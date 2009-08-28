@@ -6,7 +6,7 @@
  * Distribué sous la licence LGPL. 
  *
  * @author		Laurent MINGUET <webmaster@spipu.net>
- * @version		3.22a - 15/06/2009
+ * @version		3.24 - 05/08/2009
  */
  
 if (!defined('__CLASS_STYLEHTML__'))
@@ -387,6 +387,11 @@ if (!defined('__CLASS_STYLEHTML__'))
 			}
 		}
 
+		function restorePosition(&$current_x, &$current_y)
+		{
+			if ($this->value['y']==$current_y) $current_y = $this->value['yc'];
+		}
+		
 		function setPosition(&$current_x, &$current_y)
 		{
 			$this->value['xc'] = $current_x;
@@ -499,6 +504,8 @@ if (!defined('__CLASS_STYLEHTML__'))
 					
 			// interpreration des nouvelles valeurs
 			$correct_width = false;
+			$no_width = true;
+
 			foreach($styles as $nom => $val)
 			{
 				switch($nom)
@@ -558,6 +565,7 @@ if (!defined('__CLASS_STYLEHTML__'))
 					case 'width':
 						$this->value['width'] = $this->ConvertToMM($val, $this->getLastWidth());
 						if ($this->value['width'] && substr($val, -1)=='%') $correct_width=true;
+						$no_width = false;
 						break;
 					
 					case 'height':
@@ -880,28 +888,36 @@ if (!defined('__CLASS_STYLEHTML__'))
 			if ($this->onlyLeft) $this->value['text-align'] = 'left';
 			
 			// correction de la largeur pour correspondre au modèle de boite quick
-			if ($correct_width)
+			if ($no_width && in_array($balise, array('div')) && $this->value['position']!='absolute')
 			{
-				if (!in_array($balise, array('table', 'div', 'hr')))
-				{
-					$this->value['width']-= $this->value['padding']['l'] + $this->value['padding']['r'];
-					$this->value['width']-= $this->value['border']['l']['width'] + $this->value['border']['r']['width'];
-				}
-				if (in_array($balise, array('th', 'td')))
-				{
-					$this->value['width']-= $this->ConvertToMM(isset($param['cellspacing']) ? $param['cellspacing'] : '2px');
-				}
-				if ($this->value['width']<0) $this->value['width']=0;
+				$this->value['width'] = $this->getLastWidth();
+				$this->value['width']-= $this->value['margin']['l'] + $this->value['margin']['r'];
 			}
 			else
 			{
-				if ($this->value['width'])
+				if ($correct_width)
 				{
-					if ($this->value['border']['l']['width'])	$this->value['width']	+= $this->value['border']['l']['width'];
-					if ($this->value['border']['r']['width'])	$this->value['width']	+= $this->value['border']['r']['width'];			
-					if ($this->value['padding']['l'])			$this->value['width']	+= $this->value['padding']['l'];
-					if ($this->value['padding']['r'])			$this->value['width']	+= $this->value['padding']['r'];
-				}		
+					if (!in_array($balise, array('table', 'div', 'hr')))
+					{
+						$this->value['width']-= $this->value['padding']['l'] + $this->value['padding']['r'];
+						$this->value['width']-= $this->value['border']['l']['width'] + $this->value['border']['r']['width'];
+					}
+					if (in_array($balise, array('th', 'td')))
+					{
+						$this->value['width']-= $this->ConvertToMM(isset($param['cellspacing']) ? $param['cellspacing'] : '2px');
+					}
+					if ($this->value['width']<0) $this->value['width']=0;
+				}
+				else
+				{
+					if ($this->value['width'])
+					{
+						if ($this->value['border']['l']['width'])	$this->value['width']	+= $this->value['border']['l']['width'];
+						if ($this->value['border']['r']['width'])	$this->value['width']	+= $this->value['border']['r']['width'];			
+						if ($this->value['padding']['l'])			$this->value['width']	+= $this->value['padding']['l'];
+						if ($this->value['padding']['r'])			$this->value['width']	+= $this->value['padding']['r'];
+					}		
+				}
 			}
 			if ($this->value['height'])
 			{

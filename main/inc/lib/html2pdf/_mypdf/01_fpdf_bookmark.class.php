@@ -123,20 +123,26 @@ require_once(dirname(__FILE__).'/00_fpdf_codebar.class.php');
 			}
 		}
 		
-		function CreateIndex($titre = 'Index', $size1 = 20, $size2 = 15)
+		function CreateIndex(&$obj, $titre = 'Index', $size_title = 20, $size_bookmark = 15, $bookmark_title = true, $display_page = true)
 		{
-			$this->Bookmark($titre, 0, -1);
+			if ($bookmark_title) $this->Bookmark($titre, 0, -1);
 			
 			//Index title
-			$this->SetFontSize($size1);
+			$this->SetFontSize($size_title);
 			$this->Cell(0,5,$titre,0,1,'C');
-			$this->SetFontSize($size2);
+			$this->SetFontSize($size_bookmark);
 			$this->Ln(10);
 			
 			$size=sizeof($this->outlines);
 			$PageCellSize=$this->GetStringWidth('p. '.$this->outlines[$size-1]['p'])+2;
 			for ($i=0;$i<$size;$i++)
 			{
+				if ($this->getY()+$this->FontSize>=($this->h - $this->bMargin))
+				{
+					$obj->setNewPage();
+					$this->SetFontSize($size_bookmark);
+				}
+				
 				//Offset
 				$level=$this->outlines[$i]['l'];
 				if($level>0) $this->Cell($level*8);
@@ -150,16 +156,23 @@ require_once(dirname(__FILE__).'/00_fpdf_codebar.class.php');
 					$str=substr($str,0,-1);
 					$strsize=$this->GetStringWidth($str);
 				}
-				$this->Cell($strsize+2,$this->FontSize+2,$str);
-			
-				//Filling dots
-				$w=$this->w-$this->lMargin-$this->rMargin-$PageCellSize-($level*8)-($strsize+2);
-				$nb=$w/$this->GetStringWidth('.');
-				$dots=str_repeat('.',$nb);
-				$this->Cell($w,$this->FontSize+2,$dots,0,0,'R');
+				if ($display_page)
+				{
+					$this->Cell($strsize+2,$this->FontSize+2,$str);
 				
-				//Page number
-				$this->Cell($PageCellSize,$this->FontSize+2,'p. '.$this->outlines[$i]['p'],0,1,'R');
+					//Filling dots
+					$w=$this->w-$this->lMargin-$this->rMargin-$PageCellSize-($level*8)-($strsize+2);
+					$nb=$w/$this->GetStringWidth('.');
+					$dots=str_repeat('.',$nb);
+					$this->Cell($w,$this->FontSize+2,$dots,0,0,'R');
+
+					//Page number
+					$this->Cell($PageCellSize,$this->FontSize+2,'p. '.$this->outlines[$i]['p'],0,1,'R');
+				}
+				else
+				{
+					$this->Cell($strsize+2,$this->FontSize+2,$str, 0, 1);					
+				}
 			}
 		}
 	}

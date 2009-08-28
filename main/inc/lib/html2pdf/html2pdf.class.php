@@ -3,15 +3,14 @@
  * Logiciel : HTML2PDF
  * 
  * Convertisseur HTML => PDF, utilise fpdf de Olivier PLATHEY 
- * Distribuï¿½ sous la licence LGPL. 
+ * Distribué sous la licence LGPL. 
  *
  * @author		Laurent MINGUET <webmaster@spipu.net>
- * @version		3.22a - 15/06/2009
+ * @version		3.24 - 05/08/2009
  */
- 
- 
+
 /**
-* 	Author: Juan Carlos Raï¿½a.
+* 	Author: Juan Carlos Raña.
 * 	forced to read first because another similar library (but different version) can be found elsewhere in the system
 */
  
@@ -20,10 +19,10 @@ ini_set('include_path', $configurationPearPath);
 
 if (!defined('__CLASS_HTML2PDF__'))
 {
-	define('__CLASS_HTML2PDF__', '3.22a');
+	define('__CLASS_HTML2PDF__', '3.24');
 
 	// vous pouvez utiliser cette fonction de debug comme suit
-	// pour voir le temps et la mï¿½moire utilisï¿½s (sous linux) pour la conversion :
+	// pour voir le temps et la mémoire utilisés (sous linux) pour la conversion :
 	//	echo HTML2PDFgetTimerDebug();
 	//	$html2pdf->WriteHTML($content);
 	//	echo HTML2PDFgetTimerDebug();
@@ -51,11 +50,11 @@ if (!defined('__CLASS_HTML2PDF__'))
 	}
 	function HTML2PDFgetMem() { return function_exists('memory_get_usage') ? floor(memory_get_usage()/1024) : 0; }
 
-	require_once(dirname(__FILE__).'/_mypdf/mypdf.class.php');	// classe mypdf dï¿½rivï¿½ de fpdf de Olivier PLATHEY 
+	require_once(dirname(__FILE__).'/_mypdf/mypdf.class.php');	// classe mypdf dérivé de fpdf de Olivier PLATHEY 
 	require_once(dirname(__FILE__).'/parsingHTML.class.php');	// classe de parsing HTML
 	require_once(dirname(__FILE__).'/styleHTML.class.php');		// classe de gestion des styles
 
-	global $HTML2PDF_TABLEAU;	$HTML2PDF_TABLEAU = array();	// tableau global necessaire ï¿½ la gestion des tables imbriquï¿½es 
+	global $HTML2PDF_TABLEAU;	$HTML2PDF_TABLEAU = array();	// tableau global necessaire à la gestion des tables imbriquées 
 
 	class HTML2PDF
 	{
@@ -85,26 +84,26 @@ if (!defined('__CLASS_HTML2PDF__'))
 		var $defaultRight	= 0;
 		var $defaultBottom	= 0;
 		
-		var $margeLeft		= 0;		//marges rï¿½elles de la page
+		var $margeLeft		= 0;		//marges réelles de la page
 		var $margeTop		= 0;
 		var $margeRight		= 0;
 		var $margeBottom	= 0;
 		var $marges			= array();
 		var $Maxs			= array();
 		
-		var $maxH			= 0;		// plus grande hauteur dans la ligne, pour saut de ligne ï¿½ corriger
-		var $inLink			= '';		// indique si on est ï¿½ l'interieur d'un lien
-		var $lstAncre		= array();	// liste des ancres dï¿½tectï¿½es ou crï¿½ï¿½es
+		var $maxH			= 0;		// plus grande hauteur dans la ligne, pour saut de ligne à corriger
+		var $inLink			= '';		// indique si on est à l'interieur d'un lien
+		var $lstAncre		= array();	// liste des ancres détectées ou créées
 		var $subHEADER		= array();	// tableau des sous commandes pour faire l'HEADER
 		var $subFOOTER		= array();	// tableau des sous commandes pour faire le FOOTER
-		var $subSTATES		= array();	// tableau de sauvegarde de certains paramï¿½tres
+		var $subSTATES		= array();	// tableau de sauvegarde de certains paramètres
 		var $defLIST		= array();	// tableau de sauvegarde de l'etat des UL et OL
 		
 		var $lstChamps		= array();	// liste des champs
 		var $lstSelect		= array();	// options du select en cours
 		var $previousCall	= null;		// dernier appel
 		var $isInTfoot		= false;	// indique si on est dans un tfoot
-		var $pageMarges		= array();	// marges spï¿½cifiques dues aux floats
+		var $pageMarges		= array();	// marges spécifiques dues aux floats
 		var $isAfterFloat	= false;	// indique si on est apres un float
 		var $forOneLine		= false;	// indique si on est dans un sous HTML ne servant qu'a calculer la taille de la prochaine ligne
 		
@@ -115,12 +114,12 @@ if (!defined('__CLASS_HTML2PDF__'))
 		 * @param	string		format A4, A5, ...
 		 * @param	string		langue : fr, en, it...
 		 * @param	array		marges par defaut, dans l'ordre (left, top, right, bottom)
-		 * @param	boolean		forcer la crï¿½ation de la premiere page, ne pas utiliser, c'est utilisï¿½ en interne pour la gestion des tableaux
+		 * @param	boolean		forcer la création de la premiere page, ne pas utiliser, c'est utilisé en interne pour la gestion des tableaux
 		 * @return	null
 		 */
 		function HTML2PDF($sens = 'P', $format = 'A4', $langue='fr', $marges = array(5, 5, 5, 8), $force_page = false)
 		{
-			// sauvegarde des paramï¿½tres 
+			// sauvegarde des paramètres 
 			$this->sens			= $sens;
 			$this->format		= $format;
 			$this->FirstPage	= true;
@@ -130,7 +129,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			// chargement du fichier de langue
 			$this->textLOAD($this->langue);
 			
-			// crï¿½ation de l' objet PDF
+			// création de l' objet PDF
 			$this->pdf = new MyPDF($sens, 'mm', $format);
 
 			// initialisation des styles
@@ -151,7 +150,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			// initialisation des champs de formulaire
 			$this->lstChamps = array();
 
-			// premier page forcï¿½e
+			// premier page forcée
 			if ($force_page) $this->setNewPage($this->sens);
 		}
 		
@@ -171,7 +170,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		}
 
 		/**
-		* dï¿½finir les marges par dï¿½fault
+		* définir les marges par défault
 		*
 		* @param	int		en mm, marge left
 		* @param	int		en mm, marge top
@@ -191,7 +190,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		}
 
 		/**
-		* dï¿½finir les marges rï¿½elles, fonctions de la balise page
+		* définir les marges réelles, fonctions de la balise page
 		*
 		* @return	null
 		*/
@@ -261,7 +260,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		}
 	
 		/**
-		* dï¿½finir des nouvelles marges et sauvegarder les anciennes
+		* définir des nouvelles marges et sauvegarder les anciennes
 		*
 		* @param	float	marge left
 		* @param	float	marge top
@@ -278,7 +277,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		}
 						
 		/**
-		* rï¿½cuperer les derniï¿½res marches sauvï¿½es
+		* récuperer les dernières marches sauvées
 		*
 		* @return	null
 		*/
@@ -318,7 +317,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		}
 		
 		/**
-		* sauvegarder l'ï¿½tat actuelle des maximums
+		* sauvegarder l'état actuelle des maximums
 		*
 		* @return	null
 		*/
@@ -328,7 +327,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		}
 				
 		/**
-		* charger le dernier ï¿½tat sauvï¿½ des maximums
+		* charger le dernier état sauvé des maximums
 		*
 		* @return	null
 		*/
@@ -391,7 +390,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		}
 		
 		/**
-		* saut de ligne avec une hauteur spï¿½cifique
+		* saut de ligne avec une hauteur spécifique
 		*
 		* @param	float	hauteur de la ligne
 		* @param	integer	position reelle courante si saut de ligne pendant l'ecriture d'un texte 
@@ -405,10 +404,10 @@ if (!defined('__CLASS_HTML2PDF__'))
 		}
 			
 		/**
-		* crï¿½ation d'une nouvelle page avec une orientation particuliere
+		* création d'une nouvelle page avec une orientation particuliere
 		*
 		* @param	string	sens P=portrait ou L=landscape
-		* @param	array	tableau des propriï¿½tï¿½s du fond de la page
+		* @param	array	tableau des propriétés du fond de la page
 		* @param	integer	position reelle courante si saut de ligne pendant l'ecriture d'un texte 
 		* @return	null
 		*/
@@ -486,7 +485,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			else
 				$sub->parse_pos++;
 				
-			// pour chaque element identifiï¿½ par le parsing
+			// pour chaque element identifié par le parsing
 			for($sub->parse_pos; $sub->parse_pos<count($sub->parsing->code); $sub->parse_pos++)
 			{
 				$todo = $sub->parsing->code[$sub->parse_pos];
@@ -503,27 +502,27 @@ if (!defined('__CLASS_HTML2PDF__'))
 		}
 		
 		/** 
-		* rï¿½cupï¿½ration du PDF 
+		* récupération du PDF 
 		* 
 		* @param	string	nom du fichier PDF 
 		* @param	boolean	destination 
-		* @return	string	contenu ï¿½ventuel du pdf
+		* @return	string	contenu éventuel du pdf
 		* 
 		*
-		* Destination oï¿½ envoyer le document. Le paramï¿½tre peut prendre les valeurs suivantes :
-		* true  : equivalent ï¿½ I
-		* false : equivalent ï¿½ S  
-		* I : envoyer en inline au navigateur. Le plug-in est utilisï¿½ s'il est installï¿½. Le nom indiquï¿½ dans name est utilisï¿½ lorsque l'on sï¿½lectionne "Enregistrer sous" sur le lien gï¿½nï¿½rant le PDF.
-		* D : envoyer au navigateur en forï¿½ant le tï¿½lï¿½chargement, avec le nom indiquï¿½ dans name.
-		* F : sauver dans un fichier local, avec le nom indiquï¿½ dans name (peut inclure un rï¿½pertoire).
-		* S : renvoyer le document sous forme de chaï¿½ne. name est ignorï¿½.
+		* Destination où envoyer le document. Le paramètre peut prendre les valeurs suivantes :
+		* true  : equivalent à I
+		* false : equivalent à S  
+		* I : envoyer en inline au navigateur. Le plug-in est utilisé s'il est installé. Le nom indiqué dans name est utilisé lorsque l'on sélectionne "Enregistrer sous" sur le lien générant le PDF.
+		* D : envoyer au navigateur en forçant le téléchargement, avec le nom indiqué dans name.
+		* F : sauver dans un fichier local, avec le nom indiqué dans name (peut inclure un répertoire).
+		* S : renvoyer le document sous forme de chaîne. name est ignoré.
 		*/
 		function Output($name = '', $dest = false)
 		{
 			// nettoyage
 			global $HTML2PDF_TABLEAU; $HTML2PDF_TABLEAU = array();
 
-			// interpretation des paramï¿½tres
+			// interpretation des paramètres
 			if ($dest===false)	$dest = 'I';
 			if ($dest===true)	$dest = 'S';
 			if ($dest==='')		$dest = 'I';
@@ -545,9 +544,9 @@ if (!defined('__CLASS_HTML2PDF__'))
 		}
 		
 		/**
-		* crï¿½ation d'un sous HTML2PDF pour la gestion des tableaux imbriquï¿½s
+		* création d'un sous HTML2PDF pour la gestion des tableaux imbriqués
 		*
-		* @param	HTML2PDF	futur sous HTML2PDF passï¿½ en rï¿½fï¿½rence pour crï¿½ation
+		* @param	HTML2PDF	futur sous HTML2PDF passé en référence pour création
 		* @param	integer		marge eventuelle de l'objet si simulation d'un TD
 		* @return	null
 		*/		
@@ -582,7 +581,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			}
 			else
 				$marge = $this->margeLeft+$this->margeRight;
-
+			
 			$sub_html->saveMargin(0, 0, $marge);
 
 			// initialisation des fontes
@@ -600,7 +599,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		}
 		
 		/**
-		* destruction d'un sous HTML2PDF pour la gestion des tableaux imbriquï¿½s
+		* destruction d'un sous HTML2PDF pour la gestion des tableaux imbriqués
 		*
 		* @return	null
 		*/	
@@ -614,7 +613,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		/**
 		* Convertir un nombre arabe en nombre romain
 		*
-		* @param	integer	nombre ï¿½ convertir
+		* @param	integer	nombre à convertir
 		* @return	string	nombre converti
 		*/
 		function listeArab2Rom($nb_ar)
@@ -676,7 +675,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		/**
 		* Recuperer le LI du niveau actuel
 		*
-		* @return	string	chaine ï¿½ afficher
+		* @return	string	chaine à afficher
 		*/
 		function listeGetLi()
 		{
@@ -772,7 +771,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		/**
 		* traitement d'un code HTML
 		*
-		* @param	string	code HTML ï¿½ convertir
+		* @param	string	code HTML à convertir
 		* @param	boolean	afficher en pdf (false) ou en html (true)
 		* @return	null
 		*/	
@@ -788,7 +787,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			$html = str_replace('[[date_i]]',	date('i'),	 $html);
 			$html = str_replace('[[date_s]]',	date('s'),	 $html);
 
-			// si on veut voir le rï¿½sultat en HTML => on appelle la fonction
+			// si on veut voir le résultat en HTML => on appelle la fonction
 			if ($vue)	$this->vueHTML($html);	
 
 			// sinon, traitement pour conversion en PDF :
@@ -802,22 +801,22 @@ if (!defined('__CLASS_HTML2PDF__'))
 
 		function MakeHTMLcode()
 		{
-			// pour chaque element identifiï¿½ par le parsing
+			// pour chaque element identifié par le parsing
 			for($this->parse_pos=0; $this->parse_pos<count($this->parsing->code); $this->parse_pos++)
 			{
-				// rï¿½cupï¿½ration de l'ï¿½lï¿½ment
+				// récupération de l'élément
 				$todo = $this->parsing->code[$this->parse_pos];
 				
 				// si c'est une ouverture de tableau
 				if (in_array($todo['name'], array('table', 'ul', 'ol')) && !$todo['close'])
 				{
-					// on va crï¿½er un sous HTML, et on va travailler sur une position temporaire
+					// on va créer un sous HTML, et on va travailler sur une position temporaire
 					$tag_open = $todo['name'];
 
 					$this->sub_part = true;
 					$this->temp_pos = $this->parse_pos;
 					
-					// pour tous les ï¿½lï¿½ments jusqu'ï¿½ la fermeture de la table afin de prï¿½parer les dimensions
+					// pour tous les éléments jusqu'à la fermeture de la table afin de préparer les dimensions
 					while(isset($this->parsing->code[$this->temp_pos]) && !($this->parsing->code[$this->temp_pos]['name']==$tag_open && $this->parsing->code[$this->temp_pos]['close']))
 					{
 						$this->loadAction($this->parsing->code[$this->temp_pos]);
@@ -827,7 +826,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 					$this->sub_part = false;
 				}
 				
-				// chargement de l'action correspondant ï¿½ l'ï¿½lï¿½ment
+				// chargement de l'action correspondant à l'élément
 				$this->loadAction($todo);
 			}			
 		} 
@@ -842,9 +841,9 @@ if (!defined('__CLASS_HTML2PDF__'))
 		*/	
 		function vueHTML($content)
 		{
-			$content = preg_replace('/<page_header([^>]*)>/isU',	'<hr>'.HTML2PDF::textGET('vue01').' : $1<hr><div$1>', $content);
-			$content = preg_replace('/<page_footer([^>]*)>/isU',	'<hr>'.HTML2PDF::textGET('vue02').' : $1<hr><div$1>', $content);
-			$content = preg_replace('/<page([^>]*)>/isU',			'<hr>'.HTML2PDF::textGET('vue03').' : $1<hr><div$1>', $content);
+			$content = preg_replace('/<page_header([^>]*)>/isU',	'<hr>'.@HTML2PDF::textGET('vue01').' : $1<hr><div$1>', $content);
+			$content = preg_replace('/<page_footer([^>]*)>/isU',	'<hr>'.@HTML2PDF::textGET('vue02').' : $1<hr><div$1>', $content);
+			$content = preg_replace('/<page([^>]*)>/isU',			'<hr>'.@HTML2PDF::textGET('vue03').' : $1<hr><div$1>', $content);
 			$content = preg_replace('/<\/page([^>]*)>/isU',			'</div><hr>', $content);
 			$content = preg_replace('/<bookmark([^>]*)>/isU',		'<hr>bookmark : $1<hr>', $content);
 			$content = preg_replace('/<\/bookmark([^>]*)>/isU',		'', $content);
@@ -852,7 +851,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
-		<title>'.HTML2PDF::textGET('vue04').' HTML</title>
+		<title>'.@HTML2PDF::textGET('vue04').' HTML</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" >
 	</head>
 	<body style="padding: 10px; font-size: 10pt;font-family:	Arial;">
@@ -863,9 +862,9 @@ if (!defined('__CLASS_HTML2PDF__'))
 		}
 
 		/**
-		* chargement de l'action correspondante ï¿½ un element de parsing
+		* chargement de l'action correspondante à un element de parsing
 		*
-		* @param	array	ï¿½lï¿½ment de parsing
+		* @param	array	élément de parsing
 		* @return	null
 		*/		
 		function loadAction($row)
@@ -876,7 +875,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			// parametres de l'action
 			$param	= $row['param'];
 			
-			// si aucune page n'est crï¿½ï¿½, on la crï¿½ï¿½
+			// si aucune page n'est créé, on la créé
 			if ($fnc!='o_PAGE' && $this->FirstPage)
 			{
 				$this->setNewPage();
@@ -891,7 +890,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			}
 			else
 			{
-				HTML2PDF::makeError(1, __FILE__, __LINE__, strtoupper($row['name']));
+				@HTML2PDF::makeError(1, __FILE__, __LINE__, strtoupper($row['name']));
 				return false;
 			}
 		}
@@ -900,7 +899,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise	: PAGE
 		* mode		: OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_PAGE($param)
@@ -915,7 +914,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 				$this->subHEADER = array();
 				$this->subFOOTER = array();
 						
-				// identification de l'orientation demandï¿½e
+				// identification de l'orientation demandée
 				$orientation = '';
 				if (isset($param['orientation']))
 				{
@@ -928,7 +927,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 					if ($param['orientation']=='landscape')	$orientation = 'L';
 				}
 	
-				// identification des propriï¿½tï¿½s du background
+				// identification des propriétés du background
 				$background = array();
 				if (isset($param['backimg']))
 				{
@@ -937,7 +936,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 					$background['posY']		= isset($param['backimgy'])	? $param['backimgy']	: 'middle'; // position verticale de l'image
 					$background['width']	= isset($param['backimgw'])	? $param['backimgw']	: '100%';	// taille de l'image (100% = largueur de la feuille)
 					
-					// conversion du nom de l'image, en cas de paramï¿½tres en _GET
+					// conversion du nom de l'image, en cas de paramètres en _GET
 					$background['img'] = str_replace('&amp;', '&', $background['img']);
 					// conversion des positions
 					if ($background['posX']=='left')	$background['posX'] = '0%';
@@ -948,18 +947,18 @@ if (!defined('__CLASS_HTML2PDF__'))
 					if ($background['posY']=='bottom')	$background['posY'] = '100%';
 	
 	
-					// si il y a une image de prï¿½cisï¿½
+					// si il y a une image de précisé
 					if ($background['img'])	
 					{
 						// est-ce que c'est une image ?
 						$infos=@GetImageSize($background['img']);
 						if (count($infos)>1)
 						{
-							// taille de l'image, en fonction de la taille spï¿½cifiï¿½e. 
+							// taille de l'image, en fonction de la taille spécifiée. 
 							$Wi = $this->style->ConvertToMM($background['width'], $this->pdf->w);
 							$Hi = $Wi*$infos[1]/$infos[0];
 							
-							// rï¿½cupï¿½ration des dimensions et positions de l'image
+							// récupération des dimensions et positions de l'image
 							$background['width']	= $Wi;	
 							$background['posX']		= $this->style->ConvertToMM($background['posX'], $this->pdf->w - $Wi);
 							$background['posY']		= $this->style->ConvertToMM($background['posY'], $this->pdf->h - $Hi);
@@ -1035,7 +1034,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : PAGE
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_PAGE($param)
@@ -1168,8 +1167,8 @@ if (!defined('__CLASS_HTML2PDF__'))
 			$this->pdf->bMargin					= $this->defaultBottom;
 			$this->pdf->PageBreakTrigger		= $this->pdf->h - $this->pdf->bMargin;
 
-			// on en crï¿½ï¿½ un sous HTML que l'on transforme en PDF
-			// pour rï¿½cupï¿½rer la hauteur
+			// on en créé un sous HTML que l'on transforme en PDF
+			// pour récupérer la hauteur
 			// on extrait tout ce qui est contenu dans le FOOTER
 			$sub = null;
 			$res = $this->parsing->getLevel($this->parse_pos);
@@ -1211,7 +1210,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : NOBREAK
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/
 		function o_NOBREAK($param)
@@ -1222,7 +1221,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			// on extrait tout ce qui est contenu dans le NOBREAK
 			$res = $this->parsing->getLevel($this->parse_pos);
 
-			// on en crï¿½ï¿½ un sous HTML que l'on transforme en PDF
+			// on en créé un sous HTML que l'on transforme en PDF
 			// pour analyse les dimensions
 			// et voir si ca rentre
 			$sub = null;
@@ -1245,7 +1244,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : NOBREAK
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_NOBREAK($param)
@@ -1261,7 +1260,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : DIV
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_DIV($param, $other = 'div')
@@ -1284,7 +1283,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			// on extrait tout ce qui est contenu dans la DIV
 			$res = $this->parsing->getLevel($this->parse_pos);
 
-			// on en crï¿½ï¿½ un sous HTML que l'on transforme en PDF
+			// on en créé un sous HTML que l'on transforme en PDF
 			// pour analyse les dimensions
 			$w = 0; $h = 0;
 			if (trim($res[1]))
@@ -1296,9 +1295,11 @@ if (!defined('__CLASS_HTML2PDF__'))
 				$h = $sub->maxY;
 				unset($sub);
 			}
-
-			$w+= $marge['l']+$marge['r'];
-			$h+= $marge['t']+$marge['b'];
+			if (($w==0 && $this->style->value['width']==0) || $this->style->value['position']=='absolute')
+			{
+				$w+= $marge['l']+$marge['r']+0.001;			
+			}
+			$h+= $marge['t']+$marge['b']+0.001;
 			
 			$this->style->value['width']	= max($w, $this->style->value['width']);
 			$this->style->value['height']	= max($h, $this->style->value['height']);
@@ -1398,7 +1399,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : DIV
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_DIV($param)
@@ -1456,7 +1457,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : BARCODE
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_BARCODE($param)
@@ -1507,7 +1508,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : BARCODE
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_BARCODE($param)
@@ -1521,7 +1522,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : BOOKMARK
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_BOOKMARK($param)
@@ -1539,7 +1540,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : BOOKMARK
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_BOOKMARK($param)
@@ -1553,16 +1554,16 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : WRITE
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_WRITE($param)
 		{
 			$fill = ($this->style->value['background']['color']!==null && $this->style->value['background']['image']===null);
 			
-			// rï¿½cupï¿½ration du texte ï¿½ ï¿½crire, et conversion
+			// récupération du texte à écrire, et conversion
 			$txt = $param['txt'];
-			$txt = str_replace('&euro;', 'ï¿½', $txt);
+			$txt = str_replace('&euro;', '€', $txt);
 
 			if ($this->isAfterFloat)
 			{
@@ -1571,7 +1572,6 @@ if (!defined('__CLASS_HTML2PDF__'))
 			}
 
 			$txt = html_entity_decode($txt, ENT_QUOTES, 'ISO-8859-15');
-//			$txt = utf8_decode(html_entity_decode($txt, ENT_QUOTES, 'UTF-8'));
 
 			$txt = str_replace('[[page_cu]]',	$this->pdf->PageNo(),	$txt);
 			
@@ -1590,20 +1590,20 @@ if (!defined('__CLASS_HTML2PDF__'))
 			}
 
 			$curr_max = strlen($txt);						// taille maxi du texte
-			$maxX = 0;										// plus grande largeur du texte apres retour ï¿½ la ligne
+			$maxX = 0;										// plus grande largeur du texte apres retour à la ligne
 			$x = $this->pdf->getX();						// position du texte
 			$y = $this->pdf->getY();
 			$w = $this->pdf->GetStringWidth($txt);			// largeur du texte
 			list($left, $right) = $this->getMargins($y);	// marges autorisees
-			$nb = 0;										// nbr de lignes dï¿½coupï¿½es
+			$nb = 0;										// nbr de lignes découpées
 	
-			// tant que ca ne rentre pas sur la ligne et qu'on a du texte => on dï¿½coupe
+			// tant que ca ne rentre pas sur la ligne et qu'on a du texte => on découpe
 			while($x+$w>$right && $x<$right && strlen($txt))
 			{
 				// liste des mots
 				$lst = explode(' ', $txt);
 				
-				// trouver une phrase qui rentre dans la largeur, en ajoutant les mots 1 ï¿½ 1
+				// trouver une phrase qui rentre dans la largeur, en ajoutant les mots 1 à 1
 				$i=0;
 				$old = '';
 				$str = $lst[0];
@@ -1624,7 +1624,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 					unset($lst[0]);
 				}
 				
-				// rï¿½cupï¿½ration des mots restant, et calcul de la largeur
+				// récupération des mots restant, et calcul de la largeur
 				$txt = implode(' ', $lst);
 				$w = $this->pdf->GetStringWidth($str);
 
@@ -1634,7 +1634,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 				if (strlen($str)) $this->pdf->Cell($wc, $h+$dh, $str, 0, 0, $align, $fill, $this->inLink);
 				$this->maxH = max($this->maxH, $this->style->getLineHeight());
 				
-				// dï¿½termination de la largeur max
+				// détermination de la largeur max
 				$maxX = max($maxX, $this->pdf->getX());
 
 				// nouvelle position et nouvelle largeur pour la boucle
@@ -1642,7 +1642,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 				$y = $this->pdf->getY();
 				$x = $this->pdf->getX();
 
-				// si il reste du text ï¿½ afficher
+				// si il reste du text à afficher
 				if (strlen($txt))
 				{
 					if ($this->forOneLine)
@@ -1651,7 +1651,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 						return false;
 					}
 					
-					// retour ï¿½ la ligne
+					// retour à la ligne
 					$this->o_BR(array('style' => ''), $curr_max - strlen($txt));
 
 					$y = $this->pdf->getY();
@@ -1660,22 +1660,22 @@ if (!defined('__CLASS_HTML2PDF__'))
 					// si la prochaine ligne ne rentre pas dans la page => nouvelle page 
 					if ($y + $h>$this->pdf->h - $this->pdf->bMargin) $this->setNewPage('', null, $curr_max - strlen($txt));
 				
-					// ligne suplï¿½mentaire. au bout de 1000 : trop long => erreur
+					// ligne suplémentaire. au bout de 1000 : trop long => erreur
 					$nb++;
-					if ($nb>1000) HTML2PDF::makeError(2, __FILE__, __LINE__, array($txt, $right-$left, $this->pdf->GetStringWidth($txt))); 
+					if ($nb>1000) @HTML2PDF::makeError(2, __FILE__, __LINE__, array($txt, $right-$left, $this->pdf->GetStringWidth($txt))); 
 
 					list($left, $right) = $this->getMargins($y);	// marges autorisees
 				}
 			}
 
-			// si il reste du text apres dï¿½coupe, c'est qu'il rentre direct => on l'affiche
+			// si il reste du text apres découpe, c'est qu'il rentre direct => on l'affiche
 			if (strlen($txt))
 			{
 				$this->pdf->Cell(($align=='L' ? $w : $this->style->value['width']), $h+$dh, $txt, 0, 0, $align, $fill, $this->inLink);
 				$this->maxH = max($this->maxH, $this->style->getLineHeight());
 			}
 			
-			// dï¿½termination des positions MAX
+			// détermination des positions MAX
 			$maxX = max($maxX, $this->pdf->getX());
 			$maxY = $this->pdf->getY()+$h;
 
@@ -1699,15 +1699,15 @@ if (!defined('__CLASS_HTML2PDF__'))
 
 			if (count($infos)<2)
 			{
-				HTML2PDF::makeError(6, __FILE__, __LINE__, $src);
+				@HTML2PDF::makeError(6, __FILE__, __LINE__, $src);
 				return false;
 			}
 			
-			// rï¿½cupï¿½ration des dimensions dans l'unitï¿½ du PDF
+			// récupération des dimensions dans l'unité du PDF
 			$wi = $infos[0]/$this->pdf->k;
 			$hi = $infos[1]/$this->pdf->k;
 			
-			// dï¿½termination des dimensions d'affichage en fonction du style
+			// détermination des dimensions d'affichage en fonction du style
 			if ($this->style->value['width'] && $this->style->value['height'])
 			{
 				$w = $this->style->value['width'];
@@ -1738,6 +1738,16 @@ if (!defined('__CLASS_HTML2PDF__'))
 			$x = $this->pdf->getX();
 			$y = $this->pdf->getY();
 			
+			// si l'image ne rentre pas dans la ligne => nouvelle ligne 
+			if (!$float && ($x + $w>$this->pdf->w - $this->pdf->rMargin))
+			{
+				$hnl = $this->style->getLineHeight();
+				$hnl = max($this->maxH, $hnl);
+				$this->setNewLine($hnl);
+				$x = $this->pdf->getX();
+				$y = $this->pdf->getY();
+			}
+						
 			// si l'image ne rentre pas dans la page => nouvelle page 
 			if ($y + $h>$this->pdf->h - $this->pdf->bMargin)
 			{
@@ -1755,7 +1765,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 
 			$yc = $y-$this->style->value['margin']['t'];
 
-			// dï¿½termination de la position rï¿½elle d'affichage en fonction du text-align du parent
+			// détermination de la position réelle d'affichage en fonction du text-align du parent
 			$old = isset($this->style->table[count($this->style->table)-1]) ? $this->style->table[count($this->style->table)-1] : $this->style->value;
 
 			if ( $old['width'])
@@ -1779,12 +1789,9 @@ if (!defined('__CLASS_HTML2PDF__'))
 			if ($parent_w>$w && $float!='left')
 			{
 				if ($float=='right' || $this->style->value['text-align']=='li_right')	$x = $parent_x + $parent_w - $w-$this->style->value['margin']['r']-$this->style->value['margin']['l'];
-				
-//				if ($float=='right' || $this->style->value['text-align']=='right')	$x = $parent_x + $parent_w - $w-$this->style->value['margin']['r']-$this->style->value['margin']['l'];
-//				else if ($this->style->value['text-align']=='center')				$x = $parent_x + 0.5*($parent_w - $w);
 			}
 			
-			// affichage de l'image, et positionnement ï¿½ la suite
+			// affichage de l'image, et positionnement à la suite
 			if (!$this->sub_part && !$this->isSubPart) $this->pdf->Image($src, $x, $y, $w, $h, '', $this->inLink);
 
 			$x-= $this->style->value['margin']['l'];
@@ -1830,10 +1837,10 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* @param	float	position Y
 		* @param	float	Largeur
 		* @param	float	Hauteur
-		* @param	array	Tableau de style de dï¿½finition des borders
-		* @param	float	padding - marge intï¿½rieur au rectangle => non utile mais on le passe en paramï¿½tre
+		* @param	array	Tableau de style de définition des borders
+		* @param	float	padding - marge intérieur au rectangle => non utile mais on le passe en paramètre
 		* @param	float	margin - marge exterieur au rectangle
-		* @param	array	Tableau de style de dï¿½finition du background
+		* @param	array	Tableau de style de définition du background
 		* @return	null
 		*/	
 		function Rectangle($x, $y, $w, $h, $border, $padding, $margin, $background)
@@ -1846,7 +1853,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			$w-= $margin*2;
 			$h-= $margin*2;
 			
-			// rï¿½cupï¿½ration des radius
+			// récupération des radius
 			$radius_h = $border['radius'][0];
 			$radius_v = $border['radius'][1];
 			
@@ -1896,11 +1903,11 @@ if (!defined('__CLASS_HTML2PDF__'))
 	
 				if (count($i_infos)<2)
 				{
-					HTML2PDF::makeError(6, __FILE__, __LINE__, $i_name);
+					@HTML2PDF::makeError(6, __FILE__, __LINE__, $i_name);
 					return false;
 				}
 				
-				// rï¿½cupï¿½ration des dimensions dans l'unitï¿½ du PDF
+				// récupération des dimensions dans l'unité du PDF
 				$i_width	= 72./96.*$i_infos[0]/$this->pdf->k;
 				$i_height	= 72./96.*$i_infos[1]/$this->pdf->k;
 				
@@ -2137,7 +2144,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		}
 		
 		/**
-		* Tracer une ligne epaisse dï¿½fini par ses points avec des extreminites en biseau
+		* Tracer une ligne epaisse défini par ses points avec des extreminites en biseau
 		* 
 		* @param	array	liste des points definissant le tour de la ligne
 		* @param	float	couleur RVB
@@ -2240,7 +2247,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : BR
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @param	integer	position reelle courante si saut de ligne pendant l'ecriture d'un texte 
 		* @return	null
 		*/	
@@ -2252,7 +2259,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			$h = max($this->maxH, $h);
 			$y = $this->pdf->getY();
 
-			// si la ligne est vide, la position maximale n'a pas ï¿½tï¿½ mise ï¿½ jour => on la met ï¿½ jour
+			// si la ligne est vide, la position maximale n'a pas été mise à jour => on la met à jour
 			if ($this->maxH==0) $this->maxY = max($this->maxY, $y+$h);
 			
 			// si le saut de ligne rentre => on le prend en compte, sinon nouvelle page
@@ -2268,7 +2275,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : HR
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_HR($param)
@@ -2317,7 +2324,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : B
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_B($param, $other = 'b')
@@ -2336,7 +2343,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : B
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_B($param)
@@ -2352,7 +2359,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : I
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_I($param, $other = 'i')
@@ -2374,7 +2381,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : I
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_I($param)
@@ -2393,7 +2400,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : S
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_S($param)
@@ -2411,7 +2418,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : S
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_S($param)
@@ -2426,7 +2433,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : U
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_U($param)
@@ -2444,7 +2451,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : U
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_U($param)
@@ -2459,7 +2466,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : A
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_A($param)
@@ -2500,7 +2507,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : A
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_A($param)
@@ -2516,7 +2523,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : H1
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_H1($param)
@@ -2539,7 +2546,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : H1
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_H1($param)
@@ -2558,7 +2565,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : H2
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_H2($param)
@@ -2581,7 +2588,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : H2
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_H2($param)
@@ -2600,7 +2607,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : H3
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_H3($param)
@@ -2623,7 +2630,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : H3
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_H3($param)
@@ -2642,7 +2649,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : H4
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_H4($param)
@@ -2665,7 +2672,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : H4
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_H4($param)
@@ -2684,7 +2691,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : H5
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_H5($param)
@@ -2707,7 +2714,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : H5
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_H5($param)
@@ -2726,7 +2733,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : H6
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_H6($param)
@@ -2749,7 +2756,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : H6
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_H6($param)
@@ -2768,7 +2775,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : SPAN
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_SPAN($param, $other = 'span')
@@ -2786,13 +2793,14 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : SPAN
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_SPAN($param)
 		{
+			$this->style->restorePosition($this->pdf->x, $this->pdf->y);
 			$this->style->load();
-			$this->style->FontSet();		
+			$this->style->FontSet();
 			
 			return true;
 		}
@@ -2803,7 +2811,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : P
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_P($param)
@@ -2830,7 +2838,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : P
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_P($param)
@@ -2849,7 +2857,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : PRE
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_PRE($param, $other = 'pre')
@@ -2872,7 +2880,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : PRE
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_PRE($param, $other = 'pre')
@@ -2895,7 +2903,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : BIG
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_BIG($param)
@@ -2914,7 +2922,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : BIG
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_BIG($param)
@@ -2929,7 +2937,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : SMALL
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_SMALL($param)
@@ -2948,7 +2956,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : SMALL
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_SMALL($param)
@@ -2964,7 +2972,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : SUP
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_SUP($param)
@@ -2983,7 +2991,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : SUP
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_SUP($param)
@@ -2998,7 +3006,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : SUB
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_SUB($param)
@@ -3018,7 +3026,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : SUB
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_SUB($param)
@@ -3033,7 +3041,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : UL
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_UL($param, $other = 'ul')
@@ -3049,7 +3057,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			if (!isset($param['style']['width'])) $param['allwidth'] = true;
 			$param['cellspacing'] = 0;
 
-			// une liste est traitï¿½e comme un tableau
+			// une liste est traitée comme un tableau
 			$this->o_TABLE($param, $other);
 
 			// ajouter un niveau de liste
@@ -3063,7 +3071,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : UL
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/
 		function c_UL($param)
@@ -3089,7 +3097,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : LI
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/
 		function o_LI($param)
@@ -3178,7 +3186,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : LI
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/
 		function c_LI($param)
@@ -3198,7 +3206,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : TBODY
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_TBODY($param)
@@ -3217,7 +3225,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : TBODY
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_TBODY($param)
@@ -3234,7 +3242,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : THEAD
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_THEAD($param)
@@ -3248,7 +3256,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			$this->style->setPosition($this->pdf->x, $this->pdf->y);
 			$this->style->FontSet();
 			
-			// si on est en mode sub_html : sauvegarde du numï¿½ro du TR 
+			// si on est en mode sub_html : sauvegarde du numéro du TR 
 			if ($this->sub_part)
 			{
 				$HTML2PDF_TABLEAU[$param['num']]['thead']['tr'][0] = $HTML2PDF_TABLEAU[$param['num']]['tr_curr'];
@@ -3275,7 +3283,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : THEAD
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_THEAD($param)
@@ -3285,7 +3293,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			$this->style->load();
 			$this->style->FontSet();
 
-			// si on est en mode sub_html : sauvegarde du numï¿½ro du TR 
+			// si on est en mode sub_html : sauvegarde du numéro du TR 
 			if ($this->sub_part)
 			{
 				global $HTML2PDF_TABLEAU;				
@@ -3301,7 +3309,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : TFOOT
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_TFOOT($param)
@@ -3315,7 +3323,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			$this->style->setPosition($this->pdf->x, $this->pdf->y);
 			$this->style->FontSet();
 			
-			// si on est en mode sub_html : sauvegarde du numï¿½ro du TR 
+			// si on est en mode sub_html : sauvegarde du numéro du TR 
 			if ($this->sub_part)
 			{
 				$HTML2PDF_TABLEAU[$param['num']]['tfoot']['tr'][0] = $HTML2PDF_TABLEAU[$param['num']]['tr_curr'];
@@ -3342,7 +3350,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : TFOOT
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_TFOOT($param)
@@ -3352,7 +3360,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			$this->style->load();
 			$this->style->FontSet();
 			
-			// si on est en mode sub_html : sauvegarde du numï¿½ro du TR 
+			// si on est en mode sub_html : sauvegarde du numéro du TR 
 			if ($this->sub_part)
 			{
 				global $HTML2PDF_TABLEAU;
@@ -3369,7 +3377,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : THEAD_SUB
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_THEAD_SUB($param)
@@ -3388,7 +3396,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : THEAD_SUB
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_THEAD_SUB($param)
@@ -3405,7 +3413,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : TFOOT_SUB
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_TFOOT_SUB($param)
@@ -3424,7 +3432,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : TFOOT_SUB
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_TFOOT_SUB($param)
@@ -3441,7 +3449,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : FORM
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_FORM($param)
@@ -3458,7 +3466,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : FORM
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_FORM($param)
@@ -3473,7 +3481,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : TABLE
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_TABLE($param, $other = 'table')
@@ -3481,7 +3489,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			if ($this->forOneLine) return false;
 
 			$this->maxH = 0;
-			// utilisation du tableau des paramï¿½tres des tables
+			// utilisation du tableau des paramétres des tables
 			global $HTML2PDF_TABLEAU; 
 
 			$align_object = isset($param['align']) ? strtolower($param['align']) : 'left';
@@ -3501,7 +3509,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			if ($other=='table')
 				$collapse = isset($this->style->value['border']['collapse']) ? $this->style->value['border']['collapse'] : false;
 
-			// si oui il faut adaptï¿½ les borders
+			// si oui il faut adapté les borders
 			if ($collapse)
 			{
 				$param['style']['border'] = 'none';
@@ -3519,7 +3527,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 				$HTML2PDF_TABLEAU[$param['num']] = array();
 				$HTML2PDF_TABLEAU[$param['num']]['cellpadding']	= $this->style->ConvertToMM(isset($param['cellpadding']) ? $param['cellpadding'] : '1px'); // cellpadding du tableau
 				$HTML2PDF_TABLEAU[$param['num']]['cellspacing']	= $this->style->ConvertToMM(isset($param['cellspacing']) ? $param['cellspacing'] : '2px'); // cellspacing du tableau
-				$HTML2PDF_TABLEAU[$param['num']]['cases']		= array();				// liste des propriï¿½tï¿½s des cases
+				$HTML2PDF_TABLEAU[$param['num']]['cases']		= array();				// liste des propriétés des cases
 				$HTML2PDF_TABLEAU[$param['num']]['td_curr']		= 0;					// colonne courante
 				$HTML2PDF_TABLEAU[$param['num']]['tr_curr']		= 0;					// ligne courante
 				$HTML2PDF_TABLEAU[$param['num']]['curr_x']		= $this->pdf->getX();	// position courante X
@@ -3551,7 +3559,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			}
 			else
 			{
-				// on repart ï¿½ la premiere page du tableau et ï¿½ la premiere case
+				// on repart à la premiere page du tableau et à la premiere case
 				$HTML2PDF_TABLEAU[$param['num']]['page'] = 0;
 				$HTML2PDF_TABLEAU[$param['num']]['td_curr']	= 0;
 				$HTML2PDF_TABLEAU[$param['num']]['tr_curr']	= 0;
@@ -3580,7 +3588,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : TABLE
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_TABLE($param)
@@ -3641,13 +3649,13 @@ if (!defined('__CLASS_HTML2PDF__'))
 				// calcul des dimensions du tableau - hauteur du tableau sur chaque page
 				$HTML2PDF_TABLEAU[$param['num']]['height'] = array();
 
-				$h0 = $HTML2PDF_TABLEAU[$param['num']]['marge']['t'] + $HTML2PDF_TABLEAU[$param['num']]['marge']['b'];	// minimum de hauteur ï¿½ cause des marges
+				$h0 = $HTML2PDF_TABLEAU[$param['num']]['marge']['t'] + $HTML2PDF_TABLEAU[$param['num']]['marge']['b'];	// minimum de hauteur à cause des marges
 				$h0+= $HTML2PDF_TABLEAU[$param['num']]['thead']['height'] + $HTML2PDF_TABLEAU[$param['num']]['tfoot']['height']; // et du tfoot et thead
 				$max = $this->pdf->h - $this->pdf->bMargin;			// max de hauteur par page
 				$y = $HTML2PDF_TABLEAU[$param['num']]['curr_y'];	// position Y actuelle
 				$height = $h0;
 				
-				// on va lire les hauteurs de chaque ligne, une ï¿½ une, et voir si ca rentre sur la page.
+				// on va lire les hauteurs de chaque ligne, une à une, et voir si ca rentre sur la page.
 				for($k=0; $k<count($HTML2PDF_TABLEAU[$param['num']]['cases']); $k++)
 				{
 					// si c'est des lignes du thead ou du tfoot : on passe
@@ -3666,7 +3674,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 					}
 			
 					// si la ligne ne rentre pas dans la page
-					// => la hauteur sur cette page est trouvï¿½e, et on passe ï¿½ la page d'apres
+					// => la hauteur sur cette page est trouvée, et on passe à la page d'apres
 					if ($y+$h+$height>$max)
 					{
 						if ($height==$h0) $height = null;
@@ -3676,7 +3684,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 					}
 					$height+= $th;
 				}
-				// rajout du reste de tableau (si il existe) ï¿½ la derniere page
+				// rajout du reste de tableau (si il existe) à la derniere page
 				if ($height!=$h0 || $k==0) $HTML2PDF_TABLEAU[$param['num']]['height'][] = $height;
 			}
 			else
@@ -3700,7 +3708,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 					$HTML2PDF_TABLEAU[$param['num']]['td_curr'] = $tmp_td;
 				}
 					
-				// determination des coordonnï¿½es de sortie du tableau
+				// determination des coordonnées de sortie du tableau
 				$x = $HTML2PDF_TABLEAU[$param['num']]['curr_x'] + $HTML2PDF_TABLEAU[$param['num']]['width'];
 				if (count($HTML2PDF_TABLEAU[$param['num']]['height'])>1)
 					$y = $this->margeTop+$HTML2PDF_TABLEAU[$param['num']]['height'][count($HTML2PDF_TABLEAU[$param['num']]['height'])-1];
@@ -3726,7 +3734,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : TR
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_TR($param, $other = 'tr')
@@ -3787,7 +3795,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 					$HTML2PDF_TABLEAU[$param['num']]['curr_y'] = $this->pdf->getY();
 					$HTML2PDF_TABLEAU[$param['num']]['td_y'] = $HTML2PDF_TABLEAU[$param['num']]['curr_y']+$HTML2PDF_TABLEAU[$param['num']]['marge']['t'];
 
-					// si la hauteur de cette partie a bien ï¿½tï¿½ calculï¿½e, on trace le cadre
+					// si la hauteur de cette partie a bien été calculée, on trace le cadre
 					if (isset($HTML2PDF_TABLEAU[$param['num']]['height'][$HTML2PDF_TABLEAU[$param['num']]['page']]))
 					{
 						$old = $this->style->value;
@@ -3842,7 +3850,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : TR
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_TR($param)
@@ -3865,7 +3873,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 					if ($HTML2PDF_TABLEAU[$param['num']]['cases'][$HTML2PDF_TABLEAU[$param['num']]['tr_curr']-1][$ii]['rowspan']==1)
 						$ty = $HTML2PDF_TABLEAU[$param['num']]['cases'][$HTML2PDF_TABLEAU[$param['num']]['tr_curr']-1][$ii]['h'];	
 
-				// mise ï¿½ jour des coordonnï¿½es courantes
+				// mise à jour des coordonnées courantes
 				$HTML2PDF_TABLEAU[$param['num']]['td_x'] = $HTML2PDF_TABLEAU[$param['num']]['curr_x']+$HTML2PDF_TABLEAU[$param['num']]['marge']['l'];
 				$HTML2PDF_TABLEAU[$param['num']]['td_y']+= $ty;
 				$HTML2PDF_TABLEAU[$param['num']]['new_page'] = false;
@@ -3878,7 +3886,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : TD
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_TD($param, $other = 'td')
@@ -3961,9 +3969,9 @@ if (!defined('__CLASS_HTML2PDF__'))
 				// on extrait tout ce qui est contenu dans le TD				
 				$res = $this->parsing->getLevel($this->temp_pos);
 				
-				// on en crï¿½ï¿½ un sous HTML que l'on transforme en PDF
+				// on en créé un sous HTML que l'on transforme en PDF
 				// pour analyse les dimensions
-				// et les rï¿½cupï¿½rer dans le tableau global.
+				// et les récupérer dans le tableau global.
 				$this->CreateSubHTML($this->sub_html);
 				$this->sub_html->writeHTML($res[1]);
 				$this->temp_pos = $res[0]-2;
@@ -4025,7 +4033,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : TD
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_TD($param)
@@ -4035,7 +4043,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			$this->maxH = 0;
 			global $HTML2PDF_TABLEAU; 
 
-			// rï¿½cupï¿½ration de la marge
+			// récupération de la marge
 			$marge = array();
 			$marge['t'] = $this->style->value['padding']['t']+0.5*$HTML2PDF_TABLEAU[$param['num']]['cellspacing']+$this->style->value['border']['t']['width'];
 			$marge['r'] = $this->style->value['padding']['r']+0.5*$HTML2PDF_TABLEAU[$param['num']]['cellspacing']+$this->style->value['border']['r']['width'];
@@ -4049,13 +4057,13 @@ if (!defined('__CLASS_HTML2PDF__'))
 			// si on est dans un sub_html
 			if ($this->sub_part)
 			{
-				if ($this->testTDin1page && $this->sub_html->pdf->page>1) HTML2PDF::makeError(7, __FILE__, __LINE__); 
+				if ($this->testTDin1page && $this->sub_html->pdf->page>1) @HTML2PDF::makeError(7, __FILE__, __LINE__); 
 				
 				// dimentions de cette case
 				$w0 = $this->sub_html->maxX + $marge['l'] + $marge['r'];
 				$h0 = $this->sub_html->maxY + $marge['t'] + $marge['b'];
 	
-				// dimensions imposï¿½es par le style
+				// dimensions imposées par le style
 				$w2 = $this->style->value['width'] + $marge['l'] + $marge['r'];
 				$h2 = $this->style->value['height'] + $marge['t'] + $marge['b'];
 	
@@ -4088,7 +4096,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			// construction d'un tableau de correlation
 			$corr = array();
 
-			// on fait correspondre chaque case d'un tableau normï¿½ aux cases rï¿½elles, en prennant en compte les colspan et rowspan
+			// on fait correspondre chaque case d'un tableau normé aux cases réelles, en prennant en compte les colspan et rowspan
 			$Yr=0;
 			for($y=0; $y<count($cases); $y++)
 			{
@@ -4111,7 +4119,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			
 			if (!isset($corr[0])) return true;
 			
-			// on dï¿½termine, pour les cases sans colspan, la largeur maximale de chaque colone
+			// on détermine, pour les cases sans colspan, la largeur maximale de chaque colone
 			$sw = array();
 			for($x=0; $x<count($corr[0]); $x++)
 			{
@@ -4122,7 +4130,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 				$sw[$x] = $m;	
 			}
 
-			// on vï¿½rifie que cette taille est valide avec les colones en colspan
+			// on vérifie que cette taille est valide avec les colones en colspan
 			for($x=0; $x<count($corr[0]); $x++)
 			{
 				for($y=0; $y<count($corr); $y++)
@@ -4132,7 +4140,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 						// somme des colonnes correspondant au colspan
 						$s = 0; for($i=0; $i<$corr[$y][$x][2]; $i++) $s+= $sw[$x+$i];
 						
-						// si la somme est infï¿½rieure ï¿½ la taille necessaire => rï¿½gle de 3 pour adapter
+						// si la somme est inférieure à la taille necessaire => règle de 3 pour adapter
 						if ($s>0 && $s<$cases[$corr[$y][$x][1]][$corr[$y][$x][0]]['w'])
 							for($i=0; $i<$corr[$y][$x][2]; $i++)
 								$sw[$x+$i] = $sw[$x+$i]/$s*$cases[$corr[$y][$x][1]][$corr[$y][$x][0]]['w'];
@@ -4161,7 +4169,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 				}
 			}
 
-			// on dï¿½termine, pour les cases sans rowspan, la hauteur maximale de chaque colone
+			// on détermine, pour les cases sans rowspan, la hauteur maximale de chaque colone
 			$sh = array();
 			for($y=0; $y<count($corr); $y++)
 			{
@@ -4173,7 +4181,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			}
 
 
-			// on vï¿½rifie que cette taille est valide avec les lignes en rowspan
+			// on vérifie que cette taille est valide avec les lignes en rowspan
 			for($y=0; $y<count($corr); $y++)
 			{
 				for($x=0; $x<count($corr[0]); $x++)
@@ -4183,7 +4191,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 						// somme des colonnes correspondant au colspan
 						$s = 0; for($i=0; $i<$corr[$y][$x][3]; $i++) $s+= $sh[$y+$i];
 						
-						// si la somme est infï¿½rieure ï¿½ la taille necessaire => rï¿½gle de 3 pour adapter
+						// si la somme est inférieure à la taille necessaire => règle de 3 pour adapter
 						if ($s>0 && $s<$cases[$corr[$y][$x][1]][$corr[$y][$x][0]]['h'])
 							for($i=0; $i<$corr[$y][$x][3]; $i++)
 								$sh[$y+$i] = $sh[$y+$i]/$s*$cases[$corr[$y][$x][1]][$corr[$y][$x][0]]['h'];
@@ -4227,7 +4235,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : TH
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_TH($param)
@@ -4235,7 +4243,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			if ($this->forOneLine) return false;
 
 			$this->maxH = 0;
-			// identique ï¿½ TD mais en gras
+			// identique à TD mais en gras
 			if (!isset($param['style']['font-weight'])) $param['style']['font-weight'] = 'bold';
 			$this->o_TD($param, 'th');
 			
@@ -4246,7 +4254,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : TH
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_TH($param)
@@ -4254,7 +4262,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 			if ($this->forOneLine) return false;
 
 			$this->maxH = 0;
-			// identique ï¿½ TD
+			// identique à TD
 			$this->c_TD($param);			
 			
 			return true;
@@ -4264,7 +4272,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : IMG
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_IMG($param)
@@ -4304,7 +4312,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : SELECT
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_SELECT($param)
@@ -4339,7 +4347,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : OPTION
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_OPTION($param)
@@ -4359,7 +4367,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : OPTION
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_OPTION($param) { return true; }
@@ -4368,7 +4376,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : SELECT
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_SELECT()
@@ -4401,7 +4409,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : TEXTAREA
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_TEXTAREA($param)
@@ -4456,7 +4464,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : TEXTAREA
 		* mode : FERMETURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function c_TEXTAREA()
@@ -4471,7 +4479,7 @@ if (!defined('__CLASS_HTML2PDF__'))
 		* balise : INPUT
 		* mode : OUVERTURE
 		* 
-		* @param	array	paramï¿½tres de l'ï¿½lï¿½ment de parsing
+		* @param	array	paramètres de l'élément de parsing
 		* @return	null
 		*/	
 		function o_INPUT($param)
@@ -4560,6 +4568,11 @@ if (!defined('__CLASS_HTML2PDF__'))
 			return true;
 		}
 		
+		function CreateIndex($titre = 'Index', $size_title = 20, $size_bookmark = 15, $bookmark_title = true, $display_page = true)
+		{
+			$this->pdf->CreateIndex($this, $titre, $size_title, $size_bookmark, $bookmark_title, $display_page);
+		}
+		
 		function textLOAD($langue)
 		{
 			if (!preg_match('/^([a-z0-9]+)$/isU', $langue))
@@ -4606,53 +4619,53 @@ if (!defined('__CLASS_HTML2PDF__'))
 			switch($err)
 			{
 				case 1:
-					$msg = (HTML2PDF::textGET('err01'));
-					$msg = str_replace('[[OTHER]]', $other, $msg);
+					$msg = (@HTML2PDF::textGET('err01'));
+					$msg = str_replace('[[OTHER]]', $other, $msg); 
 					break;
 					
 				case 2:
-					$msg = (HTML2PDF::textGET('err02'));
+					$msg = (@HTML2PDF::textGET('err02'));
 					$msg = str_replace('[[OTHER_0]]', $other[0], $msg); 
 					$msg = str_replace('[[OTHER_1]]', $other[1], $msg); 
 					$msg = str_replace('[[OTHER_2]]', $other[2], $msg); 
 					break;
 					
 				case 3:
-					$msg = (HTML2PDF::textGET('err03'));
+					$msg = (@HTML2PDF::textGET('err03'));
 					$msg = str_replace('[[OTHER]]', $other, $msg); 
 					break;
 					
 				case 4:
-					$msg = (HTML2PDF::textGET('err04'));
+					$msg = (@HTML2PDF::textGET('err04'));
 					$msg = str_replace('[[OTHER]]', print_r($other, true), $msg); 
 					break;
 					
 				case 5:
-					$msg = (HTML2PDF::textGET('err05'));
+					$msg = (@HTML2PDF::textGET('err05'));
 					$msg = str_replace('[[OTHER]]', print_r($other, true), $msg); 
 					break;
 					
 				case 6:
-					$msg = (HTML2PDF::textGET('err06'));
+					$msg = (@HTML2PDF::textGET('err06'));
 					$msg = str_replace('[[OTHER]]', $other, $msg); 
 					break;	
 					
 				case 7:
-					$msg = (HTML2PDF::textGET('err07'));
+					$msg = (@HTML2PDF::textGET('err07'));
 					break;	
 			}
 			
 			$Dokeosmsg = '<div style="position: relative; margin-top: 10px; margin-bottom: 10px; border-width: 1px; border-style: solid; padding: 5px; border: 1px solid #FF0000; color: #000; background-color: #FFD1D1; min-height: 30px;"><b>'.get_lang("ConversionFailled").'</b></br>'.get_lang("CommentErrorExportDocument").'</div>';
-			echo $Dokeosmsg;		
+			echo $Dokeosmsg;
 			/*
 			////uncomment for debug
-				echo '<span style="color: #AA0000; font-weight: bold;">'.(HTML2PDF::textGET('txt01')).$err.'</span><br>';
-				echo (HTML2PDF::textGET('txt02')).' '.$file.'<br>';
-				echo (HTML2PDF::textGET('txt03')).' '.$line.'<br>';
-				echo '<br>';
-				echo $msg;
+			echo '<span style="color: #AA0000; font-weight: bold;">'.(@HTML2PDF::textGET('txt01')).$err.'</span><br>';
+			echo (@HTML2PDF::textGET('txt02')).' '.$file.'<br>';
+			echo (@HTML2PDF::textGET('txt03')).' '.$line.'<br>';
+			echo '<br>';
+			echo $msg;
 			*/
-			exit;
+			exit;	
 		}
 	}
 }

@@ -114,7 +114,7 @@ if (!defined('__CLASS_FPDF_FORMULAIRE__'))
 			static $aColors = array('transparent', 'black', 'white', 'red', 'green', 'blue', 'cyan', 'magenta', 'yellow', 'dkGray', 'gray', 'ltGray');
 			if (substr($color,0,1) == '#')
 			{
-				return sprintf("['RGB',%.3f,%.3f,%.3f]", hexdec(substr($color,1,2))/255, hexdec(substr($color,3,2))/255, hexdec(substr($color,5,2))/255);
+				return sprintf("['RGB',%.3F,%.3F,%.3F]", hexdec(substr($color,1,2))/255, hexdec(substr($color,3,2))/255, hexdec(substr($color,5,2))/255);
 			}
 			if (!in_array($color,$aColors))
 			{
@@ -155,7 +155,7 @@ if (!defined('__CLASS_FPDF_FORMULAIRE__'))
 			
 			// the followind avoid fields duplication after saving the document
 			$this->javascript .= "if(this.getField('pdfoldsaved') && this.getField('pdfoldsaved').value != 'saved') {";
-			$this->javascript .= sprintf("f".$name."=this.addField('%s','%s',%d,[%.2f,%.2f,%.2f,%.2f]);", $name, $type, $this->PageNo()-1, $x*$this->k, ($this->h-$y)*$this->k+1, ($x+$w)*$this->k, ($this->h-$y-$h)*$this->k+1)."\n";
+			$this->javascript .= sprintf("f".$name."=this.addField('%s','%s',%d,[%.2F,%.2F,%.2F,%.2F]);", $name, $type, $this->PageNo()-1, $x*$this->k, ($this->h-$y)*$this->k+1, ($x+$w)*$this->k, ($this->h-$y-$h)*$this->k+1)."\n";
 			$this->javascript .= 'f'.$name.'.textSize='.$this->FontSizePt.";\n";
 			while (list($key, $val) = each($prop))
 			{

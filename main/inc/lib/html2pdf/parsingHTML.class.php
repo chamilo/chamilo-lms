@@ -6,7 +6,7 @@
  * Distribué sous la licence LGPL. 
  *
  * @author		Laurent MINGUET <webmaster@spipu.net>
- * @version		3.22a - 15/06/2009
+ * @version		3.24 - 05/08/2009
  */
  
 if (!defined('__CLASS_PARSINGHTML__'))
@@ -122,9 +122,9 @@ if (!defined('__CLASS_PARSINGHTML__'))
 							if ($res['close'])
 							{
 								if (count($parents)<1)
-									HTML2PDF::makeError(3, __FILE__, __LINE__, $res['name']);
+									@HTML2PDF::makeError(3, __FILE__, __LINE__, $res['name']);
 								else if ($parents[count($parents)-1]!=$res['name'])
-									HTML2PDF::makeError(4, __FILE__, __LINE__, $parents);
+									@HTML2PDF::makeError(4, __FILE__, __LINE__, $parents);
 								else
 									unset($parents[count($parents)-1]);
 							}
@@ -159,7 +159,7 @@ if (!defined('__CLASS_PARSINGHTML__'))
 						$todos[$k]['param']['txt'] = preg_replace('/([^\s])([\s]*)$/isU', '$1', 	$todos[$k]['param']['txt']);
 				}
 			}
-			if (count($parents)) HTML2PDF::makeError(5, __FILE__, __LINE__, $parents);
+			if (count($parents)) @HTML2PDF::makeError(5, __FILE__, __LINE__, $parents);
 			
 			// liste des actions sauvée
 			$this->code = $todos;

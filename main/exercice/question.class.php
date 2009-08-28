@@ -1,28 +1,6 @@
 <?php // $Id: question.class.php 22257 2009-07-20 17:50:09Z juliomontoya $
  
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 
 /**
 *	File containing the Question class.
@@ -948,20 +926,37 @@ abstract class Question
 		echo '	<style>
 					div.row div.label{ width: 10%; }
 					div.row div.formw{ width: 89%; }
+					.media { display:none;} 
 				</style>';
 				
-		echo '<script>
-			function show_media()
+		echo '<script> 	 	
+			// hack to hide http://cksource.com/forums/viewtopic.php?f=6&t=8700 
+					
+			function FCKeditor_OnComplete( editorInstance )
 			{
-			if(document.getElementById(\'media\').style.display == \'none\') {
-				document.getElementById(\'media\').style.display = \'block\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';
+			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
+			      HideFCKEditorByInstanceName (editorInstance.Name);
+			   }
+			}
+			
+			function HideFCKEditorByInstanceName ( editorInstanceName ) {
+			   if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" ) {
+			      document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
+			      }
+			}
+		
+			function show_media()
+			{  
+				var my_display = document.getElementById(\'HiddenFCKquestionDescription\').style.display; 
+				if(my_display== \'none\' || my_display == \'\') {
+				document.getElementById(\'HiddenFCKquestionDescription\').style.display = \'block\';
+				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';					
 			} else {			
-				document.getElementById(\'media\').style.display = \'none\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';				
+				document.getElementById(\'HiddenFCKquestionDescription\').style.display = \'none\';
+				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';					
 			}	
 		}	
-			</script>';		
+		</script>';		
 			
 
 		$renderer = $form->defaultRenderer();
@@ -1005,8 +1000,7 @@ abstract class Question
 		</div>
 		</div>');
 
-		$form -> addElement ('html','<div id="media" style="display:none;">');
-
+		$form -> addElement ('html','<div class="HideFCKEditor" id="HiddenFCKquestionDescription" >');
 		$form->add_html_editor('questionDescription', get_lang('langQuestionDescription'), false, false, $editor_config);
 		$form -> addElement ('html','</div>');
 

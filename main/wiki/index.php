@@ -1252,7 +1252,11 @@ if ($_GET['action']=='edit')
 	}
 	elseif ($row['content']=='' AND $row['title']=='' AND $page=='index')
 	{
-		$content=sprintf(get_lang('DefaultContent'),api_get_path(WEB_IMG_PATH));
+		//Table structure for better export to pdf
+		$default_table_for_content_Start='<table align="center" border="0"><tr><td align="center">';
+		$default_table_for_content_End='</td></tr></table>';
+		
+		$content=$default_table_for_content_Start.sprintf(get_lang('DefaultContent'),api_get_path(WEB_IMG_PATH)).$default_table_for_content_End;
 		$title=get_lang('DefaultTitle');
 		$page_id=0;
 	}

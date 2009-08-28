@@ -123,9 +123,9 @@ $output .= "<tr><td>&nbsp;</td></tr>" . "<tr><td>" . "<table border='0' class='d
 //going through the items using the $items[] array instead of the database order ensures
 // we get them in the same order as in the imsmanifest file, which is rather random when using
 // the database table
-$TBL_LP_ITEM = Database :: get_course_table('lp_item');
-$TBL_LP_ITEM_VIEW = Database :: get_course_table('lp_item_view');
-$TBL_LP_VIEW = Database :: get_course_table('lp_view');
+$TBL_LP_ITEM = Database :: get_course_table(TABLE_LP_ITEM);
+$TBL_LP_ITEM_VIEW = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
+$TBL_LP_VIEW = Database :: get_course_table(TABLE_LP_VIEW);
 $tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $tbl_stats_attempts= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $tbl_quiz_questions= Database :: get_course_table(TABLE_QUIZ_QUESTION);
@@ -174,7 +174,7 @@ if (isset($_GET['lp_id']) && isset($_GET['my_lp_id'])) {
 						
 }
 
-$TBL_QUIZ = Database :: get_course_table('quiz');
+$TBL_QUIZ = Database :: get_course_table(TABLE_QUIZ_TEST);
 
 if (is_array($list) && count($list) > 0){
 	foreach ($list as $my_item_id) {

@@ -56,7 +56,7 @@ $csv_content = array();
 
 // charset determination
 if (!empty($_GET['scormcontopen'])) {
-    $tbl_lp = Database::get_course_table('lp');
+    $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
     $contopen = (int) $_GET['scormcontopen'];
     $sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
     $res = api_sql_query($sql,__FILE__,__LINE__);

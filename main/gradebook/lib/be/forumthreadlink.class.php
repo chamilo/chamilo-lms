@@ -125,7 +125,7 @@ class ForumThreadLink extends AbstractLink
 	    	$course_info = Database :: get_course_info($this->get_course_code());
 			$database_name = (empty($course_info['db_name']))?$course_info['dbName']:$course_info['db_name'];
 			if ($database_name!="") {
-			$thread_qualify = Database :: get_course_table('forum_thread_qualify', $database_name);
+			$thread_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY, $database_name);
 			
 	  		$sql = 'SELECT thread_qualify_max FROM '.Database :: get_course_table(TABLE_FORUM_THREAD, $database_name)." WHERE thread_id = '".$this->get_ref_id()."'";
 			$query = api_sql_query($sql,__FILE__,__LINE__);

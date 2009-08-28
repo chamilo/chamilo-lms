@@ -590,7 +590,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 							$res_date=api_sql_query($sql_date, __FILE__, __LINE__);
 							$obj_date=Database::fetch_object($res_date);
 							$end_date=$obj_date->avail_till;
-							$table_reminder = Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
+							$table_reminder = Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER); // TODO: To be checked. TABLE_MAIN_SURVEY_REMINDER has not been defined.
 							if ($_REQUEST['reminder']=="1") {
 								$time=getdate();
 								$time = $time['yday'];
@@ -737,7 +737,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 							$res_date=api_sql_query($sql_date, __FILE__, __LINE__);
 							$obj_date=Database::fetch_object($res_date);
 							$end_date=$obj_date->avail_till;
-							$table_reminder = Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
+							$table_reminder = Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER); // TODO: To be checked. TABLE_MAIN_SURVEY_REMINDER has not been defined.
 							
 							if ($_REQUEST['reminder']=="1") {
 								$time=getdate();

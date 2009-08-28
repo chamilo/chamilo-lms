@@ -83,21 +83,21 @@ define('TABLE_MAIN_RESERVATION_CATEGORY', 'reservation_category');
 define('TABLE_MAIN_RESERVATION_ITEM_RIGHTS', 'reservation_item_rights');
 
 // Social networking
-define('TABLE_MAIN_USER_FRIEND','user_friend');
+define('TABLE_MAIN_USER_FRIEND', 'user_friend');
 define('TABLE_MAIN_USER_FRIEND_RELATION_TYPE', 'user_friend_relation_type');
 
 // Web services
-define('TABLE_MAIN_USER_API_KEY','user_api_key');
+define('TABLE_MAIN_USER_API_KEY', 'user_api_key');
 define('TABLE_MAIN_COURSE_FIELD',			'course_field');
 define('TABLE_MAIN_COURSE_FIELD_VALUES',	'course_field_values');
 define('TABLE_MAIN_SESSION_FIELD',			'session_field');
 define('TABLE_MAIN_SESSION_FIELD_VALUES',	'session_field_values');
 
 // Message
-define('TABLE_MAIN_MESSAGE','message');
+define('TABLE_MAIN_MESSAGE', 'message');
 
 // Term and conditions
-define('TABLE_MAIN_LEGAL','legal');
+define('TABLE_MAIN_LEGAL', 'legal');
 
 // Statistic database tables
 define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 'track_e_lastaccess');
@@ -123,7 +123,7 @@ define('TABLE_SCORM_SCO_DATA', 'scorm_sco_data');
 define('TABLE_AGENDA', 'calendar_event');
 define('TABLE_AGENDA_REPEAT', 'calendar_event_repeat');
 define('TABLE_AGENDA_REPEAT_NOT', 'calendar_event_repeat_not');
-define('TABLE_AGENDA_ATTACHMENT','calendar_event_attachment');
+define('TABLE_AGENDA_ATTACHMENT', 'calendar_event_attachment');
 define('TABLE_ANNOUNCEMENT', 'announcement');
 define('TABLE_CHAT_CONNECTED', 'chat_connected'); // @todo: probably no longer in use !!!
 define('TABLE_COURSE_DESCRIPTION', 'course_description');
@@ -219,17 +219,20 @@ define('TABLE_PERSONAL_AGENDA_REPEAT_NOT', 'personal_agenda_repeat_not');
 define('TABLE_USER_COURSE_CATEGORY', 'user_course_category');
 
 // Survey
-// @todo: are these MAIN tables or course tables ?
+// @TODO: Are these MAIN tables or course tables?
+// @TODO: Probably these constants are obsolete.
 define('TABLE_MAIN_SURVEY', 'survey');
 define('TABLE_MAIN_GROUP', 'survey_group');
 define('TABLE_MAIN_SURVEYQUESTION', 'questions');
+
 // Survey
 define('TABLE_SURVEY', 'survey');
 define('TABLE_SURVEY_QUESTION', 'survey_question');
 define('TABLE_SURVEY_QUESTION_OPTION', 'survey_question_option');
 define('TABLE_SURVEY_INVITATION', 'survey_invitation');
 define('TABLE_SURVEY_ANSWER', 'survey_answer');
-define('TABLE_SURVEY_QUESTION_GROUP','survey_group');
+define('TABLE_SURVEY_QUESTION_GROUP', 'survey_group');
+define('TABLE_SURVEY_REPORT', 'survey_report');
 
 // Wiki tables
 define('TABLE_WIKI', 'wiki');
@@ -244,7 +247,10 @@ define('TABLE_GLOSSARY', 'glossary');
 define('TABLE_NOTEBOOK', 'notebook');
 
 // Message
-define('TABLE_MESSAGE', 'message'); 
+define('TABLE_MESSAGE', 'message');
+
+// Metadata
+define('TABLE_METADATA', 'metadata');
 
 
 /*

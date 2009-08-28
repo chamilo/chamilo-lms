@@ -289,7 +289,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 						$navigation_bar = $_SESSION['oLP']->get_navigation_bar();
 						$mediaplayer = $_SESSION['oLP']->get_mediaplayer($autostart);	
 						
-						$tbl_lp_item	= Database::get_course_table('lp_item');
+						$tbl_lp_item	= Database::get_course_table(TABLE_LP_ITEM);
 						$show_audioplayer = false;
 						// getting all the information about the item
 						$sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE lp_id = '" . $_SESSION['oLP']->lp_id."'";
@@ -497,7 +497,7 @@ else
 						$navigation_bar = $_SESSION['oLP']->get_navigation_bar();
 						$mediaplayer = $_SESSION['oLP']->get_mediaplayer($autostart);
 						
-						$tbl_lp_item	= Database::get_course_table('lp_item');
+						$tbl_lp_item	= Database::get_course_table(TABLE_LP_ITEM);
 						$show_audioplayer = false;
 						// getting all the information about the item
 						$sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE lp_id = '" . $_SESSION['oLP']->lp_id."'";

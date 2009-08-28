@@ -156,7 +156,7 @@ class Answer
 		{
 			$order = 'ASC';
 		}
-		$TBL_ANSWER = Database::get_course_table('quiz_answer');
+		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 		$questionId=$this->questionId;
 		//$answerType=$this->selectType();

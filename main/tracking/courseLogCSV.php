@@ -53,7 +53,7 @@ require_once('../newscorm/scormItem.class.php');
 // charset determination
 if ($_GET['scormcontopen'])
 {
-	$tbl_lp = Database::get_course_table('lp');
+	$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	$contopen = (int) $_GET['scormcontopen'];
 	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
 	$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -83,10 +83,10 @@ $table_user = Database::get_main_table(TABLE_MAIN_USER);
 //$tbl_learnpath_item = Database::get_course_table(TABLE_LEARNPATH_ITEM);
 //$tbl_learnpath_chapter = Database::get_course_table(TABLE_LEARNPATH_CHAPTER);
 
-$tbl_learnpath_main = Database::get_course_table('lp');
-$tbl_learnpath_item = Database::get_course_table('lp_item');
-$tbl_learnpath_view = Database::get_course_table('lp_view');
-$tbl_learnpath_item_view = Database::get_course_table('lp_item_view');
+$tbl_learnpath_main = Database::get_course_table(TABLE_LP_MAIN);
+$tbl_learnpath_item = Database::get_course_table(TABLE_LP_ITEM);
+$tbl_learnpath_view = Database::get_course_table(TABLE_LP_VIEW);
+$tbl_learnpath_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 $view = $_REQUEST['view'];
 

@@ -364,8 +364,8 @@ if ($_GET['view'])
 								
 						$userinfo=Database::get_user_info_from_id($last_row['is_editing']);
 							
-						$is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
-						Display::display_normal_message($is_being_edited);
+						$is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.$userinfo['firstname'].', '.$userinfo['lastname'].'</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
+						Display::display_normal_message($is_being_edited, false);
 						
 					}
 					else
@@ -1467,8 +1467,8 @@ if ($_GET['action']=='edit')
 							
 					$userinfo=Database::get_user_info_from_id($row['is_editing']);
 					
-					$is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
-					Display::display_normal_message($is_being_edited);
+					$is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.$userinfo['firstname'].', '.$userinfo['lastname'].'</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
+					Display::display_normal_message($is_being_edited, false);
 					exit;
 				}	
 				//form

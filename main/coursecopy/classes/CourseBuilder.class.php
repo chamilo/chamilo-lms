@@ -157,7 +157,7 @@ class CourseBuilder
 	 */
 	function build_forum_topics()
 	{
-		$table = Database :: get_course_table(TABLE_FORUM_POST);
+		$table = Database :: get_course_table(TABLE_FORUM_THREAD);
 		$sql = 'SELECT * FROM '.$table;
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
@@ -168,6 +168,7 @@ class CourseBuilder
 	}
 	/**
 	 * Build the forum-posts
+	 * TODO: All tree structure of posts should be built, attachments for example.
 	 */
 	function build_forum_posts()
 	{
@@ -176,7 +177,7 @@ class CourseBuilder
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
-			$forum_post = new ForumPost($obj->post_id, $obj->post_title, $obj->post_text, $obj->post_date, $obj->poster_ip, $obj->poster_name, $obj->post_notification, $obj->post_parent_id, $obj->thread_id, $obj->visible);
+			$forum_post = new ForumPost($obj->post_id, $obj->post_title, $obj->post_text, $obj->post_date, $obj->poster_id, $obj->poster_name, $obj->post_notification, $obj->post_parent_id, $obj->thread_id, $obj->forum_id, $obj->visible);
 			$this->course->add_resource($forum_post);
 		}
 	}

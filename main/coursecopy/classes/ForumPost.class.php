@@ -42,9 +42,9 @@ class ForumPost extends Resource
 	 */
 	var $post_time;
 	/**
-	 * Poster-ip
+	 * Poster id
 	 */
-	var $poster_ip;
+	var $poster_id;
 	/**
 	 * Poster name
 	 */
@@ -62,23 +62,28 @@ class ForumPost extends Resource
 	  */
 	 var $topic_id;
 	 /**
+	  * Forum id
+	  */
+	 var $forum_id;
+	 /**
 	  * Visible flag
 	  */
 	 var $visible;
 	 /**
 	 * Create a new ForumPost
 	 */
-	function ForumPost($id, $title, $text, $post_time, $poster_ip, $poster_name, $topic_notify, $parent_post_id, $topic_id, $visible)
+	function ForumPost($id, $title, $text, $post_time, $poster_id, $poster_name, $topic_notify, $parent_post_id, $topic_id, $forum_id, $visible)
 	{
 		parent::Resource($id, RESOURCE_FORUMPOST);
 		$this->title = $title;
 		$this->text = $text;
 		$this->post_time = $post_time;
-		$this->poster_ip = $poster_ip;
+		$this->poster_id = $poster_id;
 		$this->poster_name = $poster_name;
 		$this->topic_notify = $topic_notify;
 		$this->parent_post_id = $parent_post_id;
 		$this->topic_id = $topic_id;
+		$this->forum_id = $forum_id;
 		$this->visible = $visible;
 	}
 	/**

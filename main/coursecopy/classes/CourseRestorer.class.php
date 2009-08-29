@@ -102,7 +102,10 @@ class CourseRestorer
 		$this->restore_documents();
 		$this->restore_scorm_documents();
 		$this->restore_course_descriptions();
-		//$this->restore_forums();
+		// Enabled by Ivan Tcholakov, 30-AUG-2009.
+		////$this->restore_forums();
+		$this->restore_forums();
+		//
 		$this->restore_quizzes(); // after restore_documents! (for correct import of sound/video)
 		$this->restore_learnpaths();
 		$this->restore_surveys();
@@ -391,13 +394,31 @@ class CourseRestorer
 		if ($this->course->has_resources(RESOURCE_FORUM))
 		{
 			$table_forum = Database :: get_course_table(TABLE_FORUM, $this->course->destination_db);
-			$table_topic = Database :: get_course_table(TABLE_FORUM_POST, $this->course->destination_db);
+			$table_topic = Database :: get_course_table(TABLE_FORUM_THREAD, $this->course->destination_db);
 			$table_post = Database :: get_course_table(TABLE_FORUM_POST, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_FORUM] as $id => $forum)
 			{
 				$cat_id = $this->restore_forum_category($forum->category_id);
-				$sql = "INSERT INTO ".$table_forum." SET forum_name = '".Database::escape_string($forum->title)."', forum_desc = '".Database::escape_string($forum->description)."', cat_id = '".$cat_id."', forum_access='2'";
+				$sql = "INSERT INTO ".$table_forum.
+					" SET forum_title = '".Database::escape_string($forum->title).
+					"', forum_comment = '".Database::escape_string($forum->description).
+					"', forum_category = ".(int)Database::escape_string($cat_id).
+					", forum_last_post = ".(int)Database::escape_string($forum->last_post).
+					", forum_threads = ".(int)Database::escape_string($forum->topics).
+					", forum_posts = ".(int)Database::escape_string($forum->posts).
+					", allow_anonymous = ".(int)Database::escape_string($forum->allow_anonymous).
+					", allow_edit = ".(int)Database::escape_string($forum->allow_edit).
+					", approval_direct_post = '".Database::escape_string($forum->approval_direct_post).
+					"', allow_attachments = ".(int)Database::escape_string($forum->allow_attachments).
+					", allow_new_threads = ".(int)Database::escape_string($forum->allow_new_topics).
+					", default_view = '".Database::escape_string($forum->default_view).
+					"', forum_of_group = '".Database::escape_string($forum->of_group).
+					"', forum_group_public_private = '".Database::escape_string($forum->group_public_private).
+					"', forum_order = ".(int)Database::escape_string($forum->order).
+					", locked = ".(int)Database::escape_string($forum->locked).
+					", session_id = ".(int)Database::escape_string($forum->session_id).
+					", forum_image = '".Database::escape_string($forum->image)."'";
 				api_sql_query($sql, __FILE__, __LINE__);
 				$new_id = Database::get_last_insert_id();
 				$this->course->resources[RESOURCE_FORUM][$id]->destination_id = $new_id;
@@ -416,7 +437,7 @@ class CourseRestorer
 				if ($forum_topics > 0)
 				{
 					$last_post = $this->course->resources[RESOURCE_FORUMPOST][$forum->last_post];
-					$sql = "UPDATE ".$table_forum." SET forum_topics = ".$forum_topics.", forum_last_post_id = ".$last_post->destination_id." WHERE forum_id = '".$new_id."' ";
+					$sql = "UPDATE ".$table_forum." SET forum_threads = ".$forum_topics.", forum_last_post = ".(int)$last_post->destination_id." WHERE forum_id = ".(int)$new_id;
 					api_sql_query($sql, __FILE__, __LINE__);
 				}
 			}
@@ -432,7 +453,20 @@ class CourseRestorer
 		$forum_cat = $resources[RESOURCE_FORUMCATEGORY][$id];
 		if (!$forum_cat->is_restored())
 		{
-			$sql = "INSERT INTO ".$forum_cat_table." SET cat_title = '".Database::escape_string($forum_cat->title.' ('.$this->course->code.')')."'";
+			$title = $forum_cat->title;
+			if (!preg_match('/.*\((.+)\)$/', $title, $matches)) // This is for avoiding repetitive adding of training code after several backup/restore cycles.
+			{
+				if ($matches[1] != $this->course->code)
+				{
+					$title = $title.' ('.$this->course->code.')';
+				}
+			}
+			$sql = "INSERT INTO ".$forum_cat_table.
+				" SET cat_title = '".Database::escape_string($title).
+				"', cat_comment = '".Database::escape_string($forum_cat->description).
+				"', cat_order = ".(int)Database::escape_string($forum_cat->order).
+				", locked = ".(int)Database::escape_string($forum_cat->locked).
+				", session_id = ".(int)Database::escape_string($forum_cat->session_id);
 			api_sql_query($sql, __FILE__, __LINE__);
 			$new_id = Database::get_last_insert_id();
 			$this->course->resources[RESOURCE_FORUMCATEGORY][$id]->destination_id = $new_id;
@@ -445,10 +479,22 @@ class CourseRestorer
 	 */
 	function restore_topic($id, $forum_id)
 	{
-		$table = Database :: get_course_table(TABLE_FORUM_POST, $this->course->destination_db);
+		$table = Database :: get_course_table(TABLE_FORUM_THREAD, $this->course->destination_db);
 		$resources = $this->course->resources;
 		$topic = $resources[RESOURCE_FORUMTOPIC][$id];
-		$sql = "INSERT INTO ".$table." SET topic_title = '".Database::escape_string($topic->title)."', topic_time = '".$topic->time."', nom = '".Database::escape_string($topic->lastname)."', prenom = '".Database::escape_string($topic->firstname)."', topic_notify = '".$topic->topic_notify."', forum_id = '".$forum_id."'";
+		$sql = "INSERT INTO ".$table.
+			" SET thread_title = '".Database::escape_string($topic->title).
+			"', forum_id = ".(int)Database::escape_string($forum_id).
+			", thread_date = '".Database::escape_string($topic->time).
+			"', thread_poster_id = ".(int)Database::escape_string($topic->topic_poster_id).
+			", thread_poster_name = '".Database::escape_string($topic->topic_poster_name).
+			"', thread_views = ".(int)Database::escape_string($topic->views).
+			", thread_sticky = ".(int)Database::escape_string($topic->sticky).
+			", locked = ".(int)Database::escape_string($topic->locked).
+			", thread_close_date = '".Database::escape_string($topic->time_closed).
+			"', thread_weight = ".(float)Database::escape_string($topic->weight).
+			", thread_title_qualify = '".Database::escape_string($topic->title_qualify).
+			"', thread_qualify_max = ".(float)Database::escape_string($topic->qualify_max);
 		api_sql_query($sql, __FILE__, __LINE__);
 		$new_id = Database::get_last_insert_id();
 		$this->course->resources[RESOURCE_FORUMTOPIC][$id]->destination_id = $new_id;
@@ -461,30 +507,42 @@ class CourseRestorer
 				$this->restore_post($post_id, $new_id, $forum_id);
 			}
 		}
+		$last_post = $this->course->resources[RESOURCE_FORUMPOST][$topic->last_post];
+		if (is_object($last_post))
+		{
+			$sql = "UPDATE ".$table." SET thread_last_post = ".(int)$last_post->destination_id;
+			api_sql_query($sql, __FILE__, __LINE__);
+		}
 		if ($topic_replies >= 0)
 		{
-			$last_post = $this->course->resources[RESOURCE_FORUMPOST][$topic->last_post];
-			$sql = "UPDATE ".$table." SET topic_replies = '".$topic_replies."', topic_last_post_id = ".$last_post->destination_id;
+			$sql = "UPDATE ".$table." SET thread_replies = ".$topic_replies;
 			api_sql_query($sql, __FILE__, __LINE__);
 		}
 		return $new_id;
 	}
 	/**
-	 * restore a forum-post
-	 * @todo restore tree-structure of posts.
+	 * Restore a forum-post
+	 * @TODO Restore tree-structure of posts. For example: attachments to posts.
 	 */
 	function restore_post($id, $topic_id, $forum_id)
 	{
 		$table_post = Database :: get_course_table(TABLE_FORUM_POST, $this->course->destination_db);
-		$table_posttext = Database :: get_course_table(TOOL_FORUM_POST_TEXT_TABLE, $this->course->destination_db);
 		$resources = $this->course->resources;
 		$post = $resources[RESOURCE_FORUMPOST][$id];
-		$sql = "INSERT INTO ".$table_post." SET topic_id = '".$topic_id."', post_time = '".$post->post_time."', forum_id = '".$forum_id."', nom = '".Database::escape_string($post->lastname)."', prenom = '".Database::escape_string($post->firstname)."', topic_notify = '".$post->topic_notify."', poster_ip = '".$post->poster_ip."'";
+		$sql = "INSERT INTO ".$table_post.
+			" SET post_title = '".Database::escape_string($post->title).
+			"', post_text = '".Database::escape_string($post->text).
+			"', thread_id = ".(int)Database::escape_string($topic_id).
+			", post_date = '".Database::escape_string($post->post_time).
+			"', forum_id = ".(int)Database::escape_string($forum_id).
+			", poster_id = ".(int)Database::escape_string($post->poster_id).
+			", poster_name = '".Database::escape_string($post->poster_name).
+			"', post_notification = ".(int)Database::escape_string($post->topic_notify).
+			", post_parent_id = ".(int)Database::escape_string($post->parent_post_id).
+			", visible = ".(int)Database::escape_string($post->visible);
 		api_sql_query($sql, __FILE__, __LINE__);
 		$new_id = Database::get_last_insert_id();
 		$this->course->resources[RESOURCE_FORUMPOST][$id]->destination_id = $new_id;
-		$sql = "INSERT INTO ".$table_posttext." SET post_text = '".Database::escape_string($post->text)."', post_title = '".Database::escape_string($post->title)."', post_id = '".$new_id."'";
-		api_sql_query($sql, __FILE__, __LINE__);
 		return $new_id;
 	}
 	/**

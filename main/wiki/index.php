@@ -1494,7 +1494,7 @@ if ($_GET['action']=='edit')
 					echo '<td>'.get_lang('DescriptionOfTheTask').'</td>';
 					echo '</tr>';
 					echo '<tr>';	
-					echo '<td>'.api_disp_html_area('task', stripslashes($row['task']), '', '', null, array('ToolbarSet' => 'project_comment', 'Width' => '600', 'Height' => '200')).'</td>'; //TODO: create a new tolbarset
+					echo '<td>'.api_disp_html_area('task', stripslashes($row['task']), '', '', null, array('ToolbarSet' => 'wiki_task', 'Width' => '600', 'Height' => '200')).'</td>';
 					echo '</tr>';
 					echo '</table>';
 					echo '</div>';

@@ -602,7 +602,7 @@ return true;
 		echo '</tr>';
 		echo '<tr>';
 		//echo '<td><textarea name="task" cols="60" rows="4" >'.stripslashes($row['task']).'</textarea></td>';	// TODO: ¿delete?				
-		echo '<td>'.api_disp_html_area('task', stripslashes($row['task']), '', '', null, array('ToolbarSet' => 'project_comment', 'Width' => '600', 'Height' => '200')).'</td>'; //TODO: create a new tolbarset
+		echo '<td>'.api_disp_html_area('task', stripslashes($row['task']), '', '', null, array('ToolbarSet' => 'wiki_task', 'Width' => '600', 'Height' => '200')).'</td>';
 		echo '</tr>';
 		echo '</table>';
 		echo '</div>';

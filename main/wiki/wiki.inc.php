@@ -592,7 +592,7 @@ return true;
 		echo '<div id="options" style="display:none; margin: 20px;" >';					
 
 		//task
-		echo '<input type="checkbox" value="1" name="checktask" onclick="if(this.checked==true){document.getElementById(\'option4\').style.display=\'block\';}else{document.getElementById(\'option4\').style.display=\'none\';}"/>&nbsp;<img src="../img/wiki/task.gif" />'.get_lang('DescriptionOfTheTask').'';		
+		echo '<input type="checkbox" value="1" name="checktask" onclick="if(this.checked==true){document.getElementById(\'option4\').style.display=\'block\';}else{document.getElementById(\'option4\').style.display=\'none\';}"/>&nbsp;<img src="../img/wiki/task.gif" title="'.get_lang('DefineTask').'" alt="'.get_lang('DefineTask').'"/>'.get_lang('DescriptionOfTheTask').'';			
 		echo '&nbsp;&nbsp;&nbsp;<span id="msg_error4" style="display:none;color:red"></span>';
 		echo '<div id="option4" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
 		

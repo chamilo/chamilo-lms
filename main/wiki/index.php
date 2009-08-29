@@ -364,8 +364,8 @@ if ($_GET['view'])
 								
 						$userinfo=Database::get_user_info_from_id($last_row['is_editing']);
 							
-						$is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
-						Display::display_normal_message($is_being_edited);
+						$is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.$userinfo['firstname'].', '.$userinfo['lastname'].'</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
+						Display::display_normal_message($is_being_edited, false);
 						
 					}
 					else
@@ -1467,8 +1467,8 @@ if ($_GET['action']=='edit')
 							
 					$userinfo=Database::get_user_info_from_id($row['is_editing']);
 					
-					$is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
-					Display::display_normal_message($is_being_edited);
+					$is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.$userinfo['firstname'].', '.$userinfo['lastname'].'</a>. '.get_lang('ThisPageisBeginEditedTryLater').' '.date( "i",$rest_time).' '.get_lang('MinMinutes').'';
+					Display::display_normal_message($is_being_edited, false);
 					exit;
 				}	
 				//form
@@ -1485,7 +1485,7 @@ if ($_GET['action']=='edit')
 					echo '<div id="options" style="display:none; margin: 20px;" >';					
 					
 					//task
-					echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checktask" onclick="if(this.checked==true){document.getElementById(\'option4\').style.display=\'block\';}else{document.getElementById(\'option4\').style.display=\'none\';}"/>&nbsp;<img src="../img/wiki/task.gif" />'.get_lang('DescriptionOfTheTask').'';		
+					echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checktask" onclick="if(this.checked==true){document.getElementById(\'option4\').style.display=\'block\';}else{document.getElementById(\'option4\').style.display=\'none\';}"/>&nbsp;<img src="../img/wiki/task.gif" title="'.get_lang('DefineTask').'" alt="'.get_lang('DefineTask').'"/>'.get_lang('DescriptionOfTheTask').'';		
 					echo '&nbsp;&nbsp;&nbsp;<span id="msg_error4" style="display:none;color:red"></span>';
 					echo '<div id="option4" style="padding:4px; margin:5px; border:1px dotted; display:none;">';				
 
@@ -1494,7 +1494,7 @@ if ($_GET['action']=='edit')
 					echo '<td>'.get_lang('DescriptionOfTheTask').'</td>';
 					echo '</tr>';
 					echo '<tr>';	
-					echo '<td>'.api_disp_html_area('task', stripslashes($row['task']), '', '', null, array('ToolbarSet' => 'project_comment', 'Width' => '600', 'Height' => '200')).'</td>'; //TODO: create a new tolbarset
+					echo '<td>'.api_disp_html_area('task', stripslashes($row['task']), '', '', null, array('ToolbarSet' => 'wiki_task', 'Width' => '600', 'Height' => '200')).'</td>';
 					echo '</tr>';
 					echo '</table>';
 					echo '</div>';

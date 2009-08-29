@@ -592,7 +592,7 @@ return true;
 		echo '<div id="options" style="display:none; margin: 20px;" >';					
 
 		//task
-		echo '<input type="checkbox" value="1" name="checktask" onclick="if(this.checked==true){document.getElementById(\'option4\').style.display=\'block\';}else{document.getElementById(\'option4\').style.display=\'none\';}"/>&nbsp;<img src="../img/wiki/task.gif" />'.get_lang('DescriptionOfTheTask').'';		
+		echo '<input type="checkbox" value="1" name="checktask" onclick="if(this.checked==true){document.getElementById(\'option4\').style.display=\'block\';}else{document.getElementById(\'option4\').style.display=\'none\';}"/>&nbsp;<img src="../img/wiki/task.gif" title="'.get_lang('DefineTask').'" alt="'.get_lang('DefineTask').'"/>'.get_lang('DescriptionOfTheTask').'';			
 		echo '&nbsp;&nbsp;&nbsp;<span id="msg_error4" style="display:none;color:red"></span>';
 		echo '<div id="option4" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
 		
@@ -602,7 +602,7 @@ return true;
 		echo '</tr>';
 		echo '<tr>';
 		//echo '<td><textarea name="task" cols="60" rows="4" >'.stripslashes($row['task']).'</textarea></td>';	// TODO: ¿delete?				
-		echo '<td>'.api_disp_html_area('task', stripslashes($row['task']), '', '', null, array('ToolbarSet' => 'project_comment', 'Width' => '600', 'Height' => '200')).'</td>'; //TODO: create a new tolbarset
+		echo '<td>'.api_disp_html_area('task', stripslashes($row['task']), '', '', null, array('ToolbarSet' => 'wiki_task', 'Width' => '600', 'Height' => '200')).'</td>';
 		echo '</tr>';
 		echo '</table>';
 		echo '</div>';

@@ -1061,11 +1061,14 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	//Parameter 3: administrator's email
 	display_configuration_parameter($installType, get_lang("AdminEmail"), "emailForm", $emailForm);
 
-    //Parameter 4: administrator's first name
+	//Parameters 4 and 5: administrator's names
+	if (api_is_western_name_order()) {
     display_configuration_parameter($installType, get_lang("AdminFirstName"), "adminFirstName", $adminFirstName);
-
-	//Parameter 5: administrator's last name
 	display_configuration_parameter($installType, get_lang("AdminLastName"), "adminLastName", $adminLastName);
+	} else {
+		display_configuration_parameter($installType, get_lang("AdminLastName"), "adminLastName", $adminLastName);
+		display_configuration_parameter($installType, get_lang("AdminFirstName"), "adminFirstName", $adminFirstName);
+	}
 
 	//Parameter 6: administrator's telephone
 	display_configuration_parameter($installType, get_lang("AdminPhone"), "adminPhoneForm", $adminPhoneForm);

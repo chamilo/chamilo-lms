@@ -53,7 +53,7 @@ class CourseRecycler
 	function recycle()
 	{
 		$table_tool_intro = Database::get_course_table(TABLE_TOOL_INTRO);
-		$table_linked_resources = Database :: get_course_table(TABLE_LINKED_RESOURCES, $this->course->destination_db);
+		$table_linked_resources = Database :: get_course_table(TABLE_LINKED_RESOURCES);
 		$table_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
 		foreach ($this->course->resources as $type => $resources)
 		{

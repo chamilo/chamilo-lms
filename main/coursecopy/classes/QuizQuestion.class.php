@@ -59,6 +59,10 @@ class QuizQuestion extends Resource
 	 */
 	var $answers;
 	/**
+	 * Picture
+	 */
+	var $picture;
+	/**
 	 * Create a new QuizQuestion
 	 * @param string $question
 	 * @param string $description
@@ -102,4 +106,3 @@ class QuizQuestion extends Resource
 		echo $this->question;	
 	}
 }
-?>

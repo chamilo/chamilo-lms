@@ -635,9 +635,6 @@ class CourseRestorer
 	{
 		if ($this->course->has_resources(RESOURCE_COURSEDESCRIPTION))
 		{
-			
-						
-						
 			$table = Database :: get_course_table(TABLE_COURSE_DESCRIPTION, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_COURSEDESCRIPTION] as $id => $cd)
@@ -707,14 +704,28 @@ class CourseRestorer
 						$doc = str_replace('/audio/', '', $doc->path);
 					}
 				}
-				if ($id != -1) // $id = -1 identifies the fictionary test for collecting orphan questions. We do not store it in the database.
+				if ($id != -1)
 				{
-					$sql = "INSERT INTO ".$table_qui." SET title = '".Database::escape_string($quiz->title)."', description = '".Database::escape_string($quiz->description)."', type = '".$quiz->quiz_type."', random = '".$quiz->random."', active = '".$quiz->active."', sound = '".Database::escape_string($doc)."', max_attempt = '".$quiz->attempts."' ";
+					// Normal tests are stored in the database.
+					$sql = "INSERT INTO ".$table_qui.
+						" SET title = '".Database::escape_string($quiz->title).
+						"', description = '".Database::escape_string($quiz->description).
+						"', type = '".$quiz->quiz_type.
+						"', random = '".$quiz->random.
+						"', active = '".$quiz->active.
+						"', sound = '".Database::escape_string($doc).
+						"', max_attempt = ".(int)$quiz->attempts.
+						", results_disabled = ".(int)$quiz->results_disabled.
+						", access_condition = '".$quiz->access_condition.
+						"', start_time = '".$quiz->start_time.
+						"', end_time = '".$quiz->end_time.
+						"', feedback_type = ".(int)$quiz->feedback_type;
 					api_sql_query($sql, __FILE__, __LINE__);
 					$new_id = Database::get_last_insert_id();
 				}
 				else
 				{
+					// $id = -1 identifies the fictionary test for collecting orphan questions. We do not store it in the database.
 					$new_id = -1;
 				}
 				$this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;

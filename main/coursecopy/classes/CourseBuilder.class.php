@@ -248,7 +248,7 @@ class CourseBuilder
 				$doc = Database::fetch_object(api_sql_query("SELECT id FROM ".$table_doc." WHERE path = '/audio/".$obj->sound."'"));
 				$obj->sound = $doc->id;
 			}
-			$quiz = new Quiz($obj->id, $obj->title, $obj->description, $obj->random, $obj->type, $obj->active, $obj->sound, $obj->attempts);
+			$quiz = new Quiz($obj->id, $obj->title, $obj->description, $obj->random, $obj->type, $obj->active, $obj->sound, $obj->max_attempt, $obj->results_disabled, $obj->access_condition, $obj->start_time, $obj->end_time, $obj->feedback_type);
 			$sql = 'SELECT * FROM '.$table_rel.' WHERE exercice_id = '.$obj->id;
 			$db_result2 = api_sql_query($sql, __FILE__, __LINE__);
 			while ($obj2 = Database::fetch_object($db_result2))

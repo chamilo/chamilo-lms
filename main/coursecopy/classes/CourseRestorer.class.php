@@ -707,9 +707,16 @@ class CourseRestorer
 						$doc = str_replace('/audio/', '', $doc->path);
 					}
 				}
-				$sql = "INSERT INTO ".$table_qui." SET title = '".Database::escape_string($quiz->title)."', description = '".Database::escape_string($quiz->description)."', type = '".$quiz->quiz_type."', random = '".$quiz->random."', active = '".$quiz->active."', sound = '".Database::escape_string($doc)."', max_attempt = '".$quiz->attempts."' ";
-				api_sql_query($sql, __FILE__, __LINE__);
-				$new_id = Database::get_last_insert_id();
+				if ($id != -1) // $id = -1 identifies the fictionary test for collecting orphan questions. We do not store it in the database.
+				{
+					$sql = "INSERT INTO ".$table_qui." SET title = '".Database::escape_string($quiz->title)."', description = '".Database::escape_string($quiz->description)."', type = '".$quiz->quiz_type."', random = '".$quiz->random."', active = '".$quiz->active."', sound = '".Database::escape_string($doc)."', max_attempt = '".$quiz->attempts."' ";
+					api_sql_query($sql, __FILE__, __LINE__);
+					$new_id = Database::get_last_insert_id();
+				}
+				else
+				{
+					$new_id = -1;
+				}
 				$this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;
 				foreach ($quiz->question_ids as $index => $question_id)
 				{

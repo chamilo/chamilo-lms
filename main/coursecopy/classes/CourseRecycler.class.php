@@ -1,27 +1,27 @@
 <?php
 // $Id: CourseRecycler.class.php 12117 2007-04-24 22:06:36Z pcool $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Bart Mollet (bart.mollet@hogent.be)
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 require_once ('Course.class.php');
 require_once ('rmdirr.php');
@@ -247,16 +247,49 @@ class CourseRecycler
 	{
 		if ($this->course->has_resources(RESOURCE_QUIZ))
 		{
-			//$table_qui_que = Database :: get_course_table(TABLE_QUIZ_QUESTION);
-			//$table_qui_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
+			$table_qui_que = Database :: get_course_table(TABLE_QUIZ_QUESTION);
+			$table_qui_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 			$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
 			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
-			$ids = implode(',', (array_keys($this->course->resources[RESOURCE_QUIZ])));
-			$sql = "DELETE FROM ".$table_qui." WHERE id IN(".$ids.")";
+
+			$ids = array_keys($this->course->resources[RESOURCE_QUIZ]);
+			$delete_orphan_questions = in_array(-1, $ids);
+			$ids = implode(',', $ids);
+
+			// Deletion of the normal tests, questions in them are not deleted, they become orphan at this moment.
+			$sql = "DELETE FROM ".$table_qui." WHERE id <> -1 AND id IN(".$ids.")";
 			api_sql_query($sql,__FILE__,__LINE__);
-			$sql = "DELETE FROM ".$table_rel." WHERE exercice_id IN(".$ids.")";
+			$sql = "DELETE FROM ".$table_rel." WHERE exercice_id <> -1 AND exercice_id IN(".$ids.")";
 			api_sql_query($sql,__FILE__,__LINE__);
+
+			// Identifying again and deletion of the orphan questions, if it was desired.
+			if ($delete_orphan_questions)
+			{
+				$sql = 'SELECT questions.id FROM '.$table_qui_que.
+					' as questions LEFT JOIN '.$table_rel.' as quizz_questions ON questions.id=quizz_questions.question_id LEFT JOIN '.$table_qui.
+					' as exercices ON exercice_id=exercices.id WHERE quizz_questions.exercice_id IS NULL OR exercices.active = -1'; // active = -1 means "deleted" test.
+				$db_result = api_sql_query($sql, __FILE__, __LINE__);
+				if (Database::num_rows($db_result) > 0)
+				{
+					$orphan_ids = array();
+					while ($obj = Database::fetch_object($db_result))
+					{
+						$orphan_ids[] = $obj->id;
+					}
+					$orphan_ids = implode(',', $orphan_ids);
+					$sql = "DELETE FROM ".$table_rel." WHERE question_id IN(".$orphan_ids.")";
+					api_sql_query($sql,__FILE__,__LINE__);
+					$sql = "DELETE FROM ".$table_qui_ans." WHERE question_id IN(".$orphan_ids.")";
+					api_sql_query($sql,__FILE__,__LINE__);
+					$sql = "DELETE FROM ".$table_qui_que." WHERE id IN(".$orphan_ids.")";
+					api_sql_query($sql,__FILE__,__LINE__);
+				}
+			}
 		}
+
+		// Purge "deleted" tests (active = -1).
+		$sql = "DELETE FROM ".$table_qui." WHERE active = -1";
+		api_sql_query($sql,__FILE__,__LINE__);
 	}
 	/**
 	 * Recycle surveys - removes everything

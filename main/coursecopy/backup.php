@@ -33,7 +33,7 @@
  */
 
 // name of the language file that needs to be included 
-$language_file = array('coursebackup','admin');
+$language_file = array('exercice', 'coursebackup', 'admin');
 
 // including the global file
 include ('../inc/global.inc.php');

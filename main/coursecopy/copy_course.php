@@ -37,7 +37,7 @@
 ==============================================================================
 */ 
 // name of the language file that needs to be included 
-$language_file = array('coursebackup','admin');
+$language_file = array('exercice', 'coursebackup', 'admin');
 require_once '../inc/global.inc.php';
 include_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
 require_once 'classes/CourseBuilder.class.php';

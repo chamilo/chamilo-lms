@@ -994,8 +994,6 @@ class CourseRestorer
 			$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST, $this->course->destination_db);
 
 			$resources = $this->course->resources;
-			$prereq_old = array ();
-			$item_old_id = array ();
 
 			foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp) {
 				$sql = "INSERT INTO ".$table_main." " .
@@ -1029,6 +1027,7 @@ class CourseRestorer
 				$next_item_ids = array();
 				$old_prerequisite = array();
 				$old_refs = array();				
+				$prerequisite_ids = array();
 				
 				foreach ($lp->get_items() as $index => $item) {
 					/*
@@ -1105,6 +1104,7 @@ class CourseRestorer
 						}
 					}
 					
+					$prerequisite_ids[$new_item_id] = $item['prerequisite'];
 				}			
 						
 				// updating prerequisites
@@ -1148,6 +1148,17 @@ class CourseRestorer
 					$sql = "UPDATE ".$table_item." SET next_item_id = '".$next_new_id."' WHERE id = '".$new_item_id."'";
 					api_sql_query($sql, __FILE__, __LINE__);
 				}				
+
+				foreach ($prerequisite_ids as $new_item_id => $prerequisite_old_id)
+				{
+					$prerequisite_new_id = 0;
+					if($prerequisite_old_id != 0){
+						$prerequisite_new_id = $new_item_ids[$prerequisite_old_id];
+					}
+					$sql = "UPDATE ".$table_item." SET prerequisite = '".$prerequisite_new_id."' WHERE id = '".$new_item_id."'";
+					api_sql_query($sql, __FILE__, __LINE__);
+				}
+
 				$this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;				
 			}
 				

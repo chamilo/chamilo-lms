@@ -1057,4 +1057,7 @@ $EditSessionCourses = "Edit session courses";
 $SessionVisibility = "Visibility after end date";
 $BlockCoursesForThisUser = "Block user from courses in this session";
 $LanguageFile = "Language file";
+$ShowCoursesDescriptionsInCatalogTitle = "Show the courses descriptions in the catalog";
+$ShowCoursesDescriptionsInCatalogComment = "Show the courses descriptions as an integrated popup when clicking on a course info icon in the courses catalog";
+$StylesheetNotHasBeenAdded = "The stylesheet could not be added";
 ?>

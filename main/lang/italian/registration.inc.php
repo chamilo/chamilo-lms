@@ -173,4 +173,8 @@ $EditInformation = "Modifica le informazioni";
 $RegisterUser = "Iscrivi utente";
 $IHaveReadAndAgree = "Do il mio assenso.";
 $ByClickingRegisterYouAgreeTermsAndConditions = "Cliccando sul pulsante qui sotto fornisci l\'assenso relativamente alla privacy, ai termini e alle condizioni d\'uso.";
+$User = "Utente";
+$LostPass = "Password dimenticata?";
+$EnterEmailUserAndWellSendYouPassword = "Immetti il nome utente e l\'indirizzo email con cui ti sei registrata/o e ti verrà reinviata la password";
+$NoUserAccountWithThisEmailAddress = "Non ci sono registrazioni collegate al nome utente e all\'indirizzo e-mail";
 ?>

@@ -172,4 +172,8 @@ $EditInformation = "Edit profile";
 $RegisterUser = "Register";
 $IHaveReadAndAgree = "I have read and agree to the";
 $ByClickingRegisterYouAgreeTermsAndConditions = "By clicking on \'Register\' below you are agreeing to the Terms and Conditions";
+$User = "User";
+$LostPass = "Forgot your password ?";
+$EnterEmailUserAndWellSendYouPassword = "Enter the username or the email address with which you registered and we will send your password.";
+$NoUserAccountWithThisEmailAddress = "There is no account with this user and/or e-mail address";
 ?>

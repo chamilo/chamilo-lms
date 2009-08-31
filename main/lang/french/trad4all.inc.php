@@ -742,4 +742,5 @@ $Parent  = "Parent";
 $SurveyAdded = "Enquête ajoutée";
 $WikiAdded = "Wiki ajouté";
 $ReadOnly = "Lecture seule";
+$Unacceptable = "Inacceptable";
 ?>

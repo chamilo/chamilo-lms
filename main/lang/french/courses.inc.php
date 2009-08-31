@@ -79,4 +79,5 @@ $SessionName = "Titre de session";
 $SessionCategory = "Catégorie de session";
 $Expand = "Déplier";
 $Collapse = "Replier";
+$CourseDetails = "Description du cours";
 ?>

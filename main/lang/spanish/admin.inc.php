@@ -1057,4 +1057,7 @@ $EditSessionCourses = "Editar cursos";
 $SessionVisibility = "Visibilidad después de la fecha de fin";
 $BlockCoursesForThisUser = "Bloquear cursos a este usuario";
 $LanguageFile = "Archivo de idioma";
+$ShowCoursesDescriptionsInCatalogTitle = "Mostrar las descripciones de los cursos en el catálogo";
+$ShowCoursesDescriptionsInCatalogComment = "Mostrar las descripciones de los cursos como ventanas emergentes al hacer clic en un icono de información del curso en el catálogo de cursos";
+$StylesheetNotHasBeenAdded = "La hoja de estilos no ha sido añadida,probablemente su archivo zip contenga ficheros no permitidos,el zip debe contener ficheros con las siguientes extensiones(\'png\', \'jpg\', \'gif\', \'css\')";
 ?>

@@ -1056,4 +1056,8 @@ $CoursesToAvoid = "Cursos desconsiderados";
 $EditSessionCourses = "Editar sessão de cursos";
 $SessionVisibility = "Visivel após a data de término";
 $BlockCoursesForThisUser = "Bloco do cursos para este usuário";
+$LanguageFile = "Arquivo de idioma";
+$ShowCoursesDescriptionsInCatalogTitle = "Mostrar as descrições dos cursos no catálogo ";
+$ShowCoursesDescriptionsInCatalogComment = "Mostrar as descrições dos cursos em novas janelas que se abrem ao clicar em um ícone de informação do curso no catálogo de cursos";
+$StylesheetNotHasBeenAdded = "O estilo (stylesheet) não foi adicionado.";
 ?>

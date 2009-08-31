@@ -1056,4 +1056,8 @@ $CoursesToAvoid = "Corsi da non considerare";
 $EditSessionCourses = "Modifica i corsi";
 $SessionVisibility = "Visibilità dopo il termine della sessione";
 $BlockCoursesForThisUser = "Blocca i corsi per l\'utente selezionato";
+$LanguageFile = "File di traduzione";
+$ShowCoursesDescriptionsInCatalogTitle = "Mostra le informazioni sul corso nel catalogo";
+$ShowCoursesDescriptionsInCatalogComment = "Mostra le informazioni sul corso come una finestra pop-up attivata cliccando sull\'icona informativa";
+$StylesheetNotHasBeenAdded = "Il modello non è stato aggiunto";
 ?>

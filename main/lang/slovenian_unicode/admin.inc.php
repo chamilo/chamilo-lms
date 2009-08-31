@@ -1056,4 +1056,7 @@ $CoursesToAvoid = "Tečaji v izogib";
 $EditSessionCourses = "Uredi tečaje seje";
 $SessionVisibility = "Vidnost po končnem datumu";
 $BlockCoursesForThisUser = "Blokiraj tečaje za tega uporabnika";
+$LanguageFile = "Jezikovna datoteka";
+$ShowCoursesDescriptionsInCatalogTitle = "Prikaže opis tečaja v katalogu";
+$ShowCoursesDescriptionsInCatalogComment = "Prikaže opis tečaja kot integriran pop-up ob pritisku na ikono tečaja v katalogu tečaja";
 ?>

@@ -85,7 +85,9 @@ $UserStatistics = "Informes de este usuario";
 $EditUser = "Editar usuario";
 $ViewUser = "Ver usuario";
 $RSSFeeds = "Agregador RSS";
-$NoFriendsInYourContactList = "No tiene amigos en su lista de contacto";
-$TryAndFindSomeFriends = "Intente y busque algunos amigos";
+$NoFriendsInYourContactList = "Su lista de contactos está vacía";
+$TryAndFindSomeFriends = "Pruebe a encontrar algunos amigos";
 $ClearSearchResults = "Limpiar el resultado de la búsqueda";
+$SendInvitation = "Enviar invitación";
+$SocialInvitationToFriends = "Invitar a unirse a mi red de amigos";
 ?>

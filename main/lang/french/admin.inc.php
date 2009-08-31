@@ -1057,4 +1057,7 @@ $EditSessionCourses = "Éditer les cours de cette session";
 $SessionVisibility = "Visibilité postérieure à la date de fin";
 $BlockCoursesForThisUser = "Bloquer des cours pour cet utilisateur";
 $LanguageFile = "Fichier de traduction";
+$ShowCoursesDescriptionsInCatalogTitle = "Afficher les descriptions de cours dans le catalogue";
+$ShowCoursesDescriptionsInCatalogComment = "Afficher les descriptions de cours sous forme d\'une popup modale lorsque l\'utilisateur clique sur l\'icône d\'information d\'un cours dans le catalogue de cours (\"Gérer mes cours\")";
+$StylesheetNotHasBeenAdded = "La nouvelle feuille de style n\'a pas pu être ajoutée";
 ?>

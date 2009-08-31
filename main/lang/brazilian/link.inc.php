@@ -43,4 +43,6 @@ $langOnHomepage = "Na homepage";
 $langShowLinkOnHomepage = "Mostrar esse link como um ícone na homepage do curso";
 $langCsvImport = "Importação CSV";
 $General = "Geral";
+$langSaveLink = "Salvar link";
+$langSaveCategory = "Salvar pasta";
 ?>

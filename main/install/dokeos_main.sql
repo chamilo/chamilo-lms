@@ -722,7 +722,7 @@ VALUES
 ('allow_terms_conditions', NULL, 'radio', 'Platform', 'false', 'AllowTermsAndConditionsTitle', 'AllowTermsAndConditionsComment', NULL, NULL,0),
 ('show_tutor_data',NULL,'radio','Platform','true','ShowTutorDataTitle','ShowTutorDataComment',NULL,NULL, 1),
 ('show_teacher_data',NULL,'radio','Platform','true','ShowTeacherDataTitle','ShowTeacherDataComment',NULL,NULL, 1),
-('dokeos_database_version', NULL, 'textfield', NULL,'1.8.6.1.8171','DokeosDatabaseVersion','',NULL,NULL,0); 
+('dokeos_database_version', NULL, 'textfield', NULL,'1.8.6.1.8225','DokeosDatabaseVersion','',NULL,NULL,0); 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -1061,6 +1061,7 @@ CREATE TABLE gradebook_evaluation (
   weight smallint NOT NULL,
   max float unsigned NOT NULL,
   visible tinyint NOT NULL,
+  type varchar(40) NOT NULL default 'evaluation',
   PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_link;
@@ -2030,6 +2031,7 @@ CREATE TABLE  reservation_item  (
    description  text NOT NULL,
    blackout  tinyint NOT NULL default 0,
    creator  int unsigned NOT NULL default 0,
+   always_available TINYINT NOT NULL default 0,
   PRIMARY KEY  ( id )
 );
 
@@ -2174,4 +2176,20 @@ CREATE TABLE  legal (
 
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'legal_accept','Legal',0,0);
 
+--
+-- Table structure for certificate with gradebook
+--
 
+CREATE TABLE gradebook_certificate(
+	id bigint unsigned not null auto_increment,
+	cat_id int unsigned not null,
+	user_id int unsigned not null,
+	score_certificate float unsigned not null default 0,
+	date_certificate datetime not null default '0000-00-00 00:00:00',
+	path_certificate text null,
+	PRIMARY KEY(id)
+);
+ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_category_id(cat_id);
+ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_user_id(user_id);
+ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_category_id_user_id(cat_id,user_id);
+ALTER TABLE gradebook_category ADD COLUMN document_id int unsigned default NULL;

@@ -32,8 +32,15 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('show_tutor
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_tutor_data','false','No');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_teacher_data','true','Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_teacher_data','false','No');
-INSERT IGNORE INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('dokeos_database_version',NULL,'textfield',NULL,'1.8.6.1.8171','DokeosDatabaseVersion','',NULL,NULL,1,0);
 ALTER TABLE user_friend ADD COLUMN last_edit DATETIME;
+ALTER TABLE reservation_item ADD always_available TINYINT NOT NULL default 0;
+CREATE TABLE gradebook_certificate( id bigint unsigned not null auto_increment, cat_id int unsigned not null, user_id int unsigned not null, score_certificate float unsigned not null default 0, date_certificate datetime not null default '0000-00-00 00:00:00', path_certificate text null, PRIMARY KEY(id));
+ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_category_id(cat_id);
+ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_user_id(user_id);
+ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_category_id_user_id(cat_id,user_id);
+ALTER TABLE gradebook_category ADD COLUMN document_id int unsigned default NULL;
+ALTER TABLE gradebook_evaluation ADD COLUMN type varchar(40) NOT NULL default 'evaluation';
+INSERT IGNORE INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('dokeos_database_version',NULL,'textfield',NULL,'1.8.6.1.8225','DokeosDatabaseVersion','',NULL,NULL,1,0);
 
 -- xxSTATSxx
 

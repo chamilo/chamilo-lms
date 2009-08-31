@@ -135,7 +135,7 @@ class Statistics
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$activities = array ();
 		while ($row = Database::fetch_row($res)) {
-			$row[4] = api_ucfirst(format_locale_date($dateTimeFormatLong,strtotime($row[4])));
+			$row[4] = api_format_date(DATE_TIME_FORMAT_LONG, strtotime($row[4]));
 			$activities[] = $row;
 		}		
 		return $activities;

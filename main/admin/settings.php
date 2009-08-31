@@ -132,6 +132,7 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 	$default_values = array();
 	foreach($settings as $row) {			
 
+		if ($row['variable'] == 'search_enabled') { continue; }
 		$anchor_name = $row['variable'].(!empty($row['subkey']) ? '_'.$row['subkey'] : '');
 		$form->addElement('html',"\n<a name=\"$anchor_name\"></a>\n");
 
@@ -220,6 +221,7 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 				$result = api_sql_query($sql, __FILE__, __LINE__);
 				$group = array ();	
 				while ($rowkeys = Database::fetch_array($result)) {
+ 					if ($rowkeys['variable'] == 'course_create_active_tools' && $rowkeys['subkey'] == 'enable_search') {continue;}
 					$element = & $form->createElement('checkbox', $rowkeys['subkey'], '', get_lang($rowkeys['subkeytext']));
 					if ($row['access_url_changeable']==1) {						
 						//2. we look into the DB if there is a setting for a specific access_url

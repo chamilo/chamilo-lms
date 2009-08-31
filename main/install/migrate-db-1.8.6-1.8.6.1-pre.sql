@@ -39,6 +39,19 @@ ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_category_i
 ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_user_id(user_id);
 ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_category_id_user_id(cat_id,user_id);
 ALTER TABLE gradebook_category ADD COLUMN document_id int unsigned default NULL;
+
+CREATE TABLE specific_field (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, code char(1) NOT NULL, name VARCHAR( 200 ) NOT NULL);
+CREATE TABLE specific_field_values (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, course_code VARCHAR( 40 ) NOT NULL, tool_id VARCHAR( 100 ) NOT NULL, ref_id INT NOT NULL, field_id INT NOT NULL, value VARCHAR( 200 ) NOT NULL);
+ALTER TABLE specific_field ADD CONSTRAINT unique_specific_field__code UNIQUE (code);
+CREATE TABLE search_engine_ref (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, course_code VARCHAR( 40 ) NOT NULL, tool_id VARCHAR( 100 ) NOT NULL, ref_id_high_level INT NOT NULL, ref_id_second_level INT NULL, search_did INT NOT NULL);
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('search_enabled',NULL,'radio','Tools','false','EnableSearchTitle','EnableSearchComment',NULL,NULL);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('search_prefilter_prefix',NULL, NULL,'Search','','SearchPrefilterPrefix','SearchPrefilterPrefixComment',NULL,NULL);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('search_show_unlinked_results',NULL,'radio','Search','true','SearchShowUnlinkedResultsTitle','SearchShowUnlinkedResultsComment',NULL,NULL);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('search_enabled', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('search_enabled', 'false', 'No');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('search_show_unlinked_results', 'true', 'SearchShowUnlinkedResults');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('search_show_unlinked_results', 'false', 'SearchHideUnlinkedResults');
 ALTER TABLE gradebook_evaluation ADD COLUMN type varchar(40) NOT NULL default 'evaluation';
 INSERT IGNORE INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('dokeos_database_version',NULL,'textfield',NULL,'1.8.6.1.8225','DokeosDatabaseVersion','',NULL,NULL,1,0);
 

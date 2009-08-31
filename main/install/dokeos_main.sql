@@ -722,6 +722,10 @@ VALUES
 ('allow_terms_conditions', NULL, 'radio', 'Platform', 'false', 'AllowTermsAndConditionsTitle', 'AllowTermsAndConditionsComment', NULL, NULL,0),
 ('show_tutor_data',NULL,'radio','Platform','true','ShowTutorDataTitle','ShowTutorDataComment',NULL,NULL, 1),
 ('show_teacher_data',NULL,'radio','Platform','true','ShowTeacherDataTitle','ShowTeacherDataComment',NULL,NULL, 1),
+('course_create_active_tools','enable_search','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Search',0),
+('search_enabled',NULL,'radio','Tools','false','EnableSearchTitle','EnableSearchComment',NULL,NULL,1),
+('search_prefilter_prefix',NULL, NULL,'Search','','SearchPrefilterPrefix','SearchPrefilterPrefixComment',NULL,NULL,0),
+('search_show_unlinked_results',NULL,'radio','Search','true','SearchShowUnlinkedResultsTitle','SearchShowUnlinkedResultsComment',NULL,NULL,1),
 ('dokeos_database_version', NULL, 'textfield', NULL,'1.8.6.1.8225','DokeosDatabaseVersion','',NULL,NULL,0); 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -899,7 +903,12 @@ VALUES
 ('show_tutor_data','true','Yes'),
 ('show_tutor_data','false','No'),
 ('show_teacher_data','true','Yes'),
-('show_teacher_data','false','No');
+('show_teacher_data','false','No'),
+('search_enabled', 'true', 'Yes'),
+('search_enabled', 'false', 'No'),
+('search_show_unlinked_results', 'true', 'SearchShowUnlinkedResults'),
+('search_show_unlinked_results', 'false', 'SearchHideUnlinkedResults');
+
 
 UNLOCK TABLES;
 
@@ -2193,3 +2202,37 @@ ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_category_i
 ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_user_id(user_id);
 ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_category_id_user_id(cat_id,user_id);
 ALTER TABLE gradebook_category ADD COLUMN document_id int unsigned default NULL;
+
+
+
+--
+-- Tables structure for search tool
+--
+
+-- specific fields tables
+CREATE TABLE specific_field (
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	code char(1) NOT NULL,
+	name VARCHAR(200) NOT NULL
+);
+
+CREATE TABLE specific_field_values (
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	course_code VARCHAR(40) NOT NULL ,
+	tool_id VARCHAR(100) NOT NULL ,
+	ref_id INT NOT NULL ,
+	field_id INT NOT NULL ,
+	value VARCHAR(200) NOT NULL
+);
+ALTER TABLE specific_field ADD CONSTRAINT unique_specific_field__code UNIQUE (code);
+
+-- search engine references to map dokeos resources
+
+CREATE TABLE search_engine_ref (
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	course_code VARCHAR( 40 ) NOT NULL,
+	tool_id VARCHAR( 100 ) NOT NULL,
+	ref_id_high_level INT NOT NULL,
+	ref_id_second_level INT NULL,
+	search_did INT NOT NULL
+);

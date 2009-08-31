@@ -148,7 +148,9 @@ class ForumThreadLink extends AbstractLink
 	    		if ($data=Database::fetch_array($scores)) {
 	    			return array ($data['qualify'], $assignment['thread_qualify_max']);    			
 	    		} else {
-	      			return null;  			
+	    			//We sent the 0/thread_qualify_max instead of null for correct calculations
+	      			//return null;
+	      			return array (0, $assignment['thread_qualify_max']);  			
 	    		}
 	    	} else {// all students -> get average
 	    		$students=array();  // user list, needed to make sure we only

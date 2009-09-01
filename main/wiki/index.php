@@ -562,12 +562,6 @@ if ($_GET['action']=='more')
 	//Submenu Most active users in discuss
 	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mactiveusers&group_id='.$_clean['group_id'].'">'.get_lang('MostDiscussUsers').'</a></li>';//TODO:
 	
-	//Submenu Individual assignments
-	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=assignments&group_id='.$_clean['group_id'].'">'.get_lang('Assignments').'</a></li>';//TODO:
-	
-	//Submenu Delayed assignments
-	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=delayed&group_id='.$_clean['group_id'].'">'.get_lang('DelayedAssignments').'</a></li>';//TODO:
-	
 	//Submenu Random page
 	//echo '<li><a href="index.php?cidReq='.$_course[id].'&action=mrandom&group_id='.$_clean['group_id'].'">'.get_lang('RandomPage').'</a></li>';//TODO:
 
@@ -822,9 +816,9 @@ if ($_GET['action']=='wanted')
 	}
 	
 	//get name refs in last pages and make a unique list
-	$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; //old version TODO: Replace by the bottom line
+	//$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; //old version TODO: Replace by the bottom line
 	
-	//$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE visibility=1 AND '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter; // new version
+	$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE visibility=1 AND '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter; // new version
 	
 	$allpages=Database::query($sql,__FILE__,__LINE__);	
 	while ($row=Database::fetch_array($allpages))
@@ -874,9 +868,9 @@ if ($_GET['action']=='orphaned')
 	}
 	
 	//get name refs in last pages and make a unique list	
-	$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; //old version TODO: Replace by the bottom line
+	//$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; //old version TODO: Replace by the bottom line
 	
-	//$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' '; // new version
+	$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' '; // new version
 
 	$allpages=Database::query($sql,__FILE__,__LINE__);	
 	while ($row=Database::fetch_array($allpages))
@@ -1104,16 +1098,16 @@ if ($_GET['action']=='links')
 		
 		if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
 		{				
-			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.")"; //add blank space after like '%" " %' to identify each word. //Old version TODO: Replace by the bottom line
+			//$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.")"; //add blank space after like '%" " %' to identify each word. //Old version TODO: Replace by the bottom line
 			
-			//$sql="SELECT * FROM ".$tbl_wiki.", ".$tbl_wiki_conf." WHERE linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND ".$tbl_wiki_conf.".page_id=".$tbl_wiki.".page_id AND ".$tbl_wiki.".".$groupfilter.""; //add blank space after like '%" " %' to identify each word. // new version			
+			$sql="SELECT * FROM ".$tbl_wiki.", ".$tbl_wiki_conf." WHERE linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND ".$tbl_wiki_conf.".page_id=".$tbl_wiki.".page_id AND ".$tbl_wiki.".".$groupfilter.""; //add blank space after like '%" " %' to identify each word. // new version			
 			
 		}
 		else
 		{	
-			$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE visibility=1 AND linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.")"; //add blank space after like '%" " %' to identify each word //old version TODO: Replace by the bottom line
+			//$sql="SELECT * FROM ".$tbl_wiki." s1 WHERE visibility=1 AND linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s1.reflink = s2.reflink AND ".$groupfilter.")"; //add blank space after like '%" " %' to identify each word //old version TODO: Replace by the bottom line
 			
-			//$sql="SELECT * FROM ".$tbl_wiki.", ".$tbl_wiki_conf." WHERE visibility=1 AND linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND ".$tbl_wiki_conf.".page_id=".$tbl_wiki.".page_id AND ".$tbl_wiki.".".$groupfilter.""; //add blank space after like '%" " %' to identify each word // new version			
+			$sql="SELECT * FROM ".$tbl_wiki.", ".$tbl_wiki_conf." WHERE visibility=1 AND linksto LIKE '%".html_entity_decode(Database::escape_string(stripslashes(urldecode($page))))." %' AND ".$tbl_wiki_conf.".page_id=".$tbl_wiki.".page_id AND ".$tbl_wiki.".".$groupfilter.""; //add blank space after like '%" " %' to identify each word // new version			
 			
 		}		
 
@@ -1897,9 +1891,9 @@ if ($_GET['action']=='recentchanges')
 	
 	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
 	{	
-		$sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.' ORDER BY dtime DESC'; // old version TODO: Replace by the bottom line
+		//$sql='SELECT * FROM '.$tbl_wiki.' WHERE '.$groupfilter.' ORDER BY dtime DESC'; // old version TODO: Replace by the bottom line
 		
-		//$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' ORDER BY dtime DESC'; // new version		
+		$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' ORDER BY dtime DESC'; // new version		
 		
 	}
 	else
@@ -1987,15 +1981,15 @@ if ($_GET['action']=='allpages')
 
 	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
 	{	
-		$sql='SELECT  *  FROM  '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; // warning don't use group by reflink because don't return the last version// old version TODO: Replace by the bottom line
+		//$sql='SELECT  *  FROM  '.$tbl_wiki.' s1 WHERE id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; // warning don't use group by reflink because don't return the last version// old version TODO: Replace by the bottom line
 		
-		//$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' GROUP BY '.$tbl_wiki.'.page_id'; // new version
+		$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' GROUP BY '.$tbl_wiki.'.page_id'; // new version
 	}
 	else
 	{	
-		$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE visibility=1 AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; // warning don't use group by reflink because don't return the last version	// old version TODO: Replace by the bottom line
+		//$sql='SELECT  *  FROM   '.$tbl_wiki.' s1 WHERE visibility=1 AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s1.reflink = s2.reflink AND '.$groupfilter.')'; // warning don't use group by reflink because don't return the last version	// old version TODO: Replace by the bottom line
 		
-		//$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE visibility=1 AND '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' GROUP BY '.$tbl_wiki.'.page_id'; // new version
+		$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE visibility=1 AND '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.'.$groupfilter.' GROUP BY '.$tbl_wiki.'.page_id'; // new version
 		
 	}		
 

@@ -60,7 +60,7 @@ api_plugin('footer');
 if (api_get_setting('show_administrator_data')=='true') {
 	
 	// Platform manager
-	echo '<span id="platformmanager">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_setting('administratorName').' '.api_get_setting('administratorSurname'));
+	echo '<span id="platformmanager">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));
 
 }
 

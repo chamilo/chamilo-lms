@@ -86,37 +86,23 @@ function &_api_get_day_month_names($language = null) {
  */
 
 /**
- * Returns an array of conventions (patterns) of writting personal names for all "known" languages.
- * @return array	Returns the array in the following form: attay('language1 => 'pattern1', ...).
- * @link http://en.wikipedia.org/wiki/Personal_name#Naming_convention
+ * Replaces non-valid formats for person names with the default (English) format.
+ * @param string $format	The input format to be verified. 
+ * @return bool				Returns the same format if is is valid, otherwise returns a valid English format.
  */
-function &_get_name_conventions() {
-	static $conventions;
-	if (!isset($conventions)) {
-		$file = dirname(__FILE__) . '/internationalization_database/name_order_conventions.php';
-		if (file_exists($file)) {
-			$conventions = include ($file);
-		} else {
-			$conventions = array('english' => 'first_name last_name');
-		}
-		$search = array('first_name', 'last_name');
-		$replacement = array('%f', '%l');
-		foreach ($conventions as $key => &$value) {
-			$value = str_ireplace($search, $replacement, $value);
-		}
+function _api_validate_person_name_format($format) {
+	if (empty($format) || strpos($format, '%f') === false || strpos($format, '%l') === false) {
+		return '%t %f %l';
 	}
-	return $conventions;
+	return $format;
 }
 
 /**
- * Checks whether the input namin convention (a pattern) is valid or not.
- * @param string $convention	The input convention to be verified. 
- * @return bool					Returns TRUE if the pattern is valid, FALSE othewise.
+ * Removes leading, trailing and duplicate whitespace and/or commas in a full person name.
+ * Cleaning is needed for the cases when not all parts of the name are available or when the name is constructed using a "dirty" pattern.
+ * @param string $person_name	The input person name.
+ * @return string				Returns cleaned person name.
  */
-function _api_is_valid_name_convention($convention) {
-	static $cache = array();
-	if (!isset($cache[$convention])) {
-		$cache[$convention] = !empty($convention) && strpos($convention, '%f') !== false && strpos($convention, '%l') !== false;
-	}
-	return $cache[$convention];
+function _api_clean_person_name($person_name) {
+	return preg_replace(array('/\s+/', '/, ,/', '/,+/', '/^[ ,]/', '/[ ,]$/'), array(' ', ', ', ',', '', ''), $person_name);
 }

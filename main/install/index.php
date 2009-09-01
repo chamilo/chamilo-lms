@@ -691,8 +691,13 @@ elseif($_POST['step5'])
 	?><br /><br/>
 
 	<?php echo get_lang('AdminEmail').' : '.$emailForm; ?><br />
-    <?php echo get_lang('AdminFirstName').' : '.$adminFirstName; ?><br />
-	<?php echo get_lang('AdminLastName').' : '.$adminLastName; ?><br />
+	<?php
+	if (api_is_western_name_order()) {
+		echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
+	} else {
+		echo get_lang('AdminLastName').' : '.$adminLastName, '<br />', get_lang('AdminFirstName').' : '.$adminFirstName, '<br />';
+	}
+	?>
 	<?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
 
 	<?php if($installType == 'new'): ?>

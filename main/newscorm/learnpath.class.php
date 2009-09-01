@@ -833,6 +833,7 @@ class learnpath {
 		}
 
 		$lp = Database :: get_course_table(TABLE_LP_MAIN);
+		$lp_item = Database :: get_course_table(TABLE_LP_ITEM); // Proposed by Christophe (clefevre), see below.
 		$lp_view = Database :: get_course_table(TABLE_LP_VIEW);
 		$lp_item_view = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
@@ -843,6 +844,10 @@ class learnpath {
 			$sql_del_view = "DELETE FROM $lp_item_view WHERE lp_item_id = '" . $id . "'";
 			$res_del_item_view = api_sql_query($sql_del_view, __FILE__, __LINE__);
 		}
+
+    	// Proposed by Christophe (nickname: clefevre), see http://www.dokeos.com/forum/viewtopic.php?t=29673
+		$sql_del_item = "DELETE FROM $lp_item WHERE lp_id = " . $this->lp_id; 
+		$res_del_item = api_sql_query($sql_del_item, __FILE__, __LINE__);       
 
 		$sql_del_view = "DELETE FROM $lp_view WHERE lp_id = " . $this->lp_id;
 		//if($this->debug>2){error_log('New LP - Deleting views bound to lp '.$this->lp_id.': '.$sql_del_view,0);}
@@ -870,7 +875,12 @@ class learnpath {
 						if ($this->debug > 2) {
 							error_log('New LP - In learnpath::delete(), found SCORM, deleting directory: ' . $course_scorm_dir . $path, 0);
 						}
-						exec('rm -rf ' . $course_scorm_dir . $path);
+						// Proposed by Christophe (clefevre).
+						if (strcmp(substr($path, -2), "/.") == 0) {
+							$path = substr($path, 0, -1); // Remove "." at the end
+						}
+						//exec('rm -rf ' . $course_scorm_dir . $path); // See Bug #5208, this is not OS-portable way.
+						rmdirr($course_scorm_dir . $path);
 					}
 				}
 			}

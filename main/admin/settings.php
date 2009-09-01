@@ -131,7 +131,6 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 	//while ($row = mysql_fetch_array($resultsettings))
 	$default_values = array();
 	foreach($settings as $row) {			
-
 		if ($row['variable'] == 'search_enabled') { continue; }
 		$anchor_name = $row['variable'].(!empty($row['subkey']) ? '_'.$row['subkey'] : '');
 		$form->addElement('html',"\n<a name=\"$anchor_name\"></a>\n");
@@ -1088,7 +1087,7 @@ function add_edit_template()
 	$form->add_textfield('title', get_lang('Title'), false);
 	
 	// settting the form elements: the content of the template (wysiwyg editor)
-	$form->addElement('html_editor', 'template_text', get_lang('Text'), null, array('ToolbarSet' => 'AdminTemplates', 'Width' => '100%', 'Height' => '400', 'FullPage' => true));
+	$form->addElement('html_editor', 'template_text', get_lang('Text'), null, array('ToolbarSet' => 'AdminTemplates', 'Width' => '100%', 'Height' => '400'));
 	
 	// settting the form elements: the form to upload an image to be used with the template
 	$form->addElement('file','template_image',get_lang('Image'),'');
@@ -1137,6 +1136,8 @@ function add_edit_template()
 	{
 		// exporting the values
 		$values = $form->exportValues();
+		
+		//var_dump($values);exit;
 		
 		// upload the file
 		if (!empty($_FILES['template_image']['name']))
@@ -1194,15 +1195,17 @@ function add_edit_template()
 	   // store the information in the database (as insert or as update)
 	   $table_system_template = Database :: get_main_table('system_template');
 	   if ($_GET['action'] == 'add') {
-		   	$sql = "INSERT INTO $table_system_template (title, content, image) VALUES ('".Database::escape_string($values['title'])."','".Database::escape_string($values['template_text'])."','".Database::escape_string($new_file_name)."')";
+	   		$content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
+		   	$sql = "INSERT INTO $table_system_template (title, content, image) VALUES ('".Database::escape_string($values['title'])."','".$content_template."','".Database::escape_string($new_file_name)."')";
 		   	$result = api_sql_query($sql, __FILE__, __LINE__);
 		   	
 		   	// display a feedback message
 		   	Display::display_confirmation_message('TemplateAdded');
 		   	echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('template_add.gif', get_lang('AddTemplate')).get_lang('AddTemplate').'</a>';
 	   } else {
+	   		$content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
 		   	$sql = "UPDATE $table_system_template set title = '".Database::escape_string($values['title'])."',
-											   		  content = '".Database::escape_string($values['template_text'])."'";
+											   		  content = '".$content_template."'";
 		   	if (!empty($new_file_name))
 		   	{
 		   		$sql .= ", image = '".Database::escape_string($new_file_name)."'";

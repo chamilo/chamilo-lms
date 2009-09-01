@@ -311,32 +311,6 @@ function api_get_months_long($language = null) {
  */
 
 /**
- * Checks whether a given format represents prson name in Western order (for which first name is first).
-* @param int/string $format (optional)	The person name format. It may be a pattern-string (for example '%t. %l, %f') or some of the constants PERSON_NAME_COMMON_CONVENTION (default), PERSON_NAME_WESTERN_ORDER, PERSON_NAME_EASTERN_ORDER, PERSON_NAME_LIBRARY_ORDER.
- * @param string $language (optional)	The language indentificator. If it is omited, the current interface language is assumed. This parameter has meaning with the format PERSON_NAME_COMMON_CONVENTION only.
- * @return bool							The result TRUE means that the order is first_name last_name, FALSE means last_name first_name.
- * Note: You may use this function:
- * 1. for determing the order of the fields or columns "First name" and "Last name" in forms and tables;
- * 2. for constructing the ORDER clause of SQL queries, related to first name and last name;
- * 3. for adjusting php-implemented sorting by names in tables and reports.
- * @author Ivan Tcholakov
- */
-function api_is_western_name_order($format = null, $language = null) {
-	static $order = array();
-	if (empty($format)) {
-		$format = PERSON_NAME_COMMON_CONVENTION;
-	}
-	if (empty($language)) {
-		$language = api_get_interface_language();
-	}
-	if (!isset($order[$format][$language])) {
-		$test_name = api_get_person_name('%f', '%l', '%t', $format, $language);
-		$order[$format][$language] = strpos($test_name, '%f') <= strpos($test_name, '%l');
-	}
-	return $order[$format][$language];
-}
-
-/**
  * Builds a person (full) name depending on the convention for a given language.
  * @param string $first_name			The first name of the preson.
  * @param string $last_name				The last name of the person.
@@ -353,7 +327,6 @@ function api_is_western_name_order($format = null, $language = null) {
  * @author Ivan Tcholakov
  */
 function api_get_person_name($first_name, $last_name, $title = null, $format = null, $language = null) {
-	static $conventions;
 	static $valid = array();
 	if (empty($format)) {
 		$format = PERSON_NAME_COMMON_CONVENTION;
@@ -365,30 +338,7 @@ function api_get_person_name($first_name, $last_name, $title = null, $format = n
 		if (is_int($format)) {
 			switch ($format) {
 				case PERSON_NAME_COMMON_CONVENTION:
-					if (!isset($conventions)) {
-						$file = dirname(__FILE__) . '/internationalization_database/name_order_conventions.php';
-						if (file_exists($file)) {
-							$conventions = include ($file);
-						} else {
-							$conventions = array('english' => 'title first_name last_name');
-						}
-						$search = array('first_name', 'last_name', 'title');
-						$replacement = array('%f', '%l', '%t');
-						foreach ($conventions as $key => &$pattern) {
-							// Creation of patterns using the configuration options in the internationalization "database".
-							$pattern = str_ireplace($search, $replacement, $pattern);
-							// Ensuring separation between the parts of every pattern.
-							$pattern = str_replace('%', ' %', $pattern);
-							// Cleaning the patterns.
-							$pattern = _api_clean_person_name($pattern);
-							// Validating the patterns.
-							$pattern = _api_validate_person_name_format($pattern);
-						}
-						if (empty($conventions[api_refine_language_id($language)])) {
-							$conventions[api_refine_language_id($language)] = '%t %f %l';
-						}
-					}
-					$valid[$format][$language] = $conventions[api_refine_language_id($language)];
+					$valid[$format][$language] = _api_get_person_name_convention($language, 'format');
 					break;
 				case PERSON_NAME_WESTERN_ORDER:
 					$valid[$format][$language] = '%t %f %l';
@@ -407,6 +357,49 @@ function api_get_person_name($first_name, $last_name, $title = null, $format = n
 		}
 	}
 	return _api_clean_person_name(str_replace(array('%f', '%l', '%t'), array($first_name, $last_name, $title), $valid[$format][$language]));
+}
+
+/**
+ * Checks whether a given format represents person name in Western order (for which first name is first).
+* @param int/string $format (optional)	The person name format. It may be a pattern-string (for example '%t. %l, %f') or some of the constants PERSON_NAME_COMMON_CONVENTION (default), PERSON_NAME_WESTERN_ORDER, PERSON_NAME_EASTERN_ORDER, PERSON_NAME_LIBRARY_ORDER.
+ * @param string $language (optional)	The language indentificator. If it is omited, the current interface language is assumed. This parameter has meaning with the format PERSON_NAME_COMMON_CONVENTION only.
+ * @return bool							The result TRUE means that the order is first_name last_name, FALSE means last_name first_name.
+ * Note: You may use this function for determing the order of the fields or columns "First name" and "Last name" in forms, tables and reports.
+ * @author Ivan Tcholakov
+ */
+function api_is_western_name_order($format = null, $language = null) {
+	static $order = array();
+	if (empty($format)) {
+		$format = PERSON_NAME_COMMON_CONVENTION;
+	}
+	if (empty($language)) {
+		$language = api_get_interface_language();
+	}
+	if (!isset($order[$format][$language])) {
+		$test_name = api_get_person_name('%f', '%l', '%t', $format, $language);
+		$order[$format][$language] = strpos($test_name, '%f') <= strpos($test_name, '%l');
+	}
+	return $order[$format][$language];
+}
+
+/**
+ * Returns a directive for sorting person names depending on a given language and based on the options in the internationalization "database".
+ * @param string $language (optional)	The input language. If it is omited, the current interface language is assumed.
+ * @return bool							Returns boolean value. TRUE means ORDER BY first_name, last_name; FALSE means ORDER BY last_name, first_name.
+ * Note: You may use this function:
+ * 2. for constructing the ORDER clause of SQL queries, related to first_name and last_name;
+ * 3. for adjusting php-implemented sorting in tables and reports.
+ * @author Ivan Tcholakov
+ */
+function api_sort_by_first_name($language = null) {
+	static $sort_by_first_name = array();
+	if (empty($language)) {
+		$language = api_get_interface_language();
+	}
+	if (!isset($sort_by_first_name[$language])) {
+		$sort_by_first_name[$language] = _api_get_person_name_convention($language, 'sort_by');
+	}
+	return $sort_by_first_name[$language];
 }
 
 

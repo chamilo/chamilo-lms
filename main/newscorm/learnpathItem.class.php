@@ -437,7 +437,6 @@ class learnpathItem{
                     "AND   lp_view_id = ".$this->view_id." " .
                     "AND   view_count = ".$this->attempt_id;
             $res = api_sql_query($sql,__FILE__,__LINE__);
-		error_log(mysql_error());
             if (Database::num_rows($res)>0) {
                 $row = Database::fetch_array($res);
                 $lp_iv_id = $row[0];

@@ -1363,7 +1363,7 @@ if ($_GET['action']=='edit')
 				}
 				
 				//
-				if (!empty($row['max_text']) && $row['max_text']>=word_count($row['content']))
+				if (!empty($row['max_text']) && $row['max_text']<=word_count($row['content']))
 				{
 					$message=get_lang('HasReachedMaxNumWords');
 					Display::display_warning_message($message);
@@ -1426,27 +1426,28 @@ if ($_GET['action']=='edit')
 					$message_task.='<p>'.get_lang('StartDate').': '.$message_task_startdate.'</p>';
 					$message_task.='<p>'.get_lang('EndDate').': '.$message_task_enddate;
 					$message_task.=' ('.get_lang('AllowLaterSends').') '.$message_task_delayedsubmit.'</p>';
-					$message_task.='<p>'.get_lang('OtherRequirements').': '.get_lang('NMaxVersion').': '.$message_task_max_version;
+					$message_task.='<p>'.get_lang('OtherSettings').': '.get_lang('NMaxVersion').': '.$message_task_max_version;
 					$message_task.=' '.get_lang('NMaxWords').': '.$message_task_max_text;
 					
 					//display message
-					echo '<div class="normal-message">'.$message_task.'</div>';
+					Display::display_normal_message($message_task,false);
+				
 				}
 				
 				if($row['progress']==$row['fprogress1'] && !empty($row['fprogress1']))
 				{
 					$feedback_message='<b>'.get_lang('Feedback').'</b><p>'.$row['feedback1'].'</p>';
-					Display::display_normal_message($feedback_message);
+					Display::display_normal_message($feedback_message, false);
 				}
 				elseif($row['progress']==$row['fprogress2'] && !empty($row['fprogress2']))
 				{
 					$feedback_message='<b>'.get_lang('Feedback').'</b><p>'.$row['feedback2'].'</p>';
-					Display::display_normal_message($feedback_message);
+					Display::display_normal_message($feedback_message, false);
 				}
 				elseif($row['progress']==$row['fprogress3'] && !empty($row['fprogress3']))
 				{
 					$feedback_message='<b>'.get_lang('Feedback').'</b><p>'.$row['feedback3'].'</p>';
-					Display::display_normal_message($feedback_message);
+					Display::display_normal_message($feedback_message, false);
 				}		
 		
 				//previous checking for concurrent editions

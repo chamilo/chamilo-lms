@@ -324,6 +324,20 @@ abstract class Question
 	{
 		global $picturePath, $_course, $_user;
 
+		if (!file_exists($picturePath)) {			
+			if (mkdir($picturePath)) {
+				$perm = api_get_setting('permissions_for_new_directories');
+				$perm = octdec(!empty($perm)?$perm:'0770');
+				chmod($picturePath,$perm);
+				// document path
+				$documentPath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . "/document";
+				$path = str_replace($documentPath,'',$picturePath);	
+				$title_path = basename($picturePath);				
+				$doc_id = add_document($_course, $path, 'folder', 0,$title_path);
+				api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id']);
+			}										
+		} 
+		
 		// if the question has got an ID
 		if($this->id)
 		{

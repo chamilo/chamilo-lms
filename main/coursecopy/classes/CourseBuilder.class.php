@@ -296,7 +296,7 @@ class CourseBuilder
 			while ($obj = Database::fetch_object($db_result))
 			{
 				$question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level);
-				$sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.$obj->id;
+				$sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.(int)$obj->id;
 				$db_result2 = api_sql_query($sql, __FILE__, __LINE__);
 				while ($obj2 = Database::fetch_object($db_result2))
 				{

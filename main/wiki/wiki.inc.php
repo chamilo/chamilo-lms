@@ -817,7 +817,7 @@ function display_wiki_entry()
 	
 	if (!empty($row['task']))
 	{
-		$icon_task='<img src="../img/wiki/task.gif" title="'.get_lang('TaskExtra').'" alt="'.get_lang('TaskExtra').'" />';
+		$icon_task='<img src="../img/wiki/task.gif" title="'.get_lang('StandardTask').'" alt="'.get_lang('StandardTask').'" />';
 	}
 
 	//Show page. Show page to all users if isn't hide page. Mode assignments: if student is the author, can view

@@ -86,6 +86,38 @@ function &_api_get_day_month_names($language = null) {
  */
 
 /**
+ * Returns returns person name convention for a given language.
+ * @param string $language	The input language.
+ * @param string $type		The type of the requested convention. It may be 'format' for name order convention or 'sort_by' for name sorting convention.
+ * @return mixed			Depending of the requested type, the returned result may be string or boolean; null is returned on error;
+ */
+function _api_get_person_name_convention($language, $type) {
+	static $conventions;
+	$language = api_refine_language_id($language);
+	if (!isset($conventions)) {
+		$file = dirname(__FILE__) . '/internationalization_database/name_order_conventions.php';
+		if (file_exists($file)) {
+			$conventions = include ($file);
+		} else {
+			$conventions = array('english' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'));
+		}
+		$search = array('first_name', 'last_name', 'title');
+		$replacement = array('%f', '%l', '%t');
+		foreach (array_keys($conventions) as $key) {
+			$conventions[$key]['format'] = _api_validate_person_name_format(_api_clean_person_name(str_replace('%', ' %', str_ireplace($search, $replacement, $conventions[$key]['format']))));
+			$conventions[$key]['sort_by'] = strtolower($conventions[$key]['sort_by']) != 'last_name' ? true : false;
+		}
+	}
+	switch ($type) {
+		case 'format':
+			return is_string($conventions[$language]['format']) ? $conventions[$language]['format'] : '%t %f %l';
+		case 'sort_by':
+			return is_bool($conventions[$language]['sort_by']) ? $conventions[$language]['sort_by'] : true;
+	}
+	return null;
+}
+
+/**
  * Replaces non-valid formats for person names with the default (English) format.
  * @param string $format	The input format to be verified. 
  * @return bool				Returns the same format if is is valid, otherwise returns a valid English format.

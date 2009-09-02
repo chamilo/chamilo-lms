@@ -4,7 +4,7 @@
  * Implements the edition of course-session settings
  * @package dokeos.admin
  */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='admin';
 
 $cidReset=true;
@@ -64,7 +64,8 @@ if ($_POST['formSent']) {
 	}
 }
 
-$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1' ORDER BY lastname,firstname,username";
+$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
+$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
 
 $result=api_sql_query($sql,__FILE__,__LINE__);
 
@@ -110,7 +111,7 @@ foreach($coaches as $enreg)
 {
 ?>
 
-	<option value="<?php echo $enreg['user_id']; ?>" <?php if((!$sent && $enreg['user_id'] == $infos['id_coach']) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>
+	<option value="<?php echo $enreg['user_id']; ?>" <?php if((!$sent && $enreg['user_id'] == $infos['id_coach']) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['lastname'], $enreg['firstname']).' ('.$enreg['username'].')'; ?></option>
 
 <?php
 }

@@ -11,7 +11,7 @@
 ==============================================================================
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
 include ('../inc/global.inc.php');
@@ -61,32 +61,33 @@ $course = Database::fetch_array($result,'ASSOC');
 
 // Get course teachers
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$sql = "SELECT user.user_id,lastname,firstname FROM $table_user as user,$table_course_user as course_user WHERE course_user.status='1' AND course_user.user_id=user.user_id AND course_user.course_code='".$course_code."' ORDER BY lastname,firstname";
+$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
+$sql = "SELECT user.user_id,lastname,firstname FROM $table_user as user,$table_course_user as course_user WHERE course_user.status='1' AND course_user.user_id=user.user_id AND course_user.course_code='".$course_code."'".$order_clause;
 $res = api_sql_query($sql,__FILE__,__LINE__);
 $course_teachers = array();
 while($obj = Database::fetch_object($res))
 {
-		$course_teachers[$obj->user_id] = $obj->lastname.' '.$obj->firstname;
+	$course_teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 }
 
 // Get all possible teachers without the course teachers
-$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status='1' ORDER BY lastname,firstname";
+$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status='1'".$order_clause;
 $res = api_sql_query($sql,__FILE__,__LINE__);
 $teachers = array();
 
 $platform_teachers[0] = '-- '.get_lang('NoManager').' --';
 while($obj = Database::fetch_object($res))
-{		
+{
 	if(!array_key_exists($obj->user_id,$course_teachers)){
-		$teachers[$obj->user_id] = $obj->lastname.' '.$obj->firstname;
+		$teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 	}
-	
+
 
 	if($course['tutor_name']==$course_teachers[$obj->user_id]){
 		$course['tutor_name']=$obj->user_id;
 	}
-	//We add in the array platform teachers 
-	$platform_teachers[$obj->user_id] = $obj->lastname.' '.$obj->firstname;
+	//We add in the array platform teachers
+	$platform_teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 }
 
 //Case where there is no teacher in the course
@@ -127,7 +128,7 @@ $element_template = <<<EOT
 		</div>
 	</div>
 EOT;
-	
+
 $renderer = $form->defaultRenderer();
 $renderer -> setElementTemplate($element_template, 'group');
 $form -> addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="50" align="center"><input type="button" onclick="moveItem(document.getElementById(\'platform_teachers\'), document.getElementById(\'course_teachers\'))" value=">>"><br><br><input type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))" value="<<"></td><td>');
@@ -165,7 +166,7 @@ $form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'),
 // Set some default values
 
 $course_db_name = $course['db_name'];
-$course['title']=api_html_entity_decode($course['title'],ENT_QUOTES,$charset);
+$course['title'] = api_html_entity_decode($course['title'], ENT_QUOTES, $charset);
 $form->setDefaults($course);
 // Validate form
 if( $form->validate())
@@ -174,7 +175,7 @@ if( $form->validate())
 	$dbName = $_POST['dbName'];
 	$course_code = $course['code'];
 	$visual_code = $course['visual_code'];
-    
+
     // Check if the visual code is already used by *another* course
     $visual_code_is_used = false;
     error_log($visual_code);
@@ -190,12 +191,12 @@ if( $form->validate())
         }
         $warn = substr($warn,0,-1);
     }
-	
+
 	$tutor_id = $course['tutor_name'];
 	$tutor_name=$platform_teachers[$tutor_id];
-	
+
 	$teachers = $course['group']['course_teachers'];
-	
+
 	$title = $course['title'];
 	$category_code = $course['category_code'];
 	$department_name = $course['department_name'];
@@ -217,12 +218,12 @@ if( $form->validate())
 								department_name='".Database::escape_string($department_name)."',
 								department_url='".Database::escape_string($department_url)."',
 								disk_quota='".Database::escape_string($disk_quota)."',
-								visibility = '".Database::escape_string($visibility)."', 
+								visibility = '".Database::escape_string($visibility)."',
 								subscribe = '".Database::escape_string($subscribe)."',
 								unsubscribe='".Database::escape_string($unsubscribe)."'
 							WHERE code='".Database::escape_string($course_code)."'";
 	api_sql_query($sql, __FILE__, __LINE__);
-	
+
 	//Delete only teacher relations that doesn't match the selected teachers
 	$cond='';
 	if(count($teachers)>0){
@@ -230,14 +231,14 @@ if( $form->validate())
 	}	
 	$sql='DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
 	api_sql_query($sql, __FILE__, __LINE__);
-	
+
 	if(count($teachers)>0){
 		foreach($teachers as $key){
-			
+
 			//We check if the teacher is already subscribed in this course 
 			$sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'"';
 			$result = api_sql_query($sql_select_teacher, __FILE__, __LINE__);
-			
+
 			if(Database::num_rows($result) == 1){
 				$sql = 'UPDATE '.$course_user_table.' SET status = "1" WHERE course_code = "'.$course_code.'" AND user_id = "'.$key.'"';
 			}
@@ -252,11 +253,11 @@ if( $form->validate())
 					user_course_cat='0'";
 			}
 			api_sql_query($sql, __FILE__, __LINE__);
-			
+
 		}
-		
+
 	}
-	
+
 	$sql = "INSERT IGNORE INTO ".$course_user_table . " SET
 				course_code = '".Database::escape_string($course_code). "',
 				user_id = '".$tutor_id . "',
@@ -266,7 +267,7 @@ if( $form->validate())
 				sort='0',
 				user_course_cat='0'";
 	api_sql_query($sql, __FILE__, __LINE__);
-	
+
 	$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE,$course_db_name);
 	$sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."'";
 	if ($visual_code_is_used == true) {
@@ -280,30 +281,30 @@ Display::display_header($tool_name);
 
 echo "<script>
 function moveItem(origin , destination){
-	
+
 	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {	
+		if(origin.options[i].selected) {
 			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
-			origin.options[i]=null;	
+			origin.options[i]=null;
 			i = i-1;
 		}
 	}
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
-	
+
 }
 
-function sortOptions(options) { 
+function sortOptions(options) {
 
 	newOptions = new Array();
 	for (i = 0 ; i<options.length ; i++)
 		newOptions[i] = options[i];
-		
-	newOptions = newOptions.sort(mysort);	
+
+	newOptions = newOptions.sort(mysort);
 	options.length = 0;
 	for(i = 0 ; i < newOptions.length ; i++)
 		options[i] = newOptions[i];
-	
+
 }
 
 function mysort(a, b){
@@ -328,7 +329,7 @@ function valide(){
 $form->display();
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
 */
 Display :: display_footer();

@@ -118,7 +118,7 @@ api_display_tool_title($tool_name);
 </tr>
 <tr>
 	<td><?php echo get_lang('GeneralCoach'); ?> :</td>
-	<td><?php echo $session['lastname'].' '.$session['firstname'].' ('.$session['username'].')' ?></td>
+	<td><?php echo api_get_person_name($session['firstname'], $session['lastname']).' ('.$session['username'].')' ?></td>
 </tr>
 <tr>
 	<td><?php echo get_lang('Date'); ?> :</td>
@@ -192,9 +192,9 @@ else {
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
 		$course['nbr_users'] = mysql_result($rs,0,0);
 		if (empty($course['username'])) {
-			$coach = get_lang('None');		
+			$coach = get_lang('None');
 		} else {
-			$coach = $course['lastname'].' '.$course['firstname'].' ('.$course['username'].')';
+			$coach = api_get_person_name($course['firstname'], $course['lastname']).' ('.$course['username'].')';
 		}
 
 		$orig_param = '&origin=resume_session';	
@@ -235,13 +235,12 @@ if($session['nbr_users']==0){
 else {
 
 	// classe development, obsolete for the moment
-
+	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 	$sql = 'SELECT '.$tbl_user.'.user_id, lastname, firstname, username
 			FROM '.$tbl_user.'
 			INNER JOIN '.$tbl_session_rel_user.'
 				ON '.$tbl_user.'.user_id = '.$tbl_session_rel_user.'.id_user
-				AND '.$tbl_session_rel_user.'.id_session = '.$id_session.'
-			ORDER BY lastname, firstname';
+				AND '.$tbl_session_rel_user.'.id_session = '.$id_session.$order_clause;
 
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$users=api_store_result($result);
@@ -249,7 +248,7 @@ else {
 	foreach($users as $user){
 		echo '<tr>
 					<td width="90%">
-						<b>'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</b>
+						<b>'.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')</b>
 					</td>
 					<td>
 						<a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>

@@ -60,14 +60,15 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 global $_configuration;
 
 // Get all possible teachers
+$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status=1 ORDER BY lastname,firstname";
+$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status=1".$order_clause;
 //filtering teachers when creating a course
 if ($_configuration['multiple_access_urls']==true){
 	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);   	
 	$sql = "SELECT u.user_id,lastname,firstname FROM $table_user as u
 			INNER JOIN $access_url_rel_user_table url_rel_user 
-			ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1 ORDER BY lastname,firstname ";  
+			ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;  
 }
 
 $res = api_sql_query($sql,__FILE__,__LINE__);
@@ -75,7 +76,7 @@ $teachers = array();
 $teachers[0] = '-- '.get_lang('NoManager').' --';
 while($obj = mysql_fetch_object($res))
 {
-	$teachers[$obj->user_id] = $obj->lastname.' '.$obj->firstname;
+	$teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 }
 
 

@@ -41,7 +41,7 @@ if (!api_is_platform_admin() && $infos['session_admin_id']!=$_user['user_id']) {
 }
 
 if ($_POST['formSent']) {
-	$formSent=1;	
+	$formSent=1;
 	$name= $_POST['name'];
 	$year_start= $_POST['year_start']; 
 	$month_start=$_POST['month_start']; 
@@ -60,7 +60,8 @@ if ($_POST['formSent']) {
 	}
 }
 
-$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1' ORDER BY lastname,firstname,username";
+$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
+$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
 
 if ($_configuration['multiple_access_urls']==true){
 	$table_access_url_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
@@ -68,11 +69,10 @@ if ($_configuration['multiple_access_urls']==true){
 	if ($access_url_id != -1) {
 		$sql="SELECT DISTINCT u.user_id,lastname,firstname,username FROM $tbl_user u INNER JOIN $table_access_url_rel_user url_rel_user
 			ON (url_rel_user.user_id = u.user_id)
-			WHERE status='1' AND access_url_id = $access_url_id
-			ORDER BY lastname,firstname,username";
+			WHERE status='1' AND access_url_id = $access_url_id.$order_clause;
 	}
-}		
-			
+}
+
 $result=api_sql_query($sql,__FILE__,__LINE__);
 
 $Coaches=api_store_result($result);
@@ -109,7 +109,7 @@ if (!empty($return)) {
 foreach($Coaches as $enreg) {
 ?>
 
-	<option value="<?php echo $enreg['user_id']; ?>" <?php if((!$sent && $enreg['user_id'] == $infos['id_coach']) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>
+	<option value="<?php echo $enreg['user_id']; ?>" <?php if((!$sent && $enreg['user_id'] == $infos['id_coach']) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 
 <?php
 }
@@ -267,16 +267,16 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
 	</td>
 	<td>
 		<a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('DefineSessionOptions') ?></a>
-		<div style="display: 
-			<?php 
+		<div style="display:
+			<?php
 				if($formSent){
-					if($nb_days_access_before!=0 || $nb_days_access_after!=0) 
-						echo 'block'; 
+					if($nb_days_access_before!=0 || $nb_days_access_after!=0)
+						echo 'block';
 					else echo 'none';
 				}
 				else{
 					if($infos['nb_days_access_before_beginning']!=0 || $infos['nb_days_access_after_end']!=0)
-						echo 'block'; 
+						echo 'block';
 					else
 						echo 'none';
 				}

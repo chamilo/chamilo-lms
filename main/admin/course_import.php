@@ -75,7 +75,7 @@ function validate_data($courses) {
 		{
 			if (UserManager :: is_username_available($course['Teacher']))
 			{
-				$course['error'] = get_lang('UnknownTeacher');
+				$course['error'] = get_lang('UnknownTeacher').' ('.$course['Teacher'].')';
 				$errors[] = $course;
 			}
 		}
@@ -87,7 +87,7 @@ function validate_data($courses) {
 			$res = api_sql_query($sql, __FILE__, __LINE__);
 			if (mysql_num_rows($res) == 0)
 			{
-				$course['error'] = get_lang('UnkownCategory');
+				$course['error'] = get_lang('UnkownCategory').' ('.$course['CourseCategory'].')';
 				$errors[] = $course;
 			}
 		}
@@ -114,7 +114,7 @@ function save_data($courses)
 		}
 		$keys = define_course_keys($course['Code'], "", $_configuration['db_prefix']);
 		$user_table = Database::get_main_table(TABLE_MAIN_USER);
-		$sql = "SELECT user_id, CONCAT(lastname,' ',firstname) AS name FROM $user_table WHERE username = '".Database::escape_string($course['Teacher'])."'";
+		$sql = "SELECT user_id, ".(api_is_western_name_order(null, $course_language) ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)")." AS name FROM $user_table WHERE username = '".Database::escape_string($course['Teacher'])."'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$teacher = mysql_fetch_object($res);
 		$visual_code = $keys["currentCourseCode"];

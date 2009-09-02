@@ -516,6 +516,7 @@ function ldap_get_number_of_users()
 function ldap_get_user_data($from, $number_of_items, $column, $direction)
 {
 	$users = array();
+	$is_western_name_order = api_is_western_name_order();
 	if (isset($_GET['submit']))
 	{
 		$info = ldap_get_users();
@@ -532,8 +533,16 @@ function ldap_get_user_data($from, $number_of_items, $column, $direction)
 				//$user[] = $dn_array[0]; // uid is first key
 				$user[] = $info[$key]['uid'][0];
 				$user[] = $info[$key]['uid'][0];
-				$user[] = api_convert_encoding($info[$key]['givenname'][0], api_get_system_encoding(), 'UTF-8');
-				$user[] = api_convert_encoding($info[$key]['sn'][0], api_get_system_encoding(), 'UTF-8');
+				if ($is_western_name_order)
+				{
+					$user[] = api_convert_encoding($info[$key]['givenname'][0], api_get_system_encoding(), 'UTF-8');
+					$user[] = api_convert_encoding($info[$key]['sn'][0], api_get_system_encoding(), 'UTF-8');
+				}
+				else
+				{
+					$user[] = api_convert_encoding($info[$key]['sn'][0], api_get_system_encoding(), 'UTF-8');
+					$user[] = api_convert_encoding($info[$key]['givenname'][0], api_get_system_encoding(), 'UTF-8');
+				}
 				$user[] = $info[$key]['mail'][0];
 				$outab[] = $info[$key]['eduPersonPrimaryAffiliation'][0]; // Ici "student"
 				$users[] = $user;

@@ -18,7 +18,7 @@ require_once('../inc/global.inc.php');
 
 // including additional libraries
 require_once(api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
-require_once('../inc/lib/xajax/xajax.inc.php');
+require_once ('../inc/lib/xajax/xajax.inc.php');
 $xajax = new xajax();
 //$xajax->debugOn();
 $xajax -> registerFunction ('search_coachs');
@@ -41,25 +41,27 @@ $tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
 function search_coachs($needle)
 {
 	global $tbl_user;
-	
+
 	$xajax_response = new XajaxResponse();
 	$return = '';
-	
+
 	if(!empty($needle))
 	{
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
-		
+
+		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
+
 		// search users where username or firstname or lastname begins likes $needle
 		$sql = 'SELECT username, lastname, firstname FROM '.$tbl_user.' user
 				WHERE (username LIKE "'.$needle.'%"
 				OR firstname LIKE "'.$needle.'%"
 				OR lastname LIKE "'.$needle.'%")
-				AND status=1
-				ORDER BY lastname, firstname, username
-				LIMIT 10'; 
-		
+				AND status=1'.
+				$order_clause.
+				' LIMIT 10';
+
 		global $_configuration;	
 		if ($_configuration['multiple_access_urls']==true) {		
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
@@ -71,19 +73,19 @@ function search_coachs($needle)
 				WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
 				OR firstname LIKE "'.$needle.'%"
 				OR lastname LIKE "'.$needle.'%")
-				AND status=1
-				ORDER BY lastname, firstname, username
-				LIMIT 10';			
+				AND status=1'.
+				$order_clause.
+				' LIMIT 10';			
 				
 			}
 		}		
 				
-		$rs = api_sql_query($sql, __FILE__, __LINE__);		
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
 		while ($user = Database :: fetch_array($rs)) {
-			$return .= '<a href="#" onclick="fill_coach_field(\''.$user['username'].'\')">'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</a><br />';
+			$return .= '<a href="javascript: void(0);" onclick="javascript: fill_coach_field(\''.$user['username'].'\')">'.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')</a><br />';
 		}
 	}
-	$xajax_response -> addAssign('ajax_list_coachs','innerHTML',api_utf8_encode($return));
+	$xajax_response -> addAssign('ajax_list_coachs','innerHTML', api_utf8_encode($return));
 	return $xajax_response;
 }
 $xajax -> processRequests();
@@ -191,7 +193,7 @@ if (intval($count_users)<50) {
 }
 ?>
 
-	
+
 </td>
 </tr>
 <tr>
@@ -353,7 +355,7 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
 </form>
 <script type="text/javascript">
 
-function setDisable(select) {
+function setDisable(select){
 	document.form.day_start.disabled = (select.checked) ? true : false;
 	document.form.month_start.disabled = (select.checked) ? true : false;
 	document.form.year_start.disabled = (select.checked) ? true : false;

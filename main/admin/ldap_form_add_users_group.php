@@ -40,13 +40,17 @@ elseif(!empty($id_session))
 {
 	echo '<input type="hidden" name="id_session" value="'.Security::remove_XSS($id_session).'">';
 }
+$is_western_name_order = api_is_western_name_order();
 echo '<input type="hidden" name="confirmed" value="yes">';
 echo '<table border="0" cellspacing="0" width="100%">';
 echo '<tr align="center" id="header3">' .
 		'<td width="15%"><input type="button" value="'.get_lang('AllSlashNone').'" onClick="checkAll();"></td>' .
 		'<td width="40%"><b>'.get_lang('Email').'</b></td>' .
-		'<td width="15%"><b>'.get_lang('Name').'</b></td>' .
-		'<td width="15%"><b>'.get_lang('FirstName').'</b></td>' .
+		($is_western_name_order
+			? '<td width="15%"><b>'.get_lang('FirstName').'</b></td>' .
+			'<td width="15%"><b>'.get_lang('Name').'</b></td>'
+			: '<td width="15%"><b>'.get_lang('Name').'</b></td>' .
+			'<td width="15%"><b>'.get_lang('FirstName').'</b></td>') .
 		'<td width="15%"><b>'.get_lang('Login').'</b></td>' .
 	  '</tr>'."\n";																																																					   
 while (list ($key, $val) = each($nom_form)) {
@@ -55,8 +59,16 @@ while (list ($key, $val) = each($nom_form)) {
 	echo '<tr align="center" id="header'.$ndiv.'">';
 	echo '<td><input type="checkbox" name="checkboxes[]" value="'.$key.'" checked="checked"></td>';
 	echo '<td>'.$email_form[$key].'<input type="hidden" name="email_form['.$key.']" size="40" value="'.$email_form[$key].'"></td>';
-	echo '<td>'.$nom_form[$key].'<input type="hidden" name="nom_form['.$key.']" size="20" value="'.$nom_form[$key].'"></td>';
-	echo '<td>'.$prenom_form[$key].'<input type="hidden" name="prenom_form['.$key.']" size="20" value="'.$prenom_form[$key].'"></td>';
+	if ($is_western_name_order)
+	{
+		echo '<td>'.$prenom_form[$key].'<input type="hidden" name="prenom_form['.$key.']" size="20" value="'.$prenom_form[$key].'"></td>';
+		echo '<td>'.$nom_form[$key].'<input type="hidden" name="nom_form['.$key.']" size="20" value="'.$nom_form[$key].'"></td>';
+	}
+	else
+	{
+		echo '<td>'.$nom_form[$key].'<input type="hidden" name="nom_form['.$key.']" size="20" value="'.$nom_form[$key].'"></td>';
+		echo '<td>'.$prenom_form[$key].'<input type="hidden" name="prenom_form['.$key.']" size="20" value="'.$prenom_form[$key].'"></td>';
+	}
 	echo '<td>'.$username_form[$key].'<input type="hidden" name="username_form['.$key.']" size="10" value="'.$username_form[$key].'">';
 	echo '<input type="hidden" name="tutor_form['.$key.']" value="0">';
 	echo '<input type="hidden" name="admin_form['.$key.']" value="1">';

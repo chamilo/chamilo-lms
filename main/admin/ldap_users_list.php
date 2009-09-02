@@ -200,8 +200,16 @@ if (isset ($_POST['action']))
 
 $form = new FormValidator('advanced_search','get');
 $form->add_textfield('keyword_username',get_lang('LoginName'),false);
-$form->add_textfield('keyword_lastname',get_lang('LastName'),false);
-$form->add_textfield('keyword_firstname',get_lang('FirstName'),false);
+if (api_is_western_name_order())
+{
+	$form->add_textfield('keyword_firstname', get_lang('FirstName'), false);
+	$form->add_textfield('keyword_lastname', get_lang('LastName'), false);
+}
+else
+{
+	$form->add_textfield('keyword_lastname',get_lang('LastName'),false);
+	$form->add_textfield('keyword_firstname',get_lang('FirstName'),false);
+}
 if (isset($_GET['id_session'])) 
 	$form->addElement('hidden','id_session',$_GET['id_session']);
 
@@ -233,8 +241,16 @@ $table = new SortableTable('users', 'ldap_get_number_of_users', 'ldap_get_user_d
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('LoginName'));
-$table->set_header(2, get_lang('LastName'));
-$table->set_header(3, get_lang('FirstName'));
+if (api_is_western_name_order())
+{
+	$table->set_header(2, get_lang('FirstName'));
+	$table->set_header(3, get_lang('LastName'));
+}
+else
+{
+	$table->set_header(2, get_lang('LastName'));
+	$table->set_header(3, get_lang('FirstName'));
+}
 $table->set_header(4, get_lang('Email'));
 $table->set_header(5, get_lang('Actions'));
 //$table->set_column_filter(5, 'email_filter');

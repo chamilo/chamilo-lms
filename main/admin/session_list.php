@@ -286,8 +286,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		</div>
 	
 		<br />
-		<a href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'true');return false;"><?php echo get_lang('SelectAll') ?></a>&nbsp;-&nbsp;
-		<a href="#" onclick="selectAll('idChecked',<?php echo $x; ?>,'false');return false;"><?php echo get_lang('UnSelectAll') ?></a>
+		<a href="javascript: void(0);" onclick="javascript: selectAll('idChecked',<?php echo $x; ?>,'true');return false;"><?php echo get_lang('SelectAll') ?></a>&nbsp;-&nbsp;
+		<a href="javascript: void(0);" onclick="javascript: selectAll('idChecked',<?php echo $x; ?>,'false');return false;"><?php echo get_lang('UnSelectAll') ?></a>
 		<select name="action">
 		<option value="delete"><?php echo get_lang('DeleteSelectedSessions'); ?></option>
 		</select>

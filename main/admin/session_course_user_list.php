@@ -20,7 +20,7 @@ $id_session=intval($_GET['id_session']);
 $course_code=trim(stripslashes($_GET['course_code']));
 $page=intval($_GET['page']);
 $action=$_REQUEST['action'];
-$sort=in_array($_GET['sort'],array('lastname','firstname','username'))?$_GET['sort']:'lastname';
+$sort=in_array($_GET['sort'],array('lastname','firstname','username'))?$_GET['sort']:api_sort_by_first_name()?'firstname':'lastname';
 $idChecked = (is_array($_GET['idChecked']) ? $_GET['idChecked'] : (is_array($_POST['idChecked']) ? $_POST['idChecked'] : null));
 if (is_array($idChecked)) {
 	$my_temp = array(); 
@@ -40,7 +40,7 @@ if(!list($session_name,$course_title)=mysql_fetch_row($result))
 if($action == 'delete') {	
 	if(is_array($idChecked) && count($idChecked)>0 ) {
 		$idChecked=implode(',',$idChecked);
-		api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='".addslashes($course_code)."' AND id_user IN($idChecked)",__FILE__,__LINE__);		
+		api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='".addslashes($course_code)."' AND id_user IN($idChecked)",__FILE__,__LINE__);
 		$nbr_affected_rows=mysql_affected_rows();
 		api_sql_query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session' AND course_code='".addslashes($course_code)."'",__FILE__,__LINE__);
 	}
@@ -50,8 +50,9 @@ if($action == 'delete') {
 
 $limit=20;
 $from=$page * $limit;
+$is_western_name_order = api_is_western_name_order();
 
-$result=api_sql_query("SELECT user_id,lastname,firstname,username FROM $tbl_session_rel_course_rel_user,$tbl_user WHERE user_id=id_user AND id_session='$id_session' AND course_code='".addslashes($course_code)."' ORDER BY $sort LIMIT $from,".($limit+1),__FILE__,__LINE__);
+$result=api_sql_query("SELECT user_id,".($is_western_name_order ? 'firstname,lastname' : 'lastname,firstname').",username FROM $tbl_session_rel_course_rel_user,$tbl_user WHERE user_id=id_user AND id_session='$id_session' AND course_code='".addslashes($course_code)."' ORDER BY $sort LIMIT $from,".($limit+1),__FILE__,__LINE__);
 $Users=api_store_result($result);
 
 $nbr_results=sizeof($Users);
@@ -93,8 +94,13 @@ if($nbr_results > $limit) {
 <table class="data_table" width="100%">
 <tr>
   <th>&nbsp;</th>
+  <?php if ($is_western_name_order) { ?>
+  <th><a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=firstname"><?php echo get_lang('FirstName');?></a></th>
+  <th><a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=lastname"><?php echo get_lang('LastName');?></a></th>
+  <?php } else { ?>
   <th><a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=lastname"><?php echo get_lang('LastName');?></a></th>
   <th><a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=firstname"><?php echo get_lang('FirstName');?></a></th>
+  <?php } ?>
   <th><a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=username"><?php echo get_lang('Login');?></a></th>
   <th><?php echo get_lang('Actions');?></th>
 </tr>
@@ -110,8 +116,13 @@ foreach($Users as $key=>$enreg) {
 
 <tr class="<?php echo $i?'row_odd':'row_even'; ?>">
   <td><input type="checkbox" name="idChecked[]" value="<?php echo $enreg['user_id']; ?>"></td>
+  <?php if ($is_western_name_order) { ?>
+  <td><?php echo api_htmlentities($enreg['firstname'],ENT_QUOTES,$charset); ?></td>
+  <td><?php echo api_htmlentities($enreg['lastname'],ENT_QUOTES,$charset); ?></td>
+  <?php } else { ?>
   <td><?php echo api_htmlentities($enreg['lastname'],ENT_QUOTES,$charset); ?></td>
   <td><?php echo api_htmlentities($enreg['firstname'],ENT_QUOTES,$charset); ?></td>
+  <?php } ?>
   <td><?php echo api_htmlentities($enreg['username'],ENT_QUOTES,$charset); ?></td>
   <td>
 	<a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>&action=delete&idChecked[]=<?php echo $enreg['user_id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><?php Display::display_icon('delete.gif', get_lang('Delete')); ?></a>

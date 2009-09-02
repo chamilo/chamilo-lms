@@ -1,11 +1,13 @@
 <?php
-/*
+/* For licensing terms, see /dokeos_license.txt */
+
+/**
  * This file includes lp_list_search to avoid duplication of code, it
  * bootstraps dokeos api enough to make lp_list_search work.
  */
 $language_file = array('admin');
 require_once ('../inc/global.inc.php');
- //var_dump(api_get_path(LIBRARY_PATH));
+$this_section =  SECTION_COURSES;
 
 if (extension_loaded('xapian')) {
 	include_once (api_get_path(LIBRARY_PATH).'course.lib.php');

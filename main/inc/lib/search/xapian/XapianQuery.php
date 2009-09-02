@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /dokeos_license.txt */
 require_once 'xapian.php';
 require_once dirname(__FILE__) . '/../IndexableChunk.class.php';
 //TODO: think another way without including specific fields here
@@ -22,8 +23,7 @@ define('XAPIAN_DB', api_get_path(SYS_PATH).'searchdb/');
  * @param   int             $count_type     Number of items to retrieve
  * @return  array                           An array of nids corresponding to the results.
  */
-function xapian_query($query_string, $db = NULL, $start = 0, $length = 10,
-  $extra = array(), $count_type = 0) {
+function xapian_query($query_string, $db = NULL, $start = 0, $length = 10, $extra = array(), $count_type = 0) {
 
     try {
         if (!is_object($db)) {

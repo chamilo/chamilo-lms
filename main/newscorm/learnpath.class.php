@@ -1,25 +1,5 @@
 <?php
-// $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 
 /**
  * This (abstract?) class defines the parent attributes and methods for the dokeos learnpaths and scorm
@@ -3991,7 +3971,7 @@ class learnpath {
 
 		$items_table = Database :: get_course_table(TABLE_LP_ITEM);
 		//TODO: make query secure agains XSS : use member attr instead of post var
-		$lp_id = $_POST['lp_id'];
+		$lp_id = intval($_POST['lp_id']);
 		$sql = "SELECT * FROM $items_table WHERE lp_id = $lp_id";
 		$result = api_sql_query($sql);
 		$di = new DokeosIndexer();
@@ -4001,33 +3981,38 @@ class learnpath {
 			$tbl_se_ref = Database :: get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
 			$sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d LIMIT 1';
 			$sql = sprintf($sql, $tbl_se_ref, $this->cc, TOOL_LEARNPATH, $lp_id, $lp_item['id']);
+			
 			$res = api_sql_query($sql, __FILE__, __LINE__);
-			$se_ref = Database :: fetch_array($res);
+			if (Database::num_rows($res)>0) {
+		
+				$se_ref = Database :: fetch_array($res);
 
-			// compare terms
-			$doc = $di->get_document($se_ref['search_did']);
-			$xapian_terms = xapian_get_doc_terms($doc, $prefix);
-			//var_dump($xapian_terms);
-			$xterms = array ();
-			foreach ($xapian_terms as $xapian_term)
-				$xterms[] = substr($xapian_term['name'], 1);
-
-			$dterms = $terms;
-			//var_dump($xterms);
-			//var_dump($dterms);
-
-			$missing_terms = array_diff($dterms, $xterms);
-			$deprecated_terms = array_diff($xterms, $dterms);
-
-			// save it to search engine
-			foreach ($missing_terms as $term) {
-				$doc->add_term($prefix . $term, 1);
+				// compare terms
+				$doc = $di->get_document($se_ref['search_did']);
+				
+				$xapian_terms = xapian_get_doc_terms($doc, $prefix);
+				//var_dump($xapian_terms);
+				$xterms = array ();
+				foreach ($xapian_terms as $xapian_term)
+					$xterms[] = substr($xapian_term['name'], 1);
+	
+				$dterms = $terms;
+				//var_dump($xterms);
+				//var_dump($dterms);
+	
+				$missing_terms = array_diff($dterms, $xterms);
+				$deprecated_terms = array_diff($xterms, $dterms);
+	
+				// save it to search engine
+				foreach ($missing_terms as $term) {
+					$doc->add_term($prefix . $term, 1);
+				}
+				foreach ($deprecated_terms as $term) {
+					$doc->remove_term($prefix . $term);
+				}
+				$di->getDb()->replace_document((int) $se_ref['search_did'], $doc);
+				$di->getDb()->flush();
 			}
-			foreach ($deprecated_terms as $term) {
-				$doc->remove_term($prefix . $term);
-			}
-			$di->getDb()->replace_document((int) $se_ref['search_did'], $doc);
-			$di->getDb()->flush();
 		}
 
 		return true;

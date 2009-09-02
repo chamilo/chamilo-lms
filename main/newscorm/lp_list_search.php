@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /dokeos_license.txt */
+
 /**
  * Script to draw the results from a query
  * @package: dokeos.learnpath
@@ -7,12 +9,10 @@
  */
 require api_get_path(LIBRARY_PATH).'search/search_widget.php';
 require api_get_path(LIBRARY_PATH).'search/DokeosQuery.php';
-require_once(api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php');
+require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
 require_once api_get_path(LIBRARY_PATH).'/specific_fields_manager.lib.php';
 
-$htmlHeadXtra[] = '
-    <link rel="stylesheet" type="text/css" href="'. api_get_path(WEB_PATH) .'main/newscorm/lp_list_search.css" />
-    ';
+$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'. api_get_path(WEB_PATH) .'main/newscorm/lp_list_search.css" />';
 event_access_tool(TOOL_SEARCH);
 
 if (isset($_SESSION['gradebook'])){

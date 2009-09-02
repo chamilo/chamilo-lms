@@ -522,9 +522,7 @@ class DocumentManager {
 						AND docs.path NOT LIKE '".$path.$added_slash."%/%'
 						AND last.tool = '".TOOL_DOCUMENT."' 
 						AND ".$to_field." = ".$to_value."
-						AND last.visibility".$visibility_bit;
-
-		//echo $sql;
+						AND last.visibility".$visibility_bit;	
 
 		$result = api_sql_query($sql);
 
@@ -574,10 +572,14 @@ class DocumentManager {
 	public static function get_all_document_folders ($_course, $to_group_id = '0', $can_see_invisible = false) {
 		$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
 		$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-		if(empty($doc_url)){
+		/*if(empty($doc_url)){
 			$to_group_id = '0';
 		} else {
 			$to_group_id = Database::escape_string($to_group_id);
+		}*/
+		
+		if (!empty($to_group_id)) {
+		   $to_group_id = intval($to_group_id);
 		}
 		
 		if ($can_see_invisible)

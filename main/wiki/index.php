@@ -1939,7 +1939,7 @@ if ($_GET['action']=='recentchanges')
 			//get icon task	
 			if (!empty($obj->task))
 			{
-				$icon_task='<img src="../img/wiki/task.gif" title="'.get_lang('TaskExtra').'" alt="'.get_lang('TaskExtra').'" />';
+				$icon_task='<img src="../img/wiki/task.gif" title="'.get_lang('StandardTask').'" alt="'.get_lang('StandardTask').'" />';
 			}
 			else
 			{
@@ -2029,7 +2029,7 @@ if ($_GET['action']=='allpages')
 			//get icon task	
 			if (!empty($obj->task))
 			{
-				$icon_task='<img src="../img/wiki/task.gif" title="'.get_lang('TaskExtra').'" alt="'.get_lang('TaskExtra').'" />';
+				$icon_task='<img src="../img/wiki/task.gif" title="'.get_lang('StandardTask').'" alt="'.get_lang('StandardTask').'" />';
 			}
 			else
 			{

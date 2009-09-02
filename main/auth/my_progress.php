@@ -211,10 +211,10 @@ foreach($Courses as $enreg)
 				</td>
 			</tr>
 			<tr>
-			  <th class="head"><?php echo get_lang('Learnpath'); ?></th>
-			  <th class="head"><?php echo get_lang('Time'); ?></th>
-			  <th class="head"><?php echo get_lang('Progress'); ?></th>
-			  <th class="head"><?php echo get_lang('LastConnexion'); ?></th>
+			  <th class="head" style="color:#000"><?php echo get_lang('Learnpath'); ?></th>
+			  <th class="head" style="color:#000"><?php echo get_lang('Time'); ?></th>
+			  <th class="head" style="color:#000"><?php echo get_lang('Progress'); ?></th>
+			  <th class="head" style="color:#000"><?php echo get_lang('LastConnexion'); ?></th>
 			</tr>
 			<?php
 				$sqlLearnpath = "	SELECT lp.name,lp.id
@@ -290,10 +290,10 @@ foreach($Courses as $enreg)
 
 			?>
 			<tr>
-			  <th class="head"><?php echo get_lang('Exercices'); ?></th>
-			  <th class="head"><?php echo get_lang('Score'); ?></th>
-			  <th class="head"><?php echo get_lang('Attempts'); ?></th>
-			  <th class="head"><?php echo get_lang('Details'); ?></th>
+			  <th class="head" style="color:#000"><?php echo get_lang('Exercices'); ?></th>
+			  <th class="head" style="color:#000"><?php echo get_lang('Score'); ?></th>
+			  <th class="head" style="color:#000"><?php echo get_lang('Attempts'); ?></th>
+			  <th class="head" style="color:#000"><?php echo get_lang('Details'); ?></th>
 			</tr>
 
 			<?php

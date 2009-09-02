@@ -998,8 +998,8 @@ if (api_get_setting('search_enabled') == 'true') {
 echo <<<EOD
 <br/>
 <form action="main/search/" method="post">
-&nbsp;&nbsp;<input type="text" id="query" name="query" value="$search_text_default" />
-&nbsp;&nbsp;<input type="submit" name="submit" value="$search_btn" />
+&nbsp;&nbsp;<input type="text" id="query"  size="15" name="query" value="" />
+&nbsp;&nbsp;<button class="save" type="submit" name="submit" value="$search_btn"/>$search_btn </button>
 </form>
 EOD;
     echo '</div>';

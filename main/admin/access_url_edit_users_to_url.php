@@ -81,12 +81,13 @@ function search_users($needle, $id)
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 		$needle = Database::escape_string($needle);
 		// search users where username or firstname or lastname begins likes $needle
+		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 		$sql = 'SELECT u.user_id, username, lastname, firstname FROM '.$tbl_user.' u 
 				WHERE (username LIKE "'.$needle.'%"
 				OR firstname LIKE "'.$needle.'%"
-				OR lastname LIKE "'.$needle.'%") 
-				ORDER BY lastname, firstname, username
-				LIMIT 11';
+				OR lastname LIKE "'.$needle.'%")'.
+				$order_clause.
+				' LIMIT 11';
 				
 		$rs = api_sql_query($sql, __FILE__, __LINE__);		
         $i=0;
@@ -94,7 +95,7 @@ function search_users($needle, $id)
 		while ($user = Database :: fetch_array($rs)) {
 			$i++;
             if ($i<=10) {
-			     $return .= '<a href="#" onclick="add_user_to_url(\''.addslashes($user['user_id']).'\',\''.addslashes($user['lastname']).' '.addslashes($user['firstname']).' ('.addslashes($user['username']).')'.'\')">'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</a><br />';
+			    $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_url(\''.addslashes($user['user_id']).'\',\''.api_get_person_name(addslashes($user['firstname']), addslashes($user['lastname'])).' ('.addslashes($user['username']).')'.'\')">'.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')</a><br />';
             } else {
             	$return .= '...<br />';
             }
@@ -190,9 +191,10 @@ if($ajax_search) {
 			$sessionUsersList[$user['user_id']] = $user ;
 		}
 	}	
+	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 	$sql="SELECT u.user_id, lastname, firstname, username
-	  	  	FROM $tbl_user u	
-			ORDER BY lastname,firstname,username";	
+	  	  	FROM $tbl_user u".	
+			$order_clause;	
 	$result=api_sql_query($sql,__FILE__,__LINE__);	
 	$Users=api_store_result($result);
 	$user_list_leys = array_keys($sessionUsersList);
@@ -276,7 +278,7 @@ if(!empty($errorMsg)) {
 		<?php
 		foreach($nosessionUsersList as $enreg) {
 		?>
-			<option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>
+			<option value="<?php echo $enreg['user_id']; ?>"><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 
 $xajax -> processRequests();
 
@@ -338,7 +340,7 @@ function remove_item(origin)
 <?php
 foreach($sessionUsersList as $enreg) {
 ?>
-	<option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>
+	<option value="<?php echo $enreg['user_id']; ?>"><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 
 <?php
 }

@@ -87,6 +87,7 @@ function search_users($needle,$type)
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 		$user_anonymous=api_get_anonymous_id();
 		
+		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 		$cond_user_id = '';
 		if (!empty($id_session)) {
 		$id_session = Database::escape_string($id_session);
@@ -109,13 +110,13 @@ function search_users($needle,$type)
 			$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
 					WHERE (username LIKE "'.$needle.'%"
 					OR firstname LIKE "'.$needle.'%"
-					OR lastname LIKE "'.$needle.'%") AND user_id<>"'.$user_anonymous.'" 
-					ORDER BY lastname, firstname, username
-					LIMIT 11';
+				OR lastname LIKE "'.$needle.'%") AND user_id<>"'.$user_anonymous.'"'.
+				$order_clause.
+				' LIMIT 11';
 		} else {						
 			$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
-					WHERE lastname LIKE "'.$needle.'%" AND user_id<>"'.$user_anonymous.'"'.$cond_user_id.' 
-					ORDER BY lastname, firstname, username';	
+					WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user_id<>"'.$user_anonymous.'"'.$cond_user_id.
+					$order_clause;
 		}
 				
 		global $_configuration;	
@@ -128,15 +129,15 @@ function search_users($needle,$type)
 					INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
 					WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
 					OR firstname LIKE "'.$needle.'%"
-					OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'" 
-					ORDER BY lastname, firstname, username
-					LIMIT 11';
+					OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'"'.
+					$order_clause.
+					' LIMIT 11';
 				} else {
 					$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user 
 					INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
 					WHERE access_url_id = '.$access_url_id.'  
-					AND lastname LIKE "'.$needle.'%" AND user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.'  
-					ORDER BY lastname, firstname, username';					
+					AND '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
+					$order_clause;					
 				}				
 				
 			}
@@ -148,7 +149,8 @@ function search_users($needle,$type)
 			while ($user = Database :: fetch_array($rs)) {
 	            $i++;
 	            if ($i<=10) {
-				     $return .= '<a href="#" onclick="add_user_to_session(\''.$user['user_id'].'\',\''.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')'.'\')">'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</a><br />';
+            		$person_name = api_get_person_name($user['firstname'], $user['lastname']);
+					$return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_session(\''.$user['user_id'].'\',\''.$person_name.' ('.$user['username'].')'.'\')">'.$person_name.' ('.$user['username'].')</a><br />';
 	            } else {
 	            	$return .= '...<br />';
 	            }
@@ -160,7 +162,8 @@ function search_users($needle,$type)
 			global $nosessionUsersList;
 			$return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
 			while ($user = Database :: fetch_array($rs)) {				
-	            $return .= '<option value="'.$user['user_id'].'">'.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')</option>';				     	            
+				$person_name = api_get_person_name($user['firstname'], $user['lastname']);
+	            $return .= '<option value="'.$user['user_id'].'">'.$person_name.' ('.$user['username'].')</option>';				     	            
 			}
 			$return .= '</select>';
 			$xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
@@ -266,13 +269,14 @@ $count_courses = Database::result($rs, 0, 0);*/
 $ajax_search = $add_type == 'unique' ? true : false;
 global $_configuration;	
 
+$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 if ($ajax_search) {
 	$sql="SELECT user_id, lastname, firstname, username, id_session
 			FROM $tbl_user
 			INNER JOIN $tbl_session_rel_user
 				ON $tbl_session_rel_user.id_user = $tbl_user.user_id
-				AND $tbl_session_rel_user.id_session = ".intval($id_session)."
-			ORDER BY lastname,firstname,username";
+				AND $tbl_session_rel_user.id_session = ".intval($id_session).
+			$order_clause;
 
 	if ($_configuration['multiple_access_urls']==true) {		
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
@@ -285,7 +289,7 @@ if ($ajax_search) {
 				AND $tbl_session_rel_user.id_session = ".intval($id_session)."
 				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id) 
 				WHERE access_url_id = $access_url_id  
-				ORDER BY lastname,firstname,username";
+				$order_clause";
 		}
 	}		
 	$result=api_sql_query($sql,__FILE__,__LINE__);	
@@ -347,14 +351,14 @@ if ($ajax_search) {
 				LEFT JOIN $tbl_session_rel_user
 				ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
 				$where_filter
-				ORDER BY lastname,firstname,username";
+			$order_clause";
 				
 		} else {
 			$sql="SELECT  user_id, lastname, firstname, username, id_session
 				FROM $tbl_user u
 				LEFT JOIN $tbl_session_rel_user
 				ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session' 
-				ORDER BY lastname,firstname,username";
+			$order_clause";
 		}			
 		if ($_configuration['multiple_access_urls']==true) {		
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
@@ -366,7 +370,7 @@ if ($ajax_search) {
 					ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'			 
 				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id) 
 				WHERE access_url_id = $access_url_id  $where_filter
-				ORDER BY lastname,firstname,username";			
+			$order_clause";			
 			}
 		}
 		
@@ -388,7 +392,7 @@ if ($ajax_search) {
 			FROM $tbl_user u
 			LEFT JOIN $tbl_session_rel_user
 			ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session' 
-			ORDER BY lastname,firstname,username";
+			$order_clause";
 		
 		if ($_configuration['multiple_access_urls']==true) {		
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
@@ -400,7 +404,7 @@ if ($ajax_search) {
 					ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'			 
 				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id) 
 				WHERE access_url_id = $access_url_id
-				ORDER BY lastname,firstname,username";			
+				$order_clause";			
 			}
 		}		
 	$result=api_sql_query($sql,__FILE__,__LINE__);	
@@ -521,7 +525,7 @@ if(!empty($errorMsg)) {
 		<?php
 		foreach($nosessionUsersList as $enreg) {
 		?>			
-			<option value="<?php echo $enreg['user_id']; ?>" <?php if(in_array($enreg['user_id'],$UserList)) echo 'selected="selected"'; ?>><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>			
+			<option value="<?php echo $enreg['user_id']; ?>" <?php if(in_array($enreg['user_id'],$UserList)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 		<?php
 		}	
 		?>
@@ -555,7 +559,7 @@ if(!empty($errorMsg)) {
 <?php
 foreach($sessionUsersList as $enreg) {
 ?>
-	<option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>
+	<option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['firstname'].' '.$enreg['lastname'].' ('.$enreg['username'].')'; ?></option>
 
 <?php
 }

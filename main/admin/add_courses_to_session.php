@@ -132,7 +132,7 @@ function search_courses($needle,$type)
 			while($course = Database :: fetch_array($rs)) {	
 				$course_list[] = $course['code'];
 				$course_title=str_replace("'","\'",$course_title);					
-				$return .= '<a href="#" onclick="add_course_to_session(\''.$course['code'].'\',\''.$course_title.' ('.$course['visual_code'].')'.'\')">'.$course['title'].' ('.$course['visual_code'].')</a><br />';
+				$return .= '<a href="javascript: void(0);" onclick="javascript: add_course_to_session(\''.$course['code'].'\',\''.$course_title.' ('.$course['visual_code'].')'.'\')">'.$course['title'].' ('.$course['visual_code'].')</a><br />';
 			}
 			
 			$xajax_response -> addAssign('ajax_list_courses_single','innerHTML',api_utf8_encode($return));

@@ -129,9 +129,10 @@ if(empty($first_letter_user)) {
 }
 $first_letter_user = Database::escape_string($first_letter_user);
 
+$target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
 $sql = "SELECT user_id,lastname,firstname,username FROM $tbl_user 
-	    WHERE lastname LIKE '".$first_letter_user."%' OR lastname LIKE '".strtolower($first_letter_user)."%' 
-		ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." lastname";
+	    WHERE ".$target_name." LIKE '".$first_letter_user."%' OR ".$target_name." LIKE '".api_strtolower($first_letter_user)."%' 
+		ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." ".$target_name;
 $result = api_sql_query($sql, __FILE__, __LINE__);
 $db_users = api_store_result($result);
 unset($result);
@@ -168,7 +169,7 @@ unset($result);
 		<?php
 		foreach ($db_users as $user) {
 		?>
-			  <option value="<?php echo $user['user_id']; ?>" <?php if(in_array($user['user_id'],$users)) echo 'selected="selected"'; ?>><?php echo $user['lastname'].' '.$user['firstname'].' ('.$user['username'].')'; ?></option>
+			  <option value="<?php echo $user['user_id']; ?>" <?php if(in_array($user['user_id'],$users)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')'; ?></option>
 		<?php
 		}
 		?>

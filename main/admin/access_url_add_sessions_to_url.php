@@ -125,7 +125,7 @@ if(empty($first_letter_user)) {
 */
 $first_letter_session = Database::escape_string($first_letter_session); 
 $sql = "SELECT id, name FROM $tbl_session
-		WHERE name LIKE '".$first_letter_session."%' OR name LIKE '".strtolower($first_letter_session)."%'
+		WHERE name LIKE '".$first_letter_session."%' OR name LIKE '".api_strtolower($first_letter_session)."%'
 		ORDER BY name DESC ";
 		
 $result = api_sql_query($sql, __FILE__, __LINE__);

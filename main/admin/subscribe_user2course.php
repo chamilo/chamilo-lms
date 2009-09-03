@@ -218,10 +218,11 @@ if ($use_extra_fields) {
 	}		
 }
 
+$target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
 $sql = "SELECT user_id,lastname,firstname,username
 		FROM $tbl_user
-		WHERE user_id<>2 AND lastname LIKE '".$first_letter_user."%' $where_filter
-		ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." lastname";
+		WHERE user_id<>2 AND ".$target_name." LIKE '".$first_letter_user."%' $where_filter
+		ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." ".$target_name;
 
 global $_configuration;	
 if ($_configuration['multiple_access_urls']==true) {	
@@ -231,8 +232,8 @@ if ($_configuration['multiple_access_urls']==true) {
 		$sql = "SELECT u.user_id,lastname,firstname,username  FROM ".$tbl_user ." u 			
 		INNER JOIN $tbl_user_rel_access_url user_rel_url 
 		ON (user_rel_url.user_id = u.user_id)						
-		WHERE u.user_id<>2 AND access_url_id =  $access_url_id AND (lastname LIKE '".$first_letter_user."%' )  $where_filter
-		ORDER BY ". (count($users) > 0 ? "(u.user_id IN(".implode(',', $users).")) DESC," : "")." lastname";			
+		WHERE u.user_id<>2 AND access_url_id =  $access_url_id AND (".$target_name." LIKE '".$first_letter_user."%' ) $where_filter
+		ORDER BY ". (count($users) > 0 ? "(u.user_id IN(".implode(',', $users).")) DESC," : "")." ".$target_name;			
 	}
 }
 
@@ -337,13 +338,13 @@ if (is_array($extra_field_list)) {
    <tr>
     <td width="40%" align="center">
      <select name="UserList[]" multiple="multiple" size="20" style="width:230px;">
-		<?php
+<?php
 		foreach ($db_users as $user) {
-		?>
-			  <option value="<?php echo $user['user_id']; ?>" <?php if(in_array($user['user_id'],$users)) echo 'selected="selected"'; ?>><?php echo $user['lastname'].' '.$user['firstname'].' ('.$user['username'].')'; ?></option>
-		<?php
-		}
-		?>
+?>
+	  <option value="<?php echo $user['user_id']; ?>" <?php if(in_array($user['user_id'],$users)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')'; ?></option>
+<?php
+}
+?>
     </select>
    </td>
    <td width="20%" valign="middle" align="center">
@@ -351,12 +352,12 @@ if (is_array($extra_field_list)) {
    </td>
    <td width="40%" align="center">
     <select name="CourseList[]" multiple="multiple" size="20" style="width:230px;">
-		<?php
+<?php
 		foreach ($db_courses as $course) {
-		?>
-			 <option value="<?php echo $course['code']; ?>" <?php if(in_array($course['code'],$courses)) echo 'selected="selected"'; ?>><?php echo '('.$course['visual_code'].') '.$course['title']; ?></option>
-		<?php
-		}
+?>
+	 <option value="<?php echo $course['code']; ?>" <?php if(in_array($course['code'],$courses)) echo 'selected="selected"'; ?>><?php echo '('.$course['visual_code'].') '.$course['title']; ?></option>
+<?php
+}
 ?>
     </select>
    </td>

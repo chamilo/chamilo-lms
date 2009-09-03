@@ -73,16 +73,32 @@ $tool_name = get_lang('AddUsers');
 // Create the form
 $form = new FormValidator('user_add');
 $form->addElement('header', '', $tool_name);
-// Lastname
-$form->addElement('text','lastname',get_lang('LastName'));
-$form->applyFilter('lastname','html_filter');
-$form->applyFilter('lastname','trim');
-$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
-// Firstname
-$form->addElement('text','firstname',get_lang('FirstName'));
-$form->applyFilter('firstname','html_filter');
-$form->applyFilter('firstname','trim');
-$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+if (api_is_western_name_order())
+{
+	// Firstname
+	$form->addElement('text','firstname',get_lang('FirstName'));
+	$form->applyFilter('firstname','html_filter');
+	$form->applyFilter('firstname','trim');
+	$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+	// Lastname
+	$form->addElement('text','lastname',get_lang('LastName'));
+	$form->applyFilter('lastname','html_filter');
+	$form->applyFilter('lastname','trim');
+	$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
+}
+else
+{
+	// Lastname
+	$form->addElement('text','lastname',get_lang('LastName'));
+	$form->applyFilter('lastname','html_filter');
+	$form->applyFilter('lastname','trim');
+	$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
+	// Firstname
+	$form->addElement('text','firstname',get_lang('FirstName'));
+	$form->applyFilter('firstname','html_filter');
+	$form->applyFilter('firstname','trim');
+	$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+}
 // Official code
 $form->addElement('text', 'official_code', get_lang('OfficialCode'),array('size' => '40'));
 $form->applyFilter('official_code','html_filter');
@@ -146,7 +162,7 @@ if(is_array($drh_list))
 {
 	foreach($drh_list as $drh)
 	{
-		$drh_select->addOption($drh['lastname'].' '.$drh['firstname'],$drh['user_id']);
+		$drh_select->addOption(api_get_person_name($drh['firstname'], $drh['lastname']), $drh['user_id']);
 	}
 }
 $form->addElement('html', '</div>');

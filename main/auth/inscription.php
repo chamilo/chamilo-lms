@@ -81,201 +81,207 @@ if (api_get_setting('allow_terms_conditions')=='true') {
 	$display_all_form=true;
 }
 if ($display_all_form===true) {
+
+	if (api_is_western_name_order()) {
+		//	FIRST NAME and LAST NAME
+		$form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
+		$form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
+	} else {
+		//	LAST NAME and FIRST NAME
+		$form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
+		$form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
+	}
+	$form->applyFilter(array('lastname', 'firstname'), 'trim');
+	$form->addRule('lastname',  get_lang('ThisFieldIsRequired'), 'required');
+	$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+	//	EMAIL
+	$form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
+	if (api_get_setting('registration', 'email') == 'true')
+		$form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
+	$form->addRule('email', get_lang('EmailWrong'), 'email');
+	if (api_get_setting('openid_authentication')=='true') {
+		$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));	
+	}
+	/*
+	//	OFFICIAL CODE
+	if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
+		$form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => 40));
+		if (api_get_setting('registration', 'officialcode') == 'true')
+			$form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
+	}
+	*/
+	//	USERNAME
+	$form->addElement('text', 'username', get_lang('UserName'), array('size' => 20));
+	$form->applyFilter('username','trim');
+	$form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
+	$form->addRule('username', get_lang('UsernameWrong'), 'username');
+	$form->addRule('username', get_lang('UserTaken'), 'username_available');
+	$form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'),'20'), 'maxlength',20);
+	//	PASSWORD
+	$form->addElement('password', 'pass1', get_lang('Pass'),         array('size' => 40));
+	$form->addElement('password', 'pass2', get_lang('Confirmation'), array('size' => 40));
+	$form->addRule('pass1', get_lang('ThisFieldIsRequired'), 'required');
+	$form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
+	$form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
+	if (CHECK_PASS_EASY_TO_FIND)
+		$form->addRule('password1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
+
+	//	PHONE
+	$form->addElement('text', 'phone', get_lang('Phone'), array('size' => 40));
+	if (api_get_setting('registration', 'phone') == 'true')
+		$form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
 	
-//	LAST NAME and FIRST NAME
-$form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
-$form->applyFilter('lastname','trim');
-$form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
-$form->applyFilter('firstname','trim');
-$form->addRule('lastname',  get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
-//	EMAIL
-$form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
-if (api_get_setting('registration', 'email') == 'true')
-	$form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('email', get_lang('EmailWrong'), 'email');
-if (api_get_setting('openid_authentication')=='true') {
-	$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));	
-}
-/*
-//	OFFICIAL CODE
-if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
-	$form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => 40));
-	if (api_get_setting('registration', 'officialcode') == 'true')
-		$form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
-}
-*/
-//	USERNAME
-$form->addElement('text', 'username', get_lang('UserName'), array('size' => 20));
-$form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('username', get_lang('UsernameWrong'), 'username');
-$form->addRule('username', get_lang('UserTaken'), 'username_available');
-$form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'),'20'), 'maxlength',20);
-//	PASSWORD
-$form->addElement('password', 'pass1', get_lang('Pass'),         array('size' => 40));
-$form->addElement('password', 'pass2', get_lang('Confirmation'), array('size' => 40));
-$form->addRule('pass1', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
-if (CHECK_PASS_EASY_TO_FIND)
-	$form->addRule('password1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
+	// PICTURE
+	/*if (api_get_setting('profile', 'picture') == 'true') {
+		$form->addElement('file', 'picture', get_lang('AddPicture'));
+		$allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+		$form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
+	}*/
 
-//	PHONE
-$form->addElement('text', 'phone', get_lang('Phone'), array('size' => 40));
-if (api_get_setting('registration', 'phone') == 'true')
-	$form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
-	
-// PICTURE
-/*if (api_get_setting('profile', 'picture') == 'true') {
-	$form->addElement('file', 'picture', get_lang('AddPicture'));
-	$allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-	$form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
-}*/
+	//	LANGUAGE
+	if (api_get_setting('registration', 'language') == 'true') {
+		$form->addElement('select_language', 'language', get_lang('Language'));
+	}
+	//	STUDENT/TEACHER
+	if (api_get_setting('allow_registration_as_teacher') <> 'false') {
+		$form->addElement('radio', 'status', get_lang('Status'), get_lang('RegStudent'), STUDENT);
+		$form->addElement('radio', 'status', null, get_lang('RegAdmin'), COURSEMANAGER);
+	}
 
-//	LANGUAGE
-if (api_get_setting('registration', 'language') == 'true') {
-	$form->addElement('select_language', 'language', get_lang('Language'));
-}
-//	STUDENT/TEACHER
-if (api_get_setting('allow_registration_as_teacher') <> 'false') {
-	$form->addElement('radio', 'status', get_lang('Status'), get_lang('RegStudent'), STUDENT);
-	$form->addElement('radio', 'status', null, get_lang('RegAdmin'), COURSEMANAGER);
-}
-
-//	EXTENDED FIELDS
-if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mycomptetences') == 'true')
-{
-	$form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
-}
-if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mydiplomas') == 'true')
-{
-	$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
-}
-if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','myteach') == 'true')
-{
-	$form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
-}
-if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mypersonalopenarea') == 'true')
-{
-	$form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
-}
-if (api_get_setting('extended_profile') == 'true')
-{
-	if (api_get_setting('extendedprofile_registrationrequired','mycomptetences') == 'true')
+	//	EXTENDED FIELDS
+	if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mycomptetences') == 'true')
 	{
-		$form->addRule('competences', get_lang('ThisFieldIsRequired'), 'required');
+		$form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
 	}
-	if (api_get_setting('extendedprofile_registrationrequired','mydiplomas') == 'true')
+	if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mydiplomas') == 'true')
 	{
-		$form->addRule('diplomas', get_lang('ThisFieldIsRequired'), 'required');
+		$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
 	}
-	if (api_get_setting('extendedprofile_registrationrequired','myteach') == 'true')
+	if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','myteach') == 'true')
 	{
-		$form->addRule('teach', get_lang('ThisFieldIsRequired'), 'required');
+		$form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
 	}
-	if (api_get_setting('extendedprofile_registrationrequired','mypersonalopenarea') == 'true')
+	if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mypersonalopenarea') == 'true')
 	{
-		$form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
+		$form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
 	}
-}
-// EXTRA FIELDS
-$extra = UserManager::get_extra_fields(0,50,5,'ASC');
-$extra_data = UserManager::get_extra_user_data(api_get_user_id(),true);
-foreach ($extra as $id => $field_details) {
-	if ($field_details[6] == 0) {
-		continue;
+	if (api_get_setting('extended_profile') == 'true')
+	{
+		if (api_get_setting('extendedprofile_registrationrequired','mycomptetences') == 'true')
+		{
+			$form->addRule('competences', get_lang('ThisFieldIsRequired'), 'required');
+		}
+		if (api_get_setting('extendedprofile_registrationrequired','mydiplomas') == 'true')
+		{
+			$form->addRule('diplomas', get_lang('ThisFieldIsRequired'), 'required');
+		}
+		if (api_get_setting('extendedprofile_registrationrequired','myteach') == 'true')
+		{
+			$form->addRule('teach', get_lang('ThisFieldIsRequired'), 'required');
+		}
+		if (api_get_setting('extendedprofile_registrationrequired','mypersonalopenarea') == 'true')
+		{
+			$form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
+		}
 	}
-	switch($field_details[2]) {
-		case USER_FIELD_TYPE_TEXT:
-			$form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
-			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
-			$form->applyFilter('extra_'.$field_details[1], 'trim');
-			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-			break;
-		case USER_FIELD_TYPE_TEXTAREA:
-			$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
-			//$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
-			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
-			$form->applyFilter('extra_'.$field_details[1], 'trim');
-			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-			break;
-		case USER_FIELD_TYPE_RADIO:
-			$group = array();
-			foreach ($field_details[9] as $option_id => $option_details) {
-				$options[$option_details[1]] = $option_details[2];
-				$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1],$option_details[2].'<br />',$option_details[1]);
-			}
-			$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
-			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);	
-			break;
-		case USER_FIELD_TYPE_SELECT:
-			$options = array();
-			foreach($field_details[9] as $option_id => $option_details) {
-				$options[$option_details[1]] = $option_details[2];
-			}
-			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');	
-			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);			
-			break;
-		case USER_FIELD_TYPE_SELECT_MULTIPLE:
-			$options = array();
-			foreach ($field_details[9] as $option_id => $option_details) {
-				$options[$option_details[1]] = $option_details[2];
-			}
-			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,array('multiple' => 'multiple'));
-			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);	
-			break;
-		case USER_FIELD_TYPE_DATE:
-			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'registration'));
-			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
-			$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
-			$form -> setDefaults($defaults);
-			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-			$form->applyFilter('theme', 'trim');
-			break;
-		case USER_FIELD_TYPE_DATETIME:
-			$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'registration'));
-			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
-			$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
-			$form -> setDefaults($defaults);
-			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-			$form->applyFilter('theme', 'trim');
-			break;
-		case USER_FIELD_TYPE_DOUBLE_SELECT:
-			foreach ($field_details[9] as $key=>$element) {
-				if ($element[2][0] == '*') {
-					$values['*'][$element[0]] = str_replace('*','',$element[2]);
-				} else {
-					$values[0][$element[0]] = $element[2];
+	// EXTRA FIELDS
+	$extra = UserManager::get_extra_fields(0,50,5,'ASC');
+	$extra_data = UserManager::get_extra_user_data(api_get_user_id(),true);
+	foreach ($extra as $id => $field_details) {
+		if ($field_details[6] == 0) {
+			continue;
+		}
+		switch($field_details[2]) {
+			case USER_FIELD_TYPE_TEXT:
+				$form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
+				$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
+				$form->applyFilter('extra_'.$field_details[1], 'trim');
+				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+				break;
+			case USER_FIELD_TYPE_TEXTAREA:
+				$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+				//$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
+				$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
+				$form->applyFilter('extra_'.$field_details[1], 'trim');
+				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+				break;
+			case USER_FIELD_TYPE_RADIO:
+				$group = array();
+				foreach ($field_details[9] as $option_id => $option_details) {
+					$options[$option_details[1]] = $option_details[2];
+					$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1],$option_details[2].'<br />',$option_details[1]);
 				}
-			}
-			
-			$group='';
-			$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1],'',$values[0],'');
-			$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*','',$values['*'],'');
-			$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '&nbsp;');
-			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-
-			// recoding the selected values for double : if the user has selected certain values, we have to assign them to the correct select form
-			if (key_exists('extra_'.$field_details[1], $extra_data)) {
-				// exploding all the selected values (of both select forms)
-				$selected_values = explode(';',$extra_data['extra_'.$field_details[1]]);
-				$extra_data['extra_'.$field_details[1]]  =array();
-				
-				// looping through the selected values and assigning the selected values to either the first or second select form
-				foreach ($selected_values as $key=>$selected_value) {
-					if (key_exists($selected_value,$values[0])) {
-						$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
+				$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
+				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);	
+				break;
+			case USER_FIELD_TYPE_SELECT:
+				$options = array();
+				foreach($field_details[9] as $option_id => $option_details) {
+					$options[$option_details[1]] = $option_details[2];
+				}
+				$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');	
+				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);			
+				break;
+			case USER_FIELD_TYPE_SELECT_MULTIPLE:
+				$options = array();
+				foreach ($field_details[9] as $option_id => $option_details) {
+					$options[$option_details[1]] = $option_details[2];
+				}
+				$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,array('multiple' => 'multiple'));
+				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);	
+				break;
+			case USER_FIELD_TYPE_DATE:
+				$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'registration'));
+				$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
+				$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
+				$form -> setDefaults($defaults);
+				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+				$form->applyFilter('theme', 'trim');
+				break;
+			case USER_FIELD_TYPE_DATETIME:
+				$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'registration'));
+				$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
+				$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
+				$form -> setDefaults($defaults);
+				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+				$form->applyFilter('theme', 'trim');
+				break;
+			case USER_FIELD_TYPE_DOUBLE_SELECT:
+				foreach ($field_details[9] as $key=>$element) {
+					if ($element[2][0] == '*') {
+						$values['*'][$element[0]] = str_replace('*','',$element[2]);
 					} else {
-						$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
+						$values[0][$element[0]] = $element[2];
 					}
 				}
-			}
-			break;
-		case USER_FIELD_TYPE_DIVIDER:
-			$form->addElement('static',$field_details[1], '<br /><strong>'.$field_details[3].'</strong>');
-			break;
+
+				$group='';
+				$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1],'',$values[0],'');
+				$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*','',$values['*'],'');
+				$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '&nbsp;');
+				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+
+				// recoding the selected values for double : if the user has selected certain values, we have to assign them to the correct select form
+				if (key_exists('extra_'.$field_details[1], $extra_data)) {
+					// exploding all the selected values (of both select forms)
+					$selected_values = explode(';',$extra_data['extra_'.$field_details[1]]);
+					$extra_data['extra_'.$field_details[1]]  =array();
+
+					// looping through the selected values and assigning the selected values to either the first or second select form
+					foreach ($selected_values as $key=>$selected_value) {
+						if (key_exists($selected_value,$values[0])) {
+							$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
+						} else {
+							$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
+						}
+					}
+				}
+				break;
+			case USER_FIELD_TYPE_DIVIDER:
+				$form->addElement('static',$field_details[1], '<br /><strong>'.$field_details[3].'</strong>');
+				break;
+		}
 	}
-}
 
 }
 //------------ Terms and conditions

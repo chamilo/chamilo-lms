@@ -173,8 +173,12 @@ function login_user($user_id) {
 	$lastname = $result['lastname'];
 	$user_id = $result['user_id'];
 
-	//$message = "Attempting to login as ".$firstname." ".$lastname." (id ".$user_id.")";
-	$message = sprintf(get_lang('AttemptingToLoginAs'),$firstname,$lastname,$user_id);
+	//$message = "Attempting to login as ".api_get_person_name($firstname, $lastname)." (id ".$user_id.")";
+	if (api_is_western_name_order()) {
+		$message = sprintf(get_lang('AttemptingToLoginAs'),$firstname,$lastname,$user_id);
+	} else {
+		$message = sprintf(get_lang('AttemptingToLoginAs'), $lastname, $firstname, $user_id);
+	}
 
 	$loginFailed = false;
 	$uidReset = false;
@@ -323,8 +327,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	$sql = "SELECT
                  u.user_id				AS col0,
                  u.official_code		AS col1,
-				 u.lastname 			AS col2,
-                 u.firstname 			AS col3,
+				 ".(api_is_western_name_order() 
+                 ? "u.firstname 			AS col2,
+                 u.lastname 			AS col3,"
+                 : "u.lastname 			AS col2,
+                 u.firstname 			AS col3,")."
                  u.username				AS col4,
                  u.email				AS col5,
                  u.status				AS col6,
@@ -721,8 +728,13 @@ else
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false);
 	$table->set_header(1, get_lang('OfficialCode'));
-	$table->set_header(2, get_lang('LastName'));
-	$table->set_header(3, get_lang('FirstName'));
+	if (api_is_western_name_order()) {
+		$table->set_header(2, get_lang('FirstName'));
+		$table->set_header(3, get_lang('LastName'));
+	} else {
+		$table->set_header(2, get_lang('LastName'));
+		$table->set_header(3, get_lang('FirstName'));
+	}
 	$table->set_header(4, get_lang('LoginName'));
 	$table->set_header(5, get_lang('Email'));
 	$table->set_header(6, get_lang('Status'));

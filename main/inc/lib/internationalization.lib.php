@@ -26,13 +26,14 @@ define('DATE_FORMAT_LONG', 2);		// Aug 25, 09
 define('DATE_TIME_FORMAT_LONG', 3);	// August 25, 2009 at 03:28 PM
 
 // Formatting person's name.
-define('PERSON_NAME_COMMON_CONVENTION', 0);	// Formatting person's name using the pattern as it has been
+define('PERSON_NAME_COMMON_CONVENTION', 0);	// Formatting a person's name using the pattern as it has been
 											// configured in the internationalization database for every language.
 											// This (default) option would be the most used.
 // The followind options may be used in limited number of places for overriding the common convention:
-define('PERSON_NAME_WESTERN_ORDER', 1);		// Formatting person's name in Western order: first_name last_name
-define('PERSON_NAME_EASTERN_ORDER', 2);		// Formatting person's name in Eastern order: last_name first_name
-define('PERSON_NAME_LIBRARY_ORDER', 3);		// Formatting person's name in library order: last_name, first_name
+define('PERSON_NAME_WESTERN_ORDER', 1);		// Formatting a person's name in Western order: first_name last_name
+define('PERSON_NAME_EASTERN_ORDER', 2);		// Formatting a person's name in Eastern order: last_name first_name
+define('PERSON_NAME_LIBRARY_ORDER', 3);		// Contextual: formatting person's name in library order: last_name, first_name
+define('PERSON_NAME_EMAIL_ADDRESS', PERSON_NAME_WESTERN_ORDER);		// Contextual: formatting a person's name assotiated with an email-address. Ivan: I am not sure how seems email servers an clients would interpret name order, so I assign the Western order.
 
 /**
  * ----------------------------------------------------------------------------

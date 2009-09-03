@@ -580,7 +580,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 							$subject=stripslashes($emailTitle);
 							$message=stripslashes($newContentsix);
 						
-						    $sender_name = $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'];
+						    $sender_name = api_get_person_name($_SESSION['_user']['lastName'], $_SESSION['_user']['firstName'], null, PERSON_NAME_EMAIL_ADDRESS);
 						    $email = $_SESSION['_user']['mail'];
 							$headers="From:$sender_name\r\nReply-to: $email\r\nContent-type: text/html; charset=iso-8859-15";
 							//@mail($to,$subject,$message,$headers);
@@ -699,7 +699,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 								$newContentsix=str_replace("#uid#",$myrow["user_id"],$newContentfive);
 	                			$message=stripslashes($newContentsix);
 	
-							    $sender_name = $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'];
+							    $sender_name = api_get_person_name($_SESSION['_user']['lastName'], $_SESSION['_user']['firstName'], null, PERSON_NAME_EMAIL_ADDRESS);
 							    $email = $_SESSION['_user']['mail'];
 	
 	
@@ -708,14 +708,14 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 								api_mail('',$myrow["email"],stripslashes($emailTitle),$message,$sender_name,$email);
 	                        } else {
 	                            // intro of the email: receiver name and subject
-								$mail_body = $myrow["lastname"]." ".$myrow["firstname"]."<br />\n".stripslashes($emailTitle)."<br />";
+								$mail_body = api_get_person_name($myrow["lastname"], $myrow["firstname"], null, PERSON_NAME_EMAIL_ADDRESS)."<br />\n".stripslashes($emailTitle)."<br />";
 								// make a change for absolute url
 	        					$newContent = str_replace('src=\"../../','src=\"'.api_get_path(WEB_PATH).'', $newContent);
 	                            // main part of the email
 	                            $mail_body .= trim(stripslashes($newContent));
 	                            // signature of email: sender name and course URL after -- line
 	                            $mail_body .= "<br />-- <br />";
-	                            $mail_body .= $_user['firstName'].' '.$_user['lastName']." \n";
+	                            $mail_body .= api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS)." \n";
 	                            $mail_body .= "<br /> \n<a href=\"".api_get_path(WEB_COURSE_PATH).$_course['id']."\">";
 	                            $mail_body .= $_course['official_code'].' '.$_course['name'] . "</a>";
 	
@@ -730,7 +730,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 								$headers['charset'] = $charset;
 		                        $mailid=$myrow["email"];
 	 
-								$newmail = api_mail_html($myrow["lastname"].' '.$myrow["firstname"], $myrow["email"], stripslashes($emailSubject), $mail_body, $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'], $_SESSION['_user']['mail'],$headers);
+								$newmail = api_mail_html(api_get_person_name($myrow["lastname"], $myrow["firstname"], null, PERSON_NAME_EMAIL_ADDRESS), $myrow["email"], stripslashes($emailSubject), $mail_body, api_get_person_name($_SESSION['_user']['lastName'], $_SESSION['_user']['firstName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail'],$headers);
 	                        }
 	                        
 							$sql_date="SELECT * FROM $db_name WHERE survey_id='$surveyid'";
@@ -1359,7 +1359,7 @@ if ($display_announcement_list && !$surveyid) {
 			$sent_to_form=sent_to_form($sent_to);
 			$user_info=api_get_user_info($myrow['insert_user_id']);
 			
-			echo '&nbsp;&nbsp;&nbsp;'.get_lang('By').' : &nbsp;'.$user_info['lastName'].'&nbsp;'.$user_info['firstName'];			
+				echo '&nbsp;&nbsp;&nbsp;'.get_lang('By').' : &nbsp;'.str_replace(' ', '&nbsp;', api_get_person_name($user_info['firstName'], $user_info['lastName']));
 			echo "\t\t\t\t\t</th>\n","\t\t\t\t</tr>\n";			
 			echo "\t\t\t\t<tr class='row_odd'>\n\t\t\t\t\t<td class=\"announcements_datum\" colspan=\"3\">";
 			echo get_lang('AnnouncementPublishedOn')," : ",api_ucfirst(format_locale_date($dateFormatLong,strtotime($last_post_date)));

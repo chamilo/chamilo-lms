@@ -117,10 +117,10 @@ if ($_POST['formSent']) {
 							}
 							// send an email to users
 							if($sendMail) {														
-								$recipient_name = $firstname.' '.$lastname;
+								$recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
 								$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');			
-								$emailbody="[NOTE:] ".get_lang('ThisIsAutomaticEmailNoReply').".\n\n".get_lang('langDear')." $firstname $lastname,\n\n".get_lang('langYouAreReg')." ".api_get_setting('siteName') ." ".get_lang('langSettings')." $username\n". get_lang('langPass')." : $password\n\n".get_lang('langAddress') ." ". get_lang('langIs') ." ". $serverAddress ."\n\n".get_lang('YouWillSoonReceiveMailFromCoach')."\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula');						
-								$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+								$emailbody="[NOTE:] ".get_lang('ThisIsAutomaticEmailNoReply').".\n\n".get_lang('langDear')." ".api_get_person_name($firstname, $lastname).",\n\n".get_lang('langYouAreReg')." ".api_get_setting('siteName') ." ".get_lang('langSettings')." $username\n". get_lang('langPass')." : $password\n\n".get_lang('langAddress') ." ". get_lang('langIs') ." ". $serverAddress ."\n\n".get_lang('YouWillSoonReceiveMailFromCoach')."\n\n". get_lang('langProblem'). "\n\n". get_lang('langFormula');						
+								$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 							    $email_admin = api_get_setting('emailAdministrator');							
 								@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin);
 							}
@@ -203,7 +203,7 @@ if ($_POST['formSent']) {
 											expiration_date = NULL,
 											last_edit = now(),
 											last_visit = NULL,
-											tutor_name = '".$lastname." ".$firstname."',
+											tutor_name = '".api_get_person_name($firstname, $lastname, null, null, $language)."',
 											visual_code = '".$currentCourseCode."'";
 	
 								api_sql_query($sql, __FILE__, __LINE__);

@@ -72,12 +72,15 @@ function display_announcement($announcement_id)
 	$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
 	$result = Database::fetch_array($sql_result);
 	
-	$title		 = $result['title'];
-	$content	 = $result['content'];
-	$content     = make_clickable($content);
-	$content     = text_filter($content);
-	$last_post_datetime = $result['insert_date'];// post time format  datetime de mysql
-	list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
+	if ($result !== false) // A sanity check.
+	{
+		$title		 = $result['title'];
+		$content	 = $result['content'];
+		$content     = make_clickable($content);
+		$content     = text_filter($content);
+		$last_post_datetime = $result['insert_date'];// post time format  datetime de mysql
+		list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
+	}
 	
 	echo "<table height=\"100\" width=\"100%\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\" id=\"agenda_list\">\n";
 	echo "<tr class=\"data\"><td>" . $title . "</td></tr>\n";
@@ -112,13 +115,13 @@ function show_to_form($to_already_selected)
 	// the buttons for adding or removing groups/users
 	echo "\n\t\t<td valign=\"middle\">\n";
 	echo "\t\t<input	type=\"button\"	",
-				"onClick=\"move(this.form.elements[0],this.form.elements[3])\" ",// 7 & 4 : fonts
+				"onClick=\"javascript: move(this.form.elements[0],this.form.elements[3])\" ",// 7 & 4 : fonts
 				"value=\"   >>   \">",
 
 				"\n\t\t<p>&nbsp;</p>",
 
 				"\n\t\t<input	type=\"button\"",
-				"onClick=\"move(this.form.elements[3],this.form.elements[0])\" ",
+				"onClick=\"javascript: move(this.form.elements[3],this.form.elements[0])\" ",
 				"value=\"   <<   \">";
 	echo "\t\t</td>\n";
 	echo "\n\t\t<td>\n";
@@ -167,7 +170,7 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 			if (!(in_array("USER:".$this_user["user_id"],$to_already_selected))) // $to_already_selected is the array containing the users (and groups) that are already selected
 			{
 				echo	"\t\t<option value=\"USER:",$this_user["user_id"],"\">",
-					"",$this_user['lastName']," ",$this_user['firstName'],
+					"", api_get_person_name($this_user['firstName'], $this_user['lastName']),
 					"</option>\n";
 			}	
 		}
@@ -212,46 +215,42 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 			}
 			else
 			{
-				
 				foreach($ref_array_users as $key=>$value){
-	
 					if($value['user_id']==$id){
-						echo "\t\t<option value=\"".$groupuser."\">".$value['lastName']." ".$value['firstName']."</option>";
+						echo "\t\t<option value=\"".$groupuser."\">".api_get_person_name($value['firstName'], $value['lastName'])."</option>";
 						break;
 					}
-					
 				}
 			}
 		}
 	} else {
-			if($to_already_selected=='everyone'){						
-				// adding the groups to the select form
-				if (is_array($ref_array_groups))
+		if ($to_already_selected=='everyone') {						
+			// adding the groups to the select form
+			if (is_array($ref_array_groups))
+			{
+				foreach($ref_array_groups as $this_group)
 				{
-					foreach($ref_array_groups as $this_group)
+					//api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
+					if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
 					{
-						//api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
-						if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
-							{
-							echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
-								"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
-								"</option>\n";
-						}
-					}					
-				}
-			
-				// adding the individual users to the select form
-				foreach($ref_array_users as $this_user)
-				{					
-					if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
-					{
-						echo	"\t\t<option value=\"USER:",$this_user['user_id'],"\">",
-							"",$this_user['lastName']," ",$this_user['firstName'],
+						echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
+							"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
 							"</option>\n";
 					}
+				}					
+			}
+			// adding the individual users to the select form
+			foreach($ref_array_users as $this_user)
+			{					
+				if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
+				{
+					echo	"\t\t<option value=\"USER:",$this_user['user_id'],"\">",
+						"", api_get_person_name($this_user['lastName'], $this_user['firstName']),
+						"</option>\n";
 				}
-			}			
+			}
 		}
+	}
 	echo "</select>\n";
 }
 
@@ -269,8 +268,8 @@ function show_to_form_group($group_id)
 	
 	echo "\t\t<select name=\"not_selected_form[]\" size=5 style=\"width:200px\" multiple>\n";
 	$group_users = GroupManager::get_subscribed_users($group_id);
-	foreach($group_users as $user){
-		echo '<option value="'.$user['user_id'].'">'.$user['lastname'].' '.$user['firstname'].'</option>';
+	foreach ($group_users as $user){
+		echo '<option value="'.$user['user_id'].'">'.api_get_person_name($user['firstname'], $user['lastname']).'</option>';
 	}
 	echo '</select>';
 	
@@ -592,8 +591,8 @@ function sent_to_form($sent_to_array)
 			{
 				foreach ($sent_to_array['users'] as $user_id)
 				{
-					$user_info=api_get_user_info($user_id);
-					$output.="\t<option value=\"\">".$user_info['lastName']." ".$user_info['firstName']."</option>\n";
+					$user_info = api_get_user_info($user_id);
+					$output.="\t<option value=\"\">".api_get_person_name($user_info['firstName'], $user_info['lastName'])."</option>\n";
 				}
 			}
 		}
@@ -605,8 +604,8 @@ function sent_to_form($sent_to_array)
 	{
 		if (isset($sent_to_array['users']) and is_array($sent_to_array['users']))
 		{
-			$user_info=api_get_user_info($sent_to_array['users'][0]);
-			echo $user_info['lastName']." ".$user_info['firstName'];
+			$user_info = api_get_user_info($sent_to_array['users'][0]);
+			echo api_get_person_name($user_info['firstName'], $user_info['lastName']);
 		}
 		if (isset($sent_to_array['groups']) and is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]!==0)
 		{
@@ -919,8 +918,8 @@ function send_announcement_email($user_list, $course_code, $_course, $mail_title
 		$mail_subject = get_lang('professorMessage').' - '.$_course['official_code'].' - '.$mail_title;
 
 		$mail_body = '['.$_course['official_code'].'] - ['.$_course['name']."]\n";
-		$mail_body .= $this_user['lastname'].' '.$this_user['firstname'].' <'.$this_user["email"]."> \n\n".stripslashes($mail_title)."\n\n".trim(stripslashes(api_html_entity_decode(strip_tags(str_replace(array('<p>','</p>','<br />'),array('',"\n","\n"),$mail_content)), ENT_QUOTES, $charset)))." \n\n-- \n";
-		$mail_body .= $_user['firstName'].' '.$_user['lastName'].' ';
+		$mail_body .= api_get_person_name($this_user['firstname'], $this_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).' <'.$this_user["email"]."> \n\n".stripslashes($mail_title)."\n\n".trim(stripslashes(api_html_entity_decode(strip_tags(str_replace(array('<p>','</p>','<br />'),array('',"\n","\n"),$mail_content)), ENT_QUOTES, $charset)))." \n\n-- \n";
+		$mail_body .= api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS).' ';
 		$mail_body .= '<'.$_user['mail'].">\n";
 		$mail_body .= $_course['official_code'].' '.$_course['name'];
 		
@@ -929,7 +928,7 @@ function send_announcement_email($user_list, $course_code, $_course, $mail_title
 		if(empty($charset)){$charset='ISO-8859-1';}
 		$encoding = 'Content-Type: text/plain; charset='. $charset;
 		
-		$newmail = api_mail($this_user['lastname'].' '.$this_user['firstname'], $this_user['email'], $mail_subject, $mail_body, $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'], $_SESSION['_user']['mail'], $encoding);
+		$newmail = api_mail(api_get_person_name($this_user['firstname'], $this_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $this_user['email'], $mail_subject, $mail_body, api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail'], $encoding);
 	}
 }
 

@@ -190,12 +190,12 @@ foreach($Courses as $enreg)
 				if($session_course_coach_id!=0)
 				{
 					$coach_infos = UserManager :: get_user_info_by_id($session_course_coach_id);
-					$a_infosCours['tutor_name'] = $coach_infos['firstname'].' '.$coach_infos['lastname'];
+					$a_infosCours['tutor_name'] = api_get_person_name($coach_infos['firstname'], $coach_infos['lastname']);
 				}
 				else if($session_coach_id!=0)
 				{
 					$coach_infos = UserManager :: get_user_info_by_id($session_coach_id);
-					$a_infosCours['tutor_name'] = $coach_infos['firstname'].' '.$coach_infos['lastname'];
+					$a_infosCours['tutor_name'] = api_get_person_name($coach_infos['firstname'], $coach_infos['lastname']);
 				}
 			}
 		} // end if(api_get_setting('use_session_mode')=='true')

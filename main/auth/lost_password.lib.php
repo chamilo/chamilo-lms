@@ -10,7 +10,7 @@
 function get_email_headers()
 {
 	global $charset;
-	$emailHeaders = "From: \"".addslashes(api_get_setting('administratorSurname')." ".api_get_setting('administratorName'))."\" <".api_get_setting('emailAdministrator').">\n";
+	$emailHeaders = "From: \"".addslashes(api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS))."\" <".api_get_setting('emailAdministrator').">\n";
 	$emailHeaders .= "Reply-To: ".api_get_setting('emailAdministrator')."\n";
 	$emailHeaders .= "Return-Path: ".api_get_setting('emailAdministrator')."\n";
 	$emailHeaders .= "X-Sender: ".api_get_setting('emailAdministrator')."\n";	
@@ -85,7 +85,7 @@ function send_password_to_user($user)
 	$emailBody = get_lang('YourAccountParam')." ".$portal_url."\n\n$userAccountList";
 	// SEND MESSAGE
 	$emailTo = $user[0]["email"];			
-	$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
     $email_admin = api_get_setting('emailAdministrator');			
 				
 	if (@api_mail('', $emailTo, $emailSubject, $emailBody, $sender_name,$email_admin)==1) {
@@ -116,7 +116,7 @@ function handle_encrypted_password($user)
 	$emailBody .= "-----------------------------------------------\n".$userAccountList."\n-----------------------------------------------\n\n";
 	$emailBody .=get_lang('PasswordEncryptedForSecurity');
 	$emailBody .="\n\n".get_lang('Formula').",\n".get_lang('PlataformAdmin');
-	$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
     $email_admin = api_get_setting('emailAdministrator');
 			
 	if (@api_mail('', $emailTo, $emailSubject, $emailBody, $sender_name,$email_admin)==1)

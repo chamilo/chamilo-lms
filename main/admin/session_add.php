@@ -162,8 +162,9 @@ $sql = 'SELECT COUNT(1) FROM '.$tbl_user.' WHERE status=1';
 $rs = api_sql_query($sql, __FILE__, __LINE__);
 $count_users = Database::result($rs, 0, 0);
 
-if (intval($count_users)<50) {	
-	$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1' ORDER BY lastname,firstname,username";	
+if (intval($count_users)<50) {
+	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
+	$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;	
 	global $_configuration;	
 	if ($_configuration['multiple_access_urls']==true) {		
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
@@ -171,8 +172,7 @@ if (intval($count_users)<50) {
 		if ($access_url_id != -1){					
 			$sql = 'SELECT username, lastname, firstname FROM '.$tbl_user.' user
 			INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-			WHERE access_url_id = '.$access_url_id.'  AND status=1
-			ORDER BY lastname, firstname, username';			
+			WHERE access_url_id = '.$access_url_id.'  AND status=1'.$order_clause;			
 		}
 	}	
 	
@@ -182,7 +182,7 @@ if (intval($count_users)<50) {
 	<select name="coach_username" value="true" style="width:250px;">
 		<option value="0"><?php get_lang('None'); ?></option>
 		<?php foreach($Coaches as $enreg): ?>
-		<option value="<?php echo $enreg['username']; ?>" <?php if($sent && $enreg['user_id'] == $id_coach) echo 'selected="selected"'; ?>><?php echo $enreg['firstname'].' '.$enreg['lastname'].' ('.$enreg['username'].')'; ?></option>
+		<option value="<?php echo $enreg['username']; ?>" <?php if($sent && $enreg['user_id'] == $id_coach) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 		<?php endforeach; ?>
 	</select>
 	<?php

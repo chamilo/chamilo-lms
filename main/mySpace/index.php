@@ -1,27 +1,5 @@
 <?php // $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
-
+/* For licensing terms, see /dokeos_license.txt */
 /**
  * @todo use constant for $this_section
  */
@@ -52,14 +30,10 @@ $nameTools= get_lang("MySpace");
  
 // access control
 api_block_anonymous_users();
-if(!$export_csv)
-{
+if(!$export_csv) {
 	Display :: display_header($nameTools);
-}
-else
-{
-	if ($_GET['view'] == 'admin' AND $_GET['display'] == 'useroverview')
-	{
+} else {
+	if ($_GET['view'] == 'admin' AND $_GET['display'] == 'useroverview') {
 		export_tracking_user_overview();
 		exit;
 	}
@@ -610,7 +584,8 @@ if(api_is_allowed_to_create_course() && $view=='teacher')
 			$table_row[] = $avg_score_in_exercise;
 			$table_row[] = $avg_messages_in_course;
 			$table_row[] = $avg_assignments_in_course;
-			$table_row[] = '<center><a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
+			//set the "from" value to know if I access the Reporting by the Dokeos tab or the course link 
+			$table_row[] = '<center><a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true&from=myspace"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
 			
 			$csv_content[] = array(
 								api_html_entity_decode($course['title'], ENT_QUOTES, $charset),

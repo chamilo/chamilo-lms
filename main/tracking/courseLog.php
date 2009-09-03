@@ -621,5 +621,4 @@ if($_GET['studentlist'] == 'false') {
 ?>
 </table>
 <?php
-var_dump(api_is_allowed_to_create_course());
 Display::display_footer();

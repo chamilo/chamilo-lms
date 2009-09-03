@@ -165,9 +165,15 @@ if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
 	$form->applyFilter('theme', 'trim');
 }
 
-//	LAST NAME and FIRST NAME
-$form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
-$form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
+if (api_is_western_name_order()) {
+	//	FIRST NAME and LAST NAME
+	$form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
+	$form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
+} else {
+	//	LAST NAME and FIRST NAME
+	$form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
+	$form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
+}
 if (api_get_setting('profile', 'name') !== 'true')
 	$form->freeze(array('lastname', 'firstname'));
 $form->applyFilter(array('lastname', 'firstname'), 'stripslashes');
@@ -470,7 +476,7 @@ function upload_user_image($user_id)
 	}
 	
 	// get the picture and resize only if the picture is bigger width
-	$picture_infos=getimagesize($_FILES['picture']['tmp_name']);	
+	$picture_infos=@getimagesize($_FILES['picture']['tmp_name']);	
 	$type=$picture_infos[2];
 	$small_temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 22); //small picture
 	$medium_temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 85); //medium picture
@@ -724,12 +730,12 @@ if (isset($_GET['show'])) {
 	
 	if ((api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') ||(api_get_setting('allow_social_tool')=='true')) {
 		$interbreadcrumb[]= array (
-		'url' => '#',
+		'url' => 'javascript: void(0);',
 		'name' => get_lang('SocialNetwork')
 		);
 	} elseif ((api_get_setting('allow_social_tool')=='false' && api_get_setting('allow_message_tool')=='true')) {
 		$interbreadcrumb[]= array (
-		'url' => '#',
+		'url' => 'javascript: void(0);',
 		'name' => get_lang('MessageTool')
 		);	
 	}
@@ -793,7 +799,7 @@ $image_dir = $image_path['dir'];
 $image = $image_path['file'];
 $image_file = $image_dir.$image;
 $img_attributes = 'src="'.$image_file.'?rand='.time().'" '
-	.'alt="'.$user_data['lastname'].' '.$user_data['firstname'].'" '
+	.'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
 	.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; margin-top:0px;padding:5px;" ';
 if ($image_size[0] > 300) {
 	//limit display width to 300px
@@ -808,7 +814,11 @@ $big_image_width= $big_image_size[0];
 $big_image_height= $big_image_size[1];
 $url_big_image = $big_image.'?rnd='.time();
 
-echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:3px;width:250px;" >';
+// Modified by Ivan Tcholakov, 14-AUG-2009.
+// The position:absolute style has been removed for Opera-compatibility.
+//echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:3px;width:250px;" >';
+echo '<div id="image-message-container" style="float:right;display:inline;padding:3px;width:250px;" >';
+//
 if ($image=='unknown.jpg') {
 	echo '<img '.$img_attributes.' />';
 } else {

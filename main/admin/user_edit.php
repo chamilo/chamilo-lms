@@ -99,17 +99,32 @@ $form = new FormValidator('user_add','post','','',array('style' => 'width: 60%; 
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden','user_id',$user_id);
 
-// Lastname
-$form->addElement('text','lastname',get_lang('LastName'));
-$form->applyFilter('lastname','html_filter');
-$form->applyFilter('lastname','trim');
-$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
-
-// Firstname
-$form->addElement('text','firstname',get_lang('FirstName'));
-$form->applyFilter('firstname','html_filter');
-$form->applyFilter('firstname','trim');
-$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+if (api_is_western_name_order())
+{
+	// Firstname
+	$form->addElement('text','firstname',get_lang('FirstName'));
+	$form->applyFilter('firstname','html_filter');
+	$form->applyFilter('firstname','trim');
+	$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+	// Lastname
+	$form->addElement('text','lastname',get_lang('LastName'));
+	$form->applyFilter('lastname','html_filter');
+	$form->applyFilter('lastname','trim');
+	$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
+}
+else
+{
+	// Lastname
+	$form->addElement('text','lastname',get_lang('LastName'));
+	$form->applyFilter('lastname','html_filter');
+	$form->applyFilter('lastname','trim');
+	$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
+	// Firstname
+	$form->addElement('text','firstname',get_lang('FirstName'));
+	$form->applyFilter('firstname','html_filter');
+	$form->applyFilter('firstname','trim');
+	$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+}
 
 // Official code
 $form->addElement('text', 'official_code', get_lang('OfficialCode'),array('size' => '40'));
@@ -186,7 +201,7 @@ if (count($drh_list) == 0) {
 
 foreach($drh_list as $drh)
 {
-	$drh_select->addOption($drh['lastname'].' '.$drh['firstname'],$drh['user_id']);
+	$drh_select->addOption(api_get_person_name($drh['firstname'], $drh['lastname']), $drh['user_id']);
 }
 $form->addElement('html', '</div>');
 
@@ -335,7 +350,7 @@ if( $form->validate())
         {
         	mkpath($picture_location);
         }
-	    $picture_infos=getimagesize($_FILES['picture']['tmp_name']);
+		$picture_infos=@getimagesize($_FILES['picture']['tmp_name']);
 		$type=$picture_infos[2];
 		$small_temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 22); //small picture
 		$medium_temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 85); //medium picture
@@ -487,7 +502,7 @@ $image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_CODE_PATH).'i
 $image_size = @getimagesize(api_url_to_local_path($image_file));
 
 $img_attributes = 'src="'.$image_file.'?rand='.time().'" '
-    .'alt="'.$user_data['lastname'].' '.$user_data['firstname'].'" '
+    .'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
     .'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
 
 if ($image_size[0] > 300) //limit display width to 300px

@@ -50,7 +50,7 @@ if( ! isset($_GET['user_id']))
 	api_not_allowed();	
 }
 $user = api_get_user_info($_GET['user_id']);
-$tool_name = $user['firstName'].' '.$user['lastName'].(empty($user['official_code'])?'':' ('.$user['official_code'].')');
+$tool_name = api_get_person_name($user['firstName'], $user['lastName']).(empty($user['official_code'])?'':' ('.$user['official_code'].')');
 Display::display_header($tool_name);
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -85,7 +85,7 @@ $height += 30;
 $width += 30;
 $window_name = 'window'.uniqid('');
 $onclick = $window_name."=window.open('".$fullurl."','".$window_name."','alwaysRaised=yes, alwaysLowered=no,alwaysOnTop=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=".$width.",height=".$height.",left=200,top=20'); return false;";
-echo '<a href="#" onclick="'.$onclick.'" ><img src="'.$fullurl.'" '.$resizing.' alt="'.$alt.'"/></a><br />';
+echo '<a href="javascript: void(0);" onclick="'.$onclick.'" ><img src="'.$fullurl.'" '.$resizing.' alt="'.$alt.'"/></a><br />';
 
 echo '<p>'. ($user['status'] == 1 ? get_lang('Teacher') : get_lang('Student')).'</p>';
 echo '<p>'.Display :: encrypted_mailto_link($user['mail'], $user['mail']).'</p>';
@@ -142,7 +142,7 @@ if(count($sessions)>0){
 		$personal_course_list = array();
 		
 		$id_session = $enreg['id'];
-		$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF(session_course.id_coach = ".$user_id.",'2', '5')
+		$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF(session_course.id_coach = ".$user_id.",'2', '5')
 									 FROM $tbl_session_course as session_course
 									 INNER JOIN $tbl_course AS course
 									 	ON course.code = session_course.course_code

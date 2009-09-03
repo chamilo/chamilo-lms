@@ -109,7 +109,6 @@ function get_course_data($from, $number_of_items, $column, $direction)
 	while ($course = Database::fetch_row($res))
 	{
 		//place colour icons in front of courses
-		//$course[1] = get_course_visibility_icon($course[10]).'<a href="../course_home/course_home.php?cidReq='.$course[0].'">'.$course[1].'</a>'; // This is not the preferable way to go to the homepage.
 		$course[1] = get_course_visibility_icon($course[10]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[11].'/index.php">'.$course[1].'</a>';
 
 		$course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');

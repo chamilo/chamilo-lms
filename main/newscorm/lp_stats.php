@@ -1,25 +1,5 @@
 <?php
-
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 /**
  * This script displays statistics on the current learning path (scorm)
  * 
@@ -34,12 +14,9 @@ require_once ('resourcelinker.inc.php');
 require_once ('../inc/lib/tracking.lib.php');
 require_once ('../inc/lib/course.lib.php');
 
-if(empty($_SESSION['_course']['id']) && isset($_GET['course']))
-{
+if(empty($_SESSION['_course']['id']) && isset($_GET['course'])) {
 	$course_code = Security::remove_XSS($_GET['course']);
-}
-else
-{
+} else {
 	$course_code = $_SESSION['_course']['id'];
 }
 
@@ -55,8 +32,7 @@ if (isset($_GET['student_id'])) {
 //$stats_charset = $_SESSION['oLP']->encoding
 if(!isset($origin))
 	$origin = '';
-if($origin != 'tracking')
-{
+if($origin != 'tracking') {
 	if (!empty ($stats_charset)) {
 		$lp_charset = $stats_charset;
 	} else {
@@ -71,16 +47,13 @@ if($origin != 'tracking')
 	</style>';
 	include_once ('../inc/reduced_header.inc.php');
 	echo '<body>';
-}
-else
-{
+} else {
     //Get learning path's encoding
     $TBL_LP = Database :: get_course_table(TABLE_LP_MAIN);
     $sql = "SELECT default_encoding FROM $TBL_LP " .
                 "WHERE id = '".(int)$_GET['lp_id']."'";
     $res = api_sql_query($sql, __FILE__, __LINE__);
-    if (Database :: num_rows($res) > 0)
-    {
+    if (Database :: num_rows($res) > 0) {
         $row = Database::fetch_array($res);
         $lp_charset = $row['default_encoding'];
     }
@@ -90,21 +63,17 @@ else
 $dokeos_charset = api_get_setting('platform_charset');
 $output = '';
 //if display in fullscreen required
-if (!empty($_GET['fs']) && strcmp($_GET['fs'], 'true') == 0) 
-{
+if (!empty($_GET['fs']) && strcmp($_GET['fs'], 'true') == 0) {
 	$output .= '<table width="100%" align="center">';
-} 
-else 
-{
+} else {
 	$output .= '<table width="100%">';
 }
 
 //check if the user asked for the "extend all" option
 $extend_all_link = '';
 $extend_all = 0;
-
 if ($origin == 'tracking') {
-	$url_suffix = '&course=' . Security::remove_XSS($_GET['course']) . '&student_id=' . $student_id . '&lp_id=' . Security::remove_XSS($_GET['lp_id']) . '&origin=' . Security::remove_XSS($_GET['origin']);
+	$url_suffix = '&course=' . Security::remove_XSS($_GET['course']) . '&student_id=' . $student_id . '&lp_id=' . Security::remove_XSS($_GET['lp_id']) . '&origin=' . Security::remove_XSS($_GET['origin']).$from_link;
 } else {
 	$url_suffix = '';
 }
@@ -567,7 +536,7 @@ if (is_array($list) && count($list) > 0){
 						$my_url_suffix = '&course=' . api_get_course_id() . '&student_id=' . api_get_user_id() . '&lp_id=' . Security::remove_XSS($row['mylpid']);
 						$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC ';
 					} else {
-						$my_url_suffix = '&course=' . Security::remove_XSS($_GET['course']) . '&student_id=' . $student_id . '&lp_id=' . Security::remove_XSS($row['mylpid']).'&origin=' . Security::remove_XSS($_GET['origin']);
+						$my_url_suffix = '&course=' . Security::remove_XSS($_GET['course']) . '&student_id=' . $student_id . '&lp_id=' . Security::remove_XSS($row['mylpid']).'&origin=' . Security::remove_XSS($_GET['origin'].$from_link);
 						$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($_GET['course']) . '" AND status <> "incomplete"  ORDER BY exe_date DESC ';
 					}
 	
@@ -714,15 +683,15 @@ if (is_array($list) && count($list) > 0){
 							 		if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {
 										$output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'"></td>';
 									} else {
-										$output .= '<td><a href="../exercice/exercise_show.php?origin=student_progress&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $student_id . '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'"></a></td>';	
-									}
-							 								
-								} else {
+										$output .= '<td><a href="../exercice/exercise_show.php?origin=student_progress&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $student_id .$from_link. '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'"></a></td>';	
+									}							 								
+								} else {	
 									if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {
 										$output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'"></td>';
 									} else {
-										$output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $student_id . '&total_time='.$mytime.'&my_exe_exo_id='.$my_exo_exe_id.' " target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'"></a></td>';	
-									}															
+										$output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $student_id . '&total_time='.$mytime.'&my_exe_exo_id='.$my_exo_exe_id.$from_link.' " target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'"></a></td>';	
+									}		
+													
 								}		 				 	        
 							 	$output .= '</tr>';
 								$n++;												

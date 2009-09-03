@@ -101,13 +101,27 @@ if (!empty($gradebook) && $gradebook=='view') {
 			'name' => get_lang('Gradebook')
 		);
 }
-
+$fromlink = '';
 if($origin=='user_course') {
 	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".Security::remove_XSS($_GET['course']), "name" => get_lang("Users"));
 	$interbreadcrumb[] = array("url" => "../mySpace/myStudents.php?student=".Security::remove_XSS($_GET['student'])."&course=".$_course['id']."&details=true&origin=".Security::remove_XSS($_GET['origin']) , "name" => get_lang("DetailsStudentInCourse"));
 } else if($origin=='tracking_course') {
-	$interbreadcrumb[] = array ("url" => "../mySpace/index.php", "name" => get_lang('MySpace'));
- 	$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".Security::remove_XSS($_GET['student']).'&details=true&origin='.$origin.'&course='.Security::remove_XSS($_GET['cidReq']), "name" => get_lang("DetailsStudentInCourse"));
+	
+	//$interbreadcrumb[] = array ("url" => "../mySpace/index.php", "name" => get_lang('MySpace'));
+ 	//$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".Security::remove_XSS($_GET['student']).'&details=true&origin='.$origin.'&course='.Security::remove_XSS($_GET['cidReq']), "name" => get_lang("DetailsStudentInCourse"));
+ 	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$_course['directory'], 'name' => $_course['title']);
+	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$cidReq.'&studentlist=true&id_session='.$_SESSION['id_session'], "name" => get_lang("Tracking"));	
+	$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".Security::remove_XSS($_GET['student']).'&details=true&origin='.$origin.'&course='.Security::remove_XSS($_GET['cidReq']), "name" => get_lang("DetailsStudentInCourse"));
+	$interbreadcrumb[] = array ("url" => "../mySpace/lp_tracking.php?action=stats&course=".$cidReq."&student_id=".Security::remove_XSS($_GET['student'])."&lp_id=".$_GET['my_lp_id']."&origin=".Security::remove_XSS($_GET['origin']) , "name" => get_lang("LearningPathDetails"));
+
+	$from_myspace = false;
+	if (isset ($_GET['from']) && $_GET['from'] == 'myspace') {
+		$fromlink = '&from=myspace';
+		$this_section = "session_my_space";
+	} else {
+		$this_section = SECTION_COURSES;
+	}
+
 } else if($origin=='student_progress') {
 	$interbreadcrumb[] = array ("url" => "../auth/my_progress.php?id_session".Security::remove_XSS($_GET['id_session'])."&course=".$_cid, "name" => get_lang('MyProgress'));
 	unset($_cid);
@@ -115,6 +129,7 @@ if($origin=='user_course') {
 	$interbreadcrumb[]=array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
 	$this_section=SECTION_COURSES;
 }
+
 
 if ($origin != 'learnpath') {
 	Display::display_header($nameTools,"Exercise");
@@ -1030,7 +1045,8 @@ if (is_array($arrid) && is_array($arrmarks)) {
 
 if ($is_allowedToEdit) {		
 	if (in_array($origin, array('tracking_course','user_course'))) {
-		echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.urlencode($test).'&emailid='.$emailId.'&origin='.$origin.'&student='.$_GET['student'].'&details=true&course='.$_GET['cidReq'].'" method="post">';
+		
+		echo ' <form name="myform" id="myform" action="exercice.php?show=result&comments=update&exeid='.$id.'&test='.urlencode($test).'&emailid='.$emailId.'&origin='.$origin.'&student='.$_GET['student'].'&details=true&course='.$_GET['cidReq'].$fromlink.'" method="post">';
 		echo ' <input type = "hidden" name="totalWeighting" value="'.$totalWeighting.'">';
 		if (isset($_GET['myid']) && isset($_GET['my_lp_id']) && isset($_GET['student'])) {			
 			?>

@@ -132,7 +132,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	$emailid = $_GET['emailid'];
 	$test = $_GET['test'];
 	$from = $_SESSION['_user']['mail'];
-	$from_name = $_SESSION['_user']['firstName'] . " " . $_SESSION['_user']['lastName'];
+	$from_name = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
 	$url = api_get_path(WEB_CODE_PATH) . 'exercice/exercice.php?' . api_get_cidreq() . '&show=result';
 	$TBL_RECORDING = Database :: get_statistic_table('track_e_attempt_recording');
 	$total_weighting = $_REQUEST['totalWeighting'];
@@ -781,9 +781,9 @@ if (($is_allowedToEdit) and ($origin != 'learnpath')) {
 				$alt = get_lang('ExportWithoutUserFields');
 				$extra_user_fields = '<input type="hidden" name="export_user_fields" value="do_not_export_user_fields">';
 			}
-			//echo '<a href="#" onclick="document.form1a.submit();">'.Display::return_icon('excel.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
-			echo '<a href="#" onclick="document.form1b.submit();">' . Display :: return_icon('excel.gif', get_lang('ExportAsXLS')) . get_lang('ExportAsXLS') . '</a>';
-			//echo '<a href="#" onclick="document.form1c.submit();">'.Display::return_icon('synthese_view.gif',$alt).$alt.'</a>';			
+			//echo '<a href="javascript: void(0);" onclick="javascript: document.form1a.submit();">'.Display::return_icon('excel.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
+			echo '<a href="javascript: void(0);" onclick="javascript: document.form1b.submit();">' . Display :: return_icon('excel.gif', get_lang('ExportAsXLS')) . get_lang('ExportAsXLS') . '</a>';
+			//echo '<a href="javascript: void(0);" onclick="javascript: document.form1c.submit();">'.Display::return_icon('synthese_view.gif',$alt).$alt.'</a>';			
 			echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=test') . '">' . Display :: return_icon('quiz.gif', get_lang('BackToExercisesList')) . get_lang('BackToExercisesList') . '</a>';
 			echo '<form id="form1a" name="form1a" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '">';
 			echo '<input type="hidden" name="export_report" value="export_report">';
@@ -1139,14 +1139,14 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 			$exercise_where_query = 'te.exe_exo_id =ce.id AND ';
 		}
 
-		$sql = "SELECT CONCAT(lastname,' ',firstname) as users, ce.title, te.exe_result ,
+			$sql="SELECT ".(api_is_western_name_order() ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)")." as users, ce.title, te.exe_result ,
 								 te.exe_weighting, UNIX_TIMESTAMP(te.exe_date), te.exe_id, email, UNIX_TIMESTAMP(te.start_date), steps_counter,cuser.user_id,te.exe_duration
 						  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user,$tbl_course_rel_user AS cuser
 						  WHERE  user.user_id=cuser.user_id AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'
 						  AND cuser.status<>1 $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 
 						  AND cuser.course_code=te.exe_cours_id ORDER BY users, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
 
-		$hpsql = "SELECT CONCAT(tu.lastname,' ',tu.firstname), tth.exe_name,
+			$hpsql="SELECT ".(api_is_western_name_order() ? "CONCAT(tu.firstname,' ',tu.lastname)" : "CONCAT(tu.lastname,' ',tu.firstname)").", tth.exe_name,
 								tth.exe_result , tth.exe_weighting, UNIX_TIMESTAMP(tth.exe_date)
 							FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
 							WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($_cid) . " $user_id_and '
@@ -1156,7 +1156,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 		// get only this user's results
 		$user_id_and = ' AND te.exe_user_id = ' . Database :: escape_string(api_get_user_id()) . ' ';
 
-		$sql = "SELECT CONCAT(lastname,' ',firstname) as users, ce.title, te.exe_result ,
+				$sql="SELECT ".(api_is_western_name_order() ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)")." as users,ce.title, te.exe_result ,
 							 te.exe_weighting, UNIX_TIMESTAMP(te.exe_date), te.exe_id, email, UNIX_TIMESTAMP(te.start_date), steps_counter,cuser.user_id,te.exe_duration, ce.results_disabled
 						  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user,$tbl_course_rel_user AS cuser
 						  WHERE  user.user_id=cuser.user_id AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'

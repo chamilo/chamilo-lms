@@ -91,6 +91,6 @@ Display::display_header($nameTools,"Exercise");
 	$form->display();
 	echo "</td>";
 	}?>
-	<form name="frm" action="#" method="post">
+	<form name="frm" action="javascript: void(0);" method="post">
 	 Click Ok to finish <input  type="submit" value="Ok" />
 	</form>

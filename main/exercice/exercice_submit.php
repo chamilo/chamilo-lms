@@ -1100,4 +1100,6 @@ if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType !
 if ($origin != 'learnpath') {
 	//so we are not in learnpath tool
 	Display :: display_footer();
+} else {
+	echo '</body></html>';
 }

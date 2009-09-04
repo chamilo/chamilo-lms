@@ -109,7 +109,7 @@ Display::display_header($nameTools,"Exercise");
 $sql = 'SELECT * FROM '.$TBL_EXERCICES;
 $query = api_sql_query($sql,__FILE__,__LINE__);
 */
-$sql = "SELECT *, quiz_question.question, CONCAT(firstname,' ',lastname) as full_name FROM $TBL_TRACK_ATTEMPT_RECORDING t,$TBL_USER,$TBL_EXERCICES_QUESTION quiz_question WHERE quiz_question.id = question_id AND user_id = author AND exe_id = '".(int)$_GET['exe_id']."' ORDER BY t.insert_date desc,question ASC";
+$sql = "SELECT *, quiz_question.question, firstname, lastname FROM $TBL_TRACK_ATTEMPT_RECORDING t,$TBL_USER,$TBL_EXERCICES_QUESTION quiz_question WHERE quiz_question.id = question_id AND user_id = author AND exe_id = '".(int)$_GET['exe_id']."' ORDER BY t.insert_date desc,question ASC";
 $query = api_sql_query($sql,__FILE__,__LINE__);
 while($row = Database::fetch_array($query)){
 	echo '<tr';
@@ -125,7 +125,7 @@ while($row = Database::fetch_array($query)){
 	}
 
 	echo '<td>'.$row['insert_date'].'</td>';
-	echo '<td>'.(empty($row['full_name'])?'<i>'.get_lang('OriginalValue').'</i>':$row['full_name']).'</td>';
+	echo '<td>'.(empty($row['firstname']) && empty($row['lastname']) ? '<i>'.get_lang('OriginalValue').'</i>' : api_get_person_name($row['firstname'], $row['lastname'])).'</td>';
 
 	echo '</tr>';
 }

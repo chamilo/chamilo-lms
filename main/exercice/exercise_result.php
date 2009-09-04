@@ -135,7 +135,7 @@ $query = "SELECT user_id FROM $main_admin_table LIMIT 1"; //get all admins from 
 $admin_id = Database::result(api_sql_query($query),0,"user_id");
 $uinfo = api_get_user_info($admin_id);
 $from = $uinfo['mail'];
-$from_name = $uinfo['firstname'].' '.$uinfo['lastname'];
+$from_name = api_get_person_name($uinfo['firstname'], $uinfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
 $str = $_SERVER['REQUEST_URI'];
 $url = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result';
 
@@ -1111,7 +1111,7 @@ if(count($arrques)>0) {
 	  </tr>
 	  <tr>
 	    <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
-	    <td valign="top" >#firstName# #lastName#</td>
+	    '.(api_is_western_name_order() ? '<td valign="top" >#firstName# #lastName#</td>' : '<td valign="top" >#lastName# #firstName#</td>').'
 	  </tr>
 	  <tr>
 	    <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
@@ -1145,7 +1145,7 @@ if(count($arrques)>0) {
 	
 		$msg1= str_replace("#url#",$url,$msg);
 		$mail_content = $msg1;
-		$student_name = $_SESSION['_user']['firstName'].' '.$_SESSION['_user']['lastName'];
+		$student_name = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName']);
 		$subject = get_lang('OpenQuestionsAttempted');
 		
 		$from = api_get_setting('noreply_email_address');
@@ -1157,7 +1157,7 @@ if(count($arrques)>0) {
 						';
 				$result=api_sql_query($sql,__FILE__,__LINE__);
 				$from = Database::result($result,0,'email');
-				$from_name = Database::result($result,0,'firstname').' '.Database::result($result,0,'lastname');
+				$from_name = api_get_person_name(Database::result($result,0,'firstname'), Database::result($result,0,'lastname'), null, PERSON_NAME_EMAIL_ADDRESS);
 			} else {
 				$array = explode(' ',$_SESSION['_course']['titular']);
 				$firstname = $array[1];
@@ -1168,7 +1168,7 @@ if(count($arrques)>0) {
 				';
 				$result=api_sql_query($sql,__FILE__,__LINE__);
 				$from = Database::result($result,0,'email');
-				$from_name = Database::result($result,0,'firstname').' '.Database::result($result,0,'lastname');
+				$from_name = api_get_person_name(Database::result($result,0,'firstname'), Database::result($result,0,'lastname'), null, PERSON_NAME_EMAIL_ADDRESS);
 			}
 		}	
 	api_mail_html($student_name, $to, $subject, $mail_content, $from_name, $from, array('encoding'=>$mycharset,'charset'=>$mycharset));

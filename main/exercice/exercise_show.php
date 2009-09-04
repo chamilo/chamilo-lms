@@ -453,10 +453,10 @@ if ($show_results == true ) {
 			$status_info=CourseManager::get_user_in_course_status($user_id,$course_code);
 			if (STUDENT==$status_info) {
 				$user_info=api_get_user_info($user_id); 
-				echo $user_info['firstName'].' '.$user_info['lastName'];
+				echo api_get_person_name($user_info['firstName'], $user_info['lastName']);
 			} elseif(COURSEMANAGER==$status_info && !isset($_GET['user'])) {
 				$user_info=api_get_user_info($user_id); 
-				echo $user_info['firstName'].' '.$user_info['lastName'];
+				echo api_get_person_name($user_info['firstName'], $user_info['lastName']);
 			} else {
 				echo $user_name;
 			}

@@ -1318,7 +1318,7 @@ function draw_date_picker($prefix,$default='') {
 		
 		$new_folder_text .= '<div class="row">
 								<div class="label">									
-								<a href="#" onclick=" return plus();"><span id="plus">'.Display::return_icon('div_show.gif',get_lang('AdvancedParameters'),array('style'=>'vertical-align:center')).' '.get_lang('AdvancedParameters').'</span></a><br />
+								<a href="javascript: void(0);" onclick="javascript: return plus();"><span id="plus">'.Display::return_icon('div_show.gif',get_lang('AdvancedParameters'),array('style'=>'vertical-align:center')).' '.get_lang('AdvancedParameters').'</span></a><br />
 								</div> 
 								<div class="formw">
 									'.$addtext.'

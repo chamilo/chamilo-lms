@@ -1185,10 +1185,10 @@ function to_javascript_work() {
 			function plus() {
 				if(document.getElementById(\'options\').style.display == \'none\') {
 					document.getElementById(\'options\').style.display = \'block\';
-					document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.addslashes(get_lang('AdvancedParameters')).'\';
+					document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide', ''),array('style'=>'vertical-align:middle')).'&nbsp;'.addslashes(get_lang('AdvancedParameters', '')).'\';
 				} else {
-				document.getElementById(\'options\').style.display = \'none\';
-				document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.addslashes(get_lang('AdvancedParameters')).'\';
+					document.getElementById(\'options\').style.display = \'none\';
+					document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show', ''),array('style'=>'vertical-align:middle')).'&nbsp;'.addslashes(get_lang('AdvancedParameters', '')).'\';
 				}	
 			}
 			
@@ -1286,25 +1286,25 @@ function to_javascript_work() {
 				if(new_dir==""){
 					 
 					msg_id1.style.display ="block";
-					msg_id1.innerHTML="'.get_lang('FieldRequired').'";
+					msg_id1.innerHTML="'.get_lang('FieldRequired', '').'";
 					msg_id2.innerHTML="";msg_id3.innerHTML="";msg_id4.innerHTML="";msg_id5.innerHTML="";		
 				}
 				else if(document.form1.type1.checked==true && document.form1.type2.checked==true && expires_date > ends_date) {								 
 						msg_id2.style.display ="block";
-						msg_id2.innerHTML="'.get_lang('EndDateCannotBeBeforeTheExpireDate').'";
+						msg_id2.innerHTML="'.get_lang('EndDateCannotBeBeforeTheExpireDate', '').'";
 						msg_id1.innerHTML="";msg_id3.innerHTML="";msg_id4.innerHTML="";msg_id5.innerHTML="";												
 				}			
 				else if (checkDate(expires_month,expires_day,expires_year) == false)
 				{		 
 					msg_id3.style.display ="block";
-					msg_id3.innerHTML="'.get_lang('InvalidDate').'";
+					msg_id3.innerHTML="'.get_lang('InvalidDate', '').'";
 					msg_id1.innerHTML="";msg_id2.innerHTML="";msg_id4.innerHTML="";msg_id5.innerHTML="";		
 				}
 				else if (checkDate(ends_month,ends_day,ends_year) == false)
 				{
 					 
 					msg_id4.style.display ="block";
-					msg_id4.innerHTML="'.get_lang('InvalidDate').'";
+					msg_id4.innerHTML="'.get_lang('InvalidDate', '').'";
 					msg_id1.innerHTML="";msg_id2.innerHTML="";msg_id3.innerHTML="";msg_id5.innerHTML="";		
 				}						
 				else
@@ -1315,7 +1315,7 @@ function to_javascript_work() {
 					 	var weight = document.form1.weight.value;		
 						 	if(weight==""){
 								msg_id5.style.display ="block";
-								msg_id5.innerHTML="'.get_lang('WeightNecessary').'";
+								msg_id5.innerHTML="'.get_lang('WeightNecessary', '').'";
 								msg_id1.innerHTML="";msg_id2.innerHTML="";msg_id3.innerHTML="";msg_id4.innerHTML="";		
 							    return false;
 							}			 				   	

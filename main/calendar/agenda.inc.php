@@ -23,11 +23,11 @@
 */
 // the variables for the days and the months
 // Defining the shorts for the days
-$DaysShort = array (get_lang("SundayShort"), get_lang("MondayShort"), get_lang("TuesdayShort"), get_lang("WednesdayShort"), get_lang("ThursdayShort"), get_lang("FridayShort"), get_lang("SaturdayShort"));
+$DaysShort = api_get_week_days_short();
 // Defining the days of the week to allow translation of the days
-$DaysLong = array (get_lang("SundayLong"), get_lang("MondayLong"), get_lang("TuesdayLong"), get_lang("WednesdayLong"), get_lang("ThursdayLong"), get_lang("FridayLong"), get_lang("SaturdayLong"));
+$DaysLong = api_get_week_days_long();
 // Defining the months of the year to allow translation of the months
-$MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong"));
+$MonthsLong = api_get_months_long();
 
 /*
 ==============================================================================
@@ -865,7 +865,7 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 			if (!is_array($to_already_selected) || !in_array("USER:".$this_user['uid'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
 			{
 				echo	"\t\t<option value=\"USER:",$this_user['uid'],"\">",
-					"",$this_user['lastName']," ",$this_user['firstName'],
+					"",api_get_person_name($this_user['firstName'], $this_user['lastName']),
 					"</option>\n";
 			}
 		}			
@@ -910,8 +910,8 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 			}			
 			else
 			{								
-				$select_options_user[] = "\t\t<option value=\"".$groupuser."\">".$ref_array_users[$id]['lastName']." ".$ref_array_users[$id]['firstName']."</option>";
-				//echo "\t\t<option value=\"".$groupuser."\">".$ref_array_users[$id]['lastName']." ".$ref_array_users[$id]['firstName']."</option>";
+				$select_options_user[] = "\t\t<option value=\"".$groupuser."\">".api_get_person_name($ref_array_users[$id]['firstName'], $ref_array_users[$id]['lastName'])."</option>";
+				//echo "\t\t<option value=\"".$groupuser."\">".api_get_person_name($ref_array_users[$id]['firstName'], $ref_array_users[$id]['lastName'])."</option>";
 			}			
 		}
 		$select_options_group[] = "<option value=\"\">--------------------------------------------</option>";
@@ -1273,7 +1273,7 @@ function show_group_filter_form()
 {
 	$group_list=get_course_groups();
 	
-	echo "<select name=\"select\" onchange=\"MM_jumpMenu('parent',this,0)\">";
+echo "<select name=\"select\" onchange=\"javascript: MM_jumpMenu('parent',this,0)\">";
 	echo "<option value=\"agenda.php?group=none\">show all groups</option>";
 	foreach($group_list as $this_group)
 		{
@@ -1295,14 +1295,14 @@ function show_user_filter_form()
 {
 	$user_list=get_course_users();
 	
-	echo "<select name=\"select\" onchange=\"MM_jumpMenu('parent',this,0)\">";
+	echo "<select name=\"select\" onchange=\"javascript: MM_jumpMenu('parent',this,0)\">";
 	echo "<option value=\"agenda.php?user=none\">show all users</option>";
 	foreach($user_list as $this_user)
 		{
-		// echo "<option value=\"agenda.php?isStudentView=true&amp;user=".$this_user['uid']."\">".$this_user['lastName']." ".$this_user['firstName']."</option>";
+		// echo "<option value=\"agenda.php?isStudentView=true&amp;user=".$this_user['uid']."\">".api_get_person_name($this_user['firstName'], $this_user['lastName'])."</option>";
 		echo "<option value=\"agenda.php?user=".$this_user['uid']."\" ";
 		echo ($this_user['uid']==$_SESSION['user'])? " selected":"" ;
-		echo ">".$this_user['lastName']." ".$this_user['firstName']."</option>";
+		echo ">".api_get_person_name($this_user['firstName'], $this_user['lastName'])."</option>";
 		}
 	echo "</select>";
 }
@@ -1315,7 +1315,7 @@ function show_user_filter_form()
 */
 function show_user_group_filter_form()
 {
-	echo "\n<select name=\"select\" onchange=\"MM_jumpMenu('parent',this,0)\">";
+	echo "\n<select name=\"select\" onchange=\"javascript: MM_jumpMenu('parent',this,0)\">";
 	
 	// Groups
 	$option = "\n\t<optgroup label=\"".get_lang("Groups")."\">";
@@ -1357,7 +1357,7 @@ function show_user_group_filter_form()
 	foreach($user_list as $this_user) {
 		echo "\n\t\t<option value=\"agenda.php?user=".$this_user['uid']."\" ";
 		echo ($this_user['uid']==$_SESSION['user'])? " selected":"" ;
-		echo ">".$this_user['lastName']." ".$this_user['firstName']."</option>";		
+		echo ">".api_get_person_name($this_user['firstName'], $this_user['lastName'])."</option>";
 	}		
 	echo "\n\t</optgroup>";
 	echo "</select>";
@@ -2434,7 +2434,7 @@ function display_one_agenda_item($agenda_id)
 	    //echo '<a class="ical_export" href="'.$mylink.'&amp;class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a> ';
 	    //echo '<a class="ical_export" href="'.$mylink.'&amp;class=private" title="'.get_lang('ExportiCalPrivate').'">'.Display::return_icon($export_icon_low, get_lang('ExportiCalPrivate')).'</a> ';
 	    //echo '<a class="ical_export" href="'.$mylink.'&amp;class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a> ';
-	    echo '<a href="#" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('print.gif', get_lang('Print')).'</a>&nbsp;';
+	    echo '<a href="javascript: void(0);" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('print.gif', get_lang('Print')).'</a>&nbsp;';
 		echo "</td></tr>";
 	    if($repeat) {
 	    	echo '<tr>';
@@ -2614,7 +2614,7 @@ function show_add_form($id = '')
 	{
 		echo '	<div class="row">
 					<div class="label">
-						<a href="#" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.Display::return_icon('group.gif', get_lang('SentTo'), array ('align' => 'absmiddle')).' '.get_lang('SentTo').'</a>
+						<a href="javascript: void(0);" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.Display::return_icon('group.gif', get_lang('SentTo'), array ('align' => 'absmiddle')).' '.get_lang('SentTo').'</a>
 					</div>
 					<div class="formw">';
 		if ((isset($_GET['id'])  && $to=='everyone') || !isset($_GET['id']))

@@ -13,7 +13,7 @@ var clock_set = 0;
  * @param   string      field name
  */
 function openCalendar(form, field) {
-    window.open("./calendar.php", "calendar", "width=260,height=220,status=yes");
+    window.open("./calendar.php", "calendar", "width=260,height=250,status=yes");
 	day = eval("document." + form + "." + field + "day.options["+ "document." + form + "." + field + "day.selectedIndex].value");
     month = eval("document." + form + "." + field + "month.options["+ "document." + form + "." + field + "month.selectedIndex].value");
    	month = month-1;

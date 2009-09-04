@@ -150,6 +150,7 @@ $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 // the variables for the days and the months
 // Defining the shorts for the days
+// TODO: The function myEnc() should be eliminated. The following arrays should be constructed using the correspondent API-functions in the internationalization library.
 $DaysShort = array (myEnc(get_lang("SundayShort")), myEnc(get_lang("MondayShort")), myEnc(get_lang("TuesdayShort")), myEnc(get_lang("WednesdayShort")), myEnc(get_lang("ThursdayShort")), myEnc(get_lang("FridayShort")), myEnc(get_lang("SaturdayShort")));
 // Defining the days of the week to allow translation of the days
 $DaysLong = array (myEnc(get_lang("SundayLong")), myEnc(get_lang("MondayLong")), myEnc(get_lang("TuesdayLong")), myEnc(get_lang("WednesdayLong")), myEnc(get_lang("ThursdayLong")), myEnc(get_lang("FridayLong")), myEnc(get_lang("SaturdayLong")));

@@ -398,15 +398,15 @@ function display_monthcalendar($month, $year)
 
 	for ($ii=1;$ii<8; $ii++)
 	{
-	echo "<td class=\"weekdays\" width=\"14%\">",$DaysShort[$ii%7],"</td>\n";
-  }
+		echo "<td class=\"weekdays\" width=\"14%\">",$DaysShort[$ii%7],"</td>\n";
+	}
 
 	echo "</tr>\n";
 	$curday = -1;
 	$today = getdate();
 	while ($curday <=$numberofdays[$month])
   	{
-	echo "<tr>\n";	
+		echo "<tr>\n";	
     	for ($ii=0; $ii<7; $ii++)
 	  	{
 	  		if (($curday == -1)&&($ii==$startdayofweek))
@@ -750,11 +750,11 @@ function get_course_users()
 	if (!isset($courseadmin_filter))
 		{$courseadmin_filter='';}
 	
+	$order_clause = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
 	$sql = "SELECT u.user_id uid, u.lastname lastName, u.firstname firstName
 			FROM $tbl_user as u, $tbl_courseUser as cu
 			WHERE cu.course_code = '".$_cid."'
-				AND cu.user_id = u.user_id $courseadmin_filter
-			ORDER BY u.lastname, u.firstname";
+			AND cu.user_id = u.user_id $courseadmin_filter".$order_clause;
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	while($user=Database::fetch_array($result)){
 		$users[$user[0]] = $user;
@@ -943,7 +943,7 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 					if (!is_array($to_already_selected) || !in_array("USER:".$this_user['uid'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
 					{
 						echo	"\t\t<option value=\"USER:",$this_user['uid'],"\">",
-							"",$this_user['lastName']," ",$this_user['firstName'],
+							"",api_get_person_name($this_user['firstName'], $this_user['lastName']),
 							"</option>\n";
 					}
 				}
@@ -1152,28 +1152,28 @@ function sent_to($tool, $id)
 	$sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".$tool."' AND ref='".$id."'";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	while ($row=Database::fetch_array($result))
-		{
+	{
 		// if to_group_id is null then it is sent to a specific user
 		// if to_group_id = 0 then it is sent to everybody
 		if (!is_null($row['to_group_id']) )
-			{
+		{
 			$sent_to_group[]=$row['to_group_id'];
 			//echo $row['to_group_id'];
-			}
+		}
 		// if to_user_id <> 0 then it is sent to a specific user
 		if ($row['to_user_id']<>0)
-			{
+		{
 			$sent_to_user[]=$row['to_user_id'];
-			}
 		}
+	}
 	if (isset($sent_to_group))
-		{
+	{
 		$sent_to['groups']=$sent_to_group;
-		}
+	}
 	if (isset($sent_to_user))
-		{
+	{
 		$sent_to['users']=$sent_to_user;
-		}
+	}
 	return $sent_to;
 }
 
@@ -1198,19 +1198,19 @@ function sent_to_form($sent_to_array)
 	// we count the number of users and the number of groups
 	if (isset($sent_to_array['users']))
 	{
-	$number_users=count($sent_to_array['users']);
+		$number_users=count($sent_to_array['users']);
 	}
 	else
 	{
-	$number_users=0;
+		$number_users=0;
 	}
 	if (isset($sent_to_array['groups']))
 	{
-	$number_groups=count($sent_to_array['groups']);
+		$number_groups=count($sent_to_array['groups']);
 	}
 	else
 	{
-	$number_groups=0;
+		$number_groups=0;
 	}
 	$total_numbers=$number_users+$number_groups;
 
@@ -1234,7 +1234,7 @@ function sent_to_form($sent_to_array)
 			foreach ($sent_to_array['users'] as $user_id)
 				{
 				$user_info=api_get_user_info($user_id);
-				$output.="\t<option value=\"\">".$user_info['firstName']." ".$user_info['lastName']."</option>\n";
+				$output.="\t<option value=\"\">".api_get_person_name($user_info['firstName'], $user_info['lastName'])."</option>\n";
 				}
 			}
 	}
@@ -1244,21 +1244,21 @@ function sent_to_form($sent_to_array)
 	}
 	else // there is only one user/group
 	{
-	if (is_array($sent_to_array['users']))
+		if (is_array($sent_to_array['users']))
 		{
-		$user_info=api_get_user_info($sent_to_array['users'][0]);
-		echo $user_info['firstName']." ".$user_info['lastName'];
+			$user_info=api_get_user_info($sent_to_array['users'][0]);
+			echo api_get_person_name($user_info['firstName'], $user_info['lastName']);
 		}
-	if (is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]!==0)
+		if (is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]!==0)
 		{
-		$group_id=$sent_to_array['groups'][0];
-		echo $group_names[$group_id]['name'];
+			$group_id=$sent_to_array['groups'][0];
+			echo $group_names[$group_id]['name'];
 		}
-	if (is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]==0)
+		if (is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]==0)
 		{
-		echo get_lang("Everybody");
+			echo get_lang("Everybody");
 		}
-	//.$sent_to_array['groups'][0];
+		//.$sent_to_array['groups'][0];
 	}
 
 	echo $output;
@@ -1273,15 +1273,15 @@ function show_group_filter_form()
 {
 	$group_list=get_course_groups();
 	
-echo "<select name=\"select\" onchange=\"javascript: MM_jumpMenu('parent',this,0)\">";
+	echo "<select name=\"select\" onchange=\"javascript: MM_jumpMenu('parent',this,0)\">";
 	echo "<option value=\"agenda.php?group=none\">show all groups</option>";
 	foreach($group_list as $this_group)
-		{
+	{
 		// echo "<option value=\"agenda.php?isStudentView=true&amp;group=".$this_group['id']."\">".$this_group['name']."</option>";
 		echo "<option value=\"agenda.php?group=".$this_group['id']."\" ";
 		echo ($this_group['id']==$_SESSION['group'])? " selected":"" ;
 		echo ">".$this_group['name']."</option>";
-		}
+	}
 	echo "</select>";
 }
 
@@ -1398,7 +1398,6 @@ function load_edit_users($tool, $id)
 		}
 	return $to;
 }
-
 
 
 /**

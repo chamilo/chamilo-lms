@@ -21,19 +21,21 @@
 	Mail: info@dokeos.com
 ==============================================================================
 */
-// including the relevant language file
-// name of the language file that needs to be included 
+
 $language_file = 'agenda';
-// including the claroline global 
-require ('../../../global.inc.php');
+require_once dirname(__FILE__).'/../../../global.inc.php';
+
+//session
+if(isset($_GET['id_session']))
+	$_SESSION['id_session'] = Security::remove_XSS($_GET['id_session']);
 
 // the variables for the days and the months
 // Defining the shorts for the days
-$DaysShort = array(get_lang("SundayShort"), get_lang("MondayShort"), get_lang("TuesdayShort"), get_lang("WednesdayShort"), get_lang("ThursdayShort"), get_lang("FridayShort"), get_lang("SaturdayShort")); 
+$DaysShort = api_get_week_days_short();
 // Defining the days of the week to allow translation of the days
-$DaysLong = array(get_lang("SundayLong"), get_lang("MondayLong"), get_lang("TuesdayLong"), get_lang("WednesdayLong"), get_lang("ThursdayLong"), get_lang("FridayLong"), get_lang("SaturdayLong")); 
+$DaysLong = api_get_week_days_long();
 // Defining the months of the year to allow translation of the months
-$MonthsLong = array(get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong")); 
+$MonthsLong = api_get_months_long();
 @ $iso_lang = Database :: get_language_isocode($language_interface);
 if (empty ($iso_lang) )
 {
@@ -48,9 +50,9 @@ if (empty ($iso_lang) )
 <head>
 <title>Calendar</title>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>">
-<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH); ?>/css/default.css"/>
 <style type="text/css">
 /*<![CDATA[*/
+@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/<?php echo api_get_setting('stylesheets'); ?>/default.css";
 table.calendar
 {
 	width: 100%;	
@@ -157,7 +159,7 @@ foreach($DaysShort as $index => $day)
 /* ]]> */
 </script>
 </head>
-<body onload="initCalendar();">
+<body onLoad="javascript: initCalendar();">
 <div id="calendar_data"></div>
 <div id="clock_data"></div>
 </body>

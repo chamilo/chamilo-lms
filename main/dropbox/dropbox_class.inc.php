@@ -104,7 +104,7 @@ class Dropbox_Work {
 		$this->filesize = $filesize;
 		$this->title = $title;
 		$this->description = $description;
-		$this->author 			= $_user['firstName'].' '.$_user['lastName'];
+		$this->author = api_get_person_name($_user['firstName'], $_user['lastName']);
 		$this->last_upload_date = date("Y-m-d H:i:s",time());
 
 		// Check if object exists already. If it does, the old object is used

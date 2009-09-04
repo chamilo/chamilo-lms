@@ -584,9 +584,9 @@ function display_add_form()
 		}
 	}
 
-	foreach ($complete_user_list_for_dropbox as $k => $e)
-	    $complete_user_list_for_dropbox[$k] = $e +
-	        array('lastcommafirst' => $e['lastname'] . ', ' . $e['firstname']);
+	foreach ($complete_user_list_for_dropbox as $k => $e) {
+	    $complete_user_list_for_dropbox[$k] = $e + array('lastcommafirst' => api_get_person_name($e['firstname'], $e['lastname']));
+	}
 
 	$complete_user_list_for_dropbox = TableSort::sort_table($complete_user_list_for_dropbox, 'lastcommafirst');
 
@@ -685,7 +685,7 @@ function getUserNameFromId ( $id)  // RH: Mailing: return 'Mailing ' + id
 	    return dropbox_lang("mailingAsUsername", "noDLTT") . $mailingId;
     }
     $id = intval($id);
-    $sql = "SELECT CONCAT(lastname,' ', firstname) AS name
+    $sql = "SELECT ".(api_is_western_name_order() ? "CONCAT(firstname,' ', lastname)" : "CONCAT(lastname,' ', firstname)")." AS name
 			FROM " . dropbox_cnf("tbl_user") . "
 			WHERE user_id='$id'";
     $result = Database::query($sql,__FILE__,__LINE__);
@@ -829,7 +829,7 @@ function dropbox_lang($variable, $notrans = 'DLTT')
 /**
 * Function that finds a given config setting
 *
-* @author Ren� Haentjens, Ghent University
+* @author René Haentjens, Ghent University
 */
 function dropbox_cnf($variable)
 {
@@ -1020,10 +1020,10 @@ function store_add_dropbox()
 		{
 			include_once(api_get_path(LIBRARY_PATH) . 'usermanager.lib.php');
 			$recipent_temp=UserManager :: get_user_info_by_id($recipient_id);
-			api_mail($recipent_temp['lastname'].' '.$recipent_temp['firstname'],$recipent_temp['email'],
+			api_mail(api_get_person_name($recipent_temp['firstname'].' '.$recipent_temp['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $recipent_temp['email'],
 				get_lang('NewDropboxFileUploaded'),
-				get_lang('NewDropboxFileUploadedContent').' '.api_get_path(WEB_CODE_PATH).'dropbox/index.php?cidReq='.$_course['sysCode']."\n\n".$_user['firstName']." ".$_user['lastName']."\n".  get_lang('Email') ." : ".$_user['mail'], $_user['firstName']." ".$_user['lastName'],$_user['mail']);
-				//get_lang('NewDropboxFileUploadedContent').' '.api_get_path(WEB_CODE_PATH).'dropbox/index.php?cidReq='.$_course['sysCode']."\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator'),api_get_setting('administratorName')." ".api_get_setting('administratorSurname'),api_get_setting('emailAdministrator'));
+				get_lang('NewDropboxFileUploadedContent').' '.api_get_path(WEB_CODE_PATH).'dropbox/index.php?cidReq='.$_course['sysCode']."\n\n".api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS)."\n".  get_lang('Email') ." : ".$_user['mail'], api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_user['mail']);
+				//get_lang('NewDropboxFileUploadedContent').' '.api_get_path(WEB_CODE_PATH).'dropbox/index.php?cidReq='.$_course['sysCode']."\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS)."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName')." ".api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS), api_get_setting('emailAdministrator'));
 		}
 	}
 	
@@ -1057,7 +1057,7 @@ function display_user_link($user_id, $name='')
 			$sql="SELECT * FROM $table_user WHERE user_id='".Database::escape_string($user_id)."'";
 			$result=Database::query($sql,__FILE__,__LINE__);
 			$row=Database::fetch_array($result);
-			return "<a href=\"../user/userInfo.php?uInfo=".$row['user_id']."\">".$row['firstname']." ".$row['lastname']."</a>";
+			return "<a href=\"../user/userInfo.php?uInfo=".$row['user_id']."\">".api_get_person_name($row['firstname'], $row['lastname'])."</a>";
 		}
 		else
 		{
@@ -1300,7 +1300,7 @@ function zip_download_alternative($files)
 	
 	// Step 1: create the overview file and add it to the zip
 	$overview_file_content=generate_html_overview($files, array('filename'), array('title'));
-	$overview_file=$temp_zip_dir.'overview'.$_user['firstname'].$_user['lastname'].'.html';
+	$overview_file=$temp_zip_dir.'overview'.replace_dangerous_char(api_is_western_name_order() ? $_user['firstname'].$_user['lastname'] : $_user['lastname'].$_user['firstname'], 'strict').'.html';
 	$handle=fopen($overview_file,'w');
 	fwrite($handle,$overview_file_content);
 	// todo: find a different solution for this because even 2 seconds is no guarantee.

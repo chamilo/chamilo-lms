@@ -102,7 +102,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 				elseif(strstr($folder_titles[$folder], 'sf_user_'))
 				{			
 						$userinfo=Database::get_user_info_from_id(substr($folder_titles[$folder],8));
-						$folder_titles[$folder]=$userinfo['lastname'].', '.$userinfo['firstname'];				
+					$folder_titles[$folder]=api_get_person_name($userinfo['firstname'], $userinfo['lastname']);				
 				}				
 				
 				$label = str_repeat('&nbsp;&nbsp;&nbsp;',count($path_parts)-2).' &mdash; '.$folder_titles[$folder];
@@ -189,7 +189,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 			$url=$www.$path;
 		}
 		//files that we want opened in a new window
-		if($ext=='txt') //add here
+		if($ext=='txt' || $ext=='log' || $ext=='css' || $ext=='js') //add here
 		{
 			$target='_blank';
 		}
@@ -211,7 +211,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 	elseif(strstr($tooltip_title, 'sf_user_'))
 	{
 		$userinfo=Database::get_user_info_from_id(substr($tooltip_title,8));
-		$tooltip_title_alt=$userinfo['lastname'].', '.$userinfo['firstname'];
+		$tooltip_title_alt=api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 	}
 	else
 	{
@@ -271,7 +271,7 @@ function build_document_icon_tag($type, $path)
 			{
 				$icon = '../upload/users/'.substr($basename,8).'/'.$image_path['file'];
 			}
-			$basename = $userinfo['lastname'].', '.$userinfo['firstname'];			
+			$basename = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);			
 		}
 		else
 		{	

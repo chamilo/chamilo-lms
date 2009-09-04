@@ -521,6 +521,7 @@ if (!$_GET['view'] OR $_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs'
 			foreach ($dropbox_file->recipients as $recipient) {
 				$receivers_celldata=display_user_link($recipient['user_id'], $recipient['name']).', '.$receivers_celldata;
 			}
+			$receivers_celldata = trim(trim($receivers_celldata), ','); // Removing the trailing comma.
 			$dropbox_file_data[]=$receivers_celldata;
 			$dropbox_file_data[]=date_to_str_ago($dropbox_file->last_upload_date).'<br><span class="dropbox_date">'.$dropbox_file->last_upload_date.'</span>';
 

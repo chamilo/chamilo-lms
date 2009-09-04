@@ -318,7 +318,7 @@ for ($i=0; $i<$array_len;$i++)
 	elseif(strstr($dir_array[$i], 'sf_user_'))
 	{
 		$userinfo=Database::get_user_info_from_id(substr($dir_array[$i], 8));		
-		$dir_array[$i]=$userinfo['lastname'].', '.$userinfo['firstname'];
+		$dir_array[$i]=api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 	}
 
 	$url_dir='document.php?&curdirpath='.$dir_acum.$dir_array[$i]; 
@@ -370,7 +370,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 	  ======================================*/
 	$my_get_move=Security::remove_XSS($_GET['move']); 
 	if (isset($_GET['move']) && $_GET['move']!='')
-	{	
+	{ 	
 		if (!$is_allowed_to_edit)
 		{
 			if(DocumentManager::check_readonly($_course,$_user['user_id'],$my_get_move))
@@ -606,7 +606,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		$template_text .= '<button type="submit" class="add" name="create_template">'.get_lang('CreateTemplate').'</button>';
 		$template_text .= '</form>';
 		//show the form
-		Display::display_normal_message($template_text,false);
+		Display::display_normal_message($template_text,false);		
 		
 	} elseif(isset($_GET['add_as_template']) && isset($_POST['create_template'])) {		
 		
@@ -636,26 +636,26 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 				
 				// upload dir
 				$upload_dir = api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/';
-				
+
 				// resize image to max default and end upload
 				require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
 				$temp = new image($_FILES['template_image']['tmp_name']);
-				$picture_infos=getimagesize($_FILES['template_image']['tmp_name']);
-				
+				$picture_infos = @getimagesize($_FILES['template_image']['tmp_name']);
+
 				$max_width_for_picture = 100;
-				
+
 				if ($picture_infos[0]>$max_width_for_picture) {		
 					$thumbwidth = $max_width_for_picture;
 					if (empty($thumbwidth) or $thumbwidth==0) {
 					  $thumbwidth=$max_width_for_picture;
 					}
 					$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
-					
+
 					$temp->resize($thumbwidth,$new_height,0);
 				}
-				
+
 				$type=$picture_infos[2];
-						  
+
 				switch (!empty($type)) {
 					case 2 : $temp->send_image('JPG',$upload_dir.$new_file_name);							 
 							 break;
@@ -668,7 +668,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 	   }	
 		
 		DocumentManager::set_document_as_template($title, $description, $document_id_for_template, $course_code, $user_id, $new_file_name);		
-		Display::display_confirmation_message(get_lang('DocumentSetAsTemplate'));
+		Display::display_confirmation_message(get_lang('DocumentSetAsTemplate'));		
 	}
 		
 	if(isset($_GET['remove_as_template'])) {		
@@ -741,12 +741,12 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 			$document_name=$id['title'];
 		} else {
 		   $document_name=basename($id['path']);
-			//Juan Carlos Ra�a get lastname and firstname when folder is in shared_folder
+			//Juan Carlos Raña: Get firstname and lastname when folder is in shared_folder.
 			//TODO: check if is also necessary (above else)
 			if(strstr($document_name, 'sf_user_'))
 			{
 				$userinfo=Database::get_user_info_from_id(substr($document_name, 8));
-				$document_name=$userinfo['lastname'].', '.$userinfo['firstname'];
+				$document_name=api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 			}
 			elseif(strstr($document_name, 'shared_folder'))
 			{
@@ -764,7 +764,7 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 		if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='') {
 			if (!empty($id['insert_user_id'])) {
 				$user_info=UserManager::get_user_info_by_id($id['insert_user_id']);		
-				$user_name=$user_info['firstname'].' '.$user_info['lastname'];
+				$user_name=api_get_person_name($user_info['firstname'], $user_info['lastname']);
 				$user_link='<div class="document_owner">'.get_lang('Owner').': '.display_user_link_document($id['insert_user_id'],$user_name).'</div>';
 			}
 		}

@@ -63,7 +63,7 @@ foreach ($rows as $post) {
 	if ($post['user_id']=='0') {
 		$name=$post['poster_name'];
 	} else {
-		$name=$post['firstname'].' '.$post['lastname'];
+		$name=api_get_person_name($post['firstname'], $post['lastname']);
 	}	
 	if (api_get_course_setting('allow_user_image_forum')) {
 		echo '<br />'.display_user_image($post['user_id'],$name,$origin).'<br />';

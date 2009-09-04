@@ -1985,7 +1985,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 		// When we are quoting a message then we have to put that message into the wysiwyg editor.
 		// note: the style has to be hardcoded here because using class="quote" didn't work
 		if($action=='quote') {
-			$defaults['post_text']='<div>&nbsp;</div><div style="margin: 5px;"><div style="font-size: 90%;	font-style: italic;">'.get_lang('Quoting').' '.$values['firstname'].' '.$values['lastname'].':</div><div style="color: #006600; font-size: 90%;	font-style: italic; background-color: #FAFAFA; border: #D1D7DC 1px solid; padding: 3px;">'.prepare4display($values['post_text']).'</div></div><div>&nbsp;</div><div>&nbsp;</div>';
+			$defaults['post_text']='<div>&nbsp;</div><div style="margin: 5px;"><div style="font-size: 90%;	font-style: italic;">'.get_lang('Quoting').' '.api_get_person_name($values['firstname'], $values['lastname']).':</div><div style="color: #006600; font-size: 90%;	font-style: italic; background-color: #FAFAFA; border: #D1D7DC 1px solid; padding: 3px;">'.prepare4display($values['post_text']).'</div></div><div>&nbsp;</div><div>&nbsp;</div>';
 		}
 	}
 	$form->setDefaults(isset($defaults)?$defaults:null);
@@ -2925,7 +2925,7 @@ function send_mail($user_info=array(), $thread_information=array()) {
 	if (isset($thread_information) and is_array($thread_information)) {
 		$thread_link= api_get_path('WEB_CODE_PATH').'forum/viewthread.php?'.api_get_cidreq().'&forum='.$thread_information['forum_id'].'&thread='.$thread_information['thread_id'];
 	}
-	$email_body= $user_info['firstname']." ".$user_info['lastname']."\n\r";
+	$email_body = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS)."\n\r";
 	$email_body .= '['.$_course['official_code'].'] - ['.$_course['name']."]<br>\n";
 	$email_body .= get_lang('NewForumPost')."\n";
 	$email_body .= get_lang('YouWantedToStayInformed')."<br><br>\n";
@@ -2938,7 +2938,7 @@ function send_mail($user_info=array(), $thread_information=array()) {
 	}
 
 	if ($user_info['user_id']<>$_user['user_id']) {
-		$newmail = api_mail_html($user_info["lastname"].' '.$user_info["firstname"], $user_info["email"], $email_subject, $email_body, $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'], $_SESSION['_user']['mail']);
+		$newmail = api_mail_html(api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $user_info['email'], $email_subject, $email_body, api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail']);
 	}
 }
 
@@ -3695,7 +3695,7 @@ function send_notifications($forum_id=0, $thread_id=0, $post_id=0) {
 	if (is_array($users_to_be_notified)) {
 		foreach ($users_to_be_notified as $key=>$value) {
 			if ($value['email'] <> $_user['email']) {
-				$email_body= $value['firstname']." ".$value['lastname']."\n\r";
+				$email_body = api_get_person_name($value['firstname'], $value['lastname'], null, PERSON_NAME_EMAIL_ADDRESS)."\n\r";
 				$email_body .= '['.$_course['official_code'].'] - ['.$_course['name']."]<br>\n";
 				$email_body .= get_lang('NewForumPost')."\n";
 				$email_body .= get_lang('YouWantedToStayInformed')."<br><br>\n";
@@ -3707,7 +3707,7 @@ function send_notifications($forum_id=0, $thread_id=0, $post_id=0) {
 					$charset='ISO-8859-1';
 				}
 			
-				$newmail = api_mail_html($value['lastname'].' '.$value['firstname'], $value['email'], $email_subject, $email_body, $_SESSION['_user']['lastName'].' '.$_SESSION['_user']['firstName'], $_SESSION['_user']['mail']);
+				$newmail = api_mail_html(api_get_person_name($value['firstname'], $value['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $value['email'], $email_subject, $email_body, api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail']);
 			}
 		}
 	}
@@ -3866,10 +3866,10 @@ function get_thread_user_post($course_db, $thread_id, $user_id )
  */
  function get_name_user_by_id($user_id) {
 	$t_users = Database :: get_main_table(TABLE_MAIN_USER);	
-	$sql ="SELECT CONCAT(firstname,' ',lastname) FROM ".$t_users." WHERE user_id = '".$user_id."' ";	
+	$sql = "SELECT firstname, lastname FROM ".$t_users." WHERE user_id = '".$user_id."' ";	
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	$row = Database::fetch_array($result);
-	return $row[0];	
+	return api_get_person_name($row[0], $row[1]);	
  }
  
  /** This function get the name of an thread by id

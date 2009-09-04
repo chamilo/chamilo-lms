@@ -150,7 +150,7 @@ while ($row=Database::fetch_array($result)) {
 	if ($row['user_id']=='0') {
 		$name=$row['poster_name'];
 	} else {
-		$name=$row['firstname'].' '.$row['lastname'];
+		$name=api_get_person_name($row['firstname'], $row['lastname']);
 	}
 	echo $name.'<br />';
 	echo $row['post_date'].'<br /><br />';

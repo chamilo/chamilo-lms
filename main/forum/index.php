@@ -408,7 +408,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 							$name=$forum['last_poster_name'];
 							$poster_id=0;
 						} else {
-							$name=$forum['last_poster_firstname'].' '.$forum['last_poster_lastname'];
+							$name = api_get_person_name($forum['last_poster_firstname'], $forum['last_poster_lastname']);
 							$poster_id=$forum['last_poster_id'];
 						}
 						echo "\t\t<td nowrap=\"nowrap\">";

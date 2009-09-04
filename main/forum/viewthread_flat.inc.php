@@ -50,7 +50,7 @@ foreach ($rows as $row) {
 	if ($row['user_id']=='0') {
 		$name=prepare4display($row['poster_name']);
 	} else {
-		$name=$row['firstname'].' '.$row['lastname'];
+		$name=api_get_person_name($row['firstname'], $row['lastname']);
 	}
 	if($origin!='learnpath') {	
 		if (api_get_course_setting('allow_user_image_forum')) {

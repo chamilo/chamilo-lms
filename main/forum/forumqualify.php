@@ -313,7 +313,7 @@ if ($allowed_to_edit) {
 		
 		for($i=0;$i<count($qualify_historic);$i++) {
 			    $my_user_info=api_get_user_info($qualify_historic[$i]['qualify_user_id']);
-				$name = $my_user_info['firstName']." ".$my_user_info['lastName'];					
+				$name = api_get_person_name($my_user_info['firstName'], $my_user_info['lastName']);					
 				$table_list.= '<tr class="'.$class.'"><td>'.$name.'</td>';			
 				$table_list.= '<td>'.$qualify_historic[$i]['qualify'].'</td>';
 				$table_list.= '<td>'.$qualify_historic[$i]['qualify_time'].'</td></tr>';			

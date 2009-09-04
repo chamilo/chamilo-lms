@@ -129,14 +129,14 @@ if (!empty($_SESSION['toolgroup'])) {
 	$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
 	$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
 	$interbreadcrumb[]=array("url" => "viewthread.php?origin=".$origin."&gradebook=".$gradebook."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => $current_thread['thread_title']);
-	$interbreadcrumb[]=array("url" => "#","name" => get_lang('Reply'));
+	$interbreadcrumb[]=array("url" => "javascript: void(0);","name" => get_lang('Reply'));
 	
 } else {
 	$interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook","name" => $nameTools);
 	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => $current_forum_category['cat_title']);
 	$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
 	$interbreadcrumb[]=array("url" => "viewthread.php?origin=".$origin."&gradebook=".$gradebook."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => $current_thread['thread_title']);
-	$interbreadcrumb[]=array("url" => "#","name" => get_lang('Reply'));
+	$interbreadcrumb[]=array("url" => "javascript: void(0);","name" => get_lang('Reply'));
 }
 /*
 -----------------------------------------------------------

@@ -254,7 +254,7 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 				} else {
 						$class_stdlist="row_even";
 				}
-				$name_user_theme = 	$row_student_list['firstname'].' '.$row_student_list['lastname'];					
+				$name_user_theme = 	api_get_person_name($row_student_list['firstname'], $row_student_list['lastname']);					
 				$table_list.= '<tr class="$class_stdlist"><td><a href="../user/userInfo.php?uInfo='.$row_student_list['user_id'].'&tipo=sdtlist&'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).$origin_string.'">'.$name_user_theme.'</a></td>';
 				if ($_GET['list']=='qualify') {
 					$table_list.= '<td>'.$row_student_list['qualify'].'/'.$max_qualify.'</td>';
@@ -410,19 +410,19 @@ if(is_array($threads)) {
 			if ($row['user_id']=='0') {
 				$name=prepare4display($row['thread_poster_name']);
 			} else {
-				$name=$row['firstname'].' '.$row['lastname'];
+				$name=api_get_person_name($row['firstname'], $row['lastname']);
 			}			
 			echo "\t\t<td>".$row['thread_views']."</td>\n";
 			if ($row['last_poster_user_id']=='0') {
 				$name=$row['poster_name'];  
 			} else {
-				$name=$row['last_poster_firstname'].' '.$row['last_poster_lastname'];
+				$name=api_get_person_name($row['last_poster_firstname'], $row['last_poster_lastname']);
 			}
 			
 			if($origin != 'learnpath') {
-				echo "\t\t<td>".display_user_link($row['user_id'], $row['firstname'].' '.$row['lastname'])."</td>\n";
+				echo "\t\t<td>".display_user_link($row['user_id'], api_get_person_name($row['firstname'], $row['lastname']))."</td>\n";
 			} else {
-				echo "\t\t<td>".$row['firstname'].' '.$row['lastname']."</td>\n";
+				echo "\t\t<td>".api_get_person_name($row['firstname'], $row['lastname'])."</td>\n";
 			}
 			
 			// if the last post is invisible and it is not the teacher who is looking then we have to find the last visible post of the thread
@@ -432,13 +432,13 @@ if(is_array($threads)) {
 				$last_post_sql="SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
 				$last_post_result=api_sql_query($last_post_sql, __FILE__, __LINE__);
 				$last_post_row=Database::fetch_array($last_post_result);
-				$name=$last_post_row['firstname'].' '.$last_post_row['lastname'];
+				$name=api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
 				$last_post=$last_post_row['post_date']." ".get_lang('By').' '.display_user_link($last_post_row['poster_id'], $name);
 			} else {
 				$last_post_sql="SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
 				$last_post_result=api_sql_query($last_post_sql, __FILE__, __LINE__);
 				$last_post_row=Database::fetch_array($last_post_result);
-				$name=$last_post_row['firstname'].' '.$last_post_row['lastname'];
+				$name=api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
 				$last_post=$last_post_row['post_date']." ".get_lang('By').' '.$name;
 			}
 			echo "\t\t<td>".$last_post."</td>\n";

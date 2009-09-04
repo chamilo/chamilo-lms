@@ -41,7 +41,7 @@ if(isset($rows)){
 		if ($row['user_id']=='0') {
 			$name=prepare4display($row['poster_name']);
 		} else {
-			$name=$row['firstname'].' '.$row['lastname'];
+			$name=api_get_person_name($row['firstname'], $row['lastname']);
 		}
 		if($sw === true) {
 			echo "<div style=\"border: 1px solid #000000; padding: 4px 0px 0px 4px; margin-top:5px;\" > <h3> $name </h3> </div>";

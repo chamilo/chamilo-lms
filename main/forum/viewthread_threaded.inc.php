@@ -212,7 +212,7 @@ if ($rows[$display_post_id]['user_id']=='0')
 }
 else 
 {
-	$name=$rows[$display_post_id]['firstname'].' '.$rows[$display_post_id]['lastname'];
+	$name=api_get_person_name($rows[$display_post_id]['firstname'], $rows[$display_post_id]['lastname']);
 }
 if (api_get_course_setting('allow_user_image_forum')) {echo '<br />'.display_user_image($rows[$display_post_id]['user_id'],$name, $origin).'<br />';	}
 echo display_user_link($rows[$display_post_id]['user_id'], $name, $origin).'<br />';

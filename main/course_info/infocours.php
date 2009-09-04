@@ -116,25 +116,26 @@ $s_tutor=mysql_result($q_tutor,0,"tutor_name");
 $s_sql_course_titular="SELECT DISTINCT username, lastname, firstname FROM $tbl_user as user, $tbl_course_user as course_rel_user WHERE (course_rel_user.status='1') AND user.user_id=course_rel_user.user_id AND course_code='".$course_code."'";
 $q_result_titulars=api_sql_query($s_sql_course_titular, __FILE__, __LINE__);
 
+$target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
 if(mysql_num_rows($q_result_titulars)==0){
-	$sql="SELECT username, lastname, firstname FROM $tbl_user as user, $tbl_admin as admin WHERE admin.user_id=user.user_id ORDER BY lastname ASC";
+	$sql="SELECT username, lastname, firstname FROM $tbl_user as user, $tbl_admin as admin WHERE admin.user_id=user.user_id ORDER BY ".$target_name." ASC";
 	$q_result_titulars=api_sql_query($sql, __FILE__, __LINE__);
 }
 
 $a_profs[0] = '-- '.get_lang('NoManager').' --';
-while($a_titulars=mysql_fetch_array($q_result_titulars)){
-		$s_username=$a_titulars["username"];
-		$s_lastname=$a_titulars["lastname"];
-		$s_firstname=$a_titulars["firstname"];
+while ($a_titulars = mysql_fetch_array($q_result_titulars)) {
+	$s_username = $a_titulars['username'];
+	$s_lastname = $a_titulars['lastname'];
+	$s_firstname = $a_titulars['firstname'];
 
-		if($s_firstname.' '.$s_lastname==$s_tutor){
-			$s_selected_tutor=$s_firstname.' '.$s_lastname;
-		}
-		$s_disabled_select_titular="";
-		if(!$is_courseAdmin){
-            $s_disabled_select_titular="disabled=disabled";
-		}
-		$a_profs[$s_firstname.' '.$s_lastname]="$s_lastname $s_firstname ($s_username)";
+	if (api_get_person_name($s_firstname, $s_lastname) == $s_tutor) {
+		$s_selected_tutor = api_get_person_name($s_firstname, $s_lastname);
+	}
+	$s_disabled_select_titular = '';
+	if (!$is_courseAdmin) {
+		$s_disabled_select_titular = 'disabled=disabled';
+	}
+	$a_profs[api_get_person_name($s_firstname, $s_lastname)] = api_get_person_name($s_lastname, $s_firstname).' ('.$s_username.')';
 }
 
 while ($cat = mysql_fetch_array($res))
@@ -152,7 +153,7 @@ $form = new FormValidator('update_course');
 // COURSE SETTINGS
 $form->addElement('html','<div class="sectiontitle"><a href="#header" style="float:right;">'.Display::return_icon('top.gif',get_lang('Top')).'</a><a name="coursesettings" id="coursesettings"></a>'.Display::return_icon('settings.gif',get_lang('CourseSettings')).' '.get_lang('CourseSettings').'</div>');
 $visual_code=$form->addElement('text','visual_code', get_lang('Code'));
-$visual_code->freeze();
+	$visual_code->freeze();
 $form->applyFilter('visual_code', 'strtoupper');
 //$form->add_textfield('tutor_name', get_lang('Professors'), true, array ('size' => '60'));
 $prof = &$form->addElement('select', 'tutor_name', get_lang('Professors'), $a_profs);
@@ -253,11 +254,11 @@ $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class=
 if (api_get_setting('allow_course_theme') == 'true')
 {	
 	$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif',get_lang('Top')).'</a><a name="theme" id="theme"></a>'.Display::return_icon('theme.gif',get_lang('Theming')).' '.get_lang('Theming').'</div><div style="clear:both;"></div>');
-	
+
 	//Allow Learning path 
 	$form->addElement('radio', 'allow_learning_path_theme', get_lang('AllowLearningPathTheme'), get_lang('AllowLearningPathThemeAllow'), 1);
 	$form->addElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
-	$form -> addElement('html',$linebreak);	
+	$form -> addElement('html',$linebreak);
 	
 	$form->addElement('select_theme', 'course_theme', get_lang('Theme'));
 	$form->applyFilter('course_theme', 'trim');
@@ -265,9 +266,9 @@ if (api_get_setting('allow_course_theme') == 'true')
 }
 
 if (is_settings_editable())
-{
+	{
 	$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
-}
+	}
 else
 {
 	// is it allowed to edit the course settings?
@@ -321,7 +322,7 @@ if ($form->validate() && is_settings_editable()) {
 	$update_values = $form->exportValues();
 	foreach ($update_values as $index => $value) {
 		$update_values[$index] = Database::escape_string($value);
-	}	
+	}
 	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql = "UPDATE $table_course SET title 			= '".Security::remove_XSS($update_values['title'])."',
 										 visual_code 	= '".$update_values['visual_code']."',
@@ -366,7 +367,7 @@ if ($form->validate() && is_settings_editable()) {
 	if($update_values['allow_user_image_forum'] != $values['allow_user_image_forum']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_image_forum']." WHERE variable = 'allow_user_image_forum' ";
 		api_sql_query($sql,__FILE__,__LINE__);
-	}	
+	}
 	if($update_values['allow_open_chat_window'] != $values['allow_open_chat_window']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_open_chat_window']." WHERE variable = 'allow_open_chat_window' ";
 		api_sql_query($sql,__FILE__,__LINE__);
@@ -397,9 +398,9 @@ Display :: display_header($nameTools, MODULE_HELP_NAME);
 
 //api_display_tool_title($nameTools);
 if (isset ($_GET['action']) && $_GET['action'] == 'show_message')
-{
+	{
 	Display :: display_normal_message(get_lang('ModifDone'));
-}
+	}
 
 // actions bar
 echo '<div class="actions">';

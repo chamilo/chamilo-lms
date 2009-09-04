@@ -93,7 +93,7 @@ if (isset($_user["language"]) && $_user["language"]!="") {
 	$values['course_language'] = api_get_setting('platformLanguage');
 }
 
-$values['tutor_name'] = $_user['firstName']." ".$_user['lastName'];
+$values['tutor_name'] = api_get_person_name($_user['firstName'], $_user['lastName'], null, null, $values['course_language']);
 $form->setDefaults($values);
 // Validate the form
 if ($form->validate()) {

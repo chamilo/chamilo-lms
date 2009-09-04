@@ -92,14 +92,14 @@ $currentCourseExpirationDate	= $currentCourseExtentionData["expiration_date"];
 <h3>
 	<?php echo $nameTools ?>
 </h3>
-<?php echo get_lang('SubTitle'); ?>
+<?php //echo get_lang('SubTitle'); ?>
 
 
-this script  would be  called  by  
+This script  would be  called  by  
 	professor, 
 	or administrator, 
 	or other  script 
-to give more time to a course before expiration
+to give more time to a course before expiration.
 
 <?php
 Display::display_footer();

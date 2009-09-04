@@ -168,7 +168,7 @@ class StudentPublicationLink extends AbstractLink
     		$sql1='SELECT firstname, lastname FROM '.Database::get_main_table(TABLE_MAIN_USER)." WHERE user_id = '".((int)$stud_id)."'";
      		$query = api_sql_query($sql1,__FILE__,__LINE__);
 			$student = Database::fetch_array($query);
-    		$sql .= ' AND author = '."'".Database::escape_string($student['firstname'].' '.$student['lastname'])."'";
+    		$sql .= ' AND author = '."'".Database::escape_string(api_get_person_name($student['firstname'], $student['lastname'], null, null, $course_info['course_language']))."'";
     	}
     	// order by id, that way the student's first attempt is accessed first
 		$sql .= ' ORDER BY id';

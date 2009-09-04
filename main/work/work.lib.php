@@ -164,7 +164,7 @@ function display_user_link($user_id, $name='')
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 		$row=Database::fetch_array($result);
 		if ($name=='') {
-			return "<a href=\"../user/userInfo.php?cidReq=".api_get_course_id()."&gradebook=$gradebook&origin=&uInfo=".$row['user_id']."\">".$row['firstname']." ".$row['lastname']."</a>";
+			return "<a href=\"../user/userInfo.php?cidReq=".api_get_course_id()."&gradebook=$gradebook&origin=&uInfo=".$row['user_id']."\">".api_get_person_name($row['firstname'], $row['lastname'])."</a>";
 		} else {
 			return "<a href=\"../user/userInfo.php?cidReq=".api_get_course_id()."&gradebook=$gradebook&origin=&uInfo=".$user_id."\">".$name."</a>";
 		}

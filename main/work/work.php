@@ -816,7 +816,7 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 					$title = $_FILES['file']['name'];
 				}
 				//if (!$authors) {
-				$authors = $currentUserFirstName . " " . $currentUserLastName;
+			$authors = api_get_person_name($currentUserFirstName, $currentUserLastName);
 				//}
 				// compose a unique file name to avoid any conflict
 				$new_file_name = uniqid('') . $new_file_name;
@@ -1157,7 +1157,7 @@ if ($is_course_member) {
 		//$titleAuthors = $form->addElement('text', 'authors', get_lang("Authors"), 'style="width: 350px;"');
 
 		//if (empty ($authors)) {
-		$authors = $_user['firstName'] . " " . $_user['lastName'];
+		$authors = api_get_person_name($_user['firstName'], $_user['lastName']);
 		//}
 
 		//$defaults["authors"] = ($edit ? stripslashes($workAuthor) : stripslashes($authors));
@@ -1368,15 +1368,15 @@ if ($cur_dir_path == '/') {
 
 if (!$display_upload_form && !$display_tool_options) {
 	$add_query = '';	
-	$sql = "SELECT concat(user.firstname,' ',user.lastname) FROM $table_user user, $table_course_user course_user
+	$sql = "SELECT user.firstname, user.lastname FROM $table_user user, $table_course_user course_user
 			  WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status='1'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$admin_course = '';
 	while($row = Database::fetch_row($res)) {
-		$admin_course .='\''.$row[0].'\','; 	
+		$admin_course .='\''.api_get_person_name($row[0], $row[1]).'\','; 	
 	}
 	if(!$is_allowed_to_edit && $is_special==true) { 
-		$add_query = ' AND author IN('.$admin_course.'\''.$_user['firstName'].' '.$_user['lastName'].'\')';
+		$add_query = ' AND author IN('.$admin_course.'\''.api_get_person_name($_user['firstName'], $_user['lastName']).'\')';
 	}
 	if($is_allowed_to_edit && $is_special==true) { 	
 	

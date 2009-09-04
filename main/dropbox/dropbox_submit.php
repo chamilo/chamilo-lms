@@ -68,7 +68,7 @@ if ( isset( $_POST["submitWork"]))
 
     /**
      * --------------------------------------
-     * �����FORM SUBMIT : VALIDATE POSTED DATA
+     * FORM SUBMIT : VALIDATE POSTED DATA
      * --------------------------------------
      */
     // the author or description field is empty
@@ -142,7 +142,7 @@ if ( isset( $_POST["submitWork"]))
 
     /**
      * --------------------------------------
-     * ����FORM SUBMIT : UPLOAD NEW FILE
+     * FORM SUBMIT : UPLOAD NEW FILE
      * --------------------------------------
      */
     if ( !$error)
@@ -458,7 +458,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 		            {
 						$errormsg .= dropbox_lang("mailingFileIsFor");
 		            }
-					$errormsg .= htmlspecialchars($thisRecip[1].' '.$thisRecip[2],ENT_QUOTES,$charset);
+					$errormsg .= htmlspecialchars(api_get_person_name($thisRecip[2], $thisRecip[1]), ENT_QUOTES, $charset);
 
 					if ( is_null($thisRecip[3]))
 					{
@@ -489,7 +489,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 		        $remainingUsers = '';
 		        while ( ($res = mysql_fetch_array($result)))
 		        {
-					$remainingUsers .= ', ' . htmlspecialchars($res[0].' '.$res[1],ENT_QUOTES,$charset);
+					$remainingUsers .= ', ' . htmlspecialchars(api_get_person_name($res[1], $res[0]), ENT_QUOTES, $charset);
 		        }
 		        $errormsg .= '<br />' . dropbox_lang("mailingNothingFor") . api_substr($remainingUsers, 1) . '.<br />';
 	        }

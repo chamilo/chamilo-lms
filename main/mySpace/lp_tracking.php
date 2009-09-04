@@ -1,24 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008-2009 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 
 /*
  * Created on 26 mars 07 by Eric Marguin
@@ -26,8 +7,18 @@
  */
  
 $language_file = array ('registration', 'index', 'tracking', 'exercice', 'scorm', 'learnpath');
-$cidReset = true;
+//$cidReset = true;
+
 include ('../inc/global.inc.php');
+
+$from_myspace = false;
+$from_link = '';
+if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
+	$from_link = '&from=myspace';
+	$this_section = "session_my_space";
+} else {
+	$this_section = SECTION_COURSES;
+}
 include_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
 include_once(api_get_path(LIBRARY_PATH).'export.lib.inc.php');
 include_once(api_get_path(LIBRARY_PATH).'course.lib.php');
@@ -37,13 +28,10 @@ include_once('../newscorm/learnpathItem.class.php');
 require_once (api_get_path(LIBRARY_PATH).'export.lib.inc.php');
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
-if($export_csv)
-{
+if($export_csv) {
 	ob_start();
 }
 $csv_content = array();
-
-
 $user_id = intval($_GET['student_id']);
 
 if (isset($_GET['course'])) {
@@ -164,7 +152,6 @@ echo '<div class ="actions"><div align="left" style="float:left;margin-top:2px;"
 
 $list = learnpath :: get_flat_ordered_items_list($lp_id);
 $origin = 'tracking';
-
 if($export_csv) {	
 	include_once('../newscorm/lp_stats.php');	
 	//Export :: export_table_csv($csv_content, 'reporting_student');

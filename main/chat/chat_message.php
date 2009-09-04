@@ -248,13 +248,13 @@ if (!empty($course) && !empty($_user['user_id']))
 				if($isMaster)
 				{
 					$photo= '<img src="'.api_get_path(WEB_IMG_PATH).'teachers.gif" alt="'.get_lang('Teacher').'"  width="11" height="11" align="top"  title="'.get_lang('Teacher').'"  />';				
-					fputs($fp,'<span style="color:#999; font-size: smaller;">['.$timeNow.']</span>'.$photo.' <span id="chat_login_name"><b>'.$firstname.' '.$lastname.'</b></span> : <i>'.$message.'</i><br>'."\n");	 		
+					fputs($fp,'<span style="color:#999; font-size: smaller;">['.$timeNow.']</span>'.$photo.' <span id="chat_login_name"><b>'.api_get_person_name($firstname, $lastname).'</b></span> : <i>'.$message.'</i><br>'."\n");	 		
 					
 				}
 				else
 				{
 					$photo= '<img src="'.api_get_path(WEB_IMG_PATH).'students.gif" alt="'.get_lang('Student').'"  width="11" height="11" align="top"  title="'.get_lang('Student').'"  />';
-					 fputs($fp,'<span style="color:#999; font-size: smaller;">['.$timeNow.']</span>'.$photo.' <b>'.$firstname.' '.$lastname.'</b> : <i>'.$message.'</i><br>'."\n");
+					 fputs($fp,'<span style="color:#999; font-size: smaller;">['.$timeNow.']</span>'.$photo.' <b>'.api_get_person_name($firstname, $lastname).'</b> : <i>'.$message.'</i><br>'."\n");
 				}
 		
 				fclose($fp);

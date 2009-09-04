@@ -103,6 +103,7 @@ $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT *,cu.status as course_status FROM $table_course_user cu, $table_user u WHERE cu.user_id = u.user_id AND cu.course_code = '".$code."'";
 $res = api_sql_query($sql,__FILE__,__LINE__);
+$is_western_name_order = api_is_western_name_order();
 if (mysql_num_rows($res) > 0)
 {
 	$users = array ();
@@ -110,8 +111,16 @@ if (mysql_num_rows($res) > 0)
 	{
 		$user = array ();
 		$user[] = $obj->official_code;
-		$user[] = $obj->firstname;
-		$user[] = $obj->lastname;
+		if ($is_western_name_order)
+		{
+			$user[] = $obj->firstname;
+			$user[] = $obj->lastname;
+		}
+		else
+		{
+			$user[] = $obj->lastname;
+			$user[] = $obj->firstname;
+		}
 		$user[] = Display :: encrypted_mailto_link($obj->email, $obj->email);
 		$user[] = $obj->course_status == 5 ? get_lang('Student') : get_lang('Teacher');
 		$user[] = '<a href="user_information.php?user_id='.$obj->user_id.'">'.Display::return_icon('synthese_view.gif',get_lang('UserInfo')).'</a>';
@@ -121,8 +130,16 @@ if (mysql_num_rows($res) > 0)
 	$table->set_additional_parameters(array ('code' => $code));
 	$table->set_other_tables(array('usage_table','class_table'));
 	$table->set_header(0,get_lang('OfficialCode'), true);
-	$table->set_header(1,get_lang('FirstName'), true);
-	$table->set_header(2,get_lang('LastName'), true);
+	if ($is_western_name_order)
+	{
+		$table->set_header(1,get_lang('FirstName'), true);
+		$table->set_header(2,get_lang('LastName'), true);
+	}
+	else
+	{
+		$table->set_header(1,get_lang('LastName'), true);
+		$table->set_header(2,get_lang('FirstName'), true);
+	}
 	$table->set_header(3,get_lang('Email'), true);
 	$table->set_header(4,get_lang('Status'), true);
 	$table->set_header(5,'', false);

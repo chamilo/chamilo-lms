@@ -25,7 +25,14 @@ $language_file[] = 'scorm';
 require '../inc/global.inc.php';
 
 // the section (for the tabs)
-$this_section = "session_my_space";
+//$this_section = "session_my_space";
+$from_myspace = false;
+if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
+	$from_myspace = true;
+	$this_section = "session_my_space";
+} else {
+	$this_section = SECTION_COURSES;
+}
 
 
 $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
@@ -558,8 +565,11 @@ if($_GET['studentlist'] == 'false') {
 				$row[8] = strip_tags($row[8]);
 				$csv_content[] = $row;
 			}
-			
-			$row[] = '<center><a href="../mySpace/myStudents.php?student='.$student_id.'&details=true&course='.$course_code.'&origin=tracking_course"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
+			$from = '';
+			if ($from_myspace) {
+				$from ='&from=myspace';
+			}
+			$row[] = '<center><a href="../mySpace/myStudents.php?student='.$student_id.'&details=true&course='.$course_code.'&origin=tracking_course'.$from.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
 			
 			$all_datas[] = $row;		
 	

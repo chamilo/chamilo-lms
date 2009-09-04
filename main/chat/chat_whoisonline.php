@@ -114,7 +114,7 @@ if (!empty($course))
 	?>    
     <tr>    
 	  <td width="1%" valign="top"><img src="<?php echo $file_url;?>" border="0" width="22" alt="" /></td>
-	  <td width="99%"><?php if($status == 1) echo Display::return_icon('teachers.gif', get_lang('Teacher'),array('height' => '11')).' '; else echo Display::return_icon('students.gif', get_lang('Student'), array('height' => '11'));?><a <?php if($status == 1) echo 'class="master"';// ?> name="user_<?php echo $enreg['user_id']; ?>" href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&showPic=<?php if($showPic == $enreg['user_id']) echo '0'; else echo $enreg['user_id']; ?>#user_<?php echo $enreg['user_id']; ?>"><?php echo api_ucfirst($enreg['firstname']).' '.api_ucfirst($enreg['lastname']); ?></a></td>
+	  <td width="99%"><?php if($status == 1) echo Display::return_icon('teachers.gif', get_lang('Teacher'),array('height' => '11')).' '; else echo Display::return_icon('students.gif', get_lang('Student'), array('height' => '11'));?><a <?php if($status == 1) echo 'class="master"';// ?> name="user_<?php echo $enreg['user_id']; ?>" href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&showPic=<?php if($showPic == $enreg['user_id']) echo '0'; else echo $enreg['user_id']; ?>#user_<?php echo $enreg['user_id']; ?>"><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']); ?></a></td>
 	</tr>
 	<?php
 	

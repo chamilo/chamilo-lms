@@ -10,20 +10,20 @@ require_once (api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
 api_protect_admin_script(true);
 
 $htmlHeadXtra[] = '<script language="javascript">
-		
+
 				function selectAll(idCheck,numRows,action) {
-					
+
 					for(i=0;i<numRows;i++) {
 						idcheck = document.getElementById(idCheck+"_"+i);
 						if (action == "true"){
 							idcheck.checked = true;
 						} else {
 							idcheck.checked = false;
-						}		
-					}		
-							
+						}
+					}
+
 				}
-				
+
 				</script>
 		';
 
@@ -47,28 +47,28 @@ if ($action == 'delete') {
 $interbreadcrumb[]=array("url" => "index.php","name" => get_lang('PlatformAdmin'));
 
 if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
-	
+
 	$interbreadcrumb[] = array ("url" => 'session_list.php', "name" => get_lang('SessionList'));
 	$tool_name = get_lang('SearchASession');
 	Display :: display_header($tool_name);
-	
+
 	$form = new FormValidator('advanced_search','get');
 	$form->addElement('header', '', $tool_name);
 	$active_group = array();
 	$active_group[] = $form->createElement('checkbox','active','',get_lang('Active'));
 	$active_group[] = $form->createElement('checkbox','inactive','',get_lang('Inactive'));
 	$form->addGroup($active_group,'',get_lang('ActiveSession'),'<br/>',false);
-	
+
 	$form->addElement('style_submit_button', 'submit',get_lang('Search'),'class="search"');
 	$defaults['active'] = 1;
 	$defaults['inactive'] = 1;
 	$form->setDefaults($defaults);
 	$form->display();
-	
+
 } else {
 	
-	$limit = 20;
-	$from = $page * $limit;
+	$limit=20;
+	$from=$page * $limit;
 	
 	//if user is crfp admin only list its sessions
 	if(!api_is_platform_admin()) {
@@ -85,20 +85,20 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		$and=" AND id_coach=user_id";
 	}
 	
-	if (isset($_REQUEST['active']) && !isset($_REQUEST['inactive']) ){
+	if(isset($_REQUEST['active']) && !isset($_REQUEST['inactive']) ){
 		$and .= ' AND ( (session.date_start <= CURDATE() AND session.date_end >= CURDATE()) OR session.date_start="0000-00-00" ) ';
 		$cond_url = '&amp;active='.Security::remove_XSS($_REQUEST['active']);
 	}
-	if (!isset($_REQUEST['active']) && isset($_REQUEST['inactive']) ){
+	if(!isset($_REQUEST['active']) && isset($_REQUEST['inactive']) ){
 		$and .= ' AND ( (session.date_start > CURDATE() OR session.date_end < CURDATE()) AND session.date_start<>"0000-00-00" ) ';
 		$cond_url = '&amp;inactive='.Security::remove_XSS($_REQUEST['inactive']);
 	}
 	
-	$query= "SELECT id,name,nbr_courses,date_start,date_end, firstname, lastname
+	$query= "SELECT id,name,nbr_courses,date_start,date_end, firstname, lastname 
 			FROM $tbl_session, $tbl_user
 			$where
 			$and
-			ORDER BY $sort
+			ORDER BY $sort 
 			LIMIT $from,".($limit+1);
 			
 	//query which allows me to get a record without taking into account the page
@@ -108,7 +108,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 				$and
 				ORDER BY $sort";
 				
-	
+
 	//filtering the session list by access_url
 	if ($_configuration['multiple_access_urls']==true){
 		$table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);	
@@ -131,32 +131,32 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	}
 	
 
-
+	
 	$result_rows = api_sql_query($query_rows,__FILE__,__LINE__);
 	$recorset = Database::fetch_array($result_rows);
 	$num = $recorset['total_rows'];
 	
-	$result = api_sql_query($query,__FILE__,__LINE__);
-	$Sessions = api_store_result($result);
-	$nbr_results = sizeof($Sessions);
+	$result=api_sql_query($query,__FILE__,__LINE__);	
+	$Sessions=api_store_result($result);	
+	$nbr_results=sizeof($Sessions);	
 	$tool_name = get_lang('SessionList');	
 	Display::display_header($tool_name);	
 	//api_display_tool_title($tool_name);
-    
+
     if (!empty($_GET['warn'])) {
         Display::display_warning_message(urldecode($_GET['warn']),false);
     }
     if(isset($_GET['action'])) {
         Display::display_normal_message(stripslashes($_GET['message']),false);
     }
-    ?>	
+	?>	
 	<div class="actions">		
 	<?php
-		
+
 	echo '<div style="float:right;">
 		<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddSession').'</a>									
-	 </div>';	  
-	?>  
+	  </div>'; 
+	?>
 	<form method="POST" action="session_list.php">
 		<input type="text" name="keyword" value="<?php echo Security::remove_XSS($_GET['keyword']); ?>"/>
 		<button class="search" type="submit" name="name" value="<?php echo get_lang('Search') ?>"><?php echo get_lang('Search') ?></button>
@@ -165,22 +165,22 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	<form method="post" action="<?php echo api_get_self(); ?>?action=delete&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
 	 </div><br />
 	
-	<div align="left">	
+	<div align="left">
 	<?php
 	if(count($Sessions)==0 && isset($_POST['keyword'])) {
 		echo get_lang('NoSearchResults');
 		echo '	</div>';
 	} else {
-		if ($num > $limit) {
-			if ($page) {
-			?>
+		if($num>$limit){
+			if($page) {
+			?>	
 			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>	
 			<?php
 			} else {
 				echo get_lang('Previous');
 			}
 			?>	
-			|
+			|	
 			<?php
 			if($nbr_results > $limit) {
 				?>	
@@ -190,8 +190,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 				echo get_lang('Next');
 			}
 		}
-		?>	
-	</div>
+		?>
+	</div>	
 		<br />
 		<table class="data_table" width="100%">
 		<tr>
@@ -219,12 +219,12 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		?>
 	
 		<tr class="<?php echo $i?'row_odd':'row_even'; ?>">
-		  <td><input type="checkbox" id="idChecked_<?php echo $x; ?>" name="idChecked[]" value="<?php echo $enreg['id']; ?>"></td>		  
-		  <td><a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php echo api_htmlentities($enreg['name'],ENT_QUOTES,$charset); ?></a></td>
-		  <td><a href="session_course_list.php?id_session=<?php echo $enreg['id']; ?>"><?php echo $nb_courses; ?> cours</a></td>
-		  <td><?php echo api_htmlentities($enreg['date_start'],ENT_QUOTES,$charset); ?></td>
-		  <td><?php echo api_htmlentities($enreg['date_end'],ENT_QUOTES,$charset); ?></td>
-		  <td><?php echo api_htmlentities($enreg['firstname'],ENT_QUOTES,$charset).' '.api_htmlentities($enreg['lastname'],ENT_QUOTES,$charset); ?></td>
+		  <td><input type="checkbox" id="idChecked_<?php echo $x; ?>" name="idChecked[]" value="<?php echo $enreg['id']; ?>"></td>
+	      <td><a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php echo api_htmlentities($enreg['name'],ENT_QUOTES,$charset); ?></a></td>
+	      <td><a href="session_course_list.php?id_session=<?php echo $enreg['id']; ?>"><?php echo $nb_courses; ?> cours</a></td>
+	      <td><?php echo api_htmlentities($enreg['date_start'],ENT_QUOTES,$charset); ?></td>
+	      <td><?php echo api_htmlentities($enreg['date_end'],ENT_QUOTES,$charset); ?></td>
+	      <td><?php echo api_htmlentities(api_get_person_name($enreg['firstname'], $enreg['lastname']),ENT_QUOTES,$charset); ?></td>
 		  <td>
 			<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('add_user_big.gif', get_lang('SubscribeUsersToSession')); ?></a>
 			<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('synthese_view.gif', get_lang('SubscribeCoursesToSession')); ?></a>
@@ -249,9 +249,9 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		<div align="left">
 	
 		<?php
-		
-		if ($num > $limit) {
-		if ($page)
+
+		if($num>$limit) {
+		if($page)
 			{
 			?>
 		

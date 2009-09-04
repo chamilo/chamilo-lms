@@ -1,18 +1,19 @@
 <?php
+/* For licensing terms, see /dokeos_license.txt */
 // name of the language file that needs to be included
 $language_file = array('registration','tracking','exercice','admin');
 
 $cidReset = true;
+$this_section = 'session_my_space';
 
 require ('../inc/global.inc.php');
+
 require_once (api_get_path(LIBRARY_PATH).'tracking.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once ('../newscorm/learnpath.class.php');
 
 $nameTools=get_lang('MyProgress');
-
-$this_section = 'session_my_progress';
 
 api_block_anonymous_users();
 
@@ -35,28 +36,25 @@ $tbl_course_quiz 			= Database :: get_course_table(TABLE_QUIZ_TEST);
 
 
 // get course list
-$sql = 'SELECT course_code FROM '.$tbl_course_user.' WHERE user_id='.$_user['user_id'];
+$sql = 'SELECT course_code FROM '.$tbl_course_user.' WHERE user_id='.intval($_user['user_id']);
 $rs = api_sql_query($sql, __FILE__, __LINE__);
 $Courses = array();
-while($row = Database :: fetch_array($rs))
-{
+while($row = Database :: fetch_array($rs)) {
 	$Courses[$row['course_code']] = CourseManager::get_course_information($row['course_code']);
 }
 
 // get the list of sessions where the user is subscribed as student
 $sql = 'SELECT DISTINCT course_code FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' WHERE id_user='.intval($_user['user_id']);
 $rs = api_sql_query($sql, __FILE__, __LINE__);
-while($row = Database :: fetch_array($rs))
-{
+while($row = Database :: fetch_array($rs)) {
 	$Courses[$row['course_code']] = CourseManager::get_course_information($row['course_code']);
 }
+
 echo '<div class="actions-title" >';
 echo $nameTools;
 echo '</div>';
 $now=date('Y-m-d');
-
 ?>
-
 <table class="data_table" width="100%">
 <tr class="tableName">
 	<td colspan="6">
@@ -82,10 +80,8 @@ $totalScore = 0;
 $totalItem = 0;
 $totalProgress = 0;
 
-foreach($Courses as $enreg)
-{
+foreach($Courses as $enreg) {
 	$weighting = 0;
-
 	$lastConnexion = Tracking :: get_last_connection_date_on_the_course($_user['user_id'],$enreg['code']);
 	$progress = Tracking :: get_avg_student_progress($_user['user_id'], $enreg['code']);
 	$total_time_login=Tracking :: get_time_spent_on_the_course($_user['user_id'], $enreg['code']);
@@ -97,15 +93,12 @@ foreach($Courses as $enreg)
   	<td>
 		<?php echo api_html_entity_decode($enreg['title'],ENT_QUOTES,$charset); ?>
   	</td>
-
   	<td align='center'>
 		<?php echo $time; ?>
   	</td>
-
   	<td align='center'>
   		<?php echo $progress.'%'; ?>
   	</td>
-
   	<td align='center'>
 		<?php 
 		if (!is_null($pourcentageScore)) {
@@ -115,27 +108,19 @@ foreach($Courses as $enreg)
 		}
 		?>
   	</td>
-
   	<td align='center' >
 		<?php echo $lastConnexion ?>
   	</td>
-
   	<td align='center'>
 		<a href="<?php echo api_get_self(); ?>?course=<?php echo $enreg['code']; ?>"> <?php Display::display_icon('2rightarrow.gif', get_lang('Details')); ?> </a>
   	</td>
 </tr>
-
 <?php
-
-
-
 	$i=$i ? 0 : 1;
 }
 ?>
 </table>
-
-<br/><br/>
-
+<br /><br />
 <?php
 /*
  * **********************************************************************************************
@@ -144,14 +129,12 @@ foreach($Courses as $enreg)
  *
  * **********************************************************************************************
  */
-	if(isset($_GET['course']))
-	{
+	if(isset($_GET['course'])) {
 		$course = Database::escape_string($_GET['course']);
 		$a_infosCours = CourseManager::get_course_information($course);
 		
 		//get coach and session_name if there is one and if session_mode is activated
-		if(api_get_setting('use_session_mode')=='true')
-		{
+		if(api_get_setting('use_session_mode')=='true') {
 			$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 			$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 			$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -190,12 +173,12 @@ foreach($Courses as $enreg)
 				if($session_course_coach_id!=0)
 				{
 					$coach_infos = UserManager :: get_user_info_by_id($session_course_coach_id);
-					$a_infosCours['tutor_name'] = $coach_infos['firstname'].' '.$coach_infos['lastname'];
+					$a_infosCours['tutor_name'] = api_get_person_name($coach_infos['firstname'], $coach_infos['lastname']);
 				}
 				else if($session_coach_id!=0)
 				{
 					$coach_infos = UserManager :: get_user_info_by_id($session_coach_id);
-					$a_infosCours['tutor_name'] = $coach_infos['firstname'].' '.$coach_infos['lastname'];
+					$a_infosCours['tutor_name'] = api_get_person_name($coach_infos['firstname'], $coach_infos['lastname']);
 				}
 			}
 		} // end if(api_get_setting('use_session_mode')=='true')
@@ -217,15 +200,10 @@ foreach($Courses as $enreg)
 			  <th class="head" style="color:#000"><?php echo get_lang('LastConnexion'); ?></th>
 			</tr>
 			<?php
-				$sqlLearnpath = "	SELECT lp.name,lp.id
-									FROM ".$a_infosCours['db_name'].".".$tbl_course_lp." AS lp
-								";
-
+				$sqlLearnpath = "SELECT lp.name,lp.id FROM ".$a_infosCours['db_name'].".".$tbl_course_lp." AS lp";
 				$resultLearnpath = api_sql_query($sqlLearnpath);
-
 				if(Database::num_rows($resultLearnpath)>0) {
 					while($a_learnpath = Database::fetch_array($resultLearnpath)) {
-
 						$progress = learnpath :: get_db_progress($a_learnpath['id'],$_user['user_id'], '%',$a_infosCours['db_name']);
 
 						// calculates last connection time

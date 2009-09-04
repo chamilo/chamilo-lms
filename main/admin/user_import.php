@@ -166,10 +166,10 @@ function save_data($users) {
 			}
 		
     		if ($sendMail) {			
-    			$recipient_name = $user['FirstName'].' '.$user['LastName'];
+    			$recipient_name = api_get_person_name($user['FirstName'], $user['LastName'], null, PERSON_NAME_EMAIL_ADDRESS);
     			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');			
-    			$emailbody = get_lang('Dear').$user['FirstName'].' '.$user['LastName'].",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('Settings')." $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path('WEB_PATH')." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";						
-    			$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+    			$emailbody = get_lang('Dear').api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('Settings')." $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path('WEB_PATH')." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";						
+    			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
     		    $email_admin = api_get_setting('emailAdministrator');			
     			@api_mail($recipient_name, $user['Email'], $emailsubject, $emailbody, $sender_name,$email_admin);
     		}
@@ -283,11 +283,14 @@ $extra_fields = Usermanager::get_extra_fields(0, 0, 5, 'ASC',false);
 $user_id_error=array();
 if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	$file_type = $_POST['file_type'];
-	if (strcmp($file_type,'csv')===0){ //&& strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {
+	Security::clear_token();
+    $tok = Security::get_token(); 
+	
+	if (strcmp($file_type,'csv')===0){ //&& strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {		
 		$users = parse_csv_data($_FILES['import_file']['tmp_name']);
 		$errors = validate_data($users);
 		$error_kind_file=false;
-	} elseif (strcmp($file_type,'xml')===0){// && strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {
+	} elseif (strcmp($file_type,'xml')===0){// && strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {		
 		$users = parse_xml_data($_FILES['import_file']['tmp_name']);
 		$errors = validate_data($users);
 		$error_kind_file=false;
@@ -304,13 +307,22 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	}
 	if  (is_array($users)) {
 		foreach ($users as $my_user) {
-		if (!in_array($my_user['UserName'],$user_id_error)) {
-			$users_to_insert[]=$my_user;
-				}
+			if (!in_array($my_user['UserName'],$user_id_error)) {
+				$users_to_insert[]=$my_user;
 			}
 		}
-        $inserted_in_course = array();
-	save_data($users_to_insert);
+	}
+	
+    $inserted_in_course = array();
+
+	if (strcmp($_FILES['import_file']['type'],'text/'.$file_type.'') === 0) {
+		save_data($users_to_insert);	
+	} else {
+		$error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
+		header('Location: '.api_get_self().'?warn='.urlencode($error_message).'&amp;file_type='.$file_type.'&amp;sec_token='.$tok);
+		exit ();
+	}
+
 	if ( count($errors)>0 ) {
 		$see_message_import=get_lang('FileImportedJustUsersThatAreNotRegistered');
 	} else {
@@ -318,29 +330,29 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	}
         $msg2 = '';
 	if (count($inserted_in_course)>1) {
-        	$msg2 .="<br>".get_lang('UsersSubscribedToSeveralCoursesBecauseOfVirtualCourses').':';
-            foreach ($inserted_in_course as $course) {
-            	$msg2 .= ' '.$course.',';
-            }
-            $msg2 = substr($msg2,0,-1);
-	    $msg2 .= "</br>";
+        $msg2 .="<br>".get_lang('UsersSubscribedToSeveralCoursesBecauseOfVirtualCourses').':';
+        foreach ($inserted_in_course as $course) {
+        	$msg2 .= ' '.$course.',';
         }
+        $msg2 = substr($msg2,0,-1);
+	    $msg2 .= "</br>";
+    }
+    
 	if (count($errors) != 0) {
-	$error_message = '<ul>';
-	foreach ($errors as $index => $error_user) {
-	$error_message .= '<li><b>'.$error_user['error'].'</b>: ';
-	$error_message .= $error_user['UserName'].'&nbsp;('.$error_user['FirstName'].' '.$error_user['LastName'].')';
-		$error_message .= '</li>';
+		$error_message = '<ul>';
+		foreach ($errors as $index => $error_user) {
+			$error_message .= '<li><b>'.$error_user['error'].'</b>: ';
+			$error_message .= $error_user['UserName'].'&nbsp;('.$error_user['FirstName'].' '.$error_user['LastName'].')';
+			$error_message .= '</li>';
 		}
 		$error_message .= '</ul>';
 	}
+      
+	header('Location: user_list.php?action=show_message&message='.urlencode($see_message_import).'&warn='.urlencode($error_message).'&sec_token='.$tok);
+	exit ();
+	
+}
 
- 
-        Security::clear_token();
-        $tok = Security::get_token();       
-		header('Location: user_list.php?action=show_message&message='.urlencode($see_message_import).'&warn='.urlencode($error_message).'&sec_token='.$tok);
-		exit ();
-	}
 Display :: display_header($tool_name);
 //api_display_tool_title($tool_name);
 
@@ -350,6 +362,9 @@ if($_FILES['import_file']['size'] == 0 AND $_POST) {
 
 if ($error_kind_file===true) {
 	Display :: display_error_message(get_lang('YouMustImportAFileAccordingToSelectedOption'));
+} else if (isset($_GET['warn'])) {
+	$error_message = Security::remove_XSS($_GET['warn']);
+	Display :: display_error_message($error_message);
 }
 $form = new FormValidator('user_import');
 $form->addElement('header', '', $tool_name);

@@ -115,7 +115,7 @@ if ($_GET['action']=='add')
 -----------------------------------------------------------
 */
 
-$javascript = "<script>
+$javascript = "<script type=\"text/javascript\">
 	function confirmsend ()
 	{
 		if (confirm(\"".dropbox_lang("mailingConfirmSend", "noDLTT")."\")){
@@ -216,7 +216,7 @@ $javascript .="
 $htmlHeadXtra[] = $javascript;
 
 $htmlHeadXtra[] =
-"<script>
+"<script type=\"text/javascript\">
 function confirmation (name)
 {
 	if (confirm(\" ". get_lang("AreYouSureToDelete") ." \"+ name + \" ?\"))

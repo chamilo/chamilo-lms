@@ -69,7 +69,7 @@ if ($_configuration['multiple_access_urls']==true){
 	if ($access_url_id != -1) {
 		$sql="SELECT DISTINCT u.user_id,lastname,firstname,username FROM $tbl_user u INNER JOIN $table_access_url_rel_user url_rel_user
 			ON (url_rel_user.user_id = u.user_id)
-			WHERE status='1' AND access_url_id = $access_url_id.$order_clause;
+			WHERE status='1' AND access_url_id = '$access_url_id' $order_clause";
 	}
 }
 

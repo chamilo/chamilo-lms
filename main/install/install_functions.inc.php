@@ -878,7 +878,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	//database prefix
 	display_database_parameter($installType, get_lang('DbPrefixForm'), 'dbPrefixForm', $dbPrefixForm, get_lang('DbPrefixCom'));
 	//fields for the four standard Dokeos databases
-	echo '<tr><td colspan="3"><a href="" onclick="javascript: show_hide_option();return false;" id="optionalparameters"><img style="vertical-align:middle;" src="../img/div_hide.gif" alt="show-hide" /> '.get_lang('OptionalParameters','').'</a></td></tr>';
+	echo '<tr><td colspan="3"><a href="" onclick="javascript: show_hide_option();return false;" id="optionalparameters"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="show-hide" /> '.get_lang('OptionalParameters','').'</a></td></tr>';
 	display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm', $dbNameForm, '&nbsp;',null,'id="optional_param1" style="display:none;"');
 	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;',null,'id="optional_param2" style="display:none;"');
 	if($installType == 'update' && in_array($_POST['old_version'],$update_from_version_6))

@@ -463,7 +463,7 @@ if ($encryptPassForm=='1' ) {
 				document.getElementById('optional_param5').style.display = '';
 				document.getElementById('optional_param6').style.display = '';
 				init_visibility = 1;
-			document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> <?php echo get_lang('OptionalParameters'); ?>';
+			document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> <?php echo get_lang('OptionalParameters'); ?>';
 			} else {
 				document.getElementById('optional_param1').style.display = 'none';
 				document.getElementById('optional_param2').style.display = 'none';
@@ -473,7 +473,7 @@ if ($encryptPassForm=='1' ) {
 				document.getElementById('optional_param4').style.display = 'none';
 				document.getElementById('optional_param5').style.display = 'none';
 				document.getElementById('optional_param6').style.display = 'none';
-			document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> <?php echo get_lang('OptionalParameters'); ?>';
+			document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> <?php echo get_lang('OptionalParameters'); ?>';
 				init_visibility = 0;				
 			}
 		}

@@ -103,7 +103,7 @@ class link_processor extends search_processor {
         $item_result = api_sql_query ($sql);
         if ($row = Database::fetch_array ($item_result)) {
 	        $user_data = api_get_user_info($row['insert_user_id']);
-	        $author = $user_data['firstName'] .' '. $user_data['lastName'];
+	        $author = api_get_person_name($user_data['firstName'], $user_data['lastName']);
         }
 
         return array($thumbnail, $image, $name, $author, $url);

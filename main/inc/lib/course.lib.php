@@ -1879,14 +1879,19 @@ class CourseManager {
 			$tutor=Database::fetch_array($result_tutor);
 			$emailto		= $tutor['email'];
 			$emailsubject	= get_lang('NewUserInTheCourse').': '.$name_course;
-			$emailbody		= get_lang('Dear').': '. $tutor['firstname'].' '.$tutor['lastname']."\n";
+			$emailbody		= get_lang('Dear').': '. api_get_person_name($tutor['firstname'], $tutor['lastname'])."\n";
 			$emailbody		.=get_lang('MessageNewUserInTheCourse').': '.$name_course."\n";
 			$emailbody		.=get_lang('UserName').': '.$student['username']."\n";
-			$emailbody		.=get_lang('LastName').': '.$student['lastname']."\n";
-			$emailbody		.=get_lang('FirstName').': '.$student['firstname']."\n";
+			if (api_is_western_name_order()) {
+				$emailbody		.=get_lang('FirstName').': '.$student['firstname']."\n";
+				$emailbody		.=get_lang('LastName').': '.$student['lastname']."\n";
+			} else {
+				$emailbody		.=get_lang('LastName').': '.$student['lastname']."\n";
+				$emailbody		.=get_lang('FirstName').': '.$student['firstname']."\n";
+			}
 			$emailbody		.=get_lang('Email').': '.$student['email']."\n\n";				
-			$recipient_name = $tutor['firstname'].' '.$tutor['lastname'];															
-			$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+			$recipient_name = api_get_person_name($tutor['firstname'], $tutor['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);															
+			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 	    	$email_admin = api_get_setting('emailAdministrator');				
 			@api_mail($recipient_name, $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
 		}
@@ -1974,7 +1979,7 @@ class CourseManager {
 			$sql_list="SELECT * FROM $users WHERE user_id=".$list_users['user_id'];
 			$result = api_sql_query($sql_list,__FILE__,__LINE__);
 			while ($row_user = Database::fetch_array($result)){
-				$name_teacher=$row_user['firstname'].' '.$row_user['lastname'];
+				$name_teacher=api_get_person_name($row_user['firstname'], $row_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
 				$list[]=array($row_user['email']=>$name_teacher);
 			}
 		} 
@@ -1996,7 +2001,7 @@ class CourseManager {
 		$sql_list="SELECT * FROM $users WHERE user_id=".$row_email["id_coach"];
 		$result_user = api_sql_query($sql_list,__FILE__,__LINE__);
 		while ($row_emails = Database::fetch_array($result_user)) {
-			$name_tutor=$row_emails["firstname"].' '.$row_emails["lastname"];
+			$name_tutor=api_get_person_name($row_emails["firstname"], $row_emails["lastname"], null, PERSON_NAME_EMAIL_ADDRESS);
 			$mail_tutor=array($row_emails["email"]=>$name_tutor);
 		}
 		return $mail_tutor;		   	

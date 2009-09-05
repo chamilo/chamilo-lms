@@ -573,7 +573,7 @@ class pagination
 			$output .= "<span class=\"pagination_items_per_page\">";
 			$output .= sprintf(PAGINATION_ITEMS_PER_PAGE, $itemPerPage);
 			$output .= "</span>";
-			$output .= "<span class=\"pagination_parent\"><a href=\"#\" onclick=\"goParentFolder();\" id=\"pagination_parent_link\" title=\"" . PAGINATION_GO_PARENT . "\">&nbsp;</a></span>";
+			$output .= "<span class=\"pagination_parent\"><a href=\"javascript: void(0);\" onclick=\"javascript: goParentFolder();\" id=\"pagination_parent_link\" title=\"" . PAGINATION_GO_PARENT . "\">&nbsp;</a></span>";
 		}
 
 		$output .= "</p></div>";

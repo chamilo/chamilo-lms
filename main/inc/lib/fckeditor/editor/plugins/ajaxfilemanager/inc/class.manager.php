@@ -6,7 +6,7 @@
 	 * @since 22/April/2007
 	 *
 	 * Modify for Dokeos
-	 * @author Juan Carlos Raña
+	 * @author Juan Carlos RaÃ±a
 	 * @since 31/December/2008
 	 */
 	 
@@ -94,12 +94,12 @@ class manager
 			$folderInfo = $file->getFileInfo();
 			if(sizeof($folderInfo))
 			{
-			    //for Dokeos in a name folder, replace num user by lastname and firstname 
+			    //for Dokeos in a name folder, replace num user by user names
 				
 				if(ereg('sf_user_', basename($this->currentFolderPath)))
 				{
 					$userinfo=Database::get_user_info_from_id(substr(basename($this->currentFolderPath), 8));		
-					$this->currentFolderInfo['name']=$userinfo['lastname'].', '.$userinfo['firstname'];
+					$this->currentFolderInfo['name']=api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 				}
 				else
 				{			

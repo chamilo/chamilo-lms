@@ -110,7 +110,7 @@ class Blog {
 
 		while($user = Database::fetch_array($result))
 		{
-			$blog_members[$user['user_id']] = $user['lastname']." " . $user['firstname'];
+			$blog_members[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
 		}
 
 		return $blog_members;
@@ -158,8 +158,6 @@ class Blog {
 	
 			// Subscribe the teacher to this blog
 			Blog::set_user_subscribed((int)$this_blog_id,(int)$_user['user_id']);
-	
-			return void;
 		}
 	}
 
@@ -188,8 +186,6 @@ class Blog {
 		// Update course homepage link
 		$sql = "UPDATE $tbl_tool SET name = '".Database::escape_string($title)."' WHERE link = 'blog/blog.php?blog_id=".Database::escape_string((int)$blog_id)."' LIMIT 1";
 		api_sql_query($sql, __FILE__, __LINE__);
-
-		return void;
 	}
 
 	/**
@@ -236,8 +232,6 @@ class Blog {
 		// Delete from course homepage
 		$sql = "DELETE FROM $tbl_tool WHERE link = 'blog/blog.php?blog_id=".(int)$blog_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
-	
-		return void;
 	}
 
 	/**
@@ -316,8 +310,6 @@ class Blog {
 		{
 			Display::display_error_message(get_lang('UplNoFileUploaded'));
 		}	
-
-		return void;
 	}
 
 	/**
@@ -338,8 +330,6 @@ class Blog {
 		// Create the post
 		$sql = "UPDATE $tbl_blogs_posts SET title = '" . Database::escape_string($title)."', full_text = '" . Database::escape_string($full_text)."' WHERE post_id ='".(int)$post_id."' AND blog_id ='".(int)$blog_id."' LIMIT 1 ;";
 		api_sql_query($sql, __FILE__, __LINE__);
-
-		return void;
 	}
 
 	/**
@@ -371,8 +361,6 @@ class Blog {
 					
 		// Delete posts and attachments
 		delete_all_blog_attachment($blog_id,$post_id);	
-
-		return void;
 	}
 
 	/**
@@ -453,10 +441,6 @@ class Blog {
 				}			 
 			}
 		}
-		
-		
-	
-		return void;
 	}
 
 	/**
@@ -495,7 +479,6 @@ class Blog {
 		// Finally, delete the selected comment to
 		$sql = "DELETE FROM $tbl_blogs_comments WHERE comment_id = '".(int)$comment_id."'";				
 		api_sql_query($sql, __FILE__, __LINE__);
-		return void;
 	}
 
 	/**
@@ -569,8 +552,6 @@ class Blog {
 
 			api_sql_query($sql, __FILE__, __LINE__);
 		}
-
-		return void;
 	}
 
 	/**
@@ -652,8 +633,6 @@ class Blog {
 
 			api_sql_query($sql, __FILE__, __LINE__);
 		}
-
-		return void;
 	}
 
 	/**
@@ -671,8 +650,6 @@ class Blog {
 		// Delete posts
 		$sql = "DELETE FROM $tbl_blogs_tasks WHERE blog_id = '".(int)$blog_id."' AND task_id = '".(int)$task_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
-
-		return void;
 	}
 
 	/**
@@ -689,8 +666,6 @@ class Blog {
 		// Delete posts
 		$sql = "DELETE FROM $tbl_blogs_tasks_rel_user WHERE blog_id = '".(int)$blog_id."' AND task_id = '".(int)$task_id."' AND user_id = '".(int)$user_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
-
-		return void;
 	}
 
 	/**
@@ -776,8 +751,6 @@ class Blog {
 					VALUES ('".Database::escape_string($title)."', 'blog/blog.php?blog_id=".(int)$blog_id."', 'blog.gif', '1', '0', 'pastillegris.gif', '0', '_self')";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 		}
-
-		return void;
 	}
 
 
@@ -864,7 +837,7 @@ class Blog {
 					echo ' "> '.$file_name_array['filename'].' </a><br />';
 					echo '</span>';														
 				}				
-				echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . $blog_post['lastname'] . ' ' . $blog_post['firstname'] . ' - <a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . '</a></span>'."\n";
+				echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . api_get_person_name($blog_post['firstname'], $blog_post['lastname']) . ' - <a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . '</a></span>'."\n";
 				echo '</div>'."\n";
 			}					
 		}
@@ -917,7 +890,7 @@ class Blog {
 		global $dateFormatLong;
 
 		// Put date in correct output format
-		$date_output = api_ucfirst(format_locale_date($dateFormatLong,strtotime($date_output)));
+		$date_output = format_locale_date($dateFormatLong,strtotime($date_output));
 
 		// Display the posts
 		echo '<span class="blogpost_title">' . get_lang('PostsOf') . ': ' . $date_output . '</span>';
@@ -954,7 +927,7 @@ class Blog {
 
 		// Prepare data
 		$blog_post_text = make_clickable(stripslashes($blog_post['full_text']));
-		$blog_post_date = api_ucfirst(format_locale_date($dateFormatLong,strtotime($blog_post['date_creation'])));
+		$blog_post_date = format_locale_date($dateFormatLong,strtotime($blog_post['date_creation']));
 		$blog_post_time = date('H:m',strtotime($blog_post['date_creation']));
 		$blog_post_actions = "";
 
@@ -993,7 +966,7 @@ class Blog {
 			echo '<br />';
 		}			
 			
-		echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . $blog_post['lastname'] . ' ' . $blog_post['firstname'] . ' - ' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . ' - ' . get_lang('Rating') . ': '.Blog::display_rating('post',$blog_id,$post_id) . $rating_select . '</span>';
+		echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . api_get_person_name($blog_post['firstname'], $blog_post['lastname']) . ' - ' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . ' - ' . get_lang('Rating') . ': '.Blog::display_rating('post',$blog_id,$post_id) . $rating_select . '</span>';
 		echo '<span class="blogpost_actions">' . $blog_post_actions . '</span>';
 		echo '</div>';
 
@@ -1167,7 +1140,7 @@ class Blog {
 
 			// Prepare data
 			$comment_text = make_clickable(stripslashes($comment['comment']));
-			$blog_comment_date = api_ucfirst(format_locale_date($dateFormatLong,strtotime($comment['date_creation'])));
+			$blog_comment_date = format_locale_date($dateFormatLong,strtotime($comment['date_creation']));
 			$blog_comment_time = date('H:i',strtotime($comment['date_creation']));
 			$blog_comment_actions = "";
 			if(api_is_allowed('BLOG_' . $blog_id, 'article_comments_delete', $task_id)) { $blog_comment_actions .= '<a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;do=delete_comment&amp;comment_id=' . $comment['comment_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('DeleteThisComment') . '" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"><img src="../img/delete.gif" border="0" /></a>'; }
@@ -1200,7 +1173,7 @@ class Blog {
 					echo '</span><br />';								
 				}				
 				
-				echo '<span class="blogpost_comment_info">' . get_lang('Author') . ': ' . $comment['lastname'] . ' ' . $comment['firstname'] . ' - ' . get_lang('Rating') . ': '.Blog::display_rating('comment', $blog_id, $comment['comment_id']) . $rating_select . '</span>';
+				echo '<span class="blogpost_comment_info">' . get_lang('Author') . ': ' . api_get_person_name($comment['firstname'], $comment['lastname']) . ' - ' . get_lang('Rating') . ': '.Blog::display_rating('comment', $blog_id, $comment['comment_id']) . $rating_select . '</span>';
 				echo '<span class="blogpost_actions">' . $blog_comment_actions . '</span>';
 			echo '</div>';
 
@@ -1572,7 +1545,7 @@ class Blog {
 			$delete_confirm = ($assignment['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"';
 
 			echo	'<tr class="' . $css_class . '" valign="top">',
-						 '<td width="240">' . $assignment['firstname'] . ' ' . $assignment['lastname'] . '</td>',
+						 '<td width="240">' . api_get_person_name($assignment['firstname'], $assignment['lastname']) . '</td>',
 						 '<td>'.stripslashes($assignment['title']) . '</td>',
 						 '<td>'.stripslashes($assignment['description']) . '</td>',
 						 '<td>' . $assignment['target_date'] . '</td>',
@@ -1799,7 +1772,7 @@ class Blog {
 		$select_user_list = '<select name="task_user_id">';
 		while($user = Database::fetch_array($result))
 		{
-			$select_user_list .= '<option value="' . $user['user_id'] . '">' . $user['firstname']." " . $user['lastname'] . '</option>';
+			$select_user_list .= '<option value="' . $user['user_id'] . '">' . api_get_person_name($user['firstname'], $user['lastname']) . '</option>';
 		}
 		$select_user_list .= '</select>';
 
@@ -1980,7 +1953,7 @@ class Blog {
 
 		while($user = Database::fetch_array($result))
 		{
-			$select_user_list .= '<option ' . (($user_id == $user['user_id']) ? 'selected="selected "' : ' ') . 'value="' . $user['user_id'] . '">' . $user['firstname']." " . $user['lastname'] . '</option>';
+			$select_user_list .= '<option ' . (($user_id == $user['user_id']) ? 'selected="selected "' : ' ') . 'value="' . $user['user_id'] . '">' . api_get_person_name($user['firstname'], $user['lastname']) . '</option>';
 		}
 
 		$select_user_list .= '</select>';
@@ -2198,7 +2171,7 @@ class Blog {
 		{
 			while($blog_post = Database::fetch_array($result))
 			{
-				echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $blog_id . '&amp;task_id=' . $task_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment">'.stripslashes($blog_post['title']) . '</a>, ' . get_lang('WrittenBy') . ' ' . $blog_post['firstname'] . ' '.stripslashes($blog_post['lastname']) . '<br />';
+				echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $blog_id . '&amp;task_id=' . $task_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment">'.stripslashes($blog_post['title']) . '</a>, ' . get_lang('WrittenBy') . ' ' . stripslashes(api_get_person_name($blog_post['firstname'], $blog_post['lastname'])) . '<br />';
 			}
 		}
 		else
@@ -2261,6 +2234,7 @@ class Blog {
 	public static function display_form_user_subscribe ($blog_id) {
 		// Init
 		global $_course;
+		$is_western_name_order = api_is_western_name_order();
 		$currentCourse = $_course['sysCode'];
 		$tbl_users 			= Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
@@ -2285,8 +2259,13 @@ class Blog {
 
 		// Set table headers
 		$column_header[] = array ('', false, '');
-		$column_header[] = array (get_lang('LastName'), true, '');
-		$column_header[] = array (get_lang('FirstName'), true, '');
+		if ($is_western_name_order) {
+			$column_header[] = array (get_lang('FirstName'), true, '');
+			$column_header[] = array (get_lang('LastName'), true, '');
+		} else {
+			$column_header[] = array (get_lang('LastName'), true, '');
+			$column_header[] = array (get_lang('FirstName'), true, '');
+		}
 		$column_header[] = array (get_lang('Email'), true, '');
 		$column_header[] = array (get_lang('Register'), false, '');
 		
@@ -2312,8 +2291,13 @@ class Blog {
 				$a_infosUser = UserManager :: get_user_info_by_id($user['user_id']);
 				$row = array ();
 				$row[] = '<input type="checkbox" name="user[]" value="' . $a_infosUser['user_id'] . '" '.(($_GET['selectall'] == "subscribe") ? ' checked="checked" ' : '') . '/>';
-				$row[] = $a_infosUser["lastname"];
-				$row[] = $a_infosUser["firstname"];
+				if ($is_western_name_order) {
+					$row[] = $a_infosUser["firstname"];
+					$row[] = $a_infosUser["lastname"];
+				} else {
+					$row[] = $a_infosUser["lastname"];
+					$row[] = $a_infosUser["firstname"];
+				}
 				$row[] = Display::encrypted_mailto_link($a_infosUser["email"]);
 				//Link to register users
 				if($a_infosUser["user_id"] != $_SESSION['_user']['user_id'])
@@ -2360,6 +2344,7 @@ class Blog {
 	 */
 	public static function display_form_user_unsubscribe ($blog_id) {
 		global $_user;
+		$is_western_name_order = api_is_western_name_order();
 
 		// Init
 		$tbl_users 			= Database::get_main_table(TABLE_MAIN_USER);
@@ -2370,8 +2355,13 @@ class Blog {
 		$properties["width"] = "100%";
 		//table column titles
 		$column_header[] = array ('', false, '');
-		$column_header[] = array (get_lang('LastName'), true, '');
-		$column_header[] = array (get_lang('FirstName'), true, '');
+		if ($is_western_name_order) {
+			$column_header[] = array (get_lang('FirstName'), true, '');
+			$column_header[] = array (get_lang('LastName'), true, '');
+		} else {
+			$column_header[] = array (get_lang('LastName'), true, '');
+			$column_header[] = array (get_lang('FirstName'), true, '');
+		}
 		$column_header[] = array (get_lang('Email'), true, '');
 		$column_header[] = array (get_lang('TaskManager'), true, '');
 		$column_header[] = array (get_lang('UnRegister'), false, '');
@@ -2392,8 +2382,13 @@ class Blog {
 		{
 			$row = array ();
 			$row[] = '<input type="checkbox" name="user[]" value="' . $myrow['user_id'] . '" '.(($_GET['selectall'] == "unsubscribe") ? ' checked="checked" ' : '') . '/>';
-			$row[] = $myrow["lastname"];
-			$row[] = $myrow["firstname"];
+			if ($is_western_name_order) {
+				$row[] = $myrow["firstname"];
+				$row[] = $myrow["lastname"];
+			} else {
+				$row[] = $myrow["lastname"];
+				$row[] = $myrow["firstname"];
+			}
 			$row[] = Display::encrypted_mailto_link($myrow["email"]);
 
 			$sql = "SELECT bt.title task

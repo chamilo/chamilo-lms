@@ -61,7 +61,7 @@ if (api_is_in_course()) {
 		$new_user_dir = api_get_path(SYS_PATH).'courses/'.$_course['path'].'/document/shared_folder/sf_user_'.api_get_user_id().'/';				
 		@mkdir($new_user_dir);		
 		chmod($new_user_dir,$permissions_for_new_directories);		
-		$doc_id = add_document($_course, '/shared_folder/sf_user_'.api_get_user_id(), 'folder', 0, $_user['firstName'].' '.$_user['lastName']);
+		$doc_id = add_document($_course, '/shared_folder/sf_user_'.api_get_user_id(), 'folder', 0, api_get_person_name($_user['firstName'], $_user['lastName']));
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());
 	}

@@ -198,7 +198,7 @@ if (isset($_GET['rs'])) {
 		'name' => get_lang('SocialNetwork')
 	);
 } else {
-	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('Messages'));
+	$interbreadcrumb[] = array ('url' => 'javascript: void(0);', 'name' => get_lang('Messages'));
 	$interbreadcrumb[]= array (
 		'url' => 'outbox.php',
 		'name' => get_lang('Outbox')
@@ -209,7 +209,7 @@ if (isset($_GET['rs'])) {
 	);
 }
 	$interbreadcrumb[]= array (
-		'url' => '#',
+		'url' => 'javascript: void(0);',
 		'name' => get_lang('ComposeMessage')
 	);
 

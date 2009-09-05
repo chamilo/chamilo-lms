@@ -90,7 +90,7 @@ function mdo_generate_default_xml_metadata()
     if (isset($_user))
     {
         $xhtDoc->xht_param['author'] = "BEGIN:VCARD\\nFN:" . 
-            $_user['firstName']." ".$_user['lastName'] . 
+            api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS) .
             "\\nEMAIL:".$_user['mail'] . "\\nEND:VCARD\\n";
     }
     

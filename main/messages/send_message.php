@@ -51,7 +51,7 @@ if ($panel_id==2) {
 } 
 if ($panel_id==1) {
 ?>
-    <td height="20"><?php echo api_xml_http_response_encode(get_lang('To')); ?> &nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode($user_info['firstName'].' '.$user_info['lastName']); ?></td>
+    <td height="20"><?php echo api_xml_http_response_encode(get_lang('To')); ?> &nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName'])); ?></td>
     <td height="20"><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br/><input id="txt_subject_id" type="text" style="width:200px;"></td>
     <td height="20"><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br/><textarea id="txt_area_invite" rows="3" cols="25"></textarea></td>
     <td height="20"><input type="button" value="<?php echo api_xml_http_response_encode(get_lang('NewMessage')); ?>" onclick="hide_display_message()" />&nbsp;&nbsp;&nbsp; <input type="button" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>" onclick="action_database_panel('5','<?php echo $user_id;?>')" /></td>

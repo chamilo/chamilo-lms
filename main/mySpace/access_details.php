@@ -112,7 +112,7 @@ if (api_is_xml_http_request()) {
 		$DataSet->AddAllSeries();  
 		$DataSet->RemoveSerie('Date');  
 		$DataSet->SetAbsciseLabelSerie('Date');
-		$DataSet->SetYAxisName(api_ucfirst(get_lang('MinMinutes')));  
+		$DataSet->SetYAxisName(get_lang('Minutes'));
 		$graph_id = api_get_user_id().'AccessDetails'.api_get_course_id();
 		$DataSet->AddAllSeries();
 		
@@ -216,7 +216,7 @@ foreach ($connections as $key=>$data) {
 }
 api_display_tool_title(get_lang('DetailsStudentInCourse'));
 echo '<div class="actions">';
-echo '<strong>'.get_lang('User').': '.$mainUserInfo['firstName'].' '.$mainUserInfo['lastName'].'</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>'.get_lang('Course').': '.$course_code.'</strong></div>';
+echo '<strong>'.get_lang('User').': '.api_get_person_name($mainUserInfo['firstName'], $mainUserInfo['lastName']).'</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>'.get_lang('Course').': '.$course_code.'</strong></div>';
 
 ?>
 <div id="container-9">

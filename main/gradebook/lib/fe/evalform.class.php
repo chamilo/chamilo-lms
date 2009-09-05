@@ -245,7 +245,7 @@ class EvalForm extends FormValidator
 		$userinfo= api_get_user_info($this->result_object->get_user_id());
 		$renderer =& $this->defaultRenderer();
 		$renderer->setElementTemplate('<span>{element}</span> ');
-		$this->addElement('static', null, null,$userinfo['lastName'] . ' ' . $userinfo['firstName']);
+		$this->addElement('static', null, null, api_get_person_name($userinfo['lastName'], $userinfo['firstName']));
 		$this->add_textfield('score', get_lang('Result'), false, array (
 			'size' => '4',
 			'maxlength' => '4'
@@ -361,27 +361,31 @@ class EvalForm extends FormValidator
 	private function build_stud_label ($id, $lastname, $firstname) {
 		$opendocurl_start = '';
 		$opendocurl_end = '';
-
 		// evaluation's origin is a link
 		if ($this->evaluation_object->get_category_id() < 0) {
 			$link = LinkFactory :: get_evaluation_link ($this->evaluation_object->get_id());
-
 			$doc_url = $link->get_view_url($id);
 			if ($doc_url != null) {
 				$opendocurl_start .= '<a href="'. $doc_url . '" target="_blank">';
 				$opendocurl_end = '</a>';
 			}
 		}
-
-		return $opendocurl_start . $lastname . ' ' . $firstname . $opendocurl_end;
+		return $opendocurl_start . api_get_person_name($firstname, $lastname) . $opendocurl_end;
 	}
 
 	function sort_by_user ($item1, $item2) {
 		$user1 = $item1['user'];
 		$user2 = $item2['user'];
-		$result = api_strcmp($user1['lastname'], $user2['lastname']);
-		if ($result == 0) {
-			return api_strcmp($user1['firstname'], $user2['firstname']);
+		if (api_sort_by_first_name()) {
+			$result = api_strcmp($user1['firstname'], $user2['firstname']);
+			if ($result == 0) {
+				return api_strcmp($user1['lastname'], $user2['lastname']);
+			}
+		} else {
+			$result = api_strcmp($user1['lastname'], $user2['lastname']);
+			if ($result == 0) {
+				return api_strcmp($user1['firstname'], $user2['firstname']);
+			}
 		}
 		return $result;
 	}

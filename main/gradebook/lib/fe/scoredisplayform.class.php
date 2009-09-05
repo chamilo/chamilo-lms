@@ -92,7 +92,7 @@ class ScoreDisplayForm extends FormValidator
 
 		if ($displayscore->is_custom()) {
 			$this->addElement('checkbox', 'includeupperlimit', null, get_lang('IncludeUpperLimit'), null);
-			$this->addElement('static', null, null, '<small>' . get_lang('ScoreInfo') . '</small>');
+			$this->addElement('static', null, null, get_lang('ScoreInfo'));
 			$scorenull[]= & $this->CreateElement('static', null, null, get_lang('Between'));
 			$this->setDefaults(array (
 				'beginscore' => '0'

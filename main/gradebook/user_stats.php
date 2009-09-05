@@ -73,7 +73,7 @@ if (isset ($_GET['exportpdf'])) {
 
 	$pdf->ezSetY(810);
 	$userinfo = get_user_info_from_id($my_user_id);
-	$pdf->ezText(get_lang('Results').' : '.$userinfo['lastname']. ' '. $userinfo['firstname'].' ('. date('j/n/Y g:i') .')',12,array('justification'=>'center'));
+	$pdf->ezText(get_lang('Results').' : '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).' ('. date('j/n/Y g:i') .')', 12, array('justification'=>'center'));
 	$pdf->line(50,790,550,790);
 	$pdf->line(50,40,550,40);	
 	

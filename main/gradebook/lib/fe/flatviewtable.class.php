@@ -409,6 +409,8 @@ class FlatViewTable extends SortableTable
 	 */
 	function get_table_data ($from = 1) {
 
+		$is_western_name_order = api_is_western_name_order();
+
 		// create page navigation if needed
 
 		$totalitems = $this->datagen->get_total_items_count();
@@ -463,8 +465,11 @@ class FlatViewTable extends SortableTable
 
 
 		// retrieve sorting type
-		$users_sorting = ($this->column == 0 ? FlatViewDataGenerator :: FVDG_SORT_LASTNAME
-											 : FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME);
+		if ($is_western_name_order) {
+			$users_sorting = ($this->column == 0 ? FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME : FlatViewDataGenerator :: FVDG_SORT_LASTNAME);
+		} else {
+			$users_sorting = ($this->column == 0 ? FlatViewDataGenerator :: FVDG_SORT_LASTNAME : FlatViewDataGenerator :: FVDG_SORT_FIRSTNAME);
+		}
 		if ($this->direction == 'DESC') {
 			$users_sorting |= FlatViewDataGenerator :: FVDG_SORT_DESC;
 		} else {
@@ -475,8 +480,13 @@ class FlatViewTable extends SortableTable
 		$header_names = $this->datagen->get_header_names($this->offset, $selectlimit);
 
 		$column = 0;
-		$this->set_header($column++, $header_names[0]);
-		$this->set_header($column++, $header_names[1]);
+		if ($is_western_name_order) {
+			$this->set_header($column++, $header_names[1]);
+			$this->set_header($column++, $header_names[0]);
+		} else {
+			$this->set_header($column++, $header_names[0]);
+			$this->set_header($column++, $header_names[1]);
+		}
 
 		while ($column < count($header_names)) {
 			$this->set_header($column, $header_names[$column], false);
@@ -487,16 +497,22 @@ class FlatViewTable extends SortableTable
 
 		// step 2: generate rows: students
 		
-		$data_array = $this->datagen->get_data($users_sorting,
-										 $from, $this->per_page,
-										 $this->offset, $selectlimit);
+		$data_array = $this->datagen->get_data($users_sorting, $from, $this->per_page, $this->offset, $selectlimit);
 
 		$table_data = array();
 		foreach ($data_array as $user_row) {
 			$table_row = array ();
 			$count = 0;
-			$table_row[]= $this->build_name_link($user_row[$count++], $user_row[$count++]);
-			$table_row[]= $user_row[$count++];
+			$user_id = $user_row[$count++];
+			$lastname = $user_row[$count++];
+			$firstname = $user_row[$count++];
+			if ($is_western_name_order) {
+				$table_row[] = $this->build_name_link($user_id, $firstname);
+				$table_row[] = $this->build_name_link($user_id, $lastname);
+			} else {
+				$table_row[] = $this->build_name_link($user_id, $lastname);
+				$table_row[] = $this->build_name_link($user_id, $firstname);
+			}
 			while ($count < count($user_row)) {
 				$table_row[] = $user_row[$count++];	
 			}
@@ -506,11 +522,9 @@ class FlatViewTable extends SortableTable
 	}
 
 
-
-
 	// Other functions
 
-	private function build_name_link ($user_id, $lastname) {
-		return '<a href="user_stats.php?userid='.$user_id.'&selectcat='.$this->selectcat->get_id().'">'.$lastname.'</a>';
+	private function build_name_link ($user_id, $name) {
+		return '<a href="user_stats.php?userid='.$user_id.'&selectcat='.$this->selectcat->get_id().'">'.$name.'</a>';
 	}
 }

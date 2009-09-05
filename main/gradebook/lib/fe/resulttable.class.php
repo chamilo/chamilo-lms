@@ -62,8 +62,13 @@ class ResultTable extends SortableTable
 					'delete' => get_lang('Delete')
 			));
 		}
-		$this->set_header($column++, get_lang('LastName'));
-		$this->set_header($column++, get_lang('FirstName'));
+		if (api_is_western_name_order()) {
+			$this->set_header($column++, get_lang('FirstName'));
+			$this->set_header($column++, get_lang('LastName'));
+		} else {
+			$this->set_header($column++, get_lang('LastName'));
+			$this->set_header($column++, get_lang('FirstName'));
+		}
 		$this->set_header($column++, get_lang('Score'));
 		if ($scoredisplay->is_custom()) {
 			$this->set_header($column++, get_lang('Display'));
@@ -87,6 +92,7 @@ class ResultTable extends SortableTable
 	 */
 	function get_table_data ($from = 1) {
 
+		$is_western_name_order = api_is_western_name_order();
 		$scoredisplay = ScoreDisplay :: instance();
 
 		// determine sorting type
@@ -94,10 +100,18 @@ class ResultTable extends SortableTable
 		switch ($this->column) {
 			// Type
 			case (0 + $col_adjust):
-				$sorting = ResultsDataGenerator :: RDG_SORT_LASTNAME;
+				if ($is_western_name_order) {
+					$sorting = ResultsDataGenerator :: RDG_SORT_FIRSTNAME;
+				} else {
+					$sorting = ResultsDataGenerator :: RDG_SORT_LASTNAME;
+				}
 				break;
 			case (1 + $col_adjust):
-				$sorting = ResultsDataGenerator :: RDG_SORT_FIRSTNAME;
+				if ($is_western_name_order) {
+					$sorting = ResultsDataGenerator :: RDG_SORT_LASTNAME;
+				} else {
+					$sorting = ResultsDataGenerator :: RDG_SORT_FIRSTNAME;
+				}
 				break;
 			case (2 + $col_adjust):
 				$sorting = ResultsDataGenerator :: RDG_SORT_SCORE;
@@ -122,8 +136,13 @@ class ResultTable extends SortableTable
 			if ($this->iscourse == '1') {
 				 $row[] = $item['result_id'];
 			}	
-			$row[] = $item['lastname'];
-			$row[] = $item['firstname'];
+			if ($is_western_name_order) {
+				$row[] = $item['firstname'];
+				$row[] = $item['lastname'];
+			} else {
+				$row[] = $item['lastname'];
+				$row[] = $item['firstname'];
+			}
 			$row[] = $item['score'];
 			if ($scoredisplay->is_custom()) {
 				$row[] = $item['display'];

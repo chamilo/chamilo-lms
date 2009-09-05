@@ -34,12 +34,13 @@ function get_users_in_course($course_id) {
 	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 
+	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname ASC' : ' ORDER BY lastname, firstname ASC';
 	$sql = 'SELECT user.user_id,lastname,firstname'
 			.' FROM '.$tbl_course_user.' as course_rel_user, '.$tbl_user.' as user'
 			.' WHERE course_rel_user.user_id=user.user_id'
 			.' AND course_rel_user.status='.STUDENT
 			." AND course_rel_user.course_code='".$course_id."'"
-			.' ORDER BY lastname ASC';
+			.$order_clause;
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	return get_user_array_from_sql_result($result);
 }

@@ -305,12 +305,22 @@ if ($export_result_form->validate()) {
 		));
 		
 		$datagen = new ResultsDataGenerator ($eval[0],$allresults);
-		$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME,0,null,true);	
+		if (api_sort_by_first_name()) {
+			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_FIRSTNAME, 0, null, true);
+		} else {
+			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME,0,null,true);	
+		}
 		$newarray = array();
+		$is_western_name_order = api_is_western_name_order();
 		foreach ($data_array as $data) {
 			$newitem = array();
-			$newitem[] = $data['lastname'];
-			$newitem[] = $data['firstname'];
+			if ($is_western_name_order) {
+				$newitem[] = $data['firstname'];
+				$newitem[] = $data['lastname'];
+			} else {
+				$newitem[] = $data['lastname'];
+				$newitem[] = $data['firstname'];
+			}
 			$newitem[] = $data['score'];
 			if ($displayscore->is_custom())
 				$newitem[] = $data['display'];
@@ -318,9 +328,17 @@ if ($export_result_form->validate()) {
 		}
 		$pdf->ezSetY(650);
 		if ($displayscore->is_custom()) {
-			$header_names = array(get_lang('LastName'),get_lang('FirstName'),get_lang('Score'),get_lang('Display'));			
-		}else {
-			$header_names = array(get_lang('LastName'),get_lang('FirstName'),get_lang('Score'));
+			if ($is_western_name_order) {
+				$header_names = array(get_lang('FirstName'),get_lang('LastName'),get_lang('Score'),get_lang('Display'));
+			} else {
+				$header_names = array(get_lang('LastName'),get_lang('FirstName'),get_lang('Score'),get_lang('Display'));			
+			}
+		} else {
+			if ($is_western_name_order) {
+				$header_names = array(get_lang('FirstName'),get_lang('LastName'),get_lang('Score'));
+			} else {
+				$header_names = array(get_lang('LastName'),get_lang('FirstName'),get_lang('Score'));
+			}
 		}
 			
 		$pdf->ezTable($newarray,$header_names,'',array('showHeadings'=>1,'shaded'=>1,'showLines'=>1,'rowGap'=>3,'width'=> 500));
@@ -372,16 +390,27 @@ if (isset ($_POST['action'])) {
 		}
 	}
 } // TODO - what if selecteval not set ?
-$addparams= array (
-'selecteval' => $eval[0]->get_id());
+$addparams = array ('selecteval' => $eval[0]->get_id());
 if (isset ($_GET['print'])) {
 	$datagen = new ResultsDataGenerator ($eval[0],$allresults);
-	$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME,0,null,true);	
-		if ($displayscore->is_custom()) {
+	if (api_sort_by_first_name()) {
+		$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_FIRSTNAME, 0, null, true);
+	} else {
+		$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME,0,null,true);	
+	}
+	if ($displayscore->is_custom()) {
+		if (api_is_western_name_order()) {
+			$header_names = array(get_lang('FirstName'),get_lang('LastName'),get_lang('Score'),get_lang('Display'));
+		} else {
 			$header_names = array(get_lang('LastName'),get_lang('FirstName'),get_lang('Score'),get_lang('Display'));			
+		}
+	} else {
+		if (api_is_western_name_order()) {
+			$header_names = array(get_lang('FirstName'),get_lang('LastName'),get_lang('Score'));
 		}else {
 			$header_names = array(get_lang('LastName'),get_lang('FirstName'),get_lang('Score'));			
 		}
+	}
 	$newarray = array();
 	foreach ($data_array as $data) {
 		$newarray[] = array_slice($data, 2);			
@@ -479,7 +508,7 @@ if (isset ($_GET['importoverwritescore'])) {
 
 if (isset ($_GET['import_user_error'])) {
 	$userinfo= get_user_info_from_id($_GET['import_user_error']);
-	Display :: display_warning_message(get_lang('UserInfoDoesNotMatch') . ' ' . $userinfo['lastname'] . ' ' . $userinfo['firstname']);
+	Display :: display_warning_message(get_lang('UserInfoDoesNotMatch') . ' ' . api_get_person_name($userinfo['firstname'], $userinfo['lastname']));
 }
 if (isset ($_GET['allresdeleted'])) {
 	Display :: display_confirmation_message(get_lang('AllResultDeleted'));
@@ -487,7 +516,7 @@ if (isset ($_GET['allresdeleted'])) {
 
 if (isset ($_GET['import_score_error'])) {
 	$userinfo= get_user_info_from_id($_GET['import_score_error']);
-	Display :: display_warning_message(get_lang('ScoreDoesNotMatch') . ' ' . $userinfo['lastname'] . ' ' . $userinfo['firstname']);
+	Display :: display_warning_message(get_lang('ScoreDoesNotMatch') . ' ' . api_get_person_name($userinfo['firstname'], $userinfo['lastname']));
 }
 if ($file_type == null) { //show the result header
 		if (isset ($export_result_form) && !(isset ($edit_res_form))) {

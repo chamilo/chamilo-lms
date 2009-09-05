@@ -292,7 +292,7 @@ if ($course_to_crsind && !isset($_GET['confirm'])) {
 																			  : '&moveeval=' . Security::remove_XSS($_GET['moveeval']) )
 													.'&selectcat=' . Security::remove_XSS($_GET['selectcat'])
 													.'&targetcat=' . Security::remove_XSS($_GET['targetcat']).'">
-			   <input type="submit" value="'.get_lang('Ok').'">
+			   <input type="submit" value="'.'  '.get_lang('Ok').'  '.'">
 			   </form>';
 
 	$warning_message = get_lang('MoveWarning').'<br><br>'.$button;

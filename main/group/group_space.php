@@ -288,8 +288,8 @@ else
 		$image_path = UserManager::get_user_picture_path_by_id($tutor['user_id'],'web',false, true);				
 		$image_repository = $image_path['dir'];
 		$existing_image = $image_path['file'];
-		$photo= '<img src="'.$image_repository.$existing_image.'" align="absbottom" alt="'.$tutor['firstname'].' '.$tutor['lastname'].'"  width="32" height="32" title="'.$tutor['firstname'].' '.$tutor['lastname'].'" />';		
-		$tutor_info .= "<div style='margin-bottom: 5px;'><a href='../user/userInfo.php?origin=".$my_origin."&amp;uInfo=".$tutor['user_id']."'>".$photo."&nbsp;".$tutor['firstname']." ".$tutor['lastname']."</a></div>";
+		$photo= '<img src="'.$image_repository.$existing_image.'" align="absbottom" alt="'.api_get_person_name($tutor['firstname'], $tutor['lastname']).'"  width="32" height="32" title="'.api_get_person_name($tutor['firstname'], $tutor['lastname']).'" />';
+		$tutor_info .= "<div style='margin-bottom: 5px;'><a href='../user/userInfo.php?origin=".$my_origin."&amp;uInfo=".$tutor['user_id']."'>".$photo."&nbsp;".api_get_person_name($tutor['firstname'], $tutor['lastname'])."</a></div>";
 	}
 }
 
@@ -304,15 +304,20 @@ echo '<br/>';
  */
 echo '<b>'.get_lang("GroupMembers").':</b>';
 
-$table = new SortableTable('group_users', 'get_number_of_group_users', 'get_group_user_data',2);
+$table = new SortableTable('group_users', 'get_number_of_group_users', 'get_group_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1);
 $my_cidreq=isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';
 $my_origin=isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '';
 $my_gidreq=isset($_GET['gidReq']) ? Security::remove_XSS($_GET['gidReq']) : '';
 $parameters = array('cidReq' => $my_cidreq, 'origin'=> $my_origin, 'gidReq' => $my_gidreq);
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '');
-$table->set_header(1, get_lang('LastName'));
-$table->set_header(2, get_lang('FirstName'));
+if (api_is_western_name_order()) {
+	$table->set_header(1, get_lang('FirstName'));
+	$table->set_header(2, get_lang('LastName'));
+} else {
+	$table->set_header(1, get_lang('LastName'));
+	$table->set_header(2, get_lang('FirstName'));
+}
 
 if (api_get_setting("show_email_addresses") == "true")
 {
@@ -380,8 +385,13 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 	
 		$sql = "SELECT 
 					user.user_id 	AS col0,
-					user.lastname 	AS col1,
-					user.firstname 	AS col2,
+				".(api_is_western_name_order() ?
+				"user.firstname 	AS col1,
+				user.lastname 	AS col2,"
+				:
+				"user.lastname 	AS col1,
+				user.firstname 	AS col2,"
+				)."
 					user.email		AS col3
 					FROM ".$table_user." user, ".$table_group_user." group_rel_user 
 					WHERE group_rel_user.user_id = user.user_id 
@@ -395,8 +405,13 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 		{
 			$sql = "SELECT 
 						user.user_id 	AS col0,
-						user.lastname 	AS col1,
-						user.firstname 	AS col2,
+						".(api_is_western_name_order() ?
+						"user.firstname 	AS col1,
+						user.lastname 	AS col2,"
+						:
+						"user.lastname 	AS col1,
+						user.firstname 	AS col2,"
+						)."
 						user.email		AS col3
 						FROM ".$table_user." user, ".$table_group_user." group_rel_user 
 						WHERE group_rel_user.user_id = user.user_id 
@@ -408,8 +423,13 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 		{
 			$sql = "SELECT 
 						user.user_id 	AS col0,
-						user.lastname 	AS col1,
-						user.firstname 	AS col2
+						". (api_is_western_name_order() ?
+						"user.firstname 	AS col1,
+						user.lastname 	AS col2,"
+						:
+						"user.lastname 	AS col1,
+						user.firstname 	AS col2,"
+						)."
 						FROM ".$table_user." user, ".$table_group_user." group_rel_user 
 						WHERE group_rel_user.user_id = user.user_id 
 						AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";
@@ -454,7 +474,7 @@ function user_icon_filter($user_id)
 	$image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false, true);				
 	$image_repository = $image_path['dir'];
 	$existing_image = $image_path['file'];
-	$photo= '<center><img src="'.$image_repository.$existing_image.'" alt="'.$userinfo['lastname'].' '.$userinfo['firstname'].'"  width="22" height="22" title="'.$userinfo['lastname'].' '.$userinfo['firstname'].'" /></center>';		
+	$photo= '<center><img src="'.$image_repository.$existing_image.'" alt="'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'"  width="22" height="22" title="'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'" /></center>';
 	return "<a href='../user/userInfo.php?origin=".$origin."&amp;uInfo=".$user_id."'>".$photo;	
 }
 

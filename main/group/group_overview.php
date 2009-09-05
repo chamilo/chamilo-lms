@@ -140,7 +140,7 @@ foreach($categories as $index => $category)
 		foreach($users as $index => $user)
 		{
 			$user_info = api_get_user_info($user);
-			echo '<li>'.$user_info['firstName'].' '.$user_info['lastName'].'</li>';
+			echo '<li>'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</li>';
 		}
 		echo '</ul>';
 		echo '</li>';	

@@ -237,7 +237,7 @@ if (isset($_GET['id_session']))
 // Create a sortable table with user-data
 
 $parameters['sec_token'] = Security::get_token();
-$table = new SortableTable('users', 'ldap_get_number_of_users', 'ldap_get_user_data',2);
+$table = new SortableTable('users', 'ldap_get_number_of_users', 'ldap_get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('LoginName'));

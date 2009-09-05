@@ -185,7 +185,7 @@ elseif (isset ($_POST['number_of_groups']))
 	$tutor_options[0] = get_lang('GroupNoTutor');
 	foreach ($tutors as $index => $tutor)
 	{
-		$tutor_options[$tutor['user_id']] = $tutor['firstname'].' '.$tutor['lastname'];
+		$tutor_options[$tutor['user_id']] = api_get_person_name($tutor['firstname'], $tutor['lastname']);
 	}
 	$cat_options = array ();
 	*/

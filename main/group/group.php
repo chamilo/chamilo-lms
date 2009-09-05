@@ -345,17 +345,17 @@ foreach ($group_cats as $index => $category)
 					$tutor = api_get_user_info($tutor_id);
 					if (api_get_setting("show_email_addresses") == "true")
 					{	
-						$tutor_info .= Display::encrypted_mailto_link($tutor['mail'],$tutor['firstName'].' '.$tutor['lastName']).', ';								
+						$tutor_info .= Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])).', ';								
 					}
 					else
 					{	
 						if (api_is_allowed_to_edit()=='true')
 						{
-							$tutor_info .= Display::encrypted_mailto_link($tutor['mail'],$tutor['firstName'].' '.$tutor['lastName']).', ';
+							$tutor_info .= Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])).', ';
 						}
 						else
 						{											
-							$tutor_info .= $tutor['firstName'].' '.$tutor['lastName'].', ';
+							$tutor_info .= api_get_person_name($tutor['firstName'], $tutor['lastName']).', ';
 						}
 					}					
 				}

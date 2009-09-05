@@ -79,15 +79,29 @@ if (!api_is_allowed_to_edit(false,true)) {
  */
 
 function sort_users($user_a, $user_b) {
-	$cmp = api_strcmp($user_a['firstname'], $user_b['firstname']);
-	if ($cmp !== 0) {
-		return $cmp;
+	if (api_sort_by_first_name()) {
+		$cmp = api_strcmp($user_a['firstname'], $user_b['firstname']);
+		if ($cmp !== 0) {
+			return $cmp;
+		} else {
+			$cmp = api_strcmp($user_a['lastname'], $user_b['lastname']);
+			if ($cmp !== 0) {
+				return $cmp;
+			} else {
+				return api_strcmp($user_a['username'], $user_b['username']);
+			}
+		}
 	} else {
 		$cmp = api_strcmp($user_a['lastname'], $user_b['lastname']);
 		if ($cmp !== 0) {
 			return $cmp;
 		} else {
-			return api_strcmp($user_a['username'], $user_b['username']);
+			$cmp = api_strcmp($user_a['firstname'], $user_b['firstname']);
+			if ($cmp !== 0) {
+				return $cmp;
+			} else {
+				return api_strcmp($user_a['username'], $user_b['username']);
+			}
 		}
 	}
 }
@@ -137,7 +151,7 @@ $form->addElement('textarea', 'description', get_lang('GroupDescription'), array
 //$possible_tutors[0] = get_lang('GroupNoTutor');
 //foreach ($tutors as $index => $tutor)
 //{
-//	$possible_tutors[$tutor['user_id']] = $tutor['lastname'].' '.$tutor['firstname'];
+//	$possible_tutors[$tutor['user_id']] = api_get_person_name($tutor['lastname'], $tutor['firstname']);
 //}
 //$group = array ();
 //$group[] = & $form->createElement('select', 'tutor_id', null, $possible_tutors);
@@ -201,7 +215,7 @@ usort($complete_user_list, 'sort_users');
 
 $possible_users = array ();
 foreach ($complete_user_list as $index => $user) {
-	$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'].' ('.$user['username'].')';
+	$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
 }
 
 //print_r($complete_user_list2);
@@ -210,7 +224,7 @@ $group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['id']);
 $selected_users = array ();
 $selected_tutors = array();
 foreach ($group_tutor_list as $index => $user) {
-	//$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'];
+	//$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], .$user['lastname']);
 	$selected_tutors[] = $user['user_id'];
 }
 
@@ -232,7 +246,7 @@ $group_tutors_element->setElementTemplate('
 $group_member_list = GroupManager :: get_subscribed_users($current_group['id']);
 $selected_users = array ();
 foreach ($group_member_list as $index => $user) {
-	//$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'];
+	//$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
 	$selected_users[] = $user['user_id'];
 }
 $group_members_element = $form->addElement('advmultiselect', 'group_members', get_lang('GroupMembers'), $possible_users, 'style="width: 225px;"');

@@ -142,7 +142,7 @@ class UserFriend extends UserManager {
 			$sql.=' AND relation_type='.$id_group;
 		}
 		if (isset($search_name) && is_string($search_name)===true) {
-			$sql.=' AND friend_user_id IN (SELECT user_id FROM '.$tbl_my_user.' WHERE concat(firstName,lastName) like concat("%","'.Database::escape_string($search_name).'","%"));';
+			$sql.=' AND friend_user_id IN (SELECT user_id FROM '.$tbl_my_user.' WHERE '.(api_is_western_name_order() ? 'concat(firstName, lastName)' : 'concat(lastName, firstName)').' like concat("%","'.Database::escape_string($search_name).'","%"));';
 		}
 		$res=Database::query($sql,__FILE__,__LINE__);
 		while ($row=Database::fetch_array($res,'ASSOC')) {
@@ -304,7 +304,7 @@ class UserFriend extends UserManager {
 		$user_info=array();
 		$user_info=api_get_user_info($userfriend_id);
 		$succes=get_lang('MessageSentTo');
-		$succes.= ' : '.$user_info['firstName'].' '.$user_info['lastName'];
+		$succes.= ' : '.api_get_person_name($user_info['firstName'], $user_info['lastName']);
 		if (isset($subject_message) && isset($content_message) && isset($userfriend_id)) {			
 			$send_message = MessageManager::send_message(((int)$userfriend_id),Database::escape_string($subject_message), Database::escape_string($content_message));
 			if ($send_message) {

@@ -171,20 +171,18 @@ class UrlManager
 	 * */
 	function get_url_rel_user_data($access_url_id='')
 	{
-		$where ='';
+		$where = '';
 		$table_url_rel_user	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
 		$tbl_user 			= Database :: get_main_table(TABLE_MAIN_USER);
-		
-		if (!empty($access_url_id))
+		if (!empty($access_url_id)) {
 			$where ="WHERE $table_url_rel_user.access_url_id = ".Database::escape_string($access_url_id);
-			
+		}
+		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 		$sql="SELECT u.user_id, lastname, firstname, username, access_url_id
-				FROM $tbl_user u 
-				INNER JOIN $table_url_rel_user
-				ON $table_url_rel_user.user_id = u.user_id
-				$where
-				ORDER BY lastname,firstname,username";
-	
+			FROM $tbl_user u 
+			INNER JOIN $table_url_rel_user
+			ON $table_url_rel_user.user_id = u.user_id
+			$where".$order_clause;
 		$result=api_sql_query($sql,__FILE__,__LINE__);	
 		$users=api_store_result($result);
 		return $users;		

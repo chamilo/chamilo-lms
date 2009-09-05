@@ -1739,20 +1739,18 @@ function listAnswers($qid){
  * Possible  deprecated method
  */
 function listUsers($survey_id, $dbname, $fields='id, user_id, firstname, lastname, email, organization') {
-
 	$tbl_survey_users = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
+		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 	$sql = 'SELECT '.$fields.' FROM '.$tbl_survey_users.'
 			WHERE survey_id='.$survey_id.'
-			AND db_name="'.$dbname.'"
-			ORDER BY lastname, firstname ';
-
+				AND db_name="'.$dbname.
+				$order_clause;
 	$rs = api_sql_query($sql, __FILE__, __LINE__);
 	$users = array();
-	while($row = mysql_fetch_array($rs))
+	while ($row = mysql_fetch_array($rs)) {
 		$users[] = $row;
-
+	}
 	return $users;
-
 }
 /**
  * Possible  deprecated method

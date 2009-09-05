@@ -251,6 +251,10 @@ class GroupManager {
 				}
 				$counter++;
 			}
+			// A sanity check.
+			if (empty($forum_category_id)) {
+				$forum_category_id = 0;
+			}
 			$values['forum_category'] = $forum_category_id;
 			$values['allow_anonymous_group']['allow_anonymous'] = 0;
 			$values['students_can_edit_group']['students_can_edit'] = 0;
@@ -1035,12 +1039,12 @@ class GroupManager {
 	public static function get_subscribed_users ($group_id) {
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
+		$order_clause = api_sort_by_first_name() ? ' ORDER BY `u`.`firstname`, `u`.`lastname`' : ' ORDER BY `u`.`lastname`, `u`.`firstname`';
 		$group_id = Database::escape_string($group_id);
 		$sql = "SELECT `ug`.`id`, `u`.`user_id`, `u`.`lastname`, `u`.`firstname`, `u`.`email`
-					FROM ".$table_user." u, ".$table_group_user." ug
-					WHERE `ug`.`group_id`='".$group_id."'
-					AND `ug`.`user_id`=`u`.`user_id`
-					ORDER BY UPPER(`u`.`lastname`), UPPER(`u`.`firstname`)";
+			FROM ".$table_user." u, ".$table_group_user." ug
+			WHERE `ug`.`group_id`='".$group_id."'
+			AND `ug`.`user_id`=`u`.`user_id`". $order_clause;
 		$db_result = api_sql_query($sql,__FILE__,__LINE__);
 		$users = array ();
 		while ($user = Database::fetch_object($db_result))
@@ -1064,13 +1068,12 @@ class GroupManager {
 	public static function get_subscribed_tutors ($group_id,$id_only=false) {
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);		
 		$table_group_tutor = Database :: get_course_table(TABLE_GROUP_TUTOR);
+		$order_clause = api_sort_by_first_name() ? ' ORDER BY `u`.`firstname`, `u`.`lastname`' : ' ORDER BY `u`.`lastname`, `u`.`firstname`';
 		$group_id = Database::escape_string($group_id);
-		
 		$sql = "SELECT `tg`.`id`, `u`.`user_id`, `u`.`lastname`, `u`.`firstname`, `u`.`email`
-					FROM ".$table_user." u, ".$table_group_tutor." tg
-					WHERE `tg`.`group_id`='".$group_id."'
-					AND `tg`.`user_id`=`u`.`user_id`
-					ORDER BY UPPER(`u`.`lastname`), UPPER(`u`.`firstname`)";
+			FROM ".$table_user." u, ".$table_group_tutor." tg
+			WHERE `tg`.`group_id`='".$group_id."'
+			AND `tg`.`user_id`=`u`.`user_id`".$order_clause;
 		$db_result = api_sql_query($sql,__FILE__,__LINE__);
 		$users = array ();
 		while ($user = Database::fetch_object($db_result))
@@ -1369,7 +1372,7 @@ class GroupManager {
 				$status = $this_user["status"];
 				//$role =  $this_user["role"];
 				$tutor_id = $this_user["tutor_id"];
-				$full_name = $lastname.", ".$firstname;
+				$full_name = api_get_person_name($firstname, $lastname);
 				if ($lastname == "" || $firstname == '')
 					$full_name = $loginname;
 				$complete_user["user_id"] = $user_id;

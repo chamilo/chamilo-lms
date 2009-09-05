@@ -1198,6 +1198,10 @@ class UserManager {
 	 * @return	array	Array of fields => value for the given user
 	 */
 	public static function get_extra_user_data ($user_id, $prefix=false, $all_visibility = true, $splitmultiple=false) {
+		// A sanity check.
+		if (empty($user_id)) {
+			$user_id = 0;
+		}
 		$extra_data = array();
 		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
@@ -1271,6 +1275,10 @@ class UserManager {
 	 */
 	
 	public static function get_extra_user_data_by_field ($user_id, $field_variable, $prefix=false, $all_visibility = true, $splitmultiple=false) {
+		// A sanity check.
+		if (empty($user_id)) {
+			$user_id = 0;
+		}
 		$extra_data = array();
 		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
@@ -1526,11 +1534,10 @@ class UserManager {
 	
 		$sessions = array_merge($sessions , api_store_result($result));
 	
-	
 		if(api_is_allowed_to_create_course()) {
 			foreach($sessions as $enreg) {
 				$id_session = $enreg['id'];
-				$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name
+				$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name
 											 FROM $tbl_session_course as session_course
 											 INNER JOIN $tbl_course AS course
 											 	ON course.code = session_course.course_code
@@ -1555,7 +1562,7 @@ class UserManager {
 	
 		foreach($sessions as $enreg) {
 			$id_session = $enreg['id'];
-			$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF(session_course.id_coach = ".$user_id.",'2', '5')
+			$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF(session_course.id_coach = ".$user_id.",'2', '5')
 										 FROM $tbl_session_course as session_course
 										 INNER JOIN $tbl_course AS course
 										 	ON course.code = session_course.course_code

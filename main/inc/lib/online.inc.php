@@ -217,13 +217,12 @@ function GetFullUserName($uid)
 	$result = @api_sql_query($query,__FILE__,__LINE__);
 	if (count($result)>0)
 	{
-		$str = "";
+		$str = '';
 		while(list($firstname,$lastname)= Database::fetch_array($result))
 		{
-			$str = $lastname."&nbsp;".$firstname;
+			$str = str_replace(' ', '&nbsp;', api_get_person_name($firstname, $lastname));
 			return $str;
 		}
-		
 	}
 }
 

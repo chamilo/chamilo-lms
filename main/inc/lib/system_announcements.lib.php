@@ -392,7 +392,7 @@ class SystemAnnouncementManager
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 		while($row = Database::fetch_array($result,'ASSOC'))
 		{
-			api_mail_html($row['firstname'].' '.$row['lastname'], $row['email'], api_html_entity_decode(stripslashes($title),ENT_QUOTES,$charset), api_html_entity_decode(stripslashes($content),ENT_QUOTES,$charset), $_user['firstName'].' '.$_user['lastName'], api_get_setting('emailAdministrator'), api_get_setting('emailAdministrator'));
+			api_mail_html(api_get_person_name($row['firstname'], $row['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $row['email'], api_html_entity_decode(stripslashes($title), ENT_QUOTES, $charset), api_html_entity_decode(stripslashes($content), ENT_QUOTES, $charset), api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), api_get_setting('emailAdministrator'), api_get_setting('emailAdministrator'));
 		}
 	}
 }

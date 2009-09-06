@@ -34,6 +34,7 @@ define('PERSON_NAME_WESTERN_ORDER', 1);		// Formatting a person's name in Wester
 define('PERSON_NAME_EASTERN_ORDER', 2);		// Formatting a person's name in Eastern order: last_name first_name
 define('PERSON_NAME_LIBRARY_ORDER', 3);		// Contextual: formatting person's name in library order: last_name, first_name
 define('PERSON_NAME_EMAIL_ADDRESS', PERSON_NAME_WESTERN_ORDER);		// Contextual: formatting a person's name assotiated with an email-address. Ivan: I am not sure how seems email servers an clients would interpret name order, so I assign the Western order.
+define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);		// Contextual: formatting a person's name for data-exporting operarions. For backward compatibility this format has been set to Eastern order.
 
 /**
  * ----------------------------------------------------------------------------
@@ -362,7 +363,7 @@ function api_get_person_name($first_name, $last_name, $title = null, $format = n
 
 /**
  * Checks whether a given format represents person name in Western order (for which first name is first).
-* @param int/string $format (optional)	The person name format. It may be a pattern-string (for example '%t. %l, %f') or some of the constants PERSON_NAME_COMMON_CONVENTION (default), PERSON_NAME_WESTERN_ORDER, PERSON_NAME_EASTERN_ORDER, PERSON_NAME_LIBRARY_ORDER.
+ * @param int/string $format (optional)	The person name format. It may be a pattern-string (for example '%t. %l, %f') or some of the constants PERSON_NAME_COMMON_CONVENTION (default), PERSON_NAME_WESTERN_ORDER, PERSON_NAME_EASTERN_ORDER, PERSON_NAME_LIBRARY_ORDER.
  * @param string $language (optional)	The language indentificator. If it is omited, the current interface language is assumed. This parameter has meaning with the format PERSON_NAME_COMMON_CONVENTION only.
  * @return bool							The result TRUE means that the order is first_name last_name, FALSE means last_name first_name.
  * Note: You may use this function for determing the order of the fields or columns "First name" and "Last name" in forms, tables and reports.

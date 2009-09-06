@@ -7,29 +7,23 @@
  */
 
 // name of the language file that needs to be included 
-$language_file = array (
-	'registration',
-	'index',
-	'tracking',
-	'exercice',
-	'admin'
-);
+$language_file = array('registration', 'index', 'tracking', 'exercice', 'admin');
 //$cidReset=true;
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
-require_once '../newscorm/learnpath.class.php';
+require_once  api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
-				
+
 function show_image(image,width,height) {
 	width = parseInt(width) + 20;
 	height = parseInt(height) + 20;			
 	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');		
 }
-				
+
 </script>';
 
 $export_csv = isset ($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
@@ -175,23 +169,24 @@ function calculHours($seconds) {
 
 	//How many minutes ?
 	$min = floor(($seconds - ($hours * 3600)) / 60);
-	if ($min < 10)
+	if ($min < 10) {
 		$min = "0" . $min;
+	}
 
 	//How many seconds
 	$sec = $seconds - ($hours * 3600) - ($min * 60);
-	if ($sec < 10)
+	if ($sec < 10) {
 		$sec = "0" . $sec;
+	}
 
 	return $hours . "h" . $min . "m" . $sec . "s";
-
 }
 
 function is_teacher($course_code) {
 	global $_user;
 	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$sql = "SELECT 1 FROM $tbl_course_user WHERE user_id='" . $_user["user_id"] . "' AND course_code='" . Database :: escape_string($course_code) . "' AND status='1'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	if (Database :: result($result) != 1) {
 		return true;
 	} else {
@@ -276,7 +271,7 @@ if (!empty ($_GET['student'])) {
 
 	$avg_student_progress = $avg_student_score = $nb_courses = 0;
 	$sql = 'SELECT course_code FROM ' . $tbl_course_user . ' WHERE user_id=' . Database :: escape_string($a_infosUser['user_id']);
-	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	$rs = Database::query($sql, __FILE__, __LINE__);
 	$a_courses = array ();
 	while ($row = Database :: fetch_array($rs)) {
 		$a_courses[$row['course_code']] = $row['course_code'];
@@ -284,7 +279,7 @@ if (!empty ($_GET['student'])) {
 
 	// get the list of sessions where the user is subscribed as student
 	$sql = 'SELECT DISTINCT course_code FROM ' . Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . ' WHERE id_user=' . intval($a_infosUser['user_id']);
-	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	$rs = Database::query($sql, __FILE__, __LINE__);
 	while ($row = Database :: fetch_array($rs)) {
 		$a_courses[$row['course_code']] = $row['course_code'];
 	}
@@ -536,7 +531,7 @@ if (!empty ($_GET['student'])) {
 										WHERE session_course_user.id_user = ' . intval($a_infosUser['user_id']) . '
 										AND session_course_user.course_code = "' . Database :: escape_string($course_code_info) . '"
 										ORDER BY id_session DESC';
-			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql, __FILE__, __LINE__);
 			$num_row = Database :: num_rows($rs);
 			if ($num_row > 0) {
 				$le_session_id = intval(Database :: result($rs, 0, 0));
@@ -544,7 +539,7 @@ if (!empty ($_GET['student'])) {
 					// get session name and coach of the session
 					$sql = 'SELECT name, id_coach FROM ' . $tbl_session . ' 
 														WHERE id=' . $le_session_id;
-					$rs = api_sql_query($sql, __FILE__, __LINE__);
+					$rs = Database::query($sql, __FILE__, __LINE__);
 					$session_name = Database :: result($rs, 0, 'name');
 					$session_coach_id = intval(Database :: result($rs, 0, 'id_coach'));
 
@@ -552,7 +547,7 @@ if (!empty ($_GET['student'])) {
 					$sql = 'SELECT id_coach FROM ' . $tbl_session_course . ' 
 														WHERE id_session=' . $le_session_id . '
 														AND course_code = "' . Database :: escape_string($_GET['course']) . '"';
-					$rs = api_sql_query($sql, __FILE__, __LINE__);
+					$rs = Database::query($sql, __FILE__, __LINE__);
 					$session_course_coach_id = intval(Database :: result($rs, 0, 0));
 
 					if ($session_course_coach_id != 0) {
@@ -665,7 +660,7 @@ if (!empty ($_GET['student'])) {
 										FROM $t_lp AS lp ORDER BY lp.name ASC
 									";
 
-		$resultLearnpath = api_sql_query($sqlLearnpath, __FILE__, __LINE__);
+		$resultLearnpath = Database::query($sqlLearnpath, __FILE__, __LINE__);
 
 		$csv_content[] = array ();
 		$csv_content[] = array (
@@ -694,7 +689,7 @@ if (!empty ($_GET['student'])) {
 													ON item_view.lp_view_id = view.id
 													AND view.lp_id = ' . $a_learnpath['id'] . '
 													AND view.user_id = ' . intval($_GET['student']);
-				$rs = api_sql_query($sql, __FILE__, __LINE__);
+				$rs = Database::query($sql, __FILE__, __LINE__);
 				$total_time = 0;
 				if (Database :: num_rows($rs) > 0) {
 					$total_time = Database :: result($rs, 0, 0);
@@ -709,7 +704,7 @@ if (!empty ($_GET['student'])) {
 													ON item_view.lp_view_id = view.id
 													AND view.lp_id = ' . $a_learnpath['id'] . '
 													AND view.user_id = ' . intval($_GET['student']);
-				$rs = api_sql_query($sql, __FILE__, __LINE__);
+				$rs = Database::query($sql, __FILE__, __LINE__);
 				$start_time = null;
 				if (Database :: num_rows($rs) > 0) {
 					$start_time = Database :: result($rs, 0, 0);
@@ -837,7 +832,7 @@ if (!empty ($_GET['student'])) {
 		$t_tool = Database :: get_course_table(TABLE_TOOL_LIST, $a_infosCours['db_name']);
 		$sql = 'SELECT visibility FROM ' . $t_tool . ' WHERE name="quiz"';
 
-		$resultVisibilityQuizz = api_sql_query($sql, __FILE__, __LINE__);
+		$resultVisibilityQuizz = Database::query($sql, __FILE__, __LINE__);
 		$t_quiz = Database :: get_course_table(TABLE_QUIZ_TEST, $a_infosCours['db_name']);
 
 		if (Database :: result($resultVisibilityQuizz, 0, 'visibility') == 1) {
@@ -847,7 +842,7 @@ if (!empty ($_GET['student'])) {
 												WHERE active='1' ORDER BY quiz.title ASC
 												";
 
-			$resultExercices = api_sql_query($sqlExercices, __FILE__, __LINE__);
+			$resultExercices = Database::query($sqlExercices, __FILE__, __LINE__);
 			$i = 0;
 			$is_student = Security :: remove_XSS($_GET['student']);
 			if (Database :: num_rows($resultExercices) > 0) {
@@ -859,7 +854,7 @@ if (!empty ($_GET['student'])) {
 															AND orig_lp_id = 0
 															AND orig_lp_item_id = 0				
 															AND exe_user_id='" . Database :: escape_string($is_student) . "'";
-					$resultEssais = api_sql_query($sqlEssais, __FILE__, __LINE__);
+					$resultEssais = Database::query($sqlEssais, __FILE__, __LINE__);
 					$a_essais = Database :: fetch_array($resultEssais);
 
 					$sqlScore = "SELECT exe_id, exe_result,exe_weighting
@@ -871,7 +866,7 @@ if (!empty ($_GET['student'])) {
 														 AND orig_lp_item_id = 0
 														 ORDER BY exe_date DESC LIMIT 1";
 
-					$resultScore = api_sql_query($sqlScore, __FILE__, __LINE__);
+					$resultScore = Database::query($sqlScore, __FILE__, __LINE__);
 					$score = 0;
 					while ($a_score = Database :: fetch_array($resultScore)) {
 						$score = $score + $a_score['exe_result'];
@@ -882,6 +877,8 @@ if (!empty ($_GET['student'])) {
 					if ($weighting != 0) {
 						//i.e 10.50 
 						$pourcentageScore = round(($score * 100) / $weighting, 2);
+					} else {
+						$pourcentageScore = null;
 					}
 
 					$weighting = 0;
@@ -924,7 +921,7 @@ if (!empty ($_GET['student'])) {
 												 ";
 
 					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $a_exercices['id'] . '" AND exe_user_id="' . Security :: remove_XSS($_GET['student']) . '" AND exe_cours_id="' . $a_infosCours['code'] . '" AND orig_lp_id = 0 AND orig_lp_item_id = 0 ORDER BY exe_date DESC LIMIT 1';
-					$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);
+					$resultLastAttempt = Database::query($sql_last_attempt, __FILE__, __LINE__);
 					if (Database :: num_rows($resultLastAttempt) > 0) {
 						$id_last_attempt = Database :: result($resultLastAttempt, 0, 0);
 
@@ -1154,14 +1151,14 @@ if (!empty ($_GET['student'])) {
 											ON qrq.question_id = qq.id
 											AND qrq.exercice_id = " . intval($_GET['exe_id']);
 
-		$resultExerciceDetails = api_sql_query($sqlExerciceDetails, __FILE__, __LINE__);
+		$resultExerciceDetails = Database::query($sqlExerciceDetails, __FILE__, __LINE__);
 
 		$sqlExName = "	SELECT quiz.title
 								FROM " . $t_q . " AS quiz
 							 	WHERE quiz.id = " . intval($_GET['exe_id']);
 		;
 
-		$resultExName = api_sql_query($sqlExName, __FILE__, __LINE__);
+		$resultExName = Database::query($sqlExName, __FILE__, __LINE__);
 		$a_exName = Database :: fetch_array($resultExName);
 
 		echo "<table class='data_table'>
@@ -1177,7 +1174,7 @@ if (!empty ($_GET['student'])) {
 										FROM  " . $t_qa . " as qa
 										WHERE qa.question_id = " . $a_exerciceDetails['id'];
 
-			$resultAnswer = api_sql_query($sqlAnswer, __FILE__, __LINE__);
+			$resultAnswer = Database::query($sqlAnswer, __FILE__, __LINE__);
 
 			echo "<a name='infosExe'></a>";
 

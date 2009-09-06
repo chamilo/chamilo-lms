@@ -101,8 +101,8 @@ function calculHours($seconds) {
 function is_coach() {
   	global $tbl_session_course;
 	$sql = "SELECT course_code FROM $tbl_session_course WHERE id_coach='".$_SESSION["_uid"]."'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
-	if (mysql_num_rows($result) > 0) {
+	$result = Database::query($sql, __FILE__, __LINE__);
+	if (Database::num_rows($result) > 0) {
 		return true;	    
 	}	else {
 		return false;
@@ -136,7 +136,7 @@ if (isset($_GET["id_student"])) {
 			AND session_rel_course.id_coach=user.user_id".$order_clause;
 	}
 }
-$resultCoachs = api_sql_query($sqlCoachs, __FILE__, __LINE__);
+$resultCoachs = Database::query($sqlCoachs, __FILE__, __LINE__);
 
 if (api_is_western_name_order()) {
 	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('ConnectionTime').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
@@ -154,25 +154,25 @@ if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
 	$a_header[] = get_lang('ConnectionTime');
 }
 
-if (mysql_num_rows($resultCoachs) > 0) {
-	while ($a_coachs = mysql_fetch_array($resultCoachs)) {
+if (Database::num_rows($resultCoachs) > 0) {
+	while ($a_coachs = Database::fetch_array($resultCoachs)) {
 		$i_id_coach=$a_coachs["id_coach"];
 
-		if(isset($_GET["id_student"])){
+		if (isset($_GET["id_student"])) {
 			$sql_infos_coach = "SELECT lastname, firstname FROM $tbl_user WHERE user_id='$i_id_coach'";
-			$resultCoachsInfos = api_sql_query($sql_infos_coach);
-			$s_lastname = mysql_result($resultCoachsInfos,0,"lastname");
-			$s_firstname = mysql_result($resultCoachsInfos,0,"firstname");
+			$resultCoachsInfos = Database::query($sql_infos_coach, __FILE__, __LINE__);
+			$s_lastname = Database::result($resultCoachsInfos, 0, "lastname");
+			$s_firstname = Database::result($resultCoachsInfos, 0, "firstname");
 		} else {
 			$s_lastname = $a_coachs["lastname"];
 			$s_firstname = $a_coachs["firstname"];
 		}
 
 		$s_sql_connection_time = "SELECT login_date, logout_date FROM $tbl_track_login WHERE login_user_id ='$i_id_coach' AND logout_date <> 'null'";
-		$q_result_connection_time = api_sql_query($s_sql_connection_time);
+		$q_result_connection_time = Database::query($s_sql_connection_time, __FILE__, __LINE__);
 
-		$i_nb_seconds=0;
-		while($a_connections = mysql_fetch_array($q_result_connection_time)) {
+		$i_nb_seconds = 0;
+		while($a_connections = Database::fetch_array($q_result_connection_time)) {
 			$s_login_date = $a_connections["login_date"];
 			$s_logout_date = $a_connections["logout_date"];
 			$i_timestamp_login_date = strtotime($s_login_date);

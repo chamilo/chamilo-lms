@@ -90,7 +90,7 @@ if (isset($_POST['export'])) {
 $sqlAdmins = "SELECT user.user_id,lastname,firstname,email
 				FROM $tbl_user as user, $tbl_admin as admin
 				WHERE admin.user_id=user.user_id".$order_clause;
-$resultAdmins = api_sql_query($sqlAdmins, __FILE__, __LINE__);
+$resultAdmins = Database::query($sqlAdmins, __FILE__, __LINE__);
 
 if (api_is_western_name_order()) {
 	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th></tr>';
@@ -108,8 +108,8 @@ if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
 	$a_header[] = get_lang('Email');
 }
 
-if (mysql_num_rows($resultAdmins) > 0 ) {
-	while($a_admins = mysql_fetch_array($resultAdmins)){
+if (Database::num_rows($resultAdmins) > 0 ) {
+	while ($a_admins = Database::fetch_array($resultAdmins)) {
 
 		$i_user_id = $a_admins["user_id"];
 		$s_lastname = $a_admins["lastname"];

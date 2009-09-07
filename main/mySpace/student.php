@@ -24,11 +24,10 @@ if(isset($_GET['id_coach']) && intval($_GET['id_coach'])!=0) {
 	$nameTools = get_lang("CoachStudents");
 	$sql = 'SELECT lastname, firstname FROM '.Database::get_main_table(TABLE_MAIN_USER).' WHERE user_id='.intval($_GET['id_coach']);
 	$rs = Database::query($sql, __FILE__, __LINE__);
-
-	$coach_name = mysql_result($rs, 0, 0).' '.mysql_result($rs, 0, 1);
+	$coach_name = api_get_person_name(Database::result($rs, 0, 1), Database::result($rs, 0, 0));
 	$title = get_lang('Probationers').' - '.$coach_name;
 } else {
-	$nameTools= get_lang("Students");
+	$nameTools = get_lang("Students");
 	$title = get_lang('Probationers');
 }
 

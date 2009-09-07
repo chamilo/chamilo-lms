@@ -15,6 +15,9 @@
 ==============================================================================
 */
 
+// TODO: It seems more natural if the function api_store_result() in
+// the main API had an implementation here as Database::store_result()
+
 /*
 ==============================================================================
 		CONSTANTS

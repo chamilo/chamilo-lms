@@ -239,11 +239,11 @@ if (!empty ($_GET['student'])) {
 		api_not_allowed();
 	}
 
-	$a_infosUser['name'] = $a_infosUser['firstname'] . ' ' . $a_infosUser['lastname'];
+	$a_infosUser['name'] = api_get_person_name($a_infosUser['firstname'], $a_infosUser['lastname']);
 
 	// Actions bar
 	echo '<div class="actions">';
-	echo '<a href="#" onclick="window.print()"><img src="../img/printmgr.gif">&nbsp;' . get_lang('Print') . '</a>';
+	echo '<a href="javascript: void(0);" onclick="javascript: window.print();"><img src="../img/printmgr.gif">&nbsp;' . get_lang('Print') . '</a>';
 	echo '<a href="' . api_get_self() . '?' . Security :: remove_XSS($_SERVER['QUERY_STRING']) . '&export=csv"><img src="../img/excel.gif">&nbsp;' . get_lang('ExportAsCSV') . '</a>';
 	if (!empty ($a_infosUser['email'])) {
 		$sendMail = Display :: return_icon('send_mail.gif', get_lang('SendMail')) . ' ' . Display :: encrypted_mailto_link($a_infosUser['email'], get_lang('SendMail'));
@@ -361,7 +361,7 @@ if (!empty ($_GET['student'])) {
 	$big_image_height = $big_image_size[1];
 	$url_big_image = $big_image . '?rnd=' . time();
 	$img_attributes = 'src="' . $image_file . '?rand=' . time() . '" ' .
-	'alt="' . $a_infosUser['lastname'] . ' ' . $a_infosUser['firstname'] . '" ' .
+	'alt="' . api_get_person_name($a_infosUser['lastname'], $a_infosUser['firstname']) . '" ' .
 	'style="float:' . ($text_dir == 'rtl' ? 'left' : 'right') . '; padding:5px;" ';
 
 	if ($image_array['file'] == 'unknown.jpg') {
@@ -552,12 +552,12 @@ if (!empty ($_GET['student'])) {
 
 					if ($session_course_coach_id != 0) {
 						$coach_infos = UserManager :: get_user_info_by_id($session_course_coach_id);
-						$a_infosCours['tutor_name'] = $coach_infos['firstname'] . ' ' . $coach_infos['lastname'];
-					} else
-						if ($session_coach_id != 0) {
-							$coach_infos = UserManager :: get_user_info_by_id($session_coach_id);
-							$a_infosCours['tutor_name'] = $coach_infos['firstname'] . ' ' . $coach_infos['lastname'];
-						}
+						$a_infosCours['tutor_name'] = api_get_person_name($coach_infos['firstname'], $coach_infos['lastname']);
+					}
+					elseif ($session_coach_id != 0) {
+						$coach_infos = UserManager :: get_user_info_by_id($session_coach_id);
+						$a_infosCours['tutor_name'] = api_get_person_name($coach_infos['firstname'], $coach_infos['lastname']);
+					}
 				}
 			}
 		} // end if(api_get_setting('use_session_mode')=='true')
@@ -577,9 +577,7 @@ if (!empty ($_GET['student'])) {
 		$tableTitle = $a_infosCours['title'] . '&nbsp;|&nbsp;' . get_lang('CountToolAccess') . ' : ' . $nb_login . '&nbsp; | &nbsp;' . get_lang('Tutor') . ' : ' . stripslashes($a_infosCours['tutor_name']) . ((!empty ($session_name)) ? ' | ' . get_lang('Session') . ' : ' . $session_name : '');
 
 		$csv_content[] = array ();
-		$csv_content[] = array (
-			str_replace('&nbsp;', '', $tableTitle)
-		);
+		$csv_content[] = array (str_replace('&nbsp;', '', $tableTitle));
 ?>
 		<tr>
 			<td colspan="6">

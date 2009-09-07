@@ -39,7 +39,7 @@ if (isset($_GET['course'])) {
 }
 
 $user_infos = UserManager :: get_user_info_by_id($user_id);
-$name = $user_infos['firstname'].' '.$user_infos['lastname'];
+$name = api_get_person_name($user_infos['firstname'], $user_infos['lastname']);
 
 if (!api_is_platform_admin(true) && !CourseManager :: is_course_teacher($_user['user_id'], $cidReq) && !Tracking :: is_allowed_to_coach_student($_user['user_id'],$_GET['student_id']) && $user_infos['hr_dept_id']!==$_user['user_id']) {
 	Display::display_header('');

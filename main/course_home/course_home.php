@@ -67,9 +67,7 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqu
 $htmlHeadXtra[] ='<script type="text/javascript">
  $(document).ready(function() {
  
- 	//$(window).load(function () { 
-      $(".make_visible_and_invisible").attr("href","javascript:void(0);");
-	//});
+    $(".make_visible_and_invisible").attr("href","javascript:void(0);");
 	cont=0;
  	$("td .make_visible_and_invisible > img").click(function () {
  		cont=cont+1;
@@ -82,25 +80,9 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 		tool_id=$(this).attr("id");
 		tool_info=tool_id.split("_");
 		my_tool_id=tool_info[1];
-    
-       current_tool_image=$("#toolimage_"+my_tool_id).attr("src");
-	   list_current_tool_image=current_tool_image.split("/");
-	   image_for_replace=list_current_tool_image[list_current_tool_image.length-1];
-       list_new_image=image_for_replace.split(".");
-       		
-      if (image_for_replace.split("_na").length==2){
-			list_image_na=image_for_replace.split("_na");
-			list_image_na=list_image_na[0]+".gif";
-			new_current_tool_image=current_tool_image.replace(image_for_replace,list_image_na);
-			$("#tooldesc_"+my_tool_id).attr("class","");
-			$("#istooldesc_"+my_tool_id).attr("class","");					
-       } else {
-       	    new_image_to_replace=list_new_image[0]+"_na.gif";
-			new_current_tool_image=current_tool_image.replace(image_for_replace,new_image_to_replace);	
-			$("#tooldesc_"+my_tool_id).attr("class","invisible");
-			$("#istooldesc_"+my_tool_id).attr("class","invisible");		
-       	}
-		$("#toolimage_"+my_tool_id).attr("src",new_current_tool_image);
+		//Delete last item
+    	list_path_name[list_path_name.length-1]=null;
+    	real_path = list_path_name.join("/");
 
 		if (image_link=="visible.gif") {
 			mew_path_name=path_name.replace(make_visible,make_invisible);
@@ -113,7 +95,6 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-				$(".normal-message").append("<img src=\'/main/inc/lib/javascript/indicator.gif\'/>");
 				$(".normal-message").show();
 				$("#id_confirmation_message").hide();
 			},
@@ -121,9 +102,16 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 			url: "/main/course_home/activity.php",
 			data: "id="+my_tool_id+"&visibility="+my_visibility+"&sent_http_request=1",
 			success: function(datos) {
-				
+				eval("var info="+datos);
+				new_current_tool_image = real_path+info.image;
+				//eyes
 				$("#"+tool_id).attr("src",mew_path_name);
-				
+				//tool
+				$("#toolimage_"+my_tool_id).attr("src",new_current_tool_image);
+				//clase
+				$("#tooldesc_"+my_tool_id).attr("class",info.class);
+				$("#istooldesc_"+my_tool_id).attr("class",info.class);
+
 				if (image_link=="visible.gif") {
 					$("#"+tool_id).attr("alt","'.get_lang('Activate').'");
 					$("#"+tool_id).attr("title","'.get_lang('Activate').'");
@@ -131,19 +119,14 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 					$("#"+tool_id).attr("alt","'.get_lang('Deactivate').'");
 					$("#"+tool_id).attr("title","'.get_lang('Deactivate').'");							
 				}
-
-				if (datos=="ToolIsNowVisible") {
-					$("#id_confirmation_message").html("'.get_lang('ToolIsNowVisible').'");
-					$(".normal-message>img:first").remove();	
+				if (info.message=="is_active") {
+					message = "'.get_lang('ToolIsNowVisible').'";
 				} else {
-					$("#id_confirmation_message").html("'.get_lang('ToolIsNowHidden').'");
-					$("#id_confirmation_message").show();
-					$(".normal-message>img:first").remove();				
+					message = "'.get_lang('ToolIsNowHidden').'";
 				}
-				if ($(".normal-message>img:first").length==0) {
-					$(".normal-message").hide();
-					$("#id_confirmation_message").show();
-				}
+				$(".normal-message").hide();
+				$("#id_confirmation_message").html(message);
+				$("#id_confirmation_message").show();
 		} }); 		
 				
 	}); 	

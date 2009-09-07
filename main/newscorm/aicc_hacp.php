@@ -106,7 +106,7 @@ if(!empty($_REQUEST['command']))
 			$result = $s_ec.$error_code.$crlf.$s_et.$error_text.$crlf.$s_ad.$crlf;
 			$result .= '[Core]'.$crlf;
 			$result .= $tab.'Student_ID='.$_user['user_id'].$crlf;
-			$result .= $tab.'Student_Name='.$_user['lastName'].', '.$_user['firstName'].$_user['user_id'].$crlf;
+			$result .= $tab.'Student_Name='.api_get_person_name($_user['firstName'], $_user['lastName']).$crlf;
 			$result .= $tab.'Lesson_Location='.$oItem->get_lesson_location().$crlf;
 			$result .= $tab.'Credit='.$oItem->get_credit().$crlf;
 			$result .= $tab.'Lesson_Status='.$oItem->get_status().$crlf;

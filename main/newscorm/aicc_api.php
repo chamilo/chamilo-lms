@@ -153,7 +153,7 @@ function LMSGetValue(param) {
 		result='<?php echo $_user['user_id']; ?>';
 	}else if(param == 'cmi.core.student_name'){
 		  <?php
-			$who=addslashes($_user['lastName'].", ".$_user['firstName']);
+			$who=addslashes(api_get_person_name($_user['firstName'], $_user['lastName']));
 		    echo "result='$who';"; 
 		  ?>
 	}else if(param == 'cmi.core.lesson_location'){
@@ -209,7 +209,7 @@ function LMSGetValue(param) {
 			break;
 		case 'cmi.core.student_name'	: 
 		  <?php
-			$who=addslashes($_user['firstName'].",".$_user['lastName']);
+		    $who=addslashes(api_get_person_name($_user['firstName'], $_user['lastName']));
 		    echo "result='$who';"; 
 		  ?>	break;
 		case 'cmi.core.lesson_location'	:
@@ -605,7 +605,7 @@ function update_message_frame(msg_msg)
  * @param	string		This parameter can be a string specifying the next 
  *						item (like 'next', 'previous', 'first' or 'last') or the id to the next item  
  */
-function switch_item(current_item, next_item){ 
+function switch_item(current_item, next_item){
 	/*
 	if(!current_item){
 		logit_lms('In switch - no current_item defined',0);

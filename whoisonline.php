@@ -33,7 +33,7 @@ $htmlHeadXtra[] = '<link rel="stylesheet" href="./main/inc/lib/javascript/thickb
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function (){
 	$("input#id_btn_send_invitation").bind("click", function(){
-		if (confirm("'.get_lang('SendMessageInvitation').'")) {
+		if (confirm("'.get_lang('SendMessageInvitation', '').'")) {
 			$("#form_register_friend").submit();
 		}
 	}); 
@@ -42,7 +42,7 @@ function change_panel (mypanel_id,myuser_id) {
 		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
-			$("#id_content_panel").html("'.get_lang('Loading').'"); },
+			$("#id_content_panel").html("'.get_lang('Loading', '').'"); },
 			type: "POST",
 			url: "main/messages/send_message.php",
 			data: "panel_id="+mypanel_id+"&user_id="+myuser_id,
@@ -61,14 +61,14 @@ function action_database_panel(option_id,myuser_id) {
 	}
 	my_txt_content=$("#txt_area_invite").val();
 	if (my_txt_content.length==0 || my_txt_subject.length==0) {
-		$("#display_response_id").html("&nbsp;&nbsp;&nbsp;'.get_lang('MessageEmptyMessageOrSubject').'");
+		$("#display_response_id").html("&nbsp;&nbsp;&nbsp;'.get_lang('MessageEmptyMessageOrSubject', '').'");
 		setTimeout("message_information_display()",3000);
 		return false;
 	}
 	$.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {
-		$("#display_response_id").html("'.get_lang('Loading').'"); },
+		$("#display_response_id").html("'.get_lang('Loading', '').'"); },
 		type: "POST",
 		url: "main/messages/send_message.php",
 		data: "panel_id="+option_id+"&user_id="+myuser_id+"&txt_subject="+my_txt_subject+"&txt_content="+my_txt_content,

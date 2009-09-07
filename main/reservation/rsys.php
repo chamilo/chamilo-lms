@@ -1237,7 +1237,7 @@ class Rsys {
 		
 		$sql = "SELECT  i1.name as col0,c.name as col1, 
 				DATE_FORMAT(r1.start_at ,'%Y-%m-%d %H:%i') as col2,
-				DATE_FORMAT(r1.end_at ,'%Y-%m-%d %H:%i') as col3, CONCAT(u.lastname,' ',u.firstname) as col4,
+				DATE_FORMAT(r1.end_at ,'%Y-%m-%d %H:%i') as col3, ".(api_is_western_name_order() ? "CONCAT(u.firstname,' ',u.lastname)" : "CONCAT(u.lastname,' ',u.firstname)")." as col4,
 				DATE_FORMAT(s.start_at ,'%Y-%m-%d %H:%i')  as col5,
 				DATE_FORMAT(s.end_at ,'%Y-%m-%d %H:%i')    as col6, s.accepted as col7
 				FROM ".Rsys :: getTable('subscription')." s, ".Rsys :: getTable('reservation')." r1, ".Database :: get_main_table(TABLE_MAIN_USER)." u," .Rsys :: getTable('item')." i1,".Rsys :: getTable('category')." c
@@ -1315,14 +1315,14 @@ class Rsys {
 		}
 		
 		
-		/*$sql = "SELECT dummy AS col0, CONCAT(u.lastname,' ',u.firstname) AS col1, s.user_id AS col2, accepted AS col3
+		/*$sql = "SELECT dummy AS col0, ".(api_is_western_name_order() ? "CONCAT(u.firstname,' ',u.lastname)" : "CONCAT(u.lastname,' ',u.firstname)")." AS col1, s.user_id AS col2, accepted AS col3
 								 	FROM ".Rsys :: getTable('subscription')." s
 								 	INNER JOIN ".Database :: get_main_table(TABLE_MAIN_USER)." u ON s.user_id = u.user_id ";
 		if (!empty ($_GET['rid'])) {
 			$sql .= " WHERE s.reservation_id = '".$_GET['rid']."'";
 		}
 		$sql .= " ORDER BY col".$column." ".$direction." LIMIT ".$from.",".$per_page;*/
-		$sql = "SELECT dummy AS col0, CONCAT(u.lastname,' ',u.firstname) AS col1, s.user_id AS col2, accepted AS col3, r.start_at, r.end_at, s.start_at, s.end_at
+		$sql = "SELECT dummy AS col0, ".(api_is_western_name_order() ? "CONCAT(u.firstname,' ',u.lastname)" : "CONCAT(u.lastname,' ',u.firstname)")." AS col1, s.user_id AS col2, accepted AS col3, r.start_at, r.end_at, s.start_at, s.end_at
 			FROM ".Rsys :: getTable('subscription')." s,".Database :: get_main_table(TABLE_MAIN_USER)." u,".Database :: get_main_table(TABLE_MAIN_RESERVATION_RESERVATION)." r
 			where u.user_id = s.user_id
 			and s.reservation_id = r.id";

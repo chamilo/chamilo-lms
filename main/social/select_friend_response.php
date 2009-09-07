@@ -60,7 +60,7 @@ cellpadding="0" cellspacing="0" bgcolor="#9DACBF">
                                 <?php 
                                 $user_id=$list_get_invitation[$i]['user_sender_id'];
                                 $user_info=api_get_user_info($user_id);
-                                echo api_xml_http_response_encode($user_info['firstName'].' '.$user_info['lastName']);
+                                echo api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName']));
                                 ?></td>
                                 </tr>
                             </table></td>

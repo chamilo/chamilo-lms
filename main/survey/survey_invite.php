@@ -54,11 +54,11 @@ if (!api_is_allowed_to_edit(false,true))
 }
 
 // Database table definitions
-$table_survey 			= Database::get_course_table(TABLE_SURVEY);
-$table_survey_question 		= Database::get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option 	= Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_course 			= Database::get_main_table(TABLE_MAIN_COURSE);
-$table_user 			= Database::get_main_table(TABLE_MAIN_USER);
+$table_survey 					= Database :: get_course_table(TABLE_SURVEY);
+$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
+$table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 $user_info 			= Database::get_main_table(TABLE_MAIN_SURVEY_REMINDER); // TODO: To be checked. TABLE_MAIN_SURVEY_REMINDER has not been defined.
 
 // getting the survey information
@@ -72,7 +72,7 @@ if (empty($survey_data)) {
 }
 
 
-$urlname =strip_tags(api_substr(api_html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
+$urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
 if (api_strlen(strip_tags($survey_data['title'])) > 40)
 {
 	$urlname .= '...';
@@ -115,11 +115,11 @@ $form = new FormValidator('publish_form','post', api_get_self().'?survey_id='.$s
 $form->addElement('header', '', $tool_name);
 
 // Course users
-$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'], true, $_SESSION['id_session'], '', 'ORDER BY lastname');
+$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'], true, $_SESSION['id_session'], '', api_sort_by_first_name() ? 'ORDER BY firstname' : 'ORDER BY lastname');
 $possible_users = array ();
 foreach ($complete_user_list as $index => $user)
 {
-	$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'];
+	$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
 }
 $users = $form->addElement('advmultiselect', 'course_users', get_lang('CourseUsers'), $possible_users, 'style="width: 250px; height: 200px;"');
 $users->setElementTemplate('

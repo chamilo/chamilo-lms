@@ -66,11 +66,8 @@ include '../../main/inc/global.inc.php';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] ='<script type="text/javascript">
  $(document).ready(function() {
- 
-    $(".make_visible_and_invisible").attr("href","javascript:void(0);");
-	cont=0;
+  $(".make_visible_and_invisible").attr("href","javascript:void(0);");
  	$("td .make_visible_and_invisible > img").click(function () {
- 		cont=cont+1;
 
 		make_visible="visible.gif";
 		make_invisible="invisible.gif";
@@ -83,15 +80,7 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 		//Delete last item
     	list_path_name[list_path_name.length-1]=null;
     	real_path = list_path_name.join("/");
-
-		if (image_link=="visible.gif") {
-			mew_path_name=path_name.replace(make_visible,make_invisible);
-			my_visibility=0;
-		} else {
-			mew_path_name=path_name.replace(make_invisible,make_visible);
-			my_visibility=1;
-		}
-
+    
 		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
@@ -100,17 +89,18 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 			},
 			type: "GET",
 			url: "/main/course_home/activity.php",
-			data: "id="+my_tool_id+"&visibility="+my_visibility+"&sent_http_request=1",
+			data: "id="+my_tool_id+"&sent_http_request=1",
 			success: function(datos) {
 				eval("var info="+datos);
 				new_current_tool_image = real_path+info.image;
+        new_current_view       = real_path+info.view;
 				//eyes
-				$("#"+tool_id).attr("src",mew_path_name);
+				$("#"+tool_id).attr("src",new_current_view);
 				//tool
 				$("#toolimage_"+my_tool_id).attr("src",new_current_tool_image);
 				//clase
-				$("#tooldesc_"+my_tool_id).attr("class",info.class);
-				$("#istooldesc_"+my_tool_id).attr("class",info.class);
+				$("#tooldesc_"+my_tool_id).attr("class",info.tclass);
+				$("#istooldesc_"+my_tool_id).attr("class",info.tclass);
 
 				if (image_link=="visible.gif") {
 					$("#"+tool_id).attr("alt","'.get_lang('Activate').'");
@@ -127,7 +117,7 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 				$(".normal-message").hide();
 				$("#id_confirmation_message").html(message);
 				$("#id_confirmation_message").show();
-		} }); 		
+		} }); 
 				
 	}); 	
 

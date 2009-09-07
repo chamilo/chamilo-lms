@@ -387,36 +387,24 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		$new_image         = str_replace('.gif','_na.gif',$tool_image);
 		$requested_image   = ($tool_visibility == 0 ) ? $tool_image : $new_image;
 		$requested_clase   = ($tool_visibility == 0 ) ? 'visible' : 'invisible';
-		$requested_message = ($tool_visibility == 0 ) ? 'is_active' : 'is_inactive';		
+		$requested_message = ($tool_visibility == 0 ) ? 'is_active' : 'is_inactive';
+    $requested_view    = ($tool_visibility == 0 ) ? 'visible.gif' : 'invisible.gif'; 
+    $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;           		
 	 	/*
 		-----------------------------------------------------------
-			HIDE
+			HIDE AND REACTIVATE
 		-----------------------------------------------------------
 		*/
-		if(isset($_GET['visibility']) && $_GET['visibility']==0) // visibility 1 -> 0
-		{
 			if ($_GET["id"]==strval(intval($_GET["id"]))) {
-				$sql="UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'";
-	
+				$sql="UPDATE $tool_table SET visibility='".Database::escape_string($requested_visible)."' WHERE id='".$_GET["id"]."'";
 				api_sql_query($sql,__FILE__,__LINE__);
 			}
-		}
-	
-	  /*
-		-----------------------------------------------------------
-			REACTIVATE
-		-----------------------------------------------------------
-		*/
-		elseif(isset($_GET['visibility'])&& $_GET['visibility']==1) // visibility 0,2 -> 1
-		{
-			if ($_GET["id"]==strval(intval($_GET["id"]))) {
-				api_sql_query("UPDATE $tool_table SET visibility=1 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
-			}
-		}
+    
 		$response_data = array(
 			'image'   => $requested_image,
-			'class'   => $requested_clase,
-			'message' => $requested_message
+			'tclass'  => $requested_clase,
+			'message' => $requested_message,
+      'view'    => $requested_view
 		);
 		print(json_encode($response_data));
 		exit;

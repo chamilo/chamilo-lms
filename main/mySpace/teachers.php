@@ -7,13 +7,13 @@
 ob_start(); 
 
 // names of the language file that needs to be included 
-$language_file = array ('registration', 'index','trad4all', 'tracking', 'admin');
+$language_file = array ('registration', 'index', 'trad4all', 'tracking', 'admin');
 $cidReset = true;
 require '../inc/global.inc.php';
 
 $this_section = "session_my_space";
 
-$nameTools= get_lang('Teachers');
+$nameTools = get_lang('Teachers');
 
 api_block_anonymous_users();
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
@@ -59,11 +59,11 @@ function exportCsv($a_header, $a_data) {
 			$info .= "\r\n";
 		}
 
-		fwrite($open,$info);
+		fwrite($open, $info);
 		fclose($open);
 		$perm = api_get_setting('permissions_for_new_files');
-		$perm = octdec(!empty($perm)?$perm:'0660');
-		chmod($fileName,$perm);
+		$perm = octdec(!empty($perm) ? $perm : '0660');
+		chmod($fileName, $perm);
 
 		header("Location:".$archiveURL.$fileName);
 	}
@@ -75,27 +75,41 @@ function exportCsv($a_header, $a_data) {
  * MAIN PART
  */
 
+if (isset($_POST['export'])) {
+	$is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
+} else {
+	$is_western_name_order = api_is_western_name_order();
+}
+$sort_by_first_name = api_sort_by_first_name();
 
+$order_clause = $sort_by_first_name ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 if (isset($_GET["teacher_id"]) && $_GET["teacher_id"] != 0) {
-	$i_teacher_id=$_GET["teacher_id"];
+	$i_teacher_id = $_GET["teacher_id"];
 	$sqlFormateurs = "SELECT user_id,lastname,firstname,email
 		FROM $tbl_user
-		WHERE user_id='$i_teacher_id' 
-		ORDER BY lastname ASC";
+		WHERE user_id='$i_teacher_id'".$order_clause;
 } else {
 	$sqlFormateurs = "SELECT user_id,lastname,firstname,email
 		FROM $tbl_user
-		WHERE status = 1
-		ORDER BY lastname ASC";
+		WHERE status = 1".$order_clause;
 }
 
 $resultFormateurs = Database::query($sqlFormateurs, __FILE__, __LINE__);
 
-echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
+if ($is_western_name_order) {
+	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
+} else {
+	echo '<table class="data_table"><tr><th>'.get_lang('LastName').'</th><th>'.get_lang('FirstName').'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
+}
 
-$a_header[] = get_lang('FirstName');
-$a_header[] = get_lang('LastName');
-$a_header[] = get_lang('Email');
+if ($is_western_name_order) {
+	$a_header[] = get_lang('FirstName', '');
+	$a_header[] = get_lang('LastName', '');
+} else {
+	$a_header[] = get_lang('LastName', '');
+	$a_header[] = get_lang('FirstName', '');
+}
+$a_header[] = get_lang('Email', '');
 
 $a_data = array();
 
@@ -109,11 +123,15 @@ if (Database::num_rows($resultFormateurs) > 0) {
 		$s_firstname = $a_formateurs["firstname"];
 		$s_email = $a_formateurs["email"];
 
-		if ($i%2 == 0) {
+		if ($i % 2 == 0) {
 			$s_css_class = "row_odd";
 			
-			if ($i%20 == 0 && $i != 0){
-				echo '<tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
+			if ($i % 20 == 0 && $i != 0){
+				if ($is_western_name_order) {
+					echo '<tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
+				} else {
+					echo '<tr><th>'.get_lang('LastName').'</th><th>'.get_lang('FirstName').'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
+				}
 			}
 		} else {
 			$s_css_class = "row_even";
@@ -121,11 +139,20 @@ if (Database::num_rows($resultFormateurs) > 0) {
 
 		$i++;
 
-		$a_data[$i_user_id]["firstname"]=$s_firstname;
-		$a_data[$i_user_id]["lastname"]=$s_lastname;
-		$a_data[$i_user_id]["email"]=$s_email;
+		if ($is_western_name_order) {
+			$a_data[$i_user_id]["firstname"] = $s_firstname;
+			$a_data[$i_user_id]["lastname"] = $s_lastname;
+		} else {
+			$a_data[$i_user_id]["lastname"] = $s_lastname;
+			$a_data[$i_user_id]["firstname"] = $s_firstname;
+		}
+		$a_data[$i_user_id]["email"] = $s_email;
 
-		echo '<tr class="'.$s_css_class.'"><td>'.$s_firstname.'</td><td>'.$s_lastname.'</td><td><a href="mailto:'.$s_email.'">'.$s_email.'</a></td><td><a href="course.php?user_id='.$i_user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td><td><a href="student.php?user_id='.$i_user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td></tr>';
+		if ($is_western_name_order) {
+			echo '<tr class="'.$s_css_class.'"><td>'.$s_firstname.'</td><td>'.$s_lastname.'</td><td><a href="mailto:'.$s_email.'">'.$s_email.'</a></td><td><a href="course.php?user_id='.$i_user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td><td><a href="student.php?user_id='.$i_user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td></tr>';
+		} else {
+			echo '<tr class="'.$s_css_class.'"><td>'.$s_lastname.'</td><td>'.$s_firstname.'</td><td><a href="mailto:'.$s_email.'">'.$s_email.'</a></td><td><a href="course.php?user_id='.$i_user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td><td><a href="student.php?user_id='.$i_user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td></tr>';
+		}
 	}
 }
 
@@ -136,7 +163,7 @@ else {
 echo '</table>';
 
 if (isset($_POST['export'])) {
-	exportCsv($a_header,$a_data);
+	exportCsv($a_header, $a_data);
 }
 
 echo "<br /><br />";

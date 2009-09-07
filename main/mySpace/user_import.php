@@ -36,14 +36,27 @@ we give 2 variables to a possible sufix. Sufix means the last numbers of the use
 @param string lastname
 @author Julio Montoya Armas
 */
-function make_login($firstname, $lastname) {
-	$desired_username = '';	
-	if (api_strlen($lastname) < 17) {
-		$desired_username = api_substr($firstname, 0, 1).$lastname;
+function make_login($firstname, $lastname, $encoding = null, $language = null) {
+	if (is_null($encoding)) {
+		$encoding = api_get_system_encoding();
+	}
+	if (is_null($language)) {
+		$language = api_get_interface_language();
+	}
+	if (!api_is_western_name_order(null, $language)) {
+		$temp = $firstname;
+		$firstname = $lastname;
+		$lastname = $temp;
+	}
+	$firstname = preg_replace('/[^0-9A-Za-z]/', '', api_transliterate($firstname, '', $encoding));
+	$lastname = preg_replace('/[^0-9A-Za-z]/', '', api_transliterate($lastname, '', $encoding));
+	$desired_username = '';
+	if (strlen($lastname) < 17) {
+		$desired_username = substr($firstname, 0, 1).$lastname;
 	} else {
-		$desired_username = api_substr($firstname, 0, 1).api_substr($lastname, 0, 16);
-	}	
-	return api_strtolower($desired_username);
+		$desired_username = substr($firstname, 0, 1).substr($lastname, 0, 16);
+	}
+	return strtolower($desired_username);
 }
 
 /**
@@ -56,7 +69,7 @@ the return array will be array(username=>'jmontoya', sufix='2')
 @return array with the username, the sufix 
 @author Julio Montoya Armas
 */
-function make_username($firstname, $lastname, $username) {
+function make_username($firstname, $lastname, $username, $encoding = null, $language = null) {
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 	$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	// if username exist
@@ -68,7 +81,7 @@ function make_username($firstname, $lastname, $username) {
 			} else {
 				$sufix = $i;
 			}
-			$desired_username = make_login($firstname, $lastname);
+			$desired_username = make_login($firstname, $lastname, $encoding, $language);
 			if (UserManager::is_username_available($desired_username.$sufix)) {
 				break;
 			} else {
@@ -277,7 +290,7 @@ function save_data($users, $CourseList, $id_session) {
 		// coach only will registered users
 		$default_status = '5';
 		if ($user['create'] == '1') {
-			$user['id'] = UserManager :: create_user($user['FirstName'], $user['LastName'], $default_status , $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], api_get_setting('PlatformLanguage'), $user['PhoneNumber'], '');
+			$user['id'] = UserManager :: create_user($user['FirstName'], $user['LastName'], $default_status, $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], api_get_setting('PlatformLanguage'), $user['PhoneNumber'], '');
 			$user['added_at_platform'] = 1;
 		} else {
 			$user['id'] = $user['create'];
@@ -297,7 +310,7 @@ function save_data($users, $CourseList, $id_session) {
 			$userid = $user['id'];		
 			$sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$userid')";
 			//echo "<br>";
-			$course_session=array('course' => $enreg_course, 'added' => 1);
+			$course_session = array('course' => $enreg_course, 'added' => 1);
 			//$user['added_at_session'] = $course_session;
 			Database::query($sql, __FILE__, __LINE__);
 			if (Database::affected_rows()) {
@@ -337,10 +350,10 @@ function save_data($users, $CourseList, $id_session) {
 	if ($sendMail) {					
 		$i = 0;			
 		foreach ($users as $index => $user) {				
-			$emailto = $user['FirstName'].' '.$user['LastName'].' <'.$user['Email'].'>';
+			$emailto = api_get_person_name($user['FirstName'], $user['LastName'], null, PERSON_NAME_EMAIL_ADDRESS).' <'.$user['Email'].'>';
 			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-			$emailbody = get_lang('Dear').' '.$user['FirstName'].' '.$user['LastName'].",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('Settings')." $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path('WEB_PATH')." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";
-			$emailheaders = 'From: '.api_get_setting('administratorName').' '.api_get_setting('administratorSurname').' <'.api_get_setting('emailAdministrator').">\n";
+			$emailbody = get_lang('Dear').' '.api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('Settings')." $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path('WEB_PATH')." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";
+			$emailheaders = 'From: '.api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS).' <'.api_get_setting('emailAdministrator').">\n";
 			$emailheaders .= 'Reply-To: '.api_get_setting('emailAdministrator');		
 			@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
 
@@ -354,10 +367,10 @@ function save_data($users, $CourseList, $id_session) {
 				if ($user['added_at_session'] == 1) {
 					$addedto .= get_lang('UserInSession');
 				}			
-				$registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".$user['FirstName']." ".$user['LastName']."</a> - ".$addedto.'<br />';
+				$registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';
 			} else {
 				$addedto = get_lang('UserNotAdded');				
-				$registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".$user['FirstName']." ".$user['LastName']."</a> - ".$addedto.'<br />';				
+				$registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';				
 			}
 		}
 	} else {	
@@ -374,10 +387,10 @@ function save_data($users, $CourseList, $id_session) {
 					$addedto .= ' '.get_lang('UserInSession');
 				}
 
-				$registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".$user['FirstName']." ".$user['LastName']."</a> - ".$addedto.'<br />';
+				$registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';
 			} else {
 				$addedto = get_lang('UserNotAdded');				
-				$registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".$user['FirstName']." ".$user['LastName']."</a> - ".$addedto.'<br />';				
+				$registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';				
 			}								
 		}		
 	}
@@ -519,7 +532,7 @@ if ($_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
 	} else {
 		$users = parse_xml_data($_FILES['import_file']['tmp_name']);		
 	}
-	if (count($users) >0) {
+	if (count($users) > 0) {
 		$results = validate_data($users);		
 		$errors = $results['errors'];
 		$users = $results['users'];
@@ -558,7 +571,7 @@ if (count($errors) != 0) {
 	$error_message = '<ul>';
 	foreach ($errors as $index => $error_user) {
 		$error_message .= '<li><b>'.$error_user['error'].'</b>: ';
-		$error_message .= $error_user['FirstName'].' '.$error_user['LastName'];
+		$error_message .= api_get_person_name($error_user['FirstName'], $error_user['LastName']);
 		$error_message .= '</li>';
 	}
 	$error_message .= '</ul>';

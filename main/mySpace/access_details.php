@@ -51,7 +51,7 @@ $this_section = "session_my_space";
 
 /* MAIN */
 $user_id = Security::remove_XSS($_REQUEST['student']);
-$course_code=Security::remove_XSS($_REQUEST['course']);
+$course_code = Security::remove_XSS($_REQUEST['course']);
 
 $connections = get_connections_to_course($user_id, $course_code);
 if (api_is_xml_http_request()) {
@@ -73,7 +73,7 @@ if (api_is_xml_http_request()) {
 		//creating the main array		
 		//$main_year[date('Y', $data['login'])] += calculHours($data['logout'] - $data['login']) * 60;	
 			//$main_month_year[date('m-Y', $data['login'])] += calculHours($data['logout'] - $data['login']) * 60;
-			$main_month_year[date('m-Y', $data['login'])] += float_format(($data['logout'] - $data['login'])/60, 0);
+			$main_month_year[date('m-Y', $data['login'])] += float_format(($data['logout'] - $data['login']) / 60, 0);
 			//$main_day[date('d-m-Y', $data['login'])] += calculHours($data['logout'] - $data['login']) * 60;
 			$main_day[date('d-m-Y', $data['login'])] += float_format(($data['logout'] - $data['login']) / 60, 0);
 		if ($i > 500) {
@@ -203,8 +203,8 @@ $(function() {
 </script>'  ;
 
 Display :: display_header('');
-$TBL_USERINFO_DEF 		= Database :: get_course_table(TABLE_USER_INFO);
-$mainUserInfo 		= api_get_user_info($user_id);
+$TBL_USERINFO_DEF = Database :: get_course_table(TABLE_USER_INFO);
+$mainUserInfo = api_get_user_info($user_id);
 
 $result_to_print = '';
 $main_date_array = array();

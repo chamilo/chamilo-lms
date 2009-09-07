@@ -92,16 +92,16 @@ function rsort_sessions($a, $b) {
 */
 
 if (isset($_GET['id_coach']) && $_GET['id_coach'] != '') {
-	$id_coach=$_GET['id_coach'];
+	$id_coach = $_GET['id_coach'];
 } else {
-	$id_coach=$_user['user_id'];
+	$id_coach = $_user['user_id'];
 }
 
 $a_sessions = Tracking :: get_sessions_coached_by_user($id_coach);
 $nb_sessions = count($a_sessions);
 
 if ($export_csv) {
-	$csv_content=array();
+	$csv_content = array();
 }
 
 if ($nb_sessions > 0) {
@@ -121,14 +121,14 @@ if ($nb_sessions > 0) {
 		$row[] = $session['name'];
 		$row[] = $session['status'];
 
-		if ($session['date_start']!='0000-00-00' && $session['date_end']!='0000-00-00') {
-			$row[] = get_lang('From').' '.format_locale_date(get_lang('DateFormatLongWithoutDay'),strtotime($session['date_start'])).' '.get_lang('To').' '.format_locale_date(get_lang('DateFormatLongWithoutDay'),strtotime($session['date_end']));
+		if ($session['date_start'] != '0000-00-00' && $session['date_end'] != '0000-00-00') {
+			$row[] = get_lang('From').' '.format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($session['date_start'])).' '.get_lang('To').' '.format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($session['date_end']));
 		} else {
 			$row[] = ' - ';
 		}
 
 		if ($export_csv) {
-			$csv_content[]=$row;
+			$csv_content[] = $row;
 		}
 
 		if (isset($_GET['id_coach']) && $_GET['id_coach'] != '') {

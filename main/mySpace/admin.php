@@ -88,8 +88,8 @@ if (isset($_POST['export'])) {
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 }
 $sqlAdmins = "SELECT user.user_id,lastname,firstname,email
-				FROM $tbl_user as user, $tbl_admin as admin
-				WHERE admin.user_id=user.user_id".$order_clause;
+	FROM $tbl_user as user, $tbl_admin as admin
+	WHERE admin.user_id=user.user_id".$order_clause;
 $resultAdmins = Database::query($sqlAdmins, __FILE__, __LINE__);
 
 if (api_is_western_name_order()) {
@@ -99,16 +99,15 @@ if (api_is_western_name_order()) {
 }
 
 if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
-	$a_header[] = get_lang('FirstName');
-	$a_header[] = get_lang('LastName');
-	$a_header[] = get_lang('Email');
+	$a_header[] = get_lang('FirstName', '');
+	$a_header[] = get_lang('LastName', '');
 } else {
-	$a_header[] = get_lang('LastName');
-	$a_header[] = get_lang('FirstName');
-	$a_header[] = get_lang('Email');
+	$a_header[] = get_lang('LastName', '');
+	$a_header[] = get_lang('FirstName', '');
 }
+$a_header[] = get_lang('Email', '');
 
-if (Database::num_rows($resultAdmins) > 0 ) {
+if (Database::num_rows($resultAdmins) > 0) {
 	while ($a_admins = Database::fetch_array($resultAdmins)) {
 
 		$i_user_id = $a_admins["user_id"];
@@ -116,9 +115,9 @@ if (Database::num_rows($resultAdmins) > 0 ) {
 		$s_firstname = $a_admins["firstname"];
 		$s_email = $a_admins["email"];
 
-		if ($i%2 == 0) {
+		if ($i % 2 == 0) {
 			$s_css_class = "row_odd";
-			if ($i%20 == 0 && $i!=0) {
+			if ($i % 20 == 0 && $i != 0) {
 				if (api_is_western_name_order()) {
 					echo '<tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th></tr>';
 				} else {
@@ -140,12 +139,11 @@ if (Database::num_rows($resultAdmins) > 0 ) {
 		if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
 			$a_data[$i_user_id]["firstname"] = $s_firstname;
 			$a_data[$i_user_id]["lastname"] = $s_lastname;
-			$a_data[$i_user_id]["email"] = $s_email;
 		} else {
 			$a_data[$i_user_id]["lastname"] = $s_lastname;
 			$a_data[$i_user_id]["firstname"] = $s_firstname;
-			$a_data[$i_user_id]["email"] = $s_email;
 		}
+		$a_data[$i_user_id]["email"] = $s_email;
 	}
 }
 

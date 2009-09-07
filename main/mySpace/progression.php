@@ -98,7 +98,7 @@ if (Database::num_rows($resultCourse) > 0) {
 		} else {
 			$moyenneTest = null;
 		}
-		echo '<tr><td>'.$a_course['title'].'</td><td> </td><td> </td><td align="center">'.$moyenneTest.'%</td> </tr>';
+		echo '<tr><td>'.$a_course['title'].'</td><td> </td><td> </td><td align="center">'.(is_null($moyenneTest) ? '' : $moyenneTest.'%').'</td> </tr>';
 	}
 	echo '</table>';
 	echo "<br /><br />";

@@ -18,7 +18,7 @@ $nameTools = get_lang('Tutors');
 api_block_anonymous_users();
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
 
-if(isset($_GET["id_student"])){
+if (isset($_GET["id_student"])) {
 	$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang('Students'));
 }
 
@@ -104,9 +104,8 @@ function is_coach() {
 	$result = Database::query($sql, __FILE__, __LINE__);
 	if (Database::num_rows($result) > 0) {
 		return true;	    
-	}	else {
-		return false;
 	}
+	return false;
 }
 
 
@@ -145,18 +144,17 @@ if (api_is_western_name_order()) {
 }
 
 if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
-	$a_header[] = get_lang('FirstName');
-	$a_header[] = get_lang('LastName');
-	$a_header[] = get_lang('ConnectionTime');
+	$a_header[] = get_lang('FirstName', '');
+	$a_header[] = get_lang('LastName', '');
 } else {
-	$a_header[] = get_lang('LastName');
-	$a_header[] = get_lang('FirstName');
-	$a_header[] = get_lang('ConnectionTime');
+	$a_header[] = get_lang('LastName', '');
+	$a_header[] = get_lang('FirstName', '');
 }
+$a_header[] = get_lang('ConnectionTime', '');
 
 if (Database::num_rows($resultCoachs) > 0) {
 	while ($a_coachs = Database::fetch_array($resultCoachs)) {
-		$i_id_coach=$a_coachs["id_coach"];
+		$i_id_coach = $a_coachs["id_coach"];
 
 		if (isset($_GET["id_student"])) {
 			$sql_infos_coach = "SELECT lastname, firstname FROM $tbl_user WHERE user_id='$i_id_coach'";
@@ -172,7 +170,7 @@ if (Database::num_rows($resultCoachs) > 0) {
 		$q_result_connection_time = Database::query($s_sql_connection_time, __FILE__, __LINE__);
 
 		$i_nb_seconds = 0;
-		while($a_connections = Database::fetch_array($q_result_connection_time)) {
+		while ($a_connections = Database::fetch_array($q_result_connection_time)) {
 			$s_login_date = $a_connections["login_date"];
 			$s_logout_date = $a_connections["logout_date"];
 			$i_timestamp_login_date = strtotime($s_login_date);
@@ -185,9 +183,9 @@ if (Database::num_rows($resultCoachs) > 0) {
 			$s_connection_time = "";
 		}
 
-		if ($i%2 == 0) {
+		if ($i % 2 == 0) {
 			$s_css_class = "row_odd";
-			if ($i%20 == 0 && $i != 0) {
+			if ($i % 20 == 0 && $i != 0) {
 				if (api_is_western_name_order()) {
 					echo '<tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('ConnectionTime').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
 				} else {
@@ -209,12 +207,11 @@ if (Database::num_rows($resultCoachs) > 0) {
 		if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
 			$a_data[$i_id_coach]["firstname"] = $s_firstname;
 			$a_data[$i_id_coach]["lastname"] = $s_lastname;
-			$a_data[$i_id_coach]["connection_time"] = $s_connection_time;
 		} else {
 			$a_data[$i_id_coach]["lastname"] = $s_lastname;
 			$a_data[$i_id_coach]["firstname"] = $s_firstname;
-			$a_data[$i_id_coach]["connection_time"] = $s_connection_time;
 		}
+		$a_data[$i_id_coach]["connection_time"] = $s_connection_time;
 	}
 }
 

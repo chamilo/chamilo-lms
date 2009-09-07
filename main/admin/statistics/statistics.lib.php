@@ -308,13 +308,17 @@ class Statistics
 	function print_tool_stats()
 	{
 		$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-		$tools = array('announcement','assignment','calendar_event','chat','conference','course_description','document','dropbox','group','learnpath','link','quiz','student_publication','user','bb_forum');
+		$tools = array('announcement','assignment','calendar_event','chat','conference','course_description','document','dropbox','group','learnpath','link','quiz','student_publication','user','forum');
+		$tool_names = array();
+		foreach ($tools as $tool) {
+			$tool_names[$tool] = get_lang(ucfirst($tool), '');
+		}
 		$sql = "SELECT access_tool, count( access_id ) AS number_of_logins FROM $table WHERE access_tool IN ('".implode("','",$tools)."') GROUP BY access_tool ";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$result = array();
 		while($obj = Database::fetch_object($res))
 		{
-			$result[$obj->access_tool] = $obj->number_of_logins;
+			$result[$tool_names[$obj->access_tool]] = $obj->number_of_logins;
 		}
 		Statistics::print_stats(get_lang('PlatformToolAccess'),$result,true);
 	}

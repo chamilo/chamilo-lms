@@ -98,6 +98,8 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 		//update view_properties
 		$work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);	
 		if ( isset($_GET['typeselected']) && 5==$_GET['typeselected'] && (isset($addvalues['select_link']) && $addvalues['select_link']<>"")) {
+									
+			
 			$sql1='SELECT thread_title from '.$tbl_forum_thread.' where thread_id='.$addvalues['select_link'].';';
 			$res1=api_sql_query($sql1);
 			$rowtit=Database::fetch_row($res1);
@@ -109,11 +111,10 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 			if ( $row[0]==0 ) {
 				$link->add();
 				$sql='UPDATE '.$tbl_forum_thread.' set thread_qualify_max='.$addvalues['weight'].',thread_weight='.$addvalues['weight'].',thread_title_qualify="'.$rowtit[0].'" WHERE thread_id='.$addvalues['select_link'].';';
-				$sql_l='UPDATE '.$tbl_link.' SET weight='.$addvalues['weight'].' WHERE ref_id='.$addvalues['select_link'].';';
 				api_sql_query($sql);
-				api_sql_query($sql_l);
-			}
-			
+				//$sql_l='UPDATE '.$tbl_link.' SET weight='.$addvalues['weight'].' WHERE ref_id='.$addvalues['select_link'].' AND type=5;';				
+				//api_sql_query($sql_l);
+			}			
 		} 
 		$link->add();
 		$addvalue_result=!empty($addvalues['addresult'])?$addvalues['addresult']:array();

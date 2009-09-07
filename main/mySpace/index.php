@@ -232,12 +232,6 @@ if ($view == 'coach' || $view == 'drh') {
 		$avgStudentScore = $avgStudentScore / $nb_courses_student;
 		$avgResultsToExercises += $avgStudentScore;
 	}
-	$avgTotalProgress = 0;
-	$avgResultsToExercises = 0;
-	$avgCoursesPerStudent = 0;
-	$avgTimeSpent = 0;
-	$nb_assignments = 0;
-	$nb_posts = 0;
 
 	if ($nbStudents > 0) {
 		// average progress
@@ -252,17 +246,25 @@ if ($view == 'coach' || $view == 'drh') {
 		$nb_assignments = $nb_assignments / $nbStudents;
 		// average posts
 		$nb_posts = $nb_posts / $nbStudents;
+	} else {
+		$avgTotalProgress = null;
+		$avgResultsToExercises = null;
+		$avgCoursesPerStudent = null;
+		$avgTimeSpent = null;
+		$nb_assignments = null;
+		$nb_posts = null;
 	}
+
 	if ($export_csv) {
 		//csv part
-		$csv_content[] = array(get_lang('Probationers'));
-		$csv_content[] = array(get_lang('InactivesStudents'), $nb_inactive_students );
-		$csv_content[] = array(get_lang('AverageTimeSpentOnThePlatform'), $avgTimeSpent);
-		$csv_content[] = array(get_lang('AverageCoursePerStudent'), $avgCoursesPerStudent);
-		$csv_content[] = array(get_lang('AverageProgressInLearnpath'), $avgTotalProgress);
-		$csv_content[] = array(get_lang('AverageResultsToTheExercices'), $avgResultsToExercises);
-		$csv_content[] = array(get_lang('AveragePostsInForum'), $nb_posts);
-		$csv_content[] = array(get_lang('AverageAssignments'), $nb_assignments);
+		$csv_content[] = array(get_lang('Probationers', ''));
+		$csv_content[] = array(get_lang('InactivesStudents', ''), $nb_inactive_students );
+		$csv_content[] = array(get_lang('AverageTimeSpentOnThePlatform', ''), $avgTimeSpent);
+		$csv_content[] = array(get_lang('AverageCoursePerStudent', ''), $avgCoursesPerStudent);
+		$csv_content[] = array(get_lang('AverageProgressInLearnpath', ''), is_null($avgTotalProgress) ? null : round($avgTotalProgress, 2).'%');
+		$csv_content[] = array(get_lang('AverageResultsToTheExercices', ''), is_null($avgResultsToExercises) ? null : round($avgResultsToExercises, 2).'%');
+		$csv_content[] = array(get_lang('AveragePostsInForum', ''), $nb_posts);
+		$csv_content[] = array(get_lang('AverageAssignments', ''), $nb_assignments);
 		$csv_content[] = array();
 	} else {
 		// html part
@@ -285,7 +287,7 @@ if ($view == 'coach' || $view == 'drh') {
 						'.get_lang('AverageTimeSpentOnThePlatform').'
 					</td>
 					<td align="right">
-						'.api_time_to_hms($avgTimeSpent).'
+						'.(is_null($avgTimeSpent) ? '' : api_time_to_hms($avgTimeSpent)).'
 					</td>
 				</tr>
 				<tr>
@@ -293,7 +295,7 @@ if ($view == 'coach' || $view == 'drh') {
 						'.get_lang('AverageCoursePerStudent').'
 					</td>
 					<td align="right">
-						'.$avgCoursesPerStudent.'
+						'.(is_null($avgCoursesPerStudent) ? '' : $avgCoursesPerStudent).'
 					</td>
 				</tr>
 				<tr>
@@ -301,7 +303,7 @@ if ($view == 'coach' || $view == 'drh') {
 						'.get_lang('AverageProgressInLearnpath').'
 					</td>
 					<td align="right">
-						'.round($avgTotalProgress, 2).' %
+						'.(is_null($avgTotalProgress) ? '' : round($avgTotalProgress, 2).'%').'
 					</td>
 				</tr>
 				<tr>
@@ -309,7 +311,7 @@ if ($view == 'coach' || $view == 'drh') {
 						'.get_lang('AverageResultsToTheExercices').'
 					</td>
 					<td align="right">
-						'.round($avgResultsToExercises, 2).' %
+						'.(is_null($avgResultsToExercises) ? '' : round($avgResultsToExercises, 2).'%').'
 					</td>
 				</tr>
 				<tr>
@@ -317,7 +319,7 @@ if ($view == 'coach' || $view == 'drh') {
 						'.get_lang('AveragePostsInForum').'
 					</td>
 					<td align="right">
-						'.round($nb_posts, 2).'
+						'.(is_null($nb_posts) ? '' : round($nb_posts, 2)).'
 					</td>
 				</tr>
 				<tr>
@@ -325,7 +327,7 @@ if ($view == 'coach' || $view == 'drh') {
 						'.get_lang('AverageAssignments').'
 					</td>
 					<td align="right">
-						'.round($nb_assignments, 2).'
+						'.(is_null($nb_assignments) ? '' : round($nb_assignments, 2)).'
 					</td>
 				</tr>
 			</table>
@@ -342,7 +344,7 @@ if ($view == 'coach') {
 	$nb_sessions_past = $nb_sessions_future = $nb_sessions_current = 0;
 	$a_courses = array();
 	foreach ($a_sessions as $a_session) {
-		if($a_session['date_start'] == '0000-00-00') {
+		if ($a_session['date_start'] == '0000-00-00') {
 			$nb_sessions_current ++;
 		} else {
 			$date_start = explode('-', $a_session['date_start']);
@@ -361,17 +363,24 @@ if ($view == 'coach') {
 		}
 		$a_courses = array_merge($a_courses, Tracking::get_courses_list_from_session($a_session['id']));		
 	}
-	$nb_courses_per_session = round(count($a_courses) / $nbSessions, 2);
+
+	if ($nbSessions > 0) {
+		$nb_courses_per_session = round(count($a_courses) / $nbSessions, 2);
+		$nb_students_per_session = round($nbStudents / $nbSessions, 2);
+	} else {
+		$nb_courses_per_session = null;
+		$nb_students_per_session = null;
+	}
 	
 	
 	if ($export_csv) {
 		//csv part
-		$csv_content[] = array(get_lang('Sessions'));
-		$csv_content[] = array(get_lang('NbActiveSessions').';'.$nb_sessions_current);
-		$csv_content[] = array(get_lang('NbPastSessions').';'.$nb_sessions_past);
-		$csv_content[] = array(get_lang('NbFutureSessions').';'.$nb_sessions_future);
-		$csv_content[] = array(get_lang('NbStudentPerSession').';'.round($nbStudents / $nbSessions, 2));
-		$csv_content[] = array(get_lang('NbCoursesPerSession').';'.$nb_courses_per_session);
+		$csv_content[] = array(get_lang('Sessions', ''));
+		$csv_content[] = array(get_lang('NbActiveSessions', '').';'.$nb_sessions_current);
+		$csv_content[] = array(get_lang('NbPastSessions', '').';'.$nb_sessions_past);
+		$csv_content[] = array(get_lang('NbFutureSessions', '').';'.$nb_sessions_future);
+		$csv_content[] = array(get_lang('NbStudentPerSession', '').';'.$nb_students_per_session);
+		$csv_content[] = array(get_lang('NbCoursesPerSession', '').';'.$nb_courses_per_session);
 		$csv_content[] = array();
 	} else {
 		// html part
@@ -410,7 +419,7 @@ if ($view == 'coach') {
 						'.get_lang('NbStudentPerSession').'
 					</td>
 					<td align="right">
-						'.round($nbStudents / $nbSessions, 2).'
+						'.(is_null($nb_students_per_session) ? '' : $nb_students_per_session).'
 					</td>
 				</tr>
 				<tr>
@@ -418,7 +427,7 @@ if ($view == 'coach') {
 						'.get_lang('NbCoursesPerSession').'
 					</td>
 					<td align="right">
-						'.$nb_courses_per_session.'
+						'.(is_null($nb_courses_per_session) ? '' : $nb_courses_per_session).'
 					</td>
 				</tr>
 			</table>
@@ -447,19 +456,19 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 		$table -> set_header(7, get_lang('AvgAssignments'), false);
 		$table -> set_header(8, get_lang('Details'), false);
 
-		$csv_content[] = array(
-			get_lang('CourseTitle'),
-			get_lang('NbStudents'),
-			get_lang('AvgTimeSpentInTheCourse'),
-			get_lang('AvgStudentsProgress'),
-			get_lang('AvgCourseScore'),
-			get_lang('AvgExercisesScore'),
-			get_lang('AvgMessages'),
-			get_lang('AvgAssignments')
+		$csv_content[] = array (
+			get_lang('CourseTitle', ''),
+			get_lang('NbStudents', ''),
+			get_lang('AvgTimeSpentInTheCourse', ''),
+			get_lang('AvgStudentsProgress', ''),
+			get_lang('AvgCourseScore', ''),
+			get_lang('AvgExercisesScore', ''),
+			get_lang('AvgMessages', ''),
+			get_lang('AvgAssignments', '')
 		);
 
 		$a_course_students = array();
-		//
+
 		foreach ($a_courses as $course) {
 			$course_code = $course['course_code'];
 			$avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;
@@ -504,20 +513,27 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 
 			if ($nb_students_in_course > 0) {
 				$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
-				$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2).' %';
-				$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course, 2).' %';
-				$avg_score_in_exercise = round($avg_score_in_exercise / $nb_students_in_course, 2).' %';
+				$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2);
+				$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course, 2);
+				$avg_score_in_exercise = round($avg_score_in_exercise / $nb_students_in_course, 2);
 				$avg_messages_in_course = round($avg_messages_in_course / $nb_students_in_course, 2);
 				$avg_assignments_in_course = round($avg_assignments_in_course / $nb_students_in_course, 2);
+			} else {
+				$avg_time_spent_in_course = null;
+				$avg_progress_in_course = null;
+				$avg_score_in_course = null;
+				$avg_score_in_exercise = null;
+				$avg_messages_in_course = null;
+				$avg_assignments_in_course = null;
 			}
 
 			$table_row = array();
 			$table_row[] = $course['title'];
 			$table_row[] = $nb_students_in_course;
 			$table_row[] = $avg_time_spent_in_course;
-			$table_row[] = $avg_progress_in_course;
-			$table_row[] = $avg_score_in_course;
-			$table_row[] = $avg_score_in_exercise;
+			$table_row[] = is_null($avg_progress_in_course) ? '' : $avg_progress_in_course.'%';
+			$table_row[] = is_null($avg_score_in_course) ? '' : $avg_score_in_course.'%';
+			$table_row[] = is_null($avg_score_in_exercise) ? '' : $avg_score_in_exercise.'%';
 			$table_row[] = $avg_messages_in_course;
 			$table_row[] = $avg_assignments_in_course;
 			//set the "from" value to know if I access the Reporting by the Dokeos tab or the course link 
@@ -527,9 +543,9 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 				api_html_entity_decode($course['title'], ENT_QUOTES, $charset),
 				$nb_students_in_course,
 				$avg_time_spent_in_course,
-				$avg_progress_in_course,
-				$avg_score_in_course,
-				$avg_score_in_exercise,
+				is_null($avg_progress_in_course) ? null : $avg_progress_in_course.'%',
+				is_null($avg_score_in_course) ? null : $avg_score_in_course.'%',
+				is_null($avg_score_in_exercise) ? null : $avg_score_in_exercise.'%',
 				$avg_messages_in_course,
 				$avg_assignments_in_course,
 			);
@@ -587,24 +603,24 @@ if (api_is_platform_admin() && $view == 'admin') {
 		$table -> set_header(7, get_lang('Sessions'), false, 'align="center"');
 
 		if ($is_western_name_order) {
-			$csv_header[] = array(
-				get_lang('FirstName'),
-				get_lang('LastName'),
-				get_lang('TimeSpentOnThePlatform'),
-				get_lang('LastConnexion'),
-				get_lang('NbStudents'),
-				get_lang('CountCours'),
-				get_lang('NumberOfSessions')
+			$csv_header[] = array (
+				get_lang('FirstName', ''),
+				get_lang('LastName', ''),
+				get_lang('TimeSpentOnThePlatform', ''),
+				get_lang('LastConnexion', ''),
+				get_lang('NbStudents', ''),
+				get_lang('CountCours', ''),
+				get_lang('NumberOfSessions', '')
 			);
 		} else {
-			$csv_header[] = array(
-				get_lang('LastName'),
-				get_lang('FirstName'),
-				get_lang('TimeSpentOnThePlatform'),
-				get_lang('LastConnexion'),
-				get_lang('NbStudents'),
-				get_lang('CountCours'),
-				get_lang('NumberOfSessions')
+			$csv_header[] = array (
+				get_lang('LastName', ''),
+				get_lang('FirstName', ''),
+				get_lang('TimeSpentOnThePlatform', ''),
+				get_lang('LastConnexion', ''),
+				get_lang('NbStudents', ''),
+				get_lang('CountCours', ''),
+				get_lang('NumberOfSessions', '')
 			);
 		}
 
@@ -723,7 +739,9 @@ if (api_is_platform_admin() && $view == 'admin') {
 		if ($export_csv && $tracking_column != 3) {
 			usort($csv_content, 'sort_users');
 		}
-		$csv_content = array_merge($csv_header, $csv_content);
+		if ($export_csv) {
+			$csv_content = array_merge($csv_header, $csv_content);
+		}
 
 		foreach ($all_datas as $row) {
 			$table -> addRow($row, 'align="right"');
@@ -792,11 +810,11 @@ function export_tracking_user_overview() {
 	$csv_row = array();
 	$csv_row[] = get_lang('OfficialCode');
 	if ($is_western_name_order) {
-		$csv_row[] = get_lang('FirstName');
-		$csv_row[] = get_lang('LastName');
+		$csv_row[] = get_lang('FirstName', '');
+		$csv_row[] = get_lang('LastName', '');
 	} else {
-		$csv_row[] = get_lang('LastName');
-		$csv_row[] = get_lang('FirstName');
+		$csv_row[] = get_lang('LastName', '');
+		$csv_row[] = get_lang('FirstName', '');
 	}
 	$csv_row[] = get_lang('LoginName');	
 	$csv_row[] = get_lang('CourseCode');
@@ -809,18 +827,18 @@ function export_tracking_user_overview() {
 			$field_names_to_be_exported[] = 'extra_'.$fields[$extra_field_export][1];
 		}
 	}
-	$csv_row[] = get_lang('AvgTimeSpentInTheCourse');
-	$csv_row[] = get_lang('AvgStudentsProgress');
-	$csv_row[] = get_lang('AvgCourseScore');
-	$csv_row[] = get_lang('AvgExercisesScore');
-	$csv_row[] = get_lang('AvgMessages');
-	$csv_row[] = get_lang('AvgAssignments');
-	$csv_row[] = get_lang('TotalExercisesScoreObtained');
-	$csv_row[] = get_lang('TotalExercisesScorePossible');
-	$csv_row[] = get_lang('TotalExercisesAnswered');
-	$csv_row[] = get_lang('TotalExercisesScorePercentage');
-	$csv_row[] = get_lang('FirstLogin');
-	$csv_row[] = get_lang('LatestLogin');
+	$csv_row[] = get_lang('AvgTimeSpentInTheCourse', '');
+	$csv_row[] = get_lang('AvgStudentsProgress', '');
+	$csv_row[] = get_lang('AvgCourseScore', '');
+	$csv_row[] = get_lang('AvgExercisesScore', '');
+	$csv_row[] = get_lang('AvgMessages', '');
+	$csv_row[] = get_lang('AvgAssignments', '');
+	$csv_row[] = get_lang('TotalExercisesScoreObtained', '');
+	$csv_row[] = get_lang('TotalExercisesScorePossible', '');
+	$csv_row[] = get_lang('TotalExercisesAnswered', '');
+	$csv_row[] = get_lang('TotalExercisesScorePercentage', '');
+	$csv_row[] = get_lang('FirstLogin', '');
+	$csv_row[] = get_lang('LatestLogin', '');
 	$csv_content[] = $csv_row;
 	
 	// the other lines (the data)
@@ -1039,7 +1057,7 @@ function course_info_tracking_filter($user_id, $url_params, $row) {
 		$return .= '	<td><div>'.Tracking :: count_student_assignments($user_id, $row[0]).'</div></td>';
 		// student exercises results (obtained score, maximum score, number of exercises answered, score percentage)
 		$exercises_results = exercises_results($user_id, $row[0]);
-		$return .= '	<td width="105px"><div>'.$exercises_results['score_obtained'].'/'.$exercises_results['score_possible'].'('.$exercises_results['percentage'].'%)</div></td>';
+		$return .= '	<td width="105px"><div>'.(is_null($exercises_results['percentage']) ? '' : $exercises_results['score_obtained'].'/'.$exercises_results['score_possible'].' ( '.$exercises_results['percentage'].'% )').'</div></td>';
 		//$return .= '	<td><div>'.$exercises_results['score_possible'].'</div></td>';
 		$return .= '	<td><div>'.$exercises_results['questions_answered'].'</div></td>';
 		//$return .= '	<td><div>'.$exercises_results['percentage'].'% </div></td>';

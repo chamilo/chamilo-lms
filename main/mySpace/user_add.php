@@ -87,16 +87,29 @@ $interbreadcrumb[] = array ('url' => '../admin/index.php', 'name' => get_lang('P
 $tool_name = get_lang('AddUser');
 // Create the form
 $form = new FormValidator('user_add');
-// Lastname
-$form->addElement('text','lastname', get_lang('LastName'));
-$form->applyFilter('lastname', 'html_filter');
-$form->applyFilter('lastname', 'trim');
-$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
-// Firstname
-$form->addElement('text','firstname', get_lang('FirstName'));
-$form->applyFilter('firstname', 'html_filter');
-$form->applyFilter('firstname', 'trim');
-$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+if (api_is_western_name_order()) {
+	// Firstname
+	$form->addElement('text','firstname', get_lang('FirstName'));
+	$form->applyFilter('firstname', 'html_filter');
+	$form->applyFilter('firstname', 'trim');
+	$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+	// Lastname
+	$form->addElement('text','lastname', get_lang('LastName'));
+	$form->applyFilter('lastname', 'html_filter');
+	$form->applyFilter('lastname', 'trim');
+	$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
+} else {
+	// Lastname
+	$form->addElement('text','lastname', get_lang('LastName'));
+	$form->applyFilter('lastname', 'html_filter');
+	$form->applyFilter('lastname', 'trim');
+	$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
+	// Firstname
+	$form->addElement('text','firstname', get_lang('FirstName'));
+	$form->applyFilter('firstname', 'html_filter');
+	$form->applyFilter('firstname', 'trim');
+	$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+}
 // Official code
 $form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => '40'));
 $form->applyFilter('official_code', 'html_filter');
@@ -145,7 +158,7 @@ $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;');
 $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
 $group = array ();
 $group[] = & $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
-$group[] = & $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onChange'=>'enable_expiration_date()'));
+$group[] = & $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onChange'=>'javascript: enable_expiration_date();'));
 $form->addGroup($group, 'max_member_group', null, '', false);
 // Active account or inactive account
 $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
@@ -197,7 +210,7 @@ foreach ($extra as $id => $field_details) {
 			$group = array();
 			foreach ($field_details[9] as $option_id => $option_details) {
 				$options[$option_details[1]] = $option_details[2];
-				$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1],$option_details[2].'<br />',$option_details[1]);
+				$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1], $option_details[2].'<br />', $option_details[1]);
 			}
 			$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
 			break;
@@ -206,14 +219,14 @@ foreach ($extra as $id => $field_details) {
 			foreach ($field_details[9] as $option_id => $option_details) {
 				$options[$option_details[1]] = $option_details[2];
 			}
-			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');			
+			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, '');			
 			break;
 		case USER_FIELD_TYPE_SELECT_MULTIPLE:
 			$options = array();
 			foreach ($field_details[9] as $option_id => $option_details) {
 				$options[$option_details[1]] = $option_details[2];
 			}
-			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,array('multiple' => 'multiple'));
+			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, array('multiple' => 'multiple'));
 			break;
 		case USER_FIELD_TYPE_DATE:
 			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3]);
@@ -238,12 +251,12 @@ $defaults['admin']['platform_admin'] = 0;
 $defaults['mail']['send_mail'] = 0;
 $defaults['password']['password_auto'] = 1;
 $defaults['active'] = 1;
-$defaults['expiration_date']=array();
+$defaults['expiration_date'] = array();
 $days = api_get_setting('account_valid_duration');
 $time = strtotime('+'.$days.' day');
-$defaults['expiration_date']['d'] = date('d',$time);
-$defaults['expiration_date']['F'] = date('m',$time);
-$defaults['expiration_date']['Y'] = date('Y',$time);
+$defaults['expiration_date']['d'] = date('d', $time);
+$defaults['expiration_date']['F'] = date('m', $time);
+$defaults['expiration_date']['Y'] = date('Y', $time);
 $defaults['radio_expiration_date'] = 0;
 $defaults['status'] = STUDENT;
 $defaults['session_id'] = api_get_session_id();
@@ -291,14 +304,14 @@ if ($form->validate()) {
 			$auth_source = PLATFORM_AUTH_SOURCE;
 			$password = $user['password']['password_auto'] == '1' ? api_generate_password() : $user['password']['password'];
 		}
-		if ($user['radio_expiration_date']=='1') {
-			$expiration_date=$user['expiration_date'];
+		if ($user['radio_expiration_date'] == '1') {
+			$expiration_date = $user['expiration_date'];
 		} else {
-			$expiration_date='0000-00-00 00:00:00';
+			$expiration_date = '0000-00-00 00:00:00';
 		}
 		$active = intval($user['active']);
 		// default status = student
-		$status =5;
+		$status = 5;
 		//create user
 		$user_id = UserManager::create_user($firstname, $lastname, $status, $email, $username, $password, $official_code, api_get_setting('platformLanguage'), $phone, $picture_uri, $auth_source, $expiration_date, $active, $hr_dept_id);
 
@@ -314,7 +327,7 @@ if ($form->validate()) {
 				$result = Database::query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'",__FILE__,__LINE__);
 
 				$CourseList=array();	
-				while ($row=Database::fetch_array($result)) {
+				while ($row = Database::fetch_array($result)) {
 					$CourseList[] = $row['course_code'];
 				}
 
@@ -351,9 +364,9 @@ if ($form->validate()) {
 			Database::query($sql, __FILE__, __LINE__);
 		}
 		if (!empty ($email) && $send_mail) {
-			$emailto = '"'.$firstname.' '.$lastname.'" <'.$email.'>';
+			$emailto = '"'.api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS).'" <'.$email.'>';
 			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-			$emailheaders = 'From: '.api_get_setting('administratorName').' '.api_get_setting('administratorSurname').' <'.api_get_setting('emailAdministrator').">\n";
+			$emailheaders = 'From: '.api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS).' <'.api_get_setting('emailAdministrator').">\n";
 			$emailheaders .= 'Reply-To: '.api_get_setting('emailAdministrator');
 
 			$portal_url = $_configuration['root_web'];
@@ -364,7 +377,7 @@ if ($form->validate()) {
 					$portal_url = $url['url'];
 				}
 			}			
-			$emailbody=get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ".$portal_url."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+			$emailbody=get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ".$portal_url."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
 			@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
 		}
 		Security::clear_token();
@@ -384,7 +397,7 @@ if ($form->validate()) {
 		Security::clear_token();
 	}
 	$token = Security::get_token();
-	$form->addElement('hidden','sec_token');
+	$form->addElement('hidden', 'sec_token');
 	$form->setConstants(array('sec_token' => $token));
 }
 // Display form

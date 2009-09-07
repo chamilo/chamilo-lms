@@ -66,10 +66,10 @@ if (!empty($_GET['session'])) {
 			if ($totalWeighting != 0) {
 				$moyenneTest = round(($totalResult * 100) / $totalWeighting);
 			} else {
-				$moyenneTest = 0;
+				$moyenneTest = null;
 			}
 
-			echo '<tr><td>'.$a_session['name'].'</td><td align="center">'.$moyenneTest.'%</td><td> </td></tr>';
+			echo '<tr><td>'.$a_session['name'].'</td><td align="center">'.(is_null($moyenneTest) ? '' : $moyenneTest.'%').'</td><td> </td></tr>';
 		}
 		echo '</table>';
 	} else {
@@ -102,7 +102,7 @@ if (!empty($_GET['session'])) {
 			} else {
 				$moyenneTest = null;
 			}
-			echo '<tr><td>'.$a_course['title'].'</td><td align="center">'.$moyenneTest.'%</td><td> </td></tr>';
+			echo '<tr><td>'.$a_course['title'].'</td><td align="center">'.(is_null($moyenneTest) ? '' : $moyenneTest.'%').'</td><td> </td></tr>';
 		}
 		echo '</table>';
 	} else {

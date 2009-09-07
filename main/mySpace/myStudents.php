@@ -310,12 +310,12 @@ if (!empty ($_GET['student'])) {
 	$time_spent_on_the_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($a_infosUser['user_id'], $course_id));
 	// cvs informations
 	$csv_content[] = array (
-		get_lang('Informations')
+		get_lang('Informations', '')
 	);
 	$csv_content[] = array (
-		get_lang('Name'),
-		get_lang('Email'),
-		get_lang('Tel')
+		get_lang('Name', ''),
+		get_lang('Email', ''),
+		get_lang('Tel', '')
 	);
 	$csv_content[] = array (
 		$a_infosUser['name'],
@@ -327,21 +327,21 @@ if (!empty ($_GET['student'])) {
 
 	// csv tracking
 	$csv_content[] = array (
-		get_lang('Tracking')
+		get_lang('Tracking', '')
 	);
 	$csv_content[] = array (
-		get_lang('FirstLogin'),
-		get_lang('LatestLogin'),
-		get_lang('TimeSpentInTheCourse'),
-		get_lang('Progress'),
-		get_lang('Score')
+		get_lang('FirstLogin', ''),
+		get_lang('LatestLogin', ''),
+		get_lang('TimeSpentInTheCourse', ''),
+		get_lang('Progress', ''),
+		get_lang('Score', '')
 	);
 	$csv_content[] = array (
 		strip_tags($first_connection_date),
 		strip_tags($last_connection_date),
 		$time_spent_on_the_course,
-		$avg_student_progress . ' %',
-		$avg_student_score . ' %'
+		$avg_student_progress . '%',
+		$avg_student_score . '%'
 	);
 ?>
 	<a name="infosStudent"></a>
@@ -356,7 +356,7 @@ if (!empty ($_GET['student'])) {
 	// get the path,width and height from original picture
 	$image_file = $image_array['dir'] . $image_array['file'];
 	$big_image = $image_array['dir'] . 'big_' . $image_array['file'];
-	$big_image_size = @ getimagesize(api_url_to_local_path($big_image));
+	$big_image_size = @getimagesize(api_url_to_local_path($big_image));
 	$big_image_width = $big_image_size[0];
 	$big_image_height = $big_image_size[1];
 	$url_big_image = $big_image . '?rnd=' . time();
@@ -367,7 +367,7 @@ if (!empty ($_GET['student'])) {
 	if ($image_array['file'] == 'unknown.jpg') {
 		echo '<img ' . $img_attributes . ' />';
 	} else {
-		echo '<input type="image" ' . $img_attributes . ' onclick="return show_image(\'' . $url_big_image . '\',\'' . $big_image_width . '\',\'' . $big_image_height . '\');"/>';
+		echo '<input type="image" ' . $img_attributes . ' onclick="javascript: return show_image(\'' . $url_big_image . '\',\'' . $big_image_width . '\',\'' . $big_image_height . '\');"/>';
 	}
 
 	echo '</td>';
@@ -486,7 +486,7 @@ if (!empty ($_GET['student'])) {
 ?>
 												</td>
 						<td align="left">
-													<?php echo $avg_student_progress.' %' ?>
+													<?php echo $avg_student_progress.'%' ?>
 												</td>
 											</tr>
 											<tr>
@@ -501,7 +501,7 @@ if (!empty ($_GET['student'])) {
 ?>
 												</td>
 						<td align="left">
-													<?php  echo $avg_student_score.' %' ?>
+													<?php  echo $avg_student_score.'%' ?>
 												</td>
 											</tr>
 										</table>
@@ -662,11 +662,11 @@ if (!empty ($_GET['student'])) {
 
 		$csv_content[] = array ();
 		$csv_content[] = array (
-			get_lang('Learnpath'),
-			get_lang('Time'),
-			get_lang('Score'),
-			get_lang('Progress'),
-			get_lang('LastConnexion')
+			get_lang('Learnpath', ''),
+			get_lang('Time', ''),
+			get_lang('Score', ''),
+			get_lang('Progress', ''),
+			get_lang('LastConnexion', '')
 		);
 
 		if (Database :: num_rows($resultLearnpath) > 0) {
@@ -745,7 +745,7 @@ if (!empty ($_GET['student'])) {
 							<?php
 
 				if (!is_null($score)) {
-					echo $score . ' %';
+					echo $score . '%';
 				} else {
 					if ('0' == $progress {
 						0 }) {
@@ -883,7 +883,7 @@ if (!empty ($_GET['student'])) {
 
 					$csv_content[] = array (
 						$a_exercices['title'],
-						$pourcentageScore . ' %',
+						$pourcentageScore . '%',
 						$a_essais['essais']
 					);
 
@@ -904,7 +904,7 @@ if (!empty ($_GET['student'])) {
 					echo "	<td align='center'>
 												  ";
 					if ($a_essais['essais'] > 0) {
-						echo $pourcentageScore . ' %';
+						echo $pourcentageScore . '%';
 					} else {
 						echo '/';
 						$pourcentageScore = 0;
@@ -1073,17 +1073,19 @@ if (!empty ($_GET['student'])) {
 		if (count($a_courses) > 0) {
 			$csv_content[] = array ();
 			$csv_content[] = array (
-				get_lang('Course'),
-				get_lang('Time'),
-				get_lang('Progress'),
-				get_lang('Score')
+				get_lang('Course', ''),
+				get_lang('Time', ''),
+				get_lang('Progress', ''),
+				get_lang('Score', '')
 			);
 			foreach ($a_courses as $course_code) {
 				if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
 					$course_infos = CourseManager :: get_course_information($course_code);
 					$time_spent_on_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($a_infosUser['user_id'], $course_code));
-					$progress = Tracking :: get_avg_student_progress($a_infosUser['user_id'], $course_code) . ' %';
-					$score = Tracking :: get_avg_student_score($a_infosUser['user_id'], $course_code) . ' %';
+					$progress = Tracking :: get_avg_student_progress($a_infosUser['user_id'], $course_code);
+					$score = Tracking :: get_avg_student_score($a_infosUser['user_id'], $course_code);
+					$progress = empty($progress) ? '0%' : $progress.'%';
+					$score = empty($score) ? '0%' : $score.'%';
 					$csv_content[] = array (
 						$course_infos['title'],
 						$time_spent_on_course,

@@ -376,9 +376,18 @@ function show_tools_category($course_tool_category)
 	Work with data post askable by admin of course (franglais, clean this)
 -----------------------------------------------------------
 */
+
 if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 	if(api_is_allowed_to_edit()) {
 		$tool_table = Database::get_course_table(TABLE_TOOL_LIST);
+		$tool_id = Security::remove_XSS($_GET["id"]);
+		$tool_info = api_get_tool_information($tool_id);
+		$tool_visibility   = $tool_info['visibility'];
+		$tool_image        = $tool_info['image'];
+		$new_image         = str_replace('.gif','_na.gif',$tool_image);
+		$requested_image   = ($tool_visibility == 0 ) ? $tool_image : $new_image;
+		$requested_clase   = ($tool_visibility == 0 ) ? 'visible' : 'invisible';
+		$requested_message = ($tool_visibility == 0 ) ? 'is_active' : 'is_inactive';		
 	 	/*
 		-----------------------------------------------------------
 			HIDE
@@ -390,7 +399,6 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 				$sql="UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'";
 	
 				api_sql_query($sql,__FILE__,__LINE__);
-				echo 'ToolIsNowHidden';
 			}
 		}
 	
@@ -403,9 +411,14 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		{
 			if ($_GET["id"]==strval(intval($_GET["id"]))) {
 				api_sql_query("UPDATE $tool_table SET visibility=1 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
-				echo 'ToolIsNowVisible';
 			}
 		}
+		$response_data = array(
+			'image'   => $requested_image,
+			'class'   => $requested_clase,
+			'message' => $requested_message
+		);
+		print(json_encode($response_data));
 		exit;
 	}
 } else {
@@ -476,7 +489,7 @@ if(api_is_platform_admin())
 if(api_is_allowed_to_edit())
 {
 	?>
-	<div class="normal-message" id="id_normal_message" style="display:none"><?php echo get_lang("PleaseStandBy")."<br/>"; ?></div>
+	<div class="normal-message" id="id_normal_message" style="display:none"><?php echo get_lang("PleaseStandBy")."<br/>".'<img src="/main/inc/lib/javascript/indicator.gif"/>'; ?></div>
 	<div class="confirmation-message" id="id_confirmation_message" style="display:none"></div>		
 	<div class="courseadminview">
 		<span class="viewcaption"><?php echo get_lang("Authoring") ?></span>

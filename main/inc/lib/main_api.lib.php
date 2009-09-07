@@ -3587,3 +3587,15 @@ function api_check_term_condition($user_id) {
 	}
 	return $return;
 }
+/**
+ * Get all information of the tool into course
+ * @param int The tool id
+ * @return array
+ */
+function api_get_tool_information ($tool_id) {
+   $t_tool = Database::get_course_table(TABLE_TOOL_LIST);	
+   $sql = 'SELECT * FROM '.$t_tool.' WHERE id="'.Database::escape_string($tool_id).'"';
+   $rs  = Database::query($sql,__FILE__,__LINE__);
+   $row = Database::fetch_array($rs);
+   return $row;
+}

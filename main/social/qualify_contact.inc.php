@@ -27,7 +27,7 @@ $user_friend_relation=UserFriend::get_relation_between_contacts(api_get_user_id(
 	   	 	<td width="50%"><br/>	   	 		
 	   	 		<img src="<?php echo Security::remove_XSS($img_user[1]); ?>" />
 	   	 		<?php
-	   	 		echo '<br /><br />'.$name_user=api_xml_http_response_encode($user_info['firstName'].' '.$user_info['lastName']); 
+	   	 		echo '<br /><br />'.$name_user=api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName'])); 
 	   	 		?>
 	   	 	</td>
 	   	 <td width="50%"><div align="left">

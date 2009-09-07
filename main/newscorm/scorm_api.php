@@ -7,7 +7,7 @@
 	Copyright (c) Denes Nagy (darkden@freemail.hu)
 	
 	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt". 
+	The full license can be read in "license.txt".
 	
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
@@ -65,7 +65,7 @@ if(!is_object($oItem)){
 	error_log('New LP - scorm_api - Could not load oItem item',0);
 	exit;
 }
-$autocomplete_when_80pct = 0; 
+$autocomplete_when_80pct = 0;
 
 /*
 ============================================================================== 
@@ -108,18 +108,18 @@ api_1484_11 = API_1484_11;
 //api_1484_11 = new APIobject();  //for scorm 1.3
 
 // Error codes  
-var G_NoError 					= 0;
-var G_GeneralException 			= 101;
+var G_NoError = 0;
+var G_GeneralException = 101;
 var G_ServerBusy 				= 102; // this is not in the Scorm1.2_Runtime document 
-var G_InvalidArgumentError 		= 201;
+var G_InvalidArgumentError = 201;
 var G_ElementCannotHaveChildren = 202;
-var G_ElementIsNotAnArray 		= 203;
-var G_NotInitialized 			= 301;
-var G_NotImplementedError 		= 401;
-var G_InvalidSetValue 			= 402;
-var G_ElementIsReadOnly 		= 403;
-var G_ElementIsWriteOnly 		= 404;
-var G_IncorrectDataType 		= 405;
+var G_ElementIsNotAnArray = 203;
+var G_NotInitialized = 301;
+var G_NotImplementedError = 401;
+var G_InvalidSetValue = 402;
+var G_ElementIsReadOnly = 403;
+var G_ElementIsWriteOnly = 404;
+var G_IncorrectDataType = 405;
 
 // Error messages 
 var G_NoErrorMessage 					= '';
@@ -170,7 +170,7 @@ $(document).ready( function() {
 	info_lms_item[1]='<?php echo $oItem->get_id();?>';
 	
 	$("#current_item_id").attr("value",<?php echo $oItem->get_id();?>);
-	$("#old_item").attr("value",<?php echo $oItem->get_id();?>);
+	$("#old_item").attr("value",<?php echo $oItem->get_id();?>);	
 	
 	//var myiframe=document.getElementById('content_id');
 	//myiframe.Events.AttachEvent("onclick", update_lp_item_id);
@@ -187,7 +187,7 @@ $(document).ready( function() {
  });
 });
  
- 
+
 //Dokeos internal variables
 var saved_lesson_status = 'not attempted';
 var lms_lp_id = <?php echo $oLP->get_id();?>;
@@ -224,49 +224,49 @@ var lms_old_item_id = 0;
 var execute_stats='false';
 
 
-    
+
 /**
  * Function called mandatorily by the SCORM content to start the SCORM communication
  */
 function LMSInitialize() {  //this is the initialize function of all APIobjects
-	
+
 	/* load info for this new item by calling the js_api_refresh command in
 	 * the message frame. The message frame will update the JS variables by 
 	 * itself, in JS, by doing things like top.lesson_status = 'not attempted' 
 	 * and that kind of stuff, so when the content loads in the content frame
 	 * it will have all the correct variables set 
-	 */	 
+	 */
 	G_LastError = G_NoError ;
-	G_LastErrorMessage = 'No error';
+	G_LastErrorMessage = 'No error';	
 	//reinit to list
 	reinit_update_table_list ()
 		
 	lms_initialized=0;
-	// if there are more parameters than ""		
+	// if there are more parameters than ""
 	if (arguments.length>1) {
 		G_LastError 		= G_InvalidArgumentError;
 		G_LastErrorMessage 	= G_InvalidArgumentErrorMessage;
 		logit_scorm('Error '+ G_InvalidArgumentError + G_InvalidArgumentErrorMessage, 0);
-		return('false');		
-	} else {	
+		return('false');
+	} else {
 		logit_scorm('LMSInitialise()',0);
-		lms_initialized=1;
-		return('true');	
-	}	
+	lms_initialized=1;
+	return('true');
+	}
 }
 
 function Initialize() 
 {  //this is the initialize function of all APIobjects
-	return LMSInitialize();
+  return LMSInitialize();
 }
 
 function LMSGetValue(param) 
-{		
+{
 	//logit_scorm("LMSGetValue('"+param+"')",1);
 	G_LastError = G_NoError ;
 	G_LastErrorMessage = 'No error';	
-	var result='';	
-	
+	var result='';
+
 	// the LMSInitialize is missing
 	if (lms_initialized == 0) {
 		 G_LastError 		= G_NotInitialized; 
@@ -274,9 +274,9 @@ function LMSGetValue(param)
 		 logit_scorm('Error '+ G_NotInitialized + ' ' +G_NotInitializedMessage, 0);
 		 return '';
 	}
-	
+
 	//Dokeos does not support this SCO object properties
-	
+
 	if (param == 'cmi.student_preference.text' || 
 		param == 'cmi.student_preference.language' ||
 		param == 'cmi.student_preference.speed' ||
@@ -290,13 +290,13 @@ function LMSGetValue(param)
 		G_lastErrorString = G_NotImplementedErrorMessage;
 		logit_scorm("LMSGetValue  ('"+param+"') Error '"+G_NotImplementedErrorMessage+"'",1);
 		result = '';
-		return result;			
+		return result;
 	}
 
 	// ---- cmi.core._children
-	if(param=='cmi.core._children' || param=='cmi.core_children') {
+	if(param=='cmi.core._children' || param=='cmi.core_children'){
 		result='entry, exit, lesson_status, student_id, student_name, lesson_location, total_time, credit, lesson_mode, score, session_time';
-	} else if(param == 'cmi.core.entry'){
+	}else if(param == 'cmi.core.entry'){
 	// ---- cmi.core.entry
 		if(lms_item_core_exit=='none') {
 			result='ab-initio';
@@ -305,48 +305,48 @@ function LMSGetValue(param)
 		} else {
 			result='';
 		}
-	} else if(param == 'cmi.core.exit'){
-		// ---- cmi.core.exit
+	}else if(param == 'cmi.core.exit'){
+	// ---- cmi.core.exit
 		result='';
 		G_LastError = G_ElementIsWriteOnly;
 	}else if(param == 'cmi.core.session_time'){
 		result='';
-		G_LastError = G_ElementIsWriteOnly;		
+		G_LastError = G_ElementIsWriteOnly;
 	}else if(param == 'cmi.core.lesson_status'){
 	// ---- cmi.core.lesson_status
 	    if(lesson_status != '') {
 	    	result=lesson_status;
-	    } else {	    	
+	    } else {
 	    	//result='not attempted';
 	    }
-	} else if(param == 'cmi.core.student_id'){
+	}else if(param == 'cmi.core.student_id'){
 	// ---- cmi.core.student_id
 		result='<?php echo $_user['user_id']; ?>';
-	} else if(param == 'cmi.core.student_name'){
+	}else if(param == 'cmi.core.student_name'){
 	// ---- cmi.core.student_name
 		  <?php
-			$who=addslashes($_user['lastName'].", ".$_user['firstName']);
+			$who=addslashes(api_get_person_name($_user['firstName'], $_user['lastName']));
 		    echo "result='$who';"; 
 		  ?>
-	} else if(param == 'cmi.core.lesson_location'){
+	}else if(param == 'cmi.core.lesson_location'){
 	// ---- cmi.core.lesson_location
 		result=lesson_location;
-	} else if(param == 'cmi.core.total_time'){
+	}else if(param == 'cmi.core.total_time'){
 	// ---- cmi.core.total_time
 		result=total_time;
-	} else if(param == 'cmi.core.score._children'){
+	}else if(param == 'cmi.core.score._children'){
 	// ---- cmi.core.score._children
 		result='raw,min,max';
-	} else if(param == 'cmi.core.score.raw'){
+	}else if(param == 'cmi.core.score.raw'){
 	// ---- cmi.core.score.raw
 		result=score;
-	} else if(param == 'cmi.core.score.max'){
+	}else if(param == 'cmi.core.score.max'){
 	// ---- cmi.core.score.max
 		result=max;
-	} else if(param == 'cmi.core.score.min'){
+	}else if(param == 'cmi.core.score.min'){
 	// ---- cmi.core.score.min
 		result=min;
-	} else if(param == 'cmi.core.score'){
+	}else if(param == 'cmi.core.score'){
 	// ---- cmi.core.score -- non-standard item, provided as cmi.core.score.raw just in case
 		result=score;
 	}else if(param == 'cmi.core.credit'){
@@ -457,22 +457,22 @@ function LMSGetValue(param)
 			}
 		}
 	}else if(param == 'cmi.student_data._children'){
-		// ---- cmi.student_data._children
+	// ---- cmi.student_data._children
 		result = 'mastery_score,max_time_allowed';
 	}else if(param == 'cmi.student_data.mastery_score'){
-		// ---- cmi.student_data.mastery_score
+	// ---- cmi.student_data.mastery_score
 		result = mastery_score;
 	}else if(param == 'cmi.student_data.max_time_allowed'){
-		// ---- cmi.student_data.max_time_allowed
+	// ---- cmi.student_data.max_time_allowed
 		result = max_time_allowed;
 	}else if(param == 'cmi.interactions._count'){
-		// ---- cmi.interactions._count
+	// ---- cmi.interactions._count
 		result = interactions.length;
 	}else if(param == 'cmi.interactions._children'){
-		// ---- cmi.interactions._children
+	// ---- cmi.interactions._children
 		result = 'id,time,type,correct_responses,weighting,student_response,result,latency';
-	} else {
-		// ---- anything else
+	}else{
+	// ---- anything else
 		// Invalid argument error
 		G_lastError = G_InvalidArgumentError ;
 		G_lastErrorString = G_InvalidArgumentErrorMessage;
@@ -489,7 +489,7 @@ function GetValue(param) {
 }
 
 function LMSSetValue(param, val) {
-	
+
 	logit_scorm("LMSSetValue\n\t('"+param+"','"+val+"')",0);
 	commit = true; //value has changed, need to re-commit
 	G_LastError = G_NoError ;
@@ -521,11 +521,11 @@ function LMSSetValue(param, val) {
 		updatetable_to_list['cmi.completion_status']='true';
 		return_value='true'; //1.3
 	} else if ( param == "cmi.core.session_time" ) {
-		session_time = val;
+		session_time = val;		
 		updatetable_to_list['cmi.core.session_time']='true';		
 		return_value='true';
 	} else if ( param == "cmi.score.scaled") { //1.3
-		if(val<=1 && val>=-1) { 
+		if(val<=1 && val>=-1) {
 			score = val ;
 			updatetable_to_list['cmi.score.scaled']='true';
 			return_value='true';
@@ -550,22 +550,22 @@ function LMSSetValue(param, val) {
 		G_LastError = G_ElementIsReadOnly;
 	} else if ( param == "cmi.core.credit" ) {
 		G_LastError = G_ElementIsReadOnly;
-	} else if ( param == "cmi.core.entry" ) {               
+	} else if ( param == "cmi.core.entry" ) {
 		G_LastError = G_ElementIsReadOnly;
 	} else if ( param == "cmi.core.total_time" ) {
-		G_LastError = G_ElementIsReadOnly;			
+		G_LastError = G_ElementIsReadOnly;
 	} else if ( param == "cmi.core.lesson_mode" ) {
 		G_LastError = G_ElementIsReadOnly;
 	} else if ( param == "cmi.comments_from_lms" ) {
-		G_LastError = G_ElementIsReadOnly;	
+		G_LastError = G_ElementIsReadOnly;
 	} else if ( param == "cmi.student_data.time_limit_action" ) {
-		G_LastError = G_ElementIsReadOnly;	
+		G_LastError = G_ElementIsReadOnly;
 	} else if ( param == "cmi.student_data.mastery_score" ) {
-		G_LastError = G_ElementIsReadOnly;		
+		G_LastError = G_ElementIsReadOnly;
 	} else if ( param == "cmi.student_data.max_time_allowed" ) {
 		G_LastError = G_ElementIsReadOnly;
 	} else if ( param == "cmi.student_preference._children" ) {
-		G_LastError = G_ElementIsReadOnly;		
+		G_LastError = G_ElementIsReadOnly;
 	} else if ( param == "cmi.launch_data" ) {
 		G_LastError = G_ElementIsReadOnly;
 	} else {
@@ -576,13 +576,13 @@ function LMSSetValue(param, val) {
 			if(elem_id > interactions.length) //interactions setting should start at 0
 			{
 				/*
-                G_LastError = G_InvalidArgumentError;
+				G_LastError = G_InvalidArgumentError;
                 G_LastErrorString = 'Invalid argument (interactions)';
 				return_value = false;
                 */
                 interactions[0] = ['0','','','','','','',''];
-			}			
-			if(interactions[elem_id] == null) {
+			}
+			if(interactions[elem_id] == null){
 					interactions[elem_id] = ['','','','','','','',''];
 					//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
 					interactions[elem_id][4] = new Array();
@@ -634,7 +634,7 @@ function LMSSetValue(param, val) {
 							G_lastError = G_NotImplementedError;
 							G_lastErrorString = 'Not implemented yet';
 			}
-		} else if(param.substring(0,15)== 'cmi.objectives.'){
+		}else if(param.substring(0,15)== 'cmi.objectives.'){
 			var myres = '';
 			updatetable_to_list['objectives']='true';
 			if(myres = param.match(/cmi.objectives.(\d+).(id|score|status)(.*)/))
@@ -697,7 +697,7 @@ function LMSSetValue(param, val) {
 					}
 				}
 			}
-		} else {
+		}else{
 			G_lastError = G_NotImplementedError;
 			G_lastErrorString = G_NotImplementedErrorMessage;
 		}
@@ -742,15 +742,15 @@ function reinit_update_table_list () {
 function savedata(origin) { 
 	//origin can be 'commit', 'finish' or 'terminate'	
     if ((lesson_status != 'completed') && (lesson_status != 'passed') && (mastery_score >=0) && (score >= mastery_score)) {
-		lesson_status = 'passed';
+      lesson_status = 'passed';
         updatetable_to_list['cmi.core.lesson_status']='true';
     } else if( (mastery_score < 0) && (lms_lp_type != '2') && ( lesson_status == 'incomplete') && (score >= (0.8*max) ) ) {
-    	//the status cannot be modified automatically by the LMS under SCORM 1.2's rules    	
-    	<?php if ($autocomplete_when_80pct){ ?>
+    	//the status cannot be modified automatically by the LMS under SCORM 1.2's rules
+    <?php if ($autocomplete_when_80pct){ ?>
     	      lesson_status = 'completed';
               updatetable_to_list['cmi.core.lesson_status']='true';
-    	<?php }?>
-    	; 	
+    <?php }?>
+    ;
     } else {
         /*
          * See notes in switch_item for why this has been disabled
@@ -776,7 +776,7 @@ function savedata(origin) {
 
     my_get_value_scorm=new Array();
     my_get_value_scorm=ProcessValueScorm();
-    
+
 	logit_lms('saving data (status='+lesson_status+' - interactions: '+ interactions.length +')',1);
 	
 	old_item_id=info_lms_item[0];
@@ -805,14 +805,14 @@ function savedata_onunload() {
 */
 
 function LMSCommit(val) {
-		logit_scorm('LMSCommit()',0);
-		G_LastError = G_NoError ;
-		G_LastErrorMessage = 'No error';
-		
-		savedata('commit');
+	logit_scorm('LMSCommit()',0);
+	G_LastError = G_NoError ;
+	G_LastErrorMessage = 'No error';	
+
+			savedata('commit');
 		reinit_update_table_list();
 	    //commit = 'false' ; //now changes have been commited, no need to update until next SetValue()
-		return('true');
+	return('true');
 }
 
 function Commit(val) {
@@ -820,13 +820,13 @@ function Commit(val) {
 }
 
 function LMSFinish(val) {
-		G_LastError = G_NoError ;
-		G_LastErrorMessage = 'No error';
-		// why commit==false?	
-		if (( commit == false )) { 	
-			logit_scorm('LMSFinish() (no LMSCommit())',1);
-			 
-		}
+	G_LastError = G_NoError ;
+	G_LastErrorMessage = 'No error';	
+	// why commit==false?
+	if (( commit == false )) { 	
+		logit_scorm('LMSFinish() (no LMSCommit())',1); 
+
+	}
 
 		//if ( commit == true ) {
 			logit_scorm('LMSFinish() called',1);		
@@ -876,8 +876,8 @@ function Terminate()
 		G_LastError 		= G_NotInitialized; 
 		G_LastErrorMessage = G_NotInitializedMessage;
 		logit_scorm('Error '+ G_NotInitialized + G_NotInitializedMessage, 0);
-		return('false');		
-	} else {				
+		return('false');
+	} else {
 		logit_scorm('Terminate()',0);
 		G_LastError = G_NoError ;
 		G_LastErrorMessage = 'No error';	
@@ -956,7 +956,7 @@ function addListeners(){
     /* See notes in switch_item() for why this has been disabled
     if (lms_lp_type==2) {
         addEvent(window,'unload',savedata_onunload,false);    	
-    }
+	}
     */
 	logit_lms('Quitting addListeners()',2);
 }
@@ -976,7 +976,7 @@ function load_item(item_id,url){
 			lms_old_item_id = lms_item_id;
 			var lms_new_item_id = item_id;
 			//load new content page into content frame
-			if(lms_lp_type==1 || lms_item_type=='asset') {
+			if(lms_lp_type==1 || lms_item_type=='asset'){
 				dokeos_save_asset();
 			}
 			cont_f.src = url;
@@ -994,7 +994,7 @@ function load_item(item_id,url){
  * Save a Dokeos learnpath item's time and mark as completed upon
  * leaving it
  */
-function dokeos_save_asset() {
+function dokeos_save_asset(){
 	// only for dokeos lps
 	if (execute_stats=='true') {
 		execute_stats='false';
@@ -1032,13 +1032,13 @@ function dokeos_void_save_asset(myscore,mymax)
  * @param	integer Priority (0 for top priority, 3 for lowest)
  */
 function logit_scorm(message,priority){
-	
+
 	if(scorm_logs>priority){
 		if($("#lp_log_name") && $("#log_content")){
 			$("#log_content").append("SCORM: " + message + "<br/>");
 		}
 	}
-	
+
 }
 
 /**
@@ -1047,7 +1047,7 @@ function logit_scorm(message,priority){
  * @param	integer Priority (0 for top priority, 3 for lowest)
  */
 function logit_lms(message,priority){
-	if(lms_logs>priority){ 
+	if(lms_logs>priority){
 		if ($("#lp_log_name") && $("#log_content")) {
 			$("#log_content").append("LMS: " + message + "<br />");
 		}
@@ -1066,7 +1066,7 @@ function update_toc(update_action,update_id,change_ids)
         }
 		var myelem = $("#toc_"+update_id);		
 		var myelemimg = $("#toc_img_"+update_id);		
-		logit_lms('update_toc("'+update_action+'",'+update_id+')',2);				
+		logit_lms('update_toc("'+update_action+'",'+update_id+')',2);
 		
 		if(update_id != 0)
 		{
@@ -1074,11 +1074,11 @@ function update_toc(update_action,update_id,change_ids)
 			{
 				case 'unhighlight':
 					if (update_id%2==0)
-					{						
+					{
 						myelem.attr('class',"scorm_item_2");
 					}
 					else
-					{					
+					{
 						myelem.attr('class',"scorm_item_1");
 					}
 					break;
@@ -1089,37 +1089,37 @@ function update_toc(update_action,update_id,change_ids)
                     }				 				
 					myelem.attr('class',"scorm_item_highlight");
 					break;
-				case 'not attempted':   					
+				case 'not attempted':
 					if( myelemimg.attr('src') != '../img/notattempted.gif') {
 						myelemimg.attr('src','../img/notattempted.gif');
 						myelemimg.attr('alt','n');						
 					}
 					break;
-				case 'incomplete':					
+				case 'incomplete':
 					if( myelemimg.attr('src') != '../img/incomplete.gif') {
 						myelemimg.attr('src','../img/incomplete.gif');
 						myelemimg.attr('alt','i');						
 					}
 					break;
-				case 'completed':					
+				case 'completed':
 					if( myelemimg.attr('src') != '../img/completed.gif') {
 						myelemimg.attr('src','../img/completed.gif');
 						myelemimg.attr('alt','c');						
 					}
 					break;
-				case 'failed':					
+				case 'failed':
 					if( myelemimg.attr('src') != '../img/failed.gif') {
 						myelemimg.attr('src','../img/failed.gif');
 						myelemimg.attr('alt','f');						
 					}
 					break;
-				case 'passed':					
+				case 'passed':
 					if( myelemimg.attr('src') != '../img/completed.gif' && myelemimg.attr('alt') != 'passed') {
 						myelemimg.attr('src','../img/completed.gif');
 						myelemimg.attr('alt','p');						
 					}
 					break;
-				case 'browsed':					
+				case 'browsed':
 					if( myelemimg.attr('src') != '../img/completed.gif' && myelemimg.attr('alt') != 'browsed') {
 						myelemimg.attr('src','../img/completed.gif');
 						myelemimg.attr('alt','b');						
@@ -1133,7 +1133,7 @@ function update_toc(update_action,update_id,change_ids)
 		return true;
 }
 
-function update_stats() {	
+function update_stats() {
 	if (execute_stats=='true') {
 		try {
 		cont_f = document.getElementById('content_id');
@@ -1156,11 +1156,11 @@ function update_progress_bar(nbr_complete, nbr_total, mode)
 	logit_lms('update_progress_bar('+nbr_complete+','+nbr_total+','+mode+')',2);
 	logit_lms('could update with data: '+lms_lp_id+','+lms_view_id+','+lms_user_id,2);
 
-	if(mode == ''){mode='%';}
-	if(nbr_total == 0){nbr_total=1;}
-	var percentage = (nbr_complete/nbr_total)*100;
-	percentage = Math.round(percentage);
-					
+		if(mode == ''){mode='%';}
+		if(nbr_total == 0){nbr_total=1;}
+		var percentage = (nbr_complete/nbr_total)*100;
+		percentage = Math.round(percentage);
+		
 	var pr_text  = $("#progress_text");
 	var pr_full  = $("#progress_img_full");		
 	var pr_empty = $("#progress_img_empty");
@@ -1168,16 +1168,16 @@ function update_progress_bar(nbr_complete, nbr_total, mode)
 	pr_full.attr('width',percentage*1.2);	
 	pr_empty.attr('width',(100-percentage)*1.2);
 		
-	var mytext = '';
-	switch(mode){
-		case 'abs':
-			mytext = nbr_complete + '/' + nbr_total;
-			break;
-		case '%':
-		default:
-			mytext = percentage + '%'; 
-			break;
-	}	
+		var mytext = '';
+		switch(mode){
+			case 'abs':
+				mytext = nbr_complete + '/' + nbr_total;
+				break;
+			case '%':
+			default:
+				mytext = percentage + '%'; 
+				break;
+		}
 	pr_text.html(mytext);
 	
 	return true;
@@ -1201,7 +1201,7 @@ function update_stats_page()
  */
 function update_message_frame(msg_msg)
 {
-	if(msg_msg==null){msg_msg='';}	
+	if(msg_msg==null){msg_msg='';}
 	if(!($("#msg_div_id"))){
 		logit_lms('In update_message_frame() - message frame has no document property',0);
 	}else{
@@ -1211,10 +1211,10 @@ function update_message_frame(msg_msg)
 }
 /**
  * Function that handles the saving of an item and switching from an item to another.
- * Once called, this function should be able to do the whole process of 
- * (1) saving the current item, 
- * (2) refresh all the values inside the SCORM API object, 
- * (3) open the new item into the content_id frame, 
+ * Once called, this function should be able to do the whole process of
+ * (1) saving the current item,
+ * (2) refresh all the values inside the SCORM API object,
+ * (3) open the new item into the content_id frame,
  * (4) refresh the table of contents
  * (5) refresh the progress bar (completion)
  * (6) refresh the message frame
@@ -1222,26 +1222,26 @@ function update_message_frame(msg_msg)
  * @param	string		This parameter can be a string specifying the next 
  *						item (like 'next', 'previous', 'first' or 'last') or the id to the next item  
  */
- 
-function switch_item(current_item, next_item) {
+
+function switch_item(current_item, next_item){
     //backup these params
     var orig_current_item = current_item;
     var orig_next_item = next_item;
     var orig_lesson_status = lesson_status;
-	//(1) save the current item	
+	//(1) save the current item
 	logit_lms('Called switch_item with params '+lms_item_id+' and '+next_item+'',0);
-	if (lms_lp_type==1 || lms_item_type=='asset' || session_time == '0' || session_time == '0:00:00'){
+	if(lms_lp_type==1 || lms_item_type=='asset' || session_time == '0' || session_time == '0:00:00'){
 		if (lms_lp_type==1) {
-        	xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, asset_timer, suspend_data, lesson_location,interactions, lms_item_core_exit);
+		xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, asset_timer, suspend_data, lesson_location,interactions, lms_item_core_exit);		
 		} else {
 			my_get_value_scorm=new Array();
     		my_get_value_scorm=ProcessValueScorm();
         	xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,my_get_value_scorm);
         }
 		if(item_objectives.length>0) {
-			xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives);
-		}
-	} else {
+		xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives);
+	}
+	}else{
         /** 
          * Because of SCORM 1.2's special rule about unsent commits and the fact
          * that a SCO should be SET TO 'completed' IF NO STATUS WAS SENT (and 
@@ -1267,13 +1267,13 @@ function switch_item(current_item, next_item) {
              */
         	//savedata('finish');                                 
         //}
-        // xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
+       // xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
 
 	}
 	execute_stats=false;
 	//(2) Refresh all the values inside this SCORM API object - use AJAX
-	xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item);		
-
+	xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item);
+	
 	status_info.push(lesson_status);
 	
 	//current item
@@ -1300,7 +1300,7 @@ function switch_item(current_item, next_item) {
 			info_lms_item[1]=next_item;
 		}	
 	}
-
+	
 	//(3) open the new item in the content_id frame
 	switch(next_item){
 		case 'next':
@@ -1315,11 +1315,11 @@ function switch_item(current_item, next_item) {
 			break;
 		default:
 			break;
-	}		
+	}
 	var mysrc = 'lp_controller.php?action=content&lp_id='+lms_lp_id+'&item_id='+next_item;
-	var cont_f = $("#content_id");
+	var cont_f = $("#content_id");		
 	
-	<?php if($oLP->mode == 'fullscreen'){ ?>		
+		<?php if($oLP->mode == 'fullscreen'){ ?>
 	cont_f = window.open(''+mysrc,'content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
 	cont_f.onload=function(){
 		info_lms_item[0]=info_lms_item[1];
@@ -1331,23 +1331,23 @@ function switch_item(current_item, next_item) {
 		info_lms_item[1]= info_lms_item[1];
 	}
 
-	<?php } else { ?>
-		cont_f.attr("src",mysrc);
+		<?php } else { ?>
+			cont_f.attr("src",mysrc);								
 	<?php } ?>
-
+	
 	if(lms_lp_type==1 || lms_item_type=='asset'){
 		xajax_start_timer();
 	}	
-
-	//(4) refresh the audio player if needed  
+	
+	//(4) refresh the audio player if needed	
 	$.ajax({									
 		type: "GET",
 		url: "lp_nav.php",
 		data: "",
 		success: function(tmp_data) {
 		 		$("#media").html(tmp_data);							 				
-				}		
-  	});
+	}
+  	});			
 /*
     if ( lms_lp_type==2 && (orig_lesson_status == 'not attempted' || orig_lesson_status == '') && orig_current_item != orig_next_item) {
         params = 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id+'&iid='+orig_current_item;
@@ -1454,16 +1454,16 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,
 			is_interactions='false';
 		}
 	}
- 
+		 
  
  if (is_interactions=='true')  {
-        interact_string = '';
+         interact_string = '';
   		temp = '';
         for (i in interactions){
         	
         	interact_string += '&interact['+i+']=';
             interact_temp = '[';
-            for (j in interactions[i]) {            	
+            for (j in interactions[i]) {
             	temp = interactions[i][j];
             	temp = ''+temp; // if temp == 1 there are problems with indexOf and an integer number
             	//this fix when an interaction have ',' i.e:   {a,b,c,d} is replace to {a@.|@b@.|@c@.|@d} see DT#4444          	
@@ -1478,8 +1478,8 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,
       	
            interact_string += interact_temp;        
         }
-        //interact_string = encodeURIComponent(interact_string.substr(0,(interact_string.length-1)));         
-        params += interact_string;               
+        //interact_string = encodeURIComponent(interact_string.substr(0,(interact_string.length-1)));
+        params += interact_string;	
         is_interactions='false';
  }
 

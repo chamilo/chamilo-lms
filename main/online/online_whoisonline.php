@@ -79,7 +79,7 @@ foreach($Users as $enreg)
   <td width="99%"><a <?php if($enreg['status'] == 1) echo 'class="master"'; ?> name="user_<?php echo $enreg['user_id']; ?>" href="<?php echo api_get_self(); ?>?showPic=<?php if($showPic == $enreg['user_id']) echo '0'; else echo $enreg['user_id']; ?>#user_<?php echo $enreg['user_id']; ?>"><b><?php echo $enreg['username']; ?></b></a></td>
 </tr>
 <tr>
-  <td width="99%"><small><?php echo api_ucfirst($enreg['lastname']).' '.api_ucfirst($enreg['firstname']); ?></small></td>
+  <td width="99%"><small><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']); ?></small></td>
 </tr>
 
 <?php if($showPic == $enreg['user_id']): ?>

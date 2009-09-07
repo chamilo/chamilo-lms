@@ -149,7 +149,7 @@ while ($row = mysql_fetch_assoc($res))
 		echo '<tr>';
 		if (is_numeric($row['user']))
 		{
-			echo '			<td><a href="../user/userInfo.php?editMainUserInfo='.$row['user'].'">'.$row['firstname'].' '.$row['lastname'].'</a></td>';
+			echo '			<td><a href="../user/userInfo.php?editMainUserInfo='.$row['user'].'">'.api_get_person_name($row['firstname'], $row['lastname']).'</a></td>';
 		}
 		else
 		{

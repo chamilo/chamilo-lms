@@ -29,7 +29,7 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
         echo '&nbsp;&nbsp;Dokeos&nbsp;&nbsp;-&nbsp;&nbsp;';
         $user_id=api_get_user_id();
         $user_info=api_get_user_info($user_id);
-        echo $name_user=api_xml_http_response_encode($user_info['firstName'].' '.$user_info['lastName']) ; 
+        echo $name_user=api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName'])); 
          ?></td>
         </tr>
     </table>

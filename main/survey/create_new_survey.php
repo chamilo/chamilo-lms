@@ -215,7 +215,7 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id) 
 		// Aditional Parameters
 		$form -> addElement('html','<div class="row">
 		<div class="label">
-			<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif',null,array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>
+			<a href="javascript: void(0);" onclick="javascript: advanced_parameters();" ><span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif',null,array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>
 		</div>
 		<div class="formw">
 			&nbsp;	

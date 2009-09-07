@@ -20,7 +20,7 @@ $user_id = api_get_user_id();
 $show_full_profile = true;
 
 //I'm your friend? I can see your profile?
-if (isset($_GET['u'])) {
+if (isset($_GET['u'])) {	
 	$user_id 	= (int) Database::escape_string($_GET['u']);	
 	// It's me! 
 	if (api_get_user_id() != $user_id) {
@@ -97,7 +97,7 @@ function toogle_function (element_html, course_code){
 		 $("div#"+content).html(datos);
 		}
 	});		
-} 
+}
 </script>';
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function (){
@@ -199,8 +199,8 @@ $interbreadcrumb[]= array (
 if (isset($_GET['u']) && is_numeric($_GET['u'])) {
 	$info_user=api_get_user_info($_GET['u']);	
 	$interbreadcrumb[]= array (
-		'url' => '#',
-		'name' => $info_user['firstName'].' '.$info_user['lastName']
+		'url' => 'javascript: void(0);',
+		'name' => api_get_person_name($info_user['firstName'], $info_user['lastName'])
 	);	
 }
 if (isset($_GET['u'])) {
@@ -382,13 +382,13 @@ function get_logged_user_course_html($my_course, $count) {
 			if ( $my_course['date_start']=='0000-00-00' ) {
 				$session['dates'] = get_lang('WithoutTimeLimits');
 				if ( api_get_setting('show_session_coach') === 'true' ) {
-					$session['coach'] = get_lang('GeneralCoach').': '.$sessioncoach['lastname'].' '.$sessioncoach['firstname'];
+					$session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($sessioncoach['firstname'], $sessioncoach['lastname']);
 				}
 				$active = true;
 			} else {
 				$session ['dates'] = ' - '.get_lang('From').' '.$my_course['date_start'].' '.get_lang('To').' '.$my_course['date_end'];
 				if ( api_get_setting('show_session_coach') === 'true' ) {
-					$session['coach'] = get_lang('GeneralCoach').': '.$sessioncoach['lastname'].' '.$sessioncoach['firstname'];
+					$session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($sessioncoach['firstname'], $sessioncoach['lastname']);
 				}
 				$active = ($date_start <= $now && $date_end >= $now)?true:false;
 			}
@@ -410,7 +410,7 @@ function get_logged_user_course_html($my_course, $count) {
  */
 function get_user_feeds($user,$limit=5) {
     if (!function_exists('fetch_rss')) { return '';}
-    $fields = UserManager::get_extra_fields();
+	$fields = UserManager::get_extra_fields();
     $feed_fields = array();
     $feeds = array();
     $res = '<div class="sectiontitle">'.get_lang('RSSFeeds').'</div>';
@@ -449,9 +449,15 @@ Display :: display_header(null);
 $img_array= UserManager::get_user_picture_path_by_id($user_id,'web',true,true);
 
 //print_r($user_info);
+// Added by Ivan Tcholakov, 03-APR-2009.
+if (USE_JQUERY_CORNERS_SCRIPT) {
+//
 echo $s="<script>$(document).ready( function(){
 		  $('.rounded').corners();		  
 		});</script>";
+//
+}
+//
 			
 //echo '<div id="actions">';
 //echo '<a href="../auth/profile.php?show=1"">'.Display::return_icon('edit.gif').'&nbsp;'.api_convert_encoding(get_lang('EditInformation'),'UTF-8',$charset).'</a>';
@@ -485,8 +491,8 @@ if (is_array($personal_course_list)) {
 echo '<div class="actions-title">';
 if ($user_id == api_get_user_id())
 	echo get_lang('ViewMySharedProfile');
-else 
-	echo get_lang('ViewSharedProfile').' - '.ucfirst($user_info['firstname']).' '.$user_info['lastname'];
+else
+	echo get_lang('ViewSharedProfile').' - '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
 		
 echo '</div>';					
 
@@ -494,7 +500,7 @@ echo '<div id="social-profile-wrapper">';
 // RIGHT COLUMN
     echo '<div id="social-profile-right">';			
 		//---- FRIENDS
-		
+
 		if ($show_full_profile) {
 			$list_path_friends= $list_path_normal_friends = $list_path_parents = array();
 			
@@ -512,8 +518,8 @@ echo '<div id="social-profile-wrapper">';
 			$list_friends_file=array();
 			
 			if (count($list_path_friends)!=0) {
-				$friends_count = count($list_path_friends['id_friend']); 
-				
+				$friends_count = count($list_path_friends['id_friend']);
+
 				for ($z=0;$z< $friends_count ;$z++) {
 					$list_friends_id[]  = $list_path_friends['id_friend'][$z]['friend_user_id'];
 					$list_friends_dir[] = $list_path_friends['path_friend'][$z]['dir'];
@@ -525,13 +531,13 @@ echo '<div id="social-profile-wrapper">';
 				$j=0;
 				$friend_html .= '<div class="sectiontitle">'.get_lang('SocialFriend').'</div>';	
 				$friend_html.= '<div id="friend-container" class="social-friend-container">';							
-				$friend_html.= '<div id="friend-header">';
-				//$friend_html.=  $friends_count.' '.get_lang('Friends');
-				if ($friends_count == 1)
-					$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friend').'</div>';
-				else 
-					$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friends').'</div>';
-				if (api_get_user_id() == $user_id)	
+					$friend_html.= '<div id="friend-header">';
+							//$friend_html.=  $friends_count.' '.get_lang('Friends');
+						if ($friends_count == 1)
+							$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friend').'</div>';
+						else 
+							$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friends').'</div>';
+						if (api_get_user_id() == $user_id)	
 					$friend_html.= '<div style="float:right;"><a href="index.php?#remote-tab-6">'.get_lang('SeeAll').'</a></div>';													
 					$friend_html.= '</div>'; // close div friend-header						
 								
@@ -542,60 +548,60 @@ echo '<div id="social-profile-wrapper">';
 					while ($j<$number_of_images) {
 						if ($list_friends_file[$j]<>"") {
 							$my_user_info=api_get_user_info($list_friends_id[$j]);
-							$name_user=$my_user_info['firstName'].' '.$my_user_info['lastName'];
+							$name_user=api_get_person_name($my_user_info['firstName'], $my_user_info['lastName']);
 							$friend_html.='<div id=div_'.$list_friends_id[$j].' class="image_friend_network" ><span><center>';
 							// the height = 92 must be the sqme in the image_friend_network span style in default.css
 							$friends_profile = UserFriend::get_picture_user($list_friends_id[$j], $list_friends_file[$j], 92, 'medium_', 'width="85" height="90" ');
 							$friend_html.='<a href="profile.php?u='.$list_friends_id[$j].'&amp;'.$link_shared.'">';
 							$friend_html.='<img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$list_friends_id[$j].'" title="'.$name_user.'" />';
 							$friend_html.= '</center></span>';
-							$friend_html.= '<center class="friend">'.$my_user_info['firstName'].' '.$my_user_info['lastName'].'</a></center>';
+							$friend_html.= '<center class="friend">'.api_get_person_name($my_user_info['firstName'], $my_user_info['lastName']).'</a></center>';
 							$friend_html.= '</div>';				
 						}
 						$j++; 
 					}				
-				}			
+				}
 			} else {
 				// No friends!! :(
-				$friend_html .= '<div class="sectiontitle">'.get_lang('Friends').'</div>';
-				$friend_html.= '<div id="friend-container" class="social-friend-container">';
-				$friend_html.= '<div id="friend-header">';				
+					$friend_html .= '<div class="sectiontitle">'.get_lang('Friends').'</div>';
+					$friend_html.= '<div id="friend-container" class="social-friend-container">';					
+					$friend_html.= '<div id="friend-header">';
 				$friend_html.= '<div style="float:left; padding:0px 8px 0px 8px;">'.get_lang('NoFriendsInYourContactList').'<br /><a href="'.api_get_path(WEB_PATH).'whoisonline.php">'.get_lang('TryAndFindSomeFriends').'</a></div>';				
 				$friend_html.= '</div>'; // close div friend-header					
 			}
-			$friend_html.= '</div>'; 		
+			$friend_html.= '</div>';		
 			echo $friend_html; 				
 			//Pending invitations	
 			if (!isset($_GET['u']) || (isset($_GET['u']) && $_GET['u']==api_get_user_id())) {
-				$pending_invitations = UserFriend::get_list_invitation_of_friends_by_user_id(api_get_user_id());
-				$list_get_path_web=UserFriend::get_list_web_path_user_invitation_by_user_id(api_get_user_id());
-				$count_pending_invitations = count($pending_invitations);
-				//echo '<div class="clear"></div><br />';		
-					//javascript:register_friend(this)
-					//var_dump($pending_invitations);
-				echo '<div class="clear"></div><br />';
-				echo '<div id="social-profile-invitations" >';
-				if ($count_pending_invitations > 0) {
-					echo '<div class="sectiontitle">';
+			$pending_invitations = UserFriend::get_list_invitation_of_friends_by_user_id(api_get_user_id());
+			$list_get_path_web=UserFriend::get_list_web_path_user_invitation_by_user_id(api_get_user_id());
+			$count_pending_invitations = count($pending_invitations);
+			//echo '<div class="clear"></div><br />';		
+				//javascript:register_friend(this)
+				//var_dump($pending_invitations);
+			echo '<div class="clear"></div><br />';
+			echo '<div id="social-profile-invitations" >';
+			if ($count_pending_invitations > 0) {
+				echo '<div class="sectiontitle">';
 					echo api_convert_encoding(get_lang('PendingInvitations'),$charset,'UTF-8'); 
 					echo '</div><br />';
-					for ($i=0;$i<$count_pending_invitations;$i++) {
-						//var_dump($invitations);
+				for ($i=0;$i<$count_pending_invitations;$i++) {
+					//var_dump($invitations);
 						echo '<div id="dpending_'.$pending_invitations[$i]['user_sender_id'].'" class="friend_invitations">'; 
-							echo '<div style="float:left;width:60px;" >';
-								echo '<img style="margin-bottom:5px;" src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
-							echo '</div>';
-							echo '<div style="padding-left:70px;">';
-								echo ' '.api_convert_encoding(substr($pending_invitations[$i]['content'],0,50),$charset,'UTF-8');
-								echo '<br />';
-								echo '<a id="btn_accepted_'.$pending_invitations[$i]['user_sender_id'].'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
-								echo '<div id="id_response">&nbsp;</div>';
-							echo '</div>';
+						echo '<div style="float:left;width:60px;" >';
+							echo '<img style="margin-bottom:5px;" src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
 						echo '</div>';
-						echo '<div class="clear"></div>';
-					}
+						echo '<div style="padding-left:70px;">';
+								echo ' '.api_convert_encoding(substr($pending_invitations[$i]['content'],0,50),$charset,'UTF-8');
+							echo '<br />';
+							echo '<a id="btn_accepted_'.$pending_invitations[$i]['user_sender_id'].'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
+							echo '<div id="id_response">&nbsp;</div>';
+						echo '</div>';
+					echo '</div>';
+					echo '<div class="clear"></div>';
 				}
-				echo '</div>';
+			}
+			echo '</div>';
 			}
 			
 			//--Productions			
@@ -611,13 +617,13 @@ echo '<div id="social-profile-wrapper">';
 			}			
 			
 			// Images uploaded by course			
-			$file_list = '';			
+			$file_list = '';
 			if (is_array($course_list_code) && count($course_list_code)>0) {
-				foreach ($course_list_code as $course) { 
-					$file_list.= UserManager::get_user_upload_files_by_course($user_id,$course['code']);
-				}			
+			foreach ($course_list_code as $course) { 
+				$file_list.= UserManager::get_user_upload_files_by_course($user_id,$course['code']);
 			}
-	
+			}
+
 			if (!empty($file_list)) {
 				echo '<div class="clear"></div><br />';
 				echo '<div class="sectiontitle">';
@@ -626,7 +632,7 @@ echo '<div id="social-profile-wrapper">';
 				echo '</br><div class="social-content-information">';
 				echo $file_list;
 				echo '</div>';		
-			}			
+			}
 			
 			//loading this information 
 			
@@ -648,39 +654,39 @@ echo '<div id="social-profile-wrapper">';
 				echo '<br />';
 			}
 			
-			if (!empty($user_info['diplomas'])) {
+			if (!empty($user_info['diplomas'])) {	
 				echo '<div class="social-background-content" style="width:100%;" >';					
 				echo '<div class="social-actions-message">'.get_lang('MyDiplomas').'</div>';
 				echo cut($user_info['diplomas'],$cut_size); 
 				echo '</div>';
 				echo '<br />';
 			}
-			if (!empty($user_info['openarea'])) {
+			if (!empty($user_info['openarea'])) {	
 				echo '<div class="social-background-content" style="width:100%;" >';	
 				echo '<div class="social-actions-message">'.get_lang('MyPersonalOpenArea').'</div>';
 				echo cut($user_info['openarea'],$cut_size); 
 				echo '</div>';
 				echo '<br />';
 			}
-			if (!empty($user_info['teach'])) {
+			if (!empty($user_info['teach'])) {	
 				echo '<div class="social-background-content" style="width:100%;" >';					
 				echo '<div class="social-actions-message">'.get_lang('MyTeach').'</div>';
 				echo cut($user_info['teach'],$cut_size);
 				echo '</div>';
 				echo '<br />';
-			}
+			}				
 			echo '</div>';				
 		} else {
 			echo '<div class="clear"></div><br />';	
 		}
-				
-	echo '</div>'; // end of content section
 		
+	echo '</div>'; // end of content section
+			
 		
 echo '<div id="social-profile-container">';
 	// LEFT COLUMN
 	echo '<div id="social-profile-left">';
-	
+
 			//--- User image
 			echo '<div class="social-content-image">';
 			echo '<div class="social-background-content" style="width:95%;" align="center">';
@@ -698,11 +704,11 @@ echo '<div id="social-profile-container">';
     	  		echo '</div>';
     	  		echo '<div>';
     	  		echo Display::return_icon('edit.gif');
-    	  		echo '&nbsp;<a href="../auth/profile.php?show=1">'.get_lang('EditInformation').'</a>&nbsp;';  
+    	  		echo '&nbsp;<a href="../auth/profile.php?show=1">'.get_lang('EditInformation').'</a>&nbsp;';    	  			
     	  		echo '</div>'; 	  			
     	  	} else {
     	  		echo '&nbsp;<a href="../messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />'; 
-    	  		//echo '&nbsp;&nbsp;<a href="#">'.get_lang('SendMessage').'</a>';	
+    	  		//echo '&nbsp;&nbsp;<a href="javascript: void(0);">'.get_lang('SendMessage').'</a>';	
     	  	}
     	  	echo '</div>';
     	  	echo '<br />';
@@ -713,9 +719,9 @@ echo '<div id="social-profile-container">';
     	  	}*/
     	  	
 			// Extra information
-			
+    	  	
     	  	if ($show_full_profile) {    	  		
-				//-- Extra Data
+				//-- Extra Data							
 				$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
 				$t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 				$extra_user_data = UserManager::get_extra_user_data($user_id);
@@ -726,7 +732,7 @@ echo '<div id="social-profile-container">';
 					$extra_information .= '</div><br />';
 					$extra_information .='<div class="social-content-information">';
 					$extra_information_value = '';
-					foreach($extra_user_data as $key=>$data) {
+						foreach($extra_user_data as $key=>$data) {
 						// get display text, visibility and type from user_field table
 						$field_variable = str_replace('extra_','',$key);
 						$sql = "SELECT field_display_text,field_visible,field_type FROM $t_uf WHERE field_variable ='$field_variable'";
@@ -761,7 +767,7 @@ echo '<div id="social-profile-container">';
 					// if there are information to show
 					if (!empty($extra_information_value)) {
 						$extra_information .= $extra_information_value;
-					}
+				}
 					$extra_information .= '</div>';			
 					$extra_information .= '<br /><br />';
 				}
@@ -781,7 +787,7 @@ echo '<div id="social-profile-container">';
 					echo '<div class="social-background-content">';	
 					echo $my_agenda_items; 
 					echo '</div>';
-					
+
 					echo '<br /><br />';
 					echo '</div>';
 				}
@@ -791,9 +797,9 @@ echo '<div id="social-profile-container">';
 				$my_announcement_by_user_id=isset($_GET['u']) ? Security::remove_XSS($_GET['u']) : api_get_user_id();
 
 		    	foreach ($course_list_code as $course) {
-	    			$content = get_all_annoucement_by_user_course($course['dbName'],$my_announcement_by_user_id);	
+	    			$content = get_all_annoucement_by_user_course($course['dbName'],$my_announcement_by_user_id);	 			
 	    			$course_info=api_get_course_info($course['code']); 			
-	    	  		if (!empty($content)) {		    	  			  
+	    	  		if (!empty($content)) {	 		    	  			  
 						$announcement_content.= '<div class="social-background-content" style="width:100%">';	
 						$announcement_content.= '<div class="actions">'.$course_info['name'].'</div>';					
 						$announcement_content.= $content;	
@@ -831,7 +837,7 @@ echo '<div id="social-profile-container">';
 						  <dd>'. $user_info['username'].'	</dd>';					
 					if (!empty($user_info['firstname']) || !empty($user_info['lastname']))
 						echo '<dt>'.get_lang('Name').'</dt>		
-						  	  <dd>'. $user_info['firstname'].' '.$user_info['lastname'].'</dd>';					
+						  	  <dd>'. api_get_person_name($user_info['firstname'], $user_info['lastname']).'</dd>';					
 					if (!empty($user_info['official_code']))					
 						echo '<dt>'.get_lang('OfficialCode').'</dt>	
 						  <dd>'.$user_info['official_code'].'</dd>';
@@ -849,17 +855,17 @@ echo '<div id="social-profile-container">';
 					echo '<dl>';
 					if (!empty($user_info['firstname']) || !empty($user_info['lastname']))
 						echo '<dt>'.get_lang('Name').'</dt>		
-						  <dd>'. $user_info['firstname'].' '.$user_info['lastname'].'</dd>';					
+						  <dd>'. api_get_person_name($user_info['firstname'], $user_info['lastname']).'</dd>';					
 				echo '</div>';
 			}
-						
-			echo '<div class="clear"></div><br />';
-            echo '</div>';
+
+			echo '<div class="clear"></div><br />';			
+			echo '</div>';		
 			// COURSES LIST
 			if ($show_full_profile) {							
 				//print_r($personal_course_list);		
 				//echo '<pre>';
-				if (is_array($list)) {
+				if ( is_array($list) ) {
 					echo '<div class="sectiontitle">';
 					echo api_ucfirst(get_lang('MyCourses'));
 					echo '</div>';
@@ -868,7 +874,7 @@ echo '<div id="social-profile-container">';
 					$old_user_category = 0;
 					$i=1;
 					foreach($list as $key=>$value) {
-						if ( empty($value[2]) ) { //if out of any session		
+						if ( empty($value[2]) ) { //if out of any session				
 							echo $value[1];
 							//echo '<div id="loading'.$i.'">&nbsp;</div>';
 							//class="social-profile-rounded maincourse"							

@@ -103,10 +103,17 @@ $language_variable=api_xml_http_response_encode(get_lang('PersonalData'));
 		echo '<div class="social-profile-info" style="float:left;position:relative">';			
 			echo '<dt>'.api_xml_http_response_encode(get_lang('UserName')).'</dt>
 			<dd>'. api_xml_http_response_encode($user_info['username']).'	</dd>';
-			echo '<dt>'.api_xml_http_response_encode(get_lang('FirstName')).'</dt>
-			<dd>'. api_xml_http_response_encode($user_info['firstname']).'</dd>';
-			echo '<dt>'.api_xml_http_response_encode(get_lang('LastName')).'</dt>
-			<dd>'. api_xml_http_response_encode($user_info['lastname']).'</dd>';
+			if (api_is_western_name_order()) {
+				echo '<dt>'.api_xml_http_response_encode(get_lang('FirstName')).'</dt>
+				<dd>'. api_xml_http_response_encode($user_info['firstname']).'</dd>';
+				echo '<dt>'.api_xml_http_response_encode(get_lang('LastName')).'</dt>
+				<dd>'. api_xml_http_response_encode($user_info['lastname']).'</dd>';
+			} else {
+				echo '<dt>'.api_xml_http_response_encode(get_lang('LastName')).'</dt>
+				<dd>'. api_xml_http_response_encode($user_info['lastname']).'</dd>';
+				echo '<dt>'.api_xml_http_response_encode(get_lang('FirstName')).'</dt>
+				<dd>'. api_xml_http_response_encode($user_info['firstname']).'</dd>';
+			}
 			echo '<dt>'.api_xml_http_response_encode(get_lang('OfficialCode')).'</dt>	
 			<dd>'. api_xml_http_response_encode($user_info['official_code']).'</dd>';
 			echo '<dt>'.api_xml_http_response_encode(get_lang('Email')).'</dt>

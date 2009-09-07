@@ -59,7 +59,7 @@ for ($p=0;$p<count($list_groups);$p++) {
 		while ($j<$number_of_images) {
 			if ($list_friends_file[$j]<>"") {
 				$user_info=api_get_user_info($list_friends_id[$j]);				
-				$user_name=api_xml_http_response_encode($user_info['firstName'].' '.$user_info['lastName']) ;
+				$user_name=api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName']));
 				if($list_friends_file[$j]==='unknown.jpg') {
 					$big='';
 				} else {

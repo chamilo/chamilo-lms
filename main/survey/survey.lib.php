@@ -2582,7 +2582,7 @@ class SurveyUtil {
 
 		// actions bar
 		echo '<div class="actions">';
-		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png').' '.get_lang('BackTo').' '.get_lang('ReportingOverview').'</a>';
+		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ReportingOverview')).' '.get_lang('BackTo').' '.get_lang('ReportingOverview').'</a>';
 		if (isset($_GET['user']))
 		{
 			// the delete link
@@ -2746,7 +2746,7 @@ class SurveyUtil {
 		}
 
 		echo '<div class="actions">';
-		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png').' '.get_lang('BackTo').' '.get_lang('ReportingOverview').'</a>';
+		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ReportingOverview')).' '.get_lang('BackTo').' '.get_lang('ReportingOverview').'</a>';
 		echo '<div id="question_report_questionnumbers">'.get_lang('GoToQuestion').': ';
 		for($i=1; $i<=($survey_data['number_of_questions']); $i++ )
 		{
@@ -2996,7 +2996,7 @@ class SurveyUtil {
 
 		// actions bar
 		echo '<div class="actions">';
-		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png').' '.get_lang('BackTo').' '.get_lang('ReportingOverview').'</a>';
+		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ReportingOverview')).' '.get_lang('BackTo').' '.get_lang('ReportingOverview').'</a>';
 		echo '</div>';		
 	
 		// the form
@@ -3745,7 +3745,7 @@ class SurveyUtil {
 		
 		// actions bar
 		echo '<div class="actions">';
-		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png').' '.get_lang('BackTo').' '.get_lang('ReportingOverview').'</a>';		
+		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ReportingOverview')).' '.get_lang('BackTo').' '.get_lang('ReportingOverview').'</a>';		
 		echo '</div>';
 
 		// displaying an information message that only the questions with predefined answers can be used in a comparative report

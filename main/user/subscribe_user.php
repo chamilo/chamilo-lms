@@ -1,21 +1,21 @@
 <?php // $Id: subscribe_user.php 20412 2009-05-08 16:09:34Z herodoto $
 /*
-==============================================================================
+============================================================================== 
 	Dokeos - elearning and course management software
-
+	
 	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
-
+	
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-
+	
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-
+	
 	See the GNU General Public License for more details.
-
+	
 	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
 ==============================================================================
 */
@@ -83,7 +83,7 @@ $list_register_user='';
 $list_not_register_user='';
 
 if (isset ($_REQUEST['register'])) {
-	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
+	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {		
 		$result_simple_sub=CourseManager :: subscribe_user(Database::escape_string($_REQUEST['user_id']), $_course['sysCode'],COURSEMANAGER);	
 	} else {		
 		$result_simple_sub=CourseManager :: subscribe_user(Database::escape_string($_REQUEST['user_id']), $_course['sysCode']);
@@ -139,7 +139,7 @@ if (isset ($_POST['action'])) {
 					for ($j=0; $j<count($user_id_temp);$j++) {
 						if ($is_suscribe_user_id[$i]==$user_id_temp[$j]) {
 								if ($is_suscribe[$i]) {										
-									$list_register_user.=" - ".$user_name_temp[$j].'<br/>';
+									$list_register_user.=" - ".$user_name_temp[$j].'<br/>';								
 									$temp_unique_user=$user_name_temp[$j];								
 									$counter++;
 								} else {
@@ -152,11 +152,11 @@ if (isset ($_POST['action'])) {
 				//$list_register_user=$temp_unique_user; // only 1 user register 
 			//}
 				
-			if (!empty($list_register_user)) {					
-				if ($$is_suscribe_counter==1) {	
+			if (!empty($list_register_user)) {
+				if ($$is_suscribe_counter==1) {
 					$register_user_message=$temp_unique_user.' '.get_lang('langAddedToCourse');
 					Display::display_confirmation_message($register_user_message,false);				
-				} else {										
+				} else {
 					$register_user_message='<br />'.get_lang('UsersRegistered').'<br/><br />'.$list_register_user;
 					Display::display_confirmation_message($register_user_message,false);								
 				}				
@@ -254,25 +254,32 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$tbl_session_rel_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-	if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
+	$is_western_name_order = api_is_western_name_order();
+	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
 		if (!empty($_SESSION["id_session"])) {
-			$sql = "SELECT 
-						u.user_id AS col0,
-						u.official_code   AS col1, 
-						u.lastname  AS col2, 
-						u.firstname AS col3, 
-						u.email 	AS col4,
-						u.active 	AS col5,
-						u.user_id   AS col6
+			$sql = "SELECT
+					u.user_id AS col0,
+					u.official_code AS col1,
+					".($is_western_name_order
+					? "u.firstname AS col2,
+					u.lastname AS col3,"
+					: "u.lastname AS col2,
+					u.firstname AS col3,")." 
+					u.email 	AS col4,
+					u.active 	AS col5,
+					u.user_id   AS col6
 					FROM $user_table u
 					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."'
 					WHERE cu.id_user IS NULL";	
 		} else {	
-			$sql = "SELECT 
+			$sql = "SELECT
 					u.user_id AS col0,
-					u.official_code   AS col1, 
-					u.lastname  AS col2, 
-					u.firstname AS col3, 
+					u.official_code AS col1,
+					".($is_western_name_order
+					? "u.firstname AS col2,
+					u.lastname AS col3,"
+					: "u.lastname AS col2,
+					u.firstname AS col3,")."
 					u.email 	AS col4,
 					u.active 	AS col5,
 					u.user_id   AS col6
@@ -280,18 +287,19 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
 				WHERE cu.user_id IS NULL";
 				//showing only the courses of the current Dokeos access_url_id
-				
 				global $_configuration;
 				if ($_configuration['multiple_access_urls']==true) {
 					$url_access_id = api_get_current_access_url_id();
 					if ($url_access_id !=-1) {
 						$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-								
-						$sql = "SELECT 
+						$sql = "SELECT
 						u.user_id AS col0,
-						u.official_code   AS col1, 
-						u.lastname  AS col2, 
-						u.firstname AS col3, 
+						u.official_code AS col1,
+						".($is_western_name_order
+						? "u.firstname AS col2,
+						u.lastname AS col3,"
+						: "u.lastname AS col2,
+						u.firstname AS col3,")."
 						u.email 	AS col4,
 						u.active 	AS col5,
 						u.user_id   AS col6
@@ -301,33 +309,37 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 						ON (url_rel_user.user_id = u.user_id) 
 						WHERE cu.user_id IS NULL AND access_url_id= $url_access_id ";				
 					}		
-				}
-			
-				
+				}	
 		}
 	} else {
 		if (!empty($_SESSION["id_session"])) {
-			$sql = "SELECT 
+			$sql = "SELECT
 					u.user_id AS col0,
-					u.official_code   AS col1, 
-					u.lastname  AS col2, 
-					u.firstname AS col3, 
+					u.official_code AS col1,
+					".($is_western_name_order
+					? "u.firstname AS col2,
+					u.lastname AS col3,"
+					: "u.lastname AS col2,
+					u.firstname AS col3,")."
 					u.email 	AS col4,
 					u.active 	AS col5,
-					u.user_id   AS col6 
+					u.user_id   AS col6
 				FROM $user_table u
 				LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."'
 				WHERE cu.id_user IS NULL
 				";
 		} else {
-			$sql = "SELECT 
+		$sql = "SELECT
 					u.user_id AS col0,
-					u.official_code   AS col1, 
-					u.lastname  AS col2, 
-					u.firstname AS col3, 
+					u.official_code   AS col1,
+					".($is_western_name_order
+					? "u.firstname  AS col2,
+					u.lastname AS col3,"
+					: "u.lastname  AS col2,
+					u.firstname AS col3,")."
 					u.email 	AS col4,
 					u.active 	AS col5,
-					u.user_id   AS col6 
+					u.user_id   AS col6
 				FROM $user_table u
 				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
 				WHERE cu.user_id IS NULL";
@@ -337,12 +349,14 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				$url_access_id = api_get_current_access_url_id();
 				if ($url_access_id !=-1) {
 					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-							
-					$sql = "SELECT 
+					$sql = "SELECT
 					u.user_id AS col0,
-					u.official_code   AS col1, 
-					u.lastname  AS col2, 
-					u.firstname AS col3, 
+					u.official_code AS col1,
+					".($is_western_name_order
+					? "u.firstname  AS col2,
+					u.lastname AS col3,"
+					: "u.lastname  AS col2,
+					u.firstname AS col3,")."
 					u.email 	AS col4,
 					u.active 	AS col5,
 					u.user_id   AS col6
@@ -353,7 +367,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					WHERE cu.user_id IS NULL AND access_url_id= $url_access_id ";				
 				}		
 			}
-		}	
+		}
 	}
 	if (isset ($_REQUEST['keyword'])) {
 		$keyword = Database::escape_string($_REQUEST['keyword']);
@@ -365,9 +379,13 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	$users = array ();
 	while ($user = Database::fetch_row($res)) {
 		$users[] = $user;
-		$_SESSION['session_user_id'][]=$user[0];
-		$_SESSION['session_user_name'][]=$user[3].' '.$user[2];		
-	}	
+		$_SESSION['session_user_id'][] = $user[0];
+		if ($is_western_name_order) {
+			$_SESSION['session_user_name'][] = api_get_person_name($user[2], $user[3]);
+		} else {
+			$_SESSION['session_user_name'][] = api_get_person_name($user[3], $user[2]);
+		}
+	}
 	return $users;
 }
 /**
@@ -418,6 +436,8 @@ function active_filter($active, $url_params, $row) {
 }
 
 
+$is_western_name_order = api_is_western_name_order();
+$sort_by_first_name = api_sort_by_first_name();
 
 // Build search-form
 echo '<div class="actions">';
@@ -438,15 +458,20 @@ $form->display();
 echo '</div>';
 
 // Build table
-$table = new SortableTable('users', 'get_number_of_users', 'get_user_data', 2);
+$table = new SortableTable('users', 'get_number_of_users', 'get_user_data', ($is_western_name_order xor $sort_by_first_name) ? 3 : 2);
 $parameters['keyword'] = $_REQUEST['keyword'];
 $parameters ['type'] = $_REQUEST['type']; 
 $table->set_additional_parameters($parameters);
 $col = 0;
 $table->set_header($col ++, '', false);
 $table->set_header($col ++, get_lang('OfficialCode'));
-$table->set_header($col ++, get_lang('LastName'));
-$table->set_header($col ++, get_lang('FirstName'));
+if (api_is_western_name_order()) {
+	$table->set_header($col ++, get_lang('FirstName'));
+	$table->set_header($col ++, get_lang('LastName'));
+} else {
+	$table->set_header($col ++, get_lang('LastName'));
+	$table->set_header($col ++, get_lang('FirstName'));
+}
 $table->set_header($col ++, get_lang('Email'));
 $table->set_column_filter($col -1, 'email_filter');
 $table->set_header($col ++, get_lang('Active'),false);
@@ -455,14 +480,13 @@ $table->set_header($col ++, get_lang('reg'), false);
 $table->set_column_filter($col -1, 'reg_filter');
 $table->set_form_actions(array ('subscribe' => get_lang('reg')), 'user');
 
-if ( !empty($_POST['keyword'])) {
+if (!empty($_POST['keyword'])) {
 	$keyword_name=Security::remove_XSS($_POST['keyword']);
 	echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';	
 }
 
 // Display table
 $table->display();
-
 
 /*
 ============================================================================== 

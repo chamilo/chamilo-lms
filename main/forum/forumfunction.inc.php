@@ -882,16 +882,16 @@ function display_up_down_icon($content, $id, $list) {
 		}
 	}
 	if ($position>1) {
-		$return_value='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=up&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveUp').'">'.Display::return_icon('up.gif').'</a>';
+		$return_value='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=up&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveUp').'">'.Display::return_icon('up.gif',get_lang('MoveUp')).'</a>';
 	} else {
-		$return_value=Display::return_icon('up_na.gif');
+		$return_value=Display::return_icon('up_na.gif','-');
 	}
 	
 	if ($position<$total_items) {
-		$return_value.='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=down&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveDown').'" >'.Display::return_icon('down.gif').'</a>';
+		$return_value.='<a href="'.api_get_self().'?'.api_get_cidreq().'&action=move&amp;direction=down&amp;content='.$content.'&amp;forumcategory='.Security::remove_XSS($_GET['forumcategory']).'&amp;id='.$id.'" title="'.get_lang('MoveDown').'" >'.Display::return_icon('down.gif',get_lang('MoveDown')).'</a>';
 	} else {
 		
-	   $return_value.=Display::return_icon('down_na.gif');
+	   $return_value.=Display::return_icon('down_na.gif','-');
 	}
 	echo $return_value;
 }

@@ -773,7 +773,7 @@ function api_stristr($haystack, $needle, $before_needle = false, $encoding = nul
 		}
 		return api_substr($haystack, api_strlen($haystack, $encoding) - api_strlen($result, $encoding), null, $encoding);
 	}
-	if (PHP_VERSION < 5.3) {
+	if (!IS_PHP_53) {
 		return stristr($haystack, $needle);
 	}
 	return stristr($haystack, $needle, $before_needle);
@@ -961,6 +961,22 @@ function api_strrev($string, $encoding = null) {
 }
 
 /**
+ * Finds the position of last occurrence (case insensitive) of a string in a string.
+ * @param string $haystack				The string from which to get the position of the last occurrence.
+ * @param string $needle				The string to be found.
+ * @param int $offset (optional)		$offset may be specified to begin searching an arbitrary position. Negative values will stop searching at an arbitrary point prior to the end of the string.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return mixed						Returns the numeric position of the first occurrence (case insensitive) of $needle in the $haystack, or FALSE if $needle is not found.
+ * Note: The first character's position is 0, the second character position is 1, and so on. 
+ * This function is aimed at replacing the functions strripos() and mb_strripos() for human-language strings.
+ * @link http://php.net/manual/en/function.strripos
+ * @link http://php.net/manual/en/function.mb-strripos
+ */
+function api_strripos($haystack, $needle, $offset = 0, $encoding = null) {
+	return api_strrpos(api_strtolower($haystack, $encoding), api_strtolower($needle, $encoding), $offset, $encoding);
+}
+
+/**
  * Finds the position of last occurrence of a string in a string.
  * @param string $haystack				The string from which to get the position of the last occurrence.
  * @param string $needle				The string to be found.
@@ -990,7 +1006,7 @@ function api_strrpos($haystack, $needle, $offset = 0, $encoding = null) {
 	if (_api_is_single_byte_encoding($encoding)) {
 		return strrpos($haystack, $needle, $offset);
 	}
-	if (_api_mb_supports($encoding)) {
+	if (_api_mb_supports($encoding) && IS_PHP_52) {
 		return @mb_strrpos($haystack, $needle, $offset, $encoding);
 	}
 	elseif (api_is_encoding_supported($encoding)) {
@@ -998,7 +1014,7 @@ function api_strrpos($haystack, $needle, $offset = 0, $encoding = null) {
 			$haystack = api_utf8_encode($haystack, $encoding);
 			$needle = api_utf8_encode($needle, $encoding);
 		}
-		if (MBSTRING_INSTALLED) {
+		if (MBSTRING_INSTALLED && IS_PHP_52) {
 			return @mb_strrpos($haystack, $needle, $offset, 'UTF-8');
 		}
 		// This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
@@ -1069,7 +1085,7 @@ function api_strstr($haystack, $needle, $before_needle = false, $encoding = null
 		if (!$before_needle) {
 			return strstr($haystack, $needle);
 		}
-		if (PHP_VERSION < 5.3) {
+		if (!IS_PHP_53) {
 			$result = explode($needle, $haystack, 2);
 			if ($result === false || count($result) < 2) {
 				return false;
@@ -1099,7 +1115,7 @@ function api_strstr($haystack, $needle, $before_needle = false, $encoding = null
 	if (!$before_needle) {
 		return strstr($haystack, $needle);
 	}
-	if (PHP_VERSION < 5.3) {
+	if (!IS_PHP_53) {
 		$result = explode($needle, $haystack, 2);
 		if ($result === false || count($result) < 2) {
 			return false;

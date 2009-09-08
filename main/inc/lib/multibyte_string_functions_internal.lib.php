@@ -981,7 +981,7 @@ if (MBSTRING_INSTALLED && !function_exists('mb_stristr')) {
 		if ($pos === false) {
 			return false;
 		}
-		if($part == true) {
+		if ($part) {
 			return mb_substr($haystack, 0, $pos + 1, $encoding);
 		}
 		return mb_substr($haystack, $pos, mb_strlen($haystack, $encoding), $encoding);
@@ -1000,7 +1000,7 @@ if (MBSTRING_INSTALLED && !function_exists('mb_strrchr')) {
 		if ($pos === false) {
 			return false;
 		} 
-		if($part == true) {
+		if ($part) {
 			return mb_substr($haystack, 0, $pos + 1, $encoding);
 		}
 		return mb_substr($haystack, $pos, mb_strlen($haystack, $encoding), $encoding);
@@ -1018,7 +1018,7 @@ if (MBSTRING_INSTALLED && !function_exists('mb_strstr')) {
 		if ($pos === false) {
 			return false;
 		}
-		if($part == true) {
+		if ($part) {
 			return mb_substr($haystack, 0, $pos + 1, $encoding);
 		}
 		return mb_substr($haystack, $pos, mb_strlen($haystack, $encoding), $encoding);

@@ -242,6 +242,17 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 		//var_dump($res);
 	}
 
+	public function test_api_strripos() {
+		$haystack = 'aviación aviación'; // UTF-8
+		$needle = 'Ó';
+		$offset = 0;
+		$encoding = 'UTF-8';
+		$res = api_strripos($haystack, $needle, $offset, $encoding);
+		$this->assertTrue(is_numeric($res) || is_bool($res));
+		$this->assertTrue($res == 15);
+		//var_dump($res);
+	}
+
 	public function test_api_strrpos() {
 		$haystack = 'aviación aviación'; // UTF-8
 		$needle = 'ó';

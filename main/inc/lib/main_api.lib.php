@@ -167,6 +167,10 @@ define('PLATFORM_AUTH_SOURCE', 'platform');
 //CONSTANT defining the default HotPotatoes files directory
 define('DIR_HOTPOTATOES','/HotPotatoes_files');
 
+// Constants for detection some important PHP5 subversions.
+define('IS_PHP_52', !((float)PHP_VERSION < 5.2));
+define('IS_PHP_53', !((float)PHP_VERSION < 5.3));
+
 // This constant is a result of Windows OS detection, it has a boolean value:
 // true whether the server runs on Windows OS, false otherwise.
 define ('IS_WINDOWS_OS', api_is_windows_os());

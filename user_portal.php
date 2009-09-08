@@ -543,13 +543,13 @@ function get_logged_user_course_html($my_course) {
 			if ( $my_course['date_start']=='0000-00-00' ) {
 				$session['dates'] = get_lang('WithoutTimeLimits');
 				if ( api_get_setting('show_session_coach') === 'true' ) {
-					$session['coach'] = get_lang('GeneralCoach').': '.$sessioncoach['lastname'].' '.$sessioncoach['firstname'];
+					$session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($sessioncoach['firstname'], $sessioncoach['lastname']);
 				}
 				$active = true;
 			} else {
 				$session ['dates'] = ' - '.get_lang('From').' '.$my_course['date_start'].' '.get_lang('To').' '.$my_course['date_end'];
 				if ( api_get_setting('show_session_coach') === 'true' ) {
-					$session['coach'] = get_lang('GeneralCoach').': '.$sessioncoach['lastname'].' '.$sessioncoach['firstname'];
+					$session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($sessioncoach['firstname'], $sessioncoach['lastname']);
 				}
 				$active = ($date_start <= $now && $date_end >= $now)?true:false;
 			}

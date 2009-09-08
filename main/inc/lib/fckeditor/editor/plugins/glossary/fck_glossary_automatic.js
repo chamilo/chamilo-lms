@@ -7,7 +7,7 @@ $(document).ready(function() {
         beforeSend: function(objeto) {
         },
         type: "POST",
-        url: "../../../main/glossary/glossary_ajax_request.php",
+        url: "http://"+location.host+"/main/glossary/glossary_ajax_request.php",
         data: "glossary_data=true",
         success: function(datos) {
 			  if (datos.length==0) {
@@ -35,9 +35,9 @@ $(document).ready(function() {
 	                $.ajax({
 	                    contentType: "application/x-www-form-urlencoded",
 	                    beforeSend: function(objeto) {
-	                    $("div#"+div_content_id).html("<img src=\'../../../main/inc/lib/javascript/indicator.gif\' />"); },
+	                    $("div#"+div_content_id).html("<img src=\'http://"+location.host+"/main/inc/lib/javascript/indicator.gif\' />"); },
 	                    type: "POST",
-	                    url: "../../../main/glossary/glossary_ajax_request.php",
+	                    url: "http://"+location.host+"/main/glossary/glossary_ajax_request.php",
 	                    data: "glossary_id="+my_glossary_id,
 	                    success: function(datos) {
 	                        $("div#"+div_content_id).html(datos);

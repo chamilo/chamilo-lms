@@ -66,12 +66,73 @@ $language_file = "learnpath";
 */ 
 $htmlHeadXtra[] = '
 <script type="text/javascript">
-			
+
+var temp=false;
+var temp2=false;
+var use_document_title='.api_get_setting('use_document_title').';
+var load_default_template = '. ((isset($_POST['submit']) || empty($_SERVER['QUERY_STRING'])) ? 'false' : 'true' ) .';	
+				
 function FCKeditor_OnComplete( editorInstance )
 {	
+	editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;	
 	document.getElementById(\'frmModel\').innerHTML = "<iframe height=890px width=230px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
 }	
+		
+function check_for_title()
+	{
+		if(temp==true){
+			// This functions shows that you can interact directly with the editor area
+			// DOM. In this way you have the freedom to do anything you want with it.
 	
+			// Get the editor instance that we want to interact with.
+			var oEditor = FCKeditorAPI.GetInstance(\'content_lp\') ;
+	
+			// Get the Editor Area DOM (Document object).
+			var oDOM = oEditor.EditorDocument ;
+	
+			var iLength ;
+			var contentText ;
+			var contentTextArray;
+			var bestandsnaamNieuw = "";
+			var bestandsnaamOud = "";
+	
+			// The are two diffent ways to get the text (without HTML markups).
+			// It is browser specific.
+	
+			if( document.all )		// If Internet Explorer.
+			{
+				contentText = oDOM.body.innerText ;
+			}
+			else					// If Gecko.
+			{
+				var r = oDOM.createRange() ;
+				r.selectNodeContents( oDOM.body ) ;
+				contentText = r.toString() ;
+			}
+
+			var index=contentText.indexOf("/*<![CDATA");
+			contentText=contentText.substr(0,index);			
+
+			// Compose title if there is none
+			contentTextArray = contentText.split(\' \') ;
+			var x=0;
+			for(x=0; (x<5 && x<contentTextArray.length); x++)
+			{
+				if(x < 4)
+				{
+					bestandsnaamNieuw += contentTextArray[x] + \' \';
+				}
+				else
+				{
+					bestandsnaamNieuw += contentTextArray[x];
+				}
+			}
+			
+		
+		}
+		temp=true;
+	}		
+		
 function InnerDialogLoaded()
 {	 	
 	if (document.all)
@@ -85,8 +146,7 @@ function InnerDialogLoaded()
 	}				
 	
 	return 	B.ClickFrame();	
-};	 
-
+};		 
 		
 </script>';
 

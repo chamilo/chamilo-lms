@@ -413,7 +413,7 @@ elseif ($displayMode == "viewMainInfoEdit")
 						"<td>", get_lang('CourseManager'), "</td>\n",
 					"</tr>\n",
 					"<tr align=\"center\">",
-						"<td align=\"left\"><b>", htmlize($mainUserInfo['firstName']), " ", htmlize($mainUserInfo['lastName']), "</b></td>\n",
+						"<td align=\"left\"><b>", htmlize(api_get_person_name($mainUserInfo['firstName'], $mainUserInfo['lastName'])), "</b></td>\n",
 						"<td align=\"left\"><input type=\"text\" name =\"role\" value=\"", $mainUserInfo['role'], "\" maxlength=\"40\" /></td>",
 						"<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteTutor\" value=\"1\" ", $tutorChecked, " /></td>";
 
@@ -494,7 +494,7 @@ elseif ($displayMode == "viewContentList") // default display
 
 				"<tr align=\"center\">\n",
 
-				"<td  align=\"left\"><b>",htmlize($mainUserInfo['firstName'])," ",htmlize($mainUserInfo['lastName']),"</b></td>\n",
+				"<td  align=\"left\"><b>",htmlize(api_get_person_name($mainUserInfo['firstName'], $mainUserInfo['lastName'])),"</b></td>\n",
 				"<td  align=\"left\">",htmlize($mainUserInfo['role']),"</td>";
 
 				//DISPLAY TABLE CONTENT

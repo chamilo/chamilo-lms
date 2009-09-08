@@ -22,6 +22,9 @@
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
+
+// TODO: Is this file deprecated?
+
 /**
 ==============================================================================
 * @package dokeos.tracking

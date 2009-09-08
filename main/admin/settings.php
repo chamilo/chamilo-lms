@@ -1134,92 +1134,102 @@ function add_edit_template()
 	// if the form validates (complies to all rules) we save the information, else we display the form again (with error message if needed)
 	if( $form->validate() )
 	{
-		// exporting the values
-		$values = $form->exportValues();
-		
-		//var_dump($values);exit;
-		
-		// upload the file
-		if (!empty($_FILES['template_image']['name']))
-		{
-			include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-			$upload_ok = process_uploaded_file($_FILES['template_image']);
-			
-			if ($upload_ok)
+
+		$check = Security::check_token('post');	
+		if ($check) {		
+			// exporting the values
+			$values = $form->exportValues();
+	
+			// upload the file
+			if (!empty($_FILES['template_image']['name']))
 			{
-				// Try to add an extension to the file if it hasn't one
-				$new_file_name = add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);	
+				include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+				$upload_ok = process_uploaded_file($_FILES['template_image']);
 				
-				// upload dir
-				$upload_dir = api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/';
-				
-				// create dir if not exists
-                if (!is_dir($upload_dir)) {
-                    $perm = api_get_setting('permissions_for_new_directories');
-                    $perm = octdec(!empty($perm)?$perm:'0770');
-                	$res = @mkdir($upload_dir,$perm);
-                }
-				
-				// resize image to max default and upload
-				require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
-				$temp = new image($_FILES['template_image']['tmp_name']);	
-				$picture_infos=@getimagesize($_FILES['template_image']['tmp_name']);
-				
-				$max_width_for_picture = 100;
-				
-				if ($picture_infos[0]>$max_width_for_picture)
-				{		
-					$thumbwidth = $max_width_for_picture;
-					if (empty($thumbwidth) or $thumbwidth==0) {
-					  $thumbwidth=$max_width_for_picture;
-					}
-					$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
-					
-					$temp->resize($thumbwidth,$new_height,0);
-				}
-				
-				$type=$picture_infos[2];
-						  
-				switch (!empty($type))
+				if ($upload_ok)
 				{
-					case 2 : $temp->send_image('JPG',$upload_dir.$new_file_name);							 
-							 break;
-					case 3 : $temp->send_image('PNG',$upload_dir.$new_file_name);							
-							 break;
-					case 1 : $temp->send_image('GIF',$upload_dir.$new_file_name);							 
-							 break;
+					// Try to add an extension to the file if it hasn't one
+					$new_file_name = add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);	
+					
+					// upload dir
+					$upload_dir = api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/';
+					
+					// create dir if not exists
+	                if (!is_dir($upload_dir)) {
+	                    $perm = api_get_setting('permissions_for_new_directories');
+	                    $perm = octdec(!empty($perm)?$perm:'0770');
+	                	$res = @mkdir($upload_dir,$perm);
+	                }
+					
+					// resize image to max default and upload
+					require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
+					$temp = new image($_FILES['template_image']['tmp_name']);	
+					$picture_infos=@getimagesize($_FILES['template_image']['tmp_name']);
+					
+					$max_width_for_picture = 100;
+					
+					if ($picture_infos[0]>$max_width_for_picture)
+					{		
+						$thumbwidth = $max_width_for_picture;
+						if (empty($thumbwidth) or $thumbwidth==0) {
+						  $thumbwidth=$max_width_for_picture;
+						}
+						$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
+						
+						$temp->resize($thumbwidth,$new_height,0);
+					}
+					
+					$type=$picture_infos[2];
+							  
+					switch (!empty($type))
+					{
+						case 2 : $temp->send_image('JPG',$upload_dir.$new_file_name);							 
+								 break;
+						case 3 : $temp->send_image('PNG',$upload_dir.$new_file_name);							
+								 break;
+						case 1 : $temp->send_image('GIF',$upload_dir.$new_file_name);							 
+								 break;
+					}
 				}
-			}
-	   }
+		   }
+		   
+		   // store the information in the database (as insert or as update)
+		   $table_system_template = Database :: get_main_table('system_template');
+		   if ($_GET['action'] == 'add') {
+		   		$content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
+			   	$sql = "INSERT INTO $table_system_template (title, content, image) VALUES ('".Database::escape_string($values['title'])."','".$content_template."','".Database::escape_string($new_file_name)."')";
+			   	$result = api_sql_query($sql, __FILE__, __LINE__);
+			   	
+			   	// display a feedback message
+			   	Display::display_confirmation_message(get_lang('TemplateAdded'));
+			   	echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('template_add.gif', get_lang('AddTemplate')).get_lang('AddTemplate').'</a>';
+		   } else {
+		   		$content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
+			   	$sql = "UPDATE $table_system_template set title = '".Database::escape_string($values['title'])."',
+												   		  content = '".$content_template."'";
+			   	if (!empty($new_file_name))
+			   	{
+			   		$sql .= ", image = '".Database::escape_string($new_file_name)."'";
+			   	}
+			   	$sql .= " WHERE id='".Database::escape_string($_GET['id'])."'";
+			   	$result = api_sql_query($sql, __FILE__, __LINE__);
+			   	
+			   	// display a feedback message
+			   	Display::display_confirmation_message(get_lang('TemplateEdited'));		   	
+		   }
 	   
-	   // store the information in the database (as insert or as update)
-	   $table_system_template = Database :: get_main_table('system_template');
-	   if ($_GET['action'] == 'add') {
-	   		$content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
-		   	$sql = "INSERT INTO $table_system_template (title, content, image) VALUES ('".Database::escape_string($values['title'])."','".$content_template."','".Database::escape_string($new_file_name)."')";
-		   	$result = api_sql_query($sql, __FILE__, __LINE__);
-		   	
-		   	// display a feedback message
-		   	Display::display_confirmation_message('TemplateAdded');
-		   	echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('template_add.gif', get_lang('AddTemplate')).get_lang('AddTemplate').'</a>';
-	   } else {
-	   		$content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
-		   	$sql = "UPDATE $table_system_template set title = '".Database::escape_string($values['title'])."',
-											   		  content = '".$content_template."'";
-		   	if (!empty($new_file_name))
-		   	{
-		   		$sql .= ", image = '".Database::escape_string($new_file_name)."'";
-		   	}
-		   	$sql .= " WHERE id='".Database::escape_string($_GET['id'])."'";
-		   	$result = api_sql_query($sql, __FILE__, __LINE__);
-		   	
-		   	// display a feedback message
-		   	Display::display_confirmation_message('TemplateEdited');		   	
-	   }
+		}
+	   Security::clear_token();
 	   display_templates();
+	   
+	   
+	   
 	}
 	else 
 	{
+		$token = Security::get_token();
+		$form->addElement('hidden','sec_token');
+		$form->setConstants(array('sec_token' => $token));
 		// display the form
 		$form->display();		
 	}
@@ -1251,6 +1261,6 @@ function delete_template($id)
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	
 	// display a feedback message
-	Display::display_confirmation_message('TemplateDeleted');
+	Display::display_confirmation_message(get_lang('TemplateDeleted'));
 }
 ?>

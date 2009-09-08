@@ -11,10 +11,10 @@ $(document).ready(function() {
 
 	       $.ajax({
 	            contentType: "application/x-www-form-urlencoded",
-	            beforeSend: function(objeto) {
-	            $("div#"+div_content_id).html("<img src=\'../../../main/inc/lib/javascript/indicator.gif\' />"); },
-	            type: "POST",
-	            url: "../../../main/glossary/glossary_ajax_request.php",
+	            beforeSend: function(objeto) {	            
+	            $("div#"+div_content_id).html("<img src=\'http://"+location.host+"/main/inc/lib/javascript/indicator.gif\' />"); },	            
+	            type: "POST",	            
+	            url: "http://"+location.host+"/main/glossary/glossary_ajax_request.php",	            
 	            data: "glossary_name="+is_glossary_name,
 	            success: function(datos) {
 	                $("div#"+div_content_id).html(datos);

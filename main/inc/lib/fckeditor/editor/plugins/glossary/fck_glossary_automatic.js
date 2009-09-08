@@ -6,8 +6,8 @@ $(document).ready(function() {
         contentType: "application/x-www-form-urlencoded",
         beforeSend: function(objeto) {
         },
-        type: "POST",
-        url: "../../../main/glossary/glossary_ajax_request.php",
+        type: "POST",        
+        url: "http://"+location.host+"/main/glossary/glossary_ajax_request.php",        
         data: "glossary_data=true",
         success: function(datos) {
 			  if (datos.length==0) {
@@ -34,10 +34,10 @@ $(document).ready(function() {
 	                my_glossary_id=data_notebook[1];
 	                $.ajax({
 	                    contentType: "application/x-www-form-urlencoded",
-	                    beforeSend: function(objeto) {
-	                    $("div#"+div_content_id).html("<img src=\'../../../main/inc/lib/javascript/indicator.gif\' />"); },
-	                    type: "POST",
-	                    url: "../../../main/glossary/glossary_ajax_request.php",
+	                    beforeSend: function(objeto) {	                    
+	                    $("div#"+div_content_id).html("<img src=\'http://"+location.host+"/main/inc/lib/javascript/indicator.gif\' />"); },	                    
+	                    type: "POST",	                    
+	                    url: "http://"+location.host+"/main/glossary/glossary_ajax_request.php",	                    
 	                    data: "glossary_id="+my_glossary_id,
 	                    success: function(datos) {
 	                        $("div#"+div_content_id).html(datos);

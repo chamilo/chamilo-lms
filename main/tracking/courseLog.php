@@ -528,7 +528,7 @@ if ($_GET['studentlist'] == 'false') {
 		$table -> set_header(3, get_lang('TrainingTime'), false);
 		$table -> set_header(4, get_lang('CourseProgress'), false);
 		$table -> set_header(5, get_lang('Score'), false);	
-		$table -> set_header(6, get_lang('Student_publication'),f alse);
+		$table -> set_header(6, get_lang('Student_publication'),false);
 		$table -> set_header(7, get_lang('Messages'), false);
 		$table -> set_header(8, get_lang('FirstLogin'), false, 'align="center"');
 		$table -> set_header(9, get_lang('LatestLogin'), false, 'align="center"');

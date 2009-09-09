@@ -288,6 +288,16 @@ class HTMLPurifier_Encoder
             restore_error_handler();
             return $str;
         }
+        // Added Ivan Tcholakov, 09-SEP-2009.
+        // Next try - encoding conversion related functions form Dokeos LMS,
+        // for some encodings they work even without iconv or mbstring installed.
+        elseif (function_exists('api_is_encoding_supported')) {
+            if (api_is_encoding_supported($encoding)) {
+                $str = api_utf8_encode($str, $encoding);
+                restore_error_handler();
+                return $str;
+            }
+        }
         trigger_error('Encoding not supported, please install iconv', E_USER_ERROR);
     }
 
@@ -322,6 +332,16 @@ class HTMLPurifier_Encoder
             $str = utf8_decode($str);
             restore_error_handler();
             return $str;
+        }
+        // Added Ivan Tcholakov, 09-SEP-2009.
+        // Next try - encoding conversion related functions form Dokeos LMS,
+        // for some encodings they work even without iconv or mbstring installed.
+        elseif (function_exists('api_is_encoding_supported')) {
+            if (api_is_encoding_supported($encoding)) {
+                $str = api_utf8_decode($str, $encoding);
+                restore_error_handler();
+                return $str;
+            }
         }
         trigger_error('Encoding not supported', E_USER_ERROR);
     }

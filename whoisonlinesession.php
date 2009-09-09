@@ -80,7 +80,7 @@ Display::display_header(get_lang('UserOnlineListSession'));
 							last_access.access_date, 
 							last_access.access_cours_code,
 							last_access.access_session_id,
-							CONCAT(user.lastname,' ',user.firstname) as name,
+							".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." as name,
 							user.email
 					FROM ".Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS)." AS last_access
 					INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." AS user

@@ -342,6 +342,44 @@ class UserManager {
 	}
 
 	/**
+	 * Creates a username i.e Julio Montoya into jmontoya
+	 * @param string $firstname				The first name of the user.
+	 * @param string $lastname				The last name of the user.
+	 * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+	 * @param string $encoding (optional)	The character encoding for the input names. If it is omitted, the platform character set will be used by default.
+	 * @param string						Suggests a username, with maximal length of 17 ASCII-characters, without check for uniqueness in the system.
+	 * @author Julio Montoya Armas
+	 * @author Ivan Tcholakov, 2009 - rework about internationalization.
+	 */
+	public static function create_username($firstname, $lastname, $language = null, $encoding = null) {
+		if (is_null($encoding)) {
+			$encoding = api_get_system_encoding();
+		}
+		if (is_null($language)) {
+			$language = api_get_interface_language();
+		}
+		$max_length = 17;
+		$firstname = preg_replace('/[^0-9A-Za-z]/', '', api_transliterate($firstname, '', $encoding));
+		$lastname = preg_replace('/[^0-9A-Za-z]/', '', api_transliterate($lastname, '', $encoding));
+		$desired_username = '';
+		if (strlen($lastname) < $max_length) {
+			if (api_is_western_name_order(null, $language)) {
+				$desired_username = substr($firstname, 0, 1).$lastname;
+			} else {
+				$desired_username = $lastname.substr($firstname, 0, 1);
+			}
+		} else {
+			$max_length--;
+			if (api_is_western_name_order(null, $language)) {
+				$desired_username = substr($firstname, 0, 1).substr($lastname, 0, $max_length);
+			} else {
+				$desired_username = substr($lastname, 0, $max_length).substr($firstname, 0, 1);
+			}
+		}
+		return strtolower($desired_username);
+	}
+
+	/**
     * Get a list of users of which the given conditions match with an = 'cond'
 	* @param array $conditions a list of condition (exemple : status=>STUDENT)
 	* @param array $order_by a list of fields on which sort

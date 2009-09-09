@@ -8,6 +8,9 @@
 *	@package dokeos.library
 ==============================================================================
 */
+
+define('USER_NAME_MAX_LENGTH', 20);
+
 // define constants for user extra field types
 define('USER_FIELD_TYPE_TEXT',1);
 define('USER_FIELD_TYPE_TEXTAREA',2);
@@ -342,12 +345,12 @@ class UserManager {
 	}
 
 	/**
-	 * Creates a username i.e Julio Montoya into jmontoya
+	 * Creates a username using person's names, i.e. creates jmontoya from Julio Montoya.
 	 * @param string $firstname				The first name of the user.
 	 * @param string $lastname				The last name of the user.
 	 * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
 	 * @param string $encoding (optional)	The character encoding for the input names. If it is omitted, the platform character set will be used by default.
-	 * @param string						Suggests a username, with maximal length of 17 ASCII-characters, without check for uniqueness in the system.
+	 * @param string						Suggests a username that may contain only ASCII-characters and digits, without check for uniqueness in the system.
 	 * @author Julio Montoya Armas
 	 * @author Ivan Tcholakov, 2009 - rework about internationalization.
 	 */
@@ -358,9 +361,12 @@ class UserManager {
 		if (is_null($language)) {
 			$language = api_get_interface_language();
 		}
-		$max_length = 17;
+		$max_length = USER_NAME_MAX_LENGTH - 3;
 		$firstname = preg_replace('/[^0-9A-Za-z]/', '', api_transliterate($firstname, '', $encoding));
 		$lastname = preg_replace('/[^0-9A-Za-z]/', '', api_transliterate($lastname, '', $encoding));
+		if (empty($firstname) && empty($lastname)) {
+			return 'user';
+		}
 		$desired_username = '';
 		if (strlen($lastname) < $max_length) {
 			if (api_is_western_name_order(null, $language)) {
@@ -380,7 +386,7 @@ class UserManager {
 	}
 
 	/**
-    * Get a list of users of which the given conditions match with an = 'cond'
+	* Get a list of users of which the given conditions match with an = 'cond'
 	* @param array $conditions a list of condition (exemple : status=>STUDENT)
 	* @param array $order_by a list of fields on which sort
 	* @return array An array with all users of the platform.

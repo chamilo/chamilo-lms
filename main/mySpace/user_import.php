@@ -29,40 +29,6 @@
 */
 
 /**
-Makes a username i.e Julio Montoya into jmontoya
-we check if the lastname have < 17 characteres 
-we give 2 variables to a possible sufix. Sufix means the last numbers of the username i.e jmontoya66
-@param string firstname
-@param string lastname
-@author Julio Montoya Armas
-*/
-function make_login($firstname, $lastname, $encoding = null, $language = null) {
-	if (is_null($encoding)) {
-		$encoding = api_get_system_encoding();
-	}
-	if (is_null($language)) {
-		$language = api_get_interface_language();
-	}
-	$firstname = preg_replace('/[^0-9A-Za-z]/', '', api_transliterate($firstname, '', $encoding));
-	$lastname = preg_replace('/[^0-9A-Za-z]/', '', api_transliterate($lastname, '', $encoding));
-	$desired_username = '';
-	if (strlen($lastname) < 17) {
-		if (api_is_western_name_order(null, $language)) {
-			$desired_username = substr($firstname, 0, 1).$lastname;
-		} else {
-			$desired_username = $lastname.substr($firstname, 0, 1);
-		}
-	} else {
-		if (api_is_western_name_order(null, $language)) {
-			$desired_username = substr($firstname, 0, 1).substr($lastname, 0, 16);
-		} else {
-			$desired_username = substr($lastname, 0, 16).substr($firstname, 0, 1);
-		}
-	}
-	return strtolower($desired_username);
-}
-
-/**
 Checks if a username exist in the DB otherwise it create a "double" 
 ie. if we look into for jmontoya but the user's name already exist we create the user jmontoya2
 the return array will be array(username=>'jmontoya', sufix='2')
@@ -72,7 +38,7 @@ the return array will be array(username=>'jmontoya', sufix='2')
 @return array with the username, the sufix 
 @author Julio Montoya Armas
 */
-function make_username($firstname, $lastname, $username, $encoding = null, $language = null) {
+function make_username($firstname, $lastname, $username, $language = null, $encoding = null) {
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 	$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	// if username exist
@@ -84,7 +50,7 @@ function make_username($firstname, $lastname, $username, $encoding = null, $lang
 			} else {
 				$sufix = $i;
 			}
-			$desired_username = make_login($firstname, $lastname, $encoding, $language);
+			$desired_username = UserManager::create_username($firstname, $lastname, $language, $encoding);
 			if (UserManager::is_username_available($desired_username.$sufix)) {
 				break;
 			} else {
@@ -231,7 +197,7 @@ function get_user_creator($users,$CourseList, $id_session) {
  * validate the imported data
  * @param list of users 
  */
-function validate_data($users, $id_session) {
+function validate_data($users, $id_session = null) {
 	$errors = array();
 	$usernames = array();
 	$new_users = array();
@@ -249,15 +215,15 @@ function validate_data($users, $id_session) {
 			}
 		}
 		// 2. check if the username is too long
-		if (api_strlen($user['UserName']) > 20) {
+		if (UserManager::is_username_too_long($user['UserName'])) {
 			$user['error'] = get_lang('UserNameTooLong');
 			$errors[] = $user;
 		}
 
 		$user['UserName'] = trim($user['UserName']);
 
-		if (strlen($user['UserName']) == 0 || $user['UserName'] == '') {
-			 $user['UserName'] = make_login($user['FirstName'], $user['LastName']);
+		if (empty($user['UserName'])) {
+			 $user['UserName'] = UserManager::create_username($user['FirstName'], $user['LastName']);
 		}
 		$new_users[] = $user;
 	}

@@ -350,7 +350,7 @@ class UserManager {
 	 * @param string $lastname				The last name of the user.
 	 * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
 	 * @param string $encoding (optional)	The character encoding for the input names. If it is omitted, the platform character set will be used by default.
-	 * @param string						Suggests a username that may contain only ASCII-characters and digits, without check for uniqueness in the system.
+	 * @return string						Suggests a username that may contain only ASCII-letters and digits, without check for uniqueness in the system.
 	 * @author Julio Montoya Armas
 	 * @author Ivan Tcholakov, 2009 - rework about internationalization.
 	 */
@@ -383,6 +383,15 @@ class UserManager {
 			}
 		}
 		return strtolower($desired_username);
+	}
+
+	/**
+	 * Checks whether a username is too long or not.
+	 * @param string $username			The given username, it should contain only ASCII-letters and digits.
+	 * @param bool						Returns TRUE if length of the username exceeds the limit, FALSE otherwise.
+	 */
+	public static function is_username_too_long($username) {
+		return (strlen($username) > USER_NAME_MAX_LENGTH);
 	}
 
 	/**

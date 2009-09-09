@@ -43,18 +43,21 @@ function make_login($firstname, $lastname, $encoding = null, $language = null) {
 	if (is_null($language)) {
 		$language = api_get_interface_language();
 	}
-	if (!api_is_western_name_order(null, $language)) {
-		$temp = $firstname;
-		$firstname = $lastname;
-		$lastname = $temp;
-	}
 	$firstname = preg_replace('/[^0-9A-Za-z]/', '', api_transliterate($firstname, '', $encoding));
 	$lastname = preg_replace('/[^0-9A-Za-z]/', '', api_transliterate($lastname, '', $encoding));
 	$desired_username = '';
 	if (strlen($lastname) < 17) {
-		$desired_username = substr($firstname, 0, 1).$lastname;
+		if (api_is_western_name_order(null, $language)) {
+			$desired_username = substr($firstname, 0, 1).$lastname;
+		} else {
+			$desired_username = $lastname.substr($firstname, 0, 1);
+		}
 	} else {
-		$desired_username = substr($firstname, 0, 1).substr($lastname, 0, 16);
+		if (api_is_western_name_order(null, $language)) {
+			$desired_username = substr($firstname, 0, 1).substr($lastname, 0, 16);
+		} else {
+			$desired_username = substr($lastname, 0, 16).substr($firstname, 0, 1);
+		}
 	}
 	return strtolower($desired_username);
 }

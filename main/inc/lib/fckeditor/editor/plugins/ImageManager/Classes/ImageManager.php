@@ -541,7 +541,8 @@ class ImageManager
 			Files::delFile($file['tmp_name']);
 			return false;
 		}
-		
+
+		$file['name'] = replace_dangerous_char($file['name'], 'strict');
 		$file_name = $file['name'];
 		$extension = explode('.', $file_name);
 		$count = count($extension);

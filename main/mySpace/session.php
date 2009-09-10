@@ -116,7 +116,7 @@ if ($nb_sessions > 0) {
 	$table -> set_header(2, get_lang('Date'));
 	$table -> set_header(3, get_lang('Details'), false);
 
-	$all_datas = array();	
+	$all_data = array();	
 	foreach ($a_sessions as $session) {
 		$row = array();
 		$row[] = $session['name'];
@@ -137,7 +137,7 @@ if ($nb_sessions > 0) {
 		} else {
 			$row[] = '<a href="course.php?id_session='.$session['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
 		}
-		$all_datas[] = $row;
+		$all_data[] = $row;
 	}
 
 	if (!isset($tracking_column)) {
@@ -145,20 +145,20 @@ if ($nb_sessions > 0) {
 	}
 
 	if ($_GET['tracking_direction'] == 'DESC') {
-		usort($all_datas, 'rsort_sessions');
+		usort($all_data, 'rsort_sessions');
 	} else {
-		usort($all_datas, 'sort_sessions');
+		usort($all_data, 'sort_sessions');
 	}
 
 	if ($export_csv) {
 		usort($csv_content, 'sort_sessions');
 	}
 
-	foreach ($all_datas as $row) {
+	foreach ($all_data as $row) {
 		$table -> addRow($row);
 	}
 
-	$table -> setColAttributes(3,array('align'=>'center'));
+	$table -> setColAttributes(3, array('align' => 'center'));
 	$table -> display();	
 
 	if ($export_csv) {

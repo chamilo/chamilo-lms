@@ -98,72 +98,72 @@ if (api_is_xml_http_request()) {
 			$main_date = $main_date[$labels];
 		}
 
-		$DataSet = new pData;	
-		$DataSet->AddPoint($main_date, 'Q');
+		$data_set = new pData;	
+		$data_set->AddPoint($main_date, 'Q');
 		if (count($main_date)!= 1) {
-			$DataSet->AddPoint($labels, 'Date');
+			$data_set->AddPoint($labels, 'Date');
 		}
-		$DataSet->AddAllSeries();  
-		$DataSet->RemoveSerie('Date');  
-		$DataSet->SetAbsciseLabelSerie('Date');
-		$DataSet->SetYAxisName(get_lang('Minutes', ''));
+		$data_set->AddAllSeries();  
+		$data_set->RemoveSerie('Date');  
+		$data_set->SetAbsciseLabelSerie('Date');
+		$data_set->SetYAxisName(get_lang('Minutes', ''));
 		$graph_id = api_get_user_id().'AccessDetails'.api_get_course_id();
-		$DataSet->AddAllSeries();
+		$data_set->AddAllSeries();
 
-		$Cache = new pCache();
+		$cache = new pCache();
 		// the graph id
-		$data = $DataSet->GetData();
+		$data = $data_set->GetData();
 
-		if ($Cache->IsInCache($graph_id, $DataSet->GetData())) {
+		if ($cache->IsInCache($graph_id, $data_set->GetData())) {
 		//if (0) {
 			//if we already created the img
 			//	echo 'in cache';
-			$img_file = $Cache->GetHash($graph_id, $DataSet->GetData());
+			$img_file = $cache->GetHash($graph_id, $data_set->GetData());
 		} else {
 			// if the image does not exist in the archive/ folder
 			// Initialise the graph
-			$Test = new pChart(760, 230);
+			$test = new pChart(760, 230);
 
 			//which schema of color will be used
 			$quant_resources = count($data[0]) - 1;
 			// Adding the color schemma
-			$Test->loadColorPalette(api_get_path(LIBRARY_PATH).'pchart/palette/default.txt');
+			$test->loadColorPalette(api_get_path(LIBRARY_PATH).'pchart/palette/default.txt');
 
-			$Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 8);
-			$Test->setGraphArea(70, 30, 680, 200);
-			$Test->drawFilledRoundedRectangle(7, 7, 693, 223, 5, 240, 240, 240);
-			$Test->drawRoundedRectangle(5, 5, 695, 225, 5, 230, 230, 230);
-			$Test->drawGraphArea(255, 255, 255, TRUE);
-			$Test->drawScale($DataSet->GetData(), $DataSet->GetDataDescription(), SCALE_START0, 150, 150, 150, TRUE, 0, 0);
-			$Test->drawGrid(4, TRUE, 230, 230, 230, 50);
-			$Test->setLineStyle(2);
+			$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 8);
+			$test->setGraphArea(70, 30, 680, 200);
+			$test->drawFilledRoundedRectangle(7, 7, 693, 223, 5, 240, 240, 240);
+			$test->drawRoundedRectangle(5, 5, 695, 225, 5, 230, 230, 230);
+			$test->drawGraphArea(255, 255, 255, TRUE);
+			$test->drawScale($data_set->GetData(), $data_set->GetDataDescription(), SCALE_START0, 150, 150, 150, TRUE, 0, 0);
+			$test->drawGrid(4, TRUE, 230, 230, 230, 50);
+			$test->setLineStyle(2);
 			// Draw the 0 line
-			$Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 6);
-			$Test->drawTreshold(0, 143, 55, 72, TRUE, TRUE);
+			$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 6);
+			$test->drawTreshold(0, 143, 55, 72, TRUE, TRUE);
 
 			if (count($main_date) == 1) {
 				//Draw a graph 
 				echo '<strong>'.$labels.'</strong><br/>';
-				$Test->drawBarGraph($DataSet->GetData(), $DataSet->GetDataDescription(), TRUE);
+				$test->drawBarGraph($data_set->GetData(), $data_set->GetDataDescription(), TRUE);
 			} else {
 				//Draw the line graph
-				$Test->drawLineGraph($DataSet->GetData(), $DataSet->GetDataDescription());
-				$Test->drawPlotGraph($DataSet->GetData(), $DataSet->GetDataDescription(), 3, 2, 255, 255, 255);
+				$test->drawLineGraph($data_set->GetData(), $data_set->GetDataDescription());
+				$test->drawPlotGraph($data_set->GetData(), $data_set->GetDataDescription(), 3, 2, 255, 255, 255);
 			}
 
 			// Finish the graph
-			$Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 8);
+			$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 8);
 
-			$Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 10);
-			$Test->drawTitle(60, 22, get_lang('AccessDetails', ''), 50, 50, 50, 585);
+			$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 10);
+			$test->drawTitle(60, 22, get_lang('AccessDetails', ''), 50, 50, 50, 585);
 
 			//------------------
 			//echo 'not in cache';
-			$Cache->WriteToCache($graph_id, $DataSet->GetData(), $Test);
+			$cache->WriteToCache($graph_id, $data_set->GetData(), $test);
 			ob_start();
-			$Test->Stroke();
+			$test->Stroke();
 			ob_end_clean();
-			$img_file = $Cache->GetHash($graph_id, $DataSet->GetData());
+			$img_file = $cache->GetHash($graph_id, $data_set->GetData());
 		}
 		echo '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
 	} else {
@@ -199,8 +199,8 @@ $(function() {
 </script>';
 
 Display :: display_header('');
-$TBL_USERINFO_DEF = Database :: get_course_table(TABLE_USER_INFO);
-$mainUserInfo = api_get_user_info($user_id);
+$tbl_userinfo_def = Database :: get_course_table(TABLE_USER_INFO);
+$main_user_info = api_get_user_info($user_id);
 
 $result_to_print = '';
 $main_date_array = array();
@@ -210,7 +210,7 @@ foreach ($connections as $key => $data) {
 }
 api_display_tool_title(get_lang('DetailsStudentInCourse'));
 echo '<div class="actions">';
-echo '<strong>'.get_lang('User').': '.api_get_person_name($mainUserInfo['firstName'], $mainUserInfo['lastName']).'</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>'.get_lang('Course').': '.$course_code.'</strong></div>';
+echo '<strong>'.get_lang('User').': '.api_get_person_name($main_user_info['firstName'], $main_user_info['lastName']).'</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>'.get_lang('Course').': '.$course_code.'</strong></div>';
 
 ?>
 <div id="container-9">
@@ -313,10 +313,10 @@ function get_connections_to_course_by_time($user_id, $course_code, $year = '', $
     $rs = Database::query($sql, __FILE__, __LINE__);
     $connections = array();
     while ($row = Database::fetch_array($rs)) {
-        $login_date 				= $row['login_course_date'];
-        $logout_date 				= $row['logout_course_date'];
-        $timestamp_login_date 	= strtotime($login_date);
-        $timestamp_logout_date 	= strtotime($logout_date);
+        $login_date = $row['login_course_date'];
+        $logout_date = $row['logout_course_date'];
+        $timestamp_login_date = strtotime($login_date);
+        $timestamp_logout_date = strtotime($logout_date);
         $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date);
     }
     return $connections;

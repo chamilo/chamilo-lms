@@ -66,8 +66,8 @@ $tbl_session_rel_user 		= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
  */
 
 function count_student_coached() {
-	global $a_students;
-	return count($a_students);
+	global $students;
+	return count($students);
 }
 
 function sort_users($a, $b) {
@@ -118,24 +118,24 @@ if ($isCoach || api_is_platform_admin() || $_user['status'] == DRH) {
 
 	if (!isset($_GET['id_session'])) {
 		if ($isCoach) {
-			$a_courses = Tracking :: get_courses_followed_by_coach($coach_id);
-			$a_students = Tracking :: get_student_followed_by_coach($coach_id);
+			$courses = Tracking :: get_courses_followed_by_coach($coach_id);
+			$students = Tracking :: get_student_followed_by_coach($coach_id);
 		}
 		elseif ($_user['status'] == DRH) {
-			$a_students = Tracking :: get_student_followed_by_drh($_user['user_id']);
+			$students = Tracking :: get_student_followed_by_drh($_user['user_id']);
 			$courses_of_the_platform = CourseManager :: get_real_course_list();
 			foreach ($courses_of_the_platform as $course) {
-				$a_courses[$course['code']] = $course['code'];
+				$courses[$course['code']] = $course['code'];
 			}
 		}
 	} else {
-		$a_students = Tracking :: get_student_followed_by_coach_in_a_session($_GET['id_session'], $coach_id);
+		$students = Tracking :: get_student_followed_by_coach_in_a_session($_GET['id_session'], $coach_id);
 	}
 
 	$tracking_column = isset($_GET['tracking_column']) ? $_GET['tracking_column'] : ($is_western_name_order xor $sort_by_first_name) ? 1 : 0;
 	$tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : DESC;
 
-	if (count($a_students) > 0) {
+	if (count($students) > 0) {
 		$table = new SortableTable('tracking', 'count_student_coached', null, ($is_western_name_order xor $sort_by_first_name) ? 1 : 0);
 		if ($is_western_name_order) {
 			$table -> set_header(0, get_lang('FirstName'), true, 'align="center');
@@ -179,19 +179,18 @@ if ($isCoach || api_is_platform_admin() || $_user['status'] == DRH) {
 					get_lang('LatestLogin', '')
 				);
 			}
-			
 		}
 
 	    $all_datas = array();
-		foreach ($a_students as $student_id) {
-			$student_datas = UserManager :: get_user_info_by_id($student_id);
+		foreach ($students as $student_id) {
+			$student_data = UserManager :: get_user_info_by_id($student_id);
 			if(isset($_GET['id_session'])) {
-				$a_courses = Tracking :: get_course_list_in_session_from_student($student_id, $_GET['id_session']);
+				$courses = Tracking :: get_course_list_in_session_from_student($student_id, $_GET['id_session']);
 			}
 
 			$avg_time_spent = $avg_student_score = $avg_student_progress = $total_assignments = $total_messages = 0;
 			$nb_courses_student = 0;
-			foreach ($a_courses as $course_code) {
+			foreach ($courses as $course_code) {
 				if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
 					$avg_time_spent += Tracking :: get_time_spent_on_the_platform($student_id, $course_code);
 					$avg_student_score += Tracking :: get_avg_student_score($student_id, $course_code);
@@ -214,11 +213,11 @@ if ($isCoach || api_is_platform_admin() || $_user['status'] == DRH) {
 
 			$row = array();
 			if ($is_western_name_order) {
-				$row[] = $student_datas['firstname'];
-				$row[] = $student_datas['lastname'];
+				$row[] = $student_data['firstname'];
+				$row[] = $student_data['lastname'];
 			} else {
-				$row[] = $student_datas['lastname'];
-				$row[] = $student_datas['firstname'];
+				$row[] = $student_data['lastname'];
+				$row[] = $student_data['firstname'];
 			}
 			$row[] = api_time_to_hms($avg_time_spent);
 			$row[] = is_null($avg_student_progress) ? null : round($avg_student_progress, 2).'%';

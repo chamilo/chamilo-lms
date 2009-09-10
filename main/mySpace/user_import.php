@@ -94,11 +94,11 @@ function check_user_in_array($usernames, $user_array) {
  * @return 0 if the user is not subscribed  otherwise it returns the user_id of the given username 
  * @author Julio Montoya Armas
  */
-function user_available_in_session($username, $CourseList, $id_session) {
+function user_available_in_session($username, $course_list, $id_session) {
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 	$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);		
 
-	foreach($CourseList as $enreg_course) {
+	foreach($course_list as $enreg_course) {
 		$sql_select = "SELECT u.user_id FROM $tbl_session_rel_course_rel_user rel INNER JOIN $table_user u
 		on (rel.id_user=u.user_id)
 		WHERE rel.id_session='$id_session' AND u.status='5' AND u.username ='$username' AND rel.course_code='$enreg_course'";	
@@ -120,7 +120,7 @@ but if in the database there is a user with a name jmontoya the users registered
 @param $users list of users
 @author Julio Montoya Armas
 */
-function check_all_usernames($users, $CourseList, $id_session) {
+function check_all_usernames($users, $course_list, $id_session) {
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 	$usernames = array();
 	$new_users = array();
@@ -138,7 +138,7 @@ function check_all_usernames($users, $CourseList, $id_session) {
 				$user['UserName'] = $desired_username['username'].$desired_username['sufix'];
 				$user['create'] = '1';
 			} else {
-				$is_session_avail = user_available_in_session($user['UserName'], $CourseList, $id_session);
+				$is_session_avail = user_available_in_session($user['UserName'], $course_list, $id_session);
 				if ($is_session_avail == 0) {
 					//$desired_username = make_username($user['FirstName'],$user['LastName'],$user['UserName']);
 					//$user['UserName'] = $desired_username['username'].$desired_username['sufix'];
@@ -169,7 +169,7 @@ function check_all_usernames($users, $CourseList, $id_session) {
  * @param the session id 
  * @author Julio Montoya Armas
  */
-function get_user_creator($users,$CourseList, $id_session) {
+function get_user_creator($users, $course_list, $id_session) {
 	$errors = array();
 	foreach ($users as $index => $user) {
 		// database table definition
@@ -244,7 +244,7 @@ function complete_missing_data($user) {
 /**
  * Save the imported data
  */
-function save_data($users, $CourseList, $id_session) {
+function save_data($users, $course_list, $id_session) {
 	$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
 	$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 	$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -272,7 +272,7 @@ function save_data($users, $CourseList, $id_session) {
 	
 	// inserting users
 	$super_list = array();
-	foreach ($CourseList as $enreg_course) {
+	foreach ($course_list as $enreg_course) {
 		$nbr_users = 0;	
 		$new_users = array();	
 		foreach ($users as $index => $user) {
@@ -512,14 +512,14 @@ if ($_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
 				//selecting all the courses from the session id requested
 				$sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
 				$result = Database::query($sql, __FILE__, __LINE__);
-				$CourseList = array();
+				$course_list = array();
 				while ($row = Database::fetch_array($result)) {
-					$CourseList[] = $row['course_code'];
+					$course_list[] = $row['course_code'];
 				}
-				$errors = get_user_creator($users, $CourseList, $id_session);
-				$users = check_all_usernames($users, $CourseList, $id_session);
+				$errors = get_user_creator($users, $course_list, $id_session);
+				$users = check_all_usernames($users, $course_list, $id_session);
 				if (count($errors) == 0) {
-					save_data($users, $CourseList, $id_session);
+					save_data($users, $course_list, $id_session);
 				}
 			} else {
 				header('Location: course.php?id_session='.$id_session.'&action=error_message&message='.urlencode(get_lang('NoSessionId')));

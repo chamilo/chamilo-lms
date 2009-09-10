@@ -60,8 +60,8 @@ function count_teacher_courses() {
 }
 
 function count_coaches() {
-	global $total_no_coachs;
-	return $total_no_coachs;
+	global $total_no_coaches;
+	return $total_no_coaches;
 }
 
 function sort_users($a, $b) {
@@ -77,8 +77,8 @@ function rsort_users($a, $b) {
  * MAIN CODE
  ***************************/
 
-$isCoach = api_is_coach();
-$isPlatformAdmin = api_is_platform_admin();
+$is_coach = api_is_coach();
+$is_platform_admin = api_is_platform_admin();
 
 $view = isset($_GET['view']) ? $_GET['view'] : 'teacher';
 
@@ -86,7 +86,7 @@ $menu_items = array();
 global $_configuration;
 
 if (api_is_allowed_to_create_course()) {
-	$sqlNbCours = "SELECT course_rel_user.course_code, course.title
+	$sql_nb_cours = "SELECT course_rel_user.course_code, course.title
 			FROM $tbl_course_user as course_rel_user
 			INNER JOIN $tbl_course as course
 				ON course.code = course_rel_user.course_code
@@ -94,10 +94,10 @@ if (api_is_allowed_to_create_course()) {
 			ORDER BY course.title";
 
 	if ($_configuration['multiple_access_urls'] == true) {
-		$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);	
+		$tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);	
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1) {
-			$sqlNbCours = "	SELECT course_rel_user.course_code, course.title
+			$sql_nb_cours = "	SELECT course_rel_user.course_code, course.title
 				FROM $tbl_course_user as course_rel_user
 				INNER JOIN $tbl_course as course
 					ON course.code = course_rel_user.course_code
@@ -108,12 +108,12 @@ if (api_is_allowed_to_create_course()) {
 		}
 	}
 
-	$resultNbCours = Database::query($sqlNbCours, __FILE__, __LINE__);	
-	$a_courses = api_store_result($resultNbCours);
+	$result_nb_cours = Database::query($sql_nb_cours, __FILE__, __LINE__);	
+	$courses = api_store_result($result_nb_cours);
 
-	$nb_teacher_courses = count($a_courses);
+	$nb_teacher_courses = count($courses);
 	if ($nb_teacher_courses) {
-		if (!$isCoach && !api_is_platform_admin()) {
+		if (!$is_coach && !$is_platform_admin) {
 			$view = 'teacher';
 		}
 		if ($view == 'teacher') {
@@ -124,8 +124,8 @@ if (api_is_allowed_to_create_course()) {
 		}
 	}
 }
-if ($isCoach) {
-	if ($nb_teacher_courses == 0 && !api_is_platform_admin()) {
+if ($is_coach) {
+	if ($nb_teacher_courses == 0 && !$is_platform_admin) {
 		$view = 'coach';
 	}
 	if ($view == 'coach') {
@@ -135,8 +135,8 @@ if ($isCoach) {
 		$menu_items[] = '<a href="'.api_get_self().'?view=coach">'.get_lang('CoachInterface').'</a>';
 	}
 }
-if (api_is_platform_admin()) {
-	if (!$isCoach && $nb_teacher_courses == 0) {
+if ($is_platform_admin) {
+	if (!$is_coach && $nb_teacher_courses == 0) {
 		$view = 'admin';
 	}
 	if ($view == 'admin') {
@@ -168,28 +168,28 @@ echo '</div>';
 echo '<h4>'.$title.'</h4>';
 
 if ($_user['status'] == DRH && $view == 'drh') {
-	$a_students = Tracking :: get_student_followed_by_drh($_user['user_id']);
+	$students = Tracking :: get_student_followed_by_drh($_user['user_id']);
 	$courses_of_the_platform = CourseManager :: get_real_course_list();
 	foreach ($courses_of_the_platform as $course) {
-		$a_courses[$course['code']] = $course['code'];
+		$courses[$course['code']] = $course['code'];
 	}
 }
 
-if ($isCoach && $view == 'coach') {
-	$a_students = Tracking :: get_student_followed_by_coach($_user['user_id']);
-	$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);	
+if ($is_coach && $view == 'coach') {
+	$students = Tracking :: get_student_followed_by_coach($_user['user_id']);
+	$courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);	
 }
 
 if ($view == 'coach' || $view == 'drh') {
-	$nbStudents = count($a_students);
+	$nb_students = count($students);
 
-	$totalTimeSpent = 0;
-	$totalCourses = 0;
-	$avgTotalProgress = 0;
-	$avgResultsToExercises = 0;
+	$total_time_spent = 0;
+	$total_courses = 0;
+	$avg_total_progress = 0;
+	$avg_results_to_exercises = 0;
 	$nb_inactive_students = 0;
 	$nb_posts = $nb_assignments = 0;
-	foreach ($a_students as $student_id) {
+	foreach ($students as $student_id) {
 		// inactive students
 		$last_connection_date = Tracking :: get_last_connection_date($student_id, true, true);		
 		if ($last_connection_date != false) {
@@ -200,57 +200,57 @@ if ($view == 'coach' || $view == 'drh') {
 			$last_connection_hour[0];
 			$last_connection_time = mktime($last_connection_hour[0], $last_connection_hour[1], $last_connection_hour[2], $last_connection_date[1], $last_connection_date[2], $last_connection_date[0]);
 			*/			
-			if (time() - (3600*24*7) > $last_connection_time) {
+			if (time() - (3600 * 24 * 7) > $last_connection_time) {
 				$nb_inactive_students++;
 			}
 		} else {
 			$nb_inactive_students++;
 		}
 		
-		$totalTimeSpent += Tracking :: get_time_spent_on_the_platform($student_id);
-		$totalCourses += Tracking :: count_course_per_student($student_id);
-		$avgStudentProgress = $avgStudentScore = 0;
+		$total_time_spent += Tracking :: get_time_spent_on_the_platform($student_id);
+		$total_courses += Tracking :: count_course_per_student($student_id);
+		$avg_student_progress = $avg_student_score = 0;
 		$nb_courses_student = 0;
-		foreach ($a_courses as $course_code) {
+		foreach ($courses as $course_code) {
 			if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
 				$nb_courses_student++;
 				$nb_posts += Tracking :: count_student_messages($student_id, $course_code);
 				$nb_assignments += Tracking :: count_student_assignments($student_id, $course_code);
-				$avgStudentProgress += Tracking :: get_avg_student_progress($student_id, $course_code);
-				$avgStudentScore += Tracking :: get_avg_student_score($student_id, $course_code);
-				if ($nb_posts !== null && $nb_assignments !== null && $avgStudentProgress !== null && $avgStudentScore !== null) {
+				$avg_student_progress += Tracking :: get_avg_student_progress($student_id, $course_code);
+				$avg_student_score += Tracking :: get_avg_student_score($student_id, $course_code);
+				if ($nb_posts !== null && $nb_assignments !== null && $avg_student_progress !== null && $avg_student_score !== null) {
 					//if one of these scores is null, it means that we had a problem connecting to the right database, so don't count it in
 					$nb_courses_student++;
 				}
 			}
 		}
 		// average progress of the student
-		$avgStudentProgress = $avgStudentProgress / $nb_courses_student;
-		$avgTotalProgress += $avgStudentProgress;
+		$avg_student_progress = $avg_student_progress / $nb_courses_student;
+		$avg_total_progress += $avg_student_progress;
 
 		// average test results of the student
-		$avgStudentScore = $avgStudentScore / $nb_courses_student;
-		$avgResultsToExercises += $avgStudentScore;
+		$avg_student_score = $avg_student_score / $nb_courses_student;
+		$avg_results_to_exercises += $avg_student_score;
 	}
 
-	if ($nbStudents > 0) {
+	if ($nb_students > 0) {
 		// average progress
-		$avgTotalProgress = $avgTotalProgress / $nbStudents;
+		$avg_total_progress = $avg_total_progress / $nb_students;
 		// average results to the tests	
-		$avgResultsToExercises = $avgResultsToExercises / $nbStudents;
+		$avg_results_to_exercises = $avg_results_to_exercises / $nb_students;
 		// average courses by student
-		$avgCoursesPerStudent = round($totalCourses / $nbStudents, 2);
+		$avg_courses_per_student = round($total_courses / $nb_students, 2);
 		// average time spent on the platform
-		$avgTimeSpent = $totalTimeSpent / $nbStudents;
+		$avg_time_spent = $total_time_spent / $nb_students;
 		// average assignments
-		$nb_assignments = $nb_assignments / $nbStudents;
+		$nb_assignments = $nb_assignments / $nb_students;
 		// average posts
-		$nb_posts = $nb_posts / $nbStudents;
+		$nb_posts = $nb_posts / $nb_students;
 	} else {
-		$avgTotalProgress = null;
-		$avgResultsToExercises = null;
-		$avgCoursesPerStudent = null;
-		$avgTimeSpent = null;
+		$avg_total_progress = null;
+		$avg_results_to_exercises = null;
+		$avg_courses_per_student = null;
+		$avg_time_spent = null;
 		$nb_assignments = null;
 		$nb_posts = null;
 	}
@@ -259,10 +259,10 @@ if ($view == 'coach' || $view == 'drh') {
 		//csv part
 		$csv_content[] = array(get_lang('Probationers', ''));
 		$csv_content[] = array(get_lang('InactivesStudents', ''), $nb_inactive_students );
-		$csv_content[] = array(get_lang('AverageTimeSpentOnThePlatform', ''), $avgTimeSpent);
-		$csv_content[] = array(get_lang('AverageCoursePerStudent', ''), $avgCoursesPerStudent);
-		$csv_content[] = array(get_lang('AverageProgressInLearnpath', ''), is_null($avgTotalProgress) ? null : round($avgTotalProgress, 2).'%');
-		$csv_content[] = array(get_lang('AverageResultsToTheExercices', ''), is_null($avgResultsToExercises) ? null : round($avgResultsToExercises, 2).'%');
+		$csv_content[] = array(get_lang('AverageTimeSpentOnThePlatform', ''), $avg_time_spent);
+		$csv_content[] = array(get_lang('AverageCoursePerStudent', ''), $avg_courses_per_student);
+		$csv_content[] = array(get_lang('AverageProgressInLearnpath', ''), is_null($avg_total_progress) ? null : round($avg_total_progress, 2).'%');
+		$csv_content[] = array(get_lang('AverageResultsToTheExercices', ''), is_null($avg_results_to_exercises) ? null : round($avg_results_to_exercises, 2).'%');
 		$csv_content[] = array(get_lang('AveragePostsInForum', ''), $nb_posts);
 		$csv_content[] = array(get_lang('AverageAssignments', ''), $nb_assignments);
 		$csv_content[] = array();
@@ -271,7 +271,7 @@ if ($view == 'coach' || $view == 'drh') {
 		echo '
 		 <div class="report_section">
 			<h4>
-				<a href="student.php"><img src="'.api_get_path(WEB_IMG_PATH).'students.gif">&nbsp;'.get_lang('Probationers').' ('.$nbStudents.')'.'</a> 
+				<a href="student.php"><img src="'.api_get_path(WEB_IMG_PATH).'students.gif">&nbsp;'.get_lang('Probationers').' ('.$nb_students.')'.'</a> 
 			</h4>
 			<table class="data_table">
 				<tr>
@@ -287,7 +287,7 @@ if ($view == 'coach' || $view == 'drh') {
 						'.get_lang('AverageTimeSpentOnThePlatform').'
 					</td>
 					<td align="right">
-						'.(is_null($avgTimeSpent) ? '' : api_time_to_hms($avgTimeSpent)).'
+						'.(is_null($avg_time_spent) ? '' : api_time_to_hms($avg_time_spent)).'
 					</td>
 				</tr>
 				<tr>
@@ -295,7 +295,7 @@ if ($view == 'coach' || $view == 'drh') {
 						'.get_lang('AverageCoursePerStudent').'
 					</td>
 					<td align="right">
-						'.(is_null($avgCoursesPerStudent) ? '' : $avgCoursesPerStudent).'
+						'.(is_null($avg_courses_per_student) ? '' : $avg_courses_per_student).'
 					</td>
 				</tr>
 				<tr>
@@ -303,7 +303,7 @@ if ($view == 'coach' || $view == 'drh') {
 						'.get_lang('AverageProgressInLearnpath').'
 					</td>
 					<td align="right">
-						'.(is_null($avgTotalProgress) ? '' : round($avgTotalProgress, 2).'%').'
+						'.(is_null($avg_total_progress) ? '' : round($avg_total_progress, 2).'%').'
 					</td>
 				</tr>
 				<tr>
@@ -311,7 +311,7 @@ if ($view == 'coach' || $view == 'drh') {
 						'.get_lang('AverageResultsToTheExercices').'
 					</td>
 					<td align="right">
-						'.(is_null($avgResultsToExercises) ? '' : round($avgResultsToExercises, 2).'%').'
+						'.(is_null($avg_results_to_exercises) ? '' : round($avg_results_to_exercises, 2).'%').'
 					</td>
 				</tr>
 				<tr>
@@ -339,17 +339,17 @@ if ($view == 'coach') {
 	/****************************************
 	 * Infos about sessions of the coach
 	 ****************************************/
-	$a_sessions = Tracking :: get_sessions_coached_by_user($_user['user_id']);
-	$nbSessions = count($a_sessions);
+	$sessions = Tracking :: get_sessions_coached_by_user($_user['user_id']);
+	$nb_sessions = count($sessions);
 	$nb_sessions_past = $nb_sessions_future = $nb_sessions_current = 0;
-	$a_courses = array();
-	foreach ($a_sessions as $a_session) {
-		if ($a_session['date_start'] == '0000-00-00') {
+	$courses = array();
+	foreach ($sessions as $session) {
+		if ($session['date_start'] == '0000-00-00') {
 			$nb_sessions_current ++;
 		} else {
-			$date_start = explode('-', $a_session['date_start']);
+			$date_start = explode('-', $session['date_start']);
 			$time_start = mktime(0, 0, 0, $date_start[1], $date_start[2], $date_start[0]);			
-			$date_end = explode('-', $a_session['date_end']);				
+			$date_end = explode('-', $session['date_end']);				
 			$time_end = mktime(0, 0, 0, $date_end[1], $date_end[2], $date_end[0]);			
 			if ($time_start < time() && time() < $time_end) {
 				$nb_sessions_current++;
@@ -361,12 +361,12 @@ if ($view == 'coach') {
 				$nb_sessions_past++;
 			}
 		}
-		$a_courses = array_merge($a_courses, Tracking::get_courses_list_from_session($a_session['id']));		
+		$courses = array_merge($courses, Tracking::get_courses_list_from_session($session['id']));		
 	}
 
-	if ($nbSessions > 0) {
-		$nb_courses_per_session = round(count($a_courses) / $nbSessions, 2);
-		$nb_students_per_session = round($nbStudents / $nbSessions, 2);
+	if ($nb_sessions > 0) {
+		$nb_courses_per_session = round(count($courses) / $nb_sessions, 2);
+		$nb_students_per_session = round($nb_students / $nb_sessions, 2);
 	} else {
 		$nb_courses_per_session = null;
 		$nb_students_per_session = null;
@@ -387,7 +387,7 @@ if ($view == 'coach') {
 		echo '
 		 <div class="report_section">
 			<h4>
-				<a href="session.php"><img src="'.api_get_path(WEB_IMG_PATH).'sessions.gif">&nbsp;'.get_lang('Sessions').' ('.$nbSessions.')'.'</a>
+				<a href="session.php"><img src="'.api_get_path(WEB_IMG_PATH).'sessions.gif">&nbsp;'.get_lang('Sessions').' ('.$nb_sessions.')'.'</a>
 			</h4>
 			<table class="data_table">
 				<tr>
@@ -469,7 +469,7 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 
 		$a_course_students = array();
 
-		foreach ($a_courses as $course) {
+		foreach ($courses as $course) {
 			$course_code = $course['course_code'];
 			$avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;
 
@@ -560,7 +560,7 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 	}
 }
 
-if (api_is_platform_admin() && $view == 'admin') {
+if ($is_platform_admin && $view == 'admin') {
 	echo '<a href="'.api_get_self().'?view=admin&amp;display=coaches">'.get_lang('DisplayCoaches').'</a> | ';
 	echo '<a href="'.api_get_self().'?view=admin&amp;display=useroverview">'.get_lang('DisplayUserOverview').'</a>';
 	if ($_GET['display'] == 'useroverview') {
@@ -648,11 +648,11 @@ if (api_is_platform_admin() && $view == 'admin') {
 		}
 
 		$result_coaches = Database::query($sqlCoachs, __FILE__, __LINE__);
-		$total_no_coachs = Database::num_rows($result_coaches);
+		$total_no_coaches = Database::num_rows($result_coaches);
 
-		$global_coachs = array();
-		while ($a_coach = Database::fetch_array($result_coaches)) {
-			$global_coachs[$a_coach['user_id']] = $a_coach;
+		$global_coaches = array();
+		while ($coach = Database::fetch_array($result_coaches)) {
+			$global_coaches[$coach['user_id']] = $coach;
 		}
 
 		$sql_session_coach = 'SELECT session.id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
@@ -674,41 +674,41 @@ if (api_is_platform_admin() && $view == 'admin') {
 		}
 	
 		$result_sessions_coach = Database::query($sql_session_coach, __FILE__, __LINE__);
-		$total_no_coachs += Database::num_rows($result_sessions_coach);
-		while ($a_coach = Database::fetch_array($result_sessions_coach)) {
-			$global_coachs[$a_coach['user_id']] = $a_coach;
+		$total_no_coaches += Database::num_rows($result_sessions_coach);
+		while ($coach = Database::fetch_array($result_sessions_coach)) {
+			$global_coaches[$coach['user_id']] = $coach;
 		}	
 	
 		$all_datas = array();
 	
-		foreach ($global_coachs as $id_coach => $a_coachs) {
+		foreach ($global_coaches as $id_coach => $coaches) {
 
-			$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($a_coachs['user_id']));
-			$last_connection = Tracking :: get_last_connection_date($a_coachs['user_id']);
-			$nb_students = count(Tracking :: get_student_followed_by_coach($a_coachs['user_id']));
-			$nb_courses = count(Tracking :: get_courses_followed_by_coach($a_coachs['user_id']));
-			$nb_sessions = count(Tracking :: get_sessions_coached_by_user($a_coachs['user_id']));
+			$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($coaches['user_id']));
+			$last_connection = Tracking :: get_last_connection_date($coaches['user_id']);
+			$nb_students = count(Tracking :: get_student_followed_by_coach($coaches['user_id']));
+			$nb_courses = count(Tracking :: get_courses_followed_by_coach($coaches['user_id']));
+			$nb_sessions = count(Tracking :: get_sessions_coached_by_user($coaches['user_id']));
 
 			$table_row = array();
 			if ($is_western_name_order) {
-				$table_row[] = $a_coachs['firstname'];
-				$table_row[] = $a_coachs['lastname'];
+				$table_row[] = $coaches['firstname'];
+				$table_row[] = $coaches['lastname'];
 			} else {
-				$table_row[] = $a_coachs['lastname'];
-				$table_row[] = $a_coachs['firstname'];
+				$table_row[] = $coaches['lastname'];
+				$table_row[] = $coaches['firstname'];
 			}
 			$table_row[] = $time_on_platform;
 			$table_row[] = $last_connection;
 			$table_row[] = $nb_students;
 			$table_row[] = $nb_courses;
 			$table_row[] = $nb_sessions;
-			$table_row[] = '<center><a href="session.php?id_coach='.$a_coachs['user_id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
+			$table_row[] = '<center><a href="session.php?id_coach='.$coaches['user_id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
 			$all_datas[] = $table_row;
 
 			if ($is_western_name_order) {
 				$csv_content[] = array(
-					api_html_entity_decode($a_coachs['firstname'], ENT_QUOTES, $charset),
-					api_html_entity_decode($a_coachs['lastname'], ENT_QUOTES, $charset),
+					api_html_entity_decode($coaches['firstname'], ENT_QUOTES, $charset),
+					api_html_entity_decode($coaches['lastname'], ENT_QUOTES, $charset),
 					$time_on_platform,
 					$last_connection,
 					$nb_students,
@@ -717,8 +717,8 @@ if (api_is_platform_admin() && $view == 'admin') {
 				);
 			} else {
 				$csv_content[] = array(
-					api_html_entity_decode($a_coachs['lastname'], ENT_QUOTES, $charset),
-					api_html_entity_decode($a_coachs['firstname'], ENT_QUOTES, $charset),
+					api_html_entity_decode($coaches['lastname'], ENT_QUOTES, $charset),
+					api_html_entity_decode($coaches['firstname'], ENT_QUOTES, $charset),
 					$time_on_platform,
 					$last_connection,
 					$nb_students,

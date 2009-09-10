@@ -106,7 +106,7 @@ if (api_is_xml_http_request()) {
 		$DataSet->AddAllSeries();  
 		$DataSet->RemoveSerie('Date');  
 		$DataSet->SetAbsciseLabelSerie('Date');
-		$DataSet->SetYAxisName(get_lang('Minutes'));
+		$DataSet->SetYAxisName(get_lang('Minutes', ''));
 		$graph_id = api_get_user_id().'AccessDetails'.api_get_course_id();
 		$DataSet->AddAllSeries();
 
@@ -155,7 +155,7 @@ if (api_is_xml_http_request()) {
 			$Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 8);
 
 			$Test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 10);
-			$Test->drawTitle(60, 22, get_lang('AccessDetails'), 50, 50, 50, 585);
+			$Test->drawTitle(60, 22, get_lang('AccessDetails', ''), 50, 50, 50, 585);
 
 			//------------------
 			//echo 'not in cache';
@@ -163,7 +163,7 @@ if (api_is_xml_http_request()) {
 			ob_start();
 			$Test->Stroke();
 			ob_end_clean();
-			$img_file = $Cache->GetHash($graph_id,$DataSet->GetData());
+			$img_file = $Cache->GetHash($graph_id, $DataSet->GetData());
 		}
 		echo '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
 	} else {
@@ -271,20 +271,21 @@ function get_connections_to_course($user_id, $course_code) {
     $rs = Database::query($sql, __FILE__, __LINE__);
     $connections = array();
 
-    while ($a_connections = Database::fetch_array($rs)) {
+    while ($row = Database::fetch_array($rs)) {
 
-        $s_login_date = $a_connections['login_course_date'];
-        $s_logout_date = $a_connections['logout_course_date'];
+        $login_date = $row['login_course_date'];
+        $logout_date = $row['logout_course_date'];
 
-        $i_timestamp_login_date = strtotime($s_login_date);
-        $i_timestamp_logout_date = strtotime($s_logout_date);
+        $timestamp_login_date = strtotime($login_date);
+        $timestamp_logout_date = strtotime($logout_date);
 
-        $connections[] = array('login' => $i_timestamp_login_date, 'logout' => $i_timestamp_logout_date);
+        $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date);
     }
     return $connections;
 }
 
 /**
+ * TODO: Not used, to b deleted?
  * Enter description here...
  *
  * @param unknown_type $user_id
@@ -311,12 +312,12 @@ function get_connections_to_course_by_time($user_id, $course_code, $year = '', $
 
     $rs = Database::query($sql, __FILE__, __LINE__);
     $connections = array();
-    while ($a_connections = Database::fetch_array($rs)) {
-        $s_login_date 				= $a_connections['login_course_date'];
-        $s_logout_date 				= $a_connections['logout_course_date'];
-        $i_timestamp_login_date 	= strtotime($s_login_date);
-        $i_timestamp_logout_date 	= strtotime($s_logout_date);
-        $connections[] = array('login' => $i_timestamp_login_date, 'logout' => $i_timestamp_logout_date);
+    while ($row = Database::fetch_array($rs)) {
+        $login_date 				= $row['login_course_date'];
+        $logout_date 				= $row['logout_course_date'];
+        $timestamp_login_date 	= strtotime($login_date);
+        $timestamp_logout_date 	= strtotime($logout_date);
+        $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date);
     }
     return $connections;
 }

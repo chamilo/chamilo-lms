@@ -30,6 +30,7 @@ $nameTools= 'Sessions';
 // name of the language file that needs to be included 
 $language_file = array ('registration', 'index', 'trad4all', 'tracking');
 $cidReset = true;
+
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';

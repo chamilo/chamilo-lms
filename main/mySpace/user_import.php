@@ -445,7 +445,7 @@ function parse_xml_data($file) {
 $language_file = array ('admin', 'registration', 'index', 'trad4all', 'tracking');
 
 $cidReset = true;
-include '../inc/global.inc.php';
+require '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');

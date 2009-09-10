@@ -4,12 +4,14 @@
  * Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
 
-ob_start(); 
+ob_start();
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array ('registration', 'index', 'tracking', 'admin');
 $cidReset = true;
+
 require '../inc/global.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
 
 $this_section = "session_my_space";
 
@@ -39,71 +41,16 @@ $tbl_track_login 					= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_
 
 /*
  ===============================================================================
- 	FUNCTION
+ 	FUNCTIONS
  ===============================================================================  
  */
- 
-function exportCsv($a_header, $a_data) {
-	global $archiveDirName;
-
-	$fileName = 'coaches.csv';
-	$archivePath = api_get_path(SYS_ARCHIVE_PATH);
-	$archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
-
-	if (!$open = fopen($archivePath.$fileName, 'w+')) {
-		$message = get_lang('noOpen');
-	} else {
-		$info = '';
-
-		foreach ($a_header as $header) {
-			$info .= $header.';';
-		}
-		$info .= "\r\n";
-
-		foreach ($a_data as $data) {
-			foreach ($data as $infos) {
-				$info .= $infos.';';
-			}
-			$info .= "\r\n";
-		}
-
-		fwrite($open, $info);
-		fclose($open);
-		$perm = api_get_setting('permissions_for_new_files');
-		$perm = octdec(!empty($perm) ? $perm : '0660');
-		chmod($fileName, $perm);
-
-		header("Location:".$archiveURL.$fileName);
-	}
-	return $message;
-}
- 
-function calculHours($seconds) {
-	//combien d'heures ?
-	$hours = floor($seconds / 3600);
-
-	//combien de minutes ?
-	$min = floor(($seconds - ($hours * 3600)) / 60);
-	if ($min < 10) {
-		$min = "0".$min;
-	}
-
-	//combien de secondes
-	$sec = $seconds - ($hours * 3600) - ($min * 60);
-	if ($sec < 10) {
-		$sec = "0".$sec;
-	}
-
-	//echo $hours."h".$min."m".$sec."s";
-	return $hours."h".$min."m".$sec."s" ;
-}
 
 function is_coach() {
   	global $tbl_session_course;
 	$sql = "SELECT course_code FROM $tbl_session_course WHERE id_coach='".$_SESSION["_uid"]."'";
 	$result = Database::query($sql, __FILE__, __LINE__);
 	if (Database::num_rows($result) > 0) {
-		return true;	    
+		return true;
 	}
 	return false;
 }
@@ -119,23 +66,23 @@ if (isset($_POST['export'])) {
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 }
 if (isset($_GET["id_student"])) {
-	$i_id_student=$_GET["id_student"];
-	$sqlCoachs = "SELECT DISTINCT src.id_coach " .
+	$id_student = $_GET["id_student"];
+	$sql_coachs = "SELECT DISTINCT src.id_coach " .
 		"FROM $tbl_session_rel_course as src, $tbl_session_rel_course_rel_user as srcru " .
-		"WHERE src.id_coach<>'0' AND src.course_code=srcru.course_code AND srcru.id_user='$i_id_student' AND srcru.id_session=src.id_session";
+		"WHERE src.id_coach<>'0' AND src.course_code=srcru.course_code AND srcru.id_user='$id_student' AND srcru.id_session=src.id_session";
 } else {
 	if (api_is_platform_admin()) {
-		$sqlCoachs = "SELECT DISTINCT id_coach, user_id, lastname, firstname
+		$sql_coachs = "SELECT DISTINCT id_coach, user_id, lastname, firstname
 			FROM $tbl_user, $tbl_session_rel_course
 			WHERE id_coach=user_id".$order_clause;
 	} else {
-		$sqlCoachs = "SELECT DISTINCT id_coach, $tbl_user.user_id, lastname, firstname
+		$sql_coachs = "SELECT DISTINCT id_coach, $tbl_user.user_id, lastname, firstname
 			FROM $tbl_user as user, $tbl_session_rel_course as session_rel_course, $tbl_course_user as course_rel_user  
 			WHERE course_rel_user.course_code=session_rel_course.course_code AND course_rel_user.status='1' AND course_rel_user.user_id='".$_SESSION["_uid"]."' 
 			AND session_rel_course.id_coach=user.user_id".$order_clause;
 	}
 }
-$resultCoachs = Database::query($sqlCoachs, __FILE__, __LINE__);
+$result_coachs = Database::query($sql_coachs, __FILE__, __LINE__);
 
 if (api_is_western_name_order()) {
 	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('ConnectionTime').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
@@ -144,47 +91,48 @@ if (api_is_western_name_order()) {
 }
 
 if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
-	$a_header[] = get_lang('FirstName', '');
-	$a_header[] = get_lang('LastName', '');
+	$header[] = get_lang('FirstName', '');
+	$header[] = get_lang('LastName', '');
 } else {
-	$a_header[] = get_lang('LastName', '');
-	$a_header[] = get_lang('FirstName', '');
+	$header[] = get_lang('LastName', '');
+	$header[] = get_lang('FirstName', '');
 }
-$a_header[] = get_lang('ConnectionTime', '');
+$header[] = get_lang('ConnectionTime', '');
 
-if (Database::num_rows($resultCoachs) > 0) {
-	while ($a_coachs = Database::fetch_array($resultCoachs)) {
-		$i_id_coach = $a_coachs["id_coach"];
+if (Database::num_rows($result_coachs) > 0) {
+	while ($coachs = Database::fetch_array($result_coachs)) {
+		$id_coach = $coachs["id_coach"];
 
 		if (isset($_GET["id_student"])) {
-			$sql_infos_coach = "SELECT lastname, firstname FROM $tbl_user WHERE user_id='$i_id_coach'";
-			$resultCoachsInfos = Database::query($sql_infos_coach, __FILE__, __LINE__);
-			$s_lastname = Database::result($resultCoachsInfos, 0, "lastname");
-			$s_firstname = Database::result($resultCoachsInfos, 0, "firstname");
+			$sql_infos_coach = "SELECT lastname, firstname FROM $tbl_user WHERE user_id='$id_coach'";
+			$result_coachs_infos = Database::query($sql_infos_coach, __FILE__, __LINE__);
+			$lastname = Database::result($result_coachs_infos, 0, "lastname");
+			$firstname = Database::result($result_coachs_infos, 0, "firstname");
 		} else {
-			$s_lastname = $a_coachs["lastname"];
-			$s_firstname = $a_coachs["firstname"];
+			$lastname = $coachs["lastname"];
+			$firstname = $coachs["firstname"];
 		}
 
-		$s_sql_connection_time = "SELECT login_date, logout_date FROM $tbl_track_login WHERE login_user_id ='$i_id_coach' AND logout_date <> 'null'";
-		$q_result_connection_time = Database::query($s_sql_connection_time, __FILE__, __LINE__);
+		$sql_connection_time = "SELECT login_date, logout_date FROM $tbl_track_login WHERE login_user_id ='$id_coach' AND logout_date <> 'null'";
+		$result_connection_time = Database::query($sql_connection_time, __FILE__, __LINE__);
 
-		$i_nb_seconds = 0;
-		while ($a_connections = Database::fetch_array($q_result_connection_time)) {
-			$s_login_date = $a_connections["login_date"];
-			$s_logout_date = $a_connections["logout_date"];
-			$i_timestamp_login_date = strtotime($s_login_date);
-			$i_timestamp_logout_date = strtotime($s_logout_date);
-			$i_nb_seconds += ($i_timestamp_logout_date - $i_timestamp_login_date);
+		$nb_seconds = 0;
+		while ($connections = Database::fetch_array($result_connection_time)) {
+			$login_date = $connections["login_date"];
+			$logout_date = $connections["logout_date"];
+			$timestamp_login_date = strtotime($login_date);
+			$timestamp_logout_date = strtotime($logout_date);
+			$nb_seconds += ($timestamp_logout_date - $timestamp_login_date);
 		}
 
-		$s_connection_time = calculHours($i_nb_seconds);
-		if ($s_connection_time == "0h00m00s") {
-			$s_connection_time = "";
+		if ($nb_seconds == 0) {
+			$s_connection_time = '';
+		} else {
+			$s_connection_time = api_time_to_hms($nb_seconds);
 		}
 
 		if ($i % 2 == 0) {
-			$s_css_class = "row_odd";
+			$css_class = "row_odd";
 			if ($i % 20 == 0 && $i != 0) {
 				if (api_is_western_name_order()) {
 					echo '<tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('ConnectionTime').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
@@ -193,36 +141,34 @@ if (Database::num_rows($resultCoachs) > 0) {
 				}
 			}
 		} else {
-			$s_css_class = "row_even";
+			$css_class = "row_even";
 		}
 
 		$i++;
 
 		if (api_is_western_name_order()) {
-			echo '<tr class="'.$s_css_class.'"><td>'.$s_firstname.'</td><td>'.$s_lastname.'</td><td>'.$s_connection_time.'</td><td><a href="course.php?type=coach&user_id='.$i_id_coach.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td><td><a href="student.php?type=coach&user_id='.$i_id_coach.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td></tr>';
+			echo '<tr class="'.$css_class.'"><td>'.$firstname.'</td><td>'.$lastname.'</td><td>'.$s_connection_time.'</td><td><a href="course.php?type=coach&user_id='.$id_coach.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td><td><a href="student.php?type=coach&user_id='.$id_coach.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td></tr>';
 		} else {
-			echo '<tr class="'.$s_css_class.'"><td>'.$s_lastname.'</td><td>'.$s_firstname.'</td><td>'.$s_connection_time.'</td><td><a href="course.php?type=coach&user_id='.$i_id_coach.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td><td><a href="student.php?type=coach&user_id='.$i_id_coach.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td></tr>';
+			echo '<tr class="'.$css_class.'"><td>'.$lastname.'</td><td>'.$firstname.'</td><td>'.$s_connection_time.'</td><td><a href="course.php?type=coach&user_id='.$id_coach.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td><td><a href="student.php?type=coach&user_id='.$id_coach.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td></tr>';
 		}
 
 		if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
-			$a_data[$i_id_coach]["firstname"] = $s_firstname;
-			$a_data[$i_id_coach]["lastname"] = $s_lastname;
+			$data[$id_coach]["firstname"] = $firstname;
+			$data[$id_coach]["lastname"] = $lastname;
 		} else {
-			$a_data[$i_id_coach]["lastname"] = $s_lastname;
-			$a_data[$i_id_coach]["firstname"] = $s_firstname;
+			$data[$id_coach]["lastname"] = $lastname;
+			$data[$id_coach]["firstname"] = $firstname;
 		}
-		$a_data[$i_id_coach]["connection_time"] = $s_connection_time;
+		$data[$id_coach]["connection_time"] = $s_connection_time;
 	}
-}
-
-//No results
-else {	
+} else {
+	// No results
 	echo '<tr><td colspan="5" "align=center">'.get_lang("NoResult").'</td></tr>';
 }
 echo '</table>';
 
 if (isset($_POST['export'])){
-	exportCsv($a_header, $a_data);
+	export_csv($header, $data, 'coaches.csv');
 }
 
 echo "<br /><br />";

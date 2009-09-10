@@ -8,13 +8,15 @@
 
 // name of the language file that needs to be included 
 $language_file = array('registration', 'index', 'tracking', 'exercice', 'admin');
-//$cidReset=true;
+//$cidReset = true;
+
 require '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'tracking.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'export.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
-require_once  api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
+require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
+require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
+require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 
@@ -162,26 +164,6 @@ Display :: display_header($nameTools);
  * ======================================================================================
  */
 
-function calculHours($seconds) {
-
-	//How many hours ?
-	$hours = floor($seconds / 3600);
-
-	//How many minutes ?
-	$min = floor(($seconds - ($hours * 3600)) / 60);
-	if ($min < 10) {
-		$min = "0" . $min;
-	}
-
-	//How many seconds
-	$sec = $seconds - ($hours * 3600) - ($min * 60);
-	if ($sec < 10) {
-		$sec = "0" . $sec;
-	}
-
-	return $hours . "h" . $min . "m" . $sec . "s";
-}
-
 function is_teacher($course_code) {
 	global $_user;
 	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -209,9 +191,9 @@ $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 $tbl_stats_exercices_attempts = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-//$tbl_course_lp_view 		= Database :: get_course_table(TABLE_LP_VIEW);
+//$tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW);
 //$tbl_course_lp_view_item = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
-//$tbl_course_lp_item 		= Database :: get_course_table(TABLE_LP_ITEM);
+//$tbl_course_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
 
 $tbl_course_lp_view = 'lp_view';
 $tbl_course_lp_view_item = 'lp_item_view';

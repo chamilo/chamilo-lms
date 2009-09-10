@@ -23,6 +23,7 @@
 // name of the language file that needs to be included
 $language_file = array('admin', 'registration');
 $cidReset = true;
+
 // including necessary libraries
 require '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);

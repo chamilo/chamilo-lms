@@ -9,7 +9,7 @@
 $language_file = array ('registration', 'index', 'tracking', 'exercice', 'scorm', 'learnpath');
 //$cidReset = true;
 
-include '../inc/global.inc.php';
+require '../inc/global.inc.php';
 
 $from_myspace = false;
 $from_link = '';

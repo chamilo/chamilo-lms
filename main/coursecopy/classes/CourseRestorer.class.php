@@ -102,10 +102,7 @@ class CourseRestorer
 		$this->restore_documents();
 		$this->restore_scorm_documents();
 		$this->restore_course_descriptions();
-		// Enabled by Ivan Tcholakov, 30-AUG-2009.
-		////$this->restore_forums();
 		$this->restore_forums();
-		//
 		$this->restore_quizzes(); // after restore_documents! (for correct import of sound/video)
 		$this->restore_learnpaths();
 		$this->restore_surveys();

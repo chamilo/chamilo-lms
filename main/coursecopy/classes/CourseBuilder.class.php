@@ -61,10 +61,7 @@ class CourseBuilder
 		$this->build_announcements();
 		$this->build_links();
 		$this->build_tool_intro();
-		// Enabled by Ivan Tcholakov, 27-AUG-2009.
-		////$this->build_forums();
 		$this->build_forums();
-		//
 		$this->build_documents();
 		$this->build_course_descriptions();
 		$this->build_quizzes();
@@ -450,7 +447,6 @@ class CourseBuilder
 
 		while ($obj = Database::fetch_object($db_result))
 		{
-
 			$items = array();
 			$sql_items = "SELECT * FROM ".$table_item." WHERE lp_id = ".$obj->id."";
 			$db_items = api_sql_query($sql_items);

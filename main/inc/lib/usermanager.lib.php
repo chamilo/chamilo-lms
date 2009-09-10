@@ -9,9 +9,11 @@
 ==============================================================================
 */
 
-define('USER_NAME_MAX_LENGTH', 20);
+// Common specification for usernames.
+define('USERNAME_MAX_LENGTH', 20);
+define('USERNAME_PURIFIER', '/[^0-9A-Za-z]/');
 
-// define constants for user extra field types
+// Constants for user extra field types.
 define('USER_FIELD_TYPE_TEXT',1);
 define('USER_FIELD_TYPE_TEXTAREA',2);
 define('USER_FIELD_TYPE_RADIO',3);
@@ -350,7 +352,7 @@ class UserManager {
 	 * @param string $lastname				The last name of the user.
 	 * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
 	 * @param string $encoding (optional)	The character encoding for the input names. If it is omitted, the platform character set will be used by default.
-	 * @return string						Suggests a username that may contain only ASCII-letters and digits, without check for uniqueness within the system.
+	 * @return string						Suggests a username that contains only ASCII-letters and digits, without check for uniqueness within the system.
 	 * @author Julio Montoya Armas
 	 * @author Ivan Tcholakov, 2009 - rework about internationalization.
 	 */
@@ -361,9 +363,9 @@ class UserManager {
 		if (is_null($language)) {
 			$language = api_get_interface_language();
 		}
-		$max_length = USER_NAME_MAX_LENGTH - 3;
-		$firstname = preg_replace('/[^0-9A-Za-z]/', '', api_transliterate($firstname, '', $encoding));
-		$lastname = preg_replace('/[^0-9A-Za-z]/', '', api_transliterate($lastname, '', $encoding));
+		$max_length = USERNAME_MAX_LENGTH - 3;
+		$firstname = preg_replace(USERNAME_PURIFIER, '', api_transliterate($firstname, '', $encoding));
+		$lastname = preg_replace(USERNAME_PURIFIER, '', api_transliterate($lastname, '', $encoding));
 		if (empty($firstname) && empty($lastname)) {
 			return 'user';
 		}
@@ -394,21 +396,24 @@ class UserManager {
 	 * @param string $lastname				The last name of the user.
 	 * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
 	 * @param string $encoding (optional)	The character encoding for the input names. If it is omitted, the platform character set will be used by default.
-	 * @return string						Returns a username that may contain only ASCII-letters and digits, and that is unique within the system.
+	 * @return string						Returns a username that contains only ASCII-letters and digits, and that is unique within the system.
 	 * @author Ivan Tcholakov, 2009
 	 */
 	public static function create_unique_username($firstname, $lastname = null, $language = null, $encoding = null) {
 		if (is_null($lastname)) {
-			$username = $firstname; // In this case the actual input parameter should contain ASCII-letters and digits only.
+			// In this case the actual input parameter $firstname should contain ASCII-letters and digits only.
+			// For making this method tolerant of mistakes, let us transliterate and purify the suggested input username anyway.
+			// So, instead of the sentence $username = $firstname; we place the following:
+			$username = strtolower(preg_replace(USERNAME_PURIFIER, '', api_transliterate($firstname, '', $encoding)));
 		} else {
 			$username = self::create_username($firstname, $lastname, $language, $encoding);
 		}
 		if (!self::is_username_available($username)) {
 			$i = 0;
-			$temp_username = substr($username, 0, USER_NAME_MAX_LENGTH - strlen((string)$i)).$i;
+			$temp_username = substr($username, 0, USERNAME_MAX_LENGTH - strlen((string)$i)).$i;
 			while (!self::is_username_available($temp_username)) {
 				$i++;
-				$temp_username = substr($username, 0, USER_NAME_MAX_LENGTH - strlen((string)$i)).$i;
+				$temp_username = substr($username, 0, USERNAME_MAX_LENGTH - strlen((string)$i)).$i;
 			}
 			$username = $temp_username;
 		}
@@ -421,7 +426,7 @@ class UserManager {
 	 * @param bool						Returns TRUE if length of the username exceeds the limit, FALSE otherwise.
 	 */
 	public static function is_username_too_long($username) {
-		return (strlen($username) > USER_NAME_MAX_LENGTH);
+		return (strlen($username) > USERNAME_MAX_LENGTH);
 	}
 
 	/**

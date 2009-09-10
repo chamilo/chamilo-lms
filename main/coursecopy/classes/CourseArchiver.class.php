@@ -23,10 +23,11 @@
 	Mail: info@dokeos.com
 ==============================================================================
 */
-require_once ('Course.class.php');
-require_once ('mkdirr.php');
-require_once ('rmdirr.php');
-require_once (api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php');
+
+require_once 'Course.class.php';
+require_once api_get_path(LIBRARY_PATH).'rmdirr.lib.php';
+require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
+
 /**
  * Some functions to write a course-object to a zip-file and to read a course-
  * object from such a zip-file.
@@ -99,12 +100,12 @@ class CourseArchiver
 			foreach ($course->resources[RESOURCE_DOCUMENT] as $id => $document) {
 				if ($document->file_type == DOCUMENT) {
 					$doc_dir = $backup_dir.$document->path;
-					mkdirr(dirname($doc_dir), 0755);
+					@mkdir(dirname($doc_dir), 0755, true);
 					if (file_exists($course->path.$document->path)) {
 						copy($course->path.$document->path, $doc_dir);	
 					}					
 				} else {
-					mkdirr($backup_dir.$document->path, 0755);
+					@mkdir($backup_dir.$document->path, 0755, true);
 				}
 			}
 		}
@@ -116,7 +117,7 @@ class CourseArchiver
 			{
 				$doc_dir=dirname($backup_dir.$document->path);
 
-				mkdirr($doc_dir,0755);
+				@mkdir($doc_dir, 0755, true);
 
 				copyDirTo($course->path.$document->path, $doc_dir, false);
 			}
@@ -185,7 +186,7 @@ class CourseArchiver
 		// Create a temp directory
 		$tmp_dir_name = 'CourseArchiver_'.uniqid('');
 		$unzip_dir = api_get_path(SYS_ARCHIVE_PATH).''.$tmp_dir_name;
-		mkdirr($unzip_dir,0755);
+		@mkdir($unzip_dir, 0755, true);
 		@copy(api_get_path(SYS_ARCHIVE_PATH).''.$filename,$unzip_dir.'/backup.zip');
 		// unzip the archive
 		$zip = new PclZip($unzip_dir.'/backup.zip');

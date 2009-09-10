@@ -22,7 +22,9 @@
 	Mail: info@dokeos.com
 ============================================================================== 
 */
-require_once('Resource.class.php');
+
+require_once 'Resource.class.php';
+
 /**
  * An QuizQuestion
  * @author Bart Mollet <bart.mollet@hogent.be>

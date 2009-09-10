@@ -23,20 +23,21 @@
 	Mail: info@dokeos.com
 ============================================================================== 
 */
-require_once ('Course.class.php');
-require_once ('Document.class.php');
-require_once ('Event.class.php');
-require_once ('Link.class.php');
-require_once ('LinkCategory.class.php');
-require_once ('ForumCategory.class.php');
-require_once ('Forum.class.php');
-require_once ('ForumTopic.class.php');
-require_once ('ForumPost.class.php');
-require_once ('CourseDescription.class.php');
-require_once ('Learnpath.class.php');
-require_once ('CourseRestorer.class.php');
-require_once ('mkdirr.php');
-require_once ('rmdirr.php');
+
+require_once 'Course.class.php';
+require_once 'Document.class.php';
+require_once 'Event.class.php';
+require_once 'Link.class.php';
+require_once 'LinkCategory.class.php';
+require_once 'ForumCategory.class.php';
+require_once 'Forum.class.php';
+require_once 'ForumTopic.class.php';
+require_once 'ForumPost.class.php';
+require_once 'CourseDescription.class.php';
+require_once 'Learnpath.class.php';
+require_once 'CourseRestorer.class.php';
+require_once api_get_path(LIBRARY_PATH).'rmdirr.lib.php';
+
 class DummyCourseCreator
 {
 	/**
@@ -65,7 +66,7 @@ class DummyCourseCreator
 		$course = Database::get_course_info($course_code);
 		$this->course = new Course();
 		$tmp_path = api_get_path(SYS_COURSE_PATH).$course['directory'].'/document/tmp_'.uniqid('');
-		mkdirr($tmp_path);
+		@mkdir($tmp_path, 0755, true);
 		$this->course->backup_path = $tmp_path;
 		$this->create_dummy_links();
 		$this->create_dummy_events();
@@ -108,7 +109,7 @@ class DummyCourseCreator
 			$dir_to_make = $course_doc_path.$path;
 			if (!is_dir($dir_to_make))
 			{
-				mkdirr(str_replace('/',DIRECTORY_SEPARATOR,$dir_to_make));
+				@mkdir($dir_to_make, 0755, true);
 			}
 			$file = $course_doc_path.$path.$filename;
 			$fp = fopen($file, 'w');
@@ -215,17 +216,19 @@ class DummyCourseCreator
 		$last_forum_post = array ();
 		$last_topic_post = array ();
 		// create categorys
+		$order = 1;
 		for ($i = 1; $i <= $number_of_categories; $i ++)
 		{
-			$forumcat = new ForumCategory($i, $this->get_dummy_content('title'));
+			$forumcat = new ForumCategory($i, $this->get_dummy_content('title'), $this->get_dummy_content('description'), $order, 0, 0);
 			$this->course->add_resource($forumcat);
+			$order++;
 		}
 		// create posts
 		for ($post_id = 1; $post_id <= $number_of_posts; $post_id ++)
 		{
 			$topic_id = rand(1, $number_of_topics);
 			$last_topic_post[$topic_id] = $post_id;
-			$post = new ForumPost($post_id, $this->get_dummy_content('title'), $this->get_dummy_content('text'), 0, '127.0.0.1', 'Dokeos', 'Administrator', 0, 0, $topic_id);
+			$post = new ForumPost($post_id, $this->get_dummy_content('title'), $this->get_dummy_content('text'), date('Y-m-d H:i:s'), 1, 'Dokeos Administrator', 0, 0, $topic_id, 0, 1);
 			$this->course->add_resource($post);
 		}
 		// create topics

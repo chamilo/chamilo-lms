@@ -22,9 +22,12 @@
 	Mail: info@dokeos.com
 ============================================================================== 
 */
-require_once('Resource.class.php');
+
+require_once 'Resource.class.php';
+
 define('DOCUMENT','file');
 define('FOLDER','folder');
+
 /**
  * An document
  * @author Bart Mollet <bart.mollet@hogent.be>

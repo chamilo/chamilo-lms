@@ -22,7 +22,9 @@
 	Mail: info@dokeos.com
 ============================================================================== 
 */
-require_once('Resource.class.php');
+
+require_once 'Resource.class.php';
+
 /**
  * Add resource glossary
  * @author Isaac flores <florespaz@bidsoftperu.com>

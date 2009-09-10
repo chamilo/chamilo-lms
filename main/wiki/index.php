@@ -1029,7 +1029,7 @@ if ($_GET['action']=='searchpages')
 	$form->addElement('style_submit_button', 'SubmitWikiSearch', get_lang('Search'), 'class="search"');
 			
 	// setting the rules
-	$form->addRule('search_term', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+	$form->addRule('search_term', '<span class="required">'.get_lang('ThisFieldIsRequired').'</span>', 'required');
 	$form->addRule('search_term', get_lang('TooShort'),'minlength',3);	
 			
 	if ($form->validate())
@@ -2388,7 +2388,6 @@ if ($_GET['action']=='discuss')
 echo "</div>"; // echo "<div id='mainwiki'>";
 
 echo "</div>"; // echo "<div id='wikiwrapper'>";
-
 
 
 /*

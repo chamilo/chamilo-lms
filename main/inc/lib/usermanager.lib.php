@@ -350,7 +350,7 @@ class UserManager {
 	 * @param string $lastname				The last name of the user.
 	 * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
 	 * @param string $encoding (optional)	The character encoding for the input names. If it is omitted, the platform character set will be used by default.
-	 * @return string						Suggests a username that may contain only ASCII-letters and digits, without check for uniqueness in the system.
+	 * @return string						Suggests a username that may contain only ASCII-letters and digits, without check for uniqueness within the system.
 	 * @author Julio Montoya Armas
 	 * @author Ivan Tcholakov, 2009 - rework about internationalization.
 	 */
@@ -383,6 +383,36 @@ class UserManager {
 			}
 		}
 		return strtolower($desired_username);
+	}
+
+	/**
+	 * Creates a unique username, using:
+	 * 1. the first name and the last name of a user;
+	 * 2. an already created username but not checked for uniqueness yet.
+	 * @param string $firstname				The first name of a given user. If the second parameter $lastname is NULL, then this
+	 * parameter is treated as username which is to be checked for uniqueness and to be modified when it is necessary.
+	 * @param string $lastname				The last name of the user.
+	 * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
+	 * @param string $encoding (optional)	The character encoding for the input names. If it is omitted, the platform character set will be used by default.
+	 * @return string						Returns a username that may contain only ASCII-letters and digits, and that is unique within the system.
+	 * @author Ivan Tcholakov, 2009
+	 */
+	public static function create_unique_username($firstname, $lastname = null, $language = null, $encoding = null) {
+		if (is_null($lastname)) {
+			$username = $firstname; // In this case the actual input parameter should contain ASCII-letters and digits only.
+		} else {
+			$username = self::create_username($firstname, $lastname, $language, $encoding);
+		}
+		if (!self::is_username_available($username)) {
+			$i = 0;
+			$temp_username = substr($username, 0, USER_NAME_MAX_LENGTH - strlen((string)$i)).$i;
+			while (!self::is_username_available($temp_username)) {
+				$i++;
+				$temp_username = substr($username, 0, USER_NAME_MAX_LENGTH - strlen((string)$i)).$i;
+			}
+			$username = $temp_username;
+		}
+		return $username;
 	}
 
 	/**

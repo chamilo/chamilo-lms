@@ -87,10 +87,10 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 		//Delete last item
     	list_path_name[list_path_name.length-1]=null;
     	real_path = list_path_name.join("/");
-      my_protocol = location.protocol;
-      my_host = location.host;
-      my_real_path = my_protocol+"//"+my_host;
-            
+        my_protocol = location.protocol;
+        my_host = location.host;
+        my_real_path = my_protocol+"//"+my_host;
+
 		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {

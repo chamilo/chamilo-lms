@@ -389,7 +389,7 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		$requested_clase   = ($tool_visibility == 0 ) ? 'visible' : 'invisible';
 		$requested_message = ($tool_visibility == 0 ) ? 'is_active' : 'is_inactive';
     $requested_view    = ($tool_visibility == 0 ) ? 'visible.gif' : 'invisible.gif'; 
-    $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;        		
+    $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
 	 	/*
 		-----------------------------------------------------------
 			HIDE AND REACTIVATE
@@ -488,7 +488,6 @@ if(api_is_allowed_to_edit())
       $path_work = "";
     }
 
-   
 ?>
 	<div class="normal-message" id="id_normal_message" style="display:none"><?php echo get_lang("PleaseStandBy")."<br/>".'<img src="'.$server_protocol.$current_host.'/'.$path_work.'main/inc/lib/javascript/indicator.gif"/>'; ?></div>
 	<div class="confirmation-message" id="id_confirmation_message" style="display:none"></div>		

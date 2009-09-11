@@ -844,23 +844,26 @@ class TestMultibyte_String_Functions extends UnitTestCase {
     </Session>
 </Sessions>
 EOM;
-		$xml2 = '<?xml version="1.0" encoding="ISO-8859-1"?>'.$xml1;
+		$xml2 = '<?xml version="1.0" encoding="ISO-8859-15"?>'.$xml1;
 		$xml3 = '<?xml version="1.0" encoding="utf-8"?>'.$xml1;
 		$xml4 = str_replace('<Coach>xxx</Coach>', '<Coach>x'.chr(192).'x</Coach>', $xml1); // A non-UTF-8 character has been inserted.
 		$res1 = api_detect_xml_encoding($xml1);
 		$res2 = api_detect_xml_encoding($xml2);
 		$res3 = api_detect_xml_encoding($xml3);
 		$res4 = api_detect_xml_encoding($xml4);
+		$res5 = api_detect_xml_encoding($xml4, 'windows-1251');
 		$this->assertTrue(
 			$res1 === 'UTF-8'
-			&& $res2 === 'ISO-8859-1'
+			&& $res2 === 'ISO-8859-15'
 			&& $res3 === 'UTF-8'
-			&& $res4 === 'ISO-8859-15'
+			&& api_equal_encodings($res4, api_get_system_encoding())
+			&& $res5 === 'WINDOWS-1251'
 		);
 		//var_dump($res1);
 		//var_dump($res2);
 		//var_dump($res3);
 		//var_dump($res4);
+		//var_dump($res5);
 	}
 
 

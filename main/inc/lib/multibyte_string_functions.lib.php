@@ -2546,19 +2546,23 @@ function api_get_non_utf8_encoding($language = null) {
 
 /**
  * Detects encoding of xml-formatted text.
- * @param $string			The input xml-formatted text.
- * @return string			Returns the detected encoding.
+ * @param string $string				The input xml-formatted text.
+ * @param string $default_encoding		This is the default encoding to be returned if there is no way the xml-text's encoding to be detected. If it not spesified, the system encoding is assumed then.
+ * @return string						Returns the detected encoding.
  * Note: The regular expression string has been published by Steve Minutillo.
  * @link http://minutillo.com/steve/weblog/2004/6/17/php-xml-and-character-encodings-a-tale-of-sadness-rage-and-data-loss/
  */
-function api_detect_xml_encoding(&$string) {
+function api_detect_xml_encoding(&$string, $default_encoding = null) {
 	if (preg_match('/<?xml.*encoding=[\'"](.*?)[\'"].*?>/m', $string, $matches)) {
 		return api_refine_encoding_id($matches[1]);
 	}
 	if (api_is_valid_utf8($string)) {
 		return 'UTF-8';
 	}
-	return 'ISO-8859-15';
+	if (empty($default_encoding)) {
+		$default_encoding = _api_mb_internal_encoding();
+	}
+	return api_refine_encoding_id($default_encoding);
 }
 
 

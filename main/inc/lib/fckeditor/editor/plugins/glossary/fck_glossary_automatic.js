@@ -1,13 +1,13 @@
 $(document).ready(function() {
     $(window).load(function () { 
      var my_text=$("body").html();
-
+     my_protocol = location.protocol;
      $.ajax({
         contentType: "application/x-www-form-urlencoded",
         beforeSend: function(objeto) {
         },
         type: "POST",        
-        url: "http://"+location.host+"/main/glossary/glossary_ajax_request.php",        
+        url: my_protocol+"//"+location.host+"/main/glossary/glossary_ajax_request.php",        
         data: "glossary_data=true",
         success: function(datos) {
 			  if (datos.length==0) {

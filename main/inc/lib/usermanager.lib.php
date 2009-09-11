@@ -423,10 +423,19 @@ class UserManager {
 	/**
 	 * Checks whether a username is too long or not.
 	 * @param string $username			The given username, it should contain only ASCII-letters and digits.
-	 * @param bool						Returns TRUE if length of the username exceeds the limit, FALSE otherwise.
+	 * @return bool						Returns TRUE if length of the username exceeds the limit, FALSE otherwise.
 	 */
 	public static function is_username_too_long($username) {
 		return (strlen($username) > USERNAME_MAX_LENGTH);
+	}
+
+	/**
+	 * Reduces length to a given username to the limit.
+	 * @param string $username			The given username (ASCII-letters and digits).
+	 * @return string					Retuens the username with length that does not exceed the defined limit.
+	 */
+	public static function cut_username($username) {
+		return substr($username, 0, USERNAME_MAX_LENGTH);
 	}
 
 	/**

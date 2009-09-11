@@ -66,7 +66,6 @@ include '../../main/inc/global.inc.php';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 if ($_SERVER['HTTP_HOST'] == 'localhost') {
     //Get information of path
-    api_self();
     $info = explode('courses',api_get_self());
     $path_work = substr($info[0],0,strlen($info[0])-1);
 } else {

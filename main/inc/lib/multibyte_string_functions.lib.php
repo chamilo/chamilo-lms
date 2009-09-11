@@ -2521,7 +2521,6 @@ function api_is_encoding_supported($encoding) {
 	return $supported[$encoding];
 }
 
-
 /**
  * Returns in an array the most-probably used non-UTF-8 encoding for the given language.
  * The first (leading) value is actually used by the system at the moment.
@@ -2545,6 +2544,23 @@ function api_get_non_utf8_encoding($language = null) {
 	return 'ISO-8859-15';
 }
 
+/**
+ * Detects encoding of xml-formatted text.
+ * @param $string			The input xml-formatted text.
+ * @return string			Returns the detected encoding.
+ * Note: The regular expression string has been published by Steve Minutillo.
+ * @link http://minutillo.com/steve/weblog/2004/6/17/php-xml-and-character-encodings-a-tale-of-sadness-rage-and-data-loss/
+ */
+function api_detect_xml_encoding(&$string) {
+	if (preg_match('/<?xml.*encoding=[\'"](.*?)[\'"].*?>/m', $string, $matches)) {
+		return api_refine_encoding_id($matches[1]);
+	}
+	if (api_is_valid_utf8($string)) {
+		return 'UTF-8';
+	}
+	return 'ISO-8859-15';
+}
+
 
 /**
  * ----------------------------------------------------------------------------
@@ -2558,7 +2574,7 @@ function api_get_non_utf8_encoding($language = null) {
  * @return bool				Returns TRUE when the tested string is valid UTF-8 one, FALSE othewise.
  * @link http://en.wikipedia.org/wiki/UTF-8
  */
-function api_is_valid_utf8($string) {
+function api_is_valid_utf8(&$string) {
 
 	//return @mb_detect_encoding($string, 'UTF-8', true) == 'UTF-8' ? true : false;
 	// Ivan Tcholakov, 05-OCT-2008: I do not trust mb_detect_encoding(). I have
@@ -2725,11 +2741,11 @@ function api_is_valid_utf8($string) {
  * @param string $string	The string to be tested/validated.
  * @return bool				Returns TRUE when the tested string contains 7-bit ASCII characters only, FALSE othewise.
  */
-function api_is_valid_ascii($string) {
+function api_is_valid_ascii(&$string) {
 	if (MBSTRING_INSTALLED) {
 		return @mb_detect_encoding($string, 'ASCII', true) == 'ASCII' ? true : false;
 	}
-	return ! preg_match('/[^\x00-\x7F]/S', $string);
+	return !preg_match('/[^\x00-\x7F]/S', $string);
 }
 
 
@@ -2740,6 +2756,35 @@ function api_is_valid_ascii($string) {
  */
 
 /**
+ * Checks whether a given language identificator represents supported by the system language.
+ * @param string $language		The language identificator to be checked ('english', 'french', 'spanish', ...).
+ * @return bool $language		TRUE if the language is supported, FALSE otherwise.
+ */
+function api_is_language_supported($language) {
+	static $supported = array();
+	if (!isset($supported[$language])) {
+		$supported[$language] = in_array(api_refine_language_id($language), array_keys(_api_non_utf8_encodings()));
+	}
+	return $supported[$language];
+}
+
+/**
+ * Validates the input language identificator in order always to return a language that is supported by the system.
+ * @param string $language		The language identificator to be validated.
+ * @param bool $purify			A modifier to the returne result. If it is TRUE, then the returned language identificator is purified.
+ * @return string				Returns the input language identificator, purified, if it was demanded. If the input language is not supported, 'english' is returned then.
+ */
+function api_validate_language($language, $purify = false) {
+	if (!api_is_language_supported($language)) {
+		return 'english';
+	}
+	if ($purify) {
+		return api_refine_language_id($language);
+	}
+	return str_replace('_km', '_KM', strtolower($language));
+}
+
+/**
  * Returns a purified language id, without possible suffixes that will disturb language identification in certain cases.
  * @param string $language	The input language identificator, for example 'french_unicode'.
  * @param string			The same purified or filtered language identificator, for example 'french'.
@@ -2747,7 +2792,7 @@ function api_is_valid_ascii($string) {
 function api_refine_language_id($language) {
 	static $purified = array();
 	if (!isset($purified[$language])) {
-		$purified[$language] = strtolower(str_replace(array('_unicode', '_latin', '_corporate', '_org', '_KM'), '', $language));
+		$purified[$language] = str_replace(array('_unicode', '_latin', '_corporate', '_org', '_km'), '', strtolower($language));
 	}
 	return $purified[$language];
 }

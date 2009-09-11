@@ -789,6 +789,80 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 		//var_dump($res);
 	}
 
+	public function test_api_detect_xml_encoding() {
+		$xml1 = <<<EOM
+<Sessions>
+    <Users>
+        <User>
+            <Username>username1</Username>
+            <Lastname>xxx</Lastname>
+            <Firstname>xxx</Firstname>
+            <Password>xxx</Password>
+            <Email>xxx@xx.xx</Email>
+            <OfficialCode>xxx</OfficialCode>
+            <Phone>xxx</Phone>
+            <Status>student|teacher</Status>
+        </User>
+    </Users>
+    <Courses>
+        <Course>
+            <CourseCode>xxx</CourseCode>
+            <CourseTeacher>xxx</CourseTeacher>
+            <CourseLanguage>xxx</CourseLanguage>
+            <CourseTitle>xxx</CourseTitle>
+            <CourseDescription>xxx</CourseDescription>
+        </Course>
+    </Courses>
+    <Session>
+        <SessionName>xxx</SessionName>
+        <Coach>xxx</Coach>
+        <DateStart>xxx</DateStart>
+        <DateEnd>xxx</DateEnd>
+        <User>xxx</User>
+        <User>xxx</User>
+    	<Course>
+    		<CourseCode>coursecode1</CourseCode>
+    		<Coach>coach1</Coach>
+		<User>username1</User>
+		<User>username2</User>
+    	</Course>
+    </Session>
+    
+    <Session>
+        <SessionName>xxx</SessionName>
+        <Coach>xxx</Coach>
+        <DateStart>xxx</DateStart>
+        <DateEnd>xxx</DateEnd>
+        <User>xxx</User>
+        <User>xxx</User>
+    	<Course>
+    		<CourseCode>coursecode1</CourseCode>
+    		<Coach>coach1</Coach>
+		<User>username1</User>
+		<User>username2</User>
+    	</Course>
+    </Session>
+</Sessions>
+EOM;
+		$xml2 = '<?xml version="1.0" encoding="ISO-8859-1"?>'.$xml1;
+		$xml3 = '<?xml version="1.0" encoding="utf-8"?>'.$xml1;
+		$xml4 = str_replace('<Coach>xxx</Coach>', '<Coach>x'.chr(192).'x</Coach>', $xml1); // A non-UTF-8 character has been inserted.
+		$res1 = api_detect_xml_encoding($xml1);
+		$res2 = api_detect_xml_encoding($xml2);
+		$res3 = api_detect_xml_encoding($xml3);
+		$res4 = api_detect_xml_encoding($xml4);
+		$this->assertTrue(
+			$res1 === 'UTF-8'
+			&& $res2 === 'ISO-8859-1'
+			&& $res3 === 'UTF-8'
+			&& $res4 === 'ISO-8859-15'
+		);
+		//var_dump($res1);
+		//var_dump($res2);
+		//var_dump($res3);
+		//var_dump($res4);
+	}
+
 
 /**
  * ----------------------------------------------------------------------------
@@ -818,6 +892,88 @@ class TestMultibyte_String_Functions extends UnitTestCase {
  * Language management functions
  * ----------------------------------------------------------------------------
  */
+
+	public function test_api_is_language_supported() {
+		$language1 = 'english';
+		$language2 = 'english_org';
+		$language3 = 'EnGlIsh';
+		$language4 = 'EnGlIsh_oRg';
+		$language5 = 'french';
+		$language6 = 'french_corporate';
+		$language7 = 'frEncH';
+		$language8 = 'freNch_corPorAte';
+		$language9 = 'xxxxxxxxxxxxxx';
+		$res1 = api_is_language_supported($language1);
+		$res2 = api_is_language_supported($language2);
+		$res3 = api_is_language_supported($language3);
+		$res4 = api_is_language_supported($language4);
+		$res5 = api_is_language_supported($language5);
+		$res6 = api_is_language_supported($language6);
+		$res7 = api_is_language_supported($language7);
+		$res8 = api_is_language_supported($language8);
+		$res9 = api_is_language_supported($language9);
+		$this->assertTrue(
+			$res1 === true
+			&& $res2 === true
+			&& $res3 === true
+			&& $res4 === true
+			&& $res5 === true
+			&& $res6 === true
+			&& $res7 === true
+			&& $res8 === true
+			&& $res9 === false
+		);
+		//var_dump($res1);
+		//var_dump($res2);
+		//var_dump($res3);
+		//var_dump($res4);
+		//var_dump($res5);
+		//var_dump($res6);
+		//var_dump($res7);
+		//var_dump($res8);
+		//var_dump($res9);
+	}
+
+	public function test_api_validate_language() {
+		$language1 = 'english';
+		$language2 = 'english_org';
+		$language3 = 'EnGlIsh';
+		$language4 = 'enGlIsh_oRg';
+		$language5 = 'french';
+		$language6 = 'french_unicode';
+		$language7 = 'frEncH';
+		$language8 = 'FreNch_CorPorAte';
+		$language9 = 'xxxxxxxxxxxxxx';
+		$res1 = api_validate_language($language1);
+		$res2 = api_validate_language($language2);
+		$res3 = api_validate_language($language3);
+		$res4 = api_validate_language($language4);
+		$res5 = api_validate_language($language5);
+		$res6 = api_validate_language($language6);
+		$res7 = api_validate_language($language7);
+		$res8 = api_validate_language($language8, true);
+		$res9 = api_validate_language($language9);
+		$this->assertTrue(
+			$res1 === 'english'
+			&& $res2 === 'english_org'
+			&& $res3 === 'english'
+			&& $res4 === 'english_org'
+			&& $res5 === 'french'
+			&& $res6 === 'french_unicode'
+			&& $res7 === 'french'
+			&& $res8 === 'french'
+			&& $res9 === 'english'
+		);
+		//var_dump($res1);
+		//var_dump($res2);
+		//var_dump($res3);
+		//var_dump($res4);
+		//var_dump($res5);
+		//var_dump($res6);
+		//var_dump($res7);
+		//var_dump($res8);
+		//var_dump($res9);
+	}
 
 	public function test_api_refine_language_id() {
 		$language = 'english_org';

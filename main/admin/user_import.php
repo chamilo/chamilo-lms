@@ -10,20 +10,20 @@
 /**
  * validate the imported data
  */
- 
+
 $language_file = array ('admin', 'registration');
 require '../inc/global.inc.php';
-require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php'; 
+require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
 
 function validate_data($users) {
 	global $defined_auth_sources;
 	$errors = array ();
 	$usernames = array ();
 	foreach ($users as $index => $user) {
-		//1. check if mandatory fields are set	
+		//1. check if mandatory fields are set
 		$mandatory_fields = array ('LastName', 'FirstName');
 		if (api_get_setting('registration', 'email') == 'true') {
-			$mandatory_fields[] = 'Email';	
+			$mandatory_fields[] = 'Email';
 		}
 		foreach ($mandatory_fields as $key => $field) {
 			if (!isset ($user[$field]) || strlen($user[$field]) == 0) {
@@ -120,9 +120,9 @@ function save_data($users) {
 	if (is_array($users)) {
         foreach ($users as $index => $user)	{
     		$user = complete_missing_data($user);
-    		
+
     		$user['Status'] = api_status_key($user['Status']);
-    		
+
     		$user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], api_get_setting('PlatformLanguage'), $user['PhoneNumber'], '', $user['AuthSource']);
             if (!is_array($user['Courses']) && !empty($user['Courses'])) {
             	$user['Courses'] = array($user['Courses']);
@@ -131,9 +131,9 @@ function save_data($users) {
         		foreach ($user['Courses'] as $index => $course) {
         			if (CourseManager :: course_exists($course)) {
         				CourseManager :: subscribe_user($user_id, $course,$user['Status']);
-                        $c_info = CourseManager::get_course_information($course); 
+                        $c_info = CourseManager::get_course_information($course);
                         $inserted_in_course[$course] = $c_info['title'];
-                    } 
+                    }
                     if (CourseManager :: course_exists($course,true)) {
                     	// also subscribe to virtual courses through check on visual code
                         $list = CourseManager :: get_courses_info_from_visual_code($course);
@@ -141,7 +141,7 @@ function save_data($users) {
                         	if ($vcourse['code'] == $course) {
                         		//ignore, this has already been inserted
                         	} else {
-                                CourseManager :: subscribe_user($user_id, $vcourse['code'],$user['Status']);                		
+                                CourseManager :: subscribe_user($user_id, $vcourse['code'],$user['Status']);
                                 $inserted_in_course[$vcourse['code']] = $vcourse['title'];
                         	}
                         }
@@ -152,33 +152,33 @@ function save_data($users) {
     			$class_id = ClassManager :: get_class_id($user['ClassName']);
     			ClassManager :: add_user($user_id, $class_id);
     		}
-    		
+
     		//saving extra fields
 			global $extra_fields;
-			//print_R($user);	
+			//print_R($user);
 			//we are sure the extra field exist
-			foreach($extra_fields as $extras) {			
+			foreach($extra_fields as $extras) {
 				if (isset($user[$extras[1]])) {
-						$key 	= $extras[1];					 
+						$key 	= $extras[1];
 						$value 	= $user[$extras[1]];
-						UserManager::update_extra_field_value($user_id,$key,$value);	
+						UserManager::update_extra_field_value($user_id,$key,$value);
 				}
 			}
-		
-    		if ($sendMail) {			
+
+    		if ($sendMail) {
     			$recipient_name = api_get_person_name($user['FirstName'], $user['LastName'], null, PERSON_NAME_EMAIL_ADDRESS);
-    			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');			
-    			$emailbody = get_lang('Dear').api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('Settings')." $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path('WEB_PATH')." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";						
+    			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+    			$emailbody = get_lang('Dear').api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('Settings')." $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path('WEB_PATH')." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";
     			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-    		    $email_admin = api_get_setting('emailAdministrator');			
+    		    $email_admin = api_get_setting('emailAdministrator');
     			@api_mail($recipient_name, $user['Email'], $emailsubject, $emailbody, $sender_name,$email_admin);
     		}
-    
+
     	}
     }
 }
 /**
- * Read the CSV-file 
+ * Read the CSV-file
  * @param string $file Path to the CSV-file
  * @return array All userinformation read from the file
  */
@@ -284,26 +284,26 @@ $user_id_error=array();
 if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	$file_type = $_POST['file_type'];
 	Security::clear_token();
-    $tok = Security::get_token(); 
-	
-	if (strcmp($file_type,'csv')===0){ //&& strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {		
+    $tok = Security::get_token();
+
+	if (strcmp($file_type,'csv')===0){ //&& strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {
 		$users = parse_csv_data($_FILES['import_file']['tmp_name']);
 		$errors = validate_data($users);
 		$error_kind_file=false;
-	} elseif (strcmp($file_type,'xml')===0){// && strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {		
+	} elseif (strcmp($file_type,'xml')===0){// && strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {
 		$users = parse_xml_data($_FILES['import_file']['tmp_name']);
 		$errors = validate_data($users);
 		$error_kind_file=false;
 	} else {
 		$error_kind_file=true;
 	}
-	
+
 	//list user id whith error
 	$user_id_error=array();
-	if (is_array($errors)){ 
+	if (is_array($errors)){
 		foreach ($errors as $my_errors) {
 			$user_id_error[]=$my_errors['UserName'];
-		}	
+		}
 	}
 	if  (is_array($users)) {
 		foreach ($users as $my_user) {
@@ -312,11 +312,11 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 			}
 		}
 	}
-	
+
     $inserted_in_course = array();
 
 	if (strcmp($_FILES['import_file']['type'],'text/'.$file_type.'') === 0) {
-		save_data($users_to_insert);	
+		save_data($users_to_insert);
 	} else {
 		$error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
 		header('Location: '.api_get_self().'?warn='.urlencode($error_message).'&amp;file_type='.$file_type.'&amp;sec_token='.$tok);
@@ -337,7 +337,7 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
         $msg2 = substr($msg2,0,-1);
 	    $msg2 .= "</br>";
     }
-    
+
 	if (count($errors) != 0) {
 		$error_message = '<ul>';
 		foreach ($errors as $index => $error_user) {
@@ -347,10 +347,10 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 		}
 		$error_message .= '</ul>';
 	}
-      
+
 	header('Location: user_list.php?action=show_message&message='.urlencode($see_message_import).'&warn='.urlencode($error_message).'&sec_token='.$tok);
 	exit ();
-	
+
 }
 
 Display :: display_header($tool_name);
@@ -391,12 +391,12 @@ $count_fields = count($extra_fields);
 if ($count_fields > 0) {
 	foreach($extra_fields as $extra) {
 		$list[] = $extra[1];
-		$list_reponse[]='xxx';				
+		$list_reponse[]='xxx';
 		$spaces = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-		$result_xml.=$spaces.'&lt;'.$extra[1].'&gt;xxx&lt;/'.$extra[1].'&gt;';	
+		$result_xml.=$spaces.'&lt;'.$extra[1].'&gt;xxx&lt;/'.$extra[1].'&gt;';
 		if ($i!=$count_fields-1)
 			$result_xml.='<br/>';
-		$i++;	
+		$i++;
 	}
 }
 ?>
@@ -424,9 +424,9 @@ if ($count_fields > 0) {
         <b>&lt;Email&gt;xxx&lt;/Email&gt;</b>
         &lt;OfficialCode&gt;xxx&lt;/OfficialCode&gt;
         &lt;PhoneNumber&gt;xxx&lt;/PhoneNumber&gt;
-        &lt;Status&gt;user/teacher/drh&lt;/Status&gt;         <?php if ($result_xml!='') { echo '<br /><font style="color:red;">',$result_xml;echo '</font>';} ?>        
+        &lt;Status&gt;user/teacher/drh&lt;/Status&gt;         <?php if ($result_xml!='') { echo '<br /><font style="color:red;">',$result_xml;echo '</font>';} ?>
         &lt;Courses&gt;xxx1|xxx2|xxx3&lt;/Courses&gt;
-        &lt;ClassName&gt;class 1&lt;/ClassName&gt;        
+        &lt;ClassName&gt;class 1&lt;/ClassName&gt;
     &lt;/Contact&gt;
 &lt;/Contacts&gt;
 </pre>

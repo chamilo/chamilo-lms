@@ -56,7 +56,18 @@ if ($_POST['formSent']) {
 			//XML/////////////////
 			/////////////////////
 
-			$root = @simplexml_load_file($_FILES['import_file']['tmp_name']);
+			// SimpleXML for PHP5 deals with various encodings, but how many they are, what are version issues, do we need to waste time with configuration options?
+			// For avoiding complications we go some sort of "PHP4 way" - we convert the input xml-file into UTF-8 before passing it to the parser.
+			// Instead of:
+			// $root = @simplexml_load_file($_FILES['import_file']['tmp_name']);
+			// we may use the following construct:
+			// $root = @simplexml_load_string(api_utf8_encode_xml(file_get_contents($_FILES['import_file']['tmp_name'])));
+			// To ease debugging let us use:
+			$content = file_get_contents($_FILES['import_file']['tmp_name']);
+			$content = api_utf8_encode_xml($content);
+			$root = @simplexml_load_string($content);
+			unset($content);
+
 			if (is_object($root)) {
 				if (count($root->Users->User) > 0) {
 

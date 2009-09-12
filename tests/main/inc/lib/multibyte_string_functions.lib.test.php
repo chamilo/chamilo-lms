@@ -5,7 +5,7 @@
  * a common purpose library for supporting multibyte string
  * aware functions. Only the public API is tested here.
  * @author Ricardo Rodriguez Salazar, 2009.
- * @author Ivan Tcholakov, August 2009.
+ * @author Ivan Tcholakov, September 2009.
  * For licensing terms, see /dokeos_license.txt
  *
  * Notes:
@@ -789,69 +789,28 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function test_api_detect_xml_encoding() {
-		$xml1 = <<<EOM
-<Sessions>
-    <Users>
-        <User>
-            <Username>username1</Username>
-            <Lastname>xxx</Lastname>
-            <Firstname>xxx</Firstname>
-            <Password>xxx</Password>
-            <Email>xxx@xx.xx</Email>
-            <OfficialCode>xxx</OfficialCode>
-            <Phone>xxx</Phone>
-            <Status>student|teacher</Status>
-        </User>
-    </Users>
-    <Courses>
-        <Course>
-            <CourseCode>xxx</CourseCode>
-            <CourseTeacher>xxx</CourseTeacher>
-            <CourseLanguage>xxx</CourseLanguage>
-            <CourseTitle>xxx</CourseTitle>
-            <CourseDescription>xxx</CourseDescription>
-        </Course>
-    </Courses>
-    <Session>
-        <SessionName>xxx</SessionName>
-        <Coach>xxx</Coach>
-        <DateStart>xxx</DateStart>
-        <DateEnd>xxx</DateEnd>
-        <User>xxx</User>
-        <User>xxx</User>
-    	<Course>
-    		<CourseCode>coursecode1</CourseCode>
-    		<Coach>coach1</Coach>
-		<User>username1</User>
-		<User>username2</User>
-    	</Course>
-    </Session>
-
-    <Session>
-        <SessionName>xxx</SessionName>
-        <Coach>xxx</Coach>
-        <DateStart>xxx</DateStart>
-        <DateEnd>xxx</DateEnd>
-        <User>xxx</User>
-        <User>xxx</User>
-    	<Course>
-    		<CourseCode>coursecode1</CourseCode>
-    		<Coach>coach1</Coach>
-		<User>username1</User>
-		<User>username2</User>
-    	</Course>
-    </Session>
-</Sessions>
-EOM;
+	public function test_api_detect_encoding_xml() {
+		$xml1 = '
+			<Users>
+				<User>
+					<Username>username1</Username>
+					<Lastname>xxx</Lastname>
+					<Firstname>xxx</Firstname>
+					<Password>xxx</Password>
+					<Email>xxx@xx.xx</Email>
+					<OfficialCode>xxx</OfficialCode>
+					<Phone>xxx</Phone>
+					<Status>student</Status>
+				</User>
+			</Users>'; // US-ASCII
 		$xml2 = '<?xml version="1.0" encoding="ISO-8859-15"?>'.$xml1;
 		$xml3 = '<?xml version="1.0" encoding="utf-8"?>'.$xml1;
-		$xml4 = str_replace('<Coach>xxx</Coach>', '<Coach>x'.chr(192).'x</Coach>', $xml1); // A non-UTF-8 character has been inserted.
-		$res1 = api_detect_xml_encoding($xml1);
-		$res2 = api_detect_xml_encoding($xml2);
-		$res3 = api_detect_xml_encoding($xml3);
-		$res4 = api_detect_xml_encoding($xml4);
-		$res5 = api_detect_xml_encoding($xml4, 'windows-1251');
+		$xml4 = str_replace('<Lastname>xxx</Lastname>', '<Lastname>x'.chr(192).'x</Lastname>', $xml1); // A non-UTF-8 character has been inserted.
+		$res1 = api_detect_encoding_xml($xml1);
+		$res2 = api_detect_encoding_xml($xml2);
+		$res3 = api_detect_encoding_xml($xml3);
+		$res4 = api_detect_encoding_xml($xml4);
+		$res5 = api_detect_encoding_xml($xml4, 'windows-1251');
 		$this->assertTrue(
 			$res1 === 'UTF-8'
 			&& $res2 === 'ISO-8859-15'
@@ -866,6 +825,102 @@ EOM;
 		//var_dump($res5);
 	}
 
+	public function test_api_convert_encoding_xml() {
+		$xml = '
+			<?xml version="1.0" encoding="UTF-8"?>
+			<Users>
+				<User>
+					<Username>username1</Username>
+					<Lastname>xxx</Lastname>
+					<Firstname>Иван</Firstname>
+					<Password>xxx</Password>
+					<Email>xxx@xx.xx</Email>
+					<OfficialCode>xxx</OfficialCode>
+					<Phone>xxx</Phone>
+					<Status>student</Status>
+				</User>
+			</Users>'; // UTF-8
+		$res1 = api_convert_encoding_xml($xml, 'WINDOWS-1251', 'UTF-8');
+		$res2 = api_convert_encoding_xml($xml, 'WINDOWS-1251');
+		$res3 = api_convert_encoding_xml($res1, 'UTF-8', 'WINDOWS-1251');
+		$res4 = api_convert_encoding_xml($res2, 'UTF-8');
+		$this->assertTrue(
+			$res3 === $xml
+			&& $res4 === $xml
+		);
+		//var_dump(preg_replace(array('/\r?\n/m', '/\t/m'), array('<br />', '&nbsp;&nbsp;&nbsp;&nbsp;'), htmlspecialchars($res1)));
+		//var_dump(preg_replace(array('/\r?\n/m', '/\t/m'), array('<br />', '&nbsp;&nbsp;&nbsp;&nbsp;'), htmlspecialchars($res2)));
+		//var_dump(preg_replace(array('/\r?\n/m', '/\t/m'), array('<br />', '&nbsp;&nbsp;&nbsp;&nbsp;'), htmlspecialchars($res3)));
+		//var_dump(preg_replace(array('/\r?\n/m', '/\t/m'), array('<br />', '&nbsp;&nbsp;&nbsp;&nbsp;'), htmlspecialchars($res4)));
+	}
+
+	public function test_api_utf8_encode_xml() {
+		$xml1 = '
+			<?xml version="1.0" encoding="UTF-8"?>
+			<Users>
+				<User>
+					<Username>username1</Username>
+					<Lastname>xxx</Lastname>
+					<Firstname>Иван</Firstname>
+					<Password>xxx</Password>
+					<Email>xxx@xx.xx</Email>
+					<OfficialCode>xxx</OfficialCode>
+					<Phone>xxx</Phone>
+					<Status>student</Status>
+				</User>
+			</Users>'; // UTF-8
+		$xml2 = '
+			<?xml version="1.0" encoding="WINDOWS-1251"?>
+			<Users>
+				<User>
+					<Username>username1</Username>
+					<Lastname>xxx</Lastname>
+					<Firstname>'.chr(200).chr(226).chr(224).chr(237).'</Firstname>
+					<Password>xxx</Password>
+					<Email>xxx@xx.xx</Email>
+					<OfficialCode>xxx</OfficialCode>
+					<Phone>xxx</Phone>
+					<Status>student</Status>
+				</User>
+			</Users>'; // WINDOWS-1251
+		$res1 = api_utf8_encode_xml($xml2);
+		$this->assertTrue($res1 === $xml1);
+		//var_dump(preg_replace(array('/\r?\n/m', '/\t/m'), array('<br />', '&nbsp;&nbsp;&nbsp;&nbsp;'), htmlspecialchars($res1)));
+	}
+
+	public function test_api_utf8_decode_xml() {
+		$xml1 = '
+			<?xml version="1.0" encoding="UTF-8"?>
+			<Users>
+				<User>
+					<Username>username1</Username>
+					<Lastname>xxx</Lastname>
+					<Firstname>Иван</Firstname>
+					<Password>xxx</Password>
+					<Email>xxx@xx.xx</Email>
+					<OfficialCode>xxx</OfficialCode>
+					<Phone>xxx</Phone>
+					<Status>student</Status>
+				</User>
+			</Users>'; // UTF-8
+		$xml2 = '
+			<?xml version="1.0" encoding="WINDOWS-1251"?>
+			<Users>
+				<User>
+					<Username>username1</Username>
+					<Lastname>xxx</Lastname>
+					<Firstname>'.chr(200).chr(226).chr(224).chr(237).'</Firstname>
+					<Password>xxx</Password>
+					<Email>xxx@xx.xx</Email>
+					<OfficialCode>xxx</OfficialCode>
+					<Phone>xxx</Phone>
+					<Status>student</Status>
+				</User>
+			</Users>'; // WINDOWS-1251
+		$res1 = api_utf8_decode_xml($xml1, 'WINDOWS-1251');
+		$this->assertTrue($res1 === $xml2);
+		//var_dump(preg_replace(array('/\r?\n/m', '/\t/m'), array('<br />', '&nbsp;&nbsp;&nbsp;&nbsp;'), htmlspecialchars($res1)));
+	}
 
 /**
  * ----------------------------------------------------------------------------

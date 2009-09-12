@@ -8,8 +8,9 @@
  * @author: Ivan Tcholakov, ivantcholakov@gmail.com
  * October 2008 - initial implementation.
  * May 2009 - refactoring and minor corrections have been implemented.
- * August 2009 - PCRE-related functions have been added,
- *               dependancy on mbstring extension has been removed.
+ * August 2009    - PCRE-related functions have been added,
+ *                  dependancy on mbstring extension has been removed.
+ * September 2009 - Encoding conversion functions for XML have been added.
  * @package dokeos.library
  * ==============================================================================
  */
@@ -541,6 +542,39 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null) {
 	return $result;
 }
 
+/**
+ * Converts character encoding of a xml-formatted text. If inside the text the encoding is declared, it is modified accordingly.
+ * @param string $string					The text being converted.
+ * @param string $to_encoding				The encoding that text is being converted to.
+ * @param string $from_encoding (optional)	The encoding that text is being converted from. If it is omited, it is tried to be detected then.
+ * @return string							Returns the converted xml-text.
+ */
+function api_convert_encoding_xml($string, $to_encoding, $from_encoding = null) {
+	return _api_convert_encoding_xml($string, $to_encoding, $from_encoding);
+}
+
+/**
+ * Converts character encoding of a xml-formatted text into UTF-8. If inside the text the encoding is declared, it is set to UTF-8.
+ * @param string $string					The text being converted.
+ * @param string $from_encoding (optional)	The encoding that text is being converted from. If it is omited, it is tried to be detected then.
+ * @return string							Returns the converted xml-text.
+ */
+function api_utf8_encode_xml($string, $from_encoding = null) {
+	return _api_convert_encoding_xml($string, 'UTF-8', $from_encoding);
+}
+
+/**
+ * Converts character encoding of a xml-formatted text from UTF-8 into a specified encoding. If inside the text the encoding is declared, it is modified accordingly.
+ * @param string $string					The text being converted.
+ * @param string $to_encoding (optional)	The encoding that text is being converted to. If it is omited, the platform character set is assumed.
+ * @return string							Returns the converted xml-text.
+ */
+function api_utf8_decode_xml($string, $to_encoding = null) {
+	if (empty($to_encoding)) {
+		$to_encoding = _api_mb_internal_encoding();
+	}
+	return _api_convert_encoding_xml($string, $to_encoding, 'UTF-8');
+}
 
 /**
  * ----------------------------------------------------------------------------
@@ -2549,11 +2583,9 @@ function api_get_non_utf8_encoding($language = null) {
  * @param string $string				The input xml-formatted text.
  * @param string $default_encoding		This is the default encoding to be returned if there is no way the xml-text's encoding to be detected. If it not spesified, the system encoding is assumed then.
  * @return string						Returns the detected encoding.
- * Note: The regular expression string has been published by Steve Minutillo.
- * @link http://minutillo.com/steve/weblog/2004/6/17/php-xml-and-character-encodings-a-tale-of-sadness-rage-and-data-loss/
  */
-function api_detect_xml_encoding(&$string, $default_encoding = null) {
-	if (preg_match('/<?xml.*encoding=[\'"](.*?)[\'"].*?>/m', $string, $matches)) {
+function api_detect_encoding_xml(&$string, $default_encoding = null) {
+	if (preg_match(_PCRE_XML_ENCODING, $string, $matches)) {
 		return api_refine_encoding_id($matches[1]);
 	}
 	if (api_is_valid_utf8($string)) {

@@ -16,6 +16,18 @@
 
 /**
  * ----------------------------------------------------------------------------
+ * Internal constants
+ * ----------------------------------------------------------------------------
+ */
+
+// A regular expression for accessing declared encoding within xml-formatted text.
+// Published by Steve Minutillo,
+// http://minutillo.com/steve/weblog/2004/6/17/php-xml-and-character-encodings-a-tale-of-sadness-rage-and-data-loss/
+define('_PCRE_XML_ENCODING', '/<?xml.*encoding=[\'"](.*?)[\'"].*?>/m');
+
+
+/**
+ * ----------------------------------------------------------------------------
  * Global variables used by some callback functions
  * ----------------------------------------------------------------------------
  */
@@ -357,6 +369,32 @@ function _api_html_entity_from_unicode($codepoint) {
 		return chr($codepoint);
 	}
 	return '&#'.$codepoint.';';
+}
+
+/**
+ * Converts character encoding of a xml-formatted text. If inside the text the encoding is declared, it is modified accordingly.
+ * @param string $string					The text being converted.
+ * @param string $to_encoding				The encoding that text is being converted to.
+ * @param string $from_encoding (optional)	The encoding that text is being converted from. If the value is empty, it is tried to be detected then.
+ * @return string							Returns the converted xml-text.
+ */
+function _api_convert_encoding_xml(&$string, $to_encoding, $from_encoding) {
+	if (empty($from_encoding)) {
+		$from_encoding = api_detect_encoding_xml($string);
+	}
+	global $_api_encoding;
+	$_api_encoding = api_refine_encoding_id($to_encoding);
+	return api_convert_encoding(preg_replace_callback(_PCRE_XML_ENCODING, '_api_convert_encoding_xml_callback', $string), $to_encoding, $from_encoding);
+}
+
+/**
+ * A callback for serving the function _api_convert_encoding_xml().
+ * @param array $matches	Input array of matches corresponding to the xml-declaration.
+ * @return string			Returns the xml-declaration with modified encoding.
+ */
+function _api_convert_encoding_xml_callback($matches) {
+	global $_api_encoding;
+	return str_replace($matches[1], $_api_encoding, $matches[0]);
 }
 
 

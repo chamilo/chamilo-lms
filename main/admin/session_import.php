@@ -90,7 +90,7 @@ if ($_POST['formSent']) {
 							$firstname = api_utf8_decode($node_user->Firstname);
 							$password = api_utf8_decode($node_user->Password);
 							if (empty($password)) {
-								$password = base64_encode(rand(1000, 10000));
+								$password = api_generate_password();
 							}
 							$email = api_utf8_decode($node_user->Email);
 							$official_code = api_utf8_decode($node_user->OfficialCode);
@@ -260,7 +260,7 @@ if ($_POST['formSent']) {
 							$coach_id = api_get_user_id();
 						}
 
-						$date_start = $node_session->DateStart;
+						$date_start = api_utf8_decode($node_session->DateStart); // Just in case - encoding conversion.
 
 						if (!empty($date_start)) {
 							list($year_start, $month_start, $day_start) = explode('-', $date_start);
@@ -271,7 +271,7 @@ if ($_POST['formSent']) {
 								$time_start = mktime(0, 0, 0, $month_start, $day_start, $year_start);
 							}
 
-							$date_end = $node_session->DateEnd;
+							$date_end = api_utf8_decode($node_session->DateEnd);
 							if (!empty($date_start)) {
 								list($year_end, $month_end, $day_end) = explode('-', $date_end);
 								if (empty($year_end) || empty($month_end) || empty($day_end)) {
@@ -318,7 +318,7 @@ if ($_POST['formSent']) {
 						} else {
 							// Update the session if it is needed.
 							$my_session_result = SessionManager::get_session_by_name($session_name);
-							if ($my_session_result == false) {
+							if ($my_session_result === false) {
 								// Creating the session.
 								$sql_session = "INSERT IGNORE INTO $tbl_session SET
 										name = '".Database::escape_string($session_name)."',
@@ -372,7 +372,7 @@ if ($_POST['formSent']) {
 
 						// Adding courses to a session.
 						foreach ($node_session->Course as $node_course) {
-							$course_code = Database::escape_string($node_course->CourseCode);
+							$course_code = Database::escape_string(api_utf8_decode($node_course->CourseCode));
 							// Verify that the course pointed by the course code node exists.
 							if (CourseManager::course_exists($course_code)) {
 								// If the course exists we continue.
@@ -389,7 +389,7 @@ if ($_POST['formSent']) {
 									$coach_id = '';
 								}
 								$session_course_relation = SessionManager::relation_session_course_exist($session_id, $course_code);
-								if ($session_course_relation == false) {
+								if (!$session_course_relation) {
 									$sql_course = "INSERT INTO $tbl_session_course SET
 											course_code = '$course_code',
 											id_coach='$coach_id',
@@ -576,7 +576,7 @@ if ($_POST['formSent']) {
 						$session_counter++;
 					} else {
 						$my_session_result = SessionManager::get_session_by_name($session_name);
-						if ($my_session_result == false) {
+						if ($my_session_result === false) {
 
 							// Creating a session.
 							$sql_session = "INSERT IGNORE INTO $tbl_session SET

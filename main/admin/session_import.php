@@ -63,12 +63,12 @@ if ($_POST['formSent']) {
 					// Creating/updating users from <Sessions> <Users> base node.
 					foreach ($root->Users->User as $node_user) {
 						$username = api_utf8_decode($node_user->Username);
-						$was_cut = 0;
-						if (api_strlen($username) > 20) {
+						$was_cut = false;
+						if (UserManager::is_username_too_long($username)) {
 							// The given username is too long.
 							$user_name_dist = $username;
-							$username = api_substr($username, 0, 20);
-							$was_cut = 1;
+							$username = UserManager::cut_username($username);
+							$was_cut = true;
 						}
 						$user_exists = UserManager::is_username_available($username);
 						if ($user_exists) {
@@ -348,7 +348,7 @@ if ($_POST['formSent']) {
 
 						// Adding users to the new session.
 						foreach ($node_session->User as $node_user){
-							$username = api_utf8_decode(api_substr($node_user, 0, 20));
+							$username = UserManager::cut_username(api_utf8_decode($node_user));
 							$user_id = UserManager::get_user_id_from_username($username);
 							if ($user_id !== false) {
 								$sql = "INSERT IGNORE INTO $tbl_session_user SET
@@ -367,7 +367,7 @@ if ($_POST['formSent']) {
 								// If the course exists we continue.
 								$course_info = CourseManager::get_course_information($course_code);
 								// Searching the coach.
-								$coach = api_substr($node_course->Coach, 0, 20);
+								$coach = UserManager::cut_username(api_utf8_decode($node_course->Coach));
 								if (!empty($coach)) {
 									$coach_id = UserManager::get_user_id_from_username($coach);
 									if ($coach_id === false) {
@@ -389,7 +389,7 @@ if ($_POST['formSent']) {
 									$course_counter++;
 									$users_in_course_counter = 0;
 									foreach ($node_course->User as $node_user) {
-										$username = api_substr($node_user, 0, 20);
+										$username = UserManager::cut_username(api_utf8_decode($node_user));
 										$user_id = UserManager::get_user_id_from_username($username);
 										if ($user_id !== false) {
 											// Adding to session_rel_user table.
@@ -423,7 +423,7 @@ if ($_POST['formSent']) {
 									if ($vcourse['code'] == $course_code) {
 										// Ignore, this has already been inserted.
 									} else {
-										$coach = substr($node_course->Coach, 0, 20);
+										$coach = UserManager::cut_username(api_utf8_decode($node_course->Coach));
 										if (!empty($coach)) {
 											$coach_id = UserManager::get_user_id_from_username($coach);
 											if ($user_id === false) {
@@ -443,7 +443,7 @@ if ($_POST['formSent']) {
 											$course_counter++;
 											$users_in_course_counter = 0;
 											foreach ($node_course->User as $node_user) {
-												$username = substr($node_user, 0, 20);
+												$username = UserManager::cut_username(api_utf8_decode($node_user));
 												$user_id = UserManager::get_user_id_from_username($username);
 												if ($user_id !== false) {
 													$sql = "INSERT IGNORE INTO $tbl_session_user SET

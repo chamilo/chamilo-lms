@@ -2,7 +2,7 @@
 
 /**
  * This is a test of multibyte_string_functions.lib which is
- * a common purpose library for supporting multibyte string 
+ * a common purpose library for supporting multibyte string
  * aware functions. Only the public API is tested here.
  * @author Ricardo Rodriguez Salazar, 2009.
  * @author Ivan Tcholakov, August 2009.
@@ -62,7 +62,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 		$from_encoding = 'ISO-8859-15';
 		$string1 = api_utf8_decode($string, $from_encoding);
 		$res = api_utf8_encode($string1, $from_encoding);
-		$this->assertTrue(is_string($res)); 
+		$this->assertTrue(is_string($res));
 		$this->assertTrue($res == $string);
 		//var_dump($res);
 	}
@@ -71,14 +71,14 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 		$string = 'xxxx1ws?!áéíóú@€'; // UTF-8
 		$to_encoding = 'ISO-8859-15';
 		$res = api_utf8_decode($string, $to_encoding);
-		$this->assertTrue(is_string($res)); 
+		$this->assertTrue(is_string($res));
 		$this->assertTrue(api_utf8_encode($res, $to_encoding) == $string);
 		//var_dump($res);
 	}
 
 	public function test_api_to_system_encoding() {
 		$string = '!?/\áéíóú@€'; // UTF-8
-		$from_encoding = 'UTF-8'; 
+		$from_encoding = 'UTF-8';
 		$check_utf8_validity = false;
 		$res = api_to_system_encoding($string, $from_encoding, $check_utf8_validity);
 		$this->assertTrue(is_string($res));
@@ -88,17 +88,17 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 
 	public function test_api_htmlentities() {
 		$string = 'áéíóú@!?/\-_`*ç´`'; // UTF-8
-		$quote_style = ENT_QUOTES; 
+		$quote_style = ENT_QUOTES;
 		$encoding = 'UTF-8';
 		$res = api_htmlentities($string, $quote_style, $encoding);
 		$this->assertTrue(is_string($res));
 		$this->assertTrue(api_convert_encoding($res, $encoding, 'HTML-ENTITIES') == $string);
-		//var_dump($res);	
+		//var_dump($res);
 	}
 
 	public function test_api_html_entity_decode() {
 		$string = 'áéíóú@/\!?Ç´`+*?-_ '; // UTF-8
-		$quote_style = ENT_QUOTES; 
+		$quote_style = ENT_QUOTES;
 		$encoding = 'UTF-8';
 		$res = api_html_entity_decode(api_convert_encoding($string, 'HTML-ENTITIES', $encoding), $quote_style, $encoding);
 		$this->assertTrue(is_string($res));
@@ -124,8 +124,8 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 
 	public function test_api_file_system_decode() {
 		$string='áéíóú@/\!?Ç´`+*?-_'; // UTF-8
-		$to_encoding = 'UTF-8';	
-		$res = api_file_system_decode($string, $to_encoding); 
+		$to_encoding = 'UTF-8';
+		$res = api_file_system_decode($string, $to_encoding);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
@@ -140,7 +140,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 			'&#1044;&#1086;&#1089;&#1090;&#1086;&#1077;&#1074;&#1082;&#1080;&#1081;',
 			ENT_QUOTES, 'UTF-8');
 		*/
-		$unknown = 'X'; 
+		$unknown = 'X';
 		$from_encoding = 'UTF-8';
 		$res = api_transliterate($string, $unknown, $from_encoding);
 		$this->assertTrue($res);
@@ -150,7 +150,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	
+
 /**
  * ----------------------------------------------------------------------------
  * Common multibyte string functions
@@ -161,7 +161,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 		$search = 'Á'; // UTF-8
 		$replace = 'a';
 		$subject = 'bájando'; // UTF-8
-		$count = null; 
+		$count = null;
 		$encoding = 'UTF-8';
 		$res = api_str_ireplace($search, $replace, $subject, & $count, $encoding);
 		$this->assertTrue($res);
@@ -266,9 +266,9 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 
 	public function test_api_strstr() {
 		$haystack = 'aviación'; // UTF-8
-		$needle = 'ó'; 
-		$part = false; 
-		$encoding = 'UTF-8';		
+		$needle = 'ó';
+		$part = false;
+		$encoding = 'UTF-8';
 		$res = api_strstr($haystack, $needle, $part, $encoding);
 		$this->assertTrue(is_bool($res)|| is_string($res));
 		$this->assertTrue($res == 'ón');
@@ -296,7 +296,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 	public function test_api_substr() {
 		$string = 'áéíóúº|\/?Ç][ç]'; // UTF-8
 		$start = 10;
-		$length = 4; 
+		$length = 4;
 		$encoding = 'UTF-8';
 		$res = api_substr($string, $start, $length, $encoding);
 		$this->assertTrue(is_string($res));
@@ -306,9 +306,9 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 
 	public function test_api_substr_replace() {
 		$string = 'áéíóúº|\/?Ç][ç]'; // UTF-8
-		$replacement = 'eiou'; 
-		$start= 1; 
-		$length = 4; 
+		$replacement = 'eiou';
+		$start= 1;
+		$length = 4;
 		$encoding = 'UTF-8';
 		$res = api_substr_replace($string, $replacement, $start, $length, $encoding);
 		$this->assertTrue(is_string($res));
@@ -410,7 +410,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
  * ----------------------------------------------------------------------------
  */
 
-	public function test_api_ereg() {	
+	public function test_api_ereg() {
 		$pattern = 'scorm/showinframes.php([^"\'&]*)(&|&amp;)file=([^"\'&]*)$';
 		$string = 'http://localhost/dokeos/main/scorm/showinframes.php?id=5&amp;file=test.php';
 		$res = api_ereg($pattern, $string, $regs);
@@ -421,8 +421,8 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 
 	public function test_api_ereg_replace() {
 		$pattern = 'file=([^"\'&]*)$';
-		$string = 'http://localhost/dokeos/main/scorm/showinframes.php?id=5&amp;file=test.php'; 
-		$replacement = 'file=my_test.php'; 
+		$string = 'http://localhost/dokeos/main/scorm/showinframes.php?id=5&amp;file=test.php';
+		$replacement = 'file=my_test.php';
 		$option = null;
 		$res = api_ereg_replace($pattern, $replacement, $string, $option);
 		$this->assertTrue(is_string($res));
@@ -441,8 +441,8 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 
 	public function test_api_eregi_replace() {
 		$pattern = 'file=([^"\'&]*)$';
-		$string = 'http://localhost/dokeos/main/scorm/showinframes.php?id=5&amp;file=test.php'; 
-		$replacement = 'file=my_test.php'; 
+		$string = 'http://localhost/dokeos/main/scorm/showinframes.php?id=5&amp;file=test.php';
+		$replacement = 'file=my_test.php';
 		$option = null;
 		$res = api_eregi_replace($pattern, $replacement, $string, $option);
 		$this->assertTrue(is_string($res));
@@ -452,7 +452,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 
 	public function test_api_split() {
 		$pattern = '[/.-]';
-		$string = '08/22/2009'; 
+		$string = '08/22/2009';
 		$limit = null;
 		$res = api_split($pattern, $string, $limit);
 		$this->assertTrue(is_array($res));
@@ -520,7 +520,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 
 	public function test_api_asort() {
 		$array = array('úéo', 'aíó', 'áed'); // UTF-8
-		$sort_flag = SORT_REGULAR; 
+		$sort_flag = SORT_REGULAR;
 		$language = 'english';
 		$encoding = 'UTF-8';
 		$res = api_asort($array, $sort_flag, $language, $encoding);
@@ -530,10 +530,10 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 		//var_dump($array);
 		//var_dump($res);
 	}
-	
+
 	public function test_api_arsort() {
 		$array = array('aíó', 'úéo', 'áed'); // UTF-8
-		$sort_flag = SORT_REGULAR; 
+		$sort_flag = SORT_REGULAR;
 		$language = 'english';
 		$encoding = 'UTF-8';
 		$res = api_arsort($array, $sort_flag, $language, $encoding);
@@ -555,7 +555,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 		//var_dump($array);
 		//var_dump($res);
 	}
-	
+
 	public function test_api_natrsort() {
 		$array = array('img2.png', 'img10.png', 'img12.png', 'img1.png'); // UTF-8
 		$language = 'english';
@@ -594,7 +594,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 
 	public function test_api_ksort() {
 		$array = array('aíó' => 'img2.png', 'úéo' => 'img10.png', 'áed' => 'img12.png', 'áedc' => 'img1.png'); // UTF-8
-		$sort_flag = SORT_REGULAR; 
+		$sort_flag = SORT_REGULAR;
 		$language = 'english';
 		$encoding = 'UTF-8';
 		$res = api_ksort($array, $sort_flag, $language, $encoding);
@@ -607,7 +607,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 
 	public function test_api_krsort() {
 		$array = array('aíó' => 'img2.png', 'úéo' => 'img10.png', 'áed' => 'img12.png', 'áedc' => 'img1.png'); // UTF-8
-		$sort_flag = SORT_REGULAR; 
+		$sort_flag = SORT_REGULAR;
 		$language = 'english';
 		$encoding = 'UTF-8';
 		$res = api_krsort($array, $sort_flag, $language, $encoding);
@@ -668,7 +668,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 
 	public function test_api_sort() {
 		$array = array('úéo', 'aíó', 'áed', 'áedc'); // UTF-8
-		$sort_flag = SORT_REGULAR; 
+		$sort_flag = SORT_REGULAR;
 		$language = 'english';
 		$encoding = 'UTF-8';
 		$res = api_sort($array, $sort_flag, $language, $encoding);
@@ -680,7 +680,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 
 	public function testapi_rsort() {
 		$array = array('aíó', 'úéo', 'áed', 'áedc'); // UTF-8
-		$sort_flag = SORT_REGULAR; 
+		$sort_flag = SORT_REGULAR;
 		$language = 'english';
 		$encoding = 'UTF-8';
 		$res = api_rsort($array, $sort_flag, $language, $encoding);
@@ -700,7 +700,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 	public function test_api_in_array_nocase() {
 		$needle = 'áéíó'; // UTF-8
 		$haystack = array('Áéíó', 'uáé', 'íóú'); // UTF-8
-		$strict = false; 
+		$strict = false;
 		$encoding = 'UTF-8';
 		$res = api_in_array_nocase($needle, $haystack, $strict, $encoding);
 		$this->assertTrue(is_bool($res));
@@ -827,7 +827,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 		<User>username2</User>
     	</Course>
     </Session>
-    
+
     <Session>
         <SessionName>xxx</SessionName>
         <Coach>xxx</Coach>

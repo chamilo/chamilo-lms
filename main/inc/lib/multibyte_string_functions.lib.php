@@ -19,7 +19,7 @@
  *
  * 1. For all the functions from this library witn optional encoding
  * parameters, the system's encoding is assumed by default, i.e. the
- * value that is returned by api_get_setting('platform_charset') or 
+ * value that is returned by api_get_setting('platform_charset') or
  * the value of the global variable $charset.
  *
  * 2. In other aspects, most of the functions in this library try to copy
@@ -39,7 +39,7 @@
  * When encodings to be used are not supported by mbstring, this library
  * is able to exploit the PHP iconv extesion, which in this case should
  * be activated too.
- * 
+ *
  * 5. For improved sorting of multibyte strings the library uses the intl
  * php-extension if it is installed.
  */
@@ -518,7 +518,7 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null) {
 				}
 				$ord = $ord & 255;
 				$result .= isset($map[$bank]['en'][$ord]) ? $map[$bank]['en'][$ord] : $unknown;
-				
+
 				$head = '';
 			}
 			elseif ($c < "\x80") {
@@ -553,7 +553,7 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null) {
  * @param mixed $search					String or array of strings to be found.
  * @param mixed $replace				String or array of strings used for replacement.
  * @param mixed $subject				String or array of strings being searced.
- * @param int $count (optional)			The number of matched and replaced needles will be returned in count, which is passed by reference. 
+ * @param int $count (optional)			The number of matched and replaced needles will be returned in count, which is passed by reference.
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return mixed						String or array as a result.
  * Notes:
@@ -680,7 +680,7 @@ function api_str_split($string, $split_length = 1, $encoding = null) {
  * @param int $offset					The position in $haystack to start searching from. If it is omitted, searching starts from the beginning.
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return mixed						Returns the numeric position of the first occurrence of $needle in the $haystack, or FALSE if $needle is not found.
- * Note: The first character's position is 0, the second character position is 1, and so on. 
+ * Note: The first character's position is 0, the second character position is 1, and so on.
  * This function is aimed at replacing the functions stripos() and mb_stripos() for human-language strings.
  * @link http://php.net/manual/en/function.stripos
  * @link http://php.net/manual/en/function.mb-stripos
@@ -819,7 +819,7 @@ function api_strlen($string, $encoding = null) {
  * @param int $offset (optional)		The position in $haystack to start searching from. If it is omitted, searching starts from the beginning.
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return mixed						Returns the numeric position of the first occurrence of $needle in the $haystack, or FALSE if $needle is not found.
- * Note: The first character's position is 0, the second character position is 1, and so on. 
+ * Note: The first character's position is 0, the second character position is 1, and so on.
  * This function is aimed at replacing the functions strpos() and mb_strpos() for human-language strings.
  * @link http://php.net/manual/en/function.strpos
  * @link http://php.net/manual/en/function.mb-strpos
@@ -967,7 +967,7 @@ function api_strrev($string, $encoding = null) {
  * @param int $offset (optional)		$offset may be specified to begin searching an arbitrary position. Negative values will stop searching at an arbitrary point prior to the end of the string.
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return mixed						Returns the numeric position of the first occurrence (case insensitive) of $needle in the $haystack, or FALSE if $needle is not found.
- * Note: The first character's position is 0, the second character position is 1, and so on. 
+ * Note: The first character's position is 0, the second character position is 1, and so on.
  * This function is aimed at replacing the functions strripos() and mb_strripos() for human-language strings.
  * @link http://php.net/manual/en/function.strripos
  * @link http://php.net/manual/en/function.mb-strripos
@@ -983,7 +983,7 @@ function api_strripos($haystack, $needle, $offset = 0, $encoding = null) {
  * @param int $offset (optional)		$offset may be specified to begin searching an arbitrary position. Negative values will stop searching at an arbitrary point prior to the end of the string.
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return mixed						Returns the numeric position of the first occurrence of $needle in the $haystack, or FALSE if $needle is not found.
- * Note: The first character's position is 0, the second character position is 1, and so on. 
+ * Note: The first character's position is 0, the second character position is 1, and so on.
  * This function is aimed at replacing the functions strrpos() and mb_strrpos() for human-language strings.
  * @link http://php.net/manual/en/function.strrpos
  * @link http://php.net/manual/en/function.mb-strrpos
@@ -1410,7 +1410,7 @@ function api_substr($string, $start, $length = null, $encoding = null) {
  * If given and is positive, it represents the length of the portion of the string which is to be replaced.
  * If it is negative, it represents the number of characters from the end of string at which to stop replacing.
  * If it is not given, then it will default to api_strlen($string); i.e. end the replacing at the end of string.
- * If $length is zero, then this function will have the effect of inserting replacement into the string at the given start offset. 
+ * If $length is zero, then this function will have the effect of inserting replacement into the string at the given start offset.
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
  * @return string						The result string is returned.
  * This function is aimed at replacing the function substr_replace() for human-language strings.
@@ -1898,7 +1898,7 @@ function api_strnatcasecmp($string1, $string2, $language = null, $encoding = nul
  * @param string $string2				The second string.
  * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
  * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return int							Returns < 0 if $string1 is less than $string2; > 0 if $string1 is greater than $string2; and 0 if the strings are equal. 
+ * @return int							Returns < 0 if $string1 is less than $string2; > 0 if $string1 is greater than $string2; and 0 if the strings are equal.
  * This function is aimed at replacing the function strnatcmp() for human-language strings.
  * @link http://php.net/manual/en/function.strnatcmp.php
  * @link http://php.net/manual/en/collator.compare.php

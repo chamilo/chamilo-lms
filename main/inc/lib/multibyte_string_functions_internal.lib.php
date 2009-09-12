@@ -675,7 +675,7 @@ function api_get_default_locale() {
 /**
  * Returns a table with non-UTF-8 encodings for all system languages.
  * @return array		Returns an array in the form array('language1' => array('encoding1', encoding2', ...), ...)
- * Note: The function api_get_non_utf8_encoding() returns the first encoding from this array that is correspondent to the given language. 
+ * Note: The function api_get_non_utf8_encoding() returns the first encoding from this array that is correspondent to the given language.
  */
 function & _api_non_utf8_encodings() {
 	static $encodings;
@@ -999,7 +999,7 @@ if (MBSTRING_INSTALLED && !function_exists('mb_strrchr')) {
 		$pos = mb_strrpos($haystack, $needle, mb_strlen($haystack, $encoding) - 1, $encoding);
 		if ($pos === false) {
 			return false;
-		} 
+		}
 		if ($part) {
 			return mb_substr($haystack, 0, $pos + 1, $encoding);
 		}

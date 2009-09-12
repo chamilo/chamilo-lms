@@ -250,7 +250,7 @@ function api_format_date($date_format, $time_stamp = -1, $language = null) {
 	}
 	// We replace %a %A %b %B masks of date format with translated strings.
 	$translated = &_api_get_day_month_names($language);
-	$date_format = str_replace(array('%A', '%a', '%B', '%b'), 
+	$date_format = str_replace(array('%A', '%a', '%B', '%b'),
 		array($translated['days_long'][(int)strftime('%w', $time_stamp)],
 			$translated['days_short'][(int)strftime('%w', $time_stamp)],
 			$translated['months_long'][(int)strftime('%m', $time_stamp) - 1],

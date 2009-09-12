@@ -119,7 +119,7 @@ function _api_get_person_name_convention($language, $type) {
 
 /**
  * Replaces non-valid formats for person names with the default (English) format.
- * @param string $format	The input format to be verified. 
+ * @param string $format	The input format to be verified.
  * @return bool				Returns the same format if is is valid, otherwise returns a valid English format.
  */
 function _api_validate_person_name_format($format) {

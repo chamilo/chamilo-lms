@@ -363,28 +363,13 @@ class UserManager {
 		if (is_null($language)) {
 			$language = api_get_interface_language();
 		}
-		$max_length = USERNAME_MAX_LENGTH - 3;
-		$firstname = preg_replace(USERNAME_PURIFIER, '', api_transliterate($firstname, '', $encoding));
+		$firstname = substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($firstname, '', $encoding)), 0, 1); // The first letter only.
 		$lastname = preg_replace(USERNAME_PURIFIER, '', api_transliterate($lastname, '', $encoding));
-		if (empty($firstname) && empty($lastname)) {
-			return 'user';
+		$username = api_is_western_name_order(null, $language) ? $firstname.$lastname : $lastname.$firstname;
+		if (empty($username)) {
+			$username = 'user';
 		}
-		$desired_username = '';
-		if (strlen($lastname) < $max_length) {
-			if (api_is_western_name_order(null, $language)) {
-				$desired_username = substr($firstname, 0, 1).$lastname;
-			} else {
-				$desired_username = $lastname.substr($firstname, 0, 1);
-			}
-		} else {
-			$max_length--;
-			if (api_is_western_name_order(null, $language)) {
-				$desired_username = substr($firstname, 0, 1).substr($lastname, 0, $max_length);
-			} else {
-				$desired_username = substr($lastname, 0, $max_length).substr($firstname, 0, 1);
-			}
-		}
-		return strtolower($desired_username);
+		return strtolower(substr($username, 0, USERNAME_MAX_LENGTH - 3));
 	}
 
 	/**

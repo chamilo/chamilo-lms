@@ -38,6 +38,10 @@ $tool_name = get_lang('ImportSessionListXMLCSV');
 $interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('AdministrationTools'));
 
 set_time_limit(0);
+
+// Set this option to true to enforce strict purification for usenames.
+$purification_option_for_usernames = false;
+
 $inserted_in_course = array();
 
 if ($_POST['formSent']) {
@@ -81,9 +85,10 @@ if ($_POST['formSent']) {
 							$user_name_dist = $username;
 							$username = UserManager::cut_username($username);
 							$was_cut = true;
+						} else {
+							$username = UserManager::purify_username($username, $purification_option_for_usernames);
 						}
-						$user_exists = UserManager::is_username_available($username);
-						if ($user_exists) {
+						if (UserManager::is_username_available($username)) {
 							if ($was_cut) {
 								$error_msg .= get_lang('UsernameTooLongWasCut').' '.get_lang('From').' '.$user_name_dist.' '.get_lang('To').' '.$username.' <br />';
 							}
@@ -172,7 +177,7 @@ if ($_POST['formSent']) {
 					foreach ($root->Courses->Course as $courseNode) {
 						$course_code = trim(api_utf8_decode($courseNode->CourseCode));
 						$title = trim(api_utf8_decode($courseNode->CourseTitle));
-						$description = api_utf8_decode($courseNode->CourseDescription);
+						$description = trim(api_utf8_decode($courseNode->CourseDescription));
 						$language = trim(api_utf8_decode($courseNode->CourseLanguage));
 						$username = trim(api_utf8_decode($courseNode->CourseTeacher));
 
@@ -198,12 +203,19 @@ if ($_POST['formSent']) {
 									$title = $keys['currentCourseCode'];
 								}
 								prepare_course_repository($current_course_repository, $current_course_id);
-
-
-								update_Db_course($current_course_db_name);
-								$pictures_array = fill_course_repository($current_course_repository);
-								fill_Db_course($current_course_db_name, $current_course_repository, 'english', $pictures_array); // TODO: Hard-coded language id 'english'.
-								register_course($current_course_id, $current_course_code, $current_course_repository, $current_course_db_name, "$lastname $firstname", $course['unit_code'], addslashes($course['FR']['title']), $language, $user_id);  // TODO: Hard-coded language 'FR'.
+								// Modified by Ivan Tcholakov, 10-MAR-2009.
+								//update_Db_course($current_course_db_name);
+								update_Db_course($current_course_db_name, $language);
+								//
+								// Modified by Ivan Tcholakov, 10-MAR-2009.
+								//$pictures_array = fill_course_repository($current_course_repository);
+								$pictures_array = fill_course_repository($current_course_repository, false);
+								//
+								// Modified by Ivan Tcholakov, 10-MAR-2009.
+								//fill_Db_course($current_course_db_name, $current_course_repository, 'french');
+								fill_Db_course($current_course_db_name, $current_course_repository, $language, array(), false);
+								//
+								register_course($current_course_id, $current_course_code, $current_course_repository, $current_course_db_name, "$lastname $firstname", $course['unit_code'], addslashes($course['FR']['title']), $language, $user_id);
 								$sql = "INSERT INTO ".$tbl_course." SET
 										code = '".$current_course_id."',
 										db_name = '".$current_course_db_name."',
@@ -247,7 +259,7 @@ if ($_POST['formSent']) {
 						$user_counter = 0;
 
 						$session_name = trim(api_utf8_decode($node_session->SessionName));
-						$coach = trim(api_utf8_decode($node_session->Coach));
+						$coach = UserManager::purify_username(api_utf8_decode($node_session->Coach), $purification_option_for_usernames);
 
 						if (!empty($coach)) {
 							$coach_id = UserManager::get_user_id_from_username($coach);
@@ -359,8 +371,8 @@ if ($_POST['formSent']) {
 						}
 
 						// Adding users to the new session.
-						foreach ($node_session->User as $node_user){
-							$username = UserManager::cut_username(api_utf8_decode($node_user));
+						foreach ($node_session->User as $node_user) {
+							$username = UserManager::purify_username(api_utf8_decode($node_user), $purification_option_for_usernames);
 							$user_id = UserManager::get_user_id_from_username($username);
 							if ($user_id !== false) {
 								$sql = "INSERT IGNORE INTO $tbl_session_user SET
@@ -379,7 +391,7 @@ if ($_POST['formSent']) {
 								// If the course exists we continue.
 								$course_info = CourseManager::get_course_information($course_code);
 								// Searching the coach.
-								$coach = UserManager::cut_username(api_utf8_decode($node_course->Coach));
+								$coach = UserManager::purify_username(api_utf8_decode($node_course->Coach), $purification_option_for_usernames);
 								if (!empty($coach)) {
 									$coach_id = UserManager::get_user_id_from_username($coach);
 									if ($coach_id === false) {
@@ -401,14 +413,14 @@ if ($_POST['formSent']) {
 									$course_counter++;
 									$users_in_course_counter = 0;
 									foreach ($node_course->User as $node_user) {
-										$username = UserManager::cut_username(api_utf8_decode($node_user));
+										$username = UserManager::purify_username(api_utf8_decode($node_user), $purification_option_for_usernames);
 										$user_id = UserManager::get_user_id_from_username($username);
 										if ($user_id !== false) {
 											// Adding to session_rel_user table.
 											$sql = "INSERT IGNORE INTO $tbl_session_user SET
 													id_user='$user_id',
 													id_session = '$session_id'";
-											$rs_user = Database::query($sql,__FILE__,__LINE__);
+											$rs_user = Database::query($sql, __FILE__, __LINE__);
 											$user_counter++;
 											// Adding to session_rel_user_rel_course table.
 											$sql = "INSERT IGNORE INTO $tbl_session_course_user SET
@@ -435,7 +447,7 @@ if ($_POST['formSent']) {
 									if ($vcourse['code'] == $course_code) {
 										// Ignore, this has already been inserted.
 									} else {
-										$coach = UserManager::cut_username(api_utf8_decode($node_course->Coach));
+										$coach = UserManager::purify_username(api_utf8_decode($node_course->Coach), $purification_option_for_usernames);
 										if (!empty($coach)) {
 											$coach_id = UserManager::get_user_id_from_username($coach);
 											if ($user_id === false) {
@@ -455,7 +467,7 @@ if ($_POST['formSent']) {
 											$course_counter++;
 											$users_in_course_counter = 0;
 											foreach ($node_course->User as $node_user) {
-												$username = UserManager::cut_username(api_utf8_decode($node_user));
+												$username = UserManager::purify_username(api_utf8_decode($node_user), $purification_option_for_usernames);
 												$user_id = UserManager::get_user_id_from_username($username);
 												if ($user_id !== false) {
 													$sql = "INSERT IGNORE INTO $tbl_session_user SET
@@ -702,7 +714,7 @@ if ($_POST['formSent']) {
 											id_session='$session_id'";
 
 									$rs_course = Database::query($sql_course, __FILE__, __LINE__);
-									if (Database::affected_rows()){
+									if (Database::affected_rows()) {
 										$course_counter++;
 										$users = api_substr($course , api_strpos($course,'[', 1) + 1, api_strpos($course,']', 1));
 										$users = explode('|', $enreg['Users']);

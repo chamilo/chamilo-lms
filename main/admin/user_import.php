@@ -17,6 +17,9 @@ $language_file = array ('admin', 'registration');
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
+// Set this option to true to enforce strict purification for usenames.
+$purification_option_for_usernames = false;
+
 function validate_data($users) {
 	global $defined_auth_sources;
 	$errors = array();
@@ -34,15 +37,15 @@ function validate_data($users) {
 			}
 		}
 		// 2. Check username.
-		if (UserManager::is_username_empty($user['UserName'])) {
+		if (!UserManager::is_username_empty($user['UserName'])) {
 			// 2.1. Check if no username was used twice in import file.
-			if (isset ($usernames[$user['UserName']])) {
+			if (isset($usernames[$user['UserName']])) {
 				$user['error'] = get_lang('UserNameUsedTwice');
 				$errors[] = $user;
 			}
 			$usernames[$user['UserName']] = 1;
 			// 2.2. Check if username isn't allready in use in database.
-			if (!UserManager :: is_username_available($user['UserName'])) {
+			if (!UserManager::is_username_available($user['UserName'])) {
 				$user['error'] = get_lang('UserNameNotAvailable');
 				$errors[] = $user;
 			}
@@ -53,7 +56,7 @@ function validate_data($users) {
 			}
 		}
 		// 3. Check status.
-		if (isset ($user['Status']) && !api_status_exists($user['Status'])) {
+		if (isset($user['Status']) && !api_status_exists($user['Status'])) {
 			$user['error'] = get_lang('WrongStatus');
 			$errors[] = $user;
 		}
@@ -212,8 +215,10 @@ function element_end($parser, $data) {
 	global $user;
 	global $users;
 	global $current_value;
+	global $purification_option_for_usernames;
 	switch ($data) {
 		case 'Contact' :
+			$user['UserName'] = UserManager::purify_username($user['UserName'], $purification_option_for_usernames);
 			if ($user['Status'] == '5') {
 				$user['Status'] = STUDENT;
 			}
@@ -232,7 +237,7 @@ function element_end($parser, $data) {
  * XML-parser: handle character data
  */
 function character_data($parser, $data) {
-	$data = api_utf8_decode($data);
+	$data = trim(api_utf8_decode($data));
 	global $current_value;
 	$current_value = $data;
 }
@@ -340,7 +345,7 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 		$error_message = '<ul>';
 		foreach ($errors as $index => $error_user) {
 			$error_message .= '<li><b>'.$error_user['error'].'</b>: ';
-			$error_message .= $error_user['UserName'].'&nbsp;('.api_get_person_name($error_user['FirstName'], $error_user['LastName']).')';
+			$error_message .= '<strong>'.$error_user['UserName'].'</strong>&nbsp;('.api_get_person_name($error_user['FirstName'], $error_user['LastName']).')';
 			$error_message .= '</li>';
 		}
 		$error_message .= '</ul>';

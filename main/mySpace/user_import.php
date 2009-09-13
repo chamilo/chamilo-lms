@@ -124,7 +124,6 @@ function check_all_usernames($users, $course_list, $id_session) {
 	$usernames = array();
 	$new_users = array();
 	foreach ($users as $index => $user) {
-		$user['UserName'] = str_replace(' ', '', trim($user['UserName'])); // !!! Purification.
 		$desired_username = array();
 		if (empty($user['UserName'])) {
 			$desired_username = make_username($user['FirstName'], $user['LastName'], '');
@@ -132,19 +131,17 @@ function check_all_usernames($users, $course_list, $id_session) {
 			$user['UserName'] = $pre_username;
 			$user['create'] = '1';
 		} else {
-			if (UserManager::is_username_available($user['UserName'])) { // !!! My mistake?
+			if (UserManager::is_username_available($user['UserName'])) {
 				$desired_username = make_username($user['FirstName'], $user['LastName'], $user['UserName']);
 				$user['UserName'] = $desired_username['username'].$desired_username['sufix'];
 				$user['create'] = '1';
 			} else {
 				$is_session_avail = user_available_in_session($user['UserName'], $course_list, $id_session);
 				if ($is_session_avail == 0) {
-					//$desired_username = make_username($user['FirstName'],$user['LastName'],$user['UserName']);
-					//$user['UserName'] = $desired_username['username'].$desired_username['sufix'];
 					$user_name = $user['UserName'];
 					$sql_select = "SELECT user_id FROM $table_user WHERE username ='$user_name' ";
 					$rs = Database::query($sql_select, __FILE__, __LINE__);
-					$user['create'] = Database::result($rs, 0, 0); // this should be the ID because the user exist
+					$user['create'] = Database::result($rs, 0, 0); // This should be the ID because the user exists.
 				} else {
 					$user['create'] = $is_session_avail;
 				}
@@ -387,6 +384,7 @@ function parse_csv_data($file) {
  * XML-parser: the handler at the beginning of element.
  */
 function element_start($parser, $data) {
+	$data = api_utf8_decode($data);
 	global $user;
 	global $current_tag;
 	switch ($data) {
@@ -402,12 +400,15 @@ function element_start($parser, $data) {
  * XML-parser: the handler at the end of element.
  */
 function element_end($parser, $data) {
+	$data = api_utf8_decode($data);
 	global $user;
 	global $users;
 	global $current_value;
+	global $purification_option_for_usernames;
 	$user[$data] = $current_value;
 	switch ($data) {
 		case 'Contact' :
+			$user['UserName'] = UserManager::purify_username($user['UserName'], $purification_option_for_usernames);
 			$users[] = $user;
 			break;
 		default :
@@ -420,6 +421,7 @@ function element_end($parser, $data) {
  * XML-parser: the handler for character data.
  */
 function character_data($parser, $data) {
+	$data = trim(api_utf8_decode($data));
 	global $current_value;
 	$current_value = $data;
 }
@@ -435,11 +437,11 @@ function parse_xml_data($file) {
 	global $user;
 	global $users;
 	$users = array ();
-	$parser = xml_parser_create();
+	$parser = xml_parser_create('UTF-8');
 	xml_set_element_handler($parser, 'element_start', 'element_end');
 	xml_set_character_data_handler($parser, "character_data");
 	xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-	xml_parse($parser, file_get_contents($file));
+	xml_parse($parser, api_utf8_encode_xml(file_get_contents($file)));
 	xml_parser_free($parser);
 	return $users;
 }
@@ -474,6 +476,9 @@ if (isset($_GET['id_session']) && $_GET['id_session'] != '') {
 	$interbreadcrumb[] = array ('url' => 'session.php', 'name' => get_lang('Sessions'));
 	$interbreadcrumb[] = array ('url' => 'course.php?id_session='.$_GET['id_session'].'', 'name' => get_lang('Course'));
 }
+
+// Set this option to true to enforce strict purification for usenames.
+$purification_option_for_usernames = false;
 
 /*
 // Checking whether the current coach is the admin coach.
@@ -569,6 +574,7 @@ $form->addElement('radio', 'sendMail', get_lang('SendMailToUsers'), get_lang('Ye
 $form->addElement('radio', 'sendMail', null, get_lang('No'), 0);
 $form->addElement('submit', 'submit', get_lang('Ok'));
 $defaults['formSent'] = 1;
+$defaults['sendMail'] = 0;
 $defaults['file_type'] = 'xml';
 $form->setDefaults($defaults);
 $form->display();
@@ -591,7 +597,7 @@ $form->display();
 <p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 <blockquote>
 <pre>
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;<?php echo api_refine_encoding_id(api_get_system_encoding()); ?>&quot;?&gt;
 &lt;Contacts&gt;
     &lt;Contact&gt;
         <b>&lt;LastName&gt;Montoya&lt;/LastName&gt;</b>

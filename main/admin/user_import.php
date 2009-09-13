@@ -192,6 +192,7 @@ function parse_csv_data($file) {
  * XML-parser: handle start of element
  */
 function element_start($parser, $data) {
+	$data = api_utf8_decode($data);
 	global $user;
 	global $current_tag;
 	switch ($data) {
@@ -207,6 +208,7 @@ function element_start($parser, $data) {
  * XML-parser: handle end of element
  */
 function element_end($parser, $data) {
+	$data = api_utf8_decode($data);
 	global $user;
 	global $users;
 	global $current_value;
@@ -230,6 +232,7 @@ function element_end($parser, $data) {
  * XML-parser: handle character data
  */
 function character_data($parser, $data) {
+	$data = api_utf8_decode($data);
 	global $current_value;
 	$current_value = $data;
 }
@@ -245,11 +248,11 @@ function parse_xml_data($file) {
 	global $user;
 	global $users;
 	$users = array();
-	$parser = xml_parser_create();
+	$parser = xml_parser_create('UTF-8');
 	xml_set_element_handler($parser, 'element_start', 'element_end');
 	xml_set_character_data_handler($parser, 'character_data');
 	xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-	xml_parse($parser, file_get_contents($file));
+	xml_parse($parser, api_utf8_encode_xml(file_get_contents($file)));
 	xml_parser_free($parser);
 	return $users;
 }

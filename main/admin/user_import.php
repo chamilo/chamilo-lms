@@ -374,15 +374,16 @@ $form = new FormValidator('user_import');
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
-$form->addRule('import_file', get_lang('ThisFieldIsRequired'), 'required');
+//$form->addRule('import_file', get_lang('ThisFieldIsRequired'), 'required'); // This rule does not work, probably due to the security mechanism here.
 $allowed_file_types = array ('xml', 'csv');
-$form->addRule('file', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
+//$form->addRule('import_file', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types); // This rule does not work, probably due to the security mechanism here.
 $form->addElement('radio', 'file_type', get_lang('FileType'), 'XML (<a href="exemple.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');
 $form->addElement('radio', 'file_type', null, 'CSV (<a href="exemple.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');
 $form->addElement('radio', 'sendMail', get_lang('SendMailToUsers'), get_lang('Yes'), 1);
 $form->addElement('radio', 'sendMail', null, get_lang('No'), 0);
 $form->addElement('style_submit_button', 'submit', get_lang('Import'), 'class="save"');
 $defaults['formSent'] = 1;
+$defaults['sendMail'] = 0;
 $defaults['file_type'] = 'xml';
 $form->setDefaults($defaults);
 $form->display();

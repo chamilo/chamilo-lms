@@ -6,7 +6,7 @@
 
 ob_start();
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array ('registration', 'index', 'trad4all', 'tracking');
 $cidReset = true;
 
@@ -37,7 +37,7 @@ $tbl_admin				= Database :: get_main_table(TABLE_MAIN_ADMIN);
  */
 
 /*
- * liste nominative avec coordonnies et lien vers les cours et les stagiaires dont il est le responsable. 
+ * liste nominative avec coordonnies et lien vers les cours et les stagiaires dont il est le responsable.
  */
 
 if (isset($_POST['export'])) {

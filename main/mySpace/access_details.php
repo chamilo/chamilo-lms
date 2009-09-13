@@ -31,10 +31,10 @@
 * Calculates the time spent on the course
 * @param integer $user_id the user id
 * @param string $course_code the course code
-*	Funzione scritta da Mario per testare cose 
+*	Funzione scritta da Mario per testare cose
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array ('registration', 'index', 'tracking');
 
 // including the global Dokeos file
@@ -55,10 +55,10 @@ $course_code = Security::remove_XSS($_REQUEST['course']);
 
 $connections = get_connections_to_course($user_id, $course_code);
 if (api_is_xml_http_request()) {
-	$type  = Security::remove_XSS($_GET['type']);	
+	$type  = Security::remove_XSS($_GET['type']);
 	$main_year = $main_month_year = $main_day = array();
 	// get last 8 days/months
-	$last_days = 8;	
+	$last_days = 8;
 	$last_months = 5;
 	for ($i = $last_days; $i >= 0; $i--) {
 		$main_day[date ('d-m-Y', mktime () - $i * 3600 * 24)] = 0;
@@ -98,13 +98,13 @@ if (api_is_xml_http_request()) {
 			$main_date = $main_date[$labels];
 		}
 
-		$data_set = new pData;	
+		$data_set = new pData;
 		$data_set->AddPoint($main_date, 'Q');
 		if (count($main_date)!= 1) {
 			$data_set->AddPoint($labels, 'Date');
 		}
-		$data_set->AddAllSeries();  
-		$data_set->RemoveSerie('Date');  
+		$data_set->AddAllSeries();
+		$data_set->RemoveSerie('Date');
 		$data_set->SetAbsciseLabelSerie('Date');
 		$data_set->SetYAxisName(get_lang('Minutes', ''));
 		$graph_id = api_get_user_id().'AccessDetails'.api_get_course_id();
@@ -142,7 +142,7 @@ if (api_is_xml_http_request()) {
 			$test->drawTreshold(0, 143, 55, 72, TRUE, TRUE);
 
 			if (count($main_date) == 1) {
-				//Draw a graph 
+				//Draw a graph
 				echo '<strong>'.$labels.'</strong><br/>';
 				$test->drawBarGraph($data_set->GetData(), $data_set->GetDataDescription(), TRUE);
 			} else {
@@ -258,7 +258,7 @@ function get_connections_to_course($user_id, $course_code) {
 	// Database table definitions
     $tbl_track_course 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
     $tbl_main			= Database :: get_main_table(TABLE_MAIN_COURSE);
-    
+
     $sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.Database::escape_string($course_code).'";';
     $result = Database::query($sql_query, __FILE__, __LINE__);
     $row_query = Database::fetch_array($result, 'ASSOC');

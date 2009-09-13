@@ -3,7 +3,7 @@
 /*
  * Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
- 
+
 ob_start();
 
 // names of the language file that needs to be included
@@ -85,7 +85,7 @@ if (Database::num_rows($result_formateurs) > 0) {
 
 		if ($i % 2 == 0) {
 			$css_class = "row_odd";
-			
+
 			if ($i % 20 == 0 && $i != 0) {
 				if ($is_western_name_order) {
 					echo '<tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';

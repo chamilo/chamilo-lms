@@ -63,7 +63,7 @@ function display_drh_list(){
 		document.getElementById("drh_list").style.display="block";
 	}
 	else
-	{ 
+	{
 		document.getElementById("drh_list").style.display="none";
 		document.getElementById("drh_select").options[0].selected="selected";
 	}
@@ -78,8 +78,8 @@ if (!empty($_GET['message'])) {
 
 $id_session='';
 if (isset($_GET["id_session"]) && $_GET["id_session"] != "") {
- 	$id_session = Security::remove_XSS($_GET["id_session"]); 	
-	//$interbreadcrumb[] = array ("url" => "session.php", "name" => get_lang('Sessions')); 
+ 	$id_session = Security::remove_XSS($_GET["id_session"]);
+	//$interbreadcrumb[] = array ("url" => "session.php", "name" => get_lang('Sessions'));
 	//$interbreadcrumb[] = array ("url" => "course.php?id_session=".$_GET["id_session"]."", "name" => get_lang('Cours'));
 }
 
@@ -171,14 +171,14 @@ if (api_is_session_admin()) {
 	$where = 'WHERE session_admin_id='.intval(api_get_user_id());
 	$where .= ' AND ( (session.date_start <= CURDATE() AND session.date_end >= CURDATE()) OR session.date_start="0000-00-00" ) ';
 	$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-	$result = Database::query("SELECT id,name,nbr_courses,date_start,date_end 
-		FROM $tbl_session 					
+	$result = Database::query("SELECT id,name,nbr_courses,date_start,date_end
+		FROM $tbl_session
 		$where
 		ORDER BY name",__FILE__,__LINE__);
-	$a_sessions = api_store_result($result);		
-	$session_list = array();	
+	$a_sessions = api_store_result($result);
+	$session_list = array();
 	$session_list[0] = get_lang('SelectSession');
-	if (is_array($a_sessions)) {	
+	if (is_array($a_sessions)) {
 		foreach ($a_sessions as $session) {
 			$session_list[$session['id']]=$session['name'];
 		}
@@ -189,7 +189,7 @@ if (api_is_session_admin()) {
 	api_natsort($session_list);
 
 	$form->addElement('select', 'session_id', get_lang('Session'), $session_list);
-}		
+}
 
 
 // EXTRA FIELDS
@@ -220,7 +220,7 @@ foreach ($extra as $id => $field_details) {
 			foreach ($field_details[9] as $option_id => $option_details) {
 				$options[$option_details[1]] = $option_details[2];
 			}
-			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, '');			
+			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, '');
 			break;
 		case USER_FIELD_TYPE_SELECT_MULTIPLE:
 			$options = array();
@@ -316,7 +316,7 @@ if ($form->validate()) {
 		//create user
 		$user_id = UserManager::create_user($firstname, $lastname, $status, $email, $username, $password, $official_code, api_get_setting('platformLanguage'), $phone, $picture_uri, $auth_source, $expiration_date, $active, $hr_dept_id);
 
-		//adding to the session		
+		//adding to the session
 		if (api_is_session_admin()) {
 			$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 			$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -327,19 +327,19 @@ if ($form->validate()) {
 			if ($id_session != 0) {
 				$result = Database::query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'",__FILE__,__LINE__);
 
-				$CourseList=array();	
+				$CourseList=array();
 				while ($row = Database::fetch_array($result)) {
 					$CourseList[] = $row['course_code'];
 				}
 
 				foreach ($CourseList as $enreg_course) {
 					Database::query("INSERT INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$user_id')",__FILE__,__LINE__);
-					// updating the total				
+					// updating the total
 					$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
 					$rs = Database::query($sql, __FILE__, __LINE__);
 					list($nbr_users) = Database::fetch_array($rs);
-					Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);				
-				}		
+					Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
+				}
 
 				Database::query("INSERT INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$user_id')", __FILE__, __LINE__);
 
@@ -349,9 +349,9 @@ if ($form->validate()) {
 
 				Database::query("UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ", __FILE__, __LINE__);
 			}
-		}		
-			
-		
+		}
+
+
 		$extras = array();
 		foreach ($user as $key => $value) {
 			if (substr($key, 0, 6) == 'extra_') {
@@ -372,12 +372,12 @@ if ($form->validate()) {
 
 			$portal_url = $_configuration['root_web'];
 			if ($_configuration['multiple_access_urls']==true) {
-				$access_url_id = api_get_current_access_url_id();				
+				$access_url_id = api_get_current_access_url_id();
 				if ($access_url_id != -1) {
 					$url = api_get_access_url($access_url_id);
 					$portal_url = $url['url'];
 				}
-			}			
+			}
 			$emailbody=get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ".$portal_url."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
 			@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
 		}

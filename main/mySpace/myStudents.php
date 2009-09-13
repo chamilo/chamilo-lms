@@ -6,7 +6,7 @@
  * @package dokeos.mySpace
  */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array('registration', 'index', 'tracking', 'exercice', 'admin');
 //$cidReset = true;
 
@@ -22,8 +22,8 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 
 function show_image(image,width,height) {
 	width = parseInt(width) + 20;
-	height = parseInt(height) + 20;			
-	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');		
+	height = parseInt(height) + 20;
+	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
 }
 
 </script>';
@@ -179,7 +179,7 @@ function is_teacher($course_code) {
 /*
  *===============================================================================
  *	MAIN CODE
- *===============================================================================  
+ *===============================================================================
  */
 // Database Table Definitions
 $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -329,7 +329,7 @@ if (!empty ($_GET['student'])) {
 	<a name="infosStudent"></a>
 				<table width="100%" border="0" >
 					<tr>
-						
+
 							<?php
 
 	$image_array = UserManager :: get_user_picture_path_by_id($info_user['user_id'], 'web', false, true);
@@ -354,9 +354,9 @@ if (!empty ($_GET['student'])) {
 
 	echo '</td>';
 ?>
-						
+
 			<td width="40%" valign="top">
-			
+
 				<table width="100%" class="data_table">
 								<tr>
 									<th>
@@ -425,7 +425,7 @@ if (!empty ($_GET['student'])) {
 							</table>
 						</td>
 						<td class="borderLeft" width="35%" valign="top">
-				
+
 				<table width="100%" class="data_table">
 								<tr>
 						<th colspan="2">
@@ -508,7 +508,7 @@ if (!empty ($_GET['student'])) {
 			$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 			$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-			$sql = 'SELECT id_session 
+			$sql = 'SELECT id_session
 										FROM ' . $tbl_session_course_user . ' session_course_user
 										WHERE session_course_user.id_user = ' . intval($info_user['user_id']) . '
 										AND session_course_user.course_code = "' . Database :: escape_string($course_code_info) . '"
@@ -519,14 +519,14 @@ if (!empty ($_GET['student'])) {
 				$le_session_id = intval(Database :: result($rs, 0, 0));
 				if ($le_session_id > 0) {
 					// get session name and coach of the session
-					$sql = 'SELECT name, id_coach FROM ' . $tbl_session . ' 
+					$sql = 'SELECT name, id_coach FROM ' . $tbl_session . '
 														WHERE id=' . $le_session_id;
 					$rs = Database::query($sql, __FILE__, __LINE__);
 					$session_name = Database :: result($rs, 0, 'name');
 					$session_coach_id = intval(Database :: result($rs, 0, 'id_coach'));
 
 					// get coach of the course in the session
-					$sql = 'SELECT id_coach FROM ' . $tbl_session_course . ' 
+					$sql = 'SELECT id_coach FROM ' . $tbl_session_course . '
 														WHERE id_session=' . $le_session_id . '
 														AND course_code = "' . Database :: escape_string($_GET['course']) . '"';
 					$rs = Database::query($sql, __FILE__, __LINE__);
@@ -567,7 +567,7 @@ if (!empty ($_GET['student'])) {
 			</td>
 		</tr>
 	</table>
-		
+
 	<!-- line about learnpaths -->
 				<table class="data_table">
 					<tr>
@@ -663,7 +663,7 @@ if (!empty ($_GET['student'])) {
 				}
 
 				// calculates time
-				$sql = 'SELECT SUM(total_time) 
+				$sql = 'SELECT SUM(total_time)
 												FROM ' . $t_lpiv . ' AS item_view
 												INNER JOIN ' . $t_lpv . ' AS view
 													ON item_view.lp_view_id = view.id
@@ -678,7 +678,7 @@ if (!empty ($_GET['student'])) {
 				}
 
 				// calculates last connection time
-				$sql = 'SELECT MAX(start_time) 
+				$sql = 'SELECT MAX(start_time)
 												FROM ' . $t_lpiv . ' AS item_view
 												INNER JOIN ' . $t_lpv . ' AS view
 													ON item_view.lp_view_id = view.id
@@ -766,14 +766,14 @@ if (!empty ($_GET['student'])) {
 				}
 ?>
 						</td>
-					</tr>				
+					</tr>
 				<?php
 				$data_learnpath[$i][] = $learnpath['name'];
 				$data_learnpath[$i][] = $progress . '%';
 				$i++;
 			}
 		} else {
-			echo "	<tr>	
+			echo "	<tr>
 										<td colspan='6'>
 											" . get_lang('NoLearnpath') . "
 										</td>
@@ -832,7 +832,7 @@ if (!empty ($_GET['student'])) {
 															WHERE  ex.exe_cours_id = '" . $info_course['code'] . "'
 															AND ex.exe_exo_id = " . $exercices['id'] . "
 															AND orig_lp_id = 0
-															AND orig_lp_item_id = 0				
+															AND orig_lp_item_id = 0
 															AND exe_user_id='" . Database :: escape_string($is_student) . "'";
 					$result_essais = Database::query($sql_essais, __FILE__, __LINE__);
 					$essais = Database :: fetch_array($result_essais);
@@ -855,7 +855,7 @@ if (!empty ($_GET['student'])) {
 					}
 					$score_percentage = 0;
 					if ($weighting != 0) {
-						//i.e 10.50 
+						//i.e 10.50
 						$score_percentage = round(($score * 100) / $weighting, 2);
 					} else {
 						$score_percentage = null;
@@ -919,7 +919,7 @@ if (!empty ($_GET['student'])) {
 
 				}
 			} else {
-				echo "	<tr>	
+				echo "	<tr>
 												<td colspan='6'>
 													" . get_lang('NoExercise') . "
 												</td>
@@ -927,14 +927,14 @@ if (!empty ($_GET['student'])) {
 										 ";
 			}
 		} else {
-			echo "	<tr>	
+			echo "	<tr>
 										<td colspan='6'>
 											" . get_lang('NoExercise') . "
 										</td>
 									</tr>
 								 ";
 		}
-?>					
+?>
 					</table>
 
 	<!-- line about other tools -->
@@ -1075,7 +1075,7 @@ if (!empty ($_GET['student'])) {
 						$score
 					);
 					echo '
-										<tr>				
+										<tr>
 											<td align="right">
 												' . $course_info['title'] . '
 											</td>
@@ -1117,7 +1117,7 @@ if (!empty ($_GET['student'])) {
 
 	if (!empty ($_GET['details']) && $_GET['origin'] != 'tracking_course' && $_GET['origin'] != 'user_course') {
 ?>
-		
+
 		<br /><br />
 <?php
 
@@ -1160,7 +1160,7 @@ if (!empty ($_GET['student'])) {
 
 			echo "<a name='infosExe'></a>";
 
-			echo "	
+			echo "
 						<tr>
 							<td colspan='2'>
 								<strong>" . $exerciceDetails['question'] . ' /' . $exerciceDetails['ponderation'] . "</strong>

@@ -6,7 +6,7 @@
 // TODO: Is this file used?
 
 $nameTools = 'Reussite';
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array ('registration', 'index', 'trad4all', 'tracking');
 $cidReset = true;
 
@@ -18,7 +18,7 @@ api_block_anonymous_users();
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
 Display :: display_header($nameTools);
 
-// Database Table Definitions 
+// Database Table Definitions
 $tbl_course 		= Database :: get_main_table(TABLE_MAIN_COURSE);
 $tbl_user 			= Database :: get_main_table(TABLE_MAIN_USER);
 $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -28,7 +28,7 @@ $tbl_track_exercice = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EX
 /*
 ===============================================================================
 	MAIN CODE
-===============================================================================  
+===============================================================================
 */
 if (!empty($_GET['session'])) {
 	$sql_session = "SELECT name,id

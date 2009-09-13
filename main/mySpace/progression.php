@@ -27,11 +27,11 @@ $tbl_user 			= Database :: get_main_table(TABLE_MAIN_USER);
 $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session 		= Database :: get_main_table(TABLE_MAIN_SESSION);
 $tbl_track_exercice = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
- 
+
 /*
 ===============================================================================
  	MAIN CODE
-===============================================================================  
+===============================================================================
 */
 $sql_course = "SELECT 	title,code
 	FROM $tbl_course as course

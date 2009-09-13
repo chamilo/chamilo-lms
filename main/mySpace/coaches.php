@@ -42,7 +42,7 @@ $tbl_track_login 					= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_
 /*
  ===============================================================================
  	FUNCTIONS
- ===============================================================================  
+ ===============================================================================
  */
 
 function is_coach() {
@@ -77,8 +77,8 @@ if (isset($_GET["id_student"])) {
 			WHERE id_coach=user_id".$order_clause;
 	} else {
 		$sql_coachs = "SELECT DISTINCT id_coach, $tbl_user.user_id, lastname, firstname
-			FROM $tbl_user as user, $tbl_session_rel_course as session_rel_course, $tbl_course_user as course_rel_user  
-			WHERE course_rel_user.course_code=session_rel_course.course_code AND course_rel_user.status='1' AND course_rel_user.user_id='".$_SESSION["_uid"]."' 
+			FROM $tbl_user as user, $tbl_session_rel_course as session_rel_course, $tbl_course_user as course_rel_user
+			WHERE course_rel_user.course_code=session_rel_course.course_code AND course_rel_user.status='1' AND course_rel_user.user_id='".$_SESSION["_uid"]."'
 			AND session_rel_course.id_coach=user.user_id".$order_clause;
 	}
 }

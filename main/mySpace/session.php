@@ -18,7 +18,7 @@
 
 	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
-	
+
 ==============================================================================
 */
 /*
@@ -27,7 +27,7 @@
  */
 ob_start();
 $nameTools= 'Sessions';
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array ('registration', 'index', 'trad4all', 'tracking');
 $cidReset = true;
 
@@ -43,7 +43,7 @@ api_block_anonymous_users();
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
 Display :: display_header($nameTools);
 
-// Database Table Definitions 
+// Database Table Definitions
 $tbl_course_user 		= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_sessions 			= Database :: get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_course 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -52,16 +52,16 @@ $tbl_course 			= Database :: get_main_table(TABLE_MAIN_COURSE);
 $export_csv = false;
 
 if (isset($_GET['export']) && $_GET['export'] == 'csv') {
-	$export_csv = true; 
+	$export_csv = true;
 }
 
 
 /*
 ===============================================================================
 	FUNCTION
-===============================================================================  
+===============================================================================
 */
- 
+
 function count_sessions_coached() {
 	global $nb_sessions;
 	return $nb_sessions;
@@ -89,7 +89,7 @@ function rsort_sessions($a, $b) {
 /*
 ===============================================================================
 	MAIN CODE
-===============================================================================  
+===============================================================================
 */
 
 if (isset($_GET['id_coach']) && $_GET['id_coach'] != '') {
@@ -116,7 +116,7 @@ if ($nb_sessions > 0) {
 	$table -> set_header(2, get_lang('Date'));
 	$table -> set_header(3, get_lang('Details'), false);
 
-	$all_data = array();	
+	$all_data = array();
 	foreach ($a_sessions as $session) {
 		$row = array();
 		$row[] = $session['name'];
@@ -159,10 +159,10 @@ if ($nb_sessions > 0) {
 	}
 
 	$table -> setColAttributes(3, array('align' => 'center'));
-	$table -> display();	
+	$table -> display();
 
 	if ($export_csv) {
-		ob_end_clean();		
+		ob_end_clean();
 		Export :: export_table_csv($csv_content, 'reporting_student_list');
 	}
 } else {

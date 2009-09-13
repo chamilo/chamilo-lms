@@ -4,7 +4,7 @@
  * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
 
- // name of the language file that needs to be included 
+ // name of the language file that needs to be included
 $language_file = array ('registration', 'index', 'tracking');
 $cidReset = true;
 
@@ -62,7 +62,7 @@ $tbl_session_rel_user 		= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 /*
  ===============================================================================
  	FUNCTION
- ===============================================================================  
+ ===============================================================================
  */
 
 function count_student_coached() {
@@ -92,8 +92,8 @@ function rsort_users($a, $b)
 /*
  ===============================================================================
  	MAIN CODE
- ===============================================================================  
- */ 
+ ===============================================================================
+ */
 
 if ($isCoach || api_is_platform_admin() || $_user['status'] == DRH) {
 
@@ -146,7 +146,7 @@ if ($isCoach || api_is_platform_admin() || $_user['status'] == DRH) {
 		}
 		$table -> set_header(2, get_lang('Time'), false);
 		$table -> set_header(3, get_lang('Progress'), false);
-		$table -> set_header(4, get_lang('Score'), false);	
+		$table -> set_header(4, get_lang('Score'), false);
 		$table -> set_header(5, get_lang('Student_publication'), false);
 		$table -> set_header(6, get_lang('Messages'), false);
 		$table -> set_header(7, get_lang('FirstLogin'), false);
@@ -255,7 +255,7 @@ if ($isCoach || api_is_platform_admin() || $_user['status'] == DRH) {
 		}
 
 		foreach ($all_datas as $row) {
-			$table -> addRow($row, 'align="right"');	
+			$table -> addRow($row, 'align="right"');
 		}
 		$table -> updateColAttributes(0, array('align' => 'left'));
 		$table -> updateColAttributes(1, array('align' => 'left'));

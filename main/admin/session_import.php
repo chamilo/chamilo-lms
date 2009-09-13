@@ -11,6 +11,7 @@ $cidReset = true;
 
 require '../inc/global.inc.php';
 
+$this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
@@ -847,7 +848,7 @@ if (!empty($error_msg)) {
 
 <blockquote>
 <pre>
-&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;<?php echo api_refine_encoding_id(api_get_system_encoding()); ?>&quot;?&gt;
 &lt;Sessions&gt;
     &lt;Users&gt;
         &lt;User&gt;

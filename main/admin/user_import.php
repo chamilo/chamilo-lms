@@ -47,7 +47,7 @@ function validate_data($users) {
 				$errors[] = $user;
 			}
 			// 2.3. check if username isn't longer than the 20 allowed characters
-			if (api_strlen($user['UserName']) > 20) {
+			if (UserManager::is_username_too_long($user['UserName'])) {
 				$user['error'] = get_lang('UserNameTooLong');
 				$errors[] = $user;
 			}
@@ -81,16 +81,7 @@ function validate_data($users) {
 function complete_missing_data($user) {
 	// 1. Create a username if necessary.
 	if (!isset ($user['UserName']) || strlen($user['UserName']) == 0) {
-		$username = api_strtolower(api_ereg_replace('[^a-zA-Z]', '', api_substr($user['FirstName'], 0, 3).' '.api_substr($user['LastName'], 0, 4)));
-		if (!UserManager :: is_username_available($username)) {
-			$i = 0;
-			$temp_username = $username.$i;
-			while (!UserManager :: is_username_available($temp_username)) {
-				$temp_username = $username.++$i;
-			}
-			$username = $temp_username;
-		}
-		$user['UserName'] = $username;
+		$user['UserName'] = UserManager::create_unique_username($user['FirstName'], $user['LastName']);
 	}
 	// 2. Generate a password if necessary.
 	if (!isset ($user['Password']) || strlen($user['Password']) == 0) {
@@ -346,7 +337,7 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 		$error_message = '<ul>';
 		foreach ($errors as $index => $error_user) {
 			$error_message .= '<li><b>'.$error_user['error'].'</b>: ';
-			$error_message .= $error_user['UserName'].'&nbsp;('.$error_user['FirstName'].' '.$error_user['LastName'].')';
+			$error_message .= $error_user['UserName'].'&nbsp;('.api_get_person_name($error_user['FirstName'], $error_user['LastName']).')';
 			$error_message .= '</li>';
 		}
 		$error_message .= '</ul>';

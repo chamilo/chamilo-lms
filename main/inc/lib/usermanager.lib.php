@@ -9,20 +9,23 @@
 ==============================================================================
 */
 
-// Common specification for usernames.
+// Specification for usernames:
+// 1. ASCII-letters and digits only are acceptable, 20 characters length.
+// 2. Empty username is formally valid, but it is reserved for the anonymous user.
 define('USERNAME_MAX_LENGTH', 20);
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z]/');
+define('USERNAME_PURIFIER_SHALLOW', '/\s/');
 
 // Constants for user extra field types.
-define('USER_FIELD_TYPE_TEXT',1);
-define('USER_FIELD_TYPE_TEXTAREA',2);
+define('USER_FIELD_TYPE_TEXT', 1);
+define('USER_FIELD_TYPE_TEXTAREA', 2);
 define('USER_FIELD_TYPE_RADIO',3);
 define('USER_FIELD_TYPE_SELECT',4);
-define('USER_FIELD_TYPE_SELECT_MULTIPLE',5);
-define('USER_FIELD_TYPE_DATE',6);
-define('USER_FIELD_TYPE_DATETIME',7);
-define('USER_FIELD_TYPE_DOUBLE_SELECT',8);
-define('USER_FIELD_TYPE_DIVIDER',9);
+define('USER_FIELD_TYPE_SELECT_MULTIPLE', 5);
+define('USER_FIELD_TYPE_DATE', 6);
+define('USER_FIELD_TYPE_DATETIME', 7);
+define('USER_FIELD_TYPE_DOUBLE_SELECT', 8);
+define('USER_FIELD_TYPE_DIVIDER', 9);
 
 class UserManager {
 	private function __construct () {
@@ -406,20 +409,50 @@ class UserManager {
 	}
 
 	/**
+	 * Modifies a given username for compliance with the specification.
+	 * @param $username string				The input username.
+	 * @param bool $strict (optional)		When this flag is TRUE, the result is guaranteed for full compliance, otherwise compliance may be partial. The default value is FALSE.
+	 * @param string $encoding (optional)	The character encoding for the input names. If it is omitted, the platform character set will be used by default.
+	 * @return string						The resulting purified username.
+	 */
+	public function purify_username($username, $strict = false, $encoding = null) {
+		if ($strict) {
+			// 1. Conversion of unacceptable letters (latinian letters with accents for example) into ASCII letters in order they not to be totally removed.
+			// 2. Applying the strict purifier.
+			// 3. Length limitation.
+			return substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($username, '', $encoding)), 0, USERNAME_MAX_LENGTH);
+		}
+		// 1. Applying the shallow purifier.
+		// 2. Length limitation.
+		return substr(preg_replace(USERNAME_PURIFIER_SHALLOW, '', $username), 0, USERNAME_MAX_LENGTH);
+	}
+
+	/**
+	 * Checks whether a given username matches to the specification strictly. The empty username is assumed here as invalid.
+	 * Mostly this function is to be used in the user interface built-in validation routines for providing feedback while usernames are enterd manually.
+	 * TODO: Before applying this method, currently implemented UI validation has to be studied.
+	 * @param string $username				The input username.
+	 * @param string $encoding (optional)	The character encoding for the input names. If it is omitted, the platform character set will be used by default.
+	 * @return bool							Returns TRUE if the username is valid, FALSE otherwise.
+	 */
+	public function is_username_valid($username, $encoding = null) {
+		return !empty($username) && $username == self::purify_username($username, true);
+	}
+
+	/**
 	 * Checks whether a username is empty. If the username contains whitespace characters, such as spaces, tabulators, newlines, etc.,
-	 * it is assumed as empty too. So, this function is safe for validation unpurified data.
-	 * Note: The empty username is reserved for the anonymous user.
-	 * @param string $username			The given username.
-	 * @return bool						Returns TRUE if length of the username exceeds the limit, FALSE otherwise.
+	 * it is assumed as empty too. This function is safe for validation unpurified data (during importing).
+	 * @param string $username				The given username.
+	 * @return bool							Returns TRUE if length of the username exceeds the limit, FALSE otherwise.
 	 */
 	public static function is_username_empty($username) {
-		return (strlen(trim($username)) == 0);
+		return (strlen(self::purify_username($username, false)) == 0);
 	}
 
 	/**
 	 * Checks whether a username is too long or not.
-	 * @param string $username			The given username, it should contain only ASCII-letters and digits.
-	 * @return bool						Returns TRUE if length of the username exceeds the limit, FALSE otherwise.
+	 * @param string $username				The given username, it should contain only ASCII-letters and digits.
+	 * @return bool							Returns TRUE if length of the username exceeds the limit, FALSE otherwise.
 	 */
 	public static function is_username_too_long($username) {
 		return (strlen($username) > USERNAME_MAX_LENGTH);
@@ -427,11 +460,12 @@ class UserManager {
 
 	/**
 	 * Reduces length to a given username to the limit.
-	 * @param string $username			The given username (ASCII-letters and digits).
-	 * @return string					Retuens the username with length that does not exceed the defined limit.
+	 * @param string $username				The given username (ASCII-letters and digits).
+	 * @param string $encoding (optional)	The character encoding for the input names. If it is omitted, the platform character set will be used by default.
+	 * @return string						Retuens the username with length that does not exceed the defined limit.
 	 */
-	public static function cut_username($username) {
-		return substr(trim($username), 0, USERNAME_MAX_LENGTH);
+	public static function cut_username($username, $encoding = null) {
+		return substr(self::purify_username($username, true), 0, USERNAME_MAX_LENGTH);
 	}
 
 	/**
@@ -812,8 +846,8 @@ class UserManager {
 	 */
 	public static function update_extra_field ($fid,$columns)  {
 		//TODO check that values added are values proposed for enumerated field types
-		$t_uf 	= Database::get_main_table(TABLE_MAIN_USER_FIELD);
-		$fid 	= Database::escape_string($fid);
+		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+		$fid = Database::escape_string($fid);
 		$sqluf = "UPDATE $t_uf SET ";
 		$known_fields = array('id','field_variable','field_type','field_display_text','field_default_value','field_order','field_visible','field_changeable','field_filter');
 		$safecolumns = array();
@@ -1426,7 +1460,7 @@ class UserManager {
 	 * @param  int     The name of the field we want to know everything about
 	 * @return array   Array containing all the information about the extra profile field (first level of array contains field details, then 'options' sub-array contains options details, as returned by the database)
 	 * @author Julio Montoya
-	 * @since  Dokeos 1.8.6
+	 * @since Dokeos 1.8.6
 	 */
 	public static function get_extra_field_information_by_name ($field_variable, $fuzzy=false) {
 		// database table definition
@@ -1531,7 +1565,7 @@ class UserManager {
 	 */
 	public static function get_personal_session_course_list ($user_id) {
 		// Database Table Definitions
-		$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 		$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 		$tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
@@ -1627,7 +1661,7 @@ class UserManager {
 
 		$sessions = array_merge($sessions , api_store_result($result));
 
-		if(api_is_allowed_to_create_course()) {
+		if (api_is_allowed_to_create_course()) {
 			foreach($sessions as $enreg) {
 				$id_session = $enreg['id'];
 				$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name
@@ -1711,26 +1745,26 @@ class UserManager {
 		$return = '';
 		if (!empty($user_id) && !empty($course)) {
 			$user_id = intval($user_id);
-			$path = api_get_path(SYS_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';
-			$web_path = api_get_path(WEB_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';
-			$file_list= array();
+		$path = api_get_path(SYS_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';
+		$web_path = api_get_path(WEB_COURSE_PATH).$course.'/document/shared_folder/sf_user_'.$user_id.'/';
+		$file_list= array();
 
-			if (is_dir($path)) {
-				$handle = opendir($path);
-				while ($file = readdir($handle)) {
-					if ($file == '.' || $file == '..' || $file == '.htaccess' || is_dir($path.$file))
-						continue; // skip current/parent directory and .htaccess
-					$file_list[] = $file;
-				}
-				if (count($file_list)>0) {
-					$return = $course;
-					$return .= '<ul>';
-				}
-				foreach ($file_list as $file) {
-					$return .= '<li><a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
-				}
-				$return .= '</ul>';
+		if (is_dir($path)) {
+			$handle = opendir($path);
+			while ($file = readdir($handle)) {
+				if ($file == '.' || $file == '..' || $file == '.htaccess' || is_dir($path.$file))
+					continue; // skip current/parent directory and .htaccess
+				$file_list[] = $file;
 			}
+			if (count($file_list)>0) {
+				$return = $course;
+				$return .= '<ul>';
+			}
+			foreach ($file_list as $file) {
+				$return .= '<li><a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
+			}
+			$return .= '</ul>';
+		}
 		}
 		return $return;
 	}
@@ -1817,7 +1851,7 @@ class UserManager {
         	$num=self::add_api_key($user_id,$api_service);
         } elseif ($num==0) {
         	$num=self::add_api_key($user_id);
-        }
+		}
         return $num;
     }
     /**
@@ -1999,7 +2033,7 @@ class UserManager {
         $image_array_sys=UserManager::get_user_picture_path_by_id($user_id,'system',false,true);
         $image_array=UserManager::get_user_picture_path_by_id($user_id,'web',false,true);
         $file = $image_array_sys['dir'].$size_picture.$picture_file;
-    	if (file_exists($file)) {
+    	if(file_exists($file)) {
             $picture['file'] = $image_array['dir'].$size_picture.$picture_file;
 			$picture['style']='';
 			if ($height > 0) {

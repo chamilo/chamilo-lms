@@ -29,15 +29,15 @@
 */
 
 /**
-Checks if a username exist in the DB otherwise it create a "double"
-ie. if we look into for jmontoya but the user's name already exist we create the user jmontoya2
-the return array will be array(username=>'jmontoya', sufix='2')
-@param string firstname
-@param string lastname
-@param string username
-@return array with the username, the sufix
-@author Julio Montoya Armas
-*/
+ * Checks if a username exist in the DB otherwise it create a "double"
+ * i.e. if we look into for jmontoya but the user's name already exist we create the user jmontoya2
+ * the return array will be array(username=>'jmontoya', sufix='2')
+ * @param string firstname
+ * @param string lastname
+ * @param string username
+ * @return array with the username, the sufix
+ * @author Julio Montoya Armas
+ */
 function make_username($firstname, $lastname, $username, $language = null, $encoding = null) {
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 	$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -66,13 +66,12 @@ function make_username($firstname, $lastname, $username, $language = null, $enco
 }
 
 /**
-Checks if there are repeted users in a given array
-
-@param  array $usernames list of the usernames in the uploaded file
-@param  array $user_array['username'] and $user_array['sufix'] where sufix is the number part in a login i.e -> jmontoya2
-@return array with the $usernames array and the $user_array array
-@author Julio Montoya Armas
-*/
+ * Checks if there are repeted users in a given array
+ * @param  array $usernames list of the usernames in the uploaded file
+ * @param  array $user_array['username'] and $user_array['sufix'] where sufix is the number part in a login i.e -> jmontoya2
+ * @return array with the $usernames array and the $user_array array
+ * @author Julio Montoya Armas
+ */
 function check_user_in_array($usernames, $user_array) {
 	$user_list = array_keys($usernames);
 	$username = $user_array['username'].$user_array['sufix'];
@@ -87,7 +86,8 @@ function check_user_in_array($usernames, $user_array) {
 	return $result_array;
 }
 
-/** checks if the username is already subscribed in a session
+/**
+ * Checks whether a username has been already subscribed in a session.
  * @param string a given username
  * @param array  the array with the course list codes
  * @param the session id
@@ -102,7 +102,6 @@ function user_available_in_session($username, $course_list, $id_session) {
 		$sql_select = "SELECT u.user_id FROM $tbl_session_rel_course_rel_user rel INNER JOIN $table_user u
 		on (rel.id_user=u.user_id)
 		WHERE rel.id_session='$id_session' AND u.status='5' AND u.username ='$username' AND rel.course_code='$enreg_course'";
-		//echo "<br>";
 		$rs = Database::query($sql_select, __FILE__, __LINE__);
 		if (Database::num_rows($rs) > 0) {
 			return Database::result($rs, 0, 0);
@@ -125,7 +124,7 @@ function check_all_usernames($users, $course_list, $id_session) {
 	$usernames = array();
 	$new_users = array();
 	foreach ($users as $index => $user) {
-		$user['UserName'] = str_replace(' ', '', trim($user['UserName']));
+		$user['UserName'] = str_replace(' ', '', trim($user['UserName'])); // !!! Purification.
 		$desired_username = array();
 		if (empty($user['UserName'])) {
 			$desired_username = make_username($user['FirstName'], $user['LastName'], '');
@@ -133,7 +132,7 @@ function check_all_usernames($users, $course_list, $id_session) {
 			$user['UserName'] = $pre_username;
 			$user['create'] = '1';
 		} else {
-			if (UserManager::is_username_available($user['UserName'])) {
+			if (UserManager::is_username_available($user['UserName'])) { // !!! My mistake?
 				$desired_username = make_username($user['FirstName'], $user['LastName'], $user['UserName']);
 				$user['UserName'] = $desired_username['username'].$desired_username['sufix'];
 				$user['create'] = '1';
@@ -143,17 +142,15 @@ function check_all_usernames($users, $course_list, $id_session) {
 					//$desired_username = make_username($user['FirstName'],$user['LastName'],$user['UserName']);
 					//$user['UserName'] = $desired_username['username'].$desired_username['sufix'];
 					$user_name = $user['UserName'];
-					//echo "<br>";
 					$sql_select = "SELECT user_id FROM $table_user WHERE username ='$user_name' ";
 					$rs = Database::query($sql_select, __FILE__, __LINE__);
 					$user['create'] = Database::result($rs, 0, 0); // this should be the ID because the user exist
-					//echo '<br>';
 				} else {
 					$user['create'] = $is_session_avail;
 				}
 			}
 		}
-		// usernames is the current list of users in the file
+		// Usernames is the current list of users in the file.
 		$result_array = check_user_in_array($usernames, $desired_username);
 		$usernames = $result_array[0];
 		$desired_username = $result_array[1];
@@ -162,8 +159,9 @@ function check_all_usernames($users, $course_list, $id_session) {
 	}
 	return $new_users;
 }
+
 /**
- * This functions checks if there are users that are already registered in the DB by other creator than the current coach.
+ * This functions checks whether there are users that are already registered in the DB by different creator than the current coach.
  * @param string a given username
  * @param array  the array with the course list codes
  * @param the session id
@@ -192,9 +190,8 @@ function get_user_creator($users, $course_list, $id_session) {
 	return $errors;
 }
 
-
 /**
- * validate the imported data
+ * Validates imported data.
  * @param list of users
  */
 function validate_data($users, $id_session = null) {
@@ -202,7 +199,7 @@ function validate_data($users, $id_session = null) {
 	$usernames = array();
 	$new_users = array();
 	foreach ($users as $index => $user) {
-		//1. check if mandatory fields are set
+		// 1. Check whether mandatory fields are set.
 		$mandatory_fields = array('LastName', 'FirstName');
 		if (api_get_setting('registration', 'email') == 'true') {
 			$mandatory_fields[] = 'Email';
@@ -214,7 +211,7 @@ function validate_data($users, $id_session = null) {
 				$errors[] = $user;
 			}
 		}
-		// 2. check if the username is too long
+		// 2. Check whether the username is too long.
 		if (UserManager::is_username_too_long($user['UserName'])) {
 			$user['error'] = get_lang('UserNameTooLong');
 			$errors[] = $user;
@@ -232,17 +229,18 @@ function validate_data($users, $id_session = null) {
 }
 
 /**
- * Add missing user-information (which isn't required, like password, etc)
+ * Adds missing user-information (which isn't required, like password, etc).
  */
 function complete_missing_data($user) {
-	//1. generate a password if necessary
+	// 1. Generate a password if it is necessary.
 	if (!isset ($user['Password']) || strlen($user['Password']) == 0) {
 		$user['Password'] = api_generate_password();
 	}
 	return $user;
 }
+
 /**
- * Save the imported data
+ * Saves imported data.
  */
 function save_data($users, $course_list, $id_session) {
 	$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
@@ -252,7 +250,7 @@ function save_data($users, $course_list, $id_session) {
 
 	$sendMail = $_POST['sendMail'] ? 1 : 0;
 
-	// adding users to the platform
+	// Adding users to the platform.
 	$new_users = array();
 	foreach ($users as $index => $user) {
 		$user = complete_missing_data($user);
@@ -267,10 +265,10 @@ function save_data($users, $course_list, $id_session) {
 		}
 		$new_users[] = $user;
 	}
-	//update users list
+	// Update user list.
 	$users = $new_users;
 
-	// inserting users
+	// Inserting users.
 	$super_list = array();
 	foreach ($course_list as $enreg_course) {
 		$nbr_users = 0;
@@ -278,7 +276,6 @@ function save_data($users, $course_list, $id_session) {
 		foreach ($users as $index => $user) {
 			$userid = $user['id'];
 			$sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$userid')";
-			//echo "<br>";
 			$course_session = array('course' => $enreg_course, 'added' => 1);
 			//$user['added_at_session'] = $course_session;
 			Database::query($sql, __FILE__, __LINE__);
@@ -299,7 +296,7 @@ function save_data($users, $course_list, $id_session) {
 		$sql_update = "UPDATE $tbl_session SET nbr_users= '$nbr_users' WHERE id='$id_session'";
 		Database::query($sql_update, __FILE__, __LINE__);
 	}
-	// we dont delete the users (thoughts while dreaming)
+	// We don't delete the users (thoughts while dreaming)
 	//$sql_delete = "DELETE FROM $tbl_session_rel_user WHERE id_session = '$id_session'";
 	//Database::query($sql_delete,__FILE__, __LINE__);
 
@@ -314,7 +311,7 @@ function save_data($users, $course_list, $id_session) {
 
 	$users = $new_users;
 	$registered_users = get_lang('FileImported').'<br /> Import file results : <br />';
-	// sending the email
+	// Sending emails.
 	$addedto = '';
 	if ($sendMail) {
 		$i = 0;
@@ -369,8 +366,9 @@ function save_data($users, $course_list, $id_session) {
 
 	//header('Location: resume_session.php?id_session='.$id_session);
 }
+
 /**
- * Read the CSV-file
+ * Reads CSV-file.
  * @param string $file Path to the CSV-file
  * @return array All userinformation read from the file
  */
@@ -384,8 +382,9 @@ function parse_csv_data($file) {
 	}
 	return $users;
 }
+
 /**
- * XML-parser: handle start of element
+ * XML-parser: the handler at the beginning of element.
  */
 function element_start($parser, $data) {
 	global $user;
@@ -398,8 +397,9 @@ function element_start($parser, $data) {
 			$current_tag = $data;
 	}
 }
+
 /**
- * XML-parser: handle end of element
+ * XML-parser: the handler at the end of element.
  */
 function element_end($parser, $data) {
 	global $user;
@@ -415,15 +415,17 @@ function element_end($parser, $data) {
 			break;
 	}
 }
+
 /**
- * XML-parser: handle character data
+ * XML-parser: the handler for character data.
  */
 function character_data($parser, $data) {
 	global $current_value;
 	$current_value = $data;
 }
+
 /**
- * Read the XML-file
+ * Reads XML-file.
  * @param string $file Path to the XML-file
  * @return array All userinformation read from the file
  */
@@ -441,39 +443,46 @@ function parse_xml_data($file) {
 	xml_parser_free($parser);
 	return $users;
 }
-// name of the language file that needs to be included
+
+
+/*
+==============================================================================
+		Main script
+==============================================================================
+*/
+
 $language_file = array ('admin', 'registration', 'index', 'trad4all', 'tracking');
 
 $cidReset = true;
 require '../inc/global.inc.php';
-$this_section = SECTION_PLATFORM_ADMIN;
 
-require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'classmanager.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'import.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-$formSent = 0;
-$errorMsg = '';
+$this_section = SECTION_PLATFORM_ADMIN; // TODO: Platform admin section?
+
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'import.lib.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 $tool_name = get_lang('ImportUserListXMLCSV');
 api_block_anonymous_users();
 
-$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('MySpace'));
 $id_session = '';
-if (isset($_GET["id_session"]) && $_GET["id_session"] != "") {
- 	$id_session = Security::remove_XSS($_GET["id_session"]);
-	$interbreadcrumb[] = array ("url" => "session.php", "name" => get_lang('Sessions'));
-	$interbreadcrumb[] = array ("url" => "course.php?id_session=".$_GET["id_session"]."", "name" => get_lang('Course'));
+if (isset($_GET['id_session']) && $_GET['id_session'] != '') {
+ 	$id_session = Security::remove_XSS($_GET['id_session']);
+	$interbreadcrumb[] = array ('url' => 'session.php', 'name' => get_lang('Sessions'));
+	$interbreadcrumb[] = array ('url' => 'course.php?id_session='.$_GET['id_session'].'', 'name' => get_lang('Course'));
 }
 
-//checking if the current coach is the admin coach
 /*
+// Checking whether the current coach is the admin coach.
 if (!api_is_coach()) {
 	api_not_allowed(true);
 }
 */
-//checking if the current coach is the admin coach
+
+// Checking whether the current coach is the admin coach.
 if (api_get_setting('add_users_by_coach') == 'true') {
 	if (!api_is_platform_admin()) {
 		if (isset($_REQUEST['id_session'])) {
@@ -509,7 +518,7 @@ if ($_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
 		if (count($errors) == 0) {
 			if (!empty($id_session)) {
 				$tbl_session_rel_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-				//selecting all the courses from the session id requested
+				// Selecting all the courses from the session id requested.
 				$sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
 				$result = Database::query($sql, __FILE__, __LINE__);
 				$course_list = array();
@@ -532,14 +541,14 @@ if ($_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
 
 Display :: display_header($tool_name);
 
-if ($_FILES['import_file']['size'] == 0 AND $_POST) {
+if ($_FILES['import_file']['size'] == 0 && $_POST) {
 	Display::display_error_message(get_lang('ThisFieldIsRequired'));
 }
 
 if (count($errors) != 0) {
 	$error_message = '<ul>';
 	foreach ($errors as $index => $error_user) {
-		$error_message .= '<li><b>'.$error_user['error'].'</b>: ';
+		$error_message .= '<li><strong>'.$error_user['error'].'</strong>: ';
 		$error_message .= api_get_person_name($error_user['FirstName'], $error_user['LastName']);
 		$error_message .= '</li>';
 	}
@@ -553,7 +562,7 @@ $form->addElement('hidden', 'id_session',$id_session);
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $form->addRule('import_file', get_lang('ThisFieldIsRequired'), 'required');
 $allowed_file_types = array ('xml', 'csv');
-$form->addRule('file', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
+$form->addRule('import_file', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
 $form->addElement('radio', 'file_type', get_lang('FileType'), 'XML (<a href="exemple.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');
 $form->addElement('radio', 'file_type', null, 'CSV (<a href="exemple.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');
 $form->addElement('radio', 'sendMail', get_lang('SendMailToUsers'), get_lang('Yes'), 1);
@@ -567,6 +576,7 @@ $form->display();
 <?php echo implode('/',$defined_auth_sources); ?>
 &lt;AuthSource&gt;<?php echo implode('/',$defined_auth_sources); ?>&lt;/AuthSource&gt;
 */
+
 ?>
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 

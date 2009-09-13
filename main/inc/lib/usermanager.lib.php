@@ -409,7 +409,7 @@ class UserManager {
 	}
 
 	/**
-	 * Modifies a given username for compliance with the specification.
+	 * Modifies a given username accordingly to the specification for valid characters and length.
 	 * @param $username string				The input username.
 	 * @param bool $strict (optional)		When this flag is TRUE, the result is guaranteed for full compliance, otherwise compliance may be partial. The default value is FALSE.
 	 * @param string $encoding (optional)	The character encoding for the input names. If it is omitted, the platform character set will be used by default.
@@ -456,16 +456,6 @@ class UserManager {
 	 */
 	public static function is_username_too_long($username) {
 		return (strlen($username) > USERNAME_MAX_LENGTH);
-	}
-
-	/**
-	 * Reduces length to a given username to the limit.
-	 * @param string $username				The given username (ASCII-letters and digits).
-	 * @param string $encoding (optional)	The character encoding for the input names. If it is omitted, the platform character set will be used by default.
-	 * @return string						Retuens the username with length that does not exceed the defined limit.
-	 */
-	public static function cut_username($username, $encoding = null) {
-		return substr(self::purify_username($username, true), 0, USERNAME_MAX_LENGTH);
 	}
 
 	/**

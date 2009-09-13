@@ -78,19 +78,11 @@ if ($_POST['formSent']) {
 
 					// Creating/updating users from <Sessions> <Users> base node.
 					foreach ($root->Users->User as $node_user) {
-						$username = trim(api_utf8_decode($node_user->Username));
-						$was_cut = false;
-						if (UserManager::is_username_too_long($username)) {
-							// The given username is too long.
-							$user_name_dist = $username;
-							$username = UserManager::cut_username($username);
-							$was_cut = true;
-						} else {
+						$username = $username_old = trim(api_utf8_decode($node_user->Username));
 							$username = UserManager::purify_username($username, $purification_option_for_usernames);
-						}
 						if (UserManager::is_username_available($username)) {
-							if ($was_cut) {
-								$error_msg .= get_lang('UsernameTooLongWasCut').' '.get_lang('From').' '.$user_name_dist.' '.get_lang('To').' '.$username.' <br />';
+							if (UserManager::is_username_too_long($username_old)) {
+								$error_msg .= get_lang('UsernameTooLongWasCut').' '.get_lang('From').' '.$username_old.' '.get_lang('To').' '.$username.' <br />';
 							}
 							$lastname = trim(api_utf8_decode($node_user->Lastname));
 							$firstname = trim(api_utf8_decode($node_user->Firstname));
@@ -105,7 +97,7 @@ if ($_POST['formSent']) {
 							switch ($status) {
 								case 'student' : $status = 5; break;
 								case 'teacher' : $status = 1; break;
-								default : $status = 5; $error_msg = get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
+								default : $status = 5; $error_msg .= get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
 							}
 
 							// Adding the current user to the platform.
@@ -154,7 +146,7 @@ if ($_POST['formSent']) {
 							switch ($status) {
 								case 'student' : $status = 5; break;
 								case 'teacher' : $status = 1; break;
-								default : $status = 5; $error_msg = get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
+								default : $status = 5; $error_msg .= get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
 							}
 
 							$sql = "UPDATE $tbl_user SET
@@ -202,20 +194,13 @@ if ($_POST['formSent']) {
 								if (empty ($title)) {
 									$title = $keys['currentCourseCode'];
 								}
+
 								prepare_course_repository($current_course_repository, $current_course_id);
-								// Modified by Ivan Tcholakov, 10-MAR-2009.
-								//update_Db_course($current_course_db_name);
-								update_Db_course($current_course_db_name, $language);
-								//
-								// Modified by Ivan Tcholakov, 10-MAR-2009.
-								//$pictures_array = fill_course_repository($current_course_repository);
-								$pictures_array = fill_course_repository($current_course_repository, false);
-								//
-								// Modified by Ivan Tcholakov, 10-MAR-2009.
-								//fill_Db_course($current_course_db_name, $current_course_repository, 'french');
-								fill_Db_course($current_course_db_name, $current_course_repository, $language, array(), false);
-								//
-								register_course($current_course_id, $current_course_code, $current_course_repository, $current_course_db_name, "$lastname $firstname", $course['unit_code'], addslashes($course['FR']['title']), $language, $user_id);
+								update_Db_course($current_course_db_name);
+								$pictures_array = fill_course_repository($current_course_repository);
+								fill_Db_course($current_course_db_name, $current_course_repository, 'english', $pictures_array); // TODO: Hard-coded language id 'english'.
+								register_course($current_course_id, $current_course_code, $current_course_repository, $current_course_db_name, "$lastname $firstname", $course['unit_code'], addslashes($course['FR']['title']), $language, $user_id);  // TODO: Hard-coded language 'FR'.
+
 								$sql = "INSERT INTO ".$tbl_course." SET
 										code = '".$current_course_id."',
 										db_name = '".$current_course_db_name."',
@@ -687,8 +672,7 @@ if ($_POST['formSent']) {
 							$course_info = CourseManager::get_course_information($course_code);
 							$inserted_in_course[$course_code] = $course_info['title'];
 						} else {
-							// We should create the course as in the XML import.
-							// TODO: ?
+							// TODO: We should create the course as in the XML import.
 						}
 
 						if (CourseManager::course_exists($course_code, true)) {

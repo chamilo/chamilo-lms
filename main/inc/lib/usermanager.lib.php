@@ -406,6 +406,17 @@ class UserManager {
 	}
 
 	/**
+	 * Checks whether a username is empty. If the username contains whitespace characters, such as spaces, tabulators, newlines, etc.,
+	 * it is assumed as empty too. So, this function is safe for validation unpurified data.
+	 * Note: The empty username is reserved for the anonymous user.
+	 * @param string $username			The given username.
+	 * @return bool						Returns TRUE if length of the username exceeds the limit, FALSE otherwise.
+	 */
+	public static function is_username_empty($username) {
+		return (strlen(trim($username)) == 0);
+	}
+
+	/**
 	 * Checks whether a username is too long or not.
 	 * @param string $username			The given username, it should contain only ASCII-letters and digits.
 	 * @return bool						Returns TRUE if length of the username exceeds the limit, FALSE otherwise.
@@ -420,7 +431,7 @@ class UserManager {
 	 * @return string					Retuens the username with length that does not exceed the defined limit.
 	 */
 	public static function cut_username($username) {
-		return substr($username, 0, USERNAME_MAX_LENGTH);
+		return substr(trim($username), 0, USERNAME_MAX_LENGTH);
 	}
 
 	/**

@@ -22,50 +22,50 @@ function validate_data($users) {
 	$errors = array();
 	$usernames = array();
 	foreach ($users as $index => $user) {
-		// 1. check if mandatory fields are set
+		// 1. Check if mandatory fields are set.
 		$mandatory_fields = array('LastName', 'FirstName');
 		if (api_get_setting('registration', 'email') == 'true') {
 			$mandatory_fields[] = 'Email';
 		}
 		foreach ($mandatory_fields as $key => $field) {
-			if (!isset ($user[$field]) || strlen($user[$field]) == 0) {
+			if (empty($user[$field])) {
 				$user['error'] = get_lang($field.'Mandatory');
 				$errors[] = $user;
 			}
 		}
-		// 2. check username
-		if (isset ($user['UserName']) && strlen($user['UserName']) != 0) {
-			// 2.1. check if no username was used twice in import file
+		// 2. Check username.
+		if (UserManager::is_username_empty($user['UserName'])) {
+			// 2.1. Check if no username was used twice in import file.
 			if (isset ($usernames[$user['UserName']])) {
 				$user['error'] = get_lang('UserNameUsedTwice');
 				$errors[] = $user;
 			}
 			$usernames[$user['UserName']] = 1;
-			// 2.2. check if username isn't allready in use in database
+			// 2.2. Check if username isn't allready in use in database.
 			if (!UserManager :: is_username_available($user['UserName'])) {
 				$user['error'] = get_lang('UserNameNotAvailable');
 				$errors[] = $user;
 			}
-			// 2.3. check if username isn't longer than the 20 allowed characters
+			// 2.3. Check if username isn't longer than the 20 allowed characters.
 			if (UserManager::is_username_too_long($user['UserName'])) {
 				$user['error'] = get_lang('UserNameTooLong');
 				$errors[] = $user;
 			}
 		}
-		// 3. check status
+		// 3. Check status.
 		if (isset ($user['Status']) && !api_status_exists($user['Status'])) {
 			$user['error'] = get_lang('WrongStatus');
 			$errors[] = $user;
 		}
 		// 4. Check classname
-		if (isset ($user['ClassName']) && strlen($user['ClassName']) != 0) {
+		if (!empty($user['ClassName'])) {
 			if (!ClassManager :: class_name_exists($user['ClassName'])) {
 				$user['error'] = get_lang('ClassNameNotAvailable');
 				$errors[] = $user;
 			}
 		}
 		// 5. Check authentication source
-		if (isset ($user['AuthSource']) && strlen($user['AuthSource']) != 0) {
+		if (!empty($user['AuthSource'])) {
 			if (!in_array($user['AuthSource'], $defined_auth_sources)) {
 				$user['error'] = get_lang('AuthSourceNotAvailable');
 				$errors[] = $user;
@@ -80,19 +80,19 @@ function validate_data($users) {
  */
 function complete_missing_data($user) {
 	// 1. Create a username if necessary.
-	if (!isset ($user['UserName']) || strlen($user['UserName']) == 0) {
+	if (UserManager::is_username_empty($user['UserName'])) {
 		$user['UserName'] = UserManager::create_unique_username($user['FirstName'], $user['LastName']);
 	}
 	// 2. Generate a password if necessary.
-	if (!isset ($user['Password']) || strlen($user['Password']) == 0) {
+	if (empty($user['Password'])) {
 		$user['Password'] = api_generate_password();
 	}
 	// 3. Set status if not allready set.
-	if (!isset ($user['Status']) || strlen($user['Status']) == 0) {
+	if (empty($user['Status'])) {
 		$user['Status'] = 'user';
 	}
 	// 4. Set authsource if not allready set.
-	if (!isset ($user['AuthSource']) || strlen($user['AuthSource']) == 0) {
+	if (empty($user['AuthSource'])) {
 		$user['AuthSource'] = PLATFORM_AUTH_SOURCE;
 	}
 	return $user;
@@ -144,7 +144,7 @@ function save_data($users) {
 					}
 				}
 			}
-			if (strlen($user['ClassName']) > 0) {
+			if (!empty($user['ClassName'])) {
 				$class_id = ClassManager :: get_class_id($user['ClassName']);
 				ClassManager :: add_user($user_id, $class_id);
 			}
@@ -258,11 +258,11 @@ $cidReset = true;
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
-require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'classmanager.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'import.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'import.lib.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
 if (is_array($extAuthSource)) {
@@ -396,6 +396,7 @@ if ($count_fields > 0) {
 		$i++;
 	}
 }
+
 ?>
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 

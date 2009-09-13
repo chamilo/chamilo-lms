@@ -73,7 +73,7 @@ if ($_POST['formSent']) {
 
 					// Creating/updating users from <Sessions> <Users> base node.
 					foreach ($root->Users->User as $node_user) {
-						$username = api_utf8_decode($node_user->Username);
+						$username = trim(api_utf8_decode($node_user->Username));
 						$was_cut = false;
 						if (UserManager::is_username_too_long($username)) {
 							// The given username is too long.
@@ -86,16 +86,16 @@ if ($_POST['formSent']) {
 							if ($was_cut) {
 								$error_msg .= get_lang('UsernameTooLongWasCut').' '.get_lang('From').' '.$user_name_dist.' '.get_lang('To').' '.$username.' <br />';
 							}
-							$lastname = api_utf8_decode($node_user->Lastname);
-							$firstname = api_utf8_decode($node_user->Firstname);
+							$lastname = trim(api_utf8_decode($node_user->Lastname));
+							$firstname = trim(api_utf8_decode($node_user->Firstname));
 							$password = api_utf8_decode($node_user->Password);
 							if (empty($password)) {
 								$password = api_generate_password();
 							}
-							$email = api_utf8_decode($node_user->Email);
-							$official_code = api_utf8_decode($node_user->OfficialCode);
-							$phone = api_utf8_decode($node_user->Phone);
-							$status = api_utf8_decode($node_user->Status);
+							$email = trim(api_utf8_decode($node_user->Email));
+							$official_code = trim(api_utf8_decode($node_user->OfficialCode));
+							$phone = trim(api_utf8_decode($node_user->Phone));
+							$status = trim(api_utf8_decode($node_user->Status));
 							switch ($status) {
 								case 'student' : $status = 5; break;
 								case 'teacher' : $status = 1; break;
@@ -138,13 +138,13 @@ if ($_POST['formSent']) {
 								@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
 							}
 						} else {
-							$lastname = api_utf8_decode($node_user->Lastname);
-							$firstname = api_utf8_decode($node_user->Firstname);
+							$lastname = trim(api_utf8_decode($node_user->Lastname));
+							$firstname = trim(api_utf8_decode($node_user->Firstname));
 							$password = api_utf8_decode($node_user->Password);
-							$email = api_utf8_decode($node_user->Email);
-							$official_code = api_utf8_decode($node_user->OfficialCode);
-							$phone = api_utf8_decode($node_user->Phone);
-							$status = api_utf8_decode($node_user->Status);
+							$email = trim(api_utf8_decode($node_user->Email));
+							$official_code = trim(api_utf8_decode($node_user->OfficialCode));
+							$phone = trim(api_utf8_decode($node_user->Phone));
+							$status = trim(api_utf8_decode($node_user->Status));
 							switch ($status) {
 								case 'student' : $status = 5; break;
 								case 'teacher' : $status = 1; break;
@@ -169,11 +169,11 @@ if ($_POST['formSent']) {
 				// Creating  courses from <Sessions> <Courses> base node.
 				if (count($root->Courses->Course) > 0) {
 					foreach ($root->Courses->Course as $courseNode) {
-						$course_code = api_utf8_decode($courseNode->CourseCode);
-						$title = api_utf8_decode($courseNode->CourseTitle);
+						$course_code = trim(api_utf8_decode($courseNode->CourseCode));
+						$title = trim(api_utf8_decode($courseNode->CourseTitle));
 						$description = api_utf8_decode($courseNode->CourseDescription);
-						$language = api_utf8_decode($courseNode->CourseLanguage);
-						$username = api_utf8_decode($courseNode->CourseTeacher);
+						$language = trim(api_utf8_decode($courseNode->CourseLanguage));
+						$username = trim(api_utf8_decode($courseNode->CourseTeacher));
 
 						// Looking up for the teacher.
 						$sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";
@@ -245,8 +245,8 @@ if ($_POST['formSent']) {
 						$course_counter = 0;
 						$user_counter = 0;
 
-						$session_name = api_utf8_decode($node_session->SessionName);
-						$coach = api_utf8_decode($node_session->Coach);
+						$session_name = trim(api_utf8_decode($node_session->SessionName));
+						$coach = trim(api_utf8_decode($node_session->Coach));
 
 						if (!empty($coach)) {
 							$coach_id = UserManager::get_user_id_from_username($coach);
@@ -260,7 +260,7 @@ if ($_POST['formSent']) {
 							$coach_id = api_get_user_id();
 						}
 
-						$date_start = api_utf8_decode($node_session->DateStart); // Just in case - encoding conversion.
+						$date_start = trim(api_utf8_decode($node_session->DateStart)); // Just in case - encoding conversion.
 
 						if (!empty($date_start)) {
 							list($year_start, $month_start, $day_start) = explode('-', $date_start);
@@ -271,7 +271,7 @@ if ($_POST['formSent']) {
 								$time_start = mktime(0, 0, 0, $month_start, $day_start, $year_start);
 							}
 
-							$date_end = api_utf8_decode($node_session->DateEnd);
+							$date_end = trim(api_utf8_decode($node_session->DateEnd));
 							if (!empty($date_start)) {
 								list($year_end, $month_end, $day_end) = explode('-', $date_end);
 								if (empty($year_end) || empty($month_end) || empty($day_end)) {
@@ -372,7 +372,7 @@ if ($_POST['formSent']) {
 
 						// Adding courses to a session.
 						foreach ($node_session->Course as $node_course) {
-							$course_code = Database::escape_string(api_utf8_decode($node_course->CourseCode));
+							$course_code = Database::escape_string(trim(api_utf8_decode($node_course->CourseCode)));
 							// Verify that the course pointed by the course code node exists.
 							if (CourseManager::course_exists($course_code)) {
 								// If the course exists we continue.

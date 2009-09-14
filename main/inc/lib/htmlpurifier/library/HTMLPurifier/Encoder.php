@@ -289,7 +289,7 @@ class HTMLPurifier_Encoder
             return $str;
         }
         // Added Ivan Tcholakov, 09-SEP-2009.
-        // Next try - encoding conversion related functions form Dokeos LMS,
+        // Next try - encoding conversion related functions from Dokeos LMS,
         // for some encodings they work even without iconv or mbstring installed.
         elseif (function_exists('api_is_encoding_supported')) {
             if (api_is_encoding_supported($encoding)) {
@@ -334,7 +334,7 @@ class HTMLPurifier_Encoder
             return $str;
         }
         // Added Ivan Tcholakov, 09-SEP-2009.
-        // Next try - encoding conversion related functions form Dokeos LMS,
+        // Next try - encoding conversion related functions from Dokeos LMS,
         // for some encodings they work even without iconv or mbstring installed.
         elseif (function_exists('api_is_encoding_supported')) {
             if (api_is_encoding_supported($encoding)) {

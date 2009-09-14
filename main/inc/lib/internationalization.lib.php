@@ -124,9 +124,14 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 		}
 	}
 
-	$ot = '[='; //opening tag for missing vars
-	$ct = '=]'; //closing tag for missing vars
-	if (api_get_setting('hide_dltt_markup') == 'true') {
+	$ot = '[='; // opening tag for missing vars
+	$ct = '=]'; // closing tag for missing vars
+	if (api_get_setting('hide_dltt_markup') == 'true' || !$dltt) {
+		// The opening and closing tags do not show up in these two cases:
+		// 1. when the special setting hide_dltt_markup "says" so;
+		// 2. when showing the DLTT link (on untranslated variable) is intentionaly suppressed by a developer
+		// using the input parameter $notrans, i.e. when the function is called in this way: get_lang('MyText', '')
+		// This behaviour is valid for test and production server modes.
 		$ot = '';
 		$ct = '';
 	}
@@ -195,7 +200,7 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
  * @return string					The current language of the interface.
  */
 function api_get_interface_language($purified = false) {
-	global 	$language_interface;
+	global $language_interface;
 	if (empty($language_interface)) {
 		return 'english';
 	}

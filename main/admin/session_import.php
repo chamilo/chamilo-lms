@@ -23,7 +23,7 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
 $form_sent = 0;
-$error_msg = '';
+$error_message = ''; // Avoid conflict with the global variable $error_msg (array type) in add_course.conf.php.
 
 $tbl_user					= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_course					= Database::get_main_table(TABLE_MAIN_COURSE);
@@ -82,7 +82,7 @@ if ($_POST['formSent']) {
 							$username = UserManager::purify_username($username, $purification_option_for_usernames);
 						if (UserManager::is_username_available($username)) {
 							if (UserManager::is_username_too_long($username_old)) {
-								$error_msg .= get_lang('UsernameTooLongWasCut').' '.get_lang('From').' '.$username_old.' '.get_lang('To').' '.$username.' <br />';
+								$error_message .= get_lang('UsernameTooLongWasCut').' '.get_lang('From').' '.$username_old.' '.get_lang('To').' '.$username.' <br />';
 							}
 							$lastname = trim(api_utf8_decode($node_user->Lastname));
 							$firstname = trim(api_utf8_decode($node_user->Firstname));
@@ -97,7 +97,7 @@ if ($_POST['formSent']) {
 							switch ($status) {
 								case 'student' : $status = 5; break;
 								case 'teacher' : $status = 1; break;
-								default : $status = 5; $error_msg .= get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
+								default : $status = 5; $error_message .= get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
 							}
 
 							// Adding the current user to the platform.
@@ -146,7 +146,7 @@ if ($_POST['formSent']) {
 							switch ($status) {
 								case 'student' : $status = 5; break;
 								case 'teacher' : $status = 1; break;
-								default : $status = 5; $error_msg .= get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
+								default : $status = 5; $error_message .= get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
 							}
 
 							$sql = "UPDATE $tbl_user SET
@@ -170,7 +170,7 @@ if ($_POST['formSent']) {
 						$course_code = trim(api_utf8_decode($courseNode->CourseCode));
 						$title = trim(api_utf8_decode($courseNode->CourseTitle));
 						$description = trim(api_utf8_decode($courseNode->CourseDescription));
-						$language = trim(api_utf8_decode($courseNode->CourseLanguage));
+						$language = api_validate_language(trim(api_utf8_decode($courseNode->CourseLanguage)));
 						$username = trim(api_utf8_decode($courseNode->CourseTeacher));
 
 						// Looking up for the teacher.
@@ -198,8 +198,11 @@ if ($_POST['formSent']) {
 								prepare_course_repository($current_course_repository, $current_course_id);
 								update_Db_course($current_course_db_name);
 								$pictures_array = fill_course_repository($current_course_repository);
-								fill_Db_course($current_course_db_name, $current_course_repository, 'english', $pictures_array); // TODO: Hard-coded language id 'english'.
-								register_course($current_course_id, $current_course_code, $current_course_repository, $current_course_db_name, "$lastname $firstname", $course['unit_code'], addslashes($course['FR']['title']), $language, $user_id);  // TODO: Hard-coded language 'FR'.
+
+								//fill_Db_course($current_course_db_name, $current_course_repository, 'english', $pictures_array);
+								//register_course($current_course_id, $current_course_code, $current_course_repository, $current_course_db_name, "$lastname $firstname", $course['unit_code'], addslashes($course['FR']['title']), $language, $user_id);
+								fill_Db_course($current_course_db_name, $current_course_repository, $language, $pictures_array);
+								register_course($current_course_id, $current_course_code, $current_course_repository, $current_course_db_name, api_get_person_name($firstname, $lastname, null, null, $language), null, addslashes($title), $language, $user_id);
 
 								$sql = "INSERT INTO ".$tbl_course." SET
 										code = '".$current_course_id."',
@@ -249,7 +252,7 @@ if ($_POST['formSent']) {
 						if (!empty($coach)) {
 							$coach_id = UserManager::get_user_id_from_username($coach);
 							if ($coach_id === false) {
-								$error_msg .= get_lang('UserDoesNotExist').' : '.$coach.'<br />';
+								$error_message .= get_lang('UserDoesNotExist').' : '.$coach.'<br />';
 								// Forcing the coach id if user does not exist.
 								$coach_id = api_get_user_id();
 							}
@@ -263,7 +266,7 @@ if ($_POST['formSent']) {
 						if (!empty($date_start)) {
 							list($year_start, $month_start, $day_start) = explode('-', $date_start);
 							if(empty($year_start) || empty($month_start) || empty($day_start)) {
-								$error_msg .= get_lang('WrongDate').' : '.$date_start.'<br />';
+								$error_message .= get_lang('WrongDate').' : '.$date_start.'<br />';
 								break;
 							} else {
 								$time_start = mktime(0, 0, 0, $month_start, $day_start, $year_start);
@@ -273,14 +276,14 @@ if ($_POST['formSent']) {
 							if (!empty($date_start)) {
 								list($year_end, $month_end, $day_end) = explode('-', $date_end);
 								if (empty($year_end) || empty($month_end) || empty($day_end)) {
-									$error_msg .= get_lang('WrongDate').' : '.$date_end.'<br />';
+									$error_message .= get_lang('WrongDate').' : '.$date_end.'<br />';
 									break;
 								} else {
 									$time_end = mktime(0, 0, 0, $month_end, $day_end, $year_end);
 								}
 							}
 							if ($time_end - $time_start < 0) {
-								$error_msg .= get_lang('StartDateShouldBeBeforeEndDate').' : '.$date_end.'<br />';
+								$error_message .= get_lang('StartDateShouldBeBeforeEndDate').' : '.$date_end.'<br />';
 							}
 						}
 
@@ -380,7 +383,7 @@ if ($_POST['formSent']) {
 								if (!empty($coach)) {
 									$coach_id = UserManager::get_user_id_from_username($coach);
 									if ($coach_id === false) {
-										$error_msg .= get_lang('UserDoesNotExist').' : '.$coach.'<br />';
+										$error_message .= get_lang('UserDoesNotExist').' : '.$coach.'<br />';
 										$coach_id = '';
 									}
 								} else {
@@ -415,7 +418,7 @@ if ($_POST['formSent']) {
 											$rs_users = Database::query($sql, __FILE__, __LINE__);
 											$users_in_course_counter++;
 										} else {
-											$error_msg .= get_lang('UserDoesNotExist').' : '.$username.'<br />';
+											$error_message .= get_lang('UserDoesNotExist').' : '.$username.'<br />';
 										}
 									}
 									$update_session_course = "UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='$course_code'";
@@ -436,7 +439,7 @@ if ($_POST['formSent']) {
 										if (!empty($coach)) {
 											$coach_id = UserManager::get_user_id_from_username($coach);
 											if ($user_id === false) {
-												$error_msg .= get_lang('UserDoesNotExist').' : '.$coach.'<br />';
+												$error_message .= get_lang('UserDoesNotExist').' : '.$coach.'<br />';
 												$coach_id = '';
 											}
 										} else {
@@ -471,7 +474,7 @@ if ($_POST['formSent']) {
 														$users_in_course_counter++;
 													}
 												} else {
-													$error_msg .= get_lang('UserDoesNotExist').' : '.$username.'<br />';
+													$error_message .= get_lang('UserDoesNotExist').' : '.$username.'<br />';
 												}
 											}
 											Database::query("UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='$course_code'",__FILE__,__LINE__);
@@ -481,7 +484,7 @@ if ($_POST['formSent']) {
 								}
 							} else {
 								// Tthe course does not exist.
-								$error_msg .= get_lang('CourseDoesNotExist').' : '.$course_code.'<br />';
+								$error_message .= get_lang('CourseDoesNotExist').' : '.$course_code.'<br />';
 							}
 						}
 						Database::query("UPDATE $tbl_session SET nbr_users='$user_counter', nbr_courses='$course_counter' WHERE id='$session_id'", __FILE__, __LINE__);
@@ -489,10 +492,10 @@ if ($_POST['formSent']) {
 
 				}
 				if (empty($root->Users->User) && empty($root->Courses->Course) && empty($root->Session)) {
-					$error_msg = get_lang('NoNeededData');
+					$error_message = get_lang('NoNeededData');
 				}
 			} else {
-				$error_msg .= get_lang('XMLNotValid');
+				$error_message .= get_lang('XMLNotValid');
 			}
 		} else {
 
@@ -502,7 +505,7 @@ if ($_POST['formSent']) {
 
 			$content = file($_FILES['import_file']['tmp_name']);
 			if (!api_strstr($content[0], ';')) {
-				$error_msg = get_lang('NotCSV');
+				$error_message = get_lang('NotCSV');
 			} else {
 				$tag_names = array();
 
@@ -517,7 +520,7 @@ if ($_POST['formSent']) {
 							$tag_names[] = api_eregi_replace('[^a-z0-9_-]', '', $tag_name);
 						}
 						if (!in_array('SessionName', $tag_names) || !in_array('DateStart', $tag_names) || !in_array('DateEnd', $tag_names)) {
-							$error_msg = get_lang('NoNeededData');
+							$error_message = get_lang('NoNeededData');
 							break;
 						}
 					}
@@ -664,7 +667,7 @@ if ($_POST['formSent']) {
 									$rs_users = Database::query($sql, __FILE__, __LINE__);
 									$users_in_course_counter++;
 								} else {
-									$error_msg .= get_lang('UserDoesNotExist').' : '.$user.'<br />';
+									$error_message .= get_lang('UserDoesNotExist').' : '.$user.'<br />';
 								}
 							}
 							Database::query("UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='$course_code'", __FILE__, __LINE__);
@@ -729,8 +732,8 @@ if ($_POST['formSent']) {
 				}
 			}
 		}
-		if (!empty($error_msg)) {
-			$error_msg = get_lang('ButProblemsOccured').' :<br />'.$error_msg;
+		if (!empty($error_message)) {
+			$error_message = get_lang('ButProblemsOccured').' :<br />'.$error_message;
 		}
 
 		if (count($inserted_in_course) > 1) {
@@ -744,11 +747,11 @@ if ($_POST['formSent']) {
 			header('Location: resume_session.php?id_session='.$session_id.'&warn='.urlencode($warn));
 			exit;
 		} else {
-			header('Location: session_list.php?action=show_message&message='.urlencode(get_lang('FileImported').' '.$error_msg).'&warn='.urlencode($warn));
+			header('Location: session_list.php?action=show_message&message='.urlencode(get_lang('FileImported').' '.$error_message).'&warn='.urlencode($warn));
 			exit;
 		}
 	} else {
-		$error_msg = get_lang('NoInputFile');
+		$error_message = get_lang('NoInputFile');
 	}
 }
 
@@ -787,12 +790,12 @@ if (count($inserted_in_course) > 1) {
 <table border="0" cellpadding="5" cellspacing="0">
 
 <?php
-if (!empty($error_msg)) {
+if (!empty($error_message)) {
 ?>
 <tr>
   <td colspan="2">
 <?php
-	Display::display_normal_message($error_msg, false);
+	Display::display_normal_message($error_message, false);
 ?>
   </td>
 </tr>

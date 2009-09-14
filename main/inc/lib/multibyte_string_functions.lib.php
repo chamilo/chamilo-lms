@@ -2807,12 +2807,12 @@ function api_is_language_supported($language) {
 /**
  * Validates the input language identificator in order always to return a language that is supported by the system.
  * @param string $language		The language identificator to be validated.
- * @param bool $purify			A modifier to the returne result. If it is TRUE, then the returned language identificator is purified.
- * @return string				Returns the input language identificator, purified, if it was demanded. If the input language is not supported, 'english' is returned then.
+ * @param bool $purify			A modifier to the returned result. If it is TRUE, then the returned language identificator is purified.
+ * @return string				Returns the input language identificator, purified, if it was demanded. If the input language is not supported, the current interface language is returned then.
  */
 function api_validate_language($language, $purify = false) {
 	if (!api_is_language_supported($language)) {
-		return 'english';
+		return api_get_interface_language($purify);
 	}
 	if ($purify) {
 		return api_refine_language_id($language);

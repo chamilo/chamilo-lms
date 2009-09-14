@@ -1020,7 +1020,7 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 			&& $res6 === 'french_unicode'
 			&& $res7 === 'french'
 			&& $res8 === 'french'
-			&& $res9 === 'english'
+			&& $res9 === api_get_interface_language()
 		);
 		//var_dump($res1);
 		//var_dump($res2);

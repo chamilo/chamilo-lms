@@ -3,20 +3,20 @@
 $realm = 'The batcave';
 
 // Just a random id
-$nonce = uniqid(); 
+$nonce = uniqid();
 
 // Get the digest from the http header
 $digest = getDigest();
 
 // If there was no digest, show login
-if (is_null($digest)) requireLogin($realm,$nonce); 
+if (is_null($digest)) requireLogin($realm,$nonce);
 
 $digestParts = digestParse($digest);
 
 $validUser = 'admin';
 $validPass = 'admin';
 
-// Based on all the info we gathered we can figure out what the response should be 
+// Based on all the info we gathered we can figure out what the response should be
 $A1 = md5("{$digestParts['username']}:{$realm}:{$validPass}");
 $A2 = md5("{$_SERVER['REQUEST_METHOD']}:{$digestParts['uri']}");
 
@@ -72,4 +72,4 @@ function digestParse($digest) {
     return $needed_parts ? false : $data;
 }
 
-?> 
+?>

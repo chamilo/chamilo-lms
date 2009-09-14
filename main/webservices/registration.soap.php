@@ -55,13 +55,13 @@ $server->wsdl->addComplexType(
 		'status' => array('name' => 'status', 'type' => 'xsd:string'),
 		'email' => array('name' => 'email', 'type' => 'xsd:string'),
 		'loginname' => array('name' => 'loginname', 'type' => 'xsd:string'),
-		'password' => array('name' => 'password', 'type' => 'xsd:string'),				
+		'password' => array('name' => 'password', 'type' => 'xsd:string'),
 		'language' => array('name' => 'language', 'type' => 'xsd:string'),
-		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),		
+		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
 		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
 		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
 		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
-		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')														
+		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
 	)
 );
 
@@ -82,8 +82,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'users' => array('name' => 'users', 'type' => 'tns:userParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'users' => array('name' => 'users', 'type' => 'tns:userParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -126,50 +126,50 @@ $server->register('DokeosWSCreateUsers',				// method name
 function DokeosWSCreateUsers($params) {
 
 	global $_user, $userPasswordCrypted,$_configuration;
-	
+
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-	 	
+
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
 	}
-		
+
 	// database table definition
-	$table_user = Database::get_main_table(TABLE_MAIN_USER); 		
-	$t_uf 		= Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$table_user = Database::get_main_table(TABLE_MAIN_USER);
+	$t_uf 		= Database::get_main_table(TABLE_MAIN_USER_FIELD);
 	$t_ufv 		= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-		 
+
 	$users_params = $params['users'];
 	$results = array();
 	$orig_user_id_value = array();
-	
+
 	foreach($users_params as $user_param) {
-	
+
 		$firstName = $user_param['firstname'];			$lastName = $user_param['lastname'];
-		$status = $user_param['status'];				$email = $user_param['email'];	
+		$status = $user_param['status'];				$email = $user_param['email'];
 		$loginName = $user_param['loginname'];			$password = $user_param['password'];
-		$official_code = '';$language='';$phone = '';$picture_uri = '';$auth_source = PLATFORM_AUTH_SOURCE; 
+		$official_code = '';$language='';$phone = '';$picture_uri = '';$auth_source = PLATFORM_AUTH_SOURCE;
 		$expiration_date = '0000-00-00 00:00:00'; $active = 1; $hr_dept_id=0; $extra=null;
 		$original_user_id_name= $user_param['original_user_id_name'];
 		$original_user_id_value = $user_param['original_user_id_value'];
 		$orig_user_id_value[] = $user_param['original_user_id_value'];
-		$extra_list = $user_param['extra'];				
+		$extra_list = $user_param['extra'];
 		if (!empty($user_param['language'])) { $language=$user_param['language'];}
 		if (!empty($user_param['phone'])) { $phone = $user_param['phone'];}
-		if (!empty($user_param['expiration_date'])) { $expiration_date = $user_param['expiration_date'];}	
-		
+		if (!empty($user_param['expiration_date'])) { $expiration_date = $user_param['expiration_date'];}
+
 		// check if exits x_user_id into user_field_values table
 		$sql = "SELECT field_value,user_id	FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$row = Database::fetch_row($res);
 		$count_row = Database::num_rows($res);
-		if ($count_row > 0) {		
-			// check if user is not active 		
+		if ($count_row > 0) {
+			// check if user is not active
 			$sql = "SELECT user_id FROM $table_user WHERE user_id ='".$row[1]."' AND active= '0'";
 			$resu = api_sql_query($sql,__FILE__,__LINE__);
-			$r_check_user = Database::fetch_row($resu);	
+			$r_check_user = Database::fetch_row($resu);
 			$count_user_id = Database::num_rows($resu);
-			if ($count_user_id > 0) {			
+			if ($count_user_id > 0) {
 				$sql = "UPDATE $table_user SET
 				lastname='".Database::escape_string($lastName)."',
 				firstname='".Database::escape_string($firstName)."',
@@ -183,45 +183,45 @@ function DokeosWSCreateUsers($params) {
 				{
 					$sql .=	" auth_source='".Database::escape_string($auth_source)."',";
 				}
-				$sql .=	"						
+				$sql .=	"
 						email='".Database::escape_string($email)."',
 						status='".Database::escape_string($status)."',
 						official_code='".Database::escape_string($official_code)."',
-						phone='".Database::escape_string($phone)."',			
+						phone='".Database::escape_string($phone)."',
 						expiration_date='".Database::escape_string($expiration_date)."',
 						active='1',
-						hr_dept_id=".intval($hr_dept_id);				
+						hr_dept_id=".intval($hr_dept_id);
 				$sql .=	" WHERE user_id='".$r_check_user[0]."'";
-				api_sql_query($sql,__FILE__,__LINE__);	
+				api_sql_query($sql,__FILE__,__LINE__);
 				$results[] = $r_check_user[0];
 				continue;
-				//return $r_check_user[0]; // 			
+				//return $r_check_user[0]; //
 			} else {
 				$results[] = 0;
 				continue;
 				//return 0;	// user id already exits
 			}
 		}
-		
+
 		// default language
 		if (empty($language)) {
 			$language = api_get_setting('platformLanguage');
 		}
-	
+
 		if (!empty($_user['user_id'])) {
 			$creator_id = $_user['user_id'];
 		} else {
 			$creator_id = '';
 		}
-		
+
 		// First check wether the login already exists
-		if (! UserManager::is_username_available($loginName)) {	
+		if (! UserManager::is_username_available($loginName)) {
 			if(api_set_failure('login-pass already taken')) {
 				$results[] = 0;
-				continue;	
+				continue;
 			}
 		}
-		
+
 		$password = ($userPasswordCrypted ? md5($password) : $password);
 		$sql = "INSERT INTO $table_user
 					                SET lastname = '".Database::escape_string(trim($lastName))."',
@@ -242,8 +242,8 @@ function DokeosWSCreateUsers($params) {
 									active = '".Database::escape_string($active)."'";
 		$result = api_sql_query($sql);
 		if ($result) {
-			//echo "id returned";		
-			$return=Database::get_last_insert_id();			
+			//echo "id returned";
+			$return=Database::get_last_insert_id();
 			require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 			if ($_configuration['multiple_access_urls']==true) {
 				if (api_get_current_access_url_id()!=-1)
@@ -254,38 +254,38 @@ function DokeosWSCreateUsers($params) {
 				//we are adding by default the access_url_user table with access_url_id = 1
 				UrlManager::add_user_to_url($return, 1);
 			}
-			
+
 			// save new fieldlabel into user_field table
-			$field_id = UserManager::create_extra_field($original_user_id_name,1,$original_user_id_name,'');			
-			// save the external system's id into user_field_value table'	
+			$field_id = UserManager::create_extra_field($original_user_id_name,1,$original_user_id_name,'');
+			// save the external system's id into user_field_value table'
 			$res = UserManager::update_extra_field_value($return,$original_user_id_name,$original_user_id_value);
-									
+
 			if (is_array($extra_list) && count($extra_list) > 0) {
-				foreach ($extra_list as $extra) {					    			
+				foreach ($extra_list as $extra) {
 						$extra_field_name = $extra['field_name'];
 						$extra_field_value = $extra['field_value'];
-						// save new fieldlabel into user_field table 
+						// save new fieldlabel into user_field table
 						$field_id = UserManager::create_extra_field($extra_field_name,1,$extra_field_name,'');
-						// save the external system's id into user_field_value table'	
-						$res = UserManager::update_extra_field_value($return,$extra_field_name,$extra_field_value);										
+						// save the external system's id into user_field_value table'
+						$res = UserManager::update_extra_field_value($return,$extra_field_name,$extra_field_value);
 				}
 			}
 		} else {
 			$results[] = 0;
-			continue;							
+			continue;
 		}
-						
+
 		$results[] =  $return;
-				
-	} // end principal foreach		
-	
+
+	} // end principal foreach
+
 	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_user_id_value' =>$orig_user_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_user_id_value' =>$orig_user_id_value[$i],'result' => $results[$i]);
 	}
-	
-	return $output;		
+
+	return $output;
 
 }
 
@@ -305,14 +305,14 @@ $server->wsdl->addComplexType(
 		'status' => array('name' => 'status', 'type' => 'xsd:string'),
 		'email' => array('name' => 'email', 'type' => 'xsd:string'),
 		'loginname' => array('name' => 'loginname', 'type' => 'xsd:string'),
-		'password' => array('name' => 'password', 'type' => 'xsd:string'),				
+		'password' => array('name' => 'password', 'type' => 'xsd:string'),
 		'language' => array('name' => 'language', 'type' => 'xsd:string'),
-		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),		
+		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
 		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
 		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
 		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
 		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList'),
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')														
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -333,44 +333,44 @@ $server->register('DokeosWSCreateUser',				// method name
 function DokeosWSCreateUser($params) {
 
 	global $_user, $userPasswordCrypted,$_configuration;
-	
+
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-	 	
+
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
 	}
-		
+
 	// database table definition
-	$table_user = Database::get_main_table(TABLE_MAIN_USER); 		
-	$t_uf 		= Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$table_user = Database::get_main_table(TABLE_MAIN_USER);
+	$t_uf 		= Database::get_main_table(TABLE_MAIN_USER_FIELD);
 	$t_ufv 		= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-		 	
-	
+
+
 	$firstName = $params['firstname'];			$lastName = $params['lastname'];
-	$status = $params['status'];				$email = $params['email'];	
+	$status = $params['status'];				$email = $params['email'];
 	$loginName = $params['loginname'];			$password = $params['password'];
-	$official_code = '';$language='';$phone = '';$picture_uri = '';$auth_source = PLATFORM_AUTH_SOURCE; 
+	$official_code = '';$language='';$phone = '';$picture_uri = '';$auth_source = PLATFORM_AUTH_SOURCE;
 	$expiration_date = '0000-00-00 00:00:00'; $active = 1; $hr_dept_id=0; $extra=null;
 	$original_user_id_name= $params['original_user_id_name'];
-	$original_user_id_value = $params['original_user_id_value'];		
-	$extra_list = $params['extra'];				
+	$original_user_id_value = $params['original_user_id_value'];
+	$extra_list = $params['extra'];
 	if (!empty($params['language'])) { $language=$params['language'];}
 	if (!empty($params['phone'])) { $phone = $params['phone'];}
-	if (!empty($params['expiration_date'])) { $expiration_date = $params['expiration_date'];}	
-	
+	if (!empty($params['expiration_date'])) { $expiration_date = $params['expiration_date'];}
+
 	// check if exits x_user_id into user_field_values table
 	$sql = "SELECT field_value,user_id	FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$row = Database::fetch_row($res);
 	$count_row = Database::num_rows($res);
-	if ($count_row > 0) {		
-		// check if user is not active 		
+	if ($count_row > 0) {
+		// check if user is not active
 		$sql = "SELECT user_id FROM $table_user WHERE user_id ='".$row[1]."' AND active= '0'";
 		$resu = api_sql_query($sql,__FILE__,__LINE__);
-		$r_check_user = Database::fetch_row($resu);	
+		$r_check_user = Database::fetch_row($resu);
 		$count_user_id = Database::num_rows($resu);
-		if ($count_user_id > 0) {			
+		if ($count_user_id > 0) {
 			$sql = "UPDATE $table_user SET
 			lastname='".Database::escape_string($lastName)."',
 			firstname='".Database::escape_string($firstName)."',
@@ -384,25 +384,25 @@ function DokeosWSCreateUser($params) {
 			{
 				$sql .=	" auth_source='".Database::escape_string($auth_source)."',";
 			}
-			$sql .=	"						
+			$sql .=	"
 					email='".Database::escape_string($email)."',
 					status='".Database::escape_string($status)."',
 					official_code='".Database::escape_string($official_code)."',
-					phone='".Database::escape_string($phone)."',			
+					phone='".Database::escape_string($phone)."',
 					expiration_date='".Database::escape_string($expiration_date)."',
 					active='1',
-					hr_dept_id=".intval($hr_dept_id);				
+					hr_dept_id=".intval($hr_dept_id);
 			$sql .=	" WHERE user_id='".$r_check_user[0]."'";
 			api_sql_query($sql,__FILE__,__LINE__);
-				
+
 			return  $r_check_user[0];
-			 			
+
 		} else {
 			return 0;
 			//return 0;	// user id already exits
 		}
 	}
-	
+
 	// default language
 	if (empty($language)) {
 		$language = api_get_setting('platformLanguage');
@@ -413,14 +413,14 @@ function DokeosWSCreateUser($params) {
 	} else {
 		$creator_id = '';
 	}
-	
+
 	// First check wether the login already exists
-	if (! UserManager::is_username_available($loginName)) {	
+	if (! UserManager::is_username_available($loginName)) {
 		if(api_set_failure('login-pass already taken')) {
 			return 0;
 		}
 	}
-	
+
 	$password = ($userPasswordCrypted ? md5($password) : $password);
 	$sql = "INSERT INTO $table_user
 				                SET lastname = '".Database::escape_string(trim($lastName))."',
@@ -441,8 +441,8 @@ function DokeosWSCreateUser($params) {
 								active = '".Database::escape_string($active)."'";
 	$result = api_sql_query($sql);
 	if ($result) {
-		//echo "id returned";		
-		$return=Database::get_last_insert_id();			
+		//echo "id returned";
+		$return=Database::get_last_insert_id();
 		require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 		if ($_configuration['multiple_access_urls']==true) {
 			if (api_get_current_access_url_id()!=-1)
@@ -453,26 +453,26 @@ function DokeosWSCreateUser($params) {
 			//we are adding by default the access_url_user table with access_url_id = 1
 			UrlManager::add_user_to_url($return, 1);
 		}
-		
+
 		// save new fieldlabel into user_field table
-		$field_id = UserManager::create_extra_field($original_user_id_name,1,$original_user_id_name,'');			
-		// save the external system's id into user_field_value table'	
+		$field_id = UserManager::create_extra_field($original_user_id_name,1,$original_user_id_name,'');
+		// save the external system's id into user_field_value table'
 		$res = UserManager::update_extra_field_value($return,$original_user_id_name,$original_user_id_value);
-								
+
 		if (is_array($extra_list) && count($extra_list) > 0) {
-			foreach ($extra_list as $extra) {					    			
+			foreach ($extra_list as $extra) {
 					$extra_field_name = $extra['field_name'];
 					$extra_field_value = $extra['field_value'];
-					// save new fieldlabel into user_field table 
+					// save new fieldlabel into user_field table
 					$field_id = UserManager::create_extra_field($extra_field_name,1,$extra_field_name,'');
-					// save the external system's id into user_field_value table'	
-					$res = UserManager::update_extra_field_value($return,$extra_field_name,$extra_field_value);										
+					// save the external system's id into user_field_value table'
+					$res = UserManager::update_extra_field_value($return,$extra_field_name,$extra_field_value);
 			}
 		}
-	} else {			
-		return 0;								
+	} else {
+		return 0;
 	}
-					
+
 	return  $return;
 
 }
@@ -482,7 +482,7 @@ function DokeosWSCreateUser($params) {
 
 //prepare input params
 
-// Input params for editing users 
+// Input params for editing users
 $server->wsdl->addComplexType(
 	'createUsersPassEncryptParams',
 	'complexType',
@@ -496,13 +496,13 @@ $server->wsdl->addComplexType(
 		'email' => array('name' => 'email', 'type' => 'xsd:string'),
 		'loginname' => array('name' => 'loginname', 'type' => 'xsd:string'),
 		'password' => array('name' => 'password', 'type' => 'xsd:string'),
-		'encrypt_method' => array('name' => 'encrypt_method', 'type' => 'xsd:string'),						
+		'encrypt_method' => array('name' => 'encrypt_method', 'type' => 'xsd:string'),
 		'language' => array('name' => 'language', 'type' => 'xsd:string'),
-		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),		
+		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
 		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
 		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
 		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
-		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')									
+		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
 	)
 );
 
@@ -526,8 +526,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'users' => array('name' => 'users', 'type' => 'tns:createUsersPassEncryptParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'users' => array('name' => 'users', 'type' => 'tns:createUsersPassEncryptParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -569,8 +569,8 @@ $server->register('DokeosWSCreateUsersPasswordCrypted',						// method name
 function DokeosWSCreateUsersPasswordCrypted($params) {
 
 	global $_user, $userPasswordCrypted,$_configuration;
-	
-	$secret_key = $params['secret_key'];	
+
+	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
@@ -578,77 +578,77 @@ function DokeosWSCreateUsersPasswordCrypted($params) {
 	}
 
 	// database table definition
-	$table_user = Database::get_main_table(TABLE_MAIN_USER); 		
-	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$table_user = Database::get_main_table(TABLE_MAIN_USER);
+	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-	
+
 	$users_params = $params['users'];
 	$results = array();
 	$orig_user_id_value = array();
-	
+
 	foreach($users_params as $user_param) {
-		
+
 		$password = $user_param['password'];
 	  	$encrypt_method = $user_param['encrypt_method'];
-	  	 
+
 	  	$firstName = $user_param['firstname'];			$lastName = $user_param['lastname'];
-		$status = $user_param['status'];				$email = $user_param['email'];	
-		$loginName = $user_param['loginname'];	
-						
-		$official_code = '';$language='';$phone = '';$picture_uri = '';$auth_source = PLATFORM_AUTH_SOURCE; 
+		$status = $user_param['status'];				$email = $user_param['email'];
+		$loginName = $user_param['loginname'];
+
+		$official_code = '';$language='';$phone = '';$picture_uri = '';$auth_source = PLATFORM_AUTH_SOURCE;
 		$expiration_date = '0000-00-00 00:00:00'; $active = 1; $hr_dept_id=0; $extra=null;
 		$original_user_id_name= $user_param['original_user_id_name'];
 		$original_user_id_value = $user_param['original_user_id_value'];
 		$orig_user_id_value[] = $user_param['original_user_id_value'];
 		$extra_list = $user_param['extra'];
 		$salt = '';
-								  	  					
-		if ($userPasswordCrypted === $encrypt_method ) {		
+
+		if ($userPasswordCrypted === $encrypt_method ) {
 			if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/',$password)) {
 				$msg = "Encryption $encrypt_method is invalid";
 				$results[] = $msg;
-				continue; 				
+				continue;
 			} else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/',$password)) {
 				$msg = "Encryption $encrypt_method is invalid";
 				$results[] = $msg;
-				continue; 						
+				continue;
 			}
 		} else {
 			$msg = "This encryption $encrypt_method is not configured into dokeos ";
 			$results[] = $msg;
-			continue; 					
+			continue;
 		}
-						
+
 		if (is_array($extra_list) && count($extra_list) > 0) {
-				foreach ($extra_list as $extra) {					
+				foreach ($extra_list as $extra) {
 					if($extra['field_name'] == 'salt') {
 						$salt = $extra['field_value'];
 						break;
-					}															
+					}
 				}
-		}						
-											
+		}
+
 		if (!empty($user_param['language'])) { $language=$user_param['language'];}
 		if (!empty($user_param['phone'])) { $phone = $user_param['phone'];}
-		if (!empty($user_param['expiration_date'])) { $expiration_date = $user_param['expiration_date'];}			
-			
+		if (!empty($user_param['expiration_date'])) { $expiration_date = $user_param['expiration_date'];}
+
 		// check if exits x_user_id into user_field_values table
 		$sql = "SELECT field_value,user_id	FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$row = Database::fetch_row($res);
 		$count_row = Database::num_rows($res);
-		if ($count_row > 0) {		
-			// check if user is not active 		
+		if ($count_row > 0) {
+			// check if user is not active
 			$sql = "SELECT user_id FROM $table_user WHERE user_id ='".$row[1]."' AND active= '0'";
 			$resu = api_sql_query($sql,__FILE__,__LINE__);
-			$r_check_user = Database::fetch_row($resu);	
+			$r_check_user = Database::fetch_row($resu);
 			$count_check_user = Database::num_rows($resu);
-			if ($count_check_user > 0) {			
+			if ($count_check_user > 0) {
 				$sql = "UPDATE $table_user SET
 				lastname='".Database::escape_string($lastName)."',
 				firstname='".Database::escape_string($firstName)."',
 				username='".Database::escape_string($loginName)."',";
-							
+
 				if(!is_null($auth_source))
 				{
 					$sql .=	" auth_source='".Database::escape_string($auth_source)."',";
@@ -658,48 +658,48 @@ function DokeosWSCreateUsersPasswordCrypted($params) {
 						email='".Database::escape_string($email)."',
 						status='".Database::escape_string($status)."',
 						official_code='".Database::escape_string($official_code)."',
-						phone='".Database::escape_string($phone)."',			
+						phone='".Database::escape_string($phone)."',
 						expiration_date='".Database::escape_string($expiration_date)."',
 						active='1',
-						hr_dept_id=".intval($hr_dept_id);				
+						hr_dept_id=".intval($hr_dept_id);
 				$sql .=	" WHERE user_id='".$r_check_user[0]."'";
 				api_sql_query($sql,__FILE__,__LINE__);
-				
+
 				if (is_array($extra_list) && count($extra_list) > 0) {
-					foreach ($extra_list as $extra) {					    			
+					foreach ($extra_list as $extra) {
 						$extra_field_name = $extra['field_name'];
-						$extra_field_value = $extra['field_value'];						
-						// save the external system's id into user_field_value table'	
-						$res = UserManager::update_extra_field_value($r_check_user[0],$extra_field_name,$extra_field_value);										
+						$extra_field_value = $extra['field_value'];
+						// save the external system's id into user_field_value table'
+						$res = UserManager::update_extra_field_value($r_check_user[0],$extra_field_name,$extra_field_value);
 					}
 				}
-				
+
 				$results[] = $r_check_user[0];
-				continue;								
+				continue;
 			} else {
 				$results[] = 0;
-				continue; // user id already exits				
+				continue; // user id already exits
 			}
 		}
-		 	 	 			
+
 		// default language
 		if (empty($language)) {
 			$language = api_get_setting('platformLanguage');
 		}
-	
+
 		if (!empty($_user['user_id'])) {
 			$creator_id = $_user['user_id'];
 		} else {
 			$creator_id = '';
 		}
 		// First check wether the login already exists
-		if (! UserManager::is_username_available($loginName)) {	
+		if (! UserManager::is_username_available($loginName)) {
 			if(api_set_failure('login-pass already taken')) {
 				$results[] = 0;
-				continue;						
+				continue;
 			}
 		}
-	
+
 		$sql = "INSERT INTO $table_user
 					                SET lastname = '".Database::escape_string(trim($lastName))."',
 					                firstname = '".Database::escape_string(trim($firstName))."',
@@ -719,8 +719,8 @@ function DokeosWSCreateUsersPasswordCrypted($params) {
 									active = '".Database::escape_string($active)."'";
 		$result = api_sql_query($sql);
 		if ($result) {
-			//echo "id returned";		
-			$return=Database::get_last_insert_id();			
+			//echo "id returned";
+			$return=Database::get_last_insert_id();
 			require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 			if ($_configuration['multiple_access_urls']==true) {
 				if (api_get_current_access_url_id()!=-1)
@@ -733,35 +733,35 @@ function DokeosWSCreateUsersPasswordCrypted($params) {
 			}
 			// save new fieldlabel into user_field table
 			$field_id = UserManager::create_extra_field($original_user_id_name,1,$original_user_id_name,'');
-			// save the remote system's id into user_field_value table'	
-			$res = UserManager::update_extra_field_value($return,$original_user_id_name,$original_user_id_value);	
-			
+			// save the remote system's id into user_field_value table'
+			$res = UserManager::update_extra_field_value($return,$original_user_id_name,$original_user_id_value);
+
 			if (is_array($extra_list) && count($extra_list) > 0) {
-				foreach ($extra_list as $extra) {					    			
+				foreach ($extra_list as $extra) {
 					$extra_field_name = $extra['field_name'];
 					$extra_field_value = $extra['field_value'];
-					// save new fieldlabel into user_field table 
+					// save new fieldlabel into user_field table
 					$field_id = UserManager::create_extra_field($extra_field_name,1,$extra_field_name,'');
-					// save the external system's id into user_field_value table'	
-					$res = UserManager::update_extra_field_value($return,$extra_field_name,$extra_field_value);										
+					// save the external system's id into user_field_value table'
+					$res = UserManager::update_extra_field_value($return,$extra_field_name,$extra_field_value);
 				}
 			}
-		} else {				
+		} else {
 			$results[] = 0;
 			continue;
 		}
-		$results[] = $return;						
-		
+		$results[] = $return;
+
 	} // end principal foreach
-	
+
   	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_user_id_value' =>$orig_user_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_user_id_value' =>$orig_user_id_value[$i],'result' => $results[$i]);
 	}
-	
-	return $output;	
-	
+
+	return $output;
+
 }
 
 /* Register DokeosWSCreateUserPasswordCrypted function */
@@ -769,7 +769,7 @@ function DokeosWSCreateUsersPasswordCrypted($params) {
 
 //prepare input params
 
-// Input params for editing users 
+// Input params for editing users
 $server->wsdl->addComplexType(
 	'createUserPasswordCrypted',
 	'complexType',
@@ -783,14 +783,14 @@ $server->wsdl->addComplexType(
 		'email' => array('name' => 'email', 'type' => 'xsd:string'),
 		'loginname' => array('name' => 'loginname', 'type' => 'xsd:string'),
 		'password' => array('name' => 'password', 'type' => 'xsd:string'),
-		'encrypt_method' => array('name' => 'encrypt_method', 'type' => 'xsd:string'),						
+		'encrypt_method' => array('name' => 'encrypt_method', 'type' => 'xsd:string'),
 		'language' => array('name' => 'language', 'type' => 'xsd:string'),
-		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),		
+		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
 		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
 		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
-		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),		
+		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
 		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList'),
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')									
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -809,8 +809,8 @@ $server->register('DokeosWSCreateUserPasswordCrypted',						// method name
 function DokeosWSCreateUserPasswordCrypted($params) {
 
 	global $_user, $userPasswordCrypted,$_configuration;
-	
-	$secret_key = $params['secret_key'];	
+
+	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
@@ -818,66 +818,66 @@ function DokeosWSCreateUserPasswordCrypted($params) {
 	}
 
 	// database table definition
-	$table_user = Database::get_main_table(TABLE_MAIN_USER); 		
-	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$table_user = Database::get_main_table(TABLE_MAIN_USER);
+	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-	
+
 	//$users_params = $params['users'];
 	$results = array();
 	$orig_user_id_value = array();
 
 	$password = $params['password'];
   	$encrypt_method = $params['encrypt_method'];
-  	 
+
   	$firstName = $params['firstname'];			$lastName = $params['lastname'];
-	$status = $params['status'];				$email = $params['email'];	
-	$loginName = $params['loginname'];	
-					
-	$official_code = '';$language='';$phone = '';$picture_uri = '';$auth_source = PLATFORM_AUTH_SOURCE; 
+	$status = $params['status'];				$email = $params['email'];
+	$loginName = $params['loginname'];
+
+	$official_code = '';$language='';$phone = '';$picture_uri = '';$auth_source = PLATFORM_AUTH_SOURCE;
 	$expiration_date = '0000-00-00 00:00:00'; $active = 1; $hr_dept_id=0; $extra=null;
 	$original_user_id_name= $params['original_user_id_name'];
 	$original_user_id_value = $params['original_user_id_value'];
 	$orig_user_id_value[] = $params['original_user_id_value'];
 	$extra_list = $params['extra'];
 	$salt = '';
-							  	  					
-	if ($userPasswordCrypted === $encrypt_method ) {		
+
+	if ($userPasswordCrypted === $encrypt_method ) {
 		if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/',$password)) {
-			$msg = "Encryption $encrypt_method is invalid";				
+			$msg = "Encryption $encrypt_method is invalid";
 			return $msg;
-			 				
+
 		} else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/',$password)) {
-			$msg = "Encryption $encrypt_method is invalid";				
+			$msg = "Encryption $encrypt_method is invalid";
 			return $msg;
-			 						
+
 		}
 	} else {
 		$msg = "This encryption $encrypt_method is not configured into dokeos ";
 		return $msg;
 	}
-									
-										
+
+
 	if (!empty($params['language'])) { $language=$params['language'];}
 	if (!empty($params['phone'])) { $phone = $params['phone'];}
-	if (!empty($params['expiration_date'])) { $expiration_date = $params['expiration_date'];}			
-		
+	if (!empty($params['expiration_date'])) { $expiration_date = $params['expiration_date'];}
+
 	// check if exits x_user_id into user_field_values table
 	$sql = "SELECT field_value,user_id	FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	$row = Database::fetch_row($res);
 	$count_row = Database::num_rows($res);
-	if ($count_row > 0) {		
-		// check if user is not active 		
+	if ($count_row > 0) {
+		// check if user is not active
 		$sql = "SELECT user_id FROM $table_user WHERE user_id ='".$row[1]."' AND active= '0'";
 		$resu = api_sql_query($sql,__FILE__,__LINE__);
-		$r_check_user = Database::fetch_row($resu);	
+		$r_check_user = Database::fetch_row($resu);
 		$count_check_user = Database::num_rows($resu);
-		if ($count_check_user > 0) {			
+		if ($count_check_user > 0) {
 			$sql = "UPDATE $table_user SET
 			lastname='".Database::escape_string($lastName)."',
 			firstname='".Database::escape_string($firstName)."',
 			username='".Database::escape_string($loginName)."',";
-						
+
 			if(!is_null($auth_source))
 			{
 				$sql .=	" auth_source='".Database::escape_string($auth_source)."',";
@@ -887,28 +887,28 @@ function DokeosWSCreateUserPasswordCrypted($params) {
 					email='".Database::escape_string($email)."',
 					status='".Database::escape_string($status)."',
 					official_code='".Database::escape_string($official_code)."',
-					phone='".Database::escape_string($phone)."',			
+					phone='".Database::escape_string($phone)."',
 					expiration_date='".Database::escape_string($expiration_date)."',
 					active='1',
-					hr_dept_id=".intval($hr_dept_id);				
+					hr_dept_id=".intval($hr_dept_id);
 			$sql .=	" WHERE user_id='".$r_check_user[0]."'";
 			api_sql_query($sql,__FILE__,__LINE__);
-			
+
 			if (is_array($extra_list) && count($extra_list) > 0) {
-				foreach ($extra_list as $extra) {					    			
+				foreach ($extra_list as $extra) {
 					$extra_field_name = $extra['field_name'];
-					$extra_field_value = $extra['field_value'];						
-					// save the external system's id into user_field_value table'	
-					$res = UserManager::update_extra_field_value($r_check_user[0],$extra_field_name,$extra_field_value);										
+					$extra_field_value = $extra['field_value'];
+					// save the external system's id into user_field_value table'
+					$res = UserManager::update_extra_field_value($r_check_user[0],$extra_field_name,$extra_field_value);
 				}
 			}
-			
-			return $r_check_user[0];												
+
+			return $r_check_user[0];
 		} else {
-			return 0;				
+			return 0;
 		}
 	}
-	 	 	 			
+
 	// default language
 	if (empty($language)) {
 		$language = api_get_setting('platformLanguage');
@@ -920,9 +920,9 @@ function DokeosWSCreateUserPasswordCrypted($params) {
 		$creator_id = '';
 	}
 	// First check wether the login already exists
-	if (! UserManager::is_username_available($loginName)) {	
+	if (! UserManager::is_username_available($loginName)) {
 		if(api_set_failure('login-pass already taken')) {
-			return 0;						
+			return 0;
 		}
 	}
 
@@ -945,8 +945,8 @@ function DokeosWSCreateUserPasswordCrypted($params) {
 								active = '".Database::escape_string($active)."'";
 	$result = api_sql_query($sql);
 	if ($result) {
-		//echo "id returned";		
-		$return=Database::get_last_insert_id();			
+		//echo "id returned";
+		$return=Database::get_last_insert_id();
 		require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 		if ($_configuration['multiple_access_urls']==true) {
 			if (api_get_current_access_url_id()!=-1)
@@ -959,24 +959,24 @@ function DokeosWSCreateUserPasswordCrypted($params) {
 		}
 		// save new fieldlabel into user_field table
 		$field_id = UserManager::create_extra_field($original_user_id_name,1,$original_user_id_name,'');
-		// save the remote system's id into user_field_value table'	
-		$res = UserManager::update_extra_field_value($return,$original_user_id_name,$original_user_id_value);	
-		
+		// save the remote system's id into user_field_value table'
+		$res = UserManager::update_extra_field_value($return,$original_user_id_name,$original_user_id_value);
+
 		if (is_array($extra_list) && count($extra_list) > 0) {
-			foreach ($extra_list as $extra) {					    			
+			foreach ($extra_list as $extra) {
 				$extra_field_name = $extra['field_name'];
 				$extra_field_value = $extra['field_value'];
-				// save new fieldlabel into user_field table 
+				// save new fieldlabel into user_field table
 				$field_id = UserManager::create_extra_field($extra_field_name,1,$extra_field_name,'');
-				// save the external system's id into user_field_value table'	
-				$res = UserManager::update_extra_field_value($return,$extra_field_name,$extra_field_value);										
+				// save the external system's id into user_field_value table'
+				$res = UserManager::update_extra_field_value($return,$extra_field_name,$extra_field_value);
 			}
 		}
-	} else {							
-		return 0;			
+	} else {
+		return 0;
 	}
-	return  $return;										  		
-	
+	return  $return;
+
 }
 
 /* Register DokeosWSEditUsers function */
@@ -993,12 +993,12 @@ $server->wsdl->addComplexType(
 		'firstname' => array('name' => 'firstname', 'type' => 'xsd:string'),
 		'lastname' => array('name' => 'lastname', 'type' => 'xsd:string'),
 		'username' => array('name' => 'username', 'type' => 'xsd:string'),
-		'password' => array('name' => 'password', 'type' => 'xsd:string'),		
+		'password' => array('name' => 'password', 'type' => 'xsd:string'),
 		'email' => array('name' => 'email', 'type' => 'xsd:string'),
-		'status' => array('name' => 'status', 'type' => 'xsd:string'),		
-		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),		
+		'status' => array('name' => 'status', 'type' => 'xsd:string'),
+		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
 		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
-		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')				
+		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
 	)
 );
 
@@ -1019,8 +1019,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'users' => array('name' => 'users', 'type' => 'tns:editUsersParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'users' => array('name' => 'users', 'type' => 'tns:editUsersParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -1062,69 +1062,69 @@ $server->register('DokeosWSEditUsers',		// method name
 function DokeosWSEditUsers($params)
 {
 	global $userPasswordCrypted,$_configuration;
-	
-	$secret_key = $params['secret_key'];	
+
+	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
 	}
-	
+
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-	
+
 	$users_params = $params['users'];
 	$results = array();
 	$orig_user_id_value = array();
-	
+
 	foreach($users_params as $user_param) {
-		
+
 		$original_user_id_value = $user_param['original_user_id_value'];
-		$original_user_id_name = $user_param['original_user_id_name'];	
+		$original_user_id_name = $user_param['original_user_id_name'];
 		$orig_user_id_value[] = $original_user_id_value;
-		$firstname = $user_param['firstname']; 
+		$firstname = $user_param['firstname'];
 		$lastname = $user_param['lastname'];
 		$username = $user_param['username'];
-		$password = null; $auth_source = null; 
+		$password = null; $auth_source = null;
 		$email = $user_param['email']; $status = $user_param['status'];
 		$official_code = ''; $phone = $user_param['phone'];
-		$picture_uri = ''; $expiration_date = $user_param['expiration_date']; $active = 1; 
+		$picture_uri = ''; $expiration_date = $user_param['expiration_date']; $active = 1;
 		$creator_id= null; $hr_dept_id=0; $extra=null;
-		$extra_list = $user_param['extra'];	
-				
-		if (!empty($user_param['password'])) { $password = $user_param['password'];}	
-		
+		$extra_list = $user_param['extra'];
+
+		if (!empty($user_param['password'])) { $password = $user_param['password'];}
+
 		// get user id from id wiener
-		
+
 		$sql = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$row = Database::fetch_row($res);	
+		$row = Database::fetch_row($res);
 		$user_id = $row[0];
-	
+
 		if (empty($user_id)) {
 			$results[] = 0; // original_user_id_value doesn't exits
-			continue;			
+			continue;
 		} else {
 			$sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
 			$resu = api_sql_query($sql,__FILE__,__LINE__);
 			$r_check_user = Database::fetch_row($resu);
 			if (!empty($r_check_user[0])) {
 				$results[] = 0; // user_id is not active
-				continue;				
+				continue;
 			}
 		}
-		
+
 		// check if username already exits
 		$sql = "SELECT username FROM $table_user WHERE username = '$username' AND user_id <> '$user_id'";
 		$res_un = api_sql_query($sql,__FILE__,__LINE__);
 		$r_username = Database::fetch_row($res_un);
-		
+
 		if (!empty($r_username[0])) {
 			$results[] = 0; // username already exits
-			continue;			 
+			continue;
 		}
-						
+
 		$sql = "UPDATE $table_user SET
 				lastname='".Database::escape_string($lastname)."',
 				firstname='".Database::escape_string($firstname)."',
@@ -1147,35 +1147,35 @@ function DokeosWSEditUsers($params)
 				expiration_date='".Database::escape_string($expiration_date)."',
 				active='".Database::escape_string($active)."',
 				hr_dept_id=".intval($hr_dept_id);
-				
+
 		if(!is_null($creator_id))
 		{
 			$sql .= ", creator_id='".Database::escape_string($creator_id)."'";
 		}
 		$sql .=	" WHERE user_id='$user_id'";
-		$return = @api_sql_query($sql,__FILE__,__LINE__);	
-		
+		$return = @api_sql_query($sql,__FILE__,__LINE__);
+
 		if (is_array($extra_list) && count($extra_list) > 0) {
 			foreach ($extra_list as $extra) {
 					$extra_field_name = $extra['field_name'];
-					$extra_field_value = $extra['field_value'];		
+					$extra_field_value = $extra['field_value'];
 					// save the external system's id into user_field_value table'
 					$res = UserManager::update_extra_field_value($user_id,$extra_field_name,$extra_field_value);
 			}
 		}
-		
+
 		$results[] = $return;
-		continue;		
+		continue;
 	}
-	
+
 	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_user_id_value' =>$orig_user_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_user_id_value' =>$orig_user_id_value[$i],'result' => $results[$i]);
 	}
-	
+
 	return $output;
-			
+
 }
 
 /* Register DokeosWSEditUser function */
@@ -1192,13 +1192,13 @@ $server->wsdl->addComplexType(
 		'firstname' => array('name' => 'firstname', 'type' => 'xsd:string'),
 		'lastname' => array('name' => 'lastname', 'type' => 'xsd:string'),
 		'username' => array('name' => 'username', 'type' => 'xsd:string'),
-		'password' => array('name' => 'password', 'type' => 'xsd:string'),		
+		'password' => array('name' => 'password', 'type' => 'xsd:string'),
 		'email' => array('name' => 'email', 'type' => 'xsd:string'),
-		'status' => array('name' => 'status', 'type' => 'xsd:string'),		
-		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),		
+		'status' => array('name' => 'status', 'type' => 'xsd:string'),
+		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
 		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
 		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList'),
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')				
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -1217,59 +1217,59 @@ $server->register('DokeosWSEditUser',		// method name
 function DokeosWSEditUser($params)
 {
 	global $userPasswordCrypted,$_configuration;
-	
-	$secret_key = $params['secret_key'];	
+
+	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
 	}
-	
+
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-		
+
 	$original_user_id_value = $params['original_user_id_value'];
-	$original_user_id_name = $params['original_user_id_name'];			
-	$firstname = $params['firstname']; 
+	$original_user_id_name = $params['original_user_id_name'];
+	$firstname = $params['firstname'];
 	$lastname = $params['lastname'];
 	$username = $params['username'];
-	$password = null; $auth_source = null; 
+	$password = null; $auth_source = null;
 	$email = $params['email']; $status = $params['status'];
 	$official_code = ''; $phone = $params['phone'];
-	$picture_uri = ''; $expiration_date = $params['expiration_date']; $active = 1; 
+	$picture_uri = ''; $expiration_date = $params['expiration_date']; $active = 1;
 	$creator_id= null; $hr_dept_id=0; $extra=null;
-	$extra_list = $params['extra'];	
-			
-	if (!empty($params['password'])) { $password = $params['password'];}	
-	
+	$extra_list = $params['extra'];
+
+	if (!empty($params['password'])) { $password = $params['password'];}
+
 	// get user id from id wiener
-	
+
 	$sql = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	$row = Database::fetch_row($res);	
+	$row = Database::fetch_row($res);
 	$user_id = $row[0];
 
 	if (empty($user_id)) {
-		return 0;		
+		return 0;
 	} else {
 		$sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
 		$resu = api_sql_query($sql,__FILE__,__LINE__);
 		$r_check_user = Database::fetch_row($resu);
 		if (!empty($r_check_user[0])) {
-			return 0;				
+			return 0;
 		}
 	}
-	
+
 	// check if username already exits
 	$sql = "SELECT username FROM $table_user WHERE username = '$username' AND user_id <> '$user_id'";
 	$res_un = api_sql_query($sql,__FILE__,__LINE__);
 	$r_username = Database::fetch_row($res_un);
-	
+
 	if (!empty($r_username[0])) {
-		return 0;		 
+		return 0;
 	}
-					
+
 	$sql = "UPDATE $table_user SET
 			lastname='".Database::escape_string($lastname)."',
 			firstname='".Database::escape_string($firstname)."',
@@ -1292,25 +1292,25 @@ function DokeosWSEditUser($params)
 			expiration_date='".Database::escape_string($expiration_date)."',
 			active='".Database::escape_string($active)."',
 			hr_dept_id=".intval($hr_dept_id);
-			
+
 	if(!is_null($creator_id))
 	{
 		$sql .= ", creator_id='".Database::escape_string($creator_id)."'";
 	}
 	$sql .=	" WHERE user_id='$user_id'";
-	$return = @api_sql_query($sql,__FILE__,__LINE__);	
-	
+	$return = @api_sql_query($sql,__FILE__,__LINE__);
+
 	if (is_array($extra_list) && count($extra_list) > 0) {
 		foreach ($extra_list as $extra) {
 				$extra_field_name = $extra['field_name'];
-				$extra_field_value = $extra['field_value'];		
+				$extra_field_value = $extra['field_value'];
 				// save the external system's id into user_field_value table'
 				$res = UserManager::update_extra_field_value($user_id,$extra_field_name,$extra_field_value);
 		}
 	}
-	
+
 	return  $return;
-			
+
 }
 
 /* Register DokeosWSEditUsersPasswordCrypted function */
@@ -1328,12 +1328,12 @@ $server->wsdl->addComplexType(
 		'lastname' => array('name' => 'lastname', 'type' => 'xsd:string'),
 		'username' => array('name' => 'username', 'type' => 'xsd:string'),
 		'password' => array('name' => 'password', 'type' => 'xsd:string'),
-		'encrypt_method' => array('name' => 'encrypt_method', 'type' => 'xsd:string'),		
+		'encrypt_method' => array('name' => 'encrypt_method', 'type' => 'xsd:string'),
 		'email' => array('name' => 'email', 'type' => 'xsd:string'),
-		'status' => array('name' => 'status', 'type' => 'xsd:string'),		
-		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),		
-		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),	
-		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')			
+		'status' => array('name' => 'status', 'type' => 'xsd:string'),
+		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
+		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
+		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
 	)
 );
 
@@ -1354,8 +1354,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'users' => array('name' => 'users', 'type' => 'tns:editUsersPasswordCryptedParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'users' => array('name' => 'users', 'type' => 'tns:editUsersPasswordCryptedParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -1397,45 +1397,45 @@ $server->register('DokeosWSEditUsersPasswordCrypted',					// method name
 function DokeosWSEditUsersPasswordCrypted($params)
 {
 	global $userPasswordCrypted,$_configuration,$userPasswordCrypted;
-	
+
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
-	}		
-	
+	}
+
 	// get user id from id of remote system
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-	
-	
+
+
 	$users_params = $params['users'];
 	$results = array();
 	$orig_user_id_value = array();
-	
+
 	foreach($users_params as $user_param) {
-		
+
 		$original_user_id_value = $user_param['original_user_id_value'];
-		$original_user_id_name = $user_param['original_user_id_name'];	
+		$original_user_id_name = $user_param['original_user_id_name'];
 		$orig_user_id_value[] = $original_user_id_value;
-		$firstname = $user_param['firstname']; 
+		$firstname = $user_param['firstname'];
 		$lastname = $user_param['lastname'];
 		$username = $user_param['username'];
-		$password = null; $auth_source = null; 
+		$password = null; $auth_source = null;
 		$email = $user_param['email']; $status = $user_param['status'];
 		$official_code = ''; $phone = $user_param['phone'];
-		$picture_uri = ''; $expiration_date = $user_param['expiration_date']; $active = 1; 
+		$picture_uri = ''; $expiration_date = $user_param['expiration_date']; $active = 1;
 		$creator_id= null; $hr_dept_id=0; $extra=null;
 		$extra_list = $user_param['extra'];
-			
-		if (!empty($user_param['password']) && !empty($user_param['encrypt_method'])) { 
-			
+
+		if (!empty($user_param['password']) && !empty($user_param['encrypt_method'])) {
+
 			$password = $user_param['password'];
 			$encrypt_method = $user_param['encrypt_method'];
-			if ($userPasswordCrypted === $encrypt_method ) {		
-				if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/',$password)) {					
+			if ($userPasswordCrypted === $encrypt_method ) {
+				if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/',$password)) {
 				    $msg = "Encryption $encrypt_method is invalid";
 				    $results[] = $msg;
 					continue;
@@ -1448,7 +1448,7 @@ function DokeosWSEditUsersPasswordCrypted($params)
 				$msg = "This encryption $encrypt_method is not configured into dokeos ";
 				$results[] = $msg;
 				continue;
-			}		
+			}
 		} else if(!empty($user_param['password']) && empty($user_param['encrypt_method'])){
 			$msg = "If password is not empty the encrypt_method param is required ";
 			$results[] = $msg;
@@ -1458,42 +1458,42 @@ function DokeosWSEditUsersPasswordCrypted($params)
 			$results[] = $msg;
 			continue;
 		}
-	
-		
+
+
 		$sql = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$row = Database::fetch_row($res);	
+		$row = Database::fetch_row($res);
 		$user_id = $row[0];
-	
+
 		if (empty($user_id)) {
 			$results[] = 0; // original_user_id_value doesn't exits
-			continue;			 
+			continue;
 		} else {
 			$sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
 			$resu = api_sql_query($sql,__FILE__,__LINE__);
 			$r_check_user = Database::fetch_row($resu);
 			if (!empty($r_check_user[0])) {
 				$results[] = 0; // user_id is not active
-				continue; 				
+				continue;
 			}
 		}
-		
+
 		// check if username already exits
 		$sql = "SELECT username FROM $table_user WHERE username ='$username' AND user_id <> '$user_id'";
 		$res_un = api_sql_query($sql,__FILE__,__LINE__);
 		$r_username = Database::fetch_row($res_un);
-		
+
 		if (!empty($r_username[0])) {
 			$results[] = 0;
-			continue; // username already exits			
+			continue; // username already exits
 		}
-						
+
 		$sql = "UPDATE $table_user SET
 				lastname='".Database::escape_string($lastname)."',
 				firstname='".Database::escape_string($firstname)."',
 				username='".Database::escape_string($username)."',";
 		if(!is_null($password))
-		{			
+		{
 			$sql .= " password='".Database::escape_string($password)."',";
 		}
 		if(!is_null($auth_source))
@@ -1509,35 +1509,35 @@ function DokeosWSEditUsersPasswordCrypted($params)
 				expiration_date='".Database::escape_string($expiration_date)."',
 				active='".Database::escape_string($active)."',
 				hr_dept_id=".intval($hr_dept_id);
-				
+
 		if(!is_null($creator_id))
 		{
 			$sql .= ", creator_id='".Database::escape_string($creator_id)."'";
 		}
 		$sql .=	" WHERE user_id='$user_id'";
-		$return = @api_sql_query($sql,__FILE__,__LINE__);	
-		
+		$return = @api_sql_query($sql,__FILE__,__LINE__);
+
 		if (is_array($extra_list) && count($extra_list) > 0) {
 			foreach ($extra_list as $extra) {
 					$extra_field_name = $extra['field_name'];
-					$extra_field_value = $extra['field_value'];		
+					$extra_field_value = $extra['field_value'];
 					// save the external system's id into user_field_value table'
 					$res = UserManager::update_extra_field_value($user_id,$extra_field_name,$extra_field_value);
 			}
 		}
-		
+
 		$results[] = $return;
 		continue;
 	} //end principal foreach
-	
+
 	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_user_id_value' =>$orig_user_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_user_id_value' =>$orig_user_id_value[$i],'result' => $results[$i]);
 	}
-	
-	return $output;	
-		
+
+	return $output;
+
 }
 
 /* Register DokeosWSEditUserPasswordCrypted function */
@@ -1555,13 +1555,13 @@ $server->wsdl->addComplexType(
 		'lastname' => array('name' => 'lastname', 'type' => 'xsd:string'),
 		'username' => array('name' => 'username', 'type' => 'xsd:string'),
 		'password' => array('name' => 'password', 'type' => 'xsd:string'),
-		'encrypt_method' => array('name' => 'encrypt_method', 'type' => 'xsd:string'),		
+		'encrypt_method' => array('name' => 'encrypt_method', 'type' => 'xsd:string'),
 		'email' => array('name' => 'email', 'type' => 'xsd:string'),
-		'status' => array('name' => 'status', 'type' => 'xsd:string'),		
-		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),		
-		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),	
+		'status' => array('name' => 'status', 'type' => 'xsd:string'),
+		'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
+		'expiration_date' => array('name' => 'expiration_date', 'type' => 'xsd:string'),
 		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList'),
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')			
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -1580,39 +1580,39 @@ $server->register('DokeosWSEditUserPasswordCrypted',					// method name
 function DokeosWSEditUserPasswordCrypted($params)
 {
 	global $userPasswordCrypted,$_configuration,$userPasswordCrypted;
-	
+
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
-	}		
-	
+	}
+
 	// get user id from id of remote system
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-	
-	
-		
+
+
+
 		$original_user_id_value = $params['original_user_id_value'];
-		$original_user_id_name = $params['original_user_id_name'];			
-		$firstname = $params['firstname']; 
+		$original_user_id_name = $params['original_user_id_name'];
+		$firstname = $params['firstname'];
 		$lastname = $params['lastname'];
 		$username = $params['username'];
-		$password = null; $auth_source = null; 
+		$password = null; $auth_source = null;
 		$email = $params['email']; $status = $params['status'];
 		$official_code = ''; $phone = $params['phone'];
-		$picture_uri = ''; $expiration_date = $params['expiration_date']; $active = 1; 
+		$picture_uri = ''; $expiration_date = $params['expiration_date']; $active = 1;
 		$creator_id= null; $hr_dept_id=0; $extra=null;
 		$extra_list = $params['extra'];
-			
-		if (!empty($params['password']) && !empty($params['encrypt_method'])) { 
-			
+
+		if (!empty($params['password']) && !empty($params['encrypt_method'])) {
+
 			$password = $params['password'];
 			$encrypt_method = $params['encrypt_method'];
-			if ($userPasswordCrypted === $encrypt_method ) {		
-				if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/',$password)) {					
+			if ($userPasswordCrypted === $encrypt_method ) {
+				if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/',$password)) {
 				    $msg = "Encryption $encrypt_method is invalid";
 				    return $msg;
 				} else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/',$password)) {
@@ -1622,47 +1622,47 @@ function DokeosWSEditUserPasswordCrypted($params)
 			} else {
 				$msg = "This encryption $encrypt_method is not configured into dokeos ";
 				return $msg;
-			}		
+			}
 		} else if(!empty($params['password']) && empty($params['encrypt_method'])){
 			$msg = "If password is not empty the encrypt_method param is required ";
 			return $msg;
 		} else if(empty($params['password']) && !empty($params['encrypt_method'])){
 			$msg = "If encrypt_method is not empty the password param is required ";
-			return $msg;			
+			return $msg;
 		}
-	
-		
+
+
 		$sql = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$row = Database::fetch_row($res);	
+		$row = Database::fetch_row($res);
 		$user_id = $row[0];
-	
+
 		if (empty($user_id)) {
-			return 0;			 
+			return 0;
 		} else {
 			$sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
 			$resu = api_sql_query($sql,__FILE__,__LINE__);
 			$r_check_user = Database::fetch_row($resu);
 			if (!empty($r_check_user[0])) {
-				return 0;		
+				return 0;
 			}
 		}
-		
+
 		// check if username already exits
 		$sql = "SELECT username FROM $table_user WHERE username ='$username' AND user_id <> '$user_id'";
 		$res_un = api_sql_query($sql,__FILE__,__LINE__);
 		$r_username = Database::fetch_row($res_un);
-		
+
 		if (!empty($r_username[0])) {
-			return 0;					
+			return 0;
 		}
-						
+
 		$sql = "UPDATE $table_user SET
 				lastname='".Database::escape_string($lastname)."',
 				firstname='".Database::escape_string($firstname)."',
 				username='".Database::escape_string($username)."',";
 		if(!is_null($password))
-		{			
+		{
 			$sql .= " password='".Database::escape_string($password)."',";
 		}
 		if(!is_null($auth_source))
@@ -1678,28 +1678,28 @@ function DokeosWSEditUserPasswordCrypted($params)
 				expiration_date='".Database::escape_string($expiration_date)."',
 				active='".Database::escape_string($active)."',
 				hr_dept_id=".intval($hr_dept_id);
-				
+
 		if(!is_null($creator_id))
 		{
 			$sql .= ", creator_id='".Database::escape_string($creator_id)."'";
 		}
 		$sql .=	" WHERE user_id='$user_id'";
-		$return = @api_sql_query($sql,__FILE__,__LINE__);	
-		
+		$return = @api_sql_query($sql,__FILE__,__LINE__);
+
 		if (is_array($extra_list) && count($extra_list) > 0) {
 			foreach ($extra_list as $extra) {
 					$extra_field_name = $extra['field_name'];
-					$extra_field_value = $extra['field_value'];		
+					$extra_field_value = $extra['field_value'];
 					// save the external system's id into user_field_value table'
 					$res = UserManager::update_extra_field_value($user_id,$extra_field_name,$extra_field_value);
 			}
 		}
-		
+
 		return $return;
-		
-	
-	
-		
+
+
+
+
 }
 
 /* Register DokeosWSDeleteUsers function */
@@ -1710,7 +1710,7 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),	
+		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
 		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string')
 	)
 );
@@ -1733,8 +1733,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'users' => array('name' => 'users', 'type' => 'tns:deleteUsersParamList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'users' => array('name' => 'users', 'type' => 'tns:deleteUsersParamList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -1775,60 +1775,60 @@ $server->register('DokeosWSDeleteUsers',			// method name
 function DokeosWSDeleteUsers($params)
 {
 	global $_configuration;
-	
+
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
 	}
-	
+
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-	
+
 	$users_params = $params['users'];
 	$results = array();
 	$orig_user_id_value = array();
-	
+
 	foreach($users_params as $user_param) {
-		
+
 		$original_user_id_name = $user_param['original_user_id_name'];
 	   	$original_user_id_value = $user_param['original_user_id_value'];
-	   	$orig_user_id_value[] = $user_param['original_user_id_value'];			
-		$sql = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";		
+	   	$orig_user_id_value[] = $user_param['original_user_id_value'];
+		$sql = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$row = Database::fetch_row($res);	
+		$row = Database::fetch_row($res);
 		$user_id = $row[0];
-		
+
 		if (empty($user_id)) {
-			$results[] = 0;	
-			continue;			
+			$results[] = 0;
+			continue;
 		} else {
 			$sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
 			$resu = api_sql_query($sql,__FILE__,__LINE__);
 			$r_check_user = Database::fetch_row($resu);
 			if (!empty($r_check_user[0])) {
-				$results[] = 0;	
-				continue;				
+				$results[] = 0;
+				continue;
 			}
 		}
-		
-		// update active to 0 	
+
+		// update active to 0
 		$sql = "UPDATE $table_user SET active='0' WHERE user_id = '$user_id'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$results[] = 1;	
-		continue;	
+		$results[] = 1;
+		continue;
 	}
-	
+
    	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_user_id_value' =>$orig_user_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_user_id_value' =>$orig_user_id_value[$i],'result' => $results[$i]);
 	}
-	
-	return $output;	
-	
+
+	return $output;
+
 }
 
 /* Register DokeosWSDeleteUser function */
@@ -1839,7 +1839,7 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),	
+		'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
 		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
 		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
@@ -1860,41 +1860,41 @@ $server->register('DokeosWSDeleteUser',			// method name
 function DokeosWSDeleteUser($params)
 {
 	global $_configuration;
-	
+
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
 	}
-	
+
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-			
+
 	$original_user_id_name = $params['original_user_id_name'];
-   	$original_user_id_value = $params['original_user_id_value'];	   	
-	$sql = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";		
+   	$original_user_id_value = $params['original_user_id_value'];
+	$sql = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	$row = Database::fetch_row($res);	
+	$row = Database::fetch_row($res);
 	$user_id = $row[0];
-	
+
 	if (empty($user_id)) {
-		return 0;			
+		return 0;
 	} else {
 		$sql = "SELECT user_id FROM $table_user WHERE user_id ='$user_id' AND active= '0'";
 		$resu = api_sql_query($sql,__FILE__,__LINE__);
 		$r_check_user = Database::fetch_row($resu);
 		if (!empty($r_check_user[0])) {
-			return 0;				
+			return 0;
 		}
 	}
-	
-	// update active to 0 	
+
+	// update active to 0
 	$sql = "UPDATE $table_user SET active='0' WHERE user_id = '$user_id'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	return 1;
-	
+
 }
 
 /* Register DokeosWSCreateCourse function */
@@ -1914,7 +1914,7 @@ $server->wsdl->addComplexType(
 		'course_language' => array('name' => 'course_language', 'type' => 'xsd:string'),
 		'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
 		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
-		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')					
+		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
 	)
 );
 
@@ -1936,8 +1936,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'courses' => array('name' => 'courses', 'type' => 'tns:createCourseParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'courses' => array('name' => 'courses', 'type' => 'tns:createCourseParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -1977,96 +1977,96 @@ $server->register('DokeosWSCreateCourse',			// method name
 
 // Define the method DokeosWSCreateCourse
 function DokeosWSCreateCourse($params) {
-	
+
 	global $firstExpirationDelay,$_configuration;
-	
+
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
-	
+
 	//return $secret_key;
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
 	}
-	
+
 	$t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 	$table_field 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 	$table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-		
+
 	$courses_params = $params['courses'];
 	$results = array();
-	$orig_course_id_value = array();		
-	
+	$orig_course_id_value = array();
+
 	foreach($courses_params as $course_param) {
-		
+
 		$title=$course_param['title'];
 		$category_code=$course_param['category_code'];
 		$wanted_code=$course_param['wanted_code'];
 		$tutor_name=$course_param['tutor_name'];
 		$course_language='english';
 		$original_course_id_name= $course_param['original_course_id_name'];
-		$original_course_id_value = $course_param['original_course_id_value'];	
+		$original_course_id_value = $course_param['original_course_id_value'];
 		$orig_course_id_value[] = $course_param['original_course_id_value'];
 		$extra_list = $course_param['extra'];
-				
+
 		// check if exits $x_course_code into user_field_values table
 		$sql = "SELECT field_value,course_code FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$row = Database::fetch_row($res);
-	
-		if (!empty($row[0])) {		
-			// check if user is not active 		
+
+		if (!empty($row[0])) {
+			// check if user is not active
 			$sql = "SELECT code FROM $table_course WHERE code ='".$row[1]."' AND visibility= '0'";
 			$resu = api_sql_query($sql,__FILE__,__LINE__);
-			$r_check_course = Database::fetch_row($resu);	
+			$r_check_course = Database::fetch_row($resu);
 			if (!empty($r_check_course[0])) {
 				$sql = "UPDATE $table_course SET course_language='".Database::escape_string($course_language)."',
 									title='".Database::escape_string($title)."',
 									category_code='".Database::escape_string($category_code)."',
 									tutor_name='".Database::escape_string($tutor_name)."',
-									visual_code='".Database::escape_string($wanted_code)."',										
-									visibility = '3'								
-						WHERE code='".Database::escape_string($r_check_course[0])."'";			
+									visual_code='".Database::escape_string($wanted_code)."',
+									visibility = '3'
+						WHERE code='".Database::escape_string($r_check_course[0])."'";
 				api_sql_query($sql,__FILE__,__LINE__);
 				if (is_array($extra_list) && count($extra_list) > 0) {
-					foreach ($extra_list as $extra) {					    			
+					foreach ($extra_list as $extra) {
 							$extra_field_name = $extra['field_name'];
-							$extra_field_value = $extra['field_value'];				
-							// save the external system's id into course_field_value table'	
-							$res = CourseManager::update_course_extra_field_value($r_check_course[0],$extra_field_name,$extra_field_value);										
+							$extra_field_value = $extra['field_value'];
+							// save the external system's id into course_field_value table'
+							$res = CourseManager::update_course_extra_field_value($r_check_course[0],$extra_field_name,$extra_field_value);
 					}
-				}		
+				}
 				$results[] = $r_check_course[0];
-				continue;				
+				continue;
 			} else {
 				$results[] = 0;
-				continue; // original course id already exits				
+				continue; // original course id already exits
 			}
-		}			
-		
+		}
+
 		if (!empty($course_param['course_language'])) {
 			$course_language = $course_param['course_language'];
 		}
-			
+
 		$dbnamelength = strlen($_configuration['db_prefix']);
 		//Ensure the database prefix + database name do not get over 40 characters
 		$maxlength = 40 - $dbnamelength;
-	
+
 		// Set default values
 		if (isset($_user["language"]) && $_user["language"]!="") {
 			$values['course_language'] = $_user["language"];
 		} else {
 			$values['course_language'] = api_get_setting('platformLanguage');
 		}
-		
+
 		$values['tutor_name'] = $_user['firstName']." ".$_user['lastName'];
-			
+
 			if (trim($wanted_code) == '') {
 				$wanted_code = generate_course_code(substr($title,0,$maxlength));
 			}
-			
+
 			$keys = define_course_keys($wanted_code, "", $_configuration['db_prefix']);
-			
+
 			$sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"',Database :: escape_string($wanted_code));
 			$result_check = api_sql_query($sql_check,__FILE__,__LINE__); //I don't know why this api function doesn't work...
 			if ( Database::num_rows($result_check)<1 ) {
@@ -2081,42 +2081,42 @@ function DokeosWSCreateCourse($params) {
 					$pictures_array=fill_course_repository($directory);
 					fill_Db_course($db_name, $directory, $course_language,$pictures_array);
 					$return = register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date);
-	
+
 					// save new fieldlabel into course_field table
 					$field_id = CourseManager::create_course_extra_field($original_course_id_name,1,$original_course_id_name);
-					
-					// save the external system's id into user_field_value table'	
+
+					// save the external system's id into user_field_value table'
 					$res = CourseManager::update_course_extra_field_value($code,$original_course_id_name,$original_course_id_value);
-											
+
 					if (is_array($extra_list) && count($extra_list) > 0) {
-						foreach ($extra_list as $extra) {					    			
+						foreach ($extra_list as $extra) {
 								$extra_field_name = $extra['field_name'];
 								$extra_field_value = $extra['field_value'];
-								// save new fieldlabel into course_field table 
+								// save new fieldlabel into course_field table
 								$field_id = CourseManager::create_course_extra_field($extra_field_name,1,$extra_field_name);
-								// save the external system's id into course_field_value table'	
-								$res = CourseManager::update_course_extra_field_value($code,$extra_field_name,$extra_field_value);										
+								// save the external system's id into course_field_value table'
+								$res = CourseManager::update_course_extra_field_value($code,$extra_field_name,$extra_field_value);
 						}
-					}				
+					}
 				}
 				$results[] = $code;
-				continue;		        
+				continue;
 			} else {
 				$results[] = 0;
-				continue;				
+				continue;
 			}
-				
+
 	}// end principal foreach
-	
-	
-	
+
+
+
 	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_course_id_value' =>$orig_course_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_course_id_value' =>$orig_course_id_value[$i],'result' => $results[$i]);
 	}
-	
-	return $output;	
+
+	return $output;
 }
 
 /* Register DokeosWSCreateCourseByTitle function */
@@ -2128,11 +2128,11 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'title' => array('name' => 'title', 'type' => 'xsd:string'),	
-		'tutor_name' => array('name' => 'tutor_name', 'type' => 'xsd:string'),	
+		'title' => array('name' => 'title', 'type' => 'xsd:string'),
+		'tutor_name' => array('name' => 'tutor_name', 'type' => 'xsd:string'),
 		'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
 		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
-		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')			
+		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
 	)
 );
 
@@ -2154,8 +2154,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'courses' => array('name' => 'courses', 'type' => 'tns:createCourseByTitleParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'courses' => array('name' => 'courses', 'type' => 'tns:createCourseByTitleParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -2196,34 +2196,34 @@ $server->register('DokeosWSCreateCourseByTitle',					// method name
 
 // Define the method DokeosWSCreateCourseByTitle
 function DokeosWSCreateCourseByTitle($params) {
-	
+
 	global $firstExpirationDelay,$_configuration;
-	
+
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
-	}		
-	
+	}
+
 	$t_cfv 					= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 	$table_field 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 	$table_course_category 	= Database::get_main_table(TABLE_MAIN_CATEGORY);
 	$table_course 			= Database::get_main_table(TABLE_MAIN_COURSE);
-	
+
 	$courses_params = $params['courses'];
 	$results = array();
 	$orig_course_id_value = array();
-	
+
 	foreach($courses_params as $course_param) {
-	
-		$title = $course_param['title'];	
+
+		$title = $course_param['title'];
 		$category_code='LANG';
 		$wanted_code = '';
 		$tutor_firstname = api_get_setting('administratorName');
 		$tutor_lastname = api_get_setting('administratorSurname');
 		$tutor_name = $tutor_firstname.' '.$tutor_lastname;
-		
+
 		if (!empty($course_param['tutor_name'])) {
 			$tutor_name = $course_param['tutor_name'];
 		}
@@ -2232,56 +2232,56 @@ function DokeosWSCreateCourseByTitle($params) {
 			$course_language = $course_param['course_language'];
 		}
 		$original_course_id_name = $course_param['original_course_id_name'];
-		$original_course_id_value = $course_param['original_course_id_value'];	
+		$original_course_id_value = $course_param['original_course_id_value'];
 		$orig_course_id_value[] = $course_param['original_course_id_value'];
 		$extra_list = $course_param['extra'];
 
 		$dbnamelength = strlen($_configuration['db_prefix']);
 		//Ensure the database prefix + database name do not get over 40 characters
 		$maxlength = 40 - $dbnamelength;
-		
+
 		if (empty($wanted_code)) {
 			$wanted_code = generate_course_code(substr($title,0,$maxlength));
 		}
-	
+
 		// check if exits $x_course_code into user_field_values table
 		$sql = "SELECT field_value,course_code FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$row = Database::fetch_row($res);
-	
-		if (!empty($row[0])) {		
-			// check if user is not active 		
+
+		if (!empty($row[0])) {
+			// check if user is not active
 			$sql = "SELECT code FROM $table_course WHERE code ='".$row[1]."' AND visibility= '0'";
 			$resu = api_sql_query($sql,__FILE__,__LINE__);
-			$r_check_course = Database::fetch_row($resu);	
+			$r_check_course = Database::fetch_row($resu);
 			if (!empty($r_check_course[0])) {
 				$sql = "UPDATE $table_course SET course_language='".Database::escape_string($course_language)."',
 									title='".Database::escape_string($title)."',
 									category_code='".Database::escape_string($category_code)."',
 									tutor_name='".Database::escape_string($tutor_name)."',
-									visual_code='".Database::escape_string($wanted_code)."',										
-									visibility = '3'								
-						WHERE code='".Database::escape_string($r_check_course[0])."'";			
+									visual_code='".Database::escape_string($wanted_code)."',
+									visibility = '3'
+						WHERE code='".Database::escape_string($r_check_course[0])."'";
 				api_sql_query($sql,__FILE__,__LINE__);
 				$results[] = $r_check_course[0];
-				continue;						
+				continue;
 			} else {
 				$results[] = 0;
-				continue;		
+				continue;
 			}
-		}			
-	
+		}
+
 		// Set default values
 		if (isset($_user["language"]) && $_user["language"]!="") {
 			$values['course_language'] = $_user["language"];
 		} else {
 			$values['course_language'] = api_get_setting('platformLanguage');
 		}
-		
-		$values['tutor_name'] = $_user['firstName']." ".$_user['lastName'];				
-							
+
+		$values['tutor_name'] = $_user['firstName']." ".$_user['lastName'];
+
 		$keys = define_course_keys($wanted_code, "", $_configuration['db_prefix']);
-		
+
 		$sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"',Database :: escape_string($wanted_code));
 		$result_check = api_sql_query($sql_check,__FILE__,__LINE__); //I don't know why this api function doesn't work...
 		if ( Database::num_rows($result_check)<1 ) {
@@ -2294,47 +2294,47 @@ function DokeosWSCreateCourseByTitle($params) {
 				prepare_course_repository($directory, $code);
 				update_Db_course($db_name);
 				$pictures_array=fill_course_repository($directory);
-				fill_Db_course($db_name, $directory, $course_language,$pictures_array);			
+				fill_Db_course($db_name, $directory, $course_language,$pictures_array);
 				$return = register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date);
 
 				// save new fieldlabel into course_field table
 				$field_id = CourseManager::create_course_extra_field($original_course_id_name,1,$original_course_id_name);
-				
-				// save the external system's id into user_field_value table'	
+
+				// save the external system's id into user_field_value table'
 				$res = CourseManager::update_course_extra_field_value($code,$original_course_id_name,$original_course_id_value);
-										
+
 				if (is_array($extra_list) && count($extra_list) > 0) {
-					foreach ($extra_list as $extra) {					    			
+					foreach ($extra_list as $extra) {
 							$extra_field_name = $extra['field_name'];
 							$extra_field_value = $extra['field_value'];
-							// save new fieldlabel into course_field table 
+							// save new fieldlabel into course_field table
 							$field_id = CourseManager::create_course_extra_field($extra_field_name,1,$extra_field_name);
-							// save the external system's id into course_field_value table'	
-							$res = CourseManager::update_course_extra_field_value($code,$extra_field_name,$extra_field_value);										
+							// save the external system's id into course_field_value table'
+							$res = CourseManager::update_course_extra_field_value($code,$extra_field_name,$extra_field_value);
 					}
 				}
-									
+
 			}
 			$results[] = $code;
-			continue;			
-				        
+			continue;
+
 		} else {
 			$results[] = 0;
-			continue;			
-		}	
-		
+			continue;
+		}
+
 	} // end principal foreach
-	
+
 	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_course_id_value' =>$orig_course_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_course_id_value' =>$orig_course_id_value[$i],'result' => $results[$i]);
 	}
-	
-	return $output;		
-	
-		
-	
+
+	return $output;
+
+
+
 }
 
 /* Register DokeosWSEditCourse function */
@@ -2347,7 +2347,7 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'tutor_id' => array('name' => 'tutor_id', 'type' => 'xsd:string'),		
+		'tutor_id' => array('name' => 'tutor_id', 'type' => 'xsd:string'),
 		'title' => array('name' => 'title', 'type' => 'xsd:string'),
 		'category_code' => array('name' => 'category_code', 'type' => 'xsd:string'),
 		'department_name' => array('name' => 'department_name', 'type' => 'xsd:string'),
@@ -2359,7 +2359,7 @@ $server->wsdl->addComplexType(
 		'visual_code' => array('name' => 'visual_code', 'type' => 'xsd:string'),
 		'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
 		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
-		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')		
+		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
 	)
 );
 
@@ -2380,8 +2380,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'courses' => array('name' => 'courses', 'type' => 'tns:editCourseParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'courses' => array('name' => 'courses', 'type' => 'tns:editCourseParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -2421,68 +2421,68 @@ $server->register('DokeosWSEditCourse',			// method name
 
 // Define the method DokeosWSEditCourse
 function DokeosWSEditCourse($params){
-	
+
 	global $_configuration;
-	
+
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
 	}
-			
+
 	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);	
+	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 	$table_field 	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-		
+
 	$courses_params = $params['courses'];
 	$results = array();
 	$orig_course_id_value = array();
-	
+
 	foreach($courses_params as $course_param) {
-		
+
 		$tutor_id=$course_param['tutor_id'];
 		$title=$course_param['title'];
 		$category_code =$course_param['category_code'];
 		$department_name =$course_param['department_name'];
 		$department_url =$course_param['department_url'];
-		$course_language =$course_param['course_language'];	
+		$course_language =$course_param['course_language'];
 		$visibility=$course_param['visibility'];
 		$subscribe=$course_param['subscribe'];
 		$unsubscribe=$course_param['unsubscribe'];
 		$visual_code = $course_param['visual_code'];
-		
-		
+
+
 		$original_course_id_name = $course_param['original_course_id_name'];
 		$original_course_id_value = $course_param['original_course_id_value'];
-		$orig_course_id_value[] = $original_course_id_value; 
+		$orig_course_id_value[] = $original_course_id_value;
 		$extra_list = $course_param['extra'];
-		
+
 		// get course code from id from remote system
 		$sql = "SELECT course_code	FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$row = Database::fetch_row($res);	
-			
+		$row = Database::fetch_row($res);
+
 		$course_code=$row[0];
-	
+
 		if (empty($course_code)) {
 			$results[] = 0; // original_course_id_value doesn't exits
-			continue;				 			
-		} 
-						
+			continue;
+		}
+
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT concat(lastname,'',firstname) as tutor_name FROM $table_user WHERE status='1' AND user_id = '$tutor_id' ORDER BY lastname,firstname";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$tutor_name = Database::fetch_row($res);
-		
+
 		$dbnamelength = strlen($_configuration['db_prefix']);
 		$maxlength = 40 - $dbnamelength;
-		
+
 		if (empty($visual_code)) {
 			$visual_code = generate_course_code(substr($title,0,$maxlength));
 		}
-			
+
 		$disk_quota = '50000';
 		$tutor_name=$tutor_name[0];
 		$sql = "UPDATE $course_table SET course_language='".Database::escape_string($course_language)."',
@@ -2493,39 +2493,39 @@ function DokeosWSEditCourse($params){
 									department_name='".Database::escape_string($department_name)."',
 									department_url='".Database::escape_string($department_url)."',
 									disk_quota='".Database::escape_string($disk_quota)."',
-									visibility = '".Database::escape_string($visibility)."', 
+									visibility = '".Database::escape_string($visibility)."',
 									subscribe = '".Database::escape_string($subscribe)."',
 									unsubscribe='".Database::escape_string($unsubscribe)."'
 								WHERE code='".Database::escape_string($course_code)."'";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
-		
+
 		if (is_array($extra_list) && count($extra_list) > 0) {
 			foreach ($extra_list as $extra) {
 					$extra_field_name = $extra['field_name'];
-					$extra_field_value = $extra['field_value'];										
+					$extra_field_value = $extra['field_value'];
 					// save the external system's id into course_field_value table'
 					$res = CourseManager::update_course_extra_field_value($course_code,$extra_field_name,$extra_field_value);
 			}
 		}
-		
+
 		if ($res) {
 			$results[] = 1;
-			continue;			
+			continue;
 		} else {
 			$results[] = 0;
 			continue;
-		}	
-		
+		}
+
 	}// end principal foreach
-	
+
 	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_course_id_value' =>$orig_course_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_course_id_value' =>$orig_course_id_value[$i],'result' => $results[$i]);
 	}
-	
-	return $output;	
-	
+
+	return $output;
+
 }
 
 /* Register DokeosWSCourseDescription function */
@@ -2537,10 +2537,10 @@ $server->wsdl->addComplexType(
 	'struct',
 	'all',
 	'',
-	array(		
+	array(
 		'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
 		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')					
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -2583,18 +2583,18 @@ $server->register('DokeosWSCourseDescription',			// method name
 
 // Define the method DokeosWSCourseDescription
 function DokeosWSCourseDescription($params){
-	
+
 	global $_configuration,$_course;
-	
+
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
 	}
-		
+
 	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);	
+	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 	$table_field 	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
@@ -2602,37 +2602,37 @@ function DokeosWSCourseDescription($params){
 	$array_course__desc_default_title = array();
 	$array_course_desc_title = array();
 	$array_course_desc_content = array();
-				
+
 	$original_course_id_name = $params['original_course_id_name'];
 	$original_course_id_value = $params['original_course_id_value'];
-		
+
 	// get course code from id from remote system
 	$sql = "SELECT course_code	FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
-	$row = Database::fetch_row($res);	
-		
+	$row = Database::fetch_row($res);
+
 	$course_code=$row[0];
-    
+
 	if (Database::num_rows($res) < 1) {
 		return 0;// original_course_id_value doesn't exits
-		//continue;			 
+		//continue;
 	} else {
 		$sql = "SELECT code FROM $course_table WHERE code ='$course_code' AND visibility = '0'";
 		$resu = api_sql_query($sql,__FILE__,__LINE__);
 		$r_check_code = Database::fetch_row($resu);
 		if (Database::num_rows($resu) > 0) {
 			return  0; // this code is not active
-			//continue;				
+			//continue;
 		}
 	}
-	 
+
 	$course_ifo = api_get_course_info($course_code);
-	
+
 	$t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION,$course_ifo['dbName']);
-	
+
 	$sql = "SELECT * FROM $t_course_desc";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
-	
+
 	/*$default_titles = array(
 							get_lang('GeneralDescription'),
 							get_lang('Objectives'),
@@ -2642,23 +2642,23 @@ function DokeosWSCourseDescription($params){
 							get_lang('HumanAndTechnicalResources'),
 							get_lang('Assessment'),
 							get_lang('AddCat'));*/
-	
+
 	$default_titles = array('Descripcion general','Objetivos','Contenidos','Metodologia','Materiales','Recursos humanos y tecnicos','Evaluacion','Apartado');
-	
+
 	for ($x = 1;$x < 9; $x++){
 		$array_course_desc_id[$x] = $x;
 		$array_course_desc_default_title[$x] = $default_titles[$x-1];
 		$array_course_desc_title[$x] = '';
 		$array_course_desc_content[$x] = '';
 	}
-					
+
 	while ($row = Database::fetch_array($result)) {
-		$ind = (int)$row['id'];						
+		$ind = (int)$row['id'];
 		$array_course_desc_title[$ind] = $row['title'];
-		$array_course_desc_content[$ind] = $row['content'];			
+		$array_course_desc_content[$ind] = $row['content'];
 	}
 
-	
+
 	$count_results = count($default_titles);
 	$output = array();
 	for($i = 1; $i <=$count_results; $i++) {
@@ -2666,11 +2666,11 @@ function DokeosWSCourseDescription($params){
 							'course_desc_id' =>$array_course_desc_id[$i],
 							'course_desc_default_title' => $array_course_desc_default_title[$i],
 							'course_desc_title' => $array_course_desc_title[$i],
-							'course_desc_content' => $array_course_desc_content[$i]);				
+							'course_desc_content' => $array_course_desc_content[$i]);
 	}
-	
-	return $output;	
-			
+
+	return $output;
+
 }
 
 /* Register DokeosWSEditCourseDescription function */
@@ -2682,12 +2682,12 @@ $server->wsdl->addComplexType(
 	'struct',
 	'all',
 	'',
-	array(	
+	array(
 		'course_desc_id' => array('name' => 'course_desc_id', 'type' => 'xsd:string'),
 		'course_desc_title' => array('name' => 'course_desc_title', 'type' => 'xsd:string'),
 		'course_desc_content' => array('name' => 'course_desc_content', 'type' => 'xsd:string'),
 		'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
-		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string')							
+		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string')
 	)
 );
 
@@ -2708,8 +2708,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'course_desc' => array('name' => 'course_desc', 'type' => 'tns:editCourseDescriptionParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'course_desc' => array('name' => 'course_desc', 'type' => 'tns:editCourseDescriptionParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -2751,21 +2751,21 @@ $server->register('DokeosWSEditCourseDescription',			// method name
 
 // Define the method DokeosWSEditCourseDescription
 function DokeosWSEditCourseDescription($params){
-	
+
 	global $_configuration,$_course;
-	
+
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
 	}
-		
+
 	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);	
+	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 	$table_field 	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-	
+
 	$courses_params = $params['course_desc'];
 	$results = array();
 	$orig_course_id_value = array();
@@ -2778,65 +2778,65 @@ function DokeosWSEditCourseDescription($params){
 		$course_desc_title = $course_param['course_desc_title'];
 		$course_desc_content = $course_param['course_desc_content'];
 		$orig_course_id_value[] = $original_course_id_value;
-			
+
 		// get course code from id from remote system
 		$sql = "SELECT course_code	FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$row = Database::fetch_row($res);	
-			
+		$row = Database::fetch_row($res);
+
 		$course_code=$row[0];
-	    
+
 		if (Database::num_rows($res) < 1) {
 			$results[] = 0;
-			continue;// original_course_id_value doesn't exits						 
+			continue;// original_course_id_value doesn't exits
 		} else {
 			$sql = "SELECT code FROM $course_table WHERE code ='$course_code' AND visibility = '0'";
 			$resu = api_sql_query($sql,__FILE__,__LINE__);
 			$r_check_code = Database::fetch_row($resu);
 			if (Database::num_rows($resu) > 0) {
 				$results[] = 0;
-				continue;												
+				continue;
 			}
 		}
-				 		 
+
 		$course_ifo = api_get_course_info($course_code);
-		
+
 		$t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION,$course_ifo['dbName']);
-		
+
 		$course_desc_id = Database::escape_string($course_desc_id);
 		$course_desc_title = Database::escape_string($course_desc_title);
 		$course_desc_content = Database::escape_string($course_desc_content);
-		
-		$course_desc_id = (int)$course_desc_id;		
+
+		$course_desc_id = (int)$course_desc_id;
 		if ($course_desc_id > 8 && $course_desc_id < 1) {
 			$results[] = 0; // course_desc_id invalid
 			continue;
 		}
-		
+
 		//check if data already exits into course_description table
 		$sql_check_id = "SELECT * FROM $t_course_desc WHERE id ='$course_desc_id'";
 		$res_check_id = api_sql_query($sql_check_id,__FILE__,__LINE__);
-		
+
 		if (Database::num_rows($res_check_id) > 0) {
 			$sql = "UPDATE $t_course_desc SET title='$course_desc_title', content = '$course_desc_content' WHERE id = '".$course_desc_id."'";
-			api_sql_query($sql,__FILE__,__LINE__);	
+			api_sql_query($sql,__FILE__,__LINE__);
 		} else {
-			$sql = "INSERT IGNORE INTO $t_course_desc SET id = '".$course_desc_id."', title = '$course_desc_title', content = '$course_desc_content'";				
+			$sql = "INSERT IGNORE INTO $t_course_desc SET id = '".$course_desc_id."', title = '$course_desc_title', content = '$course_desc_content'";
 			api_sql_query($sql, __FILE__, __LINE__);
 		}
-			
-		$results[] = 1;		
-					
+
+		$results[] = 1;
+
 	}// end principal foreach
-	
+
 	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_course_id_value' =>$orig_course_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_course_id_value' =>$orig_course_id_value[$i],'result' => $results[$i]);
 	}
-	
-	return $output;	
-			
+
+	return $output;
+
 }
 
 /* Register DokeosWSDeleteCourse function */
@@ -2848,8 +2848,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),		
-		'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string')			
+		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
+		'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string')
 	)
 );
 
@@ -2871,8 +2871,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'courses' => array('name' => 'courses', 'type' => 'tns:deleteCourseParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'courses' => array('name' => 'courses', 'type' => 'tns:deleteCourseParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -2912,36 +2912,36 @@ $server->register('DokeosWSDeleteCourse',			// method name
 
 // define the method DokeosWSDeleteCourse
 function DokeosWSDeleteCourse($params) {
-	
+
 		global $_configuration;
-		
+
 		$secret_key = $params['secret_key'];
 		$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 		if (!api_is_valid_secret_key($secret_key,$security_key)) {
 			return -1; //secret key is incorrect
 		}
-						
+
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 		$table_field 	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-		
+
 		$courses_params = $params['courses'];
 		$results = array();
 		$orig_course_id_value = array();
-		
+
 		foreach($courses_params as $course_param) {
-			
+
 			$original_course_id_value = $course_param['original_course_id_value'];
-			$original_course_id_name = $course_param['original_course_id_name'];			
-			$orig_course_id_value[] = $original_course_id_value;	
+			$original_course_id_name = $course_param['original_course_id_name'];
+			$orig_course_id_value[] = $original_course_id_value;
 			// get course code from id from remote system
 			$sql_course = "SELECT course_code	FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 			$res_course = api_sql_query($sql_course,__FILE__,__LINE__);
 			$row_course = Database::fetch_row($res_course);
-				
+
 			$code=$row_course[0];
-	
+
 			if (empty($code)) {
 				$results[] = 0; // original_course_id_value doesn't exits
 				continue;
@@ -2951,23 +2951,23 @@ function DokeosWSDeleteCourse($params) {
 				$r_check_code = Database::fetch_row($resu);
 				if (!empty($r_check_code[0])) {
 					$results[] = 0; // this code is not active
-					continue;				
+					continue;
 				}
 			}
-									
+
 			$sql= "UPDATE $table_course SET visibility = '0' WHERE code = '$code'";
 			$return = api_sql_query($sql,__FILE__,__LINE__);
-			$results[] = $return;						
+			$results[] = $return;
 		}
-		
+
 		$count_results = count($results);
 		$output = array();
 		for($i = 0; $i < $count_results; $i++) {
-			$output[] = array('original_course_id_value' =>$orig_course_id_value[$i],'result' => $results[$i]);				
+			$output[] = array('original_course_id_value' =>$orig_course_id_value[$i],'result' => $results[$i]);
 		}
-		
-		return $output;	
-		
+
+		return $output;
+
 }
 
 /* Register DokeosWSCreateSession function */
@@ -2987,12 +2987,12 @@ $server->wsdl->addComplexType(
 		'month_end' => array('name' => 'month_end', 'type' => 'xsd:string'),
 		'day_end' => array('name' => 'day_end', 'type' => 'xsd:string'),
 		'nb_days_access_before' => array('name' => 'nb_days_access_before', 'type' => 'xsd:string'),
-		'nb_days_access_after' => array('name' => 'nb_days_access_after', 'type' => 'xsd:string'),		
+		'nb_days_access_after' => array('name' => 'nb_days_access_after', 'type' => 'xsd:string'),
 		'nolimit' => array('name' => 'nolimit', 'type' => 'xsd:string'),
 		'user_id' => array('name' => 'user_id', 'type' => 'xsd:string'),
 		'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string'),
 		'original_session_id_value' => array('name' => 'original_session_id_value', 'type' => 'xsd:string'),
-		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')	
+		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
 	)
 );
 
@@ -3014,8 +3014,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'sessions' => array('name' => 'sessions', 'type' => 'tns:createSessionParamList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'sessions' => array('name' => 'sessions', 'type' => 'tns:createSessionParamList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -3056,49 +3056,49 @@ $server->register('DokeosWSCreateSession',			// method name
 
 // define the method DokeosWSCreateSession
 function DokeosWSCreateSession($params) {
-	
+
 	global $_user,$_configuration;
-	
+
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
 	}
-	
+
 	$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 	$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
-	$t_sf 			= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);		
+	$t_sf 			= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
 	$t_sfv 			= Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-	
+
 	$sessions_params = $params['sessions'];
 	$results = array();
 	$orig_session_id_value = array();
-	
+
 	foreach($sessions_params as $session_param) {
-		
-		$name= trim($session_param['name']); 
-		$year_start= intval($session_param['year_start']); 
+
+		$name= trim($session_param['name']);
+		$year_start= intval($session_param['year_start']);
 		$month_start=intval($session_param['month_start']);
-		$day_start=intval($session_param['day_start']); 
-		$year_end=intval($session_param['year_end']); 
-		$month_end=intval($session_param['month_end']); 
-		$day_end=intval($session_param['day_end']); 
-		$nb_days_acess_before = intval($session_param['nb_days_access_before']); 
+		$day_start=intval($session_param['day_start']);
+		$year_end=intval($session_param['year_end']);
+		$month_end=intval($session_param['month_end']);
+		$day_end=intval($session_param['day_end']);
+		$nb_days_acess_before = intval($session_param['nb_days_access_before']);
 		$nb_days_acess_after = intval($session_param['nb_days_access_after']);
 		$id_coach = $session_param['user_id'];
 		$nolimit = $session_param['nolimit'];
 		$original_session_id_name = $session_param['original_session_id_name'];
-		$original_session_id_value = $session_param['original_session_id_value'];	
+		$original_session_id_value = $session_param['original_session_id_value'];
 		$orig_session_id_value[] = $session_param['original_session_id_value'];
 		$extra_list = $session_param['extra'];
 		// check if exits remote system's session id into session_field_values table
 		$sql = "SELECT field_value	FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$row = Database::fetch_row($res);		
+		$row = Database::fetch_row($res);
 		if (Database::num_rows($res) > 0) {
-			$results[] = 0; 
-			continue;									
+			$results[] = 0;
+			continue;
 		}
 
 		if (empty($nolimit)){
@@ -3108,19 +3108,19 @@ function DokeosWSCreateSession($params) {
 			$date_start="000-00-00";
 			$date_end="000-00-00";
 		}
-		
+
 		if(empty($name)) {
-			$results[] = 0; 
+			$results[] = 0;
 			continue;
 		} elseif(empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start))) {
-			$results[] = 0; 
+			$results[] = 0;
 			continue;
 		} elseif(empty($nolimit) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) {
-			$results[] = 0; 
+			$results[] = 0;
 			continue;
 		} elseif(empty($nolimit) && $date_start >= $date_end) {
-			$results[] = 0; 
-			continue;	
+			$results[] = 0;
+			continue;
 		}
 		else
 		{
@@ -3130,38 +3130,38 @@ function DokeosWSCreateSession($params) {
 				continue;
 			} else {
 				api_sql_query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end) VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")",__FILE__,__LINE__);
-				$id_session=Database::get_last_insert_id();	
-				
-				
+				$id_session=Database::get_last_insert_id();
+
+
 				// save new fieldlabel into course_field table
 				$field_id = SessionManager::create_session_extra_field($original_session_id_name,1,$original_session_id_name);
-				
-				// save the external system's id into user_field_value table'	
+
+				// save the external system's id into user_field_value table'
 				$res = SessionManager::update_session_extra_field_value($id_session,$original_session_id_name,$original_session_id_value);
-										
+
 				if (is_array($extra_list) && count($extra_list) > 0) {
-					foreach ($extra_list as $extra) {					    			
+					foreach ($extra_list as $extra) {
 							$extra_field_name = $extra['field_name'];
 							$extra_field_value = $extra['field_value'];
-							// save new fieldlabel into course_field table 
+							// save new fieldlabel into course_field table
 							$field_id = SessionManager::create_session_extra_field($extra_field_name,1,$extra_field_name);
-							// save the external system's id into course_field_value table'	
-							$res = SessionManager::update_session_extra_field_value($id_session,$extra_field_name,$extra_field_value);										
+							// save the external system's id into course_field_value table'
+							$res = SessionManager::update_session_extra_field_value($id_session,$extra_field_name,$extra_field_value);
 					}
 				}
 				$results[] = $id_session;
-				continue;						
+				continue;
 			}
 		}
 	} // end principal foreach
-		
+
 	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_session_id_value' =>$orig_session_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_session_id_value' =>$orig_session_id_value[$i],'result' => $results[$i]);
 	}
-	
-	return $output;	
+
+	return $output;
 
 }
 
@@ -3182,12 +3182,12 @@ $server->wsdl->addComplexType(
 		'month_end' => array('name' => 'month_end', 'type' => 'xsd:string'),
 		'day_end' => array('name' => 'day_end', 'type' => 'xsd:string'),
 		'nb_days_access_before' => array('name' => 'nb_days_access_before', 'type' => 'xsd:string'),
-		'nb_days_access_after' => array('name' => 'nb_days_access_after', 'type' => 'xsd:string'),		
+		'nb_days_access_after' => array('name' => 'nb_days_access_after', 'type' => 'xsd:string'),
 		'nolimit' => array('name' => 'nolimit', 'type' => 'xsd:string'),
 		'user_id' => array('name' => 'user_id', 'type' => 'xsd:string'),
 		'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string'),
 		'original_session_id_value' => array('name' => 'original_session_id_value', 'type' => 'xsd:string'),
-		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')			
+		'extra' => array('name' => 'extra', 'type' => 'tns:extrasList')
 	)
 );
 
@@ -3208,8 +3208,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'sessions' => array('name' => 'sessions', 'type' => 'tns:editSessionParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'sessions' => array('name' => 'sessions', 'type' => 'tns:editSessionParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -3250,55 +3250,55 @@ $server->register('DokeosWSEditSession',		// method name
 
 // define the method DokeosWSEditSession
 function DokeosWSEditSession($params) {
-	
-	global $_user,$_configuration;	
-	
-	$secret_key = $params['secret_key'];	
+
+	global $_user,$_configuration;
+
+	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
 	}
-		
+
 	$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 	$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
-	$t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);		
+	$t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
 	$t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-		
+
 	$sessions_params = $params['sessions'];
 	$results = array();
 	$orig_session_id_value = array();
-	
+
 	foreach($sessions_params as $session_param) {
-		
-		$name= trim($session_param['name']); 
-		$year_start= intval($session_param['year_start']); 
-		$month_start=intval($session_param['month_start']); 
-		$day_start=intval($session_param['day_start']); 
-		$year_end=intval($session_param['year_end']); 
+
+		$name= trim($session_param['name']);
+		$year_start= intval($session_param['year_start']);
+		$month_start=intval($session_param['month_start']);
+		$day_start=intval($session_param['day_start']);
+		$year_end=intval($session_param['year_end']);
 		$month_end=intval($session_param['month_end']);
-		$day_end=intval($session_param['day_end']); 
-		$nb_days_acess_before = intval($session_param['nb_days_access_before']); 
-		$nb_days_acess_after = intval($session_param['nb_days_access_after']); 
+		$day_end=intval($session_param['day_end']);
+		$nb_days_acess_before = intval($session_param['nb_days_access_before']);
+		$nb_days_acess_after = intval($session_param['nb_days_access_after']);
 		$original_session_id_value = $session_param['original_session_id_value'];
 		$original_session_id_name = $session_param['original_session_id_name'];
 		$orig_session_id_value[] = $original_session_id_value;
 		$coach_username = $session_param['coach_username'];
 		$nolimit = $session_param['nolimit'];
 		$id_coach = $session_param['user_id'];
-		$extra_list = $session_param['extra'];				
+		$extra_list = $session_param['extra'];
 		// get session id from original session id
-		$sql = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";		
+		$sql = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
 		$res = api_sql_query($sql,__FILE__,__LINE__);
-		$row = Database::fetch_row($res);	
-			
+		$row = Database::fetch_row($res);
+
 		$id=intval($row[0]);
-		
+
 		if (Database::num_rows($res) < 1) {
 			$results[] = 0;
-			continue;			
-		}		
-		 
+			continue;
+		}
+
 		if (empty($nolimit)) {
 			$date_start="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
 			$date_end="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
@@ -3314,7 +3314,7 @@ function DokeosWSEditSession($params) {
 			continue;
 		} else if(empty($nolimit) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) {
 			$results[] = 0; //InvalidEndDate
-			continue;			
+			continue;
 		} else if(empty($nolimit) && $date_start >= $date_end) {
 			$results[] = 0; //StartDateShouldBeBeforeEndDate
 			continue;
@@ -3327,33 +3327,33 @@ function DokeosWSEditSession($params) {
 					"session_admin_id='".		intval($_user['user_id'])."', " .
 					"nb_days_access_before_beginning='".		$nb_days_acess_before."', " .
 					"nb_days_access_after_end='".		$nb_days_acess_after."'" .
-					" WHERE id='".$id."'";		
+					" WHERE id='".$id."'";
 			api_sql_query($sql,__FILE__,__LINE__);
-			$id_session=Database::get_last_insert_id();	
-			
+			$id_session=Database::get_last_insert_id();
+
 			if (is_array($extra_list) && count($extra_list) > 0) {
 				foreach ($extra_list as $extra) {
 						$extra_field_name = $extra['field_name'];
-						$extra_field_value = $extra['field_value'];			
+						$extra_field_value = $extra['field_value'];
 						// save the external system's id into session_field_value table'
 						$res = SessionManager::update_session_extra_field_value($id,$extra_field_name,$extra_field_value);
 				}
 			}
-					
+
 			$results[] = 1;
-			continue;		
+			continue;
 		}
-			
-	} // end principal foreach	
-		
+
+	} // end principal foreach
+
 	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_session_id_value' =>$orig_session_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_session_id_value' =>$orig_session_id_value[$i],'result' => $results[$i]);
 	}
-	
-	return $output;	
-	
+
+	return $output;
+
 }
 
 /* Register DokeosWSDeleteSession function */
@@ -3365,7 +3365,7 @@ $server->wsdl->addComplexType(
 	'',
 	array(
 		'original_session_id_value' => array('name' => 'original_session_id_value', 'type' => 'xsd:string'),
-		'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string')						
+		'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string')
 	)
 );
 
@@ -3387,8 +3387,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'sessions' => array('name' => 'sessions', 'type' => 'tns:deleteSessionParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'sessions' => array('name' => 'sessions', 'type' => 'tns:deleteSessionParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -3429,85 +3429,85 @@ $server->register('DokeosWSDeleteSession',			// method name
 function DokeosWSDeleteSession($params) {
 
 	global $_configuration;
-	
-	$secret_key = $params['secret_key'];	
+
+	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
-	}	
-			
-	$t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);		
+	}
+
+	$t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
 	$t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
 	$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 	$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 	$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 	$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-		
+
 	$session_params = $params['sessions'];
 	$results = array();
 	$orig_session_id_value = array();
-	
+
 	foreach($session_params as $session_param) {
-		
+
 		$original_session_id_value = $session_param['original_session_id_value'];
 		$original_session_id_name = $session_param['original_session_id_name'];
-		$orig_session_id_value[] = $original_session_id_name;				
+		$orig_session_id_value[] = $original_session_id_name;
 		// get session id from original session id
 		$sql = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
 		$res = @api_sql_query($sql,__FILE__,__LINE__);
-		$row = Database::fetch_row($res);	
-			
-		$idChecked=intval($row[0]);		
+		$row = Database::fetch_row($res);
+
+		$idChecked=intval($row[0]);
 		if (empty($idChecked)) {
 			$results[] = 0;
-			continue;			
+			continue;
 		}
-												
-		$session_ids[] = $idChecked;	
-									
+
+		$session_ids[] = $idChecked;
+
 		$sql_session = "DELETE FROM $tbl_session WHERE id = '$idChecked'";
 		@api_sql_query($sql_session,__FILE__,__LINE__);
-		$sql_session_rel_course = "DELETE FROM $tbl_session_rel_course WHERE id_session = '$idChecked'"; 
+		$sql_session_rel_course = "DELETE FROM $tbl_session_rel_course WHERE id_session = '$idChecked'";
 		@api_sql_query($sql_session_rel_course,__FILE__,__LINE__);
 		$sql_session_rel_course_rel_user = "DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session = '$idChecked'";
-		@api_sql_query($sql_session_rel_course_rel_user,__FILE__,__LINE__);	
-		$sql_session_rel_course = "DELETE FROM $tbl_session_rel_user WHERE id_session = '$idChecked'"; 
+		@api_sql_query($sql_session_rel_course_rel_user,__FILE__,__LINE__);
+		$sql_session_rel_course = "DELETE FROM $tbl_session_rel_user WHERE id_session = '$idChecked'";
 		@api_sql_query($sql_session_rel_course,__FILE__,__LINE__);
 		$results[] = 1;
 		continue;
-	
+
 	}
-	
+
 	// get fields id from all extra fields about a given session id
 	$cad_session_ids = implode(",",$session_ids);
-											 
+
 	$sql = "SELECT distinct field_id FROM $t_sfv  WHERE session_id IN ($cad_session_ids)";
 	$res_field_ids = @api_sql_query($sql,__FILE__,__LINE__);
-	 
-	while($row_field_id = Database::fetch_row($res_field_ids)){		
-		$field_ids[] = $row_field_id[0]; 
-	}							
-	
-	//delete from table_session_field_value from a given session_id
-	foreach ($session_ids as $session_id) {		
-		$sql_session_field_value = "DELETE FROM $t_sfv WHERE session_id = '$session_id'";
-		@api_sql_query($sql_session_field_value,__FILE__,__LINE__);	
+
+	while($row_field_id = Database::fetch_row($res_field_ids)){
+		$field_ids[] = $row_field_id[0];
 	}
-	
+
+	//delete from table_session_field_value from a given session_id
+	foreach ($session_ids as $session_id) {
+		$sql_session_field_value = "DELETE FROM $t_sfv WHERE session_id = '$session_id'";
+		@api_sql_query($sql_session_field_value,__FILE__,__LINE__);
+	}
+
 	$sql = "SELECT distinct field_id FROM $t_sfv";
 	$res_field_all_ids = @api_sql_query($sql,__FILE__,__LINE__);
-	
-	while($row_field_all_id = Database::fetch_row($res_field_all_ids)){		
-		$field_all_ids[] = $row_field_all_id[0]; 
+
+	while($row_field_all_id = Database::fetch_row($res_field_all_ids)){
+		$field_all_ids[] = $row_field_all_id[0];
 	}
-	
+
 	foreach($field_ids as $field_id) {
 		// check if field id is used into table field value
 		if (in_array($field_id,$field_all_ids)) {
 			continue;
-		} else {			
+		} else {
 			$sql_session_field = "DELETE FROM $t_sf WHERE id = '$field_id'";
 			api_sql_query($sql_session_field,__FILE__,__LINE__);
 		}
@@ -3517,11 +3517,11 @@ function DokeosWSDeleteSession($params) {
 	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_session_id_value' =>$orig_session_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_session_id_value' =>$orig_session_id_value[$i],'result' => $results[$i]);
 	}
-	
-	return $output;	
-	
+
+	return $output;
+
 }
 
 
@@ -3548,7 +3548,7 @@ $server->wsdl->addComplexType(
 		'original_user_id_values' => array('name' => 'original_user_id_values', 'type' => 'tns:originalUsersList'),
 		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
 		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
-		'original_course_id_name' => array('name' => 'original_course_id_value', 'type' => 'xsd:string')				
+		'original_course_id_name' => array('name' => 'original_course_id_value', 'type' => 'xsd:string')
 	)
 );
 
@@ -3569,8 +3569,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'userscourses' => array('name' => 'userscourses', 'type' => 'tns:subscribeUserToCourseParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'userscourses' => array('name' => 'userscourses', 'type' => 'tns:subscribeUserToCourseParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -3612,18 +3612,18 @@ $server->register('DokeosWSSubscribeUserToCourse',					// method name
 
 // define the method DokeosWSSubscribeUserToCourse
 function DokeosWSSubscribeUserToCourse($params) {
-    
+
     global $_configuration;
-    
+
     $secret_key = $params['secret_key'];
     $security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
-	}    
-  
+	}
+
     $user_table = Database :: get_main_table(TABLE_MAIN_USER);
-	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 	$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
@@ -3634,28 +3634,28 @@ function DokeosWSSubscribeUserToCourse($params) {
 	$tbl_session_rel_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 	$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-    
+
     $userscourses_params = $params['userscourses'];
 	$results = array();
 	$orig_user_id_value = array();
 	$orig_course_id_value = array();
 	foreach($userscourses_params as $usercourse_param) {
-		
+
 		$original_user_id_values = $usercourse_param['original_user_id_values'];
-	    $original_user_id_name = $usercourse_param['original_user_id_name']; 
+	    $original_user_id_name = $usercourse_param['original_user_id_name'];
 	    $original_course_id_value = $usercourse_param['original_course_id_value'];
-	    $original_course_id_name = $usercourse_param['original_course_id_name'];	     	    
+	    $original_course_id_name = $usercourse_param['original_course_id_name'];
 	    $orig_course_id_value[] = $original_course_id_value;
-	 
-		$status = STUDENT;	    
-	    
-	    // get user id from original user id	    		
-	    $usersList = array();	    
+
+		$status = STUDENT;
+
+	    // get user id from original user id
+	    $usersList = array();
 	    foreach ($original_user_id_values as $row_original_user_list) {
 	 		$sql_user = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value = '$row_original_user_list'";
 	 		//return $sql_user;
 	 		$res_user = api_sql_query($sql_user,__FILE__,__LINE__);
-	 		$row_user = Database::fetch_row($res_user); 		
+	 		$row_user = Database::fetch_row($res_user);
 	 		if (empty($row_user[0])) {
 		    	continue; // user_id don't exist'
 		    } else {
@@ -3663,50 +3663,50 @@ function DokeosWSSubscribeUserToCourse($params) {
 				$resu = api_sql_query($sql,__FILE__,__LINE__);
 				$r_check_user = Database::fetch_row($resu);
 				if (!empty($r_check_user[0])) {
-					continue; // user_id is not active 
+					continue; // user_id is not active
 				}
 		    }
-		    $usersList[] = $row_user[0];	     		
+		    $usersList[] = $row_user[0];
 	 	}
 
-	    $orig_user_id_value[] = implode(",",$usersList);	   
+	    $orig_user_id_value[] = implode(",",$usersList);
 	    // get course code from original course id
-	    
+
 		$sql_course = "SELECT course_code FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 		$res_course = api_sql_query($sql_course,__FILE__,__LINE__);
-		$row_course = Database::fetch_row($res_course);	
-			
+		$row_course = Database::fetch_row($res_course);
+
 		$course_code=$row_course[0];
-		
+
 		if (empty($course_code)) {
-			$results[] = 0; // original_course_id_value doesn't exits 
-			continue;			
+			$results[] = 0; // original_course_id_value doesn't exits
+			continue;
 		} else {
 			$sql = "SELECT code FROM $course_table WHERE code ='$course_code' AND visibility = '0'";
 			$resc = api_sql_query($sql,__FILE__,__LINE__);
 			$r_check_code = Database::fetch_row($resc);
 			if (!empty($r_check_code[0])) {
-				$results[] = 0; // this code is not active 
-				continue;				
+				$results[] = 0; // this code is not active
+				continue;
 			}
-		}			    	       	    			
-		
+		}
+
 		$status = ($status == STUDENT || $status == COURSEMANAGER) ? $status : STUDENT;
 		$role_id = ($status == COURSEMANAGER) ? COURSE_ADMIN : NORMAL_COURSE_MEMBER;
 	        $course_code = Database::escape_string($course_code);
-	        
+
 		if (empty ($usersList) || empty ($course_code)) {
-			$results[] = 0; 
-			continue;			
+			$results[] = 0;
+			continue;
 		} else {
-			
+
 			foreach($usersList as $user_id) {
 				// previously check if the user are already registered on the platform
 					$handle = @api_sql_query("SELECT status FROM ".$user_table."
 															WHERE user_id = '$user_id' ", __FILE__, __LINE__);
 				if (Database::num_rows($handle) == 0){
 					//$results[] = 7; // the user isn't registered to the platform
-					continue;				
+					continue;
 				} else {
 					//check if user isn't already subscribed to the course
 					$handle = @api_sql_query("SELECT * FROM ".$course_user_table."
@@ -3714,9 +3714,9 @@ function DokeosWSSubscribeUserToCourse($params) {
 																		AND course_code ='$course_code'", __FILE__, __LINE__);
 					if (Database::num_rows($handle) > 0) {
 						//$results[] = 8; // the user is already subscribed to the course
-						continue;					
+						continue;
 					} else {
-						
+
 						$course_sort = CourseManager :: userCourseSort($user_id,$course_code);
 						$add_course_user_entry_sql = "INSERT INTO ".$course_user_table."
 											SET course_code = '$course_code',
@@ -3724,24 +3724,24 @@ function DokeosWSSubscribeUserToCourse($params) {
 											status    = '".$status."',
 											sort  =   '". ($course_sort)."'";
 						$result = @api_sql_query($add_course_user_entry_sql, __FILE__, __LINE__);
-						
-						
+
+
 					}
 				}
-			} // end foreach usersList									
+			} // end foreach usersList
 		}
 		$results[] = 1;
-		continue;	
-	} // end principal foreach        
-    
+		continue;
+	} // end principal foreach
+
     $count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_user_id_value' =>$orig_user_id_value[$i],'original_course_id_value' =>$orig_course_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_user_id_value' =>$orig_user_id_value[$i],'original_course_id_value' =>$orig_course_id_value[$i],'result' => $results[$i]);
 	}
-	
+
 	return $output;
-	
+
 }
 
 /* Register DokeosWSUnsubscribeUserFromCourse function */
@@ -3756,7 +3756,7 @@ $server->wsdl->addComplexType(
 		'original_user_id_values' => array('name' => 'original_user_id_values', 'type' => 'tns:originalUsersList'),
 		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
 		'original_course_id_value' => array('name' => 'original_course_id_value', 'type' => 'xsd:string'),
-		'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),		
+		'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
 	)
 );
 
@@ -3777,8 +3777,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'userscourses' => array('name' => 'userscourses', 'type' => 'tns:unsuscribeUserFromCourseParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'userscourses' => array('name' => 'userscourses', 'type' => 'tns:unsuscribeUserFromCourseParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -3827,37 +3827,37 @@ function DokeosWSUnsubscribeUserFromCourse($params)
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
 	}
-	
+
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
-	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
+	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 	$table_course 	= Database :: get_main_table(TABLE_MAIN_COURSE);
-    $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);	
+    $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 	$table_field 	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-	
+
 	$userscourses_params = $params['userscourses'];
 	$results = array();
 	$orig_user_id_value = array();
 	$orig_course_id_value = array();
 	foreach($userscourses_params as $usercourse_param) {
-		
+
 		$original_user_id_values 	= $usercourse_param['original_user_id_values'];
-	    $original_user_id_name 		= $usercourse_param['original_user_id_name']; 
+	    $original_user_id_name 		= $usercourse_param['original_user_id_name'];
 	    $original_course_id_value 	= $usercourse_param['original_course_id_value'];
-	    $original_course_id_name 	= $usercourse_param['original_course_id_name'];	    
+	    $original_course_id_name 	= $usercourse_param['original_course_id_name'];
 	    $orig_course_id_value[] = $original_course_id_value;
 	    // get user id from original user id
-	    
-	    
-	    
-		// get user id from original user id	    		
-	    $usersList = array();	    
+
+
+
+		// get user id from original user id
+	    $usersList = array();
 	    foreach ($original_user_id_values as $row_original_user_list) {
 	 		$sql_user = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value = '$row_original_user_list'";
 	 		//return $sql_user;
 	 		$res_user = api_sql_query($sql_user,__FILE__,__LINE__);
-	 		$row_user = Database::fetch_row($res_user); 		
+	 		$row_user = Database::fetch_row($res_user);
 	 		if (empty($row_user[0])) {
 		    	continue; // user_id don't exist'
 		    } else {
@@ -3865,59 +3865,59 @@ function DokeosWSUnsubscribeUserFromCourse($params)
 				$resu = api_sql_query($sql,__FILE__,__LINE__);
 				$r_check_user = Database::fetch_row($resu);
 				if (!empty($r_check_user[0])) {
-					continue; // user_id is not active 
+					continue; // user_id is not active
 				}
 		    }
-		    $usersList[] = $row_user[0];	     		
+		    $usersList[] = $row_user[0];
 	 	}
 
-	    $orig_user_id_value[] = implode(",",$usersList);	
-		
+	    $orig_user_id_value[] = implode(",",$usersList);
+
 	    // get course code from original course id
-	    
+
 		$sql_course 	= "SELECT course_code	FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
 		$res_course 	= api_sql_query($sql_course,__FILE__,__LINE__);
-		$row_course 	= Database::fetch_row($res_course);	
-			
+		$row_course 	= Database::fetch_row($res_course);
+
 		$course_code = $row_course[0];
-	          				 
+
 		if (empty($course_code)) {
 			$results[] = 0;
-			continue;			
+			continue;
 		} else {
 			$sql = "SELECT code FROM $table_course WHERE code ='$course_code' AND visibility = '0'";
 			$resul = api_sql_query($sql,__FILE__,__LINE__);
 			$r_check_code = Database::fetch_row($resul);
 			if (!empty($r_check_code[0])) {
 				$results[] = 0;
-				continue;				
+				continue;
 			}
-		}  
-	   	   		
+		}
+
 		if(count($usersList) == 0) {
 			$results[] = 0;
-			continue;			
+			continue;
 		}
-		
-		foreach($usersList as $user_id) {						
-		    $course_code = Database::escape_string($course_code);    				
+
+		foreach($usersList as $user_id) {
+		    $course_code = Database::escape_string($course_code);
 			$sql = "DELETE FROM $table_course_user WHERE user_id = '$user_id' AND course_code = '".$course_code."'";
-			api_sql_query($sql, __FILE__, __LINE__);		
-			$return = Database::affected_rows(); 			
+			api_sql_query($sql, __FILE__, __LINE__);
+			$return = Database::affected_rows();
 		}
 		$results[] = 1;
-		continue;	 						
+		continue;
 	} // end principal foreach
-	
+
 	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_user_id_values' =>$orig_user_id_value[$i],'original_course_id_value' =>$orig_course_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_user_id_values' =>$orig_user_id_value[$i],'original_course_id_value' =>$orig_course_id_value[$i],'result' => $results[$i]);
 	}
-	
+
 	return $output;
-	
-	
+
+
 }
 
 /* Register DokeosWSSuscribeUsersToSession function */
@@ -3932,7 +3932,7 @@ $server->wsdl->addComplexType(
 		'original_user_id_values' => array('name' => 'original_user_id_values', 'type' => 'tns:originalUsersList'),
 		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
 		'original_session_id_value' => array('name' => 'original_session_id_value', 'type' => 'xsd:string'),
-		'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string')						
+		'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string')
 	)
 );
 
@@ -3953,8 +3953,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'userssessions' => array('name' => 'userssessions', 'type' => 'tns:subscribeUsersToSessionParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'userssessions' => array('name' => 'userssessions', 'type' => 'tns:subscribeUsersToSessionParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -3995,9 +3995,9 @@ $server->register('DokeosWSSuscribeUsersToSession',						// method name
 
 // define the method DokeosWSSuscribeUsersToSession
 function DokeosWSSuscribeUsersToSession($params){
- 	
+
  	global $_configuration;
- 	
+
  	$secret_key = $params['secret_key'];
  	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
@@ -4006,43 +4006,43 @@ function DokeosWSSuscribeUsersToSession($params){
 	}
 
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
- 	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
-	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);		
-	$t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);		
+ 	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+	$t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
 	$t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
 	$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 	$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
    	$tbl_session_rel_user 				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
    	$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
-   	
+
    	$userssessions_params = $params['userssessions'];
 	$results = array();
 	$orig_user_id_value = array();
 	$orig_session_id_value = array();
 	foreach($userssessions_params as $usersession_params) {
-				   	
+
 	   	$original_session_id_value = $usersession_params['original_session_id_value'];
 		$original_session_id_name = $usersession_params['original_session_id_name'];
 		$original_user_id_name = $usersession_params['original_user_id_name'];
 		$original_user_id_values = $usersession_params['original_user_id_values'];
 	   	$orig_session_id_value[] = $original_session_id_value;
 		// get session id from original session id
-		$sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";		
+		$sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
 		$res_session = api_sql_query($sql_session,__FILE__,__LINE__);
-		$row_session = Database::fetch_row($res_session);	
-	 	 	
+		$row_session = Database::fetch_row($res_session);
+
 	 	$id_session = $row_session[0];
-	 	
+
 	 	if (Database::num_rows($res_session) < 1) {
 			$results[] = 0;
 			continue;
 		}
-	 	
+
 	 	$usersList = array();
 	 	foreach ($original_user_id_values as $row_original_user_list) {
 	 		$sql_user = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value = '$row_original_user_list'";
 	 		$res_user = api_sql_query($sql_user,__FILE__,__LINE__);
-	 		$row_user = Database::fetch_row($res_user); 		
+	 		$row_user = Database::fetch_row($res_user);
 	 		if (empty($row_user[0])) {
 		    	continue; // user_id don't exist'
 		    } else {
@@ -4050,24 +4050,24 @@ function DokeosWSSuscribeUsersToSession($params){
 				$resu = api_sql_query($sql,__FILE__,__LINE__);
 				$r_check_user = Database::fetch_row($resu);
 				if (!empty($r_check_user[0])) {
-					continue; // user_id is not active 
+					continue; // user_id is not active
 				}
 		    }
-		    $usersList[] = $row_user[0];	     		
+		    $usersList[] = $row_user[0];
 	 	}
-		
+
 		if (empty($usersList)) {
 			$results[] = 0;
-			continue;			
+			continue;
 		}
-	 	
+
 	 	$orig_user_id_value[] = implode(",",$usersList);
-	 	
+
 	  	if ($id_session!= strval(intval($id_session))) {
 	  		$results[] = 0;
 			continue;
-	  	}	   	
-		   	
+	  	}
+
 	   	$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session'";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 		$existingUsers = array();
@@ -4076,11 +4076,11 @@ function DokeosWSSuscribeUsersToSession($params){
 		}
 		$sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
-		$CourseList=array();	
+		$CourseList=array();
 		while($row=Database::fetch_array($result)) {
 			$CourseList[]=$row['course_code'];
 		}
-		
+
 		foreach ($CourseList as $enreg_course) {
 			// for each course in the session
 			$nbr_users=0;
@@ -4120,18 +4120,18 @@ function DokeosWSSuscribeUsersToSession($params){
 		api_sql_query($update_sql,__FILE__,__LINE__);
 		$return = Database::affected_rows();
 		$results[] = 1;
-		continue;					
-			
+		continue;
+
 	} // end principal foreach
-	
+
 	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_user_id_values' =>$orig_user_id_value[$i],'original_session_id_value' =>$orig_session_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_user_id_values' =>$orig_user_id_value[$i],'original_session_id_value' =>$orig_session_id_value[$i],'result' => $results[$i]);
 	}
-	
+
 	return $output;
-	
+
 }
 
 /* Register DokeosWSUnsuscribeUsersFromSession function */
@@ -4146,7 +4146,7 @@ $server->wsdl->addComplexType(
 		'original_user_id_values' => array('name' => 'original_user_id_values', 'type' => 'tns:originalUsersList'),
 		'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
 		'original_session_id_value' => array('name' => 'original_session_id_value', 'type' => 'xsd:string'),
-		'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string')						
+		'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string')
 	)
 );
 
@@ -4167,8 +4167,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'userssessions' => array('name' => 'userssessions', 'type' => 'tns:subscribeUsersToSessionParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'userssessions' => array('name' => 'userssessions', 'type' => 'tns:subscribeUsersToSessionParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -4209,9 +4209,9 @@ $server->register('DokeosWSUnsuscribeUsersFromSession',						// method name
 
 // define the method DokeosWSUnsuscribeUsersFromSession
 function DokeosWSUnsuscribeUsersFromSession($params){
- 	
+
  	global $_configuration;
- 	
+
  	$secret_key = $params['secret_key'];
  	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
@@ -4220,44 +4220,44 @@ function DokeosWSUnsuscribeUsersFromSession($params){
 	}
 
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
- 	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);		
-	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);		
-	$t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);		
+ 	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+	$t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
 	$t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
 	$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 	$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
    	$tbl_session_rel_user 				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
    	$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
-   	
+
    	$userssessions_params = $params['userssessions'];
 	$results = array();
 	$orig_user_id_value = array();
 	$orig_session_id_value = array();
-	
+
 	foreach($userssessions_params as $usersession_params) {
-				   	
+
 	   	$original_session_id_value = $usersession_params['original_session_id_value'];
 		$original_session_id_name = $usersession_params['original_session_id_name'];
 		$original_user_id_name = $usersession_params['original_user_id_name'];
 		$original_user_id_values = $usersession_params['original_user_id_values'];
 	   	$orig_session_id_value[] = $original_session_id_value;
 		// get session id from original session id
-		$sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";		
+		$sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
 		$res_session = api_sql_query($sql_session,__FILE__,__LINE__);
-		$row_session = Database::fetch_row($res_session);	
-	 	 	
+		$row_session = Database::fetch_row($res_session);
+
 	 	$id_session = $row_session[0];
-	 	
+
 	 	if (Database::num_rows($res_session) < 1) {
 			$results[] = 0;
 			continue;
 		}
-	 	
+
 	 	$usersList = array();
 	 	foreach ($original_user_id_values as $row_original_user_list) {
 	 		$sql_user = "SELECT user_id FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value = '$row_original_user_list'";
 	 		$res_user = api_sql_query($sql_user,__FILE__,__LINE__);
-	 		$row_user = Database::fetch_row($res_user); 		
+	 		$row_user = Database::fetch_row($res_user);
 	 		if (empty($row_user[0])) {
 		    	continue; // user_id don't exist'
 		    } else {
@@ -4265,24 +4265,24 @@ function DokeosWSUnsuscribeUsersFromSession($params){
 				$resu = api_sql_query($sql,__FILE__,__LINE__);
 				$r_check_user = Database::fetch_row($resu);
 				if (!empty($r_check_user[0])) {
-					continue; // user_id is not active 
+					continue; // user_id is not active
 				}
 		    }
-		    $usersList[] = $row_user[0];	     		
+		    $usersList[] = $row_user[0];
 	 	}
-		
+
 		if (empty($usersList)) {
 			$results[] = 0;
-			continue;			
+			continue;
 		}
-	 	
+
 	 	$orig_user_id_value[] = implode(",",$usersList);
-	 	
+
 	  	if ($id_session!= strval(intval($id_session))) {
 	  		$results[] = 0;
 			continue;
-	  	}	   	
-		   	
+	  	}
+
 	   	$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session'";
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 		$existingUsers = array();
@@ -4291,27 +4291,27 @@ function DokeosWSUnsuscribeUsersFromSession($params){
 		}
 		$sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
-		$CourseList=array();	
+		$CourseList=array();
 		while($row=Database::fetch_array($result)) {
 			$CourseList[]=$row['course_code'];
 		}
-		
+
 		foreach ($CourseList as $enreg_course) {
 			// for each course in the session
 			$nbr_users=0;
 		    $enreg_course = Database::escape_string($enreg_course);
-			
-			
+
+
 			foreach ($existingUsers as $existing_user) {
 				if(!in_array($existing_user, $usersList)) {
 					$sql = "DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course' AND id_user='$existing_user'";
 					api_sql_query($sql,__FILE__,__LINE__);
-	
+
 					if(Database::affected_rows()) {
 						$nbr_users--;
 					}
 				}
-			}								
+			}
 			// count users in this session-course relation
 			$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
@@ -4320,41 +4320,41 @@ function DokeosWSUnsuscribeUsersFromSession($params){
 			$update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
 			api_sql_query($update_sql,__FILE__,__LINE__);
 		}
-		
+
 		// insert missing users into session
-		
+
 		foreach ($usersList as $enreg_user) {
-	        $enreg_user = Database::escape_string($enreg_user);		
-			$delete_sql = "DELETE FROM $tbl_session_rel_user WHERE id_session = '$id_session' AND id_user ='$enreg_user'";			
+	        $enreg_user = Database::escape_string($enreg_user);
+			$delete_sql = "DELETE FROM $tbl_session_rel_user WHERE id_session = '$id_session' AND id_user ='$enreg_user'";
 			api_sql_query($delete_sql,__FILE__,__LINE__);
 			$return = Database::affected_rows();
 		}
 		$nbr_users = 0;
-		$sql = "SELECT nbr_users FROM $tbl_session WHERE id = '$id_session'";			
+		$sql = "SELECT nbr_users FROM $tbl_session WHERE id = '$id_session'";
 		$res_nbr_users = api_sql_query($sql,__FILE__,__LINE__);
 		$row_nbr_users = Database::fetch_row($res_nbr_users);
-		
+
 		if (Database::num_rows($res_nbr_users) > 0) {
-		   $nbr_users = ($row_nbr_users[0] - $return); 	
+		   $nbr_users = ($row_nbr_users[0] - $return);
 		}
-				
-		// update number of users in the session		
+
+		// update number of users in the session
 		$update_sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
 		api_sql_query($update_sql,__FILE__,__LINE__);
 		$return = Database::affected_rows();
 		$results[] = 1;
-		continue;					
-			
+		continue;
+
 	} // end principal foreach
-	
+
 	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_user_id_values' =>$orig_user_id_value[$i],'original_session_id_value' =>$orig_session_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_user_id_values' =>$orig_user_id_value[$i],'original_session_id_value' =>$orig_session_id_value[$i],'result' => $results[$i]);
 	}
-	
+
 	return $output;
-	
+
 }
 
 /* Register DokeosWSSuscribeCoursesToSession function */
@@ -4379,7 +4379,7 @@ $server->wsdl->addComplexType(
 		'original_course_id_values' => array('name' => 'original_course_id_values', 'type' => 'tns:originalCoursesList'),
 		'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
 		'original_session_id_value' => array('name' => 'original_session_id_value', 'type' => 'xsd:string'),
-		'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string')		
+		'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string')
 	)
 );
 
@@ -4400,8 +4400,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'coursessessions' => array('name' => 'coursessessions', 'type' => 'tns:subscribeCoursesToSessionParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'coursessessions' => array('name' => 'coursessessions', 'type' => 'tns:subscribeCoursesToSessionParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -4445,54 +4445,54 @@ $server->register('DokeosWSSuscribeCoursesToSession',						// method name
 function DokeosWSSuscribeCoursesToSession($params) {
 
 	global $_configuration;
-	
+
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
 	}
-   	 
+
    	// initialisation
 	$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
 	$tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 	$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 	$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
-	$t_sf 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);		
+	$t_sf 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
 	$t_sfv 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
  	$t_cfv 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-	$t_cf 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD); 
-   	
+	$t_cf 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+
    	$coursessessions_params = $params['coursessessions'];
 	$results = array();
 	$orig_course_id_value = array();
 	$orig_session_id_value = array();
 	foreach($coursessessions_params as $coursesession_param) {
-		
+
 		$original_session_id_value = $coursesession_param['original_session_id_value'];
 		$original_session_id_name = $coursesession_param['original_session_id_name'];
 		$original_course_id_name = $coursesession_param['original_course_id_name'];
-		$original_course_id_values = $coursesession_param['original_course_id_values'];					
+		$original_course_id_values = $coursesession_param['original_course_id_values'];
 	 	$orig_session_id_value[] = $original_session_id_value;
 	 	// get session id from original session id
-		$sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";		
+		$sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
 		$res_session = api_sql_query($sql_session,__FILE__,__LINE__);
-		$row_session = Database::fetch_row($res_session);	
-	 	 	
+		$row_session = Database::fetch_row($res_session);
+
 	 	$id_session = $row_session[0];
-	 	
+
 	 	if (empty($id_session)) {
-			$results[] = 0; 	
+			$results[] = 0;
 			continue;
 		}
-		     		    
+
 	    // get courses list from row_original_course_id_values
 	    $course_list = array();
 	 	foreach ($original_course_id_values as $row_original_course_list) {
 	 		$sql_course = "SELECT course_code FROM $t_cf cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value = '$row_original_course_list'";
 	 		$res_course = api_sql_query($sql_course,__FILE__,__LINE__);
-	 		$row_course = Database::fetch_row($res_course); 		
+	 		$row_course = Database::fetch_row($res_course);
 	 		if (empty($row_course[0])) {
 		    	continue; // course_code don't exist'
 		    } else {
@@ -4500,67 +4500,67 @@ function DokeosWSSuscribeCoursesToSession($params) {
 				$resu = api_sql_query($sql,__FILE__,__LINE__);
 				$r_check_course = Database::fetch_row($resu);
 				if (!empty($r_check_course[0])) {
-					continue; // user_id is not active 
+					continue; // user_id is not active
 				}
 		    }
-		    $course_list[] = $row_course[0];	     		
+		    $course_list[] = $row_course[0];
 	 	}
-		
+
 		if (empty($course_list)) {
-			$results[] = 0; 	
+			$results[] = 0;
 			continue;
 		}
-	 	
+
 	 	$orig_course_id_value[] = implode(",",$course_list);
-	 	
+
 	 	// get general coach ID
-	 	$sql = "SELECT id_coach FROM $tbl_session WHERE id='$id_session'";     	
+	 	$sql = "SELECT id_coach FROM $tbl_session WHERE id='$id_session'";
 		$id_coach = api_sql_query($sql,__FILE__,__LINE__);
 		$id_coach = Database::fetch_array($id_coach);
 		$id_coach = $id_coach[0];
-		
+
 		// get list of courses subscribed to this session
-		$sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";	
-			
+		$sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
+
 		$rs = api_sql_query($sql,__FILE__,__LINE__);
 		$existingCourses = api_store_result($rs);
 		$nbr_courses=count($existingCourses);
-		
+
 		// get list of users subscribed to this session
 		$sql="SELECT id_user
 			FROM $tbl_session_rel_user
 			WHERE id_session = '$id_session'";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 		$user_list=api_store_result($result);
-				
-		    
+
+
 		$course_directory= array();
 		// Pass through the courses list we want to add to the session
 		foreach ($course_list as $enreg_course) {
 			$enreg_course = Database::escape_string($enreg_course);
 			$exists = false;
 			// check if the course we want to add is already subscribed
-			 
+
 			foreach ($existingCourses as $existingCourse) {
 				if ($enreg_course == $existingCourse['course_code']) {
 					$exists=true;
 				}
 			}
-						
+
 			if (!$exists) {
 				//if the course isn't subscribed yet
-							
-				$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course (id_session,course_code, id_coach) VALUES ('$id_session','$enreg_course','$id_coach')";				
-				api_sql_query($sql_insert_rel_course ,__FILE__,__LINE__);			
-				
+
+				$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course (id_session,course_code, id_coach) VALUES ('$id_session','$enreg_course','$id_coach')";
+				api_sql_query($sql_insert_rel_course ,__FILE__,__LINE__);
+
 				//We add the current course in the existing courses array, to avoid adding another time the current course
 				$existingCourses[]=array('course_code'=>$enreg_course);
 				$nbr_courses++;
-						
-				// subscribe all the users from the session to this course inside the session 
+
+				// subscribe all the users from the session to this course inside the session
 				$nbr_users=0;
-				
-				foreach ($user_list as $enreg_user) {				
+
+				foreach ($user_list as $enreg_user) {
 					$enreg_user_id = Database::escape_string($enreg_user['id_user']);
 					$sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (id_session,course_code,id_user) VALUES ('$id_session','$enreg_course','$enreg_user_id')";
 					api_sql_query($sql_insert,__FILE__,__LINE__);
@@ -4569,31 +4569,31 @@ function DokeosWSSuscribeCoursesToSession($params) {
 					}
 				}
 				api_sql_query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
-				
-				
-				
+
+
+
 				$sql_directory = "SELECT directory FROM $tbl_course WHERE code = '$enreg_course'";
 				$res_directory = api_sql_query($sql_directory,__FILE__,__LINE__);
 				$row_directory = Database::fetch_row($res_directory);
-				$course_directory[] = $row_directory[0];				
-			} 
+				$course_directory[] = $row_directory[0];
+			}
 		}
 		api_sql_query("UPDATE $tbl_session SET nbr_courses=$nbr_courses WHERE id='$id_session'",__FILE__,__LINE__);
 		$course_directory[]=$id_session;
 		$cad_course_directory = implode(",",$course_directory);
-		
-		$results[] = $cad_course_directory; 	
-		continue; 
+
+		$results[] = $cad_course_directory;
+		continue;
 	}
-   	 
+
    	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_course_id_values' =>$orig_course_id_value[$i],'original_session_id_value' =>$orig_session_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_course_id_values' =>$orig_course_id_value[$i],'original_session_id_value' =>$orig_session_id_value[$i],'result' => $results[$i]);
 	}
-	
-	return $output; 
-   	
+
+	return $output;
+
 }
 
 /* Register DokeosWSUnsuscribeCoursesFromSession function */
@@ -4608,7 +4608,7 @@ $server->wsdl->addComplexType(
 		'original_course_id_values' => array('name' => 'original_course_id_values', 'type' => 'tns:originalCoursesList'),
 		'original_course_id_name' => array('name' => 'original_course_id_name', 'type' => 'xsd:string'),
 		'original_session_id_value' => array('name' => 'original_session_id_value', 'type' => 'xsd:string'),
-		'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string')		
+		'original_session_id_name' => array('name' => 'original_session_id_name', 'type' => 'xsd:string')
 	)
 );
 
@@ -4629,8 +4629,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'coursessessions' => array('name' => 'coursessessions', 'type' => 'tns:unsubscribeCoursesFromSessionParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'coursessessions' => array('name' => 'coursessessions', 'type' => 'tns:unsubscribeCoursesFromSessionParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 
@@ -4674,55 +4674,55 @@ $server->register('DokeosWSUnsuscribeCoursesFromSession',						// method name
 function DokeosWSUnsuscribeCoursesFromSession($params) {
 
 	global $_configuration;
-	
+
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key,$security_key)) {
 		return -1; //secret key is incorrect
 	}
-   	 
+
    	// initialisation
 	$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
 	$tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 	$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 	$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
-	$t_sf 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);		
+	$t_sf 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
 	$t_sfv 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
  	$t_cfv 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-	$t_cf 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD); 
-   	
+	$t_cf 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+
    	$coursessessions_params = $params['coursessessions'];
 	$results = array();
 	$orig_course_id_value = array();
 	$orig_session_id_value = array();
-	
+
 	foreach($coursessessions_params as $coursesession_param) {
-		
+
 		$original_session_id_value = $coursesession_param['original_session_id_value'];
 		$original_session_id_name = $coursesession_param['original_session_id_name'];
 		$original_course_id_name = $coursesession_param['original_course_id_name'];
-		$original_course_id_values = $coursesession_param['original_course_id_values'];					
+		$original_course_id_values = $coursesession_param['original_course_id_values'];
 	 	$orig_session_id_value[] = $original_session_id_value;
 	 	// get session id from original session id
-		$sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";		
+		$sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
 		$res_session = api_sql_query($sql_session,__FILE__,__LINE__);
-		$row_session = Database::fetch_row($res_session);	
-	 	 	
+		$row_session = Database::fetch_row($res_session);
+
 	 	$id_session = $row_session[0];
-	 	
+
 	 	if (empty($id_session)) {
-			$results[] = 0; 	
+			$results[] = 0;
 			continue;
 		}
-		     		    
+
 	    // get courses list from row_original_course_id_values
 	    $course_list = array();
 	 	foreach ($original_course_id_values as $row_original_course_list) {
 	 		$sql_course = "SELECT course_code FROM $t_cf cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value = '$row_original_course_list'";
 	 		$res_course = api_sql_query($sql_course,__FILE__,__LINE__);
-	 		$row_course = Database::fetch_row($res_course); 		
+	 		$row_course = Database::fetch_row($res_course);
 	 		if (empty($row_course[0])) {
 		    	continue; // course_code don't exist'
 		    } else {
@@ -4730,52 +4730,52 @@ function DokeosWSUnsuscribeCoursesFromSession($params) {
 				$resu = api_sql_query($sql,__FILE__,__LINE__);
 				$r_check_course = Database::fetch_row($resu);
 				if (!empty($r_check_course[0])) {
-					continue; // user_id is not active 
+					continue; // user_id is not active
 				}
 		    }
-		    $course_list[] = $row_course[0];	     		
+		    $course_list[] = $row_course[0];
 	 	}
-		
+
 		if (empty($course_list)) {
-			$results[] = 0; 	
+			$results[] = 0;
 			continue;
 		}
-	 	
-	 	$orig_course_id_value[] = implode(",",$course_list);	 		 	
+
+	 	$orig_course_id_value[] = implode(",",$course_list);
 
 		foreach ($course_list as $enreg_course) {
-	        $enreg_course = Database::escape_string($enreg_course);	
+	        $enreg_course = Database::escape_string($enreg_course);
 	        api_sql_query("DELETE FROM $tbl_session_rel_course WHERE course_code='$enreg_course' AND id_session='$id_session'");
-			api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='$enreg_course' AND id_session='$id_session'");										
+			api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='$enreg_course' AND id_session='$id_session'");
 			$return = Database::affected_rows();
 		}
-		
+
 		$nbr_courses = 0;
-		$sql = "SELECT nbr_courses FROM $tbl_session WHERE id = '$id_session'";			
+		$sql = "SELECT nbr_courses FROM $tbl_session WHERE id = '$id_session'";
 		$res_nbr_courses = api_sql_query($sql,__FILE__,__LINE__);
 		$row_nbr_courses = Database::fetch_row($res_nbr_courses);
-		
+
 		if (Database::num_rows($res_nbr_courses) > 0) {
-		   $nbr_users = ($row_nbr_courses[0] - $return); 	
+		   $nbr_users = ($row_nbr_courses[0] - $return);
 		}
-				
-		// update number of users in the session		
+
+		// update number of users in the session
 		$update_sql = "UPDATE $tbl_session SET nbr_courses= $nbr_courses WHERE id='$id_session' ";
 		api_sql_query($update_sql,__FILE__,__LINE__);
-		
+
 		$results[] = 1;
 		continue;
-		 
+
 	}
-   	 
+
    	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_course_id_values' =>$orig_course_id_value[$i],'original_session_id_value' =>$orig_session_id_value[$i],'result' => $results[$i]);				
+		$output[] = array('original_course_id_values' =>$orig_course_id_value[$i],'original_session_id_value' =>$orig_session_id_value[$i],'result' => $results[$i]);
 	}
-	
-	return $output; 
-   	
+
+	return $output;
+
 }
 
 // Use the request to (try to) invoke the service

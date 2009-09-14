@@ -5,7 +5,7 @@
  * on this dokeos portal.
  * It is set to work with the Dokeos module for Drupal:
  * http://drupal.org/project/dokeos
- * 
+ *
  * See license terms in /dokeos_license.txt
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
  */
@@ -77,31 +77,31 @@ function DokeosWSCourseList($username, $signature, $visibilities='public') {	   
     require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
     require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
     global $_configuration;
-    
+
     $info = api_get_user_info_from_username($username);
     $user_id = $info['user_id'];
     if (!UserManager::is_admin($user_id)) { return -1; }
-    
+
     $list = UserManager::get_api_keys($user_id,'dokeos');
     $key = '';
     foreach ($list as $key) {
         break;
     }
-    
+
     $local_key = $username.$key;
 
     if (!api_is_valid_secret_key($signature, $local_key)) {
         return -1; //secret key is incorrect
     }
-    
-   	
+
+
    	// libraries
 	require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 	$charset = api_get_setting('platform_charset');
 	$vis = array('public'=>'3', 'public-registered'=>'2', 'private'=>'1', 'closed'=>'0');
-	
+
 	$courses_list = array();
-	
+
 	if (!is_array($visibilities)) {
 		$visibilities = split(',',$visibilities);
 	}

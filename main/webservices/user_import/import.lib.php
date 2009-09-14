@@ -9,11 +9,11 @@ function validate_data($users)
 	$usernames = array ();
 	foreach ($users as $index => $user)
 	{
-		//1. check if mandatory fields are set	
+		//1. check if mandatory fields are set
 		$mandatory_fields = array ('LastName', 'FirstName');
 		if (api_get_setting('registration', 'email') == 'true')
 		{
-			$mandatory_fields[] = 'Email';	
+			$mandatory_fields[] = 'Email';
 		}
 		foreach ($mandatory_fields as $key => $field)
 		{
@@ -121,9 +121,9 @@ function save_data($users)
 	foreach ($users as $index => $user)
 	{
 		$user = complete_missing_data($user);
-		
+
 		$user['Status'] = api_status_key($user['Status']);
-		
+
 		$user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], api_get_setting('PlatformLanguage'), $user['PhoneNumber'], '', $user['AuthSource']);
 		foreach ($user['Courses'] as $index => $course)
 		{
@@ -135,26 +135,26 @@ function save_data($users)
 			$class_id = ClassManager :: get_class_id($user['ClassName']);
 			ClassManager :: add_user($user_id, $class_id);
 		}
-		
+
 		// qualite
 		if(!empty($user['Qualite']))
 			UserManager::update_extra_field_value($user_id,'qualite',$user['Qualite']);
-		
+
 		// Categorie
 		if(!empty($user['Categorie']))
 			UserManager::update_extra_field_value($user_id,'categorie',$user['Categorie']);
-		
+
 		// Etat
 		if(!empty($user['Etat']))
 			UserManager::update_extra_field_value($user_id,'etat',$user['Etat']);
-		
+
 		// Niveau
 		if(!empty($user['Niveau']))
 			UserManager::update_extra_field_value($user_id,'niveau',$user['Niveau']);
 	}
 }
 /**
- * Read the CSV-file 
+ * Read the CSV-file
  * @param string $file Path to the CSV-file
  * @return array All userinformation read from the file
  */

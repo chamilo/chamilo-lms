@@ -5,7 +5,7 @@
  * on this dokeos portal.
  * It is set to work with the Dokeos module for Drupal:
  * http://drupal.org/project/dokeos
- * 
+ *
  * See license terms in /dokeos_license.txt
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
  */
@@ -18,22 +18,22 @@ require_once('../inc/global.inc.php');
  * @return array Courses list (code=>[title=>'title',url='http://...',teacher=>'...',language=>''],code=>[...],...)
  */
 function courses_list($security_key,$visibilities='public') {
-	
+
 	global $_configuration;
    	// check if this script is launch by server and if security key is ok
    	if ( $security_key != $_configuration['security_key'] )
    	{
    		return array('error_msg'=>'Security check failed');
    	}
-   	
-   	
+
+
    	// libraries
 	require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 	$charset = api_get_setting('platform_charset');
 	$vis = array('public'=>'3', 'public-registered'=>'2', 'private'=>'1', 'closed'=>'0');
-	
+
 	$courses_list = array();
-	
+
 	if (!is_array($visibilities)) {
 		$tmp = $visibilities;
 		$visibilities = array($tmp);
@@ -58,7 +58,7 @@ echo '<courseslist>';
 
 if(empty($_POST['security-key']) or empty($_POST['visibility']))
 {
-	echo '<errormsg>Invalid parameters, this script expects a security-key and a visibility parameters</errormsg>';	
+	echo '<errormsg>Invalid parameters, this script expects a security-key and a visibility parameters</errormsg>';
 }
 else
 {

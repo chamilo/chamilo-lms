@@ -5,7 +5,7 @@
  * on this dokeos portal.
  * It is set to work with the Dokeos module for Drupal:
  * http://drupal.org/project/dokeos
- * 
+ *
  * See license terms in /dokeos_license.txt
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
  */
@@ -63,7 +63,7 @@ $server->register('DokeosWSCourseListOfUser',   // method name
 );
 
 /**
- * Get a list of courses (code, url, title, teacher, language) for a specific 
+ * Get a list of courses (code, url, title, teacher, language) for a specific
  * user and return to caller
  * Function registered as service. Returns strings in UTF-8.
  * @param string User name in Dokeos
@@ -76,7 +76,7 @@ function DokeosWSCourseListOfUser($username, $signature) {
     require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
     require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
     global $_configuration;
-    
+
     $info = api_get_user_info_from_username($username);
     $user_id = $info['user_id'];
     $list = UserManager::get_api_keys($user_id,'dokeos');
@@ -84,18 +84,18 @@ function DokeosWSCourseListOfUser($username, $signature) {
     foreach ($list as $key) {
     	break;
     }
-    
+
     $local_key = $username.$key;
 
     if (!api_is_valid_secret_key($signature, $local_key)) {
         return -1; //secret key is incorrect
     }
-    
-    
+
+
     // libraries
     require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
     $charset = api_get_setting('platform_charset');
-    
+
     $courses_list = array();
     $courses_list_tmp = CourseManager::get_courses_list_by_user_id($user_id);
     foreach ( $courses_list_tmp as $index => $course )
@@ -161,13 +161,13 @@ $server->register('DokeosWSEventsList',       // method name
  * @return array Events list
  */
 function DokeosWSEventsList($username,$signature,$datestart=0,$dateend=0) {
-    
+
     if (empty($username) or empty($signature)) { return -1; }
 
     require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
     require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
     global $_configuration;
-    
+
     $info = api_get_user_info_from_username($username);
     $user_id = $info['user_id'];
     $list = UserManager::get_api_keys($user_id,'dokeos');
@@ -175,19 +175,19 @@ function DokeosWSEventsList($username,$signature,$datestart=0,$dateend=0) {
     foreach ($list as $key) {
     	break;
     }
-    
+
     $local_key = $username.$key;
 
     if (!api_is_valid_secret_key($signature, $local_key)) {
         return -1; //secret key is incorrect
-    }    
-    
+    }
+
     // libraries
     require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
     $charset = api_get_setting('platform_charset');
-    
+
     $events_list = array();
-    
+
     $user_id = UserManager::get_user_id_from_username($username);
     if ($user_id === false) { return $events_list; } //error in user id recovery
     require_once '../calendar/myagenda.inc.php';

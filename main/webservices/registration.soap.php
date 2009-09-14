@@ -40,7 +40,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:extras[]')),'tns:extras'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:extras[]')),
+'tns:extras'
 );
 
 $server->wsdl->addComplexType(
@@ -72,7 +73,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:usersParams[]')),'tns:usersParams'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:usersParams[]')),
+'tns:usersParams'
 );
 
 $server->wsdl->addComplexType(
@@ -107,7 +109,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_createUsers[]')),'tns:result_createUsers'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_createUsers[]')),
+'tns:result_createUsers'
 );
 
 // Register the method to expose
@@ -225,7 +228,7 @@ function DokeosWSCreateUsers($params) {
 
 		// First check wether the login already exists.
 		if (!UserManager::is_username_available($loginName)) {
-			if(api_set_failure('login-pass already taken')) {
+			if (api_set_failure('login-pass already taken')) {
 				$results[] = 0;
 				continue;
 			}
@@ -291,7 +294,7 @@ function DokeosWSCreateUsers($params) {
 
 	$count_results = count($results);
 	$output = array();
-	for($i = 0; $i < $count_results; $i++) {
+	for ($i = 0; $i < $count_results; $i++) {
 		$output[] = array('original_user_id_value' => $orig_user_id_value[$i], 'result' => $results[$i]);
 	}
 
@@ -419,7 +422,7 @@ function DokeosWSCreateUser($params) {
 		}
 	}
 
-	// default language
+	// Default language
 	if (empty($language)) {
 		$language = api_get_setting('platformLanguage');
 	}
@@ -480,9 +483,9 @@ function DokeosWSCreateUser($params) {
 			foreach ($extra_list as $extra) {
 				$extra_field_name = $extra['field_name'];
 				$extra_field_value = $extra['field_value'];
-				// save new fieldlabel into user_field table
+				// Save new fieldlabel into user_field table.
 				$field_id = UserManager::create_extra_field($extra_field_name, 1, $extra_field_name, '');
-				// save the external system's id into user_field_value table'
+				// Save the external system's id into user_field_value table.
 				$res = UserManager::update_extra_field_value($return, $extra_field_name, $extra_field_value);
 			}
 		}
@@ -530,7 +533,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:createUsersPassEncryptParams[]')),'tns:createUsersPassEncryptParams'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:createUsersPassEncryptParams[]')),
+'tns:createUsersPassEncryptParams'
 );
 
 
@@ -567,7 +571,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_createUsersPassEncrypt[]')),'tns:result_createUsersPassEncrypt'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_createUsersPassEncrypt[]')),
+'tns:result_createUsersPassEncrypt'
 );
 
 // Register the method to expose
@@ -590,7 +595,7 @@ function DokeosWSCreateUsersPasswordCrypted($params) {
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
 	if (!api_is_valid_secret_key($secret_key, $security_key)) {
-		return -1; //secret key is incorrect
+		return -1; // The secret key is incorrect.
 	}
 
 	// database table definition
@@ -602,7 +607,7 @@ function DokeosWSCreateUsersPasswordCrypted($params) {
 	$results = array();
 	$orig_user_id_value = array();
 
-	foreach($users_params as $user_param) {
+	foreach ($users_params as $user_param) {
 
 		$password = $user_param['password'];
 	  	$encrypt_method = $user_param['encrypt_method'];
@@ -614,7 +619,7 @@ function DokeosWSCreateUsersPasswordCrypted($params) {
 		$loginName = $user_param['loginname'];
 
 		$official_code = '';
-		$language='';
+		$language = '';
 		$phone = '';
 		$picture_uri = '';
 		$auth_source = PLATFORM_AUTH_SOURCE;
@@ -657,7 +662,7 @@ function DokeosWSCreateUsersPasswordCrypted($params) {
 		if (!empty($user_param['phone'])) { $phone = $user_param['phone']; }
 		if (!empty($user_param['expiration_date'])) { $expiration_date = $user_param['expiration_date']; }
 
-		// Check if exits x_user_id into user_field_values table.
+		// Check whether x_user_id exists into user_field_values table.
 		$sql = "SELECT field_value,user_id	FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
 		$res = Database::query($sql, __FILE__, __LINE__);
 		$row = Database::fetch_row($res);
@@ -753,7 +758,7 @@ function DokeosWSCreateUsersPasswordCrypted($params) {
 					UrlManager::add_user_to_url($return, 1);
 				}
 			} else {
-				// We are adding by default the access_url_user table with access_url_id = 1
+				// We add by default the access_url_user table with access_url_id = 1
 				UrlManager::add_user_to_url($return, 1);
 			}
 			// Save new fieldlabel into user_field table.
@@ -1036,7 +1041,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:editUsersParams[]')),'tns:editUsersParams'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:editUsersParams[]')),
+'tns:editUsersParams'
 );
 
 $server->wsdl->addComplexType(
@@ -1071,7 +1077,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_editUsers[]')),'tns:result_editUsers'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editUsers[]')),
+'tns:result_editUsers'
 );
 
 // Register the method to expose
@@ -1375,7 +1382,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:editUsersPasswordCryptedParams[]')),'tns:editUsersPasswordCryptedParams'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:editUsersPasswordCryptedParams[]')),
+'tns:editUsersPasswordCryptedParams'
 );
 
 $server->wsdl->addComplexType(
@@ -1410,7 +1418,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_editUsersPasswordCrypted[]')),'tns:result_editUsersPasswordCrypted'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editUsersPasswordCrypted[]')),
+'tns:result_editUsersPasswordCrypted'
 );
 
 // Register the method to expose
@@ -1619,7 +1628,6 @@ function DokeosWSEditUserPasswordCrypted($params) {
 		return -1; // The secret key is incorrect.
 	}
 
-	// Get user id from id of remote system.
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 	$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 	$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
@@ -1648,10 +1656,10 @@ function DokeosWSEditUserPasswordCrypted($params) {
 		$password = $params['password'];
 		$encrypt_method = $params['encrypt_method'];
 		if ($userPasswordCrypted === $encrypt_method ) {
-			if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/',$password)) {
+			if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
 			    $msg = "Encryption $encrypt_method is invalid";
 			    return $msg;
-			} else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/',$password)) {
+			} else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
 				$msg = "Encryption $encrypt_method is invalid";
 				return $msg;
 			}
@@ -1750,7 +1758,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:deleteUsersParam[]')),'tns:deleteUsersParam'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:deleteUsersParam[]')),
+'tns:deleteUsersParam'
 );
 
 // Register the data structures used by the service
@@ -1786,7 +1795,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_deleteUsers[]')),'tns:result_deleteUsers'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_deleteUsers[]')),
+'tns:result_deleteUsers'
 );
 
 $server->register('DokeosWSDeleteUsers',			// method name
@@ -1985,7 +1995,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_createCourse[]')),'tns:result_createCourse'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_createCourse[]')),
+'tns:result_createCourse'
 );
 
 // Register the method to expose
@@ -2027,7 +2038,7 @@ function DokeosWSCreateCourse($params) {
 		$category_code = $course_param['category_code'];
 		$wanted_code = $course_param['wanted_code'];
 		$tutor_name = $course_param['tutor_name'];
-		$course_language = 'english';
+		$course_language = 'english'; // TODO: A hard-coded value.
 		$original_course_id_name = $course_param['original_course_id_name'];
 		$original_course_id_value = $course_param['original_course_id_value'];
 		$orig_course_id_value[] = $course_param['original_course_id_value'];
@@ -2083,7 +2094,7 @@ function DokeosWSCreateCourse($params) {
 			$values['course_language'] = api_get_setting('platformLanguage');
 		}
 
-		$values['tutor_name'] = $_user['firstName'].' '.$_user['lastName'];
+		$values['tutor_name'] = api_get_person_name($_user['firstName'], $_user['lastName'], null, null, $values['course_language']);
 
 		if (trim($wanted_code) == '') {
 			$wanted_code = generate_course_code(substr($title, 0, $maxlength));
@@ -2165,7 +2176,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:createCourseByTitleParams[]')),'tns:createCourseByTitleParams'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:createCourseByTitleParams[]')),
+'tns:createCourseByTitleParams'
 );
 
 // Register the data structures used by the service
@@ -2201,7 +2213,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_createCourseByTitle[]')),'tns:result_createCourseByTitle'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_createCourseByTitle[]')),
+'tns:result_createCourseByTitle'
 );
 
 
@@ -2240,18 +2253,17 @@ function DokeosWSCreateCourseByTitle($params) {
 	foreach($courses_params as $course_param) {
 
 		$title = $course_param['title'];
-		$category_code = 'LANG';
+		$category_code = 'LANG'; // TODO: A hard-coded value.
 		$wanted_code = '';
 		$tutor_firstname = api_get_setting('administratorName');
 		$tutor_lastname = api_get_setting('administratorSurname');
-		$tutor_name = $tutor_firstname.' '.$tutor_lastname;
-
-		if (!empty($course_param['tutor_name'])) {
-			$tutor_name = $course_param['tutor_name'];
-		}
-		$course_language = 'spanish';
+		$course_language = 'spanish'; // TODO: Incorrect default value, it should 'english'.
 		if (!empty($course_param['course_language'])) {
 			$course_language = $course_param['course_language'];
+		}
+		$tutor_name = api_get_person_name($tutor_firstname, $tutor_lastname, null, null, $course_language);
+		if (!empty($course_param['tutor_name'])) {
+			$tutor_name = $course_param['tutor_name'];
 		}
 		$original_course_id_name = $course_param['original_course_id_name'];
 		$original_course_id_value = $course_param['original_course_id_value'];
@@ -2294,13 +2306,13 @@ function DokeosWSCreateCourseByTitle($params) {
 		}
 
 		// Set default values.
-		if (isset($_user["language"]) && $_user["language"]!="") {
-			$values['course_language'] = $_user["language"];
+		if (isset($_user['language']) && $_user['language'] != '') {
+			$values['course_language'] = $_user['language'];
 		} else {
 			$values['course_language'] = api_get_setting('platformLanguage');
 		}
 
-		$values['tutor_name'] = $_user['firstName']." ".$_user['lastName'];
+		$values['tutor_name'] = api_get_person_name($_user['firstName'], $_user['lastName'], null, null, $values['course_language']);
 
 		$keys = define_course_keys($wanted_code, '', $_configuration['db_prefix']);
 
@@ -2315,7 +2327,7 @@ function DokeosWSCreateCourseByTitle($params) {
 				$expiration_date = time() + $firstExpirationDelay;
 				prepare_course_repository($directory, $code);
 				update_Db_course($db_name);
-				$pictures_array=fill_course_repository($directory);
+				$pictures_array = fill_course_repository($directory);
 				fill_Db_course($db_name, $directory, $course_language, $pictures_array);
 				$return = register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, api_get_user_id(), $expiration_date);
 
@@ -2388,7 +2400,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:editCourseParams[]')),'tns:editCourseParams'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:editCourseParams[]')),
+'tns:editCourseParams'
 );
 
 $server->wsdl->addComplexType(
@@ -2423,7 +2436,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_editCourse[]')),'tns:result_editCourse'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editCourse[]')),
+'tns:result_editCourse'
 );
 
 // Register the method to expose
@@ -2497,10 +2511,10 @@ function DokeosWSEditCourse($params){
 		$maxlength = 40 - $dbnamelength;
 
 		if (empty($visual_code)) {
-			$visual_code = generate_course_code(substr($title,0,$maxlength));
+			$visual_code = generate_course_code(substr($title, 0, $maxlength));
 		}
 
-		$disk_quota = '50000';
+		$disk_quota = '50000'; // TODO: A hard-coded value.
 		$tutor_name = $tutor_name[0];
 		$sql = "UPDATE $course_table SET course_language='".Database::escape_string($course_language)."',
 									title='".Database::escape_string($title)."',
@@ -2521,7 +2535,7 @@ function DokeosWSEditCourse($params){
 				$extra_field_name = $extra['field_name'];
 				$extra_field_value = $extra['field_value'];
 				// Save the external system's id into course_field_value table.
-				$res = CourseManager::update_course_extra_field_value($course_code,$extra_field_name,$extra_field_value);
+				$res = CourseManager::update_course_extra_field_value($course_code, $extra_field_name, $extra_field_value);
 			}
 		}
 
@@ -2582,7 +2596,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:fields_course_desc[]')),'tns:fields_course_desc'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:fields_course_desc[]')),
+'tns:fields_course_desc'
 );
 
 
@@ -2600,7 +2615,7 @@ $server->register('DokeosWSCourseDescription',				// method name
 // Define the method DokeosWSCourseDescription
 function DokeosWSCourseDescription($params) {
 
-	global $_configuration,$_course;
+	global $_configuration, $_course;
 
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
@@ -2644,7 +2659,7 @@ function DokeosWSCourseDescription($params) {
 
 	$course_ifo = api_get_course_info($course_code);
 
-	$t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION,$course_ifo['dbName']);
+	$t_course_desc = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $course_ifo['dbName']);
 
 	$sql = "SELECT * FROM $t_course_desc";
 	$result = Database::query($sql, __FILE__, __LINE__);
@@ -2659,6 +2674,7 @@ function DokeosWSCourseDescription($params) {
 							get_lang('Assessment'),
 							get_lang('AddCat'));*/
 
+	// TODO: Hard-coded Spanish texts.
 	$default_titles = array('Descripcion general', 'Objetivos', 'Contenidos', 'Metodologia', 'Materiales', 'Recursos humanos y tecnicos', 'Evaluacion', 'Apartado');
 
 	for ($x = 1; $x < 9; $x++) {
@@ -2713,7 +2729,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:editCourseDescriptionParams[]')),'tns:editCourseDescriptionParams'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:editCourseDescriptionParams[]')),
+'tns:editCourseDescriptionParams'
 );
 
 $server->wsdl->addComplexType(
@@ -2749,7 +2766,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_editCourseDescription[]')),'tns:result_editCourseDescription'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editCourseDescription[]')),
+'tns:result_editCourseDescription'
 );
 
 
@@ -2874,7 +2892,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:deleteCourseParams[]')),'tns:deleteCourseParams'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:deleteCourseParams[]')),
+'tns:deleteCourseParams'
 );
 
 // Register the data structures used by the service.
@@ -2910,7 +2929,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_deleteCourse[]')),'tns:result_deleteCourse'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_deleteCourse[]')),
+'tns:result_deleteCourse'
 );
 
 $server->register('DokeosWSDeleteCourse',			// method name
@@ -2932,7 +2952,7 @@ function DokeosWSDeleteCourse($params) {
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if (!api_is_valid_secret_key($secret_key,$security_key)) {
+	if (!api_is_valid_secret_key($secret_key, $security_key)) {
 		return -1; // The secret key is incorrect.
 	}
 
@@ -3016,7 +3036,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:createSessionParam[]')),'tns:createSessionParam'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:createSessionParam[]')),
+'tns:createSessionParam'
 );
 
 // Register the data structures used by the service
@@ -3052,7 +3073,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_createSession[]')),'tns:result_createSession'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_createSession[]')),
+'tns:result_createSession'
 );
 
 // Register the method to expose
@@ -3207,7 +3229,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:editSessionParams[]')),'tns:editSessionParams'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:editSessionParams[]')),
+'tns:editSessionParams'
 );
 
 $server->wsdl->addComplexType(
@@ -3242,7 +3265,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_editSession[]')),'tns:result_editSession'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editSession[]')),
+'tns:result_editSession'
 );
 
 
@@ -3384,7 +3408,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:deleteSessionParams[]')),'tns:deleteSessionParams'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:deleteSessionParams[]')),
+'tns:deleteSessionParams'
 );
 
 // Register the data structures used by the service
@@ -3420,7 +3445,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_deleteSession[]')),'tns:result_deleteSession'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_deleteSession[]')),
+'tns:result_deleteSession'
 );
 
 $server->register('DokeosWSDeleteSession',			// method name
@@ -3565,7 +3591,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:subscribeUserToCourseParams[]')),'tns:subscribeUserToCourseParams'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:subscribeUserToCourseParams[]')),
+'tns:subscribeUserToCourseParams'
 );
 
 $server->wsdl->addComplexType(
@@ -3601,7 +3628,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_subscribeUserToCourse[]')),'tns:result_subscribeUserToCourse'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_subscribeUserToCourse[]')),
+'tns:result_subscribeUserToCourse'
 );
 
 
@@ -3771,7 +3799,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:unsuscribeUserFromCourseParams[]')),'tns:unsuscribeUserFromCourseParams'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:unsuscribeUserFromCourseParams[]')),
+'tns:unsuscribeUserFromCourseParams'
 );
 
 $server->wsdl->addComplexType(
@@ -3807,7 +3836,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_unsuscribeUserFromCourse[]')),'tns:result_unsuscribeUserFromCourse'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_unsuscribeUserFromCourse[]')),
+'tns:result_unsuscribeUserFromCourse'
 );
 
 // Register the method to expose
@@ -3822,8 +3852,7 @@ $server->register('DokeosWSUnsubscribeUserFromCourse',					// method name
 );
 
 // define the method DokeosWSUnsubscribeUserFromCourse
-function DokeosWSUnsubscribeUserFromCourse($params)
-{
+function DokeosWSUnsubscribeUserFromCourse($params) {
 	global $_configuration;
 	$secret_key = $params['secret_key'];
 	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
@@ -3913,7 +3942,7 @@ function DokeosWSUnsubscribeUserFromCourse($params)
 	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_user_id_values' =>$orig_user_id_value[$i],'original_course_id_value' =>$orig_course_id_value[$i],'result' => $results[$i]);
+		$output[] = array('original_user_id_values' => $orig_user_id_value[$i],'original_course_id_value' => $orig_course_id_value[$i], 'result' => $results[$i]);
 	}
 
 	return $output;
@@ -3942,7 +3971,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:subscribeUsersToSessionParams[]')),'tns:subscribeUsersToSessionParams'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:subscribeUsersToSessionParams[]')),
+'tns:subscribeUsersToSessionParams'
 );
 
 $server->wsdl->addComplexType(
@@ -3978,7 +4008,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_subscribeUsersToSession[]')),'tns:result_subscribeUsersToSession'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_subscribeUsersToSession[]')),
+'tns:result_subscribeUsersToSession'
 );
 
 // Register the method to expose
@@ -4000,7 +4031,7 @@ function DokeosWSSuscribeUsersToSession($params){
  	$secret_key = $params['secret_key'];
  	$security_key = $_SERVER['REMOTE_ADDR'].$_configuration['security_key'];
 
-	if (!api_is_valid_secret_key($secret_key,$security_key)) {
+	if (!api_is_valid_secret_key($secret_key, $security_key)) {
 		return -1; // The secret key is incorrect.
 	}
 
@@ -4126,7 +4157,7 @@ function DokeosWSSuscribeUsersToSession($params){
 	$count_results = count($results);
 	$output = array();
 	for($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_user_id_values' =>$orig_user_id_value[$i],'original_session_id_value' =>$orig_session_id_value[$i],'result' => $results[$i]);
+		$output[] = array('original_user_id_values' => $orig_user_id_value[$i], 'original_session_id_value' => $orig_session_id_value[$i], 'result' => $results[$i]);
 	}
 
 	return $output;
@@ -4155,7 +4186,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:unsubscribeUsersFromSessionParams[]')),'tns:unsubscribeUsersFromSessionParams'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:unsubscribeUsersFromSessionParams[]')),
+'tns:unsubscribeUsersFromSessionParams'
 );
 
 $server->wsdl->addComplexType(
@@ -4191,7 +4223,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_unsubscribeUsersFromSession[]')),'tns:result_unsubscribeUsersFromSession'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_unsubscribeUsersFromSession[]')),
+'tns:result_unsubscribeUsersFromSession'
 );
 
 // Register the method to expose
@@ -4206,7 +4239,7 @@ $server->register('DokeosWSUnsuscribeUsersFromSession',							// method name
 );
 
 // define the method DokeosWSUnsuscribeUsersFromSession
-function DokeosWSUnsuscribeUsersFromSession($params){
+function DokeosWSUnsuscribeUsersFromSession($params) {
 
  	global $_configuration;
 
@@ -4291,14 +4324,13 @@ function DokeosWSUnsuscribeUsersFromSession($params){
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$CourseList = array();
 		while($row = Database::fetch_array($result)) {
-			$CourseList[]=$row['course_code'];
+			$CourseList[] = $row['course_code'];
 		}
 
 		foreach ($CourseList as $enreg_course) {
 			// for each course in the session
 			$nbr_users = 0;
 		    $enreg_course = Database::escape_string($enreg_course);
-
 
 			foreach ($existingUsers as $existing_user) {
 				if (!in_array($existing_user, $usersList)) {
@@ -4348,7 +4380,7 @@ function DokeosWSUnsuscribeUsersFromSession($params){
 	$count_results = count($results);
 	$output = array();
 	for ($i = 0; $i < $count_results; $i++) {
-		$output[] = array('original_user_id_values' =>$orig_user_id_value[$i],'original_session_id_value' =>$orig_session_id_value[$i],'result' => $results[$i]);
+		$output[] = array('original_user_id_values' => $orig_user_id_value[$i], 'original_session_id_value' => $orig_session_id_value[$i], 'result' => $results[$i]);
 	}
 
 	return $output;
@@ -4363,7 +4395,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'string[]')),'xsd:string'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'string[]')),
+'xsd:string'
 );
 
 $server->wsdl->addComplexType(
@@ -4387,7 +4420,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:subscribeCoursesToSessionParams[]')),'tns:subscribeCoursesToSessionParams'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:subscribeCoursesToSessionParams[]')),
+'tns:subscribeCoursesToSessionParams'
 );
 
 $server->wsdl->addComplexType(
@@ -4423,7 +4457,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_subscribeCoursesToSession[]')),'tns:result_subscribeCoursesToSession'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_subscribeCoursesToSession[]')),
+'tns:result_subscribeCoursesToSession'
 );
 
 
@@ -4612,7 +4647,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:unsubscribeCoursesFromSessionParams[]')),'tns:unsubscribeCoursesFromSessionParams'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:unsubscribeCoursesFromSessionParams[]')),
+'tns:unsubscribeCoursesFromSessionParams'
 );
 
 $server->wsdl->addComplexType(
@@ -4648,7 +4684,8 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_unsubscribeCoursesFromSession[]')),'tns:result_unsubscribeCoursesFromSession'
+array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_unsubscribeCoursesFromSession[]')),
+'tns:result_unsubscribeCoursesFromSession'
 );
 
 
@@ -4691,14 +4728,14 @@ function DokeosWSUnsuscribeCoursesFromSession($params) {
 	$orig_course_id_value = array();
 	$orig_session_id_value = array();
 
-	foreach($coursessessions_params as $coursesession_param) {
+	foreach ($coursessessions_params as $coursesession_param) {
 
 		$original_session_id_value = $coursesession_param['original_session_id_value'];
 		$original_session_id_name = $coursesession_param['original_session_id_name'];
 		$original_course_id_name = $coursesession_param['original_course_id_name'];
 		$original_course_id_values = $coursesession_param['original_course_id_values'];
 	 	$orig_session_id_value[] = $original_session_id_value;
-	 	// get session id from original session id
+	 	// Get session id from original session id
 		$sql_session = "SELECT session_id FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
 		$res_session = Database::query($sql_session, __FILE__, __LINE__);
 		$row_session = Database::fetch_row($res_session);

@@ -94,13 +94,11 @@ function DokeosWSCourseListOfUser($username, $signature) {
     // libraries
     require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
-    $charset = api_get_setting('platform_charset');
-
     $courses_list = array();
     $courses_list_tmp = CourseManager::get_courses_list_by_user_id($user_id);
     foreach ($courses_list_tmp as $index => $course) {
         $course_info = CourseManager::get_course_information($course['code']);
-        $courses_list[] = array('code' => $course['code'], 'title' => api_convert_encoding($course_info['title'], 'UTF-8', $charset), 'url' => api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/', 'teacher' => api_convert_encoding($course_info['tutor_name'], 'UTF-8', $charset), 'language' => $course_info['course_language']);
+        $courses_list[] = array('code' => $course['code'], 'title' => api_utf8_encode($course_info['title']), 'url' => api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/', 'teacher' => api_utf8_encode($course_info['tutor_name']), 'language' => $course_info['course_language']);
     }
     return $courses_list;
 }
@@ -183,8 +181,6 @@ function DokeosWSEventsList($username, $signature, $datestart = 0, $dateend = 0)
 
     // Libraries
     require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-
-    $charset = api_get_setting('platform_charset');
 
     $events_list = array();
 

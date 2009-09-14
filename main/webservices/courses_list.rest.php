@@ -31,7 +31,6 @@ function courses_list($security_key, $visibilities = 'public') {
    	// Libraries
 	require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
-	$charset = api_get_setting('platform_charset');
 	$vis = array('public' => '3', 'public-registered' => '2', 'private' => '1', 'closed' => '0');
 
 	$courses_list = array();
@@ -47,7 +46,7 @@ function courses_list($security_key, $visibilities = 'public') {
 		$courses_list_tmp = CourseManager::get_courses_list(null, null, null, null, $vis[$visibility]);
 		foreach ($courses_list_tmp as $index => $course) {
 			$course_info = CourseManager::get_course_information($course['code']);
-			$courses_list[$course['code']] = array('title' => api_convert_encoding($course_info['title'], 'UTF-8', $charset), 'url' => api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/', 'teacher' => api_convert_encoding($course_info['tutor_name'], 'UTF-8', $charset), 'language' => $course_info['course_language']);
+			$courses_list[$course['code']] = array('title' => api_utf8_encode($course_info['title']), 'url' => api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/', 'teacher' => api_utf8_encode($course_info['tutor_name']), 'language' => $course_info['course_language']);
 		}
 	}
 	return $courses_list;

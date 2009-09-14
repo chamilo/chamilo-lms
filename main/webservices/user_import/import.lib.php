@@ -19,21 +19,20 @@ function validate_data($users) {
 			}
 		}
 		// 2. Check username.
-		if (isset ($user['UserName']) && strlen($user['UserName']) != 0)
-		{
-			// 2.1. Check if no username was used twice in import file.
-			if (isset ($usernames[$user['UserName']])) {
+		if (!UserManager::is_username_empty($username)) {
+			// 2.1. Check whether username was used twice in the import file.
+			if (isset($usernames[$user['UserName']])) {
 				$user['error'] = get_lang('UserNameUsedTwice');
 				$errors[] = $user;
 			}
 			$usernames[$user['UserName']] = 1;
-			// 2.2. Check if username isn't allready in use in database.
-			if (!UserManager :: is_username_available($user['UserName'])) {
+			// 2.2. Check whether username is allready in use in database.
+			if (!UserManager::is_username_available($user['UserName'])) {
 				$user['error'] = get_lang('UserNameNotAvailable');
 				$errors[] = $user;
 			}
-			// 2.3. Check if username isn't longer than the 20 allowed characters.
-			if (strlen($user['UserName']) > 20) {
+			// 2.3. Check whether username is too long.
+			if (UserManager::is_username_too_long($user['UserName'])) {
 				$user['error'] = get_lang('UserNameTooLong');
 				$errors[] = $user;
 			}
@@ -66,17 +65,8 @@ function validate_data($users) {
  */
 function complete_missing_data($user) {
 	// 1. Create a username if necessary.
-	if (!isset ($user['UserName']) || strlen($user['UserName']) == 0) {
-		$username = strtolower(ereg_replace('[^a-zA-Z]', '', substr($user['FirstName'], 0, 3).' '.substr($user['LastName'], 0, 4)));
-		if (!UserManager :: is_username_available($username)) {
-			$i = 0;
-			$temp_username = $username.$i;
-			while (!UserManager :: is_username_available($temp_username)) {
-				$temp_username = $username.++$i;
-			}
-			$username = $temp_username;
-		}
-		$user['UserName'] = $username;
+	if (UserManager::is_username_empty($user['UserName'])) {
+		$user['UserName'] = UserManager::create_unique_username($user['FirstName'], $user['LastName']);
 	}
 	// 2. Generate a password if necessary.
 	if (!isset ($user['Password']) || strlen($user['Password']) == 0) {
@@ -113,27 +103,30 @@ function save_data($users) {
 			ClassManager :: add_user($user_id, $class_id);
 		}
 
+		// TODO: Hard-coded French texts.
+
 		// Qualite
 		if (!empty($user['Qualite'])) {
-			UserManager::update_extra_field_value($user_id,'qualite',$user['Qualite']);
+			UserManager::update_extra_field_value($user_id, 'qualite', $user['Qualite']);
 		}
 
 		// Categorie
 		if (!empty($user['Categorie'])) {
-			UserManager::update_extra_field_value($user_id,'categorie',$user['Categorie']);
+			UserManager::update_extra_field_value($user_id, 'categorie', $user['Categorie']);
 		}
 
 		// Etat
 		if (!empty($user['Etat'])) {
-			UserManager::update_extra_field_value($user_id,'etat',$user['Etat']);
+			UserManager::update_extra_field_value($user_id, 'etat', $user['Etat']);
 		}
 
 		// Niveau
-		if(!empty($user['Niveau'])) {
-			UserManager::update_extra_field_value($user_id,'niveau',$user['Niveau']);
+		if (!empty($user['Niveau'])) {
+			UserManager::update_extra_field_value($user_id, 'niveau', $user['Niveau']);
 		}
 	}
 }
+
 /**
  * Reads the CSV-file.
  * @param string $file Path to the CSV-file

@@ -224,7 +224,7 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
 * @todo replace global variable
 * @author Roan Embrechts
 */
-function api_protect_course_script($print_headers=false) {	
+function api_protect_course_script($print_headers=false) {
  	global $is_allowed_in_course;
 	if (!$is_allowed_in_course) {
 		api_not_allowed($print_headers);
@@ -535,7 +535,7 @@ function api_get_user_courses($userid,$fetch_session=true) {
 	$t_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 	$t_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 	$t_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-	
+
 	$sql_select_courses = "SELECT cc.code code, cc.db_name db, cc.directory dir, cu.status status
 			                        FROM    $t_course       cc,
 											$t_course_user   cu
@@ -1674,19 +1674,19 @@ function api_not_allowed($print_headers = false) {
 	$user = api_get_user_id();
 	$course = api_get_course_id();
     global $this_section;
-	
+
 	$origin = isset($_GET['origin'])?$_GET['origin']:'';
-	
+
 	if ($origin == 'learnpath') {
-		
+
 		echo '
 				<style type="text/css" media="screen, projection">
 				/*<![CDATA[*/
 				@import "'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css";
 				/*]]>*/
 				</style>';
-	}		
-		
+	}
+
 	if ((isset($user) && !api_is_anonymous())
 		&& (!isset($course) || $course==-1)
 		&& empty($_GET['cidReq']))
@@ -1717,9 +1717,9 @@ function api_not_allowed($print_headers = false) {
 			$form->addElement('password','password','',array('size'=>15));
 			$form->addElement('style_submit_button','submitAuth',get_lang('Enter'),'class="login"');
 			$test ='<div id="expire_session"><br />'.$form->return_form();'</div>';
-			
+
 			if((!headers_sent() or $print_headers) && $origin != 'learnpath'){Display::display_header('');}
-			Display::display_error_message('<left>'.get_lang('NotAllowed').'<br />'.get_lang('PleaseLoginAgainFromFormBelow').'<br />'.$test.'</left>',false);			
+			Display::display_error_message('<left>'.get_lang('NotAllowed').'<br />'.get_lang('PleaseLoginAgainFromFormBelow').'<br />'.$test.'</left>',false);
 			$_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
 			if ($print_headers && $origin != 'learnpath') {Display::display_footer();}
 			die();
@@ -1829,7 +1829,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 	$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY,$_course['dbName']);
 	if ($to_user_id <= 0) {
 		$to_user_id = NULL; //no to_user_id set
-	} 
+	}
 	$start_visible = ($start_visible == 0) ? "0000-00-00 00:00:00" : $start_visible;
 	$end_visible = ($end_visible == 0) ? "0000-00-00 00:00:00" : $end_visible;
 	// set filters for $to_user_id and $to_group_id, with priority for $to_user_id
@@ -1887,7 +1887,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 			$to_field = "to_user_id";
 			$to_value = $to_user_id;
 		} else {
-			// $to_user_id is not set	
+			// $to_user_id is not set
 			$to_field = "to_group_id";
 			$to_value = $to_group_id;
 		}
@@ -2019,9 +2019,9 @@ function api_get_languages() {
 }
 
 /**
-* Return the id of a language 
+* Return the id of a language
 * @param string language name (dokeos_folder)
-* @return int id of the language 
+* @return int id of the language
 */
 function api_get_language_id($language) {
 	$tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
@@ -2434,15 +2434,15 @@ function api_set_setting($var,$value,$subvar=null,$cat=null,$access_url=1) {
 	}
 
 	$res = api_sql_query($select,__FILE__,__LINE__);
-	if(Database::num_rows($res)>0) {   
+	if(Database::num_rows($res)>0) {
 		//found item for this access_url
 		$row = Database::fetch_array($res);
 		$update = "UPDATE $t_settings SET selected_value = '$value' WHERE id = ".$row['id'] ;
 		$res = api_sql_query($update,__FILE__,__LINE__);
-	} else { 
+	} else {
 		//Item not found for this access_url, we have to check if it exist with access_url = 1
 		$select = "SELECT * FROM $t_settings WHERE variable = '$var' AND access_url = 1 ";
-		// just in case 
+		// just in case
 		if ($access_url==1) {
 			if (!empty($subvar)) {
 				$select .= " AND subkey = '$subvar'";
@@ -2470,7 +2470,7 @@ function api_set_setting($var,$value,$subvar=null,$cat=null,$access_url=1) {
 			} else { // this setting does not exist
 				error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all',0);
 			}
-		} else {	
+		} else {
 			// other access url
 			if (!empty($subvar)) {
 				$select .= " AND subkey = '$subvar'";
@@ -2480,7 +2480,7 @@ function api_set_setting($var,$value,$subvar=null,$cat=null,$access_url=1) {
 			}
 			$res = api_sql_query($select,__FILE__,__LINE__);
 
-			if (Database::num_rows($res)>0) { //we have a setting for access_url 1, but none for the current one, so create one				
+			if (Database::num_rows($res)>0) { //we have a setting for access_url 1, but none for the current one, so create one
 				$row = Database::fetch_array($res);
 				if ($row['access_url_changeable']==1) {
 					$insert = "INSERT INTO $t_settings " .
@@ -2563,7 +2563,7 @@ function api_get_access_url($id) {
 	//$table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
 	$table='access_url';
 	$database = $_configuration['main_database'];
-	$table_access_url =  "`".$database."`.`".$table."`";	
+	$table_access_url =  "`".$database."`.`".$table."`";
 	$sql = "SELECT url, description, active, created_by, tms
 			FROM $table_access_url WHERE id = '$id' ";
 	$res = api_sql_query($sql,__FILE__,__LINE__);
@@ -2736,7 +2736,7 @@ function api_add_setting($val,$var,$sk=null,$type='textfield',$c=null,$title='',
 	if(Database::num_rows($res)>0) { //found item for this access_url
 		$row = Database::fetch_array($res);
 		return $row['id'];
-	} else { //item not found for this access_url, we have to check if the whole thing is missing 
+	} else { //item not found for this access_url, we have to check if the whole thing is missing
 	  //(in which case we ignore the insert) or if there *is* a record but just for access_url=1
 		$insert = "INSERT INTO $t_settings " .
 				"(variable,selected_value," .
@@ -3077,7 +3077,7 @@ function replace_dangerous_char($filename, $strict = 'loose')
 	}
 
 	// For other platform encodings and various languages we use transliteration to ASCII filename string.
-	if (!api_is_valid_utf8($filename)) { 
+	if (!api_is_valid_utf8($filename)) {
 		// Here we need to convert the file name to UTF-8 string first. We will try to guess the input encoding.
 		$input_encoding = api_get_file_system_encoding();
 		if (api_is_utf8($input_encoding)) {
@@ -3162,41 +3162,41 @@ function api_create_include_path_setting()
 
 /** Gets the current access_url id of the Dokeos Platform
  * @author Julio Montoya <gugli100@gmail.com>
- * @return int access_url_id of the current Dokeos Installation 
+ * @return int access_url_id of the current Dokeos Installation
  */
 function api_get_current_access_url_id()
 {
 	$access_url_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-	$path = api_get_path(WEB_PATH);  
+	$path = api_get_path(WEB_PATH);
 	$sql = "SELECT id FROM $access_url_table WHERE url = '".$path."'";
-	$result = api_sql_query($sql); 
+	$result = api_sql_query($sql);
 	if (Database::num_rows($result)>0) {
 	$access_url_id = Database::result($result, 0, 0);
 		return $access_url_id;
 	} else {
 		return -1;
-	}	
+	}
 }
 
 /** Gets the registered urls from a given user id
  * @author Julio Montoya <gugli100@gmail.com>
- * @return int user id  
+ * @return int user id
  */
-function api_get_access_url_from_user($user_id) 
+function api_get_access_url_from_user($user_id)
 {
 	$user_id = intval($user_id);
 	$table_url_rel_user	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-	$table_url	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);		
-	$sql = "SELECT access_url_id FROM $table_url_rel_user url_rel_user INNER JOIN $table_url u 
+	$table_url	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
+	$sql = "SELECT access_url_id FROM $table_url_rel_user url_rel_user INNER JOIN $table_url u
 		    ON (url_rel_user.access_url_id = u.id)
 		    WHERE user_id = ".Database::escape_string($user_id);
 	$result = api_sql_query($sql,  __FILE__, __LINE__);
 	$url_list=array();
 	while ($row = Database::fetch_array($result,'ASSOC')) {
 		$url_list[] = $row['access_url_id'];
-	}			
-	return $url_list;		
-}	
+	}
+	return $url_list;
+}
 
 
 /**
@@ -3218,7 +3218,7 @@ function api_get_status_of_user_in_course ($user_id,$course_code) {
 
 /**
  * Checks whether the curent user is in a course or not.
- * 
+ *
  * @param	string	The course code - optional (takes it from session if not given)
  * @return	boolean
  * @author	Yannick Warnier <yannick.warnier@dokeos.com>
@@ -3236,10 +3236,10 @@ function api_is_in_course($course_code = null) {
 
 /**
  * Checks whether the curent user is in a group or not.
- * 
+ *
  * @param	string	The group id - optional (takes it from session if not given)
  * @param	string	The course code - optional (no additional check by course if course code is not given)
- * @return	boolean	
+ * @return	boolean
  * @author	Ivan Tcholakov
  */
 function api_is_in_group($group_id = null, $course_code = null) {
@@ -3313,26 +3313,26 @@ function api_is_xml_http_request() {
 /**
  * This function gets the hash in md5 or sha1 (it depends in the platform config) of a given password
  * @param  string password
- * @return string password with the applied hash 
+ * @return string password with the applied hash
  * */
-function api_get_encrypted_password($password,$salt = '') 
+function api_get_encrypted_password($password,$salt = '')
 {
 	global $userPasswordCrypted;
 	switch ($userPasswordCrypted){
 		case 'md5':
 				if (!empty($salt)) {
-					$passwordcrypted = md5($password.$salt);	
+					$passwordcrypted = md5($password.$salt);
 				} else {
 					$passwordcrypted = md5($password);
-				}		 
+				}
 				return $passwordcrypted;
 				break;
 		case 'sha1':
 				if (!empty($salt)) {
-					$passwordcrypted = sha1($password.$salt);	
+					$passwordcrypted = sha1($password.$salt);
 				} else {
 					$passwordcrypted = sha1($password);
-				}		 
+				}
 				return $passwordcrypted;
 				break;
 		case 'none':
@@ -3340,12 +3340,12 @@ function api_get_encrypted_password($password,$salt = '')
 				break;
 		default:
 				if (!empty($salt)) {
-					$passwordcrypted = md5($password.$salt);	
+					$passwordcrypted = md5($password.$salt);
 				} else {
 					$passwordcrypted = md5($password);
 				}
 				return $passwordcrypted;
-				break; 
+				break;
 	}
 
 }
@@ -3353,7 +3353,7 @@ function api_get_encrypted_password($password,$salt = '')
 /** Check if a secret key is valid
  *  @param string $original_key_secret  - secret key from (webservice) client
  *  @param string $security_key - security key from dokeos
- *  @return boolean - true if secret key is valid, false otherwise 
+ *  @return boolean - true if secret key is valid, false otherwise
  */
 function api_is_valid_secret_key($original_key_secret,$security_key) {
     global $_configuration;
@@ -3361,7 +3361,7 @@ function api_is_valid_secret_key($original_key_secret,$security_key) {
             return true; //secret key is incorrect
     } else {
         return false;
-    }       
+    }
 }
 /**
  * Check if a user is into course
@@ -3381,7 +3381,7 @@ function api_is_user_of_course ($course_id,$user_id) {
 
 /**
  * Checks whether the server's operating system is Windows (TM).
- * @return boolean - true if the operating system is Windows, false otherwise 
+ * @return boolean - true if the operating system is Windows, false otherwise
  */
 function api_is_windows_os() {
 	if (function_exists("php_uname")) {
@@ -3557,7 +3557,7 @@ function api_get_tools_lists ($my_tool=null) {
 }
 
 /**
- * Checks if we already approved the last version term and condition 
+ * Checks if we already approved the last version term and condition
  * @param int user id
  * @return bool true if we pass false otherwise
  */
@@ -3571,23 +3571,23 @@ function api_check_term_condition($user_id) {
 		if (LegalManager::count()==0) {
 			return true;
 		}
-		//check the last user version_id passed									
+		//check the last user version_id passed
 		$sqlv = "SELECT field_value FROM $t_ufv ufv inner join $t_uf uf on ufv.field_id= uf.id
 				 WHERE field_variable = 'legal_accept' AND user_id = ".intval($user_id);
 		$resv = api_sql_query($sqlv,__FILE__,__LINE__);
 		if (Database::num_rows($resv) > 0) {
 			$rowv = Database::fetch_row($resv);
 			$rowv = $rowv[0];
-			$user_conditions = explode(':',$rowv);	
+			$user_conditions = explode(':',$rowv);
 			$version = $user_conditions[0];
-			$lang_id= $user_conditions[1]; 
+			$lang_id= $user_conditions[1];
 			$real_version = LegalManager::get_last_version($lang_id);
 			if ($version < $real_version) {
 				$return = false;
 			} else {
 				$return = true;
 			}
-		}		
+		}
 	}
 	return $return;
 }
@@ -3597,7 +3597,7 @@ function api_check_term_condition($user_id) {
  * @return array
  */
 function api_get_tool_information ($tool_id) {
-   $t_tool = Database::get_course_table(TABLE_TOOL_LIST);	
+   $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
    $sql = 'SELECT * FROM '.$t_tool.' WHERE id="'.Database::escape_string($tool_id).'"';
    $rs  = Database::query($sql,__FILE__,__LINE__);
    $row = Database::fetch_array($rs);

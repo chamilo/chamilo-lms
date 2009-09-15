@@ -112,9 +112,9 @@ function save_data($users_courses) {
 			foreach($to_subscribe as $index => $course_code) {
                 if(CourseManager :: course_exists($course_code)) {
                     CourseManager::add_user_to_course($user_id,$course_code,$csv_subscriptions[$course_code]);
-                    $c_info = CourseManager::get_course_information($course_code); 
+                    $c_info = CourseManager::get_course_information($course_code);
                     $inserted_in_course[$course_code] = $c_info['title'];
-                } 
+                }
                 if (CourseManager :: course_exists($course_code,true)) {
                     // also subscribe to virtual courses through check on visual code
                     $list = CourseManager :: get_courses_info_from_visual_code($course_code);
@@ -134,9 +134,9 @@ function save_data($users_courses) {
 			foreach($to_unsubscribe as $index => $course_code) {
                 if(CourseManager :: course_exists($course_code)) {
                     CourseManager::unsubscribe_user($user_id,$course_code);
-                    $c_info = CourseManager::get_course_information($course_code); 
+                    $c_info = CourseManager::get_course_information($course_code);
                     $inserted_in_course[$course_code] = $c_info['title'];
-                } 
+                }
                 if (CourseManager :: course_exists($course_code,true)) {
                     // also subscribe to virtual courses through check on visual code
                     $list = CourseManager :: get_courses_info_from_visual_code($course_code);
@@ -163,7 +163,7 @@ function parse_csv_data($file) {
 	$courses = Import :: csv_to_array($file);
 	return $courses;
 }
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array ('admin', 'registration');
 
 $cidReset = true;
@@ -208,7 +208,7 @@ if ($form->validate()) {
         } else {
             $warn = get_lang('UsersUnsubscribedFromBecauseVisualCode').': ';
         }
-        
+
         if (count($inserted_in_course) > 1) {
         	// The users have been inserted in more than one course
             foreach ($inserted_in_course as $code => $info) {
@@ -217,7 +217,7 @@ if ($form->validate()) {
             $warn = substr($warn,0,-1);
         }
         Security::clear_token();
-        $tok = Security::get_token();       
+        $tok = Security::get_token();
 		header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('FileImported')).'&warn='.urlencode($warn).'&sec_token='.$tok);
 		exit ();
 	}

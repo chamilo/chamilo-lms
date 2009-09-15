@@ -49,17 +49,17 @@ function display_drh_list(){
 		document.getElementById("drh_list").style.display="block";
 	}
 	else
-	{ 
+	{
 		document.getElementById("drh_list").style.display="none";
 		document.getElementById("drh_select").options[0].selected="selected";
 	}
 }
-		
+
 function show_image(image,width,height) {
 	width = parseInt(width) + 20;
-	height = parseInt(height) + 20;			
-	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \' , resizable=0\');		
-}		
+	height = parseInt(height) + 20;
+	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \' , resizable=0\');
+}
 //-->
 </script>';
 
@@ -194,7 +194,7 @@ $drh_select = $form->addElement('select','hr_dept_id',get_lang('Drh'),array(),'i
 $drh_list = UserManager :: get_user_list(array('status'=>DRH),array('lastname','firstname'));
 
 if (count($drh_list) == 0) {
-	$drh_select->addOption('- '.get_lang('ThereIsNotStillAResponsible').' -',0);	
+	$drh_select->addOption('- '.get_lang('ThereIsNotStillAResponsible').' -',0);
 } else {
 	$drh_select->addOption('- '.get_lang('SelectAResponsible').' -',0);
 }
@@ -213,9 +213,9 @@ if($user_id != $_SESSION['_uid'])
 	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin',null,get_lang('Yes'),1);
 	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin',null,get_lang('No'),0);
 	if ($user_data['status']<>5) {
-		$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;',false);	
-	} 
-	
+		$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;',false);
+	}
+
 }
 
 // Send email
@@ -278,7 +278,7 @@ foreach($extra as $id => $field_details)
 			{
 				$options[$option_details[1]] = $option_details[2];
 			}
-			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');			
+			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');
 			break;
 		case USER_FIELD_TYPE_SELECT_MULTIPLE:
 			$options = array();
@@ -338,7 +338,7 @@ if( $form->validate())
 	$picture_element = & $form->getElement('picture');
 	$picture = $picture_element->getValue();
 	$picture_uri = '';
-	
+
     //get the picture directory
     $picture_paths = UserManager::get_user_picture_path_by_id($user_id,'system',true);
     $picture_location = $picture_paths['dir'];
@@ -356,13 +356,13 @@ if( $form->validate())
 		$medium_temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 85); //medium picture
 		$temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 200); // normal picture
 		$big_temp = new image($_FILES['picture']['tmp_name']); // original picture
-		
+
 	    switch (!empty($type)) {
-		    case 2 : 
-		    	$small_temp->send_image('JPG',$picture_location.'small_'.$picture_uri); 
+		    case 2 :
+		    	$small_temp->send_image('JPG',$picture_location.'small_'.$picture_uri);
 				$medium_temp->send_image('JPG',$picture_location.'medium_'.$picture_uri);
 	    		$temp->send_image('JPG',$picture_location.$picture_uri);
-	    		$big_temp->send_image('JPG',$picture_location.'big_'.$picture_uri);	    		 
+	    		$big_temp->send_image('JPG',$picture_location.'big_'.$picture_uri);
 		    	break;
 		    case 3 :
 		    	$small_temp->send_image('PNG',$picture_location.'small_'.$picture_uri);
@@ -374,7 +374,7 @@ if( $form->validate())
 		    	$small_temp->send_image('GIF',$picture_location.'small_'.$picture_uri);
 		    	$medium_temp->send_image('GIF',$picture_location.'medium_'.$picture_uri);
 		    	$temp->send_image('GIF',$picture_location.$picture_uri);
-		    	$big_temp->send_image('GIF',$picture_location.'big_'.$picture_uri);	    		 
+		    	$big_temp->send_image('GIF',$picture_location.'big_'.$picture_uri);
 		    	break;
 	    }
 
@@ -383,11 +383,11 @@ if( $form->validate())
 	{
 		@unlink($picture_location.$user_data['picture_uri']);
 	}
-	
+
 	if (strlen($picture['name']) == 0){
 		$picture_uri = $user_data['picture_uri'];
 	}
-	
+
 	$lastname = $user['lastname'];
 	$firstname = $user['firstname'];
 	$official_code = $user['official_code'];
@@ -429,7 +429,7 @@ if( $form->validate())
 	elseif($reset_password == 3)
 	{
 		$password = $user['password'];
-		$auth_source = $user['auth_source'];		
+		$auth_source = $user['auth_source'];
 	}
 	UserManager::update_user($user_id,$firstname,$lastname,$username,$password,$auth_source,$email,$status,$official_code,$phone,$picture_uri,$expiration_date, $active, null, $hr_dept_id,null,$language);
 	if(api_get_setting('openid_authentication')=='true' && !empty($user['openid']))
@@ -449,7 +449,7 @@ if( $form->validate())
 			api_sql_query($sql,__FILE__,__LINE__);
 		}
 	}
-	
+
 	$extras = array();
 	foreach($user as $key => $value)
 	{
@@ -458,26 +458,26 @@ if( $form->validate())
 			$myres = UserManager::update_extra_field_value($user_id,substr($key,6),$value);
 		}
 	}
-	
+
 	if (!empty ($email) && $send_mail)
 	{
 		$recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
-		$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');												
+		$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
 		$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 	    $email_admin = api_get_setting('emailAdministrator');
-	    
+
 	    if ($_configuration['multiple_access_urls']==true) {
-			$access_url_id = api_get_current_access_url_id();				
+			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1 ){
-				$url = api_get_access_url($access_url_id);					
+				$url = api_get_access_url($access_url_id);
 				$emailbody=get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
-			}		
+			}
 		}
 		else {
 			$emailbody=get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
 		}
-			
-					
+
+
 		$emailbody = get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('Settings')." ". $username;
 		// Send password by e-mail if it has been modified, even if encrypted in DB (it doesn't make sense to send an e-mail with login info without the password, even if the password is encrypted)
 		if($reset_password > 0)
@@ -485,9 +485,9 @@ if( $form->validate())
 			$emailbody .= "\n".get_lang('Pass')." : ".stripslashes($password);
 		}
 		@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin);
-			
+
 	}
-	$tok = Security::get_token();		
+	$tok = Security::get_token();
 	header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserUpdated')).'&sec_token='.$tok);
 	exit();
 }

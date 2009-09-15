@@ -54,7 +54,7 @@ function display_drh_list(){
 		document.getElementById("id_platform_admin").style.display="none";
 	}
 	else
-	{ 
+	{
 		document.getElementById("drh_list").style.display="none";
 		document.getElementById("id_platform_admin").style.display="block";
 		document.getElementById("drh_select").options[0].selected="selected";
@@ -66,7 +66,7 @@ function display_drh_list(){
 
 if(!empty($_GET['message'])){
 	$message = urldecode($_GET['message']);
-}	
+}
 
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $tool_name = get_lang('AddUsers');
@@ -153,7 +153,7 @@ $form->addElement('html','<div id="drh_list" style="display:'.$display.';">');
 $drh_select = $form->addElement('select','hr_dept_id',get_lang('Drh'),array(),'id="drh_select"');
 $drh_list = UserManager :: get_user_list(array('status'=>DRH),array('lastname','firstname'));
 if (count($drh_list) == 0) {
-	$drh_select->addOption('- '.get_lang('ThereIsNotStillAResponsible').' -',0);	
+	$drh_select->addOption('- '.get_lang('ThereIsNotStillAResponsible').' -',0);
 } else {
 	$drh_select->addOption('- '.get_lang('SelectAResponsible').' -',0);
 }
@@ -195,7 +195,7 @@ $extra = UserManager::get_extra_fields(0,50,5,'ASC');
 $extra_data = UserManager::get_extra_user_data(0,true);
 
 foreach($extra as $id => $field_details)
-{	
+{
 	if ($field_details[6]==1) { // only show extra fields that are visible
 		switch($field_details[2])
 		{
@@ -225,7 +225,7 @@ foreach($extra as $id => $field_details)
 				{
 					$options[$option_details[1]] = $option_details[2];
 				}
-				$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');			
+				$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');
 				break;
 			case USER_FIELD_TYPE_SELECT_MULTIPLE:
 				$options = array();
@@ -256,25 +256,25 @@ foreach($extra as $id => $field_details)
 					{
 						$values['*'][$element[0]] = str_replace('*','',$element[2]);
 					}
-					else 
+					else
 					{
 						$values[0][$element[0]] = $element[2];
 					}
 				}
-				
+
 				$group='';
 				$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1],'',$values[0],'');
 				$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*','',$values['*'],'');
 				$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '&nbsp;');
 				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-	
+
 				// recoding the selected values for double : if the user has selected certain values, we have to assign them to the correct select form
 				if (key_exists('extra_'.$field_details[1], $extra_data))
 				{
 					// exploding all the selected values (of both select forms)
 					$selected_values = explode(';',$extra_data['extra_'.$field_details[1]]);
 					$extra_data['extra_'.$field_details[1]]  =array();
-					
+
 					// looping through the selected values and assigning the selected values to either the first or second select form
 					foreach ($selected_values as $key=>$selected_value)
 					{
@@ -282,7 +282,7 @@ foreach($extra as $id => $field_details)
 						{
 							$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
 						}
-						else 
+						else
 						{
 							$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
 						}
@@ -317,7 +317,7 @@ $form->setDefaults($defaults);
 $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"') ;
 $form->addElement('style_submit_button', 'submit_plus', get_lang('Add').'+', 'class="add"');
 */
-$select_level = array (); 	
+$select_level = array ();
 $html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit_plus', get_lang('Add').'+', 'class="add"');
 $html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
 $form->addGroup($html_results_enabled);
@@ -366,17 +366,17 @@ if( $form->validate())
 			$expiration_date='0000-00-00 00:00:00';
 		}
 		$active = intval($user['active']);
-	
+
 		$user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,$language,$phone,$picture_uri,$auth_source,$expiration_date,$active, $hr_dept_id);
 
 		// picture path
-		$picture_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$user_id.'/';		
+		$picture_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$user_id.'/';
 
-		if (strlen($picture['name']) > 0 ) {			
+		if (strlen($picture['name']) > 0 ) {
 			if (!is_dir($picture_path)) {
 				if (mkdir($picture_path)) {
 					$perm = api_get_setting('permissions_for_new_directories');
-					$perm = octdec(!empty($perm)?$perm:'0770');					
+					$perm = octdec(!empty($perm)?$perm:'0770');
 					chmod($picture_path,$perm);
 				}
 			}
@@ -386,13 +386,13 @@ if( $form->validate())
 			$medium_temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 85); //medium picture
 			$temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 200); // normal picture
 			$big_temp = new image($_FILES['picture']['tmp_name']); // original picture
-			
+
 		    switch (!empty($type)) {
 			    case 2 :
-			    	$small_temp->send_image('JPG',$picture_path.'small_'.$picture_uri); 
+			    	$small_temp->send_image('JPG',$picture_path.'small_'.$picture_uri);
 			    	$medium_temp->send_image('JPG',$picture_path.'medium_'.$picture_uri);
 			    	$temp->send_image('JPG',$picture_path.$picture_uri);
-			    	$big_temp->send_image('JPG',$picture_path.'big_'.$picture_uri);	    		 
+			    	$big_temp->send_image('JPG',$picture_path.'big_'.$picture_uri);
 			    	break;
 			    case 3 :
 			    	$small_temp->send_image('PNG',$picture_path.'small_'.$picture_uri);
@@ -404,11 +404,11 @@ if( $form->validate())
 			    	$small_temp->send_image('GIF',$picture_path.'small_'.$picture_uri);
 			    	$medium_temp->send_image('GIF',$picture_path.'medium_'.$picture_uri);
 			    	$temp->send_image('GIF',$picture_path.$picture_uri);
-			    	$big_temp->send_image('GIF',$picture_path.'big_'.$picture_uri);	    		 
+			    	$big_temp->send_image('GIF',$picture_path.'big_'.$picture_uri);
 			    	break;
 		    }
 		}
-		
+
 		$extras = array();
 		foreach($user as $key => $value)
 		{
@@ -417,7 +417,7 @@ if( $form->validate())
 				$myres = UserManager::update_extra_field_value($user_id,substr($key,6),$value);
 			}
 		}
-		
+
 		if ($platform_admin)
 		{
 			$sql = "INSERT INTO $table_admin SET user_id = '".$user_id."'";
@@ -426,23 +426,23 @@ if( $form->validate())
 		if (!empty ($email) && $send_mail)
 		{
 			$recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
-			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');			
-									
+			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+
 			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 		    $email_admin = api_get_setting('emailAdministrator');
-		    
+
 		    if ($_configuration['multiple_access_urls']==true) {
-				$access_url_id = api_get_current_access_url_id();				
+				$access_url_id = api_get_current_access_url_id();
 				if ($access_url_id != -1 ){
-					$url = api_get_access_url($access_url_id);					
+					$url = api_get_access_url($access_url_id);
 					$emailbody=get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
-				}		
+				}
 			}
 			else {
 				$emailbody=get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
 			}
-					
-		    	
+
+
 			@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin);
 		}
 		Security::clear_token();
@@ -455,7 +455,7 @@ if( $form->validate())
 		}
 		else
 		{
-			$tok = Security::get_token();		
+			$tok = Security::get_token();
 			header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserAdded')).'&sec_token='.$tok);
 			exit ();
 		}

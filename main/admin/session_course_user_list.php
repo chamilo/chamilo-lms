@@ -23,7 +23,7 @@ $action=$_REQUEST['action'];
 $sort=in_array($_GET['sort'],array('lastname','firstname','username'))?$_GET['sort']:api_sort_by_first_name()?'firstname':'lastname';
 $idChecked = (is_array($_GET['idChecked']) ? $_GET['idChecked'] : (is_array($_POST['idChecked']) ? $_POST['idChecked'] : null));
 if (is_array($idChecked)) {
-	$my_temp = array(); 
+	$my_temp = array();
 	foreach ($idChecked as $id){
 		$my_temp[]= intval($id);// forcing the intval
 	}
@@ -37,7 +37,7 @@ if(!list($session_name,$course_title)=mysql_fetch_row($result))
 	exit();
 }
 
-if($action == 'delete') {	
+if($action == 'delete') {
 	if(is_array($idChecked) && count($idChecked)>0 ) {
 		$idChecked=implode(',',$idChecked);
 		api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='".addslashes($course_code)."' AND id_user IN($idChecked)",__FILE__,__LINE__);

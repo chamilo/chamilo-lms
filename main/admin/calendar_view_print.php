@@ -22,7 +22,7 @@
 ==============================================================================
 *	@package dokeos.admin
 *	@author Carlos Vargas
-*	This file is the calendar/print.php 
+*	This file is the calendar/print.php
 ==============================================================================
 */
 // name of the language file that needs to be included

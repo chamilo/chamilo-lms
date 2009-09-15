@@ -29,7 +29,7 @@
 ==============================================================================
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'admin';
 
 // resetting the course id
@@ -74,7 +74,7 @@ Display :: display_header($tool_name);
 $form->display();
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
 */
 Display :: display_footer();

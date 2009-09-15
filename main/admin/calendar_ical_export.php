@@ -4,7 +4,7 @@
 ==============================================================================
 *	@package dokeos.admin
 *	@author Carlos Vargas
-*	This file is the calendar/ical_export.php 
+*	This file is the calendar/ical_export.php
 ==============================================================================
 */
 /**
@@ -51,7 +51,7 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 		switch($_GET['class'])
 		{
 			case 'public':
-				$vevent->setClass('PUBLIC');			
+				$vevent->setClass('PUBLIC');
 				break;
 			case 'private':
 				$vevent->setClass('PRIVATE');
@@ -60,7 +60,7 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 				$vevent->setClass('CONFIDENTIAL');
 				break;
 			default:
-				$vevent->setClass('PRIVATE');				
+				$vevent->setClass('PRIVATE');
 				break;
 		}
 
@@ -74,7 +74,7 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 				list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$ai['date']);
 				$vevent->setProperty('dtstart',array('year'=>$y,'month'=>$m,'day'=>$d,'hour'=>$h,'min'=>$M,'sec'=>$s));
 				if(empty($ai['enddate']))
-				{	
+				{
 					$y2=$y;$m2=$m;$d2=$d;$h2=$h;$M2=$M+15;$s2=$s;
 					if($M2>60){$M2=$M2-60;$h2+=1;}
 				}
@@ -104,7 +104,7 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 				list($y,$m,$d,$h,$M,$s) = preg_split('/[\s:-]/',$ai['start_date']);
 				$vevent->setProperty('dtstart',array('year'=>$y,'month'=>$m,'day'=>$d,'hour'=>$h,'min'=>$M,'sec'=>$s));
 				if(empty($ai['end_date']))
-				{	
+				{
 					$y2=$y;$m2=$m;$d2=$d;$h2=$h;$M2=$M+15;$s2=$s;
 					if($M2>60){$M2=$M2-60;$h2+=1;}
 				}
@@ -134,13 +134,13 @@ if(!empty($_GET['id']) && $_GET['id']==strval(intval($_GET['id'])))
 				break;
 			default:
 				header('location:'.$_SERVER['REFERER_URI']);
-				die();	
+				die();
 		}
 	}
 }
 else
 {
 	header('location:'.$_SERVER['REFERER_URI']);
-	die();	
+	die();
 }
 ?>

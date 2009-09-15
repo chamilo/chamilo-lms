@@ -71,22 +71,22 @@ if (is_array($extra_field_list)) {
 			$new_field_list[] = array('name'=> $extra_field[3], 'variable'=>$extra_field[1], 'data'=> $extra_field[9]);
 		}
 	}
-}	
-	
+}
+
 function search_users($needle,$type)
 {
 	global $tbl_user,$tbl_session_rel_user,$id_session;
 	$xajax_response = new XajaxResponse();
 	$return = '';
-		
+
 	if (!empty($needle) && !empty($type)) {
-		
+
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
 		$needle = Database::escape_string($needle);
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 		$user_anonymous=api_get_anonymous_id();
-		
+
 		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 		$cond_user_id = '';
 		if (!empty($id_session)) {
@@ -97,14 +97,14 @@ function search_users($needle,$type)
 			$user_ids = array();
 			if (Database::num_rows($res) > 0) {
 				while ($row = Database::fetch_row($res)) {
-					$user_ids[] = (int)$row[0];  
+					$user_ids[] = (int)$row[0];
 				}
 			}
-			if (count($user_ids) > 0){	
+			if (count($user_ids) > 0){
 				$cond_user_id = ' AND user_id NOT IN('.implode(",",$user_ids).')';
-			}				
-		} 
-		
+			}
+		}
+
 		if ($type == 'single') {
 			// search users where username or firstname or lastname begins likes $needle
 			$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
@@ -113,19 +113,19 @@ function search_users($needle,$type)
 				OR lastname LIKE "'.$needle.'%") AND user_id<>"'.$user_anonymous.'"'.
 				$order_clause.
 				' LIMIT 11';
-		} else {						
+		} else {
 			$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
 					WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user_id<>"'.$user_anonymous.'"'.$cond_user_id.
 					$order_clause;
 		}
-				
-		global $_configuration;	
-		if ($_configuration['multiple_access_urls']==true) {		
-			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+
+		global $_configuration;
+		if ($_configuration['multiple_access_urls']==true) {
+			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1){
-				if ($type == 'single') {		
-					$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user 
+				if ($type == 'single') {
+					$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
 					INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
 					WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
 					OR firstname LIKE "'.$needle.'%"
@@ -133,19 +133,19 @@ function search_users($needle,$type)
 					$order_clause.
 					' LIMIT 11';
 				} else {
-					$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user 
+					$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
 					INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-					WHERE access_url_id = '.$access_url_id.'  
+					WHERE access_url_id = '.$access_url_id.'
 					AND '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
-					$order_clause;					
-				}				
-				
+					$order_clause;
+				}
+
 			}
 		}
-				
-		$rs = api_sql_query($sql, __FILE__, __LINE__);		
-        $i=0;		
-		if ($type=='single') {			
+
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
+        $i=0;
+		if ($type=='single') {
 			while ($user = Database :: fetch_array($rs)) {
 	            $i++;
 	            if ($i<=10) {
@@ -155,15 +155,15 @@ function search_users($needle,$type)
 	            	$return .= '...<br />';
 	            }
 			}
-			
+
 			$xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));
-				
+
 		} else {
 			global $nosessionUsersList;
 			$return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
-			while ($user = Database :: fetch_array($rs)) {				
+			while ($user = Database :: fetch_array($rs)) {
 				$person_name = api_get_person_name($user['firstname'], $user['lastname']);
-	            $return .= '<option value="'.$user['user_id'].'">'.$person_name.' ('.$user['username'].')</option>';				     	            
+	            $return .= '<option value="'.$user['user_id'].'">'.$person_name.' ('.$user['username'].')</option>';
 			}
 			$return .= '</select>';
 			$xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
@@ -182,19 +182,19 @@ function add_user_to_session (code, content) {
 
 	document.getElementById("user_to_add").value = "";
 	document.getElementById("ajax_list_users_single").innerHTML = "";
-	
+
 	destination = document.getElementById("destination_users");
-			
+
 	for (i=0;i<destination.length;i++) {
 		if(destination.options[i].text == content) {
 				return false;
-		} 
-	}		
-			
-	destination.options[destination.length] = new Option(content,code);	
+		}
+	}
+
+	destination.options[destination.length] = new Option(content,code);
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
-	
+
 }
 function remove_item(origin)
 {
@@ -207,15 +207,15 @@ function remove_item(origin)
 }
 
 function validate_filter() {
-	
-		document.formulaire.add_type.value = \''.$add_type.'\';
-		document.formulaire.form_sent.value=0;				
-		document.formulaire.submit();
-		
-}
-			
 
-	
+		document.formulaire.add_type.value = \''.$add_type.'\';
+		document.formulaire.form_sent.value=0;
+		document.formulaire.submit();
+
+}
+
+
+
 </script>';
 
 
@@ -236,18 +236,18 @@ if($_POST['form_sent']) {
 	}
 
 	if ($form_sent == 1) {
-		
+
 		SessionManager::suscribe_users_to_session($id_session,$UserList,true);
-		
+
 		//adding the session to the access_url_rel_session table
 		global $_configuration;
-		require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');	
-		if ($_configuration['multiple_access_urls']==true) {			
-			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
-			$access_url_id = api_get_current_access_url_id();			
-			UrlManager::add_session_to_url($id_session,$access_url_id);			
+		require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
+		if ($_configuration['multiple_access_urls']==true) {
+			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+			$access_url_id = api_get_current_access_url_id();
+			UrlManager::add_session_to_url($id_session,$access_url_id);
 		} else {
-			// we are filling by default the access_url_rel_session table 
+			// we are filling by default the access_url_rel_session table
 			UrlManager::add_session_to_url($id_session,1);
 		}
 		//if(empty($_GET['add']))
@@ -267,7 +267,7 @@ $nosessionUsersList = $sessionUsersList = array();
 $rs = api_sql_query($sql, __FILE__, __LINE__);
 $count_courses = Database::result($rs, 0, 0);*/
 $ajax_search = $add_type == 'unique' ? true : false;
-global $_configuration;	
+global $_configuration;
 
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 if ($ajax_search) {
@@ -278,107 +278,107 @@ if ($ajax_search) {
 				AND $tbl_session_rel_user.id_session = ".intval($id_session).
 			$order_clause;
 
-	if ($_configuration['multiple_access_urls']==true) {		
-		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+	if ($_configuration['multiple_access_urls']==true) {
+		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$access_url_id = api_get_current_access_url_id();
-		if ($access_url_id != -1){				
+		if ($access_url_id != -1){
 			$sql="SELECT u.user_id, lastname, firstname, username, id_session
-			FROM $tbl_user u 
+			FROM $tbl_user u
 			INNER JOIN $tbl_session_rel_user
 				ON $tbl_session_rel_user.id_user = u.user_id
 				AND $tbl_session_rel_user.id_session = ".intval($id_session)."
-				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id) 
-				WHERE access_url_id = $access_url_id  
+				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
+				WHERE access_url_id = $access_url_id
 				$order_clause";
 		}
-	}		
-	$result=api_sql_query($sql,__FILE__,__LINE__);	
-	$Users=api_store_result($result);	
+	}
+	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$Users=api_store_result($result);
 	foreach ($Users as $user) {
 		$sessionUsersList[$user['user_id']] = $user ;
 	}
 
 } else {
 		//Filter by Extra Fields
-		$use_extra_fields = false;		
+		$use_extra_fields = false;
 		if (is_array($extra_field_list)) {
-			if (is_array($new_field_list) && count($new_field_list)>0 ) {			
+			if (is_array($new_field_list) && count($new_field_list)>0 ) {
 				$result_list=array();
 				foreach ($new_field_list as $new_field) {
-					$varname = 'field_'.$new_field['variable'];				
+					$varname = 'field_'.$new_field['variable'];
 					if (Usermanager::is_extra_field_available($new_field['variable'])) {
-						if (isset($_POST[$varname]) && $_POST[$varname]!='0') {		
-							$use_extra_fields = true;																	
+						if (isset($_POST[$varname]) && $_POST[$varname]!='0') {
+							$use_extra_fields = true;
 							$extra_field_result[]= Usermanager::get_extra_user_data_by_value($new_field['variable'], $_POST[$varname]);
-						}								
+						}
 					}
-				}									
+				}
 			}
-		}	
+		}
 		if ($use_extra_fields) {
 			$final_result = array();
 			if (count($extra_field_result)>1) {
 				for($i=0;$i<count($extra_field_result)-1;$i++) {
 					if (is_array($extra_field_result[$i+1])) {
-						$final_result  = array_intersect($extra_field_result[$i],$extra_field_result[$i+1]);				
+						$final_result  = array_intersect($extra_field_result[$i],$extra_field_result[$i+1]);
 					}
 				}
-			} else {				
+			} else {
 				$final_result = $extra_field_result[0];
 			}
-					
+
 			$where_filter ='';
 			if ($_configuration['multiple_access_urls']==true) {
 				if (is_array($final_result) && count($final_result)>0) {
 					$where_filter = " AND u.user_id IN  ('".implode("','",$final_result)."') ";
 				} else {
 					//no results
-					$where_filter = " AND u.user_id  = -1"; 
+					$where_filter = " AND u.user_id  = -1";
 				}
-			} else {			
+			} else {
 				if (is_array($final_result) && count($final_result)>0) {
 					$where_filter = " WHERE u.user_id IN  ('".implode("','",$final_result)."') ";
 				} else {
 					//no results
-					$where_filter = " WHERE u.user_id  = -1"; 
+					$where_filter = " WHERE u.user_id  = -1";
 				}
-			}		
+			}
 		}
-		
-		if ($use_extra_fields) {		
+
+		if ($use_extra_fields) {
 			$sql="SELECT  user_id, lastname, firstname, username, id_session
 				FROM $tbl_user u
 				LEFT JOIN $tbl_session_rel_user
 				ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
 				$where_filter
 			$order_clause";
-				
+
 		} else {
 			$sql="SELECT  user_id, lastname, firstname, username, id_session
 				FROM $tbl_user u
 				LEFT JOIN $tbl_session_rel_user
-				ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session' 
+				ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
 			$order_clause";
-		}			
-		if ($_configuration['multiple_access_urls']==true) {		
-			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+		}
+		if ($_configuration['multiple_access_urls']==true) {
+			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
-			if ($access_url_id != -1){				
+			if ($access_url_id != -1){
 				$sql="SELECT  u.user_id, lastname, firstname, username, id_session
 				FROM $tbl_user u
 				LEFT JOIN $tbl_session_rel_user
-					ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'			 
-				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id) 
+					ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
+				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
 				WHERE access_url_id = $access_url_id  $where_filter
-			$order_clause";			
+			$order_clause";
 			}
 		}
-		
-		$result=api_sql_query($sql,__FILE__,__LINE__);	
+
+		$result=api_sql_query($sql,__FILE__,__LINE__);
 		$Users=api_store_result($result);
 		//var_dump($_REQUEST['id_session']);
 		foreach ($Users as $user) {
-			if($user['id_session'] != $id_session)			
+			if($user['id_session'] != $id_session)
 				$nosessionUsersList[$user['user_id']] = $user ;
 		}
 		$user_anonymous=api_get_anonymous_id();
@@ -391,23 +391,23 @@ if ($ajax_search) {
 		$sql="SELECT  user_id, lastname, firstname, username, id_session
 			FROM $tbl_user u
 			LEFT JOIN $tbl_session_rel_user
-			ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session' 
+			ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
 			$order_clause";
-		
-		if ($_configuration['multiple_access_urls']==true) {		
-			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+
+		if ($_configuration['multiple_access_urls']==true) {
+			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
-			if ($access_url_id != -1){				
+			if ($access_url_id != -1){
 				$sql="SELECT  u.user_id, lastname, firstname, username, id_session
 				FROM $tbl_user u
 				LEFT JOIN $tbl_session_rel_user
-					ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'			 
-				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id) 
+					ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
+				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
 				WHERE access_url_id = $access_url_id
-				$order_clause";			
+				$order_clause";
 			}
-		}		
-	$result=api_sql_query($sql,__FILE__,__LINE__);	
+		}
+	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$Users=api_store_result($result);
 
 	foreach($Users as $key_user_list =>$value_user_list) {
@@ -415,7 +415,7 @@ if ($ajax_search) {
 			unset($Users[$key_user_list]);
 			}
 		}
-		
+
 	foreach ($Users as $user) {
 		if($user['id_session'] == $id_session){
 			$sessionUsersList[$user['user_id']] = $user;
@@ -446,30 +446,30 @@ if ($add_type == 'multiple') {
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']); ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 
 <?php
-if ($add_type=='multiple') {	
+if ($add_type=='multiple') {
 	if (is_array($extra_field_list)) {
 		if (is_array($new_field_list) && count($new_field_list)>0 ) {
 			echo '<h3>'.get_lang('FilterUsers').'</h3>';
 			foreach ($new_field_list as $new_field) {
 				echo $new_field['name'];
-				$varname = 'field_'.$new_field['variable'];						
+				$varname = 'field_'.$new_field['variable'];
 				echo '&nbsp;<select name="'.$varname.'">';
-				echo '<option value="0">--'.get_lang('Select').'--</option>';	
+				echo '<option value="0">--'.get_lang('Select').'--</option>';
 				foreach	($new_field['data'] as $option) {
 					$checked='';
 					if (isset($_POST[$varname])) {
 						if ($_POST[$varname]==$option[1]) {
-							$checked = 'selected="true"'; 
+							$checked = 'selected="true"';
 						}
-					}							
-					echo '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';		
+					}
+					echo '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
 				}
-				echo '</select>';	
+				echo '</select>';
 				echo '&nbsp;&nbsp;';
 			}
 			echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
 			echo '<br /><br />';
-		}	
+		}
 	}
 }
 ?>
@@ -496,11 +496,11 @@ if(!empty($errorMsg)) {
 <tr>
 <td align="center">
 
-<?php echo get_lang('FirstLetterUser'); ?> : 
+<?php echo get_lang('FirstLetterUser'); ?> :
      <select name="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple')" >
       <option value = "%">--</option>
       <?php
-        echo Display :: get_alphabet_options();        
+        echo Display :: get_alphabet_options();
       ?>
      </select>
 </td>
@@ -519,15 +519,15 @@ if(!empty($errorMsg)) {
 		<div id="ajax_list_users_single"></div>
 		<?php
   	  } else {
-  	  ?>  	
-  	  <div id="ajax_list_users_multiple">    	 	  
+  	  ?>
+  	  <div id="ajax_list_users_multiple">
 	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">
 		<?php
 		foreach($nosessionUsersList as $enreg) {
-		?>			
+		?>
 			<option value="<?php echo $enreg['user_id']; ?>" <?php if(in_array($enreg['user_id'],$UserList)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 		<?php
-		}	
+		}
 		?>
 	  </select>
 	  </div>
@@ -548,8 +548,8 @@ if(!empty($errorMsg)) {
   	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"></button>
 	<br /><br />
 	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"></button>
-	<?php 
-  } 
+	<?php
+  }
   ?>
 	<br /><br /><br /><br /><br /><br />
   </td>
@@ -577,8 +577,8 @@ unset($sessionUsersList);
 			echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('FinishSessionCreation').'</button>';
         } else {
             //@todo see that the call to "valide()" doesn't duplicate the onsubmit of the form (necessary to avoid delete on "enter" key pressed)
-			echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToSession').'</button>'; 
-			
+			echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToSession').'</button>';
+
         }
 		?>
 	</td>

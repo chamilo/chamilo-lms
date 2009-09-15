@@ -22,7 +22,7 @@
 ==============================================================================
 *	@package dokeos.admin
 *	@author Carlos Vargas
-*	This file is the calendar/agenda.php 
+*	This file is the calendar/agenda.php
 ==============================================================================
 */
 
@@ -266,23 +266,23 @@ if (api_is_allowed_to_edit(false,true))
 				}
                 display_agenda_items();
             } elseif ($_POST['submit_event']) {
-			
+
 		     $course_info = api_get_course_info();
 			    $event_start    = (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
                 $event_stop     = (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
-                
+
 				$id = agenda_add_item($course_info,$_POST['title'],$_POST['content'],$event_start,$event_stop,$_POST['selectedform'],false,$_POST['file_comment']);
-				
+
                 if(!empty($_POST['repeat'])) {
                 	$end_y = intval($_POST['repeat_end_year']);
                     $end_m = intval($_POST['repeat_end_month']);
                     $end_d = intval($_POST['repeat_end_day']);
                     $end   = mktime(23, 59, 59, $end_m, $end_d, $end_y);
                     $res = agenda_add_repeat_item($course_info,$id,$_POST['repeat_type'],$end,null,$_POST['file_comment']);
-                } 
+                }
                 if (api_get_setting('display_upcoming_events') == 'true') {
 					display_upcoming_events();
-				}           
+				}
 				display_agenda_items();
 			} else {
 				show_add_form();
@@ -376,7 +376,7 @@ if (!$_GET['action'] OR $_GET['action']=="showall"  OR $_GET['action']=="showcur
 		{
             if(!empty($_GET['agenda_id']))
             {
-                 display_one_agenda_item((int)$_GET['agenda_id']);   
+                 display_one_agenda_item((int)$_GET['agenda_id']);
             }
             else
             {
@@ -403,7 +403,7 @@ echo "&nbsp;</td></tr></table>";
 // The footer is displayed only if we are not in the learnpath
 if ($_GET['origin'] != 'learnpath')
 {
-	 
+
 	Display::display_footer();
 
 }

@@ -20,7 +20,7 @@
 ==============================================================================
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='admin';
 
 $cidReset=true;
@@ -45,8 +45,8 @@ require api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 if(isset($_POST['activeExtension'])){
 
-	switch ($_POST['extension_code']){		
-		
+	switch ($_POST['extension_code']){
+
 		case 'visio' :
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="true"
@@ -55,7 +55,7 @@ if(isset($_POST['activeExtension'])){
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
 			if(Database::affected_rows()>0)
 			{
-				
+
 				// select all the courses and insert the tool inside
 				$sql = 'SELECT db_name FROM '.Database::get_main_table(TABLE_MAIN_COURSE);
 				$rs = api_sql_query($sql, __FILE__, __LINE__);
@@ -67,7 +67,7 @@ if(isset($_POST['activeExtension'])){
 						$selectres = api_sql_query($select,__FILE__, __LINE__);
 						if(Database::num_rows($selectres)<1)
 						{
-							$sql = 'INSERT INTO '.$tool_table.' SET 
+							$sql = 'INSERT INTO '.$tool_table.' SET
 									name="'.TOOL_VISIO_CONFERENCE.'",
 									link="conference/index.php?type=conference",
 									image="visio.gif",
@@ -76,13 +76,13 @@ if(isset($_POST['activeExtension'])){
 									address="squaregrey.gif",
 									target="_self",
 									category="interaction"';
-							api_sql_query($sql, __FILE__, __LINE__);		
+							api_sql_query($sql, __FILE__, __LINE__);
 						}
 						$select = "SELECT id FROM $tool_table WHERE name='".TOOL_VISIO_CLASSROOM."'";
 						$selectres = api_sql_query($select,__FILE__, __LINE__);
 						if(Database::num_rows($selectres)<1)
 						{
-							$sql = 'INSERT INTO '.$tool_table.' SET 
+							$sql = 'INSERT INTO '.$tool_table.' SET
 									name="'.TOOL_VISIO_CLASSROOM.'",
 									link="conference/index.php?type=classroom",
 									image="visio.gif",
@@ -93,96 +93,96 @@ if(isset($_POST['activeExtension'])){
 									category="authoring"';
 							api_sql_query($sql, __FILE__, __LINE__);
 						}
-					}					
+					}
 				}
 				$message = get_lang('ServiceActivated');
-				
+
 			}
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.Database::escape_string($_POST['visio_host']).'"
 					WHERE variable="service_visio"
 					AND subkey="visio_host"';
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
-			
+
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.Database::escape_string($_POST['visio_port']).'"
 					WHERE variable="service_visio"
 					AND subkey="visio_port"';
-			$rs = api_sql_query($sql, __FILE__, __LINE__);	
+			$rs = api_sql_query($sql, __FILE__, __LINE__);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.Database::escape_string($_POST['visio_pass']).'"
 					WHERE variable="service_visio"
 					AND subkey="visio_pass"';
-			$rs = api_sql_query($sql, __FILE__, __LINE__);	
+			$rs = api_sql_query($sql, __FILE__, __LINE__);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.($_POST['visio_use_rtmpt']=='true'?'true':'false').'"
 					WHERE variable="service_visio"
 					AND subkey="visio_use_rtmpt"';
-			$rs = api_sql_query($sql, __FILE__, __LINE__);	
-			
+			$rs = api_sql_query($sql, __FILE__, __LINE__);
+
 			if(empty($message))
 			{
 				$message = get_lang('ServiceReconfigured');
 			}
-			
-			
-			
-			
-			break;	
-			
+
+
+
+
+			break;
+
 		case 'ppt2lp' :
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="true"
 					WHERE variable="service_ppt2lp"
 					AND subkey="active"';
-					
+
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
-			
+
 			if(Database::affected_rows()>0){
 				$message = get_lang('ServiceActivated');
 			}
-			
+
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['host']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="host"';
 			api_sql_query($sql, __FILE__, __LINE__);
-			
+
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['port']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="port"';
 			api_sql_query($sql, __FILE__, __LINE__);
-			
+
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['ftp_password']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="ftp_password"';
 			api_sql_query($sql, __FILE__, __LINE__);
-			
+
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['user']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="user"';
 			api_sql_query($sql, __FILE__, __LINE__);
-			
+
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['path_to_lzx']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="path_to_lzx"';
 			api_sql_query($sql, __FILE__, __LINE__);
-			
+
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['size']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="size"';
 			api_sql_query($sql, __FILE__, __LINE__);
-				
-			break;		
+
+			break;
 	}
-	
+
 }
 
 
@@ -204,7 +204,7 @@ if(isset($_GET['display'])){
 // javascript to handle accordion behaviour
 $javascript_message = '';
 if(!empty($message)){
-	$javascript_message = 
+	$javascript_message =
 	'
 	document.getElementById("message").style.display = "block";
 	var timer = setTimeout(hideMessage,5000);
@@ -219,12 +219,12 @@ window.onload = loadTables;
 function loadTables(){
 	'.$javascript_message.'
 	var listeDiv = document.getElementsByTagName("div");
-	
+
 	// fill extensionsHeader and extensionsContent
 	for(var i=0 ; i < listeDiv.length ; i++){
 		if(listeDiv[i].id.indexOf(\'extension_header\')!=-1){
 			listeDiv[i].onclick = afficheContent;
-			extensionsHeader.push(listeDiv[i]);		
+			extensionsHeader.push(listeDiv[i]);
 		}
 		if(listeDiv[i].id.indexOf("extension_content")!=-1){
 			extensionsContent.push(listeDiv[i]);
@@ -237,17 +237,17 @@ function hideMessage(){
 	document.getElementById("message").style.display = "none";
 }
 
-function afficheContent(event){	
+function afficheContent(event){
 	var id = this.id.replace("header","content");
 	switch(document.getElementById(id).style.display){
-		case "block" : 			
+		case "block" :
 			document.getElementById(id).style.display = "none";
 			break;
 		case "none" :
 			document.getElementById(id).style.display = "block";
 			for(var i=0 ; i < extensionsContent.length ; i++){
 				if(extensionsContent[i].id != id)
-					extensionsContent[i].style.display = "none";				
+					extensionsContent[i].style.display = "none";
 			}
 			break;
 	}
@@ -261,9 +261,9 @@ Display::display_header($nameTool);
 
 
 <div id="message" style="display: none">
-	<?php 
+	<?php
 	if(!empty($message))
-		Display::display_normal_message($message) 
+		Display::display_normal_message($message)
 	?>
 </div>
 
@@ -272,7 +272,7 @@ Display::display_header($nameTool);
 
 
 <!-- INSTRUCTIONS TO ADD AN EXTENSION HERE
-- copy paste a "main_*" div 
+- copy paste a "main_*" div
 - set the names of the subdiv to extension_header_yourextension and extension_content_yourextension
 - extension_content_yourextension is the hidden div where you have to put your form / activation process
 - extension_header_yourextension is the name of your extension
@@ -284,7 +284,7 @@ Display::display_header($nameTool);
 		<div id="extension_header_visio" class="accordion_header">
 			<a href="#"><?php echo get_lang('Visioconf') ?></a>
 		</div>
-		<div id="extension_content_visio" style="display:none" class="accordion_content">		
+		<div id="extension_content_visio" style="display:none" class="accordion_content">
 			<?php echo get_lang('VisioconfDescription') ?><br /><br />
 			<table width="100%">
 				<tr>
@@ -292,8 +292,8 @@ Display::display_header($nameTool);
 						<?php Display::display_icon('screenshot_conf.jpg', get_lang('Visioconf')); ?>
 					</td>
 					<!--td align="center" width="50%">
-						<?php 
-						$form = new FormValidator('visio');						
+						<?php
+						$form = new FormValidator('visio');
 						$form -> addElement('text', 'visio_host', get_lang('VisioHost'));
 						$form -> addElement('html','<br /><br />');
 						$form -> addElement('text', 'visio_port', get_lang('VisioPort'));
@@ -313,13 +313,13 @@ Display::display_header($nameTool);
 						$form -> addElement('html','<br /><br />');
 						if(in_array('service_visio',$listActiveServices))
 						{
-							$sql = 'SELECT subkey, selected_value FROM '.$tbl_settings_current.' 
+							$sql = 'SELECT subkey, selected_value FROM '.$tbl_settings_current.'
 									WHERE variable = "service_visio"';
 							$rs = api_sql_query($sql, __FILE__, __LINE__);
 							while($row = Database::fetch_array($rs,'ASSOC'))
 							{
 								$defaults[$row['subkey']] = $row['selected_value'];
-							}							
+							}
 							$form -> addElement('style_submit_button', 'activeExtension', get_lang('ReconfigureExtension'),'class="save"');
 						}
 						else {
@@ -333,13 +333,13 @@ Display::display_header($nameTool);
 			</table>
 		</div>
 	</div>
-	
+
 	<!-- PPT2LP -->
 	<div id="main_ppt2lp">
 		<div id="extension_header_ppt2lp" class="accordion_header">
 			<a href="#"><?php echo get_lang('Ppt2lp') ?></a>
 		</div>
-		<div id="extension_content_ppt2lp" style="display:none" class="accordion_content">		
+		<div id="extension_content_ppt2lp" style="display:none" class="accordion_content">
 			<?php echo get_lang('Ppt2lpDescription').' '.get_lang('Ppt2lpVoiceRecordingNeedsRed5') ?><br /><br />
 			<table width="100%">
 				<tr>
@@ -348,9 +348,9 @@ Display::display_header($nameTool);
 					</td>
 					<!--td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">
-						<?php 
-						
-						$form = new FormValidator('ppt2lp');						
+						<?php
+
+						$form = new FormValidator('ppt2lp');
 						$form -> addElement('text', 'host', get_lang('Host'));
 						$form -> addElement('html','<br /><br />');
 						$form -> addElement('text', 'port', get_lang('Port'));
@@ -369,24 +369,24 @@ Display::display_header($nameTool);
 									'1000x750'=>'1000x750'
 									);
 						$form -> addElement('select', 'size', get_lang('SlideSize'), $options);
-						
-						
+
+
 						$form -> addElement('hidden', 'extension_code', 'ppt2lp');
-						
+
 						$defaults = array();
 						$renderer = $form -> defaultRenderer();
 						$renderer -> setElementTemplate('<div style="text-align:left">{label}</div><div style="text-align:left">{element}</div>');
 						$form -> addElement('html','<br /><br />');
 						if(in_array('service_ppt2lp',$listActiveServices))
 						{
-							$sql = 'SELECT subkey, selected_value FROM '.$tbl_settings_current.' 
+							$sql = 'SELECT subkey, selected_value FROM '.$tbl_settings_current.'
 									WHERE variable = "service_ppt2lp"
 									AND subkey <> "active"';
 							$rs = api_sql_query($sql, __FILE__, __LINE__);
 							while($row = Database::fetch_array($rs,'ASSOC'))
 							{
 								$defaults[$row['subkey']] = $row['selected_value'];
-							}							
+							}
 							$form -> addElement('style_submit_button', 'activeExtension', get_lang('ReconfigureExtension'),'class="save"');
 						}
 						else {
@@ -395,9 +395,9 @@ Display::display_header($nameTool);
 							$defaults['size'] = '720x540';
 							$form -> addElement('style_submit_button', 'activeExtension', get_lang('ActivateExtension'),'class="save"');
 						}
-						
+
 						$form -> setDefaults($defaults);
-						$form -> display();						
+						$form -> display();
 						echo '<br />';
 						?>
 						</form>
@@ -406,7 +406,7 @@ Display::display_header($nameTool);
 			</table>
 		</div>
 	</div>
-	<?php 
+	<?php
 	/*
 	<!-- EPHORUS -->
 	<div id="main_ephorus">
@@ -425,7 +425,7 @@ Display::display_header($nameTool);
 									<TBODY>
 										<TR>
 											<TD>
-												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<a title="http://www.ephorus.com/dokeos_activate.html" href="http://www.ephorus.com/dokeos_activate.html" target="_blank">
 												<?php Display::display_icon('ephorus.gif','Ephorus'); ?>
 												</a>
@@ -447,7 +447,7 @@ Display::display_header($nameTool);
 										<TBODY>
 											<TR>
 												<TD width="50">&nbsp;
-													 
+
 												</TD>
 												<TD>
 													<P>
@@ -467,7 +467,7 @@ Display::display_header($nameTool);
 								</TD>
 							</TR>
 						</TBODY>
-						</TABLE>						
+						</TABLE>
                     </td>
 				</tr>
 			</table>
@@ -480,7 +480,7 @@ Display::display_header($nameTool);
 		<div id="extension_header_search" class="accordion_header">
 			<a href="#"><?php echo get_lang('SearchEngine') ?></a>
 		</div>
-		<div id="extension_content_search" style="display:none" class="accordion_content">		
+		<div id="extension_content_search" style="display:none" class="accordion_content">
 			<?php echo get_lang('SearchEngineDescription') ?><br /><br />
 			<table width="100%">
 				<tr>
@@ -497,13 +497,13 @@ Display::display_header($nameTool);
 			</table>
 		</div>
 	</div>
-	
+
 	<!-- SERVER STATS -->
 	<div id="main_serverstats">
 		<div id="extension_header_serverstats" class="accordion_header">
 			<a href="#"><?php echo get_lang('ServerStatistics') ?></a>
 		</div>
-		<div id="extension_content_serverstats" style="display:none" class="accordion_content">		
+		<div id="extension_content_serverstats" style="display:none" class="accordion_content">
 			<?php echo get_lang('ServerStatisticsDescription') ?><br /><br />
 			<table width="100%">
 				<tr>
@@ -520,13 +520,13 @@ Display::display_header($nameTool);
 			</table>
 		</div>
 	</div>
-	
+
 	<!-- BANDWIDTH STATS -->
 	<div id="main_bandwidthstats">
 		<div id="extension_header_bandwidthstats" class="accordion_header">
 			<a href="#"><?php echo get_lang('BandWidthStatistics') ?></a>
 		</div>
-		<div id="extension_content_bandwidthstats" style="display:none" class="accordion_content">		
+		<div id="extension_content_bandwidthstats" style="display:none" class="accordion_content">
 			<?php echo get_lang('BandWidthStatisticsDescription') ?><br /><br />
 			<table width="100%">
 				<tr>
@@ -538,15 +538,15 @@ Display::display_header($nameTool);
 						<input type="hidden" name="extension_code" value="bandwidthstats" />
 						<button type="submit" class="save" name="activeExtension" value="<?php echo get_lang('ActivateExtension') ?>" ><?php echo get_lang('ActivateExtension') ?></button>
 						</form>
-						
+
 					</td>
 				</tr>
 			</table>
 		</div>
 	</div>
-	
+
 </div><!-- /content -->
-	
+
 
 <?php
 

@@ -11,7 +11,7 @@
 ==============================================================================
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array('admin','courses');
 $cidReset = true;
 require ('../inc/global.inc.php');
@@ -25,18 +25,18 @@ require_once '../gradebook/lib/be/gradebookitem.class.php';
 require_once '../gradebook/lib/be/category.class.php';
 /**
  * Get the number of courses which will be displayed
- */ 
+ */
 function get_number_of_courses()
 {
 	$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table";
-	
+
 	global $_configuration;
     if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
     	$access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-    	$sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";    		
+    	$sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";
     }
-    
+
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = Database::escape_string($_GET['keyword']);
@@ -53,12 +53,12 @@ function get_number_of_courses()
 		$keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
 		$sql .= " WHERE (code LIKE '%".$keyword_code."%' OR visual_code LIKE '%".$keyword_code."%') AND title LIKE '%".$keyword_title."%' AND category_code LIKE '%".$keyword_category."%'  AND course_language LIKE '%".$keyword_language."%'   AND visibility LIKE '%".$keyword_visibility."%'    AND subscribe LIKE '".$keyword_subscribe."'AND unsubscribe LIKE '".$keyword_unsubscribe."'";
 	}
-	
+
 	 // adding the filter to see the user's only of the current access_url
-	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {		
-    		$sql.= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();   	  
+	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+    		$sql.= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();
     }
-    
+
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$obj = Database::fetch_object($res);
 	return $obj->total_number_of_items;
@@ -71,15 +71,15 @@ function get_course_data($from, $number_of_items, $column, $direction)
 	$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$users_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$course_users_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	
+
 	$sql = "SELECT code AS col0, visual_code AS col1, title AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, code AS col7, tutor_name as col8, code AS col9, visibility AS col10,directory as col11 FROM $course_table";
-	
+
 	global $_configuration;
     if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
     	$access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-    	$sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";    		
-    }    
-    
+    	$sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";
+    }
+
 	if (isset ($_GET['keyword']))
 	{
 		$keyword = Database::escape_string($_GET['keyword']);
@@ -96,10 +96,10 @@ function get_course_data($from, $number_of_items, $column, $direction)
 		$keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
 		$sql .= " WHERE (code LIKE '%".$keyword_code."%' OR visual_code LIKE '%".$keyword_code."%') AND title LIKE '%".$keyword_title."%' AND category_code LIKE '%".$keyword_category."%'  AND course_language LIKE '%".$keyword_language."%'   AND visibility LIKE '%".$keyword_visibility."%'    AND subscribe LIKE '".$keyword_subscribe."'AND unsubscribe LIKE '".$keyword_unsubscribe."'";
 	}
-	
+
 	 // adding the filter to see the user's only of the current access_url
-	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {		
-    		$sql.= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();   	  
+	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+    		$sql.= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();
     }
 
 	$sql .= " ORDER BY col$column $direction ";
@@ -241,10 +241,10 @@ else
 	{
 
 		CourseManager :: delete_course($_GET['delete_course']);
-		
+
 		$obj_cat=new Category();
 		$obj_cat->update_category_delete($_GET['delete_course']);
-		
+
 	}
 	// Create a search-box
 	$form = new FormValidator('search_simple','get','','','width=200px',false);
@@ -254,16 +254,16 @@ else
 	$form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'),'class="search"');
 	$form->addElement('static','search_advanced_link',null,'<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
 	echo '<div style="float:right;margin-top:5px;margin-right:5px;">
-			  <a href="'.api_get_path(WEB_CODE_PATH).'admin/course_add.php">'.Display::return_icon('course_add.gif',get_lang('AddSession')).get_lang('AddCourse').'</a>									
+			  <a href="'.api_get_path(WEB_CODE_PATH).'admin/course_add.php">'.Display::return_icon('course_add.gif',get_lang('AddSession')).get_lang('AddCourse').'</a>
 		 </div>';
-		 
-	echo '<div class="actions">';		
-		$form->display();				
+
+	echo '<div class="actions">';
+		$form->display();
 	echo '</div>';
 	// Create a sortable table with the course data
 	$table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data',2);
 	$parameters=array();
-	
+
 	if (isset ($_GET['keyword'])) {
 		$parameters = array ('keyword' => Security::remove_XSS($_GET['keyword']));
 	} elseif (isset ($_GET['keyword_code'])) {
@@ -275,7 +275,7 @@ else
 		$parameters['keyword_subscribe'] = Security::remove_XSS($_GET['keyword_subscribe']);
 		$parameters['keyword_unsubscribe'] = Security::remove_XSS($_GET['keyword_unsubscribe']);
 	}
-		
+
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false);
 	$table->set_header(1, get_lang('Code'));
@@ -286,14 +286,14 @@ else
 	$table->set_header(6, get_lang('UnsubscriptionAllowed'));
 	$table->set_header(7, get_lang('IsVirtualCourse'));
 	$table->set_header(8, get_lang('Teacher'));
-	$table->set_header(9, get_lang('Modify'), false,'width="120px"');	
-	$table->set_column_filter(9,'modify_filter');	
+	$table->set_header(9, get_lang('Modify'), false,'width="120px"');
+	$table->set_column_filter(9,'modify_filter');
 	$table->set_form_actions(array ('delete_courses' => get_lang('DeleteCourse')),'course');
 	$table->display();
 }
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
 */
 Display :: display_footer();

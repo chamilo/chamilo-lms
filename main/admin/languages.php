@@ -1,13 +1,13 @@
-<?php 
+<?php
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 * This page allows the platform admin to decide which languages should
 * be available in the language selection menu in the login page. This can be
-* useful for countries with more than one official language (like Belgium: 
-* Dutch, French and German) or international organisations that are active in	
-* a limited number of countries. 
-* 
+* useful for countries with more than one official language (like Belgium:
+* Dutch, French and German) or international organisations that are active in
+* a limited number of countries.
+*
 * @author Patrick Cool, main author
 * @author Roan EMbrechts, code cleaning
 * @since Dokeos 1.6
@@ -15,9 +15,9 @@
 ==============================================================================
 */
 /*
-============================================================================== 
+==============================================================================
 	   INIT SECTION
-============================================================================== 
+==============================================================================
 */
 // name of the language file that needs to be included
 $language_file = 'admin';
@@ -37,26 +37,26 @@ if (isset($_POST['sent_http_request'])) {
 	if (isset($_POST['visibility']) && $_POST['visibility']==strval(intval($_POST['visibility'])) && $_POST['visibility']==0) {
 		if (isset($_POST['id'])&& $_POST['id']==strval(intval($_POST['id']))) {
 			SubLanguageManager::make_unavailable_language($_POST['id']);
-			echo 'set_hidden';	
+			echo 'set_hidden';
 		}
-	} 
+	}
 	if (isset($_POST['visibility']) && $_POST['visibility']==strval(intval($_POST['visibility'])) && $_POST['visibility']==1) {
 		if (isset($_POST['id'])&& $_POST['id']==strval(intval($_POST['id']))) {
 			SubLanguageManager::make_available_language($_POST['id']);
-			echo 'set_visible';			
+			echo 'set_visible';
 		}
-	} 	
+	}
 	exit;
 }
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] ='<script type="text/javascript">
  $(document).ready(function() {
 
- 	//$(window).load(function () { 
+ 	//$(window).load(function () {
       $(".make_visible_and_invisible").attr("href","javascript:void(0)");
 	//});
- 		
- 	$("td .make_visible_and_invisible").click(function () { 
+
+ 	$("td .make_visible_and_invisible").click(function () {
 		make_visible="visible.gif";
 		make_invisible="invisible.gif";
 		id_link_tool=$(this).attr("id");
@@ -64,10 +64,10 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 		path_name_of_imglinktool=$("#"+id_img_link_tool).attr("src");
 		link_info_id=id_link_tool.split("linktool_");
 		link_id=link_info_id[1];
-				
+
 		link_tool_info=path_name_of_imglinktool.split("/");
 		my_image_tool=link_tool_info[link_tool_info.length-1];
-    
+
 
 		if (my_image_tool=="visible.gif") {
 			path_name_of_imglinktool=path_name_of_imglinktool.replace(make_visible,make_invisible);
@@ -76,48 +76,48 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 			path_name_of_imglinktool=path_name_of_imglinktool.replace(make_invisible,make_visible);
 			my_visibility=1;
 		}
-		
+
 		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
 				$("#id_content_message").html("<div class=\"normal-message\"><img src=\'/main/inc/lib/javascript/indicator.gif\' /></div>");
-			
+
 			},
 			type: "POST",
 			url: "../admin/languages.php",
 			data: "id="+link_id+"&visibility="+my_visibility+"&sent_http_request=1",
 			success: function(datos) {
-				
+
 				$("#"+id_img_link_tool).attr("src",path_name_of_imglinktool);
-				
+
 				if (my_image_tool=="visible.gif") {
 					$("#"+id_img_link_tool).attr("alt","'.get_lang('MakeAvailable').'");
 					$("#"+id_img_link_tool).attr("title","'.get_lang('MakeAvailable').'");
 				} else {
 					$("#"+id_img_link_tool).attr("alt","'.get_lang('MakeUnavailable').'");
-					$("#"+id_img_link_tool).attr("title","'.get_lang('MakeUnavailable').'");							
+					$("#"+id_img_link_tool).attr("title","'.get_lang('MakeUnavailable').'");
 				}
 
 				if (datos=="set_visible") {
 					$("#id_content_message").html("<div class=\"confirmation-message\">'.get_lang('LanguageIsNowVisible').'</div>");
 				} else {
-					$("#id_content_message").html("<div class=\"confirmation-message\">'.get_lang('LanguageIsNowHidden').'</div>");					
+					$("#id_content_message").html("<div class=\"confirmation-message\">'.get_lang('LanguageIsNowHidden').'</div>");
 				}
-				
-		} }); 		
-				
-	}); 	
+
+		} });
+
+	});
 
  });
-</script>';	
+</script>';
 // setting the table that is needed for the styles management (there is a check if it exists later in this code)
 $tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 $tbl_settings_current 	= Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
 /*
-============================================================================== 
+==============================================================================
 		STORING THE CHANGES
-============================================================================== 
+==============================================================================
 */
 
 // we change the availability
@@ -136,7 +136,7 @@ if ($_GET['action'] == 'makeavailable') {
 if ($_GET['action'] == 'setplatformlanguage') {
 
 	if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
-		SubLanguageManager::set_platform_language($_GET['id']);		
+		SubLanguageManager::set_platform_language($_GET['id']);
 	}
 
 }
@@ -188,9 +188,9 @@ elseif (isset($_POST['action']))
 
 
 /*
-============================================================================== 
+==============================================================================
 		MAIN CODE
-============================================================================== 
+==============================================================================
 */
 // setting the name of the tool
 $tool_name = get_lang('PlatformLanguages');
@@ -201,20 +201,20 @@ $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAd
 // including the header file (which includes the banner itself)
 Display :: display_header($tool_name);
 
-// displaying the naam of the tool 
+// displaying the naam of the tool
 //api_display_tool_title($tool_name);
 
 // displaying the explanation for this tool
 echo '<p>'.get_lang('PlatformLanguagesExplanation').'</p>';
 
-// selecting all the languages	
+// selecting all the languages
 $sql_select = "SELECT * FROM $tbl_admin_languages";
 $result_select = api_sql_query($sql_select);
 
 $sql_select_lang = "SELECT * FROM $tbl_settings_current WHERE  category='Languages'";
 $result_select_lang = api_sql_query($sql_select_lang,__FILE__,__LINE__);
 $row_lang=Database::fetch_array($result_select_lang);
- 
+
 /*
 --------------------------------------
 		DISPLAY THE TABLE
@@ -224,8 +224,8 @@ $row_lang=Database::fetch_array($result_select_lang);
 // the table data
 $language_data = array ();
 while ($row = Database::fetch_array($result_select)) {
-	
-	$row_td = array ();	
+
+	$row_td = array ();
 	$row_td[] = $row['id'];
 	// the first column is the original name of the language OR a form containing the original name
 	if ($_GET['action'] == 'edit' and $row['id'] == $_GET['id']) {
@@ -242,21 +242,21 @@ while ($row = Database::fetch_array($result_select)) {
 	$row_td[] = $row['english_name'];
 	// the third column
 	$row_td[] = $row['dokeos_folder'];
-	
+
 	if ($row['english_name'] == $row_lang['selected_value']){
 		$setplatformlanguage = Display::return_icon('links.gif', get_lang('CurrentLanguagesPortal'));
-	} else {		
+	} else {
 		$setplatformlanguage = "<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureYouWantToSetThisLanguageAsThePortalDefault'))."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".Display::return_icon('link_na.gif',get_lang('SetLanguageAsDefault'))."</a>";
-	}	
+	}
 	if (api_get_setting('allow_use_sub_language')=='true') {
 
 		$verified_if_is_sub_language=SubLanguageManager::check_if_language_is_sub_language($row['id']);
 
 		if ($verified_if_is_sub_language===false) {
 			$verified_if_is_father=SubLanguageManager::check_if_language_is_father($row['id']);
-			$allow_use_sub_language = "&nbsp;<a href='sub_language_add.php?action=definenewsublanguage&id=".$row['id']."'>".Display::return_icon('mas.gif', get_lang('CreateSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";		
+			$allow_use_sub_language = "&nbsp;<a href='sub_language_add.php?action=definenewsublanguage&id=".$row['id']."'>".Display::return_icon('mas.gif', get_lang('CreateSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";
 			if ($verified_if_is_father===true) {
-				//$allow_add_term_sub_language = "&nbsp;<a href='sub_language.php?action=registersublanguage&id=".$row['id']."'>".Display::return_icon('2rightarrow.gif', get_lang('AddWordForTheSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";						
+				//$allow_add_term_sub_language = "&nbsp;<a href='sub_language.php?action=registersublanguage&id=".$row['id']."'>".Display::return_icon('2rightarrow.gif', get_lang('AddWordForTheSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";
 				$allow_add_term_sub_language='';
 			} else {
 				$allow_add_term_sub_language='';
@@ -264,14 +264,14 @@ while ($row = Database::fetch_array($result_select)) {
 		} else {
 				$allow_use_sub_language='';
 				$all_information_of_sub_language=SubLanguageManager::get_all_information_of_language($row['id']);
-				$allow_add_term_sub_language = "&nbsp;<a href='sub_language.php?action=registersublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('2rightarrow.gif', get_lang('AddWordForTheSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";									
-				$allow_delete_sub_language = "&nbsp;<a href='sub_language_add.php?action=deletesublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('delete_data.gif', get_lang('DeleteSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";		
+				$allow_add_term_sub_language = "&nbsp;<a href='sub_language.php?action=registersublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('2rightarrow.gif', get_lang('AddWordForTheSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";
+				$allow_delete_sub_language = "&nbsp;<a href='sub_language_add.php?action=deletesublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('delete_data.gif', get_lang('DeleteSubLanguage'),array('width'=>'22','height'=>'22'))."</a>";
 		}
-		
+
 	} else {
 		$allow_use_sub_language='';
 		$allow_add_term_sub_language='';
-	}	
+	}
 	if ($row['available'] == 1) {
 		$row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".Display::return_icon('visible.gif', get_lang('MakeUnavailable'),array('id'=>'imglinktool_'.$row['id']))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
 		//$row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='javascript:void(0)'>".Display::return_icon('visible.gif', get_lang('MakeUnavailable'),array('id'=>'imglinktool_'.$row['id']))."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.gif', get_lang('Edit'))."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language;
@@ -298,7 +298,7 @@ $table->display();
 
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
 */
 Display :: display_footer();

@@ -22,19 +22,19 @@
 ==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	@author	 Bart Mollet
 *	@package dokeos.admin
-============================================================================== 
+==============================================================================
 */
 
 /*
 ==============================================================================
 		INIT SECTION
 ==============================================================================
-*/ 
+*/
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='admin';
 
 $cidReset=true;
@@ -46,7 +46,7 @@ api_protect_admin_script();
 require(api_get_path(LIBRARY_PATH).'classmanager.lib.php');
 if( !isset($_GET['id']))
 {
-	api_not_allowed();	
+	api_not_allowed();
 }
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => 'class_list.php', "name" => get_lang('AdminClasses'));
@@ -98,7 +98,7 @@ if (count($users) > 0)
 }
 else
 {
-	echo get_lang('NoUsersInClass');	
+	echo get_lang('NoUsersInClass');
 }
 echo '</blockquote>';
 /**
@@ -132,8 +132,8 @@ else
 }
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
-*/ 
+*/
 Display::display_footer();
-?> 
+?>

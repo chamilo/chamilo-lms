@@ -66,27 +66,27 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 
 $access_url_id=1;
 if(isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!=''){
-	$access_url_id = Security::remove_XSS(intval($_REQUEST['access_url_id'])); 
+	$access_url_id = Security::remove_XSS(intval($_REQUEST['access_url_id']));
 }
 
 function search_sessions($needle, $id)
 {
-	global $tbl_session;	
+	global $tbl_session;
 	$xajax_response = new XajaxResponse();
 	$return = '';
-				
-	if(!empty($needle)) {		
+
+	if(!empty($needle)) {
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 		$needle = Database::escape_string($needle);
 		// search sessiones where username or firstname or lastname begins likes $needle
-		$sql = 'SELECT id, name FROM '.$tbl_session.' u 
-				WHERE (name LIKE "'.$needle.'%") 
+		$sql = 'SELECT id, name FROM '.$tbl_session.' u
+				WHERE (name LIKE "'.$needle.'%")
 				ORDER BY name, id
-				LIMIT 11';				
-		$rs = api_sql_query($sql, __FILE__, __LINE__);		
-        $i=0;        
+				LIMIT 11';
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
+        $i=0;
 		while ($session = Database :: fetch_array($rs)) {
 			$i++;
             if ($i<=10) {
@@ -108,23 +108,23 @@ function add_user_to_url(code, content) {
 
 	document.getElementById("course_to_add").value = "";
 	document.getElementById("ajax_list_courses").innerHTML = "";
-	
+
 	destination = document.getElementById("destination_users");
 	destination.options[destination.length] = new Option(content,code);
-	
+
 	destination.selectedIndex = -1;
-	sortOptions(destination.options);	
+	sortOptions(destination.options);
 }
-	
+
 function send() {
-	
-	if (document.formulaire.access_url_id.value!=0) {	
-		document.formulaire.form_sent.value=0; 
-		document.formulaire.add_type.value=\''.$add_type.'\';		
+
+	if (document.formulaire.access_url_id.value!=0) {
+		document.formulaire.form_sent.value=0;
+		document.formulaire.add_type.value=\''.$add_type.'\';
 		document.formulaire.submit();
-	}	
+	}
 }
-	
+
 function remove_item(origin)
 {
 	for(var i = 0 ; i<origin.options.length ; i++) {
@@ -141,32 +141,32 @@ $errorMsg='';
 $UserList=$SessionList=array();
 $users=$sessions=array();
 
-if($_POST['form_sent']) {	
+if($_POST['form_sent']) {
 	$form_sent=$_POST['form_sent'];
-	$session_list=$_POST['session_list'];	
-		
+	$session_list=$_POST['session_list'];
+
 	if(!is_array($session_list)) {
 		$session_list=array();
 	}
-	
-	if($form_sent == 1) { 
-		if ($access_url_id==0) {						
+
+	if($form_sent == 1) {
+		if ($access_url_id==0) {
 			header('Location: access_url_edit_users_to_url.php?action=show_message&message='.get_lang('SelectURL'));
 		}
-		elseif(is_array($session_list) ) {									
+		elseif(is_array($session_list) ) {
 			UrlManager::update_urls_rel_session($session_list,$access_url_id);
 			header('Location: access_urls.php?action=show_message&message='.get_lang('SessionsWereEdited'));
-		}		
+		}
 	}
 }
 
 Display::display_header($tool_name);
 
 echo '<div class="actions" style="height:22px;">';
-echo '<div style="float:right;">		
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_add_sessions_to_url.php">'.Display::return_icon('course_add.gif',get_lang('AddSessionsToURL'),'').get_lang('AddSessionsToURL').'</a>												
-	  </div><br />';		  
-echo '</div>';	
+echo '<div style="float:right;">
+		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_add_sessions_to_url.php">'.Display::return_icon('course_add.gif',get_lang('AddSessionsToURL'),'').get_lang('AddSessionsToURL').'</a>
+	  </div><br />';
+echo '</div>';
 
 api_display_tool_title($tool_name);
 
@@ -176,30 +176,30 @@ if ($_GET['action'] == 'show_message')
 $no_session_list = $session_list = array();
 $ajax_search = $add_type == 'unique' ? true : false;
 
-if($ajax_search) {		
+if($ajax_search) {
 	$sessions=UrlManager::get_url_rel_session_data($access_url_id);
 	foreach($sessions as $session) {
 		$session_list[$session['id']] = $session ;
-	}	
-} else {	
-	$sessions=UrlManager::get_url_rel_session_data();		
+	}
+} else {
+	$sessions=UrlManager::get_url_rel_session_data();
 	foreach($sessions as $session) {
 		if($session['access_url_id'] == $access_url_id) {
 			$session_list[$session['id']] = $session ;
 		}
 	}
-		
+
 	$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql="SELECT id, name
-	  	  	FROM $tbl_session u	
-			ORDER BY name, id";	
-	$result=api_sql_query($sql,__FILE__,__LINE__);	
+	  	  	FROM $tbl_session u
+			ORDER BY name, id";
+	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$sessions=api_store_result($result);
 	$session_list_leys = array_keys($session_list);
-	foreach($sessions as $session) {	
+	foreach($sessions as $session) {
 		if (!in_array($session['id'],$session_list_leys))
 			$no_session_list[$session['id']] = $session ;
-	}	
+	}
 }
 
 
@@ -213,7 +213,7 @@ if($add_type == 'multiple') {
 
 $url_list = UrlManager::get_url_data();
 
-?>	
+?>
 
 <div style="text-align: left;">
 	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>
@@ -223,7 +223,7 @@ $url_list = UrlManager::get_url_data();
 <?php echo get_lang('SelectUrl').' : '; ?>
 <select name="access_url_id" onchange="javascript:send();">
 <option value="0"> <?php echo get_lang('SelectUrl')?></option>
-	<?php	
+	<?php
 	$url_selected='';
 	foreach ($url_list as $url_obj) {
 		$checked = '';
@@ -233,17 +233,17 @@ $url_list = UrlManager::get_url_data();
 			$url_selected=$url_obj[1];
 			}
 		}
-		if ($url_obj['active']==1) {						
+		if ($url_obj['active']==1) {
 			?>
 				<option <?php echo $checked;?> value="<?php echo $url_obj[0]; ?>"> <?php echo $url_obj[1]; ?></option>
 			<?php
 		}
 	}
-	?>		
+	?>
 </select>
 <br /><br />
 <input type="hidden" name="form_sent" value="1" />
-<input type="hidden" name="add_type" value = "<?php echo $add_type ?>" /> 
+<input type="hidden" name="add_type" value = "<?php echo $add_type ?>" />
 
 <?php
 if(!empty($errorMsg)) {
@@ -257,7 +257,7 @@ if(!empty($errorMsg)) {
 <tr>
   <td align="center"><b><?php echo get_lang('SessionListInPlatform') ?> :</b>
   </td>
-  <td></td>  
+  <td></td>
   <td align="center"><b><?php echo get_lang('SessionListIn').' '.$url_selected; ?></b></td>
 </tr>
 
@@ -271,7 +271,7 @@ if(!empty($errorMsg)) {
 		<div id="ajax_list_courses"></div>
 		<?php
   	  } else {
-  	  ?>  	  
+  	  ?>
 	  <select id="origin_users" name="no_session_list[]" multiple="multiple" size="15" style="width:300px;">
 		<?php
 		foreach($no_session_list as $no_session) {
@@ -287,13 +287,13 @@ function add_user_to_url (code, content) {
 
 	document.getElementById("course_to_add").value = "";
 	document.getElementById("ajax_list_courses").innerHTML = "";
-	
+
 	destination = document.getElementById("destination_users");
 	destination.options[destination.length] = new Option(content,code);
-	
+
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
-	
+
 }
 function remove_item(origin)
 {
@@ -327,8 +327,8 @@ function remove_item(origin)
 	<input type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" value=">>" />
 	<br /><br />
 	<input type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" value="<<" />
-	<?php 
-  } 
+	<?php
+  }
   ?>
 	<br /><br /><br /><br /><br /><br />
   </td>

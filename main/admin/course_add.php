@@ -35,7 +35,7 @@
 ==============================================================================
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array('admin','create_course');
 $cidReset = true;
 require_once ('../inc/global.inc.php');
@@ -65,10 +65,10 @@ $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status=1".$order_clause;
 //filtering teachers when creating a course
 if ($_configuration['multiple_access_urls']==true){
-	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);   	
+	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 	$sql = "SELECT u.user_id,lastname,firstname FROM $table_user as u
-			INNER JOIN $access_url_rel_user_table url_rel_user 
-			ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;  
+			INNER JOIN $access_url_rel_user_table url_rel_user
+			ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
 }
 
 $res = api_sql_query($sql,__FILE__,__LINE__);
@@ -85,7 +85,7 @@ $dbnamelength = strlen($_configuration['db_prefix']);
 $maxlength = 40 - $dbnamelength;
 
 // Build the form
-$form = new FormValidator('update_course'); 
+$form = new FormValidator('update_course');
 $form->addElement('header', '', $tool_name);
 $form->add_textfield( 'visual_code', get_lang('CourseCode'),false,array('size'=>'20','maxlength'=>20));
 $form->applyFilter('visual_code','api_strtoupper');
@@ -111,7 +111,7 @@ $form->add_textfield('department_name', get_lang('CourseDepartment'),false, arra
 $form->applyFilter('department_name','html_filter');
 $form->applyFilter('department_name','trim');
 
-//Department URL 
+//Department URL
 $form->add_textfield('department_url', get_lang('CourseDepartmentURL'),false, array ('size' => '60'));
 $form->applyFilter('department_url','html_filter');
 
@@ -148,7 +148,7 @@ if( $form->validate()) {
 	$teacher_id = $course['tutor_id'];
 	$course_teachers = $course['course_teachers'];
 	$test=false;
-	
+
 	//The course tutor has been selected in the teachers list so we must remove him to avoid double records in the database
 	foreach($course_teachers as $key=>$value){
 		if($value==$teacher_id){

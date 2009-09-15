@@ -57,13 +57,13 @@ if(!api_is_platform_admin() && $session['session_admin_id']!=$_user['user_id'])
 if($_GET['action'] == 'delete')
 {
 	$idChecked = $_GET['idChecked'];
-	if(is_array($idChecked)) {		
-		$my_temp = array(); 
+	if(is_array($idChecked)) {
+		$my_temp = array();
 		foreach ($idChecked as $id){
 			$my_temp[]= Database::escape_string($id);// forcing the escape_string
 		}
-		$idChecked = $my_temp;		
-		
+		$idChecked = $my_temp;
+
 		$idChecked="'".implode("','",$idChecked)."'";
 
 		api_sql_query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
@@ -100,7 +100,7 @@ if($_GET['action'] == 'delete')
 
 Display::display_header($tool_name);
 if (!empty($_GET['warn'])) {
-    Display::display_warning_message(urldecode($_GET['warn']));    
+    Display::display_warning_message(urldecode($_GET['warn']));
 }
 
 api_display_tool_title($tool_name);
@@ -197,7 +197,7 @@ else {
 			$coach = api_get_person_name($course['firstname'], $course['lastname']).' ('.$course['username'].')';
 		}
 
-		$orig_param = '&origin=resume_session';	
+		$orig_param = '&origin=resume_session';
 		//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
 		echo '
 		<tr>

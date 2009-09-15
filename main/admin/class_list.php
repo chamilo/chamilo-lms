@@ -28,7 +28,7 @@
 ==============================================================================
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
 require ('../inc/global.inc.php');
@@ -63,7 +63,7 @@ function get_class_data($from, $number_of_items, $column, $direction)
 	$number_of_items 	= Database::escape_string($number_of_items);
 	$column 			= Database::escape_string($column);
 	$direction 			= Database::escape_string($direction);
-	
+
 	$sql = "SELECT 	id AS col0, name AS col1, COUNT(user_id) AS col2, id AS col3
 				FROM $tbl_class
 				LEFT JOIN $tbl_class_user ON id=class_id ";

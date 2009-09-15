@@ -132,7 +132,7 @@ EOT;
 $renderer = $form->defaultRenderer();
 $renderer -> setElementTemplate($element_template, 'group');
 $form -> addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="50" align="center"><input type="button" onclick="moveItem(document.getElementById(\'platform_teachers\'), document.getElementById(\'course_teachers\'))" value=">>"><br><br><input type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))" value="<<"></td><td>');
-//title 
+//title
 $form->add_textfield( 'title', get_lang('Title'),true, array ('size' => '60'));
 $form->applyFilter('title','html_filter');
 $form->applyFilter('title','trim');
@@ -228,14 +228,14 @@ if( $form->validate())
 	$cond='';
 	if(count($teachers)>0){
 		foreach($teachers as $key) $cond.=" AND user_id<>'".$key."'";
-	}	
+	}
 	$sql='DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
 	api_sql_query($sql, __FILE__, __LINE__);
 
 	if(count($teachers)>0){
 		foreach($teachers as $key){
 
-			//We check if the teacher is already subscribed in this course 
+			//We check if the teacher is already subscribed in this course
 			$sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'"';
 			$result = api_sql_query($sql_select_teacher, __FILE__, __LINE__);
 
@@ -271,7 +271,7 @@ if( $form->validate())
 	$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE,$course_db_name);
 	$sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."'";
 	if ($visual_code_is_used == true) {
-	    header('Location: course_list.php?action=show_msg&warn='.urlencode($warn));	
+	    header('Location: course_list.php?action=show_msg&warn='.urlencode($warn));
 	} else {
         header('Location: course_list.php');
 	}

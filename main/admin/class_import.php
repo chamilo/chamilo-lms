@@ -44,7 +44,7 @@ function validate_data($classes)
 			$class['line'] = $index+2;
 			$class['error'] = get_lang('MissingClassName');
 			$errors[] = $class;
-		}	
+		}
 		//2. Check if class doesn't exist yet
 		else
 		{
@@ -52,8 +52,8 @@ function validate_data($classes)
 			{
 				$class['line'] = $index+2;
 				$class['error'] = get_lang('ClassNameExists');
-				$errors[] = $class;					
-			}	
+				$errors[] = $class;
+			}
 		}
 	}
 	return $errors;
@@ -68,15 +68,15 @@ function save_data($classes)
 	{
 		if(ClassManager::create_class($class['ClassName']))
 		{
-			$number_of_added_classes++;	
-		}	
+			$number_of_added_classes++;
+		}
 	}
 	return $number_of_added_classes;
 }
 
 
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array ('admin', 'registration');
 
 // resetting the course id
@@ -117,7 +117,7 @@ if( $form->validate())
 	{
 		$number_of_added_classes = save_data($classes);
 		Display::display_normal_message($number_of_added_classes.' '.get_lang('ClassesCreated'));
-	}		
+	}
 	else
 	{
 		$error_message = get_lang('ErrorsWhenImportingFile');
@@ -147,7 +147,7 @@ $form->display();
 <?php
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
 */
 Display :: display_footer();

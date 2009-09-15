@@ -168,7 +168,7 @@ if ($action_todo)
 	} elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit') {
 		$form_title = get_lang('EditNews');
 	}
-	
+
 	$form = new FormValidator('system_announcement');
 	$form->addElement('header', '', $form_title);
 	$form->add_textfield('title', get_lang('Title'));
@@ -188,21 +188,21 @@ if ($action_todo)
 	$form->add_timewindow('start','end',get_lang('StartTimeWindow'),get_lang('EndTimeWindow'));
 	$form->addElement('checkbox', 'visible_teacher', get_lang('Visible'), get_lang('Teacher'));
 	$form->addElement('checkbox', 'visible_student', null, get_lang('Student'));
-	$form->addElement('checkbox', 'visible_guest', null, get_lang('Guest'));	
+	$form->addElement('checkbox', 'visible_guest', null, get_lang('Guest'));
 	$form->addElement('hidden', 'id');
 	$form->addElement('checkbox', 'send_mail', get_lang('SendMail'));
-	
+
 	if (isset($_REQUEST['action']) && $_REQUEST['action']=='add') {
 		$text=get_lang('AddNews');
 		$class='add';
 		$form->addElement('hidden', 'action','add');
-		
+
 	} elseif (isset($_REQUEST['action']) && $_REQUEST['action']=='edit') {
 		$text=get_lang('EditNews');
 		$class='save';
 		$form->addElement('hidden', 'action','edit');
 	}
-	
+
 	$form->addElement('style_submit_button', 'submit', $text,'class="'.$class.'"');
 	if (api_get_setting('wcag_anysurfer_public_pages')=='true')
 	{
@@ -239,7 +239,7 @@ if ($action_todo)
 				{
 					Display :: display_normal_message(get_lang('AnnouncementAdded'));
 				}
-				else 
+				else
 				{
 					$show_announcement_list = false;
 					$form->display();

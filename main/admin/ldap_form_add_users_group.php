@@ -52,7 +52,7 @@ echo '<tr align="center" id="header3">' .
 			: '<td width="15%"><b>'.get_lang('Name').'</b></td>' .
 			'<td width="15%"><b>'.get_lang('FirstName').'</b></td>') .
 		'<td width="15%"><b>'.get_lang('Login').'</b></td>' .
-	  '</tr>'."\n";																																																					   
+	  '</tr>'."\n";
 while (list ($key, $val) = each($nom_form)) {
 	$nbre=$nbre+1;
 	if($nbre & 1) $ndiv=2; else $ndiv=3;

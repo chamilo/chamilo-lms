@@ -11,7 +11,7 @@
 ==============================================================================
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
 require ('../inc/global.inc.php');
@@ -20,7 +20,7 @@ $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 /**
- * 
+ *
  */
 function get_course_usage($course_code)
 {
@@ -183,8 +183,8 @@ else
 }
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
-*/ 
+*/
 Display::display_footer();
 ?>

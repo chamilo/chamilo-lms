@@ -38,12 +38,12 @@ if(!list($session_name)=mysql_fetch_row($result))
 
 if($action == 'delete') {
 	$idChecked = $_REQUEST['idChecked'];
-	if(is_array($idChecked) && count($idChecked)>0) {		
-		$my_temp = array(); 
+	if(is_array($idChecked) && count($idChecked)>0) {
+		$my_temp = array();
 		foreach ($idChecked as $id){
 			$my_temp[]= Database::escape_string($id);// forcing the escape_string
 		}
-		$idChecked = $my_temp;		
+		$idChecked = $my_temp;
 		$idChecked="'".implode("','",$idChecked)."'";
 		api_sql_query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
 		$nbr_affected_rows=mysql_affected_rows();

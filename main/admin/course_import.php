@@ -30,7 +30,7 @@
  * validate the imported data
  */
 function validate_data($courses) {
-	global $_configuration;	
+	global $_configuration;
 	$dbnamelength = strlen($_configuration['db_prefix']);
 	//Ensure the prefix + database name do not get over 40 characters
 	$maxlength = 40 - $dbnamelength;
@@ -130,7 +130,7 @@ function save_data($courses)
 		$msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$directory.'/">'.$code.'</a> '.get_lang('Created').'<br />';
 	}
     if (!empty($msg)) {
-        Display::display_normal_message($msg,false);    	
+        Display::display_normal_message($msg,false);
     }
 }
 /**

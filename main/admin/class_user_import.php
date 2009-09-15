@@ -90,7 +90,7 @@ function save_data($users_classes)
 	$user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
 	$class_user_table 	= Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 	$class_table 		= Database :: get_main_table(TABLE_MAIN_CLASS);
-	
+
 	$csv_data = array ();
 	foreach ($users_classes as $index => $user_class)
 	{
@@ -144,7 +144,7 @@ function parse_csv_data($file)
 	return $courses;
 }
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array ('admin', 'registration');
 
 $cidReset = true;

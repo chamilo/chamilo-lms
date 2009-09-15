@@ -75,7 +75,7 @@ if (isset ($_GET['action']))
 					{
 						Display :: display_confirmation_message(get_lang('FieldOptionMovedUp'));
 					}
-					else 
+					else
 					{
 						Display :: display_error_message(get_lang('CannotMoveFieldOption'));
 					}
@@ -83,17 +83,17 @@ if (isset ($_GET['action']))
 				break;
 			case 'movedown' :
 				if (api_is_platform_admin() && !empty($_GET['option_id']))
-				{					
+				{
 					if (move_user_field_option('movedown', $_GET['option_id']))
 					{
 						Display :: display_confirmation_message(get_lang('FieldOptionMovedDown'));
 					}
-					else 
+					else
 					{
 						Display :: display_error_message(get_lang('CannotMoveFieldOption'));
 					}
-				}				
-				break;			
+				}
+				break;
 		}
 	}
 }
@@ -124,11 +124,11 @@ function get_options_data($from, $number_of_items, $column, $direction)
 {
 	// Database table definition
 	$table_userfields_options 	= Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
-	
+
 	// The sql statement
-	$sql = "SELECT 
+	$sql = "SELECT
 				option_order 		AS col0,
-				option_display_text	AS col1,	
+				option_display_text	AS col1,
 				id 					AS col2
 			FROM $table_userfields_options WHERE field_id='".Database::escape_string($_GET['field_id'])."' ORDER BY option_order ASC";
 	$sql .= " LIMIT $from,$number_of_items";
@@ -138,39 +138,39 @@ function get_options_data($from, $number_of_items, $column, $direction)
 	{
 		$return[] = $option;
 	}
-	return $return;	
+	return $return;
 }
 
 function get_number_of_options($from=null, $number_of_items=null, $column=null, $direction=null)
 {
 	// Database table definition
 	$table_userfields_options 	= Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
-	
+
 	// The sql statement
 	$sql = "SELECT count(id) as total FROM $table_userfields_options WHERE field_id='".Database::escape_string($_GET['field_id'])."' ";
 	$res = api_sql_query($sql, __FILE__, __LINE__);
 	$row = Database::fetch_row($res);
-	return $row[0];	
+	return $row[0];
 }
 
 function actions_filter($option_id,$url_params,$row)
 {
-	global $number_of_options; 
+	global $number_of_options;
 
 	if ($row[0]<>1)
 	{
 		$return .= '<a href="'.api_get_self().'?action=moveup&amp;option_id='.$option_id.'&amp;field_id='.Security::remove_XSS($_GET['field_id']).'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('up.gif', get_lang('Up')).'</a>';
 	}
-	else 
+	else
 	{
 		$return .= Display::return_icon('blank.gif','',array('width'=>'21px'));
 	}
-	
+
 	// the down icon only has to appear when the row can be moved down (all but the last row)
 	if ($row[0]<>$number_of_options)
 	{
 		$return .= '<a href="'.api_get_self().'?action=movedown&amp;option_id='.$option_id.'&amp;field_id='.Security::remove_XSS($_GET['field_id']).'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('down.gif', get_lang('Down')).'</a>';
-	}	
+	}
 	return $return;
 }
 
@@ -179,7 +179,7 @@ function actions_filter($option_id,$url_params,$row)
  *
  * @param string $direction the direction we have to move the field to (up or down)
  * @param unknown_type $field_id
- * 
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version July 2008
  * @since Dokeos 1.8.6
@@ -188,25 +188,25 @@ function move_user_field_option($direction,$option_id)
 {
 	// Database table definition
 	$table_userfields_options 	= Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
-	
+
 	// check the parameters
 	if (!in_array($direction,array('moveup','movedown')) OR !is_numeric($option_id))
 	{
-		return false; 
+		return false;
 	}
-	
+
 	// determine the SQL sort direction
 	if ($direction == 'moveup')
 	{
 		$sortdirection = 'DESC';
 	}
-	else 
+	else
 	{
 		$sortdirection = 'ASC';
 	}
-	
-	$found = false; 
-	
+
+	$found = false;
+
 	$sql = "SELECT id, option_order FROM $table_userfields_options  WHERE field_id='".Database::escape_string($_GET['field_id'])."' ORDER BY option_order $sortdirection";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	while($row = Database::fetch_array($result))
@@ -214,10 +214,10 @@ function move_user_field_option($direction,$option_id)
 		if ($found)
 		{
 			$next_id = $row['id'];
-			$next_order = $row['option_order'];	
+			$next_order = $row['option_order'];
 			break;
 		}
-		
+
 		if ($option_id == $row['id'])
 		{
 			$this_id = $row['id'];
@@ -225,12 +225,12 @@ function move_user_field_option($direction,$option_id)
 			$found = true;
 		}
 	}
-	
+
 	$sql1 = "UPDATE ".$table_userfields_options." SET option_order = '".Database::escape_string($next_order)."' WHERE id =  '".Database::escape_string($this_id)."'";
 	$sql2 = "UPDATE ".$table_userfields_options." SET option_order = '".Database::escape_string($this_order)."' WHERE id =  '".Database::escape_string($next_id)."'";
 	api_sql_query($sql1,__FILE__,__LINE__);
 	api_sql_query($sql2,__FILE__,__LINE__);
-	
+
 	return true;
 }
 ?>

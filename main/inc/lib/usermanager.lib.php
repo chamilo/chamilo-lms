@@ -9,13 +9,6 @@
 ==============================================================================
 */
 
-// Specification for usernames:
-// 1. ASCII-letters and digits only are acceptable, 20 characters length.
-// 2. Empty username is formally valid, but it is reserved for the anonymous user.
-define('USERNAME_MAX_LENGTH', 20);
-define('USERNAME_PURIFIER', '/[^0-9A-Za-z]/');
-define('USERNAME_PURIFIER_SHALLOW', '/\s/');
-
 // Constants for user extra field types.
 define('USER_FIELD_TYPE_TEXT', 1);
 define('USER_FIELD_TYPE_TEXTAREA', 2);

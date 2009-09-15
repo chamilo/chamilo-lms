@@ -167,19 +167,6 @@ define('PLATFORM_AUTH_SOURCE', 'platform');
 //CONSTANT defining the default HotPotatoes files directory
 define('DIR_HOTPOTATOES','/HotPotatoes_files');
 
-// Constants for detection some important PHP5 subversions.
-define('IS_PHP_52', !((float)PHP_VERSION < 5.2));
-define('IS_PHP_53', !((float)PHP_VERSION < 5.3));
-
-// This constant is a result of Windows OS detection, it has a boolean value:
-// true whether the server runs on Windows OS, false otherwise.
-define ('IS_WINDOWS_OS', api_is_windows_os());
-
-// Checks for installed optional php-extensions.
-define('INTL_INSTALLED', function_exists('intl_get_error_code'));	// intl extension (from PECL), it is installed by default as of PHP 5.3.0
-define('ICONV_INSTALLED', function_exists('iconv'));				// iconv extension, for PHP5 on Windows it is installed by default.
-define('MBSTRING_INSTALLED', function_exists('mb_strlen'));			// mbstring extension.
-
 // event logs types
 define('LOG_COURSE_DELETE', 'course_deleted');
 define('LOG_COURSE_CREATE', 'course_created');
@@ -196,6 +183,27 @@ define('LOG_USER_ID', 'user_id');
 define('LOG_SESSION_ID', 'session_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY', 'settings_category');
 define('LOG_CONFIGURATION_SETTINGS_VARIABLE', 'settings_variable');
+
+// Specification for usernames:
+// 1. ASCII-letters and digits only are acceptable, 20 characters length.
+// 2. Empty username is formally valid, but it is reserved for the anonymous user.
+define('USERNAME_MAX_LENGTH', 20);
+define('USERNAME_PURIFIER', '/[^0-9A-Za-z]/');
+define('USERNAME_PURIFIER_SHALLOW', '/\s/');
+
+// Constants for detection some important PHP5 subversions.
+define('IS_PHP_52', !((float)PHP_VERSION < 5.2));
+define('IS_PHP_53', !((float)PHP_VERSION < 5.3));
+
+// This constant is a result of Windows OS detection, it has a boolean value:
+// true whether the server runs on Windows OS, false otherwise.
+define('IS_WINDOWS_OS', api_is_windows_os());
+
+// Checks for installed optional php-extensions.
+define('INTL_INSTALLED', function_exists('intl_get_error_code'));	// intl extension (from PECL), it is installed by default as of PHP 5.3.0
+define('ICONV_INSTALLED', function_exists('iconv'));				// iconv extension, for PHP5 on Windows it is installed by default.
+define('MBSTRING_INSTALLED', function_exists('mb_strlen'));			// mbstring extension.
+
 /*
 ==============================================================================
 		MAIN API EXTENSIONS

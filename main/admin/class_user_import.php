@@ -32,6 +32,7 @@
  * Validates imported data.
  */
 function validate_data($user_classes) {
+	global $purification_option_for_usernames;
 	$errors = array ();
 	$classcodes = array ();
 	foreach ($user_classes as $index => $user_class) {
@@ -62,14 +63,15 @@ function validate_data($user_classes) {
 		}
 		// 3. Check username, first, check whether it is empty.
 		if (!UserManager::is_username_empty($user_class['UserName'])) {
-			// 3.1. Check whether username exists.
-			if (UserManager::is_username_available($user_class['UserName'])) {
-				$user_class['error'] = get_lang('UnknownUser').': '.$user_class['UserName'];
-				$errors[] = $user_class;
-			}
-			// 3.2. Check whether username is too long.
+			// 3.1. Check whether username is too long.
 			if (UserManager::is_username_too_long($user_class['UserName'])) {
 				$user_class['error'] = get_lang('UserNameTooLong').': '.$user_class['UserName'];
+				$errors[] = $user_class;
+			}
+			$username = UserManager::purify_username($user_class['UserName'], $purification_option_for_usernames);
+			// 3.2. Check whether username exists.
+			if (UserManager::is_username_available($username)) {
+				$user_class['error'] = get_lang('UnknownUser').': '.$username;
 				$errors[] = $user_class;
 			}
 		}

@@ -91,17 +91,17 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 				$("#"+id_img_link_tool).attr("src",path_name_of_imglinktool);
 
 				if (my_image_tool=="visible.gif") {
-					$("#"+id_img_link_tool).attr("alt","'.get_lang('MakeAvailable').'");
-					$("#"+id_img_link_tool).attr("title","'.get_lang('MakeAvailable').'");
+					$("#"+id_img_link_tool).attr("alt","'.get_lang('MakeAvailable', '').'");
+					$("#"+id_img_link_tool).attr("title","'.get_lang('MakeAvailable', '').'");
 				} else {
-					$("#"+id_img_link_tool).attr("alt","'.get_lang('MakeUnavailable').'");
-					$("#"+id_img_link_tool).attr("title","'.get_lang('MakeUnavailable').'");
+					$("#"+id_img_link_tool).attr("alt","'.get_lang('MakeUnavailable', '').'");
+					$("#"+id_img_link_tool).attr("title","'.get_lang('MakeUnavailable', '').'");
 				}
 
 				if (datos=="set_visible") {
-					$("#id_content_message").html("<div class=\"confirmation-message\">'.get_lang('LanguageIsNowVisible').'</div>");
+					$("#id_content_message").html("<div class=\"confirmation-message\">'.get_lang('LanguageIsNowVisible', '').'</div>");
 				} else {
-					$("#id_content_message").html("<div class=\"confirmation-message\">'.get_lang('LanguageIsNowHidden').'</div>");
+					$("#id_content_message").html("<div class=\"confirmation-message\">'.get_lang('LanguageIsNowHidden', '').'</div>");
 				}
 
 		} });

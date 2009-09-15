@@ -2792,7 +2792,7 @@ function api_is_valid_ascii(&$string) {
  */
 
 /**
- * Checks whether a given language identificator represents supported by the system language.
+ * Checks whether a given language identificator represents supported by this library language.
  * @param string $language		The language identificator to be checked ('english', 'french', 'spanish', ...).
  * @return bool $language		TRUE if the language is supported, FALSE otherwise.
  */
@@ -2805,19 +2805,22 @@ function api_is_language_supported($language) {
 }
 
 /**
- * Validates the input language identificator in order always to return a language that is supported by the system.
+ * Validates the input language identificator in order always to return a language that is enabled in the system.
+ * This function is to be used for data import when provided language identificators should be validated.
  * @param string $language		The language identificator to be validated.
- * @param bool $purify			A modifier to the returned result. If it is TRUE, then the returned language identificator is purified.
- * @return string				Returns the input language identificator, purified, if it was demanded. If the input language is not supported, the current interface language is returned then.
+ * @return string				Returns the input language identificator. If the input language is not enabled, platform language is returned then.
  */
-function api_validate_language($language, $purify = false) {
-	if (!api_is_language_supported($language)) {
-		return api_get_interface_language($purify);
+function api_validate_language($language) {
+	static $enabled_languages;
+	if (!isset($enabled_languages)) {
+		$enabled_languages_info = api_get_languages();
+		$enabled_languages = $enabled_languages_info['folder'];
 	}
-	if ($purify) {
-		return api_refine_language_id($language);
+	$language = str_replace('_km', '_KM', strtolower(trim($language)));
+	if (empty($language) || !in_array($language, $enabled_languages) || !api_is_language_supported($language)) {
+		$language = api_get_setting('platformLanguage');
 	}
-	return str_replace('_km', '_KM', strtolower($language));
+	return $language;
 }
 
 /**

@@ -421,7 +421,6 @@ class UserManager {
 	/**
 	 * Checks whether a given username matches to the specification strictly. The empty username is assumed here as invalid.
 	 * Mostly this function is to be used in the user interface built-in validation routines for providing feedback while usernames are enterd manually.
-	 * TODO: Before applying this method, currently implemented UI validation has to be studied.
 	 * @param string $username				The input username.
 	 * @param string $encoding (optional)	The character encoding for the input names. If it is omitted, the platform character set will be used by default.
 	 * @return bool							Returns TRUE if the username is valid, FALSE otherwise.

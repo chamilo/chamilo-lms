@@ -155,10 +155,10 @@ if (strlen($user_data['picture_uri']) > 0 )
 }
 
 // Username
-$form->addElement('text', 'username', get_lang('LoginName'),array('maxlength'=>20));
+$form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
 $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
 $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
-$form->addRule('username', '', 'maxlength',20);
 $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
 
 // Password

@@ -111,12 +111,12 @@ if ($display_all_form===true) {
 	}
 	*/
 	//	USERNAME
-	$form->addElement('text', 'username', get_lang('UserName'), array('size' => 20));
+	$form->addElement('text', 'username', get_lang('UserName'), array('size' => USERNAME_MAX_LENGTH));
 	$form->applyFilter('username','trim');
 	$form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
+	$form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
 	$form->addRule('username', get_lang('UsernameWrong'), 'username');
 	$form->addRule('username', get_lang('UserTaken'), 'username_available');
-	$form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'),'20'), 'maxlength',20);
 	//	PASSWORD
 	$form->addElement('password', 'pass1', get_lang('Pass'),         array('size' => 40));
 	$form->addElement('password', 'pass2', get_lang('Confirmation'), array('size' => 40));

@@ -34,7 +34,10 @@ $cidReset = true;
 
 require ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'classmanager.lib.php');
+
+$this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
+
 $course = $_GET['course'];
 $class_id = intval($_GET['idclass']);
 $form_sent = 0;

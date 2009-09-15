@@ -60,10 +60,16 @@ function validate_data($user_classes) {
 				}
 			}
 		}
-		// 3. Check whether username exists.
-		if (isset ($user_class['UserName']) && strlen($user_class['UserName']) != 0) {
-			if (UserManager :: is_username_available($user_class['UserName'])) {
+		// 3. Check username, first, check whether it is empty.
+		if (!UserManager::is_username_empty($user_class['UserName'])) {
+			// 3.1. Check whether username exists.
+			if (UserManager::is_username_available($user_class['UserName'])) {
 				$user_class['error'] = get_lang('UnknownUser').': '.$user_class['UserName'];
+				$errors[] = $user_class;
+			}
+			// 3.2. Check whether username is too long.
+			if (UserManager::is_username_too_long($user_class['UserName'])) {
+				$user_class['error'] = get_lang('UserNameTooLong').': '.$user_class['UserName'];
 				$errors[] = $user_class;
 			}
 		}
@@ -75,42 +81,48 @@ function validate_data($user_classes) {
  * Saves imported data.
  */
 function save_data($users_classes) {
+
+	global $purification_option_for_usernames;
+
 	// Table definitions.
 	$user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
 	$class_user_table 	= Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 	$class_table 		= Database :: get_main_table(TABLE_MAIN_CLASS);
 
+	// Data parsing: purification + conversion (UserName, ClassName) --> (user_is, class_id)
 	$csv_data = array ();
 	foreach ($users_classes as $index => $user_class) {
-		$sql = "SELECT * FROM $class_table WHERE name = '".Database::escape_string($user_class['ClassName'])."'";
-		$res = Database::query($sql, __FILE__, __LINE__);
-		$obj = Database::fetch_object($res);
-		$csv_data[$user_class['UserName']][$obj->id] = 1;
+		$sql1 = "SELECT user_id FROM $user_table WHERE username = '".Database::escape_string(UserManager::purify_username($user_class['UserName'], $purification_option_for_usernames))."'";
+		$res1 = Database::query($sql1, __FILE__, __LINE__);
+		$obj1 = Database::fetch_object($res1);
+		$sql2 = "SELECT id FROM $class_table WHERE name = '".Database::escape_string(trim($user_class['ClassName']))."'";
+		$res2 = Database::query($sql2, __FILE__, __LINE__);
+		$obj2 = Database::fetch_object($res2);
+		if ($obj1 && $obj2) {
+			$csv_data[$obj1->user_id][$obj2->id] = 1;
+		}
 	}
-	foreach ($csv_data as $username => $csv_subscriptions) {
-		$user_id = 0;
-		$sql = "SELECT * FROM $user_table u WHERE u.username = '".Database::escape_string($username)."'";
+
+	// Logic for processing the request (data + UI options).
+	$db_subscriptions = array();
+	foreach ($csv_data as $user_id => $csv_subscriptions) {
+		$sql = "SELECT class_id FROM $class_user_table cu WHERE cu.user_id = $user_id";
 		$res = Database::query($sql, __FILE__, __LINE__);
-		$obj = Database::fetch_object($res);
-		$user_id = $obj->user_id;
-		$sql = "SELECT * FROM $class_user_table cu WHERE cu.user_id = $user_id";
-		$res = Database::query($sql, __FILE__, __LINE__);
-		$db_subscriptions = array ();
 		while ($obj = Database::fetch_object($res)) {
 			$db_subscriptions[$obj->class_id] = 1;
 		}
 		$to_subscribe = array_diff(array_keys($csv_subscriptions), array_keys($db_subscriptions));
 		$to_unsubscribe = array_diff(array_keys($db_subscriptions), array_keys($csv_subscriptions));
+		// Subscriptions for new classes.
 		if ($_POST['subscribe']) {
-			foreach ($to_subscribe as $index => $class_id) {
-				ClassManager :: add_user($user_id, $class_id);
-				//echo get_lang('Subscription').' : '.$course_code.'<br />';
+			foreach ($to_subscribe as $class_id) {
+				ClassManager::add_user($user_id, $class_id);
 			}
 		}
+		// Unsubscription from previous classes.
 		if ($_POST['unsubscribe']) {
-			foreach ($to_unsubscribe as $index => $class_id) {
-				ClassManager :: unsubscribe_user($user_id, $class_id);
-				//echo get_lang('Unsubscription').' : '.$course_code.'<br />';
+			foreach ($to_unsubscribe as $class_id) {
+				ClassManager::unsubscribe_user($user_id, $class_id);
 			}
 		}
 	}
@@ -126,7 +138,6 @@ function parse_csv_data($file) {
 	return $courses;
 }
 
-// Names of the language file that needs to be included.
 $language_file = array('admin', 'registration');
 
 $cidReset = true;
@@ -145,6 +156,9 @@ require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 $tool_name = get_lang('AddUsersToAClass').' CSV';
 
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+
+// Set this option to true to enforce strict purification for usenames.
+$purification_option_for_usernames = false;
 
 set_time_limit(0);
 
@@ -183,7 +197,7 @@ $form->display();
 <pre>
 <b>UserName</b>;<b>ClassName</b>
 jdoe;class01
-a.dam;class01
+adam;class01
 </pre>
 </blockquote>
 <?php

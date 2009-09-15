@@ -36,20 +36,20 @@ function validate_data($users) {
 				$errors[] = $user;
 			}
 		}
-		// 2. Check username.
+		// 2. Check username, first, check whether it is empty.
 		if (!UserManager::is_username_empty($user['UserName'])) {
-			// 2.1. Check if no username was used twice in import file.
+			// 2.1. Check whether the username was used twice in import file.
 			if (isset($usernames[$user['UserName']])) {
 				$user['error'] = get_lang('UserNameUsedTwice');
 				$errors[] = $user;
 			}
 			$usernames[$user['UserName']] = 1;
-			// 2.2. Check if username isn't allready in use in database.
+			// 2.2. Check whether username is allready occupied.
 			if (!UserManager::is_username_available($user['UserName'])) {
 				$user['error'] = get_lang('UserNameNotAvailable');
 				$errors[] = $user;
 			}
-			// 2.3. Check if username isn't longer than the 20 allowed characters.
+			// 2.3. Check whether username is too long.
 			if (UserManager::is_username_too_long($user['UserName'])) {
 				$user['error'] = get_lang('UserNameTooLong');
 				$errors[] = $user;

@@ -173,7 +173,7 @@ if (!$already_installed)
 	die($error_message_not_installed);
 }
 
-//Assigning a variable to avoid several useless calls to the database setting. 
+//Assigning a variable to avoid several useless calls to the database setting.
 // Do not over-user. This is only for this script's local use.
 $lib_path = api_get_path(LIBRARY_PATH);
 
@@ -241,7 +241,7 @@ api_set_string_library_default_encoding($charset);
 --------------------------------------------
   RETRIEVING ALL THE DOKEOS CONFIG SETTINGS
 --------------------------------------------
-*/	
+*/
 if(!empty($_configuration['multiple_access_urls']))
 {
 	$_configuration['access_url'] = 1;
@@ -267,8 +267,8 @@ else
 //$result=mysql_query($sql) or die(mysql_error());
 // access_url == 1 is the default dokeos location
 if ($_configuration['access_url']!=1)
-{	
-	$url_info = api_get_access_url($_configuration['access_url']);	
+{
+	$url_info = api_get_access_url($_configuration['access_url']);
 	if ($url_info['active']==1)
 	{
 		$settings_by_access = api_get_settings(null,'list',$_configuration['access_url'],1);
@@ -279,8 +279,8 @@ if ($_configuration['access_url']!=1)
 			if (empty($row['subkey']))
 				$row['subkey']=0;
 			if (empty($row['category']))
-				$row['category']=0;					
-			$settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ]	[ $row['category'] ] = $row;		
+				$row['category']=0;
+			$settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ]	[ $row['category'] ] = $row;
 		}
 	}
 }
@@ -290,7 +290,7 @@ $result = api_get_settings(null,'list',1);
 
 //while ($row=mysql_fetch_array($result))
 foreach($result as $row)
-{	
+{
 	if ($_configuration['access_url']!=1)
 	{
 		if ($url_info['active']==1)
@@ -299,20 +299,20 @@ foreach($result as $row)
 				$var=0;
 			else
 				$var=$row['variable'];
-				
+
 			if (empty($row['subkey']))
 				$subkey=0;
 			else
 				$subkey=$row['subkey'];
-				
+
 			if (empty($row['category']))
 				$category=0;
 			else
-				$category=$row['category'];	
+				$category=$row['category'];
 		}
-		
+
 		if ($row['access_url_changeable']==1 && $url_info['active']==1)
-		{		
+		{
 			if ($settings_by_access_list[ $var ] [ $subkey ] [$category ]['selected_value'] !='')
 			{
 				if ($row['subkey']==NULL)
@@ -347,10 +347,10 @@ foreach($result as $row)
 				$_setting[$row['variable']][$row['subkey']]=$row['selected_value'];
 			}
 		}
-		
+
 	}
 	else
-	{			
+	{
 		if ($row['subkey']==NULL)
 		{
 			$_setting[$row['variable']]=$row['selected_value'];
@@ -358,8 +358,8 @@ foreach($result as $row)
 		else
 		{
 			$_setting[$row['variable']][$row['subkey']]=$row['selected_value'];
-		}		
-	}	
+		}
+	}
 }
 //echo '<pre>';print_r($_setting);echo '</pre>';
 // we have to store the settings for the plugins differently because it expects an array
@@ -381,7 +381,7 @@ foreach($result as $row)
 
 //load array Kses for Htmlpurifier
 require_once $includePath."/lib/formvalidator/Rule/allowed_tags.inc.php";
-//load htmpurifier 
+//load htmpurifier
 require_once $includePath."/lib/htmlpurifier/library/HTMLPurifier.auto.php";
 
 // include the local (contextual) parameters of this course or section
@@ -512,54 +512,54 @@ if (api_get_self() == '/main/admin/sub_language.php' || api_get_self() == '/main
 	//getting parent info
 	$parent_language	= SubLanguageManager::get_all_information_of_language(intval($_REQUEST['id']));
 	//getting sub language info
-	$sub_language		= SubLanguageManager::get_all_information_of_language(intval($_REQUEST['sub_language_id']));	
+	$sub_language		= SubLanguageManager::get_all_information_of_language(intval($_REQUEST['sub_language_id']));
 
 	//echo '<pre>';
 	$english_language_array = $parent_language_array= $sub_language_array=array();
-	
+
 	foreach ($language_files_to_load as $language_file_item) {
 		$lang_list_pre = array_keys($GLOBALS);
 		include $langpath.'english/'.$language_file_item.'.inc.php';			 //loading english
-		$lang_list_post = array_keys($GLOBALS);		
-		$lang_list_result = array_diff($lang_list_post, $lang_list_pre);				
+		$lang_list_post = array_keys($GLOBALS);
+		$lang_list_result = array_diff($lang_list_post, $lang_list_pre);
 		unset($lang_list_pre);
-		
+
 		// ------  english language array
 		$english_language_array[$language_file_item]= compact($lang_list_result);
-		
-		//cleaning the variables 
-		foreach($lang_list_result as $item) {					
-			unset(${$item});			
-		}		
+
+		//cleaning the variables
+		foreach($lang_list_result as $item) {
+			unset(${$item});
+		}
 		$parent_file = $langpath.$parent_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
 		if (is_file($parent_file))
 			include $parent_file;
-			 
+
 		// ------  parent language array
 		$parent_language_array[$language_file_item]= compact($lang_list_result);
-		
-		//cleaning the variables 
-		foreach($lang_list_result as $item) {					
-			unset(${$item});			
+
+		//cleaning the variables
+		foreach($lang_list_result as $item) {
+			unset(${$item});
 		}
 		$sub_file = $langpath.$sub_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
 		if (is_file($sub_file))
-			include $sub_file; 
+			include $sub_file;
 		// ------  sub language array
 		$sub_language_array[$language_file_item]= compact($lang_list_result);
-		
-		//cleaning the variables 
-		foreach($lang_list_result as $item) {					
-			unset(${$item});			
-		}		
-	}		
+
+		//cleaning the variables
+		foreach($lang_list_result as $item) {
+			unset(${$item});
+		}
+	}
 	/*
 	print_r($english_language_array);
-	print_r($parent_language_array); 
+	print_r($parent_language_array);
 	print_r($sub_language_array); exit
 	*/
 }
-	
+
 // Checking if we have a valid language. If not we set it to the platform language.
 $valid_languages=api_get_languages();
 if (!in_array($user_language,$valid_languages['folder']))
@@ -627,16 +627,16 @@ if( isset($language_file) )
 
 if (is_array($language_files)) {
 	if (api_get_setting('allow_use_sub_language')=='true') {
-		foreach ($language_files as $index => $language_file) {		
+		foreach ($language_files as $index => $language_file) {
 			include $langpath.'english/'.$language_file.'.inc.php';
 			$langfile = $langpath.$language_interface.'/'.$language_file.'.inc.php';
-			
-			$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);	
+
+			$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 			$sql_sub_language='SELECT dokeos_folder FROM '.$tbl_admin_languages.' WHERE parent_id=(SELECT id FROM '.$tbl_admin_languages.' WHERE dokeos_folder="'.Database::escape_string($language_interface).'" AND  ISNULL(parent_id))';
-	
+
 			$rs_sub_language=Database::query($sql_sub_language,__FILE__,__LINE__);
 			$num_row_sub_language=Database::num_rows($rs_sub_language);
-			
+
 			if (file_exists($langfile)) {
 				include $langfile;
 				for ($i=0;$i<$num_row_sub_language;$i++) {
@@ -646,11 +646,11 @@ if (is_array($language_files)) {
 						include $sub_langfile;
 					}
 				}
-				
+
 			}
-		}	
+		}
 	} else {
-		foreach ($language_files as $index => $language_file) {		
+		foreach ($language_files as $index => $language_file) {
 			include $langpath.'english/'.$language_file.'.inc.php';
 			$langfile = $langpath.$language_interface.'/'.$language_file.'.inc.php';
 			if (file_exists($langfile)) {
@@ -671,9 +671,9 @@ if($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']) && isset
 { // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
 
 	$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-	
+
 	$sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
-	
+
 	$q_last_connection=api_sql_query($sql_last_connection);
 	if(Database::num_rows($q_last_connection) > 0)
 	{
@@ -681,6 +681,6 @@ if($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']) && isset
 		$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
 		api_sql_query($s_sql_update_logout_date);
 	}
-	
+
 }
 ?>

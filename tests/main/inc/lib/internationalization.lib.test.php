@@ -1,16 +1,16 @@
 <?php
 
 /**
- * This is a test of multibyte_string_functions.lib which is
- * a common purpose library for supporting multibyte string
- * aware functions. Only the public API is tested here.
+ * This is a test of internationalization.lib.php which is
+ * a common purpose library for supporting internationalization
+ * related functions. Only the public API is tested here.
  * @author Ricardo Rodriguez Salazar, 2009.
  * @author Ivan Tcholakov, September 2009.
  * For licensing terms, see /dokeos_license.txt
  *
  * Notes:
  * 1. While saving this file, please, preserve its UTF-8 encoding.
- * Othewise this tes would be broken.
+ * Othewise this test would be broken.
  * 2. While running this test, send a header declaring UTF-8 encoding.
  * Then you would see variable dumps correctly.
  * 3. Tests about string comparison and sorting might give false results
@@ -18,10 +18,10 @@
  */
 
 
-class TestMultibyte_String_Functions extends UnitTestCase {
+class TestInternationalization extends UnitTestCase {
 
-	function TestMultibyte_String_Functions() {
-        $this->UnitTestCase('Multibyte String Functions Tests');
+	function TestInternationalization() {
+        $this->UnitTestCase('Internationalization Tests');
 	}
 
 
@@ -993,44 +993,20 @@ class TestMultibyte_String_Functions extends UnitTestCase {
 	}
 
 	public function test_api_validate_language() {
-		$language1 = 'english';
-		$language2 = 'english_org';
-		$language3 = 'EnGlIsh';
-		$language4 = 'enGlIsh_oRg';
-		$language5 = 'french';
-		$language6 = 'french_unicode';
-		$language7 = 'frEncH';
-		$language8 = 'FreNch_CorPorAte';
-		$language9 = 'xxxxxxxxxxxxxx';
+		$language1 = '   '.strtoupper(api_get_interface_language()).'    ';
+		$language2 = " \t   ".strtoupper(api_get_setting('platformLanguage'))."   \t ";
+		$language3 = 'xxxxxxxxxxxxxx';
 		$res1 = api_validate_language($language1);
 		$res2 = api_validate_language($language2);
 		$res3 = api_validate_language($language3);
-		$res4 = api_validate_language($language4);
-		$res5 = api_validate_language($language5);
-		$res6 = api_validate_language($language6);
-		$res7 = api_validate_language($language7);
-		$res8 = api_validate_language($language8, true);
-		$res9 = api_validate_language($language9);
 		$this->assertTrue(
-			$res1 === 'english'
-			&& $res2 === 'english_org'
-			&& $res3 === 'english'
-			&& $res4 === 'english_org'
-			&& $res5 === 'french'
-			&& $res6 === 'french_unicode'
-			&& $res7 === 'french'
-			&& $res8 === 'french'
-			&& $res9 === api_get_interface_language()
+			$res1 === api_get_interface_language()
+			&& $res2 === api_get_setting('platformLanguage')
+			&& $res3 === api_get_setting('platformLanguage')
 		);
 		//var_dump($res1);
 		//var_dump($res2);
 		//var_dump($res3);
-		//var_dump($res4);
-		//var_dump($res5);
-		//var_dump($res6);
-		//var_dump($res7);
-		//var_dump($res8);
-		//var_dump($res9);
 	}
 
 	public function test_api_refine_language_id() {

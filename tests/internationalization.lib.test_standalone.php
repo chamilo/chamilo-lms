@@ -1,9 +1,9 @@
 <?php
 
 /**
- * A standalone test for the multibyte string library
+ * A standalone test for the internationalization library.
  * @author Ricardo Rodriguez Salazar, 2009.
- * @author Ivan Tcholakov, August 2009.
+ * @author Ivan Tcholakov, September 2009.
  * For licensing terms, see /dokeos_license.txt
  */
 
@@ -33,18 +33,18 @@ require_once($_current_dir.'simpletest/autorun.php');
 
 $_SESSION['_user']['user_id'] = 1;
 
-class MultibyteStringLibraryTests extends TestSuite {
+class InternationalizationTests extends TestSuite {
 
-    function  MultibyteStringLibraryTests() {
-        $this->TestSuite('Multibyte String Library Tests');
+    function  InternationalizationTests() {
+        $this->TestSuite('Internationalization Tests');
 
         global $_test_sys_library_path;
-		$this->addTestFile($_test_sys_library_path.'multibyte_string_functions.lib.test.php');
+		$this->addTestFile($_test_sys_library_path.'internationalization.lib.test.php');
     }
 
 }
 
-$test = & new MultibyteStringLibraryTests();
+$test = & new InternationalizationTests();
 //$test-> run( new HtmlReporter());
 
 ?>

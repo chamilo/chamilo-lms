@@ -50,7 +50,7 @@ class AllTests extends TestSuite {
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/main_api.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/media.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/message.lib.test.php');
-      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/multibyte_string_functions.lib.test.php');
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/internationalization.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/online.inc.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/security.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/session_handler.class.test.php');
@@ -100,7 +100,7 @@ class AllTests extends TestSuite {
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/main_api.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/media.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/message.lib.test.php');
-      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/multibyte_string_functions.lib.test.php');
+      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/internationalization.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/online.inc.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/security.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/session_handler.class.test.php');

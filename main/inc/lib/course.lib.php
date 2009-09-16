@@ -154,7 +154,7 @@ class CourseManager {
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_code = Database::escape_string($course_code);
 		$sql = "SELECT * FROM ".$course_table." WHERE code='".$course_code."'";
-		$sql_result = api_sql_query($sql, __FILE__, __LINE__);
+		$sql_result = Database::query($sql, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
 		return $result;
 	}
@@ -206,7 +206,7 @@ class CourseManager {
 		} else {
 			$sql .= ' OFFSET 0';
 		}
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		return api_store_result($res);
 	}
 
@@ -224,7 +224,7 @@ class CourseManager {
 		$course_code = Database::escape_string($course_code);
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT visibility, subscribe, unsubscribe from ".$course_table." where code = '".$course_code."'";
-		$sql_result = api_sql_query($sql, __FILE__, __LINE__);
+		$sql_result = Database::query($sql, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
 		return $result;
 	}
@@ -240,7 +240,7 @@ class CourseManager {
 		$user_id = Database::escape_string($user_id);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$sql_query = "SELECT * FROM $course_user_table WHERE course_code = '$course_code' AND user_id = $user_id";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
 		return $result['status'];
 	}
@@ -266,22 +266,22 @@ class CourseManager {
 		$course_code = Database::escape_string($course_code);
 		// Unsubscribe user from all groups in the course
 		$sql = "SELECT * FROM $table_course WHERE code = '".$course_code."'";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$course = Database::fetch_object($res);
 		$table_group = Database :: get_course_table(TABLE_GROUP_USER, $course->db_name);
 		$sql = "DELETE FROM $table_group WHERE user_id IN (".$user_ids.")";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 		$tbl_group_rel_tutor = Database::get_course_table(TABLE_GROUP_TUTOR, $course->db_name);
 		$sql = "DELETE FROM $tbl_group_rel_tutor WHERE user_id IN (".$user_ids.")";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		// Unsubscribe user from all blogs in the course
 		$table_blog_user = Database::get_course_table(TABLE_BLOGS_REL_USER, $course->db_name);
 		$sql = "DELETE FROM  ".$table_blog_user." WHERE user_id IN (".$user_ids.")";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 		$table_blogtask_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER, $course->db_name);
 		$sql = "DELETE FROM  ".$table_blogtask_user." WHERE user_id IN (".$user_ids.")";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		// Unsubscribe user from the course
 		if (!empty($_SESSION['id_session'])) {
@@ -292,23 +292,23 @@ class CourseManager {
 										WHERE id_session ='".$my_session_id."'
 										AND course_code = '".Database::escape_string($_SESSION['_course']['id'])."'
 										AND id_user  IN ($user_ids)";
-			$result = api_sql_query($add_session_course_rel,__FILE__, __LINE__);
+			$result = Database::query($add_session_course_rel,__FILE__, __LINE__);
 			// delete in table session_rel_user
 			$add_session_rel_user = "DELETE FROM $tbl_session_rel_user
 									WHERE id_session ='".$my_session_id."'
 									AND id_user  IN ($user_ids)";
-			$result = api_sql_query($add_session_rel_user,__FILE__, __LINE__);
+			$result = Database::query($add_session_rel_user,__FILE__, __LINE__);
 			// update the table session
 			$sql = "SELECT COUNT(*) from $tbl_session_rel_user WHERE id_session = '".$my_session_id."'";
-			$result = api_sql_query($sql,__FILE__, __LINE__);
+			$result = Database::query($sql,__FILE__, __LINE__);
 			$row = Database::fetch_array($result);
 			$count = $row[0]; // number of users by session
 
 			$update_user_session = "UPDATE $tbl_session set nbr_users = '$count' WHERE id = '".$my_session_id."'" ;
-			$result = api_sql_query($update_user_session, __FILE__, __LINE__);
+			$result = Database::query($update_user_session, __FILE__, __LINE__);
 		} else {
 			$sql = "DELETE FROM $table_course_user WHERE user_id IN (".$user_ids.") AND course_code = '".$course_code."'";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 
 			// add event to system log
 			$time = time();
@@ -348,13 +348,13 @@ class CourseManager {
 		} else {
 			// previously check if the user are already registered on the platform
 
-			$handle = @api_sql_query("SELECT status FROM ".$user_table."
+			$handle = @Database::query("SELECT status FROM ".$user_table."
 														WHERE user_id = '$user_id' ", __FILE__, __LINE__);
 			if (Database::num_rows($handle) == 0) {
 				return false; // the user isn't registered to the platform
 			} else {
 				//check if user isn't already subscribed to the course
-				$handle = @api_sql_query("SELECT * FROM ".$course_user_table."
+				$handle = @Database::query("SELECT * FROM ".$course_user_table."
 																	WHERE user_id = '$user_id'
 																	AND course_code ='$course_code'", __FILE__, __LINE__);
 				if (Database::num_rows($handle) > 0) {
@@ -367,14 +367,14 @@ class CourseManager {
 								WHERE course_code = '".$_SESSION['_course']['id']."'
 								AND id_session ='".$_SESSION["id_session"]."'
 								AND id_user = '".$user_id."'";
-						$result1 = @api_sql_query($sql1, __FILE__, __LINE__);
+						$result1 = @Database::query($sql1, __FILE__, __LINE__);
 						$check1 = Database::num_rows($result1);
 
 						//check if user isn't already estore to the session_rel_user table
 						$sql2 = "SELECT * FROM $tbl_session_rel_user
 								WHERE id_session ='".$_SESSION["id_session"]."'
 								AND id_user = '".$user_id."'";
-						$result2 = @api_sql_query($sql2, __FILE__, __LINE__);
+						$result2 = @Database::query($sql2, __FILE__, __LINE__);
 						$check2 = Database::num_rows($result2);
 
 						if ($check1 > 0 || $check2 > 0) {
@@ -385,19 +385,19 @@ class CourseManager {
 													  SET id_session ='".$_SESSION["id_session"]."',
 													  course_code = '".$_SESSION['_course']['id']."',
 													  id_user = '".$user_id."'";
-							$result = @api_sql_query($add_session_course_rel,__FILE__, __LINE__);
+							$result = @Database::query($add_session_course_rel,__FILE__, __LINE__);
 							// add in table session_rel_user
 							$add_session_rel_user = "INSERT INTO $tbl_session_rel_user
 													  SET id_session ='".$_SESSION["id_session"]."',
 													  id_user = '".$user_id."'";
-							$result = @api_sql_query($add_session_rel_user,__FILE__, __LINE__);
+							$result = @Database::query($add_session_rel_user,__FILE__, __LINE__);
 							// update the table session
 							$sql = "SELECT COUNT(*) from $tbl_session_rel_user WHERE id_session = '".$_SESSION["id_session"]."'";
-							$result = @api_sql_query($sql,__FILE__, __LINE__);
+							$result = @Database::query($sql,__FILE__, __LINE__);
 							$row = Database::fetch_array($result);
 							$count = $row[0]; // number of users by session
 							$update_user_session = "UPDATE $tbl_session set nbr_users = '$count' WHERE id = '".$_SESSION["id_session"]."'" ;
-							$result = @api_sql_query($update_user_session, __FILE__, __LINE__);
+							$result = @Database::query($update_user_session, __FILE__, __LINE__);
 						}
 					} else {
 						$course_sort = self :: userCourseSort($user_id, $course_code);
@@ -406,7 +406,7 @@ class CourseManager {
 										user_id    = '$user_id',
 										status    = '".$status."',
 										sort  =   '". ($course_sort)."'";
-						$result = @api_sql_query($add_course_user_entry_sql, __FILE__, __LINE__);
+						$result = @Database::query($add_course_user_entry_sql, __FILE__, __LINE__);
 
 
 						// add event to system log
@@ -449,13 +449,13 @@ class CourseManager {
 			$course_code = Database::escape_string($course_code);
 			// previously check if the user are already registered on the platform
 
-			$handle = api_sql_query("SELECT status FROM ".$user_table."
+			$handle = Database::query("SELECT status FROM ".$user_table."
 								WHERE user_id = '$user_id' ", __FILE__, __LINE__);
 			if (Database::num_rows($handle) == 0) {
 				return false; // the user isn't registered to the platform
 			} else {
 				//check if user isn't already subscribed to the course
-				$handle = api_sql_query("SELECT * FROM ".$course_user_table."
+				$handle = Database::query("SELECT * FROM ".$course_user_table."
 																	WHERE user_id = '$user_id'
 																	AND course_code ='$course_code'", __FILE__, __LINE__);
 				if (Database::num_rows($handle) > 0) {
@@ -463,7 +463,7 @@ class CourseManager {
 				} else {
 					// previously check if subscription is allowed for this course
 
-					$handle = api_sql_query("SELECT code, visibility FROM ".$course_table."
+					$handle = Database::query("SELECT code, visibility FROM ".$course_table."
 											WHERE  code = '$course_code'
 											AND  subscribe = '".SUBSCRIBE_NOT_ALLOWED."'", __FILE__, __LINE__);
 
@@ -476,7 +476,7 @@ class CourseManager {
 												user_id    = '$user_id',
 												status    = '".$status."',
 												sort  =   '". ($max_sort + 1)."'";
-						$result = api_sql_query($add_course_user_entry_sql, __FILE__, __LINE__);
+						$result = Database::query($add_course_user_entry_sql, __FILE__, __LINE__);
 						// TODO: To be simplified.
 						if ($result) {
 							return true;
@@ -563,7 +563,7 @@ class CourseManager {
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$wanted_course_code = Database::escape_string($wanted_course_code);
 		$sql_query = "SELECT COUNT(*) as number FROM ".$course_table."WHERE code = '$wanted_course_code' OR visual_code = '$wanted_course_code' ";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
 
 		// TODO: To be simplified.
@@ -584,7 +584,7 @@ class CourseManager {
 	public static function get_real_course_list () {
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $course_table WHERE target_course_code IS NULL";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 
 		while ($result = Database::fetch_array($sql_result)) {
 			$real_course_list[] = $result;
@@ -599,7 +599,7 @@ class CourseManager {
 	public static function get_virtual_course_list () {
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $course_table WHERE target_course_code IS NOT NULL";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 
 		while ($result = Database::fetch_array($sql_result)) {
 			$virtual_course_list[] = $result;
@@ -626,7 +626,7 @@ class CourseManager {
 											AND course_user.status = '1'";
 
 		//api_display_debug_info($sql_query);
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 
 		while ($result = Database::fetch_array($sql_result)) {
 			$result_array[] = $result;
@@ -651,7 +651,7 @@ class CourseManager {
 										WHERE course_user.user_id = '$user_id'
 											AND course_user.status = '1'";
 
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 
 		while ($result = Database::fetch_array($sql_result)) {
 			$result_array[] = $result;
@@ -691,7 +691,7 @@ class CourseManager {
 		//is the user registered in the real course?
 		$table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$sql_query = "SELECT * FROM $table WHERE user_id = '$user_id' AND course_code = '$real_course_real_code'";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
 
 		// TODO: To be simplified.
@@ -802,7 +802,7 @@ class CourseManager {
 		$table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$real_course_code = Database::escape_string($real_course_code);
 		$sql_query = "SELECT * FROM $table WHERE target_course_code = '$real_course_code'";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = array ();
 		while ($virtual_course = Database::fetch_array($sql_result)) {
 			$result[] = $virtual_course;
@@ -818,7 +818,7 @@ class CourseManager {
 		$table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$system_code = Database::escape_string($system_code);
 		$sql_query = "SELECT * FROM $table WHERE code = '$system_code'";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
 		$target_number = $result['target_course_code'];
 
@@ -842,7 +842,7 @@ class CourseManager {
 		$table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$visual_code = Database::escape_string($visual_code);
 		$sql_query = "SELECT * FROM $table WHERE visual_code = '$visual_code'";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
 		$target_number = $result['target_course_code'];
 
@@ -885,7 +885,7 @@ class CourseManager {
 	public static function get_virtual_courses_linked_to_real_course ($real_course_code) {
 		$table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $table WHERE target_course_code = '$real_course_code'";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result_array = array ();
 		while ($result = Database::fetch_array($sql_result)) {
 			$result_array[] = $result;
@@ -906,7 +906,7 @@ class CourseManager {
 		$virtual_course_code = Database::escape_string($virtual_course_code);
 		//get info about the virtual course
 		$sql_query = "SELECT * FROM $course_table WHERE code = '$virtual_course_code'";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
 		$target_course_code = $result['target_course_code'];
 
@@ -934,7 +934,7 @@ class CourseManager {
 		$table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
 		$sql_query = "SELECT * FROM $table WHERE user_id = $user_id AND course_code = '$course_code'";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
 
 		if (!isset ($result) || empty ($result)) { // TODO: To be simplified.
@@ -942,18 +942,18 @@ class CourseManager {
 				$sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
 						WHERE id_user = '.$user_id.' AND course_code="'.$course_code.'"';
 
-				$rs = api_sql_query($sql, __FILE__, __LINE__);
+				$rs = Database::query($sql, __FILE__, __LINE__);
 				if (Database::num_rows($rs) > 0) {
 					return true;
 				} else {
 					$sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE).'
 						WHERE id_coach = '.$user_id.' AND course_code="'.$course_code.'"';
-					$rs = api_sql_query($sql, __FILE__, __LINE__);
+					$rs = Database::query($sql, __FILE__, __LINE__);
 					if (Database::num_rows($rs) > 0) {
 						return true;
 					} else {
 						$sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.intval($_SESSION['id_session']).' AND id_coach='.$user_id;
-						$rs = api_sql_query($sql, __FILE__, __LINE__);
+						$rs = Database::query($sql, __FILE__, __LINE__);
 						if (Database::num_rows($rs) > 0) {
 							return true;
 						}
@@ -980,7 +980,7 @@ class CourseManager {
 		if ($user_id != strval(intval($user_id))) { return false; }
 		$course_code = Database::escape_string($course_code);
 		$sql_query = 'SELECT status FROM '.$tbl_course_user.' WHERE course_code="'.$course_code.'" and user_id="'.$user_id.'"';
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		if (Database::num_rows($sql_result) > 0) {
 			$status = Database::result($sql_result, 0, 'status');
 			// TODO: To be simplified.
@@ -1014,7 +1014,7 @@ class CourseManager {
 								ON course.code = course_user.course_code
 								WHERE course_user.user_id = '$user_id' AND ( course.code = '$course_code' OR target_course_code = '$course_code') ";
 
-			$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+			$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 			$result = Database::fetch_array($sql_result);
 
 			// TODO: To be simplified.
@@ -1041,7 +1041,7 @@ class CourseManager {
 					WHERE id_session='".$_SESSION['id_session']."'
 					AND id_user='$user_id'";
 
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			if (Database::num_rows($result)) {
 				return true;
 			}
@@ -1053,7 +1053,7 @@ class CourseManager {
 					AND id_coach = '$user_id'
 					AND course_code='$course_code'";
 
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			if (Database::num_rows($result)) {
 				return true;
 			}
@@ -1064,7 +1064,7 @@ class CourseManager {
 					WHERE session.id='".$_SESSION['id_session']."'
 					AND id_coach='$user_id'";
 
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			if (Database::num_rows($result)) {
 				return true;
 			}
@@ -1123,7 +1123,7 @@ class CourseManager {
 		$sql .= ' '.$order_by;
 		$sql .= ' '.$limit;
 
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql, __FILE__, __LINE__);
 
 		while ($user = Database::fetch_array($rs)) {
 			$user_info = Database :: get_user_info_from_id($user['user_id']);
@@ -1156,7 +1156,7 @@ class CourseManager {
 
 		//We get the coach for the given course in a given session
 		$sql = 'SELECT id_coach FROM '.$table_session_course.' WHERE id_session="'.$session_id.'" AND course_code="'.$course_code.'"';
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql, __FILE__, __LINE__);
 		while ($user = Database::fetch_array($rs)) {
 			$user_info = Database :: get_user_info_from_id($user['id_coach']);
 			$user_info['status'] = $user['status'];
@@ -1168,7 +1168,7 @@ class CourseManager {
 
 		//We get the session coach
 		$sql = 'SELECT id_coach FROM '.$table_session.' WHERE id="'.$session_id.'"';
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql, __FILE__, __LINE__);
 		$user_info = array();
 		$session_id_coach = Database::result($rs, 0, 'id_coach');
 		$user_info = Database :: get_user_info_from_id($session_id_coach);
@@ -1200,7 +1200,7 @@ class CourseManager {
 			// students directly subscribed to the course
 			$table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 			$sql_query = "SELECT * FROM $table WHERE course_code = '$course_code' AND status = 5";
-			$rs = api_sql_query($sql_query, __FILE__, __LINE__);
+			$rs = Database::query($sql_query, __FILE__, __LINE__);
 			while ($student = Database::fetch_array($rs)) {
 				$a_students[$student['user_id']] = $student;
 			}
@@ -1214,7 +1214,7 @@ class CourseManager {
 			if ($session_id != 0) {
 				$sql_query .= ' AND id_session = '.$session_id;
 			}
-			$rs = api_sql_query($sql_query, __FILE__, __LINE__);
+			$rs = Database::query($sql_query, __FILE__, __LINE__);
 			while($student = Database::fetch_array($rs)) {
 				$a_students[$student['id_user']] = $student;
 			}
@@ -1241,7 +1241,7 @@ class CourseManager {
 				"WHERE cu.course_code = '$course_code' " .
 				"AND cu.status = 1 " .
 				"AND cu.user_id = u.user_id";
-		$rs = api_sql_query($sql_query, __FILE__, __LINE__);
+		$rs = Database::query($sql_query, __FILE__, __LINE__);
 		while ($teacher = Database::fetch_array($rs)) {
 			$a_students[$teacher['user_id']] = $teacher;
 		}
@@ -1299,7 +1299,7 @@ class CourseManager {
 							ON course.code = course_user.course_code
 							WHERE course.target_course_code = '$real_course_code' AND course_user.user_id = '$user_id'";
 
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 
 		while ($result = Database::fetch_array($sql_result)) {
 			$result_array[] = $result;
@@ -1335,7 +1335,7 @@ class CourseManager {
 								GROUP BY g.id
 								ORDER BY g.name";
 
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		while ($group_data = Database::fetch_array($result)) {
 			$group_list[$group_data['id']] = $group_data;
 		}
@@ -1419,7 +1419,7 @@ class CourseManager {
 		//now one more thing: fill in the target_course_code field
 
 		$sql_query = "UPDATE $course_table SET target_course_code = '$real_course_code' WHERE code = '".Database::escape_string($course_sys_code)."' LIMIT 1 ";
-		api_sql_query($sql_query, __FILE__, __LINE__);
+		Database::query($sql_query, __FILE__, __LINE__);
 
 		return true;
 	}
@@ -1473,7 +1473,7 @@ class CourseManager {
 		}
 		$code = Database::escape_string($code);
 		$sql = "SELECT * FROM $table_course WHERE code='".$code."'";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		if (Database::num_rows($res) == 0) {
 			return;
 		}
@@ -1486,67 +1486,67 @@ class CourseManager {
 			foreach ($virtual_courses as $index => $virtual_course) {
 				// Unsubscribe all classes from the virtual course
 				$sql = "DELETE FROM $table_course_class WHERE course_code='".$virtual_course['code']."'";
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 				// Unsubscribe all users from the virtual course
 				$sql = "DELETE FROM $table_course_user WHERE course_code='".$virtual_course['code']."'";
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 				// Delete the course from the sessions tables
 				$sql = "DELETE FROM $table_session_course WHERE course_code='".$virtual_course['code']."'";
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 				$sql = "DELETE FROM $table_session_course_user WHERE course_code='".$virtual_course['code']."'";
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 				// Delete the course from the survey tables
 				$sql = "DELETE FROM $table_course_survey WHERE course_code='".$virtual_course['code']."'";
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 				$sql = "DELETE FROM $table_course_survey_user WHERE db_name='".$virtual_course['db_name']."'";
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 				$sql = "DELETE FROM $table_course_survey_reminder WHERE db_name='".$virtual_course['db_name']."'";
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 
 				// Delete the course from the stats tables
 				if ($stats) {
 					$sql = "DELETE FROM $table_stats_hotpots WHERE exe_cours_id = '".$virtual_course['code']."'";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 					$sql = "DELETE FROM $table_stats_attempt WHERE course_code = '".$virtual_course['code']."'";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 					$sql = "DELETE FROM $table_stats_exercises WHERE exe_cours_id = '".$virtual_course['code']."'";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 					$sql = "DELETE FROM $table_stats_access WHERE access_cours_code = '".$virtual_course['code']."'";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 					$sql = "DELETE FROM $table_stats_lastaccess WHERE access_cours_code = '".$virtual_course['code']."'";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 					$sql = "DELETE FROM $table_stats_course_access WHERE course_code = '".$virtual_course['code']."'";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 					$sql = "DELETE FROM $table_stats_online WHERE course = '".$virtual_course['code']."'";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 					$sql = "DELETE FROM $table_stats_default WHERE default_cours_code = '".$virtual_course['code']."'";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 					$sql = "DELETE FROM $table_stats_downloads WHERE down_cours_id = '".$virtual_course['code']."'";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 					$sql = "DELETE FROM $table_stats_links WHERE links_cours_id = '".$virtual_course['code']."'";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 					$sql = "DELETE FROM $table_stats_uploads WHERE upload_cours_id = '".$virtual_course['code']."'";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 				}
 
 				// Delete the course from the course table
 				$sql = "DELETE FROM $table_course WHERE code='".$virtual_course['code']."'";
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 			}
 			$sql = "SELECT * FROM $table_course WHERE code='".$code."'";
-			$res = api_sql_query($sql, __FILE__, __LINE__);
+			$res = Database::query($sql, __FILE__, __LINE__);
 			$course = Database::fetch_array($res);
 			if (!$_configuration['single_database']) {
 				$sql = "DROP DATABASE IF EXISTS ".$course['db_name'];
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 			} else {
 				//TODO Clean the following code as currently it would probably delete another course
 				//similarly named, by mistake...
 				$db_pattern = $_configuration['table_prefix'].$course['db_name'].$_configuration['db_glue'];
 				$sql = "SHOW TABLES LIKE '$db_pattern%'";
-				$result = api_sql_query($sql, __FILE__, __LINE__);
+				$result = Database::query($sql, __FILE__, __LINE__);
 				while (list ($courseTable) = Database::fetch_array($result)) {
-					api_sql_query("DROP TABLE $courseTable", __FILE__, __LINE__);
+					Database::query("DROP TABLE $courseTable", __FILE__, __LINE__);
 				}
 			}
 			$course_dir = api_get_path(SYS_COURSE_PATH).$course['directory'];
@@ -1558,52 +1558,52 @@ class CourseManager {
 
 		// Unsubscribe all classes from the course
 		$sql = "DELETE FROM $table_course_class WHERE course_code='".$code."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 		// Unsubscribe all users from the course
 		$sql = "DELETE FROM $table_course_user WHERE course_code='".$code."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 		// Delete the course from the sessions tables
 		$sql = "DELETE FROM $table_session_course WHERE course_code='".$code."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 		$sql = "DELETE FROM $table_session_course_user WHERE course_code='".$code."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		$sql = 'SELECT survey_id FROM '.$table_course_survey.' WHERE course_code="'.$code.'"';
-		$result_surveys = api_sql_query($sql);
+		$result_surveys = Database::query($sql, __FILE__, __LINE__);
 		while($surveys = Database::fetch_array($result_surveys)) {
 			$survey_id = $surveys[0];
 			$sql = 'DELETE FROM '.$table_course_survey_question.' WHERE survey_id="'.$survey_id.'"';
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			$sql = 'DELETE FROM '.$table_course_survey_question_option.' WHERE survey_id="'.$survey_id.'"';
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			$sql = 'DELETE FROM '.$table_course_survey.' WHERE survey_id="'.$survey_id.'"';
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		}
 
 		// Delete the course from the stats tables
 		if ($stats) {
 			$sql = "DELETE FROM $table_stats_hotpots WHERE exe_cours_id = '".$code."'";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			$sql = "DELETE FROM $table_stats_attempt WHERE course_code = '".$code."'";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			$sql = "DELETE FROM $table_stats_exercises WHERE exe_cours_id = '".$code."'";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			$sql = "DELETE FROM $table_stats_access WHERE access_cours_code = '".$code."'";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			$sql = "DELETE FROM $table_stats_lastaccess WHERE access_cours_code = '".$code."'";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			$sql = "DELETE FROM $table_stats_course_access WHERE course_code = '".$code."'";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			$sql = "DELETE FROM $table_stats_online WHERE course = '".$code."'";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			$sql = "DELETE FROM $table_stats_default WHERE default_cours_code = '".$code."'";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			$sql = "DELETE FROM $table_stats_downloads WHERE down_cours_id = '".$code."'";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			$sql = "DELETE FROM $table_stats_links WHERE links_cours_id = '".$code."'";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			$sql = "DELETE FROM $table_stats_uploads WHERE upload_cours_id = '".$code."'";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		}
 
 		global $_configuration;
@@ -1618,14 +1618,14 @@ class CourseManager {
 
 		// Delete the course from the database
 		$sql = "DELETE FROM $table_course WHERE code='".$code."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		// delete extra course fields
 		$t_cf 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 		$t_cfv 		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 
 		$sql = "SELECT distinct field_id FROM $t_cfv  WHERE course_code = '$code'";
-		$res_field_ids = @api_sql_query($sql, __FILE__, __LINE__);
+		$res_field_ids = @Database::query($sql, __FILE__, __LINE__);
 
 		while($row_field_id = Database::fetch_row($res_field_ids)){
 			$field_ids[] = $row_field_id[0];
@@ -1634,10 +1634,10 @@ class CourseManager {
 		//delete from table_course_field_value from a given course_code
 
 		$sql_course_field_value = "DELETE FROM $t_cfv WHERE course_code = '$code'";
-		@api_sql_query($sql_course_field_value, __FILE__, __LINE__);
+		@Database::query($sql_course_field_value, __FILE__, __LINE__);
 
 		$sql = "SELECT distinct field_id FROM $t_cfv";
-		$res_field_all_ids = @api_sql_query($sql, __FILE__, __LINE__);
+		$res_field_all_ids = @Database::query($sql, __FILE__, __LINE__);
 
 		while($row_field_all_id = Database::fetch_row($res_field_all_ids)){
 			$field_all_ids[] = $row_field_all_id[0];
@@ -1651,7 +1651,7 @@ class CourseManager {
 						continue;
 					} else {
 						$sql_course_field = "DELETE FROM $t_cf WHERE id = '$field_id'";
-						api_sql_query($sql_course_field, __FILE__, __LINE__);
+						Database::query($sql_course_field, __FILE__, __LINE__);
 					}
 				}
 			}
@@ -1679,13 +1679,13 @@ class CourseManager {
 		$course_code = Database::escape_string($course_code);
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT * FROM $table_course WHERE code = '$course_code'";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$course = Database::fetch_array($res);
 		$sql = "SHOW TABLES FROM ".$course['db_name'];
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		while ($table = Database::fetch_array($res)) {
 			$sql = "SELECT * FROM ".$course['db_name'].".".$table[0]."";
-			$res3 = api_sql_query($sql, __FILE__, __LINE__);
+			$res3 = Database::query($sql, __FILE__, __LINE__);
 			while ($row = Database::fetch_array($res3)) {
 				foreach ($row as $key => $value) {
 					$row[$key] = $key."='".addslashes($row[$key])."'";
@@ -1719,14 +1719,14 @@ class CourseManager {
 		$TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
 		$sql = 'SELECT title FROM '.$TABLECOURSE.' WHERE code="'.$course_code.'"';
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$course_title = Database::result($result, 0, 0);
 
 		$sql = 'SELECT course.code as code, course.title as title, cu.sort as sort FROM '.$TABLECOURSUSER.' as cu, '.$TABLECOURSE.' as course
 				WHERE course.code = cu.course_code
 				AND user_id = "'.$user_id.'"
 				AND user_course_cat=0 ORDER BY cu.sort';
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		$s_course_title_precedent = '';
 		$counter = 0;
@@ -1752,7 +1752,7 @@ class CourseManager {
 					$sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id= "'.$user_id.'"  AND user_course_cat="0" AND sort >= "'.$i_course_sort.'"';
 				}
 
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 				break;
 
 			} else {
@@ -1763,13 +1763,13 @@ class CourseManager {
 		}
 
 		//We must register the course in the beginning of the list
-		if (Database::num_rows($result)>0 && !$b_find_course) {
+		if (Database::num_rows($result) > 0 && !$b_find_course) {
 			$sql_max = 'SELECT min(sort) as min_sort FROM '.$TABLECOURSUSER.' WHERE user_id="'.$user_id.'" AND user_course_cat="0"';
-			$result_min_sort=api_sql_query($sql_max, __FILE__, __LINE__);
+			$result_min_sort = Database::query($sql_max, __FILE__, __LINE__);
 			$i_course_sort = Database::result($result_min_sort, 0, 0);
 
 			$sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id= "'.$user_id.'"  AND user_course_cat="0"';
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		}
 		return $i_course_sort;
 	}
@@ -1788,7 +1788,7 @@ class CourseManager {
 				FROM ".$table_course_category."
 				WHERE parent_id ".(is_null($parent_code) ? "IS NULL" : "='".Database::escape_string($parent_code)."'")."
 				ORDER BY code";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 
 		$new_padding = $padding.' - ';
 
@@ -1814,7 +1814,7 @@ class CourseManager {
 		} else {
 			$sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_COURSE).' WHERE code="'.Database::escape_string($course_code).'"';
 		}
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql, __FILE__, __LINE__);
 		return Database::num_rows($rs);
 	}
 
@@ -1836,7 +1836,7 @@ class CourseManager {
 		$course_code = Database::escape_string($course_code);
 
 		$sql_me = "SELECT * FROM ".$TABLE_USER." WHERE user_id='".$user_id."'";
-		$result_me = api_sql_query($sql_me, __FILE__, __LINE__);
+		$result_me = Database::query($sql_me, __FILE__, __LINE__);
 		$student = Database::fetch_array($result_me);
 		$information = self::get_course_information($course_code);
 		$name_course = $information['title'];
@@ -1849,10 +1849,10 @@ class CourseManager {
 			$sql.=" AND status=1";
 		}
 
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		while ($row = Database::fetch_array($result)) {
 			$sql_tutor = "SELECT * FROM ".$TABLE_USER." WHERE user_id='".$row['user_id']."'";
-			$result_tutor = api_sql_query($sql_tutor, __FILE__, __LINE__);
+			$result_tutor = Database::query($sql_tutor, __FILE__, __LINE__);
 			$tutor = Database::fetch_array($result_tutor);
 			$emailto		 = $tutor['email'];
 			$emailsubject	 = get_lang('NewUserInTheCourse').': '.$name_course;
@@ -1888,7 +1888,7 @@ class CourseManager {
 		$tbl_course			 = Database::get_main_table(TABLE_MAIN_COURSE);
 		$tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 		$sql = 'SELECT c.code,c.db_name,c.title FROM '.$tbl_course.' c inner join '.$tbl_course_rel_user.' cru on c.code=cru.course_code  WHERE cru.user_id='.$user_id;
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
 			$course_list[] = $row;
 			$codes[] = $row['code'];
@@ -1917,7 +1917,7 @@ class CourseManager {
 		$path = Database::escape_string($path);
 		$t_course = Database::get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT code FROM $t_course WHERE directory LIKE BINARY '$path'";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		if ($res === false) { return false; }
 		if (Database::num_rows($res) != 1) { return false; }
 		$row = Database::fetch_array($res);
@@ -1933,7 +1933,7 @@ class CourseManager {
 		$table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$code = Database::escape_string($code);
 		$sql_query = "SELECT * FROM $table WHERE visual_code = '$code'";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = array ();
 		while ($virtual_course = Database::fetch_array($sql_result)) {
 			$result[] = $virtual_course;
@@ -1952,11 +1952,11 @@ class CourseManager {
 		$course_rel_users = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$code = Database::escape_string($code);
 		$sql = "SELECT user_id FROM $course_rel_users WHERE course_code='$code' AND status=1";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$list = array();
 		while ($list_users = Database::fetch_array($res)) {
 			$sql_list = "SELECT * FROM $users WHERE user_id=".$list_users['user_id'];
-			$result = api_sql_query($sql_list, __FILE__, __LINE__);
+			$result = Database::query($sql_list, __FILE__, __LINE__);
 			while ($row_user = Database::fetch_array($result)){
 				$name_teacher = api_get_person_name($row_user['firstname'], $row_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
 				$list[] = array($row_user['email'] => $name_teacher);
@@ -1976,10 +1976,10 @@ class CourseManager {
 		$session_rel_users = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$session = Database::escape_string($session);
 		$sql_tutor = "SELECT * FROM $session_rel_users WHERE id_session='$session'";
-		$res = api_sql_query($sql_tutor, __FILE__, __LINE__);
+		$res = Database::query($sql_tutor, __FILE__, __LINE__);
 		$row_email = Database::fetch_array($res);
 		$sql_list = "SELECT * FROM $users WHERE user_id=".$row_email['id_coach'];
-		$result_user = api_sql_query($sql_list, __FILE__, __LINE__);
+		$result_user = Database::query($sql_list, __FILE__, __LINE__);
 		while ($row_emails = Database::fetch_array($result_user)) {
 			$name_tutor = api_get_person_name($row_emails['firstname'], $row_emails['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
 			$mail_tutor = array($row_emails['email'] => $name_tutor);
@@ -2003,7 +2003,7 @@ class CourseManager {
 		$fieldtype = (int)$fieldtype;
 		$time = time();
 		$sql_field = "SELECT id FROM $t_cf WHERE field_variable = '$fieldvarname'";
-		$res_field = api_sql_query($sql_field, __FILE__, __LINE__);
+		$res_field = Database::query($sql_field, __FILE__, __LINE__);
 
 		$r_field = Database::fetch_row($res_field);
 
@@ -2012,7 +2012,7 @@ class CourseManager {
 		} else {
 			// save new fieldlabel into course_field table
 			$sql = "SELECT MAX(field_order) FROM $t_cf";
-			$res = api_sql_query($sql, __FILE__, __LINE__);
+			$res = Database::query($sql, __FILE__, __LINE__);
 
 			$order = 0;
 			if (Database::num_rows($res) > 0) {
@@ -2026,7 +2026,7 @@ class CourseManager {
 										field_display_text = '$fieldtitle',
 										field_order = '$order',
 										tms = FROM_UNIXTIME($time)";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 
 			$field_id = Database::get_last_insert_id();
 		}
@@ -2059,7 +2059,7 @@ class CourseManager {
 		}
 
 		$sqlcf = "SELECT * FROM $t_cf WHERE field_variable='$fname'";
-		$rescf = api_sql_query($sqlcf, __FILE__, __LINE__);
+		$rescf = Database::query($sqlcf, __FILE__, __LINE__);
 		if (Database::num_rows($rescf) == 1) {
 			// Ok, the field exists
 			// Check if enumerated field, if the option is available
@@ -2067,20 +2067,20 @@ class CourseManager {
 
 			$tms = time();
 			$sqlcfv = "SELECT * FROM $t_cfv WHERE course_code = '$course_code' AND field_id = '".$rowcf['id']."' ORDER BY id";
-			$rescfv = api_sql_query($sqlcfv, __FILE__, __LINE__);
+			$rescfv = Database::query($sqlcfv, __FILE__, __LINE__);
 			$n = Database::num_rows($rescfv);
 			if ($n > 1) {
 				//problem, we already have to values for this field and user combination - keep last one
 				while ($rowcfv = Database::fetch_array($rescfv)) {
 					if ($n > 1) {
 						$sqld = "DELETE FROM $t_cfv WHERE id = ".$rowcfv['id'];
-						$resd = api_sql_query($sqld, __FILE__, __LINE__);
+						$resd = Database::query($sqld, __FILE__, __LINE__);
 						$n--;
 					}
 					$rowcfv = Database::fetch_array($rescfv);
 					if ($rowcfv['field_value'] != $fvalues) {
 						$sqlu = "UPDATE $t_cfv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowcfv['id'];
-						$resu = api_sql_query($sqlu, __FILE__, __LINE__);
+						$resu = Database::query($sqlu, __FILE__, __LINE__);
 						return ($resu ? true : false);
 					}
 					return true;
@@ -2091,7 +2091,7 @@ class CourseManager {
 				if ($rowcfv['field_value'] != $fvalues) {
 					$sqlu = "UPDATE $t_cfv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowcfv['id'];
 					//error_log('UM::update_extra_field_value: '.$sqlu);
-					$resu = api_sql_query($sqlu, __FILE__, __LINE__);
+					$resu = Database::query($sqlu, __FILE__, __LINE__);
 					return ($resu ? true : false);
 				}
 				return true;
@@ -2099,7 +2099,7 @@ class CourseManager {
 				$sqli = "INSERT INTO $t_cfv (course_code,field_id,field_value,tms) " .
 					"VALUES ('$course_code',".$rowcf['id'].",'$fvalues',FROM_UNIXTIME($tms))";
 				//error_log('UM::update_extra_field_value: '.$sqli);
-				$resi = api_sql_query($sqli, __FILE__, __LINE__);
+				$resi = Database::query($sqli, __FILE__, __LINE__);
 				return ($resi ? true : false);
 			}
 		} else {

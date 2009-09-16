@@ -5,7 +5,8 @@
  * Internationalization library for Dokeos 1.8.7 LMS
  * A library implementing internationalization related functions.
  * License: GNU/GPL version 2 or later (Free Software Foundation)
- * @author: Ivan Tcholakov, <ivantcholakov@gmail.com>, September 2009
+ * @author Ivan Tcholakov, <ivantcholakov@gmail.com>, September 2009
+ * @author More authors, mentioned in the correpsonding fragments of this source.
  * @package dokeos.library
  * ==============================================================================
  */
@@ -245,6 +246,65 @@ function api_get_interface_language($purified = false) {
 		return api_refine_language_id($language_interface);
 	}
 	return $language_interface;
+}
+
+/**
+ * Checks whether a given language identificator represents supported by *this library* language.
+ * @param string $language		The language identificator to be checked ('english', 'french', 'spanish', ...).
+ * @return bool $language		TRUE if the language is supported, FALSE otherwise.
+ */
+function api_is_language_supported($language) {
+	static $supported = array();
+	if (!isset($supported[$language])) {
+		$supported[$language] = in_array(api_refine_language_id($language), array_keys(_api_non_utf8_encodings()));
+	}
+	return $supported[$language];
+}
+
+/**
+ * Validates the input language identificator in order always to return a language that is enabled in the system.
+ * This function is to be used for data import when provided language identificators should be validated.
+ * @param string $language		The language identificator to be validated.
+ * @return string				Returns the input language identificator. If the input language is not enabled, platform language is returned then.
+ */
+function api_validate_language($language) {
+	static $enabled_languages;
+	if (!isset($enabled_languages)) {
+		$enabled_languages_info = api_get_languages();
+		$enabled_languages = $enabled_languages_info['folder'];
+	}
+	$language = str_replace('_km', '_KM', strtolower(trim($language)));
+	if (empty($language) || !in_array($language, $enabled_languages) || !api_is_language_supported($language)) {
+		$language = api_get_setting('platformLanguage');
+	}
+	return $language;
+}
+
+/**
+ * Returns a purified language id, without possible suffixes that will disturb language identification in certain cases.
+ * @param string $language	The input language identificator, for example 'french_unicode'.
+ * @param string			The same purified or filtered language identificator, for example 'french'.
+ */
+function api_refine_language_id($language) {
+	static $purified = array();
+	if (!isset($purified[$language])) {
+		$purified[$language] = str_replace(array('_unicode', '_latin', '_corporate', '_org', '_km'), '', strtolower($language));
+	}
+	return $purified[$language];
+}
+
+/**
+ * This function check whether a given language can use Latin 1 encoding.
+ * @param string $language	The checked language.
+ * @return bool				TRUE if the given language can use Latin 1 encoding (ISO-8859-15, ISO-8859-1, WINDOWS-1252, ...), FALSE otherwise.
+ */
+function api_is_latin1_compatible($language) {
+	static $latin1_languages;
+	if (!isset($latin1_languages)) {
+		$latin1_languages = _api_get_latin1_compatible_languages();
+	}
+	$language = api_refine_language_id($language);
+	return in_array($language, $latin1_languages);
 }
 
 
@@ -939,6 +999,7 @@ function api_utf8_decode_xml($string, $to_encoding = null) {
 	}
 	return _api_convert_encoding_xml($string, $to_encoding, 'UTF-8');
 }
+
 
 /**
  * ----------------------------------------------------------------------------
@@ -3146,72 +3207,6 @@ function api_is_valid_ascii(&$string) {
 		return @mb_detect_encoding($string, 'ASCII', true) == 'ASCII' ? true : false;
 	}
 	return !preg_match('/[^\x00-\x7F]/S', $string);
-}
-
-
-/**
- * ----------------------------------------------------------------------------
- * Language management functions
- * ----------------------------------------------------------------------------
- */
-
-/**
- * Checks whether a given language identificator represents supported by this library language.
- * @param string $language		The language identificator to be checked ('english', 'french', 'spanish', ...).
- * @return bool $language		TRUE if the language is supported, FALSE otherwise.
- */
-function api_is_language_supported($language) {
-	static $supported = array();
-	if (!isset($supported[$language])) {
-		$supported[$language] = in_array(api_refine_language_id($language), array_keys(_api_non_utf8_encodings()));
-	}
-	return $supported[$language];
-}
-
-/**
- * Validates the input language identificator in order always to return a language that is enabled in the system.
- * This function is to be used for data import when provided language identificators should be validated.
- * @param string $language		The language identificator to be validated.
- * @return string				Returns the input language identificator. If the input language is not enabled, platform language is returned then.
- */
-function api_validate_language($language) {
-	static $enabled_languages;
-	if (!isset($enabled_languages)) {
-		$enabled_languages_info = api_get_languages();
-		$enabled_languages = $enabled_languages_info['folder'];
-	}
-	$language = str_replace('_km', '_KM', strtolower(trim($language)));
-	if (empty($language) || !in_array($language, $enabled_languages) || !api_is_language_supported($language)) {
-		$language = api_get_setting('platformLanguage');
-	}
-	return $language;
-}
-
-/**
- * Returns a purified language id, without possible suffixes that will disturb language identification in certain cases.
- * @param string $language	The input language identificator, for example 'french_unicode'.
- * @param string			The same purified or filtered language identificator, for example 'french'.
- */
-function api_refine_language_id($language) {
-	static $purified = array();
-	if (!isset($purified[$language])) {
-		$purified[$language] = str_replace(array('_unicode', '_latin', '_corporate', '_org', '_km'), '', strtolower($language));
-	}
-	return $purified[$language];
-}
-
-/**
- * This function check whether a given language can use Latin 1 encoding.
- * @param string $language	The checked language.
- * @return bool				TRUE if the given language can use Latin 1 encoding (ISO-8859-15, ISO-8859-1, WINDOWS-1252, ...), FALSE otherwise.
- */
-function api_is_latin1_compatible($language) {
-	static $latin1_languages;
-	if (!isset($latin1_languages)) {
-		$latin1_languages = _api_get_latin1_compatible_languages();
-	}
-	$language = api_refine_language_id($language);
-	return in_array($language, $latin1_languages);
 }
 
 

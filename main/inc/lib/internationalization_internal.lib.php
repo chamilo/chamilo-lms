@@ -2,10 +2,11 @@
 /**
  * ==============================================================================
  * File: internationalization_internal.lib.php
- * Main API extension library for Dokeos 1.8.6+ LMS,
+ * Main API extension library for Dokeos 1.8.7 LMS,
  * contains functions for internal use only.
  * License: GNU/GPL version 2 or later (Free Software Foundation)
- * @author: Ivan Tcholakov, ivantcholakov@gmail.com, 2009
+ * @author Ivan Tcholakov, <ivantcholakov@gmail.com>, September 2009
+ * @author More authors, mentioned in the correpsonding fragments of this source.
  * @package dokeos.library
  * ==============================================================================
  *
@@ -66,6 +67,25 @@ function & _get_lang_purify(& $string, & $language) {
 		}
 	}
 	return api_html_entity_decode($string, ENT_QUOTES, $system_encoding);
+}
+
+/**
+ * This function returns an array of those languages that can use Latin 1 encoding.
+ * @return array	The array of languages that can use Latin 1 encoding (ISO-8859-15, ISO-8859-1, WINDOWS-1252, ...).
+ * Note: The returned language identificators are purified, without suffixes.
+ */
+function _api_get_latin1_compatible_languages() {
+	static $latin1_languages;
+	if (!isset($latin1_languages)) {
+		$latin1_languages = array();
+		$encodings = & _api_non_utf8_encodings();
+		foreach ($encodings as $key => $value) {
+			if (api_is_latin1($value[0])) {
+				$latin1_languages[] = $key;
+			}
+		}
+	}
+	return $latin1_languages;
 }
 
 
@@ -1077,32 +1097,6 @@ function _api_html_entity_supports($encoding) {
 		$supports[$encoding] = api_equal_encodings($encoding, $html_entity_encodings);
 	}
 	return $supports[$encoding];
-}
-
-
-/**
- * ----------------------------------------------------------------------------
- * Appendix to "Language management functions"
- * ----------------------------------------------------------------------------
- */
-
-/**
- * This function returns an array of those languages that can use Latin 1 encoding.
- * @return array	The array of languages that can use Latin 1 encoding (ISO-8859-15, ISO-8859-1, WINDOWS-1252, ...).
- * Note: The returned language identificators are purified, without suffixes.
- */
-function _api_get_latin1_compatible_languages() {
-	static $latin1_languages;
-	if (!isset($latin1_languages)) {
-		$latin1_languages = array();
-		$encodings = & _api_non_utf8_encodings();
-		foreach ($encodings as $key => $value) {
-			if (api_is_latin1($value[0])) {
-				$latin1_languages[] = $key;
-			}
-		}
-	}
-	return $latin1_languages;
 }
 
 

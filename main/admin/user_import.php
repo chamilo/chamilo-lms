@@ -38,20 +38,20 @@ function validate_data($users) {
 		}
 		// 2. Check username, first, check whether it is empty.
 		if (!UserManager::is_username_empty($user['UserName'])) {
-			// 2.1. Check whether the username was used twice in import file.
+			// 2.1. Check whether username is too long.
+			if (UserManager::is_username_too_long($user['UserName'])) {
+				$user['error'] = get_lang('UserNameTooLong');
+				$errors[] = $user;
+			}
+			// 2.2. Check whether the username was used twice in import file.
 			if (isset($usernames[$user['UserName']])) {
 				$user['error'] = get_lang('UserNameUsedTwice');
 				$errors[] = $user;
 			}
 			$usernames[$user['UserName']] = 1;
-			// 2.2. Check whether username is allready occupied.
+			// 2.3. Check whether username is allready occupied.
 			if (!UserManager::is_username_available($user['UserName'])) {
 				$user['error'] = get_lang('UserNameNotAvailable');
-				$errors[] = $user;
-			}
-			// 2.3. Check whether username is too long.
-			if (UserManager::is_username_too_long($user['UserName'])) {
-				$user['error'] = get_lang('UserNameTooLong');
 				$errors[] = $user;
 			}
 		}
@@ -82,9 +82,12 @@ function validate_data($users) {
  * Add missing user-information (which isn't required, like password, username etc).
  */
 function complete_missing_data($user) {
+	global $purification_option_for_usernames;
 	// 1. Create a username if necessary.
 	if (UserManager::is_username_empty($user['UserName'])) {
 		$user['UserName'] = UserManager::create_unique_username($user['FirstName'], $user['LastName']);
+	} else {
+		$user['UserName'] = UserManager::purify_username($user['UserName'], $purification_option_for_usernames);
 	}
 	// 2. Generate a password if necessary.
 	if (empty($user['Password'])) {
@@ -215,10 +218,8 @@ function element_end($parser, $data) {
 	global $user;
 	global $users;
 	global $current_value;
-	global $purification_option_for_usernames;
 	switch ($data) {
 		case 'Contact' :
-			$user['UserName'] = UserManager::purify_username($user['UserName'], $purification_option_for_usernames);
 			if ($user['Status'] == '5') {
 				$user['Status'] = STUDENT;
 			}

@@ -369,6 +369,7 @@ class UserManager {
 	 * @param string $language (optional)	The language in which comparison is to be made. If language is omitted, interface language is assumed then.
 	 * @param string $encoding (optional)	The character encoding for the input names. If it is omitted, the platform character set will be used by default.
 	 * @return string						Returns a username that contains only ASCII-letters and digits, and that is unique within the system.
+	 * Note: When the method is called several times with same parameters, its results look like the following sequence: ivan, ivan2, ivan3, ivan4, ...
 	 * @author Ivan Tcholakov, 2009
 	 */
 	public static function create_unique_username($firstname, $lastname = null, $language = null, $encoding = null) {
@@ -381,7 +382,7 @@ class UserManager {
 			$username = self::create_username($firstname, $lastname, $language, $encoding);
 		}
 		if (!self::is_username_available($username)) {
-			$i = 0;
+			$i = 2;
 			$temp_username = substr($username, 0, USERNAME_MAX_LENGTH - strlen((string)$i)).$i;
 			while (!self::is_username_available($temp_username)) {
 				$i++;

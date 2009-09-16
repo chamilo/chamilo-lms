@@ -414,12 +414,7 @@ class CourseManager {
 						$user_id = api_get_user_id();
 						event_system(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_COURSE_CODE, $course_code, $time, $user_id);
 					}
-					// TODO: To be simplified.
-					if ($result) {
-						return true;
-					} else {
-						return false;
-					}
+					return (bool)$result;
 				}
 			}
 		}
@@ -435,58 +430,50 @@ class CourseManager {
 	 * @param string $status (optional) The user's status in the course
 	 *
 	 * @return boolean true if subscription succeeds, boolean false otherwise.
-	 * @todo script has ugly ifelseifelseifelseif structure, improve - OK, I will.
 	 */
 	public static function add_user_to_course ($user_id, $course_code, $status = STUDENT) {
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+
 		$status = ($status == STUDENT || $status == COURSEMANAGER) ? $status : STUDENT;
-
-		if (empty($user_id) || empty ($course_code) || ($user_id != strval(intval($user_id)))) {
+		if (empty($user_id) || empty($course_code) || ($user_id != strval(intval($user_id)))) {
 			return false;
-		} else {
-			$course_code = Database::escape_string($course_code);
-			// previously check if the user are already registered on the platform
-
-			$handle = Database::query("SELECT status FROM ".$user_table."
-								WHERE user_id = '$user_id' ", __FILE__, __LINE__);
-			if (Database::num_rows($handle) == 0) {
-				return false; // the user isn't registered to the platform
-			} else {
-				//check if user isn't already subscribed to the course
-				$handle = Database::query("SELECT * FROM ".$course_user_table."
-																	WHERE user_id = '$user_id'
-																	AND course_code ='$course_code'", __FILE__, __LINE__);
-				if (Database::num_rows($handle) > 0) {
-					return false; // the user is already subscribed to the course
-				} else {
-					// previously check if subscription is allowed for this course
-
-					$handle = Database::query("SELECT code, visibility FROM ".$course_table."
-											WHERE  code = '$course_code'
-											AND  subscribe = '".SUBSCRIBE_NOT_ALLOWED."'", __FILE__, __LINE__);
-
-					if (Database::num_rows($handle) > 0) {
-						return false; // subscription not allowed for this course
-					} else {
-						$max_sort = api_max_sort_value('0', $user_id);
-						$add_course_user_entry_sql = "INSERT INTO ".$course_user_table."
-											SET course_code = '$course_code',
-												user_id    = '$user_id',
-												status    = '".$status."',
-												sort  =   '". ($max_sort + 1)."'";
-						$result = Database::query($add_course_user_entry_sql, __FILE__, __LINE__);
-						// TODO: To be simplified.
-						if ($result) {
-							return true;
-						} else {
-							return false;
-						}
-					}
-				}
-			}
 		}
+		$course_code = Database::escape_string($course_code);
+
+		// Check in advance whether the user has already been registered on the platform.
+		$handle = Database::query("SELECT status FROM ".$user_table."
+								WHERE user_id = '$user_id' ", __FILE__, __LINE__);
+		if (Database::num_rows($handle) == 0) {
+			return false; // Thehe user has not been registered to the platform.
+		}
+
+		// Check whether the user has already been subscribed to this course.
+		$handle = Database::query("SELECT * FROM ".$course_user_table."
+								WHERE user_id = '$user_id'
+								AND course_code ='$course_code'", __FILE__, __LINE__);
+		if (Database::num_rows($handle) > 0) {
+			return false; // The user has been subscribed to the course.
+		}
+
+		// Check in advance whether subscription is allowed or not for this course.
+		$handle = Database::query("SELECT code, visibility FROM ".$course_table."
+								WHERE  code = '$course_code'
+								AND  subscribe = '".SUBSCRIBE_NOT_ALLOWED."'", __FILE__, __LINE__);
+		if (Database::num_rows($handle) > 0) {
+			return false; // Subscription is not allowed for this course.
+		}
+
+		// Ok, subscribe the user.
+		$max_sort = api_max_sort_value('0', $user_id);
+		$add_course_user_entry_sql = "INSERT INTO ".$course_user_table."
+								SET course_code = '$course_code',
+								user_id    = '$user_id',
+								status    = '".$status."',
+								sort  =   '". ($max_sort + 1)."'";
+		$result = Database::query($add_course_user_entry_sql, __FILE__, __LINE__);
+		return (bool)$result;
 	}
 
 	/**
@@ -506,13 +493,13 @@ class CourseManager {
 	 * @deprecated Function not in use
 	 */
 	public static function get_real_course_code_select_html ($element_name, $has_size = true, $only_current_user_courses = true, $user_id) {
-		if ($only_current_user_courses == true) { // TODO: To be simplified.
-			$real_course_list = self :: get_real_course_list_of_user_as_course_admin($user_id);
+		if ($only_current_user_courses) {
+			$real_course_list = self::get_real_course_list_of_user_as_course_admin($user_id);
 		} else {
-			$real_course_list = self :: get_real_course_list();
+			$real_course_list = self::get_real_course_list();
 		}
 
-		if ($has_size == true) { // TODO: To be simplified.
+		if ($has_size) {
 			$size_element = "size=\"".SELECT_BOX_SIZE."\"";
 		} else {
 			$size_element = "";
@@ -537,7 +524,7 @@ class CourseManager {
 	 *	@todo move function to better place, main_api ?
 	 */
 	public static function check_parameter ($parameter, $error_message) {
-		if (!isset ($parameter) || empty($parameter)) { // TODO: To be simplified.
+		if (empty($parameter)) {
 			Display :: display_normal_message($error_message);
 			return false;
 		}
@@ -566,16 +553,7 @@ class CourseManager {
 		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
 
-		// TODO: To be simplified.
-		//return ($result['number'] > 0);
-		if ($result['number'] > 0)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return $result['number'] > 0;
 	}
 
 	/**
@@ -694,30 +672,13 @@ class CourseManager {
 		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
 
-		// TODO: To be simplified.
-		//$user_is_registered_in_real_course = !empty($result);
-		if (!isset ($result) || empty ($result))
-		{
-			$user_is_registered_in_real_course = false;
-		}
-		else
-		{
-			$user_is_registered_in_real_course = true;
-		}
-		//get a list of virtual courses linked to the current real course
-		//and to which the current user is subscribed
+		$user_is_registered_in_real_course = !empty($result);
+
+		//get a list of virtual courses linked to the current real course and to which the current user is subscribed
 
 		$user_subscribed_virtual_course_list = self :: get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_id);
 
-		// TODO: To be simplified.
-		if (count($user_subscribed_virtual_course_list) > 0)
-		{
-			$virtual_courses_exist = true;
-		}
-		else
-		{
-			$virtual_courses_exist = false;
-		}
+		$virtual_courses_exist = count($user_subscribed_virtual_course_list) > 0;
 
 		//now determine course code and name
 
@@ -751,44 +712,42 @@ class CourseManager {
 	 * @param array $virtual_course_list, the list of virtual courses
 	 */
 	public static function create_combined_name ($user_is_registered_in_real_course, $real_course_name, $virtual_course_list) {
-		if ($user_is_registered_in_real_course || count($virtual_course_list) > 1) {
-			$complete_course_name_before = get_lang('CombinedCourse').' '; //from course_home lang file
-		}
+
+		$complete_course_name = array();
 
 		if ($user_is_registered_in_real_course) {
-			//add real name to result
+			// Add the real name to the result.
 			$complete_course_name[] = $real_course_name;
 		}
 
-		//add course titles of all virtual courses to the list
+		// Add course titles of all virtual courses.
 		foreach ($virtual_course_list as $current_course) {
 			$complete_course_name[] = $current_course['title'];
 		}
 
-		$complete_course_name = $complete_course_name_before.implode(' &amp; ', $complete_course_name);
-
-		return $complete_course_name;
+		// 'CombinedCourse' is from course_home language file.
+		return (($user_is_registered_in_real_course || count($virtual_course_list) > 1) ? get_lang('CombinedCourse').' ' : '').
+			implode(' &amp; ', $complete_course_name);
 	}
 
 	/**
 	 *	Create a course code based on all real and virtual courses the user is registered in.
 	 */
 	public static function create_combined_code ($user_is_registered_in_real_course, $real_course_code, $virtual_course_list) {
-		$complete_course_code .= '';
+
+		$complete_course_code = array();
 
 		if ($user_is_registered_in_real_course) {
-			//add real name to result
+			// Add the real code to the result
 			$complete_course_code[] = $real_course_code;
 		}
 
-		//add course titles of all virtual courses to the list
+		// Add codes of all virtual courses.
 		foreach ($virtual_course_list as $current_course) {
 			$complete_course_code[] = $current_course['visual_code'];
 		}
 
-		$complete_course_code = implode(' &amp; ', $complete_course_code);
-
-		return $complete_course_code;
+		return implode(' &amp; ', $complete_course_code);
 	}
 
 	/**
@@ -817,20 +776,10 @@ class CourseManager {
 	public static function is_virtual_course_from_system_code ($system_code) {
 		$table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$system_code = Database::escape_string($system_code);
-		$sql_query = "SELECT * FROM $table WHERE code = '$system_code'";
+		$sql_query = "SELECT target_course_code FROM $table WHERE code = '$system_code'";
 		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
-		$target_number = $result['target_course_code'];
-
-		// TODO: To be simplified.
-		if ($target_number == NULL)
-		{
-			return false; //this is not a virtual course
-		}
-		else
-		{
-			return true; //this is a virtual course
-		}
+		return !empty($result['target_course_code']);
 	}
 
 	/**
@@ -841,20 +790,10 @@ class CourseManager {
 	public static function is_virtual_course_from_visual_code ($visual_code) {
 		$table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$visual_code = Database::escape_string($visual_code);
-		$sql_query = "SELECT * FROM $table WHERE visual_code = '$visual_code'";
+		$sql_query = "SELECT target_course_code FROM $table WHERE visual_code = '$visual_code'";
 		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
-		$target_number = $result['target_course_code'];
-
-		// TODO: To be simplified.
-		if ($target_number == NULL)
-		{
-			return false; //this is not a virtual course
-		}
-		else
-		{
-			return true; //this is a virtual course
-		}
+		return !empty($result['target_course_code']);
 	}
 
 	/**
@@ -862,17 +801,7 @@ class CourseManager {
 	 */
 	public static function has_virtual_courses_from_code ($real_course_code, $user_id) {
 		$user_subscribed_virtual_course_list = self :: get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_code);
-		$number_of_virtual_courses = count($user_subscribed_virtual_course_list);
-
-		// TODO: To be simplified.
-		if (count($user_subscribed_virtual_course_list) > 0)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return count($user_subscribed_virtual_course_list) > 0;
 	}
 
 	/**
@@ -936,35 +865,35 @@ class CourseManager {
 		$sql_query = "SELECT * FROM $table WHERE user_id = $user_id AND course_code = '$course_code'";
 		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
-
-		if (!isset ($result) || empty ($result)) { // TODO: To be simplified.
-			if ($in_a_session) {
-				$sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
-						WHERE id_user = '.$user_id.' AND course_code="'.$course_code.'"';
-
-				$rs = Database::query($sql, __FILE__, __LINE__);
-				if (Database::num_rows($rs) > 0) {
-					return true;
-				} else {
-					$sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE).'
-						WHERE id_coach = '.$user_id.' AND course_code="'.$course_code.'"';
-					$rs = Database::query($sql, __FILE__, __LINE__);
-					if (Database::num_rows($rs) > 0) {
-						return true;
-					} else {
-						$sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.intval($_SESSION['id_session']).' AND id_coach='.$user_id;
-						$rs = Database::query($sql, __FILE__, __LINE__);
-						if (Database::num_rows($rs) > 0) {
-							return true;
-						}
-					}
-				}
-			} else {
-				return false; //user is not registered in course
-			}
-		} else {
-			return true; //user is registered in course
+		if (!empty($result)) {
+			return true; // The user has been registered in this course.
 		}
+
+		if (!$in_a_session) {
+			return false; // The user has not been registered in this course.
+		}
+
+		$sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
+				WHERE id_user = '.$user_id.' AND course_code="'.$course_code.'"';
+		$rs = Database::query($sql, __FILE__, __LINE__);
+		if (Database::num_rows($rs) > 0) {
+			return true;
+		}
+
+		$sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE).'
+				WHERE id_coach = '.$user_id.' AND course_code="'.$course_code.'"';
+		$rs = Database::query($sql, __FILE__, __LINE__);
+		if (Database::num_rows($rs) > 0) {
+			return true;
+		}
+
+		$sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.intval($_SESSION['id_session']).' AND id_coach='.$user_id;
+		$rs = Database::query($sql, __FILE__, __LINE__);
+		if (Database::num_rows($rs) > 0) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -983,12 +912,7 @@ class CourseManager {
 		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		if (Database::num_rows($sql_result) > 0) {
 			$status = Database::result($sql_result, 0, 'status');
-			// TODO: To be simplified.
-			if ($status == 1) {
-				return true;
-			} else {
-				return false;
-			}
+			return $status == 1;
 		}
 		return false;
 	}
@@ -1004,73 +928,60 @@ class CourseManager {
 	public static function is_user_subscribed_in_real_or_linked_course ($user_id, $course_code, $session_id = '') {
 		if ($user_id != strval(intval($user_id))) { return false; }
 		$course_code = Database::escape_string($course_code);
-		if ($session_id == ''){
+		if ($session_id == '') {
 			$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 			$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
-			$sql_query = "	SELECT *
+			$sql_query = "SELECT *
 								FROM $course_table course
 								LEFT JOIN $course_user_table course_user
 								ON course.code = course_user.course_code
 								WHERE course_user.user_id = '$user_id' AND ( course.code = '$course_code' OR target_course_code = '$course_code') ";
-
 			$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 			$result = Database::fetch_array($sql_result);
 
-			// TODO: To be simplified.
-			if (!isset ($result) || empty ($result))
-			{
-				return false; //user is not registered in course
-			}
-			else
-			{
-				return true; //user is registered in course
-			}
+			return !empty($result);
 		}
-		else {
-			// is he subscribed to the course of the session ?
-			// Database Table Definitions
-			$tbl_sessions			= Database::get_main_table(TABLE_MAIN_SESSION);
-			$tbl_sessions_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-			$tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-			//In the session we trust
-			//users
-			$sql = "SELECT id_user
+		// is he subscribed to the course of the session ?
+		// Database Table Definitions
+		$tbl_sessions			= Database::get_main_table(TABLE_MAIN_SESSION);
+		$tbl_sessions_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+		$tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+		//In the session we trust
+		//users
+		$sql = "SELECT id_user
 					FROM $tbl_session_course_user
 					WHERE id_session='".$_SESSION['id_session']."'
 					AND id_user='$user_id'";
+		$result = Database::query($sql, __FILE__, __LINE__);
+		if (Database::num_rows($result)) {
+			return true;
+		}
 
-			$result = Database::query($sql, __FILE__, __LINE__);
-			if (Database::num_rows($result)) {
-				return true;
-			}
-
-			// is it a course coach ?
-			$sql = "SELECT id_coach
+		// is it a course coach ?
+		$sql = "SELECT id_coach
 					FROM $tbl_sessions_course AS session_course
 					WHERE id_session='".$_SESSION['id_session']."'
 					AND id_coach = '$user_id'
 					AND course_code='$course_code'";
+		$result = Database::query($sql, __FILE__, __LINE__);
+		if (Database::num_rows($result)) {
+			return true;
+		}
 
-			$result = Database::query($sql, __FILE__, __LINE__);
-			if (Database::num_rows($result)) {
-				return true;
-			}
-
-			// is it a session coach ?
-			$sql = "SELECT id_coach
+		// is it a session coach ?
+		$sql = "SELECT id_coach
 					FROM $tbl_sessions AS session
 					WHERE session.id='".$_SESSION['id_session']."'
 					AND id_coach='$user_id'";
-
-			$result = Database::query($sql, __FILE__, __LINE__);
-			if (Database::num_rows($result)) {
-				return true;
-			}
-
-			return false;
+		$result = Database::query($sql, __FILE__, __LINE__);
+		if (Database::num_rows($result)) {
+			return true;
 		}
+
+		return false;
 	}
 
 	/**
@@ -1107,7 +1018,7 @@ class CourseManager {
 			if ($session_id != 0) {
 				$sql .= ' AND session_course_user.id_session = '.$session_id;
 			}
-			$where[] = ' session_course_user.course_code IS NOT NULL '; // TODO: Tobe checked for correct SQL syntax after concatenation.
+			$where[] = ' session_course_user.course_code IS NOT NULL ';
 		}
 
 		if ($session_id == 0) {
@@ -1115,7 +1026,7 @@ class CourseManager {
 			$sql .= ' LEFT JOIN '.$table_course_user.' as course_rel_user
 				        ON user.user_id = course_rel_user.user_id
 						AND course_rel_user.course_code="'.Database::escape_string($course_code).'"';
-			$where[] = ' course_rel_user.course_code IS NOT NULL '; // TODO: Tobe checked for correct SQL syntax after concatenation.
+			$where[] = ' course_rel_user.course_code IS NOT NULL ';
 		}
 
 		$sql .= ' WHERE '.implode(' OR ', $where);
@@ -1231,7 +1142,7 @@ class CourseManager {
 	 *	@return array with user id
 	 */
 	public static function get_teacher_list_from_course_code ($course_code) {
-		$a_teachers = array();
+		$teachers = array();
 		// teachers directly subscribed to the course
 		$t_cu = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$t_u = Database :: get_main_table(TABLE_MAIN_USER);
@@ -1243,9 +1154,9 @@ class CourseManager {
 				"AND cu.user_id = u.user_id";
 		$rs = Database::query($sql_query, __FILE__, __LINE__);
 		while ($teacher = Database::fetch_array($rs)) {
-			$a_students[$teacher['user_id']] = $teacher;
+			$teachers[$teacher['user_id']] = $teacher;
 		}
-		return $a_students;
+		return $teachers;
 	}
 
 	/**
@@ -1642,8 +1553,8 @@ class CourseManager {
 		while($row_field_all_id = Database::fetch_row($res_field_all_ids)){
 			$field_all_ids[] = $row_field_all_id[0];
 		}
-		// TODO: Is $field_ids an array? Always?
-		if (count($field_ids) > 0) {
+
+		if (is_array($field_ids) && count($field_ids) > 0) {
 			foreach ($field_ids as $field_id) {
 				// check if field id is used into table field value
 				if (is_array($field_all_ids)) {
@@ -1733,7 +1644,7 @@ class CourseManager {
 		$b_find_course = false;
 		$i_course_sort = 1;
 
-		while ($courses=Database::fetch_array($result)){
+		while ($courses = Database::fetch_array($result)){
 
 			if ($s_course_title_precedent == '') {
 				$s_course_title_precedent = $courses['title'];
@@ -1840,9 +1751,9 @@ class CourseManager {
 		$student = Database::fetch_array($result_me);
 		$information = self::get_course_information($course_code);
 		$name_course = $information['title'];
-		$sql="SELECT * FROM ".$TABLECOURSUSER." WHERE course_code='".$course_code."'";
+		$sql = "SELECT * FROM ".$TABLECOURSUSER." WHERE course_code='".$course_code."'";
 
-		// TODO: This is a mistake.
+		// TODO: Ivan: This is a mistake, please, have a look at it. Intention here is diffcult to be guessed.
 		if ($send_to_tutor_also=true){
 			$sql.=" AND tutor_id=1";
 		} else {
@@ -2008,29 +1919,28 @@ class CourseManager {
 		$r_field = Database::fetch_row($res_field);
 
 		if (Database::num_rows($res_field) > 0) {
-			$field_id = $r_field[0];
-		} else {
-			// save new fieldlabel into course_field table
-			$sql = "SELECT MAX(field_order) FROM $t_cf";
-			$res = Database::query($sql, __FILE__, __LINE__);
-
-			$order = 0;
-			if (Database::num_rows($res) > 0) {
-				$row = Database::fetch_row($res);
-				$order = $row[0] + 1;
-			}
-
-			$sql = "INSERT INTO $t_cf
-										SET field_type = '$fieldtype',
-										field_variable = '$fieldvarname',
-										field_display_text = '$fieldtitle',
-										field_order = '$order',
-										tms = FROM_UNIXTIME($time)";
-			$result = Database::query($sql, __FILE__, __LINE__);
-
-			$field_id = Database::get_last_insert_id();
+			return $r_field[0];
 		}
-		return $field_id;
+
+		// save new fieldlabel into course_field table
+		$sql = "SELECT MAX(field_order) FROM $t_cf";
+		$res = Database::query($sql, __FILE__, __LINE__);
+
+		$order = 0;
+		if (Database::num_rows($res) > 0) {
+			$row = Database::fetch_row($res);
+			$order = $row[0] + 1;
+		}
+
+		$sql = "INSERT INTO $t_cf
+									SET field_type = '$fieldtype',
+									field_variable = '$fieldvarname',
+									field_display_text = '$fieldtitle',
+									field_order = '$order',
+									tms = FROM_UNIXTIME($time)";
+		Database::query($sql, __FILE__, __LINE__);
+
+		return Database::get_last_insert_id();
 	}
 
 	/**
@@ -2071,7 +1981,7 @@ class CourseManager {
 			$n = Database::num_rows($rescfv);
 			if ($n > 1) {
 				//problem, we already have to values for this field and user combination - keep last one
-				while ($rowcfv = Database::fetch_array($rescfv)) {
+				while ($rowcfv = Database::fetch_array($rescfv)) { // See the TODO note below.
 					if ($n > 1) {
 						$sqld = "DELETE FROM $t_cfv WHERE id = ".$rowcfv['id'];
 						$resd = Database::query($sqld, __FILE__, __LINE__);
@@ -2083,7 +1993,7 @@ class CourseManager {
 						$resu = Database::query($sqlu, __FILE__, __LINE__);
 						return ($resu ? true : false);
 					}
-					return true;
+					return true; // TODO: Sure exit from the function occures in this "while" cycle. Logic should checked. Maybe "if" instead of "while"? It is not clear...
 				}
 			} elseif ($n == 1) {
 				//we need to update the current record
@@ -2106,6 +2016,7 @@ class CourseManager {
 			return false; //field not found
 		}
 	}
+
 	/**
 	 * Get the course id of an course by the database name
 	 * @param string The database name

@@ -383,7 +383,7 @@ $whatsnew_post_info=isset($_SESSION['whatsnew_post_info'])?$_SESSION['whatsnew_p
 
 $counter=0;
 if(is_array($threads)) {
-	foreach ($threads as $row) {
+	foreach ($threads as $row) {	
 		// thread who have no replies yet and the only post is invisible should not be displayed to students.
 		if (api_is_allowed_to_edit(false,true) OR  !($row['thread_replies']=='0' AND $row['visible']=='0')) {
 			if($counter%2==0) {
@@ -441,15 +441,20 @@ if(is_array($threads)) {
 				$name=api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
 				$last_post=$last_post_row['post_date']." ".get_lang('By').' '.$name;
 			}
+
 			echo "\t\t<td>".$last_post."</td>\n";
 			echo "\t\t<td>";	
 			// get attach id
 			$attachment_list=get_attachment($row['post_id']);
 			$id_attach = !empty($attachment_list)?$attachment_list['id']:'';
+			
+			$sql_post_id="SELECT post_id FROM $table_posts WHERE post_title='".$row['thread_title']."'";
+			$result_post_id=api_sql_query($sql_post_id, __FILE__, __LINE__);
+			$row_post_id=Database::fetch_array($result_post_id);
 
 			if ($origin != 'learnpath') {							
 				if (api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) {
-					echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($my_forum)."&amp;thread=".Security::remove_XSS($row['thread_id'])."&amp;post=".$row['post_id']."&amp;gidReq=".$_SESSION['toolgroup']."&origin=".$origin."&id_attach=".$id_attach."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>\n";
+					echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".Security::remove_XSS($my_forum)."&amp;thread=".Security::remove_XSS($row['thread_id'])."&amp;post=".$row_post_id['post_id']."&amp;gidReq=".$_SESSION['toolgroup']."&origin=".$origin."&id_attach=".$id_attach."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>\n";
 					echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".Security::remove_XSS($my_forum)."&amp;action=delete&amp;content=thread&amp;gidReq=".$_SESSION['toolgroup']."&amp;id=".$row['thread_id'].$origin_string."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeleteCompleteThread"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 					display_visible_invisible_icon('thread', $row['thread_id'], $row['visibility'], array("forum"=>$my_forum,'origin'=>$origin,"gidReq"=>$_SESSION['toolgroup']));
 					display_lock_unlock_icon('thread',$row['thread_id'], $row['locked'], array("forum"=>$my_forum,'origin'=>$origin,"gidReq"=>$_SESSION['toolgroup']));

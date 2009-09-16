@@ -43,11 +43,11 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);		// Contextual: fo
  */
 
 /**
- * Initialization of some internal default valies of the multibyte string library.
+ * Initialization of some internal default valies in the internationalization library.
  * @return void
- * Note: This function should be called once in the initialization script.
+ * Note: This function should be called only once in the global initialization script.
  */
-function api_initialize_string_library() {
+function api_initialize_internationalization() {
 	if (MBSTRING_INSTALLED) {
 		@ini_set('mbstring.func_overload', 0);
 		@ini_set('mbstring.encoding_translation', 0);
@@ -55,7 +55,7 @@ function api_initialize_string_library() {
 		@ini_set('mbstring.http_output', 'pass');
 		@ini_set('mbstring.language', 'neutral');
 	}
-	api_set_string_library_default_encoding('ISO-8859-15');
+	api_set_internationalization_default_encoding('ISO-8859-15');
 }
 
 /**
@@ -63,7 +63,7 @@ function api_initialize_string_library() {
  * @param string $encoding		The specified default encoding.
  * @return string				Returns the old value of the default encoding.
  */
-function api_set_string_library_default_encoding($encoding) {
+function api_set_internationalization_default_encoding($encoding) {
 	$encoding = api_refine_encoding_id($encoding);
 	$result = _api_mb_internal_encoding();
 	_api_mb_internal_encoding($encoding);

@@ -232,10 +232,10 @@ if (empty($charset)) {
 // Preserving the value of the global variable $charset.
 $charset_initial_value = $charset;
 
-// Initialization of the multibyte string library.
-api_initialize_string_library();
-// Initialization of the default encoding that will be used by the multibyte string routines.
-api_set_string_library_default_encoding($charset);
+// Initialization of the internationalization library.
+api_initialize_internationalization();
+// Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
+api_set_internationalization_default_encoding($charset);
 
 /*
 --------------------------------------------

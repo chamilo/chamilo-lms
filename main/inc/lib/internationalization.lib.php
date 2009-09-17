@@ -90,47 +90,55 @@ function api_set_internationalization_default_encoding($encoding) {
  *
  * @author Roan Embrechts
  * @author Patrick Cool
- * @author Ivan Tcholakov, April-August 2009 (caching functionality, additional parameter $language).
+ * @author Ivan Tcholakov, April-September 2009 (caching functionality, additional parameter $language).
  *
  * Notes:
- * 1. If the name of a given language variable has the prefix "lang" it may be omited,
- * i.e. get_lang('langYes') == get_lang('Yes').
- * 2. Whenever the server type in the Dokeos Config settings is set to
- * test/development server you will get an indication that a language variable
- * is not translated and a link to a suggestions form of DLTT.
- * 3. DLTT means Dokeos Language Translation Tool.
+ * 1. If the name of a given language variable has the prefix "lang" it may be omited, i.e. get_lang('langYes') == get_lang('Yes').
+ * 2. When server type in Dokeos config settings is set as test (development) server and $notrans = 'DLTT', untranslated variables
+ * are shown as links to DLTT where translations may be proposed.
+ * 3. Additionally, untranslated variables might be indicated by special opening and closing tags  -  [=  =]
+ * They do not show up in these two cases (for both production and test server modes):
+ * - when the special setting 'hide_dltt_markup' is set so;
+ * - when showing the DLTT link (on untranslated variable) is intentionaly suppressed by a developer, using the input parameter
+ * $notrans, i.e. when the function is called in this way: get_lang('MyText', '')
+ * 4. DLTT means Dokeos Language Translation Tool.
  * @link http://www.dokeos.com/DLTT/
  */
 function get_lang($variable, $notrans = 'DLTT', $language = null) {
 
-	// We introduced the possibility to request specific language
-	// by the aditional parameter $language to this function.
+	// We introduced the possibility to request specific language by the aditional parameter $language to this function.
 
-	// By manipulating this global variable the translation
-	// may be done in different languages too (not the elegant way).
+	// By manipulating this global variable the translation may be done in different languages too (not the elegant way).
 	global $language_interface;
 
-	// Because of possibility for manipulations of the global variable
-	// $language_interface, we need its initial value.
+	// Because of possibility for manipulations of the global variable $language_interface, we need its initial value.
 	global $language_interface_initial_value;
 
-	// This is a cache for already translated language variables.
-	// By using it we will avoid repetitive translations.
-	static $cache = array();
+	// Caching results from some API functions, for speed.
+	static $langpath;
+	if (!isset($langpath)) {
+		$langpath = api_get_path(SYS_CODE_PATH).'lang/';
+	}
+	static $test_server_mode;
+	if (!isset($test_server_mode)) {
+		$test_server_mode = api_get_setting('server_type') == 'test';
+	}
+	static $hide_dltt_markup;
+	if (!isset($hide_dltt_markup)) {
+		$hide_dltt_markup = api_get_setting('hide_dltt_markup') == 'true';
+	}
 
 	// Combining both ways for requesting specific language.
 	if (empty($language)) {
 		$language = $language_interface;
 	}
+	$is_interface_language = $language == $language_interface_initial_value;
 
-	// This is a flag for showing the link to the Dokeos Language Translation Tool
-	// when the requested variable has no translation within the language files.
-	$dltt = $notrans == 'DLTT' ? true : false;
+	// This is a flag for showing the link to the DLTT when the requested variable has no translation within the language files.
+	$dltt = $notrans == 'DLTT' && $is_interface_language;
 
-	// Cache initialization.
-	if (!is_array($cache[$language])) {
-		$cache[$language] = array(false => array(), true => array());
-	}
+	// This is a cache for already translated language variables. By using it, we avoid repetitive translations, gaining speed.
+	static $cache;
 
 	// Looking up into the cache for existing translation.
 	if (isset($cache[$language][$dltt][$variable])) {
@@ -138,64 +146,52 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 		return $cache[$language][$dltt][$variable];
 	}
 
-	// There is no saved translation, we have to extract it.
+	// There is no cached translation, we have to retrieve it:
+	// - from a global variable (the faster way) - on production server mode;
+	// - from a local variable after reloading the language files - on test server mode or when requested language is different than the genuine interface language.
+	$read_global_variables = $is_interface_language && !$test_server_mode;
 
-	// If the language files have been reloaded, then the language
-	// variables should be accessed as local ones.
-	$seek_local_variables = false;
-
-	// We reload the language variables when the requested language is different to
-	// the language of the interface or when the server is in testing mode.
-	if ($language != $language_interface_initial_value || api_get_setting('server_type') == 'test') {
-		$seek_local_variables = true;
+	// Reloading the language files when it is necessary.
+	if (!$read_global_variables) {
 		global $language_files;
-		$langpath = api_get_path(SYS_CODE_PATH).'lang/';
-
-		if (isset ($language_files)) {
+		if (isset($language_files)) {
 			if (!is_array($language_files)) {
-				@include $langpath.$language.'/'.$language_files.'.inc.php';
+				@include "$langpath$language/$language_files.inc.php";
 			} else {
 				foreach ($language_files as $index => $language_file) {
-					@include $langpath.$language.'/'.$language_file.'.inc.php';
+					@include "$langpath$language/$language_file.inc.php";
 				}
 			}
 		}
 	}
 
-	$ot = '[='; // opening tag for missing vars
-	$ct = '=]'; // closing tag for missing vars
-	if (api_get_setting('hide_dltt_markup') == 'true' || !$dltt) {
-		// The opening and closing tags do not show up in these two cases:
-		// 1. when the special setting hide_dltt_markup "says" so;
-		// 2. when showing the DLTT link (on untranslated variable) is intentionaly suppressed by a developer
-		// using the input parameter $notrans, i.e. when the function is called in this way: get_lang('MyText', '')
-		// This behaviour is valid for test and production server modes.
-		$ot = '';
-		$ct = '';
+	// Opening and closing tags for missing variables.
+	if ($hide_dltt_markup || !$dltt) {
+		$ot = ''; $ct = '';
+	} else {
+		$ot = '[='; $ct = '=]';
 	}
 
 	// Translation mode for production servers.
 
-	if (api_get_setting('server_type') != 'test') {
-		if (!$seek_local_variables) {
-			$lvv = isset ($GLOBALS['lang'.$variable]) ? $GLOBALS['lang'.$variable] : (isset ($GLOBALS[$variable]) ? $GLOBALS[$variable] : $ot.$variable.$ct);
+	if (!$test_server_mode) {
+		if ($read_global_variables) {
+			$langvar = isset($GLOBALS["lang$variable"]) ? $GLOBALS["lang$variable"] : (isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : $ot.$variable.$ct);
 		} else {
-			@eval('$lvv = $'.$variable.';');
-			if (!isset($lvv)) {
-				@eval('$lvv = $lang'.$variable.';');
-				if (!isset($lvv)) {
-					$lvv = $ot.$variable.$ct;
+			@eval("\$langvar=\$$variable;"); // Note (RH): $$var doesn't work with arrays, see PHP doc
+			if (!isset($langvar)) {
+				@eval("\$langvar=\$lang$variable;");
+				if (!isset($langvar)) {
+					$langvar = $ot.$variable.$ct;
 				}
 			}
 		}
-		if (!is_string($lvv)) {
-			$cache[$language][$dltt][$variable] = $lvv;
-			return $lvv;
+		if (is_string($langvar)) {
+			$langvar = str_replace("\\'", "'", $langvar);
+			$langvar = &_get_lang_purifier($langvar, $language);
 		}
-		$lvv = str_replace("\\'", "'", $lvv);
-		$lvv = _get_lang_purify($lvv, $language);
-		$cache[$language][$dltt][$variable] = $lvv;
-		return $lvv;
+		$cache[$language][$dltt][$variable] = $langvar;
+		return $langvar;
 	}
 
 	// Translation mode for test/development servers.
@@ -204,17 +200,13 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 		$cache[$language][$dltt][$variable] = $ot.'get_lang(?)'.$ct;
 		return $cache[$language][$dltt][$variable];
 	}
-	@ eval ('$langvar = $'.$variable.';'); // Note (RH): $$var doesn't work with arrays, see PHP doc
-	if (isset ($langvar) && is_string($langvar) && strlen($langvar) > 0) {
-		$langvar = str_replace("\\'", "'", $langvar);
-		$langvar = _get_lang_purify($langvar, $language);
-		$cache[$language][$dltt][$variable] = $langvar;
-		return $langvar;
+	@eval("\$langvar=\$$variable;"); // Note (RH): $$var doesn't work with arrays, see PHP doc
+	if (!isset($langvar)) {
+		@eval("\$langvar=\$lang$variable;");
 	}
-	@ eval ('$langvar = $lang'.$variable.';');
-	if (isset ($langvar) && is_string($langvar) && strlen($langvar) > 0) {
+	if (isset($langvar) && is_string($langvar) && !empty($langvar)) {
 		$langvar = str_replace("\\'", "'", $langvar);
-		$langvar = _get_lang_purify($langvar, $language);
+		$langvar = &_get_lang_purifier($langvar, $language);
 		$cache[$language][$dltt][$variable] = $langvar;
 		return $langvar;
 	}

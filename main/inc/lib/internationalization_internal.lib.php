@@ -55,7 +55,7 @@ $_api_collator = null;
  * @param string $language	A language identiticator.
  * @return string			Returns the human language string, checked for proper encoding and purified.
  */
-function & _get_lang_purify(& $string, & $language) {
+function & _get_lang_purifier(& $string, & $language) {
 	$system_encoding = api_get_system_encoding();
 	if (api_is_utf8($system_encoding)) {
 		if (!api_is_valid_utf8($string)) {

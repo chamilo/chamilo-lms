@@ -20,7 +20,7 @@ class image {
     }
 
     function createimagefromtype($file,$handler) {
-            $size = @getimagesize($file);
+            $size = @getimagesize(api_url_to_local_path($file));
             $type=$size[2];
    
             switch ($type) {
@@ -91,7 +91,7 @@ class image {
     function addlogo($file) {
             $this->logo = image::createimagefromtype($file,'logo');
             @imagealphablending( $this->logo ,TRUE );
-            $size = getimagesize($file);
+            $size = @getimagesize(api_url_to_local_path($file));
             $this->logox=$size[0];
             $this->logoy=$size[1];
 
@@ -155,6 +155,7 @@ class image {
                     default: return 0;
             }
             
+            // TODO: Occupied memory is not released, because the following fragment of code is actually dead.
             @imagedestroy($this->bg);
             @imagedestroy($this->logo);
 

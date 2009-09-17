@@ -199,6 +199,7 @@ class UserManager {
 		Database::query($sql, __FILE__, __LINE__);
 
 		// Delete user picture
+		// TODO: Logic about api_get_setting('split_users_upload_directory') === 'true' , a user has 4 differnt sized photos to be deleted.
 		$user_info = api_get_user_info($user_id);
 		if (strlen($user_info['picture_uri']) > 0) {
 			$img_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$user_id.'/'.$user_info['picture_uri'];
@@ -510,11 +511,9 @@ class UserManager {
 		$sql = "SELECT * FROM $user_table WHERE username='".$username."'";
 		$res = Database::query($sql, __FILE__, __LINE__);
 		if (Database::num_rows($res) > 0) {
-			$user = Database::fetch_array($res);
-		} else {
-			$user = false;
+			return Database::fetch_array($res);
 		}
-		return $user;
+		return false;
 	}
 
 	/**
@@ -547,10 +546,9 @@ class UserManager {
 					}
 				}
 			}
-		} else {
-			$user = false;
+			return $user;
 		}
-		return $user;
+		return false;
 	}
 
 	/** Get the teacher list
@@ -582,116 +580,59 @@ class UserManager {
 	 * @param	string	Type of path to return (can be 'none', 'system', 'rel', 'web')
 	 * @param	bool	Whether we want to have the directory name returned 'as if' there was a file or not (in the case we want to know which directory to create - otherwise no file means no split subdir)
 	 * @param	bool	If we want that the function returns the /main/img/unknown.jpg image set it at true
-	 * @return	array 	Array of 2 elements: 'dir' and 'file' which contain the dir and file as the name implies if image does not exist it will return the unknow image if anonymous parameter is true if not it returns an empty array
+	 * @return	array 	Array of 2 elements: 'dir' and 'file' which contain the dir and file as the name implies if image does not exist it will return the unknow image if anonymous parameter is true if not it returns an empty er's
 	 */
 	public static function get_user_picture_path_by_id($id, $type = 'none', $preview = false, $anonymous = false) {
-		if (empty($id) or empty($type)) {
-			if ($anonymous) {
-				$dir = '';
-				switch ($type) {
-					case 'system': //return the complete path to the file, from root
-						$dir = api_get_path(SYS_CODE_PATH).'img/';
-						break;
-					case 'rel': //return the relative path to the file, from the Dokeos base dir
-						$dir = api_get_path(REL_CODE_PATH).'img/';
-						break;
-					case 'web': //return the complete web URL to the file
-						$dir = api_get_path(WEB_CODE_PATH).'img/';
-						break;
-					case 'none': //return only the picture_uri (as is, without subdir)
-					default:
-						break;
-				}
-				$file_anonymous = 'unknown.jpg';
-				return array('dir' => $dir, 'file' => $file_anonymous);
-			} else {
-				return array('dir' => '', 'file' => '');
-			}
+
+		switch ($type) {
+			case 'system': // Base: absolute system path.
+				$base = api_get_path(SYS_CODE_PATH);
+				break;
+			case 'rel': // Base: semi-absolute web path (no server base).
+				$base = api_get_path(REL_CODE_PATH);
+				break;
+			case 'web': // Base: absolute web path.
+				$base = api_get_path(WEB_CODE_PATH);
+				break;
+			case 'none':
+			default: // Base: empty, the result path below will be relative.
+				$base = '';
+		}
+
+		if (empty($id) || empty($type)) {
+			return $anonymous ? array('dir' => $base.'img/', 'file' => 'unknown.jpg') : array('dir' => '', 'file' => '');
 		}
 
 		$user_id = intval($id);
+
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT picture_uri FROM $user_table WHERE user_id=".$user_id;
 		$res = Database::query($sql, __FILE__, __LINE__);
 
-		$user = array();
-
-		if (Database::num_rows($res) > 0) {
-			$user = Database::fetch_array($res);
-		} else {
-			if ($anonymous) {
-				$dir = '';
-				switch ($type) {
-					case 'system': //return the complete path to the file, from root
-						$dir = api_get_path(SYS_CODE_PATH).'img/';
-						break;
-					case 'rel': //return the relative path to the file, from the Dokeos base dir
-						$dir = api_get_path(REL_CODE_PATH).'img/';
-						break;
-					case 'web': //return the complete web URL to the file
-						$dir = api_get_path(WEB_CODE_PATH).'img/';
-						break;
-					case 'none': //return only the picture_uri (as is, without subdir)
-					default:
-						break;
-				}
-				$file_anonymous = 'unknown.jpg';
-				return array('dir' => $dir, 'file' => $file_anonymous);
-			} else {
-				return array('dir'=>'','file'=>'');
-			}
+		if (!Database::num_rows($res)) {
+			return $anonymous ? array('dir' => $base.'img/', 'file' => 'unknown.jpg') : array('dir' => '', 'file' => '');
 		}
 
-		$path = trim($user['picture_uri']);
-
-		if (empty($path)) {
-			if ($anonymous) {
-				switch ($type) {
-					case 'system': //return the complete path to the file, from root
-						$dir = api_get_path(SYS_CODE_PATH).'img/';
-						break;
-					case 'rel': //return the relative path to the file, from the Dokeos base dir
-						$dir = api_get_path(REL_CODE_PATH).'img/';
-						break;
-					case 'web': //return the complete web URL to the file
-						$dir = api_get_path(WEB_CODE_PATH).'img/';
-						break;
-					case 'none': //return only the picture_uri (as is, without subdir)
-					default:
-						break;
-				}
-				$file_anonymous = 'unknown.jpg';
-				return array('dir' => $dir, 'file' => $file_anonymous);
-			}
-		}
-
-		$dir = '';
-		$first = '';
+		$user = Database::fetch_array($res);
+		$picture_filename = trim($user['picture_uri']);
 
 		if (api_get_setting('split_users_upload_directory') === 'true') {
-			if (!empty($path)) {
-				$first = substr($path, 0, 1).'/';
-			} elseif($preview == true) {
-				$first = substr(''.$user_id, 0, 1).'/';
+			if (!empty($picture_filename)) {
+				$dir = $base.'upload/users/'.substr($picture_filename, 0, 1).'/'.$user_id.'/';
+			} elseif ($preview) {
+				$dir = $base.'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
+			} else {
+				$dir = $base.'upload/users/'.$user_id.'/';
 			}
+		} else {
+			$dir = $base.'upload/users/'.$user_id.'/';
 		}
-		$first .= $user_id.'/';
 
-		switch ($type) {
-			case 'system': //return the complete path to the file, from root
-				$dir = api_get_path(SYS_CODE_PATH).'upload/users/'.$first;
-				break;
-			case 'rel': //return the relative path to the file, from the Dokeos base dir
-				$dir = api_get_path(REL_CODE_PATH).'upload/users/'.$first;
-				break;
-			case 'web': //return the complete web URL to the file
-				$dir = api_get_path(WEB_CODE_PATH).'upload/users/'.$first;
-				break;
-			case 'none': //return only the picture_uri (as is, without subdir)
-			default:
-				break;
+		if (empty($picture_filename) && $anonymous) {
+			return array('dir' => $base.'img/', 'file' => 'unknown.jpg');
 		}
-		return array('dir' => $dir, 'file' => $path);
+
+		return array('dir' => $dir, 'file' => $picture_filename);
 	}
 
 /*
@@ -1043,7 +984,7 @@ class UserManager {
 		$result = Database::query($sql);
 		if ($result) {
 			//echo "id returned";
-			$return=Database::get_last_insert_id();
+			$return = Database::get_last_insert_id();
 		} else {
 			//echo "false - failed" ;
 			return false;
@@ -1682,8 +1623,7 @@ class UserManager {
         $res = Database::query($sql, __FILE__, __LINE__);
         if ($res === false) return false; //error during query
         $num = Database::insert_id();
-        if ($num == 0) return false;
-        return $num;
+        return ($num == 0) ? false : $num;
     }
 
     /**
@@ -1847,10 +1787,7 @@ class UserManager {
         $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
         $sql = "SELECT * FROM $admin_table WHERE user_id = $user_id";
         $res = Database::query($sql);
-        if (Database::num_rows($res) === 1) {
-        	return true;
-        }
-        return false;
+        return Database::num_rows($res) === 1;
     }
 
     /**

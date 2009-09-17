@@ -329,12 +329,12 @@ if( $form->validate())
 	if($check)
 	{
 		$user = $form->exportValues();
+
 		$picture_element = & $form->getElement('picture');
 		$picture = $picture_element->getValue();
+
 		$picture_uri = '';
-		if (strlen($picture['name']) > 0 ) {
-		$picture_uri = uniqid('').'_'.replace_dangerous_char($picture['name']);
-		}
+
 		$lastname = $user['lastname'];
 		$firstname = $user['firstname'];
 		$official_code = $user['official_code'];
@@ -369,43 +369,38 @@ if( $form->validate())
 
 		$user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,$language,$phone,$picture_uri,$auth_source,$expiration_date,$active, $hr_dept_id);
 
-		// picture path
-		$picture_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$user_id.'/';
+		if (!empty($picture['name'])) {
 
-		if (strlen($picture['name']) > 0 ) {
-			if (!is_dir($picture_path)) {
-				if (mkdir($picture_path)) {
-					$perm = api_get_setting('permissions_for_new_directories');
-					$perm = octdec(!empty($perm)?$perm:'0770');
-					chmod($picture_path,$perm);
-				}
+			// picture path
+			if (api_get_setting('split_users_upload_directory') === 'true') {
+				$picture_path = api_get_path(SYS_CODE_PATH).'upload/users/'.substr((string)$user_id, 0, 1).'/'.$user_id.'/';
+			} else {
+		$picture_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$user_id.'/';
 			}
+
+			$picture_uri = $user_id.'_'.uniqid('').'_'.replace_dangerous_char($picture['name']);
+
+			UserManager::update_user($user_id,$firstname,$lastname,$username,$password,$auth_source,$email,$status,$official_code,$phone,$picture_uri,$expiration_date, $active, null, $hr_dept_id,null,$language);
+
+			$perm = api_get_setting('permissions_for_new_directories');
+			$perm = octdec(!empty($perm)?$perm:'0770');
+			if (!file_exists($picture_path)) {
+				@mkdir($picture_path, $perm, true);
+			}
+
 			$picture_infos=@getimagesize($_FILES['picture']['tmp_name']);
 			$type=$picture_infos[2];
-			$small_temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 22); //small picture
-			$medium_temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 85); //medium picture
-			$temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 200); // normal picture
-			$big_temp = new image($_FILES['picture']['tmp_name']); // original picture
+			$small_picture = UserManager::resize_picture($_FILES['picture']['tmp_name'], 22);
+			$medium_picture = UserManager::resize_picture($_FILES['picture']['tmp_name'], 85);
+			$normal_picture = UserManager::resize_picture($_FILES['picture']['tmp_name'], 200);
+			$big_picture = new image($_FILES['picture']['tmp_name']); // This is the original picture.
 
-		    switch (!empty($type)) {
-			    case 2 :
-			    	$small_temp->send_image('JPG',$picture_path.'small_'.$picture_uri);
-			    	$medium_temp->send_image('JPG',$picture_path.'medium_'.$picture_uri);
-			    	$temp->send_image('JPG',$picture_path.$picture_uri);
-			    	$big_temp->send_image('JPG',$picture_path.'big_'.$picture_uri);
-			    	break;
-			    case 3 :
-			    	$small_temp->send_image('PNG',$picture_path.'small_'.$picture_uri);
-			    	$medium_temp->send_image('PNG',$picture_path.'medium_'.$picture_uri);
-			    	$temp->send_image('PNG',$picture_path.$picture_uri);
-			    	$big_temp->send_image('PNG',$picture_path.'big_'.$picture_uri);
-			    	break;
-			    case 1 :
-			    	$small_temp->send_image('GIF',$picture_path.'small_'.$picture_uri);
-			    	$medium_temp->send_image('GIF',$picture_path.'medium_'.$picture_uri);
-			    	$temp->send_image('GIF',$picture_path.$picture_uri);
-			    	$big_temp->send_image('GIF',$picture_path.'big_'.$picture_uri);
-			    	break;
+			$picture_types = array(1 => 'GIF', 2 => 'JPG', 3 => 'PNG');
+			if (in_array($type, array_keys($picture_types))) {
+		    	$small_picture->send_image($picture_types[$type], $picture_path.'small_'.$picture_uri);
+				$medium_picture->send_image($picture_types[$type], $picture_path.'medium_'.$picture_uri);
+	    		$normal_picture->send_image($picture_types[$type], $picture_path.$picture_uri);
+	    		$big_picture->send_image($picture_types[$type], $picture_path.'big_'.$picture_uri);
 		    }
 		}
 

@@ -39,8 +39,8 @@ $htmlHeadXtra[] = '
 <script language="JavaScript" type="text/JavaScript">
 <!--
 function enable_expiration_date() { //v2.0
-	document.user_add.radio_expiration_date[0].checked=false;
-	document.user_add.radio_expiration_date[1].checked=true;
+	document.user_edit.radio_expiration_date[0].checked=false;
+	document.user_edit.radio_expiration_date[1].checked=true;
 }
 
 function display_drh_list(){
@@ -95,7 +95,7 @@ unset($user_data['password']);
 $user_data = array_merge($user_data, Usermanager :: get_extra_user_data($user_id,true));
 
 // Create the form
-$form = new FormValidator('user_add','post','','',array('style' => 'width: 60%; float: '.($text_dir=='rtl'?'right;':'left;')));
+$form = new FormValidator('user_edit','post','','',array('style' => 'width: 60%; float: '.($text_dir=='rtl'?'right;':'left;')));
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden','user_id',$user_id);
 
@@ -289,14 +289,14 @@ foreach($extra as $id => $field_details)
 			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,array('multiple' => 'multiple'));
 			break;
 		case USER_FIELD_TYPE_DATE:
-			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'user_add'));
+			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'user_edit'));
 			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
 			$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
 			$form -> setDefaults($defaults);
 			$form->applyFilter('theme', 'trim');
 			break;
 		case USER_FIELD_TYPE_DATETIME:
-			$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'user_add'));
+			$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'user_edit'));
 			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
 			$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
 			$form -> setDefaults($defaults);
@@ -335,57 +335,48 @@ $form->setDefaults($user_data);
 if( $form->validate())
 {
 	$user = $form->exportValues();
+
 	$picture_element = & $form->getElement('picture');
 	$picture = $picture_element->getValue();
-	$picture_uri = '';
+
+	$picture_uri = $user_data['picture_uri'];
 
     //get the picture directory
-    $picture_paths = UserManager::get_user_picture_path_by_id($user_id,'system',true);
-    $picture_location = $picture_paths['dir'];
-    $big_picture_location = $picture_paths['dir'];
-	if (strlen($picture['name']) > 0)
+    $picture_path_info = UserManager::get_user_picture_path_by_id($user_id, 'system', true);
+    $picture_path = $picture_path_info['dir'];
+
+    if ($user['delete_picture'] || !empty($picture['name']))
 	{
-		$picture_uri = uniqid('').'_'.replace_dangerous_char($picture['name']);
-        if(!file_exists($picture_location))
+		@unlink($picture_path.'small_'.$picture_uri);
+		@unlink($picture_path.'medium_'.$picture_uri);
+		@unlink($picture_path.'big_'.$picture_uri);
+		@unlink($picture_path.$picture_uri);
+		$picture_uri = '';
+	}
+
+	if (!empty($picture['name']))
+    {
+		$picture_uri = $user_id.'_'.uniqid('').'_'.replace_dangerous_char($picture['name']);
+    	$perm = api_get_setting('permissions_for_new_directories');
+		$perm = octdec(!empty($perm)?$perm:'0770');
+		if(!file_exists($picture_path))
         {
-        	mkpath($picture_location);
+        	@mkdir($picture_path, $perm, true);
         }
-		$picture_infos=@getimagesize($_FILES['picture']['tmp_name']);
-		$type=$picture_infos[2];
-		$small_temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 22); //small picture
-		$medium_temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 85); //medium picture
-		$temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 200); // normal picture
-		$big_temp = new image($_FILES['picture']['tmp_name']); // original picture
+		$picture_info = @getimagesize($_FILES['picture']['tmp_name']);
+		$type = $picture_info[2];
+		$small_picture = UserManager::resize_picture($_FILES['picture']['tmp_name'], 22);
+		$medium_picture = UserManager::resize_picture($_FILES['picture']['tmp_name'], 85);
+		$normal_picture = UserManager::resize_picture($_FILES['picture']['tmp_name'], 200);
+		$big_picture = new image($_FILES['picture']['tmp_name']); // This is the original picture.
 
-	    switch (!empty($type)) {
-		    case 2 :
-		    	$small_temp->send_image('JPG',$picture_location.'small_'.$picture_uri);
-				$medium_temp->send_image('JPG',$picture_location.'medium_'.$picture_uri);
-	    		$temp->send_image('JPG',$picture_location.$picture_uri);
-	    		$big_temp->send_image('JPG',$picture_location.'big_'.$picture_uri);
-		    	break;
-		    case 3 :
-		    	$small_temp->send_image('PNG',$picture_location.'small_'.$picture_uri);
-		    	$medium_temp->send_image('PNG',$picture_location.'medium_'.$picture_uri);
-		    	$temp->send_image('PNG',$picture_location.$picture_uri);
-		    	$big_temp->send_image('PNG',$picture_location.'big_'.$picture_uri);
-		    	break;
-		    case 1 :
-		    	$small_temp->send_image('GIF',$picture_location.'small_'.$picture_uri);
-		    	$medium_temp->send_image('GIF',$picture_location.'medium_'.$picture_uri);
-		    	$temp->send_image('GIF',$picture_location.$picture_uri);
-		    	$big_temp->send_image('GIF',$picture_location.'big_'.$picture_uri);
-		    	break;
-	    }
-
-	}
-	elseif(isset($user['delete_picture']))
-	{
-		@unlink($picture_location.$user_data['picture_uri']);
-	}
-
-	if (strlen($picture['name']) == 0){
-		$picture_uri = $user_data['picture_uri'];
+		$picture_types = array(1 => 'GIF', 2 => 'JPG', 3 => 'PNG');
+		if (in_array($type, array_keys($picture_types))) {
+		    $small_picture->send_image($picture_types[$type], $picture_path.'small_'.$picture_uri);
+			$medium_picture->send_image($picture_types[$type], $picture_path.'medium_'.$picture_uri);
+	    	$normal_picture->send_image($picture_types[$type], $picture_path.$picture_uri);
+	    	$big_picture->send_image($picture_types[$type], $picture_path.'big_'.$picture_uri);
+		}
 	}
 
 	$lastname = $user['lastname'];
@@ -395,7 +386,6 @@ if( $form->validate())
 	$phone = $user['phone'];
 	$username = $user['username'];
 	$status = intval($user['status']);
-	$picture = $_FILES['picture'];
 	$platform_admin = intval($user['platform_admin']);
 	$send_mail = intval($user['send_mail']);
 	$reset_password = intval($user['reset_password']);

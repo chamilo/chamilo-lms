@@ -814,7 +814,7 @@ class Database {
 		}
 	}
 	/**
-	 * This function return a resource 
+	 * This function return a resource
 	 * documentation has been added by Arthur Portugal
 	 * @author Olivier Brouckaert;
 	 * @param  string $query - SQL query
@@ -822,7 +822,7 @@ class Database {
 	 * @param  string $line - optional, the line of the error (__LINE__)
 	 * @return resource - the return value of the query
 	 */
-	
+
 	public static function query ($sql,$file='',$line=0) {
 		return 	api_sql_query($sql,$file,$line);
 	}
@@ -844,9 +844,9 @@ class Database {
 			return $option['course_code'];
 		} else {
 			return false;
-		}		
+		}
     }
 
-    
+
 }
 //end class Database

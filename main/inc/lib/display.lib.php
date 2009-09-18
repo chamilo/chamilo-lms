@@ -87,7 +87,7 @@
 require_once 'sortabletable.class.php';
 class Display {
 	private function __construct() {
-		
+
 	}
 	/**
 	* Displays the tool introduction of a tool.
@@ -95,7 +95,7 @@ class Display {
 	* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	* @param string $tool These are the constants that are used for indicating the tools.
 	* @param array $editor_config Optional configuration settings for the online editor.
-	* @return $tool return a string array list with the "define" in main_api.lib 
+	* @return $tool return a string array list with the "define" in main_api.lib
 	* @return html code for adding an introduction
 	*/
 	public static function display_introduction_section ($tool, $editor_config = null) {
@@ -276,21 +276,21 @@ class Display {
 		global $origin;
 		$column = isset ($sorting_options['column']) ? $sorting_options['column'] : 0;
 		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;
-			
+
 		$table = new SortableTableFromArray($content, $column, $default_items_per_page);
 
 		if (is_array($query_vars)) {
 			$table->set_additional_parameters($query_vars);
 		}
 		foreach ($header as $index => $header_item)
-		{			
+		{
 			$table->set_header($index, $header_item[0], $header_item[1], $header_item[2], $header_item[3]);
 		}
 		$table->set_form_actions($form_actions);
 		$table->display();
 	}
-	
-	
+
+
 	/**
 	 * Display a table with a special configuration
 	 * @param array $header Titles for the table header
@@ -311,43 +311,43 @@ class Display {
 	 * 					'page_nr' = The page to display
 	 * @param array $query_vars Additional variables to add in the query-string
 	 * @param array $column_show Array of binaries 1= show columns 0. hide a column
-	 * @param array $column_order An array of integers that let us decide how the columns are going to be sort. 
-	 * 						      i.e:  $column_order=array('1''4','3','4'); The 2nd column will be order like the 4th column 
+	 * @param array $column_order An array of integers that let us decide how the columns are going to be sort.
+	 * 						      i.e:  $column_order=array('1''4','3','4'); The 2nd column will be order like the 4th column
 	 * @param array $form_actions Set optional forms actions
-	 * 
+	 *
 	 * @author Julio Montoya
 	 */
-	 
+
 	public static function display_sortable_config_table ($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $column_show=array(),$column_order=array(),$form_actions=array()) {
 		global $origin;
 		$column = isset ($sorting_options['column']) ? $sorting_options['column'] : 0;
 		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;
-		
+
 		$table = new SortableTableFromArrayConfig($content, $column, $default_items_per_page,'tablename',$column_show,$column_order);
 
 		if (is_array($query_vars)) {
 			$table->set_additional_parameters($query_vars);
 		}
 		// show or hide the columns header
-		if (is_array($column_show) ) 
+		if (is_array($column_show) )
 		{
 			for ($i=0;$i<count($column_show);$i++)
 			{
 				if (!empty($column_show[$i]))
-				{					
+				{
 					isset($header[$i][0])?$val0=$header[$i][0]:$val0=null;
 					isset($header[$i][1])?$val1=$header[$i][1]:$val1=null;
 					isset($header[$i][2])?$val2=$header[$i][2]:$val2=null;
-					isset($header[$i][3])?$val3=$header[$i][3]:$val3=null;	
+					isset($header[$i][3])?$val3=$header[$i][3]:$val3=null;
 					$table->set_header($i, $val0, $val1, $val2, $val3);
-				}			
+				}
 			}
-		}		
+		}
 		$table->set_form_actions($form_actions);
 		$table->display();
-	}	
-	
-		
+	}
+
+
 	/**
 	* Displays a normal message. It is recommended to use this public function
 	* to display any normal information messages.
@@ -487,7 +487,7 @@ class Display {
 	 * @return - encrypted mailto hyperlink
 	 */
 	public static function encrypted_mailto_link ($email, $clickable_text = null, $style_class = '') {
-		global $charset;		
+		global $charset;
 		if (is_null($clickable_text))
 		{
 			$clickable_text = $email;
@@ -508,7 +508,7 @@ class Display {
 		}
 		//encrypt clickable text if @ is present
 		if (strpos($clickable_text, '@')) {
-			
+
 			for ($i = 0; $i < strlen($clickable_text); $i ++) {
 				$hclickable_text .= '&#'.ord($clickable_text {
 				$i }).';';
@@ -579,10 +579,10 @@ class Display {
 		}
 		return $result;
 	}
-	
+
 	public static function get_numeric_options ($min,$max, $selected_num = 0) {
 		$result = '';
-		for ($i = $min; $i <= $max; $i ++) {			
+		for ($i = $min; $i <= $max; $i ++) {
 			$result .= '<option value="'.$i.'"';
 			if (is_int($selected_num))
 				if ($selected_num == $i) {
@@ -592,7 +592,7 @@ class Display {
 		}
 		return $result;
 	}
-	
+
 	/**
 	* Show the so-called "left" menu for navigating
 	*/
@@ -687,23 +687,23 @@ class Display {
 		}
 		return '<img src="'.api_get_path(WEB_IMG_PATH).$image.'" alt="'.$alt_text.'"  title="'.$alt_text.'" '.$attribute_list.'  />';
 	}
-	
+
 	/**
 	 * Ivan, 05-SEP-2009: Deprecated, see api_get_person_name().
 	 *
 	 * Display name and lastname in a specific order
-	 * @param string Firstname 
+	 * @param string Firstname
 	 * @param string Lastname
 	 * @param string Title in the destination language (Dr, Mr, Miss, Sr, Sra, etc)
 	 * @param string Optional format string (e.g. '%t. %l, %f')
 	 * @author Carlos Vargas <carlos.vargas@dokeos.com>
 	 */
 	 public static function user_name($fname,$lname,$title='',$format=null) {
-		 if (empty($format)){	 	
+		 if (empty($format)){
 			 	if (empty($fname) or empty($lname)) {
 			 		$user_name = $fname.$lname;
 			 	} else {
-				 	$user_name= $fname.' '.$lname; 		
+				 	$user_name= $fname.' '.$lname;
 			 	}
 		 } 	else {
 		 	$find = array('%t','%f','%l');

@@ -83,7 +83,7 @@ foreach ($rows as $post) {
 		display_visible_invisible_icon('post', $post['post_id'], $post['visible'],array('forum'=>Security::remove_XSS($_GET['forum']),'thread'=>Security::remove_XSS($_GET['thread']) ));
 		echo "\n";
 		if ($count>0) {
-			echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=move&amp;origin=".$origin."&amp;post=".$post['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>";	
+			echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=move&amp;origin=".$origin."&amp;post=".$post['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>\n";	
 		}
 	}
 	$userinf=api_get_user_info($post['user_id']);
@@ -94,13 +94,13 @@ foreach ($rows as $post) {
 			echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$post['post_id']."&amp;user=".$post['user_id']."&user_id=".$post['user_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";			
 		}
 	}
-	echo '<br /><br />';
+	//echo '<br /><br />';
 	//if (($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0) OR api_is_allowed_to_edit())
 	if ($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit(false,true)) {
 		if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id'])) {
 			if (!api_is_anonymous()) {
-				echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$post['post_id'].'&amp;action=replymessage&amp;origin='. $origin .'">'.get_lang('ReplyToMessage').'</a><br />';
-				echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$post['post_id'].'&amp;action=quote&amp;origin='. $origin .'">'.get_lang('QuoteMessage').'</a><br /><br />';
+				echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$post['post_id'].'&amp;action=replymessage&amp;origin='. $origin .'">'.Display :: return_icon('message_reply_forum.png', get_lang('ReplyToMessage'))."</a>\n";
+				echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$post['post_id'].'&amp;action=quote&amp;origin='. $origin .'">'.Display :: return_icon('lp_thread_forum.gif', get_lang('QuoteMessage'))."</a>\n";
 			}
 		}
 	} else {

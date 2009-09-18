@@ -180,7 +180,7 @@ if (api_is_allowed_to_edit(false,true) OR GroupManager :: is_user_in_group($_SES
 			foreach ($forums_of_groups as $key => $value) {
 					if ($value['forum_group_public_private'] == 'public' || (/*!empty($user_subscribe_to_current_group) && */ $value['forum_group_public_private'] == 'private') || !empty($user_is_tutor) || api_is_allowed_to_edit(false,true)) {
 
-						$tools.= Display::return_icon('forum.gif', get_lang("GroupForum")) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'&gidReq='.Security::remove_XSS($current_group['id']).'">'.get_lang("Forum").'</a><br />';
+						$tools.= Display::return_icon('forum.gif', get_lang("GroupForum")) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'&gidReq='.Security::remove_XSS($current_group['id']).'">'.get_lang("Forum").': '.$value['forum_title'].'</a><br />';
 
 						//$tools.= Display::return_icon('forum.gif', get_lang("Forum")) . ' <a href="../forum/viewforum.php?forum='.$value['forum_id'].'">'.get_lang("Forum").': '.$value['forum_title'].'</a><br />';
 
@@ -423,13 +423,8 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 		{
 			$sql = "SELECT 
 						user.user_id 	AS col0,
-						". (api_is_western_name_order() ?
-						"user.firstname 	AS col1,
-						user.lastname 	AS col2,"
-						:
-						"user.lastname 	AS col1,
-						user.firstname 	AS col2,"
-						)."
+						user.lastname 	AS col1,
+						user.firstname 	AS col2
 						FROM ".$table_user." user, ".$table_group_user." group_rel_user 
 						WHERE group_rel_user.user_id = user.user_id 
 						AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";

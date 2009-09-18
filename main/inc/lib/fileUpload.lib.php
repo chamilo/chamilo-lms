@@ -74,7 +74,7 @@ function api_replace_parameter($upload_path, $buffer, $param_name="src")
 /**
  * Replaces all accentuated characters by non-accentuated characters for filenames, as
  * well as special HTML characters by their HTML entity's first letter.
- * 
+ *
  * Although this method is not absolute, it gives good results in general. It first
  * transforms the string to HTML entities (&ocirc;, @oslash;, etc) then removes the
  * HTML character part to result in simple characters (o, o, etc).
@@ -253,10 +253,10 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 		Display::display_error_message(get_lang('UplNotEnoughSpace'));
 		return false;
 	}
-	
+
 	//if the want to unzip, check if the file has a .zip (or ZIP,Zip,ZiP,...) extension
 	if ($unzip == 1 && preg_match("/.zip$/", strtolower($uploaded_file['name'])) )
-	{	
+	{
 		return unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $maxFilledSpace, $output, $to_group_id);
 		//display_message("Unzipping file");
 	}
@@ -305,16 +305,16 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 		$document_name = get_document_title($uploaded_file['name']);
 		//size of the uploaded file (in bytes)
 		$file_size = $uploaded_file['size'];
-		
+
 		$files_perm = api_get_setting('permissions_for_new_files');
 		$files_perm = octdec(!empty($files_perm)?$files_perm:'0770');
-		
+
 			//what to do if the target file exists
 			switch ($what_if_file_exists)
 				{
 				//overwrite the file if it exists
 				case 'overwrite':
-	
+
 					//check if the target file exists, so we can give another message
 					if (file_exists($store_path))
 					{
@@ -368,17 +368,17 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 						return false;
 					}
 					break;
-	
+
 				//rename the file if it exists
 				case 'rename':
 					$new_name = unique_name($where_to_save, $clean_name);
 					$store_path = $where_to_save.$new_name;
 					$new_file_path = $upload_path.$new_name;
-	
+
 					if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path))
 					{
 						chmod($store_path,$files_perm);
-						
+
 						//put the document data in the database
 						$document_id = add_document($_course,$new_file_path,'file',$file_size,$document_name);
 						if ($document_id)
@@ -400,7 +400,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 						return false;
 					}
 					break;
-	
+
 				//only save the file if it doesn't exist or warn user if it does exist
 				default:
 					if (file_exists($store_path))
@@ -410,9 +410,9 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 					else
 					{
 						if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path))
-						{							
+						{
 							chmod($store_path,$files_perm);
-								
+
 							//put the document data in the database
 							$document_id = add_document($_course,$file_path,'file',$file_size,$document_name);
 							if ($document_id)
@@ -903,13 +903,13 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 	global $_user;
 	global $to_user_id;
 	global $to_group_id;
-	
+
 	$zip_file = new pclZip($uploaded_file['tmp_name']);
 
 	// Check the zip content (real size and file extension)
 
 	$zip_content_array = $zip_file->listContent();
-	
+
 	foreach((array) $zip_content_array as $this_content)
 	{
 		$real_filesize += $this_content['size'];
@@ -935,7 +935,7 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 	$save_dir = getcwd();
 	chdir($base_work_dir.$upload_path);
 	//we extract using a callback function that "cleans" the path
-	$unzipping_state = $zip_file->extract(PCLZIP_CB_PRE_EXTRACT, 'clean_up_files_in_zip');	
+	$unzipping_state = $zip_file->extract(PCLZIP_CB_PRE_EXTRACT, 'clean_up_files_in_zip');
 	// Add all documents in the unzipped folder to the database
 	add_all_documents_in_folder_to_database($_course,$_user['user_id'],$base_work_dir,$upload_path == '/' ? '' : $upload_path, $to_group_id);
 	//Display::display_normal_message(get_lang('UplZipExtractSuccess'));
@@ -1081,7 +1081,7 @@ function clean_up_path(&$path)
 
 /**
  * Check if the file is dangerous, based on extension and/or mimetype.
- * The list of extensions accepted/rejected can be found from 
+ * The list of extensions accepted/rejected can be found from
  * api_get_setting('upload_extensions_exclude') and api_get_setting('upload_extensions_include')
  * @param	string 	filename passed by reference. The filename will be modified if filter rules say so! (you can include path but the filename should look like 'abc.html')
  * @return	int		0 to skip file, 1 to keep file
@@ -1193,7 +1193,7 @@ function get_document_id() moved to document.lib.php
  * @return boolean true /false
  */
 function update_existing_document($_course,$document_id,$filesize,$readonly=0)
-{ 
+{
 	$document_table = Database::get_course_table(TABLE_DOCUMENT,$_course['dbName']);
 	$sql="UPDATE $document_table SET size = '$filesize' , readonly = '$readonly' WHERE id='$document_id'";
 	if(api_sql_query($sql,__FILE__,__LINE__))
@@ -1838,7 +1838,7 @@ function build_missing_files_form($missing_files,$upload_path,$file_name)
 				}
 				$form .= "</table>\n"
 						."<button type='submit' name=\"cancel_submit_image\" value=\"".get_lang('Cancel')."\" class=\"cancel\">".get_lang('Cancel')."</button>"
-						."<button type='submit' name=\"submit_image\" value=\"".get_lang('Ok')."\" class=\"save\">".get_lang('Ok')."</button>"									
+						."<button type='submit' name=\"submit_image\" value=\"".get_lang('Ok')."\" class=\"save\">".get_lang('Ok')."</button>"
 						."</form>\n";
 				return $form;
 }
@@ -1856,7 +1856,7 @@ function add_all_documents_in_folder_to_database($_course,$user_id,$base_work_di
 {
 
 	$path = $base_work_dir.$current_path;
-	
+
 	//open dir
 	$handle=opendir($path);
 	//run trough
@@ -1866,7 +1866,7 @@ function add_all_documents_in_folder_to_database($_course,$user_id,$base_work_di
 
 	   $completepath="$path/$file";
 	   //directory?
-  
+
 	   if (is_dir($completepath))
 	   {
 	   	$title=get_document_title($file);
@@ -1889,7 +1889,7 @@ function add_all_documents_in_folder_to_database($_course,$user_id,$base_work_di
 			//rename
 			$safe_file=disable_dangerous_file(replace_dangerous_char($file));
 			@rename($base_work_dir.$current_path.'/'.$file,$base_work_dir.$current_path.'/'.$safe_file);
-			
+
 			if(!DocumentManager::get_document_id($_course, $current_path.'/'.$safe_file))
 			{
 			$title=get_document_title($file);

@@ -34,7 +34,7 @@ if (api_get_setting('show_navigation_menu') != 'false') {
 </div> <!-- end of #wrapper section -->
 
 <div id="footer"> <!-- start of #footer section -->
-<div id="bottom_corner"></div> 
+<div id="bottom_corner"></div>
 <div class="copyright">
 <?php
 global $_configuration;
@@ -56,16 +56,16 @@ if (api_is_platform_admin()) {
 -----------------------------------------------------------------------------
 */
 api_plugin('footer');
-	
+
 if (api_get_setting('show_administrator_data')=='true') {
-	
+
 	// Platform manager
 	echo '<span id="platformmanager">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));
 
 }
 
 if (api_get_setting('show_tutor_data')=='true'){
-	
+
 	// course manager
 	$id_course=api_get_course_id();
 	$id_session=api_get_session_id();
@@ -75,21 +75,21 @@ if (api_get_setting('show_tutor_data')=='true'){
 			$mail=CourseManager::get_email_of_tutor_to_session($id_session);
 			echo '&nbsp;'.get_lang('Tutor')." : ";
 			foreach ($mail as $v=>$k) {
-				echo Display::encrypted_mailto_link($v,$k); 
+				echo Display::encrypted_mailto_link($v,$k);
 			}
 		}
 		echo '</span>';
-	} 
-	
+	}
+
 }
 
-if (api_get_setting('show_teacher_data')=='true') {	
+if (api_get_setting('show_teacher_data')=='true') {
 	// course manager
 	$id_course=api_get_course_id();
 	if (isset($id_course) && $id_course!=-1) {
 		echo '<span id="coursemanager">';
 		$mail=CourseManager::get_emails_of_tutors_to_course($id_course);
-		if (!empty($mail)) {		
+		if (!empty($mail)) {
 			if (count($mail)>1){
 				$bar='&nbsp;|&nbsp;';
 				echo '&nbsp;'.get_lang('Teachers').' : ';
@@ -99,13 +99,13 @@ if (api_get_setting('show_teacher_data')=='true') {
 			}
 			foreach ($mail as $value=>$key) {
 				foreach ($key as $email=>$name){
-					echo Display::encrypted_mailto_link($email,$name).$bar;		
+					echo Display::encrypted_mailto_link($email,$name).$bar;
 				}
 			}
 		}
 		echo '</span>';
-	} 
-	
+	}
+
 }
 
 

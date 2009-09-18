@@ -1,32 +1,32 @@
 <?php
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Bart Mollet, Hogeschool Gent
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	This is the class library for Dokeos.
 *	@package	 dokeos.library
-============================================================================== 
+==============================================================================
 */
 require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 /**
@@ -83,7 +83,7 @@ class ClassManager
 	}
 	/**
 	 * Delete a class
-	 * @param int $class_id 
+	 * @param int $class_id
 	 * @todo Add option to unsubscribe class-members from the courses where the
 	 * class was subscibed to
 	 */
@@ -102,7 +102,7 @@ class ClassManager
 	/**
 	 * Get all users from a class
 	 * @param int $class_id
-	 * @return array 
+	 * @return array
 	 */
 	function get_users($class_id)
 	{
@@ -165,7 +165,7 @@ class ClassManager
 	/**
 	 * Get all courses in which a class is subscribed
 	 * @param int $class_id
-	 * @return array 
+	 * @return array
 	 */
 	function get_courses($class_id)
 	{
@@ -200,7 +200,7 @@ class ClassManager
 		}
 	}
 	/**
-	 * Unsubscribe a class from a course. 
+	 * Unsubscribe a class from a course.
 	 * Only students are unsubscribed. If a user is member of 2 classes which
 	 * are both subscribed to the course, the user stays in the course.
 	 * @param int $class_id The class id
@@ -227,11 +227,11 @@ class ClassManager
 		$sql = "DELETE FROM $tbl_course_class WHERE course_code = '".mysql_real_escape_string($course_code)."' AND class_id = '".mysql_real_escape_string($class_id)."'";
 		api_sql_query($sql, __FILE__, __LINE__);
 	}
-	
+
 	/**
-	 * Get the class-id 
+	 * Get the class-id
 	 * @param string $name The class name
-	 * @return int the ID of the class 
+	 * @return int the ID of the class
 	 */
 	function get_class_id($name)
 	{

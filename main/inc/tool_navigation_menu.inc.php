@@ -42,7 +42,7 @@ function get_navigation_items($include_admin_tools = false)
 	global $is_courseMember;
 	global $_user;
 	global $_course;
-	
+
 	if (!empty($_course['db_name']))
 	{
 		$database = $_course['db_name'];
@@ -181,7 +181,7 @@ function show_navigation_menu()
 			toolnavlist_el = document.getElementById('toolnavlist');
 			center_el = document.getElementById('center');
 			swap_menu_link_el = document.getElementById('swap_menu_link');
-			
+
 			if(toolnavlist_el.style.display == 'none')
 			{
 				toolnavlist_el.style.display = '';
@@ -214,16 +214,16 @@ function show_navigation_menu()
 			echo '<dd>';
 			$url_item = parse_url($navigation_item['link']);
 			$url_current = parse_url($_SERVER['REQUEST_URI']);
-			
+
 			if (strpos($navigation_item['link'],'chat')!==false && api_get_course_setting('allow_open_chat_window',$course_id)==true)
 			{
 				echo '<a href="javascript: void(0);" onclick="window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
-			}			
+			}
 			else
 			{
-				echo '<a href="'.$navigation_item['link'].'" target="_self" ';		
-			}			
-			
+				echo '<a href="'.$navigation_item['link'].'" target="_self" ';
+			}
+
 			if (stristr($url_item['path'],$url_current['path']))
 			{
 				if(! isset($_GET['learnpath_id']) || strpos($url_item['query'],'learnpath_id='.$_GET['learnpath_id']) === 0)
@@ -237,8 +237,8 @@ function show_navigation_menu()
 				echo '<div align="left"><img src="'.api_get_path(WEB_IMG_PATH).$navigation_item['image'].'" alt="'.$navigation_item['name'].'"/></div>';
 			}
 			if (api_get_setting('show_navigation_menu') != 'icons')
-			{				
-				echo $navigation_item['name'];				
+			{
+				echo $navigation_item['name'];
 			}
 			echo '</a>';
 			echo '</dd>';
@@ -267,7 +267,7 @@ function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL)
 	$navigation_items = get_navigation_items(false);
 	foreach ($navigation_items as $key => $navigation_item)
 	{
-				
+
 		if (strpos($navigation_item['link'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
 	    {
 	    	/*
@@ -277,9 +277,9 @@ function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL)
 	    }
 	    else
 	    {
-		  	echo '<a href="'.$navigation_item['link'].'"';		
-	    }		
-		
+		  	echo '<a href="'.$navigation_item['link'].'"';
+	    }
+
 		if (strpos(api_get_self(), $navigation_item['link']) !== false)
 		{
 			echo ' id="here"';

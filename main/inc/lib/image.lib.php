@@ -9,20 +9,20 @@ class image {
     var $bgx;
     var $bgy;
     var $fontfile='./verdana';
-    
+
 
     var $color;
 
     function image($bgfile='') {
-            
+
             image::addbackground($bgfile);
-            
+
     }
 
     function createimagefromtype($file,$handler) {
             $size = @getimagesize(api_url_to_local_path($file));
             $type=$size[2];
-   
+
             switch ($type) {
                     case 2 : $imhandler = @imagecreatefromjpeg($file);
                     break;
@@ -35,7 +35,7 @@ class image {
             $xtmpstr=$handler.'x';
             $ytmpstr=$handler.'y';
 
- 
+
                 $this->$xtmpstr=$size[0];
                 $this->$ytmpstr=$size[1];
 
@@ -63,7 +63,7 @@ class image {
                         $scale = ($size[0] > 0 && $size[1] >0)?min($thumbw/$size[0], $thumbh/$size[1]):0;
                         $width = (int)($size[0]*$scale);
                         $height = (int)($size[1]*$scale);
-                        
+
                         $deltaw = 0;
                         $deltah = 0;
                                 $dst_img = @ImageCreateTrueColor($width, $height);
@@ -81,8 +81,8 @@ class image {
         }
 
         function addbackground($bgfile) {
-        
-        		
+
+
                 if ( !empty($bgfile) && file_exists($bgfile) ) { $this->bg = image::createimagefromtype($bgfile,'bg');
             @imagealphablending( $this->bg ,TRUE );
             }
@@ -115,7 +115,7 @@ class image {
     	putenv('GDFONTPATH=' . realpath('.'));
     	$this->fontfile='verdana';
             $text= preg_replace('`(?<!\r)\n`',"\r\n",$text);
-           
+
             $box=@imagettfbbox ( $size, $angle, $this->fontfile, $text );
             if ($x<0) {
                 $x=$this->bgx - max($box[2],$box[4]) + $x;
@@ -127,9 +127,9 @@ class image {
             } else {
                 $y=max(-$box[7],-$box[5]) + $y;
             }
-            
+
             @imagettftext($this->bg, $size, $angle, $x, $y, $this->color, $this->fontfile , $text );
-          
+
     }
 
     function send_image($type,$file='',$compress=-1) {
@@ -154,7 +154,7 @@ class image {
                     break;
                     default: return 0;
             }
-            
+
             // TODO: Occupied memory is not released, because the following fragment of code is actually dead.
             @imagedestroy($this->bg);
             @imagedestroy($this->logo);

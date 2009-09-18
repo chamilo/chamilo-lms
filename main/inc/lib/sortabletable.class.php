@@ -107,7 +107,7 @@ class SortableTable extends HTML_Table {
 	 * table
 	 */
 	public $other_tables;
-	
+
 
 	/**
 	 * Create a new SortableTable
@@ -128,19 +128,19 @@ class SortableTable extends HTML_Table {
 		$this->table_name = $table_name;
 		$this->additional_parameters = array ();
 		$this->param_prefix = $table_name.'_';
-		
+
 		$this->page_nr = isset ($_SESSION[$this->param_prefix.'page_nr']) ? intval($_SESSION[$this->param_prefix.'page_nr']) : 1;
 		$this->page_nr = isset ($_GET[$this->param_prefix.'page_nr']) 	  ? intval($_GET[$this->param_prefix.'page_nr']) : $this->page_nr;
 		$this->column  = isset ($_SESSION[$this->param_prefix.'column'])  ? intval($_SESSION[$this->param_prefix.'column']) : $default_column;
 		$this->column  = isset ($_GET[$this->param_prefix.'column']) 	  ? intval($_GET[$this->param_prefix.'column']) : $this->column;
-		
+
 		//$this->direction = isset ($_SESSION[$this->param_prefix.'direction']) ? $_SESSION[$this->param_prefix.'direction'] : $default_order_direction;
-		
-				
+
+
 		if (isset($_SESSION[$this->param_prefix.'direction'])) {
 			$my_session_direction = $_SESSION[$this->param_prefix.'direction'];
         	if(!in_array($my_session_direction, array('ASC','DESC'))){
-        		$this->direction = 'ASC'; 
+        		$this->direction = 'ASC';
         	} else {
         		if ($my_session_direction=='ASC') {
 					$this->direction = 'ASC';
@@ -148,12 +148,12 @@ class SortableTable extends HTML_Table {
 					$this->direction = 'DESC';
 				}
         	}
-		}		
-		
+		}
+
 		if (isset($_GET[$this->param_prefix.'direction'])) {
-			$my_get_direction = $_GET[$this->param_prefix.'direction'];					
+			$my_get_direction = $_GET[$this->param_prefix.'direction'];
 			if(!in_array($my_get_direction, array('ASC','DESC'))){
-        		$this->direction = 'ASC'; 
+        		$this->direction = 'ASC';
 			} else {
 				if ($my_get_direction=='ASC') {
 					$this->direction = 'ASC';
@@ -165,10 +165,10 @@ class SortableTable extends HTML_Table {
 
 		//allow to change paginate in multiples tabs
 		unset($_SESSION[$this->param_prefix.'per_page']);
-		
+
 		$this->per_page = isset ($_SESSION[$this->param_prefix.'per_page']) ? intval($_SESSION[$this->param_prefix.'per_page']) : $default_items_per_page;
 		$this->per_page = isset ($_GET[$this->param_prefix.'per_page'])		? intval($_GET[$this->param_prefix.'per_page']) : $this->per_page;
-				
+
 		$_SESSION[$this->param_prefix.'per_page'] = $this->per_page;
 		$_SESSION[$this->param_prefix.'direction'] = $this->direction ;
 		$_SESSION[$this->param_prefix.'page_nr'] = $this->page_nr;
@@ -237,7 +237,7 @@ class SortableTable extends HTML_Table {
 				$message_empty=get_lang('TheListIsEmpty');
 			}
 			$this->setCellContents(1, 0,$message_empty);
-			
+
 			$empty_table = true;
 		}
 		$html='';
@@ -462,7 +462,7 @@ class SortableTable extends HTML_Table {
 				 	$param[$tablename.'_direction'] =  'ASC';
 				} else {
 					$param[$tablename.'_direction'] = $my_get_direction;
-				}						
+				}
 			}
 			if( isset($_GET[$tablename.'_page_nr']))
 				$param[$tablename.'_page_nr'] = intval($_GET[$tablename.'_page_nr']);
@@ -559,7 +559,7 @@ class SortableTable extends HTML_Table {
 				$row[0] .= '/>';
 			}
 		}
-		
+
 		foreach ($row as $index => $value) {
 			if (strlen($row[$index]) == 0)
 			{
@@ -636,61 +636,61 @@ class SortableTableFromArray extends SortableTable {
 
 /**
  * Sortable table which can be used for data available in an array
- * 
+ *
  * Is a variation of SortableTableFromArray because we add 2 new arrays  $column_show and $column_order
  * $column_show is an array that lets us decide which are going to be the columns to show
- * $column_order is an array that lets us decide the ordering of the columns 
+ * $column_order is an array that lets us decide the ordering of the columns
  * i.e: $column_header=array('a','b','c','d','e'); $column_order=array(1,2,5,4,5);
- * These means that the 3th column (letter "c") will be sort like the order we use in the 5th column 
+ * These means that the 3th column (letter "c") will be sort like the order we use in the 5th column
  */
- 
-class SortableTableFromArrayConfig extends SortableTable {	
+
+class SortableTableFromArrayConfig extends SortableTable {
 	/**
 	 * The array containing the columns that will be show i.e $column_show=array('1','0','0'); we will show only the 1st column
 	 */
 	private $column_show;
-		
+
 	/**
-	 *The array containing the real sort column $column_order=array('1''4','3','4'); The 2nd column will be order like the 4th column 
+	 *The array containing the real sort column $column_order=array('1''4','3','4'); The 2nd column will be order like the 4th column
 	 */
-	private $column_order;		
+	private $column_order;
 	/**
 	 * The array containing all data for this table
 	 */
 	private $table_data;
-	
+
 	/**
 	 * Constructor
 	 * @param array $table_data All the information of the table
-	 * @param int $default_column Default column that will be use in the sorts functions 
+	 * @param int $default_column Default column that will be use in the sorts functions
 	 * @param int $default_items_per_page quantity of pages that we are going to see
 	 * @param int $tablename Name of the table
-	 * @param array $column_show An array with binary values 1: we show the column 2: we don't show it 
-	 * @param array $column_order An array of integers that let us decide how the columns are going to be sort.   
-	 */ 
+	 * @param array $column_show An array with binary values 1: we show the column 2: we don't show it
+	 * @param array $column_order An array of integers that let us decide how the columns are going to be sort.
+	 */
 	public function __construct ($table_data, $default_column = 1, $default_items_per_page = 20, $tablename = 'tablename',$column_show=null,$column_order=null,$direction='ASC') {
 		$this->column_show=$column_show;
 		$this->column_order=$column_order;
-		
+
 		parent :: __construct ($tablename, null, null, $default_column, $default_items_per_page,$direction);
-		
+
 		$this->table_data = $table_data;
 	}
 	/**
 	 * Get table data to show on current page
 	 * @see SortableTable#get_table_data
 	 */
-	public function get_table_data($from = 1) {			
+	public function get_table_data($from = 1) {
 		$content = TableSort :: sort_table_config($this->table_data, $this->column, $this->direction == 'ASC' ? SORT_ASC : SORT_DESC ,$this->column_show, $this->column_order);
 		return array_slice($content, $from, $this->per_page);
 	}
-	
+
 	/**
 	 * Get total number of items
 	 * @see SortableTable#get_total_number_of_items
 	 */
 	public function get_total_number_of_items () {
 		return count($this->table_data);
-	}	
+	}
 }
 ?>

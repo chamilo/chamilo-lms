@@ -134,7 +134,7 @@ function event_access_course()
 	if(api_get_setting('use_session_mode')=='true' && isset($_SESSION['id_session']))
 	{
 		$id_session = intval($_SESSION['id_session']);
-	} 
+	}
 	else
 	{
 		$id_session = 0;
@@ -364,7 +364,7 @@ function event_link($link_id)
 		// anonymous
 		$user_id = "0";
 	}
-	
+
 	$sql = "INSERT INTO ".$TABLETRACK_LINKS."
 				( links_user_id,
 				 links_cours_id,
@@ -405,7 +405,7 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$l
 				   exe_result	=	  '".Database::escape_string($score)."',
 				   exe_weighting = '".Database::escape_string($weighting)."',
 				   session_id		= '".Database::escape_string($session_id)."',
-				   orig_lp_id = '".Database::escape_string($learnpath_id)."',		
+				   orig_lp_id = '".Database::escape_string($learnpath_id)."',
 				   orig_lp_item_id = '".Database::escape_string($learnpath_item_id)."',
 				   exe_duration = '".Database::escape_string($duration)."',
 				   exe_date= FROM_UNIXTIME(".$reallyNow."),status = '', data_tracking='',start_date =FROM_UNIXTIME(".Database::escape_string($_SESSION['exercice_start_date']).")
@@ -472,7 +472,7 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 	$quesId = Database::escape_string($quesId);
 	$exeId = Database::escape_string($exeId);
 	$j = Database::escape_string($j);
-	
+
 	global $_configuration, $_user, $_cid;
 	$TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
@@ -542,7 +542,7 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
  * @param	int		Whether this answer is correct (1) or not (0)
  * @param	string	Coordinates of this point (e.g. 123;324)
  * @return	boolean	Result of the insert query
- * @uses Course code and user_id from global scope $_cid and $_user 
+ * @uses Course code and user_id from global scope $_cid and $_user
  */
 function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $coords)
 {
@@ -581,14 +581,14 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 	global $_configuration;
 	global $_user;
 	global $TABLETRACK_DEFAULT;
-	
+
 	$event_type = Database::escape_string($event_type);
 	$event_value_type = Database::escape_string($event_value_type);
 	$event_value = Database::escape_string($event_value);
 	$timestamp = Database::escape_string($timestamp);
 	$user_id = Database::escape_string($user_id);
 	$course_code = Database::escape_string($course_code);
-	
+
 
 	// if tracking is disabled record nothing
 	if (!$_configuration['tracking_enabled'])

@@ -13,7 +13,7 @@
 
 <div id="header">
 	<div id="header1">
-		<div id="top_corner"></div> 
+		<div id="top_corner"></div>
 		<div id="institution">
 			<a href="<?php echo api_get_path(WEB_PATH);?>index.php" target="_top"><?php echo api_get_setting('siteName') ?></a>
 			<?php
@@ -44,7 +44,7 @@ if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 		echo $_course['official_code'];
 	}
 
-	if(api_get_setting("use_session_mode") == "true" && isset($_SESSION['session_name'])) { 
+	if(api_get_setting("use_session_mode") == "true" && isset($_SESSION['session_name'])) {
 		echo ' ('.$_SESSION['session_name'].')';
 	}
 	if (api_get_setting("display_coursecode_in_courselist") == "true" AND api_get_setting("display_teacher_in_courselist") == "true") {
@@ -89,14 +89,14 @@ if (isset($_course['extLink']) && $_course['extLink']['name'] != "") {
 	} else {
 		echo $_course['extLink']['name'];
 	}
-		
+
 }
 ?>
 	</div>
 	<div id="header2">
 		<div id="Header2Right">
 			<ul>
-<?php 
+<?php
 if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR (api_get_setting('showonline','users') == "true" AND $_user['user_id']) OR (api_get_setting('showonline','course') == "true" AND $_user['user_id'] AND $_cid)) {
 	if (api_get_setting("use_session_mode") == "true" && isset($_user['user_id']) && api_is_coach()) {
 	    echo '  <li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$_user['user_id'].'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.get_lang('UsersConnectedToMySessions').'</a></li>';
@@ -110,7 +110,7 @@ if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR 
 	} else {
 		$number_online_in_course = 0;
 	}
-	
+
  	echo "<li>";
 	// Display the who's online of the platform
 	if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR (api_get_setting('showonline','users') == "true" AND $_user['user_id'])) {
@@ -148,7 +148,7 @@ if ( api_is_allowed_to_edit() ) {
 	</div>
 		<div class="clear">&nbsp;</div>
 	</div>
-	
+
 	<div id="header3">
 <?php
 /*
@@ -162,7 +162,7 @@ if ($_user['user_id']) {
 		$login = '('.get_lang('Anonymous').')';
 	} else {
 		$uinfo = api_get_user_info(api_get_user_id());
-		$login = '('.$uinfo['username'].')';	
+		$login = '('.$uinfo['username'].')';
 	}
 	?>
 	 <!-- start user section line with name, my course, my profile, scorm info, etc -->
@@ -216,7 +216,7 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 			$menu_navigation['mygradebook'] = $possible_tabs['mygradebook'];
 		}
 	}
-	
+
 	// Reporting
 	if (api_get_setting('show_tabs', 'reporting') == 'true') {
 		if(api_is_allowed_to_create_course() || $_user['status'] == DRH) {
@@ -231,8 +231,8 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 			$menu_navigation['session_my_space'] = $possible_tabs['session_my_progress'];
 		}
 	}
-	
-	
+
+
 	if(api_is_platform_admin(true)) {
 		if (api_get_setting('show_tabs', 'platform_administration') == 'true') {
 			$navigation['platform_admin'] = $possible_tabs['platform_admin'];
@@ -254,7 +254,7 @@ foreach($navigation as $section => $navigation_info) {
 ?>
 		</ul>
 		<div style="clear: both;" class="clear"> </div>
-	</div>	
+	</div>
 <?php
 /*
  * if the user is a coach he can see the users who are logged in its session
@@ -308,7 +308,7 @@ foreach($navigation as $index => $navigation_info) {
 }
 
 if (!empty($final_navigation)) {
-	echo '<div id="header4">';	
+	echo '<div id="header4">';
 	echo implode(' &gt; ',$final_navigation);
 	echo '</div>';
 }
@@ -363,8 +363,8 @@ if (!$chat) {
 -----------------------------------------------------------------------------
 */
 if(api_get_setting('show_navigation_menu') != 'false' && api_get_setting('show_navigation_menu') != 'icons') {
-	Display::show_course_navigation_menu($_GET['isHidden']);	
-	$course_id = api_get_course_id();   
+	Display::show_course_navigation_menu($_GET['isHidden']);
+	$course_id = api_get_course_id();
    if (!empty($course_id) && ($course_id != -1)) {
 		echo '<div id="menuButton">';
  		echo $output_string_menu;
@@ -431,7 +431,7 @@ function get_tabs() {
 
 	// Gradebook
 	if (api_get_setting('gradebook_enable') == 'true') {
-		$navigation['mygradebook']['url'] = api_get_path(WEB_CODE_PATH).'gradebook/gradebook.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );	
+		$navigation['mygradebook']['url'] = api_get_path(WEB_CODE_PATH).'gradebook/gradebook.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
 		$navigation['mygradebook']['title'] = get_lang('MyGradebook');
 	}
 

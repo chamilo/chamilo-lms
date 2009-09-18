@@ -1,46 +1,37 @@
 <?php // $Id: user_edit.php 22233 2009-07-20 09:54:05Z ivantcholakov $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 *	@package dokeos.admin
 ==============================================================================
 */
-// name of the language file that needs to be included
-$language_file=array('admin','registration');
-$cidReset=true;
-include('../inc/global.inc.php');
-$this_section=SECTION_PLATFORM_ADMIN;
+
+// Language files that should be included
+$language_file = array('admin', 'registration');
+
+$cidReset = true;
+
+include '../inc/global.inc.php';
+
+$this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
 $htmlHeadXtra[] = '
-<script language="JavaScript" type="text/JavaScript">
+<script type="text/javascript">
 <!--
 function enable_expiration_date() { //v2.0
 	document.user_edit.radio_expiration_date[0].checked=false;
 	document.user_edit.radio_expiration_date[1].checked=true;
+}
+
+function password_switch_radio_button(){
+	var input_elements = document.getElementsByTagName("input");
+	for (var i = 0; i < input_elements.length; i++) {
+		if(input_elements.item(i).name == "reset_password" && input_elements.item(i).value == "2") {
+			input_elements.item(i).checked = true;
+		}
+	}
 }
 
 function display_drh_list(){
@@ -63,94 +54,90 @@ function show_image(image,width,height) {
 //-->
 </script>';
 
+$libpath = api_get_path(LIBRARY_PATH);
+require_once $libpath.'fileManage.lib.php';
+require_once $libpath.'fileUpload.lib.php';
+require_once $libpath.'usermanager.lib.php';
+require_once $libpath.'formvalidator/FormValidator.class.php';
+require_once $libpath.'image.lib.php';
+require_once $libpath.'mail.lib.inc.php';
 
-require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
-require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
-$user_id=isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['user_id']);
-$noPHP_SELF=true;
-$tool_name=get_lang('ModifyUserInfo');
+$user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : intval($_POST['user_id']);
+$noPHP_SELF = true;
+$tool_name = get_lang('ModifyUserInfo');
 
-$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => "user_list.php","name" => get_lang('UserList'));
+$interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => "user_list.php","name" => get_lang('UserList'));
 
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
 $sql = "SELECT u.*, a.user_id AS is_admin FROM $table_user u LEFT JOIN $table_admin a ON a.user_id = u.user_id WHERE u.user_id = '".$user_id."'";
-$res = api_sql_query($sql,__FILE__,__LINE__);
-if(mysql_num_rows($res) != 1)
-{
+$res = Database::query($sql, __FILE__, __LINE__);
+if (Database::num_rows($res) != 1) {
 	header('Location: user_list.php');
 	exit;
 }
-$user_data = mysql_fetch_array($res,MYSQL_ASSOC);
+
+$user_data = Database::fetch_array($res, 'ASSOC');
 $user_data['platform_admin'] = is_null($user_data['is_admin']) ? 0 : 1;
 $user_data['send_mail'] = 0;
 $user_data['old_password'] = $user_data['password'];
 unset($user_data['password']);
 
-$user_data = array_merge($user_data, Usermanager :: get_extra_user_data($user_id,true));
+$user_data = array_merge($user_data, Usermanager :: get_extra_user_data($user_id, true));
 
 // Create the form
-$form = new FormValidator('user_edit','post','','',array('style' => 'width: 60%; float: '.($text_dir=='rtl'?'right;':'left;')));
+$form = new FormValidator('user_edit', 'post', '', '', array('style' => 'width: 60%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')));
 $form->addElement('header', '', $tool_name);
-$form->addElement('hidden','user_id',$user_id);
+$form->addElement('hidden', 'user_id', $user_id);
 
-if (api_is_western_name_order())
-{
+if (api_is_western_name_order()) {
 	// Firstname
-	$form->addElement('text','firstname',get_lang('FirstName'));
-	$form->applyFilter('firstname','html_filter');
-	$form->applyFilter('firstname','trim');
+	$form->addElement('text', 'firstname', get_lang('FirstName'));
+	$form->applyFilter('firstname', 'html_filter');
+	$form->applyFilter('firstname', 'trim');
 	$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 	// Lastname
-	$form->addElement('text','lastname',get_lang('LastName'));
-	$form->applyFilter('lastname','html_filter');
-	$form->applyFilter('lastname','trim');
+	$form->addElement('text', 'lastname', get_lang('LastName'));
+	$form->applyFilter('lastname', 'html_filter');
+	$form->applyFilter('lastname', 'trim');
 	$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
-}
-else
-{
+} else {
 	// Lastname
-	$form->addElement('text','lastname',get_lang('LastName'));
-	$form->applyFilter('lastname','html_filter');
-	$form->applyFilter('lastname','trim');
+	$form->addElement('text', 'lastname', get_lang('LastName'));
+	$form->applyFilter('lastname', 'html_filter');
+	$form->applyFilter('lastname', 'trim');
 	$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
 	// Firstname
-	$form->addElement('text','firstname',get_lang('FirstName'));
-	$form->applyFilter('firstname','html_filter');
-	$form->applyFilter('firstname','trim');
+	$form->addElement('text', 'firstname', get_lang('FirstName'));
+	$form->applyFilter('firstname', 'html_filter');
+	$form->applyFilter('firstname', 'trim');
 	$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 }
 
 // Official code
-$form->addElement('text', 'official_code', get_lang('OfficialCode'),array('size' => '40'));
-$form->applyFilter('official_code','html_filter');
-$form->applyFilter('official_code','trim');
+$form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => '40'));
+$form->applyFilter('official_code', 'html_filter');
+$form->applyFilter('official_code', 'trim');
 
 // Email
-$form->addElement('text', 'email', get_lang('Email'),array('size' => '40'));
+$form->addElement('text', 'email', get_lang('Email'), array('size' => '40'));
 $form->addRule('email', get_lang('EmailWrong'), 'email');
 $form->addRule('email', get_lang('EmailWrong'), 'required');
 
 // OpenID
-if(api_get_setting('openid_authentication')=='true')
-{
-	$form->addElement('text', 'openid', get_lang('OpenIDURL'),array('size' => '40'));
+if (api_get_setting('openid_authentication') == 'true') {
+	$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => '40'));
 }
 
 // Phone
-$form->addElement('text','phone',get_lang('PhoneNumber'));
+$form->addElement('text', 'phone', get_lang('PhoneNumber'));
 
 // Picture
 $form->addElement('file', 'picture', get_lang('AddPicture'));
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
 $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
-if (strlen($user_data['picture_uri']) > 0 )
-{
+if (strlen($user_data['picture_uri']) > 0) {
 	$form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
 }
 
@@ -162,96 +149,88 @@ $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username')
 $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
 
 // Password
-$form->addElement('radio','reset_password',get_lang('Password'),get_lang('DontResetPassword'),0);
-if(count($extAuthSource) > 0)
+$form->addElement('radio', 'reset_password', get_lang('Password'), get_lang('DontResetPassword'), 0);
+if (count($extAuthSource) > 0)
 {
-	$group[] =& HTML_QuickForm::createElement('radio','reset_password',null,get_lang('ExternalAuthentication').' ',3);
+	$group[] =& HTML_QuickForm::createElement('radio', 'reset_password', null, get_lang('ExternalAuthentication').' ', 3);
 	$auth_sources = array();
-	foreach($extAuthSource as $key => $info)
-	{
+	foreach($extAuthSource as $key => $info) {
 		$auth_sources[$key] = $key;
 	}
-	$group[] =& HTML_QuickForm::createElement('select','auth_source',null,$auth_sources);
-	$group[] =& HTML_QuickForm::createElement('static','','','<br />');
-	$form->addGroup($group, 'password', null, '',false);
+	$group[] =& HTML_QuickForm::createElement('select', 'auth_source', null, $auth_sources);
+	$group[] =& HTML_QuickForm::createElement('static', '', '', '<br />');
+	$form->addGroup($group, 'password', null, '', false);
 }
-$form->addElement('radio','reset_password',null,get_lang('AutoGeneratePassword'),1);
+$form->addElement('radio', 'reset_password', null, get_lang('AutoGeneratePassword'), 1);
 $group = array();
-$group[] =& HTML_QuickForm::createElement('radio', 'reset_password',null,null,2);
-$group[] =& HTML_QuickForm::createElement('password', 'password',null,null);
-$form->addGroup($group, 'password', null, '',false);
+$group[] =& HTML_QuickForm::createElement('radio', 'reset_password', null, null, 2);
+$group[] =& HTML_QuickForm::createElement('password', 'password', null, array('onkeydown' => 'javascript: password_switch_radio_button();'));
+$form->addGroup($group, 'password', null, '', false);
 
 // Status
 $status = api_get_status_langvars();
-$form->addElement('select','status',get_lang('Status'),$status,'id="status_select" onchange="display_drh_list()"');
+$form->addElement('select', 'status', get_lang('Status'), $status, array('id' => 'status_select', 'onchange' => 'javascript: display_drh_list();'));
 
 //Language
 $form->addElement('select_language', 'language', get_lang('Language'));
 
 $display = $user_data['status'] == STUDENT || $_POST['status'] == STUDENT ? 'block' : 'none';
-$form->addElement('html','<div id="drh_list" style="display:'.$display.';">');
-$drh_select = $form->addElement('select','hr_dept_id',get_lang('Drh'),array(),'id="drh_select"');
-$drh_list = UserManager :: get_user_list(array('status'=>DRH),array('lastname','firstname'));
+$form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
+$drh_select = $form->addElement('select', 'hr_dept_id', get_lang('Drh'), array(), 'id="drh_select"');
+$drh_list = UserManager :: get_user_list(array('status' => DRH), api_sort_by_first_name() ? array('firstname', 'lastname') : array('lastname', 'firstname'));
 
 if (count($drh_list) == 0) {
-	$drh_select->addOption('- '.get_lang('ThereIsNotStillAResponsible').' -',0);
+	$drh_select->addOption('- '.get_lang('ThereIsNotStillAResponsible', '').' -', 0);
 } else {
-	$drh_select->addOption('- '.get_lang('SelectAResponsible').' -',0);
+	$drh_select->addOption('- '.get_lang('SelectAResponsible').' -', 0);
 }
 
-foreach($drh_list as $drh)
-{
+foreach($drh_list as $drh) {
 	$drh_select->addOption(api_get_person_name($drh['firstname'], $drh['lastname']), $drh['user_id']);
 }
 $form->addElement('html', '</div>');
 
 // Platform admin
 // Only when changing another user!
-if($user_id != $_SESSION['_uid'])
-{
+if ($user_id != $_SESSION['_uid']) {
 	$group = array();
-	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin',null,get_lang('Yes'),1);
-	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin',null,get_lang('No'),0);
-	if ($user_data['status']<>5) {
-		$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;',false);
+	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
+	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', null, get_lang('No'), 0);
+	if ($user_data['status'] <> 5) {
+		$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;', false);
 	}
-
 }
 
 // Send email
 $group = array();
-$group[] =& HTML_QuickForm::createElement('radio', 'send_mail',null,get_lang('Yes'),1);
-$group[] =& HTML_QuickForm::createElement('radio', 'send_mail',null,get_lang('No'),0);
-$form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;',false);
+$group[] =& HTML_QuickForm::createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
+$group[] =& HTML_QuickForm::createElement('radio', 'send_mail', null, get_lang('No'), 0);
+$form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;', false);
 
 // Registration Date
-$form->addElement('static','registration_date', get_lang('RegistrationDate'), $user_data['registration_date']);
+$form->addElement('static', 'registration_date', get_lang('RegistrationDate'), $user_data['registration_date']);
 
-if(! $user_data['platform_admin'] )
-{
+if (!$user_data['platform_admin']) {
 	// Expiration Date
 	$form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
 	$group = array ();
 	$group[] = & $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
-	$group[] = & $form->createElement('datepicker', 'expiration_date',null, array ('form_name' => $form->getAttribute('name'), 'onChange'=>'enable_expiration_date()'));
+	$group[] = & $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();'));
 	$form->addGroup($group, 'max_member_group', null, '', false);
 
 	// Active account or inactive account
-	$form->addElement('radio','active',get_lang('ActiveAccount'),get_lang('Active'),1);
-	$form->addElement('radio','active','',get_lang('Inactive'),0);
+	$form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
+	$form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
 }
 
 
 // EXTRA FIELDS
-$extra = UserManager::get_extra_fields(0,50,5,'ASC');
-foreach($extra as $id => $field_details)
-{
-    if($field_details[6] == 0)
-    {
-        continue;
-    }
-    switch($field_details[2])
-	{
+$extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
+foreach ($extra as $id => $field_details) {
+	if ($field_details[6] == 0) {
+		continue;
+	}
+	switch ($field_details[2]) {
 		case USER_FIELD_TYPE_TEXT:
 			$form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
 			$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
@@ -265,39 +244,36 @@ foreach($extra as $id => $field_details)
 			break;
 		case USER_FIELD_TYPE_RADIO:
 			$group = array();
-			foreach($field_details[9] as $option_id => $option_details)
-			{
+			foreach ($field_details[9] as $option_id => $option_details) {
 				$options[$option_details[1]] = $option_details[2];
-				$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1],$option_details[2].'<br />',$option_details[1]);
+				$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1], $option_details[2].'<br />', $option_details[1]);
 			}
 			$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
 			break;
 		case USER_FIELD_TYPE_SELECT:
 			$options = array();
-			foreach($field_details[9] as $option_id => $option_details)
-			{
+			foreach ($field_details[9] as $option_id => $option_details) {
 				$options[$option_details[1]] = $option_details[2];
 			}
-			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');
+			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, '');
 			break;
 		case USER_FIELD_TYPE_SELECT_MULTIPLE:
 			$options = array();
-			foreach($field_details[9] as $option_id => $option_details)
-			{
+			foreach ($field_details[9] as $option_id => $option_details) {
 				$options[$option_details[1]] = $option_details[2];
 			}
-			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,array('multiple' => 'multiple'));
+			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, array('multiple' => 'multiple'));
 			break;
 		case USER_FIELD_TYPE_DATE:
-			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'user_edit'));
-			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
+			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3], array('form_name' => 'user_edit'));
+			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
 			$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
 			$form -> setDefaults($defaults);
 			$form->applyFilter('theme', 'trim');
 			break;
 		case USER_FIELD_TYPE_DATETIME:
-			$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'user_edit'));
-			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
+			$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3], array('form_name' => 'user_edit'));
+			$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
 			$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
 			$form -> setDefaults($defaults);
 			$form->applyFilter('theme', 'trim');
@@ -305,35 +281,29 @@ foreach($extra as $id => $field_details)
 	}
 }
 
-
 // Submit button
-$form->addElement('style_submit_button', 'submit',get_lang('ModifyInformation'),'class="save"');
-
+$form->addElement('style_submit_button', 'submit', get_lang('ModifyInformation'), 'class="save"');
 
 // Set default values
-$expiration_date=$user_data['expiration_date'];
-if ($expiration_date=='0000-00-00 00:00:00')
-{
-	$user_data['radio_expiration_date']=0;
-	$user_data['expiration_date']=array();
-	$user_data['expiration_date']['d']=date('d');
-	$user_data['expiration_date']['F']=date('m');
-	$user_data['expiration_date']['Y']=date('Y');
-}
-else
-{
-	$user_data['radio_expiration_date']=1;
-	$user_data['expiration_date']=array();
-	$user_data['expiration_date']['d']=substr($expiration_date,8,2);
-	$user_data['expiration_date']['F']=substr($expiration_date,5,2);
-	$user_data['expiration_date']['Y']=substr($expiration_date,0,4);
+$user_data['reset_password'] = 0;
+$expiration_date = $user_data['expiration_date'];
+if ($expiration_date == '0000-00-00 00:00:00') {
+	$user_data['radio_expiration_date'] = 0;
+	$user_data['expiration_date'] = array();
+	$user_data['expiration_date']['d'] = date('d');
+	$user_data['expiration_date']['F'] = date('m');
+	$user_data['expiration_date']['Y'] = date('Y');
+} else {
+	$user_data['radio_expiration_date'] = 1;
+	$user_data['expiration_date'] = array();
+	$user_data['expiration_date']['d'] = substr($expiration_date, 8, 2);
+	$user_data['expiration_date']['F'] = substr($expiration_date, 5, 2);
+	$user_data['expiration_date']['Y'] = substr($expiration_date, 0, 4);
 }
 $form->setDefaults($user_data);
 
-
 // Validate form
-if( $form->validate())
-{
+if ( $form->validate()) {
 	$user = $form->exportValues();
 
 	$picture_element = & $form->getElement('picture');
@@ -341,12 +311,11 @@ if( $form->validate())
 
 	$picture_uri = $user_data['picture_uri'];
 
-    //get the picture directory
-    $picture_path_info = UserManager::get_user_picture_path_by_id($user_id, 'system', true);
-    $picture_path = $picture_path_info['dir'];
+	//get the picture directory
+	$picture_path_info = UserManager::get_user_picture_path_by_id($user_id, 'system', true);
+	$picture_path = $picture_path_info['dir'];
 
-    if ($user['delete_picture'] || !empty($picture['name']))
-	{
+	if ($user['delete_picture'] || !empty($picture['name'])) {
 		@unlink($picture_path.'small_'.$picture_uri);
 		@unlink($picture_path.'medium_'.$picture_uri);
 		@unlink($picture_path.'big_'.$picture_uri);
@@ -354,15 +323,13 @@ if( $form->validate())
 		$picture_uri = '';
 	}
 
-	if (!empty($picture['name']))
-    {
+	if (!empty($picture['name'])) {
 		$picture_uri = $user_id.'_'.uniqid('').'_'.replace_dangerous_char($picture['name']);
-    	$perm = api_get_setting('permissions_for_new_directories');
-		$perm = octdec(!empty($perm)?$perm:'0770');
-		if(!file_exists($picture_path))
-        {
-        	@mkdir($picture_path, $perm, true);
-        }
+		$perm = api_get_setting('permissions_for_new_directories');
+		$perm = octdec(!empty($perm) ? $perm : '0770');
+		if (!file_exists($picture_path)) {
+			@mkdir($picture_path, $perm, true);
+		}
 		$picture_info = @getimagesize($_FILES['picture']['tmp_name']);
 		$type = $picture_info[2];
 		$small_picture = UserManager::resize_picture($_FILES['picture']['tmp_name'], 22);
@@ -372,10 +339,10 @@ if( $form->validate())
 
 		$picture_types = array(1 => 'GIF', 2 => 'JPG', 3 => 'PNG');
 		if (in_array($type, array_keys($picture_types))) {
-		    $small_picture->send_image($picture_types[$type], $picture_path.'small_'.$picture_uri);
+			$small_picture->send_image($picture_types[$type], $picture_path.'small_'.$picture_uri);
 			$medium_picture->send_image($picture_types[$type], $picture_path.'medium_'.$picture_uri);
-	    	$normal_picture->send_image($picture_types[$type], $picture_path.$picture_uri);
-	    	$big_picture->send_image($picture_types[$type], $picture_path.'big_'.$picture_uri);
+			$normal_picture->send_image($picture_types[$type], $picture_path.$picture_uri);
+			$big_picture->send_image($picture_types[$type], $picture_path.'big_'.$picture_uri);
 		}
 	}
 
@@ -390,92 +357,74 @@ if( $form->validate())
 	$send_mail = intval($user['send_mail']);
 	$reset_password = intval($user['reset_password']);
 	$hr_dept_id = intval($user['hr_dept_id']);
-	$language=$user['language'];
-	if ($user['radio_expiration_date']=='1' && ! $user_data['platform_admin'] )
-	{
+	$language = $user['language'];
+	if ($user['radio_expiration_date'] == '1' && !$user_data['platform_admin']) {
 		$expiration_date=$user['expiration_date'];
-	}
-	else
-	{
+	} else {
 		$expiration_date='0000-00-00 00:00:00';
 	}
 	$active = $user_data['platform_admin'] ? 1 : intval($user['active']);
 
-	if( $reset_password == 0)
-	{
+	if ($reset_password == 0) {
 		$password = null;
 		$auth_source = $user_data['auth_source'];
 	}
-	elseif($reset_password == 1)
-	{
+	elseif($reset_password == 1) {
 		$password = api_generate_password();
 		$auth_source = PLATFORM_AUTH_SOURCE;
 	}
-	elseif($reset_password == 2)
-	{
+	elseif($reset_password == 2) {
 		$password = $user['password'];
 		$auth_source = PLATFORM_AUTH_SOURCE;
 	}
-	elseif($reset_password == 3)
-	{
+	elseif($reset_password == 3) {
 		$password = $user['password'];
 		$auth_source = $user['auth_source'];
 	}
-	UserManager::update_user($user_id,$firstname,$lastname,$username,$password,$auth_source,$email,$status,$official_code,$phone,$picture_uri,$expiration_date, $active, null, $hr_dept_id,null,$language);
-	if(api_get_setting('openid_authentication')=='true' && !empty($user['openid']))
-	{
+	UserManager::update_user($user_id, $firstname, $lastname, $username, $password, $auth_source, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, null, $hr_dept_id, null, $language);
+	if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
 		$up = UserManager::update_openid($user_id,$user['openid']);
 	}
-	if($user_id != $_SESSION['_uid'])
-	{
-		if($platform_admin == 1)
-		{
+	if ($user_id != $_SESSION['_uid']) {
+		if ($platform_admin == 1) {
 			$sql = "INSERT IGNORE INTO $table_admin SET user_id = '".$user_id."'";
-			api_sql_query($sql,__FILE__,__LINE__);
-		}
-		else
-		{
+			Database::query($sql, __FILE__, __LINE__);
+		} else {
 			$sql = "DELETE FROM $table_admin WHERE user_id = '".$user_id."'";
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		}
 	}
 
 	$extras = array();
-	foreach($user as $key => $value)
-	{
-		if(substr($key,0,6)=='extra_') //an extra field
-		{
-			$myres = UserManager::update_extra_field_value($user_id,substr($key,6),$value);
+	foreach($user as $key => $value) {
+		if(substr($key, 0, 6) == 'extra_') { //an extra field
+			$myres = UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
 		}
 	}
 
-	if (!empty ($email) && $send_mail)
-	{
+	if (!empty ($email) && $send_mail) {
 		$recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
 		$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
 		$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-	    $email_admin = api_get_setting('emailAdministrator');
+		$email_admin = api_get_setting('emailAdministrator');
 
-	    if ($_configuration['multiple_access_urls']==true) {
+		if ($_configuration['multiple_access_urls'] == true) {
 			$access_url_id = api_get_current_access_url_id();
-			if ($access_url_id != -1 ){
+			if ($access_url_id != -1) {
 				$url = api_get_access_url($access_url_id);
-				$emailbody=get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+				$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
 			}
 		}
 		else {
 			$emailbody=get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
 		}
 
-
 		$emailbody = get_lang('Dear')." ".stripslashes("$firstname $lastname").",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('Settings')." ". $username;
 		// Send password by e-mail if it has been modified, even if encrypted in DB (it doesn't make sense to send an e-mail with login info without the password, even if the password is encrypted)
-		if($reset_password > 0)
-		{
+		if ($reset_password > 0) {
 			$emailbody .= "\n".get_lang('Pass')." : ".stripslashes($password);
 		}
-		@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin);
-
+		@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
 	}
 	$tok = Security::get_token();
 	header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserUpdated')).'&sec_token='.$tok);
@@ -484,7 +433,7 @@ if( $form->validate())
 
 Display::display_header($tool_name);
 
-//  USER PICTURE
+// USER PICTURE
 $image_path = UserManager::get_user_picture_path_by_id($user_id,'web');
 $image_dir = $image_path['dir'];
 $image = $image_path['file'];
@@ -492,31 +441,28 @@ $image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_CODE_PATH).'i
 $image_size = @getimagesize(api_url_to_local_path($image_file));
 
 $img_attributes = 'src="'.$image_file.'?rand='.time().'" '
-    .'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
-    .'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
+	.'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
+	.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
 
-if ($image_size[0] > 300) //limit display width to 300px
-    $img_attributes .= 'width="300" ';
+if ($image_size[0] > 300) { //limit display width to 300px
+	$img_attributes .= 'width="300" ';
+}
 
 // get the path,width and height from original picture
 $big_image = $image_dir.'big_'.$image;
 $big_image_size = @getimagesize(api_url_to_local_path($big_image));
-$big_image_width= $big_image_size[0];
-$big_image_height= $big_image_size[1];
+$big_image_width = $big_image_size[0];
+$big_image_height = $big_image_size[1];
 $url_big_image = $big_image.'?rnd='.time();
-if ($image=='') {
+
+if ($image == '') {
 	echo '<img '.$img_attributes.' />';
 } else {
-	echo '<input type="image" '.$img_attributes.' onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
+	echo '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 }
-
 
 // Display form
 $form->display();
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+
+// Footer
 Display::display_footer();
-?>

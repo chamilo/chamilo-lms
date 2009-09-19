@@ -179,10 +179,11 @@ define('INTL_INSTALLED', function_exists('intl_get_error_code'));	// intl extens
 define('ICONV_INSTALLED', function_exists('iconv'));				// iconv extension, for PHP5 on Windows it is installed by default.
 define('MBSTRING_INSTALLED', function_exists('mb_strlen'));			// mbstring extension.
 
-// Constants for for api_get_path() and api_get_path_type() - predefined path types.
-define('WEB_PATH', 'WEB_PATH');
-define('SYS_PATH', 'SYS_PATH');
-define('REL_PATH', 'REL_PATH');
+// Constants for api_get_path() and api_get_path_type(), etc. - predefined path types.
+define('WEB_PATH', 'WEB_PATH');				// Identifies URL type, for example http://www.mydokeos.com/documentation/index.html
+define('SYS_PATH', 'SYS_PATH');				// Identifies system path type, for example /var/www/documentation/index.html
+define('REL_PATH', 'REL_PATH');				// Identifies semi-absolute URL, for example /documentation/index.html
+define('REL_SYS_PATH', 'REL_SYS_PATH');		// Identifies relative system path, examples: documentation/index.html  ../../documentation/index.html TODO: Not implemented yet.
 define('WEB_SERVER_ROOT_PATH', 'WEB_SERVER_ROOT_PATH');
 define('SYS_SERVER_ROOT_PATH', 'SYS_SERVER_ROOT_PATH');
 define('WEB_COURSE_PATH', 'WEB_COURSE_PATH');
@@ -204,9 +205,12 @@ define('INCLUDE_PATH', 'INCLUDE_PATH');
 define('LIBRARY_PATH', 'LIBRARY_PATH');
 define('CONFIGURATION_PATH', 'CONFIGURATION_PATH');
 define('WEB_LIBRARY_PATH', 'WEB_LIBRARY_PATH');
-// Path conversion.
+// Constants for requesting path conversion.
+define('TO_WEB_PATH', 'TO_WEB_PATH'); // TODO: Not implemented yet.
 define('TO_SYS_PATH', 'TO_SYS_PATH');
-// Path detection.
+define('TO_REL_PATH', 'TO_REL_PATH'); // TODO: Not implemented yet.
+define('TO_REL_SYS_PATH', 'TO_REL_SYS_PATH'); // TODO: Not implemented yet.
+// Path type detection.
 define('VALID_WEB_PATH', '/https?:\/\/(.*?):{0,1}([0-9]*)(\/)(.*?)/i');
 
 /*
@@ -450,14 +454,28 @@ function api_get_path($path_type, $path = null) {
 	}
 }
 
+/**
+ * Detects the type of a given path, which fron server's side may be:
+ * - absolute URL			- WEB_PATH, for example http://www.mydokeos.com/documentation/index.html
+ * - semi-absolute URL		- REL_PATH, for example /documentation/index.html
+ * - system path			- SYS_PATH, for example /var/www/documentation/index.htm
+ * - relative system path	- REL_SYS_PATH, examples: documentation/index.html  ../../documentation/index.html
+ * @param string $path		The given path to be detected.
+ * @return string			Returns one of the following constants: WEB_PATH, REL_PATH, SYS_PATH, REL_SYS_PATH.
+ */
 function api_get_path_type($path) {
 	if (preg_match(VALID_WEB_PATH, $path)) {
 		return WEB_PATH;
 	}
-	// TODO: System files to be detected.
+	// TODO: Detection of other path types to be implemented.
 	return REL_PATH;
 }
 
+/**
+ * Checks whether a given path is a web-path type (a URL).
+ * @param string $path		The given path to be checked.
+ * @return bool				Returns true when the path is web-path type, false otherwise.
+ */
 function api_is_web_path($path) {
 	return api_get_path_type($path) == WEB_PATH;
 }
@@ -3538,61 +3556,4 @@ function is_allowed_to_edit() {
  */
 function api_url_to_local_path($url) {
 	return api_get_path(TO_SYS_PATH, $url);
-	/*
-	// Check for a valid URL.
-	if (!preg_match('/https?:\/\/(.*?):{0,1}([0-9]*)(\/)(.*?)/i', $url)) {
-		return $url;	// Return non-URLs without modifications.
-	}
-
-	$original_url = $url;
-	$url = urldecode($url);
-
-	// A special case:
-	// If the URL points the document download script directly (without mod-rewrite translation),
-	// we will translate this URL into a simple one, in order to process it easy below.
-	// For example:
-	// http://localhost/dokeos/main/document/download.php?doc_url=/image.png&cDir=/
-	// becomes
-	// http://localhost/dokeos/courses/TEST/document/image.png
-	//
-	if (preg_match('/(.*)main\/document\/download.php\?doc_url=\/(.*)&cDir=\/(.*)?/', $url, $matches)) {
-		global $_cid, $_course;
-		if (!empty($_cid) and $_cid != -1 and isset($_course)) { // Inside a course?
-			$url = $matches[1].'courses/'.$_course['path'].'/document/'.str_replace('//', '/', $matches[3].'/'.$matches[2]);
-		} else {
-			return $original_url;	// Not inside a course, return then the URL "as is".
-		}
-	}
-
-	// Generally, we have to deal with URLs like this:
-	// http://localhost/dokeos/courses/TEST/document/image.png?cidReq=TEST
-	// Let us remove possibe URL's parameters:
-	// http://localhost/dokeos/courses/TEST/document/image.png
-	$tmp = explode('?', $url);
-	$array_url = explode ('/', $tmp[0]);
-
-	// Pulling out the filename image.png
-	// The rest of the URL is http://localhost/dokeos/courses/TEST/document
-	$file_name = array_pop($array_url);
-
-	// api_get_path(WEB_PATH) returns for example http://localhost/dokeos/
-	$array_web_path = explode ('/', api_get_path(WEB_PATH));
-
-	// Getting the relative system path.
-	// http://localhost/dokeos/courses/TEST/document
-	// http://localhost/dokeos/
-	// ---------------------------------------------
-	//                         courses/TEST/document
-	$array_local_path = array_values(array_diff($array_url, $array_web_path));
-	$local_path = implode('/', $array_local_path);
-
-	// Sanity check - you may have seen this comment in dokeos/main/document/download.php:
-	//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (René)
-	// Let us remove double slashes, if any (triple too, etc.).
-	$local_path = preg_replace('@/{2,}@', '/', $local_path);
-
-	// Finally, we will concatenate: the system root (for example /var/www/), the relative system path, and the file name.
-	// /var/www/courses/TEST/document/image.png
-	return str_replace("\\", '/', api_get_path(SYS_PATH)).(empty($local_path) ? '' : $local_path.'/').$file_name;
-	*/
 }

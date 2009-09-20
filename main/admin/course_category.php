@@ -28,7 +28,7 @@
 ==============================================================================
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='admin';
 
 $cidReset=true;
@@ -132,54 +132,54 @@ if(empty($action))
 	$Categories=api_store_result($result);
 }
 
-	
-	
+
+
 
 if($action == 'add' || $action == 'edit')
 {
 	?>
 	<div class="actions">
 	<a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>"><?php echo Display::return_icon('folder_up.gif').get_lang("Back"); if(!empty($category)) echo ' ('.Security::remove_XSS($category).')'; ?></a>
-	</div>	
-	
-	
+	</div>
 
-	<?php 
-	$form_title = ($action == 'add')?get_lang('AddACategory'):get_lang('EditNode'); 
+
+
+	<?php
+	$form_title = ($action == 'add')?get_lang('AddACategory'):get_lang('EditNode');
 	if(!empty($category))
 	{
-		$form_title .= ' '.get_lang('Into').' '.Security::remove_XSS($category); 
+		$form_title .= ' '.get_lang('Into').' '.Security::remove_XSS($category);
 	}
-	
+
 	$form = new FormValidator('course_category');
 	$form->addElement('header', '', $form_title);
 	$form->display();
-	
+
 	?>
-	
+
 	<form method="post" action="<?php echo api_get_self(); ?>?action=<?php echo Security::remove_XSS($action); ?>&category=<?php echo Security::remove_XSS($category); ?>&amp;id=<?php echo Security::remove_XSS($_GET['id']); ?>">
 	<input type="hidden" name="formSent" value="1" />
 	<table border="0" cellpadding="5" cellspacing="0">
-	
+
 	<?php
 	if(!empty($errorMsg))
 	{
 	?>
-	
+
 	<tr>
 	  <td colspan="2">
-	
+
 	<?php
 		Display::display_normal_message($errorMsg); //main API
 	?>
-	
+
 	  </td>
 	</tr>
-	
+
 	<?php
 	}
 	?>
-	
+
 	<tr>
 	  <td nowrap="nowrap"><?php echo get_lang("CategoryCode"); ?> :</td>
 	  <td><input type="text" name="categoryCode" size="20" maxlength="20" value="<?php echo api_htmlentities(stripslashes($categoryCode),ENT_QUOTES,$charset); ?>" /></td>
@@ -203,21 +203,21 @@ if($action == 'add' || $action == 'edit')
 			$text=get_lang('CategoryMod');
 		} else {
 			$class="add";
-			$text=get_lang('AddCategory'); 
+			$text=get_lang('AddCategory');
 		}
 	  ?>
 	  <td><button type="submit" class="<?php echo $class; ?>" value="<?php echo $text; ?>" ><?php echo $text; ?></button></td>
 	</tr>
 	</table>
 	</form>
-	
+
 	<?php
 }
 else
 {
 ?>
 <div class="actions">
-<?php 
+<?php
 if(!empty($category) && empty($action))
 {
 	$myquery = "SELECT parent_id FROM $tbl_category WHERE code='$category'";
@@ -226,13 +226,13 @@ if(!empty($category) && empty($action))
 	if(Database::num_rows($result)>0){
 		$parent_id=Database::fetch_array($result);
 	}
-	
+
 	$parent_id['parent_id']?$link=' ('.$parent_id['parent_id'].')':$link='';
 	?>
 
 	<a href="<?php echo api_get_self(); ?>?category=<?php echo $parent_id['parent_id']; ?>"><?php echo Display::return_icon('folder_up.gif').get_lang("Back"); if(!empty($parent_id)) echo $link ?></a>
 
-	<?php 
+	<?php
 }
 ?>
 <a href="<?php echo api_get_self(); ?>?category=<?php echo Security::remove_XSS($category); ?>&amp;action=add"><?php echo Display::return_icon('folder_new.gif').get_lang("AddACategory"); if(!empty($category)) echo ' '.get_lang('Into').' '.Security::remove_XSS($category); ?></a>
@@ -271,9 +271,9 @@ else
 
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
-*/ 
+*/
 Display::display_footer();
 
 /******** Functions ********/
@@ -315,7 +315,7 @@ function addNode($code,$name,$canHaveCourses,$parent_id)
 	$canHaveCourses=$canHaveCourses?'TRUE':'FALSE';
 	$code 			= Database::escape_string($code);
 	$name 			= Database::escape_string($name);
-	$parent_id		= Database::escape_string($parent_id);	
+	$parent_id		= Database::escape_string($parent_id);
 
 	$result=api_sql_query("SELECT 1 FROM $tbl_category WHERE code='$code'",__FILE__,__LINE__);
 
@@ -367,7 +367,7 @@ function moveNodeUp($code,$tree_pos,$parent_id)
 	$code 		= Database::escape_string($code);
 	$tree_pos 	= Database::escape_string($tree_pos);
 	$parent_id	= Database::escape_string($parent_id);
-	
+
 	$result=api_sql_query("SELECT code,tree_pos FROM $tbl_category WHERE parent_id ".(empty($parent_id)?"IS NULL":"='$parent_id'")." AND tree_pos<'$tree_pos' ORDER BY tree_pos DESC LIMIT 0,1",__FILE__,__LINE__);
 
 	if(!$row=Database::fetch_array($result))

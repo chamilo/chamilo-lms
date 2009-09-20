@@ -23,10 +23,10 @@
 ==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 	@author Bart Mollet
 *	@package dokeos.admin
-============================================================================== 
+==============================================================================
 */
 /*
 ==============================================================================
@@ -47,7 +47,7 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 $interbreadcrumb[] = array ("url" => 'user_list.php', "name" => get_lang('UserList'));
 if( ! isset($_GET['user_id']))
 {
-	api_not_allowed();	
+	api_not_allowed();
 }
 $user = api_get_user_info($_GET['user_id']);
 $tool_name = api_get_person_name($user['firstName'], $user['lastName']).(empty($user['official_code'])?'':' ('.$user['official_code'].')');
@@ -64,10 +64,10 @@ if( isset($_GET['action']) ) {
 			}
 			else
 			{
-				Display::display_error_message(get_lang('CannotUnsubscribeUserFromCourse'));	
+				Display::display_error_message(get_lang('CannotUnsubscribeUserFromCourse'));
 			}
-			break;	
-	}	
+			break;
+	}
 }
 api_display_tool_title($tool_name);
 echo '<div align="right" style="margin-right:4em;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$_GET['user_id'].'" title="'.get_lang('Reporting').'">'.Display::return_icon('statistics.gif',get_lang('Reporting')).'</a></div>'."\n";
@@ -135,12 +135,12 @@ if(count($sessions)>0){
 	$header[] = array (get_lang('Title'), true);
 	$header[] = array (get_lang('Status'), true);
 	$header[] = array ('', false);
-	
+
 	foreach($sessions as $enreg){
-		
+
 		$data = array ();
 		$personal_course_list = array();
-		
+
 		$id_session = $enreg['id'];
 		$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF(session_course.id_coach = ".$user_id.",'2', '5')
 									 FROM $tbl_session_course as session_course
@@ -155,42 +155,42 @@ if(count($sessions)>0){
 										ON session_course.id_session = session.id
 									 WHERE session_course.id_session = $id_session
 									 ORDER BY i";
-	
+
 		$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
-	
+
 		while ($result_row = Database::fetch_array($course_list_sql_result)){
 			$key = $result_row['id_session'].' - '.$result_row['k'];
 			$result_row['s'] = $result_row['14'];
-	
+
 			if(!isset($personal_course_list[$key])){
 				$personal_course_list[$key] = $result_row;
 			}
 		}
-		
+
 		foreach ($personal_course_list as $my_course){
-		
+
 			$row = array ();
-			
+
 			$row[] = $my_course['k'];
 			$row[] = $my_course['i'];
 			$row[] = $my_course['s'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
 			$tools = '<a href="course_information.php?code='.$my_course['k'].'">'.Display::return_icon('synthese_view.gif').'</a>'.
 					'<a href="'.api_get_path(WEB_COURSE_PATH).$my_course['d'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
 					'<a href="course_edit.php?course_code='.$my_course['k'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-			
+
 			if( $my_course->status == STUDENT ){
 				$tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$my_course['k'].'&user_id='.$user['user_id'].'">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-						
+
 			}
 			$row[] = $tools;
 			$data[] = $row;
-					
+
 		}
-		
+
 		echo $enreg['name'];
 		Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => $_GET['user_id']));
 		echo '<br><br><br>';
-		
+
 	}
 }
 else{
@@ -225,7 +225,7 @@ if (Database::num_rows($res) > 0)
 		if( $course->status == STUDENT )
 		{
 			$tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$course->code.'&user_id='.$user['user_id'].'">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-				
+
 		}
 		$row[] = $tools;
 		$data[] = $row;
@@ -277,14 +277,14 @@ else
 global $_configuration;
 if ($_configuration['multiple_access_urls']==true) {
 	require_once(api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
-	$url_list= UrlManager::get_access_url_from_user($user['user_id']);	
+	$url_list= UrlManager::get_access_url_from_user($user['user_id']);
 	if (count($url_list) > 0) {
 		$header = array();
 		$header[] = array (get_lang('URL'), true);
 		$data = array ();
 		foreach ($url_list as $url) {
 			$row = array();
-			$row[] = $url['url'];			
+			$row[] = $url['url'];
 			$data[] = $row;
 		}
 		echo '<p><b>'.get_lang('URLList').'</b></p>';
@@ -298,9 +298,9 @@ if ($_configuration['multiple_access_urls']==true) {
 
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
-*/ 
+*/
 Display::display_footer();
-?> 
+?>
 

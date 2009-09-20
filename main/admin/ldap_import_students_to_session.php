@@ -39,7 +39,7 @@ $tool_name = get_lang('LDAPImport');
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 
-$htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">	
+$htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 var buttoncheck = 1;
 function checkAll() {
 	//var boxes = document.form.elements[\'checkboxes[]\'];
@@ -78,7 +78,7 @@ if (empty($annee) && empty($id_session))
 		echo '<input type="submit" value="'.get_lang('Submit').'">';
 		echo '</form>';
 		echo '</div>';
-	
+
 }
 elseif(!empty($annee) && empty($id_session))
 {
@@ -149,7 +149,7 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed']))
 		asort($nom_form);
 		reset($nom_form);
 
-		$statut=5;	
+		$statut=5;
 		include ('ldap_form_add_users_group.php');
 	} else {
 		echo '<h4>'.get_lang('UnableToConnectTo').' '.$host.'</h4>';
@@ -193,7 +193,7 @@ elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed']=='yes'))
 		if($num>0)
 		{
 			$sql = 'UPDATE '.$tbl_session.' SET nbr_users = (nbr_users + '.$num.') WHERE id = '.intval($id_session);
-			$res = api_sql_query($sql,__FILE__,__LINE__);			 
+			$res = api_sql_query($sql,__FILE__,__LINE__);
 		}
 		header('Location: resume_session.php?id_session='.Security::remove_XSS($_POST['id_session']));
 	}
@@ -221,7 +221,7 @@ elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed']=='yes'))
 		Display::display_header($tool_name);
 		$message=get_lang('NoUserAdded');
 		Display :: display_normal_message($message,false);
-	}	
+	}
 	echo '<br /><br />';
     echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('BackToNewSearch').'</a>';
     echo '<br /><br />';

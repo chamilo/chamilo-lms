@@ -22,7 +22,9 @@
 	Mail: info@dokeos.com
 ============================================================================== 
 */
-require_once('Resource.class.php');
+
+require_once 'Resource.class.php';
+
 /**
  * A survey
  * @author Yannick Warnier <yannick.warnier@dokeos.com>

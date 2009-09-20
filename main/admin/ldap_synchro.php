@@ -72,10 +72,10 @@ foreach($Sessions as $session){
 	$UserList=array();
 	$UserUpdate=array();
 	$UserAdd=array();
-	
+
 	// Parse des code etape de la session
 	/*
-	$sql = "SELECT  id_session, code_etape, etape_description, code_ufr, annee 
+	$sql = "SELECT  id_session, code_etape, etape_description, code_ufr, annee
 		FROM $tbl_session_rel_etape
 		WHERE id_session='$id_session'
 		ORDER BY code_ufr, code_etape";
@@ -149,7 +149,7 @@ foreach($Sessions as $session){
 		{
 			print "> $name_session: ".count($UserAdd).get_lang('Added').' '.get_lang('And').' '.count($UserUpdate).' '.get_lang('Modified')."\n";
 		}
-		
+
 		// Une fois les utilisateurs importer dans la base des utilisateurs, on peux les affecter a� la session
 		$result=api_sql_query("SELECT course_code FROM $tbl_session_rel_course " .
 				"WHERE id_session='$id_session'",__FILE__,__LINE__);

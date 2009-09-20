@@ -262,7 +262,7 @@ class SystemAnnouncementManager
 		if (!checkdate($date_start[1], $date_start[2], $date_start[0])) {
 			Display :: display_normal_message(get_lang('InvalidStartDate'));
 			return false;
-		} 
+		}
 		if (($date_end[1] || $date_end[2] || $date_end[0]) && !checkdate($date_end[1], $date_end[2], $date_end[0])) {
 			Display :: display_normal_message(get_lang('InvalidEndDate'));
 			return false;
@@ -278,9 +278,9 @@ class SystemAnnouncementManager
 		$lang = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
 		$sql = "INSERT INTO ".$db_table." (title,content,date_start,date_end,visible_teacher,visible_student,visible_guest, lang)
 												VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$lang.")";
-		if ($send_mail==1) {	
-			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);	
-		}		
+		if ($send_mail==1) {
+			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);
+		}
 		return api_sql_query($sql,__FILE__,__LINE__);
 	}
 	/**
@@ -324,9 +324,9 @@ class SystemAnnouncementManager
 		$id = intval($id);
 		$sql = "UPDATE ".$db_table." SET lang=$lang,title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
 		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' WHERE id='".$id."'";
-		
+
 		if ($send_mail==1) {
-			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);	
+			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);
 		}
 		return api_sql_query($sql,__FILE__,__LINE__);
 	}
@@ -369,12 +369,12 @@ class SystemAnnouncementManager
 		$sql = "UPDATE ".$db_table." SET ".$field." = '".$visible."' WHERE id='".$announcement_id."'";
 		return api_sql_query($sql,__FILE__,__LINE__);
 	}
-	
+
 	function send_system_announcement_by_email($title,$content,$teacher, $student)
 	{
-		global $_user; 
+		global $_user;
 		global $_setting;
-		global $charset; 
+		global $charset;
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		if ($teacher<>0 AND $student == '0') {
 			$sql = "SELECT * FROM $user_table WHERE email<>'' AND status = '1'";
@@ -388,7 +388,7 @@ class SystemAnnouncementManager
 		if ($teacher == '0' AND $student == '0') {
 			return true;
 		}
-			
+
 		$result = api_sql_query($sql,__FILE__,__LINE__);
 		while($row = Database::fetch_array($result,'ASSOC'))
 		{

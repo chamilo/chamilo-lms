@@ -135,8 +135,8 @@ switch($_GET['action'])
 	case 'pictures':
 		statistics::print_user_pictures_stats();
 		break;
-	case 'activities':	 		
-		statistics::print_activities_stats();		
+	case 'activities':
+		statistics::print_activities_stats();
 		break;
 }
 

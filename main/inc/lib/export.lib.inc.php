@@ -35,34 +35,34 @@
 require_once ('document.lib.php');
 class Export {
 	private function __construct() {
-		
+
 	}
 	/**
 	 * Export tabular data to CSV-file
 	 * @param array $data
 	 * @param string $filename
 	 */
-	public static function export_table_csv ($data, $filename = 'export') {			
+	public static function export_table_csv ($data, $filename = 'export') {
 		$file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.csv';
-		$handle = @fopen($file, 'a+');		
-		
+		$handle = @fopen($file, 'a+');
+
 		if(is_array($data))
 		{
 			foreach ($data as $index => $row)
 			{
 				$line='';
 				if(is_array($row))
-				{	
-					foreach($row as $value)			
-					{				
+				{
+					foreach($row as $value)
+					{
 						$line .= '"'.str_replace('"','""',$value).'";';
 					}
 				}
-				@fwrite($handle, $line."\n");	
+				@fwrite($handle, $line."\n");
 			}
 		}
-		@fclose($handle);				
-		DocumentManager :: file_send_for_download($file, true, $filename.'.csv');	
+		@fclose($handle);
+		DocumentManager :: file_send_for_download($file, true, $filename.'.csv');
 		exit();
 	}
 	/**
@@ -72,11 +72,11 @@ class Export {
 	 */
 	public static function export_table_xls ($data, $filename = 'export') {
 		$file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xls';
-		$handle = @fopen($file, 'a+');		
-		foreach ($data as $index => $row)	
-		{						
-			@fwrite($handle, implode("\t", $row)."\n");							
-		}	
+		$handle = @fopen($file, 'a+');
+		foreach ($data as $index => $row)
+		{
+			@fwrite($handle, implode("\t", $row)."\n");
+		}
 		@fclose($handle);
 		DocumentManager :: file_send_for_download($file, true, $filename.'.xls');
 		exit();
@@ -132,7 +132,7 @@ class Export {
         $file = api_get_path(SYS_ARCHIVE_PATH).'/'.uniqid('').'.xml';
         $handle = fopen($file, 'a+');
         fwrite($handle, '<?xml version="1.0" encoding="'.$encoding.'"?>'."\n");
-        
+
         if (!is_null($wrapper_tagname))
         {
             fwrite($handle, '<'.$wrapper_tagname.'>');

@@ -22,7 +22,9 @@
 	Mail: info@dokeos.com
 ==============================================================================
 */
-require_once('Resource.class.php');
+
+require_once 'Resource.class.php';
+
 /**
  * A WWW-link from the Links-module in a Dokeos-course.
  * @author Bart Mollet <bart.mollet@hogent.be>

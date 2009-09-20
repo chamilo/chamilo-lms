@@ -391,7 +391,7 @@ elseif ($displayMode == "viewMainInfoEdit")
 		$image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);			
 		// get the path,width and height from original picture
 		$big_image = $image_array['dir'].'big_'.$image_array['file'];
-		$big_image_size = @getimagesize(api_url_to_local_path($big_image));
+		$big_image_size = api_getimagesize($big_image);
 		$big_image_width= $big_image_size[0];
 		$big_image_height= $big_image_size[1];
 		$url_big_image = $big_image.'?rnd='.time();
@@ -465,7 +465,7 @@ elseif ($displayMode == "viewContentList") // default display
 		$image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);	
 		// get the path,width and height from original picture
 		$big_image = $image_array['dir'].'big_'.$image_array['file'];
-		$big_image_size = @getimagesize(api_url_to_local_path($big_image));
+		$big_image_size = api_getimagesize($big_image);
 		$big_image_width= $big_image_size[0];
 		$big_image_height= $big_image_size[1];
 		$url_big_image = $big_image.'?rnd='.time();

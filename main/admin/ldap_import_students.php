@@ -39,7 +39,7 @@ $tool_name = get_lang('LDAPImport');
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 
-$htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">	
+$htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 var buttoncheck = 1;
 function checkAll() {
 	//var boxes = document.form.elements[\'checkboxes[]\'];
@@ -77,23 +77,23 @@ if (empty($annee) && empty($course))
 		echo get_lang('LDAPSelectFilterOnUsersOU');
 		//echo '<em>'.get_lang('ToDoThisYouMustEnterYearComponentAndComponentStep').'</em><br />';
 		///echo get_lang('FollowEachOfTheseStepsStepByStep').'<br />';
-		
+
 		echo '<form method="get" action="'.api_get_self().'"><br />';
 		echo '<em>'.get_lang('LDAPOUAttributeFilter').' :</em> ';
 		echo '<input  type="text" name="annee" size="4" maxlength="30" value="'.$annee_base.'"><br />';
 		echo '<input type="submit" value="'.get_lang('Submit').'">';
 		echo '</form>';
 		echo '</div>';
-	
+
 }
 /*
-elseif ($annee <> "" && $composante == "" && $etape == "") // form 2 annee != 0; composante= 0 etape = 0 
+elseif ($annee <> "" && $composante == "" && $etape == "") // form 2 annee != 0; composante= 0 etape = 0
 {
 		Display::display_header($tool_name);
 
 	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
 	ldap_set_version($ds);
-	
+
 	if ($ds) {
 		$r = false;
 		$res = ldap_handle_bind($ds, $r);
@@ -139,7 +139,7 @@ elseif ($annee <> "" && $composante == "" && $etape == "") // form 2 annee != 0;
 	echo '<br />';
 	echo '</div>';
 }
-elseif ($annee <> "" && $composante <> "" && $etape == "") // form3 :annee!=0composante=0etape=0 
+elseif ($annee <> "" && $composante <> "" && $etape == "") // form3 :annee!=0composante=0etape=0
 {
 
 		Display::display_header($tool_name);
@@ -274,7 +274,7 @@ elseif (!empty($annee) && !empty($course) && empty($_POST['confirmed']))
 		asort($nom_form);
 		reset($nom_form);
 
-		$statut=5;	
+		$statut=5;
 		include ('ldap_form_add_users_group.php');
 	} else {
 		echo '<h4>'.get_lang('UnableToConnectTo').' '.$host.'</h4>';
@@ -331,7 +331,7 @@ elseif (!empty($annee) && !empty($course) && ($_POST['confirmed']=='yes'))
 		Display::display_header($tool_name);
 		$message=get_lang('NoUserAdded');
 		Display :: display_normal_message($message,false);
-	}	
+	}
 	echo '<br /><br />';
     echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('BackToNewSearch').'</a>';
     echo '<br /><br />';

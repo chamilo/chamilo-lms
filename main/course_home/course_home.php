@@ -64,6 +64,13 @@ $use_anonymous = true;
 // inlcuding the global file
 include '../../main/inc/global.inc.php';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+if ($_SERVER['HTTP_HOST'] == 'localhost') {
+    //Get information of path
+    $info = explode('courses',api_get_self());
+    $path_work = substr($info[0],0,strlen($info[0])-1);
+} else {
+    $path_work = "";
+} 
 $htmlHeadXtra[] ='<script type="text/javascript">
  $(document).ready(function() {
   $(".make_visible_and_invisible").attr("href","javascript:void(0);");
@@ -80,7 +87,10 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 		//Delete last item
     	list_path_name[list_path_name.length-1]=null;
     	real_path = list_path_name.join("/");
-    
+        my_protocol = location.protocol;
+        my_host = location.host;
+        my_real_path = my_protocol+"//"+my_host;
+
 		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
@@ -88,7 +98,7 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 				$("#id_confirmation_message").hide();
 			},
 			type: "GET",
-			url: "/main/course_home/activity.php",
+			url: my_real_path+"'.$path_work.'/main/course_home/activity.php",
 			data: "id="+my_tool_id+"&sent_http_request=1",
 			success: function(datos) {
 				eval("var info="+datos);

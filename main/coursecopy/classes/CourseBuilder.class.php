@@ -1,23 +1,25 @@
 <?php
 /* For licensing terms, see /dokeos_license.txt */
-require_once ('Course.class.php');
-require_once ('Event.class.php');
-require_once ('Link.class.php');
-require_once ('ToolIntro.class.php');
-require_once ('Document.class.php');
-require_once ('ScormDocument.class.php');
-require_once ('LinkCategory.class.php');
-require_once ('CourseDescription.class.php');
-require_once ('ForumPost.class.php');
-require_once ('ForumTopic.class.php');
-require_once ('Forum.class.php');
-require_once ('ForumCategory.class.php');
-require_once ('Quiz.class.php');
-require_once ('QuizQuestion.class.php');
-require_once ('Learnpath.class.php');
-require_once ('Survey.class.php');
-require_once ('SurveyQuestion.class.php');
-require_once ('Glossary.class.php');
+
+require_once 'Course.class.php';
+require_once 'Event.class.php';
+require_once 'Link.class.php';
+require_once 'ToolIntro.class.php';
+require_once 'Document.class.php';
+require_once 'ScormDocument.class.php';
+require_once 'LinkCategory.class.php';
+require_once 'CourseDescription.class.php';
+require_once 'ForumPost.class.php';
+require_once 'ForumTopic.class.php';
+require_once 'Forum.class.php';
+require_once 'ForumCategory.class.php';
+require_once 'Quiz.class.php';
+require_once 'QuizQuestion.class.php';
+require_once 'Learnpath.class.php';
+require_once 'Survey.class.php';
+require_once 'SurveyQuestion.class.php';
+require_once 'Glossary.class.php';
+
 /**
  * Class which can build a course-object from a Dokeos-course.
  * @author Bart Mollet <bart.mollet@hogent.be>
@@ -59,10 +61,7 @@ class CourseBuilder
 		$this->build_announcements();
 		$this->build_links();
 		$this->build_tool_intro();
-		// Enabled by Ivan Tcholakov, 27-AUG-2009.
-		////$this->build_forums();
 		$this->build_forums();
-		//
 		$this->build_documents();
 		$this->build_course_descriptions();
 		$this->build_quizzes();
@@ -448,7 +447,6 @@ class CourseBuilder
 
 		while ($obj = Database::fetch_object($db_result))
 		{
-
 			$items = array();
 			$sql_items = "SELECT * FROM ".$table_item." WHERE lp_id = ".$obj->id."";
 			$db_items = api_sql_query($sql_items);

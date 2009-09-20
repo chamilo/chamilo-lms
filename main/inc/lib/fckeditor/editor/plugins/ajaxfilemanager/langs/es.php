@@ -127,7 +127,7 @@
 	define('LBL_SEARCH_RECURSIVELY', 'Buscar en todos:');
 	define('LBL_RECURSIVELY_YES', 'S&iacute;');
 	define('LBL_RECURSIVELY_NO', 'No');
-	define('BTN_SEARCH', 'Buscar ahora');
+	define('BTN_SEARCH', 'Buscar');
 	//thickbox
 	define('THICKBOX_NEXT', 'Siguiente&gt;');
 	define('THICKBOX_PREVIOUS', '&lt;Anterior');

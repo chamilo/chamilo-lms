@@ -23,8 +23,9 @@
 	Mail: info@dokeos.com
 ==============================================================================
 */
-require_once ('Course.class.php');
-require_once ('rmdirr.php');
+
+require_once 'Course.class.php';
+
 /**
  * Class to delete items from a Dokeos-course
  * @author Bart Mollet <bart.mollet@hogent.be>
@@ -78,12 +79,8 @@ class CourseRecycler
 		$this->recycle_events();
 		$this->recycle_announcements();
 		$this->recycle_documents();
-		// Enabled by Ivan Tcholakov, 27-AUG-2009.
-		////$this->recycle_forums();
-		////$this->recycle_forum_categories();
 		$this->recycle_forums();
 		$this->recycle_forum_categories();
-		//
 		$this->recycle_quizzes();
 		$this->recycle_surveys();
 		$this->recycle_learnpaths();

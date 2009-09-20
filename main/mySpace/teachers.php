@@ -3,13 +3,15 @@
 /*
  * Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
- 
-ob_start(); 
 
-// names of the language file that needs to be included 
+ob_start();
+
+// names of the language file that needs to be included
 $language_file = array ('registration', 'index', 'trad4all', 'tracking', 'admin');
 $cidReset = true;
-require '../inc/global.inc.php';
+
+require_once '../inc/global.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
 
 $this_section = "session_my_space";
 
@@ -29,48 +31,6 @@ $tbl_session_course 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 
 
-/*
-===============================================================================
-	FUNCTION
-===============================================================================  
-*/
-
-function exportCsv($a_header, $a_data) {
- 	global $archiveDirName;
-
-	$fileName = 'teachers.csv';
-	$archivePath = api_get_path(SYS_ARCHIVE_PATH);
-	$archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
-
-	if (!$open = fopen($archivePath.$fileName, 'w+')) {
-		$message = get_lang('noOpen');
-	} else {
-		$info = '';
-
-		foreach ($a_header as $header) {
-			$info .= $header.';';
-		}
-		$info .= "\r\n";
-
-		foreach ($a_data as $data) {
-			foreach ($data as $infos) {
-				$info .= $infos.';';
-			}
-			$info .= "\r\n";
-		}
-
-		fwrite($open, $info);
-		fclose($open);
-		$perm = api_get_setting('permissions_for_new_files');
-		$perm = octdec(!empty($perm) ? $perm : '0660');
-		chmod($fileName, $perm);
-
-		header("Location:".$archiveURL.$fileName);
-	}
-	return $message;
-}
-
-
 /**
  * MAIN PART
  */
@@ -84,17 +44,17 @@ $sort_by_first_name = api_sort_by_first_name();
 
 $order_clause = $sort_by_first_name ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 if (isset($_GET["teacher_id"]) && $_GET["teacher_id"] != 0) {
-	$i_teacher_id = $_GET["teacher_id"];
-	$sqlFormateurs = "SELECT user_id,lastname,firstname,email
+	$teacher_id = $_GET["teacher_id"];
+	$sql_formateurs = "SELECT user_id,lastname,firstname,email
 		FROM $tbl_user
-		WHERE user_id='$i_teacher_id'".$order_clause;
+		WHERE user_id='$teacher_id'".$order_clause;
 } else {
-	$sqlFormateurs = "SELECT user_id,lastname,firstname,email
+	$sql_formateurs = "SELECT user_id,lastname,firstname,email
 		FROM $tbl_user
 		WHERE status = 1".$order_clause;
 }
 
-$resultFormateurs = Database::query($sqlFormateurs, __FILE__, __LINE__);
+$result_formateurs = Database::query($sql_formateurs, __FILE__, __LINE__);
 
 if ($is_western_name_order) {
 	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
@@ -103,30 +63,30 @@ if ($is_western_name_order) {
 }
 
 if ($is_western_name_order) {
-	$a_header[] = get_lang('FirstName', '');
-	$a_header[] = get_lang('LastName', '');
+	$header[] = get_lang('FirstName', '');
+	$header[] = get_lang('LastName', '');
 } else {
-	$a_header[] = get_lang('LastName', '');
-	$a_header[] = get_lang('FirstName', '');
+	$header[] = get_lang('LastName', '');
+	$header[] = get_lang('FirstName', '');
 }
-$a_header[] = get_lang('Email', '');
+$header[] = get_lang('Email', '');
 
-$a_data = array();
+$data = array();
 
-if (Database::num_rows($resultFormateurs) > 0) {
+if (Database::num_rows($result_formateurs) > 0) {
 
 	$i = 1;
-	while ($a_formateurs = Database::fetch_array($resultFormateurs)) {
+	while ($formateurs = Database::fetch_array($result_formateurs)) {
 
-		$i_user_id = $a_formateurs["user_id"];
-		$s_lastname = $a_formateurs["lastname"];
-		$s_firstname = $a_formateurs["firstname"];
-		$s_email = $a_formateurs["email"];
+		$user_id = $formateurs["user_id"];
+		$lastname = $formateurs["lastname"];
+		$firstname = $formateurs["firstname"];
+		$email = $formateurs["email"];
 
 		if ($i % 2 == 0) {
-			$s_css_class = "row_odd";
-			
-			if ($i % 20 == 0 && $i != 0){
+			$css_class = "row_odd";
+
+			if ($i % 20 == 0 && $i != 0) {
 				if ($is_western_name_order) {
 					echo '<tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
 				} else {
@@ -134,36 +94,34 @@ if (Database::num_rows($resultFormateurs) > 0) {
 				}
 			}
 		} else {
-			$s_css_class = "row_even";
+			$css_class = "row_even";
 		}
 
 		$i++;
 
 		if ($is_western_name_order) {
-			$a_data[$i_user_id]["firstname"] = $s_firstname;
-			$a_data[$i_user_id]["lastname"] = $s_lastname;
+			$data[$user_id]["firstname"] = $firstname;
+			$data[$user_id]["lastname"] = $lastname;
 		} else {
-			$a_data[$i_user_id]["lastname"] = $s_lastname;
-			$a_data[$i_user_id]["firstname"] = $s_firstname;
+			$data[$user_id]["lastname"] = $lastname;
+			$data[$user_id]["firstname"] = $firstname;
 		}
-		$a_data[$i_user_id]["email"] = $s_email;
+		$data[$user_id]["email"] = $email;
 
 		if ($is_western_name_order) {
-			echo '<tr class="'.$s_css_class.'"><td>'.$s_firstname.'</td><td>'.$s_lastname.'</td><td><a href="mailto:'.$s_email.'">'.$s_email.'</a></td><td><a href="course.php?user_id='.$i_user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td><td><a href="student.php?user_id='.$i_user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td></tr>';
+			echo '<tr class="'.$css_class.'"><td>'.$firstname.'</td><td>'.$lastname.'</td><td><a href="mailto:'.$email.'">'.$email.'</a></td><td><a href="course.php?user_id='.$user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td><td><a href="student.php?user_id='.$user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td></tr>';
 		} else {
-			echo '<tr class="'.$s_css_class.'"><td>'.$s_lastname.'</td><td>'.$s_firstname.'</td><td><a href="mailto:'.$s_email.'">'.$s_email.'</a></td><td><a href="course.php?user_id='.$i_user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td><td><a href="student.php?user_id='.$i_user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td></tr>';
+			echo '<tr class="'.$css_class.'"><td>'.$lastname.'</td><td>'.$firstname.'</td><td><a href="mailto:'.$email.'">'.$email.'</a></td><td><a href="course.php?user_id='.$user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td><td><a href="student.php?user_id='.$user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td></tr>';
 		}
 	}
-}
-
-//No results
-else {
+} else {
+	// No results
 	echo '<tr><td colspan="5" "align=center">'.get_lang("NoResults").'</td></tr>';
 }
 echo '</table>';
 
 if (isset($_POST['export'])) {
-	exportCsv($a_header, $a_data);
+	export_csv($header, $data, 'teachers.csv');
 }
 
 echo "<br /><br />";

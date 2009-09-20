@@ -4,9 +4,10 @@
  */
 ob_start();
 $nameTools = 'Cours';
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array ('admin', 'registration', 'index', 'trad4all', 'tracking');
 $cidReset = true;
+
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
@@ -47,23 +48,23 @@ if (api_get_setting('add_users_by_coach') == 'true') {
 		$sql = 'SELECT id_coach FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
 		$rs = Database::query($sql, __FILE__, __LINE__);
 		if (Database::result($rs, 0, 0) != $_user['user_id']) {
-			api_not_allowed(true);  
+			api_not_allowed(true);
 		} else {
-			$show_import_icon=true;	
+			$show_import_icon=true;
 		}
 	}
 }
 
 Display :: display_header($nameTools);
 
-// Database Table Definitions 
+// Database Table Definitions
 $tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $tbl_user_course 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 $tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
- 
+
 if (isset($_GET['action'])) {
 	if ($_GET['action'] == 'show_message') {
 		Display :: display_normal_message(stripslashes($_GET['message']), false);
@@ -72,7 +73,7 @@ if (isset($_GET['action'])) {
 	if ($_GET['action'] == 'error_message') {
 		Display :: display_error_message(stripslashes($_GET['message']), false);
 	}
-}			
+}
 
 if ($show_import_icon) {
 	echo "<div align=\"right\">";
@@ -119,7 +120,7 @@ if (is_array($a_courses)) {
 					WHERE course_code="'.Database :: escape_string($course_code).'"
 					AND id_session='.$id_session;
 			$rs = Database::query($sql, __FILE__, __LINE__);
-			
+
 			while ($row = Database::fetch_array($rs)) {
 				if (!in_array($row['user_id'], $a_students)) {
 					$nb_students_in_course++;
@@ -168,7 +169,7 @@ if (is_array($a_courses)) {
 			$avg_assignments_in_course,
 		);
 
-		$table -> addRow($table_row, 'align="right"');	
+		$table -> addRow($table_row, 'align="right"');
 	}
 
 	// $csv_content = array_merge($csv_header, $csv_content); // Before this statement you are allowed to sort (in different way) the array $csv_content.

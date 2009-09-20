@@ -18,7 +18,7 @@
 
 	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
-	
+
 ==============================================================================
 */
 
@@ -32,16 +32,16 @@ function inbox_display() {
 	echo '<a onclick="compose_and_show_message(\'show\',\'1\')" href="javascript:void(0)">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
 	echo '<a class="refresh" href="javascript:window.location.reload()">'.api_convert_encoding(get_lang('Refresh'),'UTF-8',$charset).'</a>';
 	echo '</div>';
-	echo '</div>';	
+	echo '</div>';
 		$charset = api_get_setting('platform_charset');
-		$table_message = Database::get_main_table(TABLE_MESSAGE); 
+		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$request=api_is_xml_http_request();
 		if ($_SESSION['social_exist']===true) {
-			$redirect="#remote-tab-2";	
+			$redirect="#remote-tab-2";
 			if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
 				$success= get_lang('SelectedMessagesDeleted');
 			} else {
-				$success= get_lang('SelectedMessagesDeleted');				
+				$success= get_lang('SelectedMessagesDeleted');
 			}
 		} else {
 			$success= get_lang('SelectedMessagesDeleted');
@@ -82,7 +82,7 @@ function inbox_display() {
 				echo '<a href="javascript:void(0)" onclick="selectall_cheks()">'.api_xml_http_response_encode(get_lang('SelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
 				echo '<a href="javascript:void(0)" onclick="unselectall_cheks()">'.api_xml_http_response_encode(get_lang('UnSelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
 				echo '<button class="save" name="delete" type="button" value="'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'" onclick="submit_form(\'inbox\')">'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'</button>';
-				
+
 			}
 		} else {
 			$table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
@@ -95,23 +95,23 @@ function get_number_of_messages_mask() {
 }
 function get_message_data_mask($from, $number_of_items, $column, $direction) {
 	$column='3';
-	$direction='desc';	
-	//non set by SortableTable ?	
+	$direction='desc';
+	//non set by SortableTable ?
 	$number_of_items=get_number_of_messages_mask();
 	return MessageManager::get_message_data($from, $number_of_items, $column, $direction);
 }
 function outbox_display() {
-	$table_message = Database::get_main_table(TABLE_MESSAGE); 
+	$table_message = Database::get_main_table(TABLE_MESSAGE);
 	$request=api_is_xml_http_request();
 	global $charset;
 	if ($_SESSION['social_exist']===true) {
-		$redirect="#remote-tab-3";	
+		$redirect="#remote-tab-3";
 		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
 			$success= get_lang('SelectedMessagesDeleted')."&nbsp<br><a href=\""."../social/index.php?$redirect\">".get_lang('BackToOutbox')."</a>";
 		}else {
-			$success=get_lang('SelectedMessagesDeleted')."&nbsp<br><a href=\""."../social/index.php?$redirect\">".get_lang('BackToOutbox')."</a>";				
+			$success=get_lang('SelectedMessagesDeleted')."&nbsp<br><a href=\""."../social/index.php?$redirect\">".get_lang('BackToOutbox')."</a>";
 		}
-			
+
 	} else {
 		$success= get_lang('SelectedMessagesDeleted')."&nbsp</b>"."<br><a href=\""."outbox.php\">".get_lang('BackToOutbox')."</a>";
 	}
@@ -121,15 +121,15 @@ if (isset ($_REQUEST['action'])) {
 		$number_of_selected_messages = count($_POST['id']);
 		if ($number_of_selected_messages!=0) {
 			foreach ($_POST['id'] as $index => $message_id) {
-				MessageManager::delete_message_by_user_receiver(api_get_user_id(), $message_id);	
+				MessageManager::delete_message_by_user_receiver(api_get_user_id(), $message_id);
 			}
-		}		
+		}
 		Display::display_normal_message(api_xml_http_response_encode($success),false);
 		break;
 		case 'deleteone' :
 		MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
 		Display::display_confirmation_message(api_xml_http_response_encode($success),false);
-		echo '<br/>';	
+		echo '<br/>';
 		break;
 	}
 }
@@ -168,7 +168,7 @@ function get_message_data_send_mask($from, $number_of_items, $column, $direction
 	$column='3';
 	$direction='desc';
 	//non set by SortableTable ?
-	$number_of_items=get_number_of_messages_send_mask();	
+	$number_of_items=get_number_of_messages_send_mask();
 	return MessageManager::get_message_data_sent($from, $number_of_items, $column, $direction);
 }
 ?>

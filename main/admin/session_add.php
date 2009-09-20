@@ -2,10 +2,10 @@
 /* For licensing terms, see /dokeos_license.txt */
 
 /**
-============================================================================== 
+==============================================================================
 *	@package dokeos.admin
 * 	@todo use formvalidator for the form
-============================================================================== 
+==============================================================================
 */
 
 // name of the language file that needs to be included
@@ -62,12 +62,12 @@ function search_coachs($needle)
 				$order_clause.
 				' LIMIT 10';
 
-		global $_configuration;	
-		if ($_configuration['multiple_access_urls']==true) {		
-			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+		global $_configuration;
+		if ($_configuration['multiple_access_urls']==true) {
+			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
-			if ($access_url_id != -1){			
-				
+			if ($access_url_id != -1){
+
 				$sql = 'SELECT username, lastname, firstname FROM '.$tbl_user.' user
 				INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
 				WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
@@ -75,11 +75,11 @@ function search_coachs($needle)
 				OR lastname LIKE "'.$needle.'%")
 				AND status=1'.
 				$order_clause.
-				' LIMIT 10';			
-				
+				' LIMIT 10';
+
 			}
-		}		
-				
+		}
+
 		$rs = api_sql_query($sql, __FILE__, __LINE__);
 		while ($user = Database :: fetch_array($rs)) {
 			$return .= '<a href="javascript: void(0);" onclick="javascript: fill_coach_field(\''.$user['username'].'\')">'.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')</a><br />';
@@ -106,14 +106,14 @@ function fill_coach_field (username) {
 if ($_POST['formSent']) {
 	$formSent=1;
 	$name= $_POST['name'];
-	$year_start= $_POST['year_start']; 
-	$month_start=$_POST['month_start']; 
-	$day_start=$_POST['day_start']; 
-	$year_end=$_POST['year_end']; 
-	$month_end=$_POST['month_end']; 
-	$day_end=$_POST['day_end']; 
-	$nb_days_acess_before = $_POST['nb_days_acess_before']; 
-	$nb_days_acess_after = $_POST['nb_days_acess_after']; 
+	$year_start= $_POST['year_start'];
+	$month_start=$_POST['month_start'];
+	$day_start=$_POST['day_start'];
+	$year_end=$_POST['year_end'];
+	$month_end=$_POST['month_end'];
+	$day_end=$_POST['day_end'];
+	$nb_days_acess_before = $_POST['nb_days_acess_before'];
+	$nb_days_acess_after = $_POST['nb_days_acess_after'];
 	$nolimit=$_POST['nolimit'];
 	$coach_username=$_POST['coach_username'];
 	$return = SessionManager::create_session($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$coach_username);
@@ -164,18 +164,18 @@ $count_users = Database::result($rs, 0, 0);
 
 if (intval($count_users)<50) {
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
-	$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;	
-	global $_configuration;	
-	if ($_configuration['multiple_access_urls']==true) {		
-		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+	$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
+	global $_configuration;
+	if ($_configuration['multiple_access_urls']==true) {
+		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$access_url_id = api_get_current_access_url_id();
-		if ($access_url_id != -1){					
+		if ($access_url_id != -1){
 			$sql = 'SELECT username, lastname, firstname FROM '.$tbl_user.' user
 			INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-			WHERE access_url_id = '.$access_url_id.'  AND status=1'.$order_clause;			
+			WHERE access_url_id = '.$access_url_id.'  AND status=1'.$order_clause;
 		}
-	}	
-	
+	}
+
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$Coaches=api_store_result($result);
 	?>

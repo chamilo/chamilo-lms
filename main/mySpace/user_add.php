@@ -23,6 +23,7 @@
 // name of the language file that needs to be included
 $language_file = array('admin', 'registration');
 $cidReset = true;
+
 // including necessary libraries
 require '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
@@ -62,7 +63,7 @@ function display_drh_list(){
 		document.getElementById("drh_list").style.display="block";
 	}
 	else
-	{ 
+	{
 		document.getElementById("drh_list").style.display="none";
 		document.getElementById("drh_select").options[0].selected="selected";
 	}
@@ -77,8 +78,8 @@ if (!empty($_GET['message'])) {
 
 $id_session='';
 if (isset($_GET["id_session"]) && $_GET["id_session"] != "") {
- 	$id_session = Security::remove_XSS($_GET["id_session"]); 	
-	//$interbreadcrumb[] = array ("url" => "session.php", "name" => get_lang('Sessions')); 
+ 	$id_session = Security::remove_XSS($_GET["id_session"]);
+	//$interbreadcrumb[] = array ("url" => "session.php", "name" => get_lang('Sessions'));
 	//$interbreadcrumb[] = array ("url" => "course.php?id_session=".$_GET["id_session"]."", "name" => get_lang('Cours'));
 }
 
@@ -125,16 +126,16 @@ $form->addElement('file', 'picture', get_lang('AddPicture'));
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
 $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 // Username
-$form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => 20));
+$form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
 $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
 $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
-$form->addRule('username', '', 'maxlength', 20);
 $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
 // Password
 $group = array();
 $auth_sources = 0; //make available wider as we need it in case of form reset (see below)
 if (count($extAuthSource) > 0) {
-	$group[] =& HTML_QuickForm::createElement('radio','password_auto', null, get_lang('ExternalAuthentication').' ', 2);
+	$group[] =& HTML_QuickForm::createElement('radio', 'password_auto', null, get_lang('ExternalAuthentication').' ', 2);
 	$auth_sources = array();
 	foreach ($extAuthSource as $key => $info) {
 		$auth_sources[$key] = $key;
@@ -158,7 +159,7 @@ $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;');
 $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
 $group = array ();
 $group[] = & $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
-$group[] = & $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onChange'=>'javascript: enable_expiration_date();'));
+$group[] = & $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();'));
 $form->addGroup($group, 'max_member_group', null, '', false);
 // Active account or inactive account
 $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
@@ -170,14 +171,14 @@ if (api_is_session_admin()) {
 	$where = 'WHERE session_admin_id='.intval(api_get_user_id());
 	$where .= ' AND ( (session.date_start <= CURDATE() AND session.date_end >= CURDATE()) OR session.date_start="0000-00-00" ) ';
 	$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-	$result = Database::query("SELECT id,name,nbr_courses,date_start,date_end 
-		FROM $tbl_session 					
+	$result = Database::query("SELECT id,name,nbr_courses,date_start,date_end
+		FROM $tbl_session
 		$where
 		ORDER BY name",__FILE__,__LINE__);
-	$a_sessions = api_store_result($result);		
-	$session_list = array();	
+	$a_sessions = api_store_result($result);
+	$session_list = array();
 	$session_list[0] = get_lang('SelectSession');
-	if (is_array($a_sessions)) {	
+	if (is_array($a_sessions)) {
 		foreach ($a_sessions as $session) {
 			$session_list[$session['id']]=$session['name'];
 		}
@@ -188,7 +189,7 @@ if (api_is_session_admin()) {
 	api_natsort($session_list);
 
 	$form->addElement('select', 'session_id', get_lang('Session'), $session_list);
-}		
+}
 
 
 // EXTRA FIELDS
@@ -219,7 +220,7 @@ foreach ($extra as $id => $field_details) {
 			foreach ($field_details[9] as $option_id => $option_details) {
 				$options[$option_details[1]] = $option_details[2];
 			}
-			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, '');			
+			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, '');
 			break;
 		case USER_FIELD_TYPE_SELECT_MULTIPLE:
 			$options = array();
@@ -315,7 +316,7 @@ if ($form->validate()) {
 		//create user
 		$user_id = UserManager::create_user($firstname, $lastname, $status, $email, $username, $password, $official_code, api_get_setting('platformLanguage'), $phone, $picture_uri, $auth_source, $expiration_date, $active, $hr_dept_id);
 
-		//adding to the session		
+		//adding to the session
 		if (api_is_session_admin()) {
 			$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 			$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -326,19 +327,19 @@ if ($form->validate()) {
 			if ($id_session != 0) {
 				$result = Database::query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'",__FILE__,__LINE__);
 
-				$CourseList=array();	
+				$CourseList=array();
 				while ($row = Database::fetch_array($result)) {
 					$CourseList[] = $row['course_code'];
 				}
 
 				foreach ($CourseList as $enreg_course) {
 					Database::query("INSERT INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$user_id')",__FILE__,__LINE__);
-					// updating the total				
+					// updating the total
 					$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
 					$rs = Database::query($sql, __FILE__, __LINE__);
 					list($nbr_users) = Database::fetch_array($rs);
-					Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);				
-				}		
+					Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
+				}
 
 				Database::query("INSERT INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$user_id')", __FILE__, __LINE__);
 
@@ -348,9 +349,9 @@ if ($form->validate()) {
 
 				Database::query("UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ", __FILE__, __LINE__);
 			}
-		}		
-			
-		
+		}
+
+
 		$extras = array();
 		foreach ($user as $key => $value) {
 			if (substr($key, 0, 6) == 'extra_') {
@@ -371,12 +372,12 @@ if ($form->validate()) {
 
 			$portal_url = $_configuration['root_web'];
 			if ($_configuration['multiple_access_urls']==true) {
-				$access_url_id = api_get_current_access_url_id();				
+				$access_url_id = api_get_current_access_url_id();
 				if ($access_url_id != -1) {
 					$url = api_get_access_url($access_url_id);
 					$portal_url = $url['url'];
 				}
-			}			
+			}
 			$emailbody=get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('Settings')." ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ".$portal_url."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
 			@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
 		}

@@ -83,7 +83,7 @@ function generate_course_code($course_title, $encoding = null)
 function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = "", $prefix4path = "", $addUniquePrefix = false, $useCodeInDepedentKeys = true)
 {
 	global $prefixAntiNumber, $_configuration;
-	$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);	
+	$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$wantedCode = generate_course_code($wantedCode);
 	$keysCourseCode = $wantedCode;
 	if(!$useCodeInDepedentKeys)
@@ -290,7 +290,7 @@ function update_Db_course($courseDbName)
 	// Student Publication
 	$TABLETOOLWORKS 			= $courseDbName . 'student_publication';
 	$TABLETOOLWORKSASS 			= $courseDbName . 'student_publication_assignment';
-	
+
 	// Document
 	$TABLETOOLDOCUMENT 			= $courseDbName . 'document';
 
@@ -376,11 +376,11 @@ function update_Db_course($courseDbName)
 
 	// Course settings
 	$TABLESETTING = $courseDbName . 'course_setting';
-	
+
 	// Glossary
 	$TBL_GLOSSARY   = $courseDbName . 'glossary';
 
-	// Notebook 
+	// Notebook
 	$TBL_NOTEBOOK   = $courseDbName . 'notebook';
 	/*
 	-----------------------------------------------------------
@@ -401,7 +401,7 @@ function update_Db_course($courseDbName)
 	api_sql_query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLANNOUNCEMENTS . "` ADD INDEX ( session_id ) ";
 	api_sql_query($sql, __FILE__, __LINE__);
-	
+
 
 	/*
 	-----------------------------------------------------------
@@ -520,7 +520,7 @@ function update_Db_course($courseDbName)
 	api_sql_query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLFORUMTHREAD . "` ADD INDEX idx_forum_thread_forum_id (forum_id)";
 	api_sql_query($sql, __FILE__, __LINE__);
-	
+
 	// Forum Posts
 	$sql = "
 		CREATE TABLE `".$TABLETOOLFORUMPOST . "` (
@@ -555,8 +555,8 @@ function update_Db_course($courseDbName)
 		) TYPE=MyISAM";
 
 	api_sql_query($sql, __FILE__, __LINE__);
-	
-	
+
+
 	// Forum Attachment
 	$sql = "CREATE TABLE  `".$TABLETOOLFORUMATTACHMENT."` (
 			  id int NOT NULL auto_increment,
@@ -568,7 +568,7 @@ function update_Db_course($courseDbName)
 			  PRIMARY KEY (id)
 			)";
 	api_sql_query($sql, __FILE__, __LINE__);
-	
+
 	// Forum notification
 	$sql = "CREATE TABLE  `".$TABLETOOLFORUMNOTIFICATION."` (
 			  user_id int,
@@ -578,8 +578,8 @@ function update_Db_course($courseDbName)
 			    KEY user_id (user_id),
   				KEY forum_id (forum_id)
 			)";
-	api_sql_query($sql, __FILE__, __LINE__);	
-	
+	api_sql_query($sql, __FILE__, __LINE__);
+
 	// Forum thread qualify :Add table forum_thread_qualify
 	$sql = "CREATE TABLE  `".$TABLETOOLFORUMQUALIFY."` (
 			id int unsigned PRIMARY KEY AUTO_INCREMENT,
@@ -593,7 +593,7 @@ function update_Db_course($courseDbName)
 	api_sql_query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLFORUMQUALIFY . "` ADD INDEX (user_id, thread_id)";
 	api_sql_query($sql, __FILE__, __LINE__);
-	
+
 	//Forum thread qualify: Add table forum_thread_qualify_historical
 	$sql = "CREATE TABLE  `".$TABLETOOLFORUMQUALIFYLOG."` (
 			id int unsigned PRIMARY KEY AUTO_INCREMENT,
@@ -648,7 +648,7 @@ function update_Db_course($courseDbName)
 	api_sql_query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLEQUIZQUESTIONLIST . "` ADD INDEX (position)";
 	api_sql_query($sql, __FILE__, __LINE__);
-	 
+
 	// Exercise tool - answers
 	$sql = "
 		CREATE TABLE `".$TABLEQUIZANSWERSLIST . "` (
@@ -734,22 +734,22 @@ function update_Db_course($courseDbName)
 	$sql = "
 		CREATE TABLE `".$TABLETOOLAGENDAREPEAT. "` (
 		cal_id INT DEFAULT 0 NOT NULL,
-		cal_type VARCHAR(20),  
-		cal_end INT,  
-		cal_frequency INT DEFAULT 1,  
-		cal_days CHAR(7),  
+		cal_type VARCHAR(20),
+		cal_end INT,
+		cal_frequency INT DEFAULT 1,
+		cal_days CHAR(7),
 		PRIMARY KEY (cal_id)
 		)";
 	api_sql_query($sql,__FILE__,__LINE__);
 	$sql = "
 		CREATE TABLE `".$TABLETOOLAGENDAREPEATNOT."` (
-		cal_id INT NOT NULL,  
-		cal_date INT NOT NULL,  
+		cal_id INT NOT NULL,
+		cal_date INT NOT NULL,
 		PRIMARY KEY ( cal_id, cal_date )
 		)";
 	api_sql_query($sql,__FILE__,__LINE__);
-		
-		
+
+
 	// Agenda Attachment
 	$sql = "CREATE TABLE  `".$TABLETOOLAGENDAATTACHMENT."` (
 			  id int NOT NULL auto_increment,
@@ -760,7 +760,7 @@ function update_Db_course($courseDbName)
 			  filename varchar(255) NOT NULL,
 			  PRIMARY KEY (id)
 			)";
-	api_sql_query($sql, __FILE__, __LINE__);		
+	api_sql_query($sql, __FILE__, __LINE__);
 	/*
 	-----------------------------------------------------------
 		Document tool
@@ -807,8 +807,8 @@ function update_Db_course($courseDbName)
 		PRIMARY KEY (id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
-	
-	$sql = "	
+
+	$sql = "
         CREATE TABLE `".$TABLETOOLWORKSASS."` (
         id int NOT NULL auto_increment,
         expires_on datetime NOT NULL default '0000-00-00 00:00:00',
@@ -852,10 +852,10 @@ function update_Db_course($courseDbName)
 
 /*
 	-----------------------------------------------------------
-		Wiki 
+		Wiki
 	-----------------------------------------------------------
 	*/
-	
+
 	$sql = "CREATE TABLE `".$TABLETOOLWIKI . "` (
 		id int NOT NULL auto_increment,
 		page_id int NOT NULL default 0,
@@ -864,14 +864,14 @@ function update_Db_course($courseDbName)
 		content mediumtext NOT NULL,
 		user_id int NOT NULL default 0,
 		group_id int DEFAULT NULL,
-		dtime datetime NOT NULL default '0000-00-00 00:00:00',				
+		dtime datetime NOT NULL default '0000-00-00 00:00:00',
 		addlock int NOT NULL default 1,
 		editlock int NOT NULL default 0,
-		visibility int NOT NULL default 1,		
+		visibility int NOT NULL default 1,
 		addlock_disc int NOT NULL default 1,
 		visibility_disc int NOT NULL default 1,
-		ratinglock_disc int NOT NULL default 1,	
-		assignment int NOT NULL default 0,		
+		ratinglock_disc int NOT NULL default 1,
+		assignment int NOT NULL default 0,
 		comment text NOT NULL,
 		progress text NOT NULL,
 		score int NULL default 0,
@@ -879,19 +879,19 @@ function update_Db_course($courseDbName)
 		is_editing int NOT NULL default 0,
 		time_edit datetime NOT NULL default '0000-00-00 00:00:00',
 		hits int default 0,
-		linksto text NOT NULL,	
-		tag text NOT NULL,		
-		user_ip varchar(39) NOT NULL,		
+		linksto text NOT NULL,
+		tag text NOT NULL,
+		user_ip varchar(39) NOT NULL,
 		PRIMARY KEY (id),
 		KEY reflink (reflink),
 		KEY group_id (group_id),
 		KEY page_id (page_id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
-		
+
 	//
 	$sql = "CREATE TABLE `".$TABLEWIKICONF . "` (
-		page_id int NOT NULL default 0,		
+		page_id int NOT NULL default 0,
 		task text NOT NULL,
 		feedback1 text NOT NULL,
 		feedback2 text NOT NULL,
@@ -906,24 +906,24 @@ function update_Db_course($courseDbName)
 		enddate_assig datetime  NOT NULL default '0000-00-00 00:00:00',
 		delayedsubmit int NOT NULL default 0,
 		KEY page_id (page_id)
-		)";	
+		)";
 	api_sql_query($sql, __FILE__, __LINE__);
-	
+
 	//
-	
+
 	$sql = "CREATE TABLE `".$TABLEWIKIDISCUSS . "` (
 		id int NOT NULL auto_increment,
 		publication_id int NOT NULL default 0,
 		userc_id int NOT NULL default 0,
 		comment text NOT NULL,
 		p_score varchar(255) default NULL,
-		dtime datetime NOT NULL default '0000-00-00 00:00:00',		
+		dtime datetime NOT NULL default '0000-00-00 00:00:00',
 		PRIMARY KEY (id)
 		)";
 	api_sql_query($sql, __FILE__, __LINE__);
-				
+
 	//
-	
+
 	$sql = "CREATE TABLE `".$TABLEWIKIMAILCUE . "` (
 		id int NOT NULL,
 		user_id int NOT NULL,
@@ -931,10 +931,10 @@ function update_Db_course($courseDbName)
 		group_id int DEFAULT NULL,
 		KEY (id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);	
-	
-	
-	
+	api_sql_query($sql, __FILE__, __LINE__);
+
+
+
 	/*
 	-----------------------------------------------------------
 		Online
@@ -1072,9 +1072,9 @@ function update_Db_course($courseDbName)
 		PRIMARY KEY (id),
 		UNIQUE KEY UN_filename (filename)
 		)", __FILE__, __LINE__);
-		
+
 	api_sql_query("ALTER TABLE `$TABLETOOLDROPBOXFILE` ADD INDEX ( `session_id` )", __FILE__, __LINE__);
-	
+
 	api_sql_query("
 		CREATE TABLE `".$TABLETOOLDROPBOXPOST . "` (
 		file_id int unsigned NOT NULL,
@@ -1085,7 +1085,7 @@ function update_Db_course($courseDbName)
 		session_id SMALLINT UNSIGNED NOT NULL,
 		PRIMARY KEY (file_id,dest_user_id)
 		)", __FILE__, __LINE__);
-		
+
 	api_sql_query("ALTER TABLE `$TABLETOOLDROPBOXPOST` ADD INDEX ( `session_id` )", __FILE__, __LINE__);
 
 	api_sql_query("
@@ -1139,10 +1139,10 @@ function update_Db_course($courseDbName)
 		"prevent_reinit tinyint		unsigned not null default 1," . //stores the default behaviour regarding items re-initialisation when viewed a second time after success
 		"js_lib         tinytext    not null default ''," . //the JavaScript library to load for this lp
 		"debug 			tinyint		unsigned not null default 0," . //stores the default behaviour regarding items re-initialisation when viewed a second time after success
-		"theme 		varchar(255)    not null default '', " . //stores the theme of the LP 
+		"theme 		varchar(255)    not null default '', " . //stores the theme of the LP
 		"preview_image	varchar(255)    not null default '', " . //stores the theme of the LP
 		"author 		varchar(255)    not null default '', " . //stores the theme of the LP
-		"session_id  	int	unsigned not null  default 0 " . //the session_id		
+		"session_id  	int	unsigned not null  default 0 " . //the session_id
 		")";
 	if(!api_sql_query($sql, __FILE__, __LINE__))
 	{
@@ -1170,7 +1170,7 @@ function update_Db_course($courseDbName)
 	{
 		error_log($sql,0);
 	}
-	
+
 	$sql = "CREATE TABLE IF NOT EXISTS `$TABLELPITEM` (" .
 		"id				int	unsigned	primary	key auto_increment," .	//unique ID from MySQL
 		"lp_id			int unsigned	not null," .	//lp_id from 'lp'
@@ -1254,7 +1254,7 @@ function update_Db_course($courseDbName)
 	{
 		error_log($sql,0);
 	}
-	
+
 	$sql = "CREATE TABLE IF NOT EXISTS `$TABLELPIVOBJECTIVE`(" .
 		"id				bigint	unsigned 		primary key auto_increment," .
 		"lp_iv_id		bigint	unsigned not null," . //identifier of the related sco_view
@@ -1387,7 +1387,7 @@ function update_Db_course($courseDbName)
 	{
 		error_log($sql, 0);
 	}
-	
+
 	$sql ="CREATE TABLE  `" .$tbl_blogs_attachment."` (
 		  id int unsigned NOT NULL auto_increment,
 		  path varchar(255) NOT NULL COMMENT 'the real filename',
@@ -1399,14 +1399,14 @@ function update_Db_course($courseDbName)
 		  comment_id int NOT NULL default '0',
   		PRIMARY KEY  (id)
 		)";
-	
+
 	if(!api_sql_query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql, 0);
 	}
-	
-	
-	
+
+
+
 
 	$sql = "
 		CREATE TABLE `" . $tbl_permission_group . "` (
@@ -1547,14 +1547,14 @@ function update_Db_course($courseDbName)
 			  mail_subject VARCHAR( 255 ) NOT NULL,
 			  anonymous enum('0','1') NOT NULL default '0',
 			  access_condition TEXT DEFAULT NULL,
-			  shuffle bool NOT NULL default '0', 
-			  one_question_per_page bool NOT NULL default '0', 
-			  survey_version varchar(255) NOT NULL default '', 
-			  parent_id int unsigned NOT NULL, 
+			  shuffle bool NOT NULL default '0',
+			  one_question_per_page bool NOT NULL default '0',
+			  survey_version varchar(255) NOT NULL default '',
+			  parent_id int unsigned NOT NULL,
 			  survey_type int NOT NULL default 0,
 			  show_form_profile int NOT NULL default 0,
-			  form_fields TEXT NOT NULL,	
-			  session_id SMALLINT unsigned NOT NULL default 0,		  		
+			  form_fields TEXT NOT NULL,
+			  session_id SMALLINT unsigned NOT NULL default 0,
 			  PRIMARY KEY  (survey_id)
 			)";
 
@@ -1598,7 +1598,7 @@ function update_Db_course($courseDbName)
 	  survey_id int unsigned NOT NULL,
 	  option_text text NOT NULL,
 	  sort int NOT NULL,
-	  value int NOT NULL default '0', 
+	  value int NOT NULL default '0',
 	  PRIMARY KEY  (question_option_id)
 	)";
 	$result = api_sql_query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
@@ -1617,30 +1617,30 @@ function update_Db_course($courseDbName)
 	$sql = "CREATE TABLE `".$TABLESURVEYGROUP."` (
 			  id int unsigned NOT NULL auto_increment,
 			  name varchar(20) NOT NULL,
-			  description varchar(255) NOT NULL, 
+			  description varchar(255) NOT NULL,
 			  survey_id int unsigned NOT NULL,
 			  PRIMARY KEY  (id)
 			)";
-			
+
 	$result = api_sql_query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
 
 	// table glosary
 	$sql = "CREATE TABLE `".$TBL_GLOSSARY."` (
-			  glossary_id int unsigned NOT NULL auto_increment,			  
+			  glossary_id int unsigned NOT NULL auto_increment,
 			  name varchar(255) NOT NULL,
 			  description text not null,
-			  display_order int,		
+			  display_order int,
 			  PRIMARY KEY  (glossary_id)
 			)";
 	$result = api_sql_query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
-	
+
 	// table notebook
 	$sql = "CREATE TABLE `".$TBL_NOTEBOOK."` (
 			  notebook_id int unsigned NOT NULL auto_increment,
 			  user_id int unsigned NOT NULL,
-			  course varchar(40) not null,		
+			  course varchar(40) not null,
 			  session_id int NOT NULL default 0,
-			  title varchar(255) NOT NULL,				 					  
+			  title varchar(255) NOT NULL,
 			  description text NOT NULL,
 			  creation_date datetime NOT NULL default '0000-00-00 00:00:00',
 			  update_date datetime NOT NULL default '0000-00-00 00:00:00',
@@ -1648,7 +1648,7 @@ function update_Db_course($courseDbName)
 			  PRIMARY KEY  (notebook_id)
 			)";
 	$result = api_sql_query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
-	
+
 	return 0;
 }
 
@@ -1673,7 +1673,7 @@ function browse_folders($path, $files, $media)
 	if(is_dir($path))
 	{
 		$handle = opendir($path);
-		while (false !== ($file = readdir($handle))) 
+		while (false !== ($file = readdir($handle)))
 		{
 			if(is_dir($path.$file) && strpos($file,'.')!==0)
 			{
@@ -1756,7 +1756,7 @@ function fill_course_repository($courseRepository)
 		}
 
 		$handle = opendir($img_code_path);
-	
+
 		foreach($pictures_array as $key => $value)
 		{
 			if($value["dir"]!="")
@@ -1769,20 +1769,20 @@ function fill_course_repository($courseRepository)
 				chmod($course_documents_folder_images.$value["file"],$perm_file);
 			}
 		}
-		
+
 		//trainer thumbnails fix
-		
-		$path_thumb=mkdir($course_documents_folder_images.'trainer/.thumbs',$perm);				
-		$handle = opendir($img_code_path.'trainer/.thumbs/');		
-		
-		while (false !== ($file = readdir($handle))) 
+
+		$path_thumb=mkdir($course_documents_folder_images.'trainer/.thumbs',$perm);
+		$handle = opendir($img_code_path.'trainer/.thumbs/');
+
+		while (false !== ($file = readdir($handle)))
 		{
 			if (is_file($img_code_path.'trainer/.thumbs/'.$file))
 			{
 		        copy($img_code_path.'trainer/.thumbs/'.$file,$course_documents_folder_images.'trainer/.thumbs/'.$file);
 				chmod($course_documents_folder_images.'trainer/.thumbs/'.$file,$perm_file);
-			}		
-		}		
+			}
+		}
 
 		$default_document_array['images']=$pictures_array;
 
@@ -1977,7 +1977,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_GROUP . "','group/group.php','group.gif','".string2binary(api_get_setting('course_create_active_tools', 'groups')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_CHAT . "','chat/chat.php','chat.gif','".string2binary(api_get_setting('course_create_active_tools', 'chat')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_STUDENTPUBLICATION . "','work/work.php','works.gif','".string2binary(api_get_setting('course_create_active_tools', 'student_publications')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_SURVEY."','survey/survey_list.php','survey.gif','".string2binary(api_get_setting('course_create_active_tools', 'survey')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);	
+	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_SURVEY."','survey/survey_list.php','survey.gif','".string2binary(api_get_setting('course_create_active_tools', 'survey')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_WIKI ."','wiki/index.php','wiki.gif','".string2binary(api_get_setting('course_create_active_tools', 'wiki')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
     api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_GRADEBOOK."','gradebook/index.php','gradebook.gif','".string2binary(api_get_setting('course_create_active_tools', 'gradebook')). "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
 	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_GLOSSARY."','glossary/index.php','glossary.gif','".string2binary(api_get_setting('course_create_active_tools', 'glossary')). "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
@@ -2030,15 +2030,15 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		Course homepage tools for platform admin only
 	-----------------------------------------------------------
 	*/
-	
-	
+
+
 	/*
 	-----------------------------------------------------------
 		Group tool
 	-----------------------------------------------------------
 	*/
 	api_sql_query("INSERT INTO `".$TABLEGROUPCATEGORIES . "` ( id , title , description , max_student , self_reg_allowed , self_unreg_allowed , groups_per_user , display_order ) VALUES ('2', '".lang2db(get_lang('DefaultGroupCategory')) . "', '', '8', '0', '0', '0', '0');", __FILE__, __LINE__);
-	
+
 
 	/*
 	-----------------------------------------------------------
@@ -2046,10 +2046,10 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	-----------------------------------------------------------
 	*/
 	global $language_interface;
-	// Example material in the same language  
+	// Example material in the same language
 	$language_interface_tmp=$language_interface;
-	$language_interface=$language;	
-		
+	$language_interface=$language;
+
 	if(api_get_setting('example_material_course_creation')<>'false')
 	{
 
@@ -2122,7 +2122,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 					$image_id = Database :: get_last_insert_id();
 					api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
 				}
-				
+
 				if($value["file"]!="")
 				{
 					$temp=explode("/",$value["file"]);
@@ -2183,15 +2183,15 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 			Introduction text
 		-----------------------------------------------------------
 		*/
-	
+
 		$intro_text='<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="middle" align="left"><img src="'.api_get_path(REL_CODE_PATH).'img/mr_dokeos.png" alt="mr. Dokeos" title="mr. Dokeos" /></td><td valign="middle" align="left">'.lang2db(get_lang('IntroductionText')).'</td></tr></table>';
 		api_sql_query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_COURSE_HOMEPAGE . "','".$intro_text. "')", __FILE__, __LINE__);
 		api_sql_query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_STUDENTPUBLICATION . "','".lang2db(get_lang('IntroductionTwo')) . "')", __FILE__, __LINE__);
-		
+
 		//wiki intro
 		$intro_wiki='<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"></td><td valign="top" align="left">'.lang2db(get_lang('IntroductionWiki')).'</td></tr></table>';
-		api_sql_query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_WIKI . "','".$intro_wiki. "')",__FILE__,__LINE__); 
-		
+		api_sql_query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_WIKI . "','".$intro_wiki. "')",__FILE__,__LINE__);
+
 		/*
 		-----------------------------------------------------------
 			Exercise tool
@@ -2227,8 +2227,8 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		api_sql_query("INSERT INTO `$TABLEFORUMPOSTS` VALUES (1, '".lang2db(get_lang('ExampleThread'))."', '".lang2db(get_lang('ExampleThreadContent'))."', 1, 1, 1, '', NOW(), 0, 0, 1)", __FILE__, __LINE__);
 
 	}
-		
-	$language_interface=$language_interface_tmp;	
+
+	$language_interface=$language_interface_tmp;
 
 	return 0;
 };
@@ -2333,14 +2333,14 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 					last_visit = NULL,
 					tutor_name = '".Database :: escape_string($titular) . "',
 					visual_code = '".Database :: escape_string($courseScreenCode) . "'";
-		
+
 		api_sql_query($sql, __FILE__, __LINE__);
 
 		$sort = api_max_sort_value('0', api_get_user_id());
-		
+
 		require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 		$i_course_sort = CourseManager :: userCourseSort($uidCreator,$courseSysCode);
-		
+
 		$sql = "INSERT INTO ".$TABLECOURSUSER . " SET
 					course_code = '".addslashes($courseSysCode) . "',
 					user_id = '".Database::escape_string($uidCreator) . "',
@@ -2367,22 +2367,22 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 		//adding the course to an URL
 		global $_configuration;
 		require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
-		if ($_configuration['multiple_access_urls']==true) {			
-			$url_id=1;				
+		if ($_configuration['multiple_access_urls']==true) {
+			$url_id=1;
 			if (api_get_current_access_url_id()!=-1) {
 				$url_id=api_get_current_access_url_id();
-			}											
-			UrlManager::add_course_to_url($courseSysCode,$url_id);			
+			}
+			UrlManager::add_course_to_url($courseSysCode,$url_id);
 		} else {
 			UrlManager::add_course_to_url($courseSysCode,1);
 		}
-		
-		// add event to system log		
+
+		// add event to system log
 		$time = time();
-		$user_id = api_get_user_id();				
+		$user_id = api_get_user_id();
 		event_system(LOG_COURSE_CREATE, LOG_COURSE_CODE, $courseSysCode, $time, $user_id, $courseSysCode);
-		
-		
+
+
 	}
 	return 0;
 }
@@ -2413,8 +2413,8 @@ function readPropertiesInArchive($archive, $isCompressed = TRUE) {
 	Before PHP 4.0.6, the behaviour of tempnam() depended of the underlying OS.
 	Under Windows, the "TMP" environment variable replaces the dir parameter;
 	under Linux, the "TMPDIR" environment variable has priority, while for the
-	OSes based on system V R4, the dir parameter will always be used if the 
-	directory which it represents exists. Consult your documentation for more 
+	OSes based on system V R4, the dir parameter will always be used if the
+	directory which it represents exists. Consult your documentation for more
 	details.
 	tempnam() returns the temporary filename, or the string NULL upon failure.
 	*/

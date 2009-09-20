@@ -22,23 +22,22 @@
 	Mail: info@dokeos.com
 ==============================================================================
 */
-require_once ('Course.class.php');
-require_once ('Event.class.php');
-require_once ('Link.class.php');
-require_once ('ToolIntro.class.php');
-require_once ('LinkCategory.class.php');
-require_once ('ForumCategory.class.php');
-require_once ('Forum.class.php');
-require_once ('ForumTopic.class.php');
-require_once ('ForumPost.class.php');
-require_once ('CourseDescription.class.php');
-require_once ('Learnpath.class.php');
-require_once ('Survey.class.php');
-require_once ('SurveyQuestion.class.php');
-require_once ('mkdirr.php');
-require_once ('rmdirr.php');
-require_once ('Glossary.class.php');
-include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
+
+require_once 'Course.class.php';
+require_once 'Event.class.php';
+require_once 'Link.class.php';
+require_once 'ToolIntro.class.php';
+require_once 'LinkCategory.class.php';
+require_once 'ForumCategory.class.php';
+require_once 'Forum.class.php';
+require_once 'ForumTopic.class.php';
+require_once 'ForumPost.class.php';
+require_once 'CourseDescription.class.php';
+require_once 'Learnpath.class.php';
+require_once 'Survey.class.php';
+require_once 'SurveyQuestion.class.php';
+require_once 'Glossary.class.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 define('FILE_SKIP', 1);
 define('FILE_RENAME', 2);
@@ -102,10 +101,7 @@ class CourseRestorer
 		$this->restore_documents();
 		$this->restore_scorm_documents();
 		$this->restore_course_descriptions();
-		// Enabled by Ivan Tcholakov, 30-AUG-2009.
-		////$this->restore_forums();
 		$this->restore_forums();
-		//
 		$this->restore_quizzes(); // after restore_documents! (for correct import of sound/video)
 		$this->restore_learnpaths();
 		$this->restore_surveys();
@@ -328,7 +324,7 @@ class CourseRestorer
 
 				$perm = api_get_setting('permissions_for_new_directories');
 			        $perm = octdec(!empty($perm)?$perm:'0770');
-				mkdirr(dirname($path.$document->path),$perm);
+				@mkdir(dirname($path.$document->path), $perm, true);
 
 				if (file_exists($path.$document->path))
 				{

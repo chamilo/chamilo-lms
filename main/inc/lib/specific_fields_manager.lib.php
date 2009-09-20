@@ -45,7 +45,7 @@ function delete_specific_field($id) {
   $sql = 'DELETE FROM %s WHERE id=%s LIMIT 1';
   $sql = sprintf($sql, $table_sf, $id);
   $result = api_sql_query($sql,__FILE__,__LINE__);
-  //TODO also delete the corresponding values 
+  //TODO also delete the corresponding values
 }
 
 /**
@@ -180,7 +180,7 @@ function delete_all_specific_field_value($course_id, $id_specific_field, $tool_i
 }
 
 /**
- * Delete all values from a specific item (course_id, tool_id and ref_id). 
+ * Delete all values from a specific item (course_id, tool_id and ref_id).
  * To be used when deleting such item from Dokeos
  * @param   string  Course code
  * @param   string  Tool ID
@@ -210,14 +210,14 @@ function get_specific_field_code_from_name($name) {
     $code = strtoupper(substr($name,0,1));
     //if no code exists in DB, return current one
     if (Database::num_rows($res)<1) { return $code;}
-    
+
     $existing_list = array();
     while ($row = Database::fetch_array($res)) {
     	$existing_list[] = $row['code'];
     }
     //if the current code doesn't exist in DB, return current one
     if (!in_array($code,$existing_list)) { return $code;}
-    
+
     $idx = array_search($code,$list);
     $c = count($list);
     for ($i = $idx+1, $j=0 ; $j<$c ; $i++, $j++) {

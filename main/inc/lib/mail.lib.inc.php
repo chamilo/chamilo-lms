@@ -30,7 +30,7 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
    $mail->Mailer  = $platform_email['SMTP_MAILER'];
    $mail->Host    = $platform_email['SMTP_HOST'];
    $mail->Port    = $platform_email['SMTP_PORT'];
-   $mail->CharSet = $platform_email['SMTP_CHARSET']; 
+   $mail->CharSet = $platform_email['SMTP_CHARSET'];
    $mail->WordWrap = 200; // stay far below SMTP protocol 980 chars limit
 
    if($platform_email['SMTP_AUTH'])

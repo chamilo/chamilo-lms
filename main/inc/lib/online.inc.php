@@ -1,27 +1,27 @@
 <?php
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) Istvan Mandak
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	Code library for showing Who is online
 *
 *	@author Istvan Mandak, principal author
@@ -29,7 +29,7 @@
 *	@author Bart Mollet
 *	@author Roan Embrechts, cleaning and bugfixing
 *	@package dokeos.whoisonline
-============================================================================== 
+==============================================================================
 */
 /**
  * Insert a login reference for the current user into the track_e_online stats table.
@@ -50,7 +50,7 @@ function LoginCheck($uid)
 		  $login_ip = Database::escape_string($_SERVER['REMOTE_ADDR']);
         }
 		$reallyNow = time();
-		$login_date = date("Y-m-d H:i:s",$reallyNow);	
+		$login_date = date("Y-m-d H:i:s",$reallyNow);
 		// if the $_course array exists this means we are in a course and we have to store this in the who's online table also
 		// to have the x users in this course feature working
 		if (is_array($_course) && count($_course)>0 && !empty($_course['id']))
@@ -59,7 +59,7 @@ function LoginCheck($uid)
 		}
 		else
 		{
-            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip) VALUES ($uid,$uid,'$login_date','$login_ip')";        	
+            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip) VALUES ($uid,$uid,'$login_date','$login_ip')";
 		}
 
 		@api_sql_query($query,__FILE__,__LINE__);
@@ -90,19 +90,19 @@ function online_logout() {
     if (Database::num_rows($q_last_connection)>0) {
         $i_id_last_connection=Database::result($q_last_connection,0,"login_id");
     }
-  
+
     if (!isset($_SESSION['login_as'])) {
         $current_date=date('Y-m-d H:i:s',time());
         $s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date='".$current_date."' WHERE login_id='$i_id_last_connection'";
         api_sql_query($s_sql_update_logout_date);
     }
     LoginDelete($uid, $_configuration['statistics_database']); //from inc/lib/online.inc.php - removes the "online" status
-  
+
     //the following code enables the use of an external logout function.
     //example: define a $extAuthSource['ldap']['logout']="file.php" in configuration.php
-    // then a function called ldap_logout() inside that file 
-    // (using *authent_name*_logout as the function name) and the following code 
-    // will find and execute it 
+    // then a function called ldap_logout() inside that file
+    // (using *authent_name*_logout as the function name) and the following code
+    // will find and execute it
     $uinfo = api_get_user_info($uid);
     if (($uinfo['auth_source'] != PLATFORM_AUTH_SOURCE) && is_array($extAuthSource)) {
         if (is_array($extAuthSource[$uinfo['auth_source']])) {
@@ -133,7 +133,7 @@ function online_logout() {
  */
 function LoginDelete($user_id)
 {
-	$online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);	
+	$online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $user_id = (int) $user_id;
 	$query = "DELETE FROM ".$online_table ." WHERE login_user_id = '".Database::escape_string($user_id)."'";
 	@api_sql_query($query,__FILE__,__LINE__);
@@ -148,34 +148,34 @@ function LoginDelete($user_id)
  * @todo remove parameter $statistics_database which is no longer necessary
  */
 function WhoIsOnline($uid=0,$statistics_database='',$valid)
-{				
+{
 	$valid = (int) $valid;
 	$current_date=date('Y-m-d H:i:s',time());
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
-	
-	global $_configuration;	
-	if ($_configuration['multiple_access_urls']==true) {	
-		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+
+	global $_configuration;
+	if ($_configuration['multiple_access_urls']==true) {
+		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1){
-			$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." track 			
+			$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." track
 			INNER JOIN $tbl_user_rel_access_url user_rel_url
-			ON (user_rel_url.user_id = track.login_user_id)						
-			WHERE access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";			
+			ON (user_rel_url.user_id = track.login_user_id)
+			WHERE access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
 		}
-	}	
-		
-	$result = @api_sql_query($query,__FILE__,__LINE__);						
+	}
+
+	$result = @api_sql_query($query,__FILE__,__LINE__);
 	if (count($result)>0)
 	{
 		$rtime = time();
 		$rdate = date("Y-m-d H:i:s",$rtime);
 		$validtime = mktime(date("H"),date("i")-$valid,date("s"),date("m"),date("d"),date("Y"));
 		$rarray = array();
-		
+
 		while(list($login_user_id,$login_date)= Database::fetch_row($result))
-		{	
+		{
 			$barray = array();
 			array_push($barray,$login_user_id);
 			array_push($barray,$login_date);
@@ -189,15 +189,15 @@ function WhoIsOnline($uid=0,$statistics_database='',$valid)
 			$year = substr($login_date,0,4);
 			// db timestamp
 			$dbtime = mktime($hour,$minute,$secund,$month,$day,$year);
-			
+
 			if ($dbtime>$validtime)
 			{
 				array_push($rarray,$barray);
 			}
-		}					
+		}
 		return $rarray;
 	}
-	else 
+	else
 	{
 		return false;
 	}
@@ -234,7 +234,7 @@ function GetFullUserName($uid)
 function chatcall() {
 
 	global $_user, $_cid;
-	
+
 	if (!$_user['user_id'])
 	{
 		return (false);
@@ -270,10 +270,10 @@ function chatcall() {
 				. get_lang("No")
 				."</a>"
 				."</p>";
-		
+
 		return($message);
 	}
-	else 
+	else
 	{
 		return(false);
 	}
@@ -288,23 +288,23 @@ function chatcall() {
 * @return   array   Each line gives a user id and a login time
 */
 function who_is_online_in_this_course($uid, $valid, $coursecode=null)
-{				
+{
 	if(empty($coursecode)) return false;
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$coursecode = Database::escape_string($coursecode);
 	$valid = Database::escape_string($valid);
-	
-	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE course='".$coursecode."' AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW() ";	
-	$result = api_sql_query($query,__FILE__,__LINE__);							
+
+	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE course='".$coursecode."' AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW() ";
+	$result = api_sql_query($query,__FILE__,__LINE__);
 	if (count($result)>0)
 	{
 		$rtime = time();
 		$rdate = date("Y-m-d H:i:s",$rtime);
 		$validtime = mktime(date("H"),date("i")-$valid,date("s"),date("m"),date("d"),date("Y"));
 		$rarray = array();
-		
+
 		while(list($login_user_id,$login_date)= mysql_fetch_row($result))
-		{	
+		{
 			$barray = array();
 			array_push($barray,$login_user_id);
 			array_push($barray,$login_date);
@@ -322,10 +322,10 @@ function who_is_online_in_this_course($uid, $valid, $coursecode=null)
 			{
 				array_push($rarray,$barray);
 			}
-		}					
+		}
 		return $rarray;
 	}
-	else 
+	else
 	{
 		return false;
 	}

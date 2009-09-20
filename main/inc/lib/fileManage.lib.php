@@ -819,7 +819,7 @@ class FileManager
 		else
 		{
 			FileManager :: mkdirs(dirname($path), $mode);
-		 	//mkdir($path, $mode); 
+		 	//mkdir($path, $mode);
 			return true;
 		}
 	}

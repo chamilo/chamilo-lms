@@ -43,14 +43,14 @@ if (!api_is_platform_admin() && $infos['session_admin_id']!=$_user['user_id']) {
 if ($_POST['formSent']) {
 	$formSent=1;
 	$name= $_POST['name'];
-	$year_start= $_POST['year_start']; 
-	$month_start=$_POST['month_start']; 
-	$day_start=$_POST['day_start']; 
-	$year_end=$_POST['year_end']; 
-	$month_end=$_POST['month_end']; 
-	$day_end=$_POST['day_end']; 
-	$nb_days_acess_before = $_POST['nb_days_access_before']; 
-	$nb_days_acess_after = $_POST['nb_days_access_after']; 
+	$year_start= $_POST['year_start'];
+	$month_start=$_POST['month_start'];
+	$day_start=$_POST['day_start'];
+	$year_end=$_POST['year_end'];
+	$month_end=$_POST['month_end'];
+	$day_end=$_POST['day_end'];
+	$nb_days_acess_before = $_POST['nb_days_access_before'];
+	$nb_days_acess_after = $_POST['nb_days_access_after'];
 	$nolimit=$_POST['nolimit'];
 	$id_coach=$_POST['id_coach'];
 	$return = SessionManager::edit_session($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach);
@@ -64,7 +64,7 @@ $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, usern
 $sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
 
 if ($_configuration['multiple_access_urls']==true){
-	$table_access_url_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+	$table_access_url_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1) {
 		$sql="SELECT DISTINCT u.user_id,lastname,firstname,username FROM $tbl_user u INNER JOIN $table_access_url_rel_user url_rel_user
@@ -293,7 +293,7 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
   <td>&nbsp;</td>
   <td>
 <button class="save" type="submit" value="<?php echo get_lang('ModifyThisSession') ?>"><?php echo get_lang('ModifyThisSession') ?></button>
-  
+
   </td>
 </tr>
 

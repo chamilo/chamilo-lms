@@ -22,9 +22,11 @@
 	Mail: info@dokeos.com
 ============================================================================== 
 */
-require_once ('LinkCategory.class.php');
-require_once ('Announcement.class.php');
-require_once ('Event.class.php');
+
+require_once 'LinkCategory.class.php';
+require_once 'Announcement.class.php';
+require_once 'Event.class.php';
+
 /**
  * A course-object to use in Export/Import/Backup/Copy
  * @author Bart Mollet <bart.mollet@hogent.be>

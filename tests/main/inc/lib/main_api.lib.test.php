@@ -951,15 +951,6 @@ class TestMainApi extends UnitTestCase {
 		//var_dump($res);
 	}
 	
-	function testApiUrlToLocalPath(){
-		global $url;
-		$cond= preg_match(false);
-		$res= api_url_to_local_path($url);
-		$this->assertTrue(is_null($res));
-		$this->assertFalse($cond);
-		//var_dump($res);
-	}
-	
 	function testApiResizeImage(){
 		//global $image, $target_width, $target_height;
 		$resize = array('image' =>'image.jpg', 'target_width'=>100, 'target_height'=>100);

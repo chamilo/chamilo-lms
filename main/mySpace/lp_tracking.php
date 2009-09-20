@@ -5,11 +5,11 @@
  * Created on 26 mars 07 by Eric Marguin
  * Script to display the tracking of the students in the learning paths.
  */
- 
+
 $language_file = array ('registration', 'index', 'tracking', 'exercice', 'scorm', 'learnpath');
 //$cidReset = true;
 
-include '../inc/global.inc.php';
+require '../inc/global.inc.php';
 
 $from_myspace = false;
 $from_link = '';
@@ -110,7 +110,7 @@ div.description {
 	padding: 5px;
 	vertical-align: top;
 	border-bottom: 1px solid #b1b1b1;
-	border-right: 1px dotted #e1e1e1; 
+	border-right: 1px dotted #e1e1e1;
 	border-left: 1px dotted #e1e1e1;
 }
 
@@ -130,11 +130,11 @@ Display :: display_header($nameTools);
 
 $lp_id = intval($_GET['lp_id']);
 
-$sql = 'SELECT name 
+$sql = 'SELECT name
 	FROM '.Database::get_course_table(TABLE_LP_MAIN, $_course['db_name']).'
 	WHERE id='.Database::escape_string($lp_id);
 $rs = Database::query($sql, __FILE__, __LINE__);
-$lp_title = Database::result($rs, 0, 0);	
+$lp_title = Database::result($rs, 0, 0);
 
 echo '<div class ="actions"><div align="left" style="float:left;margin-top:2px;" ><strong>'.$_course['title'].' - '.$lp_title.' - '.$name.'</strong></div>
 	  <div  align="right">
@@ -145,8 +145,8 @@ echo '<div class ="actions"><div align="left" style="float:left;margin-top:2px;"
 
 $list = learnpath :: get_flat_ordered_items_list($lp_id);
 $origin = 'tracking';
-if ($export_csv) {	
-	include_once api_get_path(SYS_CODE_PATH).'newscorm/lp_stats.php';	
+if ($export_csv) {
+	include_once api_get_path(SYS_CODE_PATH).'newscorm/lp_stats.php';
 	//Export :: export_table_csv($csv_content, 'reporting_student');
 } else {
 	ob_start();

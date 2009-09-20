@@ -1,5 +1,6 @@
 $(document).ready(function() {
     $(window).load(function () {
+	  my_protocol = location.protocol;
 	    $("body .glossary").mouseover(function(){
 	        is_glossary_name=$(this).html();
 		    random_id=Math.round(Math.random()*100);
@@ -11,10 +12,10 @@ $(document).ready(function() {
 
 	       $.ajax({
 	            contentType: "application/x-www-form-urlencoded",
-	            beforeSend: function(objeto) {
-	            $("div#"+div_content_id).html("<img src=\'http://"+location.host+"/main/inc/lib/javascript/indicator.gif\' />"); },
-	            type: "POST",
-	            url: "http://"+location.host+"/main/glossary/glossary_ajax_request.php",
+	            beforeSend: function(objeto) {	            
+	            $("div#"+div_content_id).html("<img src="+my_protocol+"//"+location.host+"/main/inc/lib/javascript/indicator.gif />"); },	            
+	            type: "POST",	            
+	            url: my_protocol+"//"+location.host+"/main/glossary/glossary_ajax_request.php",	            
 	            data: "glossary_name="+is_glossary_name,
 	            success: function(datos) {
 	                $("div#"+div_content_id).html(datos);

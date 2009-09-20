@@ -24,29 +24,29 @@
 
 session_cache_limiter('public');
 
-include('../inc/global.inc.php');
-$this_section=SECTION_COURSES;
+require '../inc/global.inc.php';
+$this_section = SECTION_COURSES;
 
-include_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
-$archivePath = api_get_path(SYS_PATH).$archiveDirName.'/';
-$archiveFile = $_GET['archive'];
+$archive_path = api_get_path(SYS_ARCHIVE_PATH);
+$archive_file = $_GET['archive'];
 
-$archiveFile = str_replace(array('..', '/', '\\'), '', $archiveFile);
+$archive_file = str_replace(array('..', '/', '\\'), '', $archive_file);
 
-list($extension) = getextension($archiveFile);
+list($extension) = getextension($archive_file);
 
-if (empty($extension) || !file_exists($archivePath.$archiveFile)) {
+if (empty($extension) || !file_exists($archive_path.$archive_file)) {
 	exit();
 }
 
 $content_type = '';
 
 if (in_array(strtolower($extension), array('xml','csv')) && api_is_platform_admin(true)) {
-	$content_type='application/force-download';
+	$content_type = 'application/force-download';
 }
 elseif (strtolower($extension) == 'zip' && $_cid && $is_courseAdmin) {
-	$content_type='application/force-download';
+	$content_type = 'application/force-download';
 }
 
 if (empty($content_type)) {
@@ -59,8 +59,7 @@ header('Cache-Control: public');
 header('Pragma: no-cache');
 
 header('Content-Type: '.$content_type);
-header('Content-Length: '.filesize($archivePath.$archiveFile));
-header('Content-Disposition: attachment; filename='.$archiveFile);
+header('Content-Length: '.filesize($archive_path.$archive_file));
+header('Content-Disposition: attachment; filename='.$archive_file);
 
-readfile($archivePath.$archiveFile);
-?>
+readfile($archive_path.$archive_file);

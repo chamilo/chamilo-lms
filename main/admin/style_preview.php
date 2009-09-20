@@ -33,7 +33,7 @@ include(api_get_path(INCLUDE_PATH).'banner.inc.php');
         <td>
         <table>
             <tr>
-              <td width="220">              
+              <td width="220">
               <table id="smallcalendar">
                   <tr id="title">
                     <td width="10%"><a href="#"><<</a></td>

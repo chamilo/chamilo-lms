@@ -23,7 +23,9 @@
 	Mail: info@dokeos.com
 ============================================================================== 
 */
-require_once ('Course.class.php');
+
+require_once 'Course.class.php';
+
 /**
  * Class to show a form to select resources
  * @author Bart Mollet <bart.mollet@hogent.be>

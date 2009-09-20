@@ -6,10 +6,12 @@
 
 ob_start();
 
-// name of the language file that needs to be included 
-$language_file = array ('registration', 'index','trad4all', 'tracking');
+// name of the language file that needs to be included
+$language_file = array ('registration', 'index', 'trad4all', 'tracking');
 $cidReset = true;
+
 require '../inc/global.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
 
 $this_section = "session_my_space";
 
@@ -30,56 +32,12 @@ $tbl_session_rel_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_admin				= Database :: get_main_table(TABLE_MAIN_ADMIN);
 
 
-/*
- ===============================================================================
- 	FUNCTION
- ===============================================================================  
- */
- 
-function exportCsv($a_header, $a_data) {
- 	global $archiveDirName;
-
-	$fileName = 'administrators.csv';
-	$archivePath = api_get_path(SYS_ARCHIVE_PATH);
-	$archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
-
-	if (!$open = fopen($archivePath.$fileName, 'w+')) {
-		$message = get_lang('noOpen');
-	} else {
-		$info = '';
-
-		foreach ($a_header as $header) {
-			$info .= $header.';';
-		}
-		$info .= "\r\n";
-
-		foreach ($a_data as $data) {
-			foreach ($data as $infos) {
-				$info .= $infos.';';
-			}
-			$info .= "\r\n";
-		}
-
-		fwrite($open, $info);
-		fclose($open);
-		$perm = api_get_setting('permissions_for_new_files');
-		$perm = octdec(!empty($perm) ? $perm : '0660');
-		chmod($fileName, $perm);
-
-		header("Location:".$archiveURL.$fileName);
-	}
-	return $message;
-}
-
-
 /**
  * MAIN PART
  */
 
 /*
- * liste nominative avec coordonn�es et lien vers les cours et
-les stagiaires dont il est le
-responsable. 
+ * liste nominative avec coordonnies et lien vers les cours et les stagiaires dont il est le responsable.
  */
 
 if (isset($_POST['export'])) {
@@ -87,10 +45,10 @@ if (isset($_POST['export'])) {
 } else {
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 }
-$sqlAdmins = "SELECT user.user_id,lastname,firstname,email
+$sql_admins = "SELECT user.user_id,lastname,firstname,email
 	FROM $tbl_user as user, $tbl_admin as admin
 	WHERE admin.user_id=user.user_id".$order_clause;
-$resultAdmins = Database::query($sqlAdmins, __FILE__, __LINE__);
+$result_admins = Database::query($sql_admins, __FILE__, __LINE__);
 
 if (api_is_western_name_order()) {
 	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th></tr>';
@@ -99,24 +57,24 @@ if (api_is_western_name_order()) {
 }
 
 if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
-	$a_header[] = get_lang('FirstName', '');
-	$a_header[] = get_lang('LastName', '');
+	$header[] = get_lang('FirstName', '');
+	$header[] = get_lang('LastName', '');
 } else {
-	$a_header[] = get_lang('LastName', '');
-	$a_header[] = get_lang('FirstName', '');
+	$header[] = get_lang('LastName', '');
+	$header[] = get_lang('FirstName', '');
 }
-$a_header[] = get_lang('Email', '');
+$header[] = get_lang('Email', '');
 
-if (Database::num_rows($resultAdmins) > 0) {
-	while ($a_admins = Database::fetch_array($resultAdmins)) {
+if (Database::num_rows($result_admins) > 0) {
+	while ($admins = Database::fetch_array($result_admins)) {
 
-		$i_user_id = $a_admins["user_id"];
-		$s_lastname = $a_admins["lastname"];
-		$s_firstname = $a_admins["firstname"];
-		$s_email = $a_admins["email"];
+		$user_id = $admins["user_id"];
+		$lastname = $admins["lastname"];
+		$firstname = $admins["firstname"];
+		$email = $admins["email"];
 
 		if ($i % 2 == 0) {
-			$s_css_class = "row_odd";
+			$css_class = "row_odd";
 			if ($i % 20 == 0 && $i != 0) {
 				if (api_is_western_name_order()) {
 					echo '<tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th></tr>';
@@ -125,36 +83,34 @@ if (Database::num_rows($resultAdmins) > 0) {
 				}
 			}
 		} else {
-			$s_css_class = "row_even";
+			$css_class = "row_even";
 		}
 
 		$i++;
 
 		if (api_is_western_name_order()) {
-			echo "<tr class=".$s_css_class."><td>$s_firstname</td><td>$s_lastname</td><td><a href='mailto:".$s_email."'>$s_email</a></td></tr>";
+			echo "<tr class=".$css_class."><td>$firstname</td><td>$lastname</td><td><a href='mailto:".$email."'>$email</a></td></tr>";
 		} else {
-			echo "<tr class=".$s_css_class."><td>$s_lastname</td><td>$s_firstname</td><td><a href='mailto:".$s_email."'>$s_email</a></td></tr>";
+			echo "<tr class=".$css_class."><td>$lastname</td><td>$firstname</td><td><a href='mailto:".$email."'>$email</a></td></tr>";
 		}
 
 		if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
-			$a_data[$i_user_id]["firstname"] = $s_firstname;
-			$a_data[$i_user_id]["lastname"] = $s_lastname;
+			$data[$user_id]["firstname"] = $firstname;
+			$data[$user_id]["lastname"] = $lastname;
 		} else {
-			$a_data[$i_user_id]["lastname"] = $s_lastname;
-			$a_data[$i_user_id]["firstname"] = $s_firstname;
+			$data[$user_id]["lastname"] = $lastname;
+			$data[$user_id]["firstname"] = $firstname;
 		}
-		$a_data[$i_user_id]["email"] = $s_email;
+		$data[$user_id]["email"] = $email;
 	}
-}
-
-//No results
-else {
-	echo '<tr><td colspan="3" "align=center">'.get_lang("NoResults").'</td></tr>';
+} else {
+	// No results
+	echo '<tr><td colspan="3" "align=center">'.get_lang('NoResults').'</td></tr>';
 }
 echo '</table>';
 
 if (isset($_POST['export'])) {
-	exportCsv($a_header, $a_data);
+	export_csv($header, $data, 'administrators.csv');
 }
 
 echo "<br /><br />";

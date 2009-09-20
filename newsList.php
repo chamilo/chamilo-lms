@@ -5,7 +5,7 @@
  */
 
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array ('courses', 'index');
 
 // including necessary files
@@ -14,7 +14,7 @@ include_once (api_get_path(LIBRARY_PATH).'/system_announcements.lib.php');
 
 $tool_name = get_lang("SystemAnnouncements");
 Display::display_header($tool_name);
- 
+
 if(isset($_GET['start']))
 {
 	$start = (int)$_GET['start'];

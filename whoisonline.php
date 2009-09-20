@@ -274,24 +274,31 @@ function display_individual_user($user_id) {
  * @param int $user_id User id
  * @todo use the correct api_get_path instead of $clarolineRepositoryWeb
  */
-function display_productions($user_id)
-{
-	$sysdir_array = UserManager::get_user_picture_path_by_id($user_id, 'system');
+function display_productions($user_id) {
+	$sysdir_array = UserManager::get_user_picture_path_by_id($user_id, 'system', true);
 	$sysdir = $sysdir_array['dir'].$user_id.'/';
-	$webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web');
+	$webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true);
 	$webdir = $webdir_array['dir'].$user_id.'/';
 	if (!is_dir($sysdir)) {
 		mkpath($sysdir);
 	}
+	/*
 	$handle = opendir($sysdir);
 	$productions = array();
 	while ($file = readdir($handle)) {
 		if ($file == '.' || $file == '..' || $file == '.htaccess') {
 			continue;						// Skip current and parent directories
 		}
+		if (preg_match('/('.$user_id.'|[0-9a-f]{13}|saved)_.+\.(png|jpg|jpeg|gif)$/i', $file)) {
+			// User's photos should not be listed as productions.
+			continue;
+		}
 		$productions[] = $file;
 	}
-	if (count($productions) > 0)	{
+	*/
+	$productions = UserManager::get_user_productions($user_id);
+
+	if (count($productions) > 0) {
 		echo '<dt><strong>'.get_lang('Productions').'</strong></dt>';
 		echo '<dd><ul>';
 		foreach ($productions as $index => $file) {

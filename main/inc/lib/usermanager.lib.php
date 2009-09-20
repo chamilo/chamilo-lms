@@ -676,7 +676,7 @@ class UserManager {
 			foreach ($productions as $file) {
 				$production_list .= '<li><a href="'.$production_dir.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
 				if ($showdelete) {
-					$production_list .= '<input type="image" name="remove_production['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="return confirmation(\''.htmlentities($file).'\');" /></li>';
+					$production_list .= '<input type="image" name="remove_production['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="javascript: return confirmation(\''.htmlentities($file).'\');" /></li>';
 				}
 			}
 			$production_list .= '</ul>';
@@ -702,6 +702,10 @@ class UserManager {
 			while ($file = readdir($handle)) {
 				if ($file == '.' || $file == '..' || $file == '.htaccess' || is_dir($production_repository.$file)) {
 					continue; // skip current/parent directory and .htaccess
+				}
+				if (preg_match('/('.$user_id.'|[0-9a-f]{13}|saved)_.+\.(png|jpg|jpeg|gif)$/i', $file)) {
+					// User's photos should not be listed as productions.
+					continue;
 				}
 				$productions[] = $file;
 			}

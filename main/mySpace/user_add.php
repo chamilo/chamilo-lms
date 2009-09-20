@@ -135,7 +135,7 @@ $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_da
 $group = array();
 $auth_sources = 0; //make available wider as we need it in case of form reset (see below)
 if (count($extAuthSource) > 0) {
-	$group[] =& HTML_QuickForm::createElement('radio','password_auto', null, get_lang('ExternalAuthentication').' ', 2);
+	$group[] =& HTML_QuickForm::createElement('radio', 'password_auto', null, get_lang('ExternalAuthentication').' ', 2);
 	$auth_sources = array();
 	foreach ($extAuthSource as $key => $info) {
 		$auth_sources[$key] = $key;
@@ -159,7 +159,7 @@ $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;');
 $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
 $group = array ();
 $group[] = & $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
-$group[] = & $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onChange'=>'javascript: enable_expiration_date();'));
+$group[] = & $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();'));
 $form->addGroup($group, 'max_member_group', null, '', false);
 // Active account or inactive account
 $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);

@@ -36,7 +36,6 @@ require_once 'ForumPost.class.php';
 require_once 'CourseDescription.class.php';
 require_once 'Learnpath.class.php';
 require_once 'CourseRestorer.class.php';
-require_once api_get_path(LIBRARY_PATH).'rmdirr.lib.php';
 
 class DummyCourseCreator
 {

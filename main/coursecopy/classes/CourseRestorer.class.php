@@ -37,7 +37,6 @@ require_once 'Learnpath.class.php';
 require_once 'Survey.class.php';
 require_once 'SurveyQuestion.class.php';
 require_once 'Glossary.class.php';
-require_once api_get_path(LIBRARY_PATH).'rmdirr.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 define('FILE_SKIP', 1);

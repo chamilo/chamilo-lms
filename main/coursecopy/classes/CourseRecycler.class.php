@@ -25,7 +25,6 @@
 */
 
 require_once 'Course.class.php';
-require_once api_get_path(LIBRARY_PATH).'rmdirr.lib.php';
 
 /**
  * Class to delete items from a Dokeos-course

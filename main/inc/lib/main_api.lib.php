@@ -265,6 +265,13 @@ function api_get_path($path_type, $path = null) {
 
 	global $_configuration;
 
+	// Some results will be cached for speed.
+	static $cache = array();
+
+	if (isset($cache[$path_type]) && is_null($path)) {
+		return $cache[$path_type];
+	}
+
 	if (!isset($_configuration['access_url']) || $_configuration['access_url'] == 1 || $_configuration['access_url'] == '') {
 		//by default we call the $_configuration['root_web'] we don't query to the DB
 		//$url_info= api_get_access_url(1);
@@ -272,15 +279,12 @@ function api_get_path($path_type, $path = null) {
 		if (isset($_configuration['root_web'])) {
 			$root_web = $_configuration['root_web'];
 		}
+		// TODO: If $_configuration['root_web'] is not set, here $root_web is not set too, this case is unresolved.
 	} else {
 		//we look into the DB the function api_get_access_url
 		//this funcion have a problem because we can't called to the Database:: functions
 		$url_info = api_get_access_url($_configuration['access_url']);
-		if ($url_info['active'] == 1) {
-			$root_web = $url_info['url'];
-		} else {
-			$root_web = $_configuration['root_web'];
-		}
+		$root_web = $url_info['active'] == 1 ? $url_info['url'] : $_configuration['root_web'];
 	}
 
 	switch ($path_type) {
@@ -288,108 +292,92 @@ function api_get_path($path_type, $path = null) {
 		case WEB_SERVER_ROOT_PATH:
 			// example: http://www.mydokeos.com/
 			$result = preg_replace('@'.api_get_path(REL_PATH).'$@', '', api_get_path(WEB_PATH));
-			if (substr($result, -1) == '/') {
-				return $result;
-			}
-			return $result.'/';
+			return $cache[$path_type] = substr($result, -1) == '/' ? $result : $result.'/';
 
 		case SYS_SERVER_ROOT_PATH:
 			$result = preg_replace('@'.api_get_path(REL_PATH).'$@', '', api_get_path(SYS_PATH));
-			if (substr($result, -1) == '/') {
-				return $result;
-			}
-			return $result.'/';
+			return $cache[$path_type] = substr($result, -1) == '/' ? $result : $result.'/';
 
 		case WEB_PATH:
 			// example: http://www.mydokeos.com/ or http://www.mydokeos.com/dokeos/ if you're using
 			// a subdirectory of your document root for Dokeos
-			if (substr($root_web, -1) == '/') {
-				return $root_web;
-			}
-			return $root_web.'/';
+			return $cache[$path_type] = substr($root_web, -1) == '/' ? $root_web : $root_web.'/';
 
 		case SYS_PATH:
 			// example: /var/www/dokeos/
-			if (substr($_configuration['root_sys'], -1) == '/') {
-				return $_configuration['root_sys'];
-			}
-			return $_configuration['root_sys'].'/';
+			return $cache[$path_type] = substr($_configuration['root_sys'], -1) == '/' ? $_configuration['root_sys'] : $_configuration['root_sys'].'/';
 
 		case REL_PATH:
 			// example: dokeos/
-			if (substr($_configuration['url_append'], -1) === '/') {
-				return $_configuration['url_append'];
-			}
-			return $_configuration['url_append'].'/';
+			return $cache[$path_type] = substr($_configuration['url_append'], -1) === '/' ? $_configuration['url_append'] : $_configuration['url_append'].'/';
 
 		case WEB_COURSE_PATH:
 			// example: http://www.mydokeos.com/courses/
-			return $root_web.$_configuration['course_folder'];
+			return $cache[$path_type] = $root_web.$_configuration['course_folder'];
 
 		case SYS_COURSE_PATH:
 			// example: /var/www/dokeos/courses/
-			return $_configuration['root_sys'].$_configuration['course_folder'];
+			return $cache[$path_type] = $_configuration['root_sys'].$_configuration['course_folder'];
 
 		case REL_COURSE_PATH:
 			// example: courses/ or dokeos/courses/
-			return api_get_path(REL_PATH).$_configuration['course_folder'];
+			return $cache[$path_type] = api_get_path(REL_PATH).$_configuration['course_folder'];
 
 		case REL_CODE_PATH:
 			// example: main/ or dokeos/main/
-			return api_get_path(REL_PATH).$_configuration['code_append'];
+			return $cache[$path_type] = api_get_path(REL_PATH).$_configuration['code_append'];
 
 		case WEB_CODE_PATH:
 			// example: http://www.mydokeos.com/main/
 			//return $GLOBALS['clarolineRepositoryWeb']; // this was changed
-			return $root_web.$_configuration['code_append'];
+			return $cache[$path_type] = $root_web.$_configuration['code_append'];
 
 		case SYS_CODE_PATH:
 			// example: /var/www/dokeos/main/
-			return $GLOBALS['clarolineRepositorySys'];
+			return $cache[$path_type] = $GLOBALS['clarolineRepositorySys'];
 
 		case SYS_LANG_PATH:
 			// example: /var/www/dokeos/main/lang/
-			return api_get_path(SYS_CODE_PATH).'lang/';
+			return $cache[$path_type] = api_get_path(SYS_CODE_PATH).'lang/';
 
 		case WEB_IMG_PATH:
 			// example: http://www.mydokeos.com/main/img/
-			return api_get_path(WEB_CODE_PATH).'img/';
+			return $cache[$path_type] = api_get_path(WEB_CODE_PATH).'img/';
 
 		case SYS_PLUGIN_PATH:
 			// example: /var/www/dokeos/plugin/
-			return api_get_path(SYS_PATH).'plugin/';
+			return $cache[$path_type] = api_get_path(SYS_PATH).'plugin/';
 
 		case WEB_PLUGIN_PATH:
 			// example: http://www.mydokeos.com/plugin/
-			return api_get_path(WEB_PATH).'plugin/';
+			return $cache[$path_type] = api_get_path(WEB_PATH).'plugin/';
 
 		case GARBAGE_PATH: //now set to be same as archive
 		case SYS_ARCHIVE_PATH :
 			// example: /var/www/dokeos/archive/
-			return api_get_path(SYS_PATH).'archive/';
+			return $cache[$path_type] = api_get_path(SYS_PATH).'archive/';
 
 		case WEB_ARCHIVE_PATH:
 			// example: http://www.mydokeos.com/archive/
-			return api_get_path(WEB_PATH).'archive/';
+			return $cache[$path_type] = api_get_path(WEB_PATH).'archive/';
 
 		case INCLUDE_PATH:
 			// Generated by main/inc/global.inc.php
 			// example: /var/www/dokeos/main/inc/
 			$incpath = realpath(dirname(__FILE__).'/../');
-			return str_replace('\\', '/', $incpath).'/';
+			return $cache[$path_type] = str_replace('\\', '/', $incpath).'/';
 
 		case LIBRARY_PATH:
 			// example: /var/www/dokeos/main/inc/lib/
-			return api_get_path(INCLUDE_PATH).'lib/';
+			return $cache[$path_type] = api_get_path(INCLUDE_PATH).'lib/';
 
 		case WEB_LIBRARY_PATH:
 			// example: http://www.mydokeos.com/main/inc/lib/
-			return api_get_path(WEB_CODE_PATH).'inc/lib/';
-			break;
+			return $cache[$path_type] = api_get_path(WEB_CODE_PATH).'inc/lib/';
 
 		case CONFIGURATION_PATH:
 			// example: /var/www/dokeos/main/inc/conf/
-			return api_get_path(INCLUDE_PATH).'conf/';
+			return $cache[$path_type] = api_get_path(INCLUDE_PATH).'conf/';
 
 		case TO_SYS_PATH:
 
@@ -401,17 +389,15 @@ function api_get_path($path_type, $path = null) {
 			$original_path = $path;
 			$path = urldecode($path);
 
-			// A special case:
-			// If the URL points the document download script directly (without mod-rewrite translation),
-			// we will translate this URL into a simple one, in order to process it easy below.
+			// A special case: If the URL points to the document download script directly (without mod-rewrite translation),
+			// we will translate this URL into a simple one, in order to process it easily below.
 			// For example:
 			// http://localhost/dokeos/main/document/download.php?doc_url=/image.png&cDir=/
 			// becomes
 			// http://localhost/dokeos/courses/TEST/document/image.png
-			//
 			if (preg_match('/(.*)main\/document\/download.php\?doc_url=\/(.*)&cDir=\/(.*)?/', $path, $matches)) {
 				global $_cid, $_course;
-				if (!empty($_cid) and $_cid != -1 and isset($_course)) { // Inside a course?
+				if (!empty($_cid) && $_cid != -1 && isset($_course)) { // Inside a course?
 					$path = $matches[1].'courses/'.$_course['path'].'/document/'.str_replace('//', '/', $matches[3].'/'.$matches[2]);
 				} else {
 					return $original_path;	// Not inside a course, return then the URL "as is".
@@ -422,32 +408,25 @@ function api_get_path($path_type, $path = null) {
 			// http://localhost/dokeos/courses/TEST/document/image.png?cidReq=TEST
 			// Let us remove possibe URL's parameters:
 			// http://localhost/dokeos/courses/TEST/document/image.png
-			$tmp = explode('?', $path);
-			$array_url = explode ('/', $tmp[0]);
+			$array_path = explode('/', (string)current(explode('?', $path)));
 
 			// Pulling out the filename image.png
 			// The rest of the URL is http://localhost/dokeos/courses/TEST/document
-			$file_name = array_pop($array_url);
-
-			// api_get_path(WEB_PATH) returns for example http://localhost/dokeos/
-			$array_web_path = explode ('/', api_get_path(WEB_PATH));
+			$file_name = array_pop($array_path);
 
 			// Getting the relative system path.
-			// http://localhost/dokeos/courses/TEST/document
-			// http://localhost/dokeos/
-			// ---------------------------------------------
-			//                         courses/TEST/document
-			$array_system_path = array_values(array_diff($array_url, $array_web_path));
-			$system_path = implode('/', $array_system_path);
-
-			// Sanity check - you may have seen this comment in dokeos/main/document/download.php:
+			// http://localhost/dokeos/courses/TEST/document         - this the "purified" URL
+			// http://localhost/dokeos/                              - this is returned by api_get_path(WEB_PATH)
+			// -----------------------------------------------------------------------------------------------------
+			//                         courses/TEST/document         - this is the resulting relative system path
+			// Note: A sanity check is needed - you may have seen this comment in dokeos/main/document/download.php:
 			//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (René)
-			// Let us remove double slashes, if any (triple too, etc.).
-			$system_path = preg_replace('@/{2,}@', '/', $system_path);
+			// So, we will clean double slashes, if any (triple too, etc.).
+			$system_rel_path = preg_replace('@/{2,}@', '/', implode('/', array_values(array_diff($array_path, explode ('/', api_get_path(WEB_PATH))))));
 
 			// Finally, we will concatenate: the system root (for example /var/www/), the relative system path, and the file name.
 			// /var/www/courses/TEST/document/image.png
-			return str_replace("\\", '/', api_get_path(SYS_PATH)).(empty($system_path) ? '' : $local_path.'/').$file_name;
+			return str_replace('\\', '/', api_get_path(SYS_PATH)).(empty($system_rel_path) ? '' : $system_rel_path.'/').$file_name;
 
 		default :
 			return null;

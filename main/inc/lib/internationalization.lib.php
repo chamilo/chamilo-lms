@@ -158,7 +158,7 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 			if (!is_array($language_files)) {
 				@include "$langpath$language/$language_files.inc.php";
 			} else {
-				foreach ($language_files as $index => $language_file) {
+				foreach ($language_files as &$language_file) {
 					@include "$langpath$language/$language_file.inc.php";
 				}
 			}
@@ -173,11 +173,11 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 	}
 
 	// Translation mode for production servers.
-
 	if (!$test_server_mode) {
 		if ($read_global_variables) {
-			$langvar = isset($GLOBALS["lang$variable"]) ? $GLOBALS["lang$variable"] : (isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : $ot.$variable.$ct);
+			$langvar = isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : (isset($GLOBALS["lang$variable"]) ? $GLOBALS["lang$variable"] : $ot.$variable.$ct);
 		} else {
+			/*
 			@eval("\$langvar=\$$variable;"); // Note (RH): $$var doesn't work with arrays, see PHP doc
 			if (!isset($langvar)) {
 				@eval("\$langvar=\$lang$variable;");
@@ -185,43 +185,31 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 					$langvar = $ot.$variable.$ct;
 				}
 			}
+			*/
+			$langvar = isset($$variable) ? $$variable : (isset(${"lang$variable"}) ? ${"lang$variable"} : $ot.$variable.$ct);
 		}
-		if (is_string($langvar)) {
-			$langvar = str_replace("\\'", "'", $langvar);
-			$langvar = &_get_lang_purifier($langvar, $language);
-		}
-		$cache[$language][$dltt][$variable] = $langvar;
-		return $langvar;
+		return $cache[$language][$dltt][$variable] = is_string($langvar) ? _get_lang_purifier(str_replace("\\'", "'", $langvar), $language) : $langvar;
 	}
 
 	// Translation mode for test/development servers.
-
 	if (!is_string($variable)) {
-		$cache[$language][$dltt][$variable] = $ot.'get_lang(?)'.$ct;
-		return $cache[$language][$dltt][$variable];
+		return $cache[$language][$dltt][$variable] = $ot.'get_lang(?)'.$ct;
 	}
+	/*
 	@eval("\$langvar=\$$variable;"); // Note (RH): $$var doesn't work with arrays, see PHP doc
 	if (!isset($langvar)) {
 		@eval("\$langvar=\$lang$variable;");
 	}
-	if (isset($langvar) && is_string($langvar) && !empty($langvar)) {
-		$langvar = str_replace("\\'", "'", $langvar);
-		$langvar = &_get_lang_purifier($langvar, $language);
-		$cache[$language][$dltt][$variable] = $langvar;
-		return $langvar;
-	}
-	if (!$dltt) {
-		$cache[$language][$dltt][$variable] = $ot.$variable.$ct;
-		return $cache[$language][$dltt][$variable];
-	}
-	if (!is_array($language_files)) {
-		$language_file = $language_files;
-	} else {
-		$language_file = implode('.inc.php', $language_files);
-	}
-	$cache[$language][$dltt][$variable] =
-		$ot.$variable.$ct."<a href=\"http://www.dokeos.com/DLTT/suggestion.php?file=".$language_file.".inc.php&amp;variable=$".$variable."&amp;language=".$language_interface."\" target=\"_blank\" style=\"color:#FF0000\"><strong>#</strong></a>";
-	return $cache[$language][$dltt][$variable];
+	*/
+	$langvar = isset($$variable) ? $$variable : ${"lang$variable"};
+	return $cache[$language][$dltt][$variable] =
+		isset($langvar) && is_string($langvar) && !empty($langvar)
+			? _get_lang_purifier(str_replace("\\'", "'", $langvar), $language)
+			: (!$dltt
+				? $ot.$variable.$ct
+				: $ot.$variable.$ct."<a href=\"http://www.dokeos.com/DLTT/suggestion.php?file=".
+					(!is_array($language_files) ? $language_files : implode('.inc.php', $language_files)).".inc.php&amp;variable=$".
+					$variable."&amp;language=".$language."\" target=\"_blank\" style=\"color:#FF0000\"><strong>#</strong></a>");
 }
 
 /**

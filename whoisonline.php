@@ -9,7 +9,7 @@
 // name of the language file that needs to be included
 $language_file = array('index','registration','messages','userInfo');
 if (!isset($_GET['cidReq'])) {
-	$cidReset = true;	
+	$cidReset = true;
 }
 // including necessary files
 require_once './main/inc/global.inc.php';
@@ -19,13 +19,13 @@ require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 // table definitions
 $track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 
-$htmlHeadXtra[] = '<script type="text/javascript">				
+$htmlHeadXtra[] = '<script type="text/javascript">
 	function show_image(image,width,height) {
 		width = parseInt(width) + 20;
-		height = parseInt(height) + 20;			
-		window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');		
+		height = parseInt(height) + 20;
+		window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
 	}
-					
+
 </script>';
 $htmlHeadXtra[] = '<script type="text/javascript" src="./main/inc/lib/javascript/jquery.js"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript" src="./main/inc/lib/javascript/thickbox.js"></script>';
@@ -36,7 +36,7 @@ $(document).ready(function (){
 		if (confirm("'.get_lang('SendMessageInvitation', '').'")) {
 			$("#form_register_friend").submit();
 		}
-	}); 
+	});
 });
 function change_panel (mypanel_id,myuser_id) {
 		$.ajax({
@@ -50,10 +50,10 @@ function change_panel (mypanel_id,myuser_id) {
 			 $("div#id_content_panel_init").html(datos);
 			 $("div#display_response_id").html("");
 			}
-		});	
+		});
 }
 function action_database_panel(option_id,myuser_id) {
-	
+
 	if (option_id==5) {
 		my_txt_subject=$("#txt_subject_id").val();
 	} else {
@@ -75,8 +75,8 @@ function action_database_panel(option_id,myuser_id) {
 		success: function(datos) {
 		 $("#display_response_id").html(datos);
 		}
-	});	
-}	
+	});
+}
 function display_hide () {
 		setTimeout("hide_display_message()",3000);
 }
@@ -91,7 +91,7 @@ function hide_display_message () {
 	}catch(e) {
 		$("#txt_area_invite").val("");
 	}
-}	
+}
 </script>';
 if ($_GET['chatid'] != '') {
 	//send out call request
@@ -103,7 +103,7 @@ if ($_GET['chatid'] != '') {
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 		//redirect caller to chat
 		header("Location: ".$_configuration['code_append']."chat/chat.php?".api_get_cidreq()."&origin=whoisonline&target=".Security::remove_XSS($chatid));
-		exit;		
+		exit;
 	}
 }
 
@@ -121,21 +121,21 @@ function display_user_list($user_list, $_plugins)
 		if(strlen($_GET['cidReq']) > 0) {
 			$extra_params['cidReq'] = Security::remove_XSS($_GET['cidReq']);
 			$course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
-		}		
+		}
 		foreach ($user_list as $user) {
 			$uid=$user[0];
 			$user_info = api_get_user_info($uid);
 			$table_row = array();
 			$url = '?id='.$uid.$course_url;
             $image_array=UserManager::get_user_picture_path_by_id($uid,'system',false,true);
-            
+
             $friends_profile = UserFriend::get_picture_user($uid, $image_array['file'], 92, 'medium_', ' width="90" height="90" ');
             //reduce image
             $table_row[] = '<center><a href="'.$url.'"><img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' border="1"></a></center>';
 			$table_row[] = '<a href="'.$url.'">'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</a>';
-			
+
 			//$table_row[] = '<a href="'.$url.'">'.$user_info['lastName'].'</a>';
-			
+
 			if (api_get_setting('show_email_addresses') == 'true') {
 				$table_row[] = Display::encrypted_mailto_link($user_info['mail']);
 			}
@@ -148,7 +148,7 @@ function display_user_list($user_list, $_plugins)
 										<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
 					} else {
 						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
-					}				
+					}
 				}
 			}
 			$table_data[] = $table_row;
@@ -156,27 +156,27 @@ function display_user_list($user_list, $_plugins)
 		$table_header[] = array(get_lang('UserPicture'),false,'width="90"');
 		$table_header[] = array(get_lang('Name'),true);
 		//$table_header[] = array(get_lang('LastName'),true);
-		
+
 		if (api_get_setting('show_email_addresses') == 'true') {
 			$table_header[] = array(get_lang('Email'),true);
 		}
 		$user_anonymous=api_get_anonymous_id();
 		if (api_get_setting('allow_social_tool')=='true' && api_get_user_id()<>$user_anonymous && api_get_user_id()<>0) {
 			$table_header[] = array(get_lang('Friends'),false,'width="200"');
-		}		
+		}
 		/*this feature is deprecated
 		if ( api_get_setting('allow_message_tool')=='true' && isset($_SESSION['_user'])) {
 			$table_header[] = array(get_lang('SendMessage'),true);
 		}
 		*/
 		$sorting_options['column'] = (isset ($_GET['column']) ? (int)$_GET['column'] : 2);
-		/*if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' ) {			
+		/*if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' ) {
 			//send_invitation_friend_user();
-			echo '<div align="right"><input type="button" name="id_btn_send_invitation" id="id_btn_send_invitation" value="'.get_lang('SendInviteMessage').'"/></div>';			
+			echo '<div align="right"><input type="button" name="id_btn_send_invitation" id="id_btn_send_invitation" value="'.get_lang('SendInviteMessage').'"/></div>';
 			echo '<form action="whoisonline.php" name="form_register_friend" id="form_register_friend" method="post">';
 		}*/
-		
-		Display::display_sortable_table($table_header,$table_data,$sorting_options,array('per_page_default'=>count($table_data)),$extra_params);		
+
+		Display::display_sortable_table($table_header,$table_data,$sorting_options,array('per_page_default'=>count($table_data)),$extra_params);
 		/*if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' ) {
 			echo '</form>';
 		}*/
@@ -190,7 +190,7 @@ function display_individual_user($user_id)
 {
 	global $interbreadcrumb;
 	$safe_user_id = Database::escape_string($user_id);
-	
+
 	// to prevent a hacking attempt: http://www.dokeos.com/forum/viewtopic.php?t=5363
 	$user_table=Database::get_main_table(TABLE_MAIN_USER);
 	$sql = "SELECT * FROM $user_table WHERE user_id='".$safe_user_id."'";
@@ -207,7 +207,7 @@ function display_individual_user($user_id)
 		echo '</div><br/>';
 		echo '<div style="text-align: center">';
 		if (strlen(trim($user_object->picture_uri)) > 0) {
-			$sysdir_array = UserManager::get_user_picture_path_by_id($safe_user_id,'system');			
+			$sysdir_array = UserManager::get_user_picture_path_by_id($safe_user_id,'system');
 			$sysdir = $sysdir_array['dir'];
 			$webdir_array = UserManager::get_user_picture_path_by_id($safe_user_id,'web');
 			$webdir = $webdir_array['dir'];
@@ -217,25 +217,25 @@ function display_individual_user($user_id)
 			$resizing = (($height > 200) ? 'height="200"' : '');
 			$height += 30;
 			$width += 30;
-			$window_name = 'window'.uniqid('');			
-			// get the path,width and height from original picture			
+			$window_name = 'window'.uniqid('');
+			// get the path,width and height from original picture
 			$big_image = $webdir.'big_'.$user_object->picture_uri;
 			$big_image_size = api_getimagesize($big_image);
 			$big_image_width= $big_image_size[0];
 			$big_image_height= $big_image_size[1];
-			$url_big_image = $big_image.'?rnd='.time();						
+			$url_big_image = $big_image.'?rnd='.time();
 			echo '<input type="image" src="'.$fullurl.'" alt="'.$alt.'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/><br />';
 			global $user_anonymous;
-			if (api_get_setting('allow_social_tool')=='true' && api_get_user_id()<>$user_anonymous && api_get_user_id()<>0) { 
+			if (api_get_setting('allow_social_tool')=='true' && api_get_user_id()<>$user_anonymous && api_get_user_id()<>0) {
 				echo '<br />';
-				echo '<a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$safe_user_id.'">'.get_lang('ViewSharedProfile').'</a>';	
+				echo '<a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$safe_user_id.'">'.get_lang('ViewSharedProfile').'</a>';
 				echo '<br />';
-			}									
-		} else {			
+			}
+		} else {
 			echo Display::return_icon('unknown.jpg',get_lang('Unknown'));
 			echo '<br />';
 		}
-		
+
 		if (api_get_setting("show_email_addresses") == "true")
 		{
 			echo Display::encrypted_mailto_link($user_object->email,$user_object->email).'<br />';
@@ -274,10 +274,10 @@ function display_individual_user($user_id)
  * @todo use the correct api_get_path instead of $clarolineRepositoryWeb
  */
 function display_productions($user_id)
-{	
+{
 	$sysdir_array = UserManager::get_user_picture_path_by_id($user_id,'system');
 	$sysdir = $sysdir_array['dir'].$user_id.'/';
-	$webdir_array = UserManager::get_user_picture_path_by_id($user_id,'web');	
+	$webdir_array = UserManager::get_user_picture_path_by_id($user_id,'web');
 	$webdir = $webdir_array['dir'].$user_id.'/';
 	if( !is_dir($sysdir)) {
 		mkpath($sysdir);
@@ -304,7 +304,7 @@ function display_productions($user_id)
 				foreach($subs as $my => $sub) {
 					if(substr($sub,0,1) != '.' && is_file($sysdir.$file.'/'.$sub))
 					{
-						echo '<li><a href="'.$webdir.urlencode($file).'/'.urlencode($sub).'" target=_blank>'.$sub.'</a></li>';						
+						echo '<li><a href="'.$webdir.urlencode($file).'/'.urlencode($sub).'" target=_blank>'.$sub.'</a></li>';
 					}
 				}
 			}
@@ -367,10 +367,10 @@ else
 $referer = empty($_GET['referer'])?'index.php':api_htmlentities(strip_tags($_GET['referer']),ENT_QUOTES,$charset);
 
 if (isset($_GET['id'])) {
-	echo '<a href="whoisonline.php" class="fake_button_back">'.get_lang('Back').'</a>';	
+	echo '<a href="whoisonline.php" class="fake_button_back">'.get_lang('Back').'</a>';
 } else {
-	echo '<a href="'.$referer.'" class="fake_button_back">'.get_lang('BackHome').'</a>';	
-} 
+	echo '<a href="'.$referer.'" class="fake_button_back">'.get_lang('BackHome').'</a>';
+}
 
 /*
 ==============================================================================

@@ -1,5 +1,5 @@
 <?php // $Id: user_portal.php 22375 2009-07-26 18:54:59Z herodoto $
-  
+
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -215,7 +215,7 @@ function get_personal_course_list($user_id) {
 										WHERE course.code = course_rel_user.course_code"."
 										AND   course_rel_user.user_id = '".$user_id."'
 										ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,i";
-	
+
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 
 	while ($result_row = Database::fetch_array($course_list_sql_result)) {
@@ -389,7 +389,7 @@ function get_logged_user_course_html($my_course) {
 	$course_tool_table 			= Database :: get_course_table(TABLE_TOOL_LIST, $course_database);
 	$tool_edit_table 			= Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_database);
 	$course_group_user_table 	= Database :: get_course_table(TOOL_USER, $course_database);
-		
+
 	$user_id = api_get_user_id();
 	$course_system_code = $my_course['k'];
 	$course_visual_code = $my_course['c'];
@@ -401,23 +401,23 @@ function get_logged_user_course_html($my_course) {
 	$course_access_settings = CourseManager :: get_access_settings($course_system_code);
 	$course_id = isset($course_info['course_id'])?$course_info['course_id']:null;
 	$course_visibility = $course_access_settings['visibility'];
-	
+
 	$user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_system_code);
-		
+
 	//function logic - act on the data
 	$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($my_course['k']);
-	if ($is_virtual_course) { 
+	if ($is_virtual_course) {
 		// If the current user is also subscribed in the real course to which this
 		// virtual course is linked, we don't need to display the virtual course entry in
 		// the course list - it is combined with the real course entry.
-		$target_course_code = CourseManager :: get_target_of_linked_course($course_system_code);		
+		$target_course_code = CourseManager :: get_target_of_linked_course($course_system_code);
 		$is_subscribed_in_target_course = CourseManager :: is_user_subscribed_in_course(api_get_user_id(), $target_course_code);
-		if ($is_subscribed_in_target_course) {			
+		if ($is_subscribed_in_target_course) {
 			return; //do not display this course entry
 		}
 	}
 	$has_virtual_courses = CourseManager :: has_virtual_courses_from_code($course_system_code, api_get_user_id());
-	if ($has_virtual_courses) { 
+	if ($has_virtual_courses) {
 		$return_result = CourseManager :: determine_course_title_from_course_info(api_get_user_id(), $course_info);
 		$course_display_title = $return_result['title'];
 		$course_display_code = $return_result['code'];
@@ -474,10 +474,10 @@ function get_logged_user_course_html($my_course) {
 			$result .= ' ('.$course_teacher_email.')';
 		}
 	}
-	
+
 	$current_course_settings = CourseManager :: get_access_settings($my_course['k']);
-	
-	
+
+
 	// display the what's new icons
 	$result .= show_notification($my_course);
 
@@ -526,7 +526,7 @@ function get_logged_user_course_html($my_course) {
 		$session = '';
 		$active = false;
 		if (!empty($my_course['session_name'])) {
-			
+
 			// Request for the name of the general coach
 			$sql = 'SELECT lastname, firstname
 			FROM '.$tbl_session.' ts
@@ -537,7 +537,7 @@ function get_logged_user_course_html($my_course) {
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
 			$sessioncoach = api_store_result($rs);
 			$sessioncoach = $sessioncoach[0];
-		
+
 			$session = array();
 			$session['title'] = $my_course['session_name'];
 			if ( $my_course['date_start']=='0000-00-00' ) {
@@ -597,14 +597,14 @@ function show_notification($my_course) {
 					AND ctt.visibility = '1'
 					AND tet.lastedit_user_id != $user_id
 					ORDER BY tet.lastedit_date";
-	
+
 	$res = api_sql_query($sql);
 	//get the group_id's with user membership
 	$group_ids = GroupManager :: get_group_ids($course_database, $user_id);
 	$group_ids[] = 0; //add group 'everyone'
 	//filter all selected items
 	while ($res && ($item_property = Database::fetch_array($res))) {
-		if ((!isset ($lastTrackInCourseDate[$item_property['tool']]) 
+		if ((!isset ($lastTrackInCourseDate[$item_property['tool']])
                 || $lastTrackInCourseDate[$item_property['tool']] < $item_property['lastedit_date'])
             && ((in_array($item_property['to_group_id'], $group_ids) && $item_property['tool'] != TOOL_DROPBOX)
                 || $item_property['to_user_id'] == $user_id)
@@ -769,7 +769,7 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 		$thisAgenda = $maxCourse - $nbDigestEntries; // new max entries for agenda
 		if ($maxAgenda < $thisAgenda) {
 			$thisAgenda = $maxAgenda;
-		}	
+		}
 		// collect from agenda, but only if tool is visible for the course
 		if ($result && $thisAgenda > 0 && Database::num_rows($result) > 0) {
 			$tableCal = $courseTablePrefix.$thisCourseDbName.$_configuration['db_glue']."calendar_event";
@@ -914,22 +914,22 @@ $show_digest_link=false;
 $display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION["studentview"] != "studentenview");
 if ($display_add_course_link) {
 	$show_menu=true;
-	$show_create_link=true;	
+	$show_create_link=true;
 }
-	
+
 if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
 	$show_menu=true;
-	$show_course_link=true;	
-} else {	
-	if (api_get_setting('allow_students_to_browse_courses')=='true') {	
+	$show_course_link=true;
+} else {
+	if (api_get_setting('allow_students_to_browse_courses')=='true') {
 		$show_menu=true;
-		$show_course_link=true;			
-	}	
+		$show_course_link=true;
+	}
 }
 
 if(isset($toolsList) and is_array($toolsList) and isset($digest)) {
 	$show_digest_link=true;
-	$show_menu=true;	
+	$show_menu=true;
 }
 
 // My account section
@@ -942,10 +942,10 @@ if ($show_menu){
 	if ($show_course_link)
 		display_edit_course_list_links();
 	if ($show_digest_link)
-		display_digest($toolsList, $digest, $orderKey, $courses);			
+		display_digest($toolsList, $digest, $orderKey, $courses);
 	echo '</ul>';
 	echo '</div>';
-}	
+}
 
 // Main navigation section
 // tabs that are deactivated are added here
@@ -972,15 +972,15 @@ if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu']))
 	echo '</div>';
 }
 
-if (api_get_setting('allow_reservation')=='true' && api_is_allowed_to_create_course() ){ 
-	//include_once('main/reservation/rsys.php'); 
+if (api_get_setting('allow_reservation')=='true' && api_is_allowed_to_create_course() ){
+	//include_once('main/reservation/rsys.php');
 	echo '<div class="menusection">';
 	echo '<span class="menusectioncaption">'.get_lang('Booking').'</span>';
 	echo '<ul class="menulist">';
-	echo '<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br/>'; 
+	echo '<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br/>';
 	//echo '<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br/>';
-	
-	/*require_once('main/reservation/rsys.php'); 
+
+	/*require_once('main/reservation/rsys.php');
 	if(api_is_platform_admin() || Rsys :: check_user_status() == 1) { // Only for admins & teachers...
 	    echo '<a href="main/reservation/m_item.php">'.get_lang('ManageItems').'</a><br/>';
 	    echo '<a href="main/reservation/m_reservation.php">'.get_lang('ManageReservationPeriods').'</a><br/>';

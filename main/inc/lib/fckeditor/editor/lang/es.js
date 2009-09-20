@@ -55,8 +55,8 @@ InsertTableLbl		: "Tabla",
 InsertTable			: "Insertar/Editar Tabla",
 InsertLineLbl		: "Línea",
 InsertLine			: "Insertar Línea Horizontal",
-InsertSpecialCharLbl: "Caracteres especiales",
-InsertSpecialChar	: "Insertar Caracteres especiales",
+InsertSpecialCharLbl: "Caracteres Especiales",
+InsertSpecialChar	: "Insertar Caracteres Especiales",
 InsertSmileyLbl		: "Emoticones",
 InsertSmiley		: "Insertar Emoticones",
 About				: "Acerca de FCKeditor",
@@ -288,7 +288,7 @@ DlgColorSelected	: "Seleccionado",
 DlgSmileyTitle		: "Insertar un Emoticón",
 
 // Special Character Dialog
-DlgSpecialCharTitle	: "Seleccione caracteres especiales",
+DlgSpecialCharTitle	: "Seleccione un carácter",
 
 // Table Dialog
 DlgTableTitle		: "Propiedades de Tabla",

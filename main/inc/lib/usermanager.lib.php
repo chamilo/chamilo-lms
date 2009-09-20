@@ -1820,7 +1820,7 @@ class UserManager {
 			require_once api_get_path(LIBRARY_PATH).'image.lib.php';
 		}
 	 	$temp = new image($file);
-	 	$picture_infos = @getimagesize(api_url_to_local_path($file));
+	 	$picture_infos = api_getimagesize($file);
 		if ($picture_infos[0] > $max_size_for_picture) {
 			$thumbwidth = $max_size_for_picture;
 			if (empty($thumbwidth) or $thumbwidth == 0) {
@@ -1858,7 +1858,7 @@ class UserManager {
             $picture['file'] = $image_array['dir'].$size_picture.$picture_file;
 			$picture['style'] = '';
 			if ($height > 0) {
-				$dimension = @getimagesize(api_url_to_local_path($picture['file']));
+				$dimension = api_getimagesize($picture['file']);
 				$margin = (($height - $dimension[1]) / 2);
 				$picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension[0].'px; height:'.$dimension[1].';" ';
 			}

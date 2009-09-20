@@ -220,7 +220,7 @@ function display_individual_user($user_id)
 			$window_name = 'window'.uniqid('');			
 			// get the path,width and height from original picture			
 			$big_image = $webdir.'big_'.$user_object->picture_uri;
-			$big_image_size = @getimagesize(api_url_to_local_path($big_image));
+			$big_image_size = api_getimagesize($big_image);
 			$big_image_width= $big_image_size[0];
 			$big_image_height= $big_image_size[1];
 			$url_big_image = $big_image.'?rnd='.time();						

@@ -397,7 +397,8 @@ function api_get_path($path_type, $path = null) {
 			// http://localhost/dokeos/courses/TEST/document/image.png
 			if (preg_match('/(.*)main\/document\/download.php\?doc_url=\/(.*)&cDir=\/(.*)?/', $path, $matches)) {
 				global $_cid, $_course;
-				if (!empty($_cid) && $_cid != -1 && isset($_course)) { // Inside a course?
+				if (!empty($_cid) && $_cid != -1 && isset($_course)) { // Inside a course?	// TODO: This restriction to be revised, what about converting
+																							// links which were created while content was within another course?
 					$path = $matches[1].'courses/'.$_course['path'].'/document/'.str_replace('//', '/', $matches[3].'/'.$matches[2]);
 				} else {
 					return $original_path;	// Not inside a course, return then the URL "as is".
@@ -3424,6 +3425,16 @@ function api_is_windows_os() {
 }
 
 /**
+ * This wrapper function has been implemented for avoiding some known problems about the function getimagesize().
+ * @link http://php.net/manual/en/function.getimagesize.php
+ * @link http://www.dokeos.com/forum/viewtopic.php?t=12345
+ * @link http://www.dokeos.com/forum/viewtopic.php?t=16355
+ */
+function api_getimagesize($path) {
+	return @getimagesize(api_get_path(TO_SYS_PATH, $path));
+}
+
+/**
  * This function resizes an image, with preserving its proportions (or aspect ratio).
  * @author Ivan Tcholakov, MAY-2009.
  * @param int $image			System path or URL of the image
@@ -3432,7 +3443,7 @@ function api_is_windows_os() {
  * @return array				Calculated new width and height
  */
 function api_resize_image($image, $target_width, $target_height) {
-	$image_properties = @getimagesize(api_url_to_local_path($image)); // We have to call getimagesize() in a safe way.
+	$image_properties = api_getimagesize($image);
 	$image_width = $image_properties[0];
 	$image_height = $image_properties[1];
 	return api_calculate_image_size($image_width, $image_height, $target_width, $target_height);
@@ -3576,15 +3587,6 @@ function is_allowed_to_edit() {
 
 /**
  * @deprecated 19-SEP-2009: Use api_get_path(TO_SYS_PATH, $url) instead.
- * This function converts URLs into local file names.
- * Purpose: To help diagnosing or making workarounds concerning problems, caused by getimagesize().
- * Usage:
- * $imagesize = @getimagesize($image);  ---->  $imagesize = @getimagesize(api_url_to_local_path($image));
- * @author Ivan Tcholakov, 23-SEP-2008, the first implementation for Dokeos 1.8.6.
- * @param string $url		The input URL.
- * @return string			Returns a system path that is correspondet to the given URL.
- * Note: If the given URL has not been detected as absolute URL inside the platform (i.e. if it is a system path,
- * a relative path or a URL that points somewhere else in the Web, then it is returned unmodified.
  */
 function api_url_to_local_path($url) {
 	return api_get_path(TO_SYS_PATH, $url);

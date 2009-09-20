@@ -348,7 +348,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 						if(!empty($forum['forum_image'])) {
 
 							$image_path = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/forum/images/'.$forum['forum_image'];												
-							$image_size = @getimagesize(api_url_to_local_path($image_path));
+							$image_size = api_getimagesize($image_path);
 
 							$img_attributes = '';
 							if (!empty($image_size)) {

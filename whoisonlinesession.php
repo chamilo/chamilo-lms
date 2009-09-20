@@ -1,17 +1,11 @@
 <?php
 /* For licensing terms, see /dokeos_license.txt */
 
-/**
- * @todo variables are sometimes in cammelcase, or even worse a mixture of CammelCase and udnerscoring: $a_userList
- *
- */
-
 // name of the language file that needs to be included
 $language_file = array ('index', 'chat', 'tracking');
 
-include_once("./main/inc/global.inc.php");
+include_once './main/inc/global.inc.php';
 api_block_anonymous_users();
-
 
 $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -25,7 +19,7 @@ $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 
 Display::display_header(get_lang('UserOnlineListSession'));
 ?>
-<br/><br/>
+<br /><br />
 <table class="data_table" width="60%">
 	<tr class="tableName">
 		<td colspan="4">
@@ -47,10 +41,10 @@ Display::display_header(get_lang('UserOnlineListSession'));
 		</th>
 	</tr>
 <?php
-	$sessionIsCoach = array();
-	if (isset($_user['user_id']) && $_user['user_id']!='') {
+	$session_is_coach = array();
+	if (isset($_user['user_id']) && $_user['user_id'] != '') {
 		$_user['user_id'] = intval($_user['user_id']);
-		$result = api_sql_query("SELECT DISTINCT id,
+		$result = Database::query("SELECT DISTINCT id,
 										name,
 										date_start,
 										date_end
@@ -61,10 +55,10 @@ Display::display_header(get_lang('UserOnlineListSession'));
 									ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 
 		while ($session = Database:: fetch_array($result)) {
-			$sessionIsCoach[$session['id']] = $session;
+			$session_is_coach[$session['id']] = $session;
 		}
 
-		$result = api_sql_query("SELECT DISTINCT id,
+		$result = Database::query("SELECT DISTINCT id,
 										name,
 										date_start,
 										date_end
@@ -72,10 +66,11 @@ Display::display_header(get_lang('UserOnlineListSession'));
 								WHERE session.id_coach = ".$_user['user_id']."
 								ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 		while ($session = Database:: fetch_array($result)) {
-			$sessionIsCoach[$session['id']] = $session;
+			$session_is_coach[$session['id']] = $session;
 		}
 
-		foreach($sessionIsCoach as $session) {
+		$students_online = array();
+		foreach ($session_is_coach as $session) {
 			$sql = "SELECT 	DISTINCT last_access.access_user_id,
 							last_access.access_date,
 							last_access.access_cours_code,
@@ -88,38 +83,35 @@ Display::display_header(get_lang('UserOnlineListSession'));
 					WHERE access_session_id='".$session['id']."'
 					AND NOW()-access_date<1000 GROUP BY access_user_id";
 
-			$result = api_sql_query($sql,__FILE__,__LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 
-			while($a_userList = mysql_fetch_array($result)) {
-				$a_onlineStudent[$a_userList['access_user_id']] = $a_userList;
+			while($user_list = Database::fetch_array($result)) {
+				$students_online[$user_list['access_user_id']] = $user_list;
 			}
 		}
 
-		if(count($a_onlineStudent)>0) {
-			foreach($a_onlineStudent as $onlineStudent) {
+		if (count($students_online) > 0) {
+			foreach ($students_online as $student_online) {
 				echo "<tr>
 						<td>
 					";
-				echo		$onlineStudent['name'];
+				echo $student_online['name'];
 				echo "	</td>
 						<td align='center'>
 					 ";
-				echo		$onlineStudent['access_cours_code'];
+				echo $student_online['access_cours_code'];
 				echo "	</td>
 						<td align='center'>
 					 ";
-							 if(!empty($onlineStudent['email']))
-							 {
-								echo $onlineStudent['email'];
-							 }
-							 else
-							 {
+							 if (!empty($student_online['email'])) {
+								echo $student_online['email'];
+							 } else {
 							 	echo get_lang('NoEmail');
 							 }
 				echo "	</td>
 						<td align='center'>
 					 ";
-				echo '<a href="main/chat/chat.php?cidReq='.$onlineStudent['access_cours_code'].'&id_session='.$onlineStudent['access_session_id'].'"> -> </a>';
+				echo '<a href="main/chat/chat.php?cidReq='.$student_online['access_cours_code'].'&id_session='.$student_online['access_session_id'].'"> -> </a>';
 				echo "	</td>
 					</tr>
 					 ";
@@ -136,11 +128,10 @@ Display::display_header(get_lang('UserOnlineListSession'));
 ?>
 </table>
 <?php
+
 /*
 ==============================================================================
 		FOOTER
 ==============================================================================
 */
-
 Display::display_footer();
-?>

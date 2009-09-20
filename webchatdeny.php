@@ -12,22 +12,22 @@
 */
 
 // name of the language file that needs to be included
-$language_file = "index";
+$language_file = 'index';
 
 // including necessary files
-include_once('./main/inc/global.inc.php');
+include_once './main/inc/global.inc.php';
 
 // table definitions
 $track_user_table = Database::get_main_table(TABLE_MAIN_USER);
-if (isset($_user['user_id']) && $_user['user_id']!='') {
+if (isset($_user['user_id']) && $_user['user_id'] != '') {
 	$_user['user_id'] = intval($_user['user_id']);
-	$sql="update $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text='DENIED' where (user_id = ".$_user['user_id'].")";
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$sql = "update $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text='DENIED' where (user_id = ".$_user['user_id'].")";
+	$result = Database::query($sql, __FILE__, __LINE__);
 }
 
 Display::display_header();
 
-$message=get_lang("RequestDenied")."<br><br><a href='javascript:history.back()'>".get_lang("Back")."</a>";
+$message = get_lang('RequestDenied').'<br /><br /><a href="javascript: history.back();">'.get_lang('Back').'</a>';
 Display::display_normal_message($message);
 
 /*
@@ -37,4 +37,3 @@ Display::display_normal_message($message);
 */
 
 Display::display_footer();
-?>

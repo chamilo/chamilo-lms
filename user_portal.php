@@ -31,7 +31,7 @@
 
 /*
 ==============================================================================
-	   INIT SECTION
+		INIT SECTION
 ==============================================================================
 */
 // Don't change these settings
@@ -44,23 +44,22 @@ define('SCRIPTVAL_NewEntriesOfTheDayOfLastLogin', 5);
 define('SCRIPTVAL_NoTimeLimit', 6);
 // End 'don't change' section
 
-
-// name of the language file that needs to be included
+// Language files that should be included
 $language_file = array ('courses', 'index');
 
 $cidReset = true; /* Flag forcing the 'current course' reset,
-                   as we're not inside a course anymore  */
+					as we're not inside a course anymore  */
 /*
 -----------------------------------------------------------
 	Included libraries
 -----------------------------------------------------------
 */
-include_once ('./main/inc/global.inc.php');
-include_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
-include_once (api_get_path(LIBRARY_PATH).'system_announcements.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+include_once './main/inc/global.inc.php';
+include_once api_get_path(LIBRARY_PATH).'course.lib.php';
+include_once api_get_path(LIBRARY_PATH).'debug.lib.inc.php';
+include_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
+include_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+include_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 api_block_anonymous_users(); // only users who are logged in can proceed
 
@@ -82,13 +81,13 @@ $main_category_table 	= Database :: get_main_table(TABLE_MAIN_CATEGORY);
 -----------------------------------------------------------
 */
 // ---- Course list options ----
-define('CONFVAL_showCourseLangIfNotSameThatPlatform', TRUE);
+define('CONFVAL_showCourseLangIfNotSameThatPlatform', true);
 // Preview of course content
 // to disable all: set CONFVAL_maxTotalByCourse = 0
 // to enable all: set e.g. CONFVAL_maxTotalByCourse = 5
 // by default disabled since what's new icons are better (see function display_digest() )
 define('CONFVAL_maxValvasByCourse', 2); // Maximum number of entries
-define('CONFVAL_maxAgendaByCourse', 2); //  collected from each course
+define('CONFVAL_maxAgendaByCourse', 2); // collected from each course
 define('CONFVAL_maxTotalByCourse', 0); //  and displayed in summary.
 define('CONFVAL_NB_CHAR_FROM_CONTENT', 80);
 // Order to sort data
@@ -97,8 +96,8 @@ $orderKey = array('keyTools', 'keyTime', 'keyCourse'); // default "best" Choice
 //$orderKey = array('keyCourse', 'keyTime', 'keyTools');
 //$orderKey = array('keyCourse', 'keyTools', 'keyTime');
 define('CONFVAL_showExtractInfo', SCRIPTVAL_UnderCourseList);
-// SCRIPTVAL_InCourseList    // best choice if $orderKey[0] == 'keyCourse'
-// SCRIPTVAL_UnderCourseList // best choice
+// SCRIPTVAL_InCourseList		// best choice if $orderKey[0] == 'keyCourse'
+// SCRIPTVAL_UnderCourseList	// best choice
 // SCRIPTVAL_Both // probably only for debug
 //define('CONFVAL_dateFormatForInfosFromCourses', get_lang('dateFormatShort'));
 define('CONFVAL_dateFormatForInfosFromCourses', get_lang('dateFormatLong'));
@@ -109,20 +108,16 @@ define("CONFVAL_limitPreviewTo", SCRIPTVAL_NewEntriesOfTheDayOfLastLogin);
 
 /*if(api_is_allowed_to_create_course() && !isset($_GET['sessionview'])){
 	$nosession = true;
-}
-else {
+} else {
 	$nosession = false;
 }*/
 
-$nosession=false;
+$nosession = false;
 
-if(api_get_setting('use_session_mode')=='true' && !$nosession) {
-	if (isset($_GET['inactives'])){
-		$display_actives = false;
-	} else {
-		$display_actives = true;
-	}
+if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
+	$display_actives = !isset($_GET['inactives']);
 }
+
 $nameTools = get_lang('MyCourses');
 $this_section = SECTION_COURSES;
 
@@ -226,7 +221,7 @@ function get_personal_course_list($user_id) {
 
 	$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, 5 as s
 								FROM $main_course_table as course, $tbl_session_course_user as srcru
-							  	WHERE srcru.course_code=course.code AND srcru.id_user='$user_id'";
+								WHERE srcru.course_code=course.code AND srcru.id_user='$user_id'";
 
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 
@@ -238,7 +233,7 @@ function get_personal_course_list($user_id) {
 
 	$personal_course_list_sql = "SELECT DISTINCT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, 2 as s
 								FROM $main_course_table as course, $tbl_session_course as src, $tbl_session as session
-							  	WHERE session.id_coach='$user_id' AND session.id=src.id_session AND src.course_code=course.code";
+								WHERE session.id_coach='$user_id' AND session.id=src.id_session AND src.course_code=course.code";
 
 	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 
@@ -251,12 +246,12 @@ function get_personal_course_list($user_id) {
 }
 
 
-
 /*
 -----------------------------------------------------------
 	Display functions
 -----------------------------------------------------------
 */
+
 /**
  * Warning: this function defines a global.
  * @todo use the correct get_path function
@@ -265,6 +260,7 @@ function display_admin_links() {
 	global $rootAdminWeb;
 	echo "<li><a href=\"".$rootAdminWeb."\">".get_lang('PlatformAdmin')."</a></li>";
 }
+
 /**
  * Enter description here...
  *
@@ -272,6 +268,7 @@ function display_admin_links() {
 function display_create_course_link() {
 	echo "<li><a href=\"main/create_course/add_course.php\">".get_lang('CourseCreate')."</a></li>";
 }
+
 /**
  * Enter description here...
  *
@@ -293,10 +290,10 @@ function display_digest($toolsList, $digest, $orderKey, $courses) {
 		// // // LEVEL 1 // // //
 		reset($digest);
 		echo "<br /><br />\n";
-		while (list ($key1) = each($digest)) {
+		while (list($key1) = each($digest)) {
 			if (is_array($digest[$key1])) {
 				// // // Title of LEVEL 1 // // //
-				echo "<b>\n";
+				echo "<strong>\n";
 				if ($orderKey[0] == 'keyTools') {
 					$tools = $key1;
 					echo $toolsList[$key1]['name'];
@@ -306,7 +303,7 @@ function display_digest($toolsList, $digest, $orderKey, $courses) {
 				} elseif ($orderKey[0] == 'keyTime') {
 					echo format_locale_date(CONFVAL_dateFormatForInfosFromCourses, strtotime($digest[$key1]));
 				}
-				echo "</b>\n";
+				echo "</strong>\n";
 				// // // End Of Title of LEVEL 1 // // //
 				// // // LEVEL 2 // // //
 				reset($digest[$key1]);
@@ -361,8 +358,8 @@ function display_digest($toolsList, $digest, $orderKey, $courses) {
  * $my_course['d'] - course directory
  * $my_course['i'] - course title
  * $my_course['c'] - visual course code
- * $my_course['k']   - system course code
- * $my_course['db']  - course database
+ * $my_course['k']  - system course code
+ * $my_course['db'] - course database
  *
  * @version 1.0.3
  * @todo refactor into different functions for database calls | logic | display
@@ -428,55 +425,54 @@ function get_logged_user_course_html($my_course) {
 
 	$s_course_status=$my_course['s'];
 
-	$s_htlm_status_icon="";
+	$s_htlm_status_icon = '';
 
-	if ($s_course_status==1) {
+	if ($s_course_status == 1) {
 		$s_htlm_status_icon=Display::return_icon('teachers.gif', get_lang('Teacher'));
 	}
-	if ($s_course_status==2) {
+	if ($s_course_status == 2) {
 		$s_htlm_status_icon=Display::return_icon('coachs.gif', get_lang('GeneralCoach'));
 	}
-	if ($s_course_status==5) {
-		$s_htlm_status_icon=Display::return_icon('students.gif', get_lang('Student'));
+	if ($s_course_status == 5) {
+		$s_htlm_status_icon = Display::return_icon('students.gif', get_lang('Student'));
 	}
 
 	//display course entry
-	$result.="\n\t";
+	$result .= "\n\t";
 	$result .= '<li class="courses"><div class="coursestatusicons">'.$s_htlm_status_icon.'</div>';
 	//show a hyperlink to the course, unless the course is closed and user is not course admin
 	if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
-		if(api_get_setting('use_session_mode')=='true' && !$nosession) {
-			if(empty($my_course['id_session'])) {
+		if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
+			if (empty($my_course['id_session'])) {
 				$my_course['id_session'] = 0;
 			}
-			if($user_in_course_status == COURSEMANAGER || ($date_start <= $now && $date_end >= $now) || $date_start=='0000-00-00') {
+			if($user_in_course_status == COURSEMANAGER || ($date_start <= $now && $date_end >= $now) || $date_start == '0000-00-00') {
 				$result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$my_course['id_session'].'">'.$course_display_title.'</a>';
 			}
 		} else {
 			$result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/">'.$course_display_title.'</a>';
 		}
 	} else {
-		$result .= $course_display_title." "." ".get_lang('CourseClosed')."";
+		$result .= $course_display_title.'  '.get_lang('CourseClosed');
 	}
 	// show the course_code and teacher if chosen to display this
-	if (api_get_setting('display_coursecode_in_courselist') == 'true' OR api_get_setting('display_teacher_in_courselist') == 'true') {
+	if (api_get_setting('display_coursecode_in_courselist') == 'true' || api_get_setting('display_teacher_in_courselist') == 'true') {
 		$result .= '<br />';
 	}
 	if (api_get_setting('display_coursecode_in_courselist') == 'true') {
 		$result .= $course_display_code;
 	}
-	if (api_get_setting('display_coursecode_in_courselist') == 'true' AND api_get_setting('display_teacher_in_courselist') == 'true') {
+	if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
 		$result .= ' &ndash; ';
 	}
 	if (api_get_setting('display_teacher_in_courselist') == 'true') {
 		$result .= $course_teacher;
-		if(!empty($course_teacher_email)) {
+		if (!empty($course_teacher_email)) {
 			$result .= ' ('.$course_teacher_email.')';
 		}
 	}
 
 	$current_course_settings = CourseManager :: get_access_settings($my_course['k']);
-
 
 	// display the what's new icons
 	$result .= show_notification($my_course);
@@ -495,7 +491,7 @@ function get_logged_user_course_html($my_course) {
 			}
 			$result .= '</li>';
 			$result .= '<ul>';
-			reset($digest[$thisCourseSysCode][$key2]);
+			reset ($digest[$thisCourseSysCode][$key2]);
 			while (list ($key3, $dataFromCourse) = each($digest[$thisCourseSysCode][$key2])) {
 				$result .= '<li>';
 				if ($orderKey[2] == 'keyTools') {
@@ -522,7 +518,7 @@ function get_logged_user_course_html($my_course) {
 	$result .= '</li>';
 
 
-	if (api_get_setting('use_session_mode')=='true' && !$nosession) {
+	if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
 		$session = '';
 		$active = false;
 		if (!empty($my_course['session_name'])) {
@@ -542,19 +538,19 @@ function get_logged_user_course_html($my_course) {
 			$session['title'] = $my_course['session_name'];
 			if ( $my_course['date_start']=='0000-00-00' ) {
 				$session['dates'] = get_lang('WithoutTimeLimits');
-				if ( api_get_setting('show_session_coach') === 'true' ) {
+				if (api_get_setting('show_session_coach') === 'true') {
 					$session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($sessioncoach['firstname'], $sessioncoach['lastname']);
 				}
 				$active = true;
 			} else {
 				$session ['dates'] = ' - '.get_lang('From').' '.$my_course['date_start'].' '.get_lang('To').' '.$my_course['date_end'];
-				if ( api_get_setting('show_session_coach') === 'true' ) {
+				if (api_get_setting('show_session_coach') === 'true') {
 					$session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($sessioncoach['firstname'], $sessioncoach['lastname']);
 				}
-				$active = ($date_start <= $now && $date_end >= $now)?true:false;
+				$active = $date_start <= $now && $date_end >= $now;
 			}
 		}
-		$output = array ($my_course['user_course_cat'], $result, $my_course['id_session'], $session, 'active'=>$active);
+		$output = array ($my_course['user_course_cat'], $result, $my_course['id_session'], $session, 'active' => $active);
 	} else {
 		$output = array ($my_course['user_course_cat'], $result);
 	}
@@ -584,8 +580,9 @@ function show_notification($my_course) {
 	$oldestTrackDate = "3000-01-01 00:00:00";
 	while ($lastTrackInCourse = Database::fetch_array($resLastTrackInCourse)) {
 		$lastTrackInCourseDate[$lastTrackInCourse['access_tool']] = $lastTrackInCourse['access_date'];
-		if ($oldestTrackDate > $lastTrackInCourse['access_date'])
+		if ($oldestTrackDate > $lastTrackInCourse['access_date']) {
 			$oldestTrackDate = $lastTrackInCourse['access_date'];
+		}
 	}
 	// get the last edits of all tools of this course
 	$sql = "SELECT tet.*, tet.lastedit_date last_date, tet.tool tool, tet.ref ref,
@@ -605,13 +602,12 @@ function show_notification($my_course) {
 	//filter all selected items
 	while ($res && ($item_property = Database::fetch_array($res))) {
 		if ((!isset ($lastTrackInCourseDate[$item_property['tool']])
-                || $lastTrackInCourseDate[$item_property['tool']] < $item_property['lastedit_date'])
-            && ((in_array($item_property['to_group_id'], $group_ids) && $item_property['tool'] != TOOL_DROPBOX)
-                || $item_property['to_user_id'] == $user_id)
-            && ($item_property['visibility'] == '1'
-                || ($my_course['s'] == '1' && $item_property['visibility'] == '0')
-                || !isset ($item_property['visibility'])))
-        {
+				|| $lastTrackInCourseDate[$item_property['tool']] < $item_property['lastedit_date'])
+			&& ((in_array($item_property['to_group_id'], $group_ids) && $item_property['tool'] != TOOL_DROPBOX)
+				|| $item_property['to_user_id'] == $user_id)
+			&& ($item_property['visibility'] == '1'
+				|| ($my_course['s'] == '1' && $item_property['visibility'] == '0')
+				|| !isset ($item_property['visibility']))) {
 			$notifications[$item_property['tool']] = $item_property;
 		}
 	}
@@ -636,7 +632,6 @@ function show_notification($my_course) {
 */
 function get_user_course_categories() {
 	global $_user;
-
 	$output = array();
 	$table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 	$sql = "SELECT * FROM ".$table_category." WHERE user_id='".Database::escape_string($_user['user_id'])."'";
@@ -661,10 +656,10 @@ if (!isset ($maxValvas)) {
 	$maxValvas = CONFVAL_maxValvasByCourse; // Maximum number of entries
 }
 if (!isset ($maxAgenda)) {
-	$maxAgenda = CONFVAL_maxAgendaByCourse; //  collected from each course
+	$maxAgenda = CONFVAL_maxAgendaByCourse; // collected from each course
 }
 if (!isset ($maxCourse)) {
-	$maxCourse = CONFVAL_maxTotalByCourse; //  and displayed in summary.
+	$maxCourse = CONFVAL_maxTotalByCourse; // and displayed in summary.
 }
 $maxValvas = (int) $maxValvas;
 $maxAgenda = (int) $maxAgenda;
@@ -680,6 +675,7 @@ if ($maxCourse > 0) {
 echo '	<div class="maincontent" id="maincontent">'; // start of content for logged in users
 // Plugins for the my courses main area
 api_plugin('mycourses_main');
+
 /*
 -----------------------------------------------------------------------------
 	System Announcements
@@ -694,8 +690,8 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 	$pageIncluded = true;
 } else {
 	/*--------------------------------------
-	              DISPLAY COURSES
-	   --------------------------------------*/
+				DISPLAY COURSES
+	  --------------------------------------*/
 
 	$list = '';
 	// this is the main function to get the course list
@@ -733,7 +729,7 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 			//Take the entries listed at the top of advalvas/announcements tool
 			$course_announcement_table = Database::get_course_table(TABLE_ANNOUNCEMENT);
 			$sqlGetLastAnnouncements = "SELECT end_date publicationDate, content
-									                            FROM ".$course_announcement_table;
+											FROM ".$course_announcement_table;
 			switch (CONFVAL_limitPreviewTo) {
 				case SCRIPTVAL_NewEntriesOfTheDay :
 					$sqlGetLastAnnouncements .= "WHERE DATE_FORMAT(end_date,'%Y %m %d') >= '".date("Y m d")."'";
@@ -744,12 +740,11 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 					// take care mysql -> DATE_FORMAT(time,format) php -> date(format,date)
 					$sqlGetLastAnnouncements .= "WHERE DATE_FORMAT(end_date,'%Y %m %d') >= '".date("Y m d", $_user["lastLogin"])."'";
 			}
-			$sqlGetLastAnnouncements .= "ORDER BY end_date DESC
-									                             LIMIT ".$maxValvas;
+			$sqlGetLastAnnouncements .= "ORDER BY end_date DESC LIMIT ".$maxValvas;
 			$resGetLastAnnouncements = api_sql_query($sqlGetLastAnnouncements, __FILE__, __LINE__);
 			if ($resGetLastAnnouncements) {
 				while ($annoncement = Database::fetch_array($resGetLastAnnouncements)) {
-					$keyTools = "valvas";
+					$keyTools = 'valvas';
 					$keyTime = $annoncement['publicationDate'];
 					$keyCourse = $thisCourseSysCode;
 					$digest[$$orderKey[0]][$$orderKey[1]][$$orderKey[2]][] = htmlspecialchars(api_substr(strip_tags($annoncement["content"]), 0, CONFVAL_NB_CHAR_FROM_CONTENT), ENT_QUOTES, $charset);
@@ -773,11 +768,11 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 		// collect from agenda, but only if tool is visible for the course
 		if ($result && $thisAgenda > 0 && Database::num_rows($result) > 0) {
 			$tableCal = $courseTablePrefix.$thisCourseDbName.$_configuration['db_glue']."calendar_event";
-			$sqlGetNextAgendaEvent = "SELECT  start_date , title content, start_time
-									                          FROM $tableCal
-									                          WHERE start_date >= CURDATE()
-									                          ORDER BY start_date, start_time
-									                          LIMIT $maxAgenda";
+			$sqlGetNextAgendaEvent = "SELECT start_date, title content, start_time
+											FROM $tableCal
+											WHERE start_date >= CURDATE()
+											ORDER BY start_date, start_time
+											LIMIT $maxAgenda";
 			$resGetNextAgendaEvent = api_sql_query($sqlGetNextAgendaEvent, __FILE__, __LINE__);
 			if ($resGetNextAgendaEvent) {
 				while ($agendaEvent = Database::fetch_array($resGetNextAgendaEvent)) {
@@ -799,24 +794,24 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 	} //end while mycourse...
 }
 
-if ( is_array($list) ) {
+if (is_array($list)) {
 	//Courses whithout sessions
 	$old_user_category = 0;
-	foreach($list as $key=>$value) {
-		if ( empty($value[2]) ) { //if out of any session
+	foreach ($list as $key => $value) {
+		if (empty($value[2])) { //if out of any session
 
 			$userdefined_categories = get_user_course_categories();
 			echo '<ul class="courseslist">';
 
 			if ($old_user_category<>$value[0]) {
-				if ($key<>0 OR $value[0]<>0) {// there are courses in the previous category
+				if ($key <> 0 || $value[0] <> 0) {// there are courses in the previous category
 					echo "\n</ul>";
 				}
 				echo "\n\n\t<ul class=\"user_course_category\"><li>".$userdefined_categories[$value[0]]."</li></ul>\n";
 				if ($key<>0 OR $value[0]<>0){ // there are courses in the previous category
 					echo "<ul class=\"courseslist\">";
 				}
-				$old_user_category=$value[0];
+				$old_user_category = $value[0];
 
 			}
 			echo $value[1];
@@ -824,21 +819,19 @@ if ( is_array($list) ) {
 		}
 	}
 
-
 	$listActives = $listInactives = $listCourses = array();
-	foreach ( $list as $key=>$value ) {
-		if ( $value['active'] ) { //if the session is still active (as told by get_logged_user_course_html())
+	foreach ($list as $key => $value) {
+		if ($value['active']) { //if the session is still active (as told by get_logged_user_course_html())
 			$listActives[] = $value;
-		} else if ( !empty($value[2]) ) { //if there is a session but it is not active
+		} else if (!empty($value[2])) { //if there is a session but it is not active
 			$listInactives[] = $value;
 		}
 	}
 	$old_user_category = 0;
 	$userdefined_categories = get_user_course_categories();
 
-	if(count($listActives)>0 && $display_actives){
+	if (count($listActives) > 0 && $display_actives) {
 		echo "<ul class=\"courseslist\">\n";
-
 		foreach ($listActives as $key => $value) {
 			if (!empty($value[2])) {
 				if ((isset($old_session) && $old_session != $value[2]) or ((!isset($old_session)) && isset($value[2]))) {
@@ -848,25 +841,20 @@ if ( is_array($list) ) {
 					}
 					echo '<ul class="session_box">' .
 							'<li class="session_box_title">'.$value[3]['title'].' '.$value[3]['dates'].'</li>';
-					if ( !empty($value[3]['coach']) ) {
+					if (!empty($value[3]['coach'])) {
 						echo '<li class="session_box_coach">'.$value[3]['coach'].'</li>';
 					}
 					echo "</ul>\n";
-
 					echo '<ul class="session_course_item">';
 				}
 			}
 			echo $value[1];
-
 		}
-
 		echo "\n</ul><br /><br />\n";
-
 	}
 
-	if (count($listInactives)>0 && !$display_actives) {
+	if (count($listInactives) > 0 && !$display_actives) {
 		echo '<ul class="sessions_list_inactive">';
-
 		foreach ($listInactives as $key => $value) {
 			if (!empty($value[2])) {
 				if ($old_session != $value[2]) {
@@ -876,23 +864,21 @@ if ( is_array($list) ) {
 					}
 					echo '<ul class="session_box">' .
 							'<li class="session_box_title">'.$value[3]['title'].' '.$value[3]['dates'].'</li>';
-					if ( !empty($value[3]['coach']) ) {
+					if (!empty($value[3]['coach'])) {
 						echo '<li class="session_box_coach">'.$value[3]['coach'].'</li>';
 					}
 					echo "</ul>\n";
-
-				echo '<ul>';
-
+					echo '<ul>';
 				}
 			}
 			echo $value[1];
-
 		}
-
 		echo "\n</ul><br /><br />\n";
 	}
 }
+
 echo '</div>'; // end of content section
+
 // Register whether full admin or null admin course
 // by course through an array dbname x user status
 api_session_register('status');
@@ -906,43 +892,46 @@ echo '	<div class="menu">';
 
 // api_display_language_form(); // moved to the profile page.
 
-$show_menu=false;
-$show_create_link=false;
-$show_course_link=false;
-$show_digest_link=false;
+$show_menu = false;
+$show_create_link = false;
+$show_course_link = false;
+$show_digest_link = false;
 
-$display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION["studentview"] != "studentenview");
+$display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION['studentview'] != 'studentenview');
 if ($display_add_course_link) {
-	$show_menu=true;
-	$show_create_link=true;
+	$show_menu = true;
+	$show_create_link = true;
 }
 
 if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course()) {
-	$show_menu=true;
-	$show_course_link=true;
+	$show_menu = true;
+	$show_course_link = true;
 } else {
 	if (api_get_setting('allow_students_to_browse_courses')=='true') {
-		$show_menu=true;
-		$show_course_link=true;
+		$show_menu = true;
+		$show_course_link = true;
 	}
 }
 
-if(isset($toolsList) and is_array($toolsList) and isset($digest)) {
-	$show_digest_link=true;
-	$show_menu=true;
+if (isset($toolsList) and is_array($toolsList) and isset($digest)) {
+	$show_digest_link = true;
+	$show_menu = true;
 }
 
 // My account section
-if ($show_menu){
+if ($show_menu) {
 	echo '<div class="menusection">';
 	echo '<span class="menusectioncaption">'.get_lang('MenuUser').'</span>';
 	echo '<ul class="menulist">';
-	if ($show_create_link)
+	if ($show_create_link) {
 		display_create_course_link();
-	if ($show_course_link)
+	}
+	if ($show_course_link) {
 		display_edit_course_list_links();
-	if ($show_digest_link)
+	}
+	if ($show_digest_link) {
 		display_digest($toolsList, $digest, $orderKey, $courses);
+	}
 	echo '</ul>';
 	echo '</div>';
 }
@@ -954,7 +943,7 @@ if (!empty($menu_navigation)) {
 	echo '<span class="menusectioncaption">'.get_lang('MainNavigation').'</span>';
 	echo '<ul class="menulist">';
 	foreach ($menu_navigation as $section => $navigation_info) {
-		$current = ($section == $GLOBALS['this_section'] ? ' id="current"' : '');
+		$current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
 		echo '<li'.$current.'>';
 		echo '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
 		echo '</li>';
@@ -964,7 +953,6 @@ if (!empty($menu_navigation)) {
 	echo '</div>';
 }
 
-
 // plugins for the my courses menu
 if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu'])) {
 	echo '<div class="note">';
@@ -972,18 +960,18 @@ if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu']))
 	echo '</div>';
 }
 
-if (api_get_setting('allow_reservation')=='true' && api_is_allowed_to_create_course() ){
+if (api_get_setting('allow_reservation') == 'true' && api_is_allowed_to_create_course() ){
 	//include_once('main/reservation/rsys.php');
 	echo '<div class="menusection">';
 	echo '<span class="menusectioncaption">'.get_lang('Booking').'</span>';
 	echo '<ul class="menulist">';
-	echo '<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br/>';
-	//echo '<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br/>';
+	echo '<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br />';
+	//echo '<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br />';
 
 	/*require_once('main/reservation/rsys.php');
 	if(api_is_platform_admin() || Rsys :: check_user_status() == 1) { // Only for admins & teachers...
-	    echo '<a href="main/reservation/m_item.php">'.get_lang('ManageItems').'</a><br/>';
-	    echo '<a href="main/reservation/m_reservation.php">'.get_lang('ManageReservationPeriods').'</a><br/>';
+		echo '<a href="main/reservation/m_item.php">'.get_lang('ManageItems').'</a><br />';
+		echo '<a href="main/reservation/m_reservation.php">'.get_lang('ManageReservationPeriods').'</a><br />';
 	}
 	*/
 	echo '</ul>';
@@ -992,19 +980,20 @@ if (api_get_setting('allow_reservation')=='true' && api_is_allowed_to_create_cou
 
 // search textbox
 if (api_get_setting('search_enabled') == 'true') {
-    echo '<div class="searchbox">';
-    $search_btn = get_lang('Search');
-    $search_text_default = get_lang('YourTextHere');
+	echo '<div class="searchbox">';
+	$search_btn = get_lang('Search');
+	$search_text_default = get_lang('YourTextHere');
 echo <<<EOD
-<br/>
+<br />
 <form action="main/search/" method="post">
-&nbsp;&nbsp;<input type="text" id="query"  size="15" name="query" value="" />
+&nbsp;&nbsp;<input type="text" id="query" size="15" name="query" value="" />
 &nbsp;&nbsp;<button class="save" type="submit" name="submit" value="$search_btn"/>$search_btn </button>
 </form>
 EOD;
-    echo '</div>';
+	echo '</div>';
 }
 
 echo '</div>'; // end of menu
+
 //footer
 Display :: display_footer();

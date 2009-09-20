@@ -423,8 +423,13 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 		{
 			$sql = "SELECT 
 						user.user_id 	AS col0,
-						user.lastname 	AS col1,
-						user.firstname 	AS col2
+						". (api_is_western_name_order() ?
+						"user.firstname 	AS col1,
+						user.lastname 	AS col2,"
+						:
+						"user.lastname 	AS col1,
+						user.firstname 	AS col2,"
+						)."
 						FROM ".$table_user." user, ".$table_group_user." group_rel_user 
 						WHERE group_rel_user.user_id = user.user_id 
 						AND group_rel_user.group_id = '".Database::escape_string($current_group['id'])."'";

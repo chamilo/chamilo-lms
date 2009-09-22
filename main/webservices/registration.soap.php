@@ -40,8 +40,7 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:extras[]')),
-'tns:extras'
+array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:extras[]')),'tns:extras'
 );
 
 $server->wsdl->addComplexType(
@@ -73,8 +72,7 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:usersParams[]')),
-'tns:usersParams'
+array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:usersParams[]')),'tns:usersParams'
 );
 
 $server->wsdl->addComplexType(
@@ -84,8 +82,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'users' => array('name' => 'users', 'type' => 'tns:userParamsList'),
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
+		'users' => array('name' => 'users', 'type' => 'tns:usersParamsList'),		
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
 	)
 );
 
@@ -109,8 +107,7 @@ $server->wsdl->addComplexType(
 '',
 'SOAP-ENC:Array',
 array(),
-array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_createUsers[]')),
-'tns:result_createUsers'
+array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_createUsers[]')),'tns:result_createUsers'
 );
 
 // Register the method to expose

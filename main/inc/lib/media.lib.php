@@ -1,5 +1,7 @@
 <?php
 
+// TODO: This file is deprecated, it will be removed. Ivan Tcholakov, 23-SEP-2003.
+
 // These constants specify multi-media related resource files (scripts, players, etc.).
 define('FLASH_PLAYER_AUDIO', 'FLASH_PLAYER_AUDIO');
 define('FLASH_PLAYER_VIDEO', 'FLASH_PLAYER_VIDEO');

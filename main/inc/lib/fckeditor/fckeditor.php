@@ -584,10 +584,16 @@ class FCKeditor
 	 * @return array
 	 */
 	private function & get_media_configuration() {
+		/*
 		$config['FlashPlayerAudio'] = Media::get_path(FLASH_PLAYER_AUDIO, REL_PATH);
 		$config['FlashPlayerVideo'] = Media::get_path(FLASH_PLAYER_VIDEO, REL_PATH);
 		$config['ScriptSWFObject'] = Media::get_path(SCRIPT_SWFOBJECT, REL_PATH);
 		$config['ScriptASCIIMathML'] = Media::get_path(SCRIPT_ASCIIMATHML, REL_PATH);
+		*/
+		$config['FlashPlayerAudio'] = api_get_path(TO_REL, FLASH_PLAYER_AUDIO);
+		$config['FlashPlayerVideo'] = api_get_path(TO_REL, FLASH_PLAYER_VIDEO);
+		$config['ScriptSWFObject'] = api_get_path(TO_REL, SCRIPT_SWFOBJECT);
+		$config['ScriptASCIIMathML'] = api_get_path(TO_REL, SCRIPT_ASCIIMATHML);
 		return $config;
 	}
 

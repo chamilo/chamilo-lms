@@ -21,12 +21,10 @@
  *
  * This is the File Manager Connector for PHP.
  */
-
 function CombinePaths( $sBasePath, $sFolder )
 {
 	return RemoveFromEnd( $sBasePath, '/' ) . '/' . RemoveFromStart( $sFolder, '/' ) ;
 }
-
 function GetResourceTypePath( $resourceType, $sCommand )
 {
 	global $Config ;
@@ -100,7 +98,7 @@ function CreateServerFolder( $folderPath, $lastFolder = null )
 	}
 
 	// Check if the parent exists, or create it.
-	if ( !file_exists( $sParent ) )
+	if ( !empty($sParent) && !file_exists( $sParent ) )
 	{
 		//prevents agains infinite loop when we can't create root folder
 		if ( !is_null( $lastFolder ) && $lastFolder === $sParent) {
@@ -270,6 +268,7 @@ function GetCurrentFolder()
 	// Check for invalid folder paths (..)
 	if ( strpos( $sCurrentFolder, '..' ) || strpos( $sCurrentFolder, "\\" ))
 		SendError( 102, '' ) ;
+
 	if ( preg_match(",(/\.)|[[:cntrl:]]|(//)|(\\\\)|([\:\*\?\"\<\>\|]),", $sCurrentFolder))
                 SendError( 102, '' ) ;
 
@@ -331,7 +330,6 @@ EOF;
 
         $rpl = array( '\\' => '\\\\', '"' => '\\"' ) ;
         echo 'window.parent.OnUploadCompleted(' . $errorNumber . ',"' . strtr( $fileUrl, $rpl ) . '","' . strtr( $fileName, $rpl ) . '", "' . strtr( $customMsg, $rpl ) . '") ;' ;
-
 	echo '</script>' ;
 	exit ;
 }

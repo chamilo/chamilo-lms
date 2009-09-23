@@ -530,5 +530,10 @@ DlgAboutInfo		: "За повече информация посетете",
 DlgDivGeneralTab	: "Общи параметри",
 DlgDivAdvancedTab	: "Допълнителни параметри",
 DlgDivStyle		: "Стил",
-DlgDivInlineStyle	: "Вграден стил"
+DlgDivInlineStyle	: "Вграден стил",
+
+ScaytTitle			: "SCAYT",
+ScaytTitleOptions	: "Опции",
+ScaytTitleLangs		: "Езици",
+ScaytTitleAbout		: "Информация"
 };

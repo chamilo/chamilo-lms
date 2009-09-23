@@ -83,7 +83,7 @@ $interbreadcrumb[] = array ('url' => 'survey_list.php', 'name' => get_lang('Surv
 if (api_is_course_admin()) {
     $interbreadcrumb[] = array ('url' => 'survey.php?survey_id='.$survey_id, 'name' => $urlname);
 } else {
-    $interbreadcrumb[] = array ('url' => 'survey_invite.php?survey_id='.$survey_id, 'name' => $urlname);    
+    $interbreadcrumb[] = array ('url' => 'survey_invite.php?survey_id='.$survey_id, 'name' => $urlname);
 }
 $tool_name = get_lang('SurveyPublication');
 
@@ -159,13 +159,13 @@ $form->addRule('mail_text', get_lang('ThisFieldIsRequired'), 'required');
 
 $portal_url = $_configuration['root_web'];
 if ($_configuration['multiple_access_urls']==true) {
-	$access_url_id = api_get_current_access_url_id();				
+	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1 ){
 		$url = api_get_access_url($access_url_id);
 		$portal_url = $url['url'];
 	}
-}	
-		  
+}
+
 // show the URL that can be used by users to fill a survey without invitation
 $auto_survey_link = $portal_url.$_configuration['code_append'].
             'survey/'.'fillsurvey.php?course='.$_course['sysCode'].
@@ -178,7 +178,7 @@ if ($form->validate())
 	// save the invitation mail
 	SurveyUtil::save_invite_mail($values['mail_text'], $values['mail_title'], !empty($survey_data['invite_mail']));
 	// saving the invitations for the course users
-	$count_course_users = SurveyUtil::save_invitations($values['course_users'], $values['mail_title'], 
+	$count_course_users = SurveyUtil::save_invitations($values['course_users'], $values['mail_title'],
                 $values['mail_text'], $values['resend_to_all'], $values['send_mail'], $values['remindUnAnswered']);
 	// saving the invitations for the additional users
 	$values['additional_users'] = $values['additional_users'].';'; 	// this is for the case when you enter only one email
@@ -188,7 +188,7 @@ if ($form->validate())
 	{
 		$additional_users[$i] = trim($additional_users[$i]);
 	}
-	$counter_additional_users = SurveyUtil::save_invitations($additional_users, $values['mail_title'], 
+	$counter_additional_users = SurveyUtil::save_invitations($additional_users, $values['mail_title'],
             $values['mail_text'], $values['resend_to_all'], $values['send_mail'], $values['remindUnAnswered']);
 	// updating the invited field in the survey table
 	SurveyUtil::update_count_invited($survey_data['code']);

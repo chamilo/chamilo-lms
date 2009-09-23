@@ -14,7 +14,7 @@ if (extension_loaded('xapian')) {
 	include_once (api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
 	include_once (api_get_path(LIBRARY_PATH).'system_announcements.lib.php');
 	include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-	include_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');	
+	include_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 	//api_block_anonymous_users(); // only users who are logged in can proceed
 	require '../newscorm/lp_list_search.php';
 } else {

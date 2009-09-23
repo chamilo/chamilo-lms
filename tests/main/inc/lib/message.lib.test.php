@@ -4,8 +4,8 @@ require_once(api_get_path(LIBRARY_PATH).'message.lib.php');
 Mock::generate('MessageManager');
 Mock::generate('Display');
 
-class TestMessage extends UnitTestCase { 
-	
+class TestMessage extends UnitTestCase {
+
 	function testget_number_of_messages_mask() {
 		$docme = new MockMessageManager();
 		$res=get_number_of_messages_mask();
@@ -13,7 +13,7 @@ class TestMessage extends UnitTestCase {
 		$this->assertTrue(is_string($res));
         //var_dump($res);
 	}
-	
+
 	function testget_message_data_mask() {
 		$docme = new MockMessageManager();
 		$from='';
@@ -25,7 +25,7 @@ class TestMessage extends UnitTestCase {
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+
 	function testget_message_data_send_mask() {
 		$docme = new MockMessageManager();
 		$from='';
@@ -37,16 +37,16 @@ class TestMessage extends UnitTestCase {
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+
 	function testget_number_of_messages_send_mask() {
 		$docme = new MockMessageManager();
 		$res=get_number_of_messages_send_mask();
         $docme->expectOnce(MessageManager::get_number_of_messages_sent());
 		$this->assertTrue(is_string($res));
         //var_dump($res);
-		
+
 	}
-	
+
 	function testinbox_display() {
 		$docme = new MockMessageManager();
 		global $charset;
@@ -57,7 +57,7 @@ class TestMessage extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	function testoutbox_display() {
 		$docme = new MockMessageManager();
 		$disp = new MockDisplay();

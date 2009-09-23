@@ -17,7 +17,7 @@ class TestMail extends UnitTestCase {
  		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	function testApiMailHtml() {
 		$mensajee = new MockPHPMailer();
 		global $regexp;

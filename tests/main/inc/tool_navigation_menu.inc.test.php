@@ -2,11 +2,11 @@
 require_once(api_get_path(SYS_CODE_PATH).'inc/tool_navigation_menu.inc.php');
 
 class TestTNMenu extends UnitTestCase{
-	
+
 	public function TestTNMenu(){
-		
+
 		$this->UnitTestCase('Navigation menu display code function tests');
-	
+
 	}
 	public function testGetNavigationItems(){
 		global $is_courseMember;
@@ -17,7 +17,7 @@ class TestTNMenu extends UnitTestCase{
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+
 	public function testShowNavigationMenu(){
 		ob_start();
 		$navigation_items = get_navigation_items(true);
@@ -27,16 +27,16 @@ class TestTNMenu extends UnitTestCase{
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	public function testShowNavigationToolShortcuts(){
 		$orientation = SHORTCUTS_HORIZONTAL;
 		$res = show_navigation_tool_shortcuts($orientation);
 		$this->assertTrue(is_null($res));
 		var_dump($res);
-		
+
 	}
-		
-	
+
+
 }
 
 

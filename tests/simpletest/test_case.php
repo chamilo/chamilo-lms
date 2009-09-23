@@ -399,7 +399,7 @@ class SimpleFileLoader {
         $suite = &$this->createSuiteFromClasses($test_file, $classes);
         return $suite;
     }
-    
+
     /**
      *    Imports new variables into the global namespace.
      *    @param hash $existing   Variables before the file was loaded.
@@ -412,7 +412,7 @@ class SimpleFileLoader {
             $_GLOBALS[$global] = $new[$global];
         }
     }
-    
+
     /**
      *    Lookup classnames from file contents, in case the
      *    file may have been included before.

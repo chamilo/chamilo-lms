@@ -6,7 +6,7 @@ require_once(api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
 
 
 class TestSurvey extends UnitTestCase {
-	
+
 	public $smanager;
 	public $squestion;
 	public $syesno;
@@ -14,9 +14,9 @@ class TestSurvey extends UnitTestCase {
 	public $personality;
 	public $multipleresponse;
 	public function TestSurvey() {
-	
+
 	$this->UnitTestCase('');
-	
+
 	}
 	public function setUp() {
 		$this->smanager = new survey_manager();
@@ -26,7 +26,7 @@ class TestSurvey extends UnitTestCase {
 		$this->spersonality = new personality();
 		$this->smultipleresponse = new multipleresponse();
 	}
-	
+
 	public function tearDown() {
 		$this-> smanager = null;
 		$this-> squestion = null;
@@ -54,7 +54,7 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($result);
 		//var_dump($res);
 	}
-	
+
 	public function testStoreSurvey(){
 		$instans = new MockDatabase();
 		global $_user;
@@ -84,17 +84,17 @@ class TestSurvey extends UnitTestCase {
 			$result = api_sql_query($sql, __FILE__, __LINE__);
 			$return	= Database::insert_id();
 		}else{
-			$sql = "UPDATE $table_survey SET";	
+			$sql = "UPDATE $table_survey SET";
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$return	= $values['survey_share']['survey_share'];	
+			$return	= $values['survey_share']['survey_share'];
 		}
-		$res = $this->smanager->store_shared_survey($values);		
+		$res = $this->smanager->store_shared_survey($values);
 		$this->assertTrue($res);
 		//var_dump($res);
 		//var_dump($table_survey);
 		//var_dump($table_survey);
 	}*/
-	
+
 	public function testDeleteSurvey(){
 		$instans = new MockDatabase();
 		$survey_id=1;
@@ -109,13 +109,13 @@ class TestSurvey extends UnitTestCase {
 		$this->assertTrue($table_survey);
 		//var_dump($table_survey_question_group);
 		//var_dump($res);
-	}	
-	
+	}
+
 	public function testCopySurvey(){
 		$instans = new MockDatabase();
 		$parent_survey=null;
 		$new_survey_id=null;
-		$instans->expectCallCount(Database::get_course_table(TABLE_SURVEY));		
+		$instans->expectCallCount(Database::get_course_table(TABLE_SURVEY));
 		$sql = "SELECT * from $table_survey_question_group " .
 			   "WHERE survey_id='".$parent_survey."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -123,10 +123,10 @@ class TestSurvey extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res);
 		$this->assertTrue($instans);
-		//var_dump($res);	
+		//var_dump($res);
 		//var_dump($result);
 	}
-	
+
 	public function testEmpty_survey(){
 		$instans = new MockDatabase();
 		$table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
@@ -142,7 +142,7 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($res);
 		//var_dump($table_survey);
 	}
-	
+
 	public function testUpdateSurveyAnswered(){
 		$instans = new MockDatabase();
 		global $_course;
@@ -160,9 +160,9 @@ class TestSurvey extends UnitTestCase {
 		$this->assertTrue($res === false);
 		//var_dump($result);
 		//var_dump($res);
-		
+
 	}
-	
+
 	public function testGetCompleteSurveyStructure(){
 		$survey_id='';
 		$shared=0;
@@ -171,7 +171,7 @@ class TestSurvey extends UnitTestCase {
 		$this->assertTrue($res=== null);
 		//var_dump($res);
 	}
-	
+
 	public function testIconQuestion(){
 		$type='open';
 		$res = $this->smanager->icon_question($type);
@@ -180,11 +180,11 @@ class TestSurvey extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		}else{
 		$this->assertTrue($res);
-		$this->assertTrue(is_string($res));	
+		$this->assertTrue(is_string($res));
 		}
 		//var_dump($res);
 	}
-	
+
 	public function testGetQuestion(){
 		$instans = new MockDatabase();
 		$question_id=01;
@@ -200,7 +200,7 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($res);
 		//var_dump($result);
 	}
-	
+
 	public function testGetQuestions(){
 		$get_questions = new MockDatabase();
 		$survey_id =1;
@@ -216,7 +216,7 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($row);
 		//var_dump($get_questions);
 	}
-	
+
 	public function testSaveQuestion(){
 		global $survey_data;
 		global $_course;
@@ -225,9 +225,9 @@ class TestSurvey extends UnitTestCase {
 		$this->assertTrue($res);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
-		
+
 	}
-	
+
 	public function testSaveSharedQuestion(){
 		$instans = new MockDatabase();
 		global $_course;
@@ -241,7 +241,7 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($res);
 		//var_dump($instans);
 	}
-	
+
 	public function testMoveSurveyQuestion(){
 		$instans = new MockDatabase();
 		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -255,7 +255,7 @@ class TestSurvey extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	public function testDeleteAllSurveyQuestions(){
 		$instans = new MockDatabase();
 		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -271,7 +271,7 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($result);
 		//var_dump($res);
 	}
-	
+
 	public function testDeleteSurveyQuestion(){
 		$instans = new MockDatabase();
 		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -286,7 +286,7 @@ class TestSurvey extends UnitTestCase {
 		$this->assertTrue(is_object($instans));
 		$this->assertFalse($res);
 		//var_dump($result);
-		//var_dump($res); 
+		//var_dump($res);
 	}
 	/*
 	public function testDeleteSharedSurveyQuestion(){
@@ -301,20 +301,20 @@ class TestSurvey extends UnitTestCase {
 		$this->assertTrue(is_object($instans));
 		//var_dump($res);
 	}
-		
+
 	public function testSaveQuestionOptions(){
 		$instans = new MockDatabase();
 		$form_content=array('percentage');
 		$survey_data=array('survey_share');
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-		$instans->expectOnce($table_survey_question_option);	
+		$instans->expectOnce($table_survey_question_option);
 		$res = $this->smanager->save_question_options($form_content,$survey_data);
 		$this->assertTrue(is_null($res));
 		$this->assertTrue(is_object($instans));
 		//var_dump($res);
 		//var_dump($table_survey_question_option);
 	}
-	
+
 	public function testSaveSharedQuestionOptions(){
 		$instans = new MockDatabase();
 		$form_content=array('answers');
@@ -331,7 +331,7 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($res);
 		//var_dump($result);
 	}
-	
+
 	public function testDeleteAllSurveyQuestionsOptions(){
 		$instans = new MockDatabase();
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
@@ -370,7 +370,7 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($result);
 		//var_dump($res);
 	}
-	
+
 	public function testDeleteAllSurveyAnswers(){
 		$instans = new MockDatabase();
 		$survey_id=1;
@@ -384,7 +384,7 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($res);
 		//var_dump($table_survey_answer);
 	}
-	
+
 	public function testGetPeopleWhoFilledSurvey(){
 		$instans = new MockDatabase();
 		$survey_id=1;
@@ -422,15 +422,15 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($res);
 		//var_dump($tool_name);
 	}
-	
+
 	public function testRenderForm(){
 		ob_start();
 		$this->squestion->render_form();
 		ob_end_clean();
 		$this->assertNotNull($this->squestion->html);
-		//var_dump($res);		
+		//var_dump($res);
 	}
-	
+
 	public function testHandleAction(){
 		global $config;
 		$form_content['answers']=array('');
@@ -444,14 +444,14 @@ class TestSurvey extends UnitTestCase {
 		$this->assertTrue(isset($form_content['answers'][$max_answer-1]));
 		//var_dump($res);
 	}
-	
+
 	public function testAddRemoveButtons(){
 		$form_content['answers'] =array();
 		$res = $this->squestion->add_remove_buttons($form_content);
 		$this->assertTrue($res);
 		//var_dump($res);
 	}
-	
+
 	public function testRenderQuestion(){
 		$form_content=array('');
 		$res = $this->squestion->render_question($form_content);
@@ -465,7 +465,7 @@ class TestSurvey extends UnitTestCase {
 		$this->syesno->create_form($form_content);
 		$this->assertNotNull($this->syesno->html);
 	}
-	
+
 	public function testRenderQuestion1(){
 		ob_start();
 		$form_content['options']=array('');
@@ -474,7 +474,7 @@ class TestSurvey extends UnitTestCase {
 		ob_end_clean();
 		$this->assertNotNull($this->syesno->html);
 	}
-	
+
 	public function testCreateForm2(){
 		global $charset;
 		$form_content=array('');
@@ -483,18 +483,18 @@ class TestSurvey extends UnitTestCase {
 		$this->assertTrue(!is_null(html));
 	}
 	/**
-	 * 	@todo it would make more sense to consider yesno as a 
-	 *  special case of multiplechoice and not the other way 
+	 * 	@todo it would make more sense to consider yesno as a
+	 *  special case of multiplechoice and not the other way
 	 *  around
 	 */
-	 
+
 	public function testRenderQuestion2(){
 		$form_content= array('');
 		$answers=array('');
 		$this->smultiplechoice->render_question($form_content, $answers);
 		$this->assertNull($this->smultiplechoice->html);
 	}
-	
+
 	public function testCreateForm3(){
 		$form_content['answers']=array();
 		$count= 0;
@@ -503,7 +503,7 @@ class TestSurvey extends UnitTestCase {
 		$this->assertNotNull($this->spersonality->html);
 		$this->assertTrue($this->spersonality->html);
 	}
-	
+
 	public function testRenderQuestion3(){
 		$form_content=array();
 		$answers=array();
@@ -511,7 +511,7 @@ class TestSurvey extends UnitTestCase {
 		$this->assertNull($this->spersonality->html);
 		$this->assertFalse($this->spersonality->html);
 	}
-	 	
+
 	public function testCreateForm4(){
 		global $charset;
 		$form_content=array();
@@ -519,7 +519,7 @@ class TestSurvey extends UnitTestCase {
 		$this->assertNotNull($this->smultipleresponse->html);
 		$this->assertTrue($this->smultipleresponse->html);
 	}
-	
+
 }
 
 ?>

@@ -1,15 +1,15 @@
 <?php //$id: $
 /**
- * This script is a configuration file for the search plugin. 
+ * This script is a configuration file for the search plugin.
  * You can use it as a master for other plugins.
- * These settings will be used in the administration interface for 
+ * These settings will be used in the administration interface for
  * plugins (Dokeos configuration settings->Plugins)
  * Make sure your read the README.txt file to understand how to use this plugin!
- * @package dokeos.plugin 
+ * @package dokeos.plugin
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
  */
 /**
- * Plugin details (must be present) 
+ * Plugin details (must be present)
  */
 //the plugin title
 $plugin_info['title']='Search';

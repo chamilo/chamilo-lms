@@ -4,7 +4,7 @@
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2009 Dokeos SPRL
-	Copyright (c) Julio Montoya Armas 
+	Copyright (c) Julio Montoya Armas
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -34,9 +34,9 @@ $list_path_friends=array();
 $user_id=api_get_user_id();
 $name_search=Security::remove_XSS($_POST['search_name_q']);
 if (isset($name_search) && $name_search!='undefined') {
-	$list_path_friends=UserFriend::get_list_path_web_by_user_id($user_id,null,$name_search);		
+	$list_path_friends=UserFriend::get_list_path_web_by_user_id($user_id,null,$name_search);
 } else {
-	$list_path_friends=UserFriend::get_list_path_web_by_user_id($user_id);		
+	$list_path_friends=UserFriend::get_list_path_web_by_user_id($user_id);
 }
 $friend_html='';
 $number_of_images=8;
@@ -44,7 +44,7 @@ $number_friends=0;
 $list_friends_id=array();
 $list_friends_dir=array();
 $list_friends_file=array();
-if (count($list_path_friends)!=0) { 
+if (count($list_path_friends)!=0) {
 	for ($z=0;$z<count($list_path_friends['id_friend']);$z++) {
 		$list_friends_id[]  = $list_path_friends['id_friend'][$z]['friend_user_id'];
 		$list_friends_dir[] = $list_path_friends['path_friend'][$z]['dir'];
@@ -54,7 +54,7 @@ if (count($list_path_friends)!=0) {
 	$number_loop   = ($number_friends/$number_of_images);
 	$loop_friends  = ceil($number_loop);
 	$j=0;
-	$friend_html.= '<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFC" >';		
+	$friend_html.= '<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFC" >';
 	for ($k=0;$k<$loop_friends;$k++) {
 		$friend_html.='<tr><td valign="top">';
 		if ($j==$number_of_images) {
@@ -80,5 +80,5 @@ if (count($list_path_friends)!=0) {
 	}
 	$friend_html.='<br/></table>';
 }
-echo $friend_html; 
+echo $friend_html;
 ?>

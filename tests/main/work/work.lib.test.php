@@ -6,7 +6,7 @@
 require_once(api_get_path(SYS_CODE_PATH).'work/work.lib.php');
 
 class TestWork extends UnitTestCase {
-	
+
 	 /**
 	 * Builds the form thats enables the user to
 	 * select a directory to browse/upload in
@@ -17,7 +17,7 @@ class TestWork extends UnitTestCase {
 	 * @param string $group_dir
 	 * @return string html form
 	 */
-	 
+
 	function testbuild_work_directory_selector() {
 		$folders=array();
 		$curdirpath='';
@@ -26,7 +26,7 @@ class TestWork extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	 /**
 	 * Builds the form thats enables the user to
 	 * move a document from one directory to another
@@ -37,7 +37,7 @@ class TestWork extends UnitTestCase {
 	 * @param string $move_file
 	 * @return string html form
 	 */
-	 
+
 	function testbuild_work_move_to_selector() {
 		$folders=array();
 		$curdirpath='';
@@ -47,7 +47,7 @@ class TestWork extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	function testconvert_date_to_array() {
 		$date=date('d/m/Y',time());
 		$group=array();
@@ -55,25 +55,25 @@ class TestWork extends UnitTestCase {
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * @param string e.g converts "2008-10-06 12:45:00" to timestamp
 	 */
-	 
+
 	function testconvert_date_to_number() {
 		$default='2008-10-06 12:45:00';
 		$res=convert_date_to_number($default);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	* This function displays the number of files contained in a directory
 	* @param	string the path of the directory complete e.g. /var/www/dokeos
-	* @param	boolean true if we want the total quantity of files include in others child directorys , false only  files in the directory		
+	* @param	boolean true if we want the total quantity of files include in others child directorys , false only  files in the directory
 	* @return	array the first element is an integer with the number of files in the folder, the second element is the number of directories
 	*/
-	
+
 	function testcount_dir() {
 		$path_dir='/var/www';
 		$recurse=0;
@@ -83,25 +83,25 @@ class TestWork extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	* create a group of select from a date
-	* @return array list 
-	*/		
+	* @return array list
+	*/
 
 	function testcreate_group_date_select() {
 		$res=create_group_date_select($prefix='');
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * @param	string	Base work dir (.../work)
 	 * @param 	string $desiredDirName complete path of the desired name
- 	 * @return 	string actual directory name if it succeeds, boolean false 
+ 	 * @return 	string actual directory name if it succeeds, boolean false
  	 * otherwise
  	 */
- 	
+
 	function testcreate_unexisting_work_directory() {
 		$base_work_dir='/var/www/dokeos/courses/ABCD/work/';
 		$desired_dir_name='/var/www/merdokeos/main/work';
@@ -109,14 +109,14 @@ class TestWork extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * Delete a work-tool directory
 	 * @param	string	Base "work" directory for this course as /var/www/dokeos/courses/ABCD/work/
 	 * @param	string	The directory name as the bit after "work/", without trailing slash
 	 * @return	integer	-1 on error
 	 */
-	 
+
 	function testdel_dir() {
 		$base_work_dir='/var/www/dokeos/';
 		$dir='work/';
@@ -125,20 +125,20 @@ class TestWork extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	/**
-	 * Transform an all directory structure (only directories) in an array 
+	 * Transform an all directory structure (only directories) in an array
 	 * @param	string path of the directory
 	 * @return	array the directory structure into an array
-	 */ 
-	 
+	 */
+
 	function testdirectory_to_array() {
 		$directory='/var/www/dokeos/';
 		$res=directory_to_array($directory);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * Displays action links (for admins, authorized groups members and authorized students)
 	 * @param	string	Current dir
@@ -146,8 +146,8 @@ class TestWork extends UnitTestCase {
 	 * @param	integer	Whether to show upload form option
 	 * @return	void
 	 */
-	
-	function testdisplay_action_links() { 
+
+	function testdisplay_action_links() {
 		$cur_dir_path='';
 		$always_show_tool_options=1;
 		$always_show_upload_form=1;
@@ -156,8 +156,8 @@ class TestWork extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		ob_end_clean();
 		//var_dump($res);
-	} 
-	
+	}
+
 	/**
 	* Displays the form where course admins can specify wether uploaded documents
 	* are visible or invisible by default.
@@ -174,7 +174,7 @@ class TestWork extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	* Display the list of student publications, taking into account the user status
 	*
@@ -183,7 +183,7 @@ class TestWork extends UnitTestCase {
 	* @param $dateFormatLong - date format
 	* @param $origin - typically empty or 'learnpath'
 	*/
-	
+
 	function testdisplay_student_publications_list() {
 		global $charset,$timeNoSecFormat,$dateFormatShort,$gradebook,$dateFormatLong;
 		$work_dir='';
@@ -198,7 +198,7 @@ class TestWork extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	* Displays all options for this tool.
 	* These are
@@ -211,7 +211,7 @@ class TestWork extends UnitTestCase {
 	* @param $cur_dir_path	Current subdirectory of 'work/'
 	* @param $cur_dir_path_url Current subdirectory of 'work/', url-encoded
 	*/
-	
+
 	function testdisplay_tool_options() {
 		global $charset, $group_properties,$gradebook,$base_work_dir;
 		$uploadvisibledisabled='';
@@ -224,7 +224,7 @@ class TestWork extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	* This function displays the firstname and lastname of the user as a link to the user tool.
 	* @see this is the same function as in the new forum, so this probably has to move to a user library.
@@ -239,10 +239,10 @@ class TestWork extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	* create a group of select from a date
-	*/	
+	*/
 
 	function testget_date_from_group() {
 		$group='';
@@ -250,19 +250,19 @@ class TestWork extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	/**
-	 * @param	string Path of the directory  
-	 * @return	array The list of ids of all the directories in the path 
+	 * @param	string Path of the directory
+	 * @return	array The list of ids of all the directories in the path
 	 */
-	
+
 	function testget_parent_directories() {
 		$my_cur_dir_path='';
 		$res=get_parent_directories($my_cur_dir_path);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * Returns a list of subdirectories found in the given directory.
 	 *
@@ -273,7 +273,7 @@ class TestWork extends UnitTestCase {
 	 * @return	strings_array	The list of subdirs in 'abc/' form, -1 on error, and 0 if none found
 	 * @todo	Add a session check to see if subdirs_list doesn't exist yet (cached copy)
 	 */
- 
+
 	function testget_subdirs_list() {
 		$basedir = $basedir.'/';
 		$dh = opendir($basedir);
@@ -286,49 +286,49 @@ class TestWork extends UnitTestCase {
 		//var_dump($res);
 		//var_dump($dirs_list);
 	}
-	
+
 	/**
 	 * Gets the id of a student publication with a given path
 	 * @param string $path
 	 * @return true if is found / false if not found
 	 */
- 
+
 	function testget_work_id() {
 		$path='/var/www/path';
 		$res=get_work_id($path);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * Get the path of a document in the student_publication table (path relative to the course directory)
 	 * @param	integer	Element ID
 	 * @return	string	Path (or -1 on error)
 	 */
- 
+
 	function testget_work_path() {
 		$id=1;
 		$res=get_work_path($id);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	/**
-	 * Insert into the DB of the course all the directories  
-	 * @param	string path of the /work directory of the course 
+	 * Insert into the DB of the course all the directories
+	 * @param	string path of the /work directory of the course
 	 * @return	-1 on error, sql query result on success
 	 * @version April 2008
-	 */ 
- 
+	 */
+
 	function testinsert_all_directory_in_course_table() {
 		global $work_table;
 		$base_work_dir='/var/www/path';
-		$dir_to_array =directory_to_array($base_work_dir,true);	
+		$dir_to_array =directory_to_array($base_work_dir,true);
 		$res=insert_all_directory_in_course_table($base_work_dir);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * Checks if the first given directory exists as a subdir of the second given directory
 	 * This function should now be deprecated by Security::check_abs_path()
@@ -336,7 +336,7 @@ class TestWork extends UnitTestCase {
 	 * @param	string	Base dir
 	 * @return	integer	-1 on error, 0 if not subdir, 1 if subdir
 	 */
- 
+
 	function testis_subdir_of() {
 		$subdir='';
 		$basedir='';
@@ -344,7 +344,7 @@ class TestWork extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	* returns all the javascript that is required for easily
 	* validation when you create a work
@@ -356,45 +356,45 @@ class TestWork extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	* converts 1-9 to 01-09
 	*/
-	
+
 	function testtwo_digits() {
 		$number=1;
 		$res=two_digits($number);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * Update the url of a dir in the student_publication table
 	 * @param	string old path
 	 * @param	string new path
 	 */
 	function testupdate_dir_name() {
-		global $base_work_dir; 
+		global $base_work_dir;
 		$path='';
 		$new_name='';
 		$res=update_dir_name($path,$new_name);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * Update the url of a work in the student_publication table
 	 * @param	integer	ID of the work to update
 	 * @param	string	Destination directory where the work has been moved (must end with a '/')
 	 * @return	-1 on error, sql query result on success
 	 */
-	  
+
 	function testupdate_work_url() {
 		$id=1;
 		$new_path='/var/www/path/';
 		$res=update_work_url($id,$new_path);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
-	}	
+	}
 }
 ?>

@@ -2,7 +2,7 @@
 require_once(api_get_path(LIBRARY_PATH).'media.lib.php');
 
 class TestMedia extends UnitTestCase {
-	
+
 		public function testget_path() {
 			$result1 = Media::get_path(FLASH_PLAYER_AUDIO, REL_PATH);
 			$result2 = Media::get_path(FLASH_PLAYER_VIDEO, WEB_PATH);

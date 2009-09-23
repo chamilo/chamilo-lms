@@ -82,8 +82,8 @@ $server->wsdl->addComplexType(
 	'all',
 	'',
 	array(
-		'users' => array('name' => 'users', 'type' => 'tns:usersParamsList'),		
-		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')													
+		'users' => array('name' => 'users', 'type' => 'tns:usersParamsList'),
+		'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
 	)
 );
 

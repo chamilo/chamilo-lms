@@ -1,6 +1,6 @@
 <?php //$id: $
 /* For licensing terms, see /dokeos_license.txt */
- 
+
 $language_file=array('registration','messages','userInfo','admin');
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
@@ -24,10 +24,10 @@ $user_friend_relation=UserFriend::get_relation_between_contacts(api_get_user_id(
 <table width="600" border="0" cellspacing="0" cellpadding="0">
 	<tr>
 	   	 <td width="600" align="left">
-	   	 	<td width="50%"><br/>	   	 		
+	   	 	<td width="50%"><br/>
 	   	 		<img src="<?php echo Security::remove_XSS($img_user[1]); ?>" />
 	   	 		<?php
-	   	 		echo '<br /><br />'.$name_user=api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName'])); 
+	   	 		echo '<br /><br />'.$name_user=api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName']));
 	   	 		?>
 	   	 	</td>
 	   	 <td width="50%"><div align="left">
@@ -39,10 +39,10 @@ for ($k=0;$k<$number_list;$k++) {
    	} else {
    		$check='';
 	}
-	?>					    
+	?>
 	<input <?php echo $check; ?> style="margin-left:50px" type="radio" class="radio" name="list_type_friend"  value="<?php echo api_xml_http_response_encode($list_of_options[$k]['id']); ?>" />
-	<?php 
-	echo  api_xml_http_response_encode(get_lang($list_of_options[$k]['title'])); 
+	<?php
+	echo  api_xml_http_response_encode(get_lang($list_of_options[$k]['title']));
 	echo '<br />';
 	?>
 	<?php

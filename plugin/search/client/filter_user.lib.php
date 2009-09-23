@@ -10,7 +10,7 @@
  */
 /**
  * Checks if a user can access a given course
- * 
+ *
  * The function gets the course code from the course directory, then
  * checks in the course_user table if the user has access to that course.
  * @param integer User ID (inside Dokeos)
@@ -29,8 +29,8 @@ function get_boolean_user_access_to_course_dir($user_id,$course_dir){
     $row = Database::fetch_array($res);
     $course_code = $row['code'];
     //Check user permissions
-    $sql = "SELECT * FROM $course_user 
-    	WHERE course_code = '$course_code' 
+    $sql = "SELECT * FROM $course_user
+    	WHERE course_code = '$course_code'
 	AND user_id = '$user_id'";
     $res = api_sql_query($sql);
     if(Database::num_rows($res)>0){
@@ -59,13 +59,13 @@ function get_boolean_user_access_to_course_dir($user_id,$course_dir){
  * Make this function always return true when no check is to be done
  * @param	string	URL to check
  * @return	boolean	True on user having access to the course or course not found, false otherwise
- 
+
  */
 function access_check($url,$default=true){
-  $matches = array(); 
+  $matches = array();
   $match1 = preg_match('/courses\/([^\/]*)\//',$url,$matches);
   if(!$match1){
-    $match2 = preg_match('/cidReq=([^&]*)/',$url,$matches); 
+    $match2 = preg_match('/cidReq=([^&]*)/',$url,$matches);
   }
   if($match1 or $match2){
     $has_access = get_boolean_user_access_to_course_dir($_SESSION['_user']['user_id'],$matches[1]);
@@ -82,7 +82,7 @@ function access_check($url,$default=true){
 }
 /**
  * Translates a course code into a course name into a string
- * 
+ *
  * This function should only be used if needed by a funny course-name rule
  * @param	string	The string to transform
  * @result	string	The transformed string

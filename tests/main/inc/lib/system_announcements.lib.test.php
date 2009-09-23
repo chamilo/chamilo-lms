@@ -4,7 +4,7 @@ require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 
 
 class TestSystemAnnouncementManager extends UnitTestCase {
-	
+
 	function testadd_announcement() {
 		$title='';
 		$content='';
@@ -16,58 +16,58 @@ class TestSystemAnnouncementManager extends UnitTestCase {
         ob_end_clean();
         //var_dump($res);
 	}
-	
+
 	function testcount_nb_announcement() {
 		$res=SystemAnnouncementManager::count_nb_announcement($start = 0,$user_id = '');
 		$this->assertTrue(is_numeric($res));
         //var_dump($res);
 	}
-	
+
 	function testdelete_announcement() {
 		$id='';
 		$res=SystemAnnouncementManager::delete_announcement($id);
 		$this->assertTrue(is_bool($res));
         //var_dump($res);
 	}
-	
+
 	function testdisplay_all_announcements() {
 		$visible='';
 		$res=SystemAnnouncementManager::display_all_announcements($visible, $id = -1,$start = 0,$user_id='');
 		$this->assertTrue(is_null($res));
         //var_dump($res);
 	}
-	
+
 	function testdisplay_announcements() {
 		$visible='';
 		$res=SystemAnnouncementManager::display_announcements($visible, $id = -1);
 		$this->assertTrue(is_null($res));
         //var_dump($res);
 	}
-	
+
 	function testdisplay_fleche() {
 		$user_id='';
 		$res=SystemAnnouncementManager::display_fleche($user_id);
 		$this->assertTrue(is_null($res));
         //var_dump($res);
 	}
-	
+
 	function testget_all_announcements() {
 		$res=SystemAnnouncementManager::get_all_announcements();
 		$this->assertTrue(is_array($res));
         //var_dump($res);
 	}
-	
+
 	function testget_announcement() {
 		$id='';
 		$res=SystemAnnouncementManager::get_announcement($id);
 		$this->assertTrue(is_bool($res));
         //var_dump($res);
 	}
-	
+
 	function testsend_system_announcement_by_email() {
-		global $_user; 
+		global $_user;
 		global $_setting;
-		global $charset; 
+		global $charset;
 		$title='';
 		$content='';
 		$teacher='';
@@ -76,7 +76,7 @@ class TestSystemAnnouncementManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
         //var_dump($res);
 	}
-	
+
 	function testset_visibility() {
 		$announcement_id='';
 		$user='';
@@ -85,7 +85,7 @@ class TestSystemAnnouncementManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
         //var_dump($res);
 	}
-	
+
 	function testupdate_announcement() {
 		$id='';
 		$title='';
@@ -98,7 +98,7 @@ class TestSystemAnnouncementManager extends UnitTestCase {
 		ob_end_clean();
         //var_dump($res);
 	}
-		
-	
+
+
 }
 ?>

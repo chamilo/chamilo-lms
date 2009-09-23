@@ -16,7 +16,7 @@
  */
 $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file[] = 'admin';
 $language_file[] = 'tracking';
 $language_file[] = 'scorm';
@@ -123,7 +123,7 @@ Display::display_header($nameTools, 'Tracking');
 
 require api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
 require api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
- 
+
 $a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true, (empty($_SESSION['id_session']) ? null : $_SESSION['id_session']));
 $nbStudents = count($a_students);
 
@@ -152,7 +152,7 @@ if ($_GET['studentlist'] == 'false') {
 	echo get_lang('StudentsTracking').' | <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>';
 }
 echo '&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print();"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>';
-if($_GET['studentlist'] == 'false') {	
+if($_GET['studentlist'] == 'false') {
 	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&studentlist=false"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
 } else {
 	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
@@ -185,7 +185,7 @@ if ($_GET['studentlist'] == 'false') {
 		foreach ($flat_list as $lp_id => $lp) {
 			$lp_avg_progress = 0;
 			foreach ($a_students as $student_id => $student) {
-				// get the progress in learning pathes	
+				// get the progress in learning pathes
 				$lp_avg_progress += learnpath::get_db_progress($lp_id, $student_id);
 			}
 			if ($nbStudents > 0) {
@@ -223,11 +223,11 @@ if ($_GET['studentlist'] == 'false') {
 					<img src="../img/quiz.gif" align="absbottom">&nbsp;'.get_lang('AverageResultsToTheExercices').' &nbsp;-&nbsp;<a href="../exercice/exercice.php?'.api_get_cidreq().'&show=result">'.get_lang('SeeDetail').'</a>
 				</h4>
 			<table class="data_table">';
-			
+
 	$sql = "SELECT id, title
 			FROM $TABLEQUIZ WHERE active <> -1";
 	$rs = api_sql_query($sql, __FILE__, __LINE__);
-	
+
 	if ($export_csv) {
     	$temp = array(get_lang('AverageProgressInLearnpath'), '');
     	$csv_content[] = array('', '');
@@ -235,7 +235,7 @@ if ($_GET['studentlist'] == 'false') {
     }
 
 	if (Database::num_rows($rs) > 0) {
-		// gets course actual administrators 
+		// gets course actual administrators
 		$sql = "SELECT user.user_id FROM $table_user user, $TABLECOURSUSER course_user
 			WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status <> '1' ";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
@@ -250,14 +250,14 @@ if ($_GET['studentlist'] == 'false') {
 			$quiz_avg_score = 0;
 			if ($count_students > 0) {
 				foreach ($student_ids as $student_id) {
-					// get the scorn in exercises	
+					// get the scorn in exercises
 					$sql = 'SELECT exe_result , exe_weighting
 						FROM '.$TABLETRACK_EXERCISES.'
 						WHERE exe_exo_id = '.$quiz['id'].'
-							AND exe_user_id = '.(int)$student_id.'		
-							AND exe_cours_id = "'.api_get_course_id().'"			
+							AND exe_user_id = '.(int)$student_id.'
+							AND exe_cours_id = "'.api_get_course_id().'"
 						AND orig_lp_id = 0
-						AND orig_lp_item_id = 0		
+						AND orig_lp_item_id = 0
 						ORDER BY exe_date DESC';
 					$rsAttempt = api_sql_query($sql, __FILE__, __LINE__);
 					$nb_attempts = 0;
@@ -272,8 +272,8 @@ if ($_GET['studentlist'] == 'false') {
 					if ($nb_attempts > 0) {
 						$avg_student_score = $avg_student_score / $nb_attempts;
 					}
-					$quiz_avg_score += $avg_student_score;										
-				}								
+					$quiz_avg_score += $avg_student_score;
+				}
 			}
             $count_students = ($count_students == 0 || is_null($count_students) || $count_students == '') ? 1 : $count_students;
 			echo '<tr><td>'.$quiz['title'].'</td><td align="right">'.round(($quiz_avg_score / $count_students), 2).'%'.'</td></tr>';
@@ -304,16 +304,16 @@ if ($_GET['studentlist'] == 'false') {
 			<table class="data_table">';
 	$count_number_of_posts_by_course = Tracking :: count_number_of_posts_by_course($_course['id']);
 	$count_number_of_forums_by_course = Tracking :: count_number_of_forums_by_course($_course['id']);
-	$count_number_of_threads_by_course = Tracking :: count_number_of_threads_by_course($_course['id']);		
-	if ($export_csv) {    	    	
+	$count_number_of_threads_by_course = Tracking :: count_number_of_threads_by_course($_course['id']);
+	if ($export_csv) {
 		$csv_content[] = array(get_lang('Forum'), '');
     	$csv_content[] = array(get_lang('ForumForumsNumber', ''), $count_number_of_forums_by_course);
     	$csv_content[] = array(get_lang('ForumThreadsNumber', ''), $count_number_of_threads_by_course);
-    	$csv_content[] = array(get_lang('ForumPostsNumber', ''), $count_number_of_posts_by_course);    	
-    }		
+    	$csv_content[] = array(get_lang('ForumPostsNumber', ''), $count_number_of_posts_by_course);
+    }
 	echo '<tr><td>'.get_lang('ForumForumsNumber').'</td><td align="right">'.$count_number_of_forums_by_course.'</td></tr>';
-	echo '<tr><td>'.get_lang('ForumThreadsNumber').'</td><td align="right">'.$count_number_of_threads_by_course.'</td></tr>'; 
-	echo '<tr><td>'.get_lang('ForumPostsNumber').'</td><td align="right">'.$count_number_of_posts_by_course.'</td></tr>';  
+	echo '<tr><td>'.get_lang('ForumThreadsNumber').'</td><td align="right">'.$count_number_of_threads_by_course.'</td></tr>';
+	echo '<tr><td>'.get_lang('ForumPostsNumber').'</td><td align="right">'.$count_number_of_posts_by_course.'</td></tr>';
 	echo '</table></div>';
 	echo '<div class="clear"></div>';
 
@@ -326,11 +326,11 @@ if ($_GET['studentlist'] == 'false') {
 					<img src="../img/chat.gif" align="absbottom">&nbsp;'.get_lang('Chat').'</a>
 				</h4>
 			<table class="data_table">';
-	$chat_connections_during_last_x_days_by_course = Tracking :: chat_connections_during_last_x_days_by_course($_course['id'], 7);	
+	$chat_connections_during_last_x_days_by_course = Tracking :: chat_connections_during_last_x_days_by_course($_course['id'], 7);
 	if ($export_csv) {
-		$csv_content[] = array(get_lang('Chat', ''), '');    	    	
-    	$csv_content[] = array(sprintf(get_lang('ChatConnectionsDuringLastXDays', ''), '7'), $chat_connections_during_last_x_days_by_course);    		
-    }		
+		$csv_content[] = array(get_lang('Chat', ''), '');
+    	$csv_content[] = array(sprintf(get_lang('ChatConnectionsDuringLastXDays', ''), '7'), $chat_connections_during_last_x_days_by_course);
+    }
 	echo '<tr><td>'.sprintf(get_lang('ChatConnectionsDuringLastXDays'), '7').'</td><td align="right">'.$chat_connections_during_last_x_days_by_course.'</td></tr>';
 
 	echo '</table></div>';
@@ -377,7 +377,7 @@ if ($_GET['studentlist'] == 'false') {
 	 * DOCUMENTS
 	 ***************************/
 	if ($_GET['num'] == 0 or empty($_GET['num'])) {
-		$num = 3;	
+		$num = 3;
 		$link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&studentlist=false&num=1#ancle">'.get_lang('SeeDetail').'</a>';
 	} else {
 		$num = 1000;
@@ -423,7 +423,7 @@ if ($_GET['studentlist'] == 'false') {
     	}
     }
 	echo '</table></div>';
-	
+
 	echo '<div class="clear"></div>';
 
 	/***************************
@@ -469,7 +469,7 @@ if ($_GET['studentlist'] == 'false') {
     	}
     }
 	echo '</table></div>';
-	echo '<div class="clear"></div>';	
+	echo '<div class="clear"></div>';
 
 	// send the csv file if asked
 	if ($export_csv) {
@@ -527,7 +527,7 @@ if ($_GET['studentlist'] == 'false') {
 		}
 		$table -> set_header(3, get_lang('TrainingTime'), false);
 		$table -> set_header(4, get_lang('CourseProgress'), false);
-		$table -> set_header(5, get_lang('Score'), false);	
+		$table -> set_header(5, get_lang('Score'), false);
 		$table -> set_header(6, get_lang('Student_publication'), false);
 		$table -> set_header(7, get_lang('Messages'), false);
 		$table -> set_header(8, get_lang('FirstLogin'), false, 'align="center"');
@@ -542,7 +542,7 @@ if ($_GET['studentlist'] == 'false') {
 			$avg_time_spent = $avg_student_score = $avg_student_progress = $total_assignments = $total_messages = 0;
 			$nb_courses_student = 0;
 			$avg_time_spent = Tracking :: get_time_spent_on_the_course($student_id, $course_code);
-			$avg_student_score = Tracking :: get_average_test_scorm_and_lp($student_id, $course_code);						
+			$avg_student_score = Tracking :: get_average_test_scorm_and_lp($student_id, $course_code);
 			$avg_student_progress = Tracking :: get_avg_student_progress($student_id, $course_code);
 			$total_assignments = Tracking :: count_student_assignments($student_id, $course_code);
 			$total_messages = Tracking :: count_student_messages($student_id, $course_code);
@@ -558,9 +558,9 @@ if ($_GET['studentlist'] == 'false') {
 			}
 			$row[] = api_time_to_hms($avg_time_spent);
 			if (is_null($avg_student_score)) {$avg_student_score=0;}
-			if (is_null($avg_student_progress)) {$avg_student_progress=0;}		
+			if (is_null($avg_student_progress)) {$avg_student_progress=0;}
 			$row[] = $avg_student_progress.'%';
-			$row[] = $avg_student_score.'%';		
+			$row[] = $avg_student_score.'%';
 			$row[] = $total_assignments;
 			$row[] = $total_messages;
 			$row[] = Tracking :: get_first_connection_date_on_the_course($student_id, $course_code);
@@ -576,7 +576,7 @@ if ($_GET['studentlist'] == 'false') {
 			}
 			$row[] = '<center><a href="../mySpace/myStudents.php?student='.$student_id.'&details=true&course='.$course_code.'&origin=tracking_course'.$from.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
 
-			$all_datas[] = $row;		
+			$all_datas[] = $row;
 		}
 
 		usort($all_datas, 'sort_users');
@@ -588,7 +588,7 @@ if ($_GET['studentlist'] == 'false') {
 		}
 
 		foreach ($all_datas as $row) {
-			$table -> addRow($row,'align="right"');	
+			$table -> addRow($row,'align="right"');
 		}
 		$table -> setColAttributes(0, array('align' => 'left'));
 		$table -> setColAttributes(1, array('align' => 'left'));
@@ -605,7 +605,7 @@ if ($_GET['studentlist'] == 'false') {
 	// send the csv file if asked
 	if ($export_csv) {
 		if ($is_western_name_order) {
-			$csv_headers = array ( 
+			$csv_headers = array (
 				get_lang('OfficialCode', ''),
 				get_lang('FirstName', ''),
 				get_lang('LastName', ''),
@@ -618,7 +618,7 @@ if ($_GET['studentlist'] == 'false') {
 				get_lang('LatestLogin', '')
 			);
 		} else {
-			$csv_headers = array ( 
+			$csv_headers = array (
 				get_lang('OfficialCode', ''),
 				get_lang('LastName', ''),
 				get_lang('FirstName', ''),

@@ -64,7 +64,7 @@ if ($_POST['export_report'])
 
 			header('Content-type: application/octet-stream');
 			header('Content-Type: application/force-download');
-			
+
 			if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT']))
 			{
 				header('Content-Disposition: filename= '.$filename);

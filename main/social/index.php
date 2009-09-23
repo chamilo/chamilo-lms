@@ -17,7 +17,7 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thi
 $htmlHeadXtra[]='<style type="text/css" media="all">@import "'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css";</style>';
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(function() {
-	$("#container-9").tabs({ remote: true});	     
+	$("#container-9").tabs({ remote: true});
 });
 function register_friend(element_input) {
 	name_button=$(element_input).attr("id");
@@ -35,13 +35,13 @@ function register_friend(element_input) {
 		 $("div#"+name_div_id).hide("slow");
 		 $("#id_response").html(datos);
 		}
-	});		
+	});
 }
 function denied_friend (element_input) {
 	name_button=$(element_input).attr("id");
 	name_div_id="id_"+name_button.substring(13);
 	user_id=name_div_id.split("_");
-	friend_user_id=user_id[1];	
+	friend_user_id=user_id[1];
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {
@@ -95,8 +95,8 @@ function set_qualify_friend() {
 	}
 	if (type_friend==null) {
 		alert("'.get_lang('SelectOneGroup', '').'");
-		return false;		
-	}	
+		return false;
+	}
 	if (confirm("'.get_lang('AttachContactsPersonal', '').' ?")) {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
@@ -161,10 +161,10 @@ function toogle_function (element_html){
 		}
 	}
 	if (my_image=="visible.gif") {
-		$(ident).hide("slow");	
+		$(ident).hide("slow");
 		$(id_button).attr("src","../img/invisible_na.gif");
 	} else {
-		$(ident).show("slow");	
+		$(ident).show("slow");
 		$(id_button).attr("src","../img/visible.gif");
 	}
 }
@@ -177,23 +177,23 @@ function unselectall_cheks() {
 function submit_form (path_submit) {
 	if (path_submit=="inbox") {
 		if (count_checkbox("inbox") > 0) {
-		   document.getElementById(\'form_send\').action="../social/index.php?inbox=true#remote-tab-2";		
+		   document.getElementById(\'form_send\').action="../social/index.php?inbox=true#remote-tab-2";
 		   if (confirm("'.get_lang('ConfirmYourChoice', '').'")) {
 		   		$("#form_send").submit();
-		   }	
+		   }
 		} else {
 			alert("'.get_lang('SelectTheCheckbox', '').'");
 		}
 
 	} else {
 		if (count_checkbox("outbox") > 0) {
-			document.getElementById(\'form_send_out\').action="../social/index.php?outbox=true#remote-tab-3";		
-		   if (confirm("'.get_lang('ConfirmYourChoice', '').'")) {			
+			document.getElementById(\'form_send_out\').action="../social/index.php?outbox=true#remote-tab-3";
+		   if (confirm("'.get_lang('ConfirmYourChoice', '').'")) {
 				$("#form_send_out").submit();
 		   }
 		} else {
 			alert("'.get_lang('SelectedMoreOptions', '').'");
-		}			
+		}
 	}
 }
 function count_checkbox(status_type) {
@@ -205,7 +205,7 @@ function count_checkbox(status_type) {
 		       cont = cont + 1;
 		    }
 		}
-		return cont;	
+		return cont;
 	} else {
 		var checkboxes = document.getElementsByName("out[]");
 		var cont = 0;
@@ -214,13 +214,13 @@ function count_checkbox(status_type) {
 		       cont = cont + 1;
 		    }
 		}
-		return cont;	
+		return cont;
 	}
 }
 function get_action_url_and_show_messages (name_rs,name_id) {
 	$(".confirmation-message").remove();
 	$(".normal-message").remove();
-	$(".error-message").remove();	
+	$(".error-message").remove();
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			beforeSend: function(objeto) {
@@ -230,7 +230,7 @@ function get_action_url_and_show_messages (name_rs,name_id) {
 			data: "rs="+name_rs+"&id="+name_id,
 			success: function(datos) {
 			 $("div#div_content_messages").html(datos);
-			 $("div#div_content_table_data").html(" ");	
+			 $("div#div_content_table_data").html(" ");
 			}
 		});
 }
@@ -247,7 +247,7 @@ function close_div_show (my_div) {
 			url: "../messages/inbox.php",
 			data:"",
 			success: function(datos) {
-			 $("div#div_content_table_data").html(datos);	
+			 $("div#div_content_table_data").html(datos);
 			}
 		});
 }
@@ -266,7 +266,7 @@ function reply_to_messages (my_action,name_rs,name_id) {
 			url: "../messages/new_message.php",
 			data:"re_id="+name_rs+"&id="+name_id,
 			success: function(datos) {
-			 $("div#div_content_messages").html(datos);	
+			 $("div#div_content_messages").html(datos);
 			}
 		});
 	}
@@ -286,10 +286,10 @@ function compose_and_show_message (my_action,name_rs) {
 			url: "../messages/new_message.php",
 			data:"rs="+name_rs,
 			success: function(datos) {
-			 $("div#div_content_messages").html(datos);	
+			 $("div#div_content_messages").html(datos);
 			}
-		});		
-	}		
+		});
+	}
 }
 function send_request_and_search() {
 	cont=0;
@@ -297,7 +297,7 @@ function send_request_and_search() {
       	name=$("#id_text_name").get(0).value;
       	if (name.length==0) {
       		return false;
-      	}    		
+      	}
 		$.ajax({
 				contentType: "application/x-www-form-urlencoded",
 				beforeSend: function(objeto) {
@@ -307,22 +307,22 @@ function send_request_and_search() {
 				url: "../social/select_options.php",
 				data: "search="+name,
 				success: function(datos){
-					
+
 					num_records=datos.split(\'</option>\');
 					if (num_records.length==1) {
-						$("#id_div_search").html("");					
+						$("#id_div_search").html("");
 						return false;
 					} else {
 						 $("#id_div_search").html(datos)
 						  list_search_hide();
 					}
-	
+
 						$("#id_search_name").bind("click", function() {
 							name_option=$("select#id_search_name option:selected").text();
 							code_option=$("select#id_search_name option:selected").val();
 							 $("#user_list").attr("value", code_option);
 							 $("#id_text_name").attr("value", name_option);
-							 
+
 							 $("#id_div_search").html("");
 							 cont++;
 						 });
@@ -335,7 +335,7 @@ function delete_one_message (num_id) {
 		$("div#div_content_table_data").html("");
 		$(".confirmation-message").remove();
 		$(".normal-message").remove();
-		$(".error-message").remove();				
+		$(".error-message").remove();
 			$.ajax({
 				contentType: "application/x-www-form-urlencoded",
 				beforeSend: function(objeto) {
@@ -374,13 +374,13 @@ function close_and_open_outbox() {
 			url: "../messages/outbox.php",
 			data:"",
 			success: function(datos) {
-			 $("div#div_content_table_data_sent").html(datos);	
+			 $("div#div_content_table_data_sent").html(datos);
 			}
 		});
 }
 function delete_one_message_outbox (num_id) {
 		$("div#div_content_messages_sent").html("");
-		$("div#div_content_table_data_sent").html("");	
+		$("div#div_content_table_data_sent").html("");
 			$.ajax({
 				contentType: "application/x-www-form-urlencoded",
 				beforeSend: function(objeto) {
@@ -404,9 +404,9 @@ if (api_get_setting('allow_message_tool')=='true') {
 	$htmlHeadXtra[] ='<script type="text/javascript">
 		function delete_message_js() {
 			$(".message-content").animate({ opacity: "hide" }, "slow");
-			$(".message-view").animate({ opacity: "show" }, "slow");			
+			$(".message-view").animate({ opacity: "show" }, "slow");
 		}
-	</script>';	
+	</script>';
 }
 $htmlHeadXtra[] = '<link rel="stylesheet" href="../inc/lib/javascript/jquery.tabs.css" type="text/css" media="print, projection, screen">';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/jquery.tabs.css" type="text/css" media="print, projection, screen">';
@@ -430,7 +430,7 @@ if ((api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_mess
 	$interbreadcrumb[]= array (
 	'url' => 'index.php?#remote-tab-1',
 	'name' => get_lang('MessageTool')
-	);	
+	);
 }
 
 Display :: display_header('');
@@ -460,27 +460,27 @@ if (isset($_GET['sendform'])) {
 		$form_delete_outbox[]=$_POST['out'][$i];
 	}
 	$form_info_outbox=implode(',',$form_delete_outbox);
-	$form_send_data_message='?form_delete_outbox='.($form_info_outbox);	
+	$form_send_data_message='?form_delete_outbox='.($form_info_outbox);
 }
 $form_url_send=isset($form_send_data_message) ? $form_send_data_message :'';
 ?>
 <div id="container-9">
     <ul>
         <li><a href="data_personal.inc.php"><span><?php Display :: display_icon('profile.png',get_lang('PersonalData')); echo '&nbsp;&nbsp;'.get_lang('PersonalData'); ?></span></a></li>
-        <?php 
-       	if (api_get_setting('allow_message_tool')=='true') { 
-       	?>        
+        <?php
+       	if (api_get_setting('allow_message_tool')=='true') {
+       	?>
         <li><a href="../messages/inbox.php<?php echo $form_url_send; ?>"><span><?php Display :: display_icon('inbox.png',get_lang('Inbox')); echo '&nbsp;&nbsp;'.get_lang('Inbox');?></span></a></li>
         <li><a href="../messages/outbox.php<?php echo $form_url_send; ?>"><span><?php Display :: display_icon('outbox.png',get_lang('Outbox') ); echo '&nbsp;&nbsp;'.get_lang('Outbox');?></span></a></li>
         <?php }
-  	 	if (api_get_setting('allow_social_tool')=='true') {      
+  	 	if (api_get_setting('allow_social_tool')=='true') {
         ?>
         <li><a href="select_friend_response.php"><span><?php Display :: display_icon('pending_invitation.png',get_lang('PendingInvitations'), array('height'=>'22px')); echo '&nbsp;&nbsp;'.get_lang('PendingInvitations'); ?></span></a></li>
         <li><a href="contacts.inc.php"><span><?php Display :: display_icon('contacts.png',get_lang('Contacts')); echo '&nbsp;&nbsp;'.get_lang('Contacts'); ?></span></a></li>
         <li><a href="group_contact.inc.php"><span><?php Display :: display_icon('group_contact.png',get_lang('ContactsGroups')); echo '&nbsp;&nbsp;'.get_lang('ContactsGroups'); ?></span></a></li>
         <?php
   	 	}
-        ?>     
+        ?>
     </ul>
     <?php //echo '<div id="show">&nbsp;</div>';?>
 </div>

@@ -35,7 +35,7 @@ class SimpleUrl {
     var $_y;
     var $_target;
     var $_raw = false;
-    
+
     /**
      *    Constructor. Parses URL into sections.
      *    @param string $url        Incoming URL.
@@ -57,7 +57,7 @@ class SimpleUrl {
         $this->_fragment = (strncmp($url, "#", 1) == 0 ? substr($url, 1) : false);
         $this->_target = false;
     }
-    
+
     /**
      *    Extracts the X, Y coordinate pair from an image map.
      *    @param string $url   URL so far. The coordinates will be
@@ -72,7 +72,7 @@ class SimpleUrl {
         }
         return array(false, false);
     }
-    
+
     /**
      *    Extracts the scheme part of an incoming URL.
      *    @param string $url   URL so far. The scheme will be
@@ -87,7 +87,7 @@ class SimpleUrl {
         }
         return false;
     }
-    
+
     /**
      *    Extracts the username and password from the
      *    incoming URL. The // prefix will be reattached
@@ -114,7 +114,7 @@ class SimpleUrl {
         $url = $prefix . $url;
         return array(false, false);
     }
-    
+
     /**
      *    Extracts the host part of an incoming URL.
      *    Includes the port number part. Will extract
@@ -143,7 +143,7 @@ class SimpleUrl {
         }
         return false;
     }
-    
+
     /**
      *    Extracts the path information from the incoming
      *    URL. Strips this path from the URL.
@@ -159,7 +159,7 @@ class SimpleUrl {
         }
         return '';
     }
-    
+
     /**
      *    Strips off the request data.
      *    @param string $url  URL so far. The request will be
@@ -174,7 +174,7 @@ class SimpleUrl {
         }
         return '';
     }
-        
+
     /**
      *    Breaks the request down into an object.
      *    @param string $raw           Raw request.
@@ -193,7 +193,7 @@ class SimpleUrl {
         }
         return $request;
     }
-    
+
     /**
      *    Accessor for protocol part.
      *    @param string $default    Value to use if not present.
@@ -203,7 +203,7 @@ class SimpleUrl {
     function getScheme($default = false) {
         return $this->_scheme ? $this->_scheme : $default;
     }
-    
+
     /**
      *    Accessor for user name.
      *    @return string    Username preceding host.
@@ -212,7 +212,7 @@ class SimpleUrl {
     function getUsername() {
         return $this->_username;
     }
-    
+
     /**
      *    Accessor for password.
      *    @return string    Password preceding host.
@@ -221,7 +221,7 @@ class SimpleUrl {
     function getPassword() {
         return $this->_password;
     }
-    
+
     /**
      *    Accessor for hostname and port.
      *    @param string $default    Value to use if not present.
@@ -231,7 +231,7 @@ class SimpleUrl {
     function getHost($default = false) {
         return $this->_host ? $this->_host : $default;
     }
-    
+
     /**
      *    Accessor for top level domain.
      *    @return string       Last part of host.
@@ -241,7 +241,7 @@ class SimpleUrl {
         $path_parts = pathinfo($this->getHost());
         return (isset($path_parts['extension']) ? $path_parts['extension'] : false);
     }
-    
+
     /**
      *    Accessor for port number.
      *    @return integer    TCP/IP port number.
@@ -249,8 +249,8 @@ class SimpleUrl {
      */
     function getPort() {
         return $this->_port;
-    }        
-            
+    }
+
     /**
      *    Accessor for path.
      *    @return string    Full path including leading slash if implied.
@@ -262,7 +262,7 @@ class SimpleUrl {
         }
         return $this->_path;
     }
-    
+
     /**
      *    Accessor for page if any. This may be a
      *    directory name if ambiguious.
@@ -275,7 +275,7 @@ class SimpleUrl {
         }
         return $matches[1];
     }
-    
+
     /**
      *    Gets the path to the page.
      *    @return string       Path less the page.
@@ -287,7 +287,7 @@ class SimpleUrl {
         }
         return $matches[1];
     }
-    
+
     /**
      *    Accessor for fragment at end of URL after the "#".
      *    @return string    Part after "#".
@@ -296,7 +296,7 @@ class SimpleUrl {
     function getFragment() {
         return $this->_fragment;
     }
-    
+
     /**
      *    Sets image coordinates. Set to false to clear
      *    them.
@@ -312,7 +312,7 @@ class SimpleUrl {
         $this->_x = (integer)$x;
         $this->_y = (integer)$y;
     }
-    
+
     /**
      *    Accessor for horizontal image coordinate.
      *    @return integer        X value.
@@ -321,7 +321,7 @@ class SimpleUrl {
     function getX() {
         return $this->_x;
     }
-        
+
     /**
      *    Accessor for vertical image coordinate.
      *    @return integer        Y value.
@@ -330,7 +330,7 @@ class SimpleUrl {
     function getY() {
         return $this->_y;
     }
-    
+
     /**
      *    Accessor for current request parameters
      *    in URL string form. Will return teh original request
@@ -350,7 +350,7 @@ class SimpleUrl {
         }
         return '';
     }
-    
+
     /**
      *    Adds an additional parameter to the request.
      *    @param string $key            Name of parameter.
@@ -361,7 +361,7 @@ class SimpleUrl {
         $this->_raw = false;
         $this->_request->add($key, $value);
     }
-    
+
     /**
      *    Adds additional parameters to the request.
      *    @param hash/SimpleFormEncoding $parameters   Additional
@@ -372,7 +372,7 @@ class SimpleUrl {
         $this->_raw = false;
         $this->_request->merge($parameters);
     }
-    
+
     /**
      *    Clears down all parameters.
      *    @access public
@@ -381,7 +381,7 @@ class SimpleUrl {
         $this->_raw = false;
         $this->_request = &new SimpleGetEncoding();
     }
-    
+
     /**
      *    Gets the frame target if present. Although
      *    not strictly part of the URL specification it
@@ -392,7 +392,7 @@ class SimpleUrl {
     function getTarget() {
         return $this->_target;
     }
-    
+
     /**
      *    Attaches a frame target.
      *    @param string $frame        Name of frame.
@@ -402,7 +402,7 @@ class SimpleUrl {
         $this->_raw = false;
         $this->_target = $frame;
     }
-    
+
     /**
      *    Renders the URL back into a string.
      *    @return string        URL in canonical form.
@@ -427,7 +427,7 @@ class SimpleUrl {
         $coords = $this->getX() === false ? '' : '?' . $this->getX() . ',' . $this->getY();
         return "$scheme$identity$host$path$encoded$fragment$coords";
     }
-    
+
     /**
      *    Replaces unknown sections to turn a relative
      *    URL into an absolute one. The base URL can
@@ -459,7 +459,7 @@ class SimpleUrl {
         $coords = $this->getX() === false ? '' : '?' . $this->getX() . ',' . $this->getY();
         return new SimpleUrl("$scheme://$identity$host$port$path$encoded$fragment$coords");
     }
-    
+
     /**
      *    Replaces unknown sections of the path with base parts
      *    to return a complete absolute one.
@@ -479,7 +479,7 @@ class SimpleUrl {
         }
         return $base->getPath();
     }
-    
+
     /**
      *    Simple test to see if a path part is relative.
      *    @param string $path        Path to test.
@@ -489,7 +489,7 @@ class SimpleUrl {
     function _isRelativePath($path) {
         return (substr($path, 0, 1) != '/');
     }
-    
+
     /**
      *    Extracts the username and password for use in rendering
      *    a URL.
@@ -502,7 +502,7 @@ class SimpleUrl {
         }
         return false;
     }
-    
+
     /**
      *    Replaces . and .. sections of the path.
      *    @param string $path    Unoptimised path.
@@ -513,7 +513,7 @@ class SimpleUrl {
         $path = preg_replace('|/\./|', '/', $path);
         return preg_replace('|/[^/]+/\.\./|', '/', $path);
     }
-    
+
     /**
      *    A pipe seperated list of all TLDs that result in two part
      *    domain names.

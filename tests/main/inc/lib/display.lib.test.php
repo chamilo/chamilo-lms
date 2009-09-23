@@ -3,7 +3,7 @@ require_once(api_get_path(LIBRARY_PATH).'display.lib.php');
 
 
 class TestDisplay extends UnitTestCase {
-	
+
 	public function testdisplay_introduction_section() {
 		$tool=api_get_tools_lists($my_tool=null);
 		ob_start();
@@ -13,7 +13,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($tool);
 	}
-	
+
 	public function testdisplay_localised_html_file(){
 		global $language_interface;
 		$doc_url = str_replace('/..', '', $doc_url);
@@ -25,7 +25,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($full_file_name);
 	}
-	
+
 	public function testdisplay_table_header() {
 		ob_start();
 		Display::display_table_header();
@@ -34,7 +34,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 		/**
 	*	Display html header of table with several options.
 	*
@@ -53,7 +53,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	*	Displays a table row.
 	*
@@ -72,7 +72,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	public function testdisplay_complex_table_row() {
 		$properties='';
 		$table_row='';
@@ -83,7 +83,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	*	display html footer of table
 	*/
@@ -95,7 +95,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	public function testdisplay_sortable_table() {
 		$header='';
 		$content='';
@@ -107,7 +107,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 		/**
 	 * Display a table with a special configuration
 	 * @param array $header Titles for the table header
@@ -118,7 +118,7 @@ class TestDisplay extends UnitTestCase {
 	 *  						th-tag (eg for column-width)
 	 * 						- 4the element: additional attributes for the td-tags
 	 * @param array $content 2D-array with the tables content
-	 * @return void String about header 
+	 * @return void String about header
 	 */
 	public function testdisplay_sortable_config_table() {
 		$header='';
@@ -131,7 +131,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 		/**
 	* Displays a normal message. It is recommended to use this public function
 	* to display any normal information messages.
@@ -139,7 +139,7 @@ class TestDisplay extends UnitTestCase {
 	* @param string $message - include any additional html
 	*                          tags if you need them
 	* @param bool	Filter (true) or not (false)
-	* @return void String message 
+	* @return void String message
 	*/
 	public function testdisplay_normal_message() {
 		global $charset;
@@ -151,7 +151,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * Display the reduced page header (without banner)
 	 */
@@ -166,7 +166,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	* Displays an confirmation message. Use this if something has been done successfully
 	*
@@ -174,7 +174,7 @@ class TestDisplay extends UnitTestCase {
 	* @param bool	Filter (true) or not (false)
 	* @return void String message
 	*/
-	public function testdisplay_confirmation_message() {		
+	public function testdisplay_confirmation_message() {
 		global $charset;
 		$message=api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : $charset);
 		ob_start();
@@ -184,13 +184,13 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($message);
 	}
-	
+
 	/**
 	* Displays an error message.
 	* @author Arthur Portugal
 	* @param string $message - include any additional html tags if you need them
 	* @param bool	Filter (true) or not (false)
-	* @param object Not display the object in the test browser 
+	* @param object Not display the object in the test browser
 	* @return string Code HTML
 	*/
 	public function testdisplay_error_message() {
@@ -203,7 +203,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($message);
 	}
-	
+
 	/**
 	 * Display the page footer
 	 * @author Arthur Portugal
@@ -219,14 +219,14 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * Display the page header
 	 * @param string The name of the page (will be showed in the page title)
 	 * @param string Optional help file name
 	 * @return string Display the hearders messages
 	 */
-	 
+
 	public function testdisplay_header() {
 		global $_plugins,$lp_theme_css,$mycoursetheme,$user_theme,$platform_theme;
 		global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $clarolineRepositoryWeb, $text_dir, $plugins, $_user, $rootAdminWeb, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;
@@ -240,7 +240,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * This public function displays an icon
 	 * @param string $image the filename of the file (in the main/img/ folder
@@ -257,7 +257,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	* Displays an warning message. Use this if you want to draw attention to something
 	*
@@ -275,7 +275,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * Return an encrypted mailto hyperlink
 	 * @author Arthur Portugal
@@ -291,7 +291,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * Print an <option>-list with all letters (A-Z).
 	 * @param char $selected_letter The letter that should be selected
@@ -302,10 +302,10 @@ class TestDisplay extends UnitTestCase {
 		Display::get_alphabet_options();
 		$res=ob_get_contents();
 		$this->assertTrue(is_string($res));
-		ob_end_clean();		
+		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	public function testget_numeric_options() {
 		$min='';
 		$max='';
@@ -316,7 +316,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	*	Create a hyperlink to the platform homepage.
 	*	@param string $name, the visible name of the hyperlink, default is sitename
@@ -330,7 +330,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * This public function returns the htmlcode for an icon
 	 *
@@ -348,7 +348,7 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	* Show the so-called "left" menu for navigating
 	*/
@@ -362,10 +362,10 @@ class TestDisplay extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * Display name and lastname in a specific order
-	 * @param string Firstname 
+	 * @param string Firstname
 	 * @param string Lastname
 	 */
 	public function testuser_name() {

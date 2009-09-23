@@ -37,7 +37,7 @@ function get_suggestions_from_search_engine($q) {
                 $field_val = array();
                 $sql2 = "SELECT * FROM $table_sfv where course_code = '$cc' AND tool_id = '$ti' AND ref_id = '$ri' ORDER BY field_id";
                 $res2 = api_sql_query($sql2,__FILE__,__LINE__);
-                // TODO this code doesn't manage multiple terms in one same field just yet (should duplicate results in this case) 
+                // TODO this code doesn't manage multiple terms in one same field just yet (should duplicate results in this case)
                 $field_id = 0;
                 while ($row2 = Database::fetch_array($res2)) {
                     //TODO : this code is not perfect yet. It overrides the
@@ -59,8 +59,8 @@ function get_suggestions_from_search_engine($q) {
                     	//We found the same field id twice, split the output
                         // array to allow for two sets of results (copy all
                         // existing array elements into copies and update the
-                        // copies) eg. Yannick - Car - Driving in $output[1] 
-                        // will create a copy as Yannick - Car - Speed 
+                        // copies) eg. Yannick - Car - Driving in $output[1]
+                        // will create a copy as Yannick - Car - Speed
                         // in $output[3]
                         $c = count($output);
                         for ($i=0;$i<$c; $i++) {

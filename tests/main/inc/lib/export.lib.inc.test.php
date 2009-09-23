@@ -5,11 +5,11 @@ require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 Mock::generate('DocumentManager');
 
 class TestExport extends UnitTestCase {
-	
-	/** Test about export csv using class document manager 
+
+	/** Test about export csv using class document manager
 	 * @author Arthur portugal
-	 * To can test and show the var_dump is necesary comment inside the class DocumentManager in the file document.lib.php the word "exit()", 
-	 * because "exit" not permit show the result.  
+	 * To can test and show the var_dump is necesary comment inside the class DocumentManager in the file document.lib.php the word "exit()",
+	 * because "exit" not permit show the result.
 	 */
     function testExportTableCsv() {
         $docman = new MockDocumentManager();
@@ -21,7 +21,7 @@ class TestExport extends UnitTestCase {
         //var_dump($docman);
         //var_dump($res);
     }
- 
+
  	function testExportTableXls() {
  		$docman = new MockDocumentManager();
 		$data = array();
@@ -32,7 +32,7 @@ class TestExport extends UnitTestCase {
         //var_dump($docman);
         //var_dump($export);
  	}
- 
+
  	function testExportTableXml() {
  		$docman = new MockDocumentManager();
 		$data = array();
@@ -46,7 +46,7 @@ class TestExport extends UnitTestCase {
 		//var_dump($docman);
         //var_dump($export);
  	}
- 
+
  	function testExportComplexTableXml() {
  		$docman = new MockDocumentManager();
 		$data = array();
@@ -58,7 +58,7 @@ class TestExport extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($docman);
  	}
- 
+
   	function testExportComplexTableXmlHelper() {
   		$data = array();
 		$level=1;
@@ -66,7 +66,7 @@ class TestExport extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
  	}
- 
+
  	function testBackupDatabase() {
  		$link='';
  		$db_name='';
@@ -90,15 +90,15 @@ class TestExport extends UnitTestCase {
  		$this->assertTrue($res);
  		var_dump($verbose);
  	}*/
- 	
+
  	function testmakeTheBackup() {
  		global $error_msg, $error_no, $db, $archiveRepositorySys, $archiveRepositoryWeb, $appendCourse, $appendMainDb, $archiveName,
  				 $_configuration, $_course, $TABLEUSER, $TABLECOURSUSER, $TABLECOURS, $TABLEANNOUNCEMENT;
- 		
+
 		$exportedCourseId='';
 		$res=makeTheBackup($exportedCourseId);
 		$this->assertTrue(is_bool($res));
-		//var_dump($res);		
+		//var_dump($res);
  	}
-}	
+}
 ?>

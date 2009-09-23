@@ -70,7 +70,7 @@ if(isset($_FILES['user_upload']))
 	//echo("<pre>");
 	//print_r($_FILES['user_upload']);
 	//echo("</pre>");
-	
+
 	$upload_ok = process_uploaded_file($_FILES['user_upload']);
 	if($upload_ok)
 	{
@@ -78,7 +78,7 @@ if(isset($_FILES['user_upload']))
 		$new_path = handle_uploaded_document($_course, $_FILES['user_upload'],$base_work_dir,$_POST['curdirpath'],$_user['user_id'],$to_group_id,$to_user_id,$max_filled_space,$_POST['unzip'],$_POST['if_exists']);
     	$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
     	$new_title = isset($_POST['title']) ? trim($_POST['title']) : '';
-		
+
     	if ($new_path && ($new_comment || $new_title))
     	if (($docid = DocumentManager::get_document_id($_course, $new_path)))
     	{
@@ -86,7 +86,7 @@ if(isset($_FILES['user_upload']))
         	$ct = '';
         	if ($new_comment) $ct .= ", comment='$new_comment'";
         	if ($new_title)   $ct .= ", title='$new_title'";
-        	api_sql_query("UPDATE $table_document SET" . substr($ct, 1) . 
+        	api_sql_query("UPDATE $table_document SET" . substr($ct, 1) .
         	    " WHERE id = '$docid'", __FILE__, __LINE__);
     	}
 		//check for missing images in html files
@@ -114,7 +114,7 @@ if(isset($_POST['submit_image']))
 		//open the html file and replace the paths
 		replace_img_path_in_html_file($_POST['img_file_path'],$paths_to_replace_in_file,$base_work_dir.$_POST['related_file']);
 		//update parent folders
-		item_property_update_on_folder($_course,$_POST['curdirpath'],$_user['user_id']);	
+		item_property_update_on_folder($_course,$_POST['curdirpath'],$_user['user_id']);
 	}
 }
 //they want to create a directory
@@ -129,7 +129,7 @@ if(isset($_POST['create_dir']) && $_POST['dirname']!='')
 		Display::display_normal_message(get_lang('DirCr'));
 		$path = $created_dir;
 	}
-	else 
+	else
 	{
 		display_error(get_lang('CannotCreateDir'));
 	}
@@ -183,7 +183,7 @@ else {	//give them a link to create a directory
 <?php echo get_lang('File'); ?>
 </td>
 <td>
-<input type="file" name="user_upload"/> 
+<input type="file" name="user_upload"/>
 </td>
 </tr>
 <?php
@@ -194,7 +194,7 @@ if(api_get_setting('use_document_title')=='true')
     <td><?php echo get_lang('Title');?></td>
     <td><input type="text" size="20" name="title" style="width:300px;"></td>
     </tr>
-	<?php 
+	<?php
 }
 ?>
     <tr>
@@ -220,7 +220,7 @@ if(api_get_setting('use_document_title')=='true')
 </form>
 <!-- end upload form -->
 
- <!-- so they can get back to the documents   --> 	 
+ <!-- so they can get back to the documents   -->
  <p><?php echo (get_lang('Back'));?> <?php echo (get_lang('To'));?> <a href="document.php?curdirpath=<?php echo $path; ?>"><?php echo (get_lang('DocumentsOverview'));?></a></p>
 
 <?php

@@ -154,7 +154,7 @@ class ShellTestCase extends SimpleTestCase {
     function assertFalse($result, $message = '%s') {
         return $this->assert(new FalseExpectation(), $result, $message);
     }
-    
+
     /**
      *    Will trigger a pass if the two parameters have
      *    the same value only. Otherwise a fail. This
@@ -171,7 +171,7 @@ class ShellTestCase extends SimpleTestCase {
                 $second,
                 $message);
     }
-    
+
     /**
      *    Will trigger a pass if the two parameters have
      *    a different value. Otherwise a fail. This

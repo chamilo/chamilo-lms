@@ -6,17 +6,17 @@ require_once(api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php');
 Mock::generate('Database');
 Mock::generate('Display');
 class TestCalendar extends UnitTestCase {
-	
+
 	function TestCalendar() {
         $this->UnitTestCase('testing the file about calendar/agenda');
-        
+
     }
-	
+
  	public function testDisplayMinimonthcalendar(){
  		ob_start();
  		global $DaysShort;
  		$agendaitems=array('abc','cde');
- 		$month=11; 
+ 		$month=11;
  		$year=2008;
  		$monthName='';
  		$res = display_minimonthcalendar($agendaitems, $month, $year, $monthName);
@@ -24,21 +24,21 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue(is_null($res));
  		//var_dump($res);
  	}
- 	
+
  	public function testToJavascript(){
  		$res = to_javascript();
  		$this->assertTrue($res);
  		$this->assertTrue(is_string($res));
  		//var_dump($res);
  	}
- 	
+
  	public function testUserGroupFilterJavascript(){
  		$res = user_group_filter_javascript();
  		$this->assertTrue($res);
  		$this->assertTrue(is_string($res));
  		//var_dump($res);
  	}
- 	
+
  	public function testDisplayMonthcalendar(){
  		ob_start();
  		global $MonthsLong;
@@ -52,7 +52,7 @@ class TestCalendar extends UnitTestCase {
 		$this->assertNull($res);
 		//var_dump($res);
  	}
- 	
+
  	public function testStoreNewAgendaItem(){
  		global $_user;
  		$res = store_new_agenda_item();
@@ -61,7 +61,7 @@ class TestCalendar extends UnitTestCase {
  		$this->assertNull($res);
  		//var_dump($res);
  	}
- 	
+
  	public function testDisplayCourseadminLinks(){
  		ob_start();
  		$res = display_courseadmin_links();
@@ -69,7 +69,7 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue(is_null($res));
  		//var_dump($res);
  	}
- 	
+
  	public function testDisplayStudentLinks(){
  		ob_start();
  		global $show;
@@ -78,7 +78,7 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue(is_null($res));
  		//var_dump($res);
  	}
- 	
+
  	public function testGetAgendaItem(){
  		$realgrouplist= new MockDatabase();
  		$id=1;
@@ -89,7 +89,7 @@ class TestCalendar extends UnitTestCase {
  		$real_list[] = $result;
  		$res = get_agenda_item($id);
  		if(is_array($real_list))
- 			$this->assertTrue(is_array($real_list));	
+ 			$this->assertTrue(is_array($real_list));
  			else{
  			$this->assertTrue(is_null($real_list));
  			$this->assertTrue($real_list === true || $real_list === false);
@@ -99,7 +99,7 @@ class TestCalendar extends UnitTestCase {
  		//var_dump($real_list);
  		//var_dump($res);
  	}
- 	
+
  	public function testStoreEditedAgendaItem(){
  		ob_start();
  		$instans = new MockDisplay();
@@ -117,7 +117,7 @@ class TestCalendar extends UnitTestCase {
  		//var_dump($instans);
  		//var_dump($edit_result);
  	}
- 	
+
  	public function testSaveEditAgendaItem(){
 	 	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 	 	$id=Database::escape_string($id);
@@ -125,14 +125,14 @@ class TestCalendar extends UnitTestCase {
 		$content=Database::escape_string($content);
 		$start_date=Database::escape_string($start_date);
 		$end_date=Database::escape_string($end_date);
-	 	$res = save_edit_agenda_item($id,$title,$content,$start_date,$end_date); 
+	 	$res = save_edit_agenda_item($id,$title,$content,$start_date,$end_date);
  		$this->assertTrue($res);
  		$this->assertTrue($TABLEAGENDA);
  		$this->assertTrue(is_bool($res));
  		//var_dump($res);
  		//var_dump($TABLEAGENDA);
  	}
- 	
+
  	public function testDeleteAgendaItem(){
  		$realagenda= new MockDatabase();
  		$realagenda1 = new MockDisplay();
@@ -140,7 +140,7 @@ class TestCalendar extends UnitTestCase {
 		$id=Database::escape_string($id);
 		$res = delete_agenda_item($id);
 		$sql = "SELECT * FROM $t_agenda WHERE id = $id";
-		$sql_result = Database::query($sql,__FILE__,__LINE__);	
+		$sql_result = Database::query($sql,__FILE__,__LINE__);
  		$result = Database::fetch_array($sql_result);
  		$real_agenda[] = $result;
  		$res= delete_agenda_item($id);
@@ -151,7 +151,7 @@ class TestCalendar extends UnitTestCase {
  		//var_dump($res);
  		//var_dump($real_agenda);
  	}
- 	
+
  	public function testShowhideAgendaItem(){
 		ob_start();
 		$instans = new MockDisplay();
@@ -221,17 +221,17 @@ class TestCalendar extends UnitTestCase {
  		//var_dump($res);
  		//var_dump($realdisplayone);
  		//var_dump($real_display_one);
-  	} 
- 	
+  	}
+
  	/*public function testShowGroupFilterForm(){
  		$group_list=get_course_groups();
  		$res = show_group_filter_form();
  		$this->assertTrue($res);
  		//var_dump($res);
  	}
- 	
+
  	public function testShowUserFilterForm(){
- 		
+
  		$res = show_user_filter_form();
  		$this->assertTrue($res);
  		//var_dump($res);
@@ -246,7 +246,7 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue(is_null($res));
  		//var_dump($res);
  	}
- 	
+
  	public function testGetAgendaitems(){
  		$realgetagenda = new MockDatabase();
  		$$TABLEAGENDA = Database :: get_course_table(TABLE_MAIN_SYSTEM_CALENDAR);
@@ -257,8 +257,8 @@ class TestCalendar extends UnitTestCase {
 		$year=Database::escape_string($year);
 		$sqlquery = "SELECT
 						DISTINCT *
-						FROM ".$TABLEAGENDA."							 
-						WHERE 
+						FROM ".$TABLEAGENDA."
+						WHERE
 						MONTH(start_date)='".$month."'
 						AND YEAR(start_date)='".$year."'
 						GROUP BY id
@@ -274,7 +274,7 @@ class TestCalendar extends UnitTestCase {
  		 //var_dump($real_get_agenda);
  		 //var_dump($realgetagenda);
  	}
- 	
+
  	public function testDisplayUpcomingEvents(){
  		 ob_start();
  		 $realdisplay = new MockDatabase();
@@ -293,9 +293,9 @@ class TestCalendar extends UnitTestCase {
 		 $this->assertTrue(is_null($res));
 		 //var_dump($real_display);
 		 //var_dump($realdisplay);
-		 //var_dump($res);					
- 	} 
- 	
+		 //var_dump($res);
+ 	}
+
  	public function testCalculateStartEndOfWeek(){
  		$week_number=4;
  		$year=2011;
@@ -304,7 +304,7 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue($res);
  		//var_dump($res);
  	}
- 	
+
  	public function testDisplayDaycalendar(){
  		ob_start();
  		$agendaitems='';
@@ -318,7 +318,7 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue(is_null($res));
  		//var_dump($res);
  	}
- 	
+
  	public function testDisplayWeekcalendar(){
  		ob_start();
  		$agendaitems='';
@@ -331,7 +331,7 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue(is_null($res));
  		//var_dump($res);
  	}
- 	
+
  	public function testGetDayAgendaitems(){
 		$realgetday = new MockDatabase();
 		$TABLEAGENDA = Database :: get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
@@ -343,8 +343,8 @@ class TestCalendar extends UnitTestCase {
  		$year=2009;
  		$day='';
  		$sqlquery = "SELECT DISTINCT *
-										FROM ".$TABLEAGENDA." 
-										WHERE 
+										FROM ".$TABLEAGENDA."
+										WHERE
 										DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
 										GROUP BY agenda.id
 										ORDER BY start_date ";
@@ -359,7 +359,7 @@ class TestCalendar extends UnitTestCase {
  		//var_dump($real_get_day);
  		//var_dump($$realgetday);
  	}
- 	
+
  	public function testGetWeekAgendaitems(){
  		$realgetweek = new MockDatabase();
  		$TABLEAGENDA = Database :: get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
@@ -382,7 +382,7 @@ class TestCalendar extends UnitTestCase {
  		//var_dump($real_get_week);
  		//var_dump($realgetweek);
  	}
- 	
+
  	public function testGetRepeatedEventsDayView(){
  		$realgetrepeat = new MockDatabase();
  		$course_info='';
@@ -414,7 +414,7 @@ class TestCalendar extends UnitTestCase {
  		//var_dump($realgetrepeat);
  		//var_dump($real_get_repeat);
  	}
- 	
+
  	public function testget_repeated_events_week_view(){
  		$realgetrepeated = new MockDatabase();
  		$course_info='';
@@ -440,7 +440,7 @@ class TestCalendar extends UnitTestCase {
  		//var_dump($real_get_repeated);
  		//var_dump($realgetrepeated);
  	}
- 	
+
  	public function testGetRepeatedEventsMonthView(){
  		$realgetrepeated= new MockDatabase();
  		$course_info='';
@@ -473,7 +473,7 @@ class TestCalendar extends UnitTestCase {
 		//var_dump($real_get_repeated);
 		//var_dump($realgetrepeated);
 	}
-	
+
 	public function testGetRepeatedEventsListView(){
 		$realgetrepeatedevents = new MockDatabase();
 		$course_info='';
@@ -505,7 +505,7 @@ class TestCalendar extends UnitTestCase {
 		//var_dump($real_get_repeated_events);
 		//var_dump($realgetrepeatedevents);
 	}
- 	
+
  	public function testIsRepeatedEvent() {
  		$realrepetead = new MockDatabase();
  		$id=1;
@@ -519,12 +519,12 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue(is_bool($resu));
  		$this->assertTrue($resu === true || $resu === false);
  		$this->assertTrue($real_repetead);
- 		$this->assertTrue($realrepetead); 
+ 		$this->assertTrue($realrepetead);
  		//var_dump($resu);
  		//var_dump($real_repetead);
  		//var_dump($realrepetead);
  	}
- 	
+
  	public function testAddWeek(){
  		$timestamp=12;
  		$num=1;
@@ -532,7 +532,7 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue(is_numeric($res));
  		//var_dump($res);
  	}
- 	
+
  	public function testAddMonth(){
  		$timestamp=5;
  		$num=1;
@@ -540,7 +540,7 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue(is_numeric($res));
  		//var_dump($res);
  	}
- 	
+
  	public function testAddYear(){
  		$timestamp=9999;
  		$num=1;
@@ -553,7 +553,7 @@ class TestCalendar extends UnitTestCase {
   * linea 2877 para que la prueba pudiera ejecutarse de manera exitosa.
   */
  	public function testAgendaAddItem(){
- 		
+
  		$realagenda = new MockDatabase();
  		global $_course;
  		$course_info='null';
@@ -586,7 +586,7 @@ class TestCalendar extends UnitTestCase {
  		//var_dump($real_agenda);
  		//var_dump($real_agenda1);
  	}
- 	
+
  	public function testGetCalendarItems(){
  		$realgetcalendar = new MockDatabase();
  		global $_user, $_course;
@@ -613,7 +613,7 @@ class TestCalendar extends UnitTestCase {
  		//var_dump($row);
  		//var_dump($res);
  	}
- 	
+
  	public function testAgendaAddRepeatItem(){
  		$realagenda = new MockDatabase();
  		$course_info='course of test';
@@ -646,7 +646,7 @@ class TestCalendar extends UnitTestCase {
  		//var_dump($res1);
  		//var_dump($real_agenda);
  	}
- 	
+
  	public function testAgendaImportIcal(){
  		$course_info='course_test';
  		$file='';
@@ -659,30 +659,30 @@ class TestCalendar extends UnitTestCase {
  		}
  		//var_dump($res);
  	}
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
- 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 ?>

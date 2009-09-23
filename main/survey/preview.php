@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-*	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modifications 
+*	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modifications
 * 	@version $Id: survey_list.php 10680 2007-01-11 21:26:23Z pcool $
 *
 * 	@todo use quickforms for the forms

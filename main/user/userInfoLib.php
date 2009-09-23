@@ -1,29 +1,29 @@
 <?php
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	@package dokeos.user
-============================================================================== 
+==============================================================================
 */
 
 
@@ -262,15 +262,15 @@ function update_user_course_properties($user_id, $course_code, $properties)
     {
     	$sqlChangeStatus = "status     = '".Database::escape_string($properties['status'])."',";
     }
-    
+
     	//feature deprecated   tutor_id      	= '".Database::escape_string($properties['tutor'])."'
     	$sql = "UPDATE $tbl_coursUser
-    					SET 	".$sqlChangeStatus."	           
+    					SET 	".$sqlChangeStatus."
 	                    role      		= '".Database::escape_string($properties['role'])."',
-	                    tutor_id      	= '".Database::escape_string($properties['tutor'])."' 	                                                     
+	                    tutor_id      	= '".Database::escape_string($properties['tutor'])."'
 	                    WHERE   user_id	    	= '".$user_id."'
 	                    AND     course_code		= '".$course_code."'";
-	                        
+
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 
 	if (mysql_affected_rows() > 0)
@@ -480,7 +480,7 @@ function get_course_user_info($user_id)
 function get_main_user_info($user_id, $courseCode)
 {
 	$user_id 	= strval(intval($user_id));
-	$courseCode = Database::escape_string($courseCode); 
+	$courseCode = Database::escape_string($courseCode);
 	if (0 == $user_id)
 	{
 		return false;
@@ -489,8 +489,8 @@ function get_main_user_info($user_id, $courseCode)
 
 	$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
-	$sql = "SELECT	u.*, u.lastname lastName, u.firstname firstName, 
-	                u.email, u.picture_uri picture, cu.role, 
+	$sql = "SELECT	u.*, u.lastname lastName, u.firstname firstName,
+	                u.email, u.picture_uri picture, cu.role,
 	                cu.status status, cu.tutor_id
 	        FROM    $table_user u, $table_course_user cu
 	        WHERE   u.user_id = cu.user_id

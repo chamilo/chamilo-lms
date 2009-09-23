@@ -50,7 +50,7 @@ if(!isset($_REQUEST['view']))
 else
 	$view = $_REQUEST['view'];
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "tracking";
 include('../inc/global.inc.php');
 

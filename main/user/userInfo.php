@@ -50,17 +50,17 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 
 $htmlHeadXtra[] = '<script type="text/javascript">
-				
+
 function show_image(image,width,height) {
 	width = parseInt(width) + 20;
-	height = parseInt(height) + 20;			
-	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');		
+	height = parseInt(height) + 20;
+	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
 }
-				
+
 </script>';
 
 $editMainUserInfo = Security::remove_XSS($_REQUEST['editMainUserInfo']);
-$uInfo = $editMainUserInfo; 
+$uInfo = $editMainUserInfo;
 $this_section = SECTION_COURSES;
 
 $nameTools = get_lang('Users');
@@ -100,7 +100,7 @@ $currentCourse = $currentCourseID;
 
 //$userIdViewed = $uInfo; // Id of the user we want to view coming from the user.php
 
-//get information about one user 
+//get information about one user
 $userIdViewed = Security::remove_XSS($_REQUEST['uInfo']);
 
 /*
@@ -136,9 +136,9 @@ include ("userInfoLib.php");
 */
 
 $displayMode = "viewContentList";
-$removeDef =  Security::remove_XSS($_GET['removeDef']); 
-$editDef = Security::remove_XSS($_GET['editDef']); 
-$moveUpDef = Security::remove_XSS($_GET['moveUpDef']); 
+$removeDef =  Security::remove_XSS($_GET['removeDef']);
+$editDef = Security::remove_XSS($_GET['editDef']);
+$moveUpDef = Security::remove_XSS($_GET['moveUpDef']);
 $moveDownDef = Security::remove_XSS($_GET['moveDownDef']);
 
 if ($allowedToEditDef)
@@ -189,24 +189,24 @@ if ($allowedToEditDef)
 		$displayMode = "viewMainInfoEdit";
 	}
 	elseif (!empty($_REQUEST['submitMainUserInfo']))
-	{	
+	{
 		/*
 		if (isset ($_REQUEST['submitMainUserInfo']))
 		{
 		*/
 			$userIdViewed = strval(intval($_REQUEST['submitMainUserInfo']));
-			
+
 			/*
-			//is teacher		
-			$promoteCourseAdmin=$_REQUEST['promoteCourseAdmin'];			
-			$userProperties['status'] = 5; 	
+			//is teacher
+			$promoteCourseAdmin=$_REQUEST['promoteCourseAdmin'];
+			$userProperties['status'] = 5;
 			if ($promoteCourseAdmin)
 			{
 				$userProperties['status'] = 1;
-			}				 	
-			
+			}
+
 			// deprecated feature
-			 
+
 			// is coach
 			if (isset ($_REQUEST['promoteTutor']))
 			{
@@ -215,35 +215,35 @@ if ($allowedToEditDef)
 				if ($promoteTutor)
 				{
 					$userProperties['tutor'] = 1;
-				}							
+				}
 			}
-			
+
 			// role is a string
 			if (isset ($_REQUEST['role']))
 			{
-				$role=$_REQUEST['role'];	 
+				$role=$_REQUEST['role'];
 				$userProperties['role'] = $role;
-			}	  		
+			}
 			*/
-			
-			//get information about one user - task #3009  
-      
+
+			//get information about one user - task #3009
+
 			if(!empty($_POST['promoteCourseAdmin']) && $_POST['promoteCourseAdmin']){
 				$userProperties['status'] = 1;
 			}else{
 				$userProperties['status'] = 5;
-			}		
-				
+			}
+
 			if(!empty($_POST['promoteTutor']) && $_POST['promoteTutor']){
 				$userProperties['tutor'] = 1;
 			}else{
 				$userProperties['tutor'] = 0;
 			}
-			
-			$userProperties['role'] = $_POST['role']; 
-				  
+
+			$userProperties['role'] = $_POST['role'];
+
 			update_user_course_properties($userIdViewed, $courseCode, $userProperties);
-			
+
 			$displayMode = "viewContentList";
 	}
 }
@@ -253,23 +253,23 @@ if ($allowedToEditDef)
 if ($allowedToEditContent)
 {
 	if (isset($_POST['submitContent']))
-	{		
+	{
 		if ($_POST['cntId']) // submit a content change
 		{
 			edit_cat_content($_POST['catId'], $userIdViewed, $_POST['content'], $_SERVER['REMOTE_ADDR']);
-	
+
 		}
 		else // submit a totally new content
 		{
 			fill_new_cat_content($_POST['catId'], $userIdViewed, $_POST['content'], $_SERVER['REMOTE_ADDR']);
-	
+
 		}
 
 		$displayMode = "viewContentList";
 	}
 	elseif (!empty($_GET['editContent']))
 	{
-		$displayMode = "viewContentEdit";	
+		$displayMode = "viewContentEdit";
 		$userIdViewed = $userIdViewed;
 	}
 }
@@ -283,7 +283,7 @@ if ($allowedToEditContent)
 echo '<div class="actions">';
 echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser')).get_lang('BackUser').'</a>';
 if (api_is_allowed_to_edit()) {
-	if (!is_numeric($_GET['editMainUserInfo'])) {	
+	if (!is_numeric($_GET['editMainUserInfo'])) {
 		echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;editMainUserInfo='.$userIdViewed.'">'.Display::return_icon('edit.gif',get_lang('EditUser')).get_lang('EditUser').'</a>';
 	} else {
 		echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;uInfo='.$userIdViewed.'">'.Display::return_icon('members.gif',get_lang('ViewUser')).get_lang('ViewUser').'</a>';
@@ -387,29 +387,29 @@ elseif ($displayMode == "viewMainInfoEdit")
 	{
 		($mainUserInfo['status'] == 1) ? $courseAdminChecked = "checked" : $courseAdminChecked = "";
 		($mainUserInfo['tutor_id'] == 1) ? $tutorChecked = "checked" : $tutorChecked = "";
-				
-		$image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);			
+
+		$image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);
 		// get the path,width and height from original picture
 		$big_image = $image_array['dir'].'big_'.$image_array['file'];
 		$big_image_size = api_getimagesize($big_image);
 		$big_image_width= $big_image_size[0];
 		$big_image_height= $big_image_size[1];
 		$url_big_image = $big_image.'?rnd='.time();
-		
+
 		if ($image_array['file']=='unknown.jpg') {
 		echo '<img src="'.$image_array['dir'].$image_array['file'].'" border="1">';
 		} else {
 		echo '<input type="image" src="'.$image_array['dir'].$image_array['file'].'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
-		}						
-		 
+		}
+
 		//"<td>", get_lang('Tutor'), "</td>\n",
 		echo "<form action=\"".api_get_self()."\" method=\"post\">\n",
 				"<input type=\"hidden\" name=\"submitMainUserInfo\" value=\"$userIdViewed\" />\n",
 				"<table width=\"80%\" border=\"0\">",
 					"<tr align=\"center\" bgcolor=\"#E6E6E6\">\n",
 						"<td align=\"left\">", get_lang('Name'), "</td>\n",
-						"<td width=\"100px\" align=\"left\">", get_lang('Description'), "</td>\n",	
-						"<td>", get_lang('Tutor'), "</td>\n",					
+						"<td width=\"100px\" align=\"left\">", get_lang('Description'), "</td>\n",
+						"<td>", get_lang('Tutor'), "</td>\n",
 						"<td>", get_lang('CourseManager'), "</td>\n",
 					"</tr>\n",
 					"<tr align=\"center\">",
@@ -430,7 +430,7 @@ elseif ($displayMode == "viewMainInfoEdit")
 		echo "<td><button class=\"save\" type=\"submit\" name=\"submit\">".get_lang('SaveChanges')."</button></td>\n", "</tr>", "</table>", "</form>\n";
 
 		echo "<p>".Display :: encrypted_mailto_link($mainUserInfo['email'], $mainUserInfo['email'])."</p>";
-		
+
 				if (api_get_setting('extended_profile') == 'true')
 				{
 					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
@@ -457,36 +457,36 @@ elseif ($displayMode == "viewContentList") // default display
 		//not supported yet: editing users of virtual courses
 		$allowedToEditDef = false;
 	}
-	
+
 	$mainUserInfo = get_main_user_info($userIdViewed, $courseCode);
-	
+
 	if ($mainUserInfo)
-	{		
-		$image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);	
+	{
+		$image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);
 		// get the path,width and height from original picture
 		$big_image = $image_array['dir'].'big_'.$image_array['file'];
 		$big_image_size = api_getimagesize($big_image);
 		$big_image_width= $big_image_size[0];
 		$big_image_height= $big_image_size[1];
 		$url_big_image = $big_image.'?rnd='.time();
-		
+
 		if ($image_array['file']=='unknown.jpg') {
 		echo '<img src="'.$image_array['dir'].$image_array['file'].'" border="1">';
 		} else {
 		echo '<input type="image" src="'.$image_array['dir'].$image_array['file'].'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
-		}		
-		
-		
+		}
+
+
 		//DISPLAY TABLE HEADING
 		if ($origin == 'learnpath') { $allowedToEditDef=false; $is_allowedToTrack=false; }
-		
+
 				//"<td>",get_lang('Tutor'),"</td>\n",
 		echo	"<table width=\"80%\" border=\"0\">",
 
 				"<tr align=\"center\" bgcolor=\"#E6E6E6\">\n",
 				"<td align=\"left\">",get_lang('Name'),"</td>\n",
 				"<td width=\"100px\" align=\"left\">",get_lang('Description'),"</td>\n",
-				"<td>",get_lang('Tutor'),"</td>\n",				
+				"<td>",get_lang('Tutor'),"</td>\n",
 				"<td>",get_lang('CourseManager'),"</td>\n",
 				($allowedToEditDef?"<td>".get_lang('Edit')."</td>\n":""),
                 ($is_allowedToTrack?"<td>".get_lang('Tracking')."</td>\n":""),
@@ -498,7 +498,7 @@ elseif ($displayMode == "viewContentList") // default display
 				"<td  align=\"left\">",htmlize($mainUserInfo['role']),"</td>";
 
 				//DISPLAY TABLE CONTENT
-				
+
 				// deprecated feature
 				if ($mainUserInfo['tutor_id'] == 1)
 				{
@@ -507,7 +507,7 @@ elseif ($displayMode == "viewContentList") // default display
 				else
 				{
 					echo "<td> - </td>\n";
-				}				
+				}
 
 				if ($mainUserInfo['status'] == 1)
 				{
@@ -537,9 +537,9 @@ elseif ($displayMode == "viewContentList") // default display
 				echo "</tr>",
 				"</table>";
 				//"<p><a href=\"mailto:",$mainUserInfo['email'],"\">",$mainUserInfo['email'],"</a>",
-				
+
 				if (api_get_setting("show_email_addresses") == "true")
-				{				
+				{
 					echo "<p>". Display::encrypted_mailto_link($mainUserInfo['email'],$mainUserInfo['email']). "</p>";
 				}
 				else
@@ -549,7 +549,7 @@ elseif ($displayMode == "viewContentList") // default display
 						echo "<p>". Display::encrypted_mailto_link($mainUserInfo['email'],$mainUserInfo['email']). "</p>";
 					}
 				}
-								
+
 				if (api_get_setting('extended_profile') == 'true')
 				{
 					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';

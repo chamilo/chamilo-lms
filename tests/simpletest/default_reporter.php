@@ -31,7 +31,7 @@ class SimpleCommandLineParser {
     var $_test = '';
     var $_xml = false;
     var $_no_skips = false;
-    
+
     /**
      *    Parses raw command line arguments into object properties.
      *    @param string $arguments        Raw commend line arguments.
@@ -56,7 +56,7 @@ class SimpleCommandLineParser {
             }
         }
     }
-    
+
     /**
      *    Run only this test.
      *    @return string        Test name to run.
@@ -65,7 +65,7 @@ class SimpleCommandLineParser {
     function getTest() {
         return $this->_test;
     }
-    
+
     /**
      *    Run only this test suite.
      *    @return string        Test class name to run.
@@ -74,7 +74,7 @@ class SimpleCommandLineParser {
     function getTestCase() {
         return $this->_case;
     }
-    
+
     /**
      *    Output should be XML or not.
      *    @return boolean        True if XML desired.
@@ -83,7 +83,7 @@ class SimpleCommandLineParser {
     function isXml() {
         return $this->_xml;
     }
-    
+
     /**
      *    Output should suppress skip messages.
      *    @return boolean        True for no skips.
@@ -102,7 +102,7 @@ class SimpleCommandLineParser {
  *    @subpackage UnitTester
  */
 class DefaultReporter extends SimpleReporterDecorator {
-    
+
     /**
      *  Assembles the appopriate reporter for the environment.
      */

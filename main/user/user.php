@@ -117,7 +117,7 @@ if (api_is_allowed_to_edit()) {
 					}
 				}
 
-				if ($session_id == 0) {					
+				if ($session_id == 0) {
 					// users directly subscribed to the course
 					$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 					$sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").", user.email, user.official_code
@@ -159,7 +159,7 @@ if (api_is_allowed_to_edit()) {
 
 			$result = Database::query($sql, __FILE__ ,__LINE__);
 			$row = Database::fetch_array($result, 'ASSOC');
-			if ($row['user_id'] == $user_id || $row['user_id'] == "") {	
+			if ($row['user_id'] == $user_id || $row['user_id'] == "") {
 				CourseManager::unsubscribe_user($_GET['user_id'], $_SESSION['_course']['sysCode']);
 				$message = get_lang('UserUnsubscribed');
 			} else {
@@ -305,7 +305,7 @@ Display::display_introduction_section(TOOL_USER, 'left');
 
 if ( api_is_allowed_to_edit()) {
 	echo "<div class=\"actions\">";
-	
+
 	// the action links
 	$actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'&nbsp;'.get_lang('ExportAsCSV').'</a> ';
 	$actions .= '<a href="subscribe_user.php?'.api_get_cidreq().'">'.Display::return_icon('add_user_big.gif',get_lang("SubscribeUserToCourse")).'&nbsp;'.get_lang("SubscribeUserToCourse").'</a> ';
@@ -389,7 +389,7 @@ function search_keyword($firstname, $lastname, $username, $official_code, $keywo
  * Get the users to display on the current page.
  */
 function get_user_data($from, $number_of_items, $column, $direction) {
-	
+
 	global $origin;
 	global $is_western_name_order;
 	global $sort_by_first_name;
@@ -437,7 +437,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 
 	if (!empty($_SESSION["id_session"])) {
 		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session'], $limit, $order_by);
-	} else {		
+	} else {
 		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], false, 0, $limit, $order_by);
 	}
 
@@ -450,7 +450,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				$temp = array();
 
 				$temp[] = $user_id;
-				$image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);				
+				$image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
 				$user_profile = UserManager::get_picture_user($user_id, $image_path['file'], 22, 'small_', ' width="22" height="22" ');
 				if (!api_is_anonymous()) {
 					$photo = '<center><a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;uInfo='.$user_id.'" title="'.get_lang('Info').'"  ><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'"  title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" /></a></center>';
@@ -489,7 +489,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 			} else {
 				$temp = array();
 
-				$image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);				
+				$image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
 				$image_repository = $image_path['dir'];
 				$existing_image = $image_path['file'];
 				if (!api_is_anonymous()) {
@@ -511,7 +511,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				$temp[] = $o_course_user['official_code'];
 				if (api_is_allowed_to_edit()) {
 					$temp[] = $user_id;
-				}				
+				}
 			}
 			$a_users[$user_id] = $temp;
 		}
@@ -539,7 +539,7 @@ function active_filter($active, $url_params, $row) {
 		$action='AccountInactive';
 		$image='wrong';
 	}
-	if ($row['0']<>$_user['user_id']) {  // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore. 
+	if ($row['0']<>$_user['user_id']) {  // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
 		$result = '<center><img src="../img/'.$image.'.gif" border="0" style="vertical-align: middle;" alt="'.get_lang(ucfirst($action)).'" title="'.get_lang(ucfirst($action)).'"/></center>';
 	}
 	return $result;

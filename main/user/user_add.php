@@ -1,39 +1,39 @@
 <?php
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 
 // TODO: Is this file deprecated?
 
 /**
-============================================================================== 
+==============================================================================
 *	@package dokeos.user
-============================================================================== 
+==============================================================================
 */
 
 /*==========================
             INIT
   ==========================*/
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file="registration";
 
 
@@ -143,7 +143,7 @@ if($register)
 		if ($_cid) $platformStatus = STUDENT;          // course registrartion context...
 		else       $platformStatus = $platformStatus; // admin section of the platform context...
 
-		//if ($userPasswordCrypted) $pw = md5($password_form);		
+		//if ($userPasswordCrypted) $pw = md5($password_form);
 		//else                      $pw = $password_form;
 		$pw = api_get_encrypted_password($password_form);
 		$result = api_sql_query("INSERT INTO $tbl_user
@@ -211,16 +211,16 @@ if($register)
 		$recipient_name = $firstname_form.' '.$lastname_form;
 		$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
 	    $email_admin = api_get_setting('emailAdministrator');
-	    
+
 		$portal_url = $_configuration['root_web'];
 		if ($_configuration['multiple_access_urls']==true) {
-			$access_url_id = api_get_current_access_url_id();				
+			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1 ){
 				$url = api_get_access_url($access_url_id);
 				$portal_url = $url['url'];
 			}
-		}					
-						
+		}
+
 		if ($courseRegSucceed)
 		{
 			$emailbody = get_lang('Dear')." ".stripslashes("$firstname_form $lastname_form").",\n".get_lang('OneResp')." $currentCourseName ".get_lang('RegYou')." ".api_get_setting('siteName')." ".get_lang('Settings')." $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".api_get_setting('administratorSurname')." ".api_get_setting('administratorName')."\n".get_lang('Manager')." ".api_get_setting('siteName')." \nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email').": ".api_get_setting('emailAdministrator')."\n";

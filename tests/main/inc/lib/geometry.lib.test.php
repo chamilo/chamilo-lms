@@ -2,13 +2,13 @@
 require_once(api_get_path(LIBRARY_PATH).'geometry.lib.php');
 
 class TestGeometry extends UnitTestCase {
-	
+
 	public function TestGeometry(){
-		
+
 		$this->UnitTestCase('calculate and return the area of an irregular polygon');
-		
+
 	}
-	
+
 	public function testCalculateArea(){
 		$xs = 12;
 		$ys = 11;
@@ -16,7 +16,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	public function testSubCalculation(){
 		$a='88';
 		$b='23';
@@ -24,7 +24,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	public function testLinesIntersect(){
 		$line1 = '2';
 		$line2 = '4';
@@ -34,7 +34,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertFalse($res);
 		//var_dump($res);
 	}
-	
+
 	public function testIsInSegment(){
 		$p= 16;
 		$a= 22;
@@ -45,7 +45,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertTrue($res);
 		//var_dump($res);
 	}
-	
+
 	public function testIsInLine(){
 		$p=221;
 		$a=11;
@@ -56,7 +56,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertTrue($res);
 		//var_dump($res);
 	}
-	
+
 	public function testGetSlope(){
 		$p=33;
 		$q=23;
@@ -66,7 +66,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertFalse($res);
 		//var_dump($res);
 	}
-	
+
 	public function testCheckPolygon(){
 		$xs=32;
 		$ys=13;
@@ -76,7 +76,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertFalse($res);
 		//var_dump($res);
 	}
-	
+
 	public function testPolygon2String(){
 		$xs=42;
 		$ys=62;
@@ -85,7 +85,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertTrue($res);
 		//var_dump($res);
 	}
-	
+
 	public function testIsInsidePolygon(){
 		$p=43;
 		$xs=11;
@@ -95,7 +95,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertTrue($res === false);
 		//var_dump($res);
 	}
-	
+
 	public function testGetInsideConditionals(){
 		$xs=11;
 		$ys=23;
@@ -104,7 +104,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertTrue($res);
 		//var_dump($res);
 	}
-	
+
 	public function testGetIntersectionData(){
 		$rxs=56;
 		$rys=11;
@@ -115,7 +115,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertTrue($res);
 		//var_dump($res);
 	}
-	
+
 	public function testGetIntersectionPolygon(){
 		$rxs='11';
 		$rys='23';
@@ -127,7 +127,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertFalse($res);
 		//var_dump($res);
 	}
-	
+
 	public function testGetIntersectionPolygonData(){
 		$rxs=34;
 		$rys=22;
@@ -138,7 +138,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertTrue($res);
 		//var_dump($res);
 	}
-	
+
 	public function testFUllyInside(){
 		$axs=12;
 		$ays=33;
@@ -150,7 +150,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertFalse($res);
 		//var_dump($res);
 	}
-	
+
 	public function testIsNextTo(){
 		$point=32;
 		$last_point=11;
@@ -162,7 +162,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertFalse($res);
 		//var_dump($res);
 	}
-	
+
 	public function testGetRightPoint(){
 		$point=44;
 		$polygon=0;
@@ -172,7 +172,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertFalse($res);
 		//var_dump($res);
 	}
-	
+
 	public function testGetLeftPoint(){
 		$point=44;
 		$polygon=01;
@@ -182,7 +182,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertFalse($res);
 		//var_dump($res);
 	}
-	
+
 	public function testToPointsArray(){
 		$xs=22;
 		$ys=33;
@@ -192,7 +192,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertFalse($res);
 		//var_dump($res);
 	}
-	
+
 	public function testToPointsIntersection(){
 		$xs=14;
 		$ys=14;
@@ -202,7 +202,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertFalse($res);
 		//var_dump($res);
 	}
-	
+
 	public function testInInternArray(){
 		$oint=34;
 		$intern_points=13;

@@ -68,7 +68,7 @@ $select_content_proximity = &$form->addElement('select','content_proximity',get_
 if(api_get_setting('search_enabled')=='true')
 {
 	$form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
-	
+
 	$specific_fields = get_specific_field_list();
 	foreach ($specific_fields as $specific_field) {
 		$form -> addElement ('text', $specific_field['code'], $specific_field['name'].' : ');

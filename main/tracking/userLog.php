@@ -40,7 +40,7 @@
 $uInfo = $_REQUEST['uInfo'];
 $view  = $_REQUEST['view'];
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'tracking';
 
 // including the global Dokeos file
@@ -80,7 +80,7 @@ if (isset($_GET['scormcontopen'])) {
 		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$row = Database::fetch_array($res);
 		$lp_charset = $row['default_encoding'];
-	}	
+	}
 	//header('Content-Type: text/html; charset='. $row['default_encoding']);
 }
 
@@ -199,7 +199,7 @@ function myEnc($isostring,$supposed_encoding='ISO-8859-15')
 * Displays the number of logins every month for a specific user in a specific course.
 */
 function display_login_tracking_info($view, $user_id, $course_id)
-{	
+{
 	$MonthsLong = $GLOBALS['MonthsLong'];
 	$track_access_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 	$tempView = $view;
@@ -374,7 +374,7 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 */
 function display_student_publications_tracking_info($view, $user_id, $course_id)
 {
-	global $TABLETRACK_UPLOADS, $TABLECOURSE_WORK, $dateTimeFormatLong, $_course; 
+	global $TABLETRACK_UPLOADS, $TABLECOURSE_WORK, $dateTimeFormatLong, $_course;
 	if(substr($view,2,1) == '1') {
 		$new_view = substr_replace($view,'0',2,1);
 		echo "<tr>
@@ -571,7 +571,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 		*		Display list of user of this group
 		*
 		***************************************************************************/
-		
+
 		echo "<h4>".myEnc(get_lang('ListStudents'))."</h4>";
 		if( $is_allowedToTrackEverybodyInCourse ) {
 			// if user can track everybody : list user of course
@@ -659,7 +659,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 		echo $navLink;
 	} else {
 		// if uInfo is set
-		
+
 		/***************************************************************************
 		*
 		*		Informations about student uInfo
@@ -672,7 +672,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 			$tracking_is_accepted = $is_course_member;
 			$tracked_user_info = Database::get_user_info_from_id($uInfo);
 		} else {
-			
+
 			// check if user is in the group of this tutor
 			$sql = "SELECT u.firstname,u.lastname, u.email
 						FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
@@ -745,7 +745,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
             $sql = "SELECT id, name FROM $tbl_learnpath_main";
     		$result=api_sql_query($sql,__FILE__,__LINE__);
     	    $ar=Database::fetch_array($result);
-    	    
+
 	    	echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
             echo "<table cellpadding='2' cellspacing='1' border='0' align='center'><tr>
     				                <td class='secLine'>

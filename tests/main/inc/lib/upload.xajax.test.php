@@ -9,9 +9,9 @@
 
 require_once(api_get_path(LIBRARY_PATH).'upload.xajax.php');
 require_once(api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php');
-require_once(api_get_path(LIBRARY_PATH).'xajax/xajaxResponse.inc.php');	
+require_once(api_get_path(LIBRARY_PATH).'xajax/xajaxResponse.inc.php');
 
-	
+
 
 class TestUpdateXajax extends UnitTestCase {
 	 /*

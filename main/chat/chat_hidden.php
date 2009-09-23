@@ -116,7 +116,7 @@ if ($_SESSION["origin"] == 'whoisonline') {  //check if our target has denied ou
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$row=mysql_fetch_array($result);
 	if ($row['chatcall_text'] == 'DENIED') {
-		echo "<script language=javascript> alert('".get_lang('ChatDenied')."'); </script>";	
+		echo "<script language=javascript> alert('".get_lang('ChatDenied')."'); </script>";
 		$sql="update $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text='' where (user_id = $talk_to)";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
 	}

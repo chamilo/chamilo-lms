@@ -31,7 +31,7 @@ class GradeBookResult
 {
 	private $gradebook_list = array(); //stores the list of exercises
 	private $results = array(); //stores the results
-	
+
 	/**
 	 * constructor of the class
 	 */
@@ -93,7 +93,7 @@ class GradeBookResult
 		while($row=Database::fetch_array($result,'ASSOC')) {
 			$return[] = $row;
 		}
-		return true;		
+		return true;
 	}
 	/**
 	 * Gets the results of all students (or just one student if access is limited)
@@ -181,7 +181,7 @@ class GradeBookResult
 				if (empty($user_id)) {
 					$return[$j+$i]['user'] = $hpresults[$i][0];
 					$return[$j+$i]['user_id'] = $results[$i][6];
-					
+
 				}
 				$return[$j+$i]['title'] = $title;
 				$return[$j+$i]['time'] = strftime(get_lang('dateTimeFormatLong'),$hpresults[$i][4]);
@@ -208,25 +208,25 @@ class GradeBookResult
 		$data = '';
 		//build the results
 		//titles
-	
+
 		foreach ($dato[0] as $header_col) {
 			if(!empty($header_col)) {
 				$data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($header_col))).';';
-			}			
+			}
 		}
-		
+
 		$data .="\r\n";
 		$cant_students = count($dato[1]);
 		//print_r($data);		exit();
-		
+
 		for($i=0;$i<$cant_students;$i++) {
 			$column = 0;
-			foreach($dato[1][$i] as $col_name) {	
-				$data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($col_name))).';';					
+			foreach($dato[1][$i] as $col_name) {
+				$data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($col_name))).';';
 			}
 			$data .="\r\n";
 		}
-		
+
 		//output the results
 		$len = strlen($data);
 		header('Content-type: application/octet-stream');
@@ -259,24 +259,24 @@ class GradeBookResult
 		$worksheet =& $workbook->addWorksheet('Report '.date('YmdGis'));
 		$line = 0;
 		$column = 0; //skip the first column (row titles)
-		//headers			
+		//headers
 		foreach ($data[0] as $header_col) {
 			$worksheet->write($line,$column,$header_col);
 			$column++;
 		}
 		//$worksheet->write($line,$column,get_lang('Total'));
-		//$column++;		
-		$line++;	
-		
+		//$column++;
+		$line++;
+
 		$cant_students = count($data[1]);
 		//print_r($data);		exit();
-		
+
 		for ($i=0;$i<$cant_students;$i++) {
 			$column = 0;
-			foreach ($data[1][$i] as $col_name) {		
+			foreach ($data[1][$i] as $col_name) {
 				$worksheet->write($line,$column,strip_tags($col_name));
 				$column++;
-				
+
 			}
 			$line++;
 		}

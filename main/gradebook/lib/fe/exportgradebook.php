@@ -24,7 +24,7 @@
 */
 /**
  * Prints an HTML page with a table containing the gradebook data
- * @param	array 	Array containing the data to be printed in the table	
+ * @param	array 	Array containing the data to be printed in the table
  * @param	array	Table headers
  * @param	string	View to print as a title for the table
  * @param	string	Course name to print as title for the table
@@ -79,18 +79,18 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
 </style>
 </head>
 <body><div id="main">';
-	
+
 	$printdata .= '<h2>'.$view.' : '.$coursename.'</h2>';
 	$printdata .= '<h3>'.get_lang('Date').' : '.date('j/n/Y g:i').'</h3>';
 	$printdata .= '<table border="1" width="90%" cellspacing="1" cellpadding="1">';
 	foreach ($header_names as $header) {
-		$printdata .= '<th>'.$header.'</th>';		
-		
+		$printdata .= '<th>'.$header.'</th>';
+
 	}
 	foreach ($data_array as $data) {
 		$printdata .= '<tr>';
 		foreach ($data as $rowdata) {
-			$printdata .= '<td>'.$rowdata.'</td>';	
+			$printdata .= '<td>'.$rowdata.'</td>';
 		}
 		$printdata .= '</tr>';
 
@@ -103,7 +103,7 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
  * @param	resource	The PDF object (ezpdf class) used to generate the file
  * @param	array		The data array
  * @param	array		Table headers
- * @param	string		Format (portrait or landscape) 
+ * @param	string		Format (portrait or landscape)
  */
 function export_pdf($pdf,$newarray,$header_names,$format) {
 	$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
@@ -116,10 +116,10 @@ function export_pdf($pdf,$newarray,$header_names,$format) {
 		$pdf->line(40,40,540,40);
 	} else {
 		$pdf->line(40,540,790,540);
-		$pdf->line(40,40,790,40);		
+		$pdf->line(40,40,790,40);
 	}
 	$pdf->ezSetY(($format=='portrait')?'750':'520');
 	$pdf->ezTable($newarray,$header_names,'',array('showHeadings'=>1,'shaded'=>1,'showLines'=>1,'rowGap'=>3,'width'=>(($format=='portrait')?'500':'750')));
-	$pdf->ezStream();	
-	
+	$pdf->ezStream();
+
 }

@@ -136,8 +136,8 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	$url = api_get_path(WEB_CODE_PATH) . 'exercice/exercice.php?' . api_get_cidreq() . '&show=result';
 	$TBL_RECORDING = Database :: get_statistic_table('track_e_attempt_recording');
 	$total_weighting = $_REQUEST['totalWeighting'];
-	
-	$my_post_info=array(); 
+
+	$my_post_info=array();
 	$post_content_id=array();
 	$comments_exist=false;
 	foreach ($_POST as $key_index=>$key_value) {
@@ -157,10 +157,10 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	}
 
 	for ($i=0;$i<$loop_in_track;$i++) {
-		
+
 		$my_marks=Database::escape_string($_POST['marks_'.$array_content_id_exe[$i]]);
 		$contain_comments=Database::escape_string($_POST['comments_'.$array_content_id_exe[$i]]);
-		
+
 		if (isset($contain_comments)) {
 			$my_comments=Database::escape_string($_POST['comments_'.$array_content_id_exe[$i]]);
 		} else {
@@ -175,7 +175,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 					  WHERE question_id = '".$my_questionid."'
 					  AND exe_id='".$id."'";
 			api_sql_query($query, __FILE__, __LINE__);
-			
+
 
 			$qry = 'SELECT sum(marks) as tot
 					FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.intval($id).'
@@ -183,7 +183,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 
 			$res = api_sql_query($qry,__FILE__,__LINE__);
 			$tot = Database::result($res,0,'tot');
-			//updating also the total weight 
+			//updating also the total weight
 			$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".Database::escape_string($tot)."', exe_weighting = '".Database::escape_string($total_weighting)."'
 						 WHERE exe_Id='".Database::escape_string($id)."'";
 			api_sql_query($totquery, __FILE__, __LINE__);
@@ -196,9 +196,9 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 					teacher_comment)
 					VALUES
 					('."'$id','".$my_questionid."','$my_marks','".date('Y-m-d H:i:s')."','".api_get_user_id()."'".',"'.$my_comments.'")';
-			api_sql_query($recording_changes, __FILE__, __LINE__);	
-	
-			
+			api_sql_query($recording_changes, __FILE__, __LINE__);
+
+
 	}
 	$post_content_id=array();
 	$array_content_id_exe=array();
@@ -225,7 +225,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 
 			$res = api_sql_query($qry, __FILE__, __LINE__);
 			$tot = Database :: result($res, 0, 'tot');
-			//updating also the total weight 
+			//updating also the total weight
 			$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '" . Database :: escape_string($tot) . "', exe_weighting = '" . Database :: escape_string($total_weighting) . "'
 									 WHERE exe_Id='" . Database :: escape_string($id) . "'";
 
@@ -270,20 +270,20 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 
 	$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '" . Database :: escape_string($tot) . "' WHERE exe_Id='" . Database :: escape_string($id) . "'";
 
-	//search items 
+	//search items
 	if (isset($_POST['my_exe_exo_id']) && isset($_POST['student_id'])) {
-		$sql_lp='SELECT li.id as lp_item_id,li.lp_id,li.item_type,li.path,liv.id AS lp_view_id,liv.user_id,max(liv.view_count) AS view_count FROM '.$TBL_LP_ITEM.' li 
+		$sql_lp='SELECT li.id as lp_item_id,li.lp_id,li.item_type,li.path,liv.id AS lp_view_id,liv.user_id,max(liv.view_count) AS view_count FROM '.$TBL_LP_ITEM.' li
 		INNER JOIN '.$TBL_LP_VIEW.' liv ON li.lp_id=liv.lp_id WHERE li.path="'.Database::escape_string(Security::remove_XSS($_POST['my_exe_exo_id'])).'" AND li.item_type="quiz" AND user_id="'.Database::escape_string(Security::remove_XSS($_POST['student_id'])).'" ';
 		$rs_lp=Database::query($sql_lp,__FILE__,__LINE__);
 		if (!($rs_lp===false)) {
-			$row_lp=Database::fetch_array($rs_lp);	
+			$row_lp=Database::fetch_array($rs_lp);
 			//update score in learnig path
-			$sql_lp_view='UPDATE '.$TBL_LP_ITEM_VIEW.' liv SET score ="'.$tot.'" WHERE liv.lp_item_id="'.(int)$row_lp['lp_item_id'].'" AND liv.lp_view_id="'.(int)$row_lp['lp_view_id'].'" AND liv.view_count="'.(int)$row_lp['view_count'].'" ;';		
+			$sql_lp_view='UPDATE '.$TBL_LP_ITEM_VIEW.' liv SET score ="'.$tot.'" WHERE liv.lp_item_id="'.(int)$row_lp['lp_item_id'].'" AND liv.lp_view_id="'.(int)$row_lp['lp_view_id'].'" AND liv.view_count="'.(int)$row_lp['view_count'].'" ;';
 			$rs_lp_view=Database::query($sql_lp_view,__FILE__, __LINE__);
 		}
 	}
 	Database::query($totquery, __FILE__, __LINE__);
-	
+
 	$subject = get_lang('ExamSheetVCC');
 	$htmlmessage = '<html>' .
 	'<head>' .
@@ -354,19 +354,19 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 				$lp_item_view_id = Database :: escape_string($lp_item_view_id);
 				$student_id = Database :: escape_string($student_id);
 				$totalWeighting = Database :: escape_string($totalWeighting);
-				// get max view_count from lp_item_view    			
+				// get max view_count from lp_item_view
 				/*$sql = "SELECT MAX(view_count) FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '" . (int) $lp_item_view_id . "'
 				    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '" . (int) $student_id . "' and lp_id='" . (int) $lp_item_id . "')";
 				$res_max_view_count = api_sql_query($sql, __FILE__, __LINE__);
 				$row_max_view_count = Database :: fetch_row($res_max_view_count);
 				$max_view_count = (int) $row_max_view_count[0];
 
-				// update score and total_time from last attempt when you qualify the exercise in Learning path detail 			
+				// update score and total_time from last attempt when you qualify the exercise in Learning path detail
 				$sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . (float) $score . "',total_time = '" . (int) $total_time . "' WHERE lp_item_id = '" . (int) $lp_item_view_id . "'
 				    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '" . (int) $student_id . "' and lp_id='" . (int) $lp_item_id . "') AND view_count = '$max_view_count'";
 				api_sql_query($sql_update_score, __FILE__, __LINE__);
 
-				// update score and total_time from last attempt when you qualify the exercise in Learning path detail 			
+				// update score and total_time from last attempt when you qualify the exercise in Learning path detail
 				$sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . (float) $score . "',total_time = '" . (int) $total_time . "' WHERE lp_item_id = '" . (int) $lp_item_view_id . "'
 				    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '" . (int) $student_id . "' and lp_id='" . (int) $lp_item_id . "') AND view_count = '$max_view_count'";
 				api_sql_query($sql_update_score, __FILE__, __LINE__);*/
@@ -379,10 +379,10 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 			}
 		}
 		if ($origin == 'tracking_course' && !empty($_POST['lp_item_id'])) {
-			//Redirect to the course detail in lp		
+			//Redirect to the course detail in lp
 			header('location: ../mySpace/lp_tracking.php?course=' . Security :: remove_XSS($_GET['course']) . '&origin=' . $origin . '&lp_id=' . Security :: remove_XSS($_POST['lp_item_id']) . '&student_id=' . Security :: remove_XSS($_GET['student']).'&from='.Security::remove_XSS($_GET['from']));
 		} else {
-			//Redirect to the reporting		
+			//Redirect to the reporting
 			header('location: ../mySpace/myStudents.php?origin=' . $origin . '&student=' . Security :: remove_XSS($_GET['student']) . '&details=true&course=' . Security :: remove_XSS($_GET['course']));
 		}
 	}
@@ -394,9 +394,9 @@ if (!empty($_GET['gradebook']) && $_GET['gradebook']=='view' ) {
 } elseif (empty($_GET['gradebook'])) {
 	unset($_SESSION['gradebook']);
 	$gradebook=	'';
-} 
+}
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[] = array (
 		'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
 		'name' => get_lang('Gradebook')
@@ -542,7 +542,7 @@ if ($is_allowedToEdit) {
 				case 'enable' : // enables an exercise
 					$objExerciseTmp->enable();
 					$objExerciseTmp->save();
-					// "WHAT'S NEW" notification: update table item_property (previously last_tooledit)								
+					// "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
 					Display :: display_confirmation_message(get_lang('VisibilityChanged'));
 
 					break;
@@ -686,12 +686,12 @@ if ($show == 'test') {
 
 if ($_configuration['tracking_enabled']) {
 	if ($show == 'result') {
-		/*if (!function_exists('make_select')) 
+		/*if (!function_exists('make_select'))
 		{
 			function make_select($name,$values,$checked='')
 			{
 				$output .= '<select name="'.$name.'" >';
-					foreach($values as $key => $value) 
+					foreach($values as $key => $value)
 					{
 						//$output .= '<option value="'.$key.'" '.(($checked==$key)?'selected="selected"':'').'>'.$value.'</option>';
 					}
@@ -700,13 +700,13 @@ if ($_configuration['tracking_enabled']) {
 			}
 		}*/
 
-		/*if (!function_exists('make_select_users')) 
+		/*if (!function_exists('make_select_users'))
 		{
 			function make_select_users($name,$values,$checked='')
 			{
 				$output .= '<select name="'.$name.'" >';
 				$output .= '<option value="all">'.get_lang('EveryBody').'</option>';
-					foreach($values as $key => $value) 
+					foreach($values as $key => $value)
 					{
 						$output .= '<option value="'.$key.'" '.(($checked==$key)?'selected="selected"':'').'>'.$value.'</option>';
 					}
@@ -735,9 +735,9 @@ if ($_configuration['tracking_enabled']) {
 					null;
 			}
 			if ($_GET['filter'] == '1' or !isset ($_GET['filter']) or $_GET['filter'] == 0 ) {
-				$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=2&gradebook='.$gradebook.'" >'.Display :: return_icon('check.gif', get_lang('ShowCorrectedOnly')).get_lang('ShowCorrectedOnly').'</a>'; 
+				$view_result = '<a href="' . api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=2&gradebook='.$gradebook.'" >'.Display :: return_icon('check.gif', get_lang('ShowCorrectedOnly')).get_lang('ShowCorrectedOnly').'</a>';
 			} else {
-				$view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1&gradebook='.$gradebook.'" >'.Display :: return_icon('un_check.gif', get_lang('ShowUnCorrectedOnly')).get_lang('ShowUnCorrectedOnly').'</a>'; 
+				$view_result = '<a href="' .api_get_self() . '?cidReq=' . api_get_course_id() . '&show=result&filter=1&gradebook='.$gradebook.'" >'.Display :: return_icon('un_check.gif', get_lang('ShowUnCorrectedOnly')).get_lang('ShowUnCorrectedOnly').'</a>';
 			}
 			//$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.api_get_course_id().'&show=result">';
 			//$form_filter .= make_select('filter',array(1=>get_lang('FilterByNotRevised'),2=>get_lang('FilterByRevised')),$filter);
@@ -745,7 +745,7 @@ if ($_configuration['tracking_enabled']) {
 			echo $view_result;
 		}
 	}
-	/*if (api_is_allowed_to_edit()) 
+	/*if (api_is_allowed_to_edit())
 	{
 		$user_count = count($user_list_name);
 		if ($user_count >0 ) {
@@ -783,7 +783,7 @@ if (($is_allowedToEdit) and ($origin != 'learnpath')) {
 			}
 			//echo '<a href="javascript: void(0);" onclick="javascript: document.form1a.submit();">'.Display::return_icon('excel.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
 			echo '<a href="javascript: void(0);" onclick="javascript: document.form1b.submit();">' . Display :: return_icon('excel.gif', get_lang('ExportAsXLS')) . get_lang('ExportAsXLS') . '</a>';
-			//echo '<a href="javascript: void(0);" onclick="javascript: document.form1c.submit();">'.Display::return_icon('synthese_view.gif',$alt).$alt.'</a>';			
+			//echo '<a href="javascript: void(0);" onclick="javascript: document.form1c.submit();">'.Display::return_icon('synthese_view.gif',$alt).$alt.'</a>';
 			echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=test') . '">' . Display :: return_icon('quiz.gif', get_lang('BackToExercisesList')) . get_lang('BackToExercisesList') . '</a>';
 			echo '<form id="form1a" name="form1a" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '">';
 			echo '<input type="hidden" name="export_report" value="export_report">';
@@ -821,7 +821,7 @@ if ($show == 'test') {
 		 <!--<th>--><?php
 ?>
 <!--</th>-->
-		 <th><?php echo get_lang('Modify');?></th>	
+		 <th><?php echo get_lang('Modify');?></th>
 	  </tr>
 	  <?php
 	} else {
@@ -829,7 +829,7 @@ if ($show == 'test') {
 ?> <tr>
 	     <th colspan="2"><?php echo get_lang('ExerciseName');?></th>
 	     <th><?php echo get_lang('QuantityQuestions');?></th>
-		 <th><?php echo get_lang('State');?></th>	
+		 <th><?php echo get_lang('State');?></th>
 	  </tr>
 		<?php
 	}
@@ -882,7 +882,7 @@ if ($show == 'test') {
 				//echo '<td><a href="exercice.php?choice=exportqti2&exerciseId='.$row['id'].'"><img src="../img/export.png" border="0" title="IMS/QTI" /></a></td>';
 ?>
 		    <td>
-		    <a href="admin.php?exerciseId=<?php echo $row['id']; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" /></a>	      
+		    <a href="admin.php?exerciseId=<?php echo $row['id']; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" /></a>
 			<?php
 
 				if ($row['results_disabled']) {
@@ -903,8 +903,8 @@ if ($show == 'test') {
 
 ?>
 
-<!--" /></a>-->	    
-			<a href="exercice.php?choice=delete&exerciseId=<?php echo $row['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset)); echo " ".$row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" alt="<?php echo api_htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>					
+<!--" /></a>-->
+			<a href="exercice.php?choice=delete&exerciseId=<?php echo $row['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset)); echo " ".$row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" alt="<?php echo api_htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>
 			<?php
 				//if active
 				if ($row['active']) {
@@ -922,7 +922,7 @@ if ($show == 'test') {
 			} else { // student only
 ?>
 	          <tr>
-	            <td><?php echo ($i+($page*$limitExPage)).'.'; ?></td>	            
+	            <td><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
 	            <?php $row['title']=api_parse_tex($row['title']);?>
 	            <td><a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$myllpitemid; ?>&exerciseId=<?php echo $row['id']; ?>"><?php echo $row['title']; ?></a></td>
 				<td align="center"> <?php
@@ -947,13 +947,13 @@ if ($show == 'test') {
 				$eid = $row['id'];
 				$uid = api_get_user_id();
 				//this query might be improved later on by ordering by the new "tms" field rather than by exe_id
-				$qry = "SELECT * FROM $TBL_TRACK_EXERCICES 
-						WHERE exe_exo_id = '" . Database :: escape_string($eid) . "' and exe_user_id = '" . Database :: escape_string($uid) . "' AND exe_cours_id = '" . api_get_course_id() . "' AND status <>'incomplete' AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id =  '" . api_get_session_id() . "' 
+				$qry = "SELECT * FROM $TBL_TRACK_EXERCICES
+						WHERE exe_exo_id = '" . Database :: escape_string($eid) . "' and exe_user_id = '" . Database :: escape_string($uid) . "' AND exe_cours_id = '" . api_get_course_id() . "' AND status <>'incomplete' AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id =  '" . api_get_session_id() . "'
 						ORDER BY exe_id DESC";
 				$qryres = api_sql_query($qry);
 				$num = Database :: num_rows($qryres);
 
-				//hide the results 
+				//hide the results
 				$my_result_disabled = $row['results_disabled'];
 				if ($my_result_disabled == 0) {
 					if ($num > 0) {
@@ -1035,11 +1035,11 @@ if ($show == 'test') {
 				if ($is_allowedToEdit) {
 					/************/
 ?>
-  
+
     <tr>
       <td><img src="../img/jqz.gif" alt="HotPotatoes" /></td>
 	   <td><?php echo ($ind+($page*$limitExPage)).'.'; ?></td>
-       <td><a href="showinframes.php?file=<?php echo $path?>&cid=<?php echo $_course['official_code'];?>&uid=<?php echo $_user['user_id'];?>" <?php if(!$active) echo 'class="invisible"'; ?>><?php echo $title?></a></td>    
+       <td><a href="showinframes.php?file=<?php echo $path?>&cid=<?php echo $_course['official_code'];?>&uid=<?php echo $_user['user_id'];?>" <?php if(!$active) echo 'class="invisible"'; ?>><?php echo $title?></a></td>
   <td></td>
       <td><a href="adminhp.php?hotpotatoesName=<?php echo $path; ?>"> <img src="../img/edit.gif" border="0" alt="<?php echo api_htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>" /></a>
        <img src="../img/wizard_gray_small.gif" border="0" title="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" />
@@ -1143,7 +1143,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 								 te.exe_weighting, UNIX_TIMESTAMP(te.exe_date), te.exe_id, email, UNIX_TIMESTAMP(te.start_date), steps_counter,cuser.user_id,te.exe_duration
 						  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user,$tbl_course_rel_user AS cuser
 						  WHERE  user.user_id=cuser.user_id AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'
-						  AND cuser.status<>1 $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 
+						  AND cuser.status<>1 $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0
 						  AND cuser.course_code=te.exe_cours_id ORDER BY users, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
 
 			$hpsql="SELECT ".(api_is_western_name_order() ? "CONCAT(tu.firstname,' ',tu.lastname)" : "CONCAT(tu.lastname,' ',tu.firstname)").", tth.exe_name,
@@ -1160,7 +1160,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 							 te.exe_weighting, UNIX_TIMESTAMP(te.exe_date), te.exe_id, email, UNIX_TIMESTAMP(te.start_date), steps_counter,cuser.user_id,te.exe_duration, ce.results_disabled
 						  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user,$tbl_course_rel_user AS cuser
 						  WHERE  user.user_id=cuser.user_id AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'
-						  AND cuser.status<>1 $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0 
+						  AND cuser.status<>1 $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0
 						  AND cuser.course_code=te.exe_cours_id ORDER BY users, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
 
 		$hpsql = "SELECT '',exe_name, exe_result , exe_weighting, UNIX_TIMESTAMP(exe_date)
@@ -1215,7 +1215,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 			$test = $results[$i][1];
 			$dt = strftime($dateTimeFormatLong, $results[$i][4]);
 			$res = $results[$i][2];
-			
+
 			$duration = intval($results[$i][10]);
 			// we filter the results if we have the permission to
 			if (isset ($results[$i][11]))
@@ -1253,12 +1253,12 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 
 				// there are already a duration test period calculated??
 				//echo '<td>'.sprintf(get_lang('DurationFormat'), $duration).'</td>';
-				
-				// if the float look like 10.00 we show only 10  
-				
+
+				// if the float look like 10.00 we show only 10
+
 				$my_res		= float_format($results[$i][2],1);
 				$my_total 	= float_format($results[$i][3],1);
-				
+
 				echo '<td>' . round(($my_res / ($my_total != 0 ? $my_total : 1)) * 100, 2) . '% (' . $my_res . ' / ' . $my_total . ')</td>';
 
 				// Is hard to read this!!

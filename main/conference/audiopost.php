@@ -1,4 +1,4 @@
-<?php 
+<?php
 //file_put_contents("result.txt", print_r($_POST, true));
 //file_put_contents("result3.txt", print_r($_FILES, true));
 //file_put_contents("result2.txt", print_r($_GET, true));
@@ -51,7 +51,7 @@ if($is_our_server)
 					$res = api_item_property_update($course_info,TOOL_DOCUMENT,$id,'DocumentAdded',$_GET['user_id']);
 					if($res === false)
 					{
-						error_log(__FILE__.':'.__LINE__.': Something went wrong with item properties update of '.$target,0);					
+						error_log(__FILE__.':'.__LINE__.': Something went wrong with item properties update of '.$target,0);
 					}
 					else
 					{//make sound invisible?
@@ -60,7 +60,7 @@ if($is_our_server)
 				}
 				else
 				{
-					error_log(__FILE__.':'.__LINE__.': Could not create document record for document '.$target,0);					
+					error_log(__FILE__.':'.__LINE__.': Could not create document record for document '.$target,0);
 				}
 			}
 		}

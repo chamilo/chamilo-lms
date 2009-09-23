@@ -47,7 +47,7 @@ require_once 'forumfunction.inc.php';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/jquery.js" ></script>';
 $htmlHeadXtra[] = '<script language="javascript">
 										$(document).ready(function(){ $(\'.hide-me\').slideUp() });
-									function hidecontent(content){ $(content).slideToggle(\'normal\'); } 
+									function hidecontent(content){ $(content).slideToggle(\'normal\'); }
 									</script>';
 
 //are we in a lp ?
@@ -82,7 +82,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
@@ -159,11 +159,11 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
 		if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id'])) {
 			//reply link
 			echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread&origin='.$origin.'">'.get_lang('ReplyToThread').'</a>';
-			
+
 			//new thread link
 			if (api_is_allowed_to_edit(false,true) OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1)) {
 				if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
-					echo '&nbsp;&nbsp;'; 
+					echo '&nbsp;&nbsp;';
 					/*echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).$origin_string.'">'.Display::return_icon('forumthread_new.gif').' '.get_lang('NewTopic').'</a>';*/
 				} else {
 					echo get_lang('ForumLocked');
@@ -173,7 +173,7 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
 	}
 	// note: this is to prevent that some browsers display the links over the table (FF does it but Opera doesn't)
 	echo '&nbsp;';
-	
+
 	/*
 	-----------------------------------------------------------
 		Display Forum Category and the Forum information
@@ -189,7 +189,7 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
 	if (isset($_GET['view']) and in_array($_GET['view'],$viewmode_whitelist)) {
 		$viewmode=Database::escape_string($_GET['view']);
 		$_SESSION['view']=$viewmode;
-	} 
+	}
 	if (empty($viewmode)) {
 		$viewmode = 'flat';
 	}
@@ -204,20 +204,20 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
 	// but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
 	echo "<table class=\"data_table\" width=\"100%\">\n";
 
-	// the thread	
-	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";		
+	// the thread
+	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
 	echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
-	
-	if ($origin!='learnpath') {		
-		echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title']).' - ';				
+
+	if ($origin!='learnpath') {
+		echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title']).' - ';
 	}
-		
-	echo prepare4display($current_forum['forum_title']).'<br />';						
+
+	echo prepare4display($current_forum['forum_title']).'<br />';
 	echo "</th>\n";
-	echo "\t</tr>\n";		
-	echo '<span>'.prepare4display($current_thread['thread_comment']).'</span>';	
+	echo "\t</tr>\n";
+	echo '<span>'.prepare4display($current_thread['thread_comment']).'</span>';
 	echo "</table>";
-		
+
 	include_once('viewpost.inc.php');
 } // if ($message<>'PostDeletedSpecial') // in this case the first and only post of the thread is removed
 

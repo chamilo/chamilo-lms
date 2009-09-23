@@ -45,7 +45,7 @@ if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
 }
 
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
- 
+
 $interbreadcrumb[]= array (
 	'url' => $_SESSION['gradebook_dest'],
 	'name' => get_lang('Gradebook'
@@ -83,7 +83,7 @@ if (isset ($export_flatview_form) && (!$file_type == 'pdf')) {
 	Display :: display_normal_message($export_flatview_form->toHtml(),false);
 }
 if (isset($_GET['selectcat'])) {
-	$category_id=Security::remove_XSS($_GET['selectcat']);	
+	$category_id=Security::remove_XSS($_GET['selectcat']);
 } else {
 	$category_id='';
 }
@@ -106,7 +106,7 @@ if (!empty($keyword)) {
 		$users= get_all_users($alleval, $alllinks);
 	}else {
 		$users=null;
-	}	
+	}
 }
 if (isset ($_GET['exportpdf']))	{
 	$interbreadcrumb[]= array (
@@ -123,25 +123,25 @@ if (isset ($_GET['exportpdf']))	{
 		$format = $export['orientation'];
 		$pdf =& new Cezpdf('a4',$format); //format is 'portrait' or 'landscape'
 		$clear_printable_data=array();
-		$clear_send_printable_data=array();		
+		$clear_send_printable_data=array();
 		//var_dump(count($printable_data[1]));
 		for ($i=0;$i<count($printable_data[1]);$i++) {
 			for ($k=0;$k<count($printable_data[1][$i]);$k++) {
 				$clear_printable_data[]=strip_tags($printable_data[1][$i][$k]);
 			}
 			$clear_send_printable_data[]=$clear_printable_data;
-			$clear_printable_data=array();	
+			$clear_printable_data=array();
 		}
 		/*var_dump($printable_data[1]);
 		var_dump('--------------');
 		var_dump($clear_send_printable_data);*/
 		export_pdf($pdf,$clear_send_printable_data,$printable_data[0],$format);
-		exit;		
+		exit;
 	}
 }
 
 if (isset ($_GET['print']))	{
-	$printable_data = get_printable_data ($users,$alleval, $alllinks);	
+	$printable_data = get_printable_data ($users,$alleval, $alllinks);
 	echo print_table($printable_data[1],$printable_data[0], get_lang('FlatView'), $cat[0]->get_name());
 	exit;
 }
@@ -149,20 +149,20 @@ if (isset ($_GET['print']))	{
 if(!empty($_POST['export_report']) && $_POST['export_report'] == 'export_report'){
 	if(api_is_platform_admin() || api_is_course_admin() || api_is_course_coach())	{
 		$user_id = null;
-		
-		if(empty($_SESSION['export_user_fields'])) { 
+
+		if(empty($_SESSION['export_user_fields'])) {
 			$_SESSION['export_user_fields'] = false;
 		}
 		if(!api_is_allowed_to_edit(false,false) and !api_is_course_tutor()) {
 			$user_id = api_get_user_id();
 		}
-	
-		require_once('gradebook_result.class.php');	
+
+		require_once('gradebook_result.class.php');
 		$printable_data = get_printable_data ($users,$alleval, $alllinks);
-		
+
 		switch($_POST['export_format']) {
 			case 'xls':
-				$export = new GradeBookResult();				
+				$export = new GradeBookResult();
 				$export->exportCompleteReportXLS($printable_data );
 				exit;
 				break;
@@ -195,25 +195,25 @@ if (isset($_GET['exportpdf'])) {
 }
 if (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') {
 		DisplayGradebook :: display_header_reduce_flatview($cat[0], $showeval, $showlink, $simple_search_form);
-		$flatviewtable->display();	
-} elseif (isset($_GET['selectcat']) && ($_SESSION['studentview']=='teacherview')) {	
-		DisplayGradebook :: display_header_reduce_flatview($cat[0], $showeval, $showlink, $simple_search_form);				
-		/*echo '<div id="contentLoading" class="contentLoading">';  
-		echo Display::display_icon('loader.gif'); 		  
+		$flatviewtable->display();
+} elseif (isset($_GET['selectcat']) && ($_SESSION['studentview']=='teacherview')) {
+		DisplayGradebook :: display_header_reduce_flatview($cat[0], $showeval, $showlink, $simple_search_form);
+		/*echo '<div id="contentLoading" class="contentLoading">';
+		echo Display::display_icon('loader.gif');
 		echo '</div>';*/
-		
-		// main graph		  
+
+		// main graph
 		//@todo load images with jquery
 		echo '<div id="contentArea" style="text-align:center;" >';
 			$image_file = $flatviewtable->display_graph();
 			$my_info_path_img=array();
 			$my_info_path_img=explode('/',$image_file);
 			if (strlen($my_info_path_img[5])==32) {
-				echo '<img  src="'.$image_file.'">';	
+				echo '<img  src="'.$image_file.'">';
 			}
-			$flatviewtable->display();		
+			$flatviewtable->display();
 			$flatviewtable->display_graph_by_resource();
-		echo '</div>';						
+		echo '</div>';
 }
 Display :: display_footer();
 
@@ -226,7 +226,7 @@ function get_printable_data($users,$alleval, $alllinks) {
 	$data_array = $datagen->get_data(FlatViewDataGenerator :: FVDG_SORT_LASTNAME,0,null,$offset,$count,true);
 	$newarray = array();
 	foreach ($data_array as $data) {
-		$newarray[] = array_slice($data, 1);		
+		$newarray[] = array_slice($data, 1);
 	}
 	return array ($header_names, $newarray);
 }

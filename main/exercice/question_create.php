@@ -1,5 +1,5 @@
 <?php // $Id: question_create.php 20569 2009-05-12 21:34:00Z pcool $
- 
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -76,9 +76,9 @@ $tbl_exercices = Database :: get_course_table(TABLE_QUIZ_TEST);
 $sql = "SELECT id,title,type,description, results_disabled FROM $tbl_exercices WHERE active<>'-1' ORDER BY title ASC";
 $result = api_sql_query($sql, __FILE__, __LINE__);
 $exercises['-'] = '-'.get_lang('SelectExercice').'-';
-while ($row = Database :: fetch_array($result)) 
+while ($row = Database :: fetch_array($result))
 {
-	$exercises[$row['id']] = $row['title'];	
+	$exercises[$row['id']] = $row['title'];
 }
 $form->addElement('select', 'exercice', get_lang('Exercice'), $exercises);
 
@@ -99,7 +99,7 @@ if ($form->validate())
 	$values = $form->exportValues();
 	//echo 'form validates';
 	//print_r($values);
-	
+
 	foreach (Question::$questionTypes as $question_type_id => $question_type_class_and_name)
 	{
 		if (get_lang($question_type_class_and_name[1]) == $values['question_type_hidden'])
@@ -107,19 +107,19 @@ if ($form->validate())
 			$answer_type = $question_type_id;
 		}
 	}
-	
+
 	header('Location: admin.php?exerciseId='.$values['exercice'].'&newQuestion=yes&answerType='.$answer_type);
 }
-else 
+else
 {
 	// header
-	Display::display_header($nameTools);	
-	
+	Display::display_header($nameTools);
+
 	// displaying the form
 	$form->display();
-	
+
 	// footer
-	Display::display_footer();	
+	Display::display_footer();
 }
 
 
@@ -135,7 +135,7 @@ $("#test-select").bind('click',function(){
 
 
 
-<?php 
+<?php
 // defining the pictures of the question types
 $pictures_question_types[1] = 'mcua.gif';
 $pictures_question_types[2] = 'mcma.gif';
@@ -167,7 +167,7 @@ function check_question_type($parameter)
 	{
 		return true;
 	}
-	else 
+	else
 	{
 		return false;
 	}

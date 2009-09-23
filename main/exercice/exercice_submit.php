@@ -256,7 +256,7 @@ if ($formSent) {
 			if (isset ($_POST['hotspot'])) {
 				$exerciseResultCoordinates = $_POST['hotspot'];
 			}
-	
+
 		} else {
 			// gets the question ID from $choice. It is the key of the array
 			list ($key) = array_keys($choice);
@@ -276,7 +276,7 @@ if ($formSent) {
 					//
 					define('ENABLED_LIVE_EXERCISE_TRACKING', 1);
 					require_once 'question.class.php';
-					require_once 'answer.class.php';					
+					require_once 'answer.class.php';
 					$counter = 0;
 					$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 					$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
@@ -288,7 +288,7 @@ if ($formSent) {
 						// gets the student choice for this question
 						$choice = $exerciseResult[$questionId];
 
-						// creates a temporary Question object				
+						// creates a temporary Question object
 						$objQuestionTmp = Question :: read($questionId);
 
 						$questionName = $objQuestionTmp->selectTitle();
@@ -303,7 +303,7 @@ if ($formSent) {
 						if (isset ($_POST['hotspot']) && isset($_POST['hotspot'][$key])) {
 							$exerciseResultCoordinates[$key] = $_POST['hotspot'][$key];
 						}
-						
+
 						// construction of the Answer object
 						$objAnswerTmp = new Answer($questionId);
 						$nbrAnswers = $objAnswerTmp->selectNbrAnswers();
@@ -317,7 +317,7 @@ if ($formSent) {
 							$answerComment = $objAnswerTmp->selectComment($answerId);
 							$answerCorrect = $objAnswerTmp->isCorrect($answerId);
 							$answerWeighting = $objAnswerTmp->selectWeighting($answerId);
-							
+
 							switch ($answerType) {
 								// for unique answer
 								case UNIQUE_ANSWER :
@@ -785,7 +785,7 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 						  on error resume next
 						  Dim swControl, swVersion
 						  swVersion = 0
-	
+
 						  set swControl = CreateObject(\"ShockwaveFlash.ShockwaveFlash.\" + CStr(i))
 						  if (IsObject(swControl)) then
 						    swVersion = swControl.GetVariable(\"\$version\")
@@ -794,7 +794,7 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 						End Function
 						// -->
 						</script>
-	
+
 						<script language=\"JavaScript1.1\" type=\"text/javascript\">
 						<!-- // Detect Client Browser type
 						var isIE  = (navigator.appVersion.indexOf(\"MSIE\") != -1) ? true : false;
@@ -831,7 +831,7 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 							else if (navigator.userAgent.toLowerCase().indexOf(\"webtv\") != -1) flashVer = 2;
 							// Can't detect in all other cases
 							else {
-	
+
 								flashVer = -1;
 							}
 							return flashVer;
@@ -860,7 +860,7 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 									versionMajor      = versionArray[0];
 									versionMinor      = versionArray[1];
 									versionRevision   = versionArray[2];
-	
+
 									versionString     = versionMajor + \".\" + versionRevision;   // 7.0r24 == 7.24
 									versionNum        = parseFloat(versionString);
 						        	// is the major.revision >= requested major.revision AND the minor version >= requested minor
@@ -904,8 +904,8 @@ if ($exerciseAttempts > 0) {
 	$sql = "SELECT count(*) FROM $stat_table WHERE exe_exo_id = '$quizID'
 				AND exe_user_id = '$user_id'
 				AND status != 'incomplete'
-				AND orig_lp_id = $safe_lp_id 
-				AND orig_lp_item_id = $safe_lp_item_id  
+				AND orig_lp_id = $safe_lp_id
+				AND orig_lp_item_id = $safe_lp_item_id
 	            AND exe_cours_id = '$course_code' AND session_id = '" . (int) $_SESSION['id_session'] . "'";
 
 	$aquery = api_sql_query($sql, __FILE__, __LINE__);
@@ -996,7 +996,7 @@ if (!empty ($error)) {
 	}
 	$s = "<p>$exerciseDescription</p>";
 
-	if ($exerciseType == 2) 
+	if ($exerciseType == 2)
 	{
 		$s2 = "&exerciseId=" . $exerciseId;
 	}
@@ -1019,7 +1019,7 @@ if (!empty ($error)) {
 	foreach ($questionList as $questionId) {
 		// for sequential exercises
 		if ($exerciseType == 2) {
-			// if it is not the right question, goes to the next loop iteration			
+			// if it is not the right question, goes to the next loop iteration
 			if ($questionNum != $i) {
 				$i++;
 				continue;
@@ -1034,13 +1034,13 @@ if (!empty ($error)) {
 						unset ($objQuestionTmp);
 						Display :: display_normal_message(get_lang('AlreadyAnswered'));
 						$i++;
-						//echo '<tr><td>'.get_lang('AlreadyAnswered').' &quot;'.$questionName.'&quot;</td></tr>';	
+						//echo '<tr><td>'.get_lang('AlreadyAnswered').' &quot;'.$questionName.'&quot;</td></tr>';
 						break;
 					}
 				}
 			}
 		}
-		// shows the question and its answers		
+		// shows the question and its answers
 		showQuestion($questionId, false, $origin, $i, $nbrQuestions);
 		$i++;
 		// for sequential exercises
@@ -1054,13 +1054,13 @@ if (!empty ($error)) {
 		   &nbsp;&nbsp; //--><br />";
 	echo '<div style="padding-left:10px; margin-top:-10px;">';
 	$submit_btn = "<button class='next' type='submit' name='submit'>";
-	//	$submit_btn.=get_lang('ValidateAnswer'); 
+	//	$submit_btn.=get_lang('ValidateAnswer');
 	if ($objExercise->selectFeedbackType() == 1 && $_SESSION['objExercise']->selectType() == 2) {
 		$submit_btn = '';
 		echo '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.js" type="text/javascript"></script>';
 		echo '<style type="text/css" media="all">@import "' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css";</style>';
 		$hotspot_get = $_POST['hotspot'];
-		// Show a hidden div			
+		// Show a hidden div
 		echo "<script>$(document).ready( function(){
 							  $('.rounded').corners();
 							  $('.rounded_inner').corners();

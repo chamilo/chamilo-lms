@@ -3,7 +3,7 @@
 ==============================================================================
 	Dokeos - elearning and course management software
 
-	Copyright (c) 2008 Dokeos SPRL	
+	Copyright (c) 2008 Dokeos SPRL
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -61,16 +61,16 @@ $doc_url = str_replace('/..', '', $doc_url); //echo $doc_url;
 
 if (! isset($_course))
 {
-	api_not_allowed(true);	
+	api_not_allowed(true);
 }
 
 $full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/forum/'.$doc_url;
 
 //if the rewrite rule asks for a directory, we redirect to the document explorer
-if (is_dir($full_file_name)) 
+if (is_dir($full_file_name))
 {
 	//remove last slash if present
-	//$doc_url = ($doc_url{strlen($doc_url)-1}=='/')?substr($doc_url,0,strlen($doc_url)-1):$doc_url; 
+	//$doc_url = ($doc_url{strlen($doc_url)-1}=='/')?substr($doc_url,0,strlen($doc_url)-1):$doc_url;
 	//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (Ren�)
 	while ($doc_url{$dul = strlen($doc_url)-1}=='/') $doc_url = substr($doc_url,0,$dul);
 	//create the path

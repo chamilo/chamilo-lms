@@ -2,7 +2,7 @@
 /* For licensing terms, see /dokeos_license.txt */
 //error_log(__FILE__);
 /**
-*	
+*
 *	@package dokeos.exercise
 * 	@author Toon Keppens
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $

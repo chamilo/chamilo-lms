@@ -103,7 +103,7 @@ if (!empty($_GET['gradebook']) && $_GET['gradebook']=='view' ) {
 	$gradebook=	'';
 } */
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[] = array (
 		'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
 		'name' => get_lang('Gradebook')
@@ -111,26 +111,26 @@ if (!empty($gradebook) && $gradebook=='view') {
 }
 
 if (!empty($_SESSION['toolgroup'])) {
-	
+
 	$_clean['toolgroup']=(int)$_SESSION['toolgroup'];
 	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
 	$interbreadcrumb[] = array("url"=>"../group/group.php", "name" => get_lang('Groups'));
 	$interbreadcrumb[] = array("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
 	$interbreadcrumb[] = array("url"=>"viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;gidReq=".$_SESSION['toolgroup']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum['forum_title']));
 	$interbreadcrumb[] = array("url"=>"viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&gradebook=".$gradebook."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
-	
+
 	Display :: display_header('');
 	api_display_tool_title($nameTools);
-	
+
 } else {
 
 	$my_search=isset($_GET['search']) ? $_GET['search'] : '';
-	
-	
+
+
 	if ($origin=='learnpath') {
 		include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
 	} else {
-	
+
 		$interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook&search=".Security::remove_XSS(urlencode($my_search)),"name" => $nameTools);
 		$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum_category['cat_title']));
 		$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum['forum_title']));
@@ -177,7 +177,7 @@ if ($my_message) {
 	Display :: display_confirmation_message(get_lang($my_message));
 }
 
-if ($my_message<>'PostDeletedSpecial') { 
+if ($my_message<>'PostDeletedSpecial') {
 	// in this case the first and only post of the thread is removed
 	// this increases the number of times the thread has been viewed
 	increase_thread_view($_GET['thread']);
@@ -202,12 +202,12 @@ if ($my_message<>'PostDeletedSpecial') {
 		if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id'])) {
 			//reply link
 			if (!api_is_anonymous()) {
-				echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread&origin='.$origin.'">'.Display::return_icon('forumthread_new.gif',get_lang('ReplyToThread')).get_lang('ReplyToThread').'</a>';				
+				echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread&origin='.$origin.'">'.Display::return_icon('forumthread_new.gif',get_lang('ReplyToThread')).get_lang('ReplyToThread').'</a>';
 			}
 			//new thread link
 			if ((api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1)) {
 				if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
-					echo '&nbsp;&nbsp;'; 
+					echo '&nbsp;&nbsp;';
 /*					if ( isset($_GET['gradebook']) && $_GET['gradebook']!=""){
 						$info_thread=get_thread_information($_GET['thread']);
 						echo '<a href="newthread.php?'.api_get_cidreq().'&forum='.$info_thread['forum_id'].'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'">'.Display::return_icon('forumthread_new.gif', get_lang('NewTopic')).' '.get_lang('NewTopic').'</a>';
@@ -220,16 +220,16 @@ if ($my_message<>'PostDeletedSpecial') {
 			}
 		}
 	}
-	
-	// the different views of the thread	
+
+	// the different views of the thread
 	if ($origin != 'learnpath') {
-		$my_url = '<a href="viewthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;search='.Security::remove_XSS(urlencode($my_search));		
+		$my_url = '<a href="viewthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;search='.Security::remove_XSS(urlencode($my_search));
 		echo $my_url.'&amp;view=flat&origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('forum_listview.gif',get_lang('FlatView')).get_lang('FlatView').'</a>';
 		echo $my_url.'&amp;view=threaded&origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('forum_threadedview.gif',get_lang('ThreadedView')).get_lang('ThreadedView').'</a>';
 		echo $my_url.'&amp;view=nested&origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('forum_nestedview.gif',get_lang('NestedView')).get_lang('NestedView').'</a>';
 	}
-	$my_url = null;	
-	
+	$my_url = null;
+
 	echo '</div>&nbsp;';
 
 
@@ -264,20 +264,20 @@ if ($my_message<>'PostDeletedSpecial') {
 	// but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
 	echo "<table class=\"data_table\" width='100%'>\n";
 
-	// the thread	
-	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";		
+	// the thread
+	echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"6\">";
 	echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
-	
-	if ($origin!='learnpath') {		
-		echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title']).' - ';				
+
+	if ($origin!='learnpath') {
+		echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title']).' - ';
 	}
-		
-	echo prepare4display($current_forum['forum_title']).'<br />';					
+
+	echo prepare4display($current_forum['forum_title']).'<br />';
 	echo "</th>\n";
-	echo "\t</tr>\n";		
-	echo '<span>'.prepare4display(isset($current_thread['thread_comment'])?$current_thread['thread_comment']:'').'</span>';	
+	echo "\t</tr>\n";
+	echo '<span>'.prepare4display(isset($current_thread['thread_comment'])?$current_thread['thread_comment']:'').'</span>';
 	echo "</table>";
-	
+
 	switch ($viewmode) {
 		case 'flat':
 			include_once('viewthread_flat.inc.php');

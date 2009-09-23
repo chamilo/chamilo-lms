@@ -53,11 +53,11 @@ api_session_register("dropbox_uniqueid");
  */
 if ( isset( $_POST["submitWork"]))
 {
-    if (file_exists(api_get_path(INCLUDE_PATH) . "/fileUploadLib.inc.php")) 
+    if (file_exists(api_get_path(INCLUDE_PATH) . "/fileUploadLib.inc.php"))
     {
         require_once(api_get_path(INCLUDE_PATH) . "/fileUploadLib.inc.php");
-    } 
-    else 
+    }
+    else
     {
         require_once(api_get_path(LIBRARY_PATH) . "/fileUpload.lib.php");
 	}
@@ -182,17 +182,17 @@ if ( isset( $_POST["submitWork"]))
             {
 	            // set title
 	            $dropbox_title = $dropbox_filename;
-	
+
 	            // set author
 	            if ( $_POST['authors'] == '')
 	            {
 	                $_POST['authors'] = getUserNameFromId( $_user['user_id']);
 	            }
-	
+
 				if ( $dropbox_overwrite)  // RH: Mailing: adapted
 				{
 					$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
-	
+
 					foreach($dropbox_person->sentWork as $w)
 					{
 						if ($w->title == $dropbox_filename)
@@ -216,7 +216,7 @@ if ( isset( $_POST["submitWork"]))
 				{
 					$dropbox_filename = getLoginFromId( $_user['user_id']) . "_" . $dropbox_filename . "_".uniqid('');
 				}
-	
+
 				if ( ( ! is_dir( dropbox_cnf("sysPath"))))
 	            {
 					//The dropbox subdir doesn't exist yet so make it and create the .htaccess file
@@ -224,13 +224,13 @@ if ( isset( $_POST["submitWork"]))
 					$fp = fopen( dropbox_cnf("sysPath")."/.htaccess", "w") or die (dropbox_lang("errorCreatingDir")." (code 405)");
 					fwrite($fp, "AuthName AllowLocalAccess
 	                             AuthType Basic
-	
+
 	                             order deny,allow
 	                             deny from all
-	
+
 	                             php_flag zlib.output_compression off") or die (dropbox_lang("errorCreatingDir")." (code 406)");
 	            }
-	
+
 				if ( $error) {}
 	            elseif ( $thisIsAMailing)  // RH: $newWorkRecipients is integer - see class
 				{
@@ -269,9 +269,9 @@ if ( isset( $_POST["submitWork"]))
 		            	}
 		            }
 	        	}
-	
+
 				//After uploading the file, create the db entries
-	
+
 	        	if ( !$error)
 	        	{
 		            @move_uploaded_file( $dropbox_filetmpname, dropbox_cnf("sysPath") . '/' . $dropbox_filename)
@@ -333,7 +333,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
         {
 			// string result = error message, array result = [user_id, lastname, firstname]
 
-	    	global $var, $sel; 
+	    	global $var, $sel;
             if (isset($students)) {
                 unset($students);
             }
@@ -392,11 +392,11 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
             }
         }
 
-	    if (file_exists(api_get_path(INCLUDE_PATH) . "/pclzip/pclzip.lib.php")) 
+	    if (file_exists(api_get_path(INCLUDE_PATH) . "/pclzip/pclzip.lib.php"))
 	    {
 	        require(api_get_path(INCLUDE_PATH) . "/pclzip/pclzip.lib.php");
-	    } 
-	    else 
+	    }
+	    else
 	    {
 	        require(api_get_path(LIBRARY_PATH) . "/pclzip/pclzip.lib.php");
 		}

@@ -81,7 +81,7 @@ class CourseRestorer
 	 * which the resources should be stored. Default: Current Dokeos-course.
 	 */
 	function restore($destination_course_code = '')
-	{		
+	{
 		if ($destination_course_code == '') {
 			$course_info = api_get_course_info();
 			$this->course->destination_db = $course_info['dbName'];
@@ -92,8 +92,8 @@ class CourseRestorer
 			$this->course->destination_path = $course_info['directory'];
 		}
 		// platform encoding
-		$course_charset = $this->course->encoding; 
-		
+		$course_charset = $this->course->encoding;
+
 		$this->restore_links();
 		$this->restore_tool_intro();
 		$this->restore_events();
@@ -144,7 +144,7 @@ class CourseRestorer
 		$table = Database :: get_course_table(TABLE_LINKED_RESOURCES, $this->course->destination_db);
 		foreach ($this->course->resources as $type => $resources)
 		{
-			if (is_array($resources)) 
+			if (is_array($resources))
 				foreach ($resources as $id => $resource)
 				{
 					$linked_resources = $resource->get_linked_resources();
@@ -164,8 +164,8 @@ class CourseRestorer
 	 * Restore documents
 	 */
 	function restore_documents()
-	{		
-		if ($this->course->has_resources(RESOURCE_DOCUMENT)) {			
+	{
+		if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
 			$table = Database :: get_course_table(TABLE_DOCUMENT, $this->course->destination_db);
 			$resources = $this->course->resources;
 			$destination_course['dbName']= $this->course->destination_db;
@@ -174,26 +174,26 @@ class CourseRestorer
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 				$perm = api_get_setting('permissions_for_new_directories');
 			    $perm = octdec(!empty($perm)?$perm:0770);
-			    $dirs = explode('/', dirname($document->path));	
+			    $dirs = explode('/', dirname($document->path));
 			    if (count($dirs)==1) {
 			    	if ($this->file_type==FOLDER) {
 			    		$new = substr($document->path, 8);
 			    		$created_dir = create_unexisting_directory($destination_course,api_get_user_id(),0, 0 ,$path.'document',$new,basename($new));
 			    	}
-			    } else {			    	    								
-					$my_temp = '';		
-					for ($i=1; $i<=count($dirs); $i++) {			
-						$my_temp .= $dirs[$i];					
-						if (!is_dir($path.'document/'.$my_temp)) {											
-							$sql = "SELECT id FROM ".$table." WHERE path='/".Database::escape_string($my_temp)."'"; 
-							//echo '<br>';							
-							$res = api_sql_query($sql, __FILE__, __LINE__);							
-							$num_result = Database::num_rows($res);					
+			    } else {
+					$my_temp = '';
+					for ($i=1; $i<=count($dirs); $i++) {
+						$my_temp .= $dirs[$i];
+						if (!is_dir($path.'document/'.$my_temp)) {
+							$sql = "SELECT id FROM ".$table." WHERE path='/".Database::escape_string($my_temp)."'";
+							//echo '<br>';
+							$res = api_sql_query($sql, __FILE__, __LINE__);
+							$num_result = Database::num_rows($res);
 							if ($num_result==0) {
 								$created_dir = create_unexisting_directory($destination_course,api_get_user_id(),0, 0 ,$path.'document','/'.$my_temp,basename($my_temp));
 							}
 						}
-						$my_temp .= '/';																
+						$my_temp .= '/';
 					}
 			    }
 			    /*
@@ -208,9 +208,9 @@ class CourseRestorer
 				echo '<br>';
 				*/
 				if ($document->file_type == DOCUMENT) {
-					if (file_exists($path.$document->path)) {	
+					if (file_exists($path.$document->path)) {
 						switch ($this->file_option) {
-							case FILE_OVERWRITE :								
+							case FILE_OVERWRITE :
 								$this->course->backup_path.'/'.$document->path;
 								copy($this->course->backup_path.'/'.$document->path, $path.$document->path);
 								$sql = "SELECT id FROM ".$table." WHERE path='/".substr($document->path, 9)."'";
@@ -287,7 +287,7 @@ class CourseRestorer
 							}
 						}
 					} // end file doesn't exist
-				}				
+				}
 				else
 				{
 					/*$sql = "SELECT id FROM ".$table." WHERE path = '/".Database::escape_string(substr($document->path, 9))."'";
@@ -295,7 +295,7 @@ class CourseRestorer
 					if( Database::num_rows($res)> 0)
 					{
 						$obj = Database::fetch_object($res);
-						$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $obj->id;	
+						$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $obj->id;
 					}
 					else
 					{
@@ -339,7 +339,7 @@ class CourseRestorer
 						case FILE_SKIP :
 							break;
 						case FILE_RENAME :
-							$i = 1; 
+							$i = 1;
 
 							$ext = explode('.', basename($document->path));
 
@@ -642,7 +642,7 @@ class CourseRestorer
 				} else {
 					$course_destination=$this->course->destination_path;
 				}
-				
+
 				$course_info=api_get_course_info(api_get_course_id());
 				$search='../courses/'.$course_info['path'].'/document';
 				$replace_search_by='../courses/'.$course_destination.'/document';
@@ -777,15 +777,15 @@ class CourseRestorer
 			$table_ans = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_SURVEY] as $id => $survey)
-			{	
-				
+			{
+
 				$sql_check =   'SELECT survey_id FROM '.$table_sur.'
 								WHERE code = "'.Database::escape_string($survey->code).'"
 								AND lang="'.Database::escape_string($survey->lang).'"
 								';
-				
+
 				$result_check = api_sql_query($sql_check, __FILE__, __LINE__);
-				
+
 				$doc = '';
 				$sql = "INSERT INTO ".$table_sur." " .
 						"SET code = '".Database::escape_string($survey->code)."', " .
@@ -804,19 +804,19 @@ class CourseRestorer
 						"answered = '0', " .
 						"invite_mail = '".Database::escape_string($survey->invite_mail)."', " .
 						"reminder_mail = '".Database::escape_string($survey->reminder_mail)."'";
-				
+
 				//An existing survey exists with the same code and the same language
 				if(Database::num_rows($result_check) == 1)
 				{
-										
+
 					switch ($this->file_option) {
-						
+
 						case FILE_SKIP:
 							//Do nothing
 							break;
-							
+
 						case FILE_RENAME:
-							
+
 							$survey_code = $survey->code.'_';
 							$i=1;
 							$temp_survey_code = $survey_code.$i;
@@ -825,7 +825,7 @@ class CourseRestorer
 								$temp_survey_code = $survey_code.++$i;
 							}
 							$survey_code = $temp_survey_code;
-							
+
 							$sql = "INSERT INTO ".$table_sur." " .
 									"SET code = '".Database::escape_string($survey_code)."', " .
 									"title = '".Database::escape_string($survey->title)."', " .
@@ -843,10 +843,10 @@ class CourseRestorer
 									"answered = '0', " .
 									"invite_mail = '".Database::escape_string($survey->invite_mail)."', " .
 									"reminder_mail = '".Database::escape_string($survey->reminder_mail)."'";
-							
+
 							//Insert the new source survey
 							api_sql_query($sql, __FILE__, __LINE__);
-							
+
 							$new_id = Database::get_last_insert_id();
 							$this->course->resources[RESOURCE_SURVEY][$id]->destination_id = $new_id;
 							foreach ($survey->question_ids as $index => $question_id)
@@ -861,30 +861,30 @@ class CourseRestorer
 										"question_id = ".$qid."";
 								api_sql_query($sql, __FILE__, __LINE__);
 							}
-							
+
 							break;
-							
+
 						case FILE_OVERWRITE:
-														
+
 							// Delete the existing survey with the same code and language and import the one of the source course
-							
+
 							// getting the information of the survey (used for when the survey is shared)
 							require_once(api_get_path(SYS_CODE_PATH).'survey/survey.lib.php');
-							
+
 							$sql_select_existing_survey = "SELECT * FROM $table_sur WHERE survey_id='".Database::escape_string(Database::result($result_check,0,0))."'";
 							$result = api_sql_query($sql_select_existing_survey, __FILE__, __LINE__);
 							$survey_data = Database::fetch_array($result,'ASSOC');
-							
+
 							// if the survey is shared => also delete the shared content
 							if (is_numeric($survey_data['survey_share']))
 							{
 								survey_manager::delete_survey($survey_data['survey_share'], true,$this->course->destination_db);
 							}
 							$return = survey_manager :: delete_survey($survey_data['survey_id'],false,$this->course->destination_db);
-							
+
 							//Insert the new source survey
 							api_sql_query($sql, __FILE__, __LINE__);
-							
+
 							$new_id = Database::get_last_insert_id();
 							$this->course->resources[RESOURCE_SURVEY][$id]->destination_id = $new_id;
 							foreach ($survey->question_ids as $index => $question_id)
@@ -899,14 +899,14 @@ class CourseRestorer
 										"question_id = ".$qid."";
 								api_sql_query($sql, __FILE__, __LINE__);
 							}
-							
+
 							break;
-							
+
 						default:
 							break;
 					}
-					
-					
+
+
 				}
 				//No existing survey with the same language and the same code, we just copy the survey
 				else
@@ -927,23 +927,23 @@ class CourseRestorer
 						api_sql_query($sql, __FILE__, __LINE__);
 					}
 				}
-				
+
 			}
 		}
 	}
-	
+
 	/**
 	 * Check availability of a survey code
 	 */
 	function is_survey_code_available($survey_code)
-	{		
+	{
 		$table_sur = Database :: get_course_table(TABLE_SURVEY, $this->course->destination_db);
 		$sql = "SELECT * FROM $table_sur WHERE code='".Database::escape_string($survey_code)."'";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
 		if(Database::num_rows($result) > 0) return false; else return true;
-		
+
 	}
-	
+
 	/**
 	 * Restore survey-questions
 	 */
@@ -962,7 +962,7 @@ class CourseRestorer
 			}
 			$table_que = Database :: get_course_table(TABLE_SURVEY_QUESTION, $this->course->destination_db);
 			$table_ans = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION, $this->course->destination_db);
-			
+
 			$sql = "INSERT INTO ".$table_que." " .
 					"SET survey_id = 		'".Database::escape_string($question->survey_id)."', " .
 					"survey_question = 		'".Database::escape_string($question->survey_question)."', " .
@@ -973,7 +973,7 @@ class CourseRestorer
 					"shared_question_id = 	'".Database::escape_string($question->shared_question_id)."', " .
 					"max_value = 			'".Database::escape_string($question->max_value)."' ";
 			api_sql_query($sql, __FILE__, __LINE__);
-			
+
 			$new_id = Database::get_last_insert_id();
 			foreach ($question->answers as $index => $answer) {
 				$sql = "INSERT INTO ".$table_ans." " .
@@ -1033,9 +1033,9 @@ class CourseRestorer
 				$previous_item_ids = array();
 				$next_item_ids = array();
 				$old_prerequisite = array();
-				$old_refs = array();				
+				$old_refs = array();
 				$prerequisite_ids = array();
-				
+
 				foreach ($lp->get_items() as $index => $item) {
 					/*
 					if ($item['id'] != 0)
@@ -1053,17 +1053,17 @@ class CourseRestorer
 					} else {
 						$ref = $item['ref'];
 					}*/
-					
+
 					// we set the ref code here and then we update in a for loop
 					$ref = $item['ref'];
-					
+
 					//Dealing with path the same way as ref as some data has been put into path when it's a
 					//local resource
 					$path = Database::escape_string($item['path']);
 					if(strval(intval($path)) === $path) {
 						$path = $this->get_new_id($item['item_type'],$path);
 					}
-					
+
 					$sql = "INSERT INTO ".$table_item." SET " .
 							"lp_id = '".Database::escape_string($new_lp_id)."', " .
 							"item_type='".Database::escape_string($item['item_type'])."', " .
@@ -1081,7 +1081,7 @@ class CourseRestorer
 							"prerequisite = '".Database::escape_string($item['prerequisite'])."', " .
 							"parameters='".Database::escape_string($item['parameters'])."', " .
 							"launch_data = '".Database::escape_string($item['launch_dataprereq_type'])."'";
-							
+
 					api_sql_query($sql, __FILE__, __LINE__);
 					$new_item_id = Database::get_last_insert_id();
 					//save a link between old and new item IDs
@@ -1092,7 +1092,7 @@ class CourseRestorer
 					$previous_item_ids[$new_item_id] = $item['previous_item_id'];
 					//save a reference of items that need a next_item_id refresh
 					$next_item_ids[$new_item_id] = $item['next_item_id'];
-					
+
 					if (!empty($item['prerequisite'])) {
 						if ($lp->lp_type =='2') {
 							// if is an sco
@@ -1101,7 +1101,7 @@ class CourseRestorer
 							$old_prerequisite[$new_item_id]= $new_item_ids[$item['prerequisite']];
 						}
 					}
-					
+
 					if (!empty($ref)) {
 						if ($lp->lp_type =='2') {
 							// if is an sco
@@ -1110,26 +1110,26 @@ class CourseRestorer
 							$old_refs[$new_item_id]= $new_item_ids[$ref];
 						}
 					}
-					
+
 					$prerequisite_ids[$new_item_id] = $item['prerequisite'];
-				}			
-						
+				}
+
 				// updating prerequisites
 				foreach ($old_prerequisite  as $key=>$my_old_prerequisite) {
-					if($my_old_prerequisite != ''){																	
-						$sql = "UPDATE ".$table_item." SET prerequisite = '".$my_old_prerequisite."' WHERE id = '".$key."'  ";			
-						api_sql_query($sql, __FILE__, __LINE__);					
-					}																		
+					if($my_old_prerequisite != ''){
+						$sql = "UPDATE ".$table_item." SET prerequisite = '".$my_old_prerequisite."' WHERE id = '".$key."'  ";
+						api_sql_query($sql, __FILE__, __LINE__);
+					}
 				}
-				
+
 				//updating refs
-				foreach ($old_refs  as $key=>$my_old_ref) {					
-					if ($my_old_ref != '') {										
-						$sql = "UPDATE ".$table_item." SET ref = '".$my_old_ref."' WHERE id = '".$key."'  ";						
-						api_sql_query($sql, __FILE__, __LINE__);					
-					}																		
+				foreach ($old_refs  as $key=>$my_old_ref) {
+					if ($my_old_ref != '') {
+						$sql = "UPDATE ".$table_item." SET ref = '".$my_old_ref."' WHERE id = '".$key."'  ";
+						api_sql_query($sql, __FILE__, __LINE__);
+					}
 				}
-				
+
 				foreach ($parent_item_ids as $new_item_id => $parent_item_old_id) {
 					$parent_new_id = 0;
 					if($parent_item_old_id != 0){
@@ -1146,7 +1146,7 @@ class CourseRestorer
 					$sql = "UPDATE ".$table_item." SET previous_item_id = '".$previous_new_id."' WHERE id = '".$new_item_id."'";
 					api_sql_query($sql, __FILE__, __LINE__);
 				}
-				
+
 				foreach ($next_item_ids as $new_item_id => $next_item_old_id) {
 					$next_new_id = 0;
 					if($next_item_old_id != 0){
@@ -1154,7 +1154,7 @@ class CourseRestorer
 					}
 					$sql = "UPDATE ".$table_item." SET next_item_id = '".$next_new_id."' WHERE id = '".$new_item_id."'";
 					api_sql_query($sql, __FILE__, __LINE__);
-				}				
+				}
 
 				foreach ($prerequisite_ids as $new_item_id => $prerequisite_old_id)
 				{
@@ -1166,9 +1166,9 @@ class CourseRestorer
 					api_sql_query($sql, __FILE__, __LINE__);
 				}
 
-				$this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;				
+				$this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;
 			}
-				
+
 		}
 	}
 	/**
@@ -1181,20 +1181,20 @@ class CourseRestorer
 
 		$my_tbl_db_spa_origin=Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT,$my_course_info['dbName']);
 		$my_tbl_db_spa_destination = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT, $this->course->destination_db);
-		
+
 		$my_tbl_db_origin=Database :: get_course_table(TABLE_STUDENT_PUBLICATION,$my_course_info['dbName']);
 		$my_tbl_db_destination = Database :: get_course_table(TABLE_STUDENT_PUBLICATION, $this->course->destination_db);
-		
+
 		$my_tbl_db_item_property_origin=Database :: get_course_table(TABLE_ITEM_PROPERTY, $my_course_info['dbName']);
 		$my_tbl_db_item_property_destination=Database :: get_course_table(TABLE_ITEM_PROPERTY, $this->course->destination_db);
-		
+
 		//query in student publication
-		
+
 		$query_sql_fin_sp='INSERT IGNORE INTO '.$my_tbl_db_destination.'' .
 		'(id,url,title,description,author,active,accepted,post_group_id,sent_date,' .
 		'filetype,has_properties,view_properties,qualification,date_of_qualification,' .
 		'parent_id,qualificator_id,session_id) ';
-		
+
 		$query_sql_ini_sp='SELECT id,url,title,description,author,active,accepted,post_group_id,' .
 		'sent_date,filetype,has_properties,view_properties,qualification,date_of_qualification,' .
 		'parent_id,qualificator_id,session_id FROM '.$my_tbl_db_origin.' WHERE filetype="folder" ';
@@ -1204,35 +1204,35 @@ class CourseRestorer
 		$origin='../../courses/'.$course_info['path'].'/work/';
 
 		self::allow_create_all_directory($origin,$destination,false);
-		
+
 		//query in item property
-		
+
 		$query_sql_fin_ip='INSERT IGNORE INTO '.$my_tbl_db_item_property_destination.'' .
 		'(tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,' .
 		'to_user_id,visibility,start_visible,end_visible) ';
-		
+
 		$query_sql_ini_ip='SELECT tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,' .
 		'lastedit_user_id,to_group_id,to_user_id,visibility,start_visible,
 		end_visible FROM '.$my_tbl_db_item_property_origin.' ip INNER JOIN '.$my_tbl_db_origin.' sp' .
 		' ON ip.ref=sp.id WHERE tool="work" ';
-		
-		
+
+
 		$query_sql_fin_sa='INSERT IGNORE INTO '.$my_tbl_db_spa_destination.'' .
 		'(id,expires_on,ends_on,add_to_calendar,enable_qualification,publication_id) ';
-		
+
 		$query_sql_ini_sa='SELECT sa.id,sa.expires_on,sa.ends_on,sa.add_to_calendar,sa.enable_qualification,sa.publication_id FROM '.$my_tbl_db_spa_origin.' sa INNER JOIN '.$my_tbl_db_origin.' sp
 		ON sa.publication_id=sp.id WHERE filetype="folder" ';
-		
+
 		$query_sql_sp    = $query_sql_fin_sp.$query_sql_ini_sp;
 		$query_sql_ip    = $query_sql_fin_ip.$query_sql_ini_ip;
 		$query_sql_sa    = $query_sql_fin_sa.$query_sql_ini_sa;
-		
+
 		api_sql_query($query_sql_sp,__FILE__,__LINE__);
 		api_sql_query($query_sql_ip,__FILE__,__LINE__);
 		api_sql_query($query_sql_sa,__FILE__,__LINE__);
-		
+
 	}
-	
+
 /**
  * copy all directory and sub directory
  * @param string The path origin
@@ -1240,11 +1240,11 @@ class CourseRestorer
  * @param boolean Option Overwrite
  * @return void()
  */
-	function allow_create_all_directory($source, $dest, $overwrite = false){		
+	function allow_create_all_directory($source, $dest, $overwrite = false){
    		if(!is_dir($dest)) {
     		mkdir($dest);
     	}
-    
+
 	    if ($handle = opendir($source)) {        // if the folder exploration is sucsessful, continue
 	        while (false !== ($file = readdir($handle))) { // as long as storing the next file to $file is successful, continue
 	            if ($file != '.' && $file != '..') {
@@ -1297,6 +1297,6 @@ class CourseRestorer
 
 			}
 		}
-	}	
+	}
 }
 ?>

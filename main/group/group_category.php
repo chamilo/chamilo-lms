@@ -1,39 +1,39 @@
 <?php
 // $Id: group_category.php 21074 2009-05-29 15:48:32Z cvargas1 $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
 	Copyright (c) Bart Mollet, Hogeschool Gent
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	@package dokeos.group
-============================================================================== 
+==============================================================================
 */
 /*
-============================================================================== 
+==============================================================================
 		INIT SECTION
-============================================================================== 
+==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "group";
 require_once ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
@@ -45,14 +45,14 @@ if (!api_is_allowed_to_edit(false,true) || !(isset ($_GET['id']) || isset ($_POS
 	api_not_allowed();
 }
 /**
- * Function to check the given max number of members per group 
+ * Function to check the given max number of members per group
  */
 function check_max_number_of_members($value)
 {
 	$max_member_no_limit = $value['max_member_no_limit'];
 	if( $max_member_no_limit == MEMBER_PER_GROUP_NO_LIMIT)
 	{
-		return true;	
+		return true;
 	}
 	$max_member = $value['max_member'];
 	return is_numeric($max_member);
@@ -64,8 +64,8 @@ function check_groups_per_user($value)
 {
 	$groups_per_user = $value['groups_per_user'];
 	if(isset ($_POST['id']) && intval($groups_per_user) != GROUP_PER_MEMBER_NO_LIMIT && GroupManager :: get_current_max_groups_per_user($_POST['id']) > intval($groups_per_user))
-	{	
-		return false;			
+	{
+		return false;
 	}
 	return true;
 }
@@ -106,8 +106,8 @@ else
 	if (Database::query("SELECT wiki_state FROM $table_category",__FILE__,__LINE__) == FALSE) {
     	Database::query("ALTER TABLE $table_category ADD `wiki_state` tinyint(3) UNSIGNED NOT NULL default '1';",__FILE__,__LINE__);
     }
-	
-	
+
+
 	// Create a new category
 	$action = 'add_category';
 	$form = new FormValidator('group_category');
@@ -124,7 +124,7 @@ if (api_get_setting('allow_group_categories') == 'true')
 else
 {
 	$form->addElement('hidden','title');
-	$form->addElement('hidden','description');	
+	$form->addElement('hidden','description');
 }
 // Action
 $form->addElement('hidden', 'action');
@@ -146,7 +146,7 @@ $form->addRule('limit_group',get_lang('MaxGroupsPerUserInvalid'),'callback','che
 
 $form->addElement('html', '<br/><br/><div class="sectiontitle" >'.get_lang('DefaultSettingsForNewGroups'));
 $form->addElement('html', '</div>');
-	
+
 // Members per group
 $form->addElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'),MEMBER_PER_GROUP_NO_LIMIT);
 $group = array ();
@@ -185,7 +185,7 @@ $form->addElement('radio', 'forum_state', null, get_lang('Public'), TOOL_PUBLIC)
 $form->addElement('radio', 'forum_state', null, get_lang('Private'), TOOL_PRIVATE);
 
 // Wiki Settings
-$form->addElement('radio', 'wiki_state', get_lang('GroupWiki'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE); 
+$form->addElement('radio', 'wiki_state', get_lang('GroupWiki'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
 $form->addElement('radio', 'wiki_state', null, get_lang('Public'), TOOL_PUBLIC);
 $form->addElement('radio', 'wiki_state', null, get_lang('Private'), TOOL_PRIVATE);
 
@@ -235,7 +235,7 @@ if( $defaults['max_student'] == MEMBER_PER_GROUP_NO_LIMIT)
 }
 else
 {
-	$defaults['max_member_no_limit'] = 1;	
+	$defaults['max_member_no_limit'] = 1;
 	$defaults['max_member'] = $defaults['max_student'];
 }
 $form->setDefaults($defaults);

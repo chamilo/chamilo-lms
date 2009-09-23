@@ -25,7 +25,7 @@
 /**
  * @author isaac flores paz
  * @param integer
- * @return void 
+ * @return void
  */
 function exit_of_chat ($user_id) {
 	$list_course=array();
@@ -70,7 +70,7 @@ function disconnect_user_of_chat () {
 	$cdate_m           = date('i',time());
 	$cdate_s           = date('s',time());
 	$cd_count_time_seconds=$cdate_h*3600 + $cdate_m*60 + $cdate_s;
-	
+
 	foreach ($list_info_user_in_chat as $list_info_user) {
 			$date_db_date = date('Y-m-d',strtotime($list_info_user['last_connection']));
 			$date_db_h  = date('H',strtotime($list_info_user['last_connection']));
@@ -84,7 +84,7 @@ function disconnect_user_of_chat () {
 		 			api_sql_query($sql,__FILE__,__LINE__);
 				}
 			}
-		
+
 
 	}
 }
@@ -101,6 +101,6 @@ function users_list_in_chat () {
  	while ($row = Database::fetch_array($result,'ASSOC')) {
  		$list_users_in_chat[]=$row;
  	}
- 	return $list_users_in_chat;	
-}	
+ 	return $list_users_in_chat;
+}
 ?>

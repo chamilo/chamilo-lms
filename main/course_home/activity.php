@@ -88,7 +88,7 @@ function show_tools_category($course_tool_category)
 				$result = api_sql_query("SELECT * FROM $course_tool_table WHERE category = 'admin' ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
-		
+
 
 	}
 
@@ -96,7 +96,7 @@ function show_tools_category($course_tool_category)
 	{
 		$all_tools_list[]=$temp_row;
 	}
-	
+
 	/*if(api_is_course_coach())
 	{
 		$result = api_sql_query("SELECT * FROM $course_tool_table WHERE name='tracking'",__FILE__,__LINE__);
@@ -245,9 +245,9 @@ function show_tools_category($course_tool_category)
 				}
 
 			}
-			
+
 			// Both checks are necessary as is_platform_admin doesn't take student view into account
-			if( $is_platform_admin && $is_allowed_to_edit) 
+			if( $is_platform_admin && $is_allowed_to_edit)
 			{
  				if($toolsRow['admin'] !='1')
 				{
@@ -294,11 +294,11 @@ function show_tools_category($course_tool_category)
 				$toolsRow['link'] = $toolsRow['link'].$qm_or_amp.api_get_cidreq();
 			}
 				if(strpos($toolsRow['name'],'visio_')!==false) {
-					
+
 					/*
 					$toollink = "\t" . '<a ' . $class . ' href="#" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
 					*/
-	
+
 					$toollink = "\t" . '<a id="tooldesc_'.$toolsRow["id"].'"  ' . $class . ' href="javascript: void(0);" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
 					$my_tool_link = "\t" . '<a id="istooldesc_'.$toolsRow["id"].'"  ' . $class . ' href="javascript: void(0);" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
 				} else if(strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true) {
@@ -310,16 +310,16 @@ function show_tools_category($course_tool_category)
 
 				} else {
 
-					if (count(explode('type=classroom',$toolsRow['link']))==2 || count(explode('type=conference',$toolsRow['link']))==2) {					
-						//$toollink = "\t" . '<a ' . $class . ' href="' . $toolsRow['link'] . '" target="_blank">';	
-						$toollink = "\t" . '<a id="tooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . $toolsRow['link'] . '" target="_blank">';													
-						$my_tool_link = "\t" . '<a id="istooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . $toolsRow['link'] . '" target="_blank">';							
-					
-					} else {					
-						//$toollink = "\t" . '<a ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';	
-						$toollink = "\t" . '<a id="tooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';							
-						$my_tool_link = "\t" . '<a id="istooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';	
-					
+					if (count(explode('type=classroom',$toolsRow['link']))==2 || count(explode('type=conference',$toolsRow['link']))==2) {
+						//$toollink = "\t" . '<a ' . $class . ' href="' . $toolsRow['link'] . '" target="_blank">';
+						$toollink = "\t" . '<a id="tooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . $toolsRow['link'] . '" target="_blank">';
+						$my_tool_link = "\t" . '<a id="istooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . $toolsRow['link'] . '" target="_blank">';
+
+					} else {
+						//$toollink = "\t" . '<a ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';
+						$toollink = "\t" . '<a id="tooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';
+						$my_tool_link = "\t" . '<a id="istooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';
+
 					}
 
 				}
@@ -339,9 +339,9 @@ function show_tools_category($course_tool_category)
 				}
 				Display::display_icon($toolsRow['image'], $tool_name, array('class'=>'tool-icon','id'=>'toolimage_'.$toolsRow["id"]));
 				echo '</a> ';
-					
-				echo $my_tool_link;	
-				/*	
+
+				echo $my_tool_link;
+				/*
 					echo ($toolsRow['image'] == 'file_html_na.gif' || $toolsRow['image'] == 'file_html.gif' || $toolsRow['image'] == 'scormbuilder.gif' || $toolsRow['image'] == 'scormbuilder_na.gif' || $toolsRow['image'] == 'blog.gif' || $toolsRow['image'] == 'blog_na.gif' || $toolsRow['image'] == 'external.gif' || $toolsRow['image'] == 'external_na.gif') ? '  '.stripslashes($toolsRow['name']) : '  '.get_lang(ucfirst($toolsRow['name']));
 				*/
 				echo $tool_name;
@@ -388,7 +388,7 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		$requested_image   = ($tool_visibility == 0 ) ? $tool_image : $new_image;
 		$requested_clase   = ($tool_visibility == 0 ) ? 'visible' : 'invisible';
 		$requested_message = ($tool_visibility == 0 ) ? 'is_active' : 'is_inactive';
-    $requested_view    = ($tool_visibility == 0 ) ? 'visible.gif' : 'invisible.gif'; 
+    $requested_view    = ($tool_visibility == 0 ) ? 'visible.gif' : 'invisible.gif';
     $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
 	 	/*
 		-----------------------------------------------------------
@@ -399,7 +399,7 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 				$sql="UPDATE $tool_table SET visibility='".Database::escape_string($requested_visible)."' WHERE id='".$_GET["id"]."'";
 				api_sql_query($sql,__FILE__,__LINE__);
 			}
-    
+
 		$response_data = array(
 			'image'   => $requested_image,
 			'tclass'  => $requested_clase,
@@ -410,7 +410,7 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		exit;
 	}
 } else {
-	
+
 	if(api_is_allowed_to_edit()) {
 	 	/*
 		-----------------------------------------------------------
@@ -422,7 +422,7 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 			api_sql_query("UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
 			Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
 		}
-	
+
 	  /*
 		-----------------------------------------------------------
 			REACTIVATE
@@ -434,7 +434,7 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 			Display::display_confirmation_message(get_lang('ToolIsNowVisible'));
 		}
 	}
-	
+
 }
 
 // work with data post askable by admin of course
@@ -490,7 +490,7 @@ if(api_is_allowed_to_edit())
 
 ?>
 	<div class="normal-message" id="id_normal_message" style="display:none"><?php echo get_lang("PleaseStandBy")."<br/>".'<img src="'.$server_protocol.$current_host.'/'.$path_work.'main/inc/lib/javascript/indicator.gif"/>'; ?></div>
-	<div class="confirmation-message" id="id_confirmation_message" style="display:none"></div>		
+	<div class="confirmation-message" id="id_confirmation_message" style="display:none"></div>
 	<div class="courseadminview">
 		<span class="viewcaption"><?php echo get_lang("Authoring") ?></span>
 		<table width="100%">

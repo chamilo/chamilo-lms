@@ -70,7 +70,7 @@ if ($_SERVER['HTTP_HOST'] == 'localhost') {
     $path_work = substr($info[0],0,strlen($info[0])-1);
 } else {
     $path_work = "";
-} 
+}
 $htmlHeadXtra[] ='<script type="text/javascript">
  $(document).ready(function() {
   $(".make_visible_and_invisible").attr("href","javascript:void(0);");
@@ -117,7 +117,7 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 					$("#"+tool_id).attr("title","'.get_lang('Activate').'");
 				} else {
 					$("#"+tool_id).attr("alt","'.get_lang('Deactivate').'");
-					$("#"+tool_id).attr("title","'.get_lang('Deactivate').'");							
+					$("#"+tool_id).attr("title","'.get_lang('Deactivate').'");
 				}
 				if (info.message=="is_active") {
 					message = "'.get_lang('ToolIsNowVisible').'";
@@ -127,18 +127,18 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 				$(".normal-message").hide();
 				$("#id_confirmation_message").html(message);
 				$("#id_confirmation_message").show();
-		} }); 
-				
-	}); 	
+		} });
+
+	});
 
  });
-</script>';	
+</script>';
 if(!isset($cidReq))
 {
 	$cidReq = api_get_course_id(); // to provide compatibility. with previous system
 
 	global $error_msg,$error_no;
-	$classError = "init";	
+	$classError = "init";
 	$error_no[$classError][] = "2";
 	$error_level[$classError][] = "info";
 	$error_msg[$classError][] = "[".__FILE__."][".__LINE__."] cidReq was Missing $cidReq take $dbname;";
@@ -201,7 +201,7 @@ api_session_unregister('toolgroup');
 	Is the user allowed here?
 -----------------------------------------------------------
 */
-if($is_allowed_in_course == false) 
+if($is_allowed_in_course == false)
 {
 	api_not_allowed(true);
 }
@@ -221,7 +221,7 @@ Display::display_header($course_title, "Home");
 -----------------------------------------------------------
 */
 if(!isset($coursesAlreadyVisited[$_cid]) )
-{	
+{
 	event_access_course();
 	$coursesAlreadyVisited[$_cid] = 1;
 	api_session_register('coursesAlreadyVisited');

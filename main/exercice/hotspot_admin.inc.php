@@ -101,7 +101,7 @@ if($submitAnswers || $buttonBack)
             $objAnswer->cancel();
             break;
         }
-        
+
         if($hotspot_coordinates[$i] == '0;0|0|0' || empty($hotspot_coordinates[$i])) {
         	$msgErr=get_lang('HotspotNotDrawn');
         	// clears answers already recorded into the Answer object
@@ -253,7 +253,7 @@ if($modifyAnswers)
 	{
 		Display::display_normal_message($msgErr); //main API
 	}
-	
+
 ?>
 
 <form method="post" action="<?php echo api_get_self(); ?>?hotspotadmin=<?php echo $modifyAnswers; ?>" name="frm_exercise">
@@ -268,9 +268,9 @@ if($modifyAnswers)
 			<input type="submit" class="minus" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" >
 			<input type="submit" class="plus" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" />
 			<input type="submit" class="cancel" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" >
-			<input type="submit" class="save" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" />			 
+			<input type="submit" class="save" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" />
 		<?php
-			} else {				
+			} else {
 		?>
 			<button type="submit" class="minus" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" ><?php echo get_lang('LessHotspots'); ?></button>
 			<button type="submit" class="plus" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" /><?php echo get_lang('MoreHotspots'); ?></button>
@@ -279,11 +279,11 @@ if($modifyAnswers)
 		<?php
 			}
 		?>
-		
+
 		</td>
 	</tr>
 	<tr>
-		<td valign="top" style="border:1px solid #4271b5;border-top:none;border-bottom:none;border-right:none;" >			
+		<td valign="top" style="border:1px solid #4271b5;border-top:none;border-bottom:none;border-right:none;" >
 				<input type="hidden" name="formSent" value="1" />
 				<input type="hidden" name="nbrAnswers" value="<?php echo $nbrAnswers; ?>" />
 				<table class="data_table">
@@ -309,14 +309,14 @@ if($modifyAnswers)
 						require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
 						$oFCKeditor = new FCKeditor("comment[$i]") ;
 						$content = $comment[$i];
-						$oFCKeditor->ToolbarSet = 'TestProposedAnswer';	
-						$oFCKeditor->Config['ToolbarStartExpanded'] = 'false';		
+						$oFCKeditor->ToolbarSet = 'TestProposedAnswer';
+						$oFCKeditor->Config['ToolbarStartExpanded'] = 'false';
 						$oFCKeditor->Width		= '100%';
 						$oFCKeditor->Height		= '100';
 						$oFCKeditor->Value		= $content;
 						$return =	$oFCKeditor->CreateHtml();
 						/*<td align="left"><textarea wrap="virtual" rows="1" cols="25" name="comment[<?php echo $i; ?>]" style="width: 100%"><?php echo api_htmlentities($comment[$i], ENT_QUOTES, api_get_system_encoding()); ?></textarea></td>*/
-					?>					  				  	
+					?>
 					<td align="left"><?php echo $return; ?></td>
 					<td valign="top"><input type="text" name="weighting[<?php echo $i; ?>]" size="5" value="<?php echo (isset($weighting[$i]) ? float_format($weighting[$i],1) : 10); ?>" />
 					<input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]); ?>" />
@@ -328,7 +328,7 @@ if($modifyAnswers)
 					?>
 
 				</table>
-		</td>	
+		</td>
 	</tr>
 	<tr>
 		<td colspan="2" valign="top" style="border:1px solid #ccc;border-top:none">
@@ -354,7 +354,7 @@ if($modifyAnswers)
 				// -->
 			</script>
 		</td>
-		
+
 	</tr>
 </table>
 </form>

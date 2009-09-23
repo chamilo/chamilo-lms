@@ -13,7 +13,7 @@ function get_email_headers()
 	$emailHeaders = "From: \"".addslashes(api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS))."\" <".api_get_setting('emailAdministrator').">\n";
 	$emailHeaders .= "Reply-To: ".api_get_setting('emailAdministrator')."\n";
 	$emailHeaders .= "Return-Path: ".api_get_setting('emailAdministrator')."\n";
-	$emailHeaders .= "X-Sender: ".api_get_setting('emailAdministrator')."\n";	
+	$emailHeaders .= "X-Sender: ".api_get_setting('emailAdministrator')."\n";
 	$emailHeaders .= "X-Mailer: PHP / ".phpversion()."\n";
 	$emailHeaders .= "Content-Type: text/plain;\n\tcharset=\"".$charset."\"\n";
 	$emailHeaders .= "Mime-Version: 1.0";
@@ -32,18 +32,18 @@ function get_user_account_list($user, $reset = false)
 	global $_configuration;
 	$portal_url = $_configuration['root_web'];
 	if ($_configuration['multiple_access_urls']==true) {
-		$access_url_id = api_get_current_access_url_id();				
+		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1 ){
 			$url = api_get_access_url($access_url_id);
 			$portal_url = $url['url'];
 		}
 	}
-		
-	if ($reset==true) {		 	
+
+	if ($reset==true) {
 		foreach ($user as $thisUser) {
 			$secretword = get_secret_word($thisUser["email"]);
-			if ($reset)	{								
-				$reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secretword."&id=".$thisUser['uid'];			
+			if ($reset)	{
+				$reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secretword."&id=".$thisUser['uid'];
 			} else {
 				$reset_link = get_lang('Pass')." : $thisUser[password]";
 			}
@@ -53,10 +53,10 @@ function get_user_account_list($user, $reset = false)
 		{
 			$userAccountList = implode("\n------------------------\n", $userAccountList);
 		}
-	} else {		 
+	} else {
 	    $user = $user[0];
 	    $reset_link = get_lang('Pass')." : $user[password]";
-       	$userAccountList = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$user['loginName']."\n".$reset_link.'';	
+       	$userAccountList = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$user['loginName']."\n".$reset_link.'';
 	}
 	return $userAccountList;
 }
@@ -75,19 +75,19 @@ function send_password_to_user($user)
 	$userAccountList = get_user_account_list($user); // BODY
 	$portal_url = $_configuration['root_web'];
 	if ($_configuration['multiple_access_urls']==true) {
-		$access_url_id = api_get_current_access_url_id();				
+		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1 ){
 			$url = api_get_access_url($access_url_id);
 			$portal_url = $url['url'];
 		}
 	}
-						
+
 	$emailBody = get_lang('YourAccountParam')." ".$portal_url."\n\n$userAccountList";
 	// SEND MESSAGE
-	$emailTo = $user[0]["email"];			
+	$emailTo = $user[0]["email"];
 	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-    $email_admin = api_get_setting('emailAdministrator');			
-				
+    $email_admin = api_get_setting('emailAdministrator');
+
 	if (@api_mail('', $emailTo, $emailSubject, $emailBody, $sender_name,$email_admin)==1) {
 		Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
 	} else {
@@ -111,14 +111,14 @@ function handle_encrypted_password($user)
 	$emailSubject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 	$userAccountList = get_user_account_list($user, true); // BODY
 	$emailTo = $user[0]["email"];
-	$secretword = get_secret_word($emailTo);	
+	$secretword = get_secret_word($emailTo);
 	$emailBody = get_lang('DearUser')." :\n".get_lang("password_request")."\n\n";
 	$emailBody .= "-----------------------------------------------\n".$userAccountList."\n-----------------------------------------------\n\n";
 	$emailBody .=get_lang('PasswordEncryptedForSecurity');
 	$emailBody .="\n\n".get_lang('Formula').",\n".get_lang('PlataformAdmin');
 	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
     $email_admin = api_get_setting('emailAdministrator');
-			
+
 	if (@api_mail('', $emailTo, $emailSubject, $emailBody, $sender_name,$email_admin)==1)
 	{
 		Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));

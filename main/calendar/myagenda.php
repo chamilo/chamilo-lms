@@ -80,7 +80,7 @@ $nameTools = get_lang('MyAgenda');
 //remove this if cause it was showing in agenda general
 /*if(!empty($_GET['coursePath'])) {
 	$course_path = api_htmlentities(strip_tags($_GET['coursePath']),ENT_QUOTES,$charset);
-	$course_path = str_replace(array('../','..\\'),array('',''),$course_path); 	
+	$course_path = str_replace(array('../','..\\'),array('',''),$course_path);
 }
 */
 if (!empty ($course_path)) {
@@ -128,9 +128,9 @@ if (empty($_SESSION['view']))
 	$_SESSION['view'] = "month";
 }
 // 2. Storing it in the session. If we change the view by clicking on the links left, we change the session
-if (!empty($_GET['view'])) {	
+if (!empty($_GET['view'])) {
 	$_SESSION['view'] = Security::remove_XSS($_GET['view']);
-	
+
 }
 // 3. The views: (month, week, day, personal)
 if ($_SESSION['view'])
@@ -214,7 +214,7 @@ if (isset ($_user['user_id']))
 	// The name of the current Month
 	$monthName = $MonthsLong[$month -1];
 	// Starting the output
-	
+
 	echo "\n<div class=\"actions\">\n";
 	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=month\">".Display::return_icon('calendar_month.gif', get_lang('MonthView'))." ".get_lang('MonthView')."</a> \n";
 	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=week\">".Display::return_icon('calendar_week.gif', get_lang('WeekView'))." ".get_lang('WeekView')."</a> \n";
@@ -224,8 +224,8 @@ if (isset ($_user['user_id']))
 		echo "\t<a href=\"".api_get_self()."?action=add_personal_agenda_item\">".Display::return_icon('calendar_personal_add.gif', get_lang('AddPersonalItem'))." ".get_lang('AddPersonalItem')."</a> \n";
 		echo "\t<a href=\"".api_get_self()."?action=view&amp;view=personal\">".Display::return_icon('calendar_personal.gif', get_lang('ViewPersonalItem'))."  ".get_lang('ViewPersonalItem')."</a> \n";
 	}
-	echo "</div>\n\n";	
-	
+	echo "</div>\n\n";
+
 	echo "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">";
 	echo "<tr>";
 	// output: the small calendar item on the left and the view / add links

@@ -66,21 +66,21 @@ class DropboxLink extends EvalLink
 
 			return $url;
 		} else {
-			return null;			
+			return null;
 		}
 	}
 
     public function get_type_name() {
     	return get_lang('DokeosDropbox');
     }
-    
+
 	public function is_allowed_to_change_name() {
 		return false;
 	}
 
-    
+
 // INTERNAL FUNCTIONS
-    
+
     /**
      * Lazy load function to get the dropbox database table
      */

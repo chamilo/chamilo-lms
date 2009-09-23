@@ -1,5 +1,5 @@
 <?php // $Id: question_pool.php 20451 2009-05-10 12:02:22Z ivantcholakov $
- 
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -141,7 +141,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
@@ -166,27 +166,27 @@ if($is_allowedToEdit)
 		echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">'.Display::return_icon('quiz.gif', get_lang('GoBackToEx')),get_lang('GoBackToEx'),'</a>';
 	} else {
 		echo '<a href="admin.php?',api_get_cidreq(),'&newQuestion=yes">'.Display::return_icon('new_test.gif'),get_lang('NewQu'),'</a>';
-	}	
-	if (isset($type)) {		
+	}
+	if (isset($type)) {
 		$url = api_get_self().'?type=1';
 	} else {
 		$url = api_get_self();
 	}
 	?>
-	
+
 	<form method="get" action="<?php echo $url; ?>" style="display:inline;">
-	<?php	
-	if (isset($type)) { 
+	<?php
+	if (isset($type)) {
 		echo '<input type="hidden" name="type" value="1">';
-	} 
+	}
 	?>
 	<input type="hidden" name="fromExercise" value="<?php echo $fromExercise; ?>">
-	
-	<?php echo get_lang('Filter'); ?> : 
+
+	<?php echo get_lang('Filter'); ?> :
 	<select name="exerciseId">
 	<option value="0">-- <?php echo get_lang('AllExercises'); ?> --</option>
 	<option value="-1" <?php if($exerciseId == -1) echo 'selected="selected"'; ?>>-- <?php echo get_lang('OrphanQuestions'); ?> --</option>
-	<?php 
+	<?php
 	$sql="SELECT id,title FROM $TBL_EXERCICES WHERE id<>'".Database::escape_string($fromExercise)."' AND active<>'-1' ORDER BY id";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 
@@ -196,23 +196,23 @@ if($is_allowedToEdit)
 		<option value="<?php echo $row['id']; ?>" <?php if($exerciseId == $row['id']) echo 'selected="selected"'; ?>><?php echo $row['title']; ?></option>
 		<?php
 	}
-	?> 
+	?>
     </select>
     &nbsp;
-    <?php 
+    <?php
     	echo get_lang('Difficulty');
-    	echo ' : <select name="exerciseLevel">';    	
+    	echo ' : <select name="exerciseLevel">';
 		//echo '<option value="-1">-- '.get_lang('AllExercises').' --</option>';
 		//level difficulty only from 1 to 5
 		if (!isset($exerciseLevel)) $exerciseLevel = -1;
-		
+
 		for ($level = -1; $level <=5; $level++) {
 			$selected ='';
-			if ($level!=0) {	
-				if ($exerciseLevel == $level) 
-					$selected = ' selected="selected" ';								 
+			if ($level!=0) {
+				if ($exerciseLevel == $level)
+					$selected = ' selected="selected" ';
 				if ($level==-1) {
-					echo '<option value="'.$level.'" '.$selected.'>-- '.get_lang('AllExercises').' --</option>';	
+					echo '<option value="'.$level.'" '.$selected.'>-- '.get_lang('AllExercises').' --</option>';
 				} else   {
 					echo '<option value="'.$level.'" '.$selected.'>'.$level.'</option>';
 				}
@@ -232,20 +232,20 @@ if($is_allowedToEdit)
 		//$sql="SELECT id,question,type FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($exerciseId)."' ORDER BY question_order LIMIT $from, ".($limitQuestPage + 1);
 		$where = '';
 		if (isset($type) && $type==1) {
-			$where = ' type = 1 AND ';	
-		}		
+			$where = ' type = 1 AND ';
+		}
 
 		if (isset($exerciseLevel) && $exerciseLevel != -1) {
 			$where .= ' level='.$exerciseLevel.' AND ';
 		}
-		
-		$sql="SELECT id,question,type,level 
-				FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS 
-			  	WHERE $where question_id=id AND exercice_id='".Database::escape_string($exerciseId)."'			 	
+
+		$sql="SELECT id,question,type,level
+				FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS
+			  	WHERE $where question_id=id AND exercice_id='".Database::escape_string($exerciseId)."'
 				ORDER BY question_order";
 	} elseif($exerciseId == -1) {
 		// if we have selected the option 'Orphan questions' in the list-box 'Filter'
-		
+
 		// 1. Old logic: When a test is deleted, the correspondent records in 'quiz' and 'quiz_rel_question' tables are deleted.
 		//$sql='SELECT id, question, type, exercice_id FROM '.$TBL_QUESTIONS.' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions ON questions.id=quizz_questions.question_id WHERE exercice_id IS NULL LIMIT $from, '.($limitQuestPage + 1);
 
@@ -255,62 +255,62 @@ if($is_allowedToEdit)
 		//	' as exercices ON exercice_id=exercices.id WHERE exercices.active = -1 LIMIT $from, '.($limitQuestPage + 1);
 
 		// 3. This is more safe to changes, it is a mix between old and new logic.
-		
+
 		/*$sql='SELECT questions.id, questions.question, questions.type, quizz_questions.exercice_id FROM '.$TBL_QUESTIONS.
 			' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions ON questions.id=quizz_questions.question_id LEFT JOIN '.$TBL_EXERCICES.
-			' as exercices ON exercice_id=exercices.id WHERE quizz_questions.exercice_id IS NULL OR exercices.active = -1 LIMIT '.$from.', '.($limitQuestPage + 1);	
+			' as exercices ON exercice_id=exercices.id WHERE quizz_questions.exercice_id IS NULL OR exercices.active = -1 LIMIT '.$from.', '.($limitQuestPage + 1);
 		*/
-		
+
 		/*	4. Query changed because of the Level feature implemented
 		$sql='SELECT id, question, type, exercice_id,level FROM '.$TBL_QUESTIONS.' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions
 			ON questions.id=quizz_questions.question_id AND exercice_id IS NULL '.
 			(!is_null($exerciseLevel) && $exerciseLevel >= 0 ? 'WHERE level=\''.$exerciseLevel.'\' ' : '');
 		*/
 		// 5. this is the combination of the 3 and 4 query because of the level feature implementation
-		
+
 		// we filter the type of question, because in the DirectFeedback we can only add questions with type=1 = UNIQUE_ANSWER
 		$type_where= '';
 		if (isset($type) && $type==1) {
-			$type_where = ' AND questions.type = 1 ';	
+			$type_where = ' AND questions.type = 1 ';
 		}
-				
-		$level_where = '';		
-		if (isset($exerciseLevel) && $exerciseLevel!= -1 ) {			
+
+		$level_where = '';
+		if (isset($exerciseLevel) && $exerciseLevel!= -1 ) {
 			$level_where = ' level='.$exerciseLevel.' AND ';
-		}			
+		}
 		$sql='SELECT questions.id, questions.question, questions.type, quizz_questions.exercice_id , level
-				FROM '.$TBL_QUESTIONS.' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions 
-				ON questions.id=quizz_questions.question_id LEFT JOIN '.$TBL_EXERCICES.' as exercices 
-				ON exercice_id=exercices.id 
+				FROM '.$TBL_QUESTIONS.' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions
+				ON questions.id=quizz_questions.question_id LEFT JOIN '.$TBL_EXERCICES.' as exercices
+				ON exercice_id=exercices.id
 				WHERE '.$level_where.' (quizz_questions.exercice_id IS NULL OR exercices.active = -1 )  '.$type_where.'
-				LIMIT '.$from.', '.($limitQuestPage + 1);		
-			
+				LIMIT '.$from.', '.($limitQuestPage + 1);
+
 	} else {
 		// if we have not selected any option in the list-box 'Filter'
-		
+
 		//$sql="SELECT id,question,type FROM $TBL_QUESTIONS LIMIT $from, ".($limitQuestPage + 1);
 		$where = '';
-		
+
 		if (isset($type)&& $type==1){
-			$where = ' WHERE type = 1 ';				
+			$where = ' WHERE type = 1 ';
 		}
-		
-		if (isset($exerciseLevel) && $exerciseLevel != -1) {			
+
+		if (isset($exerciseLevel) && $exerciseLevel != -1) {
 			if (strlen($where)>0)
 				$where .= ' AND level='.$exerciseLevel.' ';
-			else 
-				$where = ' WHERE level='.$exerciseLevel.' ';			
+			else
+				$where = ' WHERE level='.$exerciseLevel.' ';
 		}
 		$sql="SELECT id,question,type,level FROM $TBL_QUESTIONS $where ";
-			
+
 		// forces the value to 0
 		//echo $sql;
 		$exerciseId=0;
 	}
-	
+
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	$nbrQuestions=Database::num_rows($result);
-	
+
     echo '<tr>',
       '<td colspan="',($fromExercise?3:3),'">',
     	'<table border="0" cellpadding="0" cellspacing="0" width="100%">',
@@ -318,7 +318,7 @@ if($is_allowedToEdit)
     	  '<td>';
 	echo '</td>',
 	 '<td align="right">';
-	 
+
 	if(!empty($page)) {
 	   echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&fromExercise=',$fromExercise,'&page=',($page-1),'">&lt;&lt; ',get_lang('PreviousPage'),'</a> |';
 	} elseif($nbrQuestions > $limitQuestPage) {
@@ -349,21 +349,21 @@ if($is_allowedToEdit)
     echo '</tr>';
 	$i=1;
 	echo '<pre>';
-	
+
 	echo '</pre>';
-	while ($row = Database::fetch_array($result)) {		
-		// if we come from the exercise administration to get a question, 
+	while ($row = Database::fetch_array($result)) {
+		// if we come from the exercise administration to get a question,
         // don't show the questions already used by that exercise
-        
-        /*if (!$fromExercise) {echo '1'; }   
-        if (!isset($objExercise)){echo '2';}    
-        if (!($objExercise instanceOf Exercise)){echo '3';}    
-        if (!$objExercise->isInList($row['id'])) {echo '4';}        
+
+        /*if (!$fromExercise) {echo '1'; }
+        if (!isset($objExercise)){echo '2';}
+        if (!($objExercise instanceOf Exercise)){echo '3';}
+        if (!$objExercise->isInList($row['id'])) {echo '4';}
         */
-        
-        // original recipe - 
+
+        // original recipe -
       //if (!$fromExercise || !isset($objExercise) || !($objExercise instanceOf Exercise) || (!$objExercise->isInList($row['id'])))
-		if (!$fromExercise || !isset($objExercise) || !($objExercise instanceOf Exercise) || (is_array($objExercise->questionList)) ) {	
+		if (!$fromExercise || !isset($objExercise) || !($objExercise instanceOf Exercise) || (is_array($objExercise->questionList)) ) {
             echo '<tr ',($i%2==0?'class="row_odd"':'class="row_even"'),'>';
             echo '  <td><a href="admin.php?',api_get_cidreq(),'&editQuestion=',$row['id'],'&fromExercise=',$fromExercise,'">',$row['question'],'</a></td>';
             echo '  <td align="center" >';

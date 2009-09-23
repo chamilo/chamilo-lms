@@ -43,7 +43,7 @@ if(!class_exists('FillBlanks')):
  *	@package dokeos.exercise
  **/
 
-class FillBlanks extends Question 
+class FillBlanks extends Question
 {
 	static $typePicture = 'fill_in_blanks.gif';
 	static $explanationLangVar = 'FillBlanks';
@@ -61,65 +61,65 @@ class FillBlanks extends Question
 	 * function which redifines Question::createAnswersForm
 	 * @param the formvalidator instance
 	 */
-	function createAnswersForm ($form) 
+	function createAnswersForm ($form)
 	{
-		$defaults = array();		
-	
+		$defaults = array();
+
 		if(!empty($this->id)) {
 			$objAnswer = new answer($this->id);
-			
+
 			// the question is encoded like this
 		    // [A] B [C] D [E] F::10,10,10@1
 		    // number 1 before the "@" means that is a switchable fill in blank question
 		    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
-		    // means that is a normal fill blank question		
+		    // means that is a normal fill blank question
 
 			$pre_array = explode('::', $objAnswer->selectAnswer(1));
-	
+
 			//make sure we only take the last bit to find special marks
 			$sz = count($pre_array);
-			$is_set_switchable = explode('@', $pre_array[$sz-1]);			
+			$is_set_switchable = explode('@', $pre_array[$sz-1]);
 			if ($is_set_switchable[1]) {
-				$defaults['multiple_answer']=1;	
+				$defaults['multiple_answer']=1;
 			} else {
-				$defaults['multiple_answer']=0;	
+				$defaults['multiple_answer']=0;
 			}
-			
+
 			//take the complete string except after the last '::'
 			$defaults['answer'] = '';
 			for($i=0;$i<($sz-1);$i++) {
 				$defaults['answer'] .= $pre_array[$i];
 			}
 			$a_weightings = explode(',',$is_set_switchable[0]);
-		} else {						
+		} else {
 			$defaults['answer'] = get_lang('DefaultTextInBlanks');
 		}
 
 		// javascript
-		
+
 		echo '
 		<script type="text/javascript">
 			function FCKeditor_OnComplete( editorInstance )
-			{								
-				if (window.attachEvent) {		
+			{
+				if (window.attachEvent) {
 					editorInstance.EditorDocument.attachEvent("onkeyup", updateBlanks) ;
 				} else {
 					editorInstance.EditorDocument.addEventListener("keyup",updateBlanks,true);
-				}		
-										
+				}
+
 			}
-		
+
 		var firstTime = true;
-		function updateBlanks() 
+		function updateBlanks()
 		{
 			if (firstTime) {
 				field = document.getElementById("answer");
-				var answer = field.value; } 
+				var answer = field.value; }
 			else {
-				var oEditor = FCKeditorAPI.GetInstance(\'answer\'); 
+				var oEditor = FCKeditorAPI.GetInstance(\'answer\');
 				answer =  oEditor.GetXHTML( true ) ;
-			}   
-			
+			}
+
 			var blanks = answer.match(/\[[^\]]*\]/g);
 
 			var fields = "<div class=\"row\"><div class=\"label\">'.get_lang('Weighting').'</div><div class=\"formw\"><table>";
@@ -153,22 +153,22 @@ class FillBlanks extends Question
 
 
 		// answer
-		$form -> addElement ('html', '<br /><br /><div class="row"><div class="label"></div><div class="formw">'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank').'</div></div>');						
+		$form -> addElement ('html', '<br /><br /><div class="row"><div class="label"></div><div class="formw">'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank').'</div></div>');
 		$form -> addElement ('html_editor', 'answer', '<img src="../img/fill_field.png">','id="answer" cols="122" rows="6" onkeyup="javascript: updateBlanks(this);"', array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '350'));
 
 		$form -> addRule ('answer',get_lang('GiveText'),'required');
 		$form -> addRule ('answer',get_lang('DefineBlanks'),'regex','/\[.*\]/');
- 
+
 		//added multiple answers
 		$form -> addElement ('checkbox','multiple_answer','', get_lang('FillInBlankSwitchable'));
-		
+
 		$form -> addElement('html','<div id="blanks_weighting"></div>');
 
 		global $text, $class;
 		// setting the save button here and not in the question class.php
 		$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
 
-		
+
 		$form -> setDefaults($defaults);
 
 	}
@@ -178,7 +178,7 @@ class FillBlanks extends Question
 	 * abstract function which creates the form to create / edit the answers of the question
 	 * @param the formvalidator instance
 	 */
-	function processAnswersCreation($form) 
+	function processAnswersCreation($form)
 	{
 		global $charset;
 
@@ -195,7 +195,7 @@ class FillBlanks extends Question
 		{
 			$this -> weighting = 0;
 		}
-		
+
 		if($nb>0)
 		{
 			$answer .= '::';
@@ -208,7 +208,7 @@ class FillBlanks extends Question
 		}
 		$is_multiple = $form -> getSubmitValue('multiple_answer');
 		$answer.='@'.$is_multiple;
-		
+
 		$this -> save();
         $objAnswer = new answer($this->id);
         $objAnswer->createAnswer($answer,0,'',0,'');

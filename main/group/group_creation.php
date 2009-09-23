@@ -35,7 +35,7 @@
        DOKEOS INIT SETTINGS
 ===============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "group";
 require_once ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
@@ -55,16 +55,16 @@ if (isset ($_POST['action']))
 	{
 		case 'create_groups' :
 			$groups = array ();
-			
+
 			for ($i = 0; $i < $_POST['number_of_groups']; $i ++)
 			{
 				$group1['name'] = api_strlen($_POST['group_'.$i.'_name']) == 0 ? get_lang('Group').' '.$i : $_POST['group_'.$i.'_name'] ;
-				$group1['category'] = isset($_POST['group_'.$i.'_category'])?$_POST['group_'.$i.'_category']:null;				
+				$group1['category'] = isset($_POST['group_'.$i.'_category'])?$_POST['group_'.$i.'_category']:null;
 				$group1['tutor'] = isset($_POST['group_'.$i.'_tutor'])?$_POST['group_'.$i.'_tutor']:null;
 				$group1['places'] = isset($_POST['group_'.$i.'_places'])?$_POST['group_'.$i.'_places']:null;
 				$groups[] = $group1;
 			}
-			
+
 			foreach ($groups as $index => $group)
 			{
 				if (!empty($_POST['same_tutor']))

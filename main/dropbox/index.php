@@ -166,8 +166,8 @@ if (isset($_POST['StoreCategory'])) {
 	{
 		Display :: display_error_message(get_lang('FormHasErrorsPleaseComplete').'<br />'.$return_information['message']);
 		display_addcategory_form($_POST['category_name'],$_POST['edit_id'],$_POST['action']);
-	}	
-	
+	}
+
 }
 
 // *** Move a File ***

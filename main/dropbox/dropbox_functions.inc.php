@@ -1,7 +1,7 @@
 <?php //$id: $
 /* For licensing terms, see /dokeos_license.txt */
 /**
-* This file contains additional dropbox functions. Initially there were some 
+* This file contains additional dropbox functions. Initially there were some
 * functions in the init files also but I have moved them over
 * to one file 		-- Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
@@ -185,7 +185,7 @@ function display_move_form($part, $id, $target=array())
 	echo  '</select>';
 	echo '	</div>
 			</div>';
-	
+
 	echo '
 		<div class="row">
 			<div class="label">
@@ -193,10 +193,10 @@ function display_move_form($part, $id, $target=array())
 			<div class="formw">
 				<button class="next" type="submit" name="do_move" value="'.get_lang('Ok').'">'.get_lang('MoveFile').'</button>
 			</div>
-		</div>	
+		</div>
 	';
 	echo '</form>';
-	
+
 	echo '<div style="clear: both;"></div>';
 }
 
@@ -450,7 +450,7 @@ function display_addcategory_form($category_name='', $id='',$action)
 	if ($action=='addsentcategory') {
 		$target='sent';
 	}
-	
+
 	if ($action=='editcategory') {
 		$text=get_lang('ModifyCategory');
 		$class='save';
@@ -467,9 +467,9 @@ function display_addcategory_form($category_name='', $id='',$action)
 	}
 	echo '<input name="action" type="hidden" value="'.Security::remove_XSS($action).'">';
 	echo '<input name="target" type="hidden" value="'.$target.'">';
-	
+
 	echo '<div class="row"><div class="form_header">'.$title.'</div></div>';
-	
+
 	echo '	<div class="row">
 				<div class="label">
 					<span class="form_required">*</span> '.get_lang('CategoryName').'
@@ -482,25 +482,25 @@ function display_addcategory_form($category_name='', $id='',$action)
 	if ($_POST AND !empty($_POST['category_name']))
 	{
 		echo '<span class="form_error">'.get_lang('CategoryAlreadyExistsEditIt').'<span><br />';
-	}	
+	}
 	echo '			<input type="text" name="category_name" value="'.Security::remove_XSS($category_name).'" />
 				</div>
 			</div>';
-	
+
 	echo '	<div class="row">
 				<div class="label">
 				</div>
 				<div class="formw">
 					<button class="'.$class.'" type="submit" name="StoreCategory">'.$text.'</button>
 				</div>
-			</div>';	
+			</div>';
 	echo '	<div class="row">
 				<div class="label">
 				</div>
 				<div class="formw">
 					<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>
 				</div>
-			</div>';	
+			</div>';
 	echo '</form>';
 	echo '<div style="clear: both;"></div>';
 }
@@ -519,14 +519,14 @@ function display_add_form()
 	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 	?>
 	<form method="post" action="index.php?view_received_category=<?php echo Security::remove_XSS($_GET['view_received_category']); ?>&view_sent_category=<?php echo Security::remove_XSS($_GET['view_sent_category']); ?>&view=<?php echo Security::remove_XSS($_GET['view']); ?>&<?php echo "origin=$origin"."&".api_get_cidreq(); ?>" enctype="multipart/form-data" onsubmit="return checkForm(this)">
-	
+
 	<div class="row"><div class="form_header"><?php echo get_lang('UploadNewFile'); ?></div></div>
-	
+
 	<div class="row">
 		<div class="label">
 			<span class="form_required">*</span><?php echo dropbox_lang("uploadFile")?>:
 		</div>
-		<div class="formw">	
+		<div class="formw">
 				<input type="hidden" name="MAX_FILE_SIZE" value='<?php echo dropbox_cnf("maxFilesize")?>' />
 				<input type="file" name="file" size="20" <?php if (dropbox_cnf("allowOverwrite")) echo 'onChange="checkfile(this.value)"'; ?> />
 				<input type="hidden" name="dropbox_unid" value="<?php echo $dropbox_unid ?>" />
@@ -539,19 +539,19 @@ function display_add_form()
 				?>
 		</div>
 	</div>
-		
+
 	<?php
 	if (dropbox_cnf("allowOverwrite"))
 	{
 		?>
 		<div class="row">
 			<div class="label">
-				
+
 			</div>
 			<div class="formw">
 				<input type="checkbox" name="cb_overwrite" id="cb_overwrite" value="true" /><?php echo dropbox_lang("overwriteFile")?>
 			</div>
-		</div>	
+		</div>
 		<?php
 	}
 	?>
@@ -659,7 +659,7 @@ function display_add_form()
 		echo '</select>
 		</div>
 	</div>';
-		
+
 	echo '
 		<div class="row">
 			<div class="label">
@@ -668,8 +668,8 @@ function display_add_form()
 				<button type="Submit" class="upload" name="submitWork">'.dropbox_lang("upload", "noDLTT").'</button>
 			</div>
 		</div>
-	';		
-	
+	';
+
 	echo "</form>";
 }
 
@@ -951,7 +951,7 @@ function store_add_dropbox()
     {
     	return get_lang('UplUnableToSaveFileFilteredExtension');
     }
-	
+
 	// set title
 	$dropbox_title = $dropbox_filename;
 	// set author
@@ -1011,9 +1011,9 @@ function store_add_dropbox()
 	}
 
 	@move_uploaded_file( $dropbox_filetmpname, dropbox_cnf("sysPath") . '/' . $dropbox_filename);
-	
+
 	$b_send_mail = api_get_course_setting('email_alert_on_new_doc_dropbox');
-	
+
 	if($b_send_mail)
 	{
 		foreach($new_work_recipients as $recipient_id)
@@ -1026,7 +1026,7 @@ function store_add_dropbox()
 				//get_lang('NewDropboxFileUploadedContent').' '.api_get_path(WEB_CODE_PATH).'dropbox/index.php?cidReq='.$_course['sysCode']."\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS)."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName')." ".api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS), api_get_setting('emailAdministrator'));
 		}
 	}
-	
+
 	new Dropbox_SentWork( $_user['user_id'], $dropbox_title, $_POST['description'], strip_tags($_POST['authors']), $dropbox_filename, $dropbox_filesize, $new_work_recipients);
 
 	Security::clear_token();
@@ -1127,7 +1127,7 @@ function feedback_form()
 	$number_users_who_see_file=Database::num_rows($result);
 	if ($number_users_who_see_file>1)
 	{
-		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea><br /><button type="submit" class="add" name="store_feedback" value="'.get_lang('Ok').'" 
+		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea><br /><button type="submit" class="add" name="store_feedback" value="'.get_lang('Ok').'"
 			onclick="document.form_tablename.attributes.action.value = document.location;">'.get_lang('AddComment').'</button>';
 	}
 	else
@@ -1182,9 +1182,9 @@ function zip_download ($array)
 	global $dropbox_cnf;
 	global $_user;
 	global $files;
-	
+
 	$sys_course_path = api_get_path(SYS_COURSE_PATH);
-	
+
 	// zip library for creation of the zipfile
 	include(api_get_path(LIBRARY_PATH)."/pclzip/pclzip.lib.php");
 
@@ -1297,14 +1297,14 @@ function zip_download_alternative($files)
 	{
 		$zip_folder->add(api_get_path(SYS_COURSE_PATH).$_course['path']."/temp/".$value['title'],PCLZIP_OPT_REMOVE_PATH, api_get_path(SYS_COURSE_PATH).$_course['path']."/temp");
 	}
-	
+
 	// Step 1: create the overview file and add it to the zip
 	$overview_file_content=generate_html_overview($files, array('filename'), array('title'));
 	$overview_file=$temp_zip_dir.'overview'.replace_dangerous_char(api_is_western_name_order() ? $_user['firstname'].$_user['lastname'] : $_user['lastname'].$_user['firstname'], 'strict').'.html';
 	$handle=fopen($overview_file,'w');
 	fwrite($handle,$overview_file_content);
 	// todo: find a different solution for this because even 2 seconds is no guarantee.
-	sleep(2);	
+	sleep(2);
 
 	// Step 4: we add the overview file
 	$zip_folder->add($overview_file,PCLZIP_OPT_REMOVE_PATH, api_get_path(SYS_COURSE_PATH).$_course['path']."/temp");
@@ -1472,7 +1472,7 @@ function get_total_number_feedback($file_id='')
 function check_number_feedback($key, $array)
 {
 	if (is_array($array))
-	{	
+	{
 		if (key_exists($key,$array))
 		{
 			return $array[$key];

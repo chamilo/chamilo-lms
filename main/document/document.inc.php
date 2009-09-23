@@ -35,7 +35,7 @@
 
 
 /**
- * Builds the form thats enables the user to 
+ * Builds the form thats enables the user to
  * select a directory to browse/upload in
  *
  * @param array 	An array containing the folders we want to be able to select
@@ -60,7 +60,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 			$folder_titles = array();
 			while($obj = Database::fetch_object($res))
 			{
-				$folder_titles[$obj->path] = $obj->title;	
+				$folder_titles[$obj->path] = $obj->title;
 			}
 		}
 	}
@@ -69,21 +69,21 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 		if (is_array($folders)){
 			foreach($folders as $folder)
 			{
-				$folder_titles[$folder] = basename($folder);	
-			}	
+				$folder_titles[$folder] = basename($folder);
+			}
 		}
 	}
-	
+
 	require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 	$form = new FormValidator('selector','POST',api_get_self());
-	
+
 	$parent_select = $form->addElement('select', 'curdirpath', get_lang('CurrentDirectory'),'','onchange="javascript:document.selector.submit()"');
-	
+
 	if($changeRenderer==true){
 		$renderer = $form->defaultRenderer();
 		$renderer->setElementTemplate('<span>{label} : {element}</span> ','curdirpath');
 	}
-	
+
 	//group documents cannot be uploaded in the root
 	if(empty($group_dir))
 	{
@@ -94,17 +94,17 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 			{
 				$selected = ($curdirpath==$folder)?' selected="selected"':'';
 				$path_parts = explode('/',$folder);
-				
+
 				if($folder_titles[$folder]=='shared_folder')
 				{
 					$folder_titles[$folder]=get_lang('SharedFolder');
 				}
 				elseif(strstr($folder_titles[$folder], 'sf_user_'))
-				{			
+				{
 						$userinfo=Database::get_user_info_from_id(substr($folder_titles[$folder],8));
-					$folder_titles[$folder]=api_get_person_name($userinfo['firstname'], $userinfo['lastname']);				
-				}				
-				
+					$folder_titles[$folder]=api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+				}
+
 				$label = str_repeat('&nbsp;&nbsp;&nbsp;',count($path_parts)-2).' &mdash; '.$folder_titles[$folder];
 				$parent_select -> addOption($label,$folder);
 				if($selected!='') $parent_select->setSelected($folder);
@@ -124,13 +124,13 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 			else
 			{
 				$path_parts = explode('/',str_replace($group_dir,'',$folder));
-				$label = str_repeat('&nbsp;&nbsp;&nbsp;',count($path_parts)-2).' &mdash; '.$label;			
+				$label = str_repeat('&nbsp;&nbsp;&nbsp;',count($path_parts)-2).' &mdash; '.$label;
 			}
 			$parent_select -> addOption($label,$folder);
 			if($selected!='') $parent_select->setSelected($folder);
 		}
 	}
-	
+
 	$form=$form->toHtml();
 
 	return $form;
@@ -154,7 +154,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 	{
 		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
 	}
-	else 
+	else
 	{
 		$req_gid = '';
 	}
@@ -182,7 +182,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 		{
 			$url = "showinframes.php?".api_get_cidreq()."&amp;file=".$url_path.$req_gid;
 		}
-		else 
+		else
 		{
 			//url-encode for problematic characters (we may not call them dangerous characters...)
 			$path = str_replace('%2F', '/',$url_path).'?'.api_get_cidreq();
@@ -194,7 +194,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 			$target='_blank';
 		}
 	}
-	else 
+	else
 	{
 		$url=api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$url_path.$req_gid;
 	}
@@ -203,7 +203,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 	//$tooltip_title = str_replace('?cidReq='.$_GET['cidReq'],'',basename($path));
 	$tooltip_title = explode('?', basename($path));
 	$tooltip_title = $tooltip_title[0];
-	
+
 	if($tooltip_title=='shared_folder')
 	{
 		$tooltip_title_alt=get_lang('SharedFolder');
@@ -260,25 +260,25 @@ function build_document_icon_tag($type, $path)
 		}
 		elseif(strstr($basename, 'sf_user_'))
 		{
-			$userinfo=Database::get_user_info_from_id(substr($basename,8));	
-			$image_path = UserManager::get_user_picture_path_by_id(substr($basename,8),'web',false, true);										
-		
+			$userinfo=Database::get_user_info_from_id(substr($basename,8));
+			$image_path = UserManager::get_user_picture_path_by_id(substr($basename,8),'web',false, true);
+
 			if($image_path['file']=='unknown.jpg')
-			{		
+			{
 				$icon = $image_path['file'];
 			}
 			else
 			{
 				$icon = '../upload/users/'.substr($basename,8).'/'.$image_path['file'];
 			}
-			$basename = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);			
+			$basename = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 		}
 		else
-		{	
+		{
 		    if(($basename =='audio' || $basename =='flash' || $basename =='images' || $basename =='video') && api_is_allowed_to_edit()==true)
-			{			  
-					$basename = get_lang('HelpDefaultDirDocuments');				
-			}				
+			{
+					$basename = get_lang('HelpDefaultDirDocuments');
+			}
 			$icon = 'folder_document.gif';
 		}
 	}
@@ -302,7 +302,7 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template,$
 	{
 		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
 	}
-	else 
+	else
 	{
 		$req_gid = '';
 	}
@@ -323,17 +323,17 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template,$
 	if( isset($_GET['direction']))
 	{
 		$sort_params[] = 'direction='.Security::remove_XSS($_GET['direction']);
-	}	
+	}
 	$sort_params = implode('&amp;',$sort_params);
 	$visibility_icon = ($visibility==0)?'invisible':'visible';
 	$visibility_command = ($visibility==0)?'set_visible':'set_invisible';
 	$curdirpath = urlencode($curdirpath);
-	
+
 	$modify_icons = '';
-		
+
 	if ($is_read_only)
 	{
-		$modify_icons = Display::return_icon('edit_na.gif', get_lang('Modify'));		
+		$modify_icons = Display::return_icon('edit_na.gif', get_lang('Modify'));
         $modify_icons .= '&nbsp;'.Display::return_icon('delete.gif', get_lang('Delete'));
         $modify_icons .= '&nbsp;'.Display::return_icon('deplacer_fichier_na.gif', get_lang('Move'));
         $modify_icons .= '&nbsp;'.Display::return_icon($visibility_icon.'_na.gif', get_lang('VisibilityCannotBeChanged'));
@@ -341,15 +341,15 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template,$
 	else
 	{
 		$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
-        if (strcmp($path,'/audio')===0 or strcmp($path,'/flash')===0 or strcmp($path,'/images')===0 or strcmp($path,'/shared_folder')===0 or strcmp($path,'/video')===0) { 
+        if (strcmp($path,'/audio')===0 or strcmp($path,'/flash')===0 or strcmp($path,'/images')===0 or strcmp($path,'/shared_folder')===0 or strcmp($path,'/video')===0) {
         	$modify_icons .= '&nbsp;'.Display::return_icon('delete_na.gif',get_lang('ThisFolderCannotBeDeleted'));
         } else {
         	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /></a>';
         }
         $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;move='.urlencode($path).$req_gid.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
         $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon.'.gif" border="0" title="'.get_lang('Visible').'" alt="" /></a>';
-	}	
-	
+	}
+
 	if($type == 'file' && pathinfo($path,PATHINFO_EXTENSION)=='html')
 	{
 		if($is_template==0)
@@ -359,7 +359,7 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template,$
 		else{
 			$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;remove_as_template='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/wizard_gray_small.gif" border="0" title="'.get_lang('RemoveAsTemplate').'" alt=""'.get_lang('RemoveAsTemplate').'" /></a>';
 		}
-	}	
+	}
 	return $modify_icons;
 }
 
@@ -368,17 +368,17 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 {
 	$form = '<form name="move_to" action="'.api_get_self().'" method="post">'."\n";
 	$form .= '<input type="hidden" name="move_file" value="'.$move_file.'" />'."\n";
-	
+
 	$form .= '<div class="row">';
 	$form .= '	<div class="label">';
 	$form .= 	get_lang('MoveTo');
 	$form .= '	</div>';
 	$form .= '	<div class="formw">';
-	
+
 	$form .= ' <select name="move_to">'."\n";
-	
+
 	//group documents cannot be uploaded in the root
-	if($group_dir=='') 
+	if($group_dir=='')
 	{
 		if($curdirpath!='/')
 		{
@@ -387,7 +387,7 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 		if(is_array($folders))
 		{
 			foreach ($folders AS $folder)
-			{	
+			{
 				//you cannot move a file to:
 				//1. current directory
 				//2. inside the folder you want to move
@@ -395,7 +395,7 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 				if(($curdirpath!=$folder) && ($folder!=$move_file) && (substr($folder,0,strlen($move_file)+1) != $move_file.'/'))
 				{
 					$path_displayed = $folder;
-					
+
 					// if document title is used, we have to display titles instead of real paths...
 					if(api_get_setting('use_document_title'))
 					{
@@ -409,17 +409,17 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 	else
 	{
 		foreach ($folders AS $folder)
-		{	
+		{
 			if(($curdirpath!=$folder) && ($folder!=$move_file) && (substr($folder,0,strlen($move_file)+1) != $move_file.'/'))//cannot copy dir into his own subdir
 			{
 				if(api_get_setting('use_document_title'))
 				{
 					$path_displayed = get_titles_of_path($folder);
 				}
-				
+
 				$display_folder = substr($path_displayed,strlen($group_dir));
 				$display_folder = ($display_folder == '')?'/ ('.get_lang('HomeDirectory').')':$display_folder;
-								
+
 				$form .= '<option value="'.$folder.'">'.$display_folder.'</option>'."\n";
 			}
 		}
@@ -427,17 +427,17 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 
 	$form .= '		</select>'."\n";
 	$form .= '	</div>';
-	
+
 	$form .= '<div class="row">';
 	$form .= '	<div class="label"></div>';
-	$form .= '	<div class="formw">';	
+	$form .= '	<div class="formw">';
 	$form .= '		<button type="submit" class="next" name="move_file_submit">'.get_lang('MoveFile').'</button>'."\n";
-	$form .= '	</div>';	
-	$form .= '</div>';	
+	$form .= '	</div>';
+	$form .= '</div>';
 
 	$form .= '</form>';
-	
-	$form .= '<div style="clear: both; margin-bottom: 10px;"></div>';		
+
+	$form .= '<div style="clear: both; margin-bottom: 10px;"></div>';
 
 	return $form;
 }
@@ -458,13 +458,13 @@ function get_titles_of_path($path)
 	$path_displayed = '';
 	for($i=0; $i<$nb_slashes; $i++)
 	{ // foreach folders of the path, retrieve title.
-	
+
 		$current_slash_pos = strpos($path,'/',$current_slash_pos+1);
 		$tmp_path = substr($path,strpos($path,'/',0),$current_slash_pos);
-		
+
 		if(empty($tmp_path)) // if empty, then we are in the final part of the path
 			$tmp_path = $path;
-			
+
 		if(!empty($tmp_folders_titles[$tmp_path])) // if this path has soon been stored here we don't need a new query
 		{
 			$path_displayed .= $tmp_folders_titles[$tmp_path];
@@ -486,14 +486,14 @@ function get_titles_of_path($path)
 /**
 * This function displays the name of the user and makes the link tothe user tool.
 *
-* @param $user_id 
+* @param $user_id
 * @param $name
 * @return a link to the userInfo.php
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8
-*/ 
+*/
 function display_user_link_document($user_id, $name)
-{	
+{
 	if ($user_id<>0)
 	{
 		return '<a href="../user/userInfo.php?uInfo='.$user_id.'">'.$name.'</a>';
@@ -511,7 +511,7 @@ function create_dir_form()
 	$new_folder_text .= '<input type="hidden" name="curdirpath" value="'.Security::remove_XSS($_GET['curdirpath']).'" />';
 	// form title
 	$new_folder_text .= '<div class="row"><div class="form_header">'.get_lang('CreateDir').'</div></div>';
-	
+
 	// folder field
 	$new_folder_text .= '<div class="row">';
 	$new_folder_text .= '<div class="label"><span class="form_required">*</span>'.get_lang('NewDir').'</div>';
@@ -521,10 +521,10 @@ function create_dir_form()
 	$new_folder_text .= '<div class="row">';
 	$new_folder_text .= '<div class="label">&nbsp;</div>';
 	$new_folder_text .= '<div class="formw"><button type="submit" class="add" name="create_dir">'.get_lang('CreateFolder').'</button></div>';
-	$new_folder_text .= '</div>';		
+	$new_folder_text .= '</div>';
 	$new_folder_text .= '</form>';
-	$new_folder_text .= '<div style="clear: both; margin-bottom: 10px;"></div>';	
-	
+	$new_folder_text .= '<div style="clear: both; margin-bottom: 10px;"></div>';
+
 	return $new_folder_text;
 }
 ?>

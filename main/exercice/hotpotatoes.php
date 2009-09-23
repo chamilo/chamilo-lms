@@ -52,7 +52,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
@@ -258,8 +258,8 @@ if((api_is_allowed_to_edit()) && (($finish == 0) || ($finish == 2)))
 			"<input type=\"file\" name=\"userFile\">\n",
 			"<input type=\"submit\" name=\"submit\" value=\"".get_lang('Send')."\"><br/>\n";*/
 	//Display::display_icon('hotpotatoes.jpg','',array('align'=> 'right', 'style' => 'position: absolute; padding-top: 30px; margin-left: 500px;'));
-	
-	echo '<div class="row"><div class="form_header">'.$nameTools.'</div></div>';	
+
+	echo '<div class="row"><div class="form_header">'.$nameTools.'</div></div>';
 	echo '<div class="row">';
 	echo '<div class="label" style="padding:10px">';
 	echo '<span class="form_required">*</span>';
@@ -272,14 +272,14 @@ if((api_is_allowed_to_edit()) && (($finish == 0) || ($finish == 2)))
 	echo '</div>';
 
 	echo '<div class="formw">';
-	
+
 	echo '<div style="float:left;padding:10px" >
 			<input type="file" name="userFile"><br /><br />
 			<button type="submit" class="upload" name="submit" value="'.get_lang('Send').'">'.get_lang('SendFile').'</button>
 		 </div>';
-	echo '<div>'.Display::display_icon('hotpotatoes.jpg','').'</div>';		
+	echo '<div>'.Display::display_icon('hotpotatoes.jpg','').'</div>';
 	echo '</div></div>';
-	
+
 ?>
 
 <?php

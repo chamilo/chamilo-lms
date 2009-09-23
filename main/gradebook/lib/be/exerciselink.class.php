@@ -36,7 +36,7 @@ class ExerciseLink extends AbstractLink
     private $course_info = null;
     private $exercise_table = null;
     private $exercise_data = null;
-    
+
 
 // CONSTRUCTORS
 
@@ -53,7 +53,7 @@ class ExerciseLink extends AbstractLink
 	 */
     public function get_not_created_links() {
     	if (empty($this->course_code)) {
-     	die('Error in get_not_created_links() : course code not set');  		
+     	die('Error in get_not_created_links() : course code not set');
     	}
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
@@ -77,7 +77,7 @@ class ExerciseLink extends AbstractLink
 	 */
     public function get_all_links() {
     	if (empty($this->course_code)) {
-    		die('Error in get_not_created_links() : course code not set');  		
+    		die('Error in get_not_created_links() : course code not set');
     	}
     	$course_info = api_get_course_info($this->course_code);
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK,$course_info['dbName']);
@@ -103,7 +103,7 @@ class ExerciseLink extends AbstractLink
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
     }
-    
+
     /**
 	 * Get the score of this exercise. Only the first attempts are taken into account.
 	 * @param $stud_id student id (default: all students who have results - then the average is returned)
@@ -116,32 +116,32 @@ class ExerciseLink extends AbstractLink
     	$tbl_stats_e_attempt_recording = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
 		$sql = 'SELECT * FROM '.$tbl_stats.' WHERE exe_exo_id = '.$this->get_ref_id().' AND orig_lp_id = 0 AND orig_lp_item_id = 0';
-		
+
 		if (isset($stud_id)){
 			$currect_course=api_get_course_id();
 			$course_code_exe=(strlen($currect_course)===0) ? $this->get_course_code() : api_get_course_id();
     		$sql .= ' AND exe_cours_id="'.$course_code_exe.'" AND exe_user_id = '."'".$stud_id."'";
     	}
-		
+
 		$sql .= ' ORDER BY exe_id DESC';
 		$scores = api_sql_query($sql, __FILE__, __LINE__);
-		
-    	if (isset($stud_id)) {
-    		// for 1 student    			
 
-    		if ($data=Database::fetch_array($scores)) {	    			
+    	if (isset($stud_id)) {
+    		// for 1 student
+
+    		if ($data=Database::fetch_array($scores)) {
     			return array ($data['exe_result'], $data['exe_weighting']);
        		} else {
        			 return null;
        		}
 
     	} else {// all students -> get average
-    		// normal way of getting the info			
+    		// normal way of getting the info
 
     		$students=array();  // user list, needed to make sure we only
     							// take first attempts into account
 			$rescount = 0;
-			$sum = 0;			
+			$sum = 0;
 			while ($data=Database::fetch_array($scores)) {
 				if (!(array_key_exists($data['exe_user_id'],$students))) {
 					if ($data['exe_weighting'] != 0) {
@@ -157,10 +157,10 @@ class ExerciseLink extends AbstractLink
 			} else {
 				return array ($sum , $rescount);
 			}
-				
+
     	}
     }
-    
+
     /**
      * Get URL where to go to if the user clicks on the link.
      * First we go to exercise_jump.php and then to the result page.
@@ -179,7 +179,7 @@ class ExerciseLink extends AbstractLink
         }
 		return $url;
 	}
-    
+
     /**
      * Get name to display: same as exercise title
      */
@@ -187,7 +187,7 @@ class ExerciseLink extends AbstractLink
     	$data = $this->get_exercise_data();
     	return $data['title'];
     }
-    
+
     /**
      * Get description to display: same as exercise description
      */
@@ -206,15 +206,15 @@ class ExerciseLink extends AbstractLink
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
     }
-    
+
     public function get_type_name() {
     	return get_lang('DokeosExercises');
     }
-    
+
 	public function needs_name_and_description() {
 		return false;
 	}
-	
+
 	public function needs_max() {
 		return false;
 	}
@@ -227,9 +227,9 @@ class ExerciseLink extends AbstractLink
 		return false;
 	}
 
-    
+
 // INTERNAL FUNCTIONS
-    
+
     /**
      * Lazy load function to get the database table of the exercise
      */

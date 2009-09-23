@@ -22,20 +22,20 @@ require_once(api_get_path(INCLUDE_PATH).'lib/legal.lib.php');
 //require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
 
 // Load terms & conditions from the current lang
-if (api_get_setting('allow_terms_conditions')=='true') {	
+if (api_get_setting('allow_terms_conditions')=='true') {
 	$get = array_keys($_GET);
 	if (isset($get)) {
-		if ($get[0]=='legal'){				
+		if ($get[0]=='legal'){
 			//$language = api_get_setting('platformLanguage');
 			$language = api_get_interface_language();
 			$language = api_get_language_id($language);
 			$term_preview= LegalManager::get_last_condition($language);
 			if ($term_preview==false) {
 				//look for the default language
-				$language = api_get_setting('platformLanguage');				
+				$language = api_get_setting('platformLanguage');
 				$language = api_get_language_id($language);
 				$term_preview= LegalManager::get_last_condition($language);
-			}					
+			}
 			$tool_name = get_lang('TermsAndConditions');
 			Display :: display_header('');
 			echo '<div class="actions-title">';
@@ -43,7 +43,7 @@ if (api_get_setting('allow_terms_conditions')=='true') {
 			echo '</div>';
 			if (!empty($term_preview['content']))
 				echo $term_preview['content'];
-			else 
+			else
 				echo get_lang('ComingSoon');
 			Display :: display_footer();
 			exit;
@@ -67,7 +67,7 @@ if (api_get_setting('allow_registration')=='approval') {
 }
 //if openid was not found
 if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
-	Display::display_warning_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));	
+	Display::display_warning_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));
 }
 
 $form = new FormValidator('registration');
@@ -100,7 +100,7 @@ if ($display_all_form===true) {
 		$form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addRule('email', get_lang('EmailWrong'), 'email');
 	if (api_get_setting('openid_authentication')=='true') {
-		$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));	
+		$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));
 	}
 	/*
 	//	OFFICIAL CODE
@@ -130,7 +130,7 @@ if ($display_all_form===true) {
 	$form->addElement('text', 'phone', get_lang('Phone'), array('size' => 40));
 	if (api_get_setting('registration', 'phone') == 'true')
 		$form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
-	
+
 	// PICTURE
 	/*if (api_get_setting('profile', 'picture') == 'true') {
 		$form->addElement('file', 'picture', get_lang('AddPicture'));
@@ -212,15 +212,15 @@ if ($display_all_form===true) {
 					$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1],$option_details[2].'<br />',$option_details[1]);
 				}
 				$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
-				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);	
+				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 				break;
 			case USER_FIELD_TYPE_SELECT:
 				$options = array();
 				foreach($field_details[9] as $option_id => $option_details) {
 					$options[$option_details[1]] = $option_details[2];
 				}
-				$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');	
-				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);			
+				$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');
+				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 				break;
 			case USER_FIELD_TYPE_SELECT_MULTIPLE:
 				$options = array();
@@ -228,7 +228,7 @@ if ($display_all_form===true) {
 					$options[$option_details[1]] = $option_details[2];
 				}
 				$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,array('multiple' => 'multiple'));
-				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);	
+				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 				break;
 			case USER_FIELD_TYPE_DATE:
 				$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'registration'));
@@ -285,13 +285,13 @@ if ($display_all_form===true) {
 
 }
 //------------ Terms and conditions
-if (api_get_setting('allow_terms_conditions')=='true') {	
+if (api_get_setting('allow_terms_conditions')=='true') {
 	//$language = api_get_setting('platformLanguage');
 	$language = api_get_interface_language();
 	$language = api_get_language_id($language);
-	$term_preview= LegalManager::get_last_condition($language);	
-	
-	if ($term_preview==false) { 
+	$term_preview= LegalManager::get_last_condition($language);
+
+	if ($term_preview==false) {
 		//we load from the platform
 		$language = api_get_setting('platformLanguage');
 		$language = api_get_language_id($language);
@@ -299,31 +299,31 @@ if (api_get_setting('allow_terms_conditions')=='true') {
 		//if is false we load from english
 		if ($term_preview==false){
 			$language = api_get_language_id('english'); //this must work
-			$term_preview= LegalManager::get_last_condition($language);	
-		}					
-	}	
+			$term_preview= LegalManager::get_last_condition($language);
+		}
+	}
 	// Version and language //password
 	$form->addElement('hidden', 'legal_accept_type',$term_preview['version'].':'.$term_preview['language_id']);
-	$form->addElement('hidden', 'legal_info',$term_preview['legal_id'].':'.$term_preview['language_id']);	
+	$form->addElement('hidden', 'legal_info',$term_preview['legal_id'].':'.$term_preview['language_id']);
 	if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
 		$form->addElement('hidden', 'login',$_SESSION['info_current_user'][1]);
-		$form->addElement('hidden', 'password',$_SESSION['info_current_user'][2]);	
+		$form->addElement('hidden', 'password',$_SESSION['info_current_user'][2]);
 	}
 	if($term_preview['type'] == 1) {
-		$form->addElement('checkbox', 'legal_accept', null, get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');		
+		$form->addElement('checkbox', 'legal_accept', null, get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');
 		$form->addRule('extra_legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
 	} else {
-		if (!empty($term_preview['content'])) {			
+		if (!empty($term_preview['content'])) {
 			$preview = LegalManager::show_last_condition($term_preview);
 			$term_preview  = '<div class="row">
 					<div class="label">'.get_lang('TermsAndConditions').'</div>
 					<div class="formw">
 					'.$preview.'
-					<br />				
+					<br />
 					</div>
-					</div>';		
+					</div>';
 			$form->addElement('html', $term_preview);
-		}		
+		}
 	}
 }
 
@@ -351,7 +351,7 @@ if(!empty($_GET['phone']))
 
 if (api_get_setting('openid_authentication')=='true' && !empty($_GET['openid']))
 {
-	$defaults['openid'] = Security::remove_XSS($_GET['openid']);	
+	$defaults['openid'] = Security::remove_XSS($_GET['openid']);
 }
 $defaults['status'] = STUDENT;
 $form->setDefaults($defaults);
@@ -361,18 +361,18 @@ if ($form->validate()) {
 	  STORE THE NEW USER DATA INSIDE THE MAIN DOKEOS DATABASE
 	  -----------------------------------------------------*/
 	$values = $form->exportValues();
-	
+
 	$values['username'] = api_substr($values['username'],0,20); //make *sure* the login isn't too long
 
 	if (api_get_setting('allow_registration_as_teacher') == 'false') {
 		$values['status'] = STUDENT;
 	}
-	
+
 	// creating a new user
-	$user_id = UserManager::create_user($values['firstname'],$values['lastname'],$values['status'],$values['email'],$values['username'],$values['pass1'],$values['official_code'], $values['language'],$values['phone'],$picture_uri);	
+	$user_id = UserManager::create_user($values['firstname'],$values['lastname'],$values['status'],$values['email'],$values['username'],$values['pass1'],$values['official_code'], $values['language'],$values['phone'],$picture_uri);
 
 		// Terms & Conditions
-	if (api_get_setting('allow_terms_conditions')=='true') {	
+	if (api_get_setting('allow_terms_conditions')=='true') {
 		// update the terms & conditions
 		if (isset($values['legal_accept_type'])) {
 			$cond_array = explode(':',$values['legal_accept_type']);
@@ -380,7 +380,7 @@ if ($form->validate()) {
 				$time = time();
 				$condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
 				UserManager::update_extra_field_value($user_id,'legal_accept',$condition_to_save);
-			}	
+			}
 		}
 	}
 
@@ -449,12 +449,12 @@ if ($form->validate()) {
 			$sql = "UPDATE ".$TABLE_USER."	SET active='0' WHERE user_id='".$user_id."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 
-			
+
 			$sql_get_id_admin="SELECT * FROM ".Database::get_main_table(TABLE_MAIN_ADMIN);
 			$result=api_sql_query($sql_get_id_admin,__FILE__,__LINE__);
 			while ($row = Database::fetch_array($result)) {
-					
-				$sql_admin_list="SELECT * FROM ".$TABLE_USER." WHERE user_id='".$row['user_id']."'";			
+
+				$sql_admin_list="SELECT * FROM ".$TABLE_USER." WHERE user_id='".$row['user_id']."'";
 				$result_list=api_sql_query($sql_admin_list,__FILE__,__LINE__);
 				$admin_list=Database::fetch_array($result_list);
 				$emailto		= $admin_list['email'];
@@ -470,18 +470,18 @@ if ($form->validate()) {
 				$emailbody		.=get_lang('FirstName').': '.$values['firstname']."\n";
 				$emailbody		.=get_lang('Email').': '.$values['email']."\n";
 				$emailbody		.=get_lang('Status').': '.$values['status']."\n\n";
-				$emailbody		.=get_lang('ManageUser').': '.api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id;	
-				
+				$emailbody		.=get_lang('ManageUser').': '.api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id;
+
 				$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
-			    $email_admin = api_get_setting('emailAdministrator');				
+			    $email_admin = api_get_setting('emailAdministrator');
 				@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
-				
+
 			}
 				// 3. exit the page
 				unset($user_id);
 				Display :: display_footer();
 				exit;
-			
+
 		}
 
 
@@ -497,7 +497,7 @@ if ($form->validate()) {
 		api_session_register('_user');
 		api_session_register('is_allowedCreateCourse');
 
-		//stats		
+		//stats
 		event_login();
 		// last user login date is now
 		$user_last_login_datetime = 0; // used as a unix timestamp it will correspond to : 1 1 1970
@@ -510,7 +510,7 @@ if ($form->validate()) {
 
 		if (strstr($values['email'], '@')) {
 			// Lets predefine some variables. Be sure to change the from address!
-			$recipient_name = $values['firstname'].' '.$values['lastname'];	
+			$recipient_name = $values['firstname'].' '.$values['lastname'];
 			$email = $values['email'];
 			$emailfromaddr = api_get_setting('emailAdministrator');
 			$emailfromname = api_get_setting('siteName');
@@ -519,20 +519,20 @@ if ($form->validate()) {
 			// The body can be as long as you wish, and any combination of text and variables
 			$portal_url = $_configuration['root_web'];
 			if ($_configuration['multiple_access_urls']==true) {
-				$access_url_id = api_get_current_access_url_id();				
+				$access_url_id = api_get_current_access_url_id();
 				if ($access_url_id != -1 ){
 					$url = api_get_access_url($access_url_id);
 					$portal_url = $url['url'];
 				}
-			} 
-	
+			}
+
 			$emailbody = get_lang('Dear')." ".stripslashes(Security::remove_XSS($recipient_name)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('Settings')." ".$values['username']."\n".get_lang('Pass')." : ".stripslashes($values['pass1'])."\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$portal_url."\n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
-			
+
 			// Here we are forming one large header line
-			// Every header must be followed by a \n except the last			
+			// Every header must be followed by a \n except the last
 			$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
-		    $email_admin = api_get_setting('emailAdministrator');						
-			@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin);	
+		    $email_admin = api_get_setting('emailAdministrator');
+			@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin);
 		}
 	}
 

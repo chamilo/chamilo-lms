@@ -350,7 +350,7 @@ if(isset($_FILES['user_upload']))
              */
 			if (!empty($_POST['if_exists']) && $_POST['if_exists'] == 'overwrite') {
 				// overwrite the file on search engine
-				// actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one 
+				// actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one
 
 				// get search_did
 				$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
@@ -496,7 +496,7 @@ if(isset($_GET['createdir']))
 	$new_folder_text .= '</form>';
 	//show the form
 	//Display::display_normal_message($new_folder_text, false);
-	
+
 	echo create_dir_form();
 }
 

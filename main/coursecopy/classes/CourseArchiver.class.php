@@ -76,23 +76,23 @@ class CourseArchiver
 		{
 			//TODO set and handle an error message telling the user to review the permissions on the archive directory
       		error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors')!=false?$php_errormsg:'error not recorded because track_errors is off in your php.ini').' - This error, occuring because your archive directory will not let this script write data into it, will prevent courses backups to be created',0);
-		} 
+		}
 		// Write the course-object to the file
 		$fp = @fopen($course_info_file, 'w');
 		if($fp == false)
 		{
       			error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors')!=false?$php_errormsg:'error not recorded because track_errors is off in your php.ini'),0);
-		} 
+		}
 		$res = @fwrite($fp, base64_encode(serialize($course)));
 		if($res == false)
 		{
       			error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors')!=false?$php_errormsg:'error not recorded because track_errors is off in your php.ini'),0);
-		} 
+		}
 		$res = @fclose($fp);
 		if($res == false)
 		{
       			error_log(__FILE__.' line '.__LINE__.': '.(ini_get('track_errors')!=false?$php_errormsg:'error not recorded because track_errors is off in your php.ini'),0);
-		} 
+		}
 
 		// Copy all documents to the temp-dir
 		if( is_array($course->resources[RESOURCE_DOCUMENT])) {
@@ -101,8 +101,8 @@ class CourseArchiver
 					$doc_dir = $backup_dir.$document->path;
 					@mkdir(dirname($doc_dir), 0755, true);
 					if (file_exists($course->path.$document->path)) {
-						copy($course->path.$document->path, $doc_dir);	
-					}					
+						copy($course->path.$document->path, $doc_dir);
+					}
 				} else {
 					@mkdir($backup_dir.$document->path, 0755, true);
 				}

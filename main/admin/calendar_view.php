@@ -22,12 +22,12 @@
 ==============================================================================
 *	@package dokeos.admin
 *	@author Carlos Vargas
-*	This file is the calendar/calendar.php 
+*	This file is the calendar/calendar.php
 ==============================================================================
 */
 // name of the language file that needs to be included
 $language_file = 'agenda';
-// including the claroline global 
+// including the claroline global
 include('../inc/global.inc.php');
 
 //session
@@ -36,7 +36,7 @@ if(isset($_GET['id_session']))
 
 // the variables for the days and the months
 // Defining the shorts for the days
-$DaysShort = api_get_week_days_short(); 
+$DaysShort = api_get_week_days_short();
 // Defining the days of the week to allow translation of the days
 $DaysLong = api_get_week_days_long();
 // Defining the months of the year to allow translation of the months
@@ -60,7 +60,7 @@ $MonthsLong = api_get_months_long();
 }
 table.calendar
 {
-	width: 100%;	
+	width: 100%;
 	font-size: 11px;
 	font-family: verdana, arial, helvetica, sans-serif;
 }
@@ -79,12 +79,12 @@ table.calendar td
 {
 	width: 25px;
 	height: 25px;
-	background-color: #f5f5f5;	
+	background-color: #f5f5f5;
 	text-align: center;
 }
 table.calendar td.selected
 {
-	border: 1px solid #ff0000; 
+	border: 1px solid #ff0000;
 	background-color: #FFCECE;
 }
 table.calendar td a

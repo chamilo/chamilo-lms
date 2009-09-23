@@ -9,5 +9,5 @@
  *
  */
 header("Location: ../../../");
-exit(); 
+exit();
 ?>

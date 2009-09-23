@@ -43,7 +43,7 @@ class Result
     function Result() {
     	$this->creation_date = time();
     }
-    
+
 // GETTERS AND SETTERS
 
    	public function get_id() {
@@ -65,7 +65,7 @@ class Result
    	public function get_score() {
 		return $this->score;
 	}
-    
+
     public function set_id ($id) {
 		$this->id = $id;
 	}
@@ -103,15 +103,15 @@ class Result
 			$res_verified_if_exist_evaluation=Database::query($sql_verified_if_exist_evaluation,__FILE__,__LINE__);
 			$info_verified_if_exist_evaluation=Database::result($res_verified_if_exist_evaluation,0,0);
 				if ($info_verified_if_exist_evaluation!=0) {
-					
+
 				$sql_course_rel_user='SELECT course_code,user_id,status FROM '.$tbl_course_rel_course.' WHERE status="5" AND course_code="'.api_get_course_id().'"; ';
 				$res_course_rel_user=Database::query($sql_course_rel_user,__FILE__,__LINE__);
-				
+
 				$list_user_course_list=array();
 				while ($row_course_rel_user=Database::fetch_array($res_course_rel_user)) {
 					$list_user_course_list[]=$row_course_rel_user;
 				}
-				
+
 				$current_date=time();
 				for ($i=0;$i<count($list_user_course_list);$i++) {
 					$sql_verified='SELECT COUNT(*) AS count FROM '.$tbl_grade_results.' WHERE user_id="'.(int)($list_user_course_list[$i]['user_id']).'" AND evaluation_id="'.Database::escape_string($evaluation_id).'";';
@@ -123,10 +123,10 @@ class Result
 						$res_insert=Database::query($sql_insert,__FILE__,__LINE__);
 					}
 				}
-				$list_user_course_list=array();	
-			}	
+				$list_user_course_list=array();
+			}
 		}
-		
+
 		$sql='SELECT id,user_id,evaluation_id,date,score FROM '.$tbl_grade_results;
 		$paramcount = 0;
 		if (!empty ($id)) {
@@ -143,7 +143,7 @@ class Result
 			if ($paramcount != 0) {
 				$sql .= ' AND';
 			} else {
-			 $sql .= ' WHERE';	
+			 $sql .= ' WHERE';
 			}
 			$sql .= ' evaluation_id = '.Database::escape_string($evaluation_id);
 			$paramcount ++;
@@ -161,7 +161,7 @@ class Result
 		}
 		return $allres;
 	}
-    
+
     /**
      * Insert this result into the database
      */
@@ -172,7 +172,7 @@ class Result
 					.' (user_id, evaluation_id,
 					date';
 			if (isset($this->score)) {
-			 $sql .= ',score';	
+			 $sql .= ',score';
 			}
 			$sql .= ') VALUES
 					('.(int)$this->get_user_id().', '.(int)$this->get_evaluation_id()
@@ -184,7 +184,7 @@ class Result
 
 			api_sql_query($sql, __FILE__, __LINE__);
 		} else {
-			die('Error in Result add: required field empty');			
+			die('Error in Result add: required field empty');
 		}
 
 	}
@@ -199,12 +199,12 @@ class Result
 
 			$arr_result=$result->load (null, $userid, $evaluationid);
 			$arr=get_object_vars($arr_result[0]);
-			
+
 			$sql = 'INSERT INTO '.$tbl_grade_results_log
 					.' (id_result,user_id, evaluation_id,
 					date_log';
 			if (isset($arr['score'])) {
-			 	$sql .= ',score';	
+			 	$sql .= ',score';
 			}
 				$sql .= ') VALUES
 					('.(int)$arr['id'].','.(int)$arr['user_id'].', '.(int)$arr['evaluation']
@@ -216,7 +216,7 @@ class Result
 
 			api_sql_query($sql, __FILE__, __LINE__);
 		} else {
-			die('Error in Result add: required field empty');			
+			die('Error in Result add: required field empty');
 		}
 	 }
 	/**
@@ -230,15 +230,15 @@ class Result
 				.', score = ';
 
 		if (isset($this->score)) {
-			$sql .= $this->get_score();			
+			$sql .= $this->get_score();
 		} else {
-			$sql .= 'null';			
+			$sql .= 'null';
 		}
 		$sql .= ' WHERE id = '.$this->id;
 		// no need to update creation date
 		api_sql_query($sql, __FILE__, __LINE__);
 	}
-	
+
 	/**
 	 * Delete this result from the database
 	 */

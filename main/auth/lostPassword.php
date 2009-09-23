@@ -35,7 +35,7 @@ echo $tool_name;
 echo '</div>';
 $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 if (isset ($_GET["reset"]) && isset ($_GET["id"])) {
-	$msg = reset_password($_GET["reset"], $_GET["id"]);	
+	$msg = reset_password($_GET["reset"], $_GET["id"]);
 	$msg1= '<a href="'.api_get_path(WEB_PATH).'main/auth/lostPassword.php" class="fake_button_back" >'.get_lang('Back').'</a>';
 	echo '<br/><br/><div class="actions" >'.$msg1.'</div>';
 } else {

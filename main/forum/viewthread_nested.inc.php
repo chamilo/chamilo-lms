@@ -25,7 +25,7 @@
 *	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 *	@Copyright Ghent University
 *	@Copyright Patrick Cool
-* 
+*
 * 	@package dokeos.forum
 */
 //are we in a lp ?
@@ -36,7 +36,7 @@ if(isset($_GET['origin']))
 }
 
 //delete attachment file
-if ((isset($_GET['action']) && $_GET['action']=='delete_attach') && isset($_GET['id_attach'])) {	
+if ((isset($_GET['action']) && $_GET['action']=='delete_attach') && isset($_GET['id_attach'])) {
 	delete_attachment(0,$_GET['id_attach']);
 }
 
@@ -48,13 +48,13 @@ foreach ($rows as $post) {
 	if ($post['visible']=='0') {
 		$titleclass='forum_message_post_title_2_be_approved';
 		$messageclass='forum_message_post_text_2_be_approved';
-		$leftclass='forum_message_left_2_be_approved';	
+		$leftclass='forum_message_left_2_be_approved';
 	} else {
 		$titleclass='forum_message_post_title';
 		$messageclass='forum_message_post_text';
-		$leftclass='forum_message_left';		
+		$leftclass='forum_message_left';
 	}
-	
+
 	$indent=$post['indent_cnt']*'20';
 	echo "<div style=\"margin-left: ".$indent."px;\">";
 	echo "<table width=\"100%\"  class=\"post\" cellspacing=\"5\" border=\"0\">\n";
@@ -64,7 +64,7 @@ foreach ($rows as $post) {
 		$name=$post['poster_name'];
 	} else {
 		$name=api_get_person_name($post['firstname'], $post['lastname']);
-	}	
+	}
 	if (api_get_course_setting('allow_user_image_forum')) {
 		echo '<br />'.display_user_image($post['user_id'],$name,$origin).'<br />';
 	}
@@ -83,15 +83,15 @@ foreach ($rows as $post) {
 		display_visible_invisible_icon('post', $post['post_id'], $post['visible'],array('forum'=>Security::remove_XSS($_GET['forum']),'thread'=>Security::remove_XSS($_GET['thread']) ));
 		echo "\n";
 		if ($count>0) {
-			echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=move&amp;origin=".$origin."&amp;post=".$post['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>\n";	
+			echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=move&amp;origin=".$origin."&amp;post=".$post['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>\n";
 		}
 	}
 	$userinf=api_get_user_info($post['user_id']);
 	$user_status=api_get_status_of_user_in_course($post['user_id'],api_get_course_id());
-	if (api_is_allowed_to_edit()) {	
-		if ($count>0 && $user_status!=1) {						
+	if (api_is_allowed_to_edit()) {
+		if ($count>0 && $user_status!=1) {
 			$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$post['user_id'],$_GET['thread']);
-			echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$post['post_id']."&amp;user=".$post['user_id']."&user_id=".$post['user_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";			
+			echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$post['post_id']."&amp;user=".$post['user_id']."&user_id=".$post['user_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";
 		}
 	}
 	//echo '<br /><br />';
@@ -123,36 +123,36 @@ foreach ($rows as $post) {
 	}
 	if ($post['post_notification']=='1' AND $post['poster_id']==$_user['user_id']) {
 		$post_image.=icon('../img/forumnotification.gif',get_lang('YouWillBeNotified'));
-	}		
+	}
 	// The post title
 	echo "\t\t<td class=\"$titleclass\">".prepare4display($post['post_title'])."</td>\n";
-	echo "\t</tr>\n";	
-	
+	echo "\t</tr>\n";
+
 	// The post message
 	echo "\t<tr>\n";
 	echo "\t\t<td class=\"$messageclass\">".prepare4display($post['post_text'])."</td>\n";
 	echo "\t</tr>\n";
-	
+
 
 	// The check if there is an attachment
-	$attachment_list=get_attachment($post['post_id']);	
-	
+	$attachment_list=get_attachment($post['post_id']);
+
 	if (!empty($attachment_list)) {
-		echo '<tr><td height="50%">';	
-		$realname=$attachment_list['path'];			
+		echo '<tr><td height="50%">';
+		$realname=$attachment_list['path'];
 		$user_filename=$attachment_list['filename'];
-						
+
 		echo Display::return_icon('attachment.gif',get_lang('Attachment'));
-		echo '<a href="download.php?file=';		
+		echo '<a href="download.php?file=';
 		echo $realname;
 		echo ' "> '.$user_filename.' </a>';
 		echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
 		if (($current_forum['allow_edit']==1 AND $post['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])))	{
 		echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';
-		}	
-		echo '</td></tr>';		
+		}
+		echo '</td></tr>';
 	}
-	
+
 	// The post has been displayed => it can be removed from the what's new array
 	unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
 	unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);

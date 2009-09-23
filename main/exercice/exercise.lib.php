@@ -1,5 +1,5 @@
 <?php // $Id: exercise.lib.php 22247 2009-07-20 15:57:25Z ivantcholakov $
- 
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -37,19 +37,19 @@ require_once '../inc/lib/fckeditor/fckeditor.php';
 
 /**
  * @param int question id
- * @param boolean only answers 
- * @param boolean origin i.e = learnpath 
+ * @param boolean only answers
+ * @param boolean origin i.e = learnpath
  * @param int current item from the list of questions
- * @param int number of total questions 
+ * @param int number of total questions
  * */
 function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_item, $total_item)
 {
 	if (!ereg("MSIE", $_SERVER["HTTP_USER_AGENT"])) {
 		echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript"></script>';
-		echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';	
+		echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';
 	}
 
-	
+
 	// reads question informations
 	if(!$objQuestionTmp = Question::read($questionId))
 	{
@@ -59,7 +59,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 
 	$answerType=$objQuestionTmp->selectType();
 	$pictureName=$objQuestionTmp->selectPicture();
-	
+
 	if ($answerType != HOT_SPOT) // Question is not of type hotspot
 	{
 		if(!$onlyAnswers) {
@@ -67,17 +67,17 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 			$questionDescription=$objQuestionTmp->selectDescription();
 
 			$questionName=api_parse_tex($questionName);
-			
+
 			$s="<div id=\"question_title\" class=\"sectiontitle\">
 				".get_lang('Question').' ';
-					
-			$s.=$current_item;		
-			//@todo I need the get the feedback type	
+
+			$s.=$current_item;
+			//@todo I need the get the feedback type
 			//if($answerType != 1)
-			//$s.=' / '.$total_item;			
+			//$s.=' / '.$total_item;
 			echo $s;
-			echo ' : ';		
-			
+			echo ' : ';
+
 			echo $questionName.'</div>';
 			$s='';
 			$s.="<table class='exercise_questions' style='margin:5px;padding:5px;'>
@@ -85,7 +85,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 			$questionDescription=api_parse_tex($questionDescription);
 			$s.=$questionDescription;
 			$s.="</td></tr></table>";
-	
+
 			if(!empty($pictureName))
 			{
 				$s.="
@@ -94,7 +94,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				</tr>";
 			}
 
-		}  
+		}
 		$s.= '</table>';
 		if (!ereg("MSIE",$_SERVER["HTTP_USER_AGENT"])) {
 			$s.="<script>$(document).ready( function(){
@@ -102,7 +102,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				  $('.exercise_options').corners();
 				});</script>";
 			$s.="<div class=\"rounded exercise_questions\" style=\"width: 720px; padding: 3px; background-color:#ccc;\">";
-		
+
 		} else {
 			$option_ie="margin-left:10px";
 		}
@@ -143,7 +143,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 			if($answerType == FILL_IN_BLANKS) {
 				// splits text and weightings that are joined with the character '::'
 				list($answer)=explode('::',$answer);
-		
+
 				// because [] is parsed here we follow this procedure:
 				// 1. find everything between the [tex] and [/tex] tags
 				$startlocations=api_strpos($answer,'[tex]');
@@ -156,23 +156,23 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				}
 
 				// 3. do the normal matching parsing
-				// replaces [blank] by an input field			
-				
-				//getting the matches				
+				// replaces [blank] by an input field
+
+				//getting the matches
 				$answer=api_ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="10">',($answer));
-				
-				// Change input size 
+
+				// Change input size
 				/*
-				preg_match_all('/\[[^]]+]/',$answer,$matches);										
-				$answer=ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="@@">',($answer));								
-				
-				// 4. resize the input		
-				
-				 
+				preg_match_all('/\[[^]]+]/',$answer,$matches);
+				$answer=ereg_replace('\[[^]]+\]','<input type="text" name="choice['.$questionId.'][]" size="@@">',($answer));
+
+				// 4. resize the input
+
+
 				  foreach($matches[0] as $match) {
 				        $answer_len = strlen($match)-2;
-				        //we will only replace 1 item 
-				        // echo implode("replace term", explode("search term", "input", $limit));                                       
+				        //we will only replace 1 item
+				        // echo implode("replace term", explode("search term", "input", $limit));
 				        if ($answer_len <= 5) {
 				                $answer = (implode("5", explode("@@", $answer, 2)));
 				        } elseif($answer_len <= 10) {
@@ -201,11 +201,11 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				}
 
 				*/
-				
-				// 5. replace the {texcode by the api_pare_tex parsed code}				
-				$texstring = api_parse_tex($texstring); 
+
+				// 5. replace the {texcode by the api_pare_tex parsed code}
+				$texstring = api_parse_tex($texstring);
 				$answer=str_replace("{texcode}",$texstring,$answer);
-				
+
 			}
 
 			// unique answer
@@ -264,9 +264,9 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 
 					$s.="</select>&nbsp;&nbsp;</td>
 						  <td width='40%' valign='top'>";
-					if(isset($Select[$cpt2])) 
+					if(isset($Select[$cpt2]))
 						$s.='<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
-					else 
+					else
 						$s.='&nbsp;';
 					$s.="
 					</td>
@@ -342,16 +342,16 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		{
 			$s="<div id=\"question_title\" class=\"sectiontitle\">
 				".get_lang('Question').' ';
-					
+
 			$s.=$current_item;
 			//@todo I need to the get the feedback type
 			//if($answerType == 2)
-			//	$s.=' / '.$total_item;			
+			//	$s.=' / '.$total_item;
 			echo $s;
-			echo ': ';		
-			
+			echo ': ';
+
 			$s =$questionName.'</div>';
-			
+
 			$s.="<table class='exercise_questions'>
 			<tr>
 			  <td valign='top' colspan='2'>
@@ -434,7 +434,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 							// older WebTV supports Flash 2
 							else if (navigator.userAgent.toLowerCase().indexOf(\"webtv\") != -1) flashVer = 2;
 							// Can't detect in all other cases
-							else 
+							else
 							{
 								flashVer = -1;
 							}

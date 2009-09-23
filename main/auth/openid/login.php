@@ -1,7 +1,7 @@
 <?php
 /**
  * OpenID login method
- * 
+ *
  * The OpenID login method relies on authentication servers providing a public
  * URL that can confirm the identity of a person, thus avoiding the spread
  * use of password transmissions over non-secure lines (for Dokeos, it is a
@@ -14,7 +14,7 @@ require_once 'openid.conf.php';
 require_once 'openid.lib.php';
 require_once 'xrds.lib.php';
 
-function openid_form() 
+function openid_form()
 {
 	return '<div class="menusection"><span class="menusectioncaption">'.get_lang('OpenIdAuthentication').'</span><form name="openid_login" method="post"><label for="openid_url">'.get_lang('OpenIDURL').' <a href="main/auth/openid/whatis.php" title="'.get_lang('OpenIDWhatIs').'">'.Display::return_icon('info3.gif',get_lang('Info')).'</a></label><input type="text" id="openid_url" name="openid_url" style="background: url(main/img/openid_small_logo.png) no-repeat; background-color: #fff; background-position: 0 50%; padding-left:18px;" value="http://"></input><input type="submit" name="openid_login" value="'.get_lang('Enter').'" /><br /><br /></form></div>';
 }
@@ -29,7 +29,7 @@ function openid_form()
  * @param $claimed_id The OpenID to authenticate
  * @param $return_to The endpoint to return to from the OpenID Provider
  */
-function openid_begin($claimed_id, $return_to = '', $form_values = array()) 
+function openid_begin($claimed_id, $return_to = '', $form_values = array())
 {
 
   $claimed_id = _openid_normalize($claimed_id);
@@ -80,7 +80,7 @@ function openid_begin($claimed_id, $return_to = '', $form_values = array())
  * @return $response Response values for further processing with
  *   $response['status'] set to one of 'success', 'failed' or 'cancel'.
  */
-function openid_complete($response) 
+function openid_complete($response)
 {
   // Default to failed response
   $response['status'] = 'failed';
@@ -251,7 +251,7 @@ function openid_association_request($public) {
 }
 
 /**
- * 
+ *
  */
 function openid_authentication_request($claimed_id, $identity, $return_to = '', $assoc_handle = '', $version = 2) {
 
@@ -275,7 +275,7 @@ function openid_authentication_request($claimed_id, $identity, $return_to = '', 
   }
 
   // Simple Registration - we don't ask lastname and firstname because the only
-  // available similar data is "fullname" and we would have to guess where to split 
+  // available similar data is "fullname" and we would have to guess where to split
   $request['openid.sreg.required'] = 'nickname,email';
   $request['openid.ns.sreg'] = "http://openid.net/extensions/sreg/1.1";
 

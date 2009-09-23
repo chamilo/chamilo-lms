@@ -48,9 +48,9 @@ $(document).ready( function() {
 	for (i=0;i<$(".actions").length;i++) {
 		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
 			$(".actions:eq("+i+")").hide();
-		}		
+		}
 	}
- } ); 
+ } );
  </script>';
 api_block_anonymous_users();
 
@@ -73,7 +73,7 @@ $my_selectcat =isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat
 if ($my_selectcat!='') {
 	$my_db_name       = get_database_name_by_link_id($my_selectcat);
 	$tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_name);
-	$tbl_grade_links  = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);	
+	$tbl_grade_links  = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 }
 
 //this is called when there is no data for the course admin
@@ -187,9 +187,9 @@ if (isset ($_GET['movelink'])) {
 if (isset ($_GET['visiblecat'])) {
 	block_students();
 	if (isset ($_GET['set_visible'])) {
-		$visibility_command= 1;		
+		$visibility_command= 1;
 	} else {
-		$visibility_command= 0;		
+		$visibility_command= 0;
 	}
 	$cats= Category :: load(Security::remove_XSS($_GET['visiblecat']));
 	$cats[0]->set_visible($visibility_command);
@@ -211,8 +211,8 @@ if (isset ($_GET['deletecat'])) {
 	if ($cats[0] != null) {
 		if ($cats[0]->get_id() != 0) {
 			// better don't try to delete the root...
-			$cats[0]->delete_all();		
-		} 
+			$cats[0]->delete_all();
+		}
 	}
 	$confirmation_message = get_lang('CategoryDeleted');
 	$filter_confirm_msg = false;
@@ -221,9 +221,9 @@ if (isset ($_GET['deletecat'])) {
 if (isset ($_GET['visibleeval'])) {
 	block_students();
 	if (isset ($_GET['set_visible'])) {
-		$visibility_command= 1;		
+		$visibility_command= 1;
 	} else {
-		$visibility_command= 0;		
+		$visibility_command= 0;
 	}
 
 	$eval= Evaluation :: load(Security::remove_XSS($_GET['visibleeval']));
@@ -242,7 +242,7 @@ if (isset ($_GET['deleteeval'])) {
 	block_students();
 	$eval= Evaluation :: load(Security::remove_XSS($_GET['deleteeval']));
 	if ($eval[0] != null) {
-		$eval[0]->delete_with_results();		
+		$eval[0]->delete_with_results();
 	}
 	$confirmation_message = get_lang('GradebookEvaluationDeleted');
 	$filter_confirm_msg = false;
@@ -251,9 +251,9 @@ if (isset ($_GET['deleteeval'])) {
 if (isset ($_GET['visiblelink'])) {
 	block_students();
 	if (isset ($_GET['set_visible'])) {
-		$visibility_command= 1;		
+		$visibility_command= 1;
 	}else {
-		$visibility_command= 0;		
+		$visibility_command= 0;
 	}
 	$link= LinkFactory :: load(Security::remove_XSS($_GET['visiblelink']));
 	$link[0]->set_visible($visibility_command);
@@ -273,7 +273,7 @@ if (isset ($_GET['deletelink'])) {
 	if ($link[0] != null) {
 		$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.Security::remove_XSS($_GET['deletelink']).');';
 		api_sql_query($sql);
-		$link[0]->delete();		
+		$link[0]->delete();
 	}
 	unset ($link);
 	$confirmation_message = get_lang('LinkDeleted');
@@ -283,7 +283,7 @@ $course_to_crsind = isset ($course_to_crsind) ? $course_to_crsind : '';
 if ($course_to_crsind && !isset($_GET['confirm'])) {
 	block_students();
 	if (!isset($_GET['movecat']) && !isset($_GET['moveeval'])) {
-		die ('Error: movecat or moveeval not defined');		
+		die ('Error: movecat or moveeval not defined');
 	}
 	$button = '<form name="confirm"
 					 method="post"
@@ -323,14 +323,14 @@ if (isset ($_POST['action'])) {
 					if (api_substr($indexstr, 0, 4) == 'EVAL') {
 						$eval= Evaluation :: load(api_substr($indexstr, 4));
 						if ($eval[0] != null) {
-						$eval[0]->delete_with_results();						
+						$eval[0]->delete_with_results();
 						}
 						$number_of_deleted_evaluations++;
 					}
 					if (api_substr($indexstr, 0, 4) == 'LINK') {
 						$link= LinkFactory :: load(api_substr($indexstr, 4));
 						if ($link[0] != null) {
-							$link[0]->delete();							
+							$link[0]->delete();
 						}
 						$number_of_deleted_links++;
 					}
@@ -421,59 +421,59 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 			$interbreadcrumb[]= array (
 				'url' => $_SESSION['gradebook_dest'],
 				'name' => get_lang('Gradebook')
-			);	
+			);
 
 		if ((isset($_GET['selectcat']) && $_GET['selectcat']>0)) {
 			$interbreadcrumb[]= array (
 				'url' => $_SESSION['gradebook_dest'].'?selectcat=0',
 				'name' => get_lang('Details')
-			);	
+			);
 		}
 	 Display :: display_header('');
 	}
 }
 
 if (isset ($_GET['categorymoved'])) {
-	Display :: display_confirmation_message(get_lang('CategoryMoved'),false);	
-} 
+	Display :: display_confirmation_message(get_lang('CategoryMoved'),false);
+}
 if (isset ($_GET['evaluationmoved'])) {
 	Display :: display_confirmation_message(get_lang('EvaluationMoved'),false);
 }
 if (isset ($_GET['linkmoved'])) {
-	Display :: display_confirmation_message(get_lang('LinkMoved'),false);	
+	Display :: display_confirmation_message(get_lang('LinkMoved'),false);
 }
 if (isset ($_GET['addcat'])) {
-	Display :: display_confirmation_message(get_lang('CategoryAdded'),false);	
+	Display :: display_confirmation_message(get_lang('CategoryAdded'),false);
 }
 if (isset ($_GET['linkadded'])) {
-	Display :: display_confirmation_message(get_lang('LinkAdded'),false);	
+	Display :: display_confirmation_message(get_lang('LinkAdded'),false);
 }
 if (isset ($_GET['addresult'])) {
 	Display :: display_confirmation_message(get_lang('ResultAdded'),false);
 }
 if (isset ($_GET['editcat'])) {
-	Display :: display_confirmation_message(get_lang('CategoryEdited'),false);	
+	Display :: display_confirmation_message(get_lang('CategoryEdited'),false);
 }
 if (isset ($_GET['editeval'])) {
-	Display :: display_confirmation_message(get_lang('EvaluationEdited'),false);	
+	Display :: display_confirmation_message(get_lang('EvaluationEdited'),false);
 }
 if (isset ($_GET['linkedited'])) {
-	Display :: display_confirmation_message(get_lang('LinkEdited'),false);	
+	Display :: display_confirmation_message(get_lang('LinkEdited'),false);
 }
 if (isset ($_GET['nolinkitems'])) {
-	Display :: display_warning_message(get_lang('NoLinkItems'),false);	
+	Display :: display_warning_message(get_lang('NoLinkItems'),false);
 }
 if (isset ($_GET['addallcat'])) {
-	Display :: display_normal_message(get_lang('AddAllCat'),false);	
+	Display :: display_normal_message(get_lang('AddAllCat'),false);
 }
 if (isset ($confirmation_message)) {
 	Display :: display_confirmation_message($confirmation_message,$filter_confirm_msg);
 }
 if (isset ($warning_message)) {
-	Display :: display_warning_message($warning_message,$filter_warning_msg);	
+	Display :: display_warning_message($warning_message,$filter_warning_msg);
 }
 if (isset ($move_form)) {
-	Display :: display_normal_message($move_form->toHtml(),false);	
+	Display :: display_normal_message($move_form->toHtml(),false);
 }
 // --------------------------------------------------------------------------------
 // -                        LOAD DATA & DISPLAY TABLE                             -
@@ -484,7 +484,7 @@ $is_course_admin= api_is_allowed_to_create_course();
 if (!isset ($_GET['selectcat']) || empty ($_GET['selectcat'])) {
 	$category= 0;
 	} else {
-	$category= Security::remove_XSS($_GET['selectcat']);		
+	$category= Security::remove_XSS($_GET['selectcat']);
 	}
 // search form
 
@@ -492,7 +492,7 @@ $simple_search_form= new UserForm(UserForm :: TYPE_SIMPLE_SEARCH, null, 'simple_
 $values= $simple_search_form->exportValues();
 $keyword = '';
 if (isset($_GET['search']) && !empty($_GET['search'])) {
-	$keyword = Security::remove_XSS($_GET['search']);	
+	$keyword = Security::remove_XSS($_GET['search']);
 }
 if ($simple_search_form->validate() && (empty($keyword))) {
 	$keyword = $values['keyword'];
@@ -507,7 +507,7 @@ if (!empty($keyword)) {
 		$alllink=array();
 	} else {
 		$alleval	 = Evaluation  :: find_evaluations($keyword, $cats[0]->get_id());
-		$alllink	 = LinkFactory :: find_links($keyword, $cats[0]->get_id());	
+		$alllink	 = LinkFactory :: find_links($keyword, $cats[0]->get_id());
 	}
 
 } elseif (isset ($_GET['studentoverview'])) {
@@ -519,10 +519,10 @@ if (!empty($keyword)) {
 	if (isset ($_GET['exportpdf'])) {
 		$datagen = new GradebookDataGenerator ($allcat,$alleval, $alllink);
 		$header_names = array(get_lang('Name'),get_lang('Description'),get_lang('Weight'),get_lang('Date'),get_lang('Results'));
-		$data_array = $datagen->get_data(GradebookDataGenerator :: GDG_SORT_NAME,0,null,true);	
+		$data_array = $datagen->get_data(GradebookDataGenerator :: GDG_SORT_NAME,0,null,true);
 		$newarray = array();
 		foreach ($data_array as $data) {
-			$newarray[] = array_slice($data, 1);				
+			$newarray[] = array_slice($data, 1);
 		}
 		$pdf= new Cezpdf();
 		$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
@@ -551,7 +551,7 @@ if (!empty($keyword)) {
 		$cattotal = Category :: load(0);
 		$scoretotal= $cattotal[0]->calc_score($user_id);
 		$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal,SCORE_PERCENT) : get_lang('NoResultsAvailable'));
-		
+
 		//prepare all necessary variables:
 		$organization_name = api_get_setting('Institution');
 		$portal_name = api_get_setting('siteName');
@@ -560,7 +560,7 @@ if (!empty($keyword)) {
 		$certif_text = sprintf(get_lang('CertificateWCertifiesStudentXFinishedCourseYWithGradeZ'),$organization_name,$stud_fn.' '.$stud_ln,$category[0]->get_name(),$scorecourse_display);
 		$certif_text = str_replace("\\n","\n",$certif_text);
 		$date = date('d/m/Y',time());
-		
+
 		$pdf= new Cezpdf('a4','landscape');
 		$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
 		$pdf->ezSetMargins(30, 30, 50, 50);
@@ -580,7 +580,7 @@ if (!empty($keyword)) {
 		$pdf->ezText($portal_name,22,array('justification'=>'right'));
 		$pdf->ezStream();
 	}
-	exit;	
+	exit;
 } else {
 	$cats= Category :: load($category);
 	$stud_id= (api_is_allowed_to_create_course() ? null : api_get_user_id());
@@ -590,7 +590,7 @@ if (!empty($keyword)) {
 }
 $addparams = array ('selectcat' => $cats[0]->get_id());
 if (isset($_GET['search'])) {
-	$addparams['search'] = $keyword;	
+	$addparams['search'] = $keyword;
 }
 if (isset ($_GET['studentoverview'])) {
 	$addparams['studentoverview'] = '';

@@ -1,32 +1,32 @@
 <?php
 // $Id: copy_course.php 22204 2009-07-17 20:31:35Z iflorespaz $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Bart Mollet (bart.mollet@hogent.be)
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 /**
  * ==============================================================================
  * Copy resources from one course to another one.
- * 
+ *
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package dokeos.backup
  * ==============================================================================
@@ -35,8 +35,8 @@
 ==============================================================================
 		INIT SECTION
 ==============================================================================
-*/ 
-// name of the language file that needs to be included 
+*/
+// name of the language file that needs to be included
 $language_file = array('exercice', 'coursebackup', 'admin');
 require_once '../inc/global.inc.php';
 include_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
@@ -65,11 +65,11 @@ Display::display_header($nameTools);
 ==============================================================================
 		MAIN CODE
 ==============================================================================
-*/ 
+*/
 // If a CourseSelectForm is posted or we should copy all resources, then copy them
 if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')) {
 	if (isset ($_POST['action']) && $_POST['action'] == 'course_select_form') {
-		$course = CourseSelectForm :: get_posted_course('copy_course');		
+		$course = CourseSelectForm :: get_posted_course('copy_course');
 	} else {
 		$cb = new CourseBuilder();
 		$course = $cb->build();
@@ -81,7 +81,7 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 } elseif (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'select_items') {
 	// Else, if a CourseSelectForm is requested, show it
 	Display::display_normal_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
-	if (api_get_setting('show_glossary_in_documents') != 'none') { 
+	if (api_get_setting('show_glossary_in_documents') != 'none') {
 		Display::display_normal_message(get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'));
 	}
 	$cb = new CourseBuilder();
@@ -91,7 +91,7 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 	$hidden_fields['same_file_name_option'] = $_POST['same_file_name_option'];
 	$hidden_fields['destination_course'] = $_POST['destination_course'];
 	CourseSelectForm :: display_form($course, $hidden_fields, true);
-} else {	
+} else {
 	$table_c = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$table_cu = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$user_info = api_get_user_info();
@@ -103,7 +103,7 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 	$sql .= ' AND target_course_code IS NULL AND cu.user_id = '.$user_info['user_id'].' AND c.code != '."'".$course_info['sysCode']."'".' ORDER BY title ASC';
 	$res = api_sql_query($sql,__FILE__,__LINE__);
 	if( Database::num_rows($res) == 0) {
-		Display::display_normal_message(get_lang('NoDestinationCoursesAvailable'));	
+		Display::display_normal_message(get_lang('NoDestinationCoursesAvailable'));
 	} else {
 ?>
 	<form method="post" action="copy_course.php">
@@ -144,8 +144,8 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 }
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
-*/ 
+*/
 Display::display_footer();
 ?>

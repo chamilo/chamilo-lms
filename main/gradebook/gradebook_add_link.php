@@ -72,34 +72,34 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 		$link->set_user_id(api_get_user_id());
 		if($category[0]->get_course_code() == '' && !empty($_GET['course_code'])) {
 			$link->set_course_code(Database::escape_string($_GET['course_code']));
-			
+
 		} else {
 			$link->set_course_code($category[0]->get_course_code());
 		}
 		$link->set_category_id($category[0]->get_id());
-		
+
 		if ($link->needs_name_and_description()) {
 			$link->set_name($addvalues['name']);
 		} else {
 			$link->set_ref_id($addvalues['select_link']);
 		}
 		$link->set_weight($addvalues['weight']);
-		
+
 		if ($link->needs_max()) {
 			$link->set_max($addvalues['max']);
 		}
 		$link->set_date(strtotime($addvalues['date']));
-		
+
 		if ($link->needs_name_and_description()) {
 			$link->set_description($addvalues['description']);
 		}
 		$link->set_visible(empty ($addvalues['visible']) ? 0 : 1);
-		
+
 		//update view_properties
-		$work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);	
+		$work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 		if ( isset($_GET['typeselected']) && 5==$_GET['typeselected'] && (isset($addvalues['select_link']) && $addvalues['select_link']<>"")) {
-									
-			
+
+
 			$sql1='SELECT thread_title from '.$tbl_forum_thread.' where thread_id='.$addvalues['select_link'].';';
 			$res1=api_sql_query($sql1);
 			$rowtit=Database::fetch_row($res1);
@@ -107,15 +107,15 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 			$sql_l='SELECT count(*) FROM '.$tbl_link.' WHERE ref_id='.$addvalues['select_link'].' and course_code="'.$course_id.'" and type=5;';
 			$res_l=api_sql_query($sql_l);
 			$row=Database::fetch_row($res_l);
-			
+
 			if ( $row[0]==0 ) {
 				$link->add();
 				$sql='UPDATE '.$tbl_forum_thread.' set thread_qualify_max='.$addvalues['weight'].',thread_weight='.$addvalues['weight'].',thread_title_qualify="'.$rowtit[0].'" WHERE thread_id='.$addvalues['select_link'].';';
 				api_sql_query($sql);
-				//$sql_l='UPDATE '.$tbl_link.' SET weight='.$addvalues['weight'].' WHERE ref_id='.$addvalues['select_link'].' AND type=5;';				
+				//$sql_l='UPDATE '.$tbl_link.' SET weight='.$addvalues['weight'].' WHERE ref_id='.$addvalues['select_link'].' AND type=5;';
 				//api_sql_query($sql_l);
-			}			
-		} 
+			}
+		}
 		$link->add();
 		$addvalue_result=!empty($addvalues['addresult'])?$addvalues['addresult']:array();
 		if ($addvalue_result == 1) {

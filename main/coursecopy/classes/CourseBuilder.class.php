@@ -42,7 +42,7 @@ class CourseBuilder
 		$this->course->type = $type;
 		$this->course->path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/';
 		$this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['path'];
-		$this->course->encoding = api_get_system_encoding(); //current platform encoding 
+		$this->course->encoding = api_get_system_encoding(); //current platform encoding
 	}
 	/**
 	 * Get the created course
@@ -106,13 +106,13 @@ class CourseBuilder
 	function build_documents()
 	{
 		$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
-		$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);	
-			
-        if (!empty($this->course->type) && $this->course->type=='partial')        	
+		$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+
+        if (!empty($this->course->type) && $this->course->type=='partial')
         	$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND path NOT LIKE \'/images/gallery%\' ORDER BY path';
         else
         	$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 ORDER BY path';
-		
+
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
@@ -521,23 +521,23 @@ class CourseBuilder
 			closedir($dir);
 		}
 	}
-	
+
 	/**
 	 * Build the glossarys
 	 */
 	function build_glossarys() {
 		$table_glossary = Database :: get_course_table(TABLE_GLOSSARY);
-		
-        if (!empty($this->course->type) && $this->course->type=='partial')        	
+
+        if (!empty($this->course->type) && $this->course->type=='partial')
         	$sql = 'SELECT * FROM '.$table_glossary.' g ';
         else
         	$sql = 'SELECT * FROM '.$table_glossary.' g ';
-		
+
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$doc = new Glossary($obj->glossary_id, $obj->name, $obj->description, $obj->display_order);
 			$this->course->add_resource($doc);
 		}
-	}	
+	}
 }

@@ -35,7 +35,7 @@ class LearnpathLink extends AbstractLink
     private $course_info = null;
     private $learnpath_table = null;
     private $learnpath_data = null;
-    
+
 
 // CONSTRUCTORS
 
@@ -55,7 +55,7 @@ class LearnpathLink extends AbstractLink
     {
     	if (empty($this->course_code))
     		die('Error in get_not_created_links() : course code not set');
-    	
+
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 		$sql = 'SELECT id,name from '.$this->get_learnpath_table()
@@ -83,7 +83,7 @@ class LearnpathLink extends AbstractLink
     	if (empty($this->course_code))
     		die('Error in get_not_created_links() : course code not set');
 
-		$course_info = api_get_course_info($this->course_code);    	
+		$course_info = api_get_course_info($this->course_code);
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK,$course_info['dbName']);
 
 		$sql = 'SELECT id,name from '.$this->get_learnpath_table();
@@ -96,7 +96,7 @@ class LearnpathLink extends AbstractLink
 		}
 		return $cats;
     }
-    
+
 
     /**
      * Has anyone used this learnpath yet ?
@@ -111,7 +111,7 @@ class LearnpathLink extends AbstractLink
 		$number=Database::fetch_array($result,'NUM');
 		return ($number[0] != 0);
     }
-    
+
     /**
 	 * Get the progress of this learnpath. Only the last attempt are taken into account.
 	 * @param $stud_id student id (default: all students who have results - then the average is returned)
@@ -128,10 +128,10 @@ class LearnpathLink extends AbstractLink
 		}
     	$sql = 'SELECT * FROM '.$tbl_stats
     			." WHERE lp_id = ".$this->get_ref_id();
-    	
+
     	if (isset($stud_id))
     		$sql .= ' AND user_id = '.$stud_id;
-    		
+
     	// order by id, that way the student's first attempt is accessed first
 		$sql .= ' ORDER BY view_count DESC';
     	$scores = api_sql_query($sql, __FILE__, __LINE__);
@@ -145,7 +145,7 @@ class LearnpathLink extends AbstractLink
     		else
     			return null;
     	}
-    	
+
     	// all students -> get average
     	else
     	{
@@ -170,7 +170,7 @@ class LearnpathLink extends AbstractLink
 				return array ($sum , $rescount);
     	}
     }
-    
+
     /**
      * Get URL where to go to if the user clicks on the link.
      */
@@ -189,7 +189,7 @@ class LearnpathLink extends AbstractLink
 		}
 		return $url;
 	}
-    
+
     /**
      * Get name to display: same as learnpath title
      */
@@ -198,7 +198,7 @@ class LearnpathLink extends AbstractLink
     	$data = $this->get_learnpath_data();
     	return $data['name'];
     }
-    
+
     /**
      * Get description to display: same as learnpath description
      */
@@ -219,17 +219,17 @@ class LearnpathLink extends AbstractLink
 		$number=Database::fetch_row($result,'NUM');
 		return ($number[0] != 0);
     }
-    
+
     public function get_type_name()
     {
     	return get_lang('DokeosLearningPaths');
     }
-    
+
 	public function needs_name_and_description()
 	{
 		return false;
 	}
-	
+
 	public function needs_max()
 	{
 		return false;
@@ -246,7 +246,7 @@ class LearnpathLink extends AbstractLink
 	}
 
 // INTERNAL FUNCTIONS
-    
+
     /**
      * Lazy load function to get the database table of the learnpath
      */
@@ -276,5 +276,5 @@ class LearnpathLink extends AbstractLink
 			$this->learnpath_data=Database::fetch_array($result);
     	}
     	return $this->learnpath_data;
-    }  
+    }
 }

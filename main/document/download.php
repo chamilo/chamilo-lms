@@ -67,8 +67,8 @@ $doc_url = str_replace(' ', '+', $doc_url);
 $doc_url = str_replace(array('../','\\..','\\0','..\\'),array('','','',''), $doc_url); //echo $doc_url;
 
 
-// dealing with image included into survey: when users receive a link towards a 
-// survey while not being authenticated on the plateform. 
+// dealing with image included into survey: when users receive a link towards a
+// survey while not being authenticated on the plateform.
 // the administrator should probably be able to disable this code through admin
 // inteface
 $refer_script = strrchr($_SERVER["HTTP_REFERER"],'/');
@@ -81,7 +81,7 @@ if (substr($refer_script,0,15) == "/fillsurvey.php") {
 	$_course['path']=$_course['directory'];
 } else {
 	//protection
-	api_protect_course_script();	
+	api_protect_course_script();
 
 	if (! isset($_course))
 	{
@@ -90,10 +90,10 @@ if (substr($refer_script,0,15) == "/fillsurvey.php") {
 
 
 	//if the rewrite rule asks for a directory, we redirect to the document explorer
-	if(is_dir(api_get_path(SYS_COURSE_PATH).$_course['path']."/document".$doc_url)) 
+	if(is_dir(api_get_path(SYS_COURSE_PATH).$_course['path']."/document".$doc_url))
 	{
 		//remove last slash if present
-		//$doc_url = ($doc_url{strlen($doc_url)-1}=='/')?substr($doc_url,0,strlen($doc_url)-1):$doc_url; 
+		//$doc_url = ($doc_url{strlen($doc_url)-1}=='/')?substr($doc_url,0,strlen($doc_url)-1):$doc_url;
 		//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (Ren�)
 		while ($doc_url{$dul = strlen($doc_url)-1}=='/') $doc_url = substr($doc_url,0,$dul);
 		//group folder?

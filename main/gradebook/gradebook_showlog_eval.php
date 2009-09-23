@@ -43,7 +43,7 @@ $interbreadcrumb[] = array (
 	'url' => 'gradebook_showlog_eval.php?visiblelog='.Security::remove_XSS($_GET['visiblelog']).'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']),
 	'name' => get_lang('GradebookQualifyLog')
 );
-	
+
 Display :: display_header('');
 echo '<div class="clear"></div>';
 echo '<div class="actions">';

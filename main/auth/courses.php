@@ -1,4 +1,4 @@
-<?php 
+<?php
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -16,7 +16,7 @@
 // name of the language file that needs to be included
 $language_file = array ('courses','registration');
 
-//delete the globals["_cid"] we don't need it here 
+//delete the globals["_cid"] we don't need it here
 $cidReset = true; // Flag forcing the 'current course' reset
 
 // including the global file
@@ -29,9 +29,9 @@ $this_section=SECTION_COURSES;
 api_block_anonymous_users();
 
 if (!(api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create_course())) {
-	if (api_get_setting('allow_students_to_browse_courses')=='false') {	
-		api_not_allowed();		
-	}			
+	if (api_get_setting('allow_students_to_browse_courses')=='false') {
+		api_not_allowed();
+	}
 }
 // include additional libraries
 include_once(api_get_path(LIBRARY_PATH) . 'debug.lib.inc.php');
@@ -103,7 +103,7 @@ if (isset($_GET['move']))
 		if($ctok == $_GET['sec_token'])
 		{
 			$message=move_category($_GET['move'], $_GET['category']);
-		}			
+		}
 	}
 }
 
@@ -240,7 +240,7 @@ function subscribe_user($course_code)
 
 	if ($all_course_information['registration_code']=='' OR $_POST['course_registration_code']==$all_course_information['registration_code'])
 	{
-		
+
 		if (api_is_platform_admin()) {
 			$status_user_in_new_course=COURSEMANAGER;
 		} else {
@@ -255,7 +255,7 @@ function subscribe_user($course_code)
 				CourseManager::email_to_tutor($_user['user_id'],$course_code,$send_to_tutor_also=true);
 			}
 			return get_lang('EnrollToCourseSuccessful');
-			
+
 		}
 		else
 		{
@@ -337,20 +337,20 @@ function browse_courses()
 */
 function count_courses_in_category($category)
 {
-	$tbl_course         = Database::get_main_table(TABLE_MAIN_COURSE);	
-	$sql="SELECT * FROM $tbl_course WHERE category_code".(empty($category)?" IS NULL":"='".$category."'");	
-	
+	$tbl_course         = Database::get_main_table(TABLE_MAIN_COURSE);
+	$sql="SELECT * FROM $tbl_course WHERE category_code".(empty($category)?" IS NULL":"='".$category."'");
+
 	//showing only the courses of the current Dokeos access_url_id
 	global $_configuration;
 	if ($_configuration['multiple_access_urls']==true) {
 		$url_access_id = api_get_current_access_url_id();
 		if ($url_access_id !=-1) {
-			$tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);		
-			$sql="SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course 
+			$tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+			$sql="SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course
 					ON (url_rel_course.course_code=course.code)
 					WHERE access_url_id = $url_access_id AND category_code".(empty($category)?" IS NULL":"='".$category."'");
-		}		
-	}	
+		}
+	}
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	return Database::num_rows($result);
 }
@@ -367,11 +367,11 @@ function browse_course_categories()
 	$tbl_courses_nodes   = Database::get_main_table(TABLE_MAIN_CATEGORY);
 	$category = Database::escape_string($_GET['category']);
 	$safe_url_categ = Security::remove_XSS($_GET['category']);
-	
+
 	echo "<p><b>".get_lang('CourseCategories')."</b>";
 
 	$sql= "SELECT * FROM $tbl_courses_nodes WHERE parent_id ".(empty($category)?"IS NULL":"='".$category."'")." GROUP BY code, parent_id  ORDER BY tree_pos ASC";
-	
+
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	echo "<ul>";
 	while ($row=Database::fetch_array($result))	{
@@ -405,21 +405,21 @@ function browse_courses_in_category()
 
 	echo "<p><b>".get_lang('CoursesInCategory')."</b>";
 	$my_category = (empty($category)?" IS NULL":"='".$category."'");
-	
+
 	$sql="SELECT * FROM $tbl_course WHERE category_code".$my_category.' ORDER BY title, visual_code';
 
-	//showing only the courses of the current Dokeos access_url_id 
+	//showing only the courses of the current Dokeos access_url_id
 	global $_configuration;
 	if ($_configuration['multiple_access_urls']==true) {
 		$url_access_id = api_get_current_access_url_id();
 		if ($url_access_id !=-1) {
-			$tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);		
-			$sql="SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course 
+			$tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+			$sql="SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course
 					ON (url_rel_course.course_code=course.code)
 					WHERE access_url_id = $url_access_id AND category_code".$my_category.' ORDER BY title, visual_code';
-		}		
+		}
 	}
-	
+
 	$result=api_sql_query($sql,__FILE__,__LINE__);
 	while ($row=Database::fetch_array($result)) {
 		if ($row['registration_code']=='') {
@@ -428,7 +428,7 @@ function browse_courses_in_category()
 			$registration_code=true;
 		}
 		$courses[]=array("code" => $row['code'], "directory" => $row['directory'], "db"=> $row['db_name'], "visual_code" => $row['visual_code'], "title" => $row['title'], "tutor" => $row['tutor_name'], "subscribe" => $row['subscribe'], "unsubscribe" => $row['unsubscribe'], 'registration_code'=> $registration_code);
-	}	
+	}
 	display_subscribe_to_courses($courses);
 }
 
@@ -524,17 +524,17 @@ function search_courses($search_term)
 	$TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
 	$search_term_safe=Database::escape_string($search_term);
 	$sql_find="SELECT * FROM $TABLECOURS WHERE code LIKE '%".$search_term_safe."%' OR title LIKE '%".$search_term_safe."%' OR tutor_name LIKE '%".$search_term_safe."%' ORDER BY title, visual_code ASC";
-	
+
 	global $_configuration;
 	if ($_configuration['multiple_access_urls']==true) {
 		$url_access_id = api_get_current_access_url_id();
 		if ($url_access_id !=-1) {
 			$tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-			$sql_find="SELECT * FROM $TABLECOURS as course INNER JOIN $tbl_url_rel_course as url_rel_course 
+			$sql_find="SELECT * FROM $TABLECOURS as course INNER JOIN $tbl_url_rel_course as url_rel_course
 					ON (url_rel_course.course_code=course.code)
-					WHERE access_url_id = $url_access_id AND  (code LIKE '%".$search_term_safe."%' OR title LIKE '%".$search_term_safe."%' OR tutor_name LIKE '%".$search_term_safe."%' ) ORDER BY title, visual_code ASC "; 
-		}		
-	}	
+					WHERE access_url_id = $url_access_id AND  (code LIKE '%".$search_term_safe."%' OR title LIKE '%".$search_term_safe."%' OR tutor_name LIKE '%".$search_term_safe."%' ) ORDER BY title, visual_code ASC ";
+		}
+	}
 	$result_find=api_sql_query($sql_find,__FILE__,__LINE__);
 	while ($row=Database::fetch_array($result_find)) {
 		$courses[]=array("code" => $row['code'], "directory" => $row['directory'], "db"=> $row['db_name'], "visual_code" => $row['visual_code'], "title" => $row['title'], "tutor" => $row['tutor_name'], "subscribe" => $row['subscribe'], "unsubscribe" => $row['unsubscribe']);
@@ -818,7 +818,7 @@ function display_courses_in_category($user_category_id, $showicons)
 	$TABLECOURS=Database::get_main_table(TABLE_MAIN_COURSE);
 	$TABLECOURSUSER=Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$TABLE_USER_COURSE_CATEGORY = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
-	
+
 
 
 	$sql_select_courses="SELECT course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
@@ -904,7 +904,7 @@ function display_subscribe_icon($current_course, $user_coursecodes)
 {
 	global $stok;
 	// we display the icon to subscribe or the text already subscribed
-	if (in_array($current_course['code'],$user_coursecodes)) {		
+	if (in_array($current_course['code'],$user_coursecodes)) {
 		Display::display_icon('enroll_na.gif', get_lang('AlreadySubscribed'));
 	} else {
 		if ($current_course['subscribe'] == SUBSCRIBE_ALLOWED)
@@ -920,7 +920,7 @@ function display_subscribe_icon($current_course, $user_coursecodes)
 		} else {
 		//	echo get_lang("SubscribingNotAllowed");
 			Display::display_icon('enroll_na.gif', get_lang('SubscribingNotAllowed'));
-			
+
 		}
 	}
 }
@@ -962,7 +962,7 @@ function display_course_icons($key, $number_of_courses, $course)
 	}
 	echo "<td rowspan=\"2\" valign=\"top\" class=\"invisible\">";
 	if ($course['status'] != 1) {
-		if ($course['unsubscr'] == 1) {	
+		if ($course['unsubscr'] == 1) {
 				// changed link to submit to avoid action by the search tool indexer
 				echo	"<form action=\"".api_get_self()."\" method=\"post\" onsubmit=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"),ENT_QUOTES,$charset))."')) return false;\">";
 				echo    '<input type="hidden" name="sec_token" value="'.$stok.'">';
@@ -1178,7 +1178,7 @@ function display_info_text($text)
 {
 	//echo "<font color=\"#808080\">" . $text . "</font>\n";
 	echo $text;
-} 
+}
 
 /**
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University

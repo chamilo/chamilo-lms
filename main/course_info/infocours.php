@@ -252,14 +252,14 @@ $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class=
 
 // COURSE THEME PICKER
 if (api_get_setting('allow_course_theme') == 'true')
-{	
+{
 	$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif',get_lang('Top')).'</a><a name="theme" id="theme"></a>'.Display::return_icon('theme.gif',get_lang('Theming')).' '.get_lang('Theming').'</div><div style="clear:both;"></div>');
 
-	//Allow Learning path 
+	//Allow Learning path
 	$form->addElement('radio', 'allow_learning_path_theme', get_lang('AllowLearningPathTheme'), get_lang('AllowLearningPathThemeAllow'), 1);
 	$form->addElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
 	$form -> addElement('html',$linebreak);
-	
+
 	$form->addElement('select_theme', 'course_theme', get_lang('Theme'));
 	$form->applyFilter('course_theme', 'trim');
 	$form -> addElement('html',$linebreak);
@@ -363,7 +363,7 @@ if ($form->validate() && is_settings_editable()) {
 	if($update_values['allow_user_edit_announcement'] != $values['allow_user_edit_announcement']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_edit_announcement']." WHERE variable = 'allow_user_edit_announcement' ";
 		api_sql_query($sql,__FILE__,__LINE__);
-	}	
+	}
 	if($update_values['allow_user_image_forum'] != $values['allow_user_image_forum']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_image_forum']." WHERE variable = 'allow_user_image_forum' ";
 		api_sql_query($sql,__FILE__,__LINE__);
@@ -371,16 +371,16 @@ if ($form->validate() && is_settings_editable()) {
 	if($update_values['allow_open_chat_window'] != $values['allow_open_chat_window']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_open_chat_window']." WHERE variable = 'allow_open_chat_window' ";
 		api_sql_query($sql,__FILE__,__LINE__);
-	}	
+	}
 	if($update_values['course_theme'] != $values['course_theme']){
 		$sql = "UPDATE $table_course_setting SET value = '".$update_values['course_theme']."' WHERE variable = 'course_theme' ";
-		api_sql_query($sql,__FILE__,__LINE__); 
+		api_sql_query($sql,__FILE__,__LINE__);
 	}
 	if($update_values['allow_learningpath_theme'] != $values['allow_learning_path_theme']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_learning_path_theme']." WHERE variable = 'allow_learning_path_theme' ";
 		api_sql_query($sql,__FILE__,__LINE__);
 	}
-	
+
 
 	$cidReset = true;
 	$cidReq = $course_code;

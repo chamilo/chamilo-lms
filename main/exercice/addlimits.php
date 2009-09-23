@@ -141,7 +141,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),
 			'name' => get_lang('Gradebook')
@@ -229,7 +229,7 @@ Time :
  * @todo shouldn't this be moved to the part above (around line 111: action handling)
  */
 if (isset($_POST['ok'])) {
-	$exercise_id = Database::escape_string($_POST['exe_id']);	
+	$exercise_id = Database::escape_string($_POST['exe_id']);
 	if ($_POST['limit']==1) {
 		$minutes = Database::escape_string($_POST['minutes']);
 		$query = "UPDATE ".$TBL_EXERCICES." SET ques_time_limit= $minutes where id= $exercise_id";

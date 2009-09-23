@@ -10,8 +10,8 @@ Display::display_header('OpenID', NULL);
 <p>
 <a href="<?php
  if (strpos($_SERVER['HTTP_REFERER'],$_SERVER['HTTP_HOST'])) {
- 	 echo Security::remove_XSS($_SERVER['HTTP_REFERER']); 
- } 
+ 	 echo Security::remove_XSS($_SERVER['HTTP_REFERER']);
+ }
  ?>">Return to the previous page</a>
 </p>
 <?php

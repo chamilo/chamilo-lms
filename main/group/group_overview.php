@@ -1,5 +1,5 @@
 <?php // $Id: group_overview.php 22201 2009-07-17 19:57:03Z cfasanando $
- 
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -25,25 +25,25 @@
 */
 
 /**
-============================================================================== 
+==============================================================================
 *	Main page for the group module.
-*	This script displays the general group settings, 
+*	This script displays the general group settings,
 *	and a list of groups with buttons to view, edit...
-*	
+*
 *	@author Thomas Depraetere, Hugues Peeters, Christophe Gesche: initial versions
 *	@author Bert Vanderkimpen, improved self-unsubscribe for cvs
 *	@author Patrick Cool, show group comment under the group name
 *	@author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
 *	@author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
 *	@package dokeos.group
-============================================================================== 
+==============================================================================
 */
 /*
-============================================================================== 
+==============================================================================
 		INIT SECTION
-============================================================================== 
+==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "group";
 include ('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
@@ -78,17 +78,17 @@ if( isset($_GET['action']))
 					$row[] = $user['lastName'];
 					$row[] = $user['firstName'];
 					$data[] = $row;
-				}	
+				}
 			}
 			switch($_GET['type'])
 			{
 				case 'csv':
 					Export::export_table_csv($data);
 				case 'xls':
-					Export::export_table_xls($data);	
-			}	
+					Export::export_table_xls($data);
+			}
 			break;
-	}	
+	}
 }
 
 /*
@@ -110,7 +110,7 @@ else
 
 // action links
 echo '<div class="actions">';
-echo Display::return_icon('groupadd.gif', get_lang('NewGroupCreate')) . '<a href="group_creation.php?'.api_get_cidreq().'">'.get_lang('NewGroupCreate').'</a>';	
+echo Display::return_icon('groupadd.gif', get_lang('NewGroupCreate')) . '<a href="group_creation.php?'.api_get_cidreq().'">'.get_lang('NewGroupCreate').'</a>';
 echo Display::return_icon('group.gif', get_lang('Groups')) .'<a href="group.php?'.api_get_cidreq().'">'.get_lang('Groups').'</a>';
 if (api_get_setting('allow_group_categories') == 'true') {
 	echo Display::return_icon('folder_new.gif', get_lang('AddCategory')) . '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.get_lang('AddCategory').'</a>&nbsp;';
@@ -128,7 +128,7 @@ foreach($categories as $index => $category)
 	if( api_get_setting('allow_group_categories') == 'true')
 	{
 		echo '<h3>'.$category['title'].'</h3>';
-	}	
+	}
 	$groups = GroupManager::get_group_list($category['id']);
 	echo '<ul>';
 	foreach($groups as $index => $group)
@@ -143,14 +143,14 @@ foreach($categories as $index => $category)
 			echo '<li>'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</li>';
 		}
 		echo '</ul>';
-		echo '</li>';	
+		echo '</li>';
 	}
 	echo '</ul>';
 }
 /*
-============================================================================== 
-		FOOTER 
-============================================================================== 
+==============================================================================
+		FOOTER
+==============================================================================
 */
 if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath')
 {

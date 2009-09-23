@@ -31,15 +31,15 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
  * @author Stijn Konings
  * @package dokeos.gradebook
  */
- 
+
 class CatForm extends FormValidator {
-    
+
     const TYPE_ADD = 1;
     const TYPE_EDIT = 2;
     const TYPE_MOVE = 3;
     const TYPE_SELECT_COURSE = 4;
     private $category_object;
-    
+
 	/**
 	 * Builds a form containing form items based on a given parameter
 	 * @param int form_type 1=add, 2=edit,3=move,4=browse
@@ -50,7 +50,7 @@ class CatForm extends FormValidator {
     function CatForm($form_type, $category_object,$form_name,$method = 'post',$action=null) {
 		parent :: __construct($form_name, $method, $action);
     	$this->form_type = $form_type;
-    	if (isset ($category_object)) {	
+    	if (isset ($category_object)) {
     		$this->category_object = $category_object;
     	}
     	if ($this->form_type == self :: TYPE_EDIT) {
@@ -83,12 +83,12 @@ class CatForm extends FormValidator {
 				$select->addoption($line.' '.$cat[1],$cat[0]);
 			} else {
 				$select->addoption($line.' '.$cat[1],$cat[0],'disabled');
-			}	
+			}
 			$line = '';
 		}
    		$this->addElement('submit', null, get_lang('Ok'));
    	}
-	/** 
+	/**
 	 * This function builds an 'add category form, if parent id is 0, it will only
 	 * show courses
 	 */
@@ -111,17 +111,17 @@ class CatForm extends FormValidator {
    			$this->setDefaults(array(
    			   'hid_user_id' => $this->category_object->get_user_id(),
    			   'hid_parent_id' => $this->category_object->get_parent_id()
-   			));		
-		} else {			
+   			));
+		} else {
    			$this->setDefaults(array(
    		    'hid_user_id' => $this->category_object->get_user_id(),
    		    'hid_parent_id' => $this->category_object->get_parent_id()
    		    ));
-   		    $this->addElement('hidden','course_code', $this->category_object->get_course_code()); 		    		
+   		    $this->addElement('hidden','course_code', $this->category_object->get_course_code());
 		}
    		$this->build_basic_form();
    	}
-   	
+
 	/**
 	 * Builds an form to edit a category
 	 */
@@ -130,8 +130,8 @@ class CatForm extends FormValidator {
 			'name' => $this->category_object->get_name(),
     		'description' => $this->category_object->get_description(),
     		'hid_user_id' => $this->category_object->get_user_id(),
-    		'hid_parent_id' => $this->category_object->get_parent_id(),	
-   	 		'weight' => $this->category_object->get_weight(),	
+    		'hid_parent_id' => $this->category_object->get_parent_id(),
+   	 		'weight' => $this->category_object->get_weight(),
    	 		'visible' => $this->category_object->is_visible(),
    	 		'certif_min_score' => $this->category_object->get_certificate_min_score(),
     		));
@@ -139,12 +139,12 @@ class CatForm extends FormValidator {
    		$this->addElement('hidden','course_code', $this->category_object->get_course_code());
 		$this->build_basic_form();
    	}
-   	
+
    	private function build_basic_form() {
 		$this->addElement('hidden', 'zero', 0);
 		$this->add_textfield('name', get_lang('CategoryName'),true,array('size'=>'54','maxlength'=>'50'));
-		$this->add_textfield('weight', get_lang('Weight'),true,array('size'=>'4','maxlength'=>'4'));			
-		$this->add_textfield('certif_min_score', get_lang('CertificateMinScore'),false,array('size'=>'4','maxlength'=>'4'));			
+		$this->add_textfield('weight', get_lang('Weight'),true,array('size'=>'4','maxlength'=>'4'));
+		$this->add_textfield('certif_min_score', get_lang('CertificateMinScore'),false,array('size'=>'4','maxlength'=>'4'));
    		$this->addElement('hidden','hid_user_id');
    		$this->addElement('hidden','hid_parent_id');
 		$this->addElement('textarea', 'description', get_lang('Description'),array('rows'=>'3','cols' => '34'));
@@ -157,8 +157,8 @@ class CatForm extends FormValidator {
 		$this->addRule('certif_min_score',get_lang('NoDecimals'),'nopunctuation');
 		$this->addRule(array ('certif_min_score', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
    	}
-	/** 
-	 * This function builds an 'select course' form in the add category process, 
+	/**
+	 * This function builds an 'select course' form in the add category process,
 	 * if parent id is 0, it will only show courses
 	 */
    	protected function build_select_course_form() {
@@ -172,16 +172,16 @@ class CatForm extends FormValidator {
 		$this->setDefaults(array(
 		   'hid_user_id' => $this->category_object->get_user_id(),
 		   'hid_parent_id' => $this->category_object->get_parent_id()
-		));		
+		));
    		$this->addElement('hidden','hid_user_id');
    		$this->addElement('hidden','hid_parent_id');
 		$this->addElement('submit', null, get_lang('Ok'));
    	}
-     	
+
    	function display() {
    		parent :: display();
    	}
-   	
+
    	function setDefaults($defaults = array ()) {
    		parent :: setDefaults($defaults);
    	}

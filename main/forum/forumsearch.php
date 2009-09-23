@@ -1,5 +1,5 @@
 <?php  // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
- 
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -81,7 +81,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')

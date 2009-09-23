@@ -1,27 +1,27 @@
 <?php
 // $Id: DummyCourseCreator.class.php 15087 2008-04-25 04:37:14Z yannoo $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Bart Mollet (bart.mollet@hogent.be)
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 
 require_once 'Course.class.php';
@@ -44,7 +44,7 @@ class DummyCourseCreator
 	 */
 	var $course;
 	/**
-	 * 
+	 *
 	 */
 	var $default_property = array();
 	/**
@@ -122,7 +122,7 @@ class DummyCourseCreator
 		foreach($directories as $path => $flag)
 		{
 			$path = substr($path,0,strlen($path)-1);
-			$document = new Document($doc_id++,'/'.$path, $this->get_dummy_content('description'),$this->get_dummy_content('title'),'folder',0);	
+			$document = new Document($doc_id++,'/'.$path, $this->get_dummy_content('description'),$this->get_dummy_content('title'),'folder',0);
 			$property['lastedit_type'] = 'FolderCreated';
 			$document->item_properties[] = $property;
 			$this->course->add_resource($document);
@@ -192,7 +192,7 @@ class DummyCourseCreator
 		}
 		// create links
 		$number_of_links = rand(5, 50);
-		$on_homepage = rand(0,20) == 0 ? 1 : 0; 
+		$on_homepage = rand(0,20) == 0 ? 1 : 0;
 		$property = $this->default_property;
 		$property['lastedit_type'] = 'LinkAdded';
 		$property['tool'] = TOOL_LINK;
@@ -271,7 +271,7 @@ class DummyCourseCreator
 				$resource = $resources[rand(0,count($resources)-1)];
 				$item = array();
 				$item['type'] = $resource->type;
-				$item['id'] = $resource->source_id;	
+				$item['id'] = $resource->source_id;
 				$item['display_order'] = $item_id;
 				$item['title'] = $this->get_dummy_content('title');
 				$item['description'] = $this->get_dummy_content('description');
@@ -279,14 +279,14 @@ class DummyCourseCreator
 				if( rand(0,5) == 1 && $item_id > 1)
 				{
 					$item['prereq_type'] = 'i';
-					$item['prereq'] = rand($global_item_id - $item_id,$global_item_id-1);	
+					$item['prereq'] = rand($global_item_id - $item_id,$global_item_id-1);
 				}
 				$chapter['items'][] = $item;
 				$global_item_id++;
 			}
-			$chapters[] = $chapter;	
+			$chapters[] = $chapter;
 		}
-		$lp = new Learnpath($i,$this->get_dummy_content('title'),$this->get_dummy_content('description'),1,$chapters);	
+		$lp = new Learnpath($i,$this->get_dummy_content('title'),$this->get_dummy_content('description'),1,$chapters);
 		$this->course->add_resource($lp);
 		}
 	}
@@ -305,7 +305,7 @@ class DummyCourseCreator
 		 case 'description':
 		 	$descriptions = explode(".",$dummy_text);
 		 	return $descriptions[rand(0,count($descriptions)-1)];
-		 	break;	
+		 	break;
 		 case 'title':
 		 	$dummy_text = str_replace(array("\n",'.',',',"\t"),array(' ','','',' '),$dummy_text);
 		 	$titles = explode(" ",$dummy_text);

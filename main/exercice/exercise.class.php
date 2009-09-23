@@ -57,7 +57,7 @@ class Exercise
 	 * @return - boolean - true if exercise exists, otherwise false
 	 */
 	function read($id)
-	{ 
+	{
 		global $_course;
        	global $_configuration;
         global $questionList;
@@ -106,7 +106,7 @@ class Exercise
           	}
             //overload questions list with recorded questions list
             //load questions only for exercises of type 'one question per page'
-            //this is needed only is there is no questions   
+            //this is needed only is there is no questions
             //
             if($this->type == 2 && $_configuration['live_exercise_tracking']==true && $_SERVER['REQUEST_METHOD']!='POST' && defined('QUESTION_LIST_ALREADY_LOGGED'))
 	        {
@@ -141,7 +141,7 @@ class Exercise
 	{
 		return $this->exercise;
 	}
-	
+
 	/**
 	 * returns the number of attempts setted
 	 *
@@ -151,8 +151,8 @@ class Exercise
 	{
 		return $this->attempts;
 	}
-	
-	/** returns the number of FeedbackType  * 	
+
+	/** returns the number of FeedbackType  *
 	 *  0=>Feedback , 1=>DirectFeedback, 2=>NoFeedback
 	 * @return - numeric - exercise attempts
 	 */
@@ -160,8 +160,8 @@ class Exercise
 	{
 		return $this->feedbacktype;
 	}
-	
-	
+
+
 	/**
 	 * returns the time limit
 	 */
@@ -212,7 +212,7 @@ class Exercise
 	function selectResultsDisabled()
 	{
 		return $this->results_disabled;
-	}	
+	}
 
 	/**
 	 * tells if questions are selected randomly, and if so returns the draws
@@ -278,19 +278,19 @@ class Exercise
 	 *					 without randomizing, otherwise, returns the list with questions selected randomly
      */
 	function selectRandomList()
-	{		
-		$nbQuestions = $this->selectNbrQuestions();		
+	{
+		$nbQuestions = $this->selectNbrQuestions();
 		$temp_list = $this->questionList;
 		//error_log(print_r($temp_list,true));
 		//error_log(count($temp_list));
 		if (count($temp_list)<>0) {
-			shuffle($temp_list);	
-			return array_combine(range(1,$nbQuestions),$temp_list);	
-		}		
+			shuffle($temp_list);
+			return array_combine(range(1,$nbQuestions),$temp_list);
+		}
 
-		
+
 		$nbQuestions = $this->selectNbrQuestions();
-		
+
 		//Not a random exercise, or if there are not at least 2 questions
 		if($this->random == 0 || $nbQuestions < 2)
 		{
@@ -299,16 +299,16 @@ class Exercise
 
 		$randQuestionList = array();
 		$alreadyChosen = array();
-		
+
 		for($i=0; $i < $this->random; $i++)
-		{	
+		{
 			if($i < $nbQuestions){
 				do
 				{
 					$rand=rand(1,$nbQuestions);
 				}
 				while(in_array($rand,$alreadyChosen));
-				
+
 				$alreadyChosen[]=$rand;
 				$randQuestionList[$rand] = $this->questionList[$rand];
 			}
@@ -342,7 +342,7 @@ class Exercise
 	{
 		$this->exercise=$title;
 	}
-	
+
 	/**
 	 * changes the exercise max attempts
 	 *
@@ -352,8 +352,8 @@ class Exercise
 	{
 		$this->attempts=$attempts;
 	}
-	
-	
+
+
 	/**
 	 * changes the exercise feedback type
 	 *
@@ -363,7 +363,7 @@ class Exercise
 	{
 		$this->feedbacktype=$feedback_type;
 	}
-	
+
 
 	/**
 	 * changes the exercise description
@@ -468,12 +468,12 @@ class Exercise
 	{
 		$this->active=0;
 	}
-	
+
 	function disable_results()
 	{
 		$this->results_disabled = true;
 	}
-	
+
 	function enable_results()
 	{
 		$this->results_disabled = false;
@@ -486,7 +486,7 @@ class Exercise
 			$this->results_disabled = false;
 		}
 	}
-	
+
 
 	/**
 	 * updates the exercise in the data base
@@ -497,9 +497,9 @@ class Exercise
 	{
 		global $_course,$_user;
 		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);        
-        $TBL_QUIZ_QUESTION= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);        
-	
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $TBL_QUIZ_QUESTION= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+
 		$id=$this->id;
 		$exercise=$this->exercise;
 		$description=$this->description;
@@ -508,11 +508,11 @@ class Exercise
 		$attempts=$this->attempts;
 		$feedbacktype=$this->feedbacktype;
 		$random=$this->random;
-		$active=$this->active;					
+		$active=$this->active;
 		if ($feedbacktype==1){
 			$results_disabled = 1;
 		} else {
-			$results_disabled = intval($this->results_disabled);	
+			$results_disabled = intval($this->results_disabled);
 		}
         $start_time = Database::escape_string($this->start_time);
         $end_time = Database::escape_string($this->end_time);
@@ -522,11 +522,11 @@ class Exercise
 		title='".Database::escape_string(Security::remove_XSS($exercise))."',
 		description='".Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGERLOWSECURITY))."'";
 		*/
-			$sql="UPDATE $TBL_EXERCICES SET 
+			$sql="UPDATE $TBL_EXERCICES SET
 						title='".Database::escape_string($exercise)."',
 						description='".Database::escape_string($description)."'";
-						
-				if ($type_e != 'simple') {					
+
+				if ($type_e != 'simple') {
 						$sql .= ", sound='".Database::escape_string($sound)."',
 						type='".Database::escape_string($type)."',
 						random='".Database::escape_string($random)."',
@@ -535,32 +535,32 @@ class Exercise
 						start_time='$start_time',end_time='$end_time',
 						max_attempt='".Database::escape_string($attempts)."', " .
 						"results_disabled='".Database::escape_string($results_disabled)."'";
-				}				
+				}
 			$sql .= " WHERE id='".Database::escape_string($id)."'";
-			
+
 		//	echo $sql;
 			api_sql_query($sql,__FILE__,__LINE__);
-			
-			// update into the item_property table	
-			api_item_property_update($_course, TOOL_QUIZ, $id,'QuizUpdated',$_user['user_id']);	
-										
+
+			// update into the item_property table
+			api_item_property_update($_course, TOOL_QUIZ, $id,'QuizUpdated',$_user['user_id']);
+
             if (api_get_setting('search_enabled')=='true') {
                 $this -> search_engine_edit();
             }
 
 		} else {// creates a new exercise
 		//add condition by anonymous user
-		
+
 		/*if (!api_is_anonymous()) {
-			//is course manager			
+			//is course manager
 			$cond1=Database::escape_string($exercise);
-			$cond2=Database::escape_string($description);			
+			$cond2=Database::escape_string($description);
 		} else {
 			//is anonymous user
 			$cond1=Database::escape_string(Security::remove_XSS($exercise));
-			$cond2=Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGERLOWSECURITY));		
+			$cond2=Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGERLOWSECURITY));
 		}*/
-			$sql="INSERT INTO $TBL_EXERCICES (start_time,end_time,title,description,sound,type,random,active, results_disabled, max_attempt,feedback_type) 
+			$sql="INSERT INTO $TBL_EXERCICES (start_time,end_time,title,description,sound,type,random,active, results_disabled, max_attempt,feedback_type)
 					VALUES(
 						'$start_time','$end_time',
 						'".Database::escape_string($exercise)."',
@@ -573,10 +573,10 @@ class Exercise
 						'".Database::escape_string($attempts)."',
 						'".Database::escape_string($feedbacktype)."'
 						)";
-			api_sql_query($sql,__FILE__,__LINE__);			
-			$this->id=Database::insert_id();		
+			api_sql_query($sql,__FILE__,__LINE__);
+			$this->id=Database::insert_id();
         	// insert into the item_property table
-        	
+
         	api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizAdded',$_user['user_id']);
 			if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
 				$this -> search_engine_save();
@@ -609,40 +609,40 @@ class Exercise
 	 * @param - integer $id - question ID to move up
 	 */
 	function moveUp($id)
-	{	
+	{
 		// there is a bug with some version of PHP with the key and prev functions
 		// the script commented was tested in dev.dokeos.com with no success
 		// Instead of using prev and next this was change with arrays.
 		/*
-		foreach($this->questionList as $position=>$questionId)		
-		{			
+		foreach($this->questionList as $position=>$questionId)
+		{
 			// if question ID found
 			if($questionId == $id)
-			{							
+			{
 				// position of question in the array
 				echo $pos1=$position; //1
-				echo "<br>";	
-				
-				prev($this->questionList);				
-				prev($this->questionList);			
-												
-				// position of previous question in the array				
-				$pos2=key($this->questionList);			
-				//if the cursor of the array hit the end 
-				// then we must reset the array to get the previous key			
-								
+				echo "<br>";
+
+				prev($this->questionList);
+				prev($this->questionList);
+
+				// position of previous question in the array
+				$pos2=key($this->questionList);
+				//if the cursor of the array hit the end
+				// then we must reset the array to get the previous key
+
 				if($pos2===null)
-				{					
+				{
 					end($this->questionList);
 					prev($this->questionList);
-					$pos2=key($this->questionList);					
+					$pos2=key($this->questionList);
 				}
-				
+
 				// error, can't move question
 				if(!$pos2)
-				{						
+				{
 					//echo 'cant move!';
-					$pos2=key($this->questionList); 
+					$pos2=key($this->questionList);
 					reset($this->questionList);
 				}
 				$id2=$this->questionList[$pos2];
@@ -651,34 +651,34 @@ class Exercise
 			}
 			$i++;
 		}
-		*/	
-		$question_list =array();		
-		foreach($this->questionList as $position=>$questionId)		
+		*/
+		$question_list =array();
+		foreach($this->questionList as $position=>$questionId)
 		{
 			$question_list[]=	$questionId;
-		}		
+		}
 		$len=count($question_list);
-		$orderlist=array_keys($this->questionList);		
-		for($i=0;$i<$len;$i++)		
-		{			
-			$questionId = $question_list[$i];			
+		$orderlist=array_keys($this->questionList);
+		for($i=0;$i<$len;$i++)
+		{
+			$questionId = $question_list[$i];
 			if($questionId == $id)
-			{							
+			{
 				// position of question in the array
-				$pos1=$orderlist[$i];		
-				$pos2=$orderlist[$i-1];		
+				$pos1=$orderlist[$i];
+				$pos2=$orderlist[$i-1];
 				if($pos2===null)
-				{		
-					$pos2 =		$orderlist[$len-1];							
-				}				
+				{
+					$pos2 =		$orderlist[$len-1];
+				}
 				// error, can't move question
 				if(!$pos2)
 				{
-					$pos2=$orderlist[0];	
-					$i=0;			
-				}		
+					$pos2=$orderlist[0];
+					$i=0;
+				}
 				break;
-			}			
+			}
 		}
 		// permutes questions in the array
 		$temp=$this->questionList[$pos2];
@@ -697,7 +697,7 @@ class Exercise
 		// there is a bug with some version of PHP with the key and prev functions
 		// the script commented was tested in dev.dokeos.com with no success
 		// Instead of using prev and next this was change with arrays.
-		
+
 		/*
 		foreach($this->questionList as $position=>$questionId)
 		{
@@ -726,30 +726,30 @@ class Exercise
 			}
 		}
 		*/
-		
-		$question_list =array();		
-		foreach($this->questionList as $position=>$questionId)		
+
+		$question_list =array();
+		foreach($this->questionList as $position=>$questionId)
 		{
 			$question_list[]=	$questionId;
-		}		
+		}
 		$len=count($question_list);
 		$orderlist=array_keys($this->questionList);
-				
-		for($i=0;$i<$len;$i++)		
+
+		for($i=0;$i<$len;$i++)
 		{
-			$questionId = $question_list[$i];				
+			$questionId = $question_list[$i];
 			if($questionId == $id)
 			{
-				$pos1=$orderlist[$i+1];					
-				$pos2 =$orderlist[$i];			
+				$pos1=$orderlist[$i+1];
+				$pos2 =$orderlist[$i];
 				if(!$pos2)
 				{
-					//echo 'cant move!';					
-				} 
+					//echo 'cant move!';
+				}
 				break;
-			}			
+			}
 		}
-			
+
 		// permutes questions in the array
 		$temp=$this->questionList[$pos2];
 		$this->questionList[$pos2]=$this->questionList[$pos1];
@@ -825,7 +825,7 @@ class Exercise
 		$sql="UPDATE $TBL_EXERCICES SET active='-1' WHERE id='".Database::escape_string($this->id)."'";
 		api_sql_query($sql);
 		api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizDeleted',$_user['user_id']);
-		
+
 		if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian') ) {
 			$this -> search_engine_delete();
 		}
@@ -836,8 +836,8 @@ class Exercise
 	 * @param FormValidator $form the formvalidator instance (by reference)
 	 */
 	function createForm ($form, $type='full')
-	{	
-		global $id;		
+	{
+		global $id;
 		if(empty($type)){
 			$type='full';
 		}
@@ -851,19 +851,19 @@ class Exercise
 		// title
 		$form -> addElement('text', 'exerciseTitle', get_lang('ExerciseName'),'class="input_titles"');
 		//$form->applyFilter('exerciseTitle','html_filter');
-		
+
 		$form -> addElement('html','<div class="row">
 		<div class="label"></div>
 		<div class="formw" style="height:50px">
 			<a href="javascript://" onclick=" return show_media()"> <span id="media_icon"> <img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'</span></a>
 		</div>
-		</div>'); 
-		
+		</div>');
+
 		$editor_config = array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '150');
 		if(is_array($type)){
 			$editor_config = array_merge($editor_config, $type);
-		}	
-				
+		}
+
 		$form -> addElement ('html','<div class="HideFCKEditor" id="HiddenFCKexerciseDescription" >');
 		$form -> add_html_editor('exerciseDescription', get_lang('langExerciseDescription'), false, false, $editor_config);
 		$form -> addElement ('html','</div>');
@@ -875,29 +875,29 @@ class Exercise
 				<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>
 			</div>
 			</div>');
-			
+
 		// Random questions
-		$form -> addElement('html','<div id="options" style="display:none">');		
-		
+		$form -> addElement('html','<div id="options" style="display:none">');
+
 		if($type=='full') {
-			// feedback type	
+			// feedback type
 			$radios_feedback = array();
 			$radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('ExerciseAtTheEndOfTheTest'),'0');
 			$radios_feedback[] = FormValidator :: createElement ('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'),'2');
-			$form -> addGroup($radios_feedback, null, get_lang('FeedbackType'));		
-			
+			$form -> addGroup($radios_feedback, null, get_lang('FeedbackType'));
+
 			$feedback_option[0]=get_lang('ExerciseAtTheEndOfTheTest');
 			$feedback_option[1]=get_lang('DirectFeedback');
 			$feedback_option[2]=get_lang('NoFeedback');
-						
-			//Can't modify a DirectFeedback question						
+
+			//Can't modify a DirectFeedback question
 			if ($this->selectFeedbackType() != 1 ) {
 			//	$form -> addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
 				// test type
 				$radios = array();
 				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageOne'),'2');
 				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageAll'),'1');
-				$form -> addGroup($radios, null, get_lang('QuestionsPerPage'));							
+				$form -> addGroup($radios, null, get_lang('QuestionsPerPage'));
 			} else {
 				// if is Directfeedback but has not questions we can allow to modify the question type
 				if ($this->selectNbrQuestions()== 0) {
@@ -906,68 +906,68 @@ class Exercise
 					$radios = array();
 					$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SimpleExercise'),'1');
 					$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
-					$form -> addGroup($radios, null, get_lang('ExerciseType'));					
+					$form -> addGroup($radios, null, get_lang('ExerciseType'));
 				} else {
 					//we force the options to the DirectFeedback exercisetype
 					$form -> addElement('hidden', 'exerciseFeedbackType','1');
 					$form -> addElement('hidden', 'exerciseType','2');
-				}				
+				}
 			}
-			
+
 			$radios_results_disabled = array();
 			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('Yes'),'0');
 			$radios_results_disabled[] = FormValidator :: createElement ('radio', 'results_disabled', null, get_lang('No'),'1');
-			$form -> addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'));	
-		
-			$random = array();	
+			$form -> addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'));
+
+			$random = array();
 			$option=array();
 			$max = ($this->id > 0) ? $this->selectNbrQuestions() : 10 ;
 			$option = range(0,$max);
 			$option[0]=get_lang('No');
-	
+
 			$random[] = FormValidator :: createElement ('select', 'randomQuestions',null,$option);
-			$random[] = FormValidator :: createElement ('static', 'help','help','<span style="font-style: italic;">'.get_lang('RandomQuestionsHelp').'</span>');		
+			$random[] = FormValidator :: createElement ('static', 'help','help','<span style="font-style: italic;">'.get_lang('RandomQuestionsHelp').'</span>');
 			//$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
-			$form -> addGroup($random,null,get_lang('RandomQuestions'),'<br />');		
-			
+			$form -> addGroup($random,null,get_lang('RandomQuestions'),'<br />');
+
 			$attempt_option=range(0,10);
 	        $attempt_option[0]=get_lang('Infinite');
-	        
+
 	        $form -> addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts'),$attempt_option);
-	             
+
 	        $form -> addElement('checkbox', 'enabletimelimit',get_lang('EnableTimeLimits'),null,'onclick = "  return timelimit() "');
-	        	  	
+
 			$var= Exercise::selectTimeLimit();
-			
+
 			$form -> addElement('html','</div>');
-			
-			if(($this -> start_time!='0000-00-00 00:00:00')||($this -> end_time!='0000-00-00 00:00:00'))            	
+
+			if(($this -> start_time!='0000-00-00 00:00:00')||($this -> end_time!='0000-00-00 00:00:00'))
 				$form -> addElement('html','<div id="options2" style="display:block;">');
 			else
-				$form -> addElement('html','<div id="options2" style="display:none;">');	        
-	
+				$form -> addElement('html','<div id="options2" style="display:none;">');
+
 	        //$form -> addElement('date', 'start_time', get_lang('ExeStartTime'), array('language'=>'es','format' => 'dMYHi'));
 	        //$form -> addElement('date', 'end_time', get_lang('ExeEndTime'), array('language'=>'es','format' => 'dMYHi'));
 	        $form->addElement('datepicker', 'start_time', get_lang('ExeStartTime'), array('form_name'=>'exercise_admin'));
 			$form->addElement('datepicker', 'end_time', get_lang('ExeEndTime'), array('form_name'=>'exercise_admin'));
-			
-			//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));		
+
+			//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));
 			$form -> addElement('html','</div>');
-	
+
 	        $defaults = array();
-	
+
 	        if (api_get_setting('search_enabled') === 'true') {
 	            require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
-	
+
 	            $form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
 	            $form -> addElement ('html','<br /><div class="row">');
 	            $form -> addElement ('html', '<div class="label">'. get_lang('SearchFeatureDocumentLanguage') .'</div>');
 	            $form -> addElement ('html', '<div class="formw">'. api_get_languages_combo() .'</div>');
 	            $form -> addElement ('html','</div><div class="sub-form">');
-	
+
 	            $specific_fields = get_specific_field_list();
 	            foreach ($specific_fields as $specific_field) {
-	                $form -> addElement ('text', $specific_field['code'], $specific_field['name']);	
+	                $form -> addElement ('text', $specific_field['code'], $specific_field['name']);
 	                $filter = array('course_code'=> "'". api_get_course_id() ."'", 'field_id' => $specific_field['id'], 'ref_id' => $this->id, 'tool_id' => '\''. TOOL_QUIZ .'\'');
 	                $values = get_specific_field_values_list($filter, array('value'));
 	                if ( !empty($values) ) {
@@ -981,43 +981,43 @@ class Exercise
 	            $form -> addElement ('html','</div>');
 	        }
 		}
-		
+
 		// submit
 		isset($_GET['exerciseId'])?$text=get_lang('ModifyExercise'):$text=get_lang('ProcedToQuestions');
 		$form -> addElement('html', '<br /><br />');
 		$form -> addElement('style_submit_button', 'submitExercise', $text, 'class="save"');
-		
-		$form -> addRule ('exerciseTitle', get_lang('GiveExerciseName'), 'required');			
+
+		$form -> addRule ('exerciseTitle', get_lang('GiveExerciseName'), 'required');
 		if($type=='full') {
-			// rules			
+			// rules
 			$form -> addRule ('exerciseAttempts', get_lang('Numeric'), 'numeric');
 			$form -> addRule ('start_time', get_lang('InvalidDate'), 'date');
 	        $form -> addRule ('end_time', get_lang('InvalidDate'), 'date');
 	        $form -> addRule(array ('start_time', 'end_time'), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
-		}        
+		}
 
 		// defaults
 		if($type=='full') {
 			if($this -> id > 0) {
 				if ($this -> random > $this->selectNbrQuestions()) {
 					$defaults['randomQuestions'] =  $this->selectNbrQuestions();
-				} else {			
+				} else {
 					$defaults['randomQuestions'] = $this -> random;
 				}
-				
+
 				$defaults['exerciseType'] = $this -> selectType();
 				$defaults['exerciseTitle'] = $this -> selectTitle();
 				$defaults['exerciseDescription'] = $this -> selectDescription();
 				$defaults['exerciseAttempts'] = $this->selectAttempts();
-				$defaults['exerciseFeedbackType'] = $this->selectFeedbackType(); 
+				$defaults['exerciseFeedbackType'] = $this->selectFeedbackType();
 				$defaults['results_disabled'] = $this->selectResultsDisabled();
-				
+
 	  			if(($this -> start_time!='0000-00-00 00:00:00')||($this -> end_time!='0000-00-00 00:00:00'))
 	            	$defaults['enabletimelimit'] = 1;
-	    
+
 			    $defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00')? $this -> start_time : date('Y-m-d 12:00:00');
 	            $defaults['end_time'] = ($this->end_time!='0000-00-00 00:00:00')?$this -> end_time : date('Y-m-d 12:00:00',time()+84600);
-	            
+
 			} else {
 				$defaults['exerciseType'] = 2;
 				$defaults['exerciseAttempts'] = 0;
@@ -1025,14 +1025,14 @@ class Exercise
 				$defaults['exerciseDescription'] = '';
 				$defaults['exerciseFeedbackType'] = 0;
 				$defaults['results_disabled'] = 0;
-				
+
 				$defaults['start_time'] = date('Y-m-d 12:00:00');
 				$defaults['end_time'] = date('Y-m-d 12:00:00',time()+84600);
 			}
 		} else {
 			$defaults['exerciseTitle'] = $this -> selectTitle();
-			$defaults['exerciseDescription'] = $this -> selectDescription();				
-		}       
+			$defaults['exerciseDescription'] = $this -> selectDescription();
+		}
 
         if (api_get_setting('search_enabled') === 'true') {
             $defaults['index_document'] = 'checked="checked"';
@@ -1046,10 +1046,10 @@ class Exercise
 	 * @param FormValidator $form the formvalidator instance
 	 */
 	function processCreation($form,$type='')
-	{		
+	{
 
 		$this -> updateTitle($form -> getSubmitValue('exerciseTitle'));
-		$this -> updateDescription($form -> getSubmitValue('exerciseDescription'));	
+		$this -> updateDescription($form -> getSubmitValue('exerciseDescription'));
 		$this -> updateAttempts($form -> getSubmitValue('exerciseAttempts'));
 		$this -> updateFeedbackType($form -> getSubmitValue('exerciseFeedbackType'));
 		$this -> updateType($form -> getSubmitValue('exerciseType'));
@@ -1138,7 +1138,7 @@ class Exercise
         if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
             $course_id = api_get_course_id();
 
-            // actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one 
+            // actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one
             // get search_did
             $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
             $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';

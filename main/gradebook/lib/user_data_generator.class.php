@@ -40,12 +40,12 @@ class UserDataGenerator
 				$result = Result :: load (null, $userid, $eval->get_id());
 				if (count($result) == 0) {
 					$toadd = false;
-				}	
+				}
 			}
 			if ($toadd) {
 				$evals_filtered_copy = $evals;
 			}
-				
+
 		}//isset($coursecode) && strcmp($coursecode,api_get_course_id())===0
 		if (count($result) == 0) {
 			$evals_filtered=$evals;
@@ -114,7 +114,7 @@ class UserDataGenerator
 			foreach ($allitems as $item) {
 				$this->scorecache[$item->get_item_type() . $item->get_id()]
 								= $item->calc_score($this->userid);
-			}		
+			}
 			usort($allitems, array('UserDataGenerator', 'sort_by_score'));
 		} elseif ($sorting & self :: UDG_SORT_MASK) {
 			// if user sorts on student's masks, first calculate scores and cache them
@@ -137,7 +137,7 @@ class UserDataGenerator
 				$this->scorecache[$item->get_item_type() . $item->get_id()]
 								= $item->calc_score($this->userid);
 			}
-				
+
 		}
 		// generate the data to display
 		$scoredisplay = ScoreDisplay :: instance();
@@ -154,7 +154,7 @@ class UserDataGenerator
 				$row[] = $this->build_mask_column ($item, $ignore_score_color);
 			$data[] = $row;
 		}
-		
+
 		return $data;
 
 	}
@@ -194,19 +194,19 @@ class UserDataGenerator
 		$score1 = $this->avgcache[$item1->get_item_type() . $item1->get_id()];
 		$score2 = $this->avgcache[$item2->get_item_type() . $item2->get_id()];
 		return $this->compare_scores($score1, $score2);
-	}	
+	}
 
 	function sort_by_score($item1, $item2) {
 		$score1 = $this->scorecache[$item1->get_item_type() . $item1->get_id()];
 		$score2 = $this->scorecache[$item2->get_item_type() . $item2->get_id()];
 		return $this->compare_scores($score1, $score2);
-	}	
+	}
 
 	function sort_by_mask($item1, $item2) {
 		$score1 = $this->scorecache[$item1->get_item_type() . $item1->get_id()];
 		$score2 = $this->scorecache[$item2->get_item_type() . $item2->get_id()];
 		return ScoreDisplay :: compare_scores_by_custom_display($score1, $score2);
-	}	
+	}
 
 	function compare_scores ($score1, $score2) {
 		if (!isset($score1)) {
@@ -218,8 +218,8 @@ class UserDataGenerator
 		} else {
 			return (($score1[0]/$score1[1]) < ($score2[0]/$score2[1]) ? -1 : 1);
 		}
-			
-	}		
+
+	}
 
 // Other functions
 	private function build_course_name ($item) {
@@ -292,15 +292,15 @@ class UserDataGenerator
 	}
 
 	private function get_category_name_to_display ($cat) {
-		
+
 		if (isset($cat)){
-			
+
 			if ($cat->get_parent_id() == '0' || $cat->get_parent_id() == null){
 					return '';
 				} else {
 					return $cat->get_name();
 				}
-				
+
 			} else {
 					return '';
 			}

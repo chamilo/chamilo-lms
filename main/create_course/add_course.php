@@ -10,10 +10,10 @@
 ==============================================================================
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "create_course";
 
-//delete the globals["_cid"] we don't need it here 
+//delete the globals["_cid"] we don't need it here
 $cidReset = true; // Flag forcing the 'current course' reset
 
 // including the global file
@@ -65,7 +65,7 @@ $form->addElement('header', '', $tool_name);
 //title
 $form->add_textfield('title',get_lang('CourseName'),true,array('size'=>'60'));
 $form->applyFilter('title', 'html_filter');
-	
+
 $form->addElement('static',null,null,get_lang('Ex'));
 $categories_select = $form->addElement('select', 'category_code', get_lang('Fac'), $categories);
 $form->applyFilter('category_code', 'html_filter');
@@ -103,13 +103,13 @@ if ($form->validate()) {
 	$category_code = $course_values['category_code'];
 	$title = $course_values['title'];
 	$course_language = $course_values['course_language'];
-	
+
 	if (trim($wanted_code) == '') {
 		$wanted_code = generate_course_code(api_substr($title,0,$maxlength));
 	}
-	
+
 	$keys = define_course_keys($wanted_code, "", $_configuration['db_prefix']);
-	
+
 	$sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"',Database :: escape_string($wanted_code));
 	$result_check = api_sql_query($sql_check,__FILE__,__LINE__); //I don't know why this api function doesn't work...
 	if ( Database::num_rows($result_check)<1 ) {
@@ -139,7 +139,7 @@ if ($form->validate()) {
 		$form->display();
 		//echo '<p>'.get_lang('CourseCodeAlreadyExistExplained').'</p>';
 	}
-		
+
 } else {
 	// Display the form
 	$form->display();

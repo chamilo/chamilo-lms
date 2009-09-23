@@ -57,7 +57,7 @@ class UserTable extends SortableTable
 		$this->set_header($column++, get_lang('Category'));
 		$this->set_header($column++, get_lang('EvaluationAverage'));
 		$this->set_header($column++, get_lang('Result'));
-		
+
 		$scoredisplay = ScoreDisplay :: instance();
 		if ($scoredisplay->is_custom()) {
 			$this->set_header($column++, get_lang('Display'));
@@ -73,7 +73,7 @@ class UserTable extends SortableTable
 	}
 
 
-	/** 
+	/**
 	 * Function used by SortableTable to generate the data to display
 	 */
 	function get_table_data ($from = 1) {

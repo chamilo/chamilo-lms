@@ -50,7 +50,7 @@ class ResultTable extends SortableTable
 		$this->evaluation = $evaluation;
 		$this->iscourse = $iscourse;
 		$this->forprint = $forprint;
-		
+
 		if (isset ($addparams))  {
 			$this->set_additional_parameters($addparams);
 		}
@@ -87,7 +87,7 @@ class ResultTable extends SortableTable
 	}
 
 
-	/** 
+	/**
 	 * Function used by SortableTable to generate the data to display
 	 */
 	function get_table_data ($from = 1) {
@@ -125,7 +125,7 @@ class ResultTable extends SortableTable
 		} else {
 			$sorting |= ResultsDataGenerator :: RDG_SORT_ASC;
 		}
-			
+
 		$data_array = $this->datagen->get_data($sorting, $from, $this->per_page);
 
 
@@ -135,7 +135,7 @@ class ResultTable extends SortableTable
 			$row = array ();
 			if ($this->iscourse == '1') {
 				 $row[] = $item['result_id'];
-			}	
+			}
 			if ($is_western_name_order) {
 				$row[] = $item['firstname'];
 				$row[] = $item['lastname'];
@@ -152,7 +152,7 @@ class ResultTable extends SortableTable
 			}
 			$sortable_data[] = $row;
 		}
-		
+
 		return $sortable_data;
 	}
 

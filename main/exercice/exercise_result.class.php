@@ -34,7 +34,7 @@ class ExerciseResult
 {
 	private $exercises_list = array(); //stores the list of exercises
 	private $results = array(); //stores the results
-	
+
 	/**
 	 * constructor of the class
 	 */
@@ -102,7 +102,7 @@ class ExerciseResult
 		{
 			$return[] = $row;
 		}
-		return true;		
+		return true;
 	}
 	/**
 	 * Gets the results of all students (or just one student if access is limited)
@@ -202,7 +202,7 @@ class ExerciseResult
 				{
 					$return[$j+$i]['user'] = $hpresults[$i][0];
 					$return[$j+$i]['user_id'] = $results[$i][6];
-					
+
 				}
 				$return[$j+$i]['title'] = $title;
 				$return[$j+$i]['time'] = strftime(get_lang('dateTimeFormatLong'),$hpresults[$i][4]);

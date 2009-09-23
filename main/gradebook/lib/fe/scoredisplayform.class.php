@@ -40,17 +40,17 @@ class ScoreDisplayForm extends FormValidator
 		$customdisplays= $displayscore->get_custom_score_display_settings();
 		$nr_items =(count($customdisplays)!='0')?count($customdisplays):'1';
 		$this->setDefaults(array (
-		'enablescorecolor' => $displayscore->is_coloring_enabled(), 
-		'scorecolpercent' => $displayscore->get_color_split_value(), 
-		'enablescore' => $displayscore->is_custom(), 
+		'enablescorecolor' => $displayscore->is_coloring_enabled(),
+		'scorecolpercent' => $displayscore->get_color_split_value(),
+		'enablescore' => $displayscore->is_custom(),
 		'includeupperlimit' => $displayscore->is_upperlimit_included()
 		));
 		$this->addElement('hidden', 'maxvalue', '100');
 		$this->addElement('hidden', 'minvalue', '0');
 		$counter= 1;
-		
+
 		//setting the default values
-		
+
 		if(is_array($customdisplays)) {
 			foreach ($customdisplays as $customdisplay) {
 				$this->setDefaults(array (
@@ -61,7 +61,7 @@ class ScoreDisplayForm extends FormValidator
 			}
 		}
 		$scorecol= array ();
-		
+
 		//settings for the colored score
 		$this->addElement('header', '', get_lang('ScoreEdit'));
 		$this->addElement('html', '<b>' . get_lang('ScoreColor') . '</b>');
@@ -73,7 +73,7 @@ class ScoreDisplayForm extends FormValidator
 			<div class="formw">
 			<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	'.get_lang('Below').'&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{element} % '.get_lang('WillColorRed').'
 			</div>
-			</div>';	
+			</div>';
 
 		$this->AddElement('checkbox', 'enablescorecolor', null, get_lang('EnableScoreColor'), null);
 		$this->AddElement('text', 'scorecolpercent', null, array (
@@ -86,7 +86,7 @@ class ScoreDisplayForm extends FormValidator
 		$this->addRule(array('scorecolpercent','minvalue'), get_lang('UnderMin'), 'compare', '>');
 
 		//settings for the scoring system
-		
+
 		$this->addElement('html', '<br /><b>' . get_lang('ScoringSystem') . '</b>');
 		$this->addElement('checkbox', 'enablescore', null, get_lang('EnableScoringSystem'), null);
 
@@ -107,17 +107,17 @@ class ScoreDisplayForm extends FormValidator
 			for ($counter= 1; $counter <= 20; $counter++) {
 
 				$renderer =& $this->defaultRenderer();
-				$elementTemplateTwoLabel = 
+				$elementTemplateTwoLabel =
 				'<div id=' . $counter . ' style="display: '.(($counter<=$nr_items)?'inline':'none').';" class="row">
 				<p><!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
-				<div class="formw"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	<b>'.get_lang('And').'</b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{element} % =';	
+				<div class="formw"><!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	<b>'.get_lang('And').'</b>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp{element} % =';
 
 				$elementTemplateTwoLabel2 =
 				'<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->&nbsp{element}
-				<a href="javascript:minItem(' . ($counter) . ')"><img style="display: '.(($counter>=$nr_items && $counter!=1)?'inline':'none').';" id="min-' . $counter . '" src="../img/gradebook_remove.gif" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></img></a>			
+				<a href="javascript:minItem(' . ($counter) . ')"><img style="display: '.(($counter>=$nr_items && $counter!=1)?'inline':'none').';" id="min-' . $counter . '" src="../img/gradebook_remove.gif" alt="'.get_lang('Delete').'" title="'.get_lang('Delete').'"></img></a>
 				<a href="javascript:plusItem(' . ($counter+1) . ')"><img style="display: '.(($counter>=$nr_items)?'inline':'none').';" id="plus-' . ($counter+1) . '" src="../img/gradebook_add.gif" alt="'.get_lang('Add').'" title="'.get_lang('Add').'"></img></a>
 				</div></p></div>';
-				
+
 				$scorebetw= array ();
 				$this->AddElement('text', 'endscore[' . $counter . ']', null, array (
 					'size' => 5,

@@ -50,11 +50,11 @@ class ScoreDisplay
 	public static function instance() {
 		static $instance;
 		if (!isset ($instance)) {
-			$instance = new ScoreDisplay();	
+			$instance = new ScoreDisplay();
 		}
 		return $instance;
 	}
-	
+
 
 // Static methods
 
@@ -64,17 +64,17 @@ class ScoreDisplay
 	public static function compare_scores_by_custom_display ($score1, $score2)
 	{
 		if (!isset($score1)) {
-			return (isset($score2) ? 1 : 0);			
+			return (isset($score2) ? 1 : 0);
 		} elseif (!isset($score2)) {
-			return -1;			
+			return -1;
 		} else {
 			$scoredisplay = ScoreDisplay :: instance();
 			$custom1 = $scoredisplay->display_custom($score1);
 			$custom2 = $scoredisplay->display_custom($score2);
 			if ($custom1 == $custom2) {
-				return 0;				
+				return 0;
 			} else {
-				return (($score1[0]/$score1[1]) < ($score2[0]/$score2[1]) ? -1 : 1);				
+				return (($score1[0]/$score1[1]) < ($score2[0]/$score2[1]) ? -1 : 1);
 			}
 
 		}
@@ -95,7 +95,7 @@ class ScoreDisplay
     protected function ScoreDisplay() {
     	$this->coloring_enabled = $this->load_bool_setting('gradebook_score_display_coloring',0);
     	if ($this->coloring_enabled) {
-    		$this->color_split_value = $this->load_int_setting('gradebook_score_display_colorsplit',50);    		
+    		$this->color_split_value = $this->load_int_setting('gradebook_score_display_colorsplit',50);
     	}
     	$this->custom_enabled = $this->load_bool_setting('gradebook_score_display_custom', 0);
     	if ($this->custom_enabled) {
@@ -186,7 +186,7 @@ class ScoreDisplay
 	public function update_custom_score_display_settings ($displays) {
 		$this->custom_display = $displays;
    		$this->custom_display_conv = $this->convert_displays($this->custom_display);
-		
+
 		// remove previous settings
     	$tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
 		$sql = 'TRUNCATE TABLE '.$tbl_display;
@@ -197,7 +197,7 @@ class ScoreDisplay
 		$count = 0;
 		foreach ($displays as $display) {
 			if ($count > 0) {
-				$sql .= ',';				
+				$sql .= ',';
 			}
 			$sql .= "(NULL, '".$display['score']."', '".Database::escape_string($display['display'])."')";
 			$count++;
@@ -220,23 +220,23 @@ class ScoreDisplay
 		if ($this->custom_enabled && isset($this->custom_display_conv)) {
 				// students only see the custom display
 				if (!api_is_allowed_to_create_course()) {
-					$display = $this->display_custom($my_score);				
+					$display = $this->display_custom($my_score);
 				}
 				// course/platform admins
 				elseif ($what == SCORE_ONLY_DEFAULT) {
-					$display = $this->display_default ($my_score, $type2);				
+					$display = $this->display_default ($my_score, $type2);
 				}
 				elseif ($what == SCORE_ONLY_CUSTOM) {
-					$display = $this->display_custom ($my_score);				
+					$display = $this->display_custom ($my_score);
 				} else {
 					$display = $this->display_default ($my_score, $type2);
 					if ($this->display_custom ($my_score)!='')
-						$display.= ' ('.$this->display_custom ($my_score).')';				
+						$display.= ' ('.$this->display_custom ($my_score).')';
 			}
 
 		} else {
 		// if no custom display set, use default display
-			$display = $this->display_default ($my_score, $type2);		
+			$display = $this->display_default ($my_score, $type2);
 		}
 		return (($split_enabled ? $this->get_color_display_start_tag($my_score) : '')
 				. $display
@@ -270,9 +270,9 @@ class ScoreDisplay
 		if ($score==1) {
 			return '0/0';
 		} else {
-			return  $score[0] . ' / ' . $score[1];	
+			return  $score[0] . ' / ' . $score[1];
 		}
-		
+
 	}
 
 	private function display_custom ($score) {
@@ -318,7 +318,7 @@ class ScoreDisplay
 		}
 	}
 
-	
+
 	private function save_bool_setting ($property, $value) {
 		$this->save_int_setting ($property, ($value ? 'true' : 'false') );
 	}
@@ -331,7 +331,7 @@ class ScoreDisplay
 		api_sql_query($sql, __FILE__, __LINE__);
 	}
 
-	
+
 	/**
 	 * Get current custom score display settings
 	 * @return array 2-dimensional array - every element contains 3 subelements (id, score, display)
@@ -383,7 +383,7 @@ class ScoreDisplay
 			return 0;
 		} else {
 			return ($item1['score'] < $item2['score'] ? -1 : 1);
-		}	
+		}
 	}
 
 	private function get_color_display_start_tag($score) {
@@ -391,7 +391,7 @@ class ScoreDisplay
 		if ($this->coloring_enabled && ($score[0]/$my_score_denom) < ($this->color_split_value / 100)) {
 			return '<font color="red">';
 		} else {
-			return '';	
+			return '';
 		}
 	}
 

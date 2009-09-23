@@ -30,7 +30,7 @@
 *	@package dokeos.help
 ==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='help';
 $helpName=$_GET['open'];
 include('../inc/global.inc.php');
@@ -67,8 +67,8 @@ if(api_get_setting('stylesheets')<>'')
 <div style="margin:10px;">
 <div style="text-align:right;"><a href="javascript:window.close();"><?php echo get_lang('Close'); ?></a></div>
 <h4>
-<?php 
-echo get_lang('Faq'); 
+<?php
+echo get_lang('Faq');
 
 
 if(api_is_platform_admin())
@@ -108,7 +108,7 @@ if(!empty($_GET['edit']) && $_GET['edit']=='true' && api_is_platform_admin())
 }
 else
 {
-	echo file_get_contents(api_get_path(SYS_PATH).'home/'.$faq_file);	
+	echo file_get_contents(api_get_path(SYS_PATH).'home/'.$faq_file);
 }
 ?>
 <div style="text-align:right;"><a href="javascript:window.close();"><?php echo get_lang('Close'); ?></a></div>

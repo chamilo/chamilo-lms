@@ -61,10 +61,10 @@ if (!$displayscore->is_custom()) {
 	$allresults = Result :: load(null,null,$eval[0]->get_id());
 	$nr_items = array();
 	foreach ($displays as $itemsdisplay) {
-		$nr_items[$itemsdisplay['display']] = 0;		
+		$nr_items[$itemsdisplay['display']] = 0;
 	}
 	$resultcount = 0;
-	foreach ($allresults as $result) {	
+	foreach ($allresults as $result) {
 		$score = $result->get_score();
 		if (isset($score)) {
 			$display = $displayscore->display_score(array($score, $eval[0]->get_max()),SCORE_DIV | SCORE_IGNORE_SPLIT, SCORE_ONLY_CUSTOM);
@@ -80,7 +80,7 @@ if (!$displayscore->is_custom()) {
 	$highest_ratio = 0;
 	foreach ($keys as $key) {
 		if ($nr_items[$key] > $highest_ratio){
-		$highest_ratio = $nr_items[$key];		
+		$highest_ratio = $nr_items[$key];
 		}
 	}
 

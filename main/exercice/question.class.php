@@ -1,5 +1,5 @@
 <?php // $Id: question.class.php 22257 2009-07-20 17:50:09Z juliomontoya $
- 
+
 /* For licensing terms, see /dokeos_license.txt */
 
 /**
@@ -324,24 +324,24 @@ abstract class Question
 	{
 		global $picturePath, $_course, $_user;
 
-		if (!file_exists($picturePath)) {			
+		if (!file_exists($picturePath)) {
 			if (mkdir($picturePath)) {
 				$perm = api_get_setting('permissions_for_new_directories');
 				$perm = octdec(!empty($perm)?$perm:'0770');
 				chmod($picturePath,$perm);
 				// document path
 				$documentPath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . "/document";
-				$path = str_replace($documentPath,'',$picturePath);	
-				$title_path = basename($picturePath);				
+				$path = str_replace($documentPath,'',$picturePath);
+				$title_path = basename($picturePath);
 				$doc_id = add_document($_course, $path, 'folder', 0,$title_path);
 				api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id']);
-			}										
-		} 
-		
+			}
+		}
+
 		// if the question has got an ID
 		if($this->id)
 		{
-			
+
 			$extension = pathinfo($PictureName, PATHINFO_EXTENSION);
 			$this->picture='quiz-'.$this->id.'.jpg';
 			if($extension == 'gif' || $extension == 'png')
@@ -352,7 +352,7 @@ abstract class Question
 			}
 			else
 			{
-				move_uploaded_file($Picture,$picturePath.'/'.$this->picture)?true:false;	
+				move_uploaded_file($Picture,$picturePath.'/'.$this->picture)?true:false;
 			}
 			$document_id = add_document($_course, '/images/'.$this->picture, 'file', filesize($picturePath.'/'.$this->picture),$this->picture);
 			if($document_id)
@@ -566,10 +566,10 @@ abstract class Question
 	 */
 	function save($exerciseId=0) {
 		global $_course,$_user;
-		
-		$TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);		
+
+		$TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$TBL_QUESTIONS			= Database::get_course_table(TABLE_QUIZ_QUESTION);
-		
+
 		$id=$this->id;
 		$question=$this->question;
 		$description=$this->description;
@@ -577,18 +577,18 @@ abstract class Question
 		$position=$this->position;
 		$type=$this->type;
 		$picture=$this->picture;
-		$level=$this->level; 
+		$level=$this->level;
 
-		// question already exists		
+		// question already exists
 		if(!empty($id)) {
-			$sql="UPDATE $TBL_QUESTIONS SET 
+			$sql="UPDATE $TBL_QUESTIONS SET
 					question 	='".Database::escape_string(Security::remove_XSS($question))."',
 					description	='".Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGERLOWSECURITY))."',
 					ponderation	='".Database::escape_string($weighting)."',
 					position	='".Database::escape_string($position)."',
 					type		='".Database::escape_string($type)."',
 					picture		='".Database::escape_string($picture)."',
-					level		='".Database::escape_string($level)."' 
+					level		='".Database::escape_string($level)."'
 				WHERE id='".Database::escape_string($id)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
 			if(!empty($exerciseId)) {
@@ -611,7 +611,7 @@ abstract class Question
 			$current_position=Database::result($result,0,0);
 			$this -> updatePosition($current_position+1);
 			$position = $this -> position;
-			
+
 			$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type,picture,level) VALUES(
 					'".Database::escape_string(Security::remove_XSS($question))."',
 					'".Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGERLOWSECURITY))."',
@@ -624,16 +624,16 @@ abstract class Question
 			api_sql_query($sql,__FILE__,__LINE__);
 
 			$this->id=Database::get_last_insert_id();
-			
+
 			api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizQuestionAdded',$_user['user_id']);
-			
+
 			// If hotspot, create first answer
 			if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
 				$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 				$sql="INSERT INTO $TBL_ANSWERS (`id` , `question_id` , `answer` , `correct` , `comment` , `ponderation` , `position` , `hotspot_coordinates` , `hotspot_type` ) VALUES ('1', '".Database::escape_string($this->id)."', '', NULL , '', '10' , '1', '0;0|0|0', 'square')";
 				api_sql_query($sql,__FILE__,__LINE__);
-				
+
             }
 
             if (api_get_setting('search_enabled')=='true') {
@@ -651,7 +651,7 @@ abstract class Question
 		// if the question is created in an exercise
 		if($exerciseId) {
 			/*
-			$sql = 'UPDATE '.Database::get_course_table(TABLE_LP_ITEM).' 
+			$sql = 'UPDATE '.Database::get_course_table(TABLE_LP_ITEM).'
 					SET max_score = '.intval($weighting).'
 					WHERE item_type = "'.TOOL_QUIZ.'"
 					AND path='.intval($exerciseId);
@@ -705,7 +705,7 @@ abstract class Question
                                     }
                                 }
 			                }
-		                } 
+		                }
 	                }
                 }
                 if ($rmQs) {
@@ -778,7 +778,7 @@ abstract class Question
 	function addToList($exerciseId, $fromSave=FALSE) {
 		global $TBL_EXERCICE_QUESTION;
 		$id=$this->id;
-		// checks if the exercise ID is not in the list		
+		// checks if the exercise ID is not in the list
 		if(!in_array($exerciseId,$this->exerciseList)) {
 			$this->exerciseList[]=$exerciseId;
 			$sql="INSERT INTO $TBL_EXERCICE_QUESTION (question_id, exercice_id) VALUES('".Database::escape_string($id)."','".Database::escape_string($exerciseId)."')";
@@ -839,11 +839,11 @@ abstract class Question
 	 */
 	function delete($deleteFromEx=0) {
 		global $_course,$_user;
-		
-		$TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);		
+
+		$TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$TBL_QUESTIONS			= Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
-		
+
 		$id=$this->id;
 
 		// if the question must be removed from all exercises
@@ -868,7 +868,7 @@ abstract class Question
 
 			$sql="DELETE FROM $TBL_REPONSES WHERE question_id='".Database::escape_string($id)."'";
 			api_sql_query($sql,__FILE__,__LINE__);
-			
+
 			api_item_property_update($_course, TOOL_QUIZ, $id,'QuizQuestionDeleted',$_user['user_id']);
 			$this->removePicture();
 
@@ -926,7 +926,7 @@ abstract class Question
 			} else {
 				echo 'Can\'t instanciate class '.$class_name.' of type '.$type;
 				return null;
-			}	
+			}
 		}
 	}
 
@@ -940,58 +940,58 @@ abstract class Question
 		echo '	<style>
 					div.row div.label{ width: 10%; }
 					div.row div.formw{ width: 89%; }
-					.media { display:none;} 
+					.media { display:none;}
 				</style>';
-				
-		echo '<script> 	 	
-			// hack to hide http://cksource.com/forums/viewtopic.php?f=6&t=8700 
-					
+
+		echo '<script>
+			// hack to hide http://cksource.com/forums/viewtopic.php?f=6&t=8700
+
 			function FCKeditor_OnComplete( editorInstance )
 			{
 			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
 			      HideFCKEditorByInstanceName (editorInstance.Name);
 			   }
 			}
-			
+
 			function HideFCKEditorByInstanceName ( editorInstanceName ) {
 			   if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" ) {
 			      document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
 			      }
 			}
-		
+
 			function show_media()
-			{  
-				var my_display = document.getElementById(\'HiddenFCKquestionDescription\').style.display; 
+			{
+				var my_display = document.getElementById(\'HiddenFCKquestionDescription\').style.display;
 				if(my_display== \'none\' || my_display == \'\') {
 				document.getElementById(\'HiddenFCKquestionDescription\').style.display = \'block\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';					
-			} else {			
+				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';
+			} else {
 				document.getElementById(\'HiddenFCKquestionDescription\').style.display = \'none\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';					
-			}	
-		}	
-		</script>';		
-			
+				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';
+			}
+		}
+		</script>';
+
 
 		$renderer = $form->defaultRenderer();
 		$form->addElement('html','<div class="form">');
 		// question name
 		$form->addElement('text','questionName','<span class="form_required">*</span> '.get_lang('Question'),'size="80"');
 		//$form->applyFilter('questionName','html_filter');
-		
+
 		//$radios_results_enabled[] = $form->createElement('static', null, null, null);
 		//$test=FormValidator :: createElement ('text', 'questionName');
 
 		//$radios_results_enabled[]=$test;
 		// question level
-		
-		$select_level = array (1,2,3,4,5); 
-		//$radios_results_enabled[] = 	
+
+		$select_level = array (1,2,3,4,5);
+		//$radios_results_enabled[] =
 		foreach($select_level as $val) {
 			$radios_results_enabled[] = FormValidator :: createElement ('radio', null, null,$val,$val);
 		}
 		$form->addGroup($radios_results_enabled,'questionLevel',get_lang('Difficulty'));
-					
+
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw" >{element}</div></div>','questionName');
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionLevel');
 		$form->addRule('questionName', get_lang('GiveQuestion'), 'required');
@@ -1004,7 +1004,7 @@ abstract class Question
 		$editor_config = array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '150');
 		if(is_array($fck_config)){
 			$editor_config = array_merge($editor_config, $fck_config);
-		}		
+		}
 		if(!api_is_allowed_to_edit()) $editor_config['UserStatus'] = 'student';
 
 		$form -> addElement('html','<div class="row">
@@ -1027,10 +1027,10 @@ abstract class Question
 			case 1:	$this->question = get_lang('langDefaultUniqueQuestion'); break;
 			case 2:	$this->question = get_lang('langDefaultMultipleQuestion'); break;
 			case 3:	$this->question = get_lang('langDefaultFillBlankQuestion'); break;
-			case 4:	$this->question = get_lang('langDefaultMathingQuestion'); break;			
+			case 4:	$this->question = get_lang('langDefaultMathingQuestion'); break;
 			case 5:	$this->question = get_lang('langDefaultOpenQuestion');	break;
 		}
-		$form->addElement('html','</div>');	 
+		$form->addElement('html','</div>');
 		// default values
 		$defaults = array();
 		$defaults['questionName'] = $this -> question;
@@ -1078,21 +1078,21 @@ abstract class Question
 		global $exerciseId;
 		// 1. by default we show all the question types
 		$question_type_custom_list = self::$questionTypes;
-				
+
 		if (!isset($feedbacktype)) $feedbacktype=0;
 		if ($feedbacktype==1) {
 			//2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
-			$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER]); 
+			$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER]);
 		}
 		echo '<ul class="question_menu" style="padding:0px; margin:-2px;">';
-		foreach ($question_type_custom_list as $i=>$a_type) {			
+		foreach ($question_type_custom_list as $i=>$a_type) {
 			// include the class of the type
-			include_once($a_type[0]);			
+			include_once($a_type[0]);
 			 // get the picture of the type and the langvar which describes it
-			eval('$img = '.$a_type[1].'::$typePicture;');			
-			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');			
-			echo '<li>';		
-			echo '<div class="icon_image_content">';	
+			eval('$img = '.$a_type[1].'::$typePicture;');
+			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
+			echo '<li>';
+			echo '<div class="icon_image_content">';
 			echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation).'</a>';
 			echo '<br>';
 			echo '<a href="admin.php?newQuestion=yes&answerType='.$i.'">'.$explanation.'</a>';
@@ -1101,12 +1101,12 @@ abstract class Question
 		}
 		echo '<li>';
 		echo '<div class="icon_image_content">';
-		if ($feedbacktype==1) { 
+		if ($feedbacktype==1) {
 			echo $url = '<a href="question_pool.php?type=1&fromExercise='.$exerciseId.'">';
 		} else {
-			echo $url = '<a href="question_pool.php?fromExercise='.$exerciseId.'">';	
+			echo $url = '<a href="question_pool.php?fromExercise='.$exerciseId.'">';
 		}
-		echo Display::return_icon('database.png', get_lang('GetExistingQuestion'), '');		
+		echo Display::return_icon('database.png', get_lang('GetExistingQuestion'), '');
 		echo '</a><br>';
 		echo $url;
 		echo get_lang('GetExistingQuestion');
@@ -1114,7 +1114,7 @@ abstract class Question
 		echo '</div></li>';
 		echo '</ul>';
 	}
-	
+
 	static function get_types_information()
 	{
 		return self::$questionTypes;

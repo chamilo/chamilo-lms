@@ -49,11 +49,11 @@ class FreeAnswer extends Question {
 	 */
 	function createAnswersForm ($form)
 	{
-		$form -> addElement('text','weighting',get_lang('Weighting'),'size="5"');		
+		$form -> addElement('text','weighting',get_lang('Weighting'),'size="5"');
 		global $text, $class;
 		// setting the save button here and not in the question class.php
 		$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
-		
+
 		if(!empty($this->id)) {
 			$form -> setDefaults(array('weighting' => float_format($this->weighting, 1)));
 		} else {
@@ -65,7 +65,7 @@ class FreeAnswer extends Question {
 	 * abstract function which creates the form to create / edit the answers of the question
 	 * @param the formvalidator instance
 	 */
-	function processAnswersCreation($form) 
+	function processAnswersCreation($form)
 	{
 		$this -> weighting = $form -> getSubmitValue('weighting');
 		$this->save();

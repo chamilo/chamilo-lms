@@ -144,7 +144,7 @@ $sql_fb_type='SELECT feedback_type FROM '.$TBL_EXERCICES.' WHERE id ="'.Database
 
 $res_fb_type=Database::query($sql_fb_type,__FILE__,__LINE__);
 $row_fb_type=Database::fetch_row($res_fb_type);
-$feedback_type = $row_fb_type[0]; 
+$feedback_type = $row_fb_type[0];
 
  // if the above variables are empty or incorrect, we don't have any result to show, so stop the script
 if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExercise))
@@ -162,7 +162,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
@@ -343,9 +343,9 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 		border="0" alt=" " />
 	</td>
 	<td width="45%" style="border-bottom: 1px solid #4171B5;">
-		<?php		
+		<?php
 		$answer=api_parse_tex($answer);
-		echo $answer; 
+		echo $answer;
 		?>
 	</td>
 	<td width="45%" style="border-bottom: 1px solid #4171B5;">
@@ -364,7 +364,7 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 		else
 		{
 			echo '&nbsp;';
-		} 
+		}
 		?>
 	</td>
 	</tr>
@@ -422,23 +422,23 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 				<?php echo $answerId; ?>
 				</div>
 					<div style="float:left; padding-left:5px;">
-						
+
 						<div style="display:inline; float:left; width:80px;"><?php echo $answer ?></div>
-						
+
 					</div>
 				</td>
 				<td valign="top">
 					<?php $my_choice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $my_choice; ?>
 				</td>
-				<td valign="top">				
+				<td valign="top">
 					<?php
 					if ($studentChoice) {
-						echo '<span style="font-weight: bold; color: #008000;">';							
+						echo '<span style="font-weight: bold; color: #008000;">';
 					} else {
-						echo '<span style="font-weight: bold; color: #FF0000;">';												
-					}					
+						echo '<span style="font-weight: bold; color: #FF0000;">';
+					}
 					echo $answerComment;
-					echo '</span>';				 
+					echo '</span>';
 					?>
 				</td>
 		</tr>
@@ -461,11 +461,11 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 
 //show exercise title
 ?>
-	<?php if($origin != 'learnpath') {?>	
+	<?php if($origin != 'learnpath') {?>
 		<h3><?php echo $exerciseTitle ?>: <?php echo get_lang("Result"); ?></h3>
 		<?php echo $exerciseDescription; ?>
 	<?php } ?>
-	
+
 	<form method="get" action="exercice.php">
 	<input type="hidden" name="origin" value="<?php echo $origin; ?>" />
     <input type="hidden" name="learnpath_id" value="<?php echo $learnpath_id; ?>" />
@@ -477,9 +477,9 @@ $i=$totalScore=$totalWeighting=0;
 if($debug>0){echo "ExerciseResult: "; var_dump($exerciseResult); echo "QuestionList: ";var_dump($questionList);}
 
 if ($_configuration['tracking_enabled']) {
-	// Create an empty exercise  
+	// Create an empty exercise
 	$exeId= create_event_exercice($objExercise->selectId());
-}	 
+}
 $counter=0;
 
 // Loop over all question to show results for each of them, one by one
@@ -519,8 +519,8 @@ foreach ($questionList as $questionId) {
 		</td>
 		</tr>
 		<tr>
-		<td colspan="<?php echo $colspan; ?>">				
-			<i><?php echo $questionDescription; ?></i>				
+		<td colspan="<?php echo $colspan; ?>">
+			<i><?php echo $questionDescription; ?></i>
 		</td>
 		</tr>
 		<?php
@@ -569,7 +569,7 @@ foreach ($questionList as $questionId) {
 								<td width="152" valign="top">
 									<i><?php echo get_lang("CorrectAnswer"); ?></i><br /><br />
 								</td>
-						
+
 								<td width="100" valign="top">
 									<i><?php echo get_lang('HotspotHit'); ?></i><br /><br />
 								</td>
@@ -590,7 +590,7 @@ foreach ($questionList as $questionId) {
 				</tr>
 			<?php
 		}
-	} 
+	}
 
 	// construction of the Answer object
 	$objAnswerTmp=new Answer($questionId);
@@ -599,10 +599,10 @@ foreach ($questionList as $questionId) {
 	if ($answerType == FREE_ANSWER) {
 		$nbrAnswers = 1;
 	}
-		
+
 	// We're inside *one* question. Go through each possible answer for this question
 	for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
-		
+
 		//select answer of *position*=$answerId
 		$answer=$objAnswerTmp->selectAnswer($answerId);
 		$answerComment=$objAnswerTmp->selectComment($answerId);
@@ -630,34 +630,34 @@ foreach ($questionList as $questionId) {
 					}
 					break;
 			// for fill in the blanks
-			case FILL_IN_BLANKS :					
+			case FILL_IN_BLANKS :
 		    		// the question is encoded like this
 				    // [A] B [C] D [E] F::10,10,10@1
 				    // number 1 before the "@" means that is a switchable fill in blank question
 				    // [A] B [C] D [E] F::10,10,10@ or  [A] B [C] D [E] F::10,10,10
-				    // means that is a normal fill blank question			
+				    // means that is a normal fill blank question
 
 					// first we explode the "::"
-					$pre_array = explode('::', $answer);	
+					$pre_array = explode('::', $answer);
 
 					// is switchable fill blank or not
-                    $last = count($pre_array)-1;		
+                    $last = count($pre_array)-1;
 					$is_set_switchable = explode('@', $pre_array[$last]);
-					
+
 					$switchable_answer_set=false;
 					if (isset($is_set_switchable[1]) && $is_set_switchable[1]==1)
 					{
 						$switchable_answer_set=true;
-					}								
-					
+					}
+
                     $answer = '';
                     for ($k=0; $k<$last; $k++)
                     {
 					  $answer .= $pre_array[$k];
                     }
-					
+
 					// splits weightings that are joined with a comma
-					$answerWeighting = explode(',',$is_set_switchable[0]);				
+					$answerWeighting = explode(',',$is_set_switchable[0]);
 
 					// we save the answer because it will be modified
 					$temp=$answer;
@@ -676,7 +676,7 @@ foreach ($questionList as $questionId) {
 
 					$answer='';
 					$j=0;
-					
+
                     //initialise answer tags
 					$user_tags=array();
 					$correct_tags=array();
@@ -695,7 +695,7 @@ foreach ($questionList as $questionId) {
                             $real_text[] = $answer;
 							break; //no more "blanks", quit the loop
 						}
-						// adds the piece of text that is before the blank 
+						// adds the piece of text that is before the blank
                         //and ends with '[' into a general storage array
                         $real_text[]=api_substr($temp,0,$pos+1);
 						$answer.=api_substr($temp,0,$pos+1);
@@ -716,62 +716,62 @@ foreach ($questionList as $questionId) {
 						$temp=api_substr($temp,$pos+1);
                         //$answer .= ']';
 					}
-														
-					$answer='';			
-					$real_correct_tags = $correct_tags;							
+
+					$answer='';
+					$real_correct_tags = $correct_tags;
 					$chosen_list=array();
-					
+
 					for($i=0;$i<count($real_correct_tags);$i++) {
 						if ($i==0)
 						{
 							$answer.=$real_text[0];
 						}
-						
+
 						if (!$switchable_answer_set)
-						{						
+						{
 							if ($correct_tags[$i]==$user_tags[$i])
 							{
 								// gives the related weighting to the student
-								$questionScore+=$answerWeighting[$i]; 
+								$questionScore+=$answerWeighting[$i];
 								// increments total score
 								$totalScore+=$answerWeighting[$i];
 								// adds the word in green at the end of the string
-								$answer.=$correct_tags[$i]; 
+								$answer.=$correct_tags[$i];
 							}
-							// else if the word entered by the student IS NOT the same as the one defined by the professor											
+							// else if the word entered by the student IS NOT the same as the one defined by the professor
 							elseif(!empty($user_tags[$i]))
 							{
 								// adds the word in red at the end of the string, and strikes it
-								$answer.='<font color="red"><s>'.$user_tags[$i].'</s></font>'; 
+								$answer.='<font color="red"><s>'.$user_tags[$i].'</s></font>';
 							}
 							else
 							{
 								// adds a tabulation if no word has been typed by the student
 								$answer.='&nbsp;&nbsp;&nbsp;';
-							}												
-						} else { 	
+							}
+						} else {
 							// switchable fill in the blanks
 							if (in_array($user_tags[$i],$correct_tags)) {
-								$chosen_list[]=$user_tags[$i];													
+								$chosen_list[]=$user_tags[$i];
 								$correct_tags=array_diff($correct_tags,$chosen_list);
-												
-								// gives the related weighting to the student												
+
+								// gives the related weighting to the student
 								$questionScore+=$answerWeighting[$i];
 								// increments total score
 								$totalScore+=$answerWeighting[$i];
 								// adds the word in green at the end of the string
 								$answer.=$user_tags[$i];
-							}													// else if the word entered by the student IS NOT the same as the one defined by the professor											
+							}													// else if the word entered by the student IS NOT the same as the one defined by the professor
 							elseif(!empty($user_tags[$i]))
 							{
 								// adds the word in red at the end of the string, and strikes it
-								$answer.='<font color="red"><s>'.$user_tags[$i].'</s></font>'; 
+								$answer.='<font color="red"><s>'.$user_tags[$i].'</s></font>';
 							}
 							else
 							{
 								// adds a tabulation if no word has been typed by the student
 								$answer.='&nbsp;&nbsp;&nbsp;';
-							}												
+							}
 						}
 						// adds the correct word, followed by ] to close the blank
 						$answer.=' / <font color="green"><b>'.$real_correct_tags[$i].'</b></font>]';
@@ -818,7 +818,7 @@ foreach ($questionList as $questionId) {
 					}
 					break;
 			// for hotspot with no order
-			case HOT_SPOT :			
+			case HOT_SPOT :
 					$studentChoice=$choice[$answerId];
 					if ($studentChoice) { //the answer was right
 						$questionScore+=$answerWeighting;
@@ -842,10 +842,10 @@ foreach ($questionList as $questionId) {
 
 					break;
 		} // end switch Answertype
-		
+
 		//display answers (if not matching type, or if the answer is correct)
 		if ($answerType != MATCHING || $answerCorrect) {
-			if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {	
+			if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
 				if ($origin!='learnpath') {
 					display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect);
 				}
@@ -891,10 +891,10 @@ foreach ($questionList as $questionId) {
 				if($origin != 'learnpath') {
 					display_free_answer($choice);
 				}
-				
+
 			}
 			elseif($answerType == HOT_SPOT)
-			{					
+			{
 				if ($origin != 'learnpath') {
 					display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment);
 				}
@@ -933,7 +933,7 @@ foreach ($questionList as $questionId) {
 			if($origin != 'learnpath') {
 			echo "</table></td></tr>";	//echo Security::remove_XSS($questionId);
 			?>
-		
+
 			<tr>
 				<td colspan="2">
 					<i><?php echo get_lang('Hotspot'); ?></i><br /><br />
@@ -942,8 +942,8 @@ foreach ($questionList as $questionId) {
 					</object>
 				</td>
 			</tr>
-			<?php 
-			} 
+			<?php
+			}
 		}
 	?>
 	<?php if($origin != 'learnpath') { ?>
@@ -951,9 +951,9 @@ foreach ($questionList as $questionId) {
 		<td colspan="<?php echo $colspan; ?>" align="left">
 			<b>
 			<?php
-			if($questionScore==-1){ 
+			if($questionScore==-1){
 				echo get_lang('Score').": 0 /".float_format($questionWeighting);
-			} else {					
+			} else {
 				echo get_lang('Score').": ".float_format($questionScore,1)."/".float_format($questionWeighting,1);
 			}
 			?></b><br /><br />
@@ -973,9 +973,9 @@ foreach ($questionList as $questionId) {
 		if(empty($choice)){
 			$choice = 0;
 		}
-		if ($answerType==MULTIPLE_ANSWER ) {				
-			if ($choice != 0) {					
-				$reply = array_keys($choice);																									
+		if ($answerType==MULTIPLE_ANSWER ) {
+			if ($choice != 0) {
+				$reply = array_keys($choice);
 				for ($i=0;$i<sizeof($reply);$i++) {
 					$ans = $reply[$i];
 					exercise_attempt($questionScore,$ans,$quesId,$exeId,$i);
@@ -996,7 +996,7 @@ foreach ($questionList as $questionId) {
 					$answer = Database::result($res,0,"position");
 				} else {
 					$answer = 0;
-				}					
+				}
 				exercise_attempt($questionScore,$answer,$quesId,$exeId,$j);
 			}
 		}
@@ -1039,9 +1039,9 @@ foreach ($questionList as $questionId) {
 	<tr>
 	<td>
 	<br />
-		
+
 		<button type="submit" class="save"><?php echo get_lang('Finish');?></button>
-			
+
 	</td>
 	</tr>
 	</table>
@@ -1049,14 +1049,14 @@ foreach ($questionList as $questionId) {
 	</form>
 
 	<br /><br />
-<?php 
-if ($origin == 'learnpath') {	
+<?php
+if ($origin == 'learnpath') {
 	//Display::display_normal_message(get_lang('ExerciseFinished'));
-	$lp_mode =  $_SESSION['lp_mode'];	
+	$lp_mode =  $_SESSION['lp_mode'];
 	$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
-	$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';	 
+	$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
 	echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
-}	
+}
 /*
 ==============================================================================
 		Tracking of results
@@ -1064,7 +1064,7 @@ if ($origin == 'learnpath') {
 */
 
 if ($_configuration['tracking_enabled']) {
-	//	Updates the empty exercise  
+	//	Updates the empty exercise
 	$safe_lp_id = $learnpath_id==''?0:(int)$learnpath_id;
 	$safe_lp_item_id = $learnpath_item_id==''?0:(int)$learnpath_item_id;
 	$quizDuration = (!empty($_SESSION['quizStartTime']) ? time() - $_SESSION['quizStartTime'] : 0);
@@ -1096,7 +1096,7 @@ if(count($arrques)>0) {
 		<meta content="text/html; charset='.$mycharset.'" http-equiv="content-type">';
 	$msg .= '</head>
 	<body><br />
-	<p>'.get_lang('OpenQuestionsAttempted').' : 
+	<p>'.get_lang('OpenQuestionsAttempted').' :
 	</p>
 	<p>'.get_lang('AttemptDetails').' : ><br />
 	</p>
@@ -1129,7 +1129,7 @@ if(count($arrques)>0) {
 		    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Answer').' </span></td>
 		    <td valign="top" bgcolor="#F3F3F3"><span class="style16"> #answer#</span></td>
 		  	</tr>';
-		
+
 			$msg1= str_replace("#exercise#",$exerciseTitle,$msg);
 			$msg= str_replace("#firstName#",$firstName,$msg1);
 			$msg1= str_replace("#lastName#",$lastName,$msg);
@@ -1142,16 +1142,16 @@ if(count($arrques)>0) {
 		$msg.='</table><br>
 	 	<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
 	<a href="#url#">#url#</a></span></body></html>';
-	
+
 		$msg1= str_replace("#url#",$url,$msg);
 		$mail_content = $msg1;
 		$student_name = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName']);
 		$subject = get_lang('OpenQuestionsAttempted');
-		
+
 		$from = api_get_setting('noreply_email_address');
 		if($from == '') {
 			if(isset($_SESSION['id_session']) && $_SESSION['id_session'] != ''){
-				$sql = 'SELECT user.email,user.lastname,user.firstname FROM '.TABLE_MAIN_SESSION.' as session, '.TABLE_MAIN_USER.' as user 
+				$sql = 'SELECT user.email,user.lastname,user.firstname FROM '.TABLE_MAIN_SESSION.' as session, '.TABLE_MAIN_USER.' as user
 						WHERE session.id_coach = user.user_id
 						AND session.id = "'.Database::escape_string($_SESSION['id_session']).'"
 						';
@@ -1170,7 +1170,7 @@ if(count($arrques)>0) {
 				$from = Database::result($result,0,'email');
 				$from_name = api_get_person_name(Database::result($result,0,'firstname'), Database::result($result,0,'lastname'), null, PERSON_NAME_EMAIL_ADDRESS);
 			}
-		}	
+		}
 	api_mail_html($student_name, $to, $subject, $mail_content, $from_name, $from, array('encoding'=>$mycharset,'charset'=>$mycharset));
 }
 ?>

@@ -1,19 +1,19 @@
 <!--
  * FCKeditor - The text editor for internet
  * Copyright (C) 2003-2004 Frederico Caldeira Knabben
- * 
+ *
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
+ *
  * For further information visit:
  * 		http://www.fckeditor.net/
- * 
+ *
  * File Name: fck_image.html
  * 	Image Properties dialog window.
- * 
+ *
  * Version:  2.0 Beta 2
  * Modified: 2004-06-19 00:24:56
- * 
+ *
  * File Authors:
  * 		hmlyons (hmlyons@users.sourceforge.net)
  * 		Andrey Grebnev (andrey.grebnev@blandware.com)
@@ -42,7 +42,7 @@
 				<td>
 					<table cellspacing="0" cellpadding="0" width="100%" border="0">
 						<tr>
-							<td valign="top" width="100%">								
+							<td valign="top" width="100%">
 								<span fckLang="DlgFlashURL">URL</span><br>
 								<input style="WIDTH: 100%" type="text" id="txtURL" onblur="updatePreview();">
 							</td>
@@ -55,10 +55,10 @@
 				</td>
 			</tr>
 		<tr height="100%">
-		    <td valign="top"> 
+		    <td valign="top">
 		      <table cellspacing="0" cellpadding="0" width="100%" border="0" height="100%">
 				<tr>
-		          	<td height="140" valign="top"> 
+		          	<td height="140" valign="top">
 		          		<br>
 						<table cellspacing="2" cellpadding="1" border="0">
 							<tr>
@@ -69,7 +69,7 @@
 								<td><span fckLang="DlgFlashHeight">Height</span>&nbsp;</td>
 								<td><input type="text" size="3" id="txtHeight" onkeyup="OnSizeChanged('Height',this.value);"></td>
 							</tr>
-		              		<tr> 
+		              		<tr>
 		                		<td><span fckLang="DlgFlashAlign">Align</span>&nbsp;</td>
 		                		<td>
 		                			<select name="selAlign" id="selAlign" onchange="updatePreview();">
@@ -86,15 +86,15 @@
 		                  			</select>
 		                  		</td>
 		              		</tr>
-		              		<tr> 
+		              		<tr>
 		                		<td height="24"><span fckLang="DlgFlashHSpace">HSpace</span>&nbsp;</td>
 		                		<td><input name="txtHSpace" type="text" id="txtHSpace" onkeyup="updatePreview();" size="2"></td>
 		              		</tr>
-		              		<tr> 
+		              		<tr>
 		                		<td><span fckLang="DlgFlashVSpace">VSpace</span>&nbsp;</td>
 			                	<td><input name="txtVSpace" type="text" id="txtVSpace" onkeyup="updatePreview();" size="2"></td>
 			              	</tr>
-			              	<tr> 
+			              	<tr>
 			                	<td><span fckLang="DlgFlashQuality">Quality</span>&nbsp;</td>
 			                	<td>
 			                		<select name="selQuality" id="selQuality" onchange="updatePreview();">
@@ -105,7 +105,7 @@
 			                  		</select>
 			                  	</td>
 			              	</tr>
-			              	<tr> 
+			              	<tr>
 			                	<td><span fckLang="DlgFlashScale">Scale</span>&nbsp;</td>
 			                	<td>
 			                		<select name="selScale" id="selScale" onchange="updatePreview();">
@@ -115,7 +115,7 @@
 			                  		</select>
 			                  	</td>
 			              	</tr>
-			              	<tr> 
+			              	<tr>
 			                	<td><span fckLang="DlgFlashBgColor">Bg Color</span>&nbsp;</td>
 			                	<td><input id="txtBgColor" type="text" onkeyup="updatePreview();" size="8">
 			                	<input type="button" fckLang="DlgFlashBtnSelect" value="Select..." onclick="SelectColor()">
@@ -141,7 +141,7 @@
 												<div class="FlashPreviewArea">
 													<object
 														id="flashPreview"
-														classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" 
+														classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 														codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=5,0,0,0"
 														style="DISPLAY: none">
 													</object>

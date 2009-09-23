@@ -1,7 +1,7 @@
 <?php //$id: $
 /**
  * Script that displays an error message when no content could be loaded
- * @package dokeos.learnpath 
+ * @package dokeos.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 /**
@@ -29,11 +29,11 @@ $dokeos_chapter = false;
 
 foreach($list as $toc) {
 	if ($toc['id']==$lp_item_id && ($toc['type']=='dokeos_chapter' || $toc['type']=='dokeos_module' || $toc['type']=='dir')) {
-		$dokeos_chapter = true;		
-	}	
+		$dokeos_chapter = true;
+	}
 }
 
-if ($dokeos_chapter) { 
+if ($dokeos_chapter) {
 	$src='blank.php';
 } else {
 	switch($lp_type){
@@ -45,9 +45,9 @@ if ($dokeos_chapter) {
 				$_SESSION['oLP']->start_current_item(); //starts time counter manually if asset
 			}else{
 				$src = 'blank.php?error=prerequisites';
-			}		
+			}
 			break;
-		case 2:  
+		case 2:
 				$_SESSION['oLP']->stop_previous_item();
 				$prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
 				if($prereq_check === true){
@@ -55,9 +55,9 @@ if ($dokeos_chapter) {
 					$_SESSION['oLP']->start_current_item(); //starts time counter manually if asset
 				}else{
 					$src = 'blank.php?error=prerequisites';
-				}		
+				}
 				break;
-		case 3:			
+		case 3:
 			//save old if asset
 			$_SESSION['oLP']->stop_previous_item(); //save status manually if asset
 			$prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
@@ -69,7 +69,7 @@ if ($dokeos_chapter) {
 			}
 			break;
 		case 4:
-			break;	
+			break;
 	}
 }
 if($debug>0){error_log('New lp - In lp_content.php - File url is '.$src,0);}
@@ -79,7 +79,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')

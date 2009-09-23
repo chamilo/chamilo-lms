@@ -24,7 +24,7 @@ if (isset($_GET['action']))
 	{
 		$result_message=assign_role('group', $_GET['action'], $group_id, $_GET['role'], $_GET['scope']);
 		echo 'hier';
-	}	
+	}
 }
 if (isset($result_message))
 {
@@ -81,7 +81,7 @@ if (api_get_setting('group_roles')=='true')
 echo "<table class=\"data_table\">\n";
 
 // the header
-echo "\t<tr>\n";	
+echo "\t<tr>\n";
 echo "\t\t<th>".get_lang('Module')."</th>\n";
 foreach ($header_array as $header_key=>$header_value)
 {
@@ -92,16 +92,16 @@ echo "\t</tr>\n";
 // the main area with the checkboxes or images
 foreach ($tool_rights as $tool=>$rights) // $tool_rights contains all the possible tools and their rights
 {
-	echo "\t<tr>\n";	
+	echo "\t<tr>\n";
 	echo "\t\t<td>\n";
-	echo get_lang($tool); 
-	echo "\t\t</td>\n"; 
+	echo get_lang($tool);
+	echo "\t\t</td>\n";
 
 	foreach ($header_array as $key=>$value)
 	{
 		echo "\t\t<td align='center'>\n";
 		if (in_array($value,$rights))
-		{		
+		{
 			if ($setting_visualisation=='checkbox')
 			{
 				//display_checkbox_matrix($current_group_permissions, $tool, $value);
@@ -115,8 +115,8 @@ foreach ($tool_rights as $tool=>$rights) // $tool_rights contains all the possib
 		}
 		// note: in a later stage this part will be replaced by a function
 		// so that we can easily switch between a checkbox approach or an image approach
-		// where every click is in fact a change of status. In the checkbox approach you first have to 
-		// do the changes and then store them by clicking the submit button. 
+		// where every click is in fact a change of status. In the checkbox approach you first have to
+		// do the changes and then store them by clicking the submit button.
 		echo "\t\t</td>\n";
 	}
 	echo "\t</tr>\n";

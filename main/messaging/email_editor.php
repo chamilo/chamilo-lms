@@ -23,10 +23,10 @@
  * Dokeos' users.
  * It can be called from the JavaScript library email_links.lib.php which
  * overtakes the mailto: links to use the internal interface instead.
- * @author	Yannick Warnier <ywarnier@beeznest.org> 
+ * @author	Yannick Warnier <ywarnier@beeznest.org>
  */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "index";
 
 require_once"../inc/global.inc.php";
@@ -50,10 +50,10 @@ if(!empty($_POST['submit_email']) && !empty($_POST['email_title']) && !empty($_P
 	$email_administrator=Security::remove_XSS($_POST['dest']);
 	$user_id=api_get_user_id();
 	$title=Security::remove_XSS($_POST['email_title']);
-	$content=Security::remove_XSS($_POST['email_text']);	
+	$content=Security::remove_XSS($_POST['email_text']);
 	if(!empty($_user['mail'])){
 		api_send_mail($email_administrator,$title,$text,"From: ".$_user['mail']."\r\n");
-		UserManager::send_message_in_outbox ($email_administrator,$user_id,$title, $content);		
+		UserManager::send_message_in_outbox ($email_administrator,$user_id,$title, $content);
 	}else{
 		api_send_mail($email_administrator,$title,$text);
 	}

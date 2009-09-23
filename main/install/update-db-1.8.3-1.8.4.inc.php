@@ -67,9 +67,9 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 
 		exit ();
 	}
-	
-	//get_config_param() comes from install_functions.inc.php and 
-	//actually gets the param from 
+
+	//get_config_param() comes from install_functions.inc.php and
+	//actually gets the param from
 	$_configuration['db_glue'] = get_config_param('dbGlu');
 
 	if ($singleDbForm)
@@ -129,7 +129,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	// that we want to change the main databases as well...
 	$only_test = false;
 	$log = 0;
-	if (defined('DOKEOS_INSTALL')) 
+	if (defined('DOKEOS_INSTALL'))
 	{
 		if ($singleDbForm)
 		{
@@ -160,7 +160,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			if(strlen($dbNameForm)>40){
 				error_log('Database name '.$dbNameForm.' is too long, skipping',0);
 			}elseif(!in_array($dbNameForm,$dblist)){
-				error_log('Database '.$dbNameForm.' was not found, skipping',0);				
+				error_log('Database '.$dbNameForm.' was not found, skipping',0);
 			}else{
 				mysql_select_db($dbNameForm);
 				foreach($m_q_list as $query){
@@ -176,10 +176,10 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				}
 			}
 		}
-		
+
 		//get the stats queries list (s_q_list)
 		$s_q_list = get_sql_file_contents('migrate-db-1.8.3-1.8.4-pre.sql','stats');
-	
+
 		if(count($s_q_list)>0)
 		{
 			//now use the $s_q_list
@@ -190,7 +190,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			if(strlen($dbStatsForm)>40){
 				error_log('Database name '.$dbStatsForm.' is too long, skipping',0);
 			}elseif(!in_array($dbStatsForm,$dblist)){
-				error_log('Database '.$dbStatsForm.' was not found, skipping',0);				
+				error_log('Database '.$dbStatsForm.' was not found, skipping',0);
 			}else{
 				mysql_select_db($dbStatsForm);
 				foreach($s_q_list as $query){
@@ -218,7 +218,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			if(strlen($dbUserForm)>40){
 				error_log('Database name '.$dbUserForm.' is too long, skipping',0);
 			}elseif(!in_array($dbUserForm,$dblist)){
-				error_log('Database '.$dbUserForm.' was not found, skipping',0);				
+				error_log('Database '.$dbUserForm.' was not found, skipping',0);
 			}else{
 				mysql_select_db($dbUserForm);
 				foreach($u_q_list as $query){
@@ -247,7 +247,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	-----------------------------------------------------------
 	*/
 
-	$prefix = ''; 
+	$prefix = '';
 	if ($singleDbForm)
 	{
 		$prefix = $_configuration['table_prefix'];
@@ -260,7 +260,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		if(strlen($dbNameForm)>40){
 			error_log('Database name '.$dbNameForm.' is too long, skipping',0);
 		}elseif(!in_array($dbNameForm,$dblist)){
-				error_log('Database '.$dbNameForm.' was not found, skipping',0);				
+				error_log('Database '.$dbNameForm.' was not found, skipping',0);
 		}else{
 			mysql_select_db($dbNameForm);
 			$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
@@ -286,14 +286,14 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					{
 						mysql_select_db($row_course['db_name']);
 					}
-					
+
 					foreach($c_q_list as $query)
 					{
 						if ($singleDbForm) //otherwise just use the main one
 						{
 							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix{$row_course['db_name']}_$2$3",$query);
 						}
-						
+
 						if($only_test)
 						{
 							error_log("mysql_query(".$row_course['db_name'].",$query)",0);
@@ -328,7 +328,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						$vis = 'v';
 						$input = stripslashes($row_lp['name']);
 						$input = str_replace("'", "''", $input);
-						$input = str_replace('"', "''", $input);							
+						$input = str_replace('"', "''", $input);
 						$mylink = 'newscorm/lp_controller.php?action=view&lp_id='.$row_lp['id'];
 						$sql2="SELECT * FROM $tbl_tool where (name='$input' and image='scormbuilder.gif' and link LIKE '$mylink%')";
 

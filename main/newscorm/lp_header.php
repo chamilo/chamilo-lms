@@ -9,7 +9,7 @@
  */
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file[] = "scormdocument";
 require_once('back_compat.inc.php');
 require_once('learnpath.class.php');
@@ -52,7 +52,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')

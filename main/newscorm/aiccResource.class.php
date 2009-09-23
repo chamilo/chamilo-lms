@@ -1,19 +1,19 @@
 <?php //$id:$
 /**
- * Container for the aiccResource class that deals with elemens from AICC Descriptor file 
+ * Container for the aiccResource class that deals with elemens from AICC Descriptor file
  * @package	dokeos.learnpath
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  * @license	GNU/GPL - See Dokeos license directory for details
  */
 /**
- * Class defining the elements from an AICC Descriptor file 
+ * Class defining the elements from an AICC Descriptor file
  */
 class aiccResource {
 	var $identifier = '';
 	var $title = '';
-	var $description = '';	
+	var $description = '';
 	var $developer_id = '';
-		    
+
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormResource
      * object from database records or from the array given as second param
@@ -48,7 +48,7 @@ class aiccResource {
 			     		}
 			     	}
 					return true;
-			     	
+
     		}
     	}
     	return false;

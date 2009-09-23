@@ -68,7 +68,7 @@ function confirmation(name)
 	if (confirm(\" ".trim(get_lang('AreYouSureToDelete'))." ?\"))
 		{return true;}
 	else
-		{return false;} 
+		{return false;}
 }
 </script>";
 

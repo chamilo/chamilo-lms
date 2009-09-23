@@ -4,7 +4,7 @@
  * a separate file but rather some text included in lp_view.php, but SCORM involves loading a script that
  * saves the data asynchronously while the SCORM learning path carries on. Having an informational iframe
  * helps not popping up an additional window when saving data.
- * 
+ *
  * This script is also used to refresh the TOC as sometimes the SCORM JS messages are taken into account
  * only after the TOC is drawn. As such, you might complete an item, browse to the next page, have the
  * TOC drawn with your 'incomplete' status, while the SCORM messages generally arrives just after the TOC
@@ -18,7 +18,7 @@
  */
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "learnpath";
 require_once('back_compat.inc.php');
 require_once('learnpath.class.php');

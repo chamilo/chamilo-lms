@@ -6,7 +6,7 @@
 */
 
 /**
-============================================================================== 
+==============================================================================
 *	Dokeos Metadata: search Dokeos course objects via their metadata
 *
 *   URL parameters:
@@ -15,7 +15,7 @@
 *   - htt=  HTML template file (same dir as script), default= 'mds_' + type.
 *
 *	@package dokeos.metadata
-============================================================================== 
+==============================================================================
 */
 
 
@@ -36,7 +36,7 @@ if (LFN != 'md_' . strtolower(TYPE))     $urlp .= '&lfn=' . urlencode(LFN);
 if (HTT != 'mds_' . strtolower(TYPE))    $urlp .= '&htt=' . urlencode(HTT);
 if (DBG)                     $urlp .= '&dbg=' . urlencode(DBG);
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = LFN; require("../inc/global.inc.php");
 $this_section=SECTION_COURSES;
 
@@ -54,7 +54,7 @@ $xhtDoc = define_htt(HTT . '.htt', $urlp, $_course['path']);
 
 $xhtDoc->xht_param['type'] = TYPE;
 
-$xhtDoc->xht_param['index'] = 
+$xhtDoc->xht_param['index'] =
     str_replace('/search.php', '/index.php', api_get_self());
 
 
@@ -75,45 +75,45 @@ $xmlDoc = new xmddoc(''); if ($xmlDoc->error) give_up($xmlDoc->error);
 
 if (isset($_POST['mdsc']))  // Search criteria
 {
-    $mdsc = str_replace("\r", "\n", str_replace("\r\n", "\n", 
+    $mdsc = str_replace("\r", "\n", str_replace("\r\n", "\n",
         get_magic_quotes_gpc() ? stripslashes($_POST['mdsc']) : $_POST['mdsc']));
-        
+
     foreach (explode("\n", $mdsc) as $word) if (($word = trim($word)))
     {
         $words .= ", " . $word;
-        
+
         $where .= " AND indexabletext " . ($word{0} != '-' ?
              ("LIKE '%".addslashes($word)."%'") :
              ("NOT LIKE '%".addslashes(substr($word, 1))."%'"));
     }
-    
+
     if ($where)
     {
         $whereclause = substr($where, 5);  // remove first " AND "
-        
+
         $xhtDoc->xht_xmldoc->xmd_add_text_element('query', $whereclause);
         $xhtDoc->xht_param['traceinfo'] = substr($words, 2);
-        
+
         $result = $mdStore->mds_get_many('eid,mdxmltext', $whereclause);
-        
+
         while (($myrow = @mysql_fetch_array($result)))
         {
             // not quite a real manifest, but very much like one...
-            
+
             $eid = $myrow['eid']; $xmlDoc = new xmddoc($myrow['mdxmltext']);
             if ($xmlDoc->error) give_up('Entry '.$eid . ': ' . $xmlDoc->error);
-            
+
             $mdObj = new mdobject($_course, $eid);  // md_mix.php
-            
+
             $xhtDoc->xht_xmldoc->xmd_copy_foreign_child($xmlDoc);
             $newItem = $xhtDoc->xht_xmldoc->
                 xmd_select_single_element('item[-1]');
             $xhtDoc->xht_xmldoc->xmd_set_attribute($newItem, 'eid', $eid);
-            $xhtDoc->xht_xmldoc->xmd_set_attribute($newItem, 'url', 
+            $xhtDoc->xht_xmldoc->xmd_set_attribute($newItem, 'url',
                 $mdObj->mdo_url);
-            
+
             if ($mdObj->mdo_type == 'Scorm')
-                $xhtDoc->xht_xmldoc->xmd_set_attribute($newItem, 'brl', 
+                $xhtDoc->xht_xmldoc->xmd_set_attribute($newItem, 'brl',
                     $mdObj->mdo_base_url);
         }
     }
@@ -123,14 +123,14 @@ if (isset($_POST['mdsc']))  // Search criteria
 function check_is_thumb($p)  // escape function, see mds_mix.htt
 {
     global $xhtDoc; if ($p !== FALSE) return '';  // should not happen
-    
+
     if (!ereg('^pptsl[0-9]+_t\.jpg$', $xhtDoc->xht_param['thumb']))
         $xhtDoc->xht_param['thumb'] = '';
-    
+
     return '';
 }
 
-    
+
 // GENERATE OUTPUT ------------------------------------------------------------>
 
 foreach (explode("\n", $xhtDoc->htt_array['HTTP']) as $httpXtra)
@@ -149,7 +149,7 @@ $htmlHeadXtra[] = $xhtDoc->xht_fill_template('HEAD');
 Display::display_header($nameTools);
 
 $xhtDoc->xht_dbgn = DBG;  // for template debug info, set to e.g. 10000
-if (($ti = $xhtDoc->xht_param['traceinfo'])) $xhtDoc->xht_param['traceinfo'] = 
+if (($ti = $xhtDoc->xht_param['traceinfo'])) $xhtDoc->xht_param['traceinfo'] =
     '<b>' . get_lang('Search') . '</b>: ' . htmlspecialchars($ti, ENT_QUOTES, $charset);
 
 echo $xhtDoc->xht_fill_template('MDSEARCH'), "\n";

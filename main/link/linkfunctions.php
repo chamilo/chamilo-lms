@@ -254,7 +254,7 @@ function deletelinkcategory($type)
 		// make a restore function possible for the platform administrator
 		if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
 			$sql="UPDATE $tbl_link SET on_homepage='0' WHERE id='".Database::escape_string($_GET['id'])."'";
-			Database::query($sql,__FILE__,__LINE__);			
+			Database::query($sql,__FILE__,__LINE__);
 		}
 
 		api_item_property_update($_course, TOOL_LINK, $id, "delete", $_user['user_id']);
@@ -393,7 +393,7 @@ function editlinkcategory($type)
                 $link_title = $_POST['title'];
                 $link_description = $_POST['description'];
 
-                // actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one 
+                // actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one
 	            // get search_did
 	            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
 	            $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
@@ -559,14 +559,14 @@ function showlinksofcategory($catid)
 	$sqlLinks = "SELECT * FROM ".$tbl_link." link, ".$TABLE_ITEM_PROPERTY." itemproperties WHERE itemproperties.tool='".TOOL_LINK."' AND link.id=itemproperties.ref AND  link.category_id='".$catid."' AND (itemproperties.visibility='0' OR itemproperties.visibility='1')ORDER BY link.display_order DESC";
 	$result = api_sql_query($sqlLinks);
 	$numberoflinks = Database::num_rows($result);
-	
+
 	echo '<table class="data_table" width="100%">';
 	$i = 1;
 	while ($myrow = Database::fetch_array($result))
 	{
 		if($i%2==0) $css_class = 'row_odd';
 		else $css_class = 'row_even';
-		
+
 		$myrow[3] = text_filter($myrow[3]);
 		if ($myrow['visibility'] == '1')
 		{
@@ -579,22 +579,22 @@ function showlinksofcategory($catid)
 				echo "<tr class='".$css_class."'>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\" class=\"invisible\">", Display::return_icon('file_html_na.gif', get_lang('Link')),"</a></td>", "<td width=\"80%\" valign=\"top\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\"  class=\"invisible\">", api_htmlentities($myrow[2],ENT_QUOTES,$charset), "</a>\n", "<br />", $myrow[3], "";
 			}
 		}
-		
+
 		echo '<td style="text-align:center;">';
 		if (api_is_allowed_to_edit())
 		{
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=editlink&amp;category=".(!empty($category)?$category:'')."&amp;id=".$myrow[0]." &amp;urlview=$urlview \"  title=\"".get_lang('Modify')."\"  >", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"", get_lang('Modify'), "\" />", "</a>";			
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=editlink&amp;category=".(!empty($category)?$category:'')."&amp;id=".$myrow[0]." &amp;urlview=$urlview \"  title=\"".get_lang('Modify')."\"  >", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"", get_lang('Modify'), "\" />", "</a>";
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=deletelink&amp;id=", $myrow[0], "&amp;urlview=", $urlview, "\" onclick=\"javascript:if(!confirm('".get_lang('LinkDelconfirm')."')) return false;\"  title=\"".get_lang('Delete')."\" >", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"", get_lang('Delete'), "\" />", "</a>";
 			// DISPLAY MOVE UP COMMAND only if it is not the top link
 			if ($i != 1)
 			{
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=".$urlview."&amp;up=", $myrow["id"], "\"  title=\"".get_lang('Up')."\"   >", "<img src=../img/up.gif border=0 alt=\"".get_lang('Up')."\"/>", "</a>\n";
 			}
-			else 
+			else
 			{
 				echo '<img src="'.api_get_path(WEB_IMG_PATH).'up_na.gif" border=0 alt="'.get_lang('Up').'"/>';
-			}	
-			
+			}
+
 			// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
 			if ($i < $numberoflinks)
 			{
@@ -602,18 +602,18 @@ function showlinksofcategory($catid)
 			}
 			else
 			{
-				echo '<img src="'.api_get_path(WEB_IMG_PATH).'down_na.gif" border=0 alt="'.get_lang('Down').'"/>';	
+				echo '<img src="'.api_get_path(WEB_IMG_PATH).'down_na.gif" border=0 alt="'.get_lang('Down').'"/>';
 			}
-			
+
 			if ($myrow['visibility'] == "1")
 			{
-				echo '<a href="link.php?'.api_get_cidreq().'&action=invisible&amp;id='.$myrow['id'].'&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang('Hide').'"><img src="../img/visible.gif" border="0" /></a>'; 
+				echo '<a href="link.php?'.api_get_cidreq().'&action=invisible&amp;id='.$myrow['id'].'&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang('Hide').'"><img src="../img/visible.gif" border="0" /></a>';
 			}
 			if ($myrow['visibility'] == "0")
 			{
  				echo '<a href="link.php?'.api_get_cidreq().'&action=visible&amp;id='.$myrow['id'].'&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang('Show').'"><img src="../img/invisible.gif" border="0" /></a>';
 			}
-		} 
+		}
 		echo '</td>';
 		echo '</tr>';
 		$i ++;
@@ -633,15 +633,15 @@ function showcategoryadmintools($categoryid)
 	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=editcategory&amp;id='.$categoryid.'&amp;urlview='.$urlview.'"  title='.get_lang('Modify').' "><img src="../img/edit.gif" border="0" alt="'.get_lang('Modify').' "/></a>';
 	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=deletecategory&amp;id=", $categoryid, "&amp;urlview=$urlview\" onclick=\"javascript:if(!confirm('".get_lang('CategoryDelconfirm')."')) return false;\">", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"", get_lang('Delete'), "\"/>", "</a>";
 
-	// DISPLAY MOVE UP COMMAND only if it is not the top link	
+	// DISPLAY MOVE UP COMMAND only if it is not the top link
 	if ($catcounter != 1)
 	{
 		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&catmove=true&amp;up=", $categoryid, "&amp;urlview=$urlview\"  title=\"".get_lang('Up')."\" >", "<img src=../img/up.gif border=0 alt=\"".get_lang('Up')."\"/>", "</a>\n";
 	}
 	else
 	{
-		echo '<img src="'.api_get_path(WEB_IMG_PATH).'up_na.gif" border=0 alt="'.get_lang('Up').'"/>';	
-	}	
+		echo '<img src="'.api_get_path(WEB_IMG_PATH).'up_na.gif" border=0 alt="'.get_lang('Up').'"/>';
+	}
 	// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
 	if ($catcounter < $aantalcategories)
 	{
@@ -650,7 +650,7 @@ function showcategoryadmintools($categoryid)
 	else
 	{
 		echo '<img src="'.api_get_path(WEB_IMG_PATH).'down_na.gif" border=0 alt="'.get_lang('Down').'"/>';
-	}		
+	}
 	$catcounter ++;
 }
 

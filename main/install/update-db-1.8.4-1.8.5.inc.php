@@ -49,9 +49,9 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 
 		exit ();
 	}
-	
-	//get_config_param() comes from install_functions.inc.php and 
-	//actually gets the param from 
+
+	//get_config_param() comes from install_functions.inc.php and
+	//actually gets the param from
 	$_configuration['db_glue'] = get_config_param('dbGlu');
 
 	if ($singleDbForm)
@@ -111,7 +111,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	// that we want to change the main databases as well...
 	$only_test = false;
 	$log = 0;
-	if (defined('DOKEOS_INSTALL')) 
+	if (defined('DOKEOS_INSTALL'))
 	{
 		if ($singleDbForm)
 		{
@@ -142,7 +142,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			if(strlen($dbNameForm)>40){
 				error_log('Database name '.$dbNameForm.' is too long, skipping',0);
 			}elseif(!in_array($dbNameForm,$dblist)){
-				error_log('Database '.$dbNameForm.' was not found, skipping',0);				
+				error_log('Database '.$dbNameForm.' was not found, skipping',0);
 			}else{
 				mysql_select_db($dbNameForm);
 				foreach($m_q_list as $query){
@@ -158,10 +158,10 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				}
 			}
 		}
-		
+
 		//get the stats queries list (s_q_list)
 		$s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql','stats');
-	
+
 		if(count($s_q_list)>0)
 		{
 			//now use the $s_q_list
@@ -172,7 +172,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			if(strlen($dbStatsForm)>40){
 				error_log('Database name '.$dbStatsForm.' is too long, skipping',0);
 			}elseif(!in_array($dbStatsForm,$dblist)){
-				error_log('Database '.$dbStatsForm.' was not found, skipping',0);				
+				error_log('Database '.$dbStatsForm.' was not found, skipping',0);
 			}else{
 				mysql_select_db($dbStatsForm);
 				foreach($s_q_list as $query){
@@ -200,7 +200,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			if(strlen($dbUserForm)>40){
 				error_log('Database name '.$dbUserForm.' is too long, skipping',0);
 			}elseif(!in_array($dbUserForm,$dblist)){
-				error_log('Database '.$dbUserForm.' was not found, skipping',0);				
+				error_log('Database '.$dbUserForm.' was not found, skipping',0);
 			}else{
 				mysql_select_db($dbUserForm);
 				foreach($u_q_list as $query){
@@ -229,12 +229,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	-----------------------------------------------------------
 	*/
 
-	$prefix = ''; 
+	$prefix = '';
 	if ($singleDbForm)
 	{
-		$prefix =  get_config_param ('table_prefix');			
+		$prefix =  get_config_param ('table_prefix');
 	}
-	
+
 	//get the courses databases queries list (c_q_list)
 	$c_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql','course');
 
@@ -247,7 +247,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		}
 		elseif(!in_array($dbNameForm,$dblist))
 		{
-			error_log('Database '.$dbNameForm.' was not found, skipping',0);				
+			error_log('Database '.$dbNameForm.' was not found, skipping',0);
 		}
 		else
 		{
@@ -274,24 +274,24 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					 * without a database name
 					 */
 					if (!$singleDbForm) //otherwise just use the main one
-					{									
+					{
 						mysql_select_db($row_course['db_name']);
 					}
-				
+
 					foreach($c_q_list as $query)
 					{
 						if ($singleDbForm) //otherwise just use the main one
 						{
-							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix{$row_course['db_name']}_$2$3",$query);												
+							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix{$row_course['db_name']}_$2$3",$query);
 						}
-						
+
 						if($only_test)
 						{
 							error_log("mysql_query(".$row_course['db_name'].",$query)",0);
 						}
 						else
 						{
-							$res = mysql_query($query);						
+							$res = mysql_query($query);
 							if($log)
 							{
 								error_log("In ".$row_course['db_name'].", executed: $query",0);
@@ -300,12 +300,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					}
 
 					$mytable = $row_course['db_name'].".lp_item";
-					
+
 					if($singleDbForm)
 					{
 						$mytable = "$prefix{$row_course['db_name']}_lp_item";
 					}
-										
+
 					$mysql = "SELECT * FROM $mytable WHERE min_score != 0 AND prerequisite != ''";
 					$myres = mysql_query($query);
 
@@ -322,44 +322,44 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 								{
 									$mysql3 = "UPDATE $mytable SET min_score = 0 WHERE id = '".$myrow['id']."'";
 									$myres3 = mysql_query($mysql3);
-									//echo $mysql3."<br />"; 
+									//echo $mysql3."<br />";
 								}
 							}
 						}
 					}
-										
+
 					// Work Tool Folder Update
 					// we search into DB all the folders in the work tool
 					if($singleDbForm)
-					{																								
-						$my_course_table = "$prefix{$row_course['db_name']}_student_publication";																
+					{
+						$my_course_table = "$prefix{$row_course['db_name']}_student_publication";
 					}
 					else
-					{															
+					{
 						$my_course_table = $row_course['db_name'].".student_publication";
-					}					
-					
+					}
+
 					$sys_course_path = $_configuration['root_sys'].$_configuration['course_folder'];
-													
+
 					$course_dir=$sys_course_path.$row_course['directory'].'/work';
 
-					$dir_to_array =directory_to_array($course_dir,true);					
+					$dir_to_array =directory_to_array($course_dir,true);
 					$only_dir=array();
 
 					$sql_select= "SELECT filetype FROM " . $my_course_table . " WHERE  filetype = 'folder'";
 					$result = mysql_query($sql_select);
 					$num_row=mysql_num_rows($result);
-					
-					// check if there are already folder registered  
+
+					// check if there are already folder registered
 					if ($num_row == 0)
-					{			
+					{
 						for($i=0;$i<count($dir_to_array);$i++)
 						{
-							$only_dir[]=substr($dir_to_array[$i],strlen($course_dir), strlen($dir_to_array[$i]));				
+							$only_dir[]=substr($dir_to_array[$i],strlen($course_dir), strlen($dir_to_array[$i]));
 						}
-		
+
 						for($i=0;$i<count($only_dir);$i++)
-						{							
+						{
 							$sql_insert_all= "INSERT INTO " . $my_course_table . " SET url = '" . $only_dir[$i] . "', " .
 											"title        = '',
 											description 	= '',
@@ -368,11 +368,11 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 											accepted	= '1',
 											filetype	= 'folder',
 											post_group_id 	= '0',
-											sent_date	= '0000-00-00 00:00:00' ";		  
+											sent_date	= '0000-00-00 00:00:00' ";
 							mysql_query($sql_insert_all);
 						}
 					}
-		
+
 				}
 			}
 		}

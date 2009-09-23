@@ -7,7 +7,7 @@
  * @license	GNU/GPL - See Dokeos license directory for details
  */
 //flag to allow for anonymous user - needs to be set before global.inc.php
-$use_anonymous = true;	
+$use_anonymous = true;
 require_once('back_compat.inc.php');
 require_once('learnpath.class.php');
 require_once('scorm.class.php');
@@ -28,8 +28,8 @@ $lp_theme_css=$_SESSION['oLP']->get_theme();
 $scorm_css_header=true;
 include_once('../inc/reduced_header.inc.php');
 echo '<html>
-		<body>';	
-	
+		<body>';
+
 		echo '<div id="audiorecorder">	';
 		$audio_recorder_studentview = 'true';
 		$audio_recorder_item_id = $_SESSION['oLP']->current;

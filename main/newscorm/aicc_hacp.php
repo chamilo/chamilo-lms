@@ -1,6 +1,6 @@
-<?php // $Id: $ 
+<?php // $Id: $
 /**
-============================================================================== 
+==============================================================================
 *	API event handler functions for AICC / CMIv4 in HACP communication mode
 *
 *	@author   Denes Nagy <darkden@freemail.hu>
@@ -9,32 +9,32 @@
 *	@access   public
 *	@package  dokeos.learnpath
 * 	@license	GNU/GPL - See Dokeos license directory for details
-============================================================================== 
+==============================================================================
 */
 /**
- * This script is divided into three sections. 
+ * This script is divided into three sections.
  * The first section (below) is the initialisation part.
  * The second section is the AICC object part
  * The third section defines the event handlers for Dokeos' internal messaging
  * and frames refresh
- * 
+ *
  * This script implements the HACP messaging for AICC. The API messaging is
  * made by another set of scripts.
- * 
+ *
  * Rules for HACP processing of one AU
  * Rule #1 The first HACP message issued must be a GetParam
  * Rule #2 The last HACP message issued must be an ExitAU
  * Rule #3 At least one PutParam message must be issued prior to an ExitAU message
  * Rule #4 No HACP messages can be issued after a successfully issued ExitAU message
- * 
+ *
  * Only suspend_data and core.lesson_location should be sent updated to a late GetParam
  * request. All other params should be as when the AU was launched.
  */
 /*
-============================================================================== 
+==============================================================================
 	   INIT SECTION
-============================================================================== 
-*/ 
+==============================================================================
+*/
 $debug = 0;
 
 //flag to allow for anonymous user - needs to be set before global.inc.php
@@ -47,7 +47,7 @@ if(!empty($_REQUEST['aicc_sid']))
 	if($debug>1){error_log('New LP - '.__FILE__.','.__LINE__.' - reusing session ID '.$_REQUEST['aicc_sid'],0);}
 }
 //Load common libraries using a compatibility script to bridge between 1.6 and 1.8
-require_once('back_compat.inc.php');  
+require_once('back_compat.inc.php');
 if($debug>2){error_log('New LP - '.__FILE__.','.__LINE__.' - Current session ID: '.session_id(),0);}
 //Load learning path libraries so we can use the objects to define the initial values
 //of the API
@@ -126,7 +126,7 @@ if(!empty($_REQUEST['command']))
 			$result .= $tab.'Mastery_Score='.$oItem->masteryscore.$crlf;
 			//$result .= '[Student_Demographics]'.$crlf;
 			//$result .= '[Student_Preferences]'.$crlf;
-						
+
 			//error_log('Returning message: '.$result,0);
 			$result = str_replace($convert_dec,$convert_enc,$result);
 			//error_log('Returning message (encoded): '.$result,0);
@@ -150,7 +150,7 @@ if(!empty($_REQUEST['command']))
 						//error_log('In '.__FILE__.', '.__LINE__.' - aicc data before translation is '.$value,0);
 						$value = str_replace('+',' ',$value);
 						$value = str_replace($convert_enc,$convert_dec,$value);
-						$hacp_aicc_data = $value;						
+						$hacp_aicc_data = $value;
 						break;
 				}
 			}
@@ -196,7 +196,7 @@ if(!empty($_REQUEST['command']))
 						break;
 				}
 			}
-			
+
 			$error_code = 0;
 			$error_text = $errors[$error_code];
 			$result = $s_ec.$error_code.$crlf.$s_et.$error_text.$crlf.$s_ad.$crlf;

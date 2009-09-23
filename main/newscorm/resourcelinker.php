@@ -40,7 +40,7 @@
 */
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'resourcelinker';
 require_once('back_compat.inc.php');
 $this_section=SECTION_COURSES;
@@ -73,7 +73,7 @@ $action = $_REQUEST['action'];
 $add = $_REQUEST['add'];
 $chapter_id = $_REQUEST['parent_item_id'];
 $content = $_REQUEST['content'];
-// Note by Patrick Cool: this has been solved belowd. This piece of code hacking produced too much errors. 
+// Note by Patrick Cool: this has been solved belowd. This piece of code hacking produced too much errors.
 /*
 if(empty($content)){
 	//adds a default to the item-type selection
@@ -139,9 +139,9 @@ if (!empty ($_POST['add_chapter']) && !empty ($_POST['title']))
 		$sql = "SELECT id FROM $tbl_lp_item " .
 				"WHERE lp_id = $learnpath_id AND parent_item_id=$chapter_id AND display_order = $lastorder_item";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		$row = Database::fetch_array($result);		
+		$row = Database::fetch_array($result);
 		$previous = $row['id'];
-	}		
+	}
 	$order = $lastorder_item+1;
 
 	$sql = "INSERT INTO $tbl_lp_item "."(lp_id,item_type,title,parent_item_id,previous_item_id, next_item_id, display_order) " .
@@ -227,7 +227,7 @@ if ($add)
 		$sql = "SELECT MAX(display_order) as maxi FROM $tbl_lp_item " .
 				"WHERE lp_id = $learnpath_id AND parent_item_id=$chapter_id";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		$row = Database::fetch_array($result);		
+		$row = Database::fetch_array($result);
 		$lastorder_item = $row['maxi'];
 		if(empty($lastorder_item)){
 			$lastorder_item = 0;
@@ -237,9 +237,9 @@ if ($add)
 					"WHERE lp_id = $learnpath_id AND parent_item_id=$chapter_id AND display_order = $lastorder_item";
 			//error_log('New LP - resourcelinker.php - '.$sql,0);
 			$result = api_sql_query($sql, __FILE__, __LINE__);
-			$row = Database::fetch_array($result);		
+			$row = Database::fetch_array($result);
 			$previous = $row['id'];
-		}		
+		}
 		$lastorder = $lastorder_item+1;
 		foreach ($addedresource as $addedresource_item)
 		{
@@ -331,7 +331,7 @@ if ($add)
 						$tooltable = Database::get_course_table(TABLE_AGENDA);
 						$result = api_sql_query("SELECT * FROM $tooltable WHERE id=".$addedresourceid[$i],__FILE__,__LINE__);
 						$myrow=mysql_fetch_array($result);
-						$title = $myrow['title'];						
+						$title = $myrow['title'];
 						break;
 					case 'Ad_Valvas':
 						$addedresource_item = TOOL_ANNOUNCEMENT;
@@ -339,9 +339,9 @@ if ($add)
 						$tooltable = Database::get_course_table(TABLE_ANNOUNCEMENT);
 						$result = api_sql_query("SELECT * FROM $tooltable WHERE id=".$addedresourceid[$i],__FILE__,__LINE__);
 						$myrow=mysql_fetch_array($result);
-						$title = $myrow['title'];						
+						$title = $myrow['title'];
 						break;
-					
+
 				}
 				$sql = "INSERT INTO $tbl_lp_item (lp_id, title, parent_item_id, item_type, ref, previous_item_id, next_item_id, display_order) " .
 						"VALUES ($learnpath_id, '$title','$chapter_id', '$addedresource_item','$addedresourceid[$i]',$previous,0,'".$lastorder."')";
@@ -367,7 +367,7 @@ if ($add)
    		$_SESSION['addedresourceassigned'] = null;
    		unset ($_SESSION['addedresource']);
    		unset ($_SESSION['addedresourceid']);
-   		unset ($_SESSION['addedresourceassigned']); 
+   		unset ($_SESSION['addedresourceassigned']);
 	}
 }
 
@@ -385,7 +385,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
@@ -441,7 +441,7 @@ if ($_GET["source_id"])
 			break;
 		case "6" : // coming from forum: reply
 			$url = "../phpbb/reply.php?topic=$topic&forum=$forum&parentid=$parentid";
-			$url = $_SESSION['origintoolurl']; 
+			$url = $_SESSION['origintoolurl'];
 			$originaltoolname = get_lang("ForumReply");
 			$breadcrumbelement = array ("url" => $url, "name" => $originaltoolname);
 			session_unregister('from_learnpath');
@@ -464,13 +464,13 @@ if ($_GET["source_id"])
 			}
 			$originaltoolname = get_lang("AdValvas");
 			$breadcrumbelement = array ("url" => $url, "name" => $originaltoolname);
-			session_unregister('from_learnpath'); 
+			session_unregister('from_learnpath');
 			unset ($from_learnpath);
 			break;
 			/*************************************** end add Frederik.Vermeire@pandora.be *********************************/
 
 	}
-	// We do not come from the learning path. We store the name of the tool & url in a session. 
+	// We do not come from the learning path. We store the name of the tool & url in a session.
 	if ($from_learnpath != 'yes')
 	{
 		if (!$_SESSION["origintoolurl"] OR $_SESSION["origintoolurl"]<>$interbreadcrumb["url"])
@@ -483,8 +483,8 @@ if ($_GET["source_id"])
 
 }
 
-// This part of the code is the actual breadcrumb mechanism. If we do not come from the learning path we use 
-// the information from the session. Else we use the information of the learningpath itself. 
+// This part of the code is the actual breadcrumb mechanism. If we do not come from the learning path we use
+// the information from the session. Else we use the information of the learningpath itself.
 if ($from_learnpath != 'yes')
 {
 	$nameTools = get_lang('Attachment');
@@ -528,7 +528,7 @@ if ($from_learnpath == 'yes')
 }
 echo "</h3>";
 
-// we retrieve the tools that are active. 
+// we retrieve the tools that are active.
 // We use this to check which resources a student may add (only the modules that are active)
 // see http://www.dokeos.com/forum/viewtopic.php?t=4858
 $active_modules=array();
@@ -551,38 +551,38 @@ while ($row=mysql_fetch_array($result_select_active))
 		<tr>
           <td width="26%"><b><?php echo get_lang('CourseResources'); ?></b></td>
         </tr>
-        <?php  
+        <?php
         if (is_allowed_to_edit() OR in_array(TOOL_DOCUMENT,$active_modules))
         {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Document&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Document')."</a>"; ?></td>
         </tr>
-        <?php 
-        } 
+        <?php
+        }
         if (is_allowed_to_edit() OR in_array(TOOL_CALENDAR_EVENT,$active_modules))
         {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Agenda&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Agenda')."</a>"; ?></td>
         </tr>
-        <?php 
-        }  
+        <?php
+        }
         if (is_allowed_to_edit() OR in_array(TOOL_ANNOUNCEMENT,$active_modules))
         {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Ad_Valvas&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('AdValvas')."</a>"; ?></td>
         </tr>
-        <?php 
-        }  
+        <?php
+        }
         if (is_allowed_to_edit() OR in_array(TOOL_BB_FORUM,$active_modules))
         {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Forum&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Forum')."</a>"; ?></td>
         </tr>
-        <?php 
+        <?php
         }
         if (is_allowed_to_edit() OR in_array(TOOL_LINK,$active_modules))
         {
@@ -590,7 +590,7 @@ while ($row=mysql_fetch_array($result_select_active))
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Link&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Link')."</a>"; ?></td>
         </tr>
-        <?php 
+        <?php
         }
         if (is_allowed_to_edit() OR in_array(TOOL_QUIZ,$active_modules))
         {
@@ -740,14 +740,14 @@ if ($content == "Agenda")
 	include (api_get_path(LIBRARY_PATH)."text.lib.php");
 	$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-	
-	$sql="SELECT agenda.*, toolitemproperties.* 
-					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties 
+
+	$sql="SELECT agenda.*, toolitemproperties.*
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
 					WHERE `agenda`.`id` = `toolitemproperties`.`ref`
 					AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
 					AND `toolitemproperties`.`to_group_id`='0'
 					AND `toolitemproperties`.`visibility`='1'";
-	
+
 	$result = api_sql_query($sql);
 
 	while ($myrow = mysql_fetch_array($result))

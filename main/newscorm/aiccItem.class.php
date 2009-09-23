@@ -17,7 +17,7 @@ class aiccItem extends learnpathItem{
 	var $sub_items = array(); //AICC elements (des)
 	//var $prerequisites = ''; - defined in learnpathItem.class.php
 	//var $max_score = ''; //defined in learnpathItem
-	//var $path = ''; //defined in learnpathItem	
+	//var $path = ''; //defined in learnpathItem
 	var $maxtimeallowed = '00:00:00'; //AICC AU's max_time_allowed
 	var $timelimitaction = ''; //AICC AU's time_limit_action
 	var $masteryscore = ''; //AICC AU's mastery_score
@@ -130,7 +130,7 @@ class aiccItem extends learnpathItem{
     	//under certain conditions, the scorm_contact should not be set, because no scorm signal was sent
     	$this->aicc_contact = true;
     	if(!$this->aicc_contact){
-    		//error_log('New LP - was expecting SCORM message but none received',0);	
+    		//error_log('New LP - was expecting SCORM message but none received',0);
     	}
     }
 }

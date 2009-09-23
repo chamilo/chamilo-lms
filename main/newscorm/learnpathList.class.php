@@ -17,10 +17,10 @@ class learnpathList {
 	var $course_code;
 	var $user_id;
 	var $refs_active = false;
-	
+
 	/**
 	 * This method is the constructor for the learnpathList. It gets a list of available learning paths from
-	 * the database and creates the learnpath objects. This list depends on the user that is connected 
+	 * the database and creates the learnpath objects. This list depends on the user that is connected
 	 * (only displays) items if he has enough permissions to view them.
 	 * @param	integer		User ID
 	 * @param	string		Optional course code (otherwise we use api_get_course_id())
@@ -59,7 +59,7 @@ class learnpathList {
 			}
 			//check if visible
 			$vis = api_get_item_visibility(api_get_course_info($course_code),'learnpath',$row['id']);
-			
+
     		$this->list[$row['id']] = array(
     			'lp_type' => $row['lp_type'],
     			'lp_name' => stripslashes($row['name']),
@@ -76,7 +76,7 @@ class learnpathList {
     			'lp_scorm_debug' => $row['debug'],
     			'lp_display_order' => $row['display_order'],
     			'lp_preview_image' => stripslashes($row['preview_image'])
-    			); 
+    			);
     		$names[$row['name']]=$row['id'];
        	}
        	$this->alpha_list = asort($names);
@@ -84,7 +84,7 @@ class learnpathList {
     /**
      * Gets references to learnpaths for all learnpaths IDs kept in the local list.
      * This applies a transformation internally on list and ref_list and returns a copy of the refs list
-     * @return	array	List of references to learnpath objects	
+     * @return	array	List of references to learnpath objects
      */
     function get_refs(){
     	foreach($this->list as $id => $dummy)

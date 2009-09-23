@@ -6,11 +6,11 @@
 */
 
 /**
-============================================================================== 
+==============================================================================
 *	Dokeos Metadata: XMD test and demo
 *
 *	@package dokeos.metadata
-============================================================================== 
+==============================================================================
 */
 
 
@@ -20,7 +20,7 @@ function file_get_contents_n($filename)  // normalize \r and \r\n to \n
     $fp = fopen($filename, 'rb');
     $buffer = fread($fp, filesize($filename));
     fclose($fp);  // note file_get_contents is >= PHP 4.3.0
-    
+
     return str_replace("\r", "\n", str_replace("\r\n", "\n", $buffer));
 }
 
@@ -33,7 +33,7 @@ $testdoc = new xmddoc('<docroot/>');  // docroot is element 0
 
 function showDoc($title, $morestuff = '')
 {
-    global $testdoc; echo '<h4>', $title, '</h4>', '<pre>', 
+    global $testdoc; echo '<h4>', $title, '</h4>', '<pre>',
         htmlspecialchars($morestuff ? $morestuff : $testdoc->xmd_xml()), '</pre>';
 }
 
@@ -67,7 +67,7 @@ $testdoc->xmd_set_attribute(0, 'owner', 'haentjens');  // new value
 showDoc('Text removed from 1st sometag, docroot owner changed');
 
 $testdoc->xmd_remove_element($sometag2);
-$sometag2 = $testdoc->xmd_add_text_element('за', 'alors!');
+$sometag2 = $testdoc->xmd_add_text_element('пїЅпїЅ', 'alors!');
 
 showDoc('2nd sometag replaced by new subelement with French name');
 
@@ -90,7 +90,7 @@ foreach ($testdoc->attributes[$sometag1] as $name => $value)
 
 showDoc('Namespace-URI of subtag, of 1st sometag attributes', $stuff);
 
-$subsub = $testdoc->xmd_add_element('urn:sample-default:subsub', $subtag, 
+$subsub = $testdoc->xmd_add_element('urn:sample-default:subsub', $subtag,
     array('xmlns' => 'urn:sample-default', 'someatt' => 'somevalue'));
 $subsubsub = $testdoc->xmd_add_element('urn:sample-default:subsubsub', $subsub);
 
@@ -117,18 +117,18 @@ showDoc("After update 'newtag/~', ''");
 
 $keepdoc = $testdoc;
 
-$wrongdoc = "<html>\n  <body>\n    <p>Text</p>\n    <p>More text" . 
+$wrongdoc = "<html>\n  <body>\n    <p>Text</p>\n    <p>More text" .
     "\n  </body>\n</html>";
 $testdoc = new xmddoc(explode("\n", $wrongdoc));
 
-showDoc('Xml doc with syntax error + error message', 
+showDoc('Xml doc with syntax error + error message',
     $wrongdoc . "\n\n" . $testdoc->error);
 
 $xmlFile = 'imsmanifest_reload.xml';
 
-($presXmlFileContents = @file_get_contents_n($xmlFile)) 
+($presXmlFileContents = @file_get_contents_n($xmlFile))
     or die('XML file  ' . htmlspecialchars($xmlFile) . ' is missing...');
-    
+
 showDoc('XML file to be parsed', $presXmlFileContents);
 
 $testdoc = new xmddoc(explode("\n", $presXmlFileContents));
@@ -139,47 +139,47 @@ if ($testdoc->error) die($xmlFile . ':<br><br>' . $testdoc->error);
 $testdoc->xmd_update_many('metadata/lom/general/title,metadata/lom/general/description', 'langstring/@lang', 'fr');
 $testdoc->xmd_copy_foreign_child($keepdoc, $keepdoc->xmd_select_single_element('sometag[2]'));
 
-showDoc('After parsing, and after changing 2* langstring/@lang to fr, ' . 
+showDoc('After parsing, and after changing 2* langstring/@lang to fr, ' .
     'and after adding a foreign doc, reconstruction from memory');
-    
-showDoc('Element tagname of first metadata/lom/* element', 
+
+showDoc('Element tagname of first metadata/lom/* element',
     $testdoc->name[$testdoc->xmd_select_single_element('metadata/lom/*')]);
-    
-showDoc('Element namespace URI of metadata/lom/*[2]', 
+
+showDoc('Element namespace URI of metadata/lom/*[2]',
     $testdoc->xmd_get_ns_uri($testdoc->xmd_select_single_element('metadata/lom/*[2]')));
-    
-showDoc('Number of metadata/lom/* elements', 
+
+showDoc('Number of metadata/lom/* elements',
     count($testdoc->xmd_select_elements('metadata/lom/*')));
 
-showDoc('Number of resources/resource/file elements with @href', 
+showDoc('Number of resources/resource/file elements with @href',
     count($testdoc->xmd_select_elements_where_notempty(
         'resources/resource/file', '@href')));
 
-$elems = $testdoc->xmd_select_elements_where('resources/resource', 
+$elems = $testdoc->xmd_select_elements_where('resources/resource',
             'file[1]/@href', 'three.html');
 showDoc('Resource identifier where file[1]/@href is three.html',
     $testdoc->xmd_value('@identifier', $elems[0]));
-    
-$elems = $testdoc->xmd_select_elements_where('resources/resource', '@identifier', 
+
+$elems = $testdoc->xmd_select_elements_where('resources/resource', '@identifier',
     $testdoc->xmd_value('organizations/organization/item[2]/@identifierref'));
 showDoc('Resource href for item[2]',
     $testdoc->xmd_value('@href', $elems[0]));
-    
+
 $stuff = '';
-foreach (array('@identifier', 'metadata/schema', '*/*/*/*[1]/langstring', 
+foreach (array('@identifier', 'metadata/schema', '*/*/*/*[1]/langstring',
         'resources/resource[3]/@href', 'resources/resource[3]/file/@href',
-        'resources/resource[3]/@*', 'resources/resource[3]/-/@href', 
-        'resources/resource[3]/+/@href', 'resources/resource[1]/-/@href', 
-        'resources/../../../../../../../@identifier', '@*', 'resources/@*', 
-        'organizations/organization/item[4]/title', 
-        'organizations/organization/item[-2]/title', 
-        'organizations/organization/item[4]/@*', 
-        'organizations/organization/item[4]/@*item', 
-        'organizations/organization/item[2]/+item/title', 
-        'organizations/organization/item[2]/+/+/+/title', 
-        'organizations/organization/item[2]/-item', 
-        'organizations/organization/item[1]/-item', 
-        'organizations/organization/item[1]/-', 
+        'resources/resource[3]/@*', 'resources/resource[3]/-/@href',
+        'resources/resource[3]/+/@href', 'resources/resource[1]/-/@href',
+        'resources/../../../../../../../@identifier', '@*', 'resources/@*',
+        'organizations/organization/item[4]/title',
+        'organizations/organization/item[-2]/title',
+        'organizations/organization/item[4]/@*',
+        'organizations/organization/item[4]/@*item',
+        'organizations/organization/item[2]/+item/title',
+        'organizations/organization/item[2]/+/+/+/title',
+        'organizations/organization/item[2]/-item',
+        'organizations/organization/item[1]/-item',
+        'organizations/organization/item[1]/-',
         'organizations/organization/item[1]/-/@.'
         ) as $path)
     $stuff .= $path . ' => ' . $testdoc->xmd_value($path) . "\n";
@@ -189,7 +189,7 @@ showDoc('Values of: @identifier, metadata/schema, ... (see below)', $stuff);
 
 function showHtml($path)
 {
-    global $testdoc; echo '<h4>Html-value of ', htmlspecialchars($path), 
+    global $testdoc; echo '<h4>Html-value of ', htmlspecialchars($path),
         '</h4><pre>', $testdoc->xmd_html_value($path), '</pre>';
 }
 
@@ -208,19 +208,19 @@ showHtml('Titles:  -% organizations/organization/item/title ,  %- .');
 showHtml('<ul><li> -% resources/resource/file/../@identifier </li><li> %- </li></ul>');
 
 showHtml('metadata/lom/general/description/langstring');
-echo '<h5>The same, but in a HTML construct:</h5>', 
+echo '<h5>The same, but in a HTML construct:</h5>',
     $testdoc->xmd_html_value('metadata/lom/general/description/langstring');
 
 
 function getmicrotime()
-{ 
-   list($usec, $sec) = explode(" ",microtime()); 
-   return ((float)$usec + (float)$sec); 
+{
+   list($usec, $sec) = explode(" ",microtime());
+   return ((float)$usec + (float)$sec);
 }
 
 $xmlFile = 'imsmanifest_reload.xml';
 
-($presXmlFileContents = @file_get_contents_n($xmlFile)) 
+($presXmlFileContents = @file_get_contents_n($xmlFile))
     or die('XML file  ' . htmlspecialchars($xmlFile) . ' is missing...');
 $presXmlFileContents = explode("\n", $presXmlFileContents);
 
@@ -237,7 +237,7 @@ $seconds = getmicrotime() - $seconds;
 showDoc('Time to cache', $seconds);
 
 $seconds = getmicrotime();
-$testdoc = new xmddoc($testdoc2->names, $testdoc2->numbers, 
+$testdoc = new xmddoc($testdoc2->names, $testdoc2->numbers,
     $testdoc2->textstring);
 $seconds = getmicrotime() - $seconds;
 

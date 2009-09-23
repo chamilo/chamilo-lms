@@ -1,4 +1,4 @@
-<?php 
+<?php
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -11,7 +11,7 @@
 * permissions on upgrade).
 * Being in configuration.php, it benefits from the configuration.dist.php
 * advantages that a new version doesn't overwrite it, thus letting the old
-* version be available until the end of the installation. 
+* version be available until the end of the installation.
 * @package dokeos.install
 ==============================================================================
 */
@@ -40,7 +40,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			$line = '$_configuration[\'dokeos_stable\'] = '.($new_version_stable?'true':'false').';'."\r\n";
 		}
 		elseif(stristr($line,'$userPasswordCrypted'))
-		{			
+		{
 			$line = '$userPasswordCrypted 									= \''.($userPasswordCrypted).'\';'."\r\n";
 		}
 		elseif(stristr($line,'?>'))
@@ -59,13 +59,13 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	}
 	if(!$found_stable)
 	{
-		fwrite($fh,'$_configuration[\'dokeos_stable\'] = '.($new_version_stable?'true':'false').';'."\r\n");		
+		fwrite($fh,'$_configuration[\'dokeos_stable\'] = '.($new_version_stable?'true':'false').';'."\r\n");
 	}
 	fwrite($fh,'?>');
-	fclose($fh);	
-	
+	fclose($fh);
+
 	$sys_course_path = $pathForm.'courses/';
-	
+
 	//$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 	//linking
 	$link = mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm);
@@ -74,16 +74,16 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	$sql = "SELECT * FROM $db_name.course";
 	error_log('Getting courses for files updates: '.$sql,0);
 	$result=mysql_query($sql);
-	
+
 	$perm = api_get_setting('permissions_for_new_directories');
 	$perm = octdec(!empty($perm)?$perm:'0770');
 	$old_umask = umask(0);
-	
-	
+
+
 	while($courses_directories=mysql_fetch_array($result))
-	{		
+	{
 		$currentCourseRepositorySys = $sys_course_path.$courses_directories['directory'].'/';
-		
+
 		$db_name = $courses_directories['db_name'];
 		$origCRS = $updatePath.'courses/'.$courses_directories['directory'];
 
@@ -95,7 +95,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		error_log('Renaming '.$origCRS.' to '.$sys_course_path.$courses_directories['directory'],0);
 		rename($origCRS,$sys_course_path.$courses_directories['directory']);
 		error_log('Creating dirs in '.$currentCourseRepositorySys,0);
-	
+
 		//DOCUMENT FOLDER
 
         //document > shared_folder
@@ -113,17 +113,17 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		//upload > learning_path
 		if(!is_dir($currentCourseRepositorySys."upload/learning_path")){
 			mkdir($currentCourseRepositorySys."upload/learning_path",$perm);
-		}	
+		}
 
 		//upload > learning_path > images
 		if(!is_dir($currentCourseRepositorySys."upload/learning_path/images")){
 			mkdir($currentCourseRepositorySys."upload/learning_path/images",$perm);
-		}		
+		}
 
-		//upload > calendar 
+		//upload > calendar
 		if(!is_dir($currentCourseRepositorySys."upload/calendar")){
 			mkdir($currentCourseRepositorySys."upload/calendar",$perm);
-		}	
+		}
 
 		//upload > calendar > images
 		if(!is_dir($currentCourseRepositorySys."upload/calendar/images")){

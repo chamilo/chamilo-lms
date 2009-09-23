@@ -2,7 +2,7 @@
 // This file is part of the Dokeos software - See license and credits in the documentation/ directory
 /**
  * Created on 27.09.2006
- * Include the lazlo file necessary to use the audiorecorder  
+ * Include the lazlo file necessary to use the audiorecorder
  * @author Sebastian Wagner <seba.wagner@gmail.com>
  * @author Eric Marguin <e.marguin@elixir-interactive.com>
  * @author Arnaud Ligot <arnaud@cblue.be>
@@ -20,9 +20,9 @@ function getFLVDuration($flv_path) {
 	try {
 		$getid3->Analyze($flv_path);
 		return $getid3->info['playtime_seconds'];
-	} catch (Exception $e) { 
+	} catch (Exception $e) {
 		return 0;
-	} 
+	}
 }
 
 
@@ -48,13 +48,13 @@ else
 			" ORDER BY path DESC";
 	$res = api_sql_query($select);
 	if(Database::num_rows($res)>0)
-	{  
+	{
 		$row = Database::fetch_array($res);
 		//$filepath = api_get_path(WEB_COURSE_PATH).$cp.'/document'.$row['path'];
 		$duration = getFLVDuration(api_get_path(SYS_COURSE_PATH).$cp.'/document'.$row['path']);
 		$filepath = api_get_path(WEB_CODE_PATH).'document/download.php?'.api_get_cidreq().'&doc_url='.$row['path'];
 		$path_to_lzx = $web_path.'conference/'.$player.'?uri='.urlencode($filepath).'&autostart=true&duration='.$duration;
-	}	
+	}
 }
 
 if(!empty($path_to_lzx)){
@@ -68,13 +68,13 @@ if(!empty($path_to_lzx)){
 	if($audio_recorder_studentview=='false')
 	{
 		echo '<script type="text/javascript">
-	
+
 		function show_audiorecorder()
 		{
 			document.getElementById("audiorecorder_frame").innerHTML = "'.addslashes($recorder_content).'";
 			document.getElementById("show_audiorecorder_div").style.display="none";
 		}
-	
+
 		</script>
 		';
 		//Commented the audio for the version stable

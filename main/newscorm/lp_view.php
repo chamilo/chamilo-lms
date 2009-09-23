@@ -53,13 +53,13 @@ if ($is_allowed_in_course == false) api_not_allowed();
 // we set the encoding of the lp
 if (!empty($_SESSION['oLP']->encoding)) {
 	$charset = $_SESSION['oLP']->encoding;
-} else { 
+} else {
 	$charset = api_get_system_encoding();
 }
 if (empty($charset)) {
-	$charset = 'ISO-8859-1';	
+	$charset = 'ISO-8859-1';
 }
-	
+
 $oLearnpath = false;
 $course_code = api_get_course_id();
 $user_id = api_get_user_id();
@@ -160,15 +160,15 @@ $type_quiz = false;
 
 foreach($list as $toc) {
 	if ($toc['id'] == $lp_item_id && ($toc['type']=='quiz') ) {
-		$type_quiz = true;		
-	}	
+		$type_quiz = true;
+	}
 }
 
 $autostart = 'true';
 // update status,total_time from lp_item_view table when you finish the exercises in learning path
 if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
 	global $src;
-	$_SESSION['oLP']->items[$_SESSION['oLP']->current]->write_to_db();	
+	$_SESSION['oLP']->items[$_SESSION['oLP']->current]->write_to_db();
 	$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 	$TBL_LP_ITEM_VIEW		= Database::get_course_table(TABLE_LP_ITEM_VIEW);
 	$TBL_LP_VIEW			= Database::get_course_table(TABLE_LP_VIEW);
@@ -204,10 +204,10 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
 			$sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = $score,total_time = $mytime WHERE id='".$row_last_attempt[0]."'";
 			api_sql_query($sql_upd_score,__FILE__,__LINE__);
 		}
-	}			
-		
+	}
+
 	if(intval($_GET['fb_type']) > 0) {
-		$src = 'blank.php?msg=exerciseFinished';		
+		$src = 'blank.php?msg=exerciseFinished';
 	} else {
 		$src = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?id='.Security::remove_XSS($_REQUEST['exeId']).'&origin=learnpath&learnpath_id='.Security::remove_XSS($_GET['lp_id']).'&learnpath_item_id='.Security::remove_XSS($_GET['lp_id']).'&fb_type='.Security::remove_XSS($_GET['fb_type']);
 	}
@@ -220,19 +220,19 @@ $nameTools = Security :: remove_XSS(api_convert_encoding($_SESSION['oLP']->get_n
 $save_setting = api_get_setting("show_navigation_menu");
 global $_setting;
 $_setting['show_navigation_menu'] = 'false';
-$scorm_css_header=true; 	
+$scorm_css_header=true;
 $lp_theme_css=$_SESSION['oLP']->get_theme(); //sets the css theme of the LP this call is also use at the frames (toc, nav, message)
- 
+
 if($_SESSION['oLP']->mode == 'fullscreen') {
-	$htmlHeadXtra[] = "<script>window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";	
+	$htmlHeadXtra[] = "<script>window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');</script>";
 	include_once('../inc/reduced_header.inc.php');
-	
+
 	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
 	$_SESSION['loaded_lp_view'] = true;
 	?>
 <input type="hidden" id="old_item" name ="old_item" value="0"/>
 <input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
-	
+
 <div id="learningPathMain"  style="width:100%;height:100%;" >
 	<div id="learningPathLeftZone" style="float:left;width:280px;height:100%">
 		<!-- header -->
@@ -253,102 +253,102 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 		            </table>
 		        </div>
 		</div>
-		<!-- end header --> 
+		<!-- end header -->
 
 <!-- Image preview Layout -->
-	<div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px">	
+	<div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px">
 		<?php $image = '../img/lp_author_background.gif'; ?>
-			<div id="preview_image" style="padding:5px;background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;height:110px">						       	   		       	
+			<div id="preview_image" style="padding:5px;background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;height:110px">
 		       	<div style="width:100; float:left;height:105;margin:5px">
 		       		<span>
 			        <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
 			        <img width="115" height="100" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
-			        <?php 
+			        <?php
 						else
 						: echo Display :: display_icon('unknown_250_100.jpg', ' ');
 						endif;
 						?>
 					</span>
 		       	</div>
-		       		       		       
+
 				<div id="nav_id" name="nav_name" class="lp_nav" style="margin-left:105;height:90">
-			        <?php										
+			        <?php
 						$display_mode = $_SESSION['oLP']->mode;
 						$scorm_css_header = true;
 						$lp_theme_css = $_SESSION['oLP']->get_theme();
-					
-						//Setting up the CSS theme if exists						
-					
+
+						//Setting up the CSS theme if exists
+
 						if (!empty ($lp_theme_css) && !empty ($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
 							global $lp_theme_css;
 						} else {
 							$lp_theme_css = $my_style;
 						}
-					
+
 						$progress_bar = $_SESSION['oLP']->get_progress_bar('', -1, '', true);
 						$navigation_bar = $_SESSION['oLP']->get_navigation_bar();
-						$mediaplayer = $_SESSION['oLP']->get_mediaplayer($autostart);	
-						
+						$mediaplayer = $_SESSION['oLP']->get_mediaplayer($autostart);
+
 						$tbl_lp_item	= Database::get_course_table(TABLE_LP_ITEM);
 						$show_audioplayer = false;
 						// getting all the information about the item
 						$sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE lp_id = '" . $_SESSION['oLP']->lp_id."'";
-						$res_media= api_sql_query($sql, __FILE__, __LINE__);					
-						
+						$res_media= api_sql_query($sql, __FILE__, __LINE__);
+
 						if(Database::num_rows($res_media) > 0){
 							while($row_media= Database::fetch_array($res_media)) {
-							     if(!empty($row_media['audio'])) {$show_audioplayer = true; break;}	
+							     if(!empty($row_media['audio'])) {$show_audioplayer = true; break;}
 							}
 						}
 					?>
-					
+
 					<div id="lp_navigation_elem" class="lp_navigation_elem" style="padding-left:130px;margin-top:9px;">
-						<div style="padding-top:20px;padding-bottom:50px;" ><?php echo $navigation_bar; ?></div> 
+						<div style="padding-top:20px;padding-bottom:50px;" ><?php echo $navigation_bar; ?></div>
 						<div style="height:20px"><?php echo $progress_bar; ?></div>
-					</div>									
-				</div>		  	 				
-		</div>	
-			   					
-	</div>   				   			
+					</div>
+				</div>
+		</div>
+
+	</div>
 	<!-- end image preview Layout -->
 				<div id="author_name" style="position:relative;top:2px;left:0px;margin:0;padding:0;text-align:center;width:100%">
 					<?php echo $_SESSION['oLP']->get_author() ?>
 				</div>
-	
-	<!-- media player layaout -->		
+
+	<!-- media player layaout -->
 	<?php $style_media = (($show_audioplayer)?' style= "position:relative;top:10px;left:10px;margin:8px;font-size:32pt;height:20px;"':'style="height:15px"'); ?>
 	<div id="media"  <?php echo $style_media ?>>
 		<?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?>
 	</div>
 	<!-- end media player layaout -->
-	
-	<!-- toc layout -->     
+
+	<!-- toc layout -->
 	<div id="toc_id" name="toc_name"  style="padding:0;margin-top:20px;height:60%;width:100%">
 		<div id="learningPathToc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
 		<!-- log message layout -->
-		
+
 		<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:50px;overflow:auto;margin:15px">
 			<div id="log_content"></div>
 			<div style="color: white;" onClick="cleanlog();">.</div>
 		</div>
 	<!-- end log message layout -->
 		</div>
-		
+
 	</div>
 	<!-- end toc layout -->
 
-	
-	</div>
-<!-- end left Zone --> 			
 
-<!-- right Zone -->    				
+	</div>
+<!-- end left Zone -->
+
+<!-- right Zone -->
 	<div id="learningPathRightZone" style="margin-left:282px;border : 0pt solid blue;height:100%">
 		<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>
 	</div>
 <!-- end right Zone -->
 
 </div>
-   
+
 	<script language="JavaScript" type="text/javascript">
 	// Need to be called after the <head> to be sure window.oxajax is defined
   	var dokeos_xajax_handler = window.oxajax;
@@ -383,21 +383,21 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 	};
 
 	window.onload = function() {
-	
+
 		screen_height = screen.height;
 		screen_width = screen.height;
-	
-		document.getElementById('learningPathLeftZone').style.height = "100%"; 
+
+		document.getElementById('learningPathLeftZone').style.height = "100%";
 		document.getElementById('learningPathToc').style.height = "60%";
 		document.getElementById('learningPathToc').style.width = "100%";
-		document.getElementById('learningPathRightZone').style.height = "100%" 
-		document.getElementById('content_id').style.height = "100%" ; 
-		
+		document.getElementById('learningPathRightZone').style.height = "100%"
+		document.getElementById('content_id').style.height = "100%" ;
+
 		if (screen_height <= 600) {
 			document.getElementById('inner_lp_toc').style.height = "100px" ;
-			document.getElementById('learningPathLeftZone').style.height = "415px";	
-		}	
-			
+			document.getElementById('learningPathLeftZone').style.height = "415px";
+		}
+
 		initialLeftZoneHeight = document.getElementById('learningPathToc').offsetHeight;
 		initialRightZoneHeight = document.getElementById('learningPathRightZone').offsetHeight;
 		docHeight = document.body.clientHeight;
@@ -414,7 +414,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 <?php
 }
 else
-{	
+{
 	include_once('../inc/reduced_header.inc.php');
 	//$displayAudioRecorder = (api_get_setting('service_visio','active')=='true') ? true : false;
 	//check if audio recorder needs to be in studentview
@@ -428,7 +428,7 @@ else
 		$audio_recorder_studentview = false;
 	}
 	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
-	$_SESSION['loaded_lp_view'] = true;	
+	$_SESSION['loaded_lp_view'] = true;
 	?>
 
 	<input type="hidden" id="old_item" name ="old_item" value="0"/>
@@ -454,14 +454,14 @@ else
 		            </table>
 		        </div>
 		</div>
-		<!-- end header --> 
+		<!-- end header -->
 
 <!-- Image preview Layout -->
-	<div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px;">	
+	<div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px;">
 		<?php $image = '../img/lp_author_background.gif'; ?>
 
 			<div id="preview_image" style="padding:5px;background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;height:110px">
-						       	   		       	
+
 		       	<div style="width:100; float:left;height:105;margin:5px">
 		       		<span style="width:104px; height:96px; float:left; vertical-align:bottom;">
 			        <center><?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
@@ -469,87 +469,87 @@ else
 			        	$picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
 			        	if($picture['1'] < 96) $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" ';
 			        	$size = ($picture['0'] > 104 && $picture['1'] > 96 )? ' width="104" height="96" ': $style;
-			        	$flie = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); 
-			        	echo '<img '.$size.' src="'.$flie.'">'; 
+			        	$flie = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image();
+			        	echo '<img '.$size.' src="'.$flie.'">';
 			        ?>
-			        <?php 
+			        <?php
 						else
 						: echo Display :: display_icon('unknown_250_100.jpg', ' ');
 						endif;
 						?></center>
 					</span>
 		       	</div>
-		       		       		       
+
 				<div id="nav_id" name="nav_name" class="lp_nav" style="margin-left:105;height:90">
-			        <?php										
+			        <?php
 						$display_mode = $_SESSION['oLP']->mode;
 						$scorm_css_header = true;
 						$lp_theme_css = $_SESSION['oLP']->get_theme();
-					
+
 						//Setting up the CSS theme if exists
 						if (!empty ($lp_theme_css) && !empty ($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
 							global $lp_theme_css;
 						} else {
 							$lp_theme_css = $my_style;
 						}
-					
+
 						$progress_bar = $_SESSION['oLP']->get_progress_bar('', -1, '', true);
 						$navigation_bar = $_SESSION['oLP']->get_navigation_bar();
 						$mediaplayer = $_SESSION['oLP']->get_mediaplayer($autostart);
-						
+
 						$tbl_lp_item	= Database::get_course_table(TABLE_LP_ITEM);
 						$show_audioplayer = false;
 						// getting all the information about the item
 						$sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE lp_id = '" . $_SESSION['oLP']->lp_id."'";
-						$res_media= api_sql_query($sql, __FILE__, __LINE__);					
-						
+						$res_media= api_sql_query($sql, __FILE__, __LINE__);
+
 						if(Database::num_rows($res_media) > 0){
 							while($row_media= Database::fetch_array($res_media)) {
-							     if(!empty($row_media['audio'])) {$show_audioplayer = true; break;}	
+							     if(!empty($row_media['audio'])) {$show_audioplayer = true; break;}
 							}
 						}
 					?>
-					
+
 					<div id="lp_navigation_elem" class="lp_navigation_elem" style="padding-left:130px;margin-top:9px;">
-						<div style="padding-top:15px;padding-bottom:50px;" ><?php echo $navigation_bar; ?></div> 
+						<div style="padding-top:15px;padding-bottom:50px;" ><?php echo $navigation_bar; ?></div>
 						<div style="height:20px"><?php echo $progress_bar; ?></div>
-					</div>									
-				</div>		  	 				
-		</div>	
-			   					
-	</div>   				   			
+					</div>
+				</div>
+		</div>
+
+	</div>
 	<!-- end image preview Layout -->
 				<div id="author_name" style="position:relative;top:2px;left:0px;margin:0;padding:0;text-align:center;width:100%">
 					<?php echo $_SESSION['oLP']->get_author() ?>
 				</div>
-	
-	<!-- media player layaout -->		
+
+	<!-- media player layaout -->
 	<?php $style_media = (($show_audioplayer)?' style= "position:relative;top:10px;left:10px;margin:8px;font-size:32pt;height:20px;"':'style="height:15px"'); ?>
 	<div id="media"  <?php echo $style_media ?>>
 		<?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?>
 	</div>
 	<!-- end media player layaout -->
-	
-	<!-- toc layout -->     
+
+	<!-- toc layout -->
 	<div id="toc_id" name="toc_name"  style="padding:0;margin-top:20px;height:60%;width:100%">
 		<div id="learningPathToc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
 		<!-- log message layout -->
-		
+
 		<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:50px;overflow:auto;margin:15px">
 			<div id="log_content"></div>
 			<div style="color: white;" onClick="cleanlog();">.</div>
 		</div>
 	<!-- end log message layout -->
 		</div>
-		
+
 	</div>
 	<!-- end toc layout -->
 
-	
-	</div>
-<!-- end left Zone --> 					
 
-<!-- right Zone -->    				
+	</div>
+<!-- end left Zone -->
+
+<!-- right Zone -->
 	<div id="learningPathRightZone" style="margin-left:282px;height:100%">
 		<iframe id="content_id" name="content_name" src="<?php echo $src; ?>" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>
 	</div>
@@ -591,21 +591,21 @@ else
 	};
 
 	window.onload = function() {
-	
+
 		screen_height = screen.height;
 		screen_width = screen.height;
-	
-		document.getElementById('learningPathLeftZone').style.height = "100%"; 
+
+		document.getElementById('learningPathLeftZone').style.height = "100%";
 		document.getElementById('learningPathToc').style.height = "60%";
 		document.getElementById('learningPathToc').style.width = "100%";
-		document.getElementById('learningPathRightZone').style.height = "100%" 
-		document.getElementById('content_id').style.height = "100%" ; 
-		
+		document.getElementById('learningPathRightZone').style.height = "100%"
+		document.getElementById('content_id').style.height = "100%" ;
+
 		if (screen_height <= 600) {
 			document.getElementById('inner_lp_toc').style.height = "100px" ;
-			document.getElementById('learningPathLeftZone').style.height = "415px";	
-		}	
-			
+			document.getElementById('learningPathLeftZone').style.height = "415px";
+		}
+
 		initialLeftZoneHeight = document.getElementById('learningPathToc').offsetHeight;
 		initialRightZoneHeight = document.getElementById('learningPathRightZone').offsetHeight;
 		docHeight = document.body.clientHeight;

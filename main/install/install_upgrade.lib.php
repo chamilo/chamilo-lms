@@ -8,7 +8,7 @@
 * - write a .htaccess file in the courses folder for extra security;
 * - write the Dokeos config file containing important settings like database names
 * and paswords and other options.
-* 
+*
 * Ideas for future additions:
 * - a function get_old_version_settings to retrieve the config file settings
 *   of older versions before upgrading.
@@ -76,7 +76,7 @@ function fill_current_settings_table($current_settings_table, $installation_sett
 	$allowSelfReg = $installation_settings['allow_self_registration'];
 	$allowSelfRegProf = $installation_settings['allow_teacher_self_registration'];
 	$adminPhoneForm = $installation_settings['admin_phone_form'];
-	
+
 	$file_path = dirname(__FILE__).'/'.SETTING_CURRENT_DATA_FILENAME;
 	$add_setting_current_sql = "LOAD DATA INFILE '".mysql_real_escape_string($file_path)."' INTO TABLE $current_settings_table FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\'';";
 	@ mysql_query($add_setting_current_sql);
@@ -159,7 +159,7 @@ function write_dokeos_config_file($path)
     $seek = array('\\','//');
     $destroy = array('/','/');
 	$rootSys = str_replace($seek,$destroy,realpath($pathForm).'/');
-	
+
 	$file_path = dirname(__FILE__).'/'.DOKEOS_CONFIG_FILENAME;
 	$content = file_get_contents($file_path);
 	$config['{DATE_GENERATED}'] = date('r');
@@ -180,8 +180,8 @@ function write_dokeos_config_file($path)
 	$config['{URL_APPEND_PATH}'] = $urlAppendPath;
 	$config['{PLATFORM_LANGUAGE}'] = $languageForm;
 	$config['{SECURITY_KEY}'] = md5(uniqid(rand().time()));
-	$config['{ENCRYPT_PASSWORD}'] = $encryptPassForm; 
-	
+	$config['{ENCRYPT_PASSWORD}'] = $encryptPassForm;
+
 	$config['SESSION_LIFETIME'] = $session_lifetime;
 	$config['{NEW_VERSION}'] = $new_version;
 	$config['NEW_VERSION_STABLE'] = trueFalse($new_version_stable);
@@ -189,7 +189,7 @@ function write_dokeos_config_file($path)
 	{
 		$content = str_replace($key, $value, $content);
 	}
-	
+
 	$fp = @ fopen($path, 'w');
 
 	if (!$fp)
@@ -224,17 +224,17 @@ function write_dokeos_config_file($path)
 function load_main_database($installation_settings)
 {
 	$dokeos_main_sql_file_string = file_get_contents(DOKEOS_MAIN_DATABASE_FILE);
-	
+
 	//replace symbolic parameters with user-specified values
 	foreach ($installation_settings as $key => $value)
 	{
 		$dokeos_main_sql_file_string = str_replace($key, mysql_real_escape_string($value), $dokeos_main_sql_file_string);
 	}
-	
+
 	//split in array of sql strings
 	$sql_instructions = array();
 	$success = split_sql_file($sql_instructions, $dokeos_main_sql_file_string);
-	
+
 	//execute the sql instructions
 	$count = count($sql_instructions);
 	for ($i = 0; $i < $count; $i++)
@@ -251,11 +251,11 @@ function load_main_database($installation_settings)
 function load_database_script($db_script)
 {
 	$dokeos_sql_file_string = file_get_contents($db_script);
-	
+
 	//split in array of sql strings
 	$sql_instructions = array();
 	$success = split_sql_file($sql_instructions, $dokeos_sql_file_string);
-	
+
 	//execute the sql instructions
 	$count = count($sql_instructions);
 	for ($i = 0; $i < $count; $i++)
@@ -267,7 +267,7 @@ function load_database_script($db_script)
 
 /**
  * Function copied and adapted from phpMyAdmin 2.6.0 PMA_splitSqlFile (also GNU GPL)
- * 
+ *
  * Removes comment lines and splits up large sql files into individual queries
  *
  * Last revision: September 23, 2001 - gandon
@@ -337,7 +337,7 @@ function split_sql_file(&$ret, $sql)
                 } // end if...elseif...else
             } // end for
         } // end if (in string)
-       
+
         // lets skip comments (/*, -- and #)
         else if (($char == '-' && $sql_len > $i + 2 && $sql[$i + 1] == '-' && $sql[$i + 2] <= ' ') || $char == '#' || ($char == '/' && $sql_len > $i + 1 && $sql[$i + 1] == '*')) {
             $i = strpos($sql, $char == '/' ? '*/' : "\n", $i);
@@ -392,7 +392,7 @@ function split_sql_file(&$ret, $sql)
 
 /**
  * Get an SQL file's contents
- * 
+ *
  * This function bases its parsing on the pre-set format of the specific SQL files in
  * the install/upgrade procedure:
  * Lines starting with "--" are comments (but need to be taken into account as they also hold sections names)
@@ -443,7 +443,7 @@ function get_sql_file_contents($file,$section,$print_errors=true)
 			if(preg_match('/^-- xx([A-Z]*)xx/',$line,$result))
 			{	//we got a section name here
 				if($result[1] == strtoupper($section))
-				{	//we have the section we are looking for, start recording 
+				{	//we have the section we are looking for, start recording
 					$record = true;
 				}
 				else
@@ -471,18 +471,18 @@ function get_sql_file_contents($file,$section,$print_errors=true)
 function directory_to_array($directory)
 {
 	$array_items = array();
-	if ($handle = opendir($directory)) 
+	if ($handle = opendir($directory))
 	{
-		while (false !== ($file = readdir($handle))) 
+		while (false !== ($file = readdir($handle)))
 		{
-			if ($file != "." && $file != "..") 
+			if ($file != "." && $file != "..")
 			{
-				if (is_dir($directory. "/" . $file)) 
+				if (is_dir($directory. "/" . $file))
 				{
-					$array_items = array_merge($array_items, directory_to_array($directory. "/" . $file));					
-					$file = $directory . "/" . $file;					
+					$array_items = array_merge($array_items, directory_to_array($directory. "/" . $file));
+					$file = $directory . "/" . $file;
 					$array_items[] = preg_replace("/\/\//si", "/", $file);
-				}	
+				}
 			}
 		}
 		closedir($handle);

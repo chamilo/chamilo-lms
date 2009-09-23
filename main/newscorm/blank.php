@@ -7,7 +7,7 @@
 /**
  * Script
  */
- 
+
 
 $language_file[] = "learnpath";
 
@@ -29,8 +29,8 @@ if (isset($_GET['error'])) {
 			echo '<br /><br />';
 			Display::display_error_message(get_lang('DocumentHasBeenDeleted'));
 			break;
-		case 'prerequisites':	
-			echo '<br /><br />';	
+		case 'prerequisites':
+			echo '<br /><br />';
 			Display::display_normal_message(get_lang('_prereq_not_complete'));
 			break;
 		default:

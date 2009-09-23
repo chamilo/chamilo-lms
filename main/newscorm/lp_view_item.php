@@ -1,30 +1,30 @@
 <?php
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004-2009 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Patrick Cool
 	Copyright (c) Denes Nagy
 	Copyright (c) Yannick Warnier
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 * This is a learning path creation and player tool in Dokeos - previously learnpath_handler.php
 *
 * @author Patrick Cool
@@ -32,14 +32,14 @@
 * @author Roan Embrechts, refactoring and code cleaning
 * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
 * @package dokeos.learnpath
-============================================================================== 
+==============================================================================
 */
 
 /*
 ==============================================================================
 		INIT SECTION
 ==============================================================================
-*/ 
+*/
 $_SESSION['whereami'] = 'lp/build';
 if(isset($_SESSION['oLP']) && isset($_GET['id']))
 {
@@ -53,7 +53,7 @@ api_protect_course_script();
 -----------------------------------------------------------
 	Libraries
 -----------------------------------------------------------
-*/ 
+*/
 //the main_api.lib.php, database.lib.php and display.lib.php
 //libraries are included by default
 
@@ -61,19 +61,19 @@ include('learnpath_functions.inc.php');
 //include('../resourcelinker/resourcelinker.inc.php');
 include('resourcelinker.inc.php');
 //rewrite the language file, sadly overwritten by resourcelinker.inc.php
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "learnpath";
 
 /*
 -----------------------------------------------------------
 	Header and action code
 -----------------------------------------------------------
-*/ 
+*/
 /*
 -----------------------------------------------------------
 	Constants and variables
 -----------------------------------------------------------
-*/ 
+*/
 $is_allowed_to_edit = api_is_allowed_to_edit();
 
 $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
@@ -112,9 +112,9 @@ if ( (! $is_allowed_to_edit) or ($isStudentView) )
 }
 //from here on, we are admin because of the previous condition, so don't check anymore
 
-$sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id"; 
+$sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id";
 $result=api_sql_query($sql_query);
-$therow=Database::fetch_array($result); 
+$therow=Database::fetch_array($result);
 
 //$admin_output = '';
 /*
@@ -122,7 +122,7 @@ $therow=Database::fetch_array($result);
 	Course admin section
 	- all the functions not available for students - always available in this case (page only shown to admin)
 -----------------------------------------------------------
-*/ 
+*/
 /*==================================================
 			SHOWING THE ADMIN TOOLS
  ==================================================*/
@@ -131,12 +131,12 @@ $therow=Database::fetch_array($result);
 
 /*==================================================
 	prerequisites setting end
- ==================================================*/		  
+ ==================================================*/
 if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
@@ -149,7 +149,7 @@ $interbreadcrumb[]= array ("url"=>api_get_self()."?action=build&lp_id=$learnpath
 //Theme calls
 $show_learn_path=true;
 $lp_theme_css=$_SESSION['oLP']->get_theme();
- 
+
 Display::display_header(null,'Path');
 //api_display_tool_title($therow['name']);
 
@@ -167,11 +167,12 @@ function stripslashes(str) {
 	return str;
 }
 function confirmation(name) {
-	name=stripslashes(name);		if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
+	name=stripslashes(name);
+	if (confirm("<?php echo $suredel; ?> " + name + " ?")) {
 		return true;
 	} else {
 		return false;
-	}	
+	}
 }
 </script>
 <?php
@@ -184,25 +185,25 @@ function confirmation(name) {
 -----------------------------------------------------------
 */
 
-echo $_SESSION['oLP']->build_action_menu();	
+echo $_SESSION['oLP']->build_action_menu();
 echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
-	echo '<tr>';			
-		echo '<td class="tree">';	
-			echo '<div class="lp_tree">';					
+	echo '<tr>';
+		echo '<td class="tree">';
+			echo '<div class="lp_tree">';
 				//build the tree with the menu items in it
-				echo $_SESSION['oLP']->build_tree();			
-			echo '</div>';					
+				echo $_SESSION['oLP']->build_tree();
+			echo '</div>';
 		echo '</td>';
-		echo '<td class="workspace">';				
-			echo $_SESSION['oLP']->display_item((isset($new_item_id)) ? $new_item_id : $_GET['id']);			
-		echo '</td>';			
-	echo '</tr>';		
+		echo '<td class="workspace">';
+			echo $_SESSION['oLP']->display_item((isset($new_item_id)) ? $new_item_id : $_GET['id']);
+		echo '</td>';
+	echo '</tr>';
 echo '</table>';
 
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
-*/ 
+*/
 Display::display_footer();
 ?>

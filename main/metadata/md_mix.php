@@ -6,11 +6,11 @@
 */
 
 /**
-============================================================================== 
+==============================================================================
 *	Dokeos Metadata: reduced class mdobject for Search, for a Mix of objects
 *
 *	@package dokeos.metadata
-============================================================================== 
+==============================================================================
 */
 
 class mdobject
@@ -32,43 +32,43 @@ var $mdo_base_url;
 function mdobject($_course, $eid)
 {
     if (!($dotpos = strpos($eid, '.'))) return;
-    
+
     $this->mdo_course = $_course; $this->mdo_eid = $eid;
     $this->mdo_type = ($type = substr($eid, 0, $dotpos));
     $this->mdo_id = ($id = substr($eid, $dotpos + 1));
-    
+
     if ($type == 'Document' || $type == 'Scorm')
     {
-        $table = $type == 'Scorm' ? 
+        $table = $type == 'Scorm' ?
             Database::get_course_table(TABLE_SCORMDOC) :
             Database::get_course_table(TABLE_DOCUMENT);
-    
+
         if (($dotpos = strpos($id, '.')))
         {
             $urlp = '?sid=' . urlencode(substr($id, $dotpos+1));
             $id = substr($id, 0, $dotpos);
         }
-    
+
         if (($docinfo = @mysql_fetch_array(api_sql_query(
-                "SELECT path,comment,filetype FROM 
-                 $table WHERE id='" . 
+                "SELECT path,comment,filetype FROM
+                 $table WHERE id='" .
                 addslashes($id) . "'", __FILE__, __LINE__))))
         {
             $this->mdo_path =     $docinfo['path'];
             $this->mdo_comment =  $docinfo['comment'];
             $this->mdo_filetype = $docinfo['filetype'];
-        
+
             if ($type == 'Scorm')
             {
-                $this->mdo_base_url =  get_course_web() . 
+                $this->mdo_base_url =  get_course_web() .
                     $this->mdo_course['path'] . '/scorm' . $this->mdo_path;
                 $this->mdo_url =  $this->mdo_base_url . '/index.php' . $urlp;
             }
             else
             {
-                $this->mdo_url =  api_get_path(WEB_PATH) . 'main/document/' . 
-                    (($this->mdo_filetype == 'file') ? 'download' : 'document').'.php?'. 
-                    (($this->mdo_filetype == 'file') ? 'doc_url=' : 'curdirpath=') . 
+                $this->mdo_url =  api_get_path(WEB_PATH) . 'main/document/' .
+                    (($this->mdo_filetype == 'file') ? 'download' : 'document').'.php?'.
+                    (($this->mdo_filetype == 'file') ? 'doc_url=' : 'curdirpath=') .
                     urlencode($this->mdo_path);
             }
         }
@@ -77,8 +77,8 @@ function mdobject($_course, $eid)
     {
         $link_table = Database::get_course_table(TABLE_LINK);
         if (($linkinfo = @mysql_fetch_array(api_sql_query(
-                "SELECT url,title,description,category_id FROM 
-                 $link_table WHERE id='" . addslashes($id) . 
+                "SELECT url,title,description,category_id FROM
+                 $link_table WHERE id='" . addslashes($id) .
                 "'", __FILE__, __LINE__))))
         {
             $this->mdo_url = $linkinfo['url'];

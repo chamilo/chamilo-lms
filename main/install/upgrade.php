@@ -3,10 +3,10 @@
 /**
 ==============================================================================
 * In this file we're working on a well-organised upgrade script to
-* upgrade directly from Dokeos 1.6.x to Dokeos 1.8.3 
+* upgrade directly from Dokeos 1.6.x to Dokeos 1.8.3
 *
 * For this upgrade we assume there is an old_dokeos directory and the new
-* software is in a new_dokeos directory. While we're busy developing we 
+* software is in a new_dokeos directory. While we're busy developing we
 * work in this one  - large - separate file so not to disturb the other
 * existing classes - the existing code remains working.
 *
@@ -35,12 +35,12 @@
 * The function get_installed_version($old_installation_path, $parameter)
 * can be used to detect version numbers.
 */
-	
+
 /*
 ==============================================================================
 		INIT SECTION
 ==============================================================================
-*/ 
+*/
 session_start();
 
 ini_set('include_path',ini_get('include_path').PATH_SEPARATOR.'../inc/lib/pear');
@@ -85,7 +85,7 @@ $update_from_18_version = array('1.8.0','1.8.1','1.8.2');
 ==============================================================================
 		CLASSES
 ==============================================================================
-*/ 
+*/
 
 /**
  * Page in the install wizard to select the language which will be used during
@@ -314,7 +314,7 @@ class Page_DatabaseSettings extends HTML_QuickForm_Page
 		//$this->addRule('database_personal_messenger', 'ThisFieldIsRequired', 'required');
 		//$this->addElement('text', 'database_profiler', get_lang("ProfilerDatabase"), array ('size' => '40'));
 		//$this->addRule('database_profiler', 'ThisFieldIsRequired', 'required');
-		
+
 		$enable_tracking[] = & $this->createElement('radio', 'enable_tracking', null, get_lang("Yes"), 1);
 		$enable_tracking[] = & $this->createElement('radio', 'enable_tracking', null, get_lang("No"), 0);
 		$this->addGroup($enable_tracking, 'tracking', get_lang("EnableTracking"), '&nbsp;', false);
@@ -543,21 +543,21 @@ class ActionProcess extends HTML_QuickForm_Action
 			<img src="../img/bluelogo.gif" alt="logo" align="right"/>
 		<?php
 		echo '<pre>';
-		
+
 		global $repository_database;
 		global $weblcms_database;
 		global $personal_calendar_database;
 		global $user_database;
 		global $personal_messenger_database;
 		global $profiler_database;
-		
+
 		$repository_database = $values['database_repository'];
 		$weblcms_database = $values['database_weblcms'];
 		$personal_calendar_database = $values['database_personal_calendar'];
 		$user_database = $values['database_user'];
 		$personal_messenger_database = $values['database_personal_messenger'];
 		$profiler_database = $values['database_profiler'];
-		
+
 		/*full_database_install($values);
 		full_file_install($values);
 		create_admin_in_user_table($values);
@@ -582,7 +582,7 @@ class ActionProcess extends HTML_QuickForm_Action
 ==============================================================================
 		FUNCTIONS
 ==============================================================================
-*/ 
+*/
 
 function display_upgrade_header($text_dir, $dokeos_version, $install_type, $update_from_version)
 {
@@ -603,7 +603,7 @@ function display_upgrade_header($text_dir, $dokeos_version, $install_type, $upda
 	<?php } ?>
 	</head>
 	<body dir="<?php echo $text_dir ?>">
-	
+
 	<div id="header">
 		<div id="header1"><?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').' '.$dokeos_version; ?><?php if($install_type == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($install_type == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').implode('|',$update_from_version); ?></div>
 		<div class="clear"></div>
@@ -679,13 +679,13 @@ function check_update_path($path)
 	{
 		//search for 1.6.x installation
 		$version = get_installed_version($path, 'platformVersion');
-		
+
 		//search for 1.8.x installation
 		//if (! isset($version) || $version == '')
 		//{
 		//   $version = get_installed_version($path, 'dokeos_version');
 		//}
-		
+
 		if (in_array($version, $update_from_version))
 		{
 			return true;
@@ -723,9 +723,9 @@ function get_installed_version($old_installation_path, $parameter)
  *
  * IMPORTANT
  * - Before Dokeos 1.8 the main code folder was called 'claroline'. Since Dokeos 1.8
- * this folder is called 'main' -> we have to make a difference based on previous 
+ * this folder is called 'main' -> we have to make a difference based on previous
  * version.
- * - The version may be in the config file or in the installedVersion file... 
+ * - The version may be in the config file or in the installedVersion file...
  *
  * WARNING - this function relies heavily on global variables $updateFromConfigFile
  * and $configFile, and also changes these globals. This can be rewritten.
@@ -825,12 +825,12 @@ function get_config_param($param,$path)
 		return $val;
 	}
 }
-	
+
 /*
 ==============================================================================
 		MAIN CODE
 ==============================================================================
-*/ 
+*/
 global $current_active_step;
 $current_active_step = '1';
 $install_type = 'update';
@@ -880,7 +880,7 @@ if( isset($values['old_version_path']) && $values['old_version_path'] != '/var/w
 		$defaults['encrypt_password'] = 'md5';
 	} elseif (get_config_param('userPasswordCrypted',$path)==0){
 		$defaults['encrypt_password'] = 'none';
-	}	
+	}
 	//$defaults['encrypt_password'] = get_config_param('userPasswordCrypted',$path);
 	$defaults['self_reg'] = get_config_param('allowSelfReg',$path);
 }

@@ -55,11 +55,11 @@ class learnpathItem{
 	var $title;
 	var $type; // this attribute can contain chapter|link|student_publication|module|quiz|document|forum|thread
 	var $view_id;
-	
+
 	var $debug = 0; //logging param
     /**
      * Class constructor. Prepares the learnpath_item for later launch
-     * 
+     *
      * Don't forget to use set_lp_view() if applicable after creating the item.
      * Setting an lp_view will finalise the item_view data collection
      * @param	integer	Learnpath item ID
@@ -116,7 +116,7 @@ class learnpathItem{
             }
         }
         $this->audio = $row['audio'];
-		
+
 		//error_log('New LP - End of learnpathItem constructor for item '.$id,0);
     	return true;
     }
@@ -174,7 +174,7 @@ class learnpathItem{
 			$this->objectives_count = (count($this->objectives)+1);
 		}
     }
-    
+
     /**
      * Closes/stops the item viewing. Finalises runtime values. If required, save to DB.
      * @return	boolean	True on success, false otherwise
@@ -187,7 +187,7 @@ class learnpathItem{
     	if($type != 'sco'){
     		if($type == TOOL_QUIZ or $type == TOOL_HOTPOTATOES)
     		{
-    			$this->get_status(true,true);//update status (second option forces the update)		
+    			$this->get_status(true,true);//update status (second option forces the update)
     		}
     		else
     		{
@@ -197,7 +197,7 @@ class learnpathItem{
     	if($this->save_on_close)
     	{
     		$this->save();
-    	}	
+    	}
     	return true;
     }
     /**
@@ -303,7 +303,7 @@ class learnpathItem{
     		//check the status in the database rather than in the object, as checking in the object
 			//would always return "no-credit" when we want to set it to completed
 			$status = $this->get_status(true);
-			if(!empty($this->debug) && $this->debug>2){error_log('New LP - In learnpathItem::get_credit() - get_prevent_reinit!=0 and status is '.$status,0);}			
+			if(!empty($this->debug) && $this->debug>2){error_log('New LP - In learnpathItem::get_credit() - get_prevent_reinit!=0 and status is '.$status,0);}
 			if($status != $this->possible_status[0] AND $status != $this->possible_status[1]){
 				$credit = 'no-credit';
 			}
@@ -508,7 +508,7 @@ class learnpathItem{
 	}
 	/**
 	 * Gets the lesson_mode (scorm feature, but might be used by aicc as well as dokeos paths)
-	 * 
+	 *
 	 * The "browse" mode is not supported yet (because there is no such way of seeing a sco in Dokeos)
 	 * @return	string	'browse','normal' or 'review'. Defaults to 'normal'
 	 */
@@ -516,7 +516,7 @@ class learnpathItem{
 		$mode = 'normal';
 		if($this->get_prevent_reinit() != 0){ //if prevent_reinit == 0
 			$my_status = $this->get_status();
-			if($my_status != $this->possible_status[0] AND $my_status != $this->possible_status[1]){	
+			if($my_status != $this->possible_status[0] AND $my_status != $this->possible_status[1]){
 				$mode = 'review';
 			}
 		}
@@ -537,7 +537,7 @@ class learnpathItem{
     function get_mastery_score()
     {
     	if($this->debug>0){error_log('New LP - In learnpathItem::get_mastery_score()',0);}
-    	if(isset($this->mastery_score)){return $this->mastery_score;}else{return -1;}    	    	
+    	if(isset($this->mastery_score)){return $this->mastery_score;}else{return -1;}
     }
     /**
      * Gets the maximum (score)
@@ -572,7 +572,7 @@ class learnpathItem{
     function get_max_time_allowed()
     {
     	if($this->debug>0){error_log('New LP - In learnpathItem::get_max_time_allowed()',0);}
-    	if(!empty($this->max_time_allowed)){return $this->max_time_allowed;}else{return '';}    	
+    	if(!empty($this->max_time_allowed)){return $this->max_time_allowed;}else{return '';}
     }
     /**
      * Gets the minimum (score)
@@ -606,7 +606,7 @@ class learnpathItem{
     }
     /**
      * Gets the prerequisites string
-     * @return	string	Empty string or prerequisites string if defined. Defaults to 
+     * @return	string	Empty string or prerequisites string if defined. Defaults to
      */
     function get_prereq_string()
     {
@@ -636,7 +636,7 @@ class learnpathItem{
 		    		return false;
 		    	}else{
 		    		$row = Database::fetch_array($res);
-		    		$this->prevent_reinit = $row['prevent_reinit']; 
+		    		$this->prevent_reinit = $row['prevent_reinit'];
 		    	}
 	    	}else{
 	    		$this->prevent_reinit = 1;//prevent reinit is always 1 by default - see learnpath.class.php
@@ -692,11 +692,11 @@ class learnpathItem{
     	$type = $this->get_type();
     	switch($type)
     	{
-    		case TOOL_DOCUMENT : 
+    		case TOOL_DOCUMENT :
     		case TOOL_QUIZ:
     		case 'sco':
     			//get the document and, if HTML, open it
-    			
+
     			if(is_file($abs_path))
     			{
 	    			//for now, read the whole file in one go (that's gonna be a problem when the file is too big)
@@ -720,7 +720,7 @@ class learnpathItem{
 								{
 									//find which kind of path these are (local or remote)
 									$sources = $attributes[$attr];
-									
+
 									foreach($sources as $source)
 									{
 										//skip what is obviously not a resource
@@ -728,7 +728,7 @@ class learnpathItem{
 										if(strpos($source,'.')=== false) continue; //no dot, should not be an external file anyway
 										if(strpos($source,'mailto:')) continue; //mailto link
 										if(strpos($source,';') && !strpos($source,'&amp;')) continue; //avoid code - that should help
-										
+
 										if($attr == 'value')
 										{
 											if(strpos($source , 'mp3file'))
@@ -769,7 +769,7 @@ class learnpathItem{
 										}
 										if(strpos($source,'://') > 0)
 										{
-											
+
 											//cut at '?' in a URL with params
 											if(strpos($source,'?')>0)
 											{
@@ -801,22 +801,22 @@ class learnpathItem{
 													if(substr($second_part,0,1) === '/')
 													{	//link starts with a /, making it absolute (relative to DocumentRoot)
 														$files_list[] = array($second_part,'local','abs');
-														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$second_part,$recursivity+1); 
+														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$second_part,$recursivity+1);
 														if(count($in_files_list)>0)
 														{
 															$files_list = array_merge($files_list,$in_files_list);
-														} 
+														}
 													}
 													elseif(strstr($second_part,'..') === 0)
 													{	//link is relative but going back in the hierarchy
 														$files_list[] = array($second_part,'local','rel');
 														$dir = dirname($abs_path);
 														$new_abs_path = realpath($dir.'/'.$second_part);
-														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1); 
+														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1);
 														if(count($in_files_list)>0)
 														{
 															$files_list = array_merge($files_list,$in_files_list);
-														} 
+														}
 													}
 													else
 													{	//no starting '/', making it relative to current document's path
@@ -827,13 +827,13 @@ class learnpathItem{
 														$files_list[] = array($second_part,'local','rel');
 														$dir = dirname($abs_path);
 														$new_abs_path = realpath($dir.'/'.$second_part);
-														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1); 
+														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1);
 														if(count($in_files_list)>0)
 														{
 															$files_list = array_merge($files_list,$in_files_list);
-														} 
+														}
 													}
-													
+
 												}
 												//leave that second part behind now
 												$source = substr($source,0,strpos($source,'?'));
@@ -847,7 +847,7 @@ class learnpathItem{
 														if(count($in_files_list)>0)
 														{
 															$files_list = array_merge($files_list,$in_files_list);
-														} 
+														}
 													}
 													else
 													{
@@ -861,22 +861,22 @@ class learnpathItem{
 													if(substr($source,0,1) === '/')
 													{	//link starts with a /, making it absolute (relative to DocumentRoot)
 														$files_list[] = array($source,'local','abs');
-														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$source,$recursivity+1); 
+														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$source,$recursivity+1);
 														if(count($in_files_list)>0)
 														{
 															$files_list = array_merge($files_list,$in_files_list);
-														} 
+														}
 													}
 													elseif(strstr($source,'..') === 0)
 													{	//link is relative but going back in the hierarchy
 														$files_list[] = array($source,'local','rel');
 														$dir = dirname($abs_path);
 														$new_abs_path = realpath($dir.'/'.$source);
-														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1); 
+														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1);
 														if(count($in_files_list)>0)
 														{
 															$files_list = array_merge($files_list,$in_files_list);
-														} 
+														}
 													}
 													else
 													{	//no starting '/', making it relative to current document's path
@@ -887,11 +887,11 @@ class learnpathItem{
 														$files_list[] = array($source,'local','rel');
 														$dir = dirname($abs_path);
 														$new_abs_path = realpath($dir.'/'.$source);
-														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1); 
+														$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1);
 														if(count($in_files_list)>0)
 														{
 															$files_list = array_merge($files_list,$in_files_list);
-														} 
+														}
 													}
 												}
 											}
@@ -904,7 +904,7 @@ class learnpathItem{
 												if(count($in_files_list)>0)
 												{
 													$files_list = array_merge($files_list,$in_files_list);
-												} 
+												}
 											}
 											else
 											{
@@ -918,22 +918,22 @@ class learnpathItem{
 											if(substr($source,0,1) === '/')
 											{	//link starts with a /, making it absolute (relative to DocumentRoot)
 												$files_list[] = array($source,'local','abs');
-												$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$source,$recursivity+1); 
+												$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$source,$recursivity+1);
 												if(count($in_files_list)>0)
 												{
 													$files_list = array_merge($files_list,$in_files_list);
-												} 
+												}
 											}
 											elseif(strstr($source,'..') === 0)
 											{	//link is relative but going back in the hierarchy
 												$files_list[] = array($source,'local','rel');
 												$dir = dirname($abs_path);
 												$new_abs_path = realpath($dir.'/'.$source);
-												$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1); 
+												$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1);
 												if(count($in_files_list)>0)
 												{
 													$files_list = array_merge($files_list,$in_files_list);
-												} 
+												}
 											}
 											else
 											{	//no starting '/', making it relative to current document's path
@@ -944,11 +944,11 @@ class learnpathItem{
 												$files_list[] = array($source,'local','rel');
 												$dir = dirname($abs_path);
 												$new_abs_path = realpath($dir.'/'.$source);
-												$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1); 
+												$in_files_list[] = learnpathItem::get_resources_from_source(TOOL_DOCUMENT,$new_abs_path,$recursivity+1);
 												if(count($in_files_list)>0)
 												{
 													$files_list = array_merge($files_list,$in_files_list);
-												} 
+												}
 											}
 										}
 									}
@@ -958,7 +958,7 @@ class learnpathItem{
 						default:
 							break;
 					}
-					
+
     			}
     			else
     			{
@@ -1020,17 +1020,17 @@ class learnpathItem{
     			if($update_local==true){
     				$this->set_status($row['status']);
     			}
-	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning db value '.$row['status'],0);}	    		
+	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning db value '.$row['status'],0);}
     			return $row['status'];
     		}
     	} else {
     		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - in get_status: using attrib',0);}
 	    	if(!empty($this->status)) {
-	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning attrib: '.$this->status,0);}	    		
+	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning attrib: '.$this->status,0);}
 	    		return $this->status;
 	    	}
     	}
-   		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning default '.$this->possible_status[0],0);}    	
+   		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning default '.$this->possible_status[0],0);}
     	return $this->possible_status[0];
     }
     /**
@@ -1077,7 +1077,7 @@ class learnpathItem{
   		}
 		return $scorm_time;
     }
-    
+
 function get_terms()
           {
                 $lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -1127,7 +1127,7 @@ function get_terms()
     		$res = $this->type;
     	}
     	if($this->debug>2){error_log('New LP - In learnpathItem::get_type() - Returning '.$res.' for item '.$this->db_id,0);}
-    	return $res;    	
+    	return $res;
     }
     /**
      * Gets the view count for this item
@@ -1156,7 +1156,7 @@ function get_terms()
 	/**
 	 * Tells if a restart is allowed (take it from $this->prevent_reinit and $this->status)
 	 * @return	integer	-1 if retaking the sco another time for credit is not allowed,
-	 * 					 0 if it is not allowed but the item has to be finished 
+	 * 					 0 if it is not allowed but the item has to be finished
 	 * 					 1 if it is allowed. Defaults to 1
 	 */
 	function is_restart_allowed()
@@ -1243,12 +1243,12 @@ function get_terms()
 		$this->prereq_alert = '';
 		// First parse all parenthesis by using a sequential loop (looking for less-inclusives first)
 		if($prereqs_string == '_true_'){return true;}
-		if($prereqs_string == '_false_'){    	
+		if($prereqs_string == '_false_'){
 			if(empty($this->prereq_alert)){
     			$this->prereq_alert = get_lang('_prereq_not_complete');
     		}
 			return false;
-		}		
+		}
 		while(strpos($prereqs_string,'(')!==false){
 			//remove any () set and replace with its value
 			$matches = array();
@@ -1264,7 +1264,7 @@ function get_terms()
 				}
 			}
 		}
-		
+
 		//parenthesis removed, now look for ORs as it is the lesser-priority binary operator (= always uses one text operand)
 		if(strpos($prereqs_string,"|")===false){
     		if($this->debug>1){error_log('New LP - Didnt find any OR, looking for AND',0);}
@@ -1276,7 +1276,7 @@ function get_terms()
 	    				$andstatus = $andstatus && $this->parse_prereq($condition,$items,$refs_list,$user_id);
 	    				if($andstatus==false){
 							if($this->debug>1){error_log('New LP - One condition in AND was false, short-circuit',0);}
-							break;	    					
+							break;
 	    				}
 					}
 					if(empty($this->prereq_alert) && !$andstatus){
@@ -1296,10 +1296,10 @@ function get_terms()
 					return false;
 	    		}
 	    	}else{
-	    		
+
 	    		//no ORs found, now look for ANDs
-	    		
-    			if($this->debug>1){error_log('New LP - Didnt find any AND, looking for =',0);}	    		
+
+    			if($this->debug>1){error_log('New LP - Didnt find any AND, looking for =',0);}
 	    		if(strpos($prereqs_string,"=")!==false){
 		    		if($this->debug>1){error_log('New LP - Found =, looking into it',0);}
 		    		//we assume '=' signs only appear when there's nothing else around
@@ -1318,10 +1318,10 @@ function get_terms()
 						return false;
 		    		}
 	    		}else{
-	    		
+
 	    			//No ANDs found, look for <>
-	    		
-	    			if($this->debug>1){error_log('New LP - Didnt find any =, looking for <>',0);}	    		
+
+	    			if($this->debug>1){error_log('New LP - Didnt find any =, looking for <>',0);}
 		    		if(strpos($prereqs_string,"<>")!==false){
 			    		if($this->debug>1){error_log('New LP - Found <>, looking into it',0);}
 			    		//we assume '<>' signs only appear when there's nothing else around
@@ -1340,9 +1340,9 @@ function get_terms()
 			    			return false;
 			    		}
 		    		}else{
-		    			
+
 		    			//No <> found, look for ~ (unary)
-		    			
+
 		    			if($this->debug>1){error_log('New LP - Didnt find any =, looking for ~',0);}
 		    			//only remains: ~ and X*{}
 		    			if(strpos($prereqs_string,"~")!==false){
@@ -1361,10 +1361,10 @@ function get_terms()
 					    		if($this->debug>1){error_log('New LP - Found ~ but strange string: '.$prereqs_string,0);}
 		    				}
 		    			}else{
-		    				
+
 		    				//Finally, look for sets/groups
-		    				
-			    			if($this->debug>1){error_log('New LP - Didnt find any ~, looking for groups',0);}	    		
+
+			    			if($this->debug>1){error_log('New LP - Didnt find any ~, looking for groups',0);}
 		    				//only groups here
 					    	$groups = array();
 					    	$groups_there = preg_match_all('/((\d+\*)?\{([^\}]+)\}+)/',$prereqs_string,$groups);
@@ -1406,15 +1406,15 @@ function get_terms()
 							    				$status = $items[$refs_list[$cond]]->get_status(true);
 								    			if (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3])){
 						    						$mycond = true;
-							    					if($this->debug>1){error_log('New LP - Found true item',0);}						    					
+							    					if($this->debug>1){error_log('New LP - Found true item',0);}
 								    			}else{
-							    					if($this->debug>1){error_log('New LP - Found false item, the set is not true, return false',0);}						    					
+							    					if($this->debug>1){error_log('New LP - Found false item, the set is not true, return false',0);}
 								    				$mycond = false;
 								    				break;
 								    			}
 						    				}else{
 							    				if($this->debug>1){error_log('New LP - item '.$cond.' does not exist in items list',0);}
-						    					if($this->debug>1){error_log('New LP - Found false item, the set is not true, return false',0);}			    					
+						    					if($this->debug>1){error_log('New LP - Found false item, the set is not true, return false',0);}
 							    				$mycond = false;
 							    				break;
 							    			}
@@ -1426,18 +1426,18 @@ function get_terms()
 						    		return $mycond;
 						    	}
 					    	}else{
-					    		
+
 					    		//Nothing found there either. Now return the value of the corresponding resource completion status
-					    		
+
 				    			if($this->debug>1){error_log('New LP - Didnt find any group, returning value for '.$prereqs_string,0);}
-				    			if(isset($items[$refs_list[$prereqs_string]])){				    				
+				    			if(isset($items[$refs_list[$prereqs_string]])){
 				    				if($items[$refs_list[$prereqs_string]]->type == 'quiz')
 				    				{
 				    					$sql = 'SELECT exe_result, exe_weighting
 												FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES).'
-												WHERE exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' 
+												WHERE exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.'
 												AND exe_user_id = '.$user_id.'
-												AND status <> "incomplete"		
+												AND status <> "incomplete"
 												ORDER BY exe_date DESC
 												LIMIT 0, 1';
 										$rs_quiz = api_sql_query($sql, __FILE__, __LINE__);
@@ -1520,7 +1520,7 @@ function get_terms()
     }
     /**
 	 * Parses the HTML attributes given as string.
-	 * 
+	 *
 	 * @param    string  HTML attribute string
 	 * @param	 array	 List of attributes that we want to get back
 	 * @return   array   An associative array of attributes
@@ -1538,16 +1538,16 @@ function get_terms()
 	    try {
 	       //Find all occurences of something that looks like a URL
            // The structure of this regexp is:
-           // (find protocol) then 
+           // (find protocol) then
            // (optionally find some kind of space 1 or more times) then
            // find (either an equal sign or a bracket) followed by an optional space
            // followed by some text without quotes (between quotes itself or not)
            // then possible closing brackets if we were in the opening bracket case
-           // OR something like @import() 
+           // OR something like @import()
 	    	$res = preg_match_all(
                 '/(((([A-Za-z_:])([A-Za-z0-9_:\.-]*))' .
 //	            '/(((([A-Za-z_:])([A-Za-z0-9_:\.-]|[^\x00-\x7F])*)' . -> seems to be taking too much
-//                '/(((([A-Za-z_:])([^\x00-\x7F])*)' . -> takes only last letter of parameter name 
+//                '/(((([A-Za-z_:])([^\x00-\x7F])*)' . -> takes only last letter of parameter name
 	            '([ \n\t\r]+)?(' .
 //	              '(=([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+))' . -> doesn't restrict close enough to the url itself
                   '(=([ \n\t\r]+)?("[^"\)]+"|\'[^\'\)]+\'|[^ \n\t\r\)]+))' .
@@ -1556,9 +1556,9 @@ function get_terms()
                   '(\(([ \n\t\r]+)?("[^"\)]+"|\'[^\'\)]+\'|[^ \n\t\r\)]+)\))' .
 	            '))' .
 	            '|' .
-//	            '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))?/', -> takes a lot (like 100's of thousands of empty possibilities) 
-                '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))/', 
-	            $attrString, 
+//	            '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))?/', -> takes a lot (like 100's of thousands of empty possibilities)
+                '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))/',
+	            $attrString,
 	            $regs
 	       );
 
@@ -1579,18 +1579,18 @@ function get_terms()
 	            	$value = trim($regs[16][$i]);
 	            }
 	            if(!empty($name))
-	            {     
+	            {
 					if(!$reduced OR in_array(strtolower($name),$wanted))
 		            {
-			            if ($name == $check) {		                	
-		            		$attributes[strtolower($name)][] = strtolower($name);				            	
-			            } else {			            	
-			                if (!empty($value) && ($value[0] == '\'' || $value[0] == '"')) {			                	
-			                    $value = substr($value, 1, -1);			                    
+			            if ($name == $check) {
+		            		$attributes[strtolower($name)][] = strtolower($name);
+			            } else {
+			                if (!empty($value) && ($value[0] == '\'' || $value[0] == '"')) {
+			                    $value = substr($value, 1, -1);
 			                }
 						    if ($value=='API.LMSGetValue(name') {
 						    	$value='API.LMSGetValue(name)';
-						    }		                			                
+						    }
 			                $attributes[strtolower($name)][] = $value;
 			            }
 		            }
@@ -1603,7 +1603,7 @@ function get_terms()
 	}
     /**
      * Reinits all local values as the learnpath is restarted
-     * @return	boolean	True on success, false otherwise	
+     * @return	boolean	True on success, false otherwise
      */
     function restart()
     {
@@ -1629,7 +1629,7 @@ function get_terms()
 				$this->write_to_db();
 			}
 		}else{
-			//restart current element is allowed (because it's not finished yet), 
+			//restart current element is allowed (because it's not finished yet),
 			// reinit current
 			$this->current_score = 0;
 			$this->current_start_time = 0;
@@ -1684,7 +1684,7 @@ function get_terms()
 		     				break;
 		     			case 'lesson_status':
 		     				if(!empty($value)){
-			     				$this->set_status($value); 
+			     				$this->set_status($value);
 			   					if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting status to '.$value,0);}
 		     				}
 		     				break;
@@ -1747,7 +1747,7 @@ function get_terms()
 		 			if($prereqs_complete)
 		 			{
 		 				$this->set_status($this->possible_status[2]);
-		 			}	 			
+		 			}
 				break;
 	 		}
 		}
@@ -1844,14 +1844,14 @@ function get_terms()
 		    	//$this->view_min_score 	= $row['min_score'];
 				$this->status			= $row['status'];
 				$this->current_start_time	= $row['start_time'];
-				$this->current_stop_time 	= $this->current_start_time + $row['total_time']; 
+				$this->current_stop_time 	= $this->current_start_time + $row['total_time'];
 				$this->lesson_location  = $row['lesson_location'];
 				$this->core_exit		= $row['core_exit'];
 		     	if($this->debug>2){error_log('New LP - In learnpathItem::set_lp_view() - Updated item object with database values',0);}
 
 		     	//now get the number of interactions for this little guy
 		     	$item_view_interaction_table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
-		     	$sql = "SELECT * FROM $item_view_interaction_table WHERE lp_iv_id = '".$this->db_item_view_id."'"; 
+		     	$sql = "SELECT * FROM $item_view_interaction_table WHERE lp_iv_id = '".$this->db_item_view_id."'";
 				$res = api_sql_query($sql,__FILE__,__LINE__);
 				if($res !== false){
 					$this->interactions_count = Database::num_rows($res);
@@ -1860,7 +1860,7 @@ function get_terms()
 				}
 		     	//now get the number of objectives for this little guy
 		     	$item_view_objective_table = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
-		     	$sql = "SELECT * FROM $item_view_objective_table WHERE lp_iv_id = '".$this->db_item_view_id."'"; 
+		     	$sql = "SELECT * FROM $item_view_objective_table WHERE lp_iv_id = '".$this->db_item_view_id."'";
 				$res = api_sql_query($sql,__FILE__,__LINE__);
 				if($res !== false){
 					$this->objectives_count = Database::num_rows($res);
@@ -1996,7 +1996,7 @@ function get_terms()
     {
         return $this->search_did;
     }
-           
+
     /**
      * Sets the item viewing time in a usable form, given that SCORM packages often give it as 00:00:00.0000
      * @param	string	Time as given by SCORM
@@ -2046,7 +2046,7 @@ function get_terms()
 	/**
 	 * Checks if the current status is part of the list of status given
 	 * @param	strings_array	An array of status to check for. If the current status is one of the strings, return true
-	 * @return	boolean			True if the status was one of the given strings, false otherwise	
+	 * @return	boolean			True if the status was one of the given strings, false otherwise
 	 */
 	function status_is($list=array())
 	{
@@ -2172,17 +2172,17 @@ function get_terms()
      */
      function write_to_db()
      {
-	
+
    		if($this->debug>0){error_log('New LP - In learnpathItem::write_to_db()',0);}
    		$mode = $this->get_lesson_mode();
    		$credit = $this->get_credit();
    		$my_verified_status=$this->get_status(false);
-   		
+
    		$item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 		$sql_verified='SELECT status FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
 		$rs_verified=api_sql_query($sql_verified,__FILE__,__LINE__);
 		$row_verified=Database::fetch_array($rs_verified);
-					
+
    		$my_case_completed=array('completed','passed','browsed','failed');//added by isaac flores
    		if (in_array($sql_verified['status'],$my_case_completed)) {
    			$save=false;
@@ -2197,12 +2197,12 @@ function get_terms()
    		} else {
       		//check the row exists
       		$inserted = false;
-      		
+
       		// this a special case for multiple attempts and Dokeos exercises
-      		if ($this->type == 'quiz' && $this->get_prevent_reinit()==0 && $this->get_status()=='completed') {     			
-      			// we force the item to be restarted    		
+      		if ($this->type == 'quiz' && $this->get_prevent_reinit()==0 && $this->get_status()=='completed') {
+      			// we force the item to be restarted
       			$this->restart();
-      			      		
+
       			$sql = "INSERT INTO $item_view_table " .
 		     			"(total_time, " .
 		     			"start_time, " .
@@ -2227,13 +2227,13 @@ function get_terms()
 		     			"'".Database::escape_string($this->current_data)."'," .
 		     			//"'".$this->get_max_time_allowed()."'," .
 		     			"'".$this->lesson_location."')";
-		     			
+
       			if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Inserting into item_view forced: '.$sql,0);}
 		     	$res = api_sql_query($sql,__FILE__,__LINE__);
-		     	$this->db_item_view_id = Database::get_last_insert_id();	     	
-		     	$inserted = true;	
-		   }     		
-      		
+		     	$this->db_item_view_id = Database::get_last_insert_id();
+		     	$inserted = true;
+		   }
+
 	     	$item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 	     	$check = "SELECT * FROM $item_view_table " .
 	     			"WHERE lp_item_id = ".$this->db_id. " " .
@@ -2294,72 +2294,72 @@ function get_terms()
 			     			"AND lp_view_id = ".$this->view_id." " .
 			     			"AND view_count = ".$this->attempt_id;
 	     		} else {
-	     			//for all other content types...	
+	     			//for all other content types...
 	     			if ($this->type=='quiz') {
-	     				$my_status = ' ';	
-	     				$total_time = ' ';	     				 
+	     				$my_status = ' ';
+	     				$total_time = ' ';
 	     				if (!empty($_REQUEST['exeId'])) {
 							$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-							
+
 							$safe_exe_id = Database::escape_string($_REQUEST['exeId']);
 		     				$sql = 'SELECT start_date,exe_date FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.(int)$safe_exe_id;
 							$res = api_sql_query($sql,__FILE__,__LINE__);
-							$row_dates = Database::fetch_array($res);		
-	
+							$row_dates = Database::fetch_array($res);
+
 							$time_start_date = convert_mysql_date($row_dates['start_date']);
 							$time_exe_date 	 = convert_mysql_date($row_dates['exe_date']);
 							$mytime = ((int)$time_exe_date-(int)$time_start_date);
 							$total_time =" total_time = ".$mytime.", ";
-	     				}																							     				    					     			
+	     				}
 	     			} else {
 	     				$my_type_lp=learnpath::get_type_static($this->lp_id);
 	     				// this is a array containing values finished
 	     				$case_completed=array('completed','passed','browsed');
 
 	     				//is not multiple attempts
-	     				if ($this->get_prevent_reinit()==1) {				
+	     				if ($this->get_prevent_reinit()==1) {
 			  		     	// process of status verified into data base
-		     				
+
 		     				$sql_verified='SELECT status FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
 		     				$rs_verified=api_sql_query($sql_verified,__FILE__,__LINE__);
 		     				$row_verified=Database::fetch_array($rs_verified);
-		     				
-		     				//get type lp: 1=lp dokeos and  2=scorm 	
-			    			// if not is completed or passed or browsed and learning path is scorm			     			
+
+		     				//get type lp: 1=lp dokeos and  2=scorm
+			    			// if not is completed or passed or browsed and learning path is scorm
 		     				if(!in_array($this->get_status(false),$case_completed) && $my_type_lp==2 ) {//&& $this->type!='dir'
-		     					$total_time =" total_time = total_time +".$this->get_total_time().", "; 
-		     					$my_status = " status = '".$this->get_status(false)."' ,"; 
+		     					$total_time =" total_time = total_time +".$this->get_total_time().", ";
+		     					$my_status = " status = '".$this->get_status(false)."' ,";
 		     				} else {
 		     					//verified into data base
 		     					if (!in_array($row_verified['status'],$case_completed) && $my_type_lp==2 ) { //&& $this->type!='dir'
 		     						$total_time =" total_time = total_time +".$this->get_total_time().", ";
-		     						$my_status = " status = '".$this->get_status(false)."' ,"; 
+		     						$my_status = " status = '".$this->get_status(false)."' ,";
 		     	 				} elseif (in_array($row_verified['status'],$case_completed) && $my_type_lp==2 && $this->type!='sco' ) {//&& $this->type!='dir'
 		     	 					$total_time =" total_time = total_time +".$this->get_total_time().", ";
-		     	 					$my_status = " status = '".$this->get_status(false)."' ,"; 
+		     	 					$my_status = " status = '".$this->get_status(false)."' ,";
 		     					}else {
-		     	 				//&& !in_array($row_verified['status'],$case_completed)			     	 				
+		     	 				//&& !in_array($row_verified['status'],$case_completed)
 		     	 				//is lp dokeos
 		     	 					if ($my_type_lp==1 && $this->type!='chapter') {
 	     								$total_time =" total_time = total_time + ".$this->get_total_time().", ";
-	     								$my_status = " status = '".$this->get_status(false)."' ,"; 
-	     							}	
-		     	 				}		     					
+	     								$my_status = " status = '".$this->get_status(false)."' ,";
+	     							}
+		     	 				}
 		     				}
 	     				} else {
 	     					// is multiple attempts
 	     					if (in_array($this->get_status(false),$case_completed) &&  $my_type_lp==2) {
-	     						//reset zero new attempt ?	     						
+	     						//reset zero new attempt ?
 	     						$my_status = " status = '".$this->get_status(false)."' ,";
 	     					}  elseif (!in_array($this->get_status(false),$case_completed) &&  $my_type_lp==2){
 	     						$total_time =" total_time = ".$this->get_total_time().", ";
-	     						$my_status = " status = '".$this->get_status(false)."' ,";	     						
+	     						$my_status = " status = '".$this->get_status(false)."' ,";
 	     					} else {
 	     						//is dokeos LP
 	     						$total_time =" total_time = total_time +".$this->get_total_time().", ";
-	     						$my_status = " status = '".$this->get_status(false)."' ,"; 
-	     					}	
-	     					
+	     						$my_status = " status = '".$this->get_status(false)."' ,";
+	     					}
+
 	     					//code added by isaac flores
 	     					//this code line fix the problem of wrong status
 	     					if ( $my_type_lp==2) {
@@ -2373,12 +2373,12 @@ function get_terms()
 						     	} else {
 						     		$total_time =" total_time = total_time +".$this->get_total_time().", ";
 						     	}
-	     					}     					
-	     				}	     						
+	     					}
+	     				}
 	     				/*if ($my_type_lp==1 && !in_array($row_verified['status'],$case_completed)) {
 	     					$total_time =" total_time = total_time + ".$this->get_total_time().", ";
 	     				}*/
-	     				
+
 	     			}
 
 			     	$sql = "UPDATE $item_view_table " .
@@ -2393,7 +2393,7 @@ function get_terms()
 			     			"WHERE lp_item_id = ".$this->db_id." " .
 			     			"AND lp_view_id = ".$this->view_id." " .
 			     			"AND view_count = ".$this->attempt_id;
-			     			
+
 			     			$this->current_start_time = time();
 	     		}
 	    	 	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Updating item_view: '.$sql,0);}

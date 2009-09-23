@@ -26,7 +26,7 @@ $uncompress  = 1;
  * size set in php.ini, all variables from POST are cleared !
  */
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' 
+if ($_SERVER['REQUEST_METHOD'] == 'POST'
 	&& count($_FILES)>0
 	&& !empty($_FILES['user_file']['name'])
 	)
@@ -43,8 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 	$filename = $info['basename'];
 	$extension = $info['extension'];
 	$file_base_name = str_replace('.'.$extension,'',$filename);
-	
-	
+
+
 	$new_dir = replace_dangerous_char(trim($file_base_name),'strict');
 
 	require_once('learnpath.class.php');
@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 			}else{
 				//show error message stored in $oScrom->error_msg
 			}
-		
+
 			$proximity = '';
 			if(!empty($_REQUEST['content_proximity'])){$proximity = Database::escape_string($_REQUEST['content_proximity']);}
 			$maker = '';
@@ -89,13 +89,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 			require_once('openoffice_presentation.class.php');
 			$take_slide_name = empty($_POST['take_slide_name']) ? false : true;
 			$o_ppt = new OpenofficePresentation($take_slide_name);
-			$first_item_id = $o_ppt -> convert_document($_FILES['user_file']);		
+			$first_item_id = $o_ppt -> convert_document($_FILES['user_file']);
 			break;
 		case 'woogie':
 			require_once('openoffice_text.class.php');
 			$split_steps = $_POST['split_steps'];
 			$o_doc = new OpenofficeText($split_steps);
-			$first_item_id = $o_doc -> convert_document($_FILES['user_file']);				
+			$first_item_id = $o_doc -> convert_document($_FILES['user_file']);
 			break;
 		case '':
 		default:
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 elseif($_SERVER['REQUEST_METHOD'] == 'POST')
 {
 	//if file name given to get in claroline/upload/, try importing this way
-	
+
 	// A file upload has been detected, now deal with the file...
 	//directory creation
 
@@ -132,7 +132,7 @@ elseif($_SERVER['REQUEST_METHOD'] == 'POST')
 				$oScorm->parse_manifest($manifest);
 				$oScorm->import_manifest(api_get_course_id());
 			}
-		
+
 			$proximity = '';
 			if(!empty($_REQUEST['content_proximity'])){$proximity = mysql_real_escape_string($_REQUEST['content_proximity']);}
 			$maker = '';
@@ -160,6 +160,6 @@ elseif($_SERVER['REQUEST_METHOD'] == 'POST')
 		case '':
 		default:
 			return api_failure::set_failure('not_a_learning_path');
-	}	
+	}
 }
 ?>

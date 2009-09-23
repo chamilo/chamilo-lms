@@ -11,7 +11,7 @@
  */
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file[] = 'learnpath';
 require_once('back_compat.inc.php');
 /**
@@ -87,12 +87,12 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 		}
 	}
 	//$objResponse->addAlert(api_get_path(REL_CODE_PATH).'newscorm/learnpathItem.class.php');
-	
-	
+
+
 	$prereq_check = $mylp->prerequisites_match($item_id);
 	if($prereq_check === true) //launch the prerequisites check and set error if needed
 	{
-	
+
 		$mylpi =& $mylp->items[$item_id];
 		//$mylpi->set_lp_view($view_id);
 		if($max!=-1)
@@ -144,7 +144,7 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 	}else{
 		return $objResponse;
 	}
-	
+
 	$mystatus = $mylpi->get_status(false);
 	$mytotal = $mylp->get_total_items_count_without_chapters();
 	$mycomplete = $mylp->get_complete_items_count();
@@ -153,7 +153,7 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 	//$mylpi->write_to_db();
 	$_SESSION['lpobject'] = serialize($mylp);
 	if($mylpi->get_type()!='sco')
-	{ //if this object's JS status has not been updated by the SCORM API, update now 
+	{ //if this object's JS status has not been updated by the SCORM API, update now
 		$objResponse->addScript("lesson_status='".$mystatus."';");
 	}
 	$objResponse->addScript("update_toc('".$mystatus."','".$item_id."');");
@@ -162,7 +162,7 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 	{
 		if($my_upd_id != $item_id){ //only update the status from other items (i.e. parents and brothers), do not update current as we just did it already
 			$objResponse->addScript("update_toc('".$my_upd_status."','".$my_upd_id."');");
-		}		
+		}
 	}
 	$objResponse->addScript("update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');");
 
@@ -170,14 +170,14 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 		$objResponse->addScript("logit_lms('Saved data for item ".$item_id.", user ".$user_id." (status=".$mystatus.")',2)");
 		if($debug>1){error_log('End of xajax_save_item()',0);}
 	}
-	
+
 	if($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']))
 	{ // if $_SESSION['login_as'] is set, then the user is an admin logged as the user
-	
+
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-		
+
 		$sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".api_get_user_id()."' ORDER BY login_date DESC LIMIT 0,1";
-		
+
 		$q_last_connection=api_sql_query($sql_last_connection);
 		if(Database::num_rows($q_last_connection) > 0)
 		{
@@ -186,9 +186,9 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 			$s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
 			api_sql_query($s_sql_update_logout_date);
 		}
-		
+
 	}
-	
+
 	return $objResponse;
 }
 /**
@@ -293,7 +293,7 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
 		case 'previous':
 			$mylp->set_current_item($current_item);
 			$mylp->previous();
-			$new_item_id = $mylp->get_current_item_id();			
+			$new_item_id = $mylp->get_current_item_id();
 			if($debug>1){error_log('In {previous} - next item is '.$new_item_id.'(current: '.$current_item.')',0);}
 			break;
 		case 'first':

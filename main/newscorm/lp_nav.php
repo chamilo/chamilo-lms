@@ -10,7 +10,7 @@
  */
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file[] = "scormdocument";
 $language_file[] = "scorm";
 $language_file[] = "learnpath";
@@ -35,21 +35,21 @@ if(isset($_SESSION['lpobject'])) {
 	} else {
 		//error_log('New LP - in lp_nav.php - SESSION[lpobject] is not object - dying',0);
 		die('Could not instanciate lp object');
-	}	
-	$display_mode = $_SESSION['oLP']->mode;	
+	}
+	$display_mode = $_SESSION['oLP']->mode;
 	$scorm_css_header = true;
 	$lp_theme_css = $_SESSION['oLP']->get_theme();
 	//Setting up the CSS theme if exists
 	include_once('../inc/reduced_header.inc.php');
-	
+
 	if (!empty($lp_theme_css) && !empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1 ) {
-		global $lp_theme_css;			
+		global $lp_theme_css;
 	} else {
 		$lp_theme_css=$my_style;
 	}
-	//$progress_bar = $_SESSION['oLP']->get_progress_bar(); 
-	$progress_bar = $_SESSION['oLP']->get_progress_bar('',-1,'',true);	
-	$navigation_bar = $_SESSION['oLP']->get_navigation_bar();	
+	//$progress_bar = $_SESSION['oLP']->get_progress_bar();
+	$progress_bar = $_SESSION['oLP']->get_progress_bar('',-1,'',true);
+	$navigation_bar = $_SESSION['oLP']->get_navigation_bar();
 	$mediaplayer = $_SESSION['oLP']->get_mediaplayer($autostart);
 }
 session_write_close();

@@ -38,7 +38,7 @@
 		INIT SECTION
 ==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 //$language_file = 'resourcelinker';// TODO: Repeated deleting and moving the rest of this lang file to trad4all
 include ('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
@@ -70,7 +70,7 @@ $action = $_REQUEST['action'];
 $add = $_REQUEST['add'];
 $chapter_id = $_REQUEST['chapter_id'];
 $content = $_REQUEST['content'];
-// Note by Patrick Cool: this has been solved belowd. This piece of code hacking produced too much errors. 
+// Note by Patrick Cool: this has been solved belowd. This piece of code hacking produced too much errors.
 /*
 if(empty($content)){
 	//adds a default to the item-type selection
@@ -213,7 +213,7 @@ if ($add)
 		if(mysql_num_rows($result)==0){
 			$lastorder_item = 0;
 		}else{
-			$row = mysql_fetch_array($result);		
+			$row = mysql_fetch_array($result);
 			$lastorder_item = ($row[0]);
 		}
 		$sql = "SELECT MAX(display_order) FROM $tbl_learnpath_chapter WHERE parent_chapter_id=$chapter_id";
@@ -221,11 +221,11 @@ if ($add)
 		if(mysql_num_rows($result)==0){
 			$lastorder_chapter = 0;
 		}else{
-			$row = mysql_fetch_array($result);		
+			$row = mysql_fetch_array($result);
 			$lastorder_chapter = ($row[0]);
 		}
 		$lastorder = ($lastorder_chapter>$lastorder_item?$lastorder_chapter+1:$lastorder_item+1);
-		
+
 		foreach ($addedresource as $addedresource_item)
 		{
 			// in the case we added a chapter, add this into the chapters list with the correct parent_id
@@ -286,7 +286,7 @@ if ($add)
    		$_SESSION['addedresourceassigned'] = null;
    		unset ($_SESSION['addedresource']);
    		unset ($_SESSION['addedresourceid']);
-   		unset ($_SESSION['addedresourceassigned']); 
+   		unset ($_SESSION['addedresourceassigned']);
 	}
 }
 
@@ -349,7 +349,7 @@ if ($_GET["source_id"])
 			break;
 		case "6" : // coming from forum: reply
 			$url = "../phpbb/reply.php?topic=$topic&forum=$forum&parentid=$parentid";
-			$url = $_SESSION['origintoolurl']; 
+			$url = $_SESSION['origintoolurl'];
 			$originaltoolname = get_lang("ForumReply");
 			$breadcrumbelement = array ("url" => $url, "name" => $originaltoolname);
 			session_unregister('from_learnpath');
@@ -372,13 +372,13 @@ if ($_GET["source_id"])
 			}
 			$originaltoolname = get_lang("AdValvas");
 			$breadcrumbelement = array ("url" => $url, "name" => $originaltoolname);
-			session_unregister('from_learnpath'); 
+			session_unregister('from_learnpath');
 			unset ($from_learnpath);
 			break;
 			/*************************************** end add Frederik.Vermeire@pandora.be *********************************/
 
 	}
-	// We do not come from the learning path. We store the name of the tool & url in a session. 
+	// We do not come from the learning path. We store the name of the tool & url in a session.
 	if ($from_learnpath != 'yes')
 	{
 		if (!$_SESSION["origintoolurl"] OR $_SESSION["origintoolurl"]<>$interbreadcrumb["url"])
@@ -391,8 +391,8 @@ if ($_GET["source_id"])
 
 }
 
-// This part of the code is the actual breadcrumb mechanism. If we do not come from the learning path we use 
-// the information from the session. Else we use the information of the learningpath itself. 
+// This part of the code is the actual breadcrumb mechanism. If we do not come from the learning path we use
+// the information from the session. Else we use the information of the learningpath itself.
 if ($from_learnpath != 'yes')
 {
 	$nameTools = get_lang('AddResource');
@@ -436,7 +436,7 @@ if ($from_learnpath == 'yes')
 }
 echo "</h3>";
 
-// we retrieve the tools that are active. 
+// we retrieve the tools that are active.
 // We use this to check which resources a student may add (only the modules that are active)
 // see http://www.dokeos.com/forum/viewtopic.php?t=4858
 $active_modules=array();
@@ -459,38 +459,38 @@ while ($row=mysql_fetch_array($result_select_active))
 		<tr>
           <td width="26%"><b><?php echo get_lang('CourseResources'); ?></b></td>
         </tr>
-        <?php  
+        <?php
         if (is_allowed_to_edit() OR in_array(TOOL_DOCUMENT,$active_modules))
         {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Document&action=$action&id=$id&learnpath_id=$learnpath_id&chapter_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Document')."</a>"; ?></td>
         </tr>
-        <?php 
-        } 
+        <?php
+        }
         if (is_allowed_to_edit() OR in_array(TOOL_CALENDAR_EVENT,$active_modules))
         {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Agenda&action=$action&id=$id&learnpath_id=$learnpath_id&chapter_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Agenda')."</a>"; ?></td>
         </tr>
-        <?php 
-        }  
+        <?php
+        }
         if (is_allowed_to_edit() OR in_array(TOOL_ANNOUNCEMENT,$active_modules))
         {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Ad_Valvas&action=$action&id=$id&learnpath_id=$learnpath_id&chapter_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('AdValvas')."</a>"; ?></td>
         </tr>
-        <?php 
-        }  
+        <?php
+        }
         if (is_allowed_to_edit() OR in_array(TOOL_BB_FORUM,$active_modules))
         {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Forum&action=$action&id=$id&learnpath_id=$learnpath_id&chapter_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Forum')."</a>"; ?></td>
         </tr>
-        <?php 
+        <?php
         }
         if (is_allowed_to_edit() OR in_array(TOOL_LINK,$active_modules))
         {
@@ -498,7 +498,7 @@ while ($row=mysql_fetch_array($result_select_active))
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Link&action=$action&id=$id&learnpath_id=$learnpath_id&chapter_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Link')."</a>"; ?></td>
         </tr>
-        <?php 
+        <?php
         }
         if (is_allowed_to_edit() OR in_array(TOOL_QUIZ,$active_modules))
         {
@@ -643,14 +643,14 @@ if ($content == "Agenda")
 {
 	$TABLEAGENDA 			= Database::get_course_table(TABLE_AGENDA);
 	$TABLE_ITEM_PROPERTY 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-	
-	$sql="SELECT agenda.*, toolitemproperties.* 
-					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties 
+
+	$sql="SELECT agenda.*, toolitemproperties.*
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
 					WHERE `agenda`.`id` = `toolitemproperties`.`ref`
 					AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
 					AND `toolitemproperties`.`to_group_id`='0'
 					AND `toolitemproperties`.`visibility`='1'";
-	
+
 	$result = api_sql_query($sql);
 
 	while ($myrow = mysql_fetch_array($result))
@@ -721,7 +721,7 @@ if ($content == "Ad_Valvas")
 {
 	$tbl_announcement = Database :: get_course_table(TABLE_ANNOUNCEMENT);
 	$sql = "SELECT * FROM ".$tbl_announcement." a, ".$item_property_table." i  WHERE i.tool = '".TOOL_ANNOUNCEMENT."' AND a.id=i.ref AND i.visibility='1' AND i.to_group_id = 0 AND i.to_user_id IS NULL ORDER BY a.display_order ASC";
-	
+
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	while ($myrow = mysql_fetch_array($result))
 	{

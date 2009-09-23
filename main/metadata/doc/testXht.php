@@ -6,11 +6,11 @@
 */
 
 /**
-============================================================================== 
+==============================================================================
 *	Dokeos Metadata: XHT test and demo
 *
 *	@package dokeos.metadata
-============================================================================== 
+==============================================================================
 */
 
 require('../../inc/lib/xmd.lib.php');
@@ -45,11 +45,11 @@ $testdoc = new xmddoc(
             <imsmd:description>
               <imsmd:langstring xml:lang="en">Simple exemplar content package
 
-          
+
 , this description was
                          modified
-by                         
-               René                       
+by
+               Renï¿½
                                        </imsmd:langstring>
             </imsmd:description>
           </imsmd:general>
@@ -64,7 +64,7 @@ if ($testdoc->error) die($testdoc->error);
 
 // TEMPLATES ------------------------------------------------------------------>
 
-$xhtDoc = new xhtdoc( 
+$xhtDoc = new xhtdoc(
 <<<EOD
 <!-- {-HTTP-} -->
 
@@ -99,7 +99,7 @@ There are {-R keywords/keyword P empty-}{-P number-} keywords...<br><br>
 {-R Langnames C LEVEL1-}<br><br>
 
 {-D author {-V author-}-}
-{-T author != empty 
+{-T author != empty
 <h5>There is an author</h5>
 <!-- Note1: T tests parameters, not XML values directly -->
 <!-- Note2: the space after 'empty' is necessary! - see below
@@ -148,7 +148,7 @@ This text is re-calculated when the cache is no longer valid.
 
 {-P rdepth-}.{-P number-}
 
- 
+
 <!-- {--} -->
 EOD
 );
@@ -164,7 +164,7 @@ function get_lang($word)
 {
     if ($word == 'Kw') return 'Keyword';
     elseif ($word == 'Am') return '"Automatic"';
-    elseif ($word == 'Langnames') 
+    elseif ($word == 'Langnames')
         return array("de"=>"German", "fr"=>"French", "nl"=>"Dutch");
     else return 'To be translated';
 }
@@ -178,7 +178,7 @@ function md_cache($newtext)  // callback from template (for cached HTML)
     if ($newtext === FALSE)  // this is always the first callback
     {
         $cachedHtmlIsValid = FALSE;  // in real examples, not always
-        
+
         if ($cachedHtmlIsValid)
             return 'Cached HTML';
         else
@@ -199,12 +199,12 @@ function md_cache($newtext)  // callback from template (for cached HTML)
 foreach (explode("\n", $xhtDoc->htt_array['HTTP']) as $httpXtra)
     if ($httpXtra) header($httpXtra);
 
-echo "<html>\n<head>", $xhtDoc->xht_fill_template('HEAD'), 
+echo "<html>\n<head>", $xhtDoc->xht_fill_template('HEAD'),
     "\n</head>\n\n<body>\n";
 
 $xhtDoc->xht_dbgn = 0;  // for template debug info, set to e.g. 10000
 
-echo $xhtDoc->xht_fill_template('MAIN'), 
+echo $xhtDoc->xht_fill_template('MAIN'),
     '<br><br>Child nodes of "description":';
 
 foreach($testdoc->children[$testdoc->xmd_select_single_element('description')] as $child)
@@ -213,6 +213,6 @@ echo "\n\n</body>\n</html>\n";
 
 if ($xhtDoc->xht_dbgn) echo $xhtDoc->xht_dbgo;
 
-// Note: XML document and templates would normally be fetched from (different) 
+// Note: XML document and templates would normally be fetched from (different)
 // external sources, such as a file or a DB record...
 ?>

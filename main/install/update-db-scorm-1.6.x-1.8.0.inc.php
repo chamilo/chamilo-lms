@@ -1,8 +1,8 @@
 <?php //$id: $
 /**
- * Script handling the migration between an old Dokeos platform (<1.8.0) to 
+ * Script handling the migration between an old Dokeos platform (<1.8.0) to
  * setup the new database system (4 scorm tables inside the course's database)
- * @package dokeos.scorm 
+ * @package dokeos.scorm
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 /**
@@ -80,7 +80,7 @@ while ($row = Database::fetch_array($res))
     $courses_list[] = $row['db_name'];
     $courses_id_list[$row['code']] = $row['db_name'];
     $courses_id_full_table_prefix_list[$row['code']] = $dbname;
-    $courses_dir_list[$row['code']] = $row['directory']; 
+    $courses_dir_list[$row['code']] = $row['directory'];
 }
 if($loglevel>0){error_log("Tables created/deleted for all courses",0);}
 
@@ -116,7 +116,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
     $my_new_lp_item = $db.$new_lp_item;
     $my_new_lp_view = $db.$new_lp_view;
     $my_new_lp_item_view = $db.$new_lp_item_view;
-    
+
     //migrate learnpaths
     $sql_test = "SELECT * FROM $my_new_lp";
     $res_test = mysql_query($sql_test);
@@ -148,19 +148,19 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
         $max_dsp_lp = $dsp_ord;
     }
     //echo "<pre>lp_ids:".print_r($lp_ids,true)."</pre>\n";
-    
+
 
     //MIGRATING LEARNPATH CHAPTERS
     $sql_lp_chap = "ALTER TABLE $lp_chap ADD INDEX ( parent_chapter_id, display_order )";
-    $res_lp_chap = api_sql_query($sql_lp_chap,__FILE__,__LINE__); 
+    $res_lp_chap = api_sql_query($sql_lp_chap,__FILE__,__LINE__);
 
     $sql_lp_chap = "SELECT * FROM $lp_chap ORDER BY parent_chapter_id, display_order";
     //echo "$sql_lp_chap<br />\n";
-    $res_lp_chap = api_sql_query($sql_lp_chap,__FILE__,__LINE__);   
+    $res_lp_chap = api_sql_query($sql_lp_chap,__FILE__,__LINE__);
     while($row = Database::fetch_array($res_lp_chap))
     {
         //echo "Treating chapter id : ".$row['id']."<br />\n";
-        
+
         //TODO build path for this chapter (although there is no real path for any chapter)
         //TODO find out how to calculate the "next_item_id" with the "ordre" field
         $my_lp_item = $my_new_lp_item;
@@ -200,7 +200,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
         if($old_parent_chap != 0){
             $new_chap = $lp_chap_items[$old_chap];
             $new_parent = $lp_chap_items[$old_parent_chap];
-            if(isset($new_chap) && $new_chap != '' 
+            if(isset($new_chap) && $new_chap != ''
                 && isset($new_parent) && $new_parent != '')
             {
                 $sql_par_chap = "UPDATE $my_new_lp_item " .
@@ -219,7 +219,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
                     "SET previous_item_id = $last " .
                     "WHERE id = $new_id";
             $res_upd_chaps = api_sql_query($sql_upd_chaps,__FILE__,__LINE__);
-        
+
             $next = 0;
             if(!empty($ordered_chaps[$parent_chap][$order+1])){
                 $next = $ordered_chaps[$parent_chap][$order+1];
@@ -232,7 +232,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
         }
     }
     unset($ordered_chaps);
-    
+
     //migrate learnpath_items
     //TODO define this array thanks to types defined in the learnpath_building scripts
     //TODO set order correctly
@@ -257,16 +257,16 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
         'Course_description' => TOOL_COURSE_DESCRIPTION,
         'Groups'    => TOOL_GROUP,
         'Users'     => TOOL_USER,
-        
+
         //'chapter' => 'dokeos_chapter', Chapters should all be in learnpath_chapter, no matter the nesting level
-        
+
     );
     //MIGRATING LEARNPATH ITEMS
     $sql_lp_item = "ALTER TABLE $lp_item ADD INDEX ( chapter_id, display_order)";
-    $res_lp_item = api_sql_query($sql_lp_item,__FILE__,__LINE__);   
+    $res_lp_item = api_sql_query($sql_lp_item,__FILE__,__LINE__);
     $sql_lp_item = "SELECT * FROM $lp_item ORDER BY chapter_id, display_order";
     //echo "$sql_lp_item<br />\n";
-    $res_lp_item = api_sql_query($sql_lp_item,__FILE__,__LINE__);   
+    $res_lp_item = api_sql_query($sql_lp_item,__FILE__,__LINE__);
     while($row = Database::fetch_array($res_lp_item))
     {
         //echo "Treating chapter ".$row['chapter_id'].", item ".$row['id']."<br />\n";
@@ -346,7 +346,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
             if(empty($in_id) OR $in_id == false) die('Could not insert lp_item: '.$ins_sql);
             $lp_items[$parent_lps[$row['chapter_id']]][$row['id']] = $in_id;
             $lp_ordered_items[$parent_lps[$row['chapter_id']]][$row['chapter_id']][] = $in_id;
-        }       
+        }
     }
     //echo "<pre>lp_items:".print_r($lp_items,true)."</pre>\n";
     // complete next_item_id field by going through the new table and looking at parent_id and display_order
@@ -400,9 +400,9 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
         api_sql_query($upd,__FILE__,__LINE__);
         $last = $item_id;
     }
-    
+
     //echo "</pre>\n";
-    
+
     //MIGRATING THE learnpath_user TABLE (results)
     $mysql = "ALTER TABLE $my_new_lp_item_view ADD INDEX (lp_view_id)";
     $myres = api_sql_query($mysql,__FILE__,__LINE__);
@@ -428,7 +428,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
                 //used it, but now it's been removed
                 //echo "Somehow we also miss a lp_ids[".$row['learnpath_id']."] here<br />\n";
                 $incoherences ++;
-            }else{              
+            }else{
                 $mylpid = $lp_ids[$row['learnpath_id']];
                 $sql_ins_view = "INSERT INTO $my_new_lp_view(" .
                         "lp_id," .
@@ -550,7 +550,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
             if(!empty($matches[3]) && (strtolower(substr($matches[3],-15))=='imsmanifest.xml') && !is_file(realpath(urldecode($matches[3]))) )
             {
                 //echo "Removing link $link from tools<br />";
-                $sql_tool_upd = "DELETE FROM $tbl_tool WHERE id = ".$row_tool['id']; 
+                $sql_tool_upd = "DELETE FROM $tbl_tool WHERE id = ".$row_tool['id'];
                 error_log('New LP - Migration - Updating tool table (dead link): '.$sql_tool_upd,0);
                 //make sure there is a way of retrieving which links were updated (to revert)
                 fwrite($fh,$sql_tool_upd." AND link ='$link'");
@@ -569,7 +569,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
     $tbl_intro = $db.TABLE_TOOL_INTRO;
     $sql_i = "SELECT * FROM $tbl_intro WHERE id='course_homepage'";
     $res_i = api_sql_query($sql_i,__FILE__,__LINE__);
-    //$link_to_course1 = 'scorm/scormdocument.php'; 
+    //$link_to_course1 = 'scorm/scormdocument.php';
     while($row_i = Database::fetch_array($res_i)){
         $intro = $row_i['intro_text'];
         $update = 0;
@@ -595,9 +595,9 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
             api_sql_query($sql_upd,__FILE__,__LINE__);
         }
     }
-    
-    
-        
+
+
+
     if($loglevel>0){error_log("Done!".$msg,0);}
     //flush();
     //ob_flush();
@@ -648,7 +648,7 @@ $scormdocuments_lps = array();
 while($course_row = Database::fetch_array($res_crs)){
 
     if($loglevel>0){error_log("Now dealing with course ".$course_row['code']."...",0);}
-    //check the validity of this new course     
+    //check the validity of this new course
     $my_course_code = $course_row['code'];
 
     //reinit the scormdocuments list
@@ -665,23 +665,23 @@ while($course_row = Database::fetch_array($res_crs)){
     if($loglevel>1){error_log("$sql_scodoc",0);}
     $res_scodoc = api_sql_query($sql_scodoc,__FILE__,__LINE__);
     while($row_scodoc = Database::fetch_array($res_scodoc)){
-        
+
         //check if there's more than one slash in total
         if(strpos($row_scodoc['path'],'/',1)===false){
             $tmp_path = $row_scodoc['path'];
             if($loglevel>1){error_log("++Now opening $tmp_path",0);}
-            
+
             //add a prefixing slash if there is none
             if(substr($tmp_path,0,1)!='/'){
                 $tmp_path = '/'.$tmp_path;
             }
-            
+
             //if the path is just a slash, empty it
             if($tmp_path=='/'){
                 $tmp_path='';
             }
-            
-            //there is only one 'slash' sign at the beginning, 
+
+            //there is only one 'slash' sign at the beginning,
             //or none at all, so we assume
             //it is a main directory that should be taken as path
             $courses_dir = $sys_course_path.''.$courses_dir_list[$my_course_code].'/scorm'.$tmp_path;
@@ -722,7 +722,7 @@ while($course_row = Database::fetch_array($res_crs)){
     $sql_i = "SELECT * FROM $tbl_intro WHERE id='course_homepage'";
     //echo $sql_i;
     $res_i = api_sql_query($sql_i,__FILE__,__LINE__);
-    //$link_to_course1 = 'scorm/scormdocument.php'; 
+    //$link_to_course1 = 'scorm/scormdocument.php';
     while($row_scodoc = Database::fetch_array($res_i)){
         $intro = $row_scodoc['intro_text'];
         //echo $intro."<br />\n";
@@ -744,7 +744,7 @@ while($course_row = Database::fetch_array($res_crs)){
                     $mymatch = str_replace($sys_course_path,$upd_course_path,$mymatch);
                     if(!empty($mymatch) && (strtolower(substr($mymatch,-15))=='imsmanifest.xml') && is_file(realpath(urldecode($mymatch))) )
                     {
-                        
+
                         //echo $mymatch." seems ok<br />";
                         //found a new scorm course in the old directory
                         $courses_dir = $upd_course_path.''.$courses_dir_list[$my_course_code].'/scorm';
@@ -779,7 +779,7 @@ while($course_row = Database::fetch_array($res_crs)){
             }
         }
     }
-    
+
     //prepare the new course's space in the scorms array
     $scorms[$my_course_code] = array();
 
@@ -810,7 +810,7 @@ while($course_row = Database::fetch_array($res_crs)){
             $scorms[$my_course_code][$my_path] = $my_content_id;
         }
     }
-    //check if all the lps from scormdocuments_lps are already in the course array, 
+    //check if all the lps from scormdocuments_lps are already in the course array,
     //otherwise add them (and set ID of 0 so no tracking will be available)
     foreach($scormdocuments_lps as $path){
         if(!in_array($path,array_keys($scorms[$my_course_code]))){
@@ -868,7 +868,7 @@ foreach($scorms as $my_course_code => $paths_list )
     $my_content_id = $old_id;
     $my_path = $my_path;
     $my_name = basename($my_path);
-    
+
     if($loglevel>1){error_log("Try importing LP $my_path from imsmanifest first as it is more reliable",0);}
 
     //Setup the ims path (path to the imsmanifest.xml file)
@@ -877,7 +877,7 @@ foreach($scorms as $my_course_code => $paths_list )
     $courses_dir = $upd_course_path.$courses_dir_list[$my_course_code];
     $sco_path_temp = ($my_path=='/')?'':$my_path;
     $sco_middle_path = (empty($sco_path_temp)?'':(substr($sco_path_temp,0,1)=='/')?substr($sco_path_temp,1).'/':$sco_path_temp.'/'); //same thing as sco_path_temp but with reversed slashes
-    $ims = $courses_dir.'/scorm'.$sco_path_temp.'/imsmanifest.xml'; 
+    $ims = $courses_dir.'/scorm'.$sco_path_temp.'/imsmanifest.xml';
 
     if(is_file($ims)){
         //echo "Path $ims exists, importing...(line ".__LINE__.")<br />";
@@ -891,7 +891,7 @@ foreach($scorms as $my_course_code => $paths_list )
         //the title is already escaped in the method
         $oScorm->import_manifest($my_course_code);
         //TODO add code to update the path in that new lp created, as it probably uses / where
-        //$sco_path_temp should be used... 
+        //$sco_path_temp should be used...
         $lp_ids[$my_content_id] = $oScorm->lp_id; //contains the old LP ID => the new LP ID
         if($loglevel>1){error_log(" @@@ Created scorm lp ".$oScorm->lp_id." from imsmanifest [".$ims."] in course $my_course_code",0);}
         $lp_course[$my_content_id] = $courses_id_list[$my_course_code]; //contains the old learnpath ID => the course DB name
@@ -918,11 +918,11 @@ foreach($scorms as $my_course_code => $paths_list )
             $my_type        = 'sco';
             //$my_item_path = $scorm_lp_paths[$my_content_id]['path'];
             $my_item_path   = '';
-            
+
             //echo "&nbsp;&nbsp;FOUND item belonging to old learnpath num $my_content_id so belongs to course ".$lp_course[$my_content_id]."<br />\n";
-            $my_new_lp_item = $db_name.$new_lp_item;    
-            $my_new_lp_view = $db_name.$new_lp_view;    
-            $my_new_lp_item_view = $db_name.$new_lp_item_view;  
+            $my_new_lp_item = $db_name.$new_lp_item;
+            $my_new_lp_view = $db_name.$new_lp_view;
+            $my_new_lp_item_view = $db_name.$new_lp_item_view;
 
             /*
              * Check if a view is needed
@@ -973,7 +973,7 @@ foreach($scorms as $my_course_code => $paths_list )
             }
         }
 
-    }       
+    }
     else{
         //echo "Could not find $ims... Proceeding from database...(line ".__LINE__.")<br />";
         if($loglevel>1){error_log("This is a normal SCORM path",0);}
@@ -1012,14 +1012,14 @@ foreach($scorms as $my_course_code => $paths_list )
         $lp_course[$my_content_id] = $courses_id_list[$my_course_code]; //contains the old learnpath ID => the course DB name
         $lp_course_code[$my_content_id] = $my_course_code;
         $max_dsp_lp++;
-    
+
         //Setup the ims path (path to the imsmanifest.xml file)
         //echo "Looking for course with code ".$lp_course_code[$my_content_id]." (using $my_content_id)<br />\n";
         $courses_dir = $sys_course_path.$courses_dir_list[$lp_course_code[$my_content_id]];
         //$scorm_lp_paths[$my_content_id]['path'] = str_replace(' ','\\ ',$scorm_lp_paths[$my_content_id]['path']);
         $sco_path_temp = ($scorm_lp_paths[$my_content_id]['path']=='/')?'':$scorm_lp_paths[$my_content_id]['path'];
-        $scorm_lp_paths[$my_content_id]['ims'] = $courses_dir.'/scorm'.$sco_path_temp.'/imsmanifest.xml'; 
-        
+        $scorm_lp_paths[$my_content_id]['ims'] = $courses_dir.'/scorm'.$sco_path_temp.'/imsmanifest.xml';
+
         //generate an imsmanifest object to get more info about the learnpath from the file
         $oScorm = new scorm();
         //check if imsmanifest.xml exists at this location. If not, ignore the imsmanifest.
@@ -1035,16 +1035,16 @@ foreach($scorms as $my_course_code => $paths_list )
             //$my_lp_title = api_convert_encoding($oScorm->get_title(),'ISO-8859-1',$oScorm->manifest_encoding);
             $my_lp_title = api_convert_encoding($oScorm->get_title(),'ISO-8859-1','UTF-8');
             if(!empty($my_lp_title)){
-                $my_new_lp = $db_name.$new_lp;  
+                $my_new_lp = $db_name.$new_lp;
                 $my_sql = "UPDATE $my_new_lp " .
                         "SET name = '$my_lp_title', " .
                         "default_encoding = '".strtoupper($oScorm->manifest_encoding)."' " .
                         "WHERE id = ".$lp_ids[$my_content_id];
                 if($loglevel>1){error_log("Updating title and encoding: ".$my_sql,0);}
-                $my_res = api_sql_query($my_sql,__FILE__,__LINE__); 
+                $my_res = api_sql_query($my_sql,__FILE__,__LINE__);
             }
         }
-    
+
         /*
          * QUERY SCORM ITEMS FROM SCORM_SCO_DATA
          * The danger here is that we might have several users for the same data, and so
@@ -1065,12 +1065,12 @@ foreach($scorms as $my_course_code => $paths_list )
             $my_type        = 'sco';
             //$my_item_path = $scorm_lp_paths[$my_content_id]['path'];
             $my_item_path   = '';
-            
+
             //echo "&nbsp;&nbsp;FOUND item belonging to old learnpath num $my_content_id so belongs to course ".$lp_course[$my_content_id]."<br />\n";
-            $my_new_lp_item = $db_name.$new_lp_item;    
-            $my_new_lp_view = $db_name.$new_lp_view;    
-            $my_new_lp_item_view = $db_name.$new_lp_item_view;  
-            
+            $my_new_lp_item = $db_name.$new_lp_item;
+            $my_new_lp_view = $db_name.$new_lp_view;
+            $my_new_lp_item_view = $db_name.$new_lp_item_view;
+
             /*
              * Query items from the new table to check if it doesn't exist already
              * Otherwise insert it
@@ -1163,11 +1163,11 @@ foreach($scorms as $my_course_code => $paths_list )
         /*
          * Set all information that might be more correct coming from imsmanifest
          */
-        
+
         //$my_new_lp = $db_name.$new_lp;
-        //$my_new_lp_item = $db_name.$new_lp_item;  
-        //$my_new_lp_view = $db_name.$new_lp_view;  
-        //$my_new_lp_item_view = $db_name.$new_lp_item_view;    
+        //$my_new_lp_item = $db_name.$new_lp_item;
+        //$my_new_lp_view = $db_name.$new_lp_view;
+        //$my_new_lp_item_view = $db_name.$new_lp_item_view;
         //$sel_sql = "SELECT * FROM $my_new_lp WHERE id = $in_id";
         //$res = @mysql_query($sel_sql);
         //if(!$res){
@@ -1200,7 +1200,7 @@ foreach($scorms as $my_course_code => $paths_list )
                     $new_id = $lp_item_refs[$in_id][$subarray['identifier']];
                     $next = 0;
                     $dsp = $subarray['rel_order'];
-                    if($subarray['level']>$level){  
+                    if($subarray['level']>$level){
                         //getting one level deeper, just consult
                         $parent_id = $previous;
                         array_push($stock,$previous);
@@ -1240,7 +1240,7 @@ foreach($scorms as $my_course_code => $paths_list )
                     if(!empty($prereq)){
                         $update_prereq = "prerequisite = '$prereq', ";
                     }
-                    
+
                     //we had previous data about this element, update
                     $sql2 = "UPDATE $my_new_lp_item " .
                             "SET parent_item_id = $parent_id, " .
@@ -1272,7 +1272,7 @@ foreach($scorms as $my_course_code => $paths_list )
     $tbl_intro = $db_name.TABLE_TOOL_INTRO;
     $sql_i = "SELECT * FROM $tbl_intro WHERE id='course_homepage'";
     $res_i = api_sql_query($sql_i,__FILE__,__LINE__);
-    //$link_to_course1 = 'scorm/scormdocument.php'; 
+    //$link_to_course1 = 'scorm/scormdocument.php';
     while($row_i = Database::fetch_array($res_i)){
         $intro = $row_i['intro_text'];
         $out = array();

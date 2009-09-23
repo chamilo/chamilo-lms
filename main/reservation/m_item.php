@@ -44,23 +44,23 @@ $tool_name = get_lang('ResourceList');
  */
 function modify_filter($id) {
     $str='';
-	$outtt=false;	
+	$outtt=false;
 	if(Rsys::item_allow($id,'edit')){
         $number = Rsys :: get_item($id);
         //checking the status
         if ($number[5]==1) {
         	$str.= ' <a href="m_item.php?action=blackout&amp;id='.$id.'" title="'.get_lang('Inactive').'"><img alt="" src="../img/wrong.gif" /></a>';
-        } else { 
+        } else {
         	$str.= ' <a href="m_item.php?action=blackout&amp;id='.$id.'" title="'.get_lang('Active').'"><img alt="" src="../img/right.gif" /></a>';
         }
     }
-    
+
     if(Rsys::item_allow($id,'edit')){
         $str.='<a href="m_item.php?action=edit&amp;id='.$id.'" title="'.get_lang("EditItem2").'"><img alt="" src="../img/edit.gif" /></a>';
     }
     //if(Rsys::item_allow($id,'m_rights')) $str.=' &nbsp;<a href="m_item.php?action=m_rights&amp;item_id='.$id.'" title="'.get_lang("MRights").'"><img alt="" src="../img/info_small.gif" /></a>';
     if(Rsys::item_allow($id,'delete')) $str.=' <a href="m_item.php?action=delete&amp;id='.$id.'" title="'.get_lang('DeleteResource').'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmDeleteResource")))."'".')) return false;"><img alt="" src="../img/delete.gif" /></a>';
- 
+
     return $str;
 }
 
@@ -256,10 +256,10 @@ switch ($_GET['action']) {
 				$item_rights = Rsys :: get_item_rights($_GET['item_id'], $_GET['class_id']);
 
 				$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('Booking'));
-								
+
 				$interbreadcrumb[] = array ("url" => "m_item.php", "name" => $tool_name);
 				$interbreadcrumb[] = array ("url" => "m_item.php?&action=m_rights&id=".$item['id'], "name" => str_replace('#ITEM#', $item['name'], get_lang('MItemRights')));
-				
+
 				Display :: display_header(get_lang('EditRight'));
 				api_display_tool_title(get_lang('EditRight'));
 				$form = new FormValidator('itemright', 'post', "m_item.php?id=".$item['id']."&action=m_rights&subaction=edit");
@@ -311,14 +311,14 @@ switch ($_GET['action']) {
 			default :
 				$item = Rsys :: get_item($_GET['item_id']);
 				$NoSearchResults = get_lang('NoRights');
-				
-				
+
+
 				$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('Booking'));
 				$interbreadcrumb[] = array ("url" => "m_item.php", "name" => get_lang('ManageResources'));
 				Display :: display_header(str_replace('#ITEM#', $item['name'], get_lang('MItemRights')));
-				
+
 				api_display_tool_title(get_lang('MItemRights2'));
-				
+
 				echo $msg;
 				$_s_item['id'] = $_GET['item_id'];
 				$_s_item['name'] = $item['name'];
@@ -352,11 +352,11 @@ switch ($_GET['action']) {
 		}
 		break;
 	case 'add' :
-	
+
 		$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('Booking'));
-			
+
 		$interbreadcrumb[] = array ("url" => "m_item.php", "name" => get_lang('ManageResources'));
-	
+
 		//$interbreadcrumb[] = array ("url" => "m_item.php", "name" => $tool_name);
 		Display :: display_header(get_lang('AddNewResource'));
 		api_display_tool_title(get_lang('AddNewResource'));
@@ -392,11 +392,11 @@ switch ($_GET['action']) {
 		$cats = Rsys :: get_category();
 		foreach ($cats as $cat)
 			$catOptions[$cat['id']] = $cat['name'];
-			
+
 		$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('Booking'));
-			
+
 		$interbreadcrumb[] = array ("url" => "m_item.php", "name" => get_lang('ManageResources'));
-		
+
 		Display :: display_header(str_replace('#ITEM#', $item['name'], get_lang('EditResource')));
 		api_display_tool_title(get_lang('EditResource'));
 		$form = new FormValidator('item', 'post', 'm_item.php?action=edit');
@@ -426,10 +426,10 @@ switch ($_GET['action']) {
 		$msg = ob_get_contents();
 		ob_end_clean();
 	default :
-		$NoSearchResults = get_lang('NoItems');		
-		$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('Booking'));		
+		$NoSearchResults = get_lang('NoItems');
+		$interbreadcrumb[] = array ("url" => "mysubscriptions.php", "name" => get_lang('Booking'));
 		//$interbreadcrumb[] = array ("url" => "m_item.php", "name" => get_lang('ManageResources'));
-	
+
 		Display :: display_header(get_lang('ManageResources'));
 		api_display_tool_title(get_lang('ResourceList'));
 
@@ -455,7 +455,7 @@ switch ($_GET['action']) {
 		foreach ($cats as $cat)
 			echo '<option value="'.$cat['id'].'"'. ($cat['id'] == $_GET['cat'] ? ' selected="selected"' : '').'>'.$cat['name'].'</option>';
 		echo '</select></div></form>';
-		
+
 		$table = new SortableTable('item', array ('Rsys', 'get_num_items'), array ('Rsys', 'get_table_items'), 1);
 		$table->set_additional_parameters(array('cat'=>$_GET['cat']));
 		$table->set_header(0, '', false, array ('style' => 'width:10px'));

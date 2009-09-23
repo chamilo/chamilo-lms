@@ -22,7 +22,7 @@ class scormItem extends learnpathItem{
 	var $datafromlms = '';
 	var $mastery_score = '';
 	var $scorm_contact;
-    
+
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormItem
      * object from database records or from the DOM element given as parameter
@@ -131,7 +131,7 @@ class scormItem extends learnpathItem{
 				     		}
 				     	}
 						return true;
-				     	
+
 	    		}
 	    	}elseif($v == 5){
 	    		//parsing using PHP5 DOMXML methods
@@ -162,7 +162,7 @@ class scormItem extends learnpathItem{
 						     			case 'max_score':
 					     					if($tmp_children->length==1 and $child->firstChild->nodeValue!='' ) {
 						     					$this->max_score = $child->firstChild->nodeValue;
-						     				}						     			
+						     				}
 						     				break;
 				     					case 'maxtimeallowed':
 				     					case 'adlcp:maxtimeallowed':
@@ -248,7 +248,7 @@ class scormItem extends learnpathItem{
 					     	}
 				     	}
 						return true;
-				     	
+
 	    		}
 			}else{
 				//cannot parse because not PHP4 nor PHP5... We should not even be here anyway...
@@ -281,7 +281,7 @@ class scormItem extends learnpathItem{
 			'rel_order' => $rel_order,
 			'timelimitaction' => $this->timelimitaction,
 			'title' => $this->title,
-			'max_score' => $this->max_score			
+			'max_score' => $this->max_score
 			);
 		$abs_order++;
 		$i = 1;
@@ -302,7 +302,7 @@ class scormItem extends learnpathItem{
     	//under certain conditions, the scorm_contact should not be set, because no scorm signal was sent
     	$this->scorm_contact = true;
     	if(!$this->scorm_contact){
-    		//error_log('New LP - was expecting SCORM message but none received',0);	
+    		//error_log('New LP - was expecting SCORM message but none received',0);
     	}
     }
 }

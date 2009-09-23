@@ -6,21 +6,21 @@
 */
 
 /**
-============================================================================== 
+==============================================================================
 *	Dokeos Metadata: general script for opening an object
 *
 *   URL parameters:
 *   - eid=  entry-id = object-id = type.identifier, e.g. 'Document.12';
 *
 *	@package dokeos.metadata
-============================================================================== 
+==============================================================================
 */
 
 
 require("md_funcs.php");
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 /*
-$language_file = 'Whatever'; 
+$language_file = 'Whatever';
 */
 require("../inc/global.inc.php");
 $this_section=SECTION_COURSES;

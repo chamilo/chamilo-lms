@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -7,7 +7,7 @@
 	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
 	Copyright (c) 2009 Isaac Flores Paz <florespaz@bidsoftperu.com>
 	Copyright (c) Facultad de Matematicas, UADY (México)
-	Copyright (c) Evie, Free University of Brussels (Belgium)		
+	Copyright (c) Evie, Free University of Brussels (Belgium)
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -27,8 +27,8 @@
 ==============================================================================
 		INIT SECTION
 ==============================================================================
-*/ 
-// name of the language file that needs to be included 
+*/
+// name of the language file that needs to be included
 $language_file = array('registration','messages','userInfo','admin');
 $cidReset=true;
 require_once '../inc/global.inc.php';
@@ -37,7 +37,7 @@ require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 api_block_anonymous_users();
 if (isset($_GET['messages_page_nr'])) {
 	if (api_get_setting('allow_social_tool')=='true' &&  api_get_setting('allow_message_tool')=='true') {
-		header('Location:../social/index.php?pager="'.Security::remove_XSS($_GET['messages_page_nr']).'"&remote=3#remote-tab-3');	
+		header('Location:../social/index.php?pager="'.Security::remove_XSS($_GET['messages_page_nr']).'"&remote=3#remote-tab-3');
 	}
 }
 if (api_get_setting('allow_message_tool')!='true'){
@@ -45,26 +45,26 @@ if (api_get_setting('allow_message_tool')!='true'){
 }
 $htmlHeadXtra[]='<script language="javascript">
 <!--
-function enviar(miforma) 
-{ 
+function enviar(miforma)
+{
 	if(confirm("'.get_lang('SureYouWantToDeleteSelectedMessages', '').'"))
 		miforma.submit();
-} 
+}
 function select_all(formita)
-{ 
-   for (i=0;i<formita.elements.length;i++) 
+{
+   for (i=0;i<formita.elements.length;i++)
 	{
-      		if(formita.elements[i].type == "checkbox") 			
-				formita.elements[i].checked=1			
+      		if(formita.elements[i].type == "checkbox")
+				formita.elements[i].checked=1
 	}
 }
 function deselect_all(formita)
-{ 
-   for (i=0;i<formita.elements.length;i++) 
+{
+   for (i=0;i<formita.elements.length;i++)
 	{
-      		if(formita.elements[i].type == "checkbox") 			
-				formita.elements[i].checked=0			
-	}	
+      		if(formita.elements[i].type == "checkbox")
+				formita.elements[i].checked=0
+	}
 }
 //-->
 </script>';
@@ -100,7 +100,7 @@ $count_delete_outbox=(count($info_delete_outbox)-1);
 /**************************************************************/
 if( trim($info_delete_outbox[0])=='delete' ) {
 	for ($i=1;$i<=$count_delete_outbox;$i++) {
-		MessageManager::delete_message_by_user_sender(api_get_user_id(),$info_delete_outbox[$i]);	
+		MessageManager::delete_message_by_user_sender(api_get_user_id(),$info_delete_outbox[$i]);
 	}
 		$message_box=get_lang('SelectedMessagesDeleted').
 			'&nbsp
@@ -108,7 +108,7 @@ if( trim($info_delete_outbox[0])=='delete' ) {
 			get_lang('BackToOutbox').
 			'</a>';
 		Display::display_normal_message(api_xml_http_response_encode($message_box),false);
-	    exit;	
+	    exit;
 }
 /**************************************************************/
 $table_message = Database::get_main_table(TABLE_MESSAGE);
@@ -119,28 +119,28 @@ $user_sender_id=api_get_user_id();
 if ($_REQUEST['action']=='delete') {
 	$delete_list_id=array();
 	if (isset($_POST['out'])) {
-		$delete_list_id=$_POST['out'];	
+		$delete_list_id=$_POST['out'];
 	}
 	if (isset($_POST['id'])) {
-		$delete_list_id=$_POST['id'];			
+		$delete_list_id=$_POST['id'];
 	}
 	for ($i=0;$i<count($delete_list_id);$i++) {
-		MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);		
+		MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);
 	}
 	$delete_list_id=array();
-	outbox_display();		
+	outbox_display();
 } elseif ($_REQUEST['action']=='deleteone') {
 	$delete_list_id=array();
 	$id=Security::remove_XSS($_GET['id']);
 	MessageManager::delete_message_by_user_sender(api_get_user_id(),$id);
-	$delete_list_id=array();		
-	outbox_display();	
+	$delete_list_id=array();
+	outbox_display();
 }else {
-	outbox_display();	
+	outbox_display();
 }
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
 */
 if ($request===false) {

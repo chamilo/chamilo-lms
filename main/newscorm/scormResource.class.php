@@ -6,7 +6,7 @@
  */
 /**
  * Class defining the <resource> tag in an imsmanifest.xml file
- * 
+ *
  */
 class scormResource {
 	var $identifier = '';
@@ -20,7 +20,7 @@ class scormResource {
 	//var $file_metadata;
 	var $files = array();
 	var $dependencies = array();
-	    
+
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormResource
      * object from database records or from the DOM element given as parameter
@@ -104,7 +104,7 @@ class scormResource {
 					     	}
 				     	}
 						return true;
-				     	
+
 	    		}
 	    	}elseif($v == 5){
 	    		//parsing using PHP5 DOMXML methods
@@ -171,8 +171,8 @@ class scormResource {
 					     	}
 				     	}
 						return true;
-				     	
-	    		}	    		
+
+	    		}
 			}else{
 				//cannot parse because not PHP4 nor PHP5... We should not even be here anyway...
 				return false;

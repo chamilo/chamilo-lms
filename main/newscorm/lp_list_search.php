@@ -19,7 +19,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')

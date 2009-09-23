@@ -53,19 +53,19 @@ Display::display_introduction_section(TOOL_NOTEBOOK);
 
 
 // Action handling: Adding a note
-if (isset($_GET['action']) && $_GET['action'] == 'addnote') 
-{			
-	
+if (isset($_GET['action']) && $_GET['action'] == 'addnote')
+{
+
 	if (!empty($_GET['isStudentView'])) {
 		display_notes();
-		exit;		
-	} 
-	
+		exit;
+	}
+
 	$_SESSION['notebook_view'] = 'creation_date';
-		
+
 	// initiate the object
 	$form = new FormValidator('note','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
-	// settting the form elements	
+	// settting the form elements
 	$form->addElement('header', '', get_lang('NoteAddNew'));
 	$form->addElement('text', 'note_title', get_lang('NoteTitle'),array('size'=>'95'));
 	//$form->applyFilter('note_title', 'html_filter');
@@ -73,48 +73,48 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 		? array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300')
 		: array('ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
 	);
-	$form->addElement('style_submit_button', 'SubmitNote', get_lang('AddNote'), 'class="add"');	
-	
+	$form->addElement('style_submit_button', 'SubmitNote', get_lang('AddNote'), 'class="add"');
+
 	// setting the rules
-	$form->addRule('note_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');	
-	
+	$form->addRule('note_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+
 	// The validation or display
-	if ( $form->validate() ) 
+	if ( $form->validate() )
 	{
-		$check = Security::check_token('post');	
-		if ($check) 
+		$check = Security::check_token('post');
+		if ($check)
 		{
-	   		$values = $form->exportValues();	   		
+	   		$values = $form->exportValues();
 	   		save_note($values);
-	   		
+
 		}
-		Security::clear_token();		
-		display_notes();						
-	} 
-	else 
-	{		
+		Security::clear_token();
+		display_notes();
+	}
+	else
+	{
 		echo '<div class="actions">';
 		echo '<a href="index.php">'.Display::return_icon('back.png').' '.get_lang('BackToNotesList').'</a>';
 		echo '</div>';
 		$token = Security::get_token();
 		$form->addElement('hidden','sec_token');
-		$form->setConstants(array('sec_token' => $token));		
+		$form->setConstants(array('sec_token' => $token));
 		$form->display();
-	}				
+	}
 }
 
 // Action handling: Editing a note
-else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($_GET['notebook_id'])) 
+else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($_GET['notebook_id']))
 {
-	
+
 	if (!empty($_GET['isStudentView'])) {
 		display_notes();
-		exit;		
-	} 
-		
+		exit;
+	}
+
 	// initiate the object
 	$form = new FormValidator('note','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&notebook_id='.Security::remove_XSS($_GET['notebook_id']));
-	// settting the form elements	
+	// settting the form elements
 	$form->addElement('header', '', get_lang('ModifyNote'));
 	$form->addElement('hidden', 'notebook_id');
 	$form->addElement('text', 'note_title', get_lang('NoteTitle'),array('size'=>'100'));
@@ -123,41 +123,41 @@ else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($
 		? array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300')
 		: array('ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student')
 	);
-	$form->addElement('style_submit_button', 'SubmitNote', get_lang('ModifyNote'), 'class="save"');	
-	
+	$form->addElement('style_submit_button', 'SubmitNote', get_lang('ModifyNote'), 'class="save"');
+
 	// setting the defaults
 	$defaults = get_note_information(Security::remove_XSS($_GET['notebook_id']));
 	$form->setDefaults($defaults);
-		
+
 	// setting the rules
-	$form->addRule('note_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');	
-		
+	$form->addRule('note_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+
 	// The validation or display
-	if ( $form->validate() ) 
+	if ( $form->validate() )
 	{
-		$check = Security::check_token('post');	
-		if ($check) 
+		$check = Security::check_token('post');
+		if ($check)
 		{
 	   		$values = $form->exportValues();
 	   		update_note($values);
 		}
 		Security::clear_token();
 		display_notes();
-	} 
-	else 
+	}
+	else
 	{
 		echo '<div class="actions">';
 		echo '<a href="index.php">'.Display::return_icon('back.png').' '.get_lang('BackToNotesList').'</a>';
-		echo '</div>';		
+		echo '</div>';
 		$token = Security::get_token();
 		$form->addElement('hidden','sec_token');
-		$form->setConstants(array('sec_token' => $token));		
+		$form->setConstants(array('sec_token' => $token));
 		$form->display();
-	}				
+	}
 }
 
 // Action handling: deleting a note
-else if (isset($_GET['action']) && $_GET['action'] == 'deletenote' && is_numeric($_GET['notebook_id'])) 
+else if (isset($_GET['action']) && $_GET['action'] == 'deletenote' && is_numeric($_GET['notebook_id']))
 {
 	delete_note(Security::remove_XSS($_GET['notebook_id']));
 	display_notes();
@@ -173,7 +173,7 @@ else if ($_GET['action'] == 'changeview' AND in_array($_GET['view'],array('creat
 			{
 				Display::display_confirmation_message(get_lang('NotesSortedByCreationDateAsc'));
 			}
-			else 
+			else
 			{
 				Display::display_confirmation_message(get_lang('NotesSortedByCreationDateDESC'));
 			}
@@ -183,7 +183,7 @@ else if ($_GET['action'] == 'changeview' AND in_array($_GET['view'],array('creat
 			{
 				Display::display_confirmation_message(get_lang('NotesSortedByUpdateDateAsc'));
 			}
-			else 
+			else
 			{
 				Display::display_confirmation_message(get_lang('NotesSortedByUpdateDateDESC'));
 			}
@@ -193,13 +193,13 @@ else if ($_GET['action'] == 'changeview' AND in_array($_GET['view'],array('creat
 			{
 				Display::display_confirmation_message(get_lang('NotesSortedByTitleAsc'));
 			}
-			else 
+			else
 			{
 				Display::display_confirmation_message(get_lang('NotesSortedByTitleDESC'));
 			}
-			break;	
+			break;
 	}
-	$_SESSION['notebook_view'] = $_GET['view']; 
+	$_SESSION['notebook_view'] = $_GET['view'];
 	display_notes();
 } else {
 	display_notes();
@@ -213,11 +213,11 @@ Display::display_footer();
  * a little bit of javascript to display a prettier warning when deleting a note
  *
  * @return unknown
- * 
+ *
  * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
  * @version januari 2009, dokeos 1.8.6
  */
-function javascript_notebook() 
+function javascript_notebook()
 {
 	return "<script type=\"text/javascript\">
 			function confirmation (name)
@@ -234,7 +234,7 @@ function javascript_notebook()
  * This functions stores the note in the database
  *
  * @param array $values
- * 
+ *
  * @author Christian Fasanando <christian.fasanando@dokeos.com>
  * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
  * @version januari 2009, dokeos 1.8.6
@@ -242,40 +242,40 @@ function javascript_notebook()
 function save_note($values) {
 	// Database table definition
 	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
-	
+
 	$sql = "INSERT INTO $t_notebook (user_id, course, session_id, title, description, creation_date,update_date,status)
 			VALUES(
-				'".Database::escape_string(api_get_user_id())."', 
+				'".Database::escape_string(api_get_user_id())."',
 				'".Database::escape_string(api_get_course_id())."',
 				'".Database::escape_string($_SESSION['id_session'])."',
 				'".Database::escape_string(Security::remove_XSS($values['note_title']))."',
 				'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['note_comment'])),COURSEMANAGERLOWSECURITY))."',
-				'".Database::escape_string(date('Y-m-d H:i:s'))."', 
-				'".Database::escape_string(date('Y-m-d H:i:s'))."',		
+				'".Database::escape_string(date('Y-m-d H:i:s'))."',
+				'".Database::escape_string(date('Y-m-d H:i:s'))."',
 				'0')";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
 	// display the feedback message
-	Display::display_confirmation_message(get_lang('NoteAdded'));	
+	Display::display_confirmation_message(get_lang('NoteAdded'));
 }
 
 function get_note_information($notebook_id) {
 	// Database table definition
 	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
-	
-	$sql = "SELECT 	notebook_id 		AS notebook_id, 
-					title				AS note_title, 
+
+	$sql = "SELECT 	notebook_id 		AS notebook_id,
+					title				AS note_title,
 					description 		AS note_comment
 			   FROM $t_notebook
-			   WHERE notebook_id = '".Database::escape_string($notebook_id)."' ";	
+			   WHERE notebook_id = '".Database::escape_string($notebook_id)."' ";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
-	return Database::fetch_array($result);	
+	return Database::fetch_array($result);
 }
 
 /**
  * This functions updates the note in the database
  *
  * @param array $values
- * 
+ *
  * @author Christian Fasanando <christian.fasanando@dokeos.com>
  * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
  * @version januari 2009, dokeos 1.8.6
@@ -283,9 +283,9 @@ function get_note_information($notebook_id) {
 function update_note($values) {
 	// Database table definition
 	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
-	
+
 	$sql = "UPDATE $t_notebook SET
-				user_id = '".Database::escape_string(api_get_user_id())."', 
+				user_id = '".Database::escape_string(api_get_user_id())."',
 				course = '".Database::escape_string(api_get_course_id())."',
 				session_id = '".Database::escape_string($_SESSION['id_session'])."',
 				title = '".Database::escape_string(Security::remove_XSS($values['note_title']))."',
@@ -294,7 +294,7 @@ function update_note($values) {
 			WHERE notebook_id = '".Database::escape_string($values['notebook_id'])."'";
 	$result = Database::query($sql, __FILE__, __LINE__);
 	// display the feedback message
-	Display::display_confirmation_message(get_lang('NoteUpdated'));	
+	Display::display_confirmation_message(get_lang('NoteUpdated'));
 }
 
 function delete_note($notebook_id) {
@@ -302,12 +302,12 @@ function delete_note($notebook_id) {
 	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
 
 	$sql = "DELETE FROM $t_notebook WHERE notebook_id='".Database::escape_string($notebook_id)."' AND user_id = '".Database::escape_string(api_get_user_id())."'";
-	$result = Database::query($sql, __FILE__, __LINE__);	
-	Display::display_confirmation_message(get_lang('NoteDeleted'));		
+	$result = Database::query($sql, __FILE__, __LINE__);
+	Display::display_confirmation_message(get_lang('NoteDeleted'));
 }
 
 function display_notes() {
-	
+
 	if (!$_GET['direction'])
 	{
 		$sort_direction = 'ASC';
@@ -318,13 +318,13 @@ function display_notes() {
 		$sort_direction = 'ASC';
 		$link_sort_direction = 'DESC';
 	}
-	else 
+	else
 	{
 		$sort_direction = 'DESC';
 		$link_sort_direction = 'ASC';
 	}
-	
-	
+
+
 	// action links
 	echo '<div class="actions" style="margin-bottom:20px">';
 	//if (api_is_allowed_to_edit())
@@ -338,23 +338,23 @@ function display_notes() {
 	echo '<a href="index.php?'.api_get_cidreq().'&amp;action=changeview&amp;view=creation_date&amp;direction='.$link_sort_direction.'">'.Display::return_icon('calendar_select.gif',get_lang('OrderByCreationDate')).get_lang('OrderByCreationDate').'</a>';
 	echo '<a href="index.php?'.api_get_cidreq().'&amp;action=changeview&amp;view=update_date&amp;direction='.$link_sort_direction.'">'.Display::return_icon('calendar_select.gif',get_lang('OrderByModificationDate')).get_lang('OrderByModificationDate').'</a>';
 	echo '<a href="index.php?'.api_get_cidreq().'&amp;action=changeview&amp;view=title&amp;direction='.$link_sort_direction.'">'.Display::return_icon('comment.gif',get_lang('OrderByTitle')).get_lang('OrderByTitle').'</a>';
-	echo '</div>';	
-	
+	echo '</div>';
+
 	if (!in_array($_SESSION['notebook_view'],array('creation_date','update_date', 'title'))) {
 		$_SESSION['notebook_view'] = 'creation_date';
 	}
-	
+
 	// Database table definition
-	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);	
+	$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
 	$order_by = "";
 	if ($_SESSION['notebook_view'] == 'creation_date' || $_SESSION['notebook_view'] == 'update_date') {
 		$order_by = " ORDER BY ".$_SESSION['notebook_view']." $sort_direction ";
 	} else {
 		$order_by = " ORDER BY ".$_SESSION['notebook_view']." $sort_direction ";
 	}
-		
+
 	$cond_extra = ($_SESSION['notebook_view']== 'update_date')?" AND update_date <> '0000-00-00 00:00:00'":" ";
-		
+
 	$sql = "SELECT * FROM $t_notebook WHERE user_id = '".Database::escape_string(api_get_user_id())."' $cond_extra $order_by";
 	$result = Database::query($sql, __FILE__, __LINE__);
 	while ($row = Database::fetch_array($result)) {
@@ -372,6 +372,6 @@ function display_notes() {
 		echo '<a href="'.api_get_self().'?action=deletenote&amp;notebook_id='.$row['notebook_id'].'" onclick="return confirmation(\''.$row['title'].'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 		echo '</div>';
 	}
-	return $return;	
+	return $return;
 }
 ?>

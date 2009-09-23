@@ -6,8 +6,8 @@
 
     Copyright (c) 2004-2008 Dokeos SPRL
     Copyright (c) Sebastien Jacobs (www.spiritual-coder.com)
-    Copyright (c) Kristof Van Steenkiste 
-    Copyright (c) Julio Montoya Armas    
+    Copyright (c) Kristof Van Steenkiste
+    Copyright (c) Julio Montoya Armas
 
     For a full list of contributors, see "credits.txt".
     The full license can be read in "license.txt".
@@ -28,7 +28,7 @@
                 Reservation-manager (add, edit & delete)
     ---------------------------------------------------------------------
  */
- 
+
 require_once('rsys.php');
 Rsys :: protect_script('reservation');
 
@@ -38,7 +38,7 @@ if (!empty($_GET['cat']) && !empty($_GET['item'] )) {
 	$item = (int)$_GET['item'];
 	$interbreadcrumb[] = array ('url' => "reservation.php?cat=$cat&item=$item", 'name' => get_lang('Booking'));
 } else {
-	$interbreadcrumb[] = array ('url' => 'reservation.php', 'name' => get_lang('Booking'));	
+	$interbreadcrumb[] = array ('url' => 'reservation.php', 'name' => get_lang('Booking'));
 }
 
 
@@ -50,7 +50,7 @@ $reservationid = Database::escape_string($_GET['rid']);
 $reservation = Rsys :: get_reservation($reservationid);
 $item = Rsys :: get_item($reservation[0][2]);
 if ($reservation[0][9] < $reservation[0][4]) {
-	ob_start();	
+	ob_start();
 	$form = new FormValidator('reservation', 'post', 'subscribe.php?rid='.Security::remove_XSS($_GET['rid']));
 	$form->addElement('hidden', 'timepicker', $reservation[0][11]);
 	$form->addElement('hidden', 'accepted', $reservation[0][3]);
@@ -64,7 +64,7 @@ if ($reservation[0][9] < $reservation[0][4]) {
 		$max_timepicker_hour = floor($max_timepicker/60);
 		$min_timepicker_show = $min_timepicker_hour."h".$min_timepicker_min."m";
 		$max_timepicker_show = $max_timepicker_hour."h".$max_timepicker_min."m";
-		
+
 		if (!($min_timepicker == 0 && $max_timepicker == 0)) {
 			if($min_timepicker_show == $max_timepicker_show) {
 				$from_till = "van ".$min_timepicker_show;
@@ -76,7 +76,7 @@ if ($reservation[0][9] < $reservation[0][4]) {
 			$min_timepicker = 1;
 			//een reservatieperiode moet toch wel minimum 1 minuut zijn
 		}
-		
+
 		$res_start_at = $reservation[0][5];
 		$res_end_at = $reservation[0][6];
 		//echo time()."-".$res_start_at;
@@ -85,7 +85,7 @@ if ($reservation[0][9] < $reservation[0][4]) {
 		} else {
 			$time_start = Rsys :: mysql_datetime_to_timestamp($res_start_at);
 		}
-		
+
 		$sql = "SELECT start_at, end_at FROM ".Rsys :: getTable('subscription')."
 				WHERE reservation_id='".$reservationid."' and end_at > NOW() ORDER BY start_at";
 		$result = api_sql_query($sql, __FILE__, __LINE__);
@@ -94,7 +94,7 @@ if ($reservation[0][9] < $reservation[0][4]) {
 			while ($array = Database::fetch_array($result)) {
 				//print_r($array);
 				if (time() < Rsys :: mysql_datetime_to_timestamp($array["start_at"]))
-				{ 
+				{
 					if (((Rsys :: mysql_datetime_to_timestamp($array["start_at"]) - $time_start) >= ($min_timepicker*60)) && ($time_start < Rsys :: mysql_datetime_to_timestamp($array["start_at"])))
 					{
 						$start_end .= "<li>".Rsys :: timestamp_to_datetime($time_start)." en ".$array["start_at"]."</li>";
@@ -111,7 +111,7 @@ if ($reservation[0][9] < $reservation[0][4]) {
 		} else {
 			$start_end = " ".Rsys :: timestamp_to_datetime($time_start)." en ".$res_end_at;
 		}
-		
+
 		//$form->addElement('html', "timestart:".$time_start."-".Rsys :: mysql_datetime_to_timestamp($res_start_at));
 		$form->addElement('html', "<p>".str_replace('#start_end',$start_end,str_replace('#from_till', $from_till,str_replace('#name#', "<b>".$item[3]."</b>",str_replace('#start#', "<b>".$reservation[0][5]."</b>", str_replace('#end#', "<b>".$reservation[0][6]."</b>", get_lang("SubscribeTimePickerInformation"))))))." </p>");
 		$form->add_timewindow('startpicker', 'endpicker', get_lang('StartDate'), get_lang('EndDate'));
@@ -128,10 +128,10 @@ if ($reservation[0][9] < $reservation[0][4]) {
 	$buttons[] = $form->createElement('submit', 'submit', get_lang('Ok'));
 	$buttons[] = $form->createElement('button', 'cancel', get_lang('Cancel'), array ('onclick' => 'location.href="reservation.php?cat='.$item[1].'&item='.$item[0].'"'));
 	$form->addGroup($buttons, null, '', '', false);
-	
+
 	$buffer = ob_get_contents();
 	ob_end_clean();
-	
+
 	if ($form->validate()) {
 		$values = $form->exportValues();
 		if ($values['timepicker'] == 0) {

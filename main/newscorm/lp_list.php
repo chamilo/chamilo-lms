@@ -117,7 +117,7 @@ if(api_is_allowed_to_edit())
 			echo  str_repeat('&nbsp;',3).'<a href="../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/powerpoint.gif" border="0" alt="'.get_lang("PowerPointConvert").'" align="absmiddle">&nbsp;'.get_lang("PowerPointConvert").'</a>';
        		//echo  str_repeat('&nbsp;',3).'<a href="../upload/upload_word.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH.'"><img src="../img/word.gif" border="0" alt="'.get_lang("WordConvert").'" align="absmiddle">&nbsp;'.get_lang("WordConvert").'</a>';
         }
-	echo '</div>';       
+	echo '</div>';
 }
 
 echo '<table width="100%" border="0" cellspacing="2" class="data_table">';
@@ -186,7 +186,7 @@ if (is_array($flat_list))
 	    if(!$is_allowed_to_edit && $details['lp_visibility'] == 0)
 	    {
 	    	// This is a student and this path is invisible, skip
-	    	continue;		
+	    	continue;
 	    }
 		$counter++;
 	    if (($counter % 2)==0) { $oddclass="row_odd"; } else { $oddclass="row_even"; }
@@ -210,26 +210,26 @@ if (is_array($flat_list))
 	    $dsp_default_view = '';
 	    $dsp_debug = '';
 	    $dsp_order = '';
-	    
-	    // Select course theme	
+
+	    // Select course theme
 		if (!empty($platform_theme))
-		{	
+		{
 			$mystyle=$platform_theme;
 		}
-		
-		if (!empty($user_theme)) 
-		{	 
+
+		if (!empty($user_theme))
+		{
 			$mystyle=$user_theme;
-		}		
-				
-		if (!empty($mycoursetheme)) 
-		{	 
+		}
+
+		if (!empty($mycoursetheme))
+		{
 			$mystyle=$mycoursetheme;
 		}
-		
+
 		$lp_theme_css=$mystyle;
-		
-	    
+
+
 	    if($display_progress_bar)
 	    {
 	    	$dsp_progress = '<td>'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id,api_get_user_id()),'').'</td>';
@@ -268,7 +268,7 @@ if (is_array($flat_list))
 
 			$dsp_edit = '<td align="center">';
 	    	$dsp_edit_close = '</td>';
-			
+
 			/* DELETE COMMAND */
 			$dsp_delete = "<a href=\"lp_controller.php?".api_get_cidreq()."&action=delete&lp_id=$id\" " .
 			"onClick=\"return confirmation('".addslashes($name)."');\">" .
@@ -357,28 +357,28 @@ if (is_array($flat_list))
 		 	}
 		 	/*   Export  */
 	    	if($details['lp_type']==1){
-				$dsp_disk = 
+				$dsp_disk =
 					"<a href='".api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id'>" .
 					"<img src=\"../img/cd.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
 					"</a>" .
 					"";
 			}elseif($details['lp_type']==2){
-				$dsp_disk = 
+				$dsp_disk =
 					"<a href='".api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id&export_name=".replace_dangerous_char($name,'strict').".zip'>" .
 					"<img src=\"../img/cd.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
 					"</a>" .
 					"";
 			}else{
-				$dsp_disk = 
+				$dsp_disk =
 					//"<a href='".api_get_self()."?".api_get_cidreq()."&action=export&lp_id=$id'>" .
 					"<img src=\"../img/cd_gray.gif\" border=\"0\" title=\"".get_lang('Export')."\">" .
 					//"</a>" .
 					"";
 			}
-			
+
 			//hide icon export scorm
 			//$dsp_disk='';
-			
+
 			if($details['lp_display_order'] == 1 && $max != 1)
 	    	{
 	    		$dsp_order .= '<td><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">' .

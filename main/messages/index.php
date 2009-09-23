@@ -6,7 +6,7 @@
 	Copyright (c) 2009 Dokeos SPRL
 	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
 	Copyright (c) Facultad de Matematicas, UADY (México)
-	Copyright (c) Evie, Free University of Brussels (Belgium)		
+	Copyright (c) Evie, Free University of Brussels (Belgium)
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -31,7 +31,7 @@ if (api_get_setting('allow_message_tool')!='true'){
 	api_not_allowed();
 }
 
-if(api_get_user_id()!=0) {	
+if(api_get_user_id()!=0) {
 	echo '<script language="javascript" type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'messages/cookies.js"> </script> ';
 	echo '<script language="javascript" type="text/javascript">set_url("'.api_get_path(WEB_CODE_PATH).'messages/notify.php") ; notificar()</script> ';
 	$number_of_new_messages = get_new_messages();

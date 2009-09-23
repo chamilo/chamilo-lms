@@ -98,18 +98,18 @@ function show_documents($folder)
 {
 	global $_course;
 	global $source_id, $action, $learnpath_id, $chapter_id, $originalresource;
-	
+
 	// documents are a special case: the teacher can add an invisible document (it will be viewable by the user)
-	// other tools do not have this feature. This only counts 
+	// other tools do not have this feature. This only counts
 	if (is_allowed_to_edit())
 	{
 		$visibility="visibility<>'2'";
 	}
-	else 
+	else
 	{
 		$visibility="visibility='1'";
 	}
-	
+
 	$item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	$document_table = Database::get_course_table(TABLE_DOCUMENT);
 	$sql="SELECT * from $document_table, $item_property_table WHERE id=ref AND tool = '".TOOL_DOCUMENT."' AND $visibility AND to_group_id = 0 AND to_user_id IS NULL  ORDER BY path ASC";
@@ -397,11 +397,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -449,15 +449,15 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			list($title, $text)=split('<br>',$myrow['content']);
 			if ($title=='') { $title=$myrow['content']; }
 			$title=$myrow['title'];
-			$text=$myrow['content']; 			
+			$text=$myrow['content'];
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -507,11 +507,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -561,7 +561,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			  //this is needed for the exercise_submit.php can delete the session info about tests
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	
+			$result=api_sql_query($sql,__FILE__,__LINE__);
 			$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $myrow["title"]=$row['title']; }
 			$desc=$row['description'];
@@ -570,11 +570,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -629,11 +629,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -682,11 +682,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -734,11 +734,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -795,11 +795,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -849,11 +849,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			echo str_repeat("&nbsp;&gt;",$level);
 
 			if ($icon != 'nolink') {
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -914,11 +914,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -950,7 +950,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 				echo "<a href=\"../work/work.php\" class='$completed' target='_blank'>".shorten($name,($length-3*$level))."</a>";
 			}
 			break;
-			
+
 		case TOOL_DROPBOX:
 		case "Dropbox":
 			$name=get_lang('Dropbox');
@@ -962,11 +962,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink') {
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -989,7 +989,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 				echo "<a href=\"../dropbox/index.php\" class='$completed' target='_blank'>".shorten($name,($length-3*$level))."</a>";
 			}
 			break;
-			
+
 		case 'introduction_text':
 		case "Introduction_text":
 			$name=get_lang('IntroductionText');
@@ -1001,11 +1001,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink') {
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -1030,7 +1030,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 				echo "<a href=\"$s\" class='$completed' target='_blank'>".shorten($name,($length-3*$level))."</a>";
 			}
 			break;
-			
+
 		case TOOL_COURSE_DESCRIPTION:
 		case "Course_description":
 			$name=get_lang('CourseDescription');
@@ -1042,11 +1042,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink') {
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -1070,7 +1070,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 				echo "<a href=\"$s\" class='$completed' target='_blank'>".shorten($name,($length-3*$level))."</a>";
 			}
 			break;
-			
+
 		case TOOL_GROUP:
 		case "Groups":
 			$name=get_lang('Groups');
@@ -1082,11 +1082,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink') {
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -1109,7 +1109,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 				echo "<a href=\"../group/group.php?origin=$origin\" class='$completed' target='_blank'>".shorten($name,($length-3*$level))."</a>";
 			}
 			break;
-			
+
 		case TOOL_USER:
 		case "Users":
 			$name=get_lang('Users');
@@ -1121,11 +1121,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink') {
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -1705,9 +1705,9 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
 	// styling the link of the added resource
 	if ($style <> '') $styling = ' class="'.$style.'"';
 	if($new_window == true){ $target = ' target = "_blank" ';}else{$target = ' target = "_self" ';}
-	
+
 	$output = '';
-	
+
 	switch ($type)
 	{
 		case TOOL_CALENDAR_EVENT:
@@ -1782,17 +1782,17 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
 	return $output;
 }
 /**
-* Returns an HTML-formatted link to a resource, to incorporate directly into 
+* Returns an HTML-formatted link to a resource, to incorporate directly into
 * the new learning path tool.
-* 
-* The function is a big switch on tool type. 
+*
+* The function is a big switch on tool type.
 * In each case, we query the corresponding table for information and build the link
 * with that information.
 * @author	Yannick Warnier <ywarnier@beeznest.org> - rebranding based on previous work (display_addedresource_link_in_learnpath())
 * @param	string	Course code
-* @param	integer	The learning path ID (in lp table)	
+* @param	integer	The learning path ID (in lp table)
 * @param	integer	The database ID for that item in the lp_item table
-* @param	
+* @param
 * @param	string	Type (as one of the TOOL_ constants declared in main_api.lib.php)
 * @param	integer	ID of the database item to get (from that tool's table)
 * @param id          - that is the correspondent id in the mirror tool (like Agenda item 2)
@@ -1802,7 +1802,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 {
 	//error_log('In rl_get_resource_link_for_learnpath()',0);
 	$_course = Database::get_course_info($course_code);
-	
+
 	$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
 	$sql_item = "SELECT * FROM $tbl_lp_item " .
@@ -1810,7 +1810,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 	$res_item = api_sql_query($sql_item,__FILE__,__LINE__);
 	if(Database::num_rows($res_item)<1) return -1; //exit
 	$row_item = Database::fetch_array($res_item);
-	
+
 	$type = strtolower($row_item['item_type']);
 	$id = (strcmp($row_item['path'],'')==0) ? '0' : $row_item['path'];
 	$origin='learnpath';
@@ -1886,9 +1886,9 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 			$title=$myrow['post_title'];
 
 			//$desc=$row_item['description'];
-    		
+
 			$posternom=$myrow['poster_name'];
-			$posttime=$myrow['post_date'];			
+			$posttime=$myrow['post_date'];
 			$posttext=$myrow['post_text'];
 			$posttitle=$title;
 			$posttext = str_replace('"',"'",$posttext);
@@ -1929,7 +1929,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 		case TOOL_USER:
 			$link .= $main_dir_path.'user/user.php?origin='.$origin;
 			break;
-		case 'student_publication' : 
+		case 'student_publication' :
 			$link .= $main_dir_path.'work/work.php?origin=learnpath';
 			break;
 	}//end switch
@@ -1951,7 +1951,7 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 	$sql_item = "SELECT * FROM $tbl_lp_item " .
 			"WHERE lp_id = $learnpath_id AND id = $id_in_path";
 	$res_item = api_sql_query($sql_item,__FILE__,__LINE__);
-	
+
 	if(Database::num_rows($res_item)<1)
 	{
 		return ''; //exit
@@ -1960,7 +1960,7 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 	$type = strtolower($row_item['item_type']);
 	$id = $row_item['ref'];
 	$output = '';
-	
+
 	switch ($type)
 	{
 		case TOOL_CALENDAR_EVENT:
@@ -2010,24 +2010,24 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 			$post = Database::fetch_array($result);
 			$output = $post['post_title'];
 			break;
-		case 'dokeos_chapter':	 
-			$title=$row_item['title'];			
+		case 'dokeos_chapter':
+			$title=$row_item['title'];
 			if (!empty($title))
 			{
 				$output =$title;
 			}
-			else 
+			else
 			{
 				$output ='-';
 			}
 			break;
 		case TOOL_DOCUMENT:
-			$title=$row_item['title'];			
+			$title=$row_item['title'];
 			if (!empty($title))
 			{
 				$output =$title;
 			}
-			else 
+			else
 			{
 				$output ='-';
 			}
@@ -2052,7 +2052,7 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 			break;
 		*/
 	}
-	
+
 	return stripslashes($output);
 }
 ?>

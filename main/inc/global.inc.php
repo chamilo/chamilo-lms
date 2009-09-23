@@ -190,7 +190,6 @@ require_once($lib_path.'display.lib.php');
 require_once($lib_path.'text.lib.php');
 require_once($lib_path.'security.lib.php');
 require_once($lib_path.'events.lib.inc.php');
-//require_once($lib_path.'media.lib.php'); // TODO: Deprecated, to be removed. Ivan Tcholakov, 23-SEP-2003.
 
 // @todo: this shouldn't be done here. It should be stored correctly during installation
 if(empty($_configuration['statistics_database']) && $already_installed)

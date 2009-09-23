@@ -24,7 +24,7 @@ editAreaLoader.load_syntax["php"] = {
 			'PHP_OUTPUT_HANDLER_END', 'E_ERROR', 'E_WARNING', 'E_PARSE', 'E_NOTICE',
 			'E_CORE_ERROR', 'E_CORE_WARNING', 'E_COMPILE_ERROR', 'E_COMPILE_WARNING', 'E_USER_ERROR',
 			'E_USER_WARNING', 'E_USER_NOTICE', 'E_ALL'
-			
+
 		]
 		,'functions' : [
 			'func_num_args', 'func_get_arg', 'func_get_args', 'strlen', 'strcmp', 'strncmp', 'strcasecmp', 'strncasecmp', 'each', 'error_reporting', 'define', 'defined',
@@ -70,6 +70,6 @@ editAreaLoader.load_syntax["php"] = {
 		,'DELIMITERS' : 'color: #2B60FF;'
 		,'REGEXPS' : {
 			'variables' : 'color: #E0BD54;'
-		}		
+		}
 	}
 };

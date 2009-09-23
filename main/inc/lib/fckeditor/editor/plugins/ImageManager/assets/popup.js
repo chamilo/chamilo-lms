@@ -71,7 +71,7 @@ function __dlg_init(bottom) {
 			// center on parent
 			var x = opener.screenX + (opener.outerWidth - window.outerWidth) / 2;
 			var y = opener.screenY + (opener.outerHeight - window.outerHeight) / 2;
-		
+
 			// Avoiding being in the center of the page.
 			/*
 			window.moveTo(x, y);
@@ -112,7 +112,7 @@ function __dlg_translate(i18n) {
 		var spans = document.getElementsByTagName(types[type]);
 		for (var i = spans.length; --i >= 0;) {
 			var span = spans[i];
-			if (span.firstChild && span.firstChild.data) {				
+			if (span.firstChild && span.firstChild.data) {
 				var txt = i18n[span.firstChild.data];
 				if (txt) span.firstChild.data = txt;
 			}

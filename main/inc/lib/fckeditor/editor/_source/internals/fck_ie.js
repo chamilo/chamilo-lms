@@ -175,7 +175,7 @@ FCK.InsertHtml = function( html )
 	var fake = FCK.EditorDocument.getElementById('__fakeFCKRemove__') ;
 	// If the span is the only child of a node (so the inserted HTML is beyond that),
 	// remove also that parent that isn't needed. #1537
-	if (fake.parentNode.childNodes.length == 1) 
+	if (fake.parentNode.childNodes.length == 1)
 		fake = fake.parentNode ;
 	fake.removeNode( true ) ;
 

@@ -161,7 +161,7 @@ jQuery.iResize = {
 						jQuery.iResize.resizeElement.resizeOptions.maxHeight
 					);
 	},
-	
+
 	/**
 	*	setting and getting the ratio value
 	* 	defined by Logan Cai cailongqun [at] yahoo [dot] com [dot] cn
@@ -174,7 +174,7 @@ jQuery.iResize = {
 				var el = this;
 				if(typeof(value) == 'integer')
 				{//setting new ratio
-					el.resizeOptions.ratio = value;	
+					el.resizeOptions.ratio = value;
 				}else
 				{//getting the ratio
 					if(el.resizeOptions.ratio)
@@ -183,7 +183,7 @@ jQuery.iResize = {
 					}else
 					{
 						var width =  parseInt(jQuery(el).css('width')) || 0;
-						var height = parseInt(jQuery(el).css('height'))|| 0;	
+						var height = parseInt(jQuery(el).css('height'))|| 0;
 						if(width > 0 && height > 0)
 						{
 							ratio = (Math.round(height/width * 10000)/10000);
@@ -194,11 +194,11 @@ jQuery.iResize = {
 					}
 				}
 			}
-			
+
 		);
-		return ratio;	
-		
-	},	
+		return ratio;
+
+	},
 	/**
 	*	setting and getting the ratio value
 	* 	defined by Logan Cai cailongqun [at] yahoo [dot] com [dot] cn
@@ -206,7 +206,7 @@ jQuery.iResize = {
 	ResizeConstraint: function(OnOrOff)
 	{
 		var ratio;
-		
+
 		this.each(
 			function()
 			{
@@ -217,7 +217,7 @@ jQuery.iResize = {
 				}else
 				{//turn on the resize constraint and set the ratio calculated from current image width & height
 					var width =  parseInt(jQuery(el).css('width')) || 0;
-					var height = parseInt(jQuery(el).css('height'))|| 0;	
+					var height = parseInt(jQuery(el).css('height'))|| 0;
 					if(width > 0 && height > 0)
 					{
 						el.resizeOptions.ratio = (Math.round(height/width * 10000)/10000);
@@ -227,11 +227,11 @@ jQuery.iResize = {
 					}
 				}
 			}
-			
+
 		);
-		
-	},	
-	
+
+	},
+
 	move: function(e) {
 		if (jQuery.iResize.resizeElement == null) {
 			return;
@@ -486,7 +486,7 @@ jQuery.iResize = {
 jQuery.fn.extend ({
 		/**
 		 * Create a resizable element with a number of advanced options including callback, dragging
-		 * 
+		 *
 		 * @name Resizable
 		 * @description Create a resizable element with a number of advanced options including callback, dragging
 		 * @param Hash hash A hash of parameters. All parameters are optional.
@@ -516,7 +516,7 @@ jQuery.fn.extend ({
 		ResizeConstraint: jQuery.iResize.ResizeConstraint,
 		/**
 		 * Destroy a resizable
-		 * 
+		 *
 		 * @name ResizableDestroy
 		 * @description Destroy a resizable
 		 * @type jQuery

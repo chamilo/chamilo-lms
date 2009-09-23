@@ -128,7 +128,7 @@ function searchDirection_keydown(e)
 function LoadSelection()
 {
 	GetE('apiKey').value  = FCK.GoogleMapsHandler.publicKey ;
-	
+
 	GetE('txtWidth').value  = oParsedMap.width ;
 	GetE('txtHeight').value = oParsedMap.height ;
 
@@ -137,7 +137,7 @@ function LoadSelection()
 	GetE('txtCenterLongitude').value = oParsedMap.centerLon ;
 
 	var markerPoints = oParsedMap.markerPoints;
-	
+
 	GetE('encodedPolyline').value = oParsedMap.LinePoints ;
 	GetE('encodedLevels').value = oParsedMap.LineLevels ;
 
@@ -151,7 +151,7 @@ function LoadSelection()
 		var point = new GLatLng(parseFloat(markerPoints[i].lat), parseFloat(markerPoints[i].lon))
 		AddMarkerAtPoint(point, markerPoints[i].text, false);
 	}
-	
+
 	decodePolyline() ;
 }
 
@@ -165,7 +165,7 @@ function Ok()
 	}
 
 	oEditor.FCKUndo.SaveUndoStep() ;
-	
+
 	FCK.GoogleMapsHandler.publicKey = GetE('apiKey').value ;
 
 	oParsedMap.width = GetE('txtWidth').value ;
@@ -194,7 +194,7 @@ function Ok()
 		oFakeImage = oParsedMap.createHtmlElement() ;
 
 	oParsedMap.updateHTMLElement(oFakeImage);
-	
+
 	return true ;
 }
 
@@ -233,9 +233,9 @@ function SetPreviewElement( mapType )
 	map.addControl(new GSmallMapControl());
 	map.addControl(new GMapTypeControl());
 
-	GEvent.addListener(map, "zoomend", Map_ZoomEnd); 
-	GEvent.addListener(map, "drag", Map_Drag); 
-//	GEvent.addListener(map, "moveend", Map_MoveEnd); 
+	GEvent.addListener(map, "zoomend", Map_ZoomEnd);
+	GEvent.addListener(map, "drag", Map_Drag);
+//	GEvent.addListener(map, "moveend", Map_MoveEnd);
 
   GEvent.addListener(map, "click", Map_Click);
   GEvent.addDomListener(mapDiv, "keydown", DomMap_KeyDown);
@@ -275,7 +275,7 @@ function Map_Click(overlay, point)
 				break;
 		}
 	}
-	
+
 	// To get Keyboard events, the map must be focused.
 	if (!overlay || overlay.focusable)
 	{
@@ -324,7 +324,7 @@ function UpdateDimensions()
 	ResizeParent();
 }
 
-function createMarker(point, html) 
+function createMarker(point, html)
 {
 	var marker = new GMarker(point, {draggable: true});
 	marker.text = html ;
@@ -356,10 +356,10 @@ function generateEditPopupString(text)
 function doSearch()
 {
 	if (!geocoder) geocoder = new GClientGeocoder();
-	
+
 	function processPoint(point)
 	{
-			if (point) 
+			if (point)
 			{
 				GetE("txtCenterLatitude").value = point.lat().RoundTo(5) ;
 				GetE("txtCenterLongitude").value = point.lng().RoundTo(5) ;

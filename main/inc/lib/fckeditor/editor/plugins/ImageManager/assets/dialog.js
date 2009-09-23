@@ -82,7 +82,7 @@ Dialog._geckoOpenModal = function(url, action, init) {
 Dialog._addEvent = function(el, evname, func) {
 	if (Dialog.is_ie) {
 		el.attachEvent("on" + evname, func);
-	} else {		
+	} else {
 		el.addEventListener(evname, func, true);
 	}
 };

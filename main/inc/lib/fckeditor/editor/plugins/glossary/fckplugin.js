@@ -4,9 +4,9 @@ var FCKGlossary = function( name )
 {
   this.Name = name ;
   this.StyleName = '_FCK_Glossary' ;
-  this.IsActive = false ; 
+  this.IsActive = false ;
   this.EditMode = FCK.EditMode;
-        
+
   FCKStyles.AttachStyleStateChange( this.StyleName, this._OnStyleStateChange, this ) ;
 }
 
@@ -16,11 +16,11 @@ FCKGlossary.prototype =
 	{
 		FCKUndo.SaveUndoStep() ;
 
-		if ( this.IsActive ) {		    	    
-			FCKStyles.RemoveStyle(this.StyleName) ;									
+		if ( this.IsActive ) {
+			FCKStyles.RemoveStyle(this.StyleName) ;
 		}
-		else {		    		    
-			FCKStyles.ApplyStyle( this.StyleName ) ;										
+		else {
+			FCKStyles.ApplyStyle( this.StyleName ) ;
 		}
 		FCK.Focus() ;
 		FCK.Events.FireEvent( 'OnSelectionChange' ) ;
@@ -29,7 +29,7 @@ FCKGlossary.prototype =
 	GetState : function()
 	{
 		if ( FCK.EditMode != FCK_EDITMODE_WYSIWYG )
-			return FCK_TRISTATE_DISABLED ;							
+			return FCK_TRISTATE_DISABLED ;
 		return this.IsActive ? FCK_TRISTATE_ON : FCK_TRISTATE_OFF;
 	},
 

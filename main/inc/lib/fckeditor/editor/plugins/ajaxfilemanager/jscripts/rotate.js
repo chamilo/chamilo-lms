@@ -30,10 +30,10 @@ jQuery.fn.rotate = function(angle,whence) {
 			canvas.oImage = new Image();
 			canvas.oImage.src = p.src;
 	    	canvas.oImage.width = p.width;
-    		canvas.oImage.height = p.height;			
+    		canvas.oImage.height = p.height;
 		} else {
 			canvas.oImage = p.oImage;
-			
+
 		}
 
 		canvas.style.width = canvas.width = Math.abs(costheta*canvas.oImage.width) + Math.abs(sintheta*canvas.oImage.height);

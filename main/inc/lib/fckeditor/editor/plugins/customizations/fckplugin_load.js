@@ -22,7 +22,7 @@
 /*
  * A fragment of the original source code of FCKeditor version 2.6.4.1
  * is used in this file.
- * 
+ *
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
  * Copyright (C) 2003-2009 Frederico Caldeira Knabben
  */

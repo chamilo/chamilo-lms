@@ -21,10 +21,10 @@ imgmapCommand_GetState = function() {
 
 		// Does it has an assigned map?
 		if (oImage.getAttribute( 'usemap' ))
-			return FCK_TRISTATE_ON; 
+			return FCK_TRISTATE_ON;
 
 		// Plain image
-		return FCK_TRISTATE_OFF; 
+		return FCK_TRISTATE_OFF;
 	}
 	// No image selected
 	return FCK_TRISTATE_DISABLED;
@@ -32,10 +32,10 @@ imgmapCommand_GetState = function() {
 
 
 /*
-FCKCommands.RegisterCommand( 'imgmapPopup', 
+FCKCommands.RegisterCommand( 'imgmapPopup',
 	new FCKDialogCommand( FCKLang.imgmapDlgName, FCKLang.imgmapDlgTitle, FCKPlugins.Items['imgmap'].Path + 'popup.html', 700, 620, imgmapCommand_GetState ) ) ;
 */
-FCKCommands.RegisterCommand( 'imgmapPopup', 
+FCKCommands.RegisterCommand( 'imgmapPopup',
 		new FCKDialogCommand( FCKLang.imgmapDlgName, FCKLang.imgmapDlgTitle, FCKPlugins.Items['imgmap'].Path + 'popup.html', 750, 580, imgmapCommand_GetState ) ) ;
 
 

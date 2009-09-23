@@ -39,7 +39,7 @@ window.onload = function()
 	img_obj = oEditor.FCK.Selection.GetSelectedElement() ;
 
 	// On rare situations it's possible to launch the dialog without an image selected
-	// -> in IE select an image, click outside the editor and the button will remain enabled, 
+	// -> in IE select an image, click outside the editor and the button will remain enabled,
 	//		but img_obj will be null
 	if ( !img_obj )
 	{
@@ -67,7 +67,7 @@ window.onload = function()
 			'onSelectArea' : onSelectArea,
 			'onRemoveArea'	: onRemoveArea
 		},
-		html_container: null, 
+		html_container: null,
 		pic_container: $('pic_container'),
 		status_container: $('status_container'),
 		form_container: null, // $('form_container'),
@@ -105,7 +105,7 @@ window.onload = function()
 
 	if ( map_obj !== null )
 	{
-		// Select the first area: 
+		// Select the first area:
 		myimgmap.selectedId = 0 ;
 		onSelectArea( myimgmap.areas[0] ) ;
 
@@ -148,7 +148,7 @@ function Ok() {
 
 		map_obj.name = myimgmap.getMapName();
 		map_obj.id   = myimgmap.getMapId();
-		
+
 		img_obj.setAttribute('usemap', "#" + myimgmap.getMapName(), 0);
 	}
 
@@ -186,7 +186,7 @@ function toggleFieldset(fieldset, on) {
 	}
 }
 
-// We need to store here the area id because if the user clicks on an area, 
+// We need to store here the area id because if the user clicks on an area,
 // then the onSelectArea event will fire before the onchange or onblur of the editing inputs
 var currentAreaId = null ;
 
@@ -210,7 +210,7 @@ function onAddArea(id) {
 	updateAreaValues() ;
 
 	currentAreaId = id ;
-	$( 'txtUrl' ).value = 'http://' ;//Juan Carlos Raña add default protocol
+	$( 'txtUrl' ).value = 'http://' ;//Juan Carlos Raï¿½a add default protocol
 	$( 'cmbTarget' ).value = '' ;
 	$( 'txtAlt' ).value = '' ;
 	$( 'txtAttTitle' ).value = '' ;
@@ -266,7 +266,7 @@ function setMode(mode) {
 		myimgmap.nextShape = mode;
 	}
 
-	hightlightMode(mode); 
+	hightlightMode(mode);
 }
 
 var previousModeImg = null ;
@@ -306,7 +306,7 @@ function getAreaHtml(area)
 	if (area.atitle && area.atitle!='') html+= ' title="' + area.atitle + '"' ;
 	if (area.ahref && area.ahref!='') html+= ' href="' +	area.ahref + '" _fcksavedurl="' +	area.ahref + '"' ;
 	if (area.atarget && area.atarget!='') html+= ' target="' + area.atarget + '"' ;
-						
+
 	html+='/>';
 	return html;
 }

@@ -1,19 +1,19 @@
 $(document).ready(function() {
-    $(window).load(function () { 
+    $(window).load(function () {
      var my_text=$("body").html();
      my_protocol = location.protocol;
      $.ajax({
         contentType: "application/x-www-form-urlencoded",
         beforeSend: function(objeto) {
         },
-        type: "POST",        
-        url: my_protocol+"//"+location.host+"/main/glossary/glossary_ajax_request.php",        
+        type: "POST",
+        url: my_protocol+"//"+location.host+"/main/glossary/glossary_ajax_request.php",
         data: "glossary_data=true",
         success: function(datos) {
 			  if (datos.length==0) {
 			  	return false;
 			  }
-                data_terms=datos.split("[|.|_|.|-|.|]");  
+                data_terms=datos.split("[|.|_|.|-|.|]");
                 for(i=0;i<data_terms.length;i++) {
                     specific_terms=data_terms[i].split("__|__|");
                    var my_specific_terms = new RegExp(specific_terms[1],"gi");
@@ -21,7 +21,7 @@ $(document).ready(function() {
                     $("body").html(new_html);
                     my_text=$("body").html();
                 }
-                
+
 			  $("body .glossary-ajax").mouseover(function(){
 	            random_id=Math.round(Math.random()*100);
 	            div_show_id="div_show_id"+random_id;
@@ -34,26 +34,26 @@ $(document).ready(function() {
 	                my_glossary_id=data_notebook[1];
 	                $.ajax({
 	                    contentType: "application/x-www-form-urlencoded",
-	                    beforeSend: function(objeto) {	                    
-	                    $("div#"+div_content_id).html("<img src="+my_protocol+"//"+location.host+"/main/inc/lib/javascript/indicator.gif />"); },	                    
-	                    type: "POST",	                    
-	                    url: my_protocol+"//"+location.host+"/main/glossary/glossary_ajax_request.php",	                    
+	                    beforeSend: function(objeto) {
+	                    $("div#"+div_content_id).html("<img src="+my_protocol+"//"+location.host+"/main/inc/lib/javascript/indicator.gif />"); },
+	                    type: "POST",
+	                    url: my_protocol+"//"+location.host+"/main/glossary/glossary_ajax_request.php",
 	                    data: "glossary_id="+my_glossary_id,
 	                    success: function(datos) {
 	                        $("div#"+div_content_id).html(datos);
 	                    }
-	                });  
+	                });
 	          });
 	          $("body .glossary-ajax").mouseout(function(){
 		            var current_element,
 		            current_element=$(this);
 		            div_show_id=current_element.find("div").attr("id");
-		            $("div#"+div_show_id).remove();   
+		            $("div#"+div_show_id).remove();
 	          });
 
 
-				} 
-                
-            });  
-        }); 
+				}
+
+            });
+        });
 });

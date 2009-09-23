@@ -1,5 +1,5 @@
 /**
- * Functions for the image listing, used by images.php only	
+ * Functions for the image listing, used by images.php only
  * @author $Author: Wei Zhuo $
  * @version $Id: images.js 26 2004-03-31 02:35:21Z Wei Zhuo $
  * @package ImageManager
@@ -12,14 +12,14 @@
 			return str;
 	};
 
-	function changeDir(newDir) 
+	function changeDir(newDir)
 	{
 		showMessage('Loading');
 		location.href = "images.php?dir="+newDir;
 	}
 
 
-	function newFolder(dir, newDir) 
+	function newFolder(dir, newDir)
 	{
 		if ( !window.parent.opener && window.parent.oEditor )
 		{
@@ -47,26 +47,26 @@
 					showMessage('Loading');
 					break;
 				}
-			}		
+			}
 		}
 	}
 
-	function selectImage(filename, alt, width, height) 
+	function selectImage(filename, alt, width, height)
 	{
 		//var topDoc = window.top.document;
 		var topDoc = window.parent.document;
-		
+
 		var obj = topDoc.getElementById('f_file');  obj.value = filename;
-		var obj = topDoc.getElementById('f_url');  obj.value = filename;		
+		var obj = topDoc.getElementById('f_url');  obj.value = filename;
 		var obj = topDoc.getElementById('f_width');  obj.value = width;
 		var obj = topDoc.getElementById('f_width'); obj.value = width;
 		var obj = topDoc.getElementById('f_height'); obj.value = height;
 		var obj = topDoc.getElementById('f_alt'); obj.value = alt;
 		var obj = topDoc.getElementById('orginal_width'); obj.value = width;
-		var obj = topDoc.getElementById('orginal_height'); obj.value = height;		
+		var obj = topDoc.getElementById('orginal_height'); obj.value = height;
 	}
 
-	function showMessage(newMessage) 
+	function showMessage(newMessage)
 	{
 		//var topDoc = window.top.document;
 		var topDoc = window.parent.document;
@@ -79,27 +79,27 @@
 				message.removeChild(message.firstChild);
 
 			message.appendChild(topDoc.createTextNode(i18n(newMessage)));
-			
+
 			messages.style.display = "block";
 		}
 	}
 
 	function addEvent(obj, evType, fn)
-	{ 
-		if (obj.addEventListener) { obj.addEventListener(evType, fn, true); return true; } 
-		else if (obj.attachEvent) {  var r = obj.attachEvent("on"+evType, fn);  return r;  } 
-		else {  return false; } 
-	} 
+	{
+		if (obj.addEventListener) { obj.addEventListener(evType, fn, true); return true; }
+		else if (obj.attachEvent) {  var r = obj.attachEvent("on"+evType, fn);  return r;  }
+		else {  return false; }
+	}
 
-	function confirmDeleteFile(file) 
+	function confirmDeleteFile(file)
 	{
 		if(confirm(i18n("Delete file?")))
 			return true;
-	
-		return false;		
+
+		return false;
 	}
 
-	function confirmDeleteDir(dir, count) 
+	function confirmDeleteDir(dir, count)
 	{
 		if(count > 0)
 		{
@@ -107,7 +107,7 @@
 			return;
 		}
 
-		if(confirm(i18n("Delete folder?"))) 
+		if(confirm(i18n("Delete folder?")))
 			return true;
 
 		return false;

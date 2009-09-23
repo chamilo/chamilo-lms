@@ -19,7 +19,7 @@
 				CheckedElem = document.formAction.mode[i];
 			}
 		}
-		CheckedElem.checked = true;	
+		CheckedElem.checked = true;
 		return CheckedElem.value;
 	};
 	/**
@@ -28,7 +28,7 @@
 	*/
 	function changeMode(restore, force)
 	{
-		
+
 			var mode = getModeValue();
 			var imageMode = $('#image_mode');
 			if(mode != $(imageMode).val() || (typeof(restore) == "boolean"))
@@ -43,7 +43,7 @@
 						if(!restoreToOriginal(restore))
 						{
 							return false;
-							
+
 						}
 						clearImageHistory();
 					}
@@ -53,56 +53,56 @@
 						return false;
 					}else
 					{
-						restoreToOriginal(false);						
+						restoreToOriginal(false);
 						clearImageHistory();
-					}				
+					}
 				}else if((typeof(restore) == "boolean" && restore))
 				{
-					return false;	
+					return false;
 				}
-				initPositionHandler();				
+				initPositionHandler();
 				switch(mode)
 				{
 					case "resize":
 						switch($('#image_mode').val())
 						{
 							case "crop":
-								disableCrop();								
+								disableCrop();
 								break;
 							case "rotate":
 								disableRotate();
 								break;
 							case "flip":
 								disableFlip();
-								break;								
+								break;
 							default:
 								disableRotate();
-						}						
+						}
 						enableResize(document.formAction.constraint.checked);
 						break;
-					case "crop":						
+					case "crop":
 						switch($('#image_mode').val())
 						{
 							case "resize":
-								disableResize();								
+								disableResize();
 								break;
 							case "rotate":
 								disableRotate();
 								break;
 							case "flip":
 								disableFlip();
-								break;								
+								break;
 							default:
 								disableRotate();
-						}	
+						}
 						enableCrop();
-						
+
 						break;
 					case "rotate":
 						switch($('#image_mode').val())
 						{
 							case "resize":
-								disableResize();								
+								disableResize();
 								break;
 							case "crop":
 								disableCrop();
@@ -112,14 +112,14 @@
 								break;
 							default:
 								//do nothing
-						}						
+						}
 						enableRotate();
-						break;	
+						break;
 					case "flip":
 						switch($('#image_mode').val())
 						{
 							case "resize":
-								disableResize();								
+								disableResize();
 								break;
 							case "crop":
 								disableCrop();
@@ -129,19 +129,19 @@
 								break;
 							default:
 								//do nothing
-						}								
+						}
 						enableFlip();
 						break;
 					default:
 						alert('Unexpected Operation!');
-						return false;			
+						return false;
 				}
 				$('#image_mode').val(mode);
 			}
 
 	};
-	
-	
+
+
 	function resetEditor()
 	{
 		if(isImageHistoryExist())
@@ -152,7 +152,7 @@
 			alert(warningResetEmpty);
 		}
 		return false;
-		
+
 	};
 
 	/**
@@ -176,7 +176,7 @@
         $(imageContainer).css('width', imageWidth + 'px');
         $(imageContainer).css('height', imageHeight + 'px');
         $(imageToResize).css('opacity', '.5');
-		
+
         //Init Overlay
         overlay.css('background-image', 'url('+ $(imageToResize).attr('src')+')');
         overlay.css('width', imageWidth + 'px');
@@ -186,7 +186,7 @@
         widthField.val(imageWidth);
         heightField.val(imageHeight);
         topField.val(0);
-        leftField.val(0);		
+        leftField.val(0);
 	    $(overlay).Resizable(
 			{
 				minWidth: 10,
@@ -222,22 +222,22 @@
 					$(topField).val(Math.round(position.top - imageContainerTop));
 					$(leftField).val(Math.round(position.left - imageContainerLeft));
 					addImageHistory();
-					$('#ratio').val($(overlay).ResizableRatio() );	
+					$('#ratio').val($(overlay).ResizableRatio() );
 				}
 			}
 		);
 		enableConstraint();
 		toggleConstraint();
 		disableRotate();
-		
+
 	};
 	/*
-	*	disable crop function 
-	*/	
+	*	disable crop function
+	*/
 	function disableCrop()
 	{
-		$('#resizeMe').ResizableDestroy();		
-		hideHandlers();					
+		$('#resizeMe').ResizableDestroy();
+		hideHandlers();
 	};
 	/**
 	*	disable resize function
@@ -245,22 +245,22 @@
 	function disableResize()
 	{
 		$('#resizeMe').ResizableDestroy();
-		
-		hideHandlers();					
+
+		hideHandlers();
 	};
 	/**
-	*	hide all handlers 
-	*/	
+	*	hide all handlers
+	*/
 	function hideHandlers()
 	{
 		$('#resizeSE').hide();
 		$('#resizeE').hide();
-		$('#resizeNE').hide();	
+		$('#resizeNE').hide();
 		$('#resizeN').hide();
 		$('#resizeNW').hide();
-		$('#resizeW').hide();	
+		$('#resizeW').hide();
 		$('#resizeSW').hide();
-		$('#resizeS').hide();	
+		$('#resizeS').hide();
 	};
 	/**
 	*
@@ -269,10 +269,10 @@
 	function enableResize(constraint)
 	{
 		hideHandlers();
-		var imageToResize = getImageElement();	
+		var imageToResize = getImageElement();
 		var imageContainer = $('#imageContainer');
 		var imageContainerTop = parseInt($(imageContainer).css('top').replace('px', ''));
-		var imageContainerLeft = parseInt($(imageContainer).css('left').replace('px', ''));		
+		var imageContainerLeft = parseInt($(imageContainer).css('left').replace('px', ''));
 		var resizeMe = $('#resizeMe');
 		var width = $('#width');
 		var height = $('#height');
@@ -284,7 +284,7 @@
 		$('#width').val($(imageToResize).attr('width'));
 		$('#height').val($(imageToResize).attr('height'));
 		$('#x').val(0);
-		$('#y').val(0);		
+		$('#y').val(0);
 		$(resizeMe).Resizable(
 			{
 				minWidth: 10,
@@ -305,29 +305,29 @@
 					$(imageToResize).attr('height', Math.round(size.height).toString());
 					$(imageToResize).attr('width', Math.round(size.width).toString());
 					$(width).val(Math.round(size.width));
-					$(height).val(Math.round(size.height));		
+					$(height).val(Math.round(size.height));
 					$(imageContainer).css('width', $(imageToResize).attr('width') + 'px');
-					$(imageContainer).css('height', $(imageToResize).attr('height') + 'px');	
-					$('#ratio').val($(resizeMe).ResizableRatio() );			
-					addImageHistory();				
+					$(imageContainer).css('height', $(imageToResize).attr('height') + 'px');
+					$('#ratio').val($(resizeMe).ResizableRatio() );
+					addImageHistory();
 				}
 
 			}
-		);	
+		);
 		$(resizeMe).ResizeConstraint(constraint);
 		if(typeof(constraint) == 'boolean' && constraint)
-		{		
+		{
 			$('#resizeS').hide();
-			$('#resizeE').hide();			
+			$('#resizeE').hide();
 		}else
-		{			
+		{
 			$('#resizeS').show();
 			$('#resizeE').show();
-		}		
+		}
 		$('#resizeSE').show();
-		$('#ratio').val($(resizeMe).ResizableRatio() );	
-			
-			
+		$('#ratio').val($(resizeMe).ResizableRatio() );
+
+
 	};
 	/**
 	*	initiate the position of handler
@@ -350,7 +350,7 @@
         //Init Container
         $(imageContainer).css('width', imageWidth + 'px');
         $(imageContainer).css('height', imageHeight + 'px');
-		
+
         //Init Overlay
 		$(imageToResize).css('opacity', '100');
         $(overlay).css('width', imageWidth + 'px');
@@ -375,8 +375,8 @@
 	{
 		hideHandlers();
 	toggleDisabledButton('actionRotateLeft', false);
-	toggleDisabledButton('actionRotateRight', false);			
-		
+	toggleDisabledButton('actionRotateRight', false);
+
 	};
 	/**
 	*	disable rotation function
@@ -384,14 +384,14 @@
 	function disableRotate()
 	{
 	toggleDisabledButton('actionRotateLeft', true);
-	toggleDisabledButton('actionRotateRight', true);			
+	toggleDisabledButton('actionRotateRight', true);
 	};
-	
+
 	function enableConstraint()
 	{
 		$('#constraint').removeAttr('disabled');
 	};
-	
+
 	function disableConstraint()
 	{
 		$('#constraint').attr('disabled', 'disabled');
@@ -400,46 +400,46 @@
 	{
 		$('#resizeSE').show();
 		$('#resizeE').show();
-		$('#resizeNE').show();	
+		$('#resizeNE').show();
 		$('#resizeN').show();
 		$('#resizeNW').show();
-		$('#resizeW').show();	
+		$('#resizeW').show();
 		$('#resizeSW').show();
-		$('#resizeS').show();	
+		$('#resizeS').show();
 	}	;
-	
+
 	/**
 	*	turn constraint on or off
 	*/
 	function toggleConstraint()
 	{
-		hideHandlers();	
+		hideHandlers();
 		if(document.formAction.constraint.checked)
 		{
 			$('#resizeMe').ResizeConstraint(true);
 			switch(getModeValue())
 			{
 				case "resize":
-					$('#resizeSE').show();	
+					$('#resizeSE').show();
 					break;
 				case "crop":
 					$('#resizeSE').show();
-					$('#resizeNE').show();	
+					$('#resizeNE').show();
 					$('#resizeNW').show();
 					$('#resizeSW').show();
-					
+
 					break;
 				case "rotate":
 					break;
 			}
-						
+
 		}else
 		{
 			$('#resizeMe').ResizeConstraint(false);
 			switch(getModeValue())
 			{
 				case "resize":
-					$('#resizeSE').show();	
+					$('#resizeSE').show();
 					$('#resizeE').show();
 					$('#resizeS').show();
 					break;
@@ -447,12 +447,12 @@
 					ShowHandlers();
 					break;
 				case "rotate":
-					break;					
-			}			
+					break;
+			}
 		}
-		
+
 	};
-	
+
 
 	/**
 	*	restore to the state the image was
@@ -463,40 +463,40 @@
 			{
 					if(!window.confirm(warningReset))
 					{
-						return false;	
+						return false;
 					}
 			}
-			
+
 			$("#imageContainer").empty();
-			$("#hiddenImage img").clone().appendTo("#imageContainer");		
+			$("#hiddenImage img").clone().appendTo("#imageContainer");
 			return true;
-			
-	
+
+
 	};
 	/*
 	*	left rotate
-	*/	
+	*/
 	function leftRotate()
 	{
-		
+
 		var imageToResize = getImageElement();
-		$(imageToResize).rotate(-90);		
+		$(imageToResize).rotate(-90);
 		swapWidthWithHeight();
 		addImageHistory();
 		var angle = $('#angle');
 
 		var angleDegree = (parseInt($(angle).val()) + 90);
 		angleDegree = ((angleDegree == 360)?angleDegree:angleDegree%360);
-		$(angle).val((angleDegree )); 
+		$(angle).val((angleDegree ));
 		return false;
-		
+
 	};
 	/**
 	*	cancel mode change
 	*/
 	function cancelChangeMode()
 	{
-		$('#formAction input[@value=' + $('#image_mode').val() + ']').attr('checked', 'checked');	
+		$('#formAction input[@value=' + $('#image_mode').val() + ']').attr('checked', 'checked');
 	};
 	/**
 	*	get the image element which is going to be modified
@@ -514,26 +514,26 @@
 		}
 		return imageElement;
 	};
-	/*	
+	/*
 		right rotate
 	*/
 	function rightRotate()
 	{
-		
+
 		var imageToResize = getImageElement();
-		$(imageToResize).rotate(90);	
+		$(imageToResize).rotate(90);
 		swapWidthWithHeight();
 		addImageHistory();
 		var angle = $('#angle');
 
-		
+
 		var angleDegree = (parseInt($(angle).val()) - 90 );
 		if(angleDegree < 0)
 		{
 			angleDegree += 360;
 		}
-		angleDegree = ((angleDegree == 360)?angleDegree:angleDegree%360);		
-		$(angle).val((angleDegree )); 
+		angleDegree = ((angleDegree == 360)?angleDegree:angleDegree%360);
+		$(angle).val((angleDegree ));
 		return false;
 	}	;
 	/**
@@ -544,22 +544,22 @@
 		var imageContainer = $('#imageContainer');
 		var resizeMe = $('#resizeMe');
 		var width = $('#width');
-		var height = $('#height');			
+		var height = $('#height');
 		var imageToResize = getImageElement();
 		var newWidth = 0;
 		var newHeight = 0;
 		newWidth = $(imageToResize).attr('width');
-		newHeight = $(imageToResize).attr('height');			
+		newHeight = $(imageToResize).attr('height');
 		$(imageContainer).css('width', newWidth + 'px');
-		$(imageContainer).css('height', newHeight + 'px');		
+		$(imageContainer).css('height', newHeight + 'px');
 		$(width).val(newWidth);
-		$(height).val(newHeight);	
+		$(height).val(newHeight);
 		$(resizeMe).css('width', newWidth + 'px');
 		$(resizeMe).css('height', newHeight + 'px');
-		
 
 
-				
+
+
 	};
 
 
@@ -573,22 +573,22 @@
 		imageHistory = true;
 		initDisabledButtons(false);
 	};
-	
-	
+
+
 	/**
 	*	cleare all records
 	*	this features will be implemented next release
-	*/	
+	*/
 	function clearImageHistory()
 	{
 		imageHistory = false;
 		initDisabledButtons(true);
-		
-		
+
+
 	};
-	
+
 	function initDisabledButtons(forceDisable)
-	{		
+	{
 		if(numSessionHistory)
 		{
 			toggleDisabledButton('actionUndo', false);
@@ -598,19 +598,19 @@
 		}
 		if(imageHistory)
 		{
-			toggleDisabledButton('actionSave', false);	
+			toggleDisabledButton('actionSave', false);
 			toggleDisabledButton('actionReset', false);
 		}else
 		{
-			toggleDisabledButton('actionSave', true);	
+			toggleDisabledButton('actionSave', true);
 			toggleDisabledButton('actionReset', true);
 		}
 	};
-	
+
 	/**
 	*	return record
 	*	this features will be implemented next release
-	*/		
+	*/
 	function getImageHistory()
 	{
 		return imageHistory;
@@ -618,20 +618,20 @@
 	/**
 	*	check if there exists any changes
 	*	this features will be implemented next release
-	*/		
+	*/
 	function isImageHistoryExist()
 	{
-		return imageHistory;		
+		return imageHistory;
 	};
-	
+
 function flipHorizontal()
 {
 	if(window.confirm(warningFlipHorizotal))
 	{
 		addImageHistory();
-		$('#flip_angle').val('horizontal');	
+		$('#flip_angle').val('horizontal');
 		$('#mode').val('flip');
-		saveImage();		
+		saveImage();
 	}
 
 	return false;
@@ -642,9 +642,9 @@ function flipVertical()
 	if(window.confirm(warningFlipVertical))
 	{
 	addImageHistory();
-	$('#flip_angle').val('vertical');	
+	$('#flip_angle').val('vertical');
 	$('#mode').val('flip');
-	saveImage();		
+	saveImage();
 	}
 
 	return false;
@@ -665,46 +665,46 @@ function toggleDisabledButton(buttonId, forceDisable)
 	var currentClass = $(disabledButton).attr('class') ;
 	if(typeof(forceDisable) == 'boolean')
 	{
-		
+
 		if(forceDisable && currentClass == 'button')
 		{
 			newClass = 'disabledButton';
-			$(disabledButton).attr('disabled', 'disabled');				
+			$(disabledButton).attr('disabled', 'disabled');
 		}else if(!forceDisable && currentClass == 'disabledButton')
 		{
 			newClass = 'button';
-			$(disabledButton).removeAttr('disabled');					
+			$(disabledButton).removeAttr('disabled');
 		}else
 		{
 			changeRequired = false;
 		}
-		
-		
+
+
 	}
 	else if(currentClass == 'button')
 	{
 		newClass = 'disabledButton';
-		$(disabledButton).attr('disabled', 'disabled');	
+		$(disabledButton).attr('disabled', 'disabled');
 	}else
 	{
 		newClass = 'button';
-		$(disabledButton).removeAttr('disabled');			
+		$(disabledButton).removeAttr('disabled');
 	}
 	if(changeRequired)
 	{
 	$(disabledButton).removeClass('button disabledButton');
-	$(disabledButton).addClass(newClass);			
+	$(disabledButton).addClass(newClass);
 	}
 
-	
+
 };
 
 function disableFlip()
 {
 	toggleDisabledButton('actionFlipH', true);
-	toggleDisabledButton('actionFlipV', true);	
+	toggleDisabledButton('actionFlipV', true);
 };
-	
+
 	function undoImage()
 	{
 		if(numSessionHistory < 1)
@@ -717,12 +717,12 @@ function disableFlip()
 			{
 				processImage('formAction');
 			}
-			
+
 		}
 		return false;
-		
-	};	
-	
+
+	};
+
 function processImage(formId)
 {
 			$("#loading")
@@ -731,28 +731,28 @@ function processImage(formId)
 			   })
 			   .ajaxComplete(function(){
 				   $(this).hide();
-			   });	
-			var options = 
-			{ 
+			   });
+			var options =
+			{
 				dataType: 'json',
-				error: function (data, status, e) 
+				error: function (data, status, e)
 				{
 					alert(e);
-				},				
-				success: function(data) 
-				{ 
+				},
+				success: function(data)
+				{
 					if(typeof(data.error) == 'undefined')
 					{
 						alert('Unexpected information ');
 					}
 					else if(data.error != '')
 					{
-						
+
 						alert(data.error);
 					}else
 					{
 						$("#loading").show();
-						
+
 								currentFolder = data.folder_path;
 								if(data.save_as == '1')
 								{
@@ -765,28 +765,28 @@ function processImage(formId)
 								$('#path').val(data.path);
 				        var preImage = new Image();
 								preImage.width = data.width;
-								preImage.height = data.height;													
+								preImage.height = data.height;
 				        preImage.onload = function()
-				        {				
-				          
-									$('#hiddenImage').empty();														
+				        {
+
+									$('#hiddenImage').empty();
 									$(preImage).appendTo('#hiddenImage');
-									
-									changeMode(false, true);		
-									$('#loading').hide(); 		
+
+									changeMode(false, true);
+									$('#loading').hide();
 									$('#windowSaveAs').jqm({modal: true}).jqmHide();
-				             
+
 				        };
 						var now = new Date();
 				        preImage.src = data.path + "?" + now.getTime();
 
-								
-										
-						
+
+
+
 					}
-				} 
-			}; 
-			$('#' + formId).ajaxSubmit(options); 		
+				}
+			};
+			$('#' + formId).ajaxSubmit(options);
 			return false;
 };
 
@@ -795,7 +795,7 @@ function saveAsImagePre()
 	$('#windowSaveAs').jqm({modal: true}).jqmShow();
 	var saveTo = $('#save_to');
 	$(saveTo).removeOption(/./);
-	$(saveTo).ajaxAddOption(urlGetFolderList, {}, false, 
+	$(saveTo).ajaxAddOption(urlGetFolderList, {}, false,
 														function()
 														{
 																$(saveTo).selectOptions(currentFolder);
@@ -807,32 +807,32 @@ function saveAsImage()
 {
 
 	var pattern=/^[A-Za-z0-9_ \-]+$/i;
-	
+
 	var newName = $('#new_name');
-	
+
 	var saveAs = $('#save_to').get(0);
 	//alert($(saveAs).val());
 	if(!pattern.test($(newName).val()))
 	{
-		alert(warningInvalidNewName);	
+		alert(warningInvalidNewName);
 	}else if(saveAs.selectedIndex < 0)
 	{
 		alert(warningNoFolderSelected);
 	}else
-	{	
-	
+	{
+
 		$('#hidden_new_name').val($(newName).val());
 		$('#hidden_save_to').val(saveAs.options[saveAs.selectedIndex].value);
 		if(saveImage(true))
 		{
-			
-			
+
+
 		}
-		
-		
+
+
 	}
-	
-	
+
+
 	return false;
 };
 
@@ -840,7 +840,7 @@ function saveImage(saveAs)
 {
 	if(typeof(saveAs) == 'boolean' && saveAs)
 	{
-		
+
 	}else
 	{//remove new name if just normal save
 		$('#hidden_new_name').val('');
@@ -851,14 +851,14 @@ function saveImage(saveAs)
 		alert(noChangeMadeBeforeSave);
 	}else
 	{
-		
+
 		if(processImage('formImageInfo'))
-		{			
+		{
 			return true;
 		}
 	}
 	return false;
-	
+
 };
 
 

@@ -7,4 +7,4 @@ FCKCommands.RegisterCommand( 'flvPlayer',
 // Create and register the toolbar button.
 var oFlvPlayerItem		= new FCKToolbarButton( 'flvPlayer', FCKLang['DlgFLVPlayerTitle']) ;
 oFlvPlayerItem.IconPath	= FCKPlugins.Items['flvPlayer'].Path + 'flvPlayer.gif' ;
-FCKToolbarItems.RegisterItem( 'flvPlayer', oFlvPlayerItem ) ;			
+FCKToolbarItems.RegisterItem( 'flvPlayer', oFlvPlayerItem ) ;

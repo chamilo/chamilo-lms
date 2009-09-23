@@ -226,7 +226,7 @@ $.fn.ajaxSubmit = function(options) {
     var files = $('input:file', this).fieldValue();
     var found = false;
     for (var j=0; j < files.length; j++)
-        if (files[j]) 
+        if (files[j])
             found = true;
 
     if (options.iframe || found) // options.iframe allows user to force iframe mode
@@ -243,7 +243,7 @@ $.fn.ajaxSubmit = function(options) {
     function fileUpload() {
         var form = $form[0];
         var opts = $.extend({}, $.ajaxSettings, options);
-        
+
         var id = 'jqFormIO' + $.fn.ajaxSubmit.counter++;
         var $io = $('<iframe id="' + id + '" name="' + id + '" />');
         var io = $io[0];
@@ -260,21 +260,21 @@ $.fn.ajaxSubmit = function(options) {
             getResponseHeader: function() {},
             setRequestHeader: function() {}
         };
-        
+
         var g = opts.global;
         // trigger ajax global events so that activity/block indicators work like normal
         if (g && ! $.active++) $.event.trigger("ajaxStart");
         if (g) $.event.trigger("ajaxSend", [xhr, opts]);
-        
+
         var cbInvoked = 0;
         var timedOut = 0;
-        
+
         // take a breath so that pending repaints get some cpu time before the upload starts
         setTimeout(function() {
             $io.appendTo('body');
             // jQuery's event binding doesn't work for iframe events in IE
             io.attachEvent ? io.attachEvent('onload', cb) : io.addEventListener('load', cb, false);
-            
+
             // make sure form attrs are set
             var encAttr = form.encoding ? 'encoding' : 'enctype';
             var t = $form.attr('target');
@@ -292,10 +292,10 @@ $.fn.ajaxSubmit = function(options) {
             form.submit();
             $form.attr('target', t); // reset target
         }, 10);
-        
+
         function cb() {
             if (cbInvoked++) return;
-            
+
             io.detachEvent ? io.detachEvent('onload', cb) : io.removeEventListener('load', cb, false);
 
             var ok = true;
@@ -306,7 +306,7 @@ $.fn.ajaxSubmit = function(options) {
                 doc = io.contentWindow ? io.contentWindow.document : io.contentDocument ? io.contentDocument : io.document;
                 xhr.responseText = doc.body ? doc.body.innerHTML : null;
                 xhr.responseXML = doc.XMLDocument ? doc.XMLDocument : doc;
-                
+
                 if (opts.dataType == 'json' || opts.dataType == 'script') {
                     var ta = doc.getElementsByTagName('textarea')[0];
                     data = ta ? ta.value : xhr.responseText;
@@ -339,12 +339,12 @@ $.fn.ajaxSubmit = function(options) {
             if (opts.complete) opts.complete(xhr, ok ? 'success' : 'error');
 
             // clean up
-            setTimeout(function() { 
-                $io.remove(); 
+            setTimeout(function() {
+                $io.remove();
                 xhr.responseXML = null;
             }, 100);
         };
-        
+
         function toXml(s, doc) {
             if (window.ActiveXObject) {
                 doc = new ActiveXObject('Microsoft.XMLDOM');

@@ -57,17 +57,17 @@ FCKXHtml.GetXHTML = function( node, includeNode, format )
 		this._AppendChildNodes( this.MainNode, node, false ) ;
 
 	/**
-	 * FCKXHtml._AppendNode() marks DOM element objects it has 
-	 * processed by adding a property called _fckxhtmljob, 
-	 * setting it equal to the value of FCKXHtml.CurrentJobNum.  
-	 * On Internet Explorer, if an element object has such a 
-	 * property,  it will show up in the object's attributes 
-	 * NamedNodeMap, and the corresponding Attr object in 
-	 * that collection  will have is specified property set 
-	 * to true.  This trips up code elsewhere that checks to 
-	 * see if an element is free of attributes before proceeding 
+	 * FCKXHtml._AppendNode() marks DOM element objects it has
+	 * processed by adding a property called _fckxhtmljob,
+	 * setting it equal to the value of FCKXHtml.CurrentJobNum.
+	 * On Internet Explorer, if an element object has such a
+	 * property,  it will show up in the object's attributes
+	 * NamedNodeMap, and the corresponding Attr object in
+	 * that collection  will have is specified property set
+	 * to true.  This trips up code elsewhere that checks to
+	 * see if an element is free of attributes before proceeding
 	 * with an edit operation (c.f. FCK.Style.RemoveFromRange())
-	 *	
+	 *
 	 * refs #2156 and #2834
 	 */
 	if ( FCKBrowserInfo.IsIE )

@@ -1,10 +1,10 @@
 /*
  * For FCKeditor 2.3
- * 
- * 
+ *
+ *
  * File Name: ja.js
  * 	Japanese language file for the youtube plugin.
- * 
+ *
  * File Authors:
  * 		Uprush (uprushworld@yahoo.co.jp) 2007/10/30
  */

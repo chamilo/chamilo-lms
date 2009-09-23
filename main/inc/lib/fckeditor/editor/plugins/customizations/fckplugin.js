@@ -23,7 +23,7 @@
 /*
  * This plugin uses also fragments of the original source code of
  * FCKeditor version 2.6.4.
- * 
+ *
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
  * Copyright (C) 2003-2009 Frederico Caldeira Knabben
  *
@@ -310,7 +310,7 @@ var FCKDialog = ( function()
 			//if ( !topDialog )
 			//	this.DisplayMainCover() ;
 
-			var dialogInfo = 
+			var dialogInfo =
 			{
 				Title: dialogTitle,
 				Page: dialogPage,
@@ -1195,9 +1195,9 @@ FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
 // Fake images for audio files when the document has been opened.
 FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
 	{
-		var embeds = document.getElementsByTagName( 'embed' ) ; 
+		var embeds = document.getElementsByTagName( 'embed' ) ;
 		var embed ;
-		var i = embeds.length - 1 ; 
+		var i = embeds.length - 1 ;
 		while ( i >= 0 && ( embed = embeds[i--] ) )
 		{
 			if ( FCK.IsAudio( embed ) )
@@ -1205,7 +1205,7 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
 				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__MP3', embed.cloneNode(true) ) ;
 				oImg.setAttribute( '_fckmp3', 'true', 0 ) ;
 				embed.parentNode.insertBefore( oImg, embed ) ;
-				embed.parentNode.removeChild( embed ) ;			
+				embed.parentNode.removeChild( embed ) ;
 			}
 		}
 	} ;
@@ -1225,9 +1225,9 @@ FCKEmbedAndObjectProcessor.AddCustomHandler( function ( el, fakeImg )
 // Fake images for video when the document has been opened.
 FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
 	{
-		var embeds = document.getElementsByTagName( 'embed' ) ; 
+		var embeds = document.getElementsByTagName( 'embed' ) ;
 		var embed;
-		var i = embeds.length - 1 ; 
+		var i = embeds.length - 1 ;
 		while ( i >= 0 && ( embed = embeds[i--] ) )
 		{
 			if ( FCK.IsVideo( embed ) )
@@ -1235,14 +1235,14 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
 				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__Video', embed.cloneNode(true) ) ;
 				oImg.setAttribute( '_fckvideo', 'true', 0 ) ;
 				embed.parentNode.insertBefore( oImg, embed ) ;
-				embed.parentNode.removeChild( embed ) ;			
+				embed.parentNode.removeChild( embed ) ;
 			}
 		}
 
 		// For flv player, SWFObject attaching tecnique.
-		var divs = document.getElementsByTagName( 'div' ) ; 
+		var divs = document.getElementsByTagName( 'div' ) ;
 		var div;
-		var i = divs.length - 1 ; 
+		var i = divs.length - 1 ;
 		while ( i >= 0 && ( div = divs[i--] ) )
 		{
 			if ( FCK.IsVideo( div ) )
@@ -1250,7 +1250,7 @@ FCKDocumentProcessor.AppendNew().ProcessDocument = function ( document )
 				var oImg = FCKDocumentProcessor_CreateFakeImage( 'FCK__Video', div.cloneNode(true) ) ;
 				oImg.setAttribute( '_fckvideo', 'true', 0 ) ;
 				div.parentNode.insertBefore( oImg, div ) ;
-				div.parentNode.removeChild( div ) ;			
+				div.parentNode.removeChild( div ) ;
 			}
 		}
 	} ;
@@ -1416,7 +1416,7 @@ FCK.RegisterDoubleClickHandler(
 			FCKCommands.GetCommand( 'Flash' ).Execute() ;
 		}
 	}, 'IMG'
-) ;	
+) ;
 
 // MP3 command.
 FCK.RegisterDoubleClickHandler(
@@ -1430,7 +1430,7 @@ FCK.RegisterDoubleClickHandler(
 			}
 		}
 	}, 'IMG'
-) ;	
+) ;
 
 // Video-related commands.
 FCK.RegisterDoubleClickHandler(
@@ -1463,7 +1463,7 @@ FCK.RegisterDoubleClickHandler(
 			}
 		}
 	}, 'IMG'
-) ;	
+) ;
 
 
 /*
@@ -1754,7 +1754,7 @@ FCK.GetUrl = function ( url, type )
 					{
 						url = url.substr( FCKConfig.CreateDocumentDir.length ) ;
 					}
-					
+
 					break ;
 
 				case ABSOLUTE_URL:
@@ -1785,7 +1785,7 @@ FCK.GetUrl = function ( url, type )
 					{
 						url = FCKConfig.CreateDocumentDir + url ;
 					}
-					
+
 					break ;
 
 				case ABSOLUTE_URL:
@@ -1813,7 +1813,7 @@ FCK.GetUrl = function ( url, type )
 
 					url = FCK.GetUrl( url, REPOSITORY_RELATIVE_URL ) ;
 					url = FCK.ConvertUrl( url, ABSOLUTE_URL, FCKConfig.CreateDocumentWebDir) ;
-					
+
 					break ;
 
 				case ABSOLUTE_URL:
@@ -1840,7 +1840,7 @@ FCK.GetUrl = function ( url, type )
 
 					url = FCK.GetUrl( url, REPOSITORY_RELATIVE_URL ) ;
 					url = FCK.ConvertUrl( url, SEMI_ABSOLUTE_URL, FCKConfig.CreateDocumentWebDir) ;
-					
+
 					break ;
 
 				case ABSOLUTE_URL:

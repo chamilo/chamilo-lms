@@ -229,14 +229,14 @@ FCKConfig.CoreStyles =
 	'h6'			: { Element : 'h6' },
 
 	// Other formatting features.
-	
-	'Glossary'		: 
+
+	'Glossary'		:
 	{
-	 	Element 	: 'span', 
+	 	Element 	: 'span',
 	 	Styles		: { 'color' : '#00974A','cursor' : 'pointer','font-weight' : 'bold' },
-		Attributes : { 'class' : 'glossary' }	 
+		Attributes : { 'class' : 'glossary' }
 	},
-	
+
 	'FontFace' :
 	{
 		Element		: 'span',

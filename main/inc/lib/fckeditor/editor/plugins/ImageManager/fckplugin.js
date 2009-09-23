@@ -61,7 +61,7 @@
 	}
 
 	FCKCommands.RegisterCommand('ImageManager', new FCKImageManager('ImageManager')) ;
-	 
+
 	// Create the toolbar button.
 	var oImageManagerItem = new FCKToolbarButton( 'ImageManager', "ImageManager", null, null, false, true ) ;
 
@@ -98,8 +98,8 @@
 		} if(FCKSelection.GetType() == 'Text') {
 			var sElm = FCKSelection.GetParentElement();
 		}
-		
-		if (sElm != null && sElm.nodeName.toLowerCase() == 'img') 
+
+		if (sElm != null && sElm.nodeName.toLowerCase() == 'img')
 			var im = sElm;  // is current cell a image ?
 
 		if (im)

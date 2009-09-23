@@ -10,7 +10,7 @@ var FCKTools = oEditor.FCKTools ;
 // Set the language direction.
 window.document.dir = FCKLang.Dir ;
 
-// We have to avoid javascript errors if some language variables have not been defined. 
+// We have to avoid javascript errors if some language variables have not been defined.
 FCKLang['UploadSelectFileFirst'] = FCKLang['UploadSelectFileFirst'] ? FCKLang['UploadSelectFileFirst'] : 'Please, select a file before pressing the upload button.' ;
 FCKLang['FileSuccessfullyUploaded'] = FCKLang['FileSuccessfullyUploaded'] ? FCKLang['FileSuccessfullyUploaded'] : 'Your file has been successfully uploaded.' ;
 FCKLang['FileRenamed'] = FCKLang['FileRenamed'] ? FCKLang['FileRenamed'] : 'A file with the same name is already available. The uploaded file has been renamed to ' ;
@@ -240,7 +240,7 @@ function Ok()
 	{
 		if ( GetE( 'txtPlaylist' ).value.length == 0 )
 		{
-			GetE( 'txtPlaylist' ).focus() ;	
+			GetE( 'txtPlaylist' ).focus() ;
 
 			alert( oEditor.FCKLang.DlgFLVPlayerAlertPlaylist ) ;
 			return false ;
@@ -249,7 +249,7 @@ function Ok()
 
 	if ( GetE( 'txtWidth' ).value.length == 0 )
 	{
-		GetE( 'txtWidth' ).focus() ;	
+		GetE( 'txtWidth' ).focus() ;
 
 		alert( oEditor.FCKLang.DlgFLVPlayerAlertWidth ) ;
 		return false ;
@@ -257,7 +257,7 @@ function Ok()
 
 	if ( GetE( 'txtHeight' ).value.length == 0 )
 	{
-		GetE( 'txtHeight' ).focus() ;	
+		GetE( 'txtHeight' ).focus() ;
 
 		alert( oEditor.FCKLang.DlgFLVPlayerAlertHeight ) ;
 		return false ;
@@ -485,7 +485,7 @@ Media.prototype.getInnerHTML = function ( objectId )
 	for ( var i in this )
 	{
 		if ( !i || !this[i] ) continue ;
-	        if ( !i.match( /(set|get)/ ) ) 
+	        if ( !i.match( /(set|get)/ ) )
 	        {
 	        	s += i + "=" + this[i] + " " ;
         	}
@@ -551,7 +551,7 @@ Media.prototype.getInnerHTML = function ( objectId )
 			else if ( this.dispPlaylist == "below" )
 			{
 				dispThumbs = true ;
-				
+
 				if ( this.playlistDim.length > 0 )
 				{
 					dispHeight = thisWidth - this.playlistDim ;
@@ -579,7 +579,7 @@ Media.prototype.getInnerHTML = function ( objectId )
 			{
 				dispThumbs = false ;
 			}
-				
+
 			s += '	s1.addVariable("thumbsinplaylist","' + dispThumbs + '");\n' ;
 		}
 
@@ -863,7 +863,7 @@ function CheckUpload()
 		alert( FCKLang['UploadSelectFileFirst'] ) ;
 		return false ;
 	}
-	
+
 	if ( ( FCKConfig.MediaUploadAllowedExtensions.length > 0 && !oUploadAllowedExtRegex.test( sFile ) ) ||
 		( FCKConfig.MediaUploadDeniedExtensions.length > 0 && oUploadDeniedExtRegex.test( sFile ) ) )
 	{

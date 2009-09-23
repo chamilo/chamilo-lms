@@ -13,7 +13,7 @@
 // Check that the Google key is defined
 if ( typeof( FCKConfig.GoogleMaps_Key ) != 'string')
 {
-	alert( 'Error.\r\nThe configuration doesn\'t contain the Google Maps key.\r\n' + 
+	alert( 'Error.\r\nThe configuration doesn\'t contain the Google Maps key.\r\n' +
 		'Please read the Configuration section.') ;
 
 	window.open(FCKPlugins.Items['googlemaps'].Path + 'docs/' + FCKLang.GMapsHelpFile + '#configure');
@@ -28,7 +28,7 @@ if ( !FCKConfig.GoogleMaps_Key || FCKConfig.GoogleMaps_Key.length === 0)
 
 /**
 	Helper function
-	It does remove a button from an toolbarset. 
+	It does remove a button from an toolbarset.
 	It's better than leaving it disabled as it will avoid questions about why some button is always disabled.
 */
 function RemoveButtonFromToolbarSet(ToolbarSet, CommandName)
@@ -42,7 +42,7 @@ function RemoveButtonFromToolbarSet(ToolbarSet, CommandName)
 
 		// If the configuration for the toolbar is missing some element or has any extra comma
 		// this item won't be valid, so skip it and keep on processing.
-		if ( !oToolbarItems ) 
+		if ( !oToolbarItems )
 			continue ;
 
 		if ( typeof( oToolbarItems ) == 'object' )
@@ -78,7 +78,7 @@ FCKToolbarItems.RegisterItem( 'googlemaps', oGoogleMapsButton ) ;
 	---------------------------
 	It's run after a document has been loaded, it detects all the protected source elements
 
-	In order to use it, you add your comment parser with 
+	In order to use it, you add your comment parser with
 	FCKCommentsProcessor.AddParser( function )
 */
 if (typeof FCKCommentsProcessor === 'undefined')
@@ -120,24 +120,24 @@ if (typeof FCKCommentsProcessor === 'undefined')
 		for(var i=aComments.length-1; i >=0 ; i--)
 		{
 			var comment = aComments[i] ;
-			if (comment.nodeType == 8 ) // oNode.COMMENT_NODE) 
+			if (comment.nodeType == 8 ) // oNode.COMMENT_NODE)
 				this.parseComment( comment ) ;
 		}
 	}
 
 	// Fallback function, iterate all the nodes and its children searching for comments.
-	FCKCommentsProcessor.findComments = function( oNode ) 
+	FCKCommentsProcessor.findComments = function( oNode )
 	{
-		if (oNode.nodeType == 8 ) // oNode.COMMENT_NODE) 
+		if (oNode.nodeType == 8 ) // oNode.COMMENT_NODE)
 		{
 			this.parseComment( oNode ) ;
 		}
-		else 
+		else
 		{
-			if (oNode.hasChildNodes()) 
+			if (oNode.hasChildNodes())
 			{
 				var children = oNode.childNodes ;
-				for (var i = children.length-1; i >=0 ; i--) 
+				for (var i = children.length-1; i >=0 ; i--)
 					this.findComments( children[ i ] );
 			}
 		}
@@ -154,7 +154,7 @@ if (typeof FCKCommentsProcessor === 'undefined')
 
 		var regex = new RegExp( "\\{" + prefix + "(\\d+)\\}", "g" ) ;
 
-		if ( regex.test( value ) ) 
+		if ( regex.test( value ) )
 		{
 			var index = RegExp.$1 ;
 			var content = FCKTempBin.Elements[ index ] ;
@@ -268,7 +268,7 @@ FCK.GoogleMapsHandler = {
 	// Public key that will be used for the generated maps,
 	// while we are editing we will use only FCKConfig.GoogleMaps_Key
 	publicKey : function() {
-		// if FCKConfig.GoogleMaps_PublicKey is set to something, then use it 
+		// if FCKConfig.GoogleMaps_PublicKey is set to something, then use it
 		if ( FCKConfig.GoogleMaps_PublicKey )
 			return FCKConfig.GoogleMaps_PublicKey ;
 
@@ -368,12 +368,12 @@ FCK.GoogleMapsHandler = {
 	},
 
 	// Store any previous processor so nothing breaks
-	previousProcessor: FCKXHtml.TagProcessors[ 'img' ] 
+	previousProcessor: FCKXHtml.TagProcessors[ 'img' ]
 }
 
 
 // Our object that will handle parsing of the script and creating the new one.
-var FCKGoogleMap = function() 
+var FCKGoogleMap = function()
 {
 	var now = new Date() ;
 	this.number = '' + now.getFullYear() + now.getMonth() + now.getDate() + now.getHours() + now.getMinutes() + now.getSeconds() ;
@@ -458,8 +458,8 @@ FCKGoogleMap.prototype.generateStaticMap = function()
 	var h = Math.min(this.height, 640);
 	var staticMapTypes = ['roadmap', 'satellite', 'hybrid', 'terrain'] ;
 
-	return 'http://maps.google.com/staticmap?center=' + this.centerLat + ',' + this.centerLon 
-		+ '&zoom=' + this.zoom + '&size=' + w + 'x' + h 
+	return 'http://maps.google.com/staticmap?center=' + this.centerLat + ',' + this.centerLon
+		+ '&zoom=' + this.zoom + '&size=' + w + 'x' + h
 		+ '&maptype=' + staticMapTypes[ this.mapType ]
 		+ this.generateStaticMarkers()
 		+ '&key=' + FCKConfig.GoogleMaps_Key
@@ -474,7 +474,7 @@ FCKGoogleMap.prototype.generateStaticMarkers = function()
 	for (var i=0; i<this.markerPoints.length ; i++)
 	{
 		var point = this.markerPoints[i] ;
-		aPoints.push(point.lat + ',' + point.lon);	
+		aPoints.push(point.lat + ',' + point.lon);
 	}
 	return ('&markers=' + aPoints.join('|') );
 }
@@ -506,7 +506,7 @@ FCKGoogleMap.prototype.updateDimensions = function( oFakeNode )
 		{
 			iHeight = aMatchH[1] ;
 			oFakeNode.style.height = '' ;
-			oFakeNode.height = iHeight ;	
+			oFakeNode.height = iHeight ;
 		}
 	}
 
@@ -660,7 +660,7 @@ FCKGoogleMap.prototype.BuildScript = function()
 
 	aScript.push('function CreateGMap' + this.number + '() {');
 	aScript.push('	if(!GBrowserIsCompatible()) return;');
-	
+
 	aScript.push('	var allMapTypes = [G_NORMAL_MAP, G_SATELLITE_MAP, G_HYBRID_MAP, G_PHYSICAL_MAP] ;');
 	aScript.push('	var map = new GMap2(document.getElementById("gmap' + this.number + '"), {mapTypes:allMapTypes});');
 	aScript.push('	map.setCenter(new GLatLng(' + this.centerLat + ',' + this.centerLon + '), ' + this.zoom + ');');
@@ -675,7 +675,7 @@ FCKGoogleMap.prototype.BuildScript = function()
 	for (var i=0; i<this.markerPoints.length ; i++)
 	{
 		var point = this.markerPoints[i] ;
-		aPoints.push('{lat:' + point.lat + ', lon:' + point.lon + ', text:\'' + this.encodeText(point.text) + '\'}');	
+		aPoints.push('{lat:' + point.lat + ', lon:' + point.lon + ', text:\'' + this.encodeText(point.text) + '\'}');
 	}
 	aScript.push('	AddMarkers( map, [' + aPoints.join(',\r\n') + '] ) ;') ;
 
@@ -728,7 +728,7 @@ FCKXHtml.TagProcessors.img = function( node, htmlNode, xmlNode )
 		return xmlNode.ownerDocument.createComment( node.nodeValue ) ;
 	}
 
-	if (typeof FCK.GoogleMapsHandler.previousProcessor == 'function') 
+	if (typeof FCK.GoogleMapsHandler.previousProcessor == 'function')
 		node = FCK.GoogleMapsHandler.previousProcessor( node, htmlNode, xmlNode ) ;
 	else
 		node = FCKXHtml._AppendChildNodes( node, htmlNode, false ) ;
@@ -744,7 +744,7 @@ function Inject( aOrgFunc, aBeforeExec, aAtferExec ) {
   return function() {
     if (typeof(aBeforeExec) == 'function') arguments = aBeforeExec.apply(this, arguments) || arguments;
     //convert arguments object to array
-    var Result, args = [].slice.call(arguments); 
+    var Result, args = [].slice.call(arguments);
     args.push(aOrgFunc.apply(this, args));
     if (typeof(aAtferExec) == 'function') Result = aAtferExec.apply(this, args);
     return (typeof(Result) != 'undefined')?Result:args.pop();

@@ -488,24 +488,24 @@ var FCKDomTools =
 
 		for ( var i = 0 ; i < attributes.length ; i++ )
 		{
-			if ( FCKBrowserInfo.IsIE ) 
+			if ( FCKBrowserInfo.IsIE )
 			{
 				var attributeNodeName = attributes[i].nodeName ;
 
-				if ( attributeNodeName.StartsWith( '_fck' ) ) 
+				if ( attributeNodeName.StartsWith( '_fck' ) )
 				{
 					/**
 					 * There are places in the FCKeditor code where HTML element objects
-					 * get values stored as properties (e.g. _fckxhtmljob).  In Internet 
+					 * get values stored as properties (e.g. _fckxhtmljob).  In Internet
 					 * Explorer, these are interpreted as attempts to set attributes on
-					 * the element.  
+					 * the element.
 					 *
 					 * http://msdn.microsoft.com/en-us/library/ms533026(VS.85).aspx#Accessing_Element_Pr
 					 *
-					 * Counting these as HTML attributes cripples 
+					 * Counting these as HTML attributes cripples
 					 * FCK.Style.RemoveFromRange() once FCK.GetData() has been called.
 					 *
-					 * The above conditional prevents these internal properties being 
+					 * The above conditional prevents these internal properties being
 					 * counted as attributes.
 					 *
 					 * refs #2156 and #2834
@@ -514,7 +514,7 @@ var FCKDomTools =
 					continue ;
 				}
 
-				if ( attributeNodeName == 'class' ) 
+				if ( attributeNodeName == 'class' )
 				{
 					// IE has a strange bug. If calling removeAttribute('className'),
 					// the attributes collection will still contain the "class"

@@ -9,7 +9,7 @@ var mp3_url="";
 // Set the language direction.
 window.document.dir = oEditor.FCKLang.Dir ;
 
-// We have to avoid javascript errors if some language variables have not been defined. 
+// We have to avoid javascript errors if some language variables have not been defined.
 FCKLang['UploadSelectFileFirst'] = FCKLang['UploadSelectFileFirst'] ? FCKLang['UploadSelectFileFirst'] : 'Please, select a file before pressing the upload button.' ;
 FCKLang['FileSuccessfullyUploaded'] = FCKLang['FileSuccessfullyUploaded'] ? FCKLang['FileSuccessfullyUploaded'] : 'Your file has been successfully uploaded.' ;
 FCKLang['FileRenamed'] = FCKLang['FileRenamed'] ? FCKLang['FileRenamed'] : 'A file with the same name is already available. The uploaded file has been renamed to ' ;
@@ -25,7 +25,7 @@ window.parent.AddTab( 'Upload', FCKLang.DlgMP3Upload ) ;
 function OnDialogTabChange( tabCode )
 {
 	ShowE('divInfo'		, ( tabCode == 'Info' ) ) ;
-	ShowE('divUpload'	, ( tabCode == 'Upload' ) ) ;	
+	ShowE('divUpload'	, ( tabCode == 'Upload' ) ) ;
 }
 
 var sAgent = navigator.userAgent.toLowerCase() ;
@@ -92,7 +92,7 @@ function getSelectedMovie()
 	if (is_ie) {
 		oSel = FCK.Selection.GetSelectedElement( 'OBJECT' );
 	}
-	
+
 	// gecko
 	else if (is_gecko) {
 		var o = FCK.EditorWindow.getSelection() ;
@@ -126,53 +126,53 @@ function Ok()
 	if ( GetE('mpUrl').value.length == 0 )
 	{
 		window.parent.SetSelectedTab( 'Info' ) ;
-		GetE('mpUrl').focus() ;	
+		GetE('mpUrl').focus() ;
 		alert( 'Please insert the URL.' ) ;
 		return false ;
 	}
 
 	var oFakeImage  = null ;
-		
+
 	oEmbed = FCK.EditorDocument.createElement('embed');
 	UpdateEmbed(oEmbed);
-	
+
 	//oObject = FCK.EditorDocument.createElement('object');
-	//oObject.appendChild(oEmbed);	
-	
+	//oObject.appendChild(oEmbed);
+
 	/*SetAttribute(oObject, 'classid', 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000');
 	SetAttribute(oObject, 'codebase', 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#6,0,0,0');
 	SetAttribute(oObject, 'width', '300');
 	SetAttribute(oObject, 'height', '20');
-	
+
 	oParamBgcolor = FCK.EditorDocument.createElement('param');
 	SetAttribute(oParamBgcolor, 'value', '#FFFFFF');
 	SetAttribute(oParamBgcolor, 'name', 'bgcolor');
 	oObject.appendChild(oParamBgcolor);
-	
+
 	oParamMovie = FCK.EditorDocument.createElement('param');
 	SetAttribute(oParamMovie, 'value', getObjData(GetE('mpUrl').value));
 	SetAttribute(oParamMovie, 'name', 'movie');
 	oObject.appendChild(oParamMovie);
-	
+
 	oParamWAllowfullscreen = FCK.EditorDocument.createElement('param');
 	SetAttribute(oParamWAllowfullscreen, 'value', 'false');
 	SetAttribute(oParamWAllowfullscreen, 'name', 'allowfullscreen');
 	oObject.appendChild(oParamWAllowfullscreen);
-	
+
 	oParamScriptAccess = FCK.EditorDocument.createElement('param');
 	SetAttribute(oParamScriptAccess, 'value', 'always');
 	SetAttribute(oParamScriptAccess, 'name', 'allowscriptaccess');
 	oObject.appendChild(oParamScriptAccess);
-	
+
 	oParamSRC = FCK.EditorDocument.createElement('param');
 	SetAttribute(oParamSRC, 'value', 'file='+getSoundUrl()+'&autostart='+getAutostart());
 	SetAttribute(oParamSRC, 'name', 'flashvars');
 	oObject.appendChild(oParamSRC);*/
-	
+
 	oFakeImage	= oEditor.FCKDocumentProcessor_CreateFakeImage( 'FCK__MP3', oEmbed ) ;
 	oFakeImage.setAttribute( '_fckmp3', 'true', 0 ) ;
 	oFakeImage	= FCK.InsertElement( oFakeImage ) ;
-	
+
 	return true ;
 }
 
@@ -202,7 +202,7 @@ var ePreview ;
 function SetPreviewElement( previewEl )
 {
 	ePreview = previewEl ;
-	
+
 	if ( GetE('mpUrl').value.length > 0 )
 		updatePreview() ;
 }
@@ -222,12 +222,12 @@ function BrowseServer()
 	// Set the browser window feature.
 	var iWidth	= oEditor.FCKConfig.MP3BrowserWindowWidth ;
 	var iHeight	= oEditor.FCKConfig.MP3BrowserWindowHeight ;
-	
+
 	var iLeft = (screen.width  - iWidth) / 2 ;
 	var iTop  = (screen.height - iHeight) / 2 ;
 
 	var sOptions = "toolbar=no,status=no,resizable=yes,dependent=yes" ;
-	sOptions += ",width=" + iWidth ; 
+	sOptions += ",width=" + iWidth ;
 	sOptions += ",height=" + iHeight ;
 	sOptions += ",left=" + iLeft ;
 	sOptions += ",top=" + iTop ;
@@ -238,8 +238,8 @@ function BrowseServer()
 
 function SetUrl( url )
 {
-	document.getElementById('mpUrl').value = url ;	 
-	//updatePreview(); 
+	document.getElementById('mpUrl').value = url ;
+	//updatePreview();
 	Ok();
 	window.parent.Cancel();
 }
@@ -248,27 +248,27 @@ var Media = function (o)
 {
 	this.url = '';
 	this.width = '';
-	this.height = '';	
-	if (o) 
+	this.height = '';
+	if (o)
 		this.setObjectElement(o);
 };
 
 /**
  * Toma los datos de un elemento.
  * Takes data from an item.
- */ 
+ */
 Media.prototype.setObjectElement = function (e)
 {
-	if (!e) return ;	
+	if (!e) return ;
 	this.width = GetAttribute( e, 'width', this.width );
 	this.height = GetAttribute( e, 'height', this.height );
-	this.url = GetAttribute( e, 'data', this.url );	
+	this.url = GetAttribute( e, 'data', this.url );
 	// params
 	for (var i=0;i<e.childNodes.length;i++){
 		if (e.childNodes[i].tagName == 'PARAM'){
 			var paramName = GetAttribute(e.childNodes[i], 'name', '').toLowerCase();
 			var paramValue = GetAttribute(e.childNodes[i], 'value', '');
-			
+
 			switch (paramName)
 			{
 				case 'movie':
@@ -301,7 +301,7 @@ Media.prototype.setObjectElement = function (e)
  */
 Media.prototype.getOuterHTML = function (objectId){
 	var s;
- 	s= this.getInnerHTML(objectId);  
+ 	s= this.getInnerHTML(objectId);
  	return s;
 };
 
@@ -353,10 +353,10 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 			window.location.href=FCKConfig.PluginsPath + 'MP3/fck_mp3.php';
 			return ;
 	}
-	
+
 	SetUrl( fileUrl ) ;
 	//SetAutostart(GetE('autostart').value);
-	
+
 	GetE('frmUpload').reset() ;
 	// Reset the interface elements.
 	//document.getElementById('eUploadMessage').innerHTML = 'Upload' ;
@@ -376,7 +376,7 @@ function CheckUpload()
 		alert( FCKLang['UploadSelectFileFirst'] ) ;
 		return false ;
 	}
-	
+
 	if ( ( FCKConfig.MP3UploadAllowedExtensions.length > 0 && !oUploadAllowedExtRegex.test( sFile ) ) ||
 		( FCKConfig.MP3UploadDeniedExtensions.length > 0 && oUploadDeniedExtRegex.test( sFile ) ) )
 	{
@@ -384,17 +384,17 @@ function CheckUpload()
 		return false ;
 	}
 	//document.getElementById('eUploadMessage').innerHTML = 'Upload in progress, please wait...' ;
-	document.getElementById('btnUpload').disabled = true ;	
+	document.getElementById('btnUpload').disabled = true ;
 	return true ;
 }
 
 function getObjData(mpUrl)
 { 		// to create data attribute for object
-		var url=mpUrl; 		
+		var url=mpUrl;
 		//var configBasePath = FCKConfig.BasePath;
-		//var cor_indx=configBasePath.indexOf("inc/")+4;		
-		//configBasePath.substring(0, cor_indx)+"lib/mp3player/player_mp3.swf";					
-		var objdata = rel_path+'inc/lib/mediaplayer/player.swf'; // real_path variable is defined in fck_mp3.php  
+		//var cor_indx=configBasePath.indexOf("inc/")+4;
+		//configBasePath.substring(0, cor_indx)+"lib/mp3player/player_mp3.swf";
+		var objdata = rel_path+'inc/lib/mediaplayer/player.swf'; // real_path variable is defined in fck_mp3.php
 		setSoundUrl(GetE('mpUrl').value);
 		return objdata;
 }
@@ -408,7 +408,7 @@ function setSoundUrl(url)
 }
 
 function getSoundUrl()
-{		
+{
 	return mp3_url;
 }
 
@@ -420,7 +420,7 @@ function getAutostart()
 function getObjUrl(mpUrl2)
 { // to get source url
 		var url2=mpUrl2;
-		var cor_indx2 = url2.indexOf("son=")+4;		
+		var cor_indx2 = url2.indexOf("son=")+4;
 		var objdata2 = url2.substring(cor_indx2, mpUrl2.length);
 		return objdata2;
 }

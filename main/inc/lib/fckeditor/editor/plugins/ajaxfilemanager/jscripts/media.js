@@ -48,14 +48,14 @@ $.fn.media = function(options, f1, f2) {
         var o = getSettings(this, options);
         // pre-conversion callback, passes original element and fully populated options
         if (typeof f1 == 'function') f1(this, o);
-        
+
         var r = getTypesRegExp();
         var m = r.exec(o.src) || [''];
         o.type ? m[0] = o.type : m.shift();
         for (var i=0; i < m.length; i++) {
             fn = m[i].toLowerCase();
             if (isDigit(fn[0])) fn = 'fn' + fn; // fns can't begin with numbers
-            if (!$.fn.media[fn]) 
+            if (!$.fn.media[fn])
                 continue;  // unrecognized media type
             // normalize autoplay settings
             var player = $.fn.media[fn+'_player'];
@@ -67,7 +67,7 @@ $.fn.media = function(options, f1, f2) {
             var $div = $.fn.media[fn](this, o);
 
             $div.css('backgroundColor', o.bgColor).width(o.width);
-            
+
             // post-conversion callback, passes original element, new div element and fully populated options
             if (typeof f2 == 'function') f2(this, $div[0], o, player.name);
             break;
@@ -112,7 +112,7 @@ $.fn.mediabox = function(options, css) {
             });
         if (o.boxTitle)
             $div.prepend('<div style="margin:0;padding:0">' + o.boxTitle + '</div>');
-        
+
         if (css) $div.css(css);
 
         $div.displayBox( { width: o.width, height: o.height }, function(el) {
@@ -127,7 +127,7 @@ $.fn.mediabox = function(options, css) {
     });
 };
 
-  
+
 /**
  * Non-chainable method for adding or changing file format / player mapping
  * @name mapFormat
@@ -153,15 +153,15 @@ $.fn.media.defaults = {
     attrs:         {},        // added to object and embed elements as attrs
     flashvars:     {},        // added to flash content as flashvars param/attr
     flashVersion:  '7',       // required flash version
-    
+
     // MediaBox options
     boxTitle:      null,      // MediaBox titlebar
     loadingImage:  null,      // MediaBox loading indicator
-    
+
     // default flash video and mp3 player (@see: http://jeroenwijering.com/?item=Flash_Media_Player)
     flvPlayer:     'mediaplayer.swf',
     mp3Player:     'mediaplayer.swf',
-    
+
     // @see http://msdn2.microsoft.com/en-us/library/bb412401.aspx
     silverlight: {
         inplaceInstallPrompt: 'true', // display in-place install prompt?
@@ -188,7 +188,7 @@ $.fn.media.defaults.players = {
         eAttrs: {
             type:         'application/x-shockwave-flash',
             pluginspage:  'http://www.adobe.com/go/getflashplayer'
-        }        
+        }
     },
     quicktime: {
         name:         'quicktime',
@@ -225,7 +225,7 @@ $.fn.media.defaults.players = {
         eAttrs: {
             type:         'application/x-mplayer2',
             pluginspage:  'http://www.microsoft.com/Windows/MediaPlayer/'
-        }        
+        }
     },
     // special cases
     iframe: {
@@ -277,7 +277,7 @@ function isDigit(c) {
 function getSettings(el, options) {
     options = options || {};
     var $el = $(el);
-    
+
     var cls = el.className || '';
     var meta = $.meta ? $el.data() : {};
     var w = meta.width  || parseInt(((cls.match(/w:(\d+)/)||[])[1]||0));
@@ -378,7 +378,7 @@ $.fn.media.xaml = function(el, opts) {
     var cls = opts.cls ? (' class="' + opts.cls + '"') : '';
     var $div = $('<div' + id1 + cls + '>');
     $(el).after($div).remove();
-    
+
     Sys.Silverlight.createObjectEx({
         source: opts.src,
         initParams: opts.silverlight.initParams,
@@ -399,7 +399,7 @@ $.fn.media.xaml = function(el, opts) {
 function generate(el, opts, player) {
     var $el = $(el);
     var o = $.fn.media.defaults.players[player];
-    
+
     if (player == 'iframe') {
         var o = $('<iframe' + ' width="' + opts.width + '" height="' + opts.height + '" >');
         o.attr('src', opts.src);

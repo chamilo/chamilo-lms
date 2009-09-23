@@ -381,7 +381,7 @@ FCK.InsertHtml = function( html )
 		var currentNode = docFrag.RootNode.firstChild ;
 		while ( currentNode && currentNode.nodeType != 1 )
 			currentNode = currentNode.nextSibling ;
-		
+
 		if ( currentNode && FCKListsLib.BlockElements[ currentNode.nodeName.toLowerCase() ] )
 			range.SplitBlock() ;
 

@@ -280,7 +280,7 @@ class FCKeditor
 	 * Converts a PHP variable into its Javascript equivalent.
 	 * The code of this method has been "borrowed" from the funcion drupal_to_js() within the Drupal CMS.
 	 * @param mixed $var	The variable to be converted into Javascript syntax
-	 * @return string		Returns a string 
+	 * @return string		Returns a string
 	 * Note: This function is similar to json_encode(), in addition it produces HTML-safe strings, i.e. with <, > and & escaped.
 	 * @link http://drupal.org/
 	 */
@@ -318,7 +318,7 @@ class FCKeditor
 	}
 
 	/**
-	 * This method reads configuration data for the current editor's instance without overriding settings that already exist.  
+	 * This method reads configuration data for the current editor's instance without overriding settings that already exist.
 	 * @return array
 	 */
 	function read_configuration(& $config) {
@@ -359,7 +359,7 @@ class FCKeditor
 	}
 
 	/**
-	 * This method returns editor's custom configuration settings read from php-files.  
+	 * This method returns editor's custom configuration settings read from php-files.
 	 * @return array	Custom configuration data.
 	 */
 	private function & get_custom_configuration() {
@@ -372,7 +372,7 @@ class FCKeditor
 	}
 
 	/**
-	 * This method returns editor's toolbar configuration settings read from a php-file.  
+	 * This method returns editor's toolbar configuration settings read from a php-file.
 	 * @return array	Toolbar configuration data.
 	 */
 	private function & get_custom_toolbar_configuration($toolbar_dir) {
@@ -408,7 +408,7 @@ class FCKeditor
 	}
 
 	/**
-	 * This method returns automatically determined editor's configuration settings (default settings).  
+	 * This method returns automatically determined editor's configuration settings (default settings).
 	 * @return array
 	 */
 	private function & get_default_configuration() {
@@ -472,7 +472,7 @@ class FCKeditor
 		}
 		return $config;
 	}
-	
+
 	/**
 	 * This method returns default configuration for document repository that is to be used by the editor.
 	 * @return array
@@ -602,7 +602,7 @@ class FCKeditor
 	}
 
 	/**
-	 * This method returns detected configuration data about editor's MimeTeX plugin.  
+	 * This method returns detected configuration data about editor's MimeTeX plugin.
 	 * @return array
 	 */
 	private function & get_mimetex_plugin_configuration() {
@@ -637,7 +637,7 @@ class FCKeditor
 				} else {
 					$config['IsMimetexInstalled'] = $this->Config['MimetexExecutableInstalled'];
 				}
-				$config['MimetexUrl'] = $server_base . $url_relative;
+				$config['MimetexUrl'] = api_add_trailing_slash($server_base) . $url_relative;
 			}
 			// Cleaning detection related settings, we don't need them anymore.
 			unset($this->Config['MimetexExecutableInstalled']);

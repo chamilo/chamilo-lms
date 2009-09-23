@@ -42,6 +42,7 @@
 ==============================================================================
 */
 
+
 /*
 ==============================================================================
 		CONSTANTS
@@ -179,11 +180,15 @@ define('INTL_INSTALLED', function_exists('intl_get_error_code'));	// intl extens
 define('ICONV_INSTALLED', function_exists('iconv'));				// iconv extension, for PHP5 on Windows it is installed by default.
 define('MBSTRING_INSTALLED', function_exists('mb_strlen'));			// mbstring extension.
 
-// Constants for api_get_path() and api_get_path_type(), etc. - predefined path types.
-define('WEB_PATH', 'WEB_PATH');				// Identifies URL type, for example http://www.mydokeos.com/documentation/index.html
-define('SYS_PATH', 'SYS_PATH');				// Identifies system path type, for example /var/www/documentation/index.html
-define('REL_PATH', 'REL_PATH');				// Identifies semi-absolute URL, for example /documentation/index.html
-define('REL_SYS_PATH', 'REL_SYS_PATH');		// Identifies relative system path, examples: documentation/index.html  ../../documentation/index.html TODO: Not implemented yet.
+// Patterns for processing paths.									// Examples:
+define('REPEATED_SLASHES_PURIFIER', '/\/{2,}/');					// $path = preg_replace(REPEATED_SLASHES_PURIFIER, '/', $path);
+define('VALID_WEB_PATH', '/https?:\/\/[^\/]*(\/.*)?/i');			// $is_valid_path = preg_match(VALID_WEB_PATH, $path);
+define('VALID_WEB_SERVER_BASE', '/https?:\/\/[^\/]*/i');			// $new_path = preg_replace(VALID_WEB_SERVER_BASE, $new_base, $path);
+
+// Constants for api_get_path() and api_get_path_type(), etc. - registered path types.
+define('WEB_PATH', 'WEB_PATH');
+define('SYS_PATH', 'SYS_PATH');
+define('REL_PATH', 'REL_PATH');
 define('WEB_SERVER_ROOT_PATH', 'WEB_SERVER_ROOT_PATH');
 define('SYS_SERVER_ROOT_PATH', 'SYS_SERVER_ROOT_PATH');
 define('WEB_COURSE_PATH', 'WEB_COURSE_PATH');
@@ -195,7 +200,7 @@ define('SYS_CODE_PATH', 'SYS_CODE_PATH');
 define('SYS_LANG_PATH', 'SYS_LANG_PATH');
 define('WEB_IMG_PATH', 'WEB_IMG_PATH');
 define('WEB_CSS_PATH', 'WEB_CSS_PATH');
-define('GARBAGE_PATH', 'GARBAGE_PATH');
+define('GARBAGE_PATH', 'GARBAGE_PATH'); // Deprecated?
 define('SYS_PLUGIN_PATH', 'SYS_PLUGIN_PATH');
 define('PLUGIN_PATH', 'SYS_PLUGIN_PATH'); // deprecated
 define('WEB_PLUGIN_PATH', 'WEB_PLUGIN_PATH');
@@ -206,12 +211,15 @@ define('LIBRARY_PATH', 'LIBRARY_PATH');
 define('CONFIGURATION_PATH', 'CONFIGURATION_PATH');
 define('WEB_LIBRARY_PATH', 'WEB_LIBRARY_PATH');
 // Constants for requesting path conversion.
-define('TO_WEB_PATH', 'TO_WEB_PATH'); // TODO: Not implemented yet.
-define('TO_SYS_PATH', 'TO_SYS_PATH');
-define('TO_REL_PATH', 'TO_REL_PATH'); // TODO: Not implemented yet.
-define('TO_REL_SYS_PATH', 'TO_REL_SYS_PATH'); // TODO: Not implemented yet.
-// Path type detection.
-define('VALID_WEB_PATH', '/https?:\/\/(.*?):{0,1}([0-9]*)(\/)(.*?)/i');
+define('TO_WEB', 'TO_WEB');
+define('TO_SYS', 'TO_SYS');
+define('TO_REL', 'TO_REL');
+// Paths to regidtered specific resource files (scripts, players, etc.)
+define('FLASH_PLAYER_AUDIO', '{FLASH_PLAYER_AUDIO}');
+define('FLASH_PLAYER_VIDEO', '{FLASH_PLAYER_VIDEO}');
+define('SCRIPT_SWFOBJECT', '{SCRIPT_SWFOBJECT}');
+define('SCRIPT_ASCIIMATHML', '{SCRIPT_ASCIIMATHML}');
+
 
 /*
 ==============================================================================
@@ -231,234 +239,355 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
  *	Returns a full path to a certain Dokeos area, which you specify through a parameter.
  *	See $_configuration['course_folder'] in the configuration.php to alter the WEB_COURSE_PATH and SYS_COURSE_PATH parameters.
  *	@param string $type				The requested path type (a defined constant), see the examples.
- *	@param string $path (optional)	A path which type is to be converted.
- *	This parameter has meaning when $type parameter has one of the following values: TO_SYS_PATH. Otherwise it is ignored.
- *	@return string					The requested path or converted path.
+ *	@param string $path (optional)	A path which type is to be converted. Also, it may be a defined constant for a path.
+ *	This parameter has meaning when $type parameter has one of the following values: TO_WEB, TO_SYS, TO_REL. Otherwise it is ignored.
+ *	@return string					The requested path or the converted path.
  *
- * 	@example assume that your server root is /var/www/ dokeos is installed in a subfolder dokeos/ and the URL of your campus is http://www.mydokeos.com
+ * 	@example
+ *	Assume that your server root is /var/www/ dokeos is installed in a subfolder dokeos/ and the URL of your campus is http://www.mydokeos.com
  * 	The other configuration paramaters have not been changed.
- * 	The different api_get_paths will give
- *	WEB_SERVER_ROOT_PATH	http://www.mydokeos.com/
- *	SYS_SERVER_ROOT_PATH	/var/www/ - This is the physical folder where the system Dokeos has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
- * 	WEB_PATH				http://www.mydokeos.com/dokeos/
- * 	SYS_PATH				/var/www/dokeos/
- * 	REL_PATH				dokeos/
- * 	WEB_COURSE_PATH			http://www.mydokeos.com/dokeos/courses/
- * 	SYS_COURSE_PATH			/var/www/dokeos/courses/
- *	REL_COURSE_PATH			/dokeos/courses/
- * 	REL_CODE_PATH			/dokeos/main/
- * 	WEB_CODE_PATH			http://www.mydokeos.com/dokeos/main/
- * 	SYS_CODE_PATH			/var/www/dokeos/main/
- * 	SYS_LANG_PATH			/var/www/dokeos/main/lang/
- * 	WEB_IMG_PATH			http://www.mydokeos.com/dokeos/main/img/
- * 	GARBAGE_PATH
- * 	WEB_PLUGIN_PATH			http://www.mydokeos.com/dokeos/plugin/
- * 	SYS_PLUGIN_PATH			/var/www/dokeos/plugin/
- * 	WEB_ARCHIVE_PATH		http://www.mydokeos.com/dokeos/archive/
- * 	SYS_ARCHIVE_PATH		/var/www/dokeos/archive/
- *	INCLUDE_PATH			/var/www/dokeos/main/inc/
- * 	WEB_LIBRARY_PATH		http://www.mydokeos.com/dokeos/main/inc/lib/
- * 	LIBRARY_PATH			/var/www/dokeos/main/inc/lib/
- * 	CONFIGURATION_PATH		/var/www/dokeos/main/inc/conf/
+ *
+ * 	This is how we can retireve mosth used paths, for common purpose:
+ *	api_get_path(WEB_SERVER_ROOT_PATH)			http://www.mydokeos.com/
+ *	api_get_path(SYS_SERVER_ROOT_PATH)			/var/www/ - This is the physical folder where the system Dokeos has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
+ * 	api_get_path(WEB_PATH)						http://www.mydokeos.com/dokeos/
+ * 	api_get_path(SYS_PATH)						/var/www/dokeos/
+ * 	api_get_path(REL_PATH)						/dokeos/
+ * 	api_get_path(WEB_COURSE_PATH)				http://www.mydokeos.com/dokeos/courses/
+ * 	api_get_path(SYS_COURSE_PATH)				/var/www/dokeos/courses/
+ *	api_get_path(REL_COURSE_PATH)				/dokeos/courses/
+ * 	api_get_path(REL_CODE_PATH)					/dokeos/main/
+ * 	api_get_path(WEB_CODE_PATH)					http://www.mydokeos.com/dokeos/main/
+ * 	api_get_path(SYS_CODE_PATH)					/var/www/dokeos/main/
+ * 	api_get_path(SYS_LANG_PATH)					/var/www/dokeos/main/lang/
+ * 	api_get_path(WEB_IMG_PATH)					http://www.mydokeos.com/dokeos/main/img/
+ *	api_get_path(WEB_CSS_PATH)					http://www.mydokeos.com/dokeos/main/css/
+ * 	api_get_path(GARBAGE_PATH)					Deprecated?
+ * 	api_get_path(WEB_PLUGIN_PATH)				http://www.mydokeos.com/dokeos/plugin/
+ * 	api_get_path(SYS_PLUGIN_PATH)				/var/www/dokeos/plugin/
+ * 	api_get_path(WEB_ARCHIVE_PATH)				http://www.mydokeos.com/dokeos/archive/
+ * 	api_get_path(SYS_ARCHIVE_PATH)				/var/www/dokeos/archive/
+ *	api_get_path(INCLUDE_PATH)					/var/www/dokeos/main/inc/
+ * 	api_get_path(WEB_LIBRARY_PATH)				http://www.mydokeos.com/dokeos/main/inc/lib/
+ * 	api_get_path(LIBRARY_PATH)					/var/www/dokeos/main/inc/lib/
+ * 	api_get_path(CONFIGURATION_PATH)			/var/www/dokeos/main/inc/conf/
+ *
+ *	This is how we retrieve paths of "registerd" resource files (scripts, players, etc.):
+ *	api_get_path(TO_WEB, FLASH_PLAYER_AUDIO)	http://www.mydokeos.com/dokeos/main/inc/lib/mediaplayer/player.swf
+ *	api_get_path(TO_WEB, FLASH_PLAYER_VIDEO)	http://www.mydokeos.com/dokeos/main/inc/lib/mediaplayer/player.swf
+ *	api_get_path(TO_SYS, SCRIPT_SWFOBJECT)		/var/www/dokeos/main/inc/lib/swfobject/swfobject.js
+ *	api_get_path(TO_REL, SCRIPT_ASCIIMATHML)	/dokeos/main/inc/lib/asciimath/ASCIIMathML.js
+ *	...
+ *
+ *	We can convert arbitrary paths, that are not registered (no defined constant).
+ *	For guaranteed result, these paths should point inside the systen Dokeos.
+ *	Some random examples:
+ *	api_get_path(TO_WEB, $_SERVER['REQUEST_URI'])
+ *	api_get_path(TO_SYS, $_SERVER['PHP_SELF'])
+ *	api_get_path(TO_REL, __FILE__)
+ *	...
  */
 function api_get_path($path_type, $path = null) {
 
-	global $_configuration;
+	static $paths = array(
+		WEB_PATH => '',
+		SYS_PATH => '',
+		REL_PATH => '',
+		REL_SYS_PATH => '',
+		WEB_SERVER_ROOT_PATH => '',
+		SYS_SERVER_ROOT_PATH => '',
+		WEB_COURSE_PATH => '',
+		SYS_COURSE_PATH => '',
+		REL_COURSE_PATH => '',
+		REL_CODE_PATH => '',
+		WEB_CODE_PATH => '',
+		SYS_CODE_PATH => '',
+		SYS_LANG_PATH => 'lang/',
+		WEB_IMG_PATH => 'img/',
+		WEB_CSS_PATH => 'css/',
+		GARBAGE_PATH => 'archive/', // Deprecated?
+		SYS_PLUGIN_PATH => 'plugin/',
+		WEB_PLUGIN_PATH => 'plugin/',
+		SYS_ARCHIVE_PATH => 'archive/',
+		WEB_ARCHIVE_PATH => 'archive/',
+		INCLUDE_PATH => 'inc/',
+		LIBRARY_PATH => 'inc/lib/',
+		CONFIGURATION_PATH => 'inc/conf/',
+		WEB_LIBRARY_PATH => 'inc/lib/'
+	);
 
-	// Some results will be cached for speed.
-	static $cache = array();
+	static $resource_paths = array(
+		FLASH_PLAYER_AUDIO => 'inc/lib/mediaplayer/player.swf',
+		FLASH_PLAYER_VIDEO => 'inc/lib/mediaplayer/player.swf',
+		SCRIPT_SWFOBJECT => 'inc/lib/swfobject/swfobject.js',
+		SCRIPT_ASCIIMATHML => 'inc/lib/asciimath/ASCIIMathML.js'
+	);
 
-	if (isset($cache[$path_type]) && is_null($path)) {
-		return $cache[$path_type];
-	}
+	static $is_this_function_initialized;
 
-	if (!isset($_configuration['access_url']) || $_configuration['access_url'] == 1 || $_configuration['access_url'] == '') {
-		//by default we call the $_configuration['root_web'] we don't query to the DB
-		//$url_info= api_get_access_url(1);
-		//$root_web = $url_info['url'];
-		if (isset($_configuration['root_web'])) {
-			$root_web = $_configuration['root_web'];
+	static $include_path_sys;
+	static $server_base_web; // No trailing slash.
+	static $server_base_sys; // No trailing slash.
+	static $root_web;
+	static $root_sys;
+	static $root_rel;
+	static $code_folder;
+	static $course_folder;
+
+	if (!$is_this_function_initialized) {
+
+		global $_configuration;
+
+		$include_path_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../')).'/';
+
+		//
+		// Configuration data for already installed system.
+		//
+		$root_sys = $_configuration['root_sys'];
+		if (!isset($_configuration['access_url']) || $_configuration['access_url'] == 1 || $_configuration['access_url'] == '') {
+			//by default we call the $_configuration['root_web'] we don't query to the DB
+			//$url_info= api_get_access_url(1);
+			//$root_web = $url_info['url'];
+			if (isset($_configuration['root_web'])) {
+				$root_web = $_configuration['root_web'];
+			}
+			// Ivan: Just a formal note, here $root_web stays unset, reason about this is unknown.
+		} else {
+			//we look into the DB the function api_get_access_url
+			//this funcion have a problem because we can't called to the Database:: functions
+			$url_info = api_get_access_url($_configuration['access_url']);
+			$root_web = $url_info['active'] == 1 ? $url_info['url'] : $_configuration['root_web'];
 		}
-		// TODO: If $_configuration['root_web'] is not set, here $root_web is not set too, this case is unresolved.
-	} else {
-		//we look into the DB the function api_get_access_url
-		//this funcion have a problem because we can't called to the Database:: functions
-		$url_info = api_get_access_url($_configuration['access_url']);
-		$root_web = $url_info['active'] == 1 ? $url_info['url'] : $_configuration['root_web'];
+		$root_rel = $_configuration['url_append'];
+		$code_folder = $_configuration['code_append'];
+		$course_folder = $_configuration['course_folder'];
+
+		//
+		// Support for the installation process.
+		// Developers might use the function api_fet_path() directly or indirectly (this is difficult to be traced), at the moment when
+		// configuration has not been created yet. This is why this function should be upgraded to return correct results in this case.
+		//
+		if (!file_exists($include_path_sys.'/conf/configuration.php')) {
+			$requested_page_rel = api_get_self();
+			if (($pos = strpos($requested_page_rel, 'main/install')) !== false) {
+				$root_rel = substr($requested_page_rel, 0, $pos);
+				// See http://www.mediawiki.org/wiki/Manual:$wgServer
+				$server_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
+				$server_name =
+					isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME']
+					: (isset($_SERVER['HOSTNAME']) ? $_SERVER['HOSTNAME']
+					: (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST']
+					: (isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR']
+					: 'localhost')));
+				if (isset($_SERVER['SERVER_PORT']) && !strpos($server_name, ':')
+					&& (($server_protocol == 'http'
+					&& $_SERVER['SERVER_PORT'] != 80 ) || ($server_protocol == 'https' && $_SERVER['SERVER_PORT'] != 443 ))) {
+					$server_name .= ":" . $_SERVER['SERVER_PORT'];
+				}
+				$root_web = $server_protocol.'://'.$server_name.$root_rel;
+				$root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../../')).'/';
+				$code_folder = 'main/';
+				$course_folder = 'courses/';
+			}
+			// Here we give up, so we don't touch anything.
+		}
+
+		// Dealing with trailing slashes.
+		$root_web = api_add_trailing_slash($root_web);
+		$root_sys = api_add_trailing_slash($root_sys);
+		$root_rel = api_add_trailing_slash($root_rel);
+		$code_folder = api_add_trailing_slash($code_folder);
+		$course_folder = api_add_trailing_slash($course_folder);
+
+		// Web server base and system server base.
+		$server_base_web = preg_replace('@'.$root_rel.'$@', '', $root_web); // No trailing slash.
+		$server_base_sys = preg_replace('@'.$root_rel.'$@', '', $root_sys); // No trailing slash.
+
+		//
+		// Initialization of a table taht contains common-purpose paths.
+		//
+		$paths[WEB_PATH] = $root_web;
+		$paths[SYS_PATH] = $root_sys;
+		$paths[REL_PATH] = $root_rel;
+		$paths[WEB_SERVER_ROOT_PATH] = $server_base_web.'/';
+		$paths[SYS_SERVER_ROOT_PATH] = $server_base_sys.'/';
+		$paths[WEB_COURSE_PATH] = $root_web.$course_folder;
+		$paths[SYS_COURSE_PATH] = $root_sys.$course_folder;
+		$paths[REL_COURSE_PATH] = $root_rel.$course_folder;
+		$paths[REL_CODE_PATH] = $root_rel.$code_folder;
+		$paths[WEB_CODE_PATH] = $root_web.$code_folder;
+		// Elimination of an obsolete configuration setting.
+		//$paths[SYS_CODE_PATH] = $GLOBALS['clarolineRepositorySys'];
+		$paths[SYS_CODE_PATH] = $root_sys.$code_folder;
+		//
+		// Now we can switch into api_get_path() "terminology".
+		$paths[SYS_LANG_PATH] = $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
+		$paths[WEB_IMG_PATH] = $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
+		// TODO: This path may depend on the configuration option? To be researched.
+		// Maybe a new constant like WEB_USER_CSS_PATH has to be defined?
+		$paths[WEB_CSS_PATH] = $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
+		//
+		$paths[GARBAGE_PATH] = $paths[SYS_PATH].$paths[GARBAGE_PATH]; // Deprecated?
+		$paths[SYS_PLUGIN_PATH] = $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
+		$paths[WEB_PLUGIN_PATH] = $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
+		$paths[SYS_ARCHIVE_PATH] = $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
+		$paths[WEB_ARCHIVE_PATH] = $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
+		// A change for Dokeos 1.8.6.2
+		// Calculation in the previous way does not rely on configuration settings and in some cases gives unexpected results.
+		//$paths[INCLUDE_PATH] = $include_path_sys; // Old behaviour, Dokeos 1.8.6.1.
+		$paths[INCLUDE_PATH] = $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH]; // New behaviour, coherrent with the model, Dokeos 1.8.6.2.
+		//
+		$paths[LIBRARY_PATH] = $paths[SYS_CODE_PATH].$paths[LIBRARY_PATH];
+		$paths[CONFIGURATION_PATH] = $paths[SYS_CODE_PATH].$paths[CONFIGURATION_PATH];
+		$paths[WEB_LIBRARY_PATH] = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
+
+		$is_this_function_initialized = true;
 	}
+
+	// Shallow purification and validation of input parameters.
+
+	$path_type = trim($path_type);
+	$path = trim($path);
+
+	if (empty($path_type)) {
+		return null;
+	}
+
+	// Retrieving a common-purpose path.
+
+	if (isset($paths[$path_type])) {
+		return $paths[$path_type];
+	}
+
+	// Retrieving a specific resource path.
+
+	if (isset($resource_paths[$path])) {
+		switch ($path_type) {
+			case TO_WEB:
+				return $paths[WEB_CODE_PATH].$resource_paths[$path];
+			case TO_SYS:
+				return $paths[SYS_CODE_PATH].$resource_paths[$path];
+			case TO_REL:
+				return $paths[REL_CODE_PATH].$resource_paths[$path];
+			default:
+				return null;
+		}
+	}
+
+	// Common-purpose paths as a second parameter - recognition.
+
+	if (isset($paths[$path])) {
+		$path = $paths[$path];
+	}
+
+	// Second purification.
+
+	// Replacing Windows back slashes.
+	$path = str_replace('\\', '/', $path);
+	// Query strings sometimes mighth wrongly appear in non-URLs.
+	// Let us check remove them from all types of paths.
+	if (($pos = strpos($path, '?')) !== false) {
+		$path = substr($path, 0, $pos);
+	}
+
+	// Detection of the input path type. Conversion to semi-absolute type ( /dokeos/main/inc/.... ).
+
+	if (preg_match(VALID_WEB_PATH, $path)) {
+
+		// A special case: When a URL points to the document download script directly, without
+		// mod-rewrite translation, we have to translate it into an "ordinary" web path.
+		// For example:
+		// http://localhost/dokeos/main/document/download.php?doc_url=/image.png&cDir=/
+		// becomes
+		// http://localhost/dokeos/courses/TEST/document/image.png
+		// TEST is a course directory name, so called "system course code".
+		if (strpos($path, 'download.php') !== false) { // Fast detection first.
+			$path = urldecode($path);
+			if (preg_match('/(.*)main\/document\/download.php\?doc_url=\/(.*)&cDir=\/(.*)?/', $path, $matches)) {
+				$sys_course_code =
+					isset($_SESSION['_course']['sysCode'])	// User is inside a course?
+						? $_SESSION['_course']['sysCode']	// Yes, then use course's directory name.
+						: '{SYS_COURSE_CODE}';				// No, then use a fake code, it may be processed later.
+				$path = $matches[1].'courses/'.$sys_course_code.'/document/'.str_replace('//', '/', $matches[3].'/'.$matches[2]);
+			}
+		}
+		// Replacement of the present web server base with a slash '/'.
+		$path = preg_replace(VALID_WEB_SERVER_BASE, '/', $path);
+
+	} elseif (strpos($path, $server_base_sys) === 0) {
+
+		$path = preg_replace('@^'.$server_base_sys.'@', '', $path);
+
+	} elseif (strpos($path, '/') === 0) {
+
+		// Leading slash - we assume that this path is semi-absolute (REL),
+		// then path is left without furthes modifications.
+
+	} else {
+
+		return null; // Probably implementation of this case won't be needed.
+
+	}
+
+	// Path now is semi-absolute. It is convenient at this moment repeated slashes to be removed.
+	$path = preg_replace(REPEATED_SLASHES_PURIFIER, '/', $path);
+
+	// Path conversion to the requested type.
 
 	switch ($path_type) {
-
-		case WEB_SERVER_ROOT_PATH:
-			// example: http://www.mydokeos.com/
-			$result = preg_replace('@'.api_get_path(REL_PATH).'$@', '', api_get_path(WEB_PATH));
-			return $cache[$path_type] = substr($result, -1) == '/' ? $result : $result.'/';
-
-		case SYS_SERVER_ROOT_PATH:
-			$result = preg_replace('@'.api_get_path(REL_PATH).'$@', '', api_get_path(SYS_PATH));
-			return $cache[$path_type] = substr($result, -1) == '/' ? $result : $result.'/';
-
-		case WEB_PATH:
-			// example: http://www.mydokeos.com/ or http://www.mydokeos.com/dokeos/ if you're using
-			// a subdirectory of your document root for Dokeos
-			return $cache[$path_type] = substr($root_web, -1) == '/' ? $root_web : $root_web.'/';
-
-		case SYS_PATH:
-			// example: /var/www/dokeos/
-			return $cache[$path_type] = substr($_configuration['root_sys'], -1) == '/' ? $_configuration['root_sys'] : $_configuration['root_sys'].'/';
-
-		case REL_PATH:
-			// example: dokeos/
-			return $cache[$path_type] = substr($_configuration['url_append'], -1) === '/' ? $_configuration['url_append'] : $_configuration['url_append'].'/';
-
-		case WEB_COURSE_PATH:
-			// example: http://www.mydokeos.com/courses/
-			return $cache[$path_type] = $root_web.$_configuration['course_folder'];
-
-		case SYS_COURSE_PATH:
-			// example: /var/www/dokeos/courses/
-			return $cache[$path_type] = $_configuration['root_sys'].$_configuration['course_folder'];
-
-		case REL_COURSE_PATH:
-			// example: courses/ or dokeos/courses/
-			return $cache[$path_type] = api_get_path(REL_PATH).$_configuration['course_folder'];
-
-		case REL_CODE_PATH:
-			// example: main/ or dokeos/main/
-			return $cache[$path_type] = api_get_path(REL_PATH).$_configuration['code_append'];
-
-		case WEB_CODE_PATH:
-			// example: http://www.mydokeos.com/main/
-			//return $GLOBALS['clarolineRepositoryWeb']; // this was changed
-			return $cache[$path_type] = $root_web.$_configuration['code_append'];
-
-		case SYS_CODE_PATH:
-			// example: /var/www/dokeos/main/
-			return $cache[$path_type] = $GLOBALS['clarolineRepositorySys'];
-
-		case SYS_LANG_PATH:
-			// example: /var/www/dokeos/main/lang/
-			return $cache[$path_type] = api_get_path(SYS_CODE_PATH).'lang/';
-
-		case WEB_IMG_PATH:
-			// example: http://www.mydokeos.com/main/img/
-			return $cache[$path_type] = api_get_path(WEB_CODE_PATH).'img/';
-
-		case SYS_PLUGIN_PATH:
-			// example: /var/www/dokeos/plugin/
-			return $cache[$path_type] = api_get_path(SYS_PATH).'plugin/';
-
-		case WEB_PLUGIN_PATH:
-			// example: http://www.mydokeos.com/plugin/
-			return $cache[$path_type] = api_get_path(WEB_PATH).'plugin/';
-
-		case GARBAGE_PATH: //now set to be same as archive
-		case SYS_ARCHIVE_PATH :
-			// example: /var/www/dokeos/archive/
-			return $cache[$path_type] = api_get_path(SYS_PATH).'archive/';
-
-		case WEB_ARCHIVE_PATH:
-			// example: http://www.mydokeos.com/archive/
-			return $cache[$path_type] = api_get_path(WEB_PATH).'archive/';
-
-		case INCLUDE_PATH:
-			// Generated by main/inc/global.inc.php
-			// example: /var/www/dokeos/main/inc/
-			$incpath = realpath(dirname(__FILE__).'/../');
-			return $cache[$path_type] = str_replace('\\', '/', $incpath).'/';
-
-		case LIBRARY_PATH:
-			// example: /var/www/dokeos/main/inc/lib/
-			return $cache[$path_type] = api_get_path(INCLUDE_PATH).'lib/';
-
-		case WEB_LIBRARY_PATH:
-			// example: http://www.mydokeos.com/main/inc/lib/
-			return $cache[$path_type] = api_get_path(WEB_CODE_PATH).'inc/lib/';
-
-		case CONFIGURATION_PATH:
-			// example: /var/www/dokeos/main/inc/conf/
-			return $cache[$path_type] = api_get_path(INCLUDE_PATH).'conf/';
-
-		case TO_SYS_PATH:
-
-			// Check for a valid URL.
-			if (!api_is_web_path($path)) {
-				return $path;	// Return non-URLs without modifications.
-			}
-
-			$original_path = $path;
-			$path = urldecode($path);
-
-			// A special case: If the URL points to the document download script directly (without mod-rewrite translation),
-			// we will translate this URL into a simple one, in order to process it easily below.
-			// For example:
-			// http://localhost/dokeos/main/document/download.php?doc_url=/image.png&cDir=/
-			// becomes
-			// http://localhost/dokeos/courses/TEST/document/image.png
-			if (preg_match('/(.*)main\/document\/download.php\?doc_url=\/(.*)&cDir=\/(.*)?/', $path, $matches)) {
-				global $_cid, $_course;
-				if (!empty($_cid) && $_cid != -1 && isset($_course)) { // Inside a course?	// TODO: This restriction to be revised, what about converting
-																							// links which were created while content was within another course?
-					$path = $matches[1].'courses/'.$_course['path'].'/document/'.str_replace('//', '/', $matches[3].'/'.$matches[2]);
-				} else {
-					return $original_path;	// Not inside a course, return then the URL "as is".
-				}
-			}
-
-			// Generally, we have to deal with URLs like this:
-			// http://localhost/dokeos/courses/TEST/document/image.png?cidReq=TEST
-			// Let us remove possibe URL's parameters:
-			// http://localhost/dokeos/courses/TEST/document/image.png
-			$array_path = explode('/', (string)current(explode('?', $path)));
-
-			// Pulling out the filename image.png
-			// The rest of the URL is http://localhost/dokeos/courses/TEST/document
-			$file_name = array_pop($array_path);
-
-			// Getting the relative system path.
-			// http://localhost/dokeos/courses/TEST/document         - this the "purified" URL
-			// http://localhost/dokeos/                              - this is returned by api_get_path(WEB_PATH)
-			// -----------------------------------------------------------------------------------------------------
-			//                         courses/TEST/document         - this is the resulting relative system path
-			// Note: A sanity check is needed - you may have seen this comment in dokeos/main/document/download.php:
-			//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (René)
-			// So, we will clean double slashes, if any (triple too, etc.).
-			$system_rel_path = preg_replace('@/{2,}@', '/', implode('/', array_values(array_diff($array_path, explode ('/', api_get_path(WEB_PATH))))));
-
-			// Finally, we will concatenate: the system root (for example /var/www/), the relative system path, and the file name.
-			// /var/www/courses/TEST/document/image.png
-			return str_replace('\\', '/', api_get_path(SYS_PATH)).(empty($system_rel_path) ? '' : $system_rel_path.'/').$file_name;
-
-		default :
-			return null;
+		case TO_WEB:
+			return $server_base_web.$path;
+		case TO_SYS:
+			return $server_base_sys.$path;
+		case TO_REL:
+			return $path;
 	}
+
+	return null;
 }
 
 /**
- * Detects the type of a given path, which fron server's side may be:
- * - absolute URL			- WEB_PATH, for example http://www.mydokeos.com/documentation/index.html
- * - semi-absolute URL		- REL_PATH, for example /documentation/index.html
- * - system path			- SYS_PATH, for example /var/www/documentation/index.htm
- * - relative system path	- REL_SYS_PATH, examples: documentation/index.html  ../../documentation/index.html
- * @param string $path		The given path to be detected.
- * @return string			Returns one of the following constants: WEB_PATH, REL_PATH, SYS_PATH, REL_SYS_PATH.
+ * This function checks whether a given path points inside the system.
+ * @param string $path		The path to be tesed. It should be full path, web-absolute (WEB), semi-absolute (REL) or system-absolyte (SYS).
+ * @return bool				Returns true when the given path is inside the system, false otherwise.
  */
-function api_get_path_type($path) {
-	if (preg_match(VALID_WEB_PATH, $path)) {
-		return WEB_PATH;
+function api_is_internal_path($path) {
+	$path = str_replace('\\', '/', trim($path));
+	if (empty($path)) {
+		return false;
 	}
-	// TODO: Detection of other path types to be implemented.
-	return REL_PATH;
+	if (strpos($path, api_remove_trailing_slash(api_get_path(WEB_PATH))) === 0) {
+		return true;
+	}
+	if (strpos($path, api_remove_trailing_slash(api_get_path(SYS_PATH))) === 0) {
+		return true;
+	}
+	$server_base_web = api_remove_trailing_slash(api_get_path(REL_PATH));
+	$server_base_web = empty($server_base_web) ? '/' : $server_base_web;
+	if (strpos($path, $server_base_web) === 0) {
+		return true;
+	}
+	return false;
 }
 
 /**
- * Checks whether a given path is a web-path type (a URL).
- * @param string $path		The given path to be checked.
- * @return bool				Returns true when the path is web-path type, false otherwise.
+ * Adds to a given path a trailing slash if it is necessary (adds "/" character at the end of the string).
+ * @param string $path			The input path.
+ * @return string				Returns the modified path.
  */
-function api_is_web_path($path) {
-	return api_get_path_type($path) == WEB_PATH;
+function api_add_trailing_slash($path) {
+	return substr($path, -1) == '/' ? $path : $path.'/';
 }
+
+/**
+ * Removes from a given path the trailing slash if it is necessary (removes "/" character from the end of the string).
+ * @param string $path			The input path.
+ * @return string				Returns the modified path.
+ */
+function api_remove_trailing_slash($path) {
+	return substr($path, -1) == '/' ? substr($path, 0, -1) : $path;
+}
+
 
 /*
 ==============================================================================
@@ -519,6 +648,7 @@ function api_block_anonymous_users() {
 	}
 	return true;
 }
+
 
 /*
 ==============================================================================
@@ -3431,7 +3561,7 @@ function api_is_windows_os() {
  * @link http://www.dokeos.com/forum/viewtopic.php?t=16355
  */
 function api_getimagesize($path) {
-	return @getimagesize(api_get_path(TO_SYS_PATH, $path));
+	return @getimagesize(preg_match(VALID_WEB_PATH, $path) ? (api_is_internal_path($path) ? api_get_path(TO_SYS, $path) : $path) : $path);
 }
 
 /**
@@ -3586,8 +3716,8 @@ function is_allowed_to_edit() {
 }
 
 /**
- * @deprecated 19-SEP-2009: Use api_get_path(TO_SYS_PATH, $url) instead.
+ * @deprecated 19-SEP-2009: Use api_get_path(TO_SYS, $url) instead.
  */
 function api_url_to_local_path($url) {
-	return api_get_path(TO_SYS_PATH, $url);
+	return api_get_path(TO_SYS, $url);
 }

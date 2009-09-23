@@ -48,7 +48,6 @@ class AllTests extends TestSuite {
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/import.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/mail.lib.inc.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/main_api.lib.test.php');
-      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/media.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/message.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/internationalization.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/online.inc.test.php');
@@ -98,7 +97,6 @@ class AllTests extends TestSuite {
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/legal.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/mail.lib.inc.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/main_api.lib.test.php');
-      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/media.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/message.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/internationalization.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/online.inc.test.php');

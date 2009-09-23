@@ -120,16 +120,16 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op) {
 		$action='index.php';
 	}
 	$navigator_info = api_get_navigator();
-	if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {		
+	if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 		$submit_button1	= '<input type="submit" id="submit" value="'. get_lang('Search') .'" />';
-		$submit_button2 = '<input class="lower-submit" type="submit" value="'. get_lang('Search') .'" />'; 
+		$submit_button2 = '<input class="lower-submit" type="submit" value="'. get_lang('Search') .'" />';
         $reset_button 	= '<input type="submit" id="tags-clean" value="'. get_lang('SearchResetKeywords') .'" />';
 	} else {
 		$submit_button1 = '<button class="search" type="submit" id="submit" value="'. get_lang("Search") .'" /> '. get_lang('Search') .'</button>';
-		$submit_button2 = '<button class="search" type="submit" value="'. get_lang('Search') .'" />'. get_lang('Search') .'</button>'; 
-        $reset_button 	= '<button class="save"   type="submit" id="tags-clean" value="'. get_lang('SearchResetKeywords') .'" />'. get_lang('SearchResetKeywords') .'</button> ';	
+		$submit_button2 = '<button class="search" type="submit" value="'. get_lang('Search') .'" />'. get_lang('Search') .'</button>';
+        $reset_button 	= '<button class="save"   type="submit" id="tags-clean" value="'. get_lang('SearchResetKeywords') .'" />'. get_lang('SearchResetKeywords') .'</button> ';
 	}
-	
+
     $form = '
         <form id="dokeos_search" action="'. $action .'" method="GET">
             <input type="text" id="query" name="query" size="40" value="'.stripslashes(Security::remove_XSS($_REQUEST['query'])).'" />
@@ -333,7 +333,7 @@ function search_widget_show($action='index.php') {
 
     echo '<h2>'.get_lang('Search').'</h2>';
 
-    
+
 	// Tool introduction
     // TODO: Settings for the online editor to be checked (insert an image for example). Probably this is a special case here.
     if (api_get_course_id() !== -1)

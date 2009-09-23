@@ -17,7 +17,7 @@
 	define('LBL_MODIFIED', 'تعديل');
 		//File Information
 	define('LBL_FILE_INFO', 'معلومات الملف');
-	define('LBL_FILE_NAME', 'اسم الملف :');	
+	define('LBL_FILE_NAME', 'اسم الملف :');
 	define('LBL_FILE_CREATED', 'الأنشاء :');
 	define("LBL_FILE_MODIFIED", 'اخر تعديل :');
 	define("LBL_FILE_SIZE", 'حجم الملف :');
@@ -62,7 +62,7 @@
 	define('ERR_FOLDER_EXISTS', 'يجب عليك اختيار اسم غير موجود في المجلد.');
 	define('ERR_FOLDER_CREATION_FAILED', 'لم يتم الأنشاء , الرجاء المحاولة مرة اخرى.');
 	define('ERR_FOLDER_NAME_EMPTY', 'يجب عليك كتابة الاسم.');
-	
+
 		//file upload
 	define("ERR_FILE_NAME_FORMAT", 'يجب ان يحتوي الاسم على احرف , ارقام , فراغ , . , _ فقط');
 	define('ERR_FILE_NOT_UPLOADED', 'لم يتم اختيار اي ملف , الرجاء المحازلة مرة اخرى');
@@ -70,7 +70,7 @@
 	define('ERR_FILE_MOVE_FAILED', 'يمكننا ان نقو بتحريك الملف');
 	define('ERR_FILE_NOT_AVAILABLE', 'الملف غير متوفر');
 	define('ERROR_FILE_TOO_BID', 'حجم الملف كبير جدا , (اقصى حجم : %s )');
-	
+
 
 	//Tips
 	define('TIP_FOLDER_GO_DOWN', ' اضغط للدخول الى المجلد...');
@@ -90,7 +90,7 @@
 	define('LOGIN_FORM_TITLE', 'تسجيل الدخول');
 	define('LOGIN_USERNAME', 'أسم المستخدم:');
 	define('LOGIN_PASSWORD', 'كلمة المرور :');
-	define('LOGIN_FAILED', 'اسم مستخدم \ كلمة مرور خطا!'); 
-    	
-	
+	define('LOGIN_FAILED', 'اسم مستخدم \ كلمة مرور خطا!');
+
+
 ?>

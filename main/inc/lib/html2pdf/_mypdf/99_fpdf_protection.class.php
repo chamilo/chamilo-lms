@@ -1,40 +1,40 @@
 <?php
 /*************************************************************************
  * http://www.fpdf.org/fr/script/script37.php
- * 
+ *
  * @author		Klemen Vodopivec
- * 
- * Ce script permet de protéger le PDF, c'est-à-dire empêcher l'utilisateur de copier son contenu, de l'imprimer ou de le modifier.
- * 
+ *
+ * Ce script permet de protï¿½ger le PDF, c'est-ï¿½-dire empï¿½cher l'utilisateur de copier son contenu, de l'imprimer ou de le modifier.
+ *
  * SetProtection([array permissions [, string user_pass [, string owner_pass]]])
- * 
- * permissions : l'ensemble des permissions. Vide par défaut (seule la lecture est autorisée).
- * user_pass : mot de passe utilisateur. Vide par défaut.
- * owner_pass : mot de passe propriétaire. Par défaut, une valeur aléatoire est choisie.
- * 
- * Le tableau des permissions est composé de valeurs prises parmi les suivantes :
+ *
+ * permissions : l'ensemble des permissions. Vide par dï¿½faut (seule la lecture est autorisï¿½e).
+ * user_pass : mot de passe utilisateur. Vide par dï¿½faut.
+ * owner_pass : mot de passe propriï¿½taire. Par dï¿½faut, une valeur alï¿½atoire est choisie.
+ *
+ * Le tableau des permissions est composï¿½ de valeurs prises parmi les suivantes :
  *		* copy : copie du texte et des images dans le presse-papier
  *		* print : impression du document
  *		* modify : modification (autre ques les annotations et les formulaires)
- *		* annot-forms : ajout d'annotations ou de formulaires 
- * 
- * Remarque : la protection contre la modification concerne les personnes possédant la version complète d'Acrobat.
- * 
- * Si vous ne spécifiez pas de mot de passe, le document s'ouvrira normalement. Si vous indiquez un mot de passe utilisateur,
- * le lecteur de PDF le demandera avant d'afficher le document. Le mot de passe propriétaire, s'il est différent de celui utilisateur,
- * permet d'obtenir l'accès complet.
- * 
- * Note : protéger un document nécessite de le crypter, ce qui augmente le temps de traitement de manière importante.
- * Cela peut dans certains cas entraîner un time-out au niveau de PHP, en particulier si le document contient des
+ *		* annot-forms : ajout d'annotations ou de formulaires
+ *
+ * Remarque : la protection contre la modification concerne les personnes possï¿½dant la version complï¿½te d'Acrobat.
+ *
+ * Si vous ne spï¿½cifiez pas de mot de passe, le document s'ouvrira normalement. Si vous indiquez un mot de passe utilisateur,
+ * le lecteur de PDF le demandera avant d'afficher le document. Le mot de passe propriï¿½taire, s'il est diffï¿½rent de celui utilisateur,
+ * permet d'obtenir l'accï¿½s complet.
+ *
+ * Note : protï¿½ger un document nï¿½cessite de le crypter, ce qui augmente le temps de traitement de maniï¿½re importante.
+ * Cela peut dans certains cas entraï¿½ner un time-out au niveau de PHP, en particulier si le document contient des
  * images ou des polices.
  ************************************************************************/
 
 if (!defined('__CLASS_FPDF_PROTECTION__'))
 {
 	define('__CLASS_FPDF_PROTECTION__', true);
-	
+
 	require_once(dirname(__FILE__).'/02_fpdf_formulaire.class.php');
-	
+
 	class FPDF_Protection extends FPDF_Formulaire
 	{
 		var $encrypted;			//whether document is protected
@@ -44,17 +44,17 @@ if (!defined('__CLASS_FPDF_PROTECTION__'))
 		var $enc_obj_id;		//encryption object id
 		var $last_rc4_key;		//last RC4 key encrypted (cached for optimisation)
 		var $last_rc4_key_c;	//last RC4 computed key
-	
+
 		function FPDF_Protection($orientation='P',$unit='mm',$format='A4')
 		{
 			$this->FPDF_Formulaire($orientation,$unit,$format);
-	
+
 			$this->encrypted=false;
 			$this->last_rc4_key='';
 			$this->padding="\x28\xBF\x4E\x5E\x4E\x75\x8A\x41\x64\x00\x4E\x56\xFF\xFA\x01\x08".
 							"\x2E\x2E\x00\xB6\xD0\x68\x3E\x80\x2F\x0C\xA9\xFE\x64\x53\x69\x7A";
 		}
-	
+
 		/**
 		* Function to set permissions as well as user and owner passwords
 		*
@@ -93,7 +93,7 @@ if (!defined('__CLASS_FPDF_PROTECTION__'))
 			}
 			parent::_putstream($s);
 		}
-	
+
 		function _textstring($s)
 		{
 			if ($this->encrypted) {
@@ -101,7 +101,7 @@ if (!defined('__CLASS_FPDF_PROTECTION__'))
 			}
 			return parent::_textstring($s);
 		}
-	
+
 		/**
 		* Compute key depending on object number where the encrypted data is stored
 		*/
@@ -109,7 +109,7 @@ if (!defined('__CLASS_FPDF_PROTECTION__'))
 		{
 			return substr($this->_md5_16($this->encryption_key.pack('VXxx',$n)),0,10);
 		}
-	
+
 		function _putresources()
 		{
 			parent::_putresources();
@@ -122,7 +122,7 @@ if (!defined('__CLASS_FPDF_PROTECTION__'))
 				$this->_out('endobj');
 			}
 		}
-	
+
 		function _putencryption()
 		{
 			$this->_out('/Filter /Standard');
@@ -132,7 +132,7 @@ if (!defined('__CLASS_FPDF_PROTECTION__'))
 			$this->_out('/U ('.$this->_escape($this->Uvalue).')');
 			$this->_out('/P '.$this->Pvalue);
 		}
-	
+
 		function _puttrailer()
 		{
 			parent::_puttrailer();
@@ -141,7 +141,7 @@ if (!defined('__CLASS_FPDF_PROTECTION__'))
 				$this->_out('/ID [()()]');
 			}
 		}
-	
+
 		/**
 		* RC4 is the standard encryption algorithm used in PDF format
 		*/
@@ -162,7 +162,7 @@ if (!defined('__CLASS_FPDF_PROTECTION__'))
 			} else {
 				$rc4 = $this->last_rc4_key_c;
 			}
-	
+
 			$len = strlen($text);
 			$a = 0;
 			$b = 0;
@@ -176,10 +176,10 @@ if (!defined('__CLASS_FPDF_PROTECTION__'))
 				$k = $rc4[($rc4[$a]+$rc4[$b])%256];
 				$out.=chr(ord($text{$i}) ^ $k);
 			}
-	
+
 			return $out;
 		}
-	
+
 		/**
 		* Get MD5 as binary string
 		*/
@@ -187,7 +187,7 @@ if (!defined('__CLASS_FPDF_PROTECTION__'))
 		{
 			return pack('H*',md5($string));
 		}
-	
+
 		/**
 		* Compute O value
 		*/
@@ -197,7 +197,7 @@ if (!defined('__CLASS_FPDF_PROTECTION__'))
 			$owner_RC4_key = substr($tmp,0,5);
 			return $this->_RC4($owner_RC4_key, $user_pass);
 		}
-	
+
 		/**
 		* Compute U value
 		*/
@@ -205,7 +205,7 @@ if (!defined('__CLASS_FPDF_PROTECTION__'))
 		{
 			return $this->_RC4($this->encryption_key, $this->padding);
 		}
-	
+
 		/**
 		* Compute encryption key
 		*/

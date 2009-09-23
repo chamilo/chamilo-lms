@@ -12,7 +12,7 @@ if(isset($_POST['username']))
 	if($auth->login())
 	{
 		header('Location: ' . appendQueryString(CONFIG_URL_HOME, makeQueryString()));
-		exit;		
+		exit;
 	}
 }
 ?>
@@ -47,7 +47,7 @@ if(isset($_POST['username']))
 			            <tr>
 			            	<td>&nbsp;</td>
 			              <td><input type="submit" class="button" value="Login" /></td>
-			            </tr>			        
+			            </tr>
 			        </tfoot>
 			    </table>
 			</form>

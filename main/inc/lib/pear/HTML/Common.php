@@ -68,7 +68,7 @@ class HTML_Common {
 
     /**
      * Class constructor
-     * @param    mixed   $attributes     Associative array of table tag attributes 
+     * @param    mixed   $attributes     Associative array of table tag attributes
      *                                   or HTML attributes name="value" pairs
      * @param    int     $tabOffset      Indent offset in tabs
      * @access   public
@@ -91,7 +91,7 @@ class HTML_Common {
 
     /**
      * Returns the lineEnd
-     * 
+     *
      * @since     1.7
      * @access    private
      * @return    string
@@ -104,7 +104,7 @@ class HTML_Common {
 
     /**
      * Returns a string containing the unit for indenting HTML
-     * 
+     *
      * @since     1.7
      * @access    private
      * @return    string
@@ -116,7 +116,7 @@ class HTML_Common {
 
     /**
      * Returns a string containing the offset for the whole HTML code
-     * 
+     *
      * @return    string
      * @access   private
      */
@@ -187,7 +187,7 @@ class HTML_Common {
 
     /**
      * Returns the array key for the given non-name-value pair attribute
-     * 
+     *
      * @param     string    $attr         Attribute
      * @param     array     $attributes   Array of attribute
      * @since     1.0
@@ -223,7 +223,7 @@ class HTML_Common {
 
     /**
      * Removes the given attribute from the given array
-     * 
+     *
      * @param     string    $attr           Attribute name
      * @param     array     $attributes     Attribute array
      * @since     1.4
@@ -241,7 +241,7 @@ class HTML_Common {
 
     /**
      * Returns the value of the given attribute
-     * 
+     *
      * @param     string    $attr   Attribute name
      * @since     1.5
      * @access    public
@@ -270,7 +270,7 @@ class HTML_Common {
     /**
      * Returns the assoc array (default) or string of attributes
      *
-     * @param     bool    Whether to return the attributes as string 
+     * @param     bool    Whether to return the attributes as string
      * @since     1.6
      * @access    public
      * @return    mixed   attributes
@@ -296,7 +296,7 @@ class HTML_Common {
 
     /**
      * Removes an attribute
-     * 
+     *
      * @param     string    $attr   Attribute name
      * @since     1.4
      * @access    public
@@ -310,7 +310,7 @@ class HTML_Common {
 
     /**
      * Sets the line end style to Windows, Mac, Unix or a custom string.
-     * 
+     *
      * @param   string  $style  "win", "mac", "unix" or custom string.
      * @since   1.7
      * @access  public
@@ -346,7 +346,7 @@ class HTML_Common {
 
     /**
      * Returns the tabOffset
-     * 
+     *
      * @since     1.5
      * @access    public
      * @return    int
@@ -358,7 +358,7 @@ class HTML_Common {
 
     /**
      * Sets the string used to indent HTML
-     * 
+     *
      * @since     1.7
      * @param     string    $string     String used to indent ("\11", "\t", '  ', etc.).
      * @access    public
@@ -384,7 +384,7 @@ class HTML_Common {
 
     /**
      * Returns the HTML comment
-     * 
+     *
      * @since     1.5
      * @access    public
      * @return    string

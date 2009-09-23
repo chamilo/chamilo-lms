@@ -184,18 +184,18 @@ if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.
 	window.attachEvent( 'onunload', function()
 		{
 			window['__flash__removeCallback'] = function ( instance, name )
-			{ 
+			{
 				try
-				{ 
+				{
 					if ( instance )
-					{ 
-						instance[name] = null ; 
-					} 
+					{
+						instance[name] = null ;
+					}
 				}
 				catch ( flashEx )
 				{
 
-				} 
+				}
 			} ;
 		}
 	) ;

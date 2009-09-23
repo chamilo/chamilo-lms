@@ -92,7 +92,7 @@
       Render($FileName)
       Stroke()
  */
- 
+
  /* Declare some script wide constants */
  define("SCALE_NORMAL",1);
  define("SCALE_ADDALL",2);
@@ -239,7 +239,7 @@
     {
      $this->ShadowActive = FALSE;
     }
- 
+
    /* Set Palette color */
    function setColorPalette($ID,$R,$G,$B)
     {
@@ -545,13 +545,13 @@
        if ( $DataDescription["Format"]["Y"] == "number" )
         $Value = $Value.$DataDescription["Unit"]["Y"];
        if ( $DataDescription["Format"]["Y"] == "time" )
-        $Value = $this->ToTime($Value);        
+        $Value = $this->ToTime($Value);
        if ( $DataDescription["Format"]["Y"] == "date" )
-        $Value = $this->ToDate($Value);        
+        $Value = $this->ToDate($Value);
        if ( $DataDescription["Format"]["Y"] == "metric" )
-        $Value = $this->ToMetric($Value);        
+        $Value = $this->ToMetric($Value);
        if ( $DataDescription["Format"]["Y"] == "currency" )
-        $Value = $this->ToCurrency($Value);        
+        $Value = $this->ToCurrency($Value);
 
        $Position  = imageftbbox($this->FontSize,0,$this->FontName,$Value);
        $TextWidth = $Position[2]-$Position[0];
@@ -570,7 +570,7 @@
        $YPos = $YPos - $this->DivisionHeight;
       }
 
-     /* Write the Y Axis caption if set */ 
+     /* Write the Y Axis caption if set */
      if ( isset($DataDescription["Axis"]["Y"]) )
       {
        $Position   = imageftbbox($this->FontSize,90,$this->FontName,$DataDescription["Axis"]["Y"]);
@@ -595,13 +595,13 @@
          if ( $DataDescription["Format"]["X"] == "number" )
           $Value = $Value.$DataDescription["Unit"]["X"];
          if ( $DataDescription["Format"]["X"] == "time" )
-          $Value = $this->ToTime($Value);        
+          $Value = $this->ToTime($Value);
          if ( $DataDescription["Format"]["X"] == "date" )
-          $Value = $this->ToDate($Value);        
+          $Value = $this->ToDate($Value);
          if ( $DataDescription["Format"]["X"] == "metric" )
-          $Value = $this->ToMetric($Value);        
+          $Value = $this->ToMetric($Value);
          if ( $DataDescription["Format"]["X"] == "currency" )
-          $Value = $this->ToCurrency($Value);        
+          $Value = $this->ToCurrency($Value);
 
          $Position   = imageftbbox($this->FontSize,$Angle,$this->FontName,$Value);
          $TextWidth  = abs($Position[2])+abs($Position[0]);
@@ -627,7 +627,7 @@
        $ID++;
       }
 
-    /* Write the X Axis caption if set */ 
+    /* Write the X Axis caption if set */
     if ( isset($DataDescription["Axis"]["X"]) )
       {
        $Position   = imageftbbox($this->FontSize,90,$this->FontName,$DataDescription["Axis"]["X"]);
@@ -738,13 +738,13 @@
        if ( $DataDescription["Format"]["Y"] == "number" )
         $Value = $Value.$DataDescription["Unit"]["Y"];
        if ( $DataDescription["Format"]["Y"] == "time" )
-        $Value = $this->ToTime($Value);        
+        $Value = $this->ToTime($Value);
        if ( $DataDescription["Format"]["Y"] == "date" )
-        $Value = $this->ToDate($Value);        
+        $Value = $this->ToDate($Value);
        if ( $DataDescription["Format"]["Y"] == "metric" )
-        $Value = $this->ToMetric($Value);        
+        $Value = $this->ToMetric($Value);
        if ( $DataDescription["Format"]["Y"] == "currency" )
-        $Value = $this->ToCurrency($Value);        
+        $Value = $this->ToCurrency($Value);
 
        $Position  = imageftbbox($this->FontSize,0,$this->FontName,$Value);
        $TextWidth = $Position[2]-$Position[0];
@@ -847,13 +847,13 @@
        if ( $DataDescription["Format"]["Y"] == "number" )
         $Value = $Value.$DataDescription["Unit"]["Y"];
        if ( $DataDescription["Format"]["Y"] == "time" )
-        $Value = $this->ToTime($Value);        
+        $Value = $this->ToTime($Value);
        if ( $DataDescription["Format"]["Y"] == "date" )
-        $Value = $this->ToDate($Value);        
+        $Value = $this->ToDate($Value);
        if ( $DataDescription["Format"]["Y"] == "metric" )
-        $Value = $this->ToMetric($Value);        
+        $Value = $this->ToMetric($Value);
        if ( $DataDescription["Format"]["Y"] == "currency" )
-        $Value = $this->ToCurrency($Value);        
+        $Value = $this->ToCurrency($Value);
 
        $Position   = imageftbbox($this->FontSize,$Angle,$this->FontName,$Value);
        $TextWidth  = abs($Position[2])+abs($Position[0]);
@@ -878,7 +878,7 @@
        $XPos = $XPos + $this->DivisionWidth;
       }
 
-     /* Write the Y Axis caption if set */ 
+     /* Write the Y Axis caption if set */
      if ( isset($DataDescription["Axis"]["Y"]) )
       {
        $Position   = imageftbbox($this->FontSize,90,$this->FontName,$DataDescription["Axis"]["Y"]);
@@ -887,7 +887,7 @@
        imagettftext($this->Picture,$this->FontSize,90,$XMin-$this->FontSize,$TextTop,$C_TextColor,$this->FontName,$DataDescription["Axis"]["Y"]);
       }
 
-     /* Write the X Axis caption if set */ 
+     /* Write the X Axis caption if set */
      if ( isset($DataDescription["Axis"]["X"]) )
       {
        $Position   = imageftbbox($this->FontSize,90,$this->FontName,$DataDescription["Axis"]["X"]);
@@ -937,7 +937,7 @@
       {
        if ( $YPos > $this->GArea_Y1 && $YPos < $this->GArea_Y2 )
         $this->drawDottedLine($this->GArea_X1,$YPos,$this->GArea_X2,$YPos,$LineWidth,$R,$G,$B);
-        
+
        $YPos = $YPos - $this->DivisionHeight;
       }
 
@@ -1090,10 +1090,10 @@
      if ( $Shadow )
       {
        $C_ShadowColor = $this->AllocateColor($this->Picture,$this->ShadowRColor,$this->ShadowGColor,$this->ShadowBColor);
-       imagettftext($this->Picture,$this->FontSize,0,$XPos+$this->ShadowXDistance,$YPos+$this->ShadowYDistance,$C_ShadowColor,$this->FontName,$Value);     
+       imagettftext($this->Picture,$this->FontSize,0,$XPos+$this->ShadowXDistance,$YPos+$this->ShadowYDistance,$C_ShadowColor,$this->FontName,$Value);
       }
 
-     imagettftext($this->Picture,$this->FontSize,0,$XPos,$YPos,$C_TextColor,$this->FontName,$Value);     
+     imagettftext($this->Picture,$this->FontSize,0,$XPos,$YPos,$C_TextColor,$this->FontName,$Value);
     }
 
    /* Draw a text box with text align & alpha properties */
@@ -1121,9 +1121,9 @@
      $C_TextColor   =$this->AllocateColor($this->Picture,$R,$G,$B);
      $C_ShadowColor =$this->AllocateColor($this->Picture,0,0,0);
      if ( $Shadow )
-      imagettftext($this->Picture,$this->FontSize,$Angle,$X+1,$Y+1,$C_ShadowColor,$this->FontName,$Text);     
+      imagettftext($this->Picture,$this->FontSize,$Angle,$X+1,$Y+1,$C_ShadowColor,$this->FontName,$Text);
 
-     imagettftext($this->Picture,$this->FontSize,$Angle,$X,$Y,$C_TextColor,$this->FontName,$Text);     
+     imagettftext($this->Picture,$this->FontSize,$Angle,$X,$Y,$C_TextColor,$this->FontName,$Text);
     }
 
    /* Compute and draw the scale */
@@ -1394,7 +1394,7 @@
      $this->validateDataDescription("writeValues",$DataDescription);
      $this->validateData("writeValues",$Data);
 
-     if ( !is_array($Series) ) { $Series = array($Series); }     
+     if ( !is_array($Series) ) { $Series = array($Series); }
 
      foreach($Series as $Key => $Serie)
       {
@@ -1412,7 +1412,7 @@
            $YPos = $this->GArea_Y2 - (($Value-$this->VMin) * $this->DivisionRatio);
 
            $Positions = imagettfbbox($this->FontSize,0,$this->FontName,$Value);
-           $Width  = $Positions[2] - $Positions[6]; $XOffset = $XPos - ($Width/2); 
+           $Width  = $Positions[2] - $Positions[6]; $XOffset = $XPos - ($Width/2);
            $Height = $Positions[3] - $Positions[7]; $YOffset = $YPos - 4;
 
            $C_TextColor =$this->AllocateColor($this->Picture,$this->Palette[$ColorID]["R"],$this->Palette[$ColorID]["G"],$this->Palette[$ColorID]["B"]);
@@ -1623,7 +1623,7 @@
          $Index++;
         }
        $Index--;
- 
+
        $Yt[0] = 0;
        $Yt[1] = 0;
        $U[1]  = 0;
@@ -1703,7 +1703,7 @@
            $PointsCount++; $Points[] = $XLast; $Points[] = $LayerHeight;
           }
 
-         $YLast = $YPos; $XLast = $XPos; 
+         $YLast = $YPos; $XLast = $XPos;
          $XPos  = $XPos + $this->DivisionWidth * $Accuracy;
         }
 
@@ -1951,7 +1951,7 @@
               {
                $this->addToImageMap($XPos+1,min($YZero,$YPos),$XPos+$SeriesWidth-1,max($YZero,$YPos),$DataDescription["Description"][$ColName],$Data[$Key][$ColName].$DataDescription["Unit"]["Y"],"Bar");
               }
-           
+
              if ( $Shadow && $Alpha == 100 )
               $this->drawRectangle($XPos+1,$YZero,$XPos+$SeriesWidth-1,$YPos,25,25,25,TRUE,$Alpha);
 
@@ -1989,7 +1989,7 @@
         { if ( $keyI == $ColName ) { $ColorID = $ID; }; $ID++; }
 
        $XPos  = $this->GArea_X1 + $this->GAreaXOffset - $SeriesWidth / 2;
-       $XLast = -1; 
+       $XLast = -1;
        foreach ( $Data as $Key => $Values )
         {
          if ( isset($Data[$Key][$ColName]))
@@ -2425,7 +2425,7 @@
          $TopX = cos($iAngle * 3.1418 / 180 ) * $Radius + $XPos;
          $TopY = sin($iAngle * 3.1418 / 180 ) * $Radius + $YPos;
 
-         $TopPlots[$Key][] = $TopX; 
+         $TopPlots[$Key][] = $TopX;
          $TopPlots[$Key][] = $TopY;
         }
 
@@ -2442,7 +2442,7 @@
 
      /* Draw Top polygons */
      foreach ($PolyPlots as $Key => $Value)
-      { 
+      {
        $C_GraphLo = $this->AllocateColor($this->Picture,$this->Palette[$Key]["R"],$this->Palette[$Key]["G"],$this->Palette[$Key]["B"]);
        imagefilledpolygon($this->Picture,$PolyPlots[$Key],(count($PolyPlots[$Key])+1)/2,$C_GraphLo);
       }
@@ -2452,7 +2452,7 @@
 
      /* Draw Top polygons */
      foreach ($TopPlots as $Key => $Value)
-      { 
+      {
        for($j=0;$j<=count($TopPlots[$Key])-4;$j=$j+2)
         $this->drawLine($TopPlots[$Key][$j],$TopPlots[$Key][$j+1],$TopPlots[$Key][$j+2],$TopPlots[$Key][$j+3],$R,$G,$B);
       }
@@ -2578,7 +2578,7 @@
 
      /* Draw Top polygons */
      foreach ($PolyPlots as $Key => $Value)
-      { 
+      {
        if ( !$AllBlack )
         $C_GraphLo = $this->AllocateColor($this->Picture,$this->Palette[$Key]["R"],$this->Palette[$Key]["G"],$this->Palette[$Key]["B"]);
        else
@@ -2698,7 +2698,7 @@
        imagefilledpolygon($this->Picture,$BotPlots[$Key],(count($BotPlots[$Key])+1)/2,$C_GraphLo);
 
        if ( $EnhanceColors ) { $En = -10; } else { $En = 0; }
- 
+
        for($j=0;$j<=count($aBotPlots[$Key])-4;$j=$j+2)
         $this->drawLine($aBotPlots[$Key][$j],$aBotPlots[$Key][$j+1],$aBotPlots[$Key][$j+2],$aBotPlots[$Key][$j+3],$this->Palette[$Key]["R"]+$En,$this->Palette[$Key]["G"]+$En,$this->Palette[$Key]["B"]+$En);
       }
@@ -2732,7 +2732,7 @@
 
      /* Draw Top polygons */
      for($Key=count($iValues)-1;$Key>=0;$Key--)
-      { 
+      {
        $C_GraphLo = $this->AllocateColor($this->Picture,$this->Palette[$Key]["R"],$this->Palette[$Key]["G"],$this->Palette[$Key]["B"]);
        imagefilledpolygon($this->Picture,$TopPlots[$Key],(count($TopPlots[$Key])+1)/2,$C_GraphLo);
 
@@ -3015,7 +3015,7 @@
      if ( $G < 0 ) { $G = 0; } if ( $G > 255 ) { $G = 255; }
      if ( $B < 0 ) { $B = 0; } if ( $B > 255 ) { $B = 255; }
 
-     $Distance = sqrt(($X2-$X1)*($X2-$X1)+($Y2-$Y1)*($Y2-$Y1));  
+     $Distance = sqrt(($X2-$X1)*($X2-$X1)+($Y2-$Y1)*($Y2-$Y1));
      if ( $Distance == 0 )
       return(-1);
      $XStep = ($X2-$X1) / $Distance;
@@ -3047,7 +3047,7 @@
      if ( $G < 0 ) { $G = 0; } if ( $G > 255 ) { $G = 255; }
      if ( $B < 0 ) { $B = 0; } if ( $B > 255 ) { $B = 255; }
 
-     $Distance = sqrt(($X2-$X1)*($X2-$X1)+($Y2-$Y1)*($Y2-$Y1));  
+     $Distance = sqrt(($X2-$X1)*($X2-$X1)+($Y2-$Y1)*($Y2-$Y1));
 
      $XStep = ($X2-$X1) / $Distance;
      $YStep = ($Y2-$Y1) / $Distance;
@@ -3075,7 +3075,7 @@
 
        $DotIndex++;
        if ( $DotIndex == $DotSize * 2 )
-        $DotIndex = 0;        
+        $DotIndex = 0;
       }
     }
 

@@ -20,8 +20,8 @@
 	elseif(empty($_POST['currentFolderPath']) || !isUnderRoot($_POST['currentFolderPath']))
 	{
 		$error = ERR_FOLDER_PATH_NOT_ALLOWED;
-	}else 
-	{		
+	}else
+	{
 		require_once(CLASS_SESSION_ACTION);
 		$sessionAction = new SessionAction();
 		$sessionAction->setAction($_POST['action_value']);

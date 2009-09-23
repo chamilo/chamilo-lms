@@ -22,12 +22,12 @@
 require_once 'HTML/QuickForm.php';
 
 /**
- * The class represents a page of a multipage form. 
- * 
+ * The class represents a page of a multipage form.
+ *
  * Generally you'll need to subclass this and define your buildForm()
  * method that will build the form. While it is also possible to instantiate
  * this class and build the form manually, this is not the recommended way.
- * 
+ *
  * @author  Alexey Borzov <avb@php.net>
  * @package HTML_QuickForm_Controller
  * @version $Revision: 6184 $
@@ -55,7 +55,7 @@ class HTML_QuickForm_Page extends HTML_QuickForm
 
    /**
     * Class constructor
-    * 
+    *
     * @access public
     */
     function HTML_QuickForm_Page($formName, $method = 'post', $target = '_self', $attributes = null)
@@ -66,7 +66,7 @@ class HTML_QuickForm_Page extends HTML_QuickForm
 
    /**
     * Registers a handler for a specific action.
-    * 
+    *
     * @access public
     * @param  string    name of the action
     * @param  object HTML_QuickForm_Action   the handler for the action
@@ -79,10 +79,10 @@ class HTML_QuickForm_Page extends HTML_QuickForm
 
    /**
     * Handles an action.
-    * 
+    *
     * If an Action object was not registered here, controller's handle()
     * method will be called.
-    * 
+    *
     * @access public
     * @param  string Name of the action
     */
@@ -98,7 +98,7 @@ class HTML_QuickForm_Page extends HTML_QuickForm
 
    /**
     * Returns a name for a submit button that will invoke a specific action.
-    * 
+    *
     * @access public
     * @param  string  Name of the action
     * @return string  "name" attribute for a submit button
@@ -111,9 +111,9 @@ class HTML_QuickForm_Page extends HTML_QuickForm
 
    /**
     * Loads the submit values from the array.
-    * 
+    *
     * The method is NOT intended for general usage.
-    * 
+    *
     * @param array  'submit' values
     * @access public
     */
@@ -128,13 +128,13 @@ class HTML_QuickForm_Page extends HTML_QuickForm
 
    /**
     * Builds a form.
-    * 
+    *
     * You should override this method when you subclass HTML_QuickForm_Page,
     * it should contain all the necessary addElement(), applyFilter(), addRule()
-    * and possibly setDefaults() and setConstants() calls. The method will be 
+    * and possibly setDefaults() and setConstants() calls. The method will be
     * called on demand, so please be sure to set $_formBuilt property to true to
     * assure that the method works only once.
-    * 
+    *
     * @access public
     * @abstract
     */
@@ -146,8 +146,8 @@ class HTML_QuickForm_Page extends HTML_QuickForm
 
    /**
     * Checks whether the form was already built.
-    * 
-    * @access public  
+    *
+    * @access public
     * @return bool
     */
     function isFormBuilt()
@@ -158,11 +158,11 @@ class HTML_QuickForm_Page extends HTML_QuickForm
 
    /**
     * Sets the default action invoked on page-form submit
-    * 
+    *
     * This is necessary as the user may just press Enter instead of
     * clicking one of the named submit buttons and then no action name will
     * be passed to the script.
-    * 
+    *
     * @access public
     * @param  string    default action name
     */

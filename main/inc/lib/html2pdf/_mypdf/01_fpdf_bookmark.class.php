@@ -1,27 +1,27 @@
 <?php
 /*************************************************************************
  * http://www.fpdf.org/en/script/script1.php
- * 
+ *
  * @author		Olivier
- * 
+ *
  * This extension adds bookmark support. The method to add a bookmark is:
- * 
+ *
  * function Bookmark(string txt [, int level [, float y]])
- * 
+ *
  * txt: the bookmark title.
  * level: the bookmark level (0 is top level, 1 is just below, and so on).
  * y: the y position of the bookmark destination in the current page. -1 means the current position. Default value: 0.
- * 
+ *
  * The title must be encoded in ISO Latin-1.
  ************************************************************************/
 /*************************************************************************
  * http://www.fpdf.org/en/script/script13.php
- * 
+ *
  * @author		Min's
- * 
- * This class prints an index from the created bookmarks. 
+ *
+ * This class prints an index from the created bookmarks.
  ************************************************************************/
- 
+
 if (!defined('__CLASS_FPDF_BOOKMARK__'))
 {
 	define('__CLASS_FPDF_BOOKMARK__', true);
@@ -32,19 +32,19 @@ require_once(dirname(__FILE__).'/00_fpdf_codebar.class.php');
 	{
 		var $outlines=array();
 		var $OutlineRoot;
-		
+
 		function FPDF_BookMark($orientation='P',$unit='mm',$format='A4')
 		{
 			$this->FPDF_Codebar($orientation,$unit,$format);
-		
+
 		}
-		
+
 		function Bookmark($txt, $level=0, $y=0)
 		{
 			if($y==-1) $y=$this->GetY();
 			$this->outlines[]=array('t'=>$txt, 'l'=>$level, 'y'=>($this->h-$y)*$this->k, 'p'=>$this->PageNo());
 		}
-		
+
 		function _putbookmarks()
 		{
 			$nb=count($this->outlines);
@@ -67,7 +67,7 @@ require_once(dirname(__FILE__).'/00_fpdf_codebar.class.php');
 				}
 				else
 					$this->outlines[$i]['parent']=$nb;
-					
+
 				if($o['l']<=$level and $i>0)
 				{
 					//Set prev and next pointers
@@ -78,7 +78,7 @@ require_once(dirname(__FILE__).'/00_fpdf_codebar.class.php');
 				$lru[$o['l']]=$i;
 				$level=$o['l'];
 			}
-			
+
 			//Outline items
 			$n=$this->n+1;
 			foreach($this->outlines as $i=>$o)
@@ -98,7 +98,7 @@ require_once(dirname(__FILE__).'/00_fpdf_codebar.class.php');
 				$this->_out('/Count 0>>');
 				$this->_out('endobj');
 			}
-			
+
 			//Outline root
 			$this->_newobj();
 			$this->OutlineRoot=$this->n;
@@ -106,13 +106,13 @@ require_once(dirname(__FILE__).'/00_fpdf_codebar.class.php');
 			$this->_out('/Last '.($n+$lru[0]).' 0 R>>');
 			$this->_out('endobj');
 		}
-		
+
 		function _putresources()
 		{
 			parent::_putresources();
 			$this->_putbookmarks();
 		}
-		
+
 		function _putcatalog()
 		{
 			parent::_putcatalog();
@@ -122,17 +122,17 @@ require_once(dirname(__FILE__).'/00_fpdf_codebar.class.php');
 				$this->_out('/PageMode /UseOutlines');
 			}
 		}
-		
+
 		function CreateIndex(&$obj, $titre = 'Index', $size_title = 20, $size_bookmark = 15, $bookmark_title = true, $display_page = true)
 		{
 			if ($bookmark_title) $this->Bookmark($titre, 0, -1);
-			
+
 			//Index title
 			$this->SetFontSize($size_title);
 			$this->Cell(0,5,$titre,0,1,'C');
 			$this->SetFontSize($size_bookmark);
 			$this->Ln(10);
-			
+
 			$size=sizeof($this->outlines);
 			$PageCellSize=$this->GetStringWidth('p. '.$this->outlines[$size-1]['p'])+2;
 			for ($i=0;$i<$size;$i++)
@@ -142,11 +142,11 @@ require_once(dirname(__FILE__).'/00_fpdf_codebar.class.php');
 					$obj->setNewPage();
 					$this->SetFontSize($size_bookmark);
 				}
-				
+
 				//Offset
 				$level=$this->outlines[$i]['l'];
 				if($level>0) $this->Cell($level*8);
-				
+
 				//Caption
 				$str=$this->outlines[$i]['t'];
 				$strsize=$this->GetStringWidth($str);
@@ -159,7 +159,7 @@ require_once(dirname(__FILE__).'/00_fpdf_codebar.class.php');
 				if ($display_page)
 				{
 					$this->Cell($strsize+2,$this->FontSize+2,$str);
-				
+
 					//Filling dots
 					$w=$this->w-$this->lMargin-$this->rMargin-$PageCellSize-($level*8)-($strsize+2);
 					$nb=$w/$this->GetStringWidth('.');
@@ -171,7 +171,7 @@ require_once(dirname(__FILE__).'/00_fpdf_codebar.class.php');
 				}
 				else
 				{
-					$this->Cell($strsize+2,$this->FontSize+2,$str, 0, 1);					
+					$this->Cell($strsize+2,$this->FontSize+2,$str, 0, 1);
 				}
 			}
 		}

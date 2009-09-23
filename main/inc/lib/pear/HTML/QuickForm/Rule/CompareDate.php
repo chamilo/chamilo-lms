@@ -22,10 +22,10 @@ require_once 'HTML/QuickForm/Rule.php';
 
 /**
  * Rule to compare two form fields
- * 
- * The most common usage for this is to ensure that the password 
+ *
+ * The most common usage for this is to ensure that the password
  * confirmation field matches the password field
- * 
+ *
  * @access public
  * @package HTML_QuickForm
  * @version $Revision: 6184 $
@@ -49,7 +49,7 @@ class HTML_QuickForm_Rule_CompareDate extends HTML_QuickForm_Rule
 
    /**
     * Returns the operator to use for comparing the values
-    * 
+    *
     * @access private
     * @param  string     operator name
     * @return string     operator to use for validation
@@ -66,11 +66,11 @@ class HTML_QuickForm_Rule_CompareDate extends HTML_QuickForm_Rule
             return '==';
         }
     }*/
-    
+
     function validate($values)
-    {       
-        $compareFn = create_function('$a, $b', 'return mktime($a[\'H\'],$a[\'i\'],0,$a[\'M\'],$a[\'d\'],$a[\'Y\']) <=   mktime($b[\'H\'],$b[\'i\'],0,$b[\'M\'],$b[\'d\'],$b[\'Y\'] );');           
-        return $compareFn($values[0], $values[1]);         
+    {
+        $compareFn = create_function('$a, $b', 'return mktime($a[\'H\'],$a[\'i\'],0,$a[\'M\'],$a[\'d\'],$a[\'Y\']) <=   mktime($b[\'H\'],$b[\'i\'],0,$b[\'M\'],$b[\'d\'],$b[\'Y\'] );');
+        return $compareFn($values[0], $values[1]);
     }
 
 

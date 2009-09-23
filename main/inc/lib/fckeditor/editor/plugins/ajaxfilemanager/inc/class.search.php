@@ -14,7 +14,7 @@
 			'size_from'=>'',
 			'size_to'=>'',
 			'recursive'=>'0',
-			
+
 		);
 		var $sessionAction = null;
 		/**
@@ -28,17 +28,17 @@
 			$this->sessionAction = new SessionAction();
 			$objRootFolder = new file($this->rootFolder);
 			$tem = $objRootFolder->getFileInfo();
-			$obj = new manager($this->rootFolder, false);			
+			$obj = new manager($this->rootFolder, false);
 			$obj->setSessionAction($this->sessionAction);
-			$selectedDocuments = $this->sessionAction->get();					
+			$selectedDocuments = $this->sessionAction->get();
 			$fileType = $obj->getFolderInfo($this->rootFolder);
-			
+
 			foreach($fileType as $k=>$v)
 			{
 				$tem[$k] = $v;
 			}
-			
-			$tem['path'] = backslashToSlash($this->rootFolder);		
+
+			$tem['path'] = backslashToSlash($this->rootFolder);
 			$tem['type'] = (is_dir($this->rootFolder)?'folder':'file');
 			$tem['size'] = (is_dir($this->rootFolder)?'':transformFileSize(@filesize($this->rootFolder)));
 			//$tem['ctime'] = date(DATE_TIME_FORMAT, $tem['ctime']);
@@ -50,11 +50,11 @@
 			$tem['subdir'] = 0;
 			$manager = null;
 			$this->rootFolderInfo = $tem;
-			$tem = null;			
+			$tem = null;
 		}
-		
-		
-		
+
+
+
 		/**
 		 * constructor
 		 *
@@ -76,7 +76,7 @@
 			$this->searchkeywords[$key] = $value;
 		}
 		/**
-		 * change the search keywords 
+		 * change the search keywords
 		 *
 		 * @param array $keywords
 		 */
@@ -96,9 +96,9 @@
 		 */
 		function doSearch($baseFolderPath = null)
 		{
-			
+
 			$baseFolderPath = addTrailingSlash(backslashToSlash((is_null($baseFolderPath)?$this->rootFolder:$baseFolderPath)));
-			
+
 			$dirHandler = @opendir($baseFolderPath);
 			if($dirHandler)
 			{
@@ -112,7 +112,7 @@
 							$isValid = true;
 
 							$fileTime = @filemtime($path);
-							$fileSize = @filesize($path);	
+							$fileSize = @filesize($path);
 							if($this->searchkeywords['name'] !== ''  && @eregi($this->searchkeywords['name'], $file) === false)
 							{
 								$isValid = false;
@@ -124,7 +124,7 @@
 							if($this->searchkeywords['mtime_to'] != '' && $fileTime > @strtotime($this->searchkeywords['mtime_to']))
 							{
 								$isValid = false;
-							}							
+							}
 							if($this->searchkeywords['size_from'] != '' && $fileSize < @strtotime($this->searchkeywords['size_from']))
 							{
 								$isValid = false;
@@ -132,50 +132,50 @@
 							if($this->searchkeywords['size_to'] != '' && $fileSize > @strtotime($this->searchkeywords['size_to']))
 							{
 								$isValid = false;
-							}			
+							}
 							if($isValid && isListingDocument($path))
 							{
 								$finalPath = $path;
 								$objFile = new file($finalPath);
 								$tem = $objFile->getFileInfo();
-								$obj = new manager($finalPath, false);			
+								$obj = new manager($finalPath, false);
 								$obj->setSessionAction($this->sessionAction);
-								$selectedDocuments = $this->sessionAction->get();													
+								$selectedDocuments = $this->sessionAction->get();
 								$fileType = $obj->getFileType($finalPath);
-								
+
 								foreach($fileType as $k=>$v)
 								{
 									$tem[$k] = $v;
 								}
-								
-								$tem['path'] = backslashToSlash($finalPath);		
+
+								$tem['path'] = backslashToSlash($finalPath);
 								$tem['type'] = (is_dir($finalPath)?'folder':'file');
 								$tem['size'] = transformFileSize($tem['size']);
-								//$tem['ctime'] = date(DATE_TIME_FORMAT, $tem['ctime']); // Juan Carlos Raña. Comment to get a correct date when make a search
-								//$tem['mtime'] = date(DATE_TIME_FORMAT, $tem['mtime']); // Juan Carlos Raña. Comment to get a correct date when make a search
+								//$tem['ctime'] = date(DATE_TIME_FORMAT, $tem['ctime']); // Juan Carlos Raï¿½a. Comment to get a correct date when make a search
+								//$tem['mtime'] = date(DATE_TIME_FORMAT, $tem['mtime']); // Juan Carlos Raï¿½a. Comment to get a correct date when make a search
 								$tem['flag'] = (array_search($tem['path'], $selectedDocuments) !== false?($this->sessionAction->getAction() == "copy"?'copyFlag':'cutFlag'):'noFlag');
 								$tem['url'] = getFileUrl($tem['path']);
 								$this->rootFolderInfo['file']++;
 								$manager = null;
 								$this->files[] = $tem;
-								$tem = null;								
+								$tem = null;
 							}
 						}elseif(is_dir($path) && $this->searchkeywords['recursive'])
 						{
 							$this->doSearch($path); //// For Dokeos this line replaces the lower line to run the search recursively from the root directory
-							//$this->Search($baseFolderPath); //comment by Juan Carlos Raña							
+							//$this->Search($baseFolderPath); //comment by Juan Carlos Raï¿½a
 						}
 					}
 				}
 			}
-			 
+
 		}
-		
+
 		function getFoundFiles()
 		{
 			return $this->files;
 		}
-		
+
 		function getRootFolderInfo()
 		{
 

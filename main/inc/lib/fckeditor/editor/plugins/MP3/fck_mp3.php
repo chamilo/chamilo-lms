@@ -1,5 +1,5 @@
 <?php
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array('resourcelinker','document');
 include('../../../../../../inc/global.inc.php');
 ?>
@@ -10,7 +10,7 @@ include('../../../../../../inc/global.inc.php');
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta content="noindex, nofollow" name="robots">
 		<script type="text/javascript">
-		/*<![CDATA[*/		
+		/*<![CDATA[*/
 		var rel_path = "<?php  echo api_get_path(REL_CODE_PATH); ?>";
 		//var tab_to_select = '<?php echo !empty($_SERVER['QUERY_STRING']) ? 'Info' : 'Upload'; ?>';
 		var tab_to_select = 'Info' ;
@@ -28,7 +28,7 @@ include('../../../../../../inc/global.inc.php');
 					<td>
 						<table cellspacing="0" cellpadding="0" width="100%" border="0">
 							<tr>
-							<td valign="top" width="100%">								
+							<td valign="top" width="100%">
 								<span fckLang="DlgMP3URL">URL</span><br>
 								<input id="mpUrl" onBlur="javascript:updatePreview();" style="width: 100%" type="text">
 							</td>
@@ -50,34 +50,34 @@ include('../../../../../../inc/global.inc.php');
 		  //if (api_is_in_course() || api_is_platform_admin())
 		  //{
 		 	 include(api_get_path(INCLUDE_PATH).'course_document.inc.php');
-		  //}		  
+		  //}
 		  ?>
 		        </td>
 		      </tr>
 		    </table>
 		  </div>
 		</div>
-		<div id="divUpload" style="display: none">		
-		<?php		
+		<div id="divUpload" style="display: none">
+		<?php
 			include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-			$form = new FormValidator('frmUpload','POST','','UploadWindow','id="frmUpload" enctype="multipart/form-data" onSubmit="javascript:return CheckUpload();"');			
-			$form->addElement('html','<table cellspacing="1" cellpadding="1" border="0" width="90%" align="center">');			
+			$form = new FormValidator('frmUpload','POST','','UploadWindow','id="frmUpload" enctype="multipart/form-data" onSubmit="javascript:return CheckUpload();"');
+			$form->addElement('html','<table cellspacing="1" cellpadding="1" border="0" width="90%" align="center">');
 			$form->addElement('html','<tr><td>&nbsp;</td><tr><td>');
 			$form->addElement('file','NewFile','','id="txtUploadFile" size="40"');
-			$form->addElement('html','</td></tr>');			
+			$form->addElement('html','</td></tr>');
 			$form->addElement('html','<tr><td>');
 			//$renderer = & $form->defaultRenderer();
 			//$renderer->setElementTemplate('<div style="margin-left:-4px;">{element} {label}</div>', 'autostart');
 			$form->addElement('checkbox', 'autostart', '', '&nbsp;'.api_convert_encoding(get_lang('FckMp3Autostart'), 'UTF-8', $charset), array('id' => 'autostart'));
-			$form->addElement('html','</td></tr>');			
+			$form->addElement('html','</td></tr>');
 			$form->addElement('html','<tr><td>');
 			$form->addElement('submit','','Send it to the Server','id="btnUpload" fckLang="DlgLnkBtnUpload"');
-			$form->addElement('html','</td></tr></table>');			
+			$form->addElement('html','</td></tr></table>');
 			$form->addElement('html','<iframe name="UploadWindow" style="display: none" src="../../fckblank.html"></iframe>');
-			
-			$form->add_real_progress_bar('fckMP3','NewFile');			
-			$form->display();			
-		?>		
+
+			$form->add_real_progress_bar('fckMP3','NewFile');
+			$form->display();
+		?>
 		</div>
 		<script type="text/javascript">window_onload(tab_to_select);</script>
 	</body>

@@ -9,13 +9,13 @@ switch($_SESSION['whereami'])
 {
 
 
-	case 'lp/build' : 
-	case 'document/create' : 
-	case 'document/edit' : 
-		$autostart = 'false'; 
+	case 'lp/build' :
+	case 'document/create' :
+	case 'document/edit' :
+		$autostart = 'false';
 	break;
 	default :
-		$autostart = 'true'; 
+		$autostart = 'true';
 
 }
 echo utf8_encode('autostart='.$autostart);

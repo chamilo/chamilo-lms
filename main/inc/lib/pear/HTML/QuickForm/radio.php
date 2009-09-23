@@ -23,7 +23,7 @@ require_once('HTML/QuickForm/input.php');
 
 /**
  * HTML class for a radio type element
- * 
+ *
  * @author       Adam Daniel <adaniel1@eesus.jnj.com>
  * @author       Bertrand Mansion <bmansion@mamasam.com>
  * @version      1.1
@@ -47,7 +47,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
 
     /**
      * Class constructor
-     * 
+     *
      * @param     string    Input field name attribute
      * @param     mixed     Label(s) for a field
      * @param     string    Text to display near the radio
@@ -68,13 +68,13 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
         $this->_text = $text;
         $this->_generateId();
     } //end constructor
-    
+
     // }}}
     // {{{ setChecked()
 
     /**
      * Sets whether radio button is checked
-     * 
+     *
      * @param     bool    $checked  Whether the field is checked or not
      * @since     1.0
      * @access    public
@@ -94,7 +94,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
 
     /**
      * Returns whether radio button is checked
-     * 
+     *
      * @since     1.0
      * @access    public
      * @return    string
@@ -103,13 +103,13 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
     {
         return $this->getAttribute('checked');
     } //end func getChecked
-        
+
     // }}}
     // {{{ toHtml()
 
     /**
      * Returns the radio element in HTML
-     * 
+     *
      * @since     1.0
      * @access    public
      * @return    string
@@ -125,13 +125,13 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
         }
         return HTML_QuickForm_input::toHtml() . $label;
     } //end func toHtml
-    
+
     // }}}
     // {{{ getFrozenHtml()
 
     /**
      * Returns the value of field without HTML tags
-     * 
+     *
      * @since     1.0
      * @access    public
      * @return    string
@@ -151,7 +151,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
 
     /**
      * Sets the radio text
-     * 
+     *
      * @param     string    $text  Text to display near the radio button
      * @since     1.1
      * @access    public
@@ -166,8 +166,8 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
     // {{{ getText()
 
     /**
-     * Returns the radio text 
-     * 
+     * Returns the radio text
+     *
      * @since     1.1
      * @access    public
      * @return    string
@@ -238,7 +238,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
         }
         return $this->_prepareValue($value, $assoc);
     }
-    
+
     // }}}
 } //end class HTML_QuickForm_radio
 ?>

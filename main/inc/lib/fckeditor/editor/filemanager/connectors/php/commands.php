@@ -214,7 +214,7 @@ function FileUpload( $resourceType, $currentFolder, $sCommand )
 		// Get the extension.
 		$sExtension = substr( $sFileName, ( strrpos($sFileName, '.') + 1 ) ) ;
 		$sExtension = strtolower( $sExtension ) ;
-		
+
 		if ( isset( $Config['SecureImageUploads'] ) )
 		{
 			if ( ( $isImageValid = IsImageValid( $oFile['tmp_name'], $sExtension ) ) === false )

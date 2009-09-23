@@ -4,9 +4,9 @@
 ** Version.......:  1.0
 ** Author........:  Xiang Wei ZHUO <wei@zhuo.org>
 ** Filename......:  Transform.php
-** Last changed..:  30 Aug 2003 
+** Last changed..:  30 Aug 2003
 ** Notes.........:  Orginal is from PEAR
-                    
+
                     Added a few extra,
                         - create unique filename in a particular directory,
                           used for temp image files.
@@ -345,7 +345,7 @@ Class Image_Transform
         while (false !== ($entry = $d->read())) {
             if (is_file($dir.'/'.$entry) && substr($entry,0,1) == '.' && !ereg($entry, $this->image))
             {
-                //echo filemtime($this->directory.'/'.$entry)."<br>"; 
+                //echo filemtime($this->directory.'/'.$entry)."<br>";
                 //echo time();
 
                 if (filemtime($dir.'/'.$entry) + $this->lapse_time < time())
@@ -365,13 +365,13 @@ Class Image_Transform
     function createUnique($dir)
     {
        $unique_str = '.'.$this->uid.'_'.$this->uniqueStr().".".$this->type;
-        
+
        //make sure the the unique temp file does not exists
         while (file_exists($dir.$unique_str))
         {
             $unique_str = '.'.$this->uid.'_'.$this->uniqueStr().".".$this->type;
         }
-        
+
       $this->cleanUp($this->uid, $dir);
 
        return $unique_str;
@@ -556,7 +556,7 @@ Class Image_Transform
         return null; //PEAR::raiseError("No crop method exists", true);
     }
 
-    function flip() 
+    function flip()
     {
         return null;
     }

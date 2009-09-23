@@ -20,7 +20,7 @@
 
 /**
  * An abstract base class for QuickForm renderers
- * 
+ *
  * The class implements a Visitor design pattern
  *
  * @abstract
@@ -42,7 +42,7 @@ class HTML_QuickForm_Renderer
     *
     * @param    object    An HTML_QuickForm object being visited
     * @access   public
-    * @return   void 
+    * @return   void
     * @abstract
     */
     function startForm(&$form)
@@ -52,10 +52,10 @@ class HTML_QuickForm_Renderer
 
    /**
     * Called when visiting a form, after processing all form elements
-    * 
+    *
     * @param    object     An HTML_QuickForm object being visited
     * @access   public
-    * @return   void 
+    * @return   void
     * @abstract
     */
     function finishForm(&$form)
@@ -68,7 +68,7 @@ class HTML_QuickForm_Renderer
     *
     * @param    object     An HTML_QuickForm_header element being visited
     * @access   public
-    * @return   void 
+    * @return   void
     * @abstract
     */
     function renderHeader(&$header)
@@ -83,7 +83,7 @@ class HTML_QuickForm_Renderer
     * @param    bool       Whether an element is required
     * @param    string     An error message associated with an element
     * @access   public
-    * @return   void 
+    * @return   void
     * @abstract
     */
     function renderElement(&$element, $required, $error)
@@ -93,11 +93,11 @@ class HTML_QuickForm_Renderer
 
    /**
     * Called when visiting a hidden element
-    * 
+    *
     * @param    object     An HTML_QuickForm_hidden object being visited
     * @access   public
     * @return   void
-    * @abstract 
+    * @abstract
     */
     function renderHidden(&$element)
     {
@@ -106,12 +106,12 @@ class HTML_QuickForm_Renderer
 
    /**
     * Called when visiting a raw HTML/text pseudo-element
-    * 
+    *
     * Seems that this should not be used when using a template-based renderer
     *
     * @param    object     An HTML_QuickForm_html element being visited
     * @access   public
-    * @return   void 
+    * @return   void
     * @abstract
     */
     function renderHtml(&$data)
@@ -126,7 +126,7 @@ class HTML_QuickForm_Renderer
     * @param    bool       Whether a group is required
     * @param    string     An error message associated with a group
     * @access   public
-    * @return   void 
+    * @return   void
     * @abstract
     */
     function startGroup(&$group, $required, $error)
@@ -139,7 +139,7 @@ class HTML_QuickForm_Renderer
     *
     * @param    object     An HTML_QuickForm_group object being visited
     * @access   public
-    * @return   void 
+    * @return   void
     * @abstract
     */
     function finishGroup(&$group)

@@ -17,7 +17,7 @@ if(!empty($_user['user_id']) AND string_2_boolean(api_get_setting('allow_email_e
  * @param	object	Element on which the event is added
  * @param	string	Name of event
  * @param	string	Function to trigger on event
- * @param	boolean	Capture the event and prevent 
+ * @param	boolean	Capture the event and prevent
  */
 function addEvent(elm, evType, fn, useCapture)
 { //by Scott Andrew
@@ -29,7 +29,7 @@ function addEvent(elm, evType, fn, useCapture)
 		return r;
 	} else {
 		elm['on' + evType] = fn;
-	} 
+	}
 }
 /**
  * Adds the event listener
@@ -68,7 +68,7 @@ function loadEmailEditor(e)
 	}
 	if(e && e.preventDefault){
 		e.preventDefault();
-	}	
+	}
 }
 addEvent(window,'load',addListeners,false);
 </script>

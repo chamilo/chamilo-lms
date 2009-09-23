@@ -6,7 +6,7 @@ include_once('global.inc.php');
 		INIT SECTION
 ==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 
 require_once api_get_path(INCLUDE_PATH).'lib/fckeditor/repository.php';
 
@@ -198,13 +198,13 @@ if($is_allowed_to_edit) // TEACHER ONLY
 	  ======================================*/
 
 	if ( isset($_GET['delete']) )
-	{	
+	{
 		include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
 		if(DocumentManager::delete_document($_course,$_GET['delete'],$base_work_dir))
 		{
 			Display::display_normal_message(api_convert_encoding(get_lang('DocDeleted'), 'UTF-8', $charset));
 		}
-		else 
+		else
 		{
 			Display::display_normal_message(api_convert_encoding(get_lang('DocDeleteError'), 'UTF-8', $charset));
 		}
@@ -218,10 +218,10 @@ if($is_allowed_to_edit) // TEACHER ONLY
 				foreach($_POST['path'] as $index => $path)
 				{
 					DocumentManager::delete_document($_course,$path,$base_work_dir);
-				}	
+				}
 				Display::display_normal_message(api_convert_encoding(get_lang('DocDeleted'), 'UTF-8', $charset));
 				break;
-		}	
+		}
 	}
 }
 
@@ -267,7 +267,7 @@ if($docs_and_folders)
 		{
 			 $document_name=$id['title'];
 		}
-		else 
+		else
 		{
 			$document_name=basename($id['path']);
 		}
@@ -286,17 +286,17 @@ if($docs_and_folders)
 		//comments => display comment under the document name
 		//$row[] = $invisibility_span_open.nl2br(htmlspecialchars($id['comment'])).$invisibility_span_close;
 		$display_size = format_file_size($size);
-		$row[] = '<span style="display:none;">'.$size.'</span>'.$invisibility_span_open.$display_size.$invisibility_span_close; 
+		$row[] = '<span style="display:none;">'.$size.'</span>'.$invisibility_span_open.$display_size.$invisibility_span_close;
 		//last edit date
 		$display_date = format_date(strtotime($id['lastedit_date']));
-		$row[] = '<span style="display:none;">'.$id['lastedit_date'].'</span>'.$invisibility_span_open.$display_date.$invisibility_span_close; 
-		
+		$row[] = '<span style="display:none;">'.$id['lastedit_date'].'</span>'.$invisibility_span_open.$display_date.$invisibility_span_close;
+
 		$sortable_data[] = $row;
 	}
 	//*******************************************************************************************
 
 }
-else 
+else
 {
 	$sortable_data=array();
 	//$table_footer='<div style="text-align:center;"><strong>'.get_lang('NoDocsInFolder').'</strong></div>';
@@ -367,7 +367,7 @@ function getlist ($directory) {
 		}
 
 		return $files;
-	} 
+	}
 	else
 	{
 		return false;

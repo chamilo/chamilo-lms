@@ -116,7 +116,7 @@
 		else
 			return str;
 	};
-	
+
 </script>
 
 <script type="text/javascript">
@@ -125,7 +125,7 @@
 	{
 ?>
 	// Reload the images in the imageframe of the Manager :
-	// Is there a "imgManager" frame. 
+	// Is there a "imgManager" frame.
 	if ((popupWindow = parent.opener.parent) && (imgManager = parent.opener.parent.document.getElementById("imgManager")))
 	{
 		// refresh it - so it shows the edited image.

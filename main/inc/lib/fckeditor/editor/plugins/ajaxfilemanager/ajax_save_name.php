@@ -34,11 +34,11 @@
 	}elseif(!rename(removeTrailingSlash($_POST['original_path']), addTrailingSlash(getParentPath($_POST['original_path'])) . $_POST['name']))
 	{
 		$error = ERR_RENAME_FAILED;
-	}else 
+	}else
 	{
 		//update record of session if image exists in session for cut or copy
 		include_once(CLASS_SESSION_ACTION);
-		$sessionAction = new SessionAction();		
+		$sessionAction = new SessionAction();
 		$selectedDocuments = $sessionAction->get();
 		if(removeTrailingSlash($sessionAction->getFolder()) == getParentPath($_POST['original_path']) && sizeof($selectedDocuments))
 		{
@@ -46,13 +46,13 @@
 			{
 				$selectedDocuments[$key] = $_POST['name'];
 				$sessionAction->set($selectedDocuments);
-				
+
 			}
-			
+
 		}elseif(removeTrailingSlash($sessionAction->getFolder()) == removeTrailingSlash($_POST['original_path']))
 		{
 			$sessionAction->setFolder($_POST['original_path']);
-		}	
+		}
 		$path = addTrailingSlash(getParentPath($_POST['original_path'])) . $_POST['name'];
 		if(is_file($path))
 		{
@@ -66,7 +66,7 @@
 			$fileInfo = $manager->getFolderInfo();
 		}
 	}
-	
+
 	echo "{";
 	echo "error:'" . $error . "' ";
 	foreach ($fileInfo as $k=>$v)
@@ -74,6 +74,6 @@
 		echo "," . $k . ":'" . $v . "' ";
 	}
 	echo "}";
-	
-	
+
+
 ?>

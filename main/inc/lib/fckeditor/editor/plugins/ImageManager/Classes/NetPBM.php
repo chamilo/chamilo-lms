@@ -4,7 +4,7 @@
 ** Version.......:  1.0
 ** Author........:  Xiang Wei ZHUO <wei@zhuo.org>
 ** Filename......:  NetPBM.php
-** Last changed..:  30 Aug 2003 
+** Last changed..:  30 Aug 2003
 ** Notes.........:  Orginal is from PEAR
 **/
 
@@ -45,7 +45,7 @@ Class Image_Transform_Driver_NetPBM extends Image_Transform
     function Image_Transform_Driver_NetPBM()
     {
         $this->uid = md5($_SERVER['REMOTE_ADDR']);
-            
+
         return true;
     } // End function Image_NetPBM
 
@@ -90,7 +90,7 @@ Class Image_Transform_Driver_NetPBM extends Image_Transform
      * @param int $crop_width new cropped image width
      * @param int $crop_height new cropped image height
      */
-    function crop($crop_x, $crop_y, $crop_width, $crop_height) 
+    function crop($crop_x, $crop_y, $crop_width, $crop_height)
     {
         $this->command[] = IMAGE_TRANSFORM_LIB_PATH .
                             "pnmcut -left $crop_x -top $crop_y -width $crop_width -height $crop_height";
@@ -106,7 +106,7 @@ Class Image_Transform_Driver_NetPBM extends Image_Transform
         $angle = -1*floatval($angle);
 
         if($angle > 90)
-        {   
+        {
             $this->command[] = IMAGE_TRANSFORM_LIB_PATH . "pnmrotate -noantialias 90";
             $this->rotate(-1*($angle-90));
         }
@@ -124,9 +124,9 @@ Class Image_Transform_Driver_NetPBM extends Image_Transform
      *
      * @param boolean $horizontal true if horizontal flip, vertical otherwise
      */
-    function flip($horizontal) 
+    function flip($horizontal)
     {
-        if($horizontal) 
+        if($horizontal)
             $this->command[] = IMAGE_TRANSFORM_LIB_PATH . "pnmflip -lr";
         else
             $this->command[] = IMAGE_TRANSFORM_LIB_PATH . "pnmflip -tb";
@@ -200,7 +200,7 @@ Class Image_Transform_Driver_NetPBM extends Image_Transform
                 break;
         } // switch
         return implode('|', $this->command);
-    } 
+    }
 
     /**
      * Save the image file
@@ -213,7 +213,7 @@ Class Image_Transform_Driver_NetPBM extends Image_Transform
     function save($filename, $type=null, $quality = 85)
     {
         $cmd = $this->_postProcess('', $quality, $type) . ">$filename";
-            
+
 		//if we have windows server
         if(isset($_ENV['OS']) && eregi('window',$_ENV['OS']))
 			$cmd = ereg_replace('/','\\',$cmd);
@@ -236,7 +236,7 @@ Class Image_Transform_Driver_NetPBM extends Image_Transform
     {
         header('Content-type: image/' . $type);
         $cmd = $this->_postProcess($type, $quality);
-        
+
         passthru($cmd);
         $this->command = array();
     }

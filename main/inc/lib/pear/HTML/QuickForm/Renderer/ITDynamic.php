@@ -22,15 +22,15 @@ require_once 'HTML/QuickForm/Renderer.php';
 
 /**
  * A concrete renderer for HTML_QuickForm, using Integrated Templates.
- * 
- * This is a "dynamic" renderer, which means that concrete form look 
- * is defined at runtime. This also means that you can define 
+ *
+ * This is a "dynamic" renderer, which means that concrete form look
+ * is defined at runtime. This also means that you can define
  * <b>one</b> template file for <b>all</b> your forms. That template
- * should contain a block for every element 'look' appearing in your 
+ * should contain a block for every element 'look' appearing in your
  * forms and also some special blocks (consult the examples). If a
  * special block is not set for an element, the renderer falls back to
  * a default one.
- * 
+ *
  * @author Alexey Borzov <borz_off@cs.msu.su>
  * @access public
  */
@@ -67,7 +67,7 @@ class HTML_QuickForm_Renderer_ITDynamic extends HTML_QuickForm_Renderer
     var $_groupElementIdx = 0;
 
    /**
-    * Blocks to use for different elements  
+    * Blocks to use for different elements
     * @var array
     */
     var $_elementBlocks = array();
@@ -110,7 +110,7 @@ class HTML_QuickForm_Renderer_ITDynamic extends HTML_QuickForm_Renderer
         // assign javascript validation rules
         $this->_tpl->setVariable('qf_javascript', $form->getValidationScript());
     }
-      
+
 
     function renderHeader(&$header)
     {
@@ -177,7 +177,7 @@ class HTML_QuickForm_Renderer_ITDynamic extends HTML_QuickForm_Renderer
         $this->_tpl->parse($blockName);
         $this->_tpl->parseCurrentBlock();
     }
-   
+
 
     function renderHidden(&$element)
     {
@@ -221,11 +221,11 @@ class HTML_QuickForm_Renderer_ITDynamic extends HTML_QuickForm_Renderer
 
    /**
     * Returns the name of a block to use for element rendering
-    * 
+    *
     * If a name was not explicitly set via setElementBlock(), it tries
     * the names '{prefix}_{element type}' and '{prefix}_{element}', where
     * prefix is either 'qf' or the name of the current group's block
-    * 
+    *
     * @param object     An HTML_QuickForm_element object
     * @access private
     * @return string    block name
@@ -256,7 +256,7 @@ class HTML_QuickForm_Renderer_ITDynamic extends HTML_QuickForm_Renderer
 
    /**
     * Sets the block to use for element rendering
-    * 
+    *
     * @param mixed      element name or array ('element name' => 'block name')
     * @param string     block name if $elementName is not an array
     * @access public

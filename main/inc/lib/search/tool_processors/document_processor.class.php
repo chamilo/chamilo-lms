@@ -82,7 +82,7 @@ class document_processor extends search_processor {
             include_once api_get_path(LIBRARY_PATH). 'fileDisplay.lib.php';
             $icon = choose_image(basename($row['path']));
             $thumbnail = api_get_path(WEB_CODE_PATH) .'img/'. $icon;
-            $image = $thumbnail; 
+            $image = $thumbnail;
             //FIXME: use big images
             // get author
             $author = '';

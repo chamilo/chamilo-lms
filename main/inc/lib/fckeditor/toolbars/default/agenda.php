@@ -13,7 +13,7 @@ $config['ToolbarSets']['Normal'] = array(
     array('Link','Unlink','Anchor'),
     array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex'),
     array('Table','SpecialChar'),
-    '/',   
+    '/',
     array('Style','FontFormat','FontName','FontSize'),
     array('Bold','Italic','Underline'),
     array('JustifyLeft','JustifyCenter','JustifyRight','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'),

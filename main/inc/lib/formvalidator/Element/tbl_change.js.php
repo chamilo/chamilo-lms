@@ -153,7 +153,7 @@ function initCalendar() {
 
     str += "</tr></table>";
 
-    cnt.innerHTML = str;    
+    cnt.innerHTML = str;
 }
 
 /**

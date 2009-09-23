@@ -69,7 +69,7 @@ class nusoap_client_mime extends nusoap_client {
 	 * @access private
 	 */
 	var $mimeContentType;
-	
+
 	/**
 	* adds a MIME attachment to the current request.
 	*
@@ -94,7 +94,7 @@ class nusoap_client_mime extends nusoap_client {
 		$info['filename'] = $filename;
 		$info['contenttype'] = $contenttype;
 		$info['cid'] = $cid;
-		
+
 		$this->requestAttachments[] = $info;
 
 		return $cid;
@@ -140,7 +140,7 @@ class nusoap_client_mime extends nusoap_client {
 			$params['encoding']     = '8bit';
 			$params['charset']      = $this->soap_defencoding;
 			$mimeMessage->addSubpart($soapmsg, $params);
-			
+
 			foreach ($this->requestAttachments as $att) {
 				unset($params);
 
@@ -165,7 +165,7 @@ class nusoap_client_mime extends nusoap_client {
 
 			$output = $mimeMessage->encode();
 			$mimeHeaders = $output['headers'];
-	
+
 			foreach ($mimeHeaders as $k => $v) {
 				$this->debug("MIME header $k: $v");
 				if (strtolower($k) == 'content-type') {
@@ -174,13 +174,13 @@ class nusoap_client_mime extends nusoap_client {
 					$this->mimeContentType = str_replace("\r\n", " ", $v);
 				}
 			}
-	
+
 			return $output['body'];
 		}
 
 		return parent::getHTTPBody($soapmsg);
 	}
-	
+
 	/**
 	* gets the HTTP content type for the current request.
 	*
@@ -195,7 +195,7 @@ class nusoap_client_mime extends nusoap_client {
 		}
 		return parent::getHTTPContentType();
 	}
-	
+
 	/**
 	* gets the HTTP content type charset for the current request.
 	* returns false for non-text content types.
@@ -233,7 +233,7 @@ class nusoap_client_mime extends nusoap_client {
 			$params['include_bodies'] = true;
 			$params['decode_bodies'] = true;
 			$params['decode_headers'] = true;
-			
+
 			$structure = Mail_mimeDecode::decode($params);
 
 			foreach ($structure->parts as $part) {
@@ -250,12 +250,12 @@ class nusoap_client_mime extends nusoap_client {
 					$this->responseAttachments[] = $info;
 				}
 			}
-		
+
 			if (isset($return)) {
 				$this->responseData = $root;
 				return $return;
 			}
-			
+
 			$this->setError('No root part found in multipart/related content');
 			return '';
 		}
@@ -299,7 +299,7 @@ class nusoap_server_mime extends nusoap_server {
 	 * @access private
 	 */
 	var $mimeContentType;
-	
+
 	/**
 	* adds a MIME attachment to the current response.
 	*
@@ -324,7 +324,7 @@ class nusoap_server_mime extends nusoap_server {
 		$info['filename'] = $filename;
 		$info['contenttype'] = $contenttype;
 		$info['cid'] = $cid;
-		
+
 		$this->responseAttachments[] = $info;
 
 		return $cid;
@@ -370,7 +370,7 @@ class nusoap_server_mime extends nusoap_server {
 			$params['encoding']     = '8bit';
 			$params['charset']      = $this->soap_defencoding;
 			$mimeMessage->addSubpart($soapmsg, $params);
-			
+
 			foreach ($this->responseAttachments as $att) {
 				unset($params);
 
@@ -395,7 +395,7 @@ class nusoap_server_mime extends nusoap_server {
 
 			$output = $mimeMessage->encode();
 			$mimeHeaders = $output['headers'];
-	
+
 			foreach ($mimeHeaders as $k => $v) {
 				$this->debug("MIME header $k: $v");
 				if (strtolower($k) == 'content-type') {
@@ -404,13 +404,13 @@ class nusoap_server_mime extends nusoap_server {
 					$this->mimeContentType = str_replace("\r\n", " ", $v);
 				}
 			}
-	
+
 			return $output['body'];
 		}
 
 		return parent::getHTTPBody($soapmsg);
 	}
-	
+
 	/**
 	* gets the HTTP content type for the current response.
 	*
@@ -425,7 +425,7 @@ class nusoap_server_mime extends nusoap_server {
 		}
 		return parent::getHTTPContentType();
 	}
-	
+
 	/**
 	* gets the HTTP content type charset for the current response.
 	* returns false for non-text content types.
@@ -463,7 +463,7 @@ class nusoap_server_mime extends nusoap_server {
 			$params['include_bodies'] = true;
 			$params['decode_bodies'] = true;
 			$params['decode_headers'] = true;
-			
+
 			$structure = Mail_mimeDecode::decode($params);
 
 			foreach ($structure->parts as $part) {
@@ -479,11 +479,11 @@ class nusoap_server_mime extends nusoap_server {
 					$this->requestAttachments[] = $info;
 				}
 			}
-		
+
 			if (isset($return)) {
 				return $return;
 			}
-			
+
 			$this->setError('No root part found in multipart/related content');
 			return;
 		}

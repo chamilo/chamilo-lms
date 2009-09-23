@@ -20,7 +20,7 @@
 	define('LBL_MODIFIED', 'Modificado em');
 		//File Information
 	define('LBL_FILE_INFO', 'Informa&ccedil;&otilde;es do arquivo:');
-	define('LBL_FILE_NAME', 'Nome:');	
+	define('LBL_FILE_NAME', 'Nome:');
 	define('LBL_FILE_CREATED', 'Criado em:');
 	define("LBL_FILE_MODIFIED", 'Modificado em:');
 	define("LBL_FILE_SIZE", 'Tamanho:');
@@ -54,29 +54,29 @@
 	define('ERR_NOT_DOC_SELECTED_FOR_PASTE', 'Nenhum arquivo selecionado para colar.');
 	define('WARNING_CUT_PASTE', 'Tem certeza que deseja mover os arquivos selecionados para esta pasta?');
 	define('WARNING_COPY_PASTE', 'Tem certeza que deseja copiar os arquivos selecionados para esta pasta?');
-	
+
 	//ERROR MESSAGES
 		//deletion
 	define('ERR_NOT_FILE_SELECTED', 'Por favor, selecione um arquivo.');
 	define('ERR_NOT_DOC_SELECTED', 'Nenhum documento selecionado para deletar.');
-	define('ERR_DELTED_FAILED', 'Impossível deletar documento.');
+	define('ERR_DELTED_FAILED', 'Impossï¿½vel deletar documento.');
 	define('ERR_FOLDER_PATH_NOT_ALLOWED', 'O caminho desta pasta n&atilde;o &eacute; permitido.');
 		//class manager
-	define("ERR_FOLDER_NOT_FOUND", 'Impossível encontrar a pasta: ');
+	define("ERR_FOLDER_NOT_FOUND", 'Impossï¿½vel encontrar a pasta: ');
 		//rename
 	define('ERR_RENAME_FORMAT', 'Por favor, digite um nome que contenha apenas letras, n&uacute;meros, espa&ccedil;os, h&iacute;fen e underscore.');
 	define('ERR_RENAME_EXISTS', 'Por favor, digite um nome que ainda n&atilde;o exista dentro desta pasta.');
 	define('ERR_RENAME_FILE_NOT_EXISTS', 'O arquivo/pasta n&atilde;o existe.');
-	define('ERR_RENAME_FAILED', 'Impossível renomear, tente novamente.');
+	define('ERR_RENAME_FAILED', 'Impossï¿½vel renomear, tente novamente.');
 	define('ERR_RENAME_EMPTY', 'Por favor, digite um nome.');
 	define("ERR_NO_CHANGES_MADE", 'Nenhuma mudan&ccedil;a foi feita.');
 	define('ERR_RENAME_FILE_TYPE_NOT_PERMITED', 'voc&ecirc; n&atilde;o tem permiss&otilde;es para alterar o arquivo para esta extensao.');
 		//folder creation
 	define('ERR_FOLDER_FORMAT', 'Por favor, digite um nome que contenha apenas letras, n&uacute;meros, espa&ccedil;os, h&iacute;fen e underscore.');
 	define('ERR_FOLDER_EXISTS', 'Por favor, digite um nome que ainda n&atilde;o exista dentro desta pasta.');
-	define('ERR_FOLDER_CREATION_FAILED', 'Impossível criar a pasta, tente novamente.');
+	define('ERR_FOLDER_CREATION_FAILED', 'Impossï¿½vel criar a pasta, tente novamente.');
 	define('ERR_FOLDER_NAME_EMPTY', 'Por favor, de um nome.');
-	
+
 		//file upload
 	define("ERR_FILE_NAME_FORMAT", 'Por favor, digite um nome que contenha apenas letras, n&uacute;meros, espa&ccedil;os, h&iacute;fen e underscore.');
 	define('ERR_FILE_NOT_UPLOADED', 'Nenhum arquivo selecionado para a c&oacute;pia.');
@@ -84,7 +84,7 @@
 	define('ERR_FILE_MOVE_FAILED', 'Falha ao mover o arquivo.');
 	define('ERR_FILE_NOT_AVAILABLE', 'O arquivo n&atilde;o est&aacute; dispon&iacute;vel.');
 	define('ERROR_FILE_TOO_BID', 'Arquivo muito grande. (max: %s)');
-	
+
 
 	//Tips
 	define('TIP_FOLDER_GO_DOWN', 'Clique para acessar esta pasta...');
@@ -98,8 +98,8 @@
 	define('WARING_WINDOW_CLOSE', 'Tem certeza que deseja fechar esta janela?');
 	//Preview
 	define('PREVIEW_NOT_PREVIEW', 'Imagem Pr&eacute;via n&atilde;o dispon&iacute;vel.');
-	define('PREVIEW_OPEN_FAILED', 'Impossível abrir o arquivo.');
-	define('PREVIEW_IMAGE_LOAD_FAILED', 'Impossível carregar a imagem');
+	define('PREVIEW_OPEN_FAILED', 'Impossï¿½vel abrir o arquivo.');
+	define('PREVIEW_IMAGE_LOAD_FAILED', 'Impossï¿½vel carregar a imagem');
 
 	//Login
 	define('LOGIN_PAGE_TITLE', 'Ajax File Manager Login Form');
@@ -107,12 +107,12 @@
 	define('LOGIN_USERNAME', 'Username:');
 	define('LOGIN_PASSWORD', 'Password:');
 	define('LOGIN_FAILED', 'Invalid username/password.');
-	
-	
+
+
 	//88888888888   Below for Image Editor   888888888888888888888
-		//Warning 
+		//Warning
 		define('IMG_WARNING_NO_CHANGE_BEFORE_SAVE', "voc&ecirc; n&atilde;o fez modifica&ccedil;oes na imagem.");
-		
+
 		//General
 		define('IMG_GEN_IMG_NOT_EXISTS', 'Imagem n&atilde;o existe');
 		define('IMG_WARNING_LOST_CHANAGES', 'Todas as altera&ccedil;oes feitas na imagem at&eacute; o momento serao perdidas, tem certeza que deseja continuar?');
@@ -123,14 +123,14 @@
 		define('IMG_WARING_FLIP_H', 'Tem certeza que deseja espelhar a imagem horizontalmente?');
 		define('IMG_WARING_FLIP_V', 'Tem certeza que deseja espelhar a imagem verticalmente?');
 		define('IMG_INFO', 'Informa&ccedil;oes sobre a imagem');
-		
+
 		//Mode
 			define('IMG_MODE_RESIZE', 'Redimensionar:');
 			define('IMG_MODE_CROP', 'Cortar:');
 			define('IMG_MODE_ROTATE', 'Rotacionar:');
-			define('IMG_MODE_FLIP', 'Espelhar:');		
+			define('IMG_MODE_FLIP', 'Espelhar:');
 		//Button
-		
+
 			define('IMG_BTN_ROTATE_LEFT', '90&deg;Anti Hor&aacute;rio');
 			define('IMG_BTN_ROTATE_RIGHT', '90&deg;Hor&aacute;rio');
 			define('IMG_BTN_FLIP_H', 'Espelhar horizontalmente');
@@ -150,7 +150,7 @@
 			define('IMG_LBL_ANGLE', '&Acirc;ngulo:');
 		//Editor
 
-			
+
 		//Save
 		define('IMG_SAVE_EMPTY_PATH', 'Caminho da imagem vazio.');
 		define('IMG_SAVE_NOT_EXISTS', 'Imagem n&atilde;o existe.');
@@ -159,24 +159,24 @@
 		define('IMG_SAVE_RESIZE_FAILED', 'Falha ao redimensionar.');
 		define('IMG_SAVE_CROP_FAILED', 'Falha ao cortar.');
 		define('IMG_SAVE_FAILED', 'Falha ao salvar.');
-		define('IMG_SAVE_BACKUP_FAILED', 'Impossível efetuar backup da imagem original.');
-		define('IMG_SAVE_ROTATE_FAILED', 'Impossível rotacionar a imagem.');
-		define('IMG_SAVE_FLIP_FAILED', 'Impossível espelhar a imagem.');
-		define('IMG_SAVE_SESSION_IMG_OPEN_FAILED', 'Impossível abrir imagem a partir da sess&atilde;o.');
-		define('IMG_SAVE_IMG_OPEN_FAILED', 'Impossível abrir a imagem');
-		
+		define('IMG_SAVE_BACKUP_FAILED', 'Impossï¿½vel efetuar backup da imagem original.');
+		define('IMG_SAVE_ROTATE_FAILED', 'Impossï¿½vel rotacionar a imagem.');
+		define('IMG_SAVE_FLIP_FAILED', 'Impossï¿½vel espelhar a imagem.');
+		define('IMG_SAVE_SESSION_IMG_OPEN_FAILED', 'Impossï¿½vel abrir imagem a partir da sess&atilde;o.');
+		define('IMG_SAVE_IMG_OPEN_FAILED', 'Impossï¿½vel abrir a imagem');
+
 		//UNDO
 		define('IMG_UNDO_NO_HISTORY_AVAIALBE', 'Sem hist&oacute;rico dispon&iacute;vel para desfazer.');
-		define('IMG_UNDO_COPY_FAILED', 'Impossível restaurar a imagem.');
-		define('IMG_UNDO_DEL_FAILED', 'Impossível apagar a imagem da sess&atilde;o.');
-	
+		define('IMG_UNDO_COPY_FAILED', 'Impossï¿½vel restaurar a imagem.');
+		define('IMG_UNDO_DEL_FAILED', 'Impossï¿½vel apagar a imagem da sess&atilde;o.');
+
 	//88888888888   Above for Image Editor   888888888888888888888
-	
+
 	//88888888888   Session   888888888888888888888
-		define("SESSION_PERSONAL_DIR_NOT_FOUND", 'Impossível achar a pasta dedicada que deve ser criada dentro da pasta sess&atilde;o');
-		define("SESSION_COUNTER_FILE_CREATE_FAILED", 'Impossível criar o arquivo contador de sess&atilde;o.');
-		define('SESSION_COUNTER_FILE_WRITE_FAILED', 'Impossível escrever no arquivo contador de sess&atilde;o.');
+		define("SESSION_PERSONAL_DIR_NOT_FOUND", 'Impossï¿½vel achar a pasta dedicada que deve ser criada dentro da pasta sess&atilde;o');
+		define("SESSION_COUNTER_FILE_CREATE_FAILED", 'Impossï¿½vel criar o arquivo contador de sess&atilde;o.');
+		define('SESSION_COUNTER_FILE_WRITE_FAILED', 'Impossï¿½vel escrever no arquivo contador de sess&atilde;o.');
 	//88888888888   Session   888888888888888888888
-	
-	
+
+
 ?>

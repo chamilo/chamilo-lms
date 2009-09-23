@@ -31,7 +31,7 @@
 					$this->fileStat = @stat($path);
 					$this->fileInfo['size'] = $this->fileStat[7];
 					$this->fileInfo['atime'] = $this->fileStat[8];
-					$this->fileInfo['ctime'] = $this->fileStat[10];	
+					$this->fileInfo['ctime'] = $this->fileStat[10];
 					$this->fileInfo['mtime'] = $this->fileStat[9];
 					$this->fileInfo['path'] = $path;
 					$this->fileInfo['name'] = str_replace('_',' ',basename($path));	//for Dokeos. Prevent long file name
@@ -43,19 +43,19 @@
 					$this->fileInfo['name'] = str_replace('_',' ',basename($path));	//for Dokeos. Prevent long file name
 					$this->fileInfo['path'] = $path;
 					$this->fileInfo['atime'] = $this->fileStat[8];
-					$this->fileInfo['ctime'] = $this->fileStat[10];	
+					$this->fileInfo['ctime'] = $this->fileStat[10];
 					$this->fileInfo['mtime'] = $this->fileStat[9];
 					$this->fileInfo['is_writable'] = $this->isWritable();
-					$this->fileInfo['is_readable'] = $this->isReadable();					
+					$this->fileInfo['is_readable'] = $this->isReadable();
 				}
-			}else 
+			}else
 			{
-				trigger_error('No such file exists. ' . $path, E_USER_NOTICE);	
-			}				
+				trigger_error('No such file exists. ' . $path, E_USER_NOTICE);
+			}
 			}
 
 
-			
+
 		}
 		/**
 		 * contructor
@@ -66,8 +66,8 @@
 		{
 			$this->__construct($path);
 		}
-		
-		
+
+
 		/**
 		 * check if a file or folder writable
 		 *
@@ -76,7 +76,7 @@
 		 */
 	function isWritable($path=null)
 	{
-		$path = (is_null($path)?$this->filePath:$path);		
+		$path = (is_null($path)?$this->filePath:$path);
 		if (DIRECTORY_SEPARATOR == "\\")
 		{
 			$path = slashToBackslash($path);
@@ -92,14 +92,14 @@
 			{
 					$path = addTrailingSlash($path);
 					$tmp = uniqid(time());
-					if (@touch($path . $tmp)) 
+					if (@touch($path . $tmp))
 					{
 						@unlink($path . $tmp);
 						return true;
-					}			
+					}
 			}
-			return false;			
-		}else 
+			return false;
+		}else
 		{
 			return @is_writable(slashToBackslash($path));
 		}
@@ -110,11 +110,11 @@
 	 *
 	 * @return boolean true if the files is readable.
 	 */
-	function isReadable($path =null) 
+	function isReadable($path =null)
 	{
 		$path = is_null($path)?$this->filePath:$path;
 		return @is_readable(slashToBackslash($path));
-	}		
+	}
 	/**
 	 * change the modified time
 	 *
@@ -122,7 +122,7 @@
 	 * @param string $time
 	 * @return boolean
 	 */
-	function setLastModified($path=null, $time) 
+	function setLastModified($path=null, $time)
 	{
 		$path = is_null($path)?$this->filePath:$path;
 		$time = is_null($time)?time():$time;
@@ -137,33 +137,33 @@
 		 * @dirOwner
 		 * @return boolean
 		 */
-		function mkdir($path = null, $mask=null, $dirOwner='') 
+		function mkdir($path = null, $mask=null, $dirOwner='')
 		{
 			$path = is_null($path)?$this->filePath:$path;
 			if(!file_exists($path))
 			{
-				$mask = is_null($mask)?$this->mask:$mask;				
-				$status = @mkdir(slashToBackslash($path));			
+				$mask = is_null($mask)?$this->mask:$mask;
+				$status = @mkdir(slashToBackslash($path));
 				if ($mask)
 				{
 					@chmod(slashToBackslash($path), intval($mask, 8));
-				}					
+				}
 				if($dirOwner)
 				{
 					$this->chown(slashToBackslash($path), $dirOwner);
 				}
-				return $status;				
+				return $status;
 			}
 			return true;
 
-		}	
+		}
 	/**
 	 * change the own of a file or folder
 	 *
 	 * @param the file path $path
 	 * @param  $owner
 	 */
-	function chown($path, $owner) 
+	function chown($path, $owner)
 	{
 		if(!empty($owner))
 		{
@@ -173,7 +173,7 @@
 			if(!empty($owners[1]))
 				@chgrp($path, $owner[1]);
 		}
-	}	
+	}
 
     /**
          * Copy a file, or recursively copy a folder and its contents
@@ -194,34 +194,34 @@
 				{
 					$this->_debug('Unable to create folder (' . $dest . ")");
 					return false;
-				}					
+				}
 			}
 					// Copy in to your self?
 				if (getAbsPath($source) ==  getAbsPath($dest))
 				{
 					$this->_debug('Unable to copy itself. source: ' . getAbsPath($source) . "; dest: " . getAbsPath($dest));
-					return false;		
+					return false;
 				}
         // Simple copy for a file
         if (is_file($source))
-        {        	
+        {
         		$dest = addTrailingSlash($dest) . (basename($source));
         	if(file_exists($dest))
         	{
         		return false;
         	}else {
-        		
+
         		return copy($source, $dest);
         	}
-            
-            
+
+
         }elseif(is_dir($source))
         {
 	        // Loop through the folder
 	           if(file_exists(addTrailingSlash($dest) . basename($source)))
 	           {
 	           	return false;
-	           }else 
+	           }else
 	           {
 			 		if(!file_exists(addTrailingSlash($dest) . basename($source)) || !is_dir(addTrailingSlash($dest) . basename($source)))
 					{
@@ -229,24 +229,24 @@
 						{
 							$this->_debug('Unable to create folder (' . addTrailingSlash($dest) . basename($source) . ")");
 							return false;
-						}					
-					}	        	
+						}
+					}
 		        $handle = opendir($source);
 		        while(false !== ($readdir = readdir($handle)))
 		        {
 		            if($readdir != '.' && $readdir != '..')
-		            {	  
-		            	$path = addTrailingSlash($source).'/'.$readdir;    
+		            {
+		            	$path = addTrailingSlash($source).'/'.$readdir;
 		            	$this->copyTo($path, addTrailingSlash($dest) . basename($source));
 		            }
 		        }
 		         closedir($handle);
-		        return true;	           	
+		        return true;
 	           }
-	
-        }		   
+
+        }
         return false;
-    }	
+    }
     /**
      * get next available file name
      *
@@ -256,7 +256,7 @@
      */
     function getNextAvailableFileName($fileToMove, $destFolder)
     {
-    	
+
     	$folderPath = addslashes(backslashToSlash(getParentPath($fileToMove)));
     	$destFolder = addslashes(backslashToSlash(getParentPath($destFolder)));
     	$finalPath = $destFolder . basename($fileToMove);
@@ -280,9 +280,9 @@
     			{
     				$count++;
     			}
-    			$filePath = $destFolder . $fileBaseName . $count;   			
+    			$filePath = $destFolder . $fileBaseName . $count;
     		}
-    		
+
     	}
 		return $finalPath;
     }
@@ -296,7 +296,7 @@
     	return $this->fileInfo;
     }
     /**
-     * close 
+     * close
      *
      */
     function close()
@@ -322,7 +322,7 @@
 			{
 				return $this->__recursive_remove_directory($path);
 			}
-			
+
 		}
 		return false;
 	}
@@ -341,13 +341,13 @@
 		}
 		return false;
 	}
-	
+
 	function _debug($info)
 	{
 		if($this->debug)
 		{
 			echo $info . "<br>\n";
-		}else 
+		}else
 		{
 			$this->errors[] = $info;
 		}
@@ -357,7 +357,7 @@
  * expects path to directory and optional TRUE / FALSE to empty
  * of course PHP has to have the rights to delete the directory
  * you specify and all files and folders inside the directory
- * 
+ *
  * to use this function to totally remove a directory, write:
  * recursive_remove_directory('path/to/directory/to/delete');
  * to use this function to empty a directory, write:
@@ -373,25 +373,25 @@
      {
          $directory = substr($directory,0,-1);
      }
-  
+
      // if the path is not valid or is not a directory ...
      if(!file_exists($directory) || !is_dir($directory))
      {
          // ... we return false and exit the function
          return FALSE;
-  
+
      // ... if the path is not readable
      }elseif(!is_readable($directory))
      {
          // ... we return false and exit the function
          return FALSE;
-  
+
      // ... else if the path is readable
      }else{
-  
+
          // we open the directory
          $handle = @opendir($directory);
-  
+
          // and scan through the items inside
          while (FALSE !== ($item = @readdir($handle)))
          {
@@ -401,12 +401,12 @@
              {
                  // we build the new path to delete
                  $path = $directory.'/'.$item;
-  
+
                  // if the new path is a directory
                  if(is_dir($path))                  {
                      // we call this function with the new path
                      $this->__recursive_remove_directory($path);
-  
+
                  // if the new path is a file
                  }else{
                     // we remove the file
@@ -416,7 +416,7 @@
          }
          // close the directory
          @closedir($handle);
-  
+
         // if the option to empty is not set to true
          if($empty == FALSE)
          {
@@ -430,7 +430,7 @@
          // return success
          return TRUE;
      }
- }   		
+ }
 	}
 
 ?>

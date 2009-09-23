@@ -48,7 +48,7 @@ class OLE_PPS_File extends OLE_PPS
     {
         $this->_tmp_dir = '';
         $this->OLE_PPS(
-            null, 
+            null,
             $name,
             OLE_PPS_TYPE_FILE,
             null,
@@ -96,7 +96,7 @@ class OLE_PPS_File extends OLE_PPS
 
         return true;
     }
-    
+
     /**
     * Append data to PPS
     *

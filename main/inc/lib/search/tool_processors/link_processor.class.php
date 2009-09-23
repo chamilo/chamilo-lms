@@ -42,7 +42,7 @@ class link_processor extends search_processor {
 			        $visibility = api_get_item_visibility($course_info, TOOL_LINK, $one_link['link_id']);
 			        if ($visibility) {
 			        	// if one is visible let show the result for a course
-			        	// also asume all data of this item like the data of the whole group of links(Ex. author) 
+			        	// also asume all data of this item like the data of the whole group of links(Ex. author)
                         list($thumbnail, $image, $name, $author, $url) = $this->get_information($courseid, $one_link['link_id']);
                         $result_tmp = array(
                             'toolid' => TOOL_LINK,

@@ -14,7 +14,7 @@ $config['ToolbarSets']['Normal'] = array(
 	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex','asciimath'),
 	array('Table','SpecialChar'),
 	array('Outdent','Indent','-','TextColor','BGColor','-','OrderedList','UnorderedList'),
-	'/',	
+	'/',
 	array('Style','FontFormat','FontName','FontSize'),
 	array('Bold','Italic','Underline'),
 	array('JustifyLeft','JustifyCenter','JustifyRight'),

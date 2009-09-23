@@ -22,7 +22,7 @@ require_once("HTML/QuickForm/Renderer/Object.php");
 
 /**
  * QuickForm renderer for Flexy template engine, static version.
- * 
+ *
  * A static renderer for HTML_Quickform.  Makes a QuickFormFlexyObject
  * from the form content suitable for use with a Flexy template
  *
@@ -144,7 +144,7 @@ class HTML_QuickForm_Renderer_ObjectFlexy extends HTML_QuickForm_Renderer_Object
                 $keys = '->{\'' . str_replace(array('\\', '\''), array('\\\\', '\\\''), $ret->name) . '\'}';
             } else {
                 $keys = '->{\'' . str_replace(
-                            array('\\', '\'', '[', ']'), array('\\\\', '\\\'', '\'}->{\'', ''), 
+                            array('\\', '\'', '[', ']'), array('\\\\', '\\\'', '\'}->{\'', ''),
                             $ret->name
                         ) . '\'}';
             }
@@ -175,14 +175,14 @@ class HTML_QuickForm_Renderer_ObjectFlexy extends HTML_QuickForm_Renderer_Object
     }
 
     /**
-     * Stores an object representation of an element in the 
+     * Stores an object representation of an element in the
      * QuickformFormObject instance
      *
      * @access private
      * @param elObj object  Object representation of an element
      * @return void
      */
-    function _storeObject($elObj) 
+    function _storeObject($elObj)
     {
         if ($elObj) {
             $keys = $elObj->keys;
@@ -213,7 +213,7 @@ class HTML_QuickForm_Renderer_ObjectFlexy extends HTML_QuickForm_Renderer_Object
     function setHtmlTemplate($template)
     {
         $this->_html = $template;
-    } 
+    }
 
     /**
      * Set the filename of the template to render form labels
@@ -230,7 +230,7 @@ class HTML_QuickForm_Renderer_ObjectFlexy extends HTML_QuickForm_Renderer_Object
      * @param template string   Filename of template
      * @return void
      */
-    function setLabelTemplate($template) 
+    function setLabelTemplate($template)
     {
         $this->_label = $template;
     }

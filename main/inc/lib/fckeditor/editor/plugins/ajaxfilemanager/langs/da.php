@@ -17,7 +17,7 @@
 	define('LBL_MODIFIED', 'Ændret');
 		//File Information
 	define('LBL_FILE_INFO', 'Fil Information:');
-	define('LBL_FILE_NAME', 'Navn:');	
+	define('LBL_FILE_NAME', 'Navn:');
 	define('LBL_FILE_CREATED', 'Uploaded:');
 	define("LBL_FILE_MODIFIED", 'Ændret:');
 	define("LBL_FILE_SIZE", 'Fil Str:');
@@ -62,7 +62,7 @@
 	define('ERR_FOLDER_EXISTS', 'Giv venligst mappen et unikt navn.');
 	define('ERR_FOLDER_CREATION_FAILED', 'Kan ikke oprette mappen, prøv igen.');
 	define('ERR_FOLDER_NAME_EMPTY', 'Skriv venligst et navn.');
-	
+
 		//file upload
 	define("ERR_FILE_NAME_FORMAT", 'Brug kun bogstaver, tal, mellemrum, bindestreg og understregning.');
 	define('ERR_FILE_NOT_UPLOADED', 'Vælg venligst en fil, der skal uploades.');
@@ -70,7 +70,7 @@
 	define('ERR_FILE_MOVE_FAILED', 'Kan ikke flytte filen.');
 	define('ERR_FILE_NOT_AVAILABLE', 'Filen findes ikke.');
 	define('ERROR_FILE_TOO_BID', 'Filen er for stor. (max: %s)');
-	
+
 
 	//Tips
 	define('TIP_FOLDER_GO_DOWN', 'Enkelt klik for at se denne mappe...');
@@ -91,6 +91,6 @@
 	define('LOGIN_USERNAME', 'Brugernavn:');
 	define('LOGIN_PASSWORD', 'Password:');
 	define('LOGIN_FAILED', 'Forkert bruger/password.');
-	
-	
+
+
 ?>

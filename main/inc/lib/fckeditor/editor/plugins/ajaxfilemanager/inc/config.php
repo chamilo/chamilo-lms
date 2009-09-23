@@ -7,7 +7,7 @@
 	 * @since 22/April/2007
 	 *
 	 * Modifications of system config setting for Dokeos
-	 * @author Juan Carlos Raña
+	 * @author Juan Carlos Raï¿½a
 	 * @since 31/December/2008
 	 */
 
@@ -25,7 +25,7 @@
 	{
 		header('Content-Type: text/html; charset=utf-8');
 	}
-	
+
 	/**
 	 * secure file name which retrieve from query string
 	 *
@@ -35,9 +35,9 @@
 	function secureFileName($input)
 	{
 		return preg_replace('/[^a-zA-Z0-9\-_]/', '', $input);
-	}	
-	//Directories Declarations	
-	
+	}
+	//Directories Declarations
+
 	define('DIR_AJAX_ROOT', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR) ; // the path to ajax file manager
 	define('DIR_AJAX_INC', DIR_AJAX_ROOT . "inc" . DIRECTORY_SEPARATOR);
 	define('DIR_AJAX_CLASSES', DIR_AJAX_ROOT .  "classes" . DIRECTORY_SEPARATOR);
@@ -46,7 +46,7 @@
 	define('DIR_AJAX_EDIT_AREA', DIR_AJAX_JS . 'edit_area' . DIRECTORY_SEPARATOR);
 	define('DIR_LANG', DIR_AJAX_ROOT . 'langs' . DIRECTORY_SEPARATOR);
 
-	
+
 	//Class Declarations
 	define('CLASS_FILE', DIR_AJAX_INC .'class.file.php');
 	define("CLASS_UPLOAD", DIR_AJAX_INC .  'class.upload.php');
@@ -57,10 +57,10 @@
 	define('CLASS_PAGINATION', DIR_AJAX_INC . 'class.pagination.php');
 	define('CLASS_SEARCH', DIR_AJAX_INC . "class.search.php");
 	//SCRIPT FILES declarations
-	define('SPT_FUNCTION_BASE', DIR_AJAX_INC . 'function.base.php');	
+	define('SPT_FUNCTION_BASE', DIR_AJAX_INC . 'function.base.php');
 	//include different config base file according to query string "config"
 	$configBaseFileName = 'config.base.php';
-	
+
 	if(CONFIG_QUERY_STRING_ENABLE && !empty($_GET['config']) && file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config.' . secureFileName($_GET['config']) . ".php")
 	{
 		$configBaseFileName = 'config.' . secureFileName($_GET['config']) . ".php";
@@ -76,12 +76,12 @@
 		require_once(DIR_AJAX_LANGS . "en.php");
 	}
 
-	require_once(DIR_AJAX_INC . "function.base.php");	
-	
+	require_once(DIR_AJAX_INC . "function.base.php");
+
 	require_once(dirname(__FILE__) .  DIRECTORY_SEPARATOR . "class.session.php");
-	
+
 	$auth = new Auth();
-	
+
 	if(CONFIG_ACCESS_CONTROL_MODE == 1)
 	{//access control enabled
 		if(!$auth->isLoggedIn() && strtolower(basename($_SERVER['PHP_SELF']) != strtolower(basename(CONFIG_LOGIN_PAGE))))
@@ -106,7 +106,7 @@
 	define('CONFIG_URL_CUT', 'ajax_file_cut.php');
 	define('CONFIG_URL_COPY', 'ajax_file_copy.php');
 	define('CONFIG_URL_LOAD_FOLDERS', '_ajax_load_folders.php');
-	
+
 	define('CONFIG_URL_DOWNLOAD', 'ajax_download.php');
 	define('CONFIG_URL_TEXT_EDITOR', 'ajax_text_editor.php');
 	define('CONFIG_URL_GET_FOLDER_LIST', 'ajax_get_folder_listing.php');
@@ -115,6 +115,6 @@
 	define('CONFIG_URL_IMG_THUMBNAIL', 'ajax_image_thumbnail.php');
 	define('CONFIG_URL_FILEnIMAGE_MANAGER', 'ajaxfilemanager.php');
 	define('CONFIG_URL_FILE_PASTE', 'ajax_file_paste.php');
-	
+
 
 ?>

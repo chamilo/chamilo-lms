@@ -156,7 +156,7 @@ function xapian_get_all_terms($count=0, $prefix, $db=NULL) {
 
 /**
  * Retrieve all terms of a document
- * 
+ *
  * @param   XapianDocument  document searched
  * @return  array
  */
@@ -190,10 +190,10 @@ function xapian_get_doc_terms($doc=NULL, $prefix) {
 
 /**
  * Join xapian queries
- * 
- * @param XapianQuery|array $query1 
- * @param XapianQuery|array $query2 
- * @param string $op 
+ *
+ * @param XapianQuery|array $query1
+ * @param XapianQuery|array $query2
+ * @param string $op
  * @return XapianQuery query joined
  */
 function xapian_join_queries($query1, $query2=NULL, $op='or') {
@@ -215,7 +215,7 @@ function xapian_join_queries($query1, $query2=NULL, $op='or') {
 	if (!is_array($query2)) {
 		$query2 = array($query2);
 	}
-	
+
 	return new XapianQuery($op, array_merge($query1, $query2));
 }
 /**
@@ -229,19 +229,19 @@ function xapian_join_queries($query1, $query2=NULL, $op='or') {
     if ($type_error_message=='DatabaseOpeningError') {
     	$message_error=get_lang('SearchDatabaseOpeningError');
     } elseif ($type_error_message=='DatabaseVersionError') {
-     	$message_error=get_lang('SearchDatabaseVersionError');   	
+     	$message_error=get_lang('SearchDatabaseVersionError');
     }  elseif ($type_error_message=='DatabaseModifiedError') {
-      	$message_error=get_lang('SearchDatabaseModifiedError');   	
+      	$message_error=get_lang('SearchDatabaseModifiedError');
     }  elseif ($type_error_message=='DatabaseLockError') {
-      	$message_error=get_lang('SearchDatabaseLockError');     	
+      	$message_error=get_lang('SearchDatabaseLockError');
     }  elseif ($type_error_message=='DatabaseCreateError') {
-      	$message_error=get_lang('SearchDatabaseCreateError');       	
+      	$message_error=get_lang('SearchDatabaseCreateError');
     }  elseif ($type_error_message=='DatabaseCorruptError') {
-       	$message_error=get_lang('SearchDatabaseCorruptError');    	
+       	$message_error=get_lang('SearchDatabaseCorruptError');
     }  elseif ($type_error_message=='NetworkTimeoutError') {
-       	$message_error=get_lang('SearchNetworkTimeoutError');     	
+       	$message_error=get_lang('SearchNetworkTimeoutError');
     } else {
-        $message_error=get_lang('SearchOtherXapianError');    	
+        $message_error=get_lang('SearchOtherXapianError');
     }
     $display_message=get_lang('Error').' : '. $message_error;
     Display::display_error_message($display_message);

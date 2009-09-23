@@ -524,7 +524,7 @@ foreach ($allowed_tags_student as $student_index =>$student_value) {
 		foreach ($allowed_tags_student[$student_index] as $my_student_attribute_index => $my_student_value_index) {
 			$attribute_student[]=$student_index.'.'.$my_student_attribute_index;
 		}
-	}	
+	}
 }
 
 $tag_teacher=$tag_student;
@@ -537,7 +537,7 @@ foreach ($allowed_tags_teachers as $teacher_index =>$teacher_value) {
 		foreach ($allowed_tags_teachers[$teacher_index] as $my_teacher_attribute_index => $my_teacher_value_index) {
 			$attribute_teacher[]=$teacher_index.'.'.$my_teacher_attribute_index;
 		}
-	}	
+	}
 }
 
 $allowed_tags_teacher_full_page = $allowed_tags_student_full_page;

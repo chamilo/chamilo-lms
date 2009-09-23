@@ -1,9 +1,9 @@
 <?php
 /*************************************************************************
  * http://www.fpdf.org/en/script/script5.php
- * 
+ *
  * @author		Olivier
- * 
+ *
  * This script implements EAN13 and UPC-A barcodes (the second being a particular case of the first one). Bars are drawn directly in the PDF (no image is generated).
  * EAN13(float x, float y, string barcode [, float h [, float w]])
  * x: abscissa of barcode.
@@ -11,17 +11,17 @@
  * barcode: value of barcode.
  * h: height of barcode. Default value: 16.
  * w: width of a bar. Default value: 0.35.
- * 
+ *
  * UPC_A(float x, float y, string barcode [, float h [, float w]])
- * 
+ *
  * Same parameters.
- * 
- * An EAN13 barcode is made up of 13 digits, UPC-A of 12 (leading zeroes are added if necessary). The last digit is a check digit; if it's not supplied, it will be automatically computed. 
+ *
+ * An EAN13 barcode is made up of 13 digits, UPC-A of 12 (leading zeroes are added if necessary). The last digit is a check digit; if it's not supplied, it will be automatically computed.
  ************************************************************************/
- 
+
 /*************************************************************************
  * http://www.fpdf.org/en/script/script46.php
- * 
+ *
  * @author		The-eh
  *
  * This script implements Code 39 barcodes. A Code 39 barcode can encode a string with the following characters: digits (0 to 9), uppercase letters (A to Z) and 8 additional characters (- . space $ / + % *).
@@ -37,28 +37,28 @@
 if (!defined('__CLASS_FPDF_CODEBAR__'))
 {
 	define('__CLASS_FPDF_CODEBAR__', true);
-	
+
 	require_once(dirname(__FILE__).'/../_fpdf/fpdf.php');
 
 	class FPDF_Codebar extends FPDF
 	{
 		var $footer_param = array();
-		
+
 		function FPDF_Codebar($sens = 'P', $unit = 'mm', $format = 'A4')
 		{
 			$this->FPDF($sens, $unit, $format);
 		}
-		
+
 		function BARCODE_EAN13($x,$y,$barcode,$h=10,$w=.35)
 		{
 			return $this->Barcode($x,$y,$barcode,$h,$w,13);
 		}
-		
+
 		function BARCODE_UPC_A($x,$y,$barcode,$h=10,$w=.35)
 		{
 			return $this->Barcode($x,$y,$barcode,$h,$w,12);
 		}
-		
+
 		function GetCheckDigit($barcode)
 		{
 			//Compute the check digit
@@ -72,7 +72,7 @@ if (!defined('__CLASS_FPDF_CODEBAR__'))
 				$r=10-$r;
 			return $r;
 		}
-		
+
 		function TestCheckDigit($barcode)
 		{
 			//Test validity of check digit
@@ -83,7 +83,7 @@ if (!defined('__CLASS_FPDF_CODEBAR__'))
 				$sum+=$barcode{$i};
 			return ($sum+$barcode{12})%10==0;
 		}
-		
+
 		function Barcode($x,$y,$barcode,$h,$w,$len)
 		{
 			//Padding
@@ -133,27 +133,27 @@ if (!defined('__CLASS_FPDF_CODEBAR__'))
 				if($code{$i}=='1')
 					$this->Rect($x+$i*$w,$y,$w,$h,'F');
 			}
-			
+
 			$code_w = strlen($code)*$w;
 			$code_t = substr($barcode,-$len);
-			
+
 			$code_f = $code_w/strlen($code_t)*$this->k/0.60;
 			$code_h = $h+$code_f/$this->k;
-			
+
 			//Print text uder barcode
 			$this->SetFont('Arial','',$code_f);
 			$this->Text($x,$y+$h+0.90*$code_f/$this->k,$code_t);
 
 			return array($code_w, $code_h);
 		}
-		
+
 		function BARCODE_CODE39($xpos, $ypos, $code,$height=10, $baseline=0.5 )
 		{
-		
+
 			$wide = $baseline;
-			$narrow = $baseline / 3 ; 
+			$narrow = $baseline / 3 ;
 			$gap = $narrow;
-		
+
 			$barChar['0'] = 'nnnwwnwnn';
 			$barChar['1'] = 'wnnwnnnnw';
 			$barChar['2'] = 'nnwwnnnnw';
@@ -178,7 +178,7 @@ if (!defined('__CLASS_FPDF_CODEBAR__'))
 			$barChar['L'] = 'nnwnnnnww';
 			$barChar['M'] = 'wnwnnnnwn';
 			$barChar['N'] = 'nnnnwnnww';
-			$barChar['O'] = 'wnnnwnnwn'; 
+			$barChar['O'] = 'wnnnwnnwn';
 			$barChar['P'] = 'nnwnwnnwn';
 			$barChar['Q'] = 'nnnnnnwww';
 			$barChar['R'] = 'wnnnnnwwn';
@@ -198,7 +198,7 @@ if (!defined('__CLASS_FPDF_CODEBAR__'))
 			$barChar['/'] = 'nwnwnnnwn';
 			$barChar['+'] = 'nwnnnwnwn';
 			$barChar['%'] = 'nnnwnwnwn';
-		
+
 			$xpos_dep = $xpos;
 			$code = '*'.strtoupper($code).'*';
 			for($i=0; $i<strlen($code); $i++){
@@ -220,13 +220,13 @@ if (!defined('__CLASS_FPDF_CODEBAR__'))
 				}
 				$xpos += $gap;
 			}
-			
+
 			$code_w = $xpos-$xpos_dep;
 			$code_t = $code;
-			
+
 			$code_f = $code_w/strlen($code_t)*$this->k/0.60/3;
 			$code_h = $height+$code_f/$this->k;
-			
+
 			//Print text uder barcode
 			$this->SetFont('Arial','',$code_f);
 			$this->Text($xpos_dep,$ypos+$height+0.90*$code_f/$this->k,$code_t);

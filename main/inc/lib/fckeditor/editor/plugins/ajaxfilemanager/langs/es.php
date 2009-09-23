@@ -7,8 +7,8 @@
 	 */
 	define('DATE_TIME_FORMAT', 'd/M/Y H:i:s');
 	//Common
-	//Menu	
-	
+	//Menu
+
 	define('MENU_SELECT', 'Seleccionar');
 	define('MENU_DOWNLOAD', 'Descargar');
 	define('MENU_PREVIEW', 'Previsualizar');
@@ -19,7 +19,7 @@
 	define('MENU_DELETE', 'Eliminar');
 	define('MENU_PLAY', 'Ejecutar');
 	define('MENU_PASTE', 'Pegar');
-	
+
 	//Label
 		//Top Action
 		define('LBL_ACTION_REFRESH', 'Actualizar');
@@ -35,7 +35,7 @@
 	define('LBL_MODIFIED', 'Modificado el');
 		//File Information
 	define('LBL_FILE_INFO', 'Informaci&oacute;n del archivo:');
-	define('LBL_FILE_NAME', 'Nombre:');	
+	define('LBL_FILE_NAME', 'Nombre:');
 	define('LBL_FILE_CREATED', 'Creado:');
 	define('LBL_FILE_MODIFIED', 'Modificado:');
 	define('LBL_FILE_SIZE', 'Tama&ntilde;o:');
@@ -79,7 +79,7 @@
 	define('PAGINATION_GO_PARENT', 'Ir a la carpeta superior');
 	//System
 	define('SYS_DISABLED', 'Permiso denegado: el sistema est&aacute; deshabilitado.');
-	
+
 	//Cut
 	define('ERR_NOT_DOC_SELECTED_FOR_CUT', 'No hay seleccionado un documento para cortar.');
 	//Copy
@@ -94,7 +94,7 @@
 	define('ERR_UNABLE_TO_MOVE_TO_SAME_DEST', 'Error al mover el archivo (%s): El path de origen es el mismo que el de destino.');
 	define('ERR_UNABLE_TO_MOVE_NOT_FOUND', 'Error al mover el archivo (%s): El archivo que quiere mover no existe.');
 	define('ERR_UNABLE_TO_MOVE_NOT_ALLOWED', 'Error al mover el archivo (%s): Tiene denegado el acceso al archivo que quiere mover.');
- 
+
 	define('ERR_NOT_FILES_PASTED', 'Los archivos no han sido pegados.');
 
 	//Search
@@ -107,7 +107,7 @@
 	define('LBL_SEARCH_ADV_OPTIONS', 'opciones avanzadas');
 	define('LBL_SEARCH_FILE_TYPES', 'Tipos de archivo:');
 	define('SEARCH_TYPE_EXE', 'Aplicaci&oacute;n');
-	
+
 	define('SEARCH_TYPE_IMG', 'Imagen');
 	define('SEARCH_TYPE_ARCHIVE', 'Archivo');
 	define('SEARCH_TYPE_HTML', 'HTML');
@@ -166,7 +166,7 @@
 		//class manager
 	define('ERR_FOLDER_NOT_FOUND', 'No se ha podido localizar la carpeta especificada: ');
 		//rename
-	define('ERR_RENAME_FORMAT', 'Por favor, introduzca un nombre que solamente contenga letras, numeros, espacios, guiones o subrayado.');	
+	define('ERR_RENAME_FORMAT', 'Por favor, introduzca un nombre que solamente contenga letras, numeros, espacios, guiones o subrayado.');
 	define('ERR_RENAME_EXISTS', 'Ya existe una carpeta con este nombre.');
 	define('ERR_RENAME_FILE_NOT_EXISTS', 'El archivo/carpeta no existe.');
 	define('ERR_RENAME_FAILED', 'No se puede renombrar, por favor int&eacute;ntelo de nuevo.');
@@ -197,7 +197,7 @@
 	define('FILE_LBL_MORE', 'A&ntilde;adir m&aacute;s archivos para enviar');
 	define('FILE_CANCEL_UPLOAD', 'Cancelar el env&iacute;o del archivo');
 	define('FILE_LBL_UPLOAD', 'Enviar');
-	
+
 	//file download
 	define('ERR_DOWNLOAD_FILE_NOT_FOUND', 'No hay seleccionados archivos para descargar.');
 	//Rename
@@ -227,12 +227,12 @@
 	define('LOGIN_USERNAME', 'Nombre de usuario:');
 	define('LOGIN_PASSWORD', 'Contrase&ntilde;a:');
 	define('LOGIN_FAILED', 'Nombre de usuario o contrase&ntilde;a no v&aacute;lidos.');
-	
-	
+
+
 	//88888888888   Below for Image Editor   888888888888888888888
-		//Warning 
+		//Warning
 		define('IMG_WARNING_NO_CHANGE_BEFORE_SAVE', 'No se han realizado cambios en la imagen.');
-		
+
 		//General
 		define('IMG_GEN_IMG_NOT_EXISTS', 'La imagen no existe');
 		define('IMG_WARNING_LOST_CHANAGES', 'Todos los cambios de la imagen que no se hayan guardado se perder&aacute;n. &iquest; Est&aacute; seguro de querer continuar?');
@@ -243,14 +243,14 @@
 		define('IMG_WARING_FLIP_H', 'Seguro que quiere voltear horizontalmente la imagen?');
 		define('IMG_WARING_FLIP_V', 'Seguro que quiere voltear verticalmente la imagen?');
 		define('IMG_INFO', 'Informaci&oacute;n de la imagen');
-		
+
 		//Mode
 			define('IMG_MODE_RESIZE', 'Cambiar tama&ntilde;o:');
 			define('IMG_MODE_CROP', 'Recortar:');
 			define('IMG_MODE_ROTATE', 'Rotar:');
-			define('IMG_MODE_FLIP', 'Voltear:');		
+			define('IMG_MODE_FLIP', 'Voltear:');
 		//Button
-		
+
 			define('IMG_BTN_ROTATE_LEFT', '90&deg;CCW');
 			define('IMG_BTN_ROTATE_RIGHT', '90&deg;CW');
 			define('IMG_BTN_FLIP_H', 'Voltear horizontal');
@@ -275,10 +275,10 @@
 			define('IMG_LBL_SAVE_TO', 'Guardar en:');
 			define('IMG_LBL_ROOT_FOLDER', 'Carpeta principal');
 		//Editor
-		//Save as 
+		//Save as
 		define('IMG_NEW_NAME_COMMENTS', 'Por favor, no incluya la extensi&oacute;n de la imagen.');
 		define('IMG_SAVE_AS_ERR_NAME_INVALID', 'Por favor, introduzca un nombre que solamente contenga letras, numeros, espacios, guiones o subrayado.');
-		define('IMG_SAVE_AS_NOT_FOLDER_SELECTED', 'No hay seleccionado una carpeta de destino.');	
+		define('IMG_SAVE_AS_NOT_FOLDER_SELECTED', 'No hay seleccionado una carpeta de destino.');
 		define('IMG_SAVE_AS_FOLDER_NOT_FOUND', 'La carpeta de destino no existe.');
 		define('IMG_SAVE_AS_NEW_IMAGE_EXISTS', 'Ya existe una imagen con el mismo nombre.');
 
@@ -295,21 +295,21 @@
 		define('IMG_SAVE_FLIP_FAILED', 'No se puede voltear la imagen.');
 		define('IMG_SAVE_SESSION_IMG_OPEN_FAILED', 'No  se puede abrir la imagen desde la sesi&oacute;n.');
 		define('IMG_SAVE_IMG_OPEN_FAILED', 'No se puede abrir la imagen');
-		
-		
+
+
 		//UNDO
 		define('IMG_UNDO_NO_HISTORY_AVAIALBE', 'No hay cambios que deshacer.');
 		define('IMG_UNDO_COPY_FAILED', 'No se puede restaurar la imagen.');
 		define('IMG_UNDO_DEL_FAILED', 'No se puede eliminar la imagen de sesi&oacute;n');
-	
+
 	//88888888888   Above for Image Editor   888888888888888888888
-	
+
 	//88888888888   Session   888888888888888888888
 		define('SESSION_PERSONAL_DIR_NOT_FOUND', 'No se puede encontrar la carpeta dedicada que deber&iacute;a haber sido creada bajo la carpeta de sesi&oacute;n');
 		define('SESSION_COUNTER_FILE_CREATE_FAILED', 'No se puede abrir un archivo contador de sesi&oacute;n.');
 		define('SESSION_COUNTER_FILE_WRITE_FAILED', 'No se puede escribir el archivo contador de sesi&oacute;n.');
 	//88888888888   Session   888888888888888888888
-	
+
 	//88888888888   Below for Text Editor   888888888888888888888
 		define('TXT_FILE_NOT_FOUND', 'El archivo no ha sido encontrado.');
 		define('TXT_EXT_NOT_SELECTED', 'Por favor, seleccione una extensi&oacute;n de archivo');
@@ -324,6 +324,6 @@
 		define('TXT_CONTENT_UPDATE_FAILED', 'Error al actualizar el contenido del archivo.');
 		define('TXT_SAVE_AS_ERR_NAME_INVALID', 'Por favor, introduzca un nombre que solamente contenga letras, numeros, espacios, guiones o subrayado.');
 	//88888888888   Above for Text Editor   888888888888888888888
-	
-	
+
+
 ?>

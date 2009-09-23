@@ -23,7 +23,7 @@ require_once("HTML/QuickForm/element.php");
 
 /**
  * HTML class for a textarea type field
- * 
+ *
  * @author       Adam Daniel <adaniel1@eesus.jnj.com>
  * @author       Bertrand Mansion <bmansion@mamasam.com>
  * @version      1.0
@@ -44,10 +44,10 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
 
     // }}}
     // {{{ constructor
-        
+
     /**
      * Class constructor
-     * 
+     *
      * @param     string    Input field name attribute
      * @param     mixed     Label(s) for a field
      * @param     mixed     Either a typical HTML attribute string or an associative array
@@ -61,13 +61,13 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
         $this->_persistantFreeze = true;
         $this->_type = 'textarea';
     } //end constructor
-    
+
     // }}}
     // {{{ setName()
 
     /**
      * Sets the input field name
-     * 
+     *
      * @param     string    $name   Input field name attribute
      * @since     1.0
      * @access    public
@@ -77,13 +77,13 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     {
         $this->updateAttributes(array('name'=>$name));
     } //end func setName
-    
+
     // }}}
     // {{{ getName()
 
     /**
      * Returns the element name
-     * 
+     *
      * @since     1.0
      * @access    public
      * @return    string
@@ -98,7 +98,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
 
     /**
      * Sets value for textarea element
-     * 
+     *
      * @param     string    $value  Value for textarea element
      * @since     1.0
      * @access    public
@@ -108,7 +108,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     {
         $this->_value = $value;
     } //end func setValue
-    
+
     // }}}
     // {{{ getValue()
 
@@ -129,7 +129,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
 
     /**
      * Sets wrap type for textarea element
-     * 
+     *
      * @param     string    $wrap  Wrap type
      * @since     1.0
      * @access    public
@@ -139,13 +139,13 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     {
         $this->updateAttributes(array('wrap' => $wrap));
     } //end func setWrap
-    
+
     // }}}
     // {{{ setRows()
 
     /**
      * Sets height in rows for textarea element
-     * 
+     *
      * @param     string    $rows  Height expressed in rows
      * @since     1.0
      * @access    public
@@ -161,12 +161,12 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
 
     /**
      * Sets width in cols for textarea element
-     * 
+     *
      * @param     string    $cols  Width expressed in cols
      * @since     1.0
      * @access    public
      * @return    void
-     */ 
+     */
     function setCols($cols)
     {
         $this->updateAttributes(array('cols' => $cols));
@@ -177,7 +177,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
 
     /**
      * Returns the textarea element in HTML
-     * 
+     *
      * @since     1.0
      * @access    public
      * @return    string
@@ -195,13 +195,13 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
                    '</textarea>';
         }
     } //end func toHtml
-    
+
     // }}}
     // {{{ getFrozenHtml()
 
     /**
      * Returns the value of field without HTML tags (in this case, value is changed to a mask)
-     * 
+     *
      * @since     1.0
      * @access    public
      * @return    string

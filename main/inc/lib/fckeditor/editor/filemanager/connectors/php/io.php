@@ -72,7 +72,7 @@ function ServerMapFolder( $resourceType, $folderPath, $sCommand )
 {
 	// Get the resource type directory.
 	$sResourceTypePath = GetResourceTypeDirectory( $resourceType, $sCommand ) ;
-	
+
 	// Ensure that the directory exists.
 	$sErrorMsg = CreateServerFolder( $sResourceTypePath ) ;
 	if ( $sErrorMsg != '' )

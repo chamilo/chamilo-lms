@@ -6,10 +6,10 @@
  * Upload class. Used to pack functions into one practical object.
  * Call like this: var myUpload = new upload(5);
  */
-function upload(latency){ 
+function upload(latency){
 	/**
 	 * Starts the timer
-	 * Call like this: 
+	 * Call like this:
 	 * @param	string	Name of the DOM element we need to update
 	 * @param	string	Loading image to display
 	 * @return	true
@@ -21,7 +21,7 @@ function upload(latency){
 		__progress_bar_interval = setTimeout(__display_progress_bar,latency,__progress_bar_text);
 		__upload_form_domid  = formid;
 	}
-	
+
 	/**
 	 * Starts the timer of the real upload progress
 	 */
@@ -30,22 +30,22 @@ function upload(latency){
 		__progress_bar_uploadid = upload_id;
 		__progress_bar_waitAfterUpload = waitAfterUpload;
 		__upload_form_domid  = formid;
-		__progress_bar_interval = setInterval(__refreshUpload,latency);		
+		__progress_bar_interval = setInterval(__refreshUpload,latency);
 		document.getElementById(domid+'_container').style.display = 'block';
 		if(waitAfterUpload){
 			document.getElementById(domid+'_waiter_container').style.display = 'block';
 		}
-		
-		
+
+
 	}
-	
+
 	/**
 	 * Function called by a timer to update every x seconds the progress bar
 	 */
 	function __refreshUpload(){
 		xajax_updateProgress(__progress_bar_domid, __progress_bar_uploadid, __progress_bar_waitAfterUpload);
 	}
-	
+
 	/**
 	 * Displays the progress bar in the given DOM element
 	 */

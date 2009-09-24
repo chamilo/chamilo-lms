@@ -30,7 +30,7 @@
 // Logic-improvement for ensuring that English language will be shown at least, when the required language file is missing.
 FCKPlugin.prototype.Load = function()
 {
-	// Logic-modification.
+	// Logic-modification about loading language files.
 	switch ( this.Name )
 	{
 		// The following plugins do not need language files or they load language files in their own way.
@@ -78,5 +78,18 @@ FCKPlugin.prototype.Load = function()
 	}
 
 	// Add the main plugin script.
-	LoadScript( this.Path + 'fckplugin.js' ) ;
+	// Logic-modification about loading compressed version of some plugins.
+	//LoadScript( this.Path + 'fckplugin.js' ) ;
+	var load_source = ( window.document.location.toString().indexOf('fckeditor.original.html') != -1 ) ;
+	var file;
+	switch ( this.Name )
+	{
+		case 'customizations':
+			file = load_source ? 'fckplugin.js' : 'fckplugin_compressed.js';
+			break;
+		default:
+			file = 'fckplugin.js';
+	}
+	LoadScript( this.Path + file ) ;
+	// End of logic-modification.
 }

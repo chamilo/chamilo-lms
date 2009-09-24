@@ -53,8 +53,9 @@ FCKConfig.SmileyWindowHeight = 250 ;
 
 // This is a list of all supported by the online editor languages.
 FCKConfig.AvailableLanguages = 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh' ;
-// Loadding additional script that ensures the English language will be shown for plugins, if they are not provided with the requiested language files.
-LoadScript( FCKConfig.PluginsPath + 'customizations/fckplugin_load.js' ) ;
+// This script selects for loading source/compressed versions of some javascripts and ensures that the English language
+// would be shown for plugins, if they are not provided with the requiested language files.
+LoadScript( FCKConfig.PluginsPath + 'customizations/fckplugin_load.js' ) ; // Please, do not disable this script.
 // Reading the list of the enabled in myconfig.php plugins.
 FCKConfig.LoadPlugin = eval( '(' + FCKConfig.PageConfig.LoadPlugin + ')' ) ;
 // Loading the enabled plugins.

@@ -47,7 +47,7 @@
 
 /*
  **************************************************************************************
- * Initialization.
+ * Validation and initialization of configuration data.
  **************************************************************************************
  */
 
@@ -126,13 +126,6 @@ if ( FCKConfig.BaseHref.length > 0 )
 		FCKConfig.BaseHref = FCKConfig.BaseHref + '/' ;
 	}
 }
-
-
-/*
- **************************************************************************************
- * Internal configuration data. It is meant to be modified by developers only.
- **************************************************************************************
- */
 
 // The icon for the image properties button/command.
 if ( !FCKConfig.ImagesIcon )
@@ -2044,3 +2037,47 @@ FCK.GetServerBase = function ( url )
 
 	return url ;
 } ;
+
+
+/*
+ **************************************************************************************
+ * Problem fixing.
+ **************************************************************************************
+ */
+
+FCKEvents.prototype.FireEvent = function( eventName, params )
+{
+	var bReturnValue = true ;
+
+	var oCalls = this._RegisteredEvents[ eventName ] ;
+
+	if ( oCalls )
+	{
+		for ( var i = 0 ; i < oCalls.length ; i++ )
+		{
+			try
+			{
+				bReturnValue = ( oCalls[ i ]( this.Owner, params ) && bReturnValue ) ;
+			}
+			catch(e)
+			{
+				// Additional patch from Ivan Tcholakov, 24-SEP-2009:
+				// Suppressing an error on IE8, "Object expected" -2146823281, when
+				// the editor unloads after "Fit Window" command has been used.
+				if ( e.number == -2146823281 )
+				{
+					continue ;
+				}
+
+				// Ignore the following error. It may happen if pointing to a
+				// script not anymore available (#934):
+				// -2146823277 = Can't execute code from a freed script
+				if ( e.number != -2146823277 )
+					throw e ;
+
+			}
+		}
+	}
+
+	return bReturnValue ;
+}

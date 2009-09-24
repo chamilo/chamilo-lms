@@ -80,12 +80,27 @@ FCKPlugin.prototype.Load = function()
 	// Add the main plugin script.
 	// Logic-modification about loading compressed version of some plugins.
 	//LoadScript( this.Path + 'fckplugin.js' ) ;
-	var load_source = ( window.document.location.toString().indexOf('fckeditor.original.html') != -1 ) ;
 	var file;
 	switch ( this.Name )
 	{
+		case 'asciimath':
+		case 'audio':
+		case 'autogrow':
 		case 'customizations':
-			file = load_source ? 'fckplugin.js' : 'fckplugin_compressed.js';
+		case 'dragresizetable':
+		case 'fckEmbedMovies':
+		case 'flvPlayer':
+		case 'googlemaps':
+		case 'ImageManager':
+		case 'imgmap':
+		case 'mimetex':
+		case 'prompt':
+		case 'tablecommands':
+		case 'wikilink':
+		case 'youtube':
+			file = ( window.document.location.toString().indexOf('fckeditor.original.html') != -1 )
+				? 'fckplugin.js'
+				: 'fckplugin_compressed.js';
 			break;
 		default:
 			file = 'fckplugin.js';

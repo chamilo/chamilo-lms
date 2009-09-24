@@ -1,0 +1,1 @@
+﻿FCKDialog.Prompt=function(A,B,C,D,E,F){if (!A){A='&nbsp;';};if (!D){D='&nbsp;';};if (!B){B='';};if (!E){E=500;};if (!F){F=200;};var G={};G.default_value=B;G.action=C;G.message=A;FCKDialog.OpenDialog('FCKDialog_Prompt',D,FCKConfig.PluginsPath+'prompt/fck_prompt.html',E,F,G);};

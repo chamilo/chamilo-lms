@@ -61,7 +61,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	margin-top:0;
 	background-color: #ffffff;
 }
-/* 
+/*
 
 .maincontent td {
 	float: left;
@@ -180,7 +180,7 @@ input[text] {
 .courses {
 	list-style-type: none;
 	margin-bottom: 5px;
-	height: 30px;	
+	height: 30px;
 }
 /* user_portal session list */
 .session_course_item .courses {
@@ -390,12 +390,12 @@ input[text] {
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
- 
+
 #footer {
 	height:4em;
-	background-image: url(images/footer.jpg);	
+	background-image: url(images/footer.jpg);
 	background-repeat: no-repeat;
-	color:#fff;	
+	color:#fff;
 	background-color: #fff;
 	font-size: 12px;
 }
@@ -568,7 +568,7 @@ this lets the navigation menu appear to the left:
 	margin-left: 0;
 }
  /* End hide from IE5/mac */
-*/ 
+*/
 /*****************************************************
  *  LOGIN AND LANGUAGE FORM                          *
  *****************************************************/
@@ -2511,13 +2511,13 @@ div.image-social-content center.friend {
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}	
+}
 #social-profile-container {
 	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:21%;	
+	width:21%;
 }
 #social-profile-content {
 	float:right;

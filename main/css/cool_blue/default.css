@@ -13,7 +13,7 @@ body {
 	margin: 0;
 	padding: 0;
 	background-color: #fff;
-	height: 100%; /* stick */	
+	height: 100%; /* stick */
 }
 #wrapper{
 	min-height: 100%;
@@ -38,7 +38,7 @@ body {
 	margin-top: 10px;
 	width: 98%;
 	padding: 0px 10px 10px 10px;
-	min-height: 320px;	
+	min-height: 320px;
 }
 /* for content section in main index.php file */
 .maincontent {
@@ -63,7 +63,7 @@ a.invisible:link, a.invisible:visited {
 }
 .clear {
 	clear: both;
-	line-height: 
+	line-height:
  0px;
 	height: 0;
 }
@@ -1263,7 +1263,7 @@ div.report_section {
 	width: 40%;
 	float: left;
 	padding: 5px;
-	margin: 10px 20px;	
+	margin: 10px 20px;
 }
 div.report_section h4 {
 	margin: 0;
@@ -2295,13 +2295,13 @@ div.image-social-content center.friend {
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}	
+}
 #social-profile-container {
 	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:22%;	
+	width:22%;
 }
 #social-profile-content {
 	float:right;

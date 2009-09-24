@@ -1,7 +1,7 @@
 /*****************************************************
- *  MAIN  - PUBLIC ADMIN CSS		                 *                   
+ *  MAIN  - PUBLIC ADMIN CSS		                 *
  *****************************************************/
- 
+
 /* the sticky effect */
 html {
 	height: 100%;
@@ -15,7 +15,7 @@ body {
 	color: #000;
 	margin: 0;
 	padding: 0;
-	background-color: #ffffff;	
+	background-color: #ffffff;
 	height: 100%; /* stick */
 }
 
@@ -184,7 +184,7 @@ input[text] {
 .courses {
 	list-style-type: none;
 	margin-bottom: 5px;
-	height: 30px;	
+	height: 30px;
 }
 /* user_portal session list */
 .session_course_item .courses {
@@ -1055,7 +1055,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	border-bottom:1px solid #CCCCCC;
 }
 .message-content-body-left {
-	float:left;/* width:55%; */  
+	float:left;/* width:55%; */
 }
 .message-content-body-right {
 	float:right;
@@ -2543,7 +2543,7 @@ div.image-social-content center.friend {
 	border-top:1px dotted #999999;
 	border-left:1px dotted #999999;
 	border-right:1px dotted #999999;
-	/*height:35px;*/		
+	/*height:35px;*/
     padding:2px;
 	margin-bottom: 2px;
 	/*background:url(images/actions.jpg) repeat-x;*/

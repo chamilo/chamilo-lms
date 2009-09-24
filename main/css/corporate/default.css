@@ -12,7 +12,7 @@ body {
 	font-size: 12px;
 	margin: 0;
 	padding: 0;
-	height: 100%; /* stick */	
+	height: 100%; /* stick */
 }
 #wrapper{
 	min-height: 100%;
@@ -50,10 +50,10 @@ input[type=button], input[type=submit] {
 	font-weight:bold;
 	color:#666;
 }
-/* header styles */ 
+/* header styles */
 #header {
 }
-/* header 1 styles */ 
+/* header 1 styles */
 #header1 {
 	background-color: #dcdcdc;
 	color: #666;
@@ -72,7 +72,7 @@ input[type=button], input[type=submit] {
 #header1 img {
 	border: 0px;
 }
-/* header 2 styles */ 
+/* header 2 styles */
 #header2 {
 	background: #f0f0f0;
 	color: #666;
@@ -101,7 +101,7 @@ input[type=button], input[type=submit] {
 #Header2Right ul li a:hover {
 	color:#333;
 }
-/* header 3 styles */ 
+/* header 3 styles */
 #header3 {
 	background: #fff;
 	border-bottom: 1px solid #aeaeae;
@@ -188,7 +188,7 @@ input[type=button], input[type=submit] {
 }
 
 
-/* header 4 styles */ 
+/* header 4 styles */
 #header4 {
 	margin-left: 5px;
 	height: 21px;
@@ -203,8 +203,8 @@ a.breadcrumb0 {
 /* footer styles */
 #footer {
 	border-top: 1px solid #aeaeae;
-	height:3.5em;	
-	color:#fff;	
+	height:3.5em;
+	color:#fff;
 	background-color: #434343;
 }
 .push {
@@ -1796,13 +1796,13 @@ div.image-social-content center.friend {
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}	
+}
 #social-profile-container {
 	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:21%;	
+	width:21%;
 }
 #social-profile-content {
 	float:right;

@@ -13,7 +13,7 @@ body {
 	margin: 0;
 	padding: 0;
 	background-color: #fff;
-	height: 100%; /* stick */	
+	height: 100%; /* stick */
 }
 #wrapper{
 	min-height: 100%;
@@ -63,7 +63,7 @@ a.invisible:link, a.invisible:visited {
 }
 .clear {
 	clear: both;
-	line-height: 
+	line-height:
  0px;
 	height: 0;
 }
@@ -2288,13 +2288,13 @@ div.image-social-content center.friend {
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}	
+}
 #social-profile-container {
 	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:22%;	
+	width:22%;
 }
 #social-profile-content {
 	float:right;

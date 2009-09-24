@@ -13,7 +13,7 @@ body {
 	margin: 0;
 	padding: 0;
 	background-color: #fff;
-	height: 100%; /* stick */	
+	height: 100%; /* stick */
 }
 #wrapper{
 	min-height: 100%;
@@ -63,7 +63,7 @@ a.invisible:link, a.invisible:visited {
 }
 .clear {
 	clear: both;
-	line-height: 
+	line-height:
  0px;
 	height: 0;
 }
@@ -158,7 +158,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 .courses {
 	list-style-type: none;
 	margin-bottom: 5px;
-	height: 30px;	
+	height: 30px;
 }
 /* user_portal session list */
 .session_course_item .courses {
@@ -353,7 +353,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image: url(images/tab-repeat.png);
 	background-repeat: repeat-x;
 	color:#fff;
-	background-color: #434343;	
+	background-color: #434343;
 }
 .push {
 	height: 3em; /* Very important */
@@ -2302,13 +2302,13 @@ div.image-social-content center.friend {
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}	
+}
 #social-profile-container {
 	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:22%;	
+	width:22%;
 }
 #social-profile-content {
 	float:right;

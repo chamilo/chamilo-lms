@@ -3,7 +3,7 @@
    (info@ws-webservice.de / webmaster@bibelcenter.de)
    updated on 2005-02-25 by Olivier Brouckaert
    (oli.brouckaert@dokeos.com)
-   update on 2005-03-01 by Wolfgang Schneider   
+   update on 2005-03-01 by Wolfgang Schneider
    update on 2005-05-27 by Patrick Cool
    */
 
@@ -15,13 +15,13 @@ body {
 	padding: 0;
 	background-color: #fff;
 }
-img {	
-	border: none; 
+img {
+	border: none;
 }
 
 #outerframe {
 	position: relative;  /* do not remove, fixes a bug in IE */
-	border: 1px solid #fff; 
+	border: 1px solid #fff;
 	background-color: #fff;
 }
 
@@ -29,7 +29,7 @@ img {
 * html #outerframe {height: 1%;}
 /* End hide from IE5-mac */
 
-/***************************************************** 
+/*****************************************************
  *  HEADER STYLES                                    *
  *****************************************************/
 #header {
@@ -54,53 +54,53 @@ img {
 #header1 a:hover{
 	text-decoration: underline;
 }
-#sitename { 
-	margin: 0; 
+#sitename {
+	margin: 0;
 	font-weight: bold;
 }
 #institution {
-	float: left; 
+	float: left;
 	font-weight: bold;
 }
 #my_courses {
-	float: right; 
+	float: right;
 	font-weight: bold;
 }
 /* Header 2: Containing My Courses, My Profile,... */
 #header2 {
 	font-size: 12px;
 	padding: 4px;
-	background-color: #4271B5; 
-	color: #fff; 
+	background-color: #4271B5;
+	color: #fff;
 	border-bottom: 1px solid white;
 }
 #header2 .banner_links {
-	margin: 0; 
+	margin: 0;
 }
-#header2 a { 
+#header2 a {
 	text-decoration: none;
-	color: #fff; 
+	color: #fff;
 	background: transparent;
 	font-weight:normal;
 	font-size: 12px;
 }
-#header2 input.logout { 
- 	/* makes an input appear like a link in this header */	
-	margin: 0; 
-	padding: 0; 
-	background-color: transparent; 
+#header2 input.logout {
+ 	/* makes an input appear like a link in this header */
+	margin: 0;
+	padding: 0;
+	background-color: transparent;
 	border: none;
-	color: #fff; 
+	color: #fff;
 	font-size: 12px;
 	font-weight:normal;
-	font-family: verdana, arial, helvetica, sans-serif; 
+	font-family: verdana, arial, helvetica, sans-serif;
 }
 #header2 a:hover, #header2 input.logout:hover {
 	border-bottom: 1px solid #fff;
 }
 #logout {
-	float: right; 
-	width:20%; 
+	float: right;
+	width:20%;
 	text-align:right;
 }
 /* Header 3: Containing breadcrumbs, online users, student/teacher view, help */
@@ -131,12 +131,12 @@ img {
 	list-style-type: none;
 	text-align: right;
 }
-#Header3Right ul li { 
-	display: inline; 
+#Header3Right ul li {
+	display: inline;
 }
 #Header3Right ul li a {
-	padding: 4px 6px 4px 4px; 
-	color:#fff; 
+	padding: 4px 6px 4px 4px;
+	color:#fff;
 }
 /* Header 4: not used */
 #header4 {
@@ -157,7 +157,7 @@ img {
 	text-align: right;
 }
 
-/***************************************************** 
+/*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
 #footer {
@@ -170,7 +170,7 @@ img {
 	float: right;
 }
 
-/***************************************************** 
+/*****************************************************
  *  MAIN STYLES                                      *
  *****************************************************/
 #main {
@@ -209,7 +209,7 @@ img {
  background-color: #fff; font-size: 12px; color: #f00;}
 
 
-/*** layout divs for course and tool pages (being tested in some pages) ****/  
+/*** layout divs for course and tool pages (being tested in some pages) ****/
 #contentfloatholder {/* also makes the right "sliding" tab  */
 /*background: url(../pics/sidebar-r.gif) repeat-y 100% 0;
 background: url(../pics/bg_fountain.jpg) no-repeat 100% 0; */
@@ -220,26 +220,26 @@ position: relative;
 
 #contentfloatholder:after {
  /* this is for NN6 to clear floats */
-content: "."; 
-display: block; 
+content: ".";
+display: block;
 height: 0px;
-clear: both; 
+clear: both;
 visibility: hidden;
 }
 
 #centerwrap {
   float: left;
-  width: 100%; 
-  margin-right: -95%; 
-	/* this needs to be less than 100% for Moz/Mac which thinks 
-         it's empty otherwise. The difference is made up by putting a 
+  width: 100%;
+  margin-right: -95%;
+	/* this needs to be less than 100% for Moz/Mac which thinks
+         it's empty otherwise. The difference is made up by putting a
          negative left margin on the left float:
-	   Note IE/Mac doesn't like this method ~ it wants the 100% so it can 
-	   be fed in using IE only CSS below becasue IE/Win also works with the 100% method.  
+	   Note IE/Mac doesn't like this method ~ it wants the 100% so it can
+	   be fed in using IE only CSS below becasue IE/Win also works with the 100% method.
 	*/
 }
 
-#center { margin: 0 0 0 180px; padding: 10px 0 40px 0;  
+#center { margin: 0 0 0 180px; padding: 10px 0 40px 0;
  min-height: 300px; }
 
 #left { float: left; width: 180px; padding: 20px 0 0 0;
@@ -249,8 +249,8 @@ visibility: hidden;
 #leftnavbox {	margin: 0; padding: 0; float:left;}
 #leftnavbox dl { width: 160px; margin: 12px auto 4px auto; padding: 0 0 10px 0;
 background: transparent; font-size: 12px; text-align: center; }
-#leftnavbox dt { margin: 0; padding: 1px 2px; font-weight: bold; font-size: 12px; 
- text-align: center; color: #000; 
+#leftnavbox dt { margin: 0; padding: 1px 2px; font-weight: bold; font-size: 12px;
+ text-align: center; color: #000;
  border-bottom: 1px solid #fff; background: transparent; }
 #leftnavbox dd { margin: 0; padding: 0; color: #009; text-align: left;
 border-bottom:1px solid #fff; background: #ccf; }
@@ -260,10 +260,10 @@ border-bottom:1px solid #fff; background: #ccf; }
 #leftnavlist a:visited {color:#eee; text-decoration: none; display: block; padding: 2px 5px 2px 10px;
  background: #4171B5; color: #eee; width:140px; }
 #leftnavlist a:hover { background: #fff; color:#4171B5; display: block;}
-/* --- end of left side definition list menu section  --- */ 
+/* --- end of left side definition list menu section  --- */
 
 
- 
+
 /* various sections in course-home.php file  */
 #toolremove {width: 40%; color: #f00; font-weight: bold;
  margin: 10px auto; padding: 10px; border: 2px solid #f00;}
@@ -311,20 +311,20 @@ border-bottom:1px solid #fff; background: #ccf; }
 -----------------------------------------------------*/
 #agenda_list {width: 100%; margin: 0 auto; border: 1px solid #fff;
  border-collapse: collapse;}
- 
-/*The caption of the calendar (displays the month and the << and >> links*/ 
+
+/*The caption of the calendar (displays the month and the << and >> links*/
 #agenda_list #title {background-color: #4171B5; font-weight: bold;
  font-size: 12px; color: #fff; text-align: left; padding: 2px 10px; text-align: center; border: 1px solid #264269;}
 #agenda_list #title a:link, #agenda_list #title a:visited {background-color: #4171B5; font-weight: bold;
  font-size: 12px; color: #fff; text-align: left; padding: 2px 10px;text-align: center;}
 #agenda_list #title a:hover {background-color: #4171B5; font-weight: bold;
  font-size: 12px; color: #ff0000; text-align: left; padding: 2px 10px;text-align: center;}
- 
+
 /* The cells with the name of the days of the weeks (mon->sun)*/
 #agenda_list .weekdays {background-color: #D3DFF1; text-align: center;
  font-weight: bold; border: 1px solid #264269; border-collapse: collapse;}
- 
-/* The cells for the days (1->31) */ 
+
+/* The cells for the days (1->31) */
 #agenda_list .days_week {height: 40px; width: 12%; text-align: left; vertical-align: top;
  border: 1px solid #264269; border-collapse: collapse; background-color: #f5f5f5;}
 #agenda_list .days_weekend {height: 40px; width: 12%; text-align: left; vertical-align: top;
@@ -336,29 +336,29 @@ border-bottom:1px solid #fff; background: #ccf; }
 #agenda_list .data {background-color: #eee; text-align: left; padding: 2px 10px;
  font-weight: bold; border: 0px solid #4171B5; border-collapse: collapse;}
 #agenda_list .datanotbold {background-color: #eee; text-align: left; padding: 2px 10px;
- font-weight: normal; border: 0px solid #4171B5; border-collapse: collapse;} 
+ font-weight: normal; border: 0px solid #4171B5; border-collapse: collapse;}
 #agenda_list .text {background-color: #fff; text-align: left; padding: 2px 10px;
  font-weight: normal; border: 0px solid #4171B5; border-collapse: collapse;}
 
-/*text in the cells: display of agenda items (invisible)*/   
+/*text in the cells: display of agenda items (invisible)*/
 #agenda_list .data_hidden {background-color: #eee; text-align: left; padding: 2px 10px;
  font-weight: bold; border: 0px solid #4171B5; border-collapse: collapse; color: #999999;}
 #agenda_list .datanotbold_hidden {background-color: #eee; text-align: left; padding: 2px 10px;
- font-weight: normal; border: 0px solid #4171B5; border-collapse: collapse; color: #999999;} 
+ font-weight: normal; border: 0px solid #4171B5; border-collapse: collapse; color: #999999;}
 #agenda_list .text_hidden {background-color: #fff; text-align: left; padding: 2px 10px;
  font-weight: normal; border: 0px solid #4171B5; border-collapse: collapse; color: #999999;}
- 
-/*text in the cells: display of agenda items (highlighted)*/    
+
+/*text in the cells: display of agenda items (highlighted)*/
 #agenda_list .datanow {background-color: #FFCC00; text-align: left; padding: 2px 10px;
  font-weight: bold; border: 0px solid #4171B5; border-collapse: collapse;}
 #agenda_list .datanotboldnow {background-color: #FFCC00; text-align: left; padding: 2px 10px;
- font-weight: normal; border: 0px solid #4171B5; border-collapse: collapse;} 
+ font-weight: normal; border: 0px solid #4171B5; border-collapse: collapse;}
 #agenda_list .textnow {background-color: #fff; text-align: left; padding: 2px 10px;
- font-weight: normal; border: 0px solid #4171B5; border-collapse: collapse;} 
- 
+ font-weight: normal; border: 0px solid #4171B5; border-collapse: collapse;}
+
 /* ---------------------------------------------------
 	styles for the mini agenda
------------------------------------------------------*/ 
+-----------------------------------------------------*/
 #smallcalendar {width: 100%; margin: 0 auto; border: 1px solid #fff;
  border-collapse: collapse;}
 #smallcalendar .weekdays {background-color: #D3DFF1; text-align: center;
@@ -368,15 +368,15 @@ border-bottom:1px solid #fff; background: #ccf; }
 #smallcalendar .days_weekend {background-color: #e6e6e6; text-align: center;
  font-size: 11px; border: 1px solid #fff; border-collapse: collapse;}
 #smallcalendar .days_today {width: 12%; text-align: center;
- font-size: 11px;  border: 1px solid #FA8500; border-collapse: collapse; background-color: #FFCA8D;} 
-   
+ font-size: 11px;  border: 1px solid #FA8500; border-collapse: collapse; background-color: #FFCA8D;}
+
 /* ---------------------------------------------------
 	styles for the personal agenda
 -----------------------------------------------------*/
 .personal_agenda {color: #008000; }
-.personal_agenda a:link, .personal_agenda a:visited {color: #008000; } 
+.personal_agenda a:link, .personal_agenda a:visited {color: #008000; }
 a.personal_agenda:link, a.personal_agenda:visited {color: #008000; }
-.personal_agenda a:hover, .personal_agenda a:hover {color: #666666; } 
+.personal_agenda a:hover, .personal_agenda a:hover {color: #666666; }
 a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 
 
@@ -394,12 +394,12 @@ a.personal_agenda:hover, a.personal_agenda:hover {color: #666666; }
 }
 .normal-message {
 	border: 1px solid #FF8001;
-	color: #000; 
+	color: #000;
 	background-color: #FDC77E;
 }
 .error-message {
 	border: 1px solid #3F70AC;
-	color: #000; 
+	color: #000;
 	background-color: #FDC273;
 }
 
@@ -485,7 +485,7 @@ input.liteoption {font-weight : normal;} /* None-bold submit button */
 select,
 input[type=checkbox],
 input[type=radio],
-input[type=button], 
+input[type=button],
 input[type=submit] {cursor:	pointer; font-size: 12px;}
 input[text] {font-size: 12px; }
 
@@ -514,14 +514,14 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 .xxsmall {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 9px}
 
 
-/***************************************************** 
+/*****************************************************
  *  DATA TABLE STYLES                                *
  *****************************************************/
 .cell_header {background-color: #EEEEFF;font-weight:bold;text-align:left;padding-left:5px;}   /* header cell in data table in tools */
 
 .data_table{
   	border-collapse: collapse;
-	width: 100%; 
+	width: 100%;
 	padding: 5px;
 }
 .data_table th{
@@ -542,7 +542,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
   	padding: 5px;
 	  vertical-align: top;
   	border-bottom: 1px solid #b0b0b0;
-  	border-right: 1px dotted #e1e1e1; 
+  	border-right: 1px dotted #e1e1e1;
   	border-left: 1px dotted #e1e1e1;
 }
 
@@ -551,12 +551,12 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 .tool_list dd { margin: 0; padding: 4px 0 0 10px;}
 
 /* divs for category list / platform news on home page */
-.home_cats {width: 45%; float: left; 
+.home_cats {width: 45%; float: left;
 	margin: 0; padding: 8px; background: #fff;}
 
-.home_news {width: 45%; float: right; 
+.home_news {width: 45%; float: right;
 	margin: 0; padding: 8px; background: #fff;}
- 
+
 
 label.left { float: left; width: 15em; margin: 0 0 0.5em 0; }
 form br { clear: both; }
@@ -578,7 +578,7 @@ div.admin_section {
 	padding: 5px;
 	margin: 10px 20px;
 }
-div.admin_section h4 { 
+div.admin_section h4 {
   margin: 0;
 	border-bottom: 1px solid gray;
 	width: 100%;
@@ -617,7 +617,7 @@ div.admin_section h4 {
 
 /* New Announcements Tool */
 .announcements_datum
-{ 
+{
    font-size: 12px;
    font-style: italic;
    color: #666666;

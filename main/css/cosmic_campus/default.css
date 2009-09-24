@@ -66,7 +66,7 @@ input[type=button], input[type=submit] {
 	font-weight:bold;
 	color:#000;
 }
-/* header 1 styles */ 
+/* header 1 styles */
 #header1 {
 	padding: 4px;
 	background-color: #7171b7;
@@ -90,7 +90,7 @@ input[type=button], input[type=submit] {
 	float: right;
 	font-weight: bold;
 }
-/* header 2 styles */ 
+/* header 2 styles */
 #header2 {
 	min-height:10px;
 	padding:  0.2em 0.5em;
@@ -119,7 +119,7 @@ input[type=button], input[type=submit] {
 #Header2Right ul li a {
 	color:#f1d40d;
 }
-/* header 3 styles */ 
+/* header 3 styles */
 #header3 {
 	padding: 0.8em 0.5em 0.4em 0.5em;
 	background: #fff;
@@ -179,7 +179,7 @@ input[type=button], input[type=submit] {
 	float: right;
 	width: auto;
 }
-/* header 4 styles */ 
+/* header 4 styles */
 #header4 {
 	background-color: transparent;
 	color: #009;
@@ -270,7 +270,7 @@ a.breadcrumb0 {
 .courses {
 	list-style-type: none;
 	margin-bottom: 5px;
-	height: 30px;	
+	height: 30px;
 }
 /* user_portal session list */
 .session_course_item .courses {
@@ -1812,13 +1812,13 @@ div.image-social-content center.friend {
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}	
+}
 #social-profile-container {
 	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:21%;	
+	width:21%;
 }
 #social-profile-content {
 	float:right;

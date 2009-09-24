@@ -13,7 +13,7 @@ body {
 	font-size: 12px;
 	margin: 0;
 	padding: 0;
-	height: 100%; /* stick */		
+	height: 100%; /* stick */
 }
 #wrapper{
 	min-height: 100%;
@@ -102,7 +102,7 @@ input.link_alike:hover {
 	background-color: #fff;
 	margin: 0px auto;
 	margin-top: 10px;
-	min-height: 320px;	
+	min-height: 320px;
 	position: relative; /* to avoid the IE peekabo bug*/
 	width: 98%;
 }
@@ -136,7 +136,7 @@ input.link_alike:hover {
 .courses {
 	list-style-type: none;
 	margin-bottom: 5px;
-	height: 30px;	
+	height: 30px;
 }
 /* user_portal session list */
 .session_course_item .courses {
@@ -361,7 +361,7 @@ input.link_alike:hover {
 	height: 3.9em;
 	background-color: #E5EDF9;
 	border-top: 1px solid #4171B5;
-	font-size: 12px;			
+	font-size: 12px;
 }
 .push {
 	height: 4em; /* Very important */
@@ -944,7 +944,7 @@ input.liteoption {
 	border-bottom:1px solid #CCCCCC;
 }
 .message-content-body-left {
-	float:left;/*width:55%;*/  
+	float:left;/*width:55%;*/
 }
 .message-content-body-right {
 	float:right;
@@ -2552,13 +2552,13 @@ div.image-social-content center.friend {
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}	
+}
 #social-profile-container {
 	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:21%;	
+	width:21%;
 }
 #social-profile-content {
 	float:right;

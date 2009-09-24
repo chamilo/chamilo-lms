@@ -47,7 +47,7 @@
     line-height: 1.2;
     text-align: center;
     text-decoration: none;
-    white-space: nowrap; /* required in IE 6 */    
+    white-space: nowrap; /* required in IE 6 */
 }
 .tabs-nav .tabs-selected a {
     color: #000;

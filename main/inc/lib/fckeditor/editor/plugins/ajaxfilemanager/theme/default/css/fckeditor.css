@@ -25,7 +25,7 @@ form{margin: 0;}
 	background-color: #d9dbdc;
 }
 #leftCol legend {
-	
+
 	/*
 	position: absolute;
 	top: -.5em;
@@ -51,7 +51,7 @@ input{ padding: 0; background-color: transparent;}
 	min-width:760px;
 	width:100%;
     padding:0px;
-		
+
 }
 #body{
 position:absolute;
@@ -64,14 +64,14 @@ border-color:#0000CC;
 	width:265px;
 	float:left;
 	text-align:left;
-	
+
 }
 #rightCol{
 	width:100%;
 	border: none;
 	margin-left: -265px;
 	float:right;
-	
+
 
 }
 #rightCol img.ajaxLoadingImg{
@@ -81,13 +81,13 @@ margin-top:100px;
 #content{
   margin-left: 265px;
 overflow: auto;
-overflow-x: hidden;	
+overflow-x: hidden;
 max-height:380px;
 }
  .pagination_content{
   margin-left: 265px;
 overflow: auto;
-overflow-x: hidden;	   
+overflow-x: hidden;
  }
 .leftToRightArrow{
 	background-image:url(../images/arrow_right.png);
@@ -183,7 +183,7 @@ float:left;
 	font-size: 14px;
 	font-weight: bold;
 	color: #666666;
-	
+
 }
 #currentFolderInfo dt{
 	font-size:12px;
@@ -469,31 +469,31 @@ a.pagination_active{font-weight: bold; color: #CC0000;}
 /**  Detail View */
 #tableList{
 font-size:100%;
-width:100%; 
+width:100%;
 }
 #tableList thead th{
 	text-align:left;
 	color:#7a92c2;
 	padding:8px 8px 6px 8px;
 	background-color: #DDDBD2;
-} 
+}
 #tableList thead th.docName{
-	background:#DDDBD2; 
+	background:#DDDBD2;
 	padding:2px 0px 2px 20px;
-	border-right-width: 2px;	
+	border-right-width: 2px;
 	border-right-style: groove;
-} 
+}
 #tableList tbody td		{ background:#f2f1ee; padding:0; }
-#tableList tbody td.docName	{ 
-	background-color:#fff; 
-	height: 22px; 
+#tableList tbody td.docName	{
+	background-color:#fff;
+	height: 22px;
 	border-right-width: 2px;
 	border-right-style: groove;
 	padding:2px 0px 2px 20px;
 }
-#tableList tbody td.docInfo{ 
-	background-color:#f2f1ee; 
-	height: 22px; 
+#tableList tbody td.docInfo{
+	background-color:#f2f1ee;
+	height: 22px;
 	border-right-width: 2px;
 	border-right-style: groove;
 	padding:2px 0px 2px 20px;

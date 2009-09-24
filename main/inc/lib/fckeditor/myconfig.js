@@ -86,14 +86,6 @@ FCKConfig.GoogleMaps_Key = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE
 
 
 /*
- * File Manager.
- */
-
-//Upload path for the Image manager. Leave it empty.
-FCKConfig.IMUploadPath = '' ;
-
-
-/*
  * Quick-upload tabs.
  */
 

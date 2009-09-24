@@ -243,6 +243,27 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
  *	This parameter has meaning when $type parameter has one of the following values: TO_WEB, TO_SYS, TO_REL. Otherwise it is ignored.
  *	@return string					The requested path or the converted path.
  *
+ *	A terminology note:
+ *	The defined constants used by this function contain the abbreviations WEB, REL, SYS with the following meaning for types:
+ *	WEB - an absolute URL (we often call it web-path),
+ *	example: http://www.mydokeos.com/dokeos/courses/COURSE01/document/lesson01.html;
+ *	REL - represents a semi-absolute URL - a web-path, which is relative to the root web-path of the server, without server's base,
+ *	example: /dokeos/courses/COURSE01/document/lesson01.html;
+ *	SYS - represents an absolute path inside the scope of server's file system,
+ *	/var/www/dokeos/courses/COURSE01/document/lesson01.html or
+ *	C:/Inetpub/wwwroot/dokeos/courses/COURSE01/document/lesson01.html.
+ *	In some abstract sense we can consider these three path types as absolute.
+ *
+ *	Notes about the current behaviour model:
+ *	1. Windows back-slashes are converted to slashes in the result.
+ *	2. A semi-absolute web-path is detected by its leading slash. On Linux systems, absolute system paths start with
+ *	a slash too, so an additional check about presense of leading system server base is implemented. For example, the function is
+ *	able to distinguish type difference between /var/www/dokeos/courses/ (SYS) and /dokeos/courses/ (REL).
+ *	3. The function api_get_path() returns only these three types of paths, which in some sense are absolute. The function has
+ *	no a mechanism for processing relative web/system paths, such as: lesson01.html, ./lesson01.html, ../css/my_styles.css.
+ *	It has not been identified as needed yet.
+ *	4. Also, resolving the meta-symbols "." and ".." withiin paths has not been implemented, it is to be identified as needed.
+ *
  * 	@example
  *	Assume that your server root is /var/www/ dokeos is installed in a subfolder dokeos/ and the URL of your campus is http://www.mydokeos.com
  * 	The other configuration paramaters have not been changed.

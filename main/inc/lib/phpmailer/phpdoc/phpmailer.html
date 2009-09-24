@@ -274,7 +274,7 @@ phpmailer - PHP email transport class
 <TD><CODE><B><A HREF="phpmailer.html#$WordWrap">$WordWrap</A></B></CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets word wrapping on the body of the message to a given number of 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets word wrapping on the body of the message to a given number of
  characters.</TD>
 </TR>
 </TABLE>
@@ -610,7 +610,7 @@ $WordWrap</H3>
 <PRE>
 public int <B>$WordWrap</B></PRE>
 <DL>
-<DD>Sets word wrapping on the body of the message to a given number of 
+<DD>Sets word wrapping on the body of the message to a given number of
  characters. Default value is 0 (off).</DL>
 <HR>
 
@@ -646,8 +646,8 @@ $PluginDir</H3>
 <PRE>
 public string <B>$PluginDir</B></PRE>
 <DL>
-<DD>Path to phpmailer plugins.  This is now only useful if the SMTP class 
- is in a different directory than the PHP include path.  
+<DD>Path to phpmailer plugins.  This is now only useful if the SMTP class
+ is in a different directory than the PHP include path.
  Default is empty ("").</DL>
 <HR>
 
@@ -870,11 +870,11 @@ SendToQueue</H3>
 public string <B>SendToQueue</B>(var&nbsp;$queue_path,
                           var&nbsp;$send_time)</PRE>
 <DL>
-<DD>Sends mail message to an assigned queue directory.  Has an optional 
- sendTime argument.  This is used when the user wants the 
- message to be sent from the queue at a predetermined time. 
- The data must be a valid timestamp like that returned from 
- the time() or strtotime() functions.  Returns false on failure 
+<DD>Sends mail message to an assigned queue directory.  Has an optional
+ sendTime argument.  This is used when the user wants the
+ message to be sent from the queue at a predetermined time.
+ The data must be a valid timestamp like that returned from
+ the time() or strtotime() functions.  Returns false on failure
  or the message file name if success.<DD><DL>
 <DT><B>Parameters:</B><DD><CODE>$send_time</CODE> - <b>Default Value</b>: 0</DL>
 </DD>
@@ -924,7 +924,7 @@ public bool <B>AddEmbeddedImage</B>(var&nbsp;$path,
                              var&nbsp;$encoding,
                              var&nbsp;$type)</PRE>
 <DL>
-<DD>Adds an embedded attachment.  This can include images, sounds, and 
+<DD>Adds an embedded attachment.  This can include images, sounds, and
  just about any other document.<DD><DL>
 <DT><B>Parameters:</B><DD><CODE>cid</CODE> - this is the Content Id of the attachment.  Use this to identify
         the Id for accessing the image in an HTML form.<DD><CODE>$name</CODE> - <b>Default Value</b>: ""<DD><CODE>$encoding</CODE> - <b>Default Value</b>: "base64"<DD><CODE>$type</CODE> - <b>Default Value</b>: "application/octet-stream"</DL>

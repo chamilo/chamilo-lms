@@ -51,7 +51,7 @@ you pretty much get what you expect: amath x^2 or a_(m n) or a_{m n} or
 (x+1)/y or sqrtx endamath. The a``math ... enda``math tokens are used to
 start/stop the <b>new auto-math-recognize mode</b>. Of course one can still use
 the \`...\` back-quotes to delimit math formulas explicitly
-(\$...\$ should only be used for LaTeX formulas). 
+(\$...\$ should only be used for LaTeX formulas).
 The choice of grouping parenthesis is up to you
 (they don't have to match either). If the displayed expression can be
 parsed uniquely without them, they are omitted. Printing the table of
@@ -105,8 +105,8 @@ a corresponding MathML node. The constants are mostly converted to
 their respective Unicode symbols. The other expressions are converted
 as follows:<br/>
 <table>
-<tr><td>l`S`r</td><td>`to`</td><td>&lt;mrow>l`S`r&lt;/mrow> 
-(note that any pair of brackets can be used to delimit subexpressions, 
+<tr><td>l`S`r</td><td>`to`</td><td>&lt;mrow>l`S`r&lt;/mrow>
+(note that any pair of brackets can be used to delimit subexpressions,
 they don't have to match)</td></tr>
 <tr><td>sqrt `S`</td><td>`to`</td><td>&lt;msqrt>`S'`&lt;/msqrt></td></tr>
 
@@ -140,7 +140,7 @@ stackrel `S_1` `S_2`</td><td>`to`</td><td>&lt;mover>`S_2'` `S_1'`&lt;/mover>
 </td></tr>
 </table>
 In the rules above, the expression `S'` is the same as `S`, except that if
-`S` has an outer level of brackets, then `S'` is the expression inside 
+`S` has an outer level of brackets, then `S'` is the expression inside
 these brackets.
 
 <p>
@@ -160,11 +160,11 @@ these expressions are translated to
 &lt;mrow>l&lt;mtable>&lt;mtr>&lt;mtd>`S_(11)`&lt;/mtd>...
 
 &lt;mtd>`S_(1n)`&lt;/mtd>&lt;/mtr>...
-&lt;mtr>&lt;mtd>`S_(m1)`&lt;/mtd>... 
+&lt;mtr>&lt;mtd>`S_(m1)`&lt;/mtd>...
 &lt;mtd>`S_(mn)`&lt;/mtd>&lt;/mtr>&lt;/mtable>r&lt;/mrow>.
 <br/>
 
-For example 
+For example
 <tt>{(S_(11),...,S_(1n)),(vdots,ddots,vdots),(S_(m1),...,S_(mn))]</tt>
 displays as `{(S_(11),...,S_(1n)),(vdots,ddots,vdots),(S_(m1),...,S_(mn))]`.
 
@@ -199,13 +199,13 @@ Now for a complete list of constants (<a
 href="http://math.chapman.edu/cgi-bin/mathxml.pl?Complete_list_of_LaTeX_constants">standard
 LaTeX names</a> also work):
 
-</h4> 
+</h4>
 
 <p>
 Numbers: A string of digits, optionally preceded by a minus sign, and
 optionally followed by a decimal point (a period) and another string
 of digits, is parsed as a single token and converted to a MathML
-number, i.e., enclosed with the &lt;mn> tag. If it is not desirable to 
+number, i.e., enclosed with the &lt;mn> tag. If it is not desirable to
 have a preceding minus sign be part of the number, a space should be inserted.
 Thus <tt>x-1</tt> is converted to &lt;mi>x&lt;/mi>&lt;mn>-1&lt;/mn>, whereas
 <tt>x - 1</tt> is converted to &lt;mi>x&lt;/mi>&lt;mo>-&lt;/mo>&lt;mn>1&lt;/mn>.
@@ -495,7 +495,7 @@ simple enough to be coded by hand.
 <hr/>
 
 <div id="author">
-<a href="http://www.chapman.edu/~jipsen/">Peter Jipsen</a>, 
+<a href="http://www.chapman.edu/~jipsen/">Peter Jipsen</a>,
 <a href="http://www.chapman.edu/">Chapman University</a>, September 2007
 
 <a href="http://validator.w3.org/check/referer"><img border="0"

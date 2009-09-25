@@ -269,7 +269,18 @@ class HTMLPurifier_Encoder
         static $iconv = null;
         if ($iconv === null) $iconv = function_exists('iconv');
         set_error_handler(array('HTMLPurifier_Encoder', 'muteErrorHandler'));
-        if ($iconv && !$config->get('Test', 'ForceNoIconv')) {
+        // Added Ivan Tcholakov, 25-SEP-2009.
+        // First try - encoding conversion related functions from Dokeos LMS,
+        // for some encodings they work even without iconv or mbstring installed.
+        if (function_exists('api_is_encoding_supported')) {
+            if (api_is_encoding_supported($encoding)) {
+                $str = api_utf8_encode($str, $encoding);
+                restore_error_handler();
+                return $str;
+            }
+        }
+        //if ($iconv && !$config->get('Test', 'ForceNoIconv')) {
+        elseif ($iconv && !$config->get('Test', 'ForceNoIconv')) {
             $str = iconv($encoding, 'utf-8//IGNORE', $str);
             if ($str === false) {
                 // $encoding is not a valid encoding
@@ -288,16 +299,6 @@ class HTMLPurifier_Encoder
             restore_error_handler();
             return $str;
         }
-        // Added Ivan Tcholakov, 09-SEP-2009.
-        // Next try - encoding conversion related functions from Dokeos LMS,
-        // for some encodings they work even without iconv or mbstring installed.
-        elseif (function_exists('api_is_encoding_supported')) {
-            if (api_is_encoding_supported($encoding)) {
-                $str = api_utf8_encode($str, $encoding);
-                restore_error_handler();
-                return $str;
-            }
-        }
         trigger_error('Encoding not supported, please install iconv', E_USER_ERROR);
     }
 
@@ -315,7 +316,18 @@ class HTMLPurifier_Encoder
             $str = HTMLPurifier_Encoder::convertToASCIIDumbLossless($str);
         }
         set_error_handler(array('HTMLPurifier_Encoder', 'muteErrorHandler'));
-        if ($iconv && !$config->get('Test', 'ForceNoIconv')) {
+        // Added Ivan Tcholakov, 25-SEP-2009.
+        // First try - encoding conversion related functions from Dokeos LMS,
+        // for some encodings they work even without iconv or mbstring installed.
+        if (function_exists('api_is_encoding_supported')) {
+            if (api_is_encoding_supported($encoding)) {
+                $str = api_utf8_decode($str, $encoding);
+                restore_error_handler();
+                return $str;
+            }
+        }
+        //if ($iconv && !$config->get('Test', 'ForceNoIconv')) {
+        elseif ($iconv && !$config->get('Test', 'ForceNoIconv')) {
             // Undo our previous fix in convertToUTF8, otherwise iconv will barf
             $ascii_fix = HTMLPurifier_Encoder::testEncodingSupportsASCII($encoding);
             if (!$escape && !empty($ascii_fix)) {
@@ -332,16 +344,6 @@ class HTMLPurifier_Encoder
             $str = utf8_decode($str);
             restore_error_handler();
             return $str;
-        }
-        // Added Ivan Tcholakov, 09-SEP-2009.
-        // Next try - encoding conversion related functions from Dokeos LMS,
-        // for some encodings they work even without iconv or mbstring installed.
-        elseif (function_exists('api_is_encoding_supported')) {
-            if (api_is_encoding_supported($encoding)) {
-                $str = api_utf8_decode($str, $encoding);
-                restore_error_handler();
-                return $str;
-            }
         }
         trigger_error('Encoding not supported', E_USER_ERROR);
     }

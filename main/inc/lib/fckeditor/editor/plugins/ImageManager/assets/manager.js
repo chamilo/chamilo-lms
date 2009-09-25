@@ -126,6 +126,10 @@
 			if (id == "f_url")
 			{
 				str = el.value.toString().Trim();
+				if ( !str )
+				{
+					return ; // No image has been selected, do nothing.
+				}
 				if ( str.indexOf('://') < 0 )
 				{
 					if ( !isSemiAbsoluteUrl( str ) ) // A semi-absolute URL could be entered manually.

@@ -2811,7 +2811,7 @@ function api_in_array_nocase($needle, $haystack, $strict = false, $encoding = nu
  */
 function api_refine_encoding_id($encoding) {
 	if (is_array($encoding)){
-		return array_map('strtoupper', $encoding);
+		return array_map('api_refine_encoding_id', $encoding);
 	}
 	return strtoupper($encoding);
 }
@@ -2820,13 +2820,14 @@ function api_refine_encoding_id($encoding) {
  * This function checks whether two $encoding are equal (same, equvalent).
  * @param string/array $encoding1		The first encoding
  * @param string/array $encoding2		The second encoding
+ * @param bool $strict					When this parameter is TRUE the comparison ignores aliases of encodings. When the parameter is FALSE, aliases are taken into account.
  * @return bool							Returns TRUE if the encodings are equal, FALSE otherwise.
  */
-function api_equal_encodings($encoding1, $encoding2) {
+function api_equal_encodings($encoding1, $encoding2, $strict = false) {
 	static $equal_encodings = array();
 	if (is_array($encoding1)) {
 		foreach ($encoding1 as $encoding) {
-			if (api_equal_encodings($encoding, $encoding2)) {
+			if (api_equal_encodings($encoding, $encoding2, $strict)) {
 				return true;
 			}
 		}
@@ -2834,25 +2835,29 @@ function api_equal_encodings($encoding1, $encoding2) {
 	}
 	elseif (is_array($encoding2)) {
 		foreach ($encoding2 as $encoding) {
-			if (api_equal_encodings($encoding1, $encoding)) {
+			if (api_equal_encodings($encoding1, $encoding, $strict)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	if (!isset($equal_encodings[$encoding1][$encoding2])) {
+	if (!isset($equal_encodings[$encoding1][$encoding2][$strict])) {
 		$encoding_1 = api_refine_encoding_id($encoding1);
 		$encoding_2 = api_refine_encoding_id($encoding2);
 		if ($encoding_1 == $encoding_2) {
 			$result = true;
 		} else {
-			$alias1 = _api_get_character_map_name($encoding_1);
-			$alias2 = _api_get_character_map_name($encoding_2);
-			$result = !empty($alias1) && !empty($alias2) && $alias1 == $alias2;
+			if ($strict) {
+				$result = false;
+			} else {
+				$alias1 = _api_get_character_map_name($encoding_1);
+				$alias2 = _api_get_character_map_name($encoding_2);
+				$result = !empty($alias1) && !empty($alias2) && $alias1 == $alias2;
+			}
 		}
-		$equal_encodings[$encoding1][$encoding2] = $result;
+		$equal_encodings[$encoding1][$encoding2][$strict] = $result;
 	}
-	return $equal_encodings[$encoding1][$encoding2];
+	return $equal_encodings[$encoding1][$encoding2][$strict];
 }
 
 /**
@@ -2981,6 +2986,37 @@ function api_get_non_utf8_encoding($language = null) {
 		return 'ISO-8859-15';
 	}
 	return 'ISO-8859-15';
+}
+
+/**
+ * Return a list of valid encodings for setting platform character set.
+ * @return array	List of valid encodings, preferably IANA-registared.
+ */
+function api_get_valid_encodings() {
+	$encodings = & _api_non_utf8_encodings();
+	if (!is_array($encodings)) {
+		$encodings = array('english', array('ISO-8859-15'));
+	}
+	$result1 = array(); $result2 = array(); $result3 = array();
+	foreach ($encodings as $value) {
+		$encoding = api_refine_encoding_id(trim($value[0]));
+		if (!empty($encoding)) {
+			if (strpos($encoding, 'ISO-') === 0) {
+				$result1[] = $encoding;
+			} elseif (strpos($encoding, 'WINDOWS-') === 0) {
+				$result2[] = $encoding;
+			} else {
+				$result3[] = $encoding;
+			}
+		}
+	}
+	$result1 = array_unique($result1);
+	$result2 = array_unique($result2);
+	$result3 = array_unique($result3);
+	natsort($result1);
+	natsort($result2);
+	natsort($result3);
+	return array_merge(array('UTF-8'), $result1, $result2, $result3);
 }
 
 /**

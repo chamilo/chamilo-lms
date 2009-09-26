@@ -1027,7 +1027,7 @@ function _api_mb_supports($encoding) {
 	static $supported = array();
 	if (!isset($supported[$encoding])) {
 		if (MBSTRING_INSTALLED) {
-			$supported[$encoding] = api_equal_encodings($encoding, mb_list_encodings());
+			$supported[$encoding] = api_equal_encodings($encoding, mb_list_encodings(), true);
 		} else {
 			$supported[$encoding] = false;
 		}

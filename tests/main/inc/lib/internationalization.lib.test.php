@@ -77,13 +77,13 @@ class TestInternationalization extends UnitTestCase {
 	}
 
 	public function test_api_to_system_encoding() {
-		$string = '!?/\áéíóú@€'; // UTF-8
+		$string = api_utf8_encode(get_lang('Title'), api_get_system_encoding());
 		$from_encoding = 'UTF-8';
 		$check_utf8_validity = false;
 		$res = api_to_system_encoding($string, $from_encoding, $check_utf8_validity);
 		$this->assertTrue(is_string($res));
 		$this->assertTrue(api_convert_encoding($res, $from_encoding, api_get_system_encoding()) == $string);
-		//var_dump($res);
+		//var_dump(api_utf8_encode($res, api_get_system_encoding()));
 	}
 
 	public function test_api_htmlentities() {
@@ -727,15 +727,26 @@ class TestInternationalization extends UnitTestCase {
 	public function test_api_equal_encodings() {
 		$encoding1 = 'cp65001';
 		$encoding2 = 'utf-8';
-		$res1 = api_equal_encodings($encoding1, $encoding2);
 		$encoding3 = 'WINDOWS-1251';
 		$encoding4 = 'WINDOWS-1252';
+		$encoding5 = 'win-1250';
+		$encoding6 = 'windows-1250';
+		$res1 = api_equal_encodings($encoding1, $encoding2);
 		$res2 = api_equal_encodings($encoding3, $encoding4);
+		$res3 = api_equal_encodings($encoding5, $encoding6);
+		$res4 = api_equal_encodings($encoding5, $encoding6, true);
 		$this->assertTrue(is_bool($res1));
 		$this->assertTrue(is_bool($res2));
-		$this->assertTrue($res1 && !$res2);
+		$this->assertTrue(is_bool($res3));
+		$this->assertTrue(is_bool($res4));
+		$this->assertTrue($res1);
+		$this->assertTrue(!$res2);
+		$this->assertTrue($res3);
+		$this->assertTrue(!$res4);
 		//var_dump($res1);
 		//var_dump($res2);
+		//var_dump($res3);
+		//var_dump($res4);
 	}
 
 	public function test_api_is_utf8() {
@@ -786,6 +797,19 @@ class TestInternationalization extends UnitTestCase {
 		$this->assertTrue($res);
 		$this->assertTrue(is_string($res));
 		$this->assertTrue($res == 'WINDOWS-1251');
+		//var_dump($res);
+	}
+
+	public function test_api_get_valid_encodings() {
+		$res = api_get_valid_encodings();
+		$ok = is_array($res) && !empty($res);
+		$this->assertTrue($ok);
+		if ($ok) {
+			foreach ($res as $value) {
+				$ok = $ok && is_string($value);
+			}
+			$this->assertTrue($ok);
+		}
 		//var_dump($res);
 	}
 

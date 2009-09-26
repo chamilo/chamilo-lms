@@ -138,7 +138,7 @@ class HTML_Common {
 		global $charset;
         if (is_array($attributes)) {
             foreach ($attributes as $key => $value) {
-                $strAttr .= ' ' . $key . '="' . htmlspecialchars($value, ENT_QUOTES, $charset) . '"';
+                $strAttr .= ' ' . $key . '="' . @htmlspecialchars($value, ENT_QUOTES, $charset) . '"';
             }
         }
         return $strAttr;

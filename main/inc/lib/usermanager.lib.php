@@ -635,6 +635,120 @@ class UserManager {
 		return array('dir' => $dir, 'file' => $picture_filename);
 	}
 
+	/**
+	 * Creates new user pfotos in various sizes of a user, or deletes user pfotos.
+	 * Note: This method relies on configuration setting from dokeos/main/inc/conf/profile.conf.php
+	 * @param int $user_id			The user internal identitfication number.
+	 * @param string $file			The common file name for the newly created pfotos. It will be checked and modified for compatibility with the file system.
+	 * If full name is provided, path component is ignored.
+	 * If an empty name is provided, then old user photos are deleted only, @see UserManager::delete_user_picture() as the prefered way for deletion.
+	 * @param string $source_file	The full system name of the image from which user photos will be created.
+	 * @return string/bool			Returns the resulting common file name of created images which usually should be stored in database.
+	 * When deletion is recuested returns empty string. In case of internal error or negative validation returns FALSE.
+	 */
+	public static function update_user_picture($user_id, $file = null, $source_file = null) {
+
+		// Validation 1.
+		if (empty($user_id)) {
+			return false;
+		}
+		$delete = empty($file);
+		if (empty($source_file)) {
+			$source_file = $file;
+		}
+
+		// Configuration options about user photos.
+		require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
+
+		// User-reserved directory where photos have to be placed.
+		$path_info = self::get_user_picture_path_by_id($user_id, 'system', true);
+		$path = $path_info['dir'];
+		// If this directory does not exist - we create it.
+		if (!file_exists($path)) {
+			$perm = api_get_setting('permissions_for_new_directories');
+			$perm = octdec(!empty($perm) ? $perm : '0770');
+			@mkdir($path, $perm, true);
+		}
+
+		// The old photos (if any).
+		$old_file = $path_info['file'];
+
+		// Let us delete them.
+		if (!empty($old_file)) {
+			if (KEEP_THE_OLD_IMAGE_AFTER_CHANGE) {
+				$prefix = 'saved_'.date('Y_m_d_H_i_s').'_'.uniqid('').'_';
+				@rename($path.'small_'.$old_file, $path.$prefix.'small_'.$old_file);
+				@rename($path.'medium_'.$old_file, $path.$prefix.'medium_'.$old_file);
+				@rename($path.'big_'.$old_file, $path.$prefix.'big_'.$old_file);
+				@rename($path.$old_file, $path.$prefix.$old_file);
+			} else {
+				@unlink($path.'small_'.$old_file);
+				@unlink($path.'medium_'.$old_file);
+				@unlink($path.'big_'.$old_file);
+				@unlink($path.$old_file);
+			}
+		}
+
+		// Exit if only deletion has been requested. Return an empty picture name.
+		if ($delete) {
+			return '';
+		}
+
+		// Validation 2.
+		$allowed_types = array('jpg', 'jpeg', 'png', 'gif');
+		$file = str_replace('\\', '/', $file);
+		$filename = (($pos = strrpos($file, '/')) !== false) ? substr($file, $pos + 1) : $file;
+		$extension = strtolower(substr(strrchr($filename, '.'), 1));
+		if (!in_array($extension, $allowed_types)) {
+			return false;
+		}
+
+		// This is the common name for the new photos.
+		if (KEEP_THE_NAME_WHEN_CHANGE_IMAGE && !empty($old_file)) {
+			$old_extension = strtolower(substr(strrchr($old_file, '.'), 1));
+			$filename = in_array($old_extension, $allowed_types) ? substr($old_file, 0, -strlen($old_extension)) : $old_file;
+			$filename = (substr($filename, -1) == '.') ? $filename.$extension : $filename.'.'.$extension;
+		} else {
+			$filename = replace_dangerous_char($filename);
+			if (PREFIX_IMAGE_FILENAME_WITH_UID) {
+				$filename = uniqid('').'_'.$filename;
+			}
+			// We always prefix user photos with user ids, so on setting
+			// api_get_setting('split_users_upload_directory') === 'true'
+			// the correspondent directories to be found successfully.
+			$filename = $user_id.'_'.$filename;
+		}
+
+		// Storing the new photos in 4 versions with various sizes.
+
+		$picture_info = @getimagesize($source_file);
+		$type = $picture_info[2];
+		$small = self::resize_picture($source_file, 22);
+		$medium = self::resize_picture($source_file, 85);
+		$normal = self::resize_picture($source_file, 200);
+		$big = new image($source_file); // This is the original picture.
+
+		$ok = false;
+		$detected = array(1 => 'GIF', 2 => 'JPG', 3 => 'PNG');
+		if (in_array($type, array_keys($detected))) {
+			$ok = $small->send_image($detected[$type], $path.'small_'.$filename)
+				&& $medium->send_image($detected[$type], $path.'medium_'.$filename)
+				&& $normal->send_image($detected[$type], $path.$filename)
+				&& $big->send_image($detected[$type], $path.'big_'.$filename);
+		}
+		return $ok ? $filename : false;
+	}
+
+	/**
+	 * Deletes user pfotos.
+	 * Note: This method relies on configuration setting from dokeos/main/inc/conf/profile.conf.php
+	 * @param int $user_id			The user internal identitfication number.
+	 * @return string/bool			Returns empty string on success, FALSE on error.
+	 */
+	public static function delete_user_picture($user_id) {
+		return self::update_user_picture($user_id);
+	}
+
 /*
 -----------------------------------------------------------
 	PRODUCTIONS FUNCTIONS
@@ -660,13 +774,13 @@ class UserManager {
 			return true; // postpone reading from the filesystem
 		}
 
-		$productions = UserManager::get_user_productions($user_id);
+		$productions = self::get_user_productions($user_id);
 
 		if (empty($productions)) {
 			return false;
 		}
 
-		$production_path = UserManager::get_user_picture_path_by_id($user_id, 'web', true);
+		$production_path = self::get_user_picture_path_by_id($user_id, 'web', true);
 		$production_dir = $production_path['dir'].$user_id.'/';
 		$del_image = api_get_path(WEB_CODE_PATH).'img/delete.gif';
 		$del_text = get_lang('Delete');
@@ -1851,8 +1965,8 @@ class UserManager {
     		$picture['file'] = api_get_path(WEB_CODE_PATH).'img/'.$picture_file;
     		return $picture;
     	}
-        $image_array_sys = UserManager::get_user_picture_path_by_id($user_id, 'system', false, true);
-        $image_array = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
+        $image_array_sys = self::get_user_picture_path_by_id($user_id, 'system', false, true);
+        $image_array = self::get_user_picture_path_by_id($user_id, 'web', false, true);
         $file = $image_array_sys['dir'].$size_picture.$picture_file;
     	if (file_exists($file)) {
             $picture['file'] = $image_array['dir'].$size_picture.$picture_file;

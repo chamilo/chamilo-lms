@@ -436,103 +436,6 @@ function is_profile_editable() {
 
 /*
 -----------------------------------------------------------
-	USER IMAGE FUNCTIONS
------------------------------------------------------------
-*/
-
-/**
- * Upload a submitted user image.
- *
- * @param	$user_id User id
- * @return	The filename of the new picture or FALSE if the upload has failed
- */
-function upload_user_image($user_id) {
-
-	/* Originally added by Miguel (miguel@cesga.es) - 2003-11-04
-	 * Code Refactoring by Hugues Peeters (hugues.peeters@claroline.net) - 2003-11-24
-	 * Moved inside a function and refactored by Thomas Corthals - 2005-11-04
-	 */
-
-	$image_path = UserManager::get_user_picture_path_by_id($user_id, 'system', true);
-	$image_repository = $image_path['dir'];
-	$existing_image = $image_path['file'];
-	$file_extension = explode('.', $_FILES['picture']['name']);
-	$file_extension = strtolower($file_extension[count($file_extension) - 1]);
-
-	if (!file_exists($image_repository)) {
-		mkpath($image_repository);
-	}
-
-	if ($existing_image != '') {
-		if (KEEP_THE_NAME_WHEN_CHANGE_IMAGE) {
-			$picture_filename = $existing_image;
-			$old_picture_filename = 'saved_'.date('Y_m_d_H_i_s').'_'.uniqid('').'_'.$existing_image;
-		} else {
-			$old_picture_filename = $existing_image;
-			$picture_filename = (PREFIX_IMAGE_FILENAME_WITH_UID ? 'u'.$user_id.'_' : '').uniqid('').'.'.$file_extension;
-		}
-
-		if (KEEP_THE_OLD_IMAGE_AFTER_CHANGE) {
-			@rename($image_repository.$existing_image, $image_repository.$old_picture_filename);
-		} else {
-			@unlink($image_repository.$existing_image);
-		}
-	} else {
-		$picture_filename = (PREFIX_IMAGE_FILENAME_WITH_UID ? $user_id.'_' : '').uniqid('').'.'.$file_extension;
-	}
-
-	// get the picture and resize only if the picture is bigger width
-	$picture_infos = @getimagesize($_FILES['picture']['tmp_name']);
-	$type = $picture_infos[2];
-	$small_temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 22); //small picture
-	$medium_temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 85); //medium picture
-	$temp = UserManager::resize_picture($_FILES['picture']['tmp_name'], 200); // normal picture
-	$big_temp = new image($_FILES['picture']['tmp_name']); // original picture
-
-    switch (!empty($type)) {
-	    case 2 :
-	    	$small_temp->send_image('JPG', $image_repository.'small_'.$picture_filename);
-	    	$medium_temp->send_image('JPG', $image_repository.'medium_'.$picture_filename);
-	    	$temp->send_image('JPG', $image_repository.$picture_filename);
-	    	$big_temp->send_image('JPG', $image_repository.'big_'.$picture_filename);
-            break;
-	    case 3 :
-	    	$small_temp->send_image('PNG', $image_repository.'small_'.$picture_filename);
-	    	$medium_temp->send_image('PNG', $image_repository.'medium_'.$picture_filename);
-	    	$temp->send_image('PNG', $image_repository.$picture_filename);
-	    	$big_temp->send_image('PNG', $image_repository.'big_'.$picture_filename);
-            break;
-	    case 1 :
-	    	$small_temp->send_image('GIF', $image_repository.'small_'.$picture_filename);
-	    	$medium_temp->send_image('GIF', $image_repository.'medium_'.$picture_filename);
-	    	$temp->send_image('GIF', $image_repository.$picture_filename);
-	    	$big_temp->send_image('GIF', $image_repository.'big_'.$picture_filename);
-            break;
-    }
-    return $picture_filename;
-}
-
-/**
- * Remove an existing user image.
- *
- * @param	$user_id	User id
- */
-function remove_user_image($user_id) {
-	$image_path = UserManager::get_user_picture_path_by_id($user_id, 'system');
-	$image_repository = $image_path['dir'];
-	$image = $image_path['file'];
-
-	if (!empty($image)) {
-		if (KEEP_THE_OLD_IMAGE_AFTER_CHANGE) {
-			@rename($image_repository.$image, $image_repository.'deleted_'.date('Y_m_d_H_i_s').'_'.$image);
-		} else {
-			@unlink($image_repository.$image);
-		}
-	}
-}
-
-/*
------------------------------------------------------------
 	PRODUCTIONS FUNCTIONS
 -----------------------------------------------------------
 */
@@ -637,14 +540,14 @@ if (!empty($_SESSION['production_uploaded'])) {
 
 	// upload picture if a new one is provided
 	if ($_FILES['picture']['size']) {
-		if ($new_picture = upload_user_image($_user['user_id'])) {
+		if ($new_picture = UserManager::update_user_picture($_user['user_id'], $_FILES['picture']['name'], $_FILES['picture']['tmp_name'])) {
 			$user_data['picture_uri'] = $new_picture;
 			$_SESSION['image_uploaded'] = 'success';
 		}
 	}
 	// remove existing picture if asked
 	elseif (!empty($user_data['remove_picture'])) {
-		remove_user_image($_user['user_id']);
+		UserManager::delete_user_picture($_user['user_id']);
 		$user_data['picture_uri'] = '';
 	}
 

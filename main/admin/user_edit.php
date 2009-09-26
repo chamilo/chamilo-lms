@@ -310,40 +310,11 @@ if ( $form->validate()) {
 	$picture = $picture_element->getValue();
 
 	$picture_uri = $user_data['picture_uri'];
-
-	//get the picture directory
-	$picture_path_info = UserManager::get_user_picture_path_by_id($user_id, 'system', true);
-	$picture_path = $picture_path_info['dir'];
-
-	if ($user['delete_picture'] || !empty($picture['name'])) {
-		@unlink($picture_path.'small_'.$picture_uri);
-		@unlink($picture_path.'medium_'.$picture_uri);
-		@unlink($picture_path.'big_'.$picture_uri);
-		@unlink($picture_path.$picture_uri);
-		$picture_uri = '';
-	}
-
-	if (!empty($picture['name'])) {
-		$picture_uri = $user_id.'_'.uniqid('').'_'.replace_dangerous_char($picture['name']);
-		$perm = api_get_setting('permissions_for_new_directories');
-		$perm = octdec(!empty($perm) ? $perm : '0770');
-		if (!file_exists($picture_path)) {
-			@mkdir($picture_path, $perm, true);
+	if ($user['delete_picture']) {
+		$picture_uri = UserManager::delete_user_picture($user_id);
 		}
-		$picture_info = @getimagesize($_FILES['picture']['tmp_name']);
-		$type = $picture_info[2];
-		$small_picture = UserManager::resize_picture($_FILES['picture']['tmp_name'], 22);
-		$medium_picture = UserManager::resize_picture($_FILES['picture']['tmp_name'], 85);
-		$normal_picture = UserManager::resize_picture($_FILES['picture']['tmp_name'], 200);
-		$big_picture = new image($_FILES['picture']['tmp_name']); // This is the original picture.
-
-		$picture_types = array(1 => 'GIF', 2 => 'JPG', 3 => 'PNG');
-		if (in_array($type, array_keys($picture_types))) {
-			$small_picture->send_image($picture_types[$type], $picture_path.'small_'.$picture_uri);
-			$medium_picture->send_image($picture_types[$type], $picture_path.'medium_'.$picture_uri);
-			$normal_picture->send_image($picture_types[$type], $picture_path.$picture_uri);
-			$big_picture->send_image($picture_types[$type], $picture_path.'big_'.$picture_uri);
-		}
+	elseif (!empty($picture['name'])) {
+		$picture_uri = UserManager::update_user_picture($user_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
 	}
 
 	$lastname = $user['lastname'];

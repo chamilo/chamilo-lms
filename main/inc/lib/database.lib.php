@@ -424,7 +424,7 @@ class Database {
 			WHERE $course_table.code = '$course_code'
 			LIMIT 1", __FILE__, __LINE__));
 		return sprintf("%s.%s", $result[0], $table);
-    }
+	}
 
 	/**
 	 * This generic function returns the correct and complete name of any statistic table
@@ -795,10 +795,27 @@ class Database {
 	 * @return string  Course code
 	 * @todo move this function in a gradebook-related library
 	 */
-    public static function get_course_by_category($category_id) {
+	public static function get_course_by_category($category_id) {
 		$info = self::fetch_array(self::query('SELECT course_code FROM '.self::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY).' WHERE id='.$category_id, __FILE__, __LINE__), 'ASSOC');
 		return $info ? $info['course_code'] : false;
-    }
+	}
+
+	/**
+	 * Stores a query result into an array.
+	 *
+	 * @author Olivier Brouckaert
+	 * @param  resource $result - the return value of the query
+	 * @return array - the value returned by the query
+	 */
+	public static function store_result($result) {
+		$array = array();
+		if ($result !== false) { // For isolation from database engine's behaviour.
+			while ($row = self::fetch_array($result)) {
+				$array[] = $row;
+			}
+		}
+		return $array;
+	}
 
 }
 //end class Database

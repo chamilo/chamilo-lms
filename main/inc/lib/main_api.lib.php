@@ -87,7 +87,7 @@ define('UNSUBSCRIBE_NOT_ALLOWED', 0);
 
 //CONSTANTS defining all tools, using the english version
 /*
- When you add a new tool you must add it into function api_get_tools_lists() too
+When you add a new tool you must add it into function api_get_tools_lists() too
  */
 define('TOOL_DOCUMENT', 'document');
 define('TOOL_THUMBNAIL', 'thumbnail');
@@ -631,7 +631,7 @@ function api_remove_trailing_slash($path) {
  * @author Roan Embrechts
  */
 function api_protect_course_script($print_headers = false) {
- 	global $is_allowed_in_course;
+	global $is_allowed_in_course;
 	if (!$is_allowed_in_course) {
 		api_not_allowed($print_headers);
 		return false;
@@ -752,10 +752,10 @@ function api_get_user_courses($userid, $fetch_session = true) {
 	$t_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 	$sql_select_courses = "SELECT cc.code code, cc.db_name db, cc.directory dir, cu.status status
-			                        FROM    $t_course       cc,
+									FROM    $t_course       cc,
 											$t_course_user   cu
-			                        WHERE cc.code = cu.course_code
-			                        AND   cu.user_id = '".$userid."'";
+									WHERE cc.code = cu.course_code
+									AND   cu.user_id = '".$userid."'";
 	$result = Database::query($sql_select_courses, __FILE__, __LINE__);
 	if ($result === false) { return array(); }
 	while ($row = Database::fetch_array($result)) {
@@ -848,11 +848,7 @@ function api_get_course_id() {
  * @author	Yannick Warnier <yannick.warnier@dokeos.com>
  */
 function api_get_course_path($course_code = null) {
-	if (!empty($course_code)) {
-		$info = api_get_course_info($course_code);
-	} else {
-		$info = api_get_course_info();
-	}
+	$info = !empty($course_code) ? api_get_course_info($course_code) : api_get_course_info();
 	return $info['path'];
 }
 
@@ -934,10 +930,10 @@ function api_get_course_info($course_code = null) {
 		$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 		$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
 		$sql = "SELECT `course`.*, `course_category`.`code` `faCode`, `course_category`.`name` `faName`
-                 FROM $course_table
-                 LEFT JOIN $course_cat_table
-                 ON `course`.`category_code` =  `course_category`.`code`
-                 WHERE `course`.`code` = '$course_code'";
+				 FROM $course_table
+				 LEFT JOIN $course_cat_table
+				 ON `course`.`category_code` =  `course_category`.`code`
+				 WHERE `course`.`code` = '$course_code'";
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$_course = array();
 		if (Database::num_rows($result) > 0) {
@@ -1006,24 +1002,6 @@ function api_sql_query($query, $file = '', $line = 0) {
 		echo $info;
 	}
 	return $result;
-}
-
-// TODO: To be moved to Database class.
-/**
- * Store the result of a query into an array
- *
- * @author Olivier Brouckaert
- * @param  resource $result - the return value of the query
- * @return array - the value returned by the query
- */
-function api_store_result($result) {
-	$array = array();
-	if ($result !== false) { // For isolation from database engine's behaviour.
-		while ($row = Database::fetch_array($result)) {
-			$array[] = $row;
-		}
-	}
-	return $array;
 }
 
 /*
@@ -1906,7 +1884,7 @@ function api_not_allowed($print_headers = false) {
 		//if the access is not authorized and there is some login information
 		// but the cidReq is not found, assume we are missing course data and send the user
 		// to the user_portal
-	 	if ((!headers_sent() or $print_headers) && $origin != 'learnpath') { Display::display_header(''); }
+		if ((!headers_sent() or $print_headers) && $origin != 'learnpath') { Display::display_header(''); }
 		echo '<div align="center">';
 		Display::display_error_message(get_lang('NotAllowedClickBack').'<br /><br /><a href="'.$_SERVER['HTTP_REFERER'].'">'.get_lang('BackToPreviousPage').'</a><br />', false);
 		echo '</div>';
@@ -2104,8 +2082,8 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 			$to_value = $to_group_id;
 		}
 		$sql = "INSERT INTO $TABLE_ITEMPROPERTY
-						   		  			(tool,   ref,       insert_date,insert_user_id,lastedit_date,lastedit_type,   lastedit_user_id,$to_field,  visibility,   start_visible,   end_visible)
-						         	VALUES 	('$tool','$item_id','$time',    '$user_id',	   '$time',		 '$lastedit_type','$user_id',	   '$to_value','$visibility','$start_visible','$end_visible')";
+						(tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible)
+						VALUES ('$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible')";
 		$res = Database::query($sql, __FILE__, __LINE__);
 		if (!$res) {
 			return false;
@@ -2140,8 +2118,8 @@ function api_get_languages_combo($name = 'language') {
 		return $ret;
 	}
 
-	/* the the current language of the user so that his/her language occurs as
-	   selected in the dropdown menu */
+	/*	the the current language of the user so that his/her language occurs as
+		selected in the dropdown menu */
 	if (isset($_SESSION['user_language_choice'])) {
 		$default = $_SESSION['user_language_choice'];
 	} else {
@@ -2604,8 +2582,8 @@ function api_chmod_R($path, $filemode) {
 		}
 	}
 
-    closedir($handler);
-    return chmod($path, $filemode);
+	closedir($handler);
+	return chmod($path, $filemode);
 }
 
 /**
@@ -3191,7 +3169,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
 						$is_courseAdmin = true;
 					} else {
 						$is_courseAdmin = false;
-                    }
+					}
 				} else {
 					// Check if the user is a student is this session
 					$sql = "SELECT  id
@@ -3675,7 +3653,7 @@ function api_check_term_condition($user_id) {
 		}
 		//check the last user version_id passed
 		$sqlv = "SELECT field_value FROM $t_ufv ufv inner join $t_uf uf on ufv.field_id= uf.id
-				 WHERE field_variable = 'legal_accept' AND user_id = ".intval($user_id);
+				WHERE field_variable = 'legal_accept' AND user_id = ".intval($user_id);
 		$resv = Database::query($sqlv, __FILE__, __LINE__);
 		if (Database::num_rows($resv) > 0) {
 			$rowv = Database::fetch_row($resv);
@@ -3741,4 +3719,11 @@ function is_allowed_to_edit() {
  */
 function api_url_to_local_path($url) {
 	return api_get_path(TO_SYS, $url);
+}
+
+/**
+ * @deprecated 27-SEP-2009: Use Database::store_result($result) instead.
+ */
+function api_store_result($result) {
+	return Database::store_result($result);
 }

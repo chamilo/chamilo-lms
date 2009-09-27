@@ -266,7 +266,9 @@ define('TABLE_METADATA', 'metadata');
 /**
  *	@package dokeos.library
  */
+
 class Database {
+
 	/*
 	-----------------------------------------------------------------------------
 		Accessor Functions
@@ -274,81 +276,91 @@ class Database {
 		rely on of the get_xxx_table functions.
 	-----------------------------------------------------------------------------
 	*/
+
 	/**
 	 *	Returns the name of the main Dokeos database.
 	 */
-	public static function get_main_database () {
+	public static function get_main_database() {
 		global $_configuration;
 		return $_configuration['main_database'];
 	}
+
 	/**
-	*	Returns the name of the Dokeos statistics database.
-	*/
-	public static function get_statistic_database () {
+	 *	Returns the name of the Dokeos statistics database.
+	 */
+	public static function get_statistic_database() {
 		global $_configuration;
 		return $_configuration['statistics_database'];
 	}
+
 	/**
-	*	Returns the name of the Dokeos SCORM database.
-	*	@deprecated
-	*/
-	public static function get_scorm_database () {
+	 *	Returns the name of the Dokeos SCORM database.
+	 *	@deprecated
+	 */
+	public static function get_scorm_database() {
 		global $_configuration;
 		return $_configuration['scorm_database'];
 	}
+
 	/**
-	*	Returns the name of the database where all the personal stuff of the user is stored
-	*/
-	public static function get_user_personal_database () {
+	 *	Returns the name of the database where all the personal stuff of the user is stored
+	 */
+	public static function get_user_personal_database() {
 		global $_configuration;
 		return $_configuration['user_personal_database'];
 	}
+
 	/**
-	*	Returns the name of the main Dokeos database.
-	*/
-	public static function get_current_course_database () {
+	 *	Returns the name of the main Dokeos database.
+	 */
+	public static function get_current_course_database() {
 		$course_info = api_get_course_info();
-		return $course_info["dbName"];
+		return $course_info['dbName'];
 	}
+
 	/**
-	*	Returns the glued name of the current course database.
-	*/
-	public static function get_current_course_glued_database () {
+	 *	Returns the glued name of the current course database.
+	 */
+	public static function get_current_course_glued_database() {
 		$course_info = api_get_course_info();
-		return $course_info["dbNameGlu"];
+		return $course_info['dbNameGlu'];
 	}
+
 	/**
-	*	The glue is the string needed between database and table.
-	*	The trick is: in multiple databases, this is a period (with backticks)
-	*	In single database, this can be e.g. an underscore so we just fake
-	*	there are multiple databases and the code can be written independent
-	*	of the single / multiple database setting.
-	*/
-	public static function get_database_glue () {
+	 *	The glue is the string needed between database and table.
+	 *	The trick is: in multiple databases, this is a period (with backticks)
+	 *	In single database, this can be e.g. an underscore so we just fake
+	 *	there are multiple databases and the code can be written independent
+	 *	of the single / multiple database setting.
+	 */
+	public static function get_database_glue() {
 		global $_configuration;
 		return $_configuration['db_glue'];
 	}
+
 	/**
-	*	Returns the database prefix.
-	*	All created COURSE databases are prefixed with this string.
-	*
-	*	TIP: this can be convenient e.g. if you have multiple Dokeos installations
-	*	on the same physical server.
-	*/
-	public static function get_database_name_prefix () {
+	 *	Returns the database prefix.
+	 *	All created COURSE databases are prefixed with this string.
+	 *
+	 *	TIP: this can be convenient e.g. if you have multiple Dokeos installations
+	 *	on the same physical server.
+	 */
+	public static function get_database_name_prefix() {
 		global $_configuration;
 		return $_configuration['db_prefix'];
 	}
+
 	/**
-	*	Returns the course table prefix for single database.
-	*	Not certain exactly when this is used.
-	*	Do research.
-	*	It's used in local.inc.php.
-	*/
-	public static function get_course_table_prefix () {
+	 *	Returns the course table prefix for single database.
+	 *	Not certain exactly when this is used.
+	 *	Do research.
+	 *	It's used in local.inc.php.
+	 */
+	public static function get_course_table_prefix() {
 		global $_configuration;
 		return $_configuration['table_prefix'];
 	}
+
 	/*
 	-----------------------------------------------------------------------------
 		Table Name functions
@@ -366,6 +378,7 @@ class Database {
 		$result = mysql_fetch_array($sql_result);
 	-----------------------------------------------------------------------------
 	*/
+
 	/**
 	 * A more generic function than the other get_main_xxx_table functions,
 	 * this one can return the correct complete name of any table of the main database of which you pass
@@ -375,10 +388,11 @@ class Database {
 	 *
 	 * @param string $short_table_name, the name of the table
 	 */
-	public static function get_main_table ($short_table_name) {
+	public static function get_main_table($short_table_name) {
 		$database = Database::get_main_database();
 		return Database::format_table_name($database, $short_table_name);
 	}
+
 	/**
 	 * A more generic function than the older get_course_xxx_table functions,
 	 * this one can return the correct complete name of any course table of which you pass
@@ -390,34 +404,34 @@ class Database {
 	 * @param string $database_name, optional, name of the course database
 	 * - if you don't specify this, you work on the current course.
 	 */
-	public static function get_course_table ($short_table_name, $database_name = '') {
+	public static function get_course_table($short_table_name, $database_name = '') {
 		$database_name_with_glue = Database::fix_database_parameter($database_name);
 		return Database::format_glued_course_table_name($database_name_with_glue, $short_table_name);
 	}
 
-    /**
-     * Get a complete course table name from a course code
-     *
-     * @param string $course_code
-     * @param string $table the name of the table
-     */
-    public static function get_course_table_from_code ($course_code, $table) {
-        $ret = NULL;
+	/**
+	 * Get a complete course table name from a course code
+	 *
+	 * @param string $course_code
+	 * @param string $table the name of the table
+	 */
+	public static function get_course_table_from_code($course_code, $table) {
+		$ret = null;
 
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT $course_table.db_name, $course_cat_table.code
-            FROM $course_table
-            LEFT JOIN $course_cat_table
-            ON $course_table.category_code =  $course_cat_table.code
-            WHERE $course_table.code = '$course_code'
-            LIMIT 1";
-        $res = api_sql_query($sql, __FILE__, __LINE__);
-        $result = Database::fetch_array($res);
+		$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+		$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+		$sql = "SELECT $course_table.db_name, $course_cat_table.code
+			FROM $course_table
+				LEFT JOIN $course_cat_table
+					ON $course_table.category_code =  $course_cat_table.code
+			WHERE $course_table.code = '$course_code'
+			LIMIT 1";
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::fetch_array($res);
 
-        $ret = sprintf ("%s.%s", $result[0], $table);
+		$ret = sprintf ("%s.%s", $result[0], $table);
 
-        return $ret;
+		return $ret;
     }
 
 	/**
@@ -428,10 +442,11 @@ class Database {
 	 *
 	 * @param string $short_table_name, the name of the table
 	 */
-	public static function get_statistic_table ($short_table_name) {
+	public static function get_statistic_table($short_table_name) {
 		$database = Database::get_statistic_database();
 		return Database::format_table_name($database, $short_table_name);
 	}
+
 	/**
 	 * This generic function returns the correct and complete name of any scorm
 	 * table of which you pass the short name as a parameter. Please define
@@ -440,10 +455,11 @@ class Database {
 	 *
 	 * @param string $short_table_name, the name of the table
 	 */
-	public static function get_scorm_table ($short_table_name) {
+	public static function get_scorm_table($short_table_name) {
 		$database = Database::get_scorm_database();
 		return Database::format_table_name($database, $short_table_name);
 	}
+
 	/**
 	 * This generic function returns the correct and complete name of any scorm
 	 * table of which you pass the short name as a parameter. Please define
@@ -456,18 +472,20 @@ class Database {
 		$database = Database::get_user_personal_database();
 		return Database::format_table_name($database, $short_table_name);
 	}
+
+	// TODO: This method should not belong to Database class. The internationaization ibrary is a better place.
 	/**
 	 * Returns the isocode corresponding to the language directory given.
 	 * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
 	 * If $language is omitted, interface language is assumed then.
 	 * @return string			The found isocode or null on error..
 	 * Returned codes are according to the following standards (in order of preference):
-	 * -  ISO 639-1 : Alpha-2 code (two-letters code - en, fr, es, ...)
-	 * -  RFC 4646  : five-letter code based on the ISO 639 two-letter language codes
-	 *    and the ISO 3166 two-letter territory codes (pt-BR, ...)
-	 * -  ISO 639-2 : Alpha-3 code (three-letters code - ast, fur, ...)
-	*/
-	public static function get_language_isocode ($language) {
+	 * - ISO 639-1 : Alpha-2 code (two-letters code - en, fr, es, ...)
+	 * - RFC 4646  : five-letter code based on the ISO 639 two-letter language codes
+	 *   and the ISO 3166 two-letter territory codes (pt-BR, ...)
+	 * - ISO 639-2 : Alpha-3 code (three-letters code - ast, fur, ...)
+	 */
+	public static function get_language_isocode($language) {
 		static $iso_code = array();
 		if (empty($language)) {
 			$language = api_get_interface_language();
@@ -494,9 +512,9 @@ class Database {
 	*/
 
 	/**
-	*	@return a list (array) of all courses.
-	* 	@todo shouldn't this be in the course.lib.php script?
-	*/
+	 *	@return a list (array) of all courses.
+	 * 	@todo shouldn't this be in the course.lib.php script?
+	 */
 	public static function get_course_list() {
 		$table = Database::get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $table";
@@ -506,73 +524,74 @@ class Database {
 	}
 
 	/**
-	*	Returns an array with all database fields for the specified course.
-	*
-	*	@param the real (system) code of the course (ID from inside the main course table)
-	* 	@todo shouldn't this be in the course.lib.php script?
-	*/
-	public static function get_course_info ($course_code) {
-        $course_code = Database::escape_string($course_code);
+	 *	Returns an array with all database fields for the specified course.
+	 *
+	 *	@param the real (system) code of the course (ID from inside the main course table)
+	 * 	@todo shouldn't this be in the course.lib.php script?
+	 */
+	public static function get_course_info($course_code) {
+		$course_code = Database::escape_string($course_code);
 		$table = Database::get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $table WHERE `code` = '$course_code'";
 		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
 		$result = Database::generate_abstract_course_field_names($result);
-		if ($result===false) {
-			$result['db_name']='';
+		if ($result === false) {
+			$result['db_name'] = '';
 		}
 		return $result;
 	}
+
 	/**
-	*	@param $user_id (integer): the id of the user
-	*	@return $user_info (array): user_id, lastname, firstname, username, email, ...
-	*	@author Patrick Cool <patrick.cool@UGent.be>, expanded to get info for any user
-	*	@author Roan Embrechts, first version + converted to Database API
-	*	@version 30 September 2004
-	*	@desc find all the information about a specified user. Without parameter this is the current user.
-	* 	@todo shouldn't this be in the user.lib.php script?
-	*/
-	public static function get_user_info_from_id ($user_id = '') {
+	 *	@param $user_id (integer): the id of the user
+	 *	@return $user_info (array): user_id, lastname, firstname, username, email, ...
+	 *	@author Patrick Cool <patrick.cool@UGent.be>, expanded to get info for any user
+	 *	@author Roan Embrechts, first version + converted to Database API
+	 *	@version 30 September 2004
+	 *	@desc find all the information about a specified user. Without parameter this is the current user.
+	 * 	@todo shouldn't this be in the user.lib.php script?
+	 */
+	public static function get_user_info_from_id($user_id = '') {
 		$table = Database::get_main_table(TABLE_MAIN_USER);
 		if ($user_id == '') {
-			return $GLOBALS["_user"];
-		} else {
-            $user_id = Database::escape_string($user_id);
-			$sql_query = "SELECT * FROM $table WHERE user_id = '$user_id'";
-			$result = Database::query($sql_query, __FILE__, __LINE__);
-			$result_array = mysql_fetch_array($result);
-			$result_array = Database::generate_abstract_user_field_names($result_array);
-			return $result_array;
+			return $GLOBALS['_user'];
 		}
+		$user_id = Database::escape_string($user_id);
+		$sql_query = "SELECT * FROM $table WHERE user_id = '$user_id'";
+		$result = Database::query($sql_query, __FILE__, __LINE__);
+		$result_array = mysql_fetch_array($result);
+		$result_array = Database::generate_abstract_user_field_names($result_array);
+		return $result_array;
 	}
+
 	/**
-	*	This creates an abstraction layer between database field names
-	*	and field names expected in code.
-	*
-	*	This helps when changing database names.
-	*	It's also useful now to get rid of the 'franglais'.
-	*
-	*	@todo	add more array entries to abstract course info from field names
-	*	@author	Roan Embrechts
-	*
-	* 	@todo what's the use of this function. I think this is better removed.
-	* 		  There should be consistency in the variable names and the use throughout the scripts
-	* 		  for the database name we should consistently use or db_name or database (db_name probably being the better one)
-	*/
-	public static function generate_abstract_course_field_names ($result_array) {
-		$visual_code = isset($result_array["visual_code"]) ? $result_array["visual_code"] : null;
-		$code        = isset($result_array["code"]) ? $result_array["code"] : null;
+	 *	This creates an abstraction layer between database field names
+	 *	and field names expected in code.
+	 *
+	 *	This helps when changing database names.
+	 *	It's also useful now to get rid of the 'franglais'.
+	 *
+	 *	@todo	add more array entries to abstract course info from field names
+	 *	@author	Roan Embrechts
+	 *
+	 * 	@todo what's the use of this function. I think this is better removed.
+	 * 		  There should be consistency in the variable names and the use throughout the scripts
+	 * 		  for the database name we should consistently use or db_name or database (db_name probably being the better one)
+	 */
+	public static function generate_abstract_course_field_names($result_array) {
+		$visual_code = isset($result_array['visual_code']) ? $result_array['visual_code'] : null;
+		$code        = isset($result_array['code']) ? $result_array['code'] : null;
 		$title       = isset($result_array['title']) ? $result_array['title'] : null;
-		$db_name     = isset($result_array["db_name"]) ? $result_array["db_name"] : null;
-		$category_code= isset($result_array["category_code"]) ? $result_array["category_code"] : null;
-		$result_array["official_code"] = $visual_code;
-		$result_array["visual_code"]   = $visual_code;
-		$result_array["real_code"]     = $code;
-		$result_array["system_code"]   = $code;
-		$result_array["title"]         = $title;
-		$result_array["database"]      = $db_name;
-		$result_array["faculty"]       = $category_code;
-		//$result_array["directory"] = $result_array["directory"];
+		$db_name     = isset($result_array['db_name']) ? $result_array['db_name'] : null;
+		$category_code= isset($result_array['category_code']) ? $result_array['category_code'] : null;
+		$result_array['official_code'] = $visual_code;
+		$result_array['visual_code']   = $visual_code;
+		$result_array['real_code']     = $code;
+		$result_array['system_code']   = $code;
+		$result_array['title']         = $title;
+		$result_array['database']      = $db_name;
+		$result_array['faculty']       = $category_code;
+		//$result_array['directory'] = $result_array['directory'];
 		/*
 		still to do: (info taken from local.inc.php)
 
@@ -595,29 +614,29 @@ class Database {
 		*/
 		return $result_array;
 	}
+
 	/**
-	*	This creates an abstraction layer between database field names
-	*	and field names expected in code.
-	*
-	*	This helps when changing database names.
-	*	It's also useful now to get rid of the 'franglais'.
-	*
-	*	@todo add more array entries to abstract user info from field names
-	*	@author Roan Embrechts
-	*	@author Patrick Cool
-	*
-	* 	@todo what's the use of this function. I think this is better removed.
-	* 		  There should be consistency in the variable names and the use throughout the scripts
-	*/
-	public static function generate_abstract_user_field_names ($result_array) {
+	 *	This creates an abstraction layer between database field names
+	 *	and field names expected in code.
+	 *
+	 *	This helps when changing database names.
+	 *	It's also useful now to get rid of the 'franglais'.
+	 *
+	 *	@todo add more array entries to abstract user info from field names
+	 *	@author Roan Embrechts
+	 *	@author Patrick Cool
+	 *
+	 * 	@todo what's the use of this function. I think this is better removed.
+	 * 		There should be consistency in the variable names and the use throughout the scripts
+	 */
+	public static function generate_abstract_user_field_names($result_array) {
 		$result_array['firstName'] 		= $result_array['firstname'];
 		$result_array['lastName'] 		= $result_array['lastname'];
 		$result_array['mail'] 			= $result_array['email'];
 		#$result_array['picture_uri'] 	= $result_array['picture_uri'];
-		#$result_array ['user_id'  ] 	= $result_array['user_id'   ];
+		#$result_array ['user_id']		= $result_array['user_id'];
 		return $result_array;
 	}
-
 
 	/*
 	-----------------------------------------------------------------------------
@@ -626,62 +645,65 @@ class Database {
 		No effort is made to keep the names / results the same.
 	-----------------------------------------------------------------------------
 	*/
+
 	/**
-	*	Glues a course database.
-	*	glue format from local.inc.php.
-	*/
-	public static function glue_course_database_name ($database_name) {
+	 *	Glues a course database.
+	 *	glue format from local.inc.php.
+	 */
+	public static function glue_course_database_name($database_name) {
 		$prefix = Database::get_course_table_prefix();
 		$glue = Database::get_database_glue();
 		$database_name_with_glue = $prefix.$database_name.$glue;
 		return $database_name_with_glue;
 	}
+
 	/**
-	*	@param string $database_name, can be empty to use current course db
-	*
-	*	@return the glued parameter if it is not empty,
-	*	or the current course database (glued) if the parameter is empty.
-	*/
-	public static function fix_database_parameter ($database_name) {
-		if ($database_name == '')
-		{
+	 *	@param string $database_name, can be empty to use current course db
+	 *
+	 *	@return the glued parameter if it is not empty,
+	 *	or the current course database (glued) if the parameter is empty.
+	 */
+	public static function fix_database_parameter($database_name) {
+		if ($database_name == '') {
 			$course_info = api_get_course_info();
-			$database_name_with_glue = $course_info["dbNameGlu"];
-		}
-		else
-		{
+			$database_name_with_glue = $course_info['dbNameGlu'];
+		} else {
 			$database_name_with_glue = Database::glue_course_database_name($database_name);
 		}
 		return $database_name_with_glue;
 	}
+
 	/**
-	*	Structures a course database and table name to ready them
-	*	for querying. The course database parameter is considered glued:
-	*	e.g. COURSE001`.`
-	*/
-	public static function format_glued_course_table_name ($database_name_with_glue, $table) {
+	 *	Structures a course database and table name to ready them
+	 *	for querying. The course database parameter is considered glued:
+	 *	e.g. COURSE001`.`
+	 */
+	public static function format_glued_course_table_name($database_name_with_glue, $table) {
 		//$course_info = api_get_course_info();
-		return "`".$database_name_with_glue.$table."`";
+		return '`'.$database_name_with_glue.$table.'`';
 	}
+
 	/**
-	*	Structures a database and table name to ready them
-	*	for querying. The database parameter is considered not glued,
-	*	just plain e.g. COURSE001
-	*/
+	 *	Structures a database and table name to ready them
+	 *	for querying. The database parameter is considered not glued,
+	 *	just plain e.g. COURSE001
+	 */
 	public static function format_table_name($database, $table) {
-		return "`".$database."`.`".$table."`";
+		return '`'.$database.'`.`'.$table.'`';
 	}
+
 	/**
 	 * Count the number of rows in a table
 	 * @param string $table The table of which the rows should be counted
 	 * @return int The number of rows in the given table.
 	 */
-	public static function count_rows ($table) {
+	public static function count_rows($table) {
 		$sql = "SELECT COUNT(*) AS n FROM $table";
 		$res = api_sql_query($sql, __FILE__, __LINE__);
 		$obj = mysql_fetch_object($res);
 		return $obj->n;
 	}
+
 	/**
 	 * Gets the ID of the last item inserted into the database
 	 *
@@ -689,47 +711,44 @@ class Database {
 	 * @return integer The last ID as returned by the DB function
 	 * @comment This should be updated to use ADODB at some point
 	 */
-	public static function get_last_insert_id () {
+	public static function get_last_insert_id() {
 		return mysql_insert_id();
 	}
+
 	/**
 	 * Escapes a string to insert into the database as text
-	 * @param	string	The string to escape
-	 * @return	string	The escaped string
-	 * @author	Yannick Warnier <yannick.warnier@dokeos.com>
-	 * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
+	 * @param string		The string to escape
+	 * @return string		The escaped string
+	 * @author Yannick Warnier <yannick.warnier@dokeos.com>
+	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 */
 	public static function escape_string($string) {
-		if (get_magic_quotes_gpc())
-		{
+		if (get_magic_quotes_gpc()) {
 			$string = stripslashes($string);
 		}
 		return mysql_real_escape_string($string);
 	}
+
 	/**
 	 * Gets the array from a SQL result (as returned by api_sql_query) - help achieving database independence
-	 * @param     resource    The result from a call to sql_query (e.g. api_sql_query)
-	 * @param     string      Optional: "ASSOC","NUM" or "BOTH", as the constant used in mysql_fetch_array.
-	 * @return    array       Array of results as returned by php
-	 * @author    Yannick Warnier <yannick.warnier@dokeos.com>
+	 * @param resource		The result from a call to sql_query (e.g. api_sql_query)
+	 * @param string		Optional: "ASSOC","NUM" or "BOTH", as the constant used in mysql_fetch_array.
+	 * @return array		Array of results as returned by php
+	 * @author Yannick Warnier <yannick.warnier@dokeos.com>
 	 */
-	public static function fetch_array ($res, $option = 'BOTH') {
-		if ($option != 'BOTH')
-		{
-			if ($option == 'ASSOC')
-			{
+	public static function fetch_array($res, $option = 'BOTH') {
+		if ($option != 'BOTH') {
+			if ($option == 'ASSOC') {
 				return mysql_fetch_array($res, MYSQL_ASSOC);
 			}
-			elseif ($option == 'NUM')
-			{
+			elseif ($option == 'NUM') {
 				return mysql_fetch_array($res, MYSQL_NUM);
 			}
-		}
-		else
-		{
+		} else {
 			return mysql_fetch_array($res);
 		}
 	}
+
 	/**
 	 * Gets the next row of the result of the SQL query (as returned by api_sql_query) in an object form
 	 * @param	resource	The result from a call to sql_query (e.g. api_sql_query)
@@ -738,33 +757,33 @@ class Database {
 	 * @return	object		Object of class StdClass or the required class, containing the query result row
 	 * @author	Yannick Warnier <yannick.warnier@dokeos.com>
 	 */
-	public static function fetch_object ($res,$class=null,$params=null) {
-		if(!empty($class))
-		{
-			if(is_array($params))
-			{
-				return mysql_fetch_object($res,$class,$params);
+	public static function fetch_object($res, $class = null, $params = null) {
+		if (!empty($class)) {
+			if (is_array($params)) {
+				return mysql_fetch_object($res, $class, $params);
 			}
 			return mysql_fetch_object($res,$class);
 		}
 		return mysql_fetch_object($res);
 	}
+
 	/**
 	 * Gets the array from a SQL result (as returned by api_sql_query) - help achieving database independence
-	 * @param     resource    The result from a call to sql_query (e.g. api_sql_query)
-	 * @return    array       Array of results as returned by php (mysql_fetch_row)
-	 * @author    Yannick Warnier <yannick.warnier@dokeos.com>
+	 * @param resource		The result from a call to sql_query (e.g. api_sql_query)
+	 * @return array		Array of results as returned by php (mysql_fetch_row)
+	 * @author Yannick Warnier <yannick.warnier@dokeos.com>
 	 */
-	public static function fetch_row ($res) {
+	public static function fetch_row($res) {
 		return mysql_fetch_row($res);
 	}
+
 	/**
 	 * Gets the number of rows from the last query result - help achieving database independence
-	 * @param   resource    The result
-	 * @return  integer     The number of rows contained in this result
-	 * @author  Yannick Warnier <yannick.warnier@dokeos.com>
+	 * @param resource		The result
+	 * @return integer		The number of rows contained in this result
+	 * @author Yannick Warnier <yannick.warnier@dokeos.com>
 	 **/
-	public static function num_rows ($res) {
+	public static function num_rows($res) {
 		return mysql_num_rows($res);
 	}
 
@@ -772,6 +791,7 @@ class Database {
 		$database_name_with_glue = self::fix_database_parameter($database_name);
 		return self::format_glued_course_table_name($database_name_with_glue, CHAT_CONNECTED_TABLE);
 	}
+
 	/**
 	 * Acts as the relative *_result() function of most DB drivers and fetches a
 	 * specific line and a field
@@ -780,73 +800,69 @@ class Database {
 	 * @param	string		Optional field name or number
 	 * @result	mixed		One cell of the result, or FALSE on error
 	 */
-	public static function result ($resource,$row,$field='') {
+	public static function result($resource, $row, $field = '') {
 	 	if (mysql_num_rows($resource) > 0) {
-			if(!empty($field))
-			{
-				return mysql_result($resource,$row,$field);
+			if (!empty($field)) {
+				return mysql_result($resource, $row, $field);
 			}
-			else
-			{
-				return mysql_result($resource,$row);
-			}
+			return mysql_result($resource, $row);
 	 	}
+	 	return null;
 	}
+
 	/**
 	 * Recovers the last ID of any insert query executed over this SQL connection
 	 * @return	integer	Unique ID of the latest inserted row
 	 */
-	public static function insert_id () {
+	public static function insert_id() {
 		return mysql_insert_id();
 	}
+
 	/**
 	 * Returns the number of affected rows
 	 * @param	resource	Optional database resource
 	 */
-	public static function affected_rows ($r=null) {
-		if(isset($r))
-		{
+	public static function affected_rows($r = null) {
+		if (isset($r)) {
 			return mysql_affected_rows($r);
 		}
-		else
-		{
-			return mysql_affected_rows();
-		}
+		return mysql_affected_rows();
 	}
+
 	/**
-	 * This function return a resource
+	 * This function returns a resource
 	 * documentation has been added by Arthur Portugal
 	 * @author Olivier Brouckaert;
-	 * @param  string $query - SQL query
-	 * @param  string $file - optional, the file path and name of the error (__FILE__)
-	 * @param  string $line - optional, the line of the error (__LINE__)
+	 * @param string $query - SQL query
+	 * @param string $file - optional, the file path and name of the error (__FILE__)
+	 * @param string $line - optional, the line of the error (__LINE__)
 	 * @return resource - the return value of the query
 	 */
 
-	public static function query ($sql,$file='',$line=0) {
-		return 	api_sql_query($sql,$file,$line);
+	public static function query($sql, $file = '', $line = 0) {
+		return api_sql_query($sql, $file, $line);
 	}
-    public static function error () {
-    	return mysql_error();
-    }
+
+	public static function error() {
+		return mysql_error();
+	}
+
 	/**
-     * Return course code from one given gradebook category's id
+	 * Return course code from one given gradebook category's id
 	 * @param int  Category ID
 	 * @return string  Course code
-     * @todo move this function in a gradebook-related library
+	 * @todo move this function in a gradebook-related library
 	 */
-    public static function get_course_by_category ($category_id) {
+    public static function get_course_by_category($category_id) {
     	$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 		$sql = 'SELECT course_code FROM '.$tbl_grade_categories.' WHERE id='.$category_id;
-		$res=api_sql_query($sql, __FILE__, __LINE__);
-		$option=Database::fetch_array($res,'ASSOC');
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$option = Database::fetch_array($res, 'ASSOC');
 		if ($option) {
 			return $option['course_code'];
-		} else {
-			return false;
 		}
+		return false;
     }
-
 
 }
 //end class Database

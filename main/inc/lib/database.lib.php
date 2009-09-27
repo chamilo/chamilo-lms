@@ -374,8 +374,8 @@ class Database {
 		Example:
 		$table = Database::get_course_table(TABLE_DOCUMENT);
 		$sql_query = "SELECT * FROM $table WHERE $condition";
-		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
-		$result = mysql_fetch_array($sql_result);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
+		$result = Database::fetch_array($sql_result);
 	-----------------------------------------------------------------------------
 	*/
 
@@ -389,8 +389,7 @@ class Database {
 	 * @param string $short_table_name, the name of the table
 	 */
 	public static function get_main_table($short_table_name) {
-		$database = Database::get_main_database();
-		return Database::format_table_name($database, $short_table_name);
+		return self::format_table_name(self::get_main_database(), $short_table_name);
 	}
 
 	/**
@@ -405,8 +404,7 @@ class Database {
 	 * - if you don't specify this, you work on the current course.
 	 */
 	public static function get_course_table($short_table_name, $database_name = '') {
-		$database_name_with_glue = Database::fix_database_parameter($database_name);
-		return Database::format_glued_course_table_name($database_name_with_glue, $short_table_name);
+		return self::format_glued_course_table_name(self::fix_database_parameter($database_name), $short_table_name);
 	}
 
 	/**
@@ -416,22 +414,16 @@ class Database {
 	 * @param string $table the name of the table
 	 */
 	public static function get_course_table_from_code($course_code, $table) {
-		$ret = null;
-
-		$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-		$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-		$sql = "SELECT $course_table.db_name, $course_cat_table.code
+		$course_table = self::get_main_table(TABLE_MAIN_COURSE);
+		$course_cat_table = self::get_main_table(TABLE_MAIN_CATEGORY);
+		$result = self::fetch_array(self::query(
+			"SELECT $course_table.db_name, $course_cat_table.code
 			FROM $course_table
 				LEFT JOIN $course_cat_table
 					ON $course_table.category_code =  $course_cat_table.code
 			WHERE $course_table.code = '$course_code'
-			LIMIT 1";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
-		$result = Database::fetch_array($res);
-
-		$ret = sprintf ("%s.%s", $result[0], $table);
-
-		return $ret;
+			LIMIT 1", __FILE__, __LINE__));
+		return sprintf("%s.%s", $result[0], $table);
     }
 
 	/**
@@ -443,8 +435,7 @@ class Database {
 	 * @param string $short_table_name, the name of the table
 	 */
 	public static function get_statistic_table($short_table_name) {
-		$database = Database::get_statistic_database();
-		return Database::format_table_name($database, $short_table_name);
+		return self::format_table_name(self::get_statistic_database(), $short_table_name);
 	}
 
 	/**
@@ -456,8 +447,7 @@ class Database {
 	 * @param string $short_table_name, the name of the table
 	 */
 	public static function get_scorm_table($short_table_name) {
-		$database = Database::get_scorm_database();
-		return Database::format_table_name($database, $short_table_name);
+		return self::format_table_name(self::get_scorm_database(), $short_table_name);
 	}
 
 	/**
@@ -469,8 +459,7 @@ class Database {
 	 * @param string $short_table_name, the name of the table
 	 */
 	public static function get_user_personal_table($short_table_name) {
-		$database = Database::get_user_personal_database();
-		return Database::format_table_name($database, $short_table_name);
+		return self::format_table_name(self::get_user_personal_database(), $short_table_name);
 	}
 
 	// TODO: This method should not belong to Database class. The internationaization ibrary is a better place.
@@ -491,11 +480,10 @@ class Database {
 			$language = api_get_interface_language();
 		}
 		if (!isset($iso_code[$language])) {
-			$table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-			$sql_query = "SELECT isocode FROM $table WHERE dokeos_folder = '$language'";
-			$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
-			if (Database::num_rows($sql_result)) {
-				$result = Database::fetch_array($sql_result);
+			$table = self::get_main_table(TABLE_MAIN_LANGUAGE);
+			$sql_result = self::query("SELECT isocode FROM $table WHERE dokeos_folder = '$language'", __FILE__, __LINE__);
+			if (self::num_rows($sql_result)) {
+				$result = self::fetch_array($sql_result);
 				$iso_code[$language] = $result['isocode'];
 			} else {
 				$iso_code[$language] = null;
@@ -516,11 +504,8 @@ class Database {
 	 * 	@todo shouldn't this be in the course.lib.php script?
 	 */
 	public static function get_course_list() {
-		$table = Database::get_main_table(TABLE_MAIN_COURSE);
-		$sql_query = "SELECT * FROM $table";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
-		$result = api_store_result($sql_result);
-		return $result;
+		$table = self::get_main_table(TABLE_MAIN_COURSE);
+		return api_store_result(self::query("SELECT * FROM $table", __FILE__, __LINE__));
 	}
 
 	/**
@@ -530,16 +515,11 @@ class Database {
 	 * 	@todo shouldn't this be in the course.lib.php script?
 	 */
 	public static function get_course_info($course_code) {
-		$course_code = Database::escape_string($course_code);
-		$table = Database::get_main_table(TABLE_MAIN_COURSE);
-		$sql_query = "SELECT * FROM $table WHERE `code` = '$course_code'";
-		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
-		$result = Database::fetch_array($sql_result);
-		$result = Database::generate_abstract_course_field_names($result);
-		if ($result === false) {
-			$result['db_name'] = '';
-		}
-		return $result;
+		$course_code = self::escape_string($course_code);
+		$table = self::get_main_table(TABLE_MAIN_COURSE);
+		$result = self::generate_abstract_course_field_names(
+			self::fetch_array(self::query("SELECT * FROM $table WHERE `code` = '$course_code'", __FILE__, __LINE__)));
+		return $result === false ? array('db_name' => '') : $result;
 	}
 
 	/**
@@ -552,16 +532,13 @@ class Database {
 	 * 	@todo shouldn't this be in the user.lib.php script?
 	 */
 	public static function get_user_info_from_id($user_id = '') {
-		$table = Database::get_main_table(TABLE_MAIN_USER);
-		if ($user_id == '') {
+		if (empty($user_id)) {
 			return $GLOBALS['_user'];
 		}
-		$user_id = Database::escape_string($user_id);
-		$sql_query = "SELECT * FROM $table WHERE user_id = '$user_id'";
-		$result = Database::query($sql_query, __FILE__, __LINE__);
-		$result_array = mysql_fetch_array($result);
-		$result_array = Database::generate_abstract_user_field_names($result_array);
-		return $result_array;
+		$table = self::get_main_table(TABLE_MAIN_USER);
+		$user_id = self::escape_string($user_id);
+		return self::generate_abstract_user_field_names(
+			self::fetch_array(self::query("SELECT * FROM $table WHERE user_id = '$user_id'", __FILE__, __LINE__)));
 	}
 
 	/**
@@ -651,10 +628,7 @@ class Database {
 	 *	glue format from local.inc.php.
 	 */
 	public static function glue_course_database_name($database_name) {
-		$prefix = Database::get_course_table_prefix();
-		$glue = Database::get_database_glue();
-		$database_name_with_glue = $prefix.$database_name.$glue;
-		return $database_name_with_glue;
+		return self::get_course_table_prefix().$database_name.self::get_database_glue();
 	}
 
 	/**
@@ -664,13 +638,11 @@ class Database {
 	 *	or the current course database (glued) if the parameter is empty.
 	 */
 	public static function fix_database_parameter($database_name) {
-		if ($database_name == '') {
+		if (empty($database_name)) {
 			$course_info = api_get_course_info();
-			$database_name_with_glue = $course_info['dbNameGlu'];
-		} else {
-			$database_name_with_glue = Database::glue_course_database_name($database_name);
+			return $course_info['dbNameGlu'];
 		}
-		return $database_name_with_glue;
+		return self::glue_course_database_name($database_name);
 	}
 
 	/**
@@ -698,9 +670,7 @@ class Database {
 	 * @return int The number of rows in the given table.
 	 */
 	public static function count_rows($table) {
-		$sql = "SELECT COUNT(*) AS n FROM $table";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
-		$obj = mysql_fetch_object($res);
+		$obj = self::fetch_object(self::query("SELECT COUNT(*) AS n FROM $table", __FILE__, __LINE__));
 		return $obj->n;
 	}
 
@@ -723,53 +693,35 @@ class Database {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 */
 	public static function escape_string($string) {
-		if (get_magic_quotes_gpc()) {
-			$string = stripslashes($string);
-		}
-		return mysql_real_escape_string($string);
+		return get_magic_quotes_gpc() ? mysql_real_escape_string(stripslashes($string)) : mysql_real_escape_string($string);
 	}
 
 	/**
-	 * Gets the array from a SQL result (as returned by api_sql_query) - help achieving database independence
-	 * @param resource		The result from a call to sql_query (e.g. api_sql_query)
+	 * Gets the array from a SQL result (as returned by Database::query) - help achieving database independence
+	 * @param resource		The result from a call to sql_query (e.g. Database::query)
 	 * @param string		Optional: "ASSOC","NUM" or "BOTH", as the constant used in mysql_fetch_array.
 	 * @return array		Array of results as returned by php
 	 * @author Yannick Warnier <yannick.warnier@dokeos.com>
 	 */
 	public static function fetch_array($res, $option = 'BOTH') {
-		if ($option != 'BOTH') {
-			if ($option == 'ASSOC') {
-				return mysql_fetch_array($res, MYSQL_ASSOC);
-			}
-			elseif ($option == 'NUM') {
-				return mysql_fetch_array($res, MYSQL_NUM);
-			}
-		} else {
-			return mysql_fetch_array($res);
-		}
+		return $option == 'ASSOC' ? mysql_fetch_array($res, MYSQL_ASSOC) : ($option == 'NUM' ? mysql_fetch_array($res, MYSQL_NUM) : mysql_fetch_array($res));
 	}
 
 	/**
-	 * Gets the next row of the result of the SQL query (as returned by api_sql_query) in an object form
-	 * @param	resource	The result from a call to sql_query (e.g. api_sql_query)
+	 * Gets the next row of the result of the SQL query (as returned by Database::query) in an object form
+	 * @param	resource	The result from a call to sql_query (e.g. Database::query)
 	 * @param	string		Optional class name to instanciate
 	 * @param	array		Optional array of parameters
 	 * @return	object		Object of class StdClass or the required class, containing the query result row
 	 * @author	Yannick Warnier <yannick.warnier@dokeos.com>
 	 */
 	public static function fetch_object($res, $class = null, $params = null) {
-		if (!empty($class)) {
-			if (is_array($params)) {
-				return mysql_fetch_object($res, $class, $params);
-			}
-			return mysql_fetch_object($res,$class);
-		}
-		return mysql_fetch_object($res);
+		return !empty($class) ? (is_array($params) ? mysql_fetch_object($res, $class, $params) : mysql_fetch_object($res,$class)) : mysql_fetch_object($res);
 	}
 
 	/**
-	 * Gets the array from a SQL result (as returned by api_sql_query) - help achieving database independence
-	 * @param resource		The result from a call to sql_query (e.g. api_sql_query)
+	 * Gets the array from a SQL result (as returned by Database::query) - help achieving database independence
+	 * @param resource		The result from a call to sql_query (e.g. Database::query)
 	 * @return array		Array of results as returned by php (mysql_fetch_row)
 	 * @author Yannick Warnier <yannick.warnier@dokeos.com>
 	 */
@@ -787,9 +739,8 @@ class Database {
 		return mysql_num_rows($res);
 	}
 
-	public static function get_course_chat_connected_table ($database_name = '') {
-		$database_name_with_glue = self::fix_database_parameter($database_name);
-		return self::format_glued_course_table_name($database_name_with_glue, CHAT_CONNECTED_TABLE);
+	public static function get_course_chat_connected_table($database_name = '') {
+		return self::format_glued_course_table_name(self::fix_database_parameter($database_name), CHAT_CONNECTED_TABLE);
 	}
 
 	/**
@@ -801,13 +752,7 @@ class Database {
 	 * @result	mixed		One cell of the result, or FALSE on error
 	 */
 	public static function result($resource, $row, $field = '') {
-	 	if (mysql_num_rows($resource) > 0) {
-			if (!empty($field)) {
-				return mysql_result($resource, $row, $field);
-			}
-			return mysql_result($resource, $row);
-	 	}
-	 	return null;
+		return mysql_num_rows($resource) > 0 ? (!empty($field) ? mysql_result($resource, $row, $field) : mysql_result($resource, $row)) : null;
 	}
 
 	/**
@@ -823,10 +768,7 @@ class Database {
 	 * @param	resource	Optional database resource
 	 */
 	public static function affected_rows($r = null) {
-		if (isset($r)) {
-			return mysql_affected_rows($r);
-		}
-		return mysql_affected_rows();
+		return is_null($r) ? mysql_affected_rows($r) : mysql_affected_rows();
 	}
 
 	/**
@@ -854,14 +796,8 @@ class Database {
 	 * @todo move this function in a gradebook-related library
 	 */
     public static function get_course_by_category($category_id) {
-    	$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-		$sql = 'SELECT course_code FROM '.$tbl_grade_categories.' WHERE id='.$category_id;
-		$res = api_sql_query($sql, __FILE__, __LINE__);
-		$option = Database::fetch_array($res, 'ASSOC');
-		if ($option) {
-			return $option['course_code'];
-		}
-		return false;
+		$info = self::fetch_array(self::query('SELECT course_code FROM '.self::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY).' WHERE id='.$category_id, __FILE__, __LINE__), 'ASSOC');
+		return $info ? $info['course_code'] : false;
     }
 
 }

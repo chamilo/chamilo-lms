@@ -207,7 +207,7 @@ class CourseManager {
 			$sql .= ' OFFSET 0';
 		}
 		$res = Database::query($sql, __FILE__, __LINE__);
-		return api_store_result($res);
+		return Database::store_result($res);
 	}
 
 	/**

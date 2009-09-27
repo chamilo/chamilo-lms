@@ -109,7 +109,7 @@ if (api_is_allowed_to_create_course()) {
 	}
 
 	$result_nb_cours = Database::query($sql_nb_cours, __FILE__, __LINE__);
-	$courses = api_store_result($result_nb_cours);
+	$courses = Database::store_result($result_nb_cours);
 
 	$nb_teacher_courses = count($courses);
 	if ($nb_teacher_courses) {

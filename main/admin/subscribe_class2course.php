@@ -100,10 +100,10 @@ if ($_POST['formSent'])
 
 $sql = "SELECT id,name FROM $tbl_class WHERE name LIKE '".$first_letter_class."%' ORDER BY ". (count($classes) > 0 ? "(id IN('".implode("','", $classes)."')) DESC," : "")." name";
 $result = api_sql_query($sql, __FILE__, __LINE__);
-$db_classes = api_store_result($result);
+$db_classes = Database::store_result($result);
 $sql = "SELECT code,visual_code,title FROM $tbl_course WHERE visual_code LIKE '".$first_letter_course."%' ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
 $result = api_sql_query($sql, __FILE__, __LINE__);
-$db_courses = api_store_result($result);
+$db_courses = Database::store_result($result);
 if (!empty ($error_message))
 {
 	Display :: display_normal_message($error_message);

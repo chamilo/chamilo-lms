@@ -943,7 +943,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 							AND session_rel_course.course_code='$_cid'";
 
 		        $result = api_sql_query($sql,__FILE__,__LINE__);
-		        $row = api_store_result($result);
+		        $row = Database::store_result($result);
 
 		        if ($row[0]['id_coach']==$_user['user_id']) {
 		        	$_courseUser['role'] = 'Professor';

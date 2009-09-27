@@ -341,7 +341,7 @@ class ScoreDisplay
 		$sql = 'SELECT * FROM '.$tbl_display.' ORDER BY score';
 		//echo $sql;
 		$result = api_sql_query($sql, __FILE__, __LINE__);
-		return api_store_result($result);
+		return Database::store_result($result);
 	}
 
 

@@ -167,7 +167,7 @@ class UrlManager
 	/** Gets the inner join of users and urls table
 	 * @author Julio Montoya
 	 * @return int  access url id
-	 * @return array   api_store_result of the result
+	 * @return array   Database::store_result of the result
 	 * */
 	function get_url_rel_user_data($access_url_id='')
 	{
@@ -184,7 +184,7 @@ class UrlManager
 			ON $table_url_rel_user.user_id = u.user_id
 			$where".$order_clause;
 		$result=api_sql_query($sql,__FILE__,__LINE__);
-		$users=api_store_result($result);
+		$users=Database::store_result($result);
 		return $users;
 	}
 
@@ -192,7 +192,7 @@ class UrlManager
 	 /** Gets the inner join of access_url and the course table
 	 * @author Julio Montoya
 	 * @return int  access url id
-	 * @return array   api_store_result of the result
+	 * @return array   Database::store_result of the result
 	 * */
 	function get_url_rel_course_data($access_url_id='')
 	{
@@ -211,14 +211,14 @@ class UrlManager
 				ORDER BY title, code";
 
 		$result=api_sql_query($sql,__FILE__,__LINE__);
-		$courses=api_store_result($result);
+		$courses=Database::store_result($result);
 		return $courses;
 	}
 
 	/** Gets the inner join of access_url and the session table
 	 * @author Julio Montoya
 	 * @return int  access url id
-	 * @return array   api_store_result of the result
+	 * @return array   Database::store_result of the result
 	 * */
 	function get_url_rel_session_data($access_url_id='')
 	{
@@ -237,7 +237,7 @@ class UrlManager
 				ORDER BY name, id";
 
 		$result=api_sql_query($sql,__FILE__,__LINE__);
-		$sessions=api_store_result($result);
+		$sessions=Database::store_result($result);
 		return $sessions;
 	}
 
@@ -612,7 +612,7 @@ class UrlManager
 			    ON (url_rel_user.access_url_id = u.id)
 			    WHERE user_id = ".Database::escape_string($user_id);
 		$result = api_sql_query($sql,  __FILE__, __LINE__);
-		$url_list = api_store_result($result);
+		$url_list = Database::store_result($result);
 		return $url_list;
 	}
 

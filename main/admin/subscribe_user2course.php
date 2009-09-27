@@ -239,7 +239,7 @@ if ($_configuration['multiple_access_urls']==true) {
 }
 
 $result = api_sql_query($sql, __FILE__, __LINE__);
-$db_users = api_store_result($result);
+$db_users = Database::store_result($result);
 unset($result);
 
 $sql = "SELECT code,visual_code,title FROM $tbl_course WHERE visual_code LIKE '".$first_letter_course."%' ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
@@ -257,7 +257,7 @@ if ($_configuration['multiple_access_urls']==true) {
 }
 
 $result = api_sql_query($sql, __FILE__, __LINE__);
-$db_courses = api_store_result($result);
+$db_courses = Database::store_result($result);
 unset($result);
 
 if ($_configuration['multiple_access_urls']==true) {

@@ -129,7 +129,7 @@ if(empty($action))
 	$myquery="SELECT t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count,COUNT(DISTINCT t3.code) AS nbr_courses FROM $tbl_category t1 LEFT JOIN $tbl_category t2 ON t1.code=t2.parent_id LEFT JOIN $tbl_course t3 ON t3.category_code=t1.code WHERE t1.parent_id ".(empty($category)?"IS NULL":"='$category'")." GROUP BY t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count ORDER BY t1.tree_pos";
 	$result=api_sql_query($myquery,__FILE__,__LINE__);
 
-	$Categories=api_store_result($result);
+	$Categories=Database::store_result($result);
 }
 
 

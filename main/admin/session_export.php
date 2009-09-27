@@ -272,7 +272,7 @@ if ($_configuration['multiple_access_urls']==true) {
 
 $result=api_sql_query($sql,__FILE__,__LINE__);
 
-$Sessions=api_store_result($result);
+$Sessions=Database::store_result($result);
 ?>
 
 <?php

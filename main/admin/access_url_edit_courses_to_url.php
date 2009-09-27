@@ -198,7 +198,7 @@ if($ajax_search) {
 	  	  	FROM $tbl_course u
 			ORDER BY title, code";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-	$courses=api_store_result($result);
+	$courses=Database::store_result($result);
 	$course_list_leys = array_keys($course_list);
 	foreach($courses as $course) {
 		if (!in_array($course['code'],$course_list_leys))

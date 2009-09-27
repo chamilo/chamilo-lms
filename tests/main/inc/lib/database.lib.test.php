@@ -288,5 +288,14 @@ class TestDatabase extends UnitTestCase {
 		//var_dump($res);
 		$this->assertTrue(is_bool($res));
 	}
+
+	function testStoreResult(){
+		$sql="SELECT 1";
+		$resource=$this->dbase->query($sql,__FILE__,__LINE__);
+		$res = $this->dbase->store_result($resource);
+		$this->assertTrue(is_array($res));
+		//var_dump($res);
+	}
+
 }
 ?>

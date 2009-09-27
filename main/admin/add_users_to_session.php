@@ -293,7 +293,7 @@ if ($ajax_search) {
 		}
 	}
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-	$Users=api_store_result($result);
+	$Users=Database::store_result($result);
 	foreach ($Users as $user) {
 		$sessionUsersList[$user['user_id']] = $user ;
 	}
@@ -375,7 +375,7 @@ if ($ajax_search) {
 		}
 
 		$result=api_sql_query($sql,__FILE__,__LINE__);
-		$Users=api_store_result($result);
+		$Users=Database::store_result($result);
 		//var_dump($_REQUEST['id_session']);
 		foreach ($Users as $user) {
 			if($user['id_session'] != $id_session)
@@ -408,7 +408,7 @@ if ($ajax_search) {
 			}
 		}
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-	$Users=api_store_result($result);
+	$Users=Database::store_result($result);
 
 	foreach($Users as $key_user_list =>$value_user_list) {
 		if ($Users[$key_user_list]['user_id']==$user_anonymous) {

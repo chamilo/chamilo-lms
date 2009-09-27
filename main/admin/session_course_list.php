@@ -60,7 +60,7 @@ $limit=20;
 $from=$page * $limit;
 
 $result=api_sql_query("SELECT code,title,nbr_users FROM $tbl_session_rel_course,$tbl_course WHERE course_code=code AND id_session='$id_session' ORDER BY $sort LIMIT $from,".($limit+1),__FILE__,__LINE__);
-$Courses=api_store_result($result);
+$Courses=Database::store_result($result);
 $nbr_results=sizeof($Sessions);
 $tool_name = api_htmlentities($session_name,ENT_QUOTES,$charset).' : '.get_lang('CourseListInSession');
 

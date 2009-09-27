@@ -138,7 +138,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	$num = $recorset['total_rows'];
 
 	$result=api_sql_query($query,__FILE__,__LINE__);
-	$Sessions=api_store_result($result);
+	$Sessions=Database::store_result($result);
 	$nbr_results=sizeof($Sessions);
 	$tool_name = get_lang('SessionList');
 	Display::display_header($tool_name);

@@ -177,7 +177,7 @@ if (intval($count_users)<50) {
 	}
 
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-	$Coaches=api_store_result($result);
+	$Coaches=Database::store_result($result);
 	?>
 	<select name="coach_username" value="true" style="width:250px;">
 		<option value="0"><?php get_lang('None'); ?></option>

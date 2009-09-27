@@ -3766,7 +3766,7 @@ function count_number_of_post_in_thread($thread_id) {
 	global $table_posts;
 	$sql = "SELECT * FROM $table_posts WHERE thread_id='".Database::escape_string($thread_id)."' ";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
-	return count(api_store_result($result));
+	return count(Database::store_result($result));
 }
 
 /**
@@ -3782,7 +3782,7 @@ function count_number_of_post_for_user_thread($thread_id, $user_id) {
 	$sql = "SELECT * FROM $table_posts WHERE thread_id='".Database::escape_string($thread_id)."'
 																			AND poster_id = '".Database::escape_string($user_id)."' ";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
-	return count(api_store_result($result));
+	return count(Database::store_result($result));
 }
 
 /**
@@ -3796,7 +3796,7 @@ function count_number_of_user_in_course($course_id) {
 	$table_course_rel_user = Database::get_main_table("course_rel_user");
 	$sql = "SELECT * FROM $table_course_rel_user  WHERE course_code ='".Database::escape_string($course_id)."' ";
 	$result = api_sql_query($sql, __FILE__, __LINE__);
-	return count(api_store_result($result));
+	return count(Database::store_result($result));
 }
 
 /**

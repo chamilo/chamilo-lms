@@ -196,7 +196,7 @@ if($ajax_search) {
 	  	  	FROM $tbl_user u".
 			$order_clause;
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-	$Users=api_store_result($result);
+	$Users=Database::store_result($result);
 	$user_list_leys = array_keys($sessionUsersList);
 	foreach($Users as $user) {
 		if (!in_array($user['user_id'],$user_list_leys))

@@ -1538,14 +1538,14 @@ function api_is_coach() {
 								ON session_rel_course.id_coach = '".Database::escape_string($_user['user_id'])."'
 							ORDER BY date_start, date_end, name";
 	$result = Database::query($sql, __FILE__, __LINE__);
-	$sessionIsCoach = api_store_result($result);
+	$sessionIsCoach = Database::store_result($result);
 
 	$sql = "SELECT DISTINCT id, name, date_start, date_end
 							FROM session
 							WHERE session.id_coach =  '".Database::escape_string($_user['user_id'])."'
 							ORDER BY date_start, date_end, name";
 	$result = Database::query($sql, __FILE__, __LINE__);
-	$sessionIsCoach = array_merge($sessionIsCoach, api_store_result($result));
+	$sessionIsCoach = array_merge($sessionIsCoach, Database::store_result($result));
 
 	return count($sessionIsCoach) > 0;
 }
@@ -2767,7 +2767,7 @@ function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $directio
 	$direction = Database::escape_string($direction);
 	$sql = "SELECT id, url, description, active, created_by, tms FROM $t_au ORDER BY $order $direction LIMIT $to OFFSET $from";
 	$res = Database::query($sql, __FILE__, __LINE__);
-	return api_store_result($res);
+	return Database::store_result($res);
 }
 
 /**
@@ -2850,7 +2850,7 @@ function api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url
 		$sql .= " ORDER BY 1,2 ASC";
 	}
 	$res = Database::query($sql, __FILE__, __LINE__);
-	return api_store_result($res);
+	return Database::store_result($res);
 }
 
 /**
@@ -2868,7 +2868,7 @@ function api_get_settings_categories($exceptions = array(), $access_url = 1) {
 		$sql .= " WHERE category NOT IN ($list)";
 	}
 	$r = Database::query($sql, __FILE__, __LINE__);
-	return api_store_result($r);
+	return Database::store_result($r);
 }
 
 /**
@@ -3123,7 +3123,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
 					LIMIT 1";
 
 			$result = Database::query($sql, __FILE__, __LINE__);
-			$row = api_store_result($result);
+			$row = Database::store_result($result);
 
 			if ($row[0]['id_coach'] == $userid) {
 				$_courseUser['role'] = 'Professor';

@@ -373,14 +373,14 @@ class SessionManager {
 		$id_coach = $id_coach[0];
 		// get list of courses subscribed to this session
 		$rs = api_sql_query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session=$id_session");
-		$existingCourses = api_store_result($rs);
+		$existingCourses = Database::store_result($rs);
 		$nbr_courses=count($existingCourses);
 		// get list of users subscribed to this session
 		$sql="SELECT id_user
 			FROM $tbl_session_rel_user
 			WHERE id_session = $id_session";
 		$result=api_sql_query($sql,__FILE__,__LINE__);
-		$user_list=api_store_result($result);
+		$user_list=Database::store_result($result);
 
 		// remove existing courses from the session
 		if ($empty_courses===true) {

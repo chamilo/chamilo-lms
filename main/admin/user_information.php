@@ -115,7 +115,7 @@ $result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
 							AND (date_start <= NOW() AND date_end >= NOW() OR date_start='0000-00-00')
 							ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 
-$sessions=api_store_result($result);
+$sessions=Database::store_result($result);
 
 // get the list of sessions where the user is subscribed as coach in a course
 $result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
@@ -125,7 +125,7 @@ $result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
 						AND (date_start <= NOW() AND date_end >= NOW() OR date_start='0000-00-00')
 						ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 
-$session_is_coach = api_store_result($result);
+$session_is_coach = Database::store_result($result);
 
 $personal_course_list = array();
 

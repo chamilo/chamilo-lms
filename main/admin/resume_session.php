@@ -45,7 +45,7 @@ $sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start
 		WHERE '.$tbl_session.'.id='.$id_session;
 
 $rs = api_sql_query($sql, __FILE__, __LINE__);
-$session = api_store_result($rs);
+$session = Database::store_result($rs);
 $session = $session[0];
 
 if(!api_is_platform_admin() && $session['session_admin_id']!=$_user['user_id'])
@@ -185,7 +185,7 @@ else {
 			AND id_session='$id_session'
 			ORDER BY title";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-	$courses=api_store_result($result);
+	$courses=Database::store_result($result);
 	foreach($courses as $course){
 		//select the number of users
 		$sql = 'SELECT COUNT(id_user) as nb_users FROM '.$tbl_session_rel_course_rel_user.' WHERE course_code="'.Database::escape_string($course['code']).'" AND id_session='.intval($id_session);
@@ -243,7 +243,7 @@ else {
 				AND '.$tbl_session_rel_user.'.id_session = '.$id_session.$order_clause;
 
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-	$users=api_store_result($result);
+	$users=Database::store_result($result);
 	$orig_param = '&origin=resume_session&id_session='.$id_session; // change breadcrumb in destination page
 	foreach($users as $user){
 		echo '<tr>

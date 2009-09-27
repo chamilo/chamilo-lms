@@ -62,7 +62,7 @@ $pictureURL=api_get_path(WEB_CODE_PATH).'upload/users/';
 $query="SELECT t1.user_id,t1.username,t1.firstname,t1.lastname,t1.picture_uri,t3.status FROM $tbl_user t1,$tbl_online_connected t2,$tbl_course_user t3 WHERE t1.user_id=t2.user_id AND t3.user_id=t1.user_id AND t3.course_code = '".$_course[sysCode]."'  AND t2.last_connection>'".date('Y-m-d H:i:s',time()-60*5)."' ORDER BY t1.username";
 $result=api_sql_query($query,__FILE__,__LINE__);
 
-$Users=api_store_result($result);
+$Users=Database::store_result($result);
 
 include('header_frame.inc.php');
 ?>

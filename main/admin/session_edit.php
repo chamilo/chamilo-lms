@@ -75,7 +75,7 @@ if ($_configuration['multiple_access_urls']==true){
 
 $result=api_sql_query($sql,__FILE__,__LINE__);
 
-$Coaches=api_store_result($result);
+$Coaches=Database::store_result($result);
 $thisYear=date('Y');
 
 // display the header

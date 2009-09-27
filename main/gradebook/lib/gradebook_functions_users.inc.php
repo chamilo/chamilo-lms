@@ -122,7 +122,7 @@ function find_students($mask= '') {
 	}
 	$sql .= ' ORDER BY lastname';
 	$result= api_sql_query($sql, __FILE__, __LINE__);
-	$db_users= api_store_result($result);
+	$db_users= Database::store_result($result);
 	return $db_users;
 }
 

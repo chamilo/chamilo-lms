@@ -531,7 +531,7 @@ function get_logged_user_course_html($my_course) {
 			WHERE ts.id='.(int) $my_course['id_session']. ' LIMIT 1';
 
 			$rs = api_sql_query($sql, __FILE__, __LINE__);
-			$sessioncoach = api_store_result($rs);
+			$sessioncoach = Database::store_result($rs);
 			$sessioncoach = $sessioncoach[0];
 
 			$session = array();

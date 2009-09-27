@@ -210,13 +210,13 @@ if ($_POST['formSent']) {
 	$id_coach = $id_coach[0];
 
 	$rs = api_sql_query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session=$id_session");
-	$existingCourses = api_store_result($rs);
+	$existingCourses = Database::store_result($rs);
 
 	$sql="SELECT id_user
 		FROM $tbl_session_rel_user
 		WHERE id_session = $id_session";
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-	$UserList=api_store_result($result);
+	$UserList=Database::store_result($result);
 
 
 	foreach($CourseList as $enreg_course) {
@@ -321,7 +321,7 @@ if ($ajax_search) {
 	}
 
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-	$Courses=api_store_result($result);
+	$Courses=Database::store_result($result);
 
 	foreach($Courses as $course) {
 		$sessionCourses[$course['code']] = $course ;
@@ -351,7 +351,7 @@ if ($ajax_search) {
 	}
 
 	$result=api_sql_query($sql,__FILE__,__LINE__);
-	$Courses=api_store_result($result);
+	$Courses=Database::store_result($result);
 	foreach($Courses as $course) {
 		if ($course['id_session'] == $id_session) {
 			$sessionCourses[$course['code']] = $course ;

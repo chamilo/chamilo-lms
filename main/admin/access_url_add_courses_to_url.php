@@ -131,12 +131,12 @@ $sql = "SELECT code, title FROM $tbl_course
 		ORDER BY title, code DESC ";
 
 $result = api_sql_query($sql, __FILE__, __LINE__);
-$db_courses = api_store_result($result);
+$db_courses = Database::store_result($result);
 unset($result);
 
 $sql = "SELECT id, url FROM $tbl_access_url  WHERE active=1 ORDER BY url";
 $result = api_sql_query($sql, __FILE__, __LINE__);
-$db_urls = api_store_result($result);
+$db_urls = Database::store_result($result);
 unset($result);
 ?>
 

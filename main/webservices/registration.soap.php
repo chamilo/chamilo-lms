@@ -4552,7 +4552,7 @@ function DokeosWSSuscribeCoursesToSession($params) {
 		$sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
 
 		$rs = Database::query($sql, __FILE__, __LINE__);
-		$existingCourses = api_store_result($rs);
+		$existingCourses = Database::store_result($rs);
 		$nbr_courses=count($existingCourses);
 
 		// get list of users subscribed to this session
@@ -4560,7 +4560,7 @@ function DokeosWSSuscribeCoursesToSession($params) {
 			FROM $tbl_session_rel_user
 			WHERE id_session = '$id_session'";
 		$result=Database::query($sql, __FILE__, __LINE__);
-		$user_list=api_store_result($result);
+		$user_list=Database::store_result($result);
 
 		$course_directory = array();
 		// Pass through the courses list we want to add to the session.

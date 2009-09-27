@@ -61,10 +61,10 @@ $tbl_session_rel_etape 				= "session_rel_etape";
 $message="";
 
 $result=api_sql_query("SELECT id, name FROM $tbl_session",__FILE__,__LINE__);
-$Sessions=api_store_result($result);
+$Sessions=Database::store_result($result);
 
 $result=api_sql_query($sql,__FILE__,__LINE__);
-$users=api_store_result($result);
+$users=Database::store_result($result);
 
 foreach($Sessions as $session){
 	$id_session = $session['id'];

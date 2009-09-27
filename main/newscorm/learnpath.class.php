@@ -7683,7 +7683,7 @@ class learnpath {
 		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . '>'.Display::return_icon('folder_document.gif',get_lang('Documents'),array('style'=>'margin-right:5px;', 'height' => '16px')).' '. get_lang('Documents') . '</div>';
 		$return .= '<div class="lp_resource_elements" id="resDoc">';
 
-		$resources = api_store_result($res_doc);
+		$resources = Database::store_result($res_doc);
 
 		$resources_sorted = array ();
 

@@ -94,7 +94,7 @@ elseif(!empty($annee) && empty($id_session))
 		" ORDER BY name";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 
-	$sessions=api_store_result($result);
+	$sessions=Database::store_result($result);
 	$nbr_results=count($sessions);
 	foreach($sessions as $row)
 	{

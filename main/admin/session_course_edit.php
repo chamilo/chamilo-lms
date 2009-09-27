@@ -69,7 +69,7 @@ $sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'
 
 $result=api_sql_query($sql,__FILE__,__LINE__);
 
-$coaches=api_store_result($result);
+$coaches=Database::store_result($result);
 
 Display::display_header($tool_name);
 

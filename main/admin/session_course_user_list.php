@@ -53,7 +53,7 @@ $from=$page * $limit;
 $is_western_name_order = api_is_western_name_order();
 
 $result=api_sql_query("SELECT user_id,".($is_western_name_order ? 'firstname,lastname' : 'lastname,firstname').",username FROM $tbl_session_rel_course_rel_user,$tbl_user WHERE user_id=id_user AND id_session='$id_session' AND course_code='".addslashes($course_code)."' ORDER BY $sort LIMIT $from,".($limit+1),__FILE__,__LINE__);
-$Users=api_store_result($result);
+$Users=Database::store_result($result);
 
 $nbr_results=sizeof($Users);
 

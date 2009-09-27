@@ -1047,7 +1047,7 @@ class UserManager {
 						ON fields.id = options.field_id
 							AND fields.field_variable="'.Database::escape_string($field_name).'"';
 		$rs = Database::query($sql, __FILE__, __LINE__);
-		return api_store_result($rs);
+		return Database::store_result($rs);
 	}
 
 	/**
@@ -1558,9 +1558,9 @@ class UserManager {
 			ORDER BY date_start, date_end, name";
 		$result = Database::query($sessions_sql, __FILE__, __LINE__);
 
-		$sessions=api_store_result($result);
+		$sessions=Database::store_result($result);
 
-		$sessions = array_merge($sessions, api_store_result($result));
+		$sessions = array_merge($sessions, Database::store_result($result));
 
 		// get the list of sessions where the user is subscribed as coach in a course
 		$sessions_sql = "SELECT DISTINCT id, name, date_start, date_end, DATE_SUB(date_start, INTERVAL nb_days_access_before_beginning DAY), ADDDATE(date_end, INTERVAL nb_days_access_after_end DAY)
@@ -1575,7 +1575,7 @@ class UserManager {
 
 		$result = Database::query($sessions_sql, __FILE__, __LINE__);
 
-		$session_is_coach = api_store_result($result);
+		$session_is_coach = Database::store_result($result);
 
 		$sessions = array_merge($sessions, $session_is_coach);
 
@@ -1589,7 +1589,7 @@ class UserManager {
 			ORDER BY date_start, date_end, name";
 		$result = Database::query($sessions_sql, __FILE__, __LINE__);
 
-		$sessions = array_merge($sessions, api_store_result($result));
+		$sessions = array_merge($sessions, Database::store_result($result));
 
 		if (api_is_allowed_to_create_course()) {
 			foreach($sessions as $enreg) {

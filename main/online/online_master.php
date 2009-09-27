@@ -117,7 +117,7 @@ if(!$isMaster)
 	$query="SELECT id,name,url FROM $tbl_online_link ORDER BY name";
 	$result=api_sql_query($query,__FILE__,__LINE__);
 
-	$Links=api_store_result($result);
+	$Links=Database::store_result($result);
 }
 
 include('header_frame.inc.php');

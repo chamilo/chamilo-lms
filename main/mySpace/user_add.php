@@ -175,7 +175,7 @@ if (api_is_session_admin()) {
 		FROM $tbl_session
 		$where
 		ORDER BY name",__FILE__,__LINE__);
-	$a_sessions = api_store_result($result);
+	$a_sessions = Database::store_result($result);
 	$session_list = array();
 	$session_list[0] = get_lang('SelectSession');
 	if (is_array($a_sessions)) {

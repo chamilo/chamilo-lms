@@ -134,12 +134,12 @@ $sql = "SELECT user_id,lastname,firstname,username FROM $tbl_user
 	    WHERE ".$target_name." LIKE '".$first_letter_user."%' OR ".$target_name." LIKE '".api_strtolower($first_letter_user)."%'
 		ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." ".$target_name;
 $result = api_sql_query($sql, __FILE__, __LINE__);
-$db_users = api_store_result($result);
+$db_users = Database::store_result($result);
 unset($result);
 
 $sql = "SELECT id, url FROM $tbl_access_url  WHERE active=1 ORDER BY url";
 $result = api_sql_query($sql, __FILE__, __LINE__);
-$db_urls = api_store_result($result);
+$db_urls = Database::store_result($result);
 unset($result);
 ?>
 

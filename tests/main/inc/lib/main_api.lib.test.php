@@ -231,12 +231,6 @@ class TestMainApi extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testApiStoreResult(){
-		$res = api_store_result();
-		$this->assertTrue(is_array($res));
-		//var_dump($res);
-	}
-
 	function testApiSessionStart(){
 		$res = api_session_start($already_sintalled=true);
 		$this->assertTrue(is_null($res));
@@ -432,7 +426,7 @@ class TestMainApi extends UnitTestCase {
 		global $_user;
 		global $sessionIsCoach;
 		$_user['user_id']=2;
-		$sessionIsCoach=api_store_result($result=false);
+		$sessionIsCoach=Database::store_result($result=false);
 		$res=api_is_coach();
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);

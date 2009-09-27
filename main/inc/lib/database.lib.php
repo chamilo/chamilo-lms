@@ -15,9 +15,6 @@
 ==============================================================================
 */
 
-// TODO: It seems more natural if the function api_store_result() in
-// the main API had an implementation here as Database::store_result()
-
 /*
 ==============================================================================
 		CONSTANTS
@@ -505,7 +502,7 @@ class Database {
 	 */
 	public static function get_course_list() {
 		$table = self::get_main_table(TABLE_MAIN_COURSE);
-		return api_store_result(self::query("SELECT * FROM $table", __FILE__, __LINE__));
+		return self::store_result(self::query("SELECT * FROM $table", __FILE__, __LINE__));
 	}
 
 	/**

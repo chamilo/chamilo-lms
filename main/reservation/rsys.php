@@ -230,7 +230,7 @@ class Rsys {
 			$sql .= " WHERE id = ".Database::escape_string($id)."";
 		else
 			$sql .= " ORDER BY ".$orderby;
-		$arr = api_store_result(api_sql_query($sql, __FILE__, __LINE__));
+		$arr = Database::store_result(api_sql_query($sql, __FILE__, __LINE__));
 		if (!empty ($id))
 			return $arr[0];
 		else
@@ -252,7 +252,7 @@ class Rsys {
 		                WHERE (cu.user_id='".api_get_user_id()."' AND ir.view_right=1) OR i.creator='".api_get_user_id()."'  OR 1=". (api_is_platform_admin() ? 1 : 0)."
 		                GROUP BY c.id ORDER BY ".$orderby;
 
-		$arr = api_store_result(api_sql_query($sql, __FILE__, __LINE__));
+		$arr = Database::store_result(api_sql_query($sql, __FILE__, __LINE__));
 		return $arr;
 	}
 
@@ -271,7 +271,7 @@ class Rsys {
 		                WHERE (cu.user_id='".api_get_user_id()."' AND (ir.edit_right=1 OR ir.delete_right=1)) OR i.creator='".api_get_user_id()."'  OR 1=". (api_is_platform_admin() ? 1 : 0)."
 		                GROUP BY c.id ORDER BY ".$orderby;
 
-		$arr = api_store_result(api_sql_query($sql, __FILE__, __LINE__));
+		$arr = Database::store_result(api_sql_query($sql, __FILE__, __LINE__));
 		return $arr;
 	}
 
@@ -450,7 +450,7 @@ class Rsys {
 			$sql .= " WHERE i.id = '".$id."'";
 		} else
 			$sql .= " LEFT JOIN ".Rsys :: getTable("item_rights")." ir ON ir.item_id=i.id LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS)." c ON ir.class_id=c.id AND ir.item_id = i.id LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id WHERE (cu.user_id='".api_get_user_id()."' AND ir.view_right=1) OR i.creator='".api_get_user_id()."'  OR 1=". (api_is_platform_admin() ? 1 : 0)."  ORDER BY ".$orderby;
-		$arr = api_store_result(api_sql_query($sql, __FILE__, __LINE__));
+		$arr = Database::store_result(api_sql_query($sql, __FILE__, __LINE__));
 		if (!empty ($id))
 			return $arr[0]; // Return one row only
 		else
@@ -478,7 +478,7 @@ class Rsys {
 	 */
 	function get_category_items($id, $orderby = "name ASC") {
 		$sql = "SELECT * FROM ".Rsys :: getTable("item")." WHERE category_id = ".Database::escape_string($id)." ORDER BY ".$orderby;
-		$arr = api_store_result(api_sql_query($sql, __FILE__, __LINE__));
+		$arr = Database::store_result(api_sql_query($sql, __FILE__, __LINE__));
 		return $arr;
 	}
 
@@ -491,7 +491,7 @@ class Rsys {
 	 */
 	function get_course_items($id, $orderby = "name ASC") {
 		$sql = "SELECT * FROM ".Rsys :: getTable("item")." WHERE course_id = ".Database::escape_string($id)." ORDER BY ".$orderby;
-		$arr = api_store_result(api_sql_query($sql, __FILE__, __LINE__));
+		$arr = Database::store_result(api_sql_query($sql, __FILE__, __LINE__));
 		return $arr;
 	}
 
@@ -655,7 +655,7 @@ class Rsys {
 		$item_id = Database::escape_string($item_id);
 		$sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_CLASS)."
 				WHERE id NOT IN (SELECT class_id  FROM ".Rsys :: getTable("item_rights")." WHERE item_id='".$item_id."') ORDER BY name ASC, code ASC";
-		$arr = api_store_result(api_sql_query($sql, __FILE__, __LINE__));
+		$arr = Database::store_result(api_sql_query($sql, __FILE__, __LINE__));
 		return $arr;
 	}
 
@@ -725,7 +725,7 @@ class Rsys {
 	function get_class_group($class_id) {
 		$class_id = Database::escape_string($class_id);
 		$sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_CLASS)." WHERE id='".$class_id."'";
-		$arr = api_store_result(api_sql_query($sql, __FILE__, __LINE__));
+		$arr = Database::store_result(api_sql_query($sql, __FILE__, __LINE__));
 		return $arr;
 	}
 
@@ -734,14 +734,14 @@ class Rsys {
 		$class_id = Database::escape_string($class_id);
 
 		$sql = "SELECT * FROM ".Rsys :: getTable('item_rights')." WHERE item_id='".$item_id."' AND class_id='".$class_id."'";
-		$arr = api_store_result(api_sql_query($sql, __FILE__, __LINE__));
+		$arr = Database::store_result(api_sql_query($sql, __FILE__, __LINE__));
 		return $arr;
 	}
 
 	function black_out_changer($item_id) {
 		$item_id = Database::escape_string($item_id);
 		$sql = "SELECT blackout FROM ".Rsys :: getTable("item")." WHERE id='".$item_id."'";
-		$Value = api_store_result(api_sql_query($sql, __FILE__, __LINE__));
+		$Value = Database::store_result(api_sql_query($sql, __FILE__, __LINE__));
 		($Value[0][0] == 0 ? $changedValue = 1 : $changedValue = 0);
 		$sql = "UPDATE ".Rsys :: getTable("item")." SET blackout='".$changedValue."'  WHERE id = '".$item_id."'";
 		api_sql_query($sql, __FILE__, __LINE__);
@@ -1527,7 +1527,7 @@ class Rsys {
 					INNER JOIN ".Rsys :: getTable("reservation")." r ON s.reservation_id = r.id
 					INNER JOIN ".Rsys :: getTable("item")." i ON r.item_id = i.id
 					WHERE reservation_id='".$reservation_id."' AND user_id='".$user_id."'";
-			$result = api_store_result(api_sql_query($sql, __FILE__, __LINE__));
+			$result = Database::store_result(api_sql_query($sql, __FILE__, __LINE__));
 			$user_info = api_get_user_info();
 			$titel = str_replace('#ITEM#', $result[0][1], get_lang("ReservationMadeTitle"));
 			$inhoud = str_replace('#ITEM#', $result[0][1], str_replace('#START#', $result[0][2], str_replace('#END#', $result[0][3], get_lang("ReservationMadeMessage"))));

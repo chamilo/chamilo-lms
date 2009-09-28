@@ -21,55 +21,29 @@
 ==============================================================================
 */
 
-// PHP version check
-if (!function_exists('version_compare') || version_compare(phpversion(), '5', '<')) {
-	$error_message_php_version = <<<EOM
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-		<head>
-			<title>Wrong PHP version!</title>
-			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-			<style type="text/css" media="screen, projection">
-				/*<![CDATA[*/
-				@import "main/css/dokeos_blue/default.css";
-				/*]]>*/
-			</style>
-		</head>
-		<body>
-			<div id="header">
-				<div id="header1"><a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a></div>
-				<div class="clear"></div>
-				<div id="header2">&nbsp;</div>
-				<div id="header3">&nbsp;</div>
-			</div>
+// Showing/hiding error codes in global error messages.
+define('SHOW_ERROR_CODES', false);
 
-			<div style="text-align: center;"><br /><br />
-					The version of scripting language on your server is wrong. Your server has to support PHP 5.x.x .<br />
-					<a href="documentation/installation_guide.html" target="_blank">Read the installation guide.</a><br /><br />
-			</div>
+// PHP version requirement.
+define('REQUIRED_PHP_VERSION', '5');
 
-			<div id="footer">
-				<div class="copyright">Platform <a href="http://www.dokeos.com" target="_blank"> Dokeos </a> &copy; 2009 </div>
-				&nbsp;
-			</div>
-		</body>
-</html>
-EOM;
-	header('Content-Type: text/html; charset=UTF-8');
-	die($error_message_php_version);
-}
-
-// Determine the directory path where this current file lies
-// This path will be useful to include the other intialisation files
-
+// Determine the directory path where this current file lies.
+// This path will be useful to include the other intialisation files.
 $includePath = dirname(__FILE__);
 
-// @todo isn't this file renamed to configuration.inc.php yet?
-// include the main Dokeos platform configuration file
+// PHP version check.
+if (!function_exists('version_compare') || version_compare(phpversion(), REQUIRED_PHP_VERSION, '<')) {
+	$global_error_code = 1;
+	// Incorrect PHP version.
+	require $includePath.'/global_error_message.inc.php';
+	die();
+}
+
+// @todo Isn't this file renamed to configuration.inc.php yet?
+// Include the main Dokeos platform configuration file.
 $main_configuration_file_path = $includePath.'/conf/configuration.php';
 
 $already_installed = false;
-
 if (file_exists($main_configuration_file_path)) {
 	require_once $main_configuration_file_path;
 	$already_installed = true;
@@ -77,99 +51,24 @@ if (file_exists($main_configuration_file_path)) {
 	$_configuration = array();
 }
 
-// include the main Dokeos platform library file
+// Include the main Dokeos platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
 
-// Assigning a variable to avoid several useless calls to the database setting.
-// Do not over-use. This is only for this script's local use.
+// Do not over-use this variable. It is only for this script's local use.
 $lib_path = api_get_path(LIBRARY_PATH);
 
-//fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI']
-api_request_uri();
-
-// Start session
-
+// Start session.
 api_session_start($already_installed);
 
-$error_message_not_installed = <<<EOM
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-		<head>
-			<title>Dokeos has been not installed!</title>
-			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-			<style type="text/css" media="screen, projection">
-				/*<![CDATA[*/
-				@import "main/css/dokeos_blue/default.css";
-				/*]]>*/
-			</style>
-		</head>
-		<body>
-			<div id="header">
-				<div id="header1"><a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a></div>
-				<div class="clear"></div>
-				<div id="header2">&nbsp;</div>
-				<div id="header3">
-					<ul id="logout">
-						<li><a href="" target="_top"><span>&nbsp;</span></a></li>
-					</ul>
-					<ul>
-						<li id="current"><a href="#"><span>Installation</span></a></li>
-					</ul>
-					<div style="clear: both;" class="clear"></div>
-				</div>
-				<div id="header4">&nbsp;</div>
-			</div>
-
-			<div style="text-align: center;"><br /><br />
-					<form action="main/install/index.php" method="get"><button class="save" type="submit" value="&nbsp;&nbsp; Click to INSTALL DOKEOS &nbsp;&nbsp;" >Click to INSTALL DOKEOS</button></form><br />
-					or <a href="documentation/installation_guide.html" target="_blank">read the installation guide</a><br /><br />
-			</div>
-
-			<div id="footer">
-				<div class="copyright">Platform <a href="http://www.dokeos.com" target="_blank"> Dokeos </a> &copy; 2009 </div>
-				&nbsp;
-			</div>
-		</body>
-</html>
-EOM;
-
-$error_message_db_problem = <<<EOM
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-		<head>
-			<title>Dokeos database unavailable!</title>
-			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-			<style type="text/css" media="screen, projection">
-				/*<![CDATA[*/
-				@import "main/css/public_admin/default.css";
-				/*]]>*/
-			</style>
-		</head>
-		<body>
-			<div id="header">
-				<div id="header1"><a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a></div>
-				<div class="clear"></div>
-				<div id="header2">&nbsp;</div>
-				<div id="header3">&nbsp;</div>
-			</div>
-EOM;
-$error_message_db_problem .= '
-			<div style="text-align: center; font-size: large; margin-bottom: 2em;"><br /><br />
-					This portal is currently experiencing database issues. Please report this to the portal administrator. Thank you for your help.</a>
-			</div>
-			<div id="footer">
-				<div class="copyright">Platform <a href="http://www.dokeos.com" target="_blank"> Dokeos </a> &copy; 2009 </div>
-				&nbsp;
-			</div>
-		</body>
-</html>';
-
-
 if (!$already_installed) {
-	header('Content-Type: text/html; charset=UTF-8');
-	//require('installedVersion.inc.php');
-	die($error_message_not_installed);
+	$global_error_code = 2;
+	// The system has not been installed yet.
+	require $includePath.'/global_error_message.inc.php';
+	die();
 }
+
+// Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
+api_request_uri();
 
 // Add the path to the pear packages to the include path
 ini_set('include_path', api_create_include_path_setting());
@@ -184,26 +83,34 @@ require_once $lib_path.'text.lib.php';
 require_once $lib_path.'security.lib.php';
 require_once $lib_path.'events.lib.inc.php';
 
-// @todo: this shouldn't be done here. It should be stored correctly during installation
+// @todo: this shouldn't be done here. It should be stored correctly during installation.
 if (empty($_configuration['statistics_database']) && $already_installed) {
 	$_configuration['statistics_database'] = $_configuration['main_database'];
 }
 
-// connect to the server database and select the main dokeos database
-
-$dokeos_database_connection = @mysql_connect($_configuration['db_host'], $_configuration['db_user'], $_configuration['db_password']) or die ($error_message_db_problem);
-
+// Connect to the server database and select the main dokeos database.
+if (!($dokeos_database_connection = @mysql_connect($_configuration['db_host'], $_configuration['db_user'], $_configuration['db_password']))) {
+	$global_error_code = 3;
+	// The database server is not available or credentials are invalid.
+	require $includePath.'/global_error_message.inc.php';
+	die();
+}
 if (!$_configuration['db_host']) {
-	die($error_message_db_problem);
+	$global_error_code = 4;
+	// A configuration option about database server is missing.
+	require $includePath.'/global_error_message.inc.php';
+	die();
 }
 
-unset($error_message_db_problem);
-unset($error_message_not_installed);
-
-// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5
+// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5.
 api_sql_query("set session sql_mode='';", __FILE__, __LINE__);
 
-$selectResult = mysql_select_db($_configuration['main_database'],$dokeos_database_connection) or die ('<center>WARNING ! SYSTEM UNABLE TO SELECT THE MAIN DOKEOS DATABASE</center>');
+if (!mysql_select_db($_configuration['main_database'], $dokeos_database_connection)) {
+	$global_error_code = 5;
+	// Connection to the main Dokeos database is impossible, it might be missing or restricted or its configuration option might be incorrect.
+	require $includePath.'/global_error_message.inc.php';
+	die();
+}
 
 /*
 --------------------------------------------
@@ -239,7 +146,7 @@ if (!empty($_configuration['multiple_access_urls'])) {
 	$request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
 	$request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
 
-	foreach($access_urls as $details) {
+	foreach ($access_urls as $details) {
 		if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
 			$_configuration['access_url'] = $details['id'];
 		}
@@ -272,21 +179,9 @@ $result = api_get_settings(null, 'list', 1);
 foreach ($result as $row) {
 	if ($_configuration['access_url'] != 1) {
 		if ($url_info['active'] == 1) {
-			if (empty($row['variable'])) {
-				$var = 0;
-			} else {
-				$var = $row['variable'];
-			}
-			if (empty($row['subkey'])) {
-				$subkey = 0;
-			} else {
-				$subkey = $row['subkey'];
-			}
-			if (empty($row['category'])) {
-				$category = 0;
-			} else {
-				$category = $row['category'];
-			}
+			$var = empty($row['variable']) ? 0 : $row['variable'];
+			$subkey = empty($row['subkey']) ? 0 : $row['subkey'];
+			$category = empty($row['category']) ? 0 : $row['category'];
 		}
 
 		if ($row['access_url_changeable'] == 1 && $url_info['active'] == 1) {
@@ -324,7 +219,7 @@ $_plugins = array();
 foreach ($result as $row) {
 	$key = $row['variable'];
 	if (is_string($_setting[$key])) {
-		$_setting[$key]=array();
+		$_setting[$key] = array();
 	}
 	$_setting[$key][] = $row['selected_value'];
 	$_plugins[$key][] = $row['selected_value'];
@@ -398,7 +293,6 @@ if (api_get_setting('server_type') == 'test') {
 		if (!is_array($_SESSION)) {
 			$_SESSION = array();
 		}
-
 		foreach ($HTTP_SESSION_VARS as $key => $val) {
 			$_SESSION[$key] = $HTTP_SESSION_VARS[$key];
 			$GLOBALS[$key] = $HTTP_SESSION_VARS[$key];
@@ -410,7 +304,6 @@ if (api_get_setting('server_type') == 'test') {
 		$_SERVER = array();
 		foreach ($HTTP_SERVER_VARS as $key => $val) {
 			$_SERVER[$key] = $HTTP_SERVER_VARS[$key];
-
 			if (!isset($_SESSION[$key]) && $key != 'includePath' && $key != 'rootSys' && $key!= 'clarolineRepositorySys' && $key!= 'lang_path' && $key!= 'extAuthSource' && $key!= 'thisAuthSource' && $key!= 'main_configuration_file_path' && $key!= 'phpDigIncCn' && $key!= 'drs') {
 				$GLOBALS[$key]=$HTTP_SERVER_VARS[$key];
 			}
@@ -544,7 +437,6 @@ if (isset($language_file)) {
 		$language_files = array_merge($language_files, $language_file);
 	}
 }
-
 
 if (is_array($language_files)) {
 	if (api_get_setting('allow_use_sub_language') == 'true') {

@@ -122,7 +122,7 @@ function show_compose_reply_to_message ($message_id, $receiver_id) {
 	global $charset;
 	$table_message = Database::get_main_table(TABLE_MESSAGE);
 	$query = "SELECT * FROM $table_message WHERE user_receiver_id=".$receiver_id." AND id='".$message_id."';";
-	$result = api_sql_query($query,__FILE__,__LINE__);
+	$result = Database::query($query,__FILE__,__LINE__);
 	$row = Database::fetch_array($result);
 
 	if (!isset($row[1])) {

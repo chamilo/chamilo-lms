@@ -84,7 +84,7 @@ class MessageManager
 		}
 		$i=0;
 		$query = "SELECT * FROM $table_message WHERE user_receiver_id=".api_get_user_id()." AND msg_status=1";
-		$result = api_sql_query($query,__FILE__,__LINE__);
+		$result = Database::query($query,__FILE__,__LINE__);
 		$i = Database::num_rows($result);
 		return $i;
 	}
@@ -108,7 +108,7 @@ class MessageManager
 	public static function get_number_of_messages () {
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$sql_query = "SELECT COUNT(*) as number_messages FROM $table_message WHERE msg_status IN (0,1) AND user_receiver_id=".api_get_user_id();
-		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
+		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
 		$result = Database::fetch_array($sql_result);
 		return $result['number_messages'];
 	}
@@ -132,7 +132,7 @@ class MessageManager
 		$sql_query = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3, msg_status as col4 FROM $table_message " .
 					 "WHERE user_receiver_id=".api_get_user_id()." AND msg_status IN (0,1)" .
 					 "ORDER BY send_date desc, col$column $direction LIMIT $from,$number_of_items";
-		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
+		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
 		$i = 0;
 		$message_list = array ();
 		while ($result = Database::fetch_row($sql_result)) {
@@ -181,7 +181,7 @@ class MessageManager
 	        $content = api_convert_encoding($content,$charset,'UTF-8');
 			//message in inbox
 			$sql = "SELECT COUNT(*) as count FROM $table_message WHERE user_sender_id = ".api_get_user_id()." AND user_receiver_id='".Database::escape_string($receiver_user_id)."' AND title = '".Database::escape_string($title)."' AND content ='".Database::escape_string($content)."' ";
-			$res_exist = api_sql_query($sql,__FILE__,__LINE__);
+			$res_exist = Database::query($sql,__FILE__,__LINE__);
 			$row_exist = Database::fetch_array($res_exist,'ASSOC');
 			if ($row_exist['count'] ==0) {
 				$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
@@ -193,8 +193,8 @@ class MessageManager
 						 " VALUES (".
 				 		 "'".api_get_user_id()."', '".Database::escape_string($receiver_user_id)."', '4', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
 				 		 ")";
-				$rs = api_sql_query($sql,__FILE__,__LINE__);
-				$result = api_sql_query($query,__FILE__,__LINE__);
+				$rs = Database::query($sql,__FILE__,__LINE__);
+				$result = Database::query($query,__FILE__,__LINE__);
 				return $result;
 			}
         } else {
@@ -208,12 +208,12 @@ class MessageManager
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$id = Database::escape_string($id);
 		$sql="SELECT COUNT(*) as count FROM $table_message WHERE id=".$id." AND msg_status<>4;";
-		$rs=api_sql_query($sql,__FILE__,__LINE__);
+		$rs=Database::query($sql,__FILE__,__LINE__);
 		$row=Database::fetch_array($rs,'ASSOC');
 		if ($row['count']==1) {
 			$query = "DELETE FROM $table_message " .
 			"WHERE user_receiver_id=".Database::escape_string($user_receiver_id)." AND id=".$id;
-			$result = api_sql_query($query,__FILE__,__LINE__);
+			$result = Database::query($query,__FILE__,__LINE__);
 			return $result;
 		} else {
 			return false;
@@ -230,19 +230,19 @@ class MessageManager
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$query = "DELETE FROM $table_message " .
 				 "WHERE user_sender_id=".Database::escape_string($user_sender_id)." AND id=".Database::escape_string($id);
-		$result = api_sql_query($query,__FILE__,__LINE__);
+		$result = Database::query($query,__FILE__,__LINE__);
 		return $result;
 	}
 	public static function update_message ($user_id, $id) {
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$query = "UPDATE $table_message SET msg_status = '0' WHERE msg_status<>4 AND user_receiver_id=".Database::escape_string($user_id)." AND id='".Database::escape_string($id)."'";
-		$result = api_sql_query($query,__FILE__,__LINE__);
+		$result = Database::query($query,__FILE__,__LINE__);
 	}
 
 	 public static function get_message_by_user ($user_id,$id) {
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$query = "SELECT * FROM $table_message WHERE user_receiver_id=".Database::escape_string($user_id)." AND id='".Database::escape_string($id)."'";
-		$result = api_sql_query($query,__FILE__,__LINE__);
+		$result = Database::query($query,__FILE__,__LINE__);
 		return $row = Database::fetch_array($result);
 	}
 	/**
@@ -255,7 +255,7 @@ class MessageManager
 	 public static function exist_message ($user_id, $id) {
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$query = "SELECT id FROM $table_message WHERE user_receiver_id=".Database::escape_string($user_id)." AND id='".Database::escape_string($id)."'";
-		$result = api_sql_query($query,__FILE__,__LINE__);
+		$result = Database::query($query,__FILE__,__LINE__);
 		$num = Database::num_rows($result);
 		if ($num>0)
 			return true;
@@ -285,7 +285,7 @@ class MessageManager
 					 "WHERE user_sender_id=".api_get_user_id()." AND msg_status=4 " .
 					 "ORDER BY col$column $direction LIMIT $from,$number_of_items";
 
-		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
+		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
 		$i = 0;
 		$message_list = array ();
 		while ($result = Database::fetch_row($sql_result)) {
@@ -327,7 +327,7 @@ class MessageManager
 	 public static function get_number_of_messages_sent () {
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$sql_query = "SELECT COUNT(*) as number_messages FROM $table_message WHERE msg_status=4 AND user_sender_id=".api_get_user_id();
-		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
+		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
 		$result = Database::fetch_array($sql_result);
 		return $result['number_messages'];
 	}
@@ -336,14 +336,14 @@ class MessageManager
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		if (isset($_GET['id_send']) && is_numeric($_GET['id_send'])) {
 			$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".Database::escape_string($_GET['id_send'])." AND msg_status=4;";
-			$result = api_sql_query($query,__FILE__,__LINE__);
+			$result = Database::query($query,__FILE__,__LINE__);
 		    $path='outbox.php';
 		} else {
 			if (is_numeric($_GET['id'])) {
 				$query = "UPDATE $table_message SET msg_status = '0' WHERE user_receiver_id=".api_get_user_id()." AND id='".Database::escape_string($_GET['id'])."';";
-				$result = api_sql_query($query,__FILE__,__LINE__);
+				$result = Database::query($query,__FILE__,__LINE__);
 				$query = "SELECT * FROM $table_message WHERE msg_status<>4 AND user_receiver_id=".api_get_user_id()." AND id='".Database::escape_string($_GET['id'])."';";
-				$result = api_sql_query($query,__FILE__,__LINE__);
+				$result = Database::query($query,__FILE__,__LINE__);
 			}
 			$path='inbox.php';
 		}
@@ -400,7 +400,7 @@ class MessageManager
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		if (is_numeric($_GET['id_send'])) {
 			$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".Database::escape_string($_GET['id_send'])." AND msg_status=4;";
-			$result = api_sql_query($query,__FILE__,__LINE__);
+			$result = Database::query($query,__FILE__,__LINE__);
 		}
 		$path='outbox.php';
 
@@ -454,7 +454,7 @@ class MessageManager
 	public static function get_user_id_by_email ($user_email) {
 		$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 		$sql='SELECT user_id FROM '.$tbl_user.' WHERE email="'.Database::escape_string($user_email).'";';
-		$rs=api_sql_query($sql,__FILE__,__LINE__);
+		$rs=Database::query($sql,__FILE__,__LINE__);
 		$row=Database::fetch_array($rs,'ASSOC');
 		if (isset($row['user_id'])) {
 			return $row['user_id'];

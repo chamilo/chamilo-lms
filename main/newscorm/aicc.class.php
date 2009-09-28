@@ -230,7 +230,7 @@ class aicc extends learnpath {
 
      	//The previous method wasn't safe to get the database name, so do it manually with the course_code
      	$sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE code='$course_code'";
-        $res = api_sql_query($sql,__FILE__,__LINE__);
+        $res = Database::query($sql,__FILE__,__LINE__);
         if(Database::num_rows($res)<1){ error_log('New LP - Database for '.$course_code.' not found '.__FILE__.' '.__LINE__,0);return -1;}
         $row = Database::fetch_array($res);
         $dbname = Database::get_course_table_prefix().$row['db_name'].Database::get_database_glue();
@@ -238,7 +238,7 @@ class aicc extends learnpath {
 		$new_lp = Database::get_course_table(TABLE_LP_MAIN);
 		$new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
     	$get_max = "SELECT MAX(display_order) FROM $new_lp";
-    	$res_max = api_sql_query($get_max);
+    	$res_max = Database::query($get_max);
     	if(Database::num_rows($res_max)<1){
     		$dsp = 1;
     	}else{
@@ -257,7 +257,7 @@ class aicc extends learnpath {
 				"'".$this->subdir."', 0, 'embedded', '".$this->config_encoding."'," .
 				"'aicc_api.php','".$this->course_creator."',$dsp)";
 		if($this->debug>2){error_log('New LP - In import_aicc(), inserting path: '. $sql,0);}
-		$res = api_sql_query($sql);
+		$res = Database::query($sql);
 		$lp_id = Database::get_last_insert_id();
 		$this->lp_id = $lp_id;
 		api_item_property_update(api_get_course_info($course_code),TOOL_LEARNPATH,$this->lp_id,'LearnpathAdded',api_get_user_id());
@@ -296,13 +296,13 @@ class aicc extends learnpath {
 					"$parent, $previous, 0, " .
 					"'$prereq', 0" .
 					")";
-			$res_item = api_sql_query($sql_item);
+			$res_item = Database::query($sql_item);
 			if($this->debug>1){error_log('New LP - In aicc::import_aicc() - inserting item : '.$sql_item.' : '.mysql_error(),0);}
 			$item_id = Database::get_last_insert_id();
 			//now update previous item to change next_item_id
 			if($previous != 0){
 				$upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE id = $previous";
-				$upd_res = api_sql_query($upd);
+				$upd_res = Database::query($upd);
 				//update previous item id
 			}
 			$previous = $item_id;
@@ -563,7 +563,7 @@ class aicc extends learnpath {
 	 	if($lp!=0){
 	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET content_local = '$proxy' WHERE id = ".$lp;
-	 		$res = api_sql_query($sql);
+	 		$res = Database::query($sql);
 	 		return $res;
 	 	}else{
 	 		return false;
@@ -580,7 +580,7 @@ class aicc extends learnpath {
 	 	if($lp!=0){
 	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET theme = '$theme' WHERE id = ".$lp;
-	 		$res = api_sql_query($sql);
+	 		$res = Database::query($sql);
 	 		return $res;
 	 	}else{
 	 		return false;
@@ -597,7 +597,7 @@ class aicc extends learnpath {
 	 	if($lp!=0){
 	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' WHERE id = ".$lp;
-	 		$res = api_sql_query($sql);
+	 		$res = Database::query($sql);
 	 		return $res;
 	 	}else{
 	 		return false;
@@ -614,7 +614,7 @@ class aicc extends learnpath {
 	 	if($lp!=0){
 	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET author = '$author' WHERE id = ".$lp;
-	 		$res = api_sql_query($sql);
+	 		$res = Database::query($sql);
 	 		return $res;
 	 	}else{
 	 		return false;
@@ -633,7 +633,7 @@ class aicc extends learnpath {
 	 	if($lp!=0){
 	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET content_maker = '$maker' WHERE id = ".$lp;
-	 		$res = api_sql_query($sql);
+	 		$res = Database::query($sql);
 	 		return $res;
 	 	}else{
 	 		return false;
@@ -672,7 +672,7 @@ class aicc extends learnpath {
 		$_course = Database::get_course_info(api_get_course_id());
 
 		$sql = "SELECT * FROM $tbl_lp WHERE id=".$lp_id;
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = mysql_fetch_array($result);
 		$LPname = $row['path'];
 		$list = split('/',$LPname);

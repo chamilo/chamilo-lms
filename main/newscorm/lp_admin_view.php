@@ -101,7 +101,7 @@ if ( (! $is_allowed_to_edit) or ($isStudentView) )
 //from here on, we are admin because of the previous condition, so don't check anymore
 
 $sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id";
-$result=api_sql_query($sql_query);
+$result=Database::query($sql_query);
 $therow=Database::fetch_array($result);
 
 //$admin_output = '';
@@ -213,7 +213,7 @@ if (isset($_POST['save_audio']))
 	}
 	if (count($lp_items_to_remove_audio)>0) {
 		$sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE id IN (".$in.")";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 	}
 
 	// uploading the audio files
@@ -274,7 +274,7 @@ if (isset($_POST['save_audio']))
 			// store the mp3 file in the lp_item table
 			$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 			$sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file)."' WHERE id = '".Database::escape_string($lp_item_id)."'";
-			api_sql_query($sql_insert_audio, __FILE__, __LINE__);
+			Database::query($sql_insert_audio, __FILE__, __LINE__);
 
 		}
 	}

@@ -420,7 +420,7 @@ function mdstore($allow_create)
 
     define('MDS_TABLE', Database::get_course_table(TABLE_METADATA));
 
-    if (!api_sql_query("SELECT eid FROM " . MDS_TABLE))
+    if (!Database::query("SELECT eid FROM " . MDS_TABLE))
     if ($allow_create)
         $this->_query("CREATE TABLE " . MDS_TABLE . " (    " .
                 "eid varchar(250) NOT NULL," .      // entry-id, e.g. doc.1
@@ -448,7 +448,7 @@ function _query($sql, $eid = '', $sep = '')
     if ($eid) $sql .= $sep ? $this->_coldatstart('eid', $eid . $sep) :
         $this->_coldat('eid', $eid);
 
-    return api_sql_query($sql, __FILE__, __LINE__);
+    return Database::query($sql, __FILE__, __LINE__);
 }
 
 }

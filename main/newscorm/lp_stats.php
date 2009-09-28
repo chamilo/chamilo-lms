@@ -52,7 +52,7 @@ if($origin != 'tracking') {
     $TBL_LP = Database :: get_course_table(TABLE_LP_MAIN);
     $sql = "SELECT default_encoding FROM $TBL_LP " .
                 "WHERE id = '".(int)$_GET['lp_id']."'";
-    $res = api_sql_query($sql, __FILE__, __LINE__);
+    $res = Database::query($sql, __FILE__, __LINE__);
     if (Database :: num_rows($res) > 0) {
         $row = Database::fetch_array($res);
         $lp_charset = $row['default_encoding'];
@@ -100,7 +100,7 @@ $tbl_stats_attempts= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATT
 $tbl_quiz_questions= Database :: get_course_table(TABLE_QUIZ_QUESTION);
 $sql = "SELECT max(view_count) FROM $TBL_LP_VIEW " .
 "WHERE lp_id = $lp_id AND user_id = '" . $user_id . "'";
-$res = api_sql_query($sql, __FILE__, __LINE__);
+$res = Database::query($sql, __FILE__, __LINE__);
 $view = '';
 $num = 0;
 if (Database :: num_rows($res) > 0) {
@@ -130,7 +130,7 @@ if (isset($_GET['lp_id']) && isset($_GET['my_lp_id'])) {
 	$clean_lp_id = Database::escape_string($_GET['lp_id']);
 	$clean_course_code = Database :: escape_string($course_code);
 	$sql_path = "SELECT path FROM $TBL_LP_ITEM WHERE id = '$clean_lp_item_id' AND lp_id = '$clean_lp_id'";
-	$res_path = api_sql_query($sql_path,__FILE__,__LINE__);
+	$res_path = Database::query($sql_path,__FILE__,__LINE__);
 	$row_path = Database::fetch_array($res_path);
 
 	if (Database::num_rows($res_path) > 0 ){
@@ -186,7 +186,7 @@ if (is_array($list) && count($list) > 0){
 			" ORDER BY iv.view_count $qry_order ";
 		}
 
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$num = Database :: num_rows($result);
 		$time_for_total = 'NaN';
 
@@ -198,7 +198,7 @@ if (is_array($list) && count($list) > 0){
 				$my_path = Database::escape_string($row['path']);
 
 				$sql = "SELECT results_disabled FROM $TBL_QUIZ WHERE id ='".(int)$my_path."'";
-				$res_result_disabled = api_sql_query($sql,__FILE__,__LINE__);
+				$res_result_disabled = Database::query($sql,__FILE__,__LINE__);
 				$row_result_disabled = Database::fetch_row($res_result_disabled);
 
 				if (Database::num_rows($res_result_disabled) > 0 && (int)$row_result_disabled[0]===1) {
@@ -383,7 +383,7 @@ if (is_array($list) && count($list) > 0){
 				$my_path = Database::escape_string($my_path);
 
 				$sql = "SELECT results_disabled FROM $TBL_QUIZ WHERE id ='".(int)$my_path."'";
-				$res_result_disabled = api_sql_query($sql,__FILE__,__LINE__);
+				$res_result_disabled = Database::query($sql,__FILE__,__LINE__);
 				$row_result_disabled = Database::fetch_row($res_result_disabled);
 
 				if (Database::num_rows($res_result_disabled) > 0 && (int)$row_result_disabled[0]===1) {
@@ -442,7 +442,7 @@ if (is_array($list) && count($list) > 0){
 				$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC limit 1';
 			}
 
-			$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);
+			$resultLastAttempt = Database::query($sql_last_attempt, __FILE__, __LINE__);
 			$num = Database :: num_rows($resultLastAttempt);
 			if ($num > 0) {
 				while ($rowLA = Database :: fetch_array($resultLastAttempt)) {
@@ -474,11 +474,11 @@ if (is_array($list) && count($list) > 0){
 						// get score and total time from last attempt of a exercise en lp
 						$sql = "SELECT score FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '".(int)$my_id."' and lp_view_id = '".(int)$my_lp_view_id."'
 								ORDER BY view_count DESC limit 1";
-						$res_score = api_sql_query($sql,__FILE__,__LINE__);
+						$res_score = Database::query($sql,__FILE__,__LINE__);
 						$row_score = Database::fetch_array($res_score);
 
 						$sql = "SELECT SUM(total_time) as total_time FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '".(int)$my_id."' and lp_view_id = '".(int)$my_lp_view_id."'";
-						$res_time = api_sql_query($sql,__FILE__,__LINE__);
+						$res_time = Database::query($sql,__FILE__,__LINE__);
 						$row_time = Database::fetch_array($res_time);
 
 						if (Database::num_rows($res_score) > 0 && Database::num_rows($res_time) > 0) {
@@ -494,7 +494,7 @@ if (is_array($list) && count($list) > 0){
 						$sql = "SELECT SUM(t.ponderation) as maxscore from ( SELECT distinct question_id, marks,ponderation FROM $tbl_stats_attempts as at " .
 							  "INNER JOIN  $tbl_quiz_questions as q  on(q.id = at.question_id) where exe_id ='$id_last_attempt' ) as t";
 
-						$result = api_sql_query($sql, __FILE__, __LINE__);
+						$result = Database::query($sql, __FILE__, __LINE__);
 						$row_max_score = Database :: fetch_array($result);
 						$maxscore = $row_max_score['maxscore'];
 					}
@@ -540,7 +540,7 @@ if (is_array($list) && count($list) > 0){
 						$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($_GET['course']) . '" AND status <> "incomplete"  ORDER BY exe_date DESC ';
 					}
 
-					$resultLastAttempt = api_sql_query($sql_last_attempt, __FILE__, __LINE__);
+					$resultLastAttempt = Database::query($sql_last_attempt, __FILE__, __LINE__);
 					$num = Database :: num_rows($resultLastAttempt);
 					if ($num > 0) {
 						if (isset($_GET['extend_attempt']) && $_GET['extend_attempt'] == 1 && (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)  ) {
@@ -642,7 +642,7 @@ if (is_array($list) && count($list) > 0){
 			// attempts list by exercise
 			if ( (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id ) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)) {
 
-					$res_attempts = api_sql_query($sql_attempts,__FILE__,__LINE__);
+					$res_attempts = Database::query($sql_attempts,__FILE__,__LINE__);
 					$num_attempts = Database :: num_rows($res_attempts);
 					if ($row['item_type'] === 'quiz') {
 						if ($num_attempts > 0) {

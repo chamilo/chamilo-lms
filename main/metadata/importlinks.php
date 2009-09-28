@@ -86,7 +86,7 @@ function get_cat($catname)
     global $_course; $cateq = "category_title='". addslashes($catname) . "'";
 
     $linkcat_table = Database::get_course_table(TABLE_LINK_CATEGORY);
-    $result = api_sql_query("SELECT id FROM $linkcat_table WHERE " . $cateq, __FILE__, __LINE__);
+    $result = Database::query("SELECT id FROM $linkcat_table WHERE " . $cateq, __FILE__, __LINE__);
 
     if (mysql_num_rows($result) >= 1 && ($row = mysql_fetch_array($result)))
         return $row['id'];  // several categories with same name: take first
@@ -113,7 +113,7 @@ if (isset($lcn))  // category_title
     if (($lci = get_cat($lcn)) !== FALSE)
     {
         $link_table = Database::get_course_table(TABLE_LINK);
-        $result = api_sql_query("SELECT id FROM $link_table WHERE category_id=" . $lci, __FILE__, __LINE__);
+        $result = Database::query("SELECT id FROM $link_table WHERE category_id=" . $lci, __FILE__, __LINE__);
 
         while ($row = mysql_fetch_array($result))
         {
@@ -325,7 +325,7 @@ if (count($perCat)) foreach ($perCat as $cat => $number)
     $perCat[$cat] = '(' . htmlspecialchars($cat, ENT_QUOTES, $charset) . ')';
 
 $linkcat_table = Database::get_course_table(TABLE_LINK_CATEGORY);
-$result = api_sql_query("SELECT category_title FROM $linkcat_table", __FILE__, __LINE__);
+$result = Database::query("SELECT category_title FROM $linkcat_table", __FILE__, __LINE__);
 
 while ($row = mysql_fetch_array($result))
 {

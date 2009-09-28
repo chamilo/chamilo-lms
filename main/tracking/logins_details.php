@@ -116,7 +116,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
                         AND `gu`.`group_id` = '$_gid'
                         AND `u`.`user_id` = '$uInfo'";
     }
-    $query = api_sql_query($sql,__FILE__,__LINE__);
+    $query = Database::query($sql,__FILE__,__LINE__);
     $res = @mysql_fetch_array($query);
     if(is_array($res))
     {

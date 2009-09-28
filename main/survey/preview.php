@@ -118,7 +118,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='
 		$sql = "SELECT * FROM $table_survey_question
 			WHERE survey_id = '".Database::escape_string($survey_id)."'
 				ORDER BY sort ASC";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		while ($row = Database::fetch_array($result))
 		{
@@ -143,7 +143,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='
 					AND survey_question.question_id IN (".Database::escape_string(implode(',',$paged_questions[$_GET['show']])).")
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			$question_counter_max = Database::num_rows($result);
 			$counter = 0;
 			$limit=0;
@@ -172,7 +172,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='
 	}
 	// selecting the maximum number of pages
 	$sql = "SELECT * FROM $table_survey_question WHERE type='".Database::escape_string('pagebreak')."' AND survey_id='".Database::escape_string($survey_id)."'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	$numberofpages = Database::num_rows($result) + 1;
 	// Displaying the form with the questions
 	if (isset($_GET['show']))

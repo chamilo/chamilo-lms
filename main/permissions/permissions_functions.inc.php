@@ -42,7 +42,7 @@ function store_permissions($content, $id)
 
 	// We first delete all the existing permissions for that user/group/role
 	$sql="DELETE FROM $table  WHERE $id_field = '".mysql_real_escape_string($id)."'";
-	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$result=Database::query($sql, __FILE__, __LINE__);
 
 	// looping through the post values to find the permission (containing the string permission* )
 	foreach ($_POST as $key => $value)
@@ -51,7 +51,7 @@ function store_permissions($content, $id)
 		{
 			list($brol,$tool,$action)=explode("*",$key);
 			$sql="INSERT INTO $table ($id_field,tool,action) VALUES ('".mysql_real_escape_string($id)."','".mysql_real_escape_string($tool)."','".mysql_real_escape_string($action)."')";
-			$result=api_sql_query($sql, __FILE__, __LINE__);
+			$result=Database::query($sql, __FILE__, __LINE__);
 
 
 		}
@@ -101,7 +101,7 @@ function store_one_permission($content, $action, $id, $tool,$permission)
 	if($action=='grant')
 	{
 		$sql="INSERT INTO $table ($id_field,tool,action) VALUES ('".mysql_real_escape_string($id)."','".mysql_real_escape_string($tool)."','".mysql_real_escape_string($permission)."')";
-		$result=api_sql_query($sql, __FILE__, __LINE__);
+		$result=Database::query($sql, __FILE__, __LINE__);
 		if($result)
 		{
 			$result_message=get_lang('PermissionGranted');
@@ -110,7 +110,7 @@ function store_one_permission($content, $action, $id, $tool,$permission)
 	if($action=='revoke')
 	{
 		$sql="DELETE FROM $table WHERE $id_field = '".mysql_real_escape_string($id)."' AND tool='".mysql_real_escape_string($tool)."' AND action='".mysql_real_escape_string($permission)."'";
-		$result=api_sql_query($sql, __FILE__, __LINE__);
+		$result=Database::query($sql, __FILE__, __LINE__);
 		if($result)
 		{
 			$result_message=get_lang('PermissionRevoked');
@@ -162,7 +162,7 @@ function get_permissions($content, $id)
 	$sql="
 		SELECT * FROM " . $table . "
 		WHERE " . $id_field . "='" . mysql_real_escape_string($id) . "'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 
 	while($row = mysql_fetch_array($result))
 		$currentpermissions[$row['tool']][] = $row['action'];
@@ -419,7 +419,7 @@ function display_role_list($current_course_roles, $current_platform_roles)
 
 	// platform roles
 	$sql="SELECT * FROM $platform_roles_table";
-	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$result=Database::query($sql, __FILE__, __LINE__);
 	while ($row=mysql_fetch_array($result))
 	{
 		if(in_array($row['role_id'], $current_platform_roles))
@@ -448,7 +448,7 @@ function display_role_list($current_course_roles, $current_platform_roles)
 
 	// course roles
 	$sql="SELECT * FROM $coures_roles_table";
-	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$result=Database::query($sql, __FILE__, __LINE__);
 	while ($row=mysql_fetch_array($result))
 	{
 		if(in_array($row['role_id'], $current_course_roles))
@@ -504,7 +504,7 @@ function get_roles($content,$id, $scope='course')
 	$current_roles=array();
 	//$sql="SELECT role.role_id FROM $table role_group_user, $table_role role WHERE role_group_user.$id_field = '$id' AND role_group_user.role_id=role.role_id AND role_group_user.scope='".$scope."'";$sql="SELECT role.role_id FROM $table role_group_user, $table_role role WHERE role_group_user.$id_field = '$id' AND role_group_user.role_id=role.role_id AND role_group_user.scope='".$scope."'";
 	$sql="SELECT role_id FROM $table WHERE $id_field = '$id' AND scope='".$scope."'";
-	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$result=Database::query($sql, __FILE__, __LINE__);
 	while ($row=mysql_fetch_array($result))
 	{
 		$current_roles[]=$row['role_id'];
@@ -532,7 +532,7 @@ function get_all_roles($content='course')
 
 	$current_roles=array();
 	$sql="SELECT * FROM $table_role";
-	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$result=Database::query($sql, __FILE__, __LINE__);
 	while ($row=mysql_fetch_array($result))
 	{
 		$roles[]=$row;
@@ -594,7 +594,7 @@ function get_roles_permissions($content,$id, $scope='course')
 			role_group_user.role_id = role.role_id AND
 			role.role_id = role_permissions.role_id";
 
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 
 	while($row=mysql_fetch_array($result))
 		$current_role_permissions[$row['tool']][]=$row['action'];
@@ -633,7 +633,7 @@ function assign_role($content, $action, $id, $role_id, $scope='course')
 	if($action=='grant')
 	{
 		$sql="INSERT INTO $table (role_id, scope,  $id_field) VALUES ('".mysql_real_escape_string($role_id)."','".mysql_real_escape_string($scope)."','".mysql_real_escape_string($id)."')";
-		$result=api_sql_query($sql, __FILE__, __LINE__);
+		$result=Database::query($sql, __FILE__, __LINE__);
 		if($result)
 		{
 			$result_message=get_lang('RoleGranted');
@@ -642,7 +642,7 @@ function assign_role($content, $action, $id, $role_id, $scope='course')
 	if($action=='revoke')
 	{
 		$sql="DELETE FROM $table WHERE $id_field = '".mysql_real_escape_string($id)."' AND role_id='".mysql_real_escape_string($role_id)."'";
-		$result=api_sql_query($sql, __FILE__, __LINE__);
+		$result=Database::query($sql, __FILE__, __LINE__);
 		if($result)
 		{
 			$result_message=get_lang('RoleRevoked');

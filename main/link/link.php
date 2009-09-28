@@ -268,7 +268,7 @@ if(api_get_setting('search_enabled')=='true') {
 
 
 		$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
-		$resultcategories = api_sql_query($sqlcategories,__FILE__,__LINE__);
+		$resultcategories = Database::query($sqlcategories,__FILE__,__LINE__);
 
 		if (Database::num_rows($resultcategories)) {
 			echo '	<div class="row">
@@ -447,7 +447,7 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 	//making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
 	//number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
 	$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
-	$resultcategories=api_sql_query($sqlcategories);
+	$resultcategories=Database::query($sqlcategories);
 	$aantalcategories = Database::num_rows($resultcategories);
 	if ($aantalcategories > 0) {
 		echo Display::return_icon('remove.gif', $shownone)." <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
@@ -466,12 +466,12 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 
 	//Starting the table which contains the categories
 	$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
-	$resultcategories=api_sql_query($sqlcategories);
+	$resultcategories=Database::query($sqlcategories);
 
 	echo '<table class="data_table">';
 	// displaying the links which have no category (thus category = 0 or NULL), if none present this will not be displayed
 	$sqlLinks = "SELECT * FROM ".$tbl_link." WHERE category_id=0 or category_id IS NULL";
-	$result = api_sql_query($sqlLinks);
+	$result = Database::query($sqlLinks);
 	$numberofzerocategory=Database::num_rows($result);
 	if ($numberofzerocategory!==0) {
 		echo "<tr><th style=\"font-weight: bold; text-align:left;padding-left: 10px;\"><i>".get_lang('General')."</i></th></tr>";

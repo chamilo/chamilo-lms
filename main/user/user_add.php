@@ -91,7 +91,7 @@ if($register)
 
 	if($dataChecked)
 	{
-		$result=api_sql_query("SELECT user_id,
+		$result=Database::query("SELECT user_id,
 		                       (username='$username_form') AS loginExists,
 		                       (lastname='$lastname_form' AND firstname='$firstname_form' AND email='$email_form') AS userExists
 		                     FROM $tbl_user
@@ -146,7 +146,7 @@ if($register)
 		//if ($userPasswordCrypted) $pw = md5($password_form);
 		//else                      $pw = $password_form;
 		$pw = api_get_encrypted_password($password_form);
-		$result = api_sql_query("INSERT INTO $tbl_user
+		$result = Database::query("INSERT INTO $tbl_user
 		                       SET lastname       = '$lastname_form',
 		                           firstname    = '$firstname_form',
 		                           username  = '$username_form',
@@ -179,7 +179,7 @@ if($register)
 		 * if 0, the user is already registered to the course
 		 */
 
-		if (api_sql_query("INSERT INTO $tbl_courseUser
+		if (Database::query("INSERT INTO $tbl_courseUser
 						SET user_id     = '$userId',
 							course_code  = '$currentCourseID',
 							status      = '$admin_form',

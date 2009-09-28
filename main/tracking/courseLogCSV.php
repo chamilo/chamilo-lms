@@ -58,7 +58,7 @@ if ($_GET['scormcontopen'])
 	$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	$contopen = (int) $_GET['scormcontopen'];
 	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	$row = Database::fetch_array($res);
 	$lp_charset = $row['default_encoding'];
 	//header('Content-Type: text/html; charset='. $row['default_encoding']);
@@ -427,7 +427,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
         $sql = "SELECT id, name
 					FROM $tbl_learnpath_main";
                     //WHERE dokeosCourse='$_cid'"; we are using a table inside the course now, so no need for course id
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 
 	    $ar=Database::fetch_array($result);
 
@@ -451,7 +451,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 							"ON u.user_id = sd.user_id " .
 		                    "WHERE sd.lp_id=$contentId group by u.user_id";
 		            //error_log($sql2,0);
-					$result2=api_sql_query($sql2,__FILE__,__LINE__);
+					$result2=Database::query($sql2,__FILE__,__LINE__);
 
 					if(mysql_num_rows($result2)>0){
 
@@ -481,7 +481,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 										"INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
 										"INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
 										"WHERE (v.user_id=$studentId and v.lp_id=$contentId) ORDER BY v.id, i.id";
-								$result3=api_sql_query($sql3,__FILE__,__LINE__);
+								$result3=Database::query($sql3,__FILE__,__LINE__);
 							    $ar3=Database::fetch_array($result3);
 						        $title_line .= get_lang('ScormTitleColumn').";".get_lang('ScormStatusColumn').";".get_lang('ScormScoreColumn').";".get_lang('ScormTimeColumn');
 								while ($ar3['status'] != '') {

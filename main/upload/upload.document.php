@@ -86,7 +86,7 @@ if(isset($_FILES['user_upload']))
         	$ct = '';
         	if ($new_comment) $ct .= ", comment='$new_comment'";
         	if ($new_title)   $ct .= ", title='$new_title'";
-        	api_sql_query("UPDATE $table_document SET" . substr($ct, 1) .
+        	Database::query("UPDATE $table_document SET" . substr($ct, 1) .
         	    " WHERE id = '$docid'", __FILE__, __LINE__);
     	}
 		//check for missing images in html files

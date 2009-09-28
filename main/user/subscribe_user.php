@@ -243,7 +243,7 @@ function get_number_of_users() {
 		$keyword = Database::escape_string($_REQUEST['keyword']);
 		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'   OR email LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
 	}
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	$result = Database::num_rows($res);
 	return $result;
 }
@@ -375,7 +375,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	}
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	$users = array ();
 	while ($user = Database::fetch_row($res)) {
 		$users[] = $user;

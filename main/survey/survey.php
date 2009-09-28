@@ -76,12 +76,12 @@ if($is_survey_type_1 && ($_GET['action']=='addgroup')||($_GET['action']=='delete
 	{
 		if(!empty($_POST['group_id']))
 		{
-			api_sql_query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\' WHERE id = \''.Database::escape_string($_POST['group_id']).'\'');
+			Database::query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\' WHERE id = \''.Database::escape_string($_POST['group_id']).'\'');
 			$sendmsg = 'GroupUpdatedSuccessfully';
 		}
 		elseif(!empty($_POST['name']))
 		{
-			api_sql_query('INSERT INTO '.$table_survey_question_group.' (name,description,survey_id) values (\''.Database::escape_string($_POST['name']).'\',\''.Database::escape_string($_POST['description']).'\',\''.Database::escape_string($survey_id).'\') ');
+			Database::query('INSERT INTO '.$table_survey_question_group.' (name,description,survey_id) values (\''.Database::escape_string($_POST['name']).'\',\''.Database::escape_string($_POST['description']).'\',\''.Database::escape_string($survey_id).'\') ');
 			$sendmsg = 'GroupCreatedSuccessfully';
 		} else {
 			$sendmsg = 'GroupNeedName';
@@ -89,7 +89,7 @@ if($is_survey_type_1 && ($_GET['action']=='addgroup')||($_GET['action']=='delete
 	}
 
 	if($_GET['action']=='deletegroup'){
-		api_sql_query('DELETE FROM '.$table_survey_question_group.' WHERE id = '.Database::escape_string($_GET['gid']).' and survey_id = '.Database::escape_string($survey_id));
+		Database::query('DELETE FROM '.$table_survey_question_group.' WHERE id = '.Database::escape_string($_GET['gid']).' and survey_id = '.Database::escape_string($survey_id));
 		$sendmsg = 'GroupDeletedSuccessfully';
 	}
 
@@ -176,7 +176,7 @@ echo '	</tr>';
 // Displaying the table contents with all the questions
 $question_counter = 1;
 $sql = "SELECT * FROM $table_survey_question_group WHERE survey_id = '".Database::escape_string($survey_id)."' ORDER BY id";
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 $groups = array();
 while($row = Database::fetch_array($result)) {
     $groups[$row['id']] = $row['name'];
@@ -188,7 +188,7 @@ $sql = "SELECT survey_question.*, count(survey_question_option.question_option_i
 			WHERE survey_question.survey_id = '".Database::escape_string($survey_id)."'
 			GROUP BY survey_question.question_id
 			ORDER BY survey_question.sort ASC";
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 $question_counter_max = Database::num_rows($result);
 while ($row = Database::fetch_array($result,'ASSOC')) {
 	echo '<tr>';
@@ -256,7 +256,7 @@ if($is_survey_type_1)
 	echo '<form action="survey.php?action=addgroup&survey_id='.$survey_id.'" method="post">';
 	if($_GET['action']=='editgroup') {
 		$sql = 'SELECT name,description FROM '.$table_survey_question_group.' WHERE id = '.Database::escape_string($_GET['gid']).' AND survey_id = '.Database::escape_string($survey_id).' limit 1';
-		$rs = api_sql_query($sql,__FILE__,__LINE__);
+		$rs = Database::query($sql,__FILE__,__LINE__);
 		$editedrow = Database::fetch_array($rs,'ASSOC');
 
 		echo	'<input type="text" maxlength="20" name="name" value="'.$editedrow['name'].'" size="10" disabled>';
@@ -279,7 +279,7 @@ if($is_survey_type_1)
 
 	$sql = 'SELECT id,name,description FROM '.$table_survey_question_group.' WHERE survey_id = '.Database::escape_string($survey_id).' ORDER BY name';
 
-	$rs = api_sql_query($sql,__FILE__,__LINE__);
+	$rs = Database::query($sql,__FILE__,__LINE__);
 	while($row = Database::fetch_array($rs,ASSOC)){
 		$grouplist .= '<tr><td>'.$row['name'].'</td><td>'.$row['description'].'</td><td>'.
 		'<a href="survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=editgroup">'.

@@ -253,7 +253,7 @@ function save_note($values) {
 				'".Database::escape_string(date('Y-m-d H:i:s'))."',
 				'".Database::escape_string(date('Y-m-d H:i:s'))."',
 				'0')";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	// display the feedback message
 	Display::display_confirmation_message(get_lang('NoteAdded'));
 }
@@ -267,7 +267,7 @@ function get_note_information($notebook_id) {
 					description 		AS note_comment
 			   FROM $t_notebook
 			   WHERE notebook_id = '".Database::escape_string($notebook_id)."' ";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	return Database::fetch_array($result);
 }
 

@@ -111,7 +111,7 @@ if($lp_found == false || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id
 			$sel = "SELECT * FROM $lp_table WHERE id = $lp_id";
 
 			if($debug>0) error_log('New LP - querying '.$sel,0);
-			$res = api_sql_query($sel);
+			$res = Database::query($sel);
 			if(Database::num_rows($res)) {
 				$row = Database::fetch_array($res);
 				$type = $row['lp_type'];

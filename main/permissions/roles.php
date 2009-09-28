@@ -42,22 +42,22 @@ if (isset($_GET['action']) AND isset($_GET['role_id']) AND $_GET['action']=='del
 	//deleting the assignments fo this role: users
 	$table=Database::get_course_table(TABLE_ROLE_USER);
 	$sql="DELETE FROM $table WHERE role_id='".mysql_real_escape_string($_GET['role_id'])."'";
-	$result=api_sql_query($sql, __LINE__, __FILE__);
+	$result=Database::query($sql, __LINE__, __FILE__);
 
 	// deleting the assignments of this role: groups
 	$table=Database::get_course_table(TABLE_ROLE_GROUP);
 	$sql="DELETE FROM $table WHERE role_id='".mysql_real_escape_string($_GET['role_id'])."'";
-	$result=api_sql_query($sql, __LINE__, __FILE__);
+	$result=Database::query($sql, __LINE__, __FILE__);
 
 	// deleting the permissions of this role
 	$table=Database::get_course_table(TABLE_ROLE_PERMISSION);
 	$sql="DELETE FROM $table WHERE role_id='".mysql_real_escape_string($_GET['role_id'])."'";
-	$result=api_sql_query($sql, __LINE__, __FILE__);
+	$result=Database::query($sql, __LINE__, __FILE__);
 
 	// deleting the role
 	$table_role=Database::get_course_table(TABLE_ROLE);
 	$sql="DELETE FROM $table_role WHERE role_id='".mysql_real_escape_string($_GET['role_id'])."'";
-	$result=api_sql_query($sql, __LINE__, __FILE__);
+	$result=Database::query($sql, __LINE__, __FILE__);
 
 	$result_message=get_lang('RoleDeleted');
 }

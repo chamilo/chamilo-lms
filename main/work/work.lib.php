@@ -61,7 +61,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 		// make all files visible or invisible
 		$work_table 		= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 		$sql_query = "SHOW COLUMNS FROM ".$work_table." LIKE 'accepted'";
-		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
+		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
 
 		if ($sql_result) {
 			$columnStatus = Database::fetch_array($sql_result);
@@ -161,7 +161,7 @@ function display_user_link($user_id, $name='')
 
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		$sql="SELECT * FROM $table_user WHERE user_id='".Database::escape_string($user_id)."'";
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 		$row=Database::fetch_array($result);
 		if ($name=='') {
 			return "<a href=\"../user/userInfo.php?cidReq=".api_get_course_id()."&gradebook=$gradebook&origin=&uInfo=".$row['user_id']."\">".api_get_person_name($row['firstname'], $row['lastname'])."</a>";
@@ -306,8 +306,8 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 
 	}
 
-	$sql_result = api_sql_query($sql_get_publications_list,__FILE__,__LINE__);
-	$sql_result_num = api_sql_query($sql_get_publications_num,__FILE__,__LINE__);
+	$sql_result = Database::query($sql_get_publications_list,__FILE__,__LINE__);
+	$sql_result_num = Database::query($sql_get_publications_num,__FILE__,__LINE__);
 
 	$row=Database::fetch_array($sql_result_num);
 	$count_files=$row[0];
@@ -386,7 +386,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 						$sql_select_directory.=" work.post_group_id = '0' ";
 					}
 		$sql_select_directory.=" AND work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $session_condition";
-		$result=api_sql_query($sql_select_directory,__FILE__,__LINE__);
+		$result=Database::query($sql_select_directory,__FILE__,__LINE__);
 		$row=Database::fetch_array($result);
 
 
@@ -407,7 +407,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			// form edit directory
 			if(isset($clean_edit_dir) && $clean_edit_dir==$mydir) {
 				if(!empty($row['has_properties'])) {
-					$sql = api_sql_query('SELECT * FROM '.$work_assigment.' WHERE id = '."'".$row['has_properties']."'".' LIMIT 1',__FILE__,__LINE__);
+					$sql = Database::query('SELECT * FROM '.$work_assigment.' WHERE id = '."'".$row['has_properties']."'".' LIMIT 1',__FILE__,__LINE__);
 					$homework = Database::fetch_array($sql);
 				}
 
@@ -491,31 +491,31 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 					if($there_is_a_end_date == true || $there_is_a_expire_date == true) {
 						if($row['view_properties']=='1') {
 								$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
-								api_sql_query($sql_add_publication, __FILE__, __LINE__);
+								Database::query($sql_add_publication, __FILE__, __LINE__);
 								$expires_query= ' SET expires_on = '."'".(($there_is_a_expire_date == true)?get_date_from_group('expires'):'0000-00-00 00:00:00')."'".',';
 								$ends_query =   ' ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
-								api_sql_query('UPDATE '.$work_assigment.$expires_query.$ends_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
+								Database::query('UPDATE '.$work_assigment.$expires_query.$ends_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
 						} else if($row['view_properties']=='0') {
 								if ($_POST['enableExpiryDate']=='1') {
 									$expires_query= ' SET expires_on = '."'".(($there_is_a_expire_date == true)?get_date_from_group('expires'):'0000-00-00 00:00:00')."'";
 									//$ends_query =   ' ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
-									api_sql_query('UPDATE '.$work_assigment.$expires_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
+									Database::query('UPDATE '.$work_assigment.$expires_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
 									$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
-									api_sql_query($sql_add_publication, __FILE__, __LINE__);
+									Database::query($sql_add_publication, __FILE__, __LINE__);
 								}
 								if ($_POST['enableEndDate']=='1') {
 									//$expires_query= ' SET expires_on = '."'".(($there_is_a_expire_date == true)?get_date_from_group('expires'):'0000-00-00 00:00:00')."'".',';
 									$ends_query =   ' SET ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
-									api_sql_query('UPDATE '.$work_assigment.$ends_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
+									Database::query('UPDATE '.$work_assigment.$ends_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
 									$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
-									api_sql_query($sql_add_publication, __FILE__, __LINE__);
+									Database::query($sql_add_publication, __FILE__, __LINE__);
 								}
 						}
 
 					}
 					//if($_POST['qualification']['qualification']!='')
-						api_sql_query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string(Security::remove_XSS($_POST['description']))."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".' WHERE id = '."'".$row['id']."'",__FILE__,__LINE__);
-						//api_sql_query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".' WHERE course_code = '."'".api_get_course_id()."'".' AND ref_id = '."'".$row['id']."'".'',__FILE__,__LINE__);
+						Database::query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string(Security::remove_XSS($_POST['description']))."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".' WHERE id = '."'".$row['id']."'",__FILE__,__LINE__);
+						//Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".' WHERE course_code = '."'".api_get_course_id()."'".' AND ref_id = '."'".$row['id']."'".'',__FILE__,__LINE__);
 
 					Display::display_confirmation_message(get_lang('FolderEdited'));
 
@@ -531,7 +531,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 
 					// gets calendar_id from student_publication_assigment
 					$sql = "SELECT add_to_calendar FROM $work_assigment WHERE publication_id ='".$row['id']."'";
-					$res = api_sql_query($sql,__FILE__,__LINE__);
+					$res = Database::query($sql,__FILE__,__LINE__);
 					$calendar_id = Database::fetch_row($res);
 					// update from agenda if it exists
 					if (!empty($calendar_id[0])) {
@@ -540,7 +540,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 								content = '".$dir_name."',
 								end_date='".get_date_from_group('ends')."'
 							WHERE id='".$calendar_id[0]."'";
-					api_sql_query($sql,__FILE__,__LINE__);
+					Database::query($sql,__FILE__,__LINE__);
 					}
 
 
@@ -564,7 +564,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 			$sql = "SELECT course_user.user_id FROM $table_user user, $table_course_user course_user
 					  WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status='1'";
-			$res = api_sql_query($sql,__FILE__,__LINE__);
+			$res = Database::query($sql,__FILE__,__LINE__);
 			$admin_course = '';
 			while($row_admin = Database::fetch_row($res)) {
 				$admin_course .='\''.$row_admin[0].'\',';
@@ -572,12 +572,12 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$sql_document = "SELECT count(*) FROM $work_table s, $iprop_table p WHERE s.id = p.ref AND p.tool='work' AND lastedit_user_id IN(".$admin_course.'\''.api_get_user_id().'\''.") AND s.accepted='1' AND url NOT LIKE '".$sub_course_dir.$dir."/%/%' AND url LIKE '".$sub_course_dir.$dir."/%'";
 		}
 		//count documents
-		$res_document = api_sql_query($sql_document,__FILE__,__LINE__);
+		$res_document = Database::query($sql_document,__FILE__,__LINE__);
 		$count_document = Database::fetch_row($res_document);
 		$cant_files = $count_document[0];
 		//count directories
 		$sql_directory = "SELECT count(*) FROM $work_table s WHERE  url NOT LIKE '/".$mydir."/%/%' AND url LIKE '/".$mydir."/%'";
-		$res_directory = api_sql_query($sql_directory,__FILE__,__LINE__);
+		$res_directory = Database::query($sql_directory,__FILE__,__LINE__);
 		$count_directory = Database::fetch_row($res_directory);
 		$cant_dir = $count_directory[0];
 
@@ -604,7 +604,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$tbl_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 			$add_to_name = '';
 			$sql = "SELECT weight FROM ". $tbl_gradebook_link ." WHERE type='3' AND ref_id= '".$id2."'";
-			$result=api_sql_query($sql, __FILE__, __LINE__);
+			$result=Database::query($sql, __FILE__, __LINE__);
 			$count = Database::num_rows($result);
 			if($count>0) {
 				$add_to_name = ' / <span style="color:blue">'.get_lang('Assignment').'</span>';
@@ -650,7 +650,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		//Get the author ID for that document from the item_property table
 		$is_author = false;
 		$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND ref=".$work->id;
-		$author_qry = api_sql_query($author_sql,__FILE__,__LINE__);
+		$author_qry = Database::query($author_sql,__FILE__,__LINE__);
 		$row2=Database::fetch_array($author_qry);
 
 
@@ -821,7 +821,7 @@ function build_work_move_to_selector($folders,$curdirpath,$move_file,$group_dir=
 	//gets file title
 	$tbl_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$sql = "SELECT title FROM $tbl_work WHERE id ='".(int)$move_file."'";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	$title = Database::fetch_row($result);
 	global $gradebook;
 
@@ -953,11 +953,11 @@ function del_dir($base_work_dir,$dir,$id) {
 	}
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$sql = "DELETE FROM $table WHERE url LIKE BINARY 'work/".$dir."/%'";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 
 	//delete from DB the directories
 	$sql = "DELETE FROM $table WHERE filetype = 'folder' AND url LIKE BINARY '/".$dir."%'";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 
 	require_once(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 	//my_delete($base_work_dir.$dir);
@@ -974,7 +974,7 @@ function get_work_path($id)
 {
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$sql = "SELECT * FROM $table WHERE id=$id";
-	$res = api_sql_query($sql);
+	$res = Database::query($sql);
 	if(Database::num_rows($res)!=1) {
 		return -1;
 	} else {
@@ -993,7 +993,7 @@ function update_work_url($id,$new_path)
 	if(empty($id)) return -1;
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$sql = "SELECT * FROM $table WHERE id=$id";
-	$res = api_sql_query($sql);
+	$res = Database::query($sql);
 	if(Database::num_rows($res)!=1) {
 		return -1;
 	} else {
@@ -1001,7 +1001,7 @@ function update_work_url($id,$new_path)
 		$filename = basename($row['url']);
 		$new_url = $new_path.$filename;
 		$sql2 = "UPDATE $table SET url = '$new_url' WHERE id=$id";
-		$res2 = api_sql_query($sql2);
+		$res2 = Database::query($sql2);
 		return $res2;
 	}
 }
@@ -1035,26 +1035,26 @@ function update_dir_name($path, $new_name) {
 		//update all the files in the other directories according with the next query
 		$sql = 'SELECT id, url FROM '.$table.' WHERE url LIKE BINARY "work/'.$path.'/%"'; // like binary (Case Sensitive)
 
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql, __FILE__, __LINE__);
 		$work_len=strlen('work/'.$path);
 
 		while($work = Database :: fetch_array($rs)) {
 			$new_dir=$work['url'];
 			$name_with_directory=substr($new_dir,$work_len,strlen($new_dir));
 			$sql = 'UPDATE '.$table.' SET url="work/'.$path_to_dir.$new_name.$name_with_directory.'" WHERE id= '.$work['id'];
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		}
 
 		//update all the directory's children according with the next query
 		$sql = 'SELECT id, url FROM '.$table.' WHERE url LIKE BINARY "/'.$path.'%"';
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql, __FILE__, __LINE__);
 		$work_len=strlen('/'.$path);
 		while($work = Database :: fetch_array($rs)) {
 			$new_dir=$work['url'];
 			$name_with_directory=substr($new_dir,$work_len,strlen($new_dir));
 			$url=$path_to_dir.$new_name.$name_with_directory;
 			$sql = 'UPDATE '.$table.' SET url="/'.$url.'" WHERE id= '.$work['id'];
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		}
 	}
 }
@@ -1078,7 +1078,7 @@ function get_parent_directories($my_cur_dir_path) {
 			$where_sentence = "url  LIKE BINARY '" . $dir_acum . "/" . $item."'";
 			$dir_acum .= '/' . $list_parents[$i];
 			$sql = "SELECT id FROM ". $work_table . " WHERE ". $where_sentence;
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			$row= Database::fetch_array($result);
 			$list_id[]=$row['id'];
 		}
@@ -1138,7 +1138,7 @@ function insert_all_directory_in_course_table($base_work_dir) {
 							   filetype		= 'folder',
 							   post_group_id = '".intval($_GET['toolgroup'])."',
 							   sent_date	= '0000-00-00 00:00:00' ";
-        api_sql_query($sql_insert_all, __FILE__, __LINE__);
+        Database::query($sql_insert_all, __FILE__, __LINE__);
 	}
 }
 
@@ -1343,7 +1343,7 @@ function get_work_id($path) {
 	} else {
 		$sql = "SELECT id FROM $TBL_STUDENT_PUBLICATION AS work,$TBL_PROP_TABLE AS props  WHERE props.tool='work' AND work.id=props.ref AND work.url LIKE 'work/".$path."%' AND work.filetype='file' AND props.visibility<>'2' AND props.lastedit_user_id='".api_get_user_id()."'";
 	}
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	$num_rows = Database::num_rows($result);
 
 	if ($result && $num_rows > 0) {

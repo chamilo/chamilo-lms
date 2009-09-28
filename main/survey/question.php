@@ -89,7 +89,7 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 
 if($survey_data['survey_type']==1) {
 	$sql = 'SELECT id FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP).' WHERE survey_id = '.(int)$_GET['survey_id'].' LIMIT 1';
-	$rs = api_sql_query($sql,__FILE__,__LINE__);
+	$rs = Database::query($sql,__FILE__,__LINE__);
 	if(Database::num_rows($rs)===0) {
 		header('Location: survey.php?survey_id='.(int)$_GET['survey_id'].'&message='.'YouNeedToCreateGroups');
 		exit;

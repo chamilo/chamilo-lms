@@ -50,7 +50,7 @@ $question = $_REQUEST['question'];
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
-$result=api_sql_query($query,__FILE__,__LINE__);
+$result=Database::query($query,__FILE__,__LINE__);
 
 list($pseudoUser)=mysql_fetch_row($result);
 

@@ -55,7 +55,7 @@ function create_cat_def($title="", $comment="", $nbline="5")
 	}
 
 	$sql = "SELECT MAX(rank) as maxRank FROM ".$TBL_USERINFO_DEF;
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	if ($result) $maxRank = Database::fetch_array($result);
 
 	$maxRank = $maxRank['maxRank'];
@@ -68,7 +68,7 @@ function create_cat_def($title="", $comment="", $nbline="5")
 			line_count	= '$nbline',
 			rank		= '$thisRank'";
 
-	api_sql_query($sql,__FILE__,__LINE__);
+	Database::query($sql,__FILE__,__LINE__);
 
 	return true;
 }
@@ -103,7 +103,7 @@ function edit_cat_def($id, $title, $comment, $nbline)
 			comment		= '$comment',
 			line_count	= '$nbline'
 			WHERE id	= '$id'";
-	api_sql_query($sql,__FILE__,__LINE__);
+	Database::query($sql,__FILE__,__LINE__);
 
 	return true;
 }
@@ -136,7 +136,7 @@ function remove_cat_def($id, $force = false)
 	if ($force == false)
 	{
 		$sql = "SELECT * FROM $TBL_USERINFO_CONTENT $sqlCondition";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql,__FILE__,__LINE__);
 
 		if ( Database::num_rows($result) > 0)
 		{
@@ -144,7 +144,7 @@ function remove_cat_def($id, $force = false)
 		}
 	}
 	$sql = "DELETE FROM $TBL_USERINFO_DEF $sqlCondition";
-	api_sql_query($sql,__FILE__,__LINE__);
+	Database::query($sql,__FILE__,__LINE__);
 }
 
 /**
@@ -172,7 +172,7 @@ function move_cat_rank($id, $direction) // up & down.
 	}
 
 	$sql = "SELECT rank FROM $TBL_USERINFO_DEF WHERE id = '$id'";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 
 	if (Database::num_rows($result) < 1)
 	{
@@ -222,7 +222,7 @@ function move_cat_rank_by_rank($rank, $direction) // up & down.
 	$sql = "SELECT id, rank FROM ".$TBL_USERINFO_DEF." WHERE rank $compOp $rank
 	ORDER BY rank $sort LIMIT 2";
 
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 
 	if (Database::num_rows($result) < 2)
 	{
@@ -237,8 +237,8 @@ function move_cat_rank_by_rank($rank, $direction) // up & down.
 	$sql2 = "UPDATE ".$TBL_USERINFO_DEF." SET rank ='".$thisCat['rank'].
 			"' WHERE id = '".$nextCat['id']."'";
 
-	api_sql_query($sql1,__FILE__,__LINE__);
-	api_sql_query($sql2,__FILE__,__LINE__);
+	Database::query($sql1,__FILE__,__LINE__);
+	Database::query($sql2,__FILE__,__LINE__);
 
 	return true;
 }
@@ -271,7 +271,7 @@ function update_user_course_properties($user_id, $course_code, $properties)
 	                    WHERE   user_id	    	= '".$user_id."'
 	                    AND     course_code		= '".$course_code."'";
 
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 
 	if (mysql_affected_rows() > 0)
 	{
@@ -333,7 +333,7 @@ function fill_new_cat_content($definition_id, $user_id, $content="", $user_ip=""
 			WHERE	definition_id	= '$definition_id'
 			AND		user_id			= '$user_id'";
 
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 
 	if (Database::num_rows($result) > 0)
 	{
@@ -347,7 +347,7 @@ function fill_new_cat_content($definition_id, $user_id, $content="", $user_ip=""
 			editor_ip		= '$user_ip',
 			edition_time	= now()";
 
-	api_sql_query($sql,__FILE__,__LINE__);
+	Database::query($sql,__FILE__,__LINE__);
 	return true;
 }
 
@@ -391,7 +391,7 @@ function edit_cat_content($definition_id, $user_id, $content ="", $user_ip="")
 			edition_time	= now()
 			WHERE definition_id = '$definition_id' AND user_id = '$user_id'";
 
-	api_sql_query($sql,__FILE__,__LINE__);
+	Database::query($sql,__FILE__,__LINE__);
 
 	return true;
 }
@@ -420,7 +420,7 @@ function cleanout_cat_content($user_id, $definition_id)
 	$sql = "DELETE FROM ".$TBL_USERINFO_CONTENT."
 			WHERE user_id = '$user_id'  AND definition_id = '$definition_id'";
 
-	api_sql_query($sql,__FILE__,__LINE__);
+	Database::query($sql,__FILE__,__LINE__);
 
 	return true;
 }
@@ -451,7 +451,7 @@ function get_course_user_info($user_id)
 			ON cat.id = content.definition_id 	AND content.user_id = '$user_id'
 			ORDER BY cat.rank, content.id";
 
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 
 	if (Database::num_rows($result) > 0)
 	{
@@ -497,7 +497,7 @@ function get_main_user_info($user_id, $courseCode)
 	        AND     u.user_id = '$user_id'
 	        AND     cu.course_code = '$courseCode'";
 
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 
 	if (Database::num_rows($result) > 0)
 	{
@@ -535,7 +535,7 @@ function get_cat_content($userId, $catId)
 			ON cat.id = content.definition_id
 			AND content.user_id = '$userId'
 			WHERE cat.id = '$catId' ";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 
 	if (Database::num_rows($result) > 0)
 	{
@@ -563,7 +563,7 @@ function get_cat_def($catId)
 	$catId = strval(intval($catId));
 	$sql = "SELECT id, title, comment, line_count, rank FROM ".$TBL_USERINFO_DEF." WHERE id = '$catId'";
 
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 
 	if (Database::num_rows($result) > 0)
 	{
@@ -593,7 +593,7 @@ function get_cat_def_list()
 			FROM  ".$TBL_USERINFO_DEF."
 			ORDER BY rank";
 
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 
 	if (Database::num_rows($result) > 0)
 	{

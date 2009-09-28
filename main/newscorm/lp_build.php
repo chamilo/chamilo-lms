@@ -115,7 +115,7 @@ if($learnpath_id == 0)
 		FROM " . $tbl_lp . "
 		ORDER BY id DESC
 		LIMIT 0, 1";
-	$result = api_sql_query($sql);
+	$result = Database::query($sql);
 	$row = Database::fetch_array($result);
 
 	$learnpath_id = $row['id'];
@@ -124,7 +124,7 @@ if($learnpath_id == 0)
 $sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id";
 
 
-$result=api_sql_query($sql_query);
+$result=Database::query($sql_query);
 $therow=Database::fetch_array($result);
 
 //$admin_output = '';

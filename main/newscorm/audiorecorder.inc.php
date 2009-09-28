@@ -46,7 +46,7 @@ else
 	$select = "SELECT * FROM $docs " .
 			" WHERE path like BINARY '/audio/lpi".Database::escape_string($audio_recorder_item_id)."-%' AND filetype='file' " .
 			" ORDER BY path DESC";
-	$res = api_sql_query($select);
+	$res = Database::query($select);
 	if(Database::num_rows($res)>0)
 	{
 		$row = Database::fetch_array($res);

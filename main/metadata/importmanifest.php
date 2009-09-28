@@ -61,7 +61,7 @@ if (isset($workWith))  // explicit in URL, or selected at bottom of screen
 {
     $scormdocument = Database::get_course_table(TABLE_LP_MAIN);
     $sql = "SELECT id FROM $scormdocument WHERE path='". Database::escape_string(api_substr($workWith,1)) . "' OR path='". Database::escape_string(substr($workWith,1)) . "/.'";
-    $result = api_sql_query($sql, __FILE__, __LINE__);
+    $result = Database::query($sql, __FILE__, __LINE__);
 
     if (mysql_num_rows($result) == 1)
     {

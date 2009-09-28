@@ -180,7 +180,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
 	if ($safe_id == strval(intval($safe_id)) && $safe_item_id == strval(intval($safe_item_id))) {
 
 		$sql = 'SELECT start_date,exe_date,exe_result,exe_weighting FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.(int)$safe_exe_id;
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$row_dates = Database::fetch_array($res);
 
 		$time_start_date = convert_mysql_date($row_dates['start_date']);
@@ -191,18 +191,18 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
 
 		$sql_upd_status = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' WHERE lp_item_id = '".(int)$safe_item_id."'
 				 AND lp_view_id = (SELECT lp_view.id FROM $TBL_LP_VIEW lp_view WHERE user_id = '".(int)$_SESSION['oLP']->user_id."' AND lp_id='".(int)$safe_id."')";
-		api_sql_query($sql_upd_status,__FILE__,__LINE__);
+		Database::query($sql_upd_status,__FILE__,__LINE__);
 
 		$sql_upd_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '$max_score' WHERE id = '".(int)$safe_item_id."'";
-		api_sql_query($sql_upd_max_score,__FILE__,__LINE__);
+		Database::query($sql_upd_max_score,__FILE__,__LINE__);
 
 		$sql_last_attempt = "SELECT id FROM $TBL_LP_ITEM_VIEW  WHERE lp_item_id = '$safe_item_id' AND lp_view_id = '".$_SESSION['oLP']->lp_view_id."' order by id desc limit 1";
-		$res_last_attempt = api_sql_query($sql_last_attempt,__FILE__,__LINE__);
+		$res_last_attempt = Database::query($sql_last_attempt,__FILE__,__LINE__);
 		$row_last_attempt = Database::fetch_row($res_last_attempt);
 
 		if (Database::num_rows($res_last_attempt)>0) {
 			$sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = $score,total_time = $mytime WHERE id='".$row_last_attempt[0]."'";
-			api_sql_query($sql_upd_score,__FILE__,__LINE__);
+			Database::query($sql_upd_score,__FILE__,__LINE__);
 		}
 	}
 
@@ -293,7 +293,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 						$show_audioplayer = false;
 						// getting all the information about the item
 						$sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE lp_id = '" . $_SESSION['oLP']->lp_id."'";
-						$res_media= api_sql_query($sql, __FILE__, __LINE__);
+						$res_media= Database::query($sql, __FILE__, __LINE__);
 
 						if(Database::num_rows($res_media) > 0){
 							while($row_media= Database::fetch_array($res_media)) {
@@ -501,7 +501,7 @@ else
 						$show_audioplayer = false;
 						// getting all the information about the item
 						$sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE lp_id = '" . $_SESSION['oLP']->lp_id."'";
-						$res_media= api_sql_query($sql, __FILE__, __LINE__);
+						$res_media= Database::query($sql, __FILE__, __LINE__);
 
 						if(Database::num_rows($res_media) > 0){
 							while($row_media= Database::fetch_array($res_media)) {

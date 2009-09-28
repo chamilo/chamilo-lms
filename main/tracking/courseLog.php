@@ -65,7 +65,7 @@ if (!empty($_GET['scormcontopen'])) {
     $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	$contopen = (int) $_GET['scormcontopen'];
 	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	$row = Database::fetch_array($res);
 	$lp_charset = $row['default_encoding'];
 }
@@ -226,7 +226,7 @@ if ($_GET['studentlist'] == 'false') {
 
 	$sql = "SELECT id, title
 			FROM $TABLEQUIZ WHERE active <> -1";
-	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	$rs = Database::query($sql, __FILE__, __LINE__);
 
 	if ($export_csv) {
     	$temp = array(get_lang('AverageProgressInLearnpath'), '');
@@ -238,7 +238,7 @@ if ($_GET['studentlist'] == 'false') {
 		// gets course actual administrators
 		$sql = "SELECT user.user_id FROM $table_user user, $TABLECOURSUSER course_user
 			WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status <> '1' ";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 
 		$student_ids = array();
 
@@ -259,7 +259,7 @@ if ($_GET['studentlist'] == 'false') {
 						AND orig_lp_id = 0
 						AND orig_lp_item_id = 0
 						ORDER BY exe_date DESC';
-					$rsAttempt = api_sql_query($sql, __FILE__, __LINE__);
+					$rsAttempt = Database::query($sql, __FILE__, __LINE__);
 					$nb_attempts = 0;
 					$avg_student_score = 0;
 					while ($attempt = Database::fetch_array($rsAttempt)) {
@@ -352,7 +352,7 @@ if ($_GET['studentlist'] == 'false') {
             GROUP BY access_tool
 			ORDER BY count_access_tool DESC
 			LIMIT 0, 3";
-	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	$rs = Database::query($sql, __FILE__, __LINE__);
 
 	if ($export_csv) {
     	$temp = array(get_lang('ToolsMostUsed'), '');
@@ -396,7 +396,7 @@ if ($_GET['studentlist'] == 'false') {
             GROUP BY down_doc_path
 			ORDER BY count_down DESC
 			LIMIT 0,  $num";
-    $rs = api_sql_query($sql, __FILE__, __LINE__);
+    $rs = Database::query($sql, __FILE__, __LINE__);
 
     if ($export_csv) {
     	$temp = array(get_lang('DocumentsMostDownloaded', ''), '');
@@ -442,7 +442,7 @@ if ($_GET['studentlist'] == 'false') {
             GROUP BY cl.title, cl.url
 			ORDER BY count_visits DESC
 			LIMIT 0, 3";
-    $rs = api_sql_query($sql, __FILE__, __LINE__);
+    $rs = Database::query($sql, __FILE__, __LINE__);
 
     if ($export_csv) {
     	$temp = array(get_lang('LinksMostClicked'),'');

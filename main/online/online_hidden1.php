@@ -42,7 +42,7 @@ $tbl_user=Database::get_main_table(TABLE_MAIN_USER);
 $tbl_online_connected=Database::get_course_table(TABLE_ONLINE_CONNECTED);
 
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
-$result=api_sql_query($query,__FILE__,__LINE__);
+$result=Database::query($query,__FILE__,__LINE__);
 
 list($pseudoUser)=mysql_fetch_row($result);
 
@@ -63,10 +63,10 @@ $chat_size_old=intval($_POST['chat_size_old']);
 $chat_size_new=filesize($onlinePath.'messages-'.$dateNow.'.log');
 
 $query="REPLACE INTO $tbl_online_connected (user_id,last_connection) VALUES('".$_user['user_id']."',NOW())";
-api_sql_query($query,__FILE__,__LINE__);
+Database::query($query,__FILE__,__LINE__);
 
 $query="SELECT COUNT(user_id) FROM $tbl_online_connected WHERE last_connection>'".date('Y-m-d H:i:s',time()-60*5)."'";
-$result=api_sql_query($query,__FILE__,__LINE__);
+$result=Database::query($query,__FILE__,__LINE__);
 
 $connected_old=intval($_POST['connected_old']);
 list($connected_new)=mysql_fetch_row($result);

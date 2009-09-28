@@ -46,7 +46,7 @@ function check_download_survey($course, $invitation, $doc_url) {
 
 	// now we check if the invitationcode is valid
 	$sql = "SELECT * FROM $table_survey_invitation WHERE invitation_code = '".Database::escape_string($invitation)."'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	if (mysql_num_rows($result) < 1)
 	{
 		Display :: display_error_message(get_lang('WrongInvitationCode'), false);
@@ -72,7 +72,7 @@ function check_download_survey($course, $invitation, $doc_url) {
 
 	// If this is the case there will be a language choice
 	$sql = "SELECT * FROM $table_survey WHERE code='".Database::escape_string($survey_invitation['survey_code'])."'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	if (mysql_num_rows($result) > 1)
 	{
 		if ($_POST['language'])
@@ -115,7 +115,7 @@ function check_download_survey($course, $invitation, $doc_url) {
 								and (
 									option_text LIKE '%$doc_url%'
 								)";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 
 	if (mysql_num_rows($result) == 0)
 	{

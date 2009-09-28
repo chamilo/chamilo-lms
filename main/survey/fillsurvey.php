@@ -93,7 +93,7 @@ if ($invitationcode == "auto" && isset($_GET['scode'])){
     $autoInvitationcode = "auto-$userid-".$scode; //new invitation code from userid
     // the survey code must exist in this course, or the URL is invalid
     $sql = "SELECT * FROM $table_survey WHERE code='" . $scode . "'";
-    $result = api_sql_query($sql, __FILE__, __LINE__);
+    $result = Database::query($sql, __FILE__, __LINE__);
     if (Database :: num_rows($result) > 0){  // ok
         // check availability
         $row = Database :: fetch_array($result, 'ASSOC'); //
@@ -101,11 +101,11 @@ if ($invitationcode == "auto" && isset($_GET['scode'])){
         check_time_availability($tempdata); //exit if survey not available anymore
         // check for double invitation records (insert should be done once)
         $sql = "SELECT user from $table_survey_invitation where invitation_code = '".Database::escape_string($autoInvitationcode)."'";
-        $result = api_sql_query($sql, __FILE__, __LINE__);
+        $result = Database::query($sql, __FILE__, __LINE__);
         if (Database :: num_rows($result) == 0){ // ok
             $sql = "insert into $table_survey_invitation (survey_code,user, invitation_code, invitation_date) ";
             $sql .= " values (\"$scode\", \"$userid\", \"$autoInvitationcode\", now())";
-            api_sql_query($sql, __FILE__, __LINE__);
+            Database::query($sql, __FILE__, __LINE__);
         }
         // from here we use the new invitationcode auto-userid-surveycode string
         $_GET['invitationcode'] = $autoInvitationcode;
@@ -116,7 +116,7 @@ if ($invitationcode == "auto" && isset($_GET['scode'])){
 
 // now we check if the invitationcode is valid
 $sql = "SELECT * FROM $table_survey_invitation WHERE invitation_code = '" . Database :: escape_string($invitationcode) . "'";
-$result = api_sql_query($sql, __FILE__, false); // false=suppress errors
+$result = Database::query($sql, __FILE__, false); // false=suppress errors
 if (Database::num_rows($result) < 1)
 {
 	Display :: display_error_message(get_lang('WrongInvitationCode'), false);
@@ -136,7 +136,7 @@ if ($survey_invitation['answered'] == 1 && !isset($_GET['user_id']))
 // checking if there is another survey with this code.
 // If this is the case there will be a language choice
 $sql = "SELECT * FROM $table_survey WHERE code='".Database::escape_string($survey_invitation['survey_code'])."'";
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 
 if (Database::num_rows($result) > 1)
 {
@@ -179,7 +179,7 @@ if (count($_POST)>0)
 	{
 		// getting all the types of the question (because of the special treatment of the score question type
 		$sql = "SELECT * FROM $table_survey_question WHERE survey_id = '".Database::escape_string($survey_invitation['survey_id'])."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		while ($row = Database::fetch_array($result,'ASSOC'))
 		{
@@ -222,7 +222,7 @@ if (count($_POST)>0)
 					if ($types[$survey_question_id] == 'percentage')
 					{
 						$sql = "SELECT * FROM $table_survey_question_option WHERE question_option_id='".Database::escape_string($value)."'";
-						$result = api_sql_query($sql, __FILE__, __LINE__);
+						$result = Database::query($sql, __FILE__, __LINE__);
 						$row = Database::fetch_array($result,'ASSOC');
 						$option_value = $row['option_text'];
 					} else {
@@ -253,7 +253,7 @@ if (count($_POST)>0)
 				WHERE survey_id = '".Database::escape_string($survey_invitation['survey_id'])."'
 				AND survey_group_pri='0' $shuffle
 				";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
         // there is only one question type for conditional surveys
 		while ($row = Database::fetch_array($result,'ASSOC'))
 		{
@@ -271,7 +271,7 @@ if (count($_POST)>0)
 				// we select the correct answer and the puntuacion
 				$sql = "SELECT value FROM $table_survey_question_option " .
                         " WHERE question_option_id='".Database::escape_string($value)."'";
-				$result = api_sql_query($sql, __FILE__, __LINE__);
+				$result = Database::query($sql, __FILE__, __LINE__);
 				$row = Database::fetch_array($result,'ASSOC');
 				$option_value = $row['value'];
 				//$option_value = 0;
@@ -569,7 +569,7 @@ if ($survey_data['form_fields'] && $survey_data['anonymous'] == 0 && is_array($u
 				// remove trailing , from the query we have so far
 				$sql = rtrim($sql, ',');
 				$sql .= " WHERE user_id  = '" . $user_id . "'";
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 				//update the extra fields
 				if (is_array($extras)) {
 					foreach ($extras as $key => $value) {
@@ -634,7 +634,7 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
     		$sql = "SELECT * FROM $table_survey_question
     				WHERE survey_id = '".Database::escape_string($survey_invitation['survey_id'])."'
     				ORDER BY sort ASC";
-    		$result = api_sql_query($sql, __FILE__, __LINE__);
+    		$result = Database::query($sql, __FILE__, __LINE__);
     		while ($row = Database::fetch_array($result,'ASSOC'))
     		{
     			if($row['type'] == 'pagebreak')
@@ -682,7 +682,7 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
 			}
 
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			$question_counter_max = Database::num_rows($result);
 			$counter = 0;
 			$limit=0;
@@ -734,7 +734,7 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 					ORDER BY survey_group_pri
 					";
 
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			while ($row = Database :: fetch_array($result)) {
 				$answer_list['value']=$row['value'];
 				$answer_list['group']=$row['survey_group_pri'];
@@ -755,7 +755,7 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 					GROUP BY temp.survey_group_pri
 					ORDER BY temp.survey_group_pri";
 
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			while ($row = Database::fetch_array($result))
 			{
 				$list['value']=$row['value'];
@@ -955,7 +955,7 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
     								 WHERE survey_id = '".$my_survey_id."'
     							  	 AND ($secondary )
     								 ORDER BY sort ASC";
-    					$result = api_sql_query($sql, __FILE__, __LINE__);
+    					$result = Database::query($sql, __FILE__, __LINE__);
     					$counter=0;
     					while ($row = Database::fetch_array($result,'ASSOC'))
     					{
@@ -1005,7 +1005,7 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 								AND survey_question.question_id IN (".implode(',',$paged_questions_sec[$val]).")
 								ORDER  $shuffle ";
 
-						$result = api_sql_query($sql, __FILE__, __LINE__);
+						$result = Database::query($sql, __FILE__, __LINE__);
 						$question_counter_max = Database::num_rows($result);
 						$counter = 0;
 						$limit=0;
@@ -1069,7 +1069,7 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
     					  	 AND survey_group_sec1='0' AND survey_group_sec2='0'
     						 ORDER ".$order_sql." ";
     			//echo "<br>";echo "<br>";
-    			$result = api_sql_query($sql, __FILE__, __LINE__);
+    			$result = Database::query($sql, __FILE__, __LINE__);
     			$counter=0;
     			while ($row = Database::fetch_array($result,'ASSOC'))
     			{
@@ -1124,7 +1124,7 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 							WHERE survey_question.survey_id = '" . Database :: escape_string($survey_invitation['survey_id']) . "'
 							AND survey_question.question_id IN (" .$imploded. ")
 							ORDER $order_sql ";
-					$result = api_sql_query($sql, __FILE__, __LINE__);
+					$result = Database::query($sql, __FILE__, __LINE__);
 					$question_counter_max = Database :: num_rows($result);
 				}
 			}
@@ -1167,7 +1167,7 @@ if ( isset($_GET['show']) || isset($_POST['personality']))
 
 // selecting the maximum number of pages
 $sql = "SELECT * FROM $table_survey_question WHERE type='".Database::escape_string('pagebreak')."' AND survey_id='".Database::escape_string($survey_invitation['survey_id'])."'";
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 $numberofpages = Database::num_rows($result) + 1;
 
 // Displaying the form with the questions

@@ -15,7 +15,7 @@ function get_suggestions_from_search_engine($q) {
     	$sql_add = " AND course_code = '".$cid."' ";
     }
 	$sql = "SELECT * FROM $table_sfv where value LIKE '%$q%'".$sql_add." ORDER BY course_code, tool_id, ref_id, field_id";
-	$sql_result = api_sql_query($sql,__FILE__,__LINE__);
+	$sql_result = Database::query($sql,__FILE__,__LINE__);
 	$data = array();
     $i = 0;
     while ($row = Database::fetch_array($sql_result)) {
@@ -36,7 +36,7 @@ function get_suggestions_from_search_engine($q) {
                 $output = array();
                 $field_val = array();
                 $sql2 = "SELECT * FROM $table_sfv where course_code = '$cc' AND tool_id = '$ti' AND ref_id = '$ri' ORDER BY field_id";
-                $res2 = api_sql_query($sql2,__FILE__,__LINE__);
+                $res2 = Database::query($sql2,__FILE__,__LINE__);
                 // TODO this code doesn't manage multiple terms in one same field just yet (should duplicate results in this case)
                 $field_id = 0;
                 while ($row2 = Database::fetch_array($res2)) {

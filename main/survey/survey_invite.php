@@ -93,7 +93,7 @@ Display::display_header($tool_name,'Survey');
 // checking if there is another survey with this code.
 // If this is the case there will be a language choice
 $sql = "SELECT * FROM $table_survey WHERE code='".Database::escape_string($survey_data['code'])."'";
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 if (Database::num_rows($result) > 1)
 {
 	Display::display_warning_message(get_lang('IdenticalSurveycodeWarning'));

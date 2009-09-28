@@ -51,7 +51,7 @@ event_download($doc_url);
 $sql='SELECT title FROM '.$tbl_student_publication.'
   	  WHERE url LIKE BINARY "'.$doc_url.'"';
 
-$result= api_sql_query($sql, __FILE__, __LINE__);
+$result= Database::query($sql, __FILE__, __LINE__);
 $row= Database::fetch_array($result);
 $title = str_replace(' ','_', $row['title']);
 DocumentManager::file_send_for_download($full_file_name,TRUE, $title);

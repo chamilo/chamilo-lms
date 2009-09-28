@@ -390,12 +390,12 @@ $is_allowed_to_edit = api_is_allowed_to_edit(false,true); //has to come after di
 
 if (!empty ($_POST['changeProperties'])) {
 	$query = "UPDATE " . $main_course_table . " SET show_score='" . $uploadvisibledisabled . "' WHERE code='" . $_course['sysCode'] . "'";
-	api_sql_query($query, __FILE__, __LINE__);
+	Database::query($query, __FILE__, __LINE__);
 
 	$_course['show_score'] = $uploadvisibledisabled;
 } else {
 	$query = "SELECT * FROM " . $main_course_table . " WHERE code=\"" . $_course['sysCode'] . "\"";
-	$result = api_sql_query($query, __FILE__, __LINE__);
+	$result = Database::query($query, __FILE__, __LINE__);
 	$row = mysql_fetch_array($result);
 	$uploadvisibledisabled = $row["show_score"];
 }
@@ -429,9 +429,9 @@ if (api_is_allowed_to_edit(false,true)) {
 			$queryString3 = "DELETE FROM  " . $TSTDPUBASG . "  WHERE publication_id='$delete'";
 		}
 
-		$result1 = api_sql_query($queryString1, __FILE__, __LINE__);
-		$result2 = api_sql_query($queryString2, __FILE__, __LINE__);
-		$result3 = api_sql_query($queryString3, __FILE__, __LINE__);
+		$result1 = Database::query($queryString1, __FILE__, __LINE__);
+		$result2 = Database::query($queryString2, __FILE__, __LINE__);
+		$result3 = Database::query($queryString3, __FILE__, __LINE__);
 	}
 }
 
@@ -441,7 +441,7 @@ if (api_is_allowed_to_edit(false,true)) {
 	$qualification_number=0;
 	if (!empty($edit)) {
 		$sql = "SELECT * FROM  " . $work_table . "  WHERE id='" . $edit . "'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		if (!empty($result)) {
 			$row = Database::fetch_array($result);
@@ -462,12 +462,12 @@ if (api_is_allowed_to_edit(false,true)) {
 			$sql = "ALTER TABLE " . $work_table . "
 						        CHANGE accepted accepted TINYINT(1) DEFAULT '0'";
 
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 
 			$sql = "UPDATE  " . $work_table . "
 						        SET accepted = 0";
 
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 
 			Display::display_confirmation_message(get_lang('AllFilesInvisible'));
 		} else {
@@ -475,7 +475,7 @@ if (api_is_allowed_to_edit(false,true)) {
 						        SET accepted = 0
 								WHERE id = '" . $make_invisible . "'";
 
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 
 			Display::display_confirmation_message(get_lang('FileInvisible'));
 		}
@@ -489,17 +489,17 @@ if (api_is_allowed_to_edit(false,true)) {
 		if (isset($make_visible) && $make_visible == "all") {
 			$sql = "ALTER TABLE  " . $work_table . "
 						        CHANGE accepted accepted TINYINT(1) DEFAULT '1'";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			$sql = "UPDATE  " . $work_table . "
 						        SET accepted = 1";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			Display::display_confirmation_message(get_lang('AllFilesVisible'));
 
 		} else {
 			$sql = "UPDATE  " . $work_table . "
 						        SET accepted = 1
 								WHERE id = '" . $make_visible . "'";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 
 			Display::display_confirmation_message(get_lang('FileVisible'));
 		}
@@ -565,7 +565,7 @@ if (api_is_allowed_to_edit(false,true)) {
 										   date_of_qualification	= '0000-00-00 00:00:00',
 										   session_id   = ".intval($id_session);
 
-					api_sql_query($sql_add_publication, __FILE__, __LINE__);
+					Database::query($sql_add_publication, __FILE__, __LINE__);
 
 					// add the directory
 					$id = Database::insert_id();
@@ -587,11 +587,11 @@ if (api_is_allowed_to_edit(false,true)) {
 										                    add_to_calendar  = '$agenda_id',
 										                    enable_qualification = '".$enable_calification."',
 										                    publication_id = '".$id."'";
-										api_sql_query($sql_add_homework, __FILE__, __LINE__);
-									    //api_sql_query($sql_add_publication, __FILE__, __LINE__);
+										Database::query($sql_add_homework, __FILE__, __LINE__);
+									    //Database::query($sql_add_publication, __FILE__, __LINE__);
 
 										$sql_add_publication = "UPDATE ".$work_table." SET "."has_properties  = ".Database::insert_id().", view_properties = 1 ".' where id = '.$id;
-										api_sql_query($sql_add_publication, __FILE__, __LINE__);
+										Database::query($sql_add_publication, __FILE__, __LINE__);
 
 					} else {
 
@@ -601,11 +601,11 @@ if (api_is_allowed_to_edit(false,true)) {
 										                    add_to_calendar  = '$agenda_id',
 										                    enable_qualification = '".(isset($_POST['enable_calification'])?(int)$_POST['enable_calification']:'')."',
 										                    publication_id = '".$id."'";
-										api_sql_query($sql_add_homework, __FILE__, __LINE__);
-									    //api_sql_query($sql_add_publication, __FILE__, __LINE__);
+										Database::query($sql_add_homework, __FILE__, __LINE__);
+									    //Database::query($sql_add_publication, __FILE__, __LINE__);
 
 										$sql_add_publication = "UPDATE ".$work_table." SET "."has_properties  = ".Database::insert_id().", view_properties = 0 ".' where id = '.$id;
-										api_sql_query($sql_add_publication, __FILE__, __LINE__);
+										Database::query($sql_add_publication, __FILE__, __LINE__);
 
 					}
 
@@ -655,18 +655,18 @@ if (api_is_allowed_to_edit(false,true)) {
 		$delete_2=$_REQUEST['delete2'];
 		// gets calendar_id from student_publication_assigment
 		$sql = "SELECT add_to_calendar FROM $TSTDPUBASG WHERE publication_id ='$delete_2'";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$calendar_id = Database::fetch_row($res);
 		// delete from agenda if it exists
 		if (!empty($calendar_id[0])) {
 		$t_agenda   = Database::get_course_table(TABLE_AGENDA);
 		$sql = "DELETE FROM $t_agenda WHERE id ='".$calendar_id[0]."'";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 		}
 		$sql2="DELETE FROM $TSTDPUBASG WHERE publication_id ='$delete_2'";
-		$result2 = api_sql_query($sql2, __FILE__, __LINE__);
+		$result2 = Database::query($sql2, __FILE__, __LINE__);
 		$sql3="DELETE FROM $t_gradebook_link WHERE course_code='$course_code' AND ref_id='$delete_2'";
-		$result3 = api_sql_query($sql3, __FILE__, __LINE__);
+		$result3 = Database::query($sql3, __FILE__, __LINE__);
 	}
 
 	/* ----------------------
@@ -675,7 +675,7 @@ if (api_is_allowed_to_edit(false,true)) {
 	if (!empty ($_REQUEST['move'])) {
 		$folders = array();
 		$sql = "SELECT url FROM $work_table  WHERE url LIKE '/%' AND post_group_id = '".(empty($_SESSION['toolgroup'])?0:$_SESSION['toolgroup'])."'";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		while($folder = Database::fetch_array($res)) {
 		$folders[] = substr($folder['url'],1,(strlen($folder['url'])-1));
 		}
@@ -736,7 +736,7 @@ else {
 		} else {
 			//Get the author ID for that document from the item_property table
 			$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=" .Database::escape_string($delete);
-			$author_qry = api_sql_query($author_sql, __FILE__, __LINE__);
+			$author_qry = Database::query($author_sql, __FILE__, __LINE__);
 
 			if (Database :: num_rows($author_qry) == 1) {
 				//we found the current user is the author
@@ -744,9 +744,9 @@ else {
 				$queryString2 = "DELETE FROM  " . $work_table . "  WHERE id='$delete'";
 				$queryString3 = "DELETE FROM  " . $TSTDPUBASG . "  WHERE publication_id='$delete'";
 
-				$result1 = api_sql_query($queryString1, __FILE__, __LINE__);
-				$result2 = api_sql_query($queryString2, __FILE__, __LINE__);
-				$result3 = api_sql_query($queryString3, __FILE__, __LINE__);
+				$result1 = Database::query($queryString1, __FILE__, __LINE__);
+				$result2 = Database::query($queryString2, __FILE__, __LINE__);
+				$result3 = Database::query($queryString3, __FILE__, __LINE__);
 
 				if ($result1) {
 					api_item_property_update($_course, 'work', $delete, 'DocumentDeleted', $user_id);
@@ -768,11 +768,11 @@ else {
 	if ($edit) {
 		//Get the author ID for that document from the item_property table
 		$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=" . $edit;
-		$author_qry = api_sql_query($author_sql, __FILE__, __LINE__);
+		$author_qry = Database::query($author_sql, __FILE__, __LINE__);
 		if (Database :: num_rows($author_qry) == 1) {
 			//we found the current user is the author
 			$sql = "SELECT * FROM  " . $work_table . "  WHERE id='" . $edit . "'";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			if ($result ) {
 				$row = mysql_fetch_array($result);
 				$workTitle = $row['title'];
@@ -828,15 +828,15 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 				//if we come from the group tools the groupid will be saved in $work_table
 				@move_uploaded_file($_FILES['file']['tmp_name'], $updir . $my_cur_dir_path . $new_file_name);
 				$url = "work/" . $my_cur_dir_path . $new_file_name;
-				$result = api_sql_query("SHOW FIELDS FROM " . $work_table . " LIKE 'sent_date'", __FILE__, __LINE__);
+				$result = Database::query("SHOW FIELDS FROM " . $work_table . " LIKE 'sent_date'", __FILE__, __LINE__);
 
 				if (!Database::num_rows($result)) {
-					api_sql_query("ALTER TABLE " . $work_table . " ADD sent_date DATETIME NOT NULL");
+					Database::query("ALTER TABLE " . $work_table . " ADD sent_date DATETIME NOT NULL");
 				}
 				$current_date = date('Y-m-d H:i:s');
 				$parent_id = '';
 				$active = '';
-				$sql = api_sql_query('SELECT id FROM '.Database::get_course_table(TABLE_STUDENT_PUBLICATION).' WHERE url = '."'/".Database::escape_string($_GET['curdirpath'])."' AND filetype='folder' LIMIT 1");
+				$sql = Database::query('SELECT id FROM '.Database::get_course_table(TABLE_STUDENT_PUBLICATION).' WHERE url = '."'/".Database::escape_string($_GET['curdirpath'])."' AND filetype='folder' LIMIT 1");
 				if(Database::num_rows($sql) > 0 ) {
 					$dir_row = Database::fetch_array($sql);
 					$parent_id = $dir_row['id'];
@@ -854,7 +854,7 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 	                                           session_id = ".intval($id_session);
 
 
-				api_sql_query($sql_add_publication, __FILE__, __LINE__);
+				Database::query($sql_add_publication, __FILE__, __LINE__);
 
 				$Id = Database::insert_id();
 				api_item_property_update($_course, 'work', $Id, 'DocumentAdded', $user_id);
@@ -883,10 +883,10 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 				$title = basename($workUrl);
 			}
 
-			$result = api_sql_query("SHOW FIELDS FROM " . $work_table . " LIKE 'sent_date'", __FILE__, __LINE__);
+			$result = Database::query("SHOW FIELDS FROM " . $work_table . " LIKE 'sent_date'", __FILE__, __LINE__);
 
 			if (!Database::num_rows($result)) {
-				api_sql_query("ALTER TABLE " . $work_table . " ADD sent_date DATETIME NOT NULL");
+				Database::query("ALTER TABLE " . $work_table . " ADD sent_date DATETIME NOT NULL");
 			}
 				$current_date = date('Y-m-d H:i:s');
 				$sql = "INSERT INTO  " . $work_table . "
@@ -898,7 +898,7 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 					            sent_date    	= '".$current_date."',
 					            session_id = ".intval($id_session);
 
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 
 			$insertId = Database::insert_id();
 			api_item_property_update($_course, 'work', $insertId, 'DocumentAdded', $user_id);
@@ -922,7 +922,7 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 			if ($id<>'') {
 				$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=" . mysql_real_escape_string($id);
 
-				$author_qry = api_sql_query($author_sql, __FILE__, __LINE__);
+				$author_qry = Database::query($author_sql, __FILE__, __LINE__);
 				if (Database :: num_rows($author_qry) == 1) {
 					$is_author = true;
 				}
@@ -948,7 +948,7 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 					            description = '" . Database::escape_string(Security::remove_XSS($description)) . "'
 					            ".$add_to_update."
 					        WHERE id    = '$id'";
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 				}
 
 				$insertId = $id;
@@ -971,7 +971,7 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 		$emailto = array ();
 		if (empty ($id_session)) {
 			$sql_resp = 'SELECT u.email as myemail FROM ' . $table_course_user . ' cu, ' . $table_user . ' u WHERE cu.course_code = ' . "'" . api_get_course_id() . "'" . ' AND cu.status = 1 AND u.user_id = cu.user_id';
-			$res_resp = api_sql_query($sql_resp, __FILE__, __LINE__);
+			$res_resp = Database::query($sql_resp, __FILE__, __LINE__);
 			while ($row_email = Database :: fetch_array($res_resp)) {
 				if (!empty ($row_email['myemail'])) {
 					$emailto[$row_email['myemail']] = $row_email['myemail'];
@@ -984,7 +984,7 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 									INNER JOIN ' . $table_user . ' user
 										ON user.user_id = session.id_coach
 									WHERE session.id = ' . intval($id_session);
-			$res_resp = api_sql_query($sql_resp, __FILE__, __LINE__);
+			$res_resp = Database::query($sql_resp, __FILE__, __LINE__);
 			while ($row_email = Database :: fetch_array($res_resp)) {
 				if (!empty ($row_email['myemail'])) {
 					$emailto[$row_email['myemail']] = $row_email['myemail'];
@@ -997,7 +997,7 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 									INNER JOIN ' . $table_user . ' user
 										ON user.user_id = session_course.id_coach
 									WHERE session_course.id_session = ' . intval($id_session);
-			$res_resp = api_sql_query($sql_resp, __FILE__, __LINE__);
+			$res_resp = Database::query($sql_resp, __FILE__, __LINE__);
 			while ($row_email = Database :: fetch_array($res_resp)) {
 				if (!empty ($row_email['myemail'])) {
 					$emailto[$row_email['myemail']] = $row_email['myemail'];
@@ -1044,13 +1044,13 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 $has_expired = false;
 $has_ended = false;
 isset($_GET['curdirpath'])?$curdirpath=Database::escape_string($_GET['curdirpath']):$curdirpath='';
-$sql = api_sql_query('SELECT description,id FROM '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION).' WHERE filetype = '."'folder'".' and has_properties != '."''".' and url = '."'/".$curdirpath."'".' LIMIT 1',__FILE__,__LINE__);
+$sql = Database::query('SELECT description,id FROM '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION).' WHERE filetype = '."'folder'".' and has_properties != '."''".' and url = '."'/".$curdirpath."'".' LIMIT 1',__FILE__,__LINE__);
 $is_special = Database::num_rows($sql);
 if($is_special > 0):
 	$is_special = true;
 	define('IS_ASSIGNMENT',1);
 	$publication = Database::fetch_array($sql);
-	$sql = api_sql_query('SELECT * FROM '.$TSTDPUBASG.' WHERE publication_id = '.(string)$publication['id'].' LIMIT 1',__FILE__,__LINE__);
+	$sql = Database::query('SELECT * FROM '.$TSTDPUBASG.' WHERE publication_id = '.(string)$publication['id'].' LIMIT 1',__FILE__,__LINE__);
 	$homework = Database::fetch_array($sql);
 
 	if($homework['expires_on']!='0000-00-00 00:00:00' || $homework['ends_on']!='0000-00-00 00:00:00'):
@@ -1101,7 +1101,7 @@ if ($is_course_member) {
 			//Get the author ID for that document from the item_property table
 			$is_author = false;
 			$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=" . $edit;
-			$author_qry = api_sql_query($author_sql, __FILE__, __LINE__);
+			$author_qry = Database::query($author_sql, __FILE__, __LINE__);
 			if (Database :: num_rows($author_qry) == 1) {
 				$is_author = true;
 			}
@@ -1167,7 +1167,7 @@ if ($is_course_member) {
 		if($is_allowed_to_edit && !empty($edit) && !empty($parent_id)) {
 			// Get qualification from parent_id that'll allow the validation qualification over
 			$sql = "SELECT qualification FROM $work_table WHERE id='$parent_id'";
-			$result = api_sql_query($sql,__FILE__,__LINE__);
+			$result = Database::query($sql,__FILE__,__LINE__);
 			$row = Database::fetch_array($result);
 			$qualification_over = $row['qualification'];
 			$form->addElement('text', 'qualification', get_lang('Qualification'),'size="10"');
@@ -1370,7 +1370,7 @@ if (!$display_upload_form && !$display_tool_options) {
 	$add_query = '';
 	$sql = "SELECT user.firstname, user.lastname FROM $table_user user, $table_course_user course_user
 			  WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status='1'";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	$admin_course = '';
 	while($row = Database::fetch_row($res)) {
 		$admin_course .='\''.api_get_person_name($row[0], $row[1]).'\',';

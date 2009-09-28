@@ -168,7 +168,7 @@ function mdo_storeback(&$xmlDoc)  // by ref!
     // do not store back a modified coverage as category...
 
     $link_table = Database::get_course_table(TABLE_LINK);
-    if ($u) api_sql_query("UPDATE $link_table SET " . substr($u, 2) .
+    if ($u) Database::query("UPDATE $link_table SET " . substr($u, 2) .
         " WHERE id='" . addslashes($this->mdo_id) . "'", __FILE__, __LINE__);
 }
 
@@ -198,7 +198,7 @@ function mdobject($_course, $id)
     $this->mdo_dcmap_e = $ieee_dcmap_e; $this->mdo_dcmap_v = $ieee_dcmap_v;
 
     $link_table = Database::get_course_table(TABLE_LINK);
-    if (($linkinfo = @mysql_fetch_array(api_sql_query(
+    if (($linkinfo = @mysql_fetch_array(Database::query(
             "SELECT url,title,description,category_id FROM $link_table WHERE id='" .
             addslashes($id) . "'", __FILE__, __LINE__))))
     {
@@ -208,7 +208,7 @@ function mdobject($_course, $id)
         $this->mdo_category =    ($lci = $linkinfo['category_id']);
 
         $linkcat_table = Database::get_course_table(TABLE_LINK_CATEGORY);
-        if (($catinfo = @mysql_fetch_array(api_sql_query(
+        if (($catinfo = @mysql_fetch_array(Database::query(
                 "SELECT category_title FROM $linkcat_table WHERE id='" .
                 addslashes($lci) . "'", __FILE__, __LINE__))))
             $this->mdo_category_title =    $catinfo['category_title'];

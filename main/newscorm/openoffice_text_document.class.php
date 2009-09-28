@@ -263,7 +263,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 						$sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, ref_id_second_level, search_did)
                                 VALUES (NULL , \'%s\', \'%s\', %s, %s, %s)';
 						$sql = sprintf($sql, $tbl_se_ref, api_get_course_id(), TOOL_LEARNPATH, $lp_id, $previous, $did);
-						api_sql_query($sql,__FILE__,__LINE__);
+						Database::query($sql,__FILE__,__LINE__);
 					}
 				}
 			}

@@ -196,7 +196,7 @@ if ( (! $is_allowed_to_edit) or ($isStudentView) )
 //from here on, we are admin because of the previous condition, so don't check anymore
 
 $sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id";
-$result=api_sql_query($sql_query);
+$result=Database::query($sql_query);
 $therow=Database::fetch_array($result);
 
 //$admin_output = '';

@@ -68,7 +68,7 @@ class Exercise
     	#$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 		$sql="SELECT title,description,sound,type,random,active, results_disabled, max_attempt,start_time,end_time,feedback_type FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 
 		// if the exercise has been found
 		if($object=Database::fetch_object($result))
@@ -86,7 +86,7 @@ class Exercise
 			$this->end_time = $object->end_time;
             $this->start_time = $object->start_time;
 			$sql="SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($id)."' ORDER BY question_order";
-			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql,__FILE__,__LINE__);
 
 			// fills the array with the question ID for this exercise
 			// the key of the array is the question position
@@ -397,13 +397,13 @@ class Exercise
 			{
 				$query="SELECT 1 FROM $TBL_DOCUMENT "
             ." WHERE path='".str_replace($documentPath,'',$audioPath).'/'.$this->sound."'";
-				$result=api_sql_query($query,__FILE__,__LINE__);
+				$result=Database::query($query,__FILE__,__LINE__);
 
 				if(!mysql_num_rows($result))
 				{
         /*$query="INSERT INTO $TBL_DOCUMENT(path,filetype) VALUES "
             ." ('".str_replace($documentPath,'',$audioPath).'/'.$this->sound."','file')";
-        api_sql_query($query,__FILE__,__LINE__);*/
+        Database::query($query,__FILE__,__LINE__);*/
         $id = add_document($_course,str_replace($documentPath,'',$audioPath).'/'.$this->sound,'file',$sound['size'],$sound['name']);
 
         //$id = Database::get_last_insert_id();
@@ -414,7 +414,7 @@ class Exercise
                 ."(tool, ref, insert_user_id,to_group_id, insert_date, lastedit_date, lastedit_type) "
                 ." VALUES "
                 ."('".TOOL_DOCUMENT."', $id, $_user['user_id'], 0, '$time', '$time', 'DocumentAdded' )";
-        api_sql_query($query,__FILE__,__LINE__);*/
+        Database::query($query,__FILE__,__LINE__);*/
         api_item_property_update($_course, TOOL_DOCUMENT, $id, 'DocumentAdded',$_user['user_id']);
         item_property_update_on_folder($_course,str_replace($documentPath,'',$audioPath),$_user['user_id']);
 				}
@@ -539,7 +539,7 @@ class Exercise
 			$sql .= " WHERE id='".Database::escape_string($id)."'";
 
 		//	echo $sql;
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 
 			// update into the item_property table
 			api_item_property_update($_course, TOOL_QUIZ, $id,'QuizUpdated',$_user['user_id']);
@@ -573,7 +573,7 @@ class Exercise
 						'".Database::escape_string($attempts)."',
 						'".Database::escape_string($feedbacktype)."'
 						)";
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 			$this->id=Database::insert_id();
         	// insert into the item_property table
 
@@ -596,7 +596,7 @@ class Exercise
             //$sql="UPDATE $TBL_QUESTIONS SET position='".Database::escape_string($position)."' WHERE id='".Database::escape_string($questionId)."'";
             $sql="UPDATE $TBL_QUIZ_QUESTION SET question_order='".Database::escape_string($position)."' " .
                  "WHERE question_id='".Database::escape_string($questionId)."' and exercice_id=".Database::escape_string($this->id)."";
-            api_sql_query($sql,__FILE__,__LINE__);
+            Database::query($sql,__FILE__,__LINE__);
 
         }
     }
@@ -823,7 +823,7 @@ class Exercise
 		global $_course,$_user;
 		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 		$sql="UPDATE $TBL_EXERCICES SET active='-1' WHERE id='".Database::escape_string($this->id)."'";
-		api_sql_query($sql);
+		Database::query($sql);
 		api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizDeleted',$_user['user_id']);
 
 		if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian') ) {
@@ -1128,7 +1128,7 @@ class Exercise
 		    $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
 			    VALUES (NULL , \'%s\', \'%s\', %s, %s)';
 		    $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id, $did);
-		    api_sql_query($sql,__FILE__,__LINE__);
+		    Database::query($sql,__FILE__,__LINE__);
 	    }
 
     }
@@ -1143,7 +1143,7 @@ class Exercise
             $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
             $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
             $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
-            $res = api_sql_query($sql, __FILE__, __LINE__);
+            $res = Database::query($sql, __FILE__, __LINE__);
 
             if (Database::num_rows($res) > 0) {
                 require_once(api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php');
@@ -1194,12 +1194,12 @@ class Exercise
                     // save it to db
                     $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=\'%s\'';
                     $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
-                    api_sql_query($sql,__FILE__,__LINE__);
+                    Database::query($sql,__FILE__,__LINE__);
                     //var_dump($sql);
                     $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
                         VALUES (NULL , \'%s\', \'%s\', %s, %s)';
                     $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id, $did);
-                    api_sql_query($sql,__FILE__,__LINE__);
+                    Database::query($sql,__FILE__,__LINE__);
                 }
 
             }
@@ -1214,7 +1214,7 @@ class Exercise
 		    $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
 		    $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level IS NULL LIMIT 1';
 		    $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
-		    $res = api_sql_query($sql, __FILE__, __LINE__);
+		    $res = Database::query($sql, __FILE__, __LINE__);
 		    if (Database::num_rows($res) > 0) {
 			    $row = Database::fetch_array($res);
 			    require_once(api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php');
@@ -1225,7 +1225,7 @@ class Exercise
                 foreach ( $this->questionList as $question_i) {
                     $sql = 'SELECT type FROM %s WHERE id=%s';
                     $sql = sprintf($sql, $tbl_quiz_question, $question_i);
-                    $qres = api_sql_query($sql, __FILE__, __LINE__);
+                    $qres = Database::query($sql, __FILE__, __LINE__);
                     if (Database::num_rows($qres) > 0) {
                         $qrow = Database::fetch_array($qres);
                         $objQuestion = Question::getInstance($qrow['type']);
@@ -1237,7 +1237,7 @@ class Exercise
 		    }
 		    $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level IS NULL LIMIT 1';
 		    $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
-		    api_sql_query($sql, __FILE__, __LINE__);
+		    Database::query($sql, __FILE__, __LINE__);
 
 		    // remove terms from db
             require_once(api_get_path(LIBRARY_PATH) .'specific_fields_manager.lib.php');

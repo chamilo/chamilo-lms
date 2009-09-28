@@ -101,7 +101,7 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 		$sql .= ' AND cu.status=1 ';
 	}
 	$sql .= ' AND target_course_code IS NULL AND cu.user_id = '.$user_info['user_id'].' AND c.code != '."'".$course_info['sysCode']."'".' ORDER BY title ASC';
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	if( Database::num_rows($res) == 0) {
 		Display::display_normal_message(get_lang('NoDestinationCoursesAvailable'));
 	} else {

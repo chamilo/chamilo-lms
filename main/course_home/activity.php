@@ -61,31 +61,31 @@ function show_tools_category($course_tool_category)
 	switch ($course_tool_category)
 	{
 		case TOOL_STUDENT_VIEW:
-				$result = api_sql_query("SELECT * FROM $course_tool_table WHERE visibility = '1' AND (category = 'authoring' OR category = 'interaction') ORDER BY id",__FILE__,__LINE__);
+				$result = Database::query("SELECT * FROM $course_tool_table WHERE visibility = '1' AND (category = 'authoring' OR category = 'interaction') ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
 
 		case TOOL_AUTHORING:
 
-				$result = api_sql_query("SELECT * FROM $course_tool_table WHERE category = 'authoring' ORDER BY id",__FILE__,__LINE__);
+				$result = Database::query("SELECT * FROM $course_tool_table WHERE category = 'authoring' ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
 
 		case TOOL_INTERACTION:
 
-				$result = api_sql_query("SELECT * FROM $course_tool_table WHERE category = 'interaction' ORDER BY id",__FILE__,__LINE__);
+				$result = Database::query("SELECT * FROM $course_tool_table WHERE category = 'interaction' ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
 
 		case TOOL_ADMIN_VISIBLE:
 
-				$result = api_sql_query("SELECT * FROM $course_tool_table WHERE category = 'admin' AND visibility ='1' ORDER BY id",__FILE__,__LINE__);
+				$result = Database::query("SELECT * FROM $course_tool_table WHERE category = 'admin' AND visibility ='1' ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
 
 		case TOOL_ADMIN_PLATEFORM:
 
-				$result = api_sql_query("SELECT * FROM $course_tool_table WHERE category = 'admin' ORDER BY id",__FILE__,__LINE__);
+				$result = Database::query("SELECT * FROM $course_tool_table WHERE category = 'admin' ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
 
@@ -99,7 +99,7 @@ function show_tools_category($course_tool_category)
 
 	/*if(api_is_course_coach())
 	{
-		$result = api_sql_query("SELECT * FROM $course_tool_table WHERE name='tracking'",__FILE__,__LINE__);
+		$result = Database::query("SELECT * FROM $course_tool_table WHERE name='tracking'",__FILE__,__LINE__);
 		$all_tools_list[]=Database :: fetch_array($result);
 	}*/
 
@@ -150,7 +150,7 @@ function show_tools_category($course_tool_category)
 	//edit by Kevin Van Den Haute (kevin@develop-it.be) for integrating Smartblogs
 	if($sql_links != null)
 	{
-		$result_links = api_sql_query($sql_links,__FILE__,__LINE__);
+		$result_links = Database::query($sql_links,__FILE__,__LINE__);
 		$properties = array();
 		while($links_row = Database::fetch_array($result_links))
 		{
@@ -199,7 +199,7 @@ function show_tools_category($course_tool_category)
 							`user_id` = " . api_get_user_id();
 				}
 
-				$result_blogs = api_sql_query($sql_blogs, __FILE__, __LINE__);
+				$result_blogs = Database::query($sql_blogs, __FILE__, __LINE__);
 
 				if(Database::num_rows($result_blogs) > 0)
 					$all_tools_list[] = $toolsRow;
@@ -397,7 +397,7 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		*/
 			if ($_GET["id"]==strval(intval($_GET["id"]))) {
 				$sql="UPDATE $tool_table SET visibility='".Database::escape_string($requested_visible)."' WHERE id='".$_GET["id"]."'";
-				api_sql_query($sql,__FILE__,__LINE__);
+				Database::query($sql,__FILE__,__LINE__);
 			}
 
 		$response_data = array(
@@ -419,7 +419,7 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		*/
 		if(!empty($_GET['hide'])) // visibility 1 -> 0
 		{
-			api_sql_query("UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
+			Database::query("UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
 			Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
 		}
 
@@ -430,7 +430,7 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		*/
 		elseif(!empty($_GET['restore'])) // visibility 0,2 -> 1
 		{
-			api_sql_query("UPDATE $tool_table SET visibility=1 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
+			Database::query("UPDATE $tool_table SET visibility=1 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
 			Display::display_confirmation_message(get_lang('ToolIsNowVisible'));
 		}
 	}
@@ -461,7 +461,7 @@ if(api_is_platform_admin())
 
 	elseif(isset($_GET["delete"]) && $_GET["delete"])
 	{
-		api_sql_query("DELETE FROM $tool_table WHERE id='$id' AND added_tool=1",__FILE__,__LINE__);
+		Database::query("DELETE FROM $tool_table WHERE id='$id' AND added_tool=1",__FILE__,__LINE__);
 	}
 }
 

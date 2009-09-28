@@ -35,7 +35,7 @@ function exit_of_chat ($user_id) {
  		if ($response===true) {
  			$tbl_chat_connected = Database::get_course_chat_connected_table($courses['db_name']);;
  			$sql='DELETE FROM '.$tbl_chat_connected.' WHERE user_id='.$user_id;
- 			api_sql_query($sql,__FILE__,__LINE__);
+ 			Database::query($sql,__FILE__,__LINE__);
  		}
  	}
 
@@ -49,7 +49,7 @@ function exit_of_chat ($user_id) {
 function user_connected_in_chat ($user_id,$database_name) {
  	$tbl_chat_connected = Database::get_course_chat_connected_table($database_name);
  	$sql='SELECT COUNT(*) AS count FROM '.$tbl_chat_connected .' c WHERE user_id='.$user_id;
- 	$result = api_sql_query($sql,__FILE__,__LINE__);
+ 	$result = Database::query($sql,__FILE__,__LINE__);
  	$count  = Database::fetch_array($result,'ASSOC');
  	if (1==$count['count']) {
  		return true;
@@ -81,7 +81,7 @@ function disconnect_user_of_chat () {
 				if (($cd_count_time_seconds - $date_count_time_seconds)>10) {
 					$tbl_chat_connected = Database::get_course_chat_connected_table();
 		 			$sql='DELETE FROM '.$tbl_chat_connected.' WHERE user_id='.$list_info_user['user_id'];
-		 			api_sql_query($sql,__FILE__,__LINE__);
+		 			Database::query($sql,__FILE__,__LINE__);
 				}
 			}
 
@@ -97,7 +97,7 @@ function users_list_in_chat () {
 	$list_users_in_chat=array();
  	$tbl_chat_connected = Database::get_course_chat_connected_table();
  	$sql='SELECT user_id,last_connection FROM '.$tbl_chat_connected.' ;';
- 	$result=api_sql_query($sql,__FILE__,__LINE__);
+ 	$result=Database::query($sql,__FILE__,__LINE__);
  	while ($row = Database::fetch_array($result,'ASSOC')) {
  		$list_users_in_chat[]=$row;
  	}

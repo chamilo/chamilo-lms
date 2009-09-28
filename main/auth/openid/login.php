@@ -186,10 +186,10 @@ function openid_association($op_endpoint) {
   // Remove Old Associations:
   //TODO
   $openid_association = Database::get_main_table(TABLE_MAIN_OPENID_ASSOCIATION);
-  api_sql_query("DELETE FROM $openid_association WHERE created + expires_in < %d", time());
+  Database::query("DELETE FROM $openid_association WHERE created + expires_in < %d", time());
 
   // Check to see if we have an association for this IdP already
-  $assoc_handle = api_sql_query("SELECT assoc_handle FROM $openid_association WHERE idp_endpoint_uri = '%s'", $op_endpoint);
+  $assoc_handle = Database::query("SELECT assoc_handle FROM $openid_association WHERE idp_endpoint_uri = '%s'", $op_endpoint);
   if (Database::num_rows($assoc_handle)<=1) {
     $mod = OPENID_DH_DEFAULT_MOD;
     $gen = OPENID_DH_DEFAULT_GEN;
@@ -220,7 +220,7 @@ function openid_association($op_endpoint) {
     }
     //TODO
    	$openid_association = Database::get_main_table(TABLE_MAIN_OPENID_ASSOCIATION);
-    api_sql_query(sprintf("INSERT INTO $openid_association (idp_endpoint_uri, session_type, assoc_handle, assoc_type, expires_in, mac_key, created) VALUES('%s', '%s', '%s', '%s', %d, '%s', %d)",
+    Database::query(sprintf("INSERT INTO $openid_association (idp_endpoint_uri, session_type, assoc_handle, assoc_type, expires_in, mac_key, created) VALUES('%s', '%s', '%s', '%s', %d, '%s', %d)",
              $op_endpoint, $assoc_response['session_type'], $assoc_response['assoc_handle'], $assoc_response['assoc_type'], $assoc_response['expires_in'], $assoc_response['mac_key'], time()));
 
     $assoc_handle = $assoc_response['assoc_handle'];
@@ -300,7 +300,7 @@ function openid_verify_assertion($op_endpoint, $response) {
 	//TODO
   $openid_association = Database::get_main_table(TABLE_MAIN_OPENID_ASSOCIATION);
   $sql = sprintf("SELECT * FROM $openid_association WHERE assoc_handle = '%s'", $response['openid.assoc_handle']);
-  $res = api_sql_query($sql);
+  $res = Database::query($sql);
   $association = Database::fetch_object($res);
   if ($association && isset($association->session_type)) {
     $keys_to_sign = explode(',', $response['openid.signed']);

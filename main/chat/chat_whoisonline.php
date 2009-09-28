@@ -49,7 +49,7 @@ if (!empty($course))
 	$tbl_chat_connected	= Database::get_course_table(CHAT_CONNECTED_TABLE,$_course['dbName']);
 
 	$query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
-	$result=api_sql_query($query,__FILE__,__LINE__);
+	$result=Database::query($query,__FILE__,__LINE__);
 
 	list($pseudoUser)=Database::fetch_array($result);
 
@@ -63,14 +63,14 @@ if (!empty($course))
 	if(!isset($_SESSION['id_session']))
 	{
 		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,t3.status FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_course_user t3 WHERE t1.user_id=t2.user_id AND t3.user_id=t2.user_id AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' ORDER BY username";
-		$result=api_sql_query($query,__FILE__,__LINE__);
+		$result=Database::query($query,__FILE__,__LINE__);
 		$Users=Database::store_result($result);
 	}
 	else
 	{
 		// select learners
 		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session_course_user t3 WHERE t1.user_id=t2.user_id AND t3.id_user=t2.user_id AND t3.id_session = '".$_SESSION['id_session']."' AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' ORDER BY username";
-		$result=api_sql_query($query,__FILE__,__LINE__);
+		$result=Database::query($query,__FILE__,__LINE__);
 		while($learner = Database::fetch_array($result))
 		{
 			$Users[$learner['user_id']] = $learner;
@@ -78,13 +78,13 @@ if (!empty($course))
 
 		// select session coach
 		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session t3 WHERE t1.user_id=t2.user_id AND t3.id_coach=t2.user_id AND t3.id = '".$_SESSION['id_session']."' AND t2.last_connection>'".$date_inter."' ORDER BY username";
-		$result=api_sql_query($query,__FILE__,__LINE__);
+		$result=Database::query($query,__FILE__,__LINE__);
 		if($coach = Database::fetch_array($result))
 			$Users[$coach['user_id']] = $coach;
 
 		// select session course coach
 		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session_course t3 WHERE t1.user_id=t2.user_id AND t3.id_coach=t2.user_id AND t3.id_session = '".$_SESSION['id_session']."' AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' ORDER BY username";
-		$result=api_sql_query($query,__FILE__,__LINE__);
+		$result=Database::query($query,__FILE__,__LINE__);
 		if($coach = Database::fetch_array($result))
 			$Users[$coach['user_id']] = $coach;
 

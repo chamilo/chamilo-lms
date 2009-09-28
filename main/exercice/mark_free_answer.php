@@ -137,7 +137,7 @@ if($action == 'mark'){
 				WHERE exe_user_id = '".Database::escape_string($my_usr)."' AND exe_cours_id = '".Database::escape_string($my_cid)."' AND exe_exo_id = '".Database::escape_string($my_exe)."'
 				ORDER BY exe_date DESC";
 			#echo $sql;
-			$res = api_sql_query($sql,__FILE__,__LINE__);
+			$res = Database::query($sql,__FILE__,__LINE__);
 			if(mysql_num_rows($res)>0){
 				$row = mysql_fetch_array($res);
 				//@todo Check that just summing past score and the new free answer mark doesn't come up
@@ -146,7 +146,7 @@ if($action == 'mark'){
 				$sql = "UPDATE $exercise_table SET exe_result = '$my_score'
 					WHERE exe_id = '".$row['exe_id']."'";
 				#echo $sql;
-				$res = api_sql_query($sql,__FILE__,__LINE__);
+				$res = Database::query($sql,__FILE__,__LINE__);
 				$my_msg = get_lang('MarkIsUpdated');
 			}else{
 				$my_score = $_POST['score'];
@@ -177,9 +177,9 @@ if($action == 'mark'){
 				#		$user_id = '0';
 				#	}
 				#	$sql2 = "update `$tbl_learnpath_user` set score='$score' where (user_id=$user_id and learnpath_id='$learnpath_id' and learnpath_item_id='$learnpath_item_id')";
-				#	$res2 = api_sql_query($sql2,__FILE__,__LINE__);
+				#	$res2 = Database::query($sql2,__FILE__,__LINE__);
 				#}
-				$res = api_sql_query($sql,__FILE__,__LINE__);
+				$res = Database::query($sql,__FILE__,__LINE__);
 				$my_msg = get_lang('MarkInserted');
 			}
 			//$mysql_query($sql);

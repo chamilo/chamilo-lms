@@ -191,7 +191,7 @@ if((api_is_allowed_to_edit()) && (($finish == 0) || ($finish == 2)))
 					$query = "UPDATE $dbTable SET comment='$newComment' WHERE path=\"".$uploadPath."/".$fld."/".$filename."\"";
 					/*, visibility='v' */
 
-					api_sql_query($query,__FILE__,__LINE__);
+					Database::query($query,__FILE__,__LINE__);
 					api_item_property_update($_course, TOOL_QUIZ, $id, "QuizAdded", $_user['user_id']);
 				}
 				else

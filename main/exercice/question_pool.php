@@ -188,7 +188,7 @@ if($is_allowedToEdit)
 	<option value="-1" <?php if($exerciseId == -1) echo 'selected="selected"'; ?>>-- <?php echo get_lang('OrphanQuestions'); ?> --</option>
 	<?php
 	$sql="SELECT id,title FROM $TBL_EXERCICES WHERE id<>'".Database::escape_string($fromExercise)."' AND active<>'-1' ORDER BY id";
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 
 	// shows a list-box allowing to filter questions
 	while($row=Database::fetch_array($result)) {
@@ -308,7 +308,7 @@ if($is_allowedToEdit)
 		$exerciseId=0;
 	}
 
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	$nbrQuestions=Database::num_rows($result);
 
     echo '<tr>',

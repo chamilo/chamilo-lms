@@ -60,25 +60,25 @@ function show_tools($course_tool_category)
 	{
 		case TOOL_PUBLIC:
 
-				$result = api_sql_query("SELECT * FROM $course_tool_table WHERE visibility=1 ORDER BY id",__FILE__,__LINE__);
+				$result = Database::query("SELECT * FROM $course_tool_table WHERE visibility=1 ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
 
 		case TOOL_PUBLIC_BUT_HIDDEN:
 
-				$result = api_sql_query("SELECT * FROM $course_tool_table WHERE visibility=0 AND admin=0 ORDER BY id",__FILE__,__LINE__);
+				$result = Database::query("SELECT * FROM $course_tool_table WHERE visibility=0 AND admin=0 ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##808080";
 				break;
 
 		case TOOL_COURSE_ADMIN:
 
-				$result = api_sql_query("SELECT * FROM $course_tool_table WHERE admin=1 AND visibility != 2 ORDER BY id",__FILE__,__LINE__);
+				$result = Database::query("SELECT * FROM $course_tool_table WHERE admin=1 AND visibility != 2 ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
 
 		case TOOL_PLATFORM_ADMIN:
 
-				$result = api_sql_query("SELECT * FROM $course_tool_table WHERE visibility = 2 ORDER BY id",__FILE__,__LINE__);
+				$result = Database::query("SELECT * FROM $course_tool_table WHERE visibility = 2 ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 	}
 
@@ -118,7 +118,7 @@ function show_tools($course_tool_category)
 	if( $sql_links != null )
 	{
 		$properties = array();
-		$result_links=api_sql_query($sql_links,__FILE__,__LINE__);
+		$result_links=Database::query($sql_links,__FILE__,__LINE__);
 		while ($links_row=mysql_fetch_array($result_links))
 		{
 			unset($properties);
@@ -331,7 +331,7 @@ if (api_is_allowed_to_edit())
 
 	elseif ($_GET["destroy"])
 	{
-		api_sql_query("UPDATE $tool_table SET visibility='2' WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
+		Database::query("UPDATE $tool_table SET visibility='2' WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
 	}
 
   	/*
@@ -341,7 +341,7 @@ if (api_is_allowed_to_edit())
 	*/
 	elseif ($_GET["hide"]) // visibility 1 -> 0
 	{
-		api_sql_query("UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
+		Database::query("UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
 		Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
 	}
 
@@ -352,7 +352,7 @@ if (api_is_allowed_to_edit())
 	*/
 	elseif ($_GET["restore"]) // visibility 0,2 -> 1
 	{
-		api_sql_query("UPDATE $tool_table SET visibility=1  WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
+		Database::query("UPDATE $tool_table SET visibility=1  WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
 		Display::display_confirmation_message(get_lang('ToolIsNowVisible'));
 	}
 }
@@ -382,7 +382,7 @@ if (api_is_platform_admin())
 
 	elseif (isset($_GET["delete"]) && $_GET["delete"])
 	{
-		api_sql_query("DELETE FROM $tool_table WHERE id='$id' AND added_tool=1",__FILE__,__LINE__);
+		Database::query("DELETE FROM $tool_table WHERE id='$id' AND added_tool=1",__FILE__,__LINE__);
 	}
 }
 

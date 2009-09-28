@@ -148,7 +148,7 @@ class Result
 			$sql .= ' evaluation_id = '.Database::escape_string($evaluation_id);
 			$paramcount ++;
 		}
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$allres=array();
 		while ($data=Database::fetch_array($result)) {
 			$res= new Result();
@@ -182,7 +182,7 @@ class Result
 			}
 			$sql .= ')';
 
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		} else {
 			die('Error in Result add: required field empty');
 		}
@@ -214,7 +214,7 @@ class Result
 			}
 			$sql .= ')';
 
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		} else {
 			die('Error in Result add: required field empty');
 		}
@@ -236,7 +236,7 @@ class Result
 		}
 		$sql .= ' WHERE id = '.$this->id;
 		// no need to update creation date
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 	}
 
 	/**
@@ -245,6 +245,6 @@ class Result
 	public function delete() {
 		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$sql = 'DELETE FROM '.$tbl_grade_results.' WHERE id = '.$this->id;
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 	}
 }

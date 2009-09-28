@@ -279,7 +279,7 @@ if($surveyid)
 {
 	$db_name=Database::escape_string($_REQUEST['db_name']);
 	$sql_temp = "SELECT * FROM $db_name.survey WHERE survey_id='$surveyid'";
-	$res_temp = api_sql_query($sql_temp, __FILE__, __LINE__);
+	$res_temp = Database::query($sql_temp, __FILE__, __LINE__);
 	$obj=@Database::fetch_object($res_temp);
 	$template=$obj->template;
 }
@@ -365,14 +365,14 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	-----------------------------------------------------------
 	*/
 	if (!empty($_GET['action']) AND $_GET['action']=='delete' AND isset($_GET['id'])) {
-		//api_sql_query("DELETE FROM  $tbl_announcement WHERE id='$delete'",__FILE__,__LINE__);
+		//Database::query("DELETE FROM  $tbl_announcement WHERE id='$delete'",__FILE__,__LINE__);
 		$id=intval(addslashes($_GET['id']));
 
 		if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
 
 			// tooledit : visibility = 2 : only visibile for platform administrator
 			if ($ctok == $_GET['sec_token']) {
-				api_sql_query("UPDATE $tbl_item_property SET visibility='2' WHERE tool='".TOOL_ANNOUNCEMENT."' and ref='".$id."'",__FILE__,__LINE__);
+				Database::query("UPDATE $tbl_item_property SET visibility='2' WHERE tool='".TOOL_ANNOUNCEMENT."' and ref='".$id."'",__FILE__,__LINE__);
 
 				delete_added_resource("Ad_Valvas", $delete);
 
@@ -392,9 +392,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	*/
 	if (!empty($_GET['action']) and $_GET['action']=='delete_all') {
 
-		//api_sql_query("DELETE FROM $tbl_announcement",__FILE__,__LINE__);
+		//Database::query("DELETE FROM $tbl_announcement",__FILE__,__LINE__);
 		if(api_is_allowed_to_edit()) {
-			api_sql_query("UPDATE $tbl_item_property SET visibility='2' WHERE tool='".TOOL_ANNOUNCEMENT."'",__FILE__,__LINE__);
+			Database::query("UPDATE $tbl_item_property SET visibility='2' WHERE tool='".TOOL_ANNOUNCEMENT."'",__FILE__,__LINE__);
 
 			delete_all_resources_type("Ad_Valvas");
 
@@ -419,7 +419,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 		if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
 			$sql="SELECT * FROM  $tbl_announcement WHERE id='$id'";
-			$result = api_sql_query($sql,__FILE__,__LINE__);
+			$result = Database::query($sql,__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 
 			if ($myrow) {
@@ -477,7 +477,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 				"AND itemproperty.tool='".TOOL_ANNOUNCEMENT."' " .
 				"AND itemproperty.visibility<>2 " .
 				"ORDER BY display_order $sortDirection";
-		$result = api_sql_query($my_sql,__FILE__,__LINE__);
+		$result = Database::query($my_sql,__FILE__,__LINE__);
 
 		while (list ($announcementId, $announcementOrder) = Database::fetch_row($result)) {
 			// STEP 2 : FOUND THE NEXT ANNOUNCEMENT ID AND ORDER.
@@ -486,10 +486,10 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			if (isset ($thisAnnouncementOrderFound) && $thisAnnouncementOrderFound == true) {
 				$nextAnnouncementId = $announcementId;
 				$nextAnnouncementOrder = $announcementOrder;
-				api_sql_query("UPDATE $tbl_announcement " .
+				Database::query("UPDATE $tbl_announcement " .
 						"SET display_order = '$nextAnnouncementOrder' " .
 						"WHERE id =  '$thisAnnouncementId'",__FILE__,__LINE__);
-				api_sql_query("UPDATE $tbl_announcement " .
+				Database::query("UPDATE $tbl_announcement " .
 						"SET display_order = '$thisAnnouncementOrder' " .
 						"WHERE id =  '$nextAnnouncementId.'",__FILE__,__LINE__);
 
@@ -541,7 +541,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			//insert mode
 			if ($ctok == $_POST['sec_token']) {
 				if (!$surveyid) {
-					$result = api_sql_query("SELECT MAX(display_order) FROM $tbl_announcement WHERE session_id=".intval($_SESSION['id_session'])." OR session_id=0",__FILE__,__LINE__);
+					$result = Database::query("SELECT MAX(display_order) FROM $tbl_announcement WHERE session_id=".intval($_SESSION['id_session'])." OR session_id=0",__FILE__,__LINE__);
 					list($orderMax) = Database::fetch_row($result);
 					$order = $orderMax + 1;
 					if (!empty($_SESSION['toolgroup'])) {
@@ -587,7 +587,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 							//api_send_mail($to,$subject,$message,$headers);
 							api_mail('',$to,$subject,$message,$sender_name,$email,$headers);
 							$sql_date="SELECT * FROM $db_name.survey WHERE survey_id='$surveyid'";
-							$res_date=api_sql_query($sql_date, __FILE__, __LINE__);
+							$res_date=Database::query($sql_date, __FILE__, __LINE__);
 							$obj_date=Database::fetch_object($res_date);
 							$end_date=$obj_date->avail_till;
 							$table_reminder = Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER); // TODO: To be checked. TABLE_MAIN_SURVEY_REMINDER has not been defined.
@@ -596,19 +596,19 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 								$time = $time['yday'];
 								$time = $time+7;
 								$sql_insert="INSERT INTO $table_reminder(sid,db_name,email,subject,content,reminder_choice,reminder_time,avail_till) values('$surveyid','$db_name','$to','".addslashes($subject)."','".addslashes($message)."','1','$time','$end_date')";
-								api_sql_query($sql_insert, __FILE__, __LINE__);
+								Database::query($sql_insert, __FILE__, __LINE__);
 							} else if ($_REQUEST['reminder']=="2") {
 								$time=getdate();
 								$time = $time['yday'];
 								$time = $time+14;
 								$sql_insert="INSERT INTO $table_reminder(sid,db_name,email,subject,content,reminder_choice,reminder_time,avail_till) values('$surveyid','$db_name','$to','".addslashes($subject)."','".addslashes($message)."','1','$time','$end_date')";
-								api_sql_query($sql_insert, __FILE__, __LINE__);
+								Database::query($sql_insert, __FILE__, __LINE__);
 							} else if($_REQUEST['reminder']=="3") {
 								$time=getdate();
 								$time = $time['yday'];
 								$time = $time+30;
 								$sql_insert="INSERT INTO $table_reminder(sid,db_name,email,subject,content,reminder_choice,reminder_time,avail_till) values('$surveyid','$db_name','$to','".addslashes($subject)."','".addslashes($message)."','1','$time','$end_date')";
-								api_sql_query($sql_insert, __FILE__, __LINE__);
+								Database::query($sql_insert, __FILE__, __LINE__);
 							}
 						}
 					}
@@ -633,7 +633,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 								WHERE gu.group_id IN (".$grouplist.")";
 
 
-						$groupMemberResult = api_sql_query($sql,__FILE__,__LINE__);
+						$groupMemberResult = Database::query($sql,__FILE__,__LINE__);
 
 
 						if ($groupMemberResult) {
@@ -670,7 +670,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			    	}
 
 					if ($sqlmail!='') {
-						$result = api_sql_query($sqlmail,__FILE__,__LINE__);
+						$result = Database::query($sqlmail,__FILE__,__LINE__);
 
 				    	/*=================================================================================
 							    				send email one by one to avoid antispam
@@ -734,7 +734,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	                        }
 
 							$sql_date="SELECT * FROM $db_name WHERE survey_id='$surveyid'";
-							$res_date=api_sql_query($sql_date, __FILE__, __LINE__);
+							$res_date=Database::query($sql_date, __FILE__, __LINE__);
 							$obj_date=Database::fetch_object($res_date);
 							$end_date=$obj_date->avail_till;
 							$table_reminder = Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER); // TODO: To be checked. TABLE_MAIN_SURVEY_REMINDER has not been defined.
@@ -744,20 +744,20 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 								$time = $time['yday'];
 								$time = $time+7;
 								$sql="INSERT INTO $table_reminder(sid,db_name,email,subject,content,reminder_choice,reminder_time,avail_till) values('$surveyid','$db_name','$mailid','".addslashes($emailSubject)."','".addslashes($mail_body)."','1','$time','$end_date')";
-								api_sql_query($sql, __FILE__, __LINE__);
+								Database::query($sql, __FILE__, __LINE__);
 							} else if ($_REQUEST['reminder']=="2") {
 								$time=getdate();
 								$time = $time['yday'];
 								$time = $time+14;
 								$sql="INSERT INTO $table_reminder(sid,db_name,email,subject,content,reminder_choice,reminder_time,avail_till) values('$surveyid','$db_name','$mailid','".addslashes($emailSubject)."','".addslashes($mail_body)."','1','$time','$end_date')";
-								api_sql_query($sql, __FILE__, __LINE__);
+								Database::query($sql, __FILE__, __LINE__);
 
 							} else if ($_REQUEST['reminder']=="3") {
 								$time=getdate();
 								$time = $time['yday'];
 								$time = $time+30;
 								$sql="INSERT INTO $table_reminder(sid,db_name,email,subject,content,reminder_choice,reminder_time,avail_till) values('$surveyid','$db_name','$mailid','".addslashes($emailSubject)."','".addslashes($mail_body)."','1','$time','$end_date')";
-								api_sql_query($sql, __FILE__, __LINE__);
+								Database::query($sql, __FILE__, __LINE__);
 							}
 						}
 						update_mail_sent($insert_id);
@@ -908,7 +908,7 @@ if(api_is_allowed_to_edit(false,true))  {
 
 }
 
-$result = api_sql_query($sql,__FILE__,__LINE__);
+$result = Database::query($sql,__FILE__,__LINE__);
 $announcement_number = Database::num_rows($result);
 
 /*----------------------------------------------------
@@ -1290,7 +1290,7 @@ if ($display_announcement_list && !$surveyid) {
 
 	}
 
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	$num_rows = Database::num_rows($result);
 
 	/*=================================================

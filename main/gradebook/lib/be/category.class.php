@@ -211,7 +211,7 @@ class Category implements GradebookItem
 			$sql .= ' visible = '.$visible;
 			$paramcount ++;
 		}
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$allcat = Category::create_category_objects_from_sql_result($result);
 		return $allcat;
 	}
@@ -288,7 +288,7 @@ class Category implements GradebookItem
             }
 			$sql .= ')';
 
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			$this->set_id(Database::insert_id());
 		} else {
 			die('Error in Category add: required field empty');
@@ -330,7 +330,7 @@ class Category implements GradebookItem
 			.', visible = '.$this->is_visible()
 			.' WHERE id = '.$this->id;
 
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 	}
 
 	/**
@@ -339,7 +339,7 @@ class Category implements GradebookItem
 	public function delete() {
 		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 		$sql = 'DELETE FROM '.$tbl_grade_categories.' WHERE id = '.$this->id;
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 	}
 	/**
 	 * Not delete this category from the database,when visible=3 is category eliminated
@@ -347,7 +347,7 @@ class Category implements GradebookItem
 	public function update_category_delete($course_id){
 		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 		$sql = 'UPDATE '.$tbl_grade_categories.' SET visible=3 WHERE course_code ="'.$course_id.'"';
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 	}
 	/**
 	 * Show message resource delete
@@ -355,7 +355,7 @@ class Category implements GradebookItem
 	public function show_message_resource_delete($course_id) {
 		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 		$sql = 'SELECT count(*) AS num from '.$tbl_grade_categories.' WHERE course_code ="'.$course_id.'" AND visible=3';
-		$res=api_sql_query($sql, __FILE__, __LINE__);
+		$res=Database::query($sql, __FILE__, __LINE__);
 		$option=Database::fetch_array($res,'ASSOC');
 		if ($option['num']>=1) {
 			return '&nbsp;&nbsp;<span class="resource-deleted">(&nbsp;'.get_lang('ResourceDeleted').'&nbsp;)</span>';
@@ -373,7 +373,7 @@ class Category implements GradebookItem
 	 	} else {
 		 	$tbl_category=Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 		 	$sql='SELECT name,description,user_id,course_code,parent_id,weight,visible,certif_min_score,session_id FROM '.$tbl_category.' c WHERE c.id='.$selectcat;
-		 	$result=api_sql_query($sql,__FILE__,__LINE__);
+		 	$result=Database::query($sql,__FILE__,__LINE__);
 		 	$row=Database::fetch_array($result,'ASSOC');
 		 	return $row;
 	 	}
@@ -418,7 +418,7 @@ class Category implements GradebookItem
 			$sql.= ' AND parent_id = '.$parent;
 		}
 
-    	$result = api_sql_query($sql, __FILE__, __LINE__);
+    	$result = Database::query($sql, __FILE__, __LINE__);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
 	}
@@ -595,7 +595,7 @@ class Category implements GradebookItem
 
 
         }
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$cats = Category::create_category_objects_from_sql_result($result);
 
 		// course independent categories
@@ -637,7 +637,7 @@ class Category implements GradebookItem
 				.' WHERE user_id = '.$user_id
 				.')';
         }
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$cats = Category::create_category_objects_from_sql_result($result);
 		// course independent categories
 		if (isset($course_code)) {
@@ -832,7 +832,7 @@ class Category implements GradebookItem
 				.' WHERE parent_id = 0'
 //				.' AND user_id = '.$user_id
 				.' AND course_code IS NOT null)';
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		$cats=array();
 		while ($data=Database::fetch_array($result)) {
@@ -858,7 +858,7 @@ class Category implements GradebookItem
 		$sql .= ' AND cu.user_id = '.$user_id;
 		}
 
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		$cats=array();
 		while ($data=Database::fetch_array($result)) {

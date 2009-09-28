@@ -88,7 +88,7 @@ abstract class Question
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$sql="SELECT question,description,ponderation,position,type,picture,level FROM $TBL_QUESTIONS WHERE id='".Database::escape_string($id)."'";
 
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 
 		// if the question has been found
 		if($object=mysql_fetch_object($result))
@@ -104,7 +104,7 @@ abstract class Question
 			$objQuestion->level=(int) $object->level;
 
 			$sql="SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE question_id='".intval($id)."'";
-			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql,__FILE__,__LINE__);
 
 			// fills the array with the exercises which this question is in
 			while($object=mysql_fetch_object($result))
@@ -305,7 +305,7 @@ abstract class Question
 			{
 				// removes old answers
 				$sql="DELETE FROM $TBL_REPONSES WHERE question_id='".Database::escape_string($this->id)."'";
-				api_sql_query($sql,__FILE__,__LINE__);
+				Database::query($sql,__FILE__,__LINE__);
 			}
 
 			$this->type=$type;
@@ -493,7 +493,7 @@ abstract class Question
 			$picture='quiz-'.$questionId.'.'.$Extension;
 
 			$sql="UPDATE $TBL_QUESTIONS SET picture='".Database::escape_string($picture)."' WHERE id='".Database::escape_string($questionId)."'";
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 
 			return @copy($picturePath.'/'.$this->picture,$picturePath.'/'.$picture)?true:false;
 		}
@@ -590,7 +590,7 @@ abstract class Question
 					picture		='".Database::escape_string($picture)."',
 					level		='".Database::escape_string($level)."'
 				WHERE id='".Database::escape_string($id)."'";
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 			if(!empty($exerciseId)) {
 			api_item_property_update($_course, TOOL_QUIZ, $id,'QuizQuestionUpdated',$_user['user_id']);
 			}
@@ -607,7 +607,7 @@ abstract class Question
 
 		} else {// creates a new question
 			$sql="SELECT max(position) FROM $TBL_QUESTIONS as question, $TBL_EXERCICE_QUESTION as test_question WHERE question.id=test_question.question_id AND test_question.exercice_id='".Database::escape_string($exerciseId)."'";
-			$result=api_sql_query($sql);
+			$result=Database::query($sql);
 			$current_position=Database::result($result,0,0);
 			$this -> updatePosition($current_position+1);
 			$position = $this -> position;
@@ -621,7 +621,7 @@ abstract class Question
 					'".Database::escape_string($picture)."',
 					'".Database::escape_string($level)."'
 					)";
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 
 			$this->id=Database::get_last_insert_id();
 
@@ -632,7 +632,7 @@ abstract class Question
 				$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 				$sql="INSERT INTO $TBL_ANSWERS (`id` , `question_id` , `answer` , `correct` , `comment` , `ponderation` , `position` , `hotspot_coordinates` , `hotspot_type` ) VALUES ('1', '".Database::escape_string($this->id)."', '', NULL , '', '10' , '1', '0;0|0|0', 'square')";
-				api_sql_query($sql,__FILE__,__LINE__);
+				Database::query($sql,__FILE__,__LINE__);
 
             }
 
@@ -655,7 +655,7 @@ abstract class Question
 					SET max_score = '.intval($weighting).'
 					WHERE item_type = "'.TOOL_QUIZ.'"
 					AND path='.intval($exerciseId);
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 			*/
 			// adds the exercise into the exercise list of this question
 			$this->addToList($exerciseId, TRUE);
@@ -676,7 +676,7 @@ abstract class Question
               $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%s LIMIT 1';
               $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $exerciseId, $this->id);
             }
-            $res = api_sql_query($sql, __FILE__, __LINE__);
+            $res = Database::query($sql, __FILE__, __LINE__);
 
             if (Database::num_rows($res) > 0 || $addQs) {
                 require_once(api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php');
@@ -747,19 +747,19 @@ abstract class Question
                         $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=\'%s\' AND ref_id_second_level=\'%s\'';
                         $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $exerciseId, $this->id);
                     }
-                    api_sql_query($sql,__FILE__,__LINE__);
+                    Database::query($sql,__FILE__,__LINE__);
                     if ($rmQs) {
                         if (!empty($question_exercises)) {
                           $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, ref_id_second_level, search_did)
                               VALUES (NULL , \'%s\', \'%s\', %s, %s, %s)';
                           $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, array_shift($question_exercises), $this->id, $did);
-                          api_sql_query($sql,__FILE__,__LINE__);
+                          Database::query($sql,__FILE__,__LINE__);
                         }
                     } else {
                         $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, ref_id_second_level, search_did)
                             VALUES (NULL , \'%s\', \'%s\', %s, %s, %s)';
                         $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $exerciseId, $this->id, $did);
-                        api_sql_query($sql,__FILE__,__LINE__);
+                        Database::query($sql,__FILE__,__LINE__);
                     }
                 }
 
@@ -782,7 +782,7 @@ abstract class Question
 		if(!in_array($exerciseId,$this->exerciseList)) {
 			$this->exerciseList[]=$exerciseId;
 			$sql="INSERT INTO $TBL_EXERCICE_QUESTION (question_id, exercice_id) VALUES('".Database::escape_string($id)."','".Database::escape_string($exerciseId)."')";
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
             // we do not want to reindex if we had just saved adnd indexed the question
             if (!$fromSave) {
             	$this->search_engine_edit($exerciseId, TRUE);
@@ -813,17 +813,17 @@ abstract class Question
 			unset($this->exerciseList[$pos]);
             //update order of other elements
             $sql = "SELECT question_order FROM $TBL_EXERCICE_QUESTION WHERE question_id='".Database::escape_string($id)."' AND exercice_id='".Database::escape_string($exerciseId)."'";
-            $res = api_sql_query($sql,__FILE__,__LINE__);
+            $res = Database::query($sql,__FILE__,__LINE__);
             if (Database::num_rows($res)>0) {
                 $row = Database::fetch_array($res);
                 if (!empty($row['question_order'])) {
                     $sql = "UPDATE $TBL_EXERCICE_QUESTION SET question_order = question_order-1 WHERE exercice_id='".Database::escape_string($exerciseId)."' AND question_order > ".$row['question_order'];
-                    $res = api_sql_query($sql,__FILE__,__LINE__);
+                    $res = Database::query($sql,__FILE__,__LINE__);
                 }
             }
 
 			$sql="DELETE FROM $TBL_EXERCICE_QUESTION WHERE question_id='".Database::escape_string($id)."' AND exercice_id='".Database::escape_string($exerciseId)."'";
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 
 			return true;
 		}
@@ -851,23 +851,23 @@ abstract class Question
 		{
             //update the question_order of each question to avoid inconsistencies
             $sql = "SELECT exercice_id, question_order FROM $TBL_EXERCICE_QUESTION WHERE question_id='".Database::escape_string($id)."'";
-            $res = api_sql_query($sql,__FILE__,__LINE__);
+            $res = Database::query($sql,__FILE__,__LINE__);
             if (Database::num_rows($res)>0) {
                 while ($row = Database::fetch_array($res)) {
                     if (!empty($row['question_order'])) {
                         $sql = "UPDATE $TBL_EXERCICE_QUESTION SET question_order = question_order-1 WHERE exercice_id='".Database::escape_string($row['exercice_id'])."' AND question_order > ".$row['question_order'];
-                        $res = api_sql_query($sql,__FILE__,__LINE__);
+                        $res = Database::query($sql,__FILE__,__LINE__);
                     }
                 }
             }
 			$sql="DELETE FROM $TBL_EXERCICE_QUESTION WHERE question_id='".Database::escape_string($id)."'";
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 
 			$sql="DELETE FROM $TBL_QUESTIONS WHERE id='".Database::escape_string($id)."'";
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 
 			$sql="DELETE FROM $TBL_REPONSES WHERE question_id='".Database::escape_string($id)."'";
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 
 			api_item_property_update($_course, TOOL_QUIZ, $id,'QuizQuestionDeleted',$_user['user_id']);
 			$this->removePicture();
@@ -903,7 +903,7 @@ abstract class Question
 		$type=$this->type;
 
 		$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type) VALUES('".Database::escape_string($question)."','".Database::escape_string($description)."','".Database::escape_string($weighting)."','".Database::escape_string($position)."','".Database::escape_string($type)."')";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 
 		$id=Database::get_last_insert_id();
 		// duplicates the picture

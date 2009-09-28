@@ -148,7 +148,7 @@ function reset_password($secret, $id)
 	$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 	$id = (int) $id;
 	$sql = "SELECT user_id AS uid, lastname AS lastName, firstname AS firstName, username AS loginName, password, email FROM ".$tbl_user." WHERE user_id=$id";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	if ($result && mysql_num_rows($result))
 	{
 		$user[] = mysql_fetch_array($result);
@@ -162,7 +162,7 @@ function reset_password($secret, $id)
 		$user[0]["password"] = api_generate_password();
 		$crypted = $user[0]["password"];
 		$crypted = api_get_encrypted_password($crypted);
-		api_sql_query("UPDATE ".$tbl_user." SET password='$crypted' WHERE user_id=$id");
+		Database::query("UPDATE ".$tbl_user." SET password='$crypted' WHERE user_id=$id");
 		return send_password_to_user($user, $your_password_has_been_reset);
 	}
 	else

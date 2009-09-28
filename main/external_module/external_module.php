@@ -75,7 +75,7 @@ if($is_allowedToEdit && $_POST['formSent'] && $toolid)  // RH: new section
 		        "', target='" .  Database::escape_string($target) .
 		        "' WHERE id='" . Database::escape_string($id) . "'";
 
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		$linkAdded = TRUE;
 	}
@@ -95,7 +95,7 @@ elseif($is_allowedToEdit && $_POST['formSent'])
 			$link='http://'.$link;
 		}
 
-		api_sql_query("INSERT INTO $tbl_courseHome(name,link,image,visibility,admin,address,target) VALUES('".Database::escape_string($name_link)."','".Database::escape_string($link)."','$iconForImportedTools','1','0','$iconForInactiveImportedTools','$target')",__FILE__,__LINE__);
+		Database::query("INSERT INTO $tbl_courseHome(name,link,image,visibility,admin,address,target) VALUES('".Database::escape_string($name_link)."','".Database::escape_string($link)."','$iconForImportedTools','1','0','$iconForInactiveImportedTools','$target')",__FILE__,__LINE__);
 
 		$linkAdded=true;
 	}
@@ -125,7 +125,7 @@ else
     	$sql =  "SELECT name,link,target FROM $tbl_courseHome" .
         " WHERE id='" . Database::escape_string($toolid) . "'";
 
-    	$result = api_sql_query($sql, __FILE__, __LINE__);
+    	$result = Database::query($sql, __FILE__, __LINE__);
 
     	(Database::num_rows($result) == 1 && ($row = Database::fetch_array($result)))
     	    or die('? Could not fetch data with ' . htmlspecialchars($sql));

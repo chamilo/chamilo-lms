@@ -37,7 +37,7 @@ $tbl_course_quiz 			= Database :: get_course_table(TABLE_QUIZ_TEST);
 
 // get course list
 $sql = 'SELECT course_code FROM '.$tbl_course_user.' WHERE user_id='.intval($_user['user_id']);
-$rs = api_sql_query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql, __FILE__, __LINE__);
 $Courses = array();
 while($row = Database :: fetch_array($rs)) {
 	$Courses[$row['course_code']] = CourseManager::get_course_information($row['course_code']);
@@ -45,7 +45,7 @@ while($row = Database :: fetch_array($rs)) {
 
 // get the list of sessions where the user is subscribed as student
 $sql = 'SELECT DISTINCT course_code FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' WHERE id_user='.intval($_user['user_id']);
-$rs = api_sql_query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql, __FILE__, __LINE__);
 while($row = Database :: fetch_array($rs)) {
 	$Courses[$row['course_code']] = CourseManager::get_course_information($row['course_code']);
 }
@@ -145,7 +145,7 @@ foreach($Courses as $enreg) {
 					WHERE session_course_user.id_user = '.intval($_user['user_id']).'
 					AND session_course_user.course_code = "'.Database::escape_string($course).'"
 					ORDER BY id_session DESC';
-			$rs = api_sql_query($sql,__FILE__,__LINE__);
+			$rs = Database::query($sql,__FILE__,__LINE__);
 
 			$row=Database::fetch_array($rs);
 			if (!empty ($row[0]))
@@ -159,7 +159,7 @@ foreach($Courses as $enreg) {
 				// get session name and coach of the session
 				$sql = 'SELECT name, id_coach FROM '.$tbl_session.'
 						WHERE id='.$session_id;
-				$rs = api_sql_query($sql,__FILE__,__LINE__);
+				$rs = Database::query($sql,__FILE__,__LINE__);
 				$session_name = Database::result($rs,0,'name');
 				$session_coach_id = intval(Database::result($rs,0,'id_coach'));
 
@@ -167,7 +167,7 @@ foreach($Courses as $enreg) {
 				$sql = 'SELECT id_coach FROM '.$tbl_session_course.'
 						WHERE id_session='.$session_id.'
 						AND course_code = "'.Database::escape_string($_GET['course']).'"';
-				$rs = api_sql_query($sql,__FILE__,__LINE__);
+				$rs = Database::query($sql,__FILE__,__LINE__);
 				$session_course_coach_id = intval(Database::result($rs,0,0));
 
 				if($session_course_coach_id!=0)
@@ -201,7 +201,7 @@ foreach($Courses as $enreg) {
 			</tr>
 			<?php
 				$sqlLearnpath = "SELECT lp.name,lp.id FROM ".$a_infosCours['db_name'].".".$tbl_course_lp." AS lp";
-				$resultLearnpath = api_sql_query($sqlLearnpath);
+				$resultLearnpath = Database::query($sqlLearnpath);
 				if(Database::num_rows($resultLearnpath)>0) {
 					while($a_learnpath = Database::fetch_array($resultLearnpath)) {
 						$progress = learnpath :: get_db_progress($a_learnpath['id'],$_user['user_id'], '%',$a_infosCours['db_name']);
@@ -213,7 +213,7 @@ foreach($Courses as $enreg) {
 										ON item_view.lp_view_id = view.id
 										AND view.lp_id = '.$a_learnpath['id'].'
 										AND view.user_id = '.$_user['user_id'];
-						$rs = api_sql_query($sql, __FILE__, __LINE__);
+						$rs = Database::query($sql, __FILE__, __LINE__);
 						$start_time = Database::result($rs, 0, 0);
 
 						// calculates time
@@ -223,7 +223,7 @@ foreach($Courses as $enreg) {
 										ON item_view.lp_view_id = view.id
 										AND view.lp_id = '.$a_learnpath['id'].'
 										AND view.user_id = '.$_user['user_id'];
-						$rs = api_sql_query($sql, __FILE__, __LINE__);
+						$rs = Database::query($sql, __FILE__, __LINE__);
 						$total_time = Database::result($rs, 0, 0);
 
 
@@ -277,14 +277,14 @@ foreach($Courses as $enreg) {
 			<?php
 
 				$sql='SELECT visibility FROM '.$a_infosCours['db_name'].'.'.TABLE_TOOL_LIST.' WHERE name="quiz"';
-				$resultVisibilityTests = api_sql_query($sql);
+				$resultVisibilityTests = Database::query($sql);
 
 				if (Database::result($resultVisibilityTests,0,'visibility')==1) {
 					$sqlExercices = "	SELECT quiz.title,id, results_disabled
 									FROM ".$a_infosCours['db_name'].".".$tbl_course_quiz." AS quiz
 									WHERE active='1'";
 
-					$resuktExercices = api_sql_query($sqlExercices);
+					$resuktExercices = Database::query($sqlExercices);
 					if (Database::num_rows($resuktExercices)>0) {
 						while ($a_exercices = Database::fetch_array($resuktExercices)) {
 							$sqlEssais = "	SELECT COUNT(ex.exe_id) as essais
@@ -294,7 +294,7 @@ foreach($Courses as $enreg) {
 											AND orig_lp_id = 0
 											AND orig_lp_item_id = 0	"
 										 ;
-							$resultEssais = api_sql_query($sqlEssais);
+							$resultEssais = Database::query($sqlEssais);
 							$a_essais = Database::fetch_array($resultEssais);
 
 							$sqlScore = "SELECT exe_id , exe_result,exe_weighting
@@ -306,7 +306,7 @@ foreach($Courses as $enreg) {
 											 AND orig_lp_item_id = 0
 										ORDER BY exe_date DESC LIMIT 1";
 
-							$resultScore = api_sql_query($sqlScore);
+							$resultScore = Database::query($sqlScore);
 							$score = 0;
 							while($a_score = Database::fetch_array($resultScore)) {
 								$score = $score + $a_score['exe_result'];

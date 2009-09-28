@@ -34,7 +34,7 @@ $coursePath = $_course['path'];
 
 // Query db for answers
 $sql = "SELECT id, answer, hotspot_coordinates, hotspot_type FROM $TBL_ANSWERS WHERE question_id = '".Database::escape_string($questionId)."' ORDER BY id";
-$result = api_sql_query($sql,__FILE__,__LINE__);
+$result = Database::query($sql,__FILE__,__LINE__);
 
 // Init
 $output = "hotspot_lang=$courseLang&hotspot_image=$pictureName&hotspot_image_width=$pictureWidth&hotspot_image_height=$pictureHeight&courseCode=$coursePath";
@@ -95,7 +95,7 @@ if(isset($_SESSION['exerciseResultCoordinates']) && $from_db==0) {
 			' WHERE hotspot_question_id = '.intval($questionId).
 			' AND hotspot_course_code = "'.Database::escape_string($course_code).'"'.
 			' AND hotspot_exe_id='.intval($exe_id);
-	$rs = @api_sql_query($sql); // don't output error because we are in Flash execution.
+	$rs = @Database::query($sql); // don't output error because we are in Flash execution.
 	while($row = Database :: fetch_array($rs)) {
 		$output2 .= $row['hotspot_coordinate']."|";
 	}

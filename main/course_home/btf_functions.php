@@ -81,7 +81,7 @@ function showtools2($cat)
 		case 'platformAdmin' :
 			$sql = "SELECT *, image img FROM $TBL_ACCUEIL WHERE visibility = 2 ORDER BY id";
 	}
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 
 	// grabbing all the tools from $course_tool_table
 	while ($tempRow = mysql_fetch_array($result))
@@ -117,7 +117,7 @@ function showtools2($cat)
 								LEFT JOIN $tbl_item_property tip ON tip.tool='link' AND tip.ref=tl.id
 								WHERE tl.on_homepage='1' AND tip.visibility = 1";
 		}
-		$result_links = api_sql_query($sql_links);
+		$result_links = Database::query($sql_links);
 		while ($links_row = mysql_fetch_array($result_links))
 		{
 			$properties = array ();

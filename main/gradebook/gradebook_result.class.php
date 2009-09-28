@@ -64,7 +64,7 @@ class GradeBookResult
 			$sql.= ' WHERE active=1';
 		}
 		$sql .= ' ORDER BY title';
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 
 		// if the exercise has been found
 		while($row=Database::fetch_array($result,'ASSOC')) {
@@ -86,7 +86,7 @@ class GradeBookResult
 			" FROM $TBL_EXERCISE_QUESTION eq, $TBL_QUESTIONS q " .
 			" WHERE eq.question_id=q.id AND eq.exercice_id='$e_id' " .
 			" ORDER BY q.position";
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 
 		// fills the array with the question ID for this exercise
 		// the key of the array is the question position

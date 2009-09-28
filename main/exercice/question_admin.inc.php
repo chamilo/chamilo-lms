@@ -59,7 +59,7 @@ if(isset($_GET['editQuestion']))
 		$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
 		$sql="SELECT max_score FROM $TBL_LP_ITEM
 			  WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
-		$result = api_sql_query($sql);
+		$result = Database::query($sql);
 		if (Database::num_rows($result) > 0) {
 			Display::display_warning_message(get_lang('EditingScoreCauseProblemsToExercisesInLP'));
 		}

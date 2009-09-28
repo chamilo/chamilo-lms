@@ -107,19 +107,19 @@ $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 
 // Get all course categories
 $sql = "SELECT code,name FROM ".$table_course_category." WHERE auth_course_child ='TRUE'  OR code = '".mysql_real_escape_string($_course['categoryCode'])."'  ORDER BY tree_pos";
-$res = api_sql_query($sql, __FILE__, __LINE__);
+$res = Database::query($sql, __FILE__, __LINE__);
 
 $s_select_course_tutor_name="SELECT tutor_name FROM $tbl_course WHERE code='$course_code'";
-$q_tutor=api_sql_query($s_select_course_tutor_name, __FILE__, __LINE__);
+$q_tutor=Database::query($s_select_course_tutor_name, __FILE__, __LINE__);
 $s_tutor=mysql_result($q_tutor,0,"tutor_name");
 
 $s_sql_course_titular="SELECT DISTINCT username, lastname, firstname FROM $tbl_user as user, $tbl_course_user as course_rel_user WHERE (course_rel_user.status='1') AND user.user_id=course_rel_user.user_id AND course_code='".$course_code."'";
-$q_result_titulars=api_sql_query($s_sql_course_titular, __FILE__, __LINE__);
+$q_result_titulars=Database::query($s_sql_course_titular, __FILE__, __LINE__);
 
 $target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
 if(mysql_num_rows($q_result_titulars)==0){
 	$sql="SELECT username, lastname, firstname FROM $tbl_user as user, $tbl_admin as admin WHERE admin.user_id=user.user_id ORDER BY ".$target_name." ASC";
-	$q_result_titulars=api_sql_query($sql, __FILE__, __LINE__);
+	$q_result_titulars=Database::query($sql, __FILE__, __LINE__);
 }
 
 $a_profs[0] = '-- '.get_lang('NoManager').' --';
@@ -336,49 +336,49 @@ if ($form->validate() && is_settings_editable()) {
 										 tutor_name     = '".$update_values['tutor_name']."',
 										 registration_code = '".$update_values['course_registration_password']."'
 									WHERE code = '".$course_code."'";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	//update course_settings table - this assumes those records exist, otherwise triggers an error
 	$table_course_setting = Database::get_course_table(TABLE_COURSE_SETTING);
 	if($update_values['email_alert_to_teacher_on_new_user_in_course'] != $values['email_alert_to_teacher_on_new_user_in_course']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_to_teacher_on_new_user_in_course']." WHERE variable = 'email_alert_to_teacher_on_new_user_in_course' ";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 	}
 	if($update_values['email_alert_manager_on_new_doc'] != $values['email_alert_manager_on_new_doc']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_manager_on_new_doc']." WHERE variable = 'email_alert_manager_on_new_doc' ";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 	}
 	if($update_values['email_alert_on_new_doc_dropbox'] != $values['email_alert_on_new_doc_dropbox']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_on_new_doc_dropbox']." WHERE variable = 'email_alert_on_new_doc_dropbox' ";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 	}
 	if($update_values['email_alert_manager_on_new_quiz'] != $values['email_alert_manager_on_new_quiz']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_manager_on_new_quiz']." WHERE variable = 'email_alert_manager_on_new_quiz' ";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 	}
 	if($update_values['allow_user_edit_agenda'] != $values['allow_user_edit_agenda']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_edit_agenda']." WHERE variable = 'allow_user_edit_agenda' ";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 	}
 	if($update_values['allow_user_edit_announcement'] != $values['allow_user_edit_announcement']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_edit_announcement']." WHERE variable = 'allow_user_edit_announcement' ";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 	}
 	if($update_values['allow_user_image_forum'] != $values['allow_user_image_forum']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_image_forum']." WHERE variable = 'allow_user_image_forum' ";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 	}
 	if($update_values['allow_open_chat_window'] != $values['allow_open_chat_window']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_open_chat_window']." WHERE variable = 'allow_open_chat_window' ";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 	}
 	if($update_values['course_theme'] != $values['course_theme']){
 		$sql = "UPDATE $table_course_setting SET value = '".$update_values['course_theme']."' WHERE variable = 'course_theme' ";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 	}
 	if($update_values['allow_learningpath_theme'] != $values['allow_learning_path_theme']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_learning_path_theme']." WHERE variable = 'allow_learning_path_theme' ";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 	}
 
 

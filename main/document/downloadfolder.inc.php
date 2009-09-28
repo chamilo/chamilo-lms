@@ -80,7 +80,7 @@ if (is_allowed_to_edit())
 		$querypath=$path;
 	}
 	//search for all files that are not deleted => visibility != 2
-	$query = api_sql_query("SELECT path FROM $doc_table AS docs,$prop_table AS props  WHERE `props`.`tool`='".TOOL_DOCUMENT."' AND `docs`.`id`=`props`.`ref` AND `docs`.`path` LIKE '".$querypath."/%' AND `docs`.`filetype`='file' AND `props`.`visibility`<>'2' AND `props`.`to_group_id`=".$to_group_id."",__FILE__,__LINE__);
+	$query = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props  WHERE `props`.`tool`='".TOOL_DOCUMENT."' AND `docs`.`id`=`props`.`ref` AND `docs`.`path` LIKE '".$querypath."/%' AND `docs`.`filetype`='file' AND `props`.`visibility`<>'2' AND `props`.`to_group_id`=".$to_group_id."",__FILE__,__LINE__);
 	//add tem to the zip file
 	while($not_deleted_file = mysql_fetch_assoc($query))
 	{
@@ -102,7 +102,7 @@ else
 	//big problem: visible files that are in a hidden folder are included when we do a query for visiblity='v'!!!
 	//so... I do it in a couple of steps:
 	//1st: get all files that are visible in the given path
-	$query = api_sql_query("SELECT path FROM $doc_table AS docs,$prop_table AS props WHERE `props`.`tool`='".TOOL_DOCUMENT."' AND `docs`.`id`=`props`.`ref` AND `docs`.`path` LIKE '".$querypath."/%' AND `props`.`visibility`='1' AND `docs`.`filetype`='file' AND `props`.`to_group_id`=".$to_group_id,__FILE__,__LINE__);
+	$query = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props WHERE `props`.`tool`='".TOOL_DOCUMENT."' AND `docs`.`id`=`props`.`ref` AND `docs`.`path` LIKE '".$querypath."/%' AND `props`.`visibility`='1' AND `docs`.`filetype`='file' AND `props`.`to_group_id`=".$to_group_id,__FILE__,__LINE__);
 	//add them to an array
 	while($all_visible_files = mysql_fetch_assoc($query))
 	{
@@ -113,7 +113,7 @@ else
 	//print_r($all_visible_files_path);
 	//echo('</pre>');
 	//2nd: get all folders that are invisible in the given path
-	$query2 = api_sql_query("SELECT path FROM $doc_table AS docs,$prop_table AS props WHERE `props`.`tool`='".TOOL_DOCUMENT."' AND `docs`.`id`=`props`.`ref` AND `docs`.`path` LIKE '".$querypath."/%' AND `props`.`visibility`<>'1' AND `docs`.`filetype`='folder'",__FILE__,__LINE__);
+	$query2 = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props WHERE `props`.`tool`='".TOOL_DOCUMENT."' AND `docs`.`id`=`props`.`ref` AND `docs`.`path` LIKE '".$querypath."/%' AND `props`.`visibility`<>'1' AND `docs`.`filetype`='folder'",__FILE__,__LINE__);
 	//if we get invisible folders, we have to filter out these results from all visible files we found
 	if(Database::num_rows($query2)>0)
 	{
@@ -122,7 +122,7 @@ else
 		{
 		//3rd: get all files that are in the found invisible folder (these are "invisible" too)
 		//echo "<br><br>invisible folders: ".$sys_course_path.$_course['path']."/document".$invisible_folders['path']."<br>";
-			$query3 = api_sql_query("SELECT path FROM $doc_table AS docs,$prop_table AS props  WHERE `props`.`tool`='".TOOL_DOCUMENT."' AND `docs`.`id`=`props`.`ref` AND `docs`.`path` LIKE '".$invisible_folders['path']."/%' AND `docs`.`filetype`='file' AND `props`.`visibility`='1'",__FILE__,__LINE__);
+			$query3 = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props  WHERE `props`.`tool`='".TOOL_DOCUMENT."' AND `docs`.`id`=`props`.`ref` AND `docs`.`path` LIKE '".$invisible_folders['path']."/%' AND `docs`.`filetype`='file' AND `props`.`visibility`='1'",__FILE__,__LINE__);
 			//add tem to an array
 			while($files_in_invisible_folder = mysql_fetch_assoc($query3))
 			{

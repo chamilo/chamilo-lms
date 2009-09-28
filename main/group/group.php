@@ -76,11 +76,11 @@ if( api_get_setting('allow_group_categories') == 'false')
 {
 	$cat_table = Database::get_course_table(TABLE_GROUP_CATEGORY);
 	$sql = "SELECT * FROM $cat_table WHERE id = '".DEFAULT_GROUP_CATEGORY."'";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	$num = Database::num_rows($res);
 	if($num == 0)
 	{
-		api_sql_query("INSERT INTO ".$cat_table." ( id , title , description , forum_state , wiki_state, max_student , self_reg_allowed , self_unreg_allowed , groups_per_user , display_order ) VALUES ('2', '".lang2db($DefaultGroupCategory)."', '', '1', '1', '8', '0', '0', '0', '0');");
+		Database::query("INSERT INTO ".$cat_table." ( id , title , description , forum_state , wiki_state, max_student , self_reg_allowed , self_unreg_allowed , groups_per_user , display_order ) VALUES ('2', '".lang2db($DefaultGroupCategory)."', '', '1', '1', '8', '0', '0', '0', '0');");
 	}
 }
 

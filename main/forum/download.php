@@ -88,7 +88,7 @@ event_download($doc_url);
 $sql='SELECT thread_id, forum_id,filename FROM '.$tbl_forum_post.'  f  INNER JOIN '.$tbl_forum_attachment.' a
   	  ON a.post_id=f.post_id WHERE path LIKE BINARY "'.$doc_url.'"';
 
-$result= api_sql_query($sql, __FILE__, __LINE__);
+$result= Database::query($sql, __FILE__, __LINE__);
 $row= Database::fetch_array($result);
 
 $forum_thread_visibility=api_get_item_visibility(api_get_course_info($course_code),TOOL_FORUM_THREAD,$row['thread_id']);

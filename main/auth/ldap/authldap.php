@@ -664,7 +664,7 @@ function ldap_add_user_to_session($UserList, $id_session)
 
 	$id_session = (int) $id_session;
 	// Une fois les utilisateurs importer dans la base des utilisateurs, on peux les affecter a� la session
-	$result=api_sql_query("SELECT course_code FROM $tbl_session_rel_course " .
+	$result=Database::query("SELECT course_code FROM $tbl_session_rel_course " .
 			"WHERE id_session='$id_session'",__FILE__,__LINE__);
 	$CourseList=array();
 	while($row=Database::fetch_array($result))
@@ -676,25 +676,25 @@ function ldap_add_user_to_session($UserList, $id_session)
 		foreach($UserList as $enreg_user)
 		{
 			$enreg_user = (int) $enreg_user;
-			api_sql_query("INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')",__FILE__,__LINE__);
+			Database::query("INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')",__FILE__,__LINE__);
 		}
 		$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user " .
 				"WHERE id_session='$id_session' AND course_code='$enreg_course'";
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql, __FILE__, __LINE__);
 		list($nbr_users) = Database::fetch_array($rs);
-		api_sql_query("UPDATE $tbl_session_rel_course  SET nbr_users=$nbr_users " .
+		Database::query("UPDATE $tbl_session_rel_course  SET nbr_users=$nbr_users " .
 				"WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
 	}
 	foreach($UserList as $enreg_user)
 	{
 		$enreg_user = (int) $enreg_user;
-		api_sql_query("INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) " .
+		Database::query("INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) " .
 				"VALUES('$id_session','$enreg_user')",__FILE__,__LINE__);
 	}
 	// On mets a jour le nombre d'utilisateurs dans la session
 	$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_user WHERE id_session='$id_session'";
-	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	$rs = Database::query($sql, __FILE__, __LINE__);
 	list($nbr_users) = Database::fetch_array($rs);
-	api_sql_query("UPDATE $tbl_session SET nbr_users=$nbr_users WHERE id='$id_session'",__FILE__,__LINE__);
+	Database::query("UPDATE $tbl_session SET nbr_users=$nbr_users WHERE id='$id_session'",__FILE__,__LINE__);
 }
 ?>

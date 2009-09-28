@@ -127,7 +127,7 @@ $default_description_title_editable[7] = true;
 ==============================================================================
 */
 $sql = "SELECT id,title FROM $tbl_course_description ORDER BY id";
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 while ($row = Database::fetch_array($result)) {
   $default_description_titles[$row['id']] = $row['title'];
 }
@@ -137,14 +137,14 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 	// Delete a description block
 	if ($action == 'delete') {
 		$sql = "DELETE FROM $tbl_course_description WHERE id='".$description_id."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 		Display :: display_confirmation_message(get_lang('CourseDescriptionDeleted'));
 	}
 	// Add or edit a description block
 	else {
 		if (!empty($description_id)) {
 		$sql = "SELECT * FROM $tbl_course_description WHERE id='".$description_id."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 			if ($description = Database::fetch_array($result)) {
 				$default_description_titles[$description_id] = $description['title'];
 				$description_content = $description['content'];
@@ -155,7 +155,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 
 		} else {
 			$sql = "SELECT MAX(id) as MAX FROM $tbl_course_description ";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			$max= Database::fetch_array($result);
 			$description_id = $max['MAX']+1;
 			if ($description_id < ADD_BLOCK) {
@@ -206,12 +206,12 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 			$title = $description['title'];
 			if ($description['description_id'] >= ADD_BLOCK) {
 				if ($description['add']=='1') { //if this element has been submitted for addition
-					$result = api_sql_query($sql, __FILE__, __LINE__);
+					$result = Database::query($sql, __FILE__, __LINE__);
 					$sql = "INSERT IGNORE INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string(Security::remove_XSS($title,COURSEMANAGERLOWSECURITY))."', content = '".Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY))."'";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 				} else {
 					$sql = "UPDATE $tbl_course_description SET  title = '".Database::escape_string(Security::remove_XSS($title,COURSEMANAGERLOWSECURITY))."', content = '".Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY))."' WHERE id = '".$description_id."' ";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 				}
 			} else {
 				//if title is not editable, then use default title
@@ -219,9 +219,9 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 					$title = $default_description_titles[$description_id];
 				}
 				$sql = "DELETE FROM $tbl_course_description WHERE id = '".$description_id."'";
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 				$sql = "INSERT INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string(Security::remove_XSS($title,COURSEMANAGERLOWSECURITY))."', content = '".Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY))."'";
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 			}
 			Display :: display_confirmation_message(get_lang('CourseDescriptionUpdated'));
 		}
@@ -274,7 +274,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 // Show the list of all description blocks
 if ($show_description_list) {
 	$sql = "SELECT * FROM $tbl_course_description ORDER BY id";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	$descriptions = array();;
 	while ($description = Database::fetch_object($result)) {
 		$descriptions[$description->id] = $description;

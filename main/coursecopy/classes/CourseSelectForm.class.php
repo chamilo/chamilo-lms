@@ -221,13 +221,13 @@ class CourseSelectForm
 				$resource = array_keys($resource);
 				foreach	($resource as $resource_item) {
 					$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND id = '.$resource_item.' ORDER BY path';
-					$db_result = api_sql_query($sql, __FILE__, __LINE__);
+					$db_result = Database::query($sql, __FILE__, __LINE__);
 					while ($obj = Database::fetch_object($db_result)) {
 						$doc = new Document($obj->id, $obj->path, $obj->comment, $obj->title, $obj->filetype, $obj->size);
 						$course->add_resource($doc);
 						// adding item property
 						$sql = "SELECT * FROM $table_prop WHERE TOOL = '".RESOURCE_DOCUMENT."' AND ref='".$resource_item."'";
-						$res = api_sql_query($sql,__FILE__,__LINE__);
+						$res = Database::query($sql,__FILE__,__LINE__);
 						$all_properties = array ();
 						while ($item_property = Database::fetch_array($res,'ASSOC')) {
 							$all_properties[] = $item_property;

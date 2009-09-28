@@ -233,19 +233,19 @@ if (isset($_POST['ok'])) {
 	if ($_POST['limit']==1) {
 		$minutes = Database::escape_string($_POST['minutes']);
 		$query = "UPDATE ".$TBL_EXERCICES." SET ques_time_limit= $minutes where id= $exercise_id";
-		api_sql_query($query,__FILE__,__LINE__);
+		Database::query($query,__FILE__,__LINE__);
 	} else {
 		$query = "UPDATE ".$TBL_EXERCICES." SET ques_time_limit= 0 WHERE id= $exercise_id";
-		api_sql_query($query,__FILE__,__LINE__);
+		Database::query($query,__FILE__,__LINE__);
 	}
 
 	if ($_POST['attempt']==1) {
 		$attempts = Database::escape_string($_POST['attempts']);
 		$query = "UPDATE ".$TBL_EXERCICES." SET num_attempts = $attempts WHERE id= $exercise_id";
-		api_sql_query($query,__FILE__,__LINE__);
+		Database::query($query,__FILE__,__LINE__);
 	} else {
 		$query = "UPDATE ".$TBL_EXERCICES." SET num_attempts = 0 WHERE id= $exercise_id";
-		api_sql_query($query,__FILE__,__LINE__);
+		Database::query($query,__FILE__,__LINE__);
 	}
 }
 ?>

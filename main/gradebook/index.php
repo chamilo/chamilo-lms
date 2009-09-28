@@ -319,7 +319,7 @@ if (isset ($_GET['deletelink'])) {
 	$link= LinkFactory :: load($get_delete_link);
 	if ($link[0] != null) {
 		$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.$get_delete_link.');';
-		api_sql_query($sql);
+		Database::query($sql);
 		$link[0]->delete();
 	}
 	unset ($link);

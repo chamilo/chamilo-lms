@@ -93,7 +93,7 @@ if(isset($_GET['id_session']))
 // Check whether the tool is actually visible
 $table_course_tool = Database::get_course_table(TABLE_TOOL_LIST, $_course['dbName']);
 $tool_sql = 'SELECT visibility FROM ' . $table_course_tool . ' WHERE name = "'. TOOL_DOCUMENT .'" LIMIT 1';
-$tool_result = api_sql_query($tool_sql,__FILE__,__LINE__);
+$tool_result = Database::query($tool_sql,__FILE__,__LINE__);
 $tool_row = Database::fetch_array($tool_result);
 $tool_visibility = $tool_row['visibility'];
 if ($tool_visibility == '0' && $to_group_id == '0' && !($is_allowed_to_edit || $group_member_with_upload_rights))

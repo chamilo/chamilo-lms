@@ -90,7 +90,7 @@ function GetComment($path,$course_code='') {
 	}
 	$path = Database::escape_string($path);
 	$query = "select comment from $dbTable where path='$path'";
-	$result = api_sql_query($query,__FILE__,__LINE__);
+	$result = Database::query($query,__FILE__,__LINE__);
 
 	while ($row = mysql_fetch_array($result)) {
 		return $row[0];
@@ -102,14 +102,14 @@ function GetComment($path,$course_code='') {
  * Sets the comment in the database for a particular path
  * @param	string	File path
  * @param	string	Comment to set
- * @return	string	Result of the database operation (api_sql_query will output some message directly on error anyway)
+ * @return	string	Result of the database operation (Database::query will output some message directly on error anyway)
  */
 function SetComment($path,$comment) {
 	global $dbTable;
 	$path = Database::escape_string($path);
 	$comment = Database::escape_string($comment);
 	$query = "UPDATE $dbTable set comment='$comment' where path='$path'";
-	$result = api_sql_query($query,__FILE__,__LINE__);
+	$result = Database::query($query,__FILE__,__LINE__);
 	return "$result";
 }
 

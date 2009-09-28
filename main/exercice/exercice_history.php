@@ -107,10 +107,10 @@ Display::display_header($nameTools,"Exercise");
 //Display::display_introduction_section(TOOL_QUIZ);
 /*
 $sql = 'SELECT * FROM '.$TBL_EXERCICES;
-$query = api_sql_query($sql,__FILE__,__LINE__);
+$query = Database::query($sql,__FILE__,__LINE__);
 */
 $sql = "SELECT *, quiz_question.question, firstname, lastname FROM $TBL_TRACK_ATTEMPT_RECORDING t,$TBL_USER,$TBL_EXERCICES_QUESTION quiz_question WHERE quiz_question.id = question_id AND user_id = author AND exe_id = '".(int)$_GET['exe_id']."' ORDER BY t.insert_date desc,question ASC";
-$query = api_sql_query($sql,__FILE__,__LINE__);
+$query = Database::query($sql,__FILE__,__LINE__);
 while($row = Database::fetch_array($query)){
 	echo '<tr';
 	if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"';

@@ -34,7 +34,7 @@ $coursePath = $_course['path'];
 
 // Query db for answers
 //$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type, ponderation FROM $TBL_ANSWERS WHERE question_id = '$questionId' ORDER BY id";
-//$result = api_sql_query($sql,__FILE__,__LINE__);
+//$result = Database::query($sql,__FILE__,__LINE__);
 
 // Init
 $output = "hotspot_lang=$courseLang&hotspot_image=$pictureName&hotspot_image_width=$pictureWidth&hotspot_image_height=$pictureHeight&courseCode=$coursePath";

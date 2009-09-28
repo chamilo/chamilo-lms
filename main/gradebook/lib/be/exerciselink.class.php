@@ -64,7 +64,7 @@ class ExerciseLink extends AbstractLink
 				." AND course_code = '".$this->get_course_code()."'"
 				.')';
 
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$cats=array();
 		while ($data=Database::fetch_array($result)) {
 			$cats[] = array ($data['id'], $data['title']);
@@ -82,7 +82,7 @@ class ExerciseLink extends AbstractLink
     	$course_info = api_get_course_info($this->course_code);
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK,$course_info['dbName']);
 		$sql = 'SELECT id,title from '.$this->get_exercise_table().' where active=1';
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		$cats=array();
 		while ($data=Database::fetch_array($result)) {
@@ -99,7 +99,7 @@ class ExerciseLink extends AbstractLink
 		$sql = 'SELECT count(exe_id) AS number FROM '.$tbl_stats
 				." WHERE exe_cours_id = '".$this->get_course_code()."'"
 				.' AND exe_exo_id = '.$this->get_ref_id();
-    	$result = api_sql_query($sql, __FILE__, __LINE__);
+    	$result = Database::query($sql, __FILE__, __LINE__);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
     }
@@ -124,7 +124,7 @@ class ExerciseLink extends AbstractLink
     	}
 
 		$sql .= ' ORDER BY exe_id DESC';
-		$scores = api_sql_query($sql, __FILE__, __LINE__);
+		$scores = Database::query($sql, __FILE__, __LINE__);
 
     	if (isset($stud_id)) {
     		// for 1 student
@@ -202,7 +202,7 @@ class ExerciseLink extends AbstractLink
     public function is_valid_link() {
     	$sql = 'SELECT count(id) from '.$this->get_exercise_table()
 				.' WHERE id = '.$this->get_ref_id();
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
     }
@@ -256,7 +256,7 @@ class ExerciseLink extends AbstractLink
     	} elseif (!isset($this->exercise_data)) {
 			$sql = 'SELECT * from '.$this->get_exercise_table()
 					.' WHERE id = '.$this->get_ref_id();
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			$this->exercise_data=Database::fetch_array($result);
     	}
     	return $this->exercise_data;

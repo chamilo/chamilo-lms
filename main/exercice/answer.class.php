@@ -117,7 +117,7 @@ class Answer
 		$sql="SELECT id,answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination FROM
 		      $TBL_ANSWER WHERE question_id ='".Database::escape_string($questionId)."' ORDER BY position";
 
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 
 		$i=1;
 
@@ -165,7 +165,7 @@ class Answer
 				"FROM $TBL_ANSWER WHERE question_id='".Database::escape_string($questionId)."' " .
 				"ORDER BY $field $order";
 
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 
 		$i=1;
 
@@ -294,7 +294,7 @@ class Answer
 	 {
 	 	$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 	 	$sql = "SELECT * FROM $TBL_QUESTIONS WHERE id = '".Database::escape_string($this->questionId)."'";
-	 	$res = api_sql_query($sql,__FILE__,__LINE__);
+	 	$res = Database::query($sql,__FILE__,__LINE__);
 	 	if(Database::num_rows($res)<=0){
 	 		return null;
 	 	}
@@ -424,7 +424,7 @@ class Answer
 				"WHERE id = '".Database::escape_string($position)."' " .
 				"AND question_i` = '".Database::escape_string($questionId)."'";
 
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 	}
 
 	/**
@@ -440,7 +440,7 @@ class Answer
 
 		// removes old answers before inserting of new ones
 		$sql="DELETE FROM $TBL_REPONSES WHERE question_id='".Database::escape_string($questionId)."'";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 
 		// inserts new answers into data base
 		$sql="INSERT INTO $TBL_REPONSES" .
@@ -462,7 +462,7 @@ class Answer
 					'$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
 		}
 		$sql = api_substr($sql,0,-1);
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 
 		// moves $new_* arrays
 		$this->answer=$this->new_answer;
@@ -512,7 +512,7 @@ class Answer
 			}
 
 			$sql=api_substr($sql,0,-1);
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 		}
 	}
 }

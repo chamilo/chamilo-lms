@@ -188,7 +188,7 @@ abstract class AbstractLink implements GradebookItem
 			$paramcount ++;
 		}
 
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$links = AbstractLink::create_objects_from_sql_result($result);
 		return $links;
 	}
@@ -224,7 +224,7 @@ abstract class AbstractLink implements GradebookItem
 		if (isset($this->type) && isset($this->ref_id) && isset($this->user_id) && isset($this->course_code) && isset($this->category) && isset($this->weight) && isset($this->visible)) {
 			$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 			$sql_testing="select count(*) from ".$tbl_grade_links." where ref_id=".$this->get_ref_id()." AND category_id =  ".$this->category." AND type =  ".$this->type." ;";
-			$result_testing=api_sql_query($sql_testing,__FILE__,__LINE__);
+			$result_testing=Database::query($sql_testing,__FILE__,__LINE__);
 			$row_testing=Database::fetch_array($result_testing);
 
 			if ($row_testing[0]==0) {
@@ -240,7 +240,7 @@ abstract class AbstractLink implements GradebookItem
 						.','.$this->is_visible();
 				if (isset($this->link_date)) {$sql .= ','.'"'.$date_current=strtotime(date('Y-m-d H:i:s',time())).'"';}
 			$sql .= ")";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			$this->set_id(Database::insert_id());
 		 	}
 		} else {
@@ -271,7 +271,7 @@ abstract class AbstractLink implements GradebookItem
 				.', visible = '.$this->is_visible()
 				.' WHERE id = '.$this->id;
 		AbstractLink::add_link_log($this->id);
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 	}
 
 	public function add_link_log($idevaluation) {
@@ -290,7 +290,7 @@ abstract class AbstractLink implements GradebookItem
 		}
 		//error_log($name_log);
 		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,date_log,weight,visible,type,user_id_log)VALUES('".Database::escape_string($arreval['id'])."','".Database::escape_string($name_log)."','".Database::escape_string($description_log)."','".Database::escape_string($current_date_server)."','".Database::escape_string($arreval['weight'])."','".Database::escape_string($arreval['visible'])."','Link',".api_get_user_id().")";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 
 	}
 	/**
@@ -302,7 +302,7 @@ abstract class AbstractLink implements GradebookItem
 
 		$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 		$sql = 'DELETE FROM '.$tbl_grade_links.' WHERE id = '.$this->id;
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 	}
 
 

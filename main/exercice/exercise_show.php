@@ -210,7 +210,7 @@ function get_comments($id,$question_id)
 {
 	global $TBL_TRACK_ATTEMPT;
 	$sql = "SELECT teacher_comment FROM ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id)."' and question_id = '".Database::escape_string($question_id)."' ORDER by question_id";
-	$sqlres = api_sql_query($sql, __FILE__, __LINE__);
+	$sqlres = Database::query($sql, __FILE__, __LINE__);
 	$comm = Database::result($sqlres,0,"teacher_comment");
 	return $comm;
 }
@@ -384,7 +384,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
     <td colspan="2">
 <?php
 $sql_test_name='SELECT title, description, results_disabled FROM '.$TBL_EXERCICES.' as exercises, '.$TBL_TRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.Database::escape_string($id).'"';
-$result=api_sql_query($sql_test_name);
+$result=Database::query($sql_test_name);
 $show_results = true;
 // Avoiding the "Score 0/0" message  when the exe_id is not set
 if (Database::num_rows($result)>0 && isset($id)) {
@@ -416,7 +416,7 @@ if (Database::num_rows($result)>0 && isset($id)) {
 				  WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
 				  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 					//GROUP BY questions.position, attempts.question_id";
-		$result =api_sql_query($query, __FILE__, __LINE__);
+		$result =Database::query($query, __FILE__, __LINE__);
 	}
 } else {
 	Display::display_warning_message(get_lang('CantViewResults'));
@@ -550,7 +550,7 @@ if ($show_results) {
 				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
 				$queryans = "select * from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-				$resultans = api_sql_query($queryans, __FILE__, __LINE__);
+				$resultans = Database::query($queryans, __FILE__, __LINE__);
 				while ($row = Database::fetch_array($resultans)) {
 					$ind = $row['answer'];
 					$choice[$ind] = 1;
@@ -595,7 +595,7 @@ if ($show_results) {
 				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
 				$queryans = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-				$resultans = api_sql_query($queryans, __FILE__, __LINE__);
+				$resultans = Database::query($queryans, __FILE__, __LINE__);
 				$choice = Database::result($resultans,0,"answer");
 				$studentChoice=($choice == $answerId)?1:0;
 				if ($studentChoice) {
@@ -692,7 +692,7 @@ if ($show_results) {
 						}
 
 						$queryfill = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-						$resfill = api_sql_query($queryfill, __FILE__, __LINE__);
+						$resfill = Database::query($queryfill, __FILE__, __LINE__);
 						$str = Database::result($resfill,0,"answer");
 
 						preg_match_all('#\[([^[]*)\]#', $str, $arr);
@@ -743,7 +743,7 @@ if ($show_results) {
 						}
 
 						$queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-						$resfill = api_sql_query($queryfill, __FILE__, __LINE__);
+						$resfill = Database::query($queryfill, __FILE__, __LINE__);
 						$str=Database::result($resfill,0,"answer");
 						preg_match_all ('#\[([^[/]*)/#', $str, $arr);
 						$choice = $arr[1];
@@ -793,7 +793,7 @@ if ($show_results) {
 			$nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 			$questionScore = 0;
 			$query = "select answer, marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-			$resq = api_sql_query($query);
+			$resq = Database::query($query);
 			$choice = Database::result($resq,0,"answer");
 			$choice = stripslashes($choice);
 			$choice = str_replace('rn', '', $choice);
@@ -817,14 +817,14 @@ if ($show_results) {
 
 			$sql_select_answer = 'SELECT id, answer, correct, position FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct<>0';
 			$sql_answer = 'SELECT position, answer FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct=0';
-			$res_answer = api_sql_query($sql_answer, __FILE__, __LINE__);
+			$res_answer = Database::query($sql_answer, __FILE__, __LINE__);
 			// getting the real answer
 			$real_list =array();
 			while ($real_answer = Database::fetch_array($res_answer)) {
 				$real_list[$real_answer['position']]= $real_answer['answer'];
 			}
 
-			$res_answers = api_sql_query($sql_select_answer, __FILE__, __LINE__);
+			$res_answers = Database::query($sql_select_answer, __FILE__, __LINE__);
 
 			echo '<table width="100%" height="71" border="0" cellspacing="3" cellpadding="3" >';
 			echo '<tr><td colspan="2">&nbsp;</td></tr>';
@@ -854,7 +854,7 @@ if ($show_results) {
 						AND track_e_attempt.position="'.Database::escape_string($i_answer_position).'"';
 
 
-				$res_user_answer = api_sql_query($sql_user_answer, __FILE__, __LINE__);
+				$res_user_answer = Database::query($sql_user_answer, __FILE__, __LINE__);
 				if (Database::num_rows($res_user_answer)>0 ) {
 					$s_user_answer = Database::result($res_user_answer,0,0); //  rich - good looking
 				} else {
@@ -901,14 +901,14 @@ if ($show_results) {
 
 				$TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 				$query = "select hotspot_correct from ".$TBL_TRACK_HOTSPOT." where hotspot_exe_id = '".Database::escape_string($id)."' and hotspot_question_id= '".Database::escape_string($questionId)."' AND hotspot_answer_id='".Database::escape_string($answerId)."'";
-				$resq=api_sql_query($query);
+				$resq=Database::query($query);
 				$choice = Database::result($resq,0,"hotspot_correct");
 				display_hotspot_answer($answerId,$answer,$choice,$answerComment);
 
 				$i++;
 		 	}
 		 	$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-			$resfree = api_sql_query($queryfree, __FILE__, __LINE__);
+			$resfree = Database::query($queryfree, __FILE__, __LINE__);
 			$questionScore= Database::result($resfree,0,"marks");
 			$totalScore+=$questionScore;
 			echo '</table></td></tr>';
@@ -1022,7 +1022,7 @@ if ($show_results) {
 
 if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
 	//$query = "update ".$TBL_TRACK_EXERCICES." set exe_result = $totalScore where exe_id = '$id'";
-	//api_sql_query($query,__FILE__,__LINE__);
+	//Database::query($query,__FILE__,__LINE__);
 	if ($show_results) {
 		echo '<div id="question_score">'.get_lang('YourTotalScore')." ";
 		if($dsp_percent == true) {

@@ -55,7 +55,7 @@ $t_link_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 $evaledit = EvalLink :: load($_GET['visiblelink']);
 
 $sql="SELECT lk.name,lk.description,lk.date_log,lk.weight,lk.visible,lk.type,us.username from ".$t_link_log." lk inner join ".$t_user." us on lk.user_id_log=us.user_id where lk.id_linkeval_log=".$evaledit[0]->get_id()." and lk.type='link';";
-$result=api_sql_query($sql);
+$result=Database::query($sql);
 echo '<table width="100%" border="0" >';
 	echo '<tr>';
 		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('GradebookNameLog').'</strong></td>';
@@ -96,7 +96,7 @@ $t_link_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 $visible_link=Security::remove_XSS($_GET['visiblelink']);
 $evaledit   = EvalLink :: load($visible_link);
 $sql="SELECT lk.name,lk.description,lk.weight,lk.visible,lk.type,lk.date_log,us.username from ".$t_link_log." lk inner join ".$t_user." us on lk.user_id_log=us.user_id where lk.id_linkeval_log=".$evaledit[0]->get_id()." and lk.type='link';";
-$result=api_sql_query($sql);
+$result=Database::query($sql);
 $list_info=array();
 while ($row=Database::fetch_row($result)) {
 	$list_info[]=$row;

@@ -141,7 +141,7 @@ $sql="SELECT * FROM $table_posts posts, $table_users users
 		WHERE posts.thread_id='".$current_thread['thread_id']."'
 		AND posts.poster_id=users.user_id
 		ORDER BY posts.post_id ASC";
-$result=api_sql_query($sql, __FILE__, __LINE__);
+$result=Database::query($sql, __FILE__, __LINE__);
 
 echo "<table width=\"100%\" cellspacing=\"5\" border=\"0\">\n";
 while ($row=Database::fetch_array($result)) {

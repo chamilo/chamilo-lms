@@ -249,7 +249,7 @@ function get_calendar_items($month, $year)
 	} // you are a student
 
 	//echo "<pre>".$sql."</pre>";
-	$result=api_sql_query($sql,__FILE__,__LINE__) or die(Database::error());
+	$result=Database::query($sql,__FILE__,__LINE__) or die(Database::error());
 
 	/////////////////
 	$data=array();
@@ -755,7 +755,7 @@ function get_course_users()
 			FROM $tbl_user as u, $tbl_courseUser as cu
 			WHERE cu.course_code = '".$_cid."'
 			AND cu.user_id = u.user_id $courseadmin_filter".$order_clause;
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	while($user=Database::fetch_array($result)){
 		$users[$user[0]] = $user;
 	}
@@ -768,7 +768,7 @@ function get_course_users()
 				WHERE id_session='".intval($_SESSION['id_session'])."'
 				AND course_code='$_cid'";
 
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql,__FILE__,__LINE__);
 		while($user=Database::fetch_array($result)){
 			$users[$user[0]] = $user;
 		}
@@ -982,7 +982,7 @@ function store_new_agenda_item() {
 					        (title,content, start_date, end_date)
 					        VALUES
 					        ('".$title."','".$content."', '".$start_date."','".$end_date."')";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	$last_id = Database::insert_id();
 
 	// store in last_tooledit (first the groups, then the users
@@ -1045,13 +1045,13 @@ function store_agenda_item_as_announcement($item_id){
 
 	$item_id=Database::escape_string($item_id);
 	$sql = "SELECT * FROM $table_agenda WHERE id = '".$item_id."'";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	if(Database::num_rows($res)>0){
 		$row = Database::fetch_array($res);
 		//we have the agenda event, copy it
 		//get the maximum value for display order in announcement table
 		$sql_max = "SELECT MAX(display_order) FROM $table_ann";
-		$res_max = api_sql_query($sql_max,__FILE__,__LINE__);
+		$res_max = Database::query($sql_max,__FILE__,__LINE__);
 		$row_max = Database::fetch_array($res_max);
 		$max = $row_max[0]+1;
 		//build the announcement text
@@ -1060,7 +1060,7 @@ function store_agenda_item_as_announcement($item_id){
 
 		$sql_ins = "INSERT INTO $table_ann (title,content,end_date,display_order) " .
 				"VALUES ('".Security::remove_XSS($row['title'])."','".$content."','".$row['end_date']."','$max')";
-		$res_ins = api_sql_query($sql_ins,__FILE__,__LINE__);
+		$res_ins = Database::query($sql_ins,__FILE__,__LINE__);
 		if($res > 0)
 		{
 			$ann_id = Database::get_last_insert_id();
@@ -1068,7 +1068,7 @@ function store_agenda_item_as_announcement($item_id){
 			//and copy them into announcement item_properties
 			$table_props = Database::get_course_table(TABLE_ITEM_PROPERTY);
 			$sql_props = "SELECT * FROM $table_props WHERE tool = 'calendar_event' AND ref='$item_id'";
-			$res_props = api_sql_query($sql_props,__FILE__,__LINE__);
+			$res_props = Database::query($sql_props,__FILE__,__LINE__);
 			if(Database::num_rows($res_props)>0)
 			{
 				while($row_props = Database::fetch_array($res_props))
@@ -1085,7 +1085,7 @@ function store_agenda_item_as_announcement($item_id){
 							"'$time','$ann_id','AnnouncementAdded'," .
 							"'".$row_props['last_edit_user_id']."','".$row_props['to_group_id']."','".$row_props['to_user_id']."'," .
 							"'".$row_props['visibility']."','".$row_props['start_visible']."','".$row_props['end_visible']."')";
-					$res_ins_props = api_sql_query($sql_ins_props,__FILE__,__LINE__);
+					$res_ins_props = Database::query($sql_ins_props,__FILE__,__LINE__);
 					if($res_ins_props <= 0){
 						error_log('SQL Error in '.__FILE__.' at line '.__LINE__.': '.$sql_ins_props);
 					}else{
@@ -1150,7 +1150,7 @@ function sent_to($tool, $id)
 	$id=Database::escape_string($id);
 
 	$sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".$tool."' AND ref='".$id."'";
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	while ($row=Database::fetch_array($result))
 	{
 		// if to_group_id is null then it is sent to a specific user
@@ -1377,7 +1377,7 @@ function load_edit_users($tool, $id)
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 	$sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='$tool' AND ref='$id'";
-	$result=api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
+	$result=Database::query($sql,__FILE__,__LINE__) or die (Database::error());
 	while ($row=Database::fetch_array($result))
 		{
 		$to_group=$row['to_group_id'];
@@ -1412,7 +1412,7 @@ function change_visibility($tool,$id)
 	$id=Database::escape_string($id);
 
 	$sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".TOOL_CALENDAR_EVENT."' AND ref='$id'";
-	$result=api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
+	$result=Database::query($sql,__FILE__,__LINE__) or die (Database::error());
 	$row=Database::fetch_array($result);
 
 	if ($row['visibility']=='1')
@@ -1507,7 +1507,7 @@ function get_agenda_item($id)
     }
     if(empty($id)){return $item;}
 	$sql 					= "SELECT * FROM ".$TABLEAGENDA." WHERE id='".$id."'";
-	$result					= api_sql_query($sql,__FILE__,__LINE__);
+	$result					= Database::query($sql,__FILE__,__LINE__);
 	$entry_to_edit 			= Database::fetch_array($result);
 	$item['title']			= $entry_to_edit["title"];
 	$item['content']		= $entry_to_edit["content"];
@@ -1577,7 +1577,7 @@ function store_edited_agenda_item($id_attach,$file_comment)
 		// 2.a. delete everything for the users
 		$sql_delete="DELETE FROM ".$TABLE_ITEM_PROPERTY." WHERE ref='$id' AND tool='".TOOL_CALENDAR_EVENT."'";
 
-		$result = api_sql_query($sql_delete,__FILE__,__LINE__) or die (Database::error());
+		$result = Database::query($sql_delete,__FILE__,__LINE__) or die (Database::error());
 		// 2.b. storing the new users/groups
 		if (!is_null($to)) // !is_null($to): when no user is selected we send it to everyone
 		{
@@ -1635,7 +1635,7 @@ function save_edit_agenda_item($id,$title,$content,$start_date,$end_date)
 									start_date='".$start_date."',
 									end_date='".$end_date."'
 								WHERE id='".$id."'";
-	$result = api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
+	$result = Database::query($sql,__FILE__,__LINE__) or die (Database::error());
 	return true;
 }
 
@@ -1677,7 +1677,7 @@ function delete_agenda_item($id)
             }
 			//$sql = "DELETE FROM ".$TABLEAGENDA." WHERE id='$id'";
 			//$sql= "UPDATE ".$TABLE_ITEM_PROPERTY." SET visibility='2' WHERE tool='Agenda' and ref='$id'";
-			//$result = api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
+			//$result = Database::query($sql,__FILE__,__LINE__) or die (Database::error());
 			api_item_property_update($_course,TOOL_CALENDAR_EVENT,$id,'delete',api_get_user_id());
 
 			// delete the resources that were added to this agenda item
@@ -1998,7 +1998,7 @@ function display_agenda_items()
 	} // you are a student
 
 	//echo "<pre>".$sql."</pre>";
-	$result=api_sql_query($sql,__FILE__,__LINE__) or die(Database::error());
+	$result=Database::query($sql,__FILE__,__LINE__) or die(Database::error());
 	$number_items=Database::num_rows($result);
 
 	/*--------------------------------------------------
@@ -2265,7 +2265,7 @@ function get_attachment($agenda_id) {
 	$agenda_id=Database::escape_string($agenda_id);
 	$row=array();
 	$sql = 'SELECT id,path, filename,comment FROM '. $agenda_table_attachment.' WHERE agenda_id = '.(int)$agenda_id.'';
-	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$result=Database::query($sql, __FILE__, __LINE__);
 	if (Database::num_rows($result)!=0) {
 		$row=Database::fetch_array($result);
 	}
@@ -2302,7 +2302,7 @@ function display_one_agenda_item($agenda_id)
 					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
 					AND toolitemproperties.visibility='1'
 					AND agenda.id='$agenda_id'";
-	$result=api_sql_query($sql,__FILE__,__LINE__) or die(Database::error());
+	$result=Database::query($sql,__FILE__,__LINE__) or die(Database::error());
 	$number_items=Database::num_rows($result);
 	$myrow=Database::fetch_array($result); // there should be only one item so no need for a while loop
 
@@ -3066,7 +3066,7 @@ function get_agendaitems($month, $year)
 	}
 
 	$mycourse = api_get_course_info();
-    $result = api_sql_query($sqlquery, __FILE__, __LINE__);
+    $result = Database::query($sqlquery, __FILE__, __LINE__);
     global $_configuration;
    	$root_url = $_configuration['root_web'];
 	if ($_configuration['multiple_access_urls']==true) {
@@ -3156,7 +3156,7 @@ function display_upcoming_events()
 							ORDER BY start_date ";
 		}
 	}
-	$result = api_sql_query($sqlquery, __FILE__, __LINE__);
+	$result = Database::query($sqlquery, __FILE__, __LINE__);
 	$counter = 0;
 	while ($item = Database::fetch_array($result,'ASSOC'))
 	{
@@ -3375,7 +3375,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 	$items = array ();
 
 	// get agenda-items for every course
-	//$query=api_sql_query($sql_select_courses);
+	//$query=Database::query($sql_select_courses);
 	foreach ($courses_dbs as $key => $array_course_info)
 	{
 		//databases of the courses
@@ -3433,7 +3433,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 		//$sqlquery = "SELECT * FROM $agendadb WHERE DAYOFMONTH(day)='$day' AND month(day)='$month' AND year(day)='$year'";
 		//echo "abc";
 		//echo $sqlquery;
-		$result = api_sql_query($sqlquery, __FILE__, __LINE__);
+		$result = Database::query($sqlquery, __FILE__, __LINE__);
 		//echo Database::num_rows($result);
 		while ($item = Database::fetch_array($result))
 		{
@@ -3561,7 +3561,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 		// $sqlquery = "SELECT * FROM $agendadb WHERE (DAYOFMONTH(day)>='$start_day' AND DAYOFMONTH(day)<='$end_day')
 		//				AND (MONTH(day)>='$start_month' AND MONTH(day)<='$end_month')
 		//				AND (YEAR(day)>='$start_year' AND YEAR(day)<='$end_year')";
-		$result = api_sql_query($sqlquery, __FILE__, __LINE__);
+		$result = Database::query($sqlquery, __FILE__, __LINE__);
 		while ($item = Database::fetch_array($result))
 		{
 			$agendaday = date("j",strtotime($item['start_date']));
@@ -3647,7 +3647,7 @@ function get_repeated_events_day_view($course_info,$start=0,$end=0,$params)
             .(!empty($params['conditions'])?$params['conditions']:'')
             .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
             .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	if(Database::num_rows($res)>0)
 	{
 		while($row = Database::fetch_array($res))
@@ -3773,7 +3773,7 @@ function get_repeated_events_week_view($course_info,$start=0,$end=0,$params)
             .(!empty($params['conditions'])?$params['conditions']:'')
             .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
             .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	if(Database::num_rows($res)>0)
 	{
 		while($row = Database::fetch_array($res))
@@ -3904,7 +3904,7 @@ function get_repeated_events_month_view($course_info,$start=0,$end=0,$params)
             .(!empty($params['conditions'])?$params['conditions']:'')
             .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
             .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	if(Database::num_rows($res)>0)
 	{
 		while($row = Database::fetch_array($res))
@@ -4075,7 +4075,7 @@ function get_repeated_events_list_view($course_info,$start=0,$end=0,$params)
             .(!empty($params['conditions'])?$params['conditions']:'')
             .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
             .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
-    $res = api_sql_query($sql,__FILE__,__LINE__);
+    $res = Database::query($sql,__FILE__,__LINE__);
     if(Database::num_rows($res)>0)
     {
         while($row = Database::fetch_array($res))
@@ -4344,7 +4344,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     			AND item_property.ref = agenda.id
     			AND item_property.visibility <> 2
     			";
-    $result = api_sql_query($sql,__FILE__,__LINE__);
+    $result = Database::query($sql,__FILE__,__LINE__);
     $count = Database::num_rows($result);
     if ($count > 0) {
     	return false;
@@ -4355,7 +4355,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
                             VALUES
                             ('".$title."','".$content."', '".$start_date."','".$end_date."'".(!empty($parent_id)?','.((int)$parent_id):'').", '".$id_session."')";
 
-    $result = api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
+    $result = Database::query($sql,__FILE__,__LINE__) or die (Database::error());
     $last_id=Database::insert_id();
 
     // add a attachment file in agenda
@@ -4410,7 +4410,7 @@ function delete_attachment_file($id_attach) {
 	$id_attach=Database::escape_string($id_attach);
 
 	$sql="DELETE FROM $agenda_table_attachment WHERE id = ".(int)$id_attach;
-	$result=api_sql_query($sql, __LINE__, __FILE__);
+	$result=Database::query($sql, __LINE__, __FILE__);
 	$last_id_file=Database::insert_id();
 	// update item_property
 	api_item_property_update($_course, 'calendar_event_attachment', $id_attach ,'AgendaAttachmentDeleted', api_get_user_id());
@@ -4458,7 +4458,7 @@ function add_agenda_attachment_file($file_comment,$last_id) {
 				if ($result) {
 					$sql='INSERT INTO '.$agenda_table_attachment.'(filename,comment, path,agenda_id,size) '.
 						 "VALUES ( '".$safe_file_name."', '".$safe_file_comment."', '".$safe_new_file_name."' , '".$last_id."', '".$_FILES['user_upload']['size']."' )";
-					$result=api_sql_query($sql, __LINE__, __FILE__);
+					$result=Database::query($sql, __LINE__, __FILE__);
 					$message.=' / '.get_lang('FileUploadSucces').'<br />';
 
 					$last_id_file=Database::insert_id();
@@ -4509,7 +4509,7 @@ function edit_agenda_attachment_file($file_comment,$agenda_id,$id_attach) {
 				if ($result) {
 					$sql="UPDATE $agenda_table_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', agenda_id = '$safe_agenda_id', size ='".$_FILES['user_upload']['size']."'
 						   WHERE id = '$safe_id_attach'";
-					$result=api_sql_query($sql, __LINE__, __FILE__);
+					$result=Database::query($sql, __LINE__, __FILE__);
 
 					api_item_property_update($_course, 'calendar_event_attachment', $safe_id_attach ,'AgendaAttachmentUpdated', api_get_user_id());
 
@@ -4724,7 +4724,7 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 		$end_filter = $year."-".$month."-".$day." 23:59:59";
 		$sql = " SELECT * FROM ".$tbl_global_agenda." WHERE start_date>='".$start_filter."' AND start_date<='".$end_filter."'";
 	}
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	while ($item = Database::fetch_array($result))
 	{
 		// we break the date field in the database into a date and a time part

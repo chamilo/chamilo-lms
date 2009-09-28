@@ -156,7 +156,7 @@ function save_glossary($values)
 					'".Database::escape_string(Security::remove_XSS($values['glossary_title']))."',
 					'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['glossary_comment'])),COURSEMANAGERLOWSECURITY))."',
 					'".(int)($max_glossary_item + 1)."')";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$id = Database::get_last_insert_id();
 		if ($id>0) {
 			//insert into item_property
@@ -195,7 +195,7 @@ function update_glossary($values)
 						name 		= '".Database::escape_string(Security::remove_XSS($values['glossary_title']))."',
 						description	= '".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['glossary_comment'])),COURSEMANAGERLOWSECURITY))."'
 				WHERE glossary_id = ".Database::escape_string($values['glossary_id']);
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		//update glossary into item_property
 		api_item_property_update(api_get_course_info(),TOOL_GLOSSARY,Database::escape_string($values['glossary_id']),'GlossaryModified',api_get_user_id());
 		// display the feedback message
@@ -216,7 +216,7 @@ function get_max_glossary_item()
 	$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 
 	$get_max = "SELECT MAX(display_order) FROM $t_glossary";
-	$res_max = api_sql_query($get_max, __FILE__, __LINE__);
+	$res_max = Database::query($get_max, __FILE__, __LINE__);
 	$dsp=0;
 	$row = Database::fetch_array($res_max);
 	return $row[0];
@@ -242,7 +242,7 @@ function glossary_exists($term,$not_id='')
 	{
 		$sql .= " AND glossary_id <> '".Database::escape_string($not_id)."'";
 	}
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	$count = Database::num_rows($result);
 	if ($count > 0)
 	{
@@ -276,7 +276,7 @@ function get_glossary_information($glossary_id)
 			   WHERE g.glossary_id = ip.ref
 			   AND tool = '".TOOL_GLOSSARY."'
 			   AND g.glossary_id = '".Database::escape_string($glossary_id)."' ";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	return Database::fetch_array($result);
 }
 
@@ -294,7 +294,7 @@ function delete_glossary($glossary_id)
 	$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 
 	$sql = "DELETE FROM $t_glossary WHERE glossary_id='".Database::escape_string($glossary_id)."'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 
 	// reorder the remaining terms
 	reorder_glossary();
@@ -376,7 +376,7 @@ function get_number_glossary_terms()
 	$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 
 	$sql = "SELECT count(glossary_id) as total FROM $t_glossary";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	$obj = Database::fetch_object($res);
 	return $obj->total;
 }
@@ -418,7 +418,7 @@ function get_glossary_data($from, $number_of_items, $column, $direction)
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
 
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 
 	$return = array ();
 	while ($data = Database::fetch_row($res))
@@ -508,13 +508,13 @@ function reorder_glossary()
 	$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 
 	$sql = "SELECT * FROM $t_glossary ORDER by display_order ASC";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 
 	$i = 1;
 	while ($data = Database::fetch_array($res))
 	{
 		$sql_reorder = "UPDATE $t_glossary SET display_order = $i WHERE glossary_id = '".Database::escape_string($data['glossary_id'])."'";
-		api_sql_query($sql_reorder, __FILE__, __LINE__);
+		Database::query($sql_reorder, __FILE__, __LINE__);
 		$i++;
 	}
 }
@@ -544,7 +544,7 @@ function move_glossary($direction, $glossary_id)
 	}
 
 	$sql = "SELECT * FROM $t_glossary ORDER BY display_order $sortorder";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	while ($row = Database::fetch_array($res))
 	{
 		if ($found == true and empty($next_id))
@@ -564,8 +564,8 @@ function move_glossary($direction, $glossary_id)
 
 	$sql1 = "UPDATE $t_glossary SET display_order = '".Database::escape_string($next_display_order)."' WHERE glossary_id = '".Database::escape_string($current_id)."'";
 	$sql2 = "UPDATE $t_glossary SET display_order = '".Database::escape_string($current_display_order)."' WHERE glossary_id = '".Database::escape_string($next_id)."'";
-	$res = api_sql_query($sql1, __FILE__, __LINE__);
-	$res = api_sql_query($sql2, __FILE__, __LINE__);
+	$res = Database::query($sql1, __FILE__, __LINE__);
+	$res = Database::query($sql2, __FILE__, __LINE__);
 
 	Display::display_confirmation_message(get_lang('TermMoved'));
 }

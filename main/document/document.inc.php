@@ -56,7 +56,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 			$folder_sql = implode("','",$escaped_folders);
 			$doc_table = Database::get_course_table(TABLE_DOCUMENT);
 			$sql = "SELECT * FROM $doc_table WHERE filetype='folder' AND path IN ('".$folder_sql."')";
-			$res = api_sql_query($sql,__FILE__,__LINE__);
+			$res = Database::query($sql,__FILE__,__LINE__);
 			$folder_titles = array();
 			while($obj = Database::fetch_object($res))
 			{
@@ -472,7 +472,7 @@ function get_titles_of_path($path)
 		else
 		{
 			$sql = 'SELECT title FROM '.Database::get_course_table(TABLE_DOCUMENT).' WHERE path LIKE BINARY "'.$tmp_path.'"';
-			$rs = api_sql_query($sql,__FILE__,__LINE__);
+			$rs = Database::query($sql,__FILE__,__LINE__);
 			$tmp_title = '/'.Database::result($rs,0,0);
 			$path_displayed .= $tmp_title;
 			$tmp_folders_titles[$tmp_path] = $tmp_title;

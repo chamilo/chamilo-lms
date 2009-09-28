@@ -354,7 +354,7 @@ function get_number_of_group_users()
 	$sql = "SELECT count(id) AS number_of_users
 				FROM ".$table_group_user."
 				WHERE group_id='".Database::escape_string($current_group['id'])."'";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	$return = Database::fetch_array($result,'ASSOC');
 	return $return['number_of_users'];
 }
@@ -439,7 +439,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction)
 	}
 
 	$return = array ();
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	while ($row = Database::fetch_row($result))
 	{
 		$return[] = $row;

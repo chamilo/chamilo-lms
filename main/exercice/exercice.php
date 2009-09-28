@@ -121,7 +121,7 @@ if ($origin == 'learnpath') {
 
 if ($_GET['delete'] == 'delete' && ($is_allowedToEdit || api_is_coach()) && !empty ($_GET['did']) && $_GET['did'] == strval(intval($_GET['did']))) {
 	$sql = 'DELETE FROM ' . Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES) . ' WHERE exe_id = ' . $_GET['did']; //_GET[did] filtered by entry condition
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 	$filter=Security::remove_XSS($_GET['filter']);
 	header('Location: exercice.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&show=result&filter=' . $filter . '');
 	exit;
@@ -168,25 +168,25 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 		}
 			$my_questionid=$array_content_id_exe[$i];
 			$sql = "SELECT question from $TBL_QUESTIONS WHERE id = '$my_questionid'";
-			$result =api_sql_query($sql, __FILE__, __LINE__);
+			$result =Database::query($sql, __FILE__, __LINE__);
 			$ques_name = Database::result($result,0,"question");
 
 			$query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks',teacher_comment = '$my_comments'
 					  WHERE question_id = '".$my_questionid."'
 					  AND exe_id='".$id."'";
-			api_sql_query($query, __FILE__, __LINE__);
+			Database::query($query, __FILE__, __LINE__);
 
 
 			$qry = 'SELECT sum(marks) as tot
 					FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.intval($id).'
 					GROUP BY question_id';
 
-			$res = api_sql_query($qry,__FILE__,__LINE__);
+			$res = Database::query($qry,__FILE__,__LINE__);
 			$tot = Database::result($res,0,'tot');
 			//updating also the total weight
 			$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".Database::escape_string($tot)."', exe_weighting = '".Database::escape_string($total_weighting)."'
 						 WHERE exe_Id='".Database::escape_string($id)."'";
-			api_sql_query($totquery, __FILE__, __LINE__);
+			Database::query($totquery, __FILE__, __LINE__);
 			$recording_changes = 'INSERT INTO '.$TBL_RECORDING.' ' .
 					'(exe_id,
 					question_id,
@@ -196,7 +196,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 					teacher_comment)
 					VALUES
 					('."'$id','".$my_questionid."','$my_marks','".date('Y-m-d H:i:s')."','".api_get_user_id()."'".',"'.$my_comments.'")';
-			api_sql_query($recording_changes, __FILE__, __LINE__);
+			Database::query($recording_changes, __FILE__, __LINE__);
 
 
 	}
@@ -211,25 +211,25 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 
 		if ($keyexp[0] == "marks") {
 			$sql = "SELECT question from $TBL_QUESTIONS WHERE id = '$my_questionid'";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			$ques_name = Database :: result($result, 0, "question");
 
 			$query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '" . $v . "'
 								  WHERE question_id = '" . $my_questionid . "'
 								  AND exe_id='" . $id . "'";
-			api_sql_query($query, __FILE__, __LINE__);
+			Database::query($query, __FILE__, __LINE__);
 
 			$qry = 'SELECT sum(marks) as tot
 								FROM ' . $TBL_TRACK_ATTEMPT . ' WHERE exe_id = ' . intval($id) . '
 								GROUP BY question_id';
 
-			$res = api_sql_query($qry, __FILE__, __LINE__);
+			$res = Database::query($qry, __FILE__, __LINE__);
 			$tot = Database :: result($res, 0, 'tot');
 			//updating also the total weight
 			$totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '" . Database :: escape_string($tot) . "', exe_weighting = '" . Database :: escape_string($total_weighting) . "'
 									 WHERE exe_Id='" . Database :: escape_string($id) . "'";
 
-			api_sql_query($totquery, __FILE__, __LINE__);
+			Database::query($totquery, __FILE__, __LINE__);
 
 			$recording_changes = 'INSERT INTO ' . $TBL_RECORDING . ' ' .
 			'(exe_id,
@@ -239,12 +239,12 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 								author)
 								VALUES
 								(' . "'$id','" . $my_questionid . "','$v','" . date('Y-m-d H:i:s') . "','" . api_get_user_id() . "'" . ')';
-			api_sql_query($recording_changes, __FILE__, __LINE__);
+			Database::query($recording_changes, __FILE__, __LINE__);
 		} else {
 			$query = "UPDATE $TBL_TRACK_ATTEMPT SET teacher_comment = '" . $v . "'
 					  			WHERE question_id = '" . $my_questionid . "'
 					  			AND exe_id = '" . $id . "'";
-			api_sql_query($query, __FILE__, __LINE__);
+			Database::query($query, __FILE__, __LINE__);
 
 			$recording_changes = 'INSERT INTO ' . $TBL_RECORDING . ' ' .
 			'(exe_id,
@@ -254,7 +254,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 								author)
 								VALUES
 								(' . "'$id','" . $my_questionid . "','$v','" . date('Y-m-d H:i:s') . "','" . api_get_user_id() . "'" . ')';
-			api_sql_query($recording_changes, __FILE__, __LINE__);
+			Database::query($recording_changes, __FILE__, __LINE__);
 		}
 	}*/
 
@@ -262,7 +262,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 			FROM ' . $TBL_TRACK_ATTEMPT . ' where exe_id = ' . intval($id) . '
 			GROUP BY question_id';
 
-	$res = api_sql_query($qry, __FILE__, __LINE__);
+	$res = Database::query($qry, __FILE__, __LINE__);
 	$tot = 0;
 	while ($row = Database :: fetch_array($res, 'ASSOC')) {
 		$tot += $row['marks'];
@@ -357,24 +357,24 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 				// get max view_count from lp_item_view
 				/*$sql = "SELECT MAX(view_count) FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '" . (int) $lp_item_view_id . "'
 				    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '" . (int) $student_id . "' and lp_id='" . (int) $lp_item_id . "')";
-				$res_max_view_count = api_sql_query($sql, __FILE__, __LINE__);
+				$res_max_view_count = Database::query($sql, __FILE__, __LINE__);
 				$row_max_view_count = Database :: fetch_row($res_max_view_count);
 				$max_view_count = (int) $row_max_view_count[0];
 
 				// update score and total_time from last attempt when you qualify the exercise in Learning path detail
 				$sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . (float) $score . "',total_time = '" . (int) $total_time . "' WHERE lp_item_id = '" . (int) $lp_item_view_id . "'
 				    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '" . (int) $student_id . "' and lp_id='" . (int) $lp_item_id . "') AND view_count = '$max_view_count'";
-				api_sql_query($sql_update_score, __FILE__, __LINE__);
+				Database::query($sql_update_score, __FILE__, __LINE__);
 
 				// update score and total_time from last attempt when you qualify the exercise in Learning path detail
 				$sql_update_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = '" . (float) $score . "',total_time = '" . (int) $total_time . "' WHERE lp_item_id = '" . (int) $lp_item_view_id . "'
 				    					AND lp_view_id = (SELECT id from $TBL_LP_VIEW  WHERE user_id = '" . (int) $student_id . "' and lp_id='" . (int) $lp_item_id . "') AND view_count = '$max_view_count'";
-				api_sql_query($sql_update_score, __FILE__, __LINE__);*/
+				Database::query($sql_update_score, __FILE__, __LINE__);*/
 
 				// update max_score from a exercise in lp
 				$sql_update_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '" . (float) $totalWeighting . "'  WHERE id = '" . (int) $lp_item_view_id . "'";
 
-				api_sql_query($sql_update_max_score, __FILE__, __LINE__);
+				Database::query($sql_update_max_score, __FILE__, __LINE__);
 
 			}
 		}
@@ -509,7 +509,7 @@ Display :: display_introduction_section(TOOL_QUIZ);
 // selects $limitExPage exercises at the same time
 $from = $page * $limitExPage;
 $sql = "SELECT count(id) FROM $TBL_EXERCICES";
-$res = api_sql_query($sql, __FILE__, __LINE__);
+$res = Database::query($sql, __FILE__, __LINE__);
 list ($nbrexerc) = Database :: fetch_array($res);
 
 HotPotGCt($documentPath, 1, $_user['user_id']);
@@ -530,7 +530,7 @@ if ($is_allowedToEdit) {
 
 					//delete link of exercise of gradebook tool
 					$sql = 'SELECT gl.id FROM ' . $tbl_grade_link . ' gl WHERE gl.type="1" AND gl.ref_id="' . $exerciseId . '";';
-					$result = api_sql_query($sql, __FILE__, __LINE__);
+					$result = Database::query($sql, __FILE__, __LINE__);
 					$row = Database :: fetch_array($result, 'ASSOC');
 
 					$link = LinkFactory :: load($row['id']);
@@ -588,7 +588,7 @@ if ($is_allowedToEdit) {
 			case 'enable' : // enables an exercise
 				$newVisibilityStatus = "1"; //"visible"
 				$query = "SELECT id FROM $TBL_DOCUMENT WHERE path='" . Database :: escape_string($file) . "'";
-				$res = api_sql_query($query, __FILE__, __LINE__);
+				$res = Database::query($query, __FILE__, __LINE__);
 				$row = Database :: fetch_array($res, 'ASSOC');
 				api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'visible', $_user['user_id']);
 				//$dialogBox = get_lang('ViMod');
@@ -597,11 +597,11 @@ if ($is_allowedToEdit) {
 			case 'disable' : // disables an exercise
 				$newVisibilityStatus = "0"; //"invisible"
 				$query = "SELECT id FROM $TBL_DOCUMENT WHERE path='" . Database :: escape_string($file) . "'";
-				$res = api_sql_query($query, __FILE__, __LINE__);
+				$res = Database::query($query, __FILE__, __LINE__);
 				$row = Database :: fetch_array($res, 'ASSOC');
 				api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'invisible', $_user['user_id']);
 				#$query = "UPDATE $TBL_DOCUMENT SET visibility='$newVisibilityStatus' WHERE path=\"".$file."\""; //added by Toon
-				#api_sql_query($query,__FILE__,__LINE__);
+				#Database::query($query,__FILE__,__LINE__);
 				//$dialogBox = get_lang('ViMod');
 				break;
 			default :
@@ -611,13 +611,13 @@ if ($is_allowedToEdit) {
 
 	if ($show == 'test') {
 		$sql = "SELECT id,title,type,active,description, results_disabled FROM $TBL_EXERCICES WHERE active<>'-1' ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 	}
 
 }
 elseif ($show == 'test') { // only for students //fin
 	$sql = "SELECT id,title,type,description, results_disabled FROM $TBL_EXERCICES WHERE active='1' ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 }
 
 // the actions
@@ -626,30 +626,30 @@ echo '<div class="actions">';
 // display the next and previous link if needed
 $from = $page * $limitExPage;
 $sql = "SELECT count(id) FROM $TBL_EXERCICES";
-$res = api_sql_query($sql, __FILE__, __LINE__);
+$res = Database::query($sql, __FILE__, __LINE__);
 list ($nbrexerc) = Database :: fetch_array($res);
 HotPotGCt($documentPath, 1, $_user['user_id']);
 // only for administrator
 if ($is_allowedToEdit) {
 	if ($show == 'test') {
 		$sql = "SELECT id,title,type,active,description, results_disabled FROM $TBL_EXERCICES WHERE active<>'-1' ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 	}
 }
 elseif ($show == 'test') { // only for students
 	$sql = "SELECT id,title,type,description, results_disabled FROM $TBL_EXERCICES WHERE active='1' ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 }
 if ($show == 'test') {
 	$nbrExercises = Database :: num_rows($result);
 
 	//get HotPotatoes files (active and inactive)
-	$res = api_sql_query("SELECT *
+	$res = Database::query("SELECT *
 						FROM $TBL_DOCUMENT
 						WHERE
 						path LIKE '" . Database :: escape_string($uploadPath) . "/%/%'", __FILE__, __LINE__);
 	$nbrTests = Database :: num_rows($res);
-	$res = api_sql_query("SELECT *
+	$res = Database::query("SELECT *
 						FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
 						WHERE  d.id = ip.ref
 						AND ip.tool = '" . TOOL_DOCUMENT . "'
@@ -866,12 +866,12 @@ if ($show == 'test') {
 				$exid = $row['id'];
 				//count number exercice - teacher
 				$sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '" . Database :: escape_string($exid) . "'";
-				$sqlresult = api_sql_query($sqlquery);
+				$sqlresult = Database::query($sqlquery);
 				$rowi = Database :: result($sqlresult, 0);
 
 				//count number random exercice - teacher
 				$sql_random_query = 'SELECT type,random,active,results_disabled,max_attempt FROM ' . $TBL_EXERCICES . ' WHERE id="' . Database :: escape_string($exid) . '" ';
-				$rs_random = api_sql_query($sql_random_query, __FILE__, __LINE__);
+				$rs_random = Database::query($sql_random_query, __FILE__, __LINE__);
 				$row_random = Database :: fetch_array($rs_random);
 				if ($row_random['random'] > 0) {
 					echo $row_random['random'] . ' ' . api_strtolower(get_lang(($row_random['random'] > 1 ? 'Questions' : 'Question'))) . '</td>';
@@ -929,11 +929,11 @@ if ($show == 'test') {
 				$exid = $row['id'];
 				//count number exercise questions
 				$sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE exercice_id = '" . Database :: escape_string($exid) . "'";
-				$sqlresult = api_sql_query($sqlquery);
+				$sqlresult = Database::query($sqlquery);
 				$rowi = Database :: result($sqlresult, 0);
 				//count number random exercice
 				$sql_random_query = 'SELECT type,random,active,results_disabled,max_attempt FROM ' . $TBL_EXERCICES . ' WHERE id="' . Database :: escape_string($exid) . '" ';
-				$rs_random = api_sql_query($sql_random_query, __FILE__, __LINE__);
+				$rs_random = Database::query($sql_random_query, __FILE__, __LINE__);
 				$row_random = Database :: fetch_array($rs_random);
 				if ($row_random['random'] > 0) {
 					echo $row_random['random'] . ' ' . api_strtolower(get_lang(($row_random['random'] > 1 ? 'Questions' : 'Question')));
@@ -950,7 +950,7 @@ if ($show == 'test') {
 				$qry = "SELECT * FROM $TBL_TRACK_EXERCICES
 						WHERE exe_exo_id = '" . Database :: escape_string($eid) . "' and exe_user_id = '" . Database :: escape_string($uid) . "' AND exe_cours_id = '" . api_get_course_id() . "' AND status <>'incomplete' AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id =  '" . api_get_session_id() . "'
 						ORDER BY exe_id DESC";
-				$qryres = api_sql_query($qry);
+				$qryres = Database::query($qry);
 				$num = Database :: num_rows($qryres);
 
 				//hide the results
@@ -1009,7 +1009,7 @@ if ($show == 'test') {
 											AND   d.path  LIKE '" . Database :: escape_string($uploadPath) . "/%/%' AND ip.visibility='1' LIMIT " . (int) $from . "," . (int) $to;
 		}
 
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		while ($row = Database :: fetch_array($result, 'ASSOC')) {
 			$attribute['path'][] = $row['path'];
@@ -1189,7 +1189,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 			$revised = false;
 			$sql_exe = 'SELECT exe_id FROM ' . Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING) . '
 									  WHERE author != ' . "''" . ' AND exe_id = ' . "'" . Database :: escape_string($results[$i][5]) . "'" . ' LIMIT 1';
-			$query = api_sql_query($sql_exe, __FILE__, __LINE__);
+			$query = Database::query($sql_exe, __FILE__, __LINE__);
 
 			if (Database :: num_rows($query) > 0) {
 				$revised = true;

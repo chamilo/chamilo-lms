@@ -195,14 +195,14 @@ $condition = ' WHERE ' .
 	'session_id = ' . "'" . (int) $_SESSION['id_session'] . "'";
 
 $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
-$result = api_sql_query("SELECT type,feedback_type FROM $TBL_EXERCICES WHERE id=$exerciseId", __FILE__, __LINE__);
+$result = Database::query("SELECT type,feedback_type FROM $TBL_EXERCICES WHERE id=$exerciseId", __FILE__, __LINE__);
 $exercise_row = Database :: fetch_array($result);
 $exerciseType = $exercise_row['type'];
 $exerciseFeedbackType = $exercise_row['feedback_type'];
 
 if ($_configuration['live_exercise_tracking'] == true && $exerciseType == 2 && $exerciseFeedbackType != 1) {
 	$query = 'SELECT * FROM ' . $stat_table . $condition;
-	$result_select = api_sql_query($query, __FILE__, __LINE__);
+	$result_select = Database::query($query, __FILE__, __LINE__);
 	if (Database :: num_rows($result_select) > 0) {
 		$getIncomplete = Database :: fetch_array($result_select);
 		$exe_id = $getIncomplete['exe_id'];
@@ -210,7 +210,7 @@ if ($_configuration['live_exercise_tracking'] == true && $exerciseType == 2 && $
 			define('QUESTION_LIST_ALREADY_LOGGED', 1);
 			$recorded['questionList'] = explode(',', $getIncomplete['data_tracking']);
 			$query = 'SELECT * FROM ' . $exercice_attemp_table . ' WHERE exe_id = ' . $getIncomplete['exe_id'] . ' ORDER BY tms ASC';
-			$result = api_sql_query($query, __FILE__, __LINE__);
+			$result = Database::query($query, __FILE__, __LINE__);
 			while ($row = Database :: fetch_array($result)) {
 				$recorded['exerciseResult'][$row['question_id']] = 1;
 			}
@@ -567,7 +567,7 @@ if ($formSent) {
 									$val = $val;
 									$val = strip_tags($val);
 									$sql = "select position from $table_ans where question_id='" . Database :: escape_string($questionId) . "' and answer='" . Database :: escape_string($val) . "' AND correct=0";
-									$res = api_sql_query($sql, __FILE__, __LINE__);
+									$res = Database::query($sql, __FILE__, __LINE__);
 									if (Database :: num_rows($res) > 0) {
 										$answer = Database :: result($res, 0, "position");
 									} else {
@@ -599,7 +599,7 @@ if ($formSent) {
 					//at loops over all questions
 					if (isset($exe_id)) {
 						$sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . (int) $totalScore . ',exe_weighting = exe_weighting + ' . (int) $totalWeighting . ' WHERE exe_id = ' . Database::escape_string($exe_id);
-						api_sql_query($sql_update, __FILE__, __LINE__);
+						Database::query($sql_update, __FILE__, __LINE__);
 					}
 					//END of saving and qualifying
 					//------------------------------------------------------------------------------------------
@@ -629,7 +629,7 @@ if ($formSent) {
 			if ($exe_id != '') {
 				//clean incomplete
 				$update_query = 'UPDATE ' . $stat_table . ' SET ' . "status = '', data_tracking='', exe_date = '" . date('Y-m-d H:i:s') . "'" . ' WHERE exe_id = ' . Database::escape_string($exe_id);
-				api_sql_query($update_query, __FILE__, __LINE__);
+				Database::query($update_query, __FILE__, __LINE__);
 			}
 			header("Location: exercise_show.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
 		}
@@ -696,7 +696,7 @@ if (!isset ($_SESSION['questionList'])) {
 	$questionList = ($randomQuestions ? $objExercise->selectRandomList() : $objExercise->selectQuestionList());
 	// saves the question list into the session
 	$sql = 'SELECT random FROM ' . $table_quiz_test . ' WHERE id="' . Database :: escape_string($my_exe_id) . '";';
-	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	$rs = Database::query($sql, __FILE__, __LINE__);
 	$row_number = Database :: fetch_array($rs);
 	$z = 0;
 
@@ -908,7 +908,7 @@ if ($exerciseAttempts > 0) {
 				AND orig_lp_item_id = $safe_lp_item_id
 	            AND exe_cours_id = '$course_code' AND session_id = '" . (int) $_SESSION['id_session'] . "'";
 
-	$aquery = api_sql_query($sql, __FILE__, __LINE__);
+	$aquery = Database::query($sql, __FILE__, __LINE__);
 	$attempt = Database :: fetch_array($aquery);
 
 	if ($attempt[0] >= $exerciseAttempts) {
@@ -1088,10 +1088,10 @@ if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType !
 	//if($questionNum < 2){
 	if ($table_recorded_not_exist) {
 		if ($exerciseType == 2) {
-			api_sql_query("INSERT INTO $stat_table(exe_exo_id,exe_user_id,exe_cours_id,status,session_id,data_tracking,start_date,orig_lp_id,orig_lp_item_id)
+			Database::query("INSERT INTO $stat_table(exe_exo_id,exe_user_id,exe_cours_id,status,session_id,data_tracking,start_date,orig_lp_id,orig_lp_item_id)
 										VALUES('$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)", __FILE__, __LINE__);
 		} else {
-			api_sql_query("INSERT INTO $stat_table (exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date,orig_lp_id,orig_lp_item_id)
+			Database::query("INSERT INTO $stat_table (exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date,orig_lp_id,orig_lp_item_id)
 									   VALUES('$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . api_get_session_id() . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)", __FILE__, __LINE__);
 		}
 	}

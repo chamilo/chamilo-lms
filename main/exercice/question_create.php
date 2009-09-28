@@ -74,7 +74,7 @@ $form->addElement('static','select_question_type', get_lang('QuestionType'),'<di
 // the exercices
 $tbl_exercices = Database :: get_course_table(TABLE_QUIZ_TEST);
 $sql = "SELECT id,title,type,description, results_disabled FROM $tbl_exercices WHERE active<>'-1' ORDER BY title ASC";
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 $exercises['-'] = '-'.get_lang('SelectExercice').'-';
 while ($row = Database :: fetch_array($result))
 {

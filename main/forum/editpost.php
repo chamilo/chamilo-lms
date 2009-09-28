@@ -255,7 +255,7 @@ if (!empty($values) and isset($_POST['SubmitPost'])) {
 			if ($link_id==false) {
 				add_resource_to_course_gradebook(api_get_course_id(), 5, $id, $title_gradebook,$weight_calification,$value_calification,$description,time(),1,api_get_session_id());
 			} else {
-				api_sql_query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
+				Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
 			}
 
 	}

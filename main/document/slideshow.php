@@ -229,7 +229,7 @@ if ($slide_id !== "all") {
 			$pathpart=$path.'/';
 		}
 		$sql = "SELECT * FROM $tbl_documents WHERE path='".Database::escape_string($pathpart.$image_files_only[$slide])."'";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql,__FILE__,__LINE__);
 		$row = Database::fetch_array($result);
 
 		// back forward buttons

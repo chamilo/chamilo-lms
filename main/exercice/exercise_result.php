@@ -132,7 +132,7 @@ $main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
 $main_admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 $courseName = $_SESSION['_course']['name'];
 $query = "SELECT user_id FROM $main_admin_table LIMIT 1"; //get all admins from admin table
-$admin_id = Database::result(api_sql_query($query),0,"user_id");
+$admin_id = Database::result(Database::query($query),0,"user_id");
 $uinfo = api_get_user_info($admin_id);
 $from = $uinfo['mail'];
 $from_name = api_get_person_name($uinfo['firstname'], $uinfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
@@ -991,7 +991,7 @@ foreach ($questionList as $questionId) {
 					$val = $arr1[1][0];
 				$val=strip_tags($val);
 				$sql = "SELECT position from $table_ans where question_id='".Database::escape_string($questionId)."' and answer='".Database::escape_string($val)."' AND correct=0";
-				$res = api_sql_query($sql, __FILE__, __LINE__);
+				$res = Database::query($sql, __FILE__, __LINE__);
 				if (Database::num_rows($res)>0) {
 					$answer = Database::result($res,0,"position");
 				} else {
@@ -1155,7 +1155,7 @@ if(count($arrques)>0) {
 						WHERE session.id_coach = user.user_id
 						AND session.id = "'.Database::escape_string($_SESSION['id_session']).'"
 						';
-				$result=api_sql_query($sql,__FILE__,__LINE__);
+				$result=Database::query($sql,__FILE__,__LINE__);
 				$from = Database::result($result,0,'email');
 				$from_name = api_get_person_name(Database::result($result,0,'firstname'), Database::result($result,0,'lastname'), null, PERSON_NAME_EMAIL_ADDRESS);
 			} else {
@@ -1166,7 +1166,7 @@ if(count($arrques)>0) {
 						WHERE firstname = "'.Database::escape_string($firstname).'"
 						AND lastname = "'.Database::escape_string($lastname).'"
 				';
-				$result=api_sql_query($sql,__FILE__,__LINE__);
+				$result=Database::query($sql,__FILE__,__LINE__);
 				$from = Database::result($result,0,'email');
 				$from_name = api_get_person_name(Database::result($result,0,'firstname'), Database::result($result,0,'lastname'), null, PERSON_NAME_EMAIL_ADDRESS);
 			}

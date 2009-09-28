@@ -73,7 +73,7 @@ class CourseBuilder
 		foreach ($this->course->resources as $type => $resources) {
 			foreach ($resources as $id => $resource) {
 				$sql = "SELECT * FROM ".$table." WHERE source_type = '".$resource->get_type()."' AND source_id = '".$resource->get_id()."'";
-				$res = api_sql_query($sql, __FILE__, __LINE__);
+				$res = Database::query($sql, __FILE__, __LINE__);
 				while ($link = Database::fetch_object($res)) {
 					$this->course->resources[$type][$id]->add_linked_resource($link->resource_type, $link->resource_id);
 				}
@@ -88,7 +88,7 @@ class CourseBuilder
 				if ($tool != null)
 				{
 					$sql = "SELECT * FROM $table WHERE TOOL = '".$tool."' AND ref='".$resource->get_id()."'";
-					$res = api_sql_query($sql,__FILE__,__LINE__);
+					$res = Database::query($sql,__FILE__,__LINE__);
 					$all_properties = array ();
 					while ($item_property = Database::fetch_array($res))
 					{
@@ -113,7 +113,7 @@ class CourseBuilder
         else
         	$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 ORDER BY path';
 
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$doc = new Document($obj->id, $obj->path, $obj->comment, $obj->title, $obj->filetype, $obj->size);
@@ -127,7 +127,7 @@ class CourseBuilder
 	{
 		$table = Database :: get_course_table(TABLE_FORUM);
 		$sql = 'SELECT * FROM '.$table;
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$forum = new Forum($obj->forum_id, $obj->forum_title, $obj->forum_comment, $obj->forum_category, $obj->forum_last_post, $obj->forum_threads, $obj->forum_posts, $obj->allow_anonymous, $obj->allow_edit, $obj->approval_direct_post, $obj->allow_attachements, $obj->allow_new_threads, $obj->default_view, $obj->forum_of_group, $obj->forum_group_public_private, $obj->forum_order, $obj->locked, $obj->session_id, $obj->forum_image);
@@ -144,7 +144,7 @@ class CourseBuilder
 	{
 		$table = Database :: get_course_table(TABLE_FORUM_CATEGORY);
 		$sql = 'SELECT * FROM '.$table.' WHERE cat_id = '.$id;
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$forum_category = new ForumCategory($obj->cat_id, $obj->cat_title, $obj->cat_comment, $obj->cat_order, $obj->locked, $obj->session_id);
@@ -158,7 +158,7 @@ class CourseBuilder
 	{
 		$table = Database :: get_course_table(TABLE_FORUM_THREAD);
 		$sql = 'SELECT * FROM '.$table;
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$forum_topic = new ForumTopic($obj->thread_id, $obj->thread_title, $obj->thread_date, $obj->thread_poster_id, $obj->thread_poster_name, $obj->forum_id, $obj->thread_last_post, $obj->thread_replies, $obj->thread_views, $obj->thread_sticky, $obj->locked, $obj->thread_close_date, $obj->thread_weight, $obj->thread_title_qualify, $obj->thread_qualify_max);
@@ -173,7 +173,7 @@ class CourseBuilder
 	{
 		$table_post = Database :: get_course_table(TABLE_FORUM_POST);
 		$sql = 'SELECT * FROM '.$table_post;
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$forum_post = new ForumPost($obj->post_id, $obj->post_title, $obj->post_text, $obj->post_date, $obj->poster_id, $obj->poster_name, $obj->post_notification, $obj->post_parent_id, $obj->thread_id, $obj->forum_id, $obj->visible);
@@ -188,7 +188,7 @@ class CourseBuilder
 		$table = Database :: get_course_table(TABLE_LINK);
 		$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 		$sql = "SELECT * FROM $table l, $table_prop p WHERE p.ref=l.id AND p.tool = '".TOOL_LINK."' AND p.visibility != 2  ORDER BY l.display_order";
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$link = new Link($obj->id, $obj->title, $obj->url, $obj->description, $obj->category_id, $obj->on_homepage);
@@ -207,7 +207,7 @@ class CourseBuilder
 	{
 		$table = Database :: get_course_table(TABLE_TOOL_INTRO);
 		$sql = 'SELECT * FROM '.$table;
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$tool_intro = new ToolIntro($obj->id, $obj->intro_text);
@@ -221,7 +221,7 @@ class CourseBuilder
 	{
 		$link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY);
 		$sql = 'SELECT * FROM '.$link_cat_table.' WHERE id = '.$id;
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$link_category = new LinkCategory($obj->id, $obj->category_title, $obj->description, $obj->display_order);
@@ -239,17 +239,17 @@ class CourseBuilder
 		$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
 		$sql = 'SELECT * FROM '.$table_qui.' WHERE active >=0'; //select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			if (strlen($obj->sound) > 0)
 			{
-				$doc = Database::fetch_object(api_sql_query("SELECT id FROM ".$table_doc." WHERE path = '/audio/".$obj->sound."'"));
+				$doc = Database::fetch_object(Database::query("SELECT id FROM ".$table_doc." WHERE path = '/audio/".$obj->sound."'"));
 				$obj->sound = $doc->id;
 			}
 			$quiz = new Quiz($obj->id, $obj->title, $obj->description, $obj->random, $obj->type, $obj->active, $obj->sound, $obj->max_attempt, $obj->results_disabled, $obj->access_condition, $obj->start_time, $obj->end_time, $obj->feedback_type);
 			$sql = 'SELECT * FROM '.$table_rel.' WHERE exercice_id = '.$obj->id;
-			$db_result2 = api_sql_query($sql, __FILE__, __LINE__);
+			$db_result2 = Database::query($sql, __FILE__, __LINE__);
 			while ($obj2 = Database::fetch_object($db_result2))
 			{
 				$quiz->add_question($obj2->question_id);
@@ -270,12 +270,12 @@ class CourseBuilder
 
 		// Building normal tests.
 		$sql = 'SELECT * FROM '.$table_que;
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level);
 			$sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.$obj->id;
-			$db_result2 = api_sql_query($sql, __FILE__, __LINE__);
+			$db_result2 = Database::query($sql, __FILE__, __LINE__);
 			while ($obj2 = Database::fetch_object($db_result2))
 			{
 				$question->add_answer($obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position, $obj2->hotspot_coordinates, $obj2->hotspot_type);
@@ -288,7 +288,7 @@ class CourseBuilder
 		$sql = 'SELECT * FROM '.$table_que.
 			' as questions LEFT JOIN '.$table_rel.' as quizz_questions ON questions.id=quizz_questions.question_id LEFT JOIN '.$table_qui.
 			' as exercices ON exercice_id=exercices.id WHERE quizz_questions.exercice_id IS NULL OR exercices.active = -1'; // active = -1 means "deleted" test.
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		if (Database::num_rows($db_result) > 0)
 		{
 			$build_orphan_questions = true;
@@ -296,7 +296,7 @@ class CourseBuilder
 			{
 				$question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level);
 				$sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.(int)$obj->id;
-				$db_result2 = api_sql_query($sql, __FILE__, __LINE__);
+				$db_result2 = Database::query($sql, __FILE__, __LINE__);
 				while ($obj2 = Database::fetch_object($db_result2))
 				{
 					$question->add_answer($obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position, $obj2->hotspot_coordinates, $obj2->hotspot_type);
@@ -322,7 +322,7 @@ class CourseBuilder
 		$sql = 'SELECT * FROM '.$table_que.
 			' as questions LEFT JOIN '.$table_rel.' as quizz_questions ON questions.id=quizz_questions.question_id LEFT JOIN '.$table_qui.
 			' as exercices ON exercice_id=exercices.id WHERE quizz_questions.exercice_id IS NULL OR exercices.active = -1';
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		if (Database::num_rows($db_result) > 0)
 		{
 			$orphan_questions = new Quiz(-1, get_lang('OrphanQuestions', ''), '', 0, 0, 1, '', 0); // Tjis is the fictional test for collecting orphan questions.
@@ -331,7 +331,7 @@ class CourseBuilder
 			{
 				$question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level);
 				$sql = 'SELECT * FROM '.$table_ans.' WHERE question_id = '.$obj->id;
-				$db_result2 = api_sql_query($sql, __FILE__, __LINE__);
+				$db_result2 = Database::query($sql, __FILE__, __LINE__);
 				while ($obj2 = Database::fetch_object($db_result2))
 				{
 					$question->add_answer($obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position, $obj2->hotspot_coordinates, $obj2->hotspot_type);
@@ -348,7 +348,7 @@ class CourseBuilder
 		$table_survey = Database :: get_course_table(TABLE_SURVEY);
 		$table_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$sql = 'SELECT * FROM '.$table_survey;
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$survey = new Survey($obj->survey_id, $obj->code,$obj->title,
@@ -358,7 +358,7 @@ class CourseBuilder
 								$obj->creation_date, $obj->invited, $obj->answered,
 								$obj->invite_mail, $obj->reminder_mail);
 			$sql = 'SELECT * FROM '.$table_question.' WHERE survey_id = '.$obj->survey_id;
-			$db_result2 = api_sql_query($sql, __FILE__, __LINE__);
+			$db_result2 = Database::query($sql, __FILE__, __LINE__);
 			while ($obj2 = Database::fetch_object($db_result2))
 			{
 				$survey->add_question($obj2->question_id);
@@ -375,7 +375,7 @@ class CourseBuilder
 		$table_que = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_opt = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 		$sql = 'SELECT * FROM '.$table_que;
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$question = new SurveyQuestion($obj->question_id, $obj->survey_id,
@@ -383,7 +383,7 @@ class CourseBuilder
 											$obj->type, $obj->display, $obj->sort,
 											$obj->shared_question_id, $obj->max_value);
 			$sql = 'SELECT * FROM '.$table_opt.' WHERE question_id = '."'".$obj->question_id."'";
-			$db_result2 = api_sql_query($sql, __FILE__, __LINE__);
+			$db_result2 = Database::query($sql, __FILE__, __LINE__);
 			while ($obj2 = Database::fetch_object($db_result2))
 			{
 				$question->add_answer($obj2->option_text, $obj2->sort);
@@ -398,7 +398,7 @@ class CourseBuilder
 	{
 		$table = Database :: get_course_table(TABLE_ANNOUNCEMENT);
 		$sql = 'SELECT * FROM '.$table;
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$announcement = new Announcement($obj->id, $obj->title, $obj->content, $obj->end_date,$obj->display_order,$obj->email_sent);
@@ -412,7 +412,7 @@ class CourseBuilder
 	{
 		$table = Database :: get_course_table(TABLE_AGENDA);
 		$sql = 'SELECT * FROM '.$table;
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$event = new Event($obj->id, $obj->title, $obj->content, $obj->start_date, $obj->end_date);
@@ -426,7 +426,7 @@ class CourseBuilder
 	{
 		$table = Database :: get_course_table(TABLE_COURSE_DESCRIPTION);
 		$sql = 'SELECT * FROM '.$table;
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$cd = new CourseDescription($obj->id, $obj->title, $obj->content);
@@ -443,13 +443,13 @@ class CourseBuilder
 		$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST);
 
 		$sql = 'SELECT * FROM '.$table_main;
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$items = array();
 			$sql_items = "SELECT * FROM ".$table_item." WHERE lp_id = ".$obj->id."";
-			$db_items = api_sql_query($sql_items);
+			$db_items = Database::query($sql_items);
 			while ($obj_item = Database::fetch_object($db_items))
 			{
 				$item['id'] = $obj_item->id;
@@ -472,7 +472,7 @@ class CourseBuilder
 			}
 
 			$sql_tool = "SELECT id FROM ".$table_tool." WHERE (link LIKE '%lp_controller.php%lp_id=".$obj->id."%' and image='scormbuilder.gif') AND visibility='1'";
-			$db_tool = api_sql_query($sql_tool);
+			$db_tool = Database::query($sql_tool);
 
 			if(Database::num_rows($db_tool))
 			{
@@ -533,7 +533,7 @@ class CourseBuilder
         else
         	$sql = 'SELECT * FROM '.$table_glossary.' g ';
 
-		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$doc = new Glossary($obj->glossary_id, $obj->name, $obj->description, $obj->display_order);

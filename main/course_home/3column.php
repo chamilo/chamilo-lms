@@ -88,7 +88,7 @@ if (is_allowed_to_edit())
 	if($remove)
 	{
 		$sql = "SELECT * FROM $TBL_ACCUEIL WHERE id=$id";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql,__FILE__,__LINE__);
 		$toolsRow = mysql_fetch_array($result);
 		$tool_name = htmlspecialchars($toolsRow['name'] != "" ? $toolsRow['name'] : $toolsRow['link'],ENT_QUOTES,$charset);
 		if($toolsRow['img'] != "external.gif")
@@ -124,7 +124,7 @@ if (is_allowed_to_edit())
 
 	elseif ($destroy)
 	{
-		api_sql_query("UPDATE $TBL_ACCUEIL SET visibility='2' WHERE id=$id");
+		Database::query("UPDATE $TBL_ACCUEIL SET visibility='2' WHERE id=$id");
 	}
 
 /*--------------------------------------
@@ -133,7 +133,7 @@ if (is_allowed_to_edit())
 
 	elseif ($hide) // visibility 1 -> 0
 	{
-		api_sql_query("UPDATE $TBL_ACCUEIL SET visibility=0 WHERE id=$id");
+		Database::query("UPDATE $TBL_ACCUEIL SET visibility=0 WHERE id=$id");
 		Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
 	}
 
@@ -143,7 +143,7 @@ if (is_allowed_to_edit())
 
 	elseif ($restore) // visibility 0,2 -> 1
 	{
-		api_sql_query("UPDATE $TBL_ACCUEIL SET visibility=1  WHERE id=$id");
+		Database::query("UPDATE $TBL_ACCUEIL SET visibility=1  WHERE id=$id");
 		Display::display_confirmation_message(get_lang('ToolIsNowVisible'));
 	}
 
@@ -153,7 +153,7 @@ if (is_allowed_to_edit())
 
 	elseif (isset ($update) && $update)
 	{
-		$result 	= api_sql_query("SELECT * FROM $TBL_ACCUEIL WHERE id=$id");
+		$result 	= Database::query("SELECT * FROM $TBL_ACCUEIL WHERE id=$id");
 		$toolsRow 	= mysql_fetch_array($result);
 		$racine		= $_configuration['root_sys']."/".$currentCourseID."/images/";
 		$chemin		= $racine;
@@ -257,7 +257,7 @@ if ($is_platformAdmin and is_allowed_to_edit())
 
 	elseif (isset($delete) && $delete)
 	{
-		api_sql_query("DELETE FROM $TBL_ACCUEIL WHERE id=$id AND added_tool=1");
+		Database::query("DELETE FROM $TBL_ACCUEIL WHERE id=$id AND added_tool=1");
 	}
 }
 

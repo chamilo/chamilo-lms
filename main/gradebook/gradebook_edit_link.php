@@ -55,7 +55,7 @@ if ($form->validate()) {
 	$link->set_visible(empty ($values['visible']) ? 0 : 1);
 	$link->save();
 	$sql_t='UPDATE '.$tbl_forum_thread.' SET thread_weight='.$values['weight'].' WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.Security::remove_XSS($_GET['editlink']).' and type=5);';
-	api_sql_query($sql_t);
+	Database::query($sql_t);
 	header('Location: '.$_SESSION['gradebook_dest'].'?linkedited=&selectcat=' . $link->get_category_id());
 	exit;
 }

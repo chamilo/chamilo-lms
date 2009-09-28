@@ -485,7 +485,7 @@ if ($form->validate()) {
 					$ct .= ", comment='$new_comment'";
 				if ($new_title)
 					$ct .= ", title='$new_title'";
-				api_sql_query("UPDATE $TABLE_DOCUMENT SET".substr($ct, 1)." WHERE id = '$document_id'", __FILE__, __LINE__);
+				Database::query("UPDATE $TABLE_DOCUMENT SET".substr($ct, 1)." WHERE id = '$document_id'", __FILE__, __LINE__);
 			}
 			$dir= substr($dir,0,-1);
 			header('Location: document.php?curdirpath='.urlencode($dir));

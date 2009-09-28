@@ -76,7 +76,7 @@ $currentCourseRepository 	= $_course["path"];
 
 
 $sqlCourseExtention 			= "SELECT last_visit, last_edit, creation_date, expiration_date FROM ".$TABLECOURSE." WHERE code = '".$_cid."'";
-$resultCourseExtention 			= api_sql_query($sqlCourseExtention,__FILE__,__LINE__);
+$resultCourseExtention 			= Database::query($sqlCourseExtention,__FILE__,__LINE__);
 $currentCourseExtentionData 	= mysql_fetch_array($resultCourseExtention);
 $currentCourseLastVisit 		= $currentCourseExtentionData["last_visit"];
 $currentCourseLastEdit			= $currentCourseExtentionData["last_edit"];

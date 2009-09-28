@@ -101,19 +101,19 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 
 
 			$sql1='SELECT thread_title from '.$tbl_forum_thread.' where thread_id='.$addvalues['select_link'].';';
-			$res1=api_sql_query($sql1);
+			$res1=Database::query($sql1);
 			$rowtit=Database::fetch_row($res1);
 			$course_id=api_get_course_id();
 			$sql_l='SELECT count(*) FROM '.$tbl_link.' WHERE ref_id='.$addvalues['select_link'].' and course_code="'.$course_id.'" and type=5;';
-			$res_l=api_sql_query($sql_l);
+			$res_l=Database::query($sql_l);
 			$row=Database::fetch_row($res_l);
 
 			if ( $row[0]==0 ) {
 				$link->add();
 				$sql='UPDATE '.$tbl_forum_thread.' set thread_qualify_max='.$addvalues['weight'].',thread_weight='.$addvalues['weight'].',thread_title_qualify="'.$rowtit[0].'" WHERE thread_id='.$addvalues['select_link'].';';
-				api_sql_query($sql);
+				Database::query($sql);
 				//$sql_l='UPDATE '.$tbl_link.' SET weight='.$addvalues['weight'].' WHERE ref_id='.$addvalues['select_link'].' AND type=5;';
-				//api_sql_query($sql_l);
+				//Database::query($sql_l);
 			}
 		}
 		$link->add();

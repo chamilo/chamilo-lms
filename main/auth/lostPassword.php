@@ -47,7 +47,7 @@ if (isset ($_GET["reset"]) && isset ($_GET["id"])) {
 	{
 		$values = $form->exportValues();
 		$email = $values['email'];
-		$result = api_sql_query("SELECT user_id AS uid, lastname AS lastName, firstname AS firstName,
+		$result = Database::query("SELECT user_id AS uid, lastname AS lastName, firstname AS firstName,
 											username AS loginName, password, email, status AS status,
 											official_code, phone, picture_uri, creator_id
 											FROM ".$tbl_user."

@@ -282,13 +282,13 @@ if(isset($_FILES['user_upload']))
         	$ct = '';
         	if ($new_comment) $ct .= ", comment='$new_comment'";
         	if ($new_title)   $ct .= ", title='$new_title'";
-        	api_sql_query("UPDATE $table_document SET" . substr($ct, 1) .
+        	Database::query("UPDATE $table_document SET" . substr($ct, 1) .
         	    " WHERE id = '$docid'", __FILE__, __LINE__);
     	}
 
       if ( (api_get_setting('search_enabled')=='true') && ($docid = DocumentManager::get_document_id($_course, $new_path))) {
         $table_document = Database::get_course_table(TABLE_DOCUMENT);
-        $result = api_sql_query("SELECT * FROM $table_document WHERE id = '$docid' LIMIT 1", __FILE__, __LINE__);
+        $result = Database::query("SELECT * FROM $table_document WHERE id = '$docid' LIMIT 1", __FILE__, __LINE__);
         if (Database::num_rows($result) == 1) {
           $row = Database::fetch_array($result);
           $doc_path = api_get_path(SYS_COURSE_PATH) . $courseDir. $row['path'];
@@ -356,7 +356,7 @@ if(isset($_FILES['user_upload']))
 				$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
 				$sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
 				$sql = sprintf($sql, $tbl_se_ref, $courseid, TOOL_DOCUMENT, $docid);
-				$res = api_sql_query($sql, __FILE__, __LINE__);
+				$res = Database::query($sql, __FILE__, __LINE__);
 
 				if (Database::num_rows($res) > 0) {
 					$se_ref = Database::fetch_array($res);
@@ -387,7 +387,7 @@ if(isset($_FILES['user_upload']))
 						$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
 						$sql = 'UPDATE %s SET search_did=%d WHERE id=%d LIMIT 1';
 						$sql = sprintf($sql, $tbl_se_ref, (int)$did, (int)$se_ref['id']);
-						api_sql_query($sql,__FILE__,__LINE__);
+						Database::query($sql,__FILE__,__LINE__);
 					}
 
 				}
@@ -420,7 +420,7 @@ if(isset($_FILES['user_upload']))
 					$sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
 						VALUES (NULL , \'%s\', \'%s\', %s, %s)';
 					$sql = sprintf($sql, $tbl_se_ref, $courseid, TOOL_DOCUMENT, $docid, $did);
-					api_sql_query($sql,__FILE__,__LINE__);
+					Database::query($sql,__FILE__,__LINE__);
 				}
 			}
           }

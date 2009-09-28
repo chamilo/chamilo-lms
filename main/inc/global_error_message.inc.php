@@ -11,7 +11,7 @@
  *==============================================================================
  */
 
-$Institution = '<a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a>';
+$Organisation = '<a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a>';
 $PoweredBy = 'Platform <a href="http://www.dokeos.com" target="_blank"> Dokeos </a> &copy; 2009';
 
 /**
@@ -137,7 +137,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 	$global_error_message['code'] = $show_error_codes ? $ErrorCode.': '.$global_error_code.'<br /><br />' : '';
 	$global_error_message['details'] = empty($global_error_message['details']) ? '' : ($show_error_codes ? ': '.$global_error_message['details'] : $global_error_message['details']);
 
-	$global_error_message['institution'] = $Institution;
+	$global_error_message['organisation'] = $Organisation;
 	$global_error_message['powered_by'] = $PoweredBy;
 
 	$global_error_message['encoding'] = 'UTF-8';
@@ -158,7 +158,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 		</head>
 		<body>
 			<div id="header">
-				<div id="header1">{INSTITUTION}</div>
+				<div id="header1">{ORGANISATION}</div>
 				<div class="clear"></div>
 				<div id="header2">&nbsp;</div>
 				<div id="header3">

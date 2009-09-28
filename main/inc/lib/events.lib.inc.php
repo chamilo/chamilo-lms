@@ -80,7 +80,7 @@ function event_open()
 						VALUES
 						('".$remhost."',
 						 '".Database::escape_string($_SERVER['HTTP_USER_AGENT'])."', '".Database::escape_string($referer)."', FROM_UNIXTIME($reallyNow) )";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 	}
 	return 1;
 }
@@ -109,7 +109,7 @@ function event_login()
 					('".$_user['user_id']."',
 					'".Database::escape_string($_SERVER['REMOTE_ADDR'])."',
 					FROM_UNIXTIME(".$reallyNow."))";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 }
 
 /**
@@ -154,19 +154,19 @@ function event_access_course()
 				(".$user_id.",
 				'".$_cid."',
 				FROM_UNIXTIME(".$reallyNow."))";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	// added for "what's new" notification
 	$sql = "   UPDATE $TABLETRACK_LASTACCESS
 	                    SET access_date = FROM_UNIXTIME($reallyNow)
 						WHERE access_user_id = ".$user_id." AND access_cours_code = '".$_cid."' AND access_tool IS NULL AND access_session_id=".$id_session;
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	if (Database::affected_rows() == 0)
 	{
 		$sql = "	INSERT INTO $TABLETRACK_LASTACCESS
 		                	    (access_user_id,access_cours_code,access_date, access_session_id)
 		                    	VALUES
 		                	    (".$user_id.", '".$_cid."', FROM_UNIXTIME($reallyNow), ".$id_session.")";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 	}
 	// end "what's new" notification
 	return 1;
@@ -229,20 +229,20 @@ function event_access_tool($tool, $id_session=0)
 					"'".$_cid."' ,
 					'".htmlspecialchars($tool, ENT_QUOTES)."',
 					FROM_UNIXTIME(".$reallyNow."))";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 	}
 	// "what's new" notification
 	$sql = "   UPDATE $TABLETRACK_LASTACCESS
 						SET access_date = FROM_UNIXTIME($reallyNow)
 						WHERE access_user_id = ".$user_id." AND access_cours_code = '".$_cid."' AND access_tool = '".htmlspecialchars($tool, ENT_QUOTES)."' AND access_session_id=".$id_session;
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	if (Database::affected_rows() == 0)
 	{
 		$sql = "INSERT INTO $TABLETRACK_LASTACCESS
 							(access_user_id,access_cours_code,access_tool, access_date, access_session_id)
 						VALUES
 							(".$user_id.", '".$_cid."' , '".htmlspecialchars($tool, ENT_QUOTES)."', FROM_UNIXTIME($reallyNow), $id_session)";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 	}
 	return 1;
 }
@@ -295,7 +295,7 @@ function event_download($doc_url)
 				 '".htmlspecialchars($doc_url, ENT_QUOTES)."',
 				 FROM_UNIXTIME(".$reallyNow.")
 				)";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	return 1;
 }
 
@@ -335,7 +335,7 @@ function event_upload($doc_id)
 				 '".$doc_id."',
 				 FROM_UNIXTIME(".$reallyNow.")
 				)";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	return 1;
 }
 
@@ -378,7 +378,7 @@ function event_link($link_id)
 				 '".Database::escape_string($link_id)."',
 				 FROM_UNIXTIME(".$reallyNow.")
 				)";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	return 1;
 }
 
@@ -410,7 +410,7 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$l
 				   exe_duration = '".Database::escape_string($duration)."',
 				   exe_date= FROM_UNIXTIME(".$reallyNow."),status = '', data_tracking='',start_date =FROM_UNIXTIME(".Database::escape_string($_SESSION['exercice_start_date']).")
 				 WHERE exe_id = '".Database::escape_string($exeid)."'";
-		$res = @api_sql_query($sql,__FILE__,__LINE__);
+		$res = @Database::query($sql,__FILE__,__LINE__);
 		return $res;
 	} else
 		return false;
@@ -442,14 +442,14 @@ function create_event_exercice($exo_id)
 				'exe_cours_id = '."'".$_cid."'".' AND ' .
 				'status = '."'incomplete'".' AND '.
 				'session_id = '."'".api_get_session_id()."'";
-		$sql = api_sql_query('SELECT exe_id FROM '.$TABLETRACK_EXERCICES.$condition,__FILE__,__LINE__);
+		$sql = Database::query('SELECT exe_id FROM '.$TABLETRACK_EXERCICES.$condition,__FILE__,__LINE__);
 		$row = Database::fetch_array($sql);
 		return $row['exe_id'];
 	}
 
 	$sql = "INSERT INTO $TABLETRACK_EXERCICES ( exe_user_id, exe_cours_id )
 			VALUES (  ".$user_id.",  '".$_cid."' )";
-	$res = @api_sql_query($sql,__FILE__,__LINE__);
+	$res = @Database::query($sql,__FILE__,__LINE__);
 	$id= Database::get_last_insert_id();
 	return $id;
 }
@@ -525,10 +525,10 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 		author)
 		VALUES
 		('."'$exeId','".$quesId."','$score','".date('Y-m-d H:i:s')."',''".')';
-		api_sql_query($recording_changes,__FILE__,__LINE__);
+		Database::query($recording_changes,__FILE__,__LINE__);
 	}
 	if (isset($quesId) && isset($exeId) && isset($user_id)) {
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		return $res;
 	} else {
 		return false;
@@ -563,7 +563,7 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
 			" '" . Database :: escape_string($answer_id) . "'," .
 			" '" . Database :: escape_string($correct) . "'," .
 			" '" . Database :: escape_string($coords) . "')";
-	return $result = api_sql_query($sql, __FILE__, __LINE__);
+	return $result = Database::query($sql, __FILE__, __LINE__);
 }
 
 /**
@@ -623,7 +623,7 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 					'$event_type',
 					'$event_value_type',
 					'$event_value')";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	return true;
 }
 ?>

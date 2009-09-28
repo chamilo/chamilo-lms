@@ -278,7 +278,7 @@ SELECT SUM(size)
 		AND $visibility_rule
 EOQ;
 
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 
 	if($result && mysql_num_rows($result) != 0)
 	{

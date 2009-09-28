@@ -85,7 +85,7 @@ class DocumentManager {
 		$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 
 		$sql_query = "SELECT ".DISK_QUOTA_FIELD." FROM $course_table WHERE code = '$course_code'";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
 		$course_quota = $result[DISK_QUOTA_FIELD];
 
@@ -320,7 +320,7 @@ class DocumentManager {
 			$query = "SELECT 1 FROM $tbl_document AS docs,$tbl_item_property AS props
 					  WHERE props.tool = 'document' AND docs.id=props.ref AND props.visibility <> '1' AND docs.path = '$doc_url'";
 			//echo $query;
-			$result = api_sql_query($query, __FILE__, __LINE__);
+			$result = Database::query($query, __FILE__, __LINE__);
 
 			return (Database::num_rows($result) == 0);
 		}
@@ -524,7 +524,7 @@ class DocumentManager {
 						AND ".$to_field." = ".$to_value."
 						AND last.visibility".$visibility_bit;
 
-		$result = api_sql_query($sql);
+		$result = Database::query($sql);
 
 		if ($result && Database::num_rows($result) != 0)
 		{
@@ -540,7 +540,7 @@ class DocumentManager {
 										WHERE course_code='".$_course['id']."'
 										AND user_id='".api_get_user_id()."'
 										AND ref_doc='".$row['id']."'";
-					$template_result = api_sql_query($sql_is_template);
+					$template_result = Database::query($sql_is_template);
 					if(Database::num_rows($template_result)>0){
 						$row['is_template'] = 1;
 					}
@@ -592,7 +592,7 @@ class DocumentManager {
 								AND last.to_group_id = ".$to_group_id."
 								AND last.visibility <> 2";
 
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 
 			if ($result && Database::num_rows($result) != 0)
 			{
@@ -623,7 +623,7 @@ class DocumentManager {
 						AND last.tool = '".TOOL_DOCUMENT."'
 						AND last.to_group_id = ".$to_group_id."
 						AND last.visibility = 1";
-			$visibleresult = api_sql_query($visible_sql, __FILE__, __LINE__);
+			$visibleresult = Database::query($visible_sql, __FILE__, __LINE__);
 			while ($all_visible_folders = Database::fetch_array($visibleresult,'ASSOC'))
 			{
 				$visiblefolders[] = $all_visible_folders['path'];
@@ -637,7 +637,7 @@ class DocumentManager {
 						AND last.tool = '".TOOL_DOCUMENT."'
 						AND last.to_group_id = ".$to_group_id."
 						AND last.visibility = 0";
-			$invisibleresult = api_sql_query($invisible_sql, __FILE__, __LINE__);
+			$invisibleresult = Database::query($invisible_sql, __FILE__, __LINE__);
 			while ($invisible_folders = Database::fetch_array($invisibleresult,'ASSOC'))
 			{
 				//get visible folders in the invisible ones -> they are invisible too
@@ -650,7 +650,7 @@ class DocumentManager {
 								AND last.tool = '".TOOL_DOCUMENT."'
 								AND last.to_group_id = ".$to_group_id."
 								AND last.visibility = 1";
-				$folder_in_invisible_result = api_sql_query($folder_in_invisible_sql, __FILE__, __LINE__);
+				$folder_in_invisible_result = Database::query($folder_in_invisible_sql, __FILE__, __LINE__);
 				while ($folders_in_invisible_folder = Database::fetch_array($folder_in_invisible_result,'ASSOC'))
 				{
 					$invisiblefolders[] = $folders_in_invisible_folder['path'];
@@ -711,7 +711,7 @@ class DocumentManager {
 					$what_to_check_sql = "SELECT td.id, readonly, tp.insert_user_id FROM ".$TABLE_DOCUMENT." td , $TABLE_PROPERTY tp
 									WHERE tp.ref= td.id and (path='".$path."' OR path LIKE BINARY '".$path."/%' ) ";
 					//get all id's of documents that are deleted
-					$what_to_check_result = api_sql_query($what_to_check_sql, __FILE__, __LINE__);
+					$what_to_check_result = Database::query($what_to_check_sql, __FILE__, __LINE__);
 
 					if ($what_to_check_result && Database::num_rows($what_to_check_result) != 0)
 					{
@@ -748,7 +748,7 @@ class DocumentManager {
 		{
 			$sql= 'SELECT a.insert_user_id, b.readonly FROM '.$TABLE_PROPERTY.' a,'.$TABLE_DOCUMENT.' b
 				   WHERE a.ref = b.id and a.ref='.$document_id.' LIMIT 1';
-			$resultans   =  api_sql_query($sql, __FILE__, __LINE__);
+			$resultans   =  Database::query($sql, __FILE__, __LINE__);
 			$doc_details =  Database ::fetch_array($resultans,'ASSOC');
 
 			if($doc_details['readonly']==1)
@@ -776,7 +776,7 @@ class DocumentManager {
 		$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 		//if (!empty($document_id))
 		$document_id = Database::escape_string($document_id);
-		$resultans   =  api_sql_query('SELECT filetype FROM '.$TABLE_DOCUMENT.' WHERE id='.$document_id.'', __FILE__, __LINE__);
+		$resultans   =  Database::query('SELECT filetype FROM '.$TABLE_DOCUMENT.' WHERE id='.$document_id.'', __FILE__, __LINE__);
 		$result=  Database::fetch_array($resultans,'ASSOC');
 		if ($result['filetype']=='folder') {
 			return true;
@@ -807,7 +807,7 @@ class DocumentManager {
 			{
 				$what_to_delete_sql = "SELECT id FROM ".$TABLE_DOCUMENT." WHERE path='".$path."' OR path LIKE BINARY '".$path."/%'";
 				//get all id's of documents that are deleted
-				$what_to_delete_result = api_sql_query($what_to_delete_sql, __FILE__, __LINE__);
+				$what_to_delete_result = Database::query($what_to_delete_sql, __FILE__, __LINE__);
 
 				if ($what_to_delete_result && Database::num_rows($what_to_delete_result) != 0)
 				{
@@ -829,9 +829,9 @@ class DocumentManager {
 						$remove_from_document_sql = "DELETE FROM ".$TABLE_DOCUMENT." WHERE id = ".$row['id']."";
  						self::unset_document_as_template($row['id'],$_course, api_get_user_id());
 						//echo($remove_from_item_property_sql.'<br>');
-						//api_sql_query($remove_from_item_property_sql, __FILE__, __LINE__);
+						//Database::query($remove_from_item_property_sql, __FILE__, __LINE__);
 						//echo($remove_from_document_sql.'<br>');
-						api_sql_query($remove_from_document_sql, __FILE__, __LINE__);
+						Database::query($remove_from_document_sql, __FILE__, __LINE__);
 
 						//delete metadata
 						$eid = 'Document'.'.'.$row['id'];
@@ -863,11 +863,11 @@ class DocumentManager {
     					{
     						 self::unset_document_as_template($document_id, api_get_course_id(), api_get_user_id());
     						 $sql = "UPDATE $TABLE_DOCUMENT set path='".$new_path."' WHERE id='".$document_id."'";
-    						if (api_sql_query($sql, __FILE__, __LINE__))
+    						if (Database::query($sql, __FILE__, __LINE__))
     						{
     							//if it is a folder it can contain files
     							$sql = "SELECT id,path FROM ".$TABLE_DOCUMENT." WHERE path LIKE BINARY '".$path."/%'";
-    							$result = api_sql_query($sql, __FILE__, __LINE__);
+    							$result = Database::query($sql, __FILE__, __LINE__);
     							if ($result && Database::num_rows($result) > 0)
     							{
     								while ($deleted_items = Database::fetch_array($result,'ASSOC'))
@@ -888,7 +888,7 @@ class DocumentManager {
     									self::unset_document_as_template($deleted_items['id'], api_get_course_id(), api_get_user_id());
     									$sql = "UPDATE $TABLE_DOCUMENT set path = '".$new_item_path."' WHERE id = ".$deleted_items['id'];
 
-    									api_sql_query($sql, __FILE__, __LINE__);
+    									Database::query($sql, __FILE__, __LINE__);
     								}
     							}
 
@@ -943,7 +943,7 @@ class DocumentManager {
 			$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
 			$sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
 			$sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_DOCUMENT, $document_id);
-			$res = api_sql_query($sql, __FILE__, __LINE__);
+			$res = Database::query($sql, __FILE__, __LINE__);
 			if (Database::num_rows($res) > 0) {
 				$row2 = Database::fetch_array($res);
 				require_once(api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php');
@@ -952,7 +952,7 @@ class DocumentManager {
 			}
 			$sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
 			$sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_DOCUMENT, $document_id);
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 
 			// remove terms from db
 			require_once(api_get_path(LIBRARY_PATH) .'specific_fields_manager.lib.php');
@@ -971,7 +971,7 @@ class DocumentManager {
 		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 		$path = Database::escape_string($path);
 		$sql = "SELECT id FROM $TABLE_DOCUMENT WHERE path LIKE BINARY '$path'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		if ($result && Database::num_rows($result) == 1) {
 			$row = Database::fetch_array($result);
 			return $row[0];
@@ -1004,7 +1004,7 @@ class DocumentManager {
 					'".Database::escape_string($user_id)."',
 					'".Database::escape_string($document_id_for_template)."',
 					'".Database::escape_string($image)."')";
-		api_sql_query($sql);
+		Database::query($sql);
 
 		return true;
 	}
@@ -1025,7 +1025,7 @@ class DocumentManager {
 		$document_id = Database::escape_string($document_id);
 
 		$sql = 'SELECT id FROM '.$table_template.' WHERE course_code="'.$course_code.'" AND user_id="'.$user_id.'" AND ref_doc="'.$document_id.'"';
-		$result = api_sql_query($sql);
+		$result = Database::query($sql);
 		$template_id = Database::result($result,0,0);
 
 		include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
@@ -1033,7 +1033,7 @@ class DocumentManager {
 
 		$sql = 'DELETE FROM '.$table_template.' WHERE course_code="'.$course_code.'" AND user_id="'.$user_id.'" AND ref_doc="'.$document_id.'"';
 
-		api_sql_query($sql);
+		Database::query($sql);
 
 	}
 	/**
@@ -1052,7 +1052,7 @@ class DocumentManager {
         $sql = "SELECT path FROM $docTable d, $propTable ip " .
                 "where d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND d.filetype='file' AND visibility=0 AND ".
                 "locate(concat(path,'/'),'".$doc_path."/')=1";
-        $result = api_sql_query($sql,__FILE__,__LINE__);
+        $result = Database::query($sql,__FILE__,__LINE__);
         if (Database::num_rows($result) > 0){
             $row = Database::fetch_array($result);
             //echo "$row[0] not visible";

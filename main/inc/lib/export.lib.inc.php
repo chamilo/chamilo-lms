@@ -230,7 +230,7 @@ function backupDatabase($link, $db_name, $structure, $donnees, $format = 'SQL', 
 				fwrite($fp, "\nmysql_query(\"");
 			// requete de creation de la table
 			$query = "SHOW CREATE TABLE `".$tablename."`";
-			$resCreate = api_sql_query($query,__FILE__, __LINE__);
+			$resCreate = Database::query($query,__FILE__, __LINE__);
 			$row = Database::fetch_array($resCreate);
 			$schema = $row[1].";";
 			if ($format == "PHP" || $format == "SQL")
@@ -242,7 +242,7 @@ function backupDatabase($link, $db_name, $structure, $donnees, $format = 'SQL', 
 		{
 			// les donn�es de la table
 			$query = "SELECT * FROM $tablename";
-			$resData = api_sql_query($query,__FILE__, __LINE__);
+			$resData = Database::query($query,__FILE__, __LINE__);
 			if (Database::num_rows($resData) > 0)
 			{
 				$sFieldnames = "";
@@ -536,7 +536,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = "",
 	$csvInsertCourse = "\n";
 	$iniCourse = "[".$exportedCourseId."]\n";
 	$sqlSelectInfoCourse = "Select * from `".$TABLECOURS."` `course` where code = '".$exportedCourseId."' ";
-	$resInfoCourse = api_sql_query($sqlSelectInfoCourse, __FILE__, __LINE__);
+	$resInfoCourse = Database::query($sqlSelectInfoCourse, __FILE__, __LINE__);
 	$infoCourse = Database::fetch_array($resInfoCourse);
 	for ($noField = 0; $noField < mysql_num_fields($resInfoCourse); $noField ++)
 	{
@@ -596,7 +596,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = "",
 						FROM `".$TABLEUSER."`, `".$TABLECOURSUSER."`
 						WHERE `user`.`user_id`=`".$TABLECOURSUSER."`.`user_id`
 							AND `".$TABLECOURSUSER."`.`course_code`='".$exportedCourseId."'";
-		$resUsers = api_sql_query($sqlUserOfTheCourse, __FILE__, __LINE__);
+		$resUsers = Database::query($sqlUserOfTheCourse, __FILE__, __LINE__);
 		$nbUsers = Database::num_rows($resUsers);
 		if ($nbUsers > 0)
 		{
@@ -688,7 +688,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = "",
 					*
 					FROM  `".$TABLEANNOUNCEMENT."`
 					WHERE course_code='".$exportedCourseId."'";
-		$resAnn = api_sql_query($sqlAnnounceOfTheCourse, __FILE__, __LINE__);
+		$resAnn = Database::query($sqlAnnounceOfTheCourse, __FILE__, __LINE__);
 		$nbFields = mysql_num_fields($resAnn);
 		$sqlInsertAnn = "";
 		$csvInsertAnn = "";

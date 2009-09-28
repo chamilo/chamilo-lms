@@ -101,7 +101,7 @@ class learnpath_processor extends search_processor {
                 LIMIT 1";
         }
 
-        $dk_result = api_sql_query ($sql);
+        $dk_result = Database::query ($sql);
 
         $path = '';
         $name = '';

@@ -35,7 +35,7 @@ class SystemAnnouncementManager
 				break;
 		}
 		$sql .= " ORDER BY date_start DESC LIMIT 0,7";
-		$announcements = api_sql_query($sql,__FILE__,__LINE__);
+		$announcements = Database::query($sql,__FILE__,__LINE__);
 		if (Database::num_rows($announcements))
 		{
 			$query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
@@ -117,7 +117,7 @@ class SystemAnnouncementManager
 		} else {
 			$sql .= " ORDER BY date_start DESC LIMIT ".($start+1).",20";
 		}
-		$announcements = api_sql_query($sql,__FILE__,__LINE__);
+		$announcements = Database::query($sql,__FILE__,__LINE__);
 
 		if (Database::num_rows($announcements)) {
 			$query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
@@ -210,7 +210,7 @@ class SystemAnnouncementManager
 			}
  		}
 		$sql .= 'LIMIT '.$start.',21';
-		$announcements = api_sql_query($sql,__FILE__,__LINE__);
+		$announcements = Database::query($sql,__FILE__,__LINE__);
 		$i = 0;
 		while($rows = Database::fetch_array($announcements))
 		{
@@ -229,7 +229,7 @@ class SystemAnnouncementManager
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 
 		$sql = "SELECT *, IF( NOW() BETWEEN date_start AND date_end, '1', '0') AS visible FROM ".$db_table." ORDER BY date_start ASC";
-		$announcements = api_sql_query($sql,__FILE__,__LINE__);
+		$announcements = Database::query($sql,__FILE__,__LINE__);
 		$all_announcements = array();
 		while ($announcement = Database::fetch_object($announcements))
 		{
@@ -281,7 +281,7 @@ class SystemAnnouncementManager
 		if ($send_mail==1) {
 			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);
 		}
-		return api_sql_query($sql,__FILE__,__LINE__);
+		return Database::query($sql,__FILE__,__LINE__);
 	}
 	/**
 	 * Updates an announcement to the database
@@ -328,7 +328,7 @@ class SystemAnnouncementManager
 		if ($send_mail==1) {
 			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);
 		}
-		return api_sql_query($sql,__FILE__,__LINE__);
+		return Database::query($sql,__FILE__,__LINE__);
 	}
 	/**
 	 * Deletes an announcement
@@ -340,7 +340,7 @@ class SystemAnnouncementManager
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$id = intval($id);
 		$sql = "DELETE FROM ".$db_table." WHERE id='".$id."'";
-		return api_sql_query($sql,__FILE__,__LINE__);
+		return Database::query($sql,__FILE__,__LINE__);
 	}
 	/**
 	 * Gets an announcement
@@ -352,7 +352,7 @@ class SystemAnnouncementManager
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$id = intval($id);
 		$sql = "SELECT * FROM ".$db_table." WHERE id='".$id."'";
-		$announcement = Database::fetch_object(api_sql_query($sql,__FILE__,__LINE__));
+		$announcement = Database::fetch_object(Database::query($sql,__FILE__,__LINE__));
 		return $announcement;
 	}
 	/**
@@ -367,7 +367,7 @@ class SystemAnnouncementManager
 		$announcement_id = intval($announcement_id);
 		$field = ($user == VISIBLE_TEACHER ? 'visible_teacher' : ($user == VISIBLE_STUDENT ? 'visible_student' : 'visible_guest'));
 		$sql = "UPDATE ".$db_table." SET ".$field." = '".$visible."' WHERE id='".$announcement_id."'";
-		return api_sql_query($sql,__FILE__,__LINE__);
+		return Database::query($sql,__FILE__,__LINE__);
 	}
 
 	function send_system_announcement_by_email($title,$content,$teacher, $student)
@@ -389,7 +389,7 @@ class SystemAnnouncementManager
 			return true;
 		}
 
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql,__FILE__,__LINE__);
 		while($row = Database::fetch_array($result,'ASSOC'))
 		{
 			api_mail_html(api_get_person_name($row['firstname'], $row['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $row['email'], api_html_entity_decode(stripslashes($title), ENT_QUOTES, $charset), api_html_entity_decode(stripslashes($content), ENT_QUOTES, $charset), api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), api_get_setting('emailAdministrator'), api_get_setting('emailAdministrator'));

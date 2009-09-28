@@ -103,7 +103,7 @@ if (!$_configuration['db_host']) {
 }
 
 // The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5.
-api_sql_query("set session sql_mode='';", __FILE__, __LINE__);
+Database::query("set session sql_mode='';", __FILE__, __LINE__);
 
 if (!mysql_select_db($_configuration['main_database'], $dokeos_database_connection)) {
 	$global_error_code = 5;
@@ -119,7 +119,7 @@ if (!mysql_select_db($_configuration['main_database'], $dokeos_database_connecti
 */
 // The platform's character set must be retrieved at this early moment.
 $sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 while ($row = @mysql_fetch_array($result)) {
 	$charset = $row[0];
 }
@@ -486,10 +486,10 @@ if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']) && isse
 
 	$sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
 
-	$q_last_connection = api_sql_query($sql_last_connection);
+	$q_last_connection = Database::query($sql_last_connection);
 	if (Database::num_rows($q_last_connection) > 0) {
 		$i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
 		$s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
-		api_sql_query($s_sql_update_logout_date);
+		Database::query($s_sql_update_logout_date);
 	}
 }

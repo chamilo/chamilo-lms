@@ -58,7 +58,7 @@ class SessionManager {
 		$tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
 
 		$sql = 'SELECT user_id FROM '.$tbl_user.' WHERE username="'.Database::escape_string($coach_username).'"';
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql, __FILE__, __LINE__);
 		$id_coach = Database::result($rs,0,'user_id');
 
 		if (empty($nolimit)) {
@@ -84,12 +84,12 @@ class SessionManager {
 			$msg=get_lang('StartDateShouldBeBeforeEndDate');
 			return $msg;
 		} else {
-			$rs = api_sql_query("SELECT 1 FROM $tbl_session WHERE name='".addslashes($name)."'");
+			$rs = Database::query("SELECT 1 FROM $tbl_session WHERE name='".addslashes($name)."'");
 			if(Database::num_rows($rs)) {
 				$msg=get_lang('SessionNameAlreadyExists');
 				return $msg;
 			} else {
-				api_sql_query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end) VALUES('".Database::escape_string($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")",__FILE__,__LINE__);
+				Database::query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end) VALUES('".Database::escape_string($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")",__FILE__,__LINE__);
 				$id_session=Database::get_last_insert_id();
 
 				// add event to system log
@@ -160,7 +160,7 @@ class SessionManager {
 			$msg=get_lang('StartDateShouldBeBeforeEndDate');
 			return $msg;
 		} else {
-			$rs = api_sql_query("SELECT id FROM $tbl_session WHERE name='".Database::escape_string($name)."'");
+			$rs = Database::query("SELECT id FROM $tbl_session WHERE name='".Database::escape_string($name)."'");
 			$exists = false;
 			while ($row = Database::fetch_array($rs)) {
 				if($row['id']!=$id)
@@ -178,11 +178,11 @@ class SessionManager {
 						nb_days_access_before_beginning = ".$nb_days_acess_before.",
 						nb_days_access_after_end = ".$nb_days_acess_after."
 					  WHERE id='$id'";
-				api_sql_query($sql,__FILE__,__LINE__);
+				Database::query($sql,__FILE__,__LINE__);
 				/*$sqlu = "UPDATE $tbl_session_rel_course " .
 						  " SET id_coach='$id_coach'" .
 						  " WHERE id_session='$id'";
-				api_sql_query($sqlu,__FILE__,__LINE__);*/
+				Database::query($sqlu,__FILE__,__LINE__);*/
 				return $id;
 			}
 		}
@@ -209,22 +209,22 @@ class SessionManager {
 
 		if (!api_is_platform_admin()) {
 			$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_checked;
-			$rs = api_sql_query($sql,__FILE__,__LINE__);
+			$rs = Database::query($sql,__FILE__,__LINE__);
 			if (Database::result($rs,0,0)!=$_user['user_id']) {
 				api_not_allowed(true);
 			}
 		}
-		api_sql_query("DELETE FROM $tbl_session WHERE id IN($id_checked)",__FILE__,__LINE__);
-		api_sql_query("DELETE FROM $tbl_session_rel_course WHERE id_session IN($id_checked)",__FILE__,__LINE__);
-		api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session IN($id_checked)",__FILE__,__LINE__);
-		api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session IN($id_checked)",__FILE__,__LINE__);
+		Database::query("DELETE FROM $tbl_session WHERE id IN($id_checked)",__FILE__,__LINE__);
+		Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session IN($id_checked)",__FILE__,__LINE__);
+		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session IN($id_checked)",__FILE__,__LINE__);
+		Database::query("DELETE FROM $tbl_session_rel_user WHERE id_session IN($id_checked)",__FILE__,__LINE__);
 
 		// delete extra session fields
 		$t_sf 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
 		$t_sfv 		= Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
 
 		$sql = "SELECT distinct field_id FROM $t_sfv  WHERE session_id = '$id_checked'";
-		$res_field_ids = @api_sql_query($sql,__FILE__,__LINE__);
+		$res_field_ids = @Database::query($sql,__FILE__,__LINE__);
 
 		while($row_field_id = Database::fetch_row($res_field_ids)){
 			$field_ids[] = $row_field_id[0];
@@ -233,10 +233,10 @@ class SessionManager {
 		//delete from table_session_field_value from a given session id
 
 		$sql_session_field_value = "DELETE FROM $t_sfv WHERE session_id = '$id_checked'";
-		@api_sql_query($sql_session_field_value,__FILE__,__LINE__);
+		@Database::query($sql_session_field_value,__FILE__,__LINE__);
 
 		$sql = "SELECT distinct field_id FROM $t_sfv";
-		$res_field_all_ids = @api_sql_query($sql,__FILE__,__LINE__);
+		$res_field_all_ids = @Database::query($sql,__FILE__,__LINE__);
 
 		while($row_field_all_id = Database::fetch_row($res_field_all_ids)){
 			$field_all_ids[] = $row_field_all_id[0];
@@ -249,7 +249,7 @@ class SessionManager {
 					continue;
 				} else {
 					$sql_session_field = "DELETE FROM $t_sf WHERE id = '$field_id'";
-					api_sql_query($sql_session_field,__FILE__,__LINE__);
+					Database::query($sql_session_field,__FILE__,__LINE__);
 				}
 			}
 		}
@@ -282,13 +282,13 @@ class SessionManager {
 	   	$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
 
 	   	$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session'";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql,__FILE__,__LINE__);
 		$existingUsers = array();
 		while($row = Database::fetch_array($result)){
 			$existingUsers[] = $row['id_user'];
 		}
 		$sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 		$course_list=array();
 
 		while($row=Database::fetch_array($result)) {
@@ -304,7 +304,7 @@ class SessionManager {
 				foreach ($existingUsers as $existing_user) {
 					if(!in_array($existing_user, $user_list)) {
 						$sql = "DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course' AND id_user='$existing_user'";
-						api_sql_query($sql,__FILE__,__LINE__);
+						Database::query($sql,__FILE__,__LINE__);
 
 						if(Database::affected_rows()) {
 							$nbr_users--;
@@ -317,7 +317,7 @@ class SessionManager {
 				if(!in_array($enreg_user, $existingUsers)) {
 	                $enreg_user = Database::escape_string($enreg_user);
 					$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')";
-					api_sql_query($insert_sql,__FILE__,__LINE__);
+					Database::query($insert_sql,__FILE__,__LINE__);
 					if(Database::affected_rows()) {
 						$nbr_users++;
 					}
@@ -325,15 +325,15 @@ class SessionManager {
 			}
 			// count users in this session-course relation
 			$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
-			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql, __FILE__, __LINE__);
 			list($nbr_users) = Database::fetch_array($rs);
 			// update the session-course relation to add the users total
 			$update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
-			api_sql_query($update_sql,__FILE__,__LINE__);
+			Database::query($update_sql,__FILE__,__LINE__);
 		}
 		// delete users from the session
 		if ($empty_users===true){
-			api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session = $id_session",__FILE__,__LINE__);
+			Database::query("DELETE FROM $tbl_session_rel_user WHERE id_session = $id_session",__FILE__,__LINE__);
 		}
 			// insert missing users into session
 		$nbr_users = 0;
@@ -341,12 +341,12 @@ class SessionManager {
 	        $enreg_user = Database::escape_string($enreg_user);
 			$nbr_users++;
 			$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$enreg_user')";
-			api_sql_query($insert_sql,__FILE__,__LINE__);
+			Database::query($insert_sql,__FILE__,__LINE__);
 		}
 		// update number of users in the session
 		$nbr_users = count($user_list);
 		$update_sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
-		api_sql_query($update_sql,__FILE__,__LINE__);
+		Database::query($update_sql,__FILE__,__LINE__);
 	}
 	 /** Subscribes courses to the given session and optionally (default) unsubscribes previous users
 	 * @author Carlos Vargas <carlos.vargas@dokeos.com>,from existing code
@@ -368,26 +368,26 @@ class SessionManager {
 		$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
      	// get general coach ID
-		$id_coach = api_sql_query("SELECT id_coach FROM $tbl_session WHERE id=$id_session");
+		$id_coach = Database::query("SELECT id_coach FROM $tbl_session WHERE id=$id_session");
 		$id_coach = Database::fetch_array($id_coach);
 		$id_coach = $id_coach[0];
 		// get list of courses subscribed to this session
-		$rs = api_sql_query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session=$id_session");
+		$rs = Database::query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session=$id_session");
 		$existingCourses = Database::store_result($rs);
 		$nbr_courses=count($existingCourses);
 		// get list of users subscribed to this session
 		$sql="SELECT id_user
 			FROM $tbl_session_rel_user
 			WHERE id_session = $id_session";
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 		$user_list=Database::store_result($result);
 
 		// remove existing courses from the session
 		if ($empty_courses===true) {
 			foreach ($existingCourses as $existingCourse) {
 				if (!in_array($existingCourse['course_code'], $course_list)){
-					api_sql_query("DELETE FROM $tbl_session_rel_course WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
-					api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
+					Database::query("DELETE FROM $tbl_session_rel_course WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
+					Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
 
 				}
 			}
@@ -407,7 +407,7 @@ class SessionManager {
 			if (!$exists) {
 				//if the course isn't subscribed yet
 				$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course (id_session,course_code, id_coach) VALUES ('$id_session','$enreg_course','$id_coach')";
-				api_sql_query($sql_insert_rel_course ,__FILE__,__LINE__);
+				Database::query($sql_insert_rel_course ,__FILE__,__LINE__);
 				//We add the current course in the existing courses array, to avoid adding another time the current course
 				$existingCourses[]=array('course_code'=>$enreg_course);
 				$nbr_courses++;
@@ -417,15 +417,15 @@ class SessionManager {
 				foreach ($user_list as $enreg_user) {
 					$enreg_user_id = Database::escape_string($enreg_user['id_user']);
 					$sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user (id_session,course_code,id_user) VALUES ('$id_session','$enreg_course','$enreg_user_id')";
-					api_sql_query($sql_insert,__FILE__,__LINE__);
+					Database::query($sql_insert,__FILE__,__LINE__);
 					if (Database::affected_rows()) {
 						$nbr_users++;
 					}
 				}
-				api_sql_query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
+				Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
 			}
 		}
-		api_sql_query("UPDATE $tbl_session SET nbr_courses=$nbr_courses WHERE id='$id_session'",__FILE__,__LINE__);
+		Database::query("UPDATE $tbl_session SET nbr_courses=$nbr_courses WHERE id='$id_session'",__FILE__,__LINE__);
      }
 
   /**
@@ -443,7 +443,7 @@ class SessionManager {
 		$fieldtype = (int)$fieldtype;
 		$time = time();
 		$sql_field = "SELECT id FROM $t_sf WHERE field_variable = '$fieldvarname'";
-		$res_field = api_sql_query($sql_field,__FILE__,__LINE__);
+		$res_field = Database::query($sql_field,__FILE__,__LINE__);
 
 		$r_field = Database::fetch_row($res_field);
 
@@ -452,7 +452,7 @@ class SessionManager {
 		} else {
 			// save new fieldlabel into course_field table
 			$sql = "SELECT MAX(field_order) FROM $t_sf";
-			$res = api_sql_query($sql,__FILE__,__LINE__);
+			$res = Database::query($sql,__FILE__,__LINE__);
 
 			$order = 0;
 			if (Database::num_rows($res)>0) {
@@ -466,7 +466,7 @@ class SessionManager {
 						                field_display_text = '$fieldtitle',
 						                field_order = '$order',
 						                tms = FROM_UNIXTIME($time)";
-			$result = api_sql_query($sql,__FILE__,__LINE__);
+			$result = Database::query($sql,__FILE__,__LINE__);
 
 			$field_id=Database::get_last_insert_id();
 		}
@@ -504,7 +504,7 @@ class SessionManager {
 		}
 
 		$sqlsf = "SELECT * FROM $t_sf WHERE field_variable='$fname'";
-		$ressf = api_sql_query($sqlsf,__FILE__,__LINE__);
+		$ressf = Database::query($sqlsf,__FILE__,__LINE__);
 		if(Database::num_rows($ressf)==1)
 		{ //ok, the field exists
 			//	Check if enumerated field, if the option is available
@@ -512,7 +512,7 @@ class SessionManager {
 
 			$tms = time();
 			$sqlsfv = "SELECT * FROM $t_sfv WHERE session_id = '$session_id' AND field_id = '".$rowsf['id']."' ORDER BY id";
-			$ressfv = api_sql_query($sqlsfv,__FILE__,__LINE__);
+			$ressfv = Database::query($sqlsfv,__FILE__,__LINE__);
 			$n = Database::num_rows($ressfv);
 			if ($n>1) {
 				//problem, we already have to values for this field and user combination - keep last one
@@ -521,14 +521,14 @@ class SessionManager {
 					if($n > 1)
 					{
 						$sqld = "DELETE FROM $t_sfv WHERE id = ".$rowsfv['id'];
-						$resd = api_sql_query($sqld,__FILE__,__LINE__);
+						$resd = Database::query($sqld,__FILE__,__LINE__);
 						$n--;
 					}
 					$rowsfv = Database::fetch_array($ressfv);
 					if($rowsfv['field_value'] != $fvalues)
 					{
 						$sqlu = "UPDATE $t_sfv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowsfv['id'];
-						$resu = api_sql_query($sqlu,__FILE__,__LINE__);
+						$resu = Database::query($sqlu,__FILE__,__LINE__);
 						return($resu?true:false);
 					}
 					return true;
@@ -540,7 +540,7 @@ class SessionManager {
 				{
 					$sqlu = "UPDATE $t_sfv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowsfv['id'];
 					//error_log('UM::update_extra_field_value: '.$sqlu);
-					$resu = api_sql_query($sqlu,__FILE__,__LINE__);
+					$resu = Database::query($sqlu,__FILE__,__LINE__);
 					return($resu?true:false);
 				}
 				return true;
@@ -548,7 +548,7 @@ class SessionManager {
 				$sqli = "INSERT INTO $t_sfv (session_id,field_id,field_value,tms) " .
 					"VALUES ('$session_id',".$rowsf['id'].",'$fvalues',FROM_UNIXTIME($tms))";
 				//error_log('UM::update_extra_field_value: '.$sqli);
-				$resi = api_sql_query($sqli,__FILE__,__LINE__);
+				$resi = Database::query($sqli,__FILE__,__LINE__);
 				return($resi?true:false);
 			}
 		} else {
@@ -566,7 +566,7 @@ class SessionManager {
 		$tbl_session_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$return_value = false;
 		$sql= "SELECT course_code FROM $tbl_session_course WHERE id_session = ".Database::escape_string($session_id)." AND course_code = '".Database::escape_string($course_id)."'";
-		$result = api_sql_query($sql,  __FILE__, __LINE__);
+		$result = Database::query($sql,  __FILE__, __LINE__);
 		$num = Database::num_rows($result);
 		if ($num>0) {
 			$return_value = true;
@@ -582,7 +582,7 @@ class SessionManager {
 	public static function get_session_by_name ($session_name) {
 		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 		$sql = 'SELECT id, id_coach, date_start, date_end FROM '.$tbl_session.' WHERE name="'.Database::escape_string($session_name).'"';
-		$result = api_sql_query($sql,  __FILE__, __LINE__);
+		$result = Database::query($sql,  __FILE__, __LINE__);
 		$num = Database::num_rows($result);
 		if ($num>0){
 			return Database::fetch_array($result);

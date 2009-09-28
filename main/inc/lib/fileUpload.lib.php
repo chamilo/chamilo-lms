@@ -569,7 +569,7 @@ function documents_total_space($to_group_id='0')
 	AND props.to_group_id='".$to_group_id."'
 	AND props.visibility <> 2";
 
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 
 	if($result && mysql_num_rows($result)!=0)
 	{
@@ -1162,7 +1162,7 @@ function add_document($_course,$path,$filetype,$filesize,$title,$comment=NULL, $
 	(`path`,`filetype`,`size`,`title`, `comment`, readonly)
 	VALUES ('$path','$filetype','$filesize','".
 	Database::escape_string(htmlspecialchars($title, ENT_QUOTES, $charset))."', '$comment',$readonly)";
-	if(api_sql_query($sql,__FILE__,__LINE__))
+	if(Database::query($sql,__FILE__,__LINE__))
 	{
 		//display_message("Added to database (id ".mysql_insert_id().")!");
 		return Database::insert_id();
@@ -1196,7 +1196,7 @@ function update_existing_document($_course,$document_id,$filesize,$readonly=0)
 {
 	$document_table = Database::get_course_table(TABLE_DOCUMENT,$_course['dbName']);
 	$sql="UPDATE $document_table SET size = '$filesize' , readonly = '$readonly' WHERE id='$document_id'";
-	if(api_sql_query($sql,__FILE__,__LINE__))
+	if(Database::query($sql,__FILE__,__LINE__))
 	{
 		return true;
 	}
@@ -1248,7 +1248,7 @@ function item_property_update_on_folder($_course,$path,$user_id)
 			if($folder_id)
 			{
 				$sql = "UPDATE $TABLE_ITEMPROPERTY SET `lastedit_date`='$time',`lastedit_type`='DocumentInFolderUpdated', `lastedit_user_id`='$user_id' WHERE tool='".TOOL_DOCUMENT."' AND ref='$folder_id'";
-				api_sql_query($sql,__FILE__,__LINE__);
+				Database::query($sql,__FILE__,__LINE__);
 			}
 		}
 	}
@@ -1316,14 +1316,14 @@ function set_default_settings($upload_path,$filename,$filetype="file")
 	//$dbTable already has `backticks`!
 	//$query="select count(*) as bestaat from `$dbTable` where path='$upload_path/$filename'";
 	$query="select count(*) as bestaat from $dbTable where path='$upload_path/$filename'";
-	$result=api_sql_query($query,__FILE__,__LINE__);
+	$result=Database::query($query,__FILE__,__LINE__);
 	$row=mysql_fetch_array($result);
 	if($row["bestaat"]>0)
 		//$query="update `$dbTable` set path='$upload_path/$filename',visibility='$default_visibility', filetype='$filetype' where path='$upload_path/$filename'";
 		$query="update $dbTable set path='$upload_path/$filename',visibility='$default_visibility', filetype='$filetype' where path='$upload_path/$filename'";
 	else //$query="INSERT INTO `$dbTable` (path,visibility,filetype) VALUES('$upload_path/$filename','$default_visibility','$filetype')";
 		$query="INSERT INTO $dbTable (path,visibility,filetype) VALUES('$upload_path/$filename','$default_visibility','$filetype')";
-	api_sql_query($query,__FILE__,__LINE__);
+	Database::query($query,__FILE__,__LINE__);
 }
 
 //------------------------------------------------------------------------------

@@ -45,7 +45,7 @@ class ClassManager
 	{
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "SELECT * FROM $table_class WHERE id='".$class_id."'";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		return mysql_fetch_array($res, MYSQL_ASSOC);
 	}
 	/**
@@ -57,7 +57,7 @@ class ClassManager
 	{
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "UPDATE $table_class SET name='".mysql_real_escape_string($name)."' WHERE id='".$class_id."'";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 	}
 	/**
 	 * Create a class
@@ -67,7 +67,7 @@ class ClassManager
 	{
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "INSERT INTO $table_class SET name='".mysql_real_escape_string($name)."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 		return mysql_affected_rows() == 1;
 	}
 	/**
@@ -78,7 +78,7 @@ class ClassManager
 	{
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "SELECT * FROM $table_class WHERE name='".mysql_real_escape_string($name)."'";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		return mysql_num_rows($res) != 0;
 	}
 	/**
@@ -93,11 +93,11 @@ class ClassManager
 		$table_class_course = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$sql = "DELETE FROM $table_class_user WHERE class_id = '".$class_id."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 		$sql = "DELETE FROM $table_class_course WHERE class_id = '".$class_id."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 		$sql = "DELETE FROM $table_class WHERE id = '".$class_id."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 	}
 	/**
 	 * Get all users from a class
@@ -109,7 +109,7 @@ class ClassManager
 		$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT * FROM $table_class_user cu, $table_user u WHERE cu.class_id = '".$class_id."' AND cu.user_id = u.user_id";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$users = array ();
 		while ($user = mysql_fetch_array($res, MYSQL_ASSOC))
 		{
@@ -127,7 +127,7 @@ class ClassManager
 	{
 		$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$sql = "INSERT IGNORE INTO $table_class_user SET user_id = '".$user_id."', class_id='".$class_id."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 		$courses = ClassManager :: get_courses($class_id);
 		foreach ($courses as $index => $course)
 		{
@@ -152,7 +152,7 @@ class ClassManager
 			{
 				$course_codes[] = $course['course_code'];
 				$sql = "SELECT DISTINCT user_id FROM $table_class_user t1, $table_course_class t2 WHERE t1.class_id=t2.class_id AND course_code = '".$course['course_code']."' AND user_id = $user_id AND t2.class_id<>'$class_id'";
-				$res = api_sql_query($sql, __FILE__, __LINE__);
+				$res = Database::query($sql, __FILE__, __LINE__);
 				if (mysql_num_rows($res) == 0 && CourseManager :: get_user_in_course_status($user_id, $course['course_code']) == STUDENT)
 				{
 					CourseManager :: unsubscribe_user($user_id, $course['course_code']);
@@ -160,7 +160,7 @@ class ClassManager
 			}
 		}
 		$sql = "DELETE FROM $table_class_user WHERE user_id='".$user_id."' AND class_id = '".$class_id."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 	}
 	/**
 	 * Get all courses in which a class is subscribed
@@ -172,7 +172,7 @@ class ClassManager
 		$table_class_course = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT * FROM $table_class_course cc, $table_course c WHERE cc.class_id = '".$class_id."' AND cc.course_code = c.code";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$courses = array ();
 		while ($course = mysql_fetch_array($res, MYSQL_ASSOC))
 		{
@@ -191,9 +191,9 @@ class ClassManager
 		$tbl_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$sql = "INSERT IGNORE INTO $tbl_course_class SET course_code = '".mysql_real_escape_string($course_code)."', class_id = '".mysql_real_escape_string($class_id)."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 		$sql = "SELECT user_id FROM $tbl_class_user WHERE class_id = '".mysql_real_escape_string($class_id)."'";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		while ($user = mysql_fetch_object($res))
 		{
 			CourseManager :: subscribe_user($user->user_id, $course_code);
@@ -211,11 +211,11 @@ class ClassManager
 		$tbl_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$tbl_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$sql = "SELECT cu.user_id,COUNT(cc.class_id) FROM $tbl_course_class cc, $tbl_class_user cu WHERE  cc.class_id = cu.class_id AND cc.course_code = '".mysql_real_escape_string($course_code)."' GROUP BY cu.user_id HAVING COUNT(cc.class_id) = 1";
-		$single_class_users = api_sql_query($sql, __FILE__, __LINE__);
+		$single_class_users = Database::query($sql, __FILE__, __LINE__);
 		while ($single_class_user = mysql_fetch_object($single_class_users))
 		{
 			$sql = "SELECT * FROM $tbl_class_user WHERE class_id = '".mysql_real_escape_string($class_id)."' AND user_id = '".mysql_real_escape_string($single_class_user->user_id)."'";
-			$res = api_sql_query($sql, __FILE__, __LINE__);
+			$res = Database::query($sql, __FILE__, __LINE__);
 			if (mysql_num_rows($res) > 0)
 			{
 				if (CourseManager :: get_user_in_course_status($single_class_user->user_id, $course_code) == STUDENT)
@@ -225,7 +225,7 @@ class ClassManager
 			}
 		}
 		$sql = "DELETE FROM $tbl_course_class WHERE course_code = '".mysql_real_escape_string($course_code)."' AND class_id = '".mysql_real_escape_string($class_id)."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 	}
 
 	/**
@@ -237,7 +237,7 @@ class ClassManager
 	{
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "SELECT * FROM $table_class WHERE name='".$name."'";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$obj = mysql_fetch_object($res);
 		return $obj->id;
 	}
@@ -251,7 +251,7 @@ class ClassManager
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$table_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$sql = "SELECT cl.* FROM $table_class cl, $table_course_class cc WHERE cc.course_code = '".mysql_real_escape_string($course_code)."' AND cc.class_id = cl.id";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$classes = array ();
 		while ($class = mysql_fetch_array($res, MYSQL_ASSOC))
 		{

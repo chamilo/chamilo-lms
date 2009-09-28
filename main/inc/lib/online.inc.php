@@ -62,7 +62,7 @@ function LoginCheck($uid)
             $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip) VALUES ($uid,$uid,'$login_date','$login_ip')";
 		}
 
-		@api_sql_query($query,__FILE__,__LINE__);
+		@Database::query($query,__FILE__,__LINE__);
 	}
 }
 
@@ -86,7 +86,7 @@ function online_logout() {
     // selecting the last login of the user
     $uid = intval($_GET['uid']);
     $sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='$uid' ORDER BY login_date DESC LIMIT 0,1";
-    $q_last_connection=api_sql_query($sql_last_connection);
+    $q_last_connection=Database::query($sql_last_connection);
     if (Database::num_rows($q_last_connection)>0) {
         $i_id_last_connection=Database::result($q_last_connection,0,"login_id");
     }
@@ -94,7 +94,7 @@ function online_logout() {
     if (!isset($_SESSION['login_as'])) {
         $current_date=date('Y-m-d H:i:s',time());
         $s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date='".$current_date."' WHERE login_id='$i_id_last_connection'";
-        api_sql_query($s_sql_update_logout_date);
+        Database::query($s_sql_update_logout_date);
     }
     LoginDelete($uid, $_configuration['statistics_database']); //from inc/lib/online.inc.php - removes the "online" status
 
@@ -136,7 +136,7 @@ function LoginDelete($user_id)
 	$online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $user_id = (int) $user_id;
 	$query = "DELETE FROM ".$online_table ." WHERE login_user_id = '".Database::escape_string($user_id)."'";
-	@api_sql_query($query,__FILE__,__LINE__);
+	@Database::query($query,__FILE__,__LINE__);
 }
 
 /**
@@ -166,7 +166,7 @@ function WhoIsOnline($uid=0,$statistics_database='',$valid)
 		}
 	}
 
-	$result = @api_sql_query($query,__FILE__,__LINE__);
+	$result = @Database::query($query,__FILE__,__LINE__);
 	if (count($result)>0)
 	{
 		$rtime = time();
@@ -214,7 +214,7 @@ function GetFullUserName($uid)
 	$uid = Database::escape_string($uid);
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$query = "SELECT firstname,lastname FROM ".$user_table." WHERE user_id='$uid'";
-	$result = @api_sql_query($query,__FILE__,__LINE__);
+	$result = @Database::query($query,__FILE__,__LINE__);
 	if (count($result)>0)
 	{
 		$str = '';
@@ -241,7 +241,7 @@ function chatcall() {
 	}
 	$track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$sql="select chatcall_user_id, chatcall_date from $track_user_table where ( user_id = '".$_user['user_id']."' )";
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	$row=Database::fetch_array($result);
 
 	$login_date=$row['chatcall_date'];
@@ -295,7 +295,7 @@ function who_is_online_in_this_course($uid, $valid, $coursecode=null)
 	$valid = Database::escape_string($valid);
 
 	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE course='".$coursecode."' AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW() ";
-	$result = api_sql_query($query,__FILE__,__LINE__);
+	$result = Database::query($query,__FILE__,__LINE__);
 	if (count($result)>0)
 	{
 		$rtime = time();

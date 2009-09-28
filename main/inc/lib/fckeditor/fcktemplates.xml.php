@@ -102,7 +102,7 @@ function load_platform_templates() {
 	global $css, $img_dir, $default_course_dir,$js;
 	$sql = "SELECT title, image, comment, content FROM $table_template";
 
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	while ($row = Database::fetch_array($result)) {
         if (!empty($row['image'])) {
             $image = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/'.$row['image'];
@@ -162,7 +162,7 @@ function load_personal_templates($user_id=0) {
 			WHERE user_id='".Database::escape_string($user_id)."'
 			AND course_code='".Database::escape_string(api_get_course_id())."'
 			AND document.id = template.ref_doc";
-	$result_template = api_sql_query($sql,__FILE__,__LINE__);
+	$result_template = Database::query($sql,__FILE__,__LINE__);
 	while ($row = Database::fetch_array($result_template))
 	{
 		$row['content'] = file_get_contents(api_get_path('SYS_COURSE_PATH').$_course['path'].'/document'.$row['path']);

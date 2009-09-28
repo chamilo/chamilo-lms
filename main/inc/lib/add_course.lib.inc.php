@@ -122,7 +122,7 @@ function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = ""
 
 		// check if they are unique
 		$query = "SELECT 1 FROM ".$course_table . " WHERE code='".$keysCourseId . "' LIMIT 0,1";
-		$result = api_sql_query($query, __FILE__, __LINE__);
+		$result = Database::query($query, __FILE__, __LINE__);
 
 		if($keysCourseId == DEFAULT_COURSE || Database::num_rows($result))
 		{
@@ -136,12 +136,12 @@ function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = ""
 		if($_configuration['single_database'])
 		{
 			$query = "SHOW TABLES FROM `".$_configuration['main_database']."` LIKE '".$_configuration['table_prefix']."$keysCourseDbName".$_configuration['db_glue']."%'";
-			$result = api_sql_query($query, __FILE__, __LINE__);
+			$result = Database::query($query, __FILE__, __LINE__);
 		}
 		else
 		{
 			$query = "SHOW DATABASES LIKE '$keysCourseDbName'";
-			$result = api_sql_query($query, __FILE__, __LINE__);
+			$result = Database::query($query, __FILE__, __LINE__);
 		}
 
 		if(Database::num_rows($result))
@@ -256,7 +256,7 @@ function update_Db_course($courseDbName)
 
 	if(!$_configuration['single_database'])
 	{
-		api_sql_query("CREATE DATABASE IF NOT EXISTS `" . $courseDbName . "`", __FILE__, __LINE__);
+		Database::query("CREATE DATABASE IF NOT EXISTS `" . $courseDbName . "`", __FILE__, __LINE__);
 	}
 
 	$courseDbName = $_configuration['table_prefix'].$courseDbName.$_configuration['db_glue'];
@@ -398,9 +398,9 @@ function update_Db_course($courseDbName)
 		session_id smallint default 0,
 		PRIMARY KEY (id)
 		) TYPE=MyISAM";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLANNOUNCEMENTS . "` ADD INDEX ( session_id ) ";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 
 	/*
@@ -417,7 +417,7 @@ function update_Db_course($courseDbName)
 		resource_id int unsigned default NULL,
 		UNIQUE KEY id (id)
 		) TYPE=MyISAM";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `".$TABLETOOLUSERINFOCONTENT . "` (
@@ -431,7 +431,7 @@ function update_Db_course($courseDbName)
 		KEY user_id (user_id)
 		) TYPE=MyISAM";
 
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	// Unused table. Temporarily ignored for tests.
 	// Reused because of user/userInfo and user/userInfoLib scripts
@@ -445,7 +445,7 @@ function update_Db_course($courseDbName)
 		PRIMARY KEY (id)
 		) TYPE=MyISAM";
 
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	/*
 	-----------------------------------------------------------
@@ -464,9 +464,9 @@ function update_Db_course($courseDbName)
 		 PRIMARY KEY (cat_id)
 		) TYPE=MyISAM";
 
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLFORUMCATEGORY . "` ADD INDEX ( session_id ) ";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	// Forum
 	$sql = "
@@ -493,7 +493,7 @@ function update_Db_course($courseDbName)
 		 PRIMARY KEY (forum_id)
 		) TYPE=MyISAM";
 
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	// Forum Threads
 	$sql = "
@@ -517,9 +517,9 @@ function update_Db_course($courseDbName)
 		 PRIMARY KEY (thread_id)
 		) TYPE=MyISAM";
 
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLFORUMTHREAD . "` ADD INDEX idx_forum_thread_forum_id (forum_id)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	// Forum Posts
 	$sql = "
@@ -540,11 +540,11 @@ function update_Db_course($courseDbName)
 		 KEY forum_id (forum_id)
 		) TYPE=MyISAM";
 
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLFORUMPOST . "` ADD INDEX idx_forum_post_thread_id (thread_id)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLFORUMPOST . "` ADD INDEX idx_forum_post_visible (visible)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	// Forum Mailcue
 	$sql = "
@@ -554,7 +554,7 @@ function update_Db_course($courseDbName)
 		 post_id int default NULL
 		) TYPE=MyISAM";
 
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 
 	// Forum Attachment
@@ -567,7 +567,7 @@ function update_Db_course($courseDbName)
 			  filename varchar(255) NOT NULL,
 			  PRIMARY KEY (id)
 			)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	// Forum notification
 	$sql = "CREATE TABLE  `".$TABLETOOLFORUMNOTIFICATION."` (
@@ -578,7 +578,7 @@ function update_Db_course($courseDbName)
 			    KEY user_id (user_id),
   				KEY forum_id (forum_id)
 			)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	// Forum thread qualify :Add table forum_thread_qualify
 	$sql = "CREATE TABLE  `".$TABLETOOLFORUMQUALIFY."` (
@@ -590,9 +590,9 @@ function update_Db_course($courseDbName)
  			qualify_time datetime default '0000-00-00 00:00:00',
  			session_id int  default NULL
 			)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLFORUMQUALIFY . "` ADD INDEX (user_id, thread_id)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	//Forum thread qualify: Add table forum_thread_qualify_historical
 	$sql = "CREATE TABLE  `".$TABLETOOLFORUMQUALIFYLOG."` (
@@ -604,9 +604,9 @@ function update_Db_course($courseDbName)
  			qualify_time datetime default '0000-00-00 00:00:00',
  			session_id int default NULL
 			)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLFORUMQUALIFYLOG. "` ADD INDEX (user_id, thread_id)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 	/*
 	-----------------------------------------------------------
 		Exercise tool
@@ -630,7 +630,7 @@ function update_Db_course($courseDbName)
 		feedback_type int NOT NULL default 0,
 		PRIMARY KEY (id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	// Exercise tool - questions
 	$sql = "
@@ -645,9 +645,9 @@ function update_Db_course($courseDbName)
 		level int unsigned NOT NULL default 0,
 		PRIMARY KEY (id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLEQUIZQUESTIONLIST . "` ADD INDEX (position)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	// Exercise tool - answers
 	$sql = "
@@ -664,7 +664,7 @@ function update_Db_course($courseDbName)
 	    destination text NOT NULL,
 		PRIMARY KEY (id, question_id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	// Exercise tool - Test/question relations
 	$sql = "
@@ -674,7 +674,7 @@ function update_Db_course($courseDbName)
 		question_order mediumint unsigned NOT NULL default 1,
 		PRIMARY KEY (question_id,exercice_id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	/*
 	-----------------------------------------------------------
@@ -688,7 +688,7 @@ function update_Db_course($courseDbName)
 		content TEXT,
 		UNIQUE (id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	/*
 	-----------------------------------------------------------
@@ -709,7 +709,7 @@ function update_Db_course($courseDbName)
 		category enum('authoring','interaction','admin') NOT NULL default 'authoring',
 		PRIMARY KEY (id)
 		) TYPE=MyISAM";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	/*
 	-----------------------------------------------------------
@@ -727,9 +727,9 @@ function update_Db_course($courseDbName)
     	session_id int unsigned NOT NULL default 0,
 		PRIMARY KEY (id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLAGENDA . "` ADD INDEX ( session_id ) ;";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `".$TABLETOOLAGENDAREPEAT. "` (
@@ -740,14 +740,14 @@ function update_Db_course($courseDbName)
 		cal_days CHAR(7),
 		PRIMARY KEY (cal_id)
 		)";
-	api_sql_query($sql,__FILE__,__LINE__);
+	Database::query($sql,__FILE__,__LINE__);
 	$sql = "
 		CREATE TABLE `".$TABLETOOLAGENDAREPEATNOT."` (
 		cal_id INT NOT NULL,
 		cal_date INT NOT NULL,
 		PRIMARY KEY ( cal_id, cal_date )
 		)";
-	api_sql_query($sql,__FILE__,__LINE__);
+	Database::query($sql,__FILE__,__LINE__);
 
 
 	// Agenda Attachment
@@ -760,7 +760,7 @@ function update_Db_course($courseDbName)
 			  filename varchar(255) NOT NULL,
 			  PRIMARY KEY (id)
 			)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 	/*
 	-----------------------------------------------------------
 		Document tool
@@ -778,7 +778,7 @@ function update_Db_course($courseDbName)
 			session_id int UNSIGNED NOT NULL default 0,
 			PRIMARY KEY (`id`)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	/*
 	-----------------------------------------------------------
@@ -806,7 +806,7 @@ function update_Db_course($courseDbName)
 		session_id INT UNSIGNED NOT NULL default 0,
 		PRIMARY KEY (id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	$sql = "
         CREATE TABLE `".$TABLETOOLWORKSASS."` (
@@ -818,7 +818,7 @@ function update_Db_course($courseDbName)
         publication_id int NOT NULL,
         PRIMARY KEY  (id)" .
         ")";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLWORKS . "` ADD INDEX ( session_id )" ;
 
 	/*
@@ -838,7 +838,7 @@ function update_Db_course($courseDbName)
 		target char(10) default '_self',
 		PRIMARY KEY (id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `".$TABLETOOLLINKCATEGORIES . "` (
@@ -848,7 +848,7 @@ function update_Db_course($courseDbName)
 		display_order mediumint unsigned NOT NULL default 0,
 		PRIMARY KEY (id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 /*
 	-----------------------------------------------------------
@@ -887,7 +887,7 @@ function update_Db_course($courseDbName)
 		KEY group_id (group_id),
 		KEY page_id (page_id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	//
 	$sql = "CREATE TABLE `".$TABLEWIKICONF . "` (
@@ -907,7 +907,7 @@ function update_Db_course($courseDbName)
 		delayedsubmit int NOT NULL default 0,
 		KEY page_id (page_id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	//
 
@@ -920,7 +920,7 @@ function update_Db_course($courseDbName)
 		dtime datetime NOT NULL default '0000-00-00 00:00:00',
 		PRIMARY KEY (id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	//
 
@@ -931,7 +931,7 @@ function update_Db_course($courseDbName)
 		group_id int DEFAULT NULL,
 		KEY (id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 
 
@@ -946,7 +946,7 @@ function update_Db_course($courseDbName)
 		last_connection datetime NOT NULL default '0000-00-00 00:00:00',
 		PRIMARY KEY (user_id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `".$TABLETOOLONLINELINK . "` (
@@ -955,7 +955,7 @@ function update_Db_course($courseDbName)
 		url char(100) NOT NULL,
 		PRIMARY KEY (id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	$sql = "
 		CREATE TABLE `".$TABLETOOLCHATCONNECTED . "` (
@@ -963,14 +963,14 @@ function update_Db_course($courseDbName)
 		last_connection datetime NOT NULL default '0000-00-00 00:00:00',
 		PRIMARY KEY (user_id)
 		)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	/*
 	-----------------------------------------------------------
 		Groups tool
 	-----------------------------------------------------------
 	*/
-	api_sql_query("CREATE TABLE `".$TABLEGROUPS . "` (
+	Database::query("CREATE TABLE `".$TABLEGROUPS . "` (
 		id int unsigned NOT NULL auto_increment,
 		name varchar(100) default NULL,
 		category_id int unsigned NOT NULL default 0,
@@ -988,9 +988,9 @@ function update_Db_course($courseDbName)
 		session_id smallint unsigned NOT NULL default 0,
 		PRIMARY KEY (id)
 		)", __FILE__, __LINE__);
-	api_sql_query("ALTER TABLE `".$TABLEGROUPS . "` ADD INDEX ( session_id )", __FILE__,__LINE__);
+	Database::query("ALTER TABLE `".$TABLEGROUPS . "` ADD INDEX ( session_id )", __FILE__,__LINE__);
 
-	api_sql_query("CREATE TABLE `".$TABLEGROUPCATEGORIES . "` (
+	Database::query("CREATE TABLE `".$TABLEGROUPCATEGORIES . "` (
 		id int unsigned NOT NULL auto_increment,
 		title varchar(255) NOT NULL default '',
 		description text NOT NULL,
@@ -1008,7 +1008,7 @@ function update_Db_course($courseDbName)
 		PRIMARY KEY (id)
 		)", __FILE__, __LINE__);
 
-	api_sql_query("CREATE TABLE `".$TABLEGROUPUSER . "` (
+	Database::query("CREATE TABLE `".$TABLEGROUPUSER . "` (
 		id int unsigned NOT NULL auto_increment,
 		user_id int unsigned NOT NULL,
 		group_id int unsigned NOT NULL default 0,
@@ -1017,14 +1017,14 @@ function update_Db_course($courseDbName)
 		PRIMARY KEY (id)
 		)", __FILE__, __LINE__);
 
-	api_sql_query("CREATE TABLE `".$TABLEGROUPTUTOR . "` (
+	Database::query("CREATE TABLE `".$TABLEGROUPTUTOR . "` (
 		id int NOT NULL auto_increment,
 		user_id int NOT NULL,
 		group_id int NOT NULL default 0,
 		PRIMARY KEY (id)
 		)", __FILE__, __LINE__);
 
-	api_sql_query("CREATE TABLE `".$TABLEITEMPROPERTY . "` (
+	Database::query("CREATE TABLE `".$TABLEITEMPROPERTY . "` (
 		tool varchar(100) NOT NULL default '',
 		insert_user_id int unsigned NOT NULL default '0',
 		insert_date datetime NOT NULL default '0000-00-00 00:00:00',
@@ -1038,14 +1038,14 @@ function update_Db_course($courseDbName)
 		start_visible datetime NOT NULL default '0000-00-00 00:00:00',
 		end_visible datetime NOT NULL default '0000-00-00 00:00:00'
 		) TYPE=MyISAM;", __FILE__, __LINE__);
-	api_sql_query("ALTER TABLE `$TABLEITEMPROPERTY` ADD INDEX idx_item_property_toolref (tool,ref)", __FILE__, __LINE__);
+	Database::query("ALTER TABLE `$TABLEITEMPROPERTY` ADD INDEX idx_item_property_toolref (tool,ref)", __FILE__, __LINE__);
 
 	/*
 	-----------------------------------------------------------
 		Tool introductions
 	-----------------------------------------------------------
 	*/
-	api_sql_query("
+	Database::query("
 		CREATE TABLE `".$TABLEINTROS . "` (
 		id varchar(50) NOT NULL,
 		intro_text text NOT NULL,
@@ -1056,7 +1056,7 @@ function update_Db_course($courseDbName)
 		Dropbox tool
 	-----------------------------------------------------------
 	*/
-	api_sql_query("
+	Database::query("
 		CREATE TABLE `".$TABLETOOLDROPBOXFILE . "` (
 		id int unsigned NOT NULL auto_increment,
 		uploader_id int unsigned NOT NULL default 0,
@@ -1073,9 +1073,9 @@ function update_Db_course($courseDbName)
 		UNIQUE KEY UN_filename (filename)
 		)", __FILE__, __LINE__);
 
-	api_sql_query("ALTER TABLE `$TABLETOOLDROPBOXFILE` ADD INDEX ( `session_id` )", __FILE__, __LINE__);
+	Database::query("ALTER TABLE `$TABLETOOLDROPBOXFILE` ADD INDEX ( `session_id` )", __FILE__, __LINE__);
 
-	api_sql_query("
+	Database::query("
 		CREATE TABLE `".$TABLETOOLDROPBOXPOST . "` (
 		file_id int unsigned NOT NULL,
 		dest_user_id int unsigned NOT NULL default 0,
@@ -1086,9 +1086,9 @@ function update_Db_course($courseDbName)
 		PRIMARY KEY (file_id,dest_user_id)
 		)", __FILE__, __LINE__);
 
-	api_sql_query("ALTER TABLE `$TABLETOOLDROPBOXPOST` ADD INDEX ( `session_id` )", __FILE__, __LINE__);
+	Database::query("ALTER TABLE `$TABLETOOLDROPBOXPOST` ADD INDEX ( `session_id` )", __FILE__, __LINE__);
 
-	api_sql_query("
+	Database::query("
 		CREATE TABLE `".$TABLETOOLDROPBOXPERSON . "` (
 		file_id int unsigned NOT NULL,
 		user_id int unsigned NOT NULL default 0,
@@ -1103,7 +1103,7 @@ function update_Db_course($courseDbName)
   			user_id int NOT NULL default 0,
   			PRIMARY KEY  (cat_id)
   			)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	$sql = "CREATE TABLE `".$TABLETOOLDROPBOXFEEDBACK."` (
 			  feedback_id int NOT NULL auto_increment,
@@ -1115,7 +1115,7 @@ function update_Db_course($courseDbName)
 			  KEY file_id (file_id),
 			  KEY author_user_id (author_user_id)
   			)";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	/*
 	-----------------------------------------------------------
@@ -1144,7 +1144,7 @@ function update_Db_course($courseDbName)
 		"author 		varchar(255)    not null default '', " . //stores the theme of the LP
 		"session_id  	int	unsigned not null  default 0 " . //the session_id
 		")";
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
 	}
@@ -1156,17 +1156,17 @@ function update_Db_course($courseDbName)
 		"view_count		smallint unsigned	not null default 0," . //integer counting the amount of times this learning path has been attempted
 		"last_item		int		unsigned	not null default 0," . //last item seen in this view
 		"progress		int		unsigned	default 0 )"; //lp's progress for this user
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
 	}
 	$sql = "ALTER TABLE `$TABLELPVIEW` ADD INDEX (lp_id) ";
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
 	}
 	$sql = "ALTER TABLE `$TABLELPVIEW` ADD INDEX (user_id) ";
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
 	}
@@ -1193,12 +1193,12 @@ function update_Db_course($courseDbName)
         "terms TEXT NULL," . // contains the indexing tags (search engine)
         "search_did INT NULL,".// contains the internal search-engine id of this element
         "audio VARCHAR(250))"; // contains the audio file that goes with the learning path step
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
 	}
 	$sql = "ALTER TABLE `$TABLELPITEM` ADD INDEX (lp_id)";
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
 	}
@@ -1217,17 +1217,17 @@ function update_Db_course($courseDbName)
 		"core_exit		varchar(32) not null default 'none'," .
 		"max_score		varchar(8) default ''" .
 		")";
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
 	}
 	$sql = "ALTER TABLE `$TABLELPITEMVIEW` ADD INDEX (lp_item_id) ";
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
 	}
 	$sql = "ALTER TABLE `$TABLELPITEMVIEW` ADD INDEX (lp_view_id) ";
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
 	}
@@ -1245,12 +1245,12 @@ function update_Db_course($courseDbName)
 		"result			varchar(255) not null default ''," . //textual result
 		"latency		varchar(16)	not null default ''" . //time necessary for completion of the interaction
 		")";
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
 	}
 	$sql = "ALTER TABLE `$TABLELPIVINTERACTION` ADD INDEX (lp_iv_id) ";
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
 	}
@@ -1265,12 +1265,12 @@ function update_Db_course($courseDbName)
 		"score_min		float unsigned not null default 0," . //min score
 		"status			char(32) not null default 'not attempted'" . //status, just as sco status
 		")";
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
 	}
 	$sql = "ALTER TABLE `$TABLELPIVOBJECTIVE` ADD INDEX (lp_iv_id) ";
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
 	}
@@ -1290,7 +1290,7 @@ function update_Db_course($courseDbName)
 			PRIMARY KEY ( blog_id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with blogs in this course';";
 
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql, 0);
 	}
@@ -1309,7 +1309,7 @@ function update_Db_course($courseDbName)
 			PRIMARY KEY ( comment_id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with comments on posts in a blog';";
 
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql, 0);
 	}
@@ -1325,7 +1325,7 @@ function update_Db_course($courseDbName)
 			PRIMARY KEY ( post_id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with posts / blog.';";
 
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql, 0);
 	}
@@ -1341,7 +1341,7 @@ function update_Db_course($courseDbName)
 			PRIMARY KEY ( rating_id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with ratings for post/comments in a certain blog';";
 
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql, 0);
 	}
@@ -1353,7 +1353,7 @@ function update_Db_course($courseDbName)
 			PRIMARY KEY ( blog_id , user_id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table representing users subscribed to a blog';";
 
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql, 0);
 	}
@@ -1369,7 +1369,7 @@ function update_Db_course($courseDbName)
 			PRIMARY KEY ( task_id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with tasks for a blog';";
 
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql, 0);
 	}
@@ -1383,7 +1383,7 @@ function update_Db_course($courseDbName)
 			PRIMARY KEY ( blog_id , user_id , task_id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with tasks assigned to a user in a blog';";
 
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql, 0);
 	}
@@ -1400,7 +1400,7 @@ function update_Db_course($courseDbName)
   		PRIMARY KEY  (id)
 		)";
 
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql, 0);
 	}
@@ -1417,7 +1417,7 @@ function update_Db_course($courseDbName)
 			PRIMARY KEY (id)
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql, 0);
 	}
@@ -1431,7 +1431,7 @@ function update_Db_course($courseDbName)
 			PRIMARY KEY ( id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql, 0);
 	}
@@ -1445,7 +1445,7 @@ function update_Db_course($courseDbName)
 			PRIMARY KEY ( id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql, 0);
 	}
@@ -1459,7 +1459,7 @@ function update_Db_course($courseDbName)
 			PRIMARY KEY ( role_id )
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql, 0);
 	}
@@ -1471,7 +1471,7 @@ function update_Db_course($courseDbName)
 			group_id int NOT NULL default 0
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql, 0);
 	}
@@ -1484,7 +1484,7 @@ function update_Db_course($courseDbName)
 			default_perm tinyint NOT NULL default 0
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql, 0);
 	}
@@ -1496,7 +1496,7 @@ function update_Db_course($courseDbName)
 			user_id int NOT NULL default 0
 		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
 
-	if(!api_sql_query($sql, __FILE__, __LINE__))
+	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql, 0);
 	}
@@ -1507,7 +1507,7 @@ function update_Db_course($courseDbName)
 		Course Config Settings
 	-----------------------------------------------------------
 	*/
-	api_sql_query("
+	Database::query("
 		CREATE TABLE `".$TABLESETTING . "` (
 		id 			int unsigned NOT NULL auto_increment,
 		variable 	varchar(255) NOT NULL default '',
@@ -1558,9 +1558,9 @@ function update_Db_course($courseDbName)
 			  PRIMARY KEY  (survey_id)
 			)";
 
-	$result = api_sql_query($sql,__FILE__,__LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql,__FILE__,__LINE__) or die(mysql_error($sql));
 	$sql = "ALTER TABLE `".$TABLESURVEY."` ADD INDEX ( session_id )";
-	api_sql_query($sql,__FILE__,__LINE__);
+	Database::query($sql,__FILE__,__LINE__);
 
 	$sql = "CREATE TABLE `".$TABLESURVEYINVITATION."` (
 			  survey_invitation_id int unsigned NOT NULL auto_increment,
@@ -1573,7 +1573,7 @@ function update_Db_course($courseDbName)
 			  session_id SMALLINT(5) UNSIGNED NOT NULL default 0,
 			  PRIMARY KEY  (survey_invitation_id)
 			)";
-	$result = api_sql_query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
 
 	$sql = "CREATE TABLE `".$TABLESURVEYQUESTION."` (
 			  question_id int unsigned NOT NULL auto_increment,
@@ -1590,7 +1590,7 @@ function update_Db_course($courseDbName)
 			  survey_group_sec2 int unsigned NOT NULL default '0',
 			  PRIMARY KEY  (question_id)
 			)";
-	$result = api_sql_query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
 
 	$sql ="CREATE TABLE `".$TABLESURVEYQUESTIONOPTION."` (
 	  question_option_id int unsigned NOT NULL auto_increment,
@@ -1601,7 +1601,7 @@ function update_Db_course($courseDbName)
 	  value int NOT NULL default '0',
 	  PRIMARY KEY  (question_option_id)
 	)";
-	$result = api_sql_query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
 
 	$sql = "CREATE TABLE `".$TABLESURVEYANSWER."` (
 			  answer_id int unsigned NOT NULL auto_increment,
@@ -1612,7 +1612,7 @@ function update_Db_course($courseDbName)
 			  user varchar(250) NOT NULL,
 			  PRIMARY KEY  (answer_id)
 			)";
-	$result = api_sql_query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
 
 	$sql = "CREATE TABLE `".$TABLESURVEYGROUP."` (
 			  id int unsigned NOT NULL auto_increment,
@@ -1622,7 +1622,7 @@ function update_Db_course($courseDbName)
 			  PRIMARY KEY  (id)
 			)";
 
-	$result = api_sql_query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
 
 	// table glosary
 	$sql = "CREATE TABLE `".$TBL_GLOSSARY."` (
@@ -1632,7 +1632,7 @@ function update_Db_course($courseDbName)
 			  display_order int,
 			  PRIMARY KEY  (glossary_id)
 			)";
-	$result = api_sql_query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
 
 	// table notebook
 	$sql = "CREATE TABLE `".$TBL_NOTEBOOK."` (
@@ -1647,7 +1647,7 @@ function update_Db_course($courseDbName)
 			  status int,
 			  PRIMARY KEY  (notebook_id)
 			)";
-	$result = api_sql_query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
 
 	return 0;
 }
@@ -1964,41 +1964,41 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		Course homepage tools
 	-----------------------------------------------------------
 	*/
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_COURSE_DESCRIPTION . "','course_description/','info.gif','".string2binary(api_get_setting('course_create_active_tools', 'course_description')) . "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_CALENDAR_EVENT . "','calendar/agenda.php','agenda.gif','".string2binary(api_get_setting('course_create_active_tools', 'agenda')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_DOCUMENT . "','document/document.php','folder_document.gif','".string2binary(api_get_setting('course_create_active_tools', 'documents')) . "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_LEARNPATH . "','newscorm/lp_controller.php','scorm.gif','".string2binary(api_get_setting('course_create_active_tools', 'learning_path')) . "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_LINK . "','link/link.php','links.gif','".string2binary(api_get_setting('course_create_active_tools', 'links')) . "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_QUIZ . "','exercice/exercice.php','quiz.gif','".string2binary(api_get_setting('course_create_active_tools', 'quiz')) . "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_ANNOUNCEMENT . "','announcements/announcements.php','valves.gif','".string2binary(api_get_setting('course_create_active_tools', 'announcements')) . "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_FORUM . "','forum/index.php','forum.gif','".string2binary(api_get_setting('course_create_active_tools', 'forums')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_DROPBOX . "','dropbox/index.php','dropbox.gif','".string2binary(api_get_setting('course_create_active_tools', 'dropbox')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_USER . "','user/user.php','members.gif','".string2binary(api_get_setting('course_create_active_tools', 'users')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_GROUP . "','group/group.php','group.gif','".string2binary(api_get_setting('course_create_active_tools', 'groups')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_CHAT . "','chat/chat.php','chat.gif','".string2binary(api_get_setting('course_create_active_tools', 'chat')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_STUDENTPUBLICATION . "','work/work.php','works.gif','".string2binary(api_get_setting('course_create_active_tools', 'student_publications')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_SURVEY."','survey/survey_list.php','survey.gif','".string2binary(api_get_setting('course_create_active_tools', 'survey')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_WIKI ."','wiki/index.php','wiki.gif','".string2binary(api_get_setting('course_create_active_tools', 'wiki')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
-    api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_GRADEBOOK."','gradebook/index.php','gradebook.gif','".string2binary(api_get_setting('course_create_active_tools', 'gradebook')). "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_GLOSSARY."','glossary/index.php','glossary.gif','".string2binary(api_get_setting('course_create_active_tools', 'glossary')). "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_NOTEBOOK."','notebook/index.php','notebook.gif','".string2binary(api_get_setting('course_create_active_tools', 'notebook'))."','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_COURSE_DESCRIPTION . "','course_description/','info.gif','".string2binary(api_get_setting('course_create_active_tools', 'course_description')) . "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_CALENDAR_EVENT . "','calendar/agenda.php','agenda.gif','".string2binary(api_get_setting('course_create_active_tools', 'agenda')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_DOCUMENT . "','document/document.php','folder_document.gif','".string2binary(api_get_setting('course_create_active_tools', 'documents')) . "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_LEARNPATH . "','newscorm/lp_controller.php','scorm.gif','".string2binary(api_get_setting('course_create_active_tools', 'learning_path')) . "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_LINK . "','link/link.php','links.gif','".string2binary(api_get_setting('course_create_active_tools', 'links')) . "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_QUIZ . "','exercice/exercice.php','quiz.gif','".string2binary(api_get_setting('course_create_active_tools', 'quiz')) . "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_ANNOUNCEMENT . "','announcements/announcements.php','valves.gif','".string2binary(api_get_setting('course_create_active_tools', 'announcements')) . "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_FORUM . "','forum/index.php','forum.gif','".string2binary(api_get_setting('course_create_active_tools', 'forums')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_DROPBOX . "','dropbox/index.php','dropbox.gif','".string2binary(api_get_setting('course_create_active_tools', 'dropbox')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_USER . "','user/user.php','members.gif','".string2binary(api_get_setting('course_create_active_tools', 'users')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_GROUP . "','group/group.php','group.gif','".string2binary(api_get_setting('course_create_active_tools', 'groups')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_CHAT . "','chat/chat.php','chat.gif','".string2binary(api_get_setting('course_create_active_tools', 'chat')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_STUDENTPUBLICATION . "','work/work.php','works.gif','".string2binary(api_get_setting('course_create_active_tools', 'student_publications')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_SURVEY."','survey/survey_list.php','survey.gif','".string2binary(api_get_setting('course_create_active_tools', 'survey')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_WIKI ."','wiki/index.php','wiki.gif','".string2binary(api_get_setting('course_create_active_tools', 'wiki')) . "','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
+    Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_GRADEBOOK."','gradebook/index.php','gradebook.gif','".string2binary(api_get_setting('course_create_active_tools', 'gradebook')). "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_GLOSSARY."','glossary/index.php','glossary.gif','".string2binary(api_get_setting('course_create_active_tools', 'glossary')). "','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_NOTEBOOK."','notebook/index.php','notebook.gif','".string2binary(api_get_setting('course_create_active_tools', 'notebook'))."','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
 	if(api_get_setting('service_visio','active')=='true')
 	{
 		$mycheck = api_get_setting('service_visio','visio_host');
 		if(!empty($mycheck))
 		{
-			api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_VISIO_CONFERENCE . "','conference/index.php?type=conference','visio_meeting.gif','1','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
-			api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_VISIO_CLASSROOM . "','conference/index.php?type=classroom','visio.gif','1','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
+			Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_VISIO_CONFERENCE . "','conference/index.php?type=conference','visio_meeting.gif','1','0','squaregrey.gif','NO','_self','interaction')", __FILE__, __LINE__);
+			Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_VISIO_CLASSROOM . "','conference/index.php?type=classroom','visio.gif','1','0','squaregrey.gif','NO','_self','authoring')", __FILE__, __LINE__);
 		}
 	}
 
     if (api_get_setting('search_enabled')=='true') {
-        api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_SEARCH. "','search/','info.gif','".string2binary(api_get_setting('course_create_active_tools', 'enable_search')) . "','0','search.gif','NO','_self','authoring')", __FILE__, __LINE__);
+        Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_SEARCH. "','search/','info.gif','".string2binary(api_get_setting('course_create_active_tools', 'enable_search')) . "','0','search.gif','NO','_self','authoring')", __FILE__, __LINE__);
     }
 
 	// Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
 	$sql = "INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL,'" . TOOL_BLOGS . "','blog/blog_admin.php','blog_admin.gif','" . string2binary(api_get_setting('course_create_active_tools', 'blogs')) . "','1','squaregrey.gif','NO','_self','admin')";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 	// end of Smartblogs
 
 	/*
@@ -2006,25 +2006,25 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		Course homepage tools for course admin only
 	-----------------------------------------------------------
 	*/
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_TRACKING . "','tracking/courseLog.php','statistics.gif','$visible4AdminOfCourse','1','', 'NO','_self','admin')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_COURSE_SETTING . "','course_info/infocours.php','reference.gif','$visible4AdminOfCourse','1','', 'NO','_self','admin')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `".$tbl_course_homepage."` VALUES (NULL,'".TOOL_COURSE_MAINTENANCE."','course_info/maintenance.php','backup.gif','$visible4AdminOfCourse','1','','NO','_self', 'admin')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_TRACKING . "','tracking/courseLog.php','statistics.gif','$visible4AdminOfCourse','1','', 'NO','_self','admin')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_COURSE_SETTING . "','course_info/infocours.php','reference.gif','$visible4AdminOfCourse','1','', 'NO','_self','admin')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `".$tbl_course_homepage."` VALUES (NULL,'".TOOL_COURSE_MAINTENANCE."','course_info/maintenance.php','backup.gif','$visible4AdminOfCourse','1','','NO','_self', 'admin')", __FILE__, __LINE__);
 
 	/*
 	-----------------------------------------------------------
 		course_setting table (courseinfo tool)
 	-----------------------------------------------------------
 	*/
-	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_manager_on_new_doc',0,'work')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_on_new_doc_dropbox',0,'dropbox')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_user_edit_agenda',0,'agenda')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_user_edit_announcement',0,'announcement')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_manager_on_new_quiz',0,'quiz')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_user_image_forum',1,'forum')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('course_theme','','theme')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_learning_path_theme','1','theme')", __FILE__, __LINE__);
-	api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_open_chat_window',0,'chat')", __FILE__, __LINE__);
-    api_sql_query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_to_teacher_on_new_user_in_course',0,'registration')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_manager_on_new_doc',0,'work')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_on_new_doc_dropbox',0,'dropbox')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_user_edit_agenda',0,'agenda')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_user_edit_announcement',0,'announcement')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_manager_on_new_quiz',0,'quiz')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_user_image_forum',1,'forum')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('course_theme','','theme')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_learning_path_theme','1','theme')", __FILE__, __LINE__);
+	Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_open_chat_window',0,'chat')", __FILE__, __LINE__);
+    Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_to_teacher_on_new_user_in_course',0,'registration')", __FILE__, __LINE__);
 	/*
 	-----------------------------------------------------------
 		Course homepage tools for platform admin only
@@ -2037,7 +2037,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		Group tool
 	-----------------------------------------------------------
 	*/
-	api_sql_query("INSERT INTO `".$TABLEGROUPCATEGORIES . "` ( id , title , description , max_student , self_reg_allowed , self_unreg_allowed , groups_per_user , display_order ) VALUES ('2', '".lang2db(get_lang('DefaultGroupCategory')) . "', '', '8', '0', '0', '0', '0');", __FILE__, __LINE__);
+	Database::query("INSERT INTO `".$TABLEGROUPCATEGORIES . "` ( id , title , description , max_student , self_reg_allowed , self_unreg_allowed , groups_per_user , display_order ) VALUES ('2', '".lang2db(get_lang('DefaultGroupCategory')) . "', '', '8', '0', '0', '0', '0');", __FILE__, __LINE__);
 
 
 	/*
@@ -2058,34 +2058,34 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 			Documents
 		-----------------------------------------------------------
 		*/
-		//api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/example_document.html','example_document.html','file','3367')", __FILE__, __LINE__);
+		//Database::query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/example_document.html','example_document.html','file','3367')", __FILE__, __LINE__);
 		//we need to add the document properties too!
 		//$example_doc_id = Database :: get_last_insert_id();
-		//api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,1)", __FILE__, __LINE__);
+		//Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,1)", __FILE__, __LINE__);
 
-		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/images','".get_lang('Images')."','folder','0')", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/images','".get_lang('Images')."','folder','0')", __FILE__, __LINE__);
 		$example_doc_id = Database :: get_last_insert_id();
-		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
 
-		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/images/gallery','".get_lang('DefaultCourseImages')."','folder','0')", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/images/gallery','".get_lang('DefaultCourseImages')."','folder','0')", __FILE__, __LINE__);
 		$example_doc_id = Database :: get_last_insert_id();
-		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
 
-        api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/shared_folder','".get_lang('SharedDocumentsDirectory')."','folder','0')", __FILE__, __LINE__);
+        Database::query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/shared_folder','".get_lang('SharedDocumentsDirectory')."','folder','0')", __FILE__, __LINE__);
         $example_doc_id = Database :: get_last_insert_id();
-        api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
+        Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
 
-		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/audio','".get_lang('Audio')."','folder','0')", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/audio','".get_lang('Audio')."','folder','0')", __FILE__, __LINE__);
 		$example_doc_id = Database :: get_last_insert_id();
-		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
 
-		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/flash','".get_lang('Flash')."','folder','0')", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/flash','".get_lang('Flash')."','folder','0')", __FILE__, __LINE__);
 		$example_doc_id = Database :: get_last_insert_id();
-		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
 
-		api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/video','".get_lang('Video')."','folder','0')", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/video','".get_lang('Video')."','folder','0')", __FILE__, __LINE__);
 		$example_doc_id = Database :: get_last_insert_id();
-		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
 
 		//FILL THE COURSE DOCUMENT WITH DEFAULT COURSE PICTURES
 		$sys_course_path = api_get_path(SYS_COURSE_PATH);
@@ -2118,18 +2118,18 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 				{
 					$folder_path=substr($value["dir"],0,strlen($value["dir"])-1);
 					$temp=explode("/",$folder_path);
-					api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$path_documents".$folder_path."','".$temp[count($temp)-1]."','folder','0')", __FILE__, __LINE__);
+					Database::query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$path_documents".$folder_path."','".$temp[count($temp)-1]."','folder','0')", __FILE__, __LINE__);
 					$image_id = Database :: get_last_insert_id();
-					api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
+					Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
 				}
 
 				if($value["file"]!="")
 				{
 					$temp=explode("/",$value["file"]);
 					$file_size=filesize($course_documents_folder.$value["file"]);
-			        api_sql_query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$path_documents".$value["file"]."','".$temp[count($temp)-1]."','file','$file_size')", __FILE__, __LINE__);
+			        Database::query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('$path_documents".$value["file"]."','".$temp[count($temp)-1]."','file','$file_size')", __FILE__, __LINE__);
 					$image_id = Database :: get_last_insert_id();
-					api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,1)", __FILE__, __LINE__);
+					Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,1)", __FILE__, __LINE__);
 				}
 			}
 		}
@@ -2139,11 +2139,11 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 			Agenda tool
 		-----------------------------------------------------------
 		*/
-		api_sql_query("INSERT INTO `".$TABLETOOLAGENDA . "` VALUES ( NULL, '".lang2db(get_lang('AgendaCreationTitle')) . "', '".lang2db(get_lang('AgendaCreationContenu')) . "', now(), now(), NULL, 0)", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLETOOLAGENDA . "` VALUES ( NULL, '".lang2db(get_lang('AgendaCreationTitle')) . "', '".lang2db(get_lang('AgendaCreationContenu')) . "', now(), now(), NULL, 0)", __FILE__, __LINE__);
 		//we need to add the item properties too!
 		$insert_id = Database :: get_last_insert_id();
 		$sql = "INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('" . TOOL_CALENDAR_EVENT . "',1,NOW(),NOW(),$insert_id,'AgendaAdded',1,0,NULL,1)";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		/*
 		-----------------------------------------------------------
@@ -2152,19 +2152,19 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		*/
 		$add_google_link_sql = "	INSERT INTO `".$TABLETOOLLINK . "`
 							VALUES ('1','http://www.google.com','Google','".lang2db(get_lang('Google')) . "','0','0','0','_self')";
-		api_sql_query($add_google_link_sql, __FILE__, __LINE__);
+		Database::query($add_google_link_sql, __FILE__, __LINE__);
 		//we need to add the item properties too!
 		$insert_id = Database :: get_last_insert_id();
 		$sql = "INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('" . TOOL_LINK . "',1,NOW(),NOW(),$insert_id,'LinkAdded',1,0,NULL,1)";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		$add_wikipedia_link_sql = "	INSERT INTO `".$TABLETOOLLINK . "`
 							VALUES ('', 'http://www.wikipedia.org','Wikipedia','".lang2db(get_lang('Wikipedia')) . "','0','1','0','_self')";
-		api_sql_query($add_wikipedia_link_sql, __FILE__, __LINE__);
+		Database::query($add_wikipedia_link_sql, __FILE__, __LINE__);
 		//we need to add the item properties too!
 		$insert_id = Database :: get_last_insert_id();
 		$sql = "INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('" . TOOL_LINK . "',1,NOW(),NOW(),$insert_id,'LinkAdded',1,0,NULL,1)";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		/*
 		-----------------------------------------------------------
@@ -2172,11 +2172,11 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		-----------------------------------------------------------
 		*/
 		$sql = "INSERT INTO `".$TABLETOOLANNOUNCEMENTS . "` (title,content,end_date,display_order,email_sent) VALUES ('".lang2db(get_lang('AnnouncementExampleTitle')) . "', '".lang2db(get_lang('AnnouncementEx')) . "', NOW(), '1','0')";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 		//we need to add the item properties too!
 		$insert_id = Database :: get_last_insert_id();
 		$sql = "INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('" . TOOL_ANNOUNCEMENT . "',1,NOW(),NOW(),$insert_id,'AnnouncementAdded',1,0,NULL,1)";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		/*
 		-----------------------------------------------------------
@@ -2185,26 +2185,26 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		*/
 
 		$intro_text='<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="middle" align="left"><img src="'.api_get_path(REL_CODE_PATH).'img/mr_dokeos.png" alt="mr. Dokeos" title="mr. Dokeos" /></td><td valign="middle" align="left">'.lang2db(get_lang('IntroductionText')).'</td></tr></table>';
-		api_sql_query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_COURSE_HOMEPAGE . "','".$intro_text. "')", __FILE__, __LINE__);
-		api_sql_query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_STUDENTPUBLICATION . "','".lang2db(get_lang('IntroductionTwo')) . "')", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_COURSE_HOMEPAGE . "','".$intro_text. "')", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_STUDENTPUBLICATION . "','".lang2db(get_lang('IntroductionTwo')) . "')", __FILE__, __LINE__);
 
 		//wiki intro
 		$intro_wiki='<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"></td><td valign="top" align="left">'.lang2db(get_lang('IntroductionWiki')).'</td></tr></table>';
-		api_sql_query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_WIKI . "','".$intro_wiki. "')",__FILE__,__LINE__);
+		Database::query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_WIKI . "','".$intro_wiki. "')",__FILE__,__LINE__);
 
 		/*
 		-----------------------------------------------------------
 			Exercise tool
 		-----------------------------------------------------------
 		*/
-		api_sql_query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '1', '1', '".lang2db(get_lang('Ridiculise')) . "', '0', '".lang2db(get_lang('NoPsychology')) . "', '-5', '1','','','')",__FILE__,__LINE__);
-		api_sql_query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '2', '1', '".lang2db(get_lang('AdmitError')) . "', '0', '".lang2db(get_lang('NoSeduction')) . "', '-5', '2','','','')", __FILE__, __LINE__);
-		api_sql_query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '3', '1', '".lang2db(get_lang('Force')) . "', '1', '".lang2db(get_lang('Indeed')) . "', '5', '3','','','')", __FILE__, __LINE__);
-		api_sql_query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '4', '1', '".lang2db(get_lang('Contradiction')) . "', '1', '".lang2db(get_lang('NotFalse')) . "', '5', '4','','','')", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '1', '1', '".lang2db(get_lang('Ridiculise')) . "', '0', '".lang2db(get_lang('NoPsychology')) . "', '-5', '1','','','')",__FILE__,__LINE__);
+		Database::query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '2', '1', '".lang2db(get_lang('AdmitError')) . "', '0', '".lang2db(get_lang('NoSeduction')) . "', '-5', '2','','','')", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '3', '1', '".lang2db(get_lang('Force')) . "', '1', '".lang2db(get_lang('Indeed')) . "', '5', '3','','','')", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '4', '1', '".lang2db(get_lang('Contradiction')) . "', '1', '".lang2db(get_lang('NotFalse')) . "', '5', '4','','','')", __FILE__, __LINE__);
 		$html=addslashes('<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.lang2db(get_lang('Antique')).'</td></tr></table>');
-		api_sql_query('INSERT INTO `'.$TABLEQUIZ . '` (title, description, type, random, active, results_disabled ) VALUES ("'.lang2db(get_lang('ExerciceEx')) . '", "'.$html.'", "1", "0", "1", "0")', __FILE__, __LINE__);
-		api_sql_query("INSERT INTO `".$TABLEQUIZQUESTIONLIST . "` (id, question, description, ponderation, position, type, picture, level) VALUES ( '1', '".lang2db(get_lang('SocraticIrony')) . "', '".lang2db(get_lang('ManyAnswers')) . "', '10', '1', '2','',1)", __FILE__, __LINE__);
-		api_sql_query("INSERT INTO `".$TABLEQUIZQUESTION . "` (question_id, exercice_id, question_order) VALUES (1,1,1)", __FILE__, __LINE__);
+		Database::query('INSERT INTO `'.$TABLEQUIZ . '` (title, description, type, random, active, results_disabled ) VALUES ("'.lang2db(get_lang('ExerciceEx')) . '", "'.$html.'", "1", "0", "1", "0")', __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEQUIZQUESTIONLIST . "` (id, question, description, ponderation, position, type, picture, level) VALUES ( '1', '".lang2db(get_lang('SocraticIrony')) . "', '".lang2db(get_lang('ManyAnswers')) . "', '10', '1', '2','',1)", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEQUIZQUESTION . "` (question_id, exercice_id, question_order) VALUES (1,1,1)", __FILE__, __LINE__);
 
 
 		/*
@@ -2212,19 +2212,19 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 			Forum tool
 		-----------------------------------------------------------
 		*/
-		api_sql_query("INSERT INTO `$TABLEFORUMCATEGORIES` VALUES (1,'".lang2db(get_lang('ExampleForumCategory'))."', '', 1, 0, 0)", __FILE__, __LINE__);
+		Database::query("INSERT INTO `$TABLEFORUMCATEGORIES` VALUES (1,'".lang2db(get_lang('ExampleForumCategory'))."', '', 1, 0, 0)", __FILE__, __LINE__);
 		$insert_id = Database :: get_last_insert_id();
-		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('forum_category',1,NOW(),NOW(),$insert_id,'ForumCategoryAdded',1,0,NULL,1)", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('forum_category',1,NOW(),NOW(),$insert_id,'ForumCategoryAdded',1,0,NULL,1)", __FILE__, __LINE__);
 
-		api_sql_query("INSERT INTO `$TABLEFORUMS` (forum_title, forum_comment, forum_threads,forum_posts,forum_last_post,forum_category, allow_anonymous, allow_edit,allow_attachments, allow_new_threads,default_view,forum_of_group,forum_group_public_private, forum_order,locked,session_id ) VALUES ('".lang2db(get_lang('ExampleForum'))."', '', 0, 0, 0, 1, 0, 1, '0', 1, 'flat','0', 'public', 1, 0,0)", __FILE__, __LINE__);
+		Database::query("INSERT INTO `$TABLEFORUMS` (forum_title, forum_comment, forum_threads,forum_posts,forum_last_post,forum_category, allow_anonymous, allow_edit,allow_attachments, allow_new_threads,default_view,forum_of_group,forum_group_public_private, forum_order,locked,session_id ) VALUES ('".lang2db(get_lang('ExampleForum'))."', '', 0, 0, 0, 1, 0, 1, '0', 1, 'flat','0', 'public', 1, 0,0)", __FILE__, __LINE__);
 		$insert_id = Database :: get_last_insert_id();
-		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('" . TOOL_FORUM . "',1,NOW(),NOW(),$insert_id,'ForumAdded',1,0,NULL,1)", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('" . TOOL_FORUM . "',1,NOW(),NOW(),$insert_id,'ForumAdded',1,0,NULL,1)", __FILE__, __LINE__);
 
-		api_sql_query("INSERT INTO `$TABLEFORUMTHREADS` (thread_id, thread_title, forum_id, thread_replies, thread_poster_id, thread_poster_name, thread_views, thread_last_post, thread_date, locked, thread_qualify_max) VALUES (1, '".lang2db(get_lang('ExampleThread'))."', 1, 0, 1, '', 0, 1, NOW(), 0, 10)", __FILE__, __LINE__);
+		Database::query("INSERT INTO `$TABLEFORUMTHREADS` (thread_id, thread_title, forum_id, thread_replies, thread_poster_id, thread_poster_name, thread_views, thread_last_post, thread_date, locked, thread_qualify_max) VALUES (1, '".lang2db(get_lang('ExampleThread'))."', 1, 0, 1, '', 0, 1, NOW(), 0, 10)", __FILE__, __LINE__);
 		$insert_id = Database :: get_last_insert_id();
-		api_sql_query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('forum_thread',1,NOW(),NOW(),$insert_id,'ForumThreadAdded',1,0,NULL,1)", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('forum_thread',1,NOW(),NOW(),$insert_id,'ForumThreadAdded',1,0,NULL,1)", __FILE__, __LINE__);
 
-		api_sql_query("INSERT INTO `$TABLEFORUMPOSTS` VALUES (1, '".lang2db(get_lang('ExampleThread'))."', '".lang2db(get_lang('ExampleThreadContent'))."', 1, 1, 1, '', NOW(), 0, 0, 1)", __FILE__, __LINE__);
+		Database::query("INSERT INTO `$TABLEFORUMPOSTS` VALUES (1, '".lang2db(get_lang('ExampleThread'))."', '".lang2db(get_lang('ExampleThreadContent'))."', 1, 1, 1, '', NOW(), 0, 0, 1)", __FILE__, __LINE__);
 
 	}
 
@@ -2334,7 +2334,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 					tutor_name = '".Database :: escape_string($titular) . "',
 					visual_code = '".Database :: escape_string($courseScreenCode) . "'";
 
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		$sort = api_max_sort_value('0', api_get_user_id());
 
@@ -2349,7 +2349,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 					tutor_id='1',
 					sort='". ($i_course_sort) . "',
 					user_course_cat='0'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		if (count($teachers)>0) {
 			foreach ($teachers as $key) {
@@ -2361,7 +2361,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 					tutor_id='0',
 					sort='". ($sort +1) . "',
 					user_course_cat='0'";
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 			}
 		}
 		//adding the course to an URL

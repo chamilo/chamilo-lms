@@ -75,7 +75,7 @@ class TestUserInfoLib extends UnitTestCase {
 		$userId=1;
 		$catId=1;
 		$sql = "SELECT	1";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql,__FILE__,__LINE__);
 		$catContent = Database::fetch_array($result);
 		$res=get_cat_content($userId, $catId);
 		$this->assertTrue(is_array($catContent));

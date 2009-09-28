@@ -46,7 +46,7 @@ class TestSurvey extends UnitTestCase {
 		$my_course_info=api_get_course_info($my_course_id);
 		$table_survey = Database :: get_course_table(TABLE_SURVEY, $my_course_info['dbName']);
 		$sql = "SELECT * FROM $table_survey WHERE survey_id='".Database::escape_string($survey_id)."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$instans->expectCallCount($table_survey);
 		$this->assertTrue(is_array($res));
 		$this->assertFalse($result);
@@ -81,11 +81,11 @@ class TestSurvey extends UnitTestCase {
 		$instans->expectCallCount(Database::get_main_table(TABLE_MAIN_SHARED_SURVEY));
 		if(!$values['survey_id'] OR !is_numeric($values['survey_id']) OR $values['survey_share']['survey_share'] == 'true') {
 			$sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, template, intro, surveythanks, creation_date, course_code)";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			$return	= Database::insert_id();
 		}else{
 			$sql = "UPDATE $table_survey SET";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			$return	= $values['survey_share']['survey_share'];
 		}
 		$res = $this->smanager->store_shared_survey($values);
@@ -118,7 +118,7 @@ class TestSurvey extends UnitTestCase {
 		$instans->expectCallCount(Database::get_course_table(TABLE_SURVEY));
 		$sql = "SELECT * from $table_survey_question_group " .
 			   "WHERE survey_id='".$parent_survey."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$res = $this->smanager->copy_survey($parent_survey,$new_survey_id);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res);
@@ -154,7 +154,7 @@ class TestSurvey extends UnitTestCase {
 		$instans->expectCallCount($table_survey);
 		$instans->expectCallCount(count($table_survey_invitation));
 		$sql = "UPDATE $table_survey_invitation SET answered='1' WHERE session_id='".api_get_session_id()."' AND user='".Database::escape_string($user)."' AND survey_code='".Database::escape_string($survey_code)."'";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$result = $this->smanager->update_survey_answered($survey_id, $user, $survey_code);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
@@ -192,7 +192,7 @@ class TestSurvey extends UnitTestCase {
 		$tbl_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 		$sql = "SELECT * FROM $tbl_survey_question WHERE question_id='".Database::escape_string($question_id)."' ORDER BY `sort`";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = Database::fetch_array($result,'ASSOC');
 		$res = $this->smanager->get_question($question_id,$shared);
 		$this->assertTrue($res);
@@ -207,7 +207,7 @@ class TestSurvey extends UnitTestCase {
 		$tbl_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 		$sql = "SELECT * FROM $tbl_survey_question WHERE survey_id='".Database::escape_string($survey_id)."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = Database::fetch_array($result,'ASSOC');
 		$res= $this->smanager->get_questions($survey_id);
 		$get_questions->expectCallCount($result);
@@ -249,7 +249,7 @@ class TestSurvey extends UnitTestCase {
 		$survey_question_id=01;
 		$survey_id=1;
 		/*$sql = "SELECT * FROM $table_survey_question WHERE survey_id='".Database::escape_string($survey_id)."' ORDER BY sort $sort";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		*/
 		$res = $this->smanager->move_survey_question($direction,$survey_question_id,$survey_id);
 		$this->assertTrue(is_null($res));
@@ -262,7 +262,7 @@ class TestSurvey extends UnitTestCase {
 		$survey_id=1;
 		$shared=false;
 		$sql = "DELETE from $table_survey_question WHERE survey_id='".Database::escape_string($survey_id)."'";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$result = $this->smanager->delete_all_survey_questions($survey_id,$shared);
 		$instans->expectOnce($res);
 		$this->assertTrue(is_null($result));
@@ -279,7 +279,7 @@ class TestSurvey extends UnitTestCase {
 		$question_id=01;
 		$shared=false;
 		$sql = "DELETE from $table_survey_question WHERE survey_id='".Database::escape_string($survey_id)."' AND question_id='".Database::escape_string($question_id)."'";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$instans->expectOnce($res);
 		$result = $this->smanager->delete_survey_question($survey_id,$question_id);
 		$this->assertTrue(is_null($result));
@@ -321,7 +321,7 @@ class TestSurvey extends UnitTestCase {
 		$survey_data=array('');
 		$table_survey_question_option 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
 		$sql = "DELETE FROM $table_survey_question_option WHERE question_id = '".Database::escape_string($form_content['shared_question_id'])."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$instans->expectCallCount($result);
 		$res = $this->smanager->save_shared_question_options($form_content,$survey_data);
 		$this->assertTrue(is_bool($result));
@@ -338,7 +338,7 @@ class TestSurvey extends UnitTestCase {
 		$survey_id=1;
 		$shared=false;
 		$sql = "DELETE from $table_survey_question_option WHERE survey_id='".Database::escape_string($survey_id)."'";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$result = $this->smanager->delete_all_survey_questions_options($survey_id,$shared);
 		$instans->expectCallCount($res);
 		$this->assertTrue($result);
@@ -355,7 +355,7 @@ class TestSurvey extends UnitTestCase {
 		$shared=false;
 		$table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 		$sql = "DELETE from $table_survey_question_option WHERE survey_id='".Database::escape_string($survey_id)."' AND question_id='".Database::escape_string($question_id)."'";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$instans->expectOnce($res);
 		$instans->expectCallCount($res);
 		$result = $this->smanager->delete_survey_question_option($survey_id,$question_id,$shared);
@@ -394,7 +394,7 @@ class TestSurvey extends UnitTestCase {
 		$table_user	= Database :: get_main_table('user');
 		$survey_data = survey_manager::get_survey($survey_id);
 		$sql = "SELECT DISTINCT user FROM $table_survey_answer WHERE survey_id= '".Database::escape_string($survey_data['survey_id'])."'";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$instans->expectCallCount($table_user);
 		$result = $this->smanager->get_people_who_filled_survey($survey_id,$all_user_info);
 		$this->assertTrue(is_array($result));

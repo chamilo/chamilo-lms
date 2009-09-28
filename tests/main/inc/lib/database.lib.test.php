@@ -41,7 +41,7 @@ class TestDatabase extends UnitTestCase {
 
 	public function testFetchArray() {
 		$sql = 'select 1';
-		$res=api_sql_query($sql,__FILE__,__LINE__);
+		$res=Database::query($sql,__FILE__,__LINE__);
 		$resu=$this->dbase->fetch_array($res);
 		$this->assertTrue(is_array($resu));
 		$this->assertFalse(is_null($resu));
@@ -49,21 +49,21 @@ class TestDatabase extends UnitTestCase {
 
 	public function testFetchArrayError() {
 		$sql ="SELECT  1";
-		$res=api_sql_query($sql,__FILE__,__LINE__);
+		$res=Database::query($sql,__FILE__,__LINE__);
 		$resu=$this->dbase->fetch_array($res);
 		$this->assertTrue(is_array($resu));
 	}
 
 	function testFetchObject() {
 		$sql ="SELECT  1";
-		$res=api_sql_query($sql,__FILE__,__LINE__);
+		$res=Database::query($sql,__FILE__,__LINE__);
 		$resu=$this->dbase->fetch_object($res);
 		$this->assertTrue(is_object($resu));
 	}
 
 	function testFetchRow() {
 		$sql ="SELECT  1";
-		$res=api_sql_query($sql,__FILE__,__LINE__);
+		$res=Database::query($sql,__FILE__,__LINE__);
 		$resu=$this->dbase->fetch_row($res);
 		$this->assertTrue(is_array($resu));
 	}

@@ -108,7 +108,7 @@ class TestStatistics extends UnitTestCase{
 	public function testGetNumberOfActivities(){
 		$activitis = new MockDatabase();
 		$sql = "SELECT count(default_id) AS total_number_of_items FROM $track_e_default ";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$obj = Database::fetch_object($res);
 		$resu = Statistics::get_number_of_activities();
 		$this->assertTrue(is_numeric($resu));
@@ -134,7 +134,7 @@ class TestStatistics extends UnitTestCase{
 					default_date 	as col4
 				FROM $track_e_default track_default, $table_user user
 				WHERE track_default.default_user_id = user.user_id ";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$row = Database::fetch_row($res);
 		$resu = Statistics::get_activities_data($from, $number_of_items, $column, $direction);
     	$this->assertTrue(is_array($resu));
@@ -195,7 +195,7 @@ class TestStatistics extends UnitTestCase{
     	}else{
     	$sql = "SELECT DATE_FORMAT( login_date, '%a' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table." GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
     	}
-    	$res = api_sql_query($sql,__FILE__,__LINE__);
+    	$res = Database::query($sql,__FILE__,__LINE__);
     	$obj = Database::fetch_object($res);
     	$result[$obj->stat_date] = $obj->number_of_logins;
     	$login_stats[] = $result;
@@ -214,7 +214,7 @@ class TestStatistics extends UnitTestCase{
     	$total_logins = array();
     	$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
     	$query[get_lang('Total')] 	 = "SELECT count(login_user_id) AS number  FROM $table";
-      	$res = api_sql_query($query,__FILE__,__LINE__);
+      	$res = Database::query($query,__FILE__,__LINE__);
     	$obj = Database::fetch_object($res);
     	$total_logins[] = $obj->number;
     	$res = Statistics::print_recent_login_stats();
@@ -232,7 +232,7 @@ class TestStatistics extends UnitTestCase{
     	$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 		$tools = array('announcement','assignment','calendar_event','chat','conference','course_description','document','dropbox','group','learnpath','link','quiz','student_publication','user','bb_forum');
 		$sql = "SELECT access_tool, count( access_id ) AS number_of_logins FROM $table WHERE access_tool IN ('".implode("','",$tools)."') GROUP BY access_tool ";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$result = array();
 		$obj = Database::fetch_object($res);
 		$result[$obj->access_tool] = $obj->number_of_logins;
@@ -249,7 +249,7 @@ class TestStatistics extends UnitTestCase{
     	$instans = new MockDatabase();
     	$table = Database::get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT course_language, count( code ) AS number_of_courses FROM $table GROUP BY course_language ";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$result = array();
 		$obj = Database::fetch_object($res);
 		$result[$obj->course_language] = $obj->number_of_courses;
@@ -267,7 +267,7 @@ class TestStatistics extends UnitTestCase{
     	$instans = new MockDatabase();
     	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
     	$sql = "SELECT COUNT(*) AS n FROM $user_table";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$count1 = Database::fetch_object($res);
     	$instans_print[]= $count1;
     	$instans->expectOnce($instans_print);

@@ -587,7 +587,7 @@ class TestMainApi extends UnitTestCase {
 	function testApiGetLanguageIsocode(){
 		$query='';
 		$sql= true;
-		$var=api_sql_query($sql,_FILE_,_LINE_);
+		$var=Database::query($sql,_FILE_,_LINE_);
 		$res=api_get_language_isocode($query);
 		$this->assertTrue(is_string($query));
 		$this->assertTrue(isset($var));

@@ -84,7 +84,7 @@ class TestCalendar extends UnitTestCase {
  		$id=1;
  		$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
  		$sql= "SELECT * FROM ".$TABLEAGENDA." WHERE id='".$id."'";
- 		$sql_result = api_sql_query($sql,__FILE__,__LINE__);
+ 		$sql_result = Database::query($sql,__FILE__,__LINE__);
  		$result= Database::fetch_array($result);
  		$real_list[] = $result;
  		$res = get_agenda_item($id);
@@ -182,7 +182,7 @@ class TestCalendar extends UnitTestCase {
 		global $is_courseAdmin;
 		global $dateFormatLong, $timeNoSecFormat,$charset, $_user, $_course;
  		$sql = "SELECT * FROM ".$TABLEAGENDA.' ORDER BY start_date '.$_SESSION['sort'];
- 		$result=api_sql_query($sql,__FILE__,__LINE__);
+ 		$result=Database::query($sql,__FILE__,__LINE__);
  		$real_display[] = $result;
  		$res = display_agenda_items();
  		ob_end_clean();
@@ -211,7 +211,7 @@ class TestCalendar extends UnitTestCase {
 		$agenda_id=2;
 		$agenda_id=Database::escape_string($agenda_id);
  		$sql = "SELECT *	FROM ".$TABLEAGENDA;
- 		$sql_result=api_sql_query($sql,__FILE__,__LINE__);
+ 		$sql_result=Database::query($sql,__FILE__,__LINE__);
  		$myrow=Database::fetch_array($sql_result);
  		$real_display_one[]= $$myrow;
  		//$res = display_one_agenda_item($agenda_id);
@@ -263,7 +263,7 @@ class TestCalendar extends UnitTestCase {
 						AND YEAR(start_date)='".$year."'
 						GROUP BY id
 						ORDER BY start_date ";
- 		 $sql_result = api_sql_query($sqlquery, __FILE__, __LINE__);
+ 		 $sql_result = Database::query($sqlquery, __FILE__, __LINE__);
  		 $result = Database::fetch_array($sql_result);
  		 $real_get_agenda[] = $result;
  		 $res = get_agendaitems($month, $year);
@@ -283,7 +283,7 @@ class TestCalendar extends UnitTestCase {
 		 				DISTINCT *
 		 				FROM ".$TABLEAGENDA."
 		 				ORDER BY start_date ";
-		 $result = api_sql_query($sqlquery, __FILE__, __LINE__);
+		 $result = Database::query($sqlquery, __FILE__, __LINE__);
 		 $resultado = Database::fetch_array($result,'ASSOC');
 		 $real_display[] = $resultado;
 		 $res = display_upcoming_events();
@@ -348,7 +348,7 @@ class TestCalendar extends UnitTestCase {
 										DAYOFMONTH(start_date)='".$day."' AND MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
 										GROUP BY agenda.id
 										ORDER BY start_date ";
-		$result = api_sql_query($sqlquery, __FILE__, __LINE__);
+		$result = Database::query($sqlquery, __FILE__, __LINE__);
 		$item = Database::fetch_array($result);
 		$real_get_day[] = $item;
  		$res = get_day_agendaitems($courses_dbs, $month, $year, $day);
@@ -370,7 +370,7 @@ class TestCalendar extends UnitTestCase {
  		$year='';
  		$week = '';
 		$sqlquery = "SELECT DISTINCT * FROM ".$TABLEAGENDA." ORDER BY start_date";
-		$result = api_sql_query($sqlquery, __FILE__, __LINE__);
+		$result = Database::query($sqlquery, __FILE__, __LINE__);
 		$item = Database::fetch_array($result);
 		$real_get_week[]= $item;
 		$res = get_week_agendaitems($courses_dbs, $month, $year, $week);
@@ -403,7 +403,7 @@ class TestCalendar extends UnitTestCase {
             .(!empty($params['conditions'])?$params['conditions']:'')
             .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
             .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
-        $res = api_sql_query($sql,__FILE__,__LINE__);
+        $res = Database::query($sql,__FILE__,__LINE__);
 		$row = Database::fetch_array($res);
 		$real_get_repeat[] = $row;
 		$resul = get_repeated_events_day_view($course_info,$start,$end,$params);
@@ -429,7 +429,7 @@ class TestCalendar extends UnitTestCase {
             .(!empty($params['conditions'])?$params['conditions']:'')
             .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
             .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
  		$row = Database::fetch_array($res);
  		$real_get_repeated[] = $row;
  		$resul = get_repeated_events_week_view($course_info,$start,$end,$params);
@@ -460,7 +460,7 @@ class TestCalendar extends UnitTestCase {
             .(!empty($params['conditions'])?$params['conditions']:'')
             .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
             .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$row = Database::fetch_array($res);
 		$real_get_repeated[] =  $row;
 		$resul= get_repeated_events_month_view($course_info,$start,$end,$params);
@@ -493,7 +493,7 @@ class TestCalendar extends UnitTestCase {
             .(!empty($params['conditions'])?$params['conditions']:'')
             .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
             .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$row = Database::fetch_array($res);
 		$real_get_repeated_events[] = $row;
 		$resul = get_repeated_events_list_view($course_info,$start,$end,$params);
@@ -570,10 +570,10 @@ class TestCalendar extends UnitTestCase {
     	$end_date   = Database::escape_string($db_end_date);
     	$sql = "SELECT * FROM $t_agenda WHERE title='$title' AND content = '$content' AND start_date = '$start_date'
     		    AND end_date = '$end_date' ".(!empty($parent_id)? "AND parent_event_id = '$parent_id'":"");
-    	$result = api_sql_query($sql,__FILE__,__LINE__);
+    	$result = Database::query($sql,__FILE__,__LINE__);
     	$sql1 = "INSERT INTO ".$t_agenda."(title,content, start_date, end_date)VALUES
                 ('".$title."','".$content."', '".$start_date."','".$end_date."')";
- 		$result1 = api_sql_query($sql1,__FILE__,__LINE__);
+ 		$result1 = Database::query($sql1,__FILE__,__LINE__);
  		$real_agenda[]= $result;
  		$real_agenda1[]= $result1;
  		//$res = agenda_add_item($course_info, $title, $content, $db_start_date, $db_end_date, $to, $parent_id);
@@ -600,7 +600,7 @@ class TestCalendar extends UnitTestCase {
 			  WHERE MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
 			  GROUP BY id ".
 			 "ORDER BY  start_date ";
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 		$row=Database::fetch_array($result);
  		$res = get_calendar_items($month, $year);
  		$real_get_calendar[]= $row;

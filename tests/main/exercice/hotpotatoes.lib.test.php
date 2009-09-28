@@ -160,7 +160,7 @@ class TestHotpotatoes extends UnitTestCase {
 		$comment='testing this function';
 		$comment = Database::escape_string($comment);
 		$query = "UPDATE $dbTable set comment='$comment' where path='$path'";
-		$result = api_sql_query($query,__FILE__,__LINE__);
+		$result = Database::query($query,__FILE__,__LINE__);
 		$res=SetComment($path,$comment);
 		$this->assertTrue(is_string($res));
 		//var_dump($resu);

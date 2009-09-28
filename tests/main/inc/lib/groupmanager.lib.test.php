@@ -154,7 +154,7 @@ class TestGroupManager extends UnitTestCase {
 		$group_id='';
 		$course_db = '';
 		$sql = "SELECT 1 ";
-		$res = api_sql_query($sql);
+		$res = Database::query($sql);
 		$cat = Database::fetch_array($res);
 		$resu = GroupManager::get_category_from_group($group_id,$course_code);
 		$this->assertTrue(is_bool($resu));

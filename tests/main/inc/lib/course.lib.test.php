@@ -163,7 +163,7 @@ class TestCourse extends UnitTestCase{
 		$realgrouplist = new MockDatabase();
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $course_table WHERE target_course_code IS NULL";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
 		$real_course_list[] = $result;
 		$this->courseManager = new CourseManager();
@@ -176,7 +176,7 @@ class TestCourse extends UnitTestCase{
 	public function testGetVirtualCourseList(){
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $course_table WHERE target_course_code IS NOT NULL";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
 		$virtual_course_list[] = $result;
 		$res=$this->tcourse->get_virtual_course_list();

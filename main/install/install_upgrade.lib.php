@@ -28,6 +28,9 @@ define("SETTING_CURRENT_DATA_FILENAME", "setting_current_data.csv");
 define("COURSES_HTACCESS_FILENAME", "htaccess.dist");
 define("DOKEOS_CONFIG_FILENAME", "configuration.dist.php");
 
+// Added by Ivan Tcholakov, 29-SEP-2009.
+require_once '../inc/lib/database.lib.php';
+
 /*
 ==============================================================================
 		DATABASE FUNCTIONS

@@ -53,7 +53,7 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 
 if (!api_is_platform_admin()) {
 	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-	$rs = api_sql_query($sql,__FILE__,__LINE__);
+	$rs = Database::query($sql,__FILE__,__LINE__);
 	if(Database::result($rs,0,0)!=$_user['user_id']) {
 		api_not_allowed(true);
 	}
@@ -93,7 +93,7 @@ function search_users($needle,$type)
 		$id_session = Database::escape_string($id_session);
 			// check id_user from session_rel_user table
 			$sql = 'SELECT id_user FROM '.$tbl_session_rel_user.' WHERE id_session ="'.(int)$id_session.'"';
-			$res = api_sql_query($sql,__FILE__,__LINE__);
+			$res = Database::query($sql,__FILE__,__LINE__);
 			$user_ids = array();
 			if (Database::num_rows($res) > 0) {
 				while ($row = Database::fetch_row($res)) {
@@ -143,7 +143,7 @@ function search_users($needle,$type)
 			}
 		}
 
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql, __FILE__, __LINE__);
         $i=0;
 		if ($type=='single') {
 			while ($user = Database :: fetch_array($rs)) {
@@ -264,7 +264,7 @@ Display::display_header($tool_name);
 
 $nosessionUsersList = $sessionUsersList = array();
 /*$sql = 'SELECT COUNT(1) FROM '.$tbl_user;
-$rs = api_sql_query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql, __FILE__, __LINE__);
 $count_courses = Database::result($rs, 0, 0);*/
 $ajax_search = $add_type == 'unique' ? true : false;
 global $_configuration;
@@ -292,7 +292,7 @@ if ($ajax_search) {
 				$order_clause";
 		}
 	}
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	$Users=Database::store_result($result);
 	foreach ($Users as $user) {
 		$sessionUsersList[$user['user_id']] = $user ;
@@ -374,7 +374,7 @@ if ($ajax_search) {
 			}
 		}
 
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 		$Users=Database::store_result($result);
 		//var_dump($_REQUEST['id_session']);
 		foreach ($Users as $user) {
@@ -407,7 +407,7 @@ if ($ajax_search) {
 				$order_clause";
 			}
 		}
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	$Users=Database::store_result($result);
 
 	foreach($Users as $key_user_list =>$value_user_list) {

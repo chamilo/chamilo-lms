@@ -88,7 +88,7 @@ function search_courses($needle, $id)
 				)
 				ORDER BY title, code
 				LIMIT 11';
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql, __FILE__, __LINE__);
         $i=0;
 		while ($course = Database :: fetch_array($rs)) {
 			$i++;
@@ -197,7 +197,7 @@ if($ajax_search) {
 	$sql="SELECT code, title
 	  	  	FROM $tbl_course u
 			ORDER BY title, code";
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	$courses=Database::store_result($result);
 	$course_list_leys = array_keys($course_list);
 	foreach($courses as $course) {

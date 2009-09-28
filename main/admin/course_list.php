@@ -59,7 +59,7 @@ function get_number_of_courses()
     		$sql.= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();
     }
 
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	$obj = Database::fetch_object($res);
 	return $obj->total_number_of_items;
 }
@@ -104,7 +104,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
 
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	$courses = array ();
 	while ($course = Database::fetch_row($res))
 	{

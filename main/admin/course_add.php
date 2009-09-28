@@ -71,7 +71,7 @@ if ($_configuration['multiple_access_urls']==true){
 			ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
 }
 
-$res = api_sql_query($sql,__FILE__,__LINE__);
+$res = Database::query($sql,__FILE__,__LINE__);
 $teachers = array();
 $teachers[0] = '-- '.get_lang('NoManager').' --';
 while($obj = mysql_fetch_object($res))
@@ -183,7 +183,7 @@ if( $form->validate()) {
 		fill_Db_course($currentCourseDbName, $currentCourseRepository, $course_language,$pictures_array);
 		register_course($currentCourseId, $currentCourseCode, $currentCourseRepository, $currentCourseDbName, $tutor_name, $category, $title, $course_language, $teacher_id, $expiration_date,$course_teachers);
 		$sql = "UPDATE $table_course SET disk_quota = '".$disk_quota."', visibility = '".mysql_real_escape_string($course['visibility'])."', subscribe = '".mysql_real_escape_string($course['subscribe'])."', unsubscribe='".mysql_real_escape_string($course['unsubscribe'])."' WHERE code = '".$currentCourseId."'";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 		header('Location: course_list.php');
 		exit ();
 	}

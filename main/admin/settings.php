@@ -89,7 +89,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 	$my_category = mysql_real_escape_string($_GET['category']);
 
 	$sqlcountsettings = "SELECT COUNT(*) FROM $table_settings_current WHERE category='".$my_category."' AND type<>'checkbox'";
-	$resultcountsettings = api_sql_query($sqlcountsettings, __FILE__, __LINE__);
+	$resultcountsettings = Database::query($sqlcountsettings, __FILE__, __LINE__);
 	$countsetting = mysql_fetch_array($resultcountsettings);
 
 	if ($_configuration['access_url']==1)
@@ -127,7 +127,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 
 	//print_r($settings_by_access_list);echo '</pre>';
 	//$sqlsettings = "SELECT DISTINCT * FROM $table_settings_current WHERE category='$my_category' GROUP BY variable ORDER BY id ASC";
-	//$resultsettings = api_sql_query($sqlsettings, __FILE__, __LINE__);
+	//$resultsettings = Database::query($sqlsettings, __FILE__, __LINE__);
 	//while ($row = mysql_fetch_array($resultsettings))
 	$default_values = array();
 	foreach($settings as $row) {
@@ -242,7 +242,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 				//1. we collect all the options of this variable
 				$sql = "SELECT * FROM settings_current WHERE variable='".$row['variable']."' AND access_url =  1";
 
-				$result = api_sql_query($sql, __FILE__, __LINE__);
+				$result = Database::query($sql, __FILE__, __LINE__);
 				$group = array ();
 				while ($rowkeys = Database::fetch_array($result)) {
  					if ($rowkeys['variable'] == 'course_create_active_tools' && $rowkeys['subkey'] == 'enable_search') {continue;}
@@ -252,7 +252,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 						$access_url = $_configuration['access_url'];
 						if(empty($access_url )) $access_url =1;
 						$sql = "SELECT selected_value FROM settings_current WHERE variable='".$rowkeys['variable']."' AND subkey='".$rowkeys['subkey']."'  AND  subkeytext='".$rowkeys['subkeytext']."' AND access_url =  $access_url";
-						$result_access = api_sql_query($sql, __FILE__, __LINE__);
+						$result_access = Database::query($sql, __FILE__, __LINE__);
 						$row_access = Database::fetch_array($result_access);
 						if ($row_access['selected_value'] == 'true' && ! $form->isSubmitted()) {
 							$element->setChecked(true);
@@ -289,7 +289,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 		// will be set to false.
 		$r = api_set_settings_category($my_category,'false',$_configuration['access_url']);
 		//$sql = "UPDATE $table_settings_current SET selected_value='false' WHERE category='$my_category' AND type='checkbox'";
-		//$result = api_sql_query($sql, __FILE__, __LINE__);
+		//$result = Database::query($sql, __FILE__, __LINE__);
 		// Save the settings
 		$keys = array();
 		foreach ($values as $key => $value)
@@ -297,7 +297,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 			if (!is_array($value))
 			{
 				//$sql = "UPDATE $table_settings_current SET selected_value='".mysql_real_escape_string($value)."' WHERE variable='$key'";
-				//$result = api_sql_query($sql, __FILE__, __LINE__);
+				//$result = Database::query($sql, __FILE__, __LINE__);
 
 				if (api_get_setting($key) != $value) $keys[] = $key;
 
@@ -308,7 +308,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 			{
 
 				$sql = "SELECT subkey FROM $table_settings_current WHERE variable = '$key'";
-				$res = api_sql_query($sql,__FILE__,__LINE__);
+				$res = Database::query($sql,__FILE__,__LINE__);
 				$subkeys = array();
 				while ($row_subkeys = Database::fetch_array($res)) {
 					// if subkey is changed
@@ -323,7 +323,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 				{
 
 					//$sql = "UPDATE $table_settings_current SET selected_value='true' WHERE variable='$key' AND subkey = '$subkey'";
-					//$result = api_sql_query($sql, __FILE__, __LINE__);
+					//$result = Database::query($sql, __FILE__, __LINE__);
 
 					$result = api_set_setting($key,'true',$subkey,null,$_configuration['access_url']);
 
@@ -378,7 +378,7 @@ $action_images['search']        = 'search.gif';
 
 // grabbing the categories
 //$selectcategories = "SELECT DISTINCT category FROM ".$table_settings_current." WHERE category NOT IN ('stylesheets','Plugins')";
-//$resultcategories = api_sql_query($selectcategories, __FILE__, __LINE__);
+//$resultcategories = Database::query($selectcategories, __FILE__, __LINE__);
 $resultcategories = api_get_settings_categories(array('stylesheets','Plugins', 'Templates', 'Search'));
 echo "\n<div class=\"actions\">";
 //while ($row = mysql_fetch_array($resultcategories))
@@ -438,7 +438,7 @@ function get_settings_options($var)
 {
 	$table_settings_options = Database :: get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
 	$sql = "SELECT * FROM $table_settings_options WHERE variable='$var'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	while ($row = Database::fetch_array($result))
 	{
 		$temp_array = array ('value' => $row['value'], 'display_text' => $row['display_text']);
@@ -528,7 +528,7 @@ function handle_plugins()
 
 	/* We retrieve all the active plugins. */
 	//$sql = "SELECT * FROM $table_settings_current WHERE category='Plugins'";
-	//$result = api_sql_query($sql);
+	//$result = Database::query($sql);
 	$result = api_get_settings('Plugins');
 	//while ($row = mysql_fetch_array($result))
 	foreach($result as $row)
@@ -787,7 +787,7 @@ function store_plugins()
 
 	// Step 1 : we remove all the plugins
 	//$sql = "DELETE FROM $table_settings_current WHERE category='Plugins'";
-	//api_sql_query($sql, __LINE__, __FILE__);
+	//Database::query($sql, __LINE__, __FILE__);
 	$r = api_delete_category_settings('Plugins',$_configuration['access_url']);
 
 	// step 2: looping through all the post values we only store these which are really a valid plugin location.
@@ -797,7 +797,7 @@ function store_plugins()
 		if (is_valid_plugin_location($form_name_elements[1]))
 		{
 			//$sql = "INSERT into $table_settings_current (variable,category,selected_value) VALUES ('".$form_name_elements['1']."','Plugins','".$form_name_elements['0']."')";
-			//api_sql_query($sql, __LINE__, __FILE__);
+			//Database::query($sql, __LINE__, __FILE__);
 			api_add_setting($form_name_elements['0'],$form_name_elements['1'],$form_name_elements['0'],null,'Plugins',$form_name_elements['0'],null,null,null,$_configuration['access_url'],1);
 		}
 	}
@@ -841,7 +841,7 @@ function store_stylesheets()
 				WHERE variable = "stylesheets"
 				AND category = "stylesheets"';
 
-		api_sql_query($sql, __LINE__, __FILE__);
+		Database::query($sql, __LINE__, __FILE__);
 		*/
 
 		api_set_setting('stylesheets',$style,null,'stylesheets',$_configuration['access_url']);
@@ -1009,7 +1009,7 @@ function get_number_of_templates()
 
 	// The sql statement
 	$sql = "SELECT COUNT(id) AS total FROM $table_system_template";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	$row = Database::fetch_array($result);
 
 	// returning the number of templates
@@ -1038,7 +1038,7 @@ function get_template_data($from, $number_of_items, $column, $direction)
 	$sql = "SELECT image as col0, title as col1, id as col2 FROM $table_system_template";
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	while ($row = Database::fetch_array($result)) {
 		$row['1'] = get_lang($row['1']);
 		$return[]=$row;
@@ -1125,7 +1125,7 @@ function add_edit_template()
 		// Database table definition
 		$table_system_template = Database :: get_main_table('system_template');
 		$sql = "SELECT * FROM $table_system_template WHERE id = '".Database::escape_string($_GET['id'])."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = Database::fetch_array($result);
 
 		$defaults['template_id'] 	= intval($_GET['id']);
@@ -1223,7 +1223,7 @@ function add_edit_template()
 		   if ($_GET['action'] == 'add') {
 		   		$content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
 			   	$sql = "INSERT INTO $table_system_template (title, content, image) VALUES ('".Database::escape_string($values['title'])."','".$content_template."','".Database::escape_string($new_file_name)."')";
-			   	$result = api_sql_query($sql, __FILE__, __LINE__);
+			   	$result = Database::query($sql, __FILE__, __LINE__);
 
 			   	// display a feedback message
 			   	Display::display_confirmation_message(get_lang('TemplateAdded'));
@@ -1237,7 +1237,7 @@ function add_edit_template()
 			   		$sql .= ", image = '".Database::escape_string($new_file_name)."'";
 			   	}
 			   	$sql .= " WHERE id='".Database::escape_string($_GET['id'])."'";
-			   	$result = api_sql_query($sql, __FILE__, __LINE__);
+			   	$result = Database::query($sql, __FILE__, __LINE__);
 
 			   	// display a feedback message
 			   	Display::display_confirmation_message(get_lang('TemplateEdited'));
@@ -1274,7 +1274,7 @@ function delete_template($id)
 	// first we remove the image
 	$table_system_template = Database :: get_main_table('system_template');
 	$sql = "SELECT * FROM $table_system_template WHERE id = '".Database::escape_string($id)."'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	$row = Database::fetch_array($result);
 	if (!empty($row['image']))
 	{
@@ -1283,7 +1283,7 @@ function delete_template($id)
 
 	// now we remove it from the database
 	$sql = "DELETE FROM $table_system_template WHERE id = '".Database::escape_string($id)."'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 
 	// display a feedback message
 	Display::display_confirmation_message(get_lang('TemplateDeleted'));

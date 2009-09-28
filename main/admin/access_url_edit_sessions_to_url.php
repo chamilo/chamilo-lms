@@ -85,7 +85,7 @@ function search_sessions($needle, $id)
 				WHERE (name LIKE "'.$needle.'%")
 				ORDER BY name, id
 				LIMIT 11';
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql, __FILE__, __LINE__);
         $i=0;
 		while ($session = Database :: fetch_array($rs)) {
 			$i++;
@@ -193,7 +193,7 @@ if($ajax_search) {
 	$sql="SELECT id, name
 	  	  	FROM $tbl_session u
 			ORDER BY name, id";
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	$sessions=Database::store_result($result);
 	$session_list_leys = array_keys($session_list);
 	foreach($sessions as $session) {

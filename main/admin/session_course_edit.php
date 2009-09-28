@@ -36,7 +36,7 @@ $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang("Session
 $interbreadcrumb[]=array('url' => "../admin/resume_session.php?id_session=".Security::remove_XSS($_REQUEST['id_session']),"name" => get_lang('SessionOverview'));
 $interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" =>api_htmlentities($session_name,ENT_QUOTES,$charset));
 
-$result=api_sql_query("SELECT name,title FROM $tbl_session_course,$tbl_session,$tbl_course WHERE id_session=id AND course_code=code AND id_session='$id_session' AND course_code='".addslashes($course_code)."'",__FILE__,__LINE__);
+$result=Database::query("SELECT name,title FROM $tbl_session_course,$tbl_session,$tbl_course WHERE id_session=id AND course_code=code AND id_session='$id_session' AND course_code='".addslashes($course_code)."'",__FILE__,__LINE__);
 
 if (!list($session_name,$course_title)=mysql_fetch_row($result)) {
 	header('Location: session_course_list.php?id_session='.$id_session);
@@ -49,14 +49,14 @@ if ($_POST['formSent']) {
 	$id_coach=intval($_POST['id_coach']);
 
 
-	api_sql_query("UPDATE $tbl_session_course
+	Database::query("UPDATE $tbl_session_course
 				   SET id_coach='$id_coach'
 				   WHERE id_session='$id_session' AND course_code='$course_code'",__FILE__,__LINE__);
 	header('Location: '.$_GET['page'].'?id_session='.$id_session);
 	exit();
 
 }else {
-	$result=api_sql_query("SELECT id_coach FROM $tbl_session_course WHERE id_session='$id_session' AND course_code='$course_code'",__FILE__,__LINE__);
+	$result=Database::query("SELECT id_coach FROM $tbl_session_course WHERE id_session='$id_session' AND course_code='$course_code'",__FILE__,__LINE__);
 
 	if (!$infos=Database::fetch_array($result)) {
 		//header('Location: '.$_GET['page'].'?id_session='.$id_session);
@@ -67,7 +67,7 @@ if ($_POST['formSent']) {
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 $sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
 
-$result=api_sql_query($sql,__FILE__,__LINE__);
+$result=Database::query($sql,__FILE__,__LINE__);
 
 $coaches=Database::store_result($result);
 

@@ -287,7 +287,7 @@ function version_check()
 {
 	$tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 	$sql = 'SELECT selected_value FROM  '.$tbl_settings.' WHERE variable="registered" ';
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	$row=Database::fetch_array($result,'ASSOC');
 
 	// The site has not been registered yet
@@ -338,13 +338,13 @@ function register_site()
 
 	// the SQL statment
 	$sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='registered'";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 
 	//
 	if ($_POST['donotlistcampus'])
 	{
 		$sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='donotlistcampus'";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql,__FILE__,__LINE__);
 	}
 
 	// reload the settings
@@ -367,13 +367,13 @@ function check_dokeos_version2()
 	{
 		// the number of courses
 		$sql="SELECT count(code) FROM ".Database::get_main_table(TABLE_MAIN_COURSE);
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 		$row = Database::fetch_array($result);
 		$number_of_courses = $row[0];
 
 		// the number of users
 		$sql="SELECT count(user_id) FROM ".Database::get_main_table(TABLE_MAIN_USER);
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 		$row = Database::fetch_array($result);
 		$number_of_users = $row[0];
 

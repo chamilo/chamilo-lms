@@ -28,7 +28,7 @@ $page=intval($_GET['page']);
 $action=$_REQUEST['action'];
 $sort=in_array($_GET['sort'],array('title','nbr_users'))?$_GET['sort']:'title';
 
-$result=api_sql_query("SELECT name FROM $tbl_session WHERE id='$id_session'",__FILE__,__LINE__);
+$result=Database::query("SELECT name FROM $tbl_session WHERE id='$id_session'",__FILE__,__LINE__);
 
 if(!list($session_name)=mysql_fetch_row($result))
 {
@@ -45,11 +45,11 @@ if($action == 'delete') {
 		}
 		$idChecked = $my_temp;
 		$idChecked="'".implode("','",$idChecked)."'";
-		api_sql_query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
+		Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
 		$nbr_affected_rows=mysql_affected_rows();
-		api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
+		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
 
-		api_sql_query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
+		Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
 	}
 
 	header('Location: '.api_get_self().'?id_session='.$id_session.'&sort='.$sort);
@@ -59,7 +59,7 @@ if($action == 'delete') {
 $limit=20;
 $from=$page * $limit;
 
-$result=api_sql_query("SELECT code,title,nbr_users FROM $tbl_session_rel_course,$tbl_course WHERE course_code=code AND id_session='$id_session' ORDER BY $sort LIMIT $from,".($limit+1),__FILE__,__LINE__);
+$result=Database::query("SELECT code,title,nbr_users FROM $tbl_session_rel_course,$tbl_course WHERE course_code=code AND id_session='$id_session' ORDER BY $sort LIMIT $from,".($limit+1),__FILE__,__LINE__);
 $Courses=Database::store_result($result);
 $nbr_results=sizeof($Sessions);
 $tool_name = api_htmlentities($session_name,ENT_QUOTES,$charset).' : '.get_lang('CourseListInSession');

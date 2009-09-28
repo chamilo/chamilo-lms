@@ -53,7 +53,7 @@ $tbl_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 $tbl_user 		= Database :: get_main_table(TABLE_MAIN_USER);
 
 $sql = "SELECT name FROM $tbl_class WHERE id='$class_id'";
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 
 if (!list ($class_name) = mysql_fetch_row($result))
 {
@@ -115,10 +115,10 @@ Display :: display_header($tool_name);
 //api_display_tool_title($tool_name);
 $target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
 $sql = "SELECT u.user_id,lastname,firstname,username FROM $tbl_user u LEFT JOIN $tbl_class_user cu ON u.user_id=cu.user_id AND class_id='$class_id' WHERE ".$target_name." LIKE '".$first_letter_left."%' AND class_id IS NULL ORDER BY ". (count($left_user_list) > 0 ? "(user_id IN(".implode(',', $left_user_list).")) DESC," : "")." ".$target_name;
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 $left_users = Database::store_result($result);
 $sql = "SELECT u.user_id,lastname,firstname,username FROM $tbl_user u,$tbl_class_user cu WHERE cu.user_id=u.user_id AND class_id='$class_id' AND ".$target_name." LIKE '".$first_letter_right."%' ORDER BY ". (count($right_user_list) > 0 ? "(user_id IN(".implode(',', $right_user_list).")) DESC," : "")." ".$target_name;
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 $right_users = Database::store_result($result);
 if (!empty ($error_message))
 {

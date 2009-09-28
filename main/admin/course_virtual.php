@@ -225,7 +225,7 @@ function display_create_virtual_course_form()
 									FROM $category_table
 									WHERE auth_course_child ='TRUE'
 									ORDER BY tree_pos";
-			$category_result = api_sql_query($sql_query, __FILE__, __LINE__);
+			$category_result = Database::query($sql_query, __FILE__, __LINE__);
 
 			while ($current_category = mysql_fetch_array($category_result))
 			{

@@ -425,7 +425,7 @@ function store_new_agenda_item()
 					        VALUES
 					        ('".$title."','".$content."', '".$start_date."','".$end_date."')";
 
-	$result = api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
+	$result = Database::query($sql,__FILE__,__LINE__) or die (Database::error());
 	$last_id=Database::insert_id();
 
 	// store in last_tooledit (first the groups, then the users
@@ -531,7 +531,7 @@ function get_agenda_item($id)
     }
     if(empty($id)){return $item;}
 	$sql 					= "SELECT * FROM ".$TABLEAGENDA." WHERE id='".$id."'";
-	$result					= api_sql_query($sql,__FILE__,__LINE__);
+	$result					= Database::query($sql,__FILE__,__LINE__);
 	$entry_to_edit 			= Database::fetch_array($result);
 	$item['title']			= $entry_to_edit["title"];
 	$item['content']		= $entry_to_edit["content"];
@@ -597,7 +597,7 @@ function save_edit_agenda_item($id,$title,$content,$start_date,$end_date)
 									start_date='".$start_date."',
 									end_date='".$end_date."'
 								WHERE id='".$id."'";
-	$result = api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
+	$result = Database::query($sql,__FILE__,__LINE__) or die (Database::error());
 	return true;
 }
 
@@ -625,7 +625,7 @@ function delete_agenda_item($id)
             if(Database::num_rows($res)>0)
             {
                 $sql = "DELETE FROM ".$t_agenda." WHERE id='$id'";
-                $result = api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
+                $result = Database::query($sql,__FILE__,__LINE__) or die (Database::error());
             }
 			api_item_property_update($_course,TOOL_CALENDAR_EVENT,$id,'delete',api_get_user_id());
 			$id=null;
@@ -715,7 +715,7 @@ function display_agenda_items()
 	if (is_allowed_to_edit() && !api_is_anonymous()) {
 		$sql="SELECT * FROM ".$TABLEAGENDA.' ORDER BY start_date '.$_SESSION['sort'];
 		//echo "<pre>".$sql."</pre>";
-		$result=api_sql_query($sql,__FILE__,__LINE__) or die(Database::error());
+		$result=Database::query($sql,__FILE__,__LINE__) or die(Database::error());
 		$number_items=Database::num_rows($result);
 	} else {
 		$number_items = 0;
@@ -981,7 +981,7 @@ function display_one_agenda_item($agenda_id)
 	  --------------------------------------------------*/
 
 	$sql="SELECT *	FROM ".$TABLEAGENDA;
-	$result=api_sql_query($sql,__FILE__,__LINE__) or die(Database::error());
+	$result=Database::query($sql,__FILE__,__LINE__) or die(Database::error());
 	$number_items=Database::num_rows($result);
 	$myrow=Database::fetch_array($result); // there should be only one item so no need for a while loop
 
@@ -1670,7 +1670,7 @@ function get_agendaitems($month, $year)
 		}
 	}
 
-    $result = api_sql_query($sqlquery, __FILE__, __LINE__);
+    $result = Database::query($sqlquery, __FILE__, __LINE__);
 	while ($item = Database::fetch_array($result))
 	{
 		$agendaday = date('j',strtotime($item['start_date']));
@@ -1714,7 +1714,7 @@ function display_upcoming_events()
 						ORDER BY start_date ";
 	//}
 	// if the user is not an administrator of that course
-	$result = api_sql_query($sqlquery, __FILE__, __LINE__);
+	$result = Database::query($sqlquery, __FILE__, __LINE__);
 	$counter = 0;
 	while ($item = Database::fetch_array($result,'ASSOC'))
 	{
@@ -1934,7 +1934,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 	$items = array ();
 
 	// get agenda-items for every course
-	//$query=api_sql_query($sql_select_courses);
+	//$query=Database::query($sql_select_courses);
 	foreach ($courses_dbs as $key => $array_course_info)
 	{
 		//databases of the courses
@@ -1980,7 +1980,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 		//$sqlquery = "SELECT * FROM $agendadb WHERE DAYOFMONTH(day)='$day' AND month(day)='$month' AND year(day)='$year'";
 		//echo "abc";
 		//echo $sqlquery;
-		$result = api_sql_query($sqlquery, __FILE__, __LINE__);
+		$result = Database::query($sqlquery, __FILE__, __LINE__);
 		$portal_url = $_configuration['root_web'];
 		if ($_configuration['multiple_access_urls']==true) {
 			$access_url_id = api_get_current_access_url_id();
@@ -2091,7 +2091,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 		// $sqlquery = "SELECT * FROM $agendadb WHERE (DAYOFMONTH(day)>='$start_day' AND DAYOFMONTH(day)<='$end_day')
 		//				AND (MONTH(day)>='$start_month' AND MONTH(day)<='$end_month')
 		//				AND (YEAR(day)>='$start_year' AND YEAR(day)<='$end_year')";
-		$result = api_sql_query($sqlquery, __FILE__, __LINE__);
+		$result = Database::query($sqlquery, __FILE__, __LINE__);
 
 		$portal_url = $_configuration['root_web'];
 		if ($_configuration['multiple_access_urls']==true) {
@@ -2184,7 +2184,7 @@ function get_repeated_events_day_view($course_info,$start=0,$end=0,$params)
             .(!empty($params['conditions'])?$params['conditions']:'')
             .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
             .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	if(Database::num_rows($res)>0)
 	{
 		while($row = Database::fetch_array($res))
@@ -2305,7 +2305,7 @@ function get_repeated_events_week_view($course_info,$start=0,$end=0,$params)
             .(!empty($params['conditions'])?$params['conditions']:'')
             .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
             .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	if(Database::num_rows($res)>0)
 	{
 		while($row = Database::fetch_array($res))
@@ -2436,7 +2436,7 @@ function get_repeated_events_month_view($course_info,$start=0,$end=0,$params)
             .(!empty($params['conditions'])?$params['conditions']:'')
             .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
             .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	if(Database::num_rows($res)>0)
 	{
 		while($row = Database::fetch_array($res))
@@ -2607,7 +2607,7 @@ function get_repeated_events_list_view($course_info,$start=0,$end=0,$params)
             .(!empty($params['conditions'])?$params['conditions']:'')
             .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
             .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
-    $res = api_sql_query($sql,__FILE__,__LINE__);
+    $res = Database::query($sql,__FILE__,__LINE__);
     if(Database::num_rows($res)>0)
     {
         while($row = Database::fetch_array($res))
@@ -2863,7 +2863,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     // check if exists in calendar_event table
     $sql = "SELECT * FROM $t_agenda WHERE title='$title' AND content = '$content' AND start_date = '$start_date'
     		AND end_date = '$end_date' ".(!empty($parent_id)? "AND parent_event_id = '$parent_id'":"");
-    $result = api_sql_query($sql,__FILE__,__LINE__);
+    $result = Database::query($sql,__FILE__,__LINE__);
     $count = Database::num_rows($result);
     if ($count > 0) {
     	return false;
@@ -2874,7 +2874,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
                             VALUES
                             ('".$title."','".$content."', '".$start_date."','".$end_date."')";
 
-    $result = api_sql_query($sql,__FILE__,__LINE__) or die (Database::error());
+    $result = Database::query($sql,__FILE__,__LINE__) or die (Database::error());
     $last_id=Database::insert_id();
 
     // add a attachment file in agenda
@@ -2951,7 +2951,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
 			WHERE MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
 			GROUP BY id ".
 			"ORDER BY  start_date ";
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 
 		while ($row=Database::fetch_array($result)) {
 			$datum_item=(int)substr($row["start_date"],8,2);

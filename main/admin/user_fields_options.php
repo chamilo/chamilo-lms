@@ -132,7 +132,7 @@ function get_options_data($from, $number_of_items, $column, $direction)
 				id 					AS col2
 			FROM $table_userfields_options WHERE field_id='".Database::escape_string($_GET['field_id'])."' ORDER BY option_order ASC";
 	$sql .= " LIMIT $from,$number_of_items";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	$return = array ();
 	while ($option = Database::fetch_row($res))
 	{
@@ -148,7 +148,7 @@ function get_number_of_options($from=null, $number_of_items=null, $column=null, 
 
 	// The sql statement
 	$sql = "SELECT count(id) as total FROM $table_userfields_options WHERE field_id='".Database::escape_string($_GET['field_id'])."' ";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	$row = Database::fetch_row($res);
 	return $row[0];
 }
@@ -208,7 +208,7 @@ function move_user_field_option($direction,$option_id)
 	$found = false;
 
 	$sql = "SELECT id, option_order FROM $table_userfields_options  WHERE field_id='".Database::escape_string($_GET['field_id'])."' ORDER BY option_order $sortdirection";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	while($row = Database::fetch_array($result))
 	{
 		if ($found)
@@ -228,8 +228,8 @@ function move_user_field_option($direction,$option_id)
 
 	$sql1 = "UPDATE ".$table_userfields_options." SET option_order = '".Database::escape_string($next_order)."' WHERE id =  '".Database::escape_string($this_id)."'";
 	$sql2 = "UPDATE ".$table_userfields_options." SET option_order = '".Database::escape_string($this_order)."' WHERE id =  '".Database::escape_string($next_id)."'";
-	api_sql_query($sql1,__FILE__,__LINE__);
-	api_sql_query($sql2,__FILE__,__LINE__);
+	Database::query($sql1,__FILE__,__LINE__);
+	Database::query($sql2,__FILE__,__LINE__);
 
 	return true;
 }

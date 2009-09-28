@@ -84,7 +84,7 @@ if($_POST['formSent'] )
 
 			}
 		}
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 	}
 	else
 	{
@@ -94,7 +94,7 @@ if($_POST['formSent'] )
 					ON $tbl_user.user_id = $tbl_session.id_coach
 				WHERE id='$session_id'";
 
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql,__FILE__,__LINE__);
 
 	}
 
@@ -157,7 +157,7 @@ if($_POST['formSent'] )
 						ON $tbl_user.user_id = $tbl_session_user.id_user
 						AND $tbl_session_user.id_session = '".$row['id']."'";
 
-			$rsUsers = api_sql_query($sql,__FILE__,__LINE__);
+			$rsUsers = Database::query($sql,__FILE__,__LINE__);
 			$users = '';
 			while($rowUsers = Database::fetch_array($rsUsers)){
 				if($cvs){
@@ -182,7 +182,7 @@ if($_POST['formSent'] )
 						AND $tbl_session_course.id_session = '".$row['id']."'
 					LEFT JOIN $tbl_user
 						ON $tbl_user.user_id = $tbl_session_course.id_coach";
-			$rsCourses = api_sql_query($sql,__FILE__,__LINE__);
+			$rsCourses = Database::query($sql,__FILE__,__LINE__);
 
 			$courses = '';
 			while($rowCourses = Database::fetch_array($rsCourses)){
@@ -205,7 +205,7 @@ if($_POST['formSent'] )
 							AND $tbl_session_course_user.course_code='".$rowCourses['code']."'
 							AND id_session='".$row['id']."'";
 
-				$rsUsersCourse = api_sql_query($sql,__FILE__,__LINE__);
+				$rsUsersCourse = Database::query($sql,__FILE__,__LINE__);
 				while($rowUsersCourse = Database::fetch_array($rsUsersCourse)){
 					if($cvs){
 						$userscourse .= str_replace(';',',',$rowUsersCourse['username']).',';
@@ -270,7 +270,7 @@ if ($_configuration['multiple_access_urls']==true) {
 }
 
 
-$result=api_sql_query($sql,__FILE__,__LINE__);
+$result=Database::query($sql,__FILE__,__LINE__);
 
 $Sessions=Database::store_result($result);
 ?>

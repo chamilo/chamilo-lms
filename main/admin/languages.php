@@ -146,12 +146,12 @@ if ($_POST['Submit'])
 {
 	// changing the name
 	$sql_update = "UPDATE $tbl_admin_languages SET original_name='{$_POST['txt_name']}' WHERE id='{$_POST['edit_id']}'";
-	$result = api_sql_query($sql_update);
+	$result = Database::query($sql_update);
 	// changing the Platform language
 	if ($_POST['platformlanguage'] && $_POST['platformlanguage'] <> '')
 	{
 		//$sql_update_2 = "UPDATE $tbl_settings_current SET selected_value='{$_POST['platformlanguage']}' WHERE variable='platformLanguage'";
-		//$result_2 = api_sql_query($sql_update_2);
+		//$result_2 = Database::query($sql_update_2);
 		api_set_setting('platformLanguage',$_POST['platformlanguage'],null,null,$_configuration['access_url']);
 	}
 }
@@ -168,7 +168,7 @@ elseif (isset($_POST['action']))
 					$ids[] = Database::escape_string($id);
 				}
 				$sql = "UPDATE $tbl_admin_languages SET available='1' WHERE id IN ('".implode("','", $ids)."')";
-				api_sql_query($sql,__FILE__,__LINE__);
+				Database::query($sql,__FILE__,__LINE__);
 			}
 			break;
 		case 'makeunavailable' :
@@ -180,7 +180,7 @@ elseif (isset($_POST['action']))
 					$ids[] = Database::escape_string($id);
 				}
 				$sql = "UPDATE $tbl_admin_languages SET available='0' WHERE id IN ('".implode("','", $ids)."')";
-				api_sql_query($sql,__FILE__,__LINE__);
+				Database::query($sql,__FILE__,__LINE__);
 			}
 			break;
 	}
@@ -209,10 +209,10 @@ echo '<p>'.get_lang('PlatformLanguagesExplanation').'</p>';
 
 // selecting all the languages
 $sql_select = "SELECT * FROM $tbl_admin_languages";
-$result_select = api_sql_query($sql_select);
+$result_select = Database::query($sql_select);
 
 $sql_select_lang = "SELECT * FROM $tbl_settings_current WHERE  category='Languages'";
-$result_select_lang = api_sql_query($sql_select_lang,__FILE__,__LINE__);
+$result_select_lang = Database::query($sql_select_lang,__FILE__,__LINE__);
 $row_lang=Database::fetch_array($result_select_lang);
 
 /*

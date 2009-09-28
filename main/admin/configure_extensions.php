@@ -52,19 +52,19 @@ if(isset($_POST['activeExtension'])){
 					selected_value="true"
 					WHERE variable="service_visio"
 					AND subkey="active"';
-			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql, __FILE__, __LINE__);
 			if(Database::affected_rows()>0)
 			{
 
 				// select all the courses and insert the tool inside
 				$sql = 'SELECT db_name FROM '.Database::get_main_table(TABLE_MAIN_COURSE);
-				$rs = api_sql_query($sql, __FILE__, __LINE__);
+				$rs = Database::query($sql, __FILE__, __LINE__);
 				while($row = Database::fetch_array($rs)){
 					if(!empty($_POST['visio_host']))
 					{
 						$tool_table = Database::get_course_table(TABLE_TOOL_LIST,$row['db_name']);
 						$select = "SELECT id FROM $tool_table WHERE name='".TOOL_VISIO_CONFERENCE."'";
-						$selectres = api_sql_query($select,__FILE__, __LINE__);
+						$selectres = Database::query($select,__FILE__, __LINE__);
 						if(Database::num_rows($selectres)<1)
 						{
 							$sql = 'INSERT INTO '.$tool_table.' SET
@@ -76,10 +76,10 @@ if(isset($_POST['activeExtension'])){
 									address="squaregrey.gif",
 									target="_self",
 									category="interaction"';
-							api_sql_query($sql, __FILE__, __LINE__);
+							Database::query($sql, __FILE__, __LINE__);
 						}
 						$select = "SELECT id FROM $tool_table WHERE name='".TOOL_VISIO_CLASSROOM."'";
-						$selectres = api_sql_query($select,__FILE__, __LINE__);
+						$selectres = Database::query($select,__FILE__, __LINE__);
 						if(Database::num_rows($selectres)<1)
 						{
 							$sql = 'INSERT INTO '.$tool_table.' SET
@@ -91,7 +91,7 @@ if(isset($_POST['activeExtension'])){
 									address="squaregrey.gif",
 									target="_self",
 									category="authoring"';
-							api_sql_query($sql, __FILE__, __LINE__);
+							Database::query($sql, __FILE__, __LINE__);
 						}
 					}
 				}
@@ -102,25 +102,25 @@ if(isset($_POST['activeExtension'])){
 					selected_value="'.Database::escape_string($_POST['visio_host']).'"
 					WHERE variable="service_visio"
 					AND subkey="visio_host"';
-			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql, __FILE__, __LINE__);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.Database::escape_string($_POST['visio_port']).'"
 					WHERE variable="service_visio"
 					AND subkey="visio_port"';
-			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql, __FILE__, __LINE__);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.Database::escape_string($_POST['visio_pass']).'"
 					WHERE variable="service_visio"
 					AND subkey="visio_pass"';
-			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql, __FILE__, __LINE__);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.($_POST['visio_use_rtmpt']=='true'?'true':'false').'"
 					WHERE variable="service_visio"
 					AND subkey="visio_use_rtmpt"';
-			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql, __FILE__, __LINE__);
 
 			if(empty($message))
 			{
@@ -138,7 +138,7 @@ if(isset($_POST['activeExtension'])){
 					WHERE variable="service_ppt2lp"
 					AND subkey="active"';
 
-			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql, __FILE__, __LINE__);
 
 			if(Database::affected_rows()>0){
 				$message = get_lang('ServiceActivated');
@@ -148,37 +148,37 @@ if(isset($_POST['activeExtension'])){
 					selected_value="'.addslashes($_POST['host']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="host"';
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['port']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="port"';
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['ftp_password']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="ftp_password"';
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['user']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="user"';
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['path_to_lzx']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="path_to_lzx"';
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['size']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="size"';
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 
 			break;
 	}
@@ -191,7 +191,7 @@ $listActiveServices = array();
 // get the list of active services
 $sql = 'SELECT variable FROM '.$tbl_settings_current.' WHERE variable LIKE "service_%" AND subkey="active" and selected_value="true"';
 
-$rs = api_sql_query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql, __FILE__, __LINE__);
 while($row = Database::fetch_array($rs)){
 	$listActiveServices[] = $row['variable'];
 }
@@ -315,7 +315,7 @@ Display::display_header($nameTool);
 						{
 							$sql = 'SELECT subkey, selected_value FROM '.$tbl_settings_current.'
 									WHERE variable = "service_visio"';
-							$rs = api_sql_query($sql, __FILE__, __LINE__);
+							$rs = Database::query($sql, __FILE__, __LINE__);
 							while($row = Database::fetch_array($rs,'ASSOC'))
 							{
 								$defaults[$row['subkey']] = $row['selected_value'];
@@ -382,7 +382,7 @@ Display::display_header($nameTool);
 							$sql = 'SELECT subkey, selected_value FROM '.$tbl_settings_current.'
 									WHERE variable = "service_ppt2lp"
 									AND subkey <> "active"';
-							$rs = api_sql_query($sql, __FILE__, __LINE__);
+							$rs = Database::query($sql, __FILE__, __LINE__);
 							while($row = Database::fetch_array($rs,'ASSOC'))
 							{
 								$defaults[$row['subkey']] = $row['selected_value'];

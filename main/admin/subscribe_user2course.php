@@ -162,7 +162,7 @@ if ($_POST['form_sent']) {
 */
 if(empty($first_letter_user)) {
 	$sql = "SELECT count(*) as nb_users FROM $tbl_user";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	$num_row = Database::fetch_array($result);
 	if($num_row['nb_users']>1000)
 	{//if there are too much users to gracefully handle with the HTML select list,
@@ -238,7 +238,7 @@ if ($_configuration['multiple_access_urls']==true) {
 	}
 }
 
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 $db_users = Database::store_result($result);
 unset($result);
 
@@ -256,7 +256,7 @@ if ($_configuration['multiple_access_urls']==true) {
 	}
 }
 
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 $db_courses = Database::store_result($result);
 unset($result);
 

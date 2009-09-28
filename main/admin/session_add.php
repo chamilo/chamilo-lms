@@ -80,7 +80,7 @@ function search_coachs($needle)
 			}
 		}
 
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql, __FILE__, __LINE__);
 		while ($user = Database :: fetch_array($rs)) {
 			$return .= '<a href="javascript: void(0);" onclick="javascript: fill_coach_field(\''.$user['username'].'\')">'.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')</a><br />';
 		}
@@ -159,7 +159,7 @@ if (!empty($return)) {
 <?php
 
 $sql = 'SELECT COUNT(1) FROM '.$tbl_user.' WHERE status=1';
-$rs = api_sql_query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql, __FILE__, __LINE__);
 $count_users = Database::result($rs, 0, 0);
 
 if (intval($count_users)<50) {
@@ -176,7 +176,7 @@ if (intval($count_users)<50) {
 		}
 	}
 
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	$Coaches=Database::store_result($result);
 	?>
 	<select name="coach_username" value="true" style="width:250px;">

@@ -162,7 +162,7 @@ function login_user($user_id) {
     }
 
 	$sql_query = "SELECT * FROM $main_user_table WHERE user_id='$user_id'";
-	$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+	$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 	$result = Database :: fetch_array($sql_result);
 
     // check if the user is allowed to 'login_as'
@@ -309,7 +309,7 @@ function get_number_of_users()
     		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
     }
 
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	$obj = Database::fetch_object($res);
 	return $obj->total_number_of_items;
 }
@@ -398,7 +398,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 
 	$users = array ();
     $t = time();
@@ -547,7 +547,7 @@ function lock_unlock_user($status,$user_id)
 	if(($status_db=='1' OR $status_db=='0') AND is_numeric($user_id))
 	{
 		$sql="UPDATE $user_table SET active='".Database::escape_string($status_db)."' WHERE user_id='".Database::escape_string($user_id)."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 	}
 
 	if ($result)

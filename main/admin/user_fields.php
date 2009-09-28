@@ -337,7 +337,7 @@ function move_user_field($direction,$field_id)
 	$found = false;
 
 	$sql = "SELECT id, field_order FROM $table_user_field ORDER BY field_order $sortdirection";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	while($row = Database::fetch_array($result))
 	{
 		if ($found)
@@ -357,8 +357,8 @@ function move_user_field($direction,$field_id)
 
 	$sql1 = "UPDATE ".$table_user_field." SET field_order = '".Database::escape_string($next_order)."' WHERE id =  '".Database::escape_string($this_id)."'";
 	$sql2 = "UPDATE ".$table_user_field." SET field_order = '".Database::escape_string($this_order)."' WHERE id =  '".Database::escape_string($next_id)."'";
-	api_sql_query($sql1,__FILE__,__LINE__);
-	api_sql_query($sql2,__FILE__,__LINE__);
+	Database::query($sql1,__FILE__,__LINE__);
+	Database::query($sql2,__FILE__,__LINE__);
 
 	return true;
 }
@@ -382,26 +382,26 @@ function delete_user_fields($field_id)
 
 	// delete the fields
 	$sql = "DELETE FROM $table_user_field WHERE id = '".Database::escape_string($field_id)."'";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	if (Database::affected_rows() == 1)
 	{
 		// delete the field options
 		$sql = "DELETE FROM $table_user_field_options WHERE field_id = '".Database::escape_string($field_id)."'";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql,__FILE__,__LINE__);
 
 		// delete the field values
 		$sql = "DELETE FROM $table_user_field_values WHERE field_id = '".Database::escape_string($field_id)."'";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql,__FILE__,__LINE__);
 
 		// recalculate the field_order because the value is used to show/hide the up/down icon
 		// and the field_order value cannot be bigger than the number of fields
 		$sql = "SELECT * FROM $table_user_field ORDER BY field_order ASC";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql,__FILE__,__LINE__);
 		$i = 1;
 		while($row = Database::fetch_array($result))
 		{
 			$sql_reorder = "UPDATE $table_user_field SET field_order = '".Database::escape_string($i)."' WHERE id = '".Database::escape_string($row['id'])."'";
-			$result_reorder = api_sql_query($sql_reorder,__FILE__,__LINE__);
+			$result_reorder = Database::query($sql_reorder,__FILE__,__LINE__);
 			$i++;
 		}
 

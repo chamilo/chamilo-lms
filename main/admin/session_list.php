@@ -133,11 +133,11 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 
 
 
-	$result_rows = api_sql_query($query_rows,__FILE__,__LINE__);
+	$result_rows = Database::query($query_rows,__FILE__,__LINE__);
 	$recorset = Database::fetch_array($result_rows);
 	$num = $recorset['total_rows'];
 
-	$result=api_sql_query($query,__FILE__,__LINE__);
+	$result=Database::query($query,__FILE__,__LINE__);
 	$Sessions=Database::store_result($result);
 	$nbr_results=sizeof($Sessions);
 	$tool_name = get_lang('SessionList');
@@ -214,7 +214,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 			}
 			$sql = 'SELECT COUNT(course_code) FROM '.$tbl_session_rel_course.' WHERE id_session='.intval($enreg['id']);
 
-		  	$rs = api_sql_query($sql, __FILE__, __LINE__);
+		  	$rs = Database::query($sql, __FILE__, __LINE__);
 		  	list($nb_courses) = Database::fetch_array($rs);
 
 		?>

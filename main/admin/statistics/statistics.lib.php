@@ -53,7 +53,7 @@ class Statistics
 		{
 			$sql .= " WHERE category_code = '".Database::escape_string($category_code)."'";
 		}
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$obj = Database::fetch_object($res);
 		return $obj->number;
 	}
@@ -76,7 +76,7 @@ class Statistics
 		{
 			$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = ".intval(Database::escape_string($status))." AND c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."'";
 		}
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$obj = Database::fetch_object($res);
 		return $obj->number;
 	}
@@ -97,7 +97,7 @@ class Statistics
 		$sql .= " AND (user.username LIKE '%".$keyword."%' OR default_event_type LIKE '%".$keyword."%' OR default_value_type LIKE '%".$keyword."%' OR default_value LIKE '%".$keyword."%') ";
 		}
 
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$obj = Database::fetch_object($res);
 		return $obj->total_number_of_items;
 	}
@@ -132,7 +132,7 @@ class Statistics
 		}
 		$sql .=	" LIMIT $from,$number_of_items ";
 
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$activities = array ();
 		while ($row = Database::fetch_row($res)) {
 			$row[4] = api_format_date(DATE_TIME_FORMAT_LONG, strtotime($row[4]));
@@ -149,7 +149,7 @@ class Statistics
 	{
 		$category_table = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 		$sql = "SELECT * FROM $category_table ORDER BY tree_pos";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$categories = array ();
 		while ($category = Database::fetch_object($res))
 		{
@@ -263,7 +263,7 @@ class Statistics
 				$sql = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table." GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
 				break;
 		}
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$result = array();
 		while($obj = Database::fetch_object($res))
 		{
@@ -296,7 +296,7 @@ class Statistics
 		$sql[get_lang('Total')] 	 = "SELECT count(login_user_id) AS number  FROM $table";
 		foreach($sql as $index => $query)
 		{
-			$res = api_sql_query($query,__FILE__,__LINE__);
+			$res = Database::query($query,__FILE__,__LINE__);
 			$obj = Database::fetch_object($res);
 			$total_logins[$index] = $obj->number;
 		}
@@ -314,7 +314,7 @@ class Statistics
 			$tool_names[$tool] = get_lang(ucfirst($tool), '');
 		}
 		$sql = "SELECT access_tool, count( access_id ) AS number_of_logins FROM $table WHERE access_tool IN ('".implode("','",$tools)."') GROUP BY access_tool ";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$result = array();
 		while($obj = Database::fetch_object($res))
 		{
@@ -329,7 +329,7 @@ class Statistics
 	{
 		$table = Database::get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT course_language, count( code ) AS number_of_courses FROM $table GROUP BY course_language ";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$result = array();
 		while($obj = Database::fetch_object($res))
 		{
@@ -344,10 +344,10 @@ class Statistics
 	{
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT COUNT(*) AS n FROM $user_table";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$count1 = Database::fetch_object($res);
 		$sql = "SELECT COUNT(*) AS n FROM $user_table WHERE LENGTH(picture_uri) > 0";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$count2 = Database::fetch_object($res);
 		$result[get_lang('No')] = $count1->n - $count2->n; // #users without picture
 		$result[get_lang('Yes')] = $count2->n; // #users with picture
@@ -421,13 +421,13 @@ class Statistics
 			$date_diff = $values['date_diff'];
 			$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 			$sql = "SELECT * FROM $table GROUP BY access_cours_code HAVING access_cours_code <> '' AND DATEDIFF( NOW() , access_date ) >= ". $date_diff;
-			$res = api_sql_query($sql,__FILE__,__LINE__);
+			$res = Database::query($sql,__FILE__,__LINE__);
 			$number_of_courses = Database::num_rows($res);
 			$sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
 			$from = ($page_nr -1) * $per_page;
 			$sql .= ' LIMIT '.$from.','.$per_page;
 			echo '<p>'.get_lang('LastAccess').' &gt;= '.$date_diff.' '.get_lang('Days').'</p>';
-			$res = api_sql_query($sql, __FILE__, __LINE__);
+			$res = Database::query($sql, __FILE__, __LINE__);
 			if (Database::num_rows($res) > 0)
 			{
 				$courses = array ();

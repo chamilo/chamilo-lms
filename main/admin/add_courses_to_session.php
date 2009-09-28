@@ -51,7 +51,7 @@ if(isset($_GET['add_type']) && $_GET['add_type']!=''){
 
 if (!api_is_platform_admin()) {
 	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-	$rs = api_sql_query($sql,__FILE__,__LINE__);
+	$rs = Database::query($sql,__FILE__,__LINE__);
 	if (Database::result($rs,0,0)!=$_user['user_id']) {
 		api_not_allowed(true);
 	}
@@ -73,7 +73,7 @@ function search_courses($needle,$type)
 		$id_session = Database::escape_string($id_session);
 			// check course_code from session_rel_course table
 			$sql = 'SELECT course_code FROM '.$tbl_session_rel_course.' WHERE id_session ="'.(int)$id_session.'"';
-			$res = api_sql_query($sql,__FILE__,__LINE__);
+			$res = Database::query($sql,__FILE__,__LINE__);
 			$course_codes = '';
 			if (Database::num_rows($res) > 0) {
 				while ($row = Database::fetch_row($res)) {
@@ -125,7 +125,7 @@ function search_courses($needle,$type)
 			}
 		}
 
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql, __FILE__, __LINE__);
 		$course_list = array();
 		if ($type=='single') {
 
@@ -205,17 +205,17 @@ if ($_POST['formSent']) {
 	}
 	$nbr_courses=0;
 
-	$id_coach = api_sql_query("SELECT id_coach FROM $tbl_session WHERE id=$id_session");
+	$id_coach = Database::query("SELECT id_coach FROM $tbl_session WHERE id=$id_session");
 	$id_coach = Database::fetch_array($id_coach);
 	$id_coach = $id_coach[0];
 
-	$rs = api_sql_query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session=$id_session");
+	$rs = Database::query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session=$id_session");
 	$existingCourses = Database::store_result($rs);
 
 	$sql="SELECT id_user
 		FROM $tbl_session_rel_user
 		WHERE id_session = $id_session";
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	$UserList=Database::store_result($result);
 
 
@@ -229,32 +229,32 @@ if ($_POST['formSent']) {
 		}
 		if(!$exists) {
 			$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course(id_session,course_code, id_coach) VALUES('$id_session','$enreg_course','$id_coach')";
-			api_sql_query($sql_insert_rel_course ,__FILE__,__LINE__);
+			Database::query($sql_insert_rel_course ,__FILE__,__LINE__);
 			//We add in the existing courses table the current course, to not try to add another time the current course
 			$existingCourses[]=array('course_code'=>$enreg_course);
 			$nbr_users=0;
 			foreach ($UserList as $enreg_user) {
 				$enreg_user = Database::escape_string($enreg_user['id_user']);
 				$sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')";
-				api_sql_query($sql_insert,__FILE__,__LINE__);
+				Database::query($sql_insert,__FILE__,__LINE__);
 				if(Database::affected_rows()) {
 					$nbr_users++;
 				}
 			}
-			api_sql_query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
+			Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
 		}
 
 	}
 
 	foreach($existingCourses as $existingCourse) {
 		if(!in_array($existingCourse['course_code'], $CourseList)){
-			api_sql_query("DELETE FROM $tbl_session_rel_course WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
-			api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
+			Database::query("DELETE FROM $tbl_session_rel_course WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
+			Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE course_code='".$existingCourse['course_code']."' AND id_session=$id_session");
 
 		}
 	}
 	$nbr_courses=count($CourseList);
-	api_sql_query("UPDATE $tbl_session SET nbr_courses=$nbr_courses WHERE id='$id_session'",__FILE__,__LINE__);
+	Database::query("UPDATE $tbl_session SET nbr_courses=$nbr_courses WHERE id='$id_session'",__FILE__,__LINE__);
 
 	if(isset($_GET['add']))
 		header('Location: add_users_to_session.php?id_session='.$id_session.'&add=true');
@@ -289,7 +289,7 @@ echo '<div class="row"><div class="form_header">'.$tool_name.' ('.$session_info[
 
 
 /*$sql = 'SELECT COUNT(1) FROM '.$tbl_course;
-$rs = api_sql_query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql, __FILE__, __LINE__);
 $count_courses = mysql_result($rs, 0, 0);*/
 
 $ajax_search = $add_type == 'unique' ? true : false;
@@ -320,7 +320,7 @@ if ($ajax_search) {
 		}
 	}
 
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	$Courses=Database::store_result($result);
 
 	foreach($Courses as $course) {
@@ -350,7 +350,7 @@ if ($ajax_search) {
 		}
 	}
 
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	$Courses=Database::store_result($result);
 	foreach($Courses as $course) {
 		if ($course['id_session'] == $id_session) {

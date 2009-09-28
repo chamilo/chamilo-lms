@@ -44,7 +44,7 @@ $sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start
 			ON id_coach = user_id
 		WHERE '.$tbl_session.'.id='.$id_session;
 
-$rs = api_sql_query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql, __FILE__, __LINE__);
 $session = Database::store_result($rs);
 $session = $session[0];
 
@@ -66,32 +66,32 @@ if($_GET['action'] == 'delete')
 
 		$idChecked="'".implode("','",$idChecked)."'";
 
-		api_sql_query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
+		Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
 
 		$nbr_affected_rows=mysql_affected_rows();
 
-		api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
+		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
 
-		api_sql_query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
+		Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
 	}
 
 	if(!empty($_GET['class'])){
-		api_sql_query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".Database::escape_string($_GET['class']),__FILE__,__LINE__);
+		Database::query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".Database::escape_string($_GET['class']),__FILE__,__LINE__);
 
 		$nbr_affected_rows=mysql_affected_rows();
 
-		api_sql_query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
+		Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
 
 	}
 
 	if(!empty($_GET['user'])){
-		api_sql_query("DELETE FROM $tbl_session_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']),__FILE__,__LINE__);
+		Database::query("DELETE FROM $tbl_session_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']),__FILE__,__LINE__);
 		$nbr_affected_rows=mysql_affected_rows();
-		api_sql_query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
+		Database::query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
 
-		api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']),__FILE__,__LINE__);
+		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']),__FILE__,__LINE__);
 		$nbr_affected_rows=mysql_affected_rows();
-		api_sql_query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session'",__FILE__,__LINE__);
+		Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session'",__FILE__,__LINE__);
 	}
 }
 
@@ -184,12 +184,12 @@ else {
 			WHERE course_code=code
 			AND id_session='$id_session'
 			ORDER BY title";
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	$courses=Database::store_result($result);
 	foreach($courses as $course){
 		//select the number of users
 		$sql = 'SELECT COUNT(id_user) as nb_users FROM '.$tbl_session_rel_course_rel_user.' WHERE course_code="'.Database::escape_string($course['code']).'" AND id_session='.intval($id_session);
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql, __FILE__, __LINE__);
 		$course['nbr_users'] = mysql_result($rs,0,0);
 		if (empty($course['username'])) {
 			$coach = get_lang('None');
@@ -242,7 +242,7 @@ else {
 				ON '.$tbl_user.'.user_id = '.$tbl_session_rel_user.'.id_user
 				AND '.$tbl_session_rel_user.'.id_session = '.$id_session.$order_clause;
 
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	$users=Database::store_result($result);
 	$orig_param = '&origin=resume_session&id_session='.$id_session; // change breadcrumb in destination page
 	foreach($users as $user){

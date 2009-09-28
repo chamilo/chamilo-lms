@@ -92,7 +92,7 @@ elseif(!empty($annee) && empty($id_session))
 	$sql = "SELECT id,name,nbr_courses,date_start,date_end " .
 		" FROM $tbl_session ".
 		" ORDER BY name";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 
 	$sessions=Database::store_result($result);
 	$nbr_results=count($sessions);
@@ -184,7 +184,7 @@ elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed']=='yes'))
 			$sql = 'INSERT INTO '.$tbl_session_user.' SET
 					id_user="'.intval($user_id).'",
 					id_session = "'.intval($id_session).'"';
-			$res_user = api_sql_query($sql,__FILE__,__LINE__);
+			$res_user = Database::query($sql,__FILE__,__LINE__);
 			if($res_user != false)
 			{
 				$num++;
@@ -193,7 +193,7 @@ elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed']=='yes'))
 		if($num>0)
 		{
 			$sql = 'UPDATE '.$tbl_session.' SET nbr_users = (nbr_users + '.$num.') WHERE id = '.intval($id_session);
-			$res = api_sql_query($sql,__FILE__,__LINE__);
+			$res = Database::query($sql,__FILE__,__LINE__);
 		}
 		header('Location: resume_session.php?id_session='.Security::remove_XSS($_POST['id_session']));
 	}

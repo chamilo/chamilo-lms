@@ -113,7 +113,7 @@ if ($_POST['form_sent']) {
 /*
 if(empty($first_letter_user)) {
 	$sql = "SELECT count(*) as num_courses FROM $tbl_course";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	$num_row = Database::fetch_array($result);
 	if($num_row['num_courses']>1000)
 	{//if there are too much num_courses to gracefully handle with the HTML select list,
@@ -128,12 +128,12 @@ $sql = "SELECT id, name FROM $tbl_session
 		WHERE name LIKE '".$first_letter_session."%' OR name LIKE '".api_strtolower($first_letter_session)."%'
 		ORDER BY name DESC ";
 
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 $db_sessions = Database::store_result($result);
 unset($result);
 
 $sql = "SELECT id, url FROM $tbl_access_url  WHERE active=1 ORDER BY url";
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 $db_urls = Database::store_result($result);
 unset($result);
 ?>

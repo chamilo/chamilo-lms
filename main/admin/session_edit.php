@@ -27,7 +27,7 @@ $tool_name = get_lang('EditSession');
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
 
-$result=api_sql_query("SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end FROM $tbl_session WHERE id='$id'",__FILE__,__LINE__);
+$result=Database::query("SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end FROM $tbl_session WHERE id='$id'",__FILE__,__LINE__);
 
 if (!$infos=mysql_fetch_array($result)) {
 	header('Location: session_list.php');
@@ -73,7 +73,7 @@ if ($_configuration['multiple_access_urls']==true){
 	}
 }
 
-$result=api_sql_query($sql,__FILE__,__LINE__);
+$result=Database::query($sql,__FILE__,__LINE__);
 
 $Coaches=Database::store_result($result);
 $thisYear=date('Y');

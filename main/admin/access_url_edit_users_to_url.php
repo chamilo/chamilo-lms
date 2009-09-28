@@ -89,7 +89,7 @@ function search_users($needle, $id)
 				$order_clause.
 				' LIMIT 11';
 
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql, __FILE__, __LINE__);
         $i=0;
 
 		while ($user = Database :: fetch_array($rs)) {
@@ -195,7 +195,7 @@ if($ajax_search) {
 	$sql="SELECT u.user_id, lastname, firstname, username
 	  	  	FROM $tbl_user u".
 			$order_clause;
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	$Users=Database::store_result($result);
 	$user_list_leys = array_keys($sessionUsersList);
 	foreach($Users as $user) {

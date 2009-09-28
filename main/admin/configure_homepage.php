@@ -587,7 +587,7 @@ if(!empty($action)) {
 }
 else //if $action is empty, then prepare a list of the course categories to display (?)
 {
-	$result=api_sql_query("SELECT name FROM $tbl_category WHERE parent_id IS NULL ORDER BY tree_pos",__FILE__,__LINE__);
+	$result=Database::query("SELECT name FROM $tbl_category WHERE parent_id IS NULL ORDER BY tree_pos",__FILE__,__LINE__);
 	$Categories=Database::store_result($result);
 }
 

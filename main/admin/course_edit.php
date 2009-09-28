@@ -51,7 +51,7 @@ $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
 //Get the course infos
 $sql = "SELECT * FROM $course_table WHERE code='".Database::escape_string($course_code)."'";
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 if (Database::num_rows($result) != 1)
 {
 	header('Location: course_list.php');
@@ -63,7 +63,7 @@ $course = Database::fetch_array($result,'ASSOC');
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 $sql = "SELECT user.user_id,lastname,firstname FROM $table_user as user,$table_course_user as course_user WHERE course_user.status='1' AND course_user.user_id=user.user_id AND course_user.course_code='".$course_code."'".$order_clause;
-$res = api_sql_query($sql,__FILE__,__LINE__);
+$res = Database::query($sql,__FILE__,__LINE__);
 $course_teachers = array();
 while($obj = Database::fetch_object($res))
 {
@@ -72,7 +72,7 @@ while($obj = Database::fetch_object($res))
 
 // Get all possible teachers without the course teachers
 $sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status='1'".$order_clause;
-$res = api_sql_query($sql,__FILE__,__LINE__);
+$res = Database::query($sql,__FILE__,__LINE__);
 $teachers = array();
 
 $platform_teachers[0] = '-- '.get_lang('NoManager').' --';
@@ -93,7 +93,7 @@ while($obj = Database::fetch_object($res))
 //Case where there is no teacher in the course
 if(count($course_teachers)==0){
 	$sql='SELECT tutor_name FROM '.$course_table.' WHERE code="'.$course_code.'"';
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	$tutor_name=Database::result($res,0,0);
 	$course['tutor_name']=array_search($tutor_name,$platform_teachers);
 }
@@ -222,7 +222,7 @@ if( $form->validate())
 								subscribe = '".Database::escape_string($subscribe)."',
 								unsubscribe='".Database::escape_string($unsubscribe)."'
 							WHERE code='".Database::escape_string($course_code)."'";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	//Delete only teacher relations that doesn't match the selected teachers
 	$cond='';
@@ -230,14 +230,14 @@ if( $form->validate())
 		foreach($teachers as $key) $cond.=" AND user_id<>'".$key."'";
 	}
 	$sql='DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	if(count($teachers)>0){
 		foreach($teachers as $key){
 
 			//We check if the teacher is already subscribed in this course
 			$sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'"';
-			$result = api_sql_query($sql_select_teacher, __FILE__, __LINE__);
+			$result = Database::query($sql_select_teacher, __FILE__, __LINE__);
 
 			if(Database::num_rows($result) == 1){
 				$sql = 'UPDATE '.$course_user_table.' SET status = "1" WHERE course_code = "'.$course_code.'" AND user_id = "'.$key.'"';
@@ -252,7 +252,7 @@ if( $form->validate())
 					sort='0',
 					user_course_cat='0'";
 			}
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 
 		}
 
@@ -266,7 +266,7 @@ if( $form->validate())
 				tutor_id='0',
 				sort='0',
 				user_course_cat='0'";
-	api_sql_query($sql, __FILE__, __LINE__);
+	Database::query($sql, __FILE__, __LINE__);
 
 	$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE,$course_db_name);
 	$sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."'";

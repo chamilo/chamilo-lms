@@ -118,7 +118,7 @@ if ($_POST['form_sent']) {
 
 if(empty($first_letter_user)) {
 	$sql = "SELECT count(*) as nb_users FROM $tbl_user";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	$num_row = Database::fetch_array($result);
 	if($num_row['nb_users']>1000) {
 		//if there are too much users to gracefully handle with the HTML select list,
@@ -133,12 +133,12 @@ $target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
 $sql = "SELECT user_id,lastname,firstname,username FROM $tbl_user
 	    WHERE ".$target_name." LIKE '".$first_letter_user."%' OR ".$target_name." LIKE '".api_strtolower($first_letter_user)."%'
 		ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." ".$target_name;
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 $db_users = Database::store_result($result);
 unset($result);
 
 $sql = "SELECT id, url FROM $tbl_access_url  WHERE active=1 ORDER BY url";
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 $db_urls = Database::store_result($result);
 unset($result);
 ?>

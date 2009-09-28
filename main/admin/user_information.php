@@ -109,7 +109,7 @@ $tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 
 $user_id = $user['user_id'];
 
-$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
+$result=Database::query("SELECT DISTINCT id, name, date_start, date_end
 							FROM session_rel_user, session
 							WHERE id_session=id AND id_user=$user_id
 							AND (date_start <= NOW() AND date_end >= NOW() OR date_start='0000-00-00')
@@ -118,7 +118,7 @@ $result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
 $sessions=Database::store_result($result);
 
 // get the list of sessions where the user is subscribed as coach in a course
-$result=api_sql_query("SELECT DISTINCT id, name, date_start, date_end
+$result=Database::query("SELECT DISTINCT id, name, date_start, date_end
 						FROM $tbl_session as session
 						INNER JOIN $tbl_session_course as session_rel_course
 							ON session_rel_course.id_coach = $user_id
@@ -156,7 +156,7 @@ if(count($sessions)>0){
 									 WHERE session_course.id_session = $id_session
 									 ORDER BY i";
 
-		$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
+		$course_list_sql_result = Database::query($personal_course_list_sql, __FILE__, __LINE__);
 
 		while ($result_row = Database::fetch_array($course_list_sql_result)){
 			$key = $result_row['id_session'].' - '.$result_row['k'];
@@ -204,7 +204,7 @@ echo '</blockquote>';
  * Show the courses in which this user is subscribed
  */
 $sql = 'SELECT * FROM '.$table_course_user.' cu, '.$table_course.' c WHERE cu.user_id = '.$user['user_id'].' AND cu.course_code = c.code';
-$res = api_sql_query($sql,__FILE__,__LINE__);
+$res = Database::query($sql,__FILE__,__LINE__);
 if (Database::num_rows($res) > 0)
 {
 	$header=array();
@@ -246,7 +246,7 @@ else
 $table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 $table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 $sql = 'SELECT * FROM '.$table_class_user.' cu, '.$table_class.' c WHERE cu.user_id = '.$user['user_id'].' AND cu.class_id = c.id';
-$res = api_sql_query($sql,__FILE__,__LINE__);
+$res = Database::query($sql,__FILE__,__LINE__);
 if (Database::num_rows($res) > 0)
 {
 	$header = array();

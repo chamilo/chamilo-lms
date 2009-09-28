@@ -981,24 +981,23 @@ function api_get_course_info($course_code = null) {
  * Note: Database::query method is preferable for use.
  */
 function api_sql_query($query, $file = '', $line = 0) {
-	$result = @mysql_query($query);
 
-	if ($line && !$result && api_get_setting('server_type') != 'production') {
+	if (!($result = @mysql_query($query)) && $line && api_get_setting('server_type') != 'production') {
+		$security_ok = class_exists('Security') && class_exists('HTMLPurifier');
+		$error = Database::error();
 		$info = '<pre>';
-		$info .= '<b>DATABASE ERROR :</b><br /> ';
-		$info .= Security::remove_XSS(Database::error());
+		$info .= '<strong>DATABASE ERROR :</strong><br /> ';
+		$info .= $security_ok ? Security::remove_XSS($error) : api_htmlentities($error, ENT_QUOTES);
 		$info .= '<br />';
-		$info .= '<b>QUERY       :</b><br /> ';
-		$info .= Security::remove_XSS($query);
+		$info .= '<strong>QUERY       :</strong><br /> ';
+		$info .= $security_ok ? Security::remove_XSS($query) : api_htmlentities($query, ENT_QUOTES);
 		$info .= '<br />';
-		$info .= '<b>FILE        :</b><br /> ';
+		$info .= '<strong>FILE        :</strong><br /> ';
 		$info .= ($file == '' ? ' unknown ' : $file);
 		$info .= '<br />';
-		$info .= '<b>LINE        :</b><br /> ';
+		$info .= '<strong>LINE        :</strong><br /> ';
 		$info .= ($line == 0 ? ' unknown ' : $line);
 		$info .= '</pre>';
-		//@ mysql_close();
-		//die($info);
 		echo $info;
 	}
 	return $result;

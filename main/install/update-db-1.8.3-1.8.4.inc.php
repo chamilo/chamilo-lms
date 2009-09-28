@@ -336,7 +336,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						{
 							//the path is already in item_property, check the visibility is the
 							//same as the homepage tool's
-							$res2 = api_sql_query($sql2,__FILE__,__LINE__);
+							$res2 = Database::query($sql2,__FILE__,__LINE__);
 							if(mysql_num_rows($res2)>0){
 								$row2 = mysql_fetch_array($res2);
 								$vis = $row2['visibility'];
@@ -351,7 +351,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						else
 						{
 							//the path is not in item_property, insert it
-							$res2 = api_sql_query($sql2,__FILE__,__LINE__);
+							$res2 = Database::query($sql2,__FILE__,__LINE__);
 							if(mysql_num_rows($res2)>0){
 								$row2 = mysql_fetch_array($res2);
 								$vis = $row2['visibility'];

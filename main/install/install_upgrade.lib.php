@@ -506,7 +506,7 @@ function add_document_180($_course,$path,$filetype,$filesize,$title,$comment=NUL
     (`path`,`filetype`,`size`,`title`, `comment`)
     VALUES ('$path','$filetype','$filesize','".
     Database::escape_string($title)."', '$comment')";
-    if(api_sql_query($sql,__FILE__,__LINE__))
+    if(Database::query($sql,__FILE__,__LINE__))
     {
         //display_message("Added to database (id ".mysql_insert_id().")!");
         return mysql_insert_id();

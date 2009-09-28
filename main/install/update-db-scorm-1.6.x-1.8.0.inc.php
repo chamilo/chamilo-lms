@@ -65,7 +65,7 @@ $courses_id_full_table_prefix_list = array();
 $courses_dir_list = array();
 mysql_select_db($dbNameForm);
 $sql = "SELECT * FROM course";
-$res = api_sql_query($sql,__FILE__,__LINE__);
+$res = Database::query($sql,__FILE__,__LINE__);
 while ($row = Database::fetch_array($res))
 {
     $course_pref = $table_prefix;
@@ -140,7 +140,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
                 "VALUES (1," .
                         "'".mysql_real_escape_string($row['learnpath_name'])."'," .
                         "'".mysql_real_escape_string($row['learnpath_description'])."',$dsp_ord,'Dokeos')";
-        $ins_lp_res = api_sql_query($ins_lp_sql);
+        $ins_lp_res = Database::query($ins_lp_sql);
         $in_id = Database::get_last_insert_id();
         if(empty($in_id) or $in_id == false) die('Could not insert lp: '.$ins_lp_sql);
         $lp_ids[$row['learnpath_id']] = $in_id;
@@ -152,11 +152,11 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
 
     //MIGRATING LEARNPATH CHAPTERS
     $sql_lp_chap = "ALTER TABLE $lp_chap ADD INDEX ( parent_chapter_id, display_order )";
-    $res_lp_chap = api_sql_query($sql_lp_chap,__FILE__,__LINE__);
+    $res_lp_chap = Database::query($sql_lp_chap,__FILE__,__LINE__);
 
     $sql_lp_chap = "SELECT * FROM $lp_chap ORDER BY parent_chapter_id, display_order";
     //echo "$sql_lp_chap<br />\n";
-    $res_lp_chap = api_sql_query($sql_lp_chap,__FILE__,__LINE__);
+    $res_lp_chap = Database::query($sql_lp_chap,__FILE__,__LINE__);
     while($row = Database::fetch_array($res_lp_chap))
     {
         //echo "Treating chapter id : ".$row['id']."<br />\n";
@@ -184,7 +184,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
                 "123456" .
                 ")";
         //echo $ins_lp_sql."<br/>\n";
-        $ins_res = api_sql_query($ins_lp_sql,__FILE__,__LINE__);
+        $ins_res = Database::query($ins_lp_sql,__FILE__,__LINE__);
         $in_id = Database::get_last_insert_id();
         //echo "&nbsp;&nbsp;Inserted item $in_id<br />\n";
         if(empty($in_id) OR $in_id == false) die('Could not insert lp: '.$ins_sql);
@@ -206,7 +206,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
                 $sql_par_chap = "UPDATE $my_new_lp_item " .
                     "SET parent_item_id = $new_parent " .
                     "WHERE id = $new_chap";
-                $res_par_chap = api_sql_query($sql_par_chap,__FILE__,__LINE__);
+                $res_par_chap = Database::query($sql_par_chap,__FILE__,__LINE__);
             }
         }
     }
@@ -218,7 +218,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
             $sql_upd_chaps = "UPDATE $my_new_lp_item " .
                     "SET previous_item_id = $last " .
                     "WHERE id = $new_id";
-            $res_upd_chaps = api_sql_query($sql_upd_chaps,__FILE__,__LINE__);
+            $res_upd_chaps = Database::query($sql_upd_chaps,__FILE__,__LINE__);
 
             $next = 0;
             if(!empty($ordered_chaps[$parent_chap][$order+1])){
@@ -227,7 +227,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
             $sql_upd_chaps = "UPDATE $my_new_lp_item " .
                     "SET next_item_id = $next " .
                     "WHERE id = $new_id";
-            $res_upd_chaps = api_sql_query($sql_upd_chaps,__FILE__,__LINE__);
+            $res_upd_chaps = Database::query($sql_upd_chaps,__FILE__,__LINE__);
             $last = $new_id;
         }
     }
@@ -263,10 +263,10 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
     );
     //MIGRATING LEARNPATH ITEMS
     $sql_lp_item = "ALTER TABLE $lp_item ADD INDEX ( chapter_id, display_order)";
-    $res_lp_item = api_sql_query($sql_lp_item,__FILE__,__LINE__);
+    $res_lp_item = Database::query($sql_lp_item,__FILE__,__LINE__);
     $sql_lp_item = "SELECT * FROM $lp_item ORDER BY chapter_id, display_order";
     //echo "$sql_lp_item<br />\n";
-    $res_lp_item = api_sql_query($sql_lp_item,__FILE__,__LINE__);
+    $res_lp_item = Database::query($sql_lp_item,__FILE__,__LINE__);
     while($row = Database::fetch_array($res_lp_item))
     {
         //echo "Treating chapter ".$row['chapter_id'].", item ".$row['id']."<br />\n";
@@ -303,7 +303,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
         if(empty($row['title']) && $type == 'Document' && !empty($row['item_id']))
         {
             $my_sql_doctitle = "SELECT title FROM $lp_doc WHERE id = ".$row['item_id'];
-            $my_res_doctitle = api_sql_query($my_sql_doctitle,__FILE__,__LINE__);
+            $my_res_doctitle = Database::query($my_sql_doctitle,__FILE__,__LINE__);
             if($row_doctitle = Database::fetch_array($my_res_doctitle))
             {
                 $title = $row_doctitle['title'];
@@ -340,7 +340,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
                     "'$prereq_id'," .
                     $row['display_order']." " .
                     ")";
-            $ins_res = api_sql_query($ins_lp_sql,__FILE__,__LINE__);
+            $ins_res = Database::query($ins_lp_sql,__FILE__,__LINE__);
             $in_id = Database::get_last_insert_id();
             //echo "&nbsp;&nbsp;Inserted item $in_id (".$row['title'].")<br />\n";
             if(empty($in_id) OR $in_id == false) die('Could not insert lp_item: '.$ins_sql);
@@ -351,10 +351,10 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
     //echo "<pre>lp_items:".print_r($lp_items,true)."</pre>\n";
     // complete next_item_id field by going through the new table and looking at parent_id and display_order
     $order_sql = "ALTER TABLE $my_new_lp_item ADD INDEX (lp_id, parent_item_id, display_order)";
-    $order_res = api_sql_query($order_sql,__FILE__,__LINE__);
+    $order_res = Database::query($order_sql,__FILE__,__LINE__);
     $order_sql = "SELECT * FROM $my_new_lp_item ORDER by lp_id ASC, parent_item_id ASC, display_order ASC";
     //echo "$order_sql<br />\n";
-    $order_res = api_sql_query($order_sql,__FILE__,__LINE__);
+    $order_res = Database::query($order_sql,__FILE__,__LINE__);
     $order_item = array(); //this will contain a sequential list of item_id's, thus allowing to give a simple way to get next id...
     $lp_id = 0;
     //echo "<pre>";
@@ -375,7 +375,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
                         "    previous_item_id = ".$last." " .
                         "WHERE id = ".$item_id;
                 //echo "$upd<br />\n";
-                api_sql_query($upd,__FILE__,__LINE__);
+                Database::query($upd,__FILE__,__LINE__);
                 $last = $item_id;
             }
             $order_item = array();
@@ -397,7 +397,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
                 "    previous_item_id = ".$last." " .
                 "WHERE id = ".$item_id;
         //echo "$upd<br />\n";
-        api_sql_query($upd,__FILE__,__LINE__);
+        Database::query($upd,__FILE__,__LINE__);
         $last = $item_id;
     }
 
@@ -405,12 +405,12 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
 
     //MIGRATING THE learnpath_user TABLE (results)
     $mysql = "ALTER TABLE $my_new_lp_item_view ADD INDEX (lp_view_id)";
-    $myres = api_sql_query($mysql,__FILE__,__LINE__);
+    $myres = Database::query($mysql,__FILE__,__LINE__);
     $sql_lp_user = "ALTER TABLE $lp_user ADD INDEX (user_id, learnpath_id, learnpath_item_id)";
-    $res_lp_user = api_sql_query($sql_lp_user,__FILE__,__LINE__);
+    $res_lp_user = Database::query($sql_lp_user,__FILE__,__LINE__);
     $sql_lp_user = "SELECT * FROM $lp_user ORDER BY user_id, learnpath_id, learnpath_item_id";
     //echo "$sql_lp_user<br />\n";
-    $res_lp_user = api_sql_query($sql_lp_user,__FILE__,__LINE__);
+    $res_lp_user = Database::query($sql_lp_user,__FILE__,__LINE__);
     $user_id = 0;
     $learnpath_id = 0;
     $lp_view = 0;
@@ -442,7 +442,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
                         "".$last."" . //use the first chapter from this learnpath
                         ")";
                 //echo $sql_ins_view;
-                $res_ins_view = api_sql_query($sql_ins_view,__FILE__,__LINE__);
+                $res_ins_view = Database::query($sql_ins_view,__FILE__,__LINE__);
                 $in_id = Database::get_last_insert_id();
                 $user_id = $row['user_id'];
                 $learnpath_id = $row['learnpath_id'];
@@ -481,22 +481,22 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
                 "'".$row['status']."'" .
                 ")";
             //echo $sql_ins_iv;
-            $res_ins_iv = api_sql_query($sql_ins_iv,__FILE__,__LINE__);
+            $res_ins_iv = Database::query($sql_ins_iv,__FILE__,__LINE__);
         }
         //UPDATE THE LP_VIEW progress
         $mysql = "SELECT count(distinct(lp_item_id)) FROM $my_new_lp_item_view WHERE lp_view_id = ".$lp_view." AND status IN ('passed','completed','succeeded','browsed','failed')";
-        $myres = api_sql_query($mysql,__FILE__,__LINE__);
+        $myres = Database::query($mysql,__FILE__,__LINE__);
         $myrow = Database::fetch_array($myres);
         $completed = $myrow[0];
         $mylpid = $lp_ids[$row['learnpath_id']];
         $sql = "SELECT count(*) FROM $my_new_lp_item WHERE lp_id = '".$mylpid."'";
-        $myres = api_sql_query($sql,__FILE__,__LINE__);
+        $myres = Database::query($sql,__FILE__,__LINE__);
         $myrow = Database::fetch_array($myres);
         $total = $myrow[0];
         $progress = ((float)$completed/(float)$total)*100;
         $progress = number_format($progress,0);
         $sql = "UPDATE $my_new_lp_view SET progress = '$progress' WHERE id = '$lp_view'";
-        $myres = api_sql_query($sql,__FILE__,__LINE__);
+        $myres = Database::query($sql,__FILE__,__LINE__);
     }
 
     /**
@@ -516,7 +516,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
     //MIGRATING LEARNPATH LINKS ON COURSES HOMEPAGES
     $tbl_tool = $db.TABLE_TOOL_LIST;
     $sql_tool = "SELECT * FROM $tbl_tool WHERE image='scormbuilder.gif' AND link LIKE '%learnpath_handler%'";
-    $res_tool = api_sql_query($sql_tool,__FILE__,__LINE__);
+    $res_tool = Database::query($sql_tool,__FILE__,__LINE__);
     while($row_tool = Database::fetch_array($res_tool)){
         $name = $row_tool['name'];
         $link = $row_tool['link'];
@@ -533,13 +533,13 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
             fwrite($fh,$sql_tool_upd." AND link ='$link'");
             fwrite($fh_revert,"UPDATE $tbl_tool SET link='$link' WHERE id=".$row_tool['id']." AND link ='newscorm/lp_controller.php?action=view&lp_id=$new_lp_id';\n");
             //echo $sql_tool_upd." (and link='$link')<br/>\n";
-            $res_tool_upd = api_sql_query($sql_tool_upd,__FILE__,__LINE__);
+            $res_tool_upd = Database::query($sql_tool_upd,__FILE__,__LINE__);
         }
     }
 
     $tbl_tool = $db.TABLE_TOOL_LIST;
     $sql_tool = "SELECT * FROM $tbl_tool";
-    $res_tool = api_sql_query($sql_tool,__FILE__,__LINE__);
+    $res_tool = Database::query($sql_tool,__FILE__,__LINE__);
     while($row_tool = Database::fetch_array($res_tool)){
         $link = $row_tool['link'];
         $matches = array();
@@ -556,7 +556,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
                 fwrite($fh,$sql_tool_upd." AND link ='$link'");
                 fwrite($fh_revert,"INSERT INTO $tbl_tool (link) VALUES ('$link');\n");
                 //echo $sql_tool_upd." (and link='$link')<br/>\n";
-                $res_tool_upd = api_sql_query($sql_tool_upd,__FILE__,__LINE__);
+                $res_tool_upd = Database::query($sql_tool_upd,__FILE__,__LINE__);
             }
         }else{
             //echo "No scorm link found in tool link $link<br/>";
@@ -568,7 +568,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
      */
     $tbl_intro = $db.TABLE_TOOL_INTRO;
     $sql_i = "SELECT * FROM $tbl_intro WHERE id='course_homepage'";
-    $res_i = api_sql_query($sql_i,__FILE__,__LINE__);
+    $res_i = Database::query($sql_i,__FILE__,__LINE__);
     //$link_to_course1 = 'scorm/scormdocument.php';
     while($row_i = Database::fetch_array($res_i)){
         $intro = $row_i['intro_text'];
@@ -592,7 +592,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
             fwrite($fh,"$sql_upd\n");
             fwrite($fh_revert,"UPDATE $tbl_intro set intro_text = '".$row_i['intro_text']."' WHERE id = 'course_homepage' AND intro_text = '$intro';\n");
             fwrite($fh_res,"$intro\n");
-            api_sql_query($sql_upd,__FILE__,__LINE__);
+            Database::query($sql_upd,__FILE__,__LINE__);
         }
     }
 
@@ -638,7 +638,7 @@ mysql_select_db($dbNameForm);
 $course_main = TABLE_MAIN_COURSE;
 $sql_crs = "SELECT * FROM $course_main WHERE target_course_code IS NULL";
 if($loglevel>0){error_log("$sql_crs",0);}
-$res_crs = api_sql_query($sql_crs,__FILE__,__LINE__);
+$res_crs = Database::query($sql_crs,__FILE__,__LINE__);
 $num = Database::num_rows($res_crs);
 
 //prepare an array that will contain course codes and for each course code a list of lps [by path prefixed by '/']
@@ -663,7 +663,7 @@ while($course_row = Database::fetch_array($res_crs)){
     $tblscodoc = $db_name.TABLE_SCORMDOC;
     $sql_scodoc = "SELECT path FROM $tblscodoc WHERE path IS NOT NULL AND path != ''";
     if($loglevel>1){error_log("$sql_scodoc",0);}
-    $res_scodoc = api_sql_query($sql_scodoc,__FILE__,__LINE__);
+    $res_scodoc = Database::query($sql_scodoc,__FILE__,__LINE__);
     while($row_scodoc = Database::fetch_array($res_scodoc)){
 
         //check if there's more than one slash in total
@@ -721,7 +721,7 @@ while($course_row = Database::fetch_array($res_crs)){
     $tbl_intro = $db_name.TABLE_TOOL_INTRO;
     $sql_i = "SELECT * FROM $tbl_intro WHERE id='course_homepage'";
     //echo $sql_i;
-    $res_i = api_sql_query($sql_i,__FILE__,__LINE__);
+    $res_i = Database::query($sql_i,__FILE__,__LINE__);
     //$link_to_course1 = 'scorm/scormdocument.php';
     while($row_scodoc = Database::fetch_array($res_i)){
         $intro = $row_scodoc['intro_text'];
@@ -785,7 +785,7 @@ while($course_row = Database::fetch_array($res_crs)){
 
     $sql_paths = "SELECT * FROM $scorm_main WHERE dokeosCourse = '".$my_course_code."'";
     if($loglevel>0){error_log("$sql_paths",0);}
-    $res_paths = api_sql_query($sql_paths,__FILE__,__LINE__);
+    $res_paths = Database::query($sql_paths,__FILE__,__LINE__);
     $num = Database::num_rows($res_paths);
     while($scorm_row = Database::fetch_array($res_paths)){
         //check if this is a new course
@@ -905,7 +905,7 @@ foreach($scorms as $my_course_code => $paths_list )
          */
         $sql_items = "SELECT * FROM $scorm_item WHERE contentId = '".$my_content_id."' ORDER BY scoId";
         //echo "$sql_items<br />\n";
-        $res_items = api_sql_query($sql_items,__FILE__,__LINE__);
+        $res_items = Database::query($sql_items,__FILE__,__LINE__);
         while($scormItem = Database::fetch_array($res_items))
         {
             $my_sco_id      = $scormItem['scoId']; //the index for display??? (check that)
@@ -931,7 +931,7 @@ foreach($scorms as $my_course_code => $paths_list )
                 //it is worth creating an lp_view and an lp_item_view - otherwise not
                 $sel_sqlb = "SELECT * FROM $my_new_lp_view " .
                         "WHERE lp_id = ".$lp_ids[$my_content_id]." AND user_id = $my_student";
-                $sel_resb = api_sql_query($sel_sqlb,__FILE__,__LINE__);
+                $sel_resb = Database::query($sel_sqlb,__FILE__,__LINE__);
                 if(Database::num_rows($sel_resb)>0){
                     //dont insert
                     $rowb = Database::fetch_array($sel_resb);
@@ -947,12 +947,12 @@ foreach($scorms as $my_course_code => $paths_list )
                         "1" .
                         ")";
                     //echo "$ins_sql<br/>";
-                    $ins_res = api_sql_query($ins_sql,__FILE__,__LINE__);
+                    $ins_res = Database::query($ins_sql,__FILE__,__LINE__);
                     $view_insert_id = Database::get_last_insert_id();
                 }
                 $sel_sqlc = "SELECT * FROM $my_new_lp_item " .
                         "WHERE lp_id = ".$lp_ids[$my_content_id]." AND ref = '$my_identifier'";
-                $sel_resc = api_sql_query($sel_sqlc,__FILE__,__LINE__);
+                $sel_resc = Database::query($sel_sqlc,__FILE__,__LINE__);
                 if(Database::num_rows($sel_resc)>0){
                     $my_item_id_row = Database::fetch_array($sel_resc);
                     $item_insert_id = $my_item_id_row['id'];
@@ -966,7 +966,7 @@ foreach($scorms as $my_course_code => $paths_list )
                             "'$my_status'" .
                             ")";
                     //echo "$ins_sql<br/>";
-                    $ins_res = api_sql_query($ins_sql,__FILE__,__LINE__);
+                    $ins_res = Database::query($ins_sql,__FILE__,__LINE__);
                 }else{
                     //echo "  Didn't find corresponding item for $my_identifier in new tables<br/>\n";
                 }
@@ -1004,7 +1004,7 @@ foreach($scorms as $my_course_code => $paths_list )
                 "'scorm_api.php'" .
                 ")";
         if($loglevel>1){error_log("$sql_ins",0);}
-        $sql_res = api_sql_query($sql_ins,__FILE__,__LINE__);
+        $sql_res = Database::query($sql_ins,__FILE__,__LINE__);
         $in_id = Database::get_last_insert_id();
         if(empty($in_id) or $in_id == false) die('Could not insert scorm lp: '.$sql_ins);
         //echo "&nbsp;&nbsp;Inserted item $in_id<br />\n";
@@ -1041,7 +1041,7 @@ foreach($scorms as $my_course_code => $paths_list )
                         "default_encoding = '".strtoupper($oScorm->manifest_encoding)."' " .
                         "WHERE id = ".$lp_ids[$my_content_id];
                 if($loglevel>1){error_log("Updating title and encoding: ".$my_sql,0);}
-                $my_res = api_sql_query($my_sql,__FILE__,__LINE__);
+                $my_res = Database::query($my_sql,__FILE__,__LINE__);
             }
         }
 
@@ -1052,7 +1052,7 @@ foreach($scorms as $my_course_code => $paths_list )
          */
         $sql_items = "SELECT * FROM $scorm_item WHERE contentId = '".$my_content_id."' ORDER BY scoId";
         //echo "$sql_items<br />\n";
-        $res_items = api_sql_query($sql_items,__FILE__,__LINE__);
+        $res_items = Database::query($sql_items,__FILE__,__LINE__);
         while($scormItem = Database::fetch_array($res_items))
         {
             $my_sco_id      = $scormItem['scoId']; //the index for display??? (check that)
@@ -1079,7 +1079,7 @@ foreach($scorms as $my_course_code => $paths_list )
                     "WHERE ref = '$my_identifier' " .
                     "AND lp_id = ".$lp_ids[$my_content_id]."";
             //echo $sel_sql."<br />\n";
-            $sel_res = api_sql_query($sel_sql,__FILE__,__LINE__);
+            $sel_res = Database::query($sel_sql,__FILE__,__LINE__);
             if(Database::num_rows($sel_res)>0){
                 //this item already exists, reuse
                 $row = Database::fetch_array($sel_res);
@@ -1099,7 +1099,7 @@ foreach($scorms as $my_course_code => $paths_list )
                     "'".$my_title."'," .
                     "'$my_item_path'" .
                     ")";
-                $ins_res = api_sql_query($ins_sql,__FILE__,__LINE__);
+                $ins_res = Database::query($ins_sql,__FILE__,__LINE__);
                 $item_insert_id = Database::get_last_insert_id();
                 $lp_item_ids[$lp_ids[$my_content_id]][$my_sco_id]=$item_insert_id;
                 $lp_item_refs[$lp_ids[$my_content_id]][$my_identifier]=$item_insert_id;
@@ -1111,7 +1111,7 @@ foreach($scorms as $my_course_code => $paths_list )
                 //it is worth creating an lp_view and an lp_item_view - otherwise not
                 $sel_sqlb = "SELECT * FROM $my_new_lp_view " .
                         "WHERE lp_id = ".$lp_ids[$my_content_id]." AND user_id = $my_student";
-                $sel_resb = api_sql_query($sel_sqlb,__FILE__,__LINE__);
+                $sel_resb = Database::query($sel_sqlb,__FILE__,__LINE__);
                 if(Database::num_rows($sel_resb)>0){
                     //dont insert
                     $rowb = Database::fetch_array($sel_resb);
@@ -1126,7 +1126,7 @@ foreach($scorms as $my_course_code => $paths_list )
                         $my_student.", " .
                         "1" .
                         ")";
-                    $ins_res = api_sql_query($ins_sql,__FILE__,__LINE__);
+                    $ins_res = Database::query($ins_sql,__FILE__,__LINE__);
                     $view_insert_id = Database::get_last_insert_id();
                 }
                 $ins_sql = "INSERT INTO $my_new_lp_item_view (" .
@@ -1138,25 +1138,25 @@ foreach($scorms as $my_course_code => $paths_list )
                         "0, $my_time, $my_score," .
                         "'$my_status'" .
                         ")";
-                $ins_res = api_sql_query($ins_sql,__FILE__,__LINE__);
+                $ins_res = Database::query($ins_sql,__FILE__,__LINE__);
             }
         }
         //UPDATE THE LP_VIEW progress
         if(!empty($view_insert_id))
         {
             $sql = "SELECT count(distinct(lp_item_id)) FROM $my_new_lp_item_view WHERE lp_view_id = ".$view_insert_id." AND status IN ('passed','completed','succeeded','browsed','failed')";
-            $myres = api_sql_query($sql,__FILE__,__LINE__);
+            $myres = Database::query($sql,__FILE__,__LINE__);
             $myrow = Database::fetch_array($myres);
             $completed = $myrow[0];
             $mylpid = $lp_ids[$my_content_id];
             $sql = "SELECT count(*) FROM $my_new_lp_item WHERE lp_id = '".$mylpid."'";
-            $myres = api_sql_query($sql,__FILE__,__LINE__);
+            $myres = Database::query($sql,__FILE__,__LINE__);
             $myrow = Database::fetch_array($myres);
             $total = $myrow[0];
             $progress = ((float)$completed/(float)$total)*100;
             $progress = number_format($progress,0);
             $sql = "UPDATE $my_new_lp_view SET progress = '$progress' WHERE id = '$view_insert_id'";
-            $myres = api_sql_query($sql,__FILE__,__LINE__);
+            $myres = Database::query($sql,__FILE__,__LINE__);
         }
 
 
@@ -1252,7 +1252,7 @@ foreach($scorms as $my_course_code => $paths_list )
                             "display_order = $dsp " .
                             "WHERE lp_id = ".$in_id." AND id = ".$new_id;
                     //echo "$sql2<br>\n";
-                    $res2 = api_sql_query($sql2,__FILE__,__LINE__);
+                    $res2 = Database::query($sql2,__FILE__,__LINE__);
                     $previous = $new_id;
                 }
             }
@@ -1271,7 +1271,7 @@ foreach($scorms as $my_course_code => $paths_list )
      */
     $tbl_intro = $db_name.TABLE_TOOL_INTRO;
     $sql_i = "SELECT * FROM $tbl_intro WHERE id='course_homepage'";
-    $res_i = api_sql_query($sql_i,__FILE__,__LINE__);
+    $res_i = Database::query($sql_i,__FILE__,__LINE__);
     //$link_to_course1 = 'scorm/scormdocument.php';
     while($row_i = Database::fetch_array($res_i)){
         $intro = $row_i['intro_text'];
@@ -1306,7 +1306,7 @@ foreach($scorms as $my_course_code => $paths_list )
             fwrite($fh,$sql_upd."\n");
             fwrite($fh_revert,"UPDATE $tbl_intro set intro_text = '".$row_i['intro_text']."' WHERE id = 'course_homepage' AND intro_text = '$intro';\n");
             fwrite($fh_res,$intro."\n");
-            api_sql_query($sql_upd,__FILE__,__LINE__);
+            Database::query($sql_upd,__FILE__,__LINE__);
         }
     }
 

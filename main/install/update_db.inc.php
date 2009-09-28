@@ -435,12 +435,12 @@ function store_forumcategory($values)
 
 	// find the max cat_order. The new forum category is added at the end => max cat_order + &
 	$sql="SELECT MAX(cat_order) as sort_max FROM ".mysql_real_escape_string($table_categories);
-	$result=api_sql_query($sql);
+	$result=Database::query($sql);
 	$row=mysql_fetch_array($result);
 	$new_max=$row['sort_max']+1;
 
 	$sql="INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order) VALUES ('".mysql_real_escape_string($values['forum_category_title'])."','".mysql_real_escape_string($values['forum_category_comment'])."','".mysql_real_escape_string($new_max)."')";
-	api_sql_query($sql);
+	Database::query($sql);
 	$last_id=mysql_insert_id();
 	api_item_property_update($_course, TOOL_FORUM_CATEGORY, $last_id,"ForumCategoryAdded", $_user['user_id']);
 	return array('id'=>$last_id,'title'=>$values['forum_category_title']) ;
@@ -459,7 +459,7 @@ function store_forum($values)
 
 	// find the max forum_order for the given category. The new forum is added at the end => max cat_order + &
 	$sql="SELECT MAX(forum_order) as sort_max FROM ".$table_forums." WHERE forum_category=".mysql_real_escape_string($values['forum_category']);
-	$result=api_sql_query($sql);
+	$result=Database::query($sql);
 	$row=mysql_fetch_array($result);
 	$new_max=$row['sort_max']+1;
 
@@ -478,7 +478,7 @@ function store_forum($values)
 					'".mysql_real_escape_string($values['group_forum'])."',
 					'".mysql_real_escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
 					'".mysql_real_escape_string($new_max)."')";
-	api_sql_query($sql, __LINE__,__FILE__);
+	Database::query($sql, __LINE__,__FILE__);
 	$last_id=mysql_insert_id();
 	api_item_property_update($_course, TOOL_FORUM, $last_id,"ForumCategoryAdded", $_user['user_id']);
 	return array('id'=>$last_id, 'title'=>$values['forum_title']);
@@ -507,7 +507,7 @@ function store_thread($values)
 					'".mysql_real_escape_string($values['topic_views'])."',
 					'".mysql_real_escape_string($values['post_date'])."',
 					'".mysql_real_escape_string($values['thread_sticky'])."')";
-	$result=api_sql_query($sql, __LINE__, __FILE__);
+	$result=Database::query($sql, __LINE__, __FILE__);
 	$last_thread_id=mysql_insert_id();
 	api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id,"ForumThreadAdded", $_user['user_id']);
 	// if the forum properties tell that the posts have to be approved we have to put the whole thread invisible
@@ -542,7 +542,7 @@ function migrate_threads_of_forum($phpbb_forum_id, $new_forum_id)
 							WHERE forum_id='".mysql_real_escape_string($phpbb_forum_id)."'
 							AND forum.nom=users.lastname AND forum.prenom=users.firstname
 							";
-	$result_phpbb_threads=api_sql_query($sql_phpbb_threads);
+	$result_phpbb_threads=Database::query($sql_phpbb_threads);
 	$threads_counter=0;
 	while ($row_phpbb_threads=mysql_fetch_array($result_phpbb_threads))
 	{
@@ -569,7 +569,7 @@ function migrate_threads_of_forum($phpbb_forum_id, $new_forum_id)
 			forum_threads='".mysql_real_escape_string($threads_counter)."'
 			WHERE forum_id='".mysql_real_escape_string($new_forum_id)."'";
 	//echo $sql;
-	$result=api_sql_query($sql);
+	$result=Database::query($sql);
 	return array("threads"=>$threads_counter, "posts"=>$posts_counter);
 }
 
@@ -600,7 +600,7 @@ function migrate_posts_of_thread($phpbb_thread_id, $new_forum_thread_id, $new_fo
 						AND posts.prenom=users.firstname
 						AND posts.topic_id='".mysql_real_escape_string($phpbb_thread_id)."'
 						";
-	$result_phpbb_posts=api_sql_query($sql_phpbb_posts);
+	$result_phpbb_posts=Database::query($sql_phpbb_posts);
 	while($row_phpbb_posts=mysql_fetch_array($result_phpbb_posts))
 	{
 		$values=array();
@@ -625,7 +625,7 @@ function migrate_posts_of_thread($phpbb_thread_id, $new_forum_thread_id, $new_fo
 						'".mysql_real_escape_string($values['post_notification'])."',
 						'".mysql_real_escape_string($values['post_parent_id'])."',
 						'".mysql_real_escape_string($values['visible'])."')";
-		$result=api_sql_query($sql, __LINE__, __FILE__);
+		$result=Database::query($sql, __LINE__, __FILE__);
 		$post_counter++;
 		$last_post_id=mysql_insert_id();
 
@@ -637,7 +637,7 @@ function migrate_posts_of_thread($phpbb_thread_id, $new_forum_thread_id, $new_fo
 					SET source_type='forum_post', source_id='".mysql_real_escape_string($last_post_id)."'
 					WHERE source_type='".mysql_real_escape_string(TOOL_BB_POST)."' AND source_id='".mysql_real_escape_string($row_phpbb_posts['post_id'])."'";
 			echo $sql_update_added_resource;
-			$result=api_sql_query($sql_update_added_resource, __LINE__, __FILE__);
+			$result=Database::query($sql_update_added_resource, __LINE__, __FILE__);
 		}
 
 
@@ -648,7 +648,7 @@ function migrate_posts_of_thread($phpbb_thread_id, $new_forum_thread_id, $new_fo
 			thread_replies='".mysql_real_escape_string($post_counter-1)."'
 			WHERE thread_id='".mysql_real_escape_string($new_forum_thread_id)."'";
 	//echo $sql;
-	$result=api_sql_query($sql, __LINE__, __FILE__);
+	$result=Database::query($sql, __LINE__, __FILE__);
 	//echo $sql;
 	return $post_counter;
 }
@@ -665,7 +665,7 @@ function get_added_resources()
 
 	// TODO: now we also migrate the added resources.
 	$sql_added_resources="SELECT * FROM $table_added_resources WHERE source_type='".mysql_real_escape_string(TOOL_BB_POST)."'";
-	$result=api_sql_query($sql_added_resources);
+	$result=Database::query($sql_added_resources);
 	while ($row=mysql_fetch_array($result))
 	{
 		$return_array[]=$row['source_id'];
@@ -684,7 +684,7 @@ function get_forumcategory_id_by_name($forum_category_name)
 
 	$sql="SELECT cat_id FROM $table_categories WHERE cat_title='".mysql_real_escape_string($forum_category_name)."'";
 	//echo $sql;
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=mysql_fetch_array($result);
 	//echo $row['cat_id'];
 	return $row['cat_id'];

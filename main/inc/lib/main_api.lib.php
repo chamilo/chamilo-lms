@@ -965,46 +965,6 @@ function api_get_course_info($course_code = null) {
 
 /*
 ==============================================================================
-		DATABASE QUERY MANAGEMENT
-==============================================================================
-*/
-
-/**
- * Executes an SQL query
- * You have to use addslashes() on each value that you want to record into the database
- *
- * @author Olivier Brouckaert
- * @param  string $query - SQL query
- * @param  string $file - optional, the file path and name of the error (__FILE__)
- * @param  string $line - optional, the line of the error (__LINE__)
- * @return resource - the return value of the query
- * Note: Database::query method is preferable for use.
- */
-function api_sql_query($query, $file = '', $line = 0) {
-
-	if (!($result = @mysql_query($query)) && $line && api_get_setting('server_type') != 'production') {
-		$security_ok = class_exists('Security') && class_exists('HTMLPurifier');
-		$error = Database::error();
-		$info = '<pre>';
-		$info .= '<strong>DATABASE ERROR :</strong><br /> ';
-		$info .= $security_ok ? Security::remove_XSS($error) : api_htmlentities($error, ENT_QUOTES);
-		$info .= '<br />';
-		$info .= '<strong>QUERY       :</strong><br /> ';
-		$info .= $security_ok ? Security::remove_XSS($query) : api_htmlentities($query, ENT_QUOTES);
-		$info .= '<br />';
-		$info .= '<strong>FILE        :</strong><br /> ';
-		$info .= ($file == '' ? ' unknown ' : $file);
-		$info .= '<br />';
-		$info .= '<strong>LINE        :</strong><br /> ';
-		$info .= ($line == 0 ? ' unknown ' : $line);
-		$info .= '</pre>';
-		echo $info;
-	}
-	return $result;
-}
-
-/*
-==============================================================================
 		SESSION MANAGEMENT
 ==============================================================================
 */
@@ -3725,4 +3685,11 @@ function api_url_to_local_path($url) {
  */
 function api_store_result($result) {
 	return Database::store_result($result);
+}
+
+/**
+ * @deprecated 28-SEP-2009: Use Database::query($query, $file, $line) instead.
+ */
+function api_sql_query($query, $file = '', $line = 0) {
+	return Database::query($query, $file, $line);
 }

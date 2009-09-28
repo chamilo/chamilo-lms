@@ -770,16 +770,35 @@ class Database {
 
 	/**
 	 * This function returns a resource
-	 * documentation has been added by Arthur Portugal
-	 * @author Olivier Brouckaert;
+	 * Documentation has been added by Arthur Portugal
+	 * An adaptation for reliable showing error messages has been done by Ivan Tcholakov, 2009
+	 * @author Olivier Brouckaert
 	 * @param string $query - SQL query
 	 * @param string $file - optional, the file path and name of the error (__FILE__)
 	 * @param string $line - optional, the line of the error (__LINE__)
 	 * @return resource - the return value of the query
 	 */
 
-	public static function query($sql, $file = '', $line = 0) {
-		return api_sql_query($sql, $file, $line);
+	public static function query($query, $file = '', $line = 0) {
+		if (!($result = @mysql_query($query)) && $line && api_get_setting('server_type') != 'production') {
+			$security_ok = class_exists('Security') && class_exists('HTMLPurifier');
+			$error = self::error();
+			$info = '<pre>';
+			$info .= '<strong>DATABASE ERROR :</strong><br /> ';
+			$info .= $security_ok ? Security::remove_XSS($error) : api_htmlentities($error, ENT_QUOTES);
+			$info .= '<br />';
+			$info .= '<strong>QUERY       :</strong><br /> ';
+			$info .= $security_ok ? Security::remove_XSS($query) : api_htmlentities($query, ENT_QUOTES);
+			$info .= '<br />';
+			$info .= '<strong>FILE        :</strong><br /> ';
+			$info .= ($file == '' ? ' unknown ' : $file);
+			$info .= '<br />';
+			$info .= '<strong>LINE        :</strong><br /> ';
+			$info .= ($line == 0 ? ' unknown ' : $line);
+			$info .= '</pre>';
+			echo $info;
+		}
+		return $result;
 	}
 
 	public static function error() {

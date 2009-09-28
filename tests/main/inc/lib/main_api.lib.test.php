@@ -223,14 +223,6 @@ class TestMainApi extends UnitTestCase {
 		ob_end_clean();
 	}
 
-	function testApiSqlQuery(){
-		ob_start();
-		$res = api_sql_query();
-		$this->assertTrue(is_bool($res));
-		ob_end_clean();
-		//var_dump($res);
-	}
-
 	function testApiSessionStart(){
 		$res = api_session_start($already_sintalled=true);
 		$this->assertTrue(is_null($res));

@@ -23,7 +23,7 @@ function get_boolean_user_access_to_course_dir($user_id,$course_dir){
   $course      = Database::get_main_table(TABLE_MAIN_COURSE);
   //Get the course code
   $sql = "SELECT code FROM $course WHERE directory = '$course_dir'";
-  $res = api_sql_query($sql);
+  $res = Database::query($sql);
   if(Database::num_rows($res)>0){
     //Course found. Get the course code.
     $row = Database::fetch_array($res);
@@ -32,7 +32,7 @@ function get_boolean_user_access_to_course_dir($user_id,$course_dir){
     $sql = "SELECT * FROM $course_user
     	WHERE course_code = '$course_code'
 	AND user_id = '$user_id'";
-    $res = api_sql_query($sql);
+    $res = Database::query($sql);
     if(Database::num_rows($res)>0){
       //User permission found, go further and check there is a status
       $row = Database::fetch_array($res);
@@ -93,7 +93,7 @@ function subst_course_code($string){
     $course      = Database::get_main_table(TABLE_MAIN_COURSE);
     //Get the course code
     $sql = "SELECT title FROM $course WHERE code = '".$matches[1]."'";
-    $res = api_sql_query($sql);
+    $res = Database::query($sql);
     if(Database::num_rows($res)>0){
       $row = Database::fetch_array($res);
       $string = preg_replace('/(.*)\?cidReq=('.$matches[1].')(.*)/',' '.$row['title'].' - \1 \3',$string);

@@ -211,7 +211,7 @@ function get_personal_course_list($user_id) {
 										AND   course_rel_user.user_id = '".$user_id."'
 										ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,i";
 
-	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
+	$course_list_sql_result = Database::query($personal_course_list_sql, __FILE__, __LINE__);
 
 	while ($result_row = Database::fetch_array($course_list_sql_result)) {
 		$personal_course_list[] = $result_row;
@@ -223,7 +223,7 @@ function get_personal_course_list($user_id) {
 								FROM $main_course_table as course, $tbl_session_course_user as srcru
 								WHERE srcru.course_code=course.code AND srcru.id_user='$user_id'";
 
-	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
+	$course_list_sql_result = Database::query($personal_course_list_sql, __FILE__, __LINE__);
 
 	while ($result_row = Database::fetch_array($course_list_sql_result)) {
 		$personal_course_list[] = $result_row;
@@ -235,7 +235,7 @@ function get_personal_course_list($user_id) {
 								FROM $main_course_table as course, $tbl_session_course as src, $tbl_session as session
 								WHERE session.id_coach='$user_id' AND session.id=src.id_session AND src.course_code=course.code";
 
-	$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
+	$course_list_sql_result = Database::query($personal_course_list_sql, __FILE__, __LINE__);
 
 	//$personal_course_list = array_merge($personal_course_list, $course_list_sql_result);
 
@@ -530,7 +530,7 @@ function get_logged_user_course_html($my_course) {
 			ON ts.id_coach = tu.user_id
 			WHERE ts.id='.(int) $my_course['id_session']. ' LIMIT 1';
 
-			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql, __FILE__, __LINE__);
 			$sessioncoach = Database::store_result($rs);
 			$sessioncoach = $sessioncoach[0];
 
@@ -576,7 +576,7 @@ function show_notification($my_course) {
 									 USE INDEX (access_cours_code, access_user_id)
 									 WHERE access_cours_code = '".$my_course['k']."'
 									 AND access_user_id = '$user_id'";
-	$resLastTrackInCourse = api_sql_query($sqlLastTrackInCourse, __FILE__, __LINE__);
+	$resLastTrackInCourse = Database::query($sqlLastTrackInCourse, __FILE__, __LINE__);
 	$oldestTrackDate = "3000-01-01 00:00:00";
 	while ($lastTrackInCourse = Database::fetch_array($resLastTrackInCourse)) {
 		$lastTrackInCourseDate[$lastTrackInCourse['access_tool']] = $lastTrackInCourse['access_date'];
@@ -595,7 +595,7 @@ function show_notification($my_course) {
 					AND tet.lastedit_user_id != $user_id
 					ORDER BY tet.lastedit_date";
 
-	$res = api_sql_query($sql);
+	$res = Database::query($sql);
 	//get the group_id's with user membership
 	$group_ids = GroupManager :: get_group_ids($course_database, $user_id);
 	$group_ids[] = 0; //add group 'everyone'
@@ -635,7 +635,7 @@ function get_user_course_categories() {
 	$output = array();
 	$table_category = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 	$sql = "SELECT * FROM ".$table_category." WHERE user_id='".Database::escape_string($_user['user_id'])."'";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	while ($row = Database::fetch_array($result)) {
 		$output[$row['id']] = $row['title'];
 	}
@@ -722,7 +722,7 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 		$course_database = $my_course['db'];
 		$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST, $course_database);
 		$query = "SELECT visibility FROM $course_tool_table WHERE link = 'announcements/announcements.php' AND visibility = 1";
-		$result = api_sql_query($query);
+		$result = Database::query($query);
 		// collect from announcements, but only if tool is visible for the course
 		if ($result && $maxValvas > 0 && Database::num_rows($result) > 0) {
 			//Search announcements table
@@ -741,7 +741,7 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 					$sqlGetLastAnnouncements .= "WHERE DATE_FORMAT(end_date,'%Y %m %d') >= '".date("Y m d", $_user["lastLogin"])."'";
 			}
 			$sqlGetLastAnnouncements .= "ORDER BY end_date DESC LIMIT ".$maxValvas;
-			$resGetLastAnnouncements = api_sql_query($sqlGetLastAnnouncements, __FILE__, __LINE__);
+			$resGetLastAnnouncements = Database::query($sqlGetLastAnnouncements, __FILE__, __LINE__);
 			if ($resGetLastAnnouncements) {
 				while ($annoncement = Database::fetch_array($resGetLastAnnouncements)) {
 					$keyTools = 'valvas';
@@ -760,7 +760,7 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 		$course_database = $my_course['db'];
 		$course_tool_table = Database :: get_course_table(TABLE_TOOL_LIST,$course_database);
 		$query = "SELECT visibility FROM $course_tool_table WHERE link = 'calendar/agenda.php' AND visibility = 1";
-		$result = api_sql_query($query);
+		$result = Database::query($query);
 		$thisAgenda = $maxCourse - $nbDigestEntries; // new max entries for agenda
 		if ($maxAgenda < $thisAgenda) {
 			$thisAgenda = $maxAgenda;
@@ -773,7 +773,7 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 											WHERE start_date >= CURDATE()
 											ORDER BY start_date, start_time
 											LIMIT $maxAgenda";
-			$resGetNextAgendaEvent = api_sql_query($sqlGetNextAgendaEvent, __FILE__, __LINE__);
+			$resGetNextAgendaEvent = Database::query($sqlGetNextAgendaEvent, __FILE__, __LINE__);
 			if ($resGetNextAgendaEvent) {
 				while ($agendaEvent = Database::fetch_array($resGetNextAgendaEvent)) {
 					$keyTools = 'agenda';

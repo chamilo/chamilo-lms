@@ -26,15 +26,15 @@ if($_SERVER['REMOTE_ADDR']==$ip_address_of_search_server
   $course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
   $course = Database::get_main_table(TABLE_MAIN_COURSE);
   $sql = "DELETE FROM $course_rel_user WHERE user_id = $id";
-  $res = @api_sql_query($sql,__FILE__,__LINE__);
+  $res = @Database::query($sql,__FILE__,__LINE__);
   $sql = "SELECT code FROM $course";
-  $res = @api_sql_query($sql,__FILE__,__LINE__);
+  $res = @Database::query($sql,__FILE__,__LINE__);
   if(Database::num_rows($res)>0)
   {
     while ($row = Database::fetch_array($res))
     {
       $sql2 = "INSERT INTO $course_rel_user (course_code,user_id,status)VALUES('".$row['code']."',$id,5)";
-      $res2 = @api_sql_query($sql2,__FILE__,__LINE__);
+      $res2 = @Database::query($sql2,__FILE__,__LINE__);
     }
   }
   //now login the user to the platform (put everything needed inside the

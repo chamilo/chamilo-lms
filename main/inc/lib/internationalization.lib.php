@@ -291,7 +291,8 @@ function api_get_language_isocode($language = null) {
 			$result = Database::fetch_array($sql_result);
 			$iso_code[$language] = $result['isocode'];
 		} else {
-			$iso_code[$language] = null;
+			$language_purified_id = api_refine_language_id($language);
+			$iso_code[$language] = isset($iso_code[$language_purified_id]) ? $iso_code[$language_purified_id] : null;
 		}
 	}
 	return $iso_code[$language];

@@ -459,36 +459,6 @@ class Database {
 		return self::format_table_name(self::get_user_personal_database(), $short_table_name);
 	}
 
-	// TODO: This method should not belong to Database class. The internationaization ibrary is a better place.
-	/**
-	 * Returns the isocode corresponding to the language directory given.
-	 * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
-	 * If $language is omitted, interface language is assumed then.
-	 * @return string			The found isocode or null on error..
-	 * Returned codes are according to the following standards (in order of preference):
-	 * - ISO 639-1 : Alpha-2 code (two-letters code - en, fr, es, ...)
-	 * - RFC 4646  : five-letter code based on the ISO 639 two-letter language codes
-	 *   and the ISO 3166 two-letter territory codes (pt-BR, ...)
-	 * - ISO 639-2 : Alpha-3 code (three-letters code - ast, fur, ...)
-	 */
-	public static function get_language_isocode($language) {
-		static $iso_code = array();
-		if (empty($language)) {
-			$language = api_get_interface_language();
-		}
-		if (!isset($iso_code[$language])) {
-			$table = self::get_main_table(TABLE_MAIN_LANGUAGE);
-			$sql_result = self::query("SELECT isocode FROM $table WHERE dokeos_folder = '$language'", __FILE__, __LINE__);
-			if (self::num_rows($sql_result)) {
-				$result = self::fetch_array($sql_result);
-				$iso_code[$language] = $result['isocode'];
-			} else {
-				$iso_code[$language] = null;
-			}
-		}
-		return $iso_code[$language];
-	}
-
 	/*
 	-----------------------------------------------------------------------------
 		Query Functions
@@ -831,6 +801,20 @@ class Database {
 			}
 		}
 		return $array;
+	}
+
+
+	/*
+	==============================================================================
+		DEPRECATED METHODS
+	==============================================================================
+	*/
+
+	/**
+	 * @deprecated Use api_get_language_isocode($language) instead.
+	 */
+	public static function get_language_isocode($language) {
+		return api_get_language_isocode($language);
 	}
 
 }

@@ -584,16 +584,6 @@ class TestMainApi extends UnitTestCase {
 		$this->assertFalse($row);
 	}
 
-	function testApiGetLanguageIsocode(){
-		$query='';
-		$sql= true;
-		$var=Database::query($sql,_FILE_,_LINE_);
-		$res=api_get_language_isocode($query);
-		$this->assertTrue(is_string($query));
-		$this->assertTrue(isset($var));
-		//var_dump($query);
-	}
-
 	function testApiGetThemes(){
 		$cssdir= api_get_path(SYS_PATH).'main/css/';
 		$res=api_get_themes();

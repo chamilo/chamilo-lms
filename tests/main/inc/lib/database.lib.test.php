@@ -185,12 +185,6 @@ class TestDatabase extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 	}
 
-	function testGetLanguageIsocode() {
-		$lang_folder='arabic';
-		$res=$this->dbase->get_language_isocode($lang_folder);
-		$this->assertTrue(is_string($res));
-	}
-
 	function testGetLastInsertId() {
 		$res=$this->dbase->get_last_insert_id();
 		$this->assertTrue(is_numeric($res));

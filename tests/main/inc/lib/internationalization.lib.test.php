@@ -1041,6 +1041,95 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump($res);
 	}
 
+	function test_api_get_language_isocode() {
+		$test_language_table = array(
+			'*** invalid entry ***' => null, // An invalid entry.
+			'arabic' => 'ar',
+			'arabic_unicode' => 'ar',
+			'asturian' => 'ast',
+			'bosnian' => 'bs',
+			'brazilian' => 'pt-BR',
+			'bulgarian' => 'bg',
+			'catalan' => 'ca',
+			'croatian' => 'hr',
+			'czech' => 'cs',
+			'danish' => 'da',
+			'dari' => 'prs',
+			'dutch' => 'nl',
+			'dutch_corporate' => 'nl',
+			'english' => 'en',
+			'english_org' => 'en',
+			'esperanto' => 'eo',
+			'euskera' => 'eu',
+			'finnish' => 'fi',
+			'french' => 'fr',
+			'french_corporate' => 'fr',
+			'french_KM' => 'fr',
+			'french_org' => 'fr',
+			'french_unicode' => 'fr',
+			'friulian' => 'fur',
+			'galician' => 'gl',
+			'georgian' => 'ka',
+			'german' => 'de',
+			'greek' => 'el',
+			'hebrew' => 'he',
+			'hungarian' => 'hu',
+			'indonesian' => 'id',
+			'italian' => 'it',
+			'japanese' => 'ja',
+			'japanese_unicode' => 'ja',
+			'korean' => 'kr',
+			'latvian' => 'lv',
+			'lithuanian' => 'lt',
+			'macedonian' => 'mk',
+			'malay' => 'ms',
+			'norwegian' => 'no',
+			'occitan' => '',
+			'pashto' => 'ps',
+			'persian' => 'fa',
+			'polish' => 'pl',
+			'portuguese' => 'pt',
+			'quechua_cusco' => 'qu',
+			'romanian' => 'ro',
+			'russian' => 'ru',
+			'russian_unicode' => 'ru',
+			'serbian' => 'sr',
+			'simpl_chinese' => 'zh',
+			'simpl_chinese_unicode' => 'zh',
+			'slovak' => 'sk',
+			'slovenian' => 'sl',
+			'slovenian_unicode' => 'sl',
+			'spanish' => 'es',
+			'spanish_latin' => '',
+			'swahili' => 'sw',
+			'swedish' => 'sv',
+			'thai' => 'th',
+			'trad_chinese' => '',
+			'trad_chinese_unicode' => '',
+			'turkce' => 'tr',
+			'ukrainian' => 'uk',
+			'vietnamese' => 'vi',
+			'yoruba' => 'yo'
+		);
+		$res = array();
+		foreach ($test_language_table as $language => $expected_result) {
+			$test_result = api_get_language_isocode($language);
+			$res[$language] = array(
+				'expected_result' => $expected_result,
+				'test_result' => $test_result,
+				'is_ok' => $expected_result === $test_result
+			);
+		}
+		$this->assertTrue(is_array($res));
+		$is_ok = true;
+		foreach ($res as $language => $test_case) {
+			$is_ok = $is_ok && $test_case['is_ok'];
+		}
+		$this->assertTrue($is_ok);
+		//var_dump($res);
+		//foreach ($res as $language => $test_case) { echo ($test_case['is_ok'] ? '<span style="color: green; font-weight: bold;">Ok</span>' : '<span style="color: red; font-weight: bold;">Failed</span>').' '.$language.' => '.(is_null($test_case['test_result']) ? 'NULL' : $test_case['test_result']).'<br />'; }
+	}
+
 	public function test_api_is_latin1_compatible() {
 		$language = 'portuguese';
 		$res = api_is_latin1_compatible($language);

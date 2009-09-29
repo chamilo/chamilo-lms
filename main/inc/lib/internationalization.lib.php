@@ -212,22 +212,6 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 					$variable."&amp;language=".$language."\" target=\"_blank\" style=\"color:#FF0000\"><strong>#</strong></a>");
 }
 
-// TODO: Database::get_language_isocode() to be deprecated.
-/**
- * Gets language isocode column from the language table, taking the current language as a query parameter.
- * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
- * If $language is omitted, interface language is assumed then.
- * @return string			The found isocode or null on error.
- * Returned codes are according to the following standards (in order of preference):
- * -  ISO 639-1 : Alpha-2 code (two-letters code - en, fr, es, ...)
- * -  RFC 4646  : five-letter code based on the ISO 639 two-letter language codes
- *    and the ISO 3166 two-letter territory codes (pt-BR, ...)
- * -  ISO 639-2 : Alpha-3 code (three-letters code - ast, fur, ...)
- */
-function api_get_language_isocode($language = null) {
-	return Database::get_language_isocode($language);
-}
-
 /**
  * Gets the current interface language.
  * @param bool $purified (optional)	When it is true, a purified (refined) language value will be returned, for example 'french' instead of 'french_unicode'.
@@ -235,13 +219,7 @@ function api_get_language_isocode($language = null) {
  */
 function api_get_interface_language($purified = false) {
 	global $language_interface;
-	if (empty($language_interface)) {
-		return 'english';
-	}
-	if ($purified) {
-		return api_refine_language_id($language_interface);
-	}
-	return $language_interface;
+	return empty($language_interface) ? 'english' : ($purified ? api_refine_language_id($language_interface) : $language_interface);
 }
 
 /**
@@ -287,6 +265,36 @@ function api_refine_language_id($language) {
 		$purified[$language] = str_replace(array('_unicode', '_latin', '_corporate', '_org', '_km'), '', strtolower($language));
 	}
 	return $purified[$language];
+}
+
+// TODO: To be added a sanity check whether Database class has been loaded.
+/**
+ * Gets language isocode column from the language table, taking the current language as a query parameter.
+ * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
+ * If $language is omitted, interface language is assumed then.
+ * @return string			The found isocode or null on error.
+ * Returned codes are according to the following standards (in order of preference):
+ * -  ISO 639-1 : Alpha-2 code (two-letters code - en, fr, es, ...)
+ * -  RFC 4646  : five-letter code based on the ISO 639 two-letter language codes
+ *    and the ISO 3166 two-letter territory codes (pt-BR, ...)
+ * -  ISO 639-2 : Alpha-3 code (three-letters code - ast, fur, ...)
+ */
+function api_get_language_isocode($language = null) {
+	static $iso_code = array();
+	if (empty($language)) {
+		$language = api_get_interface_language();
+	}
+	if (!isset($iso_code[$language])) {
+		$table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+		$sql_result = Database::query("SELECT isocode FROM $table WHERE dokeos_folder = '$language'", __FILE__, __LINE__);
+		if (Database::num_rows($sql_result)) {
+			$result = Database::fetch_array($sql_result);
+			$iso_code[$language] = $result['isocode'];
+		} else {
+			$iso_code[$language] = null;
+		}
+	}
+	return $iso_code[$language];
 }
 
 /**

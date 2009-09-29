@@ -212,6 +212,22 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 					$variable."&amp;language=".$language."\" target=\"_blank\" style=\"color:#FF0000\"><strong>#</strong></a>");
 }
 
+// TODO: Database::get_language_isocode() to be deprecated.
+/**
+ * Gets language isocode column from the language table, taking the current language as a query parameter.
+ * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
+ * If $language is omitted, interface language is assumed then.
+ * @return string			The found isocode or null on error.
+ * Returned codes are according to the following standards (in order of preference):
+ * -  ISO 639-1 : Alpha-2 code (two-letters code - en, fr, es, ...)
+ * -  RFC 4646  : five-letter code based on the ISO 639 two-letter language codes
+ *    and the ISO 3166 two-letter territory codes (pt-BR, ...)
+ * -  ISO 639-2 : Alpha-3 code (three-letters code - ast, fur, ...)
+ */
+function api_get_language_isocode($language = null) {
+	return Database::get_language_isocode($language);
+}
+
 /**
  * Gets the current interface language.
  * @param bool $purified (optional)	When it is true, a purified (refined) language value will be returned, for example 'french' instead of 'french_unicode'.

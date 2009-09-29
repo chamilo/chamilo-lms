@@ -2057,7 +2057,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 ==============================================================================
 */
 
-// TODO: To be moved to Display calss.
+// TODO: To be moved to Display class.
 /**
  *	Displays a combobox so the user can select his/her preferred language.
  *   @param string The desired name= value for the select
@@ -2183,22 +2183,6 @@ function api_get_language_id($language) {
 	$result = Database::query($sql, __FILE__, __LINE__);
 	$row = Database::fetch_array($result);
 	return $row['id'];
-}
-
-// TODO: Tobe moved in the Internationalization library. Database::get_language_isocode() to be deprecated.
-/**
- * Gets language isocode column from the language table, taking the current language as a query parameter.
- * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
- * If $language is omitted, interface language is assumed then.
- * @return string			The found isocode or null on error.
- * Returned codes are according to the following standards (in order of preference):
- * -  ISO 639-1 : Alpha-2 code (two-letters code - en, fr, es, ...)
- * -  RFC 4646  : five-letter code based on the ISO 639 two-letter language codes
- *    and the ISO 3166 two-letter territory codes (pt-BR, ...)
- * -  ISO 639-2 : Alpha-3 code (three-letters code - ast, fur, ...)
- */
-function api_get_language_isocode($language = null) {
-	return Database::get_language_isocode($language);
 }
 
 /**

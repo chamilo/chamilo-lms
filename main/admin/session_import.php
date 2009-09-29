@@ -170,7 +170,7 @@ if ($_POST['formSent']) {
 						$course_code = trim(api_utf8_decode($courseNode->CourseCode));
 						$title = trim(api_utf8_decode($courseNode->CourseTitle));
 						$description = trim(api_utf8_decode($courseNode->CourseDescription));
-						$language = api_validate_language(api_utf8_decode($courseNode->CourseLanguage));
+						$language = api_get_valid_language(api_utf8_decode($courseNode->CourseLanguage));
 						$username = trim(api_utf8_decode($courseNode->CourseTeacher));
 
 						// Looking up for the teacher.

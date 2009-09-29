@@ -1016,13 +1016,13 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump($res9);
 	}
 
-	public function test_api_validate_language() {
+	public function test_api_get_valid_language() {
 		$language1 = '   '.strtoupper(api_get_interface_language()).'    ';
 		$language2 = " \t   ".strtoupper(api_get_setting('platformLanguage'))."   \t ";
 		$language3 = 'xxxxxxxxxxxxxx';
-		$res1 = api_validate_language($language1);
-		$res2 = api_validate_language($language2);
-		$res3 = api_validate_language($language3);
+		$res1 = api_get_valid_language($language1);
+		$res2 = api_get_valid_language($language2);
+		$res3 = api_get_valid_language($language3);
 		$this->assertTrue(
 			$res1 === api_get_interface_language()
 			&& $res2 === api_get_setting('platformLanguage')

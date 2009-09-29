@@ -247,7 +247,7 @@ function api_is_language_supported($language) {
  * @param string $language		The language identificator to be validated.
  * @return string				Returns the input language identificator. If the input language is not enabled, platform language is returned then.
  */
-function api_validate_language($language) {
+function api_get_valid_language($language) {
 	static $enabled_languages;
 	if (!isset($enabled_languages)) {
 		$enabled_languages_info = api_get_languages();

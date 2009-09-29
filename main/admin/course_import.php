@@ -104,7 +104,7 @@ function save_data($courses) {
 	global $purification_option_for_usernames;
 	$msg = '';
 	foreach ($courses as $index => $course) {
-		$course_language = api_validate_language($course['Language']);
+		$course_language = api_get_valid_language($course['Language']);
 		$keys = define_course_keys($course['Code'], '', $_configuration['db_prefix']);
 		$user_table = Database::get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT user_id, ".(api_is_western_name_order(null, $course_language) ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)")." AS name FROM $user_table WHERE username = '".Database::escape_string(UserManager::purify_username($course['Teacher'], $purification_option_for_usernames))."'";

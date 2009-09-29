@@ -1017,20 +1017,32 @@ class TestInternationalization extends UnitTestCase {
 	}
 
 	public function test_api_get_valid_language() {
-		$language1 = '   '.strtoupper(api_get_interface_language()).'    ';
-		$language2 = " \t   ".strtoupper(api_get_setting('platformLanguage'))."   \t ";
-		$language3 = 'xxxxxxxxxxxxxx';
-		$res1 = api_get_valid_language($language1);
-		$res2 = api_get_valid_language($language2);
-		$res3 = api_get_valid_language($language3);
-		$this->assertTrue(
-			$res1 === api_get_interface_language()
-			&& $res2 === api_get_setting('platformLanguage')
-			&& $res3 === api_get_setting('platformLanguage')
-		);
-		//var_dump($res1);
-		//var_dump($res2);
-		//var_dump($res3);
+		$enabled_languages_info = api_get_languages();
+		$enabled_languages = $enabled_languages_info['folder'];
+		$language = array();
+		$language[] = '   '.strtoupper(api_get_interface_language()).'    ';
+		$language[] = " \t   ".strtoupper(api_get_setting('platformLanguage'))."   \t ";
+		$language[] = 'xxxxxxxxxxxxxx';
+		$language[] = '   \t'.strtoupper('bulgarian').'    ';
+		$res = array();
+		$res[] = api_get_valid_language($language[1]);
+		$res[] = api_get_valid_language($language[2]);
+		$res[] = api_get_valid_language($language[3]);
+		$res[] = api_get_valid_language($language[4]);
+		$expected = array();
+		foreach ($language as $value) {
+			$value = str_replace('_km', '_KM', strtolower(trim($value)));
+			if (empty($value) || !in_array($value, $enabled_languages) || !api_is_language_supported($value)) {
+				$value = api_get_setting('platformLanguage');
+			}
+			$expected = $value;
+		}
+		$is_ok = true;
+		foreach ($language as $key => $value) {
+			$is_ok = $is_ok && ($value === $res[$key]);
+		}
+		//var_dump($res);
+		//var_dump($expected);
 	}
 
 	public function test_api_refine_language_id() {

@@ -1045,9 +1045,9 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump($expected);
 	}
 
-	public function test_api_refine_language_id() {
+	public function test_api_purify_language_id() {
 		$language = 'english_org';
-		$res = api_refine_language_id($language);
+		$res = api_purify_language_id($language);
 		$this->assertTrue(is_string($res));
 		$this->assertTrue($res == 'english');
 		//var_dump($res);

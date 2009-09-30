@@ -219,7 +219,7 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
  */
 function api_get_interface_language($purified = false) {
 	global $language_interface;
-	return empty($language_interface) ? 'english' : ($purified ? api_refine_language_id($language_interface) : $language_interface);
+	return empty($language_interface) ? 'english' : ($purified ? api_purify_language_id($language_interface) : $language_interface);
 }
 
 /**
@@ -230,7 +230,7 @@ function api_get_interface_language($purified = false) {
 function api_is_language_supported($language) {
 	static $supported = array();
 	if (!isset($supported[$language])) {
-		$supported[$language] = in_array(api_refine_language_id($language), array_keys(_api_non_utf8_encodings()));
+		$supported[$language] = in_array(api_purify_language_id($language), array_keys(_api_non_utf8_encodings()));
 	}
 	return $supported[$language];
 }
@@ -259,7 +259,7 @@ function api_get_valid_language($language) {
  * @param string $language	The input language identificator, for example 'french_unicode'.
  * @param string			The same purified or filtered language identificator, for example 'french'.
  */
-function api_refine_language_id($language) {
+function api_purify_language_id($language) {
 	static $purified = array();
 	if (!isset($purified[$language])) {
 		$purified[$language] = str_replace(array('_unicode', '_latin', '_corporate', '_org', '_km'), '', strtolower($language));
@@ -291,7 +291,7 @@ function api_get_language_isocode($language = null) {
 			$result = Database::fetch_array($sql_result);
 			$iso_code[$language] = $result['isocode'];
 		} else {
-			$language_purified_id = api_refine_language_id($language);
+			$language_purified_id = api_purify_language_id($language);
 			$iso_code[$language] = isset($iso_code[$language_purified_id]) ? $iso_code[$language_purified_id] : null;
 		}
 	}
@@ -308,7 +308,7 @@ function api_is_latin1_compatible($language) {
 	if (!isset($latin1_languages)) {
 		$latin1_languages = _api_get_latin1_compatible_languages();
 	}
-	$language = api_refine_language_id($language);
+	$language = api_purify_language_id($language);
 	return in_array($language, $latin1_languages);
 }
 
@@ -3002,7 +3002,7 @@ function api_get_non_utf8_encoding($language = null) {
 	if (empty($language)) {
 		$language = api_get_interface_language();
 	}
-	$language = api_refine_language_id($language);
+	$language = api_purify_language_id($language);
 	$encodings = & _api_non_utf8_encodings();
 	if (is_array($encodings[$language])) {
 		if (!empty($encodings[$language][0])) {

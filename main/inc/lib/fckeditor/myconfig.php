@@ -272,6 +272,9 @@ if ((api_get_setting('advanced_filemanager') == 'true')) {
 //$config['FontFormats'] = 'p;h1;h2;h3;h4;h5;h6;pre;address;div';
 $config['FontFormats'] = 'p;h1;h2;h3;h4;h5'; // A reduced format list.
 
+// The following setting guarantees white backgroung for the editing area
+// for all browsers. You may disable or change it if you wish.
+$config['EditorAreaStyles'] = 'body { background-color: #ffffff; }';
 
 /*
  * Additional note:

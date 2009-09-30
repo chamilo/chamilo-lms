@@ -735,7 +735,7 @@ class Database {
 	 * @param	resource	Optional database resource
 	 */
 	public static function affected_rows($r = null) {
-		return is_null($r) ? mysql_affected_rows($r) : mysql_affected_rows();
+		return !is_null($r) ? mysql_affected_rows($r) : mysql_affected_rows();
 	}
 
 	/**

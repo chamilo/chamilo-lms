@@ -806,16 +806,8 @@ function _api_get_locale_from_language($language = null) {
 		$language = api_get_interface_language();
 	}
 	if (!isset($locale[$language])) {
-		if (class_exists('Database')) {
-			$locale[$language] = Database::get_language_isocode($language);
-		} else {
-			return 'en';
-		}
-		if (empty($locale[$language])) {
-			$locale[$language] = 'en';
-		} else {
-			$locale[$language] = str_replace('-', '_', $locale[$language]);
-		}
+		$locale[$language] = api_get_language_isocode($language);
+		$locale[$language] = empty($locale[$language]) ? 'en' : str_replace('-', '_', $locale[$language]);
 	}
 	return $locale[$language];
 }

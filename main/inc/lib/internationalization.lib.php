@@ -267,7 +267,6 @@ function api_purify_language_id($language) {
 	return $purified[$language];
 }
 
-// TODO: To be added a sanity check whether Database class has been loaded.
 /**
  * Gets language isocode column from the language table, taking the current language as a query parameter.
  * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
@@ -285,8 +284,10 @@ function api_get_language_isocode($language = null) {
 		$language = api_get_interface_language();
 	}
 	if (!isset($iso_code[$language])) {
-		$table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-		$sql_result = Database::query("SELECT isocode FROM $table WHERE dokeos_folder = '$language'", __FILE__, __LINE__);
+		if (!class_exists('Database')) {
+			return 'en'; // This might happen, in case of calling this function early during the global initialization.
+		}
+		$sql_result = Database::query("SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." WHERE dokeos_folder = '$language'", __FILE__, __LINE__);
 		if (Database::num_rows($sql_result)) {
 			$result = Database::fetch_array($sql_result);
 			$iso_code[$language] = $result['isocode'];

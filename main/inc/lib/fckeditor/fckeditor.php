@@ -437,15 +437,6 @@ class FCKeditor
 	 */
 	private function & get_css_configuration() {
 		$config['EditorAreaCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/default.css';
-		/*
-		// TODO: Check whether these CSS are appropriate.
-		if (file_exists(api_get_path(SYS_PATH).'main/css/'.api_get_setting('stylesheets').'/course.css')) {
-			$config['EditorAreaCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/course.css';
-		} else {
-			$config['EditorAreaCSS'] = api_get_path(REL_PATH).'main/css/public_admin/course.css';
-		}
-		*/
-
 		$config['ToolbarComboPreviewCSS'] = $config['EditorAreaCSS'];
 		return $config;
 	}
@@ -457,17 +448,10 @@ class FCKeditor
 	private function & get_editor_language() {
 		static $config;
 		if (!is_array($config)) {
-			global $language_interface;
-			@ $editor_lang = api_get_language_isocode($language_interface);
-			$editor_lang = strtolower(str_replace('_', '-', $editor_lang));
-			if (empty ($editor_lang)) {
-				$editor_lang = 'en';
-			}
-			$language_file = api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js';
-			if (!file_exists($language_file)) {
-				// If there was no language file, use the English one.
-				$editor_lang = 'en';
-			}
+			$translation_table = array('' => 'en', 'sr' => 'sr-latn', 'zh' => 'zh-cn', 'zh-tw' => 'zh');
+			$editor_lang = strtolower(str_replace('_', '-', api_get_language_isocode()));
+			$editor_lang = isset($translation_table[$editor_lang]) ? $translation_table[$editor_lang] : $editor_lang;
+			$editor_lang = file_exists(api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js') ? $editor_lang : 'en';
 			$config['DefaultLanguage'] = $editor_lang;
 		}
 		return $config;

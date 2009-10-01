@@ -147,10 +147,10 @@ function display_user_list($user_list, $_plugins) {
 				if ($user_info['user_id'] != api_get_user_id() && !api_is_anonymous($user_info['user_id'])) {
 					$user_relation = UserFriend::get_relation_between_contacts(api_get_user_id(), $user_info['user_id']);
 					if ($user_relation == 0 || $user_relation == 6) {
-						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a><br />
-										<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
+						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=300&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a><br />
+										<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
 					} else {
-						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
+						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
 					}
 				}
 			}

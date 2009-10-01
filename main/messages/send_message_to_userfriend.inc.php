@@ -29,7 +29,7 @@ if ( isset($_REQUEST['user_friend']) ) {
 ?>
 <table width="600" border="0" height="220">
     <tr height="180">
-        <td>
+        <td align="center">
         <div class="message-content-body-left">
 			<img class="message-image-info" src="<?php echo $info_path_friend['dir'].$info_path_friend['file']; ?>"/>
 			<?php
@@ -67,10 +67,9 @@ if ( isset($_REQUEST['user_friend']) ) {
         </td>
     </tr>
         </div>
-    <tr height="22">
+    <tr>
         <td>
 			<div id="display_response_id" style="position:relative"></div>
-			<div class="message-bottom-title">&nbsp;</div>
 		</td>
 	</tr>
 </table>

@@ -1566,12 +1566,12 @@ div.system_announcement_content {
 }
 .message-content-body-left {
 	float:left;
-	width:55%;
+    width:30%;   
 }
 .message-content-body-right {
 	float:right;
 	text-align:left;
-	width:45%;
+	width:60%;
 }
 .message-body-title {
 	float:right;

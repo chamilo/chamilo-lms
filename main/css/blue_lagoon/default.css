@@ -936,9 +936,10 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	border-bottom:1px solid #CCCCCC;
 }
 .message-content-body-left {
-	float:left;/*width:55%;  */
+	float:left;
+    width:30%;   
 }
-.message-conten-body-right {
+.message-content-body-right {
 	float:right;
 	text-align:left;
 	width:60%;

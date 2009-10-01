@@ -38,6 +38,7 @@ if ( isset($_REQUEST['user_friend']) ) {
 			}
 			?>
 		</div>
+
 <div class="message-content-body-right">
 <div id="id_content_panel_init">
 			<dl>
@@ -67,10 +68,9 @@ if ( isset($_REQUEST['user_friend']) ) {
         </td>
     </tr>
         </div>
-    <tr height="22">
+    <tr>
         <td>
-			<div id="display_response_id" style="position:relative"></div>
-			<div class="message-bottom-title">&nbsp;</div>
+			<div><div id="display_response_id" style="position:relative"></div></div>
 		</td>
 	</tr>
 </table>

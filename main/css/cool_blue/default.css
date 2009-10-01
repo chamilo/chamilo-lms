@@ -930,9 +930,10 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	border-bottom:1px solid #CCCCCC;
 }
 .message-content-body-left {
-	float:left;/*width:55%;  */
+	float:left;
+    width:30%;   
 }
-.message-conten-body-right {
+.message-content-body-right {
 	float:right;
 	text-align:left;
 	width:60%;
@@ -952,7 +953,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	text-align:left;
 	margin-right:20px;
 }
-.message-conten-body-right dd {
+.message-content-body-right dd {
 	color:#333399;
 	border-bottom:1px solid #CCCCCC;
 	height:20px;
@@ -960,7 +961,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	outline-style:none;
 	background:#ffffff;
 }
-.message-conten-body-right:hover {
+.message-content-body-right:hover {
 }
 /**********************************************
  *  DOCUMENT MODULE                           *

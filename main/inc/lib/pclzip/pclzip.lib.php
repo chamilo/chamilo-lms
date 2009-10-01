@@ -199,7 +199,7 @@
     //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, 'PclZip::PclZip', "zipname=$p_zipname");
 
     // ----- Tests the zlib
-    if (!function_exists('gzopen') && !function_exists('gzopen64'))
+    if (!function_exists('gzopen'))
     {
       //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 1, "zlib extension seems to be missing");
       die('Abort '.basename(__FILE__).' : Missing zlib extensions');

@@ -28,3 +28,12 @@ Bug correction : When adding files with full windows path (drive letter)
 PclZip is now working. Before, if the drive letter is not the default
 path, PclZip was not able to add the file.
 
+
+
+Additional changes: gzopen64() - 20090930
+------------------------------
+An additional change has been applied to check on the zlib extension by probing
+gzopen64() as well as gzopen() in the PclZip() function. This is due to a
+recent change in the Zlib library, whereby the gzopen() function has been
+updated and moved to gzopen64().
+This problem has been reported to PhpConcept (editors of PclZip).

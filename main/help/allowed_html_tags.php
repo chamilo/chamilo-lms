@@ -33,7 +33,7 @@ $language_file = 'help';
 include ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/Rule/HTML.php');
-$language_code = Database :: get_language_isocode($language_interface);
+$language_code = api_get_language_isocode($language_interface);
 header('Content-Type: text/html; charset='.$charset);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

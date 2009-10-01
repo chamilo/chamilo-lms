@@ -36,7 +36,7 @@ $DaysShort = api_get_week_days_short();
 $DaysLong = api_get_week_days_long();
 // Defining the months of the year to allow translation of the months
 $MonthsLong = api_get_months_long();
-@ $iso_lang = Database :: get_language_isocode($language_interface);
+@ $iso_lang = api_get_language_isocode($language_interface);
 if (empty ($iso_lang) )
 {
 	//if there was no valid iso-code, use the english one

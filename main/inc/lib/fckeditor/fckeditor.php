@@ -458,7 +458,7 @@ class FCKeditor
 		static $config;
 		if (!is_array($config)) {
 			global $language_interface;
-			@ $editor_lang = Database :: get_language_isocode($language_interface);
+			@ $editor_lang = api_get_language_isocode($language_interface);
 			$editor_lang = strtolower(str_replace('_', '-', $editor_lang));
 			if (empty ($editor_lang)) {
 				$editor_lang = 'en';

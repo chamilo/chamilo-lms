@@ -213,7 +213,7 @@
 	}
 	*/
 
-	@ $langajaxfilemanager = Database :: get_language_isocode($language_interface);
+	@ $langajaxfilemanager = api_get_language_isocode($language_interface);
 
 	// Some code translations are needed.
 	$langajaxfilemanager = strtolower(str_replace('_', '-', $langajaxfilemanager));

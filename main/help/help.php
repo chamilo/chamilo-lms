@@ -34,7 +34,7 @@
 $language_file='help';
 $helpName=$_GET['open'];
 include('../inc/global.inc.php');
-$language_code = Database::get_language_isocode($language_interface);
+$language_code = api_get_language_isocode($language_interface);
 header('Content-Type: text/html; charset='. $charset);
 
 

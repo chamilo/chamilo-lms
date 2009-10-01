@@ -54,7 +54,7 @@ $htmlbuffer=ob_get_contents();// Store Output-Buffer in one variable
 ob_end_clean();// delete Output-Buffer
 
 /////bridge to  dokeos lang
-	@ $langhtml2pdf = Database :: get_language_isocode($language_interface);
+	@ $langhtml2pdf = api_get_language_isocode($language_interface);
 
 	// Some code translations are needed.
 	$langhtml2pdf = strtolower(str_replace('_', '-', $langhtml2pdf));

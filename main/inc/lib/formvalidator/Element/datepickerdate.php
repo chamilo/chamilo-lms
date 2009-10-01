@@ -44,7 +44,7 @@ class HTML_QuickForm_datepickerdate extends HTML_QuickForm_date
 		{
 			$popup_link = str_replace($char, "\\".$char, $popup_link);
 		}
-		@ $editor_lang = Database :: get_language_isocode($language_interface);
+		@ $editor_lang = api_get_language_isocode($language_interface);
 		if (empty ($editor_lang) )
 		{
 			//if there was no valid iso-code, use the english one

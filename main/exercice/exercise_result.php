@@ -295,7 +295,7 @@ if ($origin != 'learnpath') {
 	}
 	header('Content-Type: text/html; charset='. $charset);
 
-	@$document_language = Database::get_language_isocode($language_interface);
+	@$document_language = api_get_language_isocode($language_interface);
 	if(empty($document_language))
 	{
 	  //if there was no valid iso-code, use the english one

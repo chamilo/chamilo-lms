@@ -47,7 +47,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 			$popup_link = str_replace($char, "\\".$char, $popup_link);
 			$hour_minute_devider = str_replace($char, "\\".$char, $hour_minute_devider);
 		}
-		@ $editor_lang = Database :: get_language_isocode($language_interface);
+		@ $editor_lang = api_get_language_isocode($language_interface);
 		if (empty ($editor_lang) )
 		{
 			//if there was no valid iso-code, use the english one

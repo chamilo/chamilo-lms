@@ -1,7 +1,6 @@
 /*
+ * Occitan language file.
  * Please, use UTF-8 encoding.
- *
- * Latvian language file.
  */
 
 FCKLang['YouTubeTip']			= 'Insert/Edit YouTube' ;

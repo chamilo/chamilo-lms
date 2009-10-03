@@ -415,7 +415,7 @@ class FCKeditor
 		return array_merge(
 			self::get_javascript_custom_configuration_file(),
 			self::get_css_configuration(),
-			$this->get_editor_language(),
+			self::get_editor_language(),
 			$this->get_repository_configuration(),
 			self::get_media_configuration(),
 			self::get_user_configuration_data(),
@@ -454,8 +454,8 @@ class FCKeditor
 			$editor_lang = file_exists(api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js') ? $editor_lang : 'en';
 			$config['DefaultLanguage'] = $editor_lang;
 			$text_direction = trim(get_lang('text_dir', ''));
-			if (!$this->Config['FullPage'] && !empty($text_direction) && strlen($text_direction) == 3) {
-				$this->Config['ContentLangDirection'] = $text_direction;
+			if (!empty($text_direction) && strlen($text_direction) == 3) {
+				$config['ContentLangDirection'] = $text_direction;
 			}
 		}
 		return $config;

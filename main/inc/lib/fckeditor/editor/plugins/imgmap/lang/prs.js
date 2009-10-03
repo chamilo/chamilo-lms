@@ -1,6 +1,7 @@
-﻿// Turkish language file.
-// Image Map Editor.
-// Please, use UTF-8 encoding.
+/*
+ * Dari language file.
+ * Please, use UTF-8 encoding.
+ */
 
 FCKLang.imgmapBtn           = 'Insert/Edit Image Map';
 FCKLang.imgmapBtnRemove     = 'Remove map';
@@ -24,7 +25,6 @@ FCKLang.imgmapPointer       = 'Pointer' ;
 FCKLang.imgmapRectangle     = 'Rectangle' ;
 FCKLang.imgmapCircle        = 'Circle' ;
 FCKLang.imgmapPolygon       = 'Polygon' ;
-
 var imgmapStrings = {
 
 READY                   : 'Ready',
@@ -59,4 +59,3 @@ ERR_EXCANVAS_LOAD       : 'Excanvas not loaded properly. Try to refresh the page
 ERR_INVALID_COORDS      : 'Invalid coordinates.'
 
 };
-

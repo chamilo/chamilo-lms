@@ -1,17 +1,13 @@
 <?php
-	/**
-	 * language pack
-	 * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
-	 * @link www.phpletter.com
-	 * @since 22/April/2007
-	 *
-	 */
+/**
+ * Basque language file.
+ * Euskara hizkuntza fitxategia.
+ * Please, use UTF-8 encoding.
+ */
+
 	define('DATE_TIME_FORMAT', 'd/M/Y H:i:s');
 	//Common
 	//Menu
-
-
-
 
 	define('MENU_SELECT', 'Select');
 	define('MENU_DOWNLOAD', 'Download');

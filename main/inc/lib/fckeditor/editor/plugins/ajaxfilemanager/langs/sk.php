@@ -1,4 +1,4 @@
-<?
+<?php
 	/**
 	 * language pack
 	 * @author Vladimir Maglakelidze (voloda) (maglakel@gmail.com)

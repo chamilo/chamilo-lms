@@ -1,4 +1,4 @@
-<?
+<?php
 	/**
 	 * sysem base config setting
 	 * @author Antonello Alonzi (info@smsoft.it)

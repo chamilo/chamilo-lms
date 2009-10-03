@@ -52,7 +52,7 @@ FCKConfig.SmileyWindowHeight = 250 ;
  */
 
 // This is a list of all supported by the online editor languages.
-FCKConfig.AvailableLanguages = 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh' ;
+FCKConfig.AvailableLanguages = 'en,af,ar,ast,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,fur,gl,gu,he,hi,hr,hu,id,is,it,ja,ka,km,ko,lt,lv,mk,mn,ms,nb,nl,no,oc,pl,prs,ps,pt-br,pt,qu,ro,ru,sk,sl,sr-latn,sr,sv,sw,th,tr,uk,vi,yo,zh-cn,zh' ;
 // This script selects for loading source/compressed versions of some javascripts and ensures that the English language
 // would be shown for plugins, if they are not provided with the requiested language files.
 LoadScript( ( window.document.location.toString().indexOf('fckeditor.original.html') != -1 ) // Please, do not disable this script.

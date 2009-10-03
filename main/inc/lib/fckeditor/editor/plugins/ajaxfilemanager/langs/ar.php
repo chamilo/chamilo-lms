@@ -1,4 +1,4 @@
-﻿<?
+<?php
 	/**
 	 * sysem base config setting
 	 * @Arabic language Translation

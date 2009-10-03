@@ -25,7 +25,7 @@
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $IMConfig['language']; ?>" lang="<?php echo $IMConfig['language']; ?>">
 <head>
 <title>Insert Image</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -112,7 +112,7 @@ body {
 
 	function Init()
 	{
-		if (window.opener)
+		if ( window.opener )
 		{
 			document.getElementById('dialog_title').style.visibility = '' ;
 		}
@@ -135,7 +135,7 @@ body {
 
 </head>
 
-<body onload="javascript: Init();">
+<body dir="<?php echo $IMConfig['text_direction']; ?>" onload="javascript: Init();">
 <div id="dialog_title" class="PopupTitle" style="visibility: hidden;">Insert Image</div>
 <form action="images.php" id="uploadForm" method="post" enctype="multipart/form-data">
 <fieldset style="margin-left: 15px; margin-right: 15px;"><legend>Image Manager</legend>

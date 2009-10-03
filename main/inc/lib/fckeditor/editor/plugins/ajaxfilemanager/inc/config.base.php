@@ -200,49 +200,16 @@
 
 
 	//General Option Declarations
+
 	//LANGAUGAE DECLARATIONNS
-	/*
-	$langdoktoajaxfile= api_get_language_isocode(); //from dokeos. return, en, es...
-	if ($langdoktoajaxfile=='en' || $langdoktoajaxfile=='zh' || $langdoktoajaxfile=='es') // ajaxfilemanager full translations (only with all variables translated).
-	{
-	   $langajaxfilemanager=$langdoktoajaxfile;
-	}
-	else
-	{
-		$langajaxfilemanager='en';//default
-	}
-	*/
-
-	@ $langajaxfilemanager = api_get_language_isocode($language_interface);
-
-	// Some code translations are needed.
-	$langajaxfilemanager = strtolower(str_replace('_', '-', $langajaxfilemanager));
-	if (empty ($langajaxfilemanager))
-	{
-		$langajaxfilemanager = 'en';
-	}
-	switch ($langajaxfilemanager)
-	{
-		case 'uk':
-			$langajaxfilemanager = 'ukr';
-			break;
-		case 'pt':
-			$langajaxfilemanager = 'pt_pt';
-			break;
-		case 'pt-br':
-			$langajaxfilemanager = 'pt_br';
-			break;
-		// Code here other noticed exceptions.
-	}
-
-
-	// Checking for availability of a corresponding language file.
-	if (!file_exists(api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/langs/'.$langajaxfilemanager.'.php'))
-	{
-		// If there was no language file, use the english one.
-		$langajaxfilemanager = 'en';
-	}
+	$ajaxfilemanager_code_translation_table = array('' => 'en', 'pt' => 'pt_pt', 'sr' => 'sr_latn');
+	$langajaxfilemanager  = strtolower(str_replace('-', '_', api_get_language_isocode()));
+	$langajaxfilemanager = isset($ajaxfilemanager_code_translation_table[$langajaxfilemanager]) ? $ajaxfilemanager_code_translation_table[$langajaxfilemanager] : $langajaxfilemanager;
+	$langajaxfilemanager = file_exists(api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/langs/'.$langajaxfilemanager.'.php') ? $langajaxfilemanager : 'en';
 
 	define('CONFIG_LANG_INDEX', 'language'); //the index in the session
 	define('CONFIG_LANG_DEFAULT', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['language']) && file_exists(DIR_LANG . secureFileName($_GET['language']) . '.php')?secureFileName($_GET['language']):$langajaxfilemanager)); //change it to be your language file base name, such en
+	// Language text direction.
+	define('CONFIG_LANG_TEXT_DIRECTION_DEFAULT', in_array(CONFIG_LANG_DEFAULT, array('ar', 'prs', 'he', 'ps', 'fa')) ? 'rtl' : 'ltr');
+
 ?>

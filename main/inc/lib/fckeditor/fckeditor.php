@@ -448,9 +448,9 @@ class FCKeditor
 	private function & get_editor_language() {
 		static $config;
 		if (!is_array($config)) {
-			$translation_table = array('' => 'en', 'sr' => 'sr-latn', 'zh' => 'zh-cn', 'zh-tw' => 'zh');
+			$code_translation_table = array('' => 'en', 'sr' => 'sr-latn', 'zh' => 'zh-cn', 'zh-tw' => 'zh');
 			$editor_lang = strtolower(str_replace('_', '-', api_get_language_isocode()));
-			$editor_lang = isset($translation_table[$editor_lang]) ? $translation_table[$editor_lang] : $editor_lang;
+			$editor_lang = isset($code_translation_table[$editor_lang]) ? $code_translation_table[$editor_lang] : $editor_lang;
 			$editor_lang = file_exists(api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js') ? $editor_lang : 'en';
 			$config['DefaultLanguage'] = $editor_lang;
 		}

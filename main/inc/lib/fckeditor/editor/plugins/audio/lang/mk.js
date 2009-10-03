@@ -1,8 +1,9 @@
-// Audio Dialog.
-// Greek language file.
-// Please, use UTF-8 encoding.
+/*
+ * Audio Dialog.
+ * Macedonian language file.
+ * Please, use UTF-8 encoding.
+ */
 
 FCKLang['DlgAudioTitle'] = 'Insert audio / Audio properties' ;
 FCKLang['DlgAudioPlayback'] = 'Playback' ;
 FCKLang['DlgAudioAutoplay'] = 'Autoplay' ;
-

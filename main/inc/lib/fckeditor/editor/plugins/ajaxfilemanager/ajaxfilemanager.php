@@ -64,7 +64,7 @@
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" debug="true">
+<html xmlns="http://www.w3.org/1999/xhtml" debug="true" xml:lang="<?php echo CONFIG_LANG_DEFAULT; ?>" lang="<?php echo CONFIG_LANG_DEFAULT; ?>">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Ajax File Manager</title>
@@ -209,7 +209,7 @@ $(document).ready(
 <link href="theme/<?php echo CONFIG_THEME_NAME; ?>/css/ie6.css" type="text/css" rel="Stylesheet" media="screen">
 <![endif]-->
 </head>
-<body style="background-color:#E8E8E8;">
+<body style="background-color:#E8E8E8;" dir="<?php echo CONFIG_LANG_TEXT_DIRECTION_DEFAULT; ?>">
 	<div id="wrapper">
   	<div id="header">
   		<dl id="currentFolderInfo">

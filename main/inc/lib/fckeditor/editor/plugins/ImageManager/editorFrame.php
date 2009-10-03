@@ -27,7 +27,7 @@
 <!--[if IE]>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <![endif]-->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $IMConfig['language']; ?>" lang="<?php echo $IMConfig['language']; ?>">
 <head>
 <title></title>
 <link href="assets/editorFrame.css" rel="stylesheet" type="text/css" />
@@ -244,7 +244,7 @@
 
 </head>
 
-<body>
+<body dir="<?php echo $IMConfig['text_direction']; ?>">
 <div id="status"></div>
 <div id="ant" class="selection" style="visibility:hidden"><img src="img/spacer.gif" width="0" height="0" border="0" alt="" id="cropContent"></div>
 <?php if ($editor->isGDEditable() == -1) { ?>

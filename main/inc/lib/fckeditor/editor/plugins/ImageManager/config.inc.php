@@ -263,4 +263,15 @@ $IMConfig['thumbnail_height'] = 96;
   Image Editor temporary filename prefix.
 */
 $IMConfig['tmp_prefix'] = '.editor_';
+
+/*
+ Language and text direction.
+ */
+$IMConfig['language'] = api_get_language_isocode();
+if (empty($IMConfig['language']))
+{
+	$IMConfig['language'] = 'en';
+}
+$IMConfig['text_direction'] = in_array($IMConfig['language'], array('ar', 'prs', 'he', 'ps', 'fa')) ? 'rtl' : 'ltr';
+
 ?>

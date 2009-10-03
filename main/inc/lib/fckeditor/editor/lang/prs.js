@@ -1,4 +1,4 @@
-﻿/*
+/*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
  * Copyright (C) 2003-2009 Frederico Caldeira Knabben
  *
@@ -18,13 +18,14 @@
  *
  * == END LICENSE ==
  *
- * English (United Kingdom) language file.
+ * Dari language file.
+ * Please, use UTF-8 encoding.
  */
 
 var FCKLang =
 {
 // Language direction : "ltr" (left to right) or "rtl" (right to left).
-Dir					: "ltr",
+Dir					: "rtl",
 
 ToolbarCollapse		: "Collapse Toolbar",
 ToolbarExpand		: "Expand Toolbar",
@@ -67,7 +68,7 @@ StrikeThrough		: "Strike Through",
 Subscript			: "Subscript",
 Superscript			: "Superscript",
 LeftJustify			: "Left Justify",
-CenterJustify		: "Centre Justify",
+CenterJustify		: "Center Justify",
 RightJustify		: "Right Justify",
 BlockJustify		: "Block Justify",
 DecreaseIndent		: "Decrease Indent",
@@ -88,8 +89,8 @@ Style				: "Style",
 FontFormat			: "Format",
 Font				: "Font",
 FontSize			: "Size",
-TextColor			: "Text Colour",
-BGColor				: "Background Colour",
+TextColor			: "Text Color",
+BGColor				: "Background Color",
 Source				: "Source",
 Find				: "Find",
 Replace				: "Replace",
@@ -279,7 +280,7 @@ DlnLnkMsgNoAnchor	: "Please select an anchor",
 DlnLnkMsgInvPopName	: "The popup name must begin with an alphabetic character and must not contain spaces",
 
 // Color Dialog
-DlgColorTitle		: "Select Colour",
+DlgColorTitle		: "Select Color",
 DlgColorBtnClear	: "Clear",
 DlgColorHighlight	: "Highlight",
 DlgColorSelected	: "Selected",
@@ -298,7 +299,7 @@ DlgTableBorder		: "Border size",
 DlgTableAlign		: "Alignment",
 DlgTableAlignNotSet	: "<Not set>",
 DlgTableAlignLeft	: "Left",
-DlgTableAlignCenter	: "Centre",
+DlgTableAlignCenter	: "Center",
 DlgTableAlignRight	: "Right",
 DlgTableWidth		: "Width",
 DlgTableWidthPx		: "pixels",
@@ -308,11 +309,11 @@ DlgTableCellSpace	: "Cell spacing",
 DlgTableCellPad		: "Cell padding",
 DlgTableCaption		: "Caption",
 DlgTableSummary		: "Summary",
-DlgTableHeaders		: "Headers",	//MISSING
-DlgTableHeadersNone		: "None",	//MISSING
-DlgTableHeadersColumn	: "First column",	//MISSING
-DlgTableHeadersRow		: "First Row",	//MISSING
-DlgTableHeadersBoth		: "Both",	//MISSING
+DlgTableHeaders		: "Headers",
+DlgTableHeadersNone		: "None",
+DlgTableHeadersColumn	: "First column",
+DlgTableHeadersRow		: "First Row",
+DlgTableHeadersBoth		: "Both",
 
 // Table Cell Dialog
 DlgCellTitle		: "Cell Properties",
@@ -327,7 +328,7 @@ DlgCellWordWrapNo	: "No",
 DlgCellHorAlign		: "Horizontal Alignment",
 DlgCellHorAlignNotSet	: "<Not set>",
 DlgCellHorAlignLeft	: "Left",
-DlgCellHorAlignCenter	: "Centre",
+DlgCellHorAlignCenter	: "Center",
 DlgCellHorAlignRight: "Right",
 DlgCellVerAlign		: "Vertical Alignment",
 DlgCellVerAlignNotSet	: "<Not set>",
@@ -340,8 +341,8 @@ DlgCellTypeData		: "Data",
 DlgCellTypeHeader	: "Header",
 DlgCellRowSpan		: "Rows Span",
 DlgCellCollSpan		: "Columns Span",
-DlgCellBackColor	: "Background Colour",
-DlgCellBorderColor	: "Border Colour",
+DlgCellBackColor	: "Background Color",
+DlgCellBorderColor	: "Border Color",
 DlgCellBtnSelect	: "Select...",
 
 // Find and Replace Dialog
@@ -375,7 +376,7 @@ DlgPasteRemoveStyles	: "Remove Styles definitions",
 
 // Color Picker
 ColorAutomatic	: "Automatic",
-ColorMoreColors	: "More Colours...",
+ColorMoreColors	: "More Colors...",
 
 // Document Properties
 DocProps		: "Document Properties",
@@ -470,7 +471,7 @@ DlgLstTypeLRoman	: "Large Roman Numerals (I, II, III)",
 // Document Properties Dialog
 DlgDocGeneralTab	: "General",
 DlgDocBackTab		: "Background",
-DlgDocColorsTab		: "Colours and Margins",
+DlgDocColorsTab		: "Colors and Margins",
 DlgDocMetaTab		: "Meta Data",
 
 DlgDocPageTitle		: "Page Title",
@@ -493,7 +494,7 @@ DlgDocCharSetOther	: "Other Character Set Encoding",
 DlgDocDocType		: "Document Type Heading",
 DlgDocDocTypeOther	: "Other Document Type Heading",
 DlgDocIncXHTML		: "Include XHTML Declarations",
-DlgDocBgColor		: "Background Colour",
+DlgDocBgColor		: "Background Color",
 DlgDocBgImage		: "Background Image URL",
 DlgDocBgNoScroll	: "Nonscrolling Background",
 DlgDocCText			: "Text",
@@ -532,8 +533,8 @@ DlgDivAdvancedTab	: "Advanced",
 DlgDivStyle		: "Style",
 DlgDivInlineStyle	: "Inline Style",
 
-ScaytTitle			: "SCAYT",	//MISSING
-ScaytTitleOptions	: "Options",	//MISSING
-ScaytTitleLangs		: "Languages",	//MISSING
-ScaytTitleAbout		: "About"	//MISSING
+ScaytTitle			: "SCAYT",
+ScaytTitleOptions	: "Options",
+ScaytTitleLangs		: "Languages",
+ScaytTitleAbout		: "About"
 };

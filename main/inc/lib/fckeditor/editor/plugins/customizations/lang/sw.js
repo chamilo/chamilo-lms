@@ -1,16 +1,15 @@
-﻿/*
+/*
+ * Swahili language file.
  * Please, use UTF-8 encoding.
- *
- * Hindi language file.
  */
 
 FCKLang['Dir']                = 'ltr' ;
 
-FCKLang['BrowseServer']       = 'सर्वर ब्राउज़ करें' ;
+FCKLang['BrowseServer']       = 'Browse Server' ;
 FCKLang['Folder']             = 'Folder' ;
 FCKLang['CreateNewFolder']    = 'Create a folder' ;
 FCKLang['UploadFile']         = 'Upload a file' ;
-FCKLang['Upload']             = 'अपलोड' ;
+FCKLang['Upload']             = 'Upload' ;
 FCKLang['UploadSelectFileFirst'] = 'Please, select a file before pressing the upload button.' ;
 
 FCKLang['ResourceTypeRoot']   = 'Root' ;
@@ -26,6 +25,7 @@ FCKLang['SecurityError'] = 'Security error. You probably don\'t have enough perm
 FCKLang['ConnectorDisabled'] = 'The upload feature (connector) is disabled.' ;
 FCKLang['UploadError'] = 'Error on file upload. Error number: ' ;
 FCKLang['UploadInProgress'] = '(Upload in progress, please wait...)' ;
+
 FCKLang['NewFolderName'] = 'Type the name of the new folder:' ;
 FCKLang['NewFolderNameRequest'] = 'Please, type the folder name.' ;
 FCKLang['FolderAlreadyExists'] = 'Folder already exists.' ;
@@ -35,4 +35,3 @@ FCKLang['UnknownErrorCreatingFolder'] = 'Unknown error creating folder.' ;
 FCKLang['ErrorCreatingFolder'] = 'Error creating folder. Error number: ' ;
 
 FCKLang['ServerDidNotReturnProperXmlData'] = 'The server didn\'t reply with a proper XML data. Please check your configuration.' ;
-

@@ -27,8 +27,8 @@ FCKLang['ConnectorDisabled'] = 'The upload feature (connector) is disabled.' ;
 FCKLang['UploadError'] = 'Error on file upload. Error number: ' ;
 FCKLang['UploadInProgress'] = '(Upload in progress, please wait...)' ;
 
-FCKLang['NewFoderName'] = 'Type the name of the new folder:' ;
-FCKLang['NewFoderNameRequest'] = 'Please, type the folder name.' ;
+FCKLang['NewFolderName'] = 'Type the name of the new folder:' ;
+FCKLang['NewFolderNameRequest'] = 'Please, type the folder name.' ;
 FCKLang['FolderAlreadyExists'] = 'Folder already exists.' ;
 FCKLang['InvalidFolderName'] = 'Invalid folder name.' ;
 FCKLang['NoPermissionsToCreateFolder'] = 'You have no permissions to create the folder.' ;

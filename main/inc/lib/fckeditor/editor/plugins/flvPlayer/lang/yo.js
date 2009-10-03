@@ -1,6 +1,7 @@
-﻿// Afrikaans language file.
-// Video (flv) Dialog.
-// Please, use UTF-8 encoding.
+/*
+ * Yoruba language file.
+ * Please, use UTF-8 encoding.
+ */
 
 FCKLang["DlgFLVPlayerTitle"]          = "FLV Media Player" ;
 FCKLang["DlgFLVPlayerURL"]            = "Movie/Media File" ;

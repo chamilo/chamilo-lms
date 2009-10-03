@@ -80,7 +80,10 @@ $config['ToolbarSets']['Directory'] = 'default';
 $config['LoadPlugin'][] = 'customizations';
 
 // dragresizetable & tablecommands : Plugins for improvement table-related operations.
-$config['LoadPlugin'][] = 'dragresizetable';
+if (trim(get_lang('text_dir', '')) != 'rtl') {
+	// This plugin works properly only when language writting system is "from left to right (ltr)".
+	$config['LoadPlugin'][] = 'dragresizetable';
+}
 $config['LoadPlugin'][] = 'tablecommands';
 
 // prompt : This plugin is a dialog implementation as a replacemet of the javascript function prompt().

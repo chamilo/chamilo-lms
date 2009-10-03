@@ -99,7 +99,7 @@ class CourseSelectForm
 			require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 			$course_infos = CourseManager::get_course_information($hidden_fields['destination_course']);
 			echo '<h3>';
-				echo get_lang('DestinationCourse').' : '.$course_infos['title'];
+			echo get_lang('DestinationCourse').' : '.$course_infos['title'];
 			echo '</h3>';
 		}
 
@@ -109,7 +109,7 @@ class CourseSelectForm
 
 		echo '<script language="javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
 		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
-		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="javascript: myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy').'\',\'upload_form\')">';
+		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="javascript: myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy', '').'\',\'upload_form\')">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
 
 		foreach ($course->resources as $type => $resources) {
@@ -262,9 +262,9 @@ class CourseSelectForm
 						foreach($resources as $id => $obj) {
 						    if(!in_array($obj->survey_id,array_keys($_POST['resource'][RESOURCE_SURVEY]))) {
 								unset ($course->resources[$type][$id]);
-						    }
+							}
 						}
-					break;
+						break;
 					case RESOURCE_LINKCATEGORY :
 					case RESOURCE_FORUMCATEGORY :
 					case RESOURCE_FORUMPOST :

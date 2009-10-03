@@ -6,13 +6,13 @@ header('Content-Type: text/xml; charset=utf-8');
 $language_file = 'document';
 
 // including the global dokeos file
-require_once('../../global.inc.php');
+require_once '../../global.inc.php';
 
 // outputting the opening tag of the xml file
 echo '<?xml version="1.0" encoding="utf-8" ?>';
 
 // is this needed?
-$IMConfig['base_url'] = $_configuration['root_web'].'main/img/gallery/';
+//$IMConfig['base_url'] = $_configuration['root_web'].'main/img/gallery/';
 
 // load a stylesheet
 $css = loadCSS(api_get_setting('stylesheets'));
@@ -115,8 +115,8 @@ function load_platform_templates() {
       	$row['content'] =  str_replace('{REL_PATH}', api_get_path(REL_PATH), $row['content']);
       	$row['content'] =  str_replace('{COURSE_DIR}',$default_course_dir, $row['content']);
 
-		echo '	<Template title="'.s(get_lang($row['title']), '').'" image="'.$image.'">
-					<Description>'.s(get_lang($row['comment']), '').'</Description>
+		echo '	<Template title="'.s(get_lang($row['title'], '')).'" image="'.$image.'">
+					<Description>'.s(get_lang($row['comment'], '')).'</Description>
 					<Html>
 						<![CDATA[
 							    '.$row['content'].'
@@ -207,4 +207,3 @@ function load_empty_template()
 </Template>
 <?php
 }
-?>

@@ -149,7 +149,7 @@
 				var width = FCKDragTableHandler._GetCellWidth( table, cell ) ;
 				var colSpan = isNaN( cell.colSpan) ? 1 : cell.colSpan ;
 				if ( colArray.length <= j )
-					colArray.push( { width : width / colSpan, colSpan : colSpan } ) ;
+					colArray.push( { 'width' : width / colSpan, 'colSpan' : colSpan } ) ;
 				else
 				{
 					var guessItem = colArray[j] ;

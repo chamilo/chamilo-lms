@@ -122,7 +122,7 @@ function drawErrorBase(&$manager)
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $IMConfig['language']; ?>" lang="<?php echo $IMConfig['language']; ?>">
 <head>
 	<title>Image List</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -208,7 +208,7 @@ function drawErrorBase(&$manager)
 <script type="text/javascript" src="assets/images.js"></script>
 </head>
 
-<body>
+<body dir="<?php echo $IMConfig['text_direction']; ?>">
 <?php if ($manager->isValidBase() == false) { drawErrorBase($manager); }
 	elseif(count($list[0]) > 0 || count($list[1]) > 0) { ?>
 <table>

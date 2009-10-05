@@ -34,7 +34,7 @@
 
 	// We have to determine which language file to be loaded
 	// using information that is provided by the FCKEditor.
-	var _available_langs = 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh' ;
+	var _available_langs = 'en,af,ar,ast,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,fur,gl,gu,he,hi,hr,hu,id,is,it,ja,ka,km,ko,lt,lv,mk,mn,ms,nb,nl,no,oc,pl,prs,ps,pt-br,pt,qu,ro,ru,sk,sl,sr-latn,sr,sv,sw,th,tr,uk,vi,yo,zh-cn,zh' ;
 	_available_langs = _available_langs.split( ',' ) ;
 
 	if ( FCKConfig.DefaultLanguage )

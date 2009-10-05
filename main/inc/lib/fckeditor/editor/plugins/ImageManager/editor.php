@@ -21,7 +21,7 @@ if (isset($_GET['img'])) {
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $IMConfig['language']; ?>" lang="<?php echo $IMConfig['language']; ?>">
 <head>
 <title>Edit image</title>
 <link href="assets/editor.css" rel="stylesheet" type="text/css" />
@@ -125,7 +125,8 @@ body {
 
 </head>
 
-<body onload="javascript: Init();">
+<!-- <body dir="<?php echo $IMConfig['text_direction']; ?>" onload="javascript: Init();"> --><!-- Does not work due to used position:absolute styles. -->
+<body dir="ltr" onload="javascript: Init();">
 <div id="indicator">
 <img src="img/spacer.gif" id="indicator_image" height="20" width="20" alt="" />
 </div>

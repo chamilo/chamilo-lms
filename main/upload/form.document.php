@@ -30,7 +30,7 @@ api_display_tool_title($nameTools.$add_group_to_title);
 	*/
 		?>
 
-	<form method="POST" action="upload.php" id="upload_form" enctype="multipart/form-data" onsubmit="myUpload.start('dynamic_div','progressbar_green.gif','<?php echo(get_lang('Uploading'));?>','upload_form_div');">
+	<form method="POST" action="upload.php" id="upload_form" enctype="multipart/form-data" onsubmit="javascript: myUpload.start('dynamic_div','progressbar_green.gif','<?php echo(get_lang('Uploading', ''));?>','upload_form_div');">
 		<input type="hidden" name="curdirpath" value="<?php echo $path; ?>">
 		<input type="hidden" name="tool" value="<?php echo $my_tool; ?>">
 		<input type="file" name="user_file">

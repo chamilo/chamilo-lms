@@ -448,11 +448,15 @@ class FCKeditor
 	private function & get_editor_language() {
 		static $config;
 		if (!is_array($config)) {
-			$translation_table = array('' => 'en', 'sr' => 'sr-latn', 'zh' => 'zh-cn', 'zh-tw' => 'zh');
+			$code_translation_table = array('' => 'en', 'sr' => 'sr-latn', 'zh' => 'zh-cn', 'zh-tw' => 'zh');
 			$editor_lang = strtolower(str_replace('_', '-', api_get_language_isocode()));
-			$editor_lang = isset($translation_table[$editor_lang]) ? $translation_table[$editor_lang] : $editor_lang;
+			$editor_lang = isset($code_translation_table[$editor_lang]) ? $code_translation_table[$editor_lang] : $editor_lang;
 			$editor_lang = file_exists(api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js') ? $editor_lang : 'en';
 			$config['DefaultLanguage'] = $editor_lang;
+			$text_direction = trim(get_lang('text_dir', ''));
+			if (!empty($text_direction) && strlen($text_direction) == 3) {
+				$config['ContentLangDirection'] = $text_direction;
+			}
 		}
 		return $config;
 	}
@@ -568,12 +572,6 @@ class FCKeditor
 	 * @return array
 	 */
 	private function & get_media_configuration() {
-		/*
-		$config['FlashPlayerAudio'] = Media::get_path(FLASH_PLAYER_AUDIO, REL_PATH);
-		$config['FlashPlayerVideo'] = Media::get_path(FLASH_PLAYER_VIDEO, REL_PATH);
-		$config['ScriptSWFObject'] = Media::get_path(SCRIPT_SWFOBJECT, REL_PATH);
-		$config['ScriptASCIIMathML'] = Media::get_path(SCRIPT_ASCIIMATHML, REL_PATH);
-		*/
 		$config['FlashPlayerAudio'] = api_get_path(TO_REL, FLASH_PLAYER_AUDIO);
 		$config['FlashPlayerVideo'] = api_get_path(TO_REL, FLASH_PLAYER_VIDEO);
 		$config['ScriptSWFObject'] = api_get_path(TO_REL, SCRIPT_SWFOBJECT);

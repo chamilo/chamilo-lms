@@ -666,8 +666,10 @@ FCKSaveCommand.prototype.Execute = function()
 	{
 		if ( oForm.elements[i].type == 'submit' )
 		{
-			// Let us check whether the buton is styled, i.e. whether it is "nice".
-			if ( oForm.elements[i].getAttribute( 'class' ) )
+			// Let us check whether the button is styled, i.e. whether it is "nice".
+			if ( oForm.elements[i].getAttribute( 'class' )
+				// A workaround for the introduction sections.
+				|| oForm.elements[i].getAttribute( 'name' ) == 'intro_cmdUpdate' )
 			{
 				try
 				{

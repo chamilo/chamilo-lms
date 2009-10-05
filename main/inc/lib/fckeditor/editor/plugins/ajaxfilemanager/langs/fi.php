@@ -1,4 +1,4 @@
-<?
+<?php
 	/**
 	 * language pack
 	 * @author Jani Peltoniemi (jani@janipeltoniemi.net)

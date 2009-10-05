@@ -2274,7 +2274,6 @@ function api_return_html_area($name, $content = '', $height = '', $width = '100%
 	return $editor->toHtml();
 }
 
-// TODO: To be checked for deprecation. Anyway, this fonction needs an upgrade, see http://www.dokeos.com/forum/viewtopic.php?t=15557
 /**
  * Send an email.
  *
@@ -2286,9 +2285,96 @@ function api_return_html_area($name, $content = '', $height = '', $width = '100%
  * @param string $message
  * @param string $additional_headers
  * @param string $additional_parameters
+ * @author Ivan Tcholakov, 04-OCT-2009, a reworked version of this function.
+ * @link http://www.dokeos.com/forum/viewtopic.php?t=15557
  */
 function api_send_mail($to, $subject, $message, $additional_headers = null, $additional_parameters = null) {
-	return mail($to, $subject, $message, $additional_headers, $additional_parameters);
+	//return mail($to, $subject, $message, $additional_headers, $additional_parameters);
+
+	require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
+	require_once api_get_path(CONFIGURATION_PATH).'mail.conf.php';
+
+	if (empty($platform_email['SMTP_FROM_NAME'])) {
+		$platform_email['SMTP_FROM_NAME'] = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+	}
+
+	if (empty($platform_email['SMTP_FROM_EMAIL'])) {
+		$platform_email['SMTP_FROM_EMAIL'] = api_get_setting('emailAdministrator');
+	}
+
+	$matches = array();
+	if (preg_match('/([^<]*)<(.+)>/si', $to, $matches)) {
+		$recipient_name = trim($matches[1]);
+		$recipient_email = trim($matches[2]);
+	} else {
+		$recipient_name = '';
+		$recipient_email = trim($to);
+	}
+
+	$sender_name = '';
+	$sender_email = '';
+	$extra_headers = $additional_headers;
+
+	//regular expression to test for valid email address
+	// this should actually be revised to use the complete RFC3696 description
+	// http://tools.ietf.org/html/rfc3696#section-3
+	$regexp = "^[0-9a-z_\.+-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,3})$";
+
+	$mail = new PHPMailer();
+	$mail->CharSet = api_get_system_encoding();
+	$mail->Mailer = $platform_email['SMTP_MAILER'];
+	$mail->Host = $platform_email['SMTP_HOST'];
+	$mail->Port = $platform_email['SMTP_PORT'];
+
+	if ($platform_email['SMTP_AUTH']) {
+		$mail->SMTPAuth = 1;
+		$mail->Username = $platform_email['SMTP_USER'];
+		$mail->Password = $platform_email['SMTP_PASS'];
+	}
+
+	$mail->Priority = 3; // 5=low, 1=high
+	$mail->AddCustomHeader('Errors-To: '.$platform_email['SMTP_FROM_EMAIL']);
+	$mail->IsHTML(0);
+	$mail->SMTPKeepAlive = true;
+
+	// attachments
+	// $mail->AddAttachment($path);
+	// $mail->AddAttachment($path, $filename);
+
+	if ($sender_email != '') {
+		$mail->From = $sender_email;
+		$mail->Sender = $sender_email;
+		//$mail->ConfirmReadingTo = $sender_email; //Disposition-Notification
+	} else {
+		$mail->From = $platform_email['SMTP_FROM_EMAIL'];
+		$mail->Sender = $platform_email['SMTP_FROM_EMAIL'];
+		//$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; //Disposition-Notification
+	}
+
+	if ($sender_name != '') {
+		$mail->FromName = $sender_name;
+	} else {
+		$mail->FromName = $platform_email['SMTP_FROM_NAME'];
+	}
+	$mail->Subject = $subject;
+	$mail->Body = $message;
+	//only valid address
+	if (eregi( $regexp, $recipient_email )) {
+		$mail->AddAddress($recipient_email, $recipient_name);
+	}
+
+	if ($extra_headers != '') {
+		$mail->AddCustomHeader($extra_headers);
+	}
+
+	//send mail
+	if (!$mail->Send()) {
+		return 0;
+	}
+
+	// Clear all addresses
+	$mail->ClearAddresses();
+	return 1;
 }
 
 /**

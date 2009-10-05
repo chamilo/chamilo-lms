@@ -1420,7 +1420,8 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,
 //'cmi.core.lesson_status','cmi.completion_status','cmi.core.session_time','cmi.score.scaled','cmi.success_status',
 //'cmi.suspend_data','cmi.core.exit','interactions');
 
-	params='';
+	var is_interactions='false';
+	var params='';
 	params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id+'&iid='+lms_item_id;
 
 	for (k=0;k<info_get_lms.length;k++) {

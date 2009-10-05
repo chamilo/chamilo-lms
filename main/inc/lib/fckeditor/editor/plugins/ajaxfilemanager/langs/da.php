@@ -1,4 +1,4 @@
-<?
+<?php
 	/**
 	 * sysem base config setting
 	 * @author Logan Cai (cailongqun@yahoo.com.cn)

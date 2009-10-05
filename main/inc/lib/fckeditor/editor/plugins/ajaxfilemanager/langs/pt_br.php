@@ -1,4 +1,4 @@
-<?
+<?php
 	/**
 	 * language pack
 	 * @author Logan Cai (cailongqun@yahoo.com.cn)

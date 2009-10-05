@@ -44,7 +44,7 @@ if (isset ($_GET["reset"]) && isset ($_GET["id"])) {
 	
 } else {
 	$form = new FormValidator('lost_password');
-	$form->addElement('text', 'user', get_lang('langUser'), array('size'=>'40'));
+	$form->addElement('text', 'user', get_lang('User'), array('size'=>'40'));
 	$form->addElement('text', 'email', get_lang('Email'), array('size'=>'40'));
 	
 	$form->applyFilter('email','strtolower');

@@ -22,6 +22,21 @@ $cidReset = true; // Flag forcing the 'current course' reset
 // including the global file
 include('../inc/global.inc.php');
 
+if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
+	// additional html (javascript and style css)
+	$htmlHeadXtra[] = '<script type="text/javascript">' .
+				  	  'var GB_ROOT_DIR = "'.api_get_path(WEB_LIBRARY_PATH).'javascript/greybox/"' .
+				  	  '</script>';
+	
+	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>';
+	
+	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/greybox/AJS.js" type="text/javascript" language="javascript"></script>';
+	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/greybox/AJS_fx.js" type="text/javascript" language="javascript"></script>';
+	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/greybox/gb_scripts.js" type="text/javascript" language="javascript"></script>';
+	
+	$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/greybox/gb_styles.css" rel="stylesheet" type="text/css" />';
+}
+
 // section for the tabs
 $this_section=SECTION_COURSES;
 
@@ -483,6 +498,15 @@ function display_subscribe_to_courses($courses)
 	foreach ($courses as $key=>$course) {
 		// displaying the course title, visual code and teacher/teaching staff
 		echo "\t<tr>\n";
+		
+		if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
+			// block course description
+			echo "\t\t<td>";
+			$icon_title = get_lang('CourseDetails') . ' - ' . $course['title'];
+			echo "<a href='course_description.php?code=".$course['code']."' title='$icon_title' rel='gb_page_center[778]'>".Display::return_icon('synthese_view.gif', $icon_title)."</a>";
+			echo "\t\t</td>";
+		}
+		
 		echo "\t\t<td>\n";
 		echo "<b>".$course['title']."</b><br />";
 		if (api_get_setting("display_coursecode_in_courselist") == "true") {
@@ -836,6 +860,15 @@ function display_courses_in_category($user_category_id, $showicons)
 	while ($course=Database::fetch_array($result))
 	{
 		echo "\t<tr>\n";
+		
+		if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
+			// block course description
+			echo "\t\t<td>";
+			$icon_title = get_lang('CourseDetails') . ' - ' . $course['title'];
+			echo "<a href='course_description.php?code=".$course['code']."' title='$icon_title' rel='gb_page_center[778]'>".Display::return_icon('synthese_view.gif', $icon_title)."</a>";
+			echo "\t\t</td>";
+		}
+		
 		echo "\t\t<td>\n";
 		echo '<a name="course'.$course['code'].'"></a>'; // display an internal anchor.
 		echo "<b>".$course['title']."</b><br />";

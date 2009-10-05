@@ -728,6 +728,7 @@ VALUES
 ('search_enabled',NULL,'radio','Tools','false','EnableSearchTitle','EnableSearchComment',NULL,NULL,1),
 ('search_prefilter_prefix',NULL, NULL,'Search','','SearchPrefilterPrefix','SearchPrefilterPrefixComment',NULL,NULL,0),
 ('search_show_unlinked_results',NULL,'radio','Search','true','SearchShowUnlinkedResultsTitle','SearchShowUnlinkedResultsComment',NULL,NULL,1),
+('show_courses_descriptions_in_catalog', NULL, 'radio', 'Course', 'true', 'ShowCoursesDescriptionsInCatalogTitle', 'ShowCoursesDescriptionsInCatalogComment', NULL, NULL, 1),
 ('dokeos_database_version', NULL, 'textfield', NULL,'1.8.6.1.8225','DokeosDatabaseVersion','',NULL,NULL,0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -905,7 +906,9 @@ VALUES
 ('search_enabled', 'true', 'Yes'),
 ('search_enabled', 'false', 'No'),
 ('search_show_unlinked_results', 'true', 'SearchShowUnlinkedResults'),
-('search_show_unlinked_results', 'false', 'SearchHideUnlinkedResults');
+('search_show_unlinked_results', 'false', 'SearchHideUnlinkedResults'),
+('show_courses_descriptions_in_catalog', 'true', 'Yes'),
+('show_courses_descriptions_in_catalog', 'false', 'No');
 
 
 UNLOCK TABLES;

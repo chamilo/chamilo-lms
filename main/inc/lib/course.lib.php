@@ -2028,5 +2028,51 @@ class CourseManager {
 		$rs = Database::query($sql, __FILE__, __LINE__);
 		return Database::result($rs, 0, 'code');
 	}
+	/**
+	 * Get the database name of a course by the code
+	 * @param string The course code
+	 * @return string The database name
+	 */
+	public static function get_name_database_course($course_code) {
+	   $table_course = Database::get_main_table(TABLE_MAIN_COURSE);	
+	   $sql = 'SELECT db_name FROM '.$table_course.' WHERE code="'.Database::escape_string($course_code).'"';
+	   $rs = Database::query($sql,__FILE__,__LINE__);
+	   return Database::result($rs, 0, 'db_name');
+	}
+	/**
+	 * Lists details of the course description
+	 * @param array		The course description
+	 * @param string	The encoding
+	 * @param bool		If true is displayed if false is hidden
+	 * @return string 	The course description in html
+	 */
+	public static function get_details_course_description_html($descriptions, $charset, $action_show = true) {
+		if (isset($descriptions) && count($descriptions) > 0) {
+			$data = '';
+			foreach ($descriptions as $id => $description) {
+				$data .= '<div class="sectiontitle">';
+				if (api_is_allowed_to_edit() && $action_show == true) {
+					//delete
+					$data .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=delete&amp;description_id='.$description->id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).'\')) return false;">';
+					$data .= Display::return_icon('delete.gif', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'));
+					$data .= '</a> ';
+					//edit
+					$data .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;description_id='.$description->id.'">';
+					$data .= Display::return_icon('edit.gif', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'));
+					$data .= '</a> ';
+				}
+				$data .= $description->title;
+				$data .= '</div>';
+				$data .= '<div class="sectioncomment">';
+				$data .= text_filter($description->content);
+				$data .= '</div>';
+			}
+		} else {
+			$data .= '<em>'.get_lang('ThisCourseDescriptionIsEmpty').'</em>';
+		}
+		
+		return $data;
+		
+	}
 
 } //end class CourseManager

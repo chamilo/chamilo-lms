@@ -1762,7 +1762,7 @@ function ellipse($x0,$y0,$r1,$r2=0,$angle=0,$nSeg=8,$astart=0,$afinish=360,$clos
   if ($fill){
     $this->objects[$this->currentContents]['c'].=' f';
   } else {
-    if ($close){
+    if ($close){
       $this->objects[$this->currentContents]['c'].=' s'; // small 's' signifies closing the path as well
     } else {
       $this->objects[$this->currentContents]['c'].=' S';
@@ -2413,7 +2413,7 @@ function addTextWrap($x,$y,$width,$size,$text,$justification='left',$angle=0,$te
         $break=$i;
         $ctmp=ord($text[$i]);
         if (isset($this->fonts[$cf]['differences'][$ctmp])){
-          $ctmp=$this->fonts[$cf]['differences'][$ctmp];
+          $ctmp=$this->fonts[$cf]['differences'][$ctmp];
         }
         $breakWidth = ($w-$this->fonts[$cf]['C'][$ctmp]['WX'])*$size/1000;
       }

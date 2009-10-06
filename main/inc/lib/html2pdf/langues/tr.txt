@@ -1,19 +1,19 @@
-err01	<b>&lt;[[OTHER]]&gt;</b> etiketi bulunamadý.<br><br>Eklemek isterseniz, <b>o_[[OTHER]]</b> þeklinde açýp, <b>c_[[OTHER]]</b> þeklinde kapatabilirsiniz.<br><br> Bu þekilde etiketler üretirseniz lütfen daha sonraki HTML2PDF versiyonuna eklenmek üzere bana gönderin. ( webmaster@spipu.net ).
-err02	Ýçerik 1000 satýrdan fazla ve gerekenden uzun <br><b>Konu :</b> [[OTHER_0]]<br><b>Geniþlik :</b> [[OTHER_1]]<br><b>Yazý boyutu :</b> [[OTHER_2]]<br>
-err03	HTML kodu hatalý, etiket birden fazla defa kapatýlmýþ: <b>&lt;[[OTHER]]&gt;</b>
-err04	HTML kodu hatalý, etiketler gereken düzen içinde kapatýlmamýþ.<br>Durum : <pre>[[OTHER]]</pre>
-err05	HTML kodu hatalý, bütün etiketler kapatýlmalý.<br>Durum : <pre>[[OTHER]]</pre>
-err06	Resim dosyasý okunamýyor <b>[[OTHER]]</b>
-err07	TD içeriði bir sayfaya sýðmýyor
-txt01	HATA n°
+err01	<b>&lt;[[OTHER]]&gt;</b> etiketi bulunamadï¿½.<br><br>Eklemek isterseniz, <b>o_[[OTHER]]</b> ï¿½eklinde aï¿½ï¿½p, <b>c_[[OTHER]]</b> ï¿½eklinde kapatabilirsiniz.<br><br> Bu ï¿½ekilde etiketler ï¿½retirseniz lï¿½tfen daha sonraki HTML2PDF versiyonuna eklenmek ï¿½zere bana gï¿½nderin. ( webmaster@spipu.net ).
+err02	ï¿½ï¿½erik 1000 satï¿½rdan fazla ve gerekenden uzun <br><b>Konu :</b> [[OTHER_0]]<br><b>Geniï¿½lik :</b> [[OTHER_1]]<br><b>Yazï¿½ boyutu :</b> [[OTHER_2]]<br>
+err03	HTML kodu hatalï¿½, etiket birden fazla defa kapatï¿½lmï¿½ï¿½: <b>&lt;[[OTHER]]&gt;</b>
+err04	HTML kodu hatalï¿½, etiketler gereken dï¿½zen iï¿½inde kapatï¿½lmamï¿½ï¿½.<br>Durum : <pre>[[OTHER]]</pre>
+err05	HTML kodu hatalï¿½, bï¿½tï¿½n etiketler kapatï¿½lmalï¿½.<br>Durum : <pre>[[OTHER]]</pre>
+err06	Resim dosyasï¿½ okunamï¿½yor <b>[[OTHER]]</b>
+err07	TD iï¿½eriï¿½i bir sayfaya sï¿½ï¿½mï¿½yor
+txt01	HATA nï¿½
 txt02	Dosya :
-txt03	Satýr :
-pdf01	Doküman üretilme tarihi [[date_y]]-[[date_m]]-[[date_d]]
-pdf02	Doküman üretilme tarihi [[date_h]]:[[date_i]]
-pdf03	Doküman üretilme tarihi [[date_y]]-[[date_m]]-[[date_d]] saati [[date_h]]:[[date_i]]
+txt03	Satï¿½r :
+pdf01	Dokï¿½man ï¿½retilme tarihi [[date_y]]-[[date_m]]-[[date_d]]
+pdf02	Dokï¿½man ï¿½retilme tarihi [[date_h]]:[[date_i]]
+pdf03	Dokï¿½man ï¿½retilme tarihi [[date_y]]-[[date_m]]-[[date_d]] saati [[date_h]]:[[date_i]]
 pdf04	Sayfa [[current]]/[[nb]]
 pdf05	Adobe Reader 9 gerektirir
-vue01	DOSYA ÜSTÜ
+vue01	DOSYA ï¿½STï¿½
 vue02	DOSYA ALTI
 vue03	SAYFA
-vue04	Görünüm
+vue04	Gï¿½rï¿½nï¿½

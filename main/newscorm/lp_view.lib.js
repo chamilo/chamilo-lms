@@ -1,5 +1,5 @@
 /***********************************************
-* IFrame SSI script II- © Dynamic Drive DHTML code library (http://www.dynamicdrive.com)
+* IFrame SSI script II- ï¿½ Dynamic Drive DHTML code library (http://www.dynamicdrive.com)
 * Visit DynamicDrive.com for hundreds of original DHTML scripts
 * This notice must stay intact for legal use
 ***********************************************/

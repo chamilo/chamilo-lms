@@ -98,9 +98,9 @@ $language_variable=api_xml_http_response_encode(get_lang('PersonalData'));
 	if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' && api_get_user_id()<>2 && api_get_user_id()<>0) {
 		echo '<a href="../social/profile.php?shared=true">'.Display::return_icon('shared_profile.png',api_xml_http_response_encode(get_lang('ViewSharedProfile'))).'&nbsp;'.api_xml_http_response_encode(get_lang('ViewSharedProfile')).'</a>';
 	}
-	echo '</div>';	
-	echo '<div id="profile_container">';			
-		echo '<div class="social-profile-info" style="float:left;position:relative">';		
+	echo '</div>';
+	echo '<div id="profile_container">';
+		echo '<div class="social-profile-info" style="float:left;position:relative">';
 			echo '<dl><dt>'.api_xml_http_response_encode(get_lang('UserName')).'</dt>
 			<dd>'. api_xml_http_response_encode($user_info['username']).'	</dd></dl>';
 			if (api_is_western_name_order()) {
@@ -112,17 +112,17 @@ $language_variable=api_xml_http_response_encode(get_lang('PersonalData'));
 				echo '<dl><dt>'.api_xml_http_response_encode(get_lang('LastName')).'</dt><dd>'. api_xml_http_response_encode($user_info['lastname']).'</dd></dl>';
 				echo '<dl><dt>'.api_xml_http_response_encode(get_lang('FirstName')).'</dt><dd>'. api_xml_http_response_encode($user_info['firstname']).'</dd></dl>';
 			}
-			echo '<dl><dt>'.api_xml_http_response_encode(get_lang('OfficialCode')).'</dt>	
+			echo '<dl><dt>'.api_xml_http_response_encode(get_lang('OfficialCode')).'</dt>
 			<dd>'. api_xml_http_response_encode($user_info['official_code']).'</dd></dl>';
 			echo '<dl><dt>'.api_xml_http_response_encode(get_lang('Email')).'</dt>
 			<dd>'. api_xml_http_response_encode($user_info['email']).'</dd></dl>';
 			echo '<dl><dt>'.api_xml_http_response_encode(get_lang('Phone')).'</dt>
-			<dd>'. api_xml_http_response_encode($user_info['phone']).'</dd></dl>';			
+			<dd>'. api_xml_http_response_encode($user_info['phone']).'</dd></dl>';
 		echo '</div>';
 		echo '<div style="float:left;position:relative">';
-		echo '<div id="picture" style="width:200px;float:left;position:relative;margin-top:10px;">'; 
+		echo '<div id="picture" style="width:200px;float:left;position:relative;margin-top:10px;">';
 			echo '<img src='.$img_array['dir'].$img_array['file'].' />';
-		echo '</div>';	
+		echo '</div>';
 		/*if (api_get_setting('allow_message_tool')=='true') {
 			require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 			$number_of_new_messages = MessageManager::get_new_messages();

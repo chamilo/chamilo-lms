@@ -5,7 +5,7 @@ Table of contents
 -----------------
 1. Installation
 1.1. Red5
-1.2. Dokeos Red5 Application 
+1.2. Dokeos Red5 Application
 
 2. Configuration
 
@@ -23,7 +23,7 @@ Table of contents
 
 1.1. Red5
 
-To install red5, please check the documentation related to your platform on the red5 website[1]. Below, we will suppose that red5 home 
+To install red5, please check the documentation related to your platform on the red5 website[1]. Below, we will suppose that red5 home
 directory is /opt/red5. If you run red5 under MS-Windows, change /opt/red5 by your installation directory, for example: D:\applications\red5.
 From now on, we will refer to red5 home directory by $RED5_HOME.
 

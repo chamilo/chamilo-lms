@@ -2034,7 +2034,7 @@ class CourseManager {
 	 * @return string The database name
 	 */
 	public static function get_name_database_course($course_code) {
-	   $table_course = Database::get_main_table(TABLE_MAIN_COURSE);	
+	   $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 	   $sql = 'SELECT db_name FROM '.$table_course.' WHERE code="'.Database::escape_string($course_code).'"';
 	   $rs = Database::query($sql,__FILE__,__LINE__);
 	   return Database::result($rs, 0, 'db_name');
@@ -2070,9 +2070,9 @@ class CourseManager {
 		} else {
 			$data .= '<em>'.get_lang('ThisCourseDescriptionIsEmpty').'</em>';
 		}
-		
+
 		return $data;
-		
+
 	}
 
 } //end class CourseManager

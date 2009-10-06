@@ -33,7 +33,7 @@ edit editor/_source/internals/fckcontextmenu.js
 			the line should now read: 	return new FCKContextMenuGroup( true, this, 'ImageManager', FCKLang.ImageProperties, true ) ;
 
 This updates the _source context menu to use the image manager. However to avoid having to recompile the whole thing, also need to update the compiled versions too so also repeat the above on the following files:
-	 
+
 	 - editor/js/fckeditorcode_gecko_2.js
 	 - editor/js/fckeditorcode_ie_2.js
 

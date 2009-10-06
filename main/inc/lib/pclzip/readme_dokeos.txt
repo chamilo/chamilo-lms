@@ -19,11 +19,11 @@ of PclZip 2.6.
 Changes
 -------
 
-Revision 1.48 
+Revision 1.48
 Mon Mar 3 21:57:58 2008 UTC (9 months ago) by vblavet (Vincent Blavet)
-Branch: MAIN 
-CVS Tags: HEAD 
-Changes since 1.47: +35 -21 lines 
+Branch: MAIN
+CVS Tags: HEAD
+Changes since 1.47: +35 -21 lines
 Bug correction : When adding files with full windows path (drive letter)
 PclZip is now working. Before, if the drive letter is not the default
 path, PclZip was not able to add the file.

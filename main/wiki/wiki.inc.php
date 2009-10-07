@@ -1926,7 +1926,7 @@ function auto_add_page_users($assignment_type)
 				$_POST['content']='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Student').': '.$name.'</div>[['.$link2teacher.' | '.get_lang('AssignmentLinktoTeacherPage').']] '; //If $content_orig_B is added here, the task written by the professor was copied to the page of each student. TODO: config options
 
 			   //AssignmentLinktoTeacherPage
-			 	$all_students_pages[] = '<li>'.api_get_person_name($o_user_to_add['lastname'].', '.$o_user_to_add['firstname']).' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>';
+			 	$all_students_pages[] = '<li>'.strtoupper(api_get_person_name($o_user_to_add['lastname'].', '.$o_user_to_add['firstname'])).' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>';
 
 				$_POST['assignment']=2;
 

@@ -319,7 +319,8 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 
 	$inserted_in_course = array();
 
-	if (strcmp($_FILES['import_file']['type'], 'text/'.$file_type.'') === 0) {
+	if (strcmp($file_type, 'csv') === 0) // this replace if (strcmp($_FILES['import_file']['type'], 'text/'.$file_type.'') === 0)
+	{
 		save_data($users_to_insert);
 	} else {
 		$error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');

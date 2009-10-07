@@ -631,10 +631,10 @@ else
 			switch ($_GET['action']) {
 				case 'show_message' :
                     if (!empty($_GET['warn'])) {
-                    	Display::display_warning_message(urldecode($_GET['warn']));
+                    	Display::display_warning_message(urldecode($_GET['warn']),false);
                     }
                     if (!empty($_GET['message'])) {
-                        Display :: display_normal_message(stripslashes($_GET['message']));
+                        Display :: display_confirmation_message(stripslashes($_GET['message']));
                     }
 					break;
 				case 'delete_user' :

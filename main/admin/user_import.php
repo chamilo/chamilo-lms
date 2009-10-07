@@ -322,11 +322,18 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	if (strcmp($file_type, 'csv') === 0) // this replace if (strcmp($_FILES['import_file']['type'], 'text/'.$file_type.'') === 0)
 	{
 		save_data($users_to_insert);
+		
+	} elseif (strcmp($file_type, 'xml') === 0) {
+		
+		save_data($users_to_insert);
+		
 	} else {
+		
 		$error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
 		header('Location: '.api_get_self().'?warn='.urlencode($error_message).'&amp;file_type='.$file_type.'&amp;sec_token='.$tok);
 		exit ();
 	}
+	
 
 	if (count($errors) > 0) {
 		$see_message_import = get_lang('FileImportedJustUsersThatAreNotRegistered');

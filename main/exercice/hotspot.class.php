@@ -28,15 +28,15 @@ class HotSpot extends Question {
 	static $explanationLangVar = 'Hotspot';
 
 
-	function HotSpot(){
+	function HotSpot() {
 		parent::question();
 		$this -> type = HOT_SPOT;
 	}
 
-	function display(){
+	function display() {
 
 	}
-
+	
 	function createForm ($form) {
 		parent::createForm ($form);
 		global $text, $class;
@@ -55,37 +55,39 @@ class HotSpot extends Question {
 		} else {
 			// setting the save button here and not in the question class.php
 			// Editing a question
-			$form->addElement('style_submit_button','submitQuestion',get_lang('langModifyExercise'), 'class="'.$class.'"');
+			$form->addElement('style_submit_button','submitQuestion',get_lang('langModifyExercise'), 'class="'.$class.'"');			
 		}
-
+		
 	}
 
 	function processCreation ($form, $objExercise) {
 		$file_info = $form -> getSubmitValue('imageUpload');
 		parent::processCreation ($form, $objExercise);
-		if(!empty($file_info['tmp_name']))
-		{
+		if(!empty($file_info['tmp_name'])) {
 			$this->uploadPicture($file_info['tmp_name'], $file_info['name']);
-				list($width,$height) = @getimagesize($file_info['tmp_name']);
+			global $picturePath;
+			//fixed width ang height 
+			if (file_exists($picturePath.'/'.$this->picture)) { 
+				//list($width,$height) = @getimagesize($file_info['tmp_name']); does not work	
+				list($width,$height) = @getimagesize($picturePath.'/'.$this->picture);				
 				if($width>=$height) {
-					$this->resizePicture('width',550);
+					$this->resizePicture('width',545);
 				} else {
 					$this->resizePicture('height',350);
 				}
-			$this->save();
+				$this->save();			
+			} else {
+				return false;
+			}			
 		}
 	}
 
 	function createAnswersForm ($form) {
-
     	// nothing
-
 	}
 
 	function processAnswersCreation ($form) {
-
 		// nothing
-
 	}
 
 }

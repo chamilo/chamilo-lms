@@ -2028,6 +2028,7 @@ class CourseManager {
 		$rs = Database::query($sql, __FILE__, __LINE__);
 		return Database::result($rs, 0, 'code');
 	}
+
 	/**
 	 * Get the database name of a course by the code
 	 * @param string The course code
@@ -2039,6 +2040,7 @@ class CourseManager {
 	   $rs = Database::query($sql,__FILE__,__LINE__);
 	   return Database::result($rs, 0, 'db_name');
 	}
+
 	/**
 	 * Lists details of the course description
 	 * @param array		The course description

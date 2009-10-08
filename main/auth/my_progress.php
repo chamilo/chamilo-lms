@@ -1,19 +1,19 @@
 <?php
 /* For licensing terms, see /dokeos_license.txt */
 // name of the language file that needs to be included
-$language_file = array('registration','tracking','exercice','admin');
+$language_file = array('registration', 'tracking', 'exercice', 'admin');
 
 $cidReset = true;
 $this_section = 'session_my_space';
 
-require ('../inc/global.inc.php');
+require '../inc/global.inc.php';
 
-require_once (api_get_path(LIBRARY_PATH).'tracking.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-require_once ('../newscorm/learnpath.class.php');
+require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
 
-$nameTools=get_lang('MyProgress');
+$nameTools = get_lang('MyProgress');
 
 api_block_anonymous_users();
 
@@ -34,7 +34,6 @@ $tbl_course_lp 				= Database :: get_course_table(TABLE_LP_MAIN);
 $tbl_course_lp_item 		= Database :: get_course_table(TABLE_LP_ITEM);
 $tbl_course_quiz 			= Database :: get_course_table(TABLE_QUIZ_TEST);
 
-
 // get course list
 $sql = 'SELECT course_code FROM '.$tbl_course_user.' WHERE user_id='.intval($_user['user_id']);
 $rs = Database::query($sql, __FILE__, __LINE__);
@@ -53,7 +52,7 @@ while($row = Database :: fetch_array($rs)) {
 echo '<div class="actions-title" >';
 echo $nameTools;
 echo '</div>';
-$now=date('Y-m-d');
+$now = date('Y-m-d');
 ?>
 <table class="data_table" width="100%">
 <tr class="tableName">
@@ -80,18 +79,18 @@ $totalScore = 0;
 $totalItem = 0;
 $totalProgress = 0;
 
-foreach($Courses as $enreg) {
+foreach ($Courses as $enreg) {
 	$weighting = 0;
-	$lastConnexion = Tracking :: get_last_connection_date_on_the_course($_user['user_id'],$enreg['code']);
+	$lastConnexion = Tracking :: get_last_connection_date_on_the_course($_user['user_id'], $enreg['code']);
 	$progress = Tracking :: get_avg_student_progress($_user['user_id'], $enreg['code']);
-	$total_time_login=Tracking :: get_time_spent_on_the_course($_user['user_id'], $enreg['code']);
+	$total_time_login = Tracking :: get_time_spent_on_the_course($_user['user_id'], $enreg['code']);
 	$time = api_time_to_hms($total_time_login);
 	$pourcentageScore = Tracking :: get_average_test_scorm_and_lp ($_user['user_id'], $enreg['code']);
 ?>
 
 <tr class='<?php echo $i?'row_odd':'row_even'; ?>'>
   	<td>
-		<?php echo api_html_entity_decode($enreg['title'],ENT_QUOTES,$charset); ?>
+		<?php echo api_html_entity_decode($enreg['title'], ENT_QUOTES, $charset); ?>
   	</td>
   	<td align='center'>
 		<?php echo $time; ?>
@@ -109,7 +108,7 @@ foreach($Courses as $enreg) {
 		?>
   	</td>
   	<td align='center' >
-		<?php echo $lastConnexion ?>
+		<?php echo $lastConnexion; ?>
   	</td>
   	<td align='center'>
 		<a href="<?php echo api_get_self(); ?>?course=<?php echo $enreg['code']; ?>"> <?php Display::display_icon('2rightarrow.gif', get_lang('Details')); ?> </a>
@@ -129,12 +128,12 @@ foreach($Courses as $enreg) {
  *
  * **********************************************************************************************
  */
-	if(isset($_GET['course'])) {
+	if (isset($_GET['course'])) {
 		$course = Database::escape_string($_GET['course']);
 		$a_infosCours = CourseManager::get_course_information($course);
 
 		//get coach and session_name if there is one and if session_mode is activated
-		if(api_get_setting('use_session_mode')=='true') {
+		if (api_get_setting('use_session_mode') == 'true') {
 			$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 			$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 			$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -145,46 +144,41 @@ foreach($Courses as $enreg) {
 					WHERE session_course_user.id_user = '.intval($_user['user_id']).'
 					AND session_course_user.course_code = "'.Database::escape_string($course).'"
 					ORDER BY id_session DESC';
-			$rs = Database::query($sql,__FILE__,__LINE__);
+			$rs = Database::query($sql, __FILE__, __LINE__);
 
-			$row=Database::fetch_array($rs);
-			if (!empty ($row[0]))
-			{
-				$session_id =intval($row[0]);
+			$row = Database::fetch_array($rs);
+			if (!empty($row[0])) {
+				$session_id = intval($row[0]);
 			}
-			//$session_id =intval(Database::result($rs,0,0));
+			//$session_id = intval(Database::result($rs, 0, 0));
 
-			if($session_id>0)
-			{
+			if ($session_id > 0) {
 				// get session name and coach of the session
 				$sql = 'SELECT name, id_coach FROM '.$tbl_session.'
 						WHERE id='.$session_id;
-				$rs = Database::query($sql,__FILE__,__LINE__);
-				$session_name = Database::result($rs,0,'name');
-				$session_coach_id = intval(Database::result($rs,0,'id_coach'));
+				$rs = Database::query($sql, __FILE__, __LINE__);
+				$session_name = Database::result($rs, 0, 'name');
+				$session_coach_id = intval(Database::result($rs, 0, 'id_coach'));
 
 				// get coach of the course in the session
 				$sql = 'SELECT id_coach FROM '.$tbl_session_course.'
 						WHERE id_session='.$session_id.'
 						AND course_code = "'.Database::escape_string($_GET['course']).'"';
 				$rs = Database::query($sql,__FILE__,__LINE__);
-				$session_course_coach_id = intval(Database::result($rs,0,0));
+				$session_course_coach_id = intval(Database::result($rs, 0, 0));
 
-				if($session_course_coach_id!=0)
-				{
+				if ($session_course_coach_id != 0) {
 					$coach_infos = UserManager :: get_user_info_by_id($session_course_coach_id);
 					$a_infosCours['tutor_name'] = api_get_person_name($coach_infos['firstname'], $coach_infos['lastname']);
 				}
-				else if($session_coach_id!=0)
-				{
+				else if($session_coach_id != 0) {
 					$coach_infos = UserManager :: get_user_info_by_id($session_coach_id);
 					$a_infosCours['tutor_name'] = api_get_person_name($coach_infos['firstname'], $coach_infos['lastname']);
 				}
 			}
-		} // end if(api_get_setting('use_session_mode')=='true')
+		} // end if (api_get_setting('use_session_mode') == 'true')
 
 		$tableTitle = $a_infosCours['title'].' | Coach : '.$a_infosCours['tutor_name'].((!empty($session_name)) ? ' | '.get_lang('Session').' : '.$session_name : '');
-
 
 		?>
 		<table class="data_table" width="100%">
@@ -202,9 +196,9 @@ foreach($Courses as $enreg) {
 			<?php
 				$sqlLearnpath = "SELECT lp.name,lp.id FROM ".$a_infosCours['db_name'].".".$tbl_course_lp." AS lp";
 				$resultLearnpath = Database::query($sqlLearnpath);
-				if(Database::num_rows($resultLearnpath)>0) {
+				if (Database::num_rows($resultLearnpath) > 0) {
 					while($a_learnpath = Database::fetch_array($resultLearnpath)) {
-						$progress = learnpath :: get_db_progress($a_learnpath['id'],$_user['user_id'], '%',$a_infosCours['db_name']);
+						$progress = learnpath :: get_db_progress($a_learnpath['id'], $_user['user_id'], '%', $a_infosCours['db_name']);
 
 						// calculates last connection time
 						$sql = 'SELECT MAX(start_time)
@@ -242,10 +236,9 @@ foreach($Courses as $enreg) {
 						echo "	</td>
 								<td align='center' width=180px >
 							 ";
-						if($start_time!=''){
+						if ($start_time != '') {
 							echo $lastConnexion;
-						}
-						else{
+						} else {
 							echo '-';
 						}
 						echo "	</td>
@@ -253,9 +246,8 @@ foreach($Courses as $enreg) {
 							 ";
 					}
 
-				}
-				else
-				{
+				} else {
+
 					echo "	<tr>
 								<td colspan='4'>
 									".get_lang('NoLearnpath')."
@@ -263,9 +255,6 @@ foreach($Courses as $enreg) {
 							</tr>
 						 ";
 				}
-
-
-
 			?>
 			<tr>
 			  <th class="head" style="color:#000"><?php echo get_lang('Exercices'); ?></th>
@@ -314,11 +303,11 @@ foreach($Courses as $enreg) {
 								$exe_id = $a_score['exe_id'];
 							}
 
-							if  ($weighting>0) {
+							if  ($weighting > 0) {
 								// i.e 10.50%
-								$pourcentageScore = round(($score*100)/$weighting,2);
+								$pourcentageScore = round(($score * 100) / $weighting, 2);
 							} else {
-								$pourcentageScore=0;
+								$pourcentageScore = 0;
 							}
 
 							$weighting = 0;
@@ -328,9 +317,9 @@ foreach($Courses as $enreg) {
 							echo $a_exercices['title'];
 							echo '</td>';
 
-							if ($a_exercices['results_disabled']==0) {
+							if ($a_exercices['results_disabled'] == 0) {
 								echo '<td align="center">';
-								if ($a_essais['essais']>0) {
+								if ($a_essais['essais'] > 0) {
 									echo $pourcentageScore.'%';
 								} else {
 									echo '/';
@@ -340,8 +329,9 @@ foreach($Courses as $enreg) {
 								echo  $a_essais['essais'];
 								echo '</td>
 										<td align="center" width="25">';
-								if($a_essais['essais']>0)
+								if ($a_essais['essais'] > 0) {
 									echo '<a href="../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$a_infosCours['code'].'&id_session='.Security::remove_XSS($_GET['id_session']).'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
+								}
 								echo '</td>';
 							} else {
 								// we show or not the results if the teacher wants to
@@ -354,22 +344,18 @@ foreach($Courses as $enreg) {
 										<td align="center" width="25">';
 								echo ' -- ';
 								echo '</td>';
-
 							}
 							echo '</tr>';
 						}
 					} else {
 						echo '<tr><td colspan="4">'.get_lang('NoEx').'</td></tr>';
 					}
-				}
-				else{
+				} else {
 					echo '<tr><td colspan="4">'.get_lang('NoEx').'</td></tr>';
 				}
-
 			?>
 		</table>
 		<?php
 	}
 
 Display :: display_footer();
-?>

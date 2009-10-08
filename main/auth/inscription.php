@@ -7,44 +7,45 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = array('registration','admin');
+$language_file = array('registration', 'admin');
 
-include ("../inc/global.inc.php");
+require '../inc/global.inc.php';
 
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-require_once (api_get_path(CONFIGURATION_PATH).'profile.conf.php');
-require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
-require_once(api_get_path(INCLUDE_PATH).'lib/legal.lib.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
+require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
 
 //require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 //require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 //require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
 
 // Load terms & conditions from the current lang
-if (api_get_setting('allow_terms_conditions')=='true') {
+if (api_get_setting('allow_terms_conditions') == 'true') {
 	$get = array_keys($_GET);
 	if (isset($get)) {
-		if ($get[0]=='legal'){
+		if ($get[0] == 'legal'){
 			//$language = api_get_setting('platformLanguage');
 			$language = api_get_interface_language();
 			$language = api_get_language_id($language);
-			$term_preview= LegalManager::get_last_condition($language);
-			if ($term_preview==false) {
+			$term_preview = LegalManager::get_last_condition($language);
+			if (!$term_preview) {
 				//look for the default language
 				$language = api_get_setting('platformLanguage');
 				$language = api_get_language_id($language);
-				$term_preview= LegalManager::get_last_condition($language);
+				$term_preview = LegalManager::get_last_condition($language);
 			}
 			$tool_name = get_lang('TermsAndConditions');
 			Display :: display_header('');
 			echo '<div class="actions-title">';
 			echo $tool_name;
 			echo '</div>';
-			if (!empty($term_preview['content']))
+			if (!empty($term_preview['content'])) {
 				echo $term_preview['content'];
-			else
+			} else {
 				echo get_lang('ComingSoon');
+			}
 			Display :: display_footer();
 			exit;
 		}
@@ -62,7 +63,7 @@ if (api_get_setting('allow_registration') == 'false') {
 	api_not_allowed();
 }
 //api_display_tool_title($tool_name);
-if (api_get_setting('allow_registration')=='approval') {
+if (api_get_setting('allow_registration') == 'approval') {
 	Display::display_normal_message(get_lang('YourAccountHasToBeApproved'));
 }
 //if openid was not found
@@ -71,16 +72,16 @@ if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
 }
 
 $form = new FormValidator('registration');
-if (api_get_setting('allow_terms_conditions')=='true') {
+if (api_get_setting('allow_terms_conditions') == 'true') {
 	if (!isset($_SESSION['update_term_and_condition'][1])) {
-		$display_all_form=true;
+		$display_all_form = true;
 	} else {
-		$display_all_form=false;
+		$display_all_form = false;
 	}
 } else {
-	$display_all_form=true;
+	$display_all_form = true;
 }
-if ($display_all_form===true) {
+if ($display_all_form === true) {
 
 	if (api_is_western_name_order()) {
 		//	FIRST NAME and LAST NAME
@@ -96,10 +97,11 @@ if ($display_all_form===true) {
 	$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 	//	EMAIL
 	$form->addElement('text', 'email', get_lang('Email'), array('size' => 40));
-	if (api_get_setting('registration', 'email') == 'true')
+	if (api_get_setting('registration', 'email') == 'true') {
 		$form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
+	}
 	$form->addRule('email', get_lang('EmailWrong'), 'email');
-	if (api_get_setting('openid_authentication')=='true') {
+	if (api_get_setting('openid_authentication') == 'true') {
 		$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));
 	}
 	/*
@@ -143,50 +145,41 @@ if ($display_all_form===true) {
 		$form->addElement('select_language', 'language', get_lang('Language'));
 	}
 	//	STUDENT/TEACHER
-	if (api_get_setting('allow_registration_as_teacher') <> 'false') {
+	if (api_get_setting('allow_registration_as_teacher') != 'false') {
 		$form->addElement('radio', 'status', get_lang('Status'), get_lang('RegStudent'), STUDENT);
 		$form->addElement('radio', 'status', null, get_lang('RegAdmin'), COURSEMANAGER);
 	}
 
 	//	EXTENDED FIELDS
-	if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mycomptetences') == 'true')
-	{
+	if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true') {
 		$form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
 	}
-	if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mydiplomas') == 'true')
-	{
+	if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true') {
 		$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
 	}
-	if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','myteach') == 'true')
-	{
+	if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'myteach') == 'true') {
 		$form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
 	}
-	if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mypersonalopenarea') == 'true')
-	{
+	if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true') {
 		$form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
 	}
-	if (api_get_setting('extended_profile') == 'true')
-	{
-		if (api_get_setting('extendedprofile_registrationrequired','mycomptetences') == 'true')
-		{
+	if (api_get_setting('extended_profile') == 'true') {
+		if (api_get_setting('extendedprofile_registrationrequired', 'mycomptetences') == 'true') {
 			$form->addRule('competences', get_lang('ThisFieldIsRequired'), 'required');
 		}
-		if (api_get_setting('extendedprofile_registrationrequired','mydiplomas') == 'true')
-		{
+		if (api_get_setting('extendedprofile_registrationrequired', 'mydiplomas') == 'true') {
 			$form->addRule('diplomas', get_lang('ThisFieldIsRequired'), 'required');
 		}
-		if (api_get_setting('extendedprofile_registrationrequired','myteach') == 'true')
-		{
+		if (api_get_setting('extendedprofile_registrationrequired', 'myteach') == 'true') {
 			$form->addRule('teach', get_lang('ThisFieldIsRequired'), 'required');
 		}
-		if (api_get_setting('extendedprofile_registrationrequired','mypersonalopenarea') == 'true')
-		{
+		if (api_get_setting('extendedprofile_registrationrequired','mypersonalopenarea') == 'true') {
 			$form->addRule('openarea', get_lang('ThisFieldIsRequired'), 'required');
 		}
 	}
 	// EXTRA FIELDS
-	$extra = UserManager::get_extra_fields(0,50,5,'ASC');
-	$extra_data = UserManager::get_extra_user_data(api_get_user_id(),true);
+	$extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
+	$extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
 	foreach ($extra as $id => $field_details) {
 		if ($field_details[6] == 0) {
 			continue;
@@ -209,7 +202,7 @@ if ($display_all_form===true) {
 				$group = array();
 				foreach ($field_details[9] as $option_id => $option_details) {
 					$options[$option_details[1]] = $option_details[2];
-					$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1],$option_details[2].'<br />',$option_details[1]);
+					$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1], $option_details[2].'<br />',$option_details[1]);
 				}
 				$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
 				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
@@ -219,7 +212,7 @@ if ($display_all_form===true) {
 				foreach($field_details[9] as $option_id => $option_details) {
 					$options[$option_details[1]] = $option_details[2];
 				}
-				$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');
+				$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, '');
 				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 				break;
 			case USER_FIELD_TYPE_SELECT_MULTIPLE:
@@ -227,49 +220,49 @@ if ($display_all_form===true) {
 				foreach ($field_details[9] as $option_id => $option_details) {
 					$options[$option_details[1]] = $option_details[2];
 				}
-				$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,array('multiple' => 'multiple'));
+				$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, array('multiple' => 'multiple'));
 				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 				break;
 			case USER_FIELD_TYPE_DATE:
-				$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'registration'));
-				$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
+				$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3], array('form_name' => 'registration'));
+				$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
 				$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
 				$form -> setDefaults($defaults);
 				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 				$form->applyFilter('theme', 'trim');
 				break;
 			case USER_FIELD_TYPE_DATETIME:
-				$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'registration'));
-				$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear',1900);
+				$form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3], array('form_name' => 'registration'));
+				$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
 				$defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
 				$form -> setDefaults($defaults);
 				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 				$form->applyFilter('theme', 'trim');
 				break;
 			case USER_FIELD_TYPE_DOUBLE_SELECT:
-				foreach ($field_details[9] as $key=>$element) {
+				foreach ($field_details[9] as $key => $element) {
 					if ($element[2][0] == '*') {
-						$values['*'][$element[0]] = str_replace('*','',$element[2]);
+						$values['*'][$element[0]] = str_replace('*', '', $element[2]);
 					} else {
 						$values[0][$element[0]] = $element[2];
 					}
 				}
 
-				$group='';
-				$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1],'',$values[0],'');
-				$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*','',$values['*'],'');
+				$group = '';
+				$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1], '', $values[0], '');
+				$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*', '', $values['*'], '');
 				$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '&nbsp;');
 				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 
 				// recoding the selected values for double : if the user has selected certain values, we have to assign them to the correct select form
 				if (key_exists('extra_'.$field_details[1], $extra_data)) {
 					// exploding all the selected values (of both select forms)
-					$selected_values = explode(';',$extra_data['extra_'.$field_details[1]]);
+					$selected_values = explode(';', $extra_data['extra_'.$field_details[1]]);
 					$extra_data['extra_'.$field_details[1]]  =array();
 
 					// looping through the selected values and assigning the selected values to either the first or second select form
-					foreach ($selected_values as $key=>$selected_value) {
-						if (key_exists($selected_value,$values[0])) {
+					foreach ($selected_values as $key => $selected_value) {
+						if (key_exists($selected_value, $values[0])) {
 							$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
 						} else {
 							$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
@@ -278,33 +271,33 @@ if ($display_all_form===true) {
 				}
 				break;
 			case USER_FIELD_TYPE_DIVIDER:
-				$form->addElement('static',$field_details[1], '<br /><strong>'.$field_details[3].'</strong>');
+				$form->addElement('static', $field_details[1], '<br /><strong>'.$field_details[3].'</strong>');
 				break;
 		}
 	}
 
 }
 //------------ Terms and conditions
-if (api_get_setting('allow_terms_conditions')=='true') {
+if (api_get_setting('allow_terms_conditions') == 'true') {
 	//$language = api_get_setting('platformLanguage');
 	$language = api_get_interface_language();
 	$language = api_get_language_id($language);
-	$term_preview= LegalManager::get_last_condition($language);
+	$term_preview = LegalManager::get_last_condition($language);
 
-	if ($term_preview==false) {
+	if (!$term_preview) {
 		//we load from the platform
 		$language = api_get_setting('platformLanguage');
 		$language = api_get_language_id($language);
-		$term_preview= LegalManager::get_last_condition($language);
+		$term_preview = LegalManager::get_last_condition($language);
 		//if is false we load from english
-		if ($term_preview==false){
+		if (!$term_preview){
 			$language = api_get_language_id('english'); //this must work
-			$term_preview= LegalManager::get_last_condition($language);
+			$term_preview = LegalManager::get_last_condition($language);
 		}
 	}
 	// Version and language //password
-	$form->addElement('hidden', 'legal_accept_type',$term_preview['version'].':'.$term_preview['language_id']);
-	$form->addElement('hidden', 'legal_info',$term_preview['legal_id'].':'.$term_preview['language_id']);
+	$form->addElement('hidden', 'legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
+	$form->addElement('hidden', 'legal_info', $term_preview['legal_id'].':'.$term_preview['language_id']);
 	if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
 		$form->addElement('hidden', 'login',$_SESSION['info_current_user'][1]);
 		$form->addElement('hidden', 'password',$_SESSION['info_current_user'][2]);
@@ -327,30 +320,25 @@ if (api_get_setting('allow_terms_conditions')=='true') {
 	}
 }
 
-$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'),'class="save"');
+$form->addElement('style_submit_button', 'submit', get_lang('RegisterUser'), 'class="save"');
 
-if(isset($_SESSION["user_language_choice"]) && $_SESSION["user_language_choice"]!=""){
-	$defaults['language'] = $_SESSION["user_language_choice"];
-}
-else{
+if (isset($_SESSION['user_language_choice']) && $_SESSION['user_language_choice'] != '') {
+	$defaults['language'] = $_SESSION['user_language_choice'];
+} else {
 	$defaults['language'] = api_get_setting('platformLanguage');
 }
-if(!empty($_GET['username']))
-{
+if (!empty($_GET['username'])) {
 	$defaults['username'] = Security::remove_XSS($_GET['username']);
 }
-if(!empty($_GET['email']))
-{
+if (!empty($_GET['email'])) {
 	$defaults['email'] = Security::remove_XSS($_GET['email']);
 }
 
-if(!empty($_GET['phone']))
-{
+if (!empty($_GET['phone'])) {
 	$defaults['phone'] = Security::remove_XSS($_GET['phone']);
 }
 
-if (api_get_setting('openid_authentication')=='true' && !empty($_GET['openid']))
-{
+if (api_get_setting('openid_authentication') == 'true' && !empty($_GET['openid'])) {
 	$defaults['openid'] = Security::remove_XSS($_GET['openid']);
 }
 $defaults['status'] = STUDENT;
@@ -362,7 +350,7 @@ if ($form->validate()) {
 	  -----------------------------------------------------*/
 	$values = $form->exportValues();
 
-	$values['username'] = api_substr($values['username'],0,20); //make *sure* the login isn't too long
+	$values['username'] = api_substr($values['username'], 0, USERNAME_MAX_LENGTH); //make *sure* the login isn't too long
 
 	if (api_get_setting('allow_registration_as_teacher') == 'false') {
 		$values['status'] = STUDENT;
@@ -372,32 +360,32 @@ if ($form->validate()) {
 	$user_id = UserManager::create_user($values['firstname'],$values['lastname'],$values['status'],$values['email'],$values['username'],$values['pass1'],$values['official_code'], $values['language'],$values['phone'],$picture_uri);
 
 		// Terms & Conditions
-	if (api_get_setting('allow_terms_conditions')=='true') {
+	if (api_get_setting('allow_terms_conditions') == 'true') {
 		// update the terms & conditions
 		if (isset($values['legal_accept_type'])) {
-			$cond_array = explode(':',$values['legal_accept_type']);
-			if (!empty($cond_array[0]) && !empty($cond_array[1])){
+			$cond_array = explode(':', $values['legal_accept_type']);
+			if (!empty($cond_array[0]) && !empty($cond_array[1])) {
 				$time = time();
 				$condition_to_save = intval($cond_array[0]).':'.intval($cond_array[1]).':'.$time;
-				UserManager::update_extra_field_value($user_id,'legal_accept',$condition_to_save);
+				UserManager::update_extra_field_value($user_id, 'legal_accept', $condition_to_save);
 			}
 		}
 	}
 
 	/****** register extra fields*************/
-	$extras=array();
-	foreach($values as $key => $value) {
-		if (substr($key,0,6)=='extra_') {//an extra field
+	$extras = array();
+	foreach ($values as $key => $value) {
+		if (substr($key, 0, 6) == 'extra_') { //an extra field
 			$extras[substr($key,6)] = $value;
 		} else {
 			$sql .= " $key = '".Database::escape_string($value)."',";
 		}
 	}
 	//update the extra fields
-	$count_extra_field=count($extras);
-	if ($count_extra_field>0) {
-		foreach ($extras as $key=>$value) {
-			$myres = UserManager::update_extra_field_value($user_id,$key,$value);
+	$count_extra_field = count($extras);
+	if ($count_extra_field > 0) {
+		foreach ($extras as $key => $value) {
+			$myres = UserManager::update_extra_field_value($user_id, $key, $value);
 		}
 	}
 
@@ -406,82 +394,72 @@ if ($form->validate()) {
 		// storing the extended profile
 		$store_extended = false;
 		$sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)." SET ";
-		if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mycomptetences') == 'true')
-		{
+		if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true') {
 			$sql_set[] = "competences = '".Database::escape_string($values['competences'])."'";
 			$store_extended = true;
 		}
-		if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mydiplomas') == 'true')
-		{
+		if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true') {
 			$sql_set[] = "diplomas = '".Database::escape_string($values['diplomas'])."'";
 			$store_extended = true;
 		}
-		if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','myteach') == 'true')
-		{
+		if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'myteach') == 'true') {
 			$sql_set[] = "teach = '".Database::escape_string($values['teach'])."'";
 			$store_extended = true;
 		}
-		if (api_get_setting('extended_profile') == 'true' AND api_get_setting('extendedprofile_registration','mypersonalopenarea') == 'true')
-		{
+		if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true') {
 			$sql_set[] = "openarea = '".Database::escape_string($values['openarea'])."'";
 			$store_extended = true;
 		}
-		if ($store_extended)
-		{
-			$sql .= implode(',',$sql_set);
+		if ($store_extended) {
+			$sql .= implode(',', $sql_set);
 			$sql .= " WHERE user_id = '".Database::escape_string($user_id)."'";
-			Database::query($sql,__FILE__,__LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		}
 
 		// if there is a default duration of a valid account then we have to change the expiration_date accordingly
-		if (api_get_setting('account_valid_duration')<>'')
-		{
+		if (api_get_setting('account_valid_duration') != '') {
 			$sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)."
 						SET expiration_date='registration_date+1' WHERE user_id='".$user_id."'";
-			Database::query($sql,__FILE__,__LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		}
 
 		// if the account has to be approved then we set the account to inactive, sent a mail to the platform admin and exit the page.
-		if (api_get_setting('allow_registration')=='approval')
-		{
+		if (api_get_setting('allow_registration') == 'approval') {
 			$TABLE_USER= Database::get_main_table(TABLE_MAIN_USER);
 			// 1. set account inactive
 			$sql = "UPDATE ".$TABLE_USER."	SET active='0' WHERE user_id='".$user_id."'";
-			Database::query($sql,__FILE__,__LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 
-
-			$sql_get_id_admin="SELECT * FROM ".Database::get_main_table(TABLE_MAIN_ADMIN);
-			$result=Database::query($sql_get_id_admin,__FILE__,__LINE__);
+			$sql_get_id_admin = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_ADMIN);
+			$result = Database::query($sql_get_id_admin, __FILE__, __LINE__);
 			while ($row = Database::fetch_array($result)) {
 
-				$sql_admin_list="SELECT * FROM ".$TABLE_USER." WHERE user_id='".$row['user_id']."'";
-				$result_list=Database::query($sql_admin_list,__FILE__,__LINE__);
+				$sql_admin_list = "SELECT * FROM ".$TABLE_USER." WHERE user_id='".$row['user_id']."'";
+				$result_list = Database::query($sql_admin_list, __FILE__, __LINE__);
 				$admin_list=Database::fetch_array($result_list);
 				$emailto		= $admin_list['email'];
 
 
 				// 2. send mail to the platform admin
-				$emailfromaddr 	= api_get_setting('emailAdministrator');
-				$emailfromname 	= api_get_setting('siteName');
-				$emailsubject	= get_lang('ApprovalForNewAccount').': '.$values['username'];
-				$emailbody		= get_lang('ApprovalForNewAccount')."\n";
-				$emailbody		.=get_lang('UserName').': '.$values['username']."\n";
-				$emailbody		.=get_lang('LastName').': '.$values['lastname']."\n";
-				$emailbody		.=get_lang('FirstName').': '.$values['firstname']."\n";
-				$emailbody		.=get_lang('Email').': '.$values['email']."\n";
-				$emailbody		.=get_lang('Status').': '.$values['status']."\n\n";
-				$emailbody		.=get_lang('ManageUser').': '.api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id;
+				$emailfromaddr 	 = api_get_setting('emailAdministrator');
+				$emailfromname 	 = api_get_setting('siteName');
+				$emailsubject	 = get_lang('ApprovalForNewAccount').': '.$values['username'];
+				$emailbody		 = get_lang('ApprovalForNewAccount')."\n";
+				$emailbody		.= get_lang('UserName').': '.$values['username']."\n";
+				$emailbody		.= get_lang('LastName').': '.$values['lastname']."\n";
+				$emailbody		.= get_lang('FirstName').': '.$values['firstname']."\n";
+				$emailbody		.= get_lang('Email').': '.$values['email']."\n";
+				$emailbody		.= get_lang('Status').': '.$values['status']."\n\n";
+				$emailbody		.= get_lang('ManageUser').': '.api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id;
 
 				$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
 			    $email_admin = api_get_setting('emailAdministrator');
-				@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
-
+				@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name, $email_admin);
 			}
-				// 3. exit the page
-				unset($user_id);
-				Display :: display_footer();
-				exit;
-
+			// 3. exit the page
+			unset($user_id);
+			Display :: display_footer();
+			exit;
 		}
 
 
@@ -493,7 +471,7 @@ if ($form->validate()) {
 		$_user['mail'] 		= $values['email'];
 		$_user['language'] 	= $values['language'];
 		$_user['user_id']	= $user_id;
-		$is_allowedCreateCourse = ($values['status'] == 1) ? true : false;
+		$is_allowedCreateCourse = $values['status'] == 1;
 		api_session_register('_user');
 		api_session_register('is_allowedCreateCourse');
 
@@ -532,7 +510,7 @@ if ($form->validate()) {
 			// Every header must be followed by a \n except the last
 			$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
 		    $email_admin = api_get_setting('emailAdministrator');
-			@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name,$email_admin);
+			@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
 		}
 	}
 
@@ -560,7 +538,7 @@ if ($form->validate()) {
 	$form->display();
 }
 ?>
-<br/>
+<br />
 <?php
 if (!isset($_POST['username'])) {
 ?>
@@ -578,4 +556,3 @@ if (!isset($_POST['username'])) {
 */
 
 Display :: display_footer();
-?>

@@ -535,7 +535,7 @@ if (!empty($_SESSION['production_uploaded'])) {
 		}
 	}
 	if (empty($user_data['password0']) && !empty($user_data['password1'])) {
-			$wrong_current_password = true;
+		$wrong_current_password = true;
 	}
 
 	// upload picture if a new one is provided
@@ -609,13 +609,9 @@ if (!empty($_SESSION['production_uploaded'])) {
 }
 
 if (isset($_GET['show'])) {
-
 	if ((api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') || (api_get_setting('allow_social_tool') == 'true')) {
-
 		$interbreadcrumb[] = array ('url' => 'javascript: void(0);', 'name' => get_lang('SocialNetwork'));
-
 	} elseif ((api_get_setting('allow_social_tool') == 'false' && api_get_setting('allow_message_tool') == 'true')) {
-
 		$interbreadcrumb[] = array('url' => 'javascript: void(0);', 'name' => get_lang('MessageTool'));
 	}
 }

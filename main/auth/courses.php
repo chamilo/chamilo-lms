@@ -726,7 +726,7 @@ function display_courses($user_id, $show_course_icons, $user_courses) {
 	$sql = "SELECT * FROM $tucc WHERE user_id='".$_user['user_id']."' ORDER BY sort ASC";
 	$result = Database::query($sql,__FILE__,__LINE__);
 	while ($row = Database::fetch_array($result)) {
-		if ($show_course_icons=true) { // TODO: A typo? An alternative for this line: if ($show_course_icons) {
+		if ($show_course_icons) {
 			// The edit link is clicked.
 			if (isset($_GET['categoryid']) && $_GET['categoryid'] == $row['id']) {
 				// We display the edit form for the category.
@@ -775,7 +775,7 @@ function display_courses_in_category($user_category_id, $showicons) {
 	$result = Database::query($sql_select_courses,__FILE__,__LINE__);
 	$number_of_courses = Database::num_rows($result);
 	$key = 0;
-	while ($course=Database::fetch_array($result)) {
+	while ($course = Database::fetch_array($result)) {
 		echo "\t<tr>\n";
 
 		if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {

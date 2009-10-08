@@ -88,7 +88,7 @@ if ($form->validate())
 	$export = $form->exportValues();
 	$file_type = $export['file_type'];
 	$course_code = $export['course_code'];
-	$userPasswordCrypted =
+
 	$sql = "SELECT  u.user_id 	AS UserId,
 					u.lastname 	AS LastName,
 					u.firstname 	AS FirstName,

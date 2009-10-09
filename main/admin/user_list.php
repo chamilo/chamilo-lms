@@ -724,7 +724,8 @@ else
 	}
 	// Create a sortable table with user-data
 	$parameters['sec_token'] = Security::get_token();
-	$table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
+	
+	$table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 3);
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false);
 	$table->set_header(1, get_lang('OfficialCode'));

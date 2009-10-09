@@ -449,7 +449,10 @@ function upload_user_production($user_id) {
 	$production_repository = $image_path['dir'].$user_id.'/';
 
 	if (!file_exists($production_repository)) {
-		mkpath($production_repository);
+		$perm = api_get_setting('permissions_for_new_directories');
+		$perm = octdec(!empty($perm) ? $perm : '0770');
+		@mkdir($production_repository, $perm, true);
+
 	}
 
 	$filename = replace_dangerous_char($_FILES['production']['name']);
@@ -766,7 +769,7 @@ if (api_get_setting('allow_message_tool') == 'true') {
 			echo '</div><br />';
 		 }
 	 }*/
-	echo '<img src="../img/delete.gif" alt="'.get_lang('Close').'" title="'.get_lang('Close').'"  class="message-delete" />';
+	echo '<img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('Close').'" title="'.get_lang('Close').'"  class="message-delete" />';
 	if ($number_of_new_messages_of_friend > 0) {
 		echo '<br />';
 	}

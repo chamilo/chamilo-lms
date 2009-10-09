@@ -87,14 +87,11 @@ if (!empty ($_GET['coursePath'])) {
 	$interbreadcrumb[] = array('url' => $course_url, 'name' => Security::remove_XSS($_GET['courseCode']));
 }
 
+
 $warning_msg = '';
 if (!empty($_GET['fe'])) {
 	$warning_msg .= get_lang('UplUnableToSaveFileFilteredExtension');
 	$_GET['fe'] = null;
-}
-if (!empty($_GET['cp'])) {
-	$warning_msg .= get_lang('CurrentPasswordEmptyOrIncorrect');
-	$_GET['cp'] = null;
 }
 
 /*
@@ -455,6 +452,7 @@ function upload_user_production($user_id) {
 		$perm = api_get_setting('permissions_for_new_directories');
 		$perm = octdec(!empty($perm) ? $perm : '0770');
 		@mkdir($production_repository, $perm, true);
+
 	}
 
 	$filename = replace_dangerous_char($_FILES['production']['name']);
@@ -484,7 +482,21 @@ function check_user_password($password){
 	$result = Database::query($sql_password, __FILE__, __LINE__);
 	return Database::num_rows($result) != 0;
 }
-
+/**
+ * Check current user's current password
+ * @param	char	email
+ * @return	bool true o false
+ * @uses Gets user ID from global variable
+ */
+function check_user_email($email){
+	global $_user;
+	$user_id = $_user['user_id'];
+	if ($user_id != strval(intval($user_id)) || empty($email)) { return false; }
+	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+	$sql_password = "SELECT * FROM $table_user WHERE user_id='".$user_id."' AND email='".$email."'";
+	$result = Database::query($sql_password, __FILE__, __LINE__);
+	return Database::num_rows($result) != 0;
+}
 /*
 ==============================================================================
 		MAIN CODE
@@ -494,6 +506,18 @@ $filtered_extension = false;
 $update_success = false;
 $upload_picture_success = false;
 $upload_production_success = false;
+$msg_fail_changue_email = false;
+$msg_is_not_password = false;
+
+if (!empty($_SESSION['change_email'])) {
+	$msg_fail_changue_email= ($_SESSION['change_email'] == 'success');
+	unset($_SESSION['change_email']);
+}
+
+if (!empty($_SESSION['is_not_password'])) {
+	$msg_is_not_password = ($_SESSION['is_not_password'] == 'success');
+	unset($_SESSION['is_not_password']);
+}
 
 if (!empty($_SESSION['profile_update'])) {
 	$update_success = ($_SESSION['profile_update'] == 'success');
@@ -525,7 +549,7 @@ if (!empty($_SESSION['production_uploaded'])) {
 
 	$wrong_current_password = false;
 	$user_data = $form->exportValues();
-
+	
 	// set password if a new one was provided
 	if (!empty($user_data['password0'])) {
 		if (check_user_password($user_data['password0'])) {
@@ -534,12 +558,22 @@ if (!empty($_SESSION['production_uploaded'])) {
 			}
 		} else {
 			$wrong_current_password = true;
+			$_SESSION['is_not_password'] = 'success';
 		}
 	}
 	if (empty($user_data['password0']) && !empty($user_data['password1'])) {
 		$wrong_current_password = true;
+		$_SESSION['is_not_password'] = 'success';
 	}
-
+	
+	if (!check_user_email($user_data['email']) && !empty($user_data['password0']) && ($wrong_current_password==false)) {
+		$changeemail = $user_data['email'];
+	} 
+	
+	if (!check_user_email($user_data['email']) && empty($user_data['password0'])){
+		$_SESSION['change_email'] = 'success';
+	}
+	
 	// upload picture if a new one is provided
 	if ($_FILES['picture']['size']) {
 		if ($new_picture = UserManager::update_user_picture($_user['user_id'], $_FILES['picture']['name'], $_FILES['picture']['tmp_name'])) {
@@ -566,7 +600,7 @@ if (!empty($_SESSION['production_uploaded'])) {
 
 	// remove values that shouldn't go in the database
 	unset($user_data['password0'],$user_data['password1'], $user_data['password2'], $user_data['MAX_FILE_SIZE'],
-	$user_data['remove_picture'], $user_data['apply_change']);
+	$user_data['remove_picture'], $user_data['apply_change'],$user_data['email'] );
 
 	// Following RFC2396 (http://www.faqs.org/rfcs/rfc2396.html), a URI uses ':' as a reserved character
 	// we can thus ensure the URL doesn't contain any scheme name by searching for ':' in the string
@@ -587,15 +621,19 @@ if (!empty($_SESSION['production_uploaded'])) {
 		}
 	}
 
-	if (isset($password)) {
+	//changue email
+	if (isset($changeemail) && !isset($password) ) {
+		$sql .= " email = '".Database::escape_string($changeemail)."' ";
+	} elseif (isset($password) && isset($changeemail)) {
+		$sql .= " email = '".Database::escape_string($changeemail)."', ";		
 		$password = api_get_encrypted_password($password);
 		$sql .= " password = '".Database::escape_string($password)."'";
 	} else {
 		// remove trailing , from the query we have so far
 		$sql = rtrim($sql, ',');
 	}
-
 	$sql .= " WHERE user_id  = '".$_user['user_id']."'";
+	//var_dump($sql); exit();
 	Database::query($sql, __FILE__, __LINE__);
 	//update the extra fields
 	foreach ($extras as $key => $value) {
@@ -606,14 +644,19 @@ if (!empty($_SESSION['production_uploaded'])) {
 	$uidReset = true;
 	include api_get_path(INCLUDE_PATH).'local.inc.php';
 	$_SESSION['profile_update'] = 'success';
-	header("Location: ".api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strpos($_SERVER['QUERY_STRING'], '&fe=1') === false ? '&fe=1' : '').($wrong_current_password && strpos($_SERVER['QUERY_STRING'], '&cp=1') === false ? '&cp=1' : ''));
+	header("Location: ".api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strpos($_SERVER['QUERY_STRING'], '&fe=1') === false ? '&fe=1' : ''));
 	exit;
 }
 
+
 if (isset($_GET['show'])) {
+
 	if ((api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') || (api_get_setting('allow_social_tool') == 'true')) {
+
 		$interbreadcrumb[] = array ('url' => 'javascript: void(0);', 'name' => get_lang('SocialNetwork'));
+
 	} elseif ((api_get_setting('allow_social_tool') == 'false' && api_get_setting('allow_message_tool') == 'true')) {
+
 		$interbreadcrumb[] = array('url' => 'javascript: void(0);', 'name' => get_lang('MessageTool'));
 	}
 }
@@ -652,12 +695,19 @@ if (!empty($file_deleted)) {
 
 	if ($upload_production_success) {
 		$message.='<br />'.get_lang('ProductionUploaded');
-	}
-
+	}	
+	
 	Display :: display_confirmation_message($message, false);
 }
 
-if (!empty($warning_msg)) {
+
+if (!empty($msg_fail_changue_email)){
+	$errormail=get_lang('ToChangeYourEmailMustTypeYourPassword');
+	Display :: display_error_message($errormail, false);
+}
+
+if (!empty($msg_is_not_password)){
+	$warning_msg = get_lang('CurrentPasswordEmptyOrIncorrect');
 	Display :: display_warning_message($warning_msg, false);
 }
 

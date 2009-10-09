@@ -58,10 +58,12 @@ Display :: display_header($tool_name);
 echo '<div class="actions-title">';
 echo $tool_name;
 echo '</div>';
+
 // Forbidden to self-register
 if (api_get_setting('allow_registration') == 'false') {
 	api_not_allowed();
 }
+
 //api_display_tool_title($tool_name);
 if (api_get_setting('allow_registration') == 'approval') {
 	Display::display_normal_message(get_lang('YourAccountHasToBeApproved'));
@@ -357,7 +359,7 @@ if ($form->validate()) {
 	}
 
 	// creating a new user
-	$user_id = UserManager::create_user($values['firstname'],$values['lastname'],$values['status'],$values['email'],$values['username'],$values['pass1'],$values['official_code'], $values['language'],$values['phone'],$picture_uri);
+	$user_id = UserManager::create_user($values['firstname'], $values['lastname'], $values['status'], $values['email'], $values['username'], $values['pass1'], $values['official_code'], $values['language'], $values['phone'], $picture_uri);
 
 		// Terms & Conditions
 	if (api_get_setting('allow_terms_conditions') == 'true') {
@@ -425,7 +427,7 @@ if ($form->validate()) {
 
 		// if the account has to be approved then we set the account to inactive, sent a mail to the platform admin and exit the page.
 		if (api_get_setting('allow_registration') == 'approval') {
-			$TABLE_USER= Database::get_main_table(TABLE_MAIN_USER);
+			$TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
 			// 1. set account inactive
 			$sql = "UPDATE ".$TABLE_USER."	SET active='0' WHERE user_id='".$user_id."'";
 			Database::query($sql, __FILE__, __LINE__);
@@ -436,9 +438,8 @@ if ($form->validate()) {
 
 				$sql_admin_list = "SELECT * FROM ".$TABLE_USER." WHERE user_id='".$row['user_id']."'";
 				$result_list = Database::query($sql_admin_list, __FILE__, __LINE__);
-				$admin_list=Database::fetch_array($result_list);
-				$emailto		= $admin_list['email'];
-
+				$admin_list = Database::fetch_array($result_list);
+				$emailto = $admin_list['email'];
 
 				// 2. send mail to the platform admin
 				$emailfromaddr 	 = api_get_setting('emailAdministrator');
@@ -446,13 +447,18 @@ if ($form->validate()) {
 				$emailsubject	 = get_lang('ApprovalForNewAccount').': '.$values['username'];
 				$emailbody		 = get_lang('ApprovalForNewAccount')."\n";
 				$emailbody		.= get_lang('UserName').': '.$values['username']."\n";
-				$emailbody		.= get_lang('LastName').': '.$values['lastname']."\n";
-				$emailbody		.= get_lang('FirstName').': '.$values['firstname']."\n";
+				if (api_is_western_name_order()) {
+					$emailbody	.= get_lang('FirstName').': '.$values['firstname']."\n";
+					$emailbody	.= get_lang('LastName').': '.$values['lastname']."\n";
+				} else {
+					$emailbody	.= get_lang('LastName').': '.$values['lastname']."\n";
+					$emailbody	.= get_lang('FirstName').': '.$values['firstname']."\n";
+				}
 				$emailbody		.= get_lang('Email').': '.$values['email']."\n";
 				$emailbody		.= get_lang('Status').': '.$values['status']."\n\n";
 				$emailbody		.= get_lang('ManageUser').': '.api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id;
 
-				$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+				$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 			    $email_admin = api_get_setting('emailAdministrator');
 				@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name, $email_admin);
 			}
@@ -461,7 +467,6 @@ if ($form->validate()) {
 			Display :: display_footer();
 			exit;
 		}
-
 
 		/*--------------------------------------
 		          SESSION REGISTERING
@@ -486,9 +491,9 @@ if ($form->validate()) {
 		             EMAIL NOTIFICATION
 		  --------------------------------------*/
 
-		if (strstr($values['email'], '@')) {
-			// Lets predefine some variables. Be sure to change the from address!
-			$recipient_name = $values['firstname'].' '.$values['lastname'];
+		if (strpos($values['email'], '@') !== false) {
+			// Let us predefine some variables. Be sure to change the from address!
+			$recipient_name = api_get_person_name($values['firstname'], $values['lastname']);
 			$email = $values['email'];
 			$emailfromaddr = api_get_setting('emailAdministrator');
 			$emailfromname = api_get_setting('siteName');
@@ -496,7 +501,7 @@ if ($form->validate()) {
 
 			// The body can be as long as you wish, and any combination of text and variables
 			$portal_url = $_configuration['root_web'];
-			if ($_configuration['multiple_access_urls']==true) {
+			if ($_configuration['multiple_access_urls']) {
 				$access_url_id = api_get_current_access_url_id();
 				if ($access_url_id != -1 ){
 					$url = api_get_access_url($access_url_id);
@@ -508,7 +513,7 @@ if ($form->validate()) {
 
 			// Here we are forming one large header line
 			// Every header must be followed by a \n except the last
-			$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 		    $email_admin = api_get_setting('emailAdministrator');
 			@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
 		}
@@ -523,16 +528,16 @@ if ($form->validate()) {
 	$button_text = "";
 	if ($is_allowedCreateCourse) {
 		echo "<p>", get_lang('NowGoCreateYourCourse'), ".</p>\n";
-		$actionUrl = "../create_course/add_course.php";
+		$action_url = "../create_course/add_course.php";
 		$button_text = get_lang('CourseCreate');
 	} else {
 		echo "<p>", get_lang('NowGoChooseYourCourses'), ".</p>\n";
-		$actionUrl = "courses.php?action=subscribe";
+		$action_url = "courses.php?action=subscribe";
 		$button_text = get_lang('Next');
 	}
 	// ?uidReset=true&uidReq=$_user['user_id']
 
-	echo "<form action=\"", $actionUrl, "\"  method=\"post\">\n", "<button type=\"submit\" class=\"next\" name=\"next\" value=\"", get_lang('Next'), "\" validationmsg=\" ", get_lang('Next'), " \">".$button_text."</button>\n", "</form><br />\n";
+	echo "<form action=\"", $action_url, "\"  method=\"post\">\n", "<button type=\"submit\" class=\"next\" name=\"next\" value=\"", get_lang('Next'), "\" validationmsg=\" ", get_lang('Next'), " \">".$button_text."</button>\n", "</form><br />\n";
 
 } else {
 	$form->display();

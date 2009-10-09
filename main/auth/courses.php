@@ -404,7 +404,6 @@ function browse_courses_in_category() {
 	display_subscribe_to_courses($courses);
 }
 
-
 /**
  * displays the form for searching for a course and the results if a query has been submitted.
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -412,12 +411,12 @@ function browse_courses_in_category() {
 */
 function display_search_courses() {
 	global $_user, $stok;
-	echo "<p><strong>".get_lang("SearchCourse")."</strong><br />";
+	echo "<p><strong>".get_lang('SearchCourse')."</strong><br />";
 	echo "<form class=\"course_list\" method=\"post\" action=\"".api_get_self()."?action=subscribe\">",
 		'<input type="hidden" name="sec_token" value="'.$stok.'">',
 		"<input type=\"hidden\" name=\"search_course\" value=\"1\" />",
 		"<input type=\"text\" name=\"search_term\" value=\"".(empty($_POST['search_term']) ? '' : Security::remove_XSS($_POST['search_term']))."\" />",
-		"&nbsp;<button class=\"search\" type=\"submit\">",get_lang("_search"),"</button>",
+		"&nbsp;<button class=\"search\" type=\"submit\">",get_lang('_search'),"</button>",
 		"</form>";
 	if (isset($_POST['search_course'])) {
 		echo "<p><strong>".get_lang('SearchResultsFor')." ".api_htmlentities($_POST['search_term'], ENT_QUOTES, api_get_system_encoding())."</strong><br />";
@@ -724,18 +723,18 @@ function display_courses($user_id, $show_course_icons, $user_courses) {
 	// Step 1: We get all the categories of the user.
 	$tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 	$sql = "SELECT * FROM $tucc WHERE user_id='".$_user['user_id']."' ORDER BY sort ASC";
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	while ($row = Database::fetch_array($result)) {
 		if ($show_course_icons) {
 			// The edit link is clicked.
 			if (isset($_GET['categoryid']) && $_GET['categoryid'] == $row['id']) {
 				// We display the edit form for the category.
-				echo "<tr><td colspan=\"2\"  class=\"user_course_category\">";
+				echo "<tr><td colspan=\"2\" class=\"user_course_category\">";
 				echo '<a name="category'.$row['id'].'"></a>'; // display an internal anchor.
 				display_edit_course_category_form($row['id']);
 			} else {
 				// We simply display the title of the category.
-				echo "<tr><td colspan=\"2\"  class=\"user_course_category\">";
+				echo "<tr><td colspan=\"2\" class=\"user_course_category\">";
 				echo '<a name="category'.$row['id'].'"></a>'; // display an internal anchor.
 				echo $row['title'];
 			}
@@ -900,7 +899,7 @@ function display_course_icons($key, $number_of_courses, $course) {
 				echo "<form action=\"".api_get_self()."\" method=\"post\" onsubmit=\"javascript: if (!confirm('".addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding()))."')) return false;\">";
 				echo '<input type="hidden" name="sec_token" value="'.$stok.'">';
 				echo "<input type=\"hidden\" name=\"unsubscribe\" value=\"".$course['code']."\" />";
-				echo '<input type="image" name="unsub" style="border-color:#fff"  src="'.api_get_path(WEB_IMG_PATH).'delete.gif" title="'.get_lang('_unsubscribe').'"  alt="'.get_lang('_unsubscribe').'" /></form>';
+				echo '<input type="image" name="unsub" style="border-color:#fff" src="'.api_get_path(WEB_IMG_PATH).'delete.gif" title="'.get_lang('_unsubscribe').'"  alt="'.get_lang('_unsubscribe').'" /></form>';
 		} else {
 			display_info_text(get_lang('UnsubscribeNotAllowed'));
 		}

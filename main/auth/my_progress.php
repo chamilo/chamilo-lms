@@ -37,16 +37,16 @@ $tbl_course_quiz 			= Database :: get_course_table(TABLE_QUIZ_TEST);
 // get course list
 $sql = 'SELECT course_code FROM '.$tbl_course_user.' WHERE user_id='.intval($_user['user_id']);
 $rs = Database::query($sql, __FILE__, __LINE__);
-$Courses = array();
+$courses = array();
 while($row = Database :: fetch_array($rs)) {
-	$Courses[$row['course_code']] = CourseManager::get_course_information($row['course_code']);
+	$courses[$row['course_code']] = CourseManager::get_course_information($row['course_code']);
 }
 
 // get the list of sessions where the user is subscribed as student
 $sql = 'SELECT DISTINCT course_code FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' WHERE id_user='.intval($_user['user_id']);
 $rs = Database::query($sql, __FILE__, __LINE__);
 while($row = Database :: fetch_array($rs)) {
-	$Courses[$row['course_code']] = CourseManager::get_course_information($row['course_code']);
+	$courses[$row['course_code']] = CourseManager::get_course_information($row['course_code']);
 }
 
 echo '<div class="actions-title" >';
@@ -66,7 +66,7 @@ $now = date('Y-m-d');
   <th><?php echo get_lang('Progress'); ?></th>
   <th><?php
   echo get_lang('Score');
-  Display :: display_icon('info3.gif',get_lang('ScormAndLPTestTotalAverage') , array ('align' => 'absmiddle', 'hspace' => '3px'));
+  Display :: display_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px'));
   ?></th>
   <th><?php echo get_lang('LastConnexion'); ?></th>
   <th><?php echo get_lang('Details'); ?></th>
@@ -74,23 +74,19 @@ $now = date('Y-m-d');
 
 <?php
 $i = 0;
-$totalWeighting = 0;
-$totalScore = 0;
-$totalItem = 0;
-$totalProgress = 0;
 
-foreach ($Courses as $enreg) {
+foreach ($courses as $enreg) {
 	$weighting = 0;
-	$lastConnexion = Tracking :: get_last_connection_date_on_the_course($_user['user_id'], $enreg['code']);
+	$last_connection = Tracking :: get_last_connection_date_on_the_course($_user['user_id'], $enreg['code']);
 	$progress = Tracking :: get_avg_student_progress($_user['user_id'], $enreg['code']);
 	$total_time_login = Tracking :: get_time_spent_on_the_course($_user['user_id'], $enreg['code']);
 	$time = api_time_to_hms($total_time_login);
-	$pourcentageScore = Tracking :: get_average_test_scorm_and_lp ($_user['user_id'], $enreg['code']);
+	$percentage_score = Tracking :: get_average_test_scorm_and_lp ($_user['user_id'], $enreg['code']);
 ?>
 
 <tr class='<?php echo $i?'row_odd':'row_even'; ?>'>
   	<td>
-		<?php echo api_html_entity_decode($enreg['title'], ENT_QUOTES, $charset); ?>
+		<?php echo api_html_entity_decode($enreg['title'], ENT_QUOTES, api_get_system_encoding()); ?>
   	</td>
   	<td align='center'>
 		<?php echo $time; ?>
@@ -100,22 +96,22 @@ foreach ($Courses as $enreg) {
   	</td>
   	<td align='center'>
 		<?php
-		if (!is_null($pourcentageScore)) {
-			echo $pourcentageScore.'%';
+		if (!is_null($percentage_score)) {
+			echo $percentage_score.'%';
 		} else {
 			echo '0%';
 		}
 		?>
   	</td>
   	<td align='center' >
-		<?php echo $lastConnexion; ?>
+		<?php echo $last_connection; ?>
   	</td>
   	<td align='center'>
 		<a href="<?php echo api_get_self(); ?>?course=<?php echo $enreg['code']; ?>"> <?php Display::display_icon('2rightarrow.gif', get_lang('Details')); ?> </a>
   	</td>
 </tr>
 <?php
-	$i=$i ? 0 : 1;
+	$i = $i ? 0 : 1;
 }
 ?>
 </table>
@@ -130,7 +126,7 @@ foreach ($Courses as $enreg) {
  */
 	if (isset($_GET['course'])) {
 		$course = Database::escape_string($_GET['course']);
-		$a_infosCours = CourseManager::get_course_information($course);
+		$course_info = CourseManager::get_course_information($course);
 
 		//get coach and session_name if there is one and if session_mode is activated
 		if (api_get_setting('use_session_mode') == 'true') {
@@ -164,21 +160,21 @@ foreach ($Courses as $enreg) {
 				$sql = 'SELECT id_coach FROM '.$tbl_session_course.'
 						WHERE id_session='.$session_id.'
 						AND course_code = "'.Database::escape_string($_GET['course']).'"';
-				$rs = Database::query($sql,__FILE__,__LINE__);
+				$rs = Database::query($sql, __FILE__, __LINE__);
 				$session_course_coach_id = intval(Database::result($rs, 0, 0));
 
 				if ($session_course_coach_id != 0) {
-					$coach_infos = UserManager :: get_user_info_by_id($session_course_coach_id);
-					$a_infosCours['tutor_name'] = api_get_person_name($coach_infos['firstname'], $coach_infos['lastname']);
+					$coach_info = UserManager :: get_user_info_by_id($session_course_coach_id);
+					$course_info['tutor_name'] = api_get_person_name($coach_info['firstname'], $coach_info['lastname']);
 				}
 				else if($session_coach_id != 0) {
-					$coach_infos = UserManager :: get_user_info_by_id($session_coach_id);
-					$a_infosCours['tutor_name'] = api_get_person_name($coach_infos['firstname'], $coach_infos['lastname']);
+					$coach_info = UserManager :: get_user_info_by_id($session_coach_id);
+					$course_info['tutor_name'] = api_get_person_name($coach_info['firstname'], $coach_info['lastname']);
 				}
 			}
 		} // end if (api_get_setting('use_session_mode') == 'true')
 
-		$tableTitle = $a_infosCours['title'].' | Coach : '.$a_infosCours['tutor_name'].((!empty($session_name)) ? ' | '.get_lang('Session').' : '.$session_name : '');
+		$tableTitle = $course_info['title'].' | Coach : '.$course_info['tutor_name'].((!empty($session_name)) ? ' | '.get_lang('Session').' : '.$session_name : '');
 
 		?>
 		<table class="data_table" width="100%">
@@ -194,28 +190,28 @@ foreach ($Courses as $enreg) {
 			  <th class="head" style="color:#000"><?php echo get_lang('LastConnexion'); ?></th>
 			</tr>
 			<?php
-				$sqlLearnpath = "SELECT lp.name,lp.id FROM ".$a_infosCours['db_name'].".".$tbl_course_lp." AS lp";
-				$resultLearnpath = Database::query($sqlLearnpath);
-				if (Database::num_rows($resultLearnpath) > 0) {
-					while($a_learnpath = Database::fetch_array($resultLearnpath)) {
-						$progress = learnpath :: get_db_progress($a_learnpath['id'], $_user['user_id'], '%', $a_infosCours['db_name']);
+				$sql_learnpath = "SELECT lp.name,lp.id FROM ".$course_info['db_name'].".".$tbl_course_lp." AS lp";
+				$result_learnpath = Database::query($sql_learnpath, __FILE__, __LINE__);
+				if (Database::num_rows($result_learnpath) > 0) {
+					while($learnpath = Database::fetch_array($result_learnpath)) {
+						$progress = learnpath :: get_db_progress($learnpath['id'], $_user['user_id'], '%', $course_info['db_name']);
 
 						// calculates last connection time
 						$sql = 'SELECT MAX(start_time)
-									FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' AS item_view
-									INNER JOIN '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' AS view
+									FROM '.$course_info['db_name'].'.'.$tbl_course_lp_view_item.' AS item_view
+									INNER JOIN '.$course_info['db_name'].'.'.$tbl_course_lp_view.' AS view
 										ON item_view.lp_view_id = view.id
-										AND view.lp_id = '.$a_learnpath['id'].'
+										AND view.lp_id = '.$learnpath['id'].'
 										AND view.user_id = '.$_user['user_id'];
 						$rs = Database::query($sql, __FILE__, __LINE__);
 						$start_time = Database::result($rs, 0, 0);
 
 						// calculates time
 						$sql = 'SELECT SUM(total_time)
-									FROM '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view_item.' AS item_view
-									INNER JOIN '.$a_infosCours['db_name'].'.'.$tbl_course_lp_view.' AS view
+									FROM '.$course_info['db_name'].'.'.$tbl_course_lp_view_item.' AS item_view
+									INNER JOIN '.$course_info['db_name'].'.'.$tbl_course_lp_view.' AS view
 										ON item_view.lp_view_id = view.id
-										AND view.lp_id = '.$a_learnpath['id'].'
+										AND view.lp_id = '.$learnpath['id'].'
 										AND view.user_id = '.$_user['user_id'];
 						$rs = Database::query($sql, __FILE__, __LINE__);
 						$total_time = Database::result($rs, 0, 0);
@@ -224,7 +220,7 @@ foreach ($Courses as $enreg) {
 						echo "<tr>
 								<td>
 							 ";
-						echo 		stripslashes($a_learnpath['name']);
+						echo 		stripslashes($learnpath['name']);
 						echo "	</td>
 								<td align='center'>
 							 ";
@@ -237,7 +233,7 @@ foreach ($Courses as $enreg) {
 								<td align='center' width=180px >
 							 ";
 						if ($start_time != '') {
-							echo $lastConnexion;
+							echo $last_connection;
 						} else {
 							echo '-';
 						}
@@ -265,72 +261,72 @@ foreach ($Courses as $enreg) {
 
 			<?php
 
-				$sql='SELECT visibility FROM '.$a_infosCours['db_name'].'.'.TABLE_TOOL_LIST.' WHERE name="quiz"';
-				$resultVisibilityTests = Database::query($sql);
+				$sql = 'SELECT visibility FROM '.$course_info['db_name'].'.'.TABLE_TOOL_LIST.' WHERE name="quiz"';
+				$result_visibility_tests = Database::query($sql, __FILE__, __LINE__);
 
-				if (Database::result($resultVisibilityTests,0,'visibility')==1) {
-					$sqlExercices = "	SELECT quiz.title,id, results_disabled
-									FROM ".$a_infosCours['db_name'].".".$tbl_course_quiz." AS quiz
+				if (Database::result($result_visibility_tests, 0, 'visibility') == 1) {
+					$sql_exercices = "	SELECT quiz.title,id, results_disabled
+									FROM ".$course_info['db_name'].".".$tbl_course_quiz." AS quiz
 									WHERE active='1'";
 
-					$resuktExercices = Database::query($sqlExercices);
-					if (Database::num_rows($resuktExercices)>0) {
-						while ($a_exercices = Database::fetch_array($resuktExercices)) {
-							$sqlEssais = "	SELECT COUNT(ex.exe_id) as essais
+					$result_exercices = Database::query($sql_exercices, __FILE__, __LINE__);
+					if (Database::num_rows($result_exercices) > 0) {
+						while ($exercices = Database::fetch_array($result_exercices)) {
+							$sql_essais = "	SELECT COUNT(ex.exe_id) as essais
 											FROM $tbl_stats_exercices AS ex
-											WHERE ex.exe_user_id='".$_user['user_id']."' AND ex.exe_cours_id = '".$a_infosCours['code']."'
-											AND ex.exe_exo_id = ".$a_exercices['id']."
+											WHERE ex.exe_user_id='".$_user['user_id']."' AND ex.exe_cours_id = '".$course_info['code']."'
+											AND ex.exe_exo_id = ".$exercices['id']."
 											AND orig_lp_id = 0
 											AND orig_lp_item_id = 0	"
 										 ;
-							$resultEssais = Database::query($sqlEssais);
-							$a_essais = Database::fetch_array($resultEssais);
+							$result_essais = Database::query($sql_essais , __FILE__, __LINE__);
+							$essais = Database::fetch_array($result_essais);
 
-							$sqlScore = "SELECT exe_id , exe_result,exe_weighting
+							$sql_score = "SELECT exe_id , exe_result,exe_weighting
 										 FROM $tbl_stats_exercices
 										 WHERE exe_user_id = ".$_user['user_id']."
-											 AND exe_cours_id = '".$a_infosCours['code']."'
-											 AND exe_exo_id = ".$a_exercices['id']."
+											 AND exe_cours_id = '".$course_info['code']."'
+											 AND exe_exo_id = ".$exercices['id']."
 											 AND orig_lp_id = 0
 											 AND orig_lp_item_id = 0
 										ORDER BY exe_date DESC LIMIT 1";
 
-							$resultScore = Database::query($sqlScore);
+							$result_score = Database::query($sql_score, __FILE__, __LINE__);
 							$score = 0;
-							while($a_score = Database::fetch_array($resultScore)) {
-								$score = $score + $a_score['exe_result'];
-								$weighting = $weighting + $a_score['exe_weighting'];
-								$exe_id = $a_score['exe_id'];
+							while($current_score = Database::fetch_array($result_score)) {
+								$score = $score + $current_score['exe_result'];
+								$weighting = $weighting + $current_score['exe_weighting'];
+								$exe_id = $current_score['exe_id'];
 							}
 
 							if  ($weighting > 0) {
 								// i.e 10.50%
-								$pourcentageScore = round(($score * 100) / $weighting, 2);
+								$percentage_score = round(($score * 100) / $weighting, 2);
 							} else {
-								$pourcentageScore = 0;
+								$percentage_score = 0;
 							}
 
 							$weighting = 0;
 
 							echo '<tr>
 									<td>';
-							echo $a_exercices['title'];
+							echo $exercices['title'];
 							echo '</td>';
 
-							if ($a_exercices['results_disabled'] == 0) {
+							if ($exercices['results_disabled'] == 0) {
 								echo '<td align="center">';
-								if ($a_essais['essais'] > 0) {
-									echo $pourcentageScore.'%';
+								if ($essais['essais'] > 0) {
+									echo $percentage_score.'%';
 								} else {
 									echo '/';
 								}
 								echo '</td>';
 								echo '<td align="center">';
-								echo  $a_essais['essais'];
+								echo  $essais['essais'];
 								echo '</td>
 										<td align="center" width="25">';
-								if ($a_essais['essais'] > 0) {
-									echo '<a href="../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$a_infosCours['code'].'&id_session='.Security::remove_XSS($_GET['id_session']).'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
+								if ($essais['essais'] > 0) {
+									echo '<a href="../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$course_info['code'].'&id_session='.Security::remove_XSS($_GET['id_session']).'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
 								}
 								echo '</td>';
 							} else {

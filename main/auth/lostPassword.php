@@ -34,17 +34,19 @@ $tool_name = get_lang('LostPass');
 if (api_get_setting('allow_lostpassword') == 'false') {
 	api_not_allowed();
 }
+
 echo '<div class="actions-title">';
 echo $tool_name;
 echo '</div>';
 
-if (isset ($_GET["reset"]) && isset ($_GET["id"])) {
+if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 
 	$msg = reset_password($_GET["reset"], $_GET["id"], true);
-	$msg1= '<a href="'.api_get_path(WEB_PATH).'main/auth/lostPassword.php" class="fake_button_back" >'.get_lang('Back').'</a>';
+	$msg1= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="fake_button_back" >'.get_lang('Back').'</a>';
 	echo '<br /><br /><div class="actions" >'.$msg1.'</div>';
 
 } else {
+
 	$form = new FormValidator('lost_password');
 	$form->addElement('text', 'user', get_lang('User'), array('size'=>'40'));
 	$form->addElement('text', 'email', get_lang('Email'), array('size'=>'40'));
@@ -62,7 +64,7 @@ if (isset ($_GET["reset"]) && isset ($_GET["id"])) {
 
 		$condition = '';
 		if (!empty($email)) {
-			$condition = " AND LOWER(email) = '".mysql_real_escape_string($email)."' ";
+			$condition = " AND LOWER(email) = '".Database::escape_string($email)."' ";
 		}
 
 		$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -70,7 +72,7 @@ if (isset ($_GET["reset"]) && isset ($_GET["id"])) {
 					username AS loginName, password, email, status AS status,
 					official_code, phone, picture_uri, creator_id
 					FROM ".$tbl_user."
-					WHERE ( username = '".mysql_real_escape_string($user)."' $condition ) ";
+					WHERE ( username = '".Database::escape_string($user)."' $condition ) ";
 
 		$result = Database::query($query, __FILE__, __LINE__);
 		$num_rows = Database::num_rows($result);
@@ -94,7 +96,7 @@ if (isset ($_GET["reset"]) && isset ($_GET["id"])) {
 			Display::display_error_message(get_lang('NoUserAccountWithThisEmailAddress'));
 		}
 
-		$msg .= '<a href="'.api_get_path(WEB_PATH).'main/auth/lostPassword.php" class="fake_button_back" >'.get_lang('Back').'</a>';
+		$msg .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="fake_button_back" >'.get_lang('Back').'</a>';
 		echo '<br /><br /><div class="actions" >'.$msg.'</div>';
 
 	} else {

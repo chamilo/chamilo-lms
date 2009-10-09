@@ -2,22 +2,24 @@
 /* For licensing terms, see /dokeos_license.txt */
 
 /**
+ * @deprecated by Ivan Tcholakov, 09-OCT-2009.
  * Get email headers
  *
  * @return string
  * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
  */
+/*
 function get_email_headers() {
-	global $charset;
-	$emailHeaders = "From: \"".addslashes(api_get_setting('administratorSurname')." ".api_get_setting('administratorName'))."\" <".api_get_setting('emailAdministrator').">\n";
+	$emailHeaders = "From: \"".addslashes(api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS))."\" <".api_get_setting('emailAdministrator').">\n";
 	$emailHeaders .= "Reply-To: ".api_get_setting('emailAdministrator')."\n";
 	$emailHeaders .= "Return-Path: ".api_get_setting('emailAdministrator')."\n";
 	$emailHeaders .= "X-Sender: ".api_get_setting('emailAdministrator')."\n";
 	$emailHeaders .= "X-Mailer: PHP / ".phpversion()."\n";
-	$emailHeaders .= "Content-Type: text/plain;\n\tcharset=\"".$charset."\"\n";
+	$emailHeaders .= "Content-Type: text/plain;\n\tcharset=\"".api_get_system_encoding()."\"\n";
 	$emailHeaders .= "Mime-Version: 1.0";
 	return $emailHeaders;
 }
+*/
 
 /**
  * Enter description here...
@@ -43,34 +45,33 @@ function get_user_account_list($user, $reset = false, $by_username = false) {
 
 		if ($by_username) {
 
-			$secretword = get_secret_word($user["email"]);
+			$secret_word = get_secret_word($user['email']);
 			if ($reset)	{
-				$reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secretword."&id=".$user['uid'];
+				$reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secret_word."&id=".$user['uid'];
 			} else {
 				$reset_link = get_lang('Pass')." : $user[password]";
 			}
-			$userAccountList = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$user['loginName']."\n".get_lang('ResetLink').' : '.$reset_link.'';
+			$user_account_list = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$user['loginName']."\n".get_lang('ResetLink').' : '.$reset_link.'';
 
-			if ($userAccountList) {
-				$userAccountList = "\n------------------------\n" . $userAccountList;
+			if ($user_account_list) {
+				$user_account_list = "\n------------------------\n" . $user_account_list;
 			}
 
 		} else {
 
-			foreach ($user as $thisUser) {
-				$secretword = get_secret_word($thisUser["email"]);
+			foreach ($user as $this_user) {
+				$secret_word = get_secret_word($this_user['email']);
 				if ($reset)	{
-					$reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secretword."&id=".$thisUser['uid'];
+					$reset_link = $portal_url."main/auth/lostPassword.php?reset=".$secret_word."&id=".$this_user['uid'];
 				} else {
-					$reset_link = get_lang('Pass')." : $thisUser[password]";
+					$reset_link = get_lang('Pass')." : $this_user[password]";
 				}
-				$userAccountList[] = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$thisUser['loginName']."\n".get_lang('ResetLink').' : '.$reset_link.'';
+				$user_account_list[] = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$this_user['loginName']."\n".get_lang('ResetLink').' : '.$reset_link.'';
 			}
 
-			if ($userAccountList) {
-				$userAccountList = implode("\n------------------------\n", $userAccountList);
+			if ($user_account_list) {
+				$user_account_list = implode("\n------------------------\n", $user_account_list);
 			}
-
 		}
 
 	} else {
@@ -79,10 +80,10 @@ function get_user_account_list($user, $reset = false, $by_username = false) {
 	    	$user = $user[0];
 		}
 	    $reset_link = get_lang('Pass')." : $user[password]";
-       	$userAccountList = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$user['loginName']."\n".$reset_link.'';
+       	$user_account_list = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$user['loginName']."\n".$reset_link.'';
 
 	}
-	return $userAccountList;
+	return $user_account_list;
 }
 
 /**
@@ -92,37 +93,39 @@ function get_user_account_list($user, $reset = false, $by_username = false) {
  * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
  */
 function send_password_to_user($user, $by_username = false) {
-	global $charset;
+
 	global $_configuration;
+	/*
 	$emailHeaders = get_email_headers(); // Email Headers
-	$emailSubject = "[".get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
+	*/
+	$email_subject = "[".get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 
 	if ($by_username) { // Show only for lost password
-		$userAccountList = get_user_account_list($user, false, $by_username); // BODY
-		$emailTo = $user["email"];
+		$user_account_list = get_user_account_list($user, false, $by_username); // BODY
+		$email_to = $user['email'];
 	} else {
-		$userAccountList = get_user_account_list($user); // BODY
-		$emailTo = $user[0]["email"];
+		$user_account_list = get_user_account_list($user); // BODY
+		$email_to = $user[0]['email'];
 	}
 
 	$portal_url = $_configuration['root_web'];
 	if ($_configuration['multiple_access_urls']) {
 		$access_url_id = api_get_current_access_url_id();
-		if ($access_url_id != -1 ){
+		if ($access_url_id != -1 ) {
 			$url = api_get_access_url($access_url_id);
 			$portal_url = $url['url'];
 		}
 	}
 
-	$emailBody = get_lang('YourAccountParam')." ".$portal_url."\n\n$userAccountList";
+	$email_body = get_lang('YourAccountParam')." ".$portal_url."\n\n$user_account_list";
 	// SEND MESSAGE
-	$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
+	$sender_name = api_get_person_name(get_setting('administratorName'), get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
     $email_admin = get_setting('emailAdministrator');
 
-	if (@api_mail('', $emailTo, $emailSubject, $emailBody, $sender_name, $email_admin) == 1) {
+	if (@api_mail('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
 		Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
 	} else {
-		$message = get_lang('SystemUnableToSendEmailContact') . ' ' . Display :: encrypted_mailto_link(get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
+		$message = get_lang('SystemUnableToSendEmailContact').' '.Display :: encrypted_mailto_link(get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
 	}
 }
 
@@ -136,32 +139,34 @@ function send_password_to_user($user, $by_username = false) {
  * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
  */
 function handle_encrypted_password($user, $by_username = false) {
-	global $charset;
+
 	global $_configuration;
 
+	/*
 	$emailHeaders = get_email_headers(); // Email Headers
-	$emailSubject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
+	*/
+	$email_subject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 
 	if ($by_username) { // Show only for lost password
-		$userAccountList = get_user_account_list($user, true, $by_username); // BODY
-		$emailTo = $user["email"];
+		$user_account_list = get_user_account_list($user, true, $by_username); // BODY
+		$email_to = $user['email'];
 	} else {
-		$userAccountList = get_user_account_list($user, true); // BODY
-		$emailTo = $user[0]["email"];
+		$user_account_list = get_user_account_list($user, true); // BODY
+		$email_to = $user[0]['email'];
 	}
 
-	$secretword = get_secret_word($emailTo);
-	$emailBody = get_lang('DearUser')." :\n".get_lang("password_request")."\n\n";
-	$emailBody .= "-----------------------------------------------\n".$userAccountList."\n-----------------------------------------------\n\n";
-	$emailBody .= get_lang('PasswordEncryptedForSecurity');
-	$emailBody .= "\n\n".get_lang('Formula').",\n".get_lang('PlataformAdmin');
-	$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
+	$secret_word = get_secret_word($email_to);
+	$email_body = get_lang('DearUser')." :\n".get_lang('password_request')."\n\n";
+	$email_body .= "-----------------------------------------------\n".$user_account_list."\n-----------------------------------------------\n\n";
+	$email_body .= get_lang('PasswordEncryptedForSecurity');
+	$email_body .= "\n\n".get_lang('Formula').",\n".get_lang('PlataformAdmin');
+	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
     $email_admin = api_get_setting('emailAdministrator');
 
-	if (@api_mail('', $emailTo, $emailSubject, $emailBody, $sender_name, $email_admin) == 1) {
+	if (@api_mail('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
 		Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
 	} else {
-		$message = get_lang('SystemUnableToSendEmailContact') . ' ' . Display :: encrypted_mailto_link(get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
+		$message = get_lang('SystemUnableToSendEmailContact').' '.Display :: encrypted_mailto_link(get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
 		Display::display_error_message($message, false);
 	}
 }
@@ -172,7 +177,7 @@ function handle_encrypted_password($user, $by_username = false) {
  */
 function get_secret_word($add) {
 	global $_configuration;
-	return $secretword = md5($_configuration['security_key'].$add);
+	return $secret_word = md5($_configuration['security_key'].$add);
 }
 
 /**
@@ -189,21 +194,17 @@ function reset_password($secret, $id, $by_username = false) {
 	if ($result && $num_rows > 0) {
 		$user = Database::fetch_array($result);
 	} else {
-		return "Could not reset password.";
+		return 'Could not reset password.'; // TODO: This message has to be translated.
 	}
 
-	if (get_secret_word($user["email"]) == $secret) { // OK, secret word is good. Now change password and mail it.
-
-		$user["password"] = api_generate_password();
-		$crypted = $user["password"];
+	if (get_secret_word($user['email']) == $secret) { // OK, secret word is good. Now change password and mail it.
+		$user['password'] = api_generate_password();
+		$crypted = $user['password'];
 		$crypted = api_get_encrypted_password($crypted);
 		$sql = "UPDATE ".$tbl_user." SET password='$crypted' WHERE user_id=$id";
 		$result = Database::query($sql, __FILE__, __LINE__);
 		return send_password_to_user($user, $by_username);
-
 	} else {
-
-		return "Not allowed.";
-
+		return 'Not allowed.'; // TODO: This message has to be translated.
 	}
 }

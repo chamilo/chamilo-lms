@@ -1109,7 +1109,7 @@ if ($show == 'test') {
 // if tracking is enabled
 if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 ?>
-		<table class="data_table">
+		<!--<table class="data_table">
 		 <tr class="row_odd">
 		  <?php if($is_allowedToEdit || $is_tutor): ?>
 		  <th><?php  echo get_lang('User'); ?></th><?php endif; ?>
@@ -1118,7 +1118,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 		  <th><?php echo get_lang('Date'); ?></th>
 		  <th><?php echo get_lang('Result'); ?></th>
 		  <th><?php echo (($is_allowedToEdit||$is_tutor)?get_lang("CorrectTest"):get_lang("ViewTest")); ?></th>
-		 </tr>
+		 </tr>-->
 		<?php
 
 	$session_id_and = '';
@@ -1183,8 +1183,14 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 			$from_gradebook = true;
 		}
 		$sizeof = sizeof($results);
-		$user_list_name = $user_list_id = array ();
-
+		$user_list_id = array ();
+		$user_list_name = '';
+		$quiz_name_list = '';
+		$duration_list = '';
+		$date_list = '';
+		$result_list = '';
+		$more_details_list = '';
+		$list_info = array();
 		for ($i = 0; $i < $sizeof; $i++) {
 			$revised = false;
 			$sql_exe = 'SELECT exe_id FROM ' . Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING) . '
@@ -1207,12 +1213,13 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 				$users_array_id[] = $results[$i][1] . $results[$i][0];
 			}
 
-			$user_list_name[] = $results[$i][0];
+			$user_list_name = $results[$i][0];
 			$user_list_id[] = $results[$i][9];
 			$id = $results[$i][5];
 			$mailid = $results[$i][6];
 			$user = $results[$i][0];
 			$test = $results[$i][1];
+			$quiz_name_list = $test;
 			$dt = strftime($dateTimeFormatLong, $results[$i][4]);
 			$res = $results[$i][2];
 
@@ -1224,33 +1231,36 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 				$result_disabled = 0;
 
 			if ($result_disabled == 0) {
-				echo '<tr';
-				if ($i % 2 == 0) {
-					echo 'class="row_odd"';
-				} else {
-					echo 'class="row_even"';
-				}
-				echo '>';
+				//echo '<tr';
+				//if ($i % 2 == 0) {
+					//echo 'class="row_odd"';
+				//} else {
+					//echo 'class="row_even"';
+				//}
+				//echo '>';
 				$add_start_date = $lang_nostartdate;
 
 				if ($is_allowedToEdit || $is_tutor) {
 					$user = $results[$i][0];
-					echo '<td>' . $user . ' </td>';
+					//echo '<td>' . $user . ' </td>';
 				}
-				echo '<td>' . $test . '</td>';
-				echo '<td>';
+				//echo '<td>' . $test . '</td>';
+				//echo '<td>';
 				if ($results[$i][7] > 1) {
-					echo ceil((($results[$i][4] - $results[$i][7]) / 60)) . ' ' . get_lang('MinMinutes');
+					//echo ceil((($results[$i][4] - $results[$i][7]) / 60)) . ' ' . get_lang('MinMinutes');
+					$duration_list = ceil((($results[$i][4] - $results[$i][7]) / 60)) . ' ' . get_lang('MinMinutes');
 					if ($results[$i][8] > 1) {
-						echo ' ( ' . $results[$i][8] . ' ' . get_lang('Steps') . ' )';
+						//echo ' ( ' . $results[$i][8] . ' ' . get_lang('Steps') . ' )';
+						$duration_list = ' ( ' . $results[$i][8] . ' ' . get_lang('Steps') . ' )';
 					}
 					$add_start_date = format_locale_date('%b %d, %Y %H:%M', $results[$i][7]) . ' / ';
 				} else {
-					echo get_lang('NoLogOfDuration');
+					$duration_list = get_lang('NoLogOfDuration');
+					//echo get_lang('NoLogOfDuration');
 				}
-				echo '</td>';
-				echo '<td>' . $add_start_date . format_locale_date('%b %d, %Y %H:%M', $results[$i][4]) . '</td>'; //get_lang('dateTimeFormatLong')
-
+				//echo '</td>';
+				//echo '<td>' . $add_start_date . format_locale_date('%b %d, %Y %H:%M', $results[$i][4]) . '</td>'; //get_lang('dateTimeFormatLong')
+				$date_list = $add_start_date . format_locale_date('%b %d, %Y %H:%M', $results[$i][4]);
 				// there are already a duration test period calculated??
 				//echo '<td>'.sprintf(get_lang('DurationFormat'), $duration).'</td>';
 
@@ -1259,8 +1269,8 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 				$my_res		= float_format($results[$i][2],1);
 				$my_total 	= float_format($results[$i][3],1);
 
-				echo '<td>' . round(($my_res / ($my_total != 0 ? $my_total : 1)) * 100, 2) . '% (' . $my_res . ' / ' . $my_total . ')</td>';
-
+				//echo '<td>' . round(($my_res / ($my_total != 0 ? $my_total : 1)) * 100, 2) . '% (' . $my_res . ' / ' . $my_total . ')</td>';
+				$result_list = round(($my_res / ($my_total != 0 ? $my_total : 1)) * 100, 2) . '% (' . $my_res . ' / ' . $my_total . ')';
 				// Is hard to read this!!
 				/*
 				echo '<td>'.(($is_allowedToEdit||$is_tutor)?
@@ -1271,34 +1281,78 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 							:(($revised)?"<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>".get_lang('Show')."</a>":'')).'</td>';
 				*/
 
-				echo '<td>';
+				//echo '<td>';
+				$html_link = '';
 				if ($is_allowedToEdit || $is_tutor) {
 					if ($revised) {
-						echo "<a href='exercise_show.php?action=edit&user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".Display :: return_icon('edit.gif', get_lang('Edit'));
-						echo '&nbsp;';
+						//echo "<a href='exercise_show.php?action=edit&user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".Display :: return_icon('edit.gif', get_lang('Edit'));
+						//echo '&nbsp;';
+						$html_link.= "<a href='exercise_show.php?action=edit&user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".Display :: return_icon('edit.gif', get_lang('Edit'));
+						$html_link.= '&nbsp;';						
 					} else {
-						echo "<a href='exercise_show.php?action=qualify&user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".Display :: return_icon('quizz_small.gif', get_lang('Qualify'));
-						echo '&nbsp;';
+						//echo "<a href='exercise_show.php?action=qualify&user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".Display :: return_icon('quizz_small.gif', get_lang('Qualify'));
+						//echo '&nbsp;';
+						$html_link.="<a href='exercise_show.php?action=qualify&user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".Display :: return_icon('quizz_small.gif', get_lang('Qualify'));
+						$html_link.='&nbsp;';
 					}
-					echo "</a>";
-
-					if (api_is_platform_admin() || $is_tutor)
-						echo ' <a href="exercice.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&show=result&filter=' . $filter . '&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.gif', get_lang('Delete')).'</a>';
-						echo '&nbsp;';
-					if ($is_allowedToEdit)
-						echo ' <a href="exercice_history.php?cidReq=' . security::remove_XSS($_GET['cidReq']) . '&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
+					//echo "</a>";
+					$html_link.="</a>";
+					if (api_is_platform_admin() || $is_tutor) {
+						//echo ' <a href="exercice.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&show=result&filter=' . $filter . '&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.gif', get_lang('Delete')).'</a>';
+						//echo '&nbsp;';
+						$html_link.=' <a href="exercice.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&show=result&filter=' . $filter . '&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.gif', get_lang('Delete')).'</a>';
+						$html_link.='&nbsp;';	
+					}					
+					if ($is_allowedToEdit) {
+						//echo ' <a href="exercice_history.php?cidReq=' . security::remove_XSS($_GET['cidReq']) . '&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
+						$html_link.=' <a href="exercice_history.php?cidReq=' . security::remove_XSS($_GET['cidReq']) . '&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';						
+					}
 				} else {
-					if ($revised)
-						echo "<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>" . get_lang('Show') . "</a> ";
-					else
-						echo '&nbsp;' . get_lang('NoResult');
-				}
-				echo '</td>';
+					if ($revised) {
+						//echo "<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>" . get_lang('Show') . "</a> ";
+						$html_link.="<a href='exercise_show.php?dt=$dt&res=$res&id=$id'>" . get_lang('Show') . "</a> ";
 
-				echo '</tr>';
+					} else {
+					//	echo '&nbsp;' . get_lang('NoResult');
+						$html_link.='&nbsp;' . get_lang('NoResult');												
+					}
+
+				}
+				$more_details_list = $html_link;
+				if ($is_allowedToEdit || $is_tutor) {
+					$list_info [] = array($user_list_name,$quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
+				} else {
+					$list_info [] = array($quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);					
+				}
+				//$list_info [] = array($user_list_name,$quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
+				//echo '</td>';
+
+				//echo '</tr>';
 
 			}
 		}
+////////////////////////////////////////////////////////////////////////////////
+
+//Code added by Isaac flores
+$parameters=array('cidReq'=>Security::remove_XSS($_GET['cidReq']),'show'=>Security::remove_XSS($_GET['show']),'filter' => Security::remove_XSS($_GET['filter']),'gradebook' =>Security::remove_XSS($_GET['gradebook']));
+
+
+$table = new SortableTableFromArrayConfig($list_info, 1,20,'quiz_table');
+$table->set_additional_parameters($parameters);
+if ($is_allowedToEdit || $is_tutor) {
+	$table->set_header(0, get_lang('User'));
+	$secuence = 0;	
+} else {
+	$secuence = 1;
+}
+$table->set_header(-$secuence + 1, get_lang('Exercice'));
+$table->set_header(-$secuence + 2, get_lang('Duration'),false);
+$table->set_header(-$secuence + 3, get_lang('Date'),false);
+$table->set_header(-$secuence + 4, get_lang('Result'),false);
+$table->set_header(-$secuence + 5, (($is_allowedToEdit||$is_tutor) ? get_lang("CorrectTest") : get_lang("ViewTest")), false);
+$table->display();
+
+//////////////////////////////////////////////////////////////////////////////////
 	} else {
 		$NoTestRes = 1;
 	}

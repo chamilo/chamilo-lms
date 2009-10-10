@@ -137,16 +137,19 @@ function _api_get_person_name_convention($language, $type) {
 	static $conventions;
 	$language = api_purify_language_id($language);
 	if (!isset($conventions)) {
-		$file = dirname(__FILE__) . '/internationalization_database/name_order_conventions.php';
+		$file = dirname(__FILE__).'/internationalization_database/name_order_conventions.php';
 		if (file_exists($file)) {
 			$conventions = include ($file);
 		} else {
 			$conventions = array('english' => array('format' => 'title first_name last_name', 'sort_by' => 'first_name'));
 		}
-		$search = array('first_name', 'last_name', 'title');
-		$replacement = array('%f', '%l', '%t');
+		$search1 = array('FIRST_NAME', 'LAST_NAME', 'TITLE');
+		$replacement1 = array('%F', '%L', '%T');
+		$search2 = array('first_name', 'last_name', 'title');
+		$replacement2 = array('%f', '%l', '%t');
 		foreach (array_keys($conventions) as $key) {
-			$conventions[$key]['format'] = _api_validate_person_name_format(_api_clean_person_name(str_replace('%', ' %', str_ireplace($search, $replacement, $conventions[$key]['format']))));
+			$conventions[$key]['format'] = str_replace($search1, $replacement1, $conventions[$key]['format']);
+			$conventions[$key]['format'] = _api_validate_person_name_format(_api_clean_person_name(str_replace('%', ' %', str_ireplace($search2, $replacement2, $conventions[$key]['format']))));
 			$conventions[$key]['sort_by'] = strtolower($conventions[$key]['sort_by']) != 'last_name' ? true : false;
 		}
 	}
@@ -165,7 +168,7 @@ function _api_get_person_name_convention($language, $type) {
  * @return bool				Returns the same format if is is valid, otherwise returns a valid English format.
  */
 function _api_validate_person_name_format($format) {
-	if (empty($format) || strpos($format, '%f') === false || strpos($format, '%l') === false) {
+	if (empty($format) || stripos($format, '%f') === false || stripos($format, '%l') === false) {
 		return '%t %f %l';
 	}
 	return $format;
@@ -276,7 +279,7 @@ function _api_convert_encoding($string, $to_encoding, $from_encoding) {
 function _api_get_character_map_name($encoding) {
 	static $character_map_selector;
 	if (!isset($character_map_selector)) {
-		$file = dirname(__FILE__) . '/internationalization_database/conversion/character_map_selector.php';
+		$file = dirname(__FILE__).'/internationalization_database/conversion/character_map_selector.php';
 		if (file_exists($file)) {
 			$character_map_selector = include ($file);
 		} else {
@@ -294,7 +297,7 @@ function _api_get_character_map_name($encoding) {
  */
 function &_api_parse_character_map($name) {
 	$result = array();
-	$file = dirname(__FILE__) . '/internationalization_database/conversion/' . $name . '.TXT';
+	$file = dirname(__FILE__).'/internationalization_database/conversion/' . $name . '.TXT';
 	if (file_exists($file)) {
 		$text = @file_get_contents($file);
 		if ($text !== false) {
@@ -601,7 +604,7 @@ function &_api_utf8_get_letter_case_properties($codepoint, $type = 'lower') {
 			return null;
 		}
 		if (!isset($config[$range[$codepoint]])) {
-			$file = dirname(__FILE__) . '/internationalization_database/casefolding/' . $range[$codepoint] . '.php';
+			$file = dirname(__FILE__).'/internationalization_database/casefolding/' . $range[$codepoint] . '.php';
 			if (file_exists($file)) {
 				include $file;
 			}
@@ -856,7 +859,7 @@ function api_get_default_locale() {
 function & _api_non_utf8_encodings() {
 	static $encodings;
 	if (!isset($encodings)) {
-		$file = dirname(__FILE__) . '/internationalization_database/non_utf8_encodings.php';
+		$file = dirname(__FILE__).'/internationalization_database/non_utf8_encodings.php';
 		if (file_exists($file)) {
 			$encodings = include ($file);
 		} else {

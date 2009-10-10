@@ -1605,7 +1605,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 		//first, current author and time
 		//Who is the author?
 		$userinfo=	Database::get_user_info_from_id($lastuser);
-		$email_user_author= get_lang('EditedBy').': '.api_get_person_name($userinfo['lastname'].', '.$userinfo['firstname']);
+		$email_user_author= get_lang('EditedBy').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 
 		//When ?
 		$year = substr($lastime, 0, 4);
@@ -1644,7 +1644,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 		//first, current author and time
 		//Who is the author of last message?
 		$userinfo=	Database::get_user_info_from_id($lastuser);
-		$email_user_author= get_lang('AddedBy').': '.api_get_person_name($userinfo['lastname'].', '.$userinfo['firstname']);
+		$email_user_author= get_lang('AddedBy').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 
 		//When ?
 		$year = substr($lastime, 0, 4);
@@ -1691,7 +1691,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 
 		//Who is the author?
 		$userinfo=	Database::get_user_info_from_id($row['user_id']);
-		$email_user_author= get_lang('AddedBy').': '.api_get_person_name($userinfo['lastname'].', '.$userinfo['firstname']);
+		$email_user_author= get_lang('AddedBy').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 
 		//When ?
 		$year = substr($row['dtime'], 0, 4);
@@ -1730,7 +1730,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 
 		//Who is the author?
 		$userinfo=	Database::get_user_info_from_id(api_get_user_id());	//current user
-		$email_user_author= get_lang('DeletedBy').': '.api_get_person_name($userinfo['lastname'].', '.$userinfo['firstname']);
+		$email_user_author= get_lang('DeletedBy').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 
 
 		//When ?
@@ -1753,12 +1753,12 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 			if(empty($charset)){$charset='ISO-8859-1';}
 			$headers = 'Content-Type: text/html; charset='. $charset;
 			$userinfo = Database::get_user_info_from_id($row['user_id']);	//$row['user_id'] obtained from tbl_wiki_mailcue
-			$name_to = api_get_person_name($userinfo['lastname'].', '.$userinfo['firstname'], null, PERSON_NAME_EMAIL_ADDRESS);
+			$name_to = api_get_person_name($userinfo['firstname'], $userinfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
 			$email_to = $userinfo['email'];
 			$sender_name = api_get_setting('emailAdministrator');
 			$sender_email = api_get_setting('emailAdministrator');
 			$email_subject = get_lang('EmailWikiChanges').' - '.$_course['official_code'];
-			$email_body = get_lang('DearUser').' '.api_get_person_name($userinfo['lastname'].', '.$userinfo['firstname']).',<br /><br />';
+			$email_body = get_lang('DearUser').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).',<br /><br />';
 			$email_body .= $emailtext.' <strong>'.$_course['name'].' - '.$group_name.'</strong><br /><br /><br />';
 			$email_body .= $email_user_author.' ('.$email_date_changes.')<br /><br /><br />';
 			$email_body .= $email_assignment.'<br /><br /><br />';
@@ -1893,7 +1893,7 @@ function auto_add_page_users($assignment_type)
 	$link2teacher=$_POST['title']= $title_orig."_uass".api_get_user_id();
 
 	//first: teacher name, photo, and assignment description (original content)
-    $content_orig_A='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Teacher').': '.api_get_person_name($userinfo['lastname'].', '.$userinfo['firstname']).'</div><br/><div>';
+    $content_orig_A='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Teacher').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</div><br/><div>';
 	$content_orig_B='<h1>'.get_lang('AssignmentDescription').'</h1></div><br/>'.$_POST['content'];
 
     //Second: student list (names, photo and links to their works).
@@ -1908,7 +1908,7 @@ function auto_add_page_users($assignment_type)
 			$image_path = UserManager::get_user_picture_path_by_id($assig_user_id,'web',false, true);
 			$image_repository = $image_path['dir'];
 			$existing_image = $image_path['file'];
-			$name = api_get_person_name($o_user_to_add['lastname'].', '.$o_user_to_add['firstname']);
+			$name = api_get_person_name($o_user_to_add['firstname'], $o_user_to_add['lastname']);
 			$photo= '<img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="40" height="50" align="bottom" title="'.$name.'"  />';
 
 			$is_tutor_of_group = GroupManager :: is_tutor_of_group($assig_user_id,$_clean['group_id']); //student is tutor
@@ -1937,8 +1937,8 @@ function auto_add_page_users($assignment_type)
 				$_POST['comment']=get_lang('AssignmentFirstComToStudent');
 				$_POST['content']='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Student').': '.$name.'</div>[['.$link2teacher.' | '.get_lang('AssignmentLinktoTeacherPage').']] '; //If $content_orig_B is added here, the task written by the professor was copied to the page of each student. TODO: config options
 
-			   //AssignmentLinktoTeacherPage
-			 	$all_students_pages[] = '<li>'.strtoupper(api_get_person_name($o_user_to_add['lastname'].', '.$o_user_to_add['firstname'])).' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>';
+				//AssignmentLinktoTeacherPage
+			 	$all_students_pages[] = '<li>'.api_get_person_name($o_user_to_add['firstname'], $o_user_to_add['lastname']).' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>';
 
 				$_POST['assignment']=2;
 
@@ -2043,7 +2043,7 @@ function display_wiki_search_results($search_term, $search_content=0)
 			$row = array ();
 			$row[] =$ShowAssignment;
 			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
-			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_get_person_name($userinfo['lastname'].', '.$userinfo['firstname']).'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
+			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
 			$row[] = $year.'-'.$month.'-'.$day.' '.$hours.":".$minutes.":".$seconds;
 
 			if(api_is_allowed_to_edit(false,true)|| api_is_platform_admin())

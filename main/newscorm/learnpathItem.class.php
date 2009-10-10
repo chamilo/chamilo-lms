@@ -2173,6 +2173,11 @@ function get_terms()
      function write_to_db()
      {
 
+		// check the session visibility
+		if (!api_is_allowed_to_session_edit()) {
+			return false;
+		}
+
    		if($this->debug>0){error_log('New LP - In learnpathItem::write_to_db()',0);}
    		$mode = $this->get_lesson_mode();
    		$credit = $this->get_credit();

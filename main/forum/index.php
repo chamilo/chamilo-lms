@@ -149,6 +149,9 @@ if (api_is_allowed_to_edit(false,true)) {
 
 // notification
 if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['content']) AND isset($_GET['id'])) {
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+		api_not_allowed();
+	}
 	$return_message = set_notification($_GET['content'],$_GET['id']);
 	Display :: display_confirmation_message($return_message,false);
 }
@@ -234,6 +237,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 	// Step 3: we display the forum_categories first
 	if(is_array($forum_categories_list)) {
 		foreach ($forum_categories_list as $forum_category_key => $forum_category) {
+			
+			//validacion when belongs to a session
+			$session_img = api_get_session_image($forum_category['session_id'], $_user['status']);
+		
 			if((!isset($_SESSION['id_session']) || $_SESSION['id_session']==0) && !empty($forum_category['session_name'])) {
 				$session_displayed = ' ('.$forum_category['session_name'].')';
 			} else {
@@ -241,9 +248,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 			}
 
 			echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"5\">";
-			echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.prepare4display($forum_category['cat_id']).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display($forum_category['cat_title']).$session_displayed.'</a><br />';
-
-			if ($forum_category['cat_comment']<>'' AND trim($forum_category['cat_comment'])<>'&nbsp;') {
+			echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.prepare4display($forum_category['cat_id']).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display($forum_category['cat_title']).$session_displayed.'</a>'. $session_img .'<br />';
+			
+			if ($forum_category['cat_comment']<>'' AND trim($forum_category['cat_comment'])<>'&nbsp;') {  
 				echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
 			}
 			echo "</th>\n";
@@ -378,15 +385,17 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 
 						}
 						echo "</td>\n";
-						if ($forum['forum_of_group']<>'0') {
-							$my_all_groups_forum_name=isset($all_groups[$forum['forum_of_group']]['name']) ? $all_groups[$forum['forum_of_group']]['name'] : null;
-							$my_all_groups_forum_id=isset($all_groups[$forum['forum_of_group']]['id']) ? $all_groups[$forum['forum_of_group']]['id'] : null;
-							$group_title=api_substr($my_all_groups_forum_name,0,30);
-
-							$forum_title_group_addition=' (<a href="../group/group_space.php?'.api_get_cidreq().'&gidReq='.$forum['forum_of_group'].'" class="forum_group_link">'.get_lang('GoTo').' '.$group_title.'</a>)';
-
+						
+						//validacion when belongs to a session
+						$session_img = api_get_session_image($forum['session_id'], $_user['status']);
+						
+						if ($forum['forum_of_group'] <> '0') {
+							$my_all_groups_forum_name = isset($all_groups[$forum['forum_of_group']]['name']) ? $all_groups[$forum['forum_of_group']]['name'] : null;
+							$my_all_groups_forum_id = isset($all_groups[$forum['forum_of_group']]['id']) ? $all_groups[$forum['forum_of_group']]['id'] : null;
+							$group_title = api_substr($my_all_groups_forum_name, 0, 30);
+							$forum_title_group_addition = ' (<a href="../group/group_space.php?'.api_get_cidreq().'&gidReq='.$forum['forum_of_group'].'" class="forum_group_link">'.get_lang('GoTo').' '.$group_title.'</a>)' . $session_img;
 						} else {
-							$forum_title_group_addition='';
+							$forum_title_group_addition = '';
 						}
 
 						if((!isset($_SESSION['id_session']) || $_SESSION['id_session']==0) && !empty($forum['session_name'])) {
@@ -432,7 +441,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 								$iconnotify = 'send_mail_checked.gif';
 							}
 						}
-						if (!api_is_anonymous()) {
+
+						if (!api_is_anonymous()  && api_is_allowed_to_session_edit(false,true) ) {		
 							echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&gradebook=$gradebook&action=notify&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
 						}
 						echo "</td>\n";

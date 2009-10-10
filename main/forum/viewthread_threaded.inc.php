@@ -251,7 +251,7 @@ if (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_f
 }
 $userinf=api_get_user_info($rows[$display_post_id]['user_id']);
 $user_status=api_get_status_of_user_in_course($rows[$display_post_id]['user_id'],api_get_course_id());
-if (api_is_allowed_to_edit()) {
+if (api_is_allowed_to_edit(null,true)) {
 	if($post_id>$post_minor )
 	{
 		if($user_status!=1)
@@ -267,7 +267,7 @@ if ($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $cu
 {
 	if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id']))
 	{
-		if (!api_is_anonymous()) {
+		if (!api_is_anonymous() && api_is_allowed_to_session_edit(false,true)) {
 			echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$rows[$display_post_id]['post_id'].'&amp;action=replymessage&amp;origin='. $origin .'">'.Display :: return_icon('message_reply_forum.png', get_lang('ReplyToMessage'))."</a>\n";
 			echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$rows[$display_post_id]['post_id'].'&amp;action=quote&amp;origin='. $origin .'">'.Display :: return_icon('quote.gif', get_lang('QuoteMessage'))."</a>\n";
 		}

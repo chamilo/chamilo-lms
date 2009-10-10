@@ -20,7 +20,7 @@ include('../inc/global.inc.php');
 include('exercise.lib.php');
 $this_section=SECTION_COURSES;
 
-if(!api_is_allowed_to_edit()) {
+if(!api_is_allowed_to_edit(null,true)) {
 	api_not_allowed(true);
 }
 

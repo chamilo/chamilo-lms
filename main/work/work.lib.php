@@ -38,20 +38,20 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 			echo '<a href="work.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToWorksList')).' '.get_lang('BackToWorksList').'</a>';
 		}
 	}
-	if (! $always_show_tool_options && api_is_allowed_to_edit() && $origin != 'learnpath') {
+	if (! $always_show_tool_options && api_is_allowed_to_edit(null,true) && $origin != 'learnpath') {
 		// Create dir
 		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'">'.Display::return_icon('folder_new.gif', get_lang('CreateAssignment')).' '.get_lang('CreateAssignment').' </a>';
 		// Options
 		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".$origin."&amp;display_tool_options=true&amp;origin=".$origin."&amp;gradebook=".$gradebook."\">".Display::return_icon('acces_tool.gif', get_lang("EditToolOptions")).' ' . get_lang("EditToolOptions") . "</a>";
 	}
 
-	if (! $always_show_upload_form ) {
+	if (! $always_show_upload_form && api_is_allowed_to_session_edit(false,true)) {
 
 			$display_output .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;display_upload_form=true&amp;origin=".$origin."&amp;gradebook=".$gradebook."\">".Display::return_icon('submit_file.gif', get_lang("UploadADocument"))." ". get_lang("UploadADocument") .'</a>';
 
 	}
 
-	if (api_is_allowed_to_edit() && $origin != 'learnpath')
+	if (api_is_allowed_to_edit(null,true) && $origin != 'learnpath' && api_is_allowed_to_session_edit(false,true))
 	{
 		// delete all files
 		$display_output .= 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;delete=all\" ".
@@ -100,7 +100,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 */
 function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cur_dir_path,$cur_dir_path_url) {
 	global $charset, $group_properties,$gradebook;
-	$is_allowed_to_edit = api_is_allowed_to_edit();
+	$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 	$work_table 		= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
 	if (! $is_allowed_to_edit) {
@@ -242,7 +242,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	$work_assigment = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-	$is_allowed_to_edit = api_is_allowed_to_edit();
+	$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 	$user_id = api_get_user_id();
 	$publications_list = array();
 	$sort_params = array();
@@ -269,22 +269,25 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	if($sub_course_dir == '/') {
 		$sub_course_dir='';
 	}
-	isset($_SESSION['id_session'])?$id_session=$_SESSION['id_session']:$id_session=null;
-	$session_condition =  intval($id_session)!=0 ?"AND session_id IN (0,".intval($id_session).")" : "";
+
+	//condition for the session
+	$session_id = api_get_session_id();
+	$condition_session = api_get_session_condition($session_id);
+
 	//Get list from database
 	if($is_allowed_to_edit) {
 		$sql_get_publications_list = 	"SELECT * " .
 										"FROM  ".$work_table." " .
 										"WHERE url LIKE BINARY '$sub_course_dir%' " .
 										"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.
-												 $session_condition.
+												 $condition_session.
 		                 				"ORDER BY sent_date DESC";
 
 		$sql_get_publications_num = 	"SELECT count(*) " .
 										"FROM  ".$work_table." " .
 										"WHERE url LIKE BINARY '$sub_course_dir%' " .
 										"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.
-										 $session_condition.
+										 $condition_session.
 		                 				"ORDER BY id";
 
 	} else {
@@ -296,12 +299,12 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$subdirs_query = "AND url NOT LIKE '$sub_course_dir%/%' AND url LIKE '$sub_course_dir%'";
 		}
 
-	   	$sql_get_publications_list = 	"SELECT * FROM  $work_table $group_query $subdirs_query ".$add_in_where_query." AND session_id IN (0,".intval($id_session).") ORDER BY id";
+	   	$sql_get_publications_list = "SELECT * FROM  $work_table $group_query $subdirs_query ".$add_in_where_query."  $condition_session ORDER BY id";
 		$sql_get_publications_num = "SELECT count(url) " .
 										"FROM  ".$work_table." " .
 										"WHERE url LIKE BINARY '$sub_course_dir%' " .
 										"AND url NOT LIKE BINARY '$sub_course_dir%/%' " .$add_in_where_query.
-										 $session_condition.
+										 $condition_session.
 		                 				"ORDER BY id";
 
 	}
@@ -377,15 +380,14 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		}else {
 			$mydir_temp = '/'.$my_sub_dir.$dir;
 		}
-
-		$session_condition =  intval($id_session)!=0 ?"AND work.session_id IN (0,".intval($id_session).")" : "";
+		
 		$sql_select_directory= "SELECT prop.lastedit_date, id, author, has_properties, view_properties, description, qualification,id FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE ";
 					if (!empty($_SESSION['toolgroup'])) {
 						$sql_select_directory.=" work.post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
 					} else {
 						$sql_select_directory.=" work.post_group_id = '0' ";
 					}
-		$sql_select_directory.=" AND work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $session_condition";
+		$sql_select_directory.=" AND work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $condition_session";
 		$result=Database::query($sql_select_directory,__FILE__,__LINE__);
 		$row=Database::fetch_array($result);
 

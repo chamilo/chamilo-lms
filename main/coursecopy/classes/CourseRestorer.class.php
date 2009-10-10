@@ -36,6 +36,8 @@ require_once 'CourseDescription.class.php';
 require_once 'Learnpath.class.php';
 require_once 'Survey.class.php';
 require_once 'SurveyQuestion.class.php';
+//require_once 'mkdirr.php';
+//require_once 'rmdirr.php';
 require_once 'Glossary.class.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
@@ -80,8 +82,8 @@ class CourseRestorer
 	 * @param string $destination_course_code The code of the Dokeos-course in
 	 * which the resources should be stored. Default: Current Dokeos-course.
 	 */
-	function restore($destination_course_code = '')
-	{
+	function restore($destination_course_code = '',$session_id = 0)
+	{		
 		if ($destination_course_code == '') {
 			$course_info = api_get_course_info();
 			$this->course->destination_db = $course_info['dbName'];
@@ -92,23 +94,40 @@ class CourseRestorer
 			$this->course->destination_path = $course_info['directory'];
 		}
 		// platform encoding
-		$course_charset = $this->course->encoding;
+		$course_charset = $this->course->encoding; 
 
-		$this->restore_links();
-		$this->restore_tool_intro();
-		$this->restore_events();
-		$this->restore_announcements();
-		$this->restore_documents();
-		$this->restore_scorm_documents();
-		$this->restore_course_descriptions();
-		$this->restore_forums();
-		$this->restore_quizzes(); // after restore_documents! (for correct import of sound/video)
-		$this->restore_learnpaths();
-		$this->restore_surveys();
-		$this->restore_student_publication();
-		$this->restore_glossary();
+		if (!empty($session_id)) {
+			$this->restore_documents($session_id);
+			$this->restore_quizzes($session_id);
+			$this->restore_glossary($session_id);
+			$this->restore_learnpaths($session_id);
+			$this->restore_links($session_id);
+			$this->restore_course_descriptions($session_id);	
+		} else {
+			$this->restore_links();
+			$this->restore_tool_intro();
+			$this->restore_events();
+			$this->restore_announcements();
+			$this->restore_documents();
+			$this->restore_scorm_documents();
+			$this->restore_course_descriptions();			
+			$this->restore_quizzes(); // after restore_documents! (for correct import of sound/video)
+			$this->restore_learnpaths();
+			$this->restore_surveys();
+			$this->restore_student_publication();
+			$this->restore_glossary();		
+		}
+
+		
 		// Restore the item properties
 		$table = Database :: get_course_table(TABLE_ITEM_PROPERTY, $this->course->destination_db);
+		
+		$condition_session = "";
+		
+		if (!empty($session_id)) {
+			$condition_session = " , id_session='".intval($session_id)."'";
+		}
+		
 		foreach ($this->course->resources as $type => $resources) {
 			if (is_array($resources)) {
 				foreach ($resources as $id => $resource) {
@@ -132,7 +151,7 @@ class CourseRestorer
 									start_visible 		= '".Database::escape_string($property['start_visible'])."',
 									end_visible 		= '".Database::escape_string($property['end_visible'])."',
 									to_user_id  		= '".Database::escape_string($property['to_user_id'])."',
-									to_group_id 		= '0'";
+									to_group_id 		= '0' $condition_session" ;
 													;
 							Database::query($sql, __FILE__, __LINE__);
 						}
@@ -163,9 +182,9 @@ class CourseRestorer
 	/**
 	 * Restore documents
 	 */
-	function restore_documents()
-	{
-		if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
+	function restore_documents($session_id = 0)
+	{		
+		if ($this->course->has_resources(RESOURCE_DOCUMENT)) {			
 			$table = Database :: get_course_table(TABLE_DOCUMENT, $this->course->destination_db);
 			$resources = $this->course->resources;
 			$destination_course['dbName']= $this->course->destination_db;
@@ -244,20 +263,76 @@ class CourseRestorer
 									$new_file_name = $file_name_no_ext.'_'.$i.$ext;
 									$file_exists = file_exists($path.$new_file_name);
 								}
-								copy($this->course->backup_path.'/'.$document->path, $path.$new_file_name);
-								$sql = "INSERT INTO ".$table." SET path = '/".Database::escape_string(substr($new_file_name, 9))."', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."'";
-								Database::query($sql, __FILE__, __LINE__);
-								$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::get_last_insert_id();
-								//also insert into item_property
-								/*
-								api_item_property_update(
-										array('dbName'=>$this->course->destination_db,
-										TOOL_DOCUMENT,
-										$this->course->resource[RESOURCE_DOCUMENT][$id]->destination_id,
-										'DocumentAdded',
-										);
-								*/
-								break;
+								
+			
+								if (!empty($session_id)) {
+			
+									$document_path = explode('/',$document->path,3);
+									$course_path = $path;								// "/var/www/wiener/courses/"
+									$orig_base_folder = $document_path[1];
+									$orig_base_path   = $course_path.$document_path[0].'/'.$document_path[1];
+			
+									if (is_dir($orig_base_path)) {
+																															
+										$new_base_foldername = $orig_base_folder;	// e.g: "carpeta1"
+										$new_base_path   = $orig_base_path;			// e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1"
+											  	  
+										if ($_SESSION['orig_base_foldername'] != $new_base_foldername) {
+											unset($_SESSION['new_base_foldername']);
+											unset($_SESSION['orig_base_foldername']);
+											unset($_SESSION['new_base_path']);																																
+										}																			
+										
+										$folder_exists = file_exists($new_base_path);
+										if ($folder_exists) {
+											$_SESSION['orig_base_foldername'] = $new_base_foldername; 		// e.g: carpeta1 in session
+											$x = '';
+											while ($folder_exists) {												
+												$x = $x + 1;
+												$new_base_foldername = $document_path[1].'_'.$x;     
+												$new_base_path = $orig_base_path.'_'.$x;
+												if ($_SESSION['new_base_foldername'] == $new_base_foldername) break;
+												$folder_exists = file_exists($new_base_path);
+											}																																	
+											$_SESSION['new_base_foldername'] = $new_base_foldername;
+											$_SESSION['new_base_path'] = $new_base_path;																																															
+										} 																																				
+
+										if (isset($_SESSION['new_base_foldername']) && isset($_SESSION['new_base_path'])) {																						
+											$new_base_foldername = $_SESSION['new_base_foldername'];
+											$new_base_path = $_SESSION['new_base_path'];																						
+										}
+																												
+										$dest_document_path = $new_base_path.'/'.$document_path[2];		// e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1/collaborative.png" 
+										$basedir_dest_path = dirname($dest_document_path);				// e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1"
+										$dest_filename = basename($dest_document_path);  				// e.g: "collaborative.png" 
+										$base_path_document = $course_path.$document_path[0];			// e.g: "/var/www/wiener/courses/CURSO4/document" 
+										$course_info = api_get_course_info($this->course->destination_path);
+										$path_title = '/'.$new_base_foldername.'/'.$document_path[2];
+						
+										copy_folder_course_session($basedir_dest_path, $base_path_document,$session_id,$course_info, $document);
+			
+										copy($course_path.$document->path, $dest_document_path);
+										$sql = "INSERT INTO $table SET path = '$path_title', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string(basename($path_title))."' ,filetype='".$document->file_type."', size= '".$document->size."', session_id = '$session_id'";
+										
+										Database::query($sql, __FILE__, __LINE__);
+										$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::get_last_insert_id();			  
+										
+										} else {																						
+											copy($path.$document->path, $path.$new_file_name);
+											$sql = "INSERT INTO ".$table." SET path = '/".Database::escape_string(substr($new_file_name, 9))."', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."', session_id = '$session_id'";
+											Database::query($sql, __FILE__, __LINE__);
+											$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::get_last_insert_id();
+										}	  
+			
+									} else {									
+										copy($this->course->backup_path.'/'.$document->path, $path.$new_file_name);
+										$sql = "INSERT INTO ".$table." SET path = '/".Database::escape_string(substr($new_file_name, 9))."', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."'";
+										api_sql_query($sql, __FILE__, __LINE__);
+										$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::get_last_insert_id();
+									}			
+									break;
+									
 						} // end switch
 					} // end if file exists
 					else
@@ -305,6 +380,10 @@ class CourseRestorer
 					}*/
 				} // end folder
 			} // end for each
+		// Delete sessions for the copy the new folder in session
+		unset($_SESSION['new_base_foldername']);
+		unset($_SESSION['orig_base_foldername']);
+		unset($_SESSION['new_base_path']);		
 		}
 	}
 
@@ -544,7 +623,7 @@ class CourseRestorer
 	/**
 	 * Restore links
 	 */
-	function restore_links()
+	function restore_links($session_id = 0)
 	{
 		if ($this->course->has_resources(RESOURCE_LINK))
 		{
@@ -552,11 +631,18 @@ class CourseRestorer
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_LINK] as $id => $link)
 			{
-				$cat_id = $this->restore_link_category($link->category_id);
+				$cat_id = $this->restore_link_category($link->category_id,$session_id);
 				$sql = "SELECT MAX(display_order) FROM  $link_table WHERE category_id='" . Database::escape_string($cat_id). "'";
 				$result = Database::query($sql, __FILE__, __LINE__);
     			list($max_order) = Database::fetch_array($result);
-				$sql = "INSERT INTO ".$link_table." SET url = '".Database::escape_string($link->url)."', title = '".Database::escape_string($link->title)."', description = '".Database::escape_string($link->description)."', category_id='".$cat_id."', on_homepage = '".$link->on_homepage."', display_order='".($max_order+1)."'";
+    			
+    			$condition_session = "";    			
+    			if (!empty($session_id)) {
+    				$condition_session = " , session_id = '$session_id' ";	
+    			}
+    			
+				$sql = "INSERT INTO ".$link_table." SET url = '".Database::escape_string($link->url)."', title = '".Database::escape_string($link->title)."', description = '".Database::escape_string($link->description)."', category_id='".$cat_id."', on_homepage = '".$link->on_homepage."', display_order='".($max_order+1)."' $condition_session";
+				
 				Database::query($sql, __FILE__, __LINE__);
 				$this->course->resources[RESOURCE_LINK][$id]->destination_id = Database::get_last_insert_id();
 			}
@@ -586,8 +672,14 @@ class CourseRestorer
 	/**
 	 * Restore a link-category
 	 */
-	function restore_link_category($id)
+	function restore_link_category($id,$session_id = 0)
 	{
+		
+		$condition_session = "";    			
+		if (!empty($session_id)) {
+			$condition_session = " , session_id = '$session_id' ";	
+		}
+		
 		if ($id == 0)
 			return 0;
 		$link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY, $this->course->destination_db);
@@ -599,7 +691,7 @@ class CourseRestorer
 			$result=Database::query($sql,__FILE__,__LINE__);
 			list($orderMax)=Database::fetch_array($result,'NUM');
 			$display_order=$orderMax+1;
-			$sql = "INSERT INTO ".$link_cat_table." SET category_title = '".Database::escape_string($link_cat->title)."', description='".Database::escape_string($link_cat->description)."', display_order='".$display_order."' ";
+			$sql = "INSERT INTO ".$link_cat_table." SET category_title = '".Database::escape_string($link_cat->title)."', description='".Database::escape_string($link_cat->description)."', display_order='".$display_order."' $condition_session ";
 			Database::query($sql, __FILE__, __LINE__);
 			$new_id = Database::get_last_insert_id();
 			$this->course->resources[RESOURCE_LINKCATEGORY][$id]->destination_id = $new_id;
@@ -627,7 +719,7 @@ class CourseRestorer
 	/**
 	 * Restore course-description
 	 */
-	function restore_course_descriptions()
+	function restore_course_descriptions($session_id = 0)
 	{
 		if ($this->course->has_resources(RESOURCE_COURSEDESCRIPTION))
 		{
@@ -648,7 +740,13 @@ class CourseRestorer
 				$replace_search_by='../courses/'.$course_destination.'/document';
 				$description_content=str_replace($search,$replace_search_by,$cd->content);
 
-				$sql = "INSERT INTO ".$table." SET title = '".Database::escape_string($cd->title)."', content = '".Database::escape_string($description_content)."'";
+				$condition_session = "";
+				if (!empty($session_id)) {
+					$session_id = intval($session_id);
+					$condition_session = " , session_id = '$session_id' ";
+				}
+
+				$sql = "INSERT INTO ".$table." SET title = '".Database::escape_string($cd->title)."', content = '".Database::escape_string($description_content)."' $condition_session";
 				Database::query($sql, __FILE__, __LINE__);
 				$this->course->resources[RESOURCE_COURSEDESCRIPTION][$id]->destination_id = Database::get_last_insert_id();
 			}
@@ -679,7 +777,7 @@ class CourseRestorer
 	/**
 	 * Restore Quiz
 	 */
-	function restore_quizzes()
+	function restore_quizzes($session_id = 0)
 	{
 		if ($this->course->has_resources(RESOURCE_QUIZ))
 		{
@@ -702,6 +800,13 @@ class CourseRestorer
 				}
 				if ($id != -1)
 				{
+				
+					$condition_session = "";    			
+    				if (!empty($session_id)) {
+    					$session_id = intval($session_id);
+    					$condition_session = " , session_id = '$session_id' ";	
+    				}
+    			
 					// Normal tests are stored in the database.
 					$sql = "INSERT INTO ".$table_qui.
 						" SET title = '".Database::escape_string($quiz->title).
@@ -715,7 +820,8 @@ class CourseRestorer
 						", access_condition = '".$quiz->access_condition.
 						"', start_time = '".$quiz->start_time.
 						"', end_time = '".$quiz->end_time.
-						"', feedback_type = ".(int)$quiz->feedback_type;
+						"', feedback_type = ".(int)$quiz->feedback_type.
+						$condition_session;
 					Database::query($sql, __FILE__, __LINE__);
 					$new_id = Database::get_last_insert_id();
 				}
@@ -993,7 +1099,7 @@ class CourseRestorer
 	/**
 	 * Restore learnpaths
 	 */
-	function restore_learnpaths()
+	function restore_learnpaths($session_id = 0)
 	{
 		if ($this->course->has_resources(RESOURCE_LEARNPATH)) {
 			$table_main 	= Database :: get_course_table(TABLE_LP_MAIN, $this->course->destination_db);
@@ -1003,6 +1109,13 @@ class CourseRestorer
 			$resources = $this->course->resources;
 
 			foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp) {
+				
+				$condition_session = "";
+				if (!empty($session_id)) {
+					$session_id = intval($session_id);
+					$condition_session = " , session_id = '$session_id' ";
+				} 
+				
 				$sql = "INSERT INTO ".$table_main." " .
 						"SET lp_type = '".$lp->lp_type."', " .
 								"name = '".Database::escape_string($lp->name)."', " .
@@ -1018,7 +1131,7 @@ class CourseRestorer
 								"display_order = '".Database::escape_string($lp->display_order)."', " .
 								"js_lib= '".Database::escape_string($lp->js_lib)."', " .
 								"content_license= '".Database::escape_string($lp->content_license)."', " .
-								"debug= '".Database::escape_string($lp->debug)."' ";
+								"debug= '".Database::escape_string($lp->debug)."' $condition_session ";
 				Database::query($sql, __FILE__, __LINE__);
 
 				$new_lp_id = Database::get_last_insert_id();
@@ -1061,9 +1174,13 @@ class CourseRestorer
 					//local resource
 					$path = Database::escape_string($item['path']);
 					if(strval(intval($path)) === $path) {
-						$path = $this->get_new_id($item['item_type'],$path);
-					}
-
+						if (!empty($session_id)) {
+							$path = intval($path);	
+						} else {
+							$path = $this->get_new_id($item['item_type'],$path);	
+						}						
+					}										
+					
 					$sql = "INSERT INTO ".$table_item." SET " .
 							"lp_id = '".Database::escape_string($new_lp_id)."', " .
 							"item_type='".Database::escape_string($item['item_type'])."', " .
@@ -1283,7 +1400,7 @@ class CourseRestorer
 	/**
 	 * Restore glossary
 	 */
-	function restore_glossary()
+	function restore_glossary($session_id = 0)
 	{
 		if ($this->course->has_resources(RESOURCE_GLOSSARY))
 		{
@@ -1291,12 +1408,19 @@ class CourseRestorer
 			$t_item_propery = Database :: get_course_table(TABLE_ITEM_PROPERTY, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_GLOSSARY] as $id => $glossary) {
-				$this->course->resources[RESOURCE_GLOSSARY][$id]->destination_id = $glossary->glossary_id;
- 			    $sql = "INSERT INTO ".$table_glossary." SET glossary_id = '".Database::escape_string($glossary->glossary_id)."', name = '".Database::escape_string($glossary->name)."', description = '".Database::escape_string($glossary->description)."', display_order='".Database::escape_string($glossary->display_order)."'";
-			 	Database::query($sql, __FILE__, __LINE__);
-
-			}
-		}
-	}
+				
+				$condition_session = "";    			
+    			if (!empty($session_id)) {
+    				$session_id = intval($session_id);
+    				$condition_session = " , session_id = '$session_id' ";	
+    			}
+				
+				$sql = "INSERT INTO ".$table_glossary." SET  name = '".Database::escape_string($glossary->name)."', description = '".Database::escape_string($glossary->description)."', display_order='".Database::escape_string($glossary->display_order)."' $condition_session ";
+				Database::query($sql, __FILE__, __LINE__);
+				$this->course->resources[RESOURCE_GLOSSARY][$id]->destination_id = Database::get_last_insert_id();
+				 															    			 	
+			}						
+		}				
+	}	
 }
 ?>

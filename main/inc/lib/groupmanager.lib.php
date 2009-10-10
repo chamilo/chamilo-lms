@@ -115,11 +115,12 @@ class GroupManager {
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER, $course_db);
-		$session_id=isset($_SESSION['id_session']) ? $_SESSION['id_session'] : 0;
-		$session_condition = intval($session_id)==0 ? '' : ' g.session_id = '.intval($session_id).' ';
-		$my_status_of_user_in_course=CourseManager::get_user_in_course_status($my_user_id,$my_course_code);
-
-		$is_student_in_session=false;
+		
+		//condition for the session
+		$session_id = api_get_session_id();
+		$my_status_of_user_in_course = CourseManager::get_user_in_course_status($my_user_id,$my_course_code);
+		
+		$is_student_in_session = false;
 		if (is_null($my_status_of_user_in_course) || $my_status_of_user_in_course=='') {//into session
 			if ($session_id>0) {
 				$is_student_in_session=true;
@@ -166,11 +167,14 @@ class GroupManager {
 
 		if ($category != null){
 			$sql .= " WHERE g.category_id = '".Database::escape_string($category)."' ";
+			$session_condition = api_get_session_condition($session_id);
 			if(!empty($session_condition))
-				$sql .= 'AND '.$session_condition;
+				$sql .= $session_condition;
 		}
-		else if(!empty($session_condition))
-			$sql .= 'WHERE '.$session_condition;
+		else 
+			$session_condition = api_get_session_condition($session_id, false);
+			if(!empty($session_condition))
+			$sql .= $session_condition;
 		$sql .= " GROUP BY g.id ORDER BY UPPER(g.name)";
 		if (!api_is_anonymous()) {
 			$groupList = Database::query($sql,__FILE__,__LINE__);

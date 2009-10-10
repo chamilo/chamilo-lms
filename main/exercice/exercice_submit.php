@@ -75,7 +75,7 @@ api_protect_course_script(true);
 
 require_once api_get_path(LIBRARY_PATH) . 'text.lib.php';
 
-$is_allowedToEdit = api_is_allowed_to_edit();
+$is_allowedToEdit = api_is_allowed_to_edit(null,true);
 
 $_configuration['live_exercise_tracking'] = true;
 $stat_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
@@ -622,18 +622,23 @@ if ($formSent) {
 		if ($debug > 0) {
 			echo str_repeat('&nbsp;', 0) . 'Redirecting to exercise_result.php - Remove debug option to let this happen' . "<br />\n";
 		}
-		// goes to the script that will show the result of the exercise
-		if ($exerciseType == ALL_ON_ONE_PAGE) {
-			header("Location: exercise_result.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
-		} else {
-			if ($exe_id != '') {
-				//clean incomplete
-				$update_query = 'UPDATE ' . $stat_table . ' SET ' . "status = '', data_tracking='', exe_date = '" . date('Y-m-d H:i:s') . "'" . ' WHERE exe_id = ' . Database::escape_string($exe_id);
-				Database::query($update_query, __FILE__, __LINE__);
+		if ( api_is_allowed_to_session_edit() ) {
+			// goes to the script that will show the result of the exercise
+			if ($exerciseType == ALL_ON_ONE_PAGE) {
+				header("Location: exercise_result.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
+			} else {			
+				if ($exe_id != '') {
+					//clean incomplete
+					$update_query = 'UPDATE ' . $stat_table . ' SET ' . "status = '', data_tracking='', exe_date = '" . date('Y-m-d H:i:s') . "'" . ' WHERE exe_id = ' . Database::escape_string($exe_id);
+					api_sql_query($update_query, __FILE__, __LINE__);
+				}			
+				header("Location: exercise_show.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
 			}
-			header("Location: exercise_show.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
+			exit ();
+		} else {
+			header("Location: exercice_submit.php?exerciseId=$exerciseId");
+			exit;			
 		}
-		exit ();
 	}
 	if ($debug > 0) {
 		echo str_repeat('&nbsp;', 0) . '$formSent was set - end' . "<br />\n";
@@ -875,6 +880,9 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 						// -->
 						</script>";
 	Display :: display_header($nameTools, "Exercise");
+		if (!api_is_allowed_to_session_edit() ) {
+			Display :: display_warning_message(get_lang('SessionIsReadOnly'));
+		}
 } else {
 	if (empty ($charset)) {
 		$charset = 'ISO-8859-15';
@@ -912,7 +920,7 @@ if ($exerciseAttempts > 0) {
 	$attempt = Database :: fetch_array($aquery);
 
 	if ($attempt[0] >= $exerciseAttempts) {
-		if (!api_is_allowed_to_edit()) {
+		if (!api_is_allowed_to_edit(null,true)) {
 			Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exerciseTitle, $exerciseAttempts), false);
 			if ($origin != 'learnpath')
 				Display :: display_footer();
@@ -942,7 +950,7 @@ if ($limit_time_exists) {
 	if ($_SERVER['REQUEST_METHOD'] != 'POST')
 		$exercise_timeover = (($time_now - $exercise_end_time) > 0) ? true : false;
 	if ($permission_to_start == false || $exercise_timeover == true) { //
-		if (!api_is_allowed_to_edit()) {
+		if (!api_is_allowed_to_edit(null,true)) {
 			$message_warning = ($permission_to_start == false) ? get_lang('ExerciseNoStartedYet') : get_lang('ReachedTimeLimit');
 			Display :: display_warning_message(sprintf($message_warning, $exerciseTitle, $exerciseAttempts));
 			Display :: display_footer();
@@ -1068,15 +1076,19 @@ if (!empty ($error)) {
 		//echo '<br /><span class="rounded" style="width: 300px; margin-top: 10px; padding: 3px; background-color:#ccc;"><span style="width: 300px" class="rounded_inner" ><a href="exercise_submit_modal.php?hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&questionnum='.$questionNum.'&exerciseType='.$exerciseType.'&exerciseId='.$exerciseId.'&placeValuesBeforeTB_=savedValues&TB_iframe=true&height=480&width=640&modal=true" title="" class="thickbox" id="validationButton">'.get_lang('ValidateAnswer').'</a></span></span><br /><br /><br />';
 
 	} else {
-		if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
-			$submit_btn .= get_lang('ValidateAnswer');
-		} else {
-			$submit_btn .= get_lang('NextQuestion');
+		if (api_is_allowed_to_session_edit() ) {
+			if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
+				$submit_btn .= get_lang('ValidateAnswer');
+			} else {
+				$submit_btn .= get_lang('NextQuestion');
+			}
+			$submit_btn .= "</button>";
+			echo $submit_btn;
 		}
-		$submit_btn .= "</button>";
+		
 	}
 
-	echo $submit_btn;
+	
 	echo "</table>
 			</td>
 			</tr>

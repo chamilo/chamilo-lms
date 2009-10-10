@@ -200,16 +200,16 @@ if ($origin=='learnpath') {
 // The only exception is the course manager
 // I have split this is several pieces for clarity.
 //if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0) OR ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0)))
-if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0))) {
+if (!api_is_allowed_to_edit(null,true) AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0))) {
 	forum_not_allowed_here();
 }
-if (!api_is_allowed_to_edit() AND ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0)) {
+if (!api_is_allowed_to_edit(null,true) AND ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0)) {
 	forum_not_allowed_here();
 }
 if (!$_user['user_id'] AND $current_forum['allow_anonymous']==0) {
 	forum_not_allowed_here();
 }
-if (!api_is_allowed_to_edit() AND $current_forum['allow_edit']==0) {
+if (!api_is_allowed_to_edit(null,true) AND $current_forum['allow_edit']==0) {
 	forum_not_allowed_here();
 }
 

@@ -146,6 +146,7 @@ if(api_is_platform_admin()) {
 	 <h4><?php Display::display_icon('settings.gif', get_lang('Platform')); ?> <?php echo api_ucfirst(get_lang('Platform')); ?></h4>
 	 <ul>
 	  <li><a href="settings.php"><?php echo get_lang('DokeosConfigSettings') ?></a></li>
+	  <li><a href="special_exports.php"><?php echo get_lang('SpecialExports') ?></a></li>
 	  <li><a href="system_announcements.php"><?php echo get_lang('SystemAnnouncements') ?></a></li>
 	  <li><a href="languages.php"><?php echo get_lang('Languages'); ?></a></li>
 	  <li><a href="configure_homepage.php"><?php echo get_lang('ConfigureHomePage'); ?></a></li>
@@ -189,9 +190,11 @@ if(api_get_setting('use_session_mode')=='true')
 	</form>
 </li>
   <li><a href="session_list.php"><?php echo get_lang('ListSession') ?></a></li>
+  <li><a href="session_category_list.php"><?php echo get_lang('ListSessionCategory') ?></a></li>
   <li><a href="session_add.php"><?php echo get_lang('AddSession') ?></a></li>
   <li><a href="session_import.php"><?php echo get_lang('ImportSessionListXMLCSV') ?></a></li>
   <li><a href="session_export.php"><?php echo get_lang('ExportSessionListXMLCSV') ?></a></li>
+  <li><a href="../coursecopy/copy_course_session.php"><?php echo get_lang('CopyFromCourseInSessionToAnotherSession') ?></a></li>
   </ul>
 </div>
 

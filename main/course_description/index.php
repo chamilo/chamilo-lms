@@ -23,6 +23,7 @@ $language_file = array ('course_description', 'pedaSuggest', 'accessibility');
 
 include '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
+$session_id = api_get_session_id();
 
 include api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
@@ -126,18 +127,23 @@ $default_description_title_editable[7] = true;
 		MAIN CODE
 ==============================================================================
 */
-$sql = "SELECT id,title FROM $tbl_course_description ORDER BY id";
+
+$condition_session = api_get_session_condition($session_id, false);
+
+$sql = "SELECT id,title FROM $tbl_course_description $condition_session ORDER BY id ";
 $result = Database::query($sql, __FILE__, __LINE__);
 while ($row = Database::fetch_array($result)) {
   $default_description_titles[$row['id']] = $row['title'];
 }
 
-if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
+if (api_is_allowed_to_edit(null,true) && !is_null($description_id) || $action =='add') {
 	$description_id = intval($description_id);
 	// Delete a description block
 	if ($action == 'delete') {
 		$sql = "DELETE FROM $tbl_course_description WHERE id='".$description_id."'";
-		Database::query($sql, __FILE__, __LINE__);
+		api_sql_query($sql, __FILE__, __LINE__);
+		//update item_property (delete)
+		api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, Database::escape_string($description_id), 'delete', api_get_user_id());
 		Display :: display_confirmation_message(get_lang('CourseDescriptionDeleted'));
 	}
 	// Add or edit a description block
@@ -154,7 +160,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 			}
 
 		} else {
-			$sql = "SELECT MAX(id) as MAX FROM $tbl_course_description ";
+			$sql = "SELECT MAX(id) as MAX FROM $tbl_course_description $condition_session";
 			$result = Database::query($sql, __FILE__, __LINE__);
 			$max= Database::fetch_array($result);
 			$description_id = $max['MAX']+1;
@@ -207,7 +213,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 			if ($description['description_id'] >= ADD_BLOCK) {
 				if ($description['add']=='1') { //if this element has been submitted for addition
 					$result = Database::query($sql, __FILE__, __LINE__);
-					$sql = "INSERT IGNORE INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string(Security::remove_XSS($title,COURSEMANAGERLOWSECURITY))."', content = '".Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY))."'";
+					$sql = "INSERT IGNORE INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string(Security::remove_XSS($title,COURSEMANAGERLOWSECURITY))."', content = '".Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY))."', session_id = ".intval($session_id)." ";
 					Database::query($sql, __FILE__, __LINE__);
 				} else {
 					$sql = "UPDATE $tbl_course_description SET  title = '".Database::escape_string(Security::remove_XSS($title,COURSEMANAGERLOWSECURITY))."', content = '".Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY))."' WHERE id = '".$description_id."' ";
@@ -220,8 +226,13 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 				}
 				$sql = "DELETE FROM $tbl_course_description WHERE id = '".$description_id."'";
 				Database::query($sql, __FILE__, __LINE__);
-				$sql = "INSERT INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string(Security::remove_XSS($title,COURSEMANAGERLOWSECURITY))."', content = '".Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY))."'";
+				$sql = "INSERT INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string(Security::remove_XSS($title,COURSEMANAGERLOWSECURITY))."', content = '".Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY))."', session_id = ".intval($session_id)." ";
 				Database::query($sql, __FILE__, __LINE__);
+			}
+			$id = Database::get_last_insert_id();
+			if ($id > 0) {
+				//insert into item_property
+				api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, $id, 'CourseDescriptionAdded', api_get_user_id());
 			}
 			Display :: display_confirmation_message(get_lang('CourseDescriptionUpdated'));
 		}
@@ -229,7 +240,7 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 		else {
 			// menu top
 			//***********************************
-			if (api_is_allowed_to_edit()) {
+			if (api_is_allowed_to_edit(null,true)) {
 				$categories = array ();
 
 				foreach ($default_description_titles as $id => $title) {
@@ -273,15 +284,15 @@ if (api_is_allowed_to_edit() && !is_null($description_id) || $action =='add') {
 
 // Show the list of all description blocks
 if ($show_description_list) {
-	$sql = "SELECT * FROM $tbl_course_description ORDER BY id";
+	$sql = "SELECT * FROM $tbl_course_description $condition_session ORDER BY id ";
 	$result = Database::query($sql, __FILE__, __LINE__);
-	$descriptions = array();;
+	$descriptions = array();
 	while ($description = Database::fetch_object($result)) {
 		$descriptions[$description->id] = $description;
 		//reload titles to ensure we have the last version (after edition)
 		$default_description_titles[$description->id] = $description->title;
 	}
-	if (api_is_allowed_to_edit()) {
+	if (api_is_allowed_to_edit(null,true)) {
 		$categories = array ();
 
 		foreach ($default_description_titles as $id => $title) {
@@ -306,7 +317,7 @@ if ($show_description_list) {
 	if (isset($descriptions) && count($descriptions) > 0) {
 		foreach ($descriptions as $id => $description) {
 			echo '<div class="sectiontitle">';
-			if (api_is_allowed_to_edit()) {
+			if (api_is_allowed_to_edit(null,true)) {
 				//delete
 				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=delete&amp;description_id='.$description->id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
 				echo Display::return_icon('delete.gif', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'));

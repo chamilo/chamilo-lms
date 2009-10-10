@@ -61,7 +61,7 @@ define(FREE_ANSWER,     5);
 // allows script inclusions
 define(ALLOWED_TO_INCLUDE,1);
 
-$is_allowedToEdit=api_is_allowed_to_edit();
+$is_allowedToEdit=api_is_allowed_to_edit(null,true);
 
 // document path
 $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';

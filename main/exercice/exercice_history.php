@@ -52,7 +52,7 @@ include(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 	Constants and variables
 -----------------------------------------------------------
 */
-$is_allowedToEdit = api_is_allowed_to_edit();
+$is_allowedToEdit = api_is_allowed_to_edit(null,true);
 $is_tutor = api_is_allowed_to_edit(true);
 
 if(!$is_allowedToEdit){

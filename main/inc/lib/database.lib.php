@@ -36,6 +36,7 @@ define('TABLE_MAIN_LANGUAGE', 'language');
 define('TABLE_MAIN_SETTINGS_OPTIONS', 'settings_options');
 define('TABLE_MAIN_SETTINGS_CURRENT', 'settings_current');
 define('TABLE_MAIN_SESSION', 'session');
+define('TABLE_MAIN_SESSION_CATEGORY', 'session_category');
 define('TABLE_MAIN_SESSION_COURSE', 'session_rel_course');
 define('TABLE_MAIN_SESSION_USER', 'session_rel_user');
 define('TABLE_MAIN_SESSION_CLASS', 'session_rel_class');

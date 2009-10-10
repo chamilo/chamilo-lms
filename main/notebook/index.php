@@ -55,6 +55,9 @@ Display::display_introduction_section(TOOL_NOTEBOOK);
 // Action handling: Adding a note
 if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 {
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+		api_not_allowed();
+	}
 
 	if (!empty($_GET['isStudentView'])) {
 		display_notes();
@@ -254,6 +257,12 @@ function save_note($values) {
 				'".Database::escape_string(date('Y-m-d H:i:s'))."',
 				'0')";
 	$result = Database::query($sql, __FILE__, __LINE__);
+	$id = Database::get_last_insert_id();
+	if ($id > 0) {
+		//insert into item_property
+		api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, $id, 'NotebookAdded', api_get_user_id());
+	}
+	
 	// display the feedback message
 	Display::display_confirmation_message(get_lang('NoteAdded'));
 }
@@ -264,7 +273,8 @@ function get_note_information($notebook_id) {
 
 	$sql = "SELECT 	notebook_id 		AS notebook_id,
 					title				AS note_title,
-					description 		AS note_comment
+					description 		AS note_comment,
+			   		session_id			AS session_id					
 			   FROM $t_notebook
 			   WHERE notebook_id = '".Database::escape_string($notebook_id)."' ";
 	$result = Database::query($sql, __FILE__, __LINE__);
@@ -293,6 +303,10 @@ function update_note($values) {
 				update_date = '".Database::escape_string(date('Y-m-d H:i:s'))."'
 			WHERE notebook_id = '".Database::escape_string($values['notebook_id'])."'";
 	$result = Database::query($sql, __FILE__, __LINE__);
+
+	//update item_property (update)
+	api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, Database::escape_string($values['notebook_id']), 'NotebookUpdated', api_get_user_id());
+	
 	// display the feedback message
 	Display::display_confirmation_message(get_lang('NoteUpdated'));
 }
@@ -303,11 +317,17 @@ function delete_note($notebook_id) {
 
 	$sql = "DELETE FROM $t_notebook WHERE notebook_id='".Database::escape_string($notebook_id)."' AND user_id = '".Database::escape_string(api_get_user_id())."'";
 	$result = Database::query($sql, __FILE__, __LINE__);
+	
+	//update item_property (delete)
+	api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, Database::escape_string($notebook_id), 'delete', api_get_user_id());
+	
 	Display::display_confirmation_message(get_lang('NoteDeleted'));
 }
 
 function display_notes() {
 
+	global $_user;
+		
 	if (!$_GET['direction'])
 	{
 		$sort_direction = 'ASC';
@@ -330,7 +350,12 @@ function display_notes() {
 	//if (api_is_allowed_to_edit())
 	//{
 		if (!api_is_anonymous()) {
-			echo '<a href="index.php?'.api_get_cidreq().'&amp;action=addnote">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
+			if (api_get_session_id()==0)
+				echo '<a href="index.php?'.api_get_cidreq().'&amp;action=addnote">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
+			elseif(api_is_allowed_to_session_edit(false,true)){
+				echo '<a href="index.php?'.api_get_cidreq().'&amp;action=addnote">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
+			}
+			
 		} else {
 			echo '<a href="javascript:void(0)">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
 		}
@@ -353,18 +378,24 @@ function display_notes() {
 		$order_by = " ORDER BY ".$_SESSION['notebook_view']." $sort_direction ";
 	}
 
+	//condition for the session
+	$session_id = api_get_session_id();
+	$condition_session = api_get_session_condition($session_id);
+
 	$cond_extra = ($_SESSION['notebook_view']== 'update_date')?" AND update_date <> '0000-00-00 00:00:00'":" ";
 
-	$sql = "SELECT * FROM $t_notebook WHERE user_id = '".Database::escape_string(api_get_user_id())."' $cond_extra $order_by";
+	$sql = "SELECT * FROM $t_notebook WHERE user_id = '".Database::escape_string(api_get_user_id())."' $condition_session $cond_extra $order_by";
 	$result = Database::query($sql, __FILE__, __LINE__);
 	while ($row = Database::fetch_array($result)) {
+		//validacion when belongs to a session
+		$session_img = api_get_session_image($row['session_id'], $_user['status']);
 		echo '<div class="sectiontitle">';
 		echo '<span style="float: right;"> ('.get_lang('CreationDate').': '.date_to_str_ago($row['creation_date']).'&nbsp;&nbsp;<span class="dropbox_date">'.$row['creation_date'].'</span>';
 		if ($row['update_date'] <> $row['creation_date']) {
 			echo ', '.get_lang('UpdateDate').': '.date_to_str_ago($row['update_date']).'&nbsp;&nbsp;<span class="dropbox_date">'.$row['update_date'].'</span>';
 		}
 		echo ')</span>';
-		echo $row['title'];
+		echo $row['title'] . $session_img;
 		echo '</div>';
 		echo '<div class="sectioncomment">'.$row['description'].'</div>';
 		echo '<div>';
@@ -372,6 +403,6 @@ function display_notes() {
 		echo '<a href="'.api_get_self().'?action=deletenote&amp;notebook_id='.$row['notebook_id'].'" onclick="return confirmation(\''.$row['title'].'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 		echo '</div>';
 	}
-	return $return;
+	//return $return;
 }
 ?>

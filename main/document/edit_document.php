@@ -143,7 +143,7 @@ $baseServUrl = $_configuration['url_append']."/";
 $courseDir   = $_course['path']."/document";
 $baseWorkDir = $baseServDir.$courseDir;
 $group_document = false;
-
+$current_session_id = api_get_session_id();
 $doc_tree= explode('/', $file);
 $count_dir = count($doc_tree) -2; // "2" because at the begin and end there are 2 "/"
 // Level correction for group documents.
@@ -157,8 +157,10 @@ for($i=0;$i<($count_dir);$i++)
 	$relative_url.='../';
 }
 
+$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+
 $html_editor_config = array(
-	'ToolbarSet' => (api_is_allowed_to_edit() ? 'Documents' :'DocumentsStudent'),
+	'ToolbarSet' => ($is_allowed_to_edit ? 'Documents' :'DocumentsStudent'),
 	'Width' => '100%',
 	'Height' => '600',
 	'FullPage' => true,
@@ -473,8 +475,8 @@ if($is_allowedToEdit)
 						{
 							mkdir($filepath.'css',$perm);
 							$doc_id=add_document($_course,$dir.'css','folder',0,'css');
-							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id']);
-							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id']);
+							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id'],null,null,null,null,$current_session_id);
+							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],null,null,null,null,$current_session_id);
 						}
 
 						if(!is_file($filepath.'css/frames.css'))
@@ -483,8 +485,8 @@ if($is_allowedToEdit)
 							if (file_exists(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css')) {
 								copy(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css',$filepath.'css/frames.css');
 								$doc_id=add_document($_course,$dir.'css/frames.css','file',filesize($filepath.'css/frames.css'),'frames.css');
-								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
-								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id']);
+								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'],null,null,null,null,$current_session_id);
+								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],null,null,null,null,$current_session_id);								
 							}
 						}
 
@@ -494,7 +496,7 @@ if($is_allowedToEdit)
 						{
 							$file_size = filesize($filepath.$filename.'.'.$extension);
 							update_existing_document($_course, $document_id,$file_size,$read_only_flag);
-							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $_user['user_id']);
+							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $_user['user_id'],null,null,null,null,$current_session_id);
 							//update parent folders
 							item_property_update_on_folder($_course,$dir,$_user['user_id']);
 							$dir= substr($dir,0,-1);
@@ -615,8 +617,8 @@ $rs = Database::query($sql, __FILE__, __LINE__);
 $owner_id = Database::result($rs,0,'insert_user_id');
 
 
-if ($owner_id == $_user['user_id'] || api_is_platform_admin() || api_is_allowed_to_edit() || GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid'] ))
-{
+if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_edit || GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid'] ))
+{  
 	$get_cur_path=Security::remove_XSS($_GET['curdirpath']);
 	$get_file=Security::remove_XSS($_GET['file']);
 	$action =  api_get_self().'?sourceFile='.urlencode($file_name).'&curdirpath='.urlencode($get_cur_path).'&file='.urlencode($get_file).'&doc='.urlencode($doc);

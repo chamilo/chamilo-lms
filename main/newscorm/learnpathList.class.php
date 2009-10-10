@@ -35,7 +35,12 @@ class learnpathList {
     	}
     	$this->course_code = $course_code;
     	$this->user_id = $user_id;
-    	$sql = "SELECT * FROM $lp_table ORDER BY display_order ASC, name ASC";
+    	
+    	//condition for the session
+		$session_id = api_get_session_id();
+		$condition_session = api_get_session_condition($session_id, false);
+    	
+    	$sql = "SELECT * FROM $lp_table $condition_session ORDER BY display_order ASC, name ASC";    	
     	$res = Database::query($sql);
     	$names = array();
     	while ($row = Database::fetch_array($res))
@@ -62,6 +67,7 @@ class learnpathList {
 
     		$this->list[$row['id']] = array(
     			'lp_type' => $row['lp_type'],
+    			'lp_session' => $row['session_id'],    			
     			'lp_name' => stripslashes($row['name']),
     			'lp_desc' => stripslashes($row['description']),
     			'lp_path' => $row['path'],

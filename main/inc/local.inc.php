@@ -935,12 +935,17 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 		    	$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 		    	$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 		    	$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-		        $sql = "SELECT session.id_coach, session_admin_id
+		    	
+		    	
+		    	$sql = " SELECT session.id_coach, session_admin_id FROM $tbl_session session,$tbl_session_course_user session_rcru 
+		    			WHERE session_rcru.id_session = session.id AND session_rcru.course_code = '$_cid' AND session_rcru.id_user='{$_user['user_id']}' AND session_rcru.status = 2";
+		    	
+		        /*$sql = "SELECT session.id_coach, session_admin_id
 						FROM ".$tbl_session." as session
-						INNER JOIN ".$tbl_session_course."
+						INNER JOIN ".$tbl_session_course_user."
 							ON session_rel_course.id_session = session.id
 							AND session_rel_course.course_code='$_cid'";
+				*/
 
 		        $result = Database::query($sql,__FILE__,__LINE__);
 		        $row = Database::store_result($result);
@@ -969,10 +974,13 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 		        } else {
 		        	// Check if the current user is the course coach
 		        	$sql = "SELECT 1
-							FROM ".$tbl_session_course."
-							WHERE session_rel_course.course_code='$_cid'
-							AND session_rel_course.id_coach = '".$_user['user_id']."'";
-			        $result = Database::query($sql,__FILE__,__LINE__);
+							FROM ".$tbl_session_course_user."
+							WHERE course_code='$_cid'
+							AND id_user = '".$_user['user_id']."'
+							AND id_session = '".api_get_session_id()."'		
+							AND status = 2";
+
+			        $result = api_sql_query($sql,__FILE__,__LINE__);
 			        if ($row = Database::fetch_array($result)) {
 			        	$_courseUser['role'] = 'Professor';
 			            $is_courseMember     = true;
@@ -991,10 +999,11 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 		        		// Check if the user is a student is this session
 				        $sql = "SELECT * FROM ".$tbl_session_course_user."
 				        		WHERE id_user  = '".$_user['user_id']."'
-								AND course_code = '$cidReq'";
-
+				        		AND id_session = '".api_get_session_id()."'		
+								AND course_code = '$cidReq' AND status NOT IN(2)";
+	
 				        $result = Database::query($sql,__FILE__,__LINE__);
-
+	
 				        if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
 				        	while($row = Database::fetch_array($result)){
 					            $is_courseMember     = true;
@@ -1036,7 +1045,25 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
     		$is_allowed_in_course = true;
     	else $is_allowed_in_course = false;
 	}
-
+	
+	// requires testing!!!
+	
+	// check the session visibility
+	if ($is_allowed_in_course) {
+		$my_session_id = api_get_session_id();
+		//if I'm in a session  
+		//var_dump($is_platformAdmin, $is_courseTutor,api_is_coach());		
+		if ($my_session_id!=0) 
+			if (!$is_platformAdmin) { 
+				// admin and session coach are *not* affected to the invisible session mode 
+				// the coach is not affected because he can log in some days after the end date of a session
+				$session_visibility = api_get_session_visibility($my_session_id);
+				if ($session_visibility==SESSION_INVISIBLE)
+					$is_allowed_in_course =false;	 
+			}
+		
+	}
+	
     // save the states
 
 	api_session_register('is_courseMember');

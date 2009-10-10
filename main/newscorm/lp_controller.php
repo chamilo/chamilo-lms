@@ -175,12 +175,14 @@ if(isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true')
 	}
 }
 
+$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+
 $action = (!empty($_REQUEST['action'])?$_REQUEST['action']:'');
 switch($action)
 {
 	case 'add_item':
 
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 
@@ -228,7 +230,7 @@ switch($action)
 
 	case 'add_lp':
 
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 
@@ -271,7 +273,7 @@ switch($action)
 
 	case 'admin_view':
 
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 
@@ -289,7 +291,7 @@ switch($action)
 
 	case 'build':
 
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 
@@ -307,7 +309,7 @@ switch($action)
 
 	case 'delete_item':
 
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 
@@ -339,7 +341,7 @@ switch($action)
 
 	case 'edit_item':
 
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 
@@ -377,7 +379,7 @@ switch($action)
 
 	case 'edit_item_prereq':
 
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 
@@ -400,7 +402,7 @@ switch($action)
 
 	case 'move_item':
 
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 
@@ -433,7 +435,7 @@ switch($action)
 		break;
 
 	case 'view_item':
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 		if($debug>0) error_log('New LP - view_item action triggered', 0);
@@ -447,7 +449,7 @@ switch($action)
 		break;
 
 	case 'upload':
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 		if($debug>0) error_log('New LP - upload action triggered',0);
@@ -458,7 +460,7 @@ switch($action)
 		require('lp_list.php');
 		break;
 	case 'export':
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 		if($debug>0) error_log('New LP - export action triggered',0);
@@ -470,7 +472,7 @@ switch($action)
 		}
 		break;
 	case 'delete':
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 		if($debug>0) error_log('New LP - delete action triggered',0);
@@ -485,7 +487,7 @@ switch($action)
 		}
 		break;
 	case 'toggle_visible': //change lp visibility (inside lp tool)
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 		if($debug>0) error_log('New LP - visibility action triggered',0);
@@ -496,7 +498,7 @@ switch($action)
 		}
 		break;
 	case 'toggle_publish': //change lp published status (visibility on homepage)
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 		if($debug>0) error_log('New LP - publish action triggered',0);
@@ -507,7 +509,7 @@ switch($action)
 		}
 		break;
 	case 'move_lp_up': //change lp published status (visibility on homepage)
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 		if($debug>0) error_log('New LP - publish action triggered',0);
@@ -523,7 +525,7 @@ switch($action)
 		}
 		break;
 	case 'move_lp_down': //change lp published status (visibility on homepage)
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 		if($debug>0) error_log('New LP - publish action triggered',0);
@@ -538,7 +540,7 @@ switch($action)
 		}
 		break;
 	case 'edit':
-		if(!api_is_allowed_to_edit())
+		if(!$is_allowed_to_edit)
 		{
 			api_not_allowed(true);
 		}
@@ -550,7 +552,7 @@ switch($action)
 		}
 		break;
 	case 'update_lp':
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 		if($debug>0) error_log('New LP - update_lp action triggered',0);
@@ -612,7 +614,7 @@ switch($action)
 		}
 		break;
 	case 'add_sub_item': //add an item inside a chapter
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 		if($debug>0) error_log('New LP - add sub item action triggered',0);
@@ -631,7 +633,7 @@ switch($action)
 		break;
 	case 'deleteitem':
 	case 'delete_item':
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 		if($debug>0) error_log('New LP - delete item action triggered',0);
@@ -646,7 +648,7 @@ switch($action)
 		break;
 	case 'edititemprereq':
 	case 'edit_item_prereq':
-		if(!api_is_allowed_to_edit()){
+		if(!$is_allowed_to_edit){
 			api_not_allowed(true);
 		}
 		if($debug>0) error_log('New LP - edit item prereq action triggered',0);

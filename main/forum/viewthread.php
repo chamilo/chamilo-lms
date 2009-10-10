@@ -201,7 +201,7 @@ if ($my_message<>'PostDeletedSpecial') {
 		// The link should only appear when the user is logged in or when anonymous posts are allowed.
 		if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id'])) {
 			//reply link
-			if (!api_is_anonymous()) {
+			if (!api_is_anonymous() && api_is_allowed_to_session_edit(false,true)) {
 				echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread&origin='.$origin.'">'.Display::return_icon('forumthread_new.gif',get_lang('ReplyToThread')).get_lang('ReplyToThread').'</a>';
 			}
 			//new thread link

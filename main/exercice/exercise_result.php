@@ -478,8 +478,9 @@ if($debug>0){echo "ExerciseResult: "; var_dump($exerciseResult); echo "QuestionL
 
 if ($_configuration['tracking_enabled']) {
 	// Create an empty exercise
-	$exeId= create_event_exercice($objExercise->selectId());
-}
+	if (api_is_allowed_to_session_edit() )  
+		$exeId= create_event_exercice($objExercise->selectId());
+}	 
 $counter=0;
 
 // Loop over all question to show results for each of them, one by one
@@ -1068,7 +1069,8 @@ if ($_configuration['tracking_enabled']) {
 	$safe_lp_id = $learnpath_id==''?0:(int)$learnpath_id;
 	$safe_lp_item_id = $learnpath_item_id==''?0:(int)$learnpath_item_id;
 	$quizDuration = (!empty($_SESSION['quizStartTime']) ? time() - $_SESSION['quizStartTime'] : 0);
-	update_event_exercice($exeId, $objExercise->selectId(),$totalScore,$totalWeighting,api_get_session_id(),$safe_lp_id,$safe_lp_item_id,$quizDuration);
+	if (api_is_allowed_to_session_edit() )  
+		update_event_exercice($exeId, $objExercise->selectId(),$totalScore,$totalWeighting,api_get_session_id(),$safe_lp_id,$safe_lp_item_id,$quizDuration);
 }
 
 if($objExercise->results_disabled) {

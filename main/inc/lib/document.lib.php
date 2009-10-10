@@ -307,7 +307,11 @@ class DocumentManager {
 	*   @todo ??not only check if a file is visible, but also check if the user is allowed to see the file??
 	*/
 	public static function file_visible_to_user ($this_course, $doc_url) {
-		if (api_is_allowed_to_edit())
+		$current_session_id = api_get_session_id();
+		
+		$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+		
+		if ($is_allowed_to_edit())
 		{
 			return true;
 		}
@@ -514,7 +518,21 @@ class DocumentManager {
 		//the given path will not end with a slash, unless it's the root '/'
 		//so no root -> add slash
 		$added_slash = ($path == '/') ? '' : '/';
-
+		
+		//condition for the session		
+		$current_session_id = api_get_session_id();					
+		$is_session_into_category = api_is_session_in_category($current_session_id,'20091U');				
+		
+		$condition_session = "";
+		if ($is_session_into_category) {
+			$condition_session = " AND id_session = (SELECT IFNULL((SELECT DISTINCT id_session FROM $TABLE_ITEMPROPERTY WHERE ref = last.ref AND id_session = '$current_session_id'),0))";						
+		} else {					
+			$condition_session = " AND id_session = '$current_session_id' ";								
+		}
+		
+		
+		$sql_session_id = "SELECT IFNULL((SELECT DISTINCT id_session FROM $TABLE_ITEMPROPERTY WHERE ref = last.ref AND id_session = '$current_session_id'),0)";								
+				
 		$sql = "SELECT *
 						FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 						WHERE docs.id = last.ref
@@ -522,10 +540,10 @@ class DocumentManager {
 						AND docs.path NOT LIKE '".$path.$added_slash."%/%'
 						AND last.tool = '".TOOL_DOCUMENT."'
 						AND ".$to_field." = ".$to_value."
-						AND last.visibility".$visibility_bit;
-
+						AND last.visibility".$visibility_bit . $condition_session;								
+		
 		$result = Database::query($sql);
-
+		
 		if ($result && Database::num_rows($result) != 0)
 		{
 			while ($row = Database::fetch_array($result,'ASSOC'))
@@ -584,13 +602,16 @@ class DocumentManager {
 
 		if ($can_see_invisible)
 		{
+			//condition for the session
+			$session_id = api_get_session_id();
+			$condition_session = api_get_session_condition($session_id);
 			$sql = "SELECT path
 								FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 								WHERE docs.id = last.ref
-								AND docs.filetype = 'folder'
-								AND last.tool = '".TOOL_DOCUMENT."'
-								AND last.to_group_id = ".$to_group_id."
-								AND last.visibility <> 2";
+								AND docs.filetype = 'folder' 
+								AND last.tool = '".TOOL_DOCUMENT."' 
+								AND last.to_group_id = ".$to_group_id." 
+								AND last.visibility <> 2 $condition_session";
 
 			$result = Database::query($sql, __FILE__, __LINE__);
 
@@ -615,41 +636,50 @@ class DocumentManager {
 		//no invisible folders
 		else
 		{
+			//condition for the session
+			$session_id = api_get_session_id();
+			$condition_session = api_get_session_condition($session_id);
 			//get visible folders
 			$visible_sql = "SELECT path
 						FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 						WHERE docs.id = last.ref
-						AND docs.filetype = 'folder'
-						AND last.tool = '".TOOL_DOCUMENT."'
-						AND last.to_group_id = ".$to_group_id."
-						AND last.visibility = 1";
+						AND docs.filetype = 'folder' 
+						AND last.tool = '".TOOL_DOCUMENT."' 
+						AND last.to_group_id = ".$to_group_id." 
+						AND last.visibility = 1 $condition_session";
 			$visibleresult = Database::query($visible_sql, __FILE__, __LINE__);
 			while ($all_visible_folders = Database::fetch_array($visibleresult,'ASSOC'))
 			{
 				$visiblefolders[] = $all_visible_folders['path'];
 				//echo "visible folders: ".$all_visible_folders['path']."<br>";
 			}
+			//condition for the session
+			$session_id = api_get_session_id();
+			$condition_session = api_get_session_condition($session_id);
 			//get invisible folders
 			$invisible_sql = "SELECT path
 						FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 						WHERE docs.id = last.ref
-						AND docs.filetype = 'folder'
-						AND last.tool = '".TOOL_DOCUMENT."'
-						AND last.to_group_id = ".$to_group_id."
-						AND last.visibility = 0";
+						AND docs.filetype = 'folder' 
+						AND last.tool = '".TOOL_DOCUMENT."' 
+						AND last.to_group_id = ".$to_group_id." 
+						AND last.visibility = 0 $condition_session";
 			$invisibleresult = Database::query($invisible_sql, __FILE__, __LINE__);
 			while ($invisible_folders = Database::fetch_array($invisibleresult,'ASSOC'))
 			{
+				//condition for the session
+				$session_id = api_get_session_id();
+				$condition_session = api_get_session_condition($session_id);
 				//get visible folders in the invisible ones -> they are invisible too
 				//echo "invisible folders: ".$invisible_folders['path']."<br>";
 				$folder_in_invisible_sql = "SELECT path
 								FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 								WHERE docs.id = last.ref
-								AND docs.path LIKE '".Database::escape_string($invisible_folders['path'])."/%'
-								AND docs.filetype = 'folder'
-								AND last.tool = '".TOOL_DOCUMENT."'
-								AND last.to_group_id = ".$to_group_id."
-								AND last.visibility = 1";
+								AND docs.path LIKE '".Database::escape_string($invisible_folders['path'])."/%' 
+								AND docs.filetype = 'folder' 
+								AND last.tool = '".TOOL_DOCUMENT."' 
+								AND last.to_group_id = ".$to_group_id." 
+								AND last.visibility = 1 $condition_session";
 				$folder_in_invisible_result = Database::query($folder_in_invisible_sql, __FILE__, __LINE__);
 				while ($folders_in_invisible_folder = Database::fetch_array($folder_in_invisible_result,'ASSOC'))
 				{
@@ -800,7 +830,9 @@ class DocumentManager {
 		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
 		//first, delete the actual document...
 		$document_id = self :: get_document_id($_course, $path);
-		$new_path = $path.'_DELETED_'.$document_id;
+		//$new_path = $path.'_DELETED_'.$document_id;
+		$new_path = $path;
+		$current_session_id = api_get_session_id();
 		if ($document_id)
 		{
 			if (api_get_setting('permanently_remove_deleted_files') == 'true') //deleted files are *really* deleted
@@ -823,8 +855,8 @@ class DocumentManager {
 						//avoid wrong behavior
 
 						//$remove_from_item_property_sql = "DELETE FROM ".$TABLE_ITEMPROPERTY." WHERE ref = ".$row['id']." AND tool='".TOOL_DOCUMENT."'";
-						api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'delete', api_get_user_id());
-
+						api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'delete', api_get_user_id(),null,null,null,null,$current_session_id);
+																								
 						//query to delete from document table
 						$remove_from_document_sql = "DELETE FROM ".$TABLE_DOCUMENT." WHERE id = ".$row['id']."";
  						self::unset_document_as_template($row['id'],$_course, api_get_user_id());
@@ -854,8 +886,8 @@ class DocumentManager {
 			}
 			else //set visibility to 2 and rename file/folder to qsdqsd_DELETED_#id
 			{
-				if (api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'delete', api_get_user_id()))
-				{
+				if (api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'delete', api_get_user_id(),null,null,null,null,$current_session_id))
+				{	
 					//echo('item_property_update OK');
 					if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path) )
                     {
@@ -873,7 +905,7 @@ class DocumentManager {
     								while ($deleted_items = Database::fetch_array($result,'ASSOC'))
     								{
     									//echo('to delete also: id '.$deleted_items['id']);
-    									api_item_property_update($_course, TOOL_DOCUMENT, $deleted_items['id'], 'delete', api_get_user_id());
+    									api_item_property_update($_course, TOOL_DOCUMENT, $deleted_items['id'], 'delete', api_get_user_id(),null,null,null,null,$current_session_id);
     									//Change path of subfolders and documents in database
     									$old_item_path = $deleted_items['path'];
     									$new_item_path = $new_path.substr($old_item_path, strlen($path));

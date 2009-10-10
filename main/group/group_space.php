@@ -80,7 +80,7 @@ if (is_array($forums_of_groups)) {
 }
 
 if 	($current_group['doc_state']!=1 and $current_group['calendar_state']!=1 and $current_group['work_state']!=1 and $current_group['announcements_state']!=1 and $current_group['wiki_state']!=1 and $forum_state_public!=1) {
-	if (!api_is_allowed_to_edit() and !GroupManager :: is_user_in_group($_user['user_id'], $current_group['id'])) {
+	if (!api_is_allowed_to_edit(null,true) and !GroupManager :: is_user_in_group($_user['user_id'], $current_group['id'])) {
 		echo api_not_allowed($print_headers);
 	}
 }

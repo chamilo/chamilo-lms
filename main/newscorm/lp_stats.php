@@ -294,9 +294,10 @@ if (is_array($list) && count($list) > 0){
 				);
 
 				$my_lesson_status = api_convert_encoding(get_lang($mylanglist[$lesson_status]), $lp_charset, $dokeos_charset);
-
+				$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+				
 				if ($row['item_type'] != 'dokeos_chapter') {
-					if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {
+					if (!$is_allowed_to_edit && $result_disabled_ext_all) {
 						$view_score = '/';
 					} else {
 						$view_score = ($score == 0 ? '/' : ($maxscore === 0 ? $score : $score . '/' . float_format($maxscore, 1)));
@@ -312,7 +313,7 @@ if (is_array($list) && count($list) > 0){
 
 						if ($row['item_type'] == 'quiz') {
 
-							if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {
+							if (!$is_allowed_to_edit && $result_disabled_ext_all) {
 								$temp[] =  '/';
 							} else {
 								$temp[] = ($score == 0 ? '0/'.$maxscore : ($maxscore == 0 ? $score : $score . '/' . float_format($maxscore, 1)));
@@ -572,7 +573,7 @@ if (is_array($list) && count($list) > 0){
 					$output .= '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . "</div></font></td>\n" . '<td colspan="2"><div class="mystatus" align="center">';
 					 if ($row['item_type'] == 'quiz') {
 
-					 	if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {
+					 	if (!$is_allowed_to_edit && $result_disabled_ext_all) {
 							$output .=  '/';
 						} else {
 							$output .= ($score == 0 ? '0/'.float_format($maxscore, 1) : ($maxscore == 0 ? $score : float_format($score, 1) . '/' . float_format($maxscore, 1)));
@@ -592,7 +593,7 @@ if (is_array($list) && count($list) > 0){
 
 					if ($row['item_type'] == 'quiz') {
 
-						if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {
+						if (!$is_allowed_to_edit && $result_disabled_ext_all) {
 							$temp[] =  '/';
 						} else {
 							$temp[] = ($score == 0 ? '0/'.$maxscore : ($maxscore == 0 ? $score : $score . '/' . float_format($maxscore, 1)));
@@ -660,7 +661,7 @@ if (is_array($list) && count($list) > 0){
 								$time_attemp = learnpathItem :: get_scorm_time('js', $mytime);
 								$time_attemp = str_replace('NaN', '00' . $h . '00\'00"', $time_attemp);
 
-								if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {
+								if (!$is_allowed_to_edit && $result_disabled_ext_all) {
 									$view_score =  '-';
 								} else {
 									//show only float when need it
@@ -680,13 +681,13 @@ if (is_array($list) && count($list) > 0){
 								$output .= '<tr class="'.$oddclass.'" ><td>&nbsp;</td><td>'.$extend_attempt_link.'</td><td colspan="3">' . api_convert_encoding(get_lang('Attempt'), $lp_charset, $dokeos_charset) . ' ' . $n . '</td>'
 							 			. '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . '</div></font></td><td colspan="2"><div class="mystatus" align="center">' . $view_score  . '</div></td><td colspan="2"><div class="mystatus">' . $time_attemp . '</div></td>';
 							 	if ($origin != 'tracking') {
-							 		if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {
+							 		if (!$is_allowed_to_edit && $result_disabled_ext_all) {
 										$output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'"></td>';
 									} else {
 										$output .= '<td><a href="../exercice/exercise_show.php?origin=student_progress&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $student_id .$from_link. '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'"></a></td>';
 									}
 								} else {
-									if (!api_is_allowed_to_edit() && $result_disabled_ext_all) {
+									if (!$is_allowed_to_edit && $result_disabled_ext_all) {
 										$output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'"></td>';
 									} else {
 										$output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $student_id . '&total_time='.$mytime.'&my_exe_exo_id='.$my_exo_exe_id.$from_link.' " target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'"></a></td>';

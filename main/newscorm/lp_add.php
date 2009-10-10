@@ -70,7 +70,7 @@ $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="dtree.css" />'; 
 	Constants and variables
 -----------------------------------------------------------
 */
-$is_allowed_to_edit = api_is_allowed_to_edit();
+$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 
 $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);

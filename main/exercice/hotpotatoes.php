@@ -43,7 +43,7 @@ include("hotpotatoes.lib.php");
 $this_section=SECTION_COURSES;
 
 // access restriction: only teachers are allowed here
-if(!api_is_allowed_to_edit())
+if(!api_is_allowed_to_edit(null,true))
 {
 	api_not_allowed();
 }
@@ -61,7 +61,7 @@ if (!empty($gradebook) && $gradebook=='view') {
 // the breadcrumbs
 $interbreadcrumb[]= array ("url"=>"./exercice.php", "name"=> get_lang('Exercices'));
 
-$is_allowedToEdit=api_is_allowed_to_edit();
+$is_allowedToEdit=api_is_allowed_to_edit(null,true);
 
 // Database table definitions
 $dbTable				= Database::get_course_table(TABLE_DOCUMENT);
@@ -76,7 +76,7 @@ $imgcount		= (!empty($_POST['imgcount'])?$_POST['imgcount']:null);
 $fld			= (!empty($_POST['fld'])?$_POST['fld']:null);
 
 // if user is allowed to edit
-if (api_is_allowed_to_edit())
+if (api_is_allowed_to_edit(null,true))
 {
 	//disable document parsing(?) - obviously deprecated
 	$enableDocumentParsing=false;
@@ -94,7 +94,7 @@ if (api_is_allowed_to_edit())
 
  /** display */
 // if finish is set; it's because the user came from this script in the first place (displaying hidden "finish" field)
-if((api_is_allowed_to_edit()) && (($finish == 0) || ($finish == 2)))
+if((api_is_allowed_to_edit(null,true)) && (($finish == 0) || ($finish == 2)))
 //if(($is_allowedToEdit) )
 {
 	$nameTools = get_lang('HotPotatoesTests');

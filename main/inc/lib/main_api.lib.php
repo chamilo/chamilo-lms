@@ -80,6 +80,12 @@ define('COURSE_VISIBILITY_OPEN_PLATFORM', 2);
 /** open for the whole world */
 define('COURSE_VISIBILITY_OPEN_WORLD', 3);
 
+
+//SESSION VISIBILITY CONSTANTS
+define('SESSION_VISIBLE_READ_ONLY', 1);
+define('SESSION_VISIBLE', 2);
+define('SESSION_INVISIBLE',3);
+
 define('SUBSCRIBE_ALLOWED', 1);
 define('SUBSCRIBE_NOT_ALLOWED', 0);
 define('UNSUBSCRIBE_ALLOWED', 1);
@@ -150,6 +156,8 @@ define('LOG_USER_DELETE', 'user_deleted');
 define('LOG_USER_CREATE', 'user_created');
 define('LOG_SESSION_CREATE', 'session_created');
 define('LOG_SESSION_DELETE', 'session_deleted');
+define('LOG_SESSION_CATEGORY_CREATE', 'session_category_created');
+define('LOG_SESSION_CATEGORY_DELETE', 'session_category_deleted');
 define('LOG_CONFIGURATION_SETTINGS_CHANGE', 'settings_changed');
 define('LOG_SUBSCRIBE_USER_TO_COURSE', 'user_subscribed');
 define('LOG_UNSUBSCRIBE_USER_FROM_COURSE', 'user_unsubscribed');
@@ -157,6 +165,7 @@ define('LOG_UNSUBSCRIBE_USER_FROM_COURSE', 'user_unsubscribed');
 define('LOG_COURSE_CODE', 'course_code');
 define('LOG_USER_ID', 'user_id');
 define('LOG_SESSION_ID', 'session_id');
+define('LOG_SESSION_CATEGORY_ID', 'session_category_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY', 'settings_category');
 define('LOG_CONFIGURATION_SETTINGS_VARIABLE', 'settings_variable');
 
@@ -1406,6 +1415,170 @@ function api_get_session_name($session_id) {
 }
 
 /**
+ * Gets the session info by id
+ * @param   int     Session ID
+ * @return  array 	information of the session
+ */
+function api_get_session_info($session_id) {
+	$data = array();
+	if (!empty($session_id)) {
+		$sesion_id = intval(Database::escape_string($session_id));
+		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+		$sql = "SELECT * FROM $tbl_session WHERE id = $session_id";
+		$result = api_sql_query($sql,__FILE__,__LINE__);
+		
+	    if (Database::num_rows($result)>0) {    
+	    	$data = Database::fetch_array($result, 'ASSOC');
+	    }
+	}
+	return $data;	
+}
+
+/**
+ * Gets the session visibility by session id
+ * @param   int	session id
+ * @return  int	0 = session still available, SESSION_VISIBLE_READ_ONLY = 1, SESSION_VISIBLE = 2, SESSION_INVISIBLE = 3
+ */				
+function api_get_session_visibility($session_id) {	
+	$visibility = 0; //means that the session is still available
+	if (!empty($session_id)) {
+		$sesion_id = intval(Database::escape_string($session_id));
+		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+		
+		$is_coach = api_is_course_coach();
+		
+		$condition_date_end = "";		
+		if ($is_coach) {
+			$condition_date_end = " AND (CURDATE() > (SELECT adddate(date_end,nb_days_access_after_end) FROM $tbl_session WHERE id = $session_id) AND date_end != '0000-00-00') ";
+		} else {
+			$condition_date_end = " AND (date_end < CURDATE() AND date_end != '0000-00-00') ";
+		}
+
+		$sql = "SELECT visibility FROM $tbl_session
+				WHERE id = $session_id $condition_date_end "; // session is old and is not unlimited					
+
+		$result = api_sql_query($sql,__FILE__,__LINE__);
+
+	    if (Database::num_rows($result)>0) {
+	    	$row = Database::fetch_array($result, 'ASSOC');
+	    	$visibility = $row['visibility'];
+	    } else {
+	    	$visibility = 0;
+	    }
+	}
+	return $visibility;	
+}
+/**
+ * Gets the visibility of an session of a course that a student have
+ * @param   int     session id
+ * @param   string  Dokeos course code 
+ * @param   int     user id 
+ * @return  int  	0= Session available (in date), SESSION_VISIBLE_READ_ONLY = 1, SESSION_VISIBLE = 2, SESSION_INVISIBLE = 3
+ */		
+function api_get_session_visibility_by_user($session_id,$course_code, $user_id) {	
+	$visibility = 0; //means that the session is still available
+	if (!empty($session_id) && !empty($user_id)){
+		$sesion_id = intval(Database::escape_string($session_id));
+		$user_id = intval(Database::escape_string($user_id));
+		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION_REL_COURSE_REL_USER);
+		$sql = "SELECT visibility FROM $tbl_session
+				WHERE id_session = $session_id AND id_user = $user_id AND course_code = '$course_code'"; // session old		
+		$result = api_sql_query($sql,__FILE__,__LINE__);		
+	    if (Database::num_rows($result)>0) {    
+	    	$row = Database::fetch_array($result, 'ASSOC');
+	    	$visibility = $row['visibility'];
+	    } else {
+	    	$visibility = 0;
+	    }
+	}
+	return $visibility;	
+}
+
+/**
+ * This function validates if the resource belongs to a session and returns an image
+ * @param int	session id
+ * @param int	status id
+ * @return string	image session
+ */
+function api_get_session_image($session_id, $status_id) {
+	//validacion when belongs to a session
+	$session_id = (int)$session_id;
+	$session_img = '';
+	if ((int)$status_id != 5) { //check whether is not a student
+		if ($session_id > 0) {
+			$session_img = "&nbsp;".Display::return_icon('star.png', get_lang('ResourceSession'), array('align' => 'absmiddle'));
+		}
+	}
+	return $session_img;
+}
+
+/**
+ * This function add an additional condition according to the session of the course
+ * @param int	session id
+ * @param bool	optional, true if more than one condition false if the only condition in the query
+ * @param bool	optional, true if condition is only with session_id = current session id, false if condition is with 0 else 
+ * @return string	condition of the session
+ */
+function api_get_session_condition($session_id, $state = true, $both = false) {
+
+	$session_id = intval($session_id);	
+			
+	//condition to show resources by session
+	$condition_session = '';
+	$condition_add = $state == false ? " WHERE " : " AND ";
+	if ($session_id > 0) {
+		if (api_is_session_in_category($session_id,'20091U') || $both) {						
+			$condition_session = $condition_add . " ( session_id = ".(int)$session_id." OR session_id = 0 ) ";	
+		} else {
+			$condition_session = $condition_add . "  session_id = ".(int)$session_id." ";
+		}		
+	} else {
+		$condition_session = $condition_add . " session_id = 0 ";
+	}
+	return $condition_session;
+
+}
+
+/**
+ * This function returns information about coachs from a course in session 
+ * @param int	- optional, session id
+ * @param string - optional, course code
+ * @return array  -	array containing user_id, lastname, firstname, username.
+ */
+function api_get_coachs_from_course($session_id=0,$course_code='') {
+
+	if (!empty($session_id)) {
+		$session_id = intval($session_id);
+	} else {
+		$session_id = api_get_session_id();		
+	}
+	
+	if (!empty($course_code)) {
+		$course_code = Database::escape_string($course_code);
+	} else {
+		$course_code = api_get_course_id();		
+	}		
+
+	$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
+	$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);	
+	$coachs = array();
+
+	$sql = "SELECT u.user_id,u.lastname,u.firstname,u.username FROM $tbl_user u,$tbl_session_course_user scu
+			WHERE u.user_id = scu.id_user AND scu.id_session = '$session_id' AND scu.course_code = '$course_code' AND scu.status = 2";																				
+	$rs = Database::query($sql,__FILE__,__LINE__);
+	
+	if (Database::num_rows($rs) > 0) {
+		
+		while ($row = Database::fetch_array($rs)) {
+			$coachs[] = $row;
+		}
+		return $coachs;		
+	} else {
+		return false;
+	}
+}
+
+/**
  * Returns the value of a setting from the web-adjustable admin config settings.
  *
  * WARNING true/false are stored as string, so when comparing you need to check e.g.
@@ -1485,28 +1658,47 @@ function api_is_course_tutor() {
 
 /**
  * Check if the current user is a course or session coach
+ * @params int - optional, session id
+ * @params string - optional, course code
  * @return boolean True if current user is a course or session coach
  */
-function api_is_coach() {
+function api_is_coach($session_id = 0, $course_code = '') {
 	global $_user;
 	global $sessionIsCoach;
 
+	if (!empty($session_id)) {
+		$session_id = intval($session_id);
+	} else {
+		$session_id = api_get_session_id();		
+	}
+	
+	if (!empty($course_code)) {
+		$course_code = Database::escape_string($course_code);
+	} else {
+		$course_code = api_get_course_id();		
+	}		
+
 	$sql = "SELECT DISTINCT id, name, date_start, date_end
 							FROM session
-							INNER JOIN session_rel_course
-								ON session_rel_course.id_coach = '".Database::escape_string($_user['user_id'])."'
-							ORDER BY date_start, date_end, name";
-	$result = Database::query($sql, __FILE__, __LINE__);
-	$sessionIsCoach = Database::store_result($result);
-
+							INNER JOIN session_rel_course_rel_user session_rc_ru
+								ON session_rc_ru.id_user = '".Database::escape_string($_user['user_id'])."'
+							WHERE session_rc_ru.course_code = '$course_code' AND session_rc_ru.status = 2 AND session_rc_ru.id_session = '$session_id'		
+							ORDER BY date_start, date_end, name";	
+																									
+	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$sessionIsCoach = api_store_result($result);
+							
 	$sql = "SELECT DISTINCT id, name, date_start, date_end
 							FROM session
 							WHERE session.id_coach =  '".Database::escape_string($_user['user_id'])."'
-							ORDER BY date_start, date_end, name";
-	$result = Database::query($sql, __FILE__, __LINE__);
-	$sessionIsCoach = array_merge($sessionIsCoach, Database::store_result($result));
+							AND id = '$session_id'		
+							ORDER BY date_start, date_end, name";						
+															
+	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$sessionIsCoach = array_merge($sessionIsCoach , api_store_result($result));	
 
-	return count($sessionIsCoach) > 0;
+	return (count($sessionIsCoach) > 0);
+	
 }
 
 /**
@@ -1516,6 +1708,31 @@ function api_is_coach() {
 function api_is_session_admin() {
 	global $_user;
 	return $_user['status'] == SESSIONADMIN;
+}
+
+/**
+ * This function check is a session is assigned into a category 
+ * @param int	- session id
+ * @param string - category name 
+ * @return bool  -	true if is found, otherwise false
+ */
+function api_is_session_in_category($session_id,$category_name) {
+	
+	$session_id = intval($session_id);
+	$category_name = Database::escape_string($category_name);
+	
+	$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+	$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+	
+	$sql = "select 1 FROM $tbl_session WHERE $session_id IN (SELECT s.id FROM $tbl_session s, $tbl_session_category sc  WHERE s.session_category_id = sc.id AND sc.name LIKE '%$category_name' )";
+	$rs = Database::query($sql,__FILE__,__LINE__);
+	
+	if (Database::num_rows($rs) > 0) {
+		return true;
+	} else {
+		return false;
+	}
+
 }
 
 /*
@@ -1679,41 +1896,106 @@ function api_display_debug_info($debug_info) {
 
 // TODO: This is for the permission section.
 /**
- *	Function that removes the need to directly use is_courseAdmin global in
- *	tool scripts. It returns true or false depending on the user's rights in
- *	this particular course.
- *	Optionally checking for tutor and coach roles here allows us to use the
- *	student_view feature altogether with these roles as well.
- *	@param	bool	Whether to check if the user has the tutor role
- *	@param	bool	Whether to check if the user has the coach role
- *
- *	@author Roan Embrechts
- *	@author Patrick Cool
- *	@version 1.1, February 2004
- *	@return boolean, true: the user has the rights to edit, false: he does not
- */
-function api_is_allowed_to_edit($tutor = false, $coach = false) {
+*	Function that removes the need to directly use is_courseAdmin global in
+*	tool scripts. It returns true or false depending on the user's rights in
+*	this particular course.
+*	Optionally checking for tutor and coach roles here allows us to use the
+*	student_view feature altogether with these roles as well.
+*	@param	bool	Whether to check if the user has the tutor role
+*	@param	bool	Whether to check if the user has the coach role
+*	@param	bool	Whether to check if the user has the session coach role
+*
+*	@author Roan Embrechts
+*	@author Patrick Cool
+*	@version 1.1, February 2004
+*	@return boolean, true: the user has the rights to edit, false: he does not
+*/
+
+function api_is_allowed_to_edit($tutor=false,$coach=false,$session_coach = false) {
+	
 	$is_courseAdmin = api_is_course_admin() || api_is_platform_admin();
-	if (!$is_courseAdmin && $tutor == true) {	//if we also want to check if the user is a tutor...
+	if (!$is_courseAdmin && $tutor == true) {	//if we also want to check if the user is a tutor...	    
 		$is_courseAdmin = $is_courseAdmin || api_is_course_tutor();
 	}
 	if (!$is_courseAdmin && $coach == true) {	//if we also want to check if the user is a coach...';
-		$is_courseAdmin = $is_courseAdmin || api_is_course_coach();
+
+		// check if session visibility is read only for coachs
+		$is_allowed_coach_to_edit = api_is_course_coach();
+		$my_session_id = api_get_session_id();
+		$session_visibility = api_get_session_visibility($my_session_id);				
+		if ($session_visibility==SESSION_VISIBLE_READ_ONLY) {
+			$is_allowed_coach_to_edit = false;
+		}		
+					
+		if (api_get_setting('allow_coach_to_edit_course_session') == 'true') { // check if coach is allowed to edit a course
+			$is_courseAdmin = $is_courseAdmin || $is_allowed_coach_to_edit;
+		} else {
+			$is_courseAdmin = $is_courseAdmin;
+		}				
+		
 	}
+	if (!$is_courseAdmin && $session_coach == true) {	
+		$is_courseAdmin = $is_courseAdmin || api_is_coach();
+	}
+	
 	if (api_get_setting('student_view_enabled') == 'true') {	//check if the student_view is enabled, and if so, if it is activated
-		$is_allowed = $is_courseAdmin && $_SESSION['studentview'] != 'studentview';
+		$is_allowed = $is_courseAdmin && $_SESSION['studentview'] != "studentview";
 		return $is_allowed;
+	} else {
+		return $is_courseAdmin;
 	}
-	return $is_courseAdmin;
 }
 
 /**
- * this fun
- * @param $tool the tool we are checking ifthe user has a certain permission
- * @param $action the action we are checking (add, edit, delete, move, visibility)
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version 1.0
- */
+* Checks if a student can edit contents in a session depending 
+* on the session visibility  
+* @param	bool	Whether to check if the user has the tutor role
+* @param	bool	Whether to check if the user has the coach role
+* @return boolean, true: the user has the rights to edit, false: he does not
+*/
+function api_is_allowed_to_session_edit($tutor=false,$coach=false) {
+	if (api_is_allowed_to_edit($tutor, $coach)) {
+		// if I'm a teacher, I will return true in order to not affect the normal behaviour of Dokeos tools	
+		return true;
+	} else {
+		if (api_get_session_id()==0) {
+			// i'm not in a session so i will return true to not affect the normal behaviour of Dokeos tools			
+			return true;
+		} else {
+			//I'm in a session and I'm a student 		
+			$session_id= api_get_session_id();
+			// Get the session visibility
+			$session_visibility = api_get_session_visibility($session_id);	//if 0 the session is still available 
+			if ($session_visibility!=0) {
+				//@todo we could load the session_rel_course_rel_user permission to increase the level of detail
+				//echo api_get_user_id();
+				//echo api_get_course_id();
+								
+				switch($session_visibility) { 
+					case SESSION_VISIBLE_READ_ONLY: //1
+					return false;
+					break;
+					case SESSION_VISIBLE:			//2
+					return true;
+					break;
+					case SESSION_INVISIBLE:			//3
+					return false;
+					break;
+				}
+			} else {
+				return true;
+			}
+		}
+	}
+}
+
+/**
+* Checks whether the user is allowed in a specific tool for a specific action
+* @param $tool the tool we are checking if the user has a certain permission
+* @param $action the action we are checking (add, edit, delete, move, visibility)
+* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @version 1.0
+*/
 function api_is_allowed($tool, $action, $task_id = 0) {
 	global $_course;
 	global $_user;
@@ -1722,9 +2004,9 @@ function api_is_allowed($tool, $action, $task_id = 0) {
 		return true;
 	}
 	//if(!$_SESSION['total_permissions'][$_course['code']] and $_course)
-	if (is_array($_course) and count($_course) > 0) {
-		require_once api_get_path(SYS_CODE_PATH).'permissions/permissions_functions.inc.php';
-		require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+	if (is_array($_course) and count($_course)>0) {
+		require_once(api_get_path(SYS_CODE_PATH) . 'permissions/permissions_functions.inc.php');
+		require_once(api_get_path(LIBRARY_PATH) . "/groupmanager.lib.php");
 
 		// getting the permissions of this user
 		if ($task_id == 0) {
@@ -1774,10 +2056,12 @@ function api_is_allowed($tool, $action, $task_id = 0) {
 	// so there is no need to requery everything.
 	//my_print_r($_SESSION['total_permissions'][$_course['code']][$tool]);
 	if (is_array($_SESSION['total_permissions'][$_course['code']][$tool])) {
-		return in_array($action, $_SESSION['total_permissions'][$_course['code']][$tool]);
+		if (in_array($action, $_SESSION['total_permissions'][$_course['code']][$tool])) {
+			return true;
+		} else {
+			return false;
+		}
 	}
-
-	// TODO: Here the finction returns null. Is this intended behaviour?
 }
 
 /**
@@ -1963,7 +2247,9 @@ function api_get_item_visibility($_course, $tool, $id) {
  * @version January 2005
  * @desc update the item_properties table (if entry not exists, insert) of the course
  */
-function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $user_id, $to_group_id = 0, $to_user_id = null, $start_visible = 0, $end_visible = 0) {
+function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $user_id, $to_group_id = 0, $to_user_id = NULL, $start_visible = 0, $end_visible = 0, $session_id = 0) {
+	
+	// definition of variables
 	$tool = Database::escape_string($tool);
 	$item_id = Database::escape_string($item_id);
 	$lastedit_type = Database::escape_string($lastedit_type);
@@ -1972,19 +2258,43 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 	$to_user_id = Database::escape_string($to_user_id);
 	$start_visible = Database::escape_string($start_visible);
 	$end_visible = Database::escape_string($end_visible);
-	$to_filter = '';
+	$start_visible = ($start_visible == 0) ? "0000-00-00 00:00:00" : $start_visible;
+	$end_visible = ($end_visible == 0) ? "0000-00-00 00:00:00" : $end_visible;
+	$to_filter = "";
 	$time = time();
-	$time = date('Y-m-d H:i:s', $time);
-	$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
-	if ($to_user_id <= 0) {
-		$to_user_id = null; //no to_user_id set
+	$time = date("Y-m-d H:i:s", $time);
+	if (!empty($session_id)) {
+		$session_id = intval($session_id);
 	}
-	$start_visible = ($start_visible == 0) ? '0000-00-00 00:00:00' : $start_visible;
-	$end_visible = ($end_visible == 0) ? '0000-00-00 00:00:00' : $end_visible;
+	
+	// Definition of tables
+	$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY,$_course['dbName']);		
+		
+	if ($to_user_id <= 0) {
+		$to_user_id = NULL; //no to_user_id set
+	}
+	
+	if (!is_null($to_user_id)) {
+		// $to_user_id has more priority than $to_group_id
+		$to_field = "to_user_id";
+		$to_value = $to_user_id;
+	} else {
+		// $to_user_id is not set	
+		$to_field = "to_group_id";
+		$to_value = $to_group_id;
+	}	
+	
 	// set filters for $to_user_id and $to_group_id, with priority for $to_user_id
-	$filter = "tool='$tool' AND ref='$item_id'";
-	if ($item_id == '*') {
-		$filter = "tool='$tool' AND visibility<>'2'"; // for all (not deleted) items of the tool
+	
+	$condition_session = "";
+	if (!empty($session_id)) {		
+		$condition_session = " AND id_session = '$session_id' ";		
+	}
+
+	$filter = "tool='$tool' AND ref='$item_id' $condition_session ";	
+	
+	if ($item_id == "*") {
+		$filter = "tool='$tool' AND visibility<>'2' $condition_session"; // for all (not deleted) items of the tool
 	}
 	// check if $to_user_id and $to_group_id are passed in the function call
 	// if both are not passed (both are null) then it is a message for everybody and $to_group_id should be 0 !
@@ -1992,32 +2302,90 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 		$to_group_id = 0;
 	}
 	if (!is_null($to_user_id)) {
-		$to_filter = " AND to_user_id='$to_user_id'"; // set filter to intended user
+		$to_filter = " AND to_user_id='$to_user_id' $condition_session"; // set filter to intended user
 	} else {
 		if (($to_group_id != 0) && $to_group_id == strval(intval($to_group_id))) {
-			$to_filter = " AND to_group_id='$to_group_id'"; // set filter to intended group
+			$to_filter = " AND to_group_id='$to_group_id' $condition_session"; // set filter to intended group
 		}
 	}
 	// update if possible
-	$set_type = '';
+	$set_type = "";
 	switch ($lastedit_type) {
-		case 'delete' : // delete = make item only visible for the platform admin
+		case "delete" : // delete = make item only visible for the platform admin
 			$visibility = '2';
-			$sql = "UPDATE $TABLE_ITEMPROPERTY
-										SET lastedit_date='$time', lastedit_user_id='$user_id', visibility='$visibility' $set_type
-										WHERE $filter";
+			
+			if (!empty($session_id)) {
+																	
+				// check if session id already exist into itemp_properties for updating visibility or add it  
+				$sql = "select id_session FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref='$item_id' AND id_session = '$session_id'";
+				$rs = Database::query($sql,__FILE__,__LINE__);
+				if (Database::num_rows($rs) > 0) {					
+					$sql = "UPDATE $TABLE_ITEMPROPERTY
+							SET lastedit_type='".str_replace('_', '', ucwords($tool))."Deleted', lastedit_date='$time', lastedit_user_id='$user_id', visibility='$visibility', id_session = '$session_id' $set_type
+							WHERE $filter";
+				} else {
+										
+					$sql = "INSERT INTO $TABLE_ITEMPROPERTY
+						   		  			(tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, id_session)
+						         	VALUES 	('$tool','$item_id','$time', '$user_id', '$time',	'$lastedit_type','$user_id', '$to_value', '$visibility', '$start_visible','$end_visible', '$session_id')";								         						         		
+				}
+									
+			}	else {				
+				$sql = "UPDATE $TABLE_ITEMPROPERTY
+										SET lastedit_type='".str_replace('_', '', ucwords($tool))."Deleted', lastedit_date='$time', lastedit_user_id='$user_id', visibility='$visibility' $set_type
+										WHERE $filter";	
+			}
+						
 			break;
-		case 'visible' : // change item to visible
+		case "visible" : // change item to visible 
 			$visibility = '1';
-			$sql = "UPDATE $TABLE_ITEMPROPERTY
-										SET lastedit_date='$time', lastedit_user_id='$user_id', visibility='$visibility' $set_type
-										WHERE $filter";
+			
+			if (!empty($session_id)) {
+																	
+				// check if session id already exist into itemp_properties for updating visibility or add it  
+				$sql = "select id_session FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref='$item_id' AND id_session = '$session_id'";
+				$rs = Database::query($sql,__FILE__,__LINE__);
+				if (Database::num_rows($rs) > 0) {					
+					$sql = "UPDATE $TABLE_ITEMPROPERTY
+							SET lastedit_type='".str_replace('_', '', ucwords($tool))."Visible', lastedit_date='$time', lastedit_user_id='$user_id', visibility='$visibility', id_session = '$session_id' $set_type
+							WHERE $filter";
+				} else {
+										
+					$sql = "INSERT INTO $TABLE_ITEMPROPERTY
+						   		  			(tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, id_session)
+						         	VALUES 	('$tool','$item_id','$time', '$user_id', '$time',	'$lastedit_type','$user_id', '$to_value', '$visibility', '$start_visible','$end_visible', '$session_id')";								         						         		
+				}
+									
+			}	else {				
+				$sql = "UPDATE $TABLE_ITEMPROPERTY
+										SET lastedit_type='".str_replace('_', '', ucwords($tool))."Visible', lastedit_date='$time', lastedit_user_id='$user_id', visibility='$visibility' $set_type
+										WHERE $filter";	
+			}												
+										
 			break;
-		case 'invisible' : // change item to invisible
-			$visibility = '0';
-			$sql = "UPDATE $TABLE_ITEMPROPERTY
-										SET lastedit_date='$time', lastedit_user_id='$user_id', visibility='$visibility' $set_type
-										WHERE $filter";
+		case "invisible" : // change item to invisible
+			$visibility = '0';			
+			if (!empty($session_id)) {				
+				// check if session id already exist into itemp_properties for updating visibility or add it  
+				$sql = "Select id_session FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref='$item_id' AND id_session = '$session_id'";
+				$rs = Database::query($sql,__FILE__,__LINE__);
+				if (Database::num_rows($rs) > 0) {					
+					$sql = "UPDATE $TABLE_ITEMPROPERTY
+							SET lastedit_type='".str_replace('_', '', ucwords($tool))."Invisible', lastedit_date='$time', lastedit_user_id='$user_id', visibility='$visibility', id_session = '$session_id' $set_type
+							WHERE $filter";										
+				} else {
+
+					$sql = "INSERT INTO $TABLE_ITEMPROPERTY
+						   		  			(tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id,$to_field, visibility, start_visible, end_visible, id_session)
+						         	VALUES 	('$tool','$item_id','$time', '$user_id', '$time',	'$lastedit_type','$user_id', '$to_value', '$visibility', '$start_visible','$end_visible', '$session_id')";											
+				}
+
+			} else {
+				$sql = "UPDATE $TABLE_ITEMPROPERTY
+										SET lastedit_type='".str_replace('_', '', ucwords($tool))."Invisible', lastedit_date='$time', lastedit_user_id='$user_id', visibility='$visibility' $set_type
+										WHERE $filter";				
+			}
+									
 			break;
 		default : // item will be added or updated
 			$set_type = ", lastedit_type='$lastedit_type' ";
@@ -2028,27 +2396,19 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 										WHERE $filter";
 	}
 
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = mysql_query($sql);
 	// insert if no entries are found (can only happen in case of $lastedit_type switch is 'default')
-	if (Database::affected_rows() == 0) {
-		if (!is_null($to_user_id)) {
-			// $to_user_id has more priority than $to_group_id
-			$to_field = 'to_user_id';
-			$to_value = $to_user_id;
-		} else {
-			// $to_user_id is not set
-			$to_field = 'to_group_id';
-			$to_value = $to_group_id;
-		}
+	if (mysql_affected_rows() == 0) {
+		
 		$sql = "INSERT INTO $TABLE_ITEMPROPERTY
-						(tool, ref, insert_date, insert_user_id, lastedit_date, lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible)
-						VALUES ('$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible')";
-		$res = Database::query($sql, __FILE__, __LINE__);
+						   		  			(tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type,   lastedit_user_id,$to_field,  visibility,   start_visible,   end_visible, id_session)
+						         	VALUES 	('$tool','$item_id','$time',    '$user_id',	   '$time',		 '$lastedit_type','$user_id',	   '$to_value','$visibility','$start_visible','$end_visible', '$session_id')";
+		$res = mysql_query($sql);
 		if (!$res) {
-			return false;
+			return FALSE;
 		}
 	}
-	return true;
+	return TRUE;
 }
 
 /*
@@ -2587,6 +2947,54 @@ function rmdirr($dirname) {
 		error_log(__FILE__.' line '.__LINE__.': '.((bool)ini_get('track_errors') ? $php_errormsg : 'error not recorded because track_errors is off in your php.ini'), 0);
 	}
 	return $res;
+}
+
+function copy_folder_course_session($pathname, $base_path_document,$session_id,$course_info, $document)
+{
+	$table = Database :: get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
+	$session_id = intval($session_id);
+    // Check if directory already exists
+    if (is_dir($pathname) || empty($pathname)) {
+        return true;
+    }
+ 
+    // Ensure a file does not already exist with the same name
+    if (is_file($pathname)) {
+        trigger_error('mkdirr() File exists', E_USER_WARNING);
+        return false;
+    }
+
+    $folders = explode(DIRECTORY_SEPARATOR,str_replace($base_path_document.DIRECTORY_SEPARATOR,'',$pathname));
+
+    $new_pathname = $base_path_document;
+    $path = ''; 
+
+    foreach ($folders as $folder) {
+	$new_pathname .= DIRECTORY_SEPARATOR.$folder;
+	$path .= DIRECTORY_SEPARATOR.$folder;
+
+	if (!file_exists($new_pathname)) {
+		
+		$sql = "SELECT * FROM $table WHERE path = '$path' AND filetype = 'folder' AND session_id = '$session_id'";
+		$rs1  = Database::query($sql,__FILE__,__LINE__);
+		$num_rows = Database::num_rows($rs1);
+
+		if ($num_rows == 0) { 		
+			if (mkdir($new_pathname)) {
+				$perm = api_get_setting('permissions_for_new_directories');
+				$perm = octdec(!empty($perm)?$perm:'0770');
+				chmod($new_pathname,$perm);
+			}		
+			// Insert new folder with destination session_id 
+			$sql = "INSERT INTO ".$table." SET path = '$path', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string(basename($new_pathname))."' ,filetype='folder', size= '0', session_id = '$session_id'";
+			Database::query($sql, __FILE__, __LINE__);
+			$document_id = Database::insert_id();					
+			api_item_property_update($course_info,TOOL_DOCUMENT,$document_id,'FolderCreated',api_get_user_id(),0,0);
+		}
+	} 
+
+    } // en foreach
+
 }
 
 // TODO: chmodr() is a better name. Some corrections are needed.

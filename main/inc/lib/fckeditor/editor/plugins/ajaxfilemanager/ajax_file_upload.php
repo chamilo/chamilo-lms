@@ -90,8 +90,9 @@
 									}
 
 									$doc_id = add_document($_course, $dokeosFolder,'file', $dokeosFileSize , $dokeosFile); //get Dokeos
-
-									api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id);//get Dokeos
+									$current_session_id = api_get_session_id();
+									api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);//get Dokeos
+									
 								}
 
 								// end bridge

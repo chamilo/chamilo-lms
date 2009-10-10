@@ -1004,8 +1004,8 @@ abstract class Question
 		$editor_config = array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '150');
 		if(is_array($fck_config)){
 			$editor_config = array_merge($editor_config, $fck_config);
-		}
-		if(!api_is_allowed_to_edit()) $editor_config['UserStatus'] = 'student';
+		}		
+		if(!api_is_allowed_to_edit(null,true)) $editor_config['UserStatus'] = 'student';
 
 		$form -> addElement('html','<div class="row">
 		<div class="label"></div>

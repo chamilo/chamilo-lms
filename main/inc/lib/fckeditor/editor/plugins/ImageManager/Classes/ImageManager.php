@@ -603,7 +603,8 @@ class ImageManager
 				}
 
 				$doc_id = add_document($_course, $document_path,'file', $dokeosFileSize , $dokeosFile); //get Dokeos
-				api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id);//get Dokeos
+				$current_session_id = api_get_session_id();																								
+				api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);//get Dokeos	
 			}
 
 			/*
@@ -843,7 +844,8 @@ class ImageManager
 					$new_dir  = substr($fullpath, strlen($base_dir),-1); //
 					$created_dir = create_unexisting_directory($_course, api_get_user_id(),0,0, $base_dir, $new_dir,$newDir);
 					$doc_id = DocumentManager::get_document_id($_course, $new_dir );
-					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id());
+					$current_session_id = api_get_session_id();							
+					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(),null,null,null,null,$current_session_id);
 				}
 				else
 				{

@@ -109,8 +109,10 @@ function addlinkcategory($type)
 			list ($orderMax) = Database::fetch_row($result);
 
 			$order = $orderMax +1;
-
-			$sql = "INSERT INTO ".$tbl_link." (url, title, description, category_id,display_order,on_homepage,target) VALUES ('$urllink','$title','$description','$selectcategory','$order', '$onhomepage','$target')";
+			
+			$session_id = api_get_session_id();
+			
+			$sql = "INSERT INTO ".$tbl_link." (url, title, description, category_id, display_order, on_homepage, target, session_id) VALUES ('$urllink','$title','$description','$selectcategory','$order', '$onhomepage','$target','$session_id')";
 			$catlinkstatus = get_lang('LinkAdded');
 			Database::query($sql, __FILE__, __LINE__);
 			$link_id = Database::insert_id();
@@ -208,8 +210,10 @@ function addlinkcategory($type)
 			list ($orderMax) = Database::fetch_row($result);
 
 			$order = $orderMax +1;
-
-			$sql = "INSERT INTO ".$tbl_categories." (category_title, description, display_order) VALUES ('".Security::remove_XSS($category_title)."','".Security::remove_XSS($description)."', '$order')";
+			
+			$session_id = api_get_session_id();
+			
+			$sql = "INSERT INTO ".$tbl_categories." (category_title, description, display_order, session_id) VALUES ('".Security::remove_XSS($category_title)."','".Security::remove_XSS($description)."', '$order', '$session_id')";
 			Database::query($sql, __FILE__, __LINE__);
 
 			$catlinkstatus = get_lang('CategoryAdded');
@@ -551,37 +555,43 @@ function change_visibility($id, $scope)
 */
 function showlinksofcategory($catid)
 {
-	global $is_allowed, $charset, $urlview, $up, $down;
+	global $is_allowed, $charset, $urlview, $up, $down, $_user;
 	$tbl_link = Database :: get_course_table(TABLE_LINK);
 
 	$TABLE_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
-	$sqlLinks = "SELECT * FROM ".$tbl_link." link, ".$TABLE_ITEM_PROPERTY." itemproperties WHERE itemproperties.tool='".TOOL_LINK."' AND link.id=itemproperties.ref AND  link.category_id='".$catid."' AND (itemproperties.visibility='0' OR itemproperties.visibility='1')ORDER BY link.display_order DESC";
+	
+	//condition for the session
+	$session_id = api_get_session_id();
+	$condition_session = api_get_session_condition($session_id);
+	
+	$sqlLinks = "SELECT * FROM ".$tbl_link." link, ".$TABLE_ITEM_PROPERTY." itemproperties WHERE itemproperties.tool='".TOOL_LINK."' AND link.id=itemproperties.ref AND  link.category_id='".$catid."' AND (itemproperties.visibility='0' OR itemproperties.visibility='1') $condition_session ORDER BY link.display_order DESC";
 	$result = Database::query($sqlLinks);
 	$numberoflinks = Database::num_rows($result);
 
 	echo '<table class="data_table" width="100%">';
 	$i = 1;
-	while ($myrow = Database::fetch_array($result))
-	{
+	while ($myrow = Database::fetch_array($result)) {
+		//validacion when belongs to a session
+		$session_img = api_get_session_image($myrow['session_id'], $_user['status']);
+		
 		if($i%2==0) $css_class = 'row_odd';
 		else $css_class = 'row_even';
 
 		$myrow[3] = text_filter($myrow[3]);
 		if ($myrow['visibility'] == '1')
 		{
-			echo "<tr class='".$css_class."'>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", "<img src=\"../../main/img/file_html.gif\" border=\"0\" alt=\"".get_lang('Link')."\"/>", "</a></td>", "<td width=\"80%\" valign=\"top\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", api_htmlentities($myrow[2],ENT_QUOTES,$charset), "</a>\n", "<br/>", $myrow[3], "";
+			echo "<tr class='".$css_class."'>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", "<img src=\"../../main/img/file_html.gif\" border=\"0\" alt=\"".get_lang('Link')."\"/>", "</a></td>", "<td width=\"80%\" valign=\"top\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", api_htmlentities($myrow[2],ENT_QUOTES,$charset), "</a>", $session_img , "<br/>", $myrow[3], "";
 		}
 		else
 		{
-			if (api_is_allowed_to_edit())
+			if (api_is_allowed_to_edit(null,true))
 			{
-				echo "<tr class='".$css_class."'>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\" class=\"invisible\">", Display::return_icon('file_html_na.gif', get_lang('Link')),"</a></td>", "<td width=\"80%\" valign=\"top\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\"  class=\"invisible\">", api_htmlentities($myrow[2],ENT_QUOTES,$charset), "</a>\n", "<br />", $myrow[3], "";
+				echo "<tr class='".$css_class."'>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\" class=\"invisible\">", Display::return_icon('file_html_na.gif', get_lang('Link')),"</a></td>", "<td width=\"80%\" valign=\"top\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\"  class=\"invisible\">", api_htmlentities($myrow[2],ENT_QUOTES,$charset), "</a>\n", $session_img , "<br />", $myrow[3], "";
 			}
 		}
 
 		echo '<td style="text-align:center;">';
-		if (api_is_allowed_to_edit())
+		if (api_is_allowed_to_edit(null,true))
 		{
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=editlink&amp;category=".(!empty($category)?$category:'')."&amp;id=".$myrow[0]." &amp;urlview=$urlview \"  title=\"".get_lang('Modify')."\"  >", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"", get_lang('Modify'), "\" />", "</a>";
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=deletelink&amp;id=", $myrow[0], "&amp;urlview=", $urlview, "\" onclick=\"javascript:if(!confirm('".get_lang('LinkDelconfirm')."')) return false;\"  title=\"".get_lang('Delete')."\" >", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"", get_lang('Delete'), "\" />", "</a>";

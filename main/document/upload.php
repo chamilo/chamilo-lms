@@ -168,7 +168,9 @@ function get_text_content($doc_path, $doc_mime) {
 }
 
 // variables
-$is_allowed_to_edit = api_is_allowed_to_edit();
+	
+$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+
 
 $courseDir   = $_course['path']."/document";
 $sys_course_path = api_get_path(SYS_COURSE_PATH);

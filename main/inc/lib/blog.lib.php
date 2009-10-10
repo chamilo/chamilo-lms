@@ -129,6 +129,7 @@ class Blog {
 	public static function create_blog ($title, $subtitle) {
 		global $_user;
 		$current_date=date('Y-m-d H:i:s',time());
+		$session_id = api_get_session_id();		
 		// Tabel definitions
 		$tbl_blogs 			= Database::get_course_table(TABLE_BLOGS);
 		$tbl_tool 			= Database::get_course_table(TABLE_TOOL_LIST);
@@ -141,10 +142,15 @@ class Blog {
 		$info_count=Database::result($res,0,0);
 		if ($info_count==0) {
 			// Create the blog
-			$sql = "INSERT INTO $tbl_blogs (blog_name, blog_subtitle, date_creation, visibility )
-						VALUES ('".Database::escape_string($title)."', '".Database::escape_string($subtitle)."', '".$current_date."', '1');";
+			$sql = "INSERT INTO $tbl_blogs (blog_name, blog_subtitle, date_creation, visibility, session_id )
+						VALUES ('".Database::escape_string($title)."', '".Database::escape_string($subtitle)."', '".$current_date."', '1', '$session_id');";
 			Database::query($sql, __FILE__, __LINE__);
 			$this_blog_id = Database::get_last_insert_id();
+
+			if ($this_blog_id > 0) {
+				//insert into item_property
+				api_item_property_update(api_get_course_info(), TOOL_BLOGS, $this_blog_id, 'BlogAdded', api_get_user_id());
+			}
 
 			// Make first post. :)
 			$sql = "INSERT INTO $tbl_blogs_posts (title, full_text, date_creation, blog_id, author_id )
@@ -152,8 +158,8 @@ class Blog {
 			Database::query($sql, __FILE__, __LINE__);
 
 			// Put it on course homepage
-			$sql = "INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool)
-						VALUES ('".Database::escape_string($title)."','blog/blog.php?blog_id=".(int)$this_blog_id."','blog.gif','1','0','pastillegris.gif',0)";
+			$sql = "INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool, session_id)
+						VALUES ('".Database::escape_string($title)."','blog/blog.php?blog_id=".(int)$this_blog_id."','blog.gif','1','0','pastillegris.gif',0,'$session_id')";
 			Database::query($sql, __FILE__, __LINE__);
 
 			// Subscribe the teacher to this blog
@@ -182,6 +188,9 @@ class Blog {
 		$sql = "UPDATE $tbl_blogs SET blog_name = '".Database::escape_string($title)."',	blog_subtitle = '".Database::escape_string($subtitle)."' WHERE blog_id ='".Database::escape_string((int)$blog_id)."' LIMIT 1";
 		Database::query($sql, __FILE__, __LINE__);
 		$this_blog_id = Database::get_last_insert_id();
+
+		//update item_property (update)
+		api_item_property_update(api_get_course_info(), TOOL_BLOGS, Database::escape_string($blog_id), 'BlogUpdated', api_get_user_id());
 
 		// Update course homepage link
 		$sql = "UPDATE $tbl_tool SET name = '".Database::escape_string($title)."' WHERE link = 'blog/blog.php?blog_id=".Database::escape_string((int)$blog_id)."' LIMIT 1";
@@ -232,6 +241,9 @@ class Blog {
 		// Delete from course homepage
 		$sql = "DELETE FROM $tbl_tool WHERE link = 'blog/blog.php?blog_id=".(int)$blog_id."'";
 		Database::query($sql, __FILE__, __LINE__);
+		
+		//update item_property (delete)
+		api_item_property_update(api_get_course_info(), TOOL_BLOGS, Database::escape_string($blog_id), 'delete', api_get_user_id());
 	}
 
 	/**
@@ -2816,11 +2828,16 @@ class Blog {
 	 * Blog admin | Returns table with blogs in this course
 	 */
 	public static function display_blog_list () {
-		global $charset;
+		global $charset, $_user;
 		// Init
 		$counter = 0;
 
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
+		
+		//condition for the session
+		$session_id = api_get_session_id();
+		$condition_session = api_get_session_condition($session_id, false);
+		
 		$sql = 'SELECT blog_name,blog_subtitle,visibility,blog_id FROM '.$tbl_blogs.' ORDER BY date_creation DESC ';
 		$result = Database::query($sql, __FILE__, __LINE__);
 
@@ -2833,11 +2850,13 @@ class Blog {
 
 		if (is_array($list_info)) {
 			foreach($list_info as $key => $info_log) {
-
+				//validacion when belongs to a session
+				$session_img = api_get_session_image($info_log[4], $_user['status']);
+				
 				$url_start_blog = 'blog.php' ."?". "blog_id=".$info_log[3]. "&amp;".api_get_cidreq();
 				$title = $info_log[0];
     			$image = '<img src="../img/blog.gif" border="0" align="absmiddle" alt="' . $title . '">'."\n";
-    			$list_name = '<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_blog.'">' . $image . '</a></div><a href="'.$url_start_blog.'">' .$title. '</a>' ."\n";
+    			$list_name = '<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_blog.'">' . $image . '</a></div><a href="'.$url_start_blog.'">' .$title. '</a>' . $session_img . "\n";
 
 				$list_body_blog[] = $list_name;
 				$list_body_blog[] = $info_log[1];

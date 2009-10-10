@@ -54,14 +54,18 @@ $cidReset = true; /* Flag forcing the 'current course' reset,
 	Included libraries
 -----------------------------------------------------------
 */
-include_once './main/inc/global.inc.php';
-include_once api_get_path(LIBRARY_PATH).'course.lib.php';
-include_once api_get_path(LIBRARY_PATH).'debug.lib.inc.php';
-include_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
-include_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-include_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once './main/inc/global.inc.php';
+$libpath = api_get_path(LIBRARY_PATH);
+require_once $libpath.'course.lib.php';
+require_once $libpath.'debug.lib.inc.php';
+require_once $libpath.'system_announcements.lib.php';
+require_once $libpath.'groupmanager.lib.php';
+require_once $libpath.'usermanager.lib.php';
 
 api_block_anonymous_users(); // only users who are logged in can proceed
+
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.toggle.js" type="text/javascript" language="javascript"></script>';
 
 /*
 -----------------------------------------------------------
@@ -278,6 +282,19 @@ function display_edit_course_list_links() {
 }
 
 /**
+ * Show history sessions
+ *
+ */
+function display_history_course_session() {
+	if (isset($_GET['history']) && intval($_GET['history']) == 1) {
+		echo "<li><a href=\"user_portal.php\">".get_lang('DisplayTrainingList')."</a></li>";
+	} else {
+		echo "<li><a href=\"user_portal.php?history=1\">".get_lang('HistoryTrainingSessions')."</a></li>";	
+	}
+	
+}
+
+/**
 *	Displays a digest e.g. short summary of new agenda and announcements items.
 *	This used to be displayed in the right hand menu, but is now
 *	disabled by default (see config settings in this file) because most people like
@@ -367,10 +384,26 @@ function display_digest($toolsList, $digest, $orderKey, $courses) {
  * @todo move code for what's new icons to a separate function to clear things up
  * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
  */
-function get_logged_user_course_html($my_course) {
+function get_logged_user_course_html($course, $session_id = 0, $class='courses') {
 	global $charset;
 	global $nosession;
-
+			
+	$current_uid = api_get_user_id();
+	$info = api_get_course_info($course['code']);
+	$status_course = CourseManager::get_user_in_course_status($current_uid, $course['code']);	
+			
+	if (!is_array($course['code'])) {
+		$my_course = api_get_course_info($course['code']);
+		$my_course['k'] = $my_course['id'];
+		$my_course['db'] = $my_course['dbName'];
+		$my_course['c'] = $my_course['official_code'];
+		$my_course['i'] = $my_course['name'];
+		$my_course['d'] = $my_course['path'];
+		$my_course['t'] = $my_course['titular'];
+		$my_course['id_session'] = $session_id;
+		$my_course['status'] = ((empty($session_id))?$status_course:5);
+	}
+ 	
 	if (api_get_setting('use_session_mode')=='true' && !$nosession) {
 		global $now, $date_start, $date_end;
 	}
@@ -382,6 +415,7 @@ function get_logged_user_course_html($my_course) {
 	//$statistic_database = Database::get_statistic_database();
 	$main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
 	$tbl_session 			= Database :: get_main_table(TABLE_MAIN_SESSION);
+	$tbl_session_category 	= Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 	$course_database = $my_course['db'];
 	$course_tool_table 			= Database :: get_course_table(TABLE_TOOL_LIST, $course_database);
 	$tool_edit_table 			= Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_database);
@@ -403,7 +437,7 @@ function get_logged_user_course_html($my_course) {
 
 	//function logic - act on the data
 	$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($my_course['k']);
-	if ($is_virtual_course) {
+	if ($is_virtual_course) { 
 		// If the current user is also subscribed in the real course to which this
 		// virtual course is linked, we don't need to display the virtual course entry in
 		// the course list - it is combined with the real course entry.
@@ -422,41 +456,42 @@ function get_logged_user_course_html($my_course) {
 		$course_display_title = $course_title;
 		$course_display_code = $course_visual_code;
 	}
-
-	$s_course_status=$my_course['s'];
-
-	$s_htlm_status_icon = '';
-
+	
+	$s_course_status = $my_course['status'];
+	$is_coach = api_is_coach($my_course['id_session'],$course['code']);
+	
+	$s_htlm_status_icon = "";
+	
 	if ($s_course_status == 1) {
 		$s_htlm_status_icon=Display::return_icon('teachers.gif', get_lang('Teacher'));
 	}
-	if ($s_course_status == 2) {
+	if ($s_course_status == 2 || ($is_coach && $s_course_status != 1)) {		
 		$s_htlm_status_icon=Display::return_icon('coachs.gif', get_lang('GeneralCoach'));
 	}
-	if ($s_course_status == 5) {
-		$s_htlm_status_icon = Display::return_icon('students.gif', get_lang('Student'));
+	if ($s_course_status == 5 && !$is_coach) {
+		$s_htlm_status_icon=Display::return_icon('students.gif', get_lang('Student'));
 	}
 
 	//display course entry
-	$result .= "\n\t";
-	$result .= '<li class="courses"><div class="coursestatusicons">'.$s_htlm_status_icon.'</div>';
+	$result.="\n\t";
+	$result .= '<li class="'.$class.'"><div class="coursestatusicons">'.$s_htlm_status_icon.'</div>';
 	//show a hyperlink to the course, unless the course is closed and user is not course admin
-	if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
-		if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
-			if (empty($my_course['id_session'])) {
+	if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {			
+		if(api_get_setting('use_session_mode')=='true' && !$nosession) {
+			if(empty($my_course['id_session'])) {
 				$my_course['id_session'] = 0;
 			}
-			if($user_in_course_status == COURSEMANAGER || ($date_start <= $now && $date_end >= $now) || $date_start == '0000-00-00') {
+			if($user_in_course_status == COURSEMANAGER || ($date_start <= $now && $date_end >= $now) || $date_start=='0000-00-00') {				
 				$result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$my_course['id_session'].'">'.$course_display_title.'</a>';
 			}
 		} else {
 			$result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/">'.$course_display_title.'</a>';
 		}
 	} else {
-		$result .= $course_display_title.'  '.get_lang('CourseClosed');
+		$result .= $course_display_title." "." ".get_lang('CourseClosed')."";
 	}
 	// show the course_code and teacher if chosen to display this
-	if (api_get_setting('display_coursecode_in_courselist') == 'true' || api_get_setting('display_teacher_in_courselist') == 'true') {
+	if (api_get_setting('display_coursecode_in_courselist') == 'true' OR get_setting('display_teacher_in_courselist') == 'true') {
 		$result .= '<br />';
 	}
 	if (api_get_setting('display_coursecode_in_courselist') == 'true') {
@@ -465,9 +500,31 @@ function get_logged_user_course_html($my_course) {
 	if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
 		$result .= ' &ndash; ';
 	}
-	if (api_get_setting('display_teacher_in_courselist') == 'true') {
-		$result .= $course_teacher;
-		if (!empty($course_teacher_email)) {
+	if (api_get_setting('display_teacher_in_courselist') == 'true') {				
+		
+		
+		if (api_get_setting('use_session_mode')=='true' && !$nosession) {
+			$coachs_course = api_get_coachs_from_course($my_course['id_session'],$course['code']);
+			$course_coachs = array();
+			if (is_array($coachs_course)) {
+				foreach ($coachs_course as $coach_course) {
+					$course_coachs[] = $coach_course['lastname'].' '.$coach_course['firstname'];					
+				}
+			}
+
+			if ($s_course_status == 1) {
+				$result .= $course_teacher;
+			}
+			if ($s_course_status == 2 || ($is_coach && $s_course_status != 1)) {		
+				$result .= get_lang('Coachs').': '.implode(', ',$course_coachs);
+			}
+		
+										
+		} else {
+			$result .= $course_teacher;
+		}
+		
+		if(!empty($course_teacher_email)) {
 			$result .= ' ('.$course_teacher_email.')';
 		}
 	}
@@ -478,6 +535,7 @@ function get_logged_user_course_html($my_course) {
 	$result .= show_notification($my_course);
 
 	if ((CONFVAL_showExtractInfo == SCRIPTVAL_InCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both) && $nbDigestEntries > 0) {
+		
 		reset($digest);
 		$result .= '
 					<ul>';
@@ -524,18 +582,21 @@ function get_logged_user_course_html($my_course) {
 		if (!empty($my_course['session_name'])) {
 
 			// Request for the name of the general coach
-			$sql = 'SELECT lastname, firstname
+			$sql = 'SELECT lastname, firstname,sc.name
 			FROM '.$tbl_session.' ts
 			LEFT JOIN '.$main_user_table .' tu
 			ON ts.id_coach = tu.user_id
-			WHERE ts.id='.(int) $my_course['id_session']. ' LIMIT 1';
+			INNER JOIN '.$tbl_session_category.' sc ON ts.session_category_id = sc.id
+			WHERE ts.id='.(int) $my_course['id_session']. ' LIMIT 1';			
 
 			$rs = Database::query($sql, __FILE__, __LINE__);
-			$sessioncoach = Database::store_result($rs);
+			$sessioncoach = api_store_result($rs);
 			$sessioncoach = $sessioncoach[0];
 
 			$session = array();
 			$session['title'] = $my_course['session_name'];
+			$session_category_id = CourseManager::get_session_category_id_by_session_id($my_course['id_session']);
+			$session['category'] = $sessioncoach['name'];
 			if ( $my_course['date_start']=='0000-00-00' ) {
 				$session['dates'] = get_lang('WithoutTimeLimits');
 				if (api_get_setting('show_session_coach') === 'true') {
@@ -547,13 +608,91 @@ function get_logged_user_course_html($my_course) {
 				if (api_get_setting('show_session_coach') === 'true') {
 					$session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($sessioncoach['firstname'], $sessioncoach['lastname']);
 				}
-				$active = $date_start <= $now && $date_end >= $now;
+				$active = ($date_start <= $now && $date_end >= $now)?true:false;
 			}
 		}
-		$output = array ($my_course['user_course_cat'], $result, $my_course['id_session'], $session, 'active' => $active);
+		$output = array ($my_course['user_course_cat'], $result, $my_course['id_session'], $session, 'active'=>$active,'session_category_id'=>$session_category_id);
 	} else {
 		$output = array ($my_course['user_course_cat'], $result);
 	}
+	
+	return $output;
+}
+
+/**
+ * Get the session box details as an array
+ * @param	int	Session ID
+ * @return	array	Empty array or session array ['title'=>'...','category'=>'','dates'=>'...','coach'=>'...','active'=>true/false,'session_category_id'=>int]
+ */
+function get_session_title_box($session_id) {
+	global $nosession;
+	$output = array();
+	if (api_get_setting('use_session_mode')=='true' && !$nosession) {
+		$main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
+		$tbl_session 			= Database :: get_main_table(TABLE_MAIN_SESSION);
+		$tbl_session_category 		= Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+		$active = false;
+		// Request for the name of the general coach
+		$sql = 
+		'SELECT tu.lastname, tu.firstname, ts.name, ts.date_start, ts.date_end, ts.session_category_id
+		FROM '.$tbl_session.' ts
+		LEFT JOIN '.$main_user_table .' tu
+		ON ts.id_coach = tu.user_id
+		WHERE ts.id='.intval($session_id);
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$session_info = api_store_result($rs);
+		$session_info = $session_info[0];
+		$session = array();
+		$session['title'] = $session_info[2];
+		$session['coach'] = '';
+		if ( $session_info[3]=='0000-00-00' ) {
+			$session['dates'] = get_lang('WithoutTimeLimits');
+			if ( api_get_setting('show_session_coach') === 'true' ) {
+				$session['coach'] = get_lang('GeneralCoach').': '.$session_info[1].' '.$session_info[0];
+			}
+			$active = true;
+		} else {
+			$session ['dates'] = get_lang('From').' '.$session_info[3].' '.get_lang('Until').' '.$session_info[4];
+			if ( api_get_setting('show_session_coach') === 'true' ) {
+				$session['coach'] = get_lang('GeneralCoach').': '.$session_info[1].' '.$session_info[0];
+			}
+			$active = ($date_start <= $now && $date_end >= $now)?true:false;
+		}
+		$session['active'] = $active;
+		$session['session_category_id'] = $session_info[5];
+		$output = $session;
+	}
+	return $output;
+}
+
+/**
+ * Display code for one specific course a logged in user is subscribed to.
+ * Shows a link to the course, what's new icons...
+ *
+ * $my_course['d'] - course directory
+ * $my_course['i'] - course title
+ * $my_course['c'] - visual course code
+ * $my_course['k']   - system course code
+ * $my_course['db']  - course database
+ *
+ * @version 1.0.3
+ * @todo refactor into different functions for database calls | logic | display
+ * @todo replace single-character $my_course['d'] indices
+ * @todo move code for what's new icons to a separate function to clear things up
+ * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
+ */
+function get_global_courses_list($user_id) {
+	//1. get list of sessions the user is subscribed to
+	//2. build an ordered list of session categories and sessions
+	//3. fill this ordered list with course details
+	global $charset;
+	global $nosession;
+
+	if (api_get_setting('use_session_mode')=='true' && !$nosession) {
+		global $now, $date_start, $date_end;
+	}
+	
+	$output = array();
 	return $output;
 }
 
@@ -619,7 +758,10 @@ function show_notification($my_course) {
 			$type = $notification['lastedit_type'];
 			//$notification[image]=str_replace(".png","gif",$notification[image]);
 			//$notification[image]=str_replace(".gif","_s.gif",$notification[image]);
-			$retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$my_course['k'].'&amp;ref='.$notification['ref'].'&amp;gidReq='.$notification['to_group_id'].'">'.'<img title="-- '.get_lang(ucfirst($notification['tool'])).' -- '.get_lang('_title_notification').": ".get_lang($type)." ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="absbottom" /></a>&nbsp;';
+			if(empty($my_course['id_session'])) {
+				$my_course['id_session'] = 0;
+			}
+			$retvalue .= '<a href="'.api_get_path(WEB_CODE_PATH).$notification['link'].'?cidReq='.$my_course['k'].'&amp;ref='.$notification['ref'].'&amp;gidReq='.$notification['to_group_id'].'&amp;id_session='.$my_course['id_session'].'">'.'<img title="-- '.get_lang(ucfirst($notification['tool'])).' -- '.get_lang('_title_notification').": ".get_lang($type)." ($lastDate).\"".' src="'.api_get_path(WEB_CODE_PATH).'img/'.$notification['image'].'" border="0" align="absbottom" /></a>&nbsp;';
 		}
 	}
 	return $retvalue;
@@ -690,9 +832,31 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 	$pageIncluded = true;
 } else {
 	/*--------------------------------------
-				DISPLAY COURSES
-	  --------------------------------------*/
-
+	              DISPLAY COURSES
+	   --------------------------------------*/
+	// compose a structured array of session categories, sessions and courses
+	// for the current user
+	require_once $libpath.'sessionmanager.lib.php';
+	
+	if (isset($_GET['history']) && intval($_GET['history']) == 1) {		
+		$courses_tree = UserManager::get_sessions_by_category($_user['user_id'],true,true);
+	} else {
+		$courses_tree = UserManager::get_sessions_by_category($_user['user_id'],true);
+	}
+	foreach ($courses_tree as $cat => $sessions) {
+		$courses_tree[$cat]['details'] = SessionManager::get_session_category($cat);
+		if ($cat == 0) {
+			$courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id($_user['user_id'],false);
+		}
+		$courses_tree[$cat]['sessions'] = array_flip(array_flip($sessions));
+		if (count($courses_tree[$cat]['sessions'])>0) {
+			foreach ($courses_tree[$cat]['sessions'] as $k => $s_id) {
+				$courses_tree[$cat]['sessions'][$k] = array('details' => SessionManager::fetch($s_id));
+				$courses_tree[$cat]['sessions'][$k]['courses'] = UserManager::get_courses_list_by_session($_user['user_id'],$s_id);
+			}
+		}
+	}
+	
 	$list = '';
 	// this is the main function to get the course list
 	$personal_course_list = UserManager::get_personal_session_course_list($_user['user_id']);
@@ -790,11 +954,92 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 			take collected data and display it
 		-----------------------------------------------------------
 		*/
-		$list[] = get_logged_user_course_html($my_course);
+		//$list[] = get_logged_user_course_html($my_course);
 	} //end while mycourse...
 }
 
-if (is_array($list)) {
+if (isset($_GET['history']) && intval($_GET['history']) == 1) {
+	echo '<h3>'.get_lang('HistoryTrainingSession').'</h3>';
+}
+
+if ( is_array($courses_tree) ) {		
+	
+	foreach ($courses_tree as $key => $category) {
+		
+		
+		if ($key == 0) {
+			
+		// sessions and courses that are not in a session category
+
+			if (!isset($_GET['history'])) { // check if it's not history trainnign session list
+				// independent courses
+				if(count($category['courses']) > 0) {
+					echo '<ul class="courseslist" style="list-style-type:none;">';
+				}
+				
+				foreach ($category['courses'] as $course) {				
+					$c = get_logged_user_course_html($course, 0, 'independent_course_item');
+					echo $c[1];				
+				}
+	
+				if(count($category['courses']) > 0) {
+					echo '</ul>';
+				}
+			}
+									
+			//independent sessions
+			foreach ($category['sessions'] as $session) {
+				//don't show empty sessions
+				if (count($session['courses'])<1) { continue; }
+				echo '<ul class="session_box">';
+					echo '<li class="session_box_title" id="session_'.$session['details']['id'].'" >';
+					echo Display::return_icon('div_show.gif', get_lang('Expand'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
+					$s = get_session_title_box($session['details']['id']);
+					echo get_lang('SessionName') . ': ' . $s['title']. ' - '.(!empty($s['coach'])?$s['coach'].' - ':'').$s['dates'];
+					echo '</li>';
+				//courses inside the current session
+				foreach ($session['courses'] as $course) {
+					$c = get_logged_user_course_html($course, $session['details']['id'], 'session_course_item');
+					echo $c[1];					
+				}
+				echo '</ul>';
+			}
+
+		} else {						
+			// all sessions included in
+			if (!empty($category['details'])) {
+				echo '<div class="session_category" id="session_category_'.$category['details']['id'].'" style="background-color:#fbfbfb; border:1px solid #dddddd; padding:5px; margin-top: 10px;">';
+				echo '<div class="session_category_title_box" id="session_category_title_box_'.$category['details']['id'].'" style="font-size:larger; color: #555555;">'. Display::return_icon('div_show.gif', get_lang('Expand'), array('align' => 'absmiddle', 'id' => 'category_img_'.$category['details']['id'])) . ' ' . get_lang('SessionCategory') . ': ' . $category['details']['name'].'  -  '.get_lang('From').' '.$category['details']['date_start'].' '.get_lang('Until').' '.$category['details']['date_end'].'</div>';
+								
+				foreach ($category['sessions'] as $session) {
+					//don't show empty sessions
+					if (count($session['courses'])<1) { continue; }
+					echo '<ul class="session_box" id="session_'.$session['details']['id'].'">';
+					echo '<li class="session_box_title" id="session_'.$session['details']['id'].'">';
+					echo Display::return_icon('div_show.gif', get_lang('Expand'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
+					$s = get_session_title_box($session['details']['id']);
+					echo get_lang('SessionName') . ': ' . $s['title']. ' - '.(!empty($s['coach'])?$s['coach'].' - ':'').$s['dates'];
+					echo '</li>';
+					
+					foreach ($session['courses'] as $course) {
+						//echo '<li class="session_course_item" id="session_course_item_'.$course['code'].'" style="padding:5px">';
+						$c = get_logged_user_course_html($course, $session['details']['id'], 'session_course_item');
+						//var_dump($c);
+						echo $c[1];
+						//echo $course['code'];
+						//echo '</li>';
+					}
+					echo '</ul>';
+				}
+				echo '</div>';
+			}
+
+		}
+	}	
+}
+
+/*
+if ( is_array($list) ) {
 	//Courses whithout sessions
 	$old_user_category = 0;
 	foreach ($list as $key => $value) {
@@ -832,25 +1077,54 @@ if (is_array($list)) {
 
 	if (count($listActives) > 0 && $display_actives) {
 		echo "<ul class=\"courseslist\">\n";
+		
+		$name_category = array();
+		$i = 0;
+		$j=0;
 		foreach ($listActives as $key => $value) {
+			$session_category_id=$value['session_category_id'];
+			if (!empty($value[3]['category'])) {
+				if (!in_array($value[3]['category'], $name_category)) {
+					
+					if ($key != 0) {
+						echo '</ul>';
+					}
+					//Category
+					$name_category['name'] = $value[3]['category'];
+					echo '<ul class="category_box" id="category_box_'.$session_category_id.'">' .
+							'<li class="category_box_title" id="category_box_title_'.$session_category_id.'">'.$name_category['name'].'</li>';
+					echo "</ul>\n";
+				}
+	
+			}
+		
 			if (!empty($value[2])) {
 				if ((isset($old_session) && $old_session != $value[2]) or ((!isset($old_session)) && isset($value[2]))) {
 					$old_session = $value[2];
 					if ($key != 0) {
 						echo '</ul>';
 					}
-					echo '<ul class="session_box">' .
-							'<li class="session_box_title">'.$value[3]['title'].' '.$value[3]['dates'].'</li>';
-					if (!empty($value[3]['coach'])) {
+					//Session
+			
+					echo '<ul style="display:none" class="session_box_'.$session_category_id.'"  >' .
+							'<li class="session_box_title" >'.$value[3]['title'].' '.$value[3]['dates'].'</li>';
+					if ( !empty($value[3]['coach']) ) {
 						echo '<li class="session_box_coach">'.$value[3]['coach'].'</li>';
 					}
 					echo "</ul>\n";
-					echo '<ul class="session_course_item">';
+					
+
+					echo '<ul  class="session_course_item" id="session_course_item_'.$i.'">';
+					
 				}
 			}
+			//Courses
 			echo $value[1];
+			$i++;
 		}
+		
 		echo "\n</ul><br /><br />\n";
+		
 	}
 
 	if (count($listInactives) > 0 && !$display_actives) {
@@ -875,10 +1149,10 @@ if (is_array($list)) {
 		}
 		echo "\n</ul><br /><br />\n";
 	}
-}
+} */
+
 
 echo '</div>'; // end of content section
-
 // Register whether full admin or null admin course
 // by course through an array dbname x user status
 api_session_register('status');
@@ -923,13 +1197,14 @@ if ($show_menu) {
 	echo '<div class="menusection">';
 	echo '<span class="menusectioncaption">'.get_lang('MenuUser').'</span>';
 	echo '<ul class="menulist">';
-	if ($show_create_link) {
+	if ($show_create_link) {		
 		display_create_course_link();
 	}
-	if ($show_course_link) {
+	if ($show_course_link) {		
 		display_edit_course_list_links();
+		display_history_course_session();
 	}
-	if ($show_digest_link) {
+	if ($show_digest_link) {		
 		display_digest($toolsList, $digest, $orderKey, $courses);
 	}
 	echo '</ul>';

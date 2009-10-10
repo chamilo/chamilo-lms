@@ -41,7 +41,7 @@ require_once api_get_path(LIBRARY_PATH) . 'usermanager.lib.php';
 	Constants and variables
 -----------------------------------------------------------
 */
-$is_allowedToEdit = api_is_allowed_to_edit();
+$is_allowedToEdit = api_is_allowed_to_edit(null,true);
 $is_tutor = api_is_allowed_to_edit(true);
 $is_tutor_course = api_is_course_tutor();
 $tbl_course_rel_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -629,15 +629,20 @@ $sql = "SELECT count(id) FROM $TBL_EXERCICES";
 $res = Database::query($sql, __FILE__, __LINE__);
 list ($nbrexerc) = Database :: fetch_array($res);
 HotPotGCt($documentPath, 1, $_user['user_id']);
+
+//condition for the session
+$session_id = api_get_session_id();
+$condition_session = api_get_session_condition($session_id);
+
 // only for administrator
 if ($is_allowedToEdit) {
 	if ($show == 'test') {
-		$sql = "SELECT id,title,type,active,description, results_disabled FROM $TBL_EXERCICES WHERE active<>'-1' ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
+		$sql = "SELECT id, title, type, active, description, results_disabled, session_id FROM $TBL_EXERCICES WHERE active<>'-1' $condition_session ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
 		$result = Database::query($sql, __FILE__, __LINE__);
 	}
 }
 elseif ($show == 'test') { // only for students
-	$sql = "SELECT id,title,type,description, results_disabled FROM $TBL_EXERCICES WHERE active='1' ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
+	$sql = "SELECT id, title, type, description, results_disabled, session_id FROM $TBL_EXERCICES WHERE active='1' $condition_session ORDER BY title LIMIT " . (int) $from . "," . (int) ($limitExPage +1);
 	$result = Database::query($sql, __FILE__, __LINE__);
 }
 if ($show == 'test') {
@@ -715,7 +720,7 @@ if ($_configuration['tracking_enabled']) {
 			}
 		}*/
 
-		if (api_is_allowed_to_edit()) {
+		if (api_is_allowed_to_edit(null,true)) {
 			if (!$_GET['filter']) {
 				$filter_by_not_revised = true;
 				$filter = 1;
@@ -849,6 +854,9 @@ if ($show == 'test') {
 		$mylpid = (empty ($learnpath_id) ? '' : '&learnpath_id=' . $learnpath_id);
 		$mylpitemid = (empty ($learnpath_item_id) ? '' : '&learnpath_item_id=' . $learnpath_item_id);
 		while ($row = Database :: fetch_array($result)) {
+			//validacion when belongs to a session
+			$session_img = api_get_session_image($row['session_id'], $_user['status']);
+			
 			if ($i % 2 == 0)
 				$s_class = "row_odd";
 			else
@@ -860,7 +868,7 @@ if ($show == 'test') {
 			<td width="30" align="left"><?php Display::display_icon('quiz.gif', get_lang('Exercice'))?></td>
 			<td width="15" valign="left"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
 				<?php $row['title']=api_parse_tex($row['title']); ?>
-			<td><a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$mylpitemid; ?>&amp;exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a></td>
+			<td><a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$mylpitemid; ?>&amp;exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a><?php echo $session_img; ?></td>
 			<td align="center"> <?php
 
 				$exid = $row['id'];

@@ -174,33 +174,33 @@ if ($origin=='learnpath') {
 */
 $table_link 			= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 // Change visibility of a forum or a forum category
-if (($my_action=='invisible' OR $my_action=='visible') AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
+if (($my_action=='invisible' OR $my_action=='visible') AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true) && api_is_allowed_to_session_edit(false,true)) {
 	$message=change_visibility($_GET['content'], $_GET['id'],$_GET['action']);// note: this has to be cleaned first
 }
 // locking and unlocking
-if (($my_action=='lock' OR $my_action=='unlock') AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
+if (($my_action=='lock' OR $my_action=='unlock') AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true) && api_is_allowed_to_session_edit(false,true)) {
 	$message=change_lock_status($_GET['content'], $_GET['id'],$my_action);// note: this has to be cleaned first
 }
 // deleting
-if ($my_action=='delete'  AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
+if ($my_action=='delete'  AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true) && api_is_allowed_to_session_edit(false,true)) {
 	$message=delete_forum_forumcategory_thread($_GET['content'],$_GET['id']); // note: this has to be cleaned first
 	//delete link
 	$sql_link='DELETE FROM '.$table_link.' WHERE ref_id='.Database::escape_string(Security::remove_XSS($_GET['id'])).' and type=5 and course_code="'.api_get_course_id().'";';
 	Database::query($sql_link);
 }
 // moving
-if ($my_action=='move' and isset($_GET['thread']) AND api_is_allowed_to_edit(false,true)) {
+if ($my_action=='move' and isset($_GET['thread']) AND api_is_allowed_to_edit(false,true) && api_is_allowed_to_session_edit(false,true)) {
 	$message=move_thread_form();
 }
 // notification
-if ($my_action == 'notify' AND isset($_GET['content']) AND isset($_GET['id'])) {
+if ($my_action == 'notify' AND isset($_GET['content']) AND isset($_GET['id']) && api_is_allowed_to_session_edit(false,true)) {
 	$return_message = set_notification($_GET['content'],$_GET['id']);
 	Display :: display_confirmation_message($return_message,false);
 }
 
 // student list
 
-if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit()) {
+if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(null,true)) {
 
 	switch($_GET['list']) {
 		case "qualify":
@@ -240,7 +240,7 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 		if ($_GET['list']=='qualify') {
 			$table_list.= '<th>'.get_lang('Qualification').'</th>';
 		}
-		if (api_is_allowed_to_edit()) {
+		if (api_is_allowed_to_edit(null,true)) {
 			$table_list.= '<th>'.get_lang('Qualify').'</th>';
 		}
 		$table_list.= '</tr>';
@@ -259,7 +259,7 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 				if ($_GET['list']=='qualify') {
 					$table_list.= '<td>'.$row_student_list['qualify'].'/'.$max_qualify.'</td>';
 				}
-				if (api_is_allowed_to_edit()) {
+				if (api_is_allowed_to_edit(null,true)) {
 					$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$my_forum,$row_student_list['user_id'],$_GET['id']);
 					$table_list.= '<td><a href="forumqualify.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($my_forum).'&thread='.Security::remove_XSS($_GET['id']).'&user='.$row_student_list['user_id'].'&user_id='.$row_student_list['user_id'].'&idtextqualify='.$current_qualify_thread.'&origin='.$origin.'">'.icon('../img/'.$icon_qualify,get_lang('Qualify')).'</a></td></tr>';
 				}
@@ -468,11 +468,11 @@ if(is_array($threads)) {
 				}
 			}
 			$icon_liststd = 'group.gif';
-			if (!api_is_anonymous()) {
+			if (!api_is_anonymous() && api_is_allowed_to_session_edit(false,true)) {
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;forum=".Security::remove_XSS($my_forum)."&origin=".$origin."&amp;action=notify&amp;content=thread&amp;gidReq=".$_SESSION['toolgroup']."&amp;id=".$row['thread_id']."\">".icon('../img/'.$iconnotify,get_lang('NotifyMe'))."</a>";
 			}
 
-			if (api_is_allowed_to_edit() && $origin != 'learnpath') {
+			if (api_is_allowed_to_edit(null,true) && $origin != 'learnpath') {
 				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($my_forum).'&origin='.$origin.'&amp;action=liststd&amp;content=thread&amp;gidReq='.$_SESSION['toolgroup'].'&amp;id='.$row['thread_id'].'">'.icon('../img/'.$icon_liststd,get_lang('StudentList')).'</a>';
 			}
 			echo "</td>\n";

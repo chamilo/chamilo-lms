@@ -271,8 +271,11 @@ foreach ($group_cats as $index => $category)
 		// Determine wether current user is tutor for this course
 		$user_is_tutor = GroupManager :: is_tutor($_user['user_id']);
 		$group_data = array ();
-		foreach ($group_list as $index => $this_group)
-		{
+		foreach ($group_list as $index => $this_group) {
+			
+			//validacion when belongs to a session
+			$session_img = api_get_session_image($this_group['session_id'], $_user['status']);
+			
 			// all the tutors of this group
 			$tutorsids_of_group=GroupManager::get_subscribed_tutors($this_group['id'],true);
 
@@ -310,6 +313,7 @@ foreach ($group_cats as $index => $category)
 				{
 					$group_name .= ' ('.$this_group['session_name'].')';
 				}
+				$group_name .= $session_img;
 				$row[] = $group_name.'<br/>'.stripslashes(trim($this_group['description']));
 			}
 			else

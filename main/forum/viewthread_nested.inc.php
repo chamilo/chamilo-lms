@@ -88,7 +88,7 @@ foreach ($rows as $post) {
 	}
 	$userinf=api_get_user_info($post['user_id']);
 	$user_status=api_get_status_of_user_in_course($post['user_id'],api_get_course_id());
-	if (api_is_allowed_to_edit()) {
+	if (api_is_allowed_to_edit(null,true)) {
 		if ($count>0 && $user_status!=1) {
 			$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$post['user_id'],$_GET['thread']);
 			echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$post['post_id']."&amp;user=".$post['user_id']."&user_id=".$post['user_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";
@@ -98,7 +98,7 @@ foreach ($rows as $post) {
 	//if (($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0) OR api_is_allowed_to_edit())
 	if ($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit(false,true)) {
 		if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id'])) {
-			if (!api_is_anonymous()) {
+			if (!api_is_anonymous() && api_is_allowed_to_session_edit(false,true)) {
 				echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$post['post_id'].'&amp;action=replymessage&amp;origin='. $origin .'">'.Display :: return_icon('message_reply_forum.png', get_lang('ReplyToMessage'))."</a>\n";
 				echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$post['post_id'].'&amp;action=quote&amp;origin='. $origin .'">'.Display :: return_icon('quote.gif', get_lang('QuoteMessage'))."</a>\n";
 			}

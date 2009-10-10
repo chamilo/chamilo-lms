@@ -450,6 +450,7 @@ CREATE TABLE session (
   nb_days_access_before_beginning TINYINT UNSIGNED NULL default '0',
   nb_days_access_after_end TINYINT UNSIGNED NULL default '0',
   session_admin_id INT UNSIGNED NOT NULL,
+  visibility int NOT NULL default 1,
   PRIMARY KEY  (id),
   INDEX (session_admin_id),
   UNIQUE KEY name (name)
@@ -479,6 +480,7 @@ CREATE TABLE session_rel_course_rel_user (
   id_session smallint unsigned NOT NULL default '0',
   course_code char(40) NOT NULL default '',
   id_user int unsigned NOT NULL default '0',
+  visibility int NOT NULL default 1,
   PRIMARY KEY  (id_session,course_code,id_user),
   KEY id_user (id_user),
   KEY course_code (course_code)
@@ -549,7 +551,6 @@ ALTER TABLE settings_current ADD UNIQUE unique_setting ( variable , subkey , cat
 --
 -- Dumping data for table settings_current
 --
-
 
 /*!40000 ALTER TABLE settings_current DISABLE KEYS */;
 LOCK TABLES settings_current WRITE;
@@ -719,6 +720,7 @@ VALUES
 ('allow_message_tool', NULL, 'radio', 'Tools', 'false', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL,0),
 ('allow_social_tool', NULL, 'radio', 'Tools', 'false', 'AllowSocialToolTitle', 'AllowSocialToolComment', NULL, NULL, 0),
 ('allow_students_to_browse_courses',NULL,'radio','Platform','true','AllowStudentsToBrowseCoursesTitle','AllowStudentsToBrowseCoursesComment',NULL,NULL, 1),
+('show_session_data', NULL, 'radio', 'Course', 'false', 'ShowSessionDataTitle', 'ShowSessionDataComment', NULL, NULL, 1),
 ('allow_use_sub_language', NULL, 'radio', 'Platform', 'false', 'AllowUseSubLanguageTitle', 'AllowUseSubLanguageComment', NULL, NULL,0),
 ('show_glossary_in_documents', NULL, 'radio', 'Course', 'none', 'ShowGlossaryInDocumentsTitle', 'ShowGlossaryInDocumentsComment', NULL, NULL,1),
 ('allow_terms_conditions', NULL, 'radio', 'Platform', 'false', 'AllowTermsAndConditionsTitle', 'AllowTermsAndConditionsComment', NULL, NULL,0),
@@ -729,7 +731,8 @@ VALUES
 ('search_prefilter_prefix',NULL, NULL,'Search','','SearchPrefilterPrefix','SearchPrefilterPrefixComment',NULL,NULL,0),
 ('search_show_unlinked_results',NULL,'radio','Search','true','SearchShowUnlinkedResultsTitle','SearchShowUnlinkedResultsComment',NULL,NULL,1),
 ('show_courses_descriptions_in_catalog', NULL, 'radio', 'Course', 'true', 'ShowCoursesDescriptionsInCatalogTitle', 'ShowCoursesDescriptionsInCatalogComment', NULL, NULL, 1),
-('dokeos_database_version', NULL, 'textfield', NULL,'1.8.6.1.8225','DokeosDatabaseVersion','',NULL,NULL,0);
+('allow_coach_to_edit_course_session',NULL,'radio','Course','false','AllowCoachsToEditInsideTrainingSessions','AllowCoachsToEditInsideTrainingSessionsComment',NULL,NULL, 0),
+('dokeos_database_version', NULL, 'textfield', NULL,'1.8.6.1.8565','DokeosDatabaseVersion','',NULL,NULL,0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -896,6 +899,8 @@ VALUES
 ('allow_students_to_browse_courses','false','No'),
 ('show_email_of_teacher_or_tutor ', 'true', 'Yes'),
 ('show_email_of_teacher_or_tutor ', 'false', 'No'),
+('show_session_data ', 'true', 'Yes'),
+('show_session_data ', 'false', 'No'),
 ('allow_use_sub_language', 'true', 'Yes'),
 ('allow_use_sub_language', 'false', 'No'),
 ('show_glossary_in_documents', 'none', 'ShowGlossaryInDocumentsIsNone'),
@@ -908,7 +913,9 @@ VALUES
 ('search_show_unlinked_results', 'true', 'SearchShowUnlinkedResults'),
 ('search_show_unlinked_results', 'false', 'SearchHideUnlinkedResults'),
 ('show_courses_descriptions_in_catalog', 'true', 'Yes'),
-('show_courses_descriptions_in_catalog', 'false', 'No');
+('show_courses_descriptions_in_catalog', 'false', 'No'),
+('allow_coach_to_edit_course_session','true','Yes'),
+('allow_coach_to_edit_course_session','false','No');
 
 
 UNLOCK TABLES;
@@ -2237,3 +2244,18 @@ CREATE TABLE search_engine_ref (
 	ref_id_second_level INT NULL,
 	search_did INT NOT NULL
 );
+
+--
+-- Table structure for table sessions categories
+--
+
+CREATE TABLE session_category (
+  id int(11) NOT NULL auto_increment,
+  name varchar(100) default NULL,
+  date_start date default NULL,
+  date_end date default NULL,
+  PRIMARY KEY  (id)
+);
+
+ALTER TABLE session ADD COLUMN session_category_id INT NOT NULL;
+ALTER TABLE session_rel_course_rel_user ADD status TINYINT NOT NULL DEFAULT 0;

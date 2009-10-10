@@ -29,6 +29,7 @@ $htmlHeadXtra[] = '<script language="javascript">
 		';
 
 $tbl_session=Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_category=Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 $tbl_session_rel_course=Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_course_rel_user=Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_session_rel_user=Database::get_main_table(TABLE_MAIN_SESSION_USER);
@@ -36,9 +37,10 @@ $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
 $page=intval($_GET['page']);
 $action=$_REQUEST['action'];
-$sort=in_array($_GET['sort'],array('name','nbr_courses','date_start','date_end'))?$_GET['sort']:'name';
+$sort=in_array($_GET['sort'],array('name', 'nbr_courses', 'name_category', 'date_start', 'date_end','visibility'))?$_GET['sort']:'name';
 $idChecked = $_REQUEST['idChecked'];
-
+$id_category = intval($_REQUEST['id_category']);
+$cond_url = '';
 if ($action == 'delete') {
 	SessionManager::delete_session($idChecked);
 	header('Location: '.api_get_self().'?sort='.$sort);
@@ -70,73 +72,82 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 
 	$limit=20;
 	$from=$page * $limit;
-
+	$where = '';
 	//if user is crfp admin only list its sessions
 	if(!api_is_platform_admin()) {
 		$where = 'WHERE session_admin_id='.intval($_user['user_id']);
-		$where .= (empty($_REQUEST['keyword']) ? " " : " AND name LIKE '%".addslashes($_REQUEST['keyword'])."%'");
-	}
-	else {
-		$where .= (empty($_REQUEST['keyword']) ? " " : " WHERE name LIKE '%".addslashes($_REQUEST['keyword'])."%'");
-	}
-
-	if(trim($where) == ''){
-		$and=" WHERE id_coach=user_id";
+		$where .= (empty($_REQUEST['keyword']) ? "" : " AND s.name LIKE '%".addslashes($_REQUEST['keyword'])."%'");
 	} else {
-		$and=" AND id_coach=user_id";
+		$where .= (empty($_REQUEST['keyword']) ? "" : " WHERE s.name LIKE '%".addslashes($_REQUEST['keyword'])."%'");
 	}
-
-	if(isset($_REQUEST['active']) && !isset($_REQUEST['inactive']) ){
-		$and .= ' AND ( (session.date_start <= CURDATE() AND session.date_end >= CURDATE()) OR session.date_start="0000-00-00" ) ';
+	if (isset($_REQUEST['active']) && isset($_REQUEST['inactive'] )) {
+		// if both are set we search all sessions
 		$cond_url = '&amp;active='.Security::remove_XSS($_REQUEST['active']);
-	}
-	if(!isset($_REQUEST['active']) && isset($_REQUEST['inactive']) ){
-		$and .= ' AND ( (session.date_start > CURDATE() OR session.date_end < CURDATE()) AND session.date_start<>"0000-00-00" ) ';
-		$cond_url = '&amp;inactive='.Security::remove_XSS($_REQUEST['inactive']);
-	}
-
-	$query= "SELECT id,name,nbr_courses,date_start,date_end, firstname, lastname
-			FROM $tbl_session, $tbl_user
-			$where
-			$and
-			ORDER BY $sort
-			LIMIT $from,".($limit+1);
-
-	//query which allows me to get a record without taking into account the page
-	$query_rows= "SELECT count(*) as total_rows
-				FROM $tbl_session, $tbl_user
-				$where
-				$and
-				ORDER BY $sort";
-
-
-	//filtering the session list by access_url
-	if ($_configuration['multiple_access_urls']==true){
-		$table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-		$access_url_id = api_get_current_access_url_id();
-		if ($access_url_id != -1) {
-			$and.= " AND access_url_id = $access_url_id AND $table_access_url_rel_session.session_id = $tbl_session.id";
-			$query= "SELECT id,name,nbr_courses,date_start,date_end, firstname, lastname
-				FROM $tbl_session, $tbl_user, $table_access_url_rel_session
-				$where
-				$and
-				ORDER BY $sort
-				LIMIT $from,".($limit+1);
-
-			$query_rows= "SELECT count(*) as total_rows
-				FROM $tbl_session, $tbl_user,$table_access_url_rel_session
-				$where
-				$and
-				ORDER BY $sort";
+		$cond_url .= '&amp;inactive='.Security::remove_XSS($_REQUEST['inactive']);
+	} else {
+		if (isset($_REQUEST['active'])) {
+			if (empty($where)) {
+				$where .= ' WHERE ( (s.date_start <= CURDATE() AND s.date_end >= CURDATE()) OR s.date_start="0000-00-00" ) ';	
+			} else {
+				$where .= ' AND ( (s.date_start <= CURDATE() AND s.date_end >= CURDATE()) OR s.date_start="0000-00-00" ) ';
+			}
+			$cond_url = '&amp;active='.Security::remove_XSS($_REQUEST['active']);
+		}
+		if (isset($_REQUEST['inactive'])) {
+			if (empty($where)) {
+				$where .= ' WHERE ( (s.date_start > CURDATE() OR s.date_end < CURDATE()) AND s.date_start<>"0000-00-00" ) ';
+			} else {
+				$where .= ' AND ( (s.date_start > CURDATE() OR s.date_end < CURDATE()) AND s.date_start<>"0000-00-00" ) ';
+			}	
+			$cond_url = '&amp;inactive='.Security::remove_XSS($_REQUEST['inactive']);
 		}
 	}
+	if(isset($_GET['id_category'])){
+		$where.= (empty($where))? ' AND ' : ' WHERE ';
+		$id_category = Security::remove_XSS($id_category); 
+		$where.= ' session_category_id = "'.$id_category.'" ';
+		$cond_url.= '&amp;id_category='.$id_category;	
+	}
+	$sort = ($sort != "name_category")?  's.'.$sort : 'category_name';
+	$query = "SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name, s.visibility
+			 FROM $tbl_session s 
+			 	LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id 
+			 	INNER JOIN $tbl_user u ON s.id_coach = u.user_id 
+			 $where 
+			 ORDER BY $sort ";
+	//query which allows me to get a record without taking into account the page
+	$query_rows = "SELECT count(*) as total_rows 
+			 FROM $tbl_session s 
+			 	LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
+			 	INNER JOIN $tbl_user u ON s.id_coach = u.user_id 
+			 $where ";
 
+//filtering the session list by access_url
+	if ($_configuration['multiple_access_urls'] == true){
+		$table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);	
+		$access_url_id = api_get_current_access_url_id();
+		if ($access_url_id != -1) {
+			$where.= " AND ar.access_url_id = $access_url_id ";
+			$query = "SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name , s.visibility
+			 FROM $tbl_session s 
+			 	LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
+			 	INNER JOIN $tbl_user u ON s.id_coach = u.user_id 
+				INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
+			 $where 
+			 ORDER BY $sort LIMIT $from,".($limit+1);
 
+			$query_rows = "SELECT count(*) as total_rows 
+			 FROM $tbl_session s 
+			 	LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id  
+			 	INNER JOIN $tbl_user u ON s.id_coach = u.user_id 
+			 	INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id 
+			 $where ";
+		}
+	}
 
 	$result_rows = Database::query($query_rows,__FILE__,__LINE__);
 	$recorset = Database::fetch_array($result_rows);
 	$num = $recorset['total_rows'];
-
 	$result=Database::query($query,__FILE__,__LINE__);
 	$Sessions=Database::store_result($result);
 	$nbr_results=sizeof($Sessions);
@@ -155,7 +166,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	<?php
 
 	echo '<div style="float:right;">
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddSession').'</a>
+		<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSessionsInCategories')).get_lang('AddSessionsInCategories').'</a>
+		<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddSession').'</a>									
 	  </div>';
 	?>
 	<form method="POST" action="session_list.php">
@@ -199,9 +211,11 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		  <th>&nbsp;</th>
 		  <th><a href="<?php echo api_get_self(); ?>?sort=name"><?php echo get_lang('NameOfTheSession'); ?></a></th>
 		  <th><a href="<?php echo api_get_self(); ?>?sort=nbr_courses"><?php echo get_lang('NumberOfCourses'); ?></a></th>
+		  <th><a href="<?php echo api_get_self(); ?>?sort=name_category<?php echo $cond_url; ?>"><?php echo get_lang('SessionCategoryName'); ?></a></th>
 		  <th><a href="<?php echo api_get_self(); ?>?sort=date_start"><?php echo get_lang('StartDate'); ?></a></th>
 		  <th><a href="<?php echo api_get_self(); ?>?sort=date_end"><?php echo get_lang('EndDate'); ?></a></th>
 		  <th><a href="<?php echo api_get_self(); ?>?sort=coach_name"><?php echo get_lang('Coach'); ?></a></th>
+		  <th><a href="<?php echo api_get_self(); ?>?sort=visibility<?php echo $cond_url; ?>"><?php echo get_lang('Visibility'); ?></a></th>
 		  <th><?php echo get_lang('Actions'); ?></th>
 		</tr>
 
@@ -223,12 +237,29 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		  <td><input type="checkbox" id="idChecked_<?php echo $x; ?>" name="idChecked[]" value="<?php echo $enreg['id']; ?>"></td>
 	      <td><a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php echo api_htmlentities($enreg['name'],ENT_QUOTES,$charset); ?></a></td>
 	      <td><a href="session_course_list.php?id_session=<?php echo $enreg['id']; ?>"><?php echo $nb_courses; ?> cours</a></td>
+	      <td><?php echo api_htmlentities($enreg['category_name'],ENT_QUOTES,$charset); ?></td>
 	      <td><?php echo api_htmlentities($enreg['date_start'],ENT_QUOTES,$charset); ?></td>
 	      <td><?php echo api_htmlentities($enreg['date_end'],ENT_QUOTES,$charset); ?></td>
 	      <td><?php echo api_htmlentities(api_get_person_name($enreg['firstname'], $enreg['lastname']),ENT_QUOTES,$charset); ?></td>
+		  <td><?php
+		  
+		  switch (intval($enreg['visibility'])) {
+				case SESSION_VISIBLE_READ_ONLY: //1
+					echo get_lang('ReadOnly');
+				break;
+				case SESSION_VISIBLE:			//2
+					echo get_lang('Visible');
+				break;
+				case SESSION_INVISIBLE:			//3
+					echo api_ucfirst(get_lang('Invisible'));
+				break;				 
+		  }
+		   
+		  
+		  ?></td>
 		  <td>
 			<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('add_user_big.gif', get_lang('SubscribeUsersToSession')); ?></a>
-			<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('course_add.gif', get_lang('SubscribeCoursesToSession')); ?></a>
+			<a href="add_courses_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('synthese_view.gif', get_lang('SubscribeCoursesToSession')); ?></a>
 			<a href="session_edit.php?page=session_list.php&id=<?php echo $enreg['id']; ?>"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a>
 			<a href="<?php echo api_get_self(); ?>?sort=<?php echo $sort; ?>&action=delete&idChecked=<?php echo $enreg['id']; ?>" onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;"><?php Display::display_icon('delete.gif', get_lang('Delete')); ?></a>
 		  </td>

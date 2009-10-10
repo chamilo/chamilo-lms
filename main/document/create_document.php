@@ -251,8 +251,10 @@ if ($relative_url== '') {
 	$relative_url = '/';
 }
 
+$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+
 $html_editor_config = array(
-	'ToolbarSet' => (api_is_allowed_to_edit() ? 'Documents' :'DocumentsStudent'),
+	'ToolbarSet' => ($is_allowed_to_edit ? 'Documents' :'DocumentsStudent'),
 	'Width' => '100%',
 	'Height' => '600',
 	'FullPage' => true,
@@ -293,8 +295,7 @@ $interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($_GE
 if (!$is_allowed_in_course)
 	api_not_allowed(true);
 
-$is_allowedToEdit = api_is_allowed_to_edit();
-if (!($is_allowedToEdit || $_SESSION['group_member_with_upload_rights'])) {
+if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'])) {
 	api_not_allowed(true);
 }
 /*
@@ -388,6 +389,8 @@ if (api_get_setting('use_document_title') == 'true') {
 	));
 }
 
+$current_session_id = api_get_session_id();
+
 //$form->addElement('style_submit_button', 'submit', get_lang('SaveDocument'), 'class="save"');
 
 // HTML-editor
@@ -456,16 +459,16 @@ if ($form->validate()) {
 			mkdir($filepath.'css');
 			chmod($filepath.'css', $perm);
 			$doc_id = add_document($_course, $dir.'css', 'folder', 0, 'css');
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id']);
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id']);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id'],null,null,null,null,$current_session_id);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],null,null,null,null,$current_session_id);
 		}
 
 		if (!is_file($filepath.'css/frames.css')) {
 			//make a copy of the current css for the new document
 			copy(api_get_path(SYS_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css', $filepath.'css/frames.css');
 			$doc_id = add_document($_course, $dir.'css/frames.css', 'file', filesize($filepath.'css/frames.css'), 'frames.css');
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id']);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'],null,null,null,null,$current_session_id);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],null,null,null,null,$current_session_id);
 		}
 
 		$file_size = filesize($filepath.$filename.'.'.$extension);
@@ -473,7 +476,7 @@ if ($form->validate()) {
 
 		$document_id = add_document($_course, $save_file_path, 'file', $file_size, $filename,null,$readonly);
 		if ($document_id) {
-			api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_user['user_id'], $to_group_id);
+			api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_user['user_id'], $to_group_id,null,null,null,$current_session_id);
 			//update parent folders
 			item_property_update_on_folder($_course, $_GET['dir'], $_user['user_id']);
 			$new_comment = isset ($_POST['comment']) ? trim($_POST['comment']) : '';

@@ -199,10 +199,10 @@ if (intval($count_users)<50) {
 </td>
 </tr>
 <?php
-	$id_session_category = ''; 
+	$id_session_category = '';
 	$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 	$sql = 'SELECT id, name FROM '.$tbl_session_category.' ORDER BY name ASC';
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	$Categories = api_store_result($result);
 ?>
 <tr>
@@ -369,8 +369,8 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
 <tr>
   <td width="40%"><?php echo get_lang('SessionVisibility') ?></td>
   <td width="60%">
-  	<select name="session_visibility" style="width:250px;">		
-		<?php 
+  	<select name="session_visibility" style="width:250px;">
+		<?php
 		$visibility_list = array(SESSION_VISIBLE_READ_ONLY=>get_lang('ReadOnly'), SESSION_VISIBLE=>get_lang('Visible'), SESSION_INVISIBLE=>api_ucfirst(get_lang('Invisible')));
 		foreach($visibility_list as $key=>$item): ?>
 		<option value="<?php echo $key; ?>" <?php if($item == $visibility_id) echo 'selected="selected"'; ?>><?php echo $item; ?></option>
@@ -399,9 +399,9 @@ function setDisable(select){
 	document.form.day_end.disabled = (select.checked) ? true : false;
 	document.form.month_end.disabled = (select.checked) ? true : false;
 	document.form.year_end.disabled = (select.checked) ? true : false;
-	
-	document.form.session_visibility.disabled = (select.checked) ? true : false;	
-	document.form.session_visibility.selectedIndex = 0;	
+
+	document.form.session_visibility.disabled = (select.checked) ? true : false;
+	document.form.session_visibility.selectedIndex = 0;
 }
 </script>
 <?php

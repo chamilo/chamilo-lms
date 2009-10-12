@@ -141,7 +141,7 @@ if (api_is_allowed_to_edit(null,true) && !is_null($description_id) || $action ==
 	// Delete a description block
 	if ($action == 'delete') {
 		$sql = "DELETE FROM $tbl_course_description WHERE id='".$description_id."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 		//update item_property (delete)
 		api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, Database::escape_string($description_id), 'delete', api_get_user_id());
 		Display :: display_confirmation_message(get_lang('CourseDescriptionDeleted'));

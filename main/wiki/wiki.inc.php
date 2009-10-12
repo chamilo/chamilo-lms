@@ -838,47 +838,46 @@ function display_wiki_entry()
 	{
 		echo '<div id="wikititle">';
 
-		// page action: protecting (locking) the page
-	if (check_protect_page())
-	{
+		// page action: protecting (locking) the page		
 		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 		{
+			if (check_protect_page()==1)
+			{				
 				$protect_page= '<img src="../img/wiki/lock.gif" title="'.get_lang('PageLockedExtra').'" alt="'.get_lang('PageLockedExtra').'" />';
-		}
-		else
-		{
-				$protect_page= '<img src="../img/wiki/lock.gif" title="'.get_lang('PageLockedExtra').'" alt="'.get_lang('PageLockedExtra').'" />';
-		}
-	}
-	else
-	{
-		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
-	   	{
+				$lock_unlock_protect='unlock';
+			}
+			else
+			{
 				$protect_page= '<img src="../img/wiki/unlock.gif" title="'.get_lang('PageUnlockedExtra').'" alt="'.get_lang('PageUnlockedExtra').'" />';
-	   	}
-	}
+				$lock_unlock_protect='lock';
+			}
+		}
 		echo '<span style="float:right">';
-		echo '<a href="index.php?action=showpage&amp;actionpage=lock&amp;title='.$page.'">'.$protect_page.'</a>';
+		echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_protect.'&amp;title='.$page.'">'.$protect_page.'</a>';
 		echo '</span>';
 
 		//page action: visibility
-	if (check_visibility_page())
-	{
-		//This hides the icon eye closed to users of work they can see yours
-		if(($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id()==$row['user_id']))==false)
-	  	{
-				$visibility_page= '<img src="../img/wiki/invisible.gif" title="'.get_lang('HidePageExtra').'" alt="'.get_lang('HidePageExtra').'" />';
-	    }
-	}
-	else
-	{
 		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 		{
+			if (check_visibility_page()==1)
+			{
+				// TODO: FIX  This hides the icon eye closed to users of work they can see yours
+				//if(($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id()==$row['user_id']))==false)
+				//{
+				//		
+				// }
 				$visibility_page= '<img src="../img/wiki/visible.gif" title="'.get_lang('ShowPageExtra').'" alt="'.get_lang('ShowPageExtra').'" />';
+				$lock_unlock_visibility='invisible';
+									
+			}
+			else
+			{
+				$visibility_page= '<img src="../img/wiki/invisible.gif" title="'.get_lang('HidePageExtra').'" alt="'.get_lang('HidePageExtra').'" />';
+				$lock_unlock_visibility='visible';
+			}
 		}
-	}
 		echo '<span style="float:right">';
-		echo '<a href="index.php?action=showpage&amp;actionpage=visibility&amp;title='.$page.'">'.$visibility_page.'</a>';
+		echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_visibility.'&amp;title='.$page.'">'.$visibility_page.'</a>';
 		echo '</span>';
 
 		//page action: notification
@@ -1049,6 +1048,7 @@ function is_active_navigation_tab($paramwk)
 /**
  * Lock add pages
  * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * return current database status of protect page and change it if get action
  */
 
 function check_addnewpagelock()
@@ -1066,15 +1066,16 @@ function check_addnewpagelock()
 	$status_addlock=$row['addlock'];
 
 	//change status
-	if ($_GET['actionpage']=='addlock' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin()))
+	if (api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 	{
-		if ($row['addlock']==1)
+		
+		if ($_GET['actionpage']=='lockaddnew' && $status_addlock==0) 
+		{
+	    	$status_addlock=1;
+			}
+		if ($_GET['actionpage']=='unlockaddnew' && $status_addlock==1)
 		{
 			$status_addlock=0;
-		}
-		else
-		{
-			$status_addlock=1;
 		}
 
 		Database::query('UPDATE '.$tbl_wiki.' SET addlock="'.Database::escape_string($status_addlock).'" WHERE '.$groupfilter.'',__LINE__,__FILE__);
@@ -1086,20 +1087,14 @@ function check_addnewpagelock()
 
 	//show status
 
-	if ($row['addlock']==1 || ($row['content']=='' AND $row['title']=='' AND $page=='index'))
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+		return $row['addlock'];
 }
 
 
 /**
  * Protect page
  * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * return current database status of protect page and change it if get action
  */
 function check_protect_page()
 {
@@ -1118,16 +1113,17 @@ function check_protect_page()
 	$id=$row['id'];
 
 	///change status
-	if ($_GET['actionpage']=='lock' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin()))
-    {
-	    if ($row['editlock']==0)
-	    {
-	    	$status_editlock=1;
-	    }
-	    else
+	if (api_is_allowed_to_edit(false,true) || api_is_platform_admin())
+	{
+		if($_GET['actionpage']=='lock' && $status_editlock==0)
 		{
-	 		$status_editlock=0;
-	 	}
+			$status_editlock=1;			
+		}
+		if($_GET['actionpage']=='unlock' && $status_editlock==1)
+		{
+			$status_editlock=0;
+		}	
+	
 
 		$sql='UPDATE '.$tbl_wiki.' SET editlock="'.Database::escape_string($status_editlock).'" WHERE id="'.$id.'"';
 	    Database::query($sql,__FILE__,__LINE__);
@@ -1140,21 +1136,15 @@ function check_protect_page()
 	}
 
 	//show status
-	if ($row['editlock']==0 || ($row['content']=='' AND $row['title']=='' AND $page=='index'))
-	{
-	 	return false;
-	}
-	else
-	{
-	 	return true;
-	}
 
+	 	return $row['editlock'];
 }
 
 
 /**
  * Visibility page
  * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * return current database status of visibility and change it if get action
  */
 function check_visibility_page()
 {
@@ -1170,18 +1160,20 @@ function check_visibility_page()
 	$row=Database::fetch_array($result);
 
 	$status_visibility=$row['visibility'];
-	$id=$row['id'];	//need ? check. TODO
 
-	//change status
-	if ($_GET['actionpage']=='visibility' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin()))
+
+	//change status	
+	
+	if (api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 	{
-		if ($row['visibility']==1)
-	    {
-	    	$status_visibility=0;
-	    }
-	    else
+		if($_GET['actionpage']=='visible' && $status_visibility==0)
 		{
-		 	$status_visibility=1;
+			$status_visibility=1;
+			
+		}
+		if($_GET['actionpage']=='invisible' && $status_visibility==1)
+		{
+			$status_visibility=0;
 		}
 
 		$sql='UPDATE '.$tbl_wiki.' SET visibility="'.Database::escape_string($status_visibility).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter;
@@ -1195,21 +1187,14 @@ function check_visibility_page()
      }
 
 	//show status
-	if ($row['visibility']=="1" || ($row['content']=='' AND $row['title']=='' AND $page=='index'))
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
-
+		return $row['visibility'];
 }
 
 
 /**
  * Visibility discussion
  * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * return current database status of discuss visibility and change it if get action page
  */
 function check_visibility_discuss()
 {
@@ -1225,18 +1210,17 @@ function check_visibility_discuss()
 	$row=Database::fetch_array($result);
 
 	$status_visibility_disc=$row['visibility_disc'];
-	$id=$row['id'];	//need ? check. TODO
-
+	
 	//change status
-	if ($_GET['actionpage']=='visibility_disc' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin()))
+	if (api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 	{
-		if ($row['visibility_disc']==1)
-	    {
-	    	$status_visibility_disc=0;
-	    }
-	    else
+		if ($_GET['actionpage']=='showdisc' && $status_visibility_disc==0)
 		{
-			$status_visibility_disc=1;
+	    	$status_visibility_disc=1;
+		}
+		if ($_GET['actionpage']=='hidedisc' && $status_visibility_disc==1)
+		{
+			$status_visibility_disc=0;
 		}
 
 		$sql='UPDATE '.$tbl_wiki.' SET visibility_disc="'.Database::escape_string($status_visibility_disc).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter;
@@ -1250,22 +1234,14 @@ function check_visibility_discuss()
 	}
 
 	//show status
-
-	if ($row['visibility_disc']==1 || ($row['content']=='' AND $row['title']=='' AND $page=='index'))
-	{
-	 	return false;
-
-	}
-	else
-	{
-	 	return true;
-	}
+	 	return $row['visibility_disc'];
 }
 
 
 /**
  * Lock add discussion
  * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * return current database status of lock dicuss and change if get action
  */
 function check_addlock_discuss()
 {
@@ -1280,18 +1256,18 @@ function check_addlock_discuss()
 	$row=Database::fetch_array($result);
 
 	$status_addlock_disc=$row['addlock_disc'];
-	$id=$row['id'];		//need ? check. TODO
 
 	//change status
-	if ($_GET['actionpage']=='addlock_disc' && (api_is_allowed_to_edit(null,true) || api_is_platform_admin()))
+	if (api_is_allowed_to_edit() || api_is_platform_admin())
     {
-		if ($row['addlock_disc']==1)
-	    {
-	    	$status_addlock_disc=0;
-	    }
-	    else
+		
+		if ($_GET['actionpage']=='lockdisc' && $status_addlock_disc==0) 
 		{
-			$status_addlock_disc=1;
+	    	$status_addlock_disc=1;
+			}
+		if ($_GET['actionpage']=='unlockdisc' && $status_addlock_disc==1)
+		{
+			$status_addlock_disc=0;
 		}
 
 		$sql='UPDATE '.$tbl_wiki.' SET addlock_disc="'.Database::escape_string($status_addlock_disc).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter;
@@ -1305,22 +1281,14 @@ function check_addlock_discuss()
 	}
 
 	//show status
-
-	if ($row['addlock_disc']==1 || ($row['content']=='' AND $row['title']=='' AND $page=='index'))
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return $row['addlock_disc'];
 
 }
-
 
 /**
  * Lock rating discussion
  * @author Juan Carlos Raña <herodoto@telefonica.net>
+ *	Return current database status of rating discuss and change it if get action
  */
 function check_ratinglock_discuss()
 {
@@ -1336,19 +1304,19 @@ function check_ratinglock_discuss()
 	$row=Database::fetch_array($result);
 
 	$status_ratinglock_disc=$row['ratinglock_disc'];
-	$id=$row['id'];	//need ? check. TODO
+
 
 	//change status
-	if ($_GET['actionpage']=='ratinglock_disc' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin()))
+	if (api_is_allowed_to_edit(false,true) || api_is_platform_admin())
     {
-		if ($row['ratinglock_disc']==1)
-	    {
-	    	$status_ratinglock_disc=0;
-	    }
-	    else
+		if ($_GET['actionpage']=='lockrating' && $status_ratinglock_disc==0) 
 		{
-			$status_ratinglock_disc=1;
+	    	$status_ratinglock_disc=1;
 		}
+		if ($_GET['actionpage']=='unlockrating' && $status_ratinglock_disc==1)
+		{
+			$status_ratinglock_disc=0;
+		}	
 
 		$sql='UPDATE '.$tbl_wiki.' SET ratinglock_disc="'.Database::escape_string($status_ratinglock_disc).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter; //Visibility. Value to all,not only for the first
 	    Database::query($sql,__FILE__,__LINE__);
@@ -1361,21 +1329,15 @@ function check_ratinglock_discuss()
 	}
 
 	//show status
-	if ($row['ratinglock_disc']==1 || ($row['content']=='' AND $row['title']=='' AND $page=='index'))
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
 
+		return $row['ratinglock_disc'];
 }
 
 
 /**
  * Notify page changes
  * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * return the current 
  */
 
 function check_notify_page($reflink)

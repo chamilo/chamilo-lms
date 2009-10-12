@@ -626,18 +626,18 @@ if ($formSent) {
 			// goes to the script that will show the result of the exercise
 			if ($exerciseType == ALL_ON_ONE_PAGE) {
 				header("Location: exercise_result.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
-			} else {			
+			} else {
 				if ($exe_id != '') {
 					//clean incomplete
 					$update_query = 'UPDATE ' . $stat_table . ' SET ' . "status = '', data_tracking='', exe_date = '" . date('Y-m-d H:i:s') . "'" . ' WHERE exe_id = ' . Database::escape_string($exe_id);
-					api_sql_query($update_query, __FILE__, __LINE__);
-				}			
+					Database::query($update_query, __FILE__, __LINE__);
+				}
 				header("Location: exercise_show.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
 			}
 			exit ();
 		} else {
 			header("Location: exercice_submit.php?exerciseId=$exerciseId");
-			exit;			
+			exit;
 		}
 	}
 	if ($debug > 0) {
@@ -1085,10 +1085,10 @@ if (!empty ($error)) {
 			$submit_btn .= "</button>";
 			echo $submit_btn;
 		}
-		
+
 	}
 
-	
+
 	echo "</table>
 			</td>
 			</tr>

@@ -1163,7 +1163,7 @@ function add_document($_course,$path,$filetype,$filesize,$title,$comment=NULL, $
 	(`path`, `filetype`, `size`, `title`, `comment`, `readonly`, `session_id`)
 	VALUES ('$path','$filetype','$filesize','".
 	Database::escape_string(htmlspecialchars($title, ENT_QUOTES, $charset))."', '$comment', $readonly, $session_id)";
-	if(api_sql_query($sql,__FILE__,__LINE__))
+	if(Database::query($sql,__FILE__,__LINE__))
 	{
 		//display_message("Added to database (id ".mysql_insert_id().")!");
 		return Database::insert_id();

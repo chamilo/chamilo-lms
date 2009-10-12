@@ -54,8 +54,8 @@ if(!api_is_platform_admin() && $session['session_admin_id']!=$_user['user_id'])
 	api_not_allowed(true);
 }
 
-$sql = 'SELECT name FROM  '.$tbl_session_category.' WHERE id = "'.intval($session['session_category_id']).'"'; 
-$rs = api_sql_query($sql, __FILE__, __LINE__);
+$sql = 'SELECT name FROM  '.$tbl_session_category.' WHERE id = "'.intval($session['session_category_id']).'"';
+$rs = Database::query($sql, __FILE__, __LINE__);
 $session_category = '';
 if(mysql_num_rows($rs)>0) {
 	$rows_session_category = api_store_result($rs);
@@ -213,30 +213,30 @@ else {
 	$courses=Database::store_result($result);
 	foreach($courses as $course){
 		//select the number of users
-		
-		$sql = " SELECT count(*) FROM $tbl_session_rel_user sru, $tbl_session_rel_course_rel_user srcru 
+
+		$sql = " SELECT count(*) FROM $tbl_session_rel_user sru, $tbl_session_rel_course_rel_user srcru
 				WHERE srcru.id_user = sru.id_user AND srcru.course_code = '".Database::escape_string($course['code'])."'
-				AND srcru.id_session = '".intval($id_session)."'";  
-				 				
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+				AND srcru.id_session = '".intval($id_session)."'";
+
+		$rs = Database::query($sql, __FILE__, __LINE__);
 		$course['nbr_users'] = mysql_result($rs,0,0);
-		
+
 		// Get coachs of the courses in session
-		
-		$sql = "SELECT user.lastname,user.firstname,user.username FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user 
+
+		$sql = "SELECT user.lastname,user.firstname,user.username FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
 				WHERE session_rcru.id_user = user.user_id AND session_rcru.id_session = '".intval($id_session)."' AND session_rcru.course_code ='".Database::escape_string($course['code'])."' AND session_rcru.status=2";
 		$rs = Database::query($sql,__FILE__,__LINE__);
-		
+
 		$coachs = array();
-		if (Database::num_rows($rs) > 0) {			
+		if (Database::num_rows($rs) > 0) {
 			while($info_coach = Database::fetch_array($rs)) {
 				$coachs[] = $info_coach['lastname'].' '.$info_coach['firstname'].' ('.$info_coach['username'].')';
-			}						
+			}
 		} else {
 			$coach = get_lang('None');
 		}
-		
-					
+
+
 		if (count($coachs) > 0) {
 			$coach = implode('<br />',$coachs);
 		} else {

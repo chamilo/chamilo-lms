@@ -46,7 +46,7 @@ if (empty($id_user) || empty($id_session)) {
 
 if (!api_is_platform_admin()) {
 	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-	$rs = api_sql_query($sql,__FILE__,__LINE__);
+	$rs = Database::query($sql, __FILE__, __LINE__);
 	if (Database::result($rs,0,0)!=$_user['user_id']) {
 		api_not_allowed(true);
 	}
@@ -58,35 +58,35 @@ $CourseList=$SessionList=array();
 $courses=$sessions=array();
 $noPHP_SELF=true;
 
-if ($_POST['formSent']) {		
-	$formSent			= $_POST['formSent'];		
+if ($_POST['formSent']) {
+	$formSent			= $_POST['formSent'];
 	$CourseList			= $_POST['SessionCoursesList'];
-	
+
 	if (!is_array($CourseList)) {
 		$CourseList=array();
 	}
-	
+
 	$sql="SELECT distinct code
-			FROM $tbl_course course LEFT JOIN $tbl_session_rel_course session_rel_course 
-			ON course.code = session_rel_course.course_code inner join $tbl_session_rel_course_rel_user as srcru 
-			ON (srcru.id_session =  session_rel_course.id_session)	
+			FROM $tbl_course course LEFT JOIN $tbl_session_rel_course session_rel_course
+			ON course.code = session_rel_course.course_code inner join $tbl_session_rel_course_rel_user as srcru
+			ON (srcru.id_session =  session_rel_course.id_session)
 			WHERE id_user = $id_user and session_rel_course.id_session = $id_session";
-	
-	$rs = api_sql_query($sql);
-	$existingCourses = api_store_result($rs);	
-	if (count($CourseList) == count($existingCourses)) {		
+
+	$rs = Database::query($sql, __FILE__, __LINE__);
+	$existingCourses = api_store_result($rs);
+	if (count($CourseList) == count($existingCourses)) {
 		header('Location: session_course_user.php?id_session='.$id_session.'&id_user='.$id_user.'&msg='.get_lang('MaybeYouWantToDeleteThisUserFromSession'));
 		exit;
 	}
-	foreach($CourseList as $enreg_course) {		
+	foreach($CourseList as $enreg_course) {
 		$exists = false;
 		foreach($existingCourses as $existingCourse) {
 			if($enreg_course == $existingCourse['course_code']) {
 				$exists=true;
 			}
 		}
-		if(!$exists) {	
-			$enreg_course = Database::escape_string($enreg_course);		
+		if(!$exists) {
+			$enreg_course = Database::escape_string($enreg_course);
 			$sql_delete = "DELETE FROM $tbl_session_rel_course_rel_user
 							WHERE id_user='".$id_user."'  AND course_code='".$enreg_course."' AND id_session=$id_session";
 			Database::query($sql_delete,__FILE__, __LINE__);
@@ -94,21 +94,21 @@ if ($_POST['formSent']) {
 				//update session rel course table
 				$sql_update  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users - 1 WHERE id_session='$id_session' AND course_code='$enreg_course'";
 				Database::query($sql_update,__FILE__, __LINE__);
-			}			
+			}
 		}
 	}
-	foreach($existingCourses as $existingCourse) {				
+	foreach($existingCourses as $existingCourse) {
 		//$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course(id_session,course_code, id_coach) VALUES('$id_session','$enreg_course','$id_coach')";
 		if(!in_array($existingCourse['code'], $CourseList)){
 			$existingCourse = Database::escape_string($existingCourse['code']);
 			$sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$existingCourse','$id_user')";
 			Database::query($sql_insert,__FILE__, __LINE__);
-			if(Database::affected_rows()) {				
+			if(Database::affected_rows()) {
 				//update session rel course table
 				$sql_update  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users + 1 WHERE id_session='$id_session' AND course_code='$existingCourse'";
 				Database::query($sql_update,__FILE__, __LINE__);
 			}
-			
+
 		}
 	}
 	//header('Location: session_course_user.php?id_user='.$id_user.'&id_session='.$id_session);
@@ -120,7 +120,7 @@ if ($_POST['formSent']) {
 Display::display_header($tool_name);
 
 if (!empty($_GET['msg'])) {
-    Display::display_normal_message(urldecode($_GET['msg']));    
+    Display::display_normal_message(urldecode($_GET['msg']));
 }
 
 // the form header
@@ -128,22 +128,22 @@ $session_info = SessionManager::fetch($id_session);
 echo '<div class="row"><div class="form_header">'.$tool_name.' ('.$session_info['name'].')</div></div><br />';
 $nosessionCourses = $sessionCourses = array();
 
-/*$sql="SELECT distinct code, title, visual_code, session_rel_course.id_session 
-FROM $tbl_course course LEFT JOIN $tbl_session_rel_course session_rel_course 
-ON course.code = session_rel_course.course_code inner join $tbl_session_rel_course_rel_user as srcru 
-ON (srcru.id_session =  session_rel_course.id_session)	
+/*$sql="SELECT distinct code, title, visual_code, session_rel_course.id_session
+FROM $tbl_course course LEFT JOIN $tbl_session_rel_course session_rel_course
+ON course.code = session_rel_course.course_code inner join $tbl_session_rel_course_rel_user as srcru
+ON (srcru.id_session =  session_rel_course.id_session)
 WHERE id_user = $id_user and session_rel_course.id_session = $id_session";
 */
 // actual user
 $sql="SELECT code, title, visual_code, srcru.id_session " .
 			"FROM $tbl_course course inner JOIN $tbl_session_rel_course_rel_user   as srcru  " .
 			"ON course.code = srcru.course_code  where srcru.id_user = $id_user AND id_session = $id_session";
-			
+
 //all
 $sql_all="SELECT code, title, visual_code, src.id_session " .
 			"FROM $tbl_course course inner JOIN $tbl_session_rel_course  as src  " .
 			"ON course.code = src.course_code AND id_session = $id_session";
-			
+
 
 /*
 	echo $sql="SELECT code, title, visual_code, id_session
@@ -152,10 +152,10 @@ $sql_all="SELECT code, title, visual_code, src.id_session " .
 				ON course.code = session_rel_course.course_code
 				AND session_rel_course.id_session = ".intval($id_session)."
 			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
-	*/					
+	*/
 /*global $_configuration;
-if ($_configuration['multiple_access_urls']==true) {		
-	$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);	
+if ($_configuration['multiple_access_urls']==true) {
+	$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1){
 		$sql="SELECT code, title, visual_code, id_session
@@ -164,28 +164,28 @@ if ($_configuration['multiple_access_urls']==true) {
 				ON course.code = session_rel_course.course_code
 				AND session_rel_course.id_session = ".intval($id_session)."
 			INNER JOIN $tbl_course_rel_access_url url_course ON (url_course.course_code=course.code)
-			WHERE access_url_id = $access_url_id 
+			WHERE access_url_id = $access_url_id
 			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
-	}	
+	}
 }*/
 
-$result=api_sql_query($sql,__FILE__,__LINE__);	
-$Courses=api_store_result($result);	
+$result=Database::query($sql,__FILE__,__LINE__);
+$Courses=api_store_result($result);
 
-$result=api_sql_query($sql_all,__FILE__,__LINE__);	
-$CoursesAll=api_store_result($result);	
+$result=Database::query($sql_all,__FILE__,__LINE__);
+$CoursesAll=api_store_result($result);
 
 $course_temp = array();
 foreach($Courses as $course) {
 	$course_temp[] = $course['code'];
-}	
+}
 foreach($CoursesAll as $course) {
 	if (in_array($course['code'], $course_temp)) {
 		$nosessionCourses[$course['code']] = $course ;
 	} else {
 		$sessionCourses[$course['code']] = $course ;
 	}
-}	
+}
 
 unset($Courses);
 ?>
@@ -232,11 +232,11 @@ unset($nosessionCourses);
   <td width="45%" align="center"><select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" style="width:320px;">
 <?php
 foreach($sessionCourses as $enreg)
-{	
-?>	
+{
+?>
 	<option value="<?php echo $enreg['code']; ?>" title="<?php echo htmlspecialchars($enreg['title'].' ('.$enreg['visual_code'].')',ENT_QUOTES); ?>"><?php echo $enreg['title'].' ('.$enreg['visual_code'].')'; ?></option>
 
-<?php 
+<?php
 }
 unset($sessionCourses);
 ?>
@@ -259,25 +259,25 @@ function moveItem(origin , destination){
 	}
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
-	
+
 
 }
 
 function sortOptions(options) {
 
 	newOptions = new Array();
-	
+
 	for (i = 0 ; i<options.length ; i++) {
-		newOptions[i] = options[i];							
+		newOptions[i] = options[i];
 	}
 
 	newOptions = newOptions.sort(mysort);
 	options.length = 0;
 
-	for(i = 0 ; i < newOptions.length ; i++){		
-		options[i] = newOptions[i];			
+	for(i = 0 ; i < newOptions.length ; i++){
+		options[i] = newOptions[i];
 	}
-	
+
 }
 
 function mysort(a, b){

@@ -633,8 +633,8 @@ function update_Db_course($courseDbName)
 		)";
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLEQUIZ . "` ADD INDEX ( session_id ) ";
-	api_sql_query($sql, __FILE__, __LINE__);
-	
+	Database::query($sql, __FILE__, __LINE__);
+
 	// Exercise tool - questions
 	$sql = "
 		CREATE TABLE `".$TABLEQUIZQUESTIONLIST . "` (
@@ -851,7 +851,7 @@ function update_Db_course($courseDbName)
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLLINK . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
-	
+
 	$sql = "
 		CREATE TABLE `".$TABLETOOLLINKCATEGORIES . "` (
 		id smallint unsigned NOT NULL auto_increment,
@@ -906,7 +906,7 @@ function update_Db_course($courseDbName)
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLWIKI . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
-	
+
 	//
 	$sql = "CREATE TABLE `".$TABLEWIKICONF . "` (
 		page_id int NOT NULL default 0,
@@ -1055,7 +1055,7 @@ function update_Db_course($courseDbName)
 		visibility tinyint NOT NULL default '1',
 		start_visible datetime NOT NULL default '0000-00-00 00:00:00',
 		end_visible datetime NOT NULL default '0000-00-00 00:00:00',
-		id_session INT NOT NULL DEFAULT 0		
+		id_session INT NOT NULL DEFAULT 0
 		) TYPE=MyISAM;", __FILE__, __LINE__);
 	Database::query("ALTER TABLE `$TABLEITEMPROPERTY` ADD INDEX idx_item_property_toolref (tool,ref)", __FILE__, __LINE__);
 
@@ -1316,7 +1316,7 @@ function update_Db_course($courseDbName)
 	}
 	$sql = "ALTER TABLE `".$tbl_blogs . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
-	
+
 	$sql = "
 		CREATE TABLE `" . $tbl_blogs_comments . "` (
 			comment_id int NOT NULL AUTO_INCREMENT ,
@@ -1658,7 +1658,7 @@ function update_Db_course($courseDbName)
 	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
 	$sql = "ALTER TABLE `".$TBL_GLOSSARY . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
-	
+
 	// table notebook
 	$sql = "CREATE TABLE `".$TBL_NOTEBOOK."` (
 			  notebook_id int unsigned NOT NULL auto_increment,
@@ -2002,7 +2002,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_GROUP . "','group/group.php','group.gif','".string2binary(api_get_setting('course_create_active_tools', 'groups')) . "','0','squaregrey.gif','NO','_self','interaction','0')", __FILE__, __LINE__);
 	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_CHAT . "','chat/chat.php','chat.gif','".string2binary(api_get_setting('course_create_active_tools', 'chat')) . "','0','squaregrey.gif','NO','_self','interaction','0')", __FILE__, __LINE__);
 	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_STUDENTPUBLICATION . "','work/work.php','works.gif','".string2binary(api_get_setting('course_create_active_tools', 'student_publications')) . "','0','squaregrey.gif','NO','_self','interaction','0')", __FILE__, __LINE__);
-	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_SURVEY."','survey/survey_list.php','survey.gif','".string2binary(api_get_setting('course_create_active_tools', 'survey')) . "','0','squaregrey.gif','NO','_self','interaction','0')", __FILE__, __LINE__);	
+	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_SURVEY."','survey/survey_list.php','survey.gif','".string2binary(api_get_setting('course_create_active_tools', 'survey')) . "','0','squaregrey.gif','NO','_self','interaction','0')", __FILE__, __LINE__);
 	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_WIKI ."','wiki/index.php','wiki.gif','".string2binary(api_get_setting('course_create_active_tools', 'wiki')) . "','0','squaregrey.gif','NO','_self','interaction','0')", __FILE__, __LINE__);
     Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_GRADEBOOK."','gradebook/index.php','gradebook.gif','".string2binary(api_get_setting('course_create_active_tools', 'gradebook')). "','0','squaregrey.gif','NO','_self','authoring','0')", __FILE__, __LINE__);
 	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_GLOSSARY."','glossary/index.php','glossary.gif','".string2binary(api_get_setting('course_create_active_tools', 'glossary')). "','0','squaregrey.gif','NO','_self','authoring','0')", __FILE__, __LINE__);
@@ -2185,7 +2185,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 
 		$add_wikipedia_link_sql = "	INSERT INTO `".$TABLETOOLLINK . "` (url, title, description, category_id, display_order, on_homepage, target)
 							VALUES ('http://www.wikipedia.org','Wikipedia','".lang2db(get_lang('Wikipedia')) . "','0','1','0','_self')";
-		api_sql_query($add_wikipedia_link_sql, __FILE__, __LINE__);
+		Database::query($add_wikipedia_link_sql, __FILE__, __LINE__);
 		//we need to add the item properties too!
 		$insert_id = Database :: get_last_insert_id();
 		$sql = "INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('" . TOOL_LINK . "',1,NOW(),NOW(),$insert_id,'LinkAdded',1,0,NULL,1)";

@@ -112,7 +112,7 @@ $nameTools = get_lang('Links');
 //condition for the session
 $session_id = api_get_session_id();
 $condition_session = api_get_session_condition($session_id, false);
-		
+
 if (isset($_GET['action']) && $_GET['action']=='addlink') {
 	$nameTools = '';
 	$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
@@ -270,11 +270,11 @@ if(api_get_setting('search_enabled')=='true') {
 					</div>
 				</div>';
 
-		
-		
-	
+
+
+
 		$sqlcategories = "SELECT * FROM ".$tbl_categories." $condition_session ORDER BY display_order DESC";
-		$resultcategories = api_sql_query($sqlcategories,__FILE__,__LINE__);
+		$resultcategories = Database::query($sqlcategories,__FILE__,__LINE__);
 
 		if (Database::num_rows($resultcategories)) {
 			echo '	<div class="row">
@@ -473,7 +473,7 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 	//Starting the table which contains the categories
 	$sqlcategories = "SELECT * FROM ".$tbl_categories." $condition_session ORDER BY display_order DESC";
 	$resultcategories = Database::query($sqlcategories);
-		
+
 	echo '<table class="data_table">';
 	// displaying the links which have no category (thus category = 0 or NULL), if none present this will not be displayed
 	$sqlLinks = "SELECT * FROM ".$tbl_link." WHERE category_id=0 or category_id IS NULL";
@@ -492,7 +492,7 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 	while ($myrow = Database::fetch_array($resultcategories)) {
 		//validacion when belongs to a session
 		$session_img = api_get_session_image($myrow['session_id'], $_user['status']);
-				
+
 		//if (!isset($urlview))
 		if ($urlview == '')
 		{
@@ -519,10 +519,10 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 					echo '<th width="81%"  style="font-weight: bold; text-align:left;padding-left: 5px;">';
 					echo '<a href="'.api_get_self()."?".api_get_cidreq()."&urlview=".Security::remove_XSS($newurlview)."\">";
 					echo "<img src=../img/remove.gif>&nbsp;&nbsp;".api_htmlentities($myrow["category_title"],ENT_QUOTES,$charset)."</a><br/>&nbsp;&nbsp;&nbsp;".$myrow["description"];
-					
+
 					if (api_is_allowed_to_edit(null,true))
-						{	
-							echo '<th>';	
+						{
+							echo '<th>';
 							showcategoryadmintools($myrow["id"]);
 							echo '</th>';
 						}
@@ -543,9 +543,9 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 					echo'</a><br />&nbsp;&nbsp;&nbsp;';
 					echo $myrow["description"];
 						if (api_is_allowed_to_edit(null, true))
-						{	
-							echo '<th style="text-align:center;">';	
-							showcategoryadmintools($myrow["id"]);			
+						{
+							echo '<th style="text-align:center;">';
+							showcategoryadmintools($myrow["id"]);
 							echo '</th>';
 						}
 					echo '</th>';

@@ -144,24 +144,24 @@ function save_glossary($values)
 
 	// get the maximum display order of all the glossary items
 	$max_glossary_item = get_max_glossary_item();
-	
+
 	// session_id
 	$session_id = api_get_session_id();
-	
+
 	// check if the glossary term already exists
 	if (glossary_exists($values['glossary_title']))
 	{
 		// display the feedback message
 		Display::display_error_message('GlossaryTermAlreadyExistsYouShouldEditIt');
 	} else {
-		$sql = "INSERT INTO $t_glossary (name, description, display_order, session_id) 
+		$sql = "INSERT INTO $t_glossary (name, description, display_order, session_id)
 				VALUES(
 					'".Database::escape_string(Security::remove_XSS($values['glossary_title']))."',
 					'".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['glossary_comment'])),COURSEMANAGERLOWSECURITY))."',
 					'".(int)($max_glossary_item + 1)."',
 					'".Database::escape_string($session_id)."'
 					)";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$id = Database::get_last_insert_id();
 		if ($id>0) {
 			//insert into item_property
@@ -300,10 +300,10 @@ function delete_glossary($glossary_id)
 
 	$sql = "DELETE FROM $t_glossary WHERE glossary_id='".Database::escape_string($glossary_id)."'";
 	$result = Database::query($sql, __FILE__, __LINE__);
-	
+
 	//update item_property (delete)
 	api_item_property_update(api_get_course_info(), TOOL_GLOSSARY, Database::escape_string($glossary_id), 'delete', api_get_user_id());
-	
+
 	// reorder the remaining terms
 	reorder_glossary();
 	$_SESSION['max_glossary_display'] = get_max_glossary_item();
@@ -340,9 +340,9 @@ function display_glossary()
 		$table->set_header(3, get_lang('CreationDate'), false);
 		$table->set_header(4, get_lang('UpdateDate'), false);
 		if (api_is_allowed_to_edit(null,true)) {
-			$table->set_header(5, get_lang('Actions'), false);		
+			$table->set_header(5, get_lang('Actions'), false);
 			$table->set_column_filter(5, 'actions_filter');
-		}	
+		}
 		$table->display();
 	}
 	if ($_SESSION['glossary_view'] == 'list')
@@ -406,17 +406,17 @@ function get_glossary_data($from, $number_of_items, $column, $direction)
 	// Database table definition
 	$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 	$t_item_propery = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-	
+
 	if (api_is_allowed_to_edit(null,true)) {
 		$col5 = ", glossary.glossary_id	as col5";
 	} else {
 		$col5 = " ";
 	}
-	
+
 	//condition for the session
 	$session_id = api_get_session_id();
 	$condition_session = api_get_session_condition($session_id);
-	
+
 	$sql = "SELECT
 				glossary.display_order 	as col0,
 				glossary.name 			as col1,
@@ -425,41 +425,41 @@ function get_glossary_data($from, $number_of_items, $column, $direction)
 				ip.lastedit_date		as col4
 				$col5,
 				glossary.session_id as session_id
-			FROM $t_glossary glossary, $t_item_propery ip 
+			FROM $t_glossary glossary, $t_item_propery ip
 			WHERE glossary.glossary_id = ip.ref
 			AND tool = '".TOOL_GLOSSARY."' $condition_session";
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
-	
-	$res = api_sql_query($sql, __FILE__, __LINE__);
-	
+
+	$res = Database::query($sql, __FILE__, __LINE__);
+
 	$return = array();
 	$array = array();
 	while ($data = Database::fetch_array($res)) {
-		
+
 		$array[0] = $data[0];
-		
+
 		//validacion when belongs to a session
 		$session_img = api_get_session_image($data['session_id'], $_user['status']);
 		$array[1] = $data[1] . $session_img;
-		
+
 		if (!$_SESSION['glossary_view'] || $_SESSION['glossary_view'] == 'table') {
 			$array[2] = str_replace(array('<p>','</p>'),array('','<br />'),$data[2]);
 		} else {
 			$array[2] = $data[2];
 		}
-		
+
 		$array[3] = $data[3];
 		$array[4] = $data[4];
-		
+
 		if (api_is_allowed_to_edit(null,true)) {
 			$array[5] = $data[5];
 		}
-		
+
 		$return[] = $array;
 	}
-	
-	return $return;	
+
+	return $return;
 }
 
 /**
@@ -501,10 +501,10 @@ function actions_filter($glossary_id,$url_params,$row)
 		}
 	}
 	$return .= '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$row[5].'&msg=edit">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>';
-	
+
 	$glossary_data = get_glossary_information($row[5]);
 	$glossary_term = $glossary_data['glossary_title'];
-		
+
 	$return .= '<a href="'.api_get_self().'?action=delete_glossary&amp;glossary_id='.$row[5].'" onclick="return confirmation(\''.$glossary_term.'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 	return $return;
 }

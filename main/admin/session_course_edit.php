@@ -139,7 +139,7 @@ foreach($coaches as $enreg)
 {
 ?>
 
-	<option value="<?php echo $enreg['user_id']; ?>" <?php if((!$sent && (is_array($arr_infos) && in_array($enreg['user_id'],$arr_infos))) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>
+	<option value="<?php echo $enreg['user_id']; ?>" <?php if((!$sent && (is_array($arr_infos) && in_array($enreg['user_id'],$arr_infos))) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname', $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 
 <?php
 }

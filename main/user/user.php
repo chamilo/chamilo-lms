@@ -586,7 +586,7 @@ if (api_is_allowed_to_edit()) {
 	$table->set_header($header_nr++, '', false);
 }
 $table->set_header($header_nr++, get_lang('Photo'), false);
-if (is_western_name_order) {
+if ($is_western_name_order) {
 	$table->set_header($header_nr++, get_lang('FirstName'));
 	$table->set_header($header_nr++, get_lang('LastName'));
 } else {

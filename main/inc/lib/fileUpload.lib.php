@@ -246,7 +246,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 	$uploaded_file['name']=stripslashes($uploaded_file['name']);
 	//add extension to files without one (if possible)
 	$uploaded_file['name']=add_ext_on_mime($uploaded_file['name'],$uploaded_file['type']);
-
+	$current_session_id = api_get_session_id();
 	//check if there is enough space to save the file
 	if (!enough_space($uploaded_file['size'], $maxFilledSpace))
 	{
@@ -336,7 +336,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 								//update filesize
 								update_existing_document($_course,$document_id,$uploaded_file['size']);
 								//update document item_property
-								api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentUpdated',$user_id,$to_group_id,$to_user_id);
+								api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentUpdated',$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
 							}
 							//if the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course,$upload_path,$user_id);
@@ -353,7 +353,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 							if ($document_id)
 							{
 								//put the document in item_property update
-								api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id);
+								api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
 							}
 							//if the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course,$upload_path,$user_id);
@@ -384,7 +384,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 						if ($document_id)
 						{
 							//update document item_property
-							api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id);
+							api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
 						}
 						//if the file is in a folder, we need to update all parent folders
 						item_property_update_on_folder($_course,$upload_path,$user_id);
@@ -418,7 +418,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 							if ($document_id)
 							{
 								//update document item_property
-								api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id);
+								api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
 							}
 							//if the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course,$upload_path,$user_id);
@@ -1157,12 +1157,13 @@ function filter_extension(&$filename)
 function add_document($_course,$path,$filetype,$filesize,$title,$comment=NULL, $readonly=0)
 {
 	global $charset;
+	$session_id = api_get_session_id();
 	$table_document = Database::get_course_table(TABLE_DOCUMENT,$_course['dbName']);
 	$sql="INSERT INTO $table_document
-	(`path`,`filetype`,`size`,`title`, `comment`, readonly)
+	(`path`, `filetype`, `size`, `title`, `comment`, `readonly`, `session_id`)
 	VALUES ('$path','$filetype','$filesize','".
-	Database::escape_string(htmlspecialchars($title, ENT_QUOTES, $charset))."', '$comment',$readonly)";
-	if(Database::query($sql,__FILE__,__LINE__))
+	Database::escape_string(htmlspecialchars($title, ENT_QUOTES, $charset))."', '$comment', $readonly, $session_id)";
+	if(api_sql_query($sql,__FILE__,__LINE__))
 	{
 		//display_message("Added to database (id ".mysql_insert_id().")!");
 		return Database::insert_id();
@@ -1418,7 +1419,8 @@ function create_unexisting_directory($_course,$user_id,$to_group_id,$to_user_id,
 		if ($document_id)
 		{
 		//update document item_property
-		api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'FolderCreated',$user_id,$to_group_id,$to_user_id);
+		$current_session_id = api_get_session_id();
+		api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'FolderCreated',$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
 		return $desired_dir_name.$nb;
 		}
 	}
@@ -1854,11 +1856,10 @@ function build_missing_files_form($missing_files,$upload_path,$file_name)
  */
 function add_all_documents_in_folder_to_database($_course,$user_id,$base_work_dir,$current_path='',$to_group_id=0)
 {
-
-	$path = $base_work_dir.$current_path;
-
-	//open dir
-	$handle=opendir($path);
+$current_session_id = api_get_session_id();
+$path = $base_work_dir.$current_path;
+//open dir
+$handle=opendir($path);
 	//run trough
 	while($file=readdir($handle))
 	{
@@ -1876,7 +1877,7 @@ function add_all_documents_in_folder_to_database($_course,$user_id,$base_work_di
 		if(!DocumentManager::get_document_id($_course, $current_path.'/'.$safe_file))
 		{
 			$document_id=add_document($_course,$current_path.'/'.$safe_file,'folder',0,$title);
-			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id, $to_group_id);
+			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id, $to_group_id,null,null,null,$current_session_id);
 			//echo $current_path.'/'.$safe_file." added!<br/>";
 
 		}
@@ -1895,7 +1896,7 @@ function add_all_documents_in_folder_to_database($_course,$user_id,$base_work_di
 			$title=get_document_title($file);
 			$size = filesize($base_work_dir.$current_path.'/'.$safe_file);
 			$document_id = add_document($_course,$current_path.'/'.$safe_file,'file',$size,$title);
-			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id);
+			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,null,null,null,$current_session_id);
 			//echo $current_path.'/'.$safe_file." added!<br/>";
 			}
 	    }

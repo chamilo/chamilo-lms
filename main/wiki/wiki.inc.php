@@ -303,6 +303,7 @@ function save_wiki() {
 	$_clean['version']=Database::escape_string($_POST['version'])+1;
 	$_clean['linksto'] = links_to($_clean['content']); //and check links content
 	$dtime = date( "Y-m-d H:i:s" );
+	$session_id = api_get_session_id();	
 
 	if (isset($_SESSION['_gid']))
     {
@@ -355,10 +356,15 @@ function save_wiki() {
 		$_clean['max_version']=Database::escape_string(Security::remove_XSS($_POST['max_version']));
 	}
 
-	$sql="INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['page_id']."','".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
+	$sql = "INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip, session_id) VALUES ('".$_clean['page_id']."','".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."', '".Database::escape_string($session_id)."')";
 
 	$result=Database::query($sql);
     $Id = Database::insert_id();
+
+	if ($Id > 0) {
+		//insert into item_property
+		api_item_property_update(api_get_course_info(), TOOL_WIKI, $Id, 'WikiAdded', api_get_user_id(), $_clean['group_id']);
+	}
 
 	if ($_clean['page_id']	==0)
 	{
@@ -398,8 +404,9 @@ function restore_wikipage($r_page_id, $r_reflink, $r_title, $r_content, $r_group
 	$r_dtime = date( "Y-m-d H:i:s" );
 	$r_version = $r_version+1;
 	$r_comment = get_lang('RestoredFromVersion').': '.$c_version;
-
-	$sql="INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$r_page_id."','".$r_reflink."','".$r_title."','".$r_content."','".$r_user_id."','".$r_group_id."','".$r_dtime."','".$r_assignment."','".$r_comment."','".$r_progress."','".$r_version."','".$r_linksto."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
+	$session_id = api_get_session_id();
+	
+	$sql="INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip, session_id) VALUES ('".$r_page_id."','".$r_reflink."','".$r_title."','".$r_content."','".$r_user_id."','".$r_group_id."','".$r_dtime."','".$r_assignment."','".$r_comment."','".$r_progress."','".$r_version."','".$r_linksto."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."','".Database::escape_string($session_id)."')";
 
 	$result=Database::query($sql);
     $Id = Database::insert_id();
@@ -450,6 +457,9 @@ function save_new_wiki() {
 
 	// cleaning the variables
 	$_clean['assignment']=Database::escape_string($_POST['assignment']);
+
+	// session_id
+	$session_id = api_get_session_id();
 
 	if($_clean['assignment']==2 || $_clean['assignment']==1) {// Unlike ordinary pages of pages of assignments. Allow create a ordinary page although there is a assignment with the same name
 		$_clean['reflink']=Database::escape_string(Security::remove_XSS(str_replace(' ','_',$_POST['title']."_uass".$assig_user_id)));
@@ -536,18 +546,21 @@ function save_new_wiki() {
 		   return get_lang('WikiPageTitleExist').'<a href="index.php?action=edit&amp;title='.$var.'&group_id='.$group_id.'">'.$_POST['title'].'</a>';
 		} else {
 			$dtime = date( "Y-m-d H:i:s" );
-			$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
-		   $result=Database::query($sql,__LINE__,__FILE__);
-		   $Id = Database::insert_id();
+			$sql = "INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, version, linksto, user_ip, session_id) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."', '".Database::escape_string($session_id)."')";
+		    $result = Database::query($sql,__LINE__,__FILE__);
+		    $Id = Database::insert_id();
+		   	
+		   	if ($Id > 0) {
+				//insert into item_property
+				api_item_property_update(api_get_course_info(), TOOL_WIKI, $Id, 'WikiAdded', api_get_user_id(), $_clean['group_id']);
+			}
 
 		   $sql='UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'" WHERE id="'.$Id.'"';
 	       Database::query($sql,__FILE__,__LINE__);
 
 			//insert wiki config
 		   $sql="INSERT INTO ".$tbl_wiki_conf." (page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit) VALUES ('".$Id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
-		   Database::query($sql,__LINE__,__FILE__);
-
-		   api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id(), $_clean['group_id']);
+		   Database::query($sql,__LINE__,__FILE__);		   
 
 		   check_emailcue(0, 'A');
 		   return get_lang('NewWikiSaved').' <a href="index.php?action=showpage&amp;title='.$_clean['reflink'].'&group_id='.$group_id.'">'.$_POST['title'].'</a>';
@@ -583,7 +596,7 @@ return true;
 	echo '<div id="wikititle">';
 	echo  '<span class="form_required">*</span> '.get_lang(Title).': <input type="text" name="title" value="'.urldecode($_GET['title']).'" size="40">';
 
-	if(api_is_allowed_to_edit() || api_is_platform_admin())
+	if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 	{
 
 		$_clean['group_id']=(int)$_SESSION['_gid']; // TODO: check if delete ?
@@ -709,7 +722,7 @@ return true;
 	}
 	echo '</div>';
 	echo '<div id="wikicontent">';
-	api_disp_html_area('content', '', '', '', null, api_is_allowed_to_edit()
+	api_disp_html_area('content', '', '', '', null, api_is_allowed_to_edit(null,true)
 		? array('ToolbarSet' => 'Wiki', 'Width' => '100%', 'Height' => '400')
 		: array('ToolbarSet' => 'WikiStudent', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
 	);
@@ -782,7 +795,7 @@ function display_wiki_entry()
 	// if both are empty and we are displaying the index page then we display the default text.
 	if ($row['content']=='' AND $row['title']=='' AND $page=='index')
 	{
-		if(api_is_allowed_to_edit() || api_is_platform_admin() || GroupManager :: is_user_in_group(api_get_user_id(),$_SESSION['_gid']))
+		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin() || GroupManager :: is_user_in_group(api_get_user_id(),$_SESSION['_gid']))
 		{
 			//Table structure for better export to pdf
 			$default_table_for_content_Start='<table align="center" border="0"><tr><td align="center">';
@@ -821,14 +834,14 @@ function display_wiki_entry()
 	}
 
 	//Show page. Show page to all users if isn't hide page. Mode assignments: if student is the author, can view
-	if($KeyVisibility=="1" || api_is_allowed_to_edit() || api_is_platform_admin() || ($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id()==$row['user_id'])))
+	if($KeyVisibility=="1" || api_is_allowed_to_edit(false,true) || api_is_platform_admin() || ($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id()==$row['user_id'])))
 	{
 		echo '<div id="wikititle">';
 
 		// page action: protecting (locking) the page
 	if (check_protect_page())
 	{
-		if(api_is_allowed_to_edit() || api_is_platform_admin())
+		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 		{
 				$protect_page= '<img src="../img/wiki/lock.gif" title="'.get_lang('PageLockedExtra').'" alt="'.get_lang('PageLockedExtra').'" />';
 		}
@@ -839,7 +852,7 @@ function display_wiki_entry()
 	}
 	else
 	{
-		if(api_is_allowed_to_edit() || api_is_platform_admin())
+		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 	   	{
 				$protect_page= '<img src="../img/wiki/unlock.gif" title="'.get_lang('PageUnlockedExtra').'" alt="'.get_lang('PageUnlockedExtra').'" />';
 	   	}
@@ -859,7 +872,7 @@ function display_wiki_entry()
 	}
 	else
 	{
-		if(api_is_allowed_to_edit() || api_is_platform_admin())
+		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 		{
 				$visibility_page= '<img src="../img/wiki/visible.gif" title="'.get_lang('ShowPageExtra').'" alt="'.get_lang('ShowPageExtra').'" />';
 		}
@@ -869,13 +882,12 @@ function display_wiki_entry()
 		echo '</span>';
 
 		//page action: notification
-	if (check_notify_page($page))
-	{
-			$notify_page= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('NotifyByEmail').'" alt="'.get_lang('NotifyByEmail').'" />';
-		}
-		else
-		{
-			$notify_page= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('CancelNotifyByEmail').'" alt="'.get_lang('CancelNotifyByEmail').'" />';
+		if (api_is_allowed_to_session_edit() ) {
+			if (check_notify_page($page)) {
+				$notify_page= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('NotifyByEmail').'" alt="'.get_lang('NotifyByEmail').'" />';
+			} else {
+				$notify_page= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('CancelNotifyByEmail').'" alt="'.get_lang('CancelNotifyByEmail').'" />';
+			}
 		}
 		echo '<span style="float:right">';
 		echo '<a href="index.php?action=showpage&amp;actionpage=notify&amp;title='.$page.'">'.$notify_page.'</a>';
@@ -891,7 +903,7 @@ function display_wiki_entry()
 		echo '</span>';
 
 		//page action: copy last version to doc area
-		if(api_is_allowed_to_edit() || api_is_platform_admin())
+		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 		{
 			echo '<span style="float:right;">';
 			echo '<form name="form_export2DOC" method="post" action="index.php">';
@@ -1054,7 +1066,7 @@ function check_addnewpagelock()
 	$status_addlock=$row['addlock'];
 
 	//change status
-	if ($_GET['actionpage']=='addlock' && (api_is_allowed_to_edit() || api_is_platform_admin()))
+	if ($_GET['actionpage']=='addlock' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin()))
 	{
 		if ($row['addlock']==1)
 		{
@@ -1106,7 +1118,7 @@ function check_protect_page()
 	$id=$row['id'];
 
 	///change status
-	if ($_GET['actionpage']=='lock' && (api_is_allowed_to_edit() || api_is_platform_admin()))
+	if ($_GET['actionpage']=='lock' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin()))
     {
 	    if ($row['editlock']==0)
 	    {
@@ -1161,7 +1173,7 @@ function check_visibility_page()
 	$id=$row['id'];	//need ? check. TODO
 
 	//change status
-	if ($_GET['actionpage']=='visibility' && (api_is_allowed_to_edit() || api_is_platform_admin()))
+	if ($_GET['actionpage']=='visibility' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin()))
 	{
 		if ($row['visibility']==1)
 	    {
@@ -1216,7 +1228,7 @@ function check_visibility_discuss()
 	$id=$row['id'];	//need ? check. TODO
 
 	//change status
-	if ($_GET['actionpage']=='visibility_disc' && (api_is_allowed_to_edit() || api_is_platform_admin()))
+	if ($_GET['actionpage']=='visibility_disc' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin()))
 	{
 		if ($row['visibility_disc']==1)
 	    {
@@ -1271,7 +1283,7 @@ function check_addlock_discuss()
 	$id=$row['id'];		//need ? check. TODO
 
 	//change status
-	if ($_GET['actionpage']=='addlock_disc' && (api_is_allowed_to_edit() || api_is_platform_admin()))
+	if ($_GET['actionpage']=='addlock_disc' && (api_is_allowed_to_edit(null,true) || api_is_platform_admin()))
     {
 		if ($row['addlock_disc']==1)
 	    {
@@ -1327,7 +1339,7 @@ function check_ratinglock_discuss()
 	$id=$row['id'];	//need ? check. TODO
 
 	//change status
-	if ($_GET['actionpage']=='ratinglock_disc' && (api_is_allowed_to_edit() || api_is_platform_admin()))
+	if ($_GET['actionpage']=='ratinglock_disc' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin()))
     {
 		if ($row['ratinglock_disc']==1)
 	    {
@@ -1593,7 +1605,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 		//first, current author and time
 		//Who is the author?
 		$userinfo=	Database::get_user_info_from_id($lastuser);
-		$email_user_author= get_lang('EditedBy').': '.api_get_person_name($userinfo['lastname'].', '.$userinfo['firstname']);
+		$email_user_author= get_lang('EditedBy').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 
 		//When ?
 		$year = substr($lastime, 0, 4);
@@ -1632,7 +1644,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 		//first, current author and time
 		//Who is the author of last message?
 		$userinfo=	Database::get_user_info_from_id($lastuser);
-		$email_user_author= get_lang('AddedBy').': '.api_get_person_name($userinfo['lastname'].', '.$userinfo['firstname']);
+		$email_user_author= get_lang('AddedBy').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 
 		//When ?
 		$year = substr($lastime, 0, 4);
@@ -1679,7 +1691,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 
 		//Who is the author?
 		$userinfo=	Database::get_user_info_from_id($row['user_id']);
-		$email_user_author= get_lang('AddedBy').': '.api_get_person_name($userinfo['lastname'].', '.$userinfo['firstname']);
+		$email_user_author= get_lang('AddedBy').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 
 		//When ?
 		$year = substr($row['dtime'], 0, 4);
@@ -1718,7 +1730,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 
 		//Who is the author?
 		$userinfo=	Database::get_user_info_from_id(api_get_user_id());	//current user
-		$email_user_author= get_lang('DeletedBy').': '.api_get_person_name($userinfo['lastname'].', '.$userinfo['firstname']);
+		$email_user_author= get_lang('DeletedBy').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
 
 
 		//When ?
@@ -1741,12 +1753,12 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 			if(empty($charset)){$charset='ISO-8859-1';}
 			$headers = 'Content-Type: text/html; charset='. $charset;
 			$userinfo = Database::get_user_info_from_id($row['user_id']);	//$row['user_id'] obtained from tbl_wiki_mailcue
-			$name_to = api_get_person_name($userinfo['lastname'].', '.$userinfo['firstname'], null, PERSON_NAME_EMAIL_ADDRESS);
+			$name_to = api_get_person_name($userinfo['firstname'], $userinfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
 			$email_to = $userinfo['email'];
 			$sender_name = api_get_setting('emailAdministrator');
 			$sender_email = api_get_setting('emailAdministrator');
 			$email_subject = get_lang('EmailWikiChanges').' - '.$_course['official_code'];
-			$email_body = get_lang('DearUser').' '.api_get_person_name($userinfo['lastname'].', '.$userinfo['firstname']).',<br /><br />';
+			$email_body = get_lang('DearUser').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).',<br /><br />';
 			$email_body .= $emailtext.' <strong>'.$_course['name'].' - '.$group_name.'</strong><br /><br /><br />';
 			$email_body .= $email_user_author.' ('.$email_date_changes.')<br /><br /><br />';
 			$email_body .= $email_assignment.'<br /><br /><br />';
@@ -1881,7 +1893,7 @@ function auto_add_page_users($assignment_type)
 	$link2teacher=$_POST['title']= $title_orig."_uass".api_get_user_id();
 
 	//first: teacher name, photo, and assignment description (original content)
-    $content_orig_A='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Teacher').': '.api_get_person_name($userinfo['lastname'].', '.$userinfo['firstname']).'</div><br/><div>';
+    $content_orig_A='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Teacher').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</div><br/><div>';
 	$content_orig_B='<h1>'.get_lang('AssignmentDescription').'</h1></div><br/>'.$_POST['content'];
 
     //Second: student list (names, photo and links to their works).
@@ -1896,7 +1908,7 @@ function auto_add_page_users($assignment_type)
 			$image_path = UserManager::get_user_picture_path_by_id($assig_user_id,'web',false, true);
 			$image_repository = $image_path['dir'];
 			$existing_image = $image_path['file'];
-			$name = api_get_person_name($o_user_to_add['lastname'].', '.$o_user_to_add['firstname']);
+			$name = api_get_person_name($o_user_to_add['firstname'], $o_user_to_add['lastname']);
 			$photo= '<img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="40" height="50" align="bottom" title="'.$name.'"  />';
 
 			$is_tutor_of_group = GroupManager :: is_tutor_of_group($assig_user_id,$_clean['group_id']); //student is tutor
@@ -1925,8 +1937,8 @@ function auto_add_page_users($assignment_type)
 				$_POST['comment']=get_lang('AssignmentFirstComToStudent');
 				$_POST['content']='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Student').': '.$name.'</div>[['.$link2teacher.' | '.get_lang('AssignmentLinktoTeacherPage').']] '; //If $content_orig_B is added here, the task written by the professor was copied to the page of each student. TODO: config options
 
-			   //AssignmentLinktoTeacherPage
-			 	$all_students_pages[] = '<li>'.strtoupper(api_get_person_name($o_user_to_add['lastname'].', '.$o_user_to_add['firstname'])).' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>';
+				//AssignmentLinktoTeacherPage
+			 	$all_students_pages[] = '<li>'.api_get_person_name($o_user_to_add['firstname'], $o_user_to_add['lastname']).' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>';
 
 				$_POST['assignment']=2;
 
@@ -1971,7 +1983,7 @@ function display_wiki_search_results($search_term, $search_content=0)
 
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 
-	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
+	if(api_is_allowed_to_edit(false,true) || api_is_platform_admin()) //only by professors if page is hidden
 	{
 		if($search_content=='1')
 		{
@@ -2031,10 +2043,10 @@ function display_wiki_search_results($search_term, $search_content=0)
 			$row = array ();
 			$row[] =$ShowAssignment;
 			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
-			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_get_person_name($userinfo['lastname'].', '.$userinfo['firstname']).'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
+			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
 			$row[] = $year.'-'.$month.'-'.$day.' '.$hours.":".$minutes.":".$seconds;
 
-			if(api_is_allowed_to_edit()|| api_is_platform_admin())
+			if(api_is_allowed_to_edit(false,true)|| api_is_platform_admin())
 			{
 				$showdelete=' <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=delete&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'"><img src="../img/delete.gif" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'" />';
 			}

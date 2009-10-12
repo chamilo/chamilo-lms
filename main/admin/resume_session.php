@@ -35,10 +35,11 @@ $tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_class							= Database::get_main_table(TABLE_MAIN_CLASS);
 $tbl_class_rel_user					= Database::get_main_table(TABLE_MAIN_CLASS_USER);
+$tbl_session_category				= Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
 $id_session = (int)$_GET['id_session'];
 
-$sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end
+$sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility
 		FROM '.$tbl_session.'
 		LEFT JOIN '.$tbl_user.'
 			ON id_coach = user_id
@@ -53,6 +54,14 @@ if(!api_is_platform_admin() && $session['session_admin_id']!=$_user['user_id'])
 	api_not_allowed(true);
 }
 
+$sql = 'SELECT name FROM  '.$tbl_session_category.' WHERE id = "'.intval($session['session_category_id']).'"'; 
+$rs = api_sql_query($sql, __FILE__, __LINE__);
+$session_category = '';
+if(mysql_num_rows($rs)>0) {
+	$rows_session_category = api_store_result($rs);
+	$rows_session_category = $rows_session_category[0];
+	$session_category = $rows_session_category['name'];
+}
 
 if($_GET['action'] == 'delete')
 {
@@ -120,6 +129,12 @@ api_display_tool_title($tool_name);
 	<td><?php echo get_lang('GeneralCoach'); ?> :</td>
 	<td><?php echo api_get_person_name($session['firstname'], $session['lastname']).' ('.$session['username'].')' ?></td>
 </tr>
+<?php if(!empty($session_category)): ?>
+<tr>
+	<td><?php echo get_lang('SessionCategory') ?></td>
+	<td><?php echo $session_category;  ?></td>
+</tr>
+<?php endif; ?>
 <tr>
 	<td><?php echo get_lang('Date'); ?> :</td>
 	<td>
@@ -149,6 +164,16 @@ api_display_tool_title($tool_name);
 		<?php echo intval($session['nb_days_access_after_end']) ?>
 	</td>
 </tr>
+
+<tr>
+	<td>
+		<?php echo api_ucfirst(get_lang('SessionVisibility')) ?> :
+	</td>
+	<td>
+		<?php if ($session['visibility']==1) echo get_lang('ReadOnly'); elseif($session['visibility']==2) echo get_lang('Visible');elseif($session['visibility']==3) echo api_ucfirst(get_lang('Invisible'))  ?>
+	</td>
+</tr>
+
 </table>
 
 <br />
@@ -188,13 +213,34 @@ else {
 	$courses=Database::store_result($result);
 	foreach($courses as $course){
 		//select the number of users
-		$sql = 'SELECT COUNT(id_user) as nb_users FROM '.$tbl_session_rel_course_rel_user.' WHERE course_code="'.Database::escape_string($course['code']).'" AND id_session='.intval($id_session);
-		$rs = Database::query($sql, __FILE__, __LINE__);
+		
+		$sql = " SELECT count(*) FROM $tbl_session_rel_user sru, $tbl_session_rel_course_rel_user srcru 
+				WHERE srcru.id_user = sru.id_user AND srcru.course_code = '".Database::escape_string($course['code'])."'
+				AND srcru.id_session = '".intval($id_session)."'";  
+				 				
+		$rs = api_sql_query($sql, __FILE__, __LINE__);
 		$course['nbr_users'] = mysql_result($rs,0,0);
-		if (empty($course['username'])) {
-			$coach = get_lang('None');
+		
+		// Get coachs of the courses in session
+		
+		$sql = "SELECT user.lastname,user.firstname,user.username FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user 
+				WHERE session_rcru.id_user = user.user_id AND session_rcru.id_session = '".intval($id_session)."' AND session_rcru.course_code ='".Database::escape_string($course['code'])."' AND session_rcru.status=2";
+		$rs = Database::query($sql,__FILE__,__LINE__);
+		
+		$coachs = array();
+		if (Database::num_rows($rs) > 0) {			
+			while($info_coach = Database::fetch_array($rs)) {
+				$coachs[] = $info_coach['lastname'].' '.$info_coach['firstname'].' ('.$info_coach['username'].')';
+			}						
 		} else {
-			$coach = api_get_person_name($course['firstname'], $course['lastname']).' ('.$course['username'].')';
+			$coach = get_lang('None');
+		}
+		
+					
+		if (count($coachs) > 0) {
+			$coach = implode('<br />',$coachs);
+		} else {
+			$coach = get_lang('None');
 		}
 
 		$orig_param = '&origin=resume_session';
@@ -251,7 +297,9 @@ else {
 						<b>'.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')</b>
 					</td>
 					<td>
-						<a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>
+						<a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;
+						<a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('course.gif', get_lang('BlockCoursesForThisUser')).'</a>&nbsp;
+						<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>
 					</td>
 				  </tr>';
 	}

@@ -86,8 +86,9 @@ $(document).ready( function() {
  } );
  </script>';
 //session
-if(isset($_GET['id_session']))
+if(isset($_GET['id_session'])) {
 	$_SESSION['id_session'] = Security::remove_XSS($_GET['id_session']);
+}
 
 // Is the document tool visible?
 // Check whether the tool is actually visible
@@ -135,7 +136,8 @@ $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$course_dir;
 $http_www = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document';
 $dbl_click_id = 0; // used to avoid double-click
-$is_allowed_to_edit = api_is_allowed_to_edit();
+
+$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 $group_member_with_upload_rights = false;
 
 //if the group id is set, we show them group documents
@@ -190,6 +192,11 @@ else
 	$to_group_id = 0;
 	$req_gid = '';
 }
+// If i'm in a session we should check the parameters of visibility
+if (api_get_session_id()!=0) {
+	$group_member_with_upload_rights = 
+           $group_member_with_upload_rights && api_is_allowed_to_session_edit(false,true);
+}
 /*
 -----------------------------------------------------------
 	Libraries
@@ -232,7 +239,7 @@ if (!(DocumentManager::is_visible($curdirpath, $_course)||$is_allowed_to_edit)){
 */
 
 $course_quota = DocumentManager::get_course_quota();
-
+$current_session_id = api_get_session_id();
 /*
 ==============================================================================
 		MAIN SECTION
@@ -327,7 +334,6 @@ for ($i=0; $i<$array_len;$i++)
 }
 
 Display::display_header('','Doc');
-$is_allowed_to_edit  = api_is_allowed_to_edit();
 
 /*
  * Lib for event log, stats & tracking
@@ -771,11 +777,14 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 
 		//icons (clickable)
 		//$row[]= build_document_icon_tag($id['filetype'],$id['path']);
-		$row[] = create_document_link($http_www,  $document_name,  $id['path'], $id['filetype'],  $size, $id['visibility'], true);
-
+		$row[] = create_document_link($http_www,  $document_name, $id['path'], $id['filetype'], $size, $id['visibility'], true);
+		
+		//validacion when belongs to a session
+		$session_img = api_get_session_image($id['session_id'], $_user['status']);
+		
 		//document title with hyperlink
-		$row[] = create_document_link($http_www,$document_name,$id['path'],$id['filetype'],$size,$id['visibility']).'<br />'.$invisibility_span_open.nl2br(htmlspecialchars($id['comment'],ENT_QUOTES,$charset)).$invisibility_span_close.$user_link;
-
+		$row[] = create_document_link($http_www, $document_name, $id['path'], $id['filetype'], $size, $id['visibility']).$session_img.'<br />'.$invisibility_span_open.nl2br(htmlspecialchars($id['comment'],ENT_QUOTES,$charset)).$invisibility_span_close.$user_link;
+		
 		//comments => display comment under the document name
 		//$row[] = $invisibility_span_open.nl2br(htmlspecialchars($id['comment'])).$invisibility_span_close;
 		$display_size = format_file_size($size);

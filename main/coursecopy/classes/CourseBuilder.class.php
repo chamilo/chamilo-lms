@@ -19,6 +19,7 @@ require_once 'Learnpath.class.php';
 require_once 'Survey.class.php';
 require_once 'SurveyQuestion.class.php';
 require_once 'Glossary.class.php';
+require_once 'CourseSession.class.php';
 
 /**
  * Class which can build a course-object from a Dokeos-course.
@@ -55,31 +56,50 @@ class CourseBuilder
 	/**
 	 * Build the course-object
 	 */
-	function build()
+	function build($session_id = 0,$course_code = '')
 	{
-		$this->build_events();
-		$this->build_announcements();
-		$this->build_links();
-		$this->build_tool_intro();
-		$this->build_forums();
-		$this->build_documents();
-		$this->build_course_descriptions();
-		$this->build_quizzes();
-		$this->build_learnpaths();
-		$this->build_surveys();
-		$this->build_glossarys();
+		
+		if (!empty($session_id) && !empty($course_code)) {
+			$course_info = api_get_course_info($course_code);
+			$table_link = Database :: get_course_table(TABLE_LINKED_RESOURCES,$course_info['dbName']);	
+			$table_properties = Database :: get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
+				
+			$this->build_documents($session_id,$course_code);
+			$this->build_quizzes($session_id,$course_code);
+			$this->build_glossary($session_id,$course_code);
+			$this->build_learnpaths($session_id,$course_code);
+			$this->build_links($session_id,$course_code);
+			$this->build_course_descriptions($session_id,$course_code);
+			
+		} else {
+			
+			$table_link = Database :: get_course_table(TABLE_LINKED_RESOURCES);
+			$table_properties = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+			
+			$this->build_events();
+			$this->build_announcements();
+			$this->build_links();
+			$this->build_tool_intro();
+			$this->build_documents();
+			$this->build_course_descriptions();
+			$this->build_quizzes();
+			$this->build_learnpaths();
+			$this->build_surveys();
+			$this->build_glossary();
+		}
+
 		//TABLE_LINKED_RESOURCES is the "resource" course table, which is deprecated, apparently
-		$table = Database :: get_course_table(TABLE_LINKED_RESOURCES);
+		
 		foreach ($this->course->resources as $type => $resources) {
 			foreach ($resources as $id => $resource) {
-				$sql = "SELECT * FROM ".$table." WHERE source_type = '".$resource->get_type()."' AND source_id = '".$resource->get_id()."'";
+				$sql = "SELECT * FROM ".$table_link." WHERE source_type = '".$resource->get_type()."' AND source_id = '".$resource->get_id()."'";
 				$res = Database::query($sql, __FILE__, __LINE__);
 				while ($link = Database::fetch_object($res)) {
 					$this->course->resources[$type][$id]->add_linked_resource($link->resource_type, $link->resource_id);
 				}
 			}
 		}
-		$table = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+		
 		foreach ($this->course->resources as $type => $resources)
 		{
 			foreach ($resources as $id => $resource)
@@ -87,7 +107,7 @@ class CourseBuilder
 				$tool = $resource->get_tool();
 				if ($tool != null)
 				{
-					$sql = "SELECT * FROM $table WHERE TOOL = '".$tool."' AND ref='".$resource->get_id()."'";
+					$sql = "SELECT * FROM $table_properties WHERE TOOL = '".$tool."' AND ref='".$resource->get_id()."'";
 					$res = Database::query($sql,__FILE__,__LINE__);
 					$all_properties = array ();
 					while ($item_property = Database::fetch_array($res))
@@ -103,22 +123,47 @@ class CourseBuilder
 	/**
 	 * Build the documents
 	 */
-	function build_documents()
+	function build_documents($session_id = 0,$course_code = '')
 	{
-		$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
-		$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
-        if (!empty($this->course->type) && $this->course->type=='partial')
+				
+		if (!empty($course_code) && !empty($session_id)) {
+			$course_info = api_get_course_info($course_code);
+			$table_doc = Database :: get_course_table(TABLE_DOCUMENT,$course_info['dbName']);
+			$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
+			
+			$session_id = intval($session_id);
+			
+			if (!empty($this->course->type) && $this->course->type=='partial') {        	
+        		$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND path NOT LIKE \'/images/gallery%\' AND session_id = '.$session_id.' ORDER BY path';
+			} else {
+	        	$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND session_id = '.$session_id.' ORDER BY path';
+			}						
+			
+			$db_result = Database::query($sql, __FILE__, __LINE__);
+			while ($obj = Database::fetch_object($db_result))
+			{
+				$doc = new Document($obj->id, $obj->path, $obj->comment, $obj->title, $obj->filetype, $obj->size);
+				$this->course->add_resource($doc);
+			}				
+			
+		} else {
+			$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
+			$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+			
+			if (!empty($this->course->type) && $this->course->type=='partial')        	
         	$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND path NOT LIKE \'/images/gallery%\' ORDER BY path';
-        else
-        	$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 ORDER BY path';
-
-		$db_result = Database::query($sql, __FILE__, __LINE__);
-		while ($obj = Database::fetch_object($db_result))
-		{
-			$doc = new Document($obj->id, $obj->path, $obj->comment, $obj->title, $obj->filetype, $obj->size);
-			$this->course->add_resource($doc);
-		}
+	        else
+	        	$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 ORDER BY path';
+			
+			$db_result = Database::query($sql, __FILE__, __LINE__);
+			while ($obj = Database::fetch_object($db_result))
+			{
+				$doc = new Document($obj->id, $obj->path, $obj->comment, $obj->title, $obj->filetype, $obj->size);
+				$this->course->add_resource($doc);
+			}
+		}	
+			
+        
 	}
 	/**
 	 * Build the forums
@@ -183,17 +228,33 @@ class CourseBuilder
 	/**
 	 * Build the links
 	 */
-	function build_links()
+	function build_links($session_id = 0,$course_code = '')
 	{
-		$table = Database :: get_course_table(TABLE_LINK);
-		$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-		$sql = "SELECT * FROM $table l, $table_prop p WHERE p.ref=l.id AND p.tool = '".TOOL_LINK."' AND p.visibility != 2  ORDER BY l.display_order";
-		$db_result = Database::query($sql, __FILE__, __LINE__);
+		
+		if (!empty($session_id) && !empty($course_code)) {
+			$course_info = api_get_course_info($course_code);
+			$table = Database :: get_course_table(TABLE_LINK,$course_info['dbName']);
+			$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
+			$session_id = intval($session_id);
+			$sql = "SELECT * FROM $table l, $table_prop p WHERE p.ref=l.id AND p.tool = '".TOOL_LINK."' AND p.visibility != 2  AND session_id = '$session_id' ORDER BY l.display_order";	
+		} else {
+			$table = Database :: get_course_table(TABLE_LINK);
+			$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+			$sql = "SELECT * FROM $table l, $table_prop p WHERE p.ref=l.id AND p.tool = '".TOOL_LINK."' AND p.visibility != 2  ORDER BY l.display_order";	
+		}
+
+		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$link = new Link($obj->id, $obj->title, $obj->url, $obj->description, $obj->category_id, $obj->on_homepage);
 			$this->course->add_resource($link);
-			$res = $this->build_link_category($obj->category_id);
+			
+			if (!empty($course_code)) {
+				$res = $this->build_link_category($obj->category_id,$course_code);
+			} else {
+				$res = $this->build_link_category($obj->category_id);	
+			}
+
 			if($res > 0)
 			{
 				$this->course->resources[RESOURCE_LINK][$obj->id]->add_linked_resource(RESOURCE_LINKCATEGORY, $obj->category_id);
@@ -217,9 +278,15 @@ class CourseBuilder
 	/**
 	 * Build a link category
 	 */
-	function build_link_category($id)
+	function build_link_category($id, $course_code = '')
 	{
-		$link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY);
+		if (!empty($course_code)) {
+			$course_info = api_get_course_info($course_code);
+			$link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY, $course_info['dbName']);
+		} else {
+			$link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY);	
+		}
+
 		$sql = 'SELECT * FROM '.$link_cat_table.' WHERE id = '.$id;
 		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
@@ -233,13 +300,23 @@ class CourseBuilder
 	/**
 	 * Build the Quizzes
 	 */
-	function build_quizzes()
+	function build_quizzes($session_id = 0,$course_code = '')
 	{
-		$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
-		$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
-		$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
-		$sql = 'SELECT * FROM '.$table_qui.' WHERE active >=0'; //select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
-		$db_result = Database::query($sql, __FILE__, __LINE__);
+		if (!empty($course_code) && !empty($session_id)) {
+			$course_info = api_get_course_info($course_code);
+			$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST, $course_info['dbName']);
+			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION, $course_info['dbName']);
+			$table_doc = Database :: get_course_table(TABLE_DOCUMENT, $course_info['dbName']);						
+			$session_id = intval($session_id);
+			$sql = 'SELECT * FROM '.$table_qui.' WHERE active >=0 AND session_id = '.$session_id; //select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
+		} else {
+			$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
+			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
+			$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
+			$sql = 'SELECT * FROM '.$table_qui.' WHERE active >=0'; //select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)			
+		}
+		
+		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			if (strlen($obj->sound) > 0)
@@ -256,17 +333,33 @@ class CourseBuilder
 			}
 			$this->course->add_resource($quiz);
 		}
-		$this->build_quiz_questions();
+		
+		if (!empty($course_code)) {
+			$this->build_quiz_questions($course_code);
+		} else {
+			$this->build_quiz_questions();	
+		}
+		
+		
 	}
 	/**
 	 * Build the Quiz-Questions
 	 */
-	function build_quiz_questions()
+	function build_quiz_questions($course_code = '')
 	{
-		$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
-		$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
-		$table_que = Database :: get_course_table(TABLE_QUIZ_QUESTION);
-		$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
+		
+		if (!empty($course_code)) {
+			$course_info = api_get_course_info($course_code);
+			$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST,$course_info['dbName']);
+			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION,$course_info['dbName']);
+			$table_que = Database :: get_course_table(TABLE_QUIZ_QUESTION,$course_info['dbName']);
+			$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER,$course_info['dbName']);
+		} else {
+			$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
+			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
+			$table_que = Database :: get_course_table(TABLE_QUIZ_QUESTION);
+			$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);	
+		}
 
 		// Building normal tests.
 		$sql = 'SELECT * FROM '.$table_que;
@@ -422,10 +515,18 @@ class CourseBuilder
 	/**
 	 * Build the course-descriptions
 	 */
-	function build_course_descriptions()
+	function build_course_descriptions($session_id = 0,$course_code = '')
 	{
-		$table = Database :: get_course_table(TABLE_COURSE_DESCRIPTION);
-		$sql = 'SELECT * FROM '.$table;
+		if (!empty($session_id) && !empty($course_code)) {
+			$course_info = api_get_course_info($course_code);
+			$table = Database :: get_course_table(TABLE_COURSE_DESCRIPTION,$course_info['dbName']);
+			$session_id = intval($session_id);
+			$sql = 'SELECT * FROM '.$table. ' WHERE session_id ='.$session_id;	
+		} else {
+			$table = Database :: get_course_table(TABLE_COURSE_DESCRIPTION);
+			$sql = 'SELECT * FROM '.$table;
+		}
+
 		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
@@ -436,14 +537,25 @@ class CourseBuilder
 	/**
 	 * Build the learnpaths
 	 */
-	function build_learnpaths()
+	function build_learnpaths($session_id = 0,$course_code = '')
 	{
-		$table_main 	= Database :: get_course_table(TABLE_LP_MAIN);
-		$table_item 	= Database :: get_course_table(TABLE_LP_ITEM);
-		$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST);
+		
+		if (!empty($session_id) && !empty($course_code)) {
+			$course_info 	= api_get_course_info($course_code);
+			$table_main 	= Database :: get_course_table(TABLE_LP_MAIN,$course_info['dbName']);
+			$table_item 	= Database :: get_course_table(TABLE_LP_ITEM,$course_info['dbName']);
+			$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST,$course_info['dbName']);
+	
+			$sql = 'SELECT * FROM '.$table_main.' WHERE session_id = '.$session_id;			
+		} else {
+			$table_main 	= Database :: get_course_table(TABLE_LP_MAIN);
+			$table_item 	= Database :: get_course_table(TABLE_LP_ITEM);
+			$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST);
 
-		$sql = 'SELECT * FROM '.$table_main;
-		$db_result = Database::query($sql, __FILE__, __LINE__);
+			$sql = 'SELECT * FROM '.$table_main;			
+		}
+
+		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 
 		while ($obj = Database::fetch_object($db_result))
 		{
@@ -525,19 +637,60 @@ class CourseBuilder
 	/**
 	 * Build the glossarys
 	 */
-	function build_glossarys() {
-		$table_glossary = Database :: get_course_table(TABLE_GLOSSARY);
-
-        if (!empty($this->course->type) && $this->course->type=='partial')
-        	$sql = 'SELECT * FROM '.$table_glossary.' g ';
-        else
-        	$sql = 'SELECT * FROM '.$table_glossary.' g ';
-
-		$db_result = Database::query($sql, __FILE__, __LINE__);
+	function build_glossary($session_id = 0, $course_code = '') {
+		
+		if (!empty($session_id) && !empty($course_code)) {
+			$course_info = api_get_course_info($course_code);
+			$table_glossary = Database :: get_course_table(TABLE_GLOSSARY,$course_info['dbName']);
+			$session_id = intval($session_id);											
+	        if (!empty($this->course->type) && $this->course->type=='partial') {
+	        	$sql = 'SELECT * FROM '.$table_glossary.' g WHERE session_id = '.$session_id;
+	        } else {
+	        	$sql = 'SELECT * FROM '.$table_glossary.' g WHERE session_id = '.$session_id;
+	        }		        	        	        
+		} else {
+			$table_glossary = Database :: get_course_table(TABLE_GLOSSARY);					
+	        if (!empty($this->course->type) && $this->course->type=='partial') {
+	        	$sql = 'SELECT * FROM '.$table_glossary.' g ';
+	        } else {
+	        	$sql = 'SELECT * FROM '.$table_glossary.' g ';
+	        }	
+		}
+		
+		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
 			$doc = new Glossary($obj->glossary_id, $obj->name, $obj->description, $obj->display_order);
 			$this->course->add_resource($doc);
 		}
+	}
+	
+	/*
+	 * build session course by jhon
+	 * */
+	function build_session_course(){
+		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+		$tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+		$list_course = Database::get_course_list();
+		$list = array(); 
+		foreach($list_course as $_course) {
+			$this->course = new Course();
+			$this->course->code = $_course['code'];
+			$this->course->type = 'partial';
+			$this->course->path = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/';
+			$this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['directory'];
+			$this->course->encoding = api_get_system_encoding(); //current platform encoding 
+			$code_course = $_course['code'];
+			$sql_session = "SELECT id, name, course_code  FROM $tbl_session_course 
+				INNER JOIN  $tbl_session ON id_session = id 
+				WHERE course_code = '$code_course' ";
+			$query_session = api_sql_query($sql_session, __FILE__, __LINE__);			
+			while($rows_session = mysql_fetch_assoc($query_session)) {
+				$session = new CourseSession($rows_session['id'], $rows_session['name']);
+				$this->course->add_resource($session);
+			}
+			$list[] = $this->course;
+		}
+		return $list;
 	}
 }

@@ -10,7 +10,7 @@ $language_file='admin';
 $cidReset=true;
 
 require '../inc/global.inc.php';
-
+require_once '../inc/lib/sessionmanager.lib.php';
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
 
@@ -27,6 +27,7 @@ $tbl_user			= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_course			= Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_session		= Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $course_info=api_get_course_info($_REQUEST['course_code']);
 $tool_name=$course_info['name'];
@@ -43,25 +44,52 @@ if (!list($session_name,$course_title)=mysql_fetch_row($result)) {
 	exit();
 }
 
+$arr_infos = array();
 if ($_POST['formSent']) {
 	$formSent=1;
 
-	$id_coach=intval($_POST['id_coach']);
+	// get all tutor by course_code in the session	
+	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$id_session' AND course_code = '$course_code' AND status = 2";	
+	$rs_coachs = Database::query($sql,__FILE__,__LINE__);
+	
+	$coachs_course_session = array();
+	if (Database::num_rows($rs_coachs) > 0){
+		while ($row_coachs = Database::fetch_row($rs_coachs)) {
+			$coachs_course_session[] = $row_coachs[0];		
+		}	
+	}			
+	
+	$id_coachs= $_POST['id_coach'];
+			
+	if (is_array($id_coachs) && count($id_coachs) > 0) {
+		
+		foreach ($id_coachs as $id_coach) {			
+			$id_coach = intval($id_coach);
+			$rs1 = SessionManager::set_coach_to_course_session($id_coach, $id_session, $course_code);										
+		}
+		
+		// set status to 0 other tutors from multiple list		
+		$array_intersect = array_diff($coachs_course_session,$id_coachs);				
+					
+		foreach ($array_intersect as $nocoach_user_id) {							
+			$rs2 = SessionManager::set_coach_to_course_session($nocoach_user_id, $id_session, $course_code,true);
+		}
 
-
-	Database::query("UPDATE $tbl_session_course
-				   SET id_coach='$id_coach'
-				   WHERE id_session='$id_session' AND course_code='$course_code'",__FILE__,__LINE__);
-	header('Location: '.$_GET['page'].'?id_session='.$id_session);
-	exit();
-
-}else {
-	$result=Database::query("SELECT id_coach FROM $tbl_session_course WHERE id_session='$id_session' AND course_code='$course_code'",__FILE__,__LINE__);
-
-	if (!$infos=Database::fetch_array($result)) {
-		//header('Location: '.$_GET['page'].'?id_session='.$id_session);
-		exit();
+		header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
+		exit();		
+				
 	}
+	
+}else {
+	
+	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$id_session' AND course_code = '$course_code' AND status = 2 ";	
+	$rs = Database::query($sql,__FILE__,__LINE__);	
+
+	if (Database::num_rows($rs) > 0) {					
+		while ($infos = Database::fetch_array($rs)) {
+			$arr_infos[] = $infos['id_user'];
+		}	
+	} 	
 }
 
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
@@ -101,17 +129,17 @@ if(!empty($errorMsg))
 ?>
 
 <tr>
-  <td width="30%"><?php echo get_lang("CoachName") ?>&nbsp;&nbsp;</td>
-  <td width="70%"><select name="id_coach" style="width:250px;">
+  <td width="25%" valign = "top"><?php echo get_lang("CoachName") ?>&nbsp;&nbsp;</td>
+  <td width="70%"><select name="id_coach[]" style="width:300px;" multiple="multiple" size="7">
 	<option value="0">----- <?php echo get_lang("Choose") ?> -----</option>
-	<option value="0" <?php if((!$sent && $enreg['user_id'] == $infos['id_coach']) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo get_lang('None') ?></option>
+	<option value="0" <?php if(count($arr_infos) == 0) echo 'selected="selected"'; ?>><?php echo get_lang('None') ?></option>
 <?php
 
 foreach($coaches as $enreg)
 {
 ?>
 
-	<option value="<?php echo $enreg['user_id']; ?>" <?php if((!$sent && $enreg['user_id'] == $infos['id_coach']) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['lastname'], $enreg['firstname']).' ('.$enreg['username'].')'; ?></option>
+	<option value="<?php echo $enreg['user_id']; ?>" <?php if((!$sent && (is_array($arr_infos) && in_array($enreg['user_id'],$arr_infos))) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>
 
 <?php
 }

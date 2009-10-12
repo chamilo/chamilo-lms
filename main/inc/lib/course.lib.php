@@ -865,35 +865,35 @@ class CourseManager {
 		$sql_query = "SELECT * FROM $table WHERE user_id = $user_id AND course_code = '$course_code'";
 		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
-		if (!empty($result)) {
-			return true; // The user has been registered in this course.
+		
+		if (!isset ($result) || empty ($result)) {
+			if ($in_a_session) {
+				$sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
+						WHERE id_user = '.$user_id.' AND course_code="'.$course_code.'"';
+				
+				$rs = api_sql_query($sql, __FILE__, __LINE__);
+				if (Database::num_rows($rs)>0) {
+					return true;
+				} else {
+					$sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE).'
+						WHERE id_coach = '.$user_id.' AND course_code="'.$course_code.'"';
+					$rs = api_sql_query($sql, __FILE__, __LINE__);
+					if (Database::num_rows($rs)>0) {
+						return true;
+					} else {
+                            $sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.intval($_SESSION['id_session']).' AND id_coach='.$user_id;
+                            $rs = api_sql_query($sql, __FILE__, __LINE__);
+                            if (Database::num_rows($rs)>0) {
+                                    return true;
+                            }
+                    }
+				}
+			} else { 
+				return false; //user is not registered in course
+            }
+		} else {
+			return true; //user is registered in course
 		}
-
-		if (!$in_a_session) {
-			return false; // The user has not been registered in this course.
-		}
-
-		$sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
-				WHERE id_user = '.$user_id.' AND course_code="'.$course_code.'"';
-		$rs = Database::query($sql, __FILE__, __LINE__);
-		if (Database::num_rows($rs) > 0) {
-			return true;
-		}
-
-		$sql = 'SELECT 1 FROM '.Database :: get_main_table(TABLE_MAIN_SESSION_COURSE).'
-				WHERE id_coach = '.$user_id.' AND course_code="'.$course_code.'"';
-		$rs = Database::query($sql, __FILE__, __LINE__);
-		if (Database::num_rows($rs) > 0) {
-			return true;
-		}
-
-		$sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.intval($_SESSION['id_session']).' AND id_coach='.$user_id;
-		$rs = Database::query($sql, __FILE__, __LINE__);
-		if (Database::num_rows($rs) > 0) {
-			return true;
-		}
-
-		return false;
 	}
 
 	/**
@@ -2028,7 +2028,16 @@ class CourseManager {
 		$rs = Database::query($sql, __FILE__, __LINE__);
 		return Database::result($rs, 0, 'code');
 	}
-
+	
+	public static function get_session_category_id_by_session_id($session_id) {
+	    $t_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+	    $t_session = Database::get_main_table(TABLE_MAIN_SESSION);	    	
+		$sql='SELECT  sc.id session_category FROM '.$t_session_category.' sc INNER JOIN '.$t_session.' s ON
+			sc.id=s.session_category_id WHERE s.id="'.Database::escape_string($session_id).'"';
+		$rs=Database::query($sql,__FILE__,__LINE__);
+		return Database::result($rs,0,'session_category');
+	}
+	
 	/**
 	 * Get the database name of a course by the code
 	 * @param string The course code
@@ -2040,7 +2049,6 @@ class CourseManager {
 	   $rs = Database::query($sql,__FILE__,__LINE__);
 	   return Database::result($rs, 0, 'db_name');
 	}
-
 	/**
 	 * Lists details of the course description
 	 * @param array		The course description

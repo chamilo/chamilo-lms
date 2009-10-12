@@ -29,7 +29,7 @@ require_once 'forumfunction.inc.php';
 $nameTools = get_lang('Forum');
 $this_section = SECTION_COURSES;
 
-$allowed_to_edit = api_is_allowed_to_edit(true,true);
+$allowed_to_edit = api_is_allowed_to_edit(null,true);
 if (!$allowed_to_edit) {
 	api_not_allowed(true);
 }

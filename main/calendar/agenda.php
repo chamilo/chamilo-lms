@@ -261,14 +261,13 @@ if (empty($select_year) && empty($select_month))
 }
 
 echo '<div class="actions">';
-if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
-{
+if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false,true)) {
 	display_courseadmin_links();
 }
 display_student_links();
 echo '</div>';
 
-if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
+if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(false,true)))
 {
 	switch ($_GET['action'])
 	{
@@ -376,8 +375,8 @@ echo '<td valign="top">';
 echo '<div class="sort" style="float:left">';
 echo '</div>';
 
-if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())) {
-
+if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(false,true) )) {
+		
 	switch ($_GET['action']) {
 		case 'importical' :
 								if (isset($_POST['ical_submit'])) {

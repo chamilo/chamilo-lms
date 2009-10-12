@@ -60,8 +60,9 @@
 						$dokeosFile = $_POST['new_folder']; //get Ajaxfilemanager
 
 						$doc_id = add_document($_course, $dokeosPath,'folder', 0, $dokeosFile); //get Dokeos
-						api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id(),$to_group_id);//get Dokeos
-						api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(),$to_group_id);//get Dokeos
+						$current_session_id = api_get_session_id();
+						api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);//get Dokeos
+						api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);//get Dokeos
 					}
 					// end bridge to Dokeos
 					foreach($pathInfo as $k=>$v)

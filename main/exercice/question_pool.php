@@ -43,7 +43,7 @@ include('../inc/global.inc.php');
 
 $this_section=SECTION_COURSES;
 
-$is_allowedToEdit=api_is_allowed_to_edit();
+$is_allowedToEdit=api_is_allowed_to_edit(null,true);
 
 $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);

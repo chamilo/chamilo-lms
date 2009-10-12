@@ -53,39 +53,44 @@ require_once '../../main/inc/global.inc.php';
 
 function show_tools_category($course_tool_category)
 {
+	global $_user;
 	$web_code_path = api_get_path(WEB_CODE_PATH);
 	$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 	$is_allowed_to_edit = api_is_allowed_to_edit();
 	$is_platform_admin = api_is_platform_admin();
-
-	switch ($course_tool_category)
-	{
+	
+	//condition for the session
+	$session_id = api_get_session_id();
+	$condition_session = api_get_session_condition($session_id,true,true);
+	
+	switch ($course_tool_category) {
+		
 		case TOOL_STUDENT_VIEW:
-				$result = Database::query("SELECT * FROM $course_tool_table WHERE visibility = '1' AND (category = 'authoring' OR category = 'interaction') ORDER BY id",__FILE__,__LINE__);
+				$result = Database::query("SELECT * FROM $course_tool_table WHERE visibility = '1' AND (category = 'authoring' OR category = 'interaction') $condition_session ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
 
 		case TOOL_AUTHORING:
 
-				$result = Database::query("SELECT * FROM $course_tool_table WHERE category = 'authoring' ORDER BY id",__FILE__,__LINE__);
+				$result = Database::query("SELECT * FROM $course_tool_table WHERE category = 'authoring' $condition_session ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
 
 		case TOOL_INTERACTION:
 
-				$result = Database::query("SELECT * FROM $course_tool_table WHERE category = 'interaction' ORDER BY id",__FILE__,__LINE__);
+				$result = Database::query("SELECT * FROM $course_tool_table WHERE category = 'interaction' $condition_session ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
 
 		case TOOL_ADMIN_VISIBLE:
 
-				$result = Database::query("SELECT * FROM $course_tool_table WHERE category = 'admin' AND visibility ='1' ORDER BY id",__FILE__,__LINE__);
+				$result = Database::query("SELECT * FROM $course_tool_table WHERE category = 'admin' AND visibility ='1' $condition_session ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
 
 		case TOOL_ADMIN_PLATEFORM:
 
-				$result = Database::query("SELECT * FROM $course_tool_table WHERE category = 'admin' ORDER BY id",__FILE__,__LINE__);
+				$result = Database::query("SELECT * FROM $course_tool_table WHERE category = 'admin' $condition_session ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
 
@@ -114,7 +119,7 @@ function show_tools_category($course_tool_category)
 			$sql_links="SELECT tl.*, tip.visibility
 					FROM $course_link_table tl
 					LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
-						WHERE tl.on_homepage='1'";
+						WHERE tl.on_homepage='1' $condition_session";
 
 			break;
 
@@ -132,14 +137,14 @@ function show_tools_category($course_tool_category)
 				$sql_links="SELECT tl.*, tip.visibility
 				FROM $course_link_table tl
 				LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
-						WHERE tl.on_homepage='1'";
+						WHERE tl.on_homepage='1' $condition_session";
 			break;
 
 			case TOOL_ADMIN:
 				$sql_links="SELECT tl.*, tip.visibility
 				FROM $course_link_table tl
 				LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
-						WHERE tl.on_homepage='1'";
+						WHERE tl.on_homepage='1' $condition_session";
 			break;
 
 		default:
@@ -152,17 +157,19 @@ function show_tools_category($course_tool_category)
 	{
 		$result_links = Database::query($sql_links,__FILE__,__LINE__);
 		$properties = array();
-		while($links_row = Database::fetch_array($result_links))
-		{
-			unset($properties);
-
-			$properties['name'] = $links_row['title'];
-			$properties['link'] = $links_row['url'];
-			$properties['visibility'] = $links_row['visibility'];
-			$properties['image'] = ($links_row['visibility']== '0') ? "file_html.gif" : "file_html.gif";
-			$properties['adminlink'] = api_get_path(WEB_CODE_PATH) . "link/link.php?action=editlink&id=".$links_row['id'];
-			$properties['target'] = $links_row['target'];
-			$tmp_all_tools_list[] = $properties;
+		if (Database::num_rows($result_links) > 0) {
+			while($links_row = Database::fetch_array($result_links))
+			{
+				unset($properties);
+				$properties['name'] = $links_row['title'];
+				$properties['session_id'] = $links_row['session_id'];
+				$properties['link'] = $links_row['url'];
+				$properties['visibility'] = $links_row['visibility'];
+				$properties['image'] = ($links_row['visibility']== '0') ? "file_html.gif" : "file_html.gif";
+				$properties['adminlink'] = api_get_path(WEB_CODE_PATH) . "link/link.php?action=editlink&id=".$links_row['id'];
+				$properties['target'] = $links_row['target'];
+				$tmp_all_tools_list[] = $properties;
+			}
 		}
 	}
 
@@ -170,9 +177,7 @@ function show_tools_category($course_tool_category)
 	{
 		foreach($tmp_all_tools_list as $toolsRow)
 		{
-			if (api_get_session_id()!=0 && in_array($toolsRow['name'],array('course_maintenance','course_setting'))) {
-				continue;
-			}
+
 			if($toolsRow['image'] == 'blog.gif')
 			{
 				// Init
@@ -214,6 +219,11 @@ function show_tools_category($course_tool_category)
 		$lnk = '';
 		foreach($all_tools_list as $toolsRow)
 		{
+			
+			if (api_get_session_id()!=0 && in_array($toolsRow['name'],array('course_maintenance','course_setting'))) {
+				continue;
+			}
+			
 			if(!($i%2))
 				{echo	"<tr valign=\"top\">\n";}
 
@@ -245,7 +255,7 @@ function show_tools_category($course_tool_category)
 				}
 
 			}
-
+			
 			// Both checks are necessary as is_platform_admin doesn't take student view into account
 			if( $is_platform_admin && $is_allowed_to_edit)
 			{
@@ -338,13 +348,17 @@ function show_tools_category($course_tool_category)
 					$tool_name = get_lang(ucfirst($toolsRow['name']));
 				}
 				Display::display_icon($toolsRow['image'], $tool_name, array('class'=>'tool-icon','id'=>'toolimage_'.$toolsRow["id"]));
+				
+				//validacion when belongs to a session
+				$session_img = api_get_session_image($toolsRow['session_id'], $_user['status']);
+				
 				echo '</a> ';
 
 				echo $my_tool_link;
 				/*
 					echo ($toolsRow['image'] == 'file_html_na.gif' || $toolsRow['image'] == 'file_html.gif' || $toolsRow['image'] == 'scormbuilder.gif' || $toolsRow['image'] == 'scormbuilder_na.gif' || $toolsRow['image'] == 'blog.gif' || $toolsRow['image'] == 'blog_na.gif' || $toolsRow['image'] == 'external.gif' || $toolsRow['image'] == 'external_na.gif') ? '  '.stripslashes($toolsRow['name']) : '  '.get_lang(ucfirst($toolsRow['name']));
 				*/
-				echo $tool_name;
+				echo "{$tool_name}$session_img";
 				echo "\t" . '</a>';
 				echo '</td>';
 			if($i%2)
@@ -390,15 +404,32 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		$requested_message = ($tool_visibility == 0 ) ? 'is_active' : 'is_inactive';
     $requested_view    = ($tool_visibility == 0 ) ? 'visible.gif' : 'invisible.gif';
     $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
-	 	/*
+
+		/*
 		-----------------------------------------------------------
-			HIDE AND REACTIVATE
+			HIDE
 		-----------------------------------------------------------
 		*/
+		if(isset($_GET['visibility']) && $_GET['visibility']==0) // visibility 1 -> 0
+		{
 			if ($_GET["id"]==strval(intval($_GET["id"]))) {
-				$sql="UPDATE $tool_table SET visibility='".Database::escape_string($requested_visible)."' WHERE id='".$_GET["id"]."'";
-				Database::query($sql,__FILE__,__LINE__);
+				$sql="UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'";	
+				Database::query($sql,__FILE__,__LINE__);				
 			}
+		}
+	
+	  /*
+		-----------------------------------------------------------
+			REACTIVATE
+		-----------------------------------------------------------
+		*/
+		elseif(isset($_GET['visibility'])&& $_GET['visibility']==1) // visibility 0,2 -> 1
+		{
+			if ($_GET["id"]==strval(intval($_GET["id"]))) {
+				Database::query("UPDATE $tool_table SET visibility=1 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);				
+			}
+		}
+
 
 		$response_data = array(
 			'image'   => $requested_image,
@@ -469,6 +500,58 @@ if(api_is_platform_admin())
 
 /*
 ==============================================================================
+		SESSION DATA
+==============================================================================
+*/
+/**
+ * Shows the general data for a particular meeting
+ *
+ * @param id	session id
+ * @return string	session data
+ * 
+ */
+function show_session_data($id_session) {
+	$session_table = Database::get_main_table(TABLE_MAIN_SESSION);
+	$user_table = Database::get_main_table(TABLE_MAIN_USER);
+	$session_category_table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+	
+	$sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility
+				FROM '.$session_table.'
+			LEFT JOIN '.$user_table.'
+				ON id_coach = user_id
+			WHERE '.$session_table.'.id='.$id_session;
+	
+	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	$session = api_store_result($rs);
+	$session = $session[0];
+	
+	$sql_category = 'SELECT name FROM '.$session_category_table.' WHERE id = "'.intval($session['session_category_id']).'"';
+	$rs_category = api_sql_query($sql_category, __FILE__, __LINE__);
+	$session_category = '';
+	if (mysql_num_rows($rs_category) > 0) {
+		$rows_session_category = api_store_result($rs_category);
+		$rows_session_category = $rows_session_category[0];
+		$session_category = $rows_session_category['name'];
+	}
+	
+	if ($session['date_start'] == '00-00-0000') {
+		$msg_date = get_lang('NoTimeLimits');
+	} else {
+		$msg_date = get_lang('From').' '.$session['date_start'].' '.get_lang('To').' '.$session['date_end'];
+	}
+	
+	$output  = '';
+	if (!empty($session_category)) {
+		$output .= '<tr><td>'. get_lang('SessionCategory') . ': ' . '<b>' . $session_category .'</b></td></tr>';
+	}
+	$output .= '<tr><td style="width:50%">'. get_lang('SessionName') . ': ' . '<b>' . $session['name'] .'</b></td><td>'. get_lang('GeneralCoach') . ': ' . '<b>' . $session['lastname'].' '.$session['firstname'].' ('.$session['username'].')' .'</b></td></tr>';
+	$output .= '<tr><td>'. get_lang('SessionIdentifier') . ': '. Display::return_icon('star.png', ' ', array('align' => 'absmiddle')) .'</td><td>'. get_lang('Date') . ': ' . '<b>' . $msg_date .'</b></td></tr>';
+	
+	return $output;
+}
+
+/*
+==============================================================================
 		COURSE ADMIN ONLY VIEW
 ==============================================================================
 */
@@ -491,6 +574,18 @@ if(api_is_allowed_to_edit())
 ?>
 	<div class="normal-message" id="id_normal_message" style="display:none"><?php echo get_lang("PleaseStandBy")."<br/>".'<img src="'.$server_protocol.$current_host.'/'.$path_work.'main/inc/lib/javascript/indicator.gif"/>'; ?></div>
 	<div class="confirmation-message" id="id_confirmation_message" style="display:none"></div>
+	<?php
+		if (api_get_setting('show_session_data') === 'true' && $id_session > 0) {
+	?>
+	<div class="courseadminview">
+		<span class="viewcaption"><?php echo get_lang("SessionData") ?></span>
+		<table width="100%">
+			<?php echo show_session_data($id_session);?>
+		</table>
+	</div>
+	<?php
+		}
+	?>
 	<div class="courseadminview">
 		<span class="viewcaption"><?php echo get_lang("Authoring") ?></span>
 		<table width="100%">
@@ -509,15 +604,35 @@ if(api_is_allowed_to_edit())
 			<?php show_tools_category(TOOL_ADMIN_PLATEFORM); ?>
 		</table>
 	</div>
+	
 	<?php
-}
+		} elseif (api_is_coach()) {
+			
+			if (api_get_setting('show_session_data') === 'true' && $id_session > 0) {
+	?>
+		<div class="courseadminview">
+			<span class="viewcaption"><?php echo get_lang("SessionData") ?></span>
+			<table width="100%">
+				<?php echo show_session_data($id_session);?>
+			</table>
+		</div>
+	<?php
+			}
+	?>
+		<div class="Authoringview">
+			<table width="100%">
+				<?php show_tools_category(TOOL_STUDENT_VIEW); ?>
+			</table>
+		</div>
+	<?php
 
 /*
 ==============================================================================
 		TOOLS AUTHORING
 ==============================================================================
 */
-else{
+
+	} else {
 ?>
 	<div class="Authoringview">
 

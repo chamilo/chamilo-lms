@@ -1788,9 +1788,11 @@ function display_agenda_items()
 	// A. you are a course admin
 	//if ($is_courseAdmin)
 
-	$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' AND agenda.session_id IN (0,'.intval($_SESSION['id_session']).') ';
+	//$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' AND agenda.session_id IN (0,'.intval($_SESSION['id_session']).') ';
 
-
+	$session_id = api_get_session_id();
+	$session_condition = api_get_session_condition($session_id);
+	
 	if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 	{
 		// A.1. you are a course admin with a USER filter
@@ -2841,7 +2843,7 @@ function show_add_form($id = '')
 			$oFCKeditor->Width		= '100%';
 			$oFCKeditor->Height		= '200';
 
-			if(!api_is_allowed_to_edit())
+			if(!api_is_allowed_to_edit(null,true))
 			{
 				$oFCKeditor->ToolbarSet = 'AgendaStudent';
 			}

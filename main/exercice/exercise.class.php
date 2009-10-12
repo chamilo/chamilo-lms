@@ -500,15 +500,18 @@ class Exercise
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_QUIZ_QUESTION= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
-		$id=$this->id;
-		$exercise=$this->exercise;
-		$description=$this->description;
-		$sound=$this->sound;
-		$type=$this->type;
-		$attempts=$this->attempts;
-		$feedbacktype=$this->feedbacktype;
-		$random=$this->random;
-		$active=$this->active;
+		
+		$id = $this->id;
+		$exercise = $this->exercise;
+		$description = $this->description;
+		$sound = $this->sound;
+		$type = $this->type;
+		$attempts = $this->attempts;
+		$feedbacktype = $this->feedbacktype;
+		$random = $this->random;
+		$active = $this->active;
+		$session_id = api_get_session_id();
+		
 		if ($feedbacktype==1){
 			$results_disabled = 1;
 		} else {
@@ -560,7 +563,7 @@ class Exercise
 			$cond1=Database::escape_string(Security::remove_XSS($exercise));
 			$cond2=Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGERLOWSECURITY));
 		}*/
-			$sql="INSERT INTO $TBL_EXERCICES (start_time,end_time,title,description,sound,type,random,active, results_disabled, max_attempt,feedback_type)
+			$sql="INSERT INTO $TBL_EXERCICES (start_time, end_time, title, description, sound, type, random,active, results_disabled, max_attempt, feedback_type, session_id)
 					VALUES(
 						'$start_time','$end_time',
 						'".Database::escape_string($exercise)."',
@@ -571,7 +574,8 @@ class Exercise
 						'".Database::escape_string($active)."',
 						'".Database::escape_string($results_disabled)."',
 						'".Database::escape_string($attempts)."',
-						'".Database::escape_string($feedbacktype)."'
+						'".Database::escape_string($feedbacktype)."',
+						'".Database::escape_string($session_id)."'
 						)";
 			Database::query($sql,__FILE__,__LINE__);
 			$this->id=Database::insert_id();

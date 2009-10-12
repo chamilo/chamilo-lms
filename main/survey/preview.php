@@ -89,7 +89,7 @@ if (!api_is_allowed_to_edit(false,true))
 	Display :: display_error_message(get_lang('NotAllowed'), false);
 }*/
 // only a course admin is allowed to preview a survey: you are a course admin
-if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='true')) {
+if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='true') || api_is_allowed_to_session_edit(false,true)) {
 	// survey information
 	echo '<div id="survey_title">'.$survey_data['survey_title'].'</div>';
 	echo '<div id="survey_subtitle">'.$survey_data['survey_subtitle'].'</div>';

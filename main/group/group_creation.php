@@ -109,7 +109,7 @@ $nameTools = get_lang('GroupCreation');
 $interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang('Groups'));
 Display :: display_header($nameTools, "Group");
 
-if (!is_allowed_to_edit())
+if (!api_is_allowed_to_edit(false,true))
 {
 	api_not_allowed();
 }

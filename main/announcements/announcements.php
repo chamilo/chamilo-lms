@@ -160,6 +160,9 @@ $safe_newContent = $_POST['newContent'];
 
 if (!empty($_POST['To']))
 {
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+		api_not_allowed();
+	}
 	$display_form = true;
 
 	$form_elements= array ('emailTitle'=>$safe_emailTitle, 'newContent'=>$safe_newContent, 'id'=>$_POST['id'], 'emailoption'=>$_POST['email_ann']);
@@ -204,6 +207,9 @@ if (!empty($_POST['To']) and ($select_groupusers_status=="show"))
 // display the form
 if (((!empty($_GET['action']) && $_GET['action'] == 'add') && $_GET['origin'] == "") || (!empty($_GET['action']) && $_GET['action'] == 'edit') || !empty($_POST['To']))
 {
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+		api_not_allowed();
+	}
 	$display_form = true;
 }
 
@@ -348,6 +354,10 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	{
 		if (isset($_GET['id']) AND $_GET['id'] AND isset($_GET['action']) AND $_GET['action']=="showhide")
 		{
+			if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+				api_not_allowed();
+			}
+			
 			$id=intval(addslashes($_GET['id']));
 			if(!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id))
 			{
@@ -367,7 +377,10 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	if (!empty($_GET['action']) AND $_GET['action']=='delete' AND isset($_GET['id'])) {
 		//Database::query("DELETE FROM  $tbl_announcement WHERE id='$delete'",__FILE__,__LINE__);
 		$id=intval(addslashes($_GET['id']));
-
+		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+			api_not_allowed();
+		}
+				
 		if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
 
 			// tooledit : visibility = 2 : only visibile for platform administrator
@@ -412,6 +425,10 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	-----------------------------------------------------------
 	*/
 	if (!empty($_GET['action']) and $_GET['action']=='modify' AND isset($_GET['id'])) {
+		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+			api_not_allowed();
+		}
+			
 		$display_form = true;
 
 		// RETRIEVE THE CONTENT OF THE ANNOUNCEMENT TO MODIFY
@@ -815,6 +832,10 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 
 /* DISPLAY LEFT COLUMN */
 
+//condition for the session
+$session_id = api_get_session_id();
+$condition_session = api_get_session_condition($session_id);
+
 if(api_is_allowed_to_edit(false,true))  {
  	// check teacher status
   	if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
@@ -825,7 +846,7 @@ if(api_is_allowed_to_edit(false,true))  {
 				WHERE announcement.id = toolitemproperties.ref
 				AND toolitemproperties.tool='announcement'
 				AND toolitemproperties.visibility<>'2'
-				AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
+				$condition_session
 				GROUP BY toolitemproperties.ref
 				ORDER BY display_order DESC
 				LIMIT 0,$maximum";
@@ -854,7 +875,7 @@ if(api_is_allowed_to_edit(false,true))  {
 					AND toolitemproperties.tool='announcement'
 					AND toolitemproperties.visibility='1'
 					$cond_user_id
-					AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
+					$condition_session
 					GROUP BY toolitemproperties.ref
 					ORDER BY display_order DESC
 					LIMIT 0,$maximum";
@@ -877,7 +898,7 @@ if(api_is_allowed_to_edit(false,true))  {
 						AND toolitemproperties.tool='announcement'
 						AND toolitemproperties.visibility='1'
 						$cond_user_id
-						AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
+						$condition_session
 						GROUP BY toolitemproperties.ref
 						ORDER BY display_order DESC
 						LIMIT 0,$maximum";
@@ -897,7 +918,7 @@ if(api_is_allowed_to_edit(false,true))  {
 						AND toolitemproperties.tool='announcement'
 						AND toolitemproperties.visibility='1'
 						AND toolitemproperties.to_group_id='0'
-						AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
+						$condition_session
 						GROUP BY toolitemproperties.ref
 						ORDER BY display_order DESC
 						LIMIT 0,$maximum";
@@ -953,7 +974,9 @@ if (!$surveyid) {
 			} else {
 				$class="";
 			}
-			echo "\t\t\t\t\t\t<a style=\"text-decoration:none\" href=\"announcements.php?".api_get_cidreq()."#".$myrow['id']."\" ".$class.">" . api_trunc_str($title,$length) . "</a>\n";
+			//validacion when belongs to a session
+			$session_img = api_get_session_image($myrow['session_id'], $_user['status']);
+			echo "\t\t\t\t\t\t<a style=\"text-decoration:none\" href=\"announcements.php?".api_get_cidreq()."#".$myrow['id']."\" ".$class.">" . api_trunc_str($title, $length) . "</a>\n" . $session_img;
 			echo "\t\t\t\t\t</td>\n\t\t\t\t</tr>\n";
 		}
 		echo "\t\t\t</table>\n";
@@ -1173,7 +1196,7 @@ if ($display_announcement_list && !$surveyid) {
 					WHERE announcement.id = toolitemproperties.ref
 					AND toolitemproperties.tool='announcement'
 					AND	(toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-					AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
+					$condition_session
 					ORDER BY display_order DESC";
 
 			} else {
@@ -1184,7 +1207,7 @@ if ($display_announcement_list && !$surveyid) {
 					AND toolitemproperties.tool='announcement'
 					AND (toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id='0')
 					AND toolitemproperties.visibility='1'
-					AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
+					$condition_session
 					ORDER BY display_order DESC";
 
 			}
@@ -1198,7 +1221,7 @@ if ($display_announcement_list && !$surveyid) {
 				WHERE announcement.id = toolitemproperties.ref
 				AND toolitemproperties.tool='announcement'
 				AND (toolitemproperties.to_group_id=$group_id OR toolitemproperties.to_group_id='0')
-				AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
+				$condition_session
 				GROUP BY toolitemproperties.ref
 				ORDER BY display_order DESC";
 		} else {
@@ -1214,7 +1237,7 @@ if ($display_announcement_list && !$surveyid) {
 					WHERE announcement.id = toolitemproperties.ref
 					AND toolitemproperties.tool='announcement'
 					AND toolitemproperties.visibility='1'
-					AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
+					$condition_session
 					GROUP BY toolitemproperties.ref
 					ORDER BY display_order DESC";
 			} else {
@@ -1226,7 +1249,7 @@ if ($display_announcement_list && !$surveyid) {
 					WHERE announcement.id = toolitemproperties.ref
 					AND toolitemproperties.tool='announcement'
 					AND (toolitemproperties.visibility='0' or toolitemproperties.visibility='1')
-					AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
+					$condition_session
 					GROUP BY toolitemproperties.ref
 					ORDER BY display_order DESC";
 

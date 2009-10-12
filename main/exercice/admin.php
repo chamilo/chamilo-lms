@@ -83,7 +83,7 @@ include("../inc/global.inc.php");
 include('exercise.lib.php');
 $this_section=SECTION_COURSES;
 
-$is_allowedToEdit=api_is_allowed_to_edit();
+$is_allowedToEdit=api_is_allowed_to_edit(null,true);
 
 if(!$is_allowedToEdit)
 {

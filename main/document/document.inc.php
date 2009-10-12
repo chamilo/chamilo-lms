@@ -240,6 +240,11 @@ function build_document_icon_tag($type, $path)
 {
 	$basename = basename($path);
 
+	$current_session_id = api_get_session_id();
+		
+	$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+	
+
 	if ($type == 'file')
 	{
 		$icon = choose_image($basename);
@@ -249,7 +254,7 @@ function build_document_icon_tag($type, $path)
 		if($basename =='shared_folder')
 		{
 			$icon = 'shared_folder.gif';
-			if (api_is_allowed_to_edit())
+			if ($is_allowed_to_edit)
 			{
 				$basename = get_lang('HelpSharedFolder');
 			}
@@ -296,7 +301,7 @@ function build_document_icon_tag($type, $path)
  * @param int $id dbase id of the document
  * @return string html img tags with hyperlinks
  */
-function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template,$is_read_only=0)
+function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template,$is_read_only=0, $session_id=0)
 {
 	if(isset($_SESSION['_gid']))
 	{
@@ -330,26 +335,28 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template,$
 	$curdirpath = urlencode($curdirpath);
 
 	$modify_icons = '';
-
-	if ($is_read_only)
-	{
-		$modify_icons = Display::return_icon('edit_na.gif', get_lang('Modify'));
-        $modify_icons .= '&nbsp;'.Display::return_icon('delete.gif', get_lang('Delete'));
-        $modify_icons .= '&nbsp;'.Display::return_icon('deplacer_fichier_na.gif', get_lang('Move'));
+	$cur_ses = api_get_session_id();
+	// if document is read only *or* we're in a session and the document 
+	// is from a non-session context, hide the edition capabilities
+	if ($is_read_only /*or ($session_id!=$cur_ses)*/)
+	{				
+		$modify_icons = Display::return_icon('edit_na.gif', get_lang('Modify'));		
+        $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.gif', get_lang('Delete'));
+        $modify_icons .= '&nbsp;'.Display::return_icon('deplacer_fichier_na.gif', get_lang('Move'));        
         $modify_icons .= '&nbsp;'.Display::return_icon($visibility_icon.'_na.gif', get_lang('VisibilityCannotBeChanged'));
 	}
 	else
-	{
+	{		
 		$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
-        if (strcmp($path,'/audio')===0 or strcmp($path,'/flash')===0 or strcmp($path,'/images')===0 or strcmp($path,'/shared_folder')===0 or strcmp($path,'/video')===0) {
-        	$modify_icons .= '&nbsp;'.Display::return_icon('delete_na.gif',get_lang('ThisFolderCannotBeDeleted'));
-        } else {
-        	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /></a>';
-        }
-        $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;move='.urlencode($path).$req_gid.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
-        $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon.'.gif" border="0" title="'.get_lang('Visible').'" alt="" /></a>';
-	}
-
+        	if (strcmp($path,'/audio')===0 or strcmp($path,'/flash')===0 or strcmp($path,'/images')===0 or strcmp($path,'/shared_folder')===0 or strcmp($path,'/video')===0) { 
+        		$modify_icons .= '&nbsp;'.Display::return_icon('delete_na.gif',get_lang('ThisFolderCannotBeDeleted'));
+        	} else {
+        		$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /></a>';
+        	}
+	        $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;move='.urlencode($path).$req_gid.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
+        	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon.'.gif" border="0" title="'.get_lang('Visible').'" alt="" /></a>';
+	}	
+	
 	if($type == 'file' && pathinfo($path,PATHINFO_EXTENSION)=='html')
 	{
 		if($is_template==0)

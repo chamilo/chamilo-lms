@@ -88,7 +88,7 @@ if ( empty ( $action ) ) {
     $action = $_GET['action'];
 }
 
-$is_allowedToEdit=api_is_allowed_to_edit() || $is_courseTutor;
+$is_allowedToEdit=api_is_allowed_to_edit(null,true) || $is_courseTutor;
 $nameTools=get_lang('CorrectTest');
 
 if (isset($_SESSION['gradebook'])){
@@ -287,7 +287,7 @@ function display_fill_in_blanks_answer($answer,$id,$questionId)
 		<td>
 			<?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
 		</td><?php
-		if(!api_is_allowed_to_edit()) {?>
+		if(!api_is_allowed_to_edit(null,true)) {?>
 			<td>
 			<?php
 			$comm = get_comments($id,$questionId);
@@ -308,7 +308,7 @@ function display_free_answer($answer,$id,$questionId) {
 		<tr>
 		<td>
 			<?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
-		</td> <?php if(!api_is_allowed_to_edit()) {?>
+		</td> <?php if(!api_is_allowed_to_edit(null,true)) {?>
         <td>
         <?php
         $comm = get_comments($id,$questionId);

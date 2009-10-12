@@ -67,7 +67,7 @@ if(isset($rows)){
 
 		echo '<br /><b>'.$row['post_date'].'</b><br />';
 
-		if (api_is_allowed_to_edit()) {
+		if (api_is_allowed_to_edit(null,true)) {
 			echo $url_post;
 		}
 

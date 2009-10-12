@@ -139,6 +139,157 @@ function sort_users($a, $b) {
 	return api_strcmp(trim(api_strtolower($a[$_SESSION['tracking_column']])), trim(api_strtolower($b[$_SESSION['tracking_column']])));
 }
 
+function count_item_resources() {
+	$table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+	$sql = "SELECT count(tool) AS total_number_of_items FROM $table_item_property track_resource, $table_user user" .
+			" WHERE track_resource.insert_user_id = user.user_id";
+	
+	if (isset($_GET['keyword'])) {
+		$keyword = Database::escape_string($_GET['keyword']);
+		$sql .= " AND (user.username LIKE '%".$keyword."%' OR lastedit_type LIKE '%".$keyword."%' OR tool LIKE '%".$keyword."%')";
+	}
+	
+	$sql .= " AND tool IN ('document', 'learnpath', 'quiz', 'glossary', 'link', 'course_description')";
+	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$obj = Database::fetch_object($res);
+	return $obj->total_number_of_items;
+}
+
+function get_item_resources_data($from, $number_of_items, $column, $direction) {
+	global $dateTimeFormatLong;
+	$table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+	$table_session = Database :: get_main_table(TABLE_MAIN_SESSION);
+	$sql = "SELECT
+			 	tool as col0,
+				lastedit_type as col1,
+				ref as ref,
+				user.username as col3,
+				insert_date as col5,
+				visibility as col6
+			FROM $table_item_property track_resource, $table_user user
+			WHERE track_resource.insert_user_id = user.user_id ";
+	
+	if (isset($_GET['keyword'])) {
+		$keyword = Database::escape_string($_GET['keyword']);
+		$sql .= " AND (user.username LIKE '%".$keyword."%' OR lastedit_type LIKE '%".$keyword."%' OR tool LIKE '%".$keyword."%') ";
+	}
+	
+	$sql .= " AND tool IN ('document', 'learnpath', 'quiz', 'glossary', 'link', 'course_description')";
+	
+	if ($column == 0) { $column = '0'; }
+	if ($column != '' && $direction != '') {
+		if ($column != 2 && $column != 4) {
+			$sql .=	" ORDER BY col$column $direction";
+		}
+	} else {
+		$sql .=	" ORDER BY col5 DESC ";
+	}
+	
+	$sql .=	" LIMIT $from, $number_of_items ";
+	
+	$res = api_sql_query($sql, __FILE__, __LINE__) or die(mysql_error());
+	$resources = array ();
+	
+	while ($row = Database::fetch_array($res)) {
+		$ref = $row['ref'];
+		$table_name = get_tool_name_table($row['col0']);
+		$table_tool = Database :: get_course_table($table_name['table_name']);
+		$id = $table_name['id_tool'];
+		$query = "SELECT session.id, session.name, user.username FROM $table_tool tool, $table_session session, $table_user user" .
+					" WHERE tool.session_id = session.id AND session.id_coach = user.user_id AND tool.$id = $ref";
+		$recorset = api_sql_query($query, __FILE__, __LINE__);
+		
+		if (!empty($recorset)) {
+			
+			$obj = Database::fetch_object($recorset);
+			
+			$name_session = '';
+			$coach_name = '';
+			if (!empty($obj)) {
+				$name_session = $obj->name;
+				$coach_name = $obj->username;
+			}
+			
+			$url_tool = api_get_path(WEB_CODE_PATH).$table_name['link_tool'];
+			
+			$row[0] = '';
+			if ($row['col6'] != 2) {
+				$row[0] = '<a href="'.$url_tool.'?'.api_get_cidreq().'&'.$obj->id.'">'.api_ucfirst($row['col0']).'</a>';
+			} else {
+				$row[0] = api_ucfirst($row['col0']);
+			}
+			
+			$row[1] = get_lang($row[1]);
+			
+			$row[5] = api_ucfirst(format_locale_date($dateTimeFormatLong, strtotime($row['col5'])));
+			
+			$row[4] = '';
+			if ($table_name['table_name'] == 'document') {
+				$condition = 'tool.title as title';
+				$query_document = "SELECT $condition FROM $table_tool tool" .
+									" WHERE id = $ref";
+				$rs_document = api_sql_query($query_document, __FILE__, __LINE__) or die(mysql_error());
+				$obj_document = Database::fetch_object($rs_document);
+				$row[4] = $obj_document->title;
+			}
+			
+			$row2 = $name_session;
+			if (!empty($coach_name)) {
+				$row2 .= '<br />'.get_lang('Coach').': '.$coach_name;
+			}
+			$row[2] = $row2;
+			
+			$resources[] = $row;
+		}
+		
+	}
+	
+	return $resources;
+}
+
+function get_tool_name_table($tool) {
+	switch ($tool) {
+		case 'document':
+			$table_name = TABLE_DOCUMENT;
+			$link_tool = 'document/document.php';
+			$id_tool = 'id';
+			break;
+		case 'learnpath':
+			$table_name = TABLE_LP_MAIN;
+			$link_tool = 'newscorm/lp_controller.php';
+			$id_tool = 'id';
+			break;
+		case 'quiz':
+			$table_name = TABLE_QUIZ_TEST;
+			$link_tool = 'exercice/exercice.php';
+			$id_tool = 'id';
+			break;
+		case 'glossary':
+			$table_name = TABLE_GLOSSARY;
+			$link_tool = 'glossary/index.php';
+			$id_tool = 'glossary_id';
+			break;
+		case 'link':
+			$table_name = TABLE_LINK;
+			$link_tool = 'link/link.php';
+			$id_tool = 'id';
+			break;
+		case 'course_description':
+			$table_name = TABLE_COURSE_DESCRIPTION;
+			$link_tool = 'course_description/';
+			$id_tool = 'id';
+			break;
+		default:
+			$table_name = $tool;
+			break;
+	}
+	return array('table_name' => $table_name,
+				 'link_tool' => $link_tool,
+				 'id_tool' => $id_tool);
+}
+
 /*
 ==============================================================================
 		MAIN CODE
@@ -147,14 +298,16 @@ function sort_users($a, $b) {
 
 echo '<div class="actions">';
 if ($_GET['studentlist'] == 'false') {
-	echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a>&nbsp;|&nbsp;'.get_lang('CourseTracking');
-} else {
-	echo get_lang('StudentsTracking').' | <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>';
+	echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a> | '.get_lang('CourseTracking').' | <a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking');
+} elseif($_GET['studentlist'] == 'resources') {
+	echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a> | <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a> | '.get_lang('ResourcesTracking');
+} elseif($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
+	echo get_lang('StudentsTracking').' | <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a> | <a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking').'</a>';
 }
 echo '&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print();"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>';
 if($_GET['studentlist'] == 'false') {
 	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&studentlist=false"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
-} else {
+} elseif ($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
 	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
 }
 echo '</div>';
@@ -476,7 +629,7 @@ if ($_GET['studentlist'] == 'false') {
 		ob_end_clean();
 		Export :: export_table_csv($csv_content, 'reporting_course_tracking');
 	}
-} else {
+} elseif($_GET['studentlist'] == 'true' or $_GET['studentlist'] == '') {
 // else display student list with all the informations
 
 	// BEGIN : form to remind inactives susers
@@ -635,6 +788,38 @@ if ($_GET['studentlist'] == 'false') {
 		array_unshift($csv_content, $csv_headers); // adding headers before the content
 		Export :: export_table_csv($csv_content, 'reporting_student_list');
 	}
+	
+} elseif($_GET['studentlist'] == 'resources') {
+	
+	// Create a search-box
+	$form = new FormValidator('search_simple','get',api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq().'&studentlist=resources','','width=200px',false);
+	$renderer =& $form->defaultRenderer();
+	$renderer->setElementTemplate('<span>{element}</span>');
+	$form->addElement('hidden','studentlist','resources');
+	$form->addElement('text','keyword',get_lang('keyword'));
+	$form->addElement('style_submit_button', 'submit', get_lang('Search'),'class="search"');
+	echo '<div class="actions">';
+		$form->display();
+	echo '</div>';
+	
+	$table = new SortableTable('resources', 'count_item_resources', 'get_item_resources_data', 5, 20, 'DESC');
+	$parameters = array();
+	
+	if (isset($_GET['keyword'])) {
+		$parameters['keyword'] = Security::remove_XSS($_GET['keyword']);
+	}
+	
+	$parameters['studentlist'] = 'resources';
+	
+	$table->set_additional_parameters($parameters);
+	$table->set_header(0, get_lang('Tool'));
+	$table->set_header(1, get_lang('EventType'));
+	$table->set_header(2, get_lang('Session'), false);
+	$table->set_header(3, get_lang('UserName'));
+	$table->set_header(4, get_lang('Document'), false);
+	$table->set_header(5, get_lang('Date'));
+	$table->display();
+	
 }
 ?>
 </table>

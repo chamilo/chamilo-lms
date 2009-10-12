@@ -63,6 +63,8 @@ class learnpath {
 	var $arrMenu = array(); //array for the menu items
 
 	var $debug = 0; //logging level
+	
+	var $lp_session_id =0;
 
 	/**
 	 * Class constructor. Needs a database handler, a course code and a learnpath id from the database.
@@ -133,7 +135,8 @@ class learnpath {
 	   			$this->path = $row['path'];
 	   			$this->preview_image= $row['preview_image'];
 	   			$this->author= $row['author'];
-
+	   			$this->lp_session_id = $row['session_id'];
+	   			
 	   			if($this->type == 2){
     				if($row['force_commit'] == 1){
     					$this->force_commit = true;
@@ -595,7 +598,10 @@ class learnpath {
 		//check lp_name doesn't exist, otherwise append something
 		$i = 0;
 		$name = learnpath :: escape_string($name);
-
+		
+		//session_id
+		$session_id = api_get_session_id();
+		
 		$check_name = "SELECT * FROM $tbl_lp WHERE name = '$name'";
 		//if($this->debug>2){error_log('New LP - Checking the name for new LP: '.$check_name,0);}
 		$res_name = Database::query($check_name, __FILE__, __LINE__);
@@ -637,10 +643,10 @@ class learnpath {
 				$sql_insert = "INSERT INTO $tbl_lp " .
 				"(lp_type,name,description,path,default_view_mod," .
 				"default_encoding,display_order,content_maker," .
-				"content_local,js_lib) " .
+				"content_local,js_lib,session_id) " .
 				"VALUES ($type,'$name','$description','','embedded'," .
 				"'UTF-8','$dsp','Dokeos'," .
-				"'local','')";
+				"'local','','".Database::escape_string($session_id)."')";
 				//if($this->debug>2){error_log('New LP - Inserting new lp '.$sql_insert,0);}
 				$res_insert = Database::query($sql_insert, __FILE__, __LINE__);
 				$id = Database :: get_last_insert_id();
@@ -2274,6 +2280,22 @@ class learnpath {
 			return '';
 		}
 	}
+	
+	/**
+	* Gets the learnpath session id 
+	* @return	string	Learnpath theme
+	*/
+	function get_lp_session_id() {
+		if ($this->debug > 0) {
+			error_log('New LP - In learnpath::get_lp_session_id()', 0);
+		}
+		if (!empty ($this->lp_session_id)) {
+			return $this->lp_session_id;
+		} else {
+			return 0;
+		}
+	}
+	
 
 	/**
 	 * Gets the learnpath image
@@ -2756,6 +2778,10 @@ class learnpath {
 	 * @return	string	HTML TOC ready to display
 	 */
 	function get_html_toc() {
+		
+		
+		$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+				
 		$charset = api_get_setting('platform_charset');
 		$display_action_links_with_icons = false;
 
@@ -2768,19 +2794,25 @@ class learnpath {
 		//if(empty($parent)){$parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()];}
 		$html = '<div class="scorm_title"><div class="scorm_title_text">' . Security::remove_XSS(api_convert_encoding($this->get_name(), $this->encoding, $charset)) . '</div></div>';
 		// build, display
-		if (api_is_allowed_to_edit()) {
+		if ($is_allowed_to_edit) {
 			$gradebook = Security :: remove_XSS($_GET['gradebook']);
-			$html .= '<div class="actions_lp">';
-			if ($display_action_links_with_icons) {
-				$html .= "<a href='lp_controller.php?" . api_get_cidreq() . "&amp;action=build&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . Display :: return_icon('learnpath_build.gif', get_lang('Build')) . ' ' . get_lang('Build') . "</a>";
-				$html .= "<a href='lp_controller.php?" . api_get_cidreq() . "&amp;action=admin_view&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . Display :: return_icon('learnpath_organize.gif', get_lang('BasicOverview')) . ' ' . get_lang('BasicOverview') . "</a>";
-				$html .= '<span>' . Display :: return_icon('learnpath_view_na.gif', get_lang("Display")) . ' <b>' . get_lang("Display") . '</b></span>';
-			} else {
-				$html .= "<a href='lp_controller.php?" . api_get_cidreq() . "&amp;gradebook=$gradebook&amp;action=build&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Build') . "</a>";
-				$html .= "<a href='lp_controller.php?" . api_get_cidreq() . "&amp;action=admin_view&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('BasicOverview') . "</a>";
-				$html .= '<span><b>' . get_lang('Display') . '</b></span>';
+			
+			//var_dump($this->get_lp_session_id());
+			if ($this->get_lp_session_id()==api_get_session_id()) {
+				$html .= '<div class="actions_lp">';
+				if ($display_action_links_with_icons) {
+					$html .= "<a href='lp_controller.php?" . api_get_cidreq() . "&amp;action=build&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . Display :: return_icon('learnpath_build.gif', get_lang('Build')) . ' ' . get_lang('Build') . "</a>";
+					$html .= "<a href='lp_controller.php?" . api_get_cidreq() . "&amp;action=admin_view&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . Display :: return_icon('learnpath_organize.gif', get_lang('BasicOverview')) . ' ' . get_lang('BasicOverview') . "</a>";
+					$html .= '<span>' . Display :: return_icon('learnpath_view_na.gif', get_lang("Display")) . ' <b>' . get_lang("Display") . '</b></span>';
+				} else {
+					$html .= "<a href='lp_controller.php?" . api_get_cidreq() . "&amp;gradebook=$gradebook&amp;action=build&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Build') . "</a>";
+					$html .= "<a href='lp_controller.php?" . api_get_cidreq() . "&amp;action=admin_view&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('BasicOverview') . "</a>";
+					$html .= '<span><b>' . get_lang('Display') . '</b></span>';
+				}
+				$html .= '</div>';
 			}
-			$html .= '</div>';
+			
+			
 		}
 		$html .= '<div id="inner_lp_toc" class="inner_lp_toc">' . "\n";
 		require_once ('resourcelinker.inc.php');
@@ -4577,6 +4609,9 @@ class learnpath {
 	 * @return string
 	 */
 	function overview() {
+		
+		$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+			
 		$platform_charset = api_get_system_encoding();
 		if ($this->debug > 0) {
 			error_log('New LP - In learnpath::overview()', 0);
@@ -4617,7 +4652,7 @@ class learnpath {
 		$arrLP = $this->arrMenu;
 		unset ($this->arrMenu);
 
-		if (api_is_allowed_to_edit()) {
+		if ($is_allowed_to_edit) {
 
 			$gradebook = Security :: remove_XSS($_GET['gradebook']);
 			$return .= '<div class="actions">';
@@ -4705,7 +4740,7 @@ class learnpath {
 			}
 			$return .= '</td>' . "\n";
 
-			if (api_is_allowed_to_edit()) {
+			if ($is_allowed_to_edit) {
 				$return .= "\t\t" . '<td align="center">' . "\n";
 
 				if ($arrLP[$i]['previous_item_id'] != 0) {

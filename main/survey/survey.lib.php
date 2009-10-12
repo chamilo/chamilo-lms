@@ -257,6 +257,11 @@ class survey_manager
 						)";
 			$result = Database::query($sql, __FILE__, __LINE__);
 			$survey_id = Database::insert_id();
+			if ($survey_id > 0) {
+				//insert into item_property
+				api_item_property_update(api_get_course_info(), TOOL_SURVEY, $survey_id, 'SurveyAdded', api_get_user_id());
+			}
+			
 			if($values['survey_type']==1 && !empty($values['parent_id'])){
 				survey_manager::copy_survey($values['parent_id'],$survey_id);
 			}
@@ -334,7 +339,10 @@ class survey_manager
 							anonymous	= '".Database::escape_string($values['anonymous'])."'".$additionalsets."
 					WHERE survey_id = '".Database::escape_string($values['survey_id'])."'";
 			$result = Database::query($sql, __FILE__, __LINE__);
-
+			
+			//update into item_property (update)
+			api_item_property_update(api_get_course_info(), TOOL_SURVEY, Database::escape_string($values['survey_id']), 'SurveyUpdated', api_get_user_id());
+			
 			//$return['message'] = get_lang('SurveyUpdatedSuccesfully').'<br />'.get_lang('YouCanNowAddQuestionToYourSurvey').': ';
 			//$return['message'] .= '<a href="survey.php?survey_id='.$values['survey_id'].'">'.get_lang('Here').'</a>';
 			//$return['message'] .= get_lang('OrReturnToSurveyOverview').'<a href="survey_list.php">'.get_lang('Here').'</a>';
@@ -426,8 +434,11 @@ class survey_manager
 
 		// deleting the questions of the survey
 		survey_manager::delete_all_survey_questions($survey_id, $shared);
-
-		return true;
+		
+		//update into item_property (delete)
+		api_item_property_update(api_get_course_info(), TOOL_SURVEY, Database::escape_string($survey_id), 'delete', api_get_user_id());
+		
+		return void;
 	}
 
 	function copy_survey($parent_survey, $new_survey_id)
@@ -4631,8 +4642,12 @@ class SurveyUtil {
 		if ($search_restriction)
 		{
 			$search_restriction = ' AND '.$search_restriction;
-		}
-
+		}		
+		
+		//condition for the session
+		$session_id = api_get_session_id();
+		$condition_session = api_get_session_condition($session_id);
+		
 		//IF(is_shared<>0,'V','-')	 					AS col6,
 		$sql = "SELECT
 					survey.survey_id							AS col0,
@@ -4645,25 +4660,43 @@ class SurveyUtil {
 	                survey.avail_till							AS col7,
 	                CONCAT('<a href=\"survey_invitation.php?view=answered&amp;survey_id=',survey.survey_id,'\">',survey.answered,'</a> / <a href=\"survey_invitation.php?view=invited&amp;survey_id=',survey.survey_id,'\">',survey.invited, '</a>')	AS col8,
 	                survey.anonymous							AS col9,
-	                survey.survey_id							AS col10
+	                survey.survey_id							AS col10,
+	                survey.session_id							AS session_id
 	             FROM $table_survey survey
 				 LEFT JOIN $table_survey_question survey_question ON survey.survey_id = survey_question.survey_id
 	             , $table_user user
 	             WHERE survey.author = user.user_id
 	             $search_restriction
+	             $condition_session
 	             ";
 		$sql .= " GROUP BY survey.survey_id";
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
-		$res = Database::query($sql, __FILE__, __LINE__);
-		$surveys = array ();
-		while ($survey = Database::fetch_array($res))
-		{
-			$surveys[] = $survey;
+		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$surveys = array();
+		$array = array();
+		while ($survey = Database::fetch_array($res)) {
+			$array[0] = $survey[0];
+			$array[1] = $survey[1];
+			
+			//validacion when belongs to a session
+			$session_img = api_get_session_image($survey['session_id'], $_user['status']);
+			$array[2] = $survey[2] . $session_img;
+			
+			$array[3] = $survey[3];
+			$array[4] = $survey[4];
+			$array[5] = $survey[5];
+			$array[6] = $survey[6];
+			$array[7] = $survey[7];
+			$array[8] = $survey[8];
+			$array[9] = $survey[9];
+			$array[10] = $survey[10];
+			
+			$surveys[] = $array;
 		}
 		return $surveys;
 	}
-
+	
 	function get_survey_data_for_coach($from, $number_of_items, $column, $direction)
 	{
 		//echo '<pre>';

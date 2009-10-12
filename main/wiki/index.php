@@ -352,7 +352,7 @@ if ($_GET['view'])
 
 			if($PassEdit) //show editor if edit is allowed
 			{
-				if (check_protect_page() && (api_is_allowed_to_edit(false,true)==false || api_is_platform_admin()==false))
+				if ($row['editlock']==1 && (api_is_allowed_to_edit(false,true)==false || api_is_platform_admin()==false))
 				{
 					   Display::display_normal_message(get_lang('PageLockedExtra'));
 				}
@@ -1333,7 +1333,7 @@ if ($_GET['action']=='edit')
 
 	 	if($PassEdit) //show editor if edit is allowed
 		 {
-	 		if (check_protect_page() && (api_is_allowed_to_edit(false,true)==false || api_is_platform_admin()==false))
+	 		if ($row['editlock']==1 && (api_is_allowed_to_edit(false,true)==false || api_is_platform_admin()==false))
   	   	    {
     		       Display::display_normal_message(get_lang('PageLockedExtra'));
 		    }

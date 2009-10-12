@@ -114,7 +114,7 @@ if ($_SESSION["origin"] == 'whoisonline') {  //check if our target has denied ou
 	$track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$sql="select chatcall_text from $track_user_table where ( user_id = $talk_to )";
 	$result=Database::query($sql,__FILE__,__LINE__);
-	$row=mysql_fetch_array($result);
+	$row=Database::fetch_array($result);
 	if ($row['chatcall_text'] == 'DENIED') {
 		echo "<script language=javascript> alert('".get_lang('ChatDenied')."'); </script>";
 		$sql="update $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text='' where (user_id = $talk_to)";

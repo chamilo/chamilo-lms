@@ -46,7 +46,7 @@ class ClassManager
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "SELECT * FROM $table_class WHERE id='".$class_id."'";
 		$res = Database::query($sql, __FILE__, __LINE__);
-		return mysql_fetch_array($res, MYSQL_ASSOC);
+		return Database::fetch_array($res, 'ASSOC');
 	}
 	/**
 	 * Change the name of a class
@@ -111,7 +111,7 @@ class ClassManager
 		$sql = "SELECT * FROM $table_class_user cu, $table_user u WHERE cu.class_id = '".$class_id."' AND cu.user_id = u.user_id";
 		$res = Database::query($sql, __FILE__, __LINE__);
 		$users = array ();
-		while ($user = mysql_fetch_array($res, MYSQL_ASSOC))
+		while ($user = Database::fetch_array($res, 'ASSOC'))
 		{
 			$users[] = $user;
 		}
@@ -174,7 +174,7 @@ class ClassManager
 		$sql = "SELECT * FROM $table_class_course cc, $table_course c WHERE cc.class_id = '".$class_id."' AND cc.course_code = c.code";
 		$res = Database::query($sql, __FILE__, __LINE__);
 		$courses = array ();
-		while ($course = mysql_fetch_array($res, MYSQL_ASSOC))
+		while ($course = Database::fetch_array($res, 'ASSOC'))
 		{
 			$courses[] = $course;
 		}
@@ -253,7 +253,7 @@ class ClassManager
 		$sql = "SELECT cl.* FROM $table_class cl, $table_course_class cc WHERE cc.course_code = '".mysql_real_escape_string($course_code)."' AND cc.class_id = cl.id";
 		$res = Database::query($sql, __FILE__, __LINE__);
 		$classes = array ();
-		while ($class = mysql_fetch_array($res, MYSQL_ASSOC))
+		while ($class = Database::fetch_array($res, 'ASSOC'))
 		{
 			$classes[] = $class;
 		}

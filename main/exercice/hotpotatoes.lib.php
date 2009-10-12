@@ -92,7 +92,7 @@ function GetComment($path,$course_code='') {
 	$query = "select comment from $dbTable where path='$path'";
 	$result = Database::query($query,__FILE__,__LINE__);
 
-	while ($row = mysql_fetch_array($result)) {
+	while ($row = Database::fetch_array($result)) {
 		return $row[0];
 	}
 	return "";

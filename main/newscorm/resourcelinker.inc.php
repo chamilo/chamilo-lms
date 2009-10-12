@@ -114,7 +114,7 @@ function show_documents($folder)
 	$document_table = Database::get_course_table(TABLE_DOCUMENT);
 	$sql="SELECT * from $document_table, $item_property_table WHERE id=ref AND tool = '".TOOL_DOCUMENT."' AND $visibility AND to_group_id = 0 AND to_user_id IS NULL  ORDER BY path ASC";
 	$result=Database::query($sql,__FILE__,__LINE__);
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		if (!$folder)
 		{
@@ -169,7 +169,7 @@ function show_documents($folder)
 			//	echo '<br />';
 			//	}// if (str_replace($folder.'/','',$conform_folder)!==$folder)
 		} // else (if (!$folder))
-	} //while ($row=mysql_fetch_array($result))
+	} //while ($row=Database::fetch_array($result))
 
 	// this is code for the case that we are in a subfolder
 	if ($good_paths)
@@ -282,31 +282,31 @@ function display_addedresource_link($type, $id, $style='')
 		case 'Agenda':
 			$TABLEAGENDA = $_course['dbNameGlu'].'calendar_event';
 			$result = Database::query("SELECT * FROM `$TABLEAGENDA` WHERE id=$id",__FILE__,__LINE__);
-			$myrow = mysql_fetch_array($result);
+			$myrow = Database::fetch_array($result);
 			echo '<img src="../img/agenda.gif" align="middle" /> <a href="../calendar/agenda.php"'.$styling.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case 'Ad_Valvas':
 			$tbl_announcement = $_course['dbNameGlu'].'announcement';
 			$result = Database::query("SELECT * FROM `$tbl_announcement` WHERE id=$id",__FILE__,__LINE__);
-			$myrow = mysql_fetch_array($result);
+			$myrow = Database::fetch_array($result);
 			echo '<img src="../img/valves.gif" align="middle" /> <a href="../announcements/announcements.php"'.$styling.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case 'Link':
 			$TABLETOOLLINK = $_course['dbNameGlu'].'link';
 			$result = Database::query("SELECT * FROM `$TABLETOOLLINK` WHERE id=$id",__FILE__,__LINE__);
-			$myrow = mysql_fetch_array($result);
+			$myrow = Database::fetch_array($result);
 			echo '<img src="../img/links.gif" align="middle" /> <a href="#" onclick="javascript:window.open(\'../link/link_goto.php?link_id='.$myrow['id'].'&amp;link_url='.urlencode($myrow['url'])."','MyWindow','width=500,height=400,top='+((screen.height-400)/2)+',left='+((screen.width-500)/2)+',scrollbars=1,resizable=1,menubar=1'); return false;\"".$styling.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case 'Exercise':
 			$TBL_EXERCICES = $_course['dbNameGlu'].'quiz';
 			$result = Database::query("SELECT * FROM `$TBL_EXERCICES` WHERE id=$id",__FILE__,__LINE__);
-			$myrow = mysql_fetch_array($result);
+			$myrow = Database::fetch_array($result);
 			echo '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercice_submit.php?exerciseId='.$myrow['id'].'"'.$styling.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case 'Forum':
 			$TBL_FORUMS = $_course['dbNameGlu'].'bb_forums';
 			$result = Database::query("SELECT * FROM `$TBL_FORUMS` WHERE forum_id=$id",__FILE__,__LINE__);
-			$myrow = mysql_fetch_array($result);
+			$myrow = Database::fetch_array($result);
 			echo '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewforum.php?forum='.$myrow['forum_id'].'&amp;md5='.$myrow['md5'].'"'.$styling.'>'.$myrow['forum_name']."</a><br />\n";
 			break;
 		case 'Thread':  //=topics
@@ -314,11 +314,11 @@ function display_addedresource_link($type, $id, $style='')
 			$tbl_posts_text	= $_course['dbNameGlu'].'bb_posts_text';
 			$TBL_FORUMS		= $_course['dbNameGlu'].'bb_forums';
 			$result = Database::query("SELECT * FROM `$tbl_posts` posts, `$TBL_FORUMS` forum WHERE forum.forum_id=posts.forum_id and post_id=$id",__FILE__,__LINE__);
-			$myrow = mysql_fetch_array($result);
+			$myrow = Database::fetch_array($result);
 			// grabbing the title of the post
 			$sql_title = "SELECT * FROM `$tbl_posts_text` WHERE post_id=".$myrow["post_id"];
 			$result_title = Database::query($sql_title,__FILE__,__LINE__);
-			$myrow_title = mysql_fetch_array($result_title);
+			$myrow_title = Database::fetch_array($result_title);
 			echo '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$myrow['topic_id'].'&amp;forum='.$myrow['forum_id'].'&amp;md5='.$myrow['md5'].'"'.$styling.'>'.$myrow_title['post_title']."</a><br />\n";
 			break;
 		case 'Post':
@@ -331,7 +331,7 @@ function display_addedresource_link($type, $id, $style='')
 		case 'Document':
 			$dbTable = $_course['dbNameGlu'].'document';
 			$result = Database::query("SELECT * FROM `$dbTable` WHERE id=$id",__FILE__,__LINE__);
-			$myrow = mysql_fetch_array($result);
+			$myrow = Database::fetch_array($result);
 			$pathname = explode('/',$myrow['path']); // making a correct name for the link
 			$last = count($pathname) - 1;  // making a correct name for the link
 			$filename = $pathname[$last];  // making a correct name for the link
@@ -386,10 +386,10 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case "Agenda":
 			$TABLEAGENDA 		= $_course['dbNameGlu']."calendar_event";
 			$result = Database::query("SELECT * FROM `$TABLEAGENDA` WHERE id=$id",__FILE__,__LINE__);
-			$myrow=mysql_fetch_array($result);
+			$myrow=Database::fetch_array($result);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $myrow["title"]=$row['title']; }
 			$desc=$row['description'];
 			$agenda_id=$row['item_id'];
@@ -436,10 +436,10 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case "Ad_Valvas":
 			$tbl_announcement = $_course['dbNameGlu']."announcement";
 			$result = Database::query("SELECT * FROM `$tbl_announcement` WHERE id=$id",__FILE__,__LINE__);
-			$myrow=mysql_fetch_array($result);
+			$myrow=Database::fetch_array($result);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $myrow["content"]=$row['title']; }
 			$desc=$row['description'];
 			$ann_id=$row['item_id'];
@@ -496,10 +496,10 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case "Link" :
 			$TABLETOOLLINK	= $_course['dbNameGlu']."link";
 			$result= Database::query("SELECT * FROM `$TABLETOOLLINK` WHERE id=$id",__FILE__,__LINE__);
-			$myrow=mysql_fetch_array($result);
+			$myrow=Database::fetch_array($result);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $myrow["title"]=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -555,14 +555,14 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case "Exercise":
 			$TBL_EXERCICES  = $_course['dbNameGlu'].'quiz';
 			$result= Database::query("SELECT * FROM `$TBL_EXERCICES` WHERE id=$id",__FILE__,__LINE__);
-			$myrow=mysql_fetch_array($result);
+			$myrow=Database::fetch_array($result);
 
 			if ($builder=='builder') { $origin='builder'; }
 			  //this is needed for the exercise_submit.php can delete the session info about tests
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
 			$result=Database::query($sql,__FILE__,__LINE__);
-			$row=mysql_fetch_array($result);
+			$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $myrow["title"]=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -613,7 +613,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			$TBL_DOCUMENT  = $_course['dbNameGlu'].'document';
 			$documentPath=api_get_path('SYS_COURSE_PATH').$_course['path'].'/document';
 			$result = Database::query("SELECT * FROM `".$TBL_DOCUMENT."` WHERE id=$id");
-			$myrow= mysql_fetch_array($result);
+			$myrow= Database::fetch_array($result);
 			$path=$myrow["path"];
 			$name=GetQuizName($path,$documentPath);
 
@@ -621,7 +621,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			  //this is needed for the exercise_submit.php can delete the session info about tests
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $name=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -671,10 +671,10 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case "Forum":
 			$TBL_FORUMS = Database::get_course_table(TABLE_FORUM,$_course['database']);
 			$result= Database::query("SELECT * FROM $TBL_FORUMS WHERE forum_id=$id",__FILE__,__LINE__);
-			$myrow=mysql_fetch_array($result);
+			$myrow=Database::fetch_array($result);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $myrow["forum_name"]=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -723,10 +723,10 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			$tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD,$_course['database']);
 			$sql="SELECT * FROM $tbl_topics where topic_id=$id";
 			$result= Database::query($sql,__FILE__,__LINE__);
-			$myrow=mysql_fetch_array($result);
+			$myrow=Database::fetch_array($result);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $myrow["topic_title"]=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -775,14 +775,14 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			$tbl_posts_text  = $_course['dbNameGlu'].'bb_posts_text';
 			$TBL_FORUMS = $_course['dbNameGlu']."bb_forums";
 			$result= Database::query("SELECT * FROM `$tbl_posts` where post_id=$id",__FILE__,__LINE__);
-			$myrow=mysql_fetch_array($result);
+			$myrow=Database::fetch_array($result);
 			// grabbing the title of the post
 			$sql_titel="SELECT * FROM `$tbl_posts_text` WHERE post_id=".$myrow["post_id"];
 			$result_titel=Database::query($sql_titel,__FILE__,__LINE__);
-			$myrow_titel=mysql_fetch_array($result_titel);
+			$myrow_titel=Database::fetch_array($result_titel);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $myrow_titel["post_title"]=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -839,7 +839,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			$mysql = "SELECT * FROM `$dbTable` WHERE id=$id";
 			//error_log('New LP - Querying document table: '.$mysql,0);
 			$result = Database::query($mysql,__FILE__,__LINE__);
-			$myrow=mysql_fetch_array($result);
+			$myrow=Database::fetch_array($result);
 
 			$pathname=explode("/",$myrow["path"]); // making a correct name for the link
 			$last=count($pathname)-1;  // making a correct name for the link
@@ -861,7 +861,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
 			//error_log('New LP - Querying lp_item table: '.$sql,0);
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $filename=$row['title']; }
 			$desc=$row['description'];
 
@@ -906,7 +906,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case "Assignments":
 			$name=get_lang('Assignments');
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $name=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -955,7 +955,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case "Dropbox":
 			$name=get_lang('Dropbox');
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $name=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -994,7 +994,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case "Introduction_text":
 			$name=get_lang('IntroductionText');
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $name=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -1035,7 +1035,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case "Course_description":
 			$name=get_lang('CourseDescription');
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $name=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -1075,7 +1075,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case "Groups":
 			$name=get_lang('Groups');
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $name=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -1114,7 +1114,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case "Users":
 			$name=get_lang('Users');
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $name=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -1181,10 +1181,10 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 		case "Agenda":
 			$TABLEAGENDA 		= $_course['dbNameGlu']."calendar_event";
 			$result = Database::query("SELECT * FROM `$TABLEAGENDA` WHERE id=$id",__FILE__,__LINE__);
-			$myrow=mysql_fetch_array($result);
+			$myrow=Database::fetch_array($result);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $myrow["title"]=$row['title']; }
 			$desc=$row['description'];
 			$agenda_id=$row['item_id'];
@@ -1202,7 +1202,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 		case "Ad_Valvas":
 			$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 			$result = Database::query("SELECT * FROM $tbl_announcement WHERE id=$id",__FILE__,__LINE__);
-			$myrow=mysql_fetch_array($result);
+			$myrow=Database::fetch_array($result);
 
 			if ($builder != 'builder')
 			{
@@ -1217,10 +1217,10 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 		case "Link" :
 			$TABLETOOLLINK	= $_course['dbNameGlu']."link";
 			$result= Database::query("SELECT * FROM `$TABLETOOLLINK` WHERE id=$id",__FILE__,__LINE__);
-			$myrow=mysql_fetch_array($result);
+			$myrow=Database::fetch_array($result);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 
 			$thelink=$myrow["url"];
 			if ($builder != 'builder')
@@ -1236,13 +1236,13 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 		case "Exercise":
 			$TBL_EXERCICES  = $_course['dbNameGlu'].'quiz';
 			$result= Database::query("SELECT * FROM `$TBL_EXERCICES` WHERE id=$id",__FILE__,__LINE__);
-			$myrow=mysql_fetch_array($result);
+			$myrow=Database::fetch_array($result);
 
 			if ($builder=='builder') { $origin='builder'; }
 			  //this is needed for the exercise_submit.php can delete the session info about tests
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $myrow["title"]=$row['title']; }
 
 			if ($builder != 'builder')
@@ -1259,7 +1259,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 	  	    $TBL_DOCUMENT  = $_course['dbNameGlu'].'document';
 		    $documentPath=api_get_path('SYS_COURSE_PATH').$_course['path'].'/document';
 			$result = Database::query("SELECT * FROM `".$TBL_DOCUMENT."` WHERE id=$id");
-		    $myrow= mysql_fetch_array($result);
+		    $myrow= Database::fetch_array($result);
 		    $path=$myrow["path"];
 		  	$name=GetQuizName($path,$documentPath);
 
@@ -1280,12 +1280,12 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 		case "Forum":
 			$TBL_FORUMS = $_course['dbNameGlu']."bb_forums";  // TODO: This is the old table name, it should be corrected.
 			$result= Database::query("SELECT * FROM `$TBL_FORUMS` WHERE forum_id=$id",__FILE__,__LINE__);
-			$myrow=mysql_fetch_array($result);
+			$myrow=Database::fetch_array($result);
 
 			if ($builder=='builder') { $origin='builder'; }
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $myrow["forum_name"]=$row['title']; }
 
 			if ($myrow["forum_name"]=='') { $type="Forum"; }
@@ -1307,10 +1307,10 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			$TBL_FORUMS = $_course['dbNameGlu']."bb_forums";
 			$sql="SELECT * FROM `$tbl_topics` where topic_id=$id";
 			$result= Database::query($sql,__FILE__,__LINE__);
-			$myrow=mysql_fetch_array($result);
+			$myrow=Database::fetch_array($result);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 
 			if ($builder != 'builder')
 			{
@@ -1327,14 +1327,14 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			$tbl_posts_text  = $_course['dbNameGlu'].'bb_posts_text';
 			$TBL_FORUMS = $_course['dbNameGlu']."bb_forums";
 			$result= Database::query("SELECT * FROM `$tbl_posts` where post_id=$id",__FILE__,__LINE__);
-			$myrow=mysql_fetch_array($result);
+			$myrow=Database::fetch_array($result);
 			// grabbing the title of the post
 			$sql_titel="SELECT * FROM `$tbl_posts_text` WHERE post_id=".$myrow["post_id"];
 			$result_titel=Database::query($sql_titel,__FILE__,__LINE__);
-			$myrow_titel=mysql_fetch_array($result_titel);
+			$myrow_titel=Database::fetch_array($result_titel);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 			if ($row['title'] != '') { $myrow_titel["post_title"]=$row['title']; }
 			$desc=$row['description'];
     		$link .= str_repeat("&nbsp;&gt;",$level);
@@ -1357,14 +1357,14 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 		case "Document":
 			$dbTable  = $_course['dbNameGlu']."document";
 			$result=Database::query("SELECT * FROM `$dbTable` WHERE id=$id",__FILE__,__LINE__);
-			$myrow=mysql_fetch_array($result);
+			$myrow=Database::fetch_array($result);
 
 			$pathname=explode("/",$myrow["path"]); // making a correct name for the link
 			$last=count($pathname)-1;  // making a correct name for the link
 			$filename=$pathname[$last];  // making a correct name for the link
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=Database::fetch_array($result);
 
 			if ($builder != 'builder')
 			{
@@ -1533,7 +1533,7 @@ function edit_added_resources($type, $id)
 
 	$sql="SELECT * FROM `$TABLERESOURCE` WHERE source_type='$type' and source_id=$id";
 	$result=Database::query($sql,__FILE__,__LINE__);
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		$addedresource[]=$row["resource_type"];
 		$addedresourceid[]=$row["resource_id"];
@@ -1576,7 +1576,7 @@ function display_added_resources($type, $id, $style='')
 
 	$sql="SELECT * FROM `$TABLERESOURCE` WHERE source_type='$type' and source_id='$id'";
 	$result=Database::query($sql,__FILE__,__LINE__);
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		if ($origin != 'learnpath')
 		{

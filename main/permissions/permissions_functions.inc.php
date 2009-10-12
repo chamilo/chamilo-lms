@@ -164,7 +164,7 @@ function get_permissions($content, $id)
 		WHERE " . $id_field . "='" . mysql_real_escape_string($id) . "'";
 	$result = Database::query($sql, __FILE__, __LINE__);
 
-	while($row = mysql_fetch_array($result))
+	while($row = Database::fetch_array($result))
 		$currentpermissions[$row['tool']][] = $row['action'];
 
 	return $currentpermissions;
@@ -420,7 +420,7 @@ function display_role_list($current_course_roles, $current_platform_roles)
 	// platform roles
 	$sql="SELECT * FROM $platform_roles_table";
 	$result=Database::query($sql, __FILE__, __LINE__);
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		if(in_array($row['role_id'], $current_platform_roles))
 		{
@@ -449,7 +449,7 @@ function display_role_list($current_course_roles, $current_platform_roles)
 	// course roles
 	$sql="SELECT * FROM $coures_roles_table";
 	$result=Database::query($sql, __FILE__, __LINE__);
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		if(in_array($row['role_id'], $current_course_roles))
 		{
@@ -505,7 +505,7 @@ function get_roles($content,$id, $scope='course')
 	//$sql="SELECT role.role_id FROM $table role_group_user, $table_role role WHERE role_group_user.$id_field = '$id' AND role_group_user.role_id=role.role_id AND role_group_user.scope='".$scope."'";$sql="SELECT role.role_id FROM $table role_group_user, $table_role role WHERE role_group_user.$id_field = '$id' AND role_group_user.role_id=role.role_id AND role_group_user.scope='".$scope."'";
 	$sql="SELECT role_id FROM $table WHERE $id_field = '$id' AND scope='".$scope."'";
 	$result=Database::query($sql, __FILE__, __LINE__);
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		$current_roles[]=$row['role_id'];
 	}
@@ -533,7 +533,7 @@ function get_all_roles($content='course')
 	$current_roles=array();
 	$sql="SELECT * FROM $table_role";
 	$result=Database::query($sql, __FILE__, __LINE__);
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		$roles[]=$row;
 	}
@@ -596,7 +596,7 @@ function get_roles_permissions($content,$id, $scope='course')
 
 	$result = Database::query($sql, __FILE__, __LINE__);
 
-	while($row=mysql_fetch_array($result))
+	while($row=Database::fetch_array($result))
 		$current_role_permissions[$row['tool']][]=$row['action'];
 
 	return $current_role_permissions;

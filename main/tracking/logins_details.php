@@ -117,7 +117,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
                         AND `u`.`user_id` = '$uInfo'";
     }
     $query = Database::query($sql,__FILE__,__LINE__);
-    $res = @mysql_fetch_array($query);
+    $res = @Database::fetch_array($query);
     if(is_array($res))
     {
         $res[2] == "" ? $res2 = get_lang('NoEmail') : $res2 = Display::encrypted_mailto_link($res[2]);

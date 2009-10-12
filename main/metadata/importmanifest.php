@@ -65,7 +65,7 @@ if (isset($workWith))  // explicit in URL, or selected at bottom of screen
 
     if (mysql_num_rows($result) == 1)
     {
-        if (($row = mysql_fetch_array($result)))
+        if (($row = Database::fetch_array($result)))
         {
         	$sdi = $row['id'];
         }
@@ -408,7 +408,7 @@ elseif ($smo == get_lang('Index') && file_exists($phpDigIncCn) &&
         ($sdisub ? "." . $sdisub . "\_%'" : ".%'") .
         ($sdiall ? "" : " AND NOT INSTR(eid,'_')"));  // SQL LIKE underscore
 
-    while ($row = mysql_fetch_array($result))  // load indexabletexts in memory
+    while ($row = Database::fetch_array($result))  // load indexabletexts in memory
     {
         // URL: index.php[?sid=xxx[&thumb=yyy]] (file[1]/@href: pptslnnn_t.jpg)
 
@@ -460,7 +460,7 @@ echo '<h3>', get_lang('Statistics'), '</h3>', "\n";
 $result = $mdStore->mds_get_many('eid', "eid LIKE '" . EID_TYPE . ".%'");
 echo get_lang('TotalMDEs'), mysql_num_rows($result), "\n";
 
-while ($row = mysql_fetch_array($result))
+while ($row = Database::fetch_array($result))
 {
     $eid_id = substr($eid = $row['eid'], TPLEN);
 

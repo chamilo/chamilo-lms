@@ -58,7 +58,7 @@ if ( isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action']=
 				" ;
 	}
 	$result=Database::query($sql,__FILE__,__LINE__);
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		$files_to_download[]=$row['id'];
 	}

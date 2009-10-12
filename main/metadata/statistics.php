@@ -84,7 +84,7 @@ echo get_lang('TotalMDEs'), mysql_num_rows($result), "<br>\n";
 
 echo count($kwds), ' ', get_lang('CourseKwds'), '<br>', "\n";
 
-while ($row = mysql_fetch_array($result))
+while ($row = Database::fetch_array($result))
 {
     $eid = $row['eid']; $curr = ''; $xmltext = $row['mdxmltext']; $offset = 0;
 

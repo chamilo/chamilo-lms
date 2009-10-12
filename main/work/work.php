@@ -396,7 +396,7 @@ if (!empty ($_POST['changeProperties'])) {
 } else {
 	$query = "SELECT * FROM " . $main_course_table . " WHERE code=\"" . $_course['sysCode'] . "\"";
 	$result = Database::query($query, __FILE__, __LINE__);
-	$row = mysql_fetch_array($result);
+	$row = Database::fetch_array($result);
 	$uploadvisibledisabled = $row["show_score"];
 }
 
@@ -414,7 +414,7 @@ Display :: display_introduction_section(TOOL_STUDENTPUBLICATION);
 -----------------------------------------------------------
 */
 if (api_is_allowed_to_edit(null,true)) {
-	
+
 	/*-------------------------------------------
 				DELETE WORK COMMAND
 	-----------------------------------------*/
@@ -441,11 +441,11 @@ if (api_is_allowed_to_edit(null,true)) {
 	  -----------------------------------------*/
 	$qualification_number=0;
 	if (!empty($edit)) {
-		
-		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+
+		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
 		}
-	
+
 		$sql = "SELECT * FROM  " . $work_table . "  WHERE id='" . $edit . "'";
 		$result = Database::query($sql, __FILE__, __LINE__);
 
@@ -463,11 +463,11 @@ if (api_is_allowed_to_edit(null,true)) {
 		MAKE INVISIBLE WORK COMMAND
 	  -----------------------------------------*/
 
-	if (!empty($make_invisible)) {	
-		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+	if (!empty($make_invisible)) {
+		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
 		}
-		if (isset($make_invisible) && $make_invisible == "all") {		
+		if (isset($make_invisible) && $make_invisible == "all") {
 			$sql = "ALTER TABLE " . $work_table . "
 						        CHANGE accepted accepted TINYINT(1) DEFAULT '0'";
 
@@ -494,8 +494,8 @@ if (api_is_allowed_to_edit(null,true)) {
 		MAKE VISIBLE WORK COMMAND
 	  -----------------------------------------*/
 
-	if (!empty($make_visible)) { 
-		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+	if (!empty($make_visible)) {
+		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
 		}
 		if (isset($make_visible) && $make_visible == "all") {
@@ -527,13 +527,13 @@ if (api_is_allowed_to_edit(null,true)) {
 	 * Create dir command
 	 ---------------------*/
 	if (!empty ($_REQUEST['new_dir'])) {
-		
-		
-		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+
+
+		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
 		}
-		
-		
+
+
 		function get_date_from_select($prefix) {
 				return $_POST[$prefix.'_year'].'-'.two_digits($_POST[$prefix.'_month']).'-'.two_digits($_POST[$prefix.'_day']).' '.two_digits($_POST[$prefix.'_hour']).':'.two_digits($_POST[$prefix.'_minute']).':00';
 		}
@@ -664,25 +664,25 @@ if (api_is_allowed_to_edit(null,true)) {
 	/* -------------------
 	 * Delete dir command
 	 --------------------*/
-	if (!empty ($_REQUEST['delete_dir'])) {		
-		
-		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+	if (!empty ($_REQUEST['delete_dir'])) {
+
+		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
 		}
-		
+
 		$delete_directory=$_REQUEST['delete_dir'];
 		$id=$_REQUEST['delete2'];
 		del_dir($base_work_dir . '/', $delete_directory,$id);
 		Display :: display_confirmation_message(get_lang('DirDeleted') . ': '.$delete_directory);
 	}
-	if (!empty ($_REQUEST['delete2'])) {	
-		
-		
-		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+	if (!empty ($_REQUEST['delete2'])) {
+
+
+		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
 		}
-		
-			
+
+
 		$delete_2=$_REQUEST['delete2'];
 		// gets calendar_id from student_publication_assigment
 		$sql = "SELECT add_to_calendar FROM $TSTDPUBASG WHERE publication_id ='$delete_2'";
@@ -761,12 +761,12 @@ else {
 	/*-------------------------------------------
 				DELETE WORK COMMAND
 	-----------------------------------------*/
-	if ($delete) {		
-			
-		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+	if ($delete) {
+
+		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
 		}
-	
+
 		if ($delete == "all") {
 			/*not authorized to this user */
 		} else {
@@ -800,13 +800,13 @@ else {
 	/*-------------------------------------------
 	           EDIT COMMAND WORK COMMAND
 	  -----------------------------------------*/
-	  
-	if ($edit) {		
-				
-		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+
+	if ($edit) {
+
+		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
 		}
-		
+
 		//Get the author ID for that document from the item_property table
 		$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=" . $edit;
 		$author_qry = Database::query($author_sql, __FILE__, __LINE__);
@@ -815,7 +815,7 @@ else {
 			$sql = "SELECT * FROM  " . $work_table . "  WHERE id='" . $edit . "'";
 			$result = Database::query($sql, __FILE__, __LINE__);
 			if ($result ) {
-				$row = mysql_fetch_array($result);
+				$row = Database::fetch_array($result);
 				$workTitle = $row['title'];
 				$workAuthor = $row['author'];
 				$workDescription = $row['description'];
@@ -1138,12 +1138,12 @@ endif;
 
 if ($is_course_member) {
 	if (($display_upload_form || $edit)&&!$has_ended) {
-		
-		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+
+		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
 		}
-		
-		
+
+
 		if ($edit) {
 			//Get the author ID for that document from the item_property table
 			$is_author = false;

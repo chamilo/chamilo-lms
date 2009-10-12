@@ -227,7 +227,7 @@ function display_create_virtual_course_form()
 									ORDER BY tree_pos";
 			$category_result = Database::query($sql_query, __FILE__, __LINE__);
 
-			while ($current_category = mysql_fetch_array($category_result))
+			while ($current_category = Database::fetch_array($category_result))
 			{
 				echo "<option value=\"", $current_category["code"], "\"";
 				echo ">(", $current_category["code"], ") ", $current_category["name"];

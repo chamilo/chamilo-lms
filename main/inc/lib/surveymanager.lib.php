@@ -48,7 +48,7 @@ class SurveyManager {
 			$str_survey_list .= "<select name=\"exiztingsurvey\" $extra_script>\n";
 			$str_survey_list .= "<option value=\"\">--Select Survey--</option>";
 
-			while($result=mysql_fetch_array($sql_result))
+			while($result=Database::fetch_array($sql_result))
 			{
 			 $selected = ($seleced_surveyid==$result[survey_id])?"selected":"";
 			 $str_survey_list .= "\n<option value=\"".$result[survey_id]."\" ".$selected.">".$result[title]."</option>";
@@ -96,7 +96,7 @@ class SurveyManager {
 
 			$sql = 'SELECT MAX(sortby) FROM '.$table_group.' WHERE survey_id="'.Database::escape_string($survey_id).'"';
 			$rs = Database::query($sql, __FILE__, __LINE__);
-			list($sortby) = mysql_fetch_array($rs);
+			list($sortby) = Database::fetch_array($rs);
 			$sortby++;
 			$sql="INSERT INTO $table_group(group_id,survey_id,groupname,introduction, sortby) values('','$survey_id','$group_title','$introduction','$sortby')";
 			$result=Database::query($sql);
@@ -188,7 +188,7 @@ class SurveyManager {
 		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
 		echo "<select name=\"author\">";
 		echo "<option value=\"\"><--Select Survey--></optional>";
-		while ($result =@mysql_fetch_array($sql_result))
+		while ($result =@Database::fetch_array($sql_result))
 		{
 			echo "\n<option value=\"".$result[survey_id]."\">".$result[title]."</option>";
 		}
@@ -612,7 +612,7 @@ class SurveyManager {
 			$str_group_list = "";
 			$str_group_list .= "<select name=\"exiztinggroup\" $extra_script>\n";
 
-			while($result=mysql_fetch_array($sql_result))
+			while($result=Database::fetch_array($sql_result))
 			{
 			 $selected = ($seleced_groupid==$result[group_id])?"selected":"";
 			 $str_group_list .= "\n<option value=\"".$result[group_id]."\" ".$selected.">".$result[groupname]."</option>\n";
@@ -1667,7 +1667,7 @@ function get_questions_move($curr_dbname)
 {
 	$sql_select_questions="SELECT  * from $curr_dbname.questions order by `sortby` asc";
 	$result=mysql_query($sql_select_questions);
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 		{
 		// we only need the database name of the course
 		$question1[]=array("caption"=> $row['caption'], "qid" => $row['qid'],"sortby" => $row['sortby']);
@@ -1684,7 +1684,7 @@ function listGroups($id_survey, $fields = '*')
 			WHERE survey_id='.$id_survey.' ORDER BY sortby';
 	$rs = Database::query($sql, __FILE__, __LINE__);
 	$groups = array();
-	while($row = mysql_fetch_array($rs)){
+	while($row = Database::fetch_array($rs)){
 		$groups[] = $row;
 	}
 	return $groups;
@@ -1708,7 +1708,7 @@ function listQuestions($id_survey, $fields = '*')
 	$rs = Database::query($sql, __FILE__, __LINE__);
 
 	$questions = array();
-	while($row = mysql_fetch_array($rs)){
+	while($row = Database::fetch_array($rs)){
 		$questions[] = $row;
 	}
 
@@ -1728,7 +1728,7 @@ function listAnswers($qid){
 	$rs = Database::query($sql, __FILE__, __LINE__);
 
 	$answers = array();
-	while($row = mysql_fetch_array($rs)){
+	while($row = Database::fetch_array($rs)){
 		$answers[] = $row;
 	}
 
@@ -1747,7 +1747,7 @@ function listUsers($survey_id, $dbname, $fields='id, user_id, firstname, lastnam
 				$order_clause;
 	$rs = Database::query($sql, __FILE__, __LINE__);
 	$users = array();
-	while ($row = mysql_fetch_array($rs)) {
+	while ($row = Database::fetch_array($rs)) {
 		$users[] = $row;
 	}
 	return $users;
@@ -1761,7 +1761,7 @@ function getUserAnswersDetails($id_userAnswers, $params=''){
 	$sql = 'SELECT * FROM '.$table_answers.' '.$where.' '.$order;
 	$rs = Database::query($sql, __FILE__, __LINE__);
 	$answers = array();
-	while($row = mysql_fetch_array($rs))
+	while($row = Database::fetch_array($rs))
 		$answers[] = $row;
 
 	return $answers;

@@ -673,7 +673,7 @@ class aicc extends learnpath {
 
 		$sql = "SELECT * FROM $tbl_lp WHERE id=".$lp_id;
 		$result = Database::query($sql, __FILE__, __LINE__);
-		$row = mysql_fetch_array($result);
+		$row = Database::fetch_array($result);
 		$LPname = $row['path'];
 		$list = split('/',$LPname);
 		$LPnamesafe = $list[0];

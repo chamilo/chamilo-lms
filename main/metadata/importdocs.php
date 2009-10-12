@@ -65,7 +65,7 @@ echo get_lang('Tool'), ': ', mysql_num_rows($result), "<br><br>\n";
 
 $idt = array(); $cidpar = '?cidReq=' . $_course['sysCode'];
 
-while ($row = mysql_fetch_array($result))  // load indexabletexts in memory
+while ($row = Database::fetch_array($result))  // load indexabletexts in memory
 {
     $mdObj = new mdobject($_course, substr($row['eid'], AFTER_DOT));
     $idt[$mdObj->mdo_url . $cidpar] = $row['indexabletext'];

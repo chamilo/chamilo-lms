@@ -263,7 +263,7 @@ var $mds_something;
 
 function mds_get($eid, $column = 'mdxmltext', $must_exist = '')  // none: FALSE
 {
-    if (($mdt = mysql_fetch_array($this->_query("SELECT " . $column .
+    if (($mdt = Database::fetch_array($this->_query("SELECT " . $column .
         " FROM " . MDS_TABLE . " WHERE ", $eid)))) return $mdt[$column];
 
     if ($must_exist) give_up($must_exist . $this->_coldat('eid', $eid));

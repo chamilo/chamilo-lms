@@ -84,7 +84,7 @@ function showtools2($cat)
 	$result = Database::query($sql, __FILE__, __LINE__);
 
 	// grabbing all the tools from $course_tool_table
-	while ($tempRow = mysql_fetch_array($result))
+	while ($tempRow = Database::fetch_array($result))
 	{
 		/*
 		if ($tempRow['img'] !== "scormbuilder.gif" AND $tempRow['img'] !== "blog.gif")
@@ -118,7 +118,7 @@ function showtools2($cat)
 								WHERE tl.on_homepage='1' AND tip.visibility = 1";
 		}
 		$result_links = Database::query($sql_links);
-		while ($links_row = mysql_fetch_array($result_links))
+		while ($links_row = Database::fetch_array($result_links))
 		{
 			$properties = array ();
 			$properties['name'] = $links_row['title'];

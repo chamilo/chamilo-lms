@@ -29,7 +29,7 @@ $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('Session
 
 $result=Database::query("SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility FROM $tbl_session WHERE id='$id'",__FILE__,__LINE__);
 
-if (!$infos=mysql_fetch_array($result)) {
+if (!$infos=Database::fetch_array($result)) {
 	header('Location: session_list.php');
 	exit();
 }

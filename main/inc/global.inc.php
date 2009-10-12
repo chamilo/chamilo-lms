@@ -120,7 +120,7 @@ if (!mysql_select_db($_configuration['main_database'], $dokeos_database_connecti
 // The platform's character set must be retrieved at this early moment.
 $sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
 $result = Database::query($sql, __FILE__, __LINE__);
-while ($row = @mysql_fetch_array($result)) {
+while ($row = @Database::fetch_array($result)) {
 	$charset = $row[0];
 }
 if (empty($charset)) {

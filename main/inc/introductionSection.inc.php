@@ -128,7 +128,7 @@ if ($intro_editAllowed) {
 
 $sql = "SELECT intro_text FROM $TBL_INTRODUCTION WHERE id='".$moduleId."'";
 $intro_dbQuery = Database::query($sql,__FILE__,__LINE__);
-$intro_dbResult = mysql_fetch_array($intro_dbQuery);
+$intro_dbResult = Database::fetch_array($intro_dbQuery);
 $intro_content = $intro_dbResult['intro_text'];
 
 /* Determines the correct display */

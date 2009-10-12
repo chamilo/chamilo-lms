@@ -125,12 +125,12 @@ if (!empty ($_POST['add_chapter']) && !empty ($_POST['title']))
 	// get max display_order so far in this parent chapter
 	$sql = "SELECT MAX(display_order) FROM $tbl_learnpath_chapter WHERE learnpath_id = $learnpath_id "." AND parent_chapter_id = $chapter_id";
 	$res = Database::query($sql, __FILE__, __LINE__);
-	$row = mysql_fetch_array($res);
+	$row = Database::fetch_array($res);
 	$max_temp = $row[0];
 
 	$sql = "SELECT MAX(display_order) FROM $tbl_learnpath_item WHERE "." chapter_id = $chapter_id";
 	$res = Database::query($sql, __FILE__, __LINE__);
-	$row = mysql_fetch_array($res);
+	$row = Database::fetch_array($res);
 	$max_temp2 = $row[0];
 	if ($max_temp2 > $max_temp)
 	{
@@ -213,7 +213,7 @@ if ($add)
 		if(mysql_num_rows($result)==0){
 			$lastorder_item = 0;
 		}else{
-			$row = mysql_fetch_array($result);
+			$row = Database::fetch_array($result);
 			$lastorder_item = ($row[0]);
 		}
 		$sql = "SELECT MAX(display_order) FROM $tbl_learnpath_chapter WHERE parent_chapter_id=$chapter_id";
@@ -221,7 +221,7 @@ if ($add)
 		if(mysql_num_rows($result)==0){
 			$lastorder_chapter = 0;
 		}else{
-			$row = mysql_fetch_array($result);
+			$row = Database::fetch_array($result);
 			$lastorder_chapter = ($row[0]);
 		}
 		$lastorder = ($lastorder_chapter>$lastorder_item?$lastorder_chapter+1:$lastorder_item+1);
@@ -403,12 +403,12 @@ else
 	$learnpath_select_query = "	SELECT * FROM $tbl_learnpath_main
 		  								WHERE learnpath_id=$learnpath_id";
 	$sql_result = Database::query($learnpath_select_query);
-	$therow = mysql_fetch_array($sql_result);
+	$therow = Database::fetch_array($sql_result);
 
 	$learnpath_chapter_query = "	SELECT * FROM $tbl_learnpath_chapter
 		  								WHERE (learnpath_id = '$learnpath_id' and id = '$chapter_id')";
 	$sql_result = Database::query($learnpath_chapter_query);
-	$therow2 = mysql_fetch_array($sql_result);
+	$therow2 = Database::fetch_array($sql_result);
 
 	$from_learnpath = 'yes';
 	session_register('from_learnpath');
@@ -443,7 +443,7 @@ $active_modules=array();
 $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 $sql_select_active="SELECT * FROM $tool_table WHERE visibility='1'";
 $result_select_active=Database::query($sql_select_active);
-while ($row=mysql_fetch_array($result_select_active))
+while ($row=Database::fetch_array($result_select_active))
 {
 	$active_modules[]=$row['name'];
 }
@@ -653,7 +653,7 @@ if ($content == "Agenda")
 
 	$result = Database::query($sql);
 
-	while ($myrow = mysql_fetch_array($result))
+	while ($myrow = Database::fetch_array($result))
 	{
 		echo "<table width=\"100%\"><tr><td bgcolor=\"#E6E6E6\">";
 		echo "<img src='../img/agenda.gif' alt='agenda'>";
@@ -723,7 +723,7 @@ if ($content == "Ad_Valvas")
 	$sql = "SELECT * FROM ".$tbl_announcement." a, ".$item_property_table." i  WHERE i.tool = '".TOOL_ANNOUNCEMENT."' AND a.id=i.ref AND i.visibility='1' AND i.to_group_id = 0 AND i.to_user_id IS NULL ORDER BY a.display_order ASC";
 
 	$result = Database::query($sql,__FILE__,__LINE__);
-	while ($myrow = mysql_fetch_array($result))
+	while ($myrow = Database::fetch_array($result))
 	{
 		echo "<table width=\"100%\"><tr><td>";
 		echo "<img src='../img/valves.gif' alt='advalvas'>";
@@ -755,7 +755,7 @@ if ($content == "Forum")
 	{
 		$sql = "SELECT * FROM ".$TBL_FORUMS." forums, ".$TBL_CATAGORIES." categories WHERE forums.cat_id=categories.cat_id ORDER BY forums.cat_id DESC";
 		$result = Database::query($sql, __FILE__, __LINE__);
-		while ($myrow = mysql_fetch_array($result))
+		while ($myrow = Database::fetch_array($result))
 		{
 			if ($myrow["cat_title"] !== $old_cat_title)
 			{
@@ -773,13 +773,13 @@ if ($content == "Forum")
 		// displaying the category title
 		$sql = "SELECT * FROM ".$TBL_CATAGORIES." WHERE cat_id=$category";
 		$result = Database::query($sql, __FILE__, __LINE__);
-		$myrow = mysql_fetch_array($result);
+		$myrow = Database::fetch_array($result);
 		echo "<tr><td bgcolor='#4171B5' colspan='2'><font color='white'><b>".$myrow["cat_title"]."</b></font></td></tr>";
 
 		// displaying the forum title
 		$sql = "SELECT * FROM ".$TBL_FORUMS." forums, ".$TBL_FORUMTOPICS." topics WHERE forums.forum_id=topics.forum_id";
 		$result = Database::query($sql, __FILE__, __LINE__);
-		$myrow = mysql_fetch_array($result);
+		$myrow = Database::fetch_array($result);
 		echo "<tr><td bgcolor='#cccccc' colspan='2'><b>".$myrow["forum_name"]."</b></td></tr>";
 
 		if (!$thread)
@@ -787,7 +787,7 @@ if ($content == "Forum")
 			// displaying all the threads of this forum
 			$sql = "SELECT * FROM ".$TBL_FORUMTOPICS." WHERE forum_id=$forum";
 			$result = Database::query($sql, __FILE__, __LINE__);
-			while ($myrow = mysql_fetch_array($result))
+			while ($myrow = Database::fetch_array($result))
 			{
 				echo "<tr><td><a href='".api_get_self()."?content=Forum&category=$category&forum=1&thread=".$myrow["topic_id"]."&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no'>".$myrow["topic_title"]."</a>  (".$myrow["prenom"]." ".$myrow["nom"].")</td><td>";
 				showorhide_addresourcelink("Thread", $myrow["topic_id"]);
@@ -799,7 +799,7 @@ if ($content == "Forum")
 			// displaying all the replies
 			$sql = "SELECT * FROM ".$tbl_posts." post, ".$tbl_posts_text." post_text WHERE post_text.post_id=post.post_id and post.topic_id=$thread ORDER BY post_text.post_id ASC";
 			$result = Database::query($sql, __FILE__, __LINE__);
-			while ($myrow = mysql_fetch_array($result))
+			while ($myrow = Database::fetch_array($result))
 			{
 				echo "<tr><td><b>".$myrow["post_title"]."</b><br>";
 				echo $myrow["post_text"]."</td>";
@@ -849,7 +849,7 @@ if ($content == "Link")
 	if (mysql_num_rows($result) > 0)
 	{
 		echo "<table width=\"100%\"><tr><td bgcolor=\"#E6E6E6\"><i>".get_lang('NoCategory')."</i></td></tr></table>";
-		while ($myrow = mysql_fetch_array($result))
+		while ($myrow = Database::fetch_array($result))
 		{
 			echo "<img src='../img/links.gif'>".$myrow["title"];
 			echo "<br>";
@@ -861,12 +861,12 @@ if ($content == "Link")
 	// showing the categories and the links in it.
 	$sqlcategories = "SELECT * FROM ".$tbl_categories." ORDER by display_order DESC";
 	$resultcategories = Database::query($sqlcategories) or die;
-	while ($myrow = @ mysql_fetch_array($resultcategories))
+	while ($myrow = @ Database::fetch_array($resultcategories))
 	{
 		$sql_links = "SELECT * FROM ".$link_table.", ".$item_property_table." WHERE category_id='".$myrow["id"]."' AND tool = '".TOOL_LINK."' AND id=ref AND visibility='1' ORDER BY display_order DESC";
 		echo "<table width=\"100%\"><tr><td bgcolor=\"#E6E6E6\"><i>".$myrow["category_title"]."</i></td></tr></table>";
 		$result_links = Database::query($sql_links, __FILE__, __LINE__);
-		while ($myrow = mysql_fetch_array($result_links))
+		while ($myrow = Database::fetch_array($result_links))
 		{
 			echo "<img src='../img/links.gif' />".$myrow["title"];
 			echo "<br>";
@@ -885,7 +885,7 @@ if (($content == "Exercise") or ($content == "HotPotatoes"))
 {
 	$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 	$result = Database::query("SELECT * FROM ".$TBL_EXERCICES." WHERE active='1' ORDER BY id ASC");
-	while ($myrow = mysql_fetch_array($result))
+	while ($myrow = Database::fetch_array($result))
 	{
 		echo "<img src='../img/quiz.gif'>".$myrow["title"]."<br>";
 		showorhide_addresourcelink($content, $myrow["id"]);
@@ -899,7 +899,7 @@ if (($content == "Exercise") or ($content == "HotPotatoes"))
 		$documentPath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document';
 		$sql = "SELECT * FROM ".$TBL_DOCUMENT." WHERE (path LIKE '%htm%' OR path LIKE '%html%') AND path LIKE '".$uploadPath."/%/%' ORDER BY `id` ASC";
 		$result = Database::query($sql, __FILE__, __LINE__);
-		while ($myrow = mysql_fetch_array($result))
+		while ($myrow = Database::fetch_array($result))
 		{
 			$path = $myrow["path"];
 			echo "<img src='../img/jqz.gif'>".GetQuizName($path, $documentPath)."<br>";
@@ -944,7 +944,7 @@ if ($content == "Externallink")
 	$sql = "SELECT * FROM `$tbl_categories` ORDER BY display_order ASC";
 	echo $sql;
 	$result = Database::query($sql, __FILE__, __LINE__);
-	while ($row = mysql_fetch_array($result))
+	while ($row = Database::fetch_array($result))
 	{
 		echo "<option value='".$row["id"]."'>".$row["category_title"]."</option>";
 	}

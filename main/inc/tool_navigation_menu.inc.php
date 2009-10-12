@@ -75,7 +75,7 @@ function get_navigation_items($include_admin_tools = false)
 
 		$sql_menu_query = "SELECT * FROM $course_tools_table WHERE visibility='1' and admin='0' ORDER BY id ASC";
 		$sql_result = Database::query($sql_menu_query, __FILE__, __LINE__);
-		while ($row = mysql_fetch_array($sql_result))
+		while ($row = Database::fetch_array($sql_result))
 		{
 			$navigation_items[$row['id']] = $row;
 			/*
@@ -107,7 +107,7 @@ function get_navigation_items($include_admin_tools = false)
 			$course_settings_sql = "	SELECT name,image FROM $course_tools_table
 															WHERE link='course_info/infocours.php'";
 			$sql_result = Database::query($course_settings_sql);
-			$course_setting_info = mysql_fetch_array($sql_result);
+			$course_setting_info = Database::fetch_array($sql_result);
 			$course_setting_visual_name = get_lang(ucfirst($course_setting_info['name']));
 			if (api_get_session_id()==0) {
 				// course settings item

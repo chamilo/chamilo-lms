@@ -100,7 +100,7 @@ if($register)
 
 		if(mysql_num_rows($result))
 		{
-			while($user=mysql_fetch_array($result))
+			while($user=Database::fetch_array($result))
 			{
 				// check if the user is already registered to the platform
 

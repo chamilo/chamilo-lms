@@ -1318,7 +1318,7 @@ function set_default_settings($upload_path,$filename,$filetype="file")
 	//$query="select count(*) as bestaat from `$dbTable` where path='$upload_path/$filename'";
 	$query="select count(*) as bestaat from $dbTable where path='$upload_path/$filename'";
 	$result=Database::query($query,__FILE__,__LINE__);
-	$row=mysql_fetch_array($result);
+	$row=Database::fetch_array($result);
 	if($row["bestaat"]>0)
 		//$query="update `$dbTable` set path='$upload_path/$filename',visibility='$default_visibility', filetype='$filetype' where path='$upload_path/$filename'";
 		$query="update $dbTable set path='$upload_path/$filename',visibility='$default_visibility', filetype='$filetype' where path='$upload_path/$filename'";

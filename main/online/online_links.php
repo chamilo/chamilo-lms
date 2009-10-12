@@ -149,7 +149,7 @@ $result=Database::query($query,__FILE__,__LINE__);
 
 $Links=array();
 
-while($row=mysql_fetch_array($result))
+while($row=Database::fetch_array($result))
 {
 	$Links[]=$row;
 

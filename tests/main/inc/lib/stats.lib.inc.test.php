@@ -134,7 +134,7 @@ class TestStats extends UnitTestCase {
             FROM `".$TABLESTATS_COUNTRIES."`";
     	$i=$i++;
         $resu = mysql_query( $sql );
-        $row = mysql_fetch_array( $resu );
+        $row = Database::fetch_array( $resu );
         $list_countries[$i][0] = $row["code"];
         $list_countries[$i][1] = $row["country"];
 		$res=loadCountries();

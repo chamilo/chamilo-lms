@@ -130,7 +130,7 @@ $result = mysql_query ("SELECT * FROM $tbl_document
 				WHERE path LIKE    '".$curDirPath."/%'
 				AND   path NOT LIKE '".$curDirPath."/%/%'");
 
-if ($result) while($row = mysql_fetch_array($result, MYSQL_ASSOC))
+if ($result) while($row = Database::fetch_array($result, 'ASSOC'))
 {
   $attribute['path'      ][] = $row['path'      ];
   $attribute['visibility'][] = $row['visibility'];
@@ -353,7 +353,7 @@ if ($fileList)
     }
     $sql="SELECT name FROM $tbl_document WHERE ((path='$sqlpath') and (filetype='folder'))";
     $result=Database::query($sql,__FILE__,__LINE__);
-    $row=mysql_fetch_array($result);
+    $row=Database::fetch_array($result);
     if ($row['name']) { $name=$row['name']; } else { $name=$dspFileName; }
     echo	"<tr align=\"center\"", " class=".$oddclass.">\n",
         	"<td align=\"left\" valign='middle'>&nbsp;",
@@ -418,18 +418,18 @@ if (!$curDirPath) {
   $sql="select * from $tbl_learnpath_main";
   $result=Database::query($sql,__FILE__,__LINE__);
   $counter=0;
-  while ($row=mysql_fetch_array($result)) {
+  while ($row=Database::fetch_array($result)) {
     $counter++;
     if (($counter % 2)==0) { $oddclass="row_odd"; } else { $oddclass="row_even"; }
 
     $id=$row["learnpath_id"];
     $sql2="SELECT * FROM $tbl_learnpath_main where learnpath_id=$id";
     $result2=Database::query($sql2,__FILE__,__LINE__);
-    $row2=mysql_fetch_array($result2);
+    $row2=Database::fetch_array($result2);
     $name=$row2['learnpath_name'];
     $sql3="SELECT * FROM $tbl_tool where (name=\"$name\" and image='scormbuilder.gif')";
     $result3=Database::query($sql3,__FILE__,__LINE__);
-    $row3=mysql_fetch_array($result3);
+    $row3=Database::fetch_array($result3);
     if ((api_is_allowed_to_edit()) or ((!api_is_allowed_to_edit()) and ($row3["visibility"] == '1'))) {
       $row['learnpath_name']=str_replace(' ','&nbsp;',$row['learnpath_name']);
       if ($row3["visibility"] != '1') { $style=' class="invisible"'; } else { $style=''; }

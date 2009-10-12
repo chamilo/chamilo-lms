@@ -58,7 +58,7 @@ echo get_lang('TotalMDEs'), $total = mysql_num_rows($result), "<br><br>\n";
 
 if ($total > 100) set_time_limit((int) ($total / 10));
 
-while ($row = mysql_fetch_array($result))
+while ($row = Database::fetch_array($result))
 {
     $eid = $row['eid']; $xmltext = $row['mdxmltext'];
     $xhtDoc->xht_xmldoc = new xmddoc(explode("\n", $xmltext));

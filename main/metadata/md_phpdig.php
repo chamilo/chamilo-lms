@@ -78,7 +78,7 @@ function find_site($url)
 
     if (mysql_num_rows($result) == 1)
     {
-        $row = mysql_fetch_array($result); return (int) $row['site_id'];
+        $row = Database::fetch_array($result); return (int) $row['site_id'];
     }
     else
     {
@@ -105,7 +105,7 @@ function remove_engine_entries($url, $path, $file = '')
         "spider WHERE site_id=" . ($site_id = find_site($url)) . $and_path,
         __FILE__, __LINE__);  // find page(s)
 
-    while ($row = mysql_fetch_array($result))
+    while ($row = Database::fetch_array($result))
     {
         Database::query("DELETE FROM " . PHPDIG_DB_PREFIX .
             "engine WHERE spider_id=" . (int)$row['spider_id'],

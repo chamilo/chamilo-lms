@@ -70,7 +70,7 @@ $result = Database::query("SELECT isocode FROM " .
 
 $sep = ":"; $langLangs = $sep . "xx" . $sep . "xx";
 
-while ($row = mysql_fetch_array($result))
+while ($row = Database::fetch_array($result))
     if (($isocode = $row['isocode']))
     	$langLangs .= ",, " . $isocode . $sep . $isocode;
 

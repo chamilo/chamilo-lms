@@ -426,24 +426,25 @@ echo '<td>';
 		//menu add page
 		echo '<li><a href="index.php?cidReq='.$_course[id].'&action=addnew&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('addnew').'>'.get_lang('AddNew').'</a> ';
 	}
-
+	
+	if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
+	{
 		// page action: enable or disable the adding of new pages
-		if (check_addnewpagelock())
+		if (check_addnewpagelock()==1)
 		{
-			if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
-			{
-					$protect_addnewpage= '<img src="../img/wiki/lockadd.gif" title="'.get_lang('AddOptionProtected').'" alt="'.get_lang('AddOptionProtected').'" width="8" height="8" />';
-			}
+			
+			$protect_addnewpage= '<img src="../img/wiki/lockadd.gif" title="'.get_lang('AddOptionProtected').'" alt="'.get_lang('AddOptionProtected').'" width="8" height="8" />';
+			$lock_unlock_addnew='unlockaddnew';
+		
 		}
 		else
 		{
-			if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
-			{
-					$protect_addnewpage= '<img src="../img/wiki/unlockadd.gif" title="'.get_lang('AddOptionUnprotected').'" alt="'.get_lang('AddOptionUnprotected').'" width="8" height="8" />';
-			}
+			$protect_addnewpage= '<img src="../img/wiki/unlockadd.gif" title="'.get_lang('AddOptionUnprotected').'" alt="'.get_lang('AddOptionUnprotected').'" width="8" height="8" />';
+			$lock_unlock_addnew='lockaddnew';
 		}
+	}
 
-		echo '<a href="index.php?action=show&amp;actionpage=addlock&amp;title='.$page.'">'.$protect_addnewpage.'</a></li>';
+		echo '<a href="index.php?action=show&amp;actionpage='.$lock_unlock_addnew.'&amp;title='.$page.'">'.$protect_addnewpage.'</a></li>';
 
 	///menu find
 	echo '<li><a href="index.php?cidReq='.$_course[id].'&action=searchpages&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('searchpages').'>'.get_lang('SearchPages').'</a></li>';
@@ -1197,7 +1198,7 @@ if ($_GET['action']=='addnew')
 		}
 	}
 
-	elseif (check_addnewpagelock() && (api_is_allowed_to_edit(false,true)==false || api_is_platform_admin()==false))
+	elseif (check_addnewpagelock()==1 && (api_is_allowed_to_edit(false,true)==false || api_is_platform_admin()==false))
 	{
 		Display::display_error_message(get_lang('AddPagesLocked'));
 	}
@@ -2130,80 +2131,79 @@ if ($_GET['action']=='discuss')
 			echo '<div id="wikititle">';
 
 			// discussion action: protecting (locking) the discussion
-	if (check_addlock_discuss())
-	{
-		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
-		{
-					$addlock_disc= '<img src="../img/wiki/lock.gif" title="'.get_lang('LockDiscussExtra').'" alt="'.get_lang('LockDiscussExtra').'" />';
-		}
-		else
-		{
-					$addlock_disc= '<img src="../img/wiki/lock.gif" title="'.get_lang('LockDiscussExtra').'" alt="'.get_lang('LockDiscussExtra').'" />';
-		}
-
-	}
-	else
-	{
-		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
-		{
+			if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
+			{
+				if (check_addlock_discuss()==1)
+				{				
 					$addlock_disc= '<img src="../img/wiki/unlock.gif" title="'.get_lang('UnlockDiscussExtra').'" alt="'.get_lang('UnlockDiscussExtra').'" />';
-		}
-	}
+					$lock_unlock_disc='unlockdisc';
+				}
+				
+				else
+				{
+					$addlock_disc= '<img src="../img/wiki/lock.gif" title="'.get_lang('LockDiscussExtra').'" alt="'.get_lang('LockDiscussExtra').'" />';
+					$lock_unlock_disc='lockdisc';
+				}
+			}
 			echo '<span style="float:right">';
-			echo '<a href="index.php?action=discuss&amp;actionpage=addlock_disc&amp;title='.$page.'">'.$addlock_disc.'</a>';
-			echo '</span>';
-
+			echo '<a href="index.php?action=discuss&amp;actionpage='.$lock_unlock_disc.'&amp;title='.$page.'">'.$addlock_disc.'</a>';
+			echo '</span>';	
 
 			// discussion action: visibility.  Show discussion to students if isn't hidden. Show page to all teachers if is hidden.
-			if (check_visibility_discuss())
-	{
-				//Mode assignments: If is hidden, show pages to student only if student is the author
-				if(($row['assignment']==2 && $row['visibility_disc']==0 && (api_get_user_id()==$row['user_id']))==false)
-	    {
-					$visibility_disc= '<img src="../img/wiki/invisible.gif" title="'.get_lang('HideDiscussExtra').'" alt="'.get_lang('HideDiscussExtra').'" />';
-		}
-	}
-	else
-	{
-		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
-		{
+			
+			
+			if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
+			{
+				if (check_visibility_discuss()==1)
+				{
+					/// TODO: 	Fix Mode assignments: If is hidden, show discussion to student only if student is the author
+					//if(($row['assignment']==2 && $row['visibility_disc']==0 && (api_get_user_id()==$row['user_id']))==false)
+					//{
+						//$visibility_disc= '<img src="../img/wiki/invisible.gif" title="'.get_lang('HideDiscussExtra').'" alt="'.get_lang('HideDiscussExtra').'" />';
+			
+					//}					
 					$visibility_disc= '<img src="../img/wiki/visible.gif" title="'.get_lang('ShowDiscussExtra').'" alt="'.get_lang('ShowDiscussExtra').'" />';
-		}
-	}
+					$hide_show_disc='hidedisc';
+				}
+				else
+				{
+					$visibility_disc= '<img src="../img/wiki/invisible.gif" title="'.get_lang('HideDiscussExtra').'" alt="'.get_lang('HideDiscussExtra').'" />';
+					$hide_show_disc='showdisc';					
+				}
+			}
 			echo '<span style="float:right">';
-			echo '<a href="index.php?action=discuss&amp;actionpage=visibility_disc&amp;title='.$page.'">'.$visibility_disc.'</a>';
+			echo '<a href="index.php?action=discuss&amp;actionpage='.$hide_show_disc.'&amp;title='.$page.'">'.$visibility_disc.'</a>';
 			echo '</span>';
 
-
 			//discussion action: check add rating lock. Show/Hide list to rating for all student
-			if (check_ratinglock_discuss())
-	{
-				//Mode assignment: only the teacher can assign scoring
-				if(($row['assignment']==2 && $row['ratinglock_disc']==0 && (api_get_user_id()==$row['user_id']))==false)
-				{
-					$ratinglock_disc= '<img src="../img/wiki/rating_na.gif" title="'.get_lang('LockRatingDiscussExtra').'" alt="'.get_lang('LockRatingDiscussExtra').'" />';
-				}
-	}
-	else
-	{
-				if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
+			
+			if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
+			{
+				if (check_ratinglock_discuss()==1)
 				{
 					$ratinglock_disc= '<img src="../img/wiki/rating.gif" title="'.get_lang('UnlockRatingDiscussExtra').'" alt="'.get_lang('UnlockRatingDiscussExtra').'" />';
+					$lock_unlock_rating_disc='unlockrating';
 				}
-	}
+				else
+				{
+					$ratinglock_disc= '<img src="../img/wiki/rating_na.gif" title="'.get_lang('LockRatingDiscussExtra').'" alt="'.get_lang('LockRatingDiscussExtra').'" />';
+					$lock_unlock_rating_disc='lockrating';	
+				}
+			}
+
 			echo '<span style="float:right">';
-			echo '<a href="index.php?action=discuss&amp;actionpage=ratinglock_disc&amp;title='.$page.'">'.$ratinglock_disc.'</a>';
+			echo '<a href="index.php?action=discuss&amp;actionpage='.$lock_unlock_rating_disc.'&amp;title='.$page.'">'.$ratinglock_disc.'</a>';
 			echo '</span>';
 
 			//discussion action: email notification
 			if (check_notify_discuss($page))
-	{
+			{
 				$notify_disc= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('NotifyDiscussByEmail').'" alt="'.get_lang('NotifyDiscussByEmail').'" />';
-	}
+			}
 			else
-	{
+			{
 				$notify_disc= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('CancelNotifyDiscussByEmail').'" alt="'.get_lang('CancelNotifyDiscussByEmail').'" />';
-	}
+			}
 			echo '<span style="float:right">';
 			echo '<a href="index.php?action=discuss&amp;actionpage=notify_disc&amp;title='.$page.'">'.$notify_disc.'</a>';
 			echo '</span>';

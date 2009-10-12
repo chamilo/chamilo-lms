@@ -22,7 +22,7 @@
 	See the GNU General Public License for more details.
 
 	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-	
+
 ==============================================================================
 */
 /**
@@ -50,7 +50,7 @@
 * not for validation at the moment)
 ==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'document';
 /*
 ------------------------------------------------------------------------------
@@ -64,9 +64,9 @@ $htmlHeadXtra[] = '
 <script type="text/javascript">
 
 function InnerDialogLoaded()
-{	
+{
 	/*
-	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);	
+	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
 	return B.ClickFrame();
 	*/
 
@@ -95,15 +95,15 @@ function InnerDialogLoaded()
 		return null ;
 	}
 
-	var B = new EditorFrame.FCKToolbarButton(\'Templates\', EditorFrame.FCKLang.Templates);		
+	var B = new EditorFrame.FCKToolbarButton(\'Templates\', EditorFrame.FCKLang.Templates);
 	return B.ClickFrame();
-};	
-		
+};
+
 function FCKeditor_OnComplete( editorInstance )
 {
-	document.getElementById(\'frmModel\').innerHTML = "<iframe style=\'height: 525px; width: 180px;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
+	document.getElementById(\'frmModel\').innerHTML = "<iframe style=\'height: 525px; width: 180px;\' scrolling=\'no\' frameborder=\'0\' src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
 }
-		
+
 
 </script>';
 
@@ -143,7 +143,7 @@ $baseServUrl = $_configuration['url_append']."/";
 $courseDir   = $_course['path']."/document";
 $baseWorkDir = $baseServDir.$courseDir;
 $group_document = false;
-
+$current_session_id = api_get_session_id();
 $doc_tree= explode('/', $file);
 $count_dir = count($doc_tree) -2; // "2" because at the begin and end there are 2 "/"
 // Level correction for group documents.
@@ -154,11 +154,13 @@ if (!empty($group_properties['directory']))
 $relative_url='';
 for($i=0;$i<($count_dir);$i++)
 {
-	$relative_url.='../';	
+	$relative_url.='../';
 }
 
+$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+
 $html_editor_config = array(
-	'ToolbarSet' => (api_is_allowed_to_edit() ? 'Documents' :'DocumentsStudent'),
+	'ToolbarSet' => ($is_allowed_to_edit ? 'Documents' :'DocumentsStudent'),
 	'Width' => '100%',
 	'Height' => '600',
 	'FullPage' => true,
@@ -170,7 +172,7 @@ $html_editor_config = array(
 	'BaseHref' =>  api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$dir
 );
 
-$use_document_title = (get_setting('use_document_title')=='true')?true:false;
+$use_document_title = (api_get_setting('use_document_title')=='true') ? true : false;
 $noPHP_SELF=true;
 
 /*
@@ -236,8 +238,8 @@ event_access_tool(TOOL_DOCUMENT);
 if (!is_allowed_to_edit())
 {
 	if(DocumentManager::check_readonly($_course,$user_id,$file))
-	{	
-		api_not_allowed();	
+	{
+		api_not_allowed();
 	}
 
 }
@@ -279,7 +281,7 @@ function change_name($baseWorkDir, $sourceFile, $renameTo, $dir, $doc)
 	//api_display_debug_info("call my_rename: params $file_name_for_change, $renameTo");
     	$renameTo = disable_dangerous_file($renameTo); //avoid renaming to .htaccess file
 	$renameTo = my_rename($file_name_for_change, stripslashes($renameTo)); //fileManage API
-    
+
 	if ($renameTo)
 	{
 		if (isset($dir) && $dir != "")
@@ -326,7 +328,7 @@ if (isset($_POST['newComment']))
 	$newComment = trim(Database::escape_string(Security::remove_XSS($_POST['newComment']))); // remove spaces
 	$newTitle = trim(Database::escape_string(Security::remove_XSS($_POST['newTitle']))); // remove spaces
 	// Check if there is already a record for this file in the DB
-	$result = api_sql_query ("SELECT * FROM $dbTable WHERE path LIKE BINARY '".$commentPath."'",__FILE__,__LINE__);
+	$result = Database::query ("SELECT * FROM $dbTable WHERE path LIKE BINARY '".$commentPath."'",__FILE__,__LINE__);
 	while($row = Database::fetch_array($result, 'ASSOC'))
 	{
 		$attribute['path'      ] = $row['path' ];
@@ -334,11 +336,11 @@ if (isset($_POST['newComment']))
 	}
 	//Determine the correct query to the DB
 	//new code always keeps document in database
-	$query = "UPDATE $dbTable 
-		SET comment='".$newComment."', title='".$newTitle."' 
-		WHERE path 
+	$query = "UPDATE $dbTable
+		SET comment='".$newComment."', title='".$newTitle."'
+		WHERE path
 		LIKE BINARY '".$commentPath."'";
-	api_sql_query($query,__FILE__,__LINE__);
+	Database::query($query,__FILE__,__LINE__);
 	$oldComment = $newComment;
 	$oldTitle = $newTitle;
 	$comments_updated = get_lang('ComMod');
@@ -368,7 +370,7 @@ if (isset($_POST['renameTo']))
 
 /** TODO check if this code is still used **/
 /* Search the old comment */  // RH: metadata: added 'id,'
-$result = api_sql_query("SELECT id,comment,title FROM $dbTable WHERE path LIKE BINARY '$dir$doc'",__FILE__,__LINE__);
+$result = Database::query("SELECT id,comment,title FROM $dbTable WHERE path LIKE BINARY '$dir$doc'",__FILE__,__LINE__);
 
 $message = "<i>Debug info</i><br>directory = $dir<br>";
 $message .= "document = $file_name<br>";
@@ -401,7 +403,7 @@ if($is_allowedToEdit)
 
 			$_POST['filename']=str_replace('.'.$extension,'',$_POST['filename']);
 		}
-		
+
 		$filename=stripslashes($_POST['filename']);
 
 		$texte=trim(str_replace(array("\r","\n"),"",stripslashes($_POST['texte'])));
@@ -422,7 +424,7 @@ if($is_allowedToEdit)
 		//{
 			$extension = $_POST['extension'];
 		//}
-		
+
 		$file=$dir.$filename.'.'.$extension;
 		$read_only_flag=$_POST['readonly'];
 		if (!empty($read_only_flag))
@@ -433,12 +435,12 @@ if($is_allowedToEdit)
 		{
 			$read_only_flag=0;
 		}
-		
+
 		$show_edit=$_SESSION['showedit'];
 		//unset($_SESSION['showedit']);
-		api_session_unregister('showedit');		
-		
-						
+		api_session_unregister('showedit');
+
+
 		if(empty($filename))
 		{
 			$msgError=get_lang('NoFileName');
@@ -448,53 +450,53 @@ if($is_allowedToEdit)
 			if ($read_only_flag==0)
 			{
 				if (!empty($texte))
-				{					
+				{
 					if($fp=@fopen($filepath.$filename.'.'.$extension,'w'))
-					{						 
+					{
 						$texte = text_filter($texte);
 						//if flv player, change absolute paht temporarely to prevent from erasing it in the following lines
 						$texte = str_replace('flv=h','flv=h|',$texte);
 						$texte = str_replace('flv=/','flv=/|',$texte);
-						
+
 						// change the path of mp3 to absolute
 						// first regexp deals with ../../../ urls
 						// Disabled by Ivan Tcholakov.
 						//$texte = preg_replace("|(flashvars=\"file=)(\.+/)+|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/',$texte);
 						//second regexp deals with audio/ urls
 						// Disabled by Ivan Tcholakov.
-						//$texte = preg_replace("|(flashvars=\"file=)([^/]+)/|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/$2/',$texte);		 
-												
- 						
- 						fputs($fp,$texte);						
-						fclose($fp);			
+						//$texte = preg_replace("|(flashvars=\"file=)([^/]+)/|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/$2/',$texte);
+
+
+ 						fputs($fp,$texte);
+						fclose($fp);
 						$perm = api_get_setting('permissions_for_new_directories');
 						$perm = octdec(!empty($perm)?$perm:'0770');
 						if(!is_dir($filepath.'css'))
 						{
 							mkdir($filepath.'css',$perm);
 							$doc_id=add_document($_course,$dir.'css','folder',0,'css');
-							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id']);
-							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id']);
+							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id'],null,null,null,null,$current_session_id);
+							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],null,null,null,null,$current_session_id);
 						}
-						
+
 						if(!is_file($filepath.'css/frames.css'))
 						{
 							$platform_theme= api_get_setting('stylesheets');
 							if (file_exists(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css')) {
 								copy(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css',$filepath.'css/frames.css');
 								$doc_id=add_document($_course,$dir.'css/frames.css','file',filesize($filepath.'css/frames.css'),'frames.css');
-								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
-								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id']);								
+								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'],null,null,null,null,$current_session_id);
+								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],null,null,null,null,$current_session_id);								
 							}
 						}
-								
+
 						// "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
 						$document_id = DocumentManager::get_document_id($_course,$file);
 						if($document_id)
-						{	
+						{
 							$file_size = filesize($filepath.$filename.'.'.$extension);
 							update_existing_document($_course, $document_id,$file_size,$read_only_flag);
-							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $_user['user_id']);
+							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $_user['user_id'],null,null,null,null,$current_session_id);
 							//update parent folders
 							item_property_update_on_folder($_course,$dir,$_user['user_id']);
 							$dir= substr($dir,0,-1);
@@ -504,12 +506,12 @@ if($is_allowedToEdit)
 						else
 						{
 						//$msgError=get_lang('Impossible');
-						}							
+						}
 					}
 					else
 					{
 						$msgError=get_lang('Impossible');
-					}						
+					}
 				}
 				else
 				{
@@ -518,37 +520,37 @@ if($is_allowedToEdit)
 						$document_id = DocumentManager::get_document_id($_course,$file);
 						if ($document_id) {
 							update_existing_document($_course, $document_id,$file_size,$read_only_flag);
-						}							
-					}				
-				}				
+						}
+					}
+				}
 			}
 			else
-			{				
-				
+			{
+
 				if (is_file($filepath.$filename.'.'.$extension)) {
 					$file_size = filesize($filepath.$filename.'.'.$extension);
 					$document_id = DocumentManager::get_document_id($_course,$file);
-					
+
 					if ($document_id) {
 						update_existing_document($_course, $document_id,$file_size,$read_only_flag);
-					}					
+					}
 				}
-				
+
 				if (empty($document_id)) //or if is folder
-				{	
+				{
 					$folder=$_POST['file_path'];
 					$document_id = DocumentManager::get_document_id($_course,$folder);
-										
+
 					if (DocumentManager::is_folder($_course, $document_id))
 					{
 						if($document_id)
 						{
 							update_existing_document($_course, $document_id,$file_size,$read_only_flag);
-						}		
-					}					
+						}
+					}
 				}
-				
-				
+
+
 			}
 		}
 	}
@@ -558,16 +560,16 @@ if($is_allowedToEdit)
 //replace relative paths by absolute web paths  (e.g. "./" => "http://www.dokeos.com/courses/ABC/document/")
 if(file_exists($filepath.$doc))
 {
-	$extension=explode('.',$doc);	
+	$extension=explode('.',$doc);
 	$extension=$extension[sizeof($extension)-1];
 	$filename=str_replace('.'.$extension,'',$doc);
 	$extension=strtolower($extension);
-	
+
 	/*if(!in_array($extension,array('html','htm'))) // that was wrong
 	{
-		$extension=$filename=$texte='';		
+		$extension=$filename=$texte='';
 	}*/
-	
+
 	if(in_array($extension,array('html','htm')))
 	{
 		$texte=file($filepath.$doc);
@@ -575,7 +577,7 @@ if(file_exists($filepath.$doc))
 		$path_to_append=api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$dir;
 		$texte=str_replace('="./','="'.$path_to_append,$texte);
 		$texte=str_replace('mp3player.swf?son=.%2F','mp3player.swf?son='.urlencode($path_to_append),$texte);
-	}	
+	}
 }
 
 /*
@@ -603,19 +605,19 @@ if( isset($info_message))
 
 // readonly
 $sql = 'SELECT id, readonly FROM '.$dbTable.' WHERE path LIKE BINARY "'.$dir.$doc.'"';
-$rs = api_sql_query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql, __FILE__, __LINE__);
 $readonly = Database::result($rs,0,'readonly');
 $doc_id = Database::result($rs,0,'id');
- 
+
 // owner
 $sql = 'SELECT insert_user_id FROM '.Database::get_course_table(TABLE_ITEM_PROPERTY).'
 		WHERE tool LIKE "document"
 		AND ref='.intval($doc_id);
-$rs = api_sql_query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql, __FILE__, __LINE__);
 $owner_id = Database::result($rs,0,'insert_user_id');
 
 
-if ($owner_id == $_user['user_id'] || api_is_platform_admin() || api_is_allowed_to_edit() || GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid'] ))
+if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_edit || GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid'] ))
 {  
 	$get_cur_path=Security::remove_XSS($_GET['curdirpath']);
 	$get_file=Security::remove_XSS($_GET['file']);
@@ -624,15 +626,15 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || api_is_allowed_
 
 	// form title
 	$form->addElement('header', '', $nameTools);
-	
+
 	$renderer = $form->defaultRenderer();
 
 	$form->addElement('hidden','filename');
-	$form->addElement('hidden','extension'); 
+	$form->addElement('hidden','extension');
 	$form->addElement('hidden','file_path');
-	$form->addElement('hidden','commentPath');		
-	$form->addElement('hidden','showedit');	
-	
+	$form->addElement('hidden','commentPath');
+	$form->addElement('hidden','showedit');
+
 	if($use_document_title)
 	{
 		$form->add_textfield('newTitle',get_lang('Title'));
@@ -641,62 +643,62 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || api_is_allowed_
 	else
 	{
 		$form->addElement('hidden','renameTo');
-	}		
+	}
 
 	$form->addElement('hidden','formSent');
 	$defaults['formSent'] = 1;
 
-			
+
 	$read_only_flag=$_POST['readonly'];
-			
+
 	$defaults['texte'] = $texte;
-			
+
 	//if($extension == 'htm' || $extension == 'html')
 	// HotPotatoes tests are html files, but they should not be edited in order their functionality to be preserved.
 	if(($extension == 'htm' || $extension == 'html') && stripos($dir, '/HotPotatoes_files') === false)
 	{
 		if (empty($readonly) && $readonly==0)
-		{	
+		{
 			$_SESSION['showedit']=1;
 			$renderer->setElementTemplate('<div class="row"><div class="label" id="frmModel" style="overflow: visible;"></div><div class="formw">{element}</div></div>', 'texte');
 			$form->add_html_editor('texte', '', false, true, $html_editor_config);
-		}			
+		}
 	}
-			
+
 	if(!$group_document)
 	{
 		$metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Document.'.$docId).'">'.get_lang('AddMetadata').'</a>';
 		$form->addElement('static',null,get_lang('Metadata'),$metadata_link);
 	}
-			
+
 	$form->addElement('textarea','newComment',get_lang('Comment'),'rows="3" style="width:300px;"');
 	/*
 	$renderer = $form->defaultRenderer();
 	*/
-	if ($owner_id == $_user['user_id'] || api_is_platform_admin())	
+	if ($owner_id == $_user['user_id'] || api_is_platform_admin())
 	{
 		$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
-		$checked =&$form->addElement('checkbox','readonly',get_lang('ReadOnly'));			
+		$checked =&$form->addElement('checkbox','readonly',get_lang('ReadOnly'));
 		if ($readonly==1)
-		{ 
+		{
 			$checked->setChecked(true);
 		}
-	}		
+	}
 	$form->addElement('style_submit_button','submit',get_lang('SaveDocument'), 'class="save"');
-			
+
 	$defaults['filename'] = $filename;
 	$defaults['extension'] = $extension;
 	$defaults['file_path'] = Security::remove_XSS($_GET['file']);
 	$defaults['commentPath'] = $file;
 	$defaults['renameTo'] = $file_name;
 	$defaults['newComment'] = $oldComment;
-	
+
 	$form->setDefaults($defaults);
 	// show templates
 	/*
-	$form->addElement('html','<div id="frmModel" style="display:block; height:525px; width:240px; position:absolute; top:115px; left:1px;"></div>');			
+	$form->addElement('html','<div id="frmModel" style="display:block; height:525px; width:240px; position:absolute; top:115px; left:1px;"></div>');
 	*/
-	$form->display();			
+	$form->display();
 
 	//Display::display_error_message(get_lang('ReadOnlyFile')); //main API
 

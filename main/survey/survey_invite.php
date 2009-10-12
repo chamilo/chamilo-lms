@@ -54,12 +54,12 @@ if (!api_is_allowed_to_edit(false,true))
 }
 
 // Database table definitions
-$table_survey 			= Database::get_course_table(TABLE_SURVEY);
-$table_survey_question 		= Database::get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option 	= Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_course 			= Database::get_main_table(TABLE_MAIN_COURSE);
-$table_user 			= Database::get_main_table(TABLE_MAIN_USER);
-$user_info 			= Database::get_main_table(TABLE_MAIN_SURVEY_REMINDER);
+$table_survey 					= Database :: get_course_table(TABLE_SURVEY);
+$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+$table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
+$table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
+$user_info 			= Database::get_main_table(TABLE_MAIN_SURVEY_REMINDER); // TODO: To be checked. TABLE_MAIN_SURVEY_REMINDER has not been defined.
 
 // getting the survey information
 $survey_id = Security::remove_XSS($_GET['survey_id']);
@@ -72,7 +72,7 @@ if (empty($survey_data)) {
 }
 
 
-$urlname =strip_tags(api_substr(api_html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
+$urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'],ENT_QUOTES,$charset), 0, 40));
 if (api_strlen(strip_tags($survey_data['title'])) > 40)
 {
 	$urlname .= '...';
@@ -83,7 +83,7 @@ $interbreadcrumb[] = array ('url' => 'survey_list.php', 'name' => get_lang('Surv
 if (api_is_course_admin()) {
     $interbreadcrumb[] = array ('url' => 'survey.php?survey_id='.$survey_id, 'name' => $urlname);
 } else {
-    $interbreadcrumb[] = array ('url' => 'survey_invite.php?survey_id='.$survey_id, 'name' => $urlname);    
+    $interbreadcrumb[] = array ('url' => 'survey_invite.php?survey_id='.$survey_id, 'name' => $urlname);
 }
 $tool_name = get_lang('SurveyPublication');
 
@@ -93,7 +93,7 @@ Display::display_header($tool_name,'Survey');
 // checking if there is another survey with this code.
 // If this is the case there will be a language choice
 $sql = "SELECT * FROM $table_survey WHERE code='".Database::escape_string($survey_data['code'])."'";
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 if (Database::num_rows($result) > 1)
 {
 	Display::display_warning_message(get_lang('IdenticalSurveycodeWarning'));
@@ -115,11 +115,11 @@ $form = new FormValidator('publish_form','post', api_get_self().'?survey_id='.$s
 $form->addElement('header', '', $tool_name);
 
 // Course users
-$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'], true, $_SESSION['id_session'], '', 'ORDER BY lastname');
+$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'], true, $_SESSION['id_session'], '', api_sort_by_first_name() ? 'ORDER BY firstname' : 'ORDER BY lastname');
 $possible_users = array ();
 foreach ($complete_user_list as $index => $user)
 {
-	$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'];
+	$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
 }
 $users = $form->addElement('advmultiselect', 'course_users', get_lang('CourseUsers'), $possible_users, 'style="width: 250px; height: 200px;"');
 $users->setElementTemplate('
@@ -159,13 +159,13 @@ $form->addRule('mail_text', get_lang('ThisFieldIsRequired'), 'required');
 
 $portal_url = $_configuration['root_web'];
 if ($_configuration['multiple_access_urls']==true) {
-	$access_url_id = api_get_current_access_url_id();				
+	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1 ){
 		$url = api_get_access_url($access_url_id);
 		$portal_url = $url['url'];
 	}
-}	
-		  
+}
+
 // show the URL that can be used by users to fill a survey without invitation
 $auto_survey_link = $portal_url.$_configuration['code_append'].
             'survey/'.'fillsurvey.php?course='.$_course['sysCode'].
@@ -178,7 +178,7 @@ if ($form->validate())
 	// save the invitation mail
 	SurveyUtil::save_invite_mail($values['mail_text'], $values['mail_title'], !empty($survey_data['invite_mail']));
 	// saving the invitations for the course users
-	$count_course_users = SurveyUtil::save_invitations($values['course_users'], $values['mail_title'], 
+	$count_course_users = SurveyUtil::save_invitations($values['course_users'], $values['mail_title'],
                 $values['mail_text'], $values['resend_to_all'], $values['send_mail'], $values['remindUnAnswered']);
 	// saving the invitations for the additional users
 	$values['additional_users'] = $values['additional_users'].';'; 	// this is for the case when you enter only one email
@@ -188,7 +188,7 @@ if ($form->validate())
 	{
 		$additional_users[$i] = trim($additional_users[$i]);
 	}
-	$counter_additional_users = SurveyUtil::save_invitations($additional_users, $values['mail_title'], 
+	$counter_additional_users = SurveyUtil::save_invitations($additional_users, $values['mail_title'],
             $values['mail_text'], $values['resend_to_all'], $values['send_mail'], $values['remindUnAnswered']);
 	// updating the invited field in the survey table
 	SurveyUtil::update_count_invited($survey_data['code']);

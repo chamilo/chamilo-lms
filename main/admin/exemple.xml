@@ -11,7 +11,7 @@
         <Status>user</Status>
         <Courses>COURSE1|COURSE2|COURSE3</Courses>
     </Contact>
-    <Contact> 
+    <Contact>
         <LastName>Brown</LastName>
         <FirstName>Emmett</FirstName>
         <UserName>emmett</UserName>

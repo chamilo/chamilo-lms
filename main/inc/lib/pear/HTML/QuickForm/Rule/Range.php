@@ -48,13 +48,13 @@ class HTML_QuickForm_Rule_Range extends HTML_QuickForm_Rule
     function getValidationScript($options = null)
     {
         switch ($this->name) {
-            case 'minlength': 
+            case 'minlength':
                 $test = '{jsVar}.length < '.$options;
                 break;
-            case 'maxlength': 
+            case 'maxlength':
                 $test = '{jsVar}.length > '.$options;
                 break;
-            default: 
+            default:
                 $test = '({jsVar}.length < '.$options[0].' || {jsVar}.length > '.$options[1].')';
         }
         return array('', "{jsVar} != '' && {$test}");

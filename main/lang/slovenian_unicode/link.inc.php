@@ -47,4 +47,5 @@ $SearchFeatureDoIndexLink = "Indeksiram naziv in opis povezave ?";
 $langSaveLink = "Shrani povezavo";
 $langSaveCategory = "Shrani kategorijo";
 $BackToLinksOverview = "Nazaj na pregled povezav";
+$AddTargetOfLinkOnHomepage = "Izberite \'cilj\', ki predstavlja povezavo na domači strani tečaja";
 ?>

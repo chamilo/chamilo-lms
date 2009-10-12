@@ -447,7 +447,7 @@ body, .BackColor
 }
 button:hover {
     background-color:#cbcbcb;
-    color:#545454; 
+    color:#545454;
     border-style: inset;
 }
 /* button with image */
@@ -462,7 +462,7 @@ button.save, button.add, button.search, button.login, button.plus, button.minus,
     border-color: #D4E2F6;
 }
 button.save:hover, button.add:hover, button.search:hover, button.login:hover, button.plus:hover, button.minus:hover, button.next:hover, button.back:hover {
-    border-color: #D4E2F6;    
+    border-color: #D4E2F6;
     background-color:#D4E2F6;
 }
 /* NEGATIVE */
@@ -472,7 +472,7 @@ button.cancel {
 }
 
 button.cancel:hover {
-    border-color: #F4E1D0;    
+    border-color: #F4E1D0;
     background-color: #FFE3DE;
 }
 /*including "save" image*/
@@ -496,7 +496,7 @@ button.search {
 button.login {
     background-image:url(images/button_login.gif);
 	margin:2px 5px 3px 5px !important;
-	
+
 }
 
 /*including "plus" image*/

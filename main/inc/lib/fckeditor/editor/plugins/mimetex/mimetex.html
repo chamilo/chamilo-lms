@@ -28,7 +28,7 @@ var img_tag = true ;
 
 // FCKEditor
 
-// We have to avoid javascript errors if some language variables have not been defined. 
+// We have to avoid javascript errors if some language variables have not been defined.
 FCKLang['DlgMimeTeXSymbols'] = FCKLang['DlgMimeTeXSymbols'] ? FCKLang['DlgMimeTeXSymbols'] : 'Symbols' ;
 FCKLang['DlgMimeTeXCalendar'] = FCKLang['DlgMimeTeXCalendar'] ? FCKLang['DlgMimeTeXCalendar'] : 'Calendar' ;
 FCKLang['DlgMimeTeXNumeric'] = FCKLang['DlgMimeTeXNumeric'] ? FCKLang['DlgMimeTeXNumeric'] : 'Numeric' ;
@@ -50,7 +50,7 @@ switch ( oEditor.FCKLanguageManager.DefaultLanguage )
 		break ;
 }
 
-FCKLang['DlgMimeTeXSeeInstallationManual'] = FCKLang['DlgMimeTeXSeeInstallationManual'] 
+FCKLang['DlgMimeTeXSeeInstallationManual'] = FCKLang['DlgMimeTeXSeeInstallationManual']
 	? FCKLang['DlgMimeTeXSeeInstallationManual'] : 'To resolve the problem, see the Dokeos LMS %1installation guide%2.' ;
 if ( FCKConfig['UserIsPlatformAdmin'] || FCKConfig['UserIsCourseAdmin'] )
 {
@@ -73,14 +73,14 @@ if ( !eSelected )
 
 // End FCKEditor
 
-function setSelRange( inputEl, selStart, selEnd ) 
+function setSelRange( inputEl, selStart, selEnd )
 {
-	if ( inputEl.setSelectionRange ) 
+	if ( inputEl.setSelectionRange )
 	{
 		inputEl.focus() ;
 		inputEl.setSelectionRange( selStart, selEnd ) ;
-	} 
-	else if ( inputEl.createTextRange ) 
+	}
+	else if ( inputEl.createTextRange )
 	{
 		var range = inputEl.createTextRange() ;
 		range.collapse(true) ;
@@ -90,17 +90,17 @@ function setSelRange( inputEl, selStart, selEnd )
 	}
 }
 
-function insertAtCursor( myField, myValue ) 
+function insertAtCursor( myField, myValue )
 {
 	// IE support
-	if ( document.selection ) 
+	if ( document.selection )
 	{
 		myField.focus() ;
 		sel = document.selection.createRange() ;
 		sel.text = myValue;
 	}
 	// MOZILLA/NETSCAPE support
-	else if ( myField.selectionStart || myField.selectionStart == '0' ) 
+	else if ( myField.selectionStart || myField.selectionStart == '0' )
 	{
 		var startPos = myField.selectionStart ;
 		var endPos = myField.selectionEnd ;
@@ -108,8 +108,8 @@ function insertAtCursor( myField, myValue )
 			+ myValue
 			+ myField.value.substring( endPos, myField.value.length ) ;
 		setSelRange( myField, startPos + myValue.length, endPos + myValue.length ) ;
-	} 
-	else 
+	}
+	else
 	{
 		myField.value += myValue ;
 	}
@@ -150,7 +150,7 @@ function addFormula( expr )
 }
 
 // Append a mimetex image to the last DIV of the Helper-DIV
-function appendHelper( expr, alt ) 
+function appendHelper( expr, alt )
 {
 	add_expr = expr.replace( /\\/g, "\\\\" ) ;
 	src_expr = mimetex_cgi + expr ;
@@ -221,7 +221,7 @@ $(function () {
 		appendHelper( "\\ll", "ll" ) ;
 		appendHelper( "\\gg", "gg" ) ;
 		appendHelper( "\\prec", "prec" ) ;
-		appendHelper( "\\succ", "succ" ) ;		
+		appendHelper( "\\succ", "succ" ) ;
 		appendHelper( "\\leftar", "leftar" ) ;
 		appendHelper( "\\rightar", "rightar" ) ;
 		appendHelper( "\\uparr", "uparr" ) ;
@@ -229,72 +229,72 @@ $(function () {
 		appendHelper( "\\leftrightar", "leftrightar" ) ;
 		appendHelper( "\\near", "near" ) ;
 		appendHelper( "\\sear", "sear" ) ;
-		appendHelper( "\\simeq", "simeq" ) ;		
-		appendHelper( "\\Leftar", "Leftar" ) ;		
+		appendHelper( "\\simeq", "simeq" ) ;
+		appendHelper( "\\Leftar", "Leftar" ) ;
 		appendHelper( "\\Rightar", "Rightar" ) ;
 		appendHelper( "\\Upar", "Upar" ) ;
-		appendHelper( "\\Downar", "Downar" ) ;		
+		appendHelper( "\\Downar", "Downar" ) ;
 		appendHelper( "\\Leftrightar", "Leftrightar" ) ;
 		appendHelper( "\\nwar", "nwar" ) ;
-		appendHelper( "\\swar", "swar" ) ;		
-		appendHelper( "\\propto", "propto" ) ;		
+		appendHelper( "\\swar", "swar" ) ;
+		appendHelper( "\\propto", "propto" ) ;
 		appendHelper( "\\prime", "prime" ) ;
-		appendHelper( "\\infty", "infty" ) ;		
+		appendHelper( "\\infty", "infty" ) ;
 		appendHelper( "\\in", "in" ) ;
 		appendHelper( "\\ni", "ni" ) ;
 		appendHelper( "\\triangle", "triangle" ) ;
 		appendHelper( "\\bigtriangledo", "bigtriangledo" ) ;
 		appendHelper( "\/", "/" ) ; //no va es la barra normal inclinada a la derecha
 		appendHelper( "\\forall", "forall" ) ;
-		appendHelper( "\\exists", "exists" ) ;		
-		appendHelper( "\\neg", "neg" ) ;		
+		appendHelper( "\\exists", "exists" ) ;
+		appendHelper( "\\neg", "neg" ) ;
 		appendHelper( "\\emptyset", "emptyset" ) ;
 		appendHelper( "\\Re", "Re" ) ;
-		appendHelper( "\\Im", "Im" ) ;		
+		appendHelper( "\\Im", "Im" ) ;
 		appendHelper( "\\top", "top" ) ;
 		appendHelper( "\\bot", "bot" ) ;
-		appendHelper( "\\aleph", "aleph" ) ;				
-		appendHelper( "\\calA", "calA" ) ;		
+		appendHelper( "\\aleph", "aleph" ) ;
+		appendHelper( "\\calA", "calA" ) ;
 		appendHelper( "\\calZ", "calZ" ) ;
-		appendHelper( "\\cup", "cup" ) ;		
+		appendHelper( "\\cup", "cup" ) ;
 		appendHelper( "\\cap", "cap" ) ;
 		appendHelper( "\\uplus", "uplus" ) ;
 		appendHelper( "\\wedge", "wedge" ) ;
-		appendHelper( "\\vee", "vee" ) ;		
+		appendHelper( "\\vee", "vee" ) ;
 		appendHelper( "\\vdash", "vdash" ) ;
-		appendHelper( "\\dashv", "dshv" ) ;				
+		appendHelper( "\\dashv", "dshv" ) ;
 		appendHelper( "\\lfloor", "lfloor" ) ;
-		appendHelper( "\\rfloor", "rfloor" ) ;		
-		appendHelper( "\\lceil", "lceil" ) ;				
-		appendHelper( "\\rceil", "rceil" ) ;				
+		appendHelper( "\\rfloor", "rfloor" ) ;
+		appendHelper( "\\lceil", "lceil" ) ;
+		appendHelper( "\\rceil", "rceil" ) ;
 		appendHelper( "\\lbrace", "lbrace" ) ;
-		appendHelper( "\\rbrace", "rbrace" ) ;				
+		appendHelper( "\\rbrace", "rbrace" ) ;
 		appendHelper( "\\langle", "langle" ) ;
-		appendHelper( "\\rangle", "rangle" ) ;		
+		appendHelper( "\\rangle", "rangle" ) ;
 		appendHelper( "\\mid", "mid" ) ;
-		appendHelper( "\\parallel", "parallel" ) ;		
-		appendHelper( "\\updownar", "updownar" ) ;		
-		appendHelper( "\\Updownar", "Updownar" ) ;		
-		appendHelper( "\\setminus", "setminus" ) ;				
-		appendHelper( "\\wr", "wr" ) ;		
-		appendHelper( "\\surd", "surd" ) ;		
-		appendHelper( "\\amalg", "amalg" ) ;				
-		appendHelper( "\\nabla", "nabla" ) ;				
-		appendHelper( "\\int", "int" ) ;		
-		appendHelper( "\\sqcup", "sqcup" ) ;					
+		appendHelper( "\\parallel", "parallel" ) ;
+		appendHelper( "\\updownar", "updownar" ) ;
+		appendHelper( "\\Updownar", "Updownar" ) ;
+		appendHelper( "\\setminus", "setminus" ) ;
+		appendHelper( "\\wr", "wr" ) ;
+		appendHelper( "\\surd", "surd" ) ;
+		appendHelper( "\\amalg", "amalg" ) ;
+		appendHelper( "\\nabla", "nabla" ) ;
+		appendHelper( "\\int", "int" ) ;
+		appendHelper( "\\sqcup", "sqcup" ) ;
 		appendHelper( "\\sqcap", "sqcap" ) ;
-		appendHelper( "\\sqsubseteq", "sqsubseteq" ) ;		
+		appendHelper( "\\sqsubseteq", "sqsubseteq" ) ;
 		appendHelper( "\\sqsupseteq", "sqsupseteq" ) ;
-		appendHelper( "\\S", "S" ) ;		
-		appendHelper( "\\dag", "dag" ) ;		
+		appendHelper( "\\S", "S" ) ;
+		appendHelper( "\\dag", "dag" ) ;
 		appendHelper( "\\ddag", "ddag" ) ;
 		appendHelper( "\\P", "P" ) ;
-		appendHelper( "\\clubsuit", "clubsuit" ) ;		
-		appendHelper( "\\Diamond", "Diamond" ) ;		
+		appendHelper( "\\clubsuit", "clubsuit" ) ;
+		appendHelper( "\\Diamond", "Diamond" ) ;
 		appendHelper( "\\Heart", "Heart" ) ;
-		appendHelper( "\\spadesuit", "spadesuit" ) ;       
-		
-		
+		appendHelper( "\\spadesuit", "spadesuit" ) ;
+
+
 		addHelper( "symbols2", FCKLang["DlgMimeTeXSymbols"] + " 2" ) ;
 		appendHelper( "\\leftharpoonup", "leftharpoonup" ) ;
 		appendHelper( "\\leftharpoondo",  "leftharpoondo" ) ;
@@ -303,15 +303,15 @@ $(function () {
 		appendHelper( "\\triangleright", "triangleright" ) ;
 		appendHelper( "\\triangleleft", "triangleleft" ) ;
 		appendHelper( "\\star", "star" ) ;
-		appendHelper( "\\partial", "partial" ) ;		
+		appendHelper( "\\partial", "partial" ) ;
 		appendHelper( "\\flat", "flat" ) ;
-		appendHelper( "\\natural", "natural" ) ;		
+		appendHelper( "\\natural", "natural" ) ;
 		appendHelper( "\\sharp", "sharp" ) ;
-		appendHelper( "\\smile", "smile" ) ;		
+		appendHelper( "\\smile", "smile" ) ;
 		appendHelper( "\\frown", "frown" ) ;
 		appendHelper( "\\ell", "ell" ) ;
 		appendHelper( "\\imath", "imath" ) ;
-		appendHelper( "\\jmath", "jmath" ) ;		
+		appendHelper( "\\jmath", "jmath" ) ;
 		//appendHelper( "\\vp", "vp" ) ;
 		//appendHelper( "\\vec", "vec" ) ;
 		appendHelper( "\\ss", "ss" ) ;
@@ -321,45 +321,45 @@ $(function () {
 		appendHelper( "\\OE", "OE" ) ;
 		appendHelper( "\\moo", "moo" ) ;
 		appendHelper( "\\Lbag", "Lbag" ) ;
-		appendHelper( "\\Rbag", "Rbag" ) ;		
-		appendHelper( "\\lightning", "lightning" ) ;		
+		appendHelper( "\\Rbag", "Rbag" ) ;
+		appendHelper( "\\lightning", "lightning" ) ;
 		appendHelper( "\\llbracket", "llbracket" ) ;
-		appendHelper( "\\rrbracket", "rrbracket" ) ;				
+		appendHelper( "\\rrbracket", "rrbracket" ) ;
 		appendHelper( "\\subsetpluseq", "subsetpluseq" ) ;
-		appendHelper( "\\supsetpluseq", "supsetpluseq" ) ;		
-		appendHelper( "\\Yup", "Yup" ) ;		
-		appendHelper( "\\Ydown", "Ydown" ) ;		
+		appendHelper( "\\supsetpluseq", "supsetpluseq" ) ;
+		appendHelper( "\\Yup", "Yup" ) ;
+		appendHelper( "\\Ydown", "Ydown" ) ;
 		//appendHelper( "\\cyr A", "cyr A" ) ;
-		//appendHelper( "\\cyr a", "cyr a" ) ;		
+		//appendHelper( "\\cyr a", "cyr a" ) ;
 		//appendHelper( "\\cyr Dj", "cyr Dj" ) ;
 		//appendHelper( "\\cyr Zh", "cyr Zh" ) ;
 
 		addHelper( "calendar", FCKLang["DlgMimeTeXCalendar"] ) ;
 		appendHelper( "\\blue\\normalsize\\calendar", "" ) ;
-    	appendHelper( "\\reverse\\opaque\\red\\normalsize\\calendar[2008,9,11]", "" ) ;		
+    	appendHelper( "\\reverse\\opaque\\red\\normalsize\\calendar[2008,9,11]", "" ) ;
 		appendHelper( "\\today",  "" ) ;
 		appendHelper( "\\green\\today[2]",  "" ) ;
-		appendHelper( "\\red\\today[3]",  "" ) ;	
-						
-		////jc end	  		
-		
+		appendHelper( "\\red\\today[3]",  "" ) ;
+
+		////jc end
+
 		addHelper( "numeric", FCKLang["DlgMimeTeXNumeric"] ) ;
 		var al_l = "abcdefghijklmnopqrstuvwxyz" ;
 		var al_u = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" ;
 		var num  = "0123456789" ;
 		var alnum = al_u + num ;
 
-		for ( var i = 0, n = alnum.length ; i < n ; i++ ) 
+		for ( var i = 0, n = alnum.length ; i < n ; i++ )
 		{
 			appendHelper( "\\mathbb{" + alnum.substr( i, 1 ) + "}", "math bold " + alnum.substr( i, 1 ) ) ;
 		}
 		htmlHelper( "<br />" ) ;
-		for ( var i = 0, n = al_u.length ; i < n ; i++ ) 
+		for ( var i = 0, n = al_u.length ; i < n ; i++ )
 		{
 			appendHelper( "\\mathcal{" + al_u.substr( i, 1 ) + "}", "math cal " + al_u.substr( i, 1 ) ) ;
 		}
 		htmlHelper( "<br />" ) ;
-		for ( var i = 0, n = al_u.length ; i < n ; i++ ) 
+		for ( var i = 0, n = al_u.length ; i < n ; i++ )
 		{
 			appendHelper( "\\mathfrak{" + al_u.substr( i, 1 ) + "}", "math frak " + al_u.substr( i, 1 ) ) ;
 		}
@@ -440,7 +440,7 @@ $(function () {
 		appendHelper( "\\lim _{\\small{x\\to +\\infty}}", "" ) ;
 
 		////jc
-		addHelper( "moresamples", FCKLang["DlgMimeTeXMoreSamples"] ) ;		
+		addHelper( "moresamples", FCKLang["DlgMimeTeXMoreSamples"] ) ;
 
 		appendHelper( "\\\large\\begin{array}{c.c|c}       a_1&a_2&a_3\\\\\\hdash b_1&b_2&b_3\\\\\\hline c_1&c_2&c_3\\end{array}", "" ) ;
 		appendHelper( "\\large e^x=\\sum_{n=0}^\\infty\\frac{x^n}{n!}", "" ) ;
@@ -456,11 +456,11 @@ $(function () {
 		appendHelper( "\\large\\overbrace{a,...,a}^{\\text{k a^,s}},    \\underbrace{b,...,b}_{\\text{l b^,s}}\\hspace{10}    \\large\\underbrace{\\overbrace{a...a}^{\\text{k a^,s}},    \\overbrace{b...b}^{\\text{l b^,s}}}_{\\text{k+l elements}}",  "" ) ;
 
 		/*
-		appendHelper( "\\large\\scr{J}^{i0}=+\\frac i2         \\left[\\begin{array}{cc}\\sigma_i&0\\\0&-\\sigma_i\\end{array}\\right]         \\hspace{10}\\scr{J}^{ij}=\\frac12\\varepsilon_{ijk}         \\left[\\begin{array}{cc}\\sigma_k&0\\\0&\\sigma_k\\end{array}\\right]",  "" ) ;			  
+		appendHelper( "\\large\\scr{J}^{i0}=+\\frac i2         \\left[\\begin{array}{cc}\\sigma_i&0\\\0&-\\sigma_i\\end{array}\\right]         \\hspace{10}\\scr{J}^{ij}=\\frac12\\varepsilon_{ijk}         \\left[\\begin{array}{cc}\\sigma_k&0\\\0&\\sigma_k\\end{array}\\right]",  "" ) ;
 		*/
 
 		appendHelper( "\\small\\hspace{10}\\unitlength{.75}    \\picture(120,220){ (60,200){\\circle(120,40)} (0,20){\\line(0,180)}    (5,189;0,-30){\\pict(110,20){(c20,10;70;2){    \\pict(40,20){(20,10){\\circle(40,20)}(c10,10)+(c30,10)-}} } }    (119,20){\\line(0,180)} (60,20){\\circle(120,40;34)}}",  "" ) ;
-		appendHelper( "\\normalsize\\unitlength{.6}\\picture(100){   (50,50){\\circle(99)} (20,55;50,0;2){\\fs{+1}\\hat\\bullet} (50,40){\\bullet}   (50,35){\\circle(50,25;34)} (50,35){\\circle(50,45;34)}}", "" ) ;	
+		appendHelper( "\\normalsize\\unitlength{.6}\\picture(100){   (50,50){\\circle(99)} (20,55;50,0;2){\\fs{+1}\\hat\\bullet} (50,40){\\bullet}   (50,35){\\circle(50,25;34)} (50,35){\\circle(50,45;34)}}", "" ) ;
 		////jc end
 
 		$('#helpers > div').hover(function() {
@@ -482,7 +482,7 @@ $(function () {
     } ) ;
 
 
-// FCKEditor 
+// FCKEditor
 
 function LoadSelected()
 {
@@ -512,7 +512,7 @@ function LoadSelected()
 			formula = formula.Trim() ;
 			if ( formula.indexOf( '\\Large' ) == 0 )
 			{
-				formula = formula.substr( 6 ) ; 
+				formula = formula.substr( 6 ) ;
 			}
 			formula = formula.Trim() ;
 		}
@@ -526,7 +526,7 @@ function LoadSelected()
 	}
 }
 
-function Ok() 
+function Ok()
 {
 	result = document.pastemath.formula.value ;
 	if( result.length > 0 ) {
@@ -541,7 +541,7 @@ function Ok()
 			//solved a problem with stripslashes by Christophe Lefevre
 			var img_src = result_cgi + result ;
 			FCK.InsertHtml( '<img src="' + img_src.replace(/\\/g, "%5C") + '" title="' + result + '" alt="' + result + '" />' ) ;
-		}						
+		}
 		else
 		{
 			FCK.InsertHtml( '<math>' + result + '</math>' ) ;
@@ -568,21 +568,21 @@ document.write( FCKTools.GetStyleHtml( GetCommonDialogCss() ) ) ;
 div.helpers
 {
 	position: absolute;
-	max-width: 360px; 
+	max-width: 360px;
 	width:expression(document.body.clientWidth > 360? "360px": "auto" );
 	overflow:auto;
 }
-li.helpers 
+li.helpers
 {
 	margin: 3px;
 	list-style-type: none;
 }
-.helper 
+.helper
 {
 	margin: 3px;
 }
 .off
-{ 
+{
 	display: none;
 }
 .pane

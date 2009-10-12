@@ -2,7 +2,7 @@
 require_once(api_get_path(SYS_CODE_PATH).'newscorm/scorm.lib.php');
 
 class TestScorm extends UnitTestCase {
-	
+
 /**
  * This function gets a list of scorm paths located in a given directory
  * @param	string	Base directory path
@@ -18,20 +18,20 @@ class TestScorm extends UnitTestCase {
 	 	$this->assertTrue(is_array($res));
 	 	//var_dump($res);
 	}
-		
+
 /**
  * Detects the SCORM version from an imsmanifest.xml file
  * @param	string	Path to imsmanifest.xml
  * @return	string	SCORM version (1.0,1.1,1.2,1.3)
  * @todo Implement this function
  */
-	function testget_scorm_version(){	
+	function testget_scorm_version(){
 		$path='/main/erxercice/';
 		$res=get_scorm_version($path);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 /**
  * Delete a scorm directory (check for imsmanifest and if found, deletes the related rows in scorm tables also)
  * @param               string          Dir path
@@ -44,15 +44,15 @@ class TestScorm extends UnitTestCase {
 		$this->assertFalse($res);
 		//var_dump($res);
 	}
-	
+
 	function testremovescormDirTrue() {
 		global $_course;
 		$dir=api_get_path(SYS_CODE_PATH).'upload/users/';
 		$res=removescormDir($dir);
 		$this->assertTrue(is_bool($res));
-		//var_dump($res);    	
+		//var_dump($res);
 	}
-	
+
 /**
  * This function removes a directory if it exists
  * @param               string          Dir path
@@ -64,7 +64,7 @@ class TestScorm extends UnitTestCase {
 		$file='/tmp/';
 		$res=scorm_delete($file);
 		$this->assertTrue(is_bool($res));
-		//var_dump($res);	
+		//var_dump($res);
 	}
 }
 ?>

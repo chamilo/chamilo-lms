@@ -77,7 +77,7 @@ require_once 'forumfunction.inc.php';
 
 // javascript
 $htmlHeadXtra[] = '<script>
-		
+
 		function advanced_parameters() {
 			if(document.getElementById(\'id_qualify\').style.display == \'none\') {
 				document.getElementById(\'id_qualify\').style.display = \'block\';
@@ -86,9 +86,9 @@ $htmlHeadXtra[] = '<script>
 			} else {
 				document.getElementById(\'id_qualify\').style.display = \'none\';
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-			}	
+			}
 		}
-</script>';	
+</script>';
 /*
 ==============================================================================
 		MAIN DISPLAY SECTION
@@ -115,7 +115,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
@@ -129,14 +129,14 @@ if (!empty($_SESSION['toolgroup'])) {
 	$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
 	$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
 	$interbreadcrumb[]=array("url" => "viewthread.php?origin=".$origin."&gradebook=".$gradebook."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => $current_thread['thread_title']);
-	$interbreadcrumb[]=array("url" => "#","name" => get_lang('Reply'));
-	
+	$interbreadcrumb[]=array("url" => "javascript: void(0);","name" => get_lang('Reply'));
+
 } else {
 	$interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook","name" => $nameTools);
 	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => $current_forum_category['cat_title']);
 	$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
 	$interbreadcrumb[]=array("url" => "viewthread.php?origin=".$origin."&gradebook=".$gradebook."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => $current_thread['thread_title']);
-	$interbreadcrumb[]=array("url" => "#","name" => get_lang('Reply'));
+	$interbreadcrumb[]=array("url" => "javascript: void(0);","name" => get_lang('Reply'));
 }
 /*
 -----------------------------------------------------------
@@ -212,7 +212,7 @@ echo '<span class="forum_title">'.prepare4display($current_thread['thread_title'
 if (!empty ($current_forum_category['cat_title'])) {
 	echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title'])." - </span>";
 }
-	
+
 echo '<span class="forum_low_description">'.prepare4display($current_forum['forum_title']).'</span>';
 echo "</th>\n";
 echo "\t</tr>\n";

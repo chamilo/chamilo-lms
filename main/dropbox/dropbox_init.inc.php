@@ -30,12 +30,12 @@
 ==============================================================================
 		INIT SECTION
 ==============================================================================
-*/ 
-// name of the language file that needs to be included 
-$language_file = "dropbox";	
+*/
+// name of the language file that needs to be included
+$language_file = "dropbox";
 
 //this var disables the link in the breadcrumbs on top of the page
-//$noPHP_SELF = TRUE;	
+//$noPHP_SELF = TRUE;
 
 // including the basic Dokeos initialisation file
 require("../inc/global.inc.php");
@@ -55,7 +55,7 @@ require(api_get_path(INCLUDE_PATH).'/conf/mail.conf.php');
 include_once(api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php');
 include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 
-// protecting the script 
+// protecting the script
 api_protect_course_script();
 
 
@@ -63,7 +63,7 @@ api_protect_course_script();
 -----------------------------------------------------------
 	Libraries
 -----------------------------------------------------------
-*/ 
+*/
 require_once(api_get_path(LIBRARY_PATH)."/debug.lib.inc.php");
 require_once(api_get_path(LIBRARY_PATH) . "/course.lib.php");
 require_once(api_get_path(LIBRARY_PATH) . "/groupmanager.lib.php");
@@ -77,7 +77,7 @@ require_once( "dropbox_class.inc.php");
 
 // including some libraries that are also used in the documents tool
 require_once('../document/document.inc.php');  // we use a function build_document_icon_tag
-require_once(api_get_path(LIBRARY_PATH).'/fileDisplay.lib.php'); // the function choose_image is used 
+require_once(api_get_path(LIBRARY_PATH).'/fileDisplay.lib.php'); // the function choose_image is used
 require_once(api_get_path(LIBRARY_PATH).'/document.lib.php');
 
 
@@ -86,7 +86,7 @@ require_once(api_get_path(LIBRARY_PATH).'/document.lib.php');
 -----------------------------------------------------------
 	Virtual course support
 -----------------------------------------------------------
-*/ 
+*/
 $user_id = api_get_user_id();
 $course_code = $_course['sysCode'];
 $course_info = Database::get_course_info($course_code);
@@ -100,9 +100,9 @@ $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($
 -----------------------------------------------------------
 */
 // we need this here because the javascript to re-upload the file needs an array
-// off all the documents that have already been sent. 
+// off all the documents that have already been sent.
 // @todo consider moving the javascripts in a function that displays the javascripts
-// only when it is needed. 
+// only when it is needed.
 if ($_GET['action']=='add')
 {
 	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
@@ -115,7 +115,7 @@ if ($_GET['action']=='add')
 -----------------------------------------------------------
 */
 
-$javascript = "<script>
+$javascript = "<script type=\"text/javascript\">
 	function confirmsend ()
 	{
 		if (confirm(\"".dropbox_lang("mailingConfirmSend", "noDLTT")."\")){
@@ -216,7 +216,7 @@ $javascript .="
 $htmlHeadXtra[] = $javascript;
 
 $htmlHeadXtra[] =
-"<script>
+"<script type=\"text/javascript\">
 function confirmation (name)
 {
 	if (confirm(\" ". get_lang("AreYouSureToDelete") ." \"+ name + \" ?\"))
@@ -243,7 +243,7 @@ elseif ($_GET['view']='sent')
 {
 	$part='sent';
 }
-else 
+else
 {
 	header ('location: index.php?view='.$_GET['view'].'&error=Error');
 }
@@ -254,11 +254,11 @@ if (($_POST['action']=='download_received' || $_POST['action']=='download_sent')
 	if (!is_array($checked_file_ids) || count($checked_file_ids)==0)
 	{
 		header ('location: index.php?view='.$_GET['view'].'&error=CheckAtLeastOneFile');
-		exit; 
+		exit;
 	}
-	else 
+	else
 		handle_multiple_actions();
-		exit; 
+		exit;
 	}
 }
 
@@ -283,33 +283,33 @@ if((!$is_allowed_in_course || !$is_courseMember) && !api_is_allowed_to_edit())
 ==============================================================================
 		BREADCRUMBS
 ==============================================================================
-*/ 
+*/
 if ($_GET['view']=='received')
 {
 	$interbreadcrumb[] = array ("url" => "../dropbox/index.php", "name" => dropbox_lang("dropbox", "noDLTT"));
 	$nameTools = get_lang('ReceivedFiles');
-	
+
 	if ($_GET['action'] == 'addreceivedcategory')
 	{
 		$interbreadcrumb[] = array ("url" => "../dropbox/index.php?view=received", "name" => get_lang("ReceivedFiles"));
-		$nameTools = get_lang('AddNewCategory');		
+		$nameTools = get_lang('AddNewCategory');
 	}
 }
 if ($_GET['view']=='sent' OR empty($_GET['view']))
 {
 	$interbreadcrumb[] = array ("url" => "../dropbox/index.php", "name" => dropbox_lang("dropbox", "noDLTT"));
 	$nameTools = get_lang('SentFiles');
-	
+
 	if ($_GET['action'] == 'addsentcategory')
 	{
 		$interbreadcrumb[] = array ("url" => "../dropbox/index.php?view=sent", "name" => get_lang("SentFiles"));
-		$nameTools = get_lang('AddNewCategory');		
+		$nameTools = get_lang('AddNewCategory');
 	}
 	if ($_GET['action'] == 'add')
 	{
 		$interbreadcrumb[] = array ("url" => "../dropbox/index.php?view=sent", "name" => get_lang("SentFiles"));
-		$nameTools = get_lang('UploadNewFile');		
-	}		
+		$nameTools = get_lang('UploadNewFile');
+	}
 }
 
 
@@ -317,13 +317,13 @@ if ($_GET['view']=='sent' OR empty($_GET['view']))
 ==============================================================================
 		HEADER & TITLE
 ==============================================================================
-*/ 
+*/
 
 if ($origin != 'learnpath')
 {
     Display::display_header($nameTools,"Dropbox");
 }
-else // if we come from the learning path we have to include the stylesheet and the required javascripts manually. 
+else // if we come from the learning path we have to include the stylesheet and the required javascripts manually.
 {
 	echo '<link rel="stylesheet" type="text/css" href="',api_get_path(WEB_CODE_PATH), 'css/default.css">';
 	echo $javascript;

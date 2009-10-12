@@ -61,8 +61,8 @@ class UserForm extends FormValidator
 		}
 		$this->setDefaults();
 	}
-	
-	protected function build_simple_search() {	
+
+	protected function build_simple_search() {
 		if (isset($_GET['search']) && (!empty($_GET['search']))) {
 		   	$this->setDefaults(array(
    		    'keyword' => Security::remove_XSS($_GET['search'])
@@ -73,10 +73,15 @@ class UserForm extends FormValidator
 		$this->addElement('text','keyword','');
 		$this->addElement('style_submit_button','submit',get_lang('Search'),'class="search"');
 	}
-	
+
 	protected function build_user_info_form() {
-		$this->addElement('static', 'fname', get_lang('FirstName'), $this->user_info['firstname']);
-		$this->addElement('static', 'lname', get_lang('LastName'), $this->user_info['lastname']);
+		if (api_is_western_name_order()) {
+			$this->addElement('static', 'fname', get_lang('FirstName'), $this->user_info['firstname']);
+			$this->addElement('static', 'lname', get_lang('LastName'), $this->user_info['lastname']);
+		} else {
+			$this->addElement('static', 'lname', get_lang('LastName'), $this->user_info['lastname']);
+			$this->addElement('static', 'fname', get_lang('FirstName'), $this->user_info['firstname']);
+		}
 		$this->addElement('static', 'uname', get_lang('UserName'), $this->user_info['username']);
 		$this->addElement('static', 'email', get_lang('Email'), '<a href="mailto:' . $this->user_info['email'] . '">' . $this->user_info['email'] . '</a>');
 		$this->addElement('static', 'ofcode', get_lang('OfficialCode'), $this->user_info['official_code']);

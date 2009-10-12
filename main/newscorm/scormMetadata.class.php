@@ -89,7 +89,7 @@ class scormMetadata {
 				     			case XML_TEXT_NODE:
 				     				if(trim($child->content) != '')
 				     				{
-				     					if(count($children == 1)){ 
+				     					if(count($children == 1)){
 				     						//if this is the only child at this level and it is a content... save differently
 				     						$this->text = $child->content;
 				     					}else{
@@ -169,7 +169,7 @@ class scormMetadata {
 				     			case XML_TEXT_NODE:
 				     				if(trim($child->textContent) != '')
 				     				{
-				     					if(count($children == 1)){ 
+				     					if(count($children == 1)){
 				     						//if this is the only child at this level and it is a content... save differently
 				     						$this->text = $child->textContent;
 				     					}else{

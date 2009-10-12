@@ -172,4 +172,8 @@ $EditInformation = "Editar información";
 $RegisterUser = "Registrar usuario";
 $IHaveReadAndAgree = "He leido y estoy de acuerdo con los";
 $ByClickingRegisterYouAgreeTermsAndConditions = "Al hacer clic en el botón \'Registrar\' que aparece a continuación, acepta los Términos y Condiciones";
+$User = "Usuario";
+$LostPass = "¿ Ha olvidado su contraseña ?";
+$EnterEmailUserAndWellSendYouPassword = "Introduzca el usuario y la dirección de correo electrónico con la que está registrado y le remitiremos su contraseña.";
+$NoUserAccountWithThisEmailAddress = "No existe una cuenta con este usuario y/o dirección de correo electrónico";
 ?>

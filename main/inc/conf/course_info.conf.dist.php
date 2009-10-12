@@ -36,7 +36,7 @@ $showLinkToExportThisCourse = TRUE;
 $showLinkToBackupThisCourse = TRUE;
 $showLinkToRecycleThisCourse = TRUE;
 $showLinkToRestoreCourse	= TRUE;
-$showLinkToCopyThisCourse 	= TRUE; 
+$showLinkToCopyThisCourse 	= TRUE;
 */
 // If true, these fileds  keep the previous content.
 /*
@@ -58,8 +58,8 @@ $showExpirationDate 							= TRUE;
 $showCreationDate 								= TRUE;
 $showLastEdit 									= TRUE;
 $showLastVisit 									= TRUE;
-$canReportExpirationDate 						= TRUE; // need to be true 
-														// if ScriptToReportExpirationDate 
+$canReportExpirationDate 						= TRUE; // need to be true
+														// if ScriptToReportExpirationDate
 														// is not automaticly called
 //$linkToChangeDiskQuota						= "changeQuota.php";
 $urlScriptToReportExpirationDate 				= "postpone.php"; // external script to postpone the expiration of course.

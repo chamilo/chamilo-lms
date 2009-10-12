@@ -44,44 +44,44 @@ function change_image_user_field (image_value) {
 	if (image_value==1) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_text.png', get_lang('AddUserFields'))."'".');
-			
+
 	} else if (image_value==2) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_text_area.png', get_lang('AddUserFields'))."'".');
-				
+
 	} else if (image_value==3) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('add_user_field_howto.png', get_lang('AddUserFields'))."'".');
-				
+
 	} else if (image_value==4) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_drop_down.png', get_lang('AddUserFields'))."'".');
-				
+
 	} else if (image_value==5) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_multidropdown.png', get_lang('AddUserFields'))."'".');
-				
+
 	} else if (image_value==6) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_data.png', get_lang('AddUserFields'))."'".');
-				
+
 	} else if (image_value==7) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_date_time.png', get_lang('AddUserFields'))."'".');
-				
+
 	} else if (image_value==8) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_doubleselect.png', get_lang('AddUserFields'))."'".');
-				
+
 	} else if (image_value==9) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_divider.png', get_lang('AddUserFields'))."'".');
-				
+
 	}
-}		
-	
-		
-		
+}
+
+
+
 </script>';
 // Database table definitions
 $table_admin	= Database :: get_main_table(TABLE_MAIN_ADMIN);
@@ -96,7 +96,7 @@ if ($_GET['action']<>'edit')
 {
 	$tool_name = get_lang('AddUserFields');
 }
-else 
+else
 {
 	$tool_name = get_lang('EditUserFields');
 }
@@ -149,8 +149,8 @@ if (is_numeric($_GET['field_id']))
 	$defaults['fieldtitle'] = $form_information['field_display_text'];
 	$defaults['fieldlabel'] = $form_information['field_variable'];
 	$defaults['fieldtype'] = $form_information['field_type'];
-	$defaults['fielddefaultvalue'] = $form_information['field_default_value'];									
-	
+	$defaults['fielddefaultvalue'] = $form_information['field_default_value'];
+
 	$count = 0;
 	// we have to concatenate the options
 	if (count($form_information['options'])>0) {
@@ -160,7 +160,7 @@ if (is_numeric($_GET['field_id']))
 			{
 				$defaults['fieldoptions'] = $defaults['fieldoptions'].'; '.$option['option_display_text'];
 			}
-			else 
+			else
 			{
 				$defaults['fieldoptions'] = $option['option_display_text'];
 			}
@@ -174,7 +174,7 @@ $form->setDefaults($defaults);
 		$text=get_lang('buttonEditUserField');
 	} else {
 		$class="add";
-		$text=get_lang('buttonAddUserField'); 
+		$text=get_lang('buttonAddUserField');
 	}
 // Submit button
 $form->addElement('style_submit_button', 'submit',$text, 'class='.$class.'');
@@ -190,13 +190,13 @@ if( $form->validate())
 		$fieldtitle = $field['fieldtitle'];
 		$fielddefault = $field['fielddefaultvalue'];
 		$fieldoptions = $field['fieldoptions']; //comma-separated list of options
-		
+
 		if (is_numeric($field['fieldid']) AND !empty($field['fieldid']))
 		{
 			UserManager:: save_extra_field_changes($field['fieldid'],$fieldlabel,$fieldtype,$fieldtitle,$fielddefault,$fieldoptions);
 			$message = get_lang('FieldEdited');
 		}
-		else 
+		else
 		{
 			$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault,$fieldoptions);
 			$message = get_lang('FieldAdded');
@@ -230,32 +230,32 @@ echo '<div id="id_image_user_field">';
 if(!empty($defaults['fieldtype'])) {
 	$image_value = $defaults['fieldtype'];
 	if ($image_value==1) {
-		echo '<br />'.Display::return_icon('userfield_text.png', get_lang('AddUserFields'));					
+		echo '<br />'.Display::return_icon('userfield_text.png', get_lang('AddUserFields'));
 	} else if ($image_value==2) {
-		echo '<br />'.Display::return_icon('userfield_text_area.png', get_lang('AddUserFields'));						
+		echo '<br />'.Display::return_icon('userfield_text_area.png', get_lang('AddUserFields'));
 	} else if ($image_value==3) {
-		echo '<br />'.Display::return_icon('add_user_field_howto.png', get_lang('AddUserFields'));						
+		echo '<br />'.Display::return_icon('add_user_field_howto.png', get_lang('AddUserFields'));
 	} else if ($image_value==4) {
-		echo '<br />'.Display::return_icon('userfield_drop_down.png', get_lang('AddUserFields'));						
+		echo '<br />'.Display::return_icon('userfield_drop_down.png', get_lang('AddUserFields'));
 	} else if ($image_value==5) {
-		echo '<br />'.Display::return_icon('userfield_multidropdown.png', get_lang('AddUserFields'));								
+		echo '<br />'.Display::return_icon('userfield_multidropdown.png', get_lang('AddUserFields'));
 	} else if ($image_value==6) {
-		echo '<br />'.Display::return_icon('userfield_data.png', get_lang('AddUserFields'));						
+		echo '<br />'.Display::return_icon('userfield_data.png', get_lang('AddUserFields'));
 	} else if ($image_value==7) {
-		echo '<br />'.Display::return_icon('userfield_date_time.png', get_lang('AddUserFields'));								
+		echo '<br />'.Display::return_icon('userfield_date_time.png', get_lang('AddUserFields'));
 	} else if ($image_value==8) {
-		echo '<br />'.Display::return_icon('userfield_doubleselect.png', get_lang('AddUserFields'));									
+		echo '<br />'.Display::return_icon('userfield_doubleselect.png', get_lang('AddUserFields'));
 	} else if ($image_value==9) {
-		echo '<br />'.Display::return_icon('userfield_divider.png', get_lang('AddUserFields'));						
+		echo '<br />'.Display::return_icon('userfield_divider.png', get_lang('AddUserFields'));
 	}
 } else {
-	echo '<br />'.Display::return_icon('userfield_text.png', get_lang('AddUserFields'));	
-}	
-echo '</div>';	
-			
-			
+	echo '<br />'.Display::return_icon('userfield_text.png', get_lang('AddUserFields'));
+}
+echo '</div>';
 
-		
+
+
+
 
 
 // footer

@@ -1,6 +1,6 @@
 <?php // $Id: configure_homepage.php 22243 2009-07-20 15:08:31Z ivantcholakov $
 /*
-===== =========================================================================
+==============================================================================
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004-2009 Dokeos SPRL
@@ -90,34 +90,34 @@ if(!empty($_SESSION['user_language_choice'])) {
 } elseif(!empty($_SESSION['_user']['language'])) {
 	$lang=$_SESSION['_user']['language'];
 } else {
-	$lang=get_setting('platformLanguage');
+	$lang=api_get_setting('platformLanguage');
 }
 
 // ----- Ensuring availability of main files in the corresponding language -----
 
 if ($_configuration['multiple_access_urls']==true) {
-	$access_url_id = api_get_current_access_url_id();										 
-	if ($access_url_id != -1){						
+	$access_url_id = api_get_current_access_url_id();
+	if ($access_url_id != -1){
 		$url_info = api_get_access_url($access_url_id);
-		// "http://" and the final "/" replaced						
-		$url = substr($url_info['url'],7,strlen($url_info['url'])-8);						
+		// "http://" and the final "/" replaced
+		$url = substr($url_info['url'],7,strlen($url_info['url'])-8);
 		$clean_url = replace_dangerous_char($url);
 		$clean_url = str_replace('/','-',$clean_url);
 		$clean_url = $clean_url.'/';
-		
-		$homep = '../../home/'; //homep for Home Path			
-		$homep_new = '../../home/'.$clean_url; //homep for Home Path added the url				
+
+		$homep = '../../home/'; //homep for Home Path
+		$homep_new = '../../home/'.$clean_url; //homep for Home Path added the url
 		$new_url_dir = api_get_path(SYS_PATH).'home/'.$clean_url;
 		//we create the new dir for the new sites
-		if (!is_dir($new_url_dir)){		
+		if (!is_dir($new_url_dir)){
 			umask(0);
 			$perm = api_get_setting('permissions_for_new_directories');
 			$perm = octdec(!empty($perm)?$perm:'0755');
 			mkdir($new_url_dir, $perm);
-		}							
+		}
 	}
-} else {			
-	$homep_new ='';		
+} else {
+	$homep_new ='';
 	$homep = '../../home/'; //homep for Home Path
 }
 
@@ -135,15 +135,15 @@ foreach($homef as $my_file) {
 	if ($_configuration['multiple_access_urls']==true) {
 		if (!file_exists($homep_new.$my_file.'_'.$lang.$ext)) {
 			copy($homep.$my_file.$ext,$homep_new.$my_file.'_'.$lang.$ext);
-		}		
-	} else {	
+		}
+	} else {
 		if (!file_exists($homep.$my_file.'_'.$lang.$ext)) {
 			copy($homep.$my_file.$ext,$homep.$my_file.'_'.$lang.$ext);
 		}
 	}
 }
 if ($_configuration['multiple_access_urls']==true) {
-	$homep = $homep_new; 
+	$homep = $homep_new;
 }
 
 // Check WCAG settings and prepare edition using WCAG
@@ -179,11 +179,11 @@ if(!empty($action)) {
 					$home_top=WCAG_Rendering::prepareXHTML();
 				} else {
 					$home_top=trim(stripslashes($_POST['home_top']));
-				}				
-					
+				}
+
 				// Write
 				if (file_exists($homep.$topf.'_'.$lang.$ext)) {
-					if(is_writable($homep.$topf.'_'.$lang.$ext)) {						
+					if(is_writable($homep.$topf.'_'.$lang.$ext)) {
 						$fp=fopen($homep.$topf.'_'.$lang.$ext,"w");
 						fputs($fp,$home_top);
 						fclose($fp);
@@ -191,12 +191,12 @@ if(!empty($action)) {
 						$errorMsg=get_lang('HomePageFilesNotWritable');
 					}
 				} else {
-					//File does not exist					
+					//File does not exist
 					$fp=fopen($homep.$topf.'_'.$lang.$ext,"w");
 					fputs($fp,$home_top);
 					fclose($fp);
-				}				
-				
+				}
+
 				break;
 			case 'edit_notice':
 				// Filter
@@ -398,7 +398,7 @@ if(!empty($action)) {
 									fclose($fpo);
 								}
 							}
-								
+
 						} else {
 							$errorMsg=get_lang('HomePageFilesNotWritable');
 						}
@@ -454,14 +454,14 @@ if(!empty($action)) {
 				break;
 			case 'edit_top':
 				// This request is only the preparation for the update of the home_top
-				$home_top = '';			
+				$home_top = '';
 				if(is_file($homep.$topf.'_'.$lang.$ext) && is_readable($homep.$topf.'_'.$lang.$ext)) {
 					$home_top=file_get_contents($homep.$topf.'_'.$lang.$ext);
 				} elseif(is_file($homep.$topf.$lang.$ext) && is_readable($homep.$topf.$lang.$ext)) {
 					$home_top=file_get_contents($homep.$topf.$lang.$ext);
 				} else {
 					$errorMsg=get_lang('HomePageFilesNotReadable');
-				}		
+				}
 				break;
 			case 'edit_notice':
 				// This request is only the preparation for the update of the home_notice
@@ -587,8 +587,8 @@ if(!empty($action)) {
 }
 else //if $action is empty, then prepare a list of the course categories to display (?)
 {
-	$result=api_sql_query("SELECT name FROM $tbl_category WHERE parent_id IS NULL ORDER BY tree_pos",__FILE__,__LINE__);
-	$Categories=api_store_result($result);
+	$result=Database::query("SELECT name FROM $tbl_category WHERE parent_id IS NULL ORDER BY tree_pos",__FILE__,__LINE__);
+	$Categories=Database::store_result($result);
 }
 
 // -------------------------
@@ -622,7 +622,7 @@ switch($action){
 		}
 
 		?>
-		
+
 		<table border="0" cellpadding="5" cellspacing="0">
 		<tr><td colspan="2"><?php echo '<span style="font-style: italic;">'.get_lang('LetThoseFieldsEmptyToHideTheNotice').'</span>'; ?></tr>
 		<tr>
@@ -663,12 +663,12 @@ switch($action){
 		$default['link_name'] = api_htmlentities($link_name, ENT_QUOTES, $charset);
 		$form->addElement('text', 'link_name', get_lang('LinkName'), array('size' => '30', 'maxlength' => '50'));
 		$form->addElement('html', '</td></tr>');
-		
+
 		$form->addElement('html', '<tr><td nowrap="nowrap">'.get_lang('LinkURL').' ('.get_lang('Optional').') :</td><td>');
-		$default['link_url'] = empty($link_url) ? 'http://' : api_htmlentities($link_url, ENT_QUOTES, $charset); 
+		$default['link_url'] = empty($link_url) ? 'http://' : api_htmlentities($link_url, ENT_QUOTES, $charset);
 		$form->addElement('text', 'link_url', get_lang('LinkName'), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
 		$form->addElement('html', '</td></tr>');
-		
+
 		if($action == 'insert_link') {
 			$form->addElement('html', '<tr><td nowrap="nowrap">'.get_lang('InsertThisLink').' :</td>');
 			$form->addElement('html', '<td><select name="insert_where"><option value="-1">'.get_lang('FirstPlace').'</option>');
@@ -729,7 +729,7 @@ switch($action){
 		$renderer->setElementTemplate('<tr><td>{element}</td></tr>');
 		$renderer->setRequiredNoteTemplate('');
 		$form->addElement('hidden', 'formSent', '1');
-		
+
 		if($action == 'edit_news'){
 			$_languages=api_get_languages();
 			$html = '<tr><td>'.get_lang('ChooseNewsLanguage').' : ';
@@ -764,14 +764,14 @@ switch($action){
 		break;
 	default: // When no action applies, default page to update campus homepage
 		?>
-		<table border="0" cellpadding="5" cellspacing="0" width="100%">	
+		<table border="0" cellpadding="5" cellspacing="0" width="100%">
 		<tr>
 		  <td width="80%" colspan="2" valign="top">
 		  	<div class="actions">
 			<a href="<?php echo api_get_self(); ?>?action=edit_top"><?php Display::display_icon('edit.gif', get_lang('EditHomePage')); ?></a>
 			<a href="<?php echo api_get_self(); ?>?action=edit_top"><?php echo get_lang('EditHomePage'); ?></a>
 		  	</div>
-		  	
+
 			<table border="0" cellpadding="5" cellspacing="0" width="100%">
 			<tr>
 			  <td colspan="2">
@@ -788,26 +788,26 @@ switch($action){
 			  </td>
 			</tr>
 			<tr>
-			<?php 
+			<?php
 			$access_url_id =1;
 			// we only show the category options for the main Dokeos installation
-			if ($_configuration['multiple_access_urls']==true) {					
-				$access_url_id = api_get_current_access_url_id();					
-			}			
-			echo '<td width="50%">';				
+			if ($_configuration['multiple_access_urls']==true) {
+				$access_url_id = api_get_current_access_url_id();
+			}
+			echo '<td width="50%">';
 			if ($access_url_id ==1) {
 				echo '<div class="actions">';
 				echo '<a href="course_category.php">'.Display::display_icon('edit.gif', get_lang('Edit')).'</a>
 					  <a href="course_category.php">'.get_lang('EditCategories').'</a>';
 				echo '</div>';
-			}			
+			}
 			echo '</td>
 				  <td width="50%">
-				  <br />';								
+				  <br />';
 			/* <!--<a href="<?php echo api_get_self(); ?>?action=edit_news"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a> <a href="<?php echo api_get_self(); ?>?action=edit_news"><?php echo get_lang('EditNews'); ?></a>--> */
 			echo '</td></tr>
 				<tr>
-				<td width="50%" valign="top">				  	
+				<td width="50%" valign="top">
 				<table border="0" cellpadding="5" cellspacing="0" width="100%">';
 				if ($access_url_id ==1) {
 					if(sizeof($Categories)) {
@@ -818,19 +818,19 @@ switch($action){
 					} else {
 						echo get_lang('NoCategories');
 					}
-				}				
-				
+				}
+
 				echo '</table>';
 				?>
 			  </td>
 			  <!--<td width="50%" valign="top">
-				<?php				
+				<?php
 				if(file_exists($homep.$newsf.'_'.$lang.$ext)) {
 					include ($homep.$newsf.'_'.$lang.$ext);
 				} else {
 					include ($homep.$newsf.$ext);
 				}
-				
+
 			?>
 			  </td>-->
 			</tr>
@@ -861,12 +861,12 @@ switch($action){
 				<li><span style="color: #9D9DA1; font-weight: bold;"><?php echo api_ucfirst(get_lang('LostPassword')); ?></span></li>
 				</ul>
 			</div>
-			
-			
+
+
 			<br />
 			<a href="<?php echo api_get_self(); ?>?action=insert_link"><?php Display::display_icon('insert_row.png', get_lang('InsertLink')); ?></a>
 			<a href="<?php echo api_get_self(); ?>?action=insert_link"/><?php echo get_lang('InsertLink'); ?></a>
-			
+
 			<div class="menusection">
 				<span class="menusectioncaption"><?php echo api_ucfirst(get_lang('General')); ?></span>
 				<ul class="menulist">

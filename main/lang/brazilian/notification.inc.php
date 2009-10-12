@@ -16,4 +16,6 @@ $lang_new_groupforum_topic = "novo tópico adicionado ao fórum do grupo";
 $lang_new_dropbox_file = "novo arquivo recebido";
 $lang_update_dropbox_file = "um arquivo na sua caixa de entrega foi atualizado";
 $ForumCategoryAdded = "Acrescentada uma nova categoria no fórum";
+$LearnpathAdded = "Rota de Aprendizagem adicionada";
+$GlossaryAdded = "Adicionado um novo termo no Glossário";
 ?>

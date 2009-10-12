@@ -76,4 +76,9 @@ $CourseCategoryEditStored = "Kategorija je bila ažurirana";
 $buttonCreateCourseCategory = "Ustvari kategorijo tečajev";
 $buttonSaveCategory = "Shrani kategorijo";
 $buttonChangeCategory = "Zamenjaj kategorijo";
+$SessionName = "Ime seje";
+$SessionCategory = "Kategorija seje";
+$Expand = "Razširi";
+$Collapse = "Skrči";
+$CourseDetails = "Podrobnosti tečaja";
 ?>

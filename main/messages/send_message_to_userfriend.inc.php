@@ -29,48 +29,47 @@ if ( isset($_REQUEST['user_friend']) ) {
 ?>
 <table width="600" border="0" height="220">
     <tr height="180">
-        <td>    
+        <td align="center">
         <div class="message-content-body-left">
 			<img class="message-image-info" src="<?php echo $info_path_friend['dir'].$info_path_friend['file']; ?>"/>
-			<?php 
+			<?php
 			if ($panel != 1) {
-				echo '<br /><center>'.api_xml_http_response_encode($info_user_friend['firstName'].' '.$info_user_friend['lastName']).'</center>';
+				echo '<br /><center>'.api_xml_http_response_encode(api_get_person_name($info_user_friend['firstName'], $info_user_friend['lastName'])).'</center>';
 			}
 			?>
 		</div>
 <div class="message-content-body-right">
 <div id="id_content_panel_init">
 			<dl>
-<?php 
+<?php
 		if (api_get_setting('allow_message_tool')=='true') {
 			if ($panel == 1) {
                 //normal message
 		   		 $user_info=api_get_user_info($userfriend_id);
-		  		 echo api_xml_http_response_encode(get_lang('To')); ?> :&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode($user_info['firstName'].' '.$user_info['lastName']); ?>
+		  		 echo api_xml_http_response_encode(get_lang('To')); ?> :&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName'])); ?>
 		  		 <br />
 		 		 <br /><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br /><input id="txt_subject_id" type="text" style="width:300px;"><br/>
 		   		 <br /><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br /><textarea id="txt_area_invite" rows="4" cols="41"></textarea>
-		   		 <br /><br />		    	  
+		   		 <br /><br />
 		   		 <button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>" onclick="action_database_panel('5','<?php echo $userfriend_id;?>')"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>
 <?php
 			} else {
                 // friend invitation message
 				echo api_xml_http_response_encode(get_lang('AddPersonalMessage'));  ?> :<br /><br />
 				<textarea id="txt_area_invite" rows="5" cols="41"></textarea><br /><br />
- 				<button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SocialAddToFriends')); ?>" onclick="action_database_panel('4','<?php echo $userfriend_id;?>')" ><?php echo api_xml_http_response_encode(get_lang('SocialAddToFriends')) ?></button>	   
-<?php					
+ 				<button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SocialAddToFriends')); ?>" onclick="action_database_panel('4','<?php echo $userfriend_id;?>')" ><?php echo api_xml_http_response_encode(get_lang('SocialAddToFriends')) ?></button>
+<?php
 				}
-			}            
+			}
 ?>
-			</dl>			
+			</dl>
 </div>
         </td>
     </tr>
         </div>
-    <tr height="22">
+    <tr>
         <td>
 			<div id="display_response_id" style="position:relative"></div>
-			<div class="message-bottom-title">&nbsp;</div>
 		</td>
 	</tr>
 </table>

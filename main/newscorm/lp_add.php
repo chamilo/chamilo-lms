@@ -21,7 +21,7 @@
 */
 
 /**
-============================================================================== 
+==============================================================================
 * This is a learning path creation and player tool in Dokeos - previously learnpath_handler.php
 *
 * @author Patrick Cool
@@ -29,14 +29,14 @@
 * @author Roan Embrechts, refactoring and code cleaning
 * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
 * @package dokeos.learnpath
-============================================================================== 
+==============================================================================
 */
 
 /*
 ==============================================================================
 		INIT SECTION
 ==============================================================================
-*/ 
+*/
 $this_section=SECTION_COURSES;
 
 api_protect_course_script();
@@ -45,7 +45,7 @@ api_protect_course_script();
 -----------------------------------------------------------
 	Libraries
 -----------------------------------------------------------
-*/ 
+*/
 //the main_api.lib.php, database.lib.php and display.lib.php
 //libraries are included by default
 
@@ -53,14 +53,14 @@ include('learnpath_functions.inc.php');
 //include('../resourcelinker/resourcelinker.inc.php');
 include('resourcelinker.inc.php');
 //rewrite the language file, sadly overwritten by resourcelinker.inc.php
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'learnpath';
 
 /*
 -----------------------------------------------------------
 	Header and action code
 -----------------------------------------------------------
-*/ 
+*/
 $currentstyle = api_get_setting('stylesheets');
 //$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'css/'.$currentstyle.'/learnpath.css"/>';
 //$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="learnpath.css" />'; //will be a merged with original learnpath.css
@@ -69,12 +69,12 @@ $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="dtree.css" />'; 
 -----------------------------------------------------------
 	Constants and variables
 -----------------------------------------------------------
-*/ 
-$is_allowed_to_edit = api_is_allowed_to_edit();
+*/
+$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 
-$tbl_lp = Database::get_course_table('lp');
-$tbl_lp_item = Database::get_course_table('lp_item');
-$tbl_lp_view = Database::get_course_table('lp_view');
+$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
+$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+$tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
 $isStudentView  = (int) $_REQUEST['isStudentView'];
 $learnpath_id   = (int) $_REQUEST['lp_id'];
@@ -97,21 +97,21 @@ if ( (! $is_allowed_to_edit) or ($isStudentView) )
 }
 //from here on, we are admin because of the previous condition, so don't check anymore
 
-$sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id"; 
-$result=api_sql_query($sql_query);
-$therow=Database::fetch_array($result); 
+$sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id";
+$result=Database::query($sql_query);
+$therow=Database::fetch_array($result);
 
 /*
 -----------------------------------------------------------
 	Course admin section
 	- all the functions not available for students - always available in this case (page only shown to admin)
 -----------------------------------------------------------
-*/ 
+*/
 if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')

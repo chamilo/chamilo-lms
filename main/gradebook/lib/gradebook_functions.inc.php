@@ -65,8 +65,8 @@ function add_resource_to_course_gradebook($course_code, $resource_type, $resourc
     	$sql .= " AND (session_id IS NULL OR session_id = 0) ";
     }
     $sql .= " ORDER BY id";
-    $res = api_sql_query($sql,__FILE__,__LINE__);
-    if (Database::num_rows($res)<1){ 
+    $res = Database::query($sql,__FILE__,__LINE__);
+    if (Database::num_rows($res)<1){
         //there is no unique category for this course+session combination,
         // => create one
         $cat= new Category();
@@ -95,14 +95,14 @@ function add_resource_to_course_gradebook($course_code, $resource_type, $resourc
         $category = $row['id'];
     }
     $link->set_category_id($category);
-    
+
     if ($link->needs_name_and_description()) {
     	$link->set_name($resource_name);
     } else {
     	$link->set_ref_id($resource_id);
     }
     $link->set_weight($weight);
-    
+
     if ($link->needs_max()) {
     	$link->set_max($max);
     }
@@ -112,7 +112,7 @@ function add_resource_to_course_gradebook($course_code, $resource_type, $resourc
     if ($link->needs_name_and_description()) {
     	$link->set_description($resource_description);
     }
-        
+
     $link->set_visible(empty ($visible) ? 0 : 1);
 
     if (!empty($session_id)) {
@@ -134,14 +134,14 @@ function block_students() {
  * @param $userid
  */
 
-/** 
+/**
  * Returns the course name from a given code
  * @param string $code
  */
 function get_course_name_from_code($code) {
 	$tbl_main_categories= Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql= 'SELECT title,code FROM ' . $tbl_main_categories . 'WHERE code = "' . $code . '"';
-	$result= api_sql_query($sql,__FILE__,__LINE__);
+	$result= Database::query($sql,__FILE__,__LINE__);
 	if ($col= Database::fetch_array($result)) {
 		return $col['title'];
 	}
@@ -188,7 +188,7 @@ function build_edit_icons_cat($cat, $selectcat) {
 		$visibility_command= ($cat->is_visible() == 0) ? 'set_visible' : 'set_invisible';
 		$modify_icons= '<a href="gradebook_edit_cat.php?editcat=' . $cat->get_id() . ' &amp;cidReq='.$cat->get_course_code().'"><img src="../img/edit.gif" border="0" title="' . get_lang('Modify') . '" alt="" /></a>';
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '&amp;cidReq='.$cat->get_course_code().'" onclick="return confirmation();"><img src="../img/delete.gif" border="0" title="' . get_lang('DeleteAll') . '" alt="" /></a>';
-		
+
 		//no move ability for root categories
 		if ($cat->is_movable()) {
 			$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$cat->get_course_code().'"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';
@@ -196,7 +196,7 @@ function build_edit_icons_cat($cat, $selectcat) {
 			//$modify_icons .= '&nbsp;<img src="../img/deplacer_fichier_na.gif" border="0" title="' . get_lang('Move') . '" alt="" />';
 		}
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblecat=' . $cat->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' "><img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang('Visible') . '" alt="" /></a>';
-		
+
 		return $modify_icons;
 	}
 }
@@ -278,19 +278,19 @@ function is_resource_in_course_gradebook($course_code, $resource_type, $resource
         $sql .= " AND (session_id IS NULL OR session_id = 0) ";
     }
     $sql .= " ORDER BY id";
-    $res = api_sql_query($sql,__FILE__,__LINE__);
-    if (Database::num_rows($res)<1) { 
-    	return false; 
+    $res = Database::query($sql,__FILE__,__LINE__);
+    if (Database::num_rows($res)<1) {
+    	return false;
     }
     $row = Database::fetch_array($res);
     $category = $row['id'];
     $sql = "SELECT * FROM $l l WHERE l.category_id = $category AND type = ".(int) $resource_type." and ref_id = ".(int) $resource_id;
-    $res = api_sql_query($sql,__FILE__,__LINE__);
-    if (Database::num_rows($res)<1) { 
-    	return false; 
+    $res = Database::query($sql,__FILE__,__LINE__);
+    if (Database::num_rows($res)<1) {
+    	return false;
     }
     $row = Database::fetch_array($res);
-    return $row['id'];    
+    return $row['id'];
 }
 /**
  * Remove a resource from the unique gradebook of a given course
@@ -303,18 +303,18 @@ function remove_resource_from_course_gradebook($link_id) {
     // TODO find the corresponding category (the first one for this course, ordered by ID)
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
     $sql = "DELETE FROM $l WHERE id = ".(int)$link_id;
-    $res = api_sql_query($sql,__FILE__,__LINE__);
+    $res = Database::query($sql,__FILE__,__LINE__);
     return true;
 }
 /**
- * return the database name  
+ * return the database name
  * @param    int
  * @return   String
  */
 function get_database_name_by_link_id($id_link) {
 	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-	$res=api_sql_query('SELECT db_name from '.$course_table.' c inner join '.$tbl_grade_links.' l 
+	$res=Database::query('SELECT db_name from '.$course_table.' c inner join '.$tbl_grade_links.' l
 	on c.code=l.course_code WHERE l.id='.$id_link.' OR l.category_id='.$id_link);
 	$my_db_name=Database::fetch_array($res,'ASSOC');
 	return $my_db_name['db_name'];

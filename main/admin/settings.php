@@ -42,7 +42,11 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = 'admin';
+if ($_GET['category']=='Templates') {
+	$language_file = array('admin','document');
+} else {
+	$language_file = array('admin');
+}
 // resetting the course id
 $cidReset=true;
 // including some necessary dokeos files
@@ -76,18 +80,18 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 $tool_name = get_lang('DokeosConfigSettings');
 
 // Build the form
-if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search')))
+if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search')))
 {
 	$form = new FormValidator('settings', 'post', 'settings.php?category='.$_GET['category']);
 	$renderer = & $form->defaultRenderer();
 	$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>'."\n");
 	$renderer->setElementTemplate('<div class="sectioncomment">{label}</div>'."\n".'<div class="sectionvalue">{element}</div>'."\n");
 	$my_category = mysql_real_escape_string($_GET['category']);
-	
+
 	$sqlcountsettings = "SELECT COUNT(*) FROM $table_settings_current WHERE category='".$my_category."' AND type<>'checkbox'";
-	$resultcountsettings = api_sql_query($sqlcountsettings, __FILE__, __LINE__);
+	$resultcountsettings = Database::query($sqlcountsettings, __FILE__, __LINE__);
 	$countsetting = mysql_fetch_array($resultcountsettings);
-	 
+
 	if ($_configuration['access_url']==1)
 	{
 		$settings = api_get_settings($my_category,'group',$_configuration['access_url']);
@@ -98,9 +102,9 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 		if ($url_info['active']==1)
 		{
 			//the default settings of Dokeos
-			$settings = api_get_settings($my_category,'group',1,0);		
-			//the settings that are changeable from a particular site 
-			$settings_by_access = api_get_settings($my_category,'group',$_configuration['access_url'],1);			
+			$settings = api_get_settings($my_category,'group',1,0);
+			//the settings that are changeable from a particular site
+			$settings_by_access = api_get_settings($my_category,'group',$_configuration['access_url'],1);
 			//echo '<pre>';
 			//print_r($settings_by_access);
 			$settings_by_access_list=array();
@@ -117,36 +121,36 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 					$settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ]	[ $row['category'] ]  = $row;
 				else
 					$settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ]	[ $row['category'] ]  = array();
-			}	
+			}
 		}
 	}
 
 	//print_r($settings_by_access_list);echo '</pre>';
 	//$sqlsettings = "SELECT DISTINCT * FROM $table_settings_current WHERE category='$my_category' GROUP BY variable ORDER BY id ASC";
-	//$resultsettings = api_sql_query($sqlsettings, __FILE__, __LINE__);
+	//$resultsettings = Database::query($sqlsettings, __FILE__, __LINE__);
 	//while ($row = mysql_fetch_array($resultsettings))
 	$default_values = array();
-	foreach($settings as $row) {			
-
+	foreach($settings as $row) {
+		if ($row['variable'] == 'search_enabled') { continue; }
 		$anchor_name = $row['variable'].(!empty($row['subkey']) ? '_'.$row['subkey'] : '');
 		$form->addElement('html',"\n<a name=\"$anchor_name\"></a>\n");
 
-		($countsetting['0']%10) < 5 ?$b=$countsetting['0']-10:$b=$countsetting['0'];		
+		($countsetting['0']%10) < 5 ?$b=$countsetting['0']-10:$b=$countsetting['0'];
 		if ($i % 10 == 0 and $i<$b){
 			if ($_GET['category'] <> "Languages"){
 				$form->addElement('html','<div align="right">');
 				$form->addElement('style_submit_button', null,get_lang('SaveSettings'), 'class="save"');
 				$form->addElement('html','</div>');
-			}		
+			}
 		}
 		$i++;
 
 		$form->addElement('header', null, get_lang($row['title']));
-		
+
 		if ($row['access_url_changeable']=='1' && $_configuration['multiple_access_urls']==true) {
-			$form->addElement('html', '<div style="float:right;">'.Display::return_icon('shared_setting.png',get_lang('SharedSettingIconComment')).'</div>');						
-		}	
-		
+			$form->addElement('html', '<div style="float:right;">'.Display::return_icon('shared_setting.png',get_lang('SharedSettingIconComment')).'</div>');
+		}
+
 		$hideme=array();
 		$hide_element=false;
 		if ($_configuration['access_url']!=1)
@@ -159,35 +163,60 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 			}
 			elseif($url_info['active']==1)
 			{
-				// we show the elements 
+				// we show the elements
 				if (empty($row['variable']))
 					$row['variable']=0;
 				if (empty($row['subkey']))
 					$row['subkey']=0;
 				if (empty($row['category']))
 					$row['category']=0;
-					
+
 				if (is_array ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ]	[ $row['category'] ]))
 				{
-					// we are sure that the other site have a selected value 
-					if ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ]	[ $row['category'] ]['selected_value']!='')											
+					// we are sure that the other site have a selected value
+					if ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ]	[ $row['category'] ]['selected_value']!='')
 						$row['selected_value']	=$settings_by_access_list[$row['variable']] [$row['subkey']]	[ $row['category'] ]['selected_value'];
 				}
 				// there is no else because we load the default $row['selected_value'] of the main Dokeos site
-			}	
-		}	
-				
+			}
+		}
+
 		switch ($row['type']) {
-			case 'textfield' :	
+			case 'textfield' :
 				if ($row['variable']=='account_valid_duration') {
 					$form->addElement('text', $row['variable'], get_lang($row['comment']),array('maxlength'=>'5'));
-					$form->applyFilter($row['variable'],'html_filter');					
-					$default_values[$row['variable']] = $row['selected_value'];	
+					$form->applyFilter($row['variable'],'html_filter');
+					$default_values[$row['variable']] = $row['selected_value'];
+
+				// For platform character set selection: Conversion of the textfield to a select box with valid values.
+				} elseif ($row['variable'] == 'platform_charset') {
+					$current_system_encoding = api_refine_encoding_id(trim($row['selected_value']));
+					$valid_encodings = array_flip(api_get_valid_encodings());
+					if (!isset($valid_encodings[$current_system_encoding])) {
+						$is_alias_encoding = false;
+						foreach ($valid_encodings as $encoding) {
+							if (api_equal_encodings($encoding, $current_system_encoding)) {
+								$is_alias_encoding = true;
+								$current_system_encoding = $encoding;
+								break;
+							}
+						}
+						if (!$is_alias_encoding) {
+							$valid_encodings[$current_system_encoding] = $current_system_encoding;
+						}
+					}
+					foreach ($valid_encodings as $key => &$encoding) {
+						$encoding = api_is_encoding_supported($key) ? $key : $key.' (n.a.)';
+					}
+					$form->addElement('select', $row['variable'], get_lang($row['comment']), $valid_encodings);
+					$default_values[$row['variable']] = $current_system_encoding;
+				//
+
 				} else {
 					$form->addElement('text', $row['variable'], get_lang($row['comment']),$hideme);
 					$form->applyFilter($row['variable'],'html_filter');
-					$default_values[$row['variable']] = $row['selected_value'];		
-				}					
+					$default_values[$row['variable']] = $row['selected_value'];
+				}
 
 				break;
 			case 'textarea' :
@@ -203,7 +232,7 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 						if ($hide_element) {
 							$element->freeze();
 						}
-						$group[] = $element; 
+						$group[] = $element;
 					}
 				}
 				$form->addGroup($group, $row['variable'], get_lang($row['comment']), '<br />', false);
@@ -212,26 +241,27 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 			case 'checkbox';
 				//1. we collect all the options of this variable
 				$sql = "SELECT * FROM settings_current WHERE variable='".$row['variable']."' AND access_url =  1";
-				
-				$result = api_sql_query($sql, __FILE__, __LINE__);
-				$group = array ();	
+
+				$result = Database::query($sql, __FILE__, __LINE__);
+				$group = array ();
 				while ($rowkeys = Database::fetch_array($result)) {
+ 					if ($rowkeys['variable'] == 'course_create_active_tools' && $rowkeys['subkey'] == 'enable_search') {continue;}
 					$element = & $form->createElement('checkbox', $rowkeys['subkey'], '', get_lang($rowkeys['subkeytext']));
-					if ($row['access_url_changeable']==1) {						
+					if ($row['access_url_changeable']==1) {
 						//2. we look into the DB if there is a setting for a specific access_url
 						$access_url = $_configuration['access_url'];
 						if(empty($access_url )) $access_url =1;
-						$sql = "SELECT selected_value FROM settings_current WHERE variable='".$rowkeys['variable']."' AND subkey='".$rowkeys['subkey']."'  AND  subkeytext='".$rowkeys['subkeytext']."' AND access_url =  $access_url";						
-						$result_access = api_sql_query($sql, __FILE__, __LINE__);
+						$sql = "SELECT selected_value FROM settings_current WHERE variable='".$rowkeys['variable']."' AND subkey='".$rowkeys['subkey']."'  AND  subkeytext='".$rowkeys['subkeytext']."' AND access_url =  $access_url";
+						$result_access = Database::query($sql, __FILE__, __LINE__);
 						$row_access = Database::fetch_array($result_access);
 						if ($row_access['selected_value'] == 'true' && ! $form->isSubmitted()) {
-							$element->setChecked(true); 
+							$element->setChecked(true);
 						}
-					} else {											
+					} else {
 						if ($rowkeys['selected_value'] == 'true' && ! $form->isSubmitted()) {
-							$element->setChecked(true); 
+							$element->setChecked(true);
 						}
-					}					
+					}
 					if ($hide_element) {
 						$element->freeze();
 					}
@@ -259,7 +289,7 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 		// will be set to false.
 		$r = api_set_settings_category($my_category,'false',$_configuration['access_url']);
 		//$sql = "UPDATE $table_settings_current SET selected_value='false' WHERE category='$my_category' AND type='checkbox'";
-		//$result = api_sql_query($sql, __FILE__, __LINE__);
+		//$result = Database::query($sql, __FILE__, __LINE__);
 		// Save the settings
 		$keys = array();
 		foreach ($values as $key => $value)
@@ -267,33 +297,33 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 			if (!is_array($value))
 			{
 				//$sql = "UPDATE $table_settings_current SET selected_value='".mysql_real_escape_string($value)."' WHERE variable='$key'";
-				//$result = api_sql_query($sql, __FILE__, __LINE__);
-				
-				if (api_get_setting($key) != $value) $keys[] = $key;	
-																
-				$result = api_set_setting($key,$value,null,null,$_configuration['access_url']);												
+				//$result = Database::query($sql, __FILE__, __LINE__);
+
+				if (api_get_setting($key) != $value) $keys[] = $key;
+
+				$result = api_set_setting($key,$value,null,null,$_configuration['access_url']);
 
 			}
 			else
 			{
-				
+
 				$sql = "SELECT subkey FROM $table_settings_current WHERE variable = '$key'";
-				$res = api_sql_query($sql,__FILE__,__LINE__);
+				$res = Database::query($sql,__FILE__,__LINE__);
 				$subkeys = array();
 				while ($row_subkeys = Database::fetch_array($res)) {
-					// if subkey is changed					
+					// if subkey is changed
 					if ( (isset($value[$row_subkeys['subkey']]) && api_get_setting($key,$row_subkeys['subkey']) == 'false') ||
 						 (!isset($value[$row_subkeys['subkey']]) && api_get_setting($key,$row_subkeys['subkey']) == 'true')) {
 						$keys[] = $key;
-						break;	
-					} 																		
+						break;
+					}
 				}
 
 				foreach ($value as $subkey => $subvalue)
 				{
 
 					//$sql = "UPDATE $table_settings_current SET selected_value='true' WHERE variable='$key' AND subkey = '$subkey'";
-					//$result = api_sql_query($sql, __FILE__, __LINE__);
+					//$result = Database::query($sql, __FILE__, __LINE__);
 
 					$result = api_set_setting($key,'true',$subkey,null,$_configuration['access_url']);
 
@@ -301,19 +331,19 @@ if (!empty($_GET['category']) and !in_array($_GET['category'], array('Plugins', 
 			}
 		}
 
-		// add event configuration settings category to system log		
+		// add event configuration settings category to system log
 		$time = time();
-		$user_id = api_get_user_id();		
-		$category = $_GET['category']; 		
+		$user_id = api_get_user_id();
+		$category = $_GET['category'];
 		event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
-		
 
-		// add event configuration settings variable to system log				
-		if (is_array($keys) && count($keys) > 0) {			
-			foreach($keys as $variable) {																	
-					event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_VARIABLE, $variable, $time, $user_id);				
+
+		// add event configuration settings variable to system log
+		if (is_array($keys) && count($keys) > 0) {
+			foreach($keys as $variable) {
+					event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_VARIABLE, $variable, $time, $user_id);
 			}
-		}			
+		}
 
 		header('Location: settings.php?action=stored&category='.Security::remove_XSS($_GET['category']));
 		exit;
@@ -348,7 +378,7 @@ $action_images['search']        = 'search.gif';
 
 // grabbing the categories
 //$selectcategories = "SELECT DISTINCT category FROM ".$table_settings_current." WHERE category NOT IN ('stylesheets','Plugins')";
-//$resultcategories = api_sql_query($selectcategories, __FILE__, __LINE__);
+//$resultcategories = Database::query($selectcategories, __FILE__, __LINE__);
 $resultcategories = api_get_settings_categories(array('stylesheets','Plugins', 'Templates', 'Search'));
 echo "\n<div class=\"actions\">";
 //while ($row = mysql_fetch_array($resultcategories))
@@ -362,7 +392,7 @@ echo "\n\t<a href=\"".api_get_self()."?category=Templates\">".Display::return_ic
 echo "\n\t<a href=\"".api_get_self()."?category=Search\">".Display::return_icon($action_images['search'], api_ucfirst(get_lang('Search'))).api_ucfirst(get_lang('Search'))."</a>";
 echo "\n</div>";
 
-if (isset ($_GET['category']))
+if (!empty($_GET['category']))
 {
 	switch ($_GET['category'])
 	{
@@ -380,7 +410,7 @@ if (isset ($_GET['category']))
             break;
 		case 'Templates' :
 			handle_templates();
-			break;            
+			break;
 		default :
 			$form->display();
 	}
@@ -408,7 +438,7 @@ function get_settings_options($var)
 {
 	$table_settings_options = Database :: get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
 	$sql = "SELECT * FROM $table_settings_options WHERE variable='$var'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	while ($row = Database::fetch_array($result))
 	{
 		$temp_array = array ('value' => $row['value'], 'display_text' => $row['display_text']);
@@ -430,11 +460,11 @@ function handle_plugins()
 
 	if (isset($_POST['submit_plugins']))
 	{
-		store_plugins();		
-		// add event to system log		
+		store_plugins();
+		// add event to system log
 		$time = time();
-		$user_id = api_get_user_id();		
-		$category = $_GET['category']; 		
+		$user_id = api_get_user_id();
+		$category = $_GET['category'];
 		event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
 
 		Display :: display_normal_message(get_lang('SettingsStored'));
@@ -498,7 +528,7 @@ function handle_plugins()
 
 	/* We retrieve all the active plugins. */
 	//$sql = "SELECT * FROM $table_settings_current WHERE category='Plugins'";
-	//$result = api_sql_query($sql);
+	//$result = Database::query($sql);
 	$result = api_get_settings('Plugins');
 	//while ($row = mysql_fetch_array($result))
 	foreach($result as $row)
@@ -561,7 +591,7 @@ function display_plugin_cell($location, $plugin_info, $current_plugin, $active_p
 	echo "\t\t<td align=\"center\">\n";
 	if (in_array($location, $plugin_info['location']))
 	{
-		if (isset($active_plugins[$location]) && is_array($active_plugins[$location]) 
+		if (isset($active_plugins[$location]) && is_array($active_plugins[$location])
 			&& in_array($current_plugin, $active_plugins[$location]))
 		{
 			$checked = "checked";
@@ -585,32 +615,32 @@ function handle_stylesheets()
 	// Current style
 	$currentstyle = api_get_setting('stylesheets');
 	$is_style_changeable=false;
-	
-	
+
+
 	if ($_configuration['access_url']!=1)
 	{
 		$style_info = api_get_settings('stylesheets','',1,0);
-		$url_info = api_get_access_url($_configuration['access_url']);	 
+		$url_info = api_get_access_url($_configuration['access_url']);
 		if ($style_info[0]['access_url_changeable']==1 && $url_info['active']==1)
 		{
-			$is_style_changeable=true;	
-			echo '<div class="actions" id="stylesheetuploadlink">';	
-			Display::display_icon('theme_add.gif');	
+			$is_style_changeable=true;
+			echo '<div class="actions" id="stylesheetuploadlink">';
+			Display::display_icon('theme_add.gif');
 			echo '<a href="" onclick="document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\';return false; ">'.get_lang('UploadNewStylesheet').'</a>';
 			echo '</div>';
-		} 
+		}
 	}
 	else
 	{
 		$is_style_changeable=true;
-		echo '<div class="actions" id="stylesheetuploadlink">';	
+		echo '<div class="actions" id="stylesheetuploadlink">';
 		Display::display_icon('theme_add.gif');
 		echo '<a href="" onclick="document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\';return false; ">'.get_lang('UploadNewStylesheet').'</a>';
 		echo '</div>';
-	}	
-		
+	}
+
 	$form = new FormValidator('stylesheet_upload','post','settings.php?category=stylesheets&showuploadform=true');
-	$form->addElement('text','name_stylesheet',get_lang('NameStylesheet'),array('size' => '40', 'maxlength' => '40'));	
+	$form->addElement('text','name_stylesheet',get_lang('NameStylesheet'),array('size' => '40', 'maxlength' => '40'));
 	$form->addRule('name_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addElement('file', 'new_stylesheet', get_lang('UploadNewStylesheet'));
 	$allowed_file_types = array ('css');
@@ -623,41 +653,41 @@ function handle_stylesheets()
 		$picture_element = & $form->getElement('new_stylesheet');
 		$picture = $picture_element->getValue();
 		upload_stylesheet($values, $picture);
-		
-		// add event to system log		
+
+		// add event to system log
 		$time = time();
-		$user_id = api_get_user_id();		
-		$category = $_GET['category']; 		
+		$user_id = api_get_user_id();
+		$category = $_GET['category'];
 		event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
-		
+
 		Display::display_confirmation_message(get_lang('StylesheetAdded'));
 	}
-	else 
+	else
 	{
 		if (!is_writable(api_get_path(SYS_CODE_PATH).'css/'))
 		{
 			Display::display_error_message(api_get_path(SYS_CODE_PATH).'css/'.get_lang('IsNotWritable'));
 		}
-		else 
+		else
 		{
 			if ($_GET['showuploadform'] == 'true')
 			{
 				echo '<div id="newstylesheetform">';
 			}
-			else 
+			else
 			{
 				echo '<div id="newstylesheetform" style="display: none;">';
 			}
 				// uploading a new stylesheet
 			if ($_configuration['access_url']==1)
 			{
-				$form->display();	
+				$form->display();
 			}
 			else
 			{
 				if ($is_style_changeable)
 				{
-					$form->display();				
+					$form->display();
 				}
 			}
 			echo '</div>';
@@ -691,9 +721,9 @@ function handle_stylesheets()
 						$selected = '';
 					}
 					$show_name=get_lang(str_replace(' ','', ucwords(str_replace('_',' ', $style_dir))), '');
-					
+
 					if ($is_style_changeable)
-					{					
+					{
 						echo "<input type=\"radio\" name=\"style\" value=\"".$style_dir."\" ".$selected." onClick=\"parent.preview.location='style_preview.php?style=".$style_dir."';\"/>";
 						echo '<a href="style_preview.php?style='.$style_dir.'" target="preview">'.$show_name.'</a>';
 					}
@@ -710,7 +740,7 @@ function handle_stylesheets()
 		@closedir($handle);
 	}
 	if ($is_style_changeable)
-	{	
+	{
 		echo '<button class="save" type="submit" name="submit_stylesheets"> '.get_lang('SaveSettings').' </button></form>';
 	}
 }
@@ -720,7 +750,7 @@ function handle_stylesheets()
  *
  * @param array $values the values of the form
  * @param array $picture the values of the uploaded file
- * 
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version May 2008
  * @since Dokeos 1.8.5
@@ -729,7 +759,7 @@ function upload_stylesheet($values,$picture)
 {
 	// valid name for the stylesheet folder
 	$style_name = api_ereg_replace("[^A-Za-z0-9]", "", $values['name_stylesheet'] );
-	
+
 	// create the folder if needed
 	if(!is_dir(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/'))
 	{
@@ -738,9 +768,9 @@ function upload_stylesheet($values,$picture)
 			$perm = api_get_setting('permissions_for_new_directories');
 			$perm = octdec(!empty($perm)?$perm:'0770');
 			chmod(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/', $perm);
-		}		
+		}
 	}
-	
+
 	// move the file in the folder
 	move_uploaded_file($picture['tmp_name'], api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/'.$picture['name']);
 }
@@ -757,7 +787,7 @@ function store_plugins()
 
 	// Step 1 : we remove all the plugins
 	//$sql = "DELETE FROM $table_settings_current WHERE category='Plugins'";
-	//api_sql_query($sql, __LINE__, __FILE__);
+	//Database::query($sql, __LINE__, __FILE__);
 	$r = api_delete_category_settings('Plugins',$_configuration['access_url']);
 
 	// step 2: looping through all the post values we only store these which are really a valid plugin location.
@@ -767,8 +797,8 @@ function store_plugins()
 		if (is_valid_plugin_location($form_name_elements[1]))
 		{
 			//$sql = "INSERT into $table_settings_current (variable,category,selected_value) VALUES ('".$form_name_elements['1']."','Plugins','".$form_name_elements['0']."')";
-			//api_sql_query($sql, __LINE__, __FILE__);
-			api_add_setting($form_name_elements['0'],$form_name_elements['1'],$form_name_elements['0'],null,'Plugins',$form_name_elements['0'],null,null,null,$_configuration['access_url'],1);			
+			//Database::query($sql, __LINE__, __FILE__);
+			api_add_setting($form_name_elements['0'],$form_name_elements['1'],$form_name_elements['0'],null,'Plugins',$form_name_elements['0'],null,null,null,$_configuration['access_url'],1);
 		}
 	}
 }
@@ -811,9 +841,9 @@ function store_stylesheets()
 				WHERE variable = "stylesheets"
 				AND category = "stylesheets"';
 
-		api_sql_query($sql, __LINE__, __FILE__);
+		Database::query($sql, __LINE__, __FILE__);
 		*/
-		
+
 		api_set_setting('stylesheets',$style,null,'stylesheets',$_configuration['access_url']);
 	}
 
@@ -908,7 +938,7 @@ function handle_search() {
 
 /**
  * wrapper for the templates
- * 
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
  * @since Dokeos 1.8.6
@@ -923,21 +953,21 @@ function handle_templates()
 
 	if ($_GET['action'] == 'add' OR ( $_GET['action'] == 'edit' AND is_numeric($_GET['id']))) {
 		add_edit_template();
-		
-		// add event to system log		
+
+		// add event to system log
 		$time = time();
-		$user_id = api_get_user_id();		
-		$category = $_GET['category']; 		
+		$user_id = api_get_user_id();
+		$category = $_GET['category'];
 		event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
-		
+
 	} else {
 		if ($_GET['action'] == 'delete' and is_numeric($_GET['id'])) {
 			delete_template($_GET['id']);
-			
-			// add event to system log		
+
+			// add event to system log
 			$time = time();
-			$user_id = api_get_user_id();		
-			$category = $_GET['category']; 		
+			$user_id = api_get_user_id();
+			$category = $_GET['category'];
 			event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
 		}
 		display_templates();
@@ -954,20 +984,20 @@ function handle_templates()
 function display_templates()
 {
 	$table = new SortableTable('templates', 'get_number_of_templates', 'get_template_data',1);
-	$table->set_additional_parameters(array('category'=>$_GET['category']));
+	$table->set_additional_parameters(array('category'=>Security::remove_XSS($_GET['category'])));
 	$table->set_header(0, get_lang('Image'), true, array ('style' => 'width:101px;'));
 	$table->set_header(1, get_lang('Title'));
-	$table->set_header(2, get_lang('Actions'), false, array ('style' => 'width:30px;'));	
+	$table->set_header(2, get_lang('Actions'), false, array ('style' => 'width:50px;'));
 	$table->set_column_filter(2,'actions_filter');
 	$table->set_column_filter(0,'image_filter');
-	$table->display();	
+	$table->display();
 }
 
 /**
- * Get the number of templates that are defined by the platform admin. 
+ * Get the number of templates that are defined by the platform admin.
  *
- * @return integer 
- * 
+ * @return integer
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
  * @since Dokeos 1.8.6
@@ -976,12 +1006,12 @@ function get_number_of_templates()
 {
 	// Database table definition
 	$table_system_template = Database :: get_main_table('system_template');
-	
+
 	// The sql statement
 	$sql = "SELECT COUNT(id) AS total FROM $table_system_template";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	$row = Database::fetch_array($result);
-	
+
 	// returning the number of templates
 	return $row['total'];
 }
@@ -991,10 +1021,10 @@ function get_number_of_templates()
  *
  * @param integer $from the start of the limit statement
  * @param integer $number_of_items the number of elements that have to be retrieved from the database
- * @param integer $column the column that is 
+ * @param integer $column the column that is
  * @param string $direction the sorting direction (ASC or DESC�
- * @return array 
- * 
+ * @return array
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
  * @since Dokeos 1.8.6
@@ -1003,17 +1033,16 @@ function get_template_data($from, $number_of_items, $column, $direction)
 {
 	// Database table definition
 	$table_system_template = Database :: get_main_table('system_template');
-	
+
 	// the sql statement
 	$sql = "SELECT image as col0, title as col1, id as col2 FROM $table_system_template";
 	$sql .= " ORDER BY col$column $direction ";
-	$sql .= " LIMIT $from,$number_of_items";	
-	$result = api_sql_query($sql, __FILE__, __LINE__);
-	while ($row = Database::fetch_array($result))
-	{
+	$sql .= " LIMIT $from,$number_of_items";
+	$result = Database::query($sql, __FILE__, __LINE__);
+	while ($row = Database::fetch_array($result)) {
+		$row['1'] = get_lang($row['1']);
 		$return[]=$row;
 	}
-	
 	// returning all the information for the sortable table
 	return $return;
 }
@@ -1023,7 +1052,7 @@ function get_template_data($from, $number_of_items, $column, $direction)
  *
  * @param integer $id the id of the template
  * @return html code for the link to edit and delete the template
- * 
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
  * @since Dokeos 1.8.6
@@ -1040,7 +1069,7 @@ function actions_filter($id)
  *
  * @param string $image the image
  * @return html code for the image
- * 
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
  * @since Dokeos 1.8.6
@@ -1068,153 +1097,166 @@ function add_edit_template()
 {
 	// initiate the object
 	$form = new FormValidator('template', 'post', 'settings.php?category=Templates&action='.$_GET['action'].'&id='.$_GET['id']);
-	
+
 	// settting the form elements: the header
-	if ($_GET['action'] == 'add')
-	{
+	if ($_GET['action'] == 'add') {
 		$title = get_lang('AddTemplate');
 	}
-	else 
+	else
 	{
 		$title = get_lang('EditTemplate');
 	}
 	$form->addElement('header', '', $title);
-	
+
 	// settting the form elements: the title of the template
 	$form->add_textfield('title', get_lang('Title'), false);
-	
+
 	// settting the form elements: the content of the template (wysiwyg editor)
-	$form->addElement('html_editor', 'template_text', get_lang('Text'), null, array('ToolbarSet' => 'AdminTemplates', 'Width' => '100%', 'Height' => '400', 'FullPage' => true));
-	
+	$form->addElement('html_editor', 'template_text', get_lang('Text'), null, array('ToolbarSet' => 'AdminTemplates', 'Width' => '100%', 'Height' => '400'));
+
 	// settting the form elements: the form to upload an image to be used with the template
 	$form->addElement('file','template_image',get_lang('Image'),'');
-	
+
 	// settting the form elements: a little bit information about the template image
 	$form->addElement('static', 'file_comment', '', get_lang('TemplateImageComment100x70'));
-	
-	// getting all the information of the template when editing a template 
-	if ($_GET['action'] == 'edit')
-	{
-		// Database table definition		
+
+	// getting all the information of the template when editing a template
+	if ($_GET['action'] == 'edit') {
+		// Database table definition
 		$table_system_template = Database :: get_main_table('system_template');
 		$sql = "SELECT * FROM $table_system_template WHERE id = '".Database::escape_string($_GET['id'])."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = Database::fetch_array($result);
-		
-		$defaults['template_id'] 	= $_GET['id'];
+
+		$defaults['template_id'] 	= intval($_GET['id']);
 		$defaults['template_text'] 	= $row['content'];
-		$defaults['title'] 			= $row['title'];
-		
+		//forcing a get_lang
+		$defaults['title'] 			= get_lang($row['title']);
+
 		// adding an extra field: a hidden field with the id of the template we are editing
 		$form->addElement('hidden','template_id');
-		
+
 		// adding an extra field: a preview of the image that is currently used
 		if (!empty($row['image']))
-		{		
+		{
 			$form->addElement('static','template_image_preview', '', '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/'.$row['image'].'" alt="'.get_lang('TemplatePreview').'"/>');
 		}
 		else
 		{
 			$form->addElement('static','template_image_preview', '', '<img src="'.api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/noimage.gif" alt="'.get_lang('NoTemplatePreview').'"/>');
 		}
-		
-		// setting the information of the template that we are editing 
+
+		// setting the information of the template that we are editing
 		$form->setDefaults($defaults);
-	}	
+	}
 		// settting the form elements: the submit button
 	$form->addElement('style_submit_button' , 'submit', get_lang('Ok') ,'class="save"');
-	
+
 	// setting the rules: the required fields
-	$form->addRule('title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');	
-	$form->addRule('template_text', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');	
-	
+	$form->addRule('title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+	$form->addRule('template_text', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+
 	// if the form validates (complies to all rules) we save the information, else we display the form again (with error message if needed)
 	if( $form->validate() )
 	{
-		// exporting the values
-		$values = $form->exportValues();
-		
-		// upload the file
-		if (!empty($_FILES['template_image']['name']))
-		{
-			include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-			$upload_ok = process_uploaded_file($_FILES['template_image']);
-			
-			if ($upload_ok)
+
+		$check = Security::check_token('post');
+		if ($check) {
+			// exporting the values
+			$values = $form->exportValues();
+
+			// upload the file
+			if (!empty($_FILES['template_image']['name']))
 			{
-				// Try to add an extension to the file if it hasn't one
-				$new_file_name = add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);	
-				
-				// upload dir
-				$upload_dir = api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/';
-				
-				// create dir if not exists
-                if (!is_dir($upload_dir)) {
-                    $perm = api_get_setting('permissions_for_new_directories');
-                    $perm = octdec(!empty($perm)?$perm:'0770');
-                	$res = @mkdir($upload_dir,$perm);
-                }
-				
-				// resize image to max default and upload
-				require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
-				$temp = new image($_FILES['template_image']['tmp_name']);	
-				$picture_infos=@getimagesize($_FILES['template_image']['tmp_name']);
-				
-				$max_width_for_picture = 100;
-				
-				if ($picture_infos[0]>$max_width_for_picture)
-				{		
-					$thumbwidth = $max_width_for_picture;
-					if (empty($thumbwidth) or $thumbwidth==0) {
-					  $thumbwidth=$max_width_for_picture;
-					}
-					$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
-					
-					$temp->resize($thumbwidth,$new_height,0);
-				}
-				
-				$type=$picture_infos[2];
-						  
-				switch (!empty($type))
+				include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+				$upload_ok = process_uploaded_file($_FILES['template_image']);
+
+				if ($upload_ok)
 				{
-					case 2 : $temp->send_image('JPG',$upload_dir.$new_file_name);							 
-							 break;
-					case 3 : $temp->send_image('PNG',$upload_dir.$new_file_name);							
-							 break;
-					case 1 : $temp->send_image('GIF',$upload_dir.$new_file_name);							 
-							 break;
+					// Try to add an extension to the file if it hasn't one
+					$new_file_name = add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);
+
+					// upload dir
+					$upload_dir = api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/';
+
+					// create dir if not exists
+	                if (!is_dir($upload_dir)) {
+	                    $perm = api_get_setting('permissions_for_new_directories');
+	                    $perm = octdec(!empty($perm)?$perm:'0770');
+	                	$res = @mkdir($upload_dir,$perm);
+	                }
+
+					// resize image to max default and upload
+					require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
+					$temp = new image($_FILES['template_image']['tmp_name']);
+					$picture_infos=@getimagesize($_FILES['template_image']['tmp_name']);
+
+					$max_width_for_picture = 100;
+
+					if ($picture_infos[0]>$max_width_for_picture)
+					{
+						$thumbwidth = $max_width_for_picture;
+						if (empty($thumbwidth) or $thumbwidth==0) {
+						  $thumbwidth=$max_width_for_picture;
+						}
+						$new_height = round(($thumbwidth/$picture_infos[0])*$picture_infos[1]);
+
+						$temp->resize($thumbwidth,$new_height,0);
+					}
+
+					$type=$picture_infos[2];
+
+					switch (!empty($type))
+					{
+						case 2 : $temp->send_image('JPG',$upload_dir.$new_file_name);
+								 break;
+						case 3 : $temp->send_image('PNG',$upload_dir.$new_file_name);
+								 break;
+						case 1 : $temp->send_image('GIF',$upload_dir.$new_file_name);
+								 break;
+					}
 				}
-			}
-	   }
-	   
-	   // store the information in the database (as insert or as update)
-	   $table_system_template = Database :: get_main_table('system_template');
-	   if ($_GET['action'] == 'add') {
-		   	$sql = "INSERT INTO $table_system_template (title, content, image) VALUES ('".Database::escape_string($values['title'])."','".Database::escape_string($values['template_text'])."','".Database::escape_string($new_file_name)."')";
-		   	$result = api_sql_query($sql, __FILE__, __LINE__);
-		   	
-		   	// display a feedback message
-		   	Display::display_confirmation_message('TemplateAdded');
-		   	echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('template_add.gif', get_lang('AddTemplate')).get_lang('AddTemplate').'</a>';
-	   } else {
-		   	$sql = "UPDATE $table_system_template set title = '".Database::escape_string($values['title'])."',
-											   		  content = '".Database::escape_string($values['template_text'])."'";
-		   	if (!empty($new_file_name))
-		   	{
-		   		$sql .= ", image = '".Database::escape_string($new_file_name)."'";
-		   	}
-		   	$sql .= " WHERE id='".Database::escape_string($_GET['id'])."'";
-		   	$result = api_sql_query($sql, __FILE__, __LINE__);
-		   	
-		   	// display a feedback message
-		   	Display::display_confirmation_message('TemplateEdited');		   	
-	   }
+		   }
+
+		   // store the information in the database (as insert or as update)
+		   $table_system_template = Database :: get_main_table('system_template');
+		   if ($_GET['action'] == 'add') {
+		   		$content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
+			   	$sql = "INSERT INTO $table_system_template (title, content, image) VALUES ('".Database::escape_string($values['title'])."','".$content_template."','".Database::escape_string($new_file_name)."')";
+			   	$result = Database::query($sql, __FILE__, __LINE__);
+
+			   	// display a feedback message
+			   	Display::display_confirmation_message(get_lang('TemplateAdded'));
+			   	echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('template_add.gif', get_lang('AddTemplate')).get_lang('AddTemplate').'</a>';
+		   } else {
+		   		$content_template = '<head>{CSS}<style type="text/css">.text{font-weight: normal;}</style></head><body>'.Database::escape_string($values['template_text']).'</body>';
+			   	$sql = "UPDATE $table_system_template set title = '".Database::escape_string($values['title'])."',
+												   		  content = '".$content_template."'";
+			   	if (!empty($new_file_name))
+			   	{
+			   		$sql .= ", image = '".Database::escape_string($new_file_name)."'";
+			   	}
+			   	$sql .= " WHERE id='".Database::escape_string($_GET['id'])."'";
+			   	$result = Database::query($sql, __FILE__, __LINE__);
+
+			   	// display a feedback message
+			   	Display::display_confirmation_message(get_lang('TemplateEdited'));
+		   }
+
+		}
+	   Security::clear_token();
 	   display_templates();
+
+
+
 	}
-	else 
+	else
 	{
+		$token = Security::get_token();
+		$form->addElement('hidden','sec_token');
+		$form->setConstants(array('sec_token' => $token));
 		// display the form
-		$form->display();		
+		$form->display();
 	}
 }
 
@@ -1222,7 +1264,7 @@ function add_edit_template()
  * Delete a template
  *
  * @param integer $id the id of the template that has to be deleted
- * 
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version August 2008
  * @since Dokeos 1.8.6
@@ -1232,18 +1274,18 @@ function delete_template($id)
 	// first we remove the image
 	$table_system_template = Database :: get_main_table('system_template');
 	$sql = "SELECT * FROM $table_system_template WHERE id = '".Database::escape_string($id)."'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
-	$row = Database::fetch_array($result);	
+	$result = Database::query($sql, __FILE__, __LINE__);
+	$row = Database::fetch_array($result);
 	if (!empty($row['image']))
 	{
 		unlink(api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/'.$row['image']);
 	}
-	
+
 	// now we remove it from the database
 	$sql = "DELETE FROM $table_system_template WHERE id = '".Database::escape_string($id)."'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
-	
+	$result = Database::query($sql, __FILE__, __LINE__);
+
 	// display a feedback message
-	Display::display_confirmation_message('TemplateDeleted');
+	Display::display_confirmation_message(get_lang('TemplateDeleted'));
 }
 ?>

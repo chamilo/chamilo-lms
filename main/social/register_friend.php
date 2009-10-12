@@ -19,12 +19,12 @@ $is_my_friend            = Security::remove_XSS($_POST['is_my_friend']); //filte
 if (isset($_POST['is_my_friend'])) {
 	$relation_type='3';//my friend
 } else {
-	$relation_type='1';//Contact unknown	
+	$relation_type='1';//Contact unknown
 }
 
 if (isset($_POST['friend_id'])) {
 	UserFriend::register_friend ((int)$the_current_user_id,(int)$my_current_friend,(int)$relation_type);
-	UserFriend::register_friend ((int)$my_current_friend,(int)$the_current_user_id,(int)$relation_type);	
+	UserFriend::register_friend ((int)$my_current_friend,(int)$the_current_user_id,(int)$relation_type);
 	UserFriend::invitation_accepted ((int)$my_current_friend,(int)$the_current_user_id);
 	if (isset($_POST['is_my_friend'])) {
 		echo api_xml_http_response_encode(get_lang('AddedContactToList'));
@@ -35,7 +35,7 @@ if (isset($_POST['friend_id'])) {
 }
 if (isset($_POST['denied_friend_id'])) {
 	UserFriend::invitation_denied((int)$my_denied_current_friend,(int)$the_current_user_id);
-	Display::display_confirmation_message(api_xml_http_response_encode(get_lang('InvitationDenied')));	
+	Display::display_confirmation_message(api_xml_http_response_encode(get_lang('InvitationDenied')));
 }
 if (isset($_POST['delete_friend_id'])) {
 	UserFriend::removed_friend((int)$my_delete_friend);

@@ -1,5 +1,5 @@
 <?php // $Id: admin.php 21662 2009-06-29 14:55:09Z iflorespaz $
- 
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -83,7 +83,7 @@ include("../inc/global.inc.php");
 include('exercise.lib.php');
 $this_section=SECTION_COURSES;
 
-$is_allowedToEdit=api_is_allowed_to_edit();
+$is_allowedToEdit=api_is_allowed_to_edit(null,true);
 
 if(!$is_allowedToEdit)
 {
@@ -190,7 +190,7 @@ if($_GET['action'] == 'exportqti2' && !empty($_GET['questionId']))
 	$temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";
 	$temp_xml_file = $temp_zip_dir."/qti2export_".$qid.'.xml';
 	file_put_contents($temp_xml_file,$export);
-	$zip_folder=new PclZip($temp_zip_file);	
+	$zip_folder=new PclZip($temp_zip_file);
 	$zip_folder->add($temp_xml_file, PCLZIP_OPT_REMOVE_ALL_PATH);
 	$name = 'qti2_export_'.$qid.'.zip';
 
@@ -312,7 +312,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
@@ -464,7 +464,7 @@ if(isset($_GET['message']))
 	}
 }
 
-/*		
+/*
 $description = $objExercise->selectDescription();
 echo '<div class="sectiontitle">'.$objExercise->selectTitle().'</div>';
 if(!empty($description))
@@ -492,7 +492,7 @@ if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspota
 	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?exerciseId='.$_GET['exerciseId']);
 	$form -> addElement ('hidden','edit','true');
 	//$objExercise -> createForm ($form,'simple');
-	
+
 	if($form -> validate()) {
 		$objExercise -> processCreation($form,'simple');
 		if($form -> getSubmitValue('edit') == 'true')
@@ -500,9 +500,9 @@ if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspota
 	}
 	if(api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
 			Display::display_error_message(get_lang('SearchXapianModuleNotInstaled'));
-	}			
-	$form -> display (); 
-	echo '<br />';	
+	}
+	$form -> display ();
+	echo '<br />';
 	// question list management
 	include('question_list_admin.inc.php');
 }

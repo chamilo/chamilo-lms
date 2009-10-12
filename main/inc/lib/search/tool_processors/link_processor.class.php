@@ -42,7 +42,7 @@ class link_processor extends search_processor {
 			        $visibility = api_get_item_visibility($course_info, TOOL_LINK, $one_link['link_id']);
 			        if ($visibility) {
 			        	// if one is visible let show the result for a course
-			        	// also asume all data of this item like the data of the whole group of links(Ex. author) 
+			        	// also asume all data of this item like the data of the whole group of links(Ex. author)
                         list($thumbnail, $image, $name, $author, $url) = $this->get_information($courseid, $one_link['link_id']);
                         $result_tmp = array(
                             'toolid' => TOOL_LINK,
@@ -100,10 +100,10 @@ class link_processor extends search_processor {
         $image = $thumbnail; //FIXME: use big images
         // get author
         $author = '';
-        $item_result = api_sql_query ($sql);
+        $item_result = Database::query ($sql);
         if ($row = Database::fetch_array ($item_result)) {
 	        $user_data = api_get_user_info($row['insert_user_id']);
-	        $author = $user_data['firstName'] .' '. $user_data['lastName'];
+	        $author = api_get_person_name($user_data['firstName'], $user_data['lastName']);
         }
 
         return array($thumbnail, $image, $name, $author, $url);

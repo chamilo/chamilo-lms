@@ -13,25 +13,25 @@ KSES4
 	* 0.2.2rc
 	- Added SetProtocols() to make protocol replacement a single step
 	  to fully answer concerns in bug #892477
-	  
+
 KSES5
 	* 1.0.0
 	- Turned many methods private
-	
+
 	- Now using __construct default constructor
-	
+
 	- Only runs in PHP5 or better
-	
+
 	- All method names changed to reflect verb status
-	
+
 	- Folded sinlge line functions into calling methods
-	
+
 	- Deprecated _hook(), Protocols()
-	
+
 	- Added AddProtocols() to replace Protocols()
-	
+
 	- Added filterKsesTextHook() to replace _hook()
-	
+
 	- Added RemoveProtocol() and RemoveProtocols() to remove protocols
 	  singly, or batch.  This should clear bug #892477
 
@@ -40,22 +40,22 @@ KSES5
 KSES4
 	* 0.2.1
 	- Synced version number to procedural code
-	
+
 	- Deprecated _hook(), Protocols()
-	
+
 	- Added AddProtocols() to replace Protocols()
-	
+
 	- Added filterKsesTextHook() to replace _hook()
-	
+
 	- Added RemoveProtocol() and RemoveProtocols() to remove protocols singly,
 	  or batch.  This should clear bug #892477
 
 OOP
 	- Forked code into PHP4 and PHP5 versions.  Use '$myKses = new kses[45]'
 	  from now on.
-	
+
 	- Modified code to run in E_STRICT.  This should clear bug #918493
-	
+
 	- Added phpDoc commenting
 
 OOP

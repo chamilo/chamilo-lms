@@ -131,6 +131,9 @@ Display::display_introduction_section(TOOL_DROPBOX);
 
 // *** display the form for adding a new dropbox item. ***
 if ($_GET['action']=="add") {
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+		api_not_allowed();
+	}
 	display_add_form();
 }
 
@@ -145,18 +148,30 @@ if (isset($_POST['submitWork'])) {
 
 // *** display the form for adding a category ***
 if ($_GET['action']=="addreceivedcategory" or $_GET['action']=="addsentcategory") {
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+		api_not_allowed();
+	}
 	display_addcategory_form($_POST['category_name'],'',$_GET['action']);
 }
 
 // *** editing a category: displaying the form ***
 if ($_GET['action']=='editcategory' and isset($_GET['id'])) {
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+		api_not_allowed();
+	}	
 	if (!$_POST) {
+		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+			api_not_allowed();
+		}
 		display_addcategory_form('',$_GET['id'],'editcategory');
 	}
 }
 
 // *** storing a new or edited category ***
 if (isset($_POST['StoreCategory'])) {
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+		api_not_allowed();
+	}	
 	$return_information = store_addcategory();
 	if( $return_information['type'] == 'confirmation')
 	{
@@ -166,12 +181,15 @@ if (isset($_POST['StoreCategory'])) {
 	{
 		Display :: display_error_message(get_lang('FormHasErrorsPleaseComplete').'<br />'.$return_information['message']);
 		display_addcategory_form($_POST['category_name'],$_POST['edit_id'],$_POST['action']);
-	}	
-	
+	}
+
 }
 
 // *** Move a File ***
 if (($_GET['action']=='movesent' OR $_GET['action']=='movereceived') AND isset($_GET['move_id'])) {
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+		api_not_allowed();
+	}	
 	display_move_form(str_replace('move','',$_GET['action']), $_GET['move_id'], get_dropbox_categories(str_replace('move','',$_GET['action'])));
 }
 if ($_POST['do_move']) {
@@ -180,6 +198,9 @@ if ($_POST['do_move']) {
 
 // *** Delete a file ***
 if (($_GET['action']=='deletereceivedfile' OR $_GET['action']=='deletesentfile') AND isset($_GET['id']) AND is_numeric($_GET['id'])) {
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+		api_not_allowed();
+	}	
 	$dropboxfile=new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
 	if ($_GET['action']=='deletereceivedfile') {
 		$dropboxfile->deleteReceivedWork($_GET['id']);
@@ -194,6 +215,9 @@ if (($_GET['action']=='deletereceivedfile' OR $_GET['action']=='deletesentfile')
 
 // *** Delete a category ***
 if (($_GET['action']=='deletereceivedcategory' OR $_GET['action']=='deletesentcategory') AND isset($_GET['id']) AND is_numeric($_GET['id'])) {
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+		api_not_allowed();
+	}	
 	$message=delete_category($_GET['action'], $_GET['id']);
 	Display :: display_confirmation_message($message);
 }
@@ -212,6 +236,9 @@ if (!isset($_POST['feedback']) && (strstr($_POST['action'],'move_received') OR
 
 // *** Store Feedback ***
 if ($_POST['feedback']) {
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+		api_not_allowed();
+	}
 	$display_message = store_feedback();
 	Display :: display_normal_message($display_message);
 }
@@ -251,16 +278,30 @@ if ( $_GET['view']=='received' OR $dropbox_cnf['sent_received_tabs']==false) {
 
 
 	/* *** Menu Received *** */
-	echo '<div class="actions">';
-	if ($view_dropbox_category_received<>0) {
-		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong> ';
-		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.gif',get_lang('Up')).' '.get_lang('Root')."</a>\n";
-        $movelist[0] = 'Root'; // move_received selectbox content
-	} else {
-	    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_new.gif').' '.get_lang('AddNewCategory').'</a>';
+	
+	if (api_get_session_id()==0) {
+		echo '<div class="actions">';
+		if ($view_dropbox_category_received<>0  && api_is_allowed_to_session_edit(false,true)) {
+			echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong> ';
+			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.gif',get_lang('Up')).' '.get_lang('Root')."</a>\n";
+	        $movelist[0] = 'Root'; // move_received selectbox content
+		} else {
+		    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_new.gif').' '.get_lang('AddNewCategory').'</a>';
+		}
+		echo '</div>';
+	} else {		
+		 if (api_is_allowed_to_session_edit(false,true)) {
+		 	echo '<div class="actions">';
+			if ($view_dropbox_category_received<>0  && api_is_allowed_to_session_edit(false,true)) {
+				echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong> ';
+				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.gif',get_lang('Up')).' '.get_lang('Root')."</a>\n";
+		        $movelist[0] = 'Root'; // move_received selectbox content
+			} else {
+			    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_new.gif').' '.get_lang('AddNewCategory').'</a>';
+			}
+			echo '</div>';
+		 }
 	}
-
-	echo '</div>';
 }
 if (!$_GET['view'] OR $_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false) {
 	//echo '<h3>'.get_lang('SentFiles').'</h3>';
@@ -273,17 +314,35 @@ if (!$_GET['view'] OR $_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs'
 	}
 
 	/* *** Menu Sent *** */
-	echo '<div class="actions">';
-	if ($view_dropbox_category_sent<>0) {
-		echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_sent]['cat_name'].'</strong> ';
-		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category=0&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.gif',get_lang('Up')).' '.get_lang('Root')."</a>\n";
+
+	if (api_get_session_id()==0) {
+		echo '<div class="actions">';
+		if ($view_dropbox_category_sent<>0) {
+			echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_sent]['cat_name'].'</strong> ';
+			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category=0&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.gif',get_lang('Up')).' '.get_lang('Root')."</a>\n";
+		} else {
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=addsentcategory\">".Display::return_icon('folder_new.gif')." ".get_lang('AddNewCategory')."</a>\n";
+		}	
+		if (empty($_GET['view_sent_category'])) {
+		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=add\">".Display::return_icon('submit_file.gif').' '.get_lang('UploadNewFile')."</a>&nbsp;\n";
+		}
+		echo '</div>';
 	} else {
-		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=addsentcategory\">".Display::return_icon('folder_new.gif')." ".get_lang('AddNewCategory')."</a>\n";
+		 if (api_is_allowed_to_session_edit(false,true)) {
+		 	echo '<div class="actions">';
+			if ($view_dropbox_category_sent<>0) {
+				echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_sent]['cat_name'].'</strong> ';
+				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category=0&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.gif',get_lang('Up')).' '.get_lang('Root')."</a>\n";
+			} else {
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=addsentcategory\">".Display::return_icon('folder_new.gif')." ".get_lang('AddNewCategory')."</a>\n";
+			}	
+			if (empty($_GET['view_sent_category'])) {
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=add\">".Display::return_icon('submit_file.gif').' '.get_lang('UploadNewFile')."</a>&nbsp;\n";
+			}
+			echo '</div>'; 	
+		 }
 	}
-	if (empty($_GET['view_sent_category'])) {
-	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=add\">".Display::return_icon('submit_file.gif').' '.get_lang('UploadNewFile')."</a>&nbsp;\n";
-	}
-	echo '</div>';
+	
 }
 
 
@@ -336,7 +395,13 @@ if ($_GET['view']=='received' OR $dropbox_cnf['sent_received_tabs']==false) {
 	$column_header[] = array(get_lang('Size'), TRUE, '');
 	$column_header[] = array(get_lang('Authors'), TRUE, '');
 	$column_header[] = array(get_lang('LastResent'), true);
-	$column_header[] = array(get_lang('Modify'), FALSE, '', 'nowrap style="text-align: right"');
+	
+	if (api_get_session_id()==0)			
+		$column_header[] = array(get_lang('Modify'), FALSE, '', 'nowrap style="text-align: right"');
+	elseif (api_is_allowed_to_session_edit(false,true)){
+		$column_header[] = array(get_lang('Modify'), FALSE, '', 'nowrap style="text-align: right"');
+	}
+	
 	$column_header[] = array('RealDate', true);
 
 
@@ -347,7 +412,12 @@ if ($_GET['view']=='received' OR $dropbox_cnf['sent_received_tabs']==false) {
 	$column_show[]=1;
 	$column_show[]=1;
 	$column_show[]=1;
-	$column_show[]=1;
+		
+	if (api_get_session_id()==0)			
+		$column_show[]=1;
+	elseif (api_is_allowed_to_session_edit(false,true)){
+		$column_show[]=1;
+	}
 	$column_show[]=0;
 
 	// Here we change the way how the colums are going to be sort
@@ -402,7 +472,11 @@ if ($_GET['view']=='received' OR $dropbox_cnf['sent_received_tabs']==false) {
 				$action_icons.="</td></tr>\n"; // ending the normal row of the sortable table
 				$action_icons.='<tr><td colspan="2"><a href="index.php?"'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category'])."&amp;view_sent_category=".Security::remove_XSS($_GET['view_sent_category'])."&amp;view=".Security::remove_XSS($_GET['view'])."\">".get_lang('CloseFeedback')."</a></td><td colspan=\"7\">".feedback($dropbox_file->feedback2)."</td>\n</tr>\n";
 			}
-			$dropbox_file_data[]=$action_icons;
+			if (api_get_session_id()==0)			
+				$dropbox_file_data[]=$action_icons;
+			elseif (api_is_allowed_to_session_edit(false,true)){
+				$dropbox_file_data[]=$action_icons;
+			}
 			$action_icons='';
 
 			$dropbox_file_data[]=$dropbox_file->last_upload_date;//date
@@ -442,6 +516,11 @@ if ($_GET['view']=='received' OR $dropbox_cnf['sent_received_tabs']==false) {
         	$selectlist['move_received_'.$catid] = get_lang('Move') . '->'. $catname;
     	}
     }
+    
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+		$selectlist=array();
+	}
+    
 	Display::display_sortable_config_table($column_header, $dropbox_data_recieved, $sorting_options, $paging_options, $additional_get_parameters,$column_show,$column_order, $selectlist);
 }
 
@@ -480,7 +559,14 @@ if (!$_GET['view'] OR $_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs'
 	$column_header[] = array(get_lang('Size'), TRUE, '');
 	$column_header[] = array(get_lang('SentTo'), TRUE, '');
 	$column_header[] = array(get_lang('LastResent'), TRUE, '');
-	$column_header[] = array(get_lang('Modify'), FALSE, '', 'nowrap style="text-align: right"');
+		
+	if (api_get_session_id()==0)			
+		$column_header[] = array(get_lang('Modify'), FALSE, '', 'nowrap style="text-align: right"');
+	elseif (api_is_allowed_to_session_edit(false,true)){
+		$column_header[] = array(get_lang('Modify'), FALSE, '', 'nowrap style="text-align: right"');
+	}
+	
+	
 	$column_header[] = array('RealDate', FALSE);
 
 	$column_show=array();
@@ -493,7 +579,11 @@ if (!$_GET['view'] OR $_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs'
 	$column_show[]=1;
 	$column_show[]=1;
 	$column_show[]=1;
-	$column_show[]=1;
+	if (api_get_session_id()==0)			
+		$column_show[]=1;
+	elseif (api_is_allowed_to_session_edit(false,true)){
+		$column_show[]=1;
+	}
 	$column_show[]=0;
 
 	// Here we change the way how the colums are going to be sort
@@ -521,6 +611,7 @@ if (!$_GET['view'] OR $_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs'
 			foreach ($dropbox_file->recipients as $recipient) {
 				$receivers_celldata=display_user_link($recipient['user_id'], $recipient['name']).', '.$receivers_celldata;
 			}
+			$receivers_celldata = trim(trim($receivers_celldata), ','); // Removing the trailing comma.
 			$dropbox_file_data[]=$receivers_celldata;
 			$dropbox_file_data[]=date_to_str_ago($dropbox_file->last_upload_date).'<br><span class="dropbox_date">'.$dropbox_file->last_upload_date.'</span>';
 
@@ -566,7 +657,11 @@ if (!$_GET['view'] OR $_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs'
 	}
 	// Displaying the table
 	$additional_get_parameters=array('view'=>Security::remove_XSS($_GET['view']), 'view_received_category'=>Security::remove_XSS($_GET['view_received_category']),'view_sent_category'=>Security::remove_XSS($_GET['view_sent_category']));
-	Display::display_sortable_config_table($column_header, $dropbox_data_sent, $sorting_options, $paging_options, $additional_get_parameters,$column_show,$column_order, array ('delete_received' => get_lang('Delete'),'download_received'=>get_lang('Download')));
+	$selectlist = array ('delete_received' => get_lang('Delete'),'download_received'=>get_lang('Download'));
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+		$selectlist = array ('download_received'=>get_lang('Download'));
+	}	
+	Display::display_sortable_config_table($column_header, $dropbox_data_sent, $sorting_options, $paging_options, $additional_get_parameters,$column_show,$column_order, $selectlist);
   }
 }
 Display::display_footer();

@@ -62,38 +62,38 @@ $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('Mult
 $add_type = 'multiple';
 if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
-	 
+
 }
 
 $access_url_id=1;
 if(isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!=''){
-	$access_url_id = Security::remove_XSS($_REQUEST['access_url_id']); 
+	$access_url_id = Security::remove_XSS($_REQUEST['access_url_id']);
 }
 
 function search_courses($needle, $id)
 {
-	global $tbl_course;	
+	global $tbl_course;
 	$xajax_response = new XajaxResponse();
 	$return = '';
-				
-	if(!empty($needle)) {		
+
+	if(!empty($needle)) {
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 		$needle = Database::escape_string($needle);
 		// search courses where username or firstname or lastname begins likes $needle
-		$sql = 'SELECT code, title FROM '.$tbl_course.' u 
+		$sql = 'SELECT code, title FROM '.$tbl_course.' u
 				WHERE (title LIKE "'.$needle.'%"
 				OR code LIKE "'.$needle.'%"
-				) 
+				)
 				ORDER BY title, code
-				LIMIT 11';				
-		$rs = api_sql_query($sql, __FILE__, __LINE__);		
-        $i=0;        
+				LIMIT 11';
+		$rs = Database::query($sql, __FILE__, __LINE__);
+        $i=0;
 		while ($course = Database :: fetch_array($rs)) {
 			$i++;
             if ($i<=10) {
-			     $return .= '<a href="#" onclick="add_user_to_url(\''.addslashes($course['code']).'\',\''.addslashes($course['title']).' ('.addslashes($course['code']).')'.'\')">'.$course['title'].' ('.$course['code'].')</a><br />';
+			     $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_url(\''.addslashes($course['code']).'\',\''.addslashes($course['title']).' ('.addslashes($course['code']).')'.'\')">'.$course['title'].' ('.$course['code'].')</a><br />';
             } else {
             	$return .= '...<br />';
             }
@@ -111,23 +111,23 @@ function add_user_to_url(code, content) {
 
 	document.getElementById("course_to_add").value = "";
 	document.getElementById("ajax_list_courses").innerHTML = "";
-	
+
 	destination = document.getElementById("destination_users");
 	destination.options[destination.length] = new Option(content,code);
-	
+
 	destination.selectedIndex = -1;
-	sortOptions(destination.options);	
+	sortOptions(destination.options);
 }
-	
+
 function send() {
-	
-	if (document.formulaire.access_url_id.value!=0) {	
-		document.formulaire.form_sent.value=0; 
-		document.formulaire.add_type.value=\''.$add_type.'\';		
+
+	if (document.formulaire.access_url_id.value!=0) {
+		document.formulaire.form_sent.value=0;
+		document.formulaire.add_type.value=\''.$add_type.'\';
 		document.formulaire.submit();
-	}	
+	}
 }
-	
+
 function remove_item(origin)
 {
 	for(var i = 0 ; i<origin.options.length ; i++) {
@@ -144,32 +144,32 @@ $errorMsg='';
 $UserList=$SessionList=array();
 $users=$sessions=array();
 
-if($_POST['form_sent']) {	
+if($_POST['form_sent']) {
 	$form_sent=$_POST['form_sent'];
-	$course_list=$_POST['course_list'];	
-	
+	$course_list=$_POST['course_list'];
+
 	if(!is_array($course_list)) {
 		$course_list=array();
 	}
-	
-	if($form_sent == 1) { 
-		if ($access_url_id==0) {						
+
+	if($form_sent == 1) {
+		if ($access_url_id==0) {
 			header('Location: access_url_edit_users_to_url.php?action=show_message&message='.get_lang('SelectURL'));
 		}
-		elseif(is_array($course_list) ) {									
+		elseif(is_array($course_list) ) {
 			UrlManager::update_urls_rel_course($course_list,$access_url_id);
 			header('Location: access_urls.php?action=show_message&message='.get_lang('CoursesWereEdited'));
-		}		
+		}
 	}
 }
 
 Display::display_header($tool_name);
 
 echo '<div class="actions" style="height:22px;">';
-echo '<div style="float:right;">		
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_add_courses_to_url.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddUserToURL'),'').get_lang('AddCoursesToURL').'</a>												
-	  </div><br />';		  
-echo '</div>';	
+echo '<div style="float:right;">
+		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_add_courses_to_url.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddUserToURL'),'').get_lang('AddCoursesToURL').'</a>
+	  </div><br />';
+echo '</div>';
 
 api_display_tool_title($tool_name);
 
@@ -179,31 +179,31 @@ if ($_GET['action'] == 'show_message')
 $no_course_list = $course_list = array();
 $ajax_search = $add_type == 'unique' ? true : false;
 
-if($ajax_search) {		
+if($ajax_search) {
 	$courses=UrlManager::get_url_rel_course_data($access_url_id);
 	foreach($courses as $course) {
 		$course_list[$course['course_code']] = $course ;
-	}	
-} else {	
+	}
+} else {
 	$courses=UrlManager::get_url_rel_course_data();
-		
+
 	foreach($courses as $course) {
 		if($course['access_url_id'] == $access_url_id) {
 			$course_list[$course['course_code']] = $course ;
 		}
 	}
-		
+
 	$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql="SELECT code, title
-	  	  	FROM $tbl_course u	
-			ORDER BY title, code";	
-	$result=api_sql_query($sql,__FILE__,__LINE__);	
-	$courses=api_store_result($result);
+	  	  	FROM $tbl_course u
+			ORDER BY title, code";
+	$result=Database::query($sql,__FILE__,__LINE__);
+	$courses=Database::store_result($result);
 	$course_list_leys = array_keys($course_list);
-	foreach($courses as $course) {	
+	foreach($courses as $course) {
 		if (!in_array($course['code'],$course_list_leys))
 			$no_course_list[$course['code']] = $course ;
-	}	
+	}
 }
 
 
@@ -217,7 +217,7 @@ if($add_type == 'multiple') {
 
 $url_list = UrlManager::get_url_data();
 
-?>	
+?>
 
 <div style="text-align: left;">
 	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>
@@ -227,7 +227,7 @@ $url_list = UrlManager::get_url_data();
 <?php echo get_lang('SelectUrl').' : '; ?>
 <select name="access_url_id" onchange="javascript:send();">
 <option value="0"> <?php echo get_lang('SelectUrl')?></option>
-	<?php	
+	<?php
 	$url_selected='';
 	foreach ($url_list as $url_obj) {
 		$checked = '';
@@ -237,17 +237,17 @@ $url_list = UrlManager::get_url_data();
 			$url_selected=$url_obj[1];
 			}
 		}
-		if ($url_obj['active']==1) {						
+		if ($url_obj['active']==1) {
 			?>
 				<option <?php echo $checked;?> value="<?php echo $url_obj[0]; ?>"> <?php echo $url_obj[1]; ?></option>
 			<?php
 		}
 	}
-	?>		
+	?>
 </select>
 <br /><br />
 <input type="hidden" name="form_sent" value="1" />
-<input type="hidden" name="add_type" value = "<?php echo $add_type ?>" /> 
+<input type="hidden" name="add_type" value = "<?php echo $add_type ?>" />
 
 <?php
 if(!empty($errorMsg)) {
@@ -261,7 +261,7 @@ if(!empty($errorMsg)) {
 <tr>
   <td align="center"><b><?php echo get_lang('CourseListInPlatform') ?> :</b>
   </td>
-  <td></td>  
+  <td></td>
   <td align="center"><b><?php echo get_lang('CourseListIn').' '.$url_selected; ?></b></td>
 </tr>
 
@@ -275,7 +275,7 @@ if(!empty($errorMsg)) {
 		<div id="ajax_list_courses"></div>
 		<?php
   	  } else {
-  	  ?>  	  
+  	  ?>
 	  <select id="origin_users" name="no_course_list[]" multiple="multiple" size="15" style="width:300px;">
 		<?php
 		foreach($no_course_list as $no_course) {
@@ -291,13 +291,13 @@ function add_user_to_url (code, content) {
 
 	document.getElementById("course_to_add").value = "";
 	document.getElementById("ajax_list_courses").innerHTML = "";
-	
+
 	destination = document.getElementById("destination_users");
 	destination.options[destination.length] = new Option(content,code);
-	
+
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
-	
+
 }
 function remove_item(origin)
 {
@@ -331,8 +331,8 @@ function remove_item(origin)
 	<input type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" value=">>" />
 	<br /><br />
 	<input type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" value="<<" />
-	<?php 
-  } 
+	<?php
+  }
   ?>
 	<br /><br /><br /><br /><br /><br />
   </td>

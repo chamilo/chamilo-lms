@@ -1,19 +1,19 @@
 ﻿/*
  * Licensed under the terms of the GNU Lesser General Public License:
  * 		http://www.opensource.org/licenses/lgpl-license.php
- * 
+ *
  * For further information visit:
  * 		http://www.fckeditor.net/
- * 
+ *
  * "Support Open Source software. What about a donation today?"
- * 
+ *
  * File Name: pt-br.js
  * mimeTeX Editor.
  * Brazilian Portuguese language file.
  * Please, use UTF-8 encoding.
- * 
+ *
  * File Authors:
- * 		
+ *
  */
 
 FCKLang["DlgMimeTeX"]             = 'mimeTeX Editor' ;

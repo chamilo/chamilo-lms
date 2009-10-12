@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -67,7 +67,7 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 		$interbreadcrumb[]= array (
 			'url' => $_SESSION['gradebook_dest'].'?',
 			'name' => get_lang('Gradebook'));
-		
+
 		$interbreadcrumb[]= array (
 			'url' => $_SESSION['gradebook_dest'].'?&selectcat='.Security::remove_XSS($_GET['selectcat']),
 			'name' => get_lang('EditAllWeights'));
@@ -87,10 +87,10 @@ $table_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_nam
 /*
 if($_SERVER['REQUEST_METHOD']=='POST'):
 	foreach($_POST['link'] as $key => $value){
-		api_sql_query('UPDATE '.$table_link.' SET weight = '."'".$value."'".' WHERE id = '.$key);
+		Database::query('UPDATE '.$table_link.' SET weight = '."'".$value."'".' WHERE id = '.$key);
 	}
 	foreach($_POST['evaluation'] as $key => $value){
-		api_sql_query('UPDATE '.$table_evaluation.' SET weight = '."'".$value."'".' WHERE id = '.$key);
+		Database::query('UPDATE '.$table_evaluation.' SET weight = '."'".$value."'".' WHERE id = '.$key);
 	}
 	Display :: display_normal_message(get_lang('GradebookWeightUpdated')) . '<br /><br />';
 endif;*/
@@ -120,50 +120,50 @@ if($submitted==1) {
 		require_once 'lib/be/evaluation.class.php';
 		$eval_log = new Evaluation();
 	}
-	
+
 	if(isset($_POST['link'])){
 		require_once 'lib/be/abstractlink.class.php';
 		//$eval_link_log = new AbstractLink();
 	}
-	
+
 }
 
 $category_id = (int)$_GET['selectcat'];
 $output='';
 $sql='SELECT * FROM '.$table_link.' WHERE category_id = '.$category_id;
-$result = api_sql_query($sql,__FILE__,__LINE__);
+$result = Database::query($sql,__FILE__,__LINE__);
 	while($row = Database ::fetch_array($result)){
 		//update only if value changed
 		if(isset($_POST['link'][$row['id']]) && $_POST['link'][$row['id']] != $row['weight']) {
 			AbstractLink::add_link_log($row['id']);
-			api_sql_query('UPDATE '.$table_link.' SET weight = '."'".trim($_POST['link'][$row['id']])."'".' WHERE id = '.$row['id'],__FILE__,__LINE__);
+			Database::query('UPDATE '.$table_link.' SET weight = '."'".trim($_POST['link'][$row['id']])."'".' WHERE id = '.$row['id'],__FILE__,__LINE__);
 			$sql='UPDATE '.$table_forum_thread.' SET thread_weight='.$_POST['link'][$row['id']].' WHERE thread_id='.$row['ref_id'];
-			api_sql_query($sql);
+			Database::query($sql);
 			$row['weight'] = trim($_POST['link'][$row['id']]);
 		}
 
-		$tempsql = api_sql_query('SELECT * FROM '.get_table_type_course($row['type'],$row['course_code']).' WHERE '.$table_evaluated[$row['type']][2].' = '.$row['ref_id']);
-		$resource_name = Database ::fetch_array($tempsql);	
+		$tempsql = Database::query('SELECT * FROM '.get_table_type_course($row['type'],$row['course_code']).' WHERE '.$table_evaluated[$row['type']][2].' = '.$row['ref_id']);
+		$resource_name = Database ::fetch_array($tempsql);
 		//var_dump($resource_name['lp_type']);
 		if (isset($resource_name['lp_type'])) {
 			$resource_name=$resource_name[2];
 		} else {
 			$resource_name=$resource_name[1];
 		}
-		$output.= '<tr><td> [ '.$table_evaluated[$row['type']][3].' ] '.$resource_name.'</td><td><input type="hidden" name="link_'.$row['id'].'" value="'.$resource_name.'" /><input size="10" type="text" name="link['.$row['id'].']" value="'.$row['weight'].'"/></td></tr>';	
+		$output.= '<tr><td> [ '.$table_evaluated[$row['type']][3].' ] '.$resource_name.'</td><td><input type="hidden" name="link_'.$row['id'].'" value="'.$resource_name.'" /><input size="10" type="text" name="link['.$row['id'].']" value="'.$row['weight'].'"/></td></tr>';
 	}
 
-	$sql = api_sql_query('SELECT * FROM '.$table_evaluation.' WHERE category_id = '.$category_id,__FILE__,__LINE__);
+	$sql = Database::query('SELECT * FROM '.$table_evaluation.' WHERE category_id = '.$category_id,__FILE__,__LINE__);
 	while($row = Database ::fetch_array($sql)) {
-	
+
 		//update only if value changed
 		if(isset($_POST['evaluation'][$row['id']]) && $_POST['evaluation'][$row['id']] != $row['weight']) {
 			Evaluation::add_evaluation_log($row['id']);
-			api_sql_query('UPDATE '.$table_evaluation.' SET weight = '."'".trim($_POST['evaluation'][$row['id']])."'".' WHERE id = '.$row['id'],__FILE__,__LINE__);
+			Database::query('UPDATE '.$table_evaluation.' SET weight = '."'".trim($_POST['evaluation'][$row['id']])."'".' WHERE id = '.$row['id'],__FILE__,__LINE__);
 			$row['weight'] = trim($_POST['evaluation'][$row['id']]);
 		}
 	$type_evaluated = isset($row['type']) ? $table_evaluated[$type_evaluated][3] : null;
-	$output.= '<tr><td> [ '.get_lang('Evaluation').$type_evaluated.' ] '.$row['name'].'</td><td><input type="hidden" name="eval_'.$row['id'].'" value="'.$row['name'].'" /><input type="text" size="10" name="evaluation['.$row['id'].']" value="'.$row['weight'].'"/></td></tr>';	
+	$output.= '<tr><td> [ '.get_lang('Evaluation').$type_evaluated.' ] '.$row['name'].'</td><td><input type="hidden" name="eval_'.$row['id'].'" value="'.$row['name'].'" /><input type="text" size="10" name="evaluation['.$row['id'].']" value="'.$row['weight'].'"/></td></tr>';
 }
 //by iflorespaz
 $my_category=array();
@@ -186,7 +186,7 @@ if ($my_api_cidreq=='') {
 		 <?php echo $output ?>
  </table>
  <input type="hidden" name="submitted" value="1" />
- <button class="save" type="submit" name="name" value="<?php echo get_lang('Save') ?>"><?php echo get_lang('SaveScoringRules') ?></button>  
+ <button class="save" type="submit" name="name" value="<?php echo get_lang('Save') ?>"><?php echo get_lang('SaveScoringRules') ?></button>
 </form>
 <?php
 Display :: display_footer();

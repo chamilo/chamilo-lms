@@ -177,7 +177,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			fputs($fp, '<?php
 															$cidReq = "'.$key.'";
 															$dbname = "'.str_replace($dbPrefixForm, '', $mysql_base_course).'";
-									
+
 															include("../../main/course_home/course_home.php");
 															?>');
 

@@ -51,4 +51,5 @@ $GenericScorm = "Scorm genérico";
 $UnknownPackageFormat = "O formato do pacote não foi reconhecido. Por favor, verifique se o pacote contém erros. Alguns problemas são devidos ao formato do programa ZIP ou à transferência de arquivos longos. Em caso de dúvida, evite usar arquivos zipados.";
 $Attempt = "Tentativa";
 $MoveTheCurrentForum = "Mover este fórum";
+$WarningWhenEditingScorm = "Atenção !<br /> Quando altera o conteúdo de uma etapa SCORM, as estatísticas ficam alteradas e a etapa da Rota de aprendizagem inutilizada.";
 ?>

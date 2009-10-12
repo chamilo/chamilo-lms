@@ -15,16 +15,16 @@ $manager = new ImageManager($IMConfig);
 $editor = new ImageEditor($manager, $IMConfig);
 $clean_img = '';
 if (isset($_GET['img'])) {
-	$clean_img = Security::remove_XSS($_GET['img']);	
+	$clean_img = Security::remove_XSS($_GET['img']);
 }
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $IMConfig['language']; ?>" lang="<?php echo $IMConfig['language']; ?>">
 <head>
 <title>Edit image</title>
-<link href="assets/editor.css" rel="stylesheet" type="text/css" />	
+<link href="assets/editor.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
 /*<![CDATA[*/
@@ -125,7 +125,8 @@ body {
 
 </head>
 
-<body onload="javascript: Init();">
+<!-- <body dir="<?php echo $IMConfig['text_direction']; ?>" onload="javascript: Init();"> --><!-- Does not work due to used position:absolute styles. -->
+<body dir="ltr" onload="javascript: Init();">
 <div id="indicator">
 <img src="img/spacer.gif" id="indicator_image" height="20" width="20" alt="" />
 </div>
@@ -156,9 +157,9 @@ body {
 			</td>
 		</tr>
 		</table>
-		</div>	
+		</div>
 		<a href="javascript: doUpload(); document.getElementById('uploadForm').submit();" class="buttons" title="OK"><img src="img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
-	</div>	
+	</div>
 	<div id="tools_watermark" style="display:none;">
 		<div id="watermarkControls">
 			<div id="tool_inputs">
@@ -168,13 +169,13 @@ body {
 				<table style="display: inline; vertical-align: middle;" cellpadding="0" cellspacing="0">
 					<tr>
 					<td>
-						<div id="slidercasingwatermark" class="slidercasing"> 
+						<div id="slidercasingwatermark" class="slidercasing">
 					<div id="slidertrackwatermark" class="slidertrack" style="width:100px"><img src="img/spacer.gif" width="1" height="1" border="0" alt="track"></div>
 				<div id="sliderbarwatermark" class="sliderbar" style="left:100px" onmousedown="captureStart('watermark');"><img src="img/spacer.gif" width="1" height="1" border="0" alt="track"></div>
-				</div>	
+				</div>
 					</td>
 					</tr>
-				</table>				
+				</table>
 				<input type="text" id="sliderfieldwatermark" onchange="updateSlider(this.value, 'watermark')" style="width: 2em;" value="100"/>
 				<table style="display: inline; vertical-align: bottom; margin: 0px 5px 0px 20px;" cellpadding="0" cellspacing="0">
 					<tr>
@@ -192,7 +193,7 @@ body {
 						</div>
 					</td>
 					</tr>
-				</table>		
+				</table>
 				<table style="display: inline; vertical-align: bottom; margin: 0px 10px 0px 5px;" cellpadding="0" cellspacing="0">
 					<tr>
 					<td>
@@ -208,15 +209,15 @@ body {
 						</div>
 					</td>
 					</tr>
-				</table>		
+				</table>
 				<img src="img/div.gif" height="30" width="2" class="div" alt="|" />
-			</div>	
+			</div>
 			<a href="javascript: editor.doSubmit('watermark');" class="buttons" title="OK"><img src="img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
-		</div>	
+		</div>
 		<div id="watermarkMessage" style="display: none;">
 			<script>document.write("<div id=\"tool_inputs\" style=\"text-align: center; width: 90%; color: #474767;\"><label style=\" font-weight: bold; letter-spacing: 3px;\">" + i18n("Watermarking is disabled.") + "</label><br /><label>" + i18n("No watermarks were found or all watermarks are to big for the target image.") + "</label></div>");</script>
-		</div>	
-	</div>	
+		</div>
+	</div>
 	<div id="tools_crop" style="display:none;">
 		<div id="tool_inputs">
 			<label for="cx">Start X:</label><input type="text" id="cx"  class="textInput" onchange="updateMarker('crop')"/>
@@ -224,10 +225,10 @@ body {
 			<label for="cw">Width:</label><input type="text" id="cw" class="textInput" onchange="updateMarker('crop')"/>
 			<label for="ch">Height:</label><input type="text" id="ch" class="textInput" onchange="updateMarker('crop')"/>
 			<img src="img/div.gif" height="30" width="2" class="div" alt="|" />
-		</div>	
+		</div>
 		<a href="javascript: editor.doSubmit('crop');" class="buttons" title="OK"><img src="img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
-		<a href="javascript: editor.reset();" class="buttons" title="Cancel"><img src="img/btn_cancel.gif" height="30" width="30" alt="Cancel" /></a>		
-	</div>	
+		<a href="javascript: editor.reset();" class="buttons" title="Cancel"><img src="img/btn_cancel.gif" height="30" width="30" alt="Cancel" /></a>
+	</div>
 	<div id="tools_scale" style="display:none;">
 		<div id="tool_inputs">
 			<label for="sw">Width:</label><input type="text" id="sw" class="textInput" onchange="checkConstrains('width')"/>
@@ -236,10 +237,10 @@ body {
 			<input type="checkbox" id="constProp" value="1" checked="checked" onclick="toggleConstraints()"/>
 			<label for="constProp">Constrain Proportions</label>
 			<img src="img/div.gif" height="30" width="2" class="div" alt="|" />
-		</div>	
+		</div>
 		<a href="javascript: editor.doSubmit('scale');" class="buttons" title="OK"><img src="img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
-		<a href="javascript: editor.reset();" class="buttons" title="Cancel"><img src="img/btn_cancel.gif" height="30" width="30" alt="Cancel" /></a>		
-	</div>	
+		<a href="javascript: editor.reset();" class="buttons" title="Cancel"><img src="img/btn_cancel.gif" height="30" width="30" alt="Cancel" /></a>
+	</div>
 	<div id="tools_rotate" style="display:none;">
 		<div id="tool_inputs">
 			<select id="flip" name="flip" style="margin-left: 10px; vertical-align: middle;">
@@ -258,9 +259,9 @@ body {
          </select>
 			<label for="ra">Angle:</label><input type="text" id="ra" class="textInput" value="0"/>
 			<img src="img/div.gif" height="30" width="2" class="div" alt="|" />
-		</div>	
+		</div>
 		<a href="javascript: editor.doSubmit('rotate');" class="buttons" title="OK"><img src="img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
-	</div>		
+	</div>
 	<div id="tools_measure" style="display:none;">
 		<div id="tool_inputs">
 			<label id="xLabel">X:<input type="text" class="measureStats" id="sx" disabled /></label>
@@ -282,7 +283,7 @@ body {
 				document.getElementById("angleLabel").title = i18n("angle");
 				document.getElementById("diagonalLabel").title = i18n("diagonal length");
 			</script>
-		</div>	
+		</div>
 	</div>
 	<div id="tools_save" style="display:none;">
 
@@ -318,27 +319,27 @@ body {
 			<table style="display: inline; vertical-align: middle;" cellpadding="0" cellspacing="0">
 				<tr>
 				<td>
-					<div id="slidercasingsave" class="slidercasing"> 
+					<div id="slidercasingsave" class="slidercasing">
 				<div id="slidertracksave" class="slidertrack" style="width:100px"><img src="img/spacer.gif" width="1" height="1" border="0" alt="track"></div>
             <div id="sliderbarsave" class="sliderbar" style="left:85px" onmousedown="captureStart('save');"><img src="img/spacer.gif" width="1" height="1" border="0" alt="track"></div>
-			</div>	
+			</div>
 				</td>
 				</tr>
-			</table>				
+			</table>
 			<input type="text" id="sliderfieldsave" onchange="updateSlider(this.value, 'save')" style="width: 2em;" value="85"/>
 			<img src="img/div.gif" height="30" width="2" class="div" alt="|" />
-		</div>	
+		</div>
 		<a href="javascript: editor.doSubmit('save');" class="buttons" title="OK"><img src="img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
 
 	<?php }else{ ?>
 
 		<div id="tool_inputs" style="text-align: center; width: 90%; font-size: 150%; font-weight: bold; letter-spacing: 3px; color: #474767;">
 			<label>Demo</label>
-		</div>	
+		</div>
 
 	<?php } ?>
 
-	</div>	
+	</div>
 </div>
 <div id="toolbar">
 	<div id="buttons">

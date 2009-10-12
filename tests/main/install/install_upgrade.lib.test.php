@@ -1,20 +1,20 @@
 <?php
 Mock::generate('Database');
 class TestInstallUpgrade extends UnitTestCase{
-	
+
 	public function TestInstallUpgrade() {
-		
+
 		$this->UnitTestCase('testing the function used by '.
 						    'the install and upgrade scripts');
 	}
-	
+
 	public function testSetFileFolderPermissions(){
 		$res = set_file_folder_permissions();
 		$this->assertTrue(is_null($res));
 		$this->assertNull($res);
 		//var_dump($res);
 	}
-	
+
 	public function testFillLanguageTable(){
 		$language_table='en';
 		$res = fill_language_table($language_table);
@@ -22,7 +22,7 @@ class TestInstallUpgrade extends UnitTestCase{
 		//var_dump($res);
 	}
 	/**
-	 * Fatal error: Call to undefined function trueFalse() in 
+	 * Fatal error: Call to undefined function trueFalse() in
 	 * /var/www/dokeos1861/main/install/install_upgrade.lib.php on line 114
 	 */
 	/*public function testFillCurrentSettingsTable(){
@@ -32,21 +32,21 @@ class TestInstallUpgrade extends UnitTestCase{
 		$this->assertTrue($res);
 		var_dump($res);
 	}*/
-	
+
 	public function testFillSettingsTable(){
 		$settings_options_table='';
 		$res = fill_settings_options_table($settings_options_table);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	public function testFillTrackCountriesTable(){
 		$track_countries_table='';
 		$res = fill_track_countries_table($track_countries_table);
 		$this->assertEqual(null,$res);
 		//var_dump($res);
 	}
-	
+
 	public function testWriteCoursesHtaccessFile(){
 		$url_append='/var/www/dokeos1861/main/install/';
 		$res = write_courses_htaccess_file($url_append);
@@ -58,7 +58,7 @@ class TestInstallUpgrade extends UnitTestCase{
 		//var_dump($res);
 	}
 	/**
-	 * Call to undefined function trueFalse() in 
+	 * Call to undefined function trueFalse() in
 	 * /var/www/dokeos1861/main/install/install_upgrade.lib.php on line 192
 	 */
 	 /* public function testWriteDokeosConfigFile(){
@@ -86,9 +86,9 @@ class TestInstallUpgrade extends UnitTestCase{
 		$res = write_dokeos_config_file($path);
 		$this->assertTrue($res);
 		var_dump($res);
-		
+
 	}*/
-	
+
 	public function testLoadMainDatabase(){
 		$installation_settings=array();
 		$res = load_main_database($installation_settings);
@@ -96,14 +96,14 @@ class TestInstallUpgrade extends UnitTestCase{
 		$this->assertNull($res);
 		//var_dump($res);
 	}
-	
+
 	public function testLoadDatabaseScript(){
 		$db_script='install_db';
 		$res = load_database_script($db_script);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	public function testSplitSqlFile(){
 		$ret='';
 		$sql='';
@@ -113,7 +113,7 @@ class TestInstallUpgrade extends UnitTestCase{
 		$this->assertTrue($res===true);
 		//var_dump($res);
 	}
-	
+
 	public function testGetSqlFileContents(){
 		ob_start();
 		$file='txt';
@@ -126,14 +126,14 @@ class TestInstallUpgrade extends UnitTestCase{
 		$this->assertTrue($res===true || $res === false);
 		//var_dump($res);
 	}
-	
+
 	public function testDirectoryToArray(){
 		$directory=array('aaa','bbb','ccc');
 		$res = directory_to_array($directory);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+
 	public function testAddDocument180(){
 		$_course='testing';
 		$path='http://dokeos186.net/courses/001/?id_session=0';

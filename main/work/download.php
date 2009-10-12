@@ -39,7 +39,7 @@ $doc_url = str_replace('///', '&', $doc_url);
 $doc_url = str_replace(' ', '+', $doc_url);
 $doc_url = str_replace('/..', '', $doc_url); //echo $doc_url;
 if (! isset($_course)) {
-	api_not_allowed(true);	
+	api_not_allowed(true);
 }
 
 $full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$doc_url;
@@ -48,12 +48,12 @@ $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION)
 // launch event
 event_download($doc_url);
 
-$sql='SELECT title FROM '.$tbl_student_publication.'   
+$sql='SELECT title FROM '.$tbl_student_publication.'
   	  WHERE url LIKE BINARY "'.$doc_url.'"';
 
-$result= api_sql_query($sql, __FILE__, __LINE__);
+$result= Database::query($sql, __FILE__, __LINE__);
 $row= Database::fetch_array($result);
-$title = str_replace(' ','_', $row['title']); 
+$title = str_replace(' ','_', $row['title']);
 DocumentManager::file_send_for_download($full_file_name,TRUE, $title);
 
 exit;

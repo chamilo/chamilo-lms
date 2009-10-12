@@ -1,5 +1,5 @@
 <?php // $Id: question_create.php 20569 2009-05-12 21:34:00Z pcool $
- 
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -74,11 +74,11 @@ $form->addElement('static','select_question_type', get_lang('QuestionType'),'<di
 // the exercices
 $tbl_exercices = Database :: get_course_table(TABLE_QUIZ_TEST);
 $sql = "SELECT id,title,type,description, results_disabled FROM $tbl_exercices WHERE active<>'-1' ORDER BY title ASC";
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 $exercises['-'] = '-'.get_lang('SelectExercice').'-';
-while ($row = Database :: fetch_array($result)) 
+while ($row = Database :: fetch_array($result))
 {
-	$exercises[$row['id']] = $row['title'];	
+	$exercises[$row['id']] = $row['title'];
 }
 $form->addElement('select', 'exercice', get_lang('Exercice'), $exercises);
 
@@ -87,8 +87,8 @@ $form->addElement('style_submit_button', 'SubmitCreateQuestion', get_lang('Creat
 
 // setting the rules
 // $form->addRule('question_type', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('exercice', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('exercice', '<div class="required">'.get_lang('YouHaveToSelectATest'), 'numeric');
+$form->addRule('exercice', '<span class="required">'.get_lang('ThisFieldIsRequired').'</span>', 'required');
+$form->addRule('exercice', '<span class="required">'.get_lang('YouHaveToSelectATest').'</span>', 'numeric');
 $form->registerRule('validquestiontype', 'callback', 'check_question_type');
 $form->addRule('question_type_hidden', get_lang('InvalidQuestionType'), 'validquestiontype');
 
@@ -99,7 +99,7 @@ if ($form->validate())
 	$values = $form->exportValues();
 	//echo 'form validates';
 	//print_r($values);
-	
+
 	foreach (Question::$questionTypes as $question_type_id => $question_type_class_and_name)
 	{
 		if (get_lang($question_type_class_and_name[1]) == $values['question_type_hidden'])
@@ -107,19 +107,19 @@ if ($form->validate())
 			$answer_type = $question_type_id;
 		}
 	}
-	
+
 	header('Location: admin.php?exerciseId='.$values['exercice'].'&newQuestion=yes&answerType='.$answer_type);
 }
-else 
+else
 {
 	// header
-	Display::display_header($nameTools);	
-	
+	Display::display_header($nameTools);
+
 	// displaying the form
 	$form->display();
-	
+
 	// footer
-	Display::display_footer();	
+	Display::display_footer();
 }
 
 
@@ -128,14 +128,14 @@ else
 
 
 <script>
-var ddlObj1=$("#questiontypes").finalselect({id:"test",viewWidth:'260px', viewHeight:'150px',selectText:'<?php echo Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle'))."&nbsp;&nbsp;".get_lang('SelectQuestionType');?>',selectImage:'<?php echo api_get_path(WEB_IMG_PATH); ?>select.png', viewMouseoverColor: '#EFEFEF'});
+var ddlObj1=$("#questiontypes").finalselect({id:"test",viewWidth:'260px', viewHeight:'150px', selectText:'<?php echo Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle; cursor:hand'))."&nbsp;&nbsp;".get_lang('SelectQuestionType');?>',selectImage:'<?php echo api_get_path(WEB_IMG_PATH); ?>select.png', viewMouseoverColor: '#EFEFEF'});
 $("#test-select").bind('click',function(){
 	$("#question_type_hidden").val(ddlObj1.getText());
 });
 
 
 
-<?php 
+<?php
 // defining the pictures of the question types
 $pictures_question_types[1] = 'mcua.gif';
 $pictures_question_types[2] = 'mcma.gif';
@@ -147,7 +147,7 @@ $pictures_question_types[6] = 'hotspot.gif';
 foreach (Question::$questionTypes as $key=>$value)
 {
 	?>
-	ddlObj1.addItem('<table width="100%"><tr><td style="width: 37px;" valign="top"><?php Display::display_icon($pictures_question_types[$key],addslashes(get_lang($value[1])),array('height'=>'40px;', 'style' => 'vertical-align:top;')); ?></td><td><span class="thistext"><?php echo addslashes(get_lang($value[1])); ?></span><br/><sub><?php /*echo addslashes(get_lang($value[1].'Comment'));*/ ?></sub></td></tr></table>','');
+	ddlObj1.addItem('<table width="100%"><tr><td style="width: 37px;" valign="top"><?php Display::display_icon($pictures_question_types[$key],addslashes(get_lang($value[1])),array('height'=>'40px;', 'style' => 'vertical-align:top; cursor:hand;')); ?></td><td><span class="thistext" style="cursor:hand"><?php echo addslashes(get_lang($value[1])); ?></span><br/><sub><?php /*echo addslashes(get_lang($value[1].'Comment'));*/ ?></sub></td></tr></table>','');
 	<?php
 }
 ?>
@@ -167,7 +167,7 @@ function check_question_type($parameter)
 	{
 		return true;
 	}
-	else 
+	else
 	{
 		return false;
 	}

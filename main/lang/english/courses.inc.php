@@ -75,4 +75,9 @@ $CourseCategoryEditStored = "Category updated";
 $buttonCreateCourseCategory = "Save training category";
 $buttonSaveCategory = "Save the category";
 $buttonChangeCategory = "Change category";
+$SessionName = "Session name";
+$SessionCategory = "Category of session";
+$Expand = "Expand";
+$Collapse = "Collapse";
+$CourseDetails = "Course description";
 ?>

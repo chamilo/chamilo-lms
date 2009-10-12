@@ -21,7 +21,7 @@
 	define('LBL_MODIFIED', 'Modificado em');
 		//File Information
 	define('LBL_FILE_INFO', 'Informações do ficheiro:');
-	define('LBL_FILE_NAME', 'Nome:');	
+	define('LBL_FILE_NAME', 'Nome:');
 	define('LBL_FILE_CREATED', 'Criado em:');
 	define("LBL_FILE_MODIFIED", 'Modificado em:');
 	define("LBL_FILE_SIZE", 'Tamanho:');
@@ -56,7 +56,7 @@
 	define('ERR_NOT_DOC_SELECTED_FOR_PASTE', 'Não foram seleccionado(s) documento(s) para colar.');
 	define('WARNING_CUT_PASTE', 'Tem a certeza que pretende mover os ficheiros seleccionados para a pasta actual?');
 	define('WARNING_COPY_PASTE', 'Tem a certeza que pretende copiar os ficheiros seleccionados para a pasta actual?');
-	
+
 	//ERROR MESSAGES
 		//deletion
 	define('ERR_NOT_FILE_SELECTED', 'Por favor, escolha um ficheiro.');
@@ -78,7 +78,7 @@
 	define('ERR_FOLDER_EXISTS', 'Por favor, escolha um nome que seja único nesta pasta.');
 	define('ERR_FOLDER_CREATION_FAILED', 'Não foi possível criar a pasta, tente novamente.');
 	define('ERR_FOLDER_NAME_EMPTY', 'Por favor, escolha um nome.');
-	
+
 		//file upload
 	define("ERR_FILE_NAME_FORMAT", "Por favor, escolha um nome que contenha apenas letras, dígitos, espaços, \'-\' e \'_\'.");
 	define('ERR_FILE_NOT_UPLOADED', 'Não foi seleccionado nenhum ficheiro para ser enviado.');
@@ -88,7 +88,7 @@
 	define('ERROR_FILE_TOO_BID', 'Ficheiro muito grande. (máx: %s)');
 	//file download
 	define('ERR_DOWNLOAD_FILE_NOT_FOUND', 'Não foram seleccionados ficheiros para download.');
-	
+
 
 	//Tips
 	define('TIP_FOLDER_GO_DOWN', 'Clique para ir para esta pasta...');
@@ -112,12 +112,12 @@
 	define('LOGIN_USERNAME', 'ID do utilizador:');
 	define('LOGIN_PASSWORD', 'Password:');
 	define('LOGIN_FAILED', ' ID do utilizador/password inválidos.');
-	
-	
+
+
 	//88888888888   Below for Image Editor   888888888888888888888
-		//Warning 
+		//Warning
 		define('IMG_WARNING_NO_CHANGE_BEFORE_SAVE', "Não fez qualquer alteração à imagem.");
-		
+
 		//General
 		define('IMG_GEN_IMG_NOT_EXISTS', 'A imagem não existe');
 		define('IMG_WARNING_LOST_CHANAGES', 'Todas as alterações feitas á imagem que ainda não guardou, vão ser perdidas, tem a certeza que deseja continuar?');
@@ -128,14 +128,14 @@
 		define('IMG_WARING_FLIP_H', 'Tem a certeza que pretende virar a imagem horizontalmente?');
 		define('IMG_WARING_FLIP_V', 'Tem a certeza que pretende virar a imagem verticalmente?');
 		define('IMG_INFO', 'Informações da imagem');
-		
+
 		//Mode
 			define('IMG_MODE_RESIZE', 'Redimensionar:');
 			define('IMG_MODE_CROP', 'Recortar:');
 			define('IMG_MODE_ROTATE', 'Rodar:');
-			define('IMG_MODE_FLIP', 'Virar:');		
+			define('IMG_MODE_FLIP', 'Virar:');
 		//Button
-		
+
 			define('IMG_BTN_ROTATE_LEFT', '90&graus;CCW');
 			define('IMG_BTN_ROTATE_RIGHT', '90&graus;CW');
 			define('IMG_BTN_FLIP_H', 'Virar horizontalmente');
@@ -160,10 +160,10 @@
 			define('IMG_LBL_SAVE_TO', 'Guardar para:');
 			define('IMG_LBL_ROOT_FOLDER', 'Pasta raíz');
 		//Editor
-		//Save as 
+		//Save as
 		define('IMG_NEW_NAME_COMMENTS', 'Por favor, não coloque a extensão da imagem.');
 		define('IMG_SAVE_AS_ERR_NAME_INVALID', "Por favor, escolha um nome que contenha apenas letras, dígitos, espaços, \'-\' e \'_\'.");
-		define('IMG_SAVE_AS_NOT_FOLDER_SELECTED', 'Não foi escolhida a pasta de destino.');	
+		define('IMG_SAVE_AS_NOT_FOLDER_SELECTED', 'Não foi escolhida a pasta de destino.');
 		define('IMG_SAVE_AS_FOLDER_NOT_FOUND', 'A pasta de destino não existe.');
 		define('IMG_SAVE_AS_NEW_IMAGE_EXISTS', 'Já existe uma imagem com esse nome.');
 
@@ -180,20 +180,20 @@
 		define('IMG_SAVE_FLIP_FAILED', 'Não foi possível virar a imagem.');
 		define('IMG_SAVE_SESSION_IMG_OPEN_FAILED', 'Não foi possível abrir a imagem da sessão.');
 		define('IMG_SAVE_IMG_OPEN_FAILED', 'Não foi possível abrir a imagem');
-		
+
 		//UNDO
 		define('IMG_UNDO_NO_HISTORY_AVAIALBE', 'Não existe história de anulações.');
 		define('IMG_UNDO_COPY_FAILED', 'Não foi possível colocar a imagem no estado inicial.');
 		define('IMG_UNDO_DEL_FAILED', 'Não foi possível apagar a imagem da sessão');
-	
+
 	//88888888888   Above for Image Editor   888888888888888888888
-	
+
 	//88888888888   Session   888888888888888888888
 		define("SESSION_PERSONAL_DIR_NOT_FOUND", 'Não foi possível encontrar a pasta dedicada que deveria ter sido criada na pasta de sessões');
 		define("SESSION_COUNTER_FILE_CREATE_FAILED", 'Não foi possível abrir o ficheiro que tem o contador da sessão.');
 		define('SESSION_COUNTER_FILE_WRITE_FAILED', 'Não foi possível escrever no ficheiro que tem o contador da sessão.');
 	//88888888888   Session   888888888888888888888
-	
+
 	//88888888888   Below for Text Editor   888888888888888888888
 		define('TXT_FILE_NOT_FOUND', 'O ficheiro não foi encontrado.');
 		define('TXT_EXT_NOT_SELECTED', 'Por favor, escolha a extensão do ficheiro');
@@ -208,6 +208,6 @@
 		define('TXT_CONTENT_UPDATE_FAILED', 'Não foi possível actualizar o ficheiro.');
 		define('TXT_SAVE_AS_ERR_NAME_INVALID', "Por favor, escolha um nome que contenha apenas letras, dígitos, espaços, \'-\' e \'_\'.");
 	//88888888888   Above for Text Editor   888888888888888888888
-	
-	
+
+
 ?>

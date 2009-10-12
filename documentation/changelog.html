@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  
+
   <title>Dokeos Changelog</title><link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
   <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
   <style type="text/css">
@@ -16,44 +16,74 @@
 <div id="header1">
 <h1>Dokeos&nbsp;Changelog</h1>
 </div>
-<a href="index.html">Documentation</a> &gt; Changelog 
+<a href="index.html">Documentation</a> &gt; Changelog
 <div id="outerframe">
 <div id="main">
-<br />
-<h1>Dokeos 1.8.6.1 <span style="font-style: italic;">(Babel?)</span> - August 2009</h1>
+<h1>Dokeos 1.8.6.2 - .............</h1>
 <h3>Release notes - summary</h3>
-<p>Dokeos 1.8.6.1 is a minor&nbsp;release including just a few new features, mostly focused on internationalization.&nbsp;</p>
+<p>....</p>
 <h3>New Features</h3>
 <ul>
-  <li>Improvements in document tool, allow seeing glossary terms (FS#4337)</li>
-  <li>Improvements in SCORM export(FS#4300)</li>
-  <li>At the beginning of the installation script an imperative check for PHP 5 has been added. (FS#4296)</li>
-  <li>When the system Dokeos is switched into "Test server" mode, a clickable indicator appears in the footer. This indicator is visible by platform administrators only. (FS#4341)</li>
-  <li>A transliteration function has been added. Currently, it is used in uploading files. Files with non-English names get names that contain ASCII letters only, remaining readable in the corresponding language. Rationale: The PHP5 run-time environment does not manage file name encodings, adding such a non-native feature involves too much work. For avoiding character encoding problems, transliteration of file names is the possible solution. (FS#306)</li>
-  <li>An internationalization option has been added for improving sorting in arbitrary language. When the <a href="http://php.net/manual/en/book.intl.php" target="_blank">intl</a> php-extension has been installed, various sorting routines exploit it for better sorting. Rationale: The PHP5 run-time environment does not provide native and reliable way of sorting UTF-8 strings. (FS#306)</li>
-  <li>The installation sript: The page about system requilements has been updated. Also, at the very beginning, a check has been added whether the <a href="http://php.net/manual/en/book.mbstring.php" target="_blank">mbstring</a> php-extension is installed - see <a href="http://dokeos.com/forum/viewtopic.php?t=29548" target="_blank">the related forum topic</a>. (FS#306)</li>
-  <li>A new php-based configuration for the online editor has been implemented, see <i>dokeos/main/inc/lib/fckeditor/myconfig.php</i>. Also, toolbar definitions have been split in separate php-files within the directory <i>dokeos/main/inc/lib/fckeditor/toolbars/</i> . Customization of the editor is more convenient and flexible now. (FS#2867)</li>
-  <li>Online editor: A upgrade from FCKEditor 2.6.4 to <b>FCKEditor 2.6.4.1</b> has been implemented. (FS#4383)</li>
-  <li>Online editor: Several known bug-fixes from FCKEditor 2.6.5 SVN have been implemented, tickets <a href="http://dev.fckeditor.net/ticket/1537" target="_blank">#1537</a>, <a href="http://dev.fckeditor.net/ticket/2156" target="_blank">#2156</a>, <a href="http://dev.fckeditor.net/ticket/2689" target="_blank">#2689</a>, <a href="http://dev.fckeditor.net/ticket/2821" target="_blank">#2821</a>, <a href="http://dev.fckeditor.net/ticket/2856" target="_blank">#2856</a>, <a href="http://dev.fckeditor.net/ticket/2874" target="_blank">#2874</a>, <a href="http://dev.fckeditor.net/ticket/2915" target="_blank">#2915</a>, <a href="http://dev.fckeditor.net/ticket/3120" target="_blank">#3120</a>, <a href="http://dev.fckeditor.net/ticket/3181" target="_blank">#3181</a>, <a href="http://dev.fckeditor.net/ticket/3427" target="_blank">#3427</a>, <a href="http://dev.fckeditor.net/ticket/3429" target="_blank">#3429</a>, <a href="http://dev.fckeditor.net/ticket/3439" target="_blank">#3439</a>, <a href="http://dev.fckeditor.net/ticket/3446" target="_blank">#3446</a>, <a href="http://dev.fckeditor.net/ticket/3481" target="_blank">#3481</a>, <a href="http://dev.fckeditor.net/ticket/3677" target="_blank">#3677</a>, <a href="http://dev.fckeditor.net/ticket/3818" target="_blank">#3818</a>, <a href="http://dev.fckeditor.net/ticket/3880" target="_blank">#3880</a>, <a href="http://dev.fckeditor.net/ticket/3925" target="_blank">#3925</a>. (FS#2867)</li>
-  <li>Online editor: The simple file manager, the advanced file manager and the image manager have been integrated by default with the editor's dialog system. Thus, they work faster and in a more secure way. (FS#2867)</li>
-  <li>Online editor: Blocking copy/paste for trainees has been added. The feature is configurable through editing the toolbar definition files within the directory <i>dokeos/main/inc/lib/fckeditor/toolbars/</i> . (FS#2867)</li>
-  <li>Online editor: Preview tabs have been added to the dialogs for inserting video, flv-video, and YouTube video. (FS#2867)</li>
-  <li>Online editor: The <b>audio</b> plugin has been activated by default as an implementation of the "Insert audio / Audio properties" dialog. This new plugin is intended to replace the "MP3" plugin. (FS#2867)</li>
-  <li>Online editor: Configuration of the <b>mimetex</b> plugin has been reworked to gain simplicity. The procedure for configuration has been updated, see <a href="http://www.dokeos.com/forum/viewtopic.php?t=29594" target="_blank">the related forum topic</a>. (FS#2867)</li>
-  <li>Online editor: A new <b>asciimath</b> plugin for inserting mathematical formulas has been added. It is based on the <a href="http://mathcs.chapman.edu/~jipsen/mathml/asciimath.html" target="_blank">ASCIIMathML.js</a> library. (FS#2867)</li>
-  <li>Online editor: The toolbar icons have been upgraded to those from FCKEditor 3.0. (FS#2867)</li>
-  <li>A solution has been implemented for fixing the <a href="http://bugs.adobe.com/jira/browse/FP-529" target="_blank">"__flash__removeCallback" bug</a>, which affects the media player on Internet Explorer browser. (FS#4378 and FS#2867)</li>
-  <li>Implement new sub-language feature by which language terms redefinition becomes possible through the admin section (FS#4321)</li>
-  <li>Social: Added possibility to define RSS feeds inside personal page of social network (need to define an 'rssfeeds' extra user text field)</li>
-  <li>Admin: Added courses from sessions inside AJAX popup of courses list in users list (SVN#22398)</li>
-  <li>Admin: Showing full-length course titles in list of courses while adding to sessions(SVN#22399)</li>
-  <li>Admin: Added session name in title of session edition pages(SVN#22400)</li>
-  <li>Admin: Terms and conditions added DT#4320</li>  
+  <li>...</li>
+</li>
+</ul>
+<h3>Debugging</h3>
+<ul>
+  <li>Online editor: A upgrade from FCKEditor 2.6.4.1 to <strong>FCKEditor 2.6.5, Build 23959</strong> has been implemented. (#2867)</li>
+  <li>...</li>
 </ul>
 <br />
 <h3>CSS changes</h3>
 <ul>
-  <li>Sticky footer now available in all Dokeos stylesheets. If you own a custom stylesheet you must update it see <a href="https://bts.dokeos.com/issues/show/3549">DT#3549</a> for further details.</li>
+  <li>...</li>
+</ul>
+<h3>Known issues</h3>
+<ul>
+  <li>...</li>
+</ul>
+<h3>Deprecated files</h3>
+<ul>
+  <li>...</li>
+</ul>
+<br />
+<h1>Dokeos 1.8.6.1 - August 2009</h1>
+<h3>Release notes - summary</h3>
+<p>Dokeos 1.8.6.1 is a minor&nbsp;release including just a few new features, mostly focused on internationalization, and several bugfixes.</p>
+<h3>New Features</h3>
+<ul>
+  <li>Implemented new sub-language feature by which language terms redefinition becomes possible through the admin section (FS#4321)</li>
+  <li>Admin: Terms and conditions added DT#4320</li>
+  <li>Improvements in document tool, allow seeing glossary terms (FS#4337)</li>
+  <li>Small improvements in SCORM export(FS#4300)</li>
+  <li>At the beginning of the installation script, added an imperative check for PHP 5 has been added. (FS#4296)</li>
+  <li>When the system Dokeos is switched into "Test server" mode, a clickable indicator appears in the footer. This indicator is visible by platform administrators only. (FS#4341)</li>
+  <li>A transliteration function has been added. Currently, it is used in uploading files. Files with non-English names get names that contain ASCII letters only, remaining readable in the corresponding language. Rationale: The PHP5 run-time environment does not manage file name encodings, adding such a non-native feature involves too much work. For avoiding character encoding problems, transliteration of file names is the possible solution. (FS#306)</li>
+  <li>An internationalization option has been added for improving sorting in arbitrary language. When the <a href="http://php.net/manual/en/book.intl.php" target="_blank">intl</a> php-extension has been installed, various sorting routines exploit it for better sorting. Rationale: The PHP5 run-time environment does not provide native and reliable way of sorting UTF-8 strings. (FS#306)</li>
+  <li>Installation script: The page about system requilements has been updated. Also, at the very beginning, a check has been added whether the <a href="http://php.net/manual/en/book.mbstring.php" target="_blank">mbstring</a> php-extension is installed - see <a href="http://dokeos.com/forum/viewtopic.php?t=29548" target="_blank">the related forum topic</a>. (FS#306)</li>
+  <li>A new php-based configuration for the online editor has been implemented, see <i>dokeos/main/inc/lib/fckeditor/myconfig.php</i>. Also, toolbar definitions have been split in separate php-files within the directory <i>dokeos/main/inc/lib/fckeditor/toolbars/</i> . Customization of the editor is more convenient and flexible now. (FS#2867)</li>
+  <li>Online editor: A upgrade from FCKEditor 2.6.4 to <strong>FCKEditor 2.6.4.1</strong> has been implemented. (FS#4383)</li>
+  <li>Online editor: Blocking copy/paste for trainees has been added. The feature is configurable through editing the toolbar definition files within the directory <i>dokeos/main/inc/lib/fckeditor/toolbars/</i> . (FS#2867)</li>
+  <li>Online editor: Preview tabs have been added to the dialogs for inserting video, flv-video, and YouTube video. (FS#2867)</li>
+  <li>Online editor: The <strong>audio</strong> plugin has been activated by default as an implementation of the "Insert audio / Audio properties" dialog. This new plugin is intended to replace the "MP3" plugin. (FS#2867)</li>
+  <li>Online editor: The simple file manager, the advanced file manager and the image manager have been integrated by default with the editor's dialog system. Thus, they work faster and in a more secure way. (FS#2867)</li>
+  <li>Online editor: Configuration of the <strong>mimetex</strong> plugin has been reworked to gain simplicity. The procedure for configuration has been updated, see <a href="http://www.dokeos.com/forum/viewtopic.php?t=29594" target="_blank">the related forum topic</a>. (FS#2867)</li>
+  <li>Online editor: A new <strong>asciimath</strong> plugin for inserting mathematical formulas has been added. It is based on the <a href="http://mathcs.chapman.edu/~jipsen/mathml/asciimath.html" target="_blank">ASCIIMathML.js</a> library. (FS#2867)</li>
+  <li>Social: Added possibility to define RSS feeds inside personal page of social network (need to define an 'rssfeeds' extra user text field)</li>
+</ul>
+<h3>Debugging</h3>
+<ul>
+  <li>Online editor: Several known bug-fixes from FCKEditor 2.6.5 SVN have been implemented, tickets <a href="http://dev.fckeditor.net/ticket/1537" target="_blank">#1537</a>, <a href="http://dev.fckeditor.net/ticket/2156" target="_blank">#2156</a>, <a href="http://dev.fckeditor.net/ticket/2689" target="_blank">#2689</a>, <a href="http://dev.fckeditor.net/ticket/2821" target="_blank">#2821</a>, <a href="http://dev.fckeditor.net/ticket/2856" target="_blank">#2856</a>, <a href="http://dev.fckeditor.net/ticket/2874" target="_blank">#2874</a>, <a href="http://dev.fckeditor.net/ticket/2915" target="_blank">#2915</a>, <a href="http://dev.fckeditor.net/ticket/3120" target="_blank">#3120</a>, <a href="http://dev.fckeditor.net/ticket/3181" target="_blank">#3181</a>, <a href="http://dev.fckeditor.net/ticket/3427" target="_blank">#3427</a>, <a href="http://dev.fckeditor.net/ticket/3429" target="_blank">#3429</a>, <a href="http://dev.fckeditor.net/ticket/3439" target="_blank">#3439</a>, <a href="http://dev.fckeditor.net/ticket/3446" target="_blank">#3446</a>, <a href="http://dev.fckeditor.net/ticket/3481" target="_blank">#3481</a>, <a href="http://dev.fckeditor.net/ticket/3677" target="_blank">#3677</a>, <a href="http://dev.fckeditor.net/ticket/3818" target="_blank">#3818</a>, <a href="http://dev.fckeditor.net/ticket/3880" target="_blank">#3880</a>, <a href="http://dev.fckeditor.net/ticket/3925" target="_blank">#3925</a>. (FS#2867)</li>
+  <li>Online editor: The toolbar icons have been upgraded to those from FCKEditor 3.0. (FS#2867)</li>
+  <li>A solution has been implemented for fixing the <a href="http://bugs.adobe.com/jira/browse/FP-529" target="_blank">"__flash__removeCallback" bug</a>, which affects the media player on Internet Explorer browser. (FS#4378 and FS#2867)</li>
+  <li>Quiz: fixed bug in multiple-choice/single-answer questions results (whereby the wrong answer was saved)</li>
+  <li>Admin: Added courses from sessions inside AJAX popup of courses list in users list (SVN#22398)</li>
+  <li>Admin: Showing full-length course titles in list of courses while adding to sessions(SVN#22399)</li>
+  <li>Admin: Added session name in title of session edition pages(SVN#22400)</li>
+</ul>
+<br />
+<h3>CSS changes</h3>
+<ul>
+  <li>Sticky footer now available in all Dokeos stylesheets. If you own a custom stylesheet you will need to update it, see <a href="https://bts.dokeos.com/issues/show/3549">DT#3549</a> for further details.</li>
 </ul>
 
 <br />
@@ -61,7 +91,7 @@
 <br />
 <h3>Deprecated files</h3>
 <ul>
-  <li>The whole main/inc/lib/fckeditor/editor/filemanager/browser/default/connectors/ directory should be removed for security reasons</li> 
+  <li>The whole main/inc/lib/fckeditor/editor/filemanager/browser/default/connectors/ directory should be removed for security reasons</li>
 </ul>
 <br />
 <h1>Dokeos 1.8.6 <span style="font-style: italic;">Svalbard</span> - June 2009</h1>
@@ -94,7 +124,7 @@
   <li>Documents tool: The document-type icons have been made clickable (FS#3296)</li>
   <li>Documents tool: Online editor has been disabled for HotPotatoes tests in order their functionality to be preserved (FS#3345)</li>
   <li>Allow ZIP export of assignments for teacher and tutor </li>
-  <li>Added attach documents to Agenda</li> 
+  <li>Added attach documents to Agenda</li>
   <li>Added Web Services Interface (SOAP)</li>
   <li>Added Google Maps support</li>
   <li>Added Imagemap editor</li>
@@ -108,7 +138,7 @@
   <li>Added link create course message to go directly to the course(SVN#17497)</li>
   <li>Added ability to take partial surveys and finish them later (FS#2510)</li>
   <li>New Survey Feature: Surveys without invitation mail (FS#3403)</li>
-  <li>Added Booking system (a.k.a Reservation 2 Extension) (FS#821)</li> 
+  <li>Added Booking system (a.k.a Reservation 2 Extension) (FS#821)</li>
   <li>Added user profiling fields in auto-registration page (FS#2666)</li>
   <li>Added check for writeable status of session save path in installation directory (FS#2970)</li>
   <li>Allow forum threads to be moved (FS#3460)</li>
@@ -123,7 +153,7 @@
   <li>Added Question difficulty level in Exercises (FS#3515)</li>
   <li>Added Removed buggy audio recorder and added new MP3 player with easy upload (FS#3515)</li>
   <li>Improved Survey export (SVN#17927)</li>
-  <li>Students can now view their uploaded works in Work tool (FS#3486)</li>  
+  <li>Students can now view their uploaded works in Work tool (FS#3486)</li>
   <li>Implemented
 add to calendar an assignment with the date when it is completely
 closed, also when you remove it from assignment tool, it's removed into
@@ -138,10 +168,10 @@ calendar_event table, instead this value is 0.</li>
   <li>Added pChart v1.1.2 library to manage charts in Gradebook tool(FS#3718) and the Access details of a user </li>
   <li>Added SHA1 as a possibility to encrypt user passwords (FS#3798)</li>
   <li>Added global templates to use between courses (SVN#18955)</li>
-  <li>Added To change your password, you must enter your current password (SVN#19225)</li>   
+  <li>Added To change your password, you must enter your current password (SVN#19225)</li>
   <li>Added New Dokeos stylesheets </li>
   <li>Improvements to the User profile</li>
-  <li>Improvements to the Learning path display view (no more frames)</li>     
+  <li>Improvements to the Learning path display view (no more frames)</li>
   <li>Added HTML Purifier</li>
   <li>Added tracking/logging of admin activity FS#842</li>
 </ul>
@@ -233,7 +263,7 @@ PCLZIP_OPT_REMOVE_PATH on Windows (FS#3243)</li>
   <li>Fixed various HTTPS + IE related bugs, related to caching in general (SVN#17795)</li>
   <li>Fixed 31 bugs in file/image/sounds/flash uploads/delete/permissions in profile/homepage/agenda edition pages</li>
   <li>Fixed a bug in migration for several versions at once whereby new course tools were repeated several times (SVN#17935)</li>
-  <li>Fixed security issue allowing users to upload php files on the server through FCKEditor (FS#2970)</li> 
+  <li>Fixed security issue allowing users to upload php files on the server through FCKEditor (FS#2970)</li>
   <li>Fixed folders by default into document tool must not be removed - see FS#3611</li>
   <li>Fixed qualification of themes into forum tool - see FS#3609</li>
   <li>allow show results with floating point,in exercice tool - (partial FS#3630) - SVN#18367</li>
@@ -261,7 +291,7 @@ irvienhooi</li>
   <li>Changed many things in the public-admin style (Dokeos default) to improve
 design - will probably affect other styles a little despite efforts not to</li>
   <li>Added new styles</li>
-  
+
 </ul>
 <br />
 <h3>Important language changes</h3>
@@ -274,7 +304,7 @@ if you are willing to keep that change.</li>
   <li>Changed and unified work/assignment/student publications tool as "assignments"</li>
   <li>Changed "Dropbox" tool to "Documents sharing" (or "Documents sharing space" when referring to one's own space in the tool)</li>
   <li>Changed "Student View" link to "Teacher view" and vice-versa</li>
-  <li>Many buttons now have more defined action names</li>   
+  <li>Many buttons now have more defined action names</li>
 </ul>
 <br />
 <h3>Known issues</h3>
@@ -284,7 +314,7 @@ if you are willing to keep that change.</li>
 <br />
 <h3>Deprecated files</h3>
 <ul>
-  <li>The whole main/inc/lib/xajax/tests/ should be removed</li> 
+  <li>The whole main/inc/lib/xajax/tests/ should be removed</li>
 </ul>
 <br />
 <h1>Dokeos 1.8.5 <span style="font-style: italic;">Valparaiso</span>, June 2008</h1>
@@ -406,7 +436,7 @@ quickly after recording a sound track</li>
     <li>When migrating from 1.6 to 1.8, some SCORM learning paths might need to be re-imported, which means their tracking is lost</li>
 </ul>
 <hr style="width: 100%; height: 2px;" />
-	
+
 <h1>Dokeos 1.8.4 - September 2007</h1>
 <h3>Release notes - summary</h3>
 <p>Dokeos
@@ -506,22 +536,22 @@ UTF-8 and russian and asian fonts)</li>
 <h1>Dokeos 1.8 - May 2007</h1>
 
 
-    
+
 <h3>Release notes - summary</h3>
 
 
-    
+
 <p>Dokeos 1.8 is a major release. The software becomes a complete suite
 including not only a learning management system and a learners
 administration dashboard, but also an easy-to-use authoring system and
 a simple videoconferencing interface.</p>
 
 
-    
+
 <h3>New Features</h3>
 
 
-    
+
 <ul>
 
 
@@ -576,37 +606,37 @@ a simple videoconferencing interface.</p>
       <li>Platform Statistics so you can boast with your campus. </li>
 
 
-    
+
 </ul>
 
 
-    
+
 <h1></h1>
 
 <hr style="width: 100%; height: 2px;" />
 <h1>Dokeos 1.6.5 - July 2006 </h1>
 
 
-    
+
 <h3>Release notes - summary</h3>
 
 
-    
+
 <p>Security Release. 1 bug has been fixed. Click the link below to see the complete list of bugfixes<br />
 
 
       <a href="http://www.dokeos.com/wiki/index.php/Dokeos_1.6.5_release_notes_and_changelog">http://www.dokeos.com/wiki/index.php/Dokeos_1.6.5_release_notes_and_changelog</a></p>
 
 
-    
+
 <h1>Dokeos 1.6.4 April 2006 </h1>
 
 
-    
+
 <h3>Release notes - summary</h3>
 
 
-    
+
 <p>Bugfix release. 2 bugs have been fixed. One security hole has been fixed <br />
 
 
@@ -616,60 +646,60 @@ a simple videoconferencing interface.</p>
     <a href="http://www.dokeos.com/wiki/index.php/Dokeos_1.6.4_release_notes_and_changelog">http://www.dokeos.com/wiki/index.php/Dokeos_1.6.4_release_notes_and_changelog</a></p>
 
 
-    
+
 <h1>Dokeos 1.6.3 February 2006 </h1>
 
 
-    
+
 <h3>Release notes - summary</h3>
 
 
-    
+
 <p>Bugfix release. 44 bugs have been fixed. Click the link below to see the complete list of bugfixes<br />
 
 
     <a href="http://www.dokeos.com/wiki/index.php/Dokeos_1.6.3_release_notes_and_changelog">http://www.dokeos.com/wiki/index.php/Dokeos_1.6.3_release_notes_and_changelog</a> </p>
 
 
-    
+
 <h1>Dokeos 1.6.2 - September 2005</h1>
 
 
-    
+
 <h3>Release notes - summary</h3>
 
 
-    
+
 <p>Bugfix release. 14 bugs have been fixed. Click the link below to see the complete list of bugfixes<br />
 
 
     <a href="http://www.dokeos.com/wiki/index.php/Dokeos_1.6.2_release_notes_and_changelog">http://www.dokeos.com/wiki/index.php/Dokeos_1.6.2_release_notes_and_changelog</a></p>
 
 
-    
+
 <h1>Dokeos 1.6.1 - August 2005</h1>
 
 
-    
+
 <h3>Release notes - summary</h3>
 
 
-    
+
 <p>Bugfix release. 31 bugs have been fixed. Click the link below to see the complete list of bugfixes<br />
 
 
     <a href="http://www.dokeos.com/wiki/index.php/Dokeos_1.6.1_release_notes_and_changelog">http://www.dokeos.com/wiki/index.php/Dokeos_1.6.1_release_notes_and_changelog</a></p>
 
 
-    
+
 <h1>Dokeos 1.6 - July 2005</h1>
 
 
-    
+
 <h3>Release notes - summary</h3>
 
 
-    
+
 <p>In Dokeos 1.6, security and interoperability have been improved. Protection<br />
 
 
@@ -685,11 +715,11 @@ a simple videoconferencing interface.</p>
     <a href="http://www.dokeos.com/wiki/index.php/Dokeos_1.6_release_notes">http://www.dokeos.com/wiki/index.php/Dokeos_1.6_release_notes </a></p>
 
 
-    
+
 <h3>New Features</h3>
 
 
-    
+
 <ul>
 
 
@@ -723,7 +753,7 @@ a simple videoconferencing interface.</p>
         configure many options through the web interface instead of by digging through the code. </li>
 
 
-      <li> Improved course management - completely rewritten course import/export 
+      <li> Improved course management - completely rewritten course import/export
         functions, easily copy content from one course to another</li>
 
 
@@ -734,28 +764,28 @@ a simple videoconferencing interface.</p>
 
 
       <li>Interoperability: support for SCORM import/export, XML import/export for
-        some features, IEEE LOM Metadata support in documents and groups, import of 
-        Hotpotatoes, connection with QuestionMark (this last one will be available 
+        some features, IEEE LOM Metadata support in documents and groups, import of
+        Hotpotatoes, connection with QuestionMark (this last one will be available
         as plugin).</li>
 
 
-    
+
 </ul>
 
 
-    
+
 <h3>Roadmap</h3>
 
 
-    
+
 <p><a href="http://www.dokeos.com/wiki/index.php/Roadmap_1.6">http://www.dokeos.com/wiki/index.php/Roadmap_1.6</a></p>
 
 
-    
+
 <h1>Dokeos 1.5.5   </h1>
 
 
-    
+
 <ul>
 
 

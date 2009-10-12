@@ -2,7 +2,7 @@
 
 var dialog		= window.parent ;
 var oEditor		= dialog.InnerDialogLoaded() ;
-var FCK			= oEditor.FCK ; 
+var FCK			= oEditor.FCK ;
 var FCKLang		= oEditor.FCKLang ;
 var FCKConfig	= oEditor.FCKConfig ;
 var FCKTools	= oEditor.FCKTools ;
@@ -10,7 +10,7 @@ var FCKTools	= oEditor.FCKTools ;
 // Set the language direction.
 window.document.dir = FCKLang.Dir ;
 
-// We have to avoid javascript errors if some language variables have not been defined. 
+// We have to avoid javascript errors if some language variables have not been defined.
 FCKLang['UploadSelectFileFirst'] = FCKLang['UploadSelectFileFirst'] ? FCKLang['UploadSelectFileFirst'] : 'Please, select a file before pressing the upload button.' ;
 FCKLang['FileSuccessfullyUploaded'] = FCKLang['FileSuccessfullyUploaded'] ? FCKLang['FileSuccessfullyUploaded'] : 'Your file has been successfully uploaded.' ;
 FCKLang['FileRenamed'] = FCKLang['FileRenamed'] ? FCKLang['FileRenamed'] : 'A file with the same name is already available. The uploaded file has been renamed to ' ;
@@ -49,7 +49,7 @@ function OnDialogTabChange( tabCode )
 
 // <object><param><embed> alternative does not working properly
 // for reasons only microsoft can know.
-var EmbedInObject = false ; 
+var EmbedInObject = false ;
 
 // Get the selected embedded movie and its container div (if available).
 var oMovie = null ;
@@ -69,7 +69,7 @@ if ( oFakeImage )
 
 if ( oContainerDiv )
 {
-	if ( oContainerDiv.tagName == 'DIV' && 
+	if ( oContainerDiv.tagName == 'DIV' &&
 		 oContainerDiv.childNodes.length > 0 &&
 		 oContainerDiv.childNodes[0].tagName == ( EmbedInObject ? 'OBJECT' : 'EMBED' ) )
 	{
@@ -115,11 +115,11 @@ function GetParam( e, pname, defvalue )
 	}
 }
 
-window.onload = function ()	
+window.onload = function ()
 {
 	// Translate the dialog box texts.
 	oEditor.FCKLanguageManager.TranslatePage( document ) ;
-	
+
 	// Read settings from existing embedded movie or set to default.
 
 	GetE( 'txtUrl' ).value = GetParam( oMovie, ( EmbedInObject ? 'url' : 'src' ), '' ) ;
@@ -208,7 +208,7 @@ function CreateEmbeddedMovie( url )
 			html += '<param name="showstatusbar" value="' + ( GetE( 'chkShowstatusbar' ).checked ? 'true' : 'false' ) + '" />' ;
 			html += '<param name="standby" value="Loading Video..." />' ;
 			html += '<param name="pluginspace" value="' + pluginspace + '" />' ;
-			html += '<param name="codebase" value="' + codebase + '" />' ; 
+			html += '<param name="codebase" value="' + codebase + '" />' ;
 			html += '<embed type="' + sType + '" src="' + url + '"></embed>' ;
 			html += '<noembed>Download movie: <a href="' + url + '">' + url + '</a></noembed>' ;
 			html += '</object>';
@@ -226,7 +226,7 @@ function CreateEmbeddedMovie( url )
 			       'showstatusbar="' + ( GetE( 'chkShowstatusbar' ).checked ? 'true' : 'false' ) + '" ' +
 			       'pluginspace="' + pluginspace + '" ' +
 			       'codebase="' + codebase + '"' ;
-			if ( !GetE( 'chkAutosize' ).checked )	
+			if ( !GetE( 'chkAutosize' ).checked )
 				html += 'width="' + GetE( 'txtWidth' ).value + '" height="' + GetE( 'txtHeight' ).value + '"' ;
 			html += '></embed>' ;
 		}
@@ -257,14 +257,14 @@ function Ok()
 	url = GetE( 'txtUrl' ).value ;
 
 	if ( !oFakeImage )
-	{	
+	{
 		oFakeImage = oEditor.FCKDocumentProcessor_CreateFakeImage( 'FCK__Video', oEmbed ) ;
 		oFakeImage.setAttribute( '_fckvideo', 'true', 0 ) ;
 	}
 
-	oEditor.FCKEmbedAndObjectProcessor.RefreshView( oFakeImage, oEmbed ) ;	
+	oEditor.FCKEmbedAndObjectProcessor.RefreshView( oFakeImage, oEmbed ) ;
 
-	html = CreateEmbeddedMovie( url ) ;	
+	html = CreateEmbeddedMovie( url ) ;
 	FCK.InsertHtml( html ) ;
 
 	oEditor.FCKUndo.SaveUndoStep() ;
@@ -399,7 +399,7 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 			alert( FCKLang['UploadError'] + errorNumber ) ;
 			return ;
 	}
-	
+
 	SetUrl( fileUrl ) ;
 	GetE( 'frmUpload' ).reset() ;
 }
@@ -416,7 +416,7 @@ function CheckUpload()
 		alert( FCKLang['UploadSelectFileFirst'] ) ;
 		return false ;
 	}
-	
+
 	if ( ( FCKConfig.VideoUploadAllowedExtensions.length > 0 && !oUploadAllowedExtRegex.test( sFile ) ) ||
 		( FCKConfig.VideoUploadDeniedExtensions.length > 0 && oUploadDeniedExtRegex.test( sFile ) ) )
 	{

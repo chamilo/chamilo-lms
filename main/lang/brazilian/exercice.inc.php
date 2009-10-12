@@ -323,4 +323,13 @@ $BackToResultList = "Voltar à lista de resultados";
 $EditingScoreCauseProblemsToExercisesInLP = "Se editar a pontuação de uma questão, recorde-se de que esta exercício foi adicionado num Curso";
 $SelectExercice = "Selecione o exercício";
 $YouHaveToSelectATest = "Você tem que selecionar um teste";
+$HotspotDelineation = "Deliniamento do Hotspot";
+$CreateQuestions = "Criar questões";
+$MoreOAR = "Mais OAR";
+$LessOAR = "Menos OAR";
+$LearnerIsInformed = "Esta mensagem aparecerá ao estudante se ele errar esta etapa, assim como uma tabela com resultados";
+$MinOverlap = "Overlap Mínimo";
+$MaxExcess = "Excesso máximo ";
+$MaxMissing = "Maximo missing ";
+$IfNoError = "Se não existir nenhum erro ";
 ?>

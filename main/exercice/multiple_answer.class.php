@@ -1,5 +1,5 @@
 <?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
- 
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -88,7 +88,7 @@ class MultipleAnswer extends Question {
 						</th>
 						<th>
 							'.get_lang('Weighting').'
-						</th>						
+						</th>
 					</tr>';
 		$form -> addElement ('html', $html);
 
@@ -102,10 +102,10 @@ class MultipleAnswer extends Question {
 			}
 		}
 
-		$form -> addElement('hidden', 'nb_answers');		
+		$form -> addElement('hidden', 'nb_answers');
 		$boxes_names = array();
 
-		for($i = 1 ; $i <= $nb_answers ; ++$i) {			
+		for($i = 1 ; $i <= $nb_answers ; ++$i) {
 			if(is_object($answer)) {
 				$defaults['answer['.$i.']'] = $answer -> answer[$i];
 				$defaults['comment['.$i.']'] = $answer -> comment[$i];
@@ -116,7 +116,7 @@ class MultipleAnswer extends Question {
 				$defaults['comment[1]'] = get_lang('langDefaultMultipleComment2');
 				$defaults['correct[1]'] = true;
 				$defaults['weighting[1]'] = 10;
-								
+
 				$defaults['answer[2]']  = get_lang('langDefaultMultipleAnswer1');
 				$defaults['comment[2]'] = get_lang('langDefaultMultipleComment1');
 				$defaults['correct[2]'] = false;
@@ -124,13 +124,13 @@ class MultipleAnswer extends Question {
 			}
 			$renderer = & $form->defaultRenderer();
 			$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>');
-			
+
 			$answer_number=$form->addElement('text', null,null,'value="'.$i.'"');
-			$answer_number->freeze(); 
-			
+			$answer_number->freeze();
+
 			$form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox" style="margin-left: 0em;"');
 			$boxes_names[] = 'correct['.$i.']';
-			
+
 			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 			$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
@@ -139,24 +139,24 @@ class MultipleAnswer extends Question {
 		}
 		$form -> addElement ('html', '</table>');
 		$form -> addElement ('html', '<br />');
-		
+
 		$form -> add_multiple_required_rule ($boxes_names , get_lang('ChooseAtLeastOneCheckbox') , 'multiple_required');
 
 
 		$navigator_info = api_get_navigator();
-		global $text, $class;	
-		//ie6 fix			
+		global $text, $class;
+		//ie6 fix
 		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 			$form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
 			$form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
-			$form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');			
+			$form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');
 		} else {
 			$form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
 			$form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
 			// setting the save button here and not in the question class.php
 			$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
 		}
-		
+
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
 		$renderer->setElementTemplate('{element}&nbsp;','submitQuestion');
 		$renderer->setElementTemplate('{element}','moreAnswers');

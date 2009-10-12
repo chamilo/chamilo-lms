@@ -3,7 +3,7 @@
 /**
  * Experimental HTML5-based parser using Jeroen van der Meer's PH5P library.
  * Occupies space in the HTML5 pseudo-namespace, which may cause conflicts.
- * 
+ *
  * @note
  *    Recent changes to PHP's DOM extension have resulted in some fatal
  *    error conditions with the original version of PH5P. Pending changes,
@@ -11,7 +11,7 @@
  */
 
 class HTMLPurifier_Lexer_PH5P extends HTMLPurifier_Lexer_DOMLex {
-    
+
     public function tokenizeHTML($html, $config, $context) {
         $new_html = $this->normalize($html, $config, $context);
         $new_html = $this->wrapHTML($new_html, $config, $context);
@@ -32,31 +32,31 @@ class HTMLPurifier_Lexer_PH5P extends HTMLPurifier_Lexer_DOMLex {
             , $tokens);
         return $tokens;
     }
-    
+
 }
 
 /*
 
-Copyright 2007 Jeroen van der Meer <http://jero.net/> 
+Copyright 2007 Jeroen van der Meer <http://jero.net/>
 
-Permission is hereby granted, free of charge, to any person obtaining a 
-copy of this software and associated documentation files (the 
-"Software"), to deal in the Software without restriction, including 
-without limitation the rights to use, copy, modify, merge, publish, 
-distribute, sublicense, and/or sell copies of the Software, and to 
-permit persons to whom the Software is furnished to do so, subject to 
-the following conditions: 
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
 
-The above copyright notice and this permission notice shall be included 
-in all copies or substantial portions of the Software. 
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
-OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 */
 
@@ -1075,7 +1075,7 @@ class HTML5 {
         // used when parsing entities in text and in attributes.
 
         // The behaviour depends on the identity of the next character (the
-        // one immediately after the U+0026 AMPERSAND character): 
+        // one immediately after the U+0026 AMPERSAND character):
 
         switch($this->character($this->char + 1)) {
             // U+0023 NUMBER SIGN (#)
@@ -2231,7 +2231,7 @@ class HTML5TreeConstructer {
                     if($this->elementInScope($token['name'])) {
                         $this->generateImpliedEndTags();
 
-                    } 
+                    }
 
                     if(end($this->stack)->nodeName !== $token['name']) {
                         /* Now, if the current node is not an element with the
@@ -2610,7 +2610,7 @@ class HTML5TreeConstructer {
                             for($x = count($this->stack) - $n; $x >= $n; $x--) {
                                 array_pop($this->stack);
                             }
-                                    
+
                         } else {
                             $category = $this->getElementCategory($node);
 
@@ -3546,7 +3546,7 @@ class HTML5TreeConstructer {
             // In theory, this should ever be needed, but just in case
             if ($token['name'] === '') $token['name'] = 'span'; // arbitrary generic choice
         }
-        
+
         $el = $this->dom->createElement($token['name']);
 
         foreach($token['attr'] as $attr) {

@@ -40,11 +40,11 @@ class HTML_QuickForm_Rule_Callback extends HTML_QuickForm_Rule
 
    /**
     * Whether to use BC mode for specific rules
-    * 
+    *
     * Previous versions of QF passed element's name as a first parameter
     * to validation functions, but not to validation methods. This behaviour
     * is emulated if you are using 'function' as rule type when registering.
-    * 
+    *
     * @var array
     * @access private
     */
@@ -82,7 +82,7 @@ class HTML_QuickForm_Rule_Callback extends HTML_QuickForm_Rule
      * @param     string    $name       Name of rule
      * @param     string    $callback   Name of function or method
      * @param     string    $class      Name of class containing the method
-     * @param     bool      $BCMode     Backwards compatibility mode 
+     * @param     bool      $BCMode     Backwards compatibility mode
      * @access    public
      */
     function addData($name, $callback, $class = null, $BCMode = false)

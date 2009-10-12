@@ -71,7 +71,7 @@ class LinkFactory
 		$links = AbstractLink :: load(null, null, $eval_id);
 		foreach ($links as $link) {
 			if (is_a($link, 'EvalLink')) {
-				return $link;				
+				return $link;
 			}
 		}
 		return null;
@@ -91,9 +91,9 @@ class LinkFactory
 	 * @param $type link type
 	 */
 	public function create ($type) {
-		if ($type == LINK_EXERCISE ) { 
+		if ($type == LINK_EXERCISE ) {
 			return new ExerciseLink();
-		} elseif ($type == LINK_DROPBOX ) { 
+		} elseif ($type == LINK_DROPBOX ) {
 			return new DropboxLink();
 		} elseif ($type == LINK_STUDENTPUBLICATION ) {
 			return new StudentPublicationLink();

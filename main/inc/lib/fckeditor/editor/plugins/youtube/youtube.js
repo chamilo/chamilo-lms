@@ -28,7 +28,7 @@ FCKLang['DlgYouTubeURLTipContent1'] = FCKLang['DlgYouTubeURLTipContent1'] ? FCKL
 FCKLang['DlgYouTubeURLTipContent3'] = FCKLang['DlgYouTubeURLTipContent3'] ? FCKLang['DlgYouTubeURLTipContent3'] : '' ;
 FCKLang['DlgYouTubeURLTipContent1'] = FCKLang['DlgYouTubeURLTipContent1'].toString().replace( '%s', '<a href="http://www.youtube.com/" target="_blank">http://www.youtube.com/<\/a>' ) ;
 FCKLang['DlgYouTubeURLTipContent3'] = FCKLang['DlgYouTubeURLTipContent3'].toString().replace( '%s', 'http://www.youtube.com/watch?v=XXXXXXXXXXX...' ) ;
-	
+
 //#### Dialog Tabs
 
 // Set the dialog tabs.
@@ -116,14 +116,14 @@ function Ok()
 
 		return false ;
 	}
-	
+
 	// Check security
 	if ( checkCode( GetE( 'txtUrl' ).value ) == false )
 	{
 		alert( oEditor.FCKLang.DlgYouTubeSecurity ) ;
 		return false ;
 	}
-	
+
     oEditor.FCKUndo.SaveUndoStep() ;
     if ( !oEmbed )
 	{
@@ -148,10 +148,10 @@ function UpdateEmbed( e )
 {
 	var YoutubeUrl = GetE( 'txtUrl' ).value ;
 	var YoutubeId = GetYoutubeId( YoutubeUrl ) ;
-	
+
 	SetAttribute( e, 'type', 'application/x-shockwave-flash' ) ;
 	SetAttribute( e, 'pluginspage', 'http://www.macromedia.com/go/getflashplayer' ) ;
-    SetAttribute( e, 'allowfullscreen', 'true' ) ;	
+    SetAttribute( e, 'allowfullscreen', 'true' ) ;
 	if ( GetE( 'radioHigh' ).checked )
 	{
 		SetAttribute( e, 'src', YoutubeSite + YoutubeId + HighQualityString ) ;
@@ -171,7 +171,7 @@ function checkCode( code )
 	{
 		return false ;
 	}
-	
+
 	if ( code.search( REG_PROTOCOL ) != -1 )
 	{
 		return false ;

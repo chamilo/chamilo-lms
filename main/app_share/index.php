@@ -15,22 +15,22 @@ $nameTools = get_lang("ModifInfo");
 $course_code = $_course["sysCode"];
 
 $app_share_tmp_dir_base = api_get_path(SYS_ARCHIVE_PATH).'app_share/';
-mkdir ($app_share_tmp_dir_base, 0700); 
+mkdir ($app_share_tmp_dir_base, 0700);
 $app_share_tmp_dir = $app_share_tmp_dir_base.$course_code;
 $app_base_file = api_get_path(SYS_CODE_PATH).'app_share/DokeosAppShare.exe';
 $app_share_app_file = $app_share_tmp_dir.'/DokeosAppShare.exe';
 
 $specialCode='';
 if (file_exists($app_share_app_file) == FALSE) {
-	
+
 	mkdir ($app_share_tmp_dir, 0700);
-	
+
 	if (file_exists($app_base_file) == FALSE) {
 		echo('FATAL ERROR: file <b>'.$app_base_file.'</b> not found.<br />');
 	} else {
 		$source = fopen($app_base_file, "r");
 		$target = fopen($app_share_app_file, "a" );
-		
+
 		$specialCode = rand(100000,999999).time().rand(100000,999999);
 		$contents = fread ($source, filesize ($app_base_file));
 		fwrite ($target, $contents, filesize ($app_base_file));
@@ -38,7 +38,7 @@ if (file_exists($app_share_app_file) == FALSE) {
 		fclose($source);
 		fclose($target);
 	}
-	
+
 } else {
 	$source = fopen($app_share_app_file, "r" );
 	fread ($source, filesize ($app_base_file)); // skip binary content
@@ -74,7 +74,7 @@ if ($_GET["client"] == 'true') {
     <PARAM NAME = ENCODING VALUE=Tight>
     <PARAM NAME = 'Open New Window' VALUE='Yes'>
     <COMMENT>
-	<EMBED 
+	<EMBED
             type = 'application/x-java-applet;version=1.4' \
             CODE = VncViewer.class \
             ARCHIVE = VncViewer.jar \

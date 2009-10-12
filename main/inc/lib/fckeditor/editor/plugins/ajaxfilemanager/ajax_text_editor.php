@@ -10,20 +10,20 @@
 	if(CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_EDITABLE)
 	{
 		die(SYS_DISABLED);
-	}	
+	}
 		$session->gc();
 		$_GET['path'] = empty($_GET['path'])?CONFIG_SYS_ROOT_PATH . "ajax_image_editor_demo.jpg":$_GET['path'];
 		if(!empty($_GET['path']) && file_exists($_GET['path']) && is_file($_GET['path']) && isUnderRoot($_GET['path']))
 		{
 				$path = $_GET['path'];
-		}else 
+		}else
 		{
 			die(TXT_FILE_NOT_FOUND);
 		}
 		if(file_exists(DIR_AJAX_EDIT_AREA . "reg_syntax" . DIRECTORY_SEPARATOR . getFileExt($path) . ".js"))
 		{
-			$syntax = getFileExt($path);			
-		}else 
+			$syntax = getFileExt($path);
+		}else
 		{
 			switch (getFileExt($path))
 			{
@@ -36,7 +36,7 @@
 		}
 		if(array_search(getFileExt($path), getValidTextEditorExts())=== false)
 		{
-			die(TXT_DISALLOWED_EXT);	
+			die(TXT_DISALLOWED_EXT);
 		}
 	?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -64,8 +64,8 @@
 		jQuery(document).ready(
 		function()
 		{
-				editAreaLoader.init({				
-				id: "content"	// id of the textarea to transform		
+				editAreaLoader.init({
+				id: "content"	// id of the textarea to transform
 				,start_highlight: false	// if start with highlight
 				,allow_resize: "both"
 				,gecko_spellcheck:true
@@ -74,16 +74,16 @@
 				,save_callback:"save"
 				,save_as_callback:"save_as"
 				,language: "<?php echo (file_exists(DIR_AJAX_EDIT_AREA . 'langs' . DIRECTORY_SEPARATOR .CONFIG_LANG_INDEX . ".js")?CONFIG_LANG_INDEX:'en'); ?>"
-				,syntax: "<?php echo $syntax; ?>"	
-			});				
-				jQuery('#windowSaveAs').jqm();		
-				jQuery('#windowProcessing').jqm({modal:true});				
+				,syntax: "<?php echo $syntax; ?>"
+			});
+				jQuery('#windowSaveAs').jqm();
+				jQuery('#windowProcessing').jqm({modal:true});
 		}
-	);		
+	);
 
-		
 
-			
+
+
 </script>
 
 <link href="theme/<?php echo CONFIG_THEME_NAME; ?>/css/ajaxtexteditor.css" type="text/css" rel="stylesheet" />
@@ -98,10 +98,10 @@
 <div id="windowProcessing" class="jqmWindow" style="display:none">
 	<form name="frmProcessing" id="frmProcessing" method="POST" action="<?php echo appendQueryString(CONFIG_URL_SAVE_TEXT, makeQueryString(array('path')));?>">
 		<input type="hidden" name="folder" id="folder" value="<?php echo dirname($path); ?>" />
-		<input type="hidden" name="name" id="name" value="<?php echo basename($path); ?>" />	
+		<input type="hidden" name="name" id="name" value="<?php echo basename($path); ?>" />
 		<input type="hidden" name="save_as_request" id="save_as_request" value="0" />
-		<div style="display:none"><textarea name="text" id="text"></textarea></div> 
-	</form> 
+		<div style="display:none"><textarea name="text" id="text"></textarea></div>
+	</form>
 	<a href="#" class="jqmClose" id="windowSaveClose"><?php echo IMG_BTN_CANCEL; ?></a>
 	<p><img src="theme/<?php echo CONFIG_THEME_NAME; ?>/images/loading.gif" /></p>
 </div>
@@ -139,7 +139,7 @@
             </th>
             <td>
             	<select class="input" name="save_to" id="save_to">
-              	
+
               </select>
             </td>
           </tr>

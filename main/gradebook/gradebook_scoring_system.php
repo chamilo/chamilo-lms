@@ -44,7 +44,7 @@ $htmlHeadXtra[]= '
 	 	document.getElementById("txta-"+(item)).value = "100";
 	 	document.getElementById("txta-"+(item-1)).value = "";
   }
-  
+
   function minItem(item)
    {
     if (item != 1)
@@ -58,7 +58,7 @@ $htmlHeadXtra[]= '
 
 	}
 	if (item = 1)
-	{	
+	{
 		document.getElementById("min-"+(item)).style.display = "none";
 	}
   }
@@ -95,7 +95,7 @@ if ($scoreform->validate()) {
 			if (!empty($setting['score'])) {
 				foreach ($scoringdisplay as $passed_entry) {
 					if ($passed_entry['score'] == $setting['score']) {
-						$ranges_ok = false;	
+						$ranges_ok = false;
 					}
 				}
 			$scoringdisplay[]= $setting;
@@ -112,12 +112,12 @@ if ($scoreform->validate()) {
 	$val_enablescorecolor=isset($values['enablescorecolor']) ? $values['enablescorecolor'] : null;
 	$displayscore->set_coloring_enabled(($val_enablescorecolor == '1') ? true : false);
 	if ($displayscore->is_coloring_enabled()) {
-		$displayscore->set_color_split_value($values['scorecolpercent']);	
+		$displayscore->set_color_split_value($values['scorecolpercent']);
 	}
 	// update custom display settings
 	$val_enablescore=isset($values['enablescore']) ? $values['enablescore'] : null;
 	$val_includeupperlimit=isset($values['includeupperlimit']) ? $values['includeupperlimit'] : null;
-	
+
 	$displayscore->set_custom(($val_enablescore == '1') ? true : false);
 	$displayscore->set_upperlimit_included(($val_includeupperlimit == '1') ? true : false);
 	if ($displayscore->is_custom() && !empty($scoringdisplay)) {

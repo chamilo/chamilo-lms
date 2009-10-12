@@ -172,4 +172,8 @@ $EditInformation = "Modifier information";
 $RegisterUser = "Valider mon inscription";
 $IHaveReadAndAgree = "J\'ai lu et accepte les";
 $ByClickingRegisterYouAgreeTermsAndConditions = "En cliquant sur le bouton \"Valider mon inscription\" ci-dessous, vous marquez votre accord avec les termes et conditions de ce site.";
+$User = "Utilisateur";
+$LostPass = "Vous avez oublié votre mot de passe?";
+$EnterEmailUserAndWellSendYouPassword = "Entrez votre nom d\'utilisateur ou l\'adresse e-mail avec laquelle vous vous êtes enregistré et nous vous enverrons votre mot de passe par e-mail.";
+$NoUserAccountWithThisEmailAddress = "Désolé, nous n\'avons trouvé aucune trace d\'un compte avec ce nom d\'utilisateur et/ou cette adresse e-mail.";
 ?>

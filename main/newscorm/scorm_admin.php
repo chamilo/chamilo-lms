@@ -97,17 +97,17 @@ switch($action){
 		if(!empty($id)){
 			$l="learnpath/learnpath_handler.php?learnpath_id=$id";
 			$sql="DELETE FROM $tbl_tool where (link='$l' AND image='scormbuilder.gif')";
-			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql,__FILE__,__LINE__);
 			$sql="SELECT * FROM $tbl_learnpath_chapter where learnpath_id=$id";
-			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql,__FILE__,__LINE__);
 			while ($row=mysql_fetch_array($result))
 			{
 				$c=$row['id'];
 				$sql2="DELETE FROM $tbl_learnpath_item where chapter_id=$c";
-				$result2=api_sql_query($sql2,__FILE__,__LINE__);
+				$result2=Database::query($sql2,__FILE__,__LINE__);
 			}
 			$sql="DELETE FROM $tbl_learnpath_chapter where learnpath_id=$id";
-			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql,__FILE__,__LINE__);
 			deletepath($id);
 			$dialogBox=get_lang('_learnpath_deleted');
 		}
@@ -118,7 +118,7 @@ switch($action){
 		  ==================================================================*/
 		if(!empty($id)){
 			$sql="SELECT * FROM $tbl_learnpath_main where learnpath_id=$id";
-			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql,__FILE__,__LINE__);
 			$row=mysql_fetch_array($result);
 			$name=domesticate($row['learnpath_name']);
 			if ($set_visibility == 'i') {
@@ -132,7 +132,7 @@ switch($action){
 				$v=1;
 			}
 			$sql="SELECT * FROM $tbl_tool where (name='$name' and image='scormbuilder.gif')";
-			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql,__FILE__,__LINE__);
 			$row2=mysql_fetch_array($result);
 			$num=mysql_num_rows($result);
 			if (($set_visibility == 'i') && ($num>0))
@@ -155,7 +155,7 @@ switch($action){
 			{
 				//parameter and database incompatible, do nothing
 			}
-			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql,__FILE__,__LINE__);
 
 		}
 		break;
@@ -167,9 +167,9 @@ switch($action){
 		{
 		  $l="learnpath/learnpath_handler.php?learnpath_id=$id";
 		  $sql="UPDATE $tbl_tool set name='".domesticate($learnpath_name)."' where (link='$l' and image='scormbuilder.gif')";
-		  $result=api_sql_query($sql,__FILE__,__LINE__);
+		  $result=Database::query($sql,__FILE__,__LINE__);
 		  $sql ="UPDATE $tbl_learnpath_main SET learnpath_name='".domesticate($learnpath_name)."', learnpath_description='".domesticate($learnpath_description)."' WHERE learnpath_id=$id";
-		  $result=api_sql_query($sql,__FILE__,__LINE__);
+		  $result=Database::query($sql,__FILE__,__LINE__);
 		  $dialogBox=get_lang('_learnpath_edited');
 		}
 		break;
@@ -180,10 +180,10 @@ switch($action){
 		if (!empty($Submit))
 		{
 		  $sql ="INSERT INTO $tbl_learnpath_main (learnpath_name, learnpath_description) VALUES ('".domesticate($learnpath_name)."','".domesticate($learnpath_description)."')";
-		  api_sql_query($sql,__FILE__,__LINE__);
+		  Database::query($sql,__FILE__,__LINE__);
 		  $my_lp_id = Database::get_last_insert_id();
 		  $sql ="INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool) VALUES ('".domesticate($learnpath_name)."','learnpath/learnpath_handler.php?learnpath_id=$my_lp_id','scormbuilder.gif','1','0','pastillegris.gif',0)";
-		  api_sql_query($sql,__FILE__,__LINE__);
+		  Database::query($sql,__FILE__,__LINE__);
 		  //instead of displaying this info text, get the user directly to the learnpath edit page
 		  //$dialogBox=get_lang('_learnpath_added');
 		  header('location:../learnpath/learnpath_handler.php?'.api_get_cidreq().'&learnpath_id='.$my_lp_id);
@@ -197,7 +197,7 @@ switch($action){
 		if (!empty($Submit))
 		{
 			$sql ="UPDATE $tbl_document SET comment='".domesticate($learnpath_description)."', name='".domesticate($learnpath_name)."' WHERE path='$path'";
-			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql,__FILE__,__LINE__);
 			$dialogBox=get_lang('_learnpath_edited');
 		}
 		break;
@@ -402,10 +402,10 @@ if($is_allowedToEdit) // TEACHER ONLY
       $newVisibilityStatus = "i";
     }
     $query = "UPDATE $tbl_document SET visibility='$newVisibilityStatus' WHERE path=\"".$visibilityPath."\""; //added by Toon
-    api_sql_query($query,__FILE__,__LINE__);
+    Database::query($query,__FILE__,__LINE__);
     if (mysql_affected_rows() == 0) // extra check added by Toon, normally not necessary anymore because all files are in the db
     {
-      api_sql_query("INSERT INTO $tbl_document SET path=\"".$visibilityPath."\", visibility=\"".$newVisibilityStatus."\"",__FILE__,__LINE__);
+      Database::query("INSERT INTO $tbl_document SET path=\"".$visibilityPath."\", visibility=\"".$newVisibilityStatus."\"",__FILE__,__LINE__);
     }
     unset($attribute);
     $dialogBox = get_lang('ViMod');

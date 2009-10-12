@@ -3,7 +3,7 @@
 
 /**
  * HTML class for a submit type element
- * 
+ *
  * PHP versions 4 and 5
  *
  * LICENSE: This source file is subject to version 3.01 of the PHP license
@@ -29,7 +29,7 @@ require_once 'style_button.php';
 
 /**
  * HTML class for a submit type element
- * 
+ *
  * @category    HTML
  * @package     HTML_QuickForm
  * @author      Adam Daniel <adaniel1@eesus.jnj.com>
@@ -43,7 +43,7 @@ class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
 
     /**
      * Class constructor
-     * 
+     *
      * @param     string    Input field name attribute
      * @param     string    Input field value
      * @param     mixed     Either a typical HTML attribute string or an associative array
@@ -57,13 +57,13 @@ class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
         $this->setValue($value);
         $this->setType('submit');
     } //end constructor
-    
+
     // }}}
     // {{{ freeze()
 
     /**
      * Freeze the element so that only its value is returned
-     * 
+     *
      * @access    public
      * @return    void
      */

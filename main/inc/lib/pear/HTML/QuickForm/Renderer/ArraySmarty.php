@@ -180,11 +180,11 @@ class HTML_QuickForm_Renderer_ArraySmarty extends HTML_QuickForm_Renderer_Array
         }
         // create keys for elements grouped by native group or name
         if (api_strstr($ret['name'], '[') or $this->_currentGroup) {
-            // Fix for bug #8123: escape backslashes and quotes to prevent errors 
+            // Fix for bug #8123: escape backslashes and quotes to prevent errors
             // in eval(). The code below seems to handle the case where element
             // name has unbalanced square brackets. Dunno whether we really
             // need this after the fix for #8123, but I'm wary of making big
-            // changes to this code.  
+            // changes to this code.
             api_preg_match('/([^]]*)\\[([^]]*)\\]/', $ret['name'], $matches);
             if (isset($matches[1])) {
                 $sKeysSub = api_substr_replace($ret['name'], '', 0, api_strlen($matches[1]));

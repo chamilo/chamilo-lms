@@ -47,7 +47,7 @@ require_once('survey.lib.php');
 require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
-if (!api_is_allowed_to_edit(false,true)) //coach can see this 
+if (!api_is_allowed_to_edit(false,true)) //coach can see this
 {
 	Display :: display_header(get_lang('SurveyList'));
 	SurveyUtil::survey_list_user($_user['user_id']);
@@ -71,7 +71,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 }
 else
 {
-	$tool_name = get_lang('SurveyList'); 
+	$tool_name = get_lang('SurveyList');
 }
 
 
@@ -122,11 +122,11 @@ if(isset($_GET['action']) && $_GET['action'] == 'empty')
 			api_not_allowed();
 			exit;
 		}
-	} else { 
+	} else {
 		if (!(api_is_course_admin() || api_is_platform_admin())) {
 			api_not_allowed();
-			exit;			
-		} 
+			exit;
+		}
 	}
 	$return = survey_manager::empty_survey(intval($_GET['survey_id']));
 	if ($return)

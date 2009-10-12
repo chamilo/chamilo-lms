@@ -3,9 +3,9 @@
 ** Version.......:  1.1
 ** Author........:  Xiang Wei ZHUO <wei@zhuo.org>
 ** Filename......:  slider.js
-** Last changed..:  31 Mar 2004 
+** Last changed..:  31 Mar 2004
 ** Notes.........:  Works in IE and Mozilla
-**/ 
+**/
 
 var ie=document.all
 var ns6=document.getElementById&&!document.all
@@ -19,11 +19,11 @@ function getMouseXY(e) {
 
     x = ns6? e.clientX: event.clientX
     y = ns6? e.clientY: event.clientY
-    
+
     if (sx < 0) sx = x; if (sy < 0) sy = y;
 
     var dx = initX +(x-sx);
-    
+
     if (dx <= rangeMin)
         dx = rangeMin;
     else if (dx >= rangeMax)
@@ -33,7 +33,7 @@ function getMouseXY(e) {
 
     if (currentSlider !=  null)
         currentSlider.style.left = dx+"px";
-        
+
     if (sliderField != null)
     {
         sliderField.value = parseInt(range);
@@ -75,7 +75,7 @@ function updateSlider(value, action)
 
     if (currentSlider !=  null)
         currentSlider.style.left = newValue+"px";
-    
+
     var range = newValue/(rangeMax - rangeMin)*100;
 
     if (sliderField != null)

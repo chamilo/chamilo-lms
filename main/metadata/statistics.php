@@ -6,11 +6,11 @@
 */
 
 /**
-============================================================================== 
+==============================================================================
 *	Dokeos Metadata: statistics about metadata
 *
 *	@package dokeos.metadata
-============================================================================== 
+==============================================================================
 */
 
 
@@ -21,14 +21,14 @@ require('md_funcs.php');
 define('EID_TYPE', 'Mix');
 require('md_' . strtolower(EID_TYPE) . '.php');
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'md_mix';
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 
 $nameTools = get_lang('Tool');
 
-($nameTools && get_lang('Sorry')) or give_up( 
+($nameTools && get_lang('Sorry')) or give_up(
     'Language file ' . $language_file . " doesn't define 'Tool' and 'Sorry'");
 
 $_course = api_get_course_info(); isset($_course) or give_up(get_lang('Sorry'));
@@ -72,7 +72,7 @@ $kwds = array(); $kwcnt = array(); $kwrefs = array();
 
 while (($kwline = fgets($myFile)))
 {
-    if (ereg('°>(.+)<°', $kwline, $regs) || ereg('">(.+)<°', $kwline, $regs))
+    if (ereg('ï¿½>(.+)<ï¿½', $kwline, $regs) || ereg('">(.+)<ï¿½', $kwline, $regs))
         foreach (explode(',', $regs[1]) as $kw)
             if (!in_array($kw = strtr(trim($kw), $htmldecode), $kwds))
                 $kwds []= $kw;
@@ -87,11 +87,11 @@ echo count($kwds), ' ', get_lang('CourseKwds'), '<br>', "\n";
 while ($row = mysql_fetch_array($result))
 {
     $eid = $row['eid']; $curr = ''; $xmltext = $row['mdxmltext']; $offset = 0;
-    
+
     if (substr($eid, 0, 6) == 'Scorm.')
         if (($dotpos = strpos($eid, '.', 6)) && $dotpos + 1 < strlen($eid))
             $curr = substr($eid, 0, $dotpos);
-                
+
     while (($start = strpos($xmltext, '<keyword>', $offset)))
         if (($start = strpos($xmltext, '">', $start + 9)))
         {
@@ -101,8 +101,8 @@ while ($row = mysql_fetch_array($result))
                 if (!in_array($kw, $kwds))
                 {
                     if (!in_array($kw = '!' . $kw, $kwds)) $kwds []= $kw;
-                    $kwrefs[$kw] .= ' ' . ($curr ? 
-                        (strpos($kwrefs[$kw], $curr) ? 
+                    $kwrefs[$kw] .= ' ' . ($curr ?
+                        (strpos($kwrefs[$kw], $curr) ?
                             substr($eid, $dotpos+1) : $eid) : $eid);
                 }
                 $kwcnt[$kw] ++;  // = $kwcnt[$kw] ? $kwcnt[$kw] + 1 : 1;
@@ -112,7 +112,7 @@ while ($row = mysql_fetch_array($result))
             // <keyword><string language="en">lecture</string></keyword>
         }
         else $offset = $start + 9;
-    
+
     // xmd would be nicer but this is faster...
 }
 
@@ -125,7 +125,7 @@ echo '<h4>', get_lang('NonCourseKwds'), '</h4>', "\n";
 
 foreach ($kwds as $kw)
     if ($kw{0} == '!')
-        echo '<b>', htmlspecialchars(api_substr($kw, 1), ENT_QUOTES, $charset), '</b>: ', $kwcnt[$kw], 
+        echo '<b>', htmlspecialchars(api_substr($kw, 1), ENT_QUOTES, $charset), '</b>: ', $kwcnt[$kw],
             ': <i>', htmlspecialchars($kwrefs[$kw], ENT_QUOTES, $charset), ";</i> \n";
     else break;
 

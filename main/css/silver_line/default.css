@@ -87,7 +87,7 @@ ul {
 .courses {
 	list-style-type: none;
 	margin-bottom: 5px;
-	height: 30px;	
+	height: 30px;
 }
 /* user_portal session list */
 .session_course_item .courses {
@@ -102,7 +102,7 @@ ul {
 #main {
 	font-size: 89%;
 	width: 96%;
-	padding: 0 1% 15px 3%;	
+	padding: 0 1% 15px 3%;
 	/* min-height hack for ie6 or older*/
 	min-height: 400px;
 	height: auto !important;
@@ -355,7 +355,7 @@ ul {
 	height: 4em;
 	background: url('images/headerbg.jpg') repeat-y top right;
 	font-family: Arial, sans-serif, sans;
-	font-weight: bold;	
+	font-weight: bold;
 }
 .push {
 	height: 4em; /* Very important */
@@ -472,11 +472,11 @@ td .menu {
 #centerwrap {
 	float: left;
 	width: 100%;
-	margin-right: -95%;/* this needs to be less than 100% for Moz/Mac which thinks 
-         it's empty otherwise. The difference is made up by putting a 
+	margin-right: -95%;/* this needs to be less than 100% for Moz/Mac which thinks
+         it's empty otherwise. The difference is made up by putting a
          negative left margin on the left float:
-	   Note IE/Mac doesn't like this method ~ it wants the 100% so it can 
-	   be fed in using IE only CSS below becasue IE/Win also works with the 100% method.  
+	   Note IE/Mac doesn't like this method ~ it wants the 100% so it can
+	   be fed in using IE only CSS below becasue IE/Win also works with the 100% method.
 	*/
 }
 /* --- course navigation menu as a definition list  --- */
@@ -537,19 +537,19 @@ td .menu {
 	background: #fff;
 	color:#dcdcdc;
 }
-/* --- end of course navigation menu section  --- */ 
+/* --- end of course navigation menu section  --- */
 /*
 this lets the navigation menu appear to the left:
-#center { margin: 0 0 0 180px; padding: 10px 0 40px 0;  
+#center { margin: 0 0 0 180px; padding: 10px 0 40px 0;
  min-height: 300px; }
 
 #toolnav { float: left; width: 180px; padding: 20px 0 0 0;
- margin-left: -5%; 
+ margin-left: -5%;
 }
 #toolnav { float: right; width: 180px; padding: 0; margin: 0;
  margin-left: -5%; /* the difference to make the left colum appear flush left */
 }
-/* Hide from IE5-mac. Only IE-win sees this. \*/ 
+/* Hide from IE5-mac. Only IE-win sees this. \*/
 * html #toolnav {
 	margin-right: 0px;
 }
@@ -1299,12 +1299,12 @@ a.specialLink:hover, a.specialLink:focus {
 }
 .message-content-body-left {
 	float:left;
-	width:55%;
+	width:30%;
 }
 .message-content-body-right {
 	float:right;
 	text-align:left;
-	width:45%;
+	width:60%;
 }
 .message-body-title {
 	float:right;
@@ -2184,13 +2184,13 @@ div.image-social-content center.friend {
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}	
+}
 #social-profile-container {
 	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:20%;	
+	width:20%;
 }
 #social-profile-content {
 	float:right;

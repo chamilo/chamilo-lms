@@ -57,7 +57,7 @@ if ( isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action']=
 				AND post.file_id=file.id
 				" ;
 	}
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	while ($row=mysql_fetch_array($result))
 	{
 		$files_to_download[]=$row['id'];
@@ -98,7 +98,7 @@ $allowed_to_download=false;
 
 // Check if the user has sent or received the file.
 $sql="SELECT * FROM ".$dropbox_cnf["tbl_person"]." WHERE file_id='".mysql_real_escape_string($_GET['id'])."' AND user_id='".mysql_real_escape_string($_user['user_id'])."'";
-$result=api_sql_query($sql);
+$result=Database::query($sql);
 if (mysql_num_rows($result)>0)
 {
 	$allowed_to_download=true;

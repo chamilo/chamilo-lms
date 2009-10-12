@@ -1,5 +1,5 @@
 <?php
-require_once(api_get_path(LIBRARY_PATH).'social.lib.php'); 
+require_once(api_get_path(LIBRARY_PATH).'social.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'main_api.lib.php');
 Mock::generate('Database');
@@ -13,14 +13,14 @@ class TestSocial extends UnitTestCase{
 	/*
 	public $social;
 	public function TestSocial(){
-		
+
 		$this->UnitTestCase('All main social function tests');
 	}
-	
+
 	public function setUp(){
 		$this->social = new UserFriend();
 	}
-	
+
 	public function tearDown(){
 		$this->social = null;
 	}
@@ -36,9 +36,9 @@ class TestSocial extends UnitTestCase{
 		$this->assertTrue(is_null($res));
 		$this->assertNull($res);
 		//var_dump($res);
-		
+
 	}
-	
+
 	public function testRemovedFriend(){
 		$instans= new MockDatabase();
 		$instans1= new MockDatabase();
@@ -53,7 +53,7 @@ class TestSocial extends UnitTestCase{
 		//var_dump($instans);
 		//var_dump($instans1);
 	}
-	
+
 	public function testShowListTypeFriends(){
 		$instans= new MockDatabase();
 		$instans1= new MockDatabase();
@@ -67,7 +67,7 @@ class TestSocial extends UnitTestCase{
 		//var_dump($res);
 		//var_dump($instans1);
 	}
-	
+
 	public function testGetRelationTypeByName (){
 		$relation_type_name=1;
 		$res = UserFriend::get_relation_type_by_name ($relation_type_name);
@@ -77,7 +77,7 @@ class TestSocial extends UnitTestCase{
 		endif;
 		//var_dump($res);
 	}
-	
+
 	public function testGetRelationBetweenContacts (){
 		$instans= new MockDatabase();
 		$instans1= new MockDatabase();
@@ -100,7 +100,7 @@ class TestSocial extends UnitTestCase{
 		//var_dump($instans1);
 		//var_dump($instans2);
 	}
-	
+
 	public function testGetListIdFriendsByUserId (){
 		$instans= new MockDatabase();
 		$user_id = 1;
@@ -112,8 +112,8 @@ class TestSocial extends UnitTestCase{
 		$this->assertTrue(is_object($instans));
 		//var_dump($res);
 		//var_dump($instans);
-	}	
-	
+	}
+
 	public function testGetListPathWebByUserId(){
 		$instans = new MockUserManager();
 		$user_id=1;
@@ -128,7 +128,7 @@ class TestSocial extends UnitTestCase{
 		//var_dump($res);
 		//var_dump($instans);
 	}
-	
+
 	public function testGetListWebPathUserInvitationByUserId(){
 		$instans = new MockUserManager();
 		$user_id=1;
@@ -142,7 +142,7 @@ class TestSocial extends UnitTestCase{
 		//var_dump($res);
 		//var_dump($instans);
 	}
-	
+
 	public function testSendInvitationFriend(){
 		$instans = new MockDatabase();
 		$user_id=1;
@@ -155,11 +155,11 @@ class TestSocial extends UnitTestCase{
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue(is_bool($res===true || $res === false));
 		endif;
-		$this->assertTrue(is_object($instans));	
+		$this->assertTrue(is_object($instans));
 		//var_dump($res);
 		//var_dump($instans);
 	}
-	
+
 	public function testGetMessageNumberInvitationByUserId(){
 		$instans = new MockDatabase();
 		$user_receiver_id=3;
@@ -168,23 +168,23 @@ class TestSocial extends UnitTestCase{
 		if(is_string($res)):
 		$this->assertTrue(is_numeric($res));
 		endif;
-		$this->assertTrue(is_object($instans));	
-		
+		$this->assertTrue(is_object($instans));
+
 		//var_dump($res);
-		//var_dump($instans);		
+		//var_dump($instans);
 	}
-	
+
 	public function testGetListInvitationOfFriendsByUserId(){
 		$instans = new MockDatabase();
 		$user_id=1;
 		$res = UserFriend::get_list_invitation_of_friends_by_user_id ($user_id);
 		$instans->expectCallCount(Database,3,'');
 		$this->assertTrue(is_array($res));
-		$this->assertTrue(is_object($instans));	
+		$this->assertTrue(is_object($instans));
 		//var_dump($res);
 		//var_dump($instans);
 	}
-	
+
 	public function testInvitationAccepted(){
 		$instans = new MockDatabase();
 		$instans1= new MockDatabase();
@@ -200,7 +200,7 @@ class TestSocial extends UnitTestCase{
 		//var_dump($instans);
 		//var_dump($instans1);
 	}
-	
+
 	public function testInvitationDenied(){
 		$instans = new MockDatabase();
 		$user_send_id=1;
@@ -212,9 +212,9 @@ class TestSocial extends UnitTestCase{
 		//var_dump($res);
 		//var_dump($instans);
 	}
-	
-	
-	
+
+
+
 	public function testQualifyFriend(){
 		$instans = new MockDatabase();
 		$id_friend_qualify=2;

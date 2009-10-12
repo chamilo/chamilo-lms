@@ -1998,19 +1998,19 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         if (preg_match('[^external:\\\\]', $url)) {
             return; //($this->_writeUrlExternal_net($row1, $col1, $row2, $col2, $url, $str, $format));
         }
-    
+
         $record      = 0x01B8;                       // Record identifier
         $length      = 0x00000;                      // Bytes to follow
-    
+
         if (!$format) {
             $format = $this->_url_format;
         }
-    
+
         // Strip URL type and change Unix dir separator to Dos style (if needed)
         //
         $url = preg_replace('/^external:/', '', $url);
         $url = preg_replace('/\//', "\\", $url);
-    
+
         // Write the visible label
         if ($str == '') {
             $str = preg_replace('/\#/', ' - ', $url);
@@ -2019,12 +2019,12 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         if (($str_error == -2) or ($str_error == -3)) {
             return $str_error;
         }
-    
+
         // Determine if the link is relative or absolute:
         //   relative if link contains no dir separator, "somefile.xls"
         //   relative if link starts with up-dir, "..\..\somefile.xls"
         //   otherwise, absolute
-        
+
         $absolute    = 0x02; // Bit mask
         if (!preg_match("/\\\/", $url)) {
             $absolute    = 0x00;
@@ -2033,7 +2033,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
             $absolute    = 0x00;
         }
         $link_type               = 0x01 | $absolute;
-    
+
         // Determine if the link contains a sheet reference and change some of the
         // parameters accordingly.
         // Split the dir name and sheet name (if it exists)
@@ -2042,7 +2042,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         } else {
             $dir_long = $url;
         }
-    
+
         if (isset($sheet)) {
             $link_type |= 0x08;
             $sheet_len  = pack("V", strlen($sheet) + 0x01);
@@ -2058,32 +2058,32 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
         }
 
 
-    
+
         // Pack the link type
         $link_type   = pack("V", $link_type);
-    
+
         // Calculate the up-level dir count e.g.. (..\..\..\ == 3)
         $up_count    = preg_match_all("/\.\.\\\/", $dir_long, $useless);
         $up_count    = pack("v", $up_count);
-    
+
         // Store the short dos dir name (null terminated)
         $dir_short   = preg_replace("/\.\.\\\/", '', $dir_long) . "\0";
-    
+
         // Store the long dir name as a wchar string (non-null terminated)
         //$dir_long       = join("\0", split('', $dir_long));
         $dir_long       = $dir_long . "\0";
-    
+
         // Pack the lengths of the dir strings
         $dir_short_len = pack("V", strlen($dir_short)      );
         $dir_long_len  = pack("V", strlen($dir_long)       );
         $stream_len    = pack("V", 0);//strlen($dir_long) + 0x06);
-    
+
         // Pack the undocumented parts of the hyperlink stream
         $unknown1 = pack("H*",'D0C9EA79F9BACE118C8200AA004BA90B02000000'       );
         $unknown2 = pack("H*",'0303000000000000C000000000000046'               );
         $unknown3 = pack("H*",'FFFFADDE000000000000000000000000000000000000000');
         $unknown4 = pack("v",  0x03                                            );
-    
+
         // Pack the main data stream
         $data        = pack("vvvv", $row1, $row2, $col1, $col2) .
                           $unknown1     .
@@ -2099,11 +2099,11 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
                           $dir_long     .
                           $sheet_len    .
                           $sheet        ;*/
-    
+
         // Pack the header data
         $length   = strlen($data);
         $header   = pack("vv", $record, $length);
-    
+
         // Write the packed data
         $this->_append($header. $data);
         return($str_error);

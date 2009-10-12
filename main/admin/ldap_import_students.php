@@ -39,7 +39,7 @@ $tool_name = get_lang('LDAPImport');
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 
-$htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">	
+$htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 var buttoncheck = 1;
 function checkAll() {
 	//var boxes = document.form.elements[\'checkboxes[]\'];
@@ -77,23 +77,23 @@ if (empty($annee) && empty($course))
 		echo get_lang('LDAPSelectFilterOnUsersOU');
 		//echo '<em>'.get_lang('ToDoThisYouMustEnterYearComponentAndComponentStep').'</em><br />';
 		///echo get_lang('FollowEachOfTheseStepsStepByStep').'<br />';
-		
+
 		echo '<form method="get" action="'.api_get_self().'"><br />';
 		echo '<em>'.get_lang('LDAPOUAttributeFilter').' :</em> ';
 		echo '<input  type="text" name="annee" size="4" maxlength="30" value="'.$annee_base.'"><br />';
 		echo '<input type="submit" value="'.get_lang('Submit').'">';
 		echo '</form>';
 		echo '</div>';
-	
+
 }
 /*
-elseif ($annee <> "" && $composante == "" && $etape == "") // form 2 annee != 0; composante= 0 etape = 0 
+elseif ($annee <> "" && $composante == "" && $etape == "") // form 2 annee != 0; composante= 0 etape = 0
 {
 		Display::display_header($tool_name);
 
 	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
 	ldap_set_version($ds);
-	
+
 	if ($ds) {
 		$r = false;
 		$res = ldap_handle_bind($ds, $r);
@@ -109,7 +109,7 @@ elseif ($annee <> "" && $composante == "" && $etape == "") // form 2 annee != 0;
 		for($i = 0; $i < $info['count']; $i ++)
 		{
 			//presupose LDAP server is UTF-8
-			$composante[$info[$i]['ou'][0]] = iconv('utf-8', api_get_setting('platform_charset'), $info[$i]['description'][0]);
+			$composante[$info[$i]['ou'][0]] = api_utf8_decode($info[$i]['description'][0], api_get_setting('platform_charset'));
 		}
 		$oucompotab3=$composante;
 
@@ -139,7 +139,7 @@ elseif ($annee <> "" && $composante == "" && $etape == "") // form 2 annee != 0;
 	echo '<br />';
 	echo '</div>';
 }
-elseif ($annee <> "" && $composante <> "" && $etape == "") // form3 :annee!=0composante=0etape=0 
+elseif ($annee <> "" && $composante <> "" && $etape == "") // form3 :annee!=0composante=0etape=0
 {
 
 		Display::display_header($tool_name);
@@ -189,7 +189,7 @@ elseif ($annee <> "" && $composante <> "" && $etape == "") // form3 :annee!=0com
 			if ($ouetapetab[$key] != $tempcomp) {
 				$etape = $ouetapetab2[$key];
 				$tempcomp = '"'.$ouetapetab[$key].'"';
-				$tempcomp = iconv('utf-8',api_get_setting('platform_charset'),$tempcomp);
+				$tempcomp = api_utf8_decode($tempcomp, api_get_setting('platform_charset'));
 
 				$annee = str_word_count($etape, 1);
 				echo '<option value="'.$etape.'">'.$tempcomp.'</option>';
@@ -255,8 +255,8 @@ elseif (!empty($annee) && !empty($course) && empty($_POST['confirmed']))
 		$info = ldap_get_entries($ds, $sr);
 
 		for ($key = 0; $key < $info["count"]; $key ++) {
-			$nom_form[] = $info[$key]["sn"][0];//iconv("utf-8",api_get_setting('platform_charset'), $info[$key]["sn"][0]);
-			$prenom_form[] = $info[$key]["givenname"][0];//iconv("utf-8",api_get_setting('platform_charset'), $info[$key]["givenname"][0]);
+			$nom_form[] = $info[$key]["sn"][0];//api_utf8_decode($info[$key]["sn"][0], api_get_setting('platform_charset'));
+			$prenom_form[] = $info[$key]["givenname"][0];//api_utf8_decode($info[$key]["givenname"][0], api_get_setting('platform_charset'));
 			$email_form[] = $info[$key]["mail"][0];
 			// Get uid from dn
 			//$dn_array=ldap_explode_dn($info[$key]["dn"],1);
@@ -274,7 +274,7 @@ elseif (!empty($annee) && !empty($course) && empty($_POST['confirmed']))
 		asort($nom_form);
 		reset($nom_form);
 
-		$statut=5;	
+		$statut=5;
 		include ('ldap_form_add_users_group.php');
 	} else {
 		echo '<h4>'.get_lang('UnableToConnectTo').' '.$host.'</h4>';
@@ -331,7 +331,7 @@ elseif (!empty($annee) && !empty($course) && ($_POST['confirmed']=='yes'))
 		Display::display_header($tool_name);
 		$message=get_lang('NoUserAdded');
 		Display :: display_normal_message($message,false);
-	}	
+	}
 	echo '<br /><br />';
     echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('BackToNewSearch').'</a>';
     echo '<br /><br />';

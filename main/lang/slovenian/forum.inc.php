@@ -138,4 +138,5 @@ $EditForum = "Uredi forum";
 $BackToForum = "Nazaj na forum";
 $BackToForumOverview = "Nazaj na pregled forumov";
 $BackToThread = "Nazaj na nit";
+$ForumcategoryLocked = "Kategorija foruma je zaklenjena";
 ?>

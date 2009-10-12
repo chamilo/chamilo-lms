@@ -98,22 +98,22 @@ function show_documents($folder)
 {
 	global $_course;
 	global $source_id, $action, $learnpath_id, $chapter_id, $originalresource;
-	
+
 	// documents are a special case: the teacher can add an invisible document (it will be viewable by the user)
-	// other tools do not have this feature. This only counts 
+	// other tools do not have this feature. This only counts
 	if (is_allowed_to_edit())
 	{
 		$visibility="visibility<>'2'";
 	}
-	else 
+	else
 	{
 		$visibility="visibility='1'";
 	}
-	
+
 	$item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	$document_table = Database::get_course_table(TABLE_DOCUMENT);
 	$sql="SELECT * from $document_table, $item_property_table WHERE id=ref AND tool = '".TOOL_DOCUMENT."' AND $visibility AND to_group_id = 0 AND to_user_id IS NULL  ORDER BY path ASC";
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	while ($row=mysql_fetch_array($result))
 	{
 		if (!$folder)
@@ -248,7 +248,7 @@ function store_resources($source_type, $source_id)
 		foreach ($addedresource as $resource_type)
 		{
 			$sql="INSERT INTO $resource_table (source_type, source_id, resource_type, resource_id) VALUES ('$source_type', '$source_id', '$resource_type', '".$addedresourceid[key($addedresource)]."')";
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 			$i=key($addedresource);
 			next($addedresource);
 		}
@@ -281,31 +281,31 @@ function display_addedresource_link($type, $id, $style='')
 	{
 		case 'Agenda':
 			$TABLEAGENDA = $_course['dbNameGlu'].'calendar_event';
-			$result = api_sql_query("SELECT * FROM `$TABLEAGENDA` WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM `$TABLEAGENDA` WHERE id=$id",__FILE__,__LINE__);
 			$myrow = mysql_fetch_array($result);
 			echo '<img src="../img/agenda.gif" align="middle" /> <a href="../calendar/agenda.php"'.$styling.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case 'Ad_Valvas':
 			$tbl_announcement = $_course['dbNameGlu'].'announcement';
-			$result = api_sql_query("SELECT * FROM `$tbl_announcement` WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM `$tbl_announcement` WHERE id=$id",__FILE__,__LINE__);
 			$myrow = mysql_fetch_array($result);
 			echo '<img src="../img/valves.gif" align="middle" /> <a href="../announcements/announcements.php"'.$styling.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case 'Link':
 			$TABLETOOLLINK = $_course['dbNameGlu'].'link';
-			$result = api_sql_query("SELECT * FROM `$TABLETOOLLINK` WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM `$TABLETOOLLINK` WHERE id=$id",__FILE__,__LINE__);
 			$myrow = mysql_fetch_array($result);
 			echo '<img src="../img/links.gif" align="middle" /> <a href="#" onclick="javascript:window.open(\'../link/link_goto.php?link_id='.$myrow['id'].'&amp;link_url='.urlencode($myrow['url'])."','MyWindow','width=500,height=400,top='+((screen.height-400)/2)+',left='+((screen.width-500)/2)+',scrollbars=1,resizable=1,menubar=1'); return false;\"".$styling.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case 'Exercise':
 			$TBL_EXERCICES = $_course['dbNameGlu'].'quiz';
-			$result = api_sql_query("SELECT * FROM `$TBL_EXERCICES` WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM `$TBL_EXERCICES` WHERE id=$id",__FILE__,__LINE__);
 			$myrow = mysql_fetch_array($result);
 			echo '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercice_submit.php?exerciseId='.$myrow['id'].'"'.$styling.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case 'Forum':
 			$TBL_FORUMS = $_course['dbNameGlu'].'bb_forums';
-			$result = api_sql_query("SELECT * FROM `$TBL_FORUMS` WHERE forum_id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM `$TBL_FORUMS` WHERE forum_id=$id",__FILE__,__LINE__);
 			$myrow = mysql_fetch_array($result);
 			echo '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewforum.php?forum='.$myrow['forum_id'].'&amp;md5='.$myrow['md5'].'"'.$styling.'>'.$myrow['forum_name']."</a><br />\n";
 			break;
@@ -313,24 +313,24 @@ function display_addedresource_link($type, $id, $style='')
 			$tbl_posts		= $_course['dbNameGlu'].'bb_posts';
 			$tbl_posts_text	= $_course['dbNameGlu'].'bb_posts_text';
 			$TBL_FORUMS		= $_course['dbNameGlu'].'bb_forums';
-			$result = api_sql_query("SELECT * FROM `$tbl_posts` posts, `$TBL_FORUMS` forum WHERE forum.forum_id=posts.forum_id and post_id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM `$tbl_posts` posts, `$TBL_FORUMS` forum WHERE forum.forum_id=posts.forum_id and post_id=$id",__FILE__,__LINE__);
 			$myrow = mysql_fetch_array($result);
 			// grabbing the title of the post
 			$sql_title = "SELECT * FROM `$tbl_posts_text` WHERE post_id=".$myrow["post_id"];
-			$result_title = api_sql_query($sql_title,__FILE__,__LINE__);
+			$result_title = Database::query($sql_title,__FILE__,__LINE__);
 			$myrow_title = mysql_fetch_array($result_title);
 			echo '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$myrow['topic_id'].'&amp;forum='.$myrow['forum_id'].'&amp;md5='.$myrow['md5'].'"'.$styling.'>'.$myrow_title['post_title']."</a><br />\n";
 			break;
 		case 'Post':
 			$tbl_post = Database::get_course_table(TABLE_FORUM_POST);
 			$sql = "SELECT * FROM $tbl_post p WHERE post_id = $id";
-			$result = api_sql_query($sql,__FILE__,__LINE__);
+			$result = Database::query($sql,__FILE__,__LINE__);
 			$post = mysql_fetch_object($result);
 			echo '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$post->topic_id.'&amp;forum='.$post->forum_id.'"'.$styling.'>'.$post->post_title."</a><br />\n";
 			break;
 		case 'Document':
 			$dbTable = $_course['dbNameGlu'].'document';
-			$result = api_sql_query("SELECT * FROM `$dbTable` WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM `$dbTable` WHERE id=$id",__FILE__,__LINE__);
 			$myrow = mysql_fetch_array($result);
 			$pathname = explode('/',$myrow['path']); // making a correct name for the link
 			$last = count($pathname) - 1;  // making a correct name for the link
@@ -370,7 +370,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 	global $_course, $learnpath_id, $tbl_learnpath_item, $items;
 	global $curDirPath, $_configuration, $enableDocumentParsing, $_course, $_user, $_cid;
 
-	$tbl_lp_item = Database::get_course_table('lp_item');
+	$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 	$hyperlink_target_parameter = ''; //or e.g. 'target="_blank"'
 
 	$length = ((($builder == 'builder') and ($icon == 'nolink')) ? 65 : 32);
@@ -385,11 +385,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case TOOL_CALENDAR_EVENT:
 		case "Agenda":
 			$TABLEAGENDA 		= $_course['dbNameGlu']."calendar_event";
-			$result = api_sql_query("SELECT * FROM `$TABLEAGENDA` WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM `$TABLEAGENDA` WHERE id=$id",__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $myrow["title"]=$row['title']; }
 			$desc=$row['description'];
 			$agenda_id=$row['item_id'];
@@ -397,11 +397,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -435,11 +435,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case TOOL_ANNOUNCEMENT:
 		case "Ad_Valvas":
 			$tbl_announcement = $_course['dbNameGlu']."announcement";
-			$result = api_sql_query("SELECT * FROM `$tbl_announcement` WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM `$tbl_announcement` WHERE id=$id",__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $myrow["content"]=$row['title']; }
 			$desc=$row['description'];
 			$ann_id=$row['item_id'];
@@ -449,15 +449,15 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			list($title, $text)=split('<br>',$myrow['content']);
 			if ($title=='') { $title=$myrow['content']; }
 			$title=$myrow['title'];
-			$text=$myrow['content']; 			
+			$text=$myrow['content'];
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -495,11 +495,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case TOOL_LINK:
 		case "Link" :
 			$TABLETOOLLINK	= $_course['dbNameGlu']."link";
-			$result= api_sql_query("SELECT * FROM `$TABLETOOLLINK` WHERE id=$id",__FILE__,__LINE__);
+			$result= Database::query("SELECT * FROM `$TABLETOOLLINK` WHERE id=$id",__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $myrow["title"]=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -507,11 +507,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -554,14 +554,14 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case TOOL_QUIZ:
 		case "Exercise":
 			$TBL_EXERCICES  = $_course['dbNameGlu'].'quiz';
-			$result= api_sql_query("SELECT * FROM `$TBL_EXERCICES` WHERE id=$id",__FILE__,__LINE__);
+			$result= Database::query("SELECT * FROM `$TBL_EXERCICES` WHERE id=$id",__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 
 			if ($builder=='builder') { $origin='builder'; }
 			  //this is needed for the exercise_submit.php can delete the session info about tests
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	
+			$result=Database::query($sql,__FILE__,__LINE__);
 			$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $myrow["title"]=$row['title']; }
 			$desc=$row['description'];
@@ -570,11 +570,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -612,7 +612,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case "HotPotatoes":
 			$TBL_DOCUMENT  = $_course['dbNameGlu'].'document';
 			$documentPath=api_get_path('SYS_COURSE_PATH').$_course['path'].'/document';
-			$result = api_sql_query("SELECT * FROM `".$TBL_DOCUMENT."` WHERE id=$id");
+			$result = Database::query("SELECT * FROM `".$TBL_DOCUMENT."` WHERE id=$id");
 			$myrow= mysql_fetch_array($result);
 			$path=$myrow["path"];
 			$name=GetQuizName($path,$documentPath);
@@ -621,7 +621,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			  //this is needed for the exercise_submit.php can delete the session info about tests
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $name=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -629,11 +629,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -670,11 +670,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case TOOL_FORUM:
 		case "Forum":
 			$TBL_FORUMS = Database::get_course_table(TABLE_FORUM,$_course['database']);
-			$result= api_sql_query("SELECT * FROM $TBL_FORUMS WHERE forum_id=$id",__FILE__,__LINE__);
+			$result= Database::query("SELECT * FROM $TBL_FORUMS WHERE forum_id=$id",__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $myrow["forum_name"]=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -682,11 +682,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -722,11 +722,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case "Thread":  //forum post
 			$tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD,$_course['database']);
 			$sql="SELECT * FROM $tbl_topics where topic_id=$id";
-			$result= api_sql_query($sql,__FILE__,__LINE__);
+			$result= Database::query($sql,__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $myrow["topic_title"]=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -734,11 +734,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -774,15 +774,15 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			$tbl_posts       = $_course['dbNameGlu'].'bb_posts';
 			$tbl_posts_text  = $_course['dbNameGlu'].'bb_posts_text';
 			$TBL_FORUMS = $_course['dbNameGlu']."bb_forums";
-			$result= api_sql_query("SELECT * FROM `$tbl_posts` where post_id=$id",__FILE__,__LINE__);
+			$result= Database::query("SELECT * FROM `$tbl_posts` where post_id=$id",__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 			// grabbing the title of the post
 			$sql_titel="SELECT * FROM `$tbl_posts_text` WHERE post_id=".$myrow["post_id"];
-			$result_titel=api_sql_query($sql_titel,__FILE__,__LINE__);
+			$result_titel=Database::query($sql_titel,__FILE__,__LINE__);
 			$myrow_titel=mysql_fetch_array($result_titel);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $myrow_titel["post_title"]=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -795,11 +795,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -838,7 +838,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			$dbTable  = $_course['dbNameGlu']."document";
 			$mysql = "SELECT * FROM `$dbTable` WHERE id=$id";
 			//error_log('New LP - Querying document table: '.$mysql,0);
-			$result = api_sql_query($mysql,__FILE__,__LINE__);
+			$result = Database::query($mysql,__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 
 			$pathname=explode("/",$myrow["path"]); // making a correct name for the link
@@ -849,11 +849,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			echo str_repeat("&nbsp;&gt;",$level);
 
 			if ($icon != 'nolink') {
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -861,7 +861,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
 			//error_log('New LP - Querying lp_item table: '.$sql,0);
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $filename=$row['title']; }
 			$desc=$row['description'];
 
@@ -906,7 +906,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 		case "Assignments":
 			$name=get_lang('Assignments');
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $name=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
@@ -914,11 +914,11 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink')
 			{
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -950,23 +950,23 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 				echo "<a href=\"../work/work.php\" class='$completed' target='_blank'>".shorten($name,($length-3*$level))."</a>";
 			}
 			break;
-			
+
 		case TOOL_DROPBOX:
 		case "Dropbox":
 			$name=get_lang('Dropbox');
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $name=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
 
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink') {
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -989,23 +989,23 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 				echo "<a href=\"../dropbox/index.php\" class='$completed' target='_blank'>".shorten($name,($length-3*$level))."</a>";
 			}
 			break;
-			
+
 		case 'introduction_text':
 		case "Introduction_text":
 			$name=get_lang('IntroductionText');
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $name=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
 
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink') {
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -1030,23 +1030,23 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 				echo "<a href=\"$s\" class='$completed' target='_blank'>".shorten($name,($length-3*$level))."</a>";
 			}
 			break;
-			
+
 		case TOOL_COURSE_DESCRIPTION:
 		case "Course_description":
 			$name=get_lang('CourseDescription');
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $name=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
 
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink') {
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -1070,23 +1070,23 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 				echo "<a href=\"$s\" class='$completed' target='_blank'>".shorten($name,($length-3*$level))."</a>";
 			}
 			break;
-			
+
 		case TOOL_GROUP:
 		case "Groups":
 			$name=get_lang('Groups');
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $name=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
 
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink') {
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -1109,23 +1109,23 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 				echo "<a href=\"../group/group.php?origin=$origin\" class='$completed' target='_blank'>".shorten($name,($length-3*$level))."</a>";
 			}
 			break;
-			
+
 		case TOOL_USER:
 		case "Users":
 			$name=get_lang('Users');
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $name=$row['title']; }
 			$desc=$row['description'];
 			echo str_repeat("&nbsp;&gt;",$level);
 
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "<td>"; }
 			if ($icon != 'nolink') {
-				if ($completed=='completed') { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>"; 
-				}	else { 
-					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>"; 
-					//echo "&nbsp;"; 
+				if ($completed=='completed') {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+				}	else {
+					echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+					//echo "&nbsp;";
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
@@ -1166,7 +1166,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 	global $_course, $learnpath_id, $tbl_learnpath_item, $items;
 	global $curDirPath, $_configuration, $enableDocumentParsing, $_user, $_cid;
 
-	$tbl_lp_item = Database::get_course_table('lp_item');
+	$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 	$hyperlink_target_parameter = ""; //or e.g. target='_blank'
  $builder = 'player';
 	$origin='learnpath';
@@ -1180,11 +1180,11 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 	{
 		case "Agenda":
 			$TABLEAGENDA 		= $_course['dbNameGlu']."calendar_event";
-			$result = api_sql_query("SELECT * FROM `$TABLEAGENDA` WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM `$TABLEAGENDA` WHERE id=$id",__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $myrow["title"]=$row['title']; }
 			$desc=$row['description'];
 			$agenda_id=$row['item_id'];
@@ -1201,7 +1201,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 
 		case "Ad_Valvas":
 			$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-			$result = api_sql_query("SELECT * FROM $tbl_announcement WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM $tbl_announcement WHERE id=$id",__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 
 			if ($builder != 'builder')
@@ -1216,11 +1216,11 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 
 		case "Link" :
 			$TABLETOOLLINK	= $_course['dbNameGlu']."link";
-			$result= api_sql_query("SELECT * FROM `$TABLETOOLLINK` WHERE id=$id",__FILE__,__LINE__);
+			$result= Database::query("SELECT * FROM `$TABLETOOLLINK` WHERE id=$id",__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 
 			$thelink=$myrow["url"];
 			if ($builder != 'builder')
@@ -1235,14 +1235,14 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 
 		case "Exercise":
 			$TBL_EXERCICES  = $_course['dbNameGlu'].'quiz';
-			$result= api_sql_query("SELECT * FROM `$TBL_EXERCICES` WHERE id=$id",__FILE__,__LINE__);
+			$result= Database::query("SELECT * FROM `$TBL_EXERCICES` WHERE id=$id",__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 
 			if ($builder=='builder') { $origin='builder'; }
 			  //this is needed for the exercise_submit.php can delete the session info about tests
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $myrow["title"]=$row['title']; }
 
 			if ($builder != 'builder')
@@ -1258,7 +1258,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 		case "HotPotatoes":
 	  	    $TBL_DOCUMENT  = $_course['dbNameGlu'].'document';
 		    $documentPath=api_get_path('SYS_COURSE_PATH').$_course['path'].'/document';
-			$result = api_sql_query("SELECT * FROM `".$TBL_DOCUMENT."` WHERE id=$id");
+			$result = Database::query("SELECT * FROM `".$TBL_DOCUMENT."` WHERE id=$id");
 		    $myrow= mysql_fetch_array($result);
 		    $path=$myrow["path"];
 		  	$name=GetQuizName($path,$documentPath);
@@ -1279,13 +1279,13 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 
 		case "Forum":
 			$TBL_FORUMS = $_course['dbNameGlu']."bb_forums";  // TODO: This is the old table name, it should be corrected.
-			$result= api_sql_query("SELECT * FROM `$TBL_FORUMS` WHERE forum_id=$id",__FILE__,__LINE__);
+			$result= Database::query("SELECT * FROM `$TBL_FORUMS` WHERE forum_id=$id",__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 
 			if ($builder=='builder') { $origin='builder'; }
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $myrow["forum_name"]=$row['title']; }
 
 			if ($myrow["forum_name"]=='') { $type="Forum"; }
@@ -1306,11 +1306,11 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			$tbl_posts		 = $_course['dbNameGlu'].'bb_posts';
 			$TBL_FORUMS = $_course['dbNameGlu']."bb_forums";
 			$sql="SELECT * FROM `$tbl_topics` where topic_id=$id";
-			$result= api_sql_query($sql,__FILE__,__LINE__);
+			$result= Database::query($sql,__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 
 			if ($builder != 'builder')
 			{
@@ -1326,15 +1326,15 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			$tbl_posts       = $_course['dbNameGlu'].'bb_posts';
 			$tbl_posts_text  = $_course['dbNameGlu'].'bb_posts_text';
 			$TBL_FORUMS = $_course['dbNameGlu']."bb_forums";
-			$result= api_sql_query("SELECT * FROM `$tbl_posts` where post_id=$id",__FILE__,__LINE__);
+			$result= Database::query("SELECT * FROM `$tbl_posts` where post_id=$id",__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 			// grabbing the title of the post
 			$sql_titel="SELECT * FROM `$tbl_posts_text` WHERE post_id=".$myrow["post_id"];
-			$result_titel=api_sql_query($sql_titel,__FILE__,__LINE__);
+			$result_titel=Database::query($sql_titel,__FILE__,__LINE__);
 			$myrow_titel=mysql_fetch_array($result_titel);
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 			if ($row['title'] != '') { $myrow_titel["post_title"]=$row['title']; }
 			$desc=$row['description'];
     		$link .= str_repeat("&nbsp;&gt;",$level);
@@ -1356,7 +1356,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 
 		case "Document":
 			$dbTable  = $_course['dbNameGlu']."document";
-			$result=api_sql_query("SELECT * FROM `$dbTable` WHERE id=$id",__FILE__,__LINE__);
+			$result=Database::query("SELECT * FROM `$dbTable` WHERE id=$id",__FILE__,__LINE__);
 			$myrow=mysql_fetch_array($result);
 
 			$pathname=explode("/",$myrow["path"]); // making a correct name for the link
@@ -1364,7 +1364,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			$filename=$pathname[$last];  // making a correct name for the link
 
 			$sql="select * from $tbl_lp_item where id=$id_in_path";
-			$result=api_sql_query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
+			$result=Database::query($sql,__FILE__,__LINE__);	$row=mysql_fetch_array($result);
 
 			if ($builder != 'builder')
 			{
@@ -1476,7 +1476,7 @@ function delete_one_added_resource($source_type, $source_id, $resource_type, $re
 	$TABLERESOURCE 		= $_course['dbNameGlu']."resource";
 
 	$sql="DELETE FROM `$TABLERESOURCE` WHERE source_type='$source_type' and source_id='$source_id' and resource_type='$resource_type' and resource_id='$resource_id'";
-	api_sql_query($sql,__FILE__,__LINE__);
+	Database::query($sql,__FILE__,__LINE__);
 }
 
 /**
@@ -1488,7 +1488,7 @@ function delete_added_resource($type, $id)
 	$TABLERESOURCE 		= $_course['dbNameGlu']."resource";
 
 	$sql="DELETE FROM `$TABLERESOURCE` WHERE source_type='$type' and source_id='$id'";
-	api_sql_query($sql,__FILE__,__LINE__);
+	Database::query($sql,__FILE__,__LINE__);
 }
 
 /**
@@ -1502,7 +1502,7 @@ function delete_all_resources_type($type)
 
   $sql="DELETE FROM `$TABLERESOURCE` WHERE source_type='$type'";
 
-  api_sql_query($sql,__FILE__,__LINE__);
+  Database::query($sql,__FILE__,__LINE__);
 }
 
 /**
@@ -1513,7 +1513,7 @@ function check_added_resources($type, $id)
 	global $_course, $origin;
 	$TABLERESOURCE 		= $_course['dbNameGlu']."resource";
 	$sql="SELECT * FROM `$TABLERESOURCE` WHERE source_type='$type' and source_id='$id'";
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	$number_added=mysql_num_rows($result);
 	if ($number_added<>0)
 		return true;
@@ -1532,7 +1532,7 @@ function edit_added_resources($type, $id)
 	$TABLERESOURCE 		= $_course['dbNameGlu']."resource";
 
 	$sql="SELECT * FROM `$TABLERESOURCE` WHERE source_type='$type' and source_id=$id";
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	while ($row=mysql_fetch_array($result))
 	{
 		$addedresource[]=$row["resource_type"];
@@ -1554,7 +1554,7 @@ function update_added_resources($type, $id)
 	// delete all the added resources for this item in the database;
 	$sql="DELETE FROM `$TABLERESOURCE` WHERE source_type='$type' AND source_id='$id'";
 	//echo $sql;
-	api_sql_query($sql,__FILE__,__LINE__);
+	Database::query($sql,__FILE__,__LINE__);
 
 	// store the resources from the session into the database
 	store_resources($type, $id);
@@ -1575,7 +1575,7 @@ function display_added_resources($type, $id, $style='')
 	$TABLERESOURCE 		= $_course['dbNameGlu']."resource";
 
 	$sql="SELECT * FROM `$TABLERESOURCE` WHERE source_type='$type' and source_id='$id'";
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	while ($row=mysql_fetch_array($result))
 	{
 		if ($origin != 'learnpath')
@@ -1705,39 +1705,39 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
 	// styling the link of the added resource
 	if ($style <> '') $styling = ' class="'.$style.'"';
 	if($new_window == true){ $target = ' target = "_blank" ';}else{$target = ' target = "_self" ';}
-	
+
 	$output = '';
-	
+
 	switch ($type)
 	{
 		case TOOL_CALENDAR_EVENT:
 			$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA,$_course['database']);
-			$result = api_sql_query("SELECT * FROM $TABLEAGENDA WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM $TABLEAGENDA WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = '<img src="../img/agenda.gif" align="middle" /> <a href="../calendar/agenda.php"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case TOOL_ANNOUNCEMENT:
 			$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT,$_course['database']);
-			$result = api_sql_query("SELECT * FROM $tbl_announcement WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM $tbl_announcement WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = '<img src="../img/valves.gif" align="middle" /> <a href="../announcements/announcements.php"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case TOOL_LINK:
 			//doesn't take $target into account
 			$TABLETOOLLINK = Database::get_course_table(TABLE_LINK,$_course['database']);
-			$result = api_sql_query("SELECT * FROM $TABLETOOLLINK WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = '<img src="../img/links.gif" align="middle" /> <a href="#" onclick="javascript:window.open(\'../link/link_goto.php?link_id='.$myrow['id'].'&amp;link_url='.urlencode($myrow['url'])."','MyWindow','width=500,height=400,top='+((screen.height-400)/2)+',left='+((screen.width-500)/2)+',scrollbars=1,resizable=1,menubar=1'); return false;\"".$styling.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case TOOL_QUIZ:
 			$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST,$_course['database']);
-			$result = api_sql_query("SELECT * FROM $TBL_EXERCICES WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercice_submit.php?exerciseId='.$myrow['id'].'"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />\n";
 			break;
 		case TOOL_FORUM:
 			$TBL_FORUMS = Database::get_course_table(TABLE_FORUM,$_course['database']);
-			$result = api_sql_query("SELECT * FROM $TBL_FORUMS WHERE forum_id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM $TBL_FORUMS WHERE forum_id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewforum.php?forum='.$myrow['forum_id'].'&md5='.$myrow['md5'].'"'.$styling.' '.$target.'>'.$myrow['forum_name']."</a><br />\n";
 			break;
@@ -1747,7 +1747,7 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
 			$tbl_post 		= Database::get_course_table(TABLE_FORUM_POST,$_course['database']);
 			// grabbing the title of the post
 			$sql_title = "SELECT * FROM $tbl_post WHERE post_id=".$id;
-			$result_title = api_sql_query($sql_title,__FILE__,__LINE__);
+			$result_title = Database::query($sql_title,__FILE__,__LINE__);
 			$myrow_title = Database::fetch_array($result_title);
 			$output = '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$myrow_title['thread_id'].'&forum='.$myrow_title['forum_id'].'" '.$styling.' '.$target.'>'.$myrow_title['post_title']."</a><br />\n";
 			break;
@@ -1755,13 +1755,13 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
 			$tbl_post = Database::get_course_table(TABLE_FORUM_POST,$_course['database']);
 			//$tbl_post_text = Database::get_course_table(FORUM_POST_TEXT_TABLE);
 			$sql = "SELECT * FROM $tbl_post p WHERE p.post_id = $id";
-			$result = api_sql_query($sql,__FILE__,__LINE__);
+			$result = Database::query($sql,__FILE__,__LINE__);
 			$post = Database::fetch_array($result);
 			$output = '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$post['thread_id'].'&forum='.$post['forum_id'].'"'.$styling.' '.$target.'>'.$post['post_title']."</a><br />\n";
 			break;
 		case TOOL_DOCUMENT:
 			$tbl_doc = Database::get_course_table(TABLE_DOCUMENT,$_course['database']);
-			$result = api_sql_query("SELECT * FROM $tbl_doc WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM $tbl_doc WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$pathname = explode('/',$myrow['path']); // making a correct name for the link
 			$last = count($pathname) - 1;  // making a correct name for the link
@@ -1782,17 +1782,17 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
 	return $output;
 }
 /**
-* Returns an HTML-formatted link to a resource, to incorporate directly into 
+* Returns an HTML-formatted link to a resource, to incorporate directly into
 * the new learning path tool.
-* 
-* The function is a big switch on tool type. 
+*
+* The function is a big switch on tool type.
 * In each case, we query the corresponding table for information and build the link
 * with that information.
 * @author	Yannick Warnier <ywarnier@beeznest.org> - rebranding based on previous work (display_addedresource_link_in_learnpath())
 * @param	string	Course code
-* @param	integer	The learning path ID (in lp table)	
+* @param	integer	The learning path ID (in lp table)
 * @param	integer	The database ID for that item in the lp_item table
-* @param	
+* @param
 * @param	string	Type (as one of the TOOL_ constants declared in main_api.lib.php)
 * @param	integer	ID of the database item to get (from that tool's table)
 * @param id          - that is the correspondent id in the mirror tool (like Agenda item 2)
@@ -1802,15 +1802,15 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 {
 	//error_log('In rl_get_resource_link_for_learnpath()',0);
 	$_course = Database::get_course_info($course_code);
-	
-	$tbl_lp_item = Database::get_course_table('lp_item');
+
+	$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
 	$sql_item = "SELECT * FROM $tbl_lp_item " .
 			"WHERE lp_id = $learnpath_id AND id = $id_in_path";
-	$res_item = api_sql_query($sql_item,__FILE__,__LINE__);
+	$res_item = Database::query($sql_item,__FILE__,__LINE__);
 	if(Database::num_rows($res_item)<1) return -1; //exit
 	$row_item = Database::fetch_array($res_item);
-	
+
 	$type = strtolower($row_item['item_type']);
 	$id = (strcmp($row_item['path'],'')==0) ? '0' : $row_item['path'];
 	$origin='learnpath';
@@ -1833,7 +1833,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 
 		case TOOL_LINK:
 			$TABLETOOLLINK = Database::get_course_table(TABLE_LINK,$_course['database']);
-			$result= api_sql_query("SELECT * FROM $TABLETOOLLINK WHERE id=$id",__FILE__,__LINE__);
+			$result= Database::query("SELECT * FROM $TABLETOOLLINK WHERE id=$id",__FILE__,__LINE__);
 			$myrow=Database::fetch_array($result);
 			$thelink=$myrow["url"];
 			$link .= $thelink;
@@ -1844,7 +1844,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 			{
 				$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST,$_course['database']);
 				$sql = "SELECT * FROM $TBL_EXERCICES WHERE id=$id";
-				$result= api_sql_query($sql,__FILE__,__LINE__);
+				$result= Database::query($sql,__FILE__,__LINE__);
 				$myrow=Database::fetch_array($result);
 
 				if ($row_item['title'] != '') { $myrow["title"]=$row_item['title']; }
@@ -1855,7 +1855,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 		case "hotpotatoes": //lowercase because of strtolower above
 
 			$TBL_DOCUMENT  = Database::get_course_table(TABLE_DOCUMENT);
-			$result = api_sql_query("SELECT * FROM ".$TBL_DOCUMENT." WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE id=$id",__FILE__,__LINE__);
 			$myrow= Database::fetch_array($result);
 			$path=$myrow["path"];
 			$link .= $main_dir_path.'exercice/showinframes.php?file='.$path.'' .
@@ -1872,7 +1872,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 			if(!empty($id))
 			{
 				$sql="SELECT * FROM $tbl_topics where thread_id=$id";
-				$result= api_sql_query($sql,__FILE__,__LINE__);
+				$result= Database::query($sql,__FILE__,__LINE__);
 				$myrow=Database::fetch_array($result);
 				$link .= $main_dir_path.'forum/viewthread.php?origin=learnpath&thread='.$id.'' .
 						'&forum='.$myrow['forum_id'].'&lp=true';
@@ -1881,14 +1881,14 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 
 		case TOOL_POST:
 			$tbl_post = Database::get_course_table(TABLE_FORUM_POST,$_course['database']);
-			$result= api_sql_query("SELECT * FROM $tbl_post where post_id=$id",__FILE__,__LINE__);
+			$result= Database::query("SELECT * FROM $tbl_post where post_id=$id",__FILE__,__LINE__);
 			$myrow=Database::fetch_array($result);
 			$title=$myrow['post_title'];
 
 			//$desc=$row_item['description'];
-    		
+
 			$posternom=$myrow['poster_name'];
-			$posttime=$myrow['post_date'];			
+			$posttime=$myrow['post_date'];
 			$posttext=$myrow['post_text'];
 			$posttitle=$title;
 			$posttext = str_replace('"',"'",$posttext);
@@ -1901,7 +1901,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 		case TOOL_DOCUMENT:
 			$tbl_doc = Database::get_course_table(TABLE_DOCUMENT,$_course['database']);
 			$sql = "SELECT * FROM $tbl_doc WHERE id=$id";
-			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql,__FILE__,__LINE__);
 			$myrow=Database::fetch_array($result);
 			$docurl=str_replace('%2F','/',urlencode($myrow['path']));
 			$link .= $main_course_path.'document'.$docurl.'?'.api_get_cidreq();
@@ -1929,7 +1929,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 		case TOOL_USER:
 			$link .= $main_dir_path.'user/user.php?origin='.$origin;
 			break;
-		case 'student_publication' : 
+		case 'student_publication' :
 			$link .= $main_dir_path.'work/work.php?origin=learnpath';
 			break;
 	}//end switch
@@ -1946,12 +1946,12 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
 function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 {
 	$_course = Database::get_course_info($course_code);
-	$tbl_lp_item = Database::get_course_table('lp_item');
+	$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
 	$sql_item = "SELECT * FROM $tbl_lp_item " .
 			"WHERE lp_id = $learnpath_id AND id = $id_in_path";
-	$res_item = api_sql_query($sql_item,__FILE__,__LINE__);
-	
+	$res_item = Database::query($sql_item,__FILE__,__LINE__);
+
 	if(Database::num_rows($res_item)<1)
 	{
 		return ''; //exit
@@ -1960,37 +1960,37 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 	$type = strtolower($row_item['item_type']);
 	$id = $row_item['ref'];
 	$output = '';
-	
+
 	switch ($type)
 	{
 		case TOOL_CALENDAR_EVENT:
 			$TABLEAGENDA = Database::get_course_table(TABLE_AGENDA,$_course['database']);
-			$result = api_sql_query("SELECT * FROM $TABLEAGENDA WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM $TABLEAGENDA WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = $myrow['title'];
 			break;
 		case TOOL_ANNOUNCEMENT:
 			$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT,$_course['database']);
-			$result = api_sql_query("SELECT * FROM $tbl_announcement WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM $tbl_announcement WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = $myrow['title'];
 			break;
 		case TOOL_LINK:
 			//doesn't take $target into account
 			$TABLETOOLLINK = Database::get_course_table(TABLE_LINK,$_course['database']);
-			$result = api_sql_query("SELECT * FROM $TABLETOOLLINK WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = $myrow['title'];
 			break;
 		case TOOL_QUIZ:
 			$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST,$_course['database']);
-			$result = api_sql_query("SELECT * FROM $TBL_EXERCICES WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = $myrow['title'];
 			break;
 		case TOOL_FORUM:
 			$TBL_FORUMS = Database::get_course_table(TABLE_FORUM,$_course['database']);
-			$result = api_sql_query("SELECT * FROM $TBL_FORUMS WHERE forum_id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM $TBL_FORUMS WHERE forum_id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$output = $myrow['forum_name'];
 			break;
@@ -1998,7 +1998,7 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 			$tbl_post 		= Database::get_course_table(TABLE_FORUM_POST,$_course['database']);
 			// grabbing the title of the post
 			$sql_title = "SELECT * FROM $tbl_post WHERE post_id=".$id;
-			$result_title = api_sql_query($sql_title,__FILE__,__LINE__);
+			$result_title = Database::query($sql_title,__FILE__,__LINE__);
 			$myrow_title = Database::fetch_array($result_title);
 			$output = $myrow_title['post_title'];
 			break;
@@ -2006,35 +2006,35 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 			$tbl_post = Database::get_course_table(TABLE_FORUM_POST,$_course['database']);
 			//$tbl_post_text = Database::get_course_table(FORUM_POST_TEXT_TABLE);
 			$sql = "SELECT * FROM $tbl_post p WHERE p.post_id = $id";
-			$result = api_sql_query($sql,__FILE__,__LINE__);
+			$result = Database::query($sql,__FILE__,__LINE__);
 			$post = Database::fetch_array($result);
 			$output = $post['post_title'];
 			break;
-		case 'dokeos_chapter':	 
-			$title=$row_item['title'];			
+		case 'dokeos_chapter':
+			$title=$row_item['title'];
 			if (!empty($title))
 			{
 				$output =$title;
 			}
-			else 
+			else
 			{
 				$output ='-';
 			}
 			break;
 		case TOOL_DOCUMENT:
-			$title=$row_item['title'];			
+			$title=$row_item['title'];
 			if (!empty($title))
 			{
 				$output =$title;
 			}
-			else 
+			else
 			{
 				$output ='-';
 			}
 			break;
 		case 'hotpotatoes':
 			$tbl_doc = Database::get_course_table(TABLE_DOCUMENT,$_course['database']);
-			$result = api_sql_query("SELECT * FROM $tbl_doc WHERE id=$id",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM $tbl_doc WHERE id=$id",__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
 			$pathname = explode('/',$myrow['path']); // making a correct name for the link
 			$last = count($pathname) - 1;  // making a correct name for the link
@@ -2052,7 +2052,7 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
 			break;
 		*/
 	}
-	
+
 	return stripslashes($output);
 }
 ?>

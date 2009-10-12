@@ -2,25 +2,28 @@
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
+
+// TODO: Is this file deprecated?
+
 /**
 ==============================================================================
 *	@author Thomas Depraetere
@@ -31,17 +34,17 @@
 *	@package dokeos.tracking
 ==============================================================================
 */
- 
+
 /*
 ==============================================================================
 		INIT SECTION
 ==============================================================================
 */
- 
+
 $tool = $_REQUEST['tool'];
 $period = $_REQUEST['period'];
 $reqDate = $_REQUEST['reqDate'];
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "tracking";
 
 include('../inc/global.inc.php');
@@ -77,24 +80,24 @@ include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");
 
 // the variables for the days and the months
 // Defining the shorts for the days
-$DaysShort = array (get_lang("SundayShort"), get_lang("MondayShort"), get_lang("TuesdayShort"), get_lang("WednesdayShort"), get_lang("ThursdayShort"), get_lang("FridayShort"), get_lang("SaturdayShort"));
+$DaysShort = api_get_week_days_short();
 // Defining the days of the week to allow translation of the days
-$DaysLong = array (get_lang("SundayLong"), get_lang("MondayLong"), get_lang("TuesdayLong"), get_lang("WednesdayLong"), get_lang("ThursdayLong"), get_lang("FridayLong"), get_lang("SaturdayLong"));
+$DaysLong = api_get_week_days_long();
 // Defining the months of the year to allow translation of the months
-$MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong"));
+$MonthsLong = api_get_months_long();
 // Defining the months of the year to allow translation of the months
-$MonthsShort = array (get_lang("JanuaryShort"), get_lang("FebruaryShort"), get_lang("MarchShort"), get_lang("AprilShort"), get_lang("MayShort"), get_lang("JuneShort"), get_lang("JulyShort"), get_lang("AugustShort"), get_lang("SeptemberShort"), get_lang("OctoberShort"), get_lang("NovemberShort"), get_lang("DecemberShort"));
+$MonthsShort = api_get_months_short();
 
 $tool=$_REQUEST['tool'];
 $period=$_REQUEST['period'];
 $reqdate=$_REQUEST['reqdate'];
 ?>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
-<?php 
-    
-    
+<?php
+
+
     $TABLETRACK_ACCESS = $_configuration['statistics_database']."`.`track_e_access";
-    
+
     if(isset($_cid)) //stats for the current course
     {
         // to see stats of one course user must be courseAdmin of this course
@@ -112,12 +115,12 @@ $reqdate=$_REQUEST['reqdate'];
         // list of all tools
         if (!isset($tool))
         {
-            $sql = "SELECT `access_tool`, count( access_tool ) 
+            $sql = "SELECT `access_tool`, count( access_tool )
                         FROM `$TABLETRACK_ACCESS`
                         WHERE `access_tool` IS NOT NULL
                             ".$courseCodeEqualcidIfNeeded."
                         GROUP BY `access_tool`";
-            echo "<tr><td>";  
+            echo "<tr><td>";
             echo "<tr>
                     <td>
                     ";
@@ -126,7 +129,7 @@ $reqdate=$_REQUEST['reqdate'];
 					</td>
                 </tr>
             ";
-    
+
             $results = getManyResults2Col($sql);
             echo "<table cellpadding='0' cellspacing='0' border='0' align=center>";
             echo "<tr bgcolor='#E6E6E6'>
@@ -138,19 +141,19 @@ $reqdate=$_REQUEST['reqdate'];
                     </td>
                 </tr>";
             if (is_array($results))
-            { 
+            {
                 for($j = 0 ; $j < count($results) ; $j++)
-                { 
-                        echo "<tr>"; 
+                {
+                        echo "<tr>";
                         echo "<td><a href='toolaccess_details.php?tool=".urlencode($results[$j][0])."'>".get_lang($results[$j][0])."</a></td>";
                         echo "<td align='right'>".$results[$j][1]."</td>";
                         echo"</tr>";
                 }
-            
+
             }
             else
             {
-                echo "<tr>"; 
+                echo "<tr>";
                 echo "<td colspan='2'><center>".get_lang('NoResult')."</center></td>";
                 echo"</tr>";
             }
@@ -161,7 +164,7 @@ $reqdate=$_REQUEST['reqdate'];
             // this can prevent bug if there is special chars in $tool
             $encodedTool = urlencode($tool);
             $tool = urldecode($tool);
-            
+
             if( !isset($reqdate) )
                 $reqdate = time();
             echo "<tr>
@@ -172,16 +175,16 @@ $reqdate=$_REQUEST['reqdate'];
 					</td>
                 </tr>
             ";
-            
+
             /* ------ display ------ */
             // displayed period
             echo "<tr><td>";
             switch($period)
             {
-                case "month" : 
+                case "month" :
                     echo $MonthsLong[date("n", $reqdate)-1].date(" Y", $reqdate);
                     break;
-                case "week" : 
+                case "week" :
                     $weeklowreqdate = ($reqdate-(86400*date("w" , $reqdate)));
                     $weekhighreqdate = ($reqdate+(86400*(6-date("w" , $reqdate)) ));
                     echo "<b>".$langFrom."</b> ".date("d " , $weeklowreqdate).$MonthsLong[date("n", $weeklowreqdate)-1].date(" Y" , $weeklowreqdate);
@@ -189,8 +192,8 @@ $reqdate=$_REQUEST['reqdate'];
                     break;
                 // default == day
                 default :
-                    $period = "day";            
-                case "day" : 
+                    $period = "day";
+                case "day" :
                     echo $DaysLong[date("w" , $reqdate)].date(" d " , $reqdate).$MonthsLong[date("n", $reqdate)-1].date(" Y" , $reqdate);
                     break;
             }
@@ -199,11 +202,11 @@ $reqdate=$_REQUEST['reqdate'];
             echo "<tr>
                     <td>
                     <small>
-                    [<a href='".api_get_self()."?tool=$encodedTool&period=day&reqdate=$reqdate' class='specialLink'>$langPeriodDay</a>] 
+                    [<a href='".api_get_self()."?tool=$encodedTool&period=day&reqdate=$reqdate' class='specialLink'>$langPeriodDay</a>]
                     [<a href='".api_get_self()."?tool=$encodedTool&period=week&reqdate=$reqdate' class='specialLink'>$langPeriodWeek</a>]
                     [<a href='".api_get_self()."?tool=$encodedTool&period=month&reqdate=$reqdate' class='specialLink'>$langPeriodMonth</a>]
                     &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;
-                    
+
                     ";
             switch($period)
             {
@@ -213,7 +216,7 @@ $reqdate=$_REQUEST['reqdate'];
                     $previousReqDate = mktime(1,1,1,date("m",$reqdate)-1,1,date("Y",$reqdate));
                     $nextReqDate = mktime(1,1,1,date("m",$reqdate)+1,1,date("Y",$reqdate));
                     echo   "
-                        [<a href='".api_get_self()."?tool=$encodedTool&period=month&reqdate=$previousReqDate' class='specialLink'>$langPreviousMonth</a>] 
+                        [<a href='".api_get_self()."?tool=$encodedTool&period=month&reqdate=$previousReqDate' class='specialLink'>$langPreviousMonth</a>]
                         [<a href='".api_get_self()."?tool=$encodedTool&period=month&reqdate=$nextReqDate' class='specialLink'>$langNextMonth</a>]
                     ";
                     break;
@@ -222,7 +225,7 @@ $reqdate=$_REQUEST['reqdate'];
                     $previousReqDate = $reqdate - 7*86400;
                     $nextReqDate = $reqdate + 7*86400;
                     echo   "
-                        [<a href='".api_get_self()."?tool=$encodedTool&period=week&reqdate=$previousReqDate' class='specialLink'>$langPreviousWeek</a>] 
+                        [<a href='".api_get_self()."?tool=$encodedTool&period=week&reqdate=$previousReqDate' class='specialLink'>$langPreviousWeek</a>]
                         [<a href='".api_get_self()."?tool=$encodedTool&period=week&reqdate=$nextReqDate' class='specialLink'>$langNextWeek</a>]
                     ";
                     break;
@@ -231,12 +234,12 @@ $reqdate=$_REQUEST['reqdate'];
                     $previousReqDate = $reqdate - 86400;
                     $nextReqDate = $reqdate + 86400;
                     echo   "
-                        [<a href='".api_get_self()."?tool=$encodedTool&period=day&reqdate=$previousReqDate' class='specialLink'>$langPreviousDay</a>] 
+                        [<a href='".api_get_self()."?tool=$encodedTool&period=day&reqdate=$previousReqDate' class='specialLink'>$langPreviousDay</a>]
                         [<a href='".api_get_self()."?tool=$encodedTool&period=day&reqdate=$nextReqDate' class='specialLink'>$langNextDay</a>]
                     ";
                     break;
             }
-            
+
             echo"   &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;
                     [<a href='".api_get_self()."' class='specialLink'>$langViewToolList</a>]
                     </small>
@@ -250,12 +253,12 @@ $reqdate=$_REQUEST['reqdate'];
                 case "month" :
                     $sql = "SELECT UNIX_TIMESTAMP(`access_date`)
                             FROM `$TABLETRACK_ACCESS`
-                            WHERE `access_tool` = '$tool' 
+                            WHERE `access_tool` = '$tool'
                                 ".$courseCodeEqualcidIfNeeded."
                                 AND MONTH(`access_date`) = MONTH(FROM_UNIXTIME('$reqdate'))
                                 AND YEAR(`access_date`) = YEAR(FROM_UNIXTIME('$reqdate'))
                                 ORDER BY `access_date` ASC";
-                    
+
                     $days_array = daysTab($sql);
                     makeHitsTable($days_array,$langDay);
                     break;
@@ -263,12 +266,12 @@ $reqdate=$_REQUEST['reqdate'];
                 case "week" :
                     $sql = "SELECT UNIX_TIMESTAMP(`access_date`)
                             FROM `$TABLETRACK_ACCESS`
-                            WHERE `access_tool` = '$tool' 
+                            WHERE `access_tool` = '$tool'
                                 ".$courseCodeEqualcidIfNeeded."
                                 AND WEEK(`access_date`) = WEEK(FROM_UNIXTIME('$reqdate'))
                                 AND YEAR(`access_date`) = YEAR(FROM_UNIXTIME('$reqdate'))
                                 ORDER BY `access_date` ASC";
-    
+
                     $days_array = daysTab($sql);
                     makeHitsTable($days_array,$langDay);
                     break;
@@ -276,12 +279,12 @@ $reqdate=$_REQUEST['reqdate'];
                 case "day"  :
                     $sql = "SELECT UNIX_TIMESTAMP(`access_date`)
                                 FROM `$TABLETRACK_ACCESS`
-                                WHERE `access_tool` = '$tool' 
+                                WHERE `access_tool` = '$tool'
                                     ".$courseCodeEqualcidIfNeeded."
                                     AND DAYOFYEAR(`access_date`) = DAYOFYEAR(FROM_UNIXTIME('$reqdate'))
                                     AND YEAR(`access_date`) = YEAR(FROM_UNIXTIME('$reqdate'))
                                 ORDER BY `access_date` ASC";
-                    
+
                     $hours_array = hoursTab($sql,$reqdate);
                     makeHitsTable($hours_array,$langHour);
                     break;
@@ -299,8 +302,8 @@ $reqdate=$_REQUEST['reqdate'];
             echo get_lang('NotAllowed');
         }
     }
-    
-    
+
+
 ?>
 </table>
 <?php

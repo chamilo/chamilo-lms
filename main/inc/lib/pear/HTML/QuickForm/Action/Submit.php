@@ -22,7 +22,7 @@ require_once 'HTML/QuickForm/Action.php';
 
 /**
  * The action for a 'submit' button.
- * 
+ *
  * @author  Alexey Borzov <avb@php.net>
  * @package HTML_QuickForm_Controller
  * @version $Revision: 6184 $

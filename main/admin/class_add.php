@@ -29,48 +29,43 @@
 ==============================================================================
 */
 
-// name of the language file that needs to be included 
+// Language files that should be included.
 $language_file = 'admin';
 
-// resetting the course id
+// Resetting the course id.
 $cidReset = true;
 
-// including some necessary dokeos files
-require_once('../inc/global.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'classmanager.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+// Including some necessary dokeos files.
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
-// setting the section (for the tabs)
+// Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
 
-// Access restrictions
+// Access restrictions.
 api_protect_admin_script();
 
-// setting breadcrumbs
+// Setting breadcrumbs.
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
-// setting the name of the tool
+// Setting the name of the tool.
 $tool_name = get_lang("AddClasses");
 
 $form = new FormValidator('add_class');
-$form->add_textfield('name',get_lang('ClassName'));
-$form->addElement('submit','submit',get_lang('Ok'));
-if($form->validate())
-{
+$form->add_textfield('name', get_lang('ClassName'));
+$form->addElement('style_submit_button', 'submit', get_lang('Ok'), 'class="add"');
+if ($form->validate()) {
 	$values = $form->exportValues();
-	ClassManager :: create_class($values['name']);
+	ClassManager::create_class($values['name']);
 	header('Location: class_list.php');
 }
 
-// Displaying the header
+// Displaying the header.
 Display :: display_header($tool_name);
 
-// Displaying the form
+// Displaying the form.
 $form->display();
-/*
-==============================================================================
-		FOOTER 
-==============================================================================
-*/
+
+// Displaying the footer.
 Display :: display_footer();
-?>

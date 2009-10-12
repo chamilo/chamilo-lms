@@ -24,16 +24,16 @@
 *	This is a plugin for the documents tool. It looks for .jpg, .jpeg, .gif, .png
 *	files (since these are the files that can be viewed in a browser) and creates
 *	a slideshow with it by allowing to go to the next/previous image.
-*	You can also have a quick overview (thumbnail view) of all the images in 
+*	You can also have a quick overview (thumbnail view) of all the images in
 *	that particular folder.
 *
 *	Each slideshow is folder based. Only
-*	the images of the chosen folder are shown. 
-*	
+*	the images of the chosen folder are shown.
+*
 *	This file has two large sections.
 *	1. code that belongs in document.php, but to avoid clutter I put the code here
 *	(not present) 2. the function resize_image that handles the image resizing
-*	
+*
 *	@author Patrick Cool, responsible author
 *	@author Roan Embrechts, minor cleanup
 *	@package dokeos.document
@@ -41,21 +41,21 @@
 */
 
 /*
-============================================================================== 
-	general code that belongs in document.php 
-	   
+==============================================================================
+	general code that belongs in document.php
+
 	this code should indeed go in documents.php but since document.php is already a really ugly file with
 	too much things in one file , I decided to put the code for document.php here and to include this
 	file into document.php
-============================================================================== 
-*/ 
+==============================================================================
+*/
 
 $accepted_extensions = array('.jpg','.jpeg','.gif','.png');
 
 // resetting the images of the slideshow = destroying the slideshow
 if (isset($_GET['action']) && $_GET['action'] == 'exit_slideshow') {
 	$_SESSION['image_files_only'] = null;
-	unset($image_files_only); 
+	unset($image_files_only);
 }
 
 // We check if there are images in this folder by searching the extensions for .jpg, .gif, .png
@@ -75,11 +75,11 @@ $image_present = 0;
 
 if (count($all_files) > 0) {
 	foreach ($all_files as $file) {
-		$slideshow_extension = strrchr($file,'.'); 
-		$slideshow_extension = strtolower($slideshow_extension); 
+		$slideshow_extension = strrchr($file,'.');
+		$slideshow_extension = strtolower($slideshow_extension);
 		if (in_array($slideshow_extension,$accepted_extensions)) {
 			$image_present = 1;
-			$image_files_only[] = $file; 
+			$image_files_only[] = $file;
 		}
 	}
 }
@@ -96,7 +96,7 @@ $image_files_only = sort_files($array_to_search);
 $_SESSION['image_files_only'] = $image_files_only;
 
 function sort_files($table) {
-	
+
 	global $tablename_direction, $accepted_extensions;
 	$temp = array();
 
@@ -133,5 +133,5 @@ function rsort_table($a, $b) {
 	global $tablename_column;
 	return strnatcmp($b[$tablename_column], $a[$tablename_column]);
 }
- 
+
 ?>

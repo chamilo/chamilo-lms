@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin details (must be present) 
+ * Plugin details (must be present)
  */
 //the plugin title
 $plugin_info['title']='AppShare';

@@ -56,18 +56,18 @@ $courses = array ();
 $courses[''] = '--';
 $sql = "SELECT code,visual_code,title FROM $course_table ORDER BY visual_code";
 
-global $_configuration;	
-if ($_configuration['multiple_access_urls']==true) {		
-	$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);	
+global $_configuration;
+if ($_configuration['multiple_access_urls']==true) {
+	$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1){
-	$sql = "SELECT code,visual_code,title FROM $course_table as c INNER JOIN $tbl_course_rel_access_url as course_rel_url 		
-		ON (c.code = course_rel_url.course_code)		
+	$sql = "SELECT code,visual_code,title FROM $course_table as c INNER JOIN $tbl_course_rel_access_url as course_rel_url
+		ON (c.code = course_rel_url.course_code)
 		WHERE access_url_id = $access_url_id
-		ORDER BY visual_code";		
+		ORDER BY visual_code";
 	}
 }
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 while ($course = mysql_fetch_object($result))
 {
 	$courses[$course->code] = $course->visual_code.' - '.$course->title;
@@ -84,11 +84,11 @@ $form->setDefaults(array('file_type'=>'csv'));
 if ($form->validate())
 {
 	global $userPasswordCrypted;
-	
+
 	$export = $form->exportValues();
 	$file_type = $export['file_type'];
-	$course_code = $export['course_code'];	
-	$userPasswordCrypted =
+	$course_code = $export['course_code'];
+
 	$sql = "SELECT  u.user_id 	AS UserId,
 					u.lastname 	AS LastName,
 					u.firstname 	AS FirstName,
@@ -102,52 +102,52 @@ if ($form->validate())
 	if (strlen($course_code) > 0) {
 		$sql .= " FROM $user_table u, $course_user_table cu WHERE u.user_id = cu.user_id AND course_code = '$course_code' ORDER BY lastname,firstname";
 		$filename = 'export_users_'.$course_code.'_'.date('Y-m-d_H-i-s');
-	} else {		
-		global $_configuration;	
-		if ($_configuration['multiple_access_urls']==true) {		
-			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+	} else {
+		global $_configuration;
+		if ($_configuration['multiple_access_urls']==true) {
+			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
-			$sql.= " FROM $user_table u INNER JOIN $tbl_user_rel_access_url as user_rel_url 		
-				ON (u.user_id= user_rel_url.user_id)		
+			$sql.= " FROM $user_table u INNER JOIN $tbl_user_rel_access_url as user_rel_url
+				ON (u.user_id= user_rel_url.user_id)
 				WHERE access_url_id = $access_url_id
-				ORDER BY lastname,firstname";		
+				ORDER BY lastname,firstname";
 			}
 		} else {
 			$sql .= " FROM $user_table u ORDER BY lastname,firstname";
-		}		
+		}
 		$filename = 'export_users_'.date('Y-m-d_H-i-s');
 	}
-	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');	
-	$data = array();	
+	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+	$data = array();
 	$extra_fields = Usermanager::get_extra_fields(0, 0, 5, 'ASC',false);
 	if ($export['addcsvheader']=='1' AND $export['file_type']=='csv')
 	{
 		if($userPasswordCrypted!='none') {
 			$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName', 'AuthSource', 'Status', 'OfficialCode', 'Phone');
 		} else {
-			$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName','Password',  'AuthSource', 'Status', 'OfficialCode', 'Phone');	
+			$data[] = array('UserId', 'LastName', 'FirstName', 'Email', 'UserName','Password',  'AuthSource', 'Status', 'OfficialCode', 'Phone');
 		}
-		
+
 		foreach($extra_fields as $extra) {
 			$data[0][]=$extra[1];
-		}	
-		
+		}
+
 	}
-	$res = api_sql_query($sql,__FILE__,__LINE__);	
-	while($user = Database::fetch_array($res,'ASSOC')) {		
-		$student_data= UserManager :: get_extra_user_data($user['UserId'],true,false);		
+	$res = Database::query($sql,__FILE__,__LINE__);
+	while($user = Database::fetch_array($res,'ASSOC')) {
+		$student_data= UserManager :: get_extra_user_data($user['UserId'],true,false);
 		foreach($student_data as $key=>$value) {
 			$key= substr($key,6);
-			if (is_array($value)) 
+			if (is_array($value))
 				$user[$key]= $value[$key];
 			else {
 				$user[$key]= $value;
-			}			
+			}
 		}
-		$data[] = $user	;							
+		$data[] = $user	;
 	}
-	
+
 	switch($file_type)
 	{
 		case 'xml':

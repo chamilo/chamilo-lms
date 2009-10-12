@@ -25,7 +25,7 @@
 // or put    amath ... amathoff   around the whole text to use the
 // experimental auto-math-recognize mode.
 //
-// The filter enables the ASCIIMathML.js code to do most of the work. 
+// The filter enables the ASCIIMathML.js code to do most of the work.
 //
 // A copy of ASCIIMathML (version 2.0 or later) is included and
 // automatically loaded in the file asciimath/javascript.php

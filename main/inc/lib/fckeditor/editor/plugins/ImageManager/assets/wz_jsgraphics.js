@@ -3,9 +3,9 @@
 ** Version.......:  1.0
 ** Author........:  Xiang Wei ZHUO <wei@zhuo.org>
 ** Filename......:  wz_jsgraphics.js
-** Last changed..:  31 Aug 2003  
+** Last changed..:  31 Aug 2003
 ** Notes.........:  Modified for Image Editor, added extra commands
-**/ 
+**/
 
 /* This notice must be untouched at all times.
 
@@ -794,7 +794,7 @@ function jsGraphics(id, wnd)
 
     this.drawHandle = function(x, y, w, h, cursor)
     {
-        
+
         this.htm += '<div style="position:absolute;'+
         'left:' + x + 'px;'+
         'top:' + y + 'px;'+
@@ -808,7 +808,7 @@ function jsGraphics(id, wnd)
 
     this.drawHandleBox = function(x, y, w, h, cursor)
     {
-        
+
         this.htm += '<div style="position:absolute;'+
         'left:' + x + 'px;'+
         'top:' + y + 'px;'+
@@ -819,7 +819,7 @@ function jsGraphics(id, wnd)
         "cursor: '" + cursor + "';"+
         '" class="handleBox" id="' + cursor + '" ><\/div>';
 
-        
+
     }
 
     this.drawPolygon = function(x, y)
@@ -886,7 +886,7 @@ function jsGraphics(id, wnd)
     {
         this.htm = "";
         if (this.cnv) this.cnv.innerHTML = this.defhtm;
-        
+
     };
 
 

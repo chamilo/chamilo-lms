@@ -1,23 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2009 Dokeos SPRL
-	
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 
 // name of the language file that needs to be included
 $language_file ='admin';
@@ -45,7 +27,7 @@ $tool_name = get_lang('EditSession');
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
 
-$result=api_sql_query("SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end FROM $tbl_session WHERE id='$id'",__FILE__,__LINE__);
+$result=Database::query("SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility FROM $tbl_session WHERE id='$id'",__FILE__,__LINE__);
 
 if (!$infos=mysql_fetch_array($result)) {
 	header('Location: session_list.php');
@@ -59,41 +41,44 @@ if (!api_is_platform_admin() && $infos['session_admin_id']!=$_user['user_id']) {
 }
 
 if ($_POST['formSent']) {
-	$formSent=1;	
+	$formSent=1;
 	$name= $_POST['name'];
-	$year_start= $_POST['year_start']; 
-	$month_start=$_POST['month_start']; 
-	$day_start=$_POST['day_start']; 
-	$year_end=$_POST['year_end']; 
-	$month_end=$_POST['month_end']; 
-	$day_end=$_POST['day_end']; 
-	$nb_days_acess_before = $_POST['nb_days_access_before']; 
-	$nb_days_acess_after = $_POST['nb_days_access_after']; 
+	$year_start= $_POST['year_start'];
+	$month_start=$_POST['month_start'];
+	$day_start=$_POST['day_start'];
+	$year_end=$_POST['year_end'];
+	$month_end=$_POST['month_end'];
+	$day_end=$_POST['day_end'];
+	$nb_days_acess_before = $_POST['nb_days_access_before'];
+	$nb_days_acess_after = $_POST['nb_days_access_after'];
 	$nolimit=$_POST['nolimit'];
 	$id_coach=$_POST['id_coach'];
-	$return = SessionManager::edit_session($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach);
+	$id_session_category = $_POST['session_category'];
+	$id_visibility = $_POST['session_visibility'];
+	
+	$return = SessionManager::edit_session($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit, $id_coach, $id_session_category,$id_visibility);
 	if ($return == strval(intval($return))) {
 		header('Location: resume_session.php?id_session='.$return);
 		exit();
 	}
 }
 
-$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1' ORDER BY lastname,firstname,username";
+$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
+$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
 
 if ($_configuration['multiple_access_urls']==true){
-	$table_access_url_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+	$table_access_url_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1) {
 		$sql="SELECT DISTINCT u.user_id,lastname,firstname,username FROM $tbl_user u INNER JOIN $table_access_url_rel_user url_rel_user
 			ON (url_rel_user.user_id = u.user_id)
-			WHERE status='1' AND access_url_id = $access_url_id
-			ORDER BY lastname,firstname,username";
+			WHERE status='1' AND access_url_id = '$access_url_id' $order_clause";
 	}
-}		
-			
-$result=api_sql_query($sql,__FILE__,__LINE__);
+}
 
-$Coaches=api_store_result($result);
+$result=Database::query($sql,__FILE__,__LINE__);
+
+$Coaches=Database::store_result($result);
 $thisYear=date('Y');
 
 // display the header
@@ -107,12 +92,12 @@ if (!empty($return)) {
 }
 ?>
 
-<form method="post" name="form" action="<?php echo api_get_self(); ?>?page=<?php echo $_GET['page'] ?>&id=<?php echo $id; ?>" style="margin:0px;">
+<form method="post" name="form" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']) ?>&id=<?php echo $id; ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
 
 <div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
 
-<table border="0" cellpadding="5" cellspacing="0" width="550">
+<table border="0" cellpadding="5" cellspacing="0" width="650">
 
 <tr>
   <td width="30%"><?php echo get_lang('SessionName') ?>&nbsp;&nbsp;</td>
@@ -127,7 +112,7 @@ if (!empty($return)) {
 foreach($Coaches as $enreg) {
 ?>
 
-	<option value="<?php echo $enreg['user_id']; ?>" <?php if((!$sent && $enreg['user_id'] == $infos['id_coach']) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo $enreg['lastname'].' '.$enreg['firstname'].' ('.$enreg['username'].')'; ?></option>
+	<option value="<?php echo $enreg['user_id']; ?>" <?php if((!$sent && $enreg['user_id'] == $infos['id_coach']) || ($sent && $enreg['user_id'] == $id_coach)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 
 <?php
 }
@@ -137,6 +122,25 @@ unset($Coaches);
 
   </select></td>
 </tr>
+<?php
+	$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);	
+	//$access_url_id = api_get_current_access_url_id();							
+	$sql = 'SELECT id, name FROM '.$tbl_session_category.' ORDER BY name ASC';
+	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$Categories = api_store_result($result);
+?>
+<tr>
+  <td width="30%"><?php echo get_lang('SessionCategory') ?></td>
+  <td width="70%">
+  	<select name="session_category" value="true" style="width:250px;">
+		<option value="0"><?php get_lang('None'); ?></option>
+		<?php foreach($Categories as $Rows): ?>
+		<option value="<?php echo $Rows['id']; ?>" <?php if($Rows['id'] == $infos['session_category_id']) echo 'selected="selected"'; ?>><?php echo $Rows['name']; ?></option>
+		<?php endforeach; ?>
+	</select>
+  </td>
+</tr>
+
 <tr>
   <td width="30%"><?php echo get_lang('NoTimeLimits') ?></td>
   <td width="70%">
@@ -285,16 +289,16 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
 	</td>
 	<td>
 		<a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('DefineSessionOptions') ?></a>
-		<div style="display: 
-			<?php 
+		<div style="display:
+			<?php
 				if($formSent){
-					if($nb_days_access_before!=0 || $nb_days_access_after!=0) 
-						echo 'block'; 
+					if($nb_days_access_before!=0 || $nb_days_access_after!=0)
+						echo 'block';
 					else echo 'none';
 				}
 				else{
 					if($infos['nb_days_access_before_beginning']!=0 || $infos['nb_days_access_after_end']!=0)
-						echo 'block'; 
+						echo 'block';
 					else
 						echo 'none';
 				}
@@ -307,11 +311,26 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
 		</div>
 	</td>
 </tr>
+
+<tr>
+  <td width="30%"><?php echo get_lang('SessionVisibility') ?></td>
+  <td width="70%">
+  	<select name="session_visibility" style="width:250px;">		
+		<?php	
+		$visibility_list = array(SESSION_VISIBLE_READ_ONLY=>get_lang('ReadOnly'), SESSION_VISIBLE=>get_lang('Visible'), SESSION_INVISIBLE=>api_ucfirst(get_lang('Invisible')));
+		foreach($visibility_list as $key=>$item): ?>
+		<option value="<?php echo $key; ?>" <?php if($key == $infos['visibility']) echo 'selected="selected"'; ?>><?php echo $item; ?></option>
+		<?php endforeach; ?>
+	</select>
+  </td>
+</tr>
+
+
 <tr>
   <td>&nbsp;</td>
   <td>
 <button class="save" type="submit" value="<?php echo get_lang('ModifyThisSession') ?>"><?php echo get_lang('ModifyThisSession') ?></button>
-  
+
   </td>
 </tr>
 
@@ -332,6 +351,9 @@ function setDisable(select){
 	document.form.month_end.disabled = (select.checked) ? true : false;
 	document.form.year_end.disabled = (select.checked) ? true : false;
 
+	document.form.session_visibility.disabled = (select.checked) ? true : false;
+	
+	document.form.session_visibility.selectedIndex = 0;	
 
 }
 </script>

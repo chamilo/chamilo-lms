@@ -38,7 +38,7 @@
 		INIT SECTION
 ==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 //$language_file = 'resourcelinker';// TODO: Repeated deleting and moving the rest of this lang file to trad4all
 include ('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
@@ -70,7 +70,7 @@ $action = $_REQUEST['action'];
 $add = $_REQUEST['add'];
 $chapter_id = $_REQUEST['chapter_id'];
 $content = $_REQUEST['content'];
-// Note by Patrick Cool: this has been solved belowd. This piece of code hacking produced too much errors. 
+// Note by Patrick Cool: this has been solved belowd. This piece of code hacking produced too much errors.
 /*
 if(empty($content)){
 	//adds a default to the item-type selection
@@ -124,12 +124,12 @@ if (!empty ($_POST['add_chapter']) && !empty ($_POST['title']))
 
 	// get max display_order so far in this parent chapter
 	$sql = "SELECT MAX(display_order) FROM $tbl_learnpath_chapter WHERE learnpath_id = $learnpath_id "." AND parent_chapter_id = $chapter_id";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	$row = mysql_fetch_array($res);
 	$max_temp = $row[0];
 
 	$sql = "SELECT MAX(display_order) FROM $tbl_learnpath_item WHERE "." chapter_id = $chapter_id";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	$row = mysql_fetch_array($res);
 	$max_temp2 = $row[0];
 	if ($max_temp2 > $max_temp)
@@ -142,7 +142,7 @@ if (!empty ($_POST['add_chapter']) && !empty ($_POST['title']))
 	}
 
 	$sql = "INSERT INTO $tbl_learnpath_chapter "."(learnpath_id,chapter_name,chapter_description,parent_chapter_id,display_order) "." VALUES "."($learnpath_id, '$title', '$description', $chapter_id, $order )";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	if ($res !== false)
 	{
 		$title = '';
@@ -164,7 +164,7 @@ if (!empty ($_POST['external_link_submit']))
 		}
 
 		$sql = "INSERT INTO $link_table (url, title, category_id) VALUES ('$external_link','$external_link','$add_2_links')";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$addedresource[] = "Link";
 		$addedresourceid[] = mysql_insert_id();
 		$_SESSION['addedresource'] = $addedresource;
@@ -209,30 +209,30 @@ if ($add)
 		$i = 0;
 		//calculating the last order of the items of this chapter
 		$sql = "SELECT MAX(display_order) FROM $tbl_learnpath_item WHERE chapter_id=$chapter_id";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		if(mysql_num_rows($result)==0){
 			$lastorder_item = 0;
 		}else{
-			$row = mysql_fetch_array($result);		
+			$row = mysql_fetch_array($result);
 			$lastorder_item = ($row[0]);
 		}
 		$sql = "SELECT MAX(display_order) FROM $tbl_learnpath_chapter WHERE parent_chapter_id=$chapter_id";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		if(mysql_num_rows($result)==0){
 			$lastorder_chapter = 0;
 		}else{
-			$row = mysql_fetch_array($result);		
+			$row = mysql_fetch_array($result);
 			$lastorder_chapter = ($row[0]);
 		}
 		$lastorder = ($lastorder_chapter>$lastorder_item?$lastorder_chapter+1:$lastorder_item+1);
-		
+
 		foreach ($addedresource as $addedresource_item)
 		{
 			// in the case we added a chapter, add this into the chapters list with the correct parent_id
 			if ($addedresource_item == "Chap")
 			{
 				$sql = "INSERT INTO $tbl_learnpath_chapter ("."'learnpath_id','chapter_name','chapter_description','parent_chapter_id','display_order'".") VALUES (".$learnpath_id.",'".$learnpath_chapter_name."','".$learnpath_chapter_description."',".$chapter_id.",".$lastorder.")";
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 			}
 
 			if (!$addedresourceassigned[$i])
@@ -271,7 +271,7 @@ if ($add)
 					$addedresource_item .= ' '.$target;
 				}
 				$sql = "INSERT INTO $tbl_learnpath_item (id, chapter_id, item_type, item_id, display_order) VALUES ( '$autoid', '$chapter_id', '$addedresource_item','$addedresourceid[$i]','".$lastorder."')";
-				$result = api_sql_query($sql, __FILE__, __LINE__);
+				$result = Database::query($sql, __FILE__, __LINE__);
 				$addedresourceassigned[$i] = 1;
 				$resource_added = true;
 			}
@@ -286,7 +286,7 @@ if ($add)
    		$_SESSION['addedresourceassigned'] = null;
    		unset ($_SESSION['addedresource']);
    		unset ($_SESSION['addedresourceid']);
-   		unset ($_SESSION['addedresourceassigned']); 
+   		unset ($_SESSION['addedresourceassigned']);
 	}
 }
 
@@ -349,7 +349,7 @@ if ($_GET["source_id"])
 			break;
 		case "6" : // coming from forum: reply
 			$url = "../phpbb/reply.php?topic=$topic&forum=$forum&parentid=$parentid";
-			$url = $_SESSION['origintoolurl']; 
+			$url = $_SESSION['origintoolurl'];
 			$originaltoolname = get_lang("ForumReply");
 			$breadcrumbelement = array ("url" => $url, "name" => $originaltoolname);
 			session_unregister('from_learnpath');
@@ -372,13 +372,13 @@ if ($_GET["source_id"])
 			}
 			$originaltoolname = get_lang("AdValvas");
 			$breadcrumbelement = array ("url" => $url, "name" => $originaltoolname);
-			session_unregister('from_learnpath'); 
+			session_unregister('from_learnpath');
 			unset ($from_learnpath);
 			break;
 			/*************************************** end add Frederik.Vermeire@pandora.be *********************************/
 
 	}
-	// We do not come from the learning path. We store the name of the tool & url in a session. 
+	// We do not come from the learning path. We store the name of the tool & url in a session.
 	if ($from_learnpath != 'yes')
 	{
 		if (!$_SESSION["origintoolurl"] OR $_SESSION["origintoolurl"]<>$interbreadcrumb["url"])
@@ -391,8 +391,8 @@ if ($_GET["source_id"])
 
 }
 
-// This part of the code is the actual breadcrumb mechanism. If we do not come from the learning path we use 
-// the information from the session. Else we use the information of the learningpath itself. 
+// This part of the code is the actual breadcrumb mechanism. If we do not come from the learning path we use
+// the information from the session. Else we use the information of the learningpath itself.
 if ($from_learnpath != 'yes')
 {
 	$nameTools = get_lang('AddResource');
@@ -402,12 +402,12 @@ else
 {
 	$learnpath_select_query = "	SELECT * FROM $tbl_learnpath_main
 		  								WHERE learnpath_id=$learnpath_id";
-	$sql_result = api_sql_query($learnpath_select_query);
+	$sql_result = Database::query($learnpath_select_query);
 	$therow = mysql_fetch_array($sql_result);
 
 	$learnpath_chapter_query = "	SELECT * FROM $tbl_learnpath_chapter
 		  								WHERE (learnpath_id = '$learnpath_id' and id = '$chapter_id')";
-	$sql_result = api_sql_query($learnpath_chapter_query);
+	$sql_result = Database::query($learnpath_chapter_query);
 	$therow2 = mysql_fetch_array($sql_result);
 
 	$from_learnpath = 'yes';
@@ -436,13 +436,13 @@ if ($from_learnpath == 'yes')
 }
 echo "</h3>";
 
-// we retrieve the tools that are active. 
+// we retrieve the tools that are active.
 // We use this to check which resources a student may add (only the modules that are active)
 // see http://www.dokeos.com/forum/viewtopic.php?t=4858
 $active_modules=array();
 $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 $sql_select_active="SELECT * FROM $tool_table WHERE visibility='1'";
-$result_select_active=api_sql_query($sql_select_active);
+$result_select_active=Database::query($sql_select_active);
 while ($row=mysql_fetch_array($result_select_active))
 {
 	$active_modules[]=$row['name'];
@@ -459,38 +459,38 @@ while ($row=mysql_fetch_array($result_select_active))
 		<tr>
           <td width="26%"><b><?php echo get_lang('CourseResources'); ?></b></td>
         </tr>
-        <?php  
+        <?php
         if (is_allowed_to_edit() OR in_array(TOOL_DOCUMENT,$active_modules))
         {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Document&action=$action&id=$id&learnpath_id=$learnpath_id&chapter_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Document')."</a>"; ?></td>
         </tr>
-        <?php 
-        } 
+        <?php
+        }
         if (is_allowed_to_edit() OR in_array(TOOL_CALENDAR_EVENT,$active_modules))
         {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Agenda&action=$action&id=$id&learnpath_id=$learnpath_id&chapter_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Agenda')."</a>"; ?></td>
         </tr>
-        <?php 
-        }  
+        <?php
+        }
         if (is_allowed_to_edit() OR in_array(TOOL_ANNOUNCEMENT,$active_modules))
         {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Ad_Valvas&action=$action&id=$id&learnpath_id=$learnpath_id&chapter_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('AdValvas')."</a>"; ?></td>
         </tr>
-        <?php 
-        }  
+        <?php
+        }
         if (is_allowed_to_edit() OR in_array(TOOL_BB_FORUM,$active_modules))
         {
         ?>
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Forum&action=$action&id=$id&learnpath_id=$learnpath_id&chapter_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Forum')."</a>"; ?></td>
         </tr>
-        <?php 
+        <?php
         }
         if (is_allowed_to_edit() OR in_array(TOOL_LINK,$active_modules))
         {
@@ -498,7 +498,7 @@ while ($row=mysql_fetch_array($result_select_active))
         <tr>
           <td><?php echo "<a href=\"".api_get_self()."?content=Link&action=$action&id=$id&learnpath_id=$learnpath_id&chapter_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Link')."</a>"; ?></td>
         </tr>
-        <?php 
+        <?php
         }
         if (is_allowed_to_edit() OR in_array(TOOL_QUIZ,$active_modules))
         {
@@ -643,15 +643,15 @@ if ($content == "Agenda")
 {
 	$TABLEAGENDA 			= Database::get_course_table(TABLE_AGENDA);
 	$TABLE_ITEM_PROPERTY 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-	
-	$sql="SELECT agenda.*, toolitemproperties.* 
-					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties 
+
+	$sql="SELECT agenda.*, toolitemproperties.*
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
 					WHERE `agenda`.`id` = `toolitemproperties`.`ref`
 					AND `toolitemproperties`.`tool`='".TOOL_CALENDAR_EVENT."'
 					AND `toolitemproperties`.`to_group_id`='0'
 					AND `toolitemproperties`.`visibility`='1'";
-	
-	$result = api_sql_query($sql);
+
+	$result = Database::query($sql);
 
 	while ($myrow = mysql_fetch_array($result))
 	{
@@ -721,8 +721,8 @@ if ($content == "Ad_Valvas")
 {
 	$tbl_announcement = Database :: get_course_table(TABLE_ANNOUNCEMENT);
 	$sql = "SELECT * FROM ".$tbl_announcement." a, ".$item_property_table." i  WHERE i.tool = '".TOOL_ANNOUNCEMENT."' AND a.id=i.ref AND i.visibility='1' AND i.to_group_id = 0 AND i.to_user_id IS NULL ORDER BY a.display_order ASC";
-	
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+
+	$result = Database::query($sql,__FILE__,__LINE__);
 	while ($myrow = mysql_fetch_array($result))
 	{
 		echo "<table width=\"100%\"><tr><td>";
@@ -754,7 +754,7 @@ if ($content == "Forum")
 	if (!$forum and !$thread)
 	{
 		$sql = "SELECT * FROM ".$TBL_FORUMS." forums, ".$TBL_CATAGORIES." categories WHERE forums.cat_id=categories.cat_id ORDER BY forums.cat_id DESC";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		while ($myrow = mysql_fetch_array($result))
 		{
 			if ($myrow["cat_title"] !== $old_cat_title)
@@ -772,13 +772,13 @@ if ($content == "Forum")
 	{
 		// displaying the category title
 		$sql = "SELECT * FROM ".$TBL_CATAGORIES." WHERE cat_id=$category";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$myrow = mysql_fetch_array($result);
 		echo "<tr><td bgcolor='#4171B5' colspan='2'><font color='white'><b>".$myrow["cat_title"]."</b></font></td></tr>";
 
 		// displaying the forum title
 		$sql = "SELECT * FROM ".$TBL_FORUMS." forums, ".$TBL_FORUMTOPICS." topics WHERE forums.forum_id=topics.forum_id";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$myrow = mysql_fetch_array($result);
 		echo "<tr><td bgcolor='#cccccc' colspan='2'><b>".$myrow["forum_name"]."</b></td></tr>";
 
@@ -786,7 +786,7 @@ if ($content == "Forum")
 		{
 			// displaying all the threads of this forum
 			$sql = "SELECT * FROM ".$TBL_FORUMTOPICS." WHERE forum_id=$forum";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			while ($myrow = mysql_fetch_array($result))
 			{
 				echo "<tr><td><a href='".api_get_self()."?content=Forum&category=$category&forum=1&thread=".$myrow["topic_id"]."&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no'>".$myrow["topic_title"]."</a>  (".$myrow["prenom"]." ".$myrow["nom"].")</td><td>";
@@ -798,7 +798,7 @@ if ($content == "Forum")
 		{
 			// displaying all the replies
 			$sql = "SELECT * FROM ".$tbl_posts." post, ".$tbl_posts_text." post_text WHERE post_text.post_id=post.post_id and post.topic_id=$thread ORDER BY post_text.post_id ASC";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			while ($myrow = mysql_fetch_array($result))
 			{
 				echo "<tr><td><b>".$myrow["post_title"]."</b><br>";
@@ -845,7 +845,7 @@ if ($content == "Link")
 
 	// showing the links that are in the root (having no category)
 	$sql = "SELECT * FROM ".$link_table.", ".$item_property_table." WHERE (category_id=0 or category_id IS NULL) AND tool = '".TOOL_LINK."' AND id=ref AND visibility='1'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	if (mysql_num_rows($result) > 0)
 	{
 		echo "<table width=\"100%\"><tr><td bgcolor=\"#E6E6E6\"><i>".get_lang('NoCategory')."</i></td></tr></table>";
@@ -860,12 +860,12 @@ if ($content == "Link")
 
 	// showing the categories and the links in it.
 	$sqlcategories = "SELECT * FROM ".$tbl_categories." ORDER by display_order DESC";
-	$resultcategories = api_sql_query($sqlcategories) or die;
+	$resultcategories = Database::query($sqlcategories) or die;
 	while ($myrow = @ mysql_fetch_array($resultcategories))
 	{
 		$sql_links = "SELECT * FROM ".$link_table.", ".$item_property_table." WHERE category_id='".$myrow["id"]."' AND tool = '".TOOL_LINK."' AND id=ref AND visibility='1' ORDER BY display_order DESC";
 		echo "<table width=\"100%\"><tr><td bgcolor=\"#E6E6E6\"><i>".$myrow["category_title"]."</i></td></tr></table>";
-		$result_links = api_sql_query($sql_links, __FILE__, __LINE__);
+		$result_links = Database::query($sql_links, __FILE__, __LINE__);
 		while ($myrow = mysql_fetch_array($result_links))
 		{
 			echo "<img src='../img/links.gif' />".$myrow["title"];
@@ -884,7 +884,7 @@ if ($content == "Link")
 if (($content == "Exercise") or ($content == "HotPotatoes"))
 {
 	$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-	$result = api_sql_query("SELECT * FROM ".$TBL_EXERCICES." WHERE active='1' ORDER BY id ASC");
+	$result = Database::query("SELECT * FROM ".$TBL_EXERCICES." WHERE active='1' ORDER BY id ASC");
 	while ($myrow = mysql_fetch_array($result))
 	{
 		echo "<img src='../img/quiz.gif'>".$myrow["title"]."<br>";
@@ -898,7 +898,7 @@ if (($content == "Exercise") or ($content == "HotPotatoes"))
 		$TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 		$documentPath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document';
 		$sql = "SELECT * FROM ".$TBL_DOCUMENT." WHERE (path LIKE '%htm%' OR path LIKE '%html%') AND path LIKE '".$uploadPath."/%/%' ORDER BY `id` ASC";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		while ($myrow = mysql_fetch_array($result))
 		{
 			$path = $myrow["path"];
@@ -943,7 +943,7 @@ if ($content == "Externallink")
 	$tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
 	$sql = "SELECT * FROM `$tbl_categories` ORDER BY display_order ASC";
 	echo $sql;
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	while ($row = mysql_fetch_array($result))
 	{
 		echo "<option value='".$row["id"]."'>".$row["category_title"]."</option>";

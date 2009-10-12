@@ -80,7 +80,7 @@ $nameTools = get_lang('MyAgenda');
 //remove this if cause it was showing in agenda general
 /*if(!empty($_GET['coursePath'])) {
 	$course_path = api_htmlentities(strip_tags($_GET['coursePath']),ENT_QUOTES,$charset);
-	$course_path = str_replace(array('../','..\\'),array('',''),$course_path); 	
+	$course_path = str_replace(array('../','..\\'),array('',''),$course_path);
 }
 */
 if (!empty ($course_path)) {
@@ -103,11 +103,11 @@ $tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA
 
 // the variables for the days and the months
 // Defining the shorts for the days
-$DaysShort = array (get_lang("SundayShort"), get_lang("MondayShort"), get_lang("TuesdayShort"), get_lang("WednesdayShort"), get_lang("ThursdayShort"), get_lang("FridayShort"), get_lang("SaturdayShort"));
+$DaysShort = api_get_week_days_short();
 // Defining the days of the week to allow translation of the days
-$DaysLong = array (get_lang("SundayLong"), get_lang("MondayLong"), get_lang("TuesdayLong"), get_lang("WednesdayLong"), get_lang("ThursdayLong"), get_lang("FridayLong"), get_lang("SaturdayLong"));
+$DaysLong = api_get_week_days_long();
 // Defining the months of the year to allow translation of the months
-$MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong"));
+$MonthsLong = api_get_months_long();
 
 /*==============================================================================
   			TREATING THE URL PARAMETERS
@@ -128,9 +128,9 @@ if (empty($_SESSION['view']))
 	$_SESSION['view'] = "month";
 }
 // 2. Storing it in the session. If we change the view by clicking on the links left, we change the session
-if (!empty($_GET['view'])) {	
+if (!empty($_GET['view'])) {
 	$_SESSION['view'] = Security::remove_XSS($_GET['view']);
-	
+
 }
 // 3. The views: (month, week, day, personal)
 if ($_SESSION['view'])
@@ -214,25 +214,25 @@ if (isset ($_user['user_id']))
 	// The name of the current Month
 	$monthName = $MonthsLong[$month -1];
 	// Starting the output
-	
+
 	echo "\n<div class=\"actions\">\n";
 	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=month\">".Display::return_icon('calendar_month.gif', get_lang('MonthView'))." ".get_lang('MonthView')."</a> \n";
 	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=week\">".Display::return_icon('calendar_week.gif', get_lang('WeekView'))." ".get_lang('WeekView')."</a> \n";
 	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=day\">".Display::return_icon('calendar_day.gif', get_lang('DayView'))." ".get_lang('DayView')."</a> \n";
-	if (get_setting('allow_personal_agenda') == 'true')
+	if (api_get_setting('allow_personal_agenda') == 'true')
 	{
 		echo "\t<a href=\"".api_get_self()."?action=add_personal_agenda_item\">".Display::return_icon('calendar_personal_add.gif', get_lang('AddPersonalItem'))." ".get_lang('AddPersonalItem')."</a> \n";
 		echo "\t<a href=\"".api_get_self()."?action=view&amp;view=personal\">".Display::return_icon('calendar_personal.gif', get_lang('ViewPersonalItem'))."  ".get_lang('ViewPersonalItem')."</a> \n";
 	}
-	echo "</div>\n\n";	
-	
+	echo "</div>\n\n";
+
 	echo "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">";
 	echo "<tr>";
 	// output: the small calendar item on the left and the view / add links
 	echo "<td width=\"220\" valign=\"top\">";
 	$agendaitems = get_myagendaitems($courses_dbs, $month, $year);
 	$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
-	if (get_setting('allow_personal_agenda') == 'true')
+	if (api_get_setting('allow_personal_agenda') == 'true')
 	{
 		$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 	}
@@ -249,7 +249,7 @@ if (isset ($_user['user_id']))
 		case "month_view" :
 			$agendaitems = get_myagendaitems($courses_dbs, $month, $year);
 			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
-			if (get_setting("allow_personal_agenda") == "true")
+			if (api_get_setting("allow_personal_agenda") == "true")
 			{
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 			}
@@ -258,7 +258,7 @@ if (isset ($_user['user_id']))
 		case "week_view" :
 			$agendaitems = get_week_agendaitems($courses_dbs, $month, $year, $week);
 			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");
-			if (get_setting("allow_personal_agenda") == "true")
+			if (api_get_setting("allow_personal_agenda") == "true")
 			{
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");
 			}
@@ -267,7 +267,7 @@ if (isset ($_user['user_id']))
 		case "day_view" :
 			$agendaitems = get_day_agendaitems($courses_dbs, $month, $year, $day);
 			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "day_view");
-			if (get_setting("allow_personal_agenda") == "true")
+			if (api_get_setting("allow_personal_agenda") == "true")
 			{
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "day_view");
 			}

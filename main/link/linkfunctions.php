@@ -104,15 +104,17 @@ function addlinkcategory($type)
 			}
 
 			// looking for the largest order number for this category
-			$result = api_sql_query("SELECT MAX(display_order) FROM  ".$tbl_link." WHERE category_id='".Database::escape_string($_POST['selectcategory'])."'");
+			$result = Database::query("SELECT MAX(display_order) FROM  ".$tbl_link." WHERE category_id='".Database::escape_string($_POST['selectcategory'])."'");
 
 			list ($orderMax) = Database::fetch_row($result);
 
 			$order = $orderMax +1;
-
-			$sql = "INSERT INTO ".$tbl_link." (url, title, description, category_id,display_order,on_homepage,target) VALUES ('$urllink','$title','$description','$selectcategory','$order', '$onhomepage','$target')";
+			
+			$session_id = api_get_session_id();
+			
+			$sql = "INSERT INTO ".$tbl_link." (url, title, description, category_id, display_order, on_homepage, target, session_id) VALUES ('$urllink','$title','$description','$selectcategory','$order', '$onhomepage','$target','$session_id')";
 			$catlinkstatus = get_lang('LinkAdded');
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			$link_id = Database::insert_id();
 
 
@@ -160,7 +162,7 @@ function addlinkcategory($type)
 					$table_link_category = Database::get_course_table(TABLE_LINK_CATEGORY);
 					$sql_cat = 'SELECT * FROM %s WHERE id=%d LIMIT 1';
 					$sql_cat = sprintf($sql_cat, $table_link_category, (int)$selectcategory);
-					$result = api_sql_query($sql_cat, __FILE__, __LINE__);
+					$result = Database::query($sql_cat, __FILE__, __LINE__);
 					if (Database::num_rows($result) == 1) {
 						$row = Database::fetch_array($result);
 						$ic_slide->addValue("category", $row['category_title']);
@@ -180,7 +182,7 @@ function addlinkcategory($type)
 					$sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
 						VALUES (NULL , \'%s\', \'%s\', %s, %s)';
 					$sql = sprintf($sql, $tbl_se_ref, $courseid, TOOL_LINK, $link_id, $did);
-					api_sql_query($sql,__FILE__,__LINE__);
+					Database::query($sql,__FILE__,__LINE__);
 				}
 
 			}
@@ -203,14 +205,16 @@ function addlinkcategory($type)
 			$ok = false;
 		} else {
 			// looking for the largest order number for this category
-			$result = api_sql_query("SELECT MAX(display_order) FROM  ".$tbl_categories."");
+			$result = Database::query("SELECT MAX(display_order) FROM  ".$tbl_categories."");
 
 			list ($orderMax) = Database::fetch_row($result);
 
 			$order = $orderMax +1;
-
-			$sql = "INSERT INTO ".$tbl_categories." (category_title, description, display_order) VALUES ('".Security::remove_XSS($category_title)."','".Security::remove_XSS($description)."', '$order')";
-			api_sql_query($sql, __FILE__, __LINE__);
+			
+			$session_id = api_get_session_id();
+			
+			$sql = "INSERT INTO ".$tbl_categories." (category_title, description, display_order, session_id) VALUES ('".Security::remove_XSS($category_title)."','".Security::remove_XSS($description)."', '$order', '$session_id')";
+			Database::query($sql, __FILE__, __LINE__);
 
 			$catlinkstatus = get_lang('CategoryAdded');
 
@@ -254,7 +258,7 @@ function deletelinkcategory($type)
 		// make a restore function possible for the platform administrator
 		if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
 			$sql="UPDATE $tbl_link SET on_homepage='0' WHERE id='".Database::escape_string($_GET['id'])."'";
-			Database::query($sql,__FILE__,__LINE__);			
+			Database::query($sql,__FILE__,__LINE__);
 		}
 
 		api_item_property_update($_course, TOOL_LINK, $id, "delete", $_user['user_id']);
@@ -270,11 +274,11 @@ function deletelinkcategory($type)
 
 		// first we delete the category itself and afterwards all the links of this category.
 		$sql = "DELETE FROM ".$tbl_categories." WHERE id='".Database::escape_string(Security::remove_XSS($_GET['id']))."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 		$sql = "DELETE FROM ".$tbl_link." WHERE category_id='".Database::escape_string(Security::remove_XSS($_GET['id']))."'";
 		$catlinkstatus = get_lang('CategoryDeleted');
 		unset ($id);
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		Display::display_confirmation_message(get_lang('CategoryDeleted'));
 	}
@@ -292,7 +296,7 @@ function delete_link_from_search_engine($course_id, $link_id) {
 		$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
 		$sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
 		$sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		if (Database::num_rows($res) > 0) {
 			$row = Database::fetch_array($res);
 			require_once(api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php');
@@ -301,7 +305,7 @@ function delete_link_from_search_engine($course_id, $link_id) {
 		}
 		$sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
 		$sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		// remove terms from db
 		require_once(api_get_path(LIBRARY_PATH) .'specific_fields_manager.lib.php');
@@ -343,7 +347,7 @@ function editlinkcategory($type)
 	{
 		// this is used to populate the link-form with the info found in the database
 		$sql = "SELECT * FROM ".$tbl_link." WHERE id='".$_GET['id']."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		if ($myrow = Database::fetch_array($result))
 		{
 			$urllink = $myrow["url"];
@@ -369,13 +373,13 @@ function editlinkcategory($type)
 
 			// finding the old category_id
 			$sql = "SELECT * FROM ".$tbl_link." WHERE id='".Database::escape_string(Security::remove_XSS($_POST['id']))."'";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			$row = Database::fetch_array($result);
 			$category_id = $row['category_id'];
 
 			if ($category_id <> $_POST['selectcategory']) {
 				$sql = "SELECT MAX(display_order) FROM ".$tbl_link." WHERE category_id='".$_POST['selectcategory']."'";
-				$result = api_sql_query($sql);
+				$result = Database::query($sql);
 				list ($max_display_order) = Database::fetch_row($result);
 				$max_display_order ++;
 			} else {
@@ -383,7 +387,7 @@ function editlinkcategory($type)
 			}
 
 			$sql = "UPDATE ".$tbl_link." set url='".Database::escape_string(Security::remove_XSS($_POST['urllink']))."', title='".Database::escape_string(Security::remove_XSS($_POST['title']))."', description='".Database::escape_string(Security::remove_XSS($_POST['description']))."', category_id='".Database::escape_string(Security::remove_XSS($_POST['selectcategory']))."', display_order='".$max_display_order."', on_homepage='".Database::escape_string(Security::remove_XSS($onhomepage))." ' $mytarget WHERE id='".Database::escape_string(Security::remove_XSS($_POST['id']))."'";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 
             // update search enchine and its values table if enabled
             if (api_get_setting('search_enabled')=='true') {
@@ -393,12 +397,12 @@ function editlinkcategory($type)
                 $link_title = $_POST['title'];
                 $link_description = $_POST['description'];
 
-                // actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one 
+                // actually, it consists on delete terms from db, insert new ones, create a new search engine document, and remove the old one
 	            // get search_did
 	            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
 	            $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
 	            $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
-	            $res = api_sql_query($sql, __FILE__, __LINE__);
+	            $res = Database::query($sql, __FILE__, __LINE__);
 
 	            if (Database::num_rows($res) > 0) {
                     require_once(api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php');
@@ -444,7 +448,7 @@ function editlinkcategory($type)
 	                    $table_link_category = Database::get_course_table(TABLE_LINK_CATEGORY);
 	                    $sql_cat = 'SELECT * FROM %s WHERE id=%d LIMIT 1';
 	                    $sql_cat = sprintf($sql_cat, $table_link_category, (int)$selectcategory);
-	                    $result = api_sql_query($sql_cat, __FILE__, __LINE__);
+	                    $result = Database::query($sql_cat, __FILE__, __LINE__);
 	                    if (Database::num_rows($result) == 1) {
 		                    $row = Database::fetch_array($result);
 		                    $ic_slide->addValue("category", $row['category_title']);
@@ -463,12 +467,12 @@ function editlinkcategory($type)
 	                    // save it to db
                         $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=\'%s\'';
                         $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
-                        api_sql_query($sql,__FILE__,__LINE__);
+                        Database::query($sql,__FILE__,__LINE__);
                         //var_dump($sql);
 	                    $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
 		                    VALUES (NULL , \'%s\', \'%s\', %s, %s)';
 	                    $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id, $did);
-	                    api_sql_query($sql,__FILE__,__LINE__);
+	                    Database::query($sql,__FILE__,__LINE__);
                     }
 
                 }
@@ -486,7 +490,7 @@ function editlinkcategory($type)
 		if (!$submitCategory)
 		{
 			$sql = "SELECT * FROM ".$tbl_categories." WHERE id='".$_GET['id']."'";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			if ($myrow = Database::fetch_array($result))
 			{
 				$category_title = $myrow["category_title"];
@@ -497,7 +501,7 @@ function editlinkcategory($type)
 		if ($submitCategory)
 		{
 			$sql = "UPDATE ".$tbl_categories." set category_title='".Database::escape_string(Security::remove_XSS($_POST['category_title']))."', description='".Database::escape_string(Security::remove_XSS($_POST['description']))."' WHERE id='".Database::escape_string(Security::remove_XSS($_POST['id']))."'";
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 			Display::display_confirmation_message(get_lang('CategoryModded'));
 		}
 
@@ -537,7 +541,7 @@ function change_visibility($id, $scope)
 	if ($scope == "link")
 	{
 		$sqlselect = "SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".TOOL_LINK."' and ref='".Database::escape_string($id)."'";
-		$result = api_sql_query($sqlselect);
+		$result = Database::query($sqlselect);
 		$row = Database::fetch_array($result);
 		api_item_property_update($_course, TOOL_LINK, $id, $_GET['action'], $_user['user_id']);
 	}
@@ -551,50 +555,56 @@ function change_visibility($id, $scope)
 */
 function showlinksofcategory($catid)
 {
-	global $is_allowed, $charset, $urlview, $up, $down;
+	global $is_allowed, $charset, $urlview, $up, $down, $_user;
 	$tbl_link = Database :: get_course_table(TABLE_LINK);
 
 	$TABLE_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
-	$sqlLinks = "SELECT * FROM ".$tbl_link." link, ".$TABLE_ITEM_PROPERTY." itemproperties WHERE itemproperties.tool='".TOOL_LINK."' AND link.id=itemproperties.ref AND  link.category_id='".$catid."' AND (itemproperties.visibility='0' OR itemproperties.visibility='1')ORDER BY link.display_order DESC";
-	$result = api_sql_query($sqlLinks);
-	$numberoflinks = Database::num_rows($result);
 	
+	//condition for the session
+	$session_id = api_get_session_id();
+	$condition_session = api_get_session_condition($session_id);
+	
+	$sqlLinks = "SELECT * FROM ".$tbl_link." link, ".$TABLE_ITEM_PROPERTY." itemproperties WHERE itemproperties.tool='".TOOL_LINK."' AND link.id=itemproperties.ref AND  link.category_id='".$catid."' AND (itemproperties.visibility='0' OR itemproperties.visibility='1') $condition_session ORDER BY link.display_order DESC";
+	$result = Database::query($sqlLinks);
+	$numberoflinks = Database::num_rows($result);
+
 	echo '<table class="data_table" width="100%">';
 	$i = 1;
-	while ($myrow = Database::fetch_array($result))
-	{
+	while ($myrow = Database::fetch_array($result)) {
+		//validacion when belongs to a session
+		$session_img = api_get_session_image($myrow['session_id'], $_user['status']);
+		
 		if($i%2==0) $css_class = 'row_odd';
 		else $css_class = 'row_even';
-		
+
 		$myrow[3] = text_filter($myrow[3]);
 		if ($myrow['visibility'] == '1')
 		{
-			echo "<tr class='".$css_class."'>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", "<img src=\"../../main/img/file_html.gif\" border=\"0\" alt=\"".get_lang('Link')."\"/>", "</a></td>", "<td width=\"80%\" valign=\"top\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", api_htmlentities($myrow[2],ENT_QUOTES,$charset), "</a>\n", "<br/>", $myrow[3], "";
+			echo "<tr class='".$css_class."'>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", "<img src=\"../../main/img/file_html.gif\" border=\"0\" alt=\"".get_lang('Link')."\"/>", "</a></td>", "<td width=\"80%\" valign=\"top\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\">", api_htmlentities($myrow[2],ENT_QUOTES,$charset), "</a>", $session_img , "<br/>", $myrow[3], "";
 		}
 		else
 		{
-			if (api_is_allowed_to_edit())
+			if (api_is_allowed_to_edit(null,true))
 			{
-				echo "<tr class='".$css_class."'>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\" class=\"invisible\">", Display::return_icon('file_html_na.gif', get_lang('Link')),"</a></td>", "<td width=\"80%\" valign=\"top\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\"  class=\"invisible\">", api_htmlentities($myrow[2],ENT_QUOTES,$charset), "</a>\n", "<br />", $myrow[3], "";
+				echo "<tr class='".$css_class."'>", "<td align=\"center\" valign=\"middle\" width=\"15\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\" class=\"invisible\">", Display::return_icon('file_html_na.gif', get_lang('Link')),"</a></td>", "<td width=\"80%\" valign=\"top\">", "<a href=\"link_goto.php?".api_get_cidreq()."&link_id=", $myrow[0], "&amp;link_url=", urlencode($myrow[1]), "\" target=\"_blank\"  class=\"invisible\">", api_htmlentities($myrow[2],ENT_QUOTES,$charset), "</a>\n", $session_img , "<br />", $myrow[3], "";
 			}
 		}
-		
+
 		echo '<td style="text-align:center;">';
-		if (api_is_allowed_to_edit())
+		if (api_is_allowed_to_edit(null,true))
 		{
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=editlink&amp;category=".(!empty($category)?$category:'')."&amp;id=".$myrow[0]." &amp;urlview=$urlview \"  title=\"".get_lang('Modify')."\"  >", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"", get_lang('Modify'), "\" />", "</a>";			
+			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=editlink&amp;category=".(!empty($category)?$category:'')."&amp;id=".$myrow[0]." &amp;urlview=$urlview \"  title=\"".get_lang('Modify')."\"  >", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"", get_lang('Modify'), "\" />", "</a>";
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=deletelink&amp;id=", $myrow[0], "&amp;urlview=", $urlview, "\" onclick=\"javascript:if(!confirm('".get_lang('LinkDelconfirm')."')) return false;\"  title=\"".get_lang('Delete')."\" >", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"", get_lang('Delete'), "\" />", "</a>";
 			// DISPLAY MOVE UP COMMAND only if it is not the top link
 			if ($i != 1)
 			{
 				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=".$urlview."&amp;up=", $myrow["id"], "\"  title=\"".get_lang('Up')."\"   >", "<img src=../img/up.gif border=0 alt=\"".get_lang('Up')."\"/>", "</a>\n";
 			}
-			else 
+			else
 			{
 				echo '<img src="'.api_get_path(WEB_IMG_PATH).'up_na.gif" border=0 alt="'.get_lang('Up').'"/>';
-			}	
-			
+			}
+
 			// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
 			if ($i < $numberoflinks)
 			{
@@ -602,18 +612,18 @@ function showlinksofcategory($catid)
 			}
 			else
 			{
-				echo '<img src="'.api_get_path(WEB_IMG_PATH).'down_na.gif" border=0 alt="'.get_lang('Down').'"/>';	
+				echo '<img src="'.api_get_path(WEB_IMG_PATH).'down_na.gif" border=0 alt="'.get_lang('Down').'"/>';
 			}
-			
+
 			if ($myrow['visibility'] == "1")
 			{
-				echo '<a href="link.php?'.api_get_cidreq().'&action=invisible&amp;id='.$myrow['id'].'&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang('Hide').'"><img src="../img/visible.gif" border="0" /></a>'; 
+				echo '<a href="link.php?'.api_get_cidreq().'&action=invisible&amp;id='.$myrow['id'].'&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang('Hide').'"><img src="../img/visible.gif" border="0" /></a>';
 			}
 			if ($myrow['visibility'] == "0")
 			{
  				echo '<a href="link.php?'.api_get_cidreq().'&action=visible&amp;id='.$myrow['id'].'&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang('Show').'"><img src="../img/invisible.gif" border="0" /></a>';
 			}
-		} 
+		}
 		echo '</td>';
 		echo '</tr>';
 		$i ++;
@@ -633,15 +643,15 @@ function showcategoryadmintools($categoryid)
 	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=editcategory&amp;id='.$categoryid.'&amp;urlview='.$urlview.'"  title='.get_lang('Modify').' "><img src="../img/edit.gif" border="0" alt="'.get_lang('Modify').' "/></a>';
 	echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=deletecategory&amp;id=", $categoryid, "&amp;urlview=$urlview\" onclick=\"javascript:if(!confirm('".get_lang('CategoryDelconfirm')."')) return false;\">", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"", get_lang('Delete'), "\"/>", "</a>";
 
-	// DISPLAY MOVE UP COMMAND only if it is not the top link	
+	// DISPLAY MOVE UP COMMAND only if it is not the top link
 	if ($catcounter != 1)
 	{
 		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&catmove=true&amp;up=", $categoryid, "&amp;urlview=$urlview\"  title=\"".get_lang('Up')."\" >", "<img src=../img/up.gif border=0 alt=\"".get_lang('Up')."\"/>", "</a>\n";
 	}
 	else
 	{
-		echo '<img src="'.api_get_path(WEB_IMG_PATH).'up_na.gif" border=0 alt="'.get_lang('Up').'"/>';	
-	}	
+		echo '<img src="'.api_get_path(WEB_IMG_PATH).'up_na.gif" border=0 alt="'.get_lang('Up').'"/>';
+	}
 	// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
 	if ($catcounter < $aantalcategories)
 	{
@@ -650,7 +660,7 @@ function showcategoryadmintools($categoryid)
 	else
 	{
 		echo '<img src="'.api_get_path(WEB_IMG_PATH).'down_na.gif" border=0 alt="'.get_lang('Down').'"/>';
-	}		
+	}
 	$catcounter ++;
 }
 
@@ -690,7 +700,7 @@ function movecatlink($catlinkid)
 		if(!empty($thiscatlinkId))
 		{
 			$sql = "SELECT category_id from ".$movetable." WHERE id='$thiscatlinkId'";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			$catid = Database::fetch_array($result);
 		}
 	}
@@ -708,7 +718,7 @@ function movecatlink($catlinkid)
 		{
 			$sqlcatlinks = "SELECT id, display_order FROM ".$movetable." WHERE category_id='".$catid[0]."' ORDER BY display_order $sortDirection";
 		}
-		$linkresult = api_sql_query($sqlcatlinks);
+		$linkresult = Database::query($sqlcatlinks);
 		while ($sortrow = Database::fetch_array($linkresult))
 		{
 			// STEP 2 : FOUND THE NEXT ANNOUNCEMENT ID AND ORDER, COMMIT SWAP
@@ -719,11 +729,11 @@ function movecatlink($catlinkid)
 				$nextlinkId = $sortrow["id"];
 				$nextlinkOrdre = $sortrow["display_order"];
 
-				api_sql_query("UPDATE ".$movetable."
+				Database::query("UPDATE ".$movetable."
 							             SET display_order = '$nextlinkOrdre'
 							             WHERE id =  '$thiscatlinkId'");
 
-				api_sql_query("UPDATE ".$movetable."
+				Database::query("UPDATE ".$movetable."
 							             SET display_order = '$thislinkOrdre'
 										 WHERE id =  '$nextlinkId'");
 
@@ -749,15 +759,15 @@ function get_cat($catname) // get category id (existing or make new)
 {
 	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
 
-	$result = api_sql_query("SELECT `id` FROM ".$tbl_categories." WHERE `category_title`='".addslashes($catname)."'", __FILE__, __LINE__);
+	$result = Database::query("SELECT `id` FROM ".$tbl_categories." WHERE `category_title`='".addslashes($catname)."'", __FILE__, __LINE__);
 
 	if (Database::num_rows($result) >= 1 && ($row = Database::fetch_array($result)))
 		return $row['id']; // several categories with same name: take first
 
-	$result = api_sql_query("SELECT MAX(display_order) FROM ".$tbl_categories."", __FILE__, __LINE__);
+	$result = Database::query("SELECT MAX(display_order) FROM ".$tbl_categories."", __FILE__, __LINE__);
 	list ($max_order) = Database::fetch_row($result);
 
-	api_sql_query("INSERT INTO ".$tbl_categories." (category_title, description, display_order) VALUES ('".addslashes($catname)."','','". ($max_order +1)."')", __FILE__, __LINE__);
+	Database::query("INSERT INTO ".$tbl_categories." (category_title, description, display_order) VALUES ('".addslashes($catname)."','','". ($max_order +1)."')", __FILE__, __LINE__);
 
 	return Database::insert_id();
 }
@@ -772,11 +782,11 @@ function put_link($url, $cat, $title, $description, $on_homepage, $hidden)
 	$urleq = "url='".addslashes($url)."'";
 	$cateq = "category_id=".$cat;
 
-	$result = api_sql_query("SELECT id FROM $tbl_link WHERE ".$urleq.' AND '.$cateq, __FILE__, __LINE__);
+	$result = Database::query("SELECT id FROM $tbl_link WHERE ".$urleq.' AND '.$cateq, __FILE__, __LINE__);
 
 	if (Database::num_rows($result) >= 1 && ($row = Database::fetch_array($result)))
 	{
-		api_sql_query("UPDATE $tbl_link set title='".addslashes($title)."', description='".addslashes($description)."' WHERE id='".addslashes($id = $row['id'])."'", __FILE__, __LINE__);
+		Database::query("UPDATE $tbl_link set title='".addslashes($title)."', description='".addslashes($description)."' WHERE id='".addslashes($id = $row['id'])."'", __FILE__, __LINE__);
 
 		$lang_link = get_lang('update_link');
 		$ipu = "LinkUpdated";
@@ -784,10 +794,10 @@ function put_link($url, $cat, $title, $description, $on_homepage, $hidden)
 	}
 	else // add new link
 		{
-		$result = api_sql_query("SELECT MAX(display_order) FROM  $tbl_link WHERE category_id='".addslashes($cat)."'", __FILE__, __LINE__);
+		$result = Database::query("SELECT MAX(display_order) FROM  $tbl_link WHERE category_id='".addslashes($cat)."'", __FILE__, __LINE__);
 		list ($max_order) = mysql_fetch_row($result);
 
-		api_sql_query("INSERT INTO $tbl_link (url, title, description, category_id, display_order, on_homepage) VALUES ('".addslashes($url)."','".addslashes($title)."','".addslashes($description)."','".addslashes($cat)."','". ($max_order +1)."','".$on_homepage."')", __FILE__, __LINE__);
+		Database::query("INSERT INTO $tbl_link (url, title, description, category_id, display_order, on_homepage) VALUES ('".addslashes($url)."','".addslashes($title)."','".addslashes($description)."','".addslashes($cat)."','". ($max_order +1)."','".$on_homepage."')", __FILE__, __LINE__);
 
 		$id = Database::insert_id();
 		$lang_link = get_lang('new_link');

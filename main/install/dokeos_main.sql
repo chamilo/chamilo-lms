@@ -215,7 +215,7 @@ CREATE TABLE course_field (
     field_visible tinyint default 0,
     field_changeable tinyint default 0,
     field_filter tinyint default 0,
-    tms TIMESTAMP,  
+    tms TIMESTAMP,
     PRIMARY KEY(id)
 );
 
@@ -349,9 +349,11 @@ CREATE TABLE language (
   english_name varchar(255) default NULL,
   isocode varchar(10) default NULL,
   dokeos_folder varchar(250) default NULL,
-  available tinyint NOT NULL default '1',
+  available tinyint NOT NULL default 1,
+  parent_id tinyint unsigned,
   PRIMARY KEY  (id)
 );
+ALTER TABLE language ADD INDEX idx_language_dokeos_folder(dokeos_folder);
 
 --
 -- Dumping data for table language
@@ -367,6 +369,7 @@ INSERT INTO language (original_name, english_name, isocode, dokeos_folder, avail
 ('Bosanski','bosnian','bs','bosnian',1),
 ('Catal&agrave;','catalan','ca','catalan',0),
 ('Chinese (simplified)','simpl_chinese','zh','simpl_chinese',0),
+('Chinese (traditional)','trad_chinese','zh-TW','trad_chinese',0),
 ('Czech','czech','cs','czech',0),
 ('Dansk','danish','da','danish',0),
 ('Dari','dari','prs','dari',0),
@@ -394,6 +397,7 @@ INSERT INTO language (original_name, english_name, isocode, dokeos_folder, avail
 ('Nederlands','dutch','nl','dutch',1),
 ('Nihongo','japanese','ja','japanese',0),
 ('Norsk','norwegian','no','norwegian',0),
+('Occitan','occitan','oc','occitan',0),
 ('Pashto','pashto','ps','pashto',0),
 ('Polski','polish','pl','polish',0),
 ('Portugu&ecirc;s (Portugal)','portuguese','pt','portuguese',1),
@@ -446,6 +450,7 @@ CREATE TABLE session (
   nb_days_access_before_beginning TINYINT UNSIGNED NULL default '0',
   nb_days_access_after_end TINYINT UNSIGNED NULL default '0',
   session_admin_id INT UNSIGNED NOT NULL,
+  visibility int NOT NULL default 1,
   PRIMARY KEY  (id),
   INDEX (session_admin_id),
   UNIQUE KEY name (name)
@@ -475,6 +480,7 @@ CREATE TABLE session_rel_course_rel_user (
   id_session smallint unsigned NOT NULL default '0',
   course_code char(40) NOT NULL default '',
   id_user int unsigned NOT NULL default '0',
+  visibility int NOT NULL default 1,
   PRIMARY KEY  (id_session,course_code,id_user),
   KEY id_user (id_user),
   KEY course_code (course_code)
@@ -504,7 +510,7 @@ CREATE TABLE session_field (
     field_visible tinyint default 0,
     field_changeable tinyint default 0,
     field_filter tinyint default 0,
-    tms TIMESTAMP,  
+    tms TIMESTAMP,
     PRIMARY KEY(id)
 );
 
@@ -546,10 +552,9 @@ ALTER TABLE settings_current ADD UNIQUE unique_setting ( variable , subkey , cat
 -- Dumping data for table settings_current
 --
 
-
 /*!40000 ALTER TABLE settings_current DISABLE KEYS */;
 LOCK TABLES settings_current WRITE;
-INSERT INTO settings_current 
+INSERT INTO settings_current
 (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
 VALUES
 ('Institution',NULL,'textfield','Platform','{ORGANISATIONNAME}','InstitutionTitle','InstitutionComment','platform',NULL, 1),
@@ -638,7 +643,7 @@ VALUES
 ('service_ppt2lp', 'path_to_lzx', 'textfield', NULL, NULL, '', NULL, NULL, NULL, 0),
 ('service_ppt2lp', 'size', 'radio', NULL, '720x540', '', NULL, NULL, NULL, 0),
 ('wcag_anysurfer_public_pages', NULL, 'radio','Platform','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL, 0),
-('stylesheets', NULL, 'textfield','stylesheets','blue_lagoon','',NULL, NULL, NULL, 1), 
+('stylesheets', NULL, 'textfield','stylesheets','dokeos_blue','',NULL, NULL, NULL, 1),
 ('upload_extensions_list_type', NULL, 'radio', 'Security', 'blacklist', 'UploadExtensionsListType', 'UploadExtensionsListTypeComment', NULL, NULL, 0),
 ('upload_extensions_blacklist', NULL, 'textfield', 'Security', '', 'UploadExtensionsBlacklist', 'UploadExtensionsBlacklistComment', NULL, NULL, 0),
 ('upload_extensions_whitelist', NULL, 'textfield', 'Security', 'htm;html;jpg;jpeg;gif;png;swf;avi;mpg;mpeg;mov;flv;doc;docx;xls;xlsx;ppt;pptx;odt;odp;ods;pdf', 'UploadExtensionsWhitelist', 'UploadExtensionsWhitelistComment', NULL, NULL, 0),
@@ -657,7 +662,7 @@ VALUES
 ('show_tabs', 'my_courses', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyCourses', 1),
 ('show_tabs', 'reporting', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsReporting', 1),
 ('show_tabs', 'platform_administration', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsPlatformAdministration', 1),
-('show_tabs', 'my_agenda', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyAgenda', 1), 
+('show_tabs', 'my_agenda', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyAgenda', 1),
 ('show_tabs', 'my_profile', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyProfile', 1),
 ('default_forum_view', NULL, 'radio', 'Course', 'flat', 'DefaultForumViewTitle','DefaultForumViewComment',NULL,NULL, 0),
 ('platform_charset',NULL,'textfield','Platform','iso-8859-15','PlatformCharsetTitle','PlatformCharsetComment','platform',NULL, 0),
@@ -688,7 +693,7 @@ VALUES
 ('ldap_filled_tutor_field', NULL, 'textfield', 'LDAP', 'employeenumber', 'LDAPFilledTutorFieldTitle', 'LDAPFilledTutorFieldComment', NULL, '', 0),
 ('ldap_authentication_login', NULL, 'textfield', 'LDAP', '', 'LDAPAuthenticationLoginTitle', 'LDAPAuthenticationLoginComment', NULL, '', 0),
 ('ldap_authentication_password', NULL, 'textfield', 'LDAP', '', 'LDAPAuthenticationPasswordTitle', 'LDAPAuthenticationPasswordComment', NULL, '', 0),
-('service_visio', 'visio_use_rtmpt', 'radio',null,'false', 'VisioUseRtmptTitle','VisioUseRtmptComment', NULL, NULL, 0), 
+('service_visio', 'visio_use_rtmpt', 'radio',null,'false', 'VisioUseRtmptTitle','VisioUseRtmptComment', NULL, NULL, 0),
 ('extendedprofile_registration', 'mycomptetences', 'checkbox','User','false', 'ExtendedProfileRegistrationTitle','ExtendedProfileRegistrationComment', NULL, 'MyCompetences', 0),
 ('extendedprofile_registration', 'mydiplomas', 'checkbox','User','false', 'ExtendedProfileRegistrationTitle','ExtendedProfileRegistrationComment', NULL, 'MyDiplomas', 0),
 ('extendedprofile_registration', 'myteach', 'checkbox','User','false', 'ExtendedProfileRegistrationTitle','ExtendedProfileRegistrationComment', NULL, 'MyTeach', 0),
@@ -715,7 +720,19 @@ VALUES
 ('allow_message_tool', NULL, 'radio', 'Tools', 'false', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL,0),
 ('allow_social_tool', NULL, 'radio', 'Tools', 'false', 'AllowSocialToolTitle', 'AllowSocialToolComment', NULL, NULL, 0),
 ('allow_students_to_browse_courses',NULL,'radio','Platform','true','AllowStudentsToBrowseCoursesTitle','AllowStudentsToBrowseCoursesComment',NULL,NULL, 1),
-('dokeos_database_version', NULL, 'textfield', NULL,'1.8.6.1.7945','DokeosDatabaseVersion','',NULL,NULL,0); 
+('show_session_data', NULL, 'radio', 'Course', 'false', 'ShowSessionDataTitle', 'ShowSessionDataComment', NULL, NULL, 1),
+('allow_use_sub_language', NULL, 'radio', 'Platform', 'false', 'AllowUseSubLanguageTitle', 'AllowUseSubLanguageComment', NULL, NULL,0),
+('show_glossary_in_documents', NULL, 'radio', 'Course', 'none', 'ShowGlossaryInDocumentsTitle', 'ShowGlossaryInDocumentsComment', NULL, NULL,1),
+('allow_terms_conditions', NULL, 'radio', 'Platform', 'false', 'AllowTermsAndConditionsTitle', 'AllowTermsAndConditionsComment', NULL, NULL,0),
+('show_tutor_data',NULL,'radio','Platform','true','ShowTutorDataTitle','ShowTutorDataComment',NULL,NULL, 1),
+('show_teacher_data',NULL,'radio','Platform','true','ShowTeacherDataTitle','ShowTeacherDataComment',NULL,NULL, 1),
+('course_create_active_tools','enable_search','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Search',0),
+('search_enabled',NULL,'radio','Tools','false','EnableSearchTitle','EnableSearchComment',NULL,NULL,1),
+('search_prefilter_prefix',NULL, NULL,'Search','','SearchPrefilterPrefix','SearchPrefilterPrefixComment',NULL,NULL,0),
+('search_show_unlinked_results',NULL,'radio','Search','true','SearchShowUnlinkedResultsTitle','SearchShowUnlinkedResultsComment',NULL,NULL,1),
+('show_courses_descriptions_in_catalog', NULL, 'radio', 'Course', 'true', 'ShowCoursesDescriptionsInCatalogTitle', 'ShowCoursesDescriptionsInCatalogComment', NULL, NULL, 1),
+('allow_coach_to_edit_course_session',NULL,'radio','Course','false','AllowCoachsToEditInsideTrainingSessions','AllowCoachsToEditInsideTrainingSessionsComment',NULL,NULL, 0),
+('dokeos_database_version', NULL, 'textfield', NULL,'1.8.6.1.8565','DokeosDatabaseVersion','',NULL,NULL,0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -742,7 +759,7 @@ ALTER TABLE settings_options ADD UNIQUE unique_setting_option (variable , value)
 
 /*!40000 ALTER TABLE settings_options DISABLE KEYS */;
 LOCK TABLES settings_options WRITE;
-INSERT INTO settings_options 
+INSERT INTO settings_options
 (variable, value, display_text)
 VALUES
 ('show_administrator_data','true','Yes'),
@@ -829,7 +846,7 @@ VALUES
 ('show_back_link_on_top_of_tree', 'true', 'Yes'),
 ('show_back_link_on_top_of_tree', 'false', 'No'),
 ('show_different_course_language', 'true', 'Yes'),
-('show_different_course_language', 'false', 'No'), 
+('show_different_course_language', 'false', 'No'),
 ('split_users_upload_directory', 'true', 'Yes'),
 ('split_users_upload_directory', 'false', 'No'),
 ('hide_dltt_markup', 'false', 'No'),
@@ -881,7 +898,25 @@ VALUES
 ('allow_students_to_browse_courses','true','Yes'),
 ('allow_students_to_browse_courses','false','No'),
 ('show_email_of_teacher_or_tutor ', 'true', 'Yes'),
-('show_email_of_teacher_or_tutor ', 'false', 'No');
+('show_email_of_teacher_or_tutor ', 'false', 'No'),
+('show_session_data ', 'true', 'Yes'),
+('show_session_data ', 'false', 'No'),
+('allow_use_sub_language', 'true', 'Yes'),
+('allow_use_sub_language', 'false', 'No'),
+('show_glossary_in_documents', 'none', 'ShowGlossaryInDocumentsIsNone'),
+('show_glossary_in_documents', 'ismanual', 'ShowGlossaryInDocumentsIsManual'),
+('show_glossary_in_documents', 'isautomatic', 'ShowGlossaryInDocumentsIsAutomatic'),
+('allow_terms_conditions', 'true', 'Yes'),
+('allow_terms_conditions', 'false', 'No'),
+('search_enabled', 'true', 'Yes'),
+('search_enabled', 'false', 'No'),
+('search_show_unlinked_results', 'true', 'SearchShowUnlinkedResults'),
+('search_show_unlinked_results', 'false', 'SearchHideUnlinkedResults'),
+('show_courses_descriptions_in_catalog', 'true', 'Yes'),
+('show_courses_descriptions_in_catalog', 'false', 'No'),
+('allow_coach_to_edit_course_session','true','Yes'),
+('allow_coach_to_edit_course_session','false','No');
+
 
 UNLOCK TABLES;
 
@@ -915,9 +950,9 @@ LOCK TABLES sys_announcement WRITE;
 UNLOCK TABLES;
 /*!40000 ALTER TABLE sys_announcement ENABLE KEYS */;
 
--- 
+--
 -- Table structure for shared_survey
--- 
+--
 
 DROP TABLE IF EXISTS shared_survey;
 CREATE TABLE shared_survey (
@@ -938,9 +973,9 @@ CREATE TABLE shared_survey (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for shared_survey_question
--- 
+--
 
 DROP TABLE IF EXISTS shared_survey_question;
 CREATE TABLE shared_survey_question (
@@ -958,9 +993,9 @@ CREATE TABLE shared_survey_question (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for shared_survey_question_option
--- 
+--
 
 DROP TABLE IF EXISTS shared_survey_question_option;
 CREATE TABLE shared_survey_question_option (
@@ -975,9 +1010,9 @@ CREATE TABLE shared_survey_question_option (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for templates (User's FCKEditor templates)
--- 
+--
 
 DROP TABLE IF EXISTS templates;
 CREATE TABLE templates (
@@ -993,13 +1028,13 @@ CREATE TABLE templates (
 
 
 
--- 
+--
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure of openid_association (keep info on openid servers)
--- 
+--
 
 DROP TABLE IF EXISTS openid_association;
 CREATE TABLE IF NOT EXISTS openid_association (
@@ -1043,6 +1078,7 @@ CREATE TABLE gradebook_evaluation (
   weight smallint NOT NULL,
   max float unsigned NOT NULL,
   visible tinyint NOT NULL,
+  type varchar(40) NOT NULL default 'evaluation',
   PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_link;
@@ -1085,7 +1121,7 @@ CREATE TABLE user_field (
 	field_visible tinyint default 0,
 	field_changeable tinyint default 0,
 	field_filter tinyint default 0,
-	tms	TIMESTAMP,	
+	tms	TIMESTAMP,
 	PRIMARY KEY(id)
 );
 DROP TABLE IF EXISTS user_field_options;
@@ -1158,7 +1194,7 @@ INSERT INTO access_url(url, description, active, created_by) VALUES ('http://loc
 DROP TABLE IF EXISTS access_url_rel_user;
 CREATE TABLE access_url_rel_user (
   access_url_id int unsigned NOT NULL,
-  user_id int unsigned NOT NULL,  
+  user_id int unsigned NOT NULL,
   PRIMARY KEY (access_url_id, user_id)
 );
 
@@ -1168,22 +1204,22 @@ ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url_use
 
 DROP TABLE IF EXISTS access_url_rel_course;
 CREATE TABLE access_url_rel_course (
-  access_url_id int unsigned NOT NULL, 
-  course_code char(40) NOT NULL, 
+  access_url_id int unsigned NOT NULL,
+  course_code char(40) NOT NULL,
   PRIMARY KEY (access_url_id, course_code)
 );
 
 
 DROP TABLE IF EXISTS access_url_rel_session;
 CREATE TABLE access_url_rel_session (
-  access_url_id int unsigned NOT NULL, 
+  access_url_id int unsigned NOT NULL,
   session_id int unsigned NOT NULL,
   PRIMARY KEY (access_url_id, session_id)
 );
 
--- 
+--
 -- Table structure for table sys_calendar
--- 
+--
 CREATE TABLE IF NOT EXISTS sys_calendar (
   id int unsigned NOT NULL auto_increment,
   title varchar(200) NOT NULL,
@@ -1211,23 +1247,23 @@ INSERT INTO system_template (title, comment, image, content) VALUES
             	<style type="text/css">
             	.gris_title         	{
             		color: silver;
-            	}            	
+            	}
             	h1
             	{
             		text-align: right;
             	}
 				</style>
-  
+
             </head>
             <body>
 			<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 			<tbody>
-			<tr>			
+			<tr>
 			<td style="vertical-align: middle; width: 50%;" colspan="1" rowspan="1">
 				<h1>TITULUS 1<br>
 				<span class="gris_title">TITULUS 2</span><br>
 				</h1>
-			</td>			
+			</td>
 			<td style="width: 50%;">
 				<img style="width: 100px; height: 100px;" alt="dokeos logo" src="{COURSE_DIR}images/logo_dokeos.png"></td>
 			</tr>
@@ -1243,34 +1279,34 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleCheckList', 'TemplateTitleCheckListDescription', 'checklist.gif', '
       <head>
-	               {CSS}	              
+	               {CSS}
 	            </head>
 	            <body>
 				<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 				<tbody>
 				<tr>
-				<td style="vertical-align: top; width: 66%;">						
+				<td style="vertical-align: top; width: 66%;">
 				<h3>Lorem ipsum dolor sit amet</h3>
 				<ul>
 					<li>consectetur adipisicing elit</li>
 					<li>sed do eiusmod tempor incididunt</li>
 					<li>ut labore et dolore magna aliqua</li>
 				</ul>
-				
-				<h3>Ut enim ad minim veniam</h3>							
+
+				<h3>Ut enim ad minim veniam</h3>
 				<ul>
 					<li>quis nostrud exercitation ullamco</li>
 					<li>laboris nisi ut aliquip ex ea commodo consequat</li>
 					<li>Excepteur sint occaecat cupidatat non proident</li>
 				</ul>
-				
-				<h3>Sed ut perspiciatis unde omnis</h3>				
+
+				<h3>Sed ut perspiciatis unde omnis</h3>
 				<ul>
 					<li>iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam</li>
 					<li>eaque ipsa quae ab illo inventore veritatis</li>
 					<li>et quasi architecto beatae vitae dicta sunt explicabo.&nbsp;</li>
 				</ul>
-				
+
 				</td>
 				<td style="background: transparent url({IMG_DIR}postit.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; width: 33%; text-align: center; vertical-align: bottom;">
 				<h3>Ut enim ad minima</h3>
@@ -1292,13 +1328,13 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleTeacher', 'TemplateTitleTeacherDescription', 'yourinstructor.gif', '
 <head>
                    {CSS}
-                   <style type="text/css">	            
+                   <style type="text/css">
 	            	.text
-	            	{	            	
+	            	{
 	            		font-weight: normal;
 	            	}
 					</style>
-                </head>                    
+                </head>
                 <body>
 					<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 					<tbody>
@@ -1322,7 +1358,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 					<p><br>
 					<br>
 					</p>
-				</body>	
+				</body>
 ');
 
 
@@ -1330,7 +1366,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleLeftList', 'TemplateTitleListLeftListDescription', 'leftlist.gif', '
 <head>
 	           {CSS}
-	       </head>		    
+	       </head>
 		    <body>
 				<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 				<tbody>
@@ -1360,7 +1396,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 			<p><br>
 			<br>
 			</p>
-			</body> 
+			</body>
 ');
 
 INSERT INTO system_template (title, comment, image, content) VALUES
@@ -1410,7 +1446,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 			<p><br>
 			<br>
 			</p>
-			</body> 
+			</body>
 
 ');
 
@@ -1449,20 +1485,20 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 			<p><br>
 			<br>
 			</p>
-			</body>  
+			</body>
 ');
 
 /*
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleComparison', 'TemplateTitleComparisonDescription', 'compare.gif', '
 <head>
-            {CSS}        
+            {CSS}
             </head>
-            
+
             <body>
-            	<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">				
+            	<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 				<tr>
-					<td style="height: 10%; width: 33%;"></td> 
+					<td style="height: 10%; width: 33%;"></td>
 					<td style="vertical-align: top; width: 33%;" colspan="1" rowspan="2">&nbsp;<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_standing.png "><br>
 					</td>
 					<td style="height: 10%; width: 33%;"></td>
@@ -1474,7 +1510,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 			<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; width: 33%;">
 			Convallis
 			ut.&nbsp;Cras dui magna.</td>
-			</tr>			
+			</tr>
 			</body>
 ');
 */
@@ -1484,7 +1520,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 	<head>
 	                   {CSS}
 				    </head>
-				    
+
 					<body>
 					<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 					<tbody>
@@ -1509,7 +1545,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 					<p><br>
 					<br>
 					</p>
-					</body>				    
+					</body>
 ');
 
 INSERT INTO system_template (title, comment, image, content) VALUES
@@ -1527,7 +1563,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 							<br>Ut enim ad minim veniam<br><br><br>
 							<img style="width: 48px; height: 49px; float: left;" alt="03" src="{COURSE_DIR}images/small/03.png " hspace="5">Duis aute irure dolor in reprehenderit<br><br><br>
 							<img style="width: 48px; height: 49px; float: left;" alt="04" src="{COURSE_DIR}images/small/04.png " hspace="5">Neque porro quisquam est</td>
-							
+
 						<td style="vertical-align: top; width: 50%; text-align: right;" colspan="1" rowspan="1">
 							<img style="width: 300px; height: 291px;" alt="Gearbox" src="{COURSE_DIR}images/diagrams/gearbox.jpg "><br></td>
 						</tr><tr></tr>
@@ -1536,16 +1572,16 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 						<p><br>
 						<br>
 						</p>
-					</body>	
+					</body>
 ');
 
 /*
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleObjectives', 'TemplateTitleObjectivesDescription', 'courseobjectives.gif', '
 <head>
-	               {CSS}                    
-			    </head>	
-			    
+	               {CSS}
+			    </head>
+
 			    <body>
 					<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 					<tbody>
@@ -1576,7 +1612,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 				<p><br>
 				<br>
 				</p>
-				</body>		
+				</body>
 ');
 */
 
@@ -1589,24 +1625,24 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 	               {
 	               	color: white; font-weight: bold;
 	               }
-	               </style>                    
+	               </style>
 			    </head>
-			    	
-			    	    
+
+
 			    <body>
 				<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="8" cellspacing="6">
 				<tbody>
 				<tr>
 					<td style="text-align: center; vertical-align: bottom; height: 10%;" colspan="3" rowspan="1">
 						<img style="width: 250px; height: 76px;" alt="arrow" src="{COURSE_DIR}images/diagrams/top_arrow.png ">
-					</td>				
-				</tr>			
+					</td>
+				</tr>
 				<tr>
 					<td style="height: 5%; width: 45%; vertical-align: top; background-color: rgb(153, 153, 153); text-align: center;">
 						<span class="title">Lorem ipsum</span>
 					</td>
-						
-					<td style="height: 5%; width: 10%;"></td>					
+
+					<td style="height: 5%; width: 10%;"></td>
 					<td style="height: 5%; vertical-align: top; background-color: rgb(153, 153, 153); text-align: center;">
 						<span class="title">Sed ut perspiciatis</span>
 					</td>
@@ -1620,7 +1656,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 								<li>adipisci velit, sed quia non numquam</li>
 								<li>eius modi tempora incidunt ut labore et dolore magnam</li>
 							</ul>
-				</td>			
+				</td>
 				<td style="width: 10%;"></td>
 				<td style="background-color: rgb(204, 204, 255); width: 45%; vertical-align: top;">
 					<ul>
@@ -1635,22 +1671,22 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 					<td style="height: 10%; vertical-align: top;" colspan="3" rowspan="1">
 					<img style="width: 250px; height: 76px;" alt="arrow" src="{COURSE_DIR}images/diagrams/bottom_arrow.png ">&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
 				</td>
-				</tr>			
+				</tr>
 				</tbody>
 				</table>
 				<p><br>
 				<br>
 				</p>
-				</body>	
+				</body>
 ');
 
 /*
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleLearnerWonder', 'TemplateTitleLearnerWonderDescription', 'learnerwonder.gif', '
 <head>
-               {CSS}                    
+               {CSS}
 		    </head>
-		    
+
 		    <body>
 				<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 				<tbody>
@@ -1689,26 +1725,26 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleTimeline', 'TemplateTitleTimelineDescription', 'phasetimeline.gif', '
 <head>
-               {CSS} 
+               {CSS}
 				<style>
 				.title
-				{				
-					font-weight: bold; text-align: center; 	
-				}			
-				</style>                
-		    </head>	
-		    
+				{
+					font-weight: bold; text-align: center;
+				}
+				</style>
+		    </head>
+
 		    <body>
 				<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="8" cellspacing="5">
 				<tbody>
-				<tr class="title">				
+				<tr class="title">
 					<td style="vertical-align: top; height: 3%; background-color: rgb(224, 224, 224);">Lorem ipsum</td>
 					<td style="height: 3%;"></td>
 					<td style="vertical-align: top; height: 3%; background-color: rgb(237, 237, 237);">Perspiciatis</td>
 					<td style="height: 3%;"></td>
 					<td style="vertical-align: top; height: 3%; background-color: rgb(245, 245, 245);">Nemo enim</td>
 				</tr>
-				
+
 				<tr>
 					<td style="vertical-align: top; width: 30%; background-color: rgb(224, 224, 224);">
 						<ul>
@@ -1721,7 +1757,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 					<td>
 						<img style="width: 32px; height: 32px;" alt="arrow" src="{COURSE_DIR}images/small/arrow.png ">
 					</td>
-					
+
 					<td style="vertical-align: top; width: 30%; background-color: rgb(237, 237, 237);">
 						<ul>
 							<li>ut labore</li>
@@ -1732,7 +1768,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 					<td>
 						<img style="width: 32px; height: 32px;" alt="arrow" src="{COURSE_DIR}images/small/arrow.png ">
 					</td>
-					
+
 					<td style="vertical-align: top; background-color: rgb(245, 245, 245); width: 30%;">
 						<ul>
 							<li>neque porro</li>
@@ -1754,7 +1790,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleStopAndThink', 'TemplateTitleStopAndThinkDescription', 'stopthink.gif', '
 <head>
-               {CSS}                    
+               {CSS}
 		    </head>
 		    <body>
 				<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
@@ -1793,15 +1829,15 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 				{
 					font-weight: bold; text-align: center;
 				}
-				
+
 				.items
 				{
 					text-align: right;
-				}	
-  				
+				}
+
 
 					</style>
-  
+
 			    </head>
 			    <body>
 			    <br />
@@ -1852,18 +1888,18 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleAudio', 'TemplateTitleAudioDescription', 'audiocomment.gif', '
 <head>
-               {CSS}                    
+               {CSS}
 		    </head>
                    <body>
 					<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 					<tbody>
 					<tr>
-					<td>					
+					<td>
 					<div align="center">
 					<span style="text-align: center;">
 						<embed  type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" width="300" height="20" bgcolor="#FFFFFF" src="{REL_PATH}main/inc/lib/mediaplayer/player.swf" allowfullscreen="false" allowscriptaccess="always" flashvars="file={COURSE_DIR}audio/ListeningComprehension.mp3&amp;autostart=true"></embed>
-                    </span></div>     
-					
+                    </span></div>
+
 					<br>
 					</td>
 					<td colspan="1" rowspan="3"><br>
@@ -1880,7 +1916,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 					<p><br>
 					<br>
 					</p>
-					</body>	
+					</body>
 ');
 
 INSERT INTO system_template (title, comment, image, content) VALUES
@@ -1888,7 +1924,7 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 <head>
             	{CSS}
 			</head>
-			
+
 			<body>
 			<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 			<tbody>
@@ -1947,15 +1983,15 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 INSERT INTO system_template (title, comment, image, content) VALUES
 ('TemplateTitleFlash', 'TemplateTitleFlashDescription', 'flash.gif', '
 <head>
-               {CSS}                    
-		    </head>				    
+               {CSS}
+		    </head>
 		    <body>
 		    <center>
 				<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 100%; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 				<tbody>
 					<tr>
 					<td align="center">
-					<embed width="700" height="300" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="{COURSE_DIR}flash/SpinEchoSequence.swf" play="true" loop="true" menu="true"></embed></span><br /> 				          													
+					<embed width="700" height="300" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" src="{COURSE_DIR}flash/SpinEchoSequence.swf" play="true" loop="true" menu="true"></embed></span><br />
 					</td>
 					</tr>
 				</tbody>
@@ -1975,9 +2011,9 @@ INSERT INTO system_template (title, comment, image, content) VALUES
 --
 
 
--- 
--- Table structure for table reservation category 
--- 
+--
+-- Table structure for table reservation category
+--
 
 CREATE TABLE reservation_category (
    id  int unsigned NOT NULL auto_increment,
@@ -1988,9 +2024,9 @@ CREATE TABLE reservation_category (
 
 -- --------------------------------------------------------
 
--- 
--- Table structure for table reservation category_rights 
--- 
+--
+-- Table structure for table reservation category_rights
+--
 
 CREATE TABLE  reservation_category_rights  (
    category_id  int NOT NULL default 0,
@@ -2000,9 +2036,9 @@ CREATE TABLE  reservation_category_rights  (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table  item reservation
--- 
+--
 
 CREATE TABLE  reservation_item  (
    id  int unsigned NOT NULL auto_increment,
@@ -2012,14 +2048,15 @@ CREATE TABLE  reservation_item  (
    description  text NOT NULL,
    blackout  tinyint NOT NULL default 0,
    creator  int unsigned NOT NULL default 0,
+   always_available TINYINT NOT NULL default 0,
   PRIMARY KEY  ( id )
 );
 
 -- --------------------------------------------------------
 
--- 
--- Table structure for table reservation item_rights 
--- 
+--
+-- Table structure for table reservation item_rights
+--
 
 CREATE TABLE  reservation_item_rights  (
    item_id  int unsigned NOT NULL default 0,
@@ -2033,9 +2070,9 @@ CREATE TABLE  reservation_item_rights  (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for main reservation table
--- 
+--
 
 CREATE TABLE  reservation_main  (
    id  int unsigned NOT NULL auto_increment,
@@ -2057,9 +2094,9 @@ CREATE TABLE  reservation_main  (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for reservation subscription table
--- 
+--
 
 CREATE TABLE  reservation_subscription  (
    dummy  int unsigned NOT NULL auto_increment,
@@ -2081,13 +2118,13 @@ CREATE TABLE user_friend(
   user_id int unsigned not null,
   friend_user_id int unsigned not null,
   relation_type int not null default 0,
+  last_edit DATETIME,
   PRIMARY KEY(id)
 );
 
 ALTER TABLE user_friend ADD INDEX idx_user_friend_user (user_id);
 ALTER TABLE user_friend ADD INDEX idx_user_friend_friend_user(friend_user_id);
 ALTER TABLE user_friend ADD INDEX idx_user_friend_user_friend_user(user_id,friend_user_id);
-ALTER TABLE user_friend ADD COLUMN last_edit DATETIME;
 
 --
 -- Table structure for table user_friend_relation_type
@@ -2129,6 +2166,7 @@ ALTER TABLE message ADD INDEX idx_message_user_sender(user_sender_id);
 ALTER TABLE message ADD INDEX idx_message_user_receiver(user_receiver_id);
 ALTER TABLE message ADD INDEX idx_message_user_sender_user_receiver(user_sender_id,user_receiver_id);
 ALTER TABLE message ADD INDEX idx_message_msg_status(msg_status);
+
 INSERT INTO user_friend_relation_type (id,title)
 VALUES
 (1,'SocialUnknow'),
@@ -2137,15 +2175,6 @@ VALUES
 (4,'SocialGoodFriend'),
 (5,'SocialEnemy'),
 (6,'SocialDeleted');
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_use_sub_language', NULL, 'radio', 'Platform', 'false', 'AllowUseSubLanguageTitle', 'AllowUseSubLanguageComment', NULL, NULL);
-INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_use_sub_language', 'true', 'Yes');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_use_sub_language', 'false', 'No');
-ALTER TABLE language ADD COLUMN parent_id tinyint unsigned;
-ALTER TABLE language ADD INDEX idx_dokeos_folder(dokeos_folder);
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('show_glossary_in_documents', NULL, 'radio', 'Course', 'none', 'ShowGlossaryInDocumentsTitle', 'ShowGlossaryInDocumentsComment', NULL, NULL);
-INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'none', 'ShowGlossaryInDocumentsIsNone');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'ismanual', 'ShowGlossaryInDocumentsIsManual');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'isautomatic', 'ShowGlossaryInDocumentsIsAutomatic');
 
 --
 -- Table structure for table legal (Terms & Conditions)
@@ -2157,14 +2186,76 @@ CREATE TABLE  legal (
   date int NOT NULL default 0,
   content text,
   type int NOT NULL,
-  changes text NOT NULL,  
+  changes text NOT NULL,
   version int,
   PRIMARY KEY (legal_id,language_id)
 );
 
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'legal_accept','Legal',0,0);
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_terms_conditions', NULL, 'radio', 'Platform', 'false', 'AllowTermsAndConditionsTitle', 'AllowTermsAndConditionsComment', NULL, NULL);
-INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_terms_conditions', 'true', 'Yes');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_terms_conditions', 'false', 'No');
+--
+-- Table structure for certificate with gradebook
+--
 
+CREATE TABLE gradebook_certificate(
+	id bigint unsigned not null auto_increment,
+	cat_id int unsigned not null,
+	user_id int unsigned not null,
+	score_certificate float unsigned not null default 0,
+	date_certificate datetime not null default '0000-00-00 00:00:00',
+	path_certificate text null,
+	PRIMARY KEY(id)
+);
+ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_category_id(cat_id);
+ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_user_id(user_id);
+ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_category_id_user_id(cat_id,user_id);
+ALTER TABLE gradebook_category ADD COLUMN document_id int unsigned default NULL;
+
+
+
+--
+-- Tables structure for search tool
+--
+
+-- specific fields tables
+CREATE TABLE specific_field (
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	code char(1) NOT NULL,
+	name VARCHAR(200) NOT NULL
+);
+
+CREATE TABLE specific_field_values (
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+	course_code VARCHAR(40) NOT NULL ,
+	tool_id VARCHAR(100) NOT NULL ,
+	ref_id INT NOT NULL ,
+	field_id INT NOT NULL ,
+	value VARCHAR(200) NOT NULL
+);
+ALTER TABLE specific_field ADD CONSTRAINT unique_specific_field__code UNIQUE (code);
+
+-- search engine references to map dokeos resources
+
+CREATE TABLE search_engine_ref (
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	course_code VARCHAR( 40 ) NOT NULL,
+	tool_id VARCHAR( 100 ) NOT NULL,
+	ref_id_high_level INT NOT NULL,
+	ref_id_second_level INT NULL,
+	search_did INT NOT NULL
+);
+
+--
+-- Table structure for table sessions categories
+--
+
+CREATE TABLE session_category (
+  id int(11) NOT NULL auto_increment,
+  name varchar(100) default NULL,
+  date_start date default NULL,
+  date_end date default NULL,
+  PRIMARY KEY  (id)
+);
+
+ALTER TABLE session ADD COLUMN session_category_id INT NOT NULL;
+ALTER TABLE session_rel_course_rel_user ADD status TINYINT NOT NULL DEFAULT 0;

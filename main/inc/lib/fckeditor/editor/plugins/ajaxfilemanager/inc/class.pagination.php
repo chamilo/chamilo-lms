@@ -527,7 +527,7 @@ class pagination
 		switch($type)
 		{
 			case "2":
-				$output .= "<span class=\"pagination_summany\">" . $this->getFirstItem() . " to " . $this->getLastItem() . " of " . $this->getTotal() . " results.</span> ";	
+				$output .= "<span class=\"pagination_summany\">" . $this->getFirstItem() . " to " . $this->getLastItem() . " of " . $this->getTotal() . " results.</span> ";
 			if($previousUrl = $this->getPreviousUrl())
 			{
 				$output .= " " . $previousUrl;
@@ -536,7 +536,7 @@ class pagination
 			if($nextUrl = $this->getNextUrl())
 			{
 				$output .= " " . $nextUrl;
-			}							
+			}
 				break;
 			case 1:
 				//get full summary pagination
@@ -569,11 +569,11 @@ class pagination
 			{
 				$itemPerPage .= "<option value=\"" . $v . "\" " . ($v==$this->itemsPerPage?'selected="selected"':'') . ">" . $v . "</option>\n";
 			}
-			$itemPerPage .= "</select>\n"; 
+			$itemPerPage .= "</select>\n";
 			$output .= "<span class=\"pagination_items_per_page\">";
 			$output .= sprintf(PAGINATION_ITEMS_PER_PAGE, $itemPerPage);
 			$output .= "</span>";
-			$output .= "<span class=\"pagination_parent\"><a href=\"#\" onclick=\"goParentFolder();\" id=\"pagination_parent_link\" title=\"" . PAGINATION_GO_PARENT . "\">&nbsp;</a></span>";
+			$output .= "<span class=\"pagination_parent\"><a href=\"javascript: void(0);\" onclick=\"javascript: goParentFolder();\" id=\"pagination_parent_link\" title=\"" . PAGINATION_GO_PARENT . "\">&nbsp;</a></span>";
 		}
 
 		$output .= "</p></div>";

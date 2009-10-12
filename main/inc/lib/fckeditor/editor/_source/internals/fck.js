@@ -235,6 +235,8 @@ var FCK =
 
 	GetData : function( format )
 	{
+		FCK.Events.FireEvent("OnBeforeGetData") ;
+
 		// We assume that if the user is in source editing, the editor value must
 		// represent the exact contents of the source, as the user wanted it to be.
 		if ( FCK.EditMode == FCK_EDITMODE_SOURCE )
@@ -270,7 +272,11 @@ var FCK =
 				data = FCK.XmlDeclaration + '\n' + data ;
 		}
 
-		return FCKConfig.ProtectedSource.Revert( data ) ;
+		data = FCKConfig.ProtectedSource.Revert( data ) ;
+
+		setTimeout( function() { FCK.Events.FireEvent("OnAfterGetData") ; }, 0 ) ;
+
+		return data ;
 	},
 
 	UpdateLinkedField : function()
@@ -494,7 +500,7 @@ var FCK =
 			FCK.Events.FireEvent( 'OnAfterSetHTML' ) ;
 		}
 
-		if ( FCKBrowserInfo.IsGecko )
+		if ( window.onresize )
 			window.onresize() ;
 	},
 

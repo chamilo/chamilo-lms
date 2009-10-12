@@ -5,7 +5,7 @@
  * on this dokeos portal.
  * It is set to work with the Dokeos module for Drupal:
  * http://drupal.org/project/dokeos
- * 
+ *
  * See license terms in /dokeos_license.txt
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
  */
@@ -54,8 +54,8 @@ $server->wsdl->addComplexType(
 $server->register('DokeosWSCourseList',         // method name
     array('username' => 'xsd:string',
           'signature' => 'xsd:string',
-          'visibilities' => 'xsd:string'),    // input parameters
-    array('return' => 'xsd:Array'),            // output parameters
+          'visibilities' => 'xsd:string'),      // input parameters
+    array('return' => 'xsd:Array'),             // output parameters
     'urn:WSCourseList',                         // namespace
     'urn:WSCourseList#DokeosWSCourseList',      // soapaction
     'rpc',                                      // style
@@ -72,51 +72,52 @@ $server->register('DokeosWSCourseList',         // method name
  * @param mixed  Array or string. Type of visibility of course (public, public-registered, private, closed)
  * @return array Courses list (code=>[title=>'title',url='http://...',teacher=>'...',language=>''],code=>[...],...)
  */
-function DokeosWSCourseList($username, $signature, $visibilities='public') {	    if (empty($username) or empty($signature)) { return -1; }
+function DokeosWSCourseList($username, $signature, $visibilities = 'public') {
+    if (empty($username) or empty($signature)) { return -1; }
 
-    require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-    require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+    require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+    require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
     global $_configuration;
-    
+
     $info = api_get_user_info_from_username($username);
     $user_id = $info['user_id'];
     if (!UserManager::is_admin($user_id)) { return -1; }
-    
-    $list = UserManager::get_api_keys($user_id,'dokeos');
+
+    $list = UserManager::get_api_keys($user_id, 'dokeos');
     $key = '';
     foreach ($list as $key) {
         break;
     }
-    
+
     $local_key = $username.$key;
 
     if (!api_is_valid_secret_key($signature, $local_key)) {
-        return -1; //secret key is incorrect
+        return -1; // The secret key is incorrect.
     }
-    
-   	
-   	// libraries
+
+   	// Libraries
 	require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-	$charset = api_get_setting('platform_charset');
-	$vis = array('public'=>'3', 'public-registered'=>'2', 'private'=>'1', 'closed'=>'0');
-	
+
+	$vis = array('public' => '3', 'public-registered' => '2', 'private' => '1', 'closed' => '0');
+
 	$courses_list = array();
-	
+
 	if (!is_array($visibilities)) {
-		$visibilities = split(',',$visibilities);
+		$visibilities = split(',', $visibilities);
 	}
 	foreach ($visibilities as $visibility) {
-		if (!in_array($visibility,array_keys($vis))) {
-   			return array('error_msg'=>'Security check failed');
+		if (!in_array($visibility, array_keys($vis))) {
+   			return array('error_msg' => 'Security check failed');
 		}
-		$courses_list_tmp = CourseManager::get_courses_list(null,null,null,null,$vis[$visibility]);
-		foreach ( $courses_list_tmp as $index => $course ) {
+		$courses_list_tmp = CourseManager::get_courses_list(null, null, null, null, $vis[$visibility]);
+		foreach ($courses_list_tmp as $index => $course) {
 			$course_info = CourseManager::get_course_information($course['code']);
-			$courses_list[] = array('code'=>$course['code'],'title'=>api_convert_encoding($course_info['title'],'UTF-8',$charset),'url'=>api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/','teacher'=>api_convert_encoding($course_info['tutor_name'],'UTF-8',$charset),'language'=>$course_info['course_language']);
+			$courses_list[] = array('code' => $course['code'], 'title' => api_utf8_encode($course_info['title']), 'url' => api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/', 'teacher' => api_utf8_encode($course_info['tutor_name']), 'language' => $course_info['course_language']);
 		}
 	}
 	return $courses_list;
 }
-// Use the request to (try to) invoke the service
+
+// Use the request to (try to) invoke the service.
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 $server->service($HTTP_RAW_POST_DATA);

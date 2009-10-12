@@ -1,30 +1,33 @@
 <?php // $Id: Document.class.php 4733 2005-05-02 08:54:49Z bmol $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Bart Mollet (bart.mollet@hogent.be)
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
-============================================================================== 
+==============================================================================
 */
-require_once('Resource.class.php');
+
+require_once 'Resource.class.php';
+
 define('DOCUMENT','file');
 define('FOLDER','folder');
+
 /**
  * An document
  * @author Bart Mollet <bart.mollet@hogent.be>
@@ -61,7 +64,13 @@ class Document extends Resource
 	function show()
 	{
 		parent::show();
-		echo substr($this->path,8);	
+		echo preg_replace('@^document@', '', $this->path);
+		if (!empty($this->title) && (api_get_setting('use_document_title') == 'true'))
+		{
+			if (strpos($this->path, $this->title) === false)
+			{
+				echo " - ".$this->title;
+			}
+		}
 	}
 }
-?>

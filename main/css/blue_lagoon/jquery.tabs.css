@@ -18,7 +18,7 @@
 	padding: 0 0 0 4px;
     background:#ffffff;
     border-bottom:1px dotted #ffffff;
-    border-top:1px dotted #ffffff;  	
+    border-top:1px dotted #ffffff;
 }
 .tabs-nav:after { /* clearing without presentational markup, IE gets extra treatment */
 	display: block;
@@ -34,7 +34,7 @@
 	display: block;
 	padding: 0 10px;
 	background: url(images/tab.png) no-repeat;
-	
+
 }
 .tabs-nav a {
 	position: relative;
@@ -65,7 +65,7 @@
 	height: 18px; /* IE 6 treats height as min-height */
 	min-height: 18px;
 	padding-top: 6px;
-	padding-right: 0;	
+	padding-right: 0;
 }
 *>.tabs-nav a span { /* hide from IE 6 */
 	width: auto;

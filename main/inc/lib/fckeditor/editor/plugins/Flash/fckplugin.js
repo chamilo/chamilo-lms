@@ -7,6 +7,6 @@ FCKCommands.RegisterCommand( 'Flash', flashDialogCmd ) ;
 var oFlashItem		= new FCKToolbarButton( 'Flash', FCKLang["DlgFlashTitle"]) ;
 oFlashItem.IconPath	= FCKConfig.PluginsPath + 'Flash/button.flash.gif' ;
 
-FCKToolbarItems.RegisterItem( 'Flash', oFlashItem ) ;			
+FCKToolbarItems.RegisterItem( 'Flash', oFlashItem ) ;
 // 'Flash' is the name used in the Toolbar config.
 

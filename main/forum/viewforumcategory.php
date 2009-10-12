@@ -1,5 +1,5 @@
 <?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
- 
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -52,10 +52,10 @@ require '../inc/global.inc.php';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/jquery.js" ></script>';
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 	$(document).ready(function(){ $(\'.hide-me\').slideUp() });
-	function hidecontent(content){ $(content).slideToggle(\'normal\'); } 
+	function hidecontent(content){ $(content).slideToggle(\'normal\'); }
 	</script>';
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
-		
+
 		function advanced_parameters() {
 			if(document.getElementById(\'options\').style.display == \'none\') {
 					document.getElementById(\'options\').style.display = \'block\';
@@ -63,9 +63,9 @@ $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 			} else {
 					document.getElementById(\'options\').style.display = \'none\';
 					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-			}		
+			}
 		}
-	</script>';	
+	</script>';
 
 
 // including the global dokeos file
@@ -107,7 +107,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
@@ -119,9 +119,9 @@ $interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook&search=".Secur
 $interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:'')),"name" => prepare4display($current_forum_category['cat_title']));
 
 
-if (!empty($_GET['action']) && !empty($_GET['content'])) {	  
-	if ($_GET['action']=='add' && $_GET['content']=='forum' ) {		
-		$interbreadcrumb[] = array ("url" => api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forum', 'name' => get_lang('AddForum'));	  
+if (!empty($_GET['action']) && !empty($_GET['content'])) {
+	if ($_GET['action']=='add' && $_GET['content']=='forum' ) {
+		$interbreadcrumb[] = array ("url" => api_get_self().'?'.api_get_cidreq().'&action=add&amp;content=forum', 'name' => get_lang('AddForum'));
 	}
 }
 
@@ -187,7 +187,7 @@ if ($action_forums == 'notify' AND isset($_GET['content']) AND isset($_GET['id']
 	Display :: display_confirmation_message($return_message,false);
 }
 
-if ($action_forums!='add') { 
+if ($action_forums!='add') {
 	/*
 	------------------------------------------------------------------------------------------------------
 		RETRIEVING ALL THE FORUM CATEGORIES AND FORUMS
@@ -198,11 +198,11 @@ if ($action_forums!='add') {
 	// Step 1: We store all the forum categories in an array $forum_categories
 	$forum_categories=array();
 	$forum_category=get_forum_categories($_GET['forumcategory']);
-	
+
 	// step 2: we find all the forums
 	$forum_list=array();
 	$forum_list=get_forums();
-		
+
 	/*
 	------------------------------------------------------------------------------------------------------
 		RETRIEVING ALL GROUPS AND THOSE OF THE USER
@@ -217,8 +217,8 @@ if ($action_forums!='add') {
 		foreach ($all_groups as $group) {
 			$all_groups[$group['id']]=$group;
 		}
-	}	
-	
+	}
+
 	/*
 	------------------------------------------------------------------------------------------------------
 		CLEAN GROUP ID FOR AJAXFILEMANAGER
@@ -227,8 +227,8 @@ if ($action_forums!='add') {
 	if(isset($_SESSION['_gid']))
 	{
 		unset($_SESSION['_gid']);
-    }	
-	
+    }
+
 	/*
 	-----------------------------------------------------------
 		Display Forum Categories and the Forums in it
@@ -237,12 +237,12 @@ if ($action_forums!='add') {
 	echo "<table class=\"data_table\" width='100%'>\n";
 	$my_session=isset($_SESSION['id_session']) ? $_SESSION['id_session'] : null;
 	$forum_categories_list='';
-	echo "\t<tr>\n\t\t<th align=\"left\" ".(api_is_allowed_to_edit()?"colspan='5'":"colspan='6'").">";
+	echo "\t<tr>\n\t\t<th align=\"left\" ".(api_is_allowed_to_edit(null,true)?"colspan='5'":"colspan='6'").">";
 	echo '<span class="forum_title">'.prepare4display($forum_category['cat_title']).'</span><br />';
 	echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
 	echo "</th>\n";
 	if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($my_session)!=0)) {
-		echo '<th style="vertical-align: top;" align="center" >';			
+		echo '<th style="vertical-align: top;" align="center" >';
 		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=edit&amp;content=forumcategory&amp;id=".$forum_category['cat_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=delete&amp;content=forumcategory&amp;amp;id=".$forum_category['cat_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeleteForumCategory"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
 		display_visible_invisible_icon('forumcategory', $forum_category['cat_id'], $forum_category['visibility'], array("forumcategory"=>$_GET['forumcategory']));
@@ -251,7 +251,7 @@ if ($action_forums!='add') {
 		echo "</th>\n";
 	}
 	echo "\t</tr>\n";
-	
+
 	// step 3: the interim headers (for the forum)
 	echo "\t<tr class=\"forum_header\">\n";
 	echo "\t\t<td colspan='2'>".get_lang('Forum')."</td>\n";
@@ -260,10 +260,10 @@ if ($action_forums!='add') {
 	echo "\t\t<td>".get_lang('LastPosts')."</td>\n";
 	echo "\t\t<td>".get_lang('Actions')."</td>\n";
 	echo "\t</tr>\n";
-	
+
 	// the forums in this category
 	$forums_in_category=get_forums_in_category($forum_category['cat_id']);
-	
+
 	// step 4: we display all the forums in this category.
 	$forum_count=0;
 	foreach ($forum_list as $key=>$forum) {
@@ -278,7 +278,7 @@ if ($action_forums!='add') {
 			$show_forum=false;
 			// SHOULD WE SHOW THIS PARTICULAR FORUM
 			// you are teacher => show forum
-	
+
 			if (api_is_allowed_to_edit(false,true)) {
 				//echo 'teacher';
 				$show_forum=true;
@@ -308,7 +308,7 @@ if ($action_forums!='add') {
 							$show_forum=false;
 						}
 					}
-	
+
 				}
 			}
 			//echo '<hr>';
@@ -332,7 +332,7 @@ if ($action_forums!='add') {
 					}
 				}
 				echo "</td>\n";
-				
+
 				if ($forum['forum_of_group']<>'0')
 				{
 					$my_all_groups_forum_name=isset($all_groups[$forum['forum_of_group']]['name']) ? $all_groups[$forum['forum_of_group']]['name'] : null;
@@ -344,15 +344,15 @@ if ($action_forums!='add') {
 				{
 					$forum_title_group_addition='';
 				}
-								
-				
+
+
 				if((!isset($_SESSION['id_session']) || $_SESSION['id_session']==0) && !empty($forum['session_name'])) {
 					$session_displayed = ' ('.$forum['session_name'].')';
 				} else {
 					$session_displayed = '';
 				}
 				echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:''))."\" ".class_visible_invisible($forum['visibility']).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>\n";
-				
+
 				//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 				// the number of topics and posts
 				$my_number_threads=isset($forum['number_of_threads']) ? $forum['number_of_threads'] : '';
@@ -364,7 +364,7 @@ if ($action_forums!='add') {
 					$name=$forum['last_poster_name'];
 					$poster_id=0;
 				} else {
-					$name=$forum['last_poster_firstname'].' '.$forum['last_poster_lastname'];
+					$name=api_get_person_name($forum['last_poster_firstname'], $forum['last_poster_lastname']);
 					$poster_id=$forum['last_poster_id'];
 				}
 				echo "\t\t<td>";
@@ -397,7 +397,7 @@ if ($action_forums!='add') {
 	if (count($forum_list) == 0) {
 		echo "\t<tr><td>".get_lang('NoForumInThisCategory')."</td></tr>\n";
 	}
-	
+
 	echo "</table>\n";
 }
 /*

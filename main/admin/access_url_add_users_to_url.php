@@ -2,30 +2,30 @@
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2009 Dokeos SPRL
 	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	This script allows platform admins to add users to urls.
 *	It displays a list of users and a list of courses;
 *	you can select multiple users and courses and then click on
 *	@package dokeos.admin
-============================================================================== 
+==============================================================================
 */
 
 // name of the language file that needs to be included
@@ -38,7 +38,7 @@ require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 api_protect_admin_script();
 if (!$_configuration['multiple_access_urls'])
 	header('Location: index.php');
-	
+
 /*
 -----------------------------------------------------------
 	Global constants and variables
@@ -75,10 +75,10 @@ $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('Mult
 Display :: display_header($tool_name);
 
 echo '<div class="actions" style="height:22px;">';
-echo '<div style="float:right;">		
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php">'.Display::return_icon('edit.gif',get_lang('EditUsersToURL'),'').get_lang('EditUsersToURL').'</a>													
-	  </div><br />';		  
-echo '</div>';	
+echo '<div style="float:right;">
+		<a href="'.api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php">'.Display::return_icon('edit.gif',get_lang('EditUsersToURL'),'').get_lang('EditUsersToURL').'</a>
+	  </div><br />';
+echo '</div>';
 
 api_display_tool_title($tool_name);
 
@@ -91,7 +91,7 @@ if ($_POST['form_sent']) {
 	$first_letter_user = $_POST['first_letter_user'];
 
 	foreach($users as $key => $value) {
-		$users[$key] = intval($value);	
+		$users[$key] = intval($value);
 	}
 
 	if ($form_sent == 1)
@@ -102,7 +102,7 @@ if ($_POST['form_sent']) {
 		} else {
 			UrlManager::add_users_to_urls($users,$url_list);
 			Display :: display_confirmation_message(get_lang('UsersBelongURL'));
-			//header('Location: access_urls.php?action=show_message&message='.get_lang('UsersBelongURL'));				
+			//header('Location: access_urls.php?action=show_message&message='.get_lang('UsersBelongURL'));
 		}
 	}
 }
@@ -118,8 +118,8 @@ if ($_POST['form_sent']) {
 
 if(empty($first_letter_user)) {
 	$sql = "SELECT count(*) as nb_users FROM $tbl_user";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
-	$num_row = Database::fetch_array($result);	
+	$result = Database::query($sql, __FILE__, __LINE__);
+	$num_row = Database::fetch_array($result);
 	if($num_row['nb_users']>1000) {
 		//if there are too much users to gracefully handle with the HTML select list,
 	    // assign a default filter on users names
@@ -129,16 +129,17 @@ if(empty($first_letter_user)) {
 }
 $first_letter_user = Database::escape_string($first_letter_user);
 
-$sql = "SELECT user_id,lastname,firstname,username FROM $tbl_user 
-	    WHERE lastname LIKE '".$first_letter_user."%' OR lastname LIKE '".strtolower($first_letter_user)."%' 
-		ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." lastname";
-$result = api_sql_query($sql, __FILE__, __LINE__);
-$db_users = api_store_result($result);
+$target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
+$sql = "SELECT user_id,lastname,firstname,username FROM $tbl_user
+	    WHERE ".$target_name." LIKE '".$first_letter_user."%' OR ".$target_name." LIKE '".api_strtolower($first_letter_user)."%'
+		ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." ".$target_name;
+$result = Database::query($sql, __FILE__, __LINE__);
+$db_users = Database::store_result($result);
 unset($result);
 
-$sql = "SELECT id, url FROM $tbl_access_url  WHERE active=1 ORDER BY url"; 
-$result = api_sql_query($sql, __FILE__, __LINE__);
-$db_urls = api_store_result($result);
+$sql = "SELECT id, url FROM $tbl_access_url  WHERE active=1 ORDER BY url";
+$result = Database::query($sql, __FILE__, __LINE__);
+$db_urls = Database::store_result($result);
 unset($result);
 ?>
 
@@ -149,18 +150,18 @@ unset($result);
     <td width="40%" align="center">
      <b><?php echo get_lang('UserList'); ?></b>
      <br/><br/>
-     <?php echo get_lang('FirstLetterUser'); ?> : 
+     <?php echo get_lang('FirstLetterUser'); ?> :
      <select name="first_letter_user" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
       <option value="">--</option>
       <?php
         echo Display :: get_alphabet_options($first_letter_user);
       ?>
      </select>
-    </td>    
+    </td>
         <td width="20%">&nbsp;</td>
     <td width="40%" align="center">
-     <b><?php echo get_lang('URLList'); ?> :</b>     
-    </td>    
+     <b><?php echo get_lang('URLList'); ?> :</b>
+    </td>
    </tr>
    <tr>
     <td width="40%" align="center">
@@ -168,7 +169,7 @@ unset($result);
 		<?php
 		foreach ($db_users as $user) {
 		?>
-			  <option value="<?php echo $user['user_id']; ?>" <?php if(in_array($user['user_id'],$users)) echo 'selected="selected"'; ?>><?php echo $user['lastname'].' '.$user['firstname'].' ('.$user['username'].')'; ?></option>
+			  <option value="<?php echo $user['user_id']; ?>" <?php if(in_array($user['user_id'],$users)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')'; ?></option>
 		<?php
 		}
 		?>
@@ -194,7 +195,7 @@ unset($result);
 <?php
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
 */
 Display :: display_footer();

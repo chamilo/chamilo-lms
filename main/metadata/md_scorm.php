@@ -80,14 +80,14 @@ function mdobject($_course, $id)
 {
     global $ieee_dcmap_e, $ieee_dcmap_v;  // md_funcs
 
-    $scormdocument = Database::get_course_table('lp');
+    $scormdocument = Database::get_course_table(TABLE_LP_MAIN);
 
     $this->mdo_course = $_course; $this->mdo_type = 'Scorm';
     $this->mdo_id = $id; $this->mdo_eid = $this->mdo_type . '.' . $id;
 
     $this->mdo_dcmap_e = $ieee_dcmap_e; $this->mdo_dcmap_v = $ieee_dcmap_v;
 	$sql = "SELECT path,description,lp_type FROM $scormdocument WHERE id='" . addslashes($id) . "'";
-    if (($docinfo = @mysql_fetch_array(api_sql_query($sql,__FILE__, __LINE__))))
+    if (($docinfo = @mysql_fetch_array(Database::query($sql,__FILE__, __LINE__))))
     {
         $this->mdo_path =     $docinfo['path'];
 		//Sometimes the new scorm-tool adds '/.' at the end of a directory name, so remove this before continue

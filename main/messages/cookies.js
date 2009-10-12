@@ -16,7 +16,7 @@ function Set_Cookie( name, value, expires, path, domain, secure ) {
 
 	document.cookie = name + "=" +escape( value ) +
 		( ( expires ) ? ";expires=" + expires_date.toGMTString() : "" ) + //expires.toGMTString()
-		( ( path ) ? ";path=" + path : "" ) + 
+		( ( path ) ? ";path=" + path : "" ) +
 		( ( domain ) ? ";domain=" + domain : "" ) +
 		( ( secure ) ? ";secure" : "" );
 }
@@ -42,15 +42,15 @@ function set_url(ref)
 }
 function mostrar_aviso()
 {
-	
+
 	document.getElementById("box").style.visibility="visible";
-	
+
 }
 
 function ocultar_aviso()
 {
 	document.getElementById("box").style.visibility="hidden";
-	
+
 }
 
 function notificar()
@@ -60,22 +60,22 @@ function notificar()
 }
 
 function vernuevos()
-{ 
+{
 
 	xmlHttp=GetXmlHttpObject(stateChanged)
 	xmlHttp.open("GET", url , true)
 	xmlHttp.send(null)
-} 
+}
 
-function stateChanged() 
-{ 
+function stateChanged()
+{
 
-	if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete") 
+	if (xmlHttp.readyState==4 || xmlHttp.readyState=="complete")
 	{
-		document.getElementById("nuevos").innerHTML=xmlHttp.responseText 
+		document.getElementById("nuevos").innerHTML=xmlHttp.responseText
 		if(Get_Cookie("nuevos")==null || xmlHttp.responseText-Get_Cookie("nuevos")>0 )
 		{
-		
+
 			mostrar_aviso()
 			setTimeout("ocultar_aviso()",7000);
 		}
@@ -84,39 +84,39 @@ function stateChanged()
 }
 
 	function GetXmlHttpObject(handler)
-{ 
+{
 	var objXmlHttp=null
 	if (navigator.userAgent.indexOf("Opera")>=0)
 	{
 		objXmlHttp=new XMLHttpRequest()
 		objXmlHttp.onload=handler
-		objXmlHttp.onerror=handler 
+		objXmlHttp.onerror=handler
 		return objXmlHttp
 	}
 	if (navigator.userAgent.indexOf("MSIE")>=0)
-	{ 
+	{
 		var strName="Msxml2.XMLHTTP"
 		if (navigator.appVersion.indexOf("MSIE 5.5")>=0)
 		{
 			strName="Microsoft.XMLHTTP"
-		} 
+		}
 		try
-		{ 
+		{
 			objXmlHttp=new ActiveXObject(strName)
-			objXmlHttp.onreadystatechange=handler 
+			objXmlHttp.onreadystatechange=handler
 			return objXmlHttp
-		} 
+		}
 		catch(e)
-		{ 
-		alert("Error. Scripting for ActiveX might be disabled") 
-		return 	
-		} 
-	} 
+		{
+		alert("Error. Scripting for ActiveX might be disabled")
+		return
+		}
+	}
 	if (navigator.userAgent.indexOf("Mozilla")>=0)
 	{
 		objXmlHttp=new XMLHttpRequest()
 		objXmlHttp.onload=handler
-		objXmlHttp.onerror=handler 
+		objXmlHttp.onerror=handler
 		return objXmlHttp
-	}	
-} 
+	}
+}

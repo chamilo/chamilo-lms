@@ -269,15 +269,15 @@ function CheckBrowserCompatibility( show_message )
 		if ( FCKBrowserInfo.IsIE6 )
 		{
 			if ( IsMathPlayerInstalled() )
-			{       
+			{
 				var start = navigator.appVersion.indexOf( 'MathPlayer' ) ;
 				if ( start != -1 )
-				{ 
+				{
 					// The browser is Internet Explorer 6.0+ with properly set up plugin MathPalyer 2.
 					return true ;
 				}
 				else
-				{             
+				{
 					// Notify reader they need to upgrade to MathPlayer 2.
 					if ( show_message )
 					{
@@ -287,7 +287,7 @@ function CheckBrowserCompatibility( show_message )
 				}
 			}
 			else
-			{               
+			{
 				// Direct reader to MathPlayer page.
 				if ( show_message )
 				{

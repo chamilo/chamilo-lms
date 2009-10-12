@@ -21,8 +21,8 @@
 require_once 'HTML/QuickForm/Action.php';
 
 /**
- * The action for a 'next' button of wizard-type multipage form. 
- * 
+ * The action for a 'next' button of wizard-type multipage form.
+ *
  * @author  Alexey Borzov <avb@php.net>
  * @package HTML_QuickForm_Controller
  * @version $Revision: 6184 $

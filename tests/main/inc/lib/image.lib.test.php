@@ -2,16 +2,16 @@
 require_once(api_get_path(LIBRARY_PATH).'image.lib.php');
 
 class TestImage extends UnitTestCase {
-	
+
 	public $timage;
 	public function TestImage(){
 		$this->UnitTestCase('All main image function tests');
 	}
-	
+
 	public function setUp(){
 		$this->timage = new image();
 	}
-	
+
 	public function tearDown(){
 		$this->timage = null;
 	}
@@ -19,21 +19,21 @@ class TestImage extends UnitTestCase {
 	public function testAddBackGround() {
 			$bgfile='';
 			$res=$this->timage->addbackground($bgfile);
-			$this->assertTrue(is_null($res)); 
+			$this->assertTrue(is_null($res));
 			//var_dump($bgfile);
 		}
 
 	public function testAddLogo() {
 			$file='';
 			$res=$this->timage->addlogo($file);
-			$this->assertTrue(is_null($res)); 
+			$this->assertTrue(is_null($res));
 			//var_dump($res);
 	}
 
 	public function testaddtext() {
 			$text='';
 			$res=$this->timage->addtext($text);
-			$this->assertTrue(is_null($res)); 
+			$this->assertTrue(is_null($res));
 			//var_dump($res);
 	}
 
@@ -41,27 +41,27 @@ class TestImage extends UnitTestCase {
 			$file='';
 			$handler='';
 			$res=$this->timage->createimagefromtype($file,$handler);
-			$this->assertTrue(is_null($res)); 		
+			$this->assertTrue(is_null($res));
 			//var_dump($res);
 	}
-	
+
 	public function testimagenaddback() {
 			$bgfile='';
 			$res=$this->timage->image($bgfile);
-			$this->assertTrue(is_null($res)); 		
+			$this->assertTrue(is_null($res));
 			//var_dump($res);
-		
+
 	}
-	
+
 	public function testmakecolor() {
 	 		$red='';
 	 		$green='';
 	 		$blue='';
 	 		$res=$this->timage->makecolor($red, $green, $blue);
-			$this->assertTrue(is_null($res)); 		
+			$this->assertTrue(is_null($res));
 			//var_dump($res);
 	 }
-	
+
 	public function testmergelogo() {
 	 		$x='';
 	 		$y='';
@@ -85,7 +85,7 @@ class TestImage extends UnitTestCase {
 			$this->assertTrue(is_numeric($res));
 			//var_dump($res);
 	 }
-	
+
 
 	public function testsetfont() {
 			$fontfile=$this->fontfile;
@@ -105,6 +105,6 @@ class TestImage extends UnitTestCase {
 
 
 
-	
+
 }
 ?>

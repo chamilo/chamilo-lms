@@ -22,7 +22,7 @@ require_once 'HTML/QuickForm/element.php';
 
 /**
  * Class for HTML 4.0 <button> element
- * 
+ *
  * @author  Alexey Borzov <avb@php.net>
  * @since   3.2.3
  * @access  public
@@ -34,11 +34,11 @@ class HTML_QuickForm_xbutton extends HTML_QuickForm_element
     * @var      string
     * @access   private
     */
-    var $_content; 
+    var $_content;
 
    /**
     * Class constructor
-    * 
+    *
     * @param    string  Button name
     * @param    string  Button content (HTML to add between <button></button> tags)
     * @param    mixed   Either a typical HTML attribute string or an associative array
@@ -74,7 +74,7 @@ class HTML_QuickForm_xbutton extends HTML_QuickForm_element
     function setName($name)
     {
         $this->updateAttributes(array(
-            'name' => $name 
+            'name' => $name
         ));
     }
 
@@ -129,7 +129,7 @@ class HTML_QuickForm_xbutton extends HTML_QuickForm_element
 
    /**
     * Returns a 'safe' element's value
-    * 
+    *
     * The value is only returned if the button's type is "submit" and if this
     * particlular button was clicked
     */

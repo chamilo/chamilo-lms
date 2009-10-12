@@ -72,7 +72,7 @@ switch ( $cmd )
         //include needed librabries for treatment
 
         $result_log = import_exercise($_FILES['uploadedExercise']['name']);
-       
+
         //display the result message (fail or success)
 
         $dialogBox = '';

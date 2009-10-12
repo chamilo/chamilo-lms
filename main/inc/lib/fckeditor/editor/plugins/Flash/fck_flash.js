@@ -46,7 +46,7 @@ function getSelectedMovie()
 	{
 		oSel = FCK.Selection.GetSelectedElement( 'OBJECT' ) ;
 	}
-	
+
 	// gecko
 	else if ( is_gecko )
 	{
@@ -56,7 +56,7 @@ function getSelectedMovie()
 		{
 			oSel = o.anchorNode ;
 		}
-	}	
+	}
 	// other
 	else
 	{
@@ -102,8 +102,8 @@ function Ok()
 	var e = ( oMedia || new Media() ) ;
 
 	e.url = GetE( 'txtURL' ).value ;
-	
-	updateMovie(e) ;	
+
+	updateMovie(e) ;
 
 	FCK.InsertHtml( e.getInnerHTML() ) ;
 	return true ;
@@ -128,37 +128,37 @@ function updateMovie( e )
 }
 
 function updatePreview()
-{		 
+{
 	if ( GetE( 'txtURL' ).value.length == 0 )
 	{
 		ShowE( 'flashPreview', false ) ;
 	}
 	else
 	{
-		var preview = GetE( 'flashPreview' ) ;  
-		
+		var preview = GetE( 'flashPreview' ) ;
+
 		oMedia.url = GetE( 'txtURL' ).value ;
-		
+
 		updateMovie( oMedia ) ;
-		
+
 		// preview.innerHTML dies on IE.. why?? :S
 		if ( is_ie )
 		{
 			preview.outerHTML = oMedia.getInnerHTML( 'flashPreview' ) ;
 		}
-		
+
 		// preview.outerHTML does nothing on gecko..
 		if ( is_gecko )
 		{
 			oMedia.replaceObject( preview ) ;
 		}
-		
-		ShowE( 'flashPreview', true ) ;	
+
+		ShowE( 'flashPreview', true ) ;
 	}
 }
 
 // Fired when the width or height input texts change
-function OnSizeChanged( dimension, value ) 
+function OnSizeChanged( dimension, value )
 {
 	// Verifies if the aspect ration has to be mantained
 	/*
@@ -169,14 +169,14 @@ function OnSizeChanged( dimension, value )
 			GetE('txtHeight').value = GetE('txtWidth').value = '' ;
 			return ;
 		}
-	
+
 		if ( dimension == 'Width' )
 			GetE('txtHeight').value = Math.round( oMovieOriginal.height * ( value  / oMovieOriginal.width ) ) ;
 		else
 			GetE('txtWidth').value  = Math.round( oMovieOriginal.width  * ( value / oMovieOriginal.height ) ) ;
 	}
 	*/
-	
+
 	updatePreview() ;
 }
 
@@ -185,17 +185,17 @@ function BrowseServer()
 	// Set the browser window feature.
 	var iWidth	= oEditor.FCKConfig.FlashBrowserWindowWidth ;
 	var iHeight	= oEditor.FCKConfig.FlashBrowserWindowHeight ;
-	
+
 	var iLeft = ( screen.width  - iWidth ) / 2 ;
 	var iTop  = ( screen.height - iHeight ) / 2 ;
 
 	var sOptions = "toolbar=no,status=no,resizable=yes,dependent=yes" ;
-	sOptions += ",width=" + iWidth ; 
+	sOptions += ",width=" + iWidth ;
 	sOptions += ",height=" + iHeight ;
 	sOptions += ",left=" + iLeft ;
 	sOptions += ",top=" + iTop ;
-	
-	// Open the browser window.	
+
+	// Open the browser window.
 	var oWindow = window.open( oEditor.FCKConfig.FlashBrowserURL, "FCKBrowseWindow", sOptions ) ;
 }
 
@@ -245,7 +245,7 @@ var Media = function ( o )
 	this.loop = 'true' ;
 	this.play = 'true' ;
 	this.controller = 'true' ;
-	
+
 	if ( o )
 	{
 		this.setObjectElement( o ) ;
@@ -255,7 +255,7 @@ var Media = function ( o )
 /**
  * Toma los datos de un elemento.
  * 	Takes data from an item.
- */ 
+ */
 Media.prototype.setObjectElement = function ( e )
 {
 	if (!e) return ;
@@ -427,7 +427,7 @@ Media.prototype.getOuterHTML = function ( objectId )
 	}
 	else if ( this.id != '' )
 	{
-		s += this.createAttribute( 'id', this.id ) ; 
+		s += this.createAttribute( 'id', this.id ) ;
 	}
 	if ( this.width > 0 )
 	{
@@ -453,7 +453,7 @@ Media.prototype.getOuterHTML = function ( objectId )
 	s += '>' ;
 	s += this.getInnerHTML( objectId ) ;
 	s += '</object>' ;
-  
+
 	return s ;
 } ;
 
@@ -465,7 +465,7 @@ Media.prototype.getOuterHTML = function ( objectId )
 Media.prototype.getInnerHTML = function ( objectId )
 {
 	var s = '' ;
-	
+
 //	s += this.createParam( 'movie', this.url ) ;
 //	s += this.createParam( 'src', this.url ) ;
 //	s += this.createParam( 'quality', this.quality ) ;
@@ -477,25 +477,25 @@ Media.prototype.getInnerHTML = function ( objectId )
 //	s += this.createParam( 'type', this.getMimeType() ) ;
 //	s += this.createParam( 'controller', this.controller ) ;
 /*
-	if ( objectId )		
+	if ( objectId )
 		var my_id = objectId ;
-	else 
-	if ( this.id != '' ) 
-		my_id = this.id ;	
+	else
+	if ( this.id != '' )
+		my_id = this.id ;
 	s += '<object ';
 	if ( my_id > 0 )
 		s += 'id="' + my_id  + '" ' ;
 	if (this.align > 0)
 		s += 'align="'+ this.align +'" ' ;
-		
+
 	if (this.height > 0)
-		s += 'height="'+ this.height +'" ' ;	
-	
+		s += 'height="'+ this.height +'" ' ;
+
 	if (this.width > 0)
-		s += 'width="'+ this.width +'" ' ;		
+		s += 'width="'+ this.width +'" ' ;
 	s += 'codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" ' ;
 	s += 'classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" > ' ;
-	
+
 	s += '<param value="' + this.url + '" name="movie"> ' ;
 	if (this.quality > 0)
 		s += '<param value="' + this.quality+ '" name="quality"> ' ;
@@ -513,7 +513,7 @@ Media.prototype.getInnerHTML = function ( objectId )
 	s += this.createAttribute( 'bgcolor', this.bgcolor ) ;
 	s += this.createAttribute( 'loop', this.loop ) ;
 	s += this.createAttribute( 'play', this.play ) ;
-  
+
 	if ( objectId )
 	{
 		s += this.createAttribute( 'id', objectId ) ;
@@ -534,7 +534,7 @@ Media.prototype.getInnerHTML = function ( objectId )
 	{
 		s += this.createAttribute( 'align', this.align ) ;
 	}
-	if (this.vspace > 0) 
+	if (this.vspace > 0)
 	{
 		s += this.createAttribute( 'vspace', this.vspace ) ;
 	}

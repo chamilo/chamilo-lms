@@ -11,7 +11,7 @@ class TestLostPassword extends UnitTestCase {
  		$this->assertTrue(is_string($res));
  		//var_dump($res);
 	}
-	
+
 	function testget_secret_word(){
 		global $_configuration;
 		$add='';
@@ -20,7 +20,7 @@ class TestLostPassword extends UnitTestCase {
  		$this->assertTrue(is_string($res));
  		//var_dump($res);
 	}
-	
+
 	function testget_user_account_list(){
 		global $_configuration;
 		$user='';
@@ -33,30 +33,30 @@ class TestLostPassword extends UnitTestCase {
  		$this->assertTrue(is_array($userAccountList));
  		//var_dump($userAccountList);
 	}
-	
+
 	function testhandle_encrypted_password() {
-		require_once api_get_path (LIBRARY_PATH).'mail.lib.inc.php'; 
+		require_once api_get_path (LIBRARY_PATH).'mail.lib.inc.php';
 		global $charset;
 		global $_configuration;
 		ob_start();
 		$user=array('abc');
 		$emailHeaders = get_email_headers(); // Email Headers
-		$emailSubject = "[".get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
+		$emailSubject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 		$userAccountList = get_user_account_list($user, true); // BODY
 		$emailTo = $user[0]["email"];
-		$secretword = get_secret_word($emailTo);	
+		$secretword = get_secret_word($emailTo);
 		$emailBody = get_lang('DearUser')." :\n".get_lang("password_request")."\n\n";
 		$emailBody .= "-----------------------------------------------\n".$userAccountList."\n-----------------------------------------------\n\n";
 		$emailBody .=get_lang('PasswordEncryptedForSecurity');
 		$emailBody .="\n\n".get_lang('Formula').",\n".get_lang('PlataformAdmin');
-		$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-    	$email_admin = get_setting('emailAdministrator');
+		$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+    	$email_admin = api_get_setting('emailAdministrator');
 		$res=handle_encrypted_password($user);
 		if(!is_array($res))$this->assertTrue(is_null($res));
 		ob_end_clean();
-		//var_dump($res);	
+		//var_dump($res);
 	}
-	
+
 	function testreset_password(){
 		$secret='1234567891011';
 		$id=5;
@@ -65,7 +65,7 @@ class TestLostPassword extends UnitTestCase {
  		$this->assertTrue(is_string($res));
  		//var_dump($res);
 	}
-	
+
 	function testsend_password_to_user() {
 		$user=array();
 		ob_start();

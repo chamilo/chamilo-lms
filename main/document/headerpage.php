@@ -8,7 +8,7 @@
 $language_file = 'document';
 require_once '../inc/global.inc.php';
 $noPHP_SELF=true;
-$header_file= Security::remove_XSS($_GET['file']);	
+$header_file= Security::remove_XSS($_GET['file']);
 $path_array=explode('/',str_replace('\\','/',$header_file));
 $path_array = array_map('urldecode',$path_array);
 $header_file=implode('/',$path_array);
@@ -26,6 +26,6 @@ $path_info= pathinfo($file_url_sys);
 
 Display::display_header(null,"Doc");
 echo "<div align=\"center\">";
-$file_url_web=api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$header_file."?".api_get_cidreq();	
+$file_url_web=api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$header_file."?".api_get_cidreq();
 echo "<a href='".$file_url_web."' target='blank'>".get_lang('_cut_paste_link')."</a></div>";
 ?>

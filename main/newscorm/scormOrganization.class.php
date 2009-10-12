@@ -76,7 +76,7 @@ class scormOrganization {
 				     		}
 				     	}
 						return true;
-				     	
+
 	    		}
 	    	}elseif($v == 5){
 	    		//parsing using PHP5 DOMXML methods
@@ -132,7 +132,7 @@ class scormOrganization {
 					     	}
 						}
 						return true;
-				     	
+
 	    		}
 			}else{
 				//cannot parse because not PHP4 nor PHP5... We should not even be here anyway...

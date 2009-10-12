@@ -39,11 +39,11 @@ function store_permissions($content, $id)
 		$table=Database::get_course_table(TABLE_ROLE_PERMISSION);
 		$id_field = role_id;
 	}
-	
+
 	// We first delete all the existing permissions for that user/group/role
 	$sql="DELETE FROM $table  WHERE $id_field = '".mysql_real_escape_string($id)."'";
-	$result=api_sql_query($sql, __FILE__, __LINE__);
-	
+	$result=Database::query($sql, __FILE__, __LINE__);
+
 	// looping through the post values to find the permission (containing the string permission* )
 	foreach ($_POST as $key => $value)
 	{
@@ -51,8 +51,8 @@ function store_permissions($content, $id)
 		{
 			list($brol,$tool,$action)=explode("*",$key);
 			$sql="INSERT INTO $table ($id_field,tool,action) VALUES ('".mysql_real_escape_string($id)."','".mysql_real_escape_string($tool)."','".mysql_real_escape_string($action)."')";
-			$result=api_sql_query($sql, __FILE__, __LINE__);
-			
+			$result=Database::query($sql, __FILE__, __LINE__);
+
 
 		}
 	}
@@ -64,7 +64,7 @@ function store_permissions($content, $id)
 * @param $content are we storing rights for a user, a group or a role (the database depends on it)
 * @param $action are we granting or revoking a permission?
 * @param $id the id of the user, group or role
-* @param $tool the tool 
+* @param $tool the tool
 * @param $permission the permission the user, group or role has been granted or revoked
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
 * @version 1.0
@@ -73,13 +73,13 @@ function store_one_permission($content, $action, $id, $tool,$permission)
 {
 	global $rights_full;
 	// for some reason I don't know, he can't get to the $rights_full array, so commented the following lines out.
-		
+
 	// check
 	//if(!in_array($permission, $rights_full))
 	//{
 	//	return get_lang('Error');
 	//}
-	
+
 	// Which database are we using (depending on the $content parameter)
 	if($content=='user')
 	{
@@ -96,12 +96,12 @@ function store_one_permission($content, $action, $id, $tool,$permission)
 		$table=Database::get_course_table(TABLE_ROLE_PERMISSION);
 		$id_field = role_id;
 	}
-	
+
 	// grating a right
 	if($action=='grant')
 	{
 		$sql="INSERT INTO $table ($id_field,tool,action) VALUES ('".mysql_real_escape_string($id)."','".mysql_real_escape_string($tool)."','".mysql_real_escape_string($permission)."')";
-		$result=api_sql_query($sql, __FILE__, __LINE__);
+		$result=Database::query($sql, __FILE__, __LINE__);
 		if($result)
 		{
 			$result_message=get_lang('PermissionGranted');
@@ -110,7 +110,7 @@ function store_one_permission($content, $action, $id, $tool,$permission)
 	if($action=='revoke')
 	{
 		$sql="DELETE FROM $table WHERE $id_field = '".mysql_real_escape_string($id)."' AND tool='".mysql_real_escape_string($tool)."' AND action='".mysql_real_escape_string($permission)."'";
-		$result=api_sql_query($sql, __FILE__, __LINE__);
+		$result=Database::query($sql, __FILE__, __LINE__);
 		if($result)
 		{
 			$result_message=get_lang('PermissionRevoked');
@@ -130,7 +130,7 @@ function get_permissions($content, $id)
 {
 	$currentpermissions=array();
 	// Which database are we using (depending on the $content parameter)
-	
+
 	if($content == 'user')
 	{
 		$table=Database::get_course_table(TABLE_PERMISSION_USER);
@@ -156,28 +156,28 @@ function get_permissions($content, $id)
 		$table=Database::get_course_table(TABLE_BLOGS_TASKS_PERMISSIONS);
 		$id_field = task_id;
 	}
-	
+
 	// finding all the permissions. We store this in a multidimensional array
 	// where the first dimension is the tool.
 	$sql="
 		SELECT * FROM " . $table . "
 		WHERE " . $id_field . "='" . mysql_real_escape_string($id) . "'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
-	
+	$result = Database::query($sql, __FILE__, __LINE__);
+
 	while($row = mysql_fetch_array($result))
-		$currentpermissions[$row['tool']][] = $row['action'];	
-	
-	return $currentpermissions; 
+		$currentpermissions[$row['tool']][] = $row['action'];
+
+	return $currentpermissions;
 }
 
 /**
-* the array that contains the current permission a user, group or role has will now be changed depending on 
+* the array that contains the current permission a user, group or role has will now be changed depending on
 * the Dokeos Config Setting for the permissions (limited [add, edit, delete] or full [view, add, edit, delete, move, visibility]
 * @param $content are we retrieving the rights of a user, a group or a role (the database depends on it)
 * @param $id the id of the user, group or role
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
 * @version 1.0
-* @todo currently there is a setting user_permissions and group_permissions. We should merge this in one config setting. 
+* @todo currently there is a setting user_permissions and group_permissions. We should merge this in one config setting.
 */
 function limited_or_full($current_permissions)
 {
@@ -186,7 +186,7 @@ function limited_or_full($current_permissions)
 		foreach ($current_permissions as $tool=>$tool_rights)
 		{
 			// we loop through the possible permissions of a tool and unset the entry if it is view
-			// if it is visibility or move we have to grant the edit right 
+			// if it is visibility or move we have to grant the edit right
 			foreach ($tool_rights as $key=>$value)
 			{
 				if($value=='View')
@@ -201,7 +201,7 @@ function limited_or_full($current_permissions)
 					}
 					unset($current_permissions[$tool][$key]);
 				}
-				//else 
+				//else
 				//{
 				//	$current_permissions[$tool][]=$value;
 				//}
@@ -251,13 +251,13 @@ function display_image_matrix($permission_array, $tool, $permission,$inherited_p
 	{
 		echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('PermissionGrantedByGroupOrRole')."\">";
 	}
-	else 
+	else
 	{
 		if(in_array($permission,$inherited_permissions[$tool]))
 		{
 			echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('PermissionGrantedByGroupOrRole')."\">";
 		}
-		else 
+		else
 		{
 			if(is_array($permission_array[$tool]) AND in_array($permission,$permission_array[$tool]))
 			{
@@ -276,8 +276,8 @@ function display_image_matrix($permission_array, $tool, $permission,$inherited_p
 						$urlparameters.=$key.'='.$value.'&amp;';
 					}
 					$url=$url.'?'.$urlparameters;
-					
-					echo "\t\t\t <a href=\"".$url."\">";					
+
+					echo "\t\t\t <a href=\"".$url."\">";
 				}
 				echo "<img src=\"../img/checkbox_on2.gif\" border=\"0\"/>";
 				if($editable)
@@ -285,7 +285,7 @@ function display_image_matrix($permission_array, $tool, $permission,$inherited_p
 					echo "</a>";
 				}
 			}
-			else 
+			else
 			{
 				if($editable)
 				{
@@ -302,9 +302,9 @@ function display_image_matrix($permission_array, $tool, $permission,$inherited_p
 						$urlparameters.=$key.'='.$value.'&amp;';
 					}
 					$url=$url.'?'.$urlparameters;
-					
+
 					//echo "\t\t\t <a href=\"".str_replace('&', '&amp;', $_SERVER['REQUEST_URI'])."&amp;action=grant&amp;permission=$permission&amp;tool=$tool\">";
-					echo "\t\t\t <a href=\"".$url."\">";					
+					echo "\t\t\t <a href=\"".$url."\">";
 				}
 				echo "<img src=\"../img/wrong.gif\" border=\"0\"/>";
 				if($editable)
@@ -335,13 +335,13 @@ function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $per
 	{
 		echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('PermissionGrantedByGroupOrRole')."\">";
 	}
-	else 
+	else
 	{
 		if(!empty($inherited_permissions) and in_array($permission,$inherited_permissions[$tool]))
 		{
 			echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('PermissionGrantedByGroupOrRole')."\">";
 		}
-		else 
+		else
 		{
 			if(is_array($permission_array[$tool]) AND in_array($permission,$permission_array[$tool]))
 			{
@@ -362,8 +362,8 @@ function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $per
 						$urlparameters.=$key.'='.$value.'&amp;';
 					}
 					$url=$url.'?'.$urlparameters;
-					
-					echo "\t\t\t <a href=\"".$url."\">";					
+
+					echo "\t\t\t <a href=\"".$url."\">";
 				}
 				echo "<img src=\"../img/checkbox_on2.gif\" border=\"0\"/ title=\"".get_lang('UserHasPermission')."\">";
 				if($editable)
@@ -371,7 +371,7 @@ function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $per
 					echo "</a>";
 				}
 			}
-			else 
+			else
 			{
 				if($editable)
 				{
@@ -390,9 +390,9 @@ function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $per
 						$urlparameters.=$key.'='.$value.'&amp;';
 					}
 					$url=$url.'?'.$urlparameters;
-					
+
 					//echo "\t\t\t <a href=\"".str_replace('&', '&amp;', $_SERVER['REQUEST_URI'])."&amp;action=grant&amp;permission=$permission&amp;tool=$tool\">";
-					echo "\t\t\t <a href=\"".$url."\">";					
+					echo "\t\t\t <a href=\"".$url."\">";
 				}
 				echo "<img src=\"../img/wrong.gif\" border=\"0\"/ title=\"".get_lang('UserHasPermissionNot')."\">";
 				if($editable)
@@ -412,14 +412,14 @@ function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $per
 */
 function display_role_list($current_course_roles, $current_platform_roles)
 {
-	global $setting_visualisation; 
-	
+	global $setting_visualisation;
+
 	$coures_roles_table=Database::get_course_table(TABLE_ROLE);
 	$platform_roles_table=Database::get_main_table(TABLE_ROLE);
-	
+
 	// platform roles
 	$sql="SELECT * FROM $platform_roles_table";
-	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$result=Database::query($sql, __FILE__, __LINE__);
 	while ($row=mysql_fetch_array($result))
 	{
 		if(in_array($row['role_id'], $current_platform_roles))
@@ -428,7 +428,7 @@ function display_role_list($current_course_roles, $current_platform_roles)
 			$image='checkbox_on2.gif';
 			$action='revoke';
 		}
-		else 
+		else
 		{
 			$checked='';
 			$image='wrong.gif';
@@ -444,11 +444,11 @@ function display_role_list($current_course_roles, $current_platform_roles)
 		}
 		echo $row['role_name']."<br />\n";
 		echo $row['role_comment']."<br />\n";
-	}	
-	
+	}
+
 	// course roles
 	$sql="SELECT * FROM $coures_roles_table";
-	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$result=Database::query($sql, __FILE__, __LINE__);
 	while ($row=mysql_fetch_array($result))
 	{
 		if(in_array($row['role_id'], $current_course_roles))
@@ -457,7 +457,7 @@ function display_role_list($current_course_roles, $current_platform_roles)
 			$image='checkbox_on2.gif';
 			$action='revoke';
 		}
-		else 
+		else
 		{
 			$checked='';
 			$image='wrong.gif';
@@ -471,11 +471,11 @@ function display_role_list($current_course_roles, $current_platform_roles)
 		{
 			echo "<a href=\"".str_replace('&', '&amp;', $_SERVER['REQUEST_URI'])."&amp;action=$action&amp;role=".$row['role_id']."&amp;scope=course\"><img src=\"../img/".$image."\" border=\"0\"/></a>";
 		}
-		
-		
+
+
 		echo $row['role_name']." <a href=\"../permissions/roles.php?role_id=".$row['role_id']."&amp;scope=course\"><img src=\"../img/edit.gif\" /></a><br />\n";
 		echo $row['role_comment']."<br />\n";
-	}	
+	}
 }
 
 /**
@@ -483,7 +483,7 @@ function display_role_list($current_course_roles, $current_platform_roles)
 * @param $content are we finding the roles for a user or a group (the database depends on it)
 * @param $id the id of the user or group
 * @return array that contains the name of the roles the user has
-* @todo consider having a separate table that contains only an id and a name of the role. 
+* @todo consider having a separate table that contains only an id and a name of the role.
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
 * @version 1.0
 */
@@ -500,16 +500,16 @@ function get_roles($content,$id, $scope='course')
 		$id_field = group_id;
 	}
 	$table_role=Database::get_course_table(TABLE_ROLE);
-	
+
 	$current_roles=array();
 	//$sql="SELECT role.role_id FROM $table role_group_user, $table_role role WHERE role_group_user.$id_field = '$id' AND role_group_user.role_id=role.role_id AND role_group_user.scope='".$scope."'";$sql="SELECT role.role_id FROM $table role_group_user, $table_role role WHERE role_group_user.$id_field = '$id' AND role_group_user.role_id=role.role_id AND role_group_user.scope='".$scope."'";
 	$sql="SELECT role_id FROM $table WHERE $id_field = '$id' AND scope='".$scope."'";
-	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$result=Database::query($sql, __FILE__, __LINE__);
 	while ($row=mysql_fetch_array($result))
 	{
 		$current_roles[]=$row['role_id'];
 	}
-	
+
 	return $current_roles;
 }
 
@@ -529,15 +529,15 @@ function get_all_roles($content='course')
 	{
 		$table_role=Database::get_main_table(TABLE_ROLE);
 	}
-	
+
 	$current_roles=array();
 	$sql="SELECT * FROM $table_role";
-	$result=api_sql_query($sql, __FILE__, __LINE__);
+	$result=Database::query($sql, __FILE__, __LINE__);
 	while ($row=mysql_fetch_array($result))
 	{
 		$roles[]=$row;
 	}
-	
+
 	return $roles;
 }
 
@@ -548,7 +548,7 @@ function get_all_roles($content='course')
 * @param $id the id of the user or group
 * @param string	Deprecated parameter allowing use of 'platform' scope - the corresponding tables don't exist anymore so the scope is always set to 'course'
 * @return array that contains the name of the roles the user has
-* @todo consider having a separate table that contains only an id and a name of the role. 
+* @todo consider having a separate table that contains only an id and a name of the role.
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
 * @version 1.0
 */
@@ -559,13 +559,13 @@ function get_roles_permissions($content,$id, $scope='course')
 		$table=Database::get_course_table(TABLE_ROLE_USER);
 		$id_field = user_id;
 	}
-	
+
 	if($content == 'group')
 	{
 		$table = Database::get_course_table(TABLE_ROLE_GROUP);
 		$id_field = group_id;
 	}
-	
+
 	// course roles or platform roles
 	$scope = 'course';
 	if($scope == 'course')
@@ -573,32 +573,32 @@ function get_roles_permissions($content,$id, $scope='course')
 		$table_role = Database::get_course_table(TABLE_ROLE);
 		$table_role_permissions = Database::get_course_table(TABLE_ROLE_PERMISSION);
 	}
-	
+
 	if($scope == 'platform')
 	{
 		$table_role = Database::get_main_table(TABLE_ROLE);
 		$table_role_permissions = Database::get_main_table(TABLE_ROLE_PERMISSION);
 	}
-	
+
 	$current_roles = array();
-	
+
 	$sql = "
 		SELECT *
 		FROM
 			" . $table . " role_group_user,
 			" . $table_role . " role,
-			" . $table_role_permissions . " role_permissions 
+			" . $table_role_permissions . " role_permissions
 		WHERE
 			role_group_user.scope = '" . $scope . "' AND
 			role_group_user." . $id_field . " = '" . $id . "' AND
 			role_group_user.role_id = role.role_id AND
 			role.role_id = role_permissions.role_id";
-	
-	$result = api_sql_query($sql, __FILE__, __LINE__);
-	
+
+	$result = Database::query($sql, __FILE__, __LINE__);
+
 	while($row=mysql_fetch_array($result))
 		$current_role_permissions[$row['tool']][]=$row['action'];
-	
+
 	return $current_role_permissions;
 }
 
@@ -624,16 +624,16 @@ function assign_role($content, $action, $id, $role_id, $scope='course')
 		$table=Database::get_course_table(TABLE_ROLE_GROUP);
 		$id_field = group_id;
 	}
-	else 
+	else
 	{
 		return  get_lang('Error');
 	}
-	
+
 	// grating a right
 	if($action=='grant')
 	{
 		$sql="INSERT INTO $table (role_id, scope,  $id_field) VALUES ('".mysql_real_escape_string($role_id)."','".mysql_real_escape_string($scope)."','".mysql_real_escape_string($id)."')";
-		$result=api_sql_query($sql, __FILE__, __LINE__);
+		$result=Database::query($sql, __FILE__, __LINE__);
 		if($result)
 		{
 			$result_message=get_lang('RoleGranted');
@@ -642,7 +642,7 @@ function assign_role($content, $action, $id, $role_id, $scope='course')
 	if($action=='revoke')
 	{
 		$sql="DELETE FROM $table WHERE $id_field = '".mysql_real_escape_string($id)."' AND role_id='".mysql_real_escape_string($role_id)."'";
-		$result=api_sql_query($sql, __FILE__, __LINE__);
+		$result=Database::query($sql, __FILE__, __LINE__);
 		if($result)
 		{
 			$result_message=get_lang('RoleRevoked');
@@ -662,10 +662,10 @@ function permission_array_merge($array1, $array2)
 	{
 		foreach ($permissions as $permissionkey=>$permissionvalue)
 		{
-			$array1[$tool][]=$permissionvalue; 
+			$array1[$tool][]=$permissionvalue;
 		}
 	}
-	return $array1; 
+	return $array1;
 }
 
 

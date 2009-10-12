@@ -2,7 +2,7 @@
 require_once(api_get_path(LIBRARY_PATH).'surveymanager.lib.php');
 
 class TestSurveyManager extends UnitTestCase {
-	
+
 	function testattach_survey() {
 		$surveyid='';
 		$newsurveyid='';
@@ -12,7 +12,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	function testcreate_course_survey_rel() {
 		$cidReq='';
 		$survey_id='';
@@ -22,7 +22,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	function testcreate_group() {
 		$survey_id='';
 		$group_title=' ';
@@ -32,7 +32,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	function testcreate_question() {
 		$gid='';
 		$surveyid='';
@@ -49,7 +49,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	function testcreate_survey() {
 		$surveycode='';
 		$surveytitle='';
@@ -68,7 +68,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	function testcreate_survey_attach() {
 		$surveycode='';
 		$surveytitle='';
@@ -87,7 +87,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	function testcreate_survey_in_another_language() {
 		global $_course;
 		$id='';
@@ -96,21 +96,21 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	function testdelete_group() {
 		$group_id='';
 		$res=SurveyManager::delete_group($group_id);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	function testdelete_survey() {
 		$survey_id='';
 		$res=SurveyManager::delete_survey($survey_id);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testdisplay_imported_group() {
 		$sid='';
 		$table_group='';
@@ -121,7 +121,7 @@ class TestSurveyManager extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	function testget_all_datas() {
 		global $_course;
 		$id='';
@@ -129,7 +129,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testget_author() {
 		$db_name='';
 		$survey_id='';
@@ -137,7 +137,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testget_data() {
 		$id='';
 		$field='';
@@ -145,7 +145,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testget_groupname() {
 		$db_name='';
 		$gid='';
@@ -153,7 +153,7 @@ class TestSurveyManager extends UnitTestCase {
 		if(!is_null($res))$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testget_question_data() {
 		$qid='';
 		$curr_dbname='';
@@ -161,14 +161,14 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testget_question_type() {
 		$questionid='';
 		$res=SurveyManager::get_question_type($questionid);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testget_questions_move() {
 		$curr_dbname='';
 		$question1=array("caption"=> $row['caption'], "qid" => $row['qid'],"sortby" => $row['sortby']);
@@ -176,30 +176,30 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_array($question1));
 		//var_dump($question1);
 	}
-	
+
 	function testget_status() {
 		global $_user;
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		$sqlm = "SELECT  status FROM  $table_user WHERE user_id = '".mysql_real_escape_string($_user['user_id'])."'";
-		$resm = api_sql_query($sqlm,__FILE__,__LINE__);
+		$resm = Database::query($sqlm,__FILE__,__LINE__);
 		$objm=@mysql_fetch_object($resm);
 		$ss = $objm->status ;
 		$res=SurveyManager::get_status();
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	function testget_survey_author() {
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$authorid = Database::escape_string($authorid);
 		$sql_query = "SELECT * FROM $user_table WHERE user_id='$authorid'";
-		$res = api_sql_query($sql_query, __FILE__, __LINE__);
+		$res = Database::query($sql_query, __FILE__, __LINE__);
 		$firstname=@mysql_result($res,0,'firstname');
 		$res=SurveyManager::get_survey_author($authorid);
 		$this->assertTrue(is_bool($firstname));
 		//var_dump($firstname);
 	}
-	
+
 	function testget_survey_code() {
 		$table_survey='';
 		$survey_code='';
@@ -207,7 +207,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testget_survey_list() {
 		ob_start();
 		$res=SurveyManager::get_survey_list();
@@ -215,7 +215,7 @@ class TestSurveyManager extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	function testget_surveyid() {
 		$db_name='';
 		$group_id='';
@@ -223,7 +223,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testget_surveyname() {
 		$db_name='';
 		$sid='';
@@ -231,14 +231,14 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testget_surveyname_display() {
 		$sid='';
 		$res=SurveyManager::get_surveyname_display($sid);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testgetUserAnswersDetails() {
 		$id_userAnswers='';
 		$params='';
@@ -246,7 +246,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+
 	function testimport_existing_question() {
 		$surveyid='';
 		$qids='';
@@ -257,7 +257,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	function testimport_group() {
 		$sid='';
 		$gids='';
@@ -267,7 +267,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	function testimport_question() {
 		$surveyid='';
 		$qids='';
@@ -280,7 +280,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	function testimport_questions() {
 		$import_type='';
 		$ids='';
@@ -288,7 +288,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	function testinsert_existing_groups() {
 		$sid='';
 		$gids='';
@@ -298,7 +298,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-		
+
 	function testinsert_groups() {
 		$sid='';
 		$newgid='';
@@ -309,7 +309,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	function testinsert_into_group() {
 		$survey_id='';
 		$group_title='';
@@ -319,7 +319,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	function testinsert_old_groups() {
 		$sid='';
 		$gids='';
@@ -331,7 +331,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	function testinsert_questions() {
 		$sid='';
 		$newgid='';
@@ -341,14 +341,14 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	function testlistAnswers() {
 		$qid='';
 		$res=SurveyManager::listAnswers($qid);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
-	} 
-	
+	}
+
 	function testlistGroups() {
 		$id_survey='';
 		$fields = '*';
@@ -356,7 +356,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-		
+
 	function testlistQuestions() {
 		$id_survey='';
 		$fields = '*';
@@ -364,7 +364,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+
 	function testlistUsers() {
 		$survey_id='';
 		$dbname='';
@@ -372,7 +372,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+
 	function testmove_question() {
 		$direction='';
 		$qid='';
@@ -382,7 +382,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-		
+
 	function testno_of_question() {
 		$db_name='';
 		$gid='';
@@ -390,28 +390,28 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testpick_author() {
 		$survey_id='';
 		$res=SurveyManager::pick_author($survey_id);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	 function testpick_surveyname() {
 	 	$sid='';
 	 	$res=SurveyManager::pick_surveyname($sid);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	 }
-	
+
 	function testques_id_group_name() {
 		$qid='';
 		$res=SurveyManager::ques_id_group_name($qid);
 		if(!is_null($res))$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testquestion_import() {
 		$surveyid='';
 		$qids='';
@@ -421,16 +421,16 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	function testselect_group_list() {
 		$survey_id='';
-		$seleced_groupid=''; 
+		$seleced_groupid='';
 		$extra_script='';
 		$res=SurveyManager::select_group_list($survey_id, $seleced_groupid='', $extra_script='');
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testselect_survey_list() {
 		$seleced_surveyid='';
 		$extra_script='';
@@ -438,7 +438,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	 function testupdate_group() {
 	 	$groupid='';
 	 	$surveyid='';
@@ -449,7 +449,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	 }
-	 
+
 	 function testupdate_question() {
 	 	$qid='';
 	 	$qtype='';
@@ -462,7 +462,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	 }
-	 
+
 	 function testupdate_survey() {
 	 	$surveyid='';
 	 	$surveycode='';
@@ -483,59 +483,59 @@ class TestSurveyManager extends UnitTestCase {
 		//var_dump($res);
 	 }
 }
-	
+
 
 class TestSurveyTree extends UnitTestCase {
 
-	var $surveylist;	 
+	var $surveylist;
 	var $plainsurveylist;
 	var $numbersurveys;
-		 
-	
-/*	//is a construct it can not test 
+
+
+/*	//is a construct it can not test
 	function test__construct() {
 		$res=SurveyTree::__construct();
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}*/
-	
-	
+
+
 	function testcreateList() {
 		$list='';
 		$res=SurveyTree::createList($list);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+
 	function testget_children() {
 		$list='';
 		$id='';
 		$res=SurveyTree::get_children($list,$id);
 		$this->assertTrue(is_array($res));
-		//var_dump($res);	
+		//var_dump($res);
 	}
-	
+
 	function testget_last_children_from_branch() {
 		$list='';
 		$res=SurveyTree::get_last_children_from_branch($list);
 		$this->assertTrue(is_array($res));
-		//var_dump($res);	
+		//var_dump($res);
 	}
-	
+
 	function testgetParentId() {
 		$id='';
 		$res=SurveyTree::getParentId($id);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	function testlastSibling() {
 		$id='';
 		$res=SurveyTree::lastSibling($id);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+
 	function testnextSibling() {
 		$id='';
 		$res=SurveyTree::nextSibling($id);

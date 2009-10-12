@@ -76,4 +76,7 @@ $CourseCategoryEditStored = "Kategorija je bila ažurirana";
 $buttonCreateCourseCategory = "Ustvari kategorijo teèajev";
 $buttonSaveCategory = "Shrani kategorijo";
 $buttonChangeCategory = "Zamenjaj kategorijo";
+$SessionName = "Ime seje";
+$SessionCategory = "Kategorija seje";
+$Expand = "Razširi";
 ?>

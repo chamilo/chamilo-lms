@@ -1,23 +1,23 @@
 <?php
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2007 Dokeos S.A.
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-============================================================================== 
+==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 * This is the security library for Dokeos.
 *
 * This library is based on recommendations found in the PHP5 Certification
@@ -25,36 +25,36 @@
 * http://www.phpsec.org/
 * The principles here are that all data is tainted (most scripts of Dokeos are
 * open to the public or at least to a certain public that could be malicious
-* under specific circumstances). We use the white list approach, where as we 
-* consider that data can only be used in the database or in a file if it has 
+* under specific circumstances). We use the white list approach, where as we
+* consider that data can only be used in the database or in a file if it has
 * been filtered.
-* 
+*
 * For session fixation, use ...
 * For session hijacking, use get_ua() and check_ua()
 * For Cross-Site Request Forgeries, use get_token() and check_tocken()
 * For basic filtering, use filter()
 * For files inclusions (using dynamic paths) use check_rel_path() and check_abs_path()
-* 
+*
 * @package dokeos.library
-============================================================================== 
+==============================================================================
 */
 /**
  * Security class
  *
- * Include/require it in your code and call Security::function() 
+ * Include/require it in your code and call Security::function()
  * to use its functionalities.
- * 
+ *
  * This class can also be used as a container for filtered data, by creating
- * a new Security object and using $secure->filter($new_var,[more options]) 
- * and then using $secure->clean['var'] as a filtered equivalent, although 
+ * a new Security object and using $secure->filter($new_var,[more options])
+ * and then using $secure->clean['var'] as a filtered equivalent, although
  * this is *not* mandatory at all.
- * 
+ *
  * @author	Yannick Warnier <yannick.warnier@dokeos.com>
  */
 class Security {
 	public static $clean = array();
 	/**
-	 * Checks if the absolute path (directory) given is really under the 
+	 * Checks if the absolute path (directory) given is really under the
      * checker path (directory)
 	 * @param	string	Absolute path to be checked (with trailing slash)
 	 * @param	string	Checker path under which the path should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
@@ -62,9 +62,9 @@ class Security {
 	 */
 	public static function check_abs_path ($abs_path,$checker_path) {
 		if (empty($checker_path)) {return false;} //checker path must be set
-		
+
 		$true_path=str_replace("\\", "/", realpath($abs_path));
-		
+
 		$found = strpos($true_path.'/',$checker_path);
 		if ($found===0) {
 			return true;
@@ -72,7 +72,7 @@ class Security {
         return false;
 	}
 	/**
-	 * Checks if the relative path (directory) given is really under the 
+	 * Checks if the relative path (directory) given is really under the
      * checker path (directory)
 	 * @param	string	Relative path to be checked (relative to the current directory) (with trailing slash)
 	 * @param	string	Checker path under which the path should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
@@ -119,7 +119,7 @@ class Security {
 			case 'post':
 				if (isset($_SESSION['sec_token']) && isset($_POST['sec_token']) && $_SESSION['sec_token'] === $_POST['sec_token']) {
 					return true;
-				}				
+				}
 				return false;
 			default:
 				if (isset($_SESSION['sec_token']) && isset($array) && $_SESSION['sec_token'] === $array) {
@@ -130,7 +130,7 @@ class Security {
 		return false; //just in case, don't let anything slip
 	}
 	/**
-	 * Checks the user agent of the client as recorder by get_ua() to prevent 
+	 * Checks the user agent of the client as recorder by get_ua() to prevent
 	 * most session hijacking attacks.
 	 * @return	bool	True if the user agent is the same, false otherwise
 	 */
@@ -186,7 +186,7 @@ class Security {
 		$_SESSION['sec_ua_seed'] = uniqid(rand(),TRUE);
 		$_SESSION['sec_ua'] = $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed'];
 	}
-	/** 
+	/**
 	 * This function filters a variable to the type given, with the options given
 	 * @param	mixed	The variable to be filtered
 	 * @param	string	The type of variable we expect (bool,int,float,string)
@@ -212,7 +212,7 @@ class Security {
 				$result = (float) $var;
 				break;
 			case 'string':
-				
+
 				break;
 			case 'array':
 				//an array variable shouldn't be given to the filter
@@ -241,18 +241,18 @@ class Security {
 	 * This function tackles the XSS injections.
 	 * Filtering for XSS is very easily done by using the htmlentities() function.
 	 * This kind of filtering prevents JavaScript snippets to be understood as such.
-	 * @param	mixed	The variable to filter for XSS, this params can be a string or an array (example : array(x,y)) 
+	 * @param	mixed	The variable to filter for XSS, this params can be a string or an array (example : array(x,y))
 	 * @param   integer The user status,constant allowed(STUDENT,COURSEMANAGER,ANONYMOUS,COURSEMANAGERLOWSECURITY)
 	 * @return	mixed	Filtered string or array
 	 */
 	public static function remove_XSS ($var,$user_status=ANONYMOUS) {
 		global $charset;
-		$purifier = new HTMLPurifier(null,$user_status);		
+		$purifier = new HTMLPurifier(null,$user_status);
 		if (is_array($var)) {
-			return $purifier->purifyArray($var);				
+			return $purifier->purifyArray($var);
 		} else {
-			return $purifier->purify($var);	
+			return $purifier->purify($var);
 		}
-			
+
 	}
 }

@@ -32,6 +32,8 @@
 ==============================================================================
 */
 
+// TODO: Is this file deprecated?
+
 /*
 ==============================================================================
 		INIT SECTION
@@ -48,7 +50,7 @@ if(!isset($_REQUEST['view']))
 else
 	$view = $_REQUEST['view'];
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "tracking";
 include('../inc/global.inc.php');
 
@@ -78,13 +80,13 @@ include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");
 
 // the variables for the days and the months
 // Defining the shorts for the days
-$DaysShort = array (get_lang("SundayShort"), get_lang("MondayShort"), get_lang("TuesdayShort"), get_lang("WednesdayShort"), get_lang("ThursdayShort"), get_lang("FridayShort"), get_lang("SaturdayShort"));
+$DaysShort = api_get_week_days_short();
 // Defining the days of the week to allow translation of the days
-$DaysLong = array (get_lang("SundayLong"), get_lang("MondayLong"), get_lang("TuesdayLong"), get_lang("WednesdayLong"), get_lang("ThursdayLong"), get_lang("FridayLong"), get_lang("SaturdayLong"));
+$DaysLong = api_get_week_days_long();
 // Defining the months of the year to allow translation of the months
-$MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong"));
+$MonthsLong = api_get_months_long();
 // Defining the months of the year to allow translation of the months
-$MonthsShort = array (get_lang("JanuaryShort"), get_lang("FebruaryShort"), get_lang("MarchShort"), get_lang("AprilShort"), get_lang("MayShort"), get_lang("JuneShort"), get_lang("JulyShort"), get_lang("AugustShort"), get_lang("SeptemberShort"), get_lang("OctoberShort"), get_lang("NovemberShort"), get_lang("DecemberShort"));
+$MonthsShort = api_get_months_short();
 
 $is_allowedToTrack = $is_groupTutor; // allowed to track only user of one group
 $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all student in course
@@ -114,7 +116,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
                         AND `gu`.`group_id` = '$_gid'
                         AND `u`.`user_id` = '$uInfo'";
     }
-    $query = api_sql_query($sql,__FILE__,__LINE__);
+    $query = Database::query($sql,__FILE__,__LINE__);
     $res = @mysql_fetch_array($query);
     if(is_array($res))
     {

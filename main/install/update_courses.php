@@ -100,7 +100,7 @@ elseif($_POST['step1'])
 <html>
 <head>
 <title>-- Dokeos course update -- version <?php echo $dokeos_version; ?></title>
-<link rel="stylesheet" href="../css/public_admin/default.css" type="text/css">
+<link rel="stylesheet" href="../css/dokeos_blue/default.css" type="text/css">
 </head>
 <body bgcolor="white" dir="<?php echo $text_dir ?>">
 

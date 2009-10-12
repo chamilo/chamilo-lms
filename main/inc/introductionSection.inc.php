@@ -93,18 +93,18 @@ if ($intro_editAllowed) {
 
 	if ( $intro_cmdUpdate ) {
 		if ( $form->validate()) {
-			
+
 			$form_values = $form->exportValues();
 			$intro_content = Security::remove_XSS(stripslashes(api_html_entity_decode($form_values['intro_content'])), COURSEMANAGERLOWSECURITY);
-			
+
 			if ( ! empty($intro_content) ) {
 				$sql = "REPLACE $TBL_INTRODUCTION SET id='$moduleId',intro_text='".Database::escape_string($intro_content)."'";
-				api_sql_query($sql,__FILE__,__LINE__);
+				Database::query($sql,__FILE__,__LINE__);
 				Display::display_confirmation_message(get_lang('IntroductionTextUpdated'),false);
 			} else {
 				$intro_cmdDel = true;	// got to the delete command
 			}
-			
+
 		} else {
 			$intro_cmdEdit = true;
 		}
@@ -113,7 +113,7 @@ if ($intro_editAllowed) {
 	/* Delete Command */
 
 	if ($intro_cmdDel) {
-		api_sql_query("DELETE FROM $TBL_INTRODUCTION WHERE id='".$moduleId."'",__FILE__,__LINE__);
+		Database::query("DELETE FROM $TBL_INTRODUCTION WHERE id='".$moduleId."'",__FILE__,__LINE__);
 		Display::display_confirmation_message(get_lang('IntroductionTextDeleted'));
 	}
 
@@ -127,7 +127,7 @@ if ($intro_editAllowed) {
 /* Retrieves the module introduction text, if exist */
 
 $sql = "SELECT intro_text FROM $TBL_INTRODUCTION WHERE id='".$moduleId."'";
-$intro_dbQuery = api_sql_query($sql,__FILE__,__LINE__);
+$intro_dbQuery = Database::query($sql,__FILE__,__LINE__);
 $intro_dbResult = mysql_fetch_array($intro_dbQuery);
 $intro_content = $intro_dbResult['intro_text'];
 
@@ -138,7 +138,7 @@ if ($intro_cmdEdit || $intro_cmdAdd) {
 	$intro_dispForm = true;
 	$intro_dispCommand = false;
 } else {
-	
+
 	$intro_dispDefault = true;
 	$intro_dispForm = false;
 
@@ -147,7 +147,7 @@ if ($intro_cmdEdit || $intro_cmdAdd) {
 	} else {
 		$intro_dispCommand = false;
 	}
-	
+
 }
 
 /* Executes the display */
@@ -181,9 +181,9 @@ if ($intro_dispCommand) {
 			echo "<a href=\"".api_get_self()."?intro_cmdAdd=1\">\n".get_lang('AddIntro')."</a>\n";
 		}
 		echo "</p>\n</div>";
-		
+
 	} else {
-		
+
 		// displays "edit intro && delete intro" Commands
 		echo "<div id=\"courseintro_icons\"><p>\n";
 		if (!empty ($GLOBALS["_cid"])) {
@@ -194,8 +194,8 @@ if ($intro_dispCommand) {
 			echo "<a href=\"".api_get_self()."?intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\"><img src=\"".api_get_path(WEB_CODE_PATH)."img/delete.gif\" alt=\"".get_lang('Delete')."\" border=\"0\" /></a>\n";
 		}
 		echo "</p>\n</div>";
-		
+
 	}
-	
+
 }
 ?>

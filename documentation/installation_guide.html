@@ -1,18 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
 
-  
+
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-  
-  
-  
+
+
+
   <title>Dokeos 1.8.6.1 Installation Guide</title><link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
 
-  
+
   <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
 
-  
+
   <style type="text/css">
 	<!--
 		page { width: 21cm; height: 29.7cm; margin: 2cm }
@@ -64,7 +64,7 @@
   <li><a href="#5._Administration_section">Administration section</a></li>
 
   <li><a href="#6._LDAP">LDAP&nbsp;</a></li>
-  
+
   <li><a href="#7._Mathematical_formulas">Mathematical formulas with LaTeX</a></li>
 </ol>
 
@@ -91,7 +91,7 @@ All these software are open source and freely available. <br />
 
 <br />
 
-To run Dokeos <span style="font-weight: bold;">LMS</span> on your server, you need to install WAMP, LAMP or MAMP: 
+To run Dokeos <span style="font-weight: bold;">LMS</span> on your server, you need to install WAMP, LAMP or MAMP:
 <ul>
 
   <li>To install <span style="font-weight: bold;">WAMP</span> (AMP on Windows), we recommend the <a href="http://www.apachefriends.org/en/xampp.html">XAMPP</a> .exe installer<a href="http://www.apachefriends.org/en/xampp.html"></a></li>
@@ -121,7 +121,7 @@ the installation.<span style="font-weight: bold;"><br />
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="2._Installation_of_Dokeos_LMS"></a><span style="font-weight: bold;">2. Installation of Dokeos LMS</span></h2>
 
-<a href="http://www.dokeos.com/download.php"></a> 
+<a href="http://www.dokeos.com/download.php"></a>
 <ul>
 
   <li><a href="http://www.dokeos.com/node/33">Download Dokeos LMS</a></li>
@@ -161,7 +161,7 @@ In Windows, you may need to check the properties of the folders (by
 right-clicking on them).</p>
 
 <p>
-2.5. The following files need to be readable and writeable for the web browser, 
+2.5. The following files need to be readable and writeable for the web browser,
 only during the installation process:</p>
 
 <ul>
@@ -324,12 +324,12 @@ please ask your hosting provider for advice.<br />
 
 <br />
 
-<font size="-1">* Styles and images are located in the main/css or main/img 
+<font size="-1">* Styles and images are located in the main/css or main/img
 directories. You can still recover them from your backup if you have made it.
- Any modified style or image that uses the default style/image name will be 
- overwritten by the next step. To avoid loosing your customisations, always 
- ensure you copy the styles/images under a new name and use and modify the 
- copy, not the original. The original will always be overwritten by newer 
+ Any modified style or image that uses the default style/image name will be
+ overwritten by the next step. To avoid loosing your customisations, always
+ ensure you copy the styles/images under a new name and use and modify the
+ copy, not the original. The original will always be overwritten by newer
  versions. In Dokeos 1.8.5, we have changed the name of several CSS themes.
  Backwards compatibility is ensured by the fact that an upgrade only adds the
 new themes, but you should try and use these new themes rather than sticking
@@ -341,8 +341,8 @@ to the old ones which will be deprecated shortly (not maintained).</font>
 <h3>3.2 Upgrading from Dokeos 1.6.x</h3>
 
 
-<em>If you upgrade from a lower version of Dokeos (1.6.x)</em>, the first 
-and most important thing to do is to *move* your current directory to another 
+<em>If you upgrade from a lower version of Dokeos (1.6.x)</em>, the first
+and most important thing to do is to *move* your current directory to another
 place.<br />
 An easy way to do that is to create a subdirectory called "old_version"
 in your current Dokeos directory and move everything in there using a
@@ -353,27 +353,27 @@ old to the new installation.<br />
 <br />
 The complete process is as follow:
 <ul>
-  <li> move the current Dokeos directory contents to a subdirectory called 
+  <li> move the current Dokeos directory contents to a subdirectory called
     <em>old_version</em> and make it writeable by the web server. This
 is important to allow the move of the courses/ and upload/ directories
 to the new install</li>
-  <li> download the Dokeos 1.8.6 install package from the 
+  <li> download the Dokeos 1.8.6 install package from the
     <a href="http://www.dokeos.com/en/node/33">Dokeos download page</a></li>
-  <li> unzip the new files of Dokeos 1.8.6 in the main Dokeos directory. The 
-new directory <em>main</em> should be located directly inside your 
+  <li> unzip the new files of Dokeos 1.8.6 in the main Dokeos directory. The
+new directory <em>main</em> should be located directly inside your
 Dokeos root folder</li>
   <li> point your browser on your portal URL</li>
-  <li> choose your language and click&nbsp;<span style="font-style: italic;">Upgrade from 1.6.x</span> and confirm the 
+  <li> choose your language and click&nbsp;<span style="font-style: italic;">Upgrade from 1.6.x</span> and confirm the
 current directory of the old version</li>
 </ul>
 
 <br />
 
-<em> NOTE: </em> The upgrade from 1.6.x to 1.8.x implies a revision of 
-the customised graphics and styles. The new version uses a complete new 
-set of icons and styles, which means the ones from version 1.6 cannot be 
-simply reused. The good news is the version 1.8.x allows you to create 
-your own style in a separate css folder, that you can then reuse through 
+<em> NOTE: </em> The upgrade from 1.6.x to 1.8.x implies a revision of
+the customised graphics and styles. The new version uses a complete new
+set of icons and styles, which means the ones from version 1.6 cannot be
+simply reused. The good news is the version 1.8.x allows you to create
+your own style in a separate css folder, that you can then reuse through
 all the 1.8.x versions
 <br />
 
@@ -406,8 +406,8 @@ The following directories need to be readable, writeable and executable for the 
   <li>dokeos/home/</li>
 </ul>
 
-On Linux, Mac OS X and BSD operating systems you can quick-fix this using the 
-CHMOD 777 command, but if you are unsure, we recommend you seek advice for 
+On Linux, Mac OS X and BSD operating systems you can quick-fix this using the
+CHMOD 777 command, but if you are unsure, we recommend you seek advice for
 your own OS on <a href="http://www.dokeos.com/en/node/66">our forum</a>.
 In Windows, you may need to check the properties of the folders.
 <p></p>
@@ -596,7 +596,7 @@ that criteria</li>
 
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="7._Mathematical_formulas"></a>7. Mathematical formulas with LaTeX</h2>
-		  
+
 <i>This part is optional, only organisations planning to use mathematical formulas inside the online editor might want to read this.</i><br /><br />
 
 You can enable mathematical equations writing inside the Dokeos online editor (FCKEditor) by applying the following steps:
@@ -608,7 +608,7 @@ You can enable mathematical equations writing inside the Dokeos online editor (F
 	<li>2. Reload your Apache configuration</li>
 
 	<li>3. Edit the online editor's configuration file <i>dokeos/main/inc/lib/fckeditor/myconfig.php</i> and
-		
+
     <ul>
 			<li>3.1. Enable the mimetex plugin, find the line //$config['LoadPlugin'][] = 'mimetex'; and modify it to be:
 <b>$config['LoadPlugin'][] = 'mimetex';</b> (remove the double slash)</li>
@@ -633,7 +633,7 @@ Here is an example:
     <li>4. To install mimetex executable file, make these changes:</li>
 
 <p>Add the corresponding cgi-bin directory to your Apache configuration could be done, in Apache 2, like this:
-  
+
     </p>
 <div class="code">
       ScriptAlias /cgi-bin/ /var/www/cgi-bin/<br />
@@ -649,7 +649,7 @@ Here is an example:
 <p>Adding a symbolic link can be done, under Windows, by creating a
   shortcut to the mimetex.exe file from the cgi-bin directory, or under
   Linux by issuing the following command:
-  
+
 </p>
 <div class="code">
   <p>ln -s /var/www/dokeos/main/inc/lib/mimetex/mimetex.cgi /var/www/cgi-bin/mimetex.cgi</p>
@@ -669,12 +669,12 @@ to insert mathematical formulas into your documents.<br />
   <br />
   <br />
   Contact address: Dokeos, Rue Victor Hugo, 201,&nbsp;B-1030 Brussels, Belgium<br />
-  
+
   Mail: info@dokeos.com<br />
-  
+
   Tel. +32 (0)2 669 69 55<br />
   <br />
-  
+
 </p>
 <hr />
 </div>

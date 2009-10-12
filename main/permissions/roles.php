@@ -1,9 +1,9 @@
-<?php 
-include("../inc/claro_init_global.inc.php"); 
+<?php
+include("../inc/claro_init_global.inc.php");
 include_once('permissions_functions.inc.php');
 include_once('all_permissions.inc.php');
 
-$tool_name = get_lang('Roles'); // title of the page (should come from the language file) 
+$tool_name = get_lang('Roles'); // title of the page (should come from the language file)
 
 Display::display_header($tool_name);
 // ===================================================
@@ -16,13 +16,13 @@ if ($_POST['StoreRolePermissions'])
 	if (!empty($_POST['role_name']))
 	{
 		$table_role=Database::get_course_table(TABLE_ROLE);
-		$sql="INSERT INTO $table_role (role_name, role_comment, default_role) 
+		$sql="INSERT INTO $table_role (role_name, role_comment, default_role)
 					VALUES ('".mysql_real_escape_string($_POST['role_name'])."','".mysql_real_escape_string($_POST['role_comment'])."','".mysql_real_escape_string($_POST['default_role'])."')";
 		$result=mysql_query($sql) or die(mysql_error());
 		$role_id=mysql_insert_id();
 		$result_message=store_permissions('role', $role_id);
 	}
-	else 
+	else
 	{
 		$result_message=get_lang('ErrorPleaseGiveRoleName');
 	}
@@ -42,23 +42,23 @@ if (isset($_GET['action']) AND isset($_GET['role_id']) AND $_GET['action']=='del
 	//deleting the assignments fo this role: users
 	$table=Database::get_course_table(TABLE_ROLE_USER);
 	$sql="DELETE FROM $table WHERE role_id='".mysql_real_escape_string($_GET['role_id'])."'";
-	$result=api_sql_query($sql, __LINE__, __FILE__);
-	
+	$result=Database::query($sql, __LINE__, __FILE__);
+
 	// deleting the assignments of this role: groups
 	$table=Database::get_course_table(TABLE_ROLE_GROUP);
 	$sql="DELETE FROM $table WHERE role_id='".mysql_real_escape_string($_GET['role_id'])."'";
-	$result=api_sql_query($sql, __LINE__, __FILE__);
-	
+	$result=Database::query($sql, __LINE__, __FILE__);
+
 	// deleting the permissions of this role
 	$table=Database::get_course_table(TABLE_ROLE_PERMISSION);
 	$sql="DELETE FROM $table WHERE role_id='".mysql_real_escape_string($_GET['role_id'])."'";
-	$result=api_sql_query($sql, __LINE__, __FILE__);
-	
+	$result=Database::query($sql, __LINE__, __FILE__);
+
 	// deleting the role
 	$table_role=Database::get_course_table(TABLE_ROLE);
 	$sql="DELETE FROM $table_role WHERE role_id='".mysql_real_escape_string($_GET['role_id'])."'";
-	$result=api_sql_query($sql, __LINE__, __FILE__);
-	
+	$result=Database::query($sql, __LINE__, __FILE__);
+
 	$result_message=get_lang('RoleDeleted');
 }
 
@@ -91,7 +91,7 @@ if ($_GET['action']=='add')
 	echo "\n\t\t</td>";
 	echo "\n\t\t<td>";
 	echo "\n\t\t\t<textarea name='role_comment'></textarea>";
-	echo "\n\t\t</td>";	
+	echo "\n\t\t</td>";
 	echo "\n\t</tr>";
 	echo "\n\t<tr>";
 	echo "\n\t\t<td>";
@@ -99,8 +99,8 @@ if ($_GET['action']=='add')
 	echo "\n\t\t</td>";
 	echo "\n\t\t<td>";
 	echo "\n\t\t\t<input type=\"checkbox\" name=\"default_role\" value=\"1\">";
-	echo "\n\t\t</td>";	
-	echo "\n\t</tr>";	
+	echo "\n\t\t</td>";
+	echo "\n\t</tr>";
 	echo "\n</table>";
 	echo "<table class=\"data_table\">\n";
 
@@ -112,23 +112,23 @@ if ($_GET['action']=='add')
 	if (api_get_setting('permissions')=='full')
 	{
 		$header_array=$rights_full;
-	}	
-	echo "\t<tr>\n";	
+	}
+	echo "\t<tr>\n";
 	echo "\t\t<th>".get_lang('Module')."</th>\n";
 	foreach ($header_array as $header_key=>$header_value)
 	{
 		echo "\t\t<th>".get_lang($header_value)."</th>\n";
 	}
 	echo "\t</tr>\n";
-	
+
 	// the main area with the checkboxes or images
 	foreach ($tool_rights as $tool=>$rights) // $tool_rights contains all the possible tools and their rights
 	{
-		echo "\t<tr>\n";	
+		echo "\t<tr>\n";
 		echo "\t\t<td>\n";
 		echo get_lang($tool);
-		echo "\t\t</td>\n"; 
-	
+		echo "\t\t</td>\n";
+
 		foreach ($header_array as $key=>$value)
 		{
 			echo "\t\t<td align='center'>\n";
@@ -137,16 +137,16 @@ if ($_GET['action']=='add')
 		}
 		echo "\t</tr>\n";
 	}
-	
+
 	echo "</table>\n";
-	
+
 	echo "<input type=\"Submit\" name=\"StoreRolePermissions\" value=\"".get_lang('StorePermissions')."\">";
 	echo "</form>";
-	
+
 }
 
 
-	
+
 // ===================================================
 // 		DISPLAYING THE EXISTING ROLES
 // ===================================================
@@ -179,7 +179,7 @@ foreach ($all_roles as $role)
 if ($_GET['role_id'])
 {
 	$current_role_permissions=get_permissions('role',$_GET['role_id']);
-	
+
 	// ---------------------------------------------------
 	// 			LIMITED OR FULL
 	// ---------------------------------------------------
@@ -196,38 +196,38 @@ if ($_GET['role_id'])
 	// 			DISPLAYING THE MATRIX
 	// ---------------------------------------------------
 	echo "<form method=\"post\" action=\"".str_replace('&', '&amp;', $_SERVER['REQUEST_URI'])."\">";
-	
+
 	// the list of the roles for the user
 	echo get_lang('PermissionsOfRole').':'.$current_role_info['role_name'].'<br />';
 	if ($_GET['scope']=='platform')
 	{
 		echo get_lang('IsPlatformRoleNotEditable').'<br />';
 	}
-	
+
 	echo "<table class=\"data_table\">\n";
 
 	// the header
-	echo "\t<tr>\n";	
+	echo "\t<tr>\n";
 	echo "\t\t<th>".get_lang('Module')."</th>\n";
 	foreach ($header_array as $header_key=>$header_value)
 	{
 		echo "\t\t<th>".get_lang($header_value)."</th>\n";
 	}
 	echo "\t</tr>\n";
-	
+
 	// the main area with the checkboxes or images
 	foreach ($tool_rights as $tool=>$rights) // $tool_rights contains all the possible tools and their rights
 	{
-		echo "\t<tr>\n";	
+		echo "\t<tr>\n";
 		echo "\t\t<td>\n";
 		echo get_lang($tool);
-		echo "\t\t</td>\n"; 
-	
+		echo "\t\t</td>\n";
+
 		foreach ($header_array as $key=>$value)
 		{
 			echo "\t\t<td align='center'>\n";
 			if (in_array($value,$rights))
-			{								
+			{
 				if ($setting_visualisation=='checkbox')
 				{
 					display_checkbox_matrix($current_role_permissions, $tool, $value);
@@ -236,11 +236,11 @@ if ($_GET['role_id'])
 				{
 					if ($_GET['scope']=='platform')
 					{
-						$roles_editable=false; 
+						$roles_editable=false;
 					}
-					else 
+					else
 					{
-						$roles_editable=true; 
+						$roles_editable=true;
 					}
 					display_image_matrix($current_role_permissions, $tool, $value, '','',$roles_editable);
 				}
@@ -249,7 +249,7 @@ if ($_GET['role_id'])
 		}
 		echo "\t</tr>\n";
 	}
-	
+
 	echo "</table>\n";
 	if ($setting_visualisation=='checkbox')
 	{
@@ -257,7 +257,7 @@ if ($_GET['role_id'])
 	}
 	echo "</form>";
 
-	
+
 }
 
 
@@ -265,8 +265,8 @@ if ($_GET['role_id'])
 
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
-*/ 
+*/
 Display::display_footer();
 ?>

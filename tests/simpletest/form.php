@@ -5,7 +5,7 @@
  *  @subpackage WebTester
  *  @version    $Id: form.php 1672 2008-03-02 04:47:34Z edwardzyang $
  */
-    
+
 /**#@+
  * include SimpleTest files
  */
@@ -30,7 +30,7 @@ class SimpleForm {
     var $_widgets;
     var $_radios;
     var $_checkboxes;
-    
+
     /**
      *    Starts with no held controls/widgets.
      *    @param SimpleTag $tag        Form tag to read.
@@ -48,7 +48,7 @@ class SimpleForm {
         $this->_radios = array();
         $this->_checkboxes = array();
     }
-    
+
     /**
      *    Creates the request packet to be sent by the form.
      *    @param SimpleTag $tag        Form tag to read.
@@ -64,7 +64,7 @@ class SimpleForm {
         }
         return 'SimpleGetEncoding';
     }
-    
+
     /**
      *    Sets the frame target within a frameset.
      *    @param string $frame        Name of frame.
@@ -73,7 +73,7 @@ class SimpleForm {
     function setDefaultTarget($frame) {
         $this->_default_target = $frame;
     }
-    
+
     /**
      *    Accessor for method of form submission.
      *    @return string           Either get or post.
@@ -82,7 +82,7 @@ class SimpleForm {
     function getMethod() {
         return ($this->_method ? strtolower($this->_method) : 'get');
     }
-    
+
     /**
      *    Combined action attribute with current location
      *    to get an absolute form target.
@@ -96,7 +96,7 @@ class SimpleForm {
         }
         return $page->expandUrl(new SimpleUrl($action));;
     }
-    
+
     /**
      *    Absolute URL of the target.
      *    @return SimpleUrl           URL target.
@@ -109,7 +109,7 @@ class SimpleForm {
         }
         return $url;
     }
-    
+
     /**
      *    Creates the encoding for the current values in the
      *    form.
@@ -124,7 +124,7 @@ class SimpleForm {
         }
         return $encoding;
     }
-            
+
     /**
      *    ID field of form for unique identification.
      *    @return string           Unique tag ID.
@@ -133,7 +133,7 @@ class SimpleForm {
     function getId() {
         return $this->_id;
     }
-    
+
     /**
      *    Adds a tag contents to the form.
      *    @param SimpleWidget $tag        Input tag to add.
@@ -148,7 +148,7 @@ class SimpleForm {
             $this->_setWidget($tag);
         }
     }
-    
+
     /**
      *    Sets the widget into the form, grouping radio
      *    buttons if any.
@@ -164,7 +164,7 @@ class SimpleForm {
             $this->_widgets[] = &$tag;
         }
     }
-    
+
     /**
      *    Adds a radio button, building a group if necessary.
      *    @param SimpleRadioButtonTag $tag   Incoming form control.
@@ -177,7 +177,7 @@ class SimpleForm {
         }
         $this->_widgets[$this->_radios[$tag->getName()]]->addWidget($tag);
     }
-    
+
     /**
      *    Adds a checkbox, making it a group on a repeated name.
      *    @param SimpleCheckboxTag $tag   Incoming form control.
@@ -197,7 +197,7 @@ class SimpleForm {
             $this->_widgets[$index]->addWidget($tag);
         }
     }
-    
+
     /**
      *    Extracts current value from form.
      *    @param SimpleSelector $selector   Criteria to apply.
@@ -218,7 +218,7 @@ class SimpleForm {
         }
         return null;
     }
-    
+
     /**
      *    Sets a widget value within the form.
      *    @param SimpleSelector $selector   Criteria to apply.
@@ -243,7 +243,7 @@ class SimpleForm {
         }
         return $success;
     }
-    
+
     /**
      *    Used by the page object to set widgets labels to
      *    external label tags.
@@ -260,7 +260,7 @@ class SimpleForm {
             }
         }
     }
-    
+
     /**
      *    Test to see if a form has a submit button.
      *    @param SimpleSelector $selector   Criteria to apply.
@@ -275,7 +275,7 @@ class SimpleForm {
         }
         return false;
     }
-    
+
     /**
      *    Test to see if a form has an image control.
      *    @param SimpleSelector $selector   Criteria to apply.
@@ -290,7 +290,7 @@ class SimpleForm {
         }
         return false;
     }
-    
+
     /**
      *    Gets the submit values for a selected button.
      *    @param SimpleSelector $selector   Criteria to apply.
@@ -309,12 +309,12 @@ class SimpleForm {
                 if ($additional) {
                     $encoding->merge($additional);
                 }
-                return $encoding;           
+                return $encoding;
             }
         }
         return false;
     }
-        
+
     /**
      *    Gets the submit values for an image.
      *    @param SimpleSelector $selector   Criteria to apply.
@@ -335,12 +335,12 @@ class SimpleForm {
                 if ($additional) {
                     $encoding->merge($additional);
                 }
-                return $encoding;           
+                return $encoding;
             }
         }
         return false;
     }
-    
+
     /**
      *    Simply submits the form without the submit button
      *    value. Used when there is only one button or it

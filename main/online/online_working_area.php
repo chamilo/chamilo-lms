@@ -32,7 +32,7 @@
 
 define('FRAME','working_area');
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='chat';
 
 include('../inc/global.inc.php');
@@ -40,7 +40,7 @@ $this_section=SECTION_COURSES;
 
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
-$result=api_sql_query($query,__FILE__,__LINE__);
+$result=Database::query($query,__FILE__,__LINE__);
 
 list($pseudoUser)=mysql_fetch_row($result);
 

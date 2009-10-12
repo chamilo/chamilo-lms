@@ -22,6 +22,9 @@
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
+
+// TODO: Is this file deprecated?
+
 /**
 ==============================================================================
 * @package dokeos.tracking
@@ -37,7 +40,7 @@
 $uInfo = $_REQUEST['uInfo'];
 $view  = $_REQUEST['view'];
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'tracking';
 
 // including the global Dokeos file
@@ -69,15 +72,15 @@ require_once(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 */
 // charset determination
 if (isset($_GET['scormcontopen'])) {
-	$tbl_lp = Database::get_course_table('lp');
+	$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	$contopen = Database::escape_string($_GET['scormcontopen']);
 	if (is_numeric($contopen)) {
 		$contopen = intval($contopen);
 		$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$row = Database::fetch_array($res);
 		$lp_charset = $row['default_encoding'];
-	}	
+	}
 	//header('Content-Type: text/html; charset='. $row['default_encoding']);
 }
 
@@ -144,21 +147,22 @@ if(api_get_setting('use_session_mode') == "true") {
 				OR (date_start='0000-00-00' AND date_end='0000-00-00'))
 			WHERE id_session='".$_SESSION['id_session']."' AND course_code='$_cid'";
 	//echo $sql;
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	if(!mysql_num_rows($result)){
 		$disabled = true;
 	}
 }
 
-$tbl_learnpath_main = Database::get_course_table('lp');
-$tbl_learnpath_item = Database::get_course_table('lp_item');
-$tbl_learnpath_view = Database::get_course_table('lp_view');
-$tbl_learnpath_item_view = Database::get_course_table('lp_item_view');
+$tbl_learnpath_main = Database::get_course_table(TABLE_LP_MAIN);
+$tbl_learnpath_item = Database::get_course_table(TABLE_LP_ITEM);
+$tbl_learnpath_view = Database::get_course_table(TABLE_LP_VIEW);
+$tbl_learnpath_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 // the variables for the days and the months
 // Defining the shorts for the days
+// TODO: The function myEnc() should be eliminated. The following arrays should be constructed using the correspondent API-functions in the internationalization library.
 $DaysShort = array (myEnc(get_lang("SundayShort")), myEnc(get_lang("MondayShort")), myEnc(get_lang("TuesdayShort")), myEnc(get_lang("WednesdayShort")), myEnc(get_lang("ThursdayShort")), myEnc(get_lang("FridayShort")), myEnc(get_lang("SaturdayShort")));
 // Defining the days of the week to allow translation of the days
 $DaysLong = array (myEnc(get_lang("SundayLong")), myEnc(get_lang("MondayLong")), myEnc(get_lang("TuesdayLong")), myEnc(get_lang("WednesdayLong")), myEnc(get_lang("ThursdayLong")), myEnc(get_lang("FridayLong")), myEnc(get_lang("SaturdayLong")));
@@ -195,7 +199,7 @@ function myEnc($isostring,$supposed_encoding='ISO-8859-15')
 * Displays the number of logins every month for a specific user in a specific course.
 */
 function display_login_tracking_info($view, $user_id, $course_id)
-{	
+{
 	$MonthsLong = $GLOBALS['MonthsLong'];
 	$track_access_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 	$tempView = $view;
@@ -370,7 +374,7 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 */
 function display_student_publications_tracking_info($view, $user_id, $course_id)
 {
-	global $TABLETRACK_UPLOADS, $TABLECOURSE_WORK, $dateTimeFormatLong, $_course; 
+	global $TABLETRACK_UPLOADS, $TABLECOURSE_WORK, $dateTimeFormatLong, $_course;
 	if(substr($view,2,1) == '1') {
 		$new_view = substr_replace($view,'0',2,1);
 		echo "<tr>
@@ -567,7 +571,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 		*		Display list of user of this group
 		*
 		***************************************************************************/
-		
+
 		echo "<h4>".myEnc(get_lang('ListStudents'))."</h4>";
 		if( $is_allowedToTrackEverybodyInCourse ) {
 			// if user can track everybody : list user of course
@@ -655,7 +659,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 		echo $navLink;
 	} else {
 		// if uInfo is set
-		
+
 		/***************************************************************************
 		*
 		*		Informations about student uInfo
@@ -668,14 +672,14 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 			$tracking_is_accepted = $is_course_member;
 			$tracked_user_info = Database::get_user_info_from_id($uInfo);
 		} else {
-			
+
 			// check if user is in the group of this tutor
 			$sql = "SELECT u.firstname,u.lastname, u.email
 						FROM $TABLECOURSE_GROUPSUSER gu , $TABLEUSER u
 						WHERE gu.user_id = u.user_id`
 							AND gu.group_id = '".Database::escape_string($_gid)."'
 							AND u.user_id = '".Database::escape_string($uInfo)."'";
-			$query = api_sql_query($sql,__FILE__,__LINE__);
+			$query = Database::query($sql,__FILE__,__LINE__);
 			$tracked_user_info = @mysql_fetch_assoc($query);
 			if(is_array($tracked_user_info)) $tracking_is_accepted = true;
 		}
@@ -739,9 +743,9 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
                 </tr>";
 
             $sql = "SELECT id, name FROM $tbl_learnpath_main";
-    		$result=api_sql_query($sql,__FILE__,__LINE__);
+    		$result=Database::query($sql,__FILE__,__LINE__);
     	    $ar=Database::fetch_array($result);
-    	    
+
 	    	echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
             echo "<table cellpadding='2' cellspacing='1' border='0' align='center'><tr>
     				                <td class='secLine'>
@@ -761,7 +765,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 									"INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
 									"INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
 									"WHERE (v.user_id=".Database::escape_string($uInfo)." and v.lp_id=$contentId) ORDER BY v.id, i.id";
-   							$result3=api_sql_query($sql3,__FILE__,__LINE__);
+   							$result3=Database::query($sql3,__FILE__,__LINE__);
    						    $ar3=Database::fetch_array($result3);
                             if (is_array($ar3)) {
                                 echo "<tr><td>&nbsp;&nbsp;&nbsp;</td>

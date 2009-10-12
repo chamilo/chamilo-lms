@@ -353,7 +353,7 @@ function RenameNode( oNode , newTag )
 	// does any browser currently support it in order to test?
 
 	// Only rename element nodes.
-	if ( oNode.nodeType != 1 ) 
+	if ( oNode.nodeType != 1 )
 		return null ;
 
 	// If it's already correct exit here.

@@ -12,12 +12,12 @@ $_user= 1;
 class AllTests3 extends TestSuite {
     function AllTests3() {
     	$this->TestSuite('All tests3');
-    	
+
 	$this->addTestFile(dirname(__FILE__).'/main/admin/sub_language.class.test.php');
 	//$this->addTestFile(dirname(__FILE__).'/main//class.test.php');
 	//$this->addTestFile(dirname(__FILE__).'/main//class.test.php');
 	//$this->addTestFile(dirname(__FILE__).'/main//class.test.php');
-	
+
 	}
 }
 $test = &new AllTests3();

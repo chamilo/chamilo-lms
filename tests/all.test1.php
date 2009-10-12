@@ -11,7 +11,7 @@ require_once('simpletest/autorun.php');
 class AllTests1 extends TestSuite {
     function AllTests1() {
     	$this->TestSuite('All tests1');
-        
+
         $this->addTestFile(dirname(__FILE__).'/main/inc/banner.inc.test.php');
         /**
          * Problemas con la funcion prueba, no se ejecuta de manera adecuada.

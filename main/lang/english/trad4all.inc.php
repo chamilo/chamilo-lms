@@ -738,4 +738,9 @@ $System = "System";
 $ImportantActivities = "Important activities";
 $SearchActivities = "SearchActivities";
 $SearchActivities = "SearchActivities";
+$Parent  = "Parent";
+$SurveyAdded = "Survey added";
+$WikiAdded = "Wiki added";
+$ReadOnly = "Read only";
+$Unacceptable = "Unacceptable";
 ?>

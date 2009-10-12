@@ -18,10 +18,10 @@
 	define('DATE_TIME_FORMAT', 'Y-M-d H:i:s');
 	//Common
 	//Menu
-	
-	
-	
-	
+
+
+
+
 	define('MENU_SELECT', 'Zaznacz');
 	define('MENU_DOWNLOAD', 'Pobierz');
 	define('MENU_PREVIEW', 'Podgląd');
@@ -32,7 +32,7 @@
 	define('MENU_DELETE', 'Usuń');
 	define('MENU_PLAY', 'Odtwórz');
 	define('MENU_PASTE', 'Wklej');
-	
+
 	//Label
 		//Top Action
 		define('LBL_ACTION_REFRESH', 'Odśwież');
@@ -48,7 +48,7 @@
 	define('LBL_MODIFIED', 'Ostatnia zmiana');
 		//File Information
 	define('LBL_FILE_INFO', 'Informacje o pliku:');
-	define('LBL_FILE_NAME', 'Nazwa:');	
+	define('LBL_FILE_NAME', 'Nazwa:');
 	define('LBL_FILE_CREATED', 'Utworzony:');
 	define("LBL_FILE_MODIFIED", 'Zmieniony:');
 	define("LBL_FILE_SIZE", 'Rozmiar pliku:');
@@ -92,7 +92,7 @@
 	define('PAGINATION_GO_PARENT', 'Katalog nadrzędny');
 	//System
 	define('SYS_DISABLED', 'Brak dostępu: System nieaktywny');
-	
+
 	//Cut
 	define('ERR_NOT_DOC_SELECTED_FOR_CUT', 'Nie wybrano żadnego dokumentu do wycięcia.');
 	//Copy
@@ -107,7 +107,7 @@
 	define('ERR_UNABLE_TO_MOVE_TO_SAME_DEST', 'Błąd przeniesienia pliku (%s): Ścieżka do zapisu i orginalna są identyczne.');
 	define('ERR_UNABLE_TO_MOVE_NOT_FOUND', 'Błąd przeniesienia pliku (%s): Orginał pliku nie istnieje.');
 	define('ERR_UNABLE_TO_MOVE_NOT_ALLOWED', 'Błąd przeniesienia pliku (%s): Dostęp do pliku zabroniony.');
- 
+
 	define('ERR_NOT_FILES_PASTED', 'Żadne pliki nie zostały skopiowane.');
 
 	//Search
@@ -120,7 +120,7 @@
 	define('LBL_SEARCH_ADV_OPTIONS', 'Opcje zaawansowane');
 	define('LBL_SEARCH_FILE_TYPES', 'Rozszerzenie:');
 	define('SEARCH_TYPE_EXE', 'Plik wykonywalny exe');
-	
+
 	define('SEARCH_TYPE_IMG', 'Obraz');
 	define('SEARCH_TYPE_ARCHIVE', 'Archiwum');
 	define('SEARCH_TYPE_HTML', 'HTML');
@@ -239,12 +239,12 @@
 	define('LOGIN_USERNAME', 'Nazwa użytkownika:');
 	define('LOGIN_PASSWORD', 'hasło:');
 	define('LOGIN_FAILED', 'Błędna nazwa użytkownika lub hasło.');
-	
-	
+
+
 	//88888888888   Below for Image Editor   888888888888888888888
-		//Warning 
+		//Warning
 		define('IMG_WARNING_NO_CHANGE_BEFORE_SAVE', "Nie można dokonać zmian w obrazku.");
-		
+
 		//General
 		define('IMG_GEN_IMG_NOT_EXISTS', 'Obrazek nie istnieje');
 		define('IMG_WARNING_LOST_CHANAGES', 'Wszystkie niezapisane zmiany w obrazku zostaną utracone, czy na pewno chcesz kontynuować?');
@@ -255,14 +255,14 @@
 		define('IMG_WARING_FLIP_H', 'Czy na pewno chcesz odbić obrazek w poziomie ?');
 		define('IMG_WARING_FLIP_V', 'Czy na pewno chcesz odbić obrazek w pionie ?');
 		define('IMG_INFO', 'Informacje o obrazku');
-		
+
 		//Mode
 			define('IMG_MODE_RESIZE', 'Zmień rozmiar:');
 			define('IMG_MODE_CROP', 'Kadruj:');
 			define('IMG_MODE_ROTATE', 'Obróć:');
-			define('IMG_MODE_FLIP', 'Odbij:');		
+			define('IMG_MODE_FLIP', 'Odbij:');
 		//Button
-		
+
 			define('IMG_BTN_ROTATE_LEFT', '90&deg;w lewo');
 			define('IMG_BTN_ROTATE_RIGHT', '90&deg;w prawo');
 			define('IMG_BTN_FLIP_H', 'Odbij w poziomie');
@@ -287,10 +287,10 @@
 			define('IMG_LBL_SAVE_TO', 'Zapisz do:');
 			define('IMG_LBL_ROOT_FOLDER', 'Katalog główny');
 		//Editor
-		//Save as 
+		//Save as
 		define('IMG_NEW_NAME_COMMENTS', 'Proszę nie podawać rozszerzenia pliku.');
 		define('IMG_SAVE_AS_ERR_NAME_INVALID', 'Nazwa może zawierać tylko znaki alfabetu, liczby, spację, myślnik i podkreślenie.');
-		define('IMG_SAVE_AS_NOT_FOLDER_SELECTED', 'Nie wybrano katalogu docelowego.');	
+		define('IMG_SAVE_AS_NOT_FOLDER_SELECTED', 'Nie wybrano katalogu docelowego.');
 		define('IMG_SAVE_AS_FOLDER_NOT_FOUND', 'Wybrany katalog nie istnieje.');
 		define('IMG_SAVE_AS_NEW_IMAGE_EXISTS', 'Plik o podanej nazwie już istnieje.');
 
@@ -307,21 +307,21 @@
 		define('IMG_SAVE_FLIP_FAILED', 'Nie można odbić obrazka.');
 		define('IMG_SAVE_SESSION_IMG_OPEN_FAILED', 'Nie można otworzyć obrazka z sesji.');
 		define('IMG_SAVE_IMG_OPEN_FAILED', 'Nie można otworzyć obrazka');
-		
-		
+
+
 		//UNDO
 		define('IMG_UNDO_NO_HISTORY_AVAIALBE', 'Nie można cofnąć operacji - brak historii.');
 		define('IMG_UNDO_COPY_FAILED', 'Nie można przywrócić obrazka.');
 		define('IMG_UNDO_DEL_FAILED', 'Nie można usunąć obrazka z sesji');
-	
+
 	//88888888888   Above for Image Editor   888888888888888888888
-	
+
 	//88888888888   Session   888888888888888888888
 		define("SESSION_PERSONAL_DIR_NOT_FOUND", 'Nie można odnaleźć dedykowanego folderu, który powinien być utworzony podczas tworzenia sesji.');
 		define("SESSION_COUNTER_FILE_CREATE_FAILED", 'Nie można otworzyć pliku z licznikiem sesji.');
 		define('SESSION_COUNTER_FILE_WRITE_FAILED', 'Nie można zapisać pliku z licznikiem sesji.');
 	//88888888888   Session   888888888888888888888
-	
+
 	//88888888888   Below for Text Editor   888888888888888888888
 		define('TXT_FILE_NOT_FOUND', 'Plik nie istnieje.');
 		define('TXT_EXT_NOT_SELECTED', 'Proszę wybrać rozszerzenie pliku');
@@ -336,6 +336,6 @@
 		define('TXT_CONTENT_UPDATE_FAILED', 'Błąd przy aktualizacji zawartości pliku.');
 		define('TXT_SAVE_AS_ERR_NAME_INVALID', 'Nazwa może zawierać tylko znaki alfabetu, liczby, spację, myślnik i podkreślenie.');
 	//88888888888   Above for Text Editor   888888888888888888888
-	
-	
+
+
 ?>

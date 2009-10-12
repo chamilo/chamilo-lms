@@ -5,7 +5,7 @@ err04	HTML code invalid, the tags are not closed in an orderly fashion.<br>Statu
 err05	HTML code invalid, all tags must be closed.<br>Status : <pre>[[OTHER]]</pre>
 err06	Impossible to load the image <b>[[OTHER]]</b>
 err07	The content of a TD tag does not fit on only one page
-txt01	ERROR n°
+txt01	ERROR nï¿½
 txt02	File :
 txt03	Line :
 pdf01	Document generated on [[date_y]]-[[date_m]]-[[date_d]]

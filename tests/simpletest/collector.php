@@ -71,7 +71,7 @@ class SimpleCollector {
         }
         $test->addTestFile($file);
     }
-    
+
     /**
      *  Tests for hidden files so as to skip them. Currently
      *  only tests for Unix hidden files.

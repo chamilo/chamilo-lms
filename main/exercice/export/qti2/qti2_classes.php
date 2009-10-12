@@ -46,16 +46,16 @@ class Ims2Question extends Question
                 $answer = new ImsAnswerMultipleChoice($this->id);
             	return $answer;
             case MCMA :
-                $answer = new ImsAnswerMultipleChoice($this->id);   
+                $answer = new ImsAnswerMultipleChoice($this->id);
             	return $answer;
             case TF :
-                $answer = new ImsAnswerMultipleChoice($this->id); 
+                $answer = new ImsAnswerMultipleChoice($this->id);
             	return $answer;
             case FIB :
-                $answer = new ImsAnswerFillInBlanks($this->id); 
+                $answer = new ImsAnswerFillInBlanks($this->id);
             	return $answer;
             case MATCHING :
-                $answer = new ImsAnswerMatching($this->id); 
+                $answer = new ImsAnswerMatching($this->id);
             	return $answer;
             case FREE_ANSWER :
             	$answer = new ImsAnswerFree($this->id);
@@ -77,12 +77,12 @@ class Ims2Question extends Question
     {
     	return true;
     }
-} 
+}
 
 class ImsAnswerMultipleChoice extends Answer
 {
     /**
-     * Return the XML flow for the possible answers. 
+     * Return the XML flow for the possible answers.
      *
      */
     function imsExportResponses($questionIdent, $questionStatment)
@@ -101,7 +101,7 @@ class ImsAnswerMultipleChoice extends Answer
 	            $out .= '</simpleChoice>'. "\n";
 	        }
 		}
-        $out .= '    </choiceInteraction>'. "\n"; 
+        $out .= '    </choiceInteraction>'. "\n";
         return $out;
     }
 
@@ -151,7 +151,7 @@ class ImsAnswerMultipleChoice extends Answer
     }
 }
 
-class ImsAnswerFillInBlanks extends Answer 
+class ImsAnswerFillInBlanks extends Answer
 {
     /**
      * Export the text with missing words.
@@ -162,7 +162,7 @@ class ImsAnswerFillInBlanks extends Answer
     {
         global $charset;
 		$this->answerList = $this->getAnswersList();
-		
+
         //switch ($this->type)
         //{
         //    case TEXTFIELD_FILL :
@@ -186,7 +186,7 @@ class ImsAnswerFillInBlanks extends Answer
             case LISTBOX_FILL :
             {
                 $text = $this->answerText;
- 
+
                 foreach ($this->answerList as $answerKey=>$answer)
                 {
 
@@ -194,7 +194,7 @@ class ImsAnswerFillInBlanks extends Answer
 
                     $inlineChoiceList = '';
 
-                    //1-start interaction tag 
+                    //1-start interaction tag
 
                     $inlineChoiceList .= '<inlineChoiceInteraction responseIdentifier="fill_'.$answerKey.'" >'. "\n";
 
@@ -225,7 +225,7 @@ class ImsAnswerFillInBlanks extends Answer
         //}
 
         return $out;
-        
+
     }
 
     /**
@@ -244,7 +244,7 @@ class ImsAnswerFillInBlanks extends Answer
 	        	$answer = $answer['answer'];
 	            $out .= '  <responseDeclaration identifier="fill_' . $answerKey . '" cardinality="single" baseType="identifier">' . "\n";
 	            $out .= '    <correctResponse>'. "\n";
-	
+
 	            //if ($this->type==TEXTFIELD_FILL)
 	            //{
 	                $out .= '      <value>'.$answer.'</value>'. "\n";
@@ -253,7 +253,7 @@ class ImsAnswerFillInBlanks extends Answer
 	            else
 	            {
 	                //find correct answer key to apply in manifest and output it
-	               
+
 	                foreach ($this->answerList as $choiceKey=>$correctAnswer)
 	                {
 	                    if ($correctAnswer==$answer)
@@ -264,14 +264,14 @@ class ImsAnswerFillInBlanks extends Answer
 	            }
 	            */
 	            $out .= '    </correctResponse>'. "\n";
-	    
+
 	            if (isset($this->gradeList[$answerKey]))
 	            {
 	                $out .= '    <mapping>'. "\n";
 	                $out .= '      <mapEntry mapKey="'.$answer.'" mappedValue="'.$this->gradeList[$answerKey].'"/>'. "\n";
 	                $out .= '    </mapping>'. "\n";
 	            }
-	
+
 	            $out .= '  </responseDeclaration>'. "\n";
 	        }
 		}
@@ -304,7 +304,7 @@ class ImsAnswerMatching extends Answer
 	            $out .= '    <simpleAssociableChoice identifier="left_'.$leftKey.'" >'. $leftElement['answer'] .'</simpleAssociableChoice>'. "\n";
 	        }
     	}
-        
+
         $out .= '  </simpleMatchSet>'. "\n";
 
         //add right column
@@ -324,7 +324,7 @@ class ImsAnswerMatching extends Answer
 
         $out .= '</matchInteraction>'. "\n";
 
-        return $out; 
+        return $out;
     }
 
     /**
@@ -346,7 +346,7 @@ class ImsAnswerMatching extends Answer
 	                if( ($leftElement['match'] == $rightElement['code']))
 	                {
 	                    $out .= '      <value>left_' . $leftKey . ' right_'.$i.'</value>'. "\n";
-	
+
 	                    $gradeArray['left_' . $leftKey . ' right_'.$i] = $leftElement['grade'];
 	                }
 	                $i++;
@@ -367,7 +367,7 @@ class ImsAnswerMatching extends Answer
         return $out;
     }
 
-} 
+}
 
 class ImsAnswerHotspot extends Answer
 {
@@ -384,7 +384,7 @@ class ImsAnswerHotspot extends Answer
 		if(empty($mimetype)){
 			$mimetype = 'image/jpeg';
 		}
- 
+
 		$text = '      <p>'.$questionStatment.'</p>'."\n";
 		$text .= '      <graphicOrderInteraction responseIdentifier="hotspot_'.$questionIdent.'">'."\n";
 		$text .= '        <prompt>'.$questionDesc.'</prompt>'."\n";
@@ -403,7 +403,7 @@ class ImsAnswerHotspot extends Answer
 	        			$type = 'rect';
 						$res = array();
 						$coords = preg_match('/^\s*(\d+);(\d+)\|(\d+)\|(\d+)\s*$/',$answer['hotspot_coord'],$res);
-						$coords = $res[1].','.$res[2].','.((int)$res[1]+(int)$res[3]).",".((int)$res[2]+(int)$res[4]);        			
+						$coords = $res[1].','.$res[2].','.((int)$res[1]+(int)$res[3]).",".((int)$res[2]+(int)$res[4]);
 	        			break;
 	        		case 'circle':
 	        			$type = 'circle';
@@ -428,7 +428,7 @@ class ImsAnswerHotspot extends Answer
 
 
         return $out;
-        
+
     }
 
     /**
@@ -442,14 +442,14 @@ class ImsAnswerHotspot extends Answer
         $out = '';
         $out .= '  <responseDeclaration identifier="hotspot_'.$questionIdent.'" cardinality="ordered" baseType="identifier">' . "\n";
         $out .= '    <correctResponse>'. "\n";
-		
+
 		if (is_array($this->answerList)) {
 	        foreach ($this->answerList as $answerKey=>$answer)
 	        {
 	        	$answerKey = $answer['id'];
 	        	$answer = $answer['answer'];
 	            $out .= '      <value>'.$answerKey.'</value>'. "\n";
-	
+
 	        }
 		}
         $out .= '    </correctResponse>'. "\n";

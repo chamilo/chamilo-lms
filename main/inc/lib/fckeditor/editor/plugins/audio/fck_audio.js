@@ -34,7 +34,7 @@ var FCKTools	= oEditor.FCKTools ;
 // Set the language direction.
 window.document.dir = FCKLang.Dir ;
 
-// We have to avoid javascript errors if some language variables have not been defined. 
+// We have to avoid javascript errors if some language variables have not been defined.
 FCKLang['UploadSelectFileFirst'] = FCKLang['UploadSelectFileFirst'] ? FCKLang['UploadSelectFileFirst'] : 'Please, select a file before pressing the upload button.' ;
 FCKLang['FileSuccessfullyUploaded'] = FCKLang['FileSuccessfullyUploaded'] ? FCKLang['FileSuccessfullyUploaded'] : 'Your file has been successfully uploaded.' ;
 FCKLang['FileRenamed'] = FCKLang['FileRenamed'] ? FCKLang['FileRenamed'] : 'A file with the same name is already available. The uploaded file has been renamed to ' ;
@@ -165,7 +165,7 @@ function Ok()
 	}
 
 	oEditor.FCKEmbedAndObjectProcessor.RefreshView( oFakeImage, oEmbed ) ;
-	
+
 	return true ;
 }
 
@@ -187,7 +187,7 @@ var ePreview ;
 function SetPreviewElement( previewEl )
 {
 	ePreview = previewEl ;
-	
+
 	if ( GetE( 'txtUrl' ).value.length > 0 )
 		UpdatePreview() ;
 }
@@ -276,7 +276,7 @@ function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 			alert( FCKLang['UploadError'] + errorNumber ) ;
 			return ;
 	}
-	
+
 	SetUrl( fileUrl ) ;
 	GetE('frmUpload').reset() ;
 }
@@ -293,7 +293,7 @@ function CheckUpload()
 		alert( FCKLang['UploadSelectFileFirst'] ) ;
 		return false ;
 	}
-	
+
 	if ( ( FCKConfig.MP3UploadAllowedExtensions.length > 0 && !oUploadAllowedExtRegex.test( sFile ) ) ||
 		( FCKConfig.MP3UploadDeniedExtensions.length > 0 && oUploadDeniedExtRegex.test( sFile ) ) )
 	{

@@ -39,7 +39,7 @@ $tool_name = get_lang('LDAPImport');
 // setting breadcrumbs
 $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 
-$htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">	
+$htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 var buttoncheck = 1;
 function checkAll() {
 	//var boxes = document.form.elements[\'checkboxes[]\'];
@@ -78,7 +78,7 @@ if (empty($annee) && empty($id_session))
 		echo '<input type="submit" value="'.get_lang('Submit').'">';
 		echo '</form>';
 		echo '</div>';
-	
+
 }
 elseif(!empty($annee) && empty($id_session))
 {
@@ -92,9 +92,9 @@ elseif(!empty($annee) && empty($id_session))
 	$sql = "SELECT id,name,nbr_courses,date_start,date_end " .
 		" FROM $tbl_session ".
 		" ORDER BY name";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 
-	$sessions=api_store_result($result);
+	$sessions=Database::store_result($result);
 	$nbr_results=count($sessions);
 	foreach($sessions as $row)
 	{
@@ -130,8 +130,8 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed']))
 		$info = ldap_get_entries($ds, $sr);
 
 		for ($key = 0; $key < $info["count"]; $key ++) {
-			$nom_form[] = $info[$key]["sn"][0];//iconv("utf-8",api_get_setting('platform_charset'), $info[$key]["sn"][0]);
-			$prenom_form[] = $info[$key]["givenname"][0];//iconv("utf-8",api_get_setting('platform_charset'), $info[$key]["givenname"][0]);
+			$nom_form[] = $info[$key]["sn"][0];//api_utf8_decode($info[$key]["sn"][0], api_get_setting('platform_charset'));
+			$prenom_form[] = $info[$key]["givenname"][0];//api_utf8_decode($info[$key]["givenname"][0], api_get_setting('platform_charset'));
 			$email_form[] = $info[$key]["mail"][0];
 			// Get uid from dn
 			//$dn_array=ldap_explode_dn($info[$key]["dn"],1);
@@ -149,7 +149,7 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed']))
 		asort($nom_form);
 		reset($nom_form);
 
-		$statut=5;	
+		$statut=5;
 		include ('ldap_form_add_users_group.php');
 	} else {
 		echo '<h4>'.get_lang('UnableToConnectTo').' '.$host.'</h4>';
@@ -184,7 +184,7 @@ elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed']=='yes'))
 			$sql = 'INSERT INTO '.$tbl_session_user.' SET
 					id_user="'.intval($user_id).'",
 					id_session = "'.intval($id_session).'"';
-			$res_user = api_sql_query($sql,__FILE__,__LINE__);
+			$res_user = Database::query($sql,__FILE__,__LINE__);
 			if($res_user != false)
 			{
 				$num++;
@@ -193,7 +193,7 @@ elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed']=='yes'))
 		if($num>0)
 		{
 			$sql = 'UPDATE '.$tbl_session.' SET nbr_users = (nbr_users + '.$num.') WHERE id = '.intval($id_session);
-			$res = api_sql_query($sql,__FILE__,__LINE__);			 
+			$res = Database::query($sql,__FILE__,__LINE__);
 		}
 		header('Location: resume_session.php?id_session='.Security::remove_XSS($_POST['id_session']));
 	}
@@ -221,7 +221,7 @@ elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed']=='yes'))
 		Display::display_header($tool_name);
 		$message=get_lang('NoUserAdded');
 		Display :: display_normal_message($message,false);
-	}	
+	}
 	echo '<br /><br />';
     echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('BackToNewSearch').'</a>';
     echo '<br /><br />';

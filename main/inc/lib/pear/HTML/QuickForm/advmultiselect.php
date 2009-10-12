@@ -572,7 +572,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
 		                               . $data['text'] . '</option>' . PHP_EOL;
 		        }
             }
-            
+
             $strHtmlUnselected .= '</select>';
 
             // The 'selected' multi-select which appears on the right

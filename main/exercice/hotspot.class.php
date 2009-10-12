@@ -28,12 +28,12 @@ class HotSpot extends Question {
 	static $explanationLangVar = 'Hotspot';
 
 
-	function HotSpot(){
+	function HotSpot() {
 		parent::question();
 		$this -> type = HOT_SPOT;
 	}
 
-	function display(){
+	function display() {
 
 	}
 	
@@ -44,11 +44,11 @@ class HotSpot extends Question {
 			$renderer = $form->defaultRenderer();
 			$form->addElement('html', '<div class="row"><div class="label"></div><div class="formw">'.get_lang('UploadJpgPicture').'</div></div>');
 			$form->addElement('file','imageUpload','<span class="form_required">*</span><img src="../img/hotspots.png" />');
-						
+
 			// setting the save button here and not in the question class.php
 			// Saving a question
 			$form->addElement('style_submit_button','submitQuestion',get_lang('GoToQuestion'), 'class="'.$class.'"');
-			
+
 			$renderer->setElementTemplate('<div class="row"><div class="label" style="margin-top:-30px;">{label}</div><div class="formw" >{element}</div></div>','imageUpload');
 			$form->addRule('imageUpload', get_lang('OnlyImagesAllowed'), 'filetype', array ('jpg', 'jpeg', 'png', 'gif'));
 			$form->addRule('imageUpload', get_lang('NoImage'), 'uploadedfile');
@@ -63,29 +63,31 @@ class HotSpot extends Question {
 	function processCreation ($form, $objExercise) {
 		$file_info = $form -> getSubmitValue('imageUpload');
 		parent::processCreation ($form, $objExercise);
-		if(!empty($file_info['tmp_name']))
-		{
+		if(!empty($file_info['tmp_name'])) {
 			$this->uploadPicture($file_info['tmp_name'], $file_info['name']);
-				list($width,$height) = @getimagesize($file_info['tmp_name']);
+			global $picturePath;
+			//fixed width ang height 
+			if (file_exists($picturePath.'/'.$this->picture)) { 
+				//list($width,$height) = @getimagesize($file_info['tmp_name']); does not work	
+				list($width,$height) = @getimagesize($picturePath.'/'.$this->picture);				
 				if($width>=$height) {
-					$this->resizePicture('width',550);
+					$this->resizePicture('width',545);
 				} else {
 					$this->resizePicture('height',350);
 				}
-			$this->save();
+				$this->save();			
+			} else {
+				return false;
+			}			
 		}
 	}
 
 	function createAnswersForm ($form) {
-
     	// nothing
-
 	}
 
 	function processAnswersCreation ($form) {
-
 		// nothing
-
 	}
 
 }

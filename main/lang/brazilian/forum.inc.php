@@ -138,4 +138,5 @@ $EditForum = "Editar fórum";
 $BackToForum = "Voltar ao fórum";
 $BackToForumOverview = "Voltar a visão geral do fórum";
 $BackToThread = "Voltar a discussão";
+$ForumcategoryLocked = "Categoria de fórum Bloqueado";
 ?>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Package>
+  <Test></Test>
+  <Header><![CDATA[]]></Header>
+  <Constants>
+    <Constant name="" value="" />
+  </Constants>
+  <PackageFile path="fckplugin_compressed.js">
+  <File path="fckplugin.js" />
+  </PackageFile>
+  <PackageFile path="fckplugin_load_compressed.js">
+  <File path="fckplugin_load.js" />
+  </PackageFile>
+</Package>

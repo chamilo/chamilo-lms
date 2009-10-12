@@ -50,9 +50,9 @@ function createreflink($testvalue)
 	$counter='';
 	while (!checktitle($testvalue.$counter))
 	{
-		$counter++; 
-		echo $counter."-".$testvalue.$counter."<br />"; 
-	
+		$counter++;
+		echo $counter."-".$testvalue.$counter."<br />";
+
 	}
 			// the reflink has not been found yet, so it is OK
 	return $testvalue.$counter;
@@ -60,9 +60,9 @@ function createreflink($testvalue)
 
 
 /**
-* @author Patrick Cool <patrick.cool@ugent.be>, Ghent University 
+* @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
 **/
-function checktitle($paramwk) 
+function checktitle($paramwk)
 {
 	global $tbl_wiki;
 	global $groupfilter;
@@ -90,36 +90,36 @@ function links_to($input)
 {
     $input_array=preg_split("/(\[\[|\]\])/",$input,-1, PREG_SPLIT_DELIM_CAPTURE);
     $all_links = array();
-	
+
 	foreach ($input_array as $key=>$value)
 	{
-		
+
 		if ($input_array[$key-1]=='[[' AND $input_array[$key+1]==']]')
 		{
-		
+
 		    if (strpos($value, "|") != false)
 			{
-			 	$full_link_array=explode("|", $value);			
+			 	$full_link_array=explode("|", $value);
 				$link=trim($full_link_array[0]);
-				$title=trim($full_link_array[1]);				
+				$title=trim($full_link_array[1]);
 			}
 		    else
 			{
 				$link=$value;
 				$title=$value;
 	        }
-		
+
 			unset($input_array[$key-1]);
 			unset($input_array[$key+1]);
-			
+
 			$all_links[]= Database::escape_string(str_replace(' ','_',$link)).' ';	//replace blank spaces by _ within the links. But to remove links at the end add a blank space
 		}
 
     }
-	
+
 	$output=implode($all_links);
 	return $output;
-	
+
 }
 
 /*
@@ -129,8 +129,8 @@ author Juan Carlos Raña Trabado
 function detect_external_link($input)
 {
 	$exlink='href=';
-	$exlinkStyle='class="wiki_link_ext" href=';	
-	$output=str_replace($exlink, $exlinkStyle, $input);		
+	$exlinkStyle='class="wiki_link_ext" href=';
+	$output=str_replace($exlink, $exlinkStyle, $input);
 	return $output;
 }
 
@@ -141,8 +141,8 @@ author Juan Carlos Raña Trabado
 function detect_anchor_link($input)
 {
 	$anchorlink='href="#';
-	$anchorlinkStyle='class="wiki_anchor_link" href="#';	
-	$output=str_replace($anchorlink, $anchorlinkStyle, $input);		
+	$anchorlinkStyle='class="wiki_anchor_link" href="#';
+	$output=str_replace($anchorlink, $anchorlinkStyle, $input);
 	return $output;
 }
 
@@ -153,8 +153,8 @@ author Juan Carlos Raña Trabado
 function detect_mail_link($input)
 {
 	$maillink='href="mailto';
-	$maillinkStyle='class="wiki_mail_link" href="mailto';	
-	$output=str_replace($maillink, $maillinkStyle, $input);		
+	$maillinkStyle='class="wiki_mail_link" href="mailto';
+	$output=str_replace($maillink, $maillinkStyle, $input);
 	return $output;
 }
 
@@ -165,8 +165,8 @@ author Juan Carlos Raña Trabado
 function detect_ftp_link($input)
 {
 	$ftplink='href="ftp';
-	$ftplinkStyle='class="wiki_ftp_link" href="ftp';	
-	$output=str_replace($ftplink, $ftplinkStyle, $input);		
+	$ftplinkStyle='class="wiki_ftp_link" href="ftp';
+	$output=str_replace($ftplink, $ftplinkStyle, $input);
 	return $output;
 }
 
@@ -177,8 +177,8 @@ author Juan Carlos Raña Trabado
 function detect_news_link($input)
 {
 	$newslink='href="news';
-	$newslinkStyle='class="wiki_news_link" href="news';	
-	$output=str_replace($newslink, $newslinkStyle, $input);		
+	$newslinkStyle='class="wiki_news_link" href="news';
+	$output=str_replace($newslink, $newslinkStyle, $input);
 	return $output;
 }
 
@@ -189,8 +189,8 @@ author Juan Carlos Raña Trabado
 function detect_irc_link($input)
 {
 	$irclink='href="irc';
-	$irclinkStyle='class="wiki_irc_link" href="irc';	
-	$output=str_replace($irclink, $irclinkStyle, $input);		
+	$irclinkStyle='class="wiki_irc_link" href="irc';
+	$output=str_replace($irclink, $irclinkStyle, $input);
 	return $output;
 }
 
@@ -219,55 +219,55 @@ function make_wiki_link_clickable($input)
 
 	foreach ($input_array as $key=>$value)
 	{
-		
+
 		if ($input_array[$key-1]=='[[' AND $input_array[$key+1]==']]') //now doubles brackets
 		{
-		
+
 		/////////// TODO: metawiki
 		/*
-		    if ($_clean['group_id']==0) 
+		    if ($_clean['group_id']==0)
 			{
 				$titleg_ex='';
 			}
 			else
 			{
-				$group_properties  = GroupManager :: get_group_properties($_clean['group_id']);	
+				$group_properties  = GroupManager :: get_group_properties($_clean['group_id']);
 				$group_name= $group_properties['name'];
 				$titleg_ex='<sup><img src="css/wgroup.gif" alt="('.$group_name.')" title="Link to Wikigroup:'.$group_name.'"/></sup>';
-		    }	
+		    }
 		*/
 		/////////
-					
+
 			//now full wikilink
 			if (strpos($value, "|") != false)
 			 {
-			 	$full_link_array=explode("|", $value);			
+			 	$full_link_array=explode("|", $value);
 				$link=trim($full_link_array[0]);
-				$title=trim($full_link_array[1]);				
+				$title=trim($full_link_array[1]);
 		      }
 		      else
 			  {
 				$link=$value;
 				$title=$value;
 	          }
-			  
-			//if wikilink is homepage			
+
+			//if wikilink is homepage
 			if($link=='index'){
-				$title=get_lang('DefaultTitle');				
+				$title=get_lang('DefaultTitle');
 			}
 			if ($link==get_lang('DefaultTitle')){
 				$link='index';
 			}
-			
-		
+
+
 			// note: checkreflink checks if the link is still free. If it is not used then it returns true, if it is used, then it returns false. Now the title may be different
 			if (checktitle(strtolower(str_replace(' ','_',$link))))
-			{			
-				$input_array[$key]='<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq='.$_course[id].'&action=addnew&amp;title='.urldecode($link).'&group_id='.$_clean['group_id'].'" class="new_wiki_link">'.$title.$titleg_ex.'</a>';		
+			{
+				$input_array[$key]='<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq='.$_course[id].'&action=addnew&amp;title='.urldecode($link).'&group_id='.$_clean['group_id'].'" class="new_wiki_link">'.$title.$titleg_ex.'</a>';
 			}
-			else 
-			{				
-						
+			else
+			{
+
 				$input_array[$key]='<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.strtolower(str_replace(' ','_',$link)).'&group_id='.$_clean['group_id'].'" class="wiki_link">'.$title.$titleg_ex.'</a>';
 			}
 			unset($input_array[$key-1]);
@@ -288,9 +288,9 @@ function save_wiki() {
 	global $charset;
 	global $tbl_wiki;
 	global $tbl_wiki_conf;
-	
+
 	// NOTE: visibility, visibility_disc and ratinglock_disc changes are not made here, but through the interce buttons
-	
+
 	// cleaning the variables
 	$_clean['page_id']=Database::escape_string($_POST['page_id']);
 	$_clean['reflink']=Database::escape_string(Security::remove_XSS($_POST['reflink']));
@@ -298,11 +298,12 @@ function save_wiki() {
 	$_clean['content']= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['content'])),COURSEMANAGERLOWSECURITY));
 	$_clean['user_id']=(int)Database::escape_string(api_get_user_id());
 	$_clean['assignment']=Database::escape_string($_POST['assignment']);
-    $_clean['comment']=Database::escape_string(Security::remove_XSS($_POST['comment']));	
-    $_clean['progress']=Database::escape_string($_POST['progress']);	
+    $_clean['comment']=Database::escape_string(Security::remove_XSS($_POST['comment']));
+    $_clean['progress']=Database::escape_string($_POST['progress']);
 	$_clean['version']=Database::escape_string($_POST['version'])+1;
-	$_clean['linksto'] = links_to($_clean['content']); //and check links content	
+	$_clean['linksto'] = links_to($_clean['content']); //and check links content
 	$dtime = date( "Y-m-d H:i:s" );
+	$session_id = api_get_session_id();	
 
 	if (isset($_SESSION['_gid']))
     {
@@ -312,19 +313,19 @@ function save_wiki() {
     {
  	   	$_clean['group_id']=Database::escape_string($_GET['group_id']);
     }
-	
+
 	//cleaning config variables
-			
+
 	if(!empty($_POST['task']))
 	{
 		$_clean['task']= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['task'])),COURSEMANAGERLOWSECURITY));
 	}
 	if(!empty($_POST['feedback1']) || !empty($_POST['feedback2']) || !empty($_POST['feedback3']))
 	{
-		$_clean['feedback1']=Database::escape_string(Security::remove_XSS($_POST['feedback1']));	
+		$_clean['feedback1']=Database::escape_string(Security::remove_XSS($_POST['feedback1']));
 		$_clean['feedback2']=Database::escape_string(Security::remove_XSS($_POST['feedback2']));
 		$_clean['feedback3']=Database::escape_string(Security::remove_XSS($_POST['feedback3']));
-		$_clean['fprogress1']=Database::escape_string(Security::remove_XSS($_POST['fprogress1']));	
+		$_clean['fprogress1']=Database::escape_string(Security::remove_XSS($_POST['fprogress1']));
 		$_clean['fprogress2']=Database::escape_string(Security::remove_XSS($_POST['fprogress2']));
 		$_clean['fprogress3']=Database::escape_string(Security::remove_XSS($_POST['fprogress3']));
 	}
@@ -337,51 +338,56 @@ function save_wiki() {
 		{
 			$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS($_POST['startdate_assig']));
 		}
-		
-		if(Security::remove_XSS($_POST['initenddate']==1))	
+
+		if(Security::remove_XSS($_POST['initenddate']==1))
 		{
-			$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('enddate_assig')));	
+			$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('enddate_assig')));
 		}
 		else
 		{
 			$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS($_POST['enddate_assig']));
 		}
-		
+
 		$_clean['delayedsubmit']=Database::escape_string(Security::remove_XSS($_POST['delayedsubmit']));
 
 	if(!empty($_POST['max_text']) || !empty($_POST['max_version']))
 	{
 		$_clean['max_text']=Database::escape_string(Security::remove_XSS($_POST['max_text']));
-		$_clean['max_version']=Database::escape_string(Security::remove_XSS($_POST['max_version']));	
+		$_clean['max_version']=Database::escape_string(Security::remove_XSS($_POST['max_version']));
 	}
-	
-	$sql="INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['page_id']."','".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
-	
-	$result=Database::query($sql);	
+
+	$sql = "INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip, session_id) VALUES ('".$_clean['page_id']."','".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."', '".Database::escape_string($session_id)."')";
+
+	$result=Database::query($sql);
     $Id = Database::insert_id();
-	
-	if ($_clean['page_id']	==0)   
-	{	    
+
+	if ($Id > 0) {
+		//insert into item_property
+		api_item_property_update(api_get_course_info(), TOOL_WIKI, $Id, 'WikiAdded', api_get_user_id(), $_clean['group_id']);
+	}
+
+	if ($_clean['page_id']	==0)
+	{
 		$sql='UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'" WHERE id="'.$Id.'"';
 		Database::query($sql,__FILE__,__LINE__);
 	}
-	
+
 	//update wiki config
 
 	if ($_clean['reflink']=='index' && $_clean['version']==1)
-	{	
+	{
 		$sql="INSERT INTO ".$tbl_wiki_conf." (page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit) VALUES ('".$Id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
 	}
 	else
 	{
 		$sql='UPDATE'.$tbl_wiki_conf.' SET task="'.$_clean['task'].'", feedback1="'.$_clean['feedback1'].'", feedback2="'.$_clean['feedback2'].'", feedback3="'.$_clean['feedback3'].'",  fprogress1="'.$_clean['fprogress1'].'",  fprogress2="'.$_clean['fprogress2'].'",  fprogress3="'.$_clean['fprogress3'].'", max_text="'.$_clean['max_text'].'", max_version="'.$_clean['max_version'].'", startdate_assig="'.$_clean['startdate_assig'].'", enddate_assig="'.$_clean['enddate_assig'].'", delayedsubmit="'.$_clean['delayedsubmit'].'" WHERE page_id="'.$_clean['page_id'].'"';
 	}
-	Database::query($sql,__FILE__,__LINE__);	
-	
+	Database::query($sql,__FILE__,__LINE__);
+
 	api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id(), $_clean['group_id']);
-	
+
 	check_emailcue($_clean['reflink'], 'P', $dtime, $_clean['user_id']);
-	
+
 	return get_lang('ChangesStored');
 }
 
@@ -393,20 +399,21 @@ function restore_wikipage($r_page_id, $r_reflink, $r_title, $r_content, $r_group
 {
 
 	global $tbl_wiki;
-	
+
 	$r_user_id= api_get_user_id();
 	$r_dtime = date( "Y-m-d H:i:s" );
 	$r_version = $r_version+1;
 	$r_comment = get_lang('RestoredFromVersion').': '.$c_version;
+	$session_id = api_get_session_id();
 	
-	$sql="INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$r_page_id."','".$r_reflink."','".$r_title."','".$r_content."','".$r_user_id."','".$r_group_id."','".$r_dtime."','".$r_assignment."','".$r_comment."','".$r_progress."','".$r_version."','".$r_linksto."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
-	
-	$result=Database::query($sql);	
-    $Id = Database::insert_id();		
+	$sql="INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip, session_id) VALUES ('".$r_page_id."','".$r_reflink."','".$r_title."','".$r_content."','".$r_user_id."','".$r_group_id."','".$r_dtime."','".$r_assignment."','".$r_comment."','".$r_progress."','".$r_version."','".$r_linksto."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."','".Database::escape_string($session_id)."')";
+
+	$result=Database::query($sql);
+    $Id = Database::insert_id();
 	api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id(), $r_group_id);
-	
+
 	check_emailcue($r_reflink, 'P', $r_dtime, $r_user_id);
-	
+
 	return get_lang('PageRestored');
 }
 
@@ -422,7 +429,7 @@ function delete_wiki()
 	//identify the first id by group = identify wiki
 	$sql='SELECT * FROM '.$tbl_wiki.'  WHERE  '.$groupfilter.' ORDER BY id DESC';
 	$allpages=Database::query($sql,__FILE__,__LINE__);
-		
+
 	while ($row=Database::fetch_array($allpages))	{
 		$id 		= $row['id'];
 		$group_id	= $row['group_id'];
@@ -430,9 +437,9 @@ function delete_wiki()
 		Database::query('DELETE FROM '.$tbl_wiki_conf.' WHERE page_id="'.$id.'"' ,__FILE__,__LINE__);
 		Database::query('DELETE FROM '.$tbl_wiki_discuss.' WHERE publication_id="'.$id.'"' ,__FILE__,__LINE__);
 	}
-	
-	Database::query('DELETE FROM '.$tbl_wiki_mailcue.' WHERE group_id="'.$group_id.'"' ,__FILE__,__LINE__);	
-	Database::query('DELETE FROM '.$tbl_wiki.' WHERE '.$groupfilter.'',__FILE__,__LINE__);	
+
+	Database::query('DELETE FROM '.$tbl_wiki_mailcue.' WHERE group_id="'.$group_id.'"' ,__FILE__,__LINE__);
+	Database::query('DELETE FROM '.$tbl_wiki.' WHERE '.$groupfilter.'',__FILE__,__LINE__);
 	return get_lang('WikiDeleted');
 }
 
@@ -447,40 +454,43 @@ function save_new_wiki() {
 	global $tbl_wiki;
     global $assig_user_id; //need for assignments mode
 	global $tbl_wiki_conf;
-	
+
 	// cleaning the variables
 	$_clean['assignment']=Database::escape_string($_POST['assignment']);
-			
-	if($_clean['assignment']==2 || $_clean['assignment']==1) {// Unlike ordinary pages of pages of assignments. Allow create a ordinary page although there is a assignment with the same name
-		$_clean['reflink']=Database::escape_string(Security::remove_XSS(str_replace(' ','_',$_POST['title']."_uass".$assig_user_id)));			
-    } else {		
-	 	$_clean['reflink']=Database::escape_string(Security::remove_XSS(str_replace(' ','_',$_POST['title'])));			
-	}	
 
-	$_clean['title']=Database::escape_string(Security::remove_XSS($_POST['title']));		    
+	// session_id
+	$session_id = api_get_session_id();
+
+	if($_clean['assignment']==2 || $_clean['assignment']==1) {// Unlike ordinary pages of pages of assignments. Allow create a ordinary page although there is a assignment with the same name
+		$_clean['reflink']=Database::escape_string(Security::remove_XSS(str_replace(' ','_',$_POST['title']."_uass".$assig_user_id)));
+    } else {
+	 	$_clean['reflink']=Database::escape_string(Security::remove_XSS(str_replace(' ','_',$_POST['title'])));
+	}
+
+	$_clean['title']=Database::escape_string(Security::remove_XSS($_POST['title']));
 	$_clean['content']= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['content'])),COURSEMANAGERLOWSECURITY));
-	
-	if($_clean['assignment']==2)  {//config by default for individual assignment (students)	 
-	
+
+	if($_clean['assignment']==2)  {//config by default for individual assignment (students)
+
 	 	$_clean['user_id']=(int)Database::escape_string($assig_user_id);//Identifies the user as a creator, not the teacher who created
-		
+
 		$_clean['visibility']=0;
 		$_clean['visibility_disc']=0;
 		$_clean['ratinglock_disc']=0;
-		
+
 	} else {
 	 	$_clean['user_id']=(int)Database::escape_string(api_get_user_id());
-		
+
 		$_clean['visibility']=1;
 		$_clean['visibility_disc']=1;
-		$_clean['ratinglock_disc']=1;		
-		
-	}	
+		$_clean['ratinglock_disc']=1;
+
+	}
 
 	$_clean['comment']=Database::escape_string(Security::remove_XSS($_POST['comment']));
 	$_clean['progress']=Database::escape_string($_POST['progress']);
 	$_clean['version']=1;
-		
+
 	if (isset($_SESSION['_gid']))
 	  {
 	  $_clean['group_id']=(int)$_SESSION['_gid'];
@@ -488,16 +498,16 @@ function save_new_wiki() {
 	if (isset($_GET['group_id']))
 	  {
 	   $_clean['group_id']=(int)Database::escape_string($_GET['group_id']);
-	}		   
-	
+	}
+
 	$_clean['linksto'] = links_to($_clean['content']);	//check wikilinks
-	
+
 	//cleaning config variables
 	$_clean['task']= Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($_POST['task'])),COURSEMANAGERLOWSECURITY));
-	$_clean['feedback1']=Database::escape_string(Security::remove_XSS($_POST['feedback1']));	
+	$_clean['feedback1']=Database::escape_string(Security::remove_XSS($_POST['feedback1']));
 	$_clean['feedback2']=Database::escape_string(Security::remove_XSS($_POST['feedback2']));
 	$_clean['feedback3']=Database::escape_string(Security::remove_XSS($_POST['feedback3']));
-	$_clean['fprogress1']=Database::escape_string(Security::remove_XSS($_POST['fprogress1']));	
+	$_clean['fprogress1']=Database::escape_string(Security::remove_XSS($_POST['fprogress1']));
 	$_clean['fprogress2']=Database::escape_string(Security::remove_XSS($_POST['fprogress2']));
 	$_clean['fprogress3']=Database::escape_string(Security::remove_XSS($_POST['fprogress3']));
 
@@ -509,16 +519,16 @@ function save_new_wiki() {
 	{
 		$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS($_POST['startdate_assig']));
 	}
-	
-	if(Security::remove_XSS($_POST['initenddate']==1))	
+
+	if(Security::remove_XSS($_POST['initenddate']==1))
 	{
-		$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('enddate_assig')));	
+		$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('enddate_assig')));
 	}
 	else
 	{
 		$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS($_POST['enddate_assig']));
 	}
-	
+
 	$_clean['delayedsubmit']=Database::escape_string(Security::remove_XSS($_POST['delayedsubmit']));
 	$_clean['max_text']=Database::escape_string(Security::remove_XSS($_POST['max_text']));
 	$_clean['max_version']=Database::escape_string(Security::remove_XSS($_POST['max_version']));
@@ -527,31 +537,34 @@ function save_new_wiki() {
 	if (api_eregi('_uass', $_POST['title']) || (api_strtoupper(trim($_POST['title'])) == 'INDEX' || api_strtoupper(trim(api_htmlentities($_POST['title'], ENT_QUOTES, $charset))) == api_strtoupper(api_htmlentities(get_lang('DefaultTitle'), ENT_QUOTES, $charset)))) {
 		$message= get_lang('GoAndEditMainPage');
 		Display::display_warning_message($message,false);
-	} else {		
-	
+	} else {
+
 		$var=$_clean['reflink'];
-	
+
 		$group_id=Security::remove_XSS($_GET['group_id']);
 		if(!checktitle($var)) {
-		   return get_lang('WikiPageTitleExist').'<a href="index.php?action=edit&amp;title='.$var.'&group_id='.$group_id.'">'.$_POST['title'].'</a>'; 
-		} else { 	
+		   return get_lang('WikiPageTitleExist').'<a href="index.php?action=edit&amp;title='.$var.'&group_id='.$group_id.'">'.$_POST['title'].'</a>';
+		} else {
 			$dtime = date( "Y-m-d H:i:s" );
-			$sql="INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, version, linksto, user_ip) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."')";
-		   $result=Database::query($sql,__LINE__,__FILE__);
-		   $Id = Database::insert_id();
-		   
-		   $sql='UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'" WHERE id="'.$Id.'"';		 	
-	       Database::query($sql,__FILE__,__LINE__);
+			$sql = "INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, version, linksto, user_ip, session_id) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."', '".Database::escape_string($session_id)."')";
+		    $result = Database::query($sql,__LINE__,__FILE__);
+		    $Id = Database::insert_id();
 		   	
-			//insert wiki config		 
+		   	if ($Id > 0) {
+				//insert into item_property
+				api_item_property_update(api_get_course_info(), TOOL_WIKI, $Id, 'WikiAdded', api_get_user_id(), $_clean['group_id']);
+			}
+
+		   $sql='UPDATE '.$tbl_wiki.' SET page_id="'.$Id.'" WHERE id="'.$Id.'"';
+	       Database::query($sql,__FILE__,__LINE__);
+
+			//insert wiki config
 		   $sql="INSERT INTO ".$tbl_wiki_conf." (page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit) VALUES ('".$Id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
-		   Database::query($sql,__LINE__,__FILE__);
-			
-		   api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id(), $_clean['group_id']);
-		   
+		   Database::query($sql,__LINE__,__FILE__);		   
+
 		   check_emailcue(0, 'A');
-		   return get_lang('NewWikiSaved').' <a href="index.php?action=showpage&amp;title='.$_clean['reflink'].'&group_id='.$group_id.'">'.$_POST['title'].'</a>'; 
-		} 
+		   return get_lang('NewWikiSaved').' <a href="index.php?action=showpage&amp;title='.$_clean['reflink'].'&group_id='.$group_id.'">'.$_POST['title'].'</a>';
+		}
 	}//end filter no _uass
 }
 
@@ -575,42 +588,42 @@ function CheckSend()
 		return false;
 	}
 return true;
-}	
+}
 </script>
-<?php	
+<?php
 	//form
 	echo '<form name="form1" method="post" onsubmit="return CheckSend()" action="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&amp;title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">';
 	echo '<div id="wikititle">';
 	echo  '<span class="form_required">*</span> '.get_lang(Title).': <input type="text" name="title" value="'.urldecode($_GET['title']).'" size="40">';
-	
-	if(api_is_allowed_to_edit() || api_is_platform_admin())
-	{	
-	
+
+	if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
+	{
+
 		$_clean['group_id']=(int)$_SESSION['_gid']; // TODO: check if delete ?
-	
+
 		echo'<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus" style="float:right">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>';
-		echo '<div id="options" style="display:none; margin: 20px;" >';					
+		echo '<div id="options" style="display:none; margin: 20px;" >';
 
 		//task
-		echo '<input type="checkbox" value="1" name="checktask" onclick="if(this.checked==true){document.getElementById(\'option4\').style.display=\'block\';}else{document.getElementById(\'option4\').style.display=\'none\';}"/>&nbsp;<img src="../img/wiki/task.gif" />'.get_lang('DescriptionOfTheTask').'';		
+		echo '<input type="checkbox" value="1" name="checktask" onclick="if(this.checked==true){document.getElementById(\'option4\').style.display=\'block\';}else{document.getElementById(\'option4\').style.display=\'none\';}"/>&nbsp;<img src="../img/wiki/task.gif" title="'.get_lang('DefineTask').'" alt="'.get_lang('DefineTask').'"/>'.get_lang('DescriptionOfTheTask').'';
 		echo '&nbsp;&nbsp;&nbsp;<span id="msg_error4" style="display:none;color:red"></span>';
 		echo '<div id="option4" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
-		
+
 		echo '<table border="0" style="font-weight:normal">';
 		echo '<tr>';
 		echo '<td>'.get_lang('DescriptionOfTheTask').'</td>';
 		echo '</tr>';
 		echo '<tr>';
-		//echo '<td><textarea name="task" cols="60" rows="4" >'.stripslashes($row['task']).'</textarea></td>';	// TODO: ¿delete?				
-		echo '<td>'.api_disp_html_area('task', stripslashes($row['task']), '', '', null, array('ToolbarSet' => 'project_comment', 'Width' => '600', 'Height' => '200')).'</td>'; //TODO: create a new tolbarset
+		//echo '<td><textarea name="task" cols="60" rows="4" >'.stripslashes($row['task']).'</textarea></td>';	// TODO: ¿delete?
+		echo '<td>'.api_disp_html_area('task', stripslashes($row['task']), '', '', null, array('ToolbarSet' => 'wiki_task', 'Width' => '600', 'Height' => '200')).'</td>';
 		echo '</tr>';
 		echo '</table>';
 		echo '</div>';
-		
+
 		//feedback
-		echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checkfeedback" onclick="if(this.checked==true){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>&nbsp;'.get_lang('AddFeedback').'';		
+		echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checkfeedback" onclick="if(this.checked==true){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>&nbsp;'.get_lang('AddFeedback').'';
 		echo '&nbsp;&nbsp;&nbsp;<span id="msg_error2" style="display:none;color:red"></span>';
-		echo '<div id="option2" style="padding:4px; margin:5px; border:1px dotted; display:none;">';			
+		echo '<div id="option2" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
 
 		echo '<table border="0" style="font-weight:normal" align="center">';
 		echo '<tr>';
@@ -626,7 +639,7 @@ return true;
 		echo '<tr>';
 		echo '<td>'.get_lang('FProgress').':</td>';
 		echo '<td><select name="fprogress1">
-		   <option value="0" selected>0</option>	   
+		   <option value="0" selected>0</option>
 		   <option value="10">10</option>
 		   <option value="20">20</option>
 		   <option value="30">30</option>
@@ -636,11 +649,11 @@ return true;
 		   <option value="70">70</option>
 		   <option value="80">80</option>
 		   <option value="90">90</option>
-		   <option value="100">100</option>   
+		   <option value="100">100</option>
 		   </select> %</td>';
 		echo '<td>'.get_lang('FProgress').':</td>';
 		echo '<td><select name="fprogress2">
-		   <option value="0" selected>0</option>	   
+		   <option value="0" selected>0</option>
 		   <option value="10">10</option>
 		   <option value="20">20</option>
 		   <option value="30">30</option>
@@ -650,11 +663,11 @@ return true;
 		   <option value="70">70</option>
 		   <option value="80">80</option>
 		   <option value="90">90</option>
-		   <option value="100">100</option>   
+		   <option value="100">100</option>
 		   </select> %</td>';
 		echo '<td>'.get_lang('FProgress').':</td>';
 		echo '<td><select name="fprogress3">
-		   <option value="0" selected>0</option>	   
+		   <option value="0" selected>0</option>
 		   <option value="10">10</option>
 		   <option value="20">20</option>
 		   <option value="30">30</option>
@@ -664,16 +677,16 @@ return true;
 		   <option value="70">70</option>
 		   <option value="80">80</option>
 		   <option value="90">90</option>
-		   <option value="100">100</option>   
+		   <option value="100">100</option>
 		   </select> %</td>';
-	  	echo '</tr>';	  
+	  	echo '</tr>';
 		echo '</table>';
 		echo '</div>';
-		
+
 		//time limit
-		echo  '<div>&nbsp;</div><input type="checkbox" value="1" name="checktimelimit" onclick="if(this.checked==true){document.getElementById(\'option1\').style.display=\'block\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>&nbsp;'.get_lang('PutATimeLimit').'';		
-		echo  '&nbsp;&nbsp;&nbsp;<span id="msg_error1" style="display:none;color:red"></span>';	
-		echo  '<div id="option1" style="padding:4px; margin:5px; border:1px dotted; display:none;">';			
+		echo  '<div>&nbsp;</div><input type="checkbox" value="1" name="checktimelimit" onclick="if(this.checked==true){document.getElementById(\'option1\').style.display=\'block\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>&nbsp;'.get_lang('PutATimeLimit').'';
+		echo  '&nbsp;&nbsp;&nbsp;<span id="msg_error1" style="display:none;color:red"></span>';
+		echo  '<div id="option1" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
 		echo '<table width="100%" border="0" style="font-weight:normal">';
   		echo '<tr>';
     	echo '<td align="right">'.get_lang("StartDate").':</td>';
@@ -692,13 +705,13 @@ return true;
 		echo '<td><input type="checkbox" name="delayedsubmit" value="1"></td>';
 		echo '</tr>';
 		echo'</table>';
-		echo '</div>';		
-		
+		echo '</div>';
+
 		//other limit
-		echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checkotherlimit" onclick="if(this.checked==true){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>&nbsp;'.get_lang('OtherSettings').'';		
+		echo '<div>&nbsp;</div><input type="checkbox" value="1" name="checkotherlimit" onclick="if(this.checked==true){document.getElementById(\'option3\').style.display=\'block\';}else{document.getElementById(\'option3\').style.display=\'none\';}"/>&nbsp;'.get_lang('OtherSettings').'';
 		echo '&nbsp;&nbsp;&nbsp;<span id="msg_error3" style="display:none;color:red"></span>';
-		echo '<div id="option3" style="padding:4px; margin:5px; border:1px dotted; display:none;">';			
-		echo '<div style="font-weight:normal"; align="center">'.get_lang('Max_text').':&nbsp;<input type="text" name="max_text" size="3">&nbsp;&nbsp;'.get_lang('Max_version').':&nbsp;<input type="text" name="max_version" size="3"></div>';
+		echo '<div id="option3" style="padding:4px; margin:5px; border:1px dotted; display:none;">';
+		echo '<div style="font-weight:normal"; align="center">'.get_lang('NMaxWords').':&nbsp;<input type="text" name="max_text" size="3">&nbsp;&nbsp;'.get_lang('NMaxVersion').':&nbsp;<input type="text" name="max_version" size="3"></div>';
 		echo '</div>';
 
 		//to define as an individual assignment
@@ -709,15 +722,15 @@ return true;
 	}
 	echo '</div>';
 	echo '<div id="wikicontent">';
-	api_disp_html_area('content', '', '', '', null, api_is_allowed_to_edit()
+	api_disp_html_area('content', '', '', '', null, api_is_allowed_to_edit(null,true)
 		? array('ToolbarSet' => 'Wiki', 'Width' => '100%', 'Height' => '400')
 		: array('ToolbarSet' => 'WikiStudent', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
-	); 	
+	);
 	echo '<br/>';
-	echo '<br/>'; 	
+	echo '<br/>';
 	echo get_lang('Comments').':&nbsp;&nbsp;<input type="text" name="comment" size="40"><br /><br />';
 	echo get_lang('Progress').':&nbsp;&nbsp;<select name="progress" id="progress">
-	   <option value="0" selected>0</option>	   
+	   <option value="0" selected>0</option>
 	   <option value="10">10</option>
 	   <option value="20">20</option>
 	   <option value="30">30</option>
@@ -727,9 +740,9 @@ return true;
 	   <option value="70">70</option>
 	   <option value="80">80</option>
 	   <option value="90">90</option>
-	   <option value="100">100</option>   
+	   <option value="100">100</option>
 	   </select> %';
-	echo '<br/><br/>'; 
+	echo '<br/><br/>';
 	echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">';//prevent double post
 	echo '<input type="hidden" name="SaveWikiNew" value="'.get_lang('langSave').'">'; //for save icon
 	echo '<button class="save" type="submit" name="SaveWikiNew">'.get_lang('langSave').'</button>';//for button icon
@@ -750,28 +763,28 @@ function display_wiki_entry()
 	global $groupfilter;
 	global $page;
 
-   
-	$_clean['group_id']=(int)$_SESSION['_gid']; 
+
+	$_clean['group_id']=(int)$_SESSION['_gid'];
 	if ($_GET['view'])
 	{
 		$_clean['view']=(int)Database::escape_string($_GET['view']);
-		
+
 		$filter=' AND '.$tbl_wiki.'.id="'.$_clean['view'].'"';
-	}	
+	}
 
 	//first, check page visibility in the first page version
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
-		$result=Database::query($sql,__LINE__,__FILE__);	
-		$row=Database::fetch_array($result);		
-		$KeyVisibility=$row['visibility'];	
+		$result=Database::query($sql,__LINE__,__FILE__);
+		$row=Database::fetch_array($result);
+		$KeyVisibility=$row['visibility'];
 
 	// second, show the last version
-	$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$tbl_wiki.'.'.$groupfilter.' '.$filter.' ORDER BY id DESC';
+	$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.reflink="'.api_html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$tbl_wiki.'.'.$groupfilter.' '.$filter.' ORDER BY id DESC';
 	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version
 
 
-	//update visits 
+	//update visits
 	if($row['id'])
 	{
 		$sql='UPDATE '.$tbl_wiki.' SET hits=(hits+1) WHERE id='.$row['id'].'';
@@ -782,13 +795,17 @@ function display_wiki_entry()
 	// if both are empty and we are displaying the index page then we display the default text.
 	if ($row['content']=='' AND $row['title']=='' AND $page=='index')
 	{
-		if(api_is_allowed_to_edit() || api_is_platform_admin() || GroupManager :: is_user_in_group(api_get_user_id(),$_SESSION['_gid'])) 
+		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin() || GroupManager :: is_user_in_group(api_get_user_id(),$_SESSION['_gid']))
 		{
-			$content=sprintf(get_lang('DefaultContent'),api_get_path(WEB_IMG_PATH));
+			//Table structure for better export to pdf
+			$default_table_for_content_Start='<table align="center" border="0"><tr><td align="center">';
+			$default_table_for_content_End='</td></tr></table>';
+
+			$content=$default_table_for_content_Start.sprintf(get_lang('DefaultContent'),api_get_path(WEB_IMG_PATH)).$default_table_for_content_End;
 			$title=get_lang('DefaultTitle');
 		}
 		else
-		{		
+		{
 			return Display::display_normal_message(get_lang('WikiStandBy'));
 		}
 	}
@@ -797,7 +814,7 @@ function display_wiki_entry()
   		$content=Security::remove_XSS($row['content'],COURSEMANAGERLOWSECURITY);
 		$title= Security::remove_XSS($row['title']);
 	}
-	
+
 
 	//assignment mode: identify page type
 	if(stripslashes($row['assignment'])==1)
@@ -808,23 +825,23 @@ function display_wiki_entry()
 	{
 		$icon_assignment='<img src="../img/wiki/works.gif" title="'.get_lang('AssignmentWorkExtra').'" alt="'.get_lang('AssignmentWorkExtra').'" />';
 	}
-	
+
 	//task mode
-	
+
 	if (!empty($row['task']))
 	{
-		$icon_task='<img src="../img/wiki/task.gif" title="'.get_lang('TaskExtra').'" alt="'.get_lang('TaskExtra').'" />';
+		$icon_task='<img src="../img/wiki/task.gif" title="'.get_lang('StandardTask').'" alt="'.get_lang('StandardTask').'" />';
 	}
 
 	//Show page. Show page to all users if isn't hide page. Mode assignments: if student is the author, can view
-	if($KeyVisibility=="1" || api_is_allowed_to_edit() || api_is_platform_admin() || ($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id()==$row['user_id'])))
+	if($KeyVisibility=="1" || api_is_allowed_to_edit(false,true) || api_is_platform_admin() || ($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id()==$row['user_id'])))
 	{
 		echo '<div id="wikititle">';
-	
+
 		// page action: protecting (locking) the page
 	if (check_protect_page())
-	{	
-		if(api_is_allowed_to_edit() || api_is_platform_admin())
+	{
+		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 		{
 				$protect_page= '<img src="../img/wiki/lock.gif" title="'.get_lang('PageLockedExtra').'" alt="'.get_lang('PageLockedExtra').'" />';
 		}
@@ -834,12 +851,12 @@ function display_wiki_entry()
 		}
 	}
 	else
-	{					  
-		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
+	{
+		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 	   	{
 				$protect_page= '<img src="../img/wiki/unlock.gif" title="'.get_lang('PageUnlockedExtra').'" alt="'.get_lang('PageUnlockedExtra').'" />';
-	   	}   	
-	}	
+	   	}
+	}
 		echo '<span style="float:right">';
 		echo '<a href="index.php?action=showpage&amp;actionpage=lock&amp;title='.$page.'">'.$protect_page.'</a>';
 		echo '</span>';
@@ -849,34 +866,33 @@ function display_wiki_entry()
 	{
 		//This hides the icon eye closed to users of work they can see yours
 		if(($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id()==$row['user_id']))==false)
-	  	{	  
+	  	{
 				$visibility_page= '<img src="../img/wiki/invisible.gif" title="'.get_lang('HidePageExtra').'" alt="'.get_lang('HidePageExtra').'" />';
 	    }
 	}
 	else
-	{			  
-		if(api_is_allowed_to_edit() || api_is_platform_admin()) 
+	{
+		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 		{
 				$visibility_page= '<img src="../img/wiki/visible.gif" title="'.get_lang('ShowPageExtra').'" alt="'.get_lang('ShowPageExtra').'" />';
-		}	     	
-	}		
+		}
+	}
 		echo '<span style="float:right">';
 		echo '<a href="index.php?action=showpage&amp;actionpage=visibility&amp;title='.$page.'">'.$visibility_page.'</a>';
 		echo '</span>';
-	
+
 		//page action: notification
-	if (check_notify_page($page))
-	{
-			$notify_page= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('NotifyByEmail').'" alt="'.get_lang('NotifyByEmail').'" />';
-		}
-		else
-		{
-			$notify_page= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('CancelNotifyByEmail').'" alt="'.get_lang('CancelNotifyByEmail').'" />';
+		if (api_is_allowed_to_session_edit() ) {
+			if (check_notify_page($page)) {
+				$notify_page= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('NotifyByEmail').'" alt="'.get_lang('NotifyByEmail').'" />';
+			} else {
+				$notify_page= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('CancelNotifyByEmail').'" alt="'.get_lang('CancelNotifyByEmail').'" />';
+			}
 		}
 		echo '<span style="float:right">';
 		echo '<a href="index.php?action=showpage&amp;actionpage=notify&amp;title='.$page.'">'.$notify_page.'</a>';
 		echo '</span>';
-		
+
 		//page action: export to pdf
 		echo '<span style="float:right">';
 		echo '<form name="form_export2PDF" method="post" action="export_html2pdf.php" target="_blank, fullscreen">'; // also with  export_tcpdf.php
@@ -887,20 +903,20 @@ function display_wiki_entry()
 		echo '</span>';
 
 		//page action: copy last version to doc area
-		if(api_is_allowed_to_edit() || api_is_platform_admin())
+		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 		{
-			echo '<span style="float:right;">';				
+			echo '<span style="float:right;">';
 			echo '<form name="form_export2DOC" method="post" action="index.php">';
 			echo '<input type=hidden name="export2DOC" value="export2doc">';
 			echo '<input type=hidden name="titleDOC" value="'.api_htmlentities($title, ENT_QUOTES, $charset).'">';
 			echo '<input type=hidden name="contentDOC" value="'.api_htmlentities($content, ENT_QUOTES, $charset).'">';
 			echo '<input type="image" src="../img/wiki/wexport2doc.png" border ="0" title="'.get_lang('ExportToDocArea').'" alt="'.get_lang('ExportToDocArea').'" style=" border:none;">';
 			echo '</form>';
-			echo '</span>';	
+			echo '</span>';
 		}
 		//export to print
-		?>	
-    	
+		?>
+
 		<script>
         function goprint()
         {
@@ -911,11 +927,11 @@ function display_wiki_entry()
             a.print();
         }
         </script>
-		<?php				
+		<?php
 		echo '<span style="float:right; cursor: pointer;">';
 		echo '<img src="../img/wiki/wprint.gif" title="'.get_lang('Print').'" alt="'.get_lang('Print').'" onclick="javascript: goprint();">';
 		echo '</span>';
-		
+
 
 		if (empty($title))
 		{
@@ -931,8 +947,8 @@ function display_wiki_entry()
 		{
 			echo stripslashes($title);
 		}
-			
-			echo '</div>';	
+
+			echo '</div>';
 			echo '<div id="wikicontent">'. make_wiki_link_clickable(detect_external_link(detect_anchor_link(detect_mail_link(detect_ftp_link(detect_irc_link(detect_news_link(stripslashes($content)))))))).'</div>';
 
 		echo '<div id="wikifooter">'.get_lang('Progress').': '.stripslashes($row['progress']).'%&nbsp;&nbsp;&nbsp;'.get_lang('Rating').': '.stripslashes($row['score']).'&nbsp;&nbsp;&nbsp;'.get_lang('Words').': '.word_count($content).'</div>';
@@ -943,11 +959,11 @@ function display_wiki_entry()
 
 //more for export to course document area. See display_wiki_entry
 if ($_POST['export2DOC'])
-{ 
+{
 	$titleDOC=$_POST['titleDOC'];
 	$contentDOC=$_POST['contentDOC'];
 	$groupIdDOC=(int)$_SESSION['_gid'];
-	export2doc($titleDOC,$contentDOC,$groupIdDOC); 
+	export2doc($titleDOC,$contentDOC,$groupIdDOC);
 }
 
 /**
@@ -961,7 +977,7 @@ function word_count($document) {
 	'@<style[^>]*?>.*?</style>@siU',
 	'@<![\s\S]*?--[ \t\n\r]*>@'
 	);
-	
+
     $document = preg_replace($search, '', $document);
 
   	# strip all html tags
@@ -982,7 +998,7 @@ function word_count($document) {
 
   	# remove empty elements
   	$wc = array_filter($wc);
-  
+
   	# return the number of words
  	 return count($wc);
 
@@ -996,12 +1012,12 @@ function wiki_exist($title)
 {
 	global $tbl_wiki;
 	global $groupfilter;
-	$sql='SELECT id FROM '.$tbl_wiki.'WHERE title="'.Database::escape_string($title).'" AND '.$groupfilter.' ORDER BY id ASC'; 
+	$sql='SELECT id FROM '.$tbl_wiki.'WHERE title="'.Database::escape_string($title).'" AND '.$groupfilter.' ORDER BY id ASC';
 	$result=Database::query($sql,__LINE__,__FILE__);
 	$cant=Database::num_rows($result);
 	if ($cant>0)
 		return true;
-	else 
+	else
 		return false;
 }
 
@@ -1021,9 +1037,9 @@ function display_wiki_warning($variable)
  * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
  * @return html code
  */
-function is_active_navigation_tab($paramwk) 
+function is_active_navigation_tab($paramwk)
 {
-	if ($_GET['action']==$paramwk) 
+	if ($_GET['action']==$paramwk)
 	{
 		return ' class="active"';
 	}
@@ -1035,49 +1051,49 @@ function is_active_navigation_tab($paramwk)
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
 
-function check_addnewpagelock() 
+function check_addnewpagelock()
 {
 
 	global $tbl_wiki;
 	global $groupfilter;
 
 	$_clean['group_id']=(int)$_SESSION['_gid'];
-		
-	$sql='SELECT * FROM '.$tbl_wiki.'WHERE '.$groupfilter.' ORDER BY id ASC'; 
+
+	$sql='SELECT * FROM '.$tbl_wiki.'WHERE '.$groupfilter.' ORDER BY id ASC';
 	$result=Database::query($sql,__LINE__,__FILE__);
-	$row=Database::fetch_array($result); 
-							
+	$row=Database::fetch_array($result);
+
 	$status_addlock=$row['addlock'];
-			
+
 	//change status
-	if ($_GET['actionpage']=='addlock' && (api_is_allowed_to_edit() || api_is_platform_admin())) 
-	{	
+	if ($_GET['actionpage']=='addlock' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin()))
+	{
 		if ($row['addlock']==1)
 		{
 			$status_addlock=0;
 		}
 		else
 		{
-			$status_addlock=1; 
-		}       
-		
-		Database::query('UPDATE '.$tbl_wiki.' SET addlock="'.Database::escape_string($status_addlock).'" WHERE '.$groupfilter.'',__LINE__,__FILE__);	
-	  
-		$sql='SELECT * FROM '.$tbl_wiki.'WHERE '.$groupfilter.' ORDER BY id ASC'; 
+			$status_addlock=1;
+		}
+
+		Database::query('UPDATE '.$tbl_wiki.' SET addlock="'.Database::escape_string($status_addlock).'" WHERE '.$groupfilter.'',__LINE__,__FILE__);
+
+		$sql='SELECT * FROM '.$tbl_wiki.'WHERE '.$groupfilter.' ORDER BY id ASC';
 		$result=Database::query($sql,__LINE__,__FILE__);
 		$row=Database::fetch_array($result);
-	} 
-	 		
-	//show status				
-				
+	}
+
+	//show status
+
 	if ($row['addlock']==1 || ($row['content']=='' AND $row['title']=='' AND $page=='index'))
 	{
-		return false;		
+		return false;
 	}
 	else
 	{
-		return true;				
-	}		
+		return true;
+	}
 }
 
 
@@ -1085,7 +1101,7 @@ function check_addnewpagelock()
  * Protect page
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
-function check_protect_page() 
+function check_protect_page()
 {
 	global $tbl_wiki;
 	global $page;
@@ -1094,45 +1110,45 @@ function check_protect_page()
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
-		
+
 	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
-			
+
 	$status_editlock=$row['editlock'];
-	$id=$row['id'];	
+	$id=$row['id'];
 
 	///change status
-	if ($_GET['actionpage']=='lock' && (api_is_allowed_to_edit() || api_is_platform_admin())) 
-    {		 	 
+	if ($_GET['actionpage']=='lock' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin()))
+    {
 	    if ($row['editlock']==0)
 	    {
 	    	$status_editlock=1;
 	    }
 	    else
 		{
-	 		$status_editlock=0; 
+	 		$status_editlock=0;
 	 	}
-		
-		$sql='UPDATE '.$tbl_wiki.' SET editlock="'.Database::escape_string($status_editlock).'" WHERE id="'.$id.'"';			   
-	    Database::query($sql,__FILE__,__LINE__); 
-	  
+
+		$sql='UPDATE '.$tbl_wiki.' SET editlock="'.Database::escape_string($status_editlock).'" WHERE id="'.$id.'"';
+	    Database::query($sql,__FILE__,__LINE__);
+
 	    $sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
-		
+
 	    $result=Database::query($sql,__LINE__,__FILE__);
-	    $row=Database::fetch_array($result); 
+	    $row=Database::fetch_array($result);
 
 	}
-	 				
-	//show status	
+
+	//show status
 	if ($row['editlock']==0 || ($row['content']=='' AND $row['title']=='' AND $page=='index'))
 	{
 	 	return false;
 	}
 	else
 	{
-	 	return true;				
-	}    
-		
+	 	return true;
+	}
+
 }
 
 
@@ -1140,7 +1156,7 @@ function check_protect_page()
  * Visibility page
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
-function check_visibility_page() 
+function check_visibility_page()
 {
 
 	global $tbl_wiki;
@@ -1152,32 +1168,32 @@ function check_visibility_page()
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
 	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
-				
+
 	$status_visibility=$row['visibility'];
 	$id=$row['id'];	//need ? check. TODO
-		
+
 	//change status
-	if ($_GET['actionpage']=='visibility' && (api_is_allowed_to_edit() || api_is_platform_admin())) 
-	{	
+	if ($_GET['actionpage']=='visibility' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin()))
+	{
 		if ($row['visibility']==1)
 	    {
 	    	$status_visibility=0;
 	    }
 	    else
 		{
-		 	$status_visibility=1; 
-		}       
-				
-		$sql='UPDATE '.$tbl_wiki.' SET visibility="'.Database::escape_string($status_visibility).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter; 
-	    Database::query($sql,__FILE__,__LINE__); 
-		
+		 	$status_visibility=1;
+		}
+
+		$sql='UPDATE '.$tbl_wiki.' SET visibility="'.Database::escape_string($status_visibility).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter;
+	    Database::query($sql,__FILE__,__LINE__);
+
 	    //Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
 	    $sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
 	    $result=Database::query($sql,__LINE__,__FILE__);
-	    $row=Database::fetch_array($result); 
+	    $row=Database::fetch_array($result);
 
-     } 
-	 			
+     }
+
 	//show status
 	if ($row['visibility']=="1" || ($row['content']=='' AND $row['title']=='' AND $page=='index'))
 	{
@@ -1185,9 +1201,9 @@ function check_visibility_page()
 	}
 	else
 	{
-		return true;				
-	}    
-		
+		return true;
+	}
+
 }
 
 
@@ -1195,7 +1211,7 @@ function check_visibility_page()
  * Visibility discussion
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
-function check_visibility_discuss() 
+function check_visibility_discuss()
 {
 
 	global $tbl_wiki;
@@ -1207,43 +1223,43 @@ function check_visibility_discuss()
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
 	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
-				
+
 	$status_visibility_disc=$row['visibility_disc'];
-	$id=$row['id'];	//need ? check. TODO	
-		
+	$id=$row['id'];	//need ? check. TODO
+
 	//change status
-	if ($_GET['actionpage']=='visibility_disc' && (api_is_allowed_to_edit() || api_is_platform_admin())) 
-	{	
+	if ($_GET['actionpage']=='visibility_disc' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin()))
+	{
 		if ($row['visibility_disc']==1)
 	    {
 	    	$status_visibility_disc=0;
 	    }
 	    else
 		{
-			$status_visibility_disc=1; 
-		}       
-		
+			$status_visibility_disc=1;
+		}
+
 		$sql='UPDATE '.$tbl_wiki.' SET visibility_disc="'.Database::escape_string($status_visibility_disc).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter;
-	    Database::query($sql,__FILE__,__LINE__); 
-		
+	    Database::query($sql,__FILE__,__LINE__);
+
 	   //Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
 	    $sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
 	    $result=Database::query($sql,__LINE__,__FILE__);
-	    $row=Database::fetch_array($result); 
+	    $row=Database::fetch_array($result);
 
 	}
-					
-	//show status			
+
+	//show status
 
 	if ($row['visibility_disc']==1 || ($row['content']=='' AND $row['title']=='' AND $page=='index'))
 	{
-	 	return false;		 
+	 	return false;
 
 	}
 	else
 	{
-	 	return true;				
-	}   		
+	 	return true;
+	}
 }
 
 
@@ -1251,7 +1267,7 @@ function check_visibility_discuss()
  * Lock add discussion
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
-function check_addlock_discuss() 
+function check_addlock_discuss()
 {
 	global $tbl_wiki;
 	global $page;
@@ -1262,33 +1278,33 @@ function check_addlock_discuss()
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
 	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
-				
+
 	$status_addlock_disc=$row['addlock_disc'];
-	$id=$row['id'];		//need ? check. TODO	
-		
+	$id=$row['id'];		//need ? check. TODO
+
 	//change status
-	if ($_GET['actionpage']=='addlock_disc' && (api_is_allowed_to_edit() || api_is_platform_admin())) 
-    {	
+	if ($_GET['actionpage']=='addlock_disc' && (api_is_allowed_to_edit(null,true) || api_is_platform_admin()))
+    {
 		if ($row['addlock_disc']==1)
 	    {
 	    	$status_addlock_disc=0;
 	    }
 	    else
 		{
-			$status_addlock_disc=1; 
-		}       
-		
-		$sql='UPDATE '.$tbl_wiki.' SET addlock_disc="'.Database::escape_string($status_addlock_disc).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter;		
-	    Database::query($sql,__FILE__,__LINE__); 
-		
+			$status_addlock_disc=1;
+		}
+
+		$sql='UPDATE '.$tbl_wiki.' SET addlock_disc="'.Database::escape_string($status_addlock_disc).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter;
+	    Database::query($sql,__FILE__,__LINE__);
+
 	  	//Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
 	    $sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
 	    $result=Database::query($sql,__LINE__,__FILE__);
-	    $row=Database::fetch_array($result); 
+	    $row=Database::fetch_array($result);
 
 	}
-	 		
-	//show status			
+
+	//show status
 
 	if ($row['addlock_disc']==1 || ($row['content']=='' AND $row['title']=='' AND $page=='index'))
 	{
@@ -1296,9 +1312,9 @@ function check_addlock_discuss()
 	}
 	else
 	{
-		return true;				
-	}    
-		
+		return true;
+	}
+
 }
 
 
@@ -1306,7 +1322,7 @@ function check_addlock_discuss()
  * Lock rating discussion
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
-function check_ratinglock_discuss() 
+function check_ratinglock_discuss()
 {
 
 	global $tbl_wiki;
@@ -1318,32 +1334,32 @@ function check_ratinglock_discuss()
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
 	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
-				
+
 	$status_ratinglock_disc=$row['ratinglock_disc'];
-	$id=$row['id'];	//need ? check. TODO	
-		
+	$id=$row['id'];	//need ? check. TODO
+
 	//change status
-	if ($_GET['actionpage']=='ratinglock_disc' && (api_is_allowed_to_edit() || api_is_platform_admin())) 
-    {	
+	if ($_GET['actionpage']=='ratinglock_disc' && (api_is_allowed_to_edit(false,true) || api_is_platform_admin()))
+    {
 		if ($row['ratinglock_disc']==1)
 	    {
 	    	$status_ratinglock_disc=0;
 	    }
 	    else
 		{
-			$status_ratinglock_disc=1; 
-		}       
-		
-		$sql='UPDATE '.$tbl_wiki.' SET ratinglock_disc="'.Database::escape_string($status_ratinglock_disc).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter; //Visibility. Value to all,not only for the first	
-	    Database::query($sql,__FILE__,__LINE__); 
-		
+			$status_ratinglock_disc=1;
+		}
+
+		$sql='UPDATE '.$tbl_wiki.' SET ratinglock_disc="'.Database::escape_string($status_ratinglock_disc).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter; //Visibility. Value to all,not only for the first
+	    Database::query($sql,__FILE__,__LINE__);
+
 	  	//Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
 	    $sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
 	    $result=Database::query($sql,__LINE__,__FILE__);
-	    $row=Database::fetch_array($result); 
+	    $row=Database::fetch_array($result);
 
 	}
-	 			
+
 	//show status
 	if ($row['ratinglock_disc']==1 || ($row['content']=='' AND $row['title']=='' AND $page=='index'))
 	{
@@ -1351,9 +1367,9 @@ function check_ratinglock_discuss()
 	}
 	else
 	{
-		return true;				
-	}    
-		
+		return true;
+	}
+
 }
 
 
@@ -1361,56 +1377,56 @@ function check_ratinglock_discuss()
  * Notify page changes
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
- 
+
 function check_notify_page($reflink)
 {
 	global $tbl_wiki;
-	global $groupfilter;	
+	global $groupfilter;
 	global $tbl_wiki_mailcue;
-	
+
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.$reflink.'" AND '.$groupfilter.' ORDER BY id ASC';
 	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
-	
-	$id=$row['id'];		
-		
+
+	$id=$row['id'];
+
 	$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="P"';
 	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
-			
+
 	$idm=$row['id'];
-	
-	if (empty($idm))	
-	{ 
+
+	if (empty($idm))
+	{
 		$status_notify=0;
 	}
 	else
 	{
 		$status_notify=1;
-	}	
-			
+	}
+
 	//change status
 	if ($_GET['actionpage']=='notify')
-	{	
-		
+	{
+
 		if ($status_notify==0)
-	    {		
-		   	  
+	    {
+
 			$sql="INSERT INTO ".$tbl_wiki_mailcue." (id, user_id, type, group_id) VALUES ('".$id."','".api_get_user_id()."','P','".$_clean['group_id']."')";
-			Database::query($sql,__FILE__,__LINE__);		
-			
-	    	$status_notify=1;			
+			Database::query($sql,__FILE__,__LINE__);
+
+	    	$status_notify=1;
 	    }
 	    else
-		{					
+		{
 		    $sql='DELETE FROM '.$tbl_wiki_mailcue.' WHERE id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="P"'; //$_clean['group_id'] not necessary
 			Database::query($sql,__FILE__,__LINE__);
-			
-		    $status_notify=0;				
-	    } 			
-	}	
-		
+
+		    $status_notify=0;
+	    }
+	}
+
 	//show status
 	if ($status_notify==0)
 	{
@@ -1418,7 +1434,7 @@ function check_notify_page($reflink)
 	}
 	else
 	{
-		return true;				
+		return true;
 	}
 }
 
@@ -1430,76 +1446,76 @@ function check_notify_page($reflink)
 function check_notify_discuss($reflink)
 {
 	global $tbl_wiki;
-	global $groupfilter;	
-	global $tbl_wiki_mailcue;	
-	
+	global $groupfilter;
+	global $tbl_wiki_mailcue;
+
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.$reflink.'" AND '.$groupfilter.' ORDER BY id ASC';
 	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
-	
-	$id=$row['id'];	
-			
+
+	$id=$row['id'];
+
 	$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="D"';
 	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
-			
+
 	$idm=$row['id'];
-		
-	if (empty($idm))	
-	{ 	
+
+	if (empty($idm))
+	{
 		$status_notify_disc=0;
-		
+
 	}
 	else
 	{
 		$status_notify_disc=1;
-	}	
-			
+	}
+
 	//change status
 	if ($_GET['actionpage']=='notify_disc')
-	{	
-		
+	{
+
 		if ($status_notify_disc==0)
-	    {	
-		
+	    {
+
 			if (!$_POST['Submit'])
-			{	  
-								
+			{
+
 				$sql="INSERT INTO ".$tbl_wiki_mailcue." (id, user_id, type, group_id) VALUES ('".$id."','".api_get_user_id()."','D','".$_clean['group_id']."')";
-				Database::query($sql,__FILE__,__LINE__);		
-				
+				Database::query($sql,__FILE__,__LINE__);
+
 				$status_notify_disc=1;
 			}
 			else
 			{
 				$status_notify_disc=0;
-			}			
+			}
 	    }
 	    else
-		{	
+		{
 			if (!$_POST['Submit'])
-			{				
+			{
 				$sql='DELETE FROM '.$tbl_wiki_mailcue.' WHERE id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="D"'; //$_clean['group_id'] not necessary
 				Database::query($sql,__FILE__,__LINE__);
-				
+
 				$status_notify_disc=0;
 			}
 			else
 			{
 				$status_notify_disc=1;
-			}					
-	    } 			
-	}	
-		
+			}
+	    }
+	}
+
 	//show status
 	if ($status_notify_disc==0)
-	{				
+	{
 		return false;
 	}
 	else
 	{
-		return true;					
+		return true;
 	}
 }
 
@@ -1508,49 +1524,49 @@ function check_notify_discuss($reflink)
  * Notify all changes
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
- 
+
 function check_notify_all()
 {
 
 	global $tbl_wiki_mailcue;
-	
-	$_clean['group_id']=(int)$_SESSION['_gid'];	
-		
+
+	$_clean['group_id']=(int)$_SESSION['_gid'];
+
 	$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE user_id="'.api_get_user_id().'" AND type="F" AND group_id="'.$_clean['group_id'].'"';
 	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result);
-			
+
 	$idm=$row['user_id'];
-	
+
 	if (empty($idm))
-	{ 
-		$status_notify_all=0;	
+	{
+		$status_notify_all=0;
 	}
 	else
 	{
 		$status_notify_all=1;
-	}	
-			
+	}
+
 	//change status
 	if ($_GET['actionpage']=='notify_all')
-	{	
-		
+	{
+
 		if ($status_notify_all==0)
-	    {	
+	    {
 			$sql="INSERT INTO ".$tbl_wiki_mailcue." (user_id, type, group_id) VALUES ('".api_get_user_id()."','F','".$_clean['group_id']."')";
-			Database::query($sql,__FILE__,__LINE__);		
-			
-			$status_notify_all=1;				
+			Database::query($sql,__FILE__,__LINE__);
+
+			$status_notify_all=1;
 	    }
 	    else
-		{								
+		{
 			$sql='DELETE FROM '.$tbl_wiki_mailcue.' WHERE user_id="'.api_get_user_id().'" AND type="F" AND group_id="'.$_clean['group_id'].'"';
 			Database::query($sql,__FILE__,__LINE__);
-		
-			$status_notify_all=0;			
-	    } 					
-	}	
-		
+
+			$status_notify_all=0;
+	    }
+	}
+
 	//show status
 	if ($status_notify_all==0)
 	{
@@ -1558,7 +1574,7 @@ function check_notify_all()
 	}
 	else
 	{
-		return true;				
+		return true;
 	}
 }
 
@@ -1567,97 +1583,97 @@ function check_notify_all()
  * Function check emailcue and send email when a page change
  * @author Juan Carlos Raña <herodoto@telefonica.net>
  */
- 
+
 function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 {
 	global $tbl_wiki;
-	global $groupfilter;	
+	global $groupfilter;
 	global $tbl_wiki_mailcue;
-	global $_course;		
+	global $_course;
 
     $_clean['group_id']=(int)$_SESSION['_gid'];
-	
-	$group_properties  = GroupManager :: get_group_properties($_clean['group_id']);	
+
+	$group_properties  = GroupManager :: get_group_properties($_clean['group_id']);
 	$group_name= $group_properties['name'];
 
     $allow_send_mail=false; //define the variable to below
-	
+
 	if ($type=='P')
 	{
 	//if modifying a wiki page
-		
+
 		//first, current author and time
 		//Who is the author?
-		$userinfo=	Database::get_user_info_from_id($lastuser);		
-		$email_user_author= get_lang('EditedBy').': '.$userinfo['firstname'].' '.$userinfo['lastname'];		
-		
-		//When ?		
+		$userinfo=	Database::get_user_info_from_id($lastuser);
+		$email_user_author= get_lang('EditedBy').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+
+		//When ?
 		$year = substr($lastime, 0, 4);
 		$month = substr($lastime, 5, 2);
 		$day = substr($lastime, 8, 2);
 		$hours=substr($lastime, 11,2);
 		$minutes=substr($lastime, 14,2);
 		$seconds=substr($lastime, 17,2);
-		$email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;	
-		
+		$email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;
+
 		//second, extract data from first reg
 	 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.$id_or_ref.'" AND '.$groupfilter.' ORDER BY id ASC'; //id_or_ref is reflink from tblwiki
-		
+
 		$result=Database::query($sql,__LINE__,__FILE__);
 		$row=Database::fetch_array($result);
-		
+
 		$id=$row['id'];
 		$email_page_name=$row['title'];
-		
-			
+
+
 		if ($row['visibility']==1)
 		{
-			$allow_send_mail=true; //if visibility off - notify off	
-		
-			$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="'.$type.'" OR type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full.		
+			$allow_send_mail=true; //if visibility off - notify off
+
+			$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="'.$type.'" OR type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full.
 			$result=Database::query($sql,__LINE__,__FILE__);
-			
+
 			$emailtext=get_lang('EmailWikipageModified').' <strong>'.$email_page_name.'</strong> '.get_lang('Wiki');
 		}
-	
+
 	}
 	elseif ($type=='D')
 	{
 	//if added a post to discuss
-	
+
 		//first, current author and time
 		//Who is the author of last message?
-		$userinfo=	Database::get_user_info_from_id($lastuser);		
-		$email_user_author= get_lang('AddedBy').': '.$userinfo['firstname'].' '.$userinfo['lastname'];		
-		
-		//When ?		
+		$userinfo=	Database::get_user_info_from_id($lastuser);
+		$email_user_author= get_lang('AddedBy').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+
+		//When ?
 		$year = substr($lastime, 0, 4);
 		$month = substr($lastime, 5, 2);
 		$day = substr($lastime, 8, 2);
 		$hours=substr($lastime, 11,2);
 		$minutes=substr($lastime, 14,2);
 		$seconds=substr($lastime, 17,2);
-		$email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;	
-		
-		//second, extract data from first reg	
-		
+		$email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;
+
+		//second, extract data from first reg
+
 		$id=$id_or_ref; //$id_or_ref is id from tblwiki
-		
+
 		$sql='SELECT * FROM '.$tbl_wiki.'WHERE id="'.$id.'" ORDER BY id ASC';
-		
+
 		$result=Database::query($sql,__LINE__,__FILE__);
 		$row=Database::fetch_array($result);
-		
+
 		$email_page_name=$row['title'];
-		
-		
+
+
 		if ($row['visibility_disc']==1)
 		{
-			$allow_send_mail=true; //if visibility off - notify off				
-				
+			$allow_send_mail=true; //if visibility off - notify off
+
 			$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="'.$type.'" OR type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full
-			$result=Database::query($sql,__LINE__,__FILE__);			
-			
+			$result=Database::query($sql,__LINE__,__FILE__);
+
 			$emailtext=get_lang('EmailWikiPageDiscAdded').' <strong>'.$email_page_name.'</strong> '.get_lang('Wiki');
 		}
 	}
@@ -1665,93 +1681,93 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 	{
 	//for added pages
 		$id=0; //for tbl_wiki_mailcue
-	
+
 		$sql='SELECT * FROM '.$tbl_wiki.' ORDER BY id DESC'; //the added is always the last
-		
+
 		$result=Database::query($sql,__LINE__,__FILE__);
 		$row=Database::fetch_array($result);
-		
+
 		$email_page_name=$row['title'];
-		
+
 		//Who is the author?
-		$userinfo=	Database::get_user_info_from_id($row['user_id']);		
-		$email_user_author= get_lang('AddedBy').': '.$userinfo['firstname'].' '.$userinfo['lastname'];		
-		
-		//When ?		
+		$userinfo=	Database::get_user_info_from_id($row['user_id']);
+		$email_user_author= get_lang('AddedBy').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+
+		//When ?
 		$year = substr($row['dtime'], 0, 4);
 		$month = substr($row['dtime'], 5, 2);
 		$day = substr($row['dtime'], 8, 2);
 		$hours=substr($row['dtime'], 11,2);
 		$minutes=substr($row['dtime'], 14,2);
 		$seconds=substr($row['dtime'], 17,2);
-		$email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;		
-		
-		
-		if($row['assignment']==0)	
+		$email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;
+
+
+		if($row['assignment']==0)
 		{
 			$allow_send_mail=true;
 		}
-		elseif($row['assignment']==1)	
+		elseif($row['assignment']==1)
 		{
 			$email_assignment=get_lang('AssignmentDescExtra').' ('.get_lang('AssignmentMode').')';
 			$allow_send_mail=true;
 		}
-		elseif($row['assignment']==2)		
+		elseif($row['assignment']==2)
 		{
 			$allow_send_mail=false; //Mode tasks: avoids notifications to all users about all users
-		}		
-		
+		}
+
 		$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=full
 		$result=Database::query($sql,__LINE__,__FILE__);
-	
+
 		$emailtext=get_lang('EmailWikiPageAdded').' <strong>'.$email_page_name.'</strong> '.get_lang('In').' '. get_lang('Wiki');
 	}
 	elseif($type=='E')
 	{
 		$id=0;
-		
+
 		$allow_send_mail=true;
-		
+
 		//Who is the author?
 		$userinfo=	Database::get_user_info_from_id(api_get_user_id());	//current user
-		$email_user_author= get_lang('DeletedBy').': '.$userinfo['firstname'].' '.$userinfo['lastname'];		
-		
-		
-		//When ?		
+		$email_user_author= get_lang('DeletedBy').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+
+
+		//When ?
 		$today = date('r');		//current time
-		$email_date_changes=$today;	
-		
+		$email_date_changes=$today;
+
 		$sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE id="'.$id.'" AND type="F" AND group_id="'.$_clean['group_id'].'"'; //type: P=page, D=discuss, F=wiki
 		$result=Database::query($sql,__LINE__,__FILE__);
-				
+
 		$emailtext=get_lang('EmailWikipageDedeleted');
-	}			
-	
-		
-	///make and send email		
-		
+	}
+
+
+	///make and send email
+
 	if ($allow_send_mail)
-	{	
+	{
 		while ($row=Database::fetch_array($result))
-		{		
+		{
 			if(empty($charset)){$charset='ISO-8859-1';}
 			$headers = 'Content-Type: text/html; charset='. $charset;
-			$userinfo=Database::get_user_info_from_id($row['user_id']);	//$row['user_id'] obtained from tbl_wiki_mailcue
-			$name_to=$userinfo['firstname'].' '.$userinfo['lastname'];
-			$email_to=$userinfo['email'];
-			$sender_name=get_setting('emailAdministrator');
-			$sender_email=get_setting('emailAdministrator');
+			$userinfo = Database::get_user_info_from_id($row['user_id']);	//$row['user_id'] obtained from tbl_wiki_mailcue
+			$name_to = api_get_person_name($userinfo['firstname'], $userinfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+			$email_to = $userinfo['email'];
+			$sender_name = api_get_setting('emailAdministrator');
+			$sender_email = api_get_setting('emailAdministrator');
 			$email_subject = get_lang('EmailWikiChanges').' - '.$_course['official_code'];
-			$email_body= get_lang('DearUser').' '.$userinfo['firstname'].' '.$userinfo['lastname'].',<br /><br />';
-			$email_body .= $emailtext.' <strong>'.$_course['name'].' - '.$group_name.'</strong><br /><br /><br />';						
-			$email_body .= $email_user_author.' ('.$email_date_changes.')<br /><br /><br />';		
-			$email_body .= $email_assignment.'<br /><br /><br />';					
+			$email_body = get_lang('DearUser').' '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).',<br /><br />';
+			$email_body .= $emailtext.' <strong>'.$_course['name'].' - '.$group_name.'</strong><br /><br /><br />';
+			$email_body .= $email_user_author.' ('.$email_date_changes.')<br /><br /><br />';
+			$email_body .= $email_assignment.'<br /><br /><br />';
 			$email_body .= '<font size="-2">'.get_lang('EmailWikiChangesExt_1').': <strong>'.get_lang('NotifyChanges').'</strong><br />';
 			$email_body .= get_lang('EmailWikiChangesExt_2').': <strong>'.get_lang('NotNotifyChanges').'</strong></font><br />';
 			api_mail_html($name_to, $email_to, $email_subject, $email_body, $sender_name, $sender_email, $headers);
-		}	
+		}
 	}
-}  
+}
 
 
 /**
@@ -1772,18 +1788,18 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 		$groupPart = '';
 		$groupPath ='';
 	}
-	
+
 	$exportDir = api_get_path(SYS_COURSE_PATH).api_get_course_path(). '/document'.$groupPath;
 	$exportFile = replace_dangerous_char(replace_accents($wikiTitle), 'strict' ) . $groupPart;
-	
-	$wikiContents = stripslashes($wikiContents);	
+
+	$wikiContents = stripslashes($wikiContents);
 	$wikiContents = trim(preg_replace("/\[\[|\]\]/", " ", $wikiContents));
-	
+
 	$i = 1;
 	while ( file_exists($exportDir . '/' .$exportFile.'_'.$i.'.html') ) $i++; //only export last version, but in new export new version in document area
 	$wikiFileName = $exportFile . '_' . $i . '.html';
 	$exportPath = $exportDir . '/' . $wikiFileName;
-	file_put_contents( $exportPath, $wikiContents );		 
+	file_put_contents( $exportPath, $wikiContents );
 	$doc_id = add_document($_course, $groupPath.'/'.$wikiFileName,'file',filesize($exportPath),$wikiFileName);
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), $groupId);
     // TODO: link to go document area
@@ -1796,7 +1812,7 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 
 function double_post($wpost_id)
 {
-	if(isset($_SESSION['wpost_id'])) 
+	if(isset($_SESSION['wpost_id']))
 	{
  		if ($wpost_id == $_SESSION['wpost_id'])
 		{
@@ -1822,13 +1838,13 @@ function double_post($wpost_id)
  */
 function auto_add_page_users($assignment_type)
 {
-	global $assig_user_id; //need to identify end reflinks	
+	global $assig_user_id; //need to identify end reflinks
 
-	$_clean['group_id']=(int)$_SESSION['_gid'];	
-	
-	
-	if($_clean['group_id']==0)   
-  	{	
+	$_clean['group_id']=(int)$_SESSION['_gid'];
+
+
+	if($_clean['group_id']==0)
+  	{
   		//extract course members
 		if(!empty($_SESSION["id_session"])){
 			$a_users_to_add = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session']);
@@ -1839,69 +1855,69 @@ function auto_add_page_users($assignment_type)
 		}
 	}
 	else
-	{ 
+	{
 		//extract group members
 		$subscribed_users = GroupManager :: get_subscribed_users($_clean['group_id']);
 		$subscribed_tutors = GroupManager :: get_subscribed_tutors($_clean['group_id']);
 		$a_users_to_add_with_duplicates=array_merge($subscribed_users, $subscribed_tutors);
-	
+
 		//remove duplicates
 		$a_users_to_add = $a_users_to_add_with_duplicates;
 		array_walk($a_users_to_add, create_function('&$value,$key', '$value = json_encode($value);'));
 		$a_users_to_add = array_unique($a_users_to_add);
-		array_walk($a_users_to_add, create_function('&$value,$key', '$value = json_decode($value, true);'));	
-	}    
+		array_walk($a_users_to_add, create_function('&$value,$key', '$value = json_decode($value, true);'));
+	}
 
-	
+
 	$all_students_pages = array();
 
 	//data about teacher
 	$userinfo=Database::get_user_info_from_id(api_get_user_id());
 	require_once api_get_path(INCLUDE_PATH).'/lib/usermanager.lib.php';
 	if (api_get_user_id()<>0)
-	{		
+	{
 		$image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',false, true);
 		$image_repository = $image_path['dir'];
 		$existing_image = $image_path['file'];
-		$photo= '<img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="40" height="50" align="top" title="'.$name.'"  />';	
+		$photo= '<img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="40" height="50" align="top" title="'.$name.'"  />';
 	}
 	else
 	{
 		$photo= '<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.$name.'"  width="40" height="50" align="top"  title="'.$name.'"  />';
-	}			 
-	
+	}
+
 	//teacher assignment title
 	$title_orig=$_POST['title'];
-	
+
 	//teacher assignment reflink
 	$link2teacher=$_POST['title']= $title_orig."_uass".api_get_user_id();
-	
-	//first: teacher name, photo, and assignment description (original content)	
-    $content_orig_A='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Teacher').': '.$userinfo['firstname'].' '.$userinfo['lastname'].'</div><br/><div>';
+
+	//first: teacher name, photo, and assignment description (original content)
+    $content_orig_A='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Teacher').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</div><br/><div>';
 	$content_orig_B='<h1>'.get_lang('AssignmentDescription').'</h1></div><br/>'.$_POST['content'];
-	
+
     //Second: student list (names, photo and links to their works).
 	//Third: Create Students work pages.
-	
+
    	foreach($a_users_to_add as $user_id=>$o_user_to_add)
-	{					  
+	{
 		if($o_user_to_add['user_id'] != api_get_user_id()) //except that puts the task
 		{
-											 		 
-			$assig_user_id= $o_user_to_add['user_id']; //identifies each page as created by the student, not by teacher		
+
+			$assig_user_id= $o_user_to_add['user_id']; //identifies each page as created by the student, not by teacher
 			$image_path = UserManager::get_user_picture_path_by_id($assig_user_id,'web',false, true);
 			$image_repository = $image_path['dir'];
 			$existing_image = $image_path['file'];
-			$name= $o_user_to_add['lastname'].', '.$o_user_to_add['firstname'];
+			$name = api_get_person_name($o_user_to_add['firstname'], $o_user_to_add['lastname']);
 			$photo= '<img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="40" height="50" align="bottom" title="'.$name.'"  />';
-			
-			$is_tutor_of_group = GroupManager :: is_tutor_of_group($assig_user_id,$_clean['group_id']); //student is tutor			
-			$is_tutor_and_member = (GroupManager :: is_tutor_of_group($assig_user_id,$_clean['group_id']) && GroupManager :: is_subscribed($assig_user_id, $_clean['group_id'])); //student is tutor and member		
-			
+
+			$is_tutor_of_group = GroupManager :: is_tutor_of_group($assig_user_id,$_clean['group_id']); //student is tutor
+			$is_tutor_and_member = (GroupManager :: is_tutor_of_group($assig_user_id,$_clean['group_id']) && GroupManager :: is_subscribed($assig_user_id, $_clean['group_id'])); //student is tutor and member
+
 			if($is_tutor_and_member)
 			{
 				$status_in_group=get_lang('GroupTutorAndMember');
-				
+
 			}
 			else
 			{
@@ -1913,45 +1929,45 @@ function auto_add_page_users($assignment_type)
 				{
 					$status_in_group=" "; //get_lang('GroupStandardMember')
 				}
-			}					
-			
+			}
+
 			if($assignment_type==1)
-			{			 
+			{
 				$_POST['title']= $title_orig;
-				$_POST['comment']=get_lang('AssignmentFirstComToStudent');				
+				$_POST['comment']=get_lang('AssignmentFirstComToStudent');
 				$_POST['content']='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Student').': '.$name.'</div>[['.$link2teacher.' | '.get_lang('AssignmentLinktoTeacherPage').']] '; //If $content_orig_B is added here, the task written by the professor was copied to the page of each student. TODO: config options
-				
-			   //AssignmentLinktoTeacherPage	        
-			 	$all_students_pages[] = '<li>'.$o_user_to_add['lastname'].', '.$o_user_to_add['firstname'].' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>';
-				
+
+				//AssignmentLinktoTeacherPage
+			 	$all_students_pages[] = '<li>'.api_get_person_name($o_user_to_add['firstname'], $o_user_to_add['lastname']).' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>';
+
 				$_POST['assignment']=2;
-				
-			}			
-			save_new_wiki();	
-		}	
-        		
+
+			}
+			save_new_wiki();
+		}
+
 	}//end foreach for each user
-	
-	
+
+
 	foreach($a_users_to_add as $user_id=>$o_user_to_add)
 	{
-			
+
 		if($o_user_to_add['user_id'] == api_get_user_id())
-		{		
-			$assig_user_id=$o_user_to_add['user_id'];			
-			if($assignment_type==1)	
-			 {					 
-				$_POST['title']= $title_orig;	
+		{
+			$assig_user_id=$o_user_to_add['user_id'];
+			if($assignment_type==1)
+			 {
+				$_POST['title']= $title_orig;
 				$_POST['comment']=get_lang('AssignmentDesc');
 				sort($all_students_pages);
 				$_POST['content']=$content_orig_A.$content_orig_B.'<br/><div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.get_lang('AssignmentLinkstoStudentsPage').'<br/><strong>'.$title_orig.'</strong></div><div style="background-color: #F5F8FB; border:double"><ol>'.implode($all_students_pages).'</ol></div><br/>';
 			 	$_POST['assignment']=1;
-						
-			 }					 
-			
+
+			 }
+
 			save_new_wiki();
 		}
-			
+
 	} //end foreach to teacher
 }
 
@@ -1961,13 +1977,13 @@ function auto_add_page_users($assignment_type)
  */
 function display_wiki_search_results($search_term, $search_content=0)
 {
-	global $tbl_wiki, $groupfilter, $MonthsLong; 
-	
+	global $tbl_wiki, $groupfilter, $MonthsLong;
+
 	echo '<div class="row"><div class="form_header">'.get_lang('WikiSearchResults').'</div></div>';
 
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 
-	if(api_is_allowed_to_edit() || api_is_platform_admin()) //only by professors if page is hidden
+	if(api_is_allowed_to_edit(false,true) || api_is_platform_admin()) //only by professors if page is hidden
 	{
 		if($search_content=='1')
 		{
@@ -2027,15 +2043,15 @@ function display_wiki_search_results($search_term, $search_content=0)
 			$row = array ();
 			$row[] =$ShowAssignment;
 			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
-			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.$userinfo['lastname'].', '.$userinfo['firstname'].'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
+			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
 			$row[] = $year.'-'.$month.'-'.$day.' '.$hours.":".$minutes.":".$seconds;
-			
-			if(api_is_allowed_to_edit()|| api_is_platform_admin())
+
+			if(api_is_allowed_to_edit(false,true)|| api_is_platform_admin())
 			{
 				$showdelete=' <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=delete&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'"><img src="../img/delete.gif" title="'.get_lang('Delete').'" alt="'.get_lang('Delete').'" />';
-			}			
-			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=edit&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'"><img src="../img/lp_quiz.png" title="'.get_lang('EditPage').'" alt="'.get_lang('EditPage').'" /></a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=discuss&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'"><img src="../img/comment_bubble.gif" title="'.get_lang('Discuss').'" alt="'.get_lang('Discuss').'" /></a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=history&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'"><img src="../img/history.gif" title="'.get_lang('History').'" alt="'.get_lang('History').'" /></a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=links&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'"><img src="../img/lp_link.png" title="'.get_lang('LinksPages').'" alt="'.get_lang('LinksPages').'" /></a>'.$showdelete;		
-			
+			}
+			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=edit&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'"><img src="../img/lp_quiz.png" title="'.get_lang('EditPage').'" alt="'.get_lang('EditPage').'" /></a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=discuss&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'"><img src="../img/comment_bubble.gif" title="'.get_lang('Discuss').'" alt="'.get_lang('Discuss').'" /></a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=history&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'"><img src="../img/history.gif" title="'.get_lang('History').'" alt="'.get_lang('History').'" /></a> <a href="'.api_get_self().'?cidReq='.$_course[id].'&action=links&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'"><img src="../img/lp_link.png" title="'.get_lang('LinksPages').'" alt="'.get_lang('LinksPages').'" /></a>'.$showdelete;
+
 			$rows[] = $row;
 		}
 
@@ -2047,10 +2063,10 @@ function display_wiki_search_results($search_term, $search_content=0)
 		$table->set_header(2,get_lang('Author').' ('.get_lang('LastVersion').')', true);
 		$table->set_header(3,get_lang('Date').' ('.get_lang('LastVersion').')', true);
 		$table->set_header(4,get_lang('Actions'), true, array ('style' => 'width:100px;'));
-		
+
 		$table->display();
 	}
-	else 
+	else
 	{
 		echo get_lang('NoSearchResults');
 	}
@@ -2063,12 +2079,12 @@ function display_wiki_search_results($search_term, $search_content=0)
 function draw_date_picker($prefix,$default='') {
 
 	if(empty($default)) {
-	$default = date('Y-m-d H:i:s');	
+	$default = date('Y-m-d H:i:s');
 	}
 	$parts = split(' ',$default);
 	list($d_year,$d_month,$d_day) = split('-',$parts[0]);
 	list($d_hour,$d_minute) = split(':',$parts[1]);
-	
+
 	$month_list = array(
 	1=>get_lang('JanuaryLong'),
 	2=>get_lang('FebruaryLong'),
@@ -2083,7 +2099,7 @@ function draw_date_picker($prefix,$default='') {
 	11=>get_lang('NovemberLong'),
 	12=>get_lang('DecemberLong')
 	);
-		
+
 	$minute = range(10,59);
 	array_unshift($minute,'00','01','02','03','04','05','06','07','08','09');
 	$date_form = make_select($prefix.'_day', array_combine(range(1,31),range(1,31)), $d_day);
@@ -2103,7 +2119,7 @@ function make_select($name,$values,$checked='') {
  	foreach($values as $key => $value) {
  		$output .= '<option value="'.$key.'" '.(($checked==$key)?'selected="selected"':'').'>'.$value.'</option>';
  	}
- 	$output .= '</select>';	
+ 	$output .= '</select>';
  	return $output;
 }
 

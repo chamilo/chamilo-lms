@@ -24,5 +24,5 @@
 // var wwwroot = "http://path/to/your/moodledir"
 // or copy the ASCIIMathML.js file into this file.
 
-var wwwroot = document.getElementsByTagName("script")[0].src.replace(/((.*?)\/lib\/.*)/,"$2"); 
+var wwwroot = document.getElementsByTagName("script")[0].src.replace(/((.*?)\/lib\/.*)/,"$2");
 document.write('<script src="'+wwwroot+'/filter/asciimath/ASCIIMathML.js"></script>');

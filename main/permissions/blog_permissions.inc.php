@@ -3,7 +3,7 @@
 /**
 * smartBlogs add-on: it must be possible to change rights for every single blog
 * in a course.
-* 
+*
 * @author Toon Keppens
 */
 // Init
@@ -19,9 +19,9 @@ $blog_users = Blog::get_blog_users(mysql_escape_string($_GET['blog_id']));
 // and we want to keep it that way.
 $tbl_course_rel_user = $table=Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $sql = "SELECT user_id FROM $tbl_course_rel_user WHERE status = '1' AND course_code = '".$_SESSION['_cid']."'";
-$result = api_sql_query($sql,__FILE__,__LINE__);
+$result = Database::query($sql,__FILE__,__LINE__);
 while ($user = mysql_fetch_assoc($result)) {
-	unset($blog_users[$user['user_id']]);	
+	unset($blog_users[$user['user_id']]);
 }
 
 //$user_id=$userIdViewed;
@@ -63,12 +63,12 @@ if (api_get_setting('user_roles')=='true')
 	$current_user_role_permissions_of_user=get_roles_permissions('user',$user_id);
 	$inherited_permissions=permission_array_merge($inherited_permissions,$current_user_role_permissions_of_user);
 	// NOTE: deze array moet nog gemerged worden met de $inherited_permissions array
-	// (heet momenteel nog $current_group_permissions_of_user omdat voorlopig enkel de 
-	// groepsgeërfde permissions in beschouwing worden genomen
+	// (heet momenteel nog $current_group_permissions_of_user omdat voorlopig enkel de
+	// groepsgeï¿½rfde permissions in beschouwing worden genomen
 	// dit moet ook de rol permissies van rollen die toegekend worden aan een gebruiker
 	// en de rol permissies van rollen die toegekend worden aan de groepen van een gebruiker
 	// omvatten.
-	// NOTE: checken als de rollen brol wel degelijk geactiveerd is voordat we dit allemaal 
+	// NOTE: checken als de rollen brol wel degelijk geactiveerd is voordat we dit allemaal
 	// ophalen.
 	// platform roles that are assigned to the user
 	$current_user_role_permissions_of_user=get_roles_permissions('user',$user_id, 'platform');
@@ -109,7 +109,7 @@ if (api_get_setting('user_roles')=='true')
 echo "<table class=\"data_table\">\n";
 
 // the header
-echo "\t<tr>\n";	
+echo "\t<tr>\n";
 	echo "\t\t<th rowspan=\"2\">".get_lang('Module')."</th>\n";
 	echo "\t\t<th colspan=\"4\">".get_lang('ArticleManager')."</th>\n";
 	echo "\t\t<th colspan=\"3\">".get_lang('CommentManager')."</th>\n";
@@ -138,24 +138,24 @@ foreach ($blog_users as $user_id => $user_name) // $blog_users contains all the 
 	// ---------------------------------------------------
 	$current_user_permissions = array();
 	$current_user_permissions = get_permissions('user', $user_id);
-	
-	echo "\t<tr>\n";	
+
+	echo "\t<tr>\n";
 	echo "\t\t<td>\n";
 		echo $user_name;
-	echo "\t\t</td>\n"; 
-	
+	echo "\t\t</td>\n";
+
 	foreach ($rights_full as $key => $value)
 	{
-		
+
 		echo "\t\t<td align='center'>\n";
 		if (in_array($value,$rights_blog))
 		{
 			display_image_matrix_for_blogs($current_user_permissions, $user_id, 'BLOG_'.$blog_id, $value,$inherited_permissions, $course_admin);
-		}		
+		}
 		// note: in a later stage this part will be replaced by a function
 		// so that we can easily switch between a checkbox approach or an image approach
-		// where every click is in fact a change of status. In the checkbox approach you first have to 
-		// do the changes and then store them by clicking the submit button. 
+		// where every click is in fact a change of status. In the checkbox approach you first have to
+		// do the changes and then store them by clicking the submit button.
 		echo "\t\t</td>\n";
 	}
 	echo "\t</tr>\n";

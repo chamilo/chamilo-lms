@@ -12,9 +12,9 @@ body {
 
 #outerframe {
 	position: relative;  /* do not remove, fixes a bug in IE */
-	
+
 	background-color: #fff;
-	
+
 	background-repeat:no-repeat;
 }
 
@@ -37,9 +37,9 @@ body {
  background-color: transparent;
 
  min-height: 320px;
- 
- 
- 
+
+
+
  background-repeat: no-repeat;
 }
 
@@ -198,11 +198,11 @@ input[text] {font-size: 12px; }
 	width:180px;
 
 	height:74px;
-	
+
 	margin-bottom: 0px;
-	
+
 	margin-top: 10px;
-	
+
 	margin-right: 5px;
 
 	padding: 0px 0px 0px 0px;
@@ -243,7 +243,7 @@ input[text] {font-size: 12px; }
 	padding-bottom: 0.2em;
 	background: #ffffff;
 	color: #666;
-	
+
 }
 #header2 a {
 	color: #666;
@@ -281,7 +281,7 @@ input[text] {font-size: 12px; }
 	padding: 0.8em 0.5em 0.4em 0.5em;
 	background: #fff;
 	color: #006;
-	
+
 	height:25px;
 	margin-bottom: 1px;
 	background-image: url(Images/fondoHeader3.jpg);
@@ -291,7 +291,7 @@ input[text] {font-size: 12px; }
 	PADDING-RIGHT: 15px;
 	DISPLAY: block;
 	PADDING-LEFT: 6px;
-	
+
 	BACKGROUND:  url(Images/tab_right.gif) no-repeat right top;
 	PADDING-BOTTOM: 0px;
 	COLOR: #fff;
@@ -300,7 +300,7 @@ input[text] {font-size: 12px; }
 }
 #header3 A:hover {
 	COLOR: #9ba408;
-	
+
 }
 #header3 UL {
 	PADDING-RIGHT: 10px;
@@ -327,7 +327,7 @@ input[text] {font-size: 12px; }
 	PADDING-TOP: 0px
 }
 #header3 #current {
-	
+
 }
 #header3 #current A {
 		COLOR: #999
@@ -412,7 +412,7 @@ input[text] {font-size: 12px; }
 	font-size: 12px;
 	font-weight:bold;
 	color:#ec135a;
-	
+
 
 }
 #footer .copyright {

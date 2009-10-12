@@ -22,7 +22,8 @@
 	Mail: info@dokeos.com
 ==============================================================================
 */
-require_once('Resource.class.php');
+
+require_once 'Resource.class.php';
 
 /**
  * ScormDocument class
@@ -53,7 +54,14 @@ class ScormDocument extends Resource
 	function show()
 	{
 		parent::show();
-		echo substr($this->path,8);
+		$path = preg_replace('@^scorm/@', '', $this->path);
+		echo $path;
+		if (!empty($this->title) && (api_get_setting('use_document_title') == 'true'))
+		{
+			if (strpos($path, $this->title) === false)
+			{
+				echo " - ".$this->title;
+			}
+		}
 	}
 }
-?>

@@ -1,5 +1,8 @@
 $(document).ready(function() {
     $(window).load(function () {
+	  my_protocol = location.protocol;
+	  my_pathname=location.pathname;
+	  work_path = my_pathname.substr(0,my_pathname.indexOf('/courses/'));
 	    $("body .glossary").mouseover(function(){
 	        is_glossary_name=$(this).html();
 		    random_id=Math.round(Math.random()*100);
@@ -12,19 +15,19 @@ $(document).ready(function() {
 	       $.ajax({
 	            contentType: "application/x-www-form-urlencoded",
 	            beforeSend: function(objeto) {
-	            $("div#"+div_content_id).html("<img src=\'../../../main/inc/lib/javascript/indicator.gif\' />"); },
+	            $("div#"+div_content_id).html("<img src="+my_protocol+"//"+location.host+work_path+"/main/inc/lib/javascript/indicator.gif />"); },
 	            type: "POST",
-	            url: "../../../main/glossary/glossary_ajax_request.php",
+	            url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
 	            data: "glossary_name="+is_glossary_name,
 	            success: function(datos) {
 	                $("div#"+div_content_id).html(datos);
 	            }
-	        }); 		 
+	        });
 	    });
 	    $("body .glossary").mouseout(function(){
 	        current_element=$(this);
 	        div_show_id=current_element.find("div").attr("id");
-	        $("div#"+div_show_id).remove();      
-	    });	 
+	        $("div#"+div_show_id).remove();
+	    });
     });
 });

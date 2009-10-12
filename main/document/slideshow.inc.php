@@ -20,11 +20,11 @@
 ==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	@author Patrick Cool
 *	@package dokeos.document
 *	@todo convert comments to be understandable to phpDocumentor
-============================================================================== 
+==============================================================================
 */
 /*
 ==============================================================================
@@ -34,11 +34,11 @@ Ghent University
 Mai 2004
 http://icto.UGent.be
 
-Please bear in mind that this is only an alpha release. 
-I wrote this quite quick and didn't think too much about it in advance. 
+Please bear in mind that this is only an alpha release.
+I wrote this quite quick and didn't think too much about it in advance.
 It is not perfect at all but it is workable and usefull (I think)
 Do not consider this as a powerpoint replacement, although it has
-the same starting point. 
+the same starting point.
 ==============================================================================
 */
 /*
@@ -47,11 +47,11 @@ Description:
 	This is a plugin for the documents tool. It looks for .jpg, .jpeg, .gif, .png
 	files (since these are the files that can be viewed in a browser) and creates
 	a slideshow with it by allowing to go to the next/previous image.
-	You can also have a quick overview (thumbnail view) of all the images in 
+	You can also have a quick overview (thumbnail view) of all the images in
 	that particular folder.
 	Maybe it is important to notice that each slideshow is folder based. Only
-	the images of the chosen folder are shown. 
-	
+	the images of the chosen folder are shown.
+
 	This file has two large sections.
 	1. code that belongs in document.php, but to avoid clutter I put the code here
 	2. the function resize_image that handles the image resizing
@@ -77,8 +77,8 @@ Description:
 function resize_image($image, $target_width, $target_height, $slideshow=0) {
 /*  // Replaced fragment of code by Ivan Tcholakov, 04-MAY-2009.
 	// 1. grabbing the image height and width of the original image
-		$image_properties=getimagesize($image); 
-		$source_width=$image_properties["0"]; 
+		$image_properties=getimagesize($image);
+		$source_width=$image_properties["0"];
 		$source_height=$image_properties["1"];
 		//print_r($image_properties);
 
@@ -95,12 +95,12 @@ function resize_image($image, $target_width, $target_height, $slideshow=0) {
 		{
 		if ($resize_factor_width<=1 and $resize_factor_height<=1)
 			{
-			if ($resize_factor_width > $resize_factor_height)	
+			if ($resize_factor_width > $resize_factor_height)
 				{
 				$image_width=$target_width;
 				$image_height=ceil($source_height*$resize_factor_width);
 				}
-			if ($resize_factor_width < $resize_factor_height)	
+			if ($resize_factor_width < $resize_factor_height)
 				{
 				$image_width=ceil($source_width*$resize_factor_height);
 				$image_height=$target_height;
@@ -111,7 +111,7 @@ function resize_image($image, $target_width, $target_height, $slideshow=0) {
 				$image_height=ceil($source_height*$resize_factor_height);
 				}
 			//echo "image width=".$image_width."<br>";
-			//echo "image height=".$image_height; 
+			//echo "image height=".$image_height;
 		} //if ($resize_factor_width<=1 and $resize_factor_height<=1)
 	else // no resizing required
 		{

@@ -1,4 +1,4 @@
-<?
+<?php
 	/**
 	 * sysem base config setting
 	 * @author Antonello Alonzi (info@smsoft.it)
@@ -17,7 +17,7 @@
 	define('LBL_MODIFIED', 'Modificato');
 		//File Information
 	define('LBL_FILE_INFO', 'Info File:');
-	define('LBL_FILE_NAME', 'Nome:');	
+	define('LBL_FILE_NAME', 'Nome:');
 	define('LBL_FILE_CREATED', 'Creato:');
 	define("LBL_FILE_MODIFIED", 'Modificato:');
 	define("LBL_FILE_SIZE", 'Dimensione:');
@@ -62,7 +62,7 @@
 	define('ERR_FOLDER_EXISTS', 'Per favore usa un nome univoco in questa cartella.');
 	define('ERR_FOLDER_CREATION_FAILED', 'Impossibile creare la cartella, prova ancora.');
 	define('ERR_FOLDER_NAME_EMPTY', 'Per favore indica un nome.');
-	
+
 		//file upload
 	define("ERR_FILE_NAME_FORMAT", 'Per favore inserisci un nome che contiene solo lettere, cifre, spazi, underscore e trattini.');
 	define('ERR_FILE_NOT_UPLOADED', 'Nessun file selezionato per il caricamento.');
@@ -70,7 +70,7 @@
 	define('ERR_FILE_MOVE_FAILED', 'Errore spostamento file.');
 	define('ERR_FILE_NOT_AVAILABLE', 'File non disponivile.');
 	define('ERROR_FILE_TOO_BID', 'File troppo grande. (max: %s)');
-	
+
 
 	//Tips
 	define('TIP_FOLDER_GO_DOWN', 'Click singolo per accedere alla Cartella...');
@@ -91,6 +91,6 @@
 	define('LOGIN_USERNAME', 'Username:');
 	define('LOGIN_PASSWORD', 'Password:');
 	define('LOGIN_FAILED', 'Username/password non corretti.');
-	
-	
+
+
 ?>

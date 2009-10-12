@@ -7,7 +7,7 @@ Mock::generate('api_failure');
 
 
 class TestSessionManager extends UnitTestCase {
-	
+
 	function testadd_courses_to_session() {
 		$id_session='';
 		$course_list='';
@@ -16,7 +16,7 @@ class TestSessionManager extends UnitTestCase {
 		if(!empty($res)) {
 			$this->assertTrue(is_null($res));
 		} else {
-			$this->assertTrue(is_bool($res));	
+			$this->assertTrue(is_bool($res));
 		}
 		ob_end_clean();
 		//var_dump($res);
@@ -37,7 +37,7 @@ class TestSessionManager extends UnitTestCase {
 		$nolimit='';
 		$coach_username='';
 		$id_session=Database::get_last_insert_id();
-		ob_start();	
+		ob_start();
 		$res=SessionManager::create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$nolimit,$coach_username);
 		$idsesion->expectOnce(Database::get_last_insert_id());
 		$this->assertTrue(is_object($idsesion));
@@ -46,7 +46,7 @@ class TestSessionManager extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($idsesion);
 	}
-	
+
 	function testcreate_session_extra_field() {
 		$fieldvarname='';
 		$fieldtype='';
@@ -72,7 +72,7 @@ class TestSessionManager extends UnitTestCase {
 		var_dump($res);
 	}
 	*/
-	
+
 	function testedit_session() {
 		$idsesion = new MockDatabase();
 		global $_user;
@@ -95,30 +95,30 @@ class TestSessionManager extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($id);
 	}
-	
+
 	function testget_session_by_name() {
 		$session_name='';
 		$res=SessionManager::get_session_by_name($session_name);
-		if(!is_bool($res)) $this->assertTrue(is_array($res)); 
+		if(!is_bool($res)) $this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+
 	function testrelation_session_course_exist() {
 		$session_id='';
 		$course_id='';
 		$res=SessionManager::relation_session_course_exist($session_id, $course_id);
-		if(!is_numeric($res)) $this->assertTrue(is_bool($res)); 
+		if(!is_numeric($res)) $this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testsuscribe_users_to_session() {
 		$id_session='';
 		$user_list='';
 		$res=SessionManager::suscribe_users_to_session($id_session,$user_list,$empty_users=true);
-		if(!is_null($res)) $this->assertTrue(is_bool($res)); 
+		if(!is_null($res)) $this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testupdate_session_extra_field_value() {
 		$session_id='';
 		$fname='';

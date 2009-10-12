@@ -61,7 +61,7 @@ if(1)
 			switch ($_GET['action']) {
 				case 'show_message' :
 					Display :: display_normal_message($_GET['message']);
-					break;			
+					break;
 				case 'show_field' :
 					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_visible'=>'1'))) {
 						Display :: display_confirmation_message(get_lang('FieldShown'));
@@ -75,14 +75,14 @@ if(1)
 					} else {
 						Display :: display_error_message(get_lang('CannotHideField'));
 					}
-					break;	
+					break;
 				case 'thaw_field' :
 					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_changeable'=>'1'))) {
 						Display :: display_confirmation_message(get_lang('FieldMadeChangeable'));
 					} else {
 						Display :: display_error_message(get_lang('CannotMakeFieldChangeable'));
 					}
-					break;	
+					break;
 				case 'freeze_field' :
 					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_changeable'=>'0'))) {
 						Display :: display_confirmation_message(get_lang('FieldMadeUnchangeable'));
@@ -100,13 +100,13 @@ if(1)
 					}
 					break;
 				case 'movedown' :
-					if (api_is_platform_admin() && !empty($_GET['field_id'])) {					
+					if (api_is_platform_admin() && !empty($_GET['field_id'])) {
 						if (move_user_field('movedown', $_GET['field_id'])) {
 							Display :: display_confirmation_message(get_lang('FieldMovedDown'));
 						} else {
 							Display :: display_error_message(get_lang('CannotMoveField'));
-						}					
-					}				
+						}
+					}
 					break;
 				case 'filter_on' :
 					if (api_is_platform_admin() && !empty($_GET['field_id']) && UserManager :: update_extra_field($_GET['field_id'],array('field_filter'=>'1'))) {
@@ -122,7 +122,7 @@ if(1)
 						Display :: display_error_message(get_lang('CannotShowField'));
 					}
 					break;
-							
+
 				case 'delete':
 					if (api_is_platform_admin() && !empty($_GET['field_id'])) {
 						if (delete_user_fields($_GET['field_id'])) {
@@ -146,7 +146,7 @@ if(1)
 			Security::clear_token();
 		}
 	}
-	
+
 	// Create an add-field box
 	$form = new FormValidator('add_field','post','','',null,false);
 	$renderer =& $form->defaultRenderer();
@@ -166,21 +166,21 @@ if(1)
 	$column_show  = array(1,1,1,1,1,1,1,1,1,0,0);
 	$column_order = array(1,2,3,4,5,6,7,8,9,10,11);
 	$extra_fields = UserManager::get_extra_fields(0,100,5,'ASC');
-	
+
 	$number_of_extra_fields = count($extra_fields);
- 
+
 	$table = new SortableTableFromArrayConfig($extra_fields, 5, 50, '', $column_show, $column_order, 'ASC');
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false);
-	$table->set_header(1, get_lang('FieldLabel'));
-	$table->set_header(2, get_lang('FieldType'));
+	$table->set_header(1, get_lang('FieldLabel'), false);
+	$table->set_header(2, get_lang('FieldType'), false);
 	$table->set_header(3, get_lang('FieldTitle'),false);
 	$table->set_header(4, get_lang('FieldDefaultValue'),false);
-	$table->set_header(5, get_lang('FieldOrder'));
-	$table->set_header(6, get_lang('FieldVisibility'));
-	$table->set_header(7, get_lang('FieldChangeability'));
-	$table->set_header(8, get_lang('FieldFilter'));	
-	$table->set_header(9, get_lang('Modify'));
+	$table->set_header(5, get_lang('FieldOrder'), false);
+	$table->set_header(6, get_lang('FieldVisibility'), false);
+	$table->set_header(7, get_lang('FieldChangeability'), false);
+	$table->set_header(8, get_lang('FieldFilter'), false);
+	$table->set_header(9, get_lang('Modify'), false);
 	$table->set_column_filter(5, 'order_filter');
 	$table->set_column_filter(6, 'modify_visibility');
 	$table->set_column_filter(7, 'modify_changeability');
@@ -213,7 +213,7 @@ function get_extra_fields($f,$n,$o,$d)
  *
  * @param integer $type the id of the form type
  * @return string the huma readable description of the field type (text, date, select drop-down, ...)
- * 
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version July 2008
  * @since Dokeos 1.8.6
@@ -228,8 +228,8 @@ function type_filter($type)
 	$types[USER_FIELD_TYPE_DATE] 				= get_lang('FieldTypeDate');
 	$types[USER_FIELD_TYPE_DATETIME] 			= get_lang('FieldTypeDatetime');
 	$types[USER_FIELD_TYPE_DOUBLE_SELECT] 		= get_lang('FieldTypeDoubleSelect');
-	$types[USER_FIELD_TYPE_DIVIDER] 			= get_lang('FieldTypeDivider');	
-	
+	$types[USER_FIELD_TYPE_DIVIDER] 			= get_lang('FieldTypeDivider');
+
 	return $types[$type];
 }
 
@@ -240,7 +240,7 @@ function type_filter($type)
  * @param	array	Url parameters
  * @param	array	The results row
  * @return	string	The link
- * 
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version July 2008
  * @since Dokeos 1.8.6
@@ -248,24 +248,24 @@ function type_filter($type)
 function order_filter($field_order,$url_params,$row)
 {
 	global $number_of_extra_fields;
-	
+
 	// the up icon only has to appear when the row can be moved up (all but the first row)
 	if ($row[5]<>1)
 	{
 		$return .= '<a href="'.api_get_self().'?action=moveup&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('up.gif', get_lang('Up')).'</a>';
 	}
-	else 
+	else
 	{
 		$return .= Display::return_icon('blank.gif','',array('width'=>'21px'));
 	}
-	
+
 	// the down icon only has to appear when the row can be moved down (all but the last row)
 	if ($row[5]<>$number_of_extra_fields)
 	{
 		$return .= '<a href="'.api_get_self().'?action=movedown&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('down.gif', get_lang('Down')).'</a>';
 	}
-	
-	return $return; 
+
+	return $return;
 }
 /**
  * Modify the visible field to show links and icons
@@ -301,14 +301,14 @@ function edit_filter($id,$url_params,$row)
 	global $charset;
 	$return = '<a href="user_fields_add.php?action=edit&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>';
 	$return .= ' <a href="'.api_get_self().'?action=delete&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';
-	return $return; 
+	return $return;
 }
 /**
  * Move a user defined field up or down
  *
  * @param string $direction the direction we have to move the field to (up or down)
  * @param unknown_type $field_id
- * 
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version July 2008
  * @since Dokeos 1.8.6
@@ -317,36 +317,36 @@ function move_user_field($direction,$field_id)
 {
 	// Databse table definitions
 	$table_user_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-	
+
 	// check the parameters
 	if (!in_array($direction,array('moveup','movedown')) OR !is_numeric($field_id))
 	{
-		return false; 
+		return false;
 	}
-	
+
 	// determine the SQL sort direction
 	if ($direction == 'moveup')
 	{
 		$sortdirection = 'DESC';
 	}
-	else 
+	else
 	{
 		$sortdirection = 'ASC';
 	}
-	
-	$found = false; 
-	
+
+	$found = false;
+
 	$sql = "SELECT id, field_order FROM $table_user_field ORDER BY field_order $sortdirection";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	while($row = Database::fetch_array($result))
 	{
 		if ($found)
 		{
 			$next_id = $row['id'];
-			$next_order = $row['field_order'];	
+			$next_order = $row['field_order'];
 			break;
 		}
-		
+
 		if ($field_id == $row['id'])
 		{
 			$this_id = $row['id'];
@@ -354,12 +354,12 @@ function move_user_field($direction,$field_id)
 			$found = true;
 		}
 	}
-	
+
 	$sql1 = "UPDATE ".$table_user_field." SET field_order = '".Database::escape_string($next_order)."' WHERE id =  '".Database::escape_string($this_id)."'";
 	$sql2 = "UPDATE ".$table_user_field." SET field_order = '".Database::escape_string($this_order)."' WHERE id =  '".Database::escape_string($next_id)."'";
-	api_sql_query($sql1,__FILE__,__LINE__);
-	api_sql_query($sql2,__FILE__,__LINE__);
-	
+	Database::query($sql1,__FILE__,__LINE__);
+	Database::query($sql2,__FILE__,__LINE__);
+
 	return true;
 }
 
@@ -368,7 +368,7 @@ function move_user_field($direction,$field_id)
  *
  * @param integer $field_id the id of the field that has to be deleted
  * @return boolean true if the field has been deleted, false if the field could not be deleted (for whatever reason)
- * 
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version July 2008
  * @since Dokeos 1.8.6
@@ -379,39 +379,39 @@ function delete_user_fields($field_id)
 	$table_user_field 			= Database::get_main_table(TABLE_MAIN_USER_FIELD);
 	$table_user_field_options	= Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 	$table_user_field_values 	= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-		
+
 	// delete the fields
 	$sql = "DELETE FROM $table_user_field WHERE id = '".Database::escape_string($field_id)."'";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	if (Database::affected_rows() == 1)
 	{
 		// delete the field options
 		$sql = "DELETE FROM $table_user_field_options WHERE field_id = '".Database::escape_string($field_id)."'";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
-		
+		$result = Database::query($sql,__FILE__,__LINE__);
+
 		// delete the field values
 		$sql = "DELETE FROM $table_user_field_values WHERE field_id = '".Database::escape_string($field_id)."'";
-		$result = api_sql_query($sql,__FILE__,__LINE__);	
-		
+		$result = Database::query($sql,__FILE__,__LINE__);
+
 		// recalculate the field_order because the value is used to show/hide the up/down icon
 		// and the field_order value cannot be bigger than the number of fields
 		$sql = "SELECT * FROM $table_user_field ORDER BY field_order ASC";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql,__FILE__,__LINE__);
 		$i = 1;
 		while($row = Database::fetch_array($result))
 		{
 			$sql_reorder = "UPDATE $table_user_field SET field_order = '".Database::escape_string($i)."' WHERE id = '".Database::escape_string($row['id'])."'";
-			$result_reorder = api_sql_query($sql_reorder,__FILE__,__LINE__);
+			$result_reorder = Database::query($sql_reorder,__FILE__,__LINE__);
 			$i++;
 		}
-		
+
 		// field was deleted so we return true
 		return true;
 	}
-	else 
+	else
 	{
 		// the field was not deleted so we return false
-		return false; 
+		return false;
 	}
 }
 ?>

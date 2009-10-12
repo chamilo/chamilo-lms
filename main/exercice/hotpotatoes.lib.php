@@ -56,17 +56,17 @@ function GetQuizName($fname,$fpath) {
 			//die("could not open Quiz input");
 				return basename($fname);
 			}
-	
+
 			$contents = fread($fp, filesize($fpath.$fname));
 			fclose($fp);
-	
+
 			$contents = api_strtolower($contents);
-	
+
 			$pattern = array ( 1 => "title>", 2 => "/title>");
-	
+
 			$s_contents = api_substr($contents,0,api_strpos($contents,$pattern["2"])-1);
 			$e_contents = api_substr($s_contents,api_strpos($contents,$pattern["1"])+api_strlen($pattern["1"]),api_strlen($s_contents));
-	
+
 			$title = $e_contents;
 		} else {
 			return '';
@@ -83,15 +83,15 @@ function GetQuizName($fname,$fpath) {
  */
 function GetComment($path,$course_code='') {
 	global $dbTable;
-	
-	if (!empty($course_code)) {		
+
+	if (!empty($course_code)) {
 		$course_info = api_get_course_info($course_code);
-		$dbTable     = Database::get_course_table(TABLE_DOCUMENT,$course_info['dbName']);	
+		$dbTable     = Database::get_course_table(TABLE_DOCUMENT,$course_info['dbName']);
 	}
 	$path = Database::escape_string($path);
-	$query = "select comment from $dbTable where path='$path'";		
-	$result = api_sql_query($query,__FILE__,__LINE__);
-	
+	$query = "select comment from $dbTable where path='$path'";
+	$result = Database::query($query,__FILE__,__LINE__);
+
 	while ($row = mysql_fetch_array($result)) {
 		return $row[0];
 	}
@@ -102,14 +102,14 @@ function GetComment($path,$course_code='') {
  * Sets the comment in the database for a particular path
  * @param	string	File path
  * @param	string	Comment to set
- * @return	string	Result of the database operation (api_sql_query will output some message directly on error anyway)
+ * @return	string	Result of the database operation (Database::query will output some message directly on error anyway)
  */
 function SetComment($path,$comment) {
 	global $dbTable;
 	$path = Database::escape_string($path);
 	$comment = Database::escape_string($comment);
 	$query = "UPDATE $dbTable set comment='$comment' where path='$path'";
-	$result = api_sql_query($query,__FILE__,__LINE__);
+	$result = Database::query($query,__FILE__,__LINE__);
 	return "$result";
 }
 
@@ -159,7 +159,7 @@ function WriteFileCont($full_file_path,$content) {
  * @param	string	An image tag (<img src="...." ...>)
  * @return	string	The image file name or an empty string
  */
-function GetImgName($imgtag) {	
+function GetImgName($imgtag) {
     // select src tag from img tag
 	$match = array();
 	//preg_match('/(src=(["\'])1.*(["\'])1)/i',$imgtag,$match);  		  //src
@@ -179,7 +179,7 @@ function GetImgName($imgtag) {
 				return $tmp_src;
 			}
 		}
-	} else { 
+	} else {
         //the img tag contained "http", which means it is probably external. Ignore it.
 		return "";
 	}
@@ -190,7 +190,7 @@ function GetImgName($imgtag) {
  * @param	string	An image tag
  * @return	string	The image source or ""
  */
-function GetSrcName($imgtag) {	
+function GetSrcName($imgtag) {
     // select src tag from img tag
 	$match = array();
 	preg_match("|(src=\".*\" )|U",$imgtag,$match);  		  //src
@@ -211,7 +211,7 @@ function GetSrcName($imgtag) {
  * @param  reference	Reference to a list of image parameters (emptied, then used to return results)
  * @param	reference	Reference to a counter of images (emptied, then used to return results)
  */
-function GetImgParams($fname,$fpath,&$imgparams,&$imgcount) {	
+function GetImgParams($fname,$fpath,&$imgparams,&$imgcount) {
     //select img tags from context
 	$imgparams = array();
 	//phpinfo();
@@ -258,8 +258,8 @@ function myarraysearch(&$array,$node) {
 	for($i=0;$i<count($array);$i++) {
 		if (!strcmp($array[$i],$node)) {
 			$match = $node;
-		} else { 
-            array_push($tmp_array,$array[$i]); 
+		} else {
+            array_push($tmp_array,$array[$i]);
         }
 	}
 	$array = $tmp_array;
@@ -369,8 +369,8 @@ function GetFolderName($fname) {
 function GetFolderPath($fname) {
 	$str = "";
 	$name = explode('/',$fname);
-	for ($i=0;$i < sizeof($name)-1; $i++) { 
-        $str = $str.$name[$i]."/"; 
+	for ($i=0;$i < sizeof($name)-1; $i++) {
+        $str = $str.$name[$i]."/";
     }
 	return $str;
 }
@@ -405,7 +405,7 @@ function CheckSubFolder($path) {
  * @param	integer	User id
  * @return	void	No return value, but echoes results
  */
-function HotPotGCt($folder,$flag,$userID) { 
+function HotPotGCt($folder,$flag,$userID) {
     // Garbage Collector
 	$filelist = array();
 	if ($dir = @opendir($folder)) {

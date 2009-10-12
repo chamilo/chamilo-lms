@@ -9,7 +9,7 @@
  */
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file[] = "scormdocument";
 require_once('back_compat.inc.php');
 require_once('learnpath.class.php');
@@ -34,7 +34,7 @@ $show_link = true;
 if(!api_is_allowed_to_edit()) //if the user has no edit permission (simple user)
 {
 	$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-	$result = api_sql_query("SELECT * FROM $course_tool_table WHERE name='learnpath'",__FILE__,__LINE__);
+	$result = Database::query("SELECT * FROM $course_tool_table WHERE name='learnpath'",__FILE__,__LINE__);
 	if(Database::num_rows($result)>0)
 	{
 		$row = Database::fetch_array($result);
@@ -52,7 +52,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')

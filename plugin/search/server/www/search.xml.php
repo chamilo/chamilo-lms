@@ -40,7 +40,7 @@ BrowserCharset	iso-8859-1
 #LocalCharset   koi8-r
 #BrowserCharset koi8-r
 
-# For cache mode and built-in database 
+# For cache mode and built-in database
 # you may choose alternative working directory
 #VarDir /usr/local/mnogosearch/var
 
@@ -68,7 +68,7 @@ MaxWordLength 32
 #
 #HlBeg	<font color="000088"><b>
 #HlEnd	</b></font>
-HlBeg <hl> 
+HlBeg <hl>
 HlEnd </hl>
 
 # Load synonyms file.  File name is either absolute
@@ -87,17 +87,17 @@ HlEnd </hl>
 # Uncoment this line to change default maximal excerpt size. Default value is 256
 # (requires mnogosearch-3.2.16+)
 ExcerptSize 512
-#                                                                               
+#
 
 # Uncomment this line to change number of characters before and after search words
-# in excerpts. Default value is 40. 
+# in excerpts. Default value is 40.
 # (requires mnogosearch-3.2.16+)
 ExcerptPadding 128
 #
-                                                                                
-# Uncomment this line to change Last-Modified format output                     
-# Use strftime function meta variables                                          
-#DateFormat %d %b %Y %X %Z                                                      
+
+# Uncomment this line to change Last-Modified format output
+# Use strftime function meta variables
+#DateFormat %d %b %Y %X %Z
 
 # Uncomment to limit maximum number of results
 ResultsLimit 1000
@@ -136,7 +136,7 @@ ResultsLimit 1000
 #Spell en /opt/udm/ispell/en.dict
 #Spell ru /opt/udm/ispell/ru.dict
 
-# Searchd address - only for mnogosearch - 3.2.3 or earlier ! 
+# Searchd address - only for mnogosearch - 3.2.3 or earlier !
 #SearchdAddr localhost
 
 # Uncomment this line to enable document presence check at stored
@@ -197,7 +197,7 @@ ResultsLimit 1000
 	<result_cl>$CL</result_cl>
 	<result_stored>$(STORED)</result_stored>
 	<result_sitelimit>$(SITELIMIT)</result_sitelimit>
-</result>	
+</result>
 <!--/res-->
 
 <!--ftpres-->
@@ -216,7 +216,7 @@ ResultsLimit 1000
 	<result_cl>$CL</result_cl>
 	<result_stored>$(STORED)</result_stored>
 	<result_sitelimit>$(SITELIMIT)</result_sitelimit>
-</result>	
+</result>
 <!--/ftpres-->
 
 <!--resbot-->
@@ -250,7 +250,7 @@ ResultsLimit 1000
 	<result_cl>$CL</result_cl>
 	<result_stored>$(STORED)</result_stored>
 	<result_sitelimit>$(SITELIMIT)</result_sitelimit>
-</result>	
+</result>
 <!--/res-->
 <!--resbot-->
 <result_v>$V</result_v>
@@ -281,7 +281,7 @@ ResultsLimit 1000
 	<result_cl>$CL</result_cl>
 	<result_stored>$(STORED)</result_stored>
 	<result_sitelimit>$(SITELIMIT)</result_sitelimit>
-</result>	
+</result>
 <!--/res-->
 <!--resbot-->
 <result_v>$V</result_v>

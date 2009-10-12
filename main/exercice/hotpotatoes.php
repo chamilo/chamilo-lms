@@ -43,7 +43,7 @@ include("hotpotatoes.lib.php");
 $this_section=SECTION_COURSES;
 
 // access restriction: only teachers are allowed here
-if(!api_is_allowed_to_edit())
+if(!api_is_allowed_to_edit(null,true))
 {
 	api_not_allowed();
 }
@@ -52,7 +52,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
@@ -61,7 +61,7 @@ if (!empty($gradebook) && $gradebook=='view') {
 // the breadcrumbs
 $interbreadcrumb[]= array ("url"=>"./exercice.php", "name"=> get_lang('Exercices'));
 
-$is_allowedToEdit=api_is_allowed_to_edit();
+$is_allowedToEdit=api_is_allowed_to_edit(null,true);
 
 // Database table definitions
 $dbTable				= Database::get_course_table(TABLE_DOCUMENT);
@@ -76,7 +76,7 @@ $imgcount		= (!empty($_POST['imgcount'])?$_POST['imgcount']:null);
 $fld			= (!empty($_POST['fld'])?$_POST['fld']:null);
 
 // if user is allowed to edit
-if (api_is_allowed_to_edit())
+if (api_is_allowed_to_edit(null,true))
 {
 	//disable document parsing(?) - obviously deprecated
 	$enableDocumentParsing=false;
@@ -94,7 +94,7 @@ if (api_is_allowed_to_edit())
 
  /** display */
 // if finish is set; it's because the user came from this script in the first place (displaying hidden "finish" field)
-if((api_is_allowed_to_edit()) && (($finish == 0) || ($finish == 2)))
+if((api_is_allowed_to_edit(null,true)) && (($finish == 0) || ($finish == 2)))
 //if(($is_allowedToEdit) )
 {
 	$nameTools = get_lang('HotPotatoesTests');
@@ -191,7 +191,7 @@ if((api_is_allowed_to_edit()) && (($finish == 0) || ($finish == 2)))
 					$query = "UPDATE $dbTable SET comment='$newComment' WHERE path=\"".$uploadPath."/".$fld."/".$filename."\"";
 					/*, visibility='v' */
 
-					api_sql_query($query,__FILE__,__LINE__);
+					Database::query($query,__FILE__,__LINE__);
 					api_item_property_update($_course, TOOL_QUIZ, $id, "QuizAdded", $_user['user_id']);
 				}
 				else
@@ -227,9 +227,6 @@ if((api_is_allowed_to_edit()) && (($finish == 0) || ($finish == 2)))
 	}
 
 	Display::display_header($nameTools,"Exercise");
-	?>
-
-<?php
 
 	if ($finish==2) //if we are in the img upload process
 	{
@@ -261,8 +258,8 @@ if((api_is_allowed_to_edit()) && (($finish == 0) || ($finish == 2)))
 			"<input type=\"file\" name=\"userFile\">\n",
 			"<input type=\"submit\" name=\"submit\" value=\"".get_lang('Send')."\"><br/>\n";*/
 	//Display::display_icon('hotpotatoes.jpg','',array('align'=> 'right', 'style' => 'position: absolute; padding-top: 30px; margin-left: 500px;'));
-	
-	echo '<div class="row"><div class="form_header">'.$nameTools.'</div></div>';	
+
+	echo '<div class="row"><div class="form_header">'.$nameTools.'</div></div>';
 	echo '<div class="row">';
 	echo '<div class="label" style="padding:10px">';
 	echo '<span class="form_required">*</span>';
@@ -275,14 +272,14 @@ if((api_is_allowed_to_edit()) && (($finish == 0) || ($finish == 2)))
 	echo '</div>';
 
 	echo '<div class="formw">';
-	
+
 	echo '<div style="float:left;padding:10px" >
 			<input type="file" name="userFile"><br /><br />
 			<button type="submit" class="upload" name="submit" value="'.get_lang('Send').'">'.get_lang('SendFile').'</button>
 		 </div>';
-	echo '<div>'.Display::display_icon('hotpotatoes.jpg','').'</div>';		
+	echo '<div>'.Display::display_icon('hotpotatoes.jpg','').'</div>';
 	echo '</div></div>';
-	
+
 ?>
 
 <?php

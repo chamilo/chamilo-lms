@@ -33,7 +33,7 @@
 		INIT SECTION
 ==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array('registration','admin');
 include ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
@@ -120,7 +120,7 @@ function get_number_of_classes()
 		$keyword = mysql_real_escape_string($_GET['keyword']);
 		$sql .= " AND (c.name LIKE '%".$keyword."%')";
 	}
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	$result = mysql_num_rows($res);
 	return $result;
 }
@@ -152,7 +152,7 @@ function get_class_data($from, $number_of_items, $column, $direction)
 	$sql .= " GROUP BY c.id, c.name ";
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	$classes = array ();
 	while ($class = mysql_fetch_row($res))
 	{

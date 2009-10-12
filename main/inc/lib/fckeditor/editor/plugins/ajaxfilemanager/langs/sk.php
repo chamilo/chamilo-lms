@@ -1,4 +1,4 @@
-<?
+<?php
 	/**
 	 * language pack
 	 * @author Vladimir Maglakelidze (voloda) (maglakel@gmail.com)
@@ -22,7 +22,7 @@
 	define('LBL_MODIFIED', 'Dátum');
 		//File Information
 	define('LBL_FILE_INFO', 'Info súboru:');
-	define('LBL_FILE_NAME', 'Názov:');	
+	define('LBL_FILE_NAME', 'Názov:');
 	define('LBL_FILE_CREATED', 'Vytvorene:');
 	define("LBL_FILE_MODIFIED", 'Upravene:');
 	define("LBL_FILE_SIZE", 'Veľkosť súbora:');
@@ -57,7 +57,7 @@
 	define('ERR_NOT_DOC_SELECTED_FOR_PASTE', 'Nevybrali ste súbor(y) pre akiciu ´Vložiť´.');
 	define('WARNING_CUT_PASTE', 'Ste si isty že chcete presunuť vybrane súbory do aktualného priečinku?');
 	define('WARNING_COPY_PASTE', 'Ste si isty že chcete kopírovať vybrane súbory do aktualnáého priečinku?');
-	
+
 	//ERROR MESSAGES
 		//deletion
 	define('ERR_NOT_FILE_SELECTED', 'Prosím, vyberte si súbor.');
@@ -79,7 +79,7 @@
 	define('ERR_FOLDER_EXISTS', 'Priečinok už existuje, skúste iný unikátny názov.');
 	define('ERR_FOLDER_CREATION_FAILED', 'Nie je možne vytvoriť priečinok, skúste znovu.');
 	define('ERR_FOLDER_NAME_EMPTY', 'Vyplnte názov.');
-	
+
 		//file upload
 	define("ERR_FILE_NAME_FORMAT", 'Názov súboru/priečinku môže obsahovať iba písmena(BEZ DIAKRITIKY), číslice, medzery, pomlčky a podčiarkovniky.');
 	define('ERR_FILE_NOT_UPLOADED', 'Vyberte si súbor pre upload.');
@@ -87,7 +87,7 @@
 	define('ERR_FILE_MOVE_FAILED', 'Nepodarilo sa presunúť súbor.');
 	define('ERR_FILE_NOT_AVAILABLE', 'The file is unavailable.');
 	define('ERROR_FILE_TOO_BID', 'Súbor je príliš veľký. (max: %s)');
-	
+
 		//file download
 	define('ERR_DOWNLOAD_FILE_NOT_FOUND', 'Nevybrali ste súbory pre stiahnutie.');
 
@@ -113,12 +113,12 @@
 	define('LOGIN_USERNAME', 'Užívateľské meno:');
 	define('LOGIN_PASSWORD', 'Heslo:');
 	define('LOGIN_FAILED', 'Neplatné užívateľské meno/heslo.');
-	
-	
+
+
 	//88888888888   Below for Image Editor   888888888888888888888
-		//Warning 
+		//Warning
 		define('IMG_WARNING_NO_CHANGE_BEFORE_SAVE', "Obrázky neboli upravene.");
-		
+
 		//General
 		define('IMG_GEN_IMG_NOT_EXISTS', 'Obrázok neexistuje');
 		define('IMG_WARNING_LOST_CHANAGES', 'Všetky neuložený úpravy budu stratene, naozaj chcete pokračovať?');
@@ -129,14 +129,14 @@
 		define('IMG_WARING_FLIP_H', 'Naozaj chcete preklopiť obrázok vodorovne?');
 		define('IMG_WARING_FLIP_V', 'Naozaj chcete preklopiť obrázok zvisle?');
 		define('IMG_INFO', 'Info obrázku');
-		
+
 		//Mode
 			define('IMG_MODE_RESIZE', 'Zmena Veľkosti :');
 			define('IMG_MODE_CROP', 'Odrezať :');
 			define('IMG_MODE_ROTATE', 'Otočiť :');
 			define('IMG_MODE_FLIP', 'Preklopiť:');
 		//Button
-		
+
 			define('IMG_BTN_ROTATE_LEFT', '90&deg;CCW');
 			define('IMG_BTN_ROTATE_RIGHT', '90&deg;CW');
 			define('IMG_BTN_FLIP_H', 'Preklopiť Vodorovne');
@@ -160,15 +160,15 @@
 			define('IMG_LBL_SAVE_AS', 'Uložiť ako formulár');
 			define('IMG_LBL_SAVE_TO', 'Uložiť kam:');
 			define('IMG_LBL_ROOT_FOLDER', 'Rodičovský priečinok');
-		
+
 		//Editor
-		//Save as 
+		//Save as
 		define('IMG_NEW_NAME_COMMENTS', 'Typ súboru sa automaticky priradí.');
 		define('IMG_SAVE_AS_ERR_NAME_INVALID', 'Názov súboru môže obsahovať iba písmena(BEZ DIAKRITIKY), číslice, medzery, pomlčky a podčiarkovniky.');
-		define('IMG_SAVE_AS_NOT_FOLDER_SELECTED', 'Nevybrali ste cieľový adresár.');	
+		define('IMG_SAVE_AS_NOT_FOLDER_SELECTED', 'Nevybrali ste cieľový adresár.');
 		define('IMG_SAVE_AS_FOLDER_NOT_FOUND', 'Cieľový adresár neexistuje.');
 		define('IMG_SAVE_AS_NEW_IMAGE_EXISTS', 'Taky súbor už existuje.');
-			
+
 		//Save
 		define('IMG_SAVE_EMPTY_PATH', 'Cesta obrázku je prázdna.');
 		define('IMG_SAVE_NOT_EXISTS', 'Obrázok neexistuje.');
@@ -182,20 +182,20 @@
 		define('IMG_SAVE_FLIP_FAILED', 'Nie je schopný preklopiť obrázok.');
 		define('IMG_SAVE_SESSION_IMG_OPEN_FAILED', 'Nie je schopný otvoriť obrazok zo session(relácie).');
 		define('IMG_SAVE_IMG_OPEN_FAILED', 'Nie je schopný otvoriť obrazok');
-		
+
 		//UNDO
 		define('IMG_UNDO_NO_HISTORY_AVAIALBE', 'História nie je dosptuná pre krok späť.');
 		define('IMG_UNDO_COPY_FAILED', 'Nie je schopný obnoviť obrázok.');
 		define('IMG_UNDO_DEL_FAILED', 'Nie je schopný odstrániť session obrázku');
-	
+
 	//88888888888   Above for Image Editor   888888888888888888888
-	
+
 	//88888888888   Session   888888888888888888888
 		define("SESSION_PERSONAL_DIR_NOT_FOUND", 'Nie je možne nájsť priradený priečinok, ktorý mal byť vytvorený počas priečinka relácie(session).');
 		define("SESSION_COUNTER_FILE_CREATE_FAILED", 'Nie je možne otvoriť súbor relácie(session).');
 		define('SESSION_COUNTER_FILE_WRITE_FAILED', 'Nie je možne zapísať do súboru relácie(session).');
 	//88888888888   Session   888888888888888888888
-	
+
 	//88888888888   Below for Text Editor   888888888888888888888
 		define('TXT_FILE_NOT_FOUND', 'Súbor nebol nájdený.');
 		define('TXT_EXT_NOT_SELECTED', 'Vyberte si typ súboru, prosím.');

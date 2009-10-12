@@ -1,5 +1,5 @@
 <?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
- 
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -55,7 +55,7 @@ class Blog {
 				FROM " . $tbl_blogs . "
 				WHERE blog_id = " . Database::escape_string((int)$blog_id);
 
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			$blog = Database::fetch_array($result);
 			return stripslashes($blog['blog_name']);
 		}
@@ -74,7 +74,7 @@ class Blog {
 		// init
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 		$sql = "SELECT blog_subtitle FROM $tbl_blogs WHERE blog_id ='".Database::escape_string((int)$blog_id)."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$blog = Database::fetch_array($result);
 
 		return stripslashes($blog['blog_subtitle']);
@@ -104,13 +104,13 @@ class Blog {
 			FROM " . $tbl_blogs_rel_user . " blogs_rel_user
 			INNER JOIN " . $tbl_users . " user ON blogs_rel_user.user_id = user.user_id
 			WHERE blogs_rel_user.blog_id = '" . Database::escape_string((int)$blog_id)."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		$blog_members = array ();
 
 		while($user = Database::fetch_array($result))
 		{
-			$blog_members[$user['user_id']] = $user['lastname']." " . $user['firstname'];
+			$blog_members[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
 		}
 
 		return $blog_members;
@@ -129,6 +129,7 @@ class Blog {
 	public static function create_blog ($title, $subtitle) {
 		global $_user;
 		$current_date=date('Y-m-d H:i:s',time());
+		$session_id = api_get_session_id();		
 		// Tabel definitions
 		$tbl_blogs 			= Database::get_course_table(TABLE_BLOGS);
 		$tbl_tool 			= Database::get_course_table(TABLE_TOOL_LIST);
@@ -141,25 +142,28 @@ class Blog {
 		$info_count=Database::result($res,0,0);
 		if ($info_count==0) {
 			// Create the blog
-			$sql = "INSERT INTO $tbl_blogs (blog_name, blog_subtitle, date_creation, visibility )
-						VALUES ('".Database::escape_string($title)."', '".Database::escape_string($subtitle)."', '".$current_date."', '1');";
-			api_sql_query($sql, __FILE__, __LINE__);
+			$sql = "INSERT INTO $tbl_blogs (blog_name, blog_subtitle, date_creation, visibility, session_id )
+						VALUES ('".Database::escape_string($title)."', '".Database::escape_string($subtitle)."', '".$current_date."', '1', '$session_id');";
+			Database::query($sql, __FILE__, __LINE__);
 			$this_blog_id = Database::get_last_insert_id();
-	
+
+			if ($this_blog_id > 0) {
+				//insert into item_property
+				api_item_property_update(api_get_course_info(), TOOL_BLOGS, $this_blog_id, 'BlogAdded', api_get_user_id());
+			}
+
 			// Make first post. :)
 			$sql = "INSERT INTO $tbl_blogs_posts (title, full_text, date_creation, blog_id, author_id )
 						VALUES ('".get_lang("Welcome")."', '" . get_lang('FirstPostText')."','".$current_date."', '".Database::escape_string((int)$this_blog_id)."', '".Database::escape_string((int)$_user['user_id'])."');";
-			api_sql_query($sql, __FILE__, __LINE__);
-	
+			Database::query($sql, __FILE__, __LINE__);
+
 			// Put it on course homepage
-			$sql = "INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool)
-						VALUES ('".Database::escape_string($title)."','blog/blog.php?blog_id=".(int)$this_blog_id."','blog.gif','1','0','pastillegris.gif',0)";
-			api_sql_query($sql, __FILE__, __LINE__);
-	
+			$sql = "INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool, session_id)
+						VALUES ('".Database::escape_string($title)."','blog/blog.php?blog_id=".(int)$this_blog_id."','blog.gif','1','0','pastillegris.gif',0,'$session_id')";
+			Database::query($sql, __FILE__, __LINE__);
+
 			// Subscribe the teacher to this blog
 			Blog::set_user_subscribed((int)$this_blog_id,(int)$_user['user_id']);
-	
-			return void;
 		}
 	}
 
@@ -182,14 +186,15 @@ class Blog {
 
 		// Update the blog
 		$sql = "UPDATE $tbl_blogs SET blog_name = '".Database::escape_string($title)."',	blog_subtitle = '".Database::escape_string($subtitle)."' WHERE blog_id ='".Database::escape_string((int)$blog_id)."' LIMIT 1";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 		$this_blog_id = Database::get_last_insert_id();
+
+		//update item_property (update)
+		api_item_property_update(api_get_course_info(), TOOL_BLOGS, Database::escape_string($blog_id), 'BlogUpdated', api_get_user_id());
 
 		// Update course homepage link
 		$sql = "UPDATE $tbl_tool SET name = '".Database::escape_string($title)."' WHERE link = 'blog/blog.php?blog_id=".Database::escape_string((int)$blog_id)."' LIMIT 1";
-		api_sql_query($sql, __FILE__, __LINE__);
-
-		return void;
+		Database::query($sql, __FILE__, __LINE__);
 	}
 
 	/**
@@ -208,36 +213,37 @@ class Blog {
 		$tbl_blogs_tasks 	= Database::get_course_table(TABLE_BLOGS_TASKS);
 		$tbl_tool 			= Database::get_course_table(TABLE_TOOL_LIST);
 		$tbl_blogs_rating 	= Database::get_course_table(TABLE_BLOGS_RATING);
-		$tbl_blogs_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);		
-		
-		// Delete posts from DB and the attachments 
+		$tbl_blogs_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
+
+		// Delete posts from DB and the attachments
 		delete_all_blog_attachment($blog_id);
-		
+
 		//Delete comments
 		$sql = "DELETE FROM $tbl_blogs_comment WHERE blog_id ='".(int)$blog_id."'";
-   		api_sql_query($sql, __FILE__, __LINE__);	
-   					
+   		Database::query($sql, __FILE__, __LINE__);
+
 		// Delete posts
    		$sql = "DELETE FROM $tbl_blogs_posts WHERE blog_id ='".(int)$blog_id."'";
-   		api_sql_query($sql, __FILE__, __LINE__); 		
-				
+   		Database::query($sql, __FILE__, __LINE__);
+
 		// Delete tasks
 		$sql = "DELETE FROM $tbl_blogs_tasks WHERE blog_id ='".(int)$blog_id."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		// Delete ratings
 		$sql = "DELETE FROM $tbl_blogs_rating WHERE blog_id ='".(int)$blog_id."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		// Delete blog
 		$sql ="DELETE FROM $tbl_blogs WHERE blog_id ='".(int)$blog_id."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		// Delete from course homepage
 		$sql = "DELETE FROM $tbl_tool WHERE link = 'blog/blog.php?blog_id=".(int)$blog_id."'";
-		api_sql_query($sql, __FILE__, __LINE__);
-	
-		return void;
+		Database::query($sql, __FILE__, __LINE__);
+		
+		//update item_property (delete)
+		api_item_property_update(api_get_course_info(), TOOL_BLOGS, Database::escape_string($blog_id), 'delete', api_get_user_id());
 	}
 
 	/**
@@ -254,70 +260,68 @@ class Blog {
 		global $_user;
 		global $_course;
 		global $blog_table_attachment;
-		
+
 		$upload_ok=true;
 		$has_attachment=false;
 		$current_date=date('Y-m-d H:i:s',time());
-		
+
 		if(!empty($_FILES['user_upload']['name']))
 		{
-			require_once('fileUpload.lib.php'); 
+			require_once('fileUpload.lib.php');
 			$upload_ok = process_uploaded_file($_FILES['user_upload']);
 			$has_attachment=true;
 		}
-		
+
 		if($upload_ok)
-		{	
+		{
 			// Table Definitions
 			$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
-	
+
 			// Create the post
 			$sql = "INSERT INTO " . $tbl_blogs_posts." (title, full_text, date_creation, blog_id, author_id )
 					VALUES ('".Database::escape_string($title)."', '".Database::escape_string($full_text)."','".$current_date."', '".(int)$blog_id."', '".(int)$_user['user_id']."');";
-						
-			api_sql_query($sql, __FILE__, __LINE__);
+
+			Database::query($sql, __FILE__, __LINE__);
 			$last_post_id=Database::insert_id();
-			
+
 			if ($has_attachment)
-			{			
+			{
 				$courseDir   = $_course['path'].'/upload/blog';
-				$sys_course_path = api_get_path(SYS_COURSE_PATH);		
+				$sys_course_path = api_get_path(SYS_COURSE_PATH);
 				$updir = $sys_course_path.$courseDir;
-							
+
 				// Try to add an extension to the file if it hasn't one
-				$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);	
-			
+				$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
+
 				// user's file name
 				$file_name =$_FILES['user_upload']['name'];
-							
-				if (!filter_extension($new_file_name)) 
+
+				if (!filter_extension($new_file_name))
 				{
-					Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));				
+					Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
 				}
 				else
 				{
-					$new_file_name = uniqid('');						
+					$new_file_name = uniqid('');
 					$new_path=$updir.'/'.$new_file_name;
 					$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
-					$comment=Database::escape_string($file_comment);				
-									
+					$comment=Database::escape_string($file_comment);
+
 					// Storing the attachments if any
 					if ($result)
-					{					
+					{
 						$sql='INSERT INTO '.$blog_table_attachment.'(filename,comment, path, post_id,size, blog_id,comment_id) '.
-							 "VALUES ( '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$last_post_id."', '".$_FILES['user_upload']['size']."',  '".$blog_id."', '0' )";						
-						$result=api_sql_query($sql, __LINE__, __FILE__);					
-						$message.=' / '.get_lang('AttachmentUpload');			
-					}			
-				}			 
+							 "VALUES ( '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$last_post_id."', '".$_FILES['user_upload']['size']."',  '".$blog_id."', '0' )";
+						$result=Database::query($sql, __LINE__, __FILE__);
+						$message.=' / '.get_lang('AttachmentUpload');
+					}
+				}
 			}
 		}
 		else
 		{
 			Display::display_error_message(get_lang('UplNoFileUploaded'));
-		}	
-
-		return void;
+		}
 	}
 
 	/**
@@ -337,9 +341,7 @@ class Blog {
 
 		// Create the post
 		$sql = "UPDATE $tbl_blogs_posts SET title = '" . Database::escape_string($title)."', full_text = '" . Database::escape_string($full_text)."' WHERE post_id ='".(int)$post_id."' AND blog_id ='".(int)$blog_id."' LIMIT 1 ;";
-		api_sql_query($sql, __FILE__, __LINE__);
-
-		return void;
+		Database::query($sql, __FILE__, __LINE__);
 	}
 
 	/**
@@ -359,20 +361,18 @@ class Blog {
 
 		// Delete ratings on this comment
 		$sql = "DELETE FROM $tbl_blogs_rating WHERE blog_id = '".(int)$blog_id."' AND item_id = '".(int)$post_id."' AND rating_type = 'post'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		// Delete the post
 		$sql = "DELETE FROM $tbl_blogs_posts WHERE post_id = '".(int)$post_id."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		// Delete the comments
 		$sql = "DELETE FROM $tbl_blogs_comments WHERE post_id = '".(int)$post_id."' AND blog_id = '".(int)$blog_id."'";
-		api_sql_query($sql, __FILE__, __LINE__);
-					
-		// Delete posts and attachments
-		delete_all_blog_attachment($blog_id,$post_id);	
+		Database::query($sql, __FILE__, __LINE__);
 
-		return void;
+		// Delete posts and attachments
+		delete_all_blog_attachment($blog_id,$post_id);
 	}
 
 	/**
@@ -388,75 +388,71 @@ class Blog {
 	 * @return void
 	 */
 	public static function create_comment($title, $full_text, $file_comment,$blog_id, $post_id, $parent_id, $task_id = 'NULL') {
-		global $_user;		
-		global $_course;				
+		global $_user;
+		global $_course;
 		global $blog_table_attachment;
-		
+
 		$upload_ok=true;
 		$has_attachment=false;
 		$current_date=date('Y-m-d H:i:s',time());
-		
+
 		if(!empty($_FILES['user_upload']['name']))
 		{
-			require_once('fileUpload.lib.php'); 
+			require_once('fileUpload.lib.php');
 			$upload_ok = process_uploaded_file($_FILES['user_upload']);
 			$has_attachment=true;
 		}
-		
+
 		if($upload_ok)
-		{	
+		{
 			// Table Definition
 			$tbl_blogs_comments = Database::get_course_table(TABLE_BLOGS_COMMENTS);
-	
+
 			// Create the comment
 			$sql = "INSERT INTO $tbl_blogs_comments (title, comment, author_id, date_creation, blog_id, post_id, parent_comment_id, task_id )
 						VALUES ('".Database::escape_string($title)."', '".Database::escape_string($full_text)."', '".(int)$_user['user_id']."','".$current_date."', '".(int)$blog_id."', '".(int)$post_id."', '".(int)$parent_id."', '".(int)$task_id."')";
-			api_sql_query($sql, __FILE__, __LINE__);
-	
+			Database::query($sql, __FILE__, __LINE__);
+
 			// Empty post values, or they are shown on the page again
 			$_POST['comment_title'] = "";
 			$_POST['comment_text'] = "";
-			
+
 			$last_id=Database::insert_id();
-			
+
 			if ($has_attachment)
-			{			
+			{
 				$courseDir   = $_course['path'].'/upload/blog';
-				$sys_course_path = api_get_path(SYS_COURSE_PATH);		
+				$sys_course_path = api_get_path(SYS_COURSE_PATH);
 				$updir = $sys_course_path.$courseDir;
-							
+
 				// Try to add an extension to the file if it hasn't one
-				$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);	
-			
-				// user's file name 
+				$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
+
+				// user's file name
 				$file_name =$_FILES['user_upload']['name'];
-							
-				if (!filter_extension($new_file_name)) 
+
+				if (!filter_extension($new_file_name))
 				{
-					Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));				
+					Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
 				}
 				else
 				{
-					$new_file_name = uniqid('');						
+					$new_file_name = uniqid('');
 					$new_path=$updir.'/'.$new_file_name;
 					$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
-					$comment=Database::escape_string($file_comment);				
-									
+					$comment=Database::escape_string($file_comment);
+
 					// Storing the attachments if any
 					if ($result)
-					{					
+					{
 						$sql='INSERT INTO '.$blog_table_attachment.'(filename,comment, path, post_id,size,blog_id,comment_id) '.
-							 "VALUES ( '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$post_id."', '".$_FILES['user_upload']['size']."',  '".$blog_id."', '".$last_id."'  )";						
-						$result=api_sql_query($sql, __LINE__, __FILE__);					
-						$message.=' / '.get_lang('AttachmentUpload');			
-					}			
-				}			 
+							 "VALUES ( '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$post_id."', '".$_FILES['user_upload']['size']."',  '".$blog_id."', '".$last_id."'  )";
+						$result=Database::query($sql, __LINE__, __FILE__);
+						$message.=' / '.get_lang('AttachmentUpload');
+					}
+				}
 			}
 		}
-		
-		
-	
-		return void;
 	}
 
 	/**
@@ -475,27 +471,26 @@ class Blog {
 		$blog_id = Database::escape_string($blog_id);
 		$post_id = Database::escape_string($post_id);
 		$comment_id = Database::escape_string($comment_id);
-		
-		
+
+
 		delete_all_blog_attachment($blog_id,$post_id,$comment_id);
-		
+
 		// Delete ratings on this comment
 		$sql = "DELETE FROM $tbl_blogs_rating WHERE blog_id = '".(int)$blog_id."' AND item_id = '".(int)$comment_id."' AND rating_type = 'comment'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		// select comments that have the selected comment as their parent
-		$sql = "SELECT comment_id FROM $tbl_blogs_comments WHERE parent_comment_id = '".(int)$comment_id."'";		
-		$result = api_sql_query($sql, __FILE__, __LINE__);
-			
+		$sql = "SELECT comment_id FROM $tbl_blogs_comments WHERE parent_comment_id = '".(int)$comment_id."'";
+		$result = Database::query($sql, __FILE__, __LINE__);
+
 		// Delete them recursively
-		while($comment = Database::fetch_array($result)) {					
-			Blog::delete_comment($blog_id,$post_id,$comment['comment_id']);					
-		}		
+		while($comment = Database::fetch_array($result)) {
+			Blog::delete_comment($blog_id,$post_id,$comment['comment_id']);
+		}
 
 		// Finally, delete the selected comment to
-		$sql = "DELETE FROM $tbl_blogs_comments WHERE comment_id = '".(int)$comment_id."'";				
-		api_sql_query($sql, __FILE__, __LINE__);
-		return void;
+		$sql = "DELETE FROM $tbl_blogs_comments WHERE comment_id = '".(int)$comment_id."'";
+		Database::query($sql, __FILE__, __LINE__);
 	}
 
 	/**
@@ -517,7 +512,7 @@ class Blog {
 		// Create the task
 		$sql = "INSERT INTO $tbl_blogs_tasks (blog_id, title, description, color, system_task )
 					VALUES ('".(int)$blog_id."', '" . Database::escape_string($title)."', '" . Database::escape_string($description)."', '" . Database::escape_string($color)."', '0');";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		$task_id = mysql_insert_id();
 		$tool = 'BLOG_' . $blog_id;
@@ -535,7 +530,7 @@ class Blog {
 					'article_delete'
 				)";
 
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		}
 
 		if($articleEdit == 'on')
@@ -551,7 +546,7 @@ class Blog {
 					'article_edit'
 				)";
 
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		}
 
 		if($commentsDelete == 'on')
@@ -567,10 +562,8 @@ class Blog {
 					'article_comments_delete'
 				)";
 
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		}
-
-		return void;
 	}
 
 	/**
@@ -595,7 +588,7 @@ class Blog {
 					description = '".Database::escape_string($description)."',
 					color = '".Database::escape_string($color)."'
 				WHERE task_id ='".(int)$task_id."' LIMIT 1";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		$tool = 'BLOG_' . $blog_id;
 
@@ -603,7 +596,7 @@ class Blog {
 			DELETE FROM " . $tbl_tasks_permissions . "
 			WHERE task_id = '" . (int)$task_id."'";
 
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		if($articleDelete == 'on')
 		{
@@ -618,7 +611,7 @@ class Blog {
 					'article_delete'
 				)";
 
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		}
 
 		if($articleEdit == 'on')
@@ -634,7 +627,7 @@ class Blog {
 					'article_edit'
 				)";
 
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		}
 
 		if($commentsDelete == 'on')
@@ -650,10 +643,8 @@ class Blog {
 					'article_comments_delete'
 				)";
 
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		}
-
-		return void;
 	}
 
 	/**
@@ -661,7 +652,7 @@ class Blog {
 	 *
 	 * @param Integer $blog_id
 	 * @param Integer $task_id
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function delete_task ($blog_id, $task_id) {
@@ -670,9 +661,7 @@ class Blog {
 
 		// Delete posts
 		$sql = "DELETE FROM $tbl_blogs_tasks WHERE blog_id = '".(int)$blog_id."' AND task_id = '".(int)$task_id."'";
-		api_sql_query($sql, __FILE__, __LINE__);
-
-		return void;
+		Database::query($sql, __FILE__, __LINE__);
 	}
 
 	/**
@@ -680,7 +669,7 @@ class Blog {
 	 *
 	 * @param Integer $blog_id
 	 * @param Integer $assignment_id
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function delete_assigned_task ($blog_id, $task_id,$user_id) {
@@ -688,9 +677,7 @@ class Blog {
 		$tbl_blogs_tasks_rel_user = Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 		// Delete posts
 		$sql = "DELETE FROM $tbl_blogs_tasks_rel_user WHERE blog_id = '".(int)$blog_id."' AND task_id = '".(int)$task_id."' AND user_id = '".(int)$user_id."'";
-		api_sql_query($sql, __FILE__, __LINE__);
-
-		return void;
+		Database::query($sql, __FILE__, __LINE__);
 	}
 
 	/**
@@ -714,7 +701,7 @@ class Blog {
 			INNER JOIN $tbl_blogs blog ON task_rel_user.blog_id = blog.blog_id
 			AND blog.blog_id = ".intval($_GET['blog_id'])."
 			WHERE task_rel_user.user_id = ".(int)$_user['user_id']." ORDER BY target_date ASC";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 
 			if(mysql_numrows($result) > 0)
 			{
@@ -749,10 +736,10 @@ class Blog {
 		// Init
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 		$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
-				
+
 		// Get blog properties
 		$sql = "SELECT blog_name, visibility FROM $tbl_blogs WHERE blog_id='".(int)$blog_id."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$blog = Database::fetch_array($result);
 		$visibility = $blog['visibility'];
 		$title = $blog['blog_name'];
@@ -761,23 +748,21 @@ class Blog {
 		{
 			// Change visibility state, remove from course home.
 			$sql = "UPDATE $tbl_blogs SET visibility = '0' WHERE blog_id ='".(int)$blog_id."' LIMIT 1";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 
 			$sql = "DELETE FROM $tbl_tool WHERE name = '".Database::escape_string($title)."' LIMIT 1";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 		}
 		else
 		{
 			// Change visibility state, add to course home.
 			$sql = "UPDATE $tbl_blogs SET visibility = '1' WHERE blog_id ='".(int)$blog_id."' LIMIT 1";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 
 			$sql = "INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool, target )
 					VALUES ('".Database::escape_string($title)."', 'blog/blog.php?blog_id=".(int)$blog_id."', 'blog.gif', '1', '0', 'pastillegris.gif', '0', '_self')";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 		}
-
-		return void;
 	}
 
 
@@ -800,7 +785,7 @@ class Blog {
 					WHERE post.blog_id = '".(int)$blog_id."'
 					AND $filter
 					ORDER BY post_id DESC LIMIT 0,".(int)$max_number_of_posts;
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		// Display
 		if(Database::num_rows($result) > 0)
@@ -809,7 +794,7 @@ class Blog {
 			{
 				// Get number of comments
 				$sql = "SELECT COUNT(1) as number_of_comments FROM $tbl_blogs_comments WHERE blog_id = '".(int)$blog_id."' AND post_id = '" . (int)$blog_post['post_id']."'";
-				$tmp = api_sql_query($sql, __FILE__, __LINE__);
+				$tmp = Database::query($sql, __FILE__, __LINE__);
 				$blog_post_comments = Database::fetch_array($tmp);
 
 				// Prepare data
@@ -836,7 +821,7 @@ class Blog {
 					}
 					$tok = strtok(" ");
 				}
-				
+
 				if($words >= $limit)
 				{
 					$readMoreLink = ' <span class="link" onclick="document.getElementById(\'blogpost_text_' . $blog_post_id . '\').style.display=\'block\'; document.getElementById(\'blogpost_introduction_' . $blog_post_id . '\').style.display=\'none\'">' . get_lang('ReadMore') . '</span>';
@@ -845,7 +830,7 @@ class Blog {
 				{
 					$readMoreLink = '';
 				}
-				
+
 				$introduction_text=stripslashes($introduction_text);
 
 				echo '<div class="blogpost">'."\n";
@@ -854,21 +839,21 @@ class Blog {
 				echo '<span class="blogpost_introduction" id="blogpost_introduction_' . $blog_post_id . '">' . $introduction_text . $readMoreLink . '</span>'."\n";
 				echo '<span class="blogpost_text" id="blogpost_text_' . $blog_post_id . '" style="display: none">' . $blog_post_text . '</span>'."\n";
 				$file_name_array=get_blog_attachment($blog_id,$blog_post_id,0);
-		
+
 				if (!empty($file_name_array))
-				{								
+				{
 					echo '<br /><br />';
 					echo Display::return_icon('attachment.gif',get_lang('Attachment'));
-					echo '<a href="download.php?file=';		
-					echo $file_name_array['path'];	
+					echo '<a href="download.php?file=';
+					echo $file_name_array['path'];
 					echo ' "> '.$file_name_array['filename'].' </a><br />';
-					echo '</span>';														
-				}				
-				echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . $blog_post['lastname'] . ' ' . $blog_post['firstname'] . ' - <a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . '</a></span>'."\n";
+					echo '</span>';
+				}
+				echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . api_get_person_name($blog_post['firstname'], $blog_post['lastname']) . ' - <a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . '</a></span>'."\n";
 				echo '</div>'."\n";
-			}					
+			}
 		}
-		else	
+		else
 		{
 			if($filter == '1=1')
 			{
@@ -917,7 +902,7 @@ class Blog {
 		global $dateFormatLong;
 
 		// Put date in correct output format
-		$date_output = api_ucfirst(format_locale_date($dateFormatLong,strtotime($date_output)));
+		$date_output = format_locale_date($dateFormatLong,strtotime($date_output));
 
 		// Display the posts
 		echo '<span class="blogpost_title">' . get_lang('PostsOf') . ': ' . $date_output . '</span>';
@@ -944,17 +929,17 @@ class Blog {
 					WHERE post.blog_id = '".(int)$blog_id."'
 					AND post.post_id = '".(int)$post_id."'
 					ORDER BY post_id DESC";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$blog_post = Database::fetch_array($result);
 
 		// Get number of comments
 		$sql = "SELECT COUNT(1) as number_of_comments FROM $tbl_blogs_comments WHERE blog_id = '".(int)$blog_id."' AND post_id = '".(int)$post_id."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$blog_post_comments = Database::fetch_array($result);
 
 		// Prepare data
 		$blog_post_text = make_clickable(stripslashes($blog_post['full_text']));
-		$blog_post_date = api_ucfirst(format_locale_date($dateFormatLong,strtotime($blog_post['date_creation'])));
+		$blog_post_date = format_locale_date($dateFormatLong,strtotime($blog_post['date_creation']));
 		$blog_post_time = date('H:m',strtotime($blog_post['date_creation']));
 		$blog_post_actions = "";
 
@@ -970,30 +955,30 @@ class Blog {
 			$rating_select = Blog::display_rating_form('post',$blog_id,$post_id);
 
 		$blog_post_text=stripslashes($blog_post_text);
-		
+
 		// Display post
 		echo '<div class="blogpost">';
 		echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>';
 		echo '<span class="blogpost_date">' . $blog_post_date . ' (' . $blog_post_time . ')</span>';
 		echo '<span class="blogpost_text">' . $blog_post_text . '</span><br />';
-		
+
 		$file_name_array=get_blog_attachment($blog_id,$post_id);
-		
+
 		if (!empty($file_name_array))
-		{			
+		{
 			echo ' <br />';
 			echo Display::return_icon('attachment.gif',get_lang('Attachment'));
-			echo '<a href="download.php?file=';		
-			echo $file_name_array['path'];	
-			echo ' "> '.$file_name_array['filename'].' </a>';					
-			echo '</span>';		
-			echo '<span class="attachment_comment">';	
+			echo '<a href="download.php?file=';
+			echo $file_name_array['path'];
+			echo ' "> '.$file_name_array['filename'].' </a>';
+			echo '</span>';
+			echo '<span class="attachment_comment">';
 			echo $file_name_array['comment'];
-			echo '</span>';	
+			echo '</span>';
 			echo '<br />';
-		}			
-			
-		echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . $blog_post['lastname'] . ' ' . $blog_post['firstname'] . ' - ' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . ' - ' . get_lang('Rating') . ': '.Blog::display_rating('post',$blog_id,$post_id) . $rating_select . '</span>';
+		}
+
+		echo '<span class="blogpost_info">' . get_lang('Author') . ': ' . api_get_person_name($blog_post['firstname'], $blog_post['lastname']) . ' - ' . get_lang('Comments') . ': ' . $blog_post_comments['number_of_comments'] . ' - ' . get_lang('Rating') . ': '.Blog::display_rating('post',$blog_id,$post_id) . $rating_select . '</span>';
 		echo '<span class="blogpost_actions">' . $blog_post_actions . '</span>';
 		echo '</div>';
 
@@ -1036,13 +1021,13 @@ class Blog {
 					AND item_id = '".(int)$item_id."'
 					AND rating_type = '".Database::escape_string($type)."'
 					AND user_id = '".(int)$_user['user_id']."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		if(Database::num_rows($result) == 0) // Add rating
 		{
 			$sql = "INSERT INTO $tbl_blogs_rating ( blog_id, rating_type, item_id, user_id, rating )
 						VALUES ('".(int)$blog_id."', '".Database::escape_string($type)."', '".(int)$item_id."', '".(int)$_user['user_id']."', '".Database::escape_string($rating)."')";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			return true;
 		}
 		else // Return
@@ -1052,12 +1037,12 @@ class Blog {
 	}
 
 	/**
-	 * Shows the rating of user 
-	 * 
-	 * @param String $type 
+	 * Shows the rating of user
+	 *
+	 * @param String $type
 	 * @param Integer $blog_id
 	 * @param Integer $item_id
-	 * 
+	 *
 	 * @return array()
 	 */
 	public static function display_rating ($type, $blog_id, $item_id) {
@@ -1065,7 +1050,7 @@ class Blog {
 
 		// Calculate rating
 		$sql = "SELECT AVG(rating) as rating FROM $tbl_blogs_rating WHERE blog_id = '".(int)$blog_id."' AND item_id = '".(int)$item_id."' AND rating_type = '".Database::escape_string($type)."' ";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$result = Database::fetch_array($result);
 		return round($result['rating'], 2);
 	}
@@ -1094,7 +1079,7 @@ class Blog {
 					AND item_id = '".(int)$post_id."'
 					AND rating_type = '".Database::escape_string($type)."'
 					AND user_id = '".(int)$_user['user_id']."'";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 
 			if(Database::num_rows($result) == 0) // Add rating
 			{
@@ -1113,7 +1098,7 @@ class Blog {
 					AND item_id = '".(int)$comment_id."'
 					AND rating_type = '".Database::escape_string($type)."'
 					AND user_id = '".(int)$_user['user_id']."'";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 
 			if(Database::num_rows($result) == 0) // Add rating
 			{
@@ -1150,7 +1135,7 @@ class Blog {
 					WHERE parent_comment_id = $current
 						AND comments.blog_id = '".(int)$blog_id."'
 						AND comments.post_id = '".(int)$post_id."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		while($comment = Database::fetch_array($result))
 		{
@@ -1160,14 +1145,14 @@ class Blog {
 					WHERE comment_id = $current
 					AND blog_id = '".(int)$blog_id."'
 					AND post_id = '".(int)$post_id."'";
-			$tmp = api_sql_query($tmp, __FILE__, __LINE__);
+			$tmp = Database::query($tmp, __FILE__, __LINE__);
 			$tmp = Database::fetch_array($tmp);
 			$parent_cat = $tmp['parent_comment_id'];
 			$border_color = '';
 
 			// Prepare data
 			$comment_text = make_clickable(stripslashes($comment['comment']));
-			$blog_comment_date = api_ucfirst(format_locale_date($dateFormatLong,strtotime($comment['date_creation'])));
+			$blog_comment_date = format_locale_date($dateFormatLong,strtotime($comment['date_creation']));
 			$blog_comment_time = date('H:i',strtotime($comment['date_creation']));
 			$blog_comment_actions = "";
 			if(api_is_allowed('BLOG_' . $blog_id, 'article_comments_delete', $task_id)) { $blog_comment_actions .= '<a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;do=delete_comment&amp;comment_id=' . $comment['comment_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('DeleteThisComment') . '" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"><img src="../img/delete.gif" border="0" /></a>'; }
@@ -1177,7 +1162,7 @@ class Blog {
 			{
 				$border_color = ' border-left: 3px solid #' . $comment['color'];
 			}
-			
+
 			$comment_text=stripslashes($comment_text);
 
 			// Output...
@@ -1186,21 +1171,21 @@ class Blog {
 				echo '<span class="blogpost_comment_title"><a href="#add_comment" onclick="document.getElementById(\'comment_parent_id\').value=\'' . $comment['comment_id'] . '\'; document.getElementById(\'comment_title\').value=\'Re: '.addslashes($comment['title']) . '\'" title="' . get_lang('ReplyToThisComment') . '" >'.stripslashes($comment['title']) . '</a></span>';
 				echo '<span class="blogpost_comment_date">' . $blog_comment_date . ' (' . $blog_comment_time . ')</span>';
 				echo '<span class="blogpost_text">' . $comment_text . '</span>';
-				
+
 				$file_name_array=get_blog_attachment($blog_id,$post_id, $comment['comment_id']);
 				if (!empty($file_name_array))
-				{								
+				{
 					echo '<br /><br />';
 					echo Display::return_icon('attachment.gif',get_lang('Attachment'));
-					echo '<a href="download.php?file=';		
-					echo $file_name_array['path'];	
-					echo ' "> '.$file_name_array['filename'].' </a>';	
-					echo '<span class="attachment_comment">';	
+					echo '<a href="download.php?file=';
+					echo $file_name_array['path'];
+					echo ' "> '.$file_name_array['filename'].' </a>';
+					echo '<span class="attachment_comment">';
 					echo $file_name_array['comment'];
-					echo '</span><br />';								
-				}				
-				
-				echo '<span class="blogpost_comment_info">' . get_lang('Author') . ': ' . $comment['lastname'] . ' ' . $comment['firstname'] . ' - ' . get_lang('Rating') . ': '.Blog::display_rating('comment', $blog_id, $comment['comment_id']) . $rating_select . '</span>';
+					echo '</span><br />';
+				}
+
+				echo '<span class="blogpost_comment_info">' . get_lang('Author') . ': ' . api_get_person_name($comment['firstname'], $comment['lastname']) . ' - ' . get_lang('Rating') . ': '.Blog::display_rating('comment', $blog_id, $comment['comment_id']) . $rating_select . '</span>';
 				echo '<span class="blogpost_actions">' . $blog_comment_actions . '</span>';
 			echo '</div>';
 
@@ -1297,12 +1282,12 @@ class Blog {
 
 
 			echo '<form name="add_post" enctype="multipart/form-data"  method="post" action="blog.php?action=new_post&blog_id=' . $blog_id . '">';
-			
+
 			echo '<input type="hidden" name="post_title_edited" id="post_title_edited" value="false" />';
-			
+
 			// form title
 			echo '<div class="row"><div class="form_header">' . get_lang('NewPost') . '</div></div>';
-			
+
 			// article title
 			echo '<div class="row">
 						<div class="label" >
@@ -1321,9 +1306,9 @@ class Blog {
 				$oFCKeditor->ToolbarSet = 'ProjectStudent';
 			} else {
 				$oFCKeditor->ToolbarSet = 'Project';
-			}	
+			}
 			$oFCKeditor->Value = isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):'';
-		
+
 			echo '<div class="row">
 						<div class="label">
 							' . get_lang('PostFullText') . '
@@ -1331,8 +1316,8 @@ class Blog {
 						<div class="formw">';
 			$oFCKeditor->Create();
 			echo '		</div>
-					</div>';			
-									
+					</div>';
+
 			// attachment
 			echo '<div class="row">
 						<div class="label">
@@ -1342,7 +1327,7 @@ class Blog {
 							<input type="file" name="user_upload"/>
 						</div>
 					</div>';
-									
+
 			// comment
 			echo '<div class="row">
 						<div class="label">
@@ -1363,8 +1348,8 @@ class Blog {
 								 <button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
 						</div>
 					</div>';
-			
-				 
+
+
 			echo '</form>';
 		}
 		else
@@ -1390,17 +1375,17 @@ class Blog {
 				WHERE post.blog_id = '".(int)$blog_id ."'
 				AND post.post_id = '".(int)$post_id."'
 				ORDER BY post_id DESC";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$blog_post = Database::fetch_array($result);
 
 		// Prepare data
 		$blog_post_text = stripslashes($blog_post['full_text']);
 
 		echo '<form name="edit_post" method="post" action="blog.php?action=edit_post&post_id=' . Security::remove_XSS($_GET['post_id']) . '&blog_id=' . Security::remove_XSS($blog_id) . '&article_id='.Security::remove_XSS($_GET['article_id']).'&task_id='.Security::remove_XSS($_GET['task_id']).'">';
-		
+
 		// form title
 		echo '<div class="row"><div class="form_header">' . get_lang('EditPost') . '</div></div>';
-		
+
 		// article title
 		echo '	<div class="row">
 					<div class="label">
@@ -1416,7 +1401,7 @@ class Blog {
 
 								$oFCKeditor->Width		= '100%';
 								$oFCKeditor->Height		= '200';
-								
+
 								if(!api_is_allowed_to_edit())
 								{
 									$oFCKeditor->ToolbarSet = 'ProjectStudent';
@@ -1424,7 +1409,7 @@ class Blog {
 								else
 								{
 									$oFCKeditor->ToolbarSet = 'Project';
-								}								
+								}
 								$oFCKeditor->Value		= isset($_POST['post_full_text'])?stripslashes($_POST['post_full_text']):$blog_post_text;
 		echo '	<div class="row">
 					<div class="label">
@@ -1433,8 +1418,8 @@ class Blog {
 					<div class="formw">';
 		echo $oFCKeditor->Create();
 		echo '		</div>
-				</div>';		
-								
+				</div>';
+
 
 		// submit
 		echo '	<div class="row">
@@ -1447,8 +1432,8 @@ class Blog {
 							 <button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
 					</div>
 				</div>';
-		
-		
+
+
 		echo '</form>';
 	}
 
@@ -1472,9 +1457,9 @@ class Blog {
 			echo '<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $blog_id . '&amp;do=assign"><img src="../img/blog_task.gif" border="0" align="middle" alt="'.get_lang('AssignTasks').'" />' . get_lang('AssignTasks') . '</a>';
 			?>
 				<a href="<?php echo api_get_self(); ?>?action=manage_rights&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageRights') ?>"><?php echo Display::return_icon('blog_user.gif', get_lang('RightsManager')). get_lang('RightsManager') ?></a>
-			<?php	
+			<?php
 			echo '</div>';
-			
+
 			echo '<span class="blogpost_title">' . get_lang('TaskList') . '</span><br />';
 			echo "<table class=\"data_table\">";
 			echo	"<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">",
@@ -1499,7 +1484,7 @@ class Blog {
 				ORDER BY
 					system_task,
 					title";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 
 
 			while($task = Database::fetch_array($result))
@@ -1559,7 +1544,7 @@ class Blog {
 		INNER JOIN $tbl_blogs_tasks task ON task_rel_user.task_id = task.task_id
 		INNER JOIN $tbl_users user ON task_rel_user.user_id = user.user_id
 		WHERE task_rel_user.blog_id = '".(int)$blog_id."' ORDER BY target_date ASC";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 
 		while($assignment = Database::fetch_array($result))
@@ -1572,7 +1557,7 @@ class Blog {
 			$delete_confirm = ($assignment['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"';
 
 			echo	'<tr class="' . $css_class . '" valign="top">',
-						 '<td width="240">' . $assignment['firstname'] . ' ' . $assignment['lastname'] . '</td>',
+						 '<td width="240">' . api_get_person_name($assignment['firstname'], $assignment['lastname']) . '</td>',
 						 '<td>'.stripslashes($assignment['title']) . '</td>',
 						 '<td>'.stripslashes($assignment['description']) . '</td>',
 						 '<td>' . $assignment['target_date'] . '</td>',
@@ -1601,10 +1586,10 @@ class Blog {
 
 		// form
 		echo '<form name="add_task" method="post" action="blog.php?action=manage_tasks&amp;blog_id=' . $blog_id . '">';
-		
+
 		// form title
 		echo '<div class="row"><div class="form_header">'.get_lang('AddTask').'</div></div>';
-		
+
 		// task title
 		echo '	<div class="row">
 					<div class="label">
@@ -1614,7 +1599,7 @@ class Blog {
 						<input name="task_name" type="text" size="70" />
 					</div>
 				</div>';
-		
+
 		// task comment
 		echo '	<div class="row">
 					<div class="label">
@@ -1648,8 +1633,8 @@ class Blog {
 									echo "\t\t\t\t" . '</tr>' . "\n";
 								echo "\t\t\t" . '</table>' . "\n";
 		echo '		</div>
-				</div>';			
-		
+				</div>';
+
 
 		// task color
 		echo '	<div class="row">
@@ -1663,7 +1648,7 @@ class Blog {
 									$style = 'style="background-color: #' . $color . '"';
 									echo '<option value="' . $color . '" ' . $style . '>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>';
 								}
-		echo '			   </select>';		
+		echo '			   </select>';
 		echo '		</div>
 				</div>';
 
@@ -1676,13 +1661,13 @@ class Blog {
 							<input type="hidden" name="new_task_submit" value="true" />
 						<button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
 					</div>
-				</div>';		
+				</div>';
 
 		echo '</form>';
-		
+
 		echo '<div style="clear:both; margin-bottom: 10px;"></div>';
 	}
-	
+
 
 	/**
 	 * Displays edit task form
@@ -1695,7 +1680,7 @@ class Blog {
 		$colors = array('FFFFFF','FFFF99','FFCC99','FF9933','FF6699','CCFF99','CC9966','66FF00', '9966FF', 'CF3F3F', '990033','669933','0033FF','003366','000000');
 
 		$sql = "SELECT blog_id, task_id, title, description, color FROM $tbl_blogs_tasks WHERE task_id = '".(int)$task_id."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$task = Database::fetch_array($result);
 
 		// Display
@@ -1720,7 +1705,7 @@ class Blog {
 								action
 							FROM " . $tbl_tasks_permissions . "
 							WHERE task_id = '" . (int)$task_id."'";
-						$result = api_sql_query($sql, __FILE__, __LINE__);
+						$result = Database::query($sql, __FILE__, __LINE__);
 
 						$arrPermissions = array();
 
@@ -1795,11 +1780,11 @@ class Blog {
 				INNER JOIN $tbl_blogs_rel_user blogs_rel_user
 				ON user.user_id = blogs_rel_user.user_id
 				WHERE blogs_rel_user.blog_id = '".(int)$blog_id."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$select_user_list = '<select name="task_user_id">';
 		while($user = Database::fetch_array($result))
 		{
-			$select_user_list .= '<option value="' . $user['user_id'] . '">' . $user['firstname']." " . $user['lastname'] . '</option>';
+			$select_user_list .= '<option value="' . $user['user_id'] . '">' . api_get_person_name($user['firstname'], $user['lastname']) . '</option>';
 		}
 		$select_user_list .= '</select>';
 
@@ -1819,7 +1804,7 @@ class Blog {
 			ORDER BY
 				system_task,
 				title";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$select_task_list = '<select name="task_task_id">';
 
 		while($task = Database::fetch_array($result))
@@ -1830,10 +1815,10 @@ class Blog {
 
 		// form
 		echo '<form name="assign_task" method="post" action="blog.php?action=manage_tasks&amp;blog_id=' . $blog_id . '">';
-		
+
 		// form title
 		echo '<div class="row"><div class="form_header">'.get_lang('AssignTask').'</div></div>';
-		
+
 		// user
 		echo '	<div class="row">
 					<div class="label">
@@ -1843,7 +1828,7 @@ class Blog {
 						'.$select_user_list.'
 					</div>
 				</div>';
-		
+
 		// task
 		echo '	<div class="row">
 					<div class="label">
@@ -1896,10 +1881,10 @@ class Blog {
 									echo "\t\t\t\t<option value=\"" . $value."\">" . $value."</option>\n";
 								}
 							echo '</select>
-							<a title="Kalender" href="javascript:openCalendar(\'assign_task\', \'task_\')"><img src="../img/calendar_select.gif" border="0" align="absmiddle"/></a>';		
+							<a title="Kalender" href="javascript:openCalendar(\'assign_task\', \'task_\')"><img src="../img/calendar_select.gif" border="0" align="absmiddle"/></a>';
 		echo '		</div>
-				</div>';	
-		
+				</div>';
+
 		// submit
 		echo '	<div class="row">
 					<div class="label">
@@ -1909,9 +1894,9 @@ class Blog {
 							<input type="hidden" name="assign_task_submit" value="true" />
 						<button class="save" type="submit" name="Submit">' . get_lang('Ok') . '</button>
 					</div>
-				</div>';		
-		
-		
+				</div>';
+
+
 
 		echo '</form>';
 		echo '<div style="clear: both; margin-bottom:10px;"></div>';
@@ -1945,7 +1930,7 @@ class Blog {
 				user_id = $user_id AND
 				blog_id = $blog_id";
 
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		$arrUserTasks = array();
 
@@ -1954,7 +1939,7 @@ class Blog {
             $arrUserTasks[] = $row['task_id'];
         }
         */
-        
+
 		// Get assignd date;
 		$sql = "
 			SELECT target_date
@@ -1962,7 +1947,7 @@ class Blog {
 			WHERE blog_id = '".(int)$blog_id."'
 			AND	user_id = '".(int)$user_id."'
 			AND	task_id = '".(int)$task_id."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = mysql_fetch_assoc($result);
 
 		$old_date = $row['target_date'];
@@ -1974,13 +1959,13 @@ class Blog {
 			FROM $tbl_users user
 			INNER JOIN $tbl_blogs_rel_user blogs_rel_user on user.user_id = blogs_rel_user.user_id
 			WHERE blogs_rel_user.blog_id = '".(int)$blog_id."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		$select_user_list = '<select name="task_user_id">';
 
 		while($user = Database::fetch_array($result))
 		{
-			$select_user_list .= '<option ' . (($user_id == $user['user_id']) ? 'selected="selected "' : ' ') . 'value="' . $user['user_id'] . '">' . $user['firstname']." " . $user['lastname'] . '</option>';
+			$select_user_list .= '<option ' . (($user_id == $user['user_id']) ? 'selected="selected "' : ' ') . 'value="' . $user['user_id'] . '">' . api_get_person_name($user['firstname'], $user['lastname']) . '</option>';
 		}
 
 		$select_user_list .= '</select>';
@@ -1999,7 +1984,7 @@ class Blog {
 			ORDER BY
 				system_task,
 				title";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		$select_task_list = '<select name="task_task_id">';
 
@@ -2101,7 +2086,7 @@ class Blog {
 			AND	task_id = " . (int)$task_id . "
 		";
 
-		$result = @api_sql_query($sql, __FILE__, __LINE__);
+		$result = @Database::query($sql, __FILE__, __LINE__);
 		$row = mysql_fetch_assoc($result);
 
 		if($row['number'] == 0)
@@ -2119,7 +2104,7 @@ class Blog {
 					'" . Database::escape_string($target_date) . "'
 				)";
 
-			$result = @api_sql_query($sql, __FILE__, __LINE__);
+			$result = @Database::query($sql, __FILE__, __LINE__);
 		}
 	}
 
@@ -2136,7 +2121,7 @@ class Blog {
 				task_id = " . (int)$task_id . "
 		";
 
-		$result = @api_sql_query($sql, __FILE__, __LINE__);
+		$result = @Database::query($sql, __FILE__, __LINE__);
 		$row = mysql_fetch_assoc($result);
 
 		if($row['number'] == 0 || ($row['number'] != 0 && $task_id == $old_task_id && $user_id == $old_user_id))
@@ -2153,8 +2138,8 @@ class Blog {
 					task_id = " . (int)$old_task_id . " AND
 					target_date = '" . Database::escape_string($old_target_date) . "'
 			";
-			
-			$result = @api_sql_query($sql, __FILE__, __LINE__);
+
+			$result = @Database::query($sql, __FILE__, __LINE__);
 		}
 	}
 
@@ -2174,7 +2159,7 @@ class Blog {
 			SELECT title, description
 			FROM $tbl_blogs_tasks
 			WHERE task_id = '".(int)$task_id."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = mysql_fetch_assoc($result);
 		// Get posts and authors
 		$sql = "
@@ -2187,18 +2172,18 @@ class Blog {
 			WHERE post.blog_id = '".(int)$blog_id."'
 			ORDER BY post_id DESC
 			LIMIT 0, 100";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		// Display
 		echo '<span class="blogpost_title">' . get_lang('SelectTaskArticle') . ' "' . stripslashes($row['title']) . '"</span>';
 		echo '<span style="font-style: italic;"">'.stripslashes($row['description']) . '</span><br><br>';
-		
+
 
 		if(Database::num_rows($result) > 0)
 		{
 			while($blog_post = Database::fetch_array($result))
 			{
-				echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $blog_id . '&amp;task_id=' . $task_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment">'.stripslashes($blog_post['title']) . '</a>, ' . get_lang('WrittenBy') . ' ' . $blog_post['firstname'] . ' '.stripslashes($blog_post['lastname']) . '<br />';
+				echo '<a href="blog.php?action=execute_task&amp;blog_id=' . $blog_id . '&amp;task_id=' . $task_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment">'.stripslashes($blog_post['title']) . '</a>, ' . get_lang('WrittenBy') . ' ' . stripslashes(api_get_person_name($blog_post['firstname'], $blog_post['lastname'])) . '<br />';
 			}
 		}
 		else
@@ -2219,13 +2204,13 @@ class Blog {
 
 		// Subscribe the user
 		$sql = "INSERT INTO $tbl_blogs_rel_user ( blog_id, user_id ) VALUES ('".(int)$blog_id."', '".(int)$user_id."');";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		// Give this user basic rights
 		$sql="INSERT INTO $tbl_user_permissions (user_id,tool,action) VALUES ('".(int)$user_id."','BLOG_" . (int)$blog_id."','article_add')";
-		$result = api_sql_query($sql, __LINE__, __FILE__);
+		$result = Database::query($sql, __LINE__, __FILE__);
 		$sql="INSERT INTO $tbl_user_permissions (user_id,tool,action) VALUES ('".(int)$user_id."','BLOG_" . (int)$blog_id."','article_comments_add')";
-		$result = api_sql_query($sql, __LINE__, __FILE__);
+		$result = Database::query($sql, __LINE__, __FILE__);
 	}
 
 	/**
@@ -2242,11 +2227,11 @@ class Blog {
 
 		// Unsubscribe the user
 		$sql = "DELETE FROM $tbl_blogs_rel_user WHERE blog_id = '".(int)$blog_id."' AND user_id = '".(int)$user_id."'";
-		$result = @api_sql_query($sql, __FILE__, __LINE__);
+		$result = @Database::query($sql, __FILE__, __LINE__);
 
 		// Remove this user's permissions.
 		$sql = "DELETE FROM $tbl_user_permissions WHERE user_id = '".(int)$user_id."'";
-		$result = api_sql_query($sql, __LINE__, __FILE__);
+		$result = Database::query($sql, __LINE__, __FILE__);
 	}
 
 	/**
@@ -2261,13 +2246,14 @@ class Blog {
 	public static function display_form_user_subscribe ($blog_id) {
 		// Init
 		global $_course;
+		$is_western_name_order = api_is_western_name_order();
 		$currentCourse = $_course['sysCode'];
 		$tbl_users 			= Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
 		$table_course_user 	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
-	
+
 		echo '<div class="row"><div class="form_header">'.get_lang('SubscribeMembers').'</div></div>';
-		
+
 		$properties["width"] = "100%";
 
 		// Get blog members' id.
@@ -2275,8 +2261,8 @@ class Blog {
 				INNER JOIN $tbl_blogs_rel_user blogs_rel_user
 				ON user.user_id = blogs_rel_user.user_id
 				WHERE blogs_rel_user.blog_id = '".intval($blog_id)."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
-		
+		$result = Database::query($sql, __FILE__, __LINE__);
+
 		$blog_member_ids = array ();
 		while($user = Database::fetch_array($result))
 		{
@@ -2285,24 +2271,29 @@ class Blog {
 
 		// Set table headers
 		$column_header[] = array ('', false, '');
-		$column_header[] = array (get_lang('LastName'), true, '');
-		$column_header[] = array (get_lang('FirstName'), true, '');
+		if ($is_western_name_order) {
+			$column_header[] = array (get_lang('FirstName'), true, '');
+			$column_header[] = array (get_lang('LastName'), true, '');
+		} else {
+			$column_header[] = array (get_lang('LastName'), true, '');
+			$column_header[] = array (get_lang('FirstName'), true, '');
+		}
 		$column_header[] = array (get_lang('Email'), true, '');
 		$column_header[] = array (get_lang('Register'), false, '');
-		
+
 		include_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 		include_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
-		
+
 		if(isset($_SESSION['session_id'])){
 			$session_id = intval($_SESSION['session_id']);
 		}
 		else{
 			$session_id = 0;
 		}
-		
-		$student_list = CourseManager :: get_student_list_from_course_code($currentCourse, true, $session_id);		
+
+		$student_list = CourseManager :: get_student_list_from_course_code($currentCourse, true, $session_id);
 		$user_data = array ();
-		
+
 		// Add users that are not in this blog to the list.
 		foreach($student_list as $key=>$user) {
 			if(isset($user['id_user'])) {
@@ -2312,8 +2303,13 @@ class Blog {
 				$a_infosUser = UserManager :: get_user_info_by_id($user['user_id']);
 				$row = array ();
 				$row[] = '<input type="checkbox" name="user[]" value="' . $a_infosUser['user_id'] . '" '.(($_GET['selectall'] == "subscribe") ? ' checked="checked" ' : '') . '/>';
-				$row[] = $a_infosUser["lastname"];
-				$row[] = $a_infosUser["firstname"];
+				if ($is_western_name_order) {
+					$row[] = $a_infosUser["firstname"];
+					$row[] = $a_infosUser["lastname"];
+				} else {
+					$row[] = $a_infosUser["lastname"];
+					$row[] = $a_infosUser["firstname"];
+				}
 				$row[] = Display::encrypted_mailto_link($a_infosUser["email"]);
 				//Link to register users
 				if($a_infosUser["user_id"] != $_SESSION['_user']['user_id'])
@@ -2330,13 +2326,13 @@ class Blog {
 
 		// Display
 		$query_vars['action'] = 'manage_members';
-		$query_vars['blog_id'] = $blog_id; 
+		$query_vars['blog_id'] = $blog_id;
 		echo '<form method="post" action="blog.php?action=manage_members&amp;blog_id=' . $blog_id . '">';
 			Display::display_sortable_table($column_header, $user_data,null,null,$query_vars);
 			$link = '';
 			$link .= isset ($_GET['action']) ? 'action=' . Security::remove_XSS($_GET['action']) . '&amp;' : '';
 			$link .= "blog_id=$blog_id&amp;";
-			
+
 			echo '<a href="blog.php?' . $link . 'selectall=subscribe">' . get_lang('SelectAll') . '</a> - ';
 			echo '<a href="blog.php?' . $link . '">' . get_lang('UnSelectAll') . '</a> ';
 			echo get_lang('WithSelected') . ' : ';
@@ -2360,6 +2356,7 @@ class Blog {
 	 */
 	public static function display_form_user_unsubscribe ($blog_id) {
 		global $_user;
+		$is_western_name_order = api_is_western_name_order();
 
 		// Init
 		$tbl_users 			= Database::get_main_table(TABLE_MAIN_USER);
@@ -2370,8 +2367,13 @@ class Blog {
 		$properties["width"] = "100%";
 		//table column titles
 		$column_header[] = array ('', false, '');
-		$column_header[] = array (get_lang('LastName'), true, '');
-		$column_header[] = array (get_lang('FirstName'), true, '');
+		if ($is_western_name_order) {
+			$column_header[] = array (get_lang('FirstName'), true, '');
+			$column_header[] = array (get_lang('LastName'), true, '');
+		} else {
+			$column_header[] = array (get_lang('LastName'), true, '');
+			$column_header[] = array (get_lang('FirstName'), true, '');
+		}
 		$column_header[] = array (get_lang('Email'), true, '');
 		$column_header[] = array (get_lang('TaskManager'), true, '');
 		$column_header[] = array (get_lang('UnRegister'), false, '');
@@ -2382,7 +2384,7 @@ class Blog {
 			ON user.user_id = blogs_rel_user.user_id
 			WHERE blogs_rel_user.blog_id = '".(int)$blog_id."'";
 
-		//$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		//$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 
 		$sql_result = mysql_query($sql_query) or die(mysql_error());
 
@@ -2392,8 +2394,13 @@ class Blog {
 		{
 			$row = array ();
 			$row[] = '<input type="checkbox" name="user[]" value="' . $myrow['user_id'] . '" '.(($_GET['selectall'] == "unsubscribe") ? ' checked="checked" ' : '') . '/>';
-			$row[] = $myrow["lastname"];
-			$row[] = $myrow["firstname"];
+			if ($is_western_name_order) {
+				$row[] = $myrow["firstname"];
+				$row[] = $myrow["lastname"];
+			} else {
+				$row[] = $myrow["lastname"];
+				$row[] = $myrow["firstname"];
+			}
 			$row[] = Display::encrypted_mailto_link($myrow["email"]);
 
 			$sql = "SELECT bt.title task
@@ -2428,8 +2435,8 @@ class Blog {
 		Display::display_sortable_table($column_header, $user_data,null,null,$query_vars);
 		$link = '';
 		$link .= isset ($_GET['action']) ? 'action=' . Security::remove_XSS($_GET['action']). '&amp;' : '';
-		$link .= "blog_id=$blog_id&amp;"; 
-		
+		$link .= "blog_id=$blog_id&amp;";
+
 		echo '<a href="blog.php?' . $link . 'selectall=unsubscribe">' . get_lang('SelectAll') . '</a> - ';
 		echo '<a href="blog.php?' . $link . '">' . get_lang('UnSelectAll') . '</a> ';
 		echo get_lang('WithSelected') . ' : ';
@@ -2467,12 +2474,12 @@ class Blog {
 	 */
 	public static function display_new_comment_form ($blog_id, $post_id, $title) {
 		echo '<form name="add_post" enctype="multipart/form-data" method="post" action="blog.php?action=view_post&amp;blog_id=' . intval($blog_id) . '&amp;post_id=' . intval($post_id) . '">';
-		
+
 		// form title
 		echo '<div class="row"><div class="form_header">';
 		echo (isset($_GET['task_id']) ? get_lang('ExecuteThisTask') : get_lang('AddNewComment'));
 		echo '</div></div>';
-		
+
 		// comment title
 		echo '	<div class="row">
 					<div class="label">
@@ -2484,7 +2491,7 @@ class Blog {
 				</div>';
 
 		// comment text
-		$oFCKeditor = new FCKeditor('comment_text') ;													
+		$oFCKeditor = new FCKeditor('comment_text') ;
 		$oFCKeditor->Width		= '100%';
 		$oFCKeditor->Height		= '200';
 		if(!api_is_allowed_to_edit())
@@ -2494,7 +2501,7 @@ class Blog {
 		else
 		{
 			$oFCKeditor->ToolbarSet = 'ProjectComment';
-		}		
+		}
 		$oFCKeditor->Value		= isset($_POST['comment_text'])?stripslashes($_POST['comment_text']):'';
 		echo '	<div class="row">
 					<div class="label">
@@ -2503,8 +2510,8 @@ class Blog {
 					<div class="formw">';
 		echo $oFCKeditor->Create() ;
 		echo '		</div>
-				</div>';	
-									
+				</div>';
+
 		// attachment
 		echo '	<div class="row">
 					<div class="label">
@@ -2524,7 +2531,7 @@ class Blog {
 						<textarea name="post_file_comment" cols="34" /></textarea>
 					</div>
 				</div>';
-							 
+
 		// attachment comment
 		echo '	<div class="row">
 					<div class="label">
@@ -2582,7 +2589,7 @@ class Blog {
 			$numberofdays[2] = 29;
 
 		//Get the first day of the month
-		$dayone = getdate(mktime(0, 0, 0, $month, 1, $year));		
+		$dayone = getdate(mktime(0, 0, 0, $month, 1, $year));
 		$monthName = $MonthsLong[$month-1];
 
 		//Start the week on monday
@@ -2598,7 +2605,7 @@ class Blog {
 				AND MONTH(date_creation) = '".(int)$month."'
 				AND YEAR(date_creation) = '".(int)$year."'
 				ORDER BY date_creation";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		// We will create an array of days on which there are posts.
 		if( Database::num_rows($result) > 0)
@@ -2627,7 +2634,7 @@ class Blog {
 				AND	MONTH(target_date) = '".(int)$month."'
 				AND	YEAR(target_date) = '".(int)$year."'
 				ORDER BY target_date ASC";
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 
 			if(mysql_numrows($result) > 0)
 			{
@@ -2687,10 +2694,10 @@ class Blog {
 						echo '<a href="blog.php?blog_id=' . $blog_id . '&amp;filter=' . $year . '-' . $month . '-' . $curday . '&amp;month=' . $month . '&amp;year=' . $year . '" title="' . get_lang('ViewPostsOfThisDay') . '">' . $curday . '</a>';
 					else
 						echo $dayheader;
-			
-					if (count($tasks) > 0) 
+
+					if (count($tasks) > 0)
 					{
-						if (is_array($tasks[$curday])) 
+						if (is_array($tasks[$curday]))
 						{
 							// Add tasks to calendar
 							foreach ($tasks[$curday] as $task)
@@ -2699,7 +2706,7 @@ class Blog {
 							}
 						}
 					}
-					
+
 					echo "</td>\n";
 
 					$curday ++;
@@ -2725,7 +2732,7 @@ class Blog {
 						' . get_lang('AddBlog') . '
 					</div>
 				</div>
-				
+
 				<div class="row">
 					<div class="label">
 						<span class="form_required">*</span>' . get_lang('Title') . '
@@ -2734,7 +2741,7 @@ class Blog {
 						<input name="blog_name" type="text" size="50" value="'.Security::remove_XSS($_POST['blog_name']).'" />
 					</div>
 				</div>
-				
+
 				<div class="row">
 					<div class="label">
 						' . get_lang('Subtitle') . '
@@ -2742,8 +2749,8 @@ class Blog {
 					<div class="formw">
 						<input name="blog_subtitle" type="text" size="50" value="'.Security::remove_XSS($_POST['blog_subtitle']).'"/>
 					</div>
-				</div>	
-				
+				</div>
+
 				<div class="row">
 					<div class="label">
 					</div>
@@ -2752,11 +2759,11 @@ class Blog {
 							<input type="hidden" name="new_blog_submit" value="true" />
 						<button class="save" type="submit" name="Submit">' . get_lang('SaveProject') . '</button>
 					</div>
-				</div>								
+				</div>
 			</form>
 			<div style="clear: both; margin-bottom:10px;"></div>
 			';
-			
+
 	}
 
 	/**
@@ -2768,7 +2775,7 @@ class Blog {
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
 
 		$sql = "SELECT blog_id, blog_name, blog_subtitle FROM $tbl_blogs WHERE blog_id = '".(int)$blog_id."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$blog = Database::fetch_array($result);
 
 		// the form contained errors but we do not want to lose the changes the user already did
@@ -2782,8 +2789,8 @@ class Blog {
 					<div class="form_header">
 						' . get_lang('EditBlog') . '
 					</div>
-				</div>	
-				
+				</div>
+
 				<div class="row">
 					<div class="label">
 						<span class="form_required">*</span>' . get_lang('Title') . '
@@ -2792,7 +2799,7 @@ class Blog {
 						<input name="blog_name" type="text" size="50" value="' . $blog['blog_name'] . '" />
 					</div>
 				</div>
-				
+
 				<div class="row">
 					<div class="label">
 						' . get_lang('Subtitle') . '
@@ -2800,8 +2807,8 @@ class Blog {
 					<div class="formw">
 						<input name="blog_subtitle" type="text" size="50" value="' . $blog['blog_subtitle'] . '" />
 					</div>
-				</div>	
-				
+				</div>
+
 				<div class="row">
 					<div class="label">
 					</div>
@@ -2811,7 +2818,7 @@ class Blog {
 							<input type="hidden" name="blog_id" value="' . $blog['blog_id'] . '" />
 						<button class="save" type="submit" name="Submit">' . get_lang('Save') . '</button>
 					</div>
-				</div>	
+				</div>
 			</form>
 			<div style="clear: both; margin-bottom:10px;"></div>
 			';
@@ -2821,32 +2828,39 @@ class Blog {
 	 * Blog admin | Returns table with blogs in this course
 	 */
 	public static function display_blog_list () {
-		global $charset;
+		global $charset, $_user;
 		// Init
 		$counter = 0;
 
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
+		
+		//condition for the session
+		$session_id = api_get_session_id();
+		$condition_session = api_get_session_condition($session_id, false);
+		
 		$sql = 'SELECT blog_name,blog_subtitle,visibility,blog_id FROM '.$tbl_blogs.' ORDER BY date_creation DESC ';
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		while ($row_project=Database::fetch_row($result)) {
 			$list_info[]=$row_project;
 		}
-		
+
 		$list_content_blog = array();
 		$list_body_blog = array();
-		
+
 		if (is_array($list_info)) {
 			foreach($list_info as $key => $info_log) {
+				//validacion when belongs to a session
+				$session_img = api_get_session_image($info_log[4], $_user['status']);
 				
 				$url_start_blog = 'blog.php' ."?". "blog_id=".$info_log[3]. "&amp;".api_get_cidreq();
 				$title = $info_log[0];
     			$image = '<img src="../img/blog.gif" border="0" align="absmiddle" alt="' . $title . '">'."\n";
-    			$list_name = '<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_blog.'">' . $image . '</a></div><a href="'.$url_start_blog.'">' .$title. '</a>' ."\n";
-				
+    			$list_name = '<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_blog.'">' . $image . '</a></div><a href="'.$url_start_blog.'">' .$title. '</a>' . $session_img . "\n";
+
 				$list_body_blog[] = $list_name;
 				$list_body_blog[] = $info_log[1];
-				
+
 				$visibility_icon=($info_log[2]==0) ? 'invisible' : 'visible';
 				$visibility_info=($info_log[2]==0) ? 'Visible' : 'Invisible';
 			 	$my_image.='<a href="' .api_get_self(). '?action=edit&amp;blog_id=' . $info_log[3] . '">';
@@ -2859,16 +2873,16 @@ class Blog {
 				$my_image.='<a href="' .api_get_self(). '?action=visibility&amp;blog_id=' . $info_log[3] . '">';
 				$my_image.='<img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang($visibility_info) . '" />';
 				$my_image.="</a>\n";
-									
+
 				$list_body_blog[]=$my_image;
 				$my_image='';
-				
+
 				$list_content_blog[]=$list_body_blog;
 				$list_body_blog = array();
-				
+
 			}
 			$parameters='';
-			//$parameters=array('action'=>Security::remove_XSS($_GET['action']));			
+			//$parameters=array('action'=>Security::remove_XSS($_GET['action']));
 			$table = new SortableTableFromArrayConfig($list_content_blog, 1,20,'project');
 			//$table->set_additional_parameters($parameters);
 			$table->set_header(0, get_lang('Title'));
@@ -2876,9 +2890,9 @@ class Blog {
 			$table->set_header(2, get_lang('Modify'));
 			$table->display();
 		}
-	
+
 		/*$sql = "SELECT blog_id, blog_name, blog_subtitle, visibility FROM $tbl_blogs ORDER BY blog_name";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		while($blog = Database::fetch_array($result))
 		{
@@ -2910,35 +2924,35 @@ class Blog {
 }
 
 /**
- * 
+ *
  * END CLASS BLOG
- * 
+ *
  */
 
 /**
  * Show a list with all the attachments according the parameter's
  * @param the blog's id
- * @param the post's id 
+ * @param the post's id
  * @param the comment's id
- * @return array with the post info according the parameters  
+ * @return array with the post info according the parameters
  * @author Julio Montoya Dokeos
  * @version avril 2008, dokeos 1.8.5
- */ 
+ */
 function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
-{	
+{
 	global $blog_table_attachment;
 	$blog_id = Database::escape_string($blog_id);
 	$comment_id = Database::escape_string($comment_id);
-	$post_id = Database::escape_string($post_id);	
-	
+	$post_id = Database::escape_string($post_id);
+
 	$row=array();
 	$where='';
-	
+
 	if (!empty ($post_id) && is_numeric($post_id))
 	{
 		$where.=' AND post_id ="'.$post_id.'" ';
 	}
-		
+
 	if (!empty ($comment_id) && is_numeric($comment_id) )
 	{
 		if (!empty ($post_id) )
@@ -2946,42 +2960,42 @@ function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
 			$where.= ' AND ';
 		}
 		$where.=' comment_id ="'.$comment_id.'" ';
-	} 
-	
+	}
+
 	$sql = 'SELECT path, filename, comment FROM '. $blog_table_attachment.' WHERE blog_id ="'.intval($blog_id).'"  '.$where;
-	
-	$result=api_sql_query($sql, __FILE__, __LINE__);
+
+	$result=Database::query($sql, __FILE__, __LINE__);
 	if (Database::num_rows($result)!=0)
 	{
 		$row=Database::fetch_array($result);
 	}
-	return $row;	
+	return $row;
 }
 
 /**
  * Delete the all the attachments according the parameters.
  * @param the blog's id
- * @param the post's id 
+ * @param the post's id
  * @param the comment's id
  * @author Julio Montoya Dokeos
  * @version avril 2008, dokeos 1.8.5
- */ 
+ */
 
 function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
-{	
+{
 	global $blog_table_attachment;
 	global $_course;
-	
+
 	$blog_id = Database::escape_string($blog_id);
 	$comment_id = Database::escape_string($comment_id);
-	$post_id = Database::escape_string($post_id);		
-	
-	// delete files in DB	
+	$post_id = Database::escape_string($post_id);
+
+	// delete files in DB
 	if (!empty ($post_id) && is_numeric($post_id) )
 	{
 		$where.=' AND post_id ="'.$post_id.'" ';
 	}
-		
+
 	if (!empty ($comment_id) && is_numeric($comment_id)   )
 	{
 		if (!empty ($post_id) )
@@ -2990,44 +3004,44 @@ function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
 		}
 		$where.=' comment_id ="'.$comment_id.'" ';
 	}
-			
+
 	// delete all files in directory
 	$courseDir   = $_course['path'].'/upload/blog';
-	$sys_course_path = api_get_path(SYS_COURSE_PATH);		
+	$sys_course_path = api_get_path(SYS_COURSE_PATH);
 	$updir = $sys_course_path.$courseDir;
-	
-	$sql= 'SELECT path FROM '.$blog_table_attachment.' WHERE blog_id ="'.intval($blog_id).'"  '.$where;	
-	$result=api_sql_query($sql, __FILE__, __LINE__);
-	
+
+	$sql= 'SELECT path FROM '.$blog_table_attachment.' WHERE blog_id ="'.intval($blog_id).'"  '.$where;
+	$result=Database::query($sql, __FILE__, __LINE__);
+
 	while ($row=Database::fetch_row($result))
 	{
-		$file=$updir.'/'.$row[0];											
+		$file=$updir.'/'.$row[0];
 		if (Security::check_abs_path($file,$updir) )
-		{			
+		{
 			@ unlink($file);
-		}		
-	}	
-	$sql = 'DELETE FROM '. $blog_table_attachment.' WHERE blog_id ="'.intval($blog_id).'"  '.$where;	
-	api_sql_query($sql, __FILE__, __LINE__);
+		}
+	}
+	$sql = 'DELETE FROM '. $blog_table_attachment.' WHERE blog_id ="'.intval($blog_id).'"  '.$where;
+	Database::query($sql, __FILE__, __LINE__);
 }
 /**
  * Gets all the post from a given user id
- * @param string db course name 
+ * @param string db course name
  * @param int user id
  */
 function get_blog_post_from_user($course_db_name, $user_id) {
-	
+
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS,$course_db_name);
 		$tbl_blog_post = Database::get_course_table(TABLE_BLOGS_POSTS,$course_db_name);
 		$sql = "SELECT DISTINCT blog.blog_id, post_id, title, full_text, post.date_creation
-				FROM $tbl_blogs blog INNER JOIN  $tbl_blog_post post 
+				FROM $tbl_blogs blog INNER JOIN  $tbl_blog_post post
 				ON (blog.blog_id = post.blog_id)
-				WHERE author_id =  $user_id AND visibility = 1 
+				WHERE author_id =  $user_id AND visibility = 1
 				ORDER BY post.date_creation DESC ";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$return_data = '';
 		//$my_course_info=explode('_',$course_db_name);
-		$my_course_id=CourseManager::get_course_id_by_database_name($course_db_name);	
+		$my_course_id=CourseManager::get_course_id_by_database_name($course_db_name);
 		if (Database::num_rows($result)!=0) {
 			while ($row=Database::fetch_array($result)) {
 				$return_data.=  '<div class="clear"></div><br />';
@@ -3035,7 +3049,7 @@ function get_blog_post_from_user($course_db_name, $user_id) {
 	 			$return_data.=  '<br / >';
 				//$return_data.= '<strong>'.$row['title'].'</strong>'; echo '<br>';
 				$return_data.= $row['full_text'];
-				$return_data.= '<br /><br />';				
+				$return_data.= '<br /><br />';
 			}
 		}
 		return $return_data;
@@ -3043,34 +3057,34 @@ function get_blog_post_from_user($course_db_name, $user_id) {
 
 /**
  * Gets all the post comments from a given user id
- * @param string db course name 
+ * @param string db course name
  * @param int user id
  */
 function get_blog_comment_from_user($course_db_name, $user_id) {
-	
+
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS,$course_db_name);
 		$tbl_blog_comment = Database::get_course_table(TABLE_BLOGS_COMMENTS,$course_db_name);
 		$user_id = Database::escape_string($user_id);
-		
+
 		$sql = "SELECT DISTINCT blog.blog_id, comment_id, title, comment, comment.date_creation
-				FROM $tbl_blogs blog INNER JOIN  $tbl_blog_comment comment 
+				FROM $tbl_blogs blog INNER JOIN  $tbl_blog_comment comment
 				ON (blog.blog_id = comment.blog_id)
-				WHERE author_id =  $user_id AND visibility = 1 
+				WHERE author_id =  $user_id AND visibility = 1
 				ORDER BY blog_name";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		$return_data = '';
 		$my_course_info=explode('_',$course_db_name);
 		if (Database::num_rows($result)!=0) {
 			while ($row=Database::fetch_array($result)) {
 				$return_data.=  '<div class="clear"></div><br />';
 	 			$return_data.=  '<div class="actions" style="margin-left:5px;margin-right:5px;">'.$row['title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../blog/blog.php?blog_id='.$row['blog_id'].'&gidReq=&cidReq='.$my_course_info[1].' " >'.get_lang('SeeBlog').'</a></div></div>';
-	 			$return_data.=  '<br / >';				
+	 			$return_data.=  '<br / >';
 				//$return_data.=  '<strong>'.$row['title'].'</strong>'; echo '<br>';*/
 				$return_data.=  $row['comment'];
 				$return_data.=  '<br />';
 			}
 		}
-		return $return_data; 
+		return $return_data;
 }
 
 ?>

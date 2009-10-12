@@ -74,7 +74,7 @@ function Exception(name, message)
 }
 
 /**
- * Set the name of the exception. 
+ * Set the name of the exception.
  */
 Exception.prototype.setName = function(name)
 {
@@ -82,7 +82,7 @@ Exception.prototype.setName = function(name)
 }
 
 /**
- * Get the exception's name. 
+ * Get the exception's name.
  */
 Exception.prototype.getName = function()
 {
@@ -90,7 +90,7 @@ Exception.prototype.getName = function()
 }
 
 /**
- * Set a message on the exception. 
+ * Set a message on the exception.
  */
 Exception.prototype.setMessage = function(msg)
 {
@@ -98,7 +98,7 @@ Exception.prototype.setMessage = function(msg)
 }
 
 /**
- * Get the exception message. 
+ * Get the exception message.
  */
 Exception.prototype.getMessage = function()
 {
@@ -153,7 +153,7 @@ FlashTag.prototype.setBgcolor = function(bgc)
 }
 
 /**
- * Sets any variables to be passed into the Flash content. 
+ * Sets any variables to be passed into the Flash content.
  */
 FlashTag.prototype.setFlashvars = function(fv)
 {
@@ -161,7 +161,7 @@ FlashTag.prototype.setFlashvars = function(fv)
 }
 
 /**
- * Get the Flash tag as a string. 
+ * Get the Flash tag as a string.
  */
 FlashTag.prototype.toString = function()
 {
@@ -189,7 +189,7 @@ FlashTag.prototype.toString = function()
     else
     {
         flashTag += '<embed src="'+this.src+'" ';
-        flashTag += 'quality="high" '; 
+        flashTag += 'quality="high" ';
         flashTag += 'bgcolor="#'+this.bgcolor+'" ';
         flashTag += 'width="'+this.width+'" ';
         flashTag += 'height="'+this.height+'" ';
@@ -209,7 +209,7 @@ FlashTag.prototype.toString = function()
 }
 
 /**
- * Write the Flash tag out. Pass in a reference to the document to write to. 
+ * Write the Flash tag out. Pass in a reference to the document to write to.
  */
 FlashTag.prototype.write = function(doc)
 {
@@ -218,7 +218,7 @@ FlashTag.prototype.write = function(doc)
 
 /**
  * The FlashSerializer serializes JavaScript variables of types object, array, string,
- * number, date, boolean, null or undefined into XML. 
+ * number, date, boolean, null or undefined into XML.
  */
 
 /**
@@ -296,9 +296,9 @@ FlashSerializer.prototype.serialize = function(args)
 FlashSerializer.prototype._serializeXML = function(obj)
 {
     var doc = new Object();
-    doc.xml = '<fp>'; 
+    doc.xml = '<fp>';
     this._serializeNode(obj, doc, null);
-    doc.xml += '</fp>'; 
+    doc.xml += '</fp>';
     return doc.xml;
 }
 
@@ -401,7 +401,7 @@ function FlashProxy(uid, proxySwfName)
  * Call a function in your Flash content.  Arguments should be:
  * 1. ActionScript function name to call,
  * 2. any number of additional arguments of type object,
- *    array, string, number, boolean, date, null, or undefined. 
+ *    array, string, number, boolean, date, null, or undefined.
  */
 FlashProxy.prototype.call = function()
 {

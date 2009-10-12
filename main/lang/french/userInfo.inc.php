@@ -87,4 +87,7 @@ $ViewUser = "Voir cet utilisateur";
 $RSSFeeds = "Blogs externes";
 $NoFriendsInYourContactList = "Il n\'y a aucun contact dans votre liste";
 $TryAndFindSomeFriends = "Rechercher des amis";
+$ClearSearchResults = "Nettoyer les résultats de la recherche";
+$SendInvitation = "Envoyer invitation";
+$SocialInvitationToFriends = "Inviter à se joindre à mon groupe d\'amis";
 ?>

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -22,6 +22,9 @@
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
 ==============================================================================
 */
+
+// TODO: Is this file deprecated?
+
 /**
 ==============================================================================
 * @package dokeos.tracking
@@ -36,7 +39,7 @@
 */
 $uInfo = $_REQUEST['uInfo'];
 $view = $_REQUEST['view'];
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'tracking';
 
 include('../inc/global.inc.php');
@@ -73,10 +76,10 @@ require_once(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 // charset determination
 if ($_GET['scormcontopen'])
 {
-	$tbl_lp = Database::get_course_table('lp');
+	$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	$contopen = (int) $_GET['scormcontopen'];
 	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	$row = Database::fetch_array($res);
 	$lp_charset = $row['default_encoding'];
 	//header('Content-Type: text/html; charset='. $row['default_encoding']);
@@ -135,21 +138,22 @@ if(api_get_setting('use_session_mode') == "true") {
 				OR (date_start='0000-00-00' AND date_end='0000-00-00'))
 			WHERE id_session='".$_SESSION['id_session']."' AND course_code='$_cid'";
 	//echo $sql;
-	$result=api_sql_query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql,__FILE__,__LINE__);
 	if(!mysql_num_rows($result)){
 		$disabled = true;
 	}
 }
 
-$tbl_learnpath_main = Database::get_course_table('lp');
-$tbl_learnpath_item = Database::get_course_table('lp_item');
-$tbl_learnpath_view = Database::get_course_table('lp_view');
-$tbl_learnpath_item_view = Database::get_course_table('lp_item_view');
+$tbl_learnpath_main = Database::get_course_table(TABLE_LP_MAIN);
+$tbl_learnpath_item = Database::get_course_table(TABLE_LP_ITEM);
+$tbl_learnpath_view = Database::get_course_table(TABLE_LP_VIEW);
+$tbl_learnpath_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
 // the variables for the days and the months
 // Defining the shorts for the days
+// TODO: The function myEnc() should be eliminated. The following arrays should be constructed using the correspondent API-functions in the internationalization library.
 $DaysShort = array (myEnc(get_lang("SundayShort")), myEnc(get_lang("MondayShort")), myEnc(get_lang("TuesdayShort")), myEnc(get_lang("WednesdayShort")), myEnc(get_lang("ThursdayShort")), myEnc(get_lang("FridayShort")), myEnc(get_lang("SaturdayShort")));
 // Defining the days of the week to allow translation of the days
 $DaysLong = array (myEnc(get_lang("SundayLong")), myEnc(get_lang("MondayLong")), myEnc(get_lang("TuesdayLong")), myEnc(get_lang("WednesdayLong")), myEnc(get_lang("ThursdayLong")), myEnc(get_lang("FridayLong")), myEnc(get_lang("SaturdayLong")));
@@ -194,7 +198,7 @@ function display_login_tracking_info($view, $user_id, $course_id)
 	{
 		$new_view = substr_replace($view,'0',0,1);
 		$title[1]= myEnc(get_lang('LoginsAndAccessTools')).myEnc(get_lang('LoginsDetails'));
-			
+
 		$sql = "SELECT UNIX_TIMESTAMP(`access_date`), count(`access_date`)
 					FROM $track_access_table
 					WHERE `access_user_id` = '$user_id'
@@ -220,11 +224,11 @@ function display_login_tracking_info($view, $user_id, $course_id)
 		else
 		{
 			$line= myEnc(get_lang('NoResult'))."</center></td>";
-		}		
+		}
 	}
 	else
 	{
-		$new_view = substr_replace($view,'1',0,1);		
+		$new_view = substr_replace($view,'1',0,1);
 	}
 	return array($title_line, $line);
 }
@@ -239,12 +243,12 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 	if(substr($view,1,1) == '1')
 	{
 		$new_view = substr_replace($view,'0',1,1);
-		
+
 		$title[1]= myEnc(get_lang('ExercicesDetails'));
 		$line='';
 
 		$sql = "SELECT `ce`.`title`, `te`.`exe_result` , `te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`)
-			FROM $TABLECOURSE_EXERCICES AS ce , `$TABLETRACK_EXERCICES` AS `te` 
+			FROM $TABLECOURSE_EXERCICES AS ce , `$TABLETRACK_EXERCICES` AS `te`
 			WHERE `te`.`exe_cours_id` = '$course_id'
 				AND `te`.`exe_user_id` = '$user_id'
 				AND `te`.`exe_exo_id` = `ce`.`id`
@@ -303,7 +307,7 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 	else
 	{
 		$new_view = substr_replace($view,'1',1,1);
-		
+
 	}
 	return array($title_line, $line);
 }
@@ -329,7 +333,7 @@ function display_student_publications_tracking_info($view, $user_id, $course_id)
 		$title[1]=myEnc(get_lang('WorksDetails'));
 		$line='';
 		$title_line=myEnc(get_lang('WorkTitle')).";".myEnc(get_lang('WorkAuthors')).";".myEnc(get_lang('Date'))."\n";
-			
+
 		if (is_array($results))
 		{
 			for($j = 0 ; $j < count($results) ; $j++)
@@ -377,7 +381,7 @@ function display_links_tracking_info($view, $user_id, $course_id)
 			for($j = 0 ; $j < count($results) ; $j++)
 			{
 					$line .= $results[$j][0]."\n";
-				
+
 			}
 
 		}
@@ -555,10 +559,10 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 						WHERE `gu`.`user_id` = `u`.`user_id`
 							AND `gu`.`group_id` = '$_gid'
 							AND `u`.`user_id` = '$uInfo'";
-			$query = api_sql_query($sql,__FILE__,__LINE__);
+			$query = Database::query($sql,__FILE__,__LINE__);
 			$tracked_user_info = @mysql_fetch_assoc($query);
 			if(is_array($tracked_user_info)) $tracking_is_accepted = true;
-			
+
        		$title[0] = $tracked_user_info['firstname'].'_'.$tracked_user_info['lastname'];
 		}
 
@@ -584,7 +588,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 
 			//Documents downloaded
 			list($title_line5, $line5) = display_document_tracking_info($view, $uInfo, $_cid);
-			
+
 			$title_line = $title_line1.$title_line2.$title_line3.$title_line4.$title_line5;
 			$line= $line1.$line2.$line3.$line4.$line5;
 		}
@@ -599,14 +603,14 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
          *		Scorm contents and Learning Path
          *
          ***************************************************************************/
-         //TODO: scorm tools is in work and the logs will change in few days... 
+         //TODO: scorm tools is in work and the logs will change in few days...
         /*if(substr($view,5,1) == '1')
         {
             $new_view = substr_replace($view,'0',5,1);
             $title[1]=myEnc(get_lang('ScormContentColumn'));
 			$line ='';
             $sql = "SELECT id, name FROM $tbl_learnpath_main";
-    		$result=api_sql_query($sql,__FILE__,__LINE__);
+    		$result=Database::query($sql,__FILE__,__LINE__);
     	    $ar=Database::fetch_array($result);
 
           if (is_array($ar))
@@ -623,15 +627,15 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 									"INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
 									"INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
 									"WHERE (v.user_id=$uInfo and v.lp_id=$contentId) ORDER BY v.id, i.id";
-   							$result3=api_sql_query($sql3,__FILE__,__LINE__);
+   							$result3=Database::query($sql3,__FILE__,__LINE__);
    						    $ar3=Database::fetch_array($result3);
                             if (is_array($ar3)) {
                                 $title_line=myEnc(get_lang('ScormTitleColumn')).";".myEnc(get_lang('ScormStatusColumn')).";".myEnc(get_lang('ScormScoreColumn')).";".myEnc(get_lang('ScormTimeColumn'))."\n";
-       				            
+
        							while ($ar3['status'] != '') {
 									require_once('../newscorm/learnpathItem.class.php');
 									$time = learnpathItem::get_scorm_time('php',$ar3['total_time']);
-									$title = htmlentities($ar3['title'],ENT_QUOTES,$lp_charset);
+									$title = api_htmlentities($ar3['title'],ENT_QUOTES,$lp_charset);
        								$line .= $title.';'.$ar3['status'].';'.$ar3['score'].';'.$time."\n";
        								$ar3=Database::fetch_array($result3);
        							}
@@ -663,17 +667,17 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
      *		Export to a CSV file
      *		force the browser to save the file instead of opening it
      ***************************************************************************/
-			
+
 	$len = strlen($title_line.$line);
 	header('Content-type: application/octet-stream');
 	//header('Content-Type: application/force-download');
 	header('Content-length: '.$len);
-	$filename = html_entity_decode(str_replace(":","",str_replace(" ","_", $title[0].'_'.$title[1].'.csv')));	
+	$filename = html_entity_decode(str_replace(":","",str_replace(" ","_", $title[0].'_'.$title[1].'.csv')));
 	if(preg_match("/MSIE 5.5/",$_SERVER['HTTP_USER_AGENT']))
 	{
 		header('Content-Disposition: filename= '.$filename);
 	}
-	else 
+	else
 	{
 		header('Content-Disposition: attachment; filename= '.$filename);
 	}
@@ -685,11 +689,11 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 	}
 	header('Content-Description: '.$filename);
 	header('Content-transfer-encoding: binary');
-				
+
 	echo api_html_entity_decode($title_line, ENT_QUOTES, $charset);
 	echo api_html_entity_decode($line, ENT_QUOTES, $charset);
 	exit;
-  
+
 
 }
 // not allowed

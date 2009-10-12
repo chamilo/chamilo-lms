@@ -15,7 +15,7 @@ require_once("install_upgrade.lib.php");
 ==============================================================================
 		MAIN CODE
 ==============================================================================
-*/ 
+*/
 
 //this page can only be access through including from the install script.
 
@@ -59,11 +59,11 @@ switch ($encryptPassForm) {
 	case 'md5' :
 	$passToStore=md5($passForm);
 	break;
-	case 'sha1' : 
+	case 'sha1' :
 	$passToStore=sha1($passForm);
 	break;
 	case 'none' :
-	$passToStore=($passForm); 
+	$passToStore=($passForm);
 	break;
 }
 /*

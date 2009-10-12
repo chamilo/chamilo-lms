@@ -1,5 +1,5 @@
 /**
- * Functions for the ImageEditor interface, used by editor.php only	
+ * Functions for the ImageEditor interface, used by editor.php only
  * @author $Author: Wei Zhuo $
  * @author $Author: Frédéric Klee <fklee@isuisse.com> $ - constraints toggle and check
  * @author $Author: Paul Moers <mail@saulmade.nl> $ - watermarking and replace code + several small enhancements <http://www.saulmade.nl/FCKeditor/FCKPlugins.php>
@@ -10,7 +10,7 @@
 	var current_action = null;
 	var actions = ['crop', 'scale', 'rotate', 'measure', 'save', 'watermark', 'replace'];
 	var orginal_width = null, orginal_height=null;
-	function toggle(action) 
+	function toggle(action)
 	{
 		if(current_action != action)
 		{
@@ -37,7 +37,7 @@
 			}
 
 			current_action = action;
-			
+
 			var tools = document.getElementById('tools_'+action);
 			tools.style.display = 'block';
 			var icon = document.getElementById('icon_'+action);
@@ -49,7 +49,7 @@
 			editor.setMode(current_action);
 
 			// if watermark action, show watermark
-			if(action == 'watermark') 
+			if(action == 'watermark')
 			{
 				if (editor.window.document.getElementById("imgCanvas"))
 				{
@@ -66,7 +66,7 @@
 
 			//constraints on the scale,
 			//code by Frédéric Klee <fklee@isuisse.com>
-			if(action == 'scale') 
+			if(action == 'scale')
 			{
 				var theImage = editor.window.document.getElementById('theImage');
 				orginal_width = theImage.width ;
@@ -80,10 +80,10 @@
 		}
 	}
 
-	function toggleMarker() 
+	function toggleMarker()
 	{
 		var marker = document.getElementById("markerImg");
-		
+
 		if(marker != null && marker.src != null) {
 			if(marker.src.indexOf("t_black.gif") >= 0)
 				marker.src = "img/t_white.gif";
@@ -95,11 +95,11 @@
 	}
 
 	//Toggle constraints
-	function toggleConstraints() 
+	function toggleConstraints()
 	{
 		var lock = document.getElementById("scaleConstImg");
 		var checkbox = document.getElementById("constProp");
-		
+
 		if(lock != null && lock.src != null) {
 			if(lock.src.indexOf("unlocked2.gif") >= 0)
 			{
@@ -115,32 +115,32 @@
 			}
 		}
 	}
-	
+
 	//check the constraints
-	function checkConstrains(changed) 
+	function checkConstrains(changed)
 	{
 		var constrained = document.getElementById('constProp');
-		if(constrained.checked) 
+		if(constrained.checked)
 		{
 			var w = document.getElementById('sw') ;
 			var width = w.value ;
 			var h = document.getElementById('sh') ;
 			var height = h.value ;
-			
-			if(orginal_width > 0 && orginal_height > 0) 
+
+			if(orginal_width > 0 && orginal_height > 0)
 			{
-				if(changed == 'width' && width > 0) 
+				if(changed == 'width' && width > 0)
 					h.value = parseInt((width/orginal_width)*orginal_height);
-				else if(changed == 'height' && height > 0) 
+				else if(changed == 'height' && height > 0)
 					w.value = parseInt((height/orginal_height)*orginal_width);
 			}
 		}
-		
+
 		updateMarker('scale') ;
 	}
 
 
-	function updateMarker(mode) 
+	function updateMarker(mode)
 	{
 		if (mode == 'crop')
 		{
@@ -158,18 +158,18 @@
 		}
 	}
 
-	
-	function rotatePreset(selection) 
+
+	function rotatePreset(selection)
 	{
 		var value = selection.options[selection.selectedIndex].value;
-		
+
 		if(value.length > 0 && parseInt(value) != 0) {
 			var ra = document.getElementById('ra');
 			ra.value = parseInt(value);
 		}
 	}
 
-	function updateFormat(selection) 
+	function updateFormat(selection)
 	{
 		var selected = selection.options[selection.selectedIndex].value;
 
@@ -180,7 +180,7 @@
 
 	}
 
-	function doUpload() 
+	function doUpload()
 	{
 		// hiding action buttons
 		var buttons = parent.document.getElementById('buttons');
@@ -192,14 +192,14 @@
 		// try to restrict the user from closing the editor window when uploading
 		parent.old = (parent.onbeforeunload) ? parent.onbeforeunload : function () {};
 		parent.onbeforeunload = function () {parent.old(); alert(i18n("Please do not close the window while uploading a new image! If you do, the original image gets deleted!")); return false;};
-		
+
 		var uploadForm = document.getElementById('uploadForm');
 		if(uploadForm)
 			showMessage('Uploading');
 	}
 
 	// show processing message
-	function showMessage(newMessage) 
+	function showMessage(newMessage)
 	{
 		var message = document.getElementById('message');
 		var messages = document.getElementById('messages');
@@ -207,12 +207,12 @@
 			message.removeChild(message.firstChild);
 
 		message.appendChild(document.createTextNode(i18n(newMessage)));
-		
+
 		messages.style.display = "block";
 	}
 
 	// hide message
-	function hideMessage() 
+	function hideMessage()
 	{
 		var messages = document.getElementById('messages');
 		messages.style.display = "none";
@@ -258,7 +258,7 @@
 
 			x = background.x + (background.w - floater.w) * x;
 			y = background.y + (background.h - floater.h) * y;
-			
+
 			floater.moveTo(x, y);
 		}
 	}
@@ -304,11 +304,11 @@
 	};
 
 	function addEvent(obj, evType, fn)
-	{ 
-		if (obj.addEventListener) { obj.addEventListener(evType, fn, true); return true; } 
-		else if (obj.attachEvent) {  var r = obj.attachEvent("on"+evType, fn);  return r;  } 
-		else {  return false; } 
-	} 
+	{
+		if (obj.addEventListener) { obj.addEventListener(evType, fn, true); return true; }
+		else if (obj.attachEvent) {  var r = obj.attachEvent("on"+evType, fn);  return r;  }
+		else {  return false; }
+	}
 
 	init = function()
 	{

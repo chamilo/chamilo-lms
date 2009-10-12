@@ -87,4 +87,7 @@ $ViewUser = "View this user";
 $RSSFeeds = "RSS feed";
 $NoFriendsInYourContactList = "No friends in your contact list";
 $TryAndFindSomeFriends = "Try and find some friends";
+$ClearSearchResults = "Clear search results";
+$SendInvitation = "Send invitation";
+$SocialInvitationToFriends = "Invite to join my group of friends";
 ?>

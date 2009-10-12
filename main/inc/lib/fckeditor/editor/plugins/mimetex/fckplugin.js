@@ -37,5 +37,5 @@ FCK.RegisterDoubleClickHandler(
 			FCKCommands.GetCommand( 'mimetex' ).Execute() ;
 		}
 	}, 'IMG'
-) ;	
+) ;
 

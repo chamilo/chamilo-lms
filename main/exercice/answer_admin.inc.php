@@ -1135,7 +1135,7 @@ if($modifyAnswers)
 <tr>
   <td colspan="2">
 	<input type="submit" name="buttonBack" value="&lt; <?php echo get_lang('Back'); ?>">
-	&nbsp;&nbsp;<input type="submit" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>">
+	&nbsp;&nbsp;<input type="submit" name="submitAnswers" value="<?php echo '  '.get_lang('Ok').'  '; ?>">
 	<!-- &nbsp;&nbsp;<input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;"> //-->
   </td>
 </tr>
@@ -1156,7 +1156,7 @@ if($modifyAnswers)
 			<h3>
 			<?php echo $questionName;?></h3><?php
 			$sql = "select description from `".$TBL_QUESTIONS."` where id = '".Database::escape_string($questionId)."'";
-			$res = api_sql_query($sql,_FILE_,_LINE_);
+			$res = Database::query($sql,_FILE_,_LINE_);
 			?>
 			&nbsp; &nbsp; &nbsp;
 			<?php

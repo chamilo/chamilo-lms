@@ -333,7 +333,10 @@ $form->addElement('hidden','title_edited','false','id="title_edited"');
  */
 function document_exists($filename) {
 	global $filepath;
+	$filename = addslashes(trim($filename));
+	$filename = Security::remove_XSS($filename);
 	$filename = replace_dangerous_char($filename);
+	$filename = disable_dangerous_file($filename);
 	return !file_exists($filepath.$filename.'.html');
 }
 
@@ -355,6 +358,10 @@ if (api_get_setting('use_document_title') == 'true') {
 	$group[]=$form->createElement('text','title',get_lang('Title'),'class="input_titles" id="title"');
 	//$form->applyFilter('title','trim');
 	//$form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
+
+	// Added by Ivan Tcholakov, 10-OCT-2009.
+	$form->addElement('hidden', 'filename', '', array('id' => 'filename'));
+	//
 } else {
 	//$form->add_textfield('filename', get_lang('FileName'),true,'class="input_titles" id="filename"  onblur="check_if_still_empty()"');
 	// replace the 	add_textfield with this
@@ -362,6 +369,10 @@ if (api_get_setting('use_document_title') == 'true') {
 	//$form->applyFilter('filename','trim');
 	//$form->addRule('filename', get_lang('ThisFieldIsRequired'), 'required');
 	//$form->addRule('filename', get_lang('FileExists'), 'callback', 'document_exists');
+
+	// Added by Ivan Tcholakov, 10-OCT-2009.
+	$form->addElement('hidden', 'title', '', array('id' => 'title'));
+	//
 }
 
 /* Show read-only box only in groups */
@@ -413,16 +424,14 @@ if ($form->validate()) {
 	$readonly = isset($values['readonly']) ? 1 : 0;
 
 	$values['title']=addslashes(trim($values['title']));
+	$values['title'] = Security::remove_XSS($values['title']);
+	$values['title'] = replace_dangerous_char($values['title']);
+	$values['title'] = disable_dangerous_file($values['title']);
 
-	$clean_val=$values['filename'];
-
-	$clean_val=Security::remove_XSS($clean_val);
-	$clean_val=replace_dangerous_char(($clean_val));
-	$clean_val=disable_dangerous_file($clean_val);
-	$clean_val=replace_accents($clean_val);
-
-
-	$values['filename']=$clean_val;
+	$values['filename'] = addslashes(trim($values['filename']));
+	$values['filename'] = Security::remove_XSS($values['filename']);
+	$values['filename'] = replace_dangerous_char($values['filename']);
+	$values['filename'] = disable_dangerous_file($values['filename']);
 
 	if (api_get_setting('use_document_title') != 'true') {
 		$values['title'] = $values['filename'];
@@ -430,11 +439,13 @@ if ($form->validate()) {
 		$values['filename'] = $values['title'];
 	}
 
-	$filename = replace_accents($values['filename']);
+	$filename = $values['filename'];
+	$title = $values['title'];
+	$extension = 'html';
+
 	$texte = $values['content'];
 	$texte=Security::remove_XSS($texte,COURSEMANAGERLOWSECURITY);
-	$title = $values['filename'];
-	$extension = 'html';
+
 	if (!strstr($texte, '/css/frames.css')) {
 		$texte = str_replace('</head>', '<link rel="stylesheet" href="./css/frames.css" type="text/css" /></head>', $texte);
 	}

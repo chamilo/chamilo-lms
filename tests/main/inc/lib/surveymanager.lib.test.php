@@ -182,7 +182,7 @@ class TestSurveyManager extends UnitTestCase {
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		$sqlm = "SELECT  status FROM  $table_user WHERE user_id = '".mysql_real_escape_string($_user['user_id'])."'";
 		$resm = Database::query($sqlm,__FILE__,__LINE__);
-		$objm=@mysql_fetch_object($resm);
+		$objm=@Database::fetch_object($resm);
 		$ss = $objm->status ;
 		$res=SurveyManager::get_status();
 		$this->assertTrue(is_string($res));

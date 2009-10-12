@@ -261,7 +261,7 @@ class SurveyManager {
 	{
           $sql_course = "SELECT * FROM $table_course WHERE code = '$cidReq'";
           $res_course = Database::query($sql_course,__FILE__,__LINE__);
-          $obj_course=@mysql_fetch_object($res_course);
+          $obj_course=@Database::fetch_object($res_course);
           $curr_dbname = $obj_course->db_name ;
           $surveyid = Database::escape_string($surveyid);
 		  $sql = "UPDATE $curr_dbname.survey SET code='$surveycode', title='$surveytitle', subtitle='$surveysubtitle', lang='$survey_language',   avail_from='$availablefrom', avail_till='$availabletill', is_shared='$isshare', template='$surveytemplate', intro='$surveyintroduction',surveythanks='$surveythanks'
@@ -317,7 +317,7 @@ class SurveyManager {
 	{
     	$sql_sort = "SELECT max(sortby) AS sortby FROM $curr_dbname.questions ";
 		$res_sort=Database::query($sql_sort);
-		$rs=mysql_fetch_object($res_sort);
+		$rs=Database::fetch_object($res_sort);
 		$sortby=$rs->sortby;
 		if(empty($sortby))
 		{
@@ -409,7 +409,7 @@ class SurveyManager {
 			$qid = Database::escape_string($qid);
 	        $sql = "SELECT * FROM $curr_dbname.questions where qid='$qid'";
 			$res=Database::query($sql);
-			$rs=mysql_fetch_object($res);
+			$rs=Database::fetch_object($res);
 			$properties = get_object_vars($rs);
 			foreach ($properties as $property=>$val){
 				$val = stripslashes($val);
@@ -437,7 +437,7 @@ class SurveyManager {
 		global $_course;
 		$sql='SELECT * FROM '.$_course['dbName'].'.survey WHERE survey_id='.intval($id);
 		$res=Database::query($sql);
-		return mysql_fetch_object($res);
+		return Database::fetch_object($res);
 	}
 	/**
 	 * Possible  deprecated method
@@ -472,7 +472,7 @@ class SurveyManager {
 		  $table_question = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
 		  echo $sql="select t1.title as stitle, t3.type as type, t3.caption as caption, t2.groupname as groupname from $table_survey t1, $table_group t2, $table_question t3  where t1.survey_id=t2.survey_id  and t3.gid=t2.group_id and t3.type='$question_type'";
 		  $sql_result = Database::query($sql,__FILE__,__LINE__);
-		  $result = mysql_fetch_object($sql_result);
+		  $result = Database::fetch_object($sql_result);
 		  return ($result);
 		  }
 		  */
@@ -537,7 +537,7 @@ class SurveyManager {
 		// Deleting all the questions of the survey
 		$sql = "SELECT * FROM $table_group WHERE survey_id='".$survey_id."'";
 		$res = Database::query($sql,__FILE__,__LINE__);
-		while($obj = mysql_fetch_object($res))
+		while($obj = Database::fetch_object($res))
 		{
 			$sql = "DELETE FROM $table_question WHERE gid='".$obj->group_id."'";
 			Database::query($sql,__FILE__,__LINE__);
@@ -682,7 +682,7 @@ class SurveyManager {
 				$sql = "SELECT * FROM $table_question WHERE gid = '$temp_gid'";
 				$res = Database::query($sql);
 				$num_rows = mysql_num_rows($res);
-				while($obj = mysql_fetch_object($res))
+				while($obj = Database::fetch_object($res))
 				{
 					$temp_qtype = $obj->qtype;
 					$temp_caption = $obj->caption;
@@ -733,13 +733,13 @@ class SurveyManager {
 		//echo "ths is num".$num;
 		$parameters = array();
 		$displays = array();
-		while($obj = @mysql_fetch_object($res))
+		while($obj = @Database::fetch_object($res))
 		{
 
 			$groupid = $obj->group_id;
 			$query = "SELECT * FROM $table_question WHERE gid = '$groupid'";
 			$result = Database::query($query);
-		  while($object = @mysql_fetch_object($result))
+		  while($object = @Database::fetch_object($result))
 			{
 				$display = array();
 				$display[] = '<input type="checkbox" name="course[]" value="'.$object->qid.'"/>';
@@ -767,7 +767,7 @@ class SurveyManager {
 	  {
 	 $sql = "SELECT *  FROM $db_name.survey_group WHERE survey_id = '$surveyid'";
      $res = Database::query($sql,__FILE__,__LINE__);
-	 while($obj=@mysql_fetch_object($res))
+	 while($obj=@Database::fetch_object($res))
      {
 		 $groupname=addslashes($obj->groupname);
 		 $introduction=addslashes($obj->introduction);
@@ -776,7 +776,7 @@ class SurveyManager {
 	   $groupid = mysql_insert_id();
 	   $sql_q = "SELECT *  FROM $db_name.questions WHERE gid = '$obj->group_id'";
 	   $res_q = Database::query($sql_q,__FILE__,__LINE__);
-       while($obj_q = mysql_fetch_object($res_q))
+       while($obj_q = Database::fetch_object($res_q))
 	   {
 		 $caption1=addslashes($obj_q->caption);
 		      $a1=addslashes($obj_q->a1);
@@ -803,7 +803,7 @@ class SurveyManager {
 			  $r10=addslashes($obj_q->r10);
 		 $sql_sort = "SELECT max(sortby) AS sortby FROM $curr_dbname.questions ";
          $res_sort=Database::query($sql_sort);
-         $rs=mysql_fetch_object($res_sort);
+         $rs=Database::fetch_object($res_sort);
 	     $sortby=$rs->sortby;
 	     if(empty($sortby))
 	     {$sortby=1;}
@@ -831,13 +831,13 @@ function insert_old_groups($sid,$gids,$table_group,$table_question)
 	{
 		$sql = "SELECT * FROM $table_group WHERE group_id = '$gid_arr[$p]'";
 		$res = Database::query($sql);
-		$obj = mysql_fetch_object($res);
+		$obj = Database::fetch_object($res);
 		$gname = $obj->groupname;
 		if($gname=='Default')
 		{
 			$query = "SELECT * FROM $table_group WHERE survey_id = '$sid' AND groupname = 'Default'";
 			$result = Database::query($query);
-			$object = mysql_fetch_object($result);
+			$object = Database::fetch_object($result);
 			$gid = $object->group_id;
 			$sql_def_check = "SELECT * FROM $table_question WHERE gid = '$gid'";
 			$res_def_check = Database::query($sql_def_check);
@@ -852,7 +852,7 @@ function insert_old_groups($sid,$gids,$table_group,$table_question)
 				$sql_ques = "SELECT * FROM $table_question WHERE gid= '$gid_arr[$p]'";
 				$res_ques = Database::query($sql_ques);
 				$num = mysql_num_rows($res_ques);
-				while($obj_ques = mysql_fetch_object($res_ques))
+				while($obj_ques = Database::fetch_object($res_ques))
 				{
 					$temp_qtype = $obj_ques->qtype;
 					$temp_caption = $obj_ques->caption;
@@ -908,7 +908,7 @@ function insert_old_groups($sid,$gids,$table_group,$table_question)
 			$sql_ques = "SELECT * FROM $table_question WHERE gid= '$gid_arr[$p]'";
 			$res_ques = Database::query($sql_ques);
 			$num = mysql_num_rows($res_ques);
-			while($obj_ques = mysql_fetch_object($res_ques))
+			while($obj_ques = Database::fetch_object($res_ques))
 			{
 				$temp_qtype = $obj_ques->qtype;
 				$temp_caption = $obj_ques->caption;
@@ -957,7 +957,7 @@ function insert_old_groups($sid,$gids,$table_group,$table_question,$db_name,$cid
 	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql = "SELECT * FROM $table_course WHERE code = '$cidReq'";
 	$res = Database::query($sql,__FILE__,__LINE__);
-	$obj_name=@mysql_fetch_object($res);
+	$obj_name=@Database::fetch_object($res);
 	$current_db_name = $obj_name->db_name ;
 	$gid_arr = explode(",",$gids);
 	$index = count($gid_arr);
@@ -966,13 +966,13 @@ function insert_old_groups($sid,$gids,$table_group,$table_question,$db_name,$cid
 	{
 		$sql = "SELECT * FROM $db_name.survey_group WHERE group_id = '$gid_arr[$p]'";
 		$res = Database::query($sql);
-		$obj = mysql_fetch_object($res);
+		$obj = Database::fetch_object($res);
 		$gname = $obj->groupname;
 		if($gname=='No Group')
 		{
 			$query = "SELECT * FROM $db_name.survey_group WHERE survey_id = '$sid' AND groupname = 'No Group'";
 			$result = Database::query($query);
-			$object = mysql_fetch_object($result);
+			$object = Database::fetch_object($result);
 			$gid = $object->group_id;
 			$sql_def_check = "SELECT * FROM $db_name.questions WHERE gid = '$gid'";
 			$res_def_check = Database::query($sql_def_check);
@@ -988,7 +988,7 @@ function insert_old_groups($sid,$gids,$table_group,$table_question,$db_name,$cid
 				$sql_ques = "SELECT * FROM $db_name.questions WHERE gid= '$gid_arr[$p]'";
 				$res_ques = Database::query($sql_ques);
 				$num = mysql_num_rows($res_ques);
-				while($obj_ques = mysql_fetch_object($res_ques))
+				while($obj_ques = Database::fetch_object($res_ques))
 				{
 					$temp_qtype = $obj_ques->qtype;
 					$temp_caption = $obj_ques->caption;
@@ -1044,7 +1044,7 @@ function insert_old_groups($sid,$gids,$table_group,$table_question,$db_name,$cid
 			$sql_ques = "SELECT * FROM $db_name.questions WHERE gid= '$gid_arr[$p]'";
 			$res_ques = Database::query($sql_ques);
 			$num = mysql_num_rows($res_ques);
-			while($obj_ques = mysql_fetch_object($res_ques))
+			while($obj_ques = Database::fetch_object($res_ques))
 			{
 				$temp_qtype = $obj_ques->qtype;
 				$temp_caption = $obj_ques->caption;
@@ -1093,7 +1093,7 @@ function import_question($surveyid,$qids,$table_group,$table_question,$db_name,$
    $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
    $sql_course = "SELECT * FROM $table_course WHERE code = '$cidReq'";
    $res_course = Database::query($sql_course,__FILE__,__LINE__);
-   $obj_name=@mysql_fetch_object($res_course);
+   $obj_name=@Database::fetch_object($res_course);
    $current_db_name = $obj_name->db_name ;
    $qid=explode(",",$qids);
    $count = count($qid);
@@ -1101,17 +1101,17 @@ function import_question($surveyid,$qids,$table_group,$table_question,$db_name,$
    {
 	 $sql_q = "SELECT *  FROM $table_question WHERE qid = '$qid[$i]'";
      $res_q = Database::query($sql_q,__FILE__,__LINE__);
-	 $obj=@mysql_fetch_object($res_q);
+	 $obj=@Database::fetch_object($res_q);
 	 $oldgid=$obj->gid;
 	 $sql = "SELECT *  FROM $table_group WHERE group_id = '$oldgid'";
 	 $res = Database::query($sql,__FILE__,__LINE__);
-	 $obj_gr = @mysql_fetch_object($res);
+	 $obj_gr = @Database::fetch_object($res);
 	 $gname = $obj_gr->groupname;
 	 $gintro = $obj_gr->introduction;
      $sql_gid = "SELECT *  FROM $table_group WHERE survey_id = '$surveyid' AND groupname = '$gname'";
 	 $res_gid = Database::query($sql_gid,__FILE__,__LINE__);
 	 $num=mysql_num_rows($res_gid);
-     $obj_gid=@mysql_fetch_object($res_gid);
+     $obj_gid=@Database::fetch_object($res_gid);
 	 $sql_quesid = "SELECT *  FROM $table_question WHERE gid = '$obj_gid->group_id' AND caption = '$obj->caption'";
      $res_quesid = Database::query($sql_quesid,__FILE__,__LINE__);
      $num_ques=mysql_num_rows($res_quesid);
@@ -1146,7 +1146,7 @@ function create_course_survey_rel($cidReq,$survey_id,$table_course,$table_course
 {
  $sql = "SELECT * FROM $table_course WHERE code = '$cidReq'";
  $res = Database::query($sql,__FILE__,__LINE__);
- $obj=@mysql_fetch_object($res);
+ $obj=@Database::fetch_object($res);
  $db_name = $obj->db_name ;
  $sql="INSERT INTO $table_course_survey_rel(id,course_code,db_name,survey_id) values('','$cidReq','$db_name','$survey_id')";
 
@@ -1164,17 +1164,17 @@ function import_existing_question($surveyid,$qids,$table_group,$table_question,$
   {
 	 $sql_q = "SELECT *  FROM $table_question WHERE qid = '$qid[$i]'";
      $res_q = Database::query($sql_q,__FILE__,__LINE__);
-	 $obj=@mysql_fetch_object($res_q);
+	 $obj=@Database::fetch_object($res_q);
 	 $oldgid=$obj->gid;
 	 $sql = "SELECT *  FROM $table_group WHERE group_id = '$oldgid'";
 	 $res = Database::query($sql,__FILE__,__LINE__);
-	 $obj_gr = @mysql_fetch_object($res);
+	 $obj_gr = @Database::fetch_object($res);
 	 $gname = $obj_gr->groupname;
 	 $gintro = $obj_gr->introduction;
      $sql_gid = "SELECT *  FROM $table_group WHERE survey_id = '$surveyid' AND groupname = '$gname'";
 	 $res_gid = Database::query($sql_gid,__FILE__,__LINE__);
 	 $num=mysql_num_rows($res_gid);
-     $obj_gid=@mysql_fetch_object($res_gid);
+     $obj_gid=@Database::fetch_object($res_gid);
 	 $sql_quesid = "SELECT *  FROM $table_question WHERE gid = '$obj_gid->group_id' AND caption = '$obj->caption'";
      $res_quesid = Database::query($sql_quesid,__FILE__,__LINE__);
      $num_ques=mysql_num_rows($res_quesid);
@@ -1214,13 +1214,13 @@ function insert_existing_groups ($sid,$gids,$table_group,$table_question)
 	{
 		$sql = "SELECT * FROM $table_group WHERE group_id = '$gid_arr[$p]'";
 		$res = Database::query($sql);
-		$obj = mysql_fetch_object($res);
+		$obj = Database::fetch_object($res);
 		$gname = $obj->groupname;
 		if($gname=='No Group')
 		{
 			$query = "SELECT * FROM $table_group WHERE survey_id = '$sid' AND groupname = 'No Group'";
 			$result = Database::query($query);
-			$object = mysql_fetch_object($result);
+			$object = Database::fetch_object($result);
 			$gid = $object->group_id;
 			$sql_def_check = "SELECT * FROM $table_question WHERE gid = '$gid'";
 			$res_def_check = Database::query($sql_def_check);
@@ -1235,7 +1235,7 @@ function insert_existing_groups ($sid,$gids,$table_group,$table_question)
 				$sql_ques = "SELECT * FROM $table_question WHERE gid= '$gid_arr[$p]'";
 				$res_ques = Database::query($sql_ques);
 				$num = mysql_num_rows($res_ques);
-				while($obj_ques = mysql_fetch_object($res_ques))
+				while($obj_ques = Database::fetch_object($res_ques))
 				{
 					$temp_qtype = $obj_ques->qtype;
 					$temp_caption = $obj_ques->caption;
@@ -1291,7 +1291,7 @@ function insert_existing_groups ($sid,$gids,$table_group,$table_question)
 			$sql_ques = "SELECT * FROM $table_question WHERE gid= '$gid_arr[$p]'";
 			$res_ques = Database::query($sql_ques);
 			$num = mysql_num_rows($res_ques);
-			while($obj_ques = mysql_fetch_object($res_ques))
+			while($obj_ques = Database::fetch_object($res_ques))
 			{
 				$temp_qtype = $obj_ques->qtype;
 				$temp_caption = $obj_ques->caption;
@@ -1364,14 +1364,14 @@ function question_import($surveyid,$qids,$db_name,$curr_dbname)
    {
 	 $sql_sort = "SELECT max(sortby) AS sortby FROM $curr_dbname.questions ";
      $res_sort=Database::query($sql_sort);
-     $rs=mysql_fetch_object($res_sort);
+     $rs=Database::fetch_object($res_sort);
 	 $sortby=$rs->sortby;
 	 if(empty($sortby))
 	 {$sortby=1;}
 	 else{$sortby=$sortby+1;}
 	 $sql_q = "SELECT * FROM $db_name.questions WHERE qid = '$qid[$i]'";
      $res_q = Database::query($sql_q,__FILE__,__LINE__);
-	 $obj=@mysql_fetch_object($res_q);
+	 $obj=@Database::fetch_object($res_q);
 	 $oldgid=$obj->gid;
 	 $caption1=addslashes($obj->caption);
 	  $a1=addslashes($obj->a1);
@@ -1398,7 +1398,7 @@ function question_import($surveyid,$qids,$db_name,$curr_dbname)
 			  $r10=addslashes($obj_q->r10);
      //$sql_gr = "SELECT * FROM $db_name.survey_group WHERE group_id = '$oldgid'";
      //$res_gr = Database::query($sql_gr,__FILE__,__LINE__);
-	 // $obj_gr=@mysql_fetch_object($res_gr);
+	 // $obj_gr=@Database::fetch_object($res_gr);
 	 //$groupname = $obj_gr->groupname
 	 $sql_quesid = "SELECT *  FROM $curr_dbname.questions WHERE survey_id = '$surveyid' AND imported_question = '$qid[$i]' AND db_name = '$db_name'";
      $res_quesid = Database::query($sql_quesid,__FILE__,__LINE__);
@@ -1411,11 +1411,11 @@ function question_import($surveyid,$qids,$db_name,$curr_dbname)
 	 {
 	  $sql_group = "SELECT * FROM $db_name.survey_group WHERE group_id = '$oldgid'";
 	  $res_group = Database::query($sql_group,__FILE__,__LINE__);
-	  $obj_group=@mysql_fetch_object($res_group);
+	  $obj_group=@Database::fetch_object($res_group);
 	  $groupname = $obj_group->groupname;
 	  $sql = "SELECT *  FROM $curr_dbname.survey_group WHERE groupname = '$groupname' AND survey_id = '$surveyid'";
 	  $res = Database::query($sql,__FILE__,__LINE__);
-      $obj_gro = mysql_fetch_object($res);
+      $obj_gro = Database::fetch_object($res);
 	   $num_group=mysql_num_rows($res);
 	  if($num_group>0)
 	   {
@@ -1445,13 +1445,13 @@ function import_group($surveyid,$gids,$db_name,$curr_dbname)
 	{
 		$sql = "SELECT * FROM $db_name.survey_group WHERE group_id = '$gid_arr[$i]'";
 		$res = Database::query($sql,__FILE__,__LINE__);
-		$obj = mysql_fetch_object($res);
+		$obj = Database::fetch_object($res);
 		$sql_ques = "SELECT * FROM $db_name.questions WHERE gid = '$gid_arr[$i]'";
 		$res_ques = Database::query($sql_ques,__FILE__,__LINE__);
-		$obj_ques = mysql_fetch_object($res_ques);
+		$obj_ques = Database::fetch_object($res_ques);
 		$sql_check = "SELECT * FROM $curr_dbname.survey_group WHERE survey_id = '$surveyid' AND imported_group = '$gid_arr[$i]' AND db_name = '$db_name'";
 		$res_check = Database::query($sql_check);
-		$obj_check = mysql_fetch_object($res_check);
+		$obj_check = Database::fetch_object($res_check);
 		$num = mysql_num_rows($res_check);
 		if($num>0)
 		{
@@ -1493,13 +1493,13 @@ function import_group($sid,$gids,$db_name,$curr_dbname)
 	{
 		$sql = "SELECT * FROM $db_name.survey_group WHERE group_id = '$gid_arr[$i]'";
 		$res = Database::query($sql);
-		$obj = mysql_fetch_object($res);
+		$obj = Database::fetch_object($res);
 		$groupname=addslashes($obj->groupname);
 		$introduction=addslashes($obj->introduction);
 		$g_sortby = intval($obj->sortby);
 		$sql_curr = "SELECT * FROM $curr_dbname.survey_group WHERE survey_id = '$sid' AND groupname = '$obj->groupname'";
 		$res_curr = Database::query($sql_curr);
-		$obj_curr = mysql_fetch_object($res_curr);
+		$obj_curr = Database::fetch_object($res_curr);
 		$gid = $obj_curr->group_id;
 		$num = mysql_num_rows($res_curr);
 
@@ -1507,7 +1507,7 @@ function import_group($sid,$gids,$db_name,$curr_dbname)
 		{
 			$sql_ques = "SELECT * FROM $curr_dbname.questions WHERE gid = '$gid'";
 			$res_ques = Database::query($sql_ques);
-			$obj_ques = mysql_fetch_object($res_ques);
+			$obj_ques = Database::fetch_object($res_ques);
 			$count = mysql_num_rows($res_ques);
 			for($j=0;$j<$count;$j++)
 			{
@@ -1518,7 +1518,7 @@ function import_group($sid,$gids,$db_name,$curr_dbname)
 			$check_db = @array_unique($check_db);
 			$sql_old = "SELECT * FROM $db_name.questions WHERE gid = '$gid_arr[$i]'";
 			$res_old = Database::query($sql_old);
-			while($obj_old = mysql_fetch_object($res_old))
+			while($obj_old = Database::fetch_object($res_old))
 			{
 			  $caption1=addslashes($obj_old->caption);
 	          $a1=addslashes($obj_old->a1);
@@ -1545,7 +1545,7 @@ function import_group($sid,$gids,$db_name,$curr_dbname)
 			  $r10=addslashes($obj_old->r10);
 				$sql_sort = "SELECT max(sortby) AS sortby FROM $curr_dbname.questions ";
                 $res_sort=Database::query($sql_sort);
-                $rs=mysql_fetch_object($res_sort);
+                $rs=Database::fetch_object($res_sort);
 	            $sortby=$rs->sortby;
 	            if(empty($sortby))
 	            {$sortby=1;}
@@ -1570,7 +1570,7 @@ function import_group($sid,$gids,$db_name,$curr_dbname)
 			$group_id = mysql_insert_id();
 			$sql_old = "SELECT * FROM $db_name.questions WHERE gid = '$gid_arr[$i]'";
 			$res_old = Database::query($sql_old);
-			while($obj_old = mysql_fetch_object($res_old))
+			while($obj_old = Database::fetch_object($res_old))
 			{
 			  $caption1=addslashes($obj_old->caption);
 	          $a1=addslashes($obj_old->a1);
@@ -1597,7 +1597,7 @@ function import_group($sid,$gids,$db_name,$curr_dbname)
 			  $r10=addslashes($obj_old->r10);
 				$sql_sort = "SELECT max(sortby) AS sortby FROM $curr_dbname.questions ";
                 $res_sort=Database::query($sql_sort);
-                $rs=mysql_fetch_object($res_sort);
+                $rs=Database::fetch_object($res_sort);
 	            $sortby=$rs->sortby;
 	            if(empty($sortby))
 	            {$sortby=1;}
@@ -1627,7 +1627,7 @@ function get_status()
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 	$sqlm = "SELECT  status FROM  $table_user WHERE user_id = '".mysql_real_escape_string($_user['user_id'])."'";
 	$resm = Database::query($sqlm,__FILE__,__LINE__);
-	$objm=@mysql_fetch_object($resm);
+	$objm=@Database::fetch_object($resm);
 	$ss = $objm->status ;
 	return $ss;
 }

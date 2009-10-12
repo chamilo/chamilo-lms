@@ -194,7 +194,7 @@ class ClassManager
 		Database::query($sql, __FILE__, __LINE__);
 		$sql = "SELECT user_id FROM $tbl_class_user WHERE class_id = '".mysql_real_escape_string($class_id)."'";
 		$res = Database::query($sql, __FILE__, __LINE__);
-		while ($user = mysql_fetch_object($res))
+		while ($user = Database::fetch_object($res))
 		{
 			CourseManager :: subscribe_user($user->user_id, $course_code);
 		}
@@ -212,7 +212,7 @@ class ClassManager
 		$tbl_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$sql = "SELECT cu.user_id,COUNT(cc.class_id) FROM $tbl_course_class cc, $tbl_class_user cu WHERE  cc.class_id = cu.class_id AND cc.course_code = '".mysql_real_escape_string($course_code)."' GROUP BY cu.user_id HAVING COUNT(cc.class_id) = 1";
 		$single_class_users = Database::query($sql, __FILE__, __LINE__);
-		while ($single_class_user = mysql_fetch_object($single_class_users))
+		while ($single_class_user = Database::fetch_object($single_class_users))
 		{
 			$sql = "SELECT * FROM $tbl_class_user WHERE class_id = '".mysql_real_escape_string($class_id)."' AND user_id = '".mysql_real_escape_string($single_class_user->user_id)."'";
 			$res = Database::query($sql, __FILE__, __LINE__);
@@ -238,7 +238,7 @@ class ClassManager
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "SELECT * FROM $table_class WHERE name='".$name."'";
 		$res = Database::query($sql, __FILE__, __LINE__);
-		$obj = mysql_fetch_object($res);
+		$obj = Database::fetch_object($res);
 		return $obj->id;
 	}
 	/**

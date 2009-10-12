@@ -74,7 +74,7 @@ if ($_configuration['multiple_access_urls']==true){
 $res = Database::query($sql,__FILE__,__LINE__);
 $teachers = array();
 $teachers[0] = '-- '.get_lang('NoManager').' --';
-while($obj = mysql_fetch_object($res))
+while($obj = Database::fetch_object($res))
 {
 	$teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 }

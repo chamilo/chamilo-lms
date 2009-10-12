@@ -28,7 +28,7 @@ function get_course_usage($course_code)
     $course_code = Database::escape_string($course_code);
 	$sql = "SELECT * FROM $table WHERE code='".$course_code."'";
 	$res = Database::query($sql,__FILE__,__LINE__);
-	$course = mysql_fetch_object($res);
+	$course = Database::fetch_object($res);
 	// Learnpaths
 	$table = Database :: get_course_table(TABLE_LP_MAIN, $course->db_name);
 	$usage[] = array (get_lang(ucfirst(TOOL_LEARNPATH)), Database::count_rows($table));
@@ -66,7 +66,7 @@ $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 $code = Database::escape_string($_GET['code']);
 $sql = "SELECT * FROM $table_course WHERE code = '".$code."'";
 $res = Database::query($sql,__FILE__,__LINE__);
-$course = mysql_fetch_object($res);
+$course = Database::fetch_object($res);
 $tool_name = $course->title.' ('.$course->visual_code.')';
 Display::display_header($tool_name);
 //api_display_tool_title($tool_name);
@@ -107,7 +107,7 @@ $is_western_name_order = api_is_western_name_order();
 if (mysql_num_rows($res) > 0)
 {
 	$users = array ();
-	while ($obj = mysql_fetch_object($res))
+	while ($obj = Database::fetch_object($res))
 	{
 		$user = array ();
 		$user[] = $obj->official_code;
@@ -160,7 +160,7 @@ $res = Database::query($sql,__FILE__,__LINE__);
 if (mysql_num_rows($res) > 0)
 {
 	$data = array ();
-	while ($class = mysql_fetch_object($res))
+	while ($class = Database::fetch_object($res))
 	{
 		$row = array ();
 		$row[] = $class->name;

@@ -118,7 +118,7 @@ function get_number_of_classes()
 	$sql = "SELECT * FROM $course_class_table WHERE course_code = '".$_SESSION['_course']['id']."'";
 	$res = Database::query($sql,__FILE__,__LINE__);
 	$subscribed_classes = array();
-	while($obj = mysql_fetch_object($res))
+	while($obj = Database::fetch_object($res))
 	{
 		$subscribed_classes[] = $obj->class_id;
 	}
@@ -147,7 +147,7 @@ function get_class_data($from, $number_of_items, $column, $direction)
 	$sql = "SELECT * FROM $course_class_table WHERE course_code = '".$_SESSION['_course']['id']."'";
 	$res = Database::query($sql,__FILE__,__LINE__);
 	$subscribed_classes = array();
-	while($obj = mysql_fetch_object($res))
+	while($obj = Database::fetch_object($res))
 	{
 		$subscribed_classes[] = $obj->class_id;
 	}

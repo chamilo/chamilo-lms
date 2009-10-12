@@ -68,7 +68,7 @@ if ($_configuration['multiple_access_urls']==true) {
 	}
 }
 $result = Database::query($sql, __FILE__, __LINE__);
-while ($course = mysql_fetch_object($result))
+while ($course = Database::fetch_object($result))
 {
 	$courses[$course->code] = $course->visual_code.' - '.$course->title;
 }

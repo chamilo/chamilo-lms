@@ -189,7 +189,7 @@ class CourseRecycler
 		$table_forumcat = Database :: get_course_table(TABLE_FORUM_CATEGORY);
 		$sql = "SELECT fc.cat_id FROM ".$table_forumcat." fc LEFT JOIN ".$table_forum." f ON fc.cat_id=f.forum_category WHERE f.forum_id IS NULL";
 		$res = Database::query($sql,__FILE__,__LINE__);
-		while ($obj = mysql_fetch_object($res))
+		while ($obj = Database::fetch_object($res))
 		{
 			$sql = "DELETE FROM ".$table_forumcat." WHERE cat_id = ".$obj->cat_id;
 			Database::query($sql,__FILE__,__LINE__);
@@ -205,7 +205,7 @@ class CourseRecycler
 		$link_table = Database :: get_course_table(TABLE_LINK);
 		$sql = "SELECT lc.id FROM ".$link_cat_table." lc LEFT JOIN ".$link_table." l ON lc.id=l.category_id WHERE l.id IS NULL";
 		$res = Database::query($sql,__FILE__,__LINE__);
-		while ($obj = mysql_fetch_object($res))
+		while ($obj = Database::fetch_object($res))
 		{
 			$sql = "DELETE FROM ".$link_cat_table." WHERE id = ".$obj->id;
 			Database::query($sql,__FILE__,__LINE__);

@@ -122,7 +122,7 @@ class Answer
 		$i=1;
 
 		// while a record is found
-		while($object=mysql_fetch_object($result))
+		while($object=Database::fetch_object($result))
 		{
 			$this->id[$i]=$object->id;
 			$this->answer[$i]=$object->answer;
@@ -170,7 +170,7 @@ class Answer
 		$i=1;
 
 		// while a record is found
-		while($object=mysql_fetch_object($result))
+		while($object=Database::fetch_object($result))
 		{
 			$this->answer[$i]=$object->answer;
 			$this->correct[$i]=$object->correct;

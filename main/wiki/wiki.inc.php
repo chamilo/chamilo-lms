@@ -303,7 +303,7 @@ function save_wiki() {
 	$_clean['version']=Database::escape_string($_POST['version'])+1;
 	$_clean['linksto'] = links_to($_clean['content']); //and check links content
 	$dtime = date( "Y-m-d H:i:s" );
-	$session_id = api_get_session_id();	
+	$session_id = api_get_session_id();
 
 	if (isset($_SESSION['_gid']))
     {
@@ -405,7 +405,7 @@ function restore_wikipage($r_page_id, $r_reflink, $r_title, $r_content, $r_group
 	$r_version = $r_version+1;
 	$r_comment = get_lang('RestoredFromVersion').': '.$c_version;
 	$session_id = api_get_session_id();
-	
+
 	$sql="INSERT INTO ".$tbl_wiki." (page_id, reflink, title, content, user_id, group_id, dtime, assignment, comment, progress, version, linksto, user_ip, session_id) VALUES ('".$r_page_id."','".$r_reflink."','".$r_title."','".$r_content."','".$r_user_id."','".$r_group_id."','".$r_dtime."','".$r_assignment."','".$r_comment."','".$r_progress."','".$r_version."','".$r_linksto."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."','".Database::escape_string($session_id)."')";
 
 	$result=Database::query($sql);
@@ -549,7 +549,7 @@ function save_new_wiki() {
 			$sql = "INSERT INTO ".$tbl_wiki." (reflink, title, content, user_id, group_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, version, linksto, user_ip, session_id) VALUES ('".$_clean['reflink']."','".$_clean['title']."','".$_clean['content']."','".$_clean['user_id']."','".$_clean['group_id']."','".$dtime."','".$_clean['visibility']."','".$_clean['visibility_disc']."','".$_clean['ratinglock_disc']."','".$_clean['assignment']."','".$_clean['comment']."','".$_clean['progress']."','".$_clean['version']."','".$_clean['linksto']."','".Database::escape_string($_SERVER['REMOTE_ADDR'])."', '".Database::escape_string($session_id)."')";
 		    $result = Database::query($sql,__LINE__,__FILE__);
 		    $Id = Database::insert_id();
-		   	
+
 		   	if ($Id > 0) {
 				//insert into item_property
 				api_item_property_update(api_get_course_info(), TOOL_WIKI, $Id, 'WikiAdded', api_get_user_id(), $_clean['group_id']);
@@ -560,7 +560,7 @@ function save_new_wiki() {
 
 			//insert wiki config
 		   $sql="INSERT INTO ".$tbl_wiki_conf." (page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit) VALUES ('".$Id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
-		   Database::query($sql,__LINE__,__FILE__);		   
+		   Database::query($sql,__LINE__,__FILE__);
 
 		   check_emailcue(0, 'A');
 		   return get_lang('NewWikiSaved').' <a href="index.php?action=showpage&amp;title='.$_clean['reflink'].'&group_id='.$group_id.'">'.$_POST['title'].'</a>';
@@ -838,11 +838,11 @@ function display_wiki_entry()
 	{
 		echo '<div id="wikititle">';
 
-		// page action: protecting (locking) the page		
+		// page action: protecting (locking) the page
 		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 		{
 			if (check_protect_page()==1)
-			{				
+			{
 				$protect_page= '<img src="../img/wiki/lock.gif" title="'.get_lang('PageLockedExtra').'" alt="'.get_lang('PageLockedExtra').'" />';
 				$lock_unlock_protect='unlock';
 			}
@@ -864,11 +864,11 @@ function display_wiki_entry()
 				// TODO: FIX  This hides the icon eye closed to users of work they can see yours
 				//if(($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id()==$row['user_id']))==false)
 				//{
-				//		
+				//
 				// }
 				$visibility_page= '<img src="../img/wiki/visible.gif" title="'.get_lang('ShowPageExtra').'" alt="'.get_lang('ShowPageExtra').'" />';
 				$lock_unlock_visibility='invisible';
-									
+
 			}
 			else
 			{
@@ -1068,8 +1068,8 @@ function check_addnewpagelock()
 	//change status
 	if (api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 	{
-		
-		if ($_GET['actionpage']=='lockaddnew' && $status_addlock==0) 
+
+		if ($_GET['actionpage']=='lockaddnew' && $status_addlock==0)
 		{
 	    	$status_addlock=1;
 			}
@@ -1117,13 +1117,13 @@ function check_protect_page()
 	{
 		if($_GET['actionpage']=='lock' && $status_editlock==0)
 		{
-			$status_editlock=1;			
+			$status_editlock=1;
 		}
 		if($_GET['actionpage']=='unlock' && $status_editlock==1)
 		{
 			$status_editlock=0;
-		}	
-	
+		}
+
 
 		$sql='UPDATE '.$tbl_wiki.' SET editlock="'.Database::escape_string($status_editlock).'" WHERE id="'.$id.'"';
 	    Database::query($sql,__FILE__,__LINE__);
@@ -1162,14 +1162,14 @@ function check_visibility_page()
 	$status_visibility=$row['visibility'];
 
 
-	//change status	
-	
+	//change status
+
 	if (api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 	{
 		if($_GET['actionpage']=='visible' && $status_visibility==0)
 		{
 			$status_visibility=1;
-			
+
 		}
 		if($_GET['actionpage']=='invisible' && $status_visibility==1)
 		{
@@ -1210,7 +1210,7 @@ function check_visibility_discuss()
 	$row=Database::fetch_array($result);
 
 	$status_visibility_disc=$row['visibility_disc'];
-	
+
 	//change status
 	if (api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 	{
@@ -1260,8 +1260,8 @@ function check_addlock_discuss()
 	//change status
 	if (api_is_allowed_to_edit() || api_is_platform_admin())
     {
-		
-		if ($_GET['actionpage']=='lockdisc' && $status_addlock_disc==0) 
+
+		if ($_GET['actionpage']=='lockdisc' && $status_addlock_disc==0)
 		{
 	    	$status_addlock_disc=1;
 			}
@@ -1309,14 +1309,14 @@ function check_ratinglock_discuss()
 	//change status
 	if (api_is_allowed_to_edit(false,true) || api_is_platform_admin())
     {
-		if ($_GET['actionpage']=='lockrating' && $status_ratinglock_disc==0) 
+		if ($_GET['actionpage']=='lockrating' && $status_ratinglock_disc==0)
 		{
 	    	$status_ratinglock_disc=1;
 		}
 		if ($_GET['actionpage']=='unlockrating' && $status_ratinglock_disc==1)
 		{
 			$status_ratinglock_disc=0;
-		}	
+		}
 
 		$sql='UPDATE '.$tbl_wiki.' SET ratinglock_disc="'.Database::escape_string($status_ratinglock_disc).'" WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter; //Visibility. Value to all,not only for the first
 	    Database::query($sql,__FILE__,__LINE__);
@@ -1337,7 +1337,7 @@ function check_ratinglock_discuss()
 /**
  * Notify page changes
  * @author Juan Carlos Raña <herodoto@telefonica.net>
- * return the current 
+ * return the current
  */
 
 function check_notify_page($reflink)
@@ -1975,7 +1975,7 @@ function display_wiki_search_results($search_term, $search_content=0)
 	if (mysql_num_rows($result) > 0)
 	{
 		$row = array ();
-		while ($obj = mysql_fetch_object($result))
+		while ($obj = Database::fetch_object($result))
 		{
 			//get author
 			$userinfo=Database::get_user_info_from_id($obj->user_id);

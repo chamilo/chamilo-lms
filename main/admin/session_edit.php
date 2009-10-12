@@ -127,7 +127,7 @@ unset($Coaches);
 	//$access_url_id = api_get_current_access_url_id();
 	$sql = 'SELECT id, name FROM '.$tbl_session_category.' ORDER BY name ASC';
 	$result = Database::query($sql,__FILE__,__LINE__);
-	$Categories = api_store_result($result);
+	$Categories = Database::store_result($result);
 ?>
 <tr>
   <td width="30%"><?php echo get_lang('SessionCategory') ?></td>

@@ -1686,7 +1686,7 @@ function api_is_coach($session_id = 0, $course_code = '') {
 							ORDER BY date_start, date_end, name";
 
 	$result = Database::query($sql,__FILE__,__LINE__);
-	$sessionIsCoach = api_store_result($result);
+	$sessionIsCoach = Database::store_result($result);
 
 	$sql = "SELECT DISTINCT id, name, date_start, date_end
 							FROM session
@@ -1695,7 +1695,7 @@ function api_is_coach($session_id = 0, $course_code = '') {
 							ORDER BY date_start, date_end, name";
 
 	$result = Database::query($sql,__FILE__,__LINE__);
-	$sessionIsCoach = array_merge($sessionIsCoach , api_store_result($result));
+	$sessionIsCoach = array_merge($sessionIsCoach , Database::store_result($result));
 
 	return (count($sessionIsCoach) > 0);
 

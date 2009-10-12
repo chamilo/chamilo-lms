@@ -522,14 +522,14 @@ function show_session_data($id_session) {
 			WHERE '.$session_table.'.id='.$id_session;
 
 	$rs = Database::query($sql, __FILE__, __LINE__);
-	$session = api_store_result($rs);
+	$session = Database::store_result($rs);
 	$session = $session[0];
 
 	$sql_category = 'SELECT name FROM '.$session_category_table.' WHERE id = "'.intval($session['session_category_id']).'"';
 	$rs_category = Database::query($sql_category, __FILE__, __LINE__);
 	$session_category = '';
 	if (mysql_num_rows($rs_category) > 0) {
-		$rows_session_category = api_store_result($rs_category);
+		$rows_session_category = Database::store_result($rs_category);
 		$rows_session_category = $rows_session_category[0];
 		$session_category = $rows_session_category['name'];
 	}

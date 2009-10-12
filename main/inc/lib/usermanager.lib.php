@@ -1644,8 +1644,8 @@ class UserManager {
 								AND (date_start <= CURDATE() AND date_end >= CURDATE() OR date_start='0000-00-00')
 								ORDER BY date_start, date_end, name";
 		$result = Database::query($sessions_sql,__FILE__,__LINE__);
-		$sessions=api_store_result($result);
-		$sessions = array_merge($sessions , api_store_result($result));
+		$sessions=Database::store_result($result);
+		$sessions = array_merge($sessions , Database::store_result($result));
 
 
 		// get the list of sessions where the user is subscribed as student where visibility = SESSION_VISIBLE_READ_ONLY = 1  SESSION_VISIBLE = 2
@@ -1655,7 +1655,7 @@ class UserManager {
 								AND (date_end <= CURDATE() AND date_end<>'0000-00-00') AND (visibility = ".SESSION_VISIBLE_READ_ONLY." || visibility = ".SESSION_VISIBLE.")
 								ORDER BY date_start, date_end, name";
 		$result_out_date = Database::query($sessions_out_date_sql,__FILE__,__LINE__);
-		$sessions_out_date=api_store_result($result_out_date);
+		$sessions_out_date=Database::store_result($result_out_date);
 		$sessions = array_merge($sessions , $sessions_out_date);
 
 

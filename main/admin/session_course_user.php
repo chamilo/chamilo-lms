@@ -73,7 +73,7 @@ if ($_POST['formSent']) {
 			WHERE id_user = $id_user and session_rel_course.id_session = $id_session";
 
 	$rs = Database::query($sql, __FILE__, __LINE__);
-	$existingCourses = api_store_result($rs);
+	$existingCourses = Database::store_result($rs);
 	if (count($CourseList) == count($existingCourses)) {
 		header('Location: session_course_user.php?id_session='.$id_session.'&id_user='.$id_user.'&msg='.get_lang('MaybeYouWantToDeleteThisUserFromSession'));
 		exit;
@@ -170,10 +170,10 @@ if ($_configuration['multiple_access_urls']==true) {
 }*/
 
 $result=Database::query($sql,__FILE__,__LINE__);
-$Courses=api_store_result($result);
+$Courses=Database::store_result($result);
 
 $result=Database::query($sql_all,__FILE__,__LINE__);
-$CoursesAll=api_store_result($result);
+$CoursesAll=Database::store_result($result);
 
 $course_temp = array();
 foreach($Courses as $course) {

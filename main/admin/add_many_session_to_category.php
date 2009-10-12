@@ -154,16 +154,16 @@ if(isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0 ){
 	$where = 'WHERE session_category_id !='.intval($_POST['CategorySessionId']);
 	$sql = 'SELECT id, name  FROM '.$tbl_session .' WHERE session_category_id ='.intval($_POST['CategorySessionId']).' ORDER BY name';
 	$result=Database::query($sql,__FILE__,__LINE__);
-	$rows_category_session = api_store_result($result);
+	$rows_category_session = Database::store_result($result);
 }
 
 $sql = "SELECT id, name  FROM $tbl_session_category ORDER BY name";
 $result=Database::query($sql,__FILE__,__LINE__);
-$rows_session_category = api_store_result($result);
+$rows_session_category = Database::store_result($result);
 
 $sql = "SELECT id, name  FROM $tbl_session $where ORDER BY name";
 $result=Database::query($sql,__FILE__,__LINE__);
-$rows_session = api_store_result($result);
+$rows_session = Database::store_result($result);
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $_GET['page']; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <input type="hidden" name="formSent" value="1" />

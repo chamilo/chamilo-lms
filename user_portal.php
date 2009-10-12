@@ -590,7 +590,7 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 			WHERE ts.id='.(int) $my_course['id_session']. ' LIMIT 1';
 
 			$rs = Database::query($sql, __FILE__, __LINE__);
-			$sessioncoach = api_store_result($rs);
+			$sessioncoach = Database::store_result($rs);
 			$sessioncoach = $sessioncoach[0];
 
 			$session = array();
@@ -640,7 +640,7 @@ function get_session_title_box($session_id) {
 		ON ts.id_coach = tu.user_id
 		WHERE ts.id='.intval($session_id);
 		$rs = Database::query($sql, __FILE__, __LINE__);
-		$session_info = api_store_result($rs);
+		$session_info = Database::store_result($rs);
 		$session_info = $session_info[0];
 		$session = array();
 		$session['title'] = $session_info[2];

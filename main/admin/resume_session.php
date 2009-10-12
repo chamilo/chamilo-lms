@@ -58,7 +58,7 @@ $sql = 'SELECT name FROM  '.$tbl_session_category.' WHERE id = "'.intval($sessio
 $rs = Database::query($sql, __FILE__, __LINE__);
 $session_category = '';
 if(mysql_num_rows($rs)>0) {
-	$rows_session_category = api_store_result($rs);
+	$rows_session_category = Database::store_result($rs);
 	$rows_session_category = $rows_session_category[0];
 	$session_category = $rows_session_category['name'];
 }

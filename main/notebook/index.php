@@ -55,7 +55,7 @@ Display::display_introduction_section(TOOL_NOTEBOOK);
 // Action handling: Adding a note
 if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 {
-	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 		api_not_allowed();
 	}
 
@@ -257,12 +257,12 @@ function save_note($values) {
 				'".Database::escape_string(date('Y-m-d H:i:s'))."',
 				'0')";
 	$result = Database::query($sql, __FILE__, __LINE__);
-	$id = Database::get_last_insert_id();
+	$id = Database::insert_id();
 	if ($id > 0) {
 		//insert into item_property
 		api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, $id, 'NotebookAdded', api_get_user_id());
 	}
-	
+
 	// display the feedback message
 	Display::display_confirmation_message(get_lang('NoteAdded'));
 }
@@ -274,7 +274,7 @@ function get_note_information($notebook_id) {
 	$sql = "SELECT 	notebook_id 		AS notebook_id,
 					title				AS note_title,
 					description 		AS note_comment,
-			   		session_id			AS session_id					
+			   		session_id			AS session_id
 			   FROM $t_notebook
 			   WHERE notebook_id = '".Database::escape_string($notebook_id)."' ";
 	$result = Database::query($sql, __FILE__, __LINE__);
@@ -306,7 +306,7 @@ function update_note($values) {
 
 	//update item_property (update)
 	api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, Database::escape_string($values['notebook_id']), 'NotebookUpdated', api_get_user_id());
-	
+
 	// display the feedback message
 	Display::display_confirmation_message(get_lang('NoteUpdated'));
 }
@@ -317,17 +317,17 @@ function delete_note($notebook_id) {
 
 	$sql = "DELETE FROM $t_notebook WHERE notebook_id='".Database::escape_string($notebook_id)."' AND user_id = '".Database::escape_string(api_get_user_id())."'";
 	$result = Database::query($sql, __FILE__, __LINE__);
-	
+
 	//update item_property (delete)
 	api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, Database::escape_string($notebook_id), 'delete', api_get_user_id());
-	
+
 	Display::display_confirmation_message(get_lang('NoteDeleted'));
 }
 
 function display_notes() {
 
 	global $_user;
-		
+
 	if (!$_GET['direction'])
 	{
 		$sort_direction = 'ASC';
@@ -355,7 +355,7 @@ function display_notes() {
 			elseif(api_is_allowed_to_session_edit(false,true)){
 				echo '<a href="index.php?'.api_get_cidreq().'&amp;action=addnote">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
 			}
-			
+
 		} else {
 			echo '<a href="javascript:void(0)">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
 		}

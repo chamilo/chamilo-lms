@@ -58,13 +58,13 @@ function show_tools_category($course_tool_category)
 	$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 	$is_allowed_to_edit = api_is_allowed_to_edit();
 	$is_platform_admin = api_is_platform_admin();
-	
+
 	//condition for the session
 	$session_id = api_get_session_id();
 	$condition_session = api_get_session_condition($session_id,true,true);
-	
+
 	switch ($course_tool_category) {
-		
+
 		case TOOL_STUDENT_VIEW:
 				$result = Database::query("SELECT * FROM $course_tool_table WHERE visibility = '1' AND (category = 'authoring' OR category = 'interaction') $condition_session ORDER BY id",__FILE__,__LINE__);
 				$colLink ="##003399";
@@ -219,11 +219,11 @@ function show_tools_category($course_tool_category)
 		$lnk = '';
 		foreach($all_tools_list as $toolsRow)
 		{
-			
+
 			if (api_get_session_id()!=0 && in_array($toolsRow['name'],array('course_maintenance','course_setting'))) {
 				continue;
 			}
-			
+
 			if(!($i%2))
 				{echo	"<tr valign=\"top\">\n";}
 
@@ -255,7 +255,7 @@ function show_tools_category($course_tool_category)
 				}
 
 			}
-			
+
 			// Both checks are necessary as is_platform_admin doesn't take student view into account
 			if( $is_platform_admin && $is_allowed_to_edit)
 			{
@@ -348,10 +348,10 @@ function show_tools_category($course_tool_category)
 					$tool_name = get_lang(ucfirst($toolsRow['name']));
 				}
 				Display::display_icon($toolsRow['image'], $tool_name, array('class'=>'tool-icon','id'=>'toolimage_'.$toolsRow["id"]));
-				
+
 				//validacion when belongs to a session
 				$session_img = api_get_session_image($toolsRow['session_id'], $_user['status']);
-				
+
 				echo '</a> ';
 
 				echo $my_tool_link;
@@ -413,11 +413,11 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		if(isset($_GET['visibility']) && $_GET['visibility']==0) // visibility 1 -> 0
 		{
 			if ($_GET["id"]==strval(intval($_GET["id"]))) {
-				$sql="UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'";	
-				Database::query($sql,__FILE__,__LINE__);				
+				$sql="UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'";
+				Database::query($sql,__FILE__,__LINE__);
 			}
 		}
-	
+
 	  /*
 		-----------------------------------------------------------
 			REACTIVATE
@@ -426,7 +426,7 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		elseif(isset($_GET['visibility'])&& $_GET['visibility']==1) // visibility 0,2 -> 1
 		{
 			if ($_GET["id"]==strval(intval($_GET["id"]))) {
-				Database::query("UPDATE $tool_table SET visibility=1 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);				
+				Database::query("UPDATE $tool_table SET visibility=1 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
 			}
 		}
 
@@ -508,45 +508,45 @@ if(api_is_platform_admin())
  *
  * @param id	session id
  * @return string	session data
- * 
+ *
  */
 function show_session_data($id_session) {
 	$session_table = Database::get_main_table(TABLE_MAIN_SESSION);
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$session_category_table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-	
+
 	$sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility
 				FROM '.$session_table.'
 			LEFT JOIN '.$user_table.'
 				ON id_coach = user_id
 			WHERE '.$session_table.'.id='.$id_session;
-	
-	$rs = api_sql_query($sql, __FILE__, __LINE__);
-	$session = api_store_result($rs);
+
+	$rs = Database::query($sql, __FILE__, __LINE__);
+	$session = Database::store_result($rs);
 	$session = $session[0];
-	
+
 	$sql_category = 'SELECT name FROM '.$session_category_table.' WHERE id = "'.intval($session['session_category_id']).'"';
-	$rs_category = api_sql_query($sql_category, __FILE__, __LINE__);
+	$rs_category = Database::query($sql_category, __FILE__, __LINE__);
 	$session_category = '';
 	if (mysql_num_rows($rs_category) > 0) {
-		$rows_session_category = api_store_result($rs_category);
+		$rows_session_category = Database::store_result($rs_category);
 		$rows_session_category = $rows_session_category[0];
 		$session_category = $rows_session_category['name'];
 	}
-	
+
 	if ($session['date_start'] == '00-00-0000') {
 		$msg_date = get_lang('NoTimeLimits');
 	} else {
 		$msg_date = get_lang('From').' '.$session['date_start'].' '.get_lang('To').' '.$session['date_end'];
 	}
-	
+
 	$output  = '';
 	if (!empty($session_category)) {
 		$output .= '<tr><td>'. get_lang('SessionCategory') . ': ' . '<b>' . $session_category .'</b></td></tr>';
 	}
 	$output .= '<tr><td style="width:50%">'. get_lang('SessionName') . ': ' . '<b>' . $session['name'] .'</b></td><td>'. get_lang('GeneralCoach') . ': ' . '<b>' . $session['lastname'].' '.$session['firstname'].' ('.$session['username'].')' .'</b></td></tr>';
 	$output .= '<tr><td>'. get_lang('SessionIdentifier') . ': '. Display::return_icon('star.png', ' ', array('align' => 'absmiddle')) .'</td><td>'. get_lang('Date') . ': ' . '<b>' . $msg_date .'</b></td></tr>';
-	
+
 	return $output;
 }
 
@@ -604,10 +604,10 @@ if(api_is_allowed_to_edit())
 			<?php show_tools_category(TOOL_ADMIN_PLATEFORM); ?>
 		</table>
 	</div>
-	
+
 	<?php
 		} elseif (api_is_coach()) {
-			
+
 			if (api_get_setting('show_session_data') === 'true' && $id_session > 0) {
 	?>
 		<div class="courseadminview">

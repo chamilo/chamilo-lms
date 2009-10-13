@@ -69,7 +69,7 @@ function update_db_info($action, $oldPath, $newPath="")
             $mdType = (substr($dbTable, -13) == 'scormdocument') ?
                 'Scorm' : 'Document';
 
-            while ($row = mysql_fetch_array($result))
+            while ($row = Database::fetch_array($result))
             {
                 $eid = $mdType . '.' . $row['id'];
                 $mdStore->mds_delete($eid);
@@ -783,7 +783,7 @@ class FileManager
 		$sql_query = "SELECT count(*) as number_existing FROM $glued_table WHERE path='$full_file_name'";
 		//api_display_debug_info($sql_query);
 		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
-		$result = mysql_fetch_array($sql_result);
+		$result = Database::fetch_array($sql_result);
 
 		//determine which query to execute
 		if( $result["number_existing"] > 0 )

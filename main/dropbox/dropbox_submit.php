@@ -339,7 +339,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
             }
 
 	        $result = Database::query($sel . $thisRecip . "'",__FILE__,__LINE__);
-	        while ( ($res = mysql_fetch_array($result))) {$students[] = $res;}
+	        while ( ($res = Database::fetch_array($result))) {$students[] = $res;}
 	        mysql_free_result($result);
 
 	    	if (count($students) == 1)
@@ -487,7 +487,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 	        if ( mysql_num_rows($result) > 0)
 	        {
 		        $remainingUsers = '';
-		        while ( ($res = mysql_fetch_array($result)))
+		        while ( ($res = Database::fetch_array($result)))
 		        {
 					$remainingUsers .= ', ' . htmlspecialchars(api_get_person_name($res[1], $res[0]), ENT_QUOTES, $charset);
 		        }

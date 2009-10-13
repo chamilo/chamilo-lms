@@ -96,7 +96,7 @@ if (isset($_POST['mdsc']))  // Search criteria
 
         $result = $mdStore->mds_get_many('eid,mdxmltext', $whereclause);
 
-        while (($myrow = @mysql_fetch_array($result)))
+        while (($myrow = @Database::fetch_array($result)))
         {
             // not quite a real manifest, but very much like one...
 

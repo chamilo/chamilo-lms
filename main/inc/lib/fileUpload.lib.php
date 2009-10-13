@@ -1163,9 +1163,9 @@ function add_document($_course,$path,$filetype,$filesize,$title,$comment=NULL, $
 	(`path`, `filetype`, `size`, `title`, `comment`, `readonly`, `session_id`)
 	VALUES ('$path','$filetype','$filesize','".
 	Database::escape_string(htmlspecialchars($title, ENT_QUOTES, $charset))."', '$comment', $readonly, $session_id)";
-	if(api_sql_query($sql,__FILE__,__LINE__))
+	if(Database::query($sql,__FILE__,__LINE__))
 	{
-		//display_message("Added to database (id ".mysql_insert_id().")!");
+		//display_message("Added to database (id ".Database::insert_id().")!");
 		return Database::insert_id();
 	}
 	else
@@ -1318,7 +1318,7 @@ function set_default_settings($upload_path,$filename,$filetype="file")
 	//$query="select count(*) as bestaat from `$dbTable` where path='$upload_path/$filename'";
 	$query="select count(*) as bestaat from $dbTable where path='$upload_path/$filename'";
 	$result=Database::query($query,__FILE__,__LINE__);
-	$row=mysql_fetch_array($result);
+	$row=Database::fetch_array($result);
 	if($row["bestaat"]>0)
 		//$query="update `$dbTable` set path='$upload_path/$filename',visibility='$default_visibility', filetype='$filetype' where path='$upload_path/$filename'";
 		$query="update $dbTable set path='$upload_path/$filename',visibility='$default_visibility', filetype='$filetype' where path='$upload_path/$filename'";

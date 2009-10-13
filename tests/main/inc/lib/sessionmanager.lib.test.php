@@ -36,10 +36,10 @@ class TestSessionManager extends UnitTestCase {
 		$snb_days_acess_after='';
 		$nolimit='';
 		$coach_username='';
-		$id_session=Database::get_last_insert_id();
+		$id_session=Database::insert_id();
 		ob_start();
 		$res=SessionManager::create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$nolimit,$coach_username);
-		$idsesion->expectOnce(Database::get_last_insert_id());
+		$idsesion->expectOnce(Database::insert_id());
 		$this->assertTrue(is_object($idsesion));
 		$this->assertTrue(is_numeric($id_session));
 		$this->assertTrue(is_string($res));

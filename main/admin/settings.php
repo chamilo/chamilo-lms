@@ -86,11 +86,11 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 	$renderer = & $form->defaultRenderer();
 	$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>'."\n");
 	$renderer->setElementTemplate('<div class="sectioncomment">{label}</div>'."\n".'<div class="sectionvalue">{element}</div>'."\n");
-	$my_category = mysql_real_escape_string($_GET['category']);
+	$my_category = Database::escape_string($_GET['category']);
 
 	$sqlcountsettings = "SELECT COUNT(*) FROM $table_settings_current WHERE category='".$my_category."' AND type<>'checkbox'";
 	$resultcountsettings = Database::query($sqlcountsettings, __FILE__, __LINE__);
-	$countsetting = mysql_fetch_array($resultcountsettings);
+	$countsetting = Database::fetch_array($resultcountsettings);
 
 	if ($_configuration['access_url']==1)
 	{
@@ -128,7 +128,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 	//print_r($settings_by_access_list);echo '</pre>';
 	//$sqlsettings = "SELECT DISTINCT * FROM $table_settings_current WHERE category='$my_category' GROUP BY variable ORDER BY id ASC";
 	//$resultsettings = Database::query($sqlsettings, __FILE__, __LINE__);
-	//while ($row = mysql_fetch_array($resultsettings))
+	//while ($row = Database::fetch_array($resultsettings))
 	$default_values = array();
 	foreach($settings as $row) {
 		if ($row['variable'] == 'search_enabled') { continue; }
@@ -296,7 +296,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 		{
 			if (!is_array($value))
 			{
-				//$sql = "UPDATE $table_settings_current SET selected_value='".mysql_real_escape_string($value)."' WHERE variable='$key'";
+				//$sql = "UPDATE $table_settings_current SET selected_value='".Database::escape_string($value)."' WHERE variable='$key'";
 				//$result = Database::query($sql, __FILE__, __LINE__);
 
 				if (api_get_setting($key) != $value) $keys[] = $key;
@@ -381,7 +381,7 @@ $action_images['search']        = 'search.gif';
 //$resultcategories = Database::query($selectcategories, __FILE__, __LINE__);
 $resultcategories = api_get_settings_categories(array('stylesheets','Plugins', 'Templates', 'Search'));
 echo "\n<div class=\"actions\">";
-//while ($row = mysql_fetch_array($resultcategories))
+//while ($row = Database::fetch_array($resultcategories))
 foreach($resultcategories as $row)
 {
 	echo "\n\t<a href=\"".api_get_self()."?category=".$row['category']."\">".Display::return_icon($action_images[strtolower($row['category'])], api_ucfirst(get_lang($row['category']))).api_ucfirst(get_lang($row['category']))."</a>";
@@ -530,7 +530,7 @@ function handle_plugins()
 	//$sql = "SELECT * FROM $table_settings_current WHERE category='Plugins'";
 	//$result = Database::query($sql);
 	$result = api_get_settings('Plugins');
-	//while ($row = mysql_fetch_array($result))
+	//while ($row = Database::fetch_array($result))
 	foreach($result as $row)
 	{
 		$usedplugins[$row['variable']][] = $row['selected_value'];

@@ -50,37 +50,37 @@ class aiccItem extends learnpathItem{
 			     		switch($a)
 			     		{
             				case 'system_id':
-            					$this->identifier = mysql_real_escape_string(strtolower($value));
+            					$this->identifier = Database::escape_string(strtolower($value));
             					break;
             				case 'type':
-            					$this->au_type = mysql_real_escape_string($value);
+            					$this->au_type = Database::escape_string($value);
             					break;
             				case 'command_line':
-            					$this->command_line = mysql_real_escape_string($value);
+            					$this->command_line = Database::escape_string($value);
             					break;
             				case 'max_time_allowed':
-            					$this->maxtimeallowed = mysql_real_escape_string($value);
+            					$this->maxtimeallowed = Database::escape_string($value);
             					break;
             				case 'time_limit_action':
-            					$this->timelimitaction = mysql_real_escape_string($value);
+            					$this->timelimitaction = Database::escape_string($value);
             					break;
             				case 'max_score':
-            					$this->max_score = mysql_real_escape_string($value);
+            					$this->max_score = Database::escape_string($value);
             					break;
             				case 'core_vendor':
-            					$this->core_vendor = mysql_real_escape_string($value);
+            					$this->core_vendor = Database::escape_string($value);
             					break;
             				case 'system_vendor':
-            					$this->system_vendor = mysql_real_escape_string($value);
+            					$this->system_vendor = Database::escape_string($value);
             					break;
             				case 'file_name':
-            					$this->path = mysql_real_escape_string($value);
+            					$this->path = Database::escape_string($value);
             					break;
             				case 'mastery_score':
-            					$this->masteryscore = mysql_real_escape_string($value);
+            					$this->masteryscore = Database::escape_string($value);
             					break;
             				case 'web_launch':
-            					$this->parameters = mysql_real_escape_string($value);
+            					$this->parameters = Database::escape_string($value);
             					break;
 			     		}
 			     	}

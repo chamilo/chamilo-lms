@@ -164,7 +164,7 @@ function mdobject($_course, $id)
     $this->mdo_dcmap_e = $ieee_dcmap_e; $this->mdo_dcmap_v = $ieee_dcmap_v;
 
     $document_table = Database::get_course_table(TABLE_DOCUMENT);
-    if (($docinfo = @mysql_fetch_array(Database::query(
+    if (($docinfo = @Database::fetch_array(Database::query(
             "SELECT path,title,comment,filetype FROM $document_table WHERE id='" .
             addslashes($id) . "'", __FILE__, __LINE__))))
     {
@@ -177,7 +177,7 @@ function mdobject($_course, $id)
         $group_info = Database::get_course_table(TABLE_GROUP);
         if (($result = Database::query(
                 "SELECT id,secret_directory FROM $group_info",  __FILE__, __LINE__)))
-            while (($row = mysql_fetch_array($result)))
+            while (($row = Database::fetch_array($result)))
                 if (($secdir = $row['secret_directory'] . '/') ==
                         substr($this->mdo_path, 0, strlen($secdir)))
                 {

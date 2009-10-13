@@ -100,7 +100,7 @@ switch($action){
 			$result=Database::query($sql,__FILE__,__LINE__);
 			$sql="SELECT * FROM $tbl_learnpath_chapter where learnpath_id=$id";
 			$result=Database::query($sql,__FILE__,__LINE__);
-			while ($row=mysql_fetch_array($result))
+			while ($row=Database::fetch_array($result))
 			{
 				$c=$row['id'];
 				$sql2="DELETE FROM $tbl_learnpath_item where chapter_id=$c";
@@ -119,7 +119,7 @@ switch($action){
 		if(!empty($id)){
 			$sql="SELECT * FROM $tbl_learnpath_main where learnpath_id=$id";
 			$result=Database::query($sql,__FILE__,__LINE__);
-			$row=mysql_fetch_array($result);
+			$row=Database::fetch_array($result);
 			$name=domesticate($row['learnpath_name']);
 			if ($set_visibility == 'i') {
 				$s=$name." ".get_lang('_no_published');
@@ -133,7 +133,7 @@ switch($action){
 			}
 			$sql="SELECT * FROM $tbl_tool where (name='$name' and image='scormbuilder.gif')";
 			$result=Database::query($sql,__FILE__,__LINE__);
-			$row2=mysql_fetch_array($result);
+			$row2=Database::fetch_array($result);
 			$num=mysql_num_rows($result);
 			if (($set_visibility == 'i') && ($num>0))
 			{
@@ -181,7 +181,7 @@ switch($action){
 		{
 		  $sql ="INSERT INTO $tbl_learnpath_main (learnpath_name, learnpath_description) VALUES ('".domesticate($learnpath_name)."','".domesticate($learnpath_description)."')";
 		  Database::query($sql,__FILE__,__LINE__);
-		  $my_lp_id = Database::get_last_insert_id();
+		  $my_lp_id = Database::insert_id();
 		  $sql ="INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool) VALUES ('".domesticate($learnpath_name)."','learnpath/learnpath_handler.php?learnpath_id=$my_lp_id','scormbuilder.gif','1','0','pastillegris.gif',0)";
 		  Database::query($sql,__FILE__,__LINE__);
 		  //instead of displaying this info text, get the user directly to the learnpath edit page
@@ -386,7 +386,7 @@ if($is_allowedToEdit) // TEACHER ONLY
     // At least one of these variables are empty. So it's okay to proceed this way
     /* Check if there is yet a record for this file in the DB */
     $result = mysql_query ("SELECT * FROM $tbl_document WHERE path LIKE '".$visibilityPath."'");
-    while($row = mysql_fetch_array($result, MYSQL_ASSOC))
+    while($row = Database::fetch_array($result, 'ASSOC'))
     {
       $attribute['path'      ] = $row['path'      ];
       $attribute['visibility'] = $row['visibility'];

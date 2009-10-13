@@ -643,17 +643,6 @@ class Database {
 	}
 
 	/**
-	 * Gets the ID of the last item inserted into the database
-	 *
-	 * @author Yannick Warnier <yannick.warnier@dokeos.com>
-	 * @return integer The last ID as returned by the DB function
-	 * @comment This should be updated to use ADODB at some point
-	 */
-	public static function get_last_insert_id() {
-		return mysql_insert_id();
-	}
-
-	/**
 	 * Escapes a string to insert into the database as text
 	 * @param string		The string to escape
 	 * @return string		The escaped string
@@ -724,8 +713,10 @@ class Database {
 	}
 
 	/**
-	 * Recovers the last ID of any insert query executed over this SQL connection
-	 * @return	integer	Unique ID of the latest inserted row
+	 * Gets the ID of the last item inserted into the database
+	 *
+	 * @return integer The last ID as returned by the DB function
+	 * @comment This should be updated to use ADODB at some point
 	 */
 	public static function insert_id() {
 		return mysql_insert_id();
@@ -816,6 +807,13 @@ class Database {
 	 */
 	public static function get_language_isocode($language) {
 		return api_get_language_isocode($language);
+	}
+
+	/**
+	 * @deprecated Use Database::insert_id() instead.
+	 */
+	public static function get_last_insert_id() {
+		return mysql_insert_id();
 	}
 
 }

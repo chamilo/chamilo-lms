@@ -88,7 +88,7 @@ function get_cat($catname)
     $linkcat_table = Database::get_course_table(TABLE_LINK_CATEGORY);
     $result = Database::query("SELECT id FROM $linkcat_table WHERE " . $cateq, __FILE__, __LINE__);
 
-    if (mysql_num_rows($result) >= 1 && ($row = mysql_fetch_array($result)))
+    if (mysql_num_rows($result) >= 1 && ($row = Database::fetch_array($result)))
         return $row['id'];  // several categories with same name: take first
 
     return FALSE;
@@ -107,7 +107,7 @@ if (isset($lcn))  // category_title
 
     $result = $mdStore->mds_get_many('eid,mdxmltext', OF_EID_TYPE);
 
-    while ($row = mysql_fetch_array($result))
+    while ($row = Database::fetch_array($result))
         if (check_andor_get($row, '', $mdCat, $lcn)) $uceids[] = $row['eid'];
 
     if (($lci = get_cat($lcn)) !== FALSE)
@@ -115,7 +115,7 @@ if (isset($lcn))  // category_title
         $link_table = Database::get_course_table(TABLE_LINK);
         $result = Database::query("SELECT id FROM $link_table WHERE category_id=" . $lci, __FILE__, __LINE__);
 
-        while ($row = mysql_fetch_array($result))
+        while ($row = Database::fetch_array($result))
         {
             $lceids[$id = (int) $row['id']] = ($eid = EID_TYPE . '.' . $id);
 
@@ -194,7 +194,7 @@ elseif ($slo == get_lang('Index') && file_exists($phpDigIncCn) && count($mceids)
         OF_EID_TYPE . " AND eid IN ('" .
         implode("','", array_map('addslashes', $mceids)) . "')");
 
-    while ($row = mysql_fetch_array($result))  // load indexabletexts in memory
+    while ($row = Database::fetch_array($result))  // load indexabletexts in memory
         $idt[check_andor_get($row, $mdUrl)] = $row['indexabletext'];
 
     require($phpDigIncCn);  // switch to PhpDig DB
@@ -279,7 +279,7 @@ echo '<h3>', get_lang('Statistics'), '</h3>', "\n";
 $result = $mdStore->mds_get_many('eid,mdxmltext', OF_EID_TYPE);
 echo get_lang('TotalMDEs'), mysql_num_rows($result), "\n";
 
-while ($row = mysql_fetch_array($result))
+while ($row = Database::fetch_array($result))
 {
     $cat = check_andor_get($row, $mdCat);
     $perCat[$cat] = ($pc = $perCat[$cat]) ? $pc + 1 : 1;
@@ -327,7 +327,7 @@ if (count($perCat)) foreach ($perCat as $cat => $number)
 $linkcat_table = Database::get_course_table(TABLE_LINK_CATEGORY);
 $result = Database::query("SELECT category_title FROM $linkcat_table", __FILE__, __LINE__);
 
-while ($row = mysql_fetch_array($result))
+while ($row = Database::fetch_array($result))
 {
     $cat = $row['category_title']; $hcat = htmlspecialchars($cat, ENT_QUOTES, $charset);
     if ($perCat[$cat] == $hcat) $dups[] = $cat;

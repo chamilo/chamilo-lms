@@ -40,7 +40,7 @@ $result = Database::query($sql,__FILE__,__LINE__);
 $output = "hotspot_lang=$courseLang&hotspot_image=$pictureName&hotspot_image_width=$pictureWidth&hotspot_image_height=$pictureHeight&courseCode=$coursePath";
 $i = 0;
 
-while ($hotspot = mysql_fetch_array($result))
+while ($hotspot = Database::fetch_array($result))
 {
 	$output .= "&hotspot_".$hotspot['id']."=true";
 	// Square or rectancle

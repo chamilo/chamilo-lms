@@ -63,7 +63,7 @@ class learnpath {
 	var $arrMenu = array(); //array for the menu items
 
 	var $debug = 0; //logging level
-	
+
 	var $lp_session_id =0;
 
 	/**
@@ -136,7 +136,7 @@ class learnpath {
 	   			$this->preview_image= $row['preview_image'];
 	   			$this->author= $row['author'];
 	   			$this->lp_session_id = $row['session_id'];
-	   			
+
 	   			if($this->type == 2){
     				if($row['force_commit'] == 1){
     					$this->force_commit = true;
@@ -203,7 +203,7 @@ class learnpath {
 			$this->attempt = 1;
 			$sql_ins = "INSERT INTO $lp_table (lp_id,user_id,view_count) VALUES ($lp_id,$user_id,1)";
 			$res_ins = Database::query($sql_ins, __FILE__, __LINE__);
-			$this->lp_view_id = Database :: get_last_insert_id();
+			$this->lp_view_id = Database :: insert_id();
 			if ($this->debug > 2) {
 				error_log('New LP - learnpath::learnpath() ' . __LINE__ . ' - inserting new lp_view: ' . $sql_ins, 0);
 			}
@@ -510,7 +510,7 @@ class learnpath {
 		$res_ins = Database::query($sql_ins, __FILE__, __LINE__);
 
 		if ($res_ins > 0) {
-			$new_item_id = Database :: get_last_insert_id($res_ins);
+			$new_item_id = Database :: insert_id($res_ins);
 
 			//update the item that should come after the new item
 			$sql_update_next = "
@@ -598,10 +598,10 @@ class learnpath {
 		//check lp_name doesn't exist, otherwise append something
 		$i = 0;
 		$name = learnpath :: escape_string($name);
-		
+
 		//session_id
 		$session_id = api_get_session_id();
-		
+
 		$check_name = "SELECT * FROM $tbl_lp WHERE name = '$name'";
 		//if($this->debug>2){error_log('New LP - Checking the name for new LP: '.$check_name,0);}
 		$res_name = Database::query($check_name, __FILE__, __LINE__);
@@ -649,7 +649,7 @@ class learnpath {
 				"'local','','".Database::escape_string($session_id)."')";
 				//if($this->debug>2){error_log('New LP - Inserting new lp '.$sql_insert,0);}
 				$res_insert = Database::query($sql_insert, __FILE__, __LINE__);
-				$id = Database :: get_last_insert_id();
+				$id = Database :: insert_id();
 				if ($id > 0) {
 					//insert into item_property
 					api_item_property_update(api_get_course_info(), TOOL_LEARNPATH, $id, 'LearnpathAdded', api_get_user_id());
@@ -2280,9 +2280,9 @@ class learnpath {
 			return '';
 		}
 	}
-	
+
 	/**
-	* Gets the learnpath session id 
+	* Gets the learnpath session id
 	* @return	string	Learnpath theme
 	*/
 	function get_lp_session_id() {
@@ -2295,7 +2295,7 @@ class learnpath {
 			return 0;
 		}
 	}
-	
+
 
 	/**
 	 * Gets the learnpath image
@@ -2778,10 +2778,10 @@ class learnpath {
 	 * @return	string	HTML TOC ready to display
 	 */
 	function get_html_toc() {
-		
-		
+
+
 		$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
-				
+
 		$charset = api_get_setting('platform_charset');
 		$display_action_links_with_icons = false;
 
@@ -2796,7 +2796,7 @@ class learnpath {
 		// build, display
 		if ($is_allowed_to_edit) {
 			$gradebook = Security :: remove_XSS($_GET['gradebook']);
-			
+
 			//var_dump($this->get_lp_session_id());
 			if ($this->get_lp_session_id()==api_get_session_id()) {
 				$html .= '<div class="actions_lp">';
@@ -2811,8 +2811,8 @@ class learnpath {
 				}
 				$html .= '</div>';
 			}
-			
-			
+
+
 		}
 		$html .= '<div id="inner_lp_toc" class="inner_lp_toc">' . "\n";
 		require_once ('resourcelinker.inc.php');
@@ -3221,7 +3221,7 @@ class learnpath {
 			$sql = "INSERT INTO $lp_view_table(lp_id,user_id,view_count)" .
 			"VALUES (" . $this->get_id() . "," . $this->get_user_id() . ",1)";
 			$res = Database::query($sql, __FILE__, __LINE__);
-			$id = Database :: get_last_insert_id();
+			$id = Database :: insert_id();
 			$this->lp_view_id = $id;
 		}
 		return $this->lp_view_id;
@@ -3704,7 +3704,7 @@ class learnpath {
 			error_log('New LP - Inserting new lp_view for restart: ' . $sql, 0);
 		}
 		$res = Database::query($sql, __FILE__, __LINE__);
-		if ($view_id = Database :: get_last_insert_id($res)) {
+		if ($view_id = Database :: insert_id($res)) {
 			$this->lp_view_id = $view_id;
 			$this->attempt = $this->attempt + 1;
 		} else {
@@ -4609,9 +4609,9 @@ class learnpath {
 	 * @return string
 	 */
 	function overview() {
-		
+
 		$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
-			
+
 		$platform_charset = api_get_system_encoding();
 		if ($this->debug > 0) {
 			error_log('New LP - In learnpath::overview()', 0);

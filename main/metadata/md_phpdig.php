@@ -78,13 +78,13 @@ function find_site($url)
 
     if (mysql_num_rows($result) == 1)
     {
-        $row = mysql_fetch_array($result); return (int) $row['site_id'];
+        $row = Database::fetch_array($result); return (int) $row['site_id'];
     }
     else
     {
         $result = Database::query("INSERT INTO " . PHPDIG_DB_PREFIX .
             "sites SET " . $site_url, __FILE__, __LINE__);  // new site
-        $site_id = mysql_insert_id();
+        $site_id = Database::insert_id();
 
         $result = Database::query("INSERT INTO " . PHPDIG_DB_PREFIX .
             "site_page (site_id,num_page) VALUES ('$site_id', '0')");
@@ -105,7 +105,7 @@ function remove_engine_entries($url, $path, $file = '')
         "spider WHERE site_id=" . ($site_id = find_site($url)) . $and_path,
         __FILE__, __LINE__);  // find page(s)
 
-    while ($row = mysql_fetch_array($result))
+    while ($row = Database::fetch_array($result))
     {
         Database::query("DELETE FROM " . PHPDIG_DB_PREFIX .
             "engine WHERE spider_id=" . (int)$row['spider_id'],
@@ -136,7 +136,7 @@ function index_words($site_id, $path, $file, $first_words, $keywords)
     Database::query("INSERT INTO " . PHPDIG_DB_PREFIX . $spider_set_path_etc,
         __FILE__, __LINE__);
 
-    $spider_id = mysql_insert_id(); $new = 0;
+    $spider_id = Database::insert_id(); $new = 0;
 
     foreach ($keywords as $key => $w)
     if (strlen($key) > SMALL_WORDS_SIZE and strlen($key) <= MAX_WORDS_SIZE and
@@ -153,7 +153,7 @@ function index_words($site_id, $path, $file, $first_words, $keywords)
                 "keywords (keyword,twoletters) VALUES ('" . addslashes($key) .
                 "','" .addslashes(substr(str_replace('\\','',$key),0,2)) ."')",
             __FILE__, __LINE__);
-            $key_id = mysql_insert_id(); $new++;
+            $key_id = Database::insert_id(); $new++;
         }
         else
         {

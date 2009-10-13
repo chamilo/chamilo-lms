@@ -93,16 +93,16 @@ class aicc extends learnpath {
 
 			//CRS distribute crs params into the aicc object
 			if(!empty($crs_params['course']['course_creator'])){
-				$this->course_creator = mysql_real_escape_string($crs_params['course']['course_creator']);
+				$this->course_creator = Database::escape_string($crs_params['course']['course_creator']);
 			}
 			if(!empty($crs_params['course']['course_id'])){
-				$this->course_id = mysql_real_escape_string($crs_params['course']['course_id']);
+				$this->course_id = Database::escape_string($crs_params['course']['course_id']);
 			}
 			if(!empty($crs_params['course']['course_system'])){
 				$this->course_system = $crs_params['course']['course_system'];
 			}
 			if(!empty($crs_params['course']['course_title'])){
-				$this->course_title = mysql_real_escape_string($crs_params['course']['course_title']);
+				$this->course_title = Database::escape_string($crs_params['course']['course_title']);
 			}
 			if(!empty($crs_params['course']['course_level'])){
 				$this->course_level = $crs_params['course']['course_level'];
@@ -129,7 +129,7 @@ class aicc extends learnpath {
 				$this->course_version = $crs_params['course']['version'];
 			}
 			if(!empty($crs_params['course_description'])){
-				$this->course_description = mysql_real_escape_string($crs_params['course_description']);
+				$this->course_description = Database::escape_string($crs_params['course_description']);
 			}
 
      		// Parse the Descriptor File (.des) - csv-type
@@ -258,7 +258,7 @@ class aicc extends learnpath {
 				"'aicc_api.php','".$this->course_creator."',$dsp)";
 		if($this->debug>2){error_log('New LP - In import_aicc(), inserting path: '. $sql,0);}
 		$res = Database::query($sql);
-		$lp_id = Database::get_last_insert_id();
+		$lp_id = Database::insert_id();
 		$this->lp_id = $lp_id;
 		api_item_property_update(api_get_course_info($course_code),TOOL_LEARNPATH,$this->lp_id,'LearnpathAdded',api_get_user_id());
 		api_item_property_update(api_get_course_info($course_code),TOOL_LEARNPATH,$this->lp_id,'visible',api_get_user_id());
@@ -298,7 +298,7 @@ class aicc extends learnpath {
 					")";
 			$res_item = Database::query($sql_item);
 			if($this->debug>1){error_log('New LP - In aicc::import_aicc() - inserting item : '.$sql_item.' : '.mysql_error(),0);}
-			$item_id = Database::get_last_insert_id();
+			$item_id = Database::insert_id();
 			//now update previous item to change next_item_id
 			if($previous != 0){
 				$upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE id = $previous";
@@ -673,7 +673,7 @@ class aicc extends learnpath {
 
 		$sql = "SELECT * FROM $tbl_lp WHERE id=".$lp_id;
 		$result = Database::query($sql, __FILE__, __LINE__);
-		$row = mysql_fetch_array($result);
+		$row = Database::fetch_array($result);
 		$LPname = $row['path'];
 		$list = split('/',$LPname);
 		$LPnamesafe = $list[0];

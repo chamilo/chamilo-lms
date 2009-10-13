@@ -61,7 +61,7 @@ function removescormDir($dir)
             $courseid=$_course['official_code'];
             $sql="SELECT * FROM ".Database::get_scorm_table(TABLE_SCORM_MAIN)." where (contentTitle='$scormdir' and dokeosCourse='$courseid')";
             $result=Database::query($sql,__FILE__,__LINE__);
-            while ($row=mysql_fetch_array($result))
+            while ($row=Database::fetch_array($result))
             {
 	      $c=$row['contentId'];
 	      $sql2="DELETE FROM ".Database::get_scorm_table(TABLE_SCORM_SCO_DATA)." where contentId=$c";

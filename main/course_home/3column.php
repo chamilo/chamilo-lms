@@ -89,7 +89,7 @@ if (is_allowed_to_edit())
 	{
 		$sql = "SELECT * FROM $TBL_ACCUEIL WHERE id=$id";
 		$result = Database::query($sql,__FILE__,__LINE__);
-		$toolsRow = mysql_fetch_array($result);
+		$toolsRow = Database::fetch_array($result);
 		$tool_name = htmlspecialchars($toolsRow['name'] != "" ? $toolsRow['name'] : $toolsRow['link'],ENT_QUOTES,$charset);
 		if($toolsRow['img'] != "external.gif")
 		{
@@ -154,7 +154,7 @@ if (is_allowed_to_edit())
 	elseif (isset ($update) && $update)
 	{
 		$result 	= Database::query("SELECT * FROM $TBL_ACCUEIL WHERE id=$id");
-		$toolsRow 	= mysql_fetch_array($result);
+		$toolsRow 	= Database::fetch_array($result);
 		$racine		= $_configuration['root_sys']."/".$currentCourseID."/images/";
 		$chemin		= $racine;
 		$name	= $toolsRow[1];

@@ -129,7 +129,7 @@ class Blog {
 	public static function create_blog ($title, $subtitle) {
 		global $_user;
 		$current_date=date('Y-m-d H:i:s',time());
-		$session_id = api_get_session_id();		
+		$session_id = api_get_session_id();
 		// Tabel definitions
 		$tbl_blogs 			= Database::get_course_table(TABLE_BLOGS);
 		$tbl_tool 			= Database::get_course_table(TABLE_TOOL_LIST);
@@ -145,7 +145,7 @@ class Blog {
 			$sql = "INSERT INTO $tbl_blogs (blog_name, blog_subtitle, date_creation, visibility, session_id )
 						VALUES ('".Database::escape_string($title)."', '".Database::escape_string($subtitle)."', '".$current_date."', '1', '$session_id');";
 			Database::query($sql, __FILE__, __LINE__);
-			$this_blog_id = Database::get_last_insert_id();
+			$this_blog_id = Database::insert_id();
 
 			if ($this_blog_id > 0) {
 				//insert into item_property
@@ -187,7 +187,7 @@ class Blog {
 		// Update the blog
 		$sql = "UPDATE $tbl_blogs SET blog_name = '".Database::escape_string($title)."',	blog_subtitle = '".Database::escape_string($subtitle)."' WHERE blog_id ='".Database::escape_string((int)$blog_id)."' LIMIT 1";
 		Database::query($sql, __FILE__, __LINE__);
-		$this_blog_id = Database::get_last_insert_id();
+		$this_blog_id = Database::insert_id();
 
 		//update item_property (update)
 		api_item_property_update(api_get_course_info(), TOOL_BLOGS, Database::escape_string($blog_id), 'BlogUpdated', api_get_user_id());
@@ -241,7 +241,7 @@ class Blog {
 		// Delete from course homepage
 		$sql = "DELETE FROM $tbl_tool WHERE link = 'blog/blog.php?blog_id=".(int)$blog_id."'";
 		Database::query($sql, __FILE__, __LINE__);
-		
+
 		//update item_property (delete)
 		api_item_property_update(api_get_course_info(), TOOL_BLOGS, Database::escape_string($blog_id), 'delete', api_get_user_id());
 	}
@@ -514,7 +514,7 @@ class Blog {
 					VALUES ('".(int)$blog_id."', '" . Database::escape_string($title)."', '" . Database::escape_string($description)."', '" . Database::escape_string($color)."', '0');";
 		Database::query($sql, __FILE__, __LINE__);
 
-		$task_id = mysql_insert_id();
+		$task_id = Database::insert_id();
 		$tool = 'BLOG_' . $blog_id;
 
 		if($articleDelete == 'on')
@@ -2833,11 +2833,11 @@ class Blog {
 		$counter = 0;
 
 		$tbl_blogs = Database::get_course_table(TABLE_BLOGS);
-		
+
 		//condition for the session
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id, false);
-		
+
 		$sql = 'SELECT blog_name,blog_subtitle,visibility,blog_id FROM '.$tbl_blogs.' ORDER BY date_creation DESC ';
 		$result = Database::query($sql, __FILE__, __LINE__);
 
@@ -2852,7 +2852,7 @@ class Blog {
 			foreach($list_info as $key => $info_log) {
 				//validacion when belongs to a session
 				$session_img = api_get_session_image($info_log[4], $_user['status']);
-				
+
 				$url_start_blog = 'blog.php' ."?". "blog_id=".$info_log[3]. "&amp;".api_get_cidreq();
 				$title = $info_log[0];
     			$image = '<img src="../img/blog.gif" border="0" align="absmiddle" alt="' . $title . '">'."\n";

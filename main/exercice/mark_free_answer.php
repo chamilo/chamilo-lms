@@ -139,7 +139,7 @@ if($action == 'mark'){
 			#echo $sql;
 			$res = Database::query($sql,__FILE__,__LINE__);
 			if(mysql_num_rows($res)>0){
-				$row = mysql_fetch_array($res);
+				$row = Database::fetch_array($res);
 				//@todo Check that just summing past score and the new free answer mark doesn't come up
 				// with a score higher than the possible score for that exercise
 				$my_score = $row['exe_result'] + $_POST['score'];

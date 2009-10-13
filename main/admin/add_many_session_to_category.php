@@ -52,7 +52,7 @@ if(isset($_GET['add_type']) && $_GET['add_type']!=''){
 
 if (!api_is_platform_admin()) {
 	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-	$rs = api_sql_query($sql,__FILE__,__LINE__);
+	$rs = Database::query($sql,__FILE__,__LINE__);
 	if (Database::result($rs,0,0)!=$_user['user_id']) {
 		api_not_allowed(true);
 	}
@@ -60,29 +60,29 @@ if (!api_is_platform_admin()) {
 
 function search_courses($needle,$type) {
 	global $tbl_course, $tbl_session, $id_session;
-	
+
 	$xajax_response = new XajaxResponse();
-	$return = '';	
+	$return = '';
 	if(!empty($needle) && !empty($type)) {
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
-								
-		$sql = 'SELECT * FROM '.$tbl_session.' WHERE name LIKE "'.$needle.'%" ORDER BY id';	
-				
-		$rs = api_sql_query($sql, __FILE__, __LINE__);		
+
+		$sql = 'SELECT * FROM '.$tbl_session.' WHERE name LIKE "'.$needle.'%" ORDER BY id';
+
+		$rs = Database::query($sql, __FILE__, __LINE__);
 		$course_list = array();
-	
+
 		$return .= '<select id="origin" name="NoSessionCategoryList[]" multiple="multiple" size="20" style="width:340px;">';
-		while($course = Database :: fetch_array($rs)) {	
-			$course_list[] = $course['id'];							
-			$return .= '<option value="'.$course['id'].'" title="'.htmlspecialchars($course['name'],ENT_QUOTES).'">'.$course['name'].'</option>';				
+		while($course = Database :: fetch_array($rs)) {
+			$course_list[] = $course['id'];
+			$return .= '<option value="'.$course['id'].'" title="'.htmlspecialchars($course['name'],ENT_QUOTES).'">'.$course['name'].'</option>';
 		}
 		$return .= '</select>';
 		$xajax_response -> addAssign('ajax_list_courses_multiple','innerHTML',api_utf8_encode($return));
-	}	
-	$_SESSION['course_list'] = $course_list;	
-	return $xajax_response;	
+	}
+	$_SESSION['course_list'] = $course_list;
+	return $xajax_response;
 }
 $xajax -> processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
@@ -95,18 +95,18 @@ function add_course_to_session (code, content) {
 	for (i=0;i<destination.length;i++) {
 		if(destination.options[i].text == content) {
 				return false;
-		} 
+		}
 	}
 	destination.options[destination.length] = new Option(content,code);
 	destination.selectedIndex = -1;
-	sortOptions(destination.options);	
+	sortOptions(destination.options);
 }
 function send() {
 	if (document.formulaire.CategorySessionId.value!=0) {
 		//alert(document.formulaire.CategorySessionId.value);
 		document.formulaire.formSent.value=0;
 		document.formulaire.submit();
-	}	
+	}
 }
 function remove_item(origin)
 {
@@ -132,7 +132,7 @@ if ($_POST['formSent']) {
 	if($Categoryid != 0 && count($SessionCategoryList)>0 ){
 		$session_id = join(',', $SessionCategoryList);
 		$sql = "UPDATE $tbl_session SET session_category_id = $Categoryid WHERE id in ($session_id) ";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 		header('Location: session_list.php?id_category='.$Categoryid);
 	} else {
 		header('Location: add_many_session_to_category.php?msg=error');
@@ -153,17 +153,17 @@ $rows_category_session = array();
 if(isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0 ){
 	$where = 'WHERE session_category_id !='.intval($_POST['CategorySessionId']);
 	$sql = 'SELECT id, name  FROM '.$tbl_session .' WHERE session_category_id ='.intval($_POST['CategorySessionId']).' ORDER BY name';
-	$result=api_sql_query($sql,__FILE__,__LINE__);	
-	$rows_category_session = api_store_result($result);
+	$result=Database::query($sql,__FILE__,__LINE__);
+	$rows_category_session = Database::store_result($result);
 }
 
 $sql = "SELECT id, name  FROM $tbl_session_category ORDER BY name";
-$result=api_sql_query($sql,__FILE__,__LINE__);	
-$rows_session_category = api_store_result($result);
+$result=Database::query($sql,__FILE__,__LINE__);
+$rows_session_category = Database::store_result($result);
 
 $sql = "SELECT id, name  FROM $tbl_session $where ORDER BY name";
-$result=api_sql_query($sql,__FILE__,__LINE__);	
-$rows_session = api_store_result($result);
+$result=Database::query($sql,__FILE__,__LINE__);
+$rows_session = Database::store_result($result);
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $_GET['page']; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <input type="hidden" name="formSent" value="1" />
@@ -180,11 +180,11 @@ if(!empty($errorMsg))
 	<td width="" align="center"> <b><?php echo get_lang('SessionCategoryName') ?> :</b><br />
 	<select name="CategorySessionId" style="width: 320px;" onchange="javascript:send();" >
 		<option value="0" selected> </option>
-		<?php 
+		<?php
 		foreach($rows_session_category as $category) {
 			if($category['id'] == $_POST['CategorySessionId'])
   			echo '<option value="'.$category['id'].'" selected>'.$category['name'].'</option>';
-  			else 
+  			else
   			echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';
 		}
   		?>
@@ -200,13 +200,13 @@ if(!empty($errorMsg))
 
 <?php if($add_type == 'multiple') { ?>
 <tr><td width="45%" align="center">
- <?php echo get_lang('FirstLetterCourse'); ?> : 
+ <?php echo get_lang('FirstLetterCourse'); ?> :
      <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple')">
       <option value="%">--</option>
       <?php
       echo Display :: get_alphabet_options();
       echo Display :: get_numeric_options(0,9,'');
-      ?> 
+      ?>
      </select>
 </td>
 <td>&nbsp;</td></tr>
@@ -214,8 +214,8 @@ if(!empty($errorMsg))
 <tr>
   <td width="45%" align="center">
 	<div id="ajax_list_courses_multiple">
-	<select id="origin" name="NoSessionCategoryList[]" multiple="multiple" size="20" style="width:320px;"> 
-	<?php 
+	<select id="origin" name="NoSessionCategoryList[]" multiple="multiple" size="20" style="width:320px;">
+	<?php
 	foreach($rows_session as $enreg) {
 	?>
 		<option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"'; if(in_array($enreg['id'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['name']; ?></option>
@@ -236,8 +236,8 @@ if(!empty($errorMsg))
   	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))"></button>
 	<br /><br />
 	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))"></button>
-  <?php 
-  } 
+  <?php
+  }
   ?>
 	<br /><br /><br /><br /><br /><br />
 	<?php
@@ -246,7 +246,7 @@ if(!empty($errorMsg))
   </td>
   <td width="45%" align="center">
   <select id='destination' name="SessionCategoryList[]" multiple="multiple" size="20" style="width:320px;">
-	<?php 
+	<?php
 	foreach($rows_category_session as $enreg) {
 	?>
 		<option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"'; if(in_array($enreg['id'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['name']; ?></option>
@@ -269,25 +269,25 @@ function moveItem(origin , destination){
 	}
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
-	
+
 
 }
 
 function sortOptions(options) {
 
 	newOptions = new Array();
-	
+
 	for (i = 0 ; i<options.length ; i++) {
-		newOptions[i] = options[i];							
+		newOptions[i] = options[i];
 	}
 
 	newOptions = newOptions.sort(mysort);
 	options.length = 0;
 
-	for(i = 0 ; i < newOptions.length ; i++){		
-		options[i] = newOptions[i];			
+	for(i = 0 ; i < newOptions.length ; i++){
+		options[i] = newOptions[i];
 	}
-	
+
 }
 
 function mysort(a, b){

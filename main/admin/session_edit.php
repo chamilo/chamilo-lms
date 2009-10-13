@@ -29,7 +29,7 @@ $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('Session
 
 $result=Database::query("SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility FROM $tbl_session WHERE id='$id'",__FILE__,__LINE__);
 
-if (!$infos=mysql_fetch_array($result)) {
+if (!$infos=Database::fetch_array($result)) {
 	header('Location: session_list.php');
 	exit();
 }
@@ -55,7 +55,7 @@ if ($_POST['formSent']) {
 	$id_coach=$_POST['id_coach'];
 	$id_session_category = $_POST['session_category'];
 	$id_visibility = $_POST['session_visibility'];
-	
+
 	$return = SessionManager::edit_session($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit, $id_coach, $id_session_category,$id_visibility);
 	if ($return == strval(intval($return))) {
 		header('Location: resume_session.php?id_session='.$return);
@@ -123,11 +123,11 @@ unset($Coaches);
   </select></td>
 </tr>
 <?php
-	$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);	
-	//$access_url_id = api_get_current_access_url_id();							
+	$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+	//$access_url_id = api_get_current_access_url_id();
 	$sql = 'SELECT id, name FROM '.$tbl_session_category.' ORDER BY name ASC';
-	$result = api_sql_query($sql,__FILE__,__LINE__);
-	$Categories = api_store_result($result);
+	$result = Database::query($sql,__FILE__,__LINE__);
+	$Categories = Database::store_result($result);
 ?>
 <tr>
   <td width="30%"><?php echo get_lang('SessionCategory') ?></td>
@@ -315,8 +315,8 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
 <tr>
   <td width="30%"><?php echo get_lang('SessionVisibility') ?></td>
   <td width="70%">
-  	<select name="session_visibility" style="width:250px;">		
-		<?php	
+  	<select name="session_visibility" style="width:250px;">
+		<?php
 		$visibility_list = array(SESSION_VISIBLE_READ_ONLY=>get_lang('ReadOnly'), SESSION_VISIBLE=>get_lang('Visible'), SESSION_INVISIBLE=>api_ucfirst(get_lang('Invisible')));
 		foreach($visibility_list as $key=>$item): ?>
 		<option value="<?php echo $key; ?>" <?php if($key == $infos['visibility']) echo 'selected="selected"'; ?>><?php echo $item; ?></option>
@@ -352,8 +352,8 @@ function setDisable(select){
 	document.form.year_end.disabled = (select.checked) ? true : false;
 
 	document.form.session_visibility.disabled = (select.checked) ? true : false;
-	
-	document.form.session_visibility.selectedIndex = 0;	
+
+	document.form.session_visibility.selectedIndex = 0;
 
 }
 </script>

@@ -155,12 +155,12 @@ if(count($sessions)>0){
 										ON session_course.id_session = session.id
 									 WHERE session_course.id_session = $id_session
 									 ORDER BY i";
-		*/							 
-		// this query is very similar to the above query, but it will check the session_rel_course_user table if there are courses registered to our user or not  	 
-		$personal_course_list_sql = "SELECT distinct course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF(session_course.id_coach = 3,'2', '5') 
-										FROM $tbl_session_course_user as session_course_user INNER JOIN $tbl_course AS course 
+		*/
+		// this query is very similar to the above query, but it will check the session_rel_course_user table if there are courses registered to our user or not
+		$personal_course_list_sql = "SELECT distinct course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF(session_course.id_coach = 3,'2', '5')
+										FROM $tbl_session_course_user as session_course_user INNER JOIN $tbl_course AS course
 										ON course.code = session_course_user.course_code AND session_course_user.id_session = $id_session INNER JOIN $tbl_session as session ON session_course_user.id_session = session.id
-										INNER JOIN $tbl_session_course as session_course 
+										INNER JOIN $tbl_session_course as session_course
 										LEFT JOIN $tbl_user as user ON user.user_id = session_course.id_coach
 										WHERE session_course_user.id_user = $user_id  ORDER BY i";
 
@@ -221,7 +221,7 @@ if (Database::num_rows($res) > 0)
 	$header[] = array (get_lang('Status'), true);
 	$header[] = array ('', false);
 	$data = array ();
-	while ($course = mysql_fetch_object($res))
+	while ($course = Database::fetch_object($res))
 	{
 		$row = array ();
 		$row[] = $course->code;
@@ -261,7 +261,7 @@ if (Database::num_rows($res) > 0)
 	$header[] = array (get_lang('ClassName'), true);
 	$header[] = array ('', false);
 	$data = array ();
-	while ($class = mysql_fetch_object($res))
+	while ($class = Database::fetch_object($res))
 	{
 		$row = array();
 		$row[] = $class->name;

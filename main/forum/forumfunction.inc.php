@@ -496,22 +496,22 @@ function store_forumcategory($values) {
 	$row=Database::fetch_array($result);
 	$new_max=$row['sort_max']+1;
 	$session_id = api_get_session_id();
-	
+
 	$clean_cat_title=Database::escape_string(Security::remove_XSS($values['forum_category_title']));
 
 	if (isset($values['forum_category_id'])) { // storing an edit
 		$sql="UPDATE ".$table_categories." SET cat_title='".$clean_cat_title."', cat_comment='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_category_comment'])),COURSEMANAGERLOWSECURITY))."' WHERE cat_id='".Database::escape_string($values['forum_category_id'])."'";
 		Database::query($sql,__FILE__,__LINE__);
-		$last_id=Database::get_last_insert_id();
+		$last_id=Database::insert_id();
 		api_item_property_update(api_get_course_info(), TOOL_FORUM_CATEGORY, $values['forum_category_id'], 'ForumCategoryUpdated', api_get_user_id());
 		$return_message=get_lang('ForumCategoryEdited');
 	} else {
 		$sql = "INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order, session_id) VALUES ('".$clean_cat_title."','".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['forum_category_comment'])),COURSEMANAGERLOWSECURITY))."','".Database::escape_string($new_max)."','".Database::escape_string($session_id)."')";
 		Database::query($sql,__FILE__,__LINE__);
-		$last_id = Database::get_last_insert_id();
+		$last_id = Database::insert_id();
 		if ($last_id > 0) {
 			api_item_property_update(api_get_course_info(), TOOL_FORUM_CATEGORY, $last_id, 'ForumCategoryAdded', api_get_user_id());
-		}		
+		}
 		$return_message=get_lang('ForumCategoryAdded');
 	}
 
@@ -543,9 +543,9 @@ function store_forum($values) {
 		$new_max=$row['sort_max']+1;
 	}
 
-	
+
 	$session_id = api_get_session_id();
-	
+
 	$clean_title = Database::escape_string(Security::remove_XSS($values['forum_title']));
 
 	// forum images
@@ -645,7 +645,7 @@ function store_forum($values) {
 				'".Database::escape_string(isset($new_max)?$new_max:null)."',
 				".intval($session_id).")";
 		Database::query($sql,__FILE__,__LINE__);
-		$last_id = Database::get_last_insert_id();
+		$last_id = Database::insert_id();
 		if ($last_id > 0) {
 			api_item_property_update($_course, TOOL_FORUM, $last_id, 'ForumAdded', api_get_user_id());
 		}
@@ -1104,11 +1104,11 @@ function get_forum_categories($id='') {
 	$table_categories		= Database :: get_course_table(TABLE_FORUM_CATEGORY);
 	$table_item_property	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 	$forum_categories_list = array();
-	
+
 	//condition for the session
 	$session_id = api_get_session_id();
 	$condition_session = api_get_session_condition($session_id);
-	
+
 	if ($id == '') {
 		$sql="SELECT * FROM".$table_categories." forum_categories, ".$table_item_property." item_properties
 					WHERE forum_categories.cat_id=item_properties.ref
@@ -1192,11 +1192,11 @@ function get_forums($id='') {
 	global $table_users;
 
 	// **************** GETTING ALL THE FORUMS ************************* //
-	
+
 	//condition for the session
 	$session_id = api_get_session_id();
 	$condition_session = api_get_session_condition($session_id);
-	
+
 	$forum_list = array();
 	if ($id=='') {
 		//-------------- Student -----------------//
@@ -3089,7 +3089,7 @@ function store_move_post($values) {
 				'".Database::escape_string($current_post['post_date'])."'
 				)";
 		$result=Database::query($sql, __FILE__, __LINE__);
-		$new_thread_id=Database::get_last_insert_id();
+		$new_thread_id=Database::insert_id();
 		api_item_property_update($_course, TOOL_FORUM_THREAD, $new_thread_id,"visible", $current_post['poster_id']);
 
 		// moving the post to the newly created thread

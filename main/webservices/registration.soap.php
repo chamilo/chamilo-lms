@@ -252,7 +252,7 @@ function DokeosWSCreateUsers($params) {
 		$result = Database::query($sql, __FILE__, __LINE__);
 		if ($result) {
 			//echo "id returned";
-			$return = Database::get_last_insert_id();
+			$return = Database::insert_id();
 			require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 			if ($_configuration['multiple_access_urls'] == true) {
 				if (api_get_current_access_url_id() != -1) {
@@ -458,7 +458,7 @@ function DokeosWSCreateUser($params) {
 	$result = Database::query($sql, __FILE__, __LINE__);
 	if ($result) {
 		//echo "id returned";
-		$return = Database::get_last_insert_id();
+		$return = Database::insert_id();
 		require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 		if ($_configuration['multiple_access_urls'] == true) {
 			if (api_get_current_access_url_id() != -1) {
@@ -746,7 +746,7 @@ function DokeosWSCreateUsersPasswordCrypted($params) {
 		$result = Database::query($sql, __FILE__, __LINE__);
 		if ($result) {
 			//echo "id returned";
-			$return = Database::get_last_insert_id();
+			$return = Database::insert_id();
 			require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 			if ($_configuration['multiple_access_urls'] == true) {
 				if (api_get_current_access_url_id() != -1) {
@@ -975,7 +975,7 @@ function DokeosWSCreateUserPasswordCrypted($params) {
 	$result = Database::query($sql, __FILE__, __LINE__);
 	if ($result) {
 		//echo "id returned";
-		$return = Database::get_last_insert_id();
+		$return = Database::insert_id();
 		require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 		if ($_configuration['multiple_access_urls'] == true) {
 			if (api_get_current_access_url_id() != -1) {
@@ -3160,7 +3160,7 @@ function DokeosWSCreateSession($params) {
 				continue;
 			} else {
 			Database::query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end) VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")", __FILE__, __LINE__);
-				$id_session = Database::get_last_insert_id();
+				$id_session = Database::insert_id();
 
 				// Save new fieldlabel into course_field table.
 				$field_id = SessionManager::create_session_extra_field($original_session_id_name, 1, $original_session_id_name);
@@ -3359,7 +3359,7 @@ function DokeosWSEditSession($params) {
 					"nb_days_access_after_end='".		$nb_days_acess_after."'" .
 					" WHERE id='".$id."'";
 			Database::query($sql, __FILE__, __LINE__);
-			$id_session = Database::get_last_insert_id();
+			$id_session = Database::insert_id();
 
 			if (is_array($extra_list) && count($extra_list) > 0) {
 				foreach ($extra_list as $extra) {

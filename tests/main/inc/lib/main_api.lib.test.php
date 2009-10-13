@@ -577,11 +577,8 @@ class TestMainApi extends UnitTestCase {
 	}
 
 	function testApiGetLanguages(){
-		$result=true;
-		$row = mysql_fetch_array($result);
 		$res= api_get_languages();
 		$this->assertTrue($res);
-		$this->assertFalse($row);
 	}
 
 	function testApiGetThemes(){

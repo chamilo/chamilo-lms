@@ -100,7 +100,7 @@ if($register)
 
 		if(mysql_num_rows($result))
 		{
-			while($user=mysql_fetch_array($result))
+			while($user=Database::fetch_array($result))
 			{
 				// check if the user is already registered to the platform
 
@@ -156,7 +156,7 @@ if($register)
 		                           official_code = '$official_code_form',
 		                           creator_id = '".$_user['user_id']."'");
 
-		$userId = mysql_insert_id();
+		$userId = Database::insert_id();
 
 		if ($userId) $platformRegSucceed = true;
 	}

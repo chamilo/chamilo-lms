@@ -78,9 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 				$oAICC->import_aicc(api_get_course_id());
 			}
 			$proximity = '';
-			if(!empty($_REQUEST['content_proximity'])){$proximity = mysql_real_escape_string($_REQUEST['content_proximity']);}
+			if(!empty($_REQUEST['content_proximity'])){$proximity = Database::escape_string($_REQUEST['content_proximity']);}
 			$maker = '';
-			if(!empty($_REQUEST['content_maker'])){$maker = mysql_real_escape_string($_REQUEST['content_maker']);}
+			if(!empty($_REQUEST['content_maker'])){$maker = Database::escape_string($_REQUEST['content_maker']);}
 			$oAICC->set_proximity($proximity);
 			$oAICC->set_maker($maker);
 			$oAICC->set_jslib('aicc_api.php');
@@ -134,9 +134,9 @@ elseif($_SERVER['REQUEST_METHOD'] == 'POST')
 			}
 
 			$proximity = '';
-			if(!empty($_REQUEST['content_proximity'])){$proximity = mysql_real_escape_string($_REQUEST['content_proximity']);}
+			if(!empty($_REQUEST['content_proximity'])){$proximity = Database::escape_string($_REQUEST['content_proximity']);}
 			$maker = '';
-			if(!empty($_REQUEST['content_maker'])){$maker = mysql_real_escape_string($_REQUEST['content_maker']);}
+			if(!empty($_REQUEST['content_maker'])){$maker = Database::escape_string($_REQUEST['content_maker']);}
 			$oScorm->set_proximity($proximity);
 			$oScorm->set_maker($maker);
 			$oScorm->set_jslib('scorm_api.php');
@@ -150,9 +150,9 @@ elseif($_SERVER['REQUEST_METHOD'] == 'POST')
 				$oAICC->import_aicc(api_get_course_id());
 			}
 			$proximity = '';
-			if(!empty($_REQUEST['content_proximity'])){$proximity = mysql_real_escape_string($_REQUEST['content_proximity']);}
+			if(!empty($_REQUEST['content_proximity'])){$proximity = Database::escape_string($_REQUEST['content_proximity']);}
 			$maker = '';
-			if(!empty($_REQUEST['content_maker'])){$maker = mysql_real_escape_string($_REQUEST['content_maker']);}
+			if(!empty($_REQUEST['content_maker'])){$maker = Database::escape_string($_REQUEST['content_maker']);}
 			$oAICC->set_proximity($proximity);
 			$oAICC->set_maker($maker);
 			$oAICC->set_jslib('aicc_api.php');

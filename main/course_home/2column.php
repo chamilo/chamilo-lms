@@ -85,7 +85,7 @@ function show_tools($course_tool_category)
 	$i=0;
 
 	// grabbing all the tools from $course_tool_table
-	while ($temp_row = mysql_fetch_array($result))
+	while ($temp_row = Database::fetch_array($result))
 	{
 		if($course_tool_category == TOOL_PUBLIC_BUT_HIDDEN && $temp_row['image'] != 'scormbuilder.gif')
 		{
@@ -119,7 +119,7 @@ function show_tools($course_tool_category)
 	{
 		$properties = array();
 		$result_links=Database::query($sql_links,__FILE__,__LINE__);
-		while ($links_row=mysql_fetch_array($result_links))
+		while ($links_row=Database::fetch_array($result_links))
 		{
 			unset($properties);
 			$properties['name']=$links_row['title'];

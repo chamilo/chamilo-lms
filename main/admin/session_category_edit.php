@@ -4,7 +4,7 @@
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2009 Dokeos SPRL
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
 
@@ -37,8 +37,8 @@ $tool_name = get_lang('EditSessionCategory');
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_category_list.php","name" => get_lang('ListSessionCategory'));
 $sql = "SELECT * FROM $tbl_session_category WHERE id='".$id."' ORDER BY name";
-$result=api_sql_query($sql,__FILE__,__LINE__);
-if (!$infos=mysql_fetch_array($result)) {
+$result=Database::query($sql,__FILE__,__LINE__);
+if (!$infos=Database::fetch_array($result)) {
 	header('Location: session_list.php');
 	exit();
 }
@@ -51,12 +51,12 @@ if (!api_is_platform_admin() && $infos['session_admin_id']!=$_user['user_id']) {
 if ($_POST['formSent']) {
 	$formSent=1;
 	$name= $_POST['name'];
-	$year_start= $_POST['year_start']; 
-	$month_start=$_POST['month_start']; 
-	$day_start=$_POST['day_start']; 
-	$year_end=$_POST['year_end']; 
-	$month_end=$_POST['month_end']; 
-	$day_end=$_POST['day_end']; 
+	$year_start= $_POST['year_start'];
+	$month_start=$_POST['month_start'];
+	$day_start=$_POST['day_start'];
+	$year_end=$_POST['year_end'];
+	$month_end=$_POST['month_end'];
+	$day_end=$_POST['day_end'];
 	$return = SessionManager::edit_category_session($id, $name, $year_start, $month_start, $day_start, $year_end, $month_end, $day_end);
 	if ($return == strval(intval($return))) {
 		header('Location: session_category_list.php?action=show_message&message='.urlencode(get_lang('SessionCategoryUpdate')));
@@ -209,13 +209,13 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
 <tr>
 	<td>
 		&nbsp;
-	</td>	
+	</td>
 </tr>
 <tr>
   <td>&nbsp;</td>
   <td>
 <button class="save" type="submit" value="<?php echo get_lang('ModifyThisSession') ?>"><?php echo get_lang('ModifyThisSession') ?></button>
-  
+
   </td>
 </tr>
 

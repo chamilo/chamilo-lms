@@ -106,7 +106,7 @@ $tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 
 // Get all course categories
-$sql = "SELECT code,name FROM ".$table_course_category." WHERE auth_course_child ='TRUE'  OR code = '".mysql_real_escape_string($_course['categoryCode'])."'  ORDER BY tree_pos";
+$sql = "SELECT code,name FROM ".$table_course_category." WHERE auth_course_child ='TRUE'  OR code = '".Database::escape_string($_course['categoryCode'])."'  ORDER BY tree_pos";
 $res = Database::query($sql, __FILE__, __LINE__);
 
 $s_select_course_tutor_name="SELECT tutor_name FROM $tbl_course WHERE code='$course_code'";
@@ -123,7 +123,7 @@ if(mysql_num_rows($q_result_titulars)==0){
 }
 
 $a_profs[0] = '-- '.get_lang('NoManager').' --';
-while ($a_titulars = mysql_fetch_array($q_result_titulars)) {
+while ($a_titulars = Database::fetch_array($q_result_titulars)) {
 	$s_username = $a_titulars['username'];
 	$s_lastname = $a_titulars['lastname'];
 	$s_firstname = $a_titulars['firstname'];
@@ -138,7 +138,7 @@ while ($a_titulars = mysql_fetch_array($q_result_titulars)) {
 	$a_profs[api_get_person_name($s_firstname, $s_lastname)] = api_get_person_name($s_lastname, $s_firstname).' ('.$s_username.')';
 }
 
-while ($cat = mysql_fetch_array($res))
+while ($cat = Database::fetch_array($res))
 {
 	$categories[$cat['code']] = '('.$cat['code'].') '.$cat['name'];
 	ksort($categories);

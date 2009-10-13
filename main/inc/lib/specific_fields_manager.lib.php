@@ -25,7 +25,7 @@ function add_specific_field($name) {
   $sql = sprintf($sql, $table_sf, $_safe_code, $_safe_name);
   $result = Database::query($sql,__FILE__,__LINE__);
   if ($result) {
-    return Database::get_last_insert_id();
+    return Database::insert_id();
   }
   else {
     return FALSE;
@@ -158,7 +158,7 @@ function add_specific_field_value($id_specific_field, $course_id, $tool_id, $ref
   $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id, $id_specific_field, Database::escape_string($value));
   $result = Database::query($sql,__FILE__,__LINE__);
   if ($result) {
-    return Database::get_last_insert_id();
+    return Database::insert_id();
   }
   else {
     return FALSE;

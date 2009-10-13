@@ -356,7 +356,7 @@ switch ($_GET['action']) {
 		}
 
 		if($_POST['recurrence_c'] && $msg_number == 0){
-				$Inserted_id = mysql_insert_id();
+				$Inserted_id = Database::insert_id();
 				$recurrence_date_start = Rsys :: mysql_datetime_to_timestamp($values['start']);
 				$recurrence_date_end = Rsys :: mysql_datetime_to_timestamp($values['end']);
 				$recurrence_period_end = Rsys :: mysql_datetime_to_timestamp($values['recurrence_until']);

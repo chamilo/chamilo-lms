@@ -114,7 +114,7 @@ class Dropbox_Work {
 				FROM ".dropbox_cnf("tbl_file")."
 				WHERE filename = '".addslashes($this->filename)."'";
         $result = Database::query($sql,__FILE__,__LINE__);
-		$res = mysql_fetch_array($result);
+		$res = Database::fetch_array($result);
 		if ($res != FALSE) {
 			$this->isOldWork = TRUE;
 		}
@@ -146,7 +146,7 @@ class Dropbox_Work {
 						)";
 
         	$result = Database::query($sql,__FILE__,__LINE__);
-			$this->id = mysql_insert_id(); //get automatically inserted id
+			$this->id = Database::insert_id(); //get automatically inserted id
 		}
 
 		// insert entries into person table
@@ -174,7 +174,7 @@ class Dropbox_Work {
 				FROM ".dropbox_cnf("tbl_file")."
 				WHERE id='".addslashes($id)."'";
         $result = Database::query($sql,__FILE__,__LINE__);
-		$res = mysql_fetch_array($result,MYSQL_ASSOC);
+		$res = Database::fetch_array($result, 'ASSOC');
 
 		// Check if uploader is still in Dokeos system
 		$uploader_id = stripslashes($res["uploader_id"]);
@@ -215,7 +215,7 @@ class Dropbox_Work {
 		$result = Database::query("SELECT feedback_date, feedback, cat_id FROM ".
 		    dropbox_cnf("tbl_post")." WHERE dest_user_id='".$_user['user_id'].
 		    "' AND file_id='".$id."'",__FILE__,__LINE__);
-		if ($res = mysql_fetch_array($result))
+		if ($res = Database::fetch_array($result))
 		{
     		$this->feedback_date = $res["feedback_date"];
     		$this->feedback = $res["feedback"];

@@ -426,16 +426,16 @@ echo '<td>';
 		//menu add page
 		echo '<li><a href="index.php?cidReq='.$_course[id].'&action=addnew&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('addnew').'>'.get_lang('AddNew').'</a> ';
 	}
-	
+
 	if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 	{
 		// page action: enable or disable the adding of new pages
 		if (check_addnewpagelock()==1)
 		{
-			
+
 			$protect_addnewpage= '<img src="../img/wiki/lockadd.gif" title="'.get_lang('AddOptionProtected').'" alt="'.get_lang('AddOptionProtected').'" width="8" height="8" />';
 			$lock_unlock_addnew='unlockaddnew';
-		
+
 		}
 		else
 		{
@@ -483,10 +483,10 @@ if (!in_array($_GET['action'], array('addnew', 'searchpages', 'allpages', 'recen
 	//menu show page
 	echo '<a href="index.php?cidReq='.$_course[id].'&action=showpage&amp;title='.$page.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('showpage').'>'.Display::display_icon('lp_document.png',get_lang('ShowThisPage')).' '.get_lang('Page').'</a>';
 
-	if (api_is_allowed_to_session_edit(false,true) ) { 
+	if (api_is_allowed_to_session_edit(false,true) ) {
 		//menu edit page
 		echo '<a href="index.php?cidReq='.$_course[id].'&action=edit&amp;title='.$page.'&group_id='.$_clean['group_id'].'"'.is_active_navigation_tab('edit').'>'.Display::display_icon('lp_quiz.png',get_lang('EditThisPage')).' '.get_lang('EditPage').'</a>';
-	
+
 		//menu discuss page
 		echo '<a href="index.php?action=discuss&amp;title='.$page.'"'.is_active_navigation_tab('discuss').'>'.Display::display_icon('comment_bubble.gif',get_lang('DiscussThisPage')).' '.get_lang('Discuss').'</a>';
  	}
@@ -589,7 +589,7 @@ if ($_GET['action']=='mactiveusers')
 	if (mysql_num_rows($allpages) > 0)
 	{
 		$row = array ();
-		while ($obj = mysql_fetch_object($allpages))
+		while ($obj = Database::fetch_object($allpages))
 		{
 			$userinfo=Database::get_user_info_from_id($obj->user_id);
 			$row = array ();
@@ -632,7 +632,7 @@ if ($_GET['action']=='usercontrib')
 	if (mysql_num_rows($allpages) > 0)
 	{
 		$row = array ();
-		while ($obj = mysql_fetch_object($allpages))
+		while ($obj = Database::fetch_object($allpages))
 		{
 			//get author
 			$userinfo=Database::get_user_info_from_id($obj->user_id);
@@ -719,7 +719,7 @@ if ($_GET['action']=='mostchanged')
 	if (mysql_num_rows($allpages) > 0)
 	{
 		$row = array ();
-		while ($obj = mysql_fetch_object($allpages))
+		while ($obj = Database::fetch_object($allpages))
 		{
 			//get type assignment icon
 			if($obj->assignment==1)
@@ -773,7 +773,7 @@ if ($_GET['action']=='mvisited')
 	if (mysql_num_rows($allpages) > 0)
 	{
 		$row = array ();
-		while ($obj = mysql_fetch_object($allpages))
+		while ($obj = Database::fetch_object($allpages))
 		{
 			//get type assignment icon
 			if($obj->assignment==1)
@@ -1126,7 +1126,7 @@ if ($_GET['action']=='links')
 		if (mysql_num_rows($allpages) > 0)
 		{
 			$row = array ();
-			while ($obj = mysql_fetch_object($allpages))
+			while ($obj = Database::fetch_object($allpages))
 			{
 				//get author
 				$userinfo=Database::get_user_info_from_id($obj->user_id);
@@ -1179,7 +1179,7 @@ if ($_GET['action']=='links')
 // Display the form for adding a new wiki page
 if ($_GET['action']=='addnew')
 {
-	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 		api_not_allowed();
 	}
 
@@ -1244,10 +1244,10 @@ if ($_GET['action']=='showpage' AND !isset($_POST['SaveWikiNew']))
 
 if ($_GET['action']=='edit')
 {
-	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 		api_not_allowed();
 	}
-	
+
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 
 	$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$tbl_wiki.'.'.$groupfilter.$condition_session.' ORDER BY id DESC';
@@ -1898,10 +1898,10 @@ if ($_GET['action']=='recentchanges')
 			$notify_all= '<a href="index.php?action=recentchanges&amp;actionpage=notify_all&amp;title='.$page.'"><img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('FullNotifyByEmail').'" alt="'.get_lang('FullNotifyByEmail').'" style="vertical-align:middle;" />'.get_lang('NotNotifyChanges').'</a>';
 		}
 		else
-		{	 
+		{
 			$notify_all= '<a href="index.php?action=recentchanges&amp;actionpage=notify_all&amp;title='.$page.'"><img src="../img/wiki/send_mail.gif" title="'.get_lang('FullCancelNotifyByEmail').'" alt="'.get_lang('FullCancelNotifyByEmail').'"  style="vertical-align:middle;"/>'.get_lang('NotifyChanges').'</a>';
-		}	
-		
+		}
+
 	}
 
 	echo '<div class="actions"><span style="float: right;">'.$notify_all.'</span>'.get_lang('RecentChanges').'</div>';
@@ -1928,7 +1928,7 @@ if ($_GET['action']=='recentchanges')
 	if (mysql_num_rows($allpages) > 0)
 	{
 		$row = array ();
-		while ($obj = mysql_fetch_object($allpages))
+		while ($obj = Database::fetch_object($allpages))
 		{
 			//get author
 			$userinfo=Database::get_user_info_from_id($obj->user_id);
@@ -2018,7 +2018,7 @@ if ($_GET['action']=='allpages')
 	if (mysql_num_rows($allpages) > 0)
 	{
 		$row = array ();
-		while ($obj = mysql_fetch_object($allpages))
+		while ($obj = Database::fetch_object($allpages))
 		{
 			//get author
 			$userinfo=Database::get_user_info_from_id($obj->user_id);
@@ -2087,7 +2087,7 @@ if ($_GET['action']=='allpages')
 
 if ($_GET['action']=='discuss')
 {
-	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 		api_not_allowed();
 	}
 
@@ -2134,11 +2134,11 @@ if ($_GET['action']=='discuss')
 			if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 			{
 				if (check_addlock_discuss()==1)
-				{				
+				{
 					$addlock_disc= '<img src="../img/wiki/unlock.gif" title="'.get_lang('UnlockDiscussExtra').'" alt="'.get_lang('UnlockDiscussExtra').'" />';
 					$lock_unlock_disc='unlockdisc';
 				}
-				
+
 				else
 				{
 					$addlock_disc= '<img src="../img/wiki/lock.gif" title="'.get_lang('LockDiscussExtra').'" alt="'.get_lang('LockDiscussExtra').'" />';
@@ -2147,11 +2147,11 @@ if ($_GET['action']=='discuss')
 			}
 			echo '<span style="float:right">';
 			echo '<a href="index.php?action=discuss&amp;actionpage='.$lock_unlock_disc.'&amp;title='.$page.'">'.$addlock_disc.'</a>';
-			echo '</span>';	
+			echo '</span>';
 
 			// discussion action: visibility.  Show discussion to students if isn't hidden. Show page to all teachers if is hidden.
-			
-			
+
+
 			if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 			{
 				if (check_visibility_discuss()==1)
@@ -2160,15 +2160,15 @@ if ($_GET['action']=='discuss')
 					//if(($row['assignment']==2 && $row['visibility_disc']==0 && (api_get_user_id()==$row['user_id']))==false)
 					//{
 						//$visibility_disc= '<img src="../img/wiki/invisible.gif" title="'.get_lang('HideDiscussExtra').'" alt="'.get_lang('HideDiscussExtra').'" />';
-			
-					//}					
+
+					//}
 					$visibility_disc= '<img src="../img/wiki/visible.gif" title="'.get_lang('ShowDiscussExtra').'" alt="'.get_lang('ShowDiscussExtra').'" />';
 					$hide_show_disc='hidedisc';
 				}
 				else
 				{
 					$visibility_disc= '<img src="../img/wiki/invisible.gif" title="'.get_lang('HideDiscussExtra').'" alt="'.get_lang('HideDiscussExtra').'" />';
-					$hide_show_disc='showdisc';					
+					$hide_show_disc='showdisc';
 				}
 			}
 			echo '<span style="float:right">';
@@ -2176,7 +2176,7 @@ if ($_GET['action']=='discuss')
 			echo '</span>';
 
 			//discussion action: check add rating lock. Show/Hide list to rating for all student
-			
+
 			if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 			{
 				if (check_ratinglock_discuss()==1)
@@ -2187,7 +2187,7 @@ if ($_GET['action']=='discuss')
 				else
 				{
 					$ratinglock_disc= '<img src="../img/wiki/rating_na.gif" title="'.get_lang('LockRatingDiscussExtra').'" alt="'.get_lang('LockRatingDiscussExtra').'" />';
-					$lock_unlock_rating_disc='lockrating';	
+					$lock_unlock_rating_disc='lockrating';
 				}
 			}
 

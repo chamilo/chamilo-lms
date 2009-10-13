@@ -74,7 +74,7 @@ if ($_configuration['multiple_access_urls']==true){
 $res = Database::query($sql,__FILE__,__LINE__);
 $teachers = array();
 $teachers[0] = '-- '.get_lang('NoManager').' --';
-while($obj = mysql_fetch_object($res))
+while($obj = Database::fetch_object($res))
 {
 	$teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 }
@@ -182,7 +182,7 @@ if( $form->validate()) {
 		$pictures_array=fill_course_repository($currentCourseRepository);
 		fill_Db_course($currentCourseDbName, $currentCourseRepository, $course_language,$pictures_array);
 		register_course($currentCourseId, $currentCourseCode, $currentCourseRepository, $currentCourseDbName, $tutor_name, $category, $title, $course_language, $teacher_id, $expiration_date,$course_teachers);
-		$sql = "UPDATE $table_course SET disk_quota = '".$disk_quota."', visibility = '".mysql_real_escape_string($course['visibility'])."', subscribe = '".mysql_real_escape_string($course['subscribe'])."', unsubscribe='".mysql_real_escape_string($course['unsubscribe'])."' WHERE code = '".$currentCourseId."'";
+		$sql = "UPDATE $table_course SET disk_quota = '".$disk_quota."', visibility = '".Database::escape_string($course['visibility'])."', subscribe = '".Database::escape_string($course['subscribe'])."', unsubscribe='".Database::escape_string($course['unsubscribe'])."' WHERE code = '".$currentCourseId."'";
 		Database::query($sql,__FILE__,__LINE__);
 		header('Location: course_list.php');
 		exit ();

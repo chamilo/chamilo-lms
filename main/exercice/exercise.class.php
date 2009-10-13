@@ -406,7 +406,7 @@ class Exercise
         Database::query($query,__FILE__,__LINE__);*/
         $id = add_document($_course,str_replace($documentPath,'',$audioPath).'/'.$this->sound,'file',$sound['size'],$sound['name']);
 
-        //$id = Database::get_last_insert_id();
+        //$id = Database::insert_id();
         //$time = time();
         //$time = date("Y-m-d H:i:s", $time);
         // insert into the item_property table, using default visibility of "visible"
@@ -500,7 +500,7 @@ class Exercise
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $TBL_QUIZ_QUESTION= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
-		
+
 		$id = $this->id;
 		$exercise = $this->exercise;
 		$description = $this->description;
@@ -511,7 +511,7 @@ class Exercise
 		$random = $this->random;
 		$active = $this->active;
 		$session_id = api_get_session_id();
-		
+
 		if ($feedbacktype==1){
 			$results_disabled = 1;
 		} else {

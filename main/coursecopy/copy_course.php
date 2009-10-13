@@ -110,7 +110,7 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 	<?php
 	echo get_lang('SelectDestinationCourse');
 	echo ' <select name="destination_course"/>';
-	while ($obj = mysql_fetch_object($res)) {
+	while ($obj = Database::fetch_object($res)) {
 		echo '<option value="'.$obj->code.'">'.$obj->title.'</option>';
 	}
 	echo '</select>';

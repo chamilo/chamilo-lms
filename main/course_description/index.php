@@ -141,7 +141,7 @@ if (api_is_allowed_to_edit(null,true) && !is_null($description_id) || $action ==
 	// Delete a description block
 	if ($action == 'delete') {
 		$sql = "DELETE FROM $tbl_course_description WHERE id='".$description_id."'";
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 		//update item_property (delete)
 		api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, Database::escape_string($description_id), 'delete', api_get_user_id());
 		Display :: display_confirmation_message(get_lang('CourseDescriptionDeleted'));
@@ -229,7 +229,7 @@ if (api_is_allowed_to_edit(null,true) && !is_null($description_id) || $action ==
 				$sql = "INSERT INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string(Security::remove_XSS($title,COURSEMANAGERLOWSECURITY))."', content = '".Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY))."', session_id = ".intval($session_id)." ";
 				Database::query($sql, __FILE__, __LINE__);
 			}
-			$id = Database::get_last_insert_id();
+			$id = Database::insert_id();
 			if ($id > 0) {
 				//insert into item_property
 				api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, $id, 'CourseDescriptionAdded', api_get_user_id());

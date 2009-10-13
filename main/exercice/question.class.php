@@ -91,7 +91,7 @@ abstract class Question
 		$result=Database::query($sql,__FILE__,__LINE__);
 
 		// if the question has been found
-		if($object=mysql_fetch_object($result))
+		if($object=Database::fetch_object($result))
 		{
 			$objQuestion = Question::getInstance($object->type);
 			$objQuestion->id=$id;
@@ -107,7 +107,7 @@ abstract class Question
 			$result=Database::query($sql,__FILE__,__LINE__);
 
 			// fills the array with the exercises which this question is in
-			while($object=mysql_fetch_object($result))
+			while($object=Database::fetch_object($result))
 			{
 				$objQuestion->exerciseList[]=$object->exercice_id;
 			}
@@ -623,7 +623,7 @@ abstract class Question
 					)";
 			Database::query($sql,__FILE__,__LINE__);
 
-			$this->id=Database::get_last_insert_id();
+			$this->id=Database::insert_id();
 
 			api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizQuestionAdded',$_user['user_id']);
 
@@ -905,7 +905,7 @@ abstract class Question
 		$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type) VALUES('".Database::escape_string($question)."','".Database::escape_string($description)."','".Database::escape_string($weighting)."','".Database::escape_string($position)."','".Database::escape_string($type)."')";
 		Database::query($sql,__FILE__,__LINE__);
 
-		$id=Database::get_last_insert_id();
+		$id=Database::insert_id();
 		// duplicates the picture
 		$this->exportPicture($id);
 
@@ -1004,7 +1004,7 @@ abstract class Question
 		$editor_config = array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '150');
 		if(is_array($fck_config)){
 			$editor_config = array_merge($editor_config, $fck_config);
-		}		
+		}
 		if(!api_is_allowed_to_edit(null,true)) $editor_config['UserStatus'] = 'student';
 
 		$form -> addElement('html','<div class="row">

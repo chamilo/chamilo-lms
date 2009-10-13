@@ -56,7 +56,7 @@ class ClassManager
 	function set_name($name, $class_id)
 	{
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
-		$sql = "UPDATE $table_class SET name='".mysql_real_escape_string($name)."' WHERE id='".$class_id."'";
+		$sql = "UPDATE $table_class SET name='".Database::escape_string($name)."' WHERE id='".$class_id."'";
 		$res = Database::query($sql, __FILE__, __LINE__);
 	}
 	/**
@@ -66,7 +66,7 @@ class ClassManager
 	function create_class($name)
 	{
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
-		$sql = "INSERT INTO $table_class SET name='".mysql_real_escape_string($name)."'";
+		$sql = "INSERT INTO $table_class SET name='".Database::escape_string($name)."'";
 		Database::query($sql, __FILE__, __LINE__);
 		return mysql_affected_rows() == 1;
 	}
@@ -77,7 +77,7 @@ class ClassManager
 	function class_name_exists($name)
 	{
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
-		$sql = "SELECT * FROM $table_class WHERE name='".mysql_real_escape_string($name)."'";
+		$sql = "SELECT * FROM $table_class WHERE name='".Database::escape_string($name)."'";
 		$res = Database::query($sql, __FILE__, __LINE__);
 		return mysql_num_rows($res) != 0;
 	}
@@ -190,9 +190,9 @@ class ClassManager
 		$tbl_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$tbl_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-		$sql = "INSERT IGNORE INTO $tbl_course_class SET course_code = '".mysql_real_escape_string($course_code)."', class_id = '".mysql_real_escape_string($class_id)."'";
+		$sql = "INSERT IGNORE INTO $tbl_course_class SET course_code = '".Database::escape_string($course_code)."', class_id = '".Database::escape_string($class_id)."'";
 		Database::query($sql, __FILE__, __LINE__);
-		$sql = "SELECT user_id FROM $tbl_class_user WHERE class_id = '".mysql_real_escape_string($class_id)."'";
+		$sql = "SELECT user_id FROM $tbl_class_user WHERE class_id = '".Database::escape_string($class_id)."'";
 		$res = Database::query($sql, __FILE__, __LINE__);
 		while ($user = Database::fetch_object($res))
 		{
@@ -210,11 +210,11 @@ class ClassManager
 	{
 		$tbl_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$tbl_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
-		$sql = "SELECT cu.user_id,COUNT(cc.class_id) FROM $tbl_course_class cc, $tbl_class_user cu WHERE  cc.class_id = cu.class_id AND cc.course_code = '".mysql_real_escape_string($course_code)."' GROUP BY cu.user_id HAVING COUNT(cc.class_id) = 1";
+		$sql = "SELECT cu.user_id,COUNT(cc.class_id) FROM $tbl_course_class cc, $tbl_class_user cu WHERE  cc.class_id = cu.class_id AND cc.course_code = '".Database::escape_string($course_code)."' GROUP BY cu.user_id HAVING COUNT(cc.class_id) = 1";
 		$single_class_users = Database::query($sql, __FILE__, __LINE__);
 		while ($single_class_user = Database::fetch_object($single_class_users))
 		{
-			$sql = "SELECT * FROM $tbl_class_user WHERE class_id = '".mysql_real_escape_string($class_id)."' AND user_id = '".mysql_real_escape_string($single_class_user->user_id)."'";
+			$sql = "SELECT * FROM $tbl_class_user WHERE class_id = '".Database::escape_string($class_id)."' AND user_id = '".Database::escape_string($single_class_user->user_id)."'";
 			$res = Database::query($sql, __FILE__, __LINE__);
 			if (mysql_num_rows($res) > 0)
 			{
@@ -224,7 +224,7 @@ class ClassManager
 				}
 			}
 		}
-		$sql = "DELETE FROM $tbl_course_class WHERE course_code = '".mysql_real_escape_string($course_code)."' AND class_id = '".mysql_real_escape_string($class_id)."'";
+		$sql = "DELETE FROM $tbl_course_class WHERE course_code = '".Database::escape_string($course_code)."' AND class_id = '".Database::escape_string($class_id)."'";
 		Database::query($sql, __FILE__, __LINE__);
 	}
 
@@ -250,7 +250,7 @@ class ClassManager
 	{
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$table_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
-		$sql = "SELECT cl.* FROM $table_class cl, $table_course_class cc WHERE cc.course_code = '".mysql_real_escape_string($course_code)."' AND cc.class_id = cl.id";
+		$sql = "SELECT cl.* FROM $table_class cl, $table_course_class cc WHERE cc.course_code = '".Database::escape_string($course_code)."' AND cc.class_id = cl.id";
 		$res = Database::query($sql, __FILE__, __LINE__);
 		$classes = array ();
 		while ($class = Database::fetch_array($res, 'ASSOC'))

@@ -86,7 +86,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 	$renderer = & $form->defaultRenderer();
 	$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>'."\n");
 	$renderer->setElementTemplate('<div class="sectioncomment">{label}</div>'."\n".'<div class="sectionvalue">{element}</div>'."\n");
-	$my_category = mysql_real_escape_string($_GET['category']);
+	$my_category = Database::escape_string($_GET['category']);
 
 	$sqlcountsettings = "SELECT COUNT(*) FROM $table_settings_current WHERE category='".$my_category."' AND type<>'checkbox'";
 	$resultcountsettings = Database::query($sqlcountsettings, __FILE__, __LINE__);
@@ -296,7 +296,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 		{
 			if (!is_array($value))
 			{
-				//$sql = "UPDATE $table_settings_current SET selected_value='".mysql_real_escape_string($value)."' WHERE variable='$key'";
+				//$sql = "UPDATE $table_settings_current SET selected_value='".Database::escape_string($value)."' WHERE variable='$key'";
 				//$result = Database::query($sql, __FILE__, __LINE__);
 
 				if (api_get_setting($key) != $value) $keys[] = $key;

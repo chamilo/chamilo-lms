@@ -35,12 +35,12 @@ class learnpathList {
     	}
     	$this->course_code = $course_code;
     	$this->user_id = $user_id;
-    	
+
     	//condition for the session
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id, false);
-    	
-    	$sql = "SELECT * FROM $lp_table $condition_session ORDER BY display_order ASC, name ASC";    	
+
+    	$sql = "SELECT * FROM $lp_table $condition_session ORDER BY display_order ASC, name ASC";
     	$res = Database::query($sql);
     	$names = array();
     	while ($row = Database::fetch_array($res))
@@ -48,7 +48,7 @@ class learnpathList {
     		//check if published
     		$pub = '';
     		$tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
-    		//use domesticate here instead of mysql_real_escape_string because
+    		//use domesticate here instead of Database::escape_string because
     		//it prevents ' to be slashed and the input (done by learnpath.class.php::toggle_visibility())
     		//is done using domesticate()
     		$myname = domesticate($row['name']);
@@ -67,7 +67,7 @@ class learnpathList {
 
     		$this->list[$row['id']] = array(
     			'lp_type' => $row['lp_type'],
-    			'lp_session' => $row['session_id'],    			
+    			'lp_session' => $row['session_id'],
     			'lp_name' => stripslashes($row['name']),
     			'lp_desc' => stripslashes($row['description']),
     			'lp_path' => $row['path'],

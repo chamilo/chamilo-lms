@@ -125,7 +125,7 @@ function get_number_of_classes()
 	$sql = "SELECT c.id	FROM $class_table c WHERE 1 = 1";
 	if (isset ($_GET['keyword']))
 	{
-		$keyword = mysql_real_escape_string($_GET['keyword']);
+		$keyword = Database::escape_string($_GET['keyword']);
 		$sql .= " AND (c.name LIKE '%".$keyword."%')";
 	}
 	if( count($subscribed_classes) > 0)
@@ -162,7 +162,7 @@ function get_class_data($from, $number_of_items, $column, $direction)
 	$sql .= " WHERE 1 = 1";
 	if (isset ($_GET['keyword']))
 	{
-		$keyword = mysql_real_escape_string($_GET['keyword']);
+		$keyword = Database::escape_string($_GET['keyword']);
 		$sql .= " AND (c.name LIKE '%".$keyword."%')";
 	}
 	if( count($subscribed_classes) > 0)

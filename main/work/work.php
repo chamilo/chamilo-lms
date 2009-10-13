@@ -961,7 +961,7 @@ if ($ctok==$_POST['sec_token']) { //check the token inserted into the form
 			//Get the author ID for that document from the item_property table
 			$is_author = false;
 			if ($id<>'') {
-				$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=" . mysql_real_escape_string($id);
+				$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=" . Database::escape_string($id);
 
 				$author_qry = Database::query($author_sql, __FILE__, __LINE__);
 				if (Database :: num_rows($author_qry) == 1) {

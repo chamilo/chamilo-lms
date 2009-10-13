@@ -93,16 +93,16 @@ class aicc extends learnpath {
 
 			//CRS distribute crs params into the aicc object
 			if(!empty($crs_params['course']['course_creator'])){
-				$this->course_creator = mysql_real_escape_string($crs_params['course']['course_creator']);
+				$this->course_creator = Database::escape_string($crs_params['course']['course_creator']);
 			}
 			if(!empty($crs_params['course']['course_id'])){
-				$this->course_id = mysql_real_escape_string($crs_params['course']['course_id']);
+				$this->course_id = Database::escape_string($crs_params['course']['course_id']);
 			}
 			if(!empty($crs_params['course']['course_system'])){
 				$this->course_system = $crs_params['course']['course_system'];
 			}
 			if(!empty($crs_params['course']['course_title'])){
-				$this->course_title = mysql_real_escape_string($crs_params['course']['course_title']);
+				$this->course_title = Database::escape_string($crs_params['course']['course_title']);
 			}
 			if(!empty($crs_params['course']['course_level'])){
 				$this->course_level = $crs_params['course']['course_level'];
@@ -129,7 +129,7 @@ class aicc extends learnpath {
 				$this->course_version = $crs_params['course']['version'];
 			}
 			if(!empty($crs_params['course_description'])){
-				$this->course_description = mysql_real_escape_string($crs_params['course_description']);
+				$this->course_description = Database::escape_string($crs_params['course_description']);
 			}
 
      		// Parse the Descriptor File (.des) - csv-type

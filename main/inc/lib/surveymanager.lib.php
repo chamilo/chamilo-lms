@@ -1625,7 +1625,7 @@ function get_status()
 	global $_user;
 
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
-	$sqlm = "SELECT  status FROM  $table_user WHERE user_id = '".mysql_real_escape_string($_user['user_id'])."'";
+	$sqlm = "SELECT  status FROM  $table_user WHERE user_id = '".Database::escape_string($_user['user_id'])."'";
 	$resm = Database::query($sqlm,__FILE__,__LINE__);
 	$objm=@Database::fetch_object($resm);
 	$ss = $objm->status ;

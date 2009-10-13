@@ -111,7 +111,7 @@ $res = Database::query($sql, __FILE__, __LINE__);
 
 $s_select_course_tutor_name="SELECT tutor_name FROM $tbl_course WHERE code='$course_code'";
 $q_tutor=Database::query($s_select_course_tutor_name, __FILE__, __LINE__);
-$s_tutor=mysql_result($q_tutor,0,"tutor_name");
+$s_tutor=Database::result($q_tutor,0,"tutor_name");
 
 $s_sql_course_titular="SELECT DISTINCT username, lastname, firstname FROM $tbl_user as user, $tbl_course_user as course_rel_user WHERE (course_rel_user.status='1') AND user.user_id=course_rel_user.user_id AND course_code='".$course_code."'";
 $q_result_titulars=Database::query($s_sql_course_titular, __FILE__, __LINE__);

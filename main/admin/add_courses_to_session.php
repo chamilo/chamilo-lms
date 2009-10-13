@@ -290,7 +290,7 @@ echo '<div class="row"><div class="form_header">'.$tool_name.' ('.$session_info[
 
 /*$sql = 'SELECT COUNT(1) FROM '.$tbl_course;
 $rs = Database::query($sql, __FILE__, __LINE__);
-$count_courses = mysql_result($rs, 0, 0);*/
+$count_courses = Database::result($rs, 0, 0);*/
 
 $ajax_search = $add_type == 'unique' ? true : false;
 $nosessionCourses = $sessionCourses = array();

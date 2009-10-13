@@ -72,7 +72,7 @@ class SurveyManager {
 		$sql = "SELECT survey_id FROM $survey_table WHERE title='$existing'" ;
 		$result = Database::query($sql,__FILE__,__LINE__);
 		$i=0;
-		$survey_id=mysql_result($result,$i,'survey_id');
+		$survey_id=Database::result($result,$i,'survey_id');
 		echo "in getsurveyid".$survey_id;
 		return(survey_id);
 	}
@@ -114,7 +114,7 @@ class SurveyManager {
 			$authorid = Database::escape_string($authorid);
 		    $sql_query = "SELECT * FROM $user_table WHERE user_id='$authorid'";
 			$res = Database::query($sql_query, __FILE__, __LINE__);
-			$firstname=@mysql_result($res,0,'firstname');
+			$firstname=@Database::result($res,0,'firstname');
 			return $firstname;
 	}
 
@@ -127,7 +127,7 @@ class SurveyManager {
 	    $survey_id = Database::escape_string($survey_id);
 		$sql = "SELECT author FROM $db_name.survey WHERE survey_id='$survey_id'";
 		$res = Database::query($sql, __FILE__, __LINE__);
-		$author=@mysql_result($res,0,'author');
+		$author=@Database::result($res,0,'author');
 		return $author;
 	}
 	/**
@@ -139,7 +139,7 @@ class SurveyManager {
 	    $group_id = Database::escape_string($group_id);
 		$sql = "SELECT survey_id FROM $db_name.survey_group WHERE group_id='$group_id'";
 		$res = Database::query($sql, __FILE__, __LINE__);
-		$surveyid=@mysql_result($res,0,'survey_id');
+		$surveyid=@Database::result($res,0,'survey_id');
 		return $surveyid;
 	}
 
@@ -174,7 +174,7 @@ class SurveyManager {
 		//echo $sql;
 		//exit;
 		$result=Database::query($sql);
-		$code=@mysql_result($result,0,'code');
+		$code=@Database::result($result,0,'code');
 		//echo $code;exit;
 		return($code);
 	}
@@ -306,7 +306,7 @@ class SurveyManager {
 		$table_question = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
 	  	$sql = "SELECT * FROM $table_question where qid='$questionid'";
 		$res=Database::query($sql);
-		$code=@mysql_result($res,0,'caption');
+		$code=@Database::result($res,0,'caption');
 		return($code);
 	}
 	*/
@@ -384,7 +384,7 @@ class SurveyManager {
 	  $questionid = Database::escape_string($questionid);
 	  $sql = "SELECT * FROM $table_question WHERE qid='$questionid'";
 			$res=Database::query($sql);
-			$code=@mysql_result($res,0,'type');
+			$code=@Database::result($res,0,'type');
 			return($code);
 	 }
 
@@ -425,7 +425,7 @@ class SurveyManager {
 		global $_course;
 		$sql='SELECT '.$field.' FROM '.$_course['dbName'].'.survey WHERE survey_id='.intval($id);
 		$res=Database::query($sql);
-		$code=@mysql_result($res,0);
+		$code=@Database::result($res,0);
 		return($code);
 
 	}
@@ -448,7 +448,7 @@ class SurveyManager {
 			$sid = Database::escape_string($sid);
 			$sql="SELECT * FROM $db_name.survey WHERE survey_id=$sid";
 			$res=Database::query($sql);
-			$code=@mysql_result($res,0,'title');
+			$code=@Database::result($res,0,'title');
 			return($code);
 	}
 	/**
@@ -460,7 +460,7 @@ class SurveyManager {
 			$surveytable=Database:: get_course_table(TABLE_SURVEY);
 			$sql="SELECT * FROM $surveytable WHERE survey_id=$sid";
 			$res=Database::query($sql);
-			$code=@mysql_result($res,0,'title');
+			$code=@Database::result($res,0,'title');
 			return($code);
 	}
 
@@ -579,7 +579,7 @@ class SurveyManager {
 		$ques_table=Database::get_course_table(TABLE_MAIN_SURVEYQUESTION);
 		$sql="SELECT gid FROM $ques_table where qid=$qid";
 		$res=Database::query($sql);
-		$id=@mysql_result($res,0,'gid');
+		$id=@Database::result($res,0,'gid');
 		$gname=surveymanager::get_groupname($id);
 		return($gname);
 	}
@@ -646,7 +646,7 @@ class SurveyManager {
 
              for($k=0;$k<$numrs;$k++)
 				{
-                  $imp[]=mysql_result($rs,$k,"imported_group");
+                  $imp[]=Database::result($rs,$k,"imported_group");
 				}
 
 
@@ -844,7 +844,7 @@ function insert_old_groups($sid,$gids,$table_group,$table_question)
 			$count_def_check = mysql_num_rows($res_def_check);
 			for($ctr=0;$ctr<$count_def_check;$ctr++)
 			{
-			 $imp[]=mysql_result($res_def_check,$ctr,"imported_group");
+			 $imp[]=Database::result($res_def_check,$ctr,"imported_group");
 			}
 			$imp = @array_unique($imp);
 			if(!@in_array($gid_arr[$p],$imp))
@@ -897,7 +897,7 @@ function insert_old_groups($sid,$gids,$table_group,$table_question)
 			$num_check = mysql_num_rows($res_check);
 			for($k=0;$k<$num_check;$k++)
 				{
-                  $imp[]=mysql_result($res_check,$k,"imported_group");
+                  $imp[]=Database::result($res_check,$k,"imported_group");
 				}
 			$imp = @array_unique($imp);
 			if(!@in_array($gid_arr[$p],$imp))
@@ -979,7 +979,7 @@ function insert_old_groups($sid,$gids,$table_group,$table_question,$db_name,$cid
 			$count_def_check = mysql_num_rows($res_def_check);
 			for($ctr=0;$ctr<$count_def_check;$ctr++)
 			{
-			 $imp[]=mysql_result($res_def_check,$ctr,"imported_group");
+			 $imp[]=Database::result($res_def_check,$ctr,"imported_group");
 			}
 			$imp = @array_unique($imp);
 			$gid_arr[$p];
@@ -1033,7 +1033,7 @@ function insert_old_groups($sid,$gids,$table_group,$table_question,$db_name,$cid
 			$num_check = mysql_num_rows($res_check);
 			for($k=0;$k<$num_check;$k++)
 				{
-                  $imp[]=mysql_result($res_check,$k,"imported_group");
+                  $imp[]=Database::result($res_check,$k,"imported_group");
 				}
 			$imp = @array_unique($imp);
 			if(!@in_array($gid_arr[$p],$imp))
@@ -1227,7 +1227,7 @@ function insert_existing_groups ($sid,$gids,$table_group,$table_question)
 			$count_def_check = mysql_num_rows($res_def_check);
 			for($ctr=0;$ctr<$count_def_check;$ctr++)
 			{
-			 $imp[]=mysql_result($res_def_check,$ctr,"imported_group");
+			 $imp[]=Database::result($res_def_check,$ctr,"imported_group");
 			}
 			$imp = @array_unique($imp);
 			if(!@in_array($gid_arr[$p],$imp))
@@ -1280,7 +1280,7 @@ function insert_existing_groups ($sid,$gids,$table_group,$table_question)
 			$num_check = mysql_num_rows($res_check);
 			for($k=0;$k<$num_check;$k++)
 				{
-                  $imp[]=mysql_result($res_check,$k,"imported_group");
+                  $imp[]=Database::result($res_check,$k,"imported_group");
 				}
 			$imp = @array_unique($imp);
 			if(!@in_array($gid_arr[$p],$imp))
@@ -1339,7 +1339,7 @@ function insert_existing_groups ($sid,$gids,$table_group,$table_question)
 			$surveytable=Database:: get_course_table(TABLE_SURVEY);
 			$sql="SELECT * FROM $surveytable WHERE survey_id=$sid";
 			$res=Database::query($sql);
-			$code=@mysql_result($res,0,'title');
+			$code=@Database::result($res,0,'title');
 			return($code);
 		}
 	/**
@@ -1350,7 +1350,7 @@ function pick_author($survey_id)
 	    $survey_table = Database :: get_course_table(TABLE_SURVEY);
 		$sql = "SELECT author FROM $survey_table WHERE survey_id='$survey_id'";
 		$res = Database::query($sql, __FILE__, __LINE__);
-		$author=@mysql_result($res,0,'author');
+		$author=@Database::result($res,0,'author');
 		return $author;
 	}
 	/**
@@ -1511,8 +1511,8 @@ function import_group($sid,$gids,$db_name,$curr_dbname)
 			$count = mysql_num_rows($res_ques);
 			for($j=0;$j<$count;$j++)
 			{
-				$check_qid[] = mysql_result($res_ques,$j,"imported_question");
-				$check_db[] = mysql_result($res_ques,$j,"db_name");
+				$check_qid[] = Database::result($res_ques,$j,"imported_question");
+				$check_db[] = Database::result($res_ques,$j,"db_name");
 			}
 			$check_qid = @array_unique($check_qid);
 			$check_db = @array_unique($check_db);

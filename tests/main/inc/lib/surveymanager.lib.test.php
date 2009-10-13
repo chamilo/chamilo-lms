@@ -194,7 +194,7 @@ class TestSurveyManager extends UnitTestCase {
 		$authorid = Database::escape_string($authorid);
 		$sql_query = "SELECT * FROM $user_table WHERE user_id='$authorid'";
 		$res = Database::query($sql_query, __FILE__, __LINE__);
-		$firstname=@mysql_result($res,0,'firstname');
+		$firstname=@Database::result($res,0,'firstname');
 		$res=SurveyManager::get_survey_author($authorid);
 		$this->assertTrue(is_bool($firstname));
 		//var_dump($firstname);

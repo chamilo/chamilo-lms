@@ -61,7 +61,7 @@ if(!api_is_platform_admin())
 {
 	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
 	$rs = Database::query($sql,__FILE__,__LINE__);
-	if(mysql_result($rs,0,0)!=$_user['user_id'])
+	if(Database::result($rs,0,0)!=$_user['user_id'])
 	{
 		api_not_allowed(true);
 	}

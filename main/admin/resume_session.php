@@ -219,7 +219,7 @@ else {
 				AND srcru.id_session = '".intval($id_session)."'";
 
 		$rs = Database::query($sql, __FILE__, __LINE__);
-		$course['nbr_users'] = mysql_result($rs,0,0);
+		$course['nbr_users'] = Database::result($rs,0,0);
 
 		// Get coachs of the courses in session
 

@@ -1149,7 +1149,10 @@ class Pager_Common
     function getPerPageSelectBox($start=5, $end=30, $step=5, $showAllData=false, $extraParams=array())
     {
         require_once 'Pager/HtmlWidgets.php';
-        $widget =& new Pager_HtmlWidgets($this);
+        // Suppressing a deprecation warning on PHP 5.3
+        //$widget =& new Pager_HtmlWidgets($this);
+        $widget = new Pager_HtmlWidgets($this);
+        //
         return $widget->getPerPageSelectBox($start, $end, $step, $showAllData, $extraParams);
     }
 
@@ -1173,7 +1176,10 @@ class Pager_Common
     function getPageSelectBox($params = array(), $extraAttributes = '')
     {
         require_once 'Pager/HtmlWidgets.php';
-        $widget =& new Pager_HtmlWidgets($this);
+        // Suppressing a deprecation warning on PHP 5.3
+        //$widget =& new Pager_HtmlWidgets($this);
+        $widget = new Pager_HtmlWidgets($this);
+        //
         return $widget->getPageSelectBox($params, $extraAttributes);
     }
 
@@ -1428,8 +1434,12 @@ class Pager_Common
             session_write_close();
         }
 
-        $this->_spacesBefore = str_repeat('&nbsp;', $this->_spacesBeforeSeparator);
-        $this->_spacesAfter  = str_repeat('&nbsp;', $this->_spacesAfterSeparator);
+        // Suppressing warnings on PHP 5.3
+        //$this->_spacesBefore = str_repeat('&nbsp;', $this->_spacesBeforeSeparator);
+        //$this->_spacesAfter  = str_repeat('&nbsp;', $this->_spacesAfterSeparator);
+        $this->_spacesBefore = str_repeat('&nbsp;', intval($this->_spacesBeforeSeparator));
+        $this->_spacesAfter  = str_repeat('&nbsp;', intval($this->_spacesAfterSeparator));
+        //
 
         if (isset($_REQUEST[$this->_urlVar]) && empty($options['currentPage'])) {
             $this->_currentPage = (int)$_REQUEST[$this->_urlVar];

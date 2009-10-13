@@ -230,7 +230,7 @@ else {
 		$coachs = array();
 		if (Database::num_rows($rs) > 0) {
 			while($info_coach = Database::fetch_array($rs)) {
-				$coachs[] = $info_coach['lastname'].' '.$info_coach['firstname'].' ('.$info_coach['username'].')';
+				$coachs[] = api_get_person_name($info_coach['firstname'], $info_coach['lastname']).' ('.$info_coach['username'].')';
 			}
 		} else {
 			$coach = get_lang('None');

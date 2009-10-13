@@ -2396,19 +2396,19 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 										WHERE $filter";
 	}
 
-	$res = mysql_query($sql);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	// insert if no entries are found (can only happen in case of $lastedit_type switch is 'default')
 	if (Database::affected_rows() == 0) {
 
 		$sql = "INSERT INTO $TABLE_ITEMPROPERTY
 						   		  			(tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type,   lastedit_user_id,$to_field,  visibility,   start_visible,   end_visible, id_session)
 						         	VALUES 	('$tool','$item_id','$time',    '$user_id',	   '$time',		 '$lastedit_type','$user_id',	   '$to_value','$visibility','$start_visible','$end_visible', '$session_id')";
-		$res = mysql_query($sql);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		if (!$res) {
-			return FALSE;
+			return false;
 		}
 	}
-	return TRUE;
+	return true;
 }
 
 /*

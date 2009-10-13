@@ -881,15 +881,19 @@ function display_wiki_entry()
 		echo '</span>';
 
 		//page action: notification
-		if (api_is_allowed_to_session_edit() ) {
-			if (check_notify_page($page)) {
+		if (api_is_allowed_to_session_edit())
+		{
+			if (check_notify_page($page)==1) {
 				$notify_page= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('NotifyByEmail').'" alt="'.get_lang('NotifyByEmail').'" />';
+				$lock_unlock_notify_page='unlocknotify';
 			} else {
 				$notify_page= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('CancelNotifyByEmail').'" alt="'.get_lang('CancelNotifyByEmail').'" />';
+				$lock_unlock_notify_page='locknotify';
+				
 			}
 		}
 		echo '<span style="float:right">';
-		echo '<a href="index.php?action=showpage&amp;actionpage=notify&amp;title='.$page.'">'.$notify_page.'</a>';
+		echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_notify_page.'&amp;title='.$page.'">'.$notify_page.'</a>';
 		echo '</span>';
 
 		//page action: export to pdf
@@ -1369,41 +1373,31 @@ function check_notify_page($reflink)
 	}
 
 	//change status
-	if ($_GET['actionpage']=='notify')
+	if ($_GET['actionpage']=='locknotify' && $status_notify==0)
 	{
+		$sql="INSERT INTO ".$tbl_wiki_mailcue." (id, user_id, type, group_id) VALUES ('".$id."','".api_get_user_id()."','P','".$_clean['group_id']."')";
+		Database::query($sql,__FILE__,__LINE__);
 
-		if ($status_notify==0)
-	    {
+	    $status_notify=1;
+	}
+	if ($_GET['actionpage']=='unlocknotify' && $status_notify==1)
+	{
+		$sql='DELETE FROM '.$tbl_wiki_mailcue.' WHERE id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="P"'; //$_clean['group_id'] not necessary
+		Database::query($sql,__FILE__,__LINE__);
 
-			$sql="INSERT INTO ".$tbl_wiki_mailcue." (id, user_id, type, group_id) VALUES ('".$id."','".api_get_user_id()."','P','".$_clean['group_id']."')";
-			Database::query($sql,__FILE__,__LINE__);
-
-	    	$status_notify=1;
-	    }
-	    else
-		{
-		    $sql='DELETE FROM '.$tbl_wiki_mailcue.' WHERE id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="P"'; //$_clean['group_id'] not necessary
-			Database::query($sql,__FILE__,__LINE__);
-
-		    $status_notify=0;
-	    }
+		$status_notify=0;
 	}
 
 	//show status
-	if ($status_notify==0)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+
+		return $status_notify;
 }
 
 
 /**
  * Notify discussion changes
  * @author Juan Carlos Raña <herodoto@telefonica.net>
+ * Return current database status of rating discuss and change it if get action
  */
 function check_notify_discuss($reflink)
 {
@@ -1427,7 +1421,6 @@ function check_notify_discuss($reflink)
 	if (empty($idm))
 	{
 		$status_notify_disc=0;
-
 	}
 	else
 	{
@@ -1435,50 +1428,24 @@ function check_notify_discuss($reflink)
 	}
 
 	//change status
-	if ($_GET['actionpage']=='notify_disc')
+	if ($_GET['actionpage']=='locknotifydisc' && $status_notify_disc==0)
 	{
+		$sql="INSERT INTO ".$tbl_wiki_mailcue." (id, user_id, type, group_id) VALUES ('".$id."','".api_get_user_id()."','D','".$_clean['group_id']."')";
+		Database::query($sql,__FILE__,__LINE__);
+		$status_notify_disc=1;
 
-		if ($status_notify_disc==0)
-	    {
-
-			if (!$_POST['Submit'])
-			{
-
-				$sql="INSERT INTO ".$tbl_wiki_mailcue." (id, user_id, type, group_id) VALUES ('".$id."','".api_get_user_id()."','D','".$_clean['group_id']."')";
-				Database::query($sql,__FILE__,__LINE__);
-
-				$status_notify_disc=1;
-			}
-			else
-			{
-				$status_notify_disc=0;
-			}
-	    }
-	    else
-		{
-			if (!$_POST['Submit'])
-			{
-				$sql='DELETE FROM '.$tbl_wiki_mailcue.' WHERE id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="D"'; //$_clean['group_id'] not necessary
-				Database::query($sql,__FILE__,__LINE__);
-
-				$status_notify_disc=0;
-			}
-			else
-			{
-				$status_notify_disc=1;
-			}
-	    }
+	 }
+	if ($_GET['actionpage']=='unlocknotifydisc' && $status_notify_disc==1)
+	{
+		$sql='DELETE FROM '.$tbl_wiki_mailcue.' WHERE id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="D"'; //$_clean['group_id'] not necessary
+		Database::query($sql,__FILE__,__LINE__);
+		$status_notify_disc=0;
 	}
-
+	
 	//show status
-	if ($status_notify_disc==0)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+
+		return $status_notify_disc;
+
 }
 
 
@@ -1510,34 +1477,23 @@ function check_notify_all()
 	}
 
 	//change status
-	if ($_GET['actionpage']=='notify_all')
+	if ($_GET['actionpage']=='locknotifyall' && $status_notify_all==0)
 	{
-
-		if ($status_notify_all==0)
-	    {
 			$sql="INSERT INTO ".$tbl_wiki_mailcue." (user_id, type, group_id) VALUES ('".api_get_user_id()."','F','".$_clean['group_id']."')";
 			Database::query($sql,__FILE__,__LINE__);
 
 			$status_notify_all=1;
-	    }
-	    else
-		{
-			$sql='DELETE FROM '.$tbl_wiki_mailcue.' WHERE user_id="'.api_get_user_id().'" AND type="F" AND group_id="'.$_clean['group_id'].'"';
-			Database::query($sql,__FILE__,__LINE__);
-
-			$status_notify_all=0;
-	    }
+	}
+	if ($_GET['actionpage']=='unlocknotifyall' && $status_notify_all==1)
+	{
+		$sql='DELETE FROM '.$tbl_wiki_mailcue.' WHERE user_id="'.api_get_user_id().'" AND type="F" AND group_id="'.$_clean['group_id'].'"';
+		Database::query($sql,__FILE__,__LINE__);
+		$status_notify_all=0;
 	}
 
 	//show status
-	if ($status_notify_all==0)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+
+		return $status_notify_all;
 }
 
 

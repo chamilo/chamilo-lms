@@ -46,7 +46,7 @@ if($action == 'delete') {
 		$idChecked = $my_temp;
 		$idChecked="'".implode("','",$idChecked)."'";
 		Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
-		$nbr_affected_rows=mysql_affected_rows();
+		$nbr_affected_rows=Database::affected_rows();
 		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
 
 		Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);

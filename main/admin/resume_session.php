@@ -77,7 +77,7 @@ if($_GET['action'] == 'delete')
 
 		Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
 
-		$nbr_affected_rows=mysql_affected_rows();
+		$nbr_affected_rows=Database::affected_rows();
 
 		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
 
@@ -87,7 +87,7 @@ if($_GET['action'] == 'delete')
 	if(!empty($_GET['class'])){
 		Database::query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".Database::escape_string($_GET['class']),__FILE__,__LINE__);
 
-		$nbr_affected_rows=mysql_affected_rows();
+		$nbr_affected_rows=Database::affected_rows();
 
 		Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
 
@@ -95,11 +95,11 @@ if($_GET['action'] == 'delete')
 
 	if(!empty($_GET['user'])){
 		Database::query("DELETE FROM $tbl_session_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']),__FILE__,__LINE__);
-		$nbr_affected_rows=mysql_affected_rows();
+		$nbr_affected_rows=Database::affected_rows();
 		Database::query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
 
 		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']),__FILE__,__LINE__);
-		$nbr_affected_rows=mysql_affected_rows();
+		$nbr_affected_rows=Database::affected_rows();
 		Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session'",__FILE__,__LINE__);
 	}
 }

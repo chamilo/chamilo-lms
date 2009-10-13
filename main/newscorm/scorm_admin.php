@@ -403,7 +403,7 @@ if($is_allowedToEdit) // TEACHER ONLY
     }
     $query = "UPDATE $tbl_document SET visibility='$newVisibilityStatus' WHERE path=\"".$visibilityPath."\""; //added by Toon
     Database::query($query,__FILE__,__LINE__);
-    if (mysql_affected_rows() == 0) // extra check added by Toon, normally not necessary anymore because all files are in the db
+    if (Database::affected_rows() == 0) // extra check added by Toon, normally not necessary anymore because all files are in the db
     {
       Database::query("INSERT INTO $tbl_document SET path=\"".$visibilityPath."\", visibility=\"".$newVisibilityStatus."\"",__FILE__,__LINE__);
     }

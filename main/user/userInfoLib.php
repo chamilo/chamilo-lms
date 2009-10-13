@@ -273,7 +273,7 @@ function update_user_course_properties($user_id, $course_code, $properties)
 
 	$result = Database::query($sql,__FILE__,__LINE__);
 
-	if (mysql_affected_rows() > 0)
+	if (Database::affected_rows() > 0)
 	{
 		return true;
 	}

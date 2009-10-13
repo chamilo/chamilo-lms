@@ -390,14 +390,14 @@ elseif ($smo == get_lang('Remove') && $sdisub)
 {
     $screm = EID_TYPE . '.' . $sdi . '.' . $sdisub;
     $mdStore->mds_delete_offspring($screm, '\_');  // SQL LIKE underscore
-    echo htmlspecialchars($screm . '_*: ' . mysql_affected_rows(), ENT_QUOTES, $charset), '<br />';
+    echo htmlspecialchars($screm . '_*: ' . Database::affected_rows(), ENT_QUOTES, $charset), '<br />';
 }
 elseif ($smo == get_lang('Remove'))  // remove all, regardless of $sdiall
 {
     $mdStore->mds_delete($screm = EID_TYPE . '.' . $sdi);
-    echo htmlspecialchars($screm . ': ' . mysql_affected_rows(), ENT_QUOTES, $charset), '<br />';
+    echo htmlspecialchars($screm . ': ' . Database::affected_rows(), ENT_QUOTES, $charset), '<br />';
     $mdStore->mds_delete_offspring($screm);
-    echo htmlspecialchars($screm . '.*: ' . mysql_affected_rows(), ENT_QUOTES, $charset), '<br /><br />',
+    echo htmlspecialchars($screm . '.*: ' . Database::affected_rows(), ENT_QUOTES, $charset), '<br /><br />',
 	'<b>' . get_lang('AllRemovedFor') . ' ' . $screm . '</b><br />';
 }
 elseif ($smo == get_lang('Index') && file_exists($phpDigIncCn) &&

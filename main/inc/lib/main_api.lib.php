@@ -2398,7 +2398,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 
 	$res = mysql_query($sql);
 	// insert if no entries are found (can only happen in case of $lastedit_type switch is 'default')
-	if (mysql_affected_rows() == 0) {
+	if (Database::affected_rows() == 0) {
 
 		$sql = "INSERT INTO $TABLE_ITEMPROPERTY
 						   		  			(tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type,   lastedit_user_id,$to_field,  visibility,   start_visible,   end_visible, id_session)

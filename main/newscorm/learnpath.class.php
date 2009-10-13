@@ -786,7 +786,7 @@ class learnpath {
 					"WHERE learnpath_id = '".$this->lp_id."'";
 			//$res = Database::query($sql);
 			$res = Database::query($res);
-			if(mysql_affected_rows($res)<1)
+			if(Database::affected_rows($res)<1)
 			{
 				$this->error = 'Could not update learnpath_view table while closing learnpath';
 				return false;
@@ -3966,7 +3966,7 @@ class learnpath {
 		$res = Database::query($sql, __FILE__, __LINE__);
 
 		// if the lp is visible on the homepage, change his name there
-		if (mysql_affected_rows()) {
+		if (Database::affected_rows()) {
 			$table = Database :: get_course_table(TABLE_TOOL_LIST);
 			$sql = 'UPDATE ' . $table . ' SET
 									name = "' . $this->name . '"

@@ -68,7 +68,7 @@ class ClassManager
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "INSERT INTO $table_class SET name='".Database::escape_string($name)."'";
 		Database::query($sql, __FILE__, __LINE__);
-		return mysql_affected_rows() == 1;
+		return Database::affected_rows() == 1;
 	}
 	/**
 	 * Check if a classname is allready in use

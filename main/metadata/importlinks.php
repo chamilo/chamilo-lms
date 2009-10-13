@@ -137,7 +137,7 @@ if (isset($lcn))  // category_title
 
     if (count($lceids) && count($uceids))
     {
-        $mdStore->mds_delete_many($uceids); $ufos = mysql_affected_rows();
+        $mdStore->mds_delete_many($uceids); $ufos = Database::affected_rows();
     }
 
     $interbreadcrumb[]= array(
@@ -176,7 +176,7 @@ if ($slo == get_lang('Create') && count($lceids))
 }
 elseif ($slo == get_lang('Remove') && count($lceids))
 {
-    $mdStore->mds_delete_many($mceids); $aff = mysql_affected_rows();
+    $mdStore->mds_delete_many($mceids); $aff = Database::affected_rows();
 
     echo $aff, ' MDEs/ ', count($lceids), ' ', get_lang('MdCallingTool'),
         '<br><br><b>', get_lang('AllRemovedFor'),

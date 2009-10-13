@@ -110,7 +110,7 @@ function remove_engine_entries($url, $path, $file = '')
         Database::query("DELETE FROM " . PHPDIG_DB_PREFIX .
             "engine WHERE spider_id=" . (int)$row['spider_id'],
             __FILE__, __LINE__);  // delete all references to keywords
-        $aff .= ' +' . mysql_affected_rows();
+        $aff .= ' +' . Database::affected_rows();
     }
 
     Database::query("DELETE FROM " . PHPDIG_DB_PREFIX .
@@ -118,7 +118,7 @@ function remove_engine_entries($url, $path, $file = '')
         __FILE__, __LINE__);  // delete page
 
     echo htmlspecialchars($url . $path . $file, ENT_QUOTES, $charset), ' (site_id ',
-        $site_id, '): ', mysql_affected_rows(), $aff,
+        $site_id, '): ', Database::affected_rows(), $aff,
         ' pages + word references removed from index.<br />';
 
     return $site_id;

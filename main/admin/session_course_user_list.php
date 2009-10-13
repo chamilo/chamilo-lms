@@ -41,7 +41,7 @@ if($action == 'delete') {
 	if(is_array($idChecked) && count($idChecked)>0 ) {
 		$idChecked=implode(',',$idChecked);
 		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='".addslashes($course_code)."' AND id_user IN($idChecked)",__FILE__,__LINE__);
-		$nbr_affected_rows=mysql_affected_rows();
+		$nbr_affected_rows=Database::affected_rows();
 		Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session' AND course_code='".addslashes($course_code)."'",__FILE__,__LINE__);
 	}
 	header('Location: '.api_get_self().'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);

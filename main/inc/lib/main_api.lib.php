@@ -2989,7 +2989,7 @@ function copy_folder_course_session($pathname, $base_path_document,$session_id,$
 			$sql = "INSERT INTO ".$table." SET path = '$path', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string(basename($new_pathname))."' ,filetype='folder', size= '0', session_id = '$session_id'";
 			Database::query($sql, __FILE__, __LINE__);
 			$document_id = Database::insert_id();
-			api_item_property_update($course_info,TOOL_DOCUMENT,$document_id,'FolderCreated',api_get_user_id(),0,0);
+			api_item_property_update($course_info,TOOL_DOCUMENT,$document_id,'FolderCreated',api_get_user_id(),0,0,null,null,$session_id);
 		}
 	}
 

@@ -97,7 +97,7 @@ class CourseRestorer
 		$course_charset = $this->course->encoding;
 
 		if (!empty($session_id)) {
-			$this->restore_documents($session_id);
+			$this->restore_documents($session_id,$destination_course_code);
 			$this->restore_quizzes($session_id);
 			$this->restore_glossary($session_id);
 			$this->restore_learnpaths($session_id);
@@ -182,7 +182,7 @@ class CourseRestorer
 	/**
 	 * Restore documents
 	 */
-	function restore_documents($session_id = 0)
+	function restore_documents($session_id = 0,$destination_course_code = '')
 	{
 		if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
 			$table = Database :: get_course_table(TABLE_DOCUMENT, $this->course->destination_db);
@@ -307,7 +307,7 @@ class CourseRestorer
 										$basedir_dest_path = dirname($dest_document_path);				// e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1"
 										$dest_filename = basename($dest_document_path);  				// e.g: "collaborative.png"
 										$base_path_document = $course_path.$document_path[0];			// e.g: "/var/www/wiener/courses/CURSO4/document"
-										$course_info = api_get_course_info($this->course->destination_path);
+										$course_info = api_get_course_info($destination_course_code);
 										$path_title = '/'.$new_base_foldername.'/'.$document_path[2];
 
 										copy_folder_course_session($basedir_dest_path, $base_path_document,$session_id,$course_info, $document);

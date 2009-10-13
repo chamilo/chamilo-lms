@@ -251,7 +251,11 @@ if (api_get_setting('server_type') == 'test') {
 	- only do addslashes on $_GET and $_POST
 	--------------------------------------------
 	*/
-	error_reporting(E_ALL & ~E_NOTICE);
+	if (IS_PHP_53) {
+		error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+	} else {
+		error_reporting(E_ALL & ~E_NOTICE);
+	}
 	//error_reporting(E_ALL);
 
 	//Addslashes to all $_GET variables

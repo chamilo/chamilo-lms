@@ -229,7 +229,7 @@ if (api_is_allowed_to_edit(null,true) && !is_null($description_id) || $action ==
 				$sql = "INSERT INTO $tbl_course_description SET id = '".$description_id."', title = '".Database::escape_string(Security::remove_XSS($title,COURSEMANAGERLOWSECURITY))."', content = '".Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY))."', session_id = ".intval($session_id)." ";
 				Database::query($sql, __FILE__, __LINE__);
 			}
-			$id = Database::get_last_insert_id();
+			$id = Database::insert_id();
 			if ($id > 0) {
 				//insert into item_property
 				api_item_property_update(api_get_course_info(), TOOL_COURSE_DESCRIPTION, $id, 'CourseDescriptionAdded', api_get_user_id());

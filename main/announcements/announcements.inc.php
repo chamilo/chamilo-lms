@@ -754,7 +754,7 @@ function store_advalvas_item($emailTitle,$newContent, $order, $to)
 	// store in the table announcement
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
 	$result = Database::query($sql,__FILE__,__LINE__) or die (mysql_error());
-	$last_id= Database::get_last_insert_id();
+	$last_id= Database::insert_id();
 
 	// store in item_property (first the groups, then the users
 	if (!is_null($to)) // !is_null($to): when no user is selected we send it to everyone
@@ -804,7 +804,7 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 	// store in the table announcement
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
 	$result = Database::query($sql,__FILE__,__LINE__) or die (mysql_error());
-	$last_id= Database::get_last_insert_id();
+	$last_id= Database::insert_id();
 
 	// store in item_property (first the groups, then the users
 	if (!isset($to_users)) // !isset($to): when no user is selected we send it to everyone

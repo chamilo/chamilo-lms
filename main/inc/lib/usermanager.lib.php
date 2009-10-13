@@ -100,7 +100,7 @@ class UserManager {
 		$result = Database::query($sql, __FILE__, __LINE__);
 		if ($result) {
 			//echo "id returned";
-			$return = Database::get_last_insert_id();
+			$return = Database::insert_id();
 			global $_configuration;
 			require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 			if ($_configuration['multiple_access_urls'] == true) {
@@ -1102,7 +1102,7 @@ class UserManager {
 		$result = Database::query($sql);
 		if ($result) {
 			//echo "id returned";
-			$return = Database::get_last_insert_id();
+			$return = Database::insert_id();
 		} else {
 			//echo "false - failed" ;
 			return false;

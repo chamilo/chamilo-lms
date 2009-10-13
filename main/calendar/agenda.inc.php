@@ -1063,7 +1063,7 @@ function store_agenda_item_as_announcement($item_id){
 		$res_ins = Database::query($sql_ins,__FILE__,__LINE__);
 		if($res > 0)
 		{
-			$ann_id = Database::get_last_insert_id();
+			$ann_id = Database::insert_id();
 			//Now also get the list of item_properties rows for this agenda_item (calendar_event)
 			//and copy them into announcement item_properties
 			$table_props = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -1792,7 +1792,7 @@ function display_agenda_items()
 
 	$session_id = api_get_session_id();
 	$session_condition = api_get_session_condition($session_id);
-	
+
 	if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 	{
 		// A.1. you are a course admin with a USER filter

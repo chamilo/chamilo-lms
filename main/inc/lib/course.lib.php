@@ -1781,7 +1781,7 @@ class CourseManager {
 									tms = FROM_UNIXTIME($time)";
 		Database::query($sql, __FILE__, __LINE__);
 
-		return Database::get_last_insert_id();
+		return Database::insert_id();
 	}
 
 	/**

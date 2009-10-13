@@ -167,7 +167,7 @@ class Rsys {
 		if (Rsys :: check_category($naam)) {
 			$sql = "INSERT INTO ".Rsys :: getTable("category")." (name) VALUES ('".Database::escape_string($naam)."')";
 			Database::query($sql, __FILE__, __LINE__);
-			return Database::get_last_insert_id();
+			return Database::insert_id();
 		}
 		return false;
 	}
@@ -354,7 +354,7 @@ class Rsys {
 		if (Rsys :: check_item($name, $category)) {
 			$sql = "INSERT INTO ".Rsys :: getTable("item")." (category_id,course_code,name,description,creator) VALUES ('".Database::escape_string($category)."','".Database::escape_string($course)."','".Database::escape_string($name)."','".Database::escape_string($description)."','".api_get_user_id()."')";
 			Database::query($sql, __FILE__, __LINE__);
-			return Database::get_last_insert_id();
+			return Database::insert_id();
 		}
 		return false;
 	}

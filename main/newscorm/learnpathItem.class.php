@@ -2235,7 +2235,7 @@ function get_terms()
 
       			if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Inserting into item_view forced: '.$sql,0);}
 		     	$res = Database::query($sql,__FILE__,__LINE__);
-		     	$this->db_item_view_id = Database::get_last_insert_id();
+		     	$this->db_item_view_id = Database::insert_id();
 		     	$inserted = true;
 		   }
 
@@ -2281,7 +2281,7 @@ function get_terms()
 		     			"'".$this->lesson_location."')";
 		     	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Inserting into item_view: '.$sql,0);}
 		     	$res = Database::query($sql,__FILE__,__LINE__);
-		     	$this->db_item_view_id = Database::get_last_insert_id();
+		     	$this->db_item_view_id = Database::insert_id();
 	     	} else {
 	     		$sql = '';
 	     		if($this->type=='hotpotatoes') {

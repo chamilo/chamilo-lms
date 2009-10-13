@@ -623,7 +623,7 @@ abstract class Question
 					)";
 			Database::query($sql,__FILE__,__LINE__);
 
-			$this->id=Database::get_last_insert_id();
+			$this->id=Database::insert_id();
 
 			api_item_property_update($_course, TOOL_QUIZ, $this->id,'QuizQuestionAdded',$_user['user_id']);
 
@@ -905,7 +905,7 @@ abstract class Question
 		$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type) VALUES('".Database::escape_string($question)."','".Database::escape_string($description)."','".Database::escape_string($weighting)."','".Database::escape_string($position)."','".Database::escape_string($type)."')";
 		Database::query($sql,__FILE__,__LINE__);
 
-		$id=Database::get_last_insert_id();
+		$id=Database::insert_id();
 		// duplicates the picture
 		$this->exportPicture($id);
 

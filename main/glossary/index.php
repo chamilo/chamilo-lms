@@ -162,7 +162,7 @@ function save_glossary($values)
 					'".Database::escape_string($session_id)."'
 					)";
 		$result = Database::query($sql, __FILE__, __LINE__);
-		$id = Database::get_last_insert_id();
+		$id = Database::insert_id();
 		if ($id>0) {
 			//insert into item_property
 			api_item_property_update(api_get_course_info(), TOOL_GLOSSARY, $id, 'GlossaryAdded', api_get_user_id());

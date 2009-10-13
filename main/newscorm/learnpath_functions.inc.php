@@ -357,7 +357,7 @@ function insert_item($type = 'item', $name, $chapter_description = '', $parent_i
 		{
 			return false;
 		}
-		$id = Database :: get_last_insert_id();
+		$id = Database :: insert_id();
 	}
 	elseif ($type === 'item')
 	{
@@ -372,7 +372,7 @@ function insert_item($type = 'item', $name, $chapter_description = '', $parent_i
 		{
 			return false;
 		}
-		$id = Database :: get_last_insert_id();
+		$id = Database :: insert_id();
 	}
 	return $id;
 }

@@ -185,11 +185,6 @@ class TestDatabase extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 	}
 
-	function testGetLastInsertId() {
-		$res=$this->dbase->get_last_insert_id();
-		$this->assertTrue(is_numeric($res));
-	}
-
 	function testGetMainDatabase() {
 		global $_configuration;
 		$res=$this->dbase->get_main_database();

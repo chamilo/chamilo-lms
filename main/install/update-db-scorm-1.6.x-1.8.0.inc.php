@@ -141,7 +141,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
                         "'".mysql_real_escape_string($row['learnpath_name'])."'," .
                         "'".mysql_real_escape_string($row['learnpath_description'])."',$dsp_ord,'Dokeos')";
         $ins_lp_res = Database::query($ins_lp_sql);
-        $in_id = Database::get_last_insert_id();
+        $in_id = Database::insert_id();
         if(empty($in_id) or $in_id == false) die('Could not insert lp: '.$ins_lp_sql);
         $lp_ids[$row['learnpath_id']] = $in_id;
         $dsp_ord++;
@@ -185,7 +185,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
                 ")";
         //echo $ins_lp_sql."<br/>\n";
         $ins_res = Database::query($ins_lp_sql,__FILE__,__LINE__);
-        $in_id = Database::get_last_insert_id();
+        $in_id = Database::insert_id();
         //echo "&nbsp;&nbsp;Inserted item $in_id<br />\n";
         if(empty($in_id) OR $in_id == false) die('Could not insert lp: '.$ins_sql);
         $parent_chaps[$row['id']] = $row['parent_chapter_id'];
@@ -341,7 +341,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
                     $row['display_order']." " .
                     ")";
             $ins_res = Database::query($ins_lp_sql,__FILE__,__LINE__);
-            $in_id = Database::get_last_insert_id();
+            $in_id = Database::insert_id();
             //echo "&nbsp;&nbsp;Inserted item $in_id (".$row['title'].")<br />\n";
             if(empty($in_id) OR $in_id == false) die('Could not insert lp_item: '.$ins_sql);
             $lp_items[$parent_lps[$row['chapter_id']]][$row['id']] = $in_id;
@@ -443,7 +443,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
                         ")";
                 //echo $sql_ins_view;
                 $res_ins_view = Database::query($sql_ins_view,__FILE__,__LINE__);
-                $in_id = Database::get_last_insert_id();
+                $in_id = Database::insert_id();
                 $user_id = $row['user_id'];
                 $learnpath_id = $row['learnpath_id'];
                 $lp_view = $in_id;
@@ -948,7 +948,7 @@ foreach($scorms as $my_course_code => $paths_list )
                         ")";
                     //echo "$ins_sql<br/>";
                     $ins_res = Database::query($ins_sql,__FILE__,__LINE__);
-                    $view_insert_id = Database::get_last_insert_id();
+                    $view_insert_id = Database::insert_id();
                 }
                 $sel_sqlc = "SELECT * FROM $my_new_lp_item " .
                         "WHERE lp_id = ".$lp_ids[$my_content_id]." AND ref = '$my_identifier'";
@@ -1005,7 +1005,7 @@ foreach($scorms as $my_course_code => $paths_list )
                 ")";
         if($loglevel>1){error_log("$sql_ins",0);}
         $sql_res = Database::query($sql_ins,__FILE__,__LINE__);
-        $in_id = Database::get_last_insert_id();
+        $in_id = Database::insert_id();
         if(empty($in_id) or $in_id == false) die('Could not insert scorm lp: '.$sql_ins);
         //echo "&nbsp;&nbsp;Inserted item $in_id<br />\n";
         $lp_ids[$my_content_id] = $in_id; //contains the old LP ID => the new LP ID
@@ -1100,7 +1100,7 @@ foreach($scorms as $my_course_code => $paths_list )
                     "'$my_item_path'" .
                     ")";
                 $ins_res = Database::query($ins_sql,__FILE__,__LINE__);
-                $item_insert_id = Database::get_last_insert_id();
+                $item_insert_id = Database::insert_id();
                 $lp_item_ids[$lp_ids[$my_content_id]][$my_sco_id]=$item_insert_id;
                 $lp_item_refs[$lp_ids[$my_content_id]][$my_identifier]=$item_insert_id;
             }
@@ -1127,7 +1127,7 @@ foreach($scorms as $my_course_code => $paths_list )
                         "1" .
                         ")";
                     $ins_res = Database::query($ins_sql,__FILE__,__LINE__);
-                    $view_insert_id = Database::get_last_insert_id();
+                    $view_insert_id = Database::insert_id();
                 }
                 $ins_sql = "INSERT INTO $my_new_lp_item_view (" .
                         "lp_item_id, lp_view_id, view_count," .

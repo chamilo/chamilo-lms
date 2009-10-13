@@ -181,7 +181,7 @@ switch($action){
 		{
 		  $sql ="INSERT INTO $tbl_learnpath_main (learnpath_name, learnpath_description) VALUES ('".domesticate($learnpath_name)."','".domesticate($learnpath_description)."')";
 		  Database::query($sql,__FILE__,__LINE__);
-		  $my_lp_id = Database::get_last_insert_id();
+		  $my_lp_id = Database::insert_id();
 		  $sql ="INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool) VALUES ('".domesticate($learnpath_name)."','learnpath/learnpath_handler.php?learnpath_id=$my_lp_id','scormbuilder.gif','1','0','pastillegris.gif',0)";
 		  Database::query($sql,__FILE__,__LINE__);
 		  //instead of displaying this info text, get the user directly to the learnpath edit page

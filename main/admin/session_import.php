@@ -113,7 +113,7 @@ if ($_POST['formSent']) {
 
 							// When it is applicable, adding the access_url rel user relationship too.
 							Database::query($sql, __FILE__, __LINE__);
-							$return = Database::get_last_insert_id();
+							$return = Database::insert_id();
 							global $_configuration;
 							require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 							if ($_configuration['multiple_access_urls']) {
@@ -313,7 +313,7 @@ if ($_POST['formSent']) {
 									date_end = '$date_end',
 									session_admin_id=".intval($_user['user_id']);
 							$rs_session = Database::query($sql_session, __FILE__, __LINE__);
-							$session_id = Database::get_last_insert_id();
+							$session_id = Database::insert_id();
 							$session_counter++;
 
 						} else {
@@ -328,7 +328,7 @@ if ($_POST['formSent']) {
 										date_end = '$date_end',
 										session_admin_id=".intval($_user['user_id']);
 								$rs_session = Database::query($sql_session, __FILE__, __LINE__);
-								$session_id = Database::get_last_insert_id();
+								$session_id = Database::insert_id();
 								$session_counter++;
 							} else {
 								// if the session already exists - update it.
@@ -573,7 +573,7 @@ if ($_POST['formSent']) {
 								date_end = '$date_end',
 								session_admin_id=".intval($_user['user_id']);
 						$rs_session = Database::query($sql_session, __FILE__, __LINE__);
-						$session_id = Database::get_last_insert_id();
+						$session_id = Database::insert_id();
 						$session_counter++;
 					} else {
 						$my_session_result = SessionManager::get_session_by_name($session_name);

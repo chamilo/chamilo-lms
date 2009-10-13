@@ -258,7 +258,7 @@ class aicc extends learnpath {
 				"'aicc_api.php','".$this->course_creator."',$dsp)";
 		if($this->debug>2){error_log('New LP - In import_aicc(), inserting path: '. $sql,0);}
 		$res = Database::query($sql);
-		$lp_id = Database::get_last_insert_id();
+		$lp_id = Database::insert_id();
 		$this->lp_id = $lp_id;
 		api_item_property_update(api_get_course_info($course_code),TOOL_LEARNPATH,$this->lp_id,'LearnpathAdded',api_get_user_id());
 		api_item_property_update(api_get_course_info($course_code),TOOL_LEARNPATH,$this->lp_id,'visible',api_get_user_id());
@@ -298,7 +298,7 @@ class aicc extends learnpath {
 					")";
 			$res_item = Database::query($sql_item);
 			if($this->debug>1){error_log('New LP - In aicc::import_aicc() - inserting item : '.$sql_item.' : '.mysql_error(),0);}
-			$item_id = Database::get_last_insert_id();
+			$item_id = Database::insert_id();
 			//now update previous item to change next_item_id
 			if($previous != 0){
 				$upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE id = $previous";

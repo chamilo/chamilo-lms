@@ -388,7 +388,7 @@ class scorm extends learnpath {
 					"VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."','scorm_api.php',$dsp)";
 			if($this->debug>1){error_log('New LP - In import_manifest(), inserting path: '. $sql,0);}
 			$res = Database::query($sql,__FILE__,__LINE__);
-			$lp_id = Database::get_last_insert_id();
+			$lp_id = Database::insert_id();
 			$this->lp_id = $lp_id;
 			//insert into item_property
 			api_item_property_update(api_get_course_info($course_code),TOOL_LEARNPATH,$this->lp_id,'LearnpathAdded',api_get_user_id());
@@ -470,7 +470,7 @@ class scorm extends learnpath {
 						")";
 				$res_item = Database::query($sql_item);
 				if($this->debug>1){error_log('New LP - In import_manifest(), inserting item : '.$sql_item.' : '.mysql_error(),0);}
-				$item_id = Database::get_last_insert_id();
+				$item_id = Database::insert_id();
 				//now update previous item to change next_item_id
 				$upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE id = $previous";
 				$upd_res = Database::query($upd);

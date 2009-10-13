@@ -450,7 +450,7 @@ function create_event_exercice($exo_id)
 	$sql = "INSERT INTO $TABLETRACK_EXERCICES ( exe_user_id, exe_cours_id )
 			VALUES (  ".$user_id.",  '".$_cid."' )";
 	$res = @Database::query($sql,__FILE__,__LINE__);
-	$id= Database::get_last_insert_id();
+	$id= Database::insert_id();
 	return $id;
 }
 

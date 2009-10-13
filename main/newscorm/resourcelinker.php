@@ -148,7 +148,7 @@ if (!empty ($_POST['add_chapter']) && !empty ($_POST['title']))
 			"VALUES "."($learnpath_id,'dokeos_chapter','$title', $chapter_id, $previous, 0, $order )";
 	//error_log('New LP - Inserting new resource: '.$sql,0);
 	$res = Database::query($sql, __FILE__, __LINE__);
-	$my_id = Database::get_last_insert_id($res);
+	$my_id = Database::insert_id($res);
 	if($previous>0){
 		$sql = "UPDATE $tbl_lp_item SET next_item_id = $my_id WHERE id=$previous";
 		$res = Database::query($sql,__FILE__,__LINE__);
@@ -251,7 +251,7 @@ if ($add)
 						"VALUES (".$learnpath_id.",'dokeos_chapter','".$learnpath_chapter_name."',".$chapter_id.",$previous,0,".$lastorder.")";
 				//error_log('New LP - Inserting new resource: '.$sql,0);
 				$res = Database::query($sql, __FILE__, __LINE__);
-				$my_id = Database::get_last_insert_id($res);
+				$my_id = Database::insert_id($res);
 				if($previous>0){
 					$sql = "UPDATE $tbl_lp_item SET next_item_id = $my_id WHERE id=$previous";
 					$res = Database::query($sql,__FILE__,__LINE__);
@@ -347,7 +347,7 @@ if ($add)
 						"VALUES ($learnpath_id, '$title','$chapter_id', '$addedresource_item','$addedresourceid[$i]',$previous,0,'".$lastorder."')";
 				//error_log('New LP - Inserting new resource: '.$sql,0);
 				$result = Database::query($sql, __FILE__, __LINE__);
-				$my_id = Database::get_last_insert_id($result);
+				$my_id = Database::insert_id($result);
 				if($previous>0){
 					$sql = "UPDATE $tbl_lp_item SET next_item_id = $my_id WHERE id = $previous";
 					//error_log($sql,0);

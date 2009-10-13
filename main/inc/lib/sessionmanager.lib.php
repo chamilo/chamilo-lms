@@ -95,7 +95,7 @@ class SessionManager {
 				$sql_insert = "INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id,visibility)
 							   VALUES('".Database::escape_string($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.", ".$id_session_category.", ".$id_visibility.")";
 				Database::query($sql_insert ,__FILE__,__LINE__);
-				$id_session=Database::get_last_insert_id();
+				$id_session=Database::insert_id();
 
 				// add event to system log
 				$time = time();
@@ -516,7 +516,7 @@ class SessionManager {
 						                tms = FROM_UNIXTIME($time)";
 			$result = Database::query($sql,__FILE__,__LINE__);
 
-			$field_id=Database::get_last_insert_id();
+			$field_id=Database::insert_id();
 		}
 		return $field_id;
 	}
@@ -679,7 +679,7 @@ class SessionManager {
 		} else {
 			$sql = "INSERT INTO $tbl_session_category(name, date_start, date_end) VALUES('".Database::escape_string($name)."','$date_start','$date_end')";
 			Database::query($sql ,__FILE__,__LINE__);
-			$id_session=Database::get_last_insert_id();
+			$id_session=Database::insert_id();
 			// add event to system log
 			$time = time();
 			$user_id = api_get_user_id();

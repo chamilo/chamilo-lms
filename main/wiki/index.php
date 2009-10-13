@@ -430,15 +430,13 @@ echo '<td>';
 	if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 	{
 		// page action: enable or disable the adding of new pages
-		if (check_addnewpagelock()==1)
+		if (check_addnewpagelock()==0)
 		{
-
 			$protect_addnewpage= '<img src="../img/wiki/lockadd.gif" title="'.get_lang('AddOptionProtected').'" alt="'.get_lang('AddOptionProtected').'" width="8" height="8" />';
-			$lock_unlock_addnew='unlockaddnew';
-
+			$lock_unlock_addnew='unlockaddnew';						
 		}
 		else
-		{
+		{					
 			$protect_addnewpage= '<img src="../img/wiki/unlockadd.gif" title="'.get_lang('AddOptionUnprotected').'" alt="'.get_lang('AddOptionUnprotected').'" width="8" height="8" />';
 			$lock_unlock_addnew='lockaddnew';
 		}
@@ -1198,7 +1196,7 @@ if ($_GET['action']=='addnew')
 		}
 	}
 
-	elseif (check_addnewpagelock()==1 && (api_is_allowed_to_edit(false,true)==false || api_is_platform_admin()==false))
+	elseif (check_addnewpagelock()==0 && (api_is_allowed_to_edit(false,true)==false || api_is_platform_admin()==false))
 	{
 		Display::display_error_message(get_lang('AddPagesLocked'));
 	}

@@ -1068,30 +1068,34 @@ function check_addnewpagelock()
 	$row=Database::fetch_array($result);
 
 	$status_addlock=$row['addlock'];
+	
 
 	//change status
 	if (api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 	{
 
-		if ($_GET['actionpage']=='lockaddnew' && $status_addlock==0)
+		if ($_GET['actionpage']=='lockaddnew' && $status_addlock==1)
 		{
-	    	$status_addlock=1;
+	    	$status_addlock=0;
 			}
-		if ($_GET['actionpage']=='unlockaddnew' && $status_addlock==1)
+		if ($_GET['actionpage']=='unlockaddnew' && $status_addlock==0)
 		{
-			$status_addlock=0;
+			$status_addlock=1;
 		}
-
+	
+		
 		Database::query('UPDATE '.$tbl_wiki.' SET addlock="'.Database::escape_string($status_addlock).'" WHERE '.$groupfilter.'',__LINE__,__FILE__);
 
 		$sql='SELECT * FROM '.$tbl_wiki.'WHERE '.$groupfilter.' ORDER BY id ASC';
 		$result=Database::query($sql,__LINE__,__FILE__);
 		$row=Database::fetch_array($result);
+
 	}
 
 	//show status
 
-		return $row['addlock'];
+	return $row['addlock'];
+	
 }
 
 
@@ -1190,8 +1194,14 @@ function check_visibility_page()
 
      }
 
+	if(empty($row['id']))
+	{
+		$row['visibility']= 1;
+	}
+
+
 	//show status
-		return $row['visibility'];
+	return $row['visibility'];
 }
 
 

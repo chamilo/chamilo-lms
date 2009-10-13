@@ -282,7 +282,7 @@ EOQ;
 
 	if($result && mysql_num_rows($result) != 0)
 	{
-		$row = mysql_fetch_row($result);
+		$row = Database::fetch_row($result);
 		return $row[0] == null ? 0 : $row[0];
 	}
 	else

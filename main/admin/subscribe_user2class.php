@@ -55,7 +55,7 @@ $tbl_user 		= Database :: get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT name FROM $tbl_class WHERE id='$class_id'";
 $result = Database::query($sql, __FILE__, __LINE__);
 
-if (!list ($class_name) = mysql_fetch_row($result))
+if (!list ($class_name) = Database::fetch_row($result))
 {
 	header('Location: class_list.php?filtreCours='.urlencode($course));
 	exit ();

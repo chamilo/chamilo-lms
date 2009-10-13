@@ -154,7 +154,7 @@ function get_class_data($from, $number_of_items, $column, $direction)
 	$sql .= " LIMIT $from,$number_of_items";
 	$res = Database::query($sql, __FILE__, __LINE__);
 	$classes = array ();
-	while ($class = mysql_fetch_row($res))
+	while ($class = Database::fetch_row($res))
 	{
 		$classes[] = $class;
 	}

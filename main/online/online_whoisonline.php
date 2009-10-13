@@ -47,7 +47,7 @@ $tbl_online_connected	= Database::get_course_table(TABLE_ONLINE_CONNECTED);
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
 $result=Database::query($query,__FILE__,__LINE__);
 
-list($pseudoUser)=mysql_fetch_row($result);
+list($pseudoUser)=Database::fetch_row($result);
 
 $isAllowed=(empty($pseudoUser) || !$_cid)?false:true;
 $isMaster=$is_courseAdmin?true:false;

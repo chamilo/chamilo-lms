@@ -61,7 +61,7 @@ function deleteitem($id)
 	{
 		return false;
 	}
-	$row = mysql_fetch_row($result);
+	$row = Database::fetch_row($result);
 	$display_order = $row[0];
 	$parent_item_id = $row[1];
 	// delete the item
@@ -114,7 +114,7 @@ function deletemodule($parent_item_id)
 	{
 		return false;
 	}
-	$row = mysql_fetch_row($result);
+	$row = Database::fetch_row($result);
 
 	$display_order = $row[0];
 	$parent_id = $row[1];

@@ -44,7 +44,7 @@ $tbl_online_connected=Database::get_course_table(TABLE_ONLINE_CONNECTED);
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
 $result=Database::query($query,__FILE__,__LINE__);
 
-list($pseudoUser)=mysql_fetch_row($result);
+list($pseudoUser)=Database::fetch_row($result);
 
 $isAllowed=(empty($pseudoUser) || !$_cid)?false:true;
 $isMaster=$is_courseAdmin?true:false;
@@ -69,7 +69,7 @@ $query="SELECT COUNT(user_id) FROM $tbl_online_connected WHERE last_connection>'
 $result=Database::query($query,__FILE__,__LINE__);
 
 $connected_old=intval($_POST['connected_old']);
-list($connected_new)=mysql_fetch_row($result);
+list($connected_new)=Database::fetch_row($result);
 
 $streaming_old=$_POST['streaming_old'];
 $streaming_new=md5(print_r(@file($onlinePath.'streaming.txt'),true));

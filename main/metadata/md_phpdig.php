@@ -157,7 +157,7 @@ function index_words($site_id, $path, $file, $first_words, $keywords)
         }
         else
         {
-            $keyid = mysql_fetch_row($result); $key_id = $keyid[0];
+            $keyid = Database::fetch_row($result); $key_id = $keyid[0];
         }
 
         Database::query("INSERT INTO " . PHPDIG_DB_PREFIX .

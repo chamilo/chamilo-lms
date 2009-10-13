@@ -31,7 +31,7 @@ if (is_array($idChecked)) {
 }
 $result=Database::query("SELECT name,title FROM $tbl_session,$tbl_course WHERE id='$id_session' AND code='".addslashes($course_code)."'",__FILE__,__LINE__);
 
-if(!list($session_name,$course_title)=mysql_fetch_row($result))
+if(!list($session_name,$course_title)=Database::fetch_row($result))
 {
 	header('Location: session_course_list.php?id_session='.$id_session);
 	exit();

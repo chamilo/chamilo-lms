@@ -30,7 +30,7 @@ $sort=in_array($_GET['sort'],array('title','nbr_users'))?$_GET['sort']:'title';
 
 $result=Database::query("SELECT name FROM $tbl_session WHERE id='$id_session'",__FILE__,__LINE__);
 
-if(!list($session_name)=mysql_fetch_row($result))
+if(!list($session_name)=Database::fetch_row($result))
 {
 	header('Location: session_list.php');
 	exit();

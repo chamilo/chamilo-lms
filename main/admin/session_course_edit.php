@@ -39,7 +39,7 @@ $interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_sessio
 
 $result=Database::query("SELECT name,title FROM $tbl_session_course,$tbl_session,$tbl_course WHERE id_session=id AND course_code=code AND id_session='$id_session' AND course_code='".addslashes($course_code)."'",__FILE__,__LINE__);
 
-if (!list($session_name,$course_title)=mysql_fetch_row($result)) {
+if (!list($session_name,$course_title)=Database::fetch_row($result)) {
 	header('Location: session_course_list.php?id_session='.$id_session);
 	exit();
 }
@@ -48,48 +48,48 @@ $arr_infos = array();
 if ($_POST['formSent']) {
 	$formSent=1;
 
-	// get all tutor by course_code in the session	
-	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$id_session' AND course_code = '$course_code' AND status = 2";	
+	// get all tutor by course_code in the session
+	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$id_session' AND course_code = '$course_code' AND status = 2";
 	$rs_coachs = Database::query($sql,__FILE__,__LINE__);
-	
+
 	$coachs_course_session = array();
 	if (Database::num_rows($rs_coachs) > 0){
 		while ($row_coachs = Database::fetch_row($rs_coachs)) {
-			$coachs_course_session[] = $row_coachs[0];		
-		}	
-	}			
-	
-	$id_coachs= $_POST['id_coach'];
-			
-	if (is_array($id_coachs) && count($id_coachs) > 0) {
-		
-		foreach ($id_coachs as $id_coach) {			
-			$id_coach = intval($id_coach);
-			$rs1 = SessionManager::set_coach_to_course_session($id_coach, $id_session, $course_code);										
+			$coachs_course_session[] = $row_coachs[0];
 		}
-		
-		// set status to 0 other tutors from multiple list		
-		$array_intersect = array_diff($coachs_course_session,$id_coachs);				
-					
-		foreach ($array_intersect as $nocoach_user_id) {							
+	}
+
+	$id_coachs= $_POST['id_coach'];
+
+	if (is_array($id_coachs) && count($id_coachs) > 0) {
+
+		foreach ($id_coachs as $id_coach) {
+			$id_coach = intval($id_coach);
+			$rs1 = SessionManager::set_coach_to_course_session($id_coach, $id_session, $course_code);
+		}
+
+		// set status to 0 other tutors from multiple list
+		$array_intersect = array_diff($coachs_course_session,$id_coachs);
+
+		foreach ($array_intersect as $nocoach_user_id) {
 			$rs2 = SessionManager::set_coach_to_course_session($nocoach_user_id, $id_session, $course_code,true);
 		}
 
 		header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
-		exit();		
-				
-	}
-	
-}else {
-	
-	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$id_session' AND course_code = '$course_code' AND status = 2 ";	
-	$rs = Database::query($sql,__FILE__,__LINE__);	
+		exit();
 
-	if (Database::num_rows($rs) > 0) {					
+	}
+
+}else {
+
+	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$id_session' AND course_code = '$course_code' AND status = 2 ";
+	$rs = Database::query($sql,__FILE__,__LINE__);
+
+	if (Database::num_rows($rs) > 0) {
 		while ($infos = Database::fetch_array($rs)) {
 			$arr_infos[] = $infos['id_user'];
-		}	
-	} 	
+		}
+	}
 }
 
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';

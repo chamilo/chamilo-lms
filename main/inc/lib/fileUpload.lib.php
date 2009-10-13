@@ -573,7 +573,7 @@ function documents_total_space($to_group_id='0')
 
 	if($result && mysql_num_rows($result)!=0)
 	{
-		$row = mysql_fetch_row($result);
+		$row = Database::fetch_row($result);
 
 		return $row[0];
 	}

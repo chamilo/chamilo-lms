@@ -303,7 +303,7 @@ function who_is_online_in_this_course($uid, $valid, $coursecode=null)
 		$validtime = mktime(date("H"),date("i")-$valid,date("s"),date("m"),date("d"),date("Y"));
 		$rarray = array();
 
-		while(list($login_user_id,$login_date)= mysql_fetch_row($result))
+		while(list($login_user_id,$login_date)= Database::fetch_row($result))
 		{
 			$barray = array();
 			array_push($barray,$login_user_id);

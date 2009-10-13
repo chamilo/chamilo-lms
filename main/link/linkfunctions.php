@@ -109,9 +109,9 @@ function addlinkcategory($type)
 			list ($orderMax) = Database::fetch_row($result);
 
 			$order = $orderMax +1;
-			
+
 			$session_id = api_get_session_id();
-			
+
 			$sql = "INSERT INTO ".$tbl_link." (url, title, description, category_id, display_order, on_homepage, target, session_id) VALUES ('$urllink','$title','$description','$selectcategory','$order', '$onhomepage','$target','$session_id')";
 			$catlinkstatus = get_lang('LinkAdded');
 			Database::query($sql, __FILE__, __LINE__);
@@ -210,9 +210,9 @@ function addlinkcategory($type)
 			list ($orderMax) = Database::fetch_row($result);
 
 			$order = $orderMax +1;
-			
+
 			$session_id = api_get_session_id();
-			
+
 			$sql = "INSERT INTO ".$tbl_categories." (category_title, description, display_order, session_id) VALUES ('".Security::remove_XSS($category_title)."','".Security::remove_XSS($description)."', '$order', '$session_id')";
 			Database::query($sql, __FILE__, __LINE__);
 
@@ -559,11 +559,11 @@ function showlinksofcategory($catid)
 	$tbl_link = Database :: get_course_table(TABLE_LINK);
 
 	$TABLE_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-	
+
 	//condition for the session
 	$session_id = api_get_session_id();
 	$condition_session = api_get_session_condition($session_id);
-	
+
 	$sqlLinks = "SELECT * FROM ".$tbl_link." link, ".$TABLE_ITEM_PROPERTY." itemproperties WHERE itemproperties.tool='".TOOL_LINK."' AND link.id=itemproperties.ref AND  link.category_id='".$catid."' AND (itemproperties.visibility='0' OR itemproperties.visibility='1') $condition_session ORDER BY link.display_order DESC";
 	$result = Database::query($sqlLinks);
 	$numberoflinks = Database::num_rows($result);
@@ -573,7 +573,7 @@ function showlinksofcategory($catid)
 	while ($myrow = Database::fetch_array($result)) {
 		//validacion when belongs to a session
 		$session_img = api_get_session_image($myrow['session_id'], $_user['status']);
-		
+
 		if($i%2==0) $css_class = 'row_odd';
 		else $css_class = 'row_even';
 
@@ -795,7 +795,7 @@ function put_link($url, $cat, $title, $description, $on_homepage, $hidden)
 	else // add new link
 		{
 		$result = Database::query("SELECT MAX(display_order) FROM  $tbl_link WHERE category_id='".addslashes($cat)."'", __FILE__, __LINE__);
-		list ($max_order) = mysql_fetch_row($result);
+		list ($max_order) = Database::fetch_row($result);
 
 		Database::query("INSERT INTO $tbl_link (url, title, description, category_id, display_order, on_homepage) VALUES ('".addslashes($url)."','".addslashes($title)."','".addslashes($description)."','".addslashes($cat)."','". ($max_order +1)."','".$on_homepage."')", __FILE__, __LINE__);
 

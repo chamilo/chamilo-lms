@@ -290,7 +290,10 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     function toHtml()
     {
         include_once('HTML/QuickForm/Renderer/Default.php');
-        $renderer =& new HTML_QuickForm_Renderer_Default();
+        // Suppressing a deprecation warning on PHP 5.3
+        //$renderer =& new HTML_QuickForm_Renderer_Default();
+        $renderer = new HTML_QuickForm_Renderer_Default();
+        //
         $renderer->setElementTemplate('{element}');
         $this->accept($renderer);
         return $renderer->toHtml();

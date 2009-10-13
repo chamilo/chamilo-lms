@@ -2384,9 +2384,10 @@ class Blog {
 			ON user.user_id = blogs_rel_user.user_id
 			WHERE blogs_rel_user.blog_id = '".(int)$blog_id."'";
 
-		//$sql_result = Database::query($sql_query, __FILE__, __LINE__);
-
-		$sql_result = mysql_query($sql_query) or die(mysql_error());
+		//$sql_result = mysql_query($sql_query) or die(mysql_error());
+		if (!($sql_result = Database::query($sql_query, __FILE__, __LINE__))) {
+			die();
+		}
 
 		$user_data = array ();
 
@@ -2408,7 +2409,10 @@ class Blog {
 			INNER JOIN " . Database::get_course_table(TABLE_BLOGS_TASKS) . " bt ON btu.task_id = bt.task_id
 			WHERE btu.blog_id = $blog_id AND btu.user_id = " . $myrow['user_id'] . "";
 
-			$sql_res = mysql_query($sql) or die(mysql_error());
+			//$sql_res = mysql_query($sql) or die(mysql_error());
+			if (!($sql_res = Database::query($sql, __FILE__, __LINE__))) {
+				die();
+			}
 
 			$task = '';
 

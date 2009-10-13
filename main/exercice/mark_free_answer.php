@@ -182,7 +182,7 @@ if($action == 'mark'){
 				$res = Database::query($sql,__FILE__,__LINE__);
 				$my_msg = get_lang('MarkInserted');
 			}
-			//$mysql_query($sql);
+			//$Database::query($sql, __FILE__, __LINE__);
 			//return 0;
 		}
 	}else{

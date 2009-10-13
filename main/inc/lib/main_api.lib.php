@@ -2396,19 +2396,19 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 										WHERE $filter";
 	}
 
-	$res = mysql_query($sql);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	// insert if no entries are found (can only happen in case of $lastedit_type switch is 'default')
 	if (Database::affected_rows() == 0) {
 
 		$sql = "INSERT INTO $TABLE_ITEMPROPERTY
 						   		  			(tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type,   lastedit_user_id,$to_field,  visibility,   start_visible,   end_visible, id_session)
 						         	VALUES 	('$tool','$item_id','$time',    '$user_id',	   '$time',		 '$lastedit_type','$user_id',	   '$to_value','$visibility','$start_visible','$end_visible', '$session_id')";
-		$res = mysql_query($sql);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		if (!$res) {
-			return FALSE;
+			return false;
 		}
 	}
-	return TRUE;
+	return true;
 }
 
 /*
@@ -2989,7 +2989,7 @@ function copy_folder_course_session($pathname, $base_path_document,$session_id,$
 			$sql = "INSERT INTO ".$table." SET path = '$path', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string(basename($new_pathname))."' ,filetype='folder', size= '0', session_id = '$session_id'";
 			Database::query($sql, __FILE__, __LINE__);
 			$document_id = Database::insert_id();
-			api_item_property_update($course_info,TOOL_DOCUMENT,$document_id,'FolderCreated',api_get_user_id(),0,0);
+			api_item_property_update($course_info,TOOL_DOCUMENT,$document_id,'FolderCreated',api_get_user_id(),0,0,null,null,$session_id);
 		}
 	}
 

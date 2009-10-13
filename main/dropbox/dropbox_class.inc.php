@@ -146,7 +146,7 @@ class Dropbox_Work {
 						)";
 
         	$result = Database::query($sql,__FILE__,__LINE__);
-			$this->id = mysql_insert_id(); //get automatically inserted id
+			$this->id = Database::insert_id(); //get automatically inserted id
 		}
 
 		// insert entries into person table

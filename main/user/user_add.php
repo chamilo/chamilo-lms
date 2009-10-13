@@ -156,7 +156,7 @@ if($register)
 		                           official_code = '$official_code_form',
 		                           creator_id = '".$_user['user_id']."'");
 
-		$userId = mysql_insert_id();
+		$userId = Database::insert_id();
 
 		if ($userId) $platformRegSucceed = true;
 	}

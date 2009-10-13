@@ -166,7 +166,7 @@ if (!empty ($_POST['external_link_submit']))
 		$sql = "INSERT INTO $link_table (url, title, category_id) VALUES ('$external_link','$external_link','$add_2_links')";
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$addedresource[] = "Link";
-		$addedresourceid[] = mysql_insert_id();
+		$addedresourceid[] = Database::insert_id();
 		$_SESSION['addedresource'] = $addedresource;
 		$_SESSION['addedresourceid'] = $addedresourceid;
 	}

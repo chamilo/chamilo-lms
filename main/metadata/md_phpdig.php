@@ -84,7 +84,7 @@ function find_site($url)
     {
         $result = Database::query("INSERT INTO " . PHPDIG_DB_PREFIX .
             "sites SET " . $site_url, __FILE__, __LINE__);  // new site
-        $site_id = mysql_insert_id();
+        $site_id = Database::insert_id();
 
         $result = Database::query("INSERT INTO " . PHPDIG_DB_PREFIX .
             "site_page (site_id,num_page) VALUES ('$site_id', '0')");
@@ -136,7 +136,7 @@ function index_words($site_id, $path, $file, $first_words, $keywords)
     Database::query("INSERT INTO " . PHPDIG_DB_PREFIX . $spider_set_path_etc,
         __FILE__, __LINE__);
 
-    $spider_id = mysql_insert_id(); $new = 0;
+    $spider_id = Database::insert_id(); $new = 0;
 
     foreach ($keywords as $key => $w)
     if (strlen($key) > SMALL_WORDS_SIZE and strlen($key) <= MAX_WORDS_SIZE and
@@ -153,7 +153,7 @@ function index_words($site_id, $path, $file, $first_words, $keywords)
                 "keywords (keyword,twoletters) VALUES ('" . addslashes($key) .
                 "','" .addslashes(substr(str_replace('\\','',$key),0,2)) ."')",
             __FILE__, __LINE__);
-            $key_id = mysql_insert_id(); $new++;
+            $key_id = Database::insert_id(); $new++;
         }
         else
         {

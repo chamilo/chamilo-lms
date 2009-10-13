@@ -514,7 +514,7 @@ class Blog {
 					VALUES ('".(int)$blog_id."', '" . Database::escape_string($title)."', '" . Database::escape_string($description)."', '" . Database::escape_string($color)."', '0');";
 		Database::query($sql, __FILE__, __LINE__);
 
-		$task_id = mysql_insert_id();
+		$task_id = Database::insert_id();
 		$tool = 'BLOG_' . $blog_id;
 
 		if($articleDelete == 'on')

@@ -1893,18 +1893,22 @@ if ($_GET['action']=='recentchanges')
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 
 	if ( api_is_allowed_to_session_edit(false,true) ) {
-		if (check_notify_all())
+		if (check_notify_all()==1)
 		{
-			$notify_all= '<a href="index.php?action=recentchanges&amp;actionpage=notify_all&amp;title='.$page.'"><img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('FullNotifyByEmail').'" alt="'.get_lang('FullNotifyByEmail').'" style="vertical-align:middle;" />'.get_lang('NotNotifyChanges').'</a>';
+			$notify_all= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('FullNotifyByEmail').'" alt="'.get_lang('FullNotifyByEmail').'" style="vertical-align:middle;" />'.get_lang('NotNotifyChanges');
+			$lock_unlock_notify_all='unlocknotifyall';			
 		}
 		else
 		{
-			$notify_all= '<a href="index.php?action=recentchanges&amp;actionpage=notify_all&amp;title='.$page.'"><img src="../img/wiki/send_mail.gif" title="'.get_lang('FullCancelNotifyByEmail').'" alt="'.get_lang('FullCancelNotifyByEmail').'"  style="vertical-align:middle;"/>'.get_lang('NotifyChanges').'</a>';
+			$notify_all= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('FullCancelNotifyByEmail').'" alt="'.get_lang('FullCancelNotifyByEmail').'"  style="vertical-align:middle;"/>'.get_lang('NotifyChanges');
+			$lock_unlock_notify_all='locknotifyall';
 		}
 
 	}
 
-	echo '<div class="actions"><span style="float: right;">'.$notify_all.'</span>'.get_lang('RecentChanges').'</div>';
+	echo '<div class="actions"><span style="float: right;">';	
+	echo '<a href="index.php?action=recentchanges&amp;actionpage='.$lock_unlock_notify_all.'&amp;title='.$page.'">'.$notify_all.'</a>';	
+	echo '</span>'.get_lang('RecentChanges').'</div>';
 
 
 
@@ -2196,16 +2200,18 @@ if ($_GET['action']=='discuss')
 			echo '</span>';
 
 			//discussion action: email notification
-			if (check_notify_discuss($page))
+			if (check_notify_discuss($page)==1)
 			{
 				$notify_disc= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('NotifyDiscussByEmail').'" alt="'.get_lang('NotifyDiscussByEmail').'" />';
+				$lock_unlock_notify_disc='unlocknotifydisc';
 			}
 			else
 			{
 				$notify_disc= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('CancelNotifyDiscussByEmail').'" alt="'.get_lang('CancelNotifyDiscussByEmail').'" />';
+				$lock_unlock_notify_disc='locknotifydisc';
 			}
 			echo '<span style="float:right">';
-			echo '<a href="index.php?action=discuss&amp;actionpage=notify_disc&amp;title='.$page.'">'.$notify_disc.'</a>';
+			echo '<a href="index.php?action=discuss&amp;actionpage='.$lock_unlock_notify_disc.'&amp;title='.$page.'">'.$notify_disc.'</a>';
 			echo '</span>';
 
 			echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.$row['title'];

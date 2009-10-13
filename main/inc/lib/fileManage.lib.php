@@ -61,7 +61,7 @@ function update_db_info($action, $oldPath, $newPath="")
 
         $result = Database::query("SELECT id FROM $dbTable " . $to_delete);
 
-        if (mysql_num_rows($result))
+        if (Database::num_rows($result))
         {
             require_once(api_get_path(INCLUDE_PATH) . "../metadata/md_funcs.php");
             $mdStore = new mdstore(TRUE);  // create if needed

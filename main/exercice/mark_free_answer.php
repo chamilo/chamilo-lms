@@ -138,7 +138,7 @@ if($action == 'mark'){
 				ORDER BY exe_date DESC";
 			#echo $sql;
 			$res = Database::query($sql,__FILE__,__LINE__);
-			if(mysql_num_rows($res)>0){
+			if(Database::num_rows($res)>0){
 				$row = Database::fetch_array($res);
 				//@todo Check that just summing past score and the new free answer mark doesn't come up
 				// with a score higher than the possible score for that exercise

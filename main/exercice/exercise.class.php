@@ -399,7 +399,7 @@ class Exercise
             ." WHERE path='".str_replace($documentPath,'',$audioPath).'/'.$this->sound."'";
 				$result=Database::query($query,__FILE__,__LINE__);
 
-				if(!mysql_num_rows($result))
+				if(!Database::num_rows($result))
 				{
         /*$query="INSERT INTO $TBL_DOCUMENT(path,filetype) VALUES "
             ." ('".str_replace($documentPath,'',$audioPath).'/'.$this->sound."','file')";

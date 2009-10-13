@@ -98,7 +98,7 @@ if($register)
 		                     WHERE username='$username_form' OR (lastname='$lastname_form' AND firstname='$firstname_form' AND email='$email_form')
 		                     ORDER BY userExists DESC, loginExists DESC");
 
-		if(mysql_num_rows($result))
+		if(Database::num_rows($result))
 		{
 			while($user=Database::fetch_array($result))
 			{

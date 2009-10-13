@@ -54,7 +54,7 @@ Display::display_header($nameTools);
 echo '<h3>', htmlspecialchars(EID_TYPE, ENT_QUOTES, $charset), '</h3>', "\n";
 
 $result = $mdStore->mds_get_many('eid,mdxmltext', "eid LIKE '" . EID_TYPE . ".%'");
-echo get_lang('TotalMDEs'), $total = mysql_num_rows($result), "<br><br>\n";
+echo get_lang('TotalMDEs'), $total = Database::num_rows($result), "<br><br>\n";
 
 if ($total > 100) set_time_limit((int) ($total / 10));
 

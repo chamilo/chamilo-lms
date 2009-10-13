@@ -88,7 +88,7 @@ function get_cat($catname)
     $linkcat_table = Database::get_course_table(TABLE_LINK_CATEGORY);
     $result = Database::query("SELECT id FROM $linkcat_table WHERE " . $cateq, __FILE__, __LINE__);
 
-    if (mysql_num_rows($result) >= 1 && ($row = Database::fetch_array($result)))
+    if (Database::num_rows($result) >= 1 && ($row = Database::fetch_array($result)))
         return $row['id'];  // several categories with same name: take first
 
     return FALSE;
@@ -277,7 +277,7 @@ elseif ($slo == get_lang('Index'))
 echo '<h3>', get_lang('Statistics'), '</h3>', "\n";
 
 $result = $mdStore->mds_get_many('eid,mdxmltext', OF_EID_TYPE);
-echo get_lang('TotalMDEs'), mysql_num_rows($result), "\n";
+echo get_lang('TotalMDEs'), Database::num_rows($result), "\n";
 
 while ($row = Database::fetch_array($result))
 {

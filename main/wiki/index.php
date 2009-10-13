@@ -586,7 +586,7 @@ if ($_GET['action']=='mactiveusers')
 	$allpages=Database::query($sql,__FILE__,__LINE__);
 
 	//show table
-	if (mysql_num_rows($allpages) > 0)
+	if (Database::num_rows($allpages) > 0)
 	{
 		$row = array ();
 		while ($obj = Database::fetch_object($allpages))
@@ -629,7 +629,7 @@ if ($_GET['action']=='usercontrib')
 	$allpages=Database::query($sql,__FILE__,__LINE__);
 
 	//show table
-	if (mysql_num_rows($allpages) > 0)
+	if (Database::num_rows($allpages) > 0)
 	{
 		$row = array ();
 		while ($obj = Database::fetch_object($allpages))
@@ -716,7 +716,7 @@ if ($_GET['action']=='mostchanged')
 	$allpages=Database::query($sql,__FILE__,__LINE__);
 
 	//show table
-	if (mysql_num_rows($allpages) > 0)
+	if (Database::num_rows($allpages) > 0)
 	{
 		$row = array ();
 		while ($obj = Database::fetch_object($allpages))
@@ -770,7 +770,7 @@ if ($_GET['action']=='mvisited')
 	$allpages=Database::query($sql,__FILE__,__LINE__);
 
 	//show table
-	if (mysql_num_rows($allpages) > 0)
+	if (Database::num_rows($allpages) > 0)
 	{
 		$row = array ();
 		while ($obj = Database::fetch_object($allpages))
@@ -1123,7 +1123,7 @@ if ($_GET['action']=='links')
 		$allpages=Database::query($sql,__LINE__,__FILE__);
 
 		//show table
-		if (mysql_num_rows($allpages) > 0)
+		if (Database::num_rows($allpages) > 0)
 		{
 			$row = array ();
 			while ($obj = Database::fetch_object($allpages))
@@ -1925,7 +1925,7 @@ if ($_GET['action']=='recentchanges')
 	$allpages=Database::query($sql,__LINE__,__FILE__);
 
 	//show table
-	if (mysql_num_rows($allpages) > 0)
+	if (Database::num_rows($allpages) > 0)
 	{
 		$row = array ();
 		while ($obj = Database::fetch_object($allpages))
@@ -2015,7 +2015,7 @@ if ($_GET['action']=='allpages')
 	$allpages=Database::query($sql,__LINE__,__FILE__);
 
 	//show table
-	if (mysql_num_rows($allpages) > 0)
+	if (Database::num_rows($allpages) > 0)
 	{
 		$row = array ();
 		while ($obj = Database::fetch_object($allpages))

@@ -3614,7 +3614,7 @@ function set_notification($content,$id, $add_only = false) {
 	// first we check if the notification is already set for this
 	$sql = "SELECT * FROM $table_notification WHERE $database_field = '".Database::escape_string($id)."' AND user_id = '".Database::escape_string($_user['user_id'])."'";
 	$result=Database::query($sql, __FILE__, __LINE__);
-	$total = mysql_num_rows($result);
+	$total = Database::num_rows($result);
 
 	// if the user did not indicate that (s)he wanted to be notified already then we store the notification request (to prevent double notification requests)
 	if ($total <= 0) {

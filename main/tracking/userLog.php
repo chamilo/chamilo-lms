@@ -148,7 +148,7 @@ if(api_get_setting('use_session_mode') == "true") {
 			WHERE id_session='".$_SESSION['id_session']."' AND course_code='$_cid'";
 	//echo $sql;
 	$result=Database::query($sql,__FILE__,__LINE__);
-	if(!mysql_num_rows($result)){
+	if(!Database::num_rows($result)){
 		$disabled = true;
 	}
 }

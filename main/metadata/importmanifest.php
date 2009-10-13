@@ -63,7 +63,7 @@ if (isset($workWith))  // explicit in URL, or selected at bottom of screen
     $sql = "SELECT id FROM $scormdocument WHERE path='". Database::escape_string(api_substr($workWith,1)) . "' OR path='". Database::escape_string(substr($workWith,1)) . "/.'";
     $result = Database::query($sql, __FILE__, __LINE__);
 
-    if (mysql_num_rows($result) == 1)
+    if (Database::num_rows($result) == 1)
     {
         if (($row = Database::fetch_array($result)))
         {
@@ -458,7 +458,7 @@ elseif ($smo == get_lang('Index'))
 echo '<h3>', get_lang('Statistics'), '</h3>', "\n";
 
 $result = $mdStore->mds_get_many('eid', "eid LIKE '" . EID_TYPE . ".%'");
-echo get_lang('TotalMDEs'), mysql_num_rows($result), "\n";
+echo get_lang('TotalMDEs'), Database::num_rows($result), "\n";
 
 while ($row = Database::fetch_array($result))
 {
@@ -541,7 +541,7 @@ if ($mfContents)
             {
                 $result = $mdStore->mds_get_many('eid', "eid LIKE '" .
                     EID_TYPE . "." . $sdi . "." . $ns . "\_%'");
-                $nns = mysql_num_rows($result);
+                $nns = Database::num_rows($result);
                 echo $ns, $nns ? '_ ' . $nns : '', '; ';
             }
             echo '<br>';

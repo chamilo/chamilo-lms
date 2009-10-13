@@ -76,7 +76,7 @@ function find_site($url)
     $result = Database::query("SELECT site_id FROM " . PHPDIG_DB_PREFIX .
         "sites WHERE " . $site_url, __FILE__, __LINE__);  // find site
 
-    if (mysql_num_rows($result) == 1)
+    if (Database::num_rows($result) == 1)
     {
         $row = Database::fetch_array($result); return (int) $row['site_id'];
     }
@@ -147,7 +147,7 @@ function index_words($site_id, $path, $file, $first_words, $keywords)
             "keywords WHERE keyword = '" . addslashes($key) . "'",
             __FILE__, __LINE__);
 
-        if (mysql_num_rows($result) == 0)
+        if (Database::num_rows($result) == 0)
         {
             Database::query("INSERT INTO " . PHPDIG_DB_PREFIX .
                 "keywords (keyword,twoletters) VALUES ('" . addslashes($key) .

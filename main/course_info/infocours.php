@@ -117,7 +117,7 @@ $s_sql_course_titular="SELECT DISTINCT username, lastname, firstname FROM $tbl_u
 $q_result_titulars=Database::query($s_sql_course_titular, __FILE__, __LINE__);
 
 $target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
-if(mysql_num_rows($q_result_titulars)==0){
+if(Database::num_rows($q_result_titulars)==0){
 	$sql="SELECT username, lastname, firstname FROM $tbl_user as user, $tbl_admin as admin WHERE admin.user_id=user.user_id ORDER BY ".$target_name." ASC";
 	$q_result_titulars=Database::query($sql, __FILE__, __LINE__);
 }

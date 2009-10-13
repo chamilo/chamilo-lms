@@ -79,7 +79,7 @@ class ClassManager
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "SELECT * FROM $table_class WHERE name='".Database::escape_string($name)."'";
 		$res = Database::query($sql, __FILE__, __LINE__);
-		return mysql_num_rows($res) != 0;
+		return Database::num_rows($res) != 0;
 	}
 	/**
 	 * Delete a class
@@ -153,7 +153,7 @@ class ClassManager
 				$course_codes[] = $course['course_code'];
 				$sql = "SELECT DISTINCT user_id FROM $table_class_user t1, $table_course_class t2 WHERE t1.class_id=t2.class_id AND course_code = '".$course['course_code']."' AND user_id = $user_id AND t2.class_id<>'$class_id'";
 				$res = Database::query($sql, __FILE__, __LINE__);
-				if (mysql_num_rows($res) == 0 && CourseManager :: get_user_in_course_status($user_id, $course['course_code']) == STUDENT)
+				if (Database::num_rows($res) == 0 && CourseManager :: get_user_in_course_status($user_id, $course['course_code']) == STUDENT)
 				{
 					CourseManager :: unsubscribe_user($user_id, $course['course_code']);
 				}
@@ -216,7 +216,7 @@ class ClassManager
 		{
 			$sql = "SELECT * FROM $tbl_class_user WHERE class_id = '".Database::escape_string($class_id)."' AND user_id = '".Database::escape_string($single_class_user->user_id)."'";
 			$res = Database::query($sql, __FILE__, __LINE__);
-			if (mysql_num_rows($res) > 0)
+			if (Database::num_rows($res) > 0)
 			{
 				if (CourseManager :: get_user_in_course_status($single_class_user->user_id, $course_code) == STUDENT)
 				{

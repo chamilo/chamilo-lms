@@ -57,7 +57,7 @@ function deleteitem($id)
 	//get the display order for this item before it is deleted
 	$sql = "SELECT display_order, parent_item_id FROM $tbl_lp_item WHERE id=$id";
 	$result = Database::query($sql, __FILE__, __LINE__);
-	if (mysql_num_rows($result) == 0)
+	if (Database::num_rows($result) == 0)
 	{
 		return false;
 	}
@@ -110,7 +110,7 @@ function deletemodule($parent_item_id)
 	//get this chapter's display order
 	$sql = "SELECT display_order, parent_item_id FROM $tbl_learnpath_chapter WHERE id=$parent_item_id and lp_id=$learnpath_id";
 	$result = Database::query($sql, __FILE__, __LINE__);
-	if (mysql_num_rows($result) == 0)
+	if (Database::num_rows($result) == 0)
 	{
 		return false;
 	}
@@ -440,7 +440,7 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 		$tree = get_learnpath_tree($learnpath_id);
 
 		$num_modules = count($tree);
-		//$num_modules=mysql_num_rows($result);
+		//$num_modules=Database::num_rows($result);
 		if ($num_modules == 0)
 		{
 			// do not diplay useless information
@@ -656,7 +656,7 @@ function display_all_learnpath()
 	$sql = "SELECT * FROM  $tbl_learnpath_main  ORDER BY learnpath_name";
 	$result = Database::query($sql, __FILE__, __LINE__);
 	$i = 1;
-	$num_modules = mysql_num_rows($result);
+	$num_modules = Database::num_rows($result);
 
 	while ($row = Database::fetch_array($result))
 	{
@@ -1336,7 +1336,7 @@ function is_empty($id)
 
 	$sql = "SELECT * FROM $tbl_learnpath_chapter WHERE lp_id=$id ORDER BY display_order ASC";
 	$result = Database::query($sql, __FILE__, __LINE__);
-	$num_modules = mysql_num_rows($result);
+	$num_modules = Database::num_rows($result);
 	$empty = true;
 
 	if ($num_modules != 0)
@@ -1348,7 +1348,7 @@ function is_empty($id)
 			$parent_item_id = $row['id'];
 			$sql2 = "SELECT * FROM $tbl_learnpath_item WHERE (parent_item_id=$parent_item_id) ORDER BY display_order ASC";
 			$result2 = Database::query($sql2, __FILE__, __LINE__);
-			$num_items = mysql_num_rows($result2);
+			$num_items = Database::num_rows($result2);
 			if ($num_items > 0)
 			{
 				$empty = false;
@@ -1816,7 +1816,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 			$result = Database::query("SELECT id, title, content FROM ".$tbl_course_description." ORDER BY id", __FILE__, __LINE__);
 
 			//2 Check this element
-			if (mysql_num_rows($result))
+			if (Database::num_rows($result))
 			{
 				//2.a This course has one (or more) description in the database
 				$expcontent .= "<hr noshade=\"noshade\" size=\"1\" />";

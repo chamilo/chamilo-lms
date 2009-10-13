@@ -484,7 +484,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 					AND u.user_id NOT IN ('" . implode("', '" , $students) . "')";
 	        $result = Database::query($sql,__FILE__,__LINE__);
 
-	        if ( mysql_num_rows($result) > 0)
+	        if ( Database::num_rows($result) > 0)
 	        {
 		        $remainingUsers = '';
 		        while ( ($res = Database::fetch_array($result)))

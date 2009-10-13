@@ -104,7 +104,7 @@ $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $sql = "SELECT *,cu.status as course_status FROM $table_course_user cu, $table_user u WHERE cu.user_id = u.user_id AND cu.course_code = '".$code."'";
 $res = Database::query($sql,__FILE__,__LINE__);
 $is_western_name_order = api_is_western_name_order();
-if (mysql_num_rows($res) > 0)
+if (Database::num_rows($res) > 0)
 {
 	$users = array ();
 	while ($obj = Database::fetch_object($res))
@@ -157,7 +157,7 @@ $table_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 $table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 $sql = "SELECT * FROM $table_course_class cc, $table_class c WHERE cc.class_id = c.id AND cc.course_code = '".$code."'";
 $res = Database::query($sql,__FILE__,__LINE__);
-if (mysql_num_rows($res) > 0)
+if (Database::num_rows($res) > 0)
 {
 	$data = array ();
 	while ($class = Database::fetch_object($res))

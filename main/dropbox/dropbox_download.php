@@ -99,7 +99,7 @@ $allowed_to_download=false;
 // Check if the user has sent or received the file.
 $sql="SELECT * FROM ".$dropbox_cnf["tbl_person"]." WHERE file_id='".Database::escape_string($_GET['id'])."' AND user_id='".Database::escape_string($_user['user_id'])."'";
 $result=Database::query($sql);
-if (mysql_num_rows($result)>0)
+if (Database::num_rows($result)>0)
 {
 	$allowed_to_download=true;
 }

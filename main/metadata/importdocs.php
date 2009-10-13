@@ -61,7 +61,7 @@ if (isset($dmo))  // for future use
 }
 
 $result = $mdStore->mds_get_many('eid,indexabletext', OF_EID_TYPE);
-echo get_lang('Tool'), ': ', mysql_num_rows($result), "<br><br>\n";
+echo get_lang('Tool'), ': ', Database::num_rows($result), "<br><br>\n";
 
 $idt = array(); $cidpar = '?cidReq=' . $_course['sysCode'];
 

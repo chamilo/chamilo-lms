@@ -134,7 +134,7 @@ switch($action){
 			$sql="SELECT * FROM $tbl_tool where (name='$name' and image='scormbuilder.gif')";
 			$result=Database::query($sql,__FILE__,__LINE__);
 			$row2=Database::fetch_array($result);
-			$num=mysql_num_rows($result);
+			$num=Database::num_rows($result);
 			if (($set_visibility == 'i') && ($num>0))
 			{
 				//it is visible or hidden but once was published

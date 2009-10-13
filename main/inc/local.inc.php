@@ -394,7 +394,7 @@ if (api_get_setting('allow_terms_conditions')=='true') {
 
     	    }
         } else {
-        	// login failed, mysql_num_rows($result) <= 0
+        	// login failed, Database::num_rows($result) <= 0
             $loginFailed = true;  // Default initialisation. It could
                                   // change after the external authentication
 

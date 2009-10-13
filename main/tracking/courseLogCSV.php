@@ -453,7 +453,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 		            //error_log($sql2,0);
 					$result2=Database::query($sql2,__FILE__,__LINE__);
 
-					if(mysql_num_rows($result2)>0){
+					if(Database::num_rows($result2)>0){
 
 
 					    $ar2=Database::fetch_array($result2);

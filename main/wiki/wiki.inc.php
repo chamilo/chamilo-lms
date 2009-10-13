@@ -1972,7 +1972,7 @@ function display_wiki_search_results($search_term, $search_content=0)
 	$result=Database::query($sql,__LINE__,__FILE__);
 
 	//show table
-	if (mysql_num_rows($result) > 0)
+	if (Database::num_rows($result) > 0)
 	{
 		$row = array ();
 		while ($obj = Database::fetch_object($result))

@@ -121,7 +121,7 @@ function get_number_of_classes()
 		$sql .= " AND (c.name LIKE '%".$keyword."%')";
 	}
 	$res = Database::query($sql, __FILE__, __LINE__);
-	$result = mysql_num_rows($res);
+	$result = Database::num_rows($res);
 	return $result;
 }
 /**

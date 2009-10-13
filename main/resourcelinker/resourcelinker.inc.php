@@ -1487,7 +1487,7 @@ function check_added_resources($type, $id)
 	$TABLERESOURCE 		= $_course['dbNameGlu']."resource";
 	$sql="SELECT * FROM `$TABLERESOURCE` WHERE source_type='$type' and source_id='$id'";
 	$result=Database::query($sql,__FILE__,__LINE__);
-	$number_added=mysql_num_rows($result);
+	$number_added=Database::num_rows($result);
 	if ($number_added<>0)
 		return true;
 	else

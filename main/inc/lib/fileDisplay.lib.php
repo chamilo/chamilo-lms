@@ -280,7 +280,7 @@ EOQ;
 
 	$result = Database::query($sql,__FILE__,__LINE__);
 
-	if($result && mysql_num_rows($result) != 0)
+	if($result && Database::num_rows($result) != 0)
 	{
 		$row = Database::fetch_row($result);
 		return $row[0] == null ? 0 : $row[0];

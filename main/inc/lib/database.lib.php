@@ -693,7 +693,7 @@ class Database {
 	 * @author Yannick Warnier <yannick.warnier@dokeos.com>
 	 **/
 	public static function num_rows($res) {
-		return mysql_num_rows($res);
+		return Database::num_rows($res);
 	}
 
 	public static function get_course_chat_connected_table($database_name = '') {
@@ -709,7 +709,7 @@ class Database {
 	 * @result	mixed		One cell of the result, or FALSE on error
 	 */
 	public static function result($resource, $row, $field = '') {
-		return mysql_num_rows($resource) > 0 ? (!empty($field) ? mysql_result($resource, $row, $field) : mysql_result($resource, $row)) : null;
+		return Database::num_rows($resource) > 0 ? (!empty($field) ? mysql_result($resource, $row, $field) : mysql_result($resource, $row)) : null;
 	}
 
 	/**

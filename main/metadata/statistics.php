@@ -80,7 +80,7 @@ while (($kwline = fgets($myFile)))
 fclose($myFile);
 
 $result = $mdStore->mds_get_many('eid,mdxmltext', '1 = 1');
-echo get_lang('TotalMDEs'), mysql_num_rows($result), "<br>\n";
+echo get_lang('TotalMDEs'), Database::num_rows($result), "<br>\n";
 
 echo count($kwds), ' ', get_lang('CourseKwds'), '<br>', "\n";
 

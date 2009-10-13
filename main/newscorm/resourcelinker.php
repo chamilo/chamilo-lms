@@ -944,7 +944,7 @@ if ($content == "Link")
 	// showing the links that are in the root (having no category)
 	$sql = "SELECT * FROM ".$link_table.", ".$item_property_table." WHERE (category_id=0 or category_id IS NULL) AND tool = '".TOOL_LINK."' AND id=ref AND visibility='1'";
 	$result = Database::query($sql, __FILE__, __LINE__);
-	if (mysql_num_rows($result) > 0)
+	if (Database::num_rows($result) > 0)
 	{
 		echo "<table width=\"100%\"><tr><td bgcolor=\"#E6E6E6\"><i>".get_lang('NoCategory')."</i></td></tr></table>";
 		while ($myrow = Database::fetch_array($result))

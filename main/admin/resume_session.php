@@ -57,7 +57,7 @@ if(!api_is_platform_admin() && $session['session_admin_id']!=$_user['user_id'])
 $sql = 'SELECT name FROM  '.$tbl_session_category.' WHERE id = "'.intval($session['session_category_id']).'"';
 $rs = Database::query($sql, __FILE__, __LINE__);
 $session_category = '';
-if(mysql_num_rows($rs)>0) {
+if(Database::num_rows($rs)>0) {
 	$rows_session_category = Database::store_result($rs);
 	$rows_session_category = $rows_session_category[0];
 	$session_category = $rows_session_category['name'];

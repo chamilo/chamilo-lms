@@ -133,7 +133,7 @@ function get_number_of_classes()
 		$sql .= " AND c.id NOT IN ('".implode("','",$subscribed_classes)."')";
 	}
 	$res = Database::query($sql, __FILE__, __LINE__);
-	$result = mysql_num_rows($res);
+	$result = Database::num_rows($res);
 	return $result;
 }
 /**

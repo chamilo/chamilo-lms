@@ -458,7 +458,7 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		*/
 		if(!empty($_GET['hide'])) // visibility 1 -> 0
 		{
-			Database::query("UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
+			Database::query("UPDATE $tool_table SET visibility=0 WHERE id='".intval($_GET["id"])."'",__FILE__,__LINE__);
 			Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
 		}
 
@@ -469,7 +469,7 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		*/
 		elseif(!empty($_GET['restore'])) // visibility 0,2 -> 1
 		{
-			Database::query("UPDATE $tool_table SET visibility=1 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
+			Database::query("UPDATE $tool_table SET visibility=1 WHERE id='".intval($_GET["id"])."'",__FILE__,__LINE__);
 			Display::display_confirmation_message(get_lang('ToolIsNowVisible'));
 		}
 	}

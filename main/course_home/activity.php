@@ -402,8 +402,8 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		$requested_image   = ($tool_visibility == 0 ) ? $tool_image : $new_image;
 		$requested_clase   = ($tool_visibility == 0 ) ? 'visible' : 'invisible';
 		$requested_message = ($tool_visibility == 0 ) ? 'is_active' : 'is_inactive';
-    $requested_view    = ($tool_visibility == 0 ) ? 'visible.gif' : 'invisible.gif';
-    $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
+	    $requested_view    = ($tool_visibility == 0 ) ? 'visible.gif' : 'invisible.gif';
+	    $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
 
 		/*
 		-----------------------------------------------------------
@@ -450,7 +450,7 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		*/
 		if(!empty($_GET['hide'])) // visibility 1 -> 0
 		{
-			Database::query("UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
+			Database::query("UPDATE $tool_table SET visibility=0 WHERE id='".intval($_GET["id"])."'",__FILE__,__LINE__);
 			Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
 		}
 
@@ -461,7 +461,7 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		*/
 		elseif(!empty($_GET['restore'])) // visibility 0,2 -> 1
 		{
-			Database::query("UPDATE $tool_table SET visibility=1 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
+			Database::query("UPDATE $tool_table SET visibility=1 WHERE id='".intval($_GET["id"])."'",__FILE__,__LINE__);
 			Display::display_confirmation_message(get_lang('ToolIsNowVisible'));
 		}
 	}
@@ -572,8 +572,16 @@ if(api_is_allowed_to_edit())
     }
 
 ?>
-	<div class="normal-message" id="id_normal_message" style="display:none"><?php echo get_lang("PleaseStandBy")."<br/>".'<img src="'.$server_protocol.$current_host.'/'.$path_work.'main/inc/lib/javascript/indicator.gif"/>'; ?></div>
-	<div class="confirmation-message" id="id_confirmation_message" style="display:none"></div>
+	<div class="courseadminview" style="border:0px;">
+		<div class="normal-message" id="id_normal_message" style="display:none">		
+		<?php			
+			echo '<img src="'.$server_protocol.$current_host.'/'.$path_work.'main/inc/lib/javascript/indicator.gif"/>'."&nbsp;&nbsp;";
+			echo get_lang('PleaseStandBy');
+		?>
+		</div>
+		<div class="confirmation-message" id="id_confirmation_message" style="display:none"></div>
+	</div>
+	
 	<?php
 		if (api_get_setting('show_session_data') === 'true' && $id_session > 0) {
 	?>

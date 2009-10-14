@@ -39,7 +39,6 @@ abstract class OpenofficeDocument extends learnpath {
     	global $_course, $_user, $_configuration;
 
     	$this->file_name = (strrpos($file['name'],'.')>0 ? substr($file['name'], 0, strrpos($file['name'],'.')) : $file['name']);
-    	$this->file_name = remove_accents($this->file_name);
 		$this->file_name = replace_dangerous_char($this->file_name,'strict');
 		$this->file_name = strtolower($this->file_name);
 

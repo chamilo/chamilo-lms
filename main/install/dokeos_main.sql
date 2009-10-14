@@ -451,10 +451,12 @@ CREATE TABLE session (
   nb_days_access_after_end TINYINT UNSIGNED NULL default '0',
   session_admin_id INT UNSIGNED NOT NULL,
   visibility int NOT NULL default 1,
+  session_category_id int NOT NULL,
   PRIMARY KEY  (id),
   INDEX (session_admin_id),
   UNIQUE KEY name (name)
 );
+
 -- --------------------------------------------------------
 
 --
@@ -481,6 +483,7 @@ CREATE TABLE session_rel_course_rel_user (
   course_code char(40) NOT NULL default '',
   id_user int unsigned NOT NULL default '0',
   visibility int NOT NULL default 1,
+  status int NOT NULL default 0,
   PRIMARY KEY  (id_session,course_code,id_user),
   KEY id_user (id_user),
   KEY course_code (course_code)
@@ -2256,6 +2259,3 @@ CREATE TABLE session_category (
   date_end date default NULL,
   PRIMARY KEY  (id)
 );
-
-ALTER TABLE session ADD COLUMN session_category_id INT NOT NULL;
-ALTER TABLE session_rel_course_rel_user ADD status TINYINT NOT NULL DEFAULT 0;

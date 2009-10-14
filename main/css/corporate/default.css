@@ -7,7 +7,7 @@ html {
 /* Redefining html styles */
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
-        behavior:url("/main/css/csshover3.htc");
+    behavior:url("/main/css/csshover3.htc");
 	font-family: bold arial, verdana, helvetica, sans-serif;
 	font-size: 12px;
 	margin: 0;
@@ -300,24 +300,6 @@ a.breadcrumb0 {
 	font-size: 12px;
 	font-weight: bold;
 	padding-left: 12px;
-}
-.menusection {
-	width: auto;
-	margin: 24px 6px 0 6px;
-	padding-left: 10px;
-	border: 1px solid #bbb;
-}
-.menusectioncaption {
-	position: relative;
-	top: -9px;
-	background-color:#F0F0F0;
-	font-size: 12px;
-	padding: 0 8px 0 4px;
-}
-.menulist {
-	list-style: none;
-	margin: 0 0 12px 0;
-	padding: 0;
 }
 .note {
 	width: auto;
@@ -745,6 +727,14 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 }
 #formLogin div input[type=submit] {
 	width: 109px;
+}
+#login_fail {
+	margin: 0 6px 6px 6px;
+	padding: 4px;
+	border: 1px solid #f00;
+	background-color: #fff;
+	font-size: 12px;
+	color: #f00;
 }
 /* normal table*/
 .normal_table {
@@ -1243,13 +1233,6 @@ span.radio {
 	font-size: 80%;
 }
 /*NAVIGATION MENU BAR*/
-
-
-.menucaption {
-	font-size: 12px;
-	font-weight: bold;
-	padding-left: 12px;
-}
 .menusection {
 	width: auto;
 	margin: 24px 6px 0 6px;
@@ -1550,12 +1533,12 @@ span.radio {
 }
 .message-content-body-left {
 	float:left;
-	width:30%;
+	width:55%;
 }
 .message-content-body-right {
 	float:right;
 	text-align:left;
-	width:60%;
+	width:45%;
 }
 .message-body-title {
 	float:right;

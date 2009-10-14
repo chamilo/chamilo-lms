@@ -1,29 +1,6 @@
 <?php
 // $Id: course_add.php 20441 2009-05-10 07:39:15Z ivantcholakov $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels
-		 Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 *	@package dokeos.admin
@@ -87,6 +64,13 @@ $maxlength = 40 - $dbnamelength;
 // Build the form
 $form = new FormValidator('update_course');
 $form->addElement('header', '', $tool_name);
+
+//Title
+$form->add_textfield('title', get_lang('Title'),true, array ('size' => '60'));
+$form->applyFilter('title','html_filter');
+$form->applyFilter('title','trim');
+
+// code
 $form->add_textfield( 'visual_code', get_lang('CourseCode'),false,array('size'=>'20','maxlength'=>20));
 $form->applyFilter('visual_code','api_strtoupper');
 $form->applyFilter('visual_code','html_filter');
@@ -98,10 +82,7 @@ $form->applyFilter('tutor_id','html_filter');
 $form->addElement('select', 'course_teachers', get_lang('CourseTeachers'), $teachers, 'multiple=multiple size=5');
 $form->applyFilter('course_teachers','html_filter');
 
-//Title
-$form->add_textfield('title', get_lang('Title'),true, array ('size' => '60'));
-$form->applyFilter('title','html_filter');
-$form->applyFilter('title','trim');
+
 
 $categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories);
 $form->applyFilter('category_code','html_filter');

@@ -91,7 +91,7 @@ function display_form() {
 	$html .= '<a href="../admin/index.php">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('PlatformAdmin'),array('style'=>'vertical-align:middle')).get_lang('Back').' '.get_lang('To').' '.get_lang('PlatformAdmin').'</a>';
 	$html .= '</div>';
 
-
+	$html .= '<div class="row"><div class="form_header">'.get_lang('CopyCourse').'</div></div>'; 
 	$html .= '<form name="formulaire" method="post" action="'.api_get_self().'" >';
 
 	$html .= '<table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">';
@@ -107,7 +107,8 @@ function display_form() {
 	$html .= '<select id="origin" name="SessionCoursesListOrigin[]" multiple="multiple" size="20" style="width:320px;"></select></div></td>';
 
 	// Options configuration
-	$html .= '<td align="top"><div class="sectiontitle">'.get_lang('CopyCourse').'</div>';
+	//$html .= '<td align="top"><div class="sectiontitle">'.get_lang('CopyCourse').'</div>';
+	$html .= '<td align="top">';
 	$introduction = get_lang('CopyCourseFromSessionToSessionExplanation',true);
 	$html .= '<div class="normal-message">'.$introduction.'</div>';
 	$html .= '<div style="height:150px;padding-top:10px;padding-bottom:50px"><h3>'.get_lang('TypeOfCopy').'</h3>';

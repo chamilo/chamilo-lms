@@ -310,12 +310,17 @@ FCK.UpdateLinkedField = function()
 			}
 
 			var has_script = false ;
-			var head_data = FCK.GetData( false ).match( /<head\s?[^>]*>(.*?)<\/head\s*>/i )[1] ;
+			var head_data = FCK.GetData( false );
 			if ( head_data )
 			{
-				if ( head_data.indexOf( 'ASCIIMathML.js' ) != -1 )
+				head_data = head_data.toString().match( /<head\s?[^>]*>(.*?)<\/head\s*>/i ) ;
+				if ( head_data[1] )
 				{
-					has_script = true ;
+					head_data = head_data[1] ;
+					if ( head_data.indexOf( 'ASCIIMathML.js' ) != -1 )
+					{
+						has_script = true ;
+					}
 				}
 			}
 

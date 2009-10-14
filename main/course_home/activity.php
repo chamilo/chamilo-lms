@@ -191,17 +191,17 @@ function show_tools_category($course_tool_category)
 				{
 					$sql_blogs = "
 						SELECT *
-						FROM " . $tbl_blogs_rel_user . " `blogs_rel_user`
-						WHERE `blog_id` = " . $blog_id;
+						FROM " . $tbl_blogs_rel_user . " blogs_rel_user
+						WHERE blog_id = " . $blog_id;
 				}
 				else
 				{
 					$sql_blogs = "
 						SELECT *
-						FROM " . $tbl_blogs_rel_user . " `blogs_rel_user`
+						FROM " . $tbl_blogs_rel_user . " blogs_rel_user
 						WHERE
-							`blog_id` = " . $blog_id . " AND
-							`user_id` = " . api_get_user_id();
+							blog_id = " . $blog_id . " AND
+							user_id = " . api_get_user_id();
 				}
 
 				$result_blogs = Database::query($sql_blogs, __FILE__, __LINE__);
@@ -392,7 +392,8 @@ function show_tools_category($course_tool_category)
 */
 
 if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
-	if(api_is_allowed_to_edit()) {
+	if(api_is_allowed_to_edit()) { 
+
 		$tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 		$tool_id = Security::remove_XSS($_GET["id"]);
 		$tool_info = api_get_tool_information($tool_id);
@@ -488,7 +489,7 @@ if(api_is_platform_admin())
 			<?php echo get_lang("DelLk")?>
 			<br />&nbsp;&nbsp;&nbsp;
 			<a href="<?php echo api_get_self()?>"><?php echo get_lang("No")?></a>&nbsp;|&nbsp;
-			<a href="<?php echo api_get_self()?>?delete=yes&id=<?php echo $_GET["id"]?>"><?php echo get_lang("Yes")?></a>
+			<a href="<?php echo api_get_self()?>?delete=yes&id=<?php echo Security::remove_XSS($_GET['id'])?>"><?php echo get_lang("Yes")?></a>
 			</div>
 		<?php
 	}
@@ -497,8 +498,9 @@ if(api_is_platform_admin())
 	 * Process hiding a tools from available tools.
 	 */
 
-	elseif(isset($_GET["delete"]) && $_GET["delete"])
-	{
+	elseif(isset($_GET["delete"]) && $_GET["delete"]) {
+		//where $id is set?
+		$id = intval($id);
 		Database::query("DELETE FROM $tool_table WHERE id='$id' AND added_tool=1",__FILE__,__LINE__);
 	}
 }
@@ -521,7 +523,13 @@ function show_session_data($id_session) {
 	$session_table = Database::get_main_table(TABLE_MAIN_SESSION);
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$session_category_table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-
+	
+	if ($id_session!=strval(intval($id_session))) {
+		return '';
+	} else {
+		$id_session = intval($id_session);
+	}
+	
 	$sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility
 				FROM '.$session_table.'
 			LEFT JOIN '.$user_table.'
@@ -579,7 +587,7 @@ if(api_is_allowed_to_edit())
     }
 
 ?>
-	<div class="courseadminview" style="border:0px;">
+	<div class="courseadminview" style="border:0px; margin-top: 0px;padding:5px 0px;">
 		<div class="normal-message" id="id_normal_message" style="display:none">		
 		<?php			
 			echo '<img src="'.$server_protocol.$current_host.'/'.$path_work.'main/inc/lib/javascript/indicator.gif"/>'."&nbsp;&nbsp;";

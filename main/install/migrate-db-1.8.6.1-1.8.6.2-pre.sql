@@ -14,9 +14,11 @@
 -- xxMAINxx
 ALTER TABLE gradebook_evaluation ADD COLUMN type varchar(40) NOT NULL;
 ALTER TABLE session ADD COLUMN visibility int NOT NULL default 1;
-ALTER TABLE session_rel_course_rel_user ADD COLUMN visibility int NOT NULL default 1;
-CREATE TABLE session_category (id int(11) NOT NULL auto_increment, name varchar(100) default NULL, date_start date default NULL, date_end date default NULL, PRIMARY KEY  (id));
 ALTER TABLE session ADD COLUMN session_category_id INT NOT NULL;
+
+ALTER TABLE session_rel_course_rel_user ADD COLUMN visibility int NOT NULL default 1;
+ALTER TABLE session_rel_course_rel_user ADD COLUMN status int NOT NULL default 0;
+CREATE TABLE session_category (id int(11) NOT NULL auto_increment, name varchar(100) default NULL, date_start date default NULL, date_end date default NULL, PRIMARY KEY  (id));
 
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_coach_to_edit_course_session', NULL, 'radio', 'Course', 'false', 'AllowCoachsToEditInsideTrainingSessions', 'AllowCoachsToEditInsideTrainingSessionsComment', NULL, NULL, 0);
@@ -42,6 +44,5 @@ ALTER TABLE link ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id
 ALTER TABLE wiki ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);
 ALTER TABLE tool ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);
 ALTER TABLE link_category ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);
-ALTER TABLE session_rel_course_rel_user ADD status TINYINT NOT NULL DEFAULT 0;
 ALTER TABLE item_property ADD id_session INT NOT NULL DEFAULT 0;
 ALTER TABLE item_property DROP INDEX idx_item_property_toolref, ADD INDEX idx_item_property_toolref (tool, ref, id_session); 

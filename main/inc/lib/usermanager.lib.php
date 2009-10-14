@@ -1287,6 +1287,8 @@ class UserManager {
 		// A sanity check.
 		if (empty($user_id)) {
 			$user_id = 0;
+		} else {
+			if ($user_id != strval(intval($user_id))) return array();
 		}
 		$extra_data = array();
 		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
@@ -1349,6 +1351,8 @@ class UserManager {
 		// A sanity check.
 		if (empty($user_id)) {
 			$user_id = 0;
+		} else {
+			if ($user_id != strval(intval($user_id))) return array();
 		}
 		$extra_data = array();
 		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
@@ -1505,7 +1509,7 @@ class UserManager {
 		$tbl_session				= Database :: get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_course			= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_session_course_user	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-		$user_id = intval($user_id);
+		if ($user_id != strval(intval($user_id))) return array();
 
 		$categories = array();
 		if ($fill_first) {
@@ -1539,8 +1543,10 @@ class UserManager {
 								ORDER BY session_category_id, date_start, date_end";
 
 		$result = Database::query($sessions_sql,__FILE__,__LINE__);
-		while ($row = Database::fetch_array($result)) {
-			$categories[$row['session_category_id']][] = $row['id'];
+		if (Database::num_rows($result)>0) {			 
+			while ($row = Database::fetch_array($result)) {
+				$categories[$row['session_category_id']][] = $row['id'];
+			}
 		}
 
 		// get the list of sessions where the user is subscribed as coach in a course $tbl_session_course_user
@@ -1560,8 +1566,10 @@ class UserManager {
 								ORDER BY session_category_id, date_start, date_end";
 
 		$result = Database::query($sessions_sql,__FILE__,__LINE__);
-		while ($row = Database::fetch_array($result)) {
-			$categories[$row['session_category_id']][] = $row['id'];
+		if (Database::num_rows($result)>0) {
+			while ($row = Database::fetch_array($result)) {
+				$categories[$row['session_category_id']][] = $row['id'];
+			}
 		}
 
 		// get the list of sessions where the user is subscribed as coach
@@ -1571,8 +1579,10 @@ class UserManager {
 								ORDER BY session_category_id, date_start, date_end";
 
 		$result = Database::query($sessions_sql,__FILE__,__LINE__);
-		while ($row = Database::fetch_array($result)) {
-			$categories[$row['session_category_id']][] = $row['id'];
+		if (Database::num_rows($result)>0) {
+			while ($row = Database::fetch_array($result)) {
+				$categories[$row['session_category_id']][] = $row['id'];
+			}
 		}
 		return $categories;
 	}
@@ -1592,8 +1602,9 @@ class UserManager {
 		$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-		$user_id = Database::escape_string($user_id);
+		
+		if ($user_id != strval(intval($user_id))) return array();
+		
 		//we filter the courses from the URL
 		$join_access_url = $where_access_url = '';
 		global $_configuration;

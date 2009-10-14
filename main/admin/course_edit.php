@@ -101,6 +101,12 @@ if(count($course_teachers)==0){
 // Build the form
 $form = new FormValidator('update_course');
 $form->addElement('hidden','code',$course_code);
+
+//title
+$form->add_textfield( 'title', get_lang('Title'),true, array ('size' => '60'));
+$form->applyFilter('title','html_filter');
+$form->applyFilter('title','trim');
+// code
 $form->add_textfield('visual_code', get_lang('CourseCode'));
 $form->applyFilter('visual_code','strtoupper');
 $form->applyFilter('visual_code','html_filter');
@@ -132,10 +138,7 @@ EOT;
 $renderer = $form->defaultRenderer();
 $renderer -> setElementTemplate($element_template, 'group');
 $form -> addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="50" align="center"><input type="button" onclick="moveItem(document.getElementById(\'platform_teachers\'), document.getElementById(\'course_teachers\'))" value=">>"><br><br><input type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))" value="<<"></td><td>');
-//title
-$form->add_textfield( 'title', get_lang('Title'),true, array ('size' => '60'));
-$form->applyFilter('title','html_filter');
-$form->applyFilter('title','trim');
+
 
 $categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories);
 CourseManager::select_and_sort_categories($categories_select);

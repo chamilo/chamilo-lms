@@ -27,14 +27,12 @@ $xajax = new xajax();
 $xajax -> registerFunction('search_courses');
 
 
-if (!api_is_allowed_to_edit())
-{
+if (!api_is_allowed_to_edit()) {
 	api_not_allowed(true);
 }
 
 //remove memory and time limits as much as possible as this might be a long process...
-if(function_exists('ini_set'))
-{
+if(function_exists('ini_set')) {
 	ini_set('memory_limit','256M');
 	ini_set('max_execution_time',1800);
 }
@@ -87,6 +85,13 @@ function display_form() {
 	$html  = '';
 	$sessions = SessionManager::get_sessions_list();
 
+	// actions
+	$html .= '<div class="sectiontitle">';
+	// link back to the documents overview
+	$html .= '<a href="../admin/index.php">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('PlatformAdmin'),array('style'=>'vertical-align:middle')).get_lang('Back').' '.get_lang('To').' '.get_lang('PlatformAdmin').'</a>';
+	$html .= '</div>';
+
+
 	$html .= '<form name="formulaire" method="post" action="'.api_get_self().'" >';
 
 	$html .= '<table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">';
@@ -112,11 +117,7 @@ function display_form() {
 	$html .= '<label for="copy_option_2"><span id="title_option2" style="color:#aaa">'.get_lang('LetMeSelectItems').'</span></label><br/><br/>';
 	$html .= '<button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.get_lang('CopyCourse').'</button></div>';
 
-	// actions
-	$html .= '<div class="sectiontitle">';
-	// link back to the documents overview
-	$html .= '<a href="../admin/index.php">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('PlatformAdmin'),array('style'=>'vertical-align:middle')).get_lang('Back').' '.get_lang('To').' '.get_lang('PlatformAdmin').'</a>';
-	$html .= '</div>';
+
 
 
 	$html .= '</td><td width="30%" align="center">';

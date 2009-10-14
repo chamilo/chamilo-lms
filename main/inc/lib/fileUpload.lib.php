@@ -71,26 +71,6 @@ function api_replace_parameter($upload_path, $buffer, $param_name="src")
 ==============================================================================
 */
 
-/**
- * Replaces all accentuated characters by non-accentuated characters for filenames, as
- * well as special HTML characters by their HTML entity's first letter.
- *
- * Although this method is not absolute, it gives good results in general. It first
- * transforms the string to HTML entities (&ocirc;, @oslash;, etc) then removes the
- * HTML character part to result in simple characters (o, o, etc).
- * In the case of special characters (out of alphabetical value) like &nbsp; and &lt;,
- * it will still replace them by the first letter of the HTML entity (n, l, ...) but it
- * is still an acceptable method, knowing we're filtering filenames here...
- * @param	string	The accentuated string
- * @return	string	The escaped string, not absolutely correct but satisfying
- */
-function replace_accents($string){
-	global $charset;
-	$string = api_htmlentities($string,ENT_QUOTES,$charset);
-	$res = preg_replace("/&([a-z])[a-z]+;/i","$1",$string);
-	return $res;
-}
-
 //------------------------------------------------------------------------------
 
 /**
@@ -1903,9 +1883,45 @@ $handle=opendir($path);
 	}
 }
 
-// could be usefull in some cases...
-function remove_accents($string){
+
+/*
+==============================================================================
+		DEPRECATED FUNCTIONS
+==============================================================================
+*/
+
+/**
+ * @deprecated Use transliteration instead, it is applicable for all languages.
+ *
+ * Replaces all accentuated characters by non-accentuated characters for filenames, as
+ * well as special HTML characters by their HTML entity's first letter.
+ *
+ * Although this method is not absolute, it gives good results in general. It first
+ * transforms the string to HTML entities (&ocirc;, @oslash;, etc) then removes the
+ * HTML character part to result in simple characters (o, o, etc).
+ * In the case of special characters (out of alphabetical value) like &nbsp; and &lt;,
+ * it will still replace them by the first letter of the HTML entity (n, l, ...) but it
+ * is still an acceptable method, knowing we're filtering filenames here...
+ * @param	string	The accentuated string
+ * @return	string	The escaped string, not absolutely correct but satisfying
+ */
+function replace_accents($string, $encoding = null){
+	/*
+	global $charset;
+	$string = api_htmlentities($string,ENT_QUOTES,$charset);
+	$res = preg_replace("/&([a-z])[a-z]+;/i","$1",$string);
+	return $res;
+	*/
+	return api_transliterate($string, 'x', $encoding);
+}
+
+/**
+ *  @deprecated Use transliteration instead, it is applicable for all languages.
+ */
+function remove_accents($string, $encoding = null){
+	/*
 	$string = strtr ( $string, "�����������������������������������������������������", "AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuyNn");
 	return $string;
+	*/
+	return api_transliterate($string, 'x', $encoding);
 }
-?>

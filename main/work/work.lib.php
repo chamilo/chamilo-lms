@@ -380,7 +380,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		}else {
 			$mydir_temp = '/'.$my_sub_dir.$dir;
 		}
-		
+
 		$sql_select_directory= "SELECT prop.lastedit_date, id, author, has_properties, view_properties, description, qualification,id FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE ";
 					if (!empty($_SESSION['toolgroup'])) {
 						$sql_select_directory.=" work.post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
@@ -523,9 +523,8 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 
 					$values = $form_folder -> exportValues();
 					$values = $values['my_group'];
-					$dir_name = disable_dangerous_file($values['dir_name']);
-					$dir_name = replace_accents($values['dir_name']);
 					$dir_name = replace_dangerous_char($values['dir_name']);
+					$dir_name = disable_dangerous_file($dir_name);
 					update_dir_name($mydir,$dir_name);
 					$mydir = $my_sub_dir.$dir_name;
 					$dir = $dir_name;
@@ -754,9 +753,8 @@ function get_subdirs_list($basedir='',$recurse=0){
 	$dirs_list = array();
 	$dh = opendir($basedir);
 	while($entry = readdir($dh)) {
-		$entry = replace_accents($entry);
-		$entry = disable_dangerous_file($entry);
 		$entry = replace_dangerous_char($entry);
+		$entry = disable_dangerous_file($entry);
 		if(is_dir($basedir.$entry) && $entry!='..' && $entry!='.') {
 			$dirs_list[] = $entry;
 			if($recurse==1) {
@@ -1026,10 +1024,9 @@ function update_dir_name($path, $new_name) {
 		} else {
 			$path_to_dir .= '/';
 		}
-		$new_name_filter=Security::remove_XSS($new_name);
-		$new_name=replace_accents($new_name_filter);
-		$new_name=disable_dangerous_file($new_name_filter);
-		//$new_name=replace_dangerous_char($new_name);
+		$new_name = Security::remove_XSS($new_name);
+		$new_name = replace_dangerous_char($new_name);
+		$new_name = disable_dangerous_file($new_name);
 
 		my_rename($base_work_dir.'/'.$path,$new_name);
 		$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);

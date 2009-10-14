@@ -543,10 +543,10 @@ if (api_is_allowed_to_edit(null,true)) {
 
 			include_once (api_get_path(LIBRARY_PATH) . "fileUpload.lib.php");
 			$added_slash = (substr($cur_dir_path, -1, 1) == '/') ? '' : '/';
-			$filter_directoy=Security::remove_XSS($_POST['new_dir']);
-			$directory =disable_dangerous_file($filter_directoy);
-			$directory =replace_accents($filter_directoy);
-			$dir_name = $cur_dir_path . $added_slash . replace_dangerous_char($directory);
+			$directory = Security::remove_XSS($_POST['new_dir']);
+			$directory = replace_dangerous_char($directory);
+			$directory = disable_dangerous_file($directory);
+			$dir_name = $cur_dir_path . $added_slash . $directory;
 			$created_dir = create_unexisting_work_directory($base_work_dir, $dir_name);
 
 			// we insert here the directory in the table $work_table

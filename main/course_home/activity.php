@@ -402,15 +402,19 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		$requested_image   = ($tool_visibility == 0 ) ? $tool_image : $new_image;
 		$requested_clase   = ($tool_visibility == 0 ) ? 'visible' : 'invisible';
 		$requested_message = ($tool_visibility == 0 ) ? 'is_active' : 'is_inactive';
-    $requested_view    = ($tool_visibility == 0 ) ? 'visible.gif' : 'invisible.gif';
-    $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
-
+    	$requested_view    = ($tool_visibility == 0 ) ? 'visible.gif' : 'invisible.gif';
+    	$requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
+	//HIDE AND REACTIVATE TOOL 
+	if ($_GET["id"]==strval(intval($_GET["id"]))) {
+		$sql="UPDATE $tool_table SET visibility=$requested_visible WHERE id='".$_GET["id"]."'";
+		Database::query($sql,__FILE__,__LINE__);
+	}
 		/*
 		-----------------------------------------------------------
 			HIDE
 		-----------------------------------------------------------
 		*/
-		if(isset($_GET['visibility']) && $_GET['visibility']==0) // visibility 1 -> 0
+/*		if(isset($_GET['visibility']) && $_GET['visibility']==0) // visibility 1 -> 0
 		{
 			if ($_GET["id"]==strval(intval($_GET["id"]))) {
 				$sql="UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'";
@@ -423,19 +427,19 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 			REACTIVATE
 		-----------------------------------------------------------
 		*/
-		elseif(isset($_GET['visibility'])&& $_GET['visibility']==1) // visibility 0,2 -> 1
+/*		elseif(isset($_GET['visibility'])&& $_GET['visibility']==1) // visibility 0,2 -> 1
 		{
 			if ($_GET["id"]==strval(intval($_GET["id"]))) {
 				Database::query("UPDATE $tool_table SET visibility=1 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
 			}
 		}
 
-
+*/
 		$response_data = array(
 			'image'   => $requested_image,
 			'tclass'  => $requested_clase,
 			'message' => $requested_message,
-      'view'    => $requested_view
+      		'view'    => $requested_view
 		);
 		print(json_encode($response_data));
 		exit;

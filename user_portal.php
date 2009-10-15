@@ -508,7 +508,7 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 			$course_coachs = array();
 			if (is_array($coachs_course)) {
 				foreach ($coachs_course as $coach_course) {
-					$course_coachs[] = $coach_course['lastname'].' '.$coach_course['firstname'];
+					$course_coachs[] = api_get_person_name($coach_course['firstname'], $coach_course['lastname']);
 				}
 			}
 
@@ -648,13 +648,13 @@ function get_session_title_box($session_id) {
 		if ( $session_info[3]=='0000-00-00' ) {
 			$session['dates'] = get_lang('WithoutTimeLimits');
 			if ( api_get_setting('show_session_coach') === 'true' ) {
-				$session['coach'] = get_lang('GeneralCoach').': '.$session_info[1].' '.$session_info[0];
+				$session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info[1], $session_info[0]);
 			}
 			$active = true;
 		} else {
 			$session ['dates'] = get_lang('From').' '.$session_info[3].' '.get_lang('Until').' '.$session_info[4];
 			if ( api_get_setting('show_session_coach') === 'true' ) {
-				$session['coach'] = get_lang('GeneralCoach').': '.$session_info[1].' '.$session_info[0];
+				$session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info[1], $session_info[0]);
 			}
 			$active = ($date_start <= $now && $date_end >= $now)?true:false;
 		}

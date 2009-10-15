@@ -1033,7 +1033,9 @@ function api_session_start($already_installed = true) {
  */
 function api_session_register($variable) {
 	global $$variable;
+	// session_register() is deprecated as of PHP 5.3
 	session_register($variable);
+	//
 	$_SESSION[$variable] = $$variable;
 }
 
@@ -1050,7 +1052,9 @@ function api_session_unregister($variable) {
 	}
 	if (isset($_SESSION[$variable])) {
 		$_SESSION[$variable] = null;
+		// session_unregister() is deprecated as of PHP 5.3
 		session_unregister($variable);
+		//
 	}
 }
 
@@ -1124,7 +1128,6 @@ function api_add_url_param($url, $param, $filter_xss = true) {
 	return $url;
 }
 
-// TODO: To be moved to the UserManager.
 /**
  * Returns a difficult to guess password.
  * @param int $length, the length of the password
@@ -1142,42 +1145,47 @@ function api_generate_password($length = 8) {
 	return $password;
 }
 
-// TODO: To be moved to the UserManager.
-// TODO: Multibyte support to be implemented.
 /**
  * Checks a password to see wether it is OK to use.
  * @param string $password
  * @return true if the password is acceptable, false otherwise
+ * Notes about what a password "OK to use" is:
+ * 1. The password should be at least 5 characters long.
+ * 2. Only English letters (uppercase or lowercase, it doesn't matter) and digits are allowed.
+ * 3. The password should contain at least 3 letters.
+ * 4. It should contain at least 2 digits.
+ * 5. It should not contain 3 or more consequent (according to ASCII table) characters.
  */
 function api_check_password($password) {
-	$length_pass = strlen($password);
-	if ($length_pass < 5) {
+	$password_length = api_strlen($password);
+	if ($password_length < 5) {
 		return false;
 	}
-	$pass_lower = strtolower($password);
-	$nb_lettres = $nb_digits = 0;
-	$nb_sequent_chars = 0;
-	$char_code_previous = 0;
-	for ($i = 0; $i < $length_pass; $i ++) {
-		$char_code_current = ord($pass_lower[$i]);
-		if ($i && abs($char_code_current - $char_code_previous) <= 1) {
-			$nb_sequent_chars ++;
-			if ($nb_sequent_chars == 3) {
+	$password = api_strtolower($password);
+	$letters = 0;
+	$digits = 0;
+	$consequent_characters = 0;
+	$previous_character_code = 0;
+	for ($i = 0; $i < $password_length; $i ++) {
+		$current_character_code = api_ord(api_substr($password, $i, 1));
+		if ($i && abs($current_character_code - $previous_character_code) <= 1) {
+			$consequent_characters ++;
+			if ($consequent_characters == 3) {
 				return false;
 			}
 		} else {
-			$nb_sequent_chars = 1;
+			$consequent_characters = 1;
 		}
-		if ($char_code_current >= 97 && $char_code_current <= 122) {
-			$nb_lettres ++;
-		} elseif ($char_code_current >= 48 && $char_code_current <= 57) {
-			$nb_digits ++;
+		if ($current_character_code >= 97 && $current_character_code <= 122) {
+			$letters ++;
+		} elseif ($current_character_code >= 48 && $current_character_code <= 57) {
+			$digits ++;
 		} else {
 			return false;
 		}
-		$char_code_previous = $char_code_current;
+		$previous_character_code = $current_character_code;
 	}
-	return $nb_lettres >= 3 && $nb_digits >= 2;
+	return ($letters >= 3 && $digits >= 2);
 }
 
 /**

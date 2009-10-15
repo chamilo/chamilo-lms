@@ -157,6 +157,30 @@ class TestInternationalization extends UnitTestCase {
  * ----------------------------------------------------------------------------
  */
 
+	public function test_api_ord() {
+		$encoding = 'UTF-8';
+		$characters = array('И', 'в', 'а', 'н', ' ', 'I', 'v', 'a', 'n'); // UTF-8
+		$codepoints = array(1048, 1074, 1072, 1085, 32, 73, 118, 97, 110);
+		$res = array();
+		foreach ($characters as $character) {
+			$res[] = api_ord($character, $encoding);
+		}
+		$this->assertTrue($res == $codepoints);
+		//var_dump($res);
+	}
+
+	public function test_api_chr() {
+		$encoding = 'UTF-8';
+		$codepoints = array(1048, 1074, 1072, 1085, 32, 73, 118, 97, 110);
+		$characters = array('И', 'в', 'а', 'н', ' ', 'I', 'v', 'a', 'n'); // UTF-8
+		$res = array();
+		foreach ($codepoints as $codepoint) {
+			$res[] = api_chr($codepoint, $encoding);
+		}
+		$this->assertTrue($res == $characters);
+		//var_dump($res);
+	}
+
 	public function test_api_str_ireplace() {
 		$search = 'Á'; // UTF-8
 		$replace = 'a';
@@ -526,7 +550,7 @@ class TestInternationalization extends UnitTestCase {
 		$res = api_asort($array, $sort_flag, $language, $encoding);
 		$keys = array_keys($array);
 		$this->assertTrue(is_bool($res));
-		$this->assertTrue($array[$keys[0]] == 'aíó');
+		$this->assertTrue($array[$keys[0]] == 'aíó' || $array[$keys[0]] == 'áed'); // The second result is given when intl php-extension is active.
 		//var_dump($array);
 		//var_dump($res);
 	}
@@ -637,7 +661,7 @@ class TestInternationalization extends UnitTestCase {
 		$res = api_knatrsort($array, $language, $encoding);
 		$keys = array_keys($array);
 		$this->assertTrue(is_bool($res));
-		$this->assertTrue($array[$keys[0]] == 'úéo');
+		$this->assertTrue($array[$keys[0]] == 'úéo' || $array[$keys[0]] == 'áed'); // The second result is given when intl php-extension is active.
 		//var_dump($array);
 		//var_dump($res);
 	}
@@ -673,7 +697,7 @@ class TestInternationalization extends UnitTestCase {
 		$encoding = 'UTF-8';
 		$res = api_sort($array, $sort_flag, $language, $encoding);
 		$this->assertTrue(is_bool($res));
-		$this->assertTrue($array[0] == 'aíó');
+		$this->assertTrue($array[0] == 'aíó' || $array[0] == 'áed');  // The second result is given when intl php-extension is active.
 		//var_dump($array);
 		//var_dump($res);
 	}

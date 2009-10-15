@@ -98,7 +98,7 @@ function send_password_to_user($user, $by_username = false) {
 	/*
 	$emailHeaders = get_email_headers(); // Email Headers
 	*/
-	$email_subject = "[".get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
+	$email_subject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 
 	if ($by_username) { // Show only for lost password
 		$user_account_list = get_user_account_list($user, false, $by_username); // BODY
@@ -119,13 +119,13 @@ function send_password_to_user($user, $by_username = false) {
 
 	$email_body = get_lang('YourAccountParam')." ".$portal_url."\n\n$user_account_list";
 	// SEND MESSAGE
-	$sender_name = api_get_person_name(get_setting('administratorName'), get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-    $email_admin = get_setting('emailAdministrator');
+	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+    $email_admin = api_get_setting('emailAdministrator');
 
 	if (@api_mail('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
 		Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
 	} else {
-		$message = get_lang('SystemUnableToSendEmailContact').' '.Display :: encrypted_mailto_link(get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
+		$message = get_lang('SystemUnableToSendEmailContact').' '.Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
 	}
 }
 
@@ -166,7 +166,7 @@ function handle_encrypted_password($user, $by_username = false) {
 	if (@api_mail('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
 		Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
 	} else {
-		$message = get_lang('SystemUnableToSendEmailContact').' '.Display :: encrypted_mailto_link(get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
+		$message = get_lang('SystemUnableToSendEmailContact').' '.Display :: encrypted_mailto_link(api_get_setting('emailAdministrator'), get_lang('PlatformAdmin')).".</p>";
 		Display::display_error_message($message, false);
 	}
 }

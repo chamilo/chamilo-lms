@@ -491,7 +491,7 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 		$result .= $course_display_title." "." ".get_lang('CourseClosed')."";
 	}
 	// show the course_code and teacher if chosen to display this
-	if (api_get_setting('display_coursecode_in_courselist') == 'true' OR get_setting('display_teacher_in_courselist') == 'true') {
+	if (api_get_setting('display_coursecode_in_courselist') == 'true' || api_get_setting('display_teacher_in_courselist') == 'true') {
 		$result .= '<br />';
 	}
 	if (api_get_setting('display_coursecode_in_courselist') == 'true') {

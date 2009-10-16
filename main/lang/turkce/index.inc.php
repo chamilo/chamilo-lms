@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langInvalidId = "Giri&#351; yap&#305;lamad&#305;.Kullan&#305;c&#305; ismi veya &#351;ifre hatal&#305;.<BR>E&#287;er kay&#305;tl&#305; de&#287;ilseniz, <a href=claroline/auth/inscription.php> buradan kay&#305;t olabilirsiniz</a></font color>";
-$langWelcome = "Aþaðýdaki ders sitelerine serbestçe girebilirsiniz. Burada listelenmeyen kayýt zorunluðu olandersler için kullanýcý adý ve þifre gerekmektedir. Sað taraftaki \"kayýt\" baðlantýsýný kullanarakkaydolduktan sonra bunlarý \"Dersler\" sayfasýnda görebilir ve alabilirsiniz.Ders açacak ö&#287;retmenler de ayn&#305; yerden kaydolmalýdýrlar. Fakat \"Statünüz:\" alaný için\'Ö&#287;retmen\' seçeneðini seçmelidirler.";
+$langWelcome = "A&#351;a&#287;&#305;daki ders sitelerine serbestçe girebilirsiniz. Burada listelenmeyen kay&#305;t zorunlu&#287;u olandersler için kullan&#305;c&#305; ad&#305; ve &#351;ifre gerekmektedir. Sa&#287; taraftaki \"kay&#305;t\" ba&#287;lant&#305;s&#305;n&#305; kullanarakkaydolduktan sonra bunlar&#305; \"Dersler\" sayfas&#305;nda görebilir ve alabilirsiniz.Ders açacak ö&#287;retmenler de ayn&#305; yerden kay&#305;t olmal&#305;d&#305;rlar. Fakat \"Statünüz:\" alan&#305; için\'Ö&#287;retmen\' seçene&#287;ini seçmelidirler.";
 $langPass = "&#350;ifre";
 $langEnter = "Giri&#351;";
 $langReg = "Kay&#305;t";

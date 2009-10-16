@@ -346,4 +346,5 @@ $OARHit = "Almeno una valutazione globale è stata selezionata";
 $TooManyIterationsPleaseTryUsingMoreStraightforwardPolygons = "Traccia di nuovo la figura in modo più semplice, il numero di tratti è eccessivo.";
 $Thresholds = "Soglia";
 $Delineation = "Demarcazione";
+$QuestionTypeDoesNotBelongToFeedbackTypeInExercise = "Tipo di quesito non coerente con il tipo di feedback del test";
 ?>

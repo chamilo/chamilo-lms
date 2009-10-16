@@ -32,4 +32,17 @@ $DocumentDeleted = "تم حذف المستند ";
 $SendMailBody = "قام مستخدم بتحميل مستند في أداة المستندات الخاصة بمقررك ";
 $DirDelete = "حذف المسار";
 $ValidateChanges = "اقرار التغييرات ";
+$FolderUpdated = "تم تحديث المجلد";
+$EndsAt = "ينتهي في";
+$DatesAvailables = "التواريخ المتاحة";
+$AddToCalendar = "أضف إلى اليومية";
+$DirectoryCreated = "تم إتشاء الملف";
+$ExpiryDateToSendWorkIs = "آخر أجل لإرسال الواجب هو ";
+$EnableExpiryDate = "تشغيل تاريخ انتهاء الصلاحية";
+$EndDateCannotBeBeforeTheExpireDate = "تاريخ الإنتهاء لا يمكن أت يكوت قبل تاريخ انتهاء الصلاحية";
+$DeleteAllFiles = "حذف جميع الملفات";
+$AllFilesInvisible = "إخفاء كل الملفات";
+$FileInvisible = "ملف مخفي";
+$AllFilesVisible = "إظهار كافة الملفات";
+$FileVisible = "ملف ظاهر";
 ?>

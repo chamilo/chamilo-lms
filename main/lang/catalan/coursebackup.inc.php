@@ -46,4 +46,5 @@ $UploadError = "Errors en l\'enviament, verifiqueu la mida dels fitxers i els pe
 $DocumentsWillBeAddedToo = "Els documents també seran afegits";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Si voleu exportar un itinerari formatiu que contingui exercicis, haureu d\'assegurar-vos que aquests exercicis hagin estat inclosos a l\'exportació; per això haureu hagut de seleccionar-los a la llista d\'exercicis.";
 $ArchivesDirectoryNotWriteableContactAdmin = "El directori \"archive\" utilitzat per aquesta eina no té habilitat el permís d\'escriptura. Contacteu amb l\'administrador de la plataforma.";
+$DestinationCourse = "Curs de destinació";
 ?>

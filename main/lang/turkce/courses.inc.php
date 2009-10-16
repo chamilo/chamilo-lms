@@ -75,4 +75,9 @@ $CourseCategoryEditStored = "Kategori güncellendi";
 $buttonCreateCourseCategory = "E&#287;itim kategorisini kaydet";
 $buttonSaveCategory = "Kategoriyi kaydet";
 $buttonChangeCategory = "Kategoriyi de&#287;i&#351;tir";
+$SessionName = "Oturum ad&#305;";
+$SessionCategory = "Oturum kategorisi";
+$Expand = "Geni&#351;let";
+$Collapse = "Daralt";
+$CourseDetails = "Kurs detaylar&#305;";
 ?>

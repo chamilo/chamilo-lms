@@ -60,4 +60,5 @@ $langCreateDoc = "Crear document";
 $langOrganiseDocuments = "Organitzar document";
 $langUncompress = "Descomprimir";
 $ExportShort = "Exportació curta";
+$progress = "Progrès";
 ?>

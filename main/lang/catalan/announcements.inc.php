@@ -50,4 +50,10 @@ $NoAnnouncements = "No hi ha anuncis";
 $SelectEverybody = "Seleccioneu tots";
 $SelectedUsersGroups = "Grup d\'usuaris seleccionats";
 $LearnerMessage = "Missatge d\'un alumne";
+$TitleIsRequired = "El títol és obligatori";
+$AnnounceSentByEmail = "Anunci enviat per correu electrònic";
+$AnnounceSentToUserSelection = "Anunci enviat a una selecció d\'usuaris";
+$SendAnnouncement = "Enviar anunci";
+$ModifyAnnouncement = "Modificar anunci";
+$ButtonPublishAnnouncement = "Publicar anunci";
 ?>

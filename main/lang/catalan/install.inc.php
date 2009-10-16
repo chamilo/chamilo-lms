@@ -40,6 +40,7 @@ $langEncryptUserPass = "Encripta les contrasenyes dels usuaris a la base de dade
 $langSingleDb = "Utilitzeu una o vàries bases de dades per a Dokeos";
 $langAllowSelfReg = "Permetre que els propis usuaris puguin registrar-se";
 $langRecommended = "(recomanat)";
+$langScormDB = "Base de dades SCORM";
 $langAdminLastName = "Cognoms de l\'administrador";
 $langAdminPhone = "Telèfon de l\'administrador";
 $OK = "D\'acord";

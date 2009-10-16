@@ -79,4 +79,6 @@ $buttonChangeCategory = "Zamenjaj kategorijo";
 $SessionName = "Ime seje";
 $SessionCategory = "Kategorija seje";
 $Expand = "Razširi";
+$Collapse = "Skrèi";
+$CourseDetails = "Opis teèaja";
 ?>

@@ -20,4 +20,5 @@ $exeFinished = "Todas as questões respondidas. Pode alterar a sua escolha ou cli
 $nextAnswer = "Clique agora em: &done=done";
 $delineation = "Delimitação";
 $labelDelineationMenu = "Encerrar delimitação";
+$oar = "Área de risco";
 ?>

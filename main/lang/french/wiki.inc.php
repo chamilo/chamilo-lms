@@ -175,4 +175,5 @@ $Feedback2 = "Second message";
 $Feedback3 = "Troisième message";
 $FProgress = "Progrès";
 $PutATimeLimit = "Mettre une limite de temps";
+$StandardTask = "Tâche standard";
 ?>

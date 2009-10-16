@@ -139,4 +139,5 @@ $AddAssessment = "Dodaj aktivnost te uèilnice k ocenjevanju";
 $FolderView = "Domaèa stran ocenjevanja";
 $GradebookSkillsRanking = "Težavnost";
 $SaveScoringRules = "Shrani uteži v poroèilo";
+$DefaultCertificate = "Privzeti certifikat";
 ?>

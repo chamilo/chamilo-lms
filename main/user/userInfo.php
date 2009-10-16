@@ -48,6 +48,7 @@ $language_file = array ('registration', 'userInfo');
 include ("../inc/global.inc.php");
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 
@@ -476,6 +477,22 @@ elseif ($displayMode == "viewContentList") // default display
 		echo '<input type="image" src="'.$image_array['dir'].$image_array['file'].'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 		}
 
+		// is the user online ?
+		$statistics_database = Database :: get_statistic_database();	
+		$users_online = WhoIsOnline($userIdViewed, $statistics_database, 30);
+		foreach ($users_online as $online) {
+			if (in_array($userIdViewed, $online)) {	
+				
+				
+				$online = Display::return_icon('online.gif', get_lang('OnLine'),array('style'=>'with="8"; height="8"'));
+				break;
+			}
+			else
+			{
+				$online ='';
+			}
+				
+		}
 
 		//DISPLAY TABLE HEADING
 		if ($origin == 'learnpath') { $allowedToEditDef=false; $is_allowedToTrack=false; }
@@ -494,8 +511,8 @@ elseif ($displayMode == "viewContentList") // default display
 
 				"<tr align=\"center\">\n",
 
-				"<td  align=\"left\"><b>",htmlize(api_get_person_name($mainUserInfo['firstName'], $mainUserInfo['lastName'])),"</b></td>\n",
-				"<td  align=\"left\">",htmlize($mainUserInfo['role']),"</td>";
+				"<td  align=\"left\"><b>".$online.' '.htmlize(api_get_person_name($mainUserInfo['firstName']. $mainUserInfo['lastName']))."</b></td>\n",
+				"<td  align=\"left\">".htmlize($mainUserInfo['role'])."</td>";
 
 				//DISPLAY TABLE CONTENT
 

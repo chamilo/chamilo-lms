@@ -338,7 +338,7 @@ $langpath = api_get_path(SYS_CODE_PATH).'lang/';
 
 
 /* This will only work if we are in the page to edit a sub_language */
-if (api_get_self() == '/main/admin/sub_language.php' || api_get_self() == '/main/admin/sub_language_ajax.inc.php') {
+if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language_ajax.inc.php') {
 	require_once '../admin/sub_language.class.php';
 	// getting the arrays of files i.e notification, trad4all, etc
 	$language_files_to_load = SubLanguageManager::get_all_data_of_dokeos_folder(api_get_path(SYS_LANG_PATH).'english', true);

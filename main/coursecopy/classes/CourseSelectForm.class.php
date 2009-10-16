@@ -183,7 +183,7 @@ class CourseSelectForm
 
 	function display_hidden_quiz_questions($course)
 	{
-			if(is_array($course->resources)) {
+		if(is_array($course->resources)){
 			foreach ($course->resources as $type => $resources) {
 				if (count($resources) > 0) {
 					switch ($type) {
@@ -201,7 +201,7 @@ class CourseSelectForm
 
 	function display_hidden_scorm_directories($course)
 	{
-			if(is_array($course->resources)) {
+			if(is_array($course->resources)){
 			foreach ($course->resources as $type => $resources) {
 				if(count($resources) > 0) {
 					switch($type) {

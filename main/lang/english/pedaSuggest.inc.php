@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $GeneralDescription = "Description";
-$GeneralDescriptionQuestions = "What is the goal of the training? Are there prerequisites? How is this training connected to other trainings?";
+$GeneralDescriptionQuestions = "What is the goal of the training? Are there prerequisites? How is this training connected to other training?";
 $GeneralDescriptionInformation = "Describe the training (number of hours, sser number, location) and trainer (name, office, Tel., e-mail, office hours . . . .).";
 $Objectives = "Objectives";
 $ObjectivesInformation = "What are the objectives of the training (competences, skills, outcomes)?";

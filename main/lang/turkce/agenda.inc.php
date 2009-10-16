@@ -73,5 +73,5 @@ $AgendaSortChronologicallyUp = "Artan";
 $AgendaSortChronologicallyDown = "Azalan";
 $ItemForUserSelection = "Kullan&#305;c&#305; seçim listesi";
 $IsNotiCalFormatFile = "Bu dosya iCal format&#305;nda de&#287;il";
-$RepeatEvent = "Etkili&#287;i tekrarla";
+$RepeatEvent = "Etkinli&#287;i tekrarla";
 ?>

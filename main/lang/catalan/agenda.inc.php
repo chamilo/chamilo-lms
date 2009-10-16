@@ -65,4 +65,13 @@ $RepeatYearly = "Anual";
 $RepeatEnd = "Finalitzar les repeticions el";
 $RepeatedEventViewOriginalEvent = "Veure l\'anotació inicial";
 $ICalFileImport = "Importar un fitxer iCal/ics";
+$AllUsersOfThePlatform = "Tots els usuaris de la plataforma";
+$GlobalEvent = "Esdeveniment global";
+$ModifyEvent = "Modificar esdeveniment";
+$EndDateCannotBeBeforeTheStartDate = "La data final no haurà de ser menor que la data d\'inici";
+$AgendaSortChronologicallyUp = "Ordenar esdeveniments (antics/recents)";
+$AgendaSortChronologicallyDown = "Ordenar events (recents/antics)";
+$ItemForUserSelection = "Esdeveniment dirigit a una selecció d\'usuaris";
+$IsNotiCalFormatFile = "No és un arxiu de format iCal";
+$RepeatEvent = "Repetir esdeveniment";
 ?>

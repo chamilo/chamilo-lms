@@ -88,4 +88,7 @@ $RSSFeeds = "RSS vir";
 $NoFriendsInYourContactList = "Ni prijateljev v tvojem seznamu kontaktov";
 $TryAndFindSomeFriends = "Poskusi poiskati kakšnega prijatelja";
 $ClearSearchResults = "Poèisti rezultate iskanja";
+$SendInvitation = "Pošlji vabilo";
+$SocialInvitationToFriends = "Vabilo za pridružitev k moji skupini prijateljev";
+$MyCertificates = "Moji certifikati";
 ?>

@@ -742,4 +742,5 @@ $Parent  = "Nadrejen";
 $SurveyAdded = "Vprašalnik je bil dodan";
 $WikiAdded = "Wiki je bil dodan";
 $ReadOnly = "Zgolj za branje";
+$Unacceptable = "Nesprejemljivo";
 ?>

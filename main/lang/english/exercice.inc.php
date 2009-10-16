@@ -288,7 +288,7 @@ $ShowCorrectedOnly = "With individual feedback";
 $ShowUnCorrectedOnly = "Uncorrected results";
 $HideResultsToStudents = "Hide results";
 $ShowResultsToStudents = "Show score to learner";
-$ProcedToQuestions = "Proceed to questions >";
+$ProcedToQuestions = "Proceed to questions";
 $AddQuestionToExercise = "Add this question to the test";
 $PresentationQuestions = "Display";
 $UniqueAnswer = "Multiple choice";
@@ -346,4 +346,5 @@ $OARHit = "One (or more) area at risk has been hit";
 $TooManyIterationsPleaseTryUsingMoreStraightforwardPolygons = "Too many iterations while calculating your answer. Please try drawing your delineation in a more straightforward manner";
 $Thresholds = "Thresholds";
 $Delineation = "Delineation";
+$QuestionTypeDoesNotBelongToFeedbackTypeInExercise = "Question type does not belong to feedback type in exercise";
 ?>

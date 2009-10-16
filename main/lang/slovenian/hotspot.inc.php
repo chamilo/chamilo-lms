@@ -20,4 +20,5 @@ $exeFinished = "Vsi odgovori so definirani. Sedaj lahko preuredite vroèe toèke a
 $nextAnswer = "Sedaj kliknite na: &done=done";
 $delineation = "Orisovanje";
 $labelDelineationMenu = "Zapri orisovanje";
+$oar = "Ogroženo podroèje";
 ?>

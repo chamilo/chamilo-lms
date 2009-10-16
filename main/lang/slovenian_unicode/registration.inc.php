@@ -177,4 +177,8 @@ $EditInformation = "Uredi informacije";
 $RegisterUser = "Vpiši uporabnika";
 $IHaveReadAndAgree = "Sem prebral in se strinjam z";
 $ByClickingRegisterYouAgreeTermsAndConditions = "S klikom se strinjam s načini in pogoji uporabe";
+$User = "Uporabnik";
+$LostPass = "Si pozabil(a) geslo ?";
+$EnterEmailUserAndWellSendYouPassword = "Vnesi uporabniško ime ali e-poštni naslov s katerim si registriran(a) in poslali vam bomo geslo.";
+$NoUserAccountWithThisEmailAddress = "Tu ni uporabniškega računa s tem uporabniškim imenom ali e-poštnim naslovom";
 ?>

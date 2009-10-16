@@ -159,7 +159,7 @@ if (!empty($curDirPath))
 /* CURRENT DIRECTORY */
 
 echo	'<tr>';
-echo	'<th>'.get_lang('Name').'</th>'."\n" .
+echo	'<th>'.get_lang('Title').'</th>'."\n" .
 		'<th>'.get_lang('Progress')."</th>\n";
 if ($is_allowed_to_edit)
 {

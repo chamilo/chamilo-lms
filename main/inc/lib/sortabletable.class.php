@@ -197,10 +197,10 @@ class SortableTable extends HTML_Table {
 			$params['totalItems'] = $total_number_of_items;
 			$params['urlVar'] = $this->param_prefix.'page_nr';
 			$params['currentPage'] = $this->page_nr;
-			$params['prevImg'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/prev.png"  style="vertical-align: middle;"/>';
-			$params['nextImg'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/next.png"  style="vertical-align: middle;"/>';
-			$params['firstPageText'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/first.png"  style="vertical-align: middle;"/>';
-			$params['lastPageText'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/last.png"  style="vertical-align: middle;"/>';
+			$params['prevImg'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/prev.png"  alt="'.get_lang('PreviousPage').'" title="'.get_lang('PreviousPage').'" style="vertical-align: middle;"/>';
+			$params['nextImg'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/next.png"  alt="'.get_lang('NextPage').'" title="'.get_lang('NextPage').'" style="vertical-align: middle;"/>';
+			$params['firstPageText'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/first.png"  alt="'.get_lang('FirstPage').'" title="'.get_lang('FirstPage').'" style="vertical-align: middle;"/>';
+			$params['lastPageText'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/last.png"  alt="'.get_lang('LastPage').'" title="'.get_lang('LastPage').'" style="vertical-align: middle;"/>';
 			$params['firstPagePre'] = '';
 			$params['lastPagePre'] = '';
 			$params['firstPagePost'] = '';

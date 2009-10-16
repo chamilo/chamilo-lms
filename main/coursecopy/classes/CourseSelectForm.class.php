@@ -183,15 +183,17 @@ class CourseSelectForm
 
 	function display_hidden_quiz_questions($course)
 	{
-		foreach ($course->resources as $type => $resources) {
-			if (count($resources) > 0) {
-				switch ($type) {
-					case RESOURCE_QUIZQUESTION:
-						foreach ($resources as $id => $resource) {
-							echo '<input type="hidden" name="resource['.RESOURCE_QUIZQUESTION.']['.$id.'] id="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" value="On" />';
-						}
-						break;
-
+			if(is_array($course->resources)) {
+			foreach ($course->resources as $type => $resources) {
+				if (count($resources) > 0) {
+					switch ($type) {
+						case RESOURCE_QUIZQUESTION:
+							foreach ($resources as $id => $resource) {
+								echo '<input type="hidden" name="resource['.RESOURCE_QUIZQUESTION.']['.$id.'] id="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" value="On" />';
+							}
+							break;
+	
+					}
 				}
 			}
 		}
@@ -199,14 +201,16 @@ class CourseSelectForm
 
 	function display_hidden_scorm_directories($course)
 	{
-		foreach ($course->resources as $type => $resources) {
-			if(count($resources) > 0) {
-				switch($type) {
-					case RESOURCE_SCORM:
-						foreach ($resources as $id=>$resource) {
-							echo '<input type="hidden" name="resource['.RESOURCE_SCORM.']['.$id.'] id="resource['.RESOURCE_SCORM.']['.$id.']" value="On" />';
-						}
-						break;
+			if(is_array($course->resources)) {
+			foreach ($course->resources as $type => $resources) {
+				if(count($resources) > 0) {
+					switch($type) {
+						case RESOURCE_SCORM:
+							foreach ($resources as $id=>$resource) {
+								echo '<input type="hidden" name="resource['.RESOURCE_SCORM.']['.$id.'] id="resource['.RESOURCE_SCORM.']['.$id.']" value="On" />';
+							}
+							break;
+					}
 				}
 			}
 		}

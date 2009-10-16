@@ -270,6 +270,7 @@ if (isset($_POST['SaveWikiNew']))
 	   {
 			$return_message=save_new_wiki();
 			Display::display_confirmation_message($return_message, false);
+			$page=urlencode(Security::remove_XSS($_POST['reflink']));
 	   }
 	}
 }
@@ -2410,6 +2411,12 @@ if ($_GET['action']=='discuss')
 			Display::display_normal_message(get_lang('DiscussNotAvailable'));
 
 	}
+}
+
+///in new pages go to new page
+if ($_POST['SaveWikiNew'])
+{
+	display_wiki_entry(Security::remove_XSS($_POST['reflink']));
 }
 
 echo "</div>"; // echo "<div id='mainwiki'>";

@@ -563,7 +563,11 @@ function save_new_wiki() {
 		   Database::query($sql,__LINE__,__FILE__);
 
 		   check_emailcue(0, 'A');
-		   return get_lang('NewWikiSaved').' <a href="index.php?action=showpage&amp;title='.$_clean['reflink'].'&group_id='.$group_id.'">'.$_POST['title'].'</a>';
+		   
+		   $_POST['reflink']=$_clean['reflink'];
+		   
+		   return get_lang('NewWikiSaved');
+		   
 		}
 	}//end filter no _uass
 }
@@ -744,7 +748,7 @@ return true;
 	   </select> %';
 	echo '<br/><br/>';
 	echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">';//prevent double post
-	echo '<input type="hidden" name="SaveWikiNew" value="'.get_lang('langSave').'">'; //for save icon
+	echo '<input type="hidden" name="SaveWikiNew" value="'.get_lang('langSave').'">'; //for save icon	
 	echo '<button class="save" type="submit" name="SaveWikiNew">'.get_lang('langSave').'</button>';//for button icon
 	echo '</div>';
 	echo '</form>';
@@ -755,7 +759,7 @@ return true;
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
 * @return html code
 **/
-function display_wiki_entry()
+function display_wiki_entry($newtitle)
 {
 	global $charset;
 	global $tbl_wiki;
@@ -763,6 +767,14 @@ function display_wiki_entry()
 	global $groupfilter;
 	global $page;
 
+	if($newtitle)
+	{
+		$pageMIX=$newtitle; //display the page after it is created
+	}
+	else
+	{
+		$pageMIX=$page;//display current page
+	}
 
 	$_clean['group_id']=(int)$_SESSION['_gid'];
 	if ($_GET['view'])
@@ -773,13 +785,13 @@ function display_wiki_entry()
 	}
 
 	//first, check page visibility in the first page version
-	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.' ORDER BY id ASC';
+	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($pageMIX)))).'" AND '.$groupfilter.' ORDER BY id ASC';
 		$result=Database::query($sql,__LINE__,__FILE__);
 		$row=Database::fetch_array($result);
 		$KeyVisibility=$row['visibility'];
 
 	// second, show the last version
-	$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.reflink="'.api_html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$tbl_wiki.'.'.$groupfilter.' '.$filter.' ORDER BY id DESC';
+	$sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.' WHERE '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND '.$tbl_wiki.'.reflink="'.api_html_entity_decode(Database::escape_string(stripslashes(urldecode($pageMIX)))).'" AND '.$tbl_wiki.'.'.$groupfilter.' '.$filter.' ORDER BY id DESC';
 	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=Database::fetch_array($result); // we do not need a while loop since we are always displaying the last version
 

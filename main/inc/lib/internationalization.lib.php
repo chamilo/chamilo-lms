@@ -1024,6 +1024,31 @@ function api_utf8_decode_xml($string, $to_encoding = null) {
  */
 
 /**
+ * Takes the first character in a string and returns its Unicode codepoint.
+ * @param string $character				The input string.
+ * @param string $encoding (optional)	The encoding of the input string. If it is omitted, the platform character set will be used by default.
+ * @return int							Returns: the codepoint of the first character; or 0xFFFD (unknown character) when the input string is empty.
+ * This is a multibyte aware version of the function ord().
+ * @link http://php.net/manual/en/function.ord.php
+ * Note the difference with the original funtion ord(): ord('') returns 0, api_ord('') returns 0xFFFD (unknown character).
+ */
+function api_ord($character, $encoding) {
+	return _api_utf8_ord(api_utf8_encode($character, $encoding));
+}
+
+/**
+ * Takes a Unicode codepoint and returns its correspondent character, encoded in given encoding.
+ * @param int $codepoint				The Unicode codepoint.
+ * @param string $encoding (optional)	The encoding of the returned character. If it is omitted, the platform character set will be used by default.
+ * @return string						Returns the corresponding character, encoded as it has been requested.
+ * This is a multibyte aware version of the function chr().
+ * @link http://php.net/manual/en/function.chr.php
+ */
+function api_chr($codepoint, $encoding) {
+	return api_utf8_decode(_api_utf8_chr($codepoint), $encoding);
+}
+
+/**
  * This function returns a string or an array with all occurrences of search in subject (ignoring case) replaced with the given replace value.
  * @param mixed $search					String or array of strings to be found.
  * @param mixed $replace				String or array of strings used for replacement.

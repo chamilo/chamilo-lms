@@ -1718,7 +1718,7 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 	}
 
 	$exportDir = api_get_path(SYS_COURSE_PATH).api_get_course_path(). '/document'.$groupPath;
-	$exportFile = replace_dangerous_char(replace_accents($wikiTitle), 'strict' ) . $groupPart;
+	$exportFile = replace_dangerous_char($wikiTitle, 'strict') . $groupPart;
 
 	$wikiContents = stripslashes($wikiContents);
 	$wikiContents = trim(preg_replace("/\[\[|\]\]/", " ", $wikiContents));

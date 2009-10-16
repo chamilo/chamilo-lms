@@ -271,8 +271,7 @@ class TestMainApi extends UnitTestCase {
 	}
 
 	function testApiCheckPassword(){
-		$lengthPass=strlen(5);
-		$password= $lengthPass;
+		$password = 'As438kdjf';
 		$res = api_check_password($password);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);

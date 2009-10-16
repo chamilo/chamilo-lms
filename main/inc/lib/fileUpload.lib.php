@@ -248,50 +248,49 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 	}
 	else
 	{
-	//clean up the name and prevent dangerous files
-	//remove strange characters
-	$clean_name = replace_dangerous_char($uploaded_file['name']);
-	$clean_name = replace_accents($clean_name);
-	//no "dangerous" files
-	$clean_name = disable_dangerous_file($clean_name);
-	if(!filter_extension($clean_name))
-	{
-		Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
-		return false;
-	}
-	else
-	{
-		//extension is good
-		//echo "<br/>clean name = ".$clean_name;
-		//echo "<br/>upload_path = ".$upload_path;
-		//if the upload path differs from / (= root) it will need a slash at the end
-		if ($upload_path!='/')
-			$upload_path = $upload_path.'/';
-		//echo "<br/>upload_path = ".$upload_path;
-		$file_path = $upload_path.$clean_name;
-		//echo "<br/>file path = ".$file_path;
-		//full path to where we want to store the file with trailing slash
-		$where_to_save = $base_work_dir.$upload_path;
-		//at least if the directory doesn't exist, tell so
-		if(!is_dir($where_to_save)){
-			Display::display_error_message(get_lang('DestDirectoryDoesntExist').' ('.$upload_path.')');
+		//clean up the name, only ASCII characters should stay.
+		$clean_name = replace_dangerous_char($uploaded_file['name']);
+		//no "dangerous" files
+		$clean_name = disable_dangerous_file($clean_name);
+		if(!filter_extension($clean_name))
+		{
+			Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
 			return false;
 		}
-		//echo "<br/>where to save = ".$where_to_save;
-		// full path of the destination
-		$store_path = $where_to_save.$clean_name;
-		//echo "<br/>store path = ".$store_path;
-		//name of the document without the extension (for the title)
-		$document_name = get_document_title($uploaded_file['name']);
-		//size of the uploaded file (in bytes)
-		$file_size = $uploaded_file['size'];
+		else
+		{
+			//extension is good
+			//echo "<br/>clean name = ".$clean_name;
+			//echo "<br/>upload_path = ".$upload_path;
+			//if the upload path differs from / (= root) it will need a slash at the end
+			if ($upload_path!='/') {
+				$upload_path = $upload_path.'/';
+			}
+			//echo "<br/>upload_path = ".$upload_path;
+			$file_path = $upload_path.$clean_name;
+			//echo "<br/>file path = ".$file_path;
+			//full path to where we want to store the file with trailing slash
+			$where_to_save = $base_work_dir.$upload_path;
+			//at least if the directory doesn't exist, tell so
+			if(!is_dir($where_to_save)){
+				Display::display_error_message(get_lang('DestDirectoryDoesntExist').' ('.$upload_path.')');
+				return false;
+			}
+			//echo "<br/>where to save = ".$where_to_save;
+			// full path of the destination
+			$store_path = $where_to_save.$clean_name;
+			//echo "<br/>store path = ".$store_path;
+			//name of the document without the extension (for the title)
+			$document_name = get_document_title($uploaded_file['name']);
+			//size of the uploaded file (in bytes)
+			$file_size = $uploaded_file['size'];
 
-		$files_perm = api_get_setting('permissions_for_new_files');
-		$files_perm = octdec(!empty($files_perm)?$files_perm:'0770');
+			$files_perm = api_get_setting('permissions_for_new_files');
+			$files_perm = octdec(!empty($files_perm)?$files_perm:'0770');
 
 			//what to do if the target file exists
 			switch ($what_if_file_exists)
-				{
+			{
 				//overwrite the file if it exists
 				case 'overwrite':
 
@@ -1905,7 +1904,7 @@ $handle=opendir($path);
  * @param	string	The accentuated string
  * @return	string	The escaped string, not absolutely correct but satisfying
  */
-function replace_accents($string, $encoding = null){
+function replace_accents($string, $encoding = null) {
 	/*
 	global $charset;
 	$string = api_htmlentities($string,ENT_QUOTES,$charset);
@@ -1918,7 +1917,7 @@ function replace_accents($string, $encoding = null){
 /**
  *  @deprecated Use transliteration instead, it is applicable for all languages.
  */
-function remove_accents($string, $encoding = null){
+function remove_accents($string, $encoding = null) {
 	/*
 	$string = strtr ( $string, "�����������������������������������������������������", "AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuyNn");
 	return $string;

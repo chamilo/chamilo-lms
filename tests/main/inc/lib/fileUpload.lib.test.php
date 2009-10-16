@@ -300,21 +300,6 @@ class TestFileUpload extends UnitTestCase {
 			ob_end_clean();
 		}
 
-		function testremove_accents() {
-			$string = strtr ( $string, "�����������������������������������������������������", "AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuyNn");
-			$res= remove_accents($string);
-			$this->assertTrue(is_string($res));
-			//var_dump($res);
-		}
-
-		function testreplace_accents() {
-			global $charset;
-			$string = api_htmlentities($string,ENT_QUOTES,$charset);
-			$res= replace_accents($string);
-			$this->assertTrue(is_string($res));
-			//var_dump($res);
-		}
-
 		function testreplace_img_path_in_html_file() {
 			global $_course;
 			$originalImgPath='';

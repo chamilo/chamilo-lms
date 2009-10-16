@@ -240,10 +240,9 @@ if (isset($_POST['save_audio']))
 			$file_name = $_FILES[$key]['name'];
 			$file_name=stripslashes($file_name);
 			//add extension to files without one (if possible)
-			$file_name=add_ext_on_mime($file_name,$_FILES[$key]['type']);
+			$file_name = add_ext_on_mime($file_name,$_FILES[$key]['type']);
 
 			$clean_name = replace_dangerous_char($file_name);
-			$clean_name = replace_accents($clean_name);
 			//no "dangerous" files
 			$clean_name = disable_dangerous_file($clean_name);
 

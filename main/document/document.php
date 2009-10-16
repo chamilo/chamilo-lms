@@ -515,9 +515,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		{
 			$added_slash = ($curdirpath=='/')?'':'/';
 			$dir_name = $curdirpath.$added_slash.replace_dangerous_char($post_dir_name);
-			$clean_val=disable_dangerous_file($dir_name);
-			$clean_val=replace_accents($dir_name);
-			$dir_name=$clean_val;
+			$dir_name = disable_dangerous_file($dir_name);
 			$dir_check=$base_work_dir.''.$dir_name;
 
 			if(!is_dir($dir_check))

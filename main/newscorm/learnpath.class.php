@@ -4931,7 +4931,6 @@ class learnpath {
 		//is already escaped twice when it gets here
 		$title = replace_dangerous_char(stripslashes($_POST['title']));
 		$title = disable_dangerous_file($title);
-		$title = replace_accents($title);
 
 		$filename = $title;
 		$content = $_POST['content_lp'];

@@ -314,17 +314,13 @@ FCK.UpdateLinkedField = function()
 			if ( head_data )
 			{
 				head_data = head_data.toString().match( /<head\s?[^>]*>(.*?)<\/head\s*>/i ) ;
-				if ( head_data[1] )
+				if ( head_data && head_data.toString().indexOf( 'ASCIIMathML.js' ) != -1 )
 				{
-					head_data = head_data[1] ;
-					if ( head_data.indexOf( 'ASCIIMathML.js' ) != -1 )
-					{
-						has_script = true ;
-					}
+					has_script = true ;
 				}
 			}
 
-			if ( !has_script )
+			if ( has_formula && !has_script )
 			{
 				// TODO: This fragment works in WYSIWYG mode only.
 				script = FCK.EditorDocument.createElement( 'script' ) ;

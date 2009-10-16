@@ -889,7 +889,7 @@ function display_wiki_entry()
 			} else {
 				$notify_page= '<img src="../img/wiki/send_mail.gif" title="'.get_lang('CancelNotifyByEmail').'" alt="'.get_lang('CancelNotifyByEmail').'" />';
 				$lock_unlock_notify_page='locknotify';
-				
+
 			}
 		}
 		echo '<span style="float:right">';
@@ -1068,7 +1068,7 @@ function check_addnewpagelock()
 	$row=Database::fetch_array($result);
 
 	$status_addlock=$row['addlock'];
-	
+
 
 	//change status
 	if (api_is_allowed_to_edit(false,true) || api_is_platform_admin())
@@ -1077,13 +1077,12 @@ function check_addnewpagelock()
 		if ($_GET['actionpage']=='lockaddnew' && $status_addlock==1)
 		{
 	    	$status_addlock=0;
-			}
+		}
 		if ($_GET['actionpage']=='unlockaddnew' && $status_addlock==0)
 		{
 			$status_addlock=1;
 		}
-	
-		
+
 		Database::query('UPDATE '.$tbl_wiki.' SET addlock="'.Database::escape_string($status_addlock).'" WHERE '.$groupfilter.'',__LINE__,__FILE__);
 
 		$sql='SELECT * FROM '.$tbl_wiki.'WHERE '.$groupfilter.' ORDER BY id ASC';
@@ -1095,7 +1094,7 @@ function check_addnewpagelock()
 	//show status
 
 	return $row['addlock'];
-	
+
 }
 
 
@@ -1451,7 +1450,7 @@ function check_notify_discuss($reflink)
 		Database::query($sql,__FILE__,__LINE__);
 		$status_notify_disc=0;
 	}
-	
+
 	//show status
 
 		return $status_notify_disc;
@@ -1704,8 +1703,38 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
  */
 function export2doc($wikiTitle, $wikiContents, $groupId)
 {
+	$template =
+'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{LANGUAGE}" lang="{LANGUAGE}">
+<head>
+<title>{TITLE}</title>
+<meta http-equiv="Content-Type" content="text/html; charset={ENCODING}" />
+<style type="text/css" media="screen, projection">
+/*<![CDATA[*/
+{CSS}
+/*]]>*/
+</style>
+</head>
+<body>
+{CONTENT}
+</body>
+</html>';
 
-	if ( 0 != $groupId)
+	$css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/default.css';
+	if (file_exists($css_file)) {
+		$css = @file_get_contents($css_file);
+	} else {
+		$css = '';
+	}
+	// Fixing some bugs in css files.
+	$css = str_replace('behavior:url("/main/css/csshover3.htc");', '', $css);
+	$css = str_replace('main/', $root_rel.'main/', $css);
+	$css = str_replace('images/', $root_rel.$css_path.$theme.'images/', $css);
+	$css = str_replace('../../img/', $root_rel.'main/img/', $css);
+
+	$template = str_replace(array('{LANGUAGE}', '{ENCODING}', '{TITLE}', '{CSS}'), array(api_get_language_isocode(), api_get_system_encoding(), $wikiTitle, $css), $template);
+
+	if (0 != $groupId)
 	{
 		$groupPart = '_group' . $groupId; // and add groupId to put the same document title in different groups
 		$group_properties  = GroupManager :: get_group_properties($groupId);
@@ -1723,12 +1752,14 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 	$wikiContents = stripslashes($wikiContents);
 	$wikiContents = trim(preg_replace("/\[\[|\]\]/", " ", $wikiContents));
 
+	$wikiContents = str_replace('{CONTENT}', $wikiContents, $template);
+
 	$i = 1;
 	while ( file_exists($exportDir . '/' .$exportFile.'_'.$i.'.html') ) $i++; //only export last version, but in new export new version in document area
 	$wikiFileName = $exportFile . '_' . $i . '.html';
 	$exportPath = $exportDir . '/' . $wikiFileName;
 	file_put_contents( $exportPath, $wikiContents );
-	$doc_id = add_document($_course, $groupPath.'/'.$wikiFileName,'file',filesize($exportPath),$wikiFileName);
+	$doc_id = add_document($_course, $groupPath.'/'.$wikiFileName, 'file', filesize($exportPath), $wikiTitle);
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), $groupId);
     // TODO: link to go document area
 }

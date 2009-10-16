@@ -12,11 +12,12 @@
 // name of the language file that needs to be included
 $language_file = array ('admin');
 // including the global file
+$cidReset = true;
 include ('../inc/global.inc.php');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 // setting breadcrumbs
-$interbreadcrumb[] = array ("url" => '#', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 // Access restrictions
 api_protect_admin_script(true);
 $nameTools = get_lang('SpecialExports');

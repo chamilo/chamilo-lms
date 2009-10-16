@@ -264,9 +264,9 @@ function parse_xml_data($file) {
 }
 
 $cidReset = true;
+include ('../inc/global.inc.php');
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
-
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
@@ -280,7 +280,7 @@ if (is_array($extAuthSource)) {
 
 $tool_name = get_lang('ImportUserListXMLCSV');
 
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
 $extra_fields = Usermanager::get_extra_fields(0, 0, 5, 'ASC', false);

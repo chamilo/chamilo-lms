@@ -59,6 +59,40 @@ echo '<div class="actions-title">';
 echo $tool_name;
 echo '</div>';
 
+/****************/
+
+//Header of Configure Inscription
+ 
+$home= '../../home/';
+if ($_configuration['multiple_access_urls']==true) {
+	$access_url_id = api_get_current_access_url_id();										 
+	if ($access_url_id != -1){						
+		$url_info = api_get_access_url($access_url_id);
+		// "http://" and the final "/" replaced						
+		$url = substr($url_info['url'],7,strlen($url_info['url'])-8);						
+		$clean_url = replace_dangerous_char($url);
+		$clean_url = str_replace('/','-',$clean_url);
+		$clean_url = $clean_url.'/';
+		$home_old  = '../../home/'; 
+		$home= '../../home/'.$clean_url;
+	}
+}
+
+if (!empty($_SESSION['user_language_choice'])) {
+	$user_selected_language=$_SESSION['user_language_choice'];
+} elseif(!empty($_SESSION['_user']['language'])) {
+	$user_selected_language=$_SESSION['_user']['language'];
+} else {
+	$user_selected_language=get_setting('platformLanguage');
+}
+
+if(file_exists($home.'register_top_'.$user_selected_language.'.html')) {
+	$home_top_temp = file_get_contents($home.'register_top_'.$user_selected_language.'.html');
+	$open=str_replace('{rel_path}',api_get_path(REL_PATH),$home_top_temp);
+	echo '<div style="border:1px solid #E1E1E1; padding:2px;">'.$open.'</div>';
+}
+/****************/
+
 // Forbidden to self-register
 if (api_get_setting('allow_registration') == 'false') {
 	api_not_allowed();

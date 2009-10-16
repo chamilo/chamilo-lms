@@ -6,6 +6,7 @@ $langSubTitle = "Afegir un enllaç extern o intern des de la pàgina principal del
 $langAddPage            = "Afegir una pàgina";
 $langSendPage           = "Pàgina a enviar";
 $langCouldNot           = "El fitxer no es pot enviar";
+$langOkSentLink         = "L\'enllaç ha estat afegit. Ara es accessible des de la pàgina principal del curs";
 $langTooBig             = "No ha escollit cap arxiu a enviar, o és massa gran";
 $langExplanation        = "La pàgina ha d\'estar en format HTML (ex: \"my_page.htm\"). Serà enllaçada a la pàgina principal. Si voleu enviar un document NO HTML (PDF, Word, Power Point, Video, etc.) utilitzeu les <a href=../document/document.php>eines de documents</a>";
 $langPgTitle            = "Títol de la pàgina";

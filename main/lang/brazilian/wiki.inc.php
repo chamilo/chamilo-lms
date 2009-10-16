@@ -175,4 +175,5 @@ $Feedback2 = "Segunda mensagem";
 $Feedback3 = "Terceira mensagem";
 $FProgress = "Progresso";
 $PutATimeLimit = "Fixe um prazo ";
+$StandardTask = "Tarefa Padrão";
 ?>

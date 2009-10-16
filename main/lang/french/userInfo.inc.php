@@ -90,4 +90,5 @@ $TryAndFindSomeFriends = "Rechercher des amis";
 $ClearSearchResults = "Nettoyer les résultats de la recherche";
 $SendInvitation = "Envoyer invitation";
 $SocialInvitationToFriends = "Inviter à se joindre à mon groupe d\'amis";
+$MyCertificates = "Mes certificats";
 ?>

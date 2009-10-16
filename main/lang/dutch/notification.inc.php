@@ -17,4 +17,5 @@ $lang_new_dropbox_file = "nieuw bestand ontvangen";
 $lang_update_dropbox_file = "bestand in de studentenpublicatie gewijzigd";
 $ForumCategoryAdded = "Forumcategorie toegevoegd";
 $LearnpathAdded = "Leerpad toegevoegd";
+$WikiAdded = "Wiki toegevoegt";
 ?>

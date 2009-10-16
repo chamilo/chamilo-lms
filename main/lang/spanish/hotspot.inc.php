@@ -20,5 +20,5 @@ $exeFinished = "Todas las zonas han sido seleccionadas. Ahora puede reasignar su
 $nextAnswer = "Haga clic sobre:  &done=done";
 $delineation = "Delimitación";
 $labelDelineationMenu = "Cerrar delimitación";
-$OAR = "OAR";
+$oar = "Zona de riesgo";
 ?>

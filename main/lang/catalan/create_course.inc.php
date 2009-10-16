@@ -99,4 +99,7 @@ $ExampleForum = "Exemple de fòrum";
 $ExampleThread = "Exemple de tema de conversa";
 $ExampleThreadContent = "Exemple de contingut";
 $IntroductionWiki = "La paraula Wiki és una abreviatura de WikiWikiWeb. Wikiwiki és una paraula hawaiana que significa ràpid o veloç. En un Wiki els usuaris poden escriure pàgines conjuntament. Si una persona escriu alguna cosa malament, la següent ho pot corregir. Aquesta darrera persona també pot afegir nous elements a la pàgina. Així la pàgina va millorant amb canvis successius que queden registrats en un historial.";
+$CreateCourseArea = "Crear curs";
+$CreateCourse = "Crear curs";
+$Create = "Crear";
 ?>

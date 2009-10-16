@@ -222,4 +222,5 @@ $ForumThreadsNumber = "aantal discussies";
 $ForumPostsNumber = "Aantal berichten";
 $CourseInformation = "Training informatie";
 $NoAdditionalFieldsWillBeExported = "De extra velden worden niet geëxporteerd";
+$CourseProgress = "Voortgang";
 ?>

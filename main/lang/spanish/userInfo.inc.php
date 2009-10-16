@@ -77,7 +77,7 @@ $SocialSeeContacts = "Ver mi red de contactos";
 $SocialUserInformationAttach = "Escriba un mensaje antes de  enviar la solicitud de acceso.";
 $MessageInvitationNotSent = "Su mensaje de invitación no ha sido enviado";
 $SocialAddToFriends = "Añadir a mi red de amigos";
-$UserNonRegisteredAtTheCourse = "Usuario no registrado al curso";
+$UserNonRegisteredAtTheCourse = "Usuario no inscrito en este curso";
 $ChangeContactGroup = "Cambiar el grupo de mi contacto";
 $Friend = "Amigo";
 $ViewMySharedProfile = "Mi perfil compartido";
@@ -90,4 +90,5 @@ $TryAndFindSomeFriends = "Pruebe a encontrar algunos amigos";
 $ClearSearchResults = "Limpiar el resultado de la búsqueda";
 $SendInvitation = "Enviar invitación";
 $SocialInvitationToFriends = "Invitar a unirse a mi red de amigos";
+$MyCertificates = "Mis certificados";
 ?>

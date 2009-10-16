@@ -988,6 +988,7 @@ $SearchDatabaseCorruptError = "Foi detectado a corrupção da base de dados";
 $SearchNetworkTimeoutError = "Tempo limite expirda quando ocorria a comunicação com a base de dados remota";
 $SearchOtherXapianError = "Erro no mecanismo de pesquisa";
 $SearchXapianModuleNotInstaled = "O módulo Xapian não está instalado";
+$FieldRemoved = "Campo removido ";
 $TheNewSubLanguageHasBeenAdd = "Um novo sub-idioma foi adicionado";
 $DeleteSubLanguage = "Excluir sub-idioma";
 $CreateSubLanguageForLanguage = "Crie um sub-idioma para esse linguagem";
@@ -1060,4 +1061,7 @@ $LanguageFile = "Arquivo de idioma";
 $ShowCoursesDescriptionsInCatalogTitle = "Mostrar as descrições dos cursos no catálogo ";
 $ShowCoursesDescriptionsInCatalogComment = "Mostrar as descrições dos cursos em novas janelas que se abrem ao clicar em um ícone de informação do curso no catálogo de cursos";
 $StylesheetNotHasBeenAdded = "O estilo (stylesheet) não foi adicionado.";
+$ItIsRecommendedInstallImagickExtension = "Recomenda-se a instalação da extensão imagick do PHP para obter uma melhor resolução das imagens na geração das miniaturas ou então elas não ficarão muito boas, pois a extensão gd do PHP é usada se a imagick não for encontrada.";
+$EditSpecificSearchField = "Editar o campo específico de pesquisa";
+$FieldName = "Nome do campo";
 ?>

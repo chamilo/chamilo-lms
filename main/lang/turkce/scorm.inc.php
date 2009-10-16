@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langScormVersion = "versiyon";
+$langScormVersion = "sürüm";
 $langScormRestarted = "&#350;imdilik tamamlanmam&#305;&#351; dersler.";
 $langScormNoNext = "Bu son ders.";
 $langScormNoPrev = "Bu ilk ders.";
@@ -30,5 +30,14 @@ $langScormCloseWindow = "Pencereleri kapat";
 $langScormExitFullScreen = "Normal ekrana dön";
 $langScormFullScreen = "Tam Ekran";
 $langScormNotAttempted = "Çal&#305;&#351;mad&#305;";
+$langCharset = "Karakter Seti";
+$langLocal = "Yerel";
+$langRemote = "Uzak";
+$langAutodetect = "Otomatik Tespit";
+$langAccomplishedStepsTotal = "Tamamlanan ders toplam&#305;";
 $langUnknown = "Bilinmiyor";
+$AreYouSureToDeleteSteps = "Bu ad&#305;mlar&#305; silmek istedi&#287;nizden emin misiniz?";
+$Origin = "Yönetim Arac&#305;";
+$Local = "Yerel";
+$Remote = "Uzak";
 ?>

@@ -122,4 +122,13 @@ $Resources = "Resources";
 $EditBookingPeriod = "Edit booking period";
 $CreateResourceType = "Create resource type";
 $ModifyResourceType = "Edit resource type";
+$ViewResourceTypes = "View the resource types";
+$ViewResources = "View the resources";
+$ViewBookingPeriods = "View the booking periods";
+$AlwaysAvailable = "Always available";
+$SelectResourceTypeAndResource = "Select the resource type";
+$Step1SelectResourceType = "Step 1: Select resource type";
+$Step2SelectResource = "Step 2: select the resource";
+$Step3SelectBookingPeriod = "Step 3: select the booking period";
+$NoReservations = "No reservations";
 ?>

@@ -1,12 +1,12 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
-$LearningPath = "Learning Path";
-$LevelUp = "level up";
-$AddIt = "Add it";
-$MainCategory = "main category";
-$lang_delete_added_resources = "Delete added resources";
+$ResourceAdded = "Recurs afegit. Vostè ara pot tornar a cursos o afegir més recursos";
+$LearningPath = "Itinerari d\'aprenentatge";
+$LevelUp = "nivell superior";
+$AddIt = "Afegir";
+$MainCategory = "Categoria principal";
+$lang_delete_added_resources = "Esborrar recursos afegits";
 $AddToLinks = "Add to the course links";
 $DontAdd = "do not add";
 $lang_show_all_added_resources = "Show all added resources";
@@ -51,4 +51,8 @@ $EditSuccess = "L\'edició ha estat exitosa";
 $AddCalendarItem = "Afegir element a l\'agenda";
 $AddAnn = "Afegir un anunci";
 $ForumAddNewTopic = "Fòrum: afegir un nou tòpic";
+$ForumEditTopic = "Foro: editar un tema";
+$ExerciseAnswers = "Exercici: respostes";
+$ForumReply = "Foro: respondre";
+$AgendaSortChronologicallyDown = "Ordenar l\'agenda del més recent al més antic";
 ?>

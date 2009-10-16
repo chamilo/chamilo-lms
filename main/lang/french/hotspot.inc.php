@@ -20,5 +20,5 @@ $exeFinished = "Cliquez sur le bouton en bas de page pour valider vos réponses";
 $nextAnswer = "Cliquez maintenant sur : &done=done";
 $delineation = "Délinéation";
 $labelDelineationMenu = "Fermer la délinéation";
-$OAR = "Zone à risque";
+$oar = "Zone à risque";
 ?>

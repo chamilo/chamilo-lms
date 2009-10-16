@@ -232,7 +232,7 @@ if (isset($_POST['SaveWikiChange']) AND $_POST['title']<>'')
 	{
 		//double post
 	}
-	elseif ($_POST['version']!='' && $_POST['version']!=$_SESSION['_version'])
+	elseif ($_POST['version']!='' && $_SESSION['_version']!=0 && $_POST['version']!=$_SESSION['_version'])
 	{
 		//prevent concurrent users and double version
 		Display::display_error_message(get_lang("EditedByAnotherUser"));

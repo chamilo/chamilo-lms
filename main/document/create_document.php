@@ -381,7 +381,7 @@ if(!empty($_SESSION['_gid'])) {
 	$group[]= $form->createElement('checkbox','readonly','',get_lang('ReadOnly'));
 }
 // add group to the form
-$form->addGroup($group, 'filename_group', get_lang('FileName') ,'&nbsp;&nbsp;&nbsp;', false);
+$form->addGroup($group, 'filename_group', api_get_setting('use_document_title') == 'true' ? get_lang('Title') : get_lang('FileName') ,'&nbsp;&nbsp;&nbsp;', false);
 $form->addRule('filename_group', get_lang('ThisFieldIsRequired'), 'required');
 
 if (api_get_setting('use_document_title') == 'true') {

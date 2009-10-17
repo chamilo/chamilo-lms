@@ -511,7 +511,7 @@ elseif ($displayMode == "viewContentList") // default display
 
 				"<tr align=\"center\">\n",
 
-				"<td  align=\"left\"><b>".$online.' '.htmlize(api_get_person_name($mainUserInfo['firstName']. $mainUserInfo['lastName']))."</b></td>\n",
+				"<td  align=\"left\"><b>".$online.' '.htmlize(api_get_person_name($mainUserInfo['firstName'], $mainUserInfo['lastName']))."</b></td>\n",
 				"<td  align=\"left\">".htmlize($mainUserInfo['role'])."</td>";
 
 				//DISPLAY TABLE CONTENT

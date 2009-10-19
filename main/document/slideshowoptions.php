@@ -138,8 +138,8 @@ window.onload = <?php echo $_SESSION['image_resizing'] == 'resizing' ? 'enablere
 
 <?php
 echo '<div class="actions">';
-echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png').get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview').'</a>';
-echo '<a href="slideshow.php?curdirpath='.$pathurl.'">'.Display::return_icon('images_gallery.gif').get_lang('Back').' '.get_lang('To').' '.get_lang('Slideshow').'</a>';
+echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png').get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
+echo '<a href="slideshow.php?curdirpath='.$pathurl.'">'.Display::return_icon('images_gallery.gif').get_lang('BackTo').' '.get_lang('SlideShow').'</a>';
 echo '</div>';
 ?>
 

@@ -888,7 +888,7 @@ switch($action){
 						<td><input type="password" id="password" size="15" disabled="disabled" /></td>
 					</tr>
 				</table>
-				<input type="button" value="<?php echo get_lang('Ok'); ?>" disabled="disabled" />
+				<button class="login" type="button" name="submitAuth" value="<?php echo get_lang('Ok'); ?>" disabled="disabled"><?php echo get_lang('Ok'); ?></button>
 			</form>
 			<div class="menusection">
 				<span class="menusectioncaption"><?php echo get_lang('User'); ?></span>

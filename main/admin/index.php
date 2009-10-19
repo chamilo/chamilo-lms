@@ -303,7 +303,7 @@ function version_check()
 		$return .= '<form action="'.api_get_self().'" id="VersionCheck" name="VersionCheck" method="post">';
 		$return .= get_lang('VersionCheckExplanation');
 		$return .= '<input type="checkbox" name="donotlistcampus" value="1" id="checkbox" />'.get_lang('HideCampusFromPublicDokeosPlatformsList');
-		$return .= '<input type="submit" name="Register" value="'.get_lang('EnableVersionCheck').'" id="register" />';
+		$return .= '<button type="submit" class="save" name="Register" value="'.get_lang('EnableVersionCheck').'" id="register" />'.get_lang('EnableVersionCheck').'</button>';
 		$return .= '</form>';
 	}
 	else

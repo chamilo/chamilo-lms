@@ -144,12 +144,12 @@ include(api_get_path(INCLUDE_PATH).'banner.inc.php');
     </table>
   </div>
   <div class="menu" style="width:200px">
-    <form action="#" method="post" id="loginform" name="loginform">
-      <label>Username</label>
-      <input type="text" name="login" id="login" size="15" value="" />
-      <label>Password</label>
-      <input type="password" name="password" id="password" size="15" />
-  	  <button class="login" type="submit" name="submitAuth">Enter</button>
+    <form action="#" method="post" id="loginform" name="loginform"></br>
+      <label>Username</label></br>
+      <input type="text" name="login" id="login" size="15" value="" /></br>
+      <label>Password</label></br>
+      <input type="password" name="password" id="password" size="15" /></br>
+  	  <button class="login" type="submit" name="submitAuth"disabled="disabled" >Enter</button>
     </form>
     <div class="menusection"><span class="menusectioncaption">User</span>
       <ul class="menulist">

@@ -14,6 +14,7 @@
 
 $language_file = array ('admin', 'registration');
 
+$cidReset = true;
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
@@ -263,8 +264,6 @@ function parse_xml_data($file) {
 	return $users;
 }
 
-$cidReset = true;
-include ('../inc/global.inc.php');
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
@@ -361,7 +360,7 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	}
 
 	// if the warning message is too long then we display the warning message trough a session
-	if (strlen($error_message) > 150){
+	if (api_strlen($error_message) > 150) {
 		$_SESSION['session_message_import_users'] = $error_message;
 		$error_message = 'session_message';
 	}

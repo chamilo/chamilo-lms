@@ -1230,7 +1230,7 @@ if ($_GET['action']=='showpage' AND !isset($_POST['SaveWikiNew']))
 {
 	if($_GET['title'])
 	{
-		display_wiki_entry();
+		display_wiki_entry($newtitle);
 	}
 	else
 	{

@@ -251,6 +251,81 @@ foreach($navigation as $section => $navigation_info) {
 	}
 	echo '<li'.$current.'><a href="'.$navigation_info['url'].'" target="_top"><span>'.$navigation_info['title'].'</span></a></li>'."\n";
 }
+
+/*********************/
+$lang = ''; //el for "Edit Language"
+if(!empty($_SESSION['user_language_choice'])) {
+	$lang=$_SESSION['user_language_choice'];
+} elseif(!empty($_SESSION['_user']['language'])) {
+	$lang=$_SESSION['_user']['language'];
+} else {
+	$lang=get_setting('platformLanguage');
+}
+
+if ($_configuration['multiple_access_urls']==true) {
+	$access_url_id = api_get_current_access_url_id();										 
+	if ($access_url_id != -1){						
+		$url_info = api_get_access_url($access_url_id);
+		$url = substr($url_info['url'],7,strlen($url_info['url'])-8);						
+		$clean_url = replace_dangerous_char($url);
+		$clean_url = str_replace('/','-',$clean_url);
+		$clean_url = $clean_url.'/';
+		$homep = '../../home/'; //homep for Home Path			
+		$homep_new = '../../home/'.$clean_url; //homep for Home Path added the url				
+		$new_url_dir = api_get_path(SYS_PATH).'home/'.$clean_url;
+		//we create the new dir for the new sites
+		if (!is_dir($new_url_dir)){		
+			umask(0);
+			$perm = api_get_setting('permissions_for_new_directories');
+			$perm = octdec(!empty($perm)?$perm:'0755');
+			mkdir($new_url_dir, $perm);
+		}
+	}
+} else {
+	$homep_new ='';
+	$vv = explode('/', api_get_self());
+	if(count($vv) > 2)	$homep = '../../home/';
+	else				$homep = 'home/';
+}
+$ext = '.html';
+$menutabs = 'home_tabs';
+if(is_file($homep.$menutabs.'_'.$lang.$ext) && is_readable($homep.$menutabs.'_'.$lang.$ext)) {
+	$home_top=file_get_contents($homep.$menutabs.'_'.$lang.$ext);
+} elseif(is_file($homep.$menutabs.$lang.$ext) && is_readable($homep.$menutabs.$lang.$ext)) {
+	$home_top=file_get_contents($homep.$menutabs.$lang.$ext);
+} else {
+	$errorMsg=get_lang('HomePageFilesNotReadable');
+}
+
+if(api_get_self() != '/main/admin/configure_homepage.php') {
+	if(file_exists($homep.$menutabs.'_'.$lang.$ext)) {
+		$home_top_temp=file_get_contents($homep.$menutabs.'_'.$lang.$ext);
+	} else {
+		$home_top_temp=file_get_contents($homep.$menutabs.$ext);
+	}
+	$open=str_replace('{rel_path}',api_get_path(REL_PATH),$home_top_temp);
+	echo $open;
+} else {
+	$home_menu = '';
+	if(file_exists($homep.$menutabs.'_'.$lang.$ext)) {
+		$home_menu = file($homep.$menutabs.'_'.$lang.$ext);
+	} else {
+		$home_menu = file ($homep.$menutabs.$ext);
+	}
+	foreach($home_menu as $key=>$enreg) {
+		$enreg=trim($enreg);
+		if(!empty($enreg)) {
+			$edit_link='<a href="'.api_get_self().'?action=edit_tabs&amp;link_index='.$key.'" style="padding-right:0px; padding-left:0px;">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+			$delete_link='<a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$key.'" style="padding-right:0px;" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+			echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=',' '.$edit_link.' '.$delete_link.'</li>'),$enreg);
+		}
+	}
+	echo '<li id="insert-link"> <a href="'.api_get_self().'?action=insert_tabs" style="padding-right:0px;">'. Display::return_icon('insert_row.png', get_lang('InsertLink')).'</a> <a href="'.api_get_self().'?action=insert_tabs">'.get_lang('InsertLink').'</a></li>';
+}
+/*********************/
+//Header about the tabs
+
+if ($_self == 'admin_intro_edition_page')
 ?>
 		</ul>
 		<div style="clear: both;" class="clear"> </div>

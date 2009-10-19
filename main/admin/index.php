@@ -150,6 +150,7 @@ if(api_is_platform_admin()) {
 	  <li><a href="system_announcements.php"><?php echo get_lang('SystemAnnouncements') ?></a></li>
 	  <li><a href="languages.php"><?php echo get_lang('Languages'); ?></a></li>
 	  <li><a href="configure_homepage.php"><?php echo get_lang('ConfigureHomePage'); ?></a></li>
+	  <li><a href="configure_inscription.php"><?php echo get_lang('ConfigureInscription'); ?></a></li>
 	  <li><a href="statistics/index.php"><?php echo get_lang('ToolName'); ?> </a></li>
 	  <li><a href="calendar.php"><?php echo get_lang('GlobalAgenda'); ?> </a></li>
 	  <?php if(!empty($phpMyAdminPath)) { ?>

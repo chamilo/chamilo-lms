@@ -1221,7 +1221,7 @@ if ($_GET['action']=='addnew')
 
 if (!$_GET['action'] OR $_GET['action']=='show' AND !isset($_POST['SaveWikiNew']))
 {
-	display_wiki_entry();
+	display_wiki_entry($newtitle);
 }
 
 /////////////////////// show current page ///////////////////////

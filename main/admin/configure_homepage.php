@@ -133,24 +133,25 @@ $menuf	 = 'home_menu'; //menuf for Menu File
 $newsf	 = 'home_news'; //newsf for News File
 $topf 	 = 'home_top'; //topf for Top File
 $noticef = 'home_notice'; //noticef for Notice File
+$menutabs= 'home_tabs'; //menutabs for tabs Menu
 $ext 	 = '.html'; //ext for HTML Extension - when used frequently, variables are
 				// faster than hardcoded strings
-$homef = array($menuf,$newsf,$topf,$noticef);
+$homef = array($menuf,$newsf,$topf,$noticef,$menutabs);
 
 // If language-specific file does not exist, create it by copying default file
 foreach($homef as $my_file) {
 	if ($_configuration['multiple_access_urls']==true) {
 		if (!file_exists($homep_new.$my_file.'_'.$lang.$ext)) {
 			copy($homep.$my_file.$ext,$homep_new.$my_file.'_'.$lang.$ext);
-		}
-	} else {
+		}		
+	} else {	
 		if (!file_exists($homep.$my_file.'_'.$lang.$ext)) {
 			copy($homep.$my_file.$ext,$homep.$my_file.'_'.$lang.$ext);
 		}
 	}
 }
 if ($_configuration['multiple_access_urls']==true) {
-	$homep = $homep_new;
+	$homep = $homep_new; 
 }
 
 // Check WCAG settings and prepare edition using WCAG
@@ -433,11 +434,12 @@ if(!empty($action)) {
 				// Previously, filtering of GET['link'] was done here but it left
 				// a security threat. Filtering has now been moved outside conditions
 				break;
+			case 'delete_tabs':
 			case 'delete_link':
 				// A link is deleted by getting the file into an array, removing the
 				// link and re-writing the array to the file
 				$link_index=intval($_GET['link_index']);
-
+				$menuf = ($action == 'delete_tabs')? $menutabs : $menuf;
 				$home_menu=file($homep.$menuf.'_'.$lang.$ext);
 
 				foreach($home_menu as $key=>$enreg) {

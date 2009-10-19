@@ -102,7 +102,7 @@ function MM_openBrWindow(theURL,winName,features) { //v2.0
 <div class="actions">
 	<?php
 	// exit the slideshow
-	echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png').get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview').'</a>&nbsp;';
+	echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png').get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>&nbsp;';
 
 	// show thumbnails
 	if ($slide_id <> "all") {

@@ -335,6 +335,11 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 		$error_message .= '</ul>';
 	}
 
+	// if the warning message is too long then we display the warning message trough a session
+	if (strlen($error_message) > 150){
+		$_SESSION['session_message_import_users'] = $error_message;
+		$error_message = 'session_message';
+	}
  
         Security::clear_token();
         $tok = Security::get_token();       
@@ -418,11 +423,6 @@ if ($count_fields > 0) {
 </blockquote>
 
 <?php
-
-
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+// footer
 Display :: display_footer();
+?>

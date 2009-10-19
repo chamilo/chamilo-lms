@@ -185,7 +185,7 @@ function DokeosWSCreateUsers($params) {
 				firstname='".Database::escape_string($firstName)."',
 				username='".Database::escape_string($loginName)."',";
 				if (!is_null($password)) {
-					$password = $userPasswordCrypted ? md5($password) : $password;
+					$password = $userPasswordCrypted ? api_get_encrypted_password($password) : $password;
 					$sql .= " password='".Database::escape_string($password)."',";
 				}
 				if (!is_null($auth_source)) {
@@ -231,7 +231,7 @@ function DokeosWSCreateUsers($params) {
 			}
 		}
 
-		$password = ($userPasswordCrypted ? md5($password) : $password);
+		$password = ($userPasswordCrypted ? api_get_encrypted_password($password) : $password);
 		$sql = "INSERT INTO $table_user
 					                SET lastname = '".Database::escape_string(trim($lastName))."',
 					                firstname = '".Database::escape_string(trim($firstName))."',
@@ -394,7 +394,7 @@ function DokeosWSCreateUser($params) {
 			firstname='".Database::escape_string($firstName)."',
 			username='".Database::escape_string($loginName)."',";
 			if (!is_null($password)) {
-				$password = $userPasswordCrypted ? md5($password) : $password;
+				$password = $userPasswordCrypted ? api_get_encrypted_password($password) : $password;
 				$sql .= " password='".Database::escape_string($password)."',";
 			}
 			if (!is_null($auth_source)) {
@@ -437,7 +437,7 @@ function DokeosWSCreateUser($params) {
 		}
 	}
 
-	$password = ($userPasswordCrypted ? md5($password) : $password);
+	$password = ($userPasswordCrypted ? api_get_encrypted_password($password) : $password);
 	$sql = "INSERT INTO $table_user
 				                SET lastname = '".Database::escape_string(trim($lastName))."',
 				                firstname = '".Database::escape_string(trim($firstName))."',
@@ -1167,7 +1167,7 @@ function DokeosWSEditUsers($params) {
 				firstname='".Database::escape_string($firstname)."',
 				username='".Database::escape_string($username)."',";
 		if (!is_null($password)) {
-			$password = $userPasswordCrypted ? md5($password) : $password;
+			$password = $userPasswordCrypted ? api_get_encrypted_password($password) : $password;
 			$sql .= " password='".Database::escape_string($password)."',";
 		}
 		if (!is_null($auth_source)) {
@@ -1314,7 +1314,7 @@ function DokeosWSEditUser($params) {
 			firstname='".Database::escape_string($firstname)."',
 			username='".Database::escape_string($username)."',";
 	if (!is_null($password)) {
-		$password = $userPasswordCrypted ? md5($password) : $password;
+		$password = $userPasswordCrypted ? api_get_encrypted_password($password) : $password;
 		$sql .= " password='".Database::escape_string($password)."',";
 	}
 	if (!is_null($auth_source)) {

@@ -360,6 +360,11 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 		$error_message .= '</ul>';
 	}
 
+	// if the warning message is too long then we display the warning message trough a session
+	if (strlen($error_message) > 150){
+		$_SESSION['session_message_import_users'] = $error_message;
+		$error_message = 'session_message';
+	}
 	header('Location: user_list.php?action=show_message&message='.urlencode($see_message_import).'&warn='.urlencode($error_message).'&sec_token='.$tok);
 	exit ();
 }
@@ -448,9 +453,5 @@ if ($count_fields > 0) {
 </blockquote>
 
 <?php
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
 Display :: display_footer();
+?>

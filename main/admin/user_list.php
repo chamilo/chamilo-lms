@@ -631,6 +631,10 @@ else
 			switch ($_GET['action']) {
 				case 'show_message' :
                     if (!empty($_GET['warn'])) {
+                    	// to prevent too long messages
+                    	if ($_GET['warn'] == 'session_message'){
+                    		$_GET['warn'] = $_SESSION['session_message_import_users'];
+                    	} 
                     	Display::display_warning_message(urldecode($_GET['warn']),false);
                     }
                     if (!empty($_GET['message'])) {

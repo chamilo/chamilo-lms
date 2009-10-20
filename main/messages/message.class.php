@@ -206,6 +206,7 @@ class MessageManager
 
 	 public static function delete_message_by_user_receiver ($user_receiver_id,$id) {
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
+		if ($id != strval(intval($id))) return false;
 		$id = Database::escape_string($id);
 		$sql="SELECT COUNT(*) as count FROM $table_message WHERE id=".$id." AND msg_status<>4;";
 		$rs=Database::query($sql,__FILE__,__LINE__);
@@ -227,6 +228,7 @@ class MessageManager
 	 * @return array
 	 */
 	public static function delete_message_by_user_sender ($user_sender_id,$id) {
+		if ($id != strval(intval($id))) return false;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$query = "DELETE FROM $table_message " .
 				 "WHERE user_sender_id=".Database::escape_string($user_sender_id)." AND id=".Database::escape_string($id);
@@ -234,12 +236,14 @@ class MessageManager
 		return $result;
 	}
 	public static function update_message ($user_id, $id) {
+		if ($id != strval(intval($id)) || $user_id != strval(intval($user_id))) return false;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$query = "UPDATE $table_message SET msg_status = '0' WHERE msg_status<>4 AND user_receiver_id=".Database::escape_string($user_id)." AND id='".Database::escape_string($id)."'";
 		$result = Database::query($query,__FILE__,__LINE__);
 	}
 
 	 public static function get_message_by_user ($user_id,$id) {
+	 	if ($id != strval(intval($id)) || $user_id != strval(intval($user_id))) return false;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$query = "SELECT * FROM $table_message WHERE user_receiver_id=".Database::escape_string($user_id)." AND id='".Database::escape_string($id)."'";
 		$result = Database::query($query,__FILE__,__LINE__);
@@ -253,6 +257,7 @@ class MessageManager
 	 * @return boolean
 	 */
 	 public static function exist_message ($user_id, $id) {
+	 	if ($id != strval(intval($id)) || $user_id != strval(intval($user_id))) return false;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$query = "SELECT id FROM $table_message WHERE user_receiver_id=".Database::escape_string($user_id)." AND id='".Database::escape_string($id)."'";
 		$result = Database::query($query,__FILE__,__LINE__);
@@ -335,14 +340,14 @@ class MessageManager
 		global $charset;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		if (isset($_GET['id_send']) && is_numeric($_GET['id_send'])) {
-			$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".Database::escape_string($_GET['id_send'])." AND msg_status=4;";
+			$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".intval(Database::escape_string($_GET['id_send']))." AND msg_status=4;";
 			$result = Database::query($query,__FILE__,__LINE__);
 		    $path='outbox.php';
 		} else {
 			if (is_numeric($_GET['id'])) {
-				$query = "UPDATE $table_message SET msg_status = '0' WHERE user_receiver_id=".api_get_user_id()." AND id='".Database::escape_string($_GET['id'])."';";
+				$query = "UPDATE $table_message SET msg_status = '0' WHERE user_receiver_id=".api_get_user_id()." AND id='".intval(Database::escape_string($_GET['id']))."';";
 				$result = Database::query($query,__FILE__,__LINE__);
-				$query = "SELECT * FROM $table_message WHERE msg_status<>4 AND user_receiver_id=".api_get_user_id()." AND id='".Database::escape_string($_GET['id'])."';";
+				$query = "SELECT * FROM $table_message WHERE msg_status<>4 AND user_receiver_id=".api_get_user_id()." AND id='".intval(Database::escape_string($_GET['id']))."';";
 				$result = Database::query($query,__FILE__,__LINE__);
 			}
 			$path='inbox.php';
@@ -399,7 +404,7 @@ class MessageManager
 		global $charset;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		if (is_numeric($_GET['id_send'])) {
-			$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".Database::escape_string($_GET['id_send'])." AND msg_status=4;";
+			$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".intval(Database::escape_string($_GET['id_send']))." AND msg_status=4;";
 			$result = Database::query($query,__FILE__,__LINE__);
 		}
 		$path='outbox.php';

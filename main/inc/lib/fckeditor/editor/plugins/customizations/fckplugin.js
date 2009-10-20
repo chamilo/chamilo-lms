@@ -670,6 +670,10 @@ FCKSaveCommand.prototype.Execute = function()
 			if ( oForm.elements[i].getAttribute( 'class' )
 				// A workaround for the introduction sections.
 				|| oForm.elements[i].getAttribute( 'name' ) == 'intro_cmdUpdate' )
+				// and for Forums
+				|| oForm.elements[i].getAttribute( 'name' ) == 'SubmitForumCategory' )
+				|| oForm.elements[i].getAttribute( 'name' ) == 'SubmitForum' )
+				|| oForm.elements[i].getAttribute( 'name' ) == 'SubmitPost' )
 			{
 				try
 				{

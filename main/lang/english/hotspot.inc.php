@@ -20,4 +20,5 @@ $exeFinished = "Now click on the button below to validate your answers.";
 $nextAnswer = "Now click on: &done=done";
 $delineation = "Delineation";
 $labelDelineationMenu = "Close delineation";
+$oar = "Area at risk";
 ?>

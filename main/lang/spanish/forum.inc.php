@@ -125,7 +125,7 @@ $QualifyThreadGradebook = "Calificar este hilo de discusión";
 $QualifyWeight = "Peso de la calificación";
 $QualifyNumeric = "Calificación numérica sobre";
 $AlterQualifyThread = "Editar la calificación del tema";
-$ForumMoved = "El foro se ha movido";
+$ForumMoved = "El foro ha sido movido";
 $YouMustAssignWeightOfQualification = "Debe asignar el peso de la cualificación";
 $DeleteAttachmentFile = "Eliminar archivo adjunto";
 $EditAnAttachment = "Editar un adjunto";
@@ -138,4 +138,5 @@ $EditForum = "Editar foro";
 $BackToForum = "Volver al foro";
 $BackToForumOverview = "Volver a la vista general del foro";
 $BackToThread = "Regresar a tema";
+$ForumcategoryLocked = "Categoría de foro bloqueado";
 ?>

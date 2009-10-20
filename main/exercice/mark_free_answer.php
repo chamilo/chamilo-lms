@@ -109,7 +109,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
@@ -137,16 +137,16 @@ if($action == 'mark'){
 				WHERE exe_user_id = '".Database::escape_string($my_usr)."' AND exe_cours_id = '".Database::escape_string($my_cid)."' AND exe_exo_id = '".Database::escape_string($my_exe)."'
 				ORDER BY exe_date DESC";
 			#echo $sql;
-			$res = api_sql_query($sql,__FILE__,__LINE__);
-			if(mysql_num_rows($res)>0){
-				$row = mysql_fetch_array($res);
+			$res = Database::query($sql,__FILE__,__LINE__);
+			if(Database::num_rows($res)>0){
+				$row = Database::fetch_array($res);
 				//@todo Check that just summing past score and the new free answer mark doesn't come up
 				// with a score higher than the possible score for that exercise
 				$my_score = $row['exe_result'] + $_POST['score'];
 				$sql = "UPDATE $exercise_table SET exe_result = '$my_score'
 					WHERE exe_id = '".$row['exe_id']."'";
 				#echo $sql;
-				$res = api_sql_query($sql,__FILE__,__LINE__);
+				$res = Database::query($sql,__FILE__,__LINE__);
 				$my_msg = get_lang('MarkIsUpdated');
 			}else{
 				$my_score = $_POST['score'];
@@ -177,12 +177,12 @@ if($action == 'mark'){
 				#		$user_id = '0';
 				#	}
 				#	$sql2 = "update `$tbl_learnpath_user` set score='$score' where (user_id=$user_id and learnpath_id='$learnpath_id' and learnpath_item_id='$learnpath_item_id')";
-				#	$res2 = api_sql_query($sql2,__FILE__,__LINE__);
+				#	$res2 = Database::query($sql2,__FILE__,__LINE__);
 				#}
-				$res = api_sql_query($sql,__FILE__,__LINE__);
+				$res = Database::query($sql,__FILE__,__LINE__);
 				$my_msg = get_lang('MarkInserted');
 			}
-			//$mysql_query($sql);
+			//$Database::query($sql, __FILE__, __LINE__);
 			//return 0;
 		}
 	}else{

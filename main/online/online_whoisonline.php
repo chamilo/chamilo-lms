@@ -32,7 +32,7 @@
 
 define('FRAME','online');
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='chat';
 
 include('../inc/global.inc.php');
@@ -45,9 +45,9 @@ $tbl_course_user 		= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_online_connected	= Database::get_course_table(TABLE_ONLINE_CONNECTED);
 
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
-$result=api_sql_query($query,__FILE__,__LINE__);
+$result=Database::query($query,__FILE__,__LINE__);
 
-list($pseudoUser)=mysql_fetch_row($result);
+list($pseudoUser)=Database::fetch_row($result);
 
 $isAllowed=(empty($pseudoUser) || !$_cid)?false:true;
 $isMaster=$is_courseAdmin?true:false;
@@ -60,9 +60,9 @@ if(!$isAllowed)
 $pictureURL=api_get_path(WEB_CODE_PATH).'upload/users/';
 
 $query="SELECT t1.user_id,t1.username,t1.firstname,t1.lastname,t1.picture_uri,t3.status FROM $tbl_user t1,$tbl_online_connected t2,$tbl_course_user t3 WHERE t1.user_id=t2.user_id AND t3.user_id=t1.user_id AND t3.course_code = '".$_course[sysCode]."'  AND t2.last_connection>'".date('Y-m-d H:i:s',time()-60*5)."' ORDER BY t1.username";
-$result=api_sql_query($query,__FILE__,__LINE__);
+$result=Database::query($query,__FILE__,__LINE__);
 
-$Users=api_store_result($result);
+$Users=Database::store_result($result);
 
 include('header_frame.inc.php');
 ?>
@@ -79,7 +79,7 @@ foreach($Users as $enreg)
   <td width="99%"><a <?php if($enreg['status'] == 1) echo 'class="master"'; ?> name="user_<?php echo $enreg['user_id']; ?>" href="<?php echo api_get_self(); ?>?showPic=<?php if($showPic == $enreg['user_id']) echo '0'; else echo $enreg['user_id']; ?>#user_<?php echo $enreg['user_id']; ?>"><b><?php echo $enreg['username']; ?></b></a></td>
 </tr>
 <tr>
-  <td width="99%"><small><?php echo api_ucfirst($enreg['lastname']).' '.api_ucfirst($enreg['firstname']); ?></small></td>
+  <td width="99%"><small><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']); ?></small></td>
 </tr>
 
 <?php if($showPic == $enreg['user_id']): ?>

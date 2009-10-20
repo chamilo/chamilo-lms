@@ -44,7 +44,7 @@ abstract class EvalLink extends AbstractLink
     	$eval = $this->get_evaluation();
 		return $eval->has_results();
     }
-    
+
     public function calc_score($stud_id = null) {
     	$eval = $this->get_evaluation();
 		return $eval->calc_score($stud_id);
@@ -61,17 +61,17 @@ abstract class EvalLink extends AbstractLink
 		else
 			return null;
 	}
-	
+
     public function get_name() {
     	$eval = $this->get_evaluation();
     	return $eval->get_name();
     }
-    
+
     public function get_description() {
     	$eval = $this->get_evaluation();
     	return $eval->get_description();
     }
-    
+
     public function get_max() {
     	$eval = $this->get_evaluation();
     	return $eval->get_max();
@@ -84,7 +84,7 @@ abstract class EvalLink extends AbstractLink
 	public function needs_name_and_description() {
 		return true;
 	}
-	
+
 	public function needs_max() {
 		return true;
 	}
@@ -100,56 +100,56 @@ abstract class EvalLink extends AbstractLink
 			$this->set_ref_id($this->evaluation->get_id());
 		}
 	}
-	
+
 	public function save_linked_data() {
 		if ($this->is_valid_link()) {
-			$this->evaluation->save();			
+			$this->evaluation->save();
 		}
 	}
-	
+
 	public function delete_linked_data() {
 		if ($this->is_valid_link()) {
-			$this->evaluation->delete_with_results();			
+			$this->evaluation->delete_with_results();
 		}
 	}
 
 
 	public function set_name ($name) {
 		if ($this->is_valid_link()) {
-			$this->evaluation->set_name($name);			
+			$this->evaluation->set_name($name);
 		}
 	}
-	
+
 	public function set_description ($description) {
 		if ($this->is_valid_link()) {
-			$this->evaluation->set_description($description);			
+			$this->evaluation->set_description($description);
 		}
 	}
-	
+
 	public function set_max ($max) {
 		if ($this->is_valid_link()) {
-			$this->evaluation->set_max($max);		
+			$this->evaluation->set_max($max);
 		}
 	}
 // Functions overriding non-trivial implementations from AbstractLink
 	public function set_date ($date) {
 		$this->link_date = $date;
 		if ($this->is_valid_link()) {
-			$this->evaluation->set_date($date);			
+			$this->evaluation->set_date($date);
 		}
 	}
-	
+
 	public function set_weight ($weight) {
 		$this->weight = $weight;
 		if ($this->is_valid_link()) {
-			$this->evaluation->set_weight($weight);			
+			$this->evaluation->set_weight($weight);
 		}
 	}
-	
+
 	public function set_visible ($visible) {
 		$this->visible = $visible;
 		if ($this->is_valid_link()) {
-			$this->evaluation->set_visible($visible);			
+			$this->evaluation->set_visible($visible);
 		}
 	}
 
@@ -176,7 +176,7 @@ abstract class EvalLink extends AbstractLink
 				$eval->set_course_code($this->get_course_code());
 				$this->evaluation = $eval;
 				$this->set_ref_id($eval->get_id());
-				
+
 			}
 		}
 		return $this->evaluation;

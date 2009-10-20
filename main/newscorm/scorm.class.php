@@ -22,7 +22,7 @@ class scorm extends learnpath {
 	var $idrefs = array(); //will hold the references to resources for each item ID found
 	var $refurls = array(); //for each resource found, stores the file url/uri
 	var $subdir = ''; //path between the scorm/ directory and the imsmanifest.xml e.g. maritime_nav/maritime_nav. This is the path that will be used in the lp_path when importing a package
-	var $items = array(); 
+	var $items = array();
 	var $zipname = ''; //keeps the zipfile safe for the object's life so that we can use it if no title avail
 	var $lastzipnameindex = 0; //keeps an index of the number of uses of the zipname so far
 	var $manifest_encoding = 'UTF-8';
@@ -60,7 +60,7 @@ class scorm extends learnpath {
     /**
      * Parses an imsmanifest.xml file and puts everything into the $manifest array
      * @param	string	Path to the imsmanifest.xml file on the system. If not defined, uses the base path of the course's scorm dir
-	 * @return	array	Structured array representing the imsmanifest's contents 
+	 * @return	array	Structured array representing the imsmanifest's contents
      */
      function parse_manifest($file='')
      {
@@ -212,14 +212,14 @@ class scorm extends learnpath {
 	     		if($res===false){
 	     			if($this->debug>0){error_log('New LP - In scorm::parse_manifest() - Exception thrown when loading '.$file.' in DOMDocument',0);}
 	     			//throw exception?
-	     			return null;	     			
+	     			return null;
 	     		}
 
 	     		if(!empty($doc->xmlEncoding)){
 	     			$this->manifest_encoding = strtoupper($doc->xmlEncoding);
 	     		}
 	     		if($this->debug>1){error_log('New LP - Called  (encoding:'.$doc->xmlEncoding.' - saved: '.$this->manifest_encoding.')',0);}
-	     		
+
 				$root = $doc->documentElement;
 				if($root->hasAttributes()){
 	     			$attributes = $root->attributes;
@@ -348,22 +348,22 @@ class scorm extends learnpath {
      }
      /**
       * Import the scorm object (as a result from the parse_manifest function) into the database structure
-      * @param	string	Unique course code 
+      * @param	string	Unique course code
       * @return	bool	Returns -1 on error
       */
      function import_manifest($course_code){
      	if($this->debug>0){error_log('New LP - Entered import_manifest('.$course_code.')',0);}
-     	
+
 		$sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE code='$course_code'";
-        $res = api_sql_query($sql,__FILE__,__LINE__);
+        $res = Database::query($sql,__FILE__,__LINE__);
         if(Database::num_rows($res)<1){ error_log('Database for '.$course_code.' not found '.__FILE__.' '.__LINE__,0);return -1;}
         $row = Database::fetch_array($res);
         $dbname = $row['db_name'];
 
 		//get table names
-		$new_lp = Database::get_course_table('lp',$dbname);
-		$new_lp_item = Database::get_course_table('lp_item',$dbname);
-		
+		$new_lp = Database::get_course_table(TABLE_LP_MAIN, $dbname);
+		$new_lp_item = Database::get_course_table(TABLE_LP_ITEM, $dbname);
+
 		foreach($this->organizations as $id => $dummy)
 		{
 			$oOrganization =& $this->organizations[$id];
@@ -372,7 +372,7 @@ class scorm extends learnpath {
 	     	//-for items
 	     	//-for views?
 	    	$get_max = "SELECT MAX(display_order) FROM $new_lp";
-	    	$res_max = api_sql_query($get_max);
+	    	$res_max = Database::query($get_max);
 	    	$dsp = 1;
 	    	if(Database::num_rows($res_max)>0){
 	    		$row = Database::fetch_array($res_max);
@@ -387,13 +387,13 @@ class scorm extends learnpath {
 			$sql = "INSERT INTO $new_lp (lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib,display_order)" .
 					"VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."','scorm_api.php',$dsp)";
 			if($this->debug>1){error_log('New LP - In import_manifest(), inserting path: '. $sql,0);}
-			$res = api_sql_query($sql,__FILE__,__LINE__);
-			$lp_id = Database::get_last_insert_id();
+			$res = Database::query($sql,__FILE__,__LINE__);
+			$lp_id = Database::insert_id();
 			$this->lp_id = $lp_id;
 			//insert into item_property
 			api_item_property_update(api_get_course_info($course_code),TOOL_LEARNPATH,$this->lp_id,'LearnpathAdded',api_get_user_id());
 			api_item_property_update(api_get_course_info($course_code),TOOL_LEARNPATH,$this->lp_id,'visible',api_get_user_id());
-			
+
 			//now insert all elements from inside that learning path
 			//make sure we also get the href and sco/asset from the resources
 			$list = $oOrganization->get_flat_items_list();
@@ -443,15 +443,15 @@ class scorm extends learnpath {
 				$max_score = Database::escape_string($item['max_score']);
 				if ($max_score==0 || is_null($max_score) || $max_score=='') {
 					$max_score=100;
-				}				
+				}
 				//DOM in PHP5 is always recovering data as UTF-8, somehow, no matter what
 				//the XML document encoding is. This means that we have to convert
 				//the data to the declared encoding when it is not UTF-8
 				if($this->manifest_encoding != 'UTF-8'){
-		     		$title = mb_convert_encoding($title,$this->manifest_encoding,'UTF-8');
+		     		$title = api_convert_encoding($title,$this->manifest_encoding,'UTF-8');
 		     	}
 				//if($this->manifest_encoding != $charset){
-		     	//	$title = mb_convert_encoding($title,$charset,$this->manifest_encoding);
+		     	//	$title = api_convert_encoding($title,$charset,$this->manifest_encoding);
 		     	//}
 				$identifier = Database::escape_string($item['identifier']);
 				$prereq = Database::escape_string($item['prerequisites']);
@@ -468,12 +468,12 @@ class scorm extends learnpath {
 						"'$prereq', ".$item['rel_order'] .", '".$item['datafromlms']."'," .
 						"'".$item['parameters']."'" .
 						")";
-				$res_item = api_sql_query($sql_item);
+				$res_item = Database::query($sql_item);
 				if($this->debug>1){error_log('New LP - In import_manifest(), inserting item : '.$sql_item.' : '.mysql_error(),0);}
-				$item_id = Database::get_last_insert_id();
+				$item_id = Database::insert_id();
 				//now update previous item to change next_item_id
 				$upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE id = $previous";
-				$upd_res = api_sql_query($upd);
+				$upd_res = Database::query($upd);
 				//update previous item id
 				$previous = $item_id;
 
@@ -524,7 +524,7 @@ class scorm extends learnpath {
                         $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, ref_id_second_level, search_did)
                                 VALUES (NULL , \'%s\', \'%s\', %s, %s, %s)';
                         $sql = sprintf($sql, $tbl_se_ref, api_get_course_id(), TOOL_LEARNPATH, $lp_id, $previous, $did);
-                        api_sql_query($sql,__FILE__,__LINE__);
+                        Database::query($sql,__FILE__,__LINE__);
 					}
 				}
 
@@ -533,7 +533,7 @@ class scorm extends learnpath {
      }
 	 /**
 	  * Intermediate to import_package only to allow import from local zip files
-	  * @param	string	Path to the zip file, from the dokeos sys root 
+	  * @param	string	Path to the zip file, from the dokeos sys root
 	  * @param	string	Current path (optional)
 	  * @return string	Absolute path to the imsmanifest.xml file or empty string on error
 	  */
@@ -544,7 +544,7 @@ class scorm extends learnpath {
 	 	$file_info['tmp_name'] = $file_path;
 	 	$file_info['name'] = basename($file_path);
 	 	//call the normal import_package function
-	 	return $this->import_package($file_info,$current_dir); 
+	 	return $this->import_package($file_info,$current_dir);
 	 }
      /**
       * Imports a zip file into the Dokeos structure
@@ -562,7 +562,7 @@ class scorm extends learnpath {
 		$course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_rel_dir; //absolute system path for this course
 		$current_dir = replace_dangerous_char(trim($current_dir),'strict'); //current dir we are in, inside scorm/
      	if($this->debug>1){error_log('New LP - import_package() - current_dir = '.$current_dir,0);}
-     	
+
  		//$uploaded_filename = $_FILES['userFile']['name'];
 		//get name of the zip file without the extension
 		if($this->debug>1){error_log('New LP - Received zip file name: '.$zip_file_path,0);}
@@ -571,14 +571,14 @@ class scorm extends learnpath {
 		$extension = $file_info['extension'];
 		$file_base_name = str_replace('.'.$extension,'',$filename); //filename without its extension
 		$this->zipname = $file_base_name; //save for later in case we don't have a title
-		
+
 		if($this->debug>1){error_log("New LP - base file name is : ".$file_base_name,0);}
 		$new_dir = replace_dangerous_char(trim($file_base_name),'strict');
 		$this->subdir = $new_dir;
 		if($this->debug>1){error_log("New LP - subdir is first set to : ".$this->subdir,0);}
-	
+
 		$zipFile = new pclZip($zip_file_path);
-	
+
 		// Check the zip content (real size and file extension)
 
 		$zipContentArray = $zipFile->listContent();
@@ -620,7 +620,7 @@ class scorm extends learnpath {
 		$shortest_path = $manifest_list[0];
 		$slash_count = substr_count($shortest_path,'/');
 		foreach($manifest_list as $manifest_path){
-			$tmp_slash_count = substr_count($manifest_path,'/'); 
+			$tmp_slash_count = substr_count($manifest_path,'/');
 			if($tmp_slash_count<$slash_count){
 				$shortest_path = $manifest_path;
 				$slash_count = $tmp_slash_count;
@@ -628,31 +628,31 @@ class scorm extends learnpath {
 		}
 		$this->subdir .= '/'.dirname($shortest_path); //do not concatenate because already done above
 		$manifest = $shortest_path;
-		
+
 		if($this->debug>1){error_log('New LP - Package type is now '.$package_type,0);}
-	
+
 		if($package_type== '')
 		 // && defined('CHECK_FOR_SCORM') && CHECK_FOR_SCORM)
 		{
 			return api_failure::set_failure('not_scorm_content');
 		}
-	
+
 		if (! enough_size($realFileSize, $course_sys_dir, $maxFilledSpace) )
 		{
 			return api_failure::set_failure('not_enough_space');
 		}
-	
+
 		// it happens on Linux that $new_dir sometimes doesn't start with '/'
 		if($new_dir[0] != '/')
 		{
 			$new_dir='/'.$new_dir;
 		}
-	
+
 		if($new_dir[strlen($new_dir)-1] == '/')
 		{
 			$new_dir=substr($new_dir,0,-1);
 		}
-	
+
 		/*
 		--------------------------------------
 			Uncompressing phase
@@ -666,7 +666,7 @@ class scorm extends learnpath {
 		*/
 		if(is_dir($course_sys_dir.$new_dir) OR @mkdir($course_sys_dir.$new_dir))
 		{
-			
+
 			// PHP method - slower...
 			if($this->debug>=1){error_log('New LP - Changing dir to '.$course_sys_dir.$new_dir,0);}
 			$saved_dir = getcwd();
@@ -675,13 +675,13 @@ class scorm extends learnpath {
 			for($j=0;$j<count($unzippingState);$j++)
 			{
 				$state=$unzippingState[$j];
-	
+
 				//TODO fix relative links in html files (?)
 				$extension = strrchr($state["stored_filename"], ".");
 				if($this->debug>=1){error_log('New LP - found extension '.$extension.' in '.$state['stored_filename'],0);}
-				
+
 			}
-	
+
 			if(!empty($new_dir))
 			{
 				$new_dir = $new_dir.'/';
@@ -695,15 +695,15 @@ class scorm extends learnpath {
 					if($file != '.' && $file != '..')
 					{
 						$filetype="file";
-	
+
 						if(is_dir($course_sys_dir.$new_dir.$file)) $filetype="folder";
-						
+
 						//TODO RENAMING FILES CAN BE VERY DANGEROUS SCORM-WISE, avoid that as much as possible!
 						//$safe_file=replace_dangerous_char($file,'strict');
 						$find_str = array('\\','.php','.phtml');
 						$repl_str = array('/', '.txt','.txt');
 						$safe_file = str_replace($find_str,$repl_str,$file);
-	
+
 						if($safe_file != $file){
 							//@rename($course_sys_dir.$new_dir,$course_sys_dir.'/'.$safe_file);
 							$mydir = dirname($course_sys_dir.$new_dir.$safe_file);
@@ -722,17 +722,17 @@ class scorm extends learnpath {
 							}
 							@rename($course_sys_dir.$new_dir.$file,$course_sys_dir.$new_dir.$safe_file);
 							if($this->debug==1){error_log('New LP - Renaming '.$course_sys_dir.$new_dir.$file.' to '.$course_sys_dir.$new_dir.$safe_file,0);}
-						}	
+						}
 						//set_default_settings($course_sys_dir,$safe_file,$filetype);
 					}
 				}
-	
+
 				closedir($dir);
 				chdir($saved_dir);
-				
+
 				$perm = api_get_setting('permissions_for_new_directories');
 				$perm = octdec(!empty($perm)?$perm:'0770');
-				
+
 				api_chmod_R($course_sys_dir.$new_dir , $perm);
 			}
 		}else{
@@ -748,15 +748,15 @@ class scorm extends learnpath {
 		if($this->debug>0){error_log('In scorm::set_proximity('.$proxy.') method',0);}
 	 	$lp = $this->get_id();
 	 	if($lp!=0){
-	 		$tbl_lp = Database::get_course_table('lp');
+	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET content_local = '$proxy' WHERE id = ".$lp;
-	 		$res = api_sql_query($sql);
+	 		$res = Database::query($sql);
 	 		return $res;
 	 	}else{
 	 		return false;
 	 	}
 	 }
-	 
+
 	 /**
 	 * Sets the theme setting in the database
 	 * @param	string	theme setting
@@ -765,15 +765,15 @@ class scorm extends learnpath {
 		if($this->debug>0){error_log('In scorm::set_theme('.$theme.') method',0);}
 	 	$lp = $this->get_id();
 	 	if($lp!=0){
-	 		$tbl_lp = Database::get_course_table('lp');
+	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET theme = '$theme' WHERE id = ".$lp;
-	 		$res = api_sql_query($sql);
+	 		$res = Database::query($sql);
 	 		return $res;
 	 	}else{
 	 		return false;
 	 	}
 	 }
-	 
+
 	 	 /**
 	 * Sets the image setting in the database
 	 * @param	string preview_image setting
@@ -782,16 +782,16 @@ class scorm extends learnpath {
 		if($this->debug>0){error_log('In scorm::set_theme('.$preview_image.') method',0);}
 	 	$lp = $this->get_id();
 	 	if($lp!=0){
-	 		$tbl_lp = Database::get_course_table('lp');
+	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET preview_image = '$preview_image' WHERE id = ".$lp;
-	 		$res = api_sql_query($sql);
+	 		$res = Database::query($sql);
 	 		return $res;
 	 	}else{
 	 		return false;
 	 	}
 	 }
-	 
-	 
+
+
 	 /**
 	 * Sets the author  setting in the database
 	 * @param	string preview_image setting
@@ -800,18 +800,18 @@ class scorm extends learnpath {
 		if($this->debug>0){error_log('In scorm::set_author('.$author.') method',0);}
 	 	$lp = $this->get_id();
 	 	if($lp!=0){
-	 		$tbl_lp = Database::get_course_table('lp');
+	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET author = '$author' WHERE id = ".$lp;
-	 		$res = api_sql_query($sql);
+	 		$res = Database::query($sql);
 	 		return $res;
 	 	}else{
 	 		return false;
 	 	}
 	 }
-	 
-	 
-	 
-	 
+
+
+
+
 	/**
 	 * Sets the content maker setting in the database
 	 * @param	string	Proximity setting
@@ -820,9 +820,9 @@ class scorm extends learnpath {
 		if($this->debug>0){error_log('In scorm::set_maker method('.$maker.')',0);}
 	 	$lp = $this->get_id();
 	 	if($lp!=0){
-	 		$tbl_lp = Database::get_course_table('lp');
+	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET content_maker = '$maker' WHERE id = ".$lp;
-	 		$res = api_sql_query($sql);
+	 		$res = Database::query($sql);
 	 		return $res;
 	 	}else{
 	 		return false;
@@ -857,12 +857,12 @@ class scorm extends learnpath {
 		require_once (api_get_path(LIBRARY_PATH)."document.lib.php");
 		require_once (api_get_path(LIBRARY_PATH)."pclzip/pclzip.lib.php");
 		require_once ("learnpath_functions.inc.php");
-		$tbl_lp = Database::get_course_table('lp');
+		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 		$_course = Database::get_course_info(api_get_course_id());
 
 		$sql = "SELECT * FROM $tbl_lp WHERE id=".$lp_id;
-		$result = api_sql_query($sql, __FILE__, __LINE__);
-		$row = mysql_fetch_array($result);
+		$result = Database::query($sql, __FILE__, __LINE__);
+		$row = Database::fetch_array($result);
 		$LPname = $row['path'];
 		$list = split('/',$LPname);
 		$LPnamesafe = $list[0];
@@ -871,18 +871,18 @@ class scorm extends learnpath {
 		$zipfoldername = api_get_path('SYS_COURSE_PATH').$_course['directory']."/temp/".$LPnamesafe;
 		$scormfoldername = api_get_path('SYS_COURSE_PATH').$_course['directory']."/scorm/".$LPnamesafe;
 		$zipfilename = $zipfoldername."/".$LPnamesafe.".zip";
-	
-		//Get a temporary dir for creating the zip file	
-		
+
+		//Get a temporary dir for creating the zip file
+
 		//error_log('New LP - cleaning dir '.$zipfoldername,0);
 		deldir($zipfoldername); //make sure the temp dir is cleared
 		$res = mkdir($zipfoldername);
 		//error_log('New LP - made dir '.$zipfoldername,0);
-		
+
 		//create zipfile of given directory
 		$zip_folder = new PclZip($zipfilename);
 		$zip_folder->create($scormfoldername.'/', PCLZIP_OPT_REMOVE_PATH, $scormfoldername.'/');
-		
+
 		//$zipfilename = '/var/www/dokeos-comp/courses/TEST2/scorm/example_document.html';
 		//this file sending implies removing the default mime-type from php.ini
 		//DocumentManager :: file_send_for_download($zipfilename, true, $LPnamesafe.".zip");
@@ -891,9 +891,9 @@ class scorm extends learnpath {
 		// Delete the temporary zip file and directory in fileManage.lib.php
 		my_delete($zipfilename);
 		my_delete($zipfoldername);
-	
+
 		return true;
-	}	 
+	}
 	/**
 	  * Gets a resource's path if available, otherwise return empty string
 	  * @param	string	Resource ID as used in resource array
@@ -963,7 +963,7 @@ class scorm extends learnpath {
 		$sql = "SELECT * FROM $main_table WHERE code = '$course'";
 		if($this->debug>2){error_log('New LP - scorm::reimport_manifest() '.__LINE__.' - Querying course: '.$sql,0);}
 		//$res = Database::query($sql);
-		$res = api_sql_query($sql);
+		$res = Database::query($sql);
 		if(Database::num_rows($res)>0)
 		{
 			$this->cc = $course;
@@ -973,17 +973,17 @@ class scorm extends learnpath {
 			$this->error = 'Course code does not exist in database ('.$sql.')';
 			return false;
    		}
-   		
+
    		//TODO make it flexible to use any course_code (still using env course code here)
 		//$lp_table = Database::get_course_table(LEARNPATH_TABLE);
-    	$lp_table = Database::get_course_table('lp');
+    	$lp_table = Database::get_course_table(TABLE_LP_MAIN);
 
 		//$id = Database::escape_integer($id);
 		$lp_id = $this->escape_string($lp_id);
 		$sql = "SELECT * FROM $lp_table WHERE id = '$lp_id'";
 		if($this->debug>2){error_log('New LP - scorm::reimport_manifest() '.__LINE__.' - Querying lp: '.$sql,0);}
 		//$res = Database::query($sql);
-		$res = api_sql_query($sql);
+		$res = Database::query($sql);
 		if(Database::num_rows($res)>0)
 		{
     			$this->lp_id = $lp_id;
@@ -1021,7 +1021,7 @@ class scorm extends learnpath {
 			$this->import_manifest(api_get_course_id());
 	  	}else{
 	  		if($this->debug>0){error_log('New LP - In scorm::reimport_manifest() - Could not find manifest file at '.$manifest_file,0);}
-	  	}  	
+	  	}
 	  	return false;
 	  }
 }

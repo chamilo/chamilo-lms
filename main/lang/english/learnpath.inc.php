@@ -226,7 +226,7 @@ $ShowAttempt = "Show attempt";
 $ShowAndQualifyAttempt = "Show and mark attempt";
 $langAddEdit = "Add / Edit";
 $ModifyPrerequisites = "Save prerequisites settings";
-$CreateLearningPath = "Continue >";
+$CreateLearningPath = "Continue ";
 $AddExercise = "Add test to course";
 $AddForum = "Add forum";
 $LPCreateDocument = "Add this document to the course";
@@ -243,4 +243,5 @@ $AddLinkToCourse = "Add link to course";
 $AddAssignmentToCourse = "Add assignment to course";
 $AddForumToCourse = "Add forum to course";
 $SaveAudioAndOrganization = "Save audio and organization";
+$UploadOnlyMp3Files = "Please upload mp3 files only";
 ?>

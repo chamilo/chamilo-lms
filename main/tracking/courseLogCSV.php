@@ -34,13 +34,15 @@
 ==============================================================================
 */
 
+// TODO: Is this file deprecated?
+
 /*
 ==============================================================================
 		INIT SECTION
 ==============================================================================
 */
 $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "tracking";
 
 include('../inc/global.inc.php');
@@ -53,10 +55,10 @@ require_once('../newscorm/scormItem.class.php');
 // charset determination
 if ($_GET['scormcontopen'])
 {
-	$tbl_lp = Database::get_course_table('lp');
+	$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	$contopen = (int) $_GET['scormcontopen'];
 	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	$row = Database::fetch_array($res);
 	$lp_charset = $row['default_encoding'];
 	//header('Content-Type: text/html; charset='. $row['default_encoding']);
@@ -83,10 +85,10 @@ $table_user = Database::get_main_table(TABLE_MAIN_USER);
 //$tbl_learnpath_item = Database::get_course_table(TABLE_LEARNPATH_ITEM);
 //$tbl_learnpath_chapter = Database::get_course_table(TABLE_LEARNPATH_CHAPTER);
 
-$tbl_learnpath_main = Database::get_course_table('lp');
-$tbl_learnpath_item = Database::get_course_table('lp_item');
-$tbl_learnpath_view = Database::get_course_table('lp_view');
-$tbl_learnpath_item_view = Database::get_course_table('lp_item_view');
+$tbl_learnpath_main = Database::get_course_table(TABLE_LP_MAIN);
+$tbl_learnpath_item = Database::get_course_table(TABLE_LP_ITEM);
+$tbl_learnpath_view = Database::get_course_table(TABLE_LP_VIEW);
+$tbl_learnpath_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 $view = $_REQUEST['view'];
 
@@ -126,19 +128,19 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
     ";*/
 
     if(!isset($view)) $view ="0000000";
-	
-	
+
+
 /***************************************************************************
  *
  *		Reporting
  *
  ***************************************************************************/
-	
+
 	$tempView = $view;
     if($view[6] == '1'){
-    	
+
     	$tempView[6] = '0';
-    	
+
         //--------------------------------BEGIN users in this course
         $sql = "SELECT $TABLECOURSUSER.`user_id`, $table_user.`lastname`, $table_user.`firstname`
                     FROM $TABLECOURSUSER, $table_user
@@ -155,7 +157,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
         {
         	$line='';
         	$title_line = get_lang('Name').";".get_lang('FirstAccess').";".get_lang('LastAccess').";".get_lang('Visited')."\n";
-       	
+
             for($j = 0 ; $j < count($results) ; $j++)
             {
 
@@ -201,9 +203,9 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 				$line .= $results[$j][1]." ".$results[$j][2].";".$first_access.";".$last_access.";".$lpath_pct_completed."\n";
 
 				//--------------------------------END presentation of data
-				
 
-				
+
+
             }
 
         }
@@ -211,11 +213,11 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
         {
             $line = get_lang('NoResult')."\n";
         }
-		 
+
     }
-    
-    
-    
+
+
+
 /***************************************************************************
  *
  *		Main
@@ -227,17 +229,17 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
     {
         $title[1]= $nameTools;
         $tempView[0] = '0';
-        
+
         $sql = "SELECT count(*)
                     FROM $TABLECOURSUSER
                     WHERE course_code = '".$_cid."'";
         $count = getOneResult($sql);
-        
+
 		$title_line = get_lang('CountUsers')." ; ".$count."\n";
-               
-        
-    }   
-    
+
+
+    }
+
 
 /***************************************************************************
 *
@@ -246,23 +248,23 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 ***************************************************************************/
     $tempView = $view;
     if($view[1] == '1'){
-    	
+
         $tempView[1] = '0';
 
-        
+
         $title[1]=get_lang('ConnectionsToThisCourse');
         $title_line = '';
         $line = '';
-        
+
         //Total
         $sql = "SELECT count(*)
                     FROM $TABLETRACK_ACCESS
                     WHERE access_cours_code = '".$_cid."'
                         AND access_tool IS NULL";
         $count = getOneResult($sql);
-        
+
         $line .= get_lang('CountToolAccess')." ; ".$count."\n";
-         
+
         // last 31 days
         $sql = "SELECT count(*)
                     FROM $TABLETRACK_ACCESS
@@ -270,9 +272,9 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
                         AND (access_date > DATE_ADD(CURDATE(), INTERVAL -31 DAY))
                         AND access_tool IS NULL";
         $count = getOneResult($sql);
-        
+
         $line .= get_lang('Last31days')." ; ".$count."\n";
-        
+
         // last 7 days
         $sql = "SELECT count(*)
                     FROM $TABLETRACK_ACCESS
@@ -280,9 +282,9 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
                         AND (access_date > DATE_ADD(CURDATE(), INTERVAL -7 DAY))
                         AND access_tool IS NULL";
         $count = getOneResult($sql);
-        
+
         $line .= get_lang('Last7days')." ; ".$count."\n";
-        
+
         // today
         $sql = "SELECT count(*)
                     FROM $TABLETRACK_ACCESS
@@ -291,11 +293,11 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
                         AND access_tool IS NULL";
         $count = getOneResult($sql);
         $line .= get_lang('Thisday')." ; ".$count."\n";
-        
+
     }
-    
-    
-    
+
+
+
 /***************************************************************************
  *
  *		Tools
@@ -303,22 +305,22 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
  ***************************************************************************/
 	$tempView = $view;
 	if($view[2] == '1'){
-		
+
 	    $tempView[2] = '0';
 
 		$title[1]= $nameTools;
 		$line ='';
-	    
+
 	    $title_line = get_lang('ToolTitleToolnameColumn').";".get_lang('ToolTitleUsersColumn').";".get_lang('ToolTitleCountColumn')."\n";
-              
+
 		$sql = "SELECT `access_tool`, COUNT(DISTINCT `access_user_id`),count( `access_tool` )
                 FROM $TABLETRACK_ACCESS
                 WHERE `access_tool` IS NOT NULL
                     AND `access_cours_code` = '$_cid'
                 GROUP BY `access_tool`";
-                
+
         $results = getManyResults3Col($sql);
-        
+
         if (is_array($results))
         {
             for($j = 0 ; $j < count($results) ; $j++)
@@ -331,10 +333,10 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
         {
             $line = get_lang('NoResult')."\n";
         }
-	   	    
+
 	}
-    
-    
+
+
 /***************************************************************************
 *
 *		Links
@@ -343,21 +345,21 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 
     $tempView = $view;
     if($view[3] == '1'){
-    	
+
         $tempView[3] = '0';
-        
+
         $sql = "SELECT `cl`.`title`, `cl`.`url`,count(DISTINCT `sl`.`links_user_id`), count(`cl`.`title`)
                     FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
                     WHERE `sl`.`links_link_id` = `cl`.`id`
                         AND `sl`.`links_cours_id` = '$_cid'
                     GROUP BY `cl`.`title`, `cl`.`url`";
-                    
+
 		$results = getManyResultsXCol($sql,4);
-		
+
 		$title[1]= $nameTools;
-		$line='';	
+		$line='';
 		$title_line = get_lang('LinksTitleLinkColumn').";".get_lang('LinksTitleUsersColumn').";".get_lang('LinksTitleCountColumn')."\n";
-        
+
         if (is_array($results))
         {
             for($j = 0 ; $j < count($results) ; $j++)
@@ -370,7 +372,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
         {
             $line = get_lang('NoResult')."\n";
         }
-                
+
     }
 
 
@@ -382,18 +384,18 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 
     $tempView = $view;
     if($view[4] == '1'){
-    	
+
         $tempView[4] = '0';
-        
+
         $sql = "SELECT `down_doc_path`, COUNT(DISTINCT `down_user_id`), COUNT(`down_doc_path`)
                     FROM $TABLETRACK_DOWNLOADS
                     WHERE `down_cours_id` = '$_cid'
                     GROUP BY `down_doc_path`";
-        
+
         $results = getManyResults3Col($sql);
-        
+
  		$title[1]= $nameTools;
-		$line='';	
+		$line='';
         $title_line = get_lang('DocumentsTitleDocumentColumn').";".get_lang('DocumentsTitleUsersColumn').";".get_lang('DocumentsTitleCountColumn')."\n";
         if (is_array($results))
         {
@@ -407,8 +409,8 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
         {
             $line=get_lang('NoResult')."\n";
         }
-              
-        
+
+
     }
 
 
@@ -419,28 +421,28 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 ***************************************************************************/
     $tempView = $view;
     if($view[5] == '1'){
-    	
+
         $tempView[5] = '0';
-        
-        $sql = "SELECT id, name 
+
+        $sql = "SELECT id, name
 					FROM $tbl_learnpath_main";
                     //WHERE dokeosCourse='$_cid'"; we are using a table inside the course now, so no need for course id
-		$result=api_sql_query($sql,__FILE__,__LINE__);
-		
+		$result=Database::query($sql,__FILE__,__LINE__);
+
 	    $ar=Database::fetch_array($result);
 
 		$title[1]= $nameTools;
-		$line='';	
+		$line='';
 	    $title_line = get_lang('ScormContentColumn');
-			
+
 		$scormcontopen=$_REQUEST["scormcontopen"];
 		$scormstudentopen=$_REQUEST["scormstudentopen"];
-	    
+
 	    if (is_array($ar)){
-	    	
+
 	    	while ($ar['id'] != '') {
 				$lp_title = stripslashes($ar['name']);
-				//echo "<a href='".api_get_self()."?view=".$view."&scormcontopen=".$ar['id']."' class='specialLink'>$lp_title</a>";			
+				//echo "<a href='".api_get_self()."?view=".$view."&scormcontopen=".$ar['id']."' class='specialLink'>$lp_title</a>";
 				if ($ar['id']==$scormcontopen) { //have to list the students here
 					$contentId=$ar['id'];
 					$sql2 = "SELECT u.user_id, u.lastname, u.firstname " .
@@ -449,37 +451,37 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 							"ON u.user_id = sd.user_id " .
 		                    "WHERE sd.lp_id=$contentId group by u.user_id";
 		            //error_log($sql2,0);
-					$result2=api_sql_query($sql2,__FILE__,__LINE__);
-					
-					if(mysql_num_rows($result2)>0){
-						
-						
+					$result2=Database::query($sql2,__FILE__,__LINE__);
+
+					if(Database::num_rows($result2)>0){
+
+
 					    $ar2=Database::fetch_array($result2);
 						while ($ar2 != '') {
-							
+
 							if (isset($_REQUEST["scormstudentopen"]) && $ar2['user_id']==$scormstudentopen) {
-							
+
 							$line .= $ar['id']." ".$ar2['user_id']." ".$ar2['lastname']." ".$ar2['firstname'];
-							
-							}
-							
-							else{
-								
-							$line .= $ar['id']." ".$ar2['user_id']." ".$ar2['lastname']." ".$ar2['firstname'];								
-									
+
 							}
 
-							
+							else{
+
+							$line .= $ar['id']." ".$ar2['user_id']." ".$ar2['lastname']." ".$ar2['firstname'];
+
+							}
+
+
 							if ($ar2['user_id']==$scormstudentopen) { //have to list the student's results
-							
-								
+
+
 								$studentId=$ar2['user_id'];
 								$sql3 = "SELECT iv.status, iv.score, i.title, iv.total_time " .
 										"FROM $tbl_learnpath_item i " .
 										"INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
 										"INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
 										"WHERE (v.user_id=$studentId and v.lp_id=$contentId) ORDER BY v.id, i.id";
-								$result3=api_sql_query($sql3,__FILE__,__LINE__);
+								$result3=Database::query($sql3,__FILE__,__LINE__);
 							    $ar3=Database::fetch_array($result3);
 						        $title_line .= get_lang('ScormTitleColumn').";".get_lang('ScormStatusColumn').";".get_lang('ScormScoreColumn').";".get_lang('ScormTimeColumn');
 								while ($ar3['status'] != '') {
@@ -489,43 +491,43 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 									$line .= $title.";".$ar3['status'].";".$ar3['score'].";".$time;
 									$ar3=Database::fetch_array($result3);
 								}
-								
-								
+
+
 							}
 							$line .= "\n";
 							$ar2=Database::fetch_array($result2);
 						}
-						
+
 						$title_line .= "\n";
-						
+
 					}
 
 				}
-				
+
 				$ar=Database::fetch_array($result);
-				
+
 			}
-	    	
+
     	}
-    	
-   
+
+
     }
 	 /***************************************************************************
      *
      *		Export to a CSV file
      *		force the browser to save the file instead of opening it
      ***************************************************************************/
-			
+
 	$len = strlen($title_line.$line);
 	header('Content-type: application/octet-stream');
 	//header('Content-Type: application/force-download');
 	header('Content-length: '.$len);
-	$filename = html_entity_decode(str_replace(":","",str_replace(" ","_", $title[0].'_'.$title[1].'.csv')));	
+	$filename = html_entity_decode(str_replace(":","",str_replace(" ","_", $title[0].'_'.$title[1].'.csv')));
 	if(preg_match("/MSIE 5.5/",$_SERVER['HTTP_USER_AGENT']))
 	{
 		header('Content-Disposition: filename= '.$filename);
 	}
-	else 
+	else
 	{
 		header('Content-Disposition: attachment; filename= '.$filename);
 	}
@@ -537,13 +539,13 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 	}
 	header('Content-Description: '.$filename);
 	header('Content-transfer-encoding: binary');
-				
+
 	echo api_html_entity_decode($title_line, ENT_COMPAT, $charset);
 	echo api_html_entity_decode($line, ENT_COMPAT, $charset);
 	exit;
-  
 
-    
+
+
 }
 // not allowed
 else

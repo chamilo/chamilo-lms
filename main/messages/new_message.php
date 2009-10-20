@@ -6,7 +6,7 @@
 	Copyright (c) 2009 Dokeos SPRL
 	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
 	Copyright (c) Facultad de Matematicas, UADY (México)
-	Copyright (c) Evie, Free University of Brussels (Belgium)		
+	Copyright (c) Evie, Free University of Brussels (Belgium)
 	Copyright (c) 2009 Isaac Flores Paz <isaac.flores.paz@gmail.com>
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -74,7 +74,7 @@ function validate(form,list)
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function (){
-	cont=0;	
+	cont=0;
       $("#id_text_name").bind("keyup", function(){
       	name=$("#id_text_name").get(0).value;
 		$.ajax({
@@ -96,9 +96,9 @@ $(document).ready(function (){
 				 });
 				}
 		});
-      });  
+      });
 });
-	</script>';	
+	</script>';
 
 $nameTools = api_xml_http_response_encode(get_lang('ComposeMessage'));
 
@@ -122,7 +122,7 @@ function show_compose_reply_to_message ($message_id, $receiver_id) {
 	global $charset;
 	$table_message = Database::get_main_table(TABLE_MESSAGE);
 	$query = "SELECT * FROM $table_message WHERE user_receiver_id=".$receiver_id." AND id='".$message_id."';";
-	$result = api_sql_query($query,__FILE__,__LINE__);
+	$result = Database::query($query,__FILE__,__LINE__);
 	$row = Database::fetch_array($result);
 
 	if (!isset($row[1])) {
@@ -198,7 +198,7 @@ if (isset($_GET['rs'])) {
 		'name' => get_lang('SocialNetwork')
 	);
 } else {
-	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('Messages'));
+	$interbreadcrumb[] = array ('url' => 'javascript: void(0);', 'name' => get_lang('Messages'));
 	$interbreadcrumb[]= array (
 		'url' => 'outbox.php',
 		'name' => get_lang('Outbox')
@@ -209,12 +209,12 @@ if (isset($_GET['rs'])) {
 	);
 }
 	$interbreadcrumb[]= array (
-		'url' => '#',
+		'url' => 'javascript: void(0);',
 		'name' => get_lang('ComposeMessage')
 	);
 
 if ($request===false) {
-	Display::display_header('');	
+	Display::display_header('');
 }
 
 //api_display_tool_title($nameTools);
@@ -234,22 +234,22 @@ if (!isset($_POST['compose'])) {
 } else {
 	$restrict=isset($_POST['id_text_name']) ? $_POST['id_text_name'] : false;
 	if ($restrict===false && isset($_GET['re_id'])) {
-		
+
 	}
 	if (isset($_GET['re_id'])) {
 		$default['title'] = api_xml_http_response_encode($_POST['title']);
 		$default['content'] = api_xml_http_response_encode($_POST['content']);
 		//$default['user_list'] = $_POST['user_list'];
-		manage_form($default);	
+		manage_form($default);
 	} else {
 		if ($restrict) {
 			$default['title'] = api_xml_http_response_encode($_POST['title']);
-			$default['id_text_name'] = api_xml_http_response_encode($_POST['id_text_name']); 
+			$default['id_text_name'] = api_xml_http_response_encode($_POST['id_text_name']);
 			$default['user_list'] = $_POST['user_list'];
 			manage_form($default);
 		} else {
-			Display::display_error_message(api_xml_http_response_encode(get_lang('ErrorSendingMessage')));		
-		}	
+			Display::display_error_message(api_xml_http_response_encode(get_lang('ErrorSendingMessage')));
+		}
 	}
 }
 /*

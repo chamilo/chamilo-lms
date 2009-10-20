@@ -2,11 +2,11 @@
                                                              <!-- 2005/05/19 -->
 
 <!-- Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php -->
-    
+
 */
 
 /**
-============================================================================== 
+==============================================================================
 *	Dokeos Metadata: view/edit metadata of a Dokeos course object
 *
 *   URL parameters:
@@ -16,7 +16,7 @@
 *   - dbg=  debuginfo start number, e.g. 10000
 *
 *	@package dokeos.metadata
-============================================================================== 
+==============================================================================
 */
 
 
@@ -44,8 +44,8 @@ if (LFN != 'md_' . strtolower(EID_TYPE))    $urlp .= '&lfn=' . urlencode(LFN);
 if (HTT != LFN)                             $urlp .= '&htt=' . urlencode(HTT);
 if (DBG)                                    $urlp .= '&dbg=' . urlencode(DBG);
 
-// name of the language file that needs to be included 
-$language_file = LFN; 
+// name of the language file that needs to be included
+$language_file = LFN;
 require("../inc/global.inc.php");
 $this_section=SECTION_COURSES;
 
@@ -64,13 +64,13 @@ $mdObj = new mdobject($_course, EID_ID);  // see 'md_' . EID_TYPE . '.php'
 
 // Construct assoclist $langLangs from language table ------------------------->
 
-$result = api_sql_query("SELECT isocode FROM " . 
-    Database :: get_main_table(TABLE_MAIN_LANGUAGE) . 
+$result = Database::query("SELECT isocode FROM " .
+    Database :: get_main_table(TABLE_MAIN_LANGUAGE) .
     " WHERE available='1' ORDER BY isocode ASC", __FILE__, __LINE__);
 
-$sep = ":"; $langLangs = $sep . "xx" . $sep . "xx"; 
+$sep = ":"; $langLangs = $sep . "xx" . $sep . "xx";
 
-while ($row = mysql_fetch_array($result))
+while ($row = Database::fetch_array($result))
     if (($isocode = $row['isocode']))
     	$langLangs .= ",, " . $isocode . $sep . $isocode;
 
@@ -84,18 +84,18 @@ $mdStore = new mdstore($is_allowed_to_edit);
 if (($mdt_rec = $mdStore->mds_get(EID)) === FALSE)  // no record, default XML
      $mdt = $mdObj->mdo_generate_default_xml_metadata();
 else $mdt = $mdt_rec;
-    
+
 $xhtxmldoc = new xmddoc(explode("\n", $mdt));
 
 $httfile = ($xhtxmldoc->error) ? 'md_editxml.htt' : HTT . '.htt';
 
-if (!$xhtxmldoc->error && $mdt_rec !== FALSE && 
+if (!$xhtxmldoc->error && $mdt_rec !== FALSE &&
         method_exists($mdObj, 'mdo_override'))
     $mdt = $mdObj->mdo_override($xhtxmldoc);
 
 $xhtDoc = define_htt($httfile, $urlp, $_course['path']);
 
-define('HSH', md5($mdt . LFN . $nameTools . get_lang('Sorry') . $httfile . 
+define('HSH', md5($mdt . LFN . $nameTools . get_lang('Sorry') . $httfile .
     implode('{}', $xhtDoc->htt_array)));  // cached HTML depends on LFN+HTT
 
 $xhtDoc->xht_param['traceinfo'] = $xhtxmldoc->error;
@@ -107,10 +107,10 @@ if ($is_allowed_to_edit) $xhtDoc->xht_param['isallowedtoedit'] = 'TRUE';
 
 if ($is_allowed_to_edit && isset($_POST['mda']))  // MD updates to Doc and DB
 {
-    $mdt = $mdStore->mds_update_xml_and_mdt($mdObj, $xhtDoc->xht_xmldoc, 
-        get_magic_quotes_gpc() ? stripslashes($_POST['mda']) : $_POST['mda'], 
+    $mdt = $mdStore->mds_update_xml_and_mdt($mdObj, $xhtDoc->xht_xmldoc,
+        get_magic_quotes_gpc() ? stripslashes($_POST['mda']) : $_POST['mda'],
         EID, $xhtDoc->xht_param['traceinfo'], $mdt_rec !== FALSE);
-    
+
     if ($mdt_rec !== FALSE)
     {
          if (strpos($xhtDoc->xht_param['traceinfo'], 'DELETE') !== FALSE)
@@ -118,36 +118,36 @@ if ($is_allowed_to_edit && isset($_POST['mda']))  // MD updates to Doc and DB
     }
     else if (strpos($xhtDoc->xht_param['traceinfo'], 'INSERT') !== FALSE)
             $xhtDoc->xht_param['dbrecord'] = 'TRUE';
-    
+
     if (method_exists($mdObj, 'mdo_storeback'))
         $mdObj->mdo_storeback($xhtDoc->xht_xmldoc);
-        
+
     $mdt_rec = FALSE;  // cached HTML obsolete, must re-apply templates
 }
 elseif ($is_allowed_to_edit && $_POST['mdt'])  // md_editxml.htt
 {
-    $mdStore->mds_put(EID, 
-        get_magic_quotes_gpc() ? stripslashes($_POST['mdt']) : $_POST['mdt'], 
+    $mdStore->mds_put(EID,
+        get_magic_quotes_gpc() ? stripslashes($_POST['mdt']) : $_POST['mdt'],
         'mdxmltext', '?');
     $mdStore->mds_put(EID, HSH, 'md5');
-    
+
     $xhtDoc->xht_param['dbrecord'] = 'TRUE';
-    
+
     $mdt = ''; $xhtDoc->xht_param['traceinfo'] = get_lang('PressAgain');
-    
+
     $mdt_rec = FALSE;  // cached HTML obsolete, must re-apply templates
 }
 
 $xhtDoc->xht_param['mdt'] = $mdt;
 
-define('CACHE_IS_VALID', isset($mdt_rec) && $mdt_rec !== FALSE && 
+define('CACHE_IS_VALID', isset($mdt_rec) && $mdt_rec !== FALSE &&
     HSH && HSH == $mdStore->mds_get(EID, 'md5'));
 
-    
+
 function md_part($part, $newtext)  // callback from template (HTML cache in DB)
 {
     global $mdStore;
-    
+
     if ($newtext === FALSE)
     {
         if (!CACHE_IS_VALID) return FALSE;
@@ -157,7 +157,7 @@ function md_part($part, $newtext)  // callback from template (HTML cache in DB)
     {
         $mdStore->mds_put(EID, HSH, 'md5');
         $mdStore->mds_put(EID, $newtext, $part);
-        
+
         return $newtext;
     }
 }
@@ -185,7 +185,7 @@ $noPHP_SELF = TRUE;  // in breadcrumps
 Display::display_header($nameTools); echo "\n";
 
 $xhtDoc->xht_dbgn = DBG;  // for template debug info, set to e.g. 10000
-if (($ti = $xhtDoc->xht_param['traceinfo'])) $xhtDoc->xht_param['traceinfo'] = 
+if (($ti = $xhtDoc->xht_param['traceinfo'])) $xhtDoc->xht_param['traceinfo'] =
     '<h5>Trace information</h5>' . htmlspecialchars($ti, ENT_QUOTES, $charset);
 
 echo $xhtDoc->xht_fill_template('METADATA'), "\n";

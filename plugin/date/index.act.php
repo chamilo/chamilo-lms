@@ -11,5 +11,5 @@ if(!empty($_SESSION['user_language_choice']) && !empty($convert_lang_to_code[$_S
   $code = $convert_lang_to_code[$_SESSION['user_language_choice']];
   $locale = setlocale(LC_TIME,$code);
 }
-$date = strftime('%c'); 
+$date = strftime('%c');
 ?>

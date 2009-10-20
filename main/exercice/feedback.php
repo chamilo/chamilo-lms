@@ -46,7 +46,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
@@ -74,7 +74,7 @@ Display::display_header($nameTools,"Exercise");
 	{
 	echo "<tr><td width='10%'> ";
 	$ans =  $objAnswerTmp->answer[$i];
-		
+
 	$form = new FormValidator('feedbackform','post',api_get_self()."?modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion);
 	$obj_registration_form = new HTML_QuickForm('frmRegistration', 'POST');
 	$renderer =& $obj_registration_form->defaultRenderer();
@@ -91,6 +91,6 @@ Display::display_header($nameTools,"Exercise");
 	$form->display();
 	echo "</td>";
 	}?>
-	<form name="frm" action="#" method="post">
+	<form name="frm" action="javascript: void(0);" method="post">
 	 Click Ok to finish <input  type="submit" value="Ok" />
 	</form>

@@ -22,7 +22,7 @@ require_once 'HTML/QuickForm/Action.php';
 
 /**
  * The action handles the HTTP redirect to a specific page.
- * 
+ *
  * @author  Alexey Borzov <avb@php.net>
  * @package HTML_QuickForm_Controller
  * @version $Revision: 6184 $

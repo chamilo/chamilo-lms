@@ -2,7 +2,7 @@
 require_once(api_get_path(SYS_CODE_PATH).'auth/openid/xrds.lib.php');
 
 class TestXrds extends UnitTestCase {
-	
+
 	function testxrds_cdata() {
 		global $xrds_open_elements, $xrds_services, $xrds_current_service;
 		$parser='';
@@ -11,7 +11,7 @@ class TestXrds extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	function test_xrds_element_end() {
 		 global $xrds_open_elements, $xrds_services, $xrds_current_service;
 		 $parser='';
@@ -24,7 +24,7 @@ class TestXrds extends UnitTestCase {
 		 $this->assertTrue(is_null($res));
 		 //var_dump($xrds_current_service);
 	}
-	
+
 	function test_xrds_element_start() {
 		global $xrds_open_elements;
 		$parser='';
@@ -35,12 +35,12 @@ class TestXrds extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	function test_xrds_strip_namespace() {
 		$name='';
 		$res=_xrds_strip_namespace($name);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
-	}		
+	}
 }
 ?>

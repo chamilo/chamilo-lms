@@ -9,7 +9,7 @@
 #calendar_div {
 	display: none;
 	border: 1px solid #777;
-	z-index: 10; /*must have*/ 
+	z-index: 10; /*must have*/
 }
 #calendar_div, .calendar_control, .calendar_links, .calendar_header, .calendar {
 	width: 185px;
@@ -162,5 +162,5 @@ img.calendar_trigger {
     top: -4px; /*must have*/
     left: -4px; /*must have*/
     width: 193px; /*must have to match width and borders*/
-    height: 200px; /*must have to match maximum height*/ 
+    height: 200px; /*must have to match maximum height*/
 }

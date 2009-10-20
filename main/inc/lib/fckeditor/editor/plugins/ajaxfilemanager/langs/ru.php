@@ -54,7 +54,7 @@
 	define('ERR_NOT_DOC_SELECTED_FOR_PASTE', 'Выберите документ(ы), которые Вы хотите вставить.');
 	define('WARNING_CUT_PASTE', 'Вы уверенны, что хотите переместить выбранные документы в эту папку?');
 	define('WARNING_COPY_PASTE', 'Вы уверенны, что хотите скопировать выбранные документы в эту папку?');
-	
+
 	//ERROR MESSAGES
 		//deletion
 	define('ERR_NOT_FILE_SELECTED', 'Пожалуйста, выберите файл.');
@@ -76,7 +76,7 @@
 	define('ERR_FOLDER_EXISTS', 'Это имя уже используется в данной папке. Пожалуйста, укажите другое имя.');
 	define('ERR_FOLDER_CREATION_FAILED', 'Невозможно создать папку. Пожалуйста, повторите позже.');
 	define('ERR_FOLDER_NAME_EMPTY', 'Пожалуйста, укажите имя.');
-	
+
 		//file upload
 	define("ERR_FILE_NAME_FORMAT", 'Пожалуйста, укажите корректное имя. Разрешены буквы латинского алфавита, цифры, пробел, дефис и нижнее подчеркивание.');
 	define('ERR_FILE_NOT_UPLOADED', 'Не выбран файл для загрузки.');
@@ -84,7 +84,7 @@
 	define('ERR_FILE_MOVE_FAILED', 'Не удалось переместить файл.');
 	define('ERR_FILE_NOT_AVAILABLE', 'Файл недоступен.');
 	define('ERROR_FILE_TOO_BID', 'Файл слишком большой. (Максимально допустимый размер: %s)');
-	
+
 
 	//Tips
 	define('TIP_FOLDER_GO_DOWN', 'Кликните, чтобы войти в эту папку...');
@@ -107,12 +107,12 @@
 	define('LOGIN_USERNAME', 'Имя:');
 	define('LOGIN_PASSWORD', 'Пароль:');
 	define('LOGIN_FAILED', 'Неверное имя или пароль..');
-	
-	
+
+
 	//88888888888   Below for Image Editor   888888888888888888888
-		//Warning 
+		//Warning
 		define('IMG_WARNING_NO_CHANGE_BEFORE_SAVE', "Не было сделано никаких изменений в изображении.");
-		
+
 		//General
 		define('IMG_GEN_IMG_NOT_EXISTS', 'Изображение не существует.');
 		define('IMG_WARNING_LOST_CHANAGES', 'Все несохраненные изменения будут потеряны. Вы уверенны, что хотите продолжить?');
@@ -123,14 +123,14 @@
 		define('IMG_WARING_FLIP_H', 'Вы уверены, что хотите отразить изображение горизонтально?');
 		define('IMG_WARING_FLIP_V', 'Вы уверены, что хотите отразить изображение вертикально?');
 		define('IMG_INFO', 'Информация об изображении');
-		
+
 		//Mode
 			define('IMG_MODE_RESIZE', 'Изменить размер');
 			define('IMG_MODE_CROP', 'Обрезать');
 			define('IMG_MODE_ROTATE', 'Повернуть');
 			define('IMG_MODE_FLIP', 'Отобразить зеркально');
 		//Button
-		
+
 			define('IMG_BTN_ROTATE_LEFT', '90&deg; против часовй');
 			define('IMG_BTN_ROTATE_RIGHT', '90&deg; по часовой');
 			define('IMG_BTN_FLIP_H', 'Отразить горизонтально');
@@ -150,7 +150,7 @@
 			define('IMG_LBL_ANGLE', 'Угол поворота:');
 		//Editor
 
-			
+
 		//Save
 		define('IMG_SAVE_EMPTY_PATH', 'Путь к изображению пуст.');
 		define('IMG_SAVE_NOT_EXISTS', 'Изображение не существует.');
@@ -164,19 +164,19 @@
 		define('IMG_SAVE_FLIP_FAILED', 'Не удалось зеркально отобразить изображение.');
 		define('IMG_SAVE_SESSION_IMG_OPEN_FAILED', 'Не удалось открыть изображение из сессии.');
 		define('IMG_SAVE_IMG_OPEN_FAILED', 'Не удалось открыть изображение.');
-		
+
 		//UNDO
 		define('IMG_UNDO_NO_HISTORY_AVAIALBE', 'Невозможно отменить операцию, так как история изменений отсутствует.');
 		define('IMG_UNDO_COPY_FAILED', 'Невозможно восстановить изображение.');
 		define('IMG_UNDO_DEL_FAILED', 'Невозможно удалить сессию изображения.');
-	
+
 	//88888888888   Above for Image Editor   888888888888888888888
-	
+
 	//88888888888   Session   888888888888888888888
 		define("SESSION_PERSONAL_DIR_NOT_FOUND", 'Невозможно найти папку, предназначенную для хранения сессии.');
 		define("SESSION_COUNTER_FILE_CREATE_FAILED", 'Невозможно открыть файл сессии.');
 		define('SESSION_COUNTER_FILE_WRITE_FAILED', 'Невозможно сделать запись в файл сессии.');
 	//88888888888   Session   888888888888888888888
-	
-	
+
+
 ?>

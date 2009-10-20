@@ -1,9 +1,9 @@
 <?php
 /**
  * Logiciel : HTML2PDF - classe FPDF_Formulaire
- * 
- * permet la gestion de champs de formulaire dans un PDF 
- * Inspiré des sources de http://fpdf.org/fr/script/script36.php et http://fpdf.org/fr/script/script40.php
+ *
+ * permet la gestion de champs de formulaire dans un PDF
+ * Inspirï¿½ des sources de http://fpdf.org/fr/script/script36.php et http://fpdf.org/fr/script/script40.php
  *
  * @author		Laurent MINGUET <webmaster@spipu.net>
  */
@@ -11,29 +11,29 @@
 if (!defined('__CLASS_FPDF_FORMULAIRE__'))
 {
 	define('__CLASS_FPDF_FORMULAIRE__', true);
-	
+
 	require_once(dirname(__FILE__).'/01_fpdf_bookmark.class.php');
-	
+
 	class FPDF_Formulaire extends FPDF_BookMark
 	{
 		var $javascript = '';	//javascript code
-		var $n_js;				//numéro de l'objet javascript
-		var $n_cata;			//numéro de l'objet catalogue
+		var $n_js;				//numï¿½ro de l'objet javascript
+		var $n_cata;			//numï¿½ro de l'objet catalogue
 		var $ur;				//
-		
+
 		function FPDF_Formulaire($orientation='P',$unit='mm',$format='A4')
 		{
 			$this->FPDF_BookMark($orientation,$unit,$format);
 			$this->PDFVersion='1.6';
-			
+
 			$this->ur = false;
 		}
-		
+
 		 function _putuserrights()
 		{
 			if (!$this->ur) return;
 			$this->_out('/Perms<<');
-			
+
 			$this->_out('/UR3<<');
 			$this->_out('/Reference[<<');
 			$this->_out('/Type /SigRef');
@@ -50,20 +50,20 @@ if (!defined('__CLASS_FPDF_FORMULAIRE__'))
 			$this->_out('>>');
 			$this->_out('>>');
 		}
-		
+
 		function _putresources()
 		{
-		
+
 			parent::_putresources();
 			$this->_putjavascript();
 		}
-		
+
 		function _putcatalog()
 		{
 			$this->n_cata = $this->n;
-			
+
 			parent::_putcatalog();
-			
+
 			if (!empty($this->javascript)) $this->_out('/Names <</JavaScript '.($this->n_js).' 0 R>>');
 			$this->_putuserrights();
 		}
@@ -71,12 +71,12 @@ if (!defined('__CLASS_FPDF_FORMULAIRE__'))
 		/*
 		* Create a javascript PDF string.
 		* @access protected
-		* @author Johannes Güntert, Nicola Asuni
+		* @author Johannes Gï¿½ntert, Nicola Asuni
 		*/
 		function _putjavascript()
 		{
 			if (empty($this->javascript)) return;
-			
+
 			// the following two lines are used to avoid form fields duplication after saving
 			if ($this->ur)
 			{
@@ -86,9 +86,9 @@ if (!defined('__CLASS_FPDF_FORMULAIRE__'))
 			else
 			{
 				$js1 = '';
-				$js2 = '';	
+				$js2 = '';
 			}
-		
+
 			$this->_newobj();
 			$this->n_js = $this->n;
 			$this->_out('<<');
@@ -102,7 +102,7 @@ if (!defined('__CLASS_FPDF_FORMULAIRE__'))
 			$this->_out('>>');
 			$this->_out('endobj');
 		}
-		
+
 		/*
 		* Convert color to javascript color.
 		* @param string $color color name or #RRGGBB
@@ -114,16 +114,16 @@ if (!defined('__CLASS_FPDF_FORMULAIRE__'))
 			static $aColors = array('transparent', 'black', 'white', 'red', 'green', 'blue', 'cyan', 'magenta', 'yellow', 'dkGray', 'gray', 'ltGray');
 			if (substr($color,0,1) == '#')
 			{
-				return sprintf("['RGB',%.3f,%.3f,%.3f]", hexdec(substr($color,1,2))/255, hexdec(substr($color,3,2))/255, hexdec(substr($color,5,2))/255);
+				return sprintf("['RGB',%.3F,%.3F,%.3F]", hexdec(substr($color,1,2))/255, hexdec(substr($color,3,2))/255, hexdec(substr($color,5,2))/255);
 			}
 			if (!in_array($color,$aColors))
 			{
 				$this->Error('Invalid color: '.$color);
 			}
-			
+
 			return 'color.'.$color;
 		}
-		
+
 		/*
 		* Adds a javascript form field.
 		* @param string $type field type
@@ -149,13 +149,13 @@ if (!defined('__CLASS_FPDF_FORMULAIRE__'))
 				$r = 0.1;
 				$this->Rect($x+$d*0.5+$r, $y-$d*0.5+$r, $w-$d-2*$r, $h-$d-2*$r, 'F');
 			}
-			
-			// javascript inclus			
+
+			// javascript inclus
 			$this->ur = true;
-			
+
 			// the followind avoid fields duplication after saving the document
 			$this->javascript .= "if(this.getField('pdfoldsaved') && this.getField('pdfoldsaved').value != 'saved') {";
-			$this->javascript .= sprintf("f".$name."=this.addField('%s','%s',%d,[%.2f,%.2f,%.2f,%.2f]);", $name, $type, $this->PageNo()-1, $x*$this->k, ($this->h-$y)*$this->k+1, ($x+$w)*$this->k, ($this->h-$y-$h)*$this->k+1)."\n";
+			$this->javascript .= sprintf("f".$name."=this.addField('%s','%s',%d,[%.2F,%.2F,%.2F,%.2F]);", $name, $type, $this->PageNo()-1, $x*$this->k, ($this->h-$y)*$this->k+1, ($x+$w)*$this->k, ($this->h-$y-$h)*$this->k+1)."\n";
 			$this->javascript .= 'f'.$name.'.textSize='.$this->FontSizePt.";\n";
 			while (list($key, $val) = each($prop))
 			{
@@ -165,23 +165,23 @@ if (!defined('__CLASS_FPDF_FORMULAIRE__'))
 					$val = '"'.$val.'"';
 				$this->javascript .= 'f'.$name.'.'.$key.'='.$val.";\n";
 			}
-			
+
 			$this->javascript .= '}';
 			$this->javascript.= "\n".$js_after;
 		}
-		
+
 		function IncludeJS($script)
 		{
 			$this->javascript .= $script;
 		}
-		
+
 		function form_InputHidden($name, $value)
 		{
 			$prop = array('value' => $value);
 			$js_after = '';
 			$this->_addfield('checkbox', $name, 0, 0, 0.1, 0.1, $prop, $js_after);
 		}
-		
+
 		function form_InputCheckBox($name, $x, $y, $w, $checked)
 		{
 			$prop = array();
@@ -189,20 +189,20 @@ if (!defined('__CLASS_FPDF_FORMULAIRE__'))
 			$js_after = '';
 			$this->_addfield('checkbox', $name, $x, $y, $w, $w, $prop, $js_after);
 		}
-		
+
 		function form_InputRadio($name, $x, $y, $w)
 		{
 			$prop = array();
 			$js_after = '';
 			$this->_addfield('radiobutton', $name, $x, $y, $w, $w, $prop, $js_after);
 		}
-		
+
 		function form_InputText($name, $x, $y, $w, $h, $prop)
 		{
 			$js_after = '';
 			$this->_addfield('text', $name, $x, $y, $w, $h, $prop, $js_after);
 		}
-		
+
 		function form_InputButton($name, $x, $y, $w, $h, $caption, $action, $prop)
 		{
 			if (!isset($prop['borderStyle']))	$prop['borderStyle']	= 'beveled';
@@ -218,7 +218,7 @@ if (!defined('__CLASS_FPDF_FORMULAIRE__'))
 
 		function form_Select($name, $x, $y, $w, $h, $values, $multiligne, $prop)
 		{
-			$type = ($multiligne ? 'listbox' : 'combobox');				
+			$type = ($multiligne ? 'listbox' : 'combobox');
 			$s = ''; foreach ($values as $value) { $s .= ($s ? ',' : '')."'".addslashes($value)."'"; }
 			$js_after = 'f'.$name.'.setItems(['.$s."]);\n";
 			$this->_addfield($type, $name, $x, $y, $w, $h, $prop, $js_after);

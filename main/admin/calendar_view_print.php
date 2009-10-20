@@ -22,7 +22,7 @@
 ==============================================================================
 *	@package dokeos.admin
 *	@author Carlos Vargas
-*	This file is the calendar/print.php 
+*	This file is the calendar/print.php
 ==============================================================================
 */
 // name of the language file that needs to be included
@@ -48,7 +48,7 @@ require('../inc/global.inc.php');
 $TABLEAGENDA 		= Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 
 $sql 			= "SELECT * FROM $TABLEAGENDA WHERE id IN($id) ORDER BY start_date DESC";
-$result			= api_sql_query($sql,__FILE__,__LINE__);
+$result			= Database::query($sql,__FILE__,__LINE__);
 ?>
 
 <html>

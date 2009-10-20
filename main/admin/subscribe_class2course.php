@@ -24,9 +24,9 @@
 ==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	@package dokeos.admin
-============================================================================== 
+==============================================================================
 */
 // name of the language file that needs to be included
 $language_file = 'admin';
@@ -73,7 +73,7 @@ if ($_POST['formSent'])
 		{
 			Display::display_error_message(get_lang('AtLeastOneClassAndOneCourse'));
 		}
-		elseif (api_substr($_POST['formSubmit'], -2) == '>>') // add classes to courses 
+		elseif (api_substr($_POST['formSubmit'], -2) == '>>') // add classes to courses
 		{
 			foreach ($courses as $course_code)
 			{
@@ -99,14 +99,14 @@ if ($_POST['formSent'])
 }
 
 $sql = "SELECT id,name FROM $tbl_class WHERE name LIKE '".$first_letter_class."%' ORDER BY ". (count($classes) > 0 ? "(id IN('".implode("','", $classes)."')) DESC," : "")." name";
-$result = api_sql_query($sql, __FILE__, __LINE__);
-$db_classes = api_store_result($result);
+$result = Database::query($sql, __FILE__, __LINE__);
+$db_classes = Database::store_result($result);
 $sql = "SELECT code,visual_code,title FROM $tbl_course WHERE visual_code LIKE '".$first_letter_course."%' ORDER BY ". (count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
-$result = api_sql_query($sql, __FILE__, __LINE__);
-$db_courses = api_store_result($result);
+$result = Database::query($sql, __FILE__, __LINE__);
+$db_courses = Database::store_result($result);
 if (!empty ($error_message))
 {
-	Display :: display_normal_message($error_message); 
+	Display :: display_normal_message($error_message);
 }
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;">
@@ -116,7 +116,7 @@ if (!empty ($error_message))
    <td width="40%" align="center">
     <b><?php echo get_lang('ClassList'); ?></b>
     <br/><br/>
-    <?php echo get_lang('FirstLetterClass'); ?> : 
+    <?php echo get_lang('FirstLetterClass'); ?> :
     <select name="firstLetterClass" onchange="javascript:document.formulaire.formSent.value='2'; document.formulaire.submit();">
      <option value="">--</option>
      <?php
@@ -128,7 +128,7 @@ if (!empty ($error_message))
    <td width="40%" align="center">
     <b><?php echo get_lang('CourseList'); ?> :</b>
     <br/><br/>
-    <?php echo get_lang('FirstLetterCourse'); ?> : 
+    <?php echo get_lang('FirstLetterCourse'); ?> :
     <select name="firstLetterCourse" onchange="javascript:document.formulaire.formSent.value='2'; document.formulaire.submit();">
      <option value="">--</option>
      <?php
@@ -173,7 +173,7 @@ foreach ($db_courses as $course)
 <?php
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
 */
 Display :: display_footer();

@@ -23,12 +23,12 @@ If you modify code and redistribute, you may ADD your copyright to this notice.
 //-------------CONFIGURATION FILE-------
 //-------------PHP DIG------------------
 
-// NOTE: If you want a different path, you need to add that path (relative path up to the 
-// admin directory: ../dir or full path up to the admin directory: /full/path/to/dir) in 
+// NOTE: If you want a different path, you need to add that path (relative path up to the
+// admin directory: ../dir or full path up to the admin directory: /full/path/to/dir) in
 // the first if statement in this config.php file - for example:
 // && ($relative_script_path != "../dir") // relative path
 // && ($relative_script_path != "/full/path/to/dir") // full path
-// You may also need to set $relative_script_path to this path in search.php, clickstats.php, 
+// You may also need to set $relative_script_path to this path in search.php, clickstats.php,
 // and function_phpdig_form.php depending on what files you are calling from where
 // NOTE: double dot means go back one and single dot means stay in same directory
 // NOTE: the path should be UP TO but NOT INCLUDING the admin directory - NO ending slash
@@ -43,14 +43,14 @@ If you modify code and redistribute, you may ADD your copyright to this notice.
 
 define('ABSOLUTE_SCRIPT_PATH','/full/path/to/dir'); // full path up to but not including admin dir, no end slash
 
-if ((!isset($relative_script_path)) || (($relative_script_path != ".") && 
+if ((!isset($relative_script_path)) || (($relative_script_path != ".") &&
 ($relative_script_path != "..") && ($relative_script_path != ABSOLUTE_SCRIPT_PATH))) {
   // echo "\n\nPath $relative_script_path not recognized!\n\n";
   exit();
 }
 
-// NOTE: If you receive an "undefined index" message that means that your server is not recognizing 
-// one or some of the $_SERVER variables so check your PHP info and set the $_SERVER variables to 
+// NOTE: If you receive an "undefined index" message that means that your server is not recognizing
+// one or some of the $_SERVER variables so check your PHP info and set the $_SERVER variables to
 // those recognized by your server: See http://www.php.net/reserved.variables for a list
 // If using RSS (config vars below) there are $_SERVER variables in the custom_search_page.php file too
 

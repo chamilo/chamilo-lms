@@ -22,7 +22,7 @@
 /*
  * A fragment of the original source code of FCKeditor version 2.6.4.1
  * is used in this file.
- * 
+ *
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
  * Copyright (C) 2003-2009 Frederico Caldeira Knabben
  */
@@ -30,7 +30,7 @@
 // Logic-improvement for ensuring that English language will be shown at least, when the required language file is missing.
 FCKPlugin.prototype.Load = function()
 {
-	// Logic-modification.
+	// Logic-modification about loading language files.
 	switch ( this.Name )
 	{
 		// The following plugins do not need language files or they load language files in their own way.
@@ -78,5 +78,33 @@ FCKPlugin.prototype.Load = function()
 	}
 
 	// Add the main plugin script.
-	LoadScript( this.Path + 'fckplugin.js' ) ;
+	// Logic-modification about loading compressed version of some plugins.
+	//LoadScript( this.Path + 'fckplugin.js' ) ;
+	var file;
+	switch ( this.Name )
+	{
+		case 'asciimath':
+		case 'audio':
+		case 'autogrow':
+		case 'customizations':
+		case 'dragresizetable':
+		case 'fckEmbedMovies':
+		case 'flvPlayer':
+		case 'googlemaps':
+		case 'ImageManager':
+		case 'imgmap':
+		case 'mimetex':
+		case 'prompt':
+		case 'tablecommands':
+		case 'wikilink':
+		case 'youtube':
+			file = ( window.document.location.toString().indexOf('fckeditor.original.html') != -1 )
+				? 'fckplugin.js'
+				: 'fckplugin_compressed.js';
+			break;
+		default:
+			file = 'fckplugin.js';
+	}
+	LoadScript( this.Path + file ) ;
+	// End of logic-modification.
 }

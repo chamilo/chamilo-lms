@@ -48,7 +48,7 @@
 	version history
 	---------------
 	3.2 - updated to allow for specific term search for teachers identification
-	3.1 - updated code to use database settings, to respect coding conventions as much as possible (camel-case removed) and to allow for non-anonymous login 
+	3.1 - updated code to use database settings, to respect coding conventions as much as possible (camel-case removed) and to allow for non-anonymous login
 	3.0	- updated to use ldap_var.inc.php instead of ldap_var.inc (deprecated)
 		(November 2003)
 	2.9	- further changes for new login procedure
@@ -321,7 +321,7 @@ function ldap_authentication_check ($uname, $passwd)
 	// Etablissement de la connexion anonyme avec le serveur LDAP
 	$ds=ldap_connect($ldap_host,$ldap_port);
 	ldap_set_version($ds);
-	
+
 	$test_bind = false;
 	$test_bind_res = ldap_handle_bind($ds,$test_bind);
    	//en cas de probleme on utlise le replica
@@ -379,7 +379,7 @@ function ldap_authentication_check ($uname, $passwd)
 /**
  * Set the protocol version with version from config file (enables LDAP version 3)
  * @param	resource	The LDAP connexion resource, passed by reference.
- * @return	void	
+ * @return	void
  */
 function ldap_set_version(&$resource)
 {
@@ -401,7 +401,7 @@ function ldap_set_version(&$resource)
  * Handle bind (whether authenticated or not)
  * @param	resource	The LDAP handler to which we are connecting (by reference)
  * @param	resource	The LDAP bind handler we will be modifying
- * @return	boolean		Status of the bind assignment. True for success, false for failure. 
+ * @return	boolean		Status of the bind assignment. True for success, false for failure.
  */
 function ldap_handle_bind(&$ldap_handler,&$ldap_bind)
 {
@@ -442,14 +442,14 @@ function ldap_get_users()
 {
 
 	global $ldap_basedn, $ldap_host, $ldap_port, $ldap_rdn, $ldap_pass;
-	
+
 	$keyword_firstname = trim(Database::escape_string($_GET['keyword_firstname']));
 	$keyword_lastname = trim(Database::escape_string($_GET['keyword_lastname']));
 	$keyword_username = trim(Database::escape_string($_GET['keyword_username']));
 	$keyword_type = Database::escape_string($_GET['keyword_type']);
-	
+
 	$ldap_query=array();
-	
+
 	if ($keyword_username != "") {
 		$ldap_query[]="(uid=".$keyword_username."*)";
 	} else if ($keyword_lastname!=""){
@@ -461,13 +461,13 @@ function ldap_get_users()
 	if ($keyword_type !="" && $keyword_type !="all") {
 		$ldap_query[]="(employeeType=".$keyword_type.")";
 	}
-	
+
 	if (count($ldap_query)>1){
 		$str_query.="(& ";
 		foreach ($ldap_query as $query){
 			$str_query.=" $query";
 		}
-		$str_query.=" )"; 
+		$str_query.=" )";
 	} else {
 		$str_query=$ldap_query[0];
 	}
@@ -499,11 +499,11 @@ function ldap_get_users()
  */
 function ldap_get_number_of_users()
 {
-		
+
 	$info = ldap_get_users();
 	if (count($info)>0)
 		return $info['count'];
-	else 
+	else
 		return 0;
 
 }
@@ -516,6 +516,7 @@ function ldap_get_number_of_users()
 function ldap_get_user_data($from, $number_of_items, $column, $direction)
 {
 	$users = array();
+	$is_western_name_order = api_is_western_name_order();
 	if (isset($_GET['submit']))
 	{
 		$info = ldap_get_users();
@@ -532,18 +533,26 @@ function ldap_get_user_data($from, $number_of_items, $column, $direction)
 				//$user[] = $dn_array[0]; // uid is first key
 				$user[] = $info[$key]['uid'][0];
 				$user[] = $info[$key]['uid'][0];
-				$user[] = api_convert_encoding($info[$key]['givenname'][0], api_get_system_encoding(), 'UTF-8');
-				$user[] = api_convert_encoding($info[$key]['sn'][0], api_get_system_encoding(), 'UTF-8');
+				if ($is_western_name_order)
+				{
+					$user[] = api_convert_encoding($info[$key]['givenname'][0], api_get_system_encoding(), 'UTF-8');
+					$user[] = api_convert_encoding($info[$key]['sn'][0], api_get_system_encoding(), 'UTF-8');
+				}
+				else
+				{
+					$user[] = api_convert_encoding($info[$key]['sn'][0], api_get_system_encoding(), 'UTF-8');
+					$user[] = api_convert_encoding($info[$key]['givenname'][0], api_get_system_encoding(), 'UTF-8');
+				}
 				$user[] = $info[$key]['mail'][0];
 				$outab[] = $info[$key]['eduPersonPrimaryAffiliation'][0]; // Ici "student"
 				$users[] = $user;
 			}
-			
-		} 
+
+		}
 		else
 		{
 			Display :: display_error_message(get_lang('NoUser'));
-		}	
+		}
 	}
 	return $users;
 }
@@ -558,7 +567,7 @@ function ldap_get_user_data($from, $number_of_items, $column, $direction)
 function modify_filter($user_id,$url_params, $row)
 {
 	$url_params_id="id[]=".$row[0];
-	//$url_params_id="id=".$row[0];	
+	//$url_params_id="id=".$row[0];
 	$result .= '<a href="ldap_users_list.php?action=add_user&amp;user_id='.$user_id.'&amp;id_session='.Security::remove_XSS($_GET['id_session']).'&amp;'.$url_params_id.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, api_get_system_encoding()))."'".')) return false;">'.Display::return_icon('add_user.gif', get_lang('AddUsers')).'</a>';
 	return $result;
 }
@@ -571,7 +580,7 @@ function modify_filter($user_id,$url_params, $row)
 function ldap_add_user($login)
 {
 	global $ldap_basedn, $ldap_host, $ldap_port, $ldap_rdn, $ldap_pass;
-	
+
 	$ds = ldap_connect($ldap_host, $ldap_port);
 	ldap_set_version($ds);
 	if ($ds)
@@ -625,8 +634,8 @@ function ldap_add_user($login)
 			}
 		}
 
-	} 
-	else 
+	}
+	else
 	{
 		Display :: display_error_message(get_lang('LDAPConnectionError'));
 	}
@@ -655,7 +664,7 @@ function ldap_add_user_to_session($UserList, $id_session)
 
 	$id_session = (int) $id_session;
 	// Une fois les utilisateurs importer dans la base des utilisateurs, on peux les affecter a� la session
-	$result=api_sql_query("SELECT course_code FROM $tbl_session_rel_course " .
+	$result=Database::query("SELECT course_code FROM $tbl_session_rel_course " .
 			"WHERE id_session='$id_session'",__FILE__,__LINE__);
 	$CourseList=array();
 	while($row=Database::fetch_array($result))
@@ -667,25 +676,25 @@ function ldap_add_user_to_session($UserList, $id_session)
 		foreach($UserList as $enreg_user)
 		{
 			$enreg_user = (int) $enreg_user;
-			api_sql_query("INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')",__FILE__,__LINE__);
+			Database::query("INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')",__FILE__,__LINE__);
 		}
 		$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user " .
 				"WHERE id_session='$id_session' AND course_code='$enreg_course'";
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql, __FILE__, __LINE__);
 		list($nbr_users) = Database::fetch_array($rs);
-		api_sql_query("UPDATE $tbl_session_rel_course  SET nbr_users=$nbr_users " .
+		Database::query("UPDATE $tbl_session_rel_course  SET nbr_users=$nbr_users " .
 				"WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
 	}
 	foreach($UserList as $enreg_user)
 	{
 		$enreg_user = (int) $enreg_user;
-		api_sql_query("INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) " .
+		Database::query("INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) " .
 				"VALUES('$id_session','$enreg_user')",__FILE__,__LINE__);
 	}
 	// On mets a jour le nombre d'utilisateurs dans la session
 	$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_user WHERE id_session='$id_session'";
-	$rs = api_sql_query($sql, __FILE__, __LINE__);
+	$rs = Database::query($sql, __FILE__, __LINE__);
 	list($nbr_users) = Database::fetch_array($rs);
-	api_sql_query("UPDATE $tbl_session SET nbr_users=$nbr_users WHERE id='$id_session'",__FILE__,__LINE__);
+	Database::query("UPDATE $tbl_session SET nbr_users=$nbr_users WHERE id='$id_session'",__FILE__,__LINE__);
 }
 ?>

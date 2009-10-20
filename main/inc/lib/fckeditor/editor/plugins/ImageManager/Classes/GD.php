@@ -4,7 +4,7 @@
 ** Version.......:  1.0
 ** Author........:  Xiang Wei ZHUO <wei@zhuo.org>
 ** Filename......:  GD.php
-** Last changed..:  30 Aug 2003 
+** Last changed..:  30 Aug 2003
 ** Notes.........:  Orginal is from PEAR
 **/
 // +----------------------------------------------------------------------+
@@ -244,7 +244,7 @@ Class Image_Transform_Driver_GD extends Image_Transform
         } else {
             $img2 =ImageCreate($width2,$height2);
         }
-	
+
 
         if ( !is_resource($img2) ){
             return false;/*PEAR::raiseError('Cannot create buffer for the rotataion.',
@@ -374,7 +374,7 @@ Class Image_Transform_Driver_GD extends Image_Transform
      * @param int $crop_width new cropped image width
      * @param int $crop_height new cropped image height
      */
-    function crop($new_x, $new_y, $new_width, $new_height) 
+    function crop($new_x, $new_y, $new_width, $new_height)
     {
         if(function_exists('ImageCreateTrueColor')){
             $new_img =ImageCreateTrueColor($new_width,$new_height);
@@ -394,7 +394,7 @@ Class Image_Transform_Driver_GD extends Image_Transform
         $this->new_y = $new_y;
         return true;
     }
-   
+
     /**
      * Flip the image horizontally or vertically
      *
@@ -406,22 +406,22 @@ Class Image_Transform_Driver_GD extends Image_Transform
             $this->rotate(180);
         }
 
-        $width = imagesx($this->imageHandle); 
-        $height = imagesy($this->imageHandle); 
+        $width = imagesx($this->imageHandle);
+        $height = imagesy($this->imageHandle);
 
-        for ($j = 0; $j < $height; $j++) { 
-                $left = 0; 
-                $right = $width-1; 
+        for ($j = 0; $j < $height; $j++) {
+                $left = 0;
+                $right = $width-1;
 
 
-                while ($left < $right) { 
+                while ($left < $right) {
                     //echo " j:".$j." l:".$left." r:".$right."\n<br>";
-                    $t = imagecolorat($this->imageHandle, $left, $j); 
-                    imagesetpixel($this->imageHandle, $left, $j, imagecolorat($this->imageHandle, $right, $j)); 
-                    imagesetpixel($this->imageHandle, $right, $j, $t); 
-                    $left++; $right--; 
-                } 
-            
+                    $t = imagecolorat($this->imageHandle, $left, $j);
+                    imagesetpixel($this->imageHandle, $left, $j, imagecolorat($this->imageHandle, $right, $j));
+                    imagesetpixel($this->imageHandle, $right, $j, $t);
+                    $left++; $right--;
+                }
+
         }
 
         return true;

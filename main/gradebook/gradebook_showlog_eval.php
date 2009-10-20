@@ -43,7 +43,7 @@ $interbreadcrumb[] = array (
 	'url' => 'gradebook_showlog_eval.php?visiblelog='.Security::remove_XSS($_GET['visiblelog']).'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']),
 	'name' => get_lang('GradebookQualifyLog')
 );
-	
+
 Display :: display_header('');
 echo '<div class="clear"></div>';
 echo '<div class="actions">';
@@ -54,7 +54,7 @@ $t_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 $t_user=	 Database :: get_main_table(TABLE_MAIN_USER);
 $evaledit = Evaluation :: load($_GET['visiblelog']);
 $sql="SELECT le.name,le.description,le.date_log,le.weight,le.visible,le.type,us.username from ".$t_linkeval_log." le inner join ".$t_user." us on le.user_id_log=us.user_id where id_linkeval_log=".$evaledit[0]->get_id()." and type='evaluation';";
-$result=api_sql_query($sql);
+$result=Database::query($sql);
 	echo '<table width="100%" border="0" >';
 		echo '<tr>';
 		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('GradebookNameLog').'</strong></td>';
@@ -89,7 +89,7 @@ $t_user=	 Database :: get_main_table(TABLE_MAIN_USER);
 $visible_log=Security::remove_XSS($_GET['visiblelog']);
 $evaledit = Evaluation :: load($visible_log);
 $sql="SELECT le.name,le.description,le.weight,le.visible,le.type,le.date_log,us.username from ".$t_linkeval_log." le inner join ".$t_user." us on le.user_id_log=us.user_id where id_linkeval_log=".$evaledit[0]->get_id()." and type='evaluation';";
-$result=api_sql_query($sql);
+$result=Database::query($sql);
 $list_info=array();
 while ($row=Database::fetch_row($result)) {
 	$list_info[]=$row;

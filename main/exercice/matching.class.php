@@ -75,7 +75,7 @@ class Matching extends Question {
 			if(isset($_POST['moreOptions']))
 				$nb_options++;
 
-		} else if(!empty($this -> id)) {			
+		} else if(!empty($this -> id)) {
 			$answer = new Answer($this -> id);
 			$answer -> read();
 			if(count($answer->nbrAnswers)>0) {
@@ -84,7 +84,7 @@ class Matching extends Question {
 				for($i=1 ; $i<=$answer->nbrAnswers ; $i++){
 					if ($answer -> isCorrect($i)) {
 						$nb_matches++;
-						$defaults['answer['.$nb_matches.']'] = $answer -> selectAnswer($i);						
+						$defaults['answer['.$nb_matches.']'] = $answer -> selectAnswer($i);
 						$defaults['weighting['.$nb_matches.']'] = float_format($answer -> selectWeighting($i),1);
 						$defaults['matches['.$nb_matches.']'] = $answer -> correct[$i];
 					} else {
@@ -136,19 +136,19 @@ class Matching extends Question {
 						<th>
 							'.get_lang('Weighting').'
 						</th>
-						
+
 					</tr>';
 		$form -> addElement ('html', $html);
-		
+
 		for($i = 1 ; $i <= $nb_matches ; ++$i) {
 			$form -> addElement ('html', '<tr><td>');
 			$group = array();
 			$puce = FormValidator :: createElement ('text', null,null,'value="'.$i.'"');
 			$puce->freeze();
-			$group[] = $puce;			
-			
+			$group[] = $puce;
+
 			$group[] = FormValidator :: createElement ('text', 'answer['.$i.']',null, 'size="60" style="margin-left: 0em;"');
-			$group[] = FormValidator :: createElement ('select', 'matches['.$i.']',null,$a_matches);			
+			$group[] = FormValidator :: createElement ('select', 'matches['.$i.']',null,$a_matches);
 			$group[] = FormValidator :: createElement ('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
 			$form -> addGroup($group, null, null, '</td><td width="0">');
 			$form -> addElement ('html', '</td></tr>');
@@ -156,16 +156,16 @@ class Matching extends Question {
 
 		$form -> addElement ('html', '</table></div></div>');
 		$group = array();
-		
-		
+
+
 		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 			$group[] = FormValidator :: createElement ('submit', 'lessMatches', get_lang('DelElem'),'class="minus"');
 			$group[] = FormValidator :: createElement ('submit', 'moreMatches', get_lang('AddElem'),'class="plus"');
 		} else {
 			$group[] = FormValidator :: createElement ('style_submit_button', 'lessMatches', get_lang('DelElem'),'class="minus"');
-			$group[] = FormValidator :: createElement ('style_submit_button', 'moreMatches', get_lang('AddElem'),'class="plus"');			
+			$group[] = FormValidator :: createElement ('style_submit_button', 'moreMatches', get_lang('AddElem'),'class="plus"');
 		}
-			
+
 		$form -> addGroup($group);
 
 		////////////////////////
@@ -179,12 +179,12 @@ class Matching extends Question {
 				<table class="data_table">
 					<tr style="text-align: center;">
 						<th width="40px">
-							'.get_lang('Number').'						
+							'.get_lang('Number').'
 						</th>
 						<th>
 							'.get_lang('Answer').'
 						</th>
-						
+
 					</tr>';
 		$form -> addElement ('html', $html);
 
@@ -200,25 +200,25 @@ class Matching extends Question {
 			$form -> addElement ('html', '</td></tr>');
 		}
 
-		$form -> addElement ('html', '</table></div></div>');		
+		$form -> addElement ('html', '</table></div></div>');
 		$group = array();
 		global $text, $class;
-				
+
 		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 			$group[] = FormValidator :: createElement ('submit', 'lessOptions', get_lang('DelElem'),'class="minus"');
-			$group[] = FormValidator :: createElement ('submit', 'moreOptions',get_lang('AddElem'),'class="plus"');		
+			$group[] = FormValidator :: createElement ('submit', 'moreOptions',get_lang('AddElem'),'class="plus"');
 			// setting the save button here and not in the question class.php
-			$group[] = FormValidator :: createElement('submit','submitQuestion',$text, 'class="'.$class.'"');			
+			$group[] = FormValidator :: createElement('submit','submitQuestion',$text, 'class="'.$class.'"');
 		} else {
 			$group[] = FormValidator :: createElement ('style_submit_button', 'lessOptions', get_lang('DelElem'),'class="minus"');
 			$group[] = FormValidator :: createElement ('style_submit_button', 'moreOptions',get_lang('AddElem'),'class="plus"');
 			// setting the save button here and not in the question class.php
 			$group[] = FormValidator :: createElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
-			
-		}
-		
 
-		
+		}
+
+
+
 		$form -> addGroup($group);
 		$form -> setDefaults($defaults);
 		$form->setConstants(array('nb_matches' => $nb_matches,'nb_options' => $nb_options));

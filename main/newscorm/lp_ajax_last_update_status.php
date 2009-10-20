@@ -1,17 +1,17 @@
 <?php //$id$
 /**
- * This script contains the server part of the xajax interaction process. The 
+ * This script contains the server part of the xajax interaction process. The
  * client part is located in lp_api.php or other api's.
- * This script exists exclusively to comply with the SCORM 1.2 rules notes that 
+ * This script exists exclusively to comply with the SCORM 1.2 rules notes that
  * say that if the SCO doesn't give a status throughout its execution, then the
- * status should be automatically set to 'completed', then the score should be 
- * evaluated against mastery_score and, if a raw score and mastery_score value 
+ * status should be automatically set to 'completed', then the score should be
+ * evaluated against mastery_score and, if a raw score and mastery_score value
  * are set, assign the final status based on that.
  * As such, this script will:
- * 1 - check the current status for the given element is still 'not attempted' 
+ * 1 - check the current status for the given element is still 'not attempted'
  * 2 - check if there is a mastery score
  * 3 - check if there is a raw score
- * 4 - if 2 or 3 are false, change the status to 'completed', else compare 
+ * 4 - if 2 or 3 are false, change the status to 'completed', else compare
  * whether the raw score is higher than the mastery score. If not, the status
  * will be set to 'failed', if yes, the status will be set to 'passed'
  * 5 - update the status in the table of contents
@@ -20,7 +20,7 @@
  */
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file[] = 'learnpath';
 require_once('back_compat.inc.php');
 /**
@@ -59,7 +59,7 @@ function last_update_status($lp_id,$user_id,$view_id,$item_id)
         }
     }
     error_log(__LINE__);
-    
+
     // this function should only be used for SCORM paths
     if ($mylp->get_type()!=2) {
         return;
@@ -70,7 +70,7 @@ function last_update_status($lp_id,$user_id,$view_id,$item_id)
         error_log(__LINE__);
     //launch the prerequisites check and set error if needed
         $mylpi =& $mylp->items[$item_id];
-        
+
         $mystatus_in_db = $mylpi->get_status(true);
         error_log($mystatus_in_db);
         if ($mystatus_in_db == 'not attempted' or $mystatus_in_db == '') {
@@ -93,7 +93,7 @@ function last_update_status($lp_id,$user_id,$view_id,$item_id)
             $mylp->save_item($item_id,false);
         } else {
             error_log(__LINE__);
-            return $return;        	
+            return $return;
         }
     } else {
         error_log(__LINE__);
@@ -110,7 +110,7 @@ function last_update_status($lp_id,$user_id,$view_id,$item_id)
     foreach ($update_list as $my_upd_id => $my_upd_status) {
         if ($my_upd_id != $item_id) { //only update the status from other items (i.e. parents and brothers), do not update current as we just did it already
             $return .= "update_toc('".$my_upd_status."','".$my_upd_id."','no');";
-        } 
+        }
     }
     $return .= "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');";
     $return .="update_stats();";

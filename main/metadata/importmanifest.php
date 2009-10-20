@@ -59,13 +59,13 @@ require('md_phpdig.php');
 
 if (isset($workWith))  // explicit in URL, or selected at bottom of screen
 {
-    $scormdocument = Database::get_course_table('lp');
+    $scormdocument = Database::get_course_table(TABLE_LP_MAIN);
     $sql = "SELECT id FROM $scormdocument WHERE path='". Database::escape_string(api_substr($workWith,1)) . "' OR path='". Database::escape_string(substr($workWith,1)) . "/.'";
-    $result = api_sql_query($sql, __FILE__, __LINE__);
+    $result = Database::query($sql, __FILE__, __LINE__);
 
-    if (mysql_num_rows($result) == 1)
+    if (Database::num_rows($result) == 1)
     {
-        if (($row = mysql_fetch_array($result)))
+        if (($row = Database::fetch_array($result)))
         {
         	$sdi = $row['id'];
         }
@@ -390,14 +390,14 @@ elseif ($smo == get_lang('Remove') && $sdisub)
 {
     $screm = EID_TYPE . '.' . $sdi . '.' . $sdisub;
     $mdStore->mds_delete_offspring($screm, '\_');  // SQL LIKE underscore
-    echo htmlspecialchars($screm . '_*: ' . mysql_affected_rows(), ENT_QUOTES, $charset), '<br />';
+    echo htmlspecialchars($screm . '_*: ' . Database::affected_rows(), ENT_QUOTES, $charset), '<br />';
 }
 elseif ($smo == get_lang('Remove'))  // remove all, regardless of $sdiall
 {
     $mdStore->mds_delete($screm = EID_TYPE . '.' . $sdi);
-    echo htmlspecialchars($screm . ': ' . mysql_affected_rows(), ENT_QUOTES, $charset), '<br />';
+    echo htmlspecialchars($screm . ': ' . Database::affected_rows(), ENT_QUOTES, $charset), '<br />';
     $mdStore->mds_delete_offspring($screm);
-    echo htmlspecialchars($screm . '.*: ' . mysql_affected_rows(), ENT_QUOTES, $charset), '<br /><br />',
+    echo htmlspecialchars($screm . '.*: ' . Database::affected_rows(), ENT_QUOTES, $charset), '<br /><br />',
 	'<b>' . get_lang('AllRemovedFor') . ' ' . $screm . '</b><br />';
 }
 elseif ($smo == get_lang('Index') && file_exists($phpDigIncCn) &&
@@ -408,7 +408,7 @@ elseif ($smo == get_lang('Index') && file_exists($phpDigIncCn) &&
         ($sdisub ? "." . $sdisub . "\_%'" : ".%'") .
         ($sdiall ? "" : " AND NOT INSTR(eid,'_')"));  // SQL LIKE underscore
 
-    while ($row = mysql_fetch_array($result))  // load indexabletexts in memory
+    while ($row = Database::fetch_array($result))  // load indexabletexts in memory
     {
         // URL: index.php[?sid=xxx[&thumb=yyy]] (file[1]/@href: pptslnnn_t.jpg)
 
@@ -458,9 +458,9 @@ elseif ($smo == get_lang('Index'))
 echo '<h3>', get_lang('Statistics'), '</h3>', "\n";
 
 $result = $mdStore->mds_get_many('eid', "eid LIKE '" . EID_TYPE . ".%'");
-echo get_lang('TotalMDEs'), mysql_num_rows($result), "\n";
+echo get_lang('TotalMDEs'), Database::num_rows($result), "\n";
 
-while ($row = mysql_fetch_array($result))
+while ($row = Database::fetch_array($result))
 {
     $eid_id = substr($eid = $row['eid'], TPLEN);
 
@@ -541,7 +541,7 @@ if ($mfContents)
             {
                 $result = $mdStore->mds_get_many('eid', "eid LIKE '" .
                     EID_TYPE . "." . $sdi . "." . $ns . "\_%'");
-                $nns = mysql_num_rows($result);
+                $nns = Database::num_rows($result);
                 echo $ns, $nns ? '_ ' . $nns : '', '; ';
             }
             echo '<br>';

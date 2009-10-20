@@ -22,10 +22,10 @@ require_once 'HTML/QuickForm/Action.php';
 
 /**
  * This action allows to go to a specific page of a multipage form.
- * 
- * Please note that the name for this action in addAction() should NOT be  
+ *
+ * Please note that the name for this action in addAction() should NOT be
  * 'direct', but the name of the page you wish to go to.
- * 
+ *
  * @author  Alexey Borzov <avb@php.net>
  * @package HTML_QuickForm_Controller
  * @version $Revision: 6184 $

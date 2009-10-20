@@ -1,16 +1,16 @@
 <?php
 require_once(api_get_path(SYS_CODE_PATH).'chat/chat_functions.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'course.lib.php'); 
+require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
 Mock::generate('CourseManager');
 class TestChatFunctions extends UnitTestCase {
-	
+
 	function testdisconnect_user_of_chat() {
 		$res = disconnect_user_of_chat();
  		$this->assertTrue(is_null($res));
  		//var_dump($res);
 	}
-	
+
 	function testexit_of_chat () {
 		$docu = new MockCourseManager();
 		$user_id=1;
@@ -20,7 +20,7 @@ class TestChatFunctions extends UnitTestCase {
  		$this->assertTrue(is_null($res));
  		//var_dump($res);
 	}
-	
+
 	function testuser_connected_in_chat () {
 		$user_id=1;
 		$database_name='';
@@ -28,7 +28,7 @@ class TestChatFunctions extends UnitTestCase {
  		$this->assertTrue(is_bool($res));
  		//var_dump($res);
 	}
-	
+
 	function testusers_list_in_chat () {
 		$res = users_list_in_chat();
  		$this->assertTrue(is_array($res));

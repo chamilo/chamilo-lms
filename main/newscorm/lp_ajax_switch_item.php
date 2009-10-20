@@ -11,7 +11,7 @@
  */
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file[] = 'learnpath';
 require_once('back_compat.inc.php');
 /**
@@ -68,7 +68,7 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
         case 'previous':
             $mylp->set_current_item($current_item);
             $mylp->previous();
-            $new_item_id = $mylp->get_current_item_id();            
+            $new_item_id = $mylp->get_current_item_id();
             if($debug>1){error_log('In {previous} - next item is '.$new_item_id.'(current: '.$current_item.')',0);}
             break;
         case 'first':
@@ -186,7 +186,7 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
     $myinteractions_count = $mylpi->get_interactions_count();
     $myobjectives_count = $mylpi->get_objectives_count();
     $mycore_exit = $mylpi->get_core_exit();
-    
+
     //$objResponse->addScript(
     $return .=
             "saved_lesson_status='not attempted';" .

@@ -94,7 +94,7 @@ include('forumfunction.inc.php');
 
 // javascript
 $htmlHeadXtra[] = '<script>
-		
+
 		function advanced_parameters() {
 			if(document.getElementById(\'id_qualify\').style.display == \'none\') {
 				document.getElementById(\'id_qualify\').style.display = \'block\';
@@ -105,7 +105,7 @@ $htmlHeadXtra[] = '<script>
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
 			}
 		}
-</script>';	
+</script>';
 
 /*
 ==============================================================================
@@ -133,7 +133,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
@@ -142,20 +142,20 @@ if (!empty($gradebook) && $gradebook=='view') {
 
 
 if (!empty($_SESSION['toolgroup'])) {
-	
+
 	$_clean['toolgroup']=(int)$_SESSION['toolgroup'];
 	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
 	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
 	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
-	$interbreadcrumb[] = array("url" => "viewforum.php?origin=".$origin."&amp;gidReq=".$_SESSION['toolgroup']."&amp;forum=".Security::remove_XSS($_GET['forum']),"name" => prepare4display($current_forum['forum_title']));	
-	$interbreadcrumb[] = array("url" => "#","name" => get_lang('EditPost'));
-	
+	$interbreadcrumb[] = array("url" => "viewforum.php?origin=".$origin."&amp;gidReq=".$_SESSION['toolgroup']."&amp;forum=".Security::remove_XSS($_GET['forum']),"name" => prepare4display($current_forum['forum_title']));
+	$interbreadcrumb[] = array("url" => "javascript: void (0);","name" => get_lang('EditPost'));
+
 } else {
 	$interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook","name" => $nameTools);
 	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => prepare4display($current_forum_category['cat_title']));
 	$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&amp;forum=".Security::remove_XSS($_GET['forum']),"name" => prepare4display($current_forum['forum_title']));
 	$interbreadcrumb[]=array("url" => "viewthread.php?gradebook=$gradebook&amp;origin=".$origin."&amp;forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".$_GET['thread'],"name" => prepare4display($current_thread['thread_title']));
-	$interbreadcrumb[]=array("url" => "#","name" => get_lang('EditPost'));
+	$interbreadcrumb[]=array("url" => "javascript: void (0);","name" => get_lang('EditPost'));
 }
 /*
 -----------------------------------------------------------
@@ -200,16 +200,16 @@ if ($origin=='learnpath') {
 // The only exception is the course manager
 // I have split this is several pieces for clarity.
 //if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0) OR ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0)))
-if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0))) {
+if (!api_is_allowed_to_edit(null,true) AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0))) {
 	forum_not_allowed_here();
 }
-if (!api_is_allowed_to_edit() AND ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0)) {
+if (!api_is_allowed_to_edit(null,true) AND ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0)) {
 	forum_not_allowed_here();
 }
 if (!$_user['user_id'] AND $current_forum['allow_anonymous']==0) {
 	forum_not_allowed_here();
 }
-if (!api_is_allowed_to_edit() AND $current_forum['allow_edit']==0) {
+if (!api_is_allowed_to_edit(null,true) AND $current_forum['allow_edit']==0) {
 	forum_not_allowed_here();
 }
 
@@ -253,13 +253,13 @@ if (!empty($values) and isset($_POST['SubmitPost'])) {
 			$session_id=api_get_session_id();
 			$link_id=is_resource_in_course_gradebook(api_get_course_id(),5,$id,$session_id);
 			if ($link_id==false) {
-				add_resource_to_course_gradebook(api_get_course_id(), 5, $id, $title_gradebook,$weight_calification,$value_calification,$description,time(),1,api_get_session_id());	
+				add_resource_to_course_gradebook(api_get_course_id(), 5, $id, $title_gradebook,$weight_calification,$value_calification,$description,time(),1,api_get_session_id());
 			} else {
-				api_sql_query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
+				Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
 			}
-				
+
 	}
-	
+
 }
 // footer
 if ($origin!='learnpath') {

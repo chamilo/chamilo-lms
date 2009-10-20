@@ -21,7 +21,7 @@
 	define('LBL_MODIFIED', 'Ge&auml;ndert am');
 		//File Information
 	define('LBL_FILE_INFO', 'Datei Information:');
-	define('LBL_FILE_NAME', 'Name:');	
+	define('LBL_FILE_NAME', 'Name:');
 	define('LBL_FILE_CREATED', 'Erstellt am:');
 	define("LBL_FILE_MODIFIED", 'Ge&auml;ndert am:');
 	define("LBL_FILE_SIZE", 'Datei Gr&ouml;&szlig;e:');
@@ -56,7 +56,7 @@
 	define('ERR_NOT_DOC_SELECTED_FOR_PASTE', 'Kein(e) Dokument(e) ausgew&auml;hlt zum einf&uuml;gen.');
 	define('WARNING_CUT_PASTE', 'Bist du sicher, dass du die ausgew&auml;hlten Dokumente in diesem Ordner verschieben willst?');
 	define('WARNING_COPY_PASTE', 'Bist du sicher, dass du die ausgew&auml;hlten Dokumente in diesem Ordner kopieren willst?');
-	
+
 	//ERROR MESSAGES
 		//deletion
 	define('ERR_NOT_FILE_SELECTED', 'Bitte w&auml;hle eine Datei.');
@@ -78,7 +78,7 @@
 	define('ERR_FOLDER_EXISTS', 'Bitte verwende einen Namen der in diesem Ordner noch nicht verwendet wird.');
 	define('ERR_FOLDER_CREATION_FAILED', 'Kann den Ordner nicht erstellen, bitte versuche es nochmals.');
 	define('ERR_FOLDER_NAME_EMPTY', 'Bitte gib ihm einen Namen.');
-	
+
 		//file upload
 	define("ERR_FILE_NAME_FORMAT", 'Bitte verwenden einen Namen, welcher nur Buchstaben, Punkte, Leerzeichen, Bindestriche und Unterstriche verwendet.');
 	define('ERR_FILE_NOT_UPLOADED', 'Es wurde keine Datei f&uuml;r den Upload ausgew&auml;hlt.');
@@ -88,7 +88,7 @@
 	define('ERROR_FILE_TOO_BID', 'Datei zu gro&szlig;. (max: %s)');
 	//file download
 	define('ERR_DOWNLOAD_FILE_NOT_FOUND', 'Keine Dateien zum herunterladen ausgew&auml;hlt.');
-	
+
 
 	//Tips
 	define('TIP_FOLDER_GO_DOWN', 'Einfach klicken um zu diesem Ordner zu gelangen...');
@@ -100,7 +100,7 @@
 	define('WARNING_DELETE', 'Bist du sicher, dass die diese Dateien l&ouml;schen m&ouml;chtest?.');
 	define('WARNING_IMAGE_EDIT', 'Bitte w&auml;hle ein Bild zum editieren aus.');
 	define('WARNING_NOT_FILE_EDIT', 'Bitte w&auml;hle eine Datei zum editieren.');
-	define('WARING_WINDOW_CLOSE', 'Sicher, dass du dieses Fenster schließen möchtest?');
+	define('WARING_WINDOW_CLOSE', 'Sicher, dass du dieses Fenster schlieï¿½en mï¿½chtest?');
 	//Preview
 	define('PREVIEW_NOT_PREVIEW', 'Keine Vorschau vorhanden.');
 	define('PREVIEW_OPEN_FAILED', 'Kann diese Datei nicht &ouml;ffnen.');
@@ -112,12 +112,12 @@
 	define('LOGIN_USERNAME', 'Benutzer:');
 	define('LOGIN_PASSWORD', 'Password:');
 	define('LOGIN_FAILED', 'Falscher Benutzer/Password.');
-	
-	
+
+
 	//88888888888   Below for Image Editor   888888888888888888888
-		//Warning 
+		//Warning
 		define('IMG_WARNING_NO_CHANGE_BEFORE_SAVE', "Du hast keine &auml;nderungen an diesem Bild gemacht.");
-		
+
 		//General
 		define('IMG_GEN_IMG_NOT_EXISTS', 'Das Bild existiert nicht');
 		define('IMG_WARNING_LOST_CHANAGES', 'Alle ungespeicherten &auml;nderungen an dem Bild gehen verloren. Bist du sicher, dass du fortfahren willst?');
@@ -128,14 +128,14 @@
 		define('IMG_WARING_FLIP_H', 'Bist du siche, dass du das Bild horizontal spiegeln m&ouml;chtest?');
 		define('IMG_WARING_FLIP_V', 'Bist du sicher das du das Bild vertikal spiegeln m&ouml;chtest?');
 		define('IMG_INFO', 'Bildinformation');
-		
+
 		//Mode
 			define('IMG_MODE_RESIZE', 'Gr&ouml;&szlig;e ver&Auml;ndern:');
 			define('IMG_MODE_CROP', 'Beschneiden:');
 			define('IMG_MODE_ROTATE', 'Drehen:');
-			define('IMG_MODE_FLIP', 'Spiegeln:');		
+			define('IMG_MODE_FLIP', 'Spiegeln:');
 		//Button
-		
+
 			define('IMG_BTN_ROTATE_LEFT', '90&deg;CCW');
 			define('IMG_BTN_ROTATE_RIGHT', '90&deg;CW');
 			define('IMG_BTN_FLIP_H', 'Horizontal spiegeln');
@@ -160,10 +160,10 @@
 			define('IMG_LBL_SAVE_TO', 'Speichern in...:');
 			define('IMG_LBL_ROOT_FOLDER', 'Haupt Ordner');
 		//Editor
-		//Save as 
+		//Save as
 		define('IMG_NEW_NAME_COMMENTS', 'Bitte schlie&szlig;e die Bilderweiterung  nicht mit ein.');
 		define('IMG_SAVE_AS_ERR_NAME_INVALID', 'Bitte verwenden einen Namen, welcher nur Buchstaben, Punkte, Leerzeichen, Bindestriche und Unterstriche verwendet.');
-		define('IMG_SAVE_AS_NOT_FOLDER_SELECTED', 'Kein Zielordner ausgew&auml;hlt.');	
+		define('IMG_SAVE_AS_NOT_FOLDER_SELECTED', 'Kein Zielordner ausgew&auml;hlt.');
 		define('IMG_SAVE_AS_FOLDER_NOT_FOUND', 'Der Zielordner existiert nicht.');
 		define('IMG_SAVE_AS_NEW_IMAGE_EXISTS', 'Es existiert ein Bild mit dem selben Namen.');
 
@@ -180,21 +180,21 @@
 		define('IMG_SAVE_FLIP_FAILED', 'Das Bild kann nicht umgedreht werden.');
 		define('IMG_SAVE_SESSION_IMG_OPEN_FAILED', 'Kann das Bild nicht aus der Sitzung &ouml;ffnen.');
 		define('IMG_SAVE_IMG_OPEN_FAILED', 'Kann das Bild nicht &ouml;ffnen');
-		
-		
+
+
 		//UNDO
 		define('IMG_UNDO_NO_HISTORY_AVAIALBE', 'Keine Chronik verf&uuml;gbar f&uuml;r die Undo-Funktion.');
 		define('IMG_UNDO_COPY_FAILED', 'Das Bild kann nicht wiederhergestellt werden.');
 		define('IMG_UNDO_DEL_FAILED', 'Kann das Sitzungs-Bild nicht l&ouml;schen');
-	
+
 	//88888888888   Above for Image Editor   888888888888888888888
-	
+
 	//88888888888   Session   888888888888888888888
 		define("SESSION_PERSONAL_DIR_NOT_FOUND", 'Kann den bestimmten Ordner nicht finden, welcher als Sitzungsordner erstellt wordens ein sollte');
 		define("SESSION_COUNTER_FILE_CREATE_FAILED", 'Kann die "Sitzungsz&auml;hler-Datei" im Odner nicht &ouml;ffnen.');
 		define('SESSION_COUNTER_FILE_WRITE_FAILED', 'Kann die "Sitzungsz&auml;hlerdatei nicht beschreiben.');
 	//88888888888   Session   888888888888888888888
-	
+
 	//88888888888   Below for Text Editor   888888888888888888888
 		define('TXT_FILE_NOT_FOUND', 'Datei wurde nicht gefunden.');
 		define('TXT_EXT_NOT_SELECTED', 'Bitte w&auml;hle die Dateiwerweiterung');
@@ -209,6 +209,6 @@
 		define('TXT_CONTENT_UPDATE_FAILED', 'Konnte den Inhalt der Datei nicht aktualisieren.');
 		define('TXT_SAVE_AS_ERR_NAME_INVALID', 'Bitte verwenden einen Namen, welcher nur Buchstaben, Punkte, Leerzeichen, Bindestriche und Unterstriche verwendet.');
 	//88888888888   Above for Text Editor   888888888888888888888
-	
-	
+
+
 ?>

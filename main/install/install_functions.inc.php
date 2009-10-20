@@ -173,7 +173,7 @@ function get_config_param($param,$updatePath='')
 			error_log('Could not find config file in '.$updatePath.' in get_config_param()',0);
 			return null;
 		}
-	}	
+	}
 	if(file_exists($updatePath.'main/inc/installedVersion.inc.php'))
 	{
 		$updateFromInstalledVersionFile = $updatePath.'main/inc/installedVersion.inc.php';
@@ -187,7 +187,7 @@ function get_config_param($param,$updatePath='')
 		if(file_exists($updatePath.$updateFromInstalledVersionFile))
 		{
 			$temp2 = file_to_array($updatePath.$updateFromInstalledVersionFile);
-		}		
+		}
 		$configFile=array();
 		$temp=file_to_array($updatePath.$updateFromConfigFile);
 		$temp = array_merge($temp,$temp2);
@@ -241,18 +241,18 @@ function get_config_param($param,$updatePath='')
 					$configFile[$enreg[0]]=$enreg[1];
 
 					$a=explode("'",$enreg[0]);
-					$key_tmp=$a[1];							
-					if($key_tmp== $param)					
-					{					
-						$val=$enreg[1];					
-					} 
+					$key_tmp=$a[1];
+					if($key_tmp== $param)
+					{
+						$val=$enreg[1];
+					}
 				}
 			}
 		}
 
 		return $val;
-	} 
-	else 
+	}
+	else
 	{
 		error_log('Config array could not be found in get_config_param()',0);
 		return null;
@@ -426,8 +426,8 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 				<td class="requirements-value">'.check_extension('xml', get_lang('Yes'), get_lang('No')).'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.get_lang('support').'</td>
-				<td class="requirements-value">'.check_extension('mbstring', get_lang('Yes'), get_lang('ExtensionMBStringNotAvailable')).'</td>
+				<td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
+				<td class="requirements-value">'.check_extension('mbstring', get_lang('Yes'), get_lang('ExtensionMBStringNotAvailable'), true).'</td>
 			</tr>
 			<tr>
 				<td class="requirements-item"><a href="http://php.net/manual/en/book.iconv.php" target="_blank">Iconv</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
@@ -453,7 +453,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 				<td class="requirements-item"><a href="http://xapian.org/" target="_blank">Xapian</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
 				<td class="requirements-value">'.check_extension('xapian', get_lang('Yes'), get_lang('No'), true).'</td>
 			</tr>
-				
+
 		  </table>';
 	echo '	</div>';
 	echo '</div>';
@@ -559,7 +559,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
             //</tr>'.
             //'<tr>
             //    <td class="requirements-item">'.session_save_path().'</td>
-            //    <td class="requirements-value">'.(is_writable(session_save_path()) 
+            //    <td class="requirements-value">'.(is_writable(session_save_path())
 			//		? '<strong><font color="green">'.get_lang('Writable').'</font></strong>'
 			//		: '<strong><font color="red">'.get_lang('NotWritable').'</font></strong>').'</td>
             //</tr>'.
@@ -590,7 +590,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 			<tr>
 			<td colspan="2" align="center">
 				<button type="submit" class="back" name="step1" value="&lt; <?php echo get_lang('Back');?>" ><?php echo get_lang('Back');?></button>
-				<input type="hidden" name="is_executable" id="is_executable" value="-" />	
+				<input type="hidden" name="is_executable" id="is_executable" value="-" />
 				<button type="submit" class="next" name="<?php echo (isset($_POST['step2_update_6'])?'step2_update_6':'step2_update_8');?>" value="<?php echo get_lang('Next');?> &gt;" ><?php echo get_lang('Next');?></button>
 			</td>
 			</tr>
@@ -666,7 +666,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 				echo '<li>'.$value.'</li>';
 			}
 			echo '</ul>';
-			echo '</div>';			
+			echo '</div>';
 		}
 		// check wether a Dokeos configuration file already exists.
 		elseif(file_exists('../inc/conf/configuration.php'))
@@ -742,7 +742,7 @@ function display_license_agreement()
 * @param	string	Extra notice (to show on the right side)
 * @param	boolean	Whether to display in update mode
 * @param	string	Additional attribute for the <tr> element
-* @return	void	Direct output	
+* @return	void	Direct output
 */
 function display_database_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $extra_notice, $display_when_update = true, $tr_attribute='')
 {
@@ -754,15 +754,15 @@ function display_database_parameter($install_type, $parameter_name, $form_field_
 	}
 	else
 	{
-		if ($form_field_name=='dbPassForm') { 
+		if ($form_field_name=='dbPassForm') {
 			$inputtype = 'password';
 		} else {
 			$inputtype = 'text';
 		}
-		
+
 		//Slightly limit the length of the database prefix to avoid
 		//having to cut down the databases names later on
-		if ($form_field_name=='dbPrefixForm') { 
+		if ($form_field_name=='dbPrefixForm') {
 			$maxlength = '15';
 		} else {
 			$maxlength = MAX_FORM_FIELD_LENGTH;
@@ -810,7 +810,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 			$dbStatsForm=$_configuration['statistics_database'];
 			$dbScormForm=$_configuration['scorm_database'];
 			$dbUserForm=$_configuration['user_personal_database'];
-	
+
 			$dbScormExists=true;
 		}
 
@@ -848,7 +848,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 		echo "<h2>" . display_step_sequence() .get_lang("DBSetting") . "</h2>";
 		echo get_lang("DBSettingIntro");
 	}
-	
+
 	?>
 	<br /><br />
 	</td>
@@ -878,7 +878,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	//database prefix
 	display_database_parameter($installType, get_lang('DbPrefixForm'), 'dbPrefixForm', $dbPrefixForm, get_lang('DbPrefixCom'));
 	//fields for the four standard Dokeos databases
-	echo '<tr><td colspan="3"><a href="" onclick="javascript: show_hide_option();return false;" id="optionalparameters"><img style="vertical-align:middle;" src="../img/div_hide.gif" alt="show-hide" /> '.get_lang('OptionalParameters','').'</a></td></tr>';
+	echo '<tr><td colspan="3"><a href="" onclick="javascript: show_hide_option();return false;" id="optionalparameters"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="show-hide" /> '.get_lang('OptionalParameters','').'</a></td></tr>';
 	display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm', $dbNameForm, '&nbsp;',null,'id="optional_param1" style="display:none;"');
 	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;',null,'id="optional_param2" style="display:none;"');
 	if($installType == 'update' && in_array($_POST['old_version'],$update_from_version_6))
@@ -1000,19 +1000,19 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	echo "<tr>\n";
 	echo '<td>'.get_lang('MainLang')."&nbsp;&nbsp;</td>\n";
 	if($installType == 'update')
-	{		
+	{
 		echo '<td><input type="hidden" name="languageForm" value="'.api_htmlentities($languageForm, ENT_QUOTES, $charset).'" />'.$languageForm."</td>\n";
 	}
 	else // new installation
 	{
-		
+
 	echo '<td>';
-	
+
 	$array_lang = array('asturian','english','italian','french','slovenian','spanish');
 
 	////Only display Language have 90% +
-	echo "\t\t<select name=\"languageForm\">\n";	
-				
+	echo "\t\t<select name=\"languageForm\">\n";
+
 	foreach ($array_lang as $key => $value)	{
 		echo '<option value="'.$value.'"';
 		if($value == $languageForm) echo ' selected="selected"';
@@ -1020,11 +1020,11 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	}
 
 	echo "\t\t</select>\n";
-	
+
 	//Display all language
 	/*echo "<select name=\"languageForm\">\n";
 		$dirname='../lang/';
-		
+
 		if ($dir=@opendir($dirname)) {
 			$lang_files = array();
 				while (($file = readdir($dir)) !== false) {
@@ -1035,8 +1035,8 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 			closedir($dir);
 		}
 		sort($lang_files);
-				
-		
+
+
 		foreach ($lang_files as $file) {
 			echo '<option value="'.$file.'"';
 				if($file == $languageForm) echo ' selected="selected"';
@@ -1052,20 +1052,23 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	//Second parameter: Dokeos URL
 	echo "<tr>\n";
 	echo '<td>'.get_lang('DokeosURL').' (<font color="red">'.get_lang('ThisFieldIsRequired')."</font>)&nbsp;&nbsp;</td>\n";
-	
+
 	if($installType == 'update') echo '<td>'.api_htmlentities($urlForm, ENT_QUOTES, $charset)."</td>\n";
 	else echo '<td><input type="text" size="40" maxlength="100" name="urlForm" value="'.api_htmlentities($urlForm, ENT_QUOTES, $charset).'" />'."</td>\n";
-	
+
 	echo "</tr>\n";
 
 	//Parameter 3: administrator's email
 	display_configuration_parameter($installType, get_lang("AdminEmail"), "emailForm", $emailForm);
 
-    //Parameter 4: administrator's first name
+	//Parameters 4 and 5: administrator's names
+	if (api_is_western_name_order()) {
     display_configuration_parameter($installType, get_lang("AdminFirstName"), "adminFirstName", $adminFirstName);
-
-	//Parameter 5: administrator's last name
 	display_configuration_parameter($installType, get_lang("AdminLastName"), "adminLastName", $adminLastName);
+	} else {
+		display_configuration_parameter($installType, get_lang("AdminLastName"), "adminLastName", $adminLastName);
+		display_configuration_parameter($installType, get_lang("AdminFirstName"), "adminFirstName", $adminFirstName);
+	}
 
 	//Parameter 6: administrator's telephone
 	display_configuration_parameter($installType, get_lang("AdminPhone"), "adminPhoneForm", $adminPhoneForm);
@@ -1085,7 +1088,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 
 	//Parameter 11: institute (short) name
 	display_configuration_parameter($installType, get_lang("InstituteURL"), "institutionUrlForm", $institutionUrlForm);
-	
+
 	/*
 	 //old method
 	  	<tr>
@@ -1100,13 +1103,13 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	  </td>
 	  <?php endif; ?>
 	</tr>
-	
+
 	 */
-	
+
 	?>
 	<tr>
 	  <td><?php echo get_lang("EncryptMethodUserPass"); ?> :</td>
- 
+
 	  <?php if($installType == 'update'): ?>
 	  <td><input type="hidden" name="encryptPassForm" value="<?php echo $encryptPassForm; ?>" /><?php  echo $encryptPassForm; ?></td>
 	  <?php else: ?>
@@ -1117,11 +1120,11 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	  </td>
 	  <?php endif; ?>
 	</tr>
-	
 
-	
-	
-	
+
+
+
+
 	<tr>
 	  <td><?php echo get_lang("AllowSelfReg"); ?> :</td>
 

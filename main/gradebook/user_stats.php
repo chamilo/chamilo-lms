@@ -48,12 +48,12 @@ if ($_GET['selectcat'] != null) {
 	$addparams= array (
 		'userid' => $my_user_id,
 		'selectcat' => Security::remove_XSS($_GET['selectcat'])
-	);	
+	);
 } else {
 	$addparams= array (
 		'userid' => $my_user_id,
 		'selecteval' => Security::remove_XSS($_GET['selecteval'])
-	);	
+	);
 }
 
 $user_table= new UserTable($my_user_id, $allevals, $alllinks, $addparams);
@@ -68,24 +68,24 @@ if (isset ($_GET['exportpdf'])) {
 	$displayscore= Scoredisplay :: instance();
 	$newitem= array ();
 	foreach ($data_array as $data) {
-		$newarray[] = array_slice($data, 1);	
+		$newarray[] = array_slice($data, 1);
 	}
 
 	$pdf->ezSetY(810);
 	$userinfo = get_user_info_from_id($my_user_id);
-	$pdf->ezText(get_lang('Results').' : '.$userinfo['lastname']. ' '. $userinfo['firstname'].' ('. date('j/n/Y g:i') .')',12,array('justification'=>'center'));
+	$pdf->ezText(get_lang('Results').' : '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).' ('. date('j/n/Y g:i') .')', 12, array('justification'=>'center'));
 	$pdf->line(50,790,550,790);
-	$pdf->line(50,40,550,40);	
-	
+	$pdf->line(50,40,550,40);
+
 	$pdf->ezSetY(750);
 	if ($displayscore->is_custom()) {
 		$header_names= array (
 			get_lang('Evaluation'
-		), get_lang('Course'), get_lang('Category'), get_lang('EvaluationAverage'),get_lang('Result'),get_lang('Display'));		
+		), get_lang('Course'), get_lang('Category'), get_lang('EvaluationAverage'),get_lang('Result'),get_lang('Display'));
 	} else {
 		$header_names= array (
 			get_lang('Evaluation'
-		), get_lang('Course'), get_lang('Category'), get_lang('EvaluationAverage'),get_lang('Result'));		
+		), get_lang('Course'), get_lang('Category'), get_lang('EvaluationAverage'),get_lang('Result'));
 	}
 	$pdf->ezTable($newarray, $header_names, '', array (
 		'showHeadings' => 1,

@@ -6,8 +6,8 @@
 	Copyright (c) 2009 Dokeos SPRL
 	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
 	Copyright (c) Facultad de Matematicas, UADY (México)
-	Copyright (c) Evie, Free University of Brussels (Belgium)	
-	Copyright (c) 2009 Isaac Flores Paz <isaac.flores@dokeos.com>	
+	Copyright (c) Evie, Free University of Brussels (Belgium)
+	Copyright (c) 2009 Isaac Flores Paz <isaac.flores@dokeos.com>
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -48,15 +48,15 @@ if ($panel_id==2) {
     <td height="20"><?php echo api_xml_http_response_encode(get_lang('WriteAMessage'));  ?> :<br/><textarea id="txt_area_invite" rows="3" cols="25"></textarea></td>
     <td height="20"><input type="button" value="<?php echo api_xml_http_response_encode(get_lang('SendInviteMessage')); ?>" onclick="action_database_panel('4','<?php echo $user_id;?>')" /></td>
 <?php
-} 
+}
 if ($panel_id==1) {
 ?>
-    <td height="20"><?php echo api_xml_http_response_encode(get_lang('To')); ?> &nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode($user_info['firstName'].' '.$user_info['lastName']); ?></td>
+    <td height="20"><?php echo api_xml_http_response_encode(get_lang('To')); ?> &nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName'])); ?></td>
     <td height="20"><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br/><input id="txt_subject_id" type="text" style="width:200px;"></td>
     <td height="20"><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br/><textarea id="txt_area_invite" rows="3" cols="25"></textarea></td>
     <td height="20"><input type="button" value="<?php echo api_xml_http_response_encode(get_lang('NewMessage')); ?>" onclick="hide_display_message()" />&nbsp;&nbsp;&nbsp; <input type="button" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>" onclick="action_database_panel('5','<?php echo $user_id;?>')" /></td>
 <?php
-} 
+}
 if ($panel_id==3) {
 ?>
 <dl>
@@ -73,6 +73,6 @@ if ($panel_id==4) {
 	}
 	UserFriend::send_invitation_friend_user($user_id,$subject_message,$content_message);
 } elseif ($panel_id==5) {
-	UserFriend::send_invitation_friend_user($user_id,$subject_message,$content_message);	
+	UserFriend::send_invitation_friend_user($user_id,$subject_message,$content_message);
 }
 ?>

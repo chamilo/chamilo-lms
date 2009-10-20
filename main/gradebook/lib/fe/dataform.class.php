@@ -105,7 +105,7 @@ class DataForm extends FormValidator {
 		$this->addElement('submit', 'submit', get_lang('Ok'));
 		$this->setDefaults(array(
 		'formSent' => '1',
-		'file_type' => 'csv'	
+		'file_type' => 'csv'
 		));
 	}
 

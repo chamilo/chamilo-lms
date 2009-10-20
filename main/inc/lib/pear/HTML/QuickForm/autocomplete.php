@@ -208,7 +208,7 @@ function autocomplete(textbox, event, values) {
                 replaceSelection(textbox, c);
                 sMatch = autocompleteMatch(textbox.value, values);
                 var len = textbox.value.length;
-				
+
                 if (sMatch != null) {
                     textbox.value = sMatch;
                     setSelectionRange(textbox, len, textbox.value.length);

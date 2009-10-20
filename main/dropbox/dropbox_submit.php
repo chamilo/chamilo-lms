@@ -53,11 +53,11 @@ api_session_register("dropbox_uniqueid");
  */
 if ( isset( $_POST["submitWork"]))
 {
-    if (file_exists(api_get_path(INCLUDE_PATH) . "/fileUploadLib.inc.php")) 
+    if (file_exists(api_get_path(INCLUDE_PATH) . "/fileUploadLib.inc.php"))
     {
         require_once(api_get_path(INCLUDE_PATH) . "/fileUploadLib.inc.php");
-    } 
-    else 
+    }
+    else
     {
         require_once(api_get_path(LIBRARY_PATH) . "/fileUpload.lib.php");
 	}
@@ -68,7 +68,7 @@ if ( isset( $_POST["submitWork"]))
 
     /**
      * --------------------------------------
-     * �����FORM SUBMIT : VALIDATE POSTED DATA
+     * FORM SUBMIT : VALIDATE POSTED DATA
      * --------------------------------------
      */
     // the author or description field is empty
@@ -142,7 +142,7 @@ if ( isset( $_POST["submitWork"]))
 
     /**
      * --------------------------------------
-     * ����FORM SUBMIT : UPLOAD NEW FILE
+     * FORM SUBMIT : UPLOAD NEW FILE
      * --------------------------------------
      */
     if ( !$error)
@@ -182,17 +182,17 @@ if ( isset( $_POST["submitWork"]))
             {
 	            // set title
 	            $dropbox_title = $dropbox_filename;
-	
+
 	            // set author
 	            if ( $_POST['authors'] == '')
 	            {
 	                $_POST['authors'] = getUserNameFromId( $_user['user_id']);
 	            }
-	
+
 				if ( $dropbox_overwrite)  // RH: Mailing: adapted
 				{
 					$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
-	
+
 					foreach($dropbox_person->sentWork as $w)
 					{
 						if ($w->title == $dropbox_filename)
@@ -216,7 +216,7 @@ if ( isset( $_POST["submitWork"]))
 				{
 					$dropbox_filename = getLoginFromId( $_user['user_id']) . "_" . $dropbox_filename . "_".uniqid('');
 				}
-	
+
 				if ( ( ! is_dir( dropbox_cnf("sysPath"))))
 	            {
 					//The dropbox subdir doesn't exist yet so make it and create the .htaccess file
@@ -224,13 +224,13 @@ if ( isset( $_POST["submitWork"]))
 					$fp = fopen( dropbox_cnf("sysPath")."/.htaccess", "w") or die (dropbox_lang("errorCreatingDir")." (code 405)");
 					fwrite($fp, "AuthName AllowLocalAccess
 	                             AuthType Basic
-	
+
 	                             order deny,allow
 	                             deny from all
-	
+
 	                             php_flag zlib.output_compression off") or die (dropbox_lang("errorCreatingDir")." (code 406)");
 	            }
-	
+
 				if ( $error) {}
 	            elseif ( $thisIsAMailing)  // RH: $newWorkRecipients is integer - see class
 				{
@@ -269,9 +269,9 @@ if ( isset( $_POST["submitWork"]))
 		            	}
 		            }
 	        	}
-	
+
 				//After uploading the file, create the db entries
-	
+
 	        	if ( !$error)
 	        	{
 		            @move_uploaded_file( $dropbox_filetmpname, dropbox_cnf("sysPath") . '/' . $dropbox_filename)
@@ -333,13 +333,13 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
         {
 			// string result = error message, array result = [user_id, lastname, firstname]
 
-	    	global $var, $sel; 
+	    	global $var, $sel;
             if (isset($students)) {
                 unset($students);
             }
 
-	        $result = api_sql_query($sel . $thisRecip . "'",__FILE__,__LINE__);
-	        while ( ($res = mysql_fetch_array($result))) {$students[] = $res;}
+	        $result = Database::query($sel . $thisRecip . "'",__FILE__,__LINE__);
+	        while ( ($res = Database::fetch_array($result))) {$students[] = $res;}
 	        mysql_free_result($result);
 
 	    	if (count($students) == 1)
@@ -392,11 +392,11 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
             }
         }
 
-	    if (file_exists(api_get_path(INCLUDE_PATH) . "/pclzip/pclzip.lib.php")) 
+	    if (file_exists(api_get_path(INCLUDE_PATH) . "/pclzip/pclzip.lib.php"))
 	    {
 	        require(api_get_path(INCLUDE_PATH) . "/pclzip/pclzip.lib.php");
-	    } 
-	    else 
+	    }
+	    else
 	    {
 	        require(api_get_path(LIBRARY_PATH) . "/pclzip/pclzip.lib.php");
 		}
@@ -458,7 +458,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 		            {
 						$errormsg .= dropbox_lang("mailingFileIsFor");
 		            }
-					$errormsg .= htmlspecialchars($thisRecip[1].' '.$thisRecip[2],ENT_QUOTES,$charset);
+					$errormsg .= htmlspecialchars(api_get_person_name($thisRecip[2], $thisRecip[1]), ENT_QUOTES, $charset);
 
 					if ( is_null($thisRecip[3]))
 					{
@@ -482,14 +482,14 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 					ON cu.user_id = u.user_id AND cu.course_code = '".$_course['sysCode']."'
 					WHERE cu.status = 5
 					AND u.user_id NOT IN ('" . implode("', '" , $students) . "')";
-	        $result = api_sql_query($sql,__FILE__,__LINE__);
+	        $result = Database::query($sql,__FILE__,__LINE__);
 
-	        if ( mysql_num_rows($result) > 0)
+	        if ( Database::num_rows($result) > 0)
 	        {
 		        $remainingUsers = '';
-		        while ( ($res = mysql_fetch_array($result)))
+		        while ( ($res = Database::fetch_array($result)))
 		        {
-					$remainingUsers .= ', ' . htmlspecialchars($res[0].' '.$res[1],ENT_QUOTES,$charset);
+					$remainingUsers .= ', ' . htmlspecialchars(api_get_person_name($res[1], $res[0]), ENT_QUOTES, $charset);
 		        }
 		        $errormsg .= '<br />' . dropbox_lang("mailingNothingFor") . api_substr($remainingUsers, 1) . '.<br />';
 	        }
@@ -521,7 +521,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 						SET filesize = '0'
 						, upload_date = '".$sendDT."', last_upload_date = '".$sendDT."'
 						WHERE id='".addslashes($mailing_item->id)."'";
-				$result =api_sql_query($sql,__FILE__,__LINE__);
+				$result =Database::query($sql,__FILE__,__LINE__);
 			}
 			elseif ( $mailing_item->filesize != 0)
 			{

@@ -1,4 +1,4 @@
-<?php 
+<?php
 /* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
@@ -18,9 +18,9 @@
 
 /**
  * Removes duplicate values from a dimensional array
- * 
- * @param array a dimensional array 
- * @return array an array with unique values 
+ *
+ * @param array a dimensional array
+ * @return array an array with unique values
  */
 function array_unique_dimensional($array)
 {
@@ -30,7 +30,7 @@ function array_unique_dimensional($array)
     foreach ($array as &$myvalue){
         $myvalue=serialize($myvalue);
     }
-	
+
     $array=array_unique($array);
 
     foreach ($array as &$myvalue){

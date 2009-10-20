@@ -47,7 +47,7 @@ api_protect_admin_script();
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 $action = $_GET["action"];
 $login_as_user_id = $_GET["user_id"];
-	
+
 // Login as ...
 if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 {
@@ -127,7 +127,7 @@ if (isset ($_GET['action']))
 					Display :: display_normal_message($message,false);
 				}
 				break;
-			default : 
+			default :
 				Display :: display_header($tool_name);
 		}
 		Security::clear_token();
@@ -190,9 +190,9 @@ if (isset ($_POST['action']))
 				else
 				{
 					Display :: display_normal_message(get_lang('NoUserAdded'));
-				}				
+				}
 				break;
-				
+
 		}
 		Security::clear_token();
 	}
@@ -200,9 +200,17 @@ if (isset ($_POST['action']))
 
 $form = new FormValidator('advanced_search','get');
 $form->add_textfield('keyword_username',get_lang('LoginName'),false);
-$form->add_textfield('keyword_lastname',get_lang('LastName'),false);
-$form->add_textfield('keyword_firstname',get_lang('FirstName'),false);
-if (isset($_GET['id_session'])) 
+if (api_is_western_name_order())
+{
+	$form->add_textfield('keyword_firstname', get_lang('FirstName'), false);
+	$form->add_textfield('keyword_lastname', get_lang('LastName'), false);
+}
+else
+{
+	$form->add_textfield('keyword_lastname',get_lang('LastName'),false);
+	$form->add_textfield('keyword_firstname',get_lang('FirstName'),false);
+}
+if (isset($_GET['id_session']))
 	$form->addElement('hidden','id_session',$_GET['id_session']);
 
 $type = array();
@@ -224,17 +232,25 @@ $parameters['keyword_username'] = $_GET['keyword_username'];
 $parameters['keyword_firstname'] = $_GET['keyword_firstname'];
 $parameters['keyword_lastname'] = $_GET['keyword_lastname'];
 $parameters['keyword_email'] = $_GET['keyword_email'];
-if (isset($_GET['id_session'])) 
+if (isset($_GET['id_session']))
 	$parameters['id_session'] = $_GET['id_session'];
 // Create a sortable table with user-data
 
 $parameters['sec_token'] = Security::get_token();
-$table = new SortableTable('users', 'ldap_get_number_of_users', 'ldap_get_user_data',2);
+$table = new SortableTable('users', 'ldap_get_number_of_users', 'ldap_get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('LoginName'));
-$table->set_header(2, get_lang('LastName'));
-$table->set_header(3, get_lang('FirstName'));
+if (api_is_western_name_order())
+{
+	$table->set_header(2, get_lang('FirstName'));
+	$table->set_header(3, get_lang('LastName'));
+}
+else
+{
+	$table->set_header(2, get_lang('LastName'));
+	$table->set_header(3, get_lang('FirstName'));
+}
 $table->set_header(4, get_lang('Email'));
 $table->set_header(5, get_lang('Actions'));
 //$table->set_column_filter(5, 'email_filter');

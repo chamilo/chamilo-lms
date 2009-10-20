@@ -60,7 +60,7 @@ function initCalendar() {
     if (!year && !month && !day) {
         day = window.opener.day;
         month = window.opener.month;
-        year  = window.opener.year;   
+        year  = window.opener.year;
         if (isNaN(year) || isNaN(month) || isNaN(day) || day == 0) {
             dt      = new Date();
             year    = dt.getFullYear();

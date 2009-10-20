@@ -76,7 +76,7 @@ class scormOrganization {
 				     		}
 				     	}
 						return true;
-				     	
+
 	    		}
 	    	}elseif($v == 5){
 	    		//parsing using PHP5 DOMXML methods
@@ -132,7 +132,7 @@ class scormOrganization {
 					     	}
 						}
 						return true;
-				     	
+
 	    		}
 			}else{
 				//cannot parse because not PHP4 nor PHP5... We should not even be here anyway...
@@ -164,7 +164,7 @@ class scormOrganization {
     function get_name()
     {
     	if(!empty($this->title)){
-    		return mysql_real_escape_string($this->title);
+    		return Database::escape_string($this->title);
     	}else{
     		return '';
     	}
@@ -176,7 +176,7 @@ class scormOrganization {
     function get_ref()
     {
     	if(!empty($this->identifier)){
-    		return mysql_real_escape_string($this->identifier);
+    		return Database::escape_string($this->identifier);
     	}else{
     		return '';
     	}
@@ -187,7 +187,7 @@ class scormOrganization {
      */
     function set_name($title){
     	if(!empty($title)){
-    		$this->title = mysql_real_escape_string($title);
+    		$this->title = Database::escape_string($title);
     	}
     }
 }

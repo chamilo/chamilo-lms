@@ -24,13 +24,13 @@
 /**
 ==============================================================================
 * Updates the Dokeos files from version 1.6.x to version 1.8.0
-* IMPORTANT: This script has to be included by install/index.php or 
+* IMPORTANT: This script has to be included by install/index.php or
 * update_courses.php
 *
-* DOKEOS_INSTALL is defined in the install/index.php (means that we are in 
+* DOKEOS_INSTALL is defined in the install/index.php (means that we are in
 * the regular upgrade process)
-* 
-* DOKEOS_COURSE_UPDATE is defined in update_courses.php (means we are 
+*
+* DOKEOS_COURSE_UPDATE is defined in update_courses.php (means we are
 * executing update_courses.php to update courses separately)
 *
 * When DOKEOS_INSTALL or DOKEOS_COURSE_UPDATE are defined, do for every course:
@@ -54,10 +54,10 @@ require_once('install_upgrade.lib.php');
 function insert_db($db_name, $folder_name, $text){
 
 	$_course['dbName'] = $db_name;
-	
+
 	$doc_id = add_document_180($_course, '/'.$folder_name, 'folder', 0, ucfirst($text));
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', 1);
-	
+
 }
 
 /*
@@ -75,19 +75,19 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	$sql = "SELECT * FROM course";
 	error_log('Getting courses for files updates: '.$sql,0);
 	$result=mysql_query($sql);
-	
+
 	$perm = api_get_setting('permissions_for_new_directories');
 	$perm = octdec(!empty($perm)?$perm:'0770');
 	$old_umask = umask(0);
 	while($courses_directories=mysql_fetch_array($result)){
-		
+
 		$currentCourseRepositorySys = $sys_course_path.$courses_directories["directory"]."/";
 		$db_name = $courses_directories["db_name"];
 		$origCRS = $updatePath.'courses/'.$courses_directories["directory"];
 
 		if(!is_dir($origCRS)){
 			error_log('Directory '.$origCRS.' does not exist. Skipping.',0);
-			continue;	
+			continue;
 		}
 		//move everything to the new hierarchy (from old path to new path)
 		error_log('Renaming '.$origCRS.' to '.$sys_course_path.$courses_directories["directory"],0);
@@ -128,7 +128,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		if(!is_dir($currentCourseRepositorySys."upload")){
 			mkdir($currentCourseRepositorySys."upload",$perm);
 		}
-		
+
 		//upload > blog
 		if(!is_dir($currentCourseRepositorySys."upload/blog")){
 			mkdir($currentCourseRepositorySys."upload/blog",$perm);
@@ -141,7 +141,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		if(!is_dir($currentCourseRepositorySys."upload/test")){
 			mkdir($currentCourseRepositorySys."upload/test",$perm);
 		}
-		
+
 		//Updating index file in courses directories to change claroline/ into main/
 		$content = '<?php'."\n".
 				'$cidReq="'.$courses_directories['code'].'";'."\n" .
@@ -152,7 +152,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		$fp = @ fopen($currentCourseRepositorySys.'index.php', 'w');
 		if ($fp)
 		{
-			error_log('Writing redirection file in '.$currentCourseRepositorySys.'index.php',0);			
+			error_log('Writing redirection file in '.$currentCourseRepositorySys.'index.php',0);
 			fwrite($fp, $content);
 			fclose($fp);
 		}else{
@@ -182,7 +182,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	rename($updatePath.'claroline/upload/linked_files',$pathForm.'main/upload/linked_files');
 	error_log('Renaming '.$updatePath.'claroline/upload/video to '.$pathForm.'main/upload/video',0);
 	rename($updatePath.'claroline/upload/video',$pathForm.'main/upload/video');
-		
+
 	/*
 	if (defined('DOKEOS_INSTALL'))
 	{

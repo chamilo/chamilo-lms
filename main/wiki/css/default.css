@@ -33,17 +33,17 @@
 	.diffDeleted{
         background-color: #FFAAAA;
 	}
-	
+
 	.diffAddedTex{
 		background-color: #CCFFCC;
 		text-decoration:underline;
 	}
-	
+
 	.diffDeletedTex{
         background-color: #FFAAAA;
-		text-decoration:line-through;		
+		text-decoration:line-through;
 	}
-	
+
 	#wikititle {
 		font-family: Verdana, Arial, Helvetica, sans-serif;
 		font-size: 100%;
@@ -61,10 +61,10 @@
 	#wikicontent {
 		padding-top:5px;
 		min-height:300px;
-	}		
-	
-	#menuwiki {			
-		float:left;	
+	}
+
+	#menuwiki {
+		float:left;
 		border-top: 1px solid #cccccc;
 		border-right: 1px solid #cccccc;
 		border-bottom: 1px solid #cccccc;
@@ -74,24 +74,24 @@
 		background-color: #efefef;
 	}
 
-	#menuwiki li{			
-		list-style-type: square;	
+	#menuwiki li{
+		list-style-type: square;
 	}
-	
+
 	#mainwiki {
 		border-left: 1px solid #cccccc;
 		margin-left:240px;
-		padding-left:10px;	
+		padding-left:10px;
 	}
-		
+
 	#wikifooter {
-		background-color: #EFEFEF;	
+		background-color: #EFEFEF;
 		border-top: 1px solid #cccccc;
 		border-bottom: 1px solid #cccccc;
 		border-left: 1px solid #cccccc;
-		border-right: 1px solid #cccccc;	
+		border-right: 1px solid #cccccc;
 	}
-		
+
 	.fwiki1{
 	    font-size:larger;
 	    font-style:italic;
@@ -112,36 +112,36 @@
 	}
 	a.new_wiki_link{
 		color: #FF0000;
-		border-bottom: 1px dotted #cccccc;		   
-				
+		border-bottom: 1px dotted #cccccc;
+
 	}
 
 	a.wiki_link{
-		border-bottom: 1px dotted #cccccc;	
+		border-bottom: 1px dotted #cccccc;
 	}
-	
+
 	a.wiki_link_ext{
 	 background: url(ext.png) center right no-repeat; padding-right: 14px; }
-	 
+
 	a.wiki_mail_link{
 	 background: url(email.gif) center right no-repeat; padding-right: 18px; }
-	 
+
 	a.wiki_news_link{
 	 background: url(news.png) center right no-repeat; padding-right: 18px; }
-	 
+
 	a.wiki_ftp_link{
-	 background: url(ftp.gif) center right no-repeat; padding-right: 18px; } 
-	 
+	 background: url(ftp.gif) center right no-repeat; padding-right: 18px; }
+
 	a.wiki_irc_link{
 	 background: url(irc.gif) center right no-repeat; padding-right: 18px; }
-	 
+
 	#main_navigation{
 		height: 20px;
 		margin: 0;
 		padding-left: 10px;
 		background-color:#cccccc;
 	}
-	
+
 	#tabnav{
 		height: 20px;
 		margin: 0;

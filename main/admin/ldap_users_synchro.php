@@ -86,6 +86,6 @@ if (isset($action) && ($action=="synchro")) {
 	$included=true;
 	require('ldap_synchro.php');
 	Display :: display_normal_message($message,false);
-}	
+}
 Display::display_footer();
 ?>

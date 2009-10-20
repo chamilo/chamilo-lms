@@ -41,7 +41,7 @@ $config['ToolbarSets']['Maximized'] = array(
 // A setting for blocking copy/paste functions of the editor.
 // This setting activates on leaners only. For users with other statuses there is no blocking copy/paste.
 // Possible values: true , false
-$config['BlockCopyPaste'] = true;
+//$config['BlockCopyPaste'] = true;
 
 // Here new width and height of the editor may be set.
 // Possible values, examples: 300 , '250' , '100%' , ...

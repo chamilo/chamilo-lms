@@ -122,4 +122,13 @@ $Resources = "Resursi";
 $EditBookingPeriod = "Uredi rezervacijsko obdobje";
 $CreateResourceType = "Ustvari tip resursa";
 $ModifyResourceType = "Spremeni tip resursa";
+$ViewResourceTypes = "Poglej tipe resursov";
+$ViewResources = "Poglej resurse";
+$ViewBookingPeriods = "Poglej rezervacijska obdobja";
+$AlwaysAvailable = "Vedno na voljo";
+$SelectResourceTypeAndResource = "Izberi tip resursa";
+$Step1SelectResourceType = "Korak 1: Izberi tip resursa";
+$Step2SelectResource = "Korak 2: Izberi resurs";
+$Step3SelectBookingPeriod = "Korak 3: Izberi rezervacijsko obdobje";
+$NoReservations = "Ni rezervacij";
 ?>

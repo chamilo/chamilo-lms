@@ -16,7 +16,7 @@
  * Change these parameters to compare between an old and a new database install.
  * You will need to create a course called 'COURSE' on each side to be able to compare the
  * courses databases.
- * If you have given fancy names to your databases, you will need to modify these names 
+ * If you have given fancy names to your databases, you will need to modify these names
  * in the two $bases_* variables definitions below.
  * Also, make sure about the prefix possibly used in front of the normal prefix for courses
  * databases (i.e. 'zPrefix_course' contains 'z' as additional prefix).
@@ -57,10 +57,10 @@ foreach($bases_new as $num_base=>$base)
 	$tables_db_new=array();
 	$tables_db_old=array();
 	$dump=array();
-	
+
 	//display current processed database
 	echo "<h2>Now analysing differences between databases <em>$base</em> and <em>".$bases_old[$num_base]."</em></h2>";
-	
+
 	//get a list of tables for this database
 	$query_new="SHOW TABLES FROM ".$bases_new[$num_base];
 	$result_new=mysql_query($query_new,$db_new);
@@ -110,7 +110,7 @@ foreach($bases_new as $num_base=>$base)
 			else
 			{
 				$i=0;
-				
+
 				//check for removed, new or modified fields
 				$fields_old = array();
 				$fields_new = array();
@@ -145,7 +145,7 @@ foreach($bases_new as $num_base=>$base)
 				foreach($new_fields as $dummy=>$val){
 					$new_fields[$dummy] = '++'.$val.'++';
 				}
-				$old_fields = array_diff($fields_old,$fields_new); 
+				$old_fields = array_diff($fields_old,$fields_new);
 				foreach($old_fields as $dummy=>$val){
 					$old_fields[$dummy] = '--'.$val.'--';
 				}
@@ -156,7 +156,7 @@ foreach($bases_new as $num_base=>$base)
 						'changed_fields'=>$modif_fields,
 						'new_fields'=>$new_fields,
 					);
-				}				
+				}
 			}
 			$tables_db_new[]=$table['table_name'];
 		}
@@ -176,7 +176,7 @@ foreach($bases_new as $num_base=>$base)
 			$modif_tables[]='---'.$enreg.'---';
 		}
 		//$modif_tables=array_unique($modif_tables); //deprecated with the structure complexification
-		
+
 	}else{ //this database was removed in the new version
 		$query="SHOW TABLES FROM ".$bases_old[$num_base];
 		$result=mysql_query($query,$db_old) or die(mysql_error());
@@ -194,7 +194,7 @@ foreach($bases_new as $num_base=>$base)
 		}
 
 		$modif_tables=array_unique($modif_tables);
-		echo "<h3>This database has been removed!</h3>";	
+		echo "<h3>This database has been removed!</h3>";
 	}
 	echo "<h3>Differences between each table</h3>" .
 			"- fields display under each table's name, <br>" .

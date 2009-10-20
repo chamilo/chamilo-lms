@@ -1,29 +1,29 @@
 <?php
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
 	Copyright (c) Bart Mollet, Hogeschool Gent
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	This script displays an area where teachers can edit the group properties and member list.
 *	Groups are also often called "teams" in the Dokeos code.
 *
@@ -31,14 +31,14 @@
 *	@author Roan Embrechts (VUB), partial code cleanup, initial virtual course support
 	@package dokeos.group
 *	@todo course admin functionality to create groups based on who is in which course (or class).
-============================================================================== 
+==============================================================================
 */
 /*
-============================================================================== 
+==============================================================================
 		INIT SECTION
-============================================================================== 
+==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "group";
 include ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
@@ -69,9 +69,9 @@ if (!api_is_allowed_to_edit(false,true)) {
 	api_not_allowed(true);
 }
 /*
-============================================================================== 
+==============================================================================
 		FUNCTIONS
-============================================================================== 
+==============================================================================
 */
 
 /**
@@ -79,21 +79,35 @@ if (!api_is_allowed_to_edit(false,true)) {
  */
 
 function sort_users($user_a, $user_b) {
-	$cmp = api_strcmp($user_a['firstname'], $user_b['firstname']);
-	if ($cmp !== 0) {
-		return $cmp;
+	if (api_sort_by_first_name()) {
+		$cmp = api_strcmp($user_a['firstname'], $user_b['firstname']);
+		if ($cmp !== 0) {
+			return $cmp;
+		} else {
+			$cmp = api_strcmp($user_a['lastname'], $user_b['lastname']);
+			if ($cmp !== 0) {
+				return $cmp;
+			} else {
+				return api_strcmp($user_a['username'], $user_b['username']);
+			}
+		}
 	} else {
 		$cmp = api_strcmp($user_a['lastname'], $user_b['lastname']);
 		if ($cmp !== 0) {
 			return $cmp;
 		} else {
-			return api_strcmp($user_a['username'], $user_b['username']);
+			$cmp = api_strcmp($user_a['firstname'], $user_b['firstname']);
+			if ($cmp !== 0) {
+				return $cmp;
+			} else {
+				return api_strcmp($user_a['username'], $user_b['username']);
+			}
 		}
 	}
 }
 
 /**
- * Function to check the given max number of members per group 
+ * Function to check the given max number of members per group
  */
 function check_max_number_of_members($value) {
 	$max_member_no_limit = $value['max_member_no_limit'];
@@ -116,9 +130,9 @@ function check_group_members($value) {
 	return true;
 }
 /*
-============================================================================== 
+==============================================================================
 		MAIN CODE
-============================================================================== 
+==============================================================================
 */
 
 // Build form
@@ -137,7 +151,7 @@ $form->addElement('textarea', 'description', get_lang('GroupDescription'), array
 //$possible_tutors[0] = get_lang('GroupNoTutor');
 //foreach ($tutors as $index => $tutor)
 //{
-//	$possible_tutors[$tutor['user_id']] = $tutor['lastname'].' '.$tutor['firstname'];
+//	$possible_tutors[$tutor['user_id']] = api_get_person_name($tutor['lastname'], $tutor['firstname']);
 //}
 //$group = array ();
 //$group[] = & $form->createElement('select', 'tutor_id', null, $possible_tutors);
@@ -201,7 +215,7 @@ usort($complete_user_list, 'sort_users');
 
 $possible_users = array ();
 foreach ($complete_user_list as $index => $user) {
-	$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'].' ('.$user['username'].')';
+	$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
 }
 
 //print_r($complete_user_list2);
@@ -210,7 +224,7 @@ $group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['id']);
 $selected_users = array ();
 $selected_tutors = array();
 foreach ($group_tutor_list as $index => $user) {
-	//$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'];
+	//$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], .$user['lastname']);
 	$selected_tutors[] = $user['user_id'];
 }
 
@@ -232,7 +246,7 @@ $group_tutors_element->setElementTemplate('
 $group_member_list = GroupManager :: get_subscribed_users($current_group['id']);
 $selected_users = array ();
 foreach ($group_member_list as $index => $user) {
-	//$possible_users[$user['user_id']] = $user['lastname'].' '.$user['firstname'];
+	//$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
 	$selected_users[] = $user['user_id'];
 }
 $group_members_element = $form->addElement('advmultiselect', 'group_members', get_lang('GroupMembers'), $possible_users, 'style="width: 225px;"');
@@ -266,19 +280,19 @@ if ($form->validate()) {
 	$self_registration_allowed = isset ($values['self_registration_allowed']) ? 1 : 0;
 	$self_unregistration_allowed = isset ($values['self_unregistration_allowed']) ? 1 : 0;
 	GroupManager :: set_group_properties($current_group['id'], strip_tags($values['name']), strip_tags($values['description']), $max_member, $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $values['forum_state'],$values['wiki_state'], $self_registration_allowed, $self_unregistration_allowed);
-	
+
 	// storing the tutors (we first remove all the tutors and then add only those who were selected)
 	GroupManager :: unsubscribe_all_tutors($current_group['id']);
 	if (isset ($_POST['group_tutors']) && count($_POST['group_tutors']) > 0) {
 		GroupManager :: subscribe_tutors($values['group_tutors'], $current_group['id']);
-	}	
-	
+	}
+
 	// storing the users (we first remove all users and then add only those who were selected)
 	GroupManager :: unsubscribe_all_users($current_group['id']);
 	if (isset ($_POST['group_members']) && count($_POST['group_members']) > 0) {
 		GroupManager :: subscribe_users($values['group_members'], $current_group['id']);
 	}
-	
+
 	// returning to the group area (note: this is inconsistent with the rest of dokeos)
 	$cat = GroupManager :: get_category_from_group($current_group['id']);
 	header('Location: '.$values['referer'].'?action=show_msg&msg='.get_lang('GroupSettingsModified').'&category='.$cat['id']);
@@ -311,7 +325,7 @@ Display :: display_header($nameTools, "Group");
 ?>
 
 <div class="actions">
-<a href="group_space.php"><?php  echo Display::return_icon('back.png').get_lang('Back').' '.get_lang('To').' '.get_lang('GroupSpace') ?></a>
+<a href="group_space.php"><?php  echo Display::return_icon('back.png',get_lang('ReturnTo').' '.get_lang('GroupSpace')).get_lang('ReturnTo').' '.get_lang('GroupSpace') ?></a>
 </div>
 
 <?php
@@ -323,9 +337,9 @@ $defaults['referer'] = $referer;
 $form->setDefaults($defaults);
 $form->display();
 /*
-============================================================================== 
-		FOOTER 
-============================================================================== 
+==============================================================================
+		FOOTER
+==============================================================================
 */
 Display :: display_footer();
 ?>

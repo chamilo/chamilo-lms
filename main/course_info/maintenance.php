@@ -30,7 +30,7 @@
 /*
  * Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array ('admin','create_course', 'course_info', 'coursebackup');
 
 require ('../inc/global.inc.php');
@@ -66,7 +66,7 @@ api_display_tool_title($nameTools);
 <div class="sectioncomment"><?php echo get_lang("DescriptionRecycleCourse");?></div>
 
 <div class="sectiontitle"><?php Display::display_icon('delete.gif',get_lang("DelCourse")); ?>&nbsp;&nbsp;<a href="../course_info/delete_course.php?<?php echo api_get_cidreq();?>"><?php echo get_lang("DelCourse");?></a></div>
-<div class="sectioncomment"><?php echo get_lang("DescriptionDeleteCourse");	?></div>	
+<div class="sectioncomment"><?php echo get_lang("DescriptionDeleteCourse");	?></div>
 
 <?php
 // footer

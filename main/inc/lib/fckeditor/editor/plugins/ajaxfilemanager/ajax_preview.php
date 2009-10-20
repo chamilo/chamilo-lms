@@ -6,11 +6,11 @@
 	 * @since 22/April/2007
 	 *
 	 */
-	include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");	
+	include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
 	echo getRealPath($_GET['path']);
 	if(!empty($_GET['path']) && file_exists($_GET['path']) && is_file($_GET['path']))
 	{
-		
+
 		include_once(CLASS_MANAGER);
 		$manager = new manager($_GET['path'], false);
 		$fileTypes = $manager->getFileType(basename($_GET['path']));
@@ -24,8 +24,8 @@
 					{
 						$thumInfo = getThumbWidthHeight($imageInfo[0], $imageInfo[1], 400, 135);
 						printf("<img src=\"%s\" width=\"%s\" height=\"%s\" />", getFileUrl($_GET['path']), $thumInfo['width'], $thumInfo['height']);
-													
-					}else 
+
+					}else
 					{
 						echo PREVIEW_IMAGE_LOAD_FAILED;
 					}
@@ -36,21 +36,21 @@
 					{
 						echo @fread($fp, @filesize($_GET['path']));
 						@fclose($fp);
-					}else 
+					}else
 					{
 						echo PREVIEW_OPEN_FAILED . ".";
 					}
 					break;
-					
+
 				case "video":
 					break;
 			}
-		}else 
+		}else
 		{
 			echo PREVIEW_NOT_PREVIEW . "..";
-		}		
-			
-	}else 
+		}
+
+	}else
 	{
 		echo PREVIEW_NOT_PREVIEW . "...";
 	}

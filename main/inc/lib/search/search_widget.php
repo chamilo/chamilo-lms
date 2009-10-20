@@ -1,5 +1,5 @@
 <?php
-
+/* For licensing terms, see /dokeos_license.txt */
 /**
  * Search widget. Shows the search screen contents.
  * @package dokeos.search
@@ -22,8 +22,7 @@ function search_widget_prepare(&$htmlHeadXtra) {
     <script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.autocomplete.js"></script>
     <script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'search/search_widget.js"></script>
     <link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.autocomplete.css" />
-    <link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_LIBRARY_PATH).'search/search_widget.css" />
-    ';
+    <link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_LIBRARY_PATH).'search/search_widget.css" />';
 }
 
 /**
@@ -120,13 +119,24 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op) {
 	if (isset($_GET['action']) && strcmp(trim($_GET['action']),'search')===0) {
 		$action='index.php';
 	}
+	$navigator_info = api_get_navigator();
+	if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
+		$submit_button1	= '<input type="submit" id="submit" value="'. get_lang('Search') .'" />';
+		$submit_button2 = '<input class="lower-submit" type="submit" value="'. get_lang('Search') .'" />';
+        $reset_button 	= '<input type="submit" id="tags-clean" value="'. get_lang('SearchResetKeywords') .'" />';
+	} else {
+		$submit_button1 = '<button class="search" type="submit" id="submit" value="'. get_lang("Search") .'" /> '. get_lang('Search') .'</button>';
+		$submit_button2 = '<button class="search" type="submit" value="'. get_lang('Search') .'" />'. get_lang('Search') .'</button>';
+        $reset_button 	= '<button class="save"   type="submit" id="tags-clean" value="'. get_lang('SearchResetKeywords') .'" />'. get_lang('SearchResetKeywords') .'</button> ';
+	}
+
     $form = '
         <form id="dokeos_search" action="'. $action .'" method="GET">
-            <input type="text" id="query" name="query" size="40" />
+            <input type="text" id="query" name="query" size="40" value="'.stripslashes(Security::remove_XSS($_REQUEST['query'])).'" />
             <input type="hidden" name="mode" value="'. $mode .'"/>
             <input type="hidden" name="type" value="'. $type .'"/>
             <input type="hidden" name="tablename_page_nr" value="1" />
-            <input type="submit" id="submit" value="'. get_lang("Search") .'" />
+          	'.$submit_button1.'
             <br /><br />
             <span class="search-links-box">'. $thesaurus_icon . $advanced_options .'&nbsp;</span>
             <div id="tags" class="tags" style="display:'. $display_thesaurus .';">
@@ -153,8 +163,8 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op) {
                     <td></td>
                     <td>
                         <br />
-                        <input class="lower-submit" type="submit" value="'. get_lang('Search') .'" />
-                        <input type="submit" id="tags-clean" value="'. get_lang('SearchResetKeywords') .'" />
+                      '.$reset_button.'
+                        '. $submit_button2.'
                     </td>
                 </tr>
                 </table>
@@ -198,8 +208,7 @@ function search_widget_prefilter_form($action, $show_thesaurus, $sf_terms, $op, 
             <div id="tags" class="tags" style="display:'. $display_thesaurus .';">
                 <div class="search-help-box">'. $help .'</div>
                 <table>
-                <tr>
-            ';
+                <tr>';
 
     if (!is_null($prefilter_prefix)) {
         //sorting the array of terms
@@ -301,9 +310,11 @@ function search_widget_show($action='index.php') {
         //prepare specific fields names (and also get possible URL param names)
         foreach ($specific_fields as $specific_field) {
             $temp = array();
-            foreach($dkterms[1] as $obj) {
-                $temp = array_merge($obj['sf-'.$specific_field['code']], $temp);
-            }
+            if (is_array($dkterms) && count($dkterms)>0) {
+            	foreach($dkterms[1] as $obj) {
+                	$temp = array_merge($obj['sf-'.$specific_field['code']], $temp);
+            	}
+        	}
             $sf_terms[$specific_field['code']] = $temp;
             $url_params[] = 'sf_'.$specific_field['code'];
             unset($temp);
@@ -322,7 +333,7 @@ function search_widget_show($action='index.php') {
 
     echo '<h2>'.get_lang('Search').'</h2>';
 
-    
+
 	// Tool introduction
     // TODO: Settings for the online editor to be checked (insert an image for example). Probably this is a special case here.
     if (api_get_course_id() !== -1)

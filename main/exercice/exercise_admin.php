@@ -1,24 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 
 /**
 *	Exercise administration
@@ -39,64 +20,77 @@ include('../inc/global.inc.php');
 include('exercise.lib.php');
 $this_section=SECTION_COURSES;
 
-if(!api_is_allowed_to_edit()) {
+if(!api_is_allowed_to_edit(null,true)) {
 	api_not_allowed(true);
 }
 
 $htmlHeadXtra[] = '<script>
-		
+
 		function advanced_parameters() {
 			if(document.getElementById(\'options\').style.display == \'none\') {
 				document.getElementById(\'options\').style.display = \'block\';
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 
 			} else {
-			
+
 				document.getElementById(\'options\').style.display = \'none\';
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
-			}	
-		}			 	
-				
+			}
+		}
+
+
+		function FCKeditor_OnComplete( editorInstance )
+			{
+			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
+			      HideFCKEditorByInstanceName (editorInstance.Name);
+			   }
+			}
+
+			function HideFCKEditorByInstanceName ( editorInstanceName ) {
+			   if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" ) {
+			      document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
+			      }
+			}
 		function show_media() {
-			if(document.getElementById(\'media\').style.display == \'none\') {
-				document.getElementById(\'media\').style.display = \'block\';
+			var my_display = document.getElementById(\'HiddenFCKexerciseDescription\').style.display;
+				if(my_display== \'none\' || my_display == \'\') {
+				document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'block\';
 				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'\';
-			} else {			
-				document.getElementById(\'media\').style.display = \'none\';
+			} else {
+				document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'none\';
 				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'\';
-				
-			}	
-		}			
-			
+
+			}
+		}
+
 		function timelimit() {
 			if(document.getElementById(\'options2\').style.display == \'none\') {
 				document.getElementById(\'options2\').style.display = \'block\';
 			} else {
 				document.getElementById(\'options2\').style.display = \'none\';
-			}	
+			}
 		}
-		
-		function feedbackselection() 
+
+		function feedbackselection()
 		{
 			var index = document.exercise_admin.exerciseFeedbackType.selectedIndex;
-			
-			if (index == \'1\') {					
+
+			if (index == \'1\') {
 				document.exercise_admin.exerciseType[1].checked=true;
-				document.exercise_admin.exerciseType[0].disabled=true;					
-								
-			} else { 					
-				document.exercise_admin.exerciseType[0].disabled=false;	
-			}			
+				document.exercise_admin.exerciseType[0].disabled=true;
+
+			} else {
+				document.exercise_admin.exerciseType[0].disabled=false;
+			}
 		}
 		</script>';
-		
+
 /*********************
  * INIT EXERCISE
  *********************/
 
 include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $objExercise = new Exercise();
-
 
 /*********************
  * INIT FORM
@@ -129,8 +123,8 @@ if ($form -> validate()) {
 	if (isset($_SESSION['gradebook'])) {
 		$gradebook=	$_SESSION['gradebook'];
 	}
-	
-	if (!empty($gradebook) && $gradebook=='view') {	
+
+	if (!empty($gradebook) && $gradebook=='view') {
 		$interbreadcrumb[]= array (
 				'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 				'name' => get_lang('Gradebook')
@@ -138,12 +132,15 @@ if ($form -> validate()) {
 	}
 	$nameTools=get_lang('ExerciseManagement');
 	$interbreadcrumb[] = array ("url"=>"exercice.php", "name"=> get_lang('Exercices'));
-	Display::display_header($nameTools,"Exercise");	
+	Display::display_header($nameTools,"Exercise");
 	if ($objExercise->feedbacktype==1)
 		Display::display_normal_message(get_lang("DirectFeedbackCantModifyTypeQuestion"));
 		if(api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
 				Display::display_error_message(get_lang('SearchXapianModuleNotInstaled'));
 		}
+
+	// to hide the exercise description
+	echo '<style> .media { display:none;}</style>';
 	$form -> display ();
 }
 Display::display_footer();

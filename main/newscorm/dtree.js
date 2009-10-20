@@ -81,11 +81,11 @@ function dTree(objName) {
 		inOrder					: false
 
 	}
-	
+
 	this.icon = {
 
 		root				: '../img/lp.gif',
-		
+
 		folder			: '../img/folder.gif',
 
 		folderOpen	: '../img/folderopen.gif',
@@ -523,7 +523,7 @@ dTree.prototype.closeAllChildren = function(node) {
 
 			this.aNodes[n]._io = false;
 
-			this.closeAllChildren(this.aNodes[n]);		
+			this.closeAllChildren(this.aNodes[n]);
 
 		}
 

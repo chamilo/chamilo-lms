@@ -22,8 +22,8 @@
 
 
 /**
-============================================================================== 
-* This is a learning path creation and player tool in Dokeos - previously 
+==============================================================================
+* This is a learning path creation and player tool in Dokeos - previously
 * learnpath_handler.php
 *
 * @author Patrick Cool
@@ -32,14 +32,14 @@
 * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update
 * @author Julio Montoya  - Improving the list of templates
 * @package dokeos.learnpath
-============================================================================== 
+==============================================================================
 */
 
 /*
 ==============================================================================
 		INIT SECTION
 ==============================================================================
-*/ 
+*/
 $this_section=SECTION_COURSES;
 
 api_protect_course_script();
@@ -48,7 +48,7 @@ api_protect_course_script();
 -----------------------------------------------------------
 	Libraries
 -----------------------------------------------------------
-*/ 
+*/
 //the main_api.lib.php, database.lib.php and display.lib.php
 //libraries are included by default
 
@@ -56,38 +56,98 @@ include('learnpath_functions.inc.php');
 //include('../resourcelinker/resourcelinker.inc.php');
 include('resourcelinker.inc.php');
 //rewrite the language file, sadly overwritten by resourcelinker.inc.php
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "learnpath";
 
 /*
 -----------------------------------------------------------
 	Header and action code
 -----------------------------------------------------------
-*/ 
+*/
 $htmlHeadXtra[] = '
 <script type="text/javascript">
-			
+
+var temp=false;
+var temp2=false;
+var use_document_title='.api_get_setting('use_document_title').';
+var load_default_template = '. ((isset($_POST['submit']) || empty($_SERVER['QUERY_STRING'])) ? 'false' : 'true' ) .';
+
 function FCKeditor_OnComplete( editorInstance )
-{	
-	document.getElementById(\'frmModel\').innerHTML = "<iframe height=890px width=230px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";	
-}	
-	
+{
+	editorInstance.Events.AttachEvent( \'OnSelectionChange\', check_for_title ) ;
+	document.getElementById(\'frmModel\').innerHTML = "<iframe height=890px width=230px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
+}
+
+function check_for_title()
+	{
+		if(temp==true){
+			// This functions shows that you can interact directly with the editor area
+			// DOM. In this way you have the freedom to do anything you want with it.
+
+			// Get the editor instance that we want to interact with.
+			var oEditor = FCKeditorAPI.GetInstance(\'content_lp\') ;
+
+			// Get the Editor Area DOM (Document object).
+			var oDOM = oEditor.EditorDocument ;
+
+			var iLength ;
+			var contentText ;
+			var contentTextArray;
+			var bestandsnaamNieuw = "";
+			var bestandsnaamOud = "";
+
+			// The are two diffent ways to get the text (without HTML markups).
+			// It is browser specific.
+
+			if( document.all )		// If Internet Explorer.
+			{
+				contentText = oDOM.body.innerText ;
+			}
+			else					// If Gecko.
+			{
+				var r = oDOM.createRange() ;
+				r.selectNodeContents( oDOM.body ) ;
+				contentText = r.toString() ;
+			}
+
+			var index=contentText.indexOf("/*<![CDATA");
+			contentText=contentText.substr(0,index);
+
+			// Compose title if there is none
+			contentTextArray = contentText.split(\' \') ;
+			var x=0;
+			for(x=0; (x<5 && x<contentTextArray.length); x++)
+			{
+				if(x < 4)
+				{
+					bestandsnaamNieuw += contentTextArray[x] + \' \';
+				}
+				else
+				{
+					bestandsnaamNieuw += contentTextArray[x];
+				}
+			}
+
+
+		}
+		temp=true;
+	}
+
 function InnerDialogLoaded()
-{	 	
+{
 	if (document.all)
-	{			
-		// if is iexplorer	
-		var B=new window.frames.content_lp___Frame.FCKToolbarButton(\'Templates\',window.content_lp___Frame.FCKLang.Templates);		
+	{
+		// if is iexplorer
+		var B=new window.frames.content_lp___Frame.FCKToolbarButton(\'Templates\',window.content_lp___Frame.FCKLang.Templates);
 	}
 	else
-	{		
-		var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);	
-	}				
-	
-	return 	B.ClickFrame();	
-};	 
+	{
+		var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
+	}
 
-		
+	return 	B.ClickFrame();
+};
+
 </script>';
 
 $htmlHeadXtra[] = $_SESSION['oLP']->create_js();
@@ -96,11 +156,12 @@ $htmlHeadXtra[] = $_SESSION['oLP']->create_js();
 	Constants and variables
 -----------------------------------------------------------
 */ 
-$is_allowed_to_edit = api_is_allowed_to_edit();
 
-$tbl_lp = Database::get_course_table('lp');
-$tbl_lp_item = Database::get_course_table('lp_item');
-$tbl_lp_view = Database::get_course_table('lp_view');
+$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+
+$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
+$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+$tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
 $isStudentView  = (int) $_REQUEST['isStudentView'];
 $learnpath_id   = (int) $_REQUEST['lp_id'];
@@ -135,9 +196,9 @@ if ( (! $is_allowed_to_edit) or ($isStudentView) )
 }
 //from here on, we are admin because of the previous condition, so don't check anymore
 
-$sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id"; 
-$result=api_sql_query($sql_query);
-$therow=Database::fetch_array($result); 
+$sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id";
+$result=Database::query($sql_query);
+$therow=Database::fetch_array($result);
 
 //$admin_output = '';
 /*
@@ -145,7 +206,7 @@ $therow=Database::fetch_array($result);
 	Course admin section
 	- all the functions not available for students - always available in this case (page only shown to admin)
 -----------------------------------------------------------
-*/ 
+*/
 /*==================================================
 			SHOWING THE ADMIN TOOLS
  ==================================================*/
@@ -153,7 +214,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
@@ -193,7 +254,7 @@ function stripslashes(str) {
 }
 function confirmation(name)
 {
-	name=stripslashes(name);	
+	name=stripslashes(name);
 	if (confirm("<?php echo $suredel; ?> " + name + " ?"))
 	{
 		return true;
@@ -201,7 +262,7 @@ function confirmation(name)
 	else
 	{
 		return false;
-	}	
+	}
 }
 </script>
 <?php
@@ -217,83 +278,83 @@ echo $_SESSION['oLP']->build_action_menu();
 echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 
 	echo '<tr>';
-			
-		echo '<td class="tree">';								
-			// show the template list 			
+
+		echo '<td class="tree">';
+			// show the template list
 			if (isset($_GET['type']) && $_GET['type']=='document' && !isset($_GET['file']))
 			{
 				$count_items = count($_SESSION['oLP']->ordered_items);
 				$style = ($count_items > 12)?' style="height:250px;width:230px;overflow-x : auto; overflow-y : scroll;" ':' class="lp_tree" ';
-				echo '<div  '.$style.'>';					
+				echo '<div  '.$style.'>';
 				//build the tree with the menu items in it
-				echo $_SESSION['oLP']->build_tree();			
+				echo $_SESSION['oLP']->build_tree();
 				echo '</div>';
 				// show the template list
 				echo '<p style="border-bottom:1px solid #999999; margin:0; padding:2px;"></p>'; //line
-				echo '<br />';			
+				echo '<br />';
 				echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
 			} else {
-				echo '<div class="lp_tree">';					
+				echo '<div class="lp_tree">';
 				//build the tree with the menu items in it
-				echo $_SESSION['oLP']->build_tree();			
+				echo $_SESSION['oLP']->build_tree();
 				echo '</div>';
 			}
-							
-			
+
+
 		echo '</td>';
 		echo '<td class="workspace">';
-		
+
 			if(isset($new_item_id) && is_numeric($new_item_id))
 			{
 				switch($_GET['type'])
 				{
-					
+
 					case 'chapter':
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
-						Display::display_confirmation_message(get_lang('NewChapterCreated'));					
+						Display::display_confirmation_message(get_lang('NewChapterCreated'));
 						break;
-						
+
 					case TOOL_LINK:
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
-						Display::display_confirmation_message(get_lang('NewLinksCreated'));	
+						Display::display_confirmation_message(get_lang('NewLinksCreated'));
 						break;
-					
+
 					case TOOL_STUDENTPUBLICATION:
-						
+
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
 						Display::display_confirmation_message(get_lang('NewStudentPublicationCreated'));
 						break;
-						
+
 					case 'module':
-						
+
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
 						Display::display_confirmation_message(get_lang('NewModuleCreated'));
 						break;
-						
+
 					case TOOL_QUIZ:
-					
+
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
 						Display::display_confirmation_message(get_lang('NewExerciseCreated'));
 						break;
-					
-					
+
+
 					case TOOL_DOCUMENT:
 						Display::display_confirmation_message(get_lang('NewDocumentCreated'));
 						echo $_SESSION['oLP']->display_item($new_item_id, true, $msg);
 						break;
-						
-						
+
+
 					case TOOL_FORUM:
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
 						Display::display_confirmation_message(get_lang('NewForumCreated'));
 						break;
-					
-					
+
+
 					case 'thread':
 						echo $_SESSION['oLP']->display_manipulate($new_item_id, $_GET['type']);
 						Display::display_confirmation_message(get_lang('NewThreadCreated'));
 						break;
-					
+
 				}
 			}
 			else
@@ -301,19 +362,19 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 				switch($_GET['type'])
 				{
 					case 'chapter':
-						
+
 						echo $_SESSION['oLP']->display_item_form($_GET['type'], get_lang("EnterDataNewChapter"));
-						
+
 						break;
-						
+
 					case 'module':
-					
+
 						echo $_SESSION['oLP']->display_item_form($_GET['type'], get_lang("EnterDataNewModule"));
-						
+
 						break;
-						
-					case 'document': 
-						
+
+					case 'document':
+
 						if(isset($_GET['file']) && is_numeric($_GET['file']))
 						{
 							echo $_SESSION['oLP']->display_document_form('add', 0, $_GET['file']);
@@ -322,63 +383,63 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 						{
 							echo $_SESSION['oLP']->display_document_form('add', 0);
 						}
-						
+
 						break;
-					
+
 					case 'hotpotatoes':
-					
+
 						echo $_SESSION['oLP']->display_hotpotatoes_form('add', 0, $_GET['file']);
 
 						break;
-					
+
 					case 'quiz':
-						
+
 						echo $_SESSION['oLP']->display_quiz_form('add', 0, $_GET['file']);
-						
+
 						break;
-						
+
 					case 'forum':
-						
+
 						echo $_SESSION['oLP']->display_forum_form('add', 0, $_GET['forum_id']);
-						
+
 						break;
-						
+
 					case 'thread':
-						
+
 						echo $_SESSION['oLP']->display_thread_form('add', 0, $_GET['thread_id']);
-						
+
 						break;
-					
+
 					case 'link':
-						
+
 						echo $_SESSION['oLP']->display_link_form('add', 0, $_GET['file']);
-						
+
 						break;
-						
+
 					case 'student_publication':
-						
+
 						echo $_SESSION['oLP']->display_student_publication_form('add', 0, $_GET['file']);
-						
+
 						break;
-						
+
 					case 'step':
-						
+
 						echo $_SESSION['oLP']->display_resources();
-						
+
 						break;
 				}
 			}
-		
+
 		echo '</td>';
-			
+
 	echo '</tr>';
-		
+
 echo '</table>';
 
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
-*/ 
+*/
 Display::display_footer();
 ?>

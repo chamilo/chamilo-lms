@@ -6,7 +6,7 @@
 	Copyright (c) 2009 Dokeos SPRL
 	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
 	Copyright (c) Facultad de Matematicas, UADY (México)
-	Copyright (c) Evie, Free University of Brussels (Belgium)		
+	Copyright (c) Evie, Free University of Brussels (Belgium)
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".

@@ -7,7 +7,7 @@
  */
 
 /**#@+
- * Include required SimpleTest files 
+ * Include required SimpleTest files
  */
 require_once dirname(__FILE__) . '/invoker.php';
 require_once dirname(__FILE__) . '/expectation.php';

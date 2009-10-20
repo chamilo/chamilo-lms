@@ -6,7 +6,7 @@
 */
 
 /**
-============================================================================== 
+==============================================================================
 *	Dokeos Metadata: MD API test and demo
 *
 *   The API allows other Dokeos scripts to define & manipulate metadata
@@ -14,7 +14,7 @@
 *   In this example, MD is defined for 'Document.1001', 1002, 1003
 *
 *	@package dokeos.metadata
-============================================================================== 
+==============================================================================
 */
 
 require("../md_funcs.php");
@@ -22,9 +22,9 @@ require("../md_funcs.php");
 define('EID_TYPE', 'Document');
 require('../md_' . strtolower(EID_TYPE) . '.php');
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 /*
-$language_file = 'Whatever'; 
+$language_file = 'Whatever';
 */
 require("../../inc/global.inc.php");
 
@@ -52,13 +52,13 @@ foreach(array(1001, 1002, 1003) as $eid_id)
 {
     $mdObj = new mdobject($_course, $eid_id);  // see 'md_' . EID_TYPE . '.php'
     $eid = $mdObj->mdo_eid;
-    
+
     $titlePath = $mdObj->mdo_dcmap_v['Title'];   // no IEEE dependencies here...
-    
+
     if (($mdt_rec = $mdStore->mds_get($eid)) === FALSE)
     {
          $mdt = $mdObj->mdo_generate_default_xml_metadata();
-         
+
          $xmlDoc = new xmddoc(explode("\n", $mdt));
          if (!$xmlDoc->error)
          {
@@ -74,7 +74,7 @@ foreach(array(1001, 1002, 1003) as $eid_id)
          }
 
          $mdStore->mds_put($eid, $mdt, 'mdxmltext', FALSE);
-         echo '<a href="../index.php?eid=', urlencode($eid), '">', 
+         echo '<a href="../index.php?eid=', urlencode($eid), '">',
             htmlspecialchars($eid), '</a><br>';
     }
 }
@@ -98,14 +98,14 @@ $map_lang = 'string/@language';
 $dcmap_e_kwplace = 'metadata/lom/general'; $dcmap_e_kwelem = 'keyword';
 $dcmap_e_keyword = $dcmap_e_kwplace . '/' . $dcmap_e_kwelem;
 
-$mda =  $mdObj->mdo_dcmap_v['Description'] . '=Nouvelle description' . 
-        "\n" . $mdObj->mdo_dcmap_e['Coverage'] . "~" . 
-        "\n" . $dcmap_e_kwplace . '!' . $dcmap_e_kwelem . 
-        "\n" . $dcmap_e_keyword . "[-1]!string=afrique" . 
-        "\n" . $dcmap_e_keyword . "[-1]/" . $map_lang . "=en" . 
-        "\n" . $mdObj->mdo_dcmap_e['Title'] . ',' . 
-            $mdObj->mdo_dcmap_e['Description'] . ',' . 
-            $dcmap_e_keyword . ";" . $map_lang . "=fr" . 
+$mda =  $mdObj->mdo_dcmap_v['Description'] . '=Nouvelle description' .
+        "\n" . $mdObj->mdo_dcmap_e['Coverage'] . "~" .
+        "\n" . $dcmap_e_kwplace . '!' . $dcmap_e_kwelem .
+        "\n" . $dcmap_e_keyword . "[-1]!string=afrique" .
+        "\n" . $dcmap_e_keyword . "[-1]/" . $map_lang . "=en" .
+        "\n" . $mdObj->mdo_dcmap_e['Title'] . ',' .
+            $mdObj->mdo_dcmap_e['Description'] . ',' .
+            $dcmap_e_keyword . ";" . $map_lang . "=fr" .
         "";  // update metadata of 'Document.1003' - see md_funcs
         // note we don't go far with IEEE independence...
 $mdt = $mdStore->mds_update_xml_and_mdt($mdObj, $xmlDoc, $mda, $eid, $trace);
@@ -119,7 +119,7 @@ $mdObj = new mdobject($_course, '1003');
 $mdStore->mds_put_dc_elements($mdObj, array('Coverage' => 'broad...', 'Type' => 'aggressive text'));
 // Coverage won't work, because that element has been removed above...
 $dcelem = $mdStore->mds_get_dc_elements($mdObj);
-foreach (array('Identifier', 'Title', 'Language', 'Description', 'Coverage', 
+foreach (array('Identifier', 'Title', 'Language', 'Description', 'Coverage',
                         'Type', 'Date', 'Creator', 'Format', 'Rights') as $dce)
 {
     echo $dce, '= ', htmlspecialchars($dcelem[$dce]), '<br>';
@@ -130,7 +130,7 @@ echo '<br>';
 $mdObj = new mdobject($_course, '1002');
 $mdStore->mds_put_dc_elements($mdObj, array('Coverage' => 'broad...'));
 $dcelem = $mdStore->mds_get_dc_elements($mdObj);
-foreach (array('Identifier', 'Title', 'Language', 'Description', 'Coverage', 
+foreach (array('Identifier', 'Title', 'Language', 'Description', 'Coverage',
                         'Type', 'Date', 'Creator', 'Format', 'Rights') as $dce)
 {
     echo $dce, '= ', htmlspecialchars($dcelem[$dce]), '<br>';

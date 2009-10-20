@@ -33,7 +33,7 @@ if ($lang_content_negotiation == 'yes') {
 }
 
 // -----------------------------------------------
-//  M A I N 
+//  M A I N
 // -----------------------------------------------
 
 if (!$cc) {
@@ -110,7 +110,7 @@ if (!$cc) {
 						if (($cl_origin_id) && ($cl_origin_id == $rec_id)) {
 							$url = udm_get_res_field($res, $j, UDM_FIELD_URL);
 							//YW
-							
+
 							/*if (!access_check($url)) {
 								$my_skip ++;
 								continue;

@@ -1,19 +1,19 @@
 <?php //$id:$
 /**
- * Container for the aiccResource class that deals with elemens from AICC Course Structure file 
+ * Container for the aiccResource class that deals with elemens from AICC Course Structure file
  * @package	dokeos.learnpath
  * @author	Yannick Warnier <ywarnier@beeznest.org>
  * @license	GNU/GPL - See Dokeos license directory for details
  */
 /**
  * Class defining the Block elements in an AICC Course Structure file
- * 
+ *
  */
 require_once('learnpathItem.class.php');
 class aiccBlock extends learnpathItem{
 	var $identifier = '';
 	var $members = array();
-		    
+
     /**
      * Class constructor. Depending of the type of construction called ('db' or 'manifest'), will create a scormResource
      * object from database records or from the array given as second param
@@ -50,7 +50,7 @@ class aiccBlock extends learnpathItem{
 			     		}
 			     	}
 					return true;
-			     	
+
     		}
     	}
     	return false;

@@ -280,7 +280,7 @@ class FCKeditor
 	 * Converts a PHP variable into its Javascript equivalent.
 	 * The code of this method has been "borrowed" from the funcion drupal_to_js() within the Drupal CMS.
 	 * @param mixed $var	The variable to be converted into Javascript syntax
-	 * @return string		Returns a string 
+	 * @return string		Returns a string
 	 * Note: This function is similar to json_encode(), in addition it produces HTML-safe strings, i.e. with <, > and & escaped.
 	 * @link http://drupal.org/
 	 */
@@ -318,7 +318,7 @@ class FCKeditor
 	}
 
 	/**
-	 * This method reads configuration data for the current editor's instance without overriding settings that already exist.  
+	 * This method reads configuration data for the current editor's instance without overriding settings that already exist.
 	 * @return array
 	 */
 	function read_configuration(& $config) {
@@ -359,7 +359,7 @@ class FCKeditor
 	}
 
 	/**
-	 * This method returns editor's custom configuration settings read from php-files.  
+	 * This method returns editor's custom configuration settings read from php-files.
 	 * @return array	Custom configuration data.
 	 */
 	private function & get_custom_configuration() {
@@ -372,7 +372,7 @@ class FCKeditor
 	}
 
 	/**
-	 * This method returns editor's toolbar configuration settings read from a php-file.  
+	 * This method returns editor's toolbar configuration settings read from a php-file.
 	 * @return array	Toolbar configuration data.
 	 */
 	private function & get_custom_toolbar_configuration($toolbar_dir) {
@@ -408,7 +408,7 @@ class FCKeditor
 	}
 
 	/**
-	 * This method returns automatically determined editor's configuration settings (default settings).  
+	 * This method returns automatically determined editor's configuration settings (default settings).
 	 * @return array
 	 */
 	private function & get_default_configuration() {
@@ -437,15 +437,6 @@ class FCKeditor
 	 */
 	private function & get_css_configuration() {
 		$config['EditorAreaCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/default.css';
-		/*
-		// TODO: Check whether these CSS are appropriate.
-		if (file_exists(api_get_path(SYS_PATH).'main/css/'.api_get_setting('stylesheets').'/course.css')) {
-			$config['EditorAreaCSS'] = api_get_path(REL_PATH).'main/css/'.api_get_setting('stylesheets').'/course.css';
-		} else {
-			$config['EditorAreaCSS'] = api_get_path(REL_PATH).'main/css/public_admin/course.css';
-		}
-		*/
-
 		$config['ToolbarComboPreviewCSS'] = $config['EditorAreaCSS'];
 		return $config;
 	}
@@ -457,22 +448,19 @@ class FCKeditor
 	private function & get_editor_language() {
 		static $config;
 		if (!is_array($config)) {
-			global $language_interface;
-			@ $editor_lang = Database :: get_language_isocode($language_interface);
-			$editor_lang = strtolower(str_replace('_', '-', $editor_lang));
-			if (empty ($editor_lang)) {
-				$editor_lang = 'en';
-			}
-			$language_file = api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js';
-			if (!file_exists($language_file)) {
-				// If there was no language file, use the English one.
-				$editor_lang = 'en';
-			}
+			$code_translation_table = array('' => 'en', 'sr' => 'sr-latn', 'zh' => 'zh-cn', 'zh-tw' => 'zh');
+			$editor_lang = strtolower(str_replace('_', '-', api_get_language_isocode()));
+			$editor_lang = isset($code_translation_table[$editor_lang]) ? $code_translation_table[$editor_lang] : $editor_lang;
+			$editor_lang = file_exists(api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js') ? $editor_lang : 'en';
 			$config['DefaultLanguage'] = $editor_lang;
+			$text_direction = trim(get_lang('text_dir', ''));
+			if (!empty($text_direction) && strlen($text_direction) == 3) {
+				$config['ContentLangDirection'] = $text_direction;
+			}
 		}
 		return $config;
 	}
-	
+
 	/**
 	 * This method returns default configuration for document repository that is to be used by the editor.
 	 * @return array
@@ -584,10 +572,10 @@ class FCKeditor
 	 * @return array
 	 */
 	private function & get_media_configuration() {
-		$config['FlashPlayerAudio'] = Media::get_path(FLASH_PLAYER_AUDIO, REL_PATH);
-		$config['FlashPlayerVideo'] = Media::get_path(FLASH_PLAYER_VIDEO, REL_PATH);
-		$config['ScriptSWFObject'] = Media::get_path(SCRIPT_SWFOBJECT, REL_PATH);
-		$config['ScriptASCIIMathML'] = Media::get_path(SCRIPT_ASCIIMATHML, REL_PATH);
+		$config['FlashPlayerAudio'] = api_get_path(TO_REL, FLASH_PLAYER_AUDIO);
+		$config['FlashPlayerVideo'] = api_get_path(TO_REL, FLASH_PLAYER_VIDEO);
+		$config['ScriptSWFObject'] = api_get_path(TO_REL, SCRIPT_SWFOBJECT);
+		$config['ScriptASCIIMathML'] = api_get_path(TO_REL, SCRIPT_ASCIIMATHML);
 		return $config;
 	}
 
@@ -602,7 +590,7 @@ class FCKeditor
 	}
 
 	/**
-	 * This method returns detected configuration data about editor's MimeTeX plugin.  
+	 * This method returns detected configuration data about editor's MimeTeX plugin.
 	 * @return array
 	 */
 	private function & get_mimetex_plugin_configuration() {
@@ -637,7 +625,7 @@ class FCKeditor
 				} else {
 					$config['IsMimetexInstalled'] = $this->Config['MimetexExecutableInstalled'];
 				}
-				$config['MimetexUrl'] = $server_base . $url_relative;
+				$config['MimetexUrl'] = api_add_trailing_slash($server_base) . $url_relative;
 			}
 			// Cleaning detection related settings, we don't need them anymore.
 			unset($this->Config['MimetexExecutableInstalled']);

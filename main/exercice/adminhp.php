@@ -61,7 +61,7 @@ define(FREE_ANSWER,     5);
 // allows script inclusions
 define(ALLOWED_TO_INCLUDE,1);
 
-$is_allowedToEdit=api_is_allowed_to_edit();
+$is_allowedToEdit=api_is_allowed_to_edit(null,true);
 
 // document path
 $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
@@ -91,7 +91,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')

@@ -2,27 +2,27 @@
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004-2008 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) Roan Embrechts, Vrije Universiteit Brussel
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	This is the document library for Dokeos.
 *	It is / will be used to provide a service layer to all document-using tools.
 *	and eliminate code duplication fro group documents, scorm documents, main documents.
@@ -30,30 +30,30 @@
 *
 *	@version 1.1, January 2005
 *	@package dokeos.library
-============================================================================== 
+==============================================================================
 */
 
 /*
-============================================================================== 
+==============================================================================
 	DOCUMENTATION
 	use the functions like this: DocumentManager::get_course_quota()
-============================================================================== 
+==============================================================================
 */
 
 /*
-============================================================================== 
+==============================================================================
 		CONSTANTS
-============================================================================== 
+==============================================================================
 */
 
 define("DISK_QUOTA_FIELD", "disk_quota"); //name of the database field
 /** default quota for the course documents folder */
-define("DEFAULT_DOCUMENT_QUOTA", get_setting('default_document_quotum'));
+define("DEFAULT_DOCUMENT_QUOTA", api_get_setting('default_document_quotum'));
 
 /*
-============================================================================== 
+==============================================================================
 		VARIABLES
-============================================================================== 
+==============================================================================
 */
 
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
@@ -62,10 +62,10 @@ $baseServUrl = $_configuration['url_append']."/";
 $baseWorkDir = $sys_course_path.(!empty($courseDir)?$courseDir:'');
 
 /*
-============================================================================== 
+==============================================================================
 		DocumentManager CLASS
 		the class and its functions
-============================================================================== 
+==============================================================================
 */
 
 /**
@@ -73,7 +73,7 @@ $baseWorkDir = $sys_course_path.(!empty($courseDir)?$courseDir:'');
  */
 class DocumentManager {
 	private function __construct() {
-		
+
 	}
 	/**
 	* @return the document folder quuta of the current course, in bytes
@@ -85,7 +85,7 @@ class DocumentManager {
 		$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 
 		$sql_query = "SELECT ".DISK_QUOTA_FIELD." FROM $course_table WHERE code = '$course_code'";
-		$sql_result = api_sql_query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		$result = Database::fetch_array($sql_result);
 		$course_quota = $result[DISK_QUOTA_FIELD];
 
@@ -148,7 +148,7 @@ class DocumentManager {
 		    "ez" => "application/andrew-inset",
 		    "gif" => "image/gif",
 		    "gtar" => "application/x-gtar",
-		    "gz" => "application/x-gzip",    
+		    "gz" => "application/x-gzip",
 		    "hdf" => "application/x-hdf",
 		    "hqx" => "application/mac-binhex40",
 		    "htm" => "text/html",
@@ -259,8 +259,8 @@ class DocumentManager {
 		    "wmlc" => "application/vnd.wap.wmlc",
 		    "wmls" => "text/vnd.wap.wmlscript",
 		    "wmlsc" => "application/vnd.wap.wmlscriptc",
-		    "wma" => "video/x-ms-wma",   
-		    "wmv" => "audio/x-ms-wmv",    
+		    "wma" => "video/x-ms-wma",
+		    "wmv" => "audio/x-ms-wmv",
 		    "wrl" => "model/vrml",
 		    "xbm" => "image/x-xbitmap",
 		    "xht" => "application/xhtml+xml",
@@ -273,12 +273,12 @@ class DocumentManager {
 		    "xyz" => "chemical/x-xyz",
 		    "zip" => "application/zip"
 		);
-		
-		if ($filename === TRUE) 
+
+		if ($filename === TRUE)
 		{
 			return $mime_types;
 		}
-		
+
 		//get the extension of the file
 		$extension = explode('.', $filename);
 
@@ -307,7 +307,11 @@ class DocumentManager {
 	*   @todo ??not only check if a file is visible, but also check if the user is allowed to see the file??
 	*/
 	public static function file_visible_to_user ($this_course, $doc_url) {
-		if (api_is_allowed_to_edit())
+		$current_session_id = api_get_session_id();
+		
+		$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+		
+		if ($is_allowed_to_edit())
 		{
 			return true;
 		}
@@ -317,10 +321,10 @@ class DocumentManager {
 			$tbl_item_property = $this_course.'item_property';
 			$doc_url = Database::escape_string($doc_url);
 			//$doc_url = addslashes($doc_url);
-			$query = "SELECT 1 FROM $tbl_document AS docs,$tbl_item_property AS props 
+			$query = "SELECT 1 FROM $tbl_document AS docs,$tbl_item_property AS props
 					  WHERE props.tool = 'document' AND docs.id=props.ref AND props.visibility <> '1' AND docs.path = '$doc_url'";
 			//echo $query;
-			$result = api_sql_query($query, __FILE__, __LINE__);
+			$result = Database::query($query, __FILE__, __LINE__);
 
 			return (Database::num_rows($result) == 0);
 		}
@@ -479,7 +483,7 @@ class DocumentManager {
 	* @param int $to_group_id
 	* @param int $to_user_id
 	* @param boolean $can_see_invisible
-	* @return array with all document data 
+	* @return array with all document data
 	*/
 	public static function get_all_document_data ($_course, $path = '/', $to_group_id = 0, $to_user_id = NULL, $can_see_invisible = false) {
 		$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
@@ -514,35 +518,47 @@ class DocumentManager {
 		//the given path will not end with a slash, unless it's the root '/'
 		//so no root -> add slash
 		$added_slash = ($path == '/') ? '' : '/';
-
+		
+		//condition for the session		
+		$current_session_id = api_get_session_id();					
+		$is_session_into_category = api_is_session_in_category($current_session_id,'20091U');				
+		
+		$condition_session = "";
+		if ($is_session_into_category) {
+			$condition_session = " AND id_session = (SELECT IFNULL((SELECT DISTINCT id_session FROM $TABLE_ITEMPROPERTY WHERE ref = last.ref AND id_session = '$current_session_id'),0))";						
+		} else {					
+			$condition_session = " AND id_session = '$current_session_id' ";								
+		}
+		
+		
+		$sql_session_id = "SELECT IFNULL((SELECT DISTINCT id_session FROM $TABLE_ITEMPROPERTY WHERE ref = last.ref AND id_session = '$current_session_id'),0)";								
+				
 		$sql = "SELECT *
 						FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 						WHERE docs.id = last.ref
 						AND docs.path LIKE '".$path.$added_slash."%'
 						AND docs.path NOT LIKE '".$path.$added_slash."%/%'
-						AND last.tool = '".TOOL_DOCUMENT."' 
+						AND last.tool = '".TOOL_DOCUMENT."'
 						AND ".$to_field." = ".$to_value."
-						AND last.visibility".$visibility_bit;
-
-		//echo $sql;
-
-		$result = api_sql_query($sql);
-
+						AND last.visibility".$visibility_bit . $condition_session;								
+		
+		$result = Database::query($sql);
+		
 		if ($result && Database::num_rows($result) != 0)
 		{
 			while ($row = Database::fetch_array($result,'ASSOC'))
 				//while ($row = Database::fetch_array($result,MYSQL_NUM))
 			{
-				
+
 				if($row['filetype']=='file' && pathinfo($row['path'],PATHINFO_EXTENSION)=='html'){
-					
+
 					//Templates management
 					$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
-					$sql_is_template = "SELECT id FROM $table_template 
-										WHERE course_code='".$_course['id']."' 
+					$sql_is_template = "SELECT id FROM $table_template
+										WHERE course_code='".$_course['id']."'
 										AND user_id='".api_get_user_id()."'
 										AND ref_doc='".$row['id']."'";
-					$template_result = api_sql_query($sql_is_template);
+					$template_result = Database::query($sql_is_template);
 					if(Database::num_rows($template_result)>0){
 						$row['is_template'] = 1;
 					}
@@ -550,7 +566,7 @@ class DocumentManager {
 						$row['is_template'] = 0;
 					}
 				}
-				
+
 				$document_data[$row['id']] = $row;
 				//$document_data[] = $row;
 			}
@@ -574,23 +590,30 @@ class DocumentManager {
 	public static function get_all_document_folders ($_course, $to_group_id = '0', $can_see_invisible = false) {
 		$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
 		$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-		if(empty($doc_url)){
+		/*if(empty($doc_url)){
 			$to_group_id = '0';
 		} else {
 			$to_group_id = Database::escape_string($to_group_id);
+		}*/
+
+		if (!empty($to_group_id)) {
+		   $to_group_id = intval($to_group_id);
 		}
-		
+
 		if ($can_see_invisible)
 		{
+			//condition for the session
+			$session_id = api_get_session_id();
+			$condition_session = api_get_session_condition($session_id);
 			$sql = "SELECT path
 								FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 								WHERE docs.id = last.ref
 								AND docs.filetype = 'folder' 
 								AND last.tool = '".TOOL_DOCUMENT."' 
 								AND last.to_group_id = ".$to_group_id." 
-								AND last.visibility <> 2";
+								AND last.visibility <> 2 $condition_session";
 
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 
 			if ($result && Database::num_rows($result) != 0)
 			{
@@ -613,6 +636,9 @@ class DocumentManager {
 		//no invisible folders
 		else
 		{
+			//condition for the session
+			$session_id = api_get_session_id();
+			$condition_session = api_get_session_condition($session_id);
 			//get visible folders
 			$visible_sql = "SELECT path
 						FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
@@ -620,35 +646,41 @@ class DocumentManager {
 						AND docs.filetype = 'folder' 
 						AND last.tool = '".TOOL_DOCUMENT."' 
 						AND last.to_group_id = ".$to_group_id." 
-						AND last.visibility = 1";
-			$visibleresult = api_sql_query($visible_sql, __FILE__, __LINE__);
+						AND last.visibility = 1 $condition_session";
+			$visibleresult = Database::query($visible_sql, __FILE__, __LINE__);
 			while ($all_visible_folders = Database::fetch_array($visibleresult,'ASSOC'))
 			{
 				$visiblefolders[] = $all_visible_folders['path'];
 				//echo "visible folders: ".$all_visible_folders['path']."<br>";
 			}
+			//condition for the session
+			$session_id = api_get_session_id();
+			$condition_session = api_get_session_condition($session_id);
 			//get invisible folders
-			$invisible_sql = "SELECT path 
+			$invisible_sql = "SELECT path
 						FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 						WHERE docs.id = last.ref
 						AND docs.filetype = 'folder' 
 						AND last.tool = '".TOOL_DOCUMENT."' 
 						AND last.to_group_id = ".$to_group_id." 
-						AND last.visibility = 0";
-			$invisibleresult = api_sql_query($invisible_sql, __FILE__, __LINE__);
+						AND last.visibility = 0 $condition_session";
+			$invisibleresult = Database::query($invisible_sql, __FILE__, __LINE__);
 			while ($invisible_folders = Database::fetch_array($invisibleresult,'ASSOC'))
 			{
+				//condition for the session
+				$session_id = api_get_session_id();
+				$condition_session = api_get_session_condition($session_id);
 				//get visible folders in the invisible ones -> they are invisible too
 				//echo "invisible folders: ".$invisible_folders['path']."<br>";
-				$folder_in_invisible_sql = "SELECT path 
+				$folder_in_invisible_sql = "SELECT path
 								FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 								WHERE docs.id = last.ref
 								AND docs.path LIKE '".Database::escape_string($invisible_folders['path'])."/%' 
 								AND docs.filetype = 'folder' 
 								AND last.tool = '".TOOL_DOCUMENT."' 
 								AND last.to_group_id = ".$to_group_id." 
-								AND last.visibility = 1";
-				$folder_in_invisible_result = api_sql_query($folder_in_invisible_sql, __FILE__, __LINE__);
+								AND last.visibility = 1 $condition_session";
+				$folder_in_invisible_result = Database::query($folder_in_invisible_sql, __FILE__, __LINE__);
 				while ($folders_in_invisible_folder = Database::fetch_array($folder_in_invisible_result,'ASSOC'))
 				{
 					$invisiblefolders[] = $folders_in_invisible_folder['path'];
@@ -679,26 +711,26 @@ class DocumentManager {
 				return false;
 			}
 		}
-	}	
+	}
 	/**
 	 * This check if a document has the readonly property checked, then see if the user
 	 * is the owner of this file, if all this is true then return true.
-	 * 
+	 *
 	 * @param array  $_course
 	 * @param int    $user_id id of the current user
 	 * @param string $file path stored in the database
 	 * @param int    $document_id in case you dont have the file path ,insert the id of the file here and leave $file in blank ''
-	 * @return boolean true/false	 
+	 * @return boolean true/false
 	 **/
 	public static function check_readonly ($_course,$user_id,$file,$document_id='',$to_delete=false) {
 		if(!(!empty($document_id) && is_numeric($document_id)))
-		{			
+		{
 			$document_id = self::get_document_id($_course, $file);
-		}		
-		
+		}
+
 		$TABLE_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
 		$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-		
+
 		if ($to_delete)
 		{
 			if (self::is_folder($_course, $document_id))
@@ -706,83 +738,83 @@ class DocumentManager {
 				if (!empty($file))
 				{
 					$path = Database::escape_string($file);
-					$what_to_check_sql = "SELECT td.id, readonly, tp.insert_user_id FROM ".$TABLE_DOCUMENT." td , $TABLE_PROPERTY tp 
+					$what_to_check_sql = "SELECT td.id, readonly, tp.insert_user_id FROM ".$TABLE_DOCUMENT." td , $TABLE_PROPERTY tp
 									WHERE tp.ref= td.id and (path='".$path."' OR path LIKE BINARY '".$path."/%' ) ";
 					//get all id's of documents that are deleted
-					$what_to_check_result = api_sql_query($what_to_check_sql, __FILE__, __LINE__);
-					
+					$what_to_check_result = Database::query($what_to_check_sql, __FILE__, __LINE__);
+
 					if ($what_to_check_result && Database::num_rows($what_to_check_result) != 0)
 					{
 						// file with readonly set to 1 exist?
 						$readonly_set=false;
 						while ($row = Database::fetch_array($what_to_check_result))
 						{
-							//query to delete from item_property table		
+							//query to delete from item_property table
 							//echo $row['id']; echo "<br>";
-							if ($row['readonly']==1)					
-							{					
+							if ($row['readonly']==1)
+							{
 								if (!($row['insert_user_id'] == $user_id))
-								{			 					
+								{
 									$readonly_set=true;
 									break;
-								}	
-								
+								}
+
 							}
 						}
-				
+
 						if ($readonly_set)
 						{
 							return true;
 						}
 					}
-				} 
-				return false;			
+				}
+				return false;
 			}
 		}
-				
-				
-		
+
+
+
 		if (!empty($document_id))
-		{	
+		{
 			$sql= 'SELECT a.insert_user_id, b.readonly FROM '.$TABLE_PROPERTY.' a,'.$TABLE_DOCUMENT.' b
 				   WHERE a.ref = b.id and a.ref='.$document_id.' LIMIT 1';
-			$resultans   =  api_sql_query($sql, __FILE__, __LINE__);
+			$resultans   =  Database::query($sql, __FILE__, __LINE__);
 			$doc_details =  Database ::fetch_array($resultans,'ASSOC');
-		
+
 			if($doc_details['readonly']==1)
-			{							
-				if ( $doc_details['insert_user_id'] == $user_id || api_is_platform_admin() ) 
-				{		
-						return false;						
+			{
+				if ( $doc_details['insert_user_id'] == $user_id || api_is_platform_admin() )
+				{
+						return false;
 				}
 				else
-				{	
-					return true;				
-				}			
-			}		
+				{
+					return true;
+				}
+			}
 		}
 		return false;
 	}
-	
+
 	/**
-	 * This check if a document is a folder or not	 
+	 * This check if a document is a folder or not
 	 * @param array  $_course
 	 * @param int    $document_id of the item
-	 * @return boolean true/false	 
+	 * @return boolean true/false
 	 **/
-	public static function is_folder ($_course, $document_id) {	
+	public static function is_folder ($_course, $document_id) {
 		$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 		//if (!empty($document_id))
 		$document_id = Database::escape_string($document_id);
-		$resultans   =  api_sql_query('SELECT filetype FROM '.$TABLE_DOCUMENT.' WHERE id='.$document_id.'', __FILE__, __LINE__);		
+		$resultans   =  Database::query('SELECT filetype FROM '.$TABLE_DOCUMENT.' WHERE id='.$document_id.'', __FILE__, __LINE__);
 		$result=  Database::fetch_array($resultans,'ASSOC');
 		if ($result['filetype']=='folder') {
-			return true;			
+			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
-	
+
 	/**
 	 * This deletes a document by changing visibility to 2, renaming it to filename_DELETED_#id
 	 * Files/folders that are inside a deleted folder get visibility 2
@@ -798,15 +830,17 @@ class DocumentManager {
 		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
 		//first, delete the actual document...
 		$document_id = self :: get_document_id($_course, $path);
-		$new_path = $path.'_DELETED_'.$document_id;
+		//$new_path = $path.'_DELETED_'.$document_id;
+		$new_path = $path;
+		$current_session_id = api_get_session_id();
 		if ($document_id)
 		{
-			if (get_setting('permanently_remove_deleted_files') == 'true') //deleted files are *really* deleted
+			if (api_get_setting('permanently_remove_deleted_files') == 'true') //deleted files are *really* deleted
 			{
 				$what_to_delete_sql = "SELECT id FROM ".$TABLE_DOCUMENT." WHERE path='".$path."' OR path LIKE BINARY '".$path."/%'";
 				//get all id's of documents that are deleted
-				$what_to_delete_result = api_sql_query($what_to_delete_sql, __FILE__, __LINE__);
-							
+				$what_to_delete_result = Database::query($what_to_delete_sql, __FILE__, __LINE__);
+
 				if ($what_to_delete_result && Database::num_rows($what_to_delete_result) != 0)
 				{
 					//needed to deleted medadata
@@ -819,17 +853,17 @@ class DocumentManager {
 					{
 						//query to delete from item_property table
 						//avoid wrong behavior
-												
+
 						//$remove_from_item_property_sql = "DELETE FROM ".$TABLE_ITEMPROPERTY." WHERE ref = ".$row['id']." AND tool='".TOOL_DOCUMENT."'";
-						api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'delete', api_get_user_id());
+						api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'delete', api_get_user_id(),null,null,null,null,$current_session_id);
 																								
 						//query to delete from document table
 						$remove_from_document_sql = "DELETE FROM ".$TABLE_DOCUMENT." WHERE id = ".$row['id']."";
  						self::unset_document_as_template($row['id'],$_course, api_get_user_id());
 						//echo($remove_from_item_property_sql.'<br>');
-						//api_sql_query($remove_from_item_property_sql, __FILE__, __LINE__);
+						//Database::query($remove_from_item_property_sql, __FILE__, __LINE__);
 						//echo($remove_from_document_sql.'<br>');
-						api_sql_query($remove_from_document_sql, __FILE__, __LINE__);
+						Database::query($remove_from_document_sql, __FILE__, __LINE__);
 
 						//delete metadata
 						$eid = 'Document'.'.'.$row['id'];
@@ -852,28 +886,28 @@ class DocumentManager {
 			}
 			else //set visibility to 2 and rename file/folder to qsdqsd_DELETED_#id
 			{
-				if (api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'delete', api_get_user_id()))
+				if (api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'delete', api_get_user_id(),null,null,null,null,$current_session_id))
 				{	
 					//echo('item_property_update OK');
 					if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path) )
                     {
                         if(rename($base_work_dir.$path, $base_work_dir.$new_path))
     					{
-    						 self::unset_document_as_template($document_id, api_get_course_id(), api_get_user_id());	
+    						 self::unset_document_as_template($document_id, api_get_course_id(), api_get_user_id());
     						 $sql = "UPDATE $TABLE_DOCUMENT set path='".$new_path."' WHERE id='".$document_id."'";
-    						if (api_sql_query($sql, __FILE__, __LINE__))
+    						if (Database::query($sql, __FILE__, __LINE__))
     						{
     							//if it is a folder it can contain files
     							$sql = "SELECT id,path FROM ".$TABLE_DOCUMENT." WHERE path LIKE BINARY '".$path."/%'";
-    							$result = api_sql_query($sql, __FILE__, __LINE__);
+    							$result = Database::query($sql, __FILE__, __LINE__);
     							if ($result && Database::num_rows($result) > 0)
     							{
     								while ($deleted_items = Database::fetch_array($result,'ASSOC'))
     								{
     									//echo('to delete also: id '.$deleted_items['id']);
-    									api_item_property_update($_course, TOOL_DOCUMENT, $deleted_items['id'], 'delete', api_get_user_id());
+    									api_item_property_update($_course, TOOL_DOCUMENT, $deleted_items['id'], 'delete', api_get_user_id(),null,null,null,null,$current_session_id);
     									//Change path of subfolders and documents in database
-    									$old_item_path = $deleted_items['path'];    									
+    									$old_item_path = $deleted_items['path'];
     									$new_item_path = $new_path.substr($old_item_path, strlen($path));
     									/*/
     									 * trying to fix this bug FS#2681
@@ -885,18 +919,18 @@ class DocumentManager {
 										*/
     									self::unset_document_as_template($deleted_items['id'], api_get_course_id(), api_get_user_id());
     									$sql = "UPDATE $TABLE_DOCUMENT set path = '".$new_item_path."' WHERE id = ".$deleted_items['id'];
-	
-    									api_sql_query($sql, __FILE__, __LINE__);  									
+
+    									Database::query($sql, __FILE__, __LINE__);
     								}
     							}
-    							
+
                                 self::delete_document_from_search_engine(api_get_course_id(), $document_id);
     							return true;
     						}
     					}
                         else
                         {
-                        	//Couldn't rename - file permissions problem?                        
+                        	//Couldn't rename - file permissions problem?
                             error_log(__FILE__.' '.__LINE__.': Error renaming '.$base_work_dir.$path.' to '.$base_work_dir.$new_path.'. This is probably due to file permissions',0);
                         }
                     }
@@ -912,13 +946,13 @@ class DocumentManager {
 
                         self::delete_document_from_search_engine(api_get_course_id(), $document_id);
 
-                        while ( $row = Database::fetch_array($res) ) 
+                        while ( $row = Database::fetch_array($res) )
                         {
                         	$sqlipd = "DELETE FROM $TABLE_ITEMPROPERTY WHERE ref = ".$row['id']." AND tool='".TOOL_DOCUMENT."'";
                             $resipd = Database::query($sqlipd,__FILE__,__LINE__);
                             self::unset_document_as_template($row['id'],api_get_course_id(), api_get_user_id());
                             $sqldd = "DELETE FROM $TABLE_DOCUMENT WHERE id = ".$row['id'];
-                            $resdd = Database::query($sqldd,__FILE__,__LINE__); 
+                            $resdd = Database::query($sqldd,__FILE__,__LINE__);
                         }
                     }
 				}
@@ -941,16 +975,16 @@ class DocumentManager {
 			$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
 			$sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
 			$sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_DOCUMENT, $document_id);
-			$res = api_sql_query($sql, __FILE__, __LINE__);
+			$res = Database::query($sql, __FILE__, __LINE__);
 			if (Database::num_rows($res) > 0) {
 				$row2 = Database::fetch_array($res);
 				require_once(api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php');
 				$di = new DokeosIndexer();
 				$di->remove_document((int)$row2['search_did']);
-			}     						
+			}
 			$sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
 			$sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_DOCUMENT, $document_id);
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 
 			// remove terms from db
 			require_once(api_get_path(LIBRARY_PATH) .'specific_fields_manager.lib.php');
@@ -967,9 +1001,9 @@ class DocumentManager {
 	 */
 	public static function get_document_id ($_course, $path) {
 		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
-		$path = Database::escape_string($path);		
+		$path = Database::escape_string($path);
 		$sql = "SELECT id FROM $TABLE_DOCUMENT WHERE path LIKE BINARY '$path'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		if ($result && Database::num_rows($result) == 1) {
 			$row = Database::fetch_array($result);
 			return $row[0];
@@ -977,8 +1011,8 @@ class DocumentManager {
 			return false;
 		}
 	}
-	
-	
+
+
 	/**
 	 * Allow to set a specific document as a new template for FCKEditor for a particular user in a particular course
 	 *
@@ -991,8 +1025,8 @@ class DocumentManager {
 	public static function set_document_as_template ($title, $description, $document_id_for_template, $couse_code, $user_id, $image) {
 		// Database table definition
 		$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
-		
-		// creating the sql statement	
+
+		// creating the sql statement
 		$sql = "INSERT INTO ".$table_template."
 					(title, description, course_code, user_id, ref_doc, image)
 				VALUES (
@@ -1001,13 +1035,13 @@ class DocumentManager {
 					'".Database::escape_string($couse_code)."',
 					'".Database::escape_string($user_id)."',
 					'".Database::escape_string($document_id_for_template)."',
-					'".Database::escape_string($image)."')";		
-		api_sql_query($sql);
-		
+					'".Database::escape_string($image)."')";
+		Database::query($sql);
+
 		return true;
 	}
-	
-	
+
+
 	/**
 	 * Unset a document as template
 	 *
@@ -1016,23 +1050,23 @@ class DocumentManager {
 	 * @param int $user_id
 	 */
 	public static function unset_document_as_template ($document_id, $course_code, $user_id) {
-		
+
 		$table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
 		$course_code = Database::escape_string($course_code);
 		$user_id = Database::escape_string($user_id);
 		$document_id = Database::escape_string($document_id);
-		
+
 		$sql = 'SELECT id FROM '.$table_template.' WHERE course_code="'.$course_code.'" AND user_id="'.$user_id.'" AND ref_doc="'.$document_id.'"';
-		$result = api_sql_query($sql);
+		$result = Database::query($sql);
 		$template_id = Database::result($result,0,0);
-		
+
 		include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
 		my_delete(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/'.$template_id.'.jpg');
-		
+
 		$sql = 'DELETE FROM '.$table_template.' WHERE course_code="'.$course_code.'" AND user_id="'.$user_id.'" AND ref_doc="'.$document_id.'"';
-		
-		api_sql_query($sql);
-		
+
+		Database::query($sql);
+
 	}
 	/**
 	 * return true if the documentpath have visibility=1 as item_property
@@ -1046,20 +1080,20 @@ class DocumentManager {
         //note the extra / at the end of doc_path to match every path in the
         // document table that is part of the document path
         $doc_path = Database::escape_string($doc_path);
-        
+
         $sql = "SELECT path FROM $docTable d, $propTable ip " .
                 "where d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND d.filetype='file' AND visibility=0 AND ".
                 "locate(concat(path,'/'),'".$doc_path."/')=1";
-        $result = api_sql_query($sql,__FILE__,__LINE__);
+        $result = Database::query($sql,__FILE__,__LINE__);
         if (Database::num_rows($result) > 0){
             $row = Database::fetch_array($result);
             //echo "$row[0] not visible";
             return false;
         }
-		
+
 		//improved protection of documents viewable directly through the url: incorporates the same protections of the course at the url of documents:	access allowed for the whole world Open, access allowed for users registered on the platform Private access, document accessible only to course members (see the Users list), Completely closed; the document is only accessible to the course admin and teaching assistants.
 		if ($_SESSION ['is_allowed_in_course'] || api_is_platform_admin())
-        {	
+        {
         	return true; // ok, document is visible
 		}
 		else

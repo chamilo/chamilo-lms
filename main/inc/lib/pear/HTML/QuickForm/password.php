@@ -23,7 +23,7 @@ require_once("HTML/QuickForm/input.php");
 
 /**
  * HTML class for a password type field
- * 
+ *
  * @author       Adam Daniel <adaniel1@eesus.jnj.com>
  * @author       Bertrand Mansion <bmansion@mamasam.com>
  * @version      1.1
@@ -36,28 +36,28 @@ class HTML_QuickForm_password extends HTML_QuickForm_input
 
     /**
      * Class constructor
-     * 
+     *
      * @param     string    $elementName    (optional)Input field name attribute
      * @param     string    $elementLabel   (optional)Input field label
-     * @param     mixed     $attributes     (optional)Either a typical HTML attribute string 
+     * @param     mixed     $attributes     (optional)Either a typical HTML attribute string
      *                                      or an associative array
      * @since     1.0
      * @access    public
      * @return    void
-     * @throws    
+     * @throws
      */
     function HTML_QuickForm_password($elementName=null, $elementLabel=null, $attributes=null)
     {
         HTML_QuickForm_input::HTML_QuickForm_input($elementName, $elementLabel, $attributes);
         $this->setType('password');
     } //end constructor
-    
+
     // }}}
     // {{{ setSize()
 
     /**
      * Sets size of password element
-     * 
+     *
      * @param     string    $size  Size of password field
      * @since     1.0
      * @access    public
@@ -73,7 +73,7 @@ class HTML_QuickForm_password extends HTML_QuickForm_input
 
     /**
      * Sets maxlength of password element
-     * 
+     *
      * @param     string    $maxlength  Maximum length of password field
      * @since     1.0
      * @access    public
@@ -83,17 +83,17 @@ class HTML_QuickForm_password extends HTML_QuickForm_input
     {
         $this->updateAttributes(array('maxlength'=>$maxlength));
     } //end func setMaxlength
-        
+
     // }}}
     // {{{ getFrozenHtml()
 
     /**
      * Returns the value of field without HTML tags (in this case, value is changed to a mask)
-     * 
+     *
      * @since     1.0
      * @access    public
      * @return    string
-     * @throws    
+     * @throws
      */
     function getFrozenHtml()
     {

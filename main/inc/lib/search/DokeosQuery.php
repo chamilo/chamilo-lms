@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /dokeos_license.txt */
 /*
  * Script defining generic functions against a search engine api. Just only if one day the search engine changes
  * @package: dokeos.search
@@ -39,11 +40,11 @@ function dokeos_preprocess_results($results) {
     // group by toolid
     $results_by_tool = array();
     if (count($results)>0) {
-	
+
 	    foreach ($results as $key => $row) {
 	        $results_by_tool[$row['toolid']][] = $row;
 	    }
-	
+
 	    $processed_results = array();
 	    foreach ($results_by_tool as $toolid => $rows) {
 	        $tool_processor_class = $toolid .'_processor';
@@ -54,17 +55,17 @@ function dokeos_preprocess_results($results) {
 	            $processed_results = array_merge($tool_processor->process(), $processed_results);
 	        }
 	    }
-	
+
 	    return array(count($processed_results), $processed_results);
     }
 }
 
 /**
  * Wrapper for join xapian queries
- * 
- * @param XapianQuery|array $query1 
- * @param XapianQuery|array $query2 
- * @param string $op 
+ *
+ * @param XapianQuery|array $query1
+ * @param XapianQuery|array $query2
+ * @param string $op
  * @return XapianQuery query joined
  */
 function dokeos_join_queries($query1, $query2=NULL, $op='or') {

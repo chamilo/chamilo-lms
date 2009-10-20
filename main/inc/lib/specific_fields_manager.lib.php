@@ -23,9 +23,9 @@ function add_specific_field($name) {
   $_safe_code = get_specific_field_code_from_name($_safe_code);
   if ($_safe_code === false) { return false; }
   $sql = sprintf($sql, $table_sf, $_safe_code, $_safe_name);
-  $result = api_sql_query($sql,__FILE__,__LINE__);
+  $result = Database::query($sql,__FILE__,__LINE__);
   if ($result) {
-    return Database::get_last_insert_id();
+    return Database::insert_id();
   }
   else {
     return FALSE;
@@ -44,8 +44,8 @@ function delete_specific_field($id) {
   }
   $sql = 'DELETE FROM %s WHERE id=%s LIMIT 1';
   $sql = sprintf($sql, $table_sf, $id);
-  $result = api_sql_query($sql,__FILE__,__LINE__);
-  //TODO also delete the corresponding values 
+  $result = Database::query($sql,__FILE__,__LINE__);
+  //TODO also delete the corresponding values
 }
 
 /**
@@ -61,7 +61,7 @@ function edit_specific_field($id, $name) {
   }
   $sql = 'UPDATE %s SET name = \'%s\' WHERE id = %s LIMIT 1';
   $sql = sprintf($sql, $table_sf, $name, $id);
-  $result = api_sql_query($sql,__FILE__,__LINE__);
+  $result = Database::query($sql,__FILE__,__LINE__);
 }
 
 /**
@@ -84,7 +84,7 @@ function get_specific_field_list($conditions = array(), $order_by = array()) {
   if (count($order_by) > 0) {
     $sql .= ' ORDER BY '.implode(',',$order_by);
   }
-  $sql_result = api_sql_query($sql,__FILE__,__LINE__);
+  $sql_result = Database::query($sql,__FILE__,__LINE__);
   while ($result = Database::fetch_array($sql_result)) {
     $return_array[] = $result;
   }
@@ -112,7 +112,7 @@ function get_specific_field_values_list($conditions = array(), $order_by = array
   if (count($order_by) > 0) {
     $sql .= ' ORDER BY '.implode(',',$order_by);
   }
-  $sql_result = api_sql_query($sql,__FILE__,__LINE__);
+  $sql_result = Database::query($sql,__FILE__,__LINE__);
   while ($result = Database::fetch_array($sql_result)) {
     $return_array[] = $result;
   }
@@ -133,7 +133,7 @@ function get_specific_field_values_list_by_prefix($prefix, $course_code, $tool_i
   $sql = 'SELECT sfv.value FROM %s sf LEFT JOIN %s sfv ON sf.id = sfv.field_id' .
          ' WHERE sf.code = \'%s\' AND sfv.course_code = \'%s\' AND tool_id = \'%s\' AND sfv.ref_id = %s';
   $sql = sprintf($sql, $table_sf, $table_sfv, $prefix, $course_code, $tool_id, $ref_id);
-  $sql_result = api_sql_query($sql,__FILE__,__LINE__);
+  $sql_result = Database::query($sql,__FILE__,__LINE__);
   while ($result = Database::fetch_array($sql_result)) {
     $return_array[] = $result;
   }
@@ -156,9 +156,9 @@ function add_specific_field_value($id_specific_field, $course_id, $tool_id, $ref
   }
   $sql = 'INSERT INTO %s(id, course_code, tool_id, ref_id, field_id, value) VALUES(NULL, \'%s\', \'%s\', %s, %s, \'%s\')';
   $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id, $id_specific_field, Database::escape_string($value));
-  $result = api_sql_query($sql,__FILE__,__LINE__);
+  $result = Database::query($sql,__FILE__,__LINE__);
   if ($result) {
-    return Database::get_last_insert_id();
+    return Database::insert_id();
   }
   else {
     return FALSE;
@@ -176,11 +176,11 @@ function delete_all_specific_field_value($course_id, $id_specific_field, $tool_i
   $table_sf_values = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
   $sql = 'DELETE FROM %s WHERE course_code = \'%s\' AND tool_id = \'%s\' AND ref_id = %s AND field_id = %s';
   $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id, $id_specific_field);
-  $result = api_sql_query($sql,__FILE__,__LINE__);
+  $result = Database::query($sql,__FILE__,__LINE__);
 }
 
 /**
- * Delete all values from a specific item (course_id, tool_id and ref_id). 
+ * Delete all values from a specific item (course_id, tool_id and ref_id).
  * To be used when deleting such item from Dokeos
  * @param   string  Course code
  * @param   string  Tool ID
@@ -190,7 +190,7 @@ function delete_all_values_for_item($course_id, $tool_id, $ref_id) {
   $table_sf_values = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
   $sql = 'DELETE FROM %s WHERE course_code = \'%s\' AND tool_id = \'%s\' AND ref_id = %s';
   $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id);
-  $result = api_sql_query($sql,__FILE__,__LINE__);
+  $result = Database::query($sql,__FILE__,__LINE__);
 }
 
 /**
@@ -206,18 +206,18 @@ function get_specific_field_code_from_name($name) {
     $list = array('A','B','D','E','F','G','H','I','J','K','L','M','N','P','Q','R','S','T','U','V','W','X','Y');
     $table_sf     = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
     $sql = "SELECT code FROM $table_sf ORDER BY code";
-    $res = api_sql_query($sql,__FILE__,__LINE__);
+    $res = Database::query($sql,__FILE__,__LINE__);
     $code = strtoupper(substr($name,0,1));
     //if no code exists in DB, return current one
     if (Database::num_rows($res)<1) { return $code;}
-    
+
     $existing_list = array();
     while ($row = Database::fetch_array($res)) {
     	$existing_list[] = $row['code'];
     }
     //if the current code doesn't exist in DB, return current one
     if (!in_array($code,$existing_list)) { return $code;}
-    
+
     $idx = array_search($code,$list);
     $c = count($list);
     for ($i = $idx+1, $j=0 ; $j<$c ; $i++, $j++) {

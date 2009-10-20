@@ -43,4 +43,9 @@ $langOnHomepage = "Mostrar l\'enllaç a la pàgina principal";
 $langShowLinkOnHomepage = "Mostrar aquest enllaç com una icona a la pàgina principal del curs";
 $langCsvImport = "Importar CSV";
 $General = "General";
+$SearchFeatureDoIndexLink = "Indexar títol i descripció? ";
+$langSaveLink = "Guardar enllaç";
+$langSaveCategory = "Guardar la categoria";
+$BackToLinksOverview = "Regressar a la llista d\'enllaços";
+$AddTargetOfLinkOnHomepage = "Seleccioni la manera (target) que es mostrarà l\'enllaç en la pàgina principal del curs ";
 ?>

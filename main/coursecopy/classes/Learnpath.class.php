@@ -122,7 +122,7 @@ class Learnpath extends Resource
 	function Learnpath($id,$type,$name,$path,$ref,$description,$content_local,$default_encoding,$default_view_mode,$prevent_reinit,$force_commit,$content_maker,$display_order,$js_lib,$content_license,$debug,$visibility,$items)
 	{
 		parent::Resource($id,RESOURCE_LEARNPATH);
-		$this->lp_type = $type; 
+		$this->lp_type = $type;
 		$this->name = $name;
 		$this->path = $path;
 		$this->ref = $ref;

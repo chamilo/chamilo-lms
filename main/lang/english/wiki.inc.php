@@ -155,6 +155,7 @@ $PageRestored = "The page has been restored. You can view it by clicking";
 $RestoredFromVersion = "Restored from version";
 $HWiki = "Help: wiki";
 $FirstSelectOnepage = "Please select a page first";
+$DefineTask = "If you enter a description, this page will be considered a special page that allows you to create a task";
 $ThisPageisBeginEditedBy = "At this time, this page is being edited by";
 $ThisPageisBeginEditedTryLater = "Please try again later. If the user who is currently editing the page does not save it, this page will be available to you around ";
 $EditedByAnotherUser = "Your changes will not be saved because another user has modified and saved the page while you were editing it yourself";
@@ -174,4 +175,5 @@ $Feedback2 = "Second message";
 $Feedback3 = "Third message";
 $FProgress = "Progress";
 $PutATimeLimit = "Set a time limit";
+$StandardTask = "Standard Task";
 ?>

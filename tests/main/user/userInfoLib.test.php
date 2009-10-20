@@ -2,11 +2,11 @@
 require_once(api_get_path(SYS_CODE_PATH).'user/userInfoLib.php');
 
 class TestUserInfoLib extends UnitTestCase {
-	
+
 	/**
  	* clean the content of a bloc for information category
  	*/
- 	
+
 	function testcleanout_cat_content(){
 		global $TBL_USERINFO_CONTENT;
 		$user_id=1;
@@ -15,35 +15,35 @@ class TestUserInfoLib extends UnitTestCase {
 		$this->assertTrue(($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	* create a new category definition for the user information
  	*/
- 	
+
 	function testcreate_cat_def() {
 		global $TBL_USERINFO_DEF;
 		$res=create_cat_def($title="test", $comment="comment test", $nbline="5");
 		$this->assertTrue(($res));
 		//var_dump($res);
 	}
-	
+
 	/**
  	* Edit a bloc for information category
 	*/
-	
+
 	function testedit_cat_content() {
 		global $TBL_USERINFO_CONTENT;
 		$definition_id=1;
 		$user_id=1;
 		$res=edit_cat_content($definition_id, $user_id, $content ="", $user_ip="");
 		$this->assertTrue(is_bool($res));
-		//var_dump($res); 
+		//var_dump($res);
 	}
-	
+
 	/**
  	* modify the definition of a user information category
  	*/
- 	
+
 	function testedit_cat_def() {
 		$id=1;
 		$title='test';
@@ -53,11 +53,11 @@ class TestUserInfoLib extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	/**
  	* fill a bloc for information category
  	*/
- 	
+
 	function testfill_new_cat_content() {
 		$definition_id='';
 		$user_id=1;
@@ -65,24 +65,24 @@ class TestUserInfoLib extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	/**
  	* get the user content of a categories plus the categories definition
 	*/
-	
+
 	function testget_cat_content() {
 		global $TBL_USERINFO_CONTENT, $TBL_USERINFO_DEF;
 		$userId=1;
 		$catId=1;
 		$sql = "SELECT	1";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql,__FILE__,__LINE__);
 		$catContent = Database::fetch_array($result);
 		$res=get_cat_content($userId, $catId);
 		$this->assertTrue(is_array($catContent));
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testget_cat_def() {
 		global $TBL_USERINFO_DEF;
 		$catId=1;
@@ -90,14 +90,14 @@ class TestUserInfoLib extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testget_cat_def_list() {
 		global $TBL_USERINFO_DEF;
 		$res=get_cat_def_list();
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testget_course_user_info() {
 		global $TBL_USERINFO_CONTENT, $TBL_USERINFO_DEF;
 		$user_id=1;
@@ -105,7 +105,7 @@ class TestUserInfoLib extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testget_main_user_info() {
 		$user_id=1;
 		$courseCode='TEST';
@@ -113,7 +113,7 @@ class TestUserInfoLib extends UnitTestCase {
 		if(!is_bool($res))$this->assertTrue(is_array($res));
 		var_dump($res);
 	}
-	
+
 	function testhtmlize() {
 		global $charset;
 		$phrase='test';
@@ -121,7 +121,7 @@ class TestUserInfoLib extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	function testmove_cat_rank() {
 		global $TBL_USERINFO_DEF;
 		$id=1;
@@ -130,7 +130,7 @@ class TestUserInfoLib extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testmove_cat_rank_by_rank()  {
 		global $TBL_USERINFO_DEF;
 		$rank=5;
@@ -139,7 +139,7 @@ class TestUserInfoLib extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	/**
  	* remove a category from the category list
  	* @param  - int $id - id of the category
@@ -157,7 +157,7 @@ class TestUserInfoLib extends UnitTestCase {
 		if(!is_null($res))$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * @author Hugues Peeters - peeters@ipm.ucl.ac.be
 	 * @param  int     $user_id

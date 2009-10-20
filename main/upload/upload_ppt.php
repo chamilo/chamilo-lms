@@ -6,7 +6,7 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 /**
- * First, initialise the script 
+ * First, initialise the script
  */
 // name of the language file which needs to be included
 // 'inc.php' is automatically appended to the file name
@@ -19,7 +19,7 @@ include("../inc/global.inc.php");
 require_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-		
+
 
 $form_style= '
 <style>
@@ -58,7 +58,7 @@ if(isset($_POST['convert'])){
 			if(isset($o_ppt) && $first_item_id != 0){
 				if (api_get_setting('search_enabled')=='true') {
                     require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
-                    $specific_fields = get_specific_field_list();                    
+                    $specific_fields = get_specific_field_list();
                     foreach ($specific_fields as $specific_field) {
     					$values = explode(',', trim($_POST[$specific_field['code']]));
     					if ( !empty($values) ) {
@@ -164,21 +164,21 @@ $renderer = & $form->defaultRenderer();
 
 
 // set template for user_file element
-$user_file_template = 
+$user_file_template =
 <<<EOT
 <div class="row" style="margin-top:10px;width:100%">
 		<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}{element}$div_upload_limit
-		<!-- BEGIN error --><br /><span class="form_error">{error}</span><!-- END error -->	
+		<!-- BEGIN error --><br /><span class="form_error">{error}</span><!-- END error -->
 </div>
 EOT;
 $renderer->setElementTemplate($user_file_template,'user_file');
 
 // set template for other elements
-$user_file_template = 
+$user_file_template =
 <<<EOT
 <div class="row" style="margin-top:10px;width:100%">
 		<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}{element}
-		<!-- BEGIN error --><br /><span class="form_error">{error}</span><!-- END error -->	
+		<!-- BEGIN error --><br /><span class="form_error">{error}</span><!-- END error -->
 </div>
 EOT;
 $renderer->setElementTemplate($user_file_template);
@@ -192,11 +192,11 @@ if (api_get_setting('search_enabled')=='true') {
     //$form -> addElement ('text', 'terms', get_lang('SearchFeatureDocumentTagsIfIndexing').': ');
     $form -> addElement ('html','<br />');
     $form -> addElement ('html', get_lang('SearchFeatureDocumentLanguage').': &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'. api_get_languages_combo());
-    $form -> addElement ('html','<div class="sub-form">');     
+    $form -> addElement ('html','<div class="sub-form">');
     foreach ($specific_fields as $specific_field) {
         $form -> addElement ('text', $specific_field['code'], $specific_field['name'].' : ');
     }
-    $form -> addElement ('html','</div>');     
+    $form -> addElement ('html','</div>');
 }
 
 $form -> addElement ('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');

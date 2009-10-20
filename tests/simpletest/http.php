@@ -22,7 +22,7 @@ require_once(dirname(__FILE__) . '/url.php');
  */
 class SimpleRoute {
     var $_url;
-    
+
     /**
      *    Sets the target URL.
      *    @param SimpleUrl $url   URL as object.
@@ -31,7 +31,7 @@ class SimpleRoute {
     function SimpleRoute($url) {
         $this->_url = $url;
     }
-    
+
     /**
      *    Resource name.
      *    @return SimpleUrl        Current url.
@@ -40,7 +40,7 @@ class SimpleRoute {
     function getUrl() {
         return $this->_url;
     }
-    
+
     /**
      *    Creates the first line which is the actual request.
      *    @param string $method   HTTP request method, usually GET.
@@ -51,7 +51,7 @@ class SimpleRoute {
         return $method . ' ' . $this->_url->getPath() .
                 $this->_url->getEncodedRequest() . ' HTTP/1.0';
     }
-    
+
     /**
      *    Creates the host part of the request.
      *    @return string          Host line content.
@@ -64,7 +64,7 @@ class SimpleRoute {
         }
         return $line;
     }
-    
+
     /**
      *    Opens a socket to the route.
      *    @param string $method      HTTP request method, usually GET.
@@ -86,7 +86,7 @@ class SimpleRoute {
         }
         return $socket;
     }
-    
+
     /**
      *    Factory for socket.
      *    @param string $scheme                   Protocol to use.
@@ -116,7 +116,7 @@ class SimpleProxyRoute extends SimpleRoute {
     var $_proxy;
     var $_username;
     var $_password;
-    
+
     /**
      *    Stashes the proxy address.
      *    @param SimpleUrl $url     URL as object.
@@ -131,7 +131,7 @@ class SimpleProxyRoute extends SimpleRoute {
         $this->_username = $username;
         $this->_password = $password;
     }
-    
+
     /**
      *    Creates the first line which is the actual request.
      *    @param string $method   HTTP request method, usually GET.
@@ -146,7 +146,7 @@ class SimpleProxyRoute extends SimpleRoute {
         return $method . ' ' . $scheme . '://' . $url->getHost() . $port .
                 $url->getPath() . $url->getEncodedRequest() . ' HTTP/1.0';
     }
-    
+
     /**
      *    Creates the host part of the request.
      *    @param SimpleUrl $url   URL as object.
@@ -158,7 +158,7 @@ class SimpleProxyRoute extends SimpleRoute {
         $port = $this->_proxy->getPort() ? $this->_proxy->getPort() : 8080;
         return "$host:$port";
     }
-    
+
     /**
      *    Opens a socket to the route.
      *    @param string $method       HTTP request method, usually GET.
@@ -198,7 +198,7 @@ class SimpleHttpRequest {
     var $_encoding;
     var $_headers;
     var $_cookies;
-    
+
     /**
      *    Builds the socket request from the different pieces.
      *    These include proxy information, URL, cookies, headers,
@@ -214,7 +214,7 @@ class SimpleHttpRequest {
         $this->_headers = array();
         $this->_cookies = array();
     }
-    
+
     /**
      *    Dispatches the content to the route's socket.
      *    @param integer $timeout      Connection timeout.
@@ -231,7 +231,7 @@ class SimpleHttpRequest {
         $response = &$this->_createResponse($socket);
         return $response;
     }
-    
+
     /**
      *    Sends the headers.
      *    @param SimpleSocket $socket           Open socket.
@@ -251,7 +251,7 @@ class SimpleHttpRequest {
         $socket->write("\r\n");
         $encoding->writeTo($socket);
     }
-    
+
     /**
      *    Adds a header line to the request.
      *    @param string $header_line    Text of full header line.
@@ -260,7 +260,7 @@ class SimpleHttpRequest {
     function addHeaderLine($header_line) {
         $this->_headers[] = $header_line;
     }
-    
+
     /**
      *    Reads all the relevant cookies from the
      *    cookie jar.
@@ -271,7 +271,7 @@ class SimpleHttpRequest {
     function readCookiesFromJar($jar, $url) {
         $this->_cookies = $jar->selectAsPairs($url);
     }
-    
+
     /**
      *    Wraps the socket in a response parser.
      *    @param SimpleSocket $socket   Responding socket.
@@ -301,7 +301,7 @@ class SimpleHttpHeaders {
     var $_cookies;
     var $_authentication;
     var $_realm;
-    
+
     /**
      *    Parses the incoming header block.
      *    @param string $headers     Header block.
@@ -320,7 +320,7 @@ class SimpleHttpHeaders {
             $this->_parseHeaderLine($header_line);
         }
     }
-    
+
     /**
      *    Accessor for parsed HTTP protocol version.
      *    @return integer           HTTP error code.
@@ -329,7 +329,7 @@ class SimpleHttpHeaders {
     function getHttpVersion() {
         return $this->_http_version;
     }
-    
+
     /**
      *    Accessor for raw header block.
      *    @return string        All headers as raw string.
@@ -338,7 +338,7 @@ class SimpleHttpHeaders {
     function getRaw() {
         return $this->_raw_headers;
     }
-    
+
     /**
      *    Accessor for parsed HTTP error code.
      *    @return integer           HTTP error code.
@@ -347,7 +347,7 @@ class SimpleHttpHeaders {
     function getResponseCode() {
         return (integer)$this->_response_code;
     }
-    
+
     /**
      *    Returns the redirected URL or false if
      *    no redirection.
@@ -357,7 +357,7 @@ class SimpleHttpHeaders {
     function getLocation() {
         return $this->_location;
     }
-    
+
     /**
      *    Test to see if the response is a valid redirect.
      *    @return boolean       True if valid redirect.
@@ -367,7 +367,7 @@ class SimpleHttpHeaders {
         return in_array($this->_response_code, array(301, 302, 303, 307)) &&
                 (boolean)$this->getLocation();
     }
-    
+
     /**
      *    Test to see if the response is an authentication
      *    challenge.
@@ -379,7 +379,7 @@ class SimpleHttpHeaders {
                 (boolean)$this->_authentication &&
                 (boolean)$this->_realm;
     }
-    
+
     /**
      *    Accessor for MIME type header information.
      *    @return string           MIME type.
@@ -388,7 +388,7 @@ class SimpleHttpHeaders {
     function getMimeType() {
         return $this->_mime_type;
     }
-    
+
     /**
      *    Accessor for authentication type.
      *    @return string        Type.
@@ -397,7 +397,7 @@ class SimpleHttpHeaders {
     function getAuthentication() {
         return $this->_authentication;
     }
-    
+
     /**
      *    Accessor for security realm.
      *    @return string        Realm.
@@ -406,7 +406,7 @@ class SimpleHttpHeaders {
     function getRealm() {
         return $this->_realm;
     }
-    
+
     /**
      *    Writes new cookies to the cookie jar.
      *    @param SimpleCookieJar $jar   Jar to write to.
@@ -449,7 +449,7 @@ class SimpleHttpHeaders {
             $this->_realm = trim($matches[2]);
         }
     }
-    
+
     /**
      *    Parse the Set-cookie content.
      *    @param string $cookie_line    Text after "Set-cookie:"
@@ -484,7 +484,7 @@ class SimpleHttpResponse extends SimpleStickyError {
     var $_sent;
     var $_content;
     var $_headers;
-    
+
     /**
      *    Constructor. Reads and parses the incoming
      *    content and headers.
@@ -507,7 +507,7 @@ class SimpleHttpResponse extends SimpleStickyError {
         }
         $this->_parse($raw);
     }
-    
+
     /**
      *    Splits up the headers and the rest of the content.
      *    @param string $raw    Content to parse.
@@ -525,7 +525,7 @@ class SimpleHttpResponse extends SimpleStickyError {
             $this->_headers = &new SimpleHttpHeaders($headers);
         }
     }
-    
+
     /**
      *    Original request method.
      *    @return string        GET, POST or HEAD.
@@ -534,7 +534,7 @@ class SimpleHttpResponse extends SimpleStickyError {
     function getMethod() {
         return $this->_encoding->getMethod();
     }
-    
+
     /**
      *    Resource name.
      *    @return SimpleUrl        Current url.
@@ -543,7 +543,7 @@ class SimpleHttpResponse extends SimpleStickyError {
     function getUrl() {
         return $this->_url;
     }
-    
+
     /**
      *    Original request data.
      *    @return mixed              Sent content.
@@ -552,7 +552,7 @@ class SimpleHttpResponse extends SimpleStickyError {
     function getRequestData() {
         return $this->_encoding;
     }
-    
+
     /**
      *    Raw request that was sent down the wire.
      *    @return string        Bytes actually sent.
@@ -561,7 +561,7 @@ class SimpleHttpResponse extends SimpleStickyError {
     function getSent() {
         return $this->_sent;
     }
-    
+
     /**
      *    Accessor for the content after the last
      *    header line.
@@ -571,7 +571,7 @@ class SimpleHttpResponse extends SimpleStickyError {
     function getContent() {
         return $this->_content;
     }
-    
+
     /**
      *    Accessor for header block. The response is the
      *    combination of this and the content.
@@ -581,7 +581,7 @@ class SimpleHttpResponse extends SimpleStickyError {
     function getHeaders() {
         return $this->_headers;
     }
-    
+
     /**
      *    Accessor for any new cookies.
      *    @return array       List of new cookies.
@@ -590,7 +590,7 @@ class SimpleHttpResponse extends SimpleStickyError {
     function getNewCookies() {
         return $this->_headers->getNewCookies();
     }
-    
+
     /**
      *    Reads the whole of the socket output into a
      *    single string.
@@ -606,7 +606,7 @@ class SimpleHttpResponse extends SimpleStickyError {
         }
         return $all;
     }
-    
+
     /**
      *    Test to see if the packet from the socket is the
      *    last one.

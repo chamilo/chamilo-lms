@@ -9,7 +9,7 @@ $mdObj = new mdobject($_course, $docId);  // e.g. '12'
 
 // Fetch example:
 if (is_array($dcelems = $mdStore->mds_get_dc_elements($mdObj)))
-	echo '<div>', htmlspecialchars($dcelems['Identifier']), ': ', 
+	echo '<div>', htmlspecialchars($dcelems['Identifier']), ': ',
 	    htmlspecialchars($dcelems['Description']), '</div>';
 
 // Store example:

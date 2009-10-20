@@ -57,17 +57,17 @@ cellpadding="0" cellspacing="0" bgcolor="#9DACBF">
                             <table width="100%" border="0" cellpadding="0" cellspacing="0">
                               <tr>
                                 <td width="500" height="22" valign="top" style="padding:2px;">
-                                <?php 
+                                <?php
                                 $user_id=$list_get_invitation[$i]['user_sender_id'];
                                 $user_info=api_get_user_info($user_id);
-                                echo api_xml_http_response_encode($user_info['firstName'].' '.$user_info['lastName']);
+                                echo api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName']));
                                 ?></td>
                                 </tr>
                             </table></td>
                           </tr>
                           <tr>
                             <td height="5" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
-                              
+
                               <tr>
                                 <td width="500" height="5"></td>
                                 </tr>
@@ -99,15 +99,15 @@ cellpadding="0" cellspacing="0" bgcolor="#9DACBF">
               <tr>
                 <td width="600" height="25" valign="top" style="padding:4px;"><div align="right">
        				<button class="save" name="btn_accepted" type="submit" id="<?php echo "btn_accepted_".$user_id ?>" value="<?php echo api_xml_http_response_encode(get_lang('Accept'));?>"onclick="javascript:register_friend(this)"><?php echo api_xml_http_response_encode(get_lang('Accept')) ?></button>
-     				<button class="cancel" name="btn_denied" type="submit" id="<?php echo "btn_deniedst_".$user_id ?>" value="<?php echo api_xml_http_response_encode(get_lang('Deny')); ?>" onclick="javascript:denied_friend(this)" ><?php echo api_xml_http_response_encode(get_lang('Deny'))?></button> 
+     				<button class="cancel" name="btn_denied" type="submit" id="<?php echo "btn_deniedst_".$user_id ?>" value="<?php echo api_xml_http_response_encode(get_lang('Deny')); ?>" onclick="javascript:denied_friend(this)" ><?php echo api_xml_http_response_encode(get_lang('Deny'))?></button>
                   </div></td>
                     </tr>
             </table></td>
               </tr>
-          
+
         </table></td>
         </tr>
-      
+
     </table></td>
   </tr>
 </table>

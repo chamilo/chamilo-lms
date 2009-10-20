@@ -22,23 +22,23 @@
 */
 
 /**
-*	These files are a complete rework of the forum. The database structure is 
+*	These files are a complete rework of the forum. The database structure is
 *	based on phpBB but all the code is rewritten. A lot of new functionalities
 *	are added:
 * 	- forum categories and forums can be sorted up or down, locked or made invisible
 *	- consistent and integrated forum administration
-* 	- forum options: 	are students allowed to edit their post? 
+* 	- forum options: 	are students allowed to edit their post?
 * 						moderation of posts (approval)
 * 						reply only forums (students cannot create new threads)
 * 						multiple forums per group
 *	- sticky messages
 * 	- new view option: nested view
 * 	- quoting a message
-*	
+*
 *	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 *	@Copyright Ghent University
 *	@Copyright Patrick Cool
-* 
+*
 * 	@package dokeos.forum
 */
 
@@ -50,7 +50,7 @@
  * merge files and test it all over again. So for the moment, please do not
  * touch the code
  * 							-- Patrick Cool <patrick.cool@UGent.be>
- ************************************************************************** 
+ **************************************************************************
  */
 
 $rows=get_posts($_GET['thread']); // note: this has to be cleaned first
@@ -60,7 +60,7 @@ if ($_GET['post'])
 {
 	$display_post_id=Security::remove_XSS($_GET['post']); // note: this has to be cleaned first
 }
-else 
+else
 {
 	// we need to display the first post
 	reset($rows);
@@ -76,7 +76,7 @@ if(isset($_GET['origin']))
 }
 
 //delete attachment file
-if ((isset($_GET['action']) && $_GET['action']=='delete_attach') && isset($_GET['id_attach'])) {	
+if ((isset($_GET['action']) && $_GET['action']=='delete_attach') && isset($_GET['id_attach'])) {
 	delete_attachment(0,$_GET['id_attach']);
 }
 // --------------------------------------
@@ -91,12 +91,12 @@ foreach ($rows as $post)
 	$counter++;
 	$indent=$post['indent_cnt']*'20';
 	$thread_structure.= "<div style=\"margin-left: ".$indent."px;\">";
-	
+
 	if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]) and !empty($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]) and !empty($whatsnew_post_info[$_GET['forum']][$post['thread_id']]))
 	{
 		$post_image=icon('../img/forumpostnew.gif');
 	}
-	else 
+	else
 	{
 		$post_image=icon('../img/forumpost.gif');
 	}
@@ -106,26 +106,26 @@ foreach ($rows as $post)
 		$thread_structure.='<strong>'.prepare4display($post['post_title']).'</strong></div>';
 		$prev_next_array[]=$post['post_id'];
 	}
-	else 
+	else
 	{
 		if ($post['visible']=='0')
 		{
 			$class=' class="invisible"';
 		}
-		else 
+		else
 		{
 			$class='';
 		}
 		$count_loop=($count==0)?'&id=1' : '';
 		$thread_structure.= "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$post['post_id']."&amp;origin=$origin$count_loop\" $class>".prepare4display($post['post_title'])."</a></div>\n";
 		$prev_next_array[]=$post['post_id'];
-	}	
+	}
 	$count++;
 }
 
-/*-------------------------------------------------- 
+/*--------------------------------------------------
 				 NAVIGATION CONTROLS
----------------------------------------------------- 
+----------------------------------------------------
 */
 
 $current_id=array_search($display_post_id,$prev_next_array);
@@ -158,7 +158,7 @@ if ((int)$current_id > 0)
 	echo '<a href="'.$first_href.'" '.$class.' title='.$first_message.'>'.$first_img.' '.$first_message.'</a>';
 	echo '<a href="'.$prev_href.'" '.$class_prev.' title='.$prev_message.'>'.$prev_img.' '.$prev_message.'</a>';
 }
-else 
+else
 {
 	echo '<b><span class="invisible">'.$first_img.' '.$first_message.'</b></span>';
 	echo '<b><span class="invisible">'.$prev_img.' '.$prev_message.'</b></span>';
@@ -166,7 +166,7 @@ else
 
 //  current counter
 echo  ' [ '.($current_id+1).' / '.$max.' ] ';
-  
+
 // go to: next and last
 if (($current_id+1) < $max)
 {
@@ -187,17 +187,17 @@ if ($rows[$display_post_id]['visible']=='0')
 {
 	$titleclass='forum_message_post_title_2_be_approved';
 	$messageclass='forum_message_post_text_2_be_approved';
-	$leftclass='forum_message_left_2_be_approved';	
+	$leftclass='forum_message_left_2_be_approved';
 }
-else 
+else
 {
 	$titleclass='forum_message_post_title';
 	$messageclass='forum_message_post_text';
-	$leftclass='forum_message_left';		
+	$leftclass='forum_message_left';
 }
 
 // --------------------------------------
-// 		Displaying the message 
+// 		Displaying the message
 // --------------------------------------
 
 // we mark the image we are displaying as set
@@ -210,9 +210,9 @@ if ($rows[$display_post_id]['user_id']=='0')
 {
 	$name=prepare4display($rows[$display_post_id]['poster_name']);
 }
-else 
+else
 {
-	$name=$rows[$display_post_id]['firstname'].' '.$rows[$display_post_id]['lastname'];
+	$name=api_get_person_name($rows[$display_post_id]['firstname'], $rows[$display_post_id]['lastname']);
 }
 if (api_get_course_setting('allow_user_image_forum')) {echo '<br />'.display_user_image($rows[$display_post_id]['user_id'],$name, $origin).'<br />';	}
 echo display_user_link($rows[$display_post_id]['user_id'], $name, $origin).'<br />';
@@ -246,34 +246,34 @@ if (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_f
 	$post_minor=(int)$id_posts[0];
 	$post_id = isset($_GET['post'])?(int)$_GET['post']:0;
 	if (!isset($_GET['id']) && $post_id>$post_minor) {
-		echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;origin=".$origin."&amp;action=move&amp;post=".$rows[$display_post_id]['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>\n";	
+		echo "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;origin=".$origin."&amp;action=move&amp;post=".$rows[$display_post_id]['post_id']."\">".icon('../img/deplacer_fichier.gif',get_lang('MovePost'))."</a>\n";
 	}
 }
 $userinf=api_get_user_info($rows[$display_post_id]['user_id']);
 $user_status=api_get_status_of_user_in_course($rows[$display_post_id]['user_id'],api_get_course_id());
-if (api_is_allowed_to_edit()) {
+if (api_is_allowed_to_edit(null,true)) {
 	if($post_id>$post_minor )
 	{
 		if($user_status!=1)
-		{			
+		{
 			$current_qualify_thread=show_qualify('1',$_GET['cidReq'],$_GET['forum'],$rows[$display_post_id]['user_id'],$_GET['thread']);
-			echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$rows[$display_post_id]['post_id']."&amp;user=".$rows[$display_post_id]['user_id']."&user_id=".$rows[$display_post_id]['user_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";			
-		}	
+			echo "<a href=\"forumqualify.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;action=list&amp;post=".$rows[$display_post_id]['post_id']."&amp;user=".$rows[$display_post_id]['user_id']."&user_id=".$rows[$display_post_id]['user_id']."&origin=".$origin."&idtextqualify=".$current_qualify_thread."\" >".icon('../img/new_test_small.gif',get_lang('Qualify'))."</a>\n";
+		}
 	}
 }
-echo '<br /><br />';
+//echo '<br /><br />';
 //if (($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0) OR api_is_allowed_to_edit())
 if ($current_forum_category['locked']==0 AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit(false,true))
 {
 	if ($_user['user_id'] OR ($current_forum['allow_anonymous']==1 AND !$_user['user_id']))
 	{
-		if (!api_is_anonymous()) {
-			echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$rows[$display_post_id]['post_id'].'&amp;action=replymessage&amp;origin='. $origin .'">'.get_lang('ReplyToMessage').'</a><br />';
-			echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$rows[$display_post_id]['post_id'].'&amp;action=quote&amp;origin='. $origin .'">'.get_lang('QuoteMessage').'</a><br /><br />';
+		if (!api_is_anonymous() && api_is_allowed_to_session_edit(false,true)) {
+			echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$rows[$display_post_id]['post_id'].'&amp;action=replymessage&amp;origin='. $origin .'">'.Display :: return_icon('message_reply_forum.png', get_lang('ReplyToMessage'))."</a>\n";
+			echo '<a href="reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.$rows[$display_post_id]['post_id'].'&amp;action=quote&amp;origin='. $origin .'">'.Display :: return_icon('quote.gif', get_lang('QuoteMessage'))."</a>\n";
 		}
 	}
 }
-else 
+else
 {
 	if ($current_forum_category['locked']==1)
 {
@@ -286,7 +286,7 @@ else
 	if ($current_thread['locked']==1)
 	{
 		echo get_lang('ThreadLocked').'<br />';
-}				
+}
 }
 echo "</td>\n";
 // note: this can be removed here because it will be displayed in the tree
@@ -294,7 +294,7 @@ if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['threa
 {
 	$post_image=icon('../img/forumpostnew.gif');
 }
-else 
+else
 {
 	$post_image=icon('../img/forumpost.gif');
 }
@@ -304,7 +304,7 @@ if ($rows[$display_post_id]['post_notification']=='1' AND $rows[$display_post_id
 }
 // The post title
 echo "\t\t<td class=\"$titleclass\">".prepare4display($rows[$display_post_id]['post_title'])."</td>\n";
-echo "\t</tr>\n";	
+echo "\t</tr>\n";
 
 // The post message
 echo "\t<tr>\n";
@@ -312,26 +312,26 @@ echo "\t\t<td class=\"$messageclass\">".prepare4display($rows[$display_post_id][
 echo "\t</tr>\n";
 
 // The check if there is an attachment
-$attachment_list=get_attachment($display_post_id);	
+$attachment_list=get_attachment($display_post_id);
 
 if (!empty($attachment_list))
 {
-	echo '<tr><td height="50%">';	
-	$realname=$attachment_list['path'];			
+	echo '<tr><td height="50%">';
+	$realname=$attachment_list['path'];
 	$user_filename=$attachment_list['filename'];
-					
+
 	echo Display::return_icon('attachment.gif',get_lang('Attachment'));
-	echo '<a href="download.php?file=';		
+	echo '<a href="download.php?file=';
 	echo $realname;
 	echo ' "> '.$user_filename.' </a>';
 	echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
 	if (($current_forum['allow_edit']==1 AND $rows[$display_post_id]['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])))	{
 		echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';
-	}	
-	echo '</td></tr>';		
+	}
+	echo '</td></tr>';
 }
 
-	
+
 
 // The post has been displayed => it can be removed from the what's new array
 unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);

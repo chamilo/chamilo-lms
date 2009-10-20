@@ -60,11 +60,11 @@ $tbl_session_rel_etape 				= "session_rel_etape";
 
 $message="";
 
-$result=api_sql_query("SELECT id, name FROM $tbl_session",__FILE__,__LINE__);
-$Sessions=api_store_result($result);
+$result=Database::query("SELECT id, name FROM $tbl_session",__FILE__,__LINE__);
+$Sessions=Database::store_result($result);
 
-$result=api_sql_query($sql,__FILE__,__LINE__);
-$users=api_store_result($result);
+$result=Database::query($sql,__FILE__,__LINE__);
+$users=Database::store_result($result);
 
 foreach($Sessions as $session){
 	$id_session = $session['id'];
@@ -72,14 +72,14 @@ foreach($Sessions as $session){
 	$UserList=array();
 	$UserUpdate=array();
 	$UserAdd=array();
-	
+
 	// Parse des code etape de la session
 	/*
-	$sql = "SELECT  id_session, code_etape, etape_description, code_ufr, annee 
+	$sql = "SELECT  id_session, code_etape, etape_description, code_ufr, annee
 		FROM $tbl_session_rel_etape
 		WHERE id_session='$id_session'
 		ORDER BY code_ufr, code_etape";
-	$result = api_sql_query($sql);
+	$result = Database::query($sql);
 	*/
 	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
 	ldap_set_version($ds);
@@ -109,8 +109,8 @@ foreach($Sessions as $session){
 					echo "<pre>";
 					print_r($info[$key]);
 					echo "</pre>";
-					$lastname = iconv('utf-8', api_get_setting('platform_charset'), $info[$key]["sn"][0]);
-					$firstname = iconv('utf-8', api_get_setting('platform_charset'), $info[$key]["givenname"][0]);
+					$lastname = api_utf8_decode($info[$key]["sn"][0], api_get_setting('platform_charset'));
+					$firstname = api_utf8_decode($info[$key]["givenname"][0], api_get_setting('platform_charset'));
 					$email = $info[$key]["mail"][0];
 					// Get uid from dn
 					$dn_array=ldap_explode_dn($info[$key]["dn"],1);
@@ -149,9 +149,9 @@ foreach($Sessions as $session){
 		{
 			print "> $name_session: ".count($UserAdd).get_lang('Added').' '.get_lang('And').' '.count($UserUpdate).' '.get_lang('Modified')."\n";
 		}
-		
+
 		// Une fois les utilisateurs importer dans la base des utilisateurs, on peux les affecter a� la session
-		$result=api_sql_query("SELECT course_code FROM $tbl_session_rel_course " .
+		$result=Database::query("SELECT course_code FROM $tbl_session_rel_course " .
 				"WHERE id_session='$id_session'",__FILE__,__LINE__);
 		$CourseList=array();
 		while($row=Database::fetch_array($result))
@@ -163,29 +163,29 @@ foreach($Sessions as $session){
 			// On ajoute la relation entre l'utilisateur et le cours
 			foreach($UserList as $enreg_user)
 			{
-				api_sql_query("INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')",__FILE__,__LINE__);
+				Database::query("INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')",__FILE__,__LINE__);
 			}
 			$sql = "SELECT COUNT(id_user) as nbUsers " .
 					"FROM $tbl_session_rel_course_rel_user " .
 					"WHERE id_session='$id_session' AND course_code='$enreg_course'";
-			$rs = api_sql_query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql, __FILE__, __LINE__);
 			list($nbr_users) = Database::fetch_array($rs);
 			$sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 		}
 		// On ajoute la relation entre l'utilisateur et la session
 		foreach($UserList as $enreg_user){
 			$sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) " .
 					"VALUES('$id_session','$enreg_user')";
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 		}
 		$sql = "SELECT COUNT(id_user) as nbUsers " .
 				"FROM $tbl_session_rel_user " .
 				"WHERE id_session='$id_session'";
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql, __FILE__, __LINE__);
 		list($nbr_users) = Database::fetch_array($rs);
 		$sql = "UPDATE $tbl_session SET nbr_users=$nbr_users WHERE id='$id_session'";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 	}
 }
 ?>

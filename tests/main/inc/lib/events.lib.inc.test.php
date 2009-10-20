@@ -2,7 +2,7 @@
 require_once(api_get_path(LIBRARY_PATH).'events.lib.inc.php');
 
 class TestEvents extends UnitTestCase {
-	
+
 	function testCreateEventExercice() {
 		global $_user, $_cid, $_configuration;
 		$exo_id='';
@@ -10,7 +10,7 @@ class TestEvents extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	function testEventAccessCourse() {
 		global $_configuration;
 		global $_user;
@@ -21,7 +21,7 @@ class TestEvents extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	function testEventAccessTool() {
 		global $_configuration;
 		global $_cid;
@@ -33,12 +33,12 @@ class TestEvents extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	function testEventDownload() {
 		global $_configuration;
 		global $_user;
 		global $_cid;
-		global $TABLETRACK_DOWNLOADS;	
+		global $TABLETRACK_DOWNLOADS;
 		$doc_url='';
 		$res=event_download();
 		$this->assertTrue(is_numeric($res));
@@ -55,7 +55,7 @@ class TestEvents extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-		
+
 	function testEventLogin() {
 		global $_configuration;
 		global $_user;
@@ -64,7 +64,7 @@ class TestEvents extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	function testEventOpen() {
 		global $_configuration;
 		global $TABLETRACK_OPEN;
@@ -72,7 +72,7 @@ class TestEvents extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	function testEventSystem() {
 		global $_configuration;
 		global $_user;
@@ -84,8 +84,8 @@ class TestEvents extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
-	
+
+
 	function testEventUpload() {
 		global $_configuration;
 		global $_user;
@@ -96,7 +96,7 @@ class TestEvents extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 	function testExerciseAttempt() {
 		$score = Database::escape_string($score);
 		$answer = Database::escape_string($answer);
@@ -108,7 +108,7 @@ class TestEvents extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testExerciseAttemptHotspot() {
 		global $_configuration, $_user, $_cid;
 		$exe_id='';
@@ -120,7 +120,7 @@ class TestEvents extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testUpdateEventExercice() {
 		$exeid='';
 		$exo_id='';

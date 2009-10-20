@@ -18,7 +18,7 @@ if (! defined('TYPE_MATTERS')) {
  *    @subpackage   UnitTester
  */
 class SimpleDumper {
-    
+
     /**
      *    Renders a variable in a shorter form than print_r().
      *    @param mixed $value      Variable to render as a string.
@@ -43,7 +43,7 @@ class SimpleDumper {
         }
         return "Unknown";
     }
-    
+
     /**
      *    Gets the string representation of a type.
      *    @param mixed $value    Variable to check against.
@@ -95,7 +95,7 @@ class SimpleDumper {
         $method = '_describe' . $type . 'Difference';
         return $this->$method($first, $second, $identical);
     }
-    
+
     /**
      *    Tests to see if types match.
      *    @param mixed $first        First variable.
@@ -128,7 +128,7 @@ class SimpleDumper {
         $value = substr($value, $start, $size);
         return ($start > 0 ? "..." : "") . $value . ($start + $size < $length ? "..." : "");
     }
-    
+
     /**
      *    Creates a human readable description of the
      *    difference between two variables. The minimal
@@ -143,7 +143,7 @@ class SimpleDumper {
                 "] does not match [" .
                 $this->describeValue($second) . "]";
     }
-    
+
     /**
      *    Creates a human readable description of the
      *    difference between a null and another variable.
@@ -156,7 +156,7 @@ class SimpleDumper {
     function _describeNullDifference($first, $second, $identical) {
         return $this->_describeGenericDifference($first, $second);
     }
-    
+
     /**
      *    Creates a human readable description of the
      *    difference between a boolean and another variable.
@@ -169,7 +169,7 @@ class SimpleDumper {
     function _describeBooleanDifference($first, $second, $identical) {
         return $this->_describeGenericDifference($first, $second);
     }
-    
+
     /**
      *    Creates a human readable description of the
      *    difference between a string and another variable.
@@ -190,7 +190,7 @@ class SimpleDumper {
                 $this->clipString($second, 200, $position) . "]";
         return $message;
     }
-    
+
     /**
      *    Creates a human readable description of the
      *    difference between an integer and another variable.
@@ -209,7 +209,7 @@ class SimpleDumper {
                 $this->describeValue($second) . "] by " .
                 abs($first - $second);
     }
-    
+
     /**
      *    Creates a human readable description of the
      *    difference between two floating point numbers.
@@ -228,7 +228,7 @@ class SimpleDumper {
                 $this->describeValue($second) . "] by " .
                 abs($first - $second);
     }
-    
+
     /**
      *    Creates a human readable description of the
      *    difference between two arrays.
@@ -261,7 +261,7 @@ class SimpleDumper {
         }
         return "";
     }
-    
+
     /**
      *    Compares two arrays to see if their key lists match.
      *    For an identical match, the ordering and types of the keys
@@ -282,7 +282,7 @@ class SimpleDumper {
         sort($second_keys);
         return ($first_keys == $second_keys);
     }
-    
+
     /**
      *    Creates a human readable description of the
      *    difference between a resource and another variable.
@@ -295,7 +295,7 @@ class SimpleDumper {
     function _describeResourceDifference($first, $second, $identical) {
         return $this->_describeGenericDifference($first, $second);
     }
-    
+
     /**
      *    Creates a human readable description of the
      *    difference between two objects.
@@ -314,7 +314,7 @@ class SimpleDumper {
                 get_object_vars($second),
                 $identical);
     }
-    
+
     /**
      *    Find the first character position that differs
      *    in two strings by binary chop.
@@ -341,7 +341,7 @@ class SimpleDumper {
         }
         return $position;
     }
-    
+
     /**
      *    Sends a formatted dump of a variable to a string.
      *    @param mixed $variable    Variable to display.

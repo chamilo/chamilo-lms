@@ -23,7 +23,7 @@
 *	@package dokeos.survey
 * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
 * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
-*	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modifications 
+*	@author Julio Montoya Armas <gugli100@gmail.com>, Dokeos: Personality Test modifications
 * 	@version $Id: survey_list.php 10680 2007-01-11 21:26:23Z pcool $
 *
 * 	@todo use quickforms for the forms
@@ -89,7 +89,7 @@ if (!api_is_allowed_to_edit(false,true))
 	Display :: display_error_message(get_lang('NotAllowed'), false);
 }*/
 // only a course admin is allowed to preview a survey: you are a course admin
-if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='true')) {
+if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='true') || api_is_allowed_to_session_edit(false,true)) {
 	// survey information
 	echo '<div id="survey_title">'.$survey_data['survey_title'].'</div>';
 	echo '<div id="survey_subtitle">'.$survey_data['survey_subtitle'].'</div>';
@@ -118,7 +118,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='
 		$sql = "SELECT * FROM $table_survey_question
 			WHERE survey_id = '".Database::escape_string($survey_id)."'
 				ORDER BY sort ASC";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 
 		while ($row = Database::fetch_array($result))
 		{
@@ -143,7 +143,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='
 					AND survey_question.question_id IN (".Database::escape_string(implode(',',$paged_questions[$_GET['show']])).")
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			$question_counter_max = Database::num_rows($result);
 			$counter = 0;
 			$limit=0;
@@ -172,7 +172,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='
 	}
 	// selecting the maximum number of pages
 	$sql = "SELECT * FROM $table_survey_question WHERE type='".Database::escape_string('pagebreak')."' AND survey_id='".Database::escape_string($survey_id)."'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	$numberofpages = Database::num_rows($result) + 1;
 	// Displaying the form with the questions
 	if (isset($_GET['show']))

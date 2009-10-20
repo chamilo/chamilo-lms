@@ -6,7 +6,7 @@
 */
 
 /**
-============================================================================== 
+==============================================================================
 *   Dokeos Metadata: common functions and mdstore class
 *
 *   This script requires xmd.lib.php and xht.lib.php (Dokeos inc/lib).
@@ -26,7 +26,7 @@
 *                   assign value to subpath (see also xmd_update_many)
 *
 *   @package dokeos.metadata
-============================================================================== 
+==============================================================================
 */
 
 
@@ -39,7 +39,7 @@ if (isset($getpostvars) && is_array($getpostvars))
         $val = isset($_POST[$gpvar]) ? $_POST[$gpvar] : $_GET[$gpvar];
         $GLOBALS[$gpvar] = get_magic_quotes_gpc() ? stripslashes($val) : $val;
     }
-    
+
 function fgc($filename)
 {
     $fp = fopen($filename, 'rb'); $buffer = fread($fp, filesize($filename));
@@ -50,9 +50,9 @@ function fgc($filename)
 function give_up($msg)
 {
 	global $charset;
-    echo '<p align="center">MetaData:<br /><b>? ', 
+    echo '<p align="center">MetaData:<br /><b>? ',
         htmlspecialchars($msg, ENT_QUOTES, $charset), '</b></p>'; exit;
-} 
+}
 
 
 function getpar($name, $description, $default = '')
@@ -60,9 +60,9 @@ function getpar($name, $description, $default = '')
     $value = isset($_GET[$value = api_strtolower($name)]) ? $_GET[$value] : '';
     $value = get_magic_quotes_gpc() ? stripslashes($value) : $value;
     if (!$value) $value = $default;
-    if ($value == '') give_up('URL parameter ' . api_strtoupper($name) . ' - ' . 
+    if ($value == '') give_up('URL parameter ' . api_strtoupper($name) . ' - ' .
                 $description . ' - is required');
-    
+
     define(api_strtoupper($name), $value);
 }
 
@@ -86,25 +86,25 @@ function define_htt($htt_file, $urlp, $course_path)
 
     ($htt_file_contents = @fgc($htt_file))
         or give_up('Templates file "' . $htt_file . '" is missing...');
-    
+
     $xhtDoc = new xhtdoc($htt_file_contents);
-    if ($xhtDoc->htt_error) 
+    if ($xhtDoc->htt_error)
         give_up('Templates file "' . $htt_file . '": ' . $xhtDoc->htt_error);
-    
+
     $xhtDoc->xht_param['self'] = api_get_self() . $urlp;
-    
+
     $xhtDoc->xht_param['dateTime'] = date('Y-m-d');
-    
+
     $ckw = $course_path . '/CourseKwds.js';
     define('KEYWORDS_CACHE', get_course_path() . $ckw);
-    
-    if (file_exists(KEYWORDS_CACHE)) $kcdt = 
+
+    if (file_exists(KEYWORDS_CACHE)) $kcdt =
         htmlspecialchars(date('Y/m/d H:i:s', filemtime(KEYWORDS_CACHE)), ENT_QUOTES, $charset);
-    
+
     $xhtDoc->xht_param['keywordscache'] = $kcdt ?
-        '<script type="text/javascript" src="' . get_course_web() . $ckw . '"></script>' . 
+        '<script type="text/javascript" src="' . get_course_web() . $ckw . '"></script>' .
         '<br /><small><i>(CourseKwds cache: ' . $kcdt . ')</i></small>' : '';
-    
+
     return $xhtDoc;
 }
 
@@ -112,20 +112,20 @@ function define_htt($htt_file, $urlp, $course_path)
 function make_uri()
 {
     $regs = array(); // for use with ereg()
-    
+
     $uri = strtr(ereg_replace(
-        "[^0-9A-Za-z\xC0-\xD6\xD8-\xF6\xF8-\xFF\*\(\('!_.-]", "_", 
+        "[^0-9A-Za-z\xC0-\xD6\xD8-\xF6\xF8-\xFF\*\(\('!_.-]", "_",
         api_get_setting('siteName')), "\\", "_");  // allow letdigs, and _-.()'!*
-    
-    if (($p = strpos($uri, '.')) !== FALSE) 
+
+    if (($p = strpos($uri, '.')) !== FALSE)
         $uri = substr($uri, 0, $p);
     if (ereg('^([^/]+//)?([^/\?]+)[/\?]',api_get_path(WEB_PATH).'/',$regs))
         if (ereg('([^\.]+)(\.ca)?(\.[^\.]+)?', strrev($regs[2]), $regs))
-            $uri = str_replace('.', '-', 
+            $uri = str_replace('.', '-',
                 strrev($regs[1].$regs[2].$regs[3])) . ':' . $uri;
     $uri = 'urn:' . strtolower($uri);
     while (substr($uri, -1)=='.') $uri = substr($uri,0,-1);
-    
+
     return $uri;
 }
 
@@ -209,16 +209,16 @@ $ieee_dcmap_v = array(
 
 // KEYWORD TREE --------------------------------------------------------------->
 
-function define_kwds($mdo) 
+function define_kwds($mdo)
 {
-    if (!($newtext = trim(@fgc(get_course_path() . $mdo->mdo_course['path'] . 
+    if (!($newtext = trim(@fgc(get_course_path() . $mdo->mdo_course['path'] .
             '/document' . $mdo->mdo_path ))))
     {
         unlink(KEYWORDS_CACHE); return;
     }
                                     // templates to define the tree as JScript object
     $xhtDocKw = new xhtdoc(<<<EOD
-    
+
 <!-- {-KWTREE_OBJECT-} -->
 
 KWTREE_OBJECT = {n:"", ti:"{-X @title-}"
@@ -227,27 +227,27 @@ KWTREE_OBJECT = {n:"", ti:"{-X @title-}"
 document.write(traverseKwObj(KWTREE_OBJECT, '', 0)); KWDS_ARRAY.sort();
 
 <!-- {-DOWN_THE_KWTREE-} -->
-{-T number > 1 , -}{n:"{-V @.-}"{-D cm {-X @comment-}-}{-T cm != empty , cm:"{-P cm-}"-}{-D pt {-X @postit-}-}{-T pt != empty , pt:"{-P pt-}"-}{-R * P empty-}{-T number >= 1 
+{-T number > 1 , -}{n:"{-V @.-}"{-D cm {-X @comment-}-}{-T cm != empty , cm:"{-P cm-}"-}{-D pt {-X @postit-}-}{-T pt != empty , pt:"{-P pt-}"-}{-R * P empty-}{-T number >= 1
 , c:[-}{-T number >= 1 R * C DOWN_THE_KWTREE-}{-R * P empty-}{-T number >= 1 ]-}}
 
 <!-- {--} -->
 EOD
     );  // traverseKwObj (md_script) generates clickable tree and populates KWDS_ARRAY
 
-    
-    if ($xhtDocKw->htt_error) 
+
+    if ($xhtDocKw->htt_error)
         give_up('KwdTree template (metadata/md_funcs): ' . $xhtDocKw->htt_error);
-    
+
     $xhtDocKw->xht_xmldoc = new xmddoc(explode("\n", $newtext));
     if ($xhtDocKw->xht_xmldoc->error)
-        give_up('CourseKwds (metadata/md_funcs): XML error: ' . 
+        give_up('CourseKwds (metadata/md_funcs): XML error: ' .
         $xhtDocKw->xht_xmldoc->error);
-    
+
     if (count($xhtDocKw->xht_xmldoc->children[0]) < 2)
     {
         unlink(KEYWORDS_CACHE); return;
     }
-    
+
     $fileHandler = @fopen(KEYWORDS_CACHE, 'w');
     @fwrite($fileHandler, $xhtDocKw->xht_fill_template('KWTREE_OBJECT'));
     @fclose($fileHandler);
@@ -263,26 +263,26 @@ var $mds_something;
 
 function mds_get($eid, $column = 'mdxmltext', $must_exist = '')  // none: FALSE
 {
-    if (($mdt = mysql_fetch_array($this->_query("SELECT " . $column . 
+    if (($mdt = Database::fetch_array($this->_query("SELECT " . $column .
         " FROM " . MDS_TABLE . " WHERE ", $eid)))) return $mdt[$column];
-    
+
     if ($must_exist) give_up($must_exist . $this->_coldat('eid', $eid));
-    
+
     return FALSE;
 }
 
 function mds_get_dc_elements($mdo)  // no record: FALSE
 {
     if (!($mdt = $this->mds_get($mdo->mdo_eid))) return FALSE;
-    
+
     $xmlDoc = new xmddoc(explode("\n", $mdt)); if ($xmlDoc->error) return FALSE;
-    
+
     $result = array();
     foreach ($mdo->mdo_dcmap_v as $dce => $xp)
     {
         $result[$dce] = $xmlDoc->xmd_value($xp);
     }
-    
+
     return $result;
 }
 
@@ -291,21 +291,21 @@ function mds_get_many($columns, $where_clause)
     $cols = '';
     foreach (explode(',', $columns) as $col) $cols .= "," . trim($col);
     if (!$cols) return;
-    
-    return $this->_query("SELECT " . api_substr($cols, 1) . 
+
+    return $this->_query("SELECT " . api_substr($cols, 1) .
         " FROM " . MDS_TABLE . " WHERE ". $where_clause);
 }
 
 function mds_put($eid, $data, $column = 'mdxmltext', $exists = TRUE)
 {
     if ($exists === TRUE)
-        return $this->_query("UPDATE " . MDS_TABLE . " SET " . 
+        return $this->_query("UPDATE " . MDS_TABLE . " SET " .
             $this->_coldat($column, $data) . " WHERE ", $eid);
     elseif ($exists === FALSE)
-        return $this->_query("INSERT INTO " . MDS_TABLE . " SET " . 
+        return $this->_query("INSERT INTO " . MDS_TABLE . " SET " .
             $this->_coldat($column, $data) . ", ", $eid);
     else  // user doesn't know, check first whether the record exists
-        return $this->mds_put($eid, $data, $column, 
+        return $this->mds_put($eid, $data, $column,
             !($this->mds_get($eid) === FALSE));
 }
 
@@ -316,16 +316,16 @@ function mds_put_dc_elements($mdo, $dcelem)
         $mdt = $mdo->mdo_generate_default_xml_metadata(); $exists = FALSE;
     }
     else $exists = TRUE;
-    
+
     $xmlDoc = new xmddoc(explode("\n", $mdt)); if ($xmlDoc->error) return FALSE;
-    
+
     foreach ($dcelem as $dce => $value)
     {
         $xmlDoc->xmd_update($mdo->mdo_dcmap_v[$dce], (string) $value);
     }
-    
+
     $this->mds_put($mdo->mdo_eid, '', 'md5', $exists);
-    
+
     return $this->mds_put($mdo->mdo_eid, $xmlDoc->xmd_xml());
 }
 
@@ -348,27 +348,27 @@ function mds_delete_offspring($eid, $sep = '.')
 function mds_delete_many($idarray)
 {
     if (!is_array($idarray) || count($idarray) == 0) return FALSE;
-    
-    return $this->_query("DELETE FROM " . MDS_TABLE . " WHERE eid IN ('" . 
+
+    return $this->_query("DELETE FROM " . MDS_TABLE . " WHERE eid IN ('" .
         implode("','", array_map('addslashes', $idarray)) . "')");
 }
 
-function mds_update_xml_and_mdt($mdo, &$xmlDoc, $mda, $eid, &$traceinfo, 
+function mds_update_xml_and_mdt($mdo, &$xmlDoc, $mda, $eid, &$traceinfo,
         $exists = TRUE)  // note: $xmlDoc and $traceinfo passed by reference
 {
-    foreach (explode("\n", 
+    foreach (explode("\n",
            str_replace("\r", "\n", str_replace("\r\n", "\n", $mda))) as $update)
     {
         if (!$update) continue;
-        
+
         if (($nameLth = strpos($update, '=')))  // e.g. 'gen/tit/str=new'
         {
             if (($text = api_substr($update, $nameLth + 1)) === FALSE) $text = '';
-            
+
             if (!($path = trim(api_substr($update, 0, $nameLth)))) continue;
-            
+
             if (($sc = api_strpos($path, ';')))  // e.g. 'gen/tit,gen/des;str@lang'
-                $xmlDoc->xmd_update_many(api_substr($path, 0, $sc), 
+                $xmlDoc->xmd_update_many(api_substr($path, 0, $sc),
                     api_substr($path, $sc + 1), $text);
             else
                 $xmlDoc->xmd_update($path, $text);
@@ -394,12 +394,12 @@ function mds_update_xml_and_mdt($mdo, &$xmlDoc, $mda, $eid, &$traceinfo,
                 $x = $xmlDoc->xmd_update(trim($update), '');
             }
         }
-        
+
         if ($update) $traceinfo .= $update . '- ';
     }
-    
+
     $mdt = $xmlDoc->xmd_xml();
-    
+
     if ($exists === FALSE)
     {
         $this->mds_put($eid, $mdt, 'mdxmltext', FALSE);
@@ -410,19 +410,19 @@ function mds_update_xml_and_mdt($mdo, &$xmlDoc, $mda, $eid, &$traceinfo,
         $this->mds_put($eid, $mdt, 'mdxmltext');
         $traceinfo .= 'UPDATE ' . $eid . '- ';
     }
-    
+
     return $mdt;
 }
 
 function mdstore($allow_create)
 {
     global $_course; if (!isset($_course)) return;
-    
-    define('MDS_TABLE', Database::get_course_table('metadata'));
 
-    if (!api_sql_query("SELECT eid FROM " . MDS_TABLE))
+    define('MDS_TABLE', Database::get_course_table(TABLE_METADATA));
+
+    if (!Database::query("SELECT eid FROM " . MDS_TABLE))
     if ($allow_create)
-        $this->_query("CREATE TABLE " . MDS_TABLE . " (    " . 
+        $this->_query("CREATE TABLE " . MDS_TABLE . " (    " .
                 "eid varchar(250) NOT NULL," .      // entry-id, e.g. doc.1
                 "mdxmltext text default ''," .      // MD-text, XML-formatted
                 "md5 char(32) default ''," .        // hash-validator
@@ -447,8 +447,8 @@ function _query($sql, $eid = '', $sep = '')
 {
     if ($eid) $sql .= $sep ? $this->_coldatstart('eid', $eid . $sep) :
         $this->_coldat('eid', $eid);
-    
-    return api_sql_query($sql, __FILE__, __LINE__);
+
+    return Database::query($sql, __FILE__, __LINE__);
 }
 
 }
@@ -459,7 +459,7 @@ function _query($sql, $eid = '', $sep = '')
     modify it under the terms of the GNU General Public License
     as published by the Free Software Foundation; either version 2
     of the License, or (at your option) any later version.
-    
+
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the

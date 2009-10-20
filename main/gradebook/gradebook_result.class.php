@@ -31,7 +31,7 @@ class GradeBookResult
 {
 	private $gradebook_list = array(); //stores the list of exercises
 	private $results = array(); //stores the results
-	
+
 	/**
 	 * constructor of the class
 	 */
@@ -64,7 +64,7 @@ class GradeBookResult
 			$sql.= ' WHERE active=1';
 		}
 		$sql .= ' ORDER BY title';
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 
 		// if the exercise has been found
 		while($row=Database::fetch_array($result,'ASSOC')) {
@@ -86,14 +86,14 @@ class GradeBookResult
 			" FROM $TBL_EXERCISE_QUESTION eq, $TBL_QUESTIONS q " .
 			" WHERE eq.question_id=q.id AND eq.exercice_id='$e_id' " .
 			" ORDER BY q.position";
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 
 		// fills the array with the question ID for this exercise
 		// the key of the array is the question position
 		while($row=Database::fetch_array($result,'ASSOC')) {
 			$return[] = $row;
 		}
-		return true;		
+		return true;
 	}
 	/**
 	 * Gets the results of all students (or just one student if access is limited)
@@ -116,13 +116,13 @@ class GradeBookResult
 		if (empty($user_id)) {
 			//get all results (ourself and the others) as an admin should see them
 			//AND exe_user_id <> $_user['user_id']  clause has been removed
-			$sql="SELECT CONCAT(lastname,' ',firstname),ce.title, te.exe_result ,
+			$sql="SELECT ".(api_is_western_name_order() ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)").", ce.title, te.exe_result ,
 						te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id, user.email, user.user_id
 				  FROM $TBL_EXERCISES ce , $TBL_TRACK_EXERCISES te, $TBL_USER user
 				  WHERE te.exe_exo_id = ce.id AND user_id=te.exe_user_id AND te.exe_cours_id='$cid'
 				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 
-			$hpsql="SELECT CONCAT(tu.lastname,' ',tu.firstname), tth.exe_name,
+			$hpsql="SELECT ".(api_is_western_name_order() ? "CONCAT(tu.firstname,' ',tu.lastname)" : "CONCAT(tu.lastname,' ',tu.firstname)").", tth.exe_name,
 						tth.exe_result , tth.exe_weighting, UNIX_TIMESTAMP(tth.exe_date), tu.email, tu.user_id
 					FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
 					WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '".$cid."'
@@ -139,7 +139,6 @@ class GradeBookResult
 					FROM $TBL_TRACK_HOTPOTATOES
 					WHERE exe_user_id = '".$user_id."' AND exe_cours_id = '".$cid."'
 					ORDER BY exe_cours_id ASC, exe_date ASC";
-
 		}
 
 		$results=getManyResultsXCol($sql,8);
@@ -182,7 +181,7 @@ class GradeBookResult
 				if (empty($user_id)) {
 					$return[$j+$i]['user'] = $hpresults[$i][0];
 					$return[$j+$i]['user_id'] = $results[$i][6];
-					
+
 				}
 				$return[$j+$i]['title'] = $title;
 				$return[$j+$i]['time'] = strftime(get_lang('dateTimeFormatLong'),$hpresults[$i][4]);
@@ -209,25 +208,25 @@ class GradeBookResult
 		$data = '';
 		//build the results
 		//titles
-	
+
 		foreach ($dato[0] as $header_col) {
 			if(!empty($header_col)) {
 				$data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($header_col))).';';
-			}			
+			}
 		}
-		
+
 		$data .="\r\n";
 		$cant_students = count($dato[1]);
 		//print_r($data);		exit();
-		
+
 		for($i=0;$i<$cant_students;$i++) {
 			$column = 0;
-			foreach($dato[1][$i] as $col_name) {	
-				$data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($col_name))).';';					
+			foreach($dato[1][$i] as $col_name) {
+				$data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($col_name))).';';
 			}
 			$data .="\r\n";
 		}
-		
+
 		//output the results
 		$len = strlen($data);
 		header('Content-type: application/octet-stream');
@@ -260,24 +259,24 @@ class GradeBookResult
 		$worksheet =& $workbook->addWorksheet('Report '.date('YmdGis'));
 		$line = 0;
 		$column = 0; //skip the first column (row titles)
-		//headers			
+		//headers
 		foreach ($data[0] as $header_col) {
 			$worksheet->write($line,$column,$header_col);
 			$column++;
 		}
 		//$worksheet->write($line,$column,get_lang('Total'));
-		//$column++;		
-		$line++;	
-		
+		//$column++;
+		$line++;
+
 		$cant_students = count($data[1]);
 		//print_r($data);		exit();
-		
+
 		for ($i=0;$i<$cant_students;$i++) {
 			$column = 0;
-			foreach ($data[1][$i] as $col_name) {		
+			foreach ($data[1][$i] as $col_name) {
 				$worksheet->write($line,$column,strip_tags($col_name));
 				$column++;
-				
+
 			}
 			$line++;
 		}

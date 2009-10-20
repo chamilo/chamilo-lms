@@ -651,9 +651,9 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
         if (preg_match("/\d/",$location)) {
             return;                      // Ignore numbers
         }
-    
+
         $location = strtolower($location);
-    
+
         if ($location == 'left') {
             $this->_text_h_align = 1;
         }
@@ -691,9 +691,9 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
         if (preg_match("/\d/",$location)) {
             return;                      // Ignore numbers
         }
-    
+
         $location = strtolower($location);
- 
+
         if ($location == 'top') {
             $this->_text_v_align = 0;
         }

@@ -19,7 +19,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
@@ -39,7 +39,7 @@ echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']
 echo '<a href="../newscorm/lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('scorm.gif',get_lang('ReturnToLearningPaths')).' '.get_lang('ReturnToLearningPaths').'</a>';
 echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action='.Security::remove_XSS($_GET['action']).'&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'&amp;updateaudio=true">'.Display::return_icon('audio.gif', get_lang('UpdateAllAudioFragments')).' '.get_lang('UpdateAllAudioFragments').'</a>';
 echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=chapter&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang("NewChapter").'"><img alt="'.get_lang("NewChapter").'" src="../img/lp_dokeos_chapter_add.gif" title="'.get_lang("NewChapter").'" />'.get_lang("NewChapter").'</a>';
-echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=step&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang("NewStep").'"><img alt="'.get_lang("NewStep").'" src="../img/new_test.gif" title="'.get_lang("NewStep").'" />'.get_lang("NewStep").'</a>';			
+echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=step&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang("NewStep").'"><img alt="'.get_lang("NewStep").'" src="../img/new_test.gif" title="'.get_lang("NewStep").'" />'.get_lang("NewStep").'</a>';
 
 echo '</div>';
 
@@ -91,36 +91,36 @@ $content_proximity_select->addOption(get_lang('Remote'), 'remote');
 
 
 if (api_get_setting('allow_course_theme') == 'true')
-{		
+{
 	$mycourselptheme=api_get_course_setting('allow_learning_path_theme');
-	if (!empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1) 
-	{			
-		//LP theme picker				
+	if (!empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1)
+	{
+		//LP theme picker
 		$theme_select = &$form->addElement('select_theme', 'lp_theme', get_lang('Theme'));
 		$form->applyFilter('lp_theme', 'trim');
-		
+
 		$s_theme = $_SESSION['oLP']->get_theme();
-		$theme_select ->setSelected($s_theme); //default	
-	}	
+		$theme_select ->setSelected($s_theme); //default
+	}
 }
 
 //Author
-$form->addElement('html_editor', 'lp_author', get_lang('Author'), array('size'=>80), array('ToolbarSet' => 'LearningPathAuthor', 'Width' => '100%', 'Height' => '150px') ); 
+$form->addElement('html_editor', 'lp_author', get_lang('Author'), array('size'=>80), array('ToolbarSet' => 'LearningPathAuthor', 'Width' => '100%', 'Height' => '150px') );
 $form->applyFilter('lp_author', 'html_filter');
 
-// LP image	
+// LP image
 $form->add_progress_bar();
 if( strlen($_SESSION['oLP']->get_preview_image() ) > 0)
 {
 	$show_preview_image='<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'>';
 	$div = '<div class="row">
 	<div class="label">'.get_lang('ImagePreview').'</div>
-	<div class="formw">	
+	<div class="formw">
 	'.$show_preview_image.'
 	</div>
-	</div>';	
-	$form->addElement('html', $div .'<br/>');	
-	$form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));	
+	</div>';
+	$form->addElement('html', $div .'<br/>');
+	$form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
 }
 
 $form->addElement('file', 'lp_preview_image', ($_SESSION['oLP']->get_preview_image() != '' ? get_lang('UpdateImage') : get_lang('AddImage')));

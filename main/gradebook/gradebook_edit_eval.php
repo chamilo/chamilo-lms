@@ -46,9 +46,9 @@ if ($form->validate()) {
 	$eval->set_date(strtotime($values['date']));
 	$eval->set_max($values['max']);
 	if (empty ($values['visible'])) {
-		$visible = 0;	
+		$visible = 0;
 	} else {
-		$visible = 1;		
+		$visible = 1;
 	}
 	$eval->set_visible($visible);
 	$eval->save();

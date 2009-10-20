@@ -148,7 +148,7 @@ class HtmlReporter extends SimpleReporter {
                 ' line ' . $exception->getLine() . ']';
         print " -&gt; <strong>" . $this->_htmlEntities($message) . "</strong><br />\n";
     }
-    
+
     /**
      *    Prints the message for skipping tests.
      *    @param string $message    Text of skip condition.
@@ -283,7 +283,7 @@ class TextReporter extends SimpleReporter {
         print "\tin " . implode("\n\tin ", array_reverse($breadcrumb));
         print "\n";
     }
-    
+
     /**
      *    Prints the message for skipping tests.
      *    @param string $message    Text of skip condition.
@@ -315,7 +315,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
     var $_just_this_case = false;
     var $_just_this_test = false;
     var $_on;
-    
+
     /**
      *    Selects the test case or group to be run,
      *    and optionally a specific test.
@@ -364,7 +364,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
         }
         return false;
     }
-    
+
     /**
      *    Switch on testing for the group or subgroup.
      *    @access private
@@ -372,7 +372,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
     function _on() {
         $this->_on = true;
     }
-    
+
     /**
      *    Switch off testing for the group or subgroup.
      *    @access private
@@ -380,7 +380,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
     function _off() {
         $this->_on = false;
     }
-    
+
     /**
      *    Is this group actually being tested?
      *    @return boolean     True if the current test group is active.
@@ -436,7 +436,7 @@ class SelectiveReporter extends SimpleReporterDecorator {
  *    @subpackage UnitTester
  */
 class NoSkipsReporter extends SimpleReporterDecorator {
-    
+
     /**
      *    Does nothing.
      *    @param string $message    Text of skip condition.

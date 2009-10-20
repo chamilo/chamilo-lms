@@ -13,7 +13,7 @@ body {
 	margin: 0;
 	padding: 0;
 	background-color: #fff;
-	height: 100%; /* stick */	
+	height: 100%; /* stick */
 }
 #wrapper{
 	min-height: 100%;
@@ -63,7 +63,7 @@ a.invisible:link, a.invisible:visited {
 }
 .clear {
 	clear: both;
-	line-height: 
+	line-height:
  0px;
 	height: 0;
 }
@@ -936,9 +936,10 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	border-bottom:1px solid #CCCCCC;
 }
 .message-content-body-left {
-	float:left;/*width:55%;  */
+	float:left;
+	width:30%;
 }
-.message-conten-body-right {
+.message-content-body-right {
 	float:right;
 	text-align:left;
 	width:60%;
@@ -958,7 +959,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	text-align:left;
 	margin-right:20px;
 }
-.message-conten-body-right dd {
+.message-content-body-right dd {
 	color:#333399;
 	border-bottom:1px solid #CCCCCC;
 	height:20px;
@@ -966,7 +967,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	outline-style:none;
 	background:#ffffff;
 }
-.message-conten-body-right:hover {
+.message-content-body-right:hover {
 }
 /**********************************************
  *  DOCUMENT MODULE                           *
@@ -1298,21 +1299,23 @@ div.report_section h4 {
 	font-weight: bold;
 	color: #666;
 	list-style-type: none;
-	margin: 5px;
+	margin: 5px 5px 5px 40px;
 	padding: 5px;
 	margin-bottom: 10px;
 }
 .session_box_title {
+	margin-bottom: 7px;
 }
 .session_box_coach {
 }
 .session_course_item {
 	/* padding: 0px; */
-	margin: 0px;
+	margin: 7px 0px;
 }
 
 .session_course_item .courses {
-	height:22px;
+	margin-bottom: 5px;
+	height:35px;
 }
 
 
@@ -2301,13 +2304,13 @@ div.image-social-content center.friend {
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}	
+}
 #social-profile-container {
 	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:22%;	
+	width:22%;
 }
 #social-profile-content {
 	float:right;

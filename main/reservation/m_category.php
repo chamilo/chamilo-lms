@@ -23,7 +23,7 @@
     Mail: info@dokeos.com
 ==============================================================================
 */
-/** 
+/**
     ---------------------------------------------------------------------
                 Category-manager (add, edit & delete)
     ---------------------------------------------------------------------
@@ -47,7 +47,7 @@ $interbreadcrumb[] = array ("url" => "../admin/index.php", "name" => get_lang('P
 
 /**
  *  Filter to display the modify-buttons
- * 
+ *
  *  @param - int $id The ResourceType-id
  */
 function modify_filter($id) {
@@ -106,7 +106,7 @@ switch ($_GET['action']) {
 		$NoSearchResults = get_lang('NoCategories');
 		Display :: display_header($tool_name);
 		api_display_tool_title($tool_name);
-		
+
 		echo $msg;
 		echo '<div class="actions">';
 		echo '<a href="m_category.php?action=add"><img src="../img/view_more_stats.gif" border="0" alt="" title="'.get_lang('AddNewBookingPeriod').'"/>'.get_lang('AddNewResourceType').'</a><br />';

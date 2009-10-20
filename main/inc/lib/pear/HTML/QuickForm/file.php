@@ -31,7 +31,7 @@ if (class_exists('HTML_QuickForm')) {
 
 /**
  * HTML class for a file type element
- * 
+ *
  * @author       Adam Daniel <adaniel1@eesus.jnj.com>
  * @author       Bertrand Mansion <bmansion@mamasam.com>
  * @version      1.0
@@ -53,10 +53,10 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
 
     /**
      * Class constructor
-     * 
+     *
      * @param     string    Input field name attribute
      * @param     string    Input field label
-     * @param     mixed     (optional)Either a typical HTML attribute string 
+     * @param     mixed     (optional)Either a typical HTML attribute string
      *                      or an associative array
      * @since     1.0
      * @access    public
@@ -66,13 +66,13 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
         HTML_QuickForm_input::HTML_QuickForm_input($elementName, $elementLabel, $attributes);
         $this->setType('file');
     } //end constructor
-    
+
     // }}}
     // {{{ setSize()
 
     /**
      * Sets size of file element
-     * 
+     *
      * @param     int    Size of file element
      * @since     1.0
      * @access    public
@@ -81,13 +81,13 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     {
         $this->updateAttributes(array('size' => $size));
     } //end func setSize
-    
+
     // }}}
     // {{{ getSize()
 
     /**
      * Returns size of file element
-     * 
+     *
      * @since     1.0
      * @access    public
      * @return    int
@@ -102,7 +102,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
 
     /**
      * Freeze the element so that only its value is returned
-     * 
+     *
      * @access    public
      * @return    bool
      */
@@ -116,13 +116,13 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
 
     /**
      * Sets value for file element.
-     * 
+     *
      * Actually this does nothing. The function is defined here to override
      * HTML_Quickform_input's behaviour of setting the 'value' attribute. As
-     * no sane user-agent uses <input type="file">'s value for anything 
-     * (because of security implications) we implement file's value as a 
+     * no sane user-agent uses <input type="file">'s value for anything
+     * (because of security implications) we implement file's value as a
      * read-only property with a special meaning.
-     * 
+     *
      * @param     mixed    Value for file element
      * @since     3.0
      * @access    public
@@ -131,7 +131,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     {
         return null;
     } //end func setValue
-    
+
     // }}}
     // {{{ getValue()
 
@@ -187,8 +187,8 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
     // {{{ moveUploadedFile()
 
     /**
-     * Moves an uploaded file into the destination 
-     * 
+     * Moves an uploaded file into the destination
+     *
      * @param    string  Destination directory path
      * @param    string  New file name
      * @access   public
@@ -200,9 +200,9 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             $dest .= '/';
         }
         $fileName = ($fileName != '') ? $fileName : basename($this->_value['name']);
-        return move_uploaded_file($this->_value['tmp_name'], $dest . $fileName); 
+        return move_uploaded_file($this->_value['tmp_name'], $dest . $fileName);
     } // end func moveUploadedFile
-    
+
     // }}}
     // {{{ isUploadedFile()
 
@@ -236,7 +236,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             return false;
         }
     } // end func _ruleIsUploadedFile
-    
+
     // }}}
     // {{{ _ruleCheckMaxFileSize()
 
@@ -250,7 +250,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
      */
     function _ruleCheckMaxFileSize($elementValue, $maxSize)
     {
-        if (!empty($elementValue['error']) && 
+        if (!empty($elementValue['error']) &&
             (UPLOAD_ERR_FORM_SIZE == $elementValue['error'] || UPLOAD_ERR_INI_SIZE == $elementValue['error'])) {
             return false;
         }
@@ -300,16 +300,16 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
         }
         return preg_match($regex, $elementValue['name']);
     } // end func _ruleCheckFileName
-    
+
     // }}}
     // {{{ _findValue()
 
    /**
     * Tries to find the element value from the values array
-    * 
-    * Needs to be redefined here as $_FILES is populated differently from 
+    *
+    * Needs to be redefined here as $_FILES is populated differently from
     * other arrays when element name is of the form foo[bar]
-    * 
+    *
     * @access    private
     * @return    mixed
     */
@@ -325,7 +325,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             $base  = str_replace(
                         array('\\', '\''), array('\\\\', '\\\''),
                         substr($elementName, 0, $pos)
-                    ); 
+                    );
             $idx   = "['" . str_replace(
                         array('\\', '\'', ']', '['), array('\\\\', '\\\'', '', "']['"),
                         substr($elementName, $pos + 1, -1)

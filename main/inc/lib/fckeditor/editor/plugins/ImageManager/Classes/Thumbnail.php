@@ -16,7 +16,7 @@ require_once('Transform.php');
  * @package ImageManager
  * @subpackage Images
  */
-class Thumbnail 
+class Thumbnail
 {
 	/**
 	 * Graphics driver, GD, NetPBM or ImageMagick.
@@ -53,7 +53,7 @@ class Thumbnail
 	 * @param int $width thumbnail width
 	 * @param int $height thumbnail height
 	 */
-	function Thumbnail($width=96, $height=96) 
+	function Thumbnail($width=96, $height=96)
 	{
 		$this->driver = Image_Transform::factory(IMAGE_CLASS);
 		$this->width = $width;
@@ -67,16 +67,16 @@ class Thumbnail
 	 * as this parameter value.
 	 * @return boolean true if thumbnail is created, false otherwise
 	 */
-	function createThumbnail($file, $thumbnail=null) 
+	function createThumbnail($file, $thumbnail=null)
 	{
-		if(!is_file($file)) 
+		if(!is_file($file))
 			Return false;
 
 		//error_log('Creating Thumbs: '.$file);
 
 		$this->driver->load($file);
 
-		if($this->proportional) 
+		if($this->proportional)
 		{
 			$width = $this->driver->img_x;
 			$height = $this->driver->img_y;
@@ -89,7 +89,7 @@ class Thumbnail
 
 		$this->driver->resize($this->width, $this->height);
 
-		if(is_null($thumbnail)) 
+		if(is_null($thumbnail))
 			$this->save($file);
 		else
 			$this->save($thumbnail);
@@ -97,7 +97,7 @@ class Thumbnail
 
 		$this->free();
 
-		if(is_file($thumbnail)) 
+		if(is_file($thumbnail))
 			Return true;
 		else
 			Return false;
@@ -107,7 +107,7 @@ class Thumbnail
 	 * Save the thumbnail file.
 	 * @param string $file file name to be saved as.
 	 */
-	function save($file) 
+	function save($file)
 	{
 		$this->driver->save($file);
 	}
@@ -115,7 +115,7 @@ class Thumbnail
 	/**
 	 * Free up the graphic driver resources.
 	 */
-	function free() 
+	function free()
 	{
 		$this->driver->free();
 	}

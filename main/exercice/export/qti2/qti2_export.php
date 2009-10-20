@@ -7,7 +7,7 @@ if ( count( get_included_files() ) == 1 ) die( '---' );
  * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE
  *
  * @author Claro Team <cvs@claroline.net>
- * @author Yannick Warnier <yannick.warnier@dokeos.com> 
+ * @author Yannick Warnier <yannick.warnier@dokeos.com>
  */
 
 require dirname(__FILE__) . '/qti2_classes.php';
@@ -24,12 +24,12 @@ define(FREE_ANSWER,     5);
 define(HOT_SPOT, 		6);
 define(HOT_SPOT_ORDER, 	7);
 /**
- * An IMS/QTI item. It corresponds to a single question. 
+ * An IMS/QTI item. It corresponds to a single question.
  * This class allows export from Claroline to IMS/QTI2.0 XML format of a single question.
  * It is not usable as-is, but must be subclassed, to support different kinds of questions.
  *
  * Every start_*() and corresponding end_*(), as well as export_*() methods return a string.
- * 
+ *
  * @warning Attached files are NOT exported.
  */
 class ImsAssessmentItem
@@ -50,7 +50,7 @@ class ImsAssessmentItem
         $this->answer = $this->question->setAnswer();
         $this->questionIdent = "QST_" . $question->id ;
      }
-     
+
      /**
       * Start the XML flow.
       *
@@ -72,9 +72,9 @@ class ImsAssessmentItem
                     identifier="'.$this->questionIdent.'"
                     title="'.htmlspecialchars($this->question->selectTitle()).'">'."\n";
         return $string;
-         
+
       }
-      
+
       /**
        * End the XML flow, closing the </item> tag.
        *
@@ -86,13 +86,13 @@ class ImsAssessmentItem
 
      /**
       * Start the itemBody
-      * 
+      *
       */
      function start_item_body()
      {
         return '  <itemBody>' . "\n";
      }
-     
+
      /**
       * End the itemBody part.
       *
@@ -112,8 +112,8 @@ class ImsAssessmentItem
           //return '  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p0/rptemplates/map_response"/>' . "\n";
           return '  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_correct"/>' . "\n";
       }
-  
- 
+
+
      /**
       * Export the question as an IMS/QTI Item.
       *
@@ -126,13 +126,13 @@ class ImsAssessmentItem
      {
         global $charset;
         $head = $foot = "";
-        
+
         if( $standalone )
         {
             $head = '<?xml version="1.0" encoding="'.$charset.'" standalone="no"?>' . "\n";
         }
         $res = $head
-               . $this->start_item() 
+               . $this->start_item()
                  .$this->answer->imsExportResponsesDeclaration($this->questionIdent)
                  . $this->start_item_body()
                  . $this->answer->imsExportResponses($this->questionIdent, $this->question->question, $this->question->description, $this->question->picture)
@@ -141,7 +141,7 @@ class ImsAssessmentItem
                . $this->end_item()
              . $foot;
         return $res;
-     }     
+     }
 }
 
 /**
@@ -160,7 +160,7 @@ class ImsAssessmentItem
 class ImsSection
 {
     var $exercise;
-    
+
     /**
      * Constructor.
      * @param $exe The Exercise instance to export
@@ -170,7 +170,7 @@ class ImsSection
     {
         $this->exercise = $exe;
     }
-    
+
     function start_section()
     {
         $out = '<section ident="EXO_' . $this->exercise->selectId() . '" title="' . $this->exercise->selectTitle() . '">' . "\n";
@@ -181,7 +181,7 @@ class ImsSection
     {
         return "</section>\n";
     }
-    
+
     function export_duration()
     {
         if ($max_time = $this->exercise->selectTimeLimit())
@@ -208,9 +208,9 @@ class ImsSection
              . "</material></flow_mat></presentation_material>\n";
         return $out;
     }
-    
+
     /**
-     * Export the ordering information. 
+     * Export the ordering information.
      * Either sequential, through all questions, or random, with a selected number of questions.
      * @author Amand Tihon <amand@alrj.org>
      */
@@ -231,10 +231,10 @@ class ImsSection
                  . "  <selection />\n"
                  . "</selection_ordering>\n";
         }
-        
+
         return $out;
     }
-    
+
     /**
      * Export the questions, as a succession of <items>
      * @author Amand Tihon <amand@alrj.org>
@@ -248,18 +248,18 @@ class ImsSection
         }
         return $out;
     }
-    
+
     /**
      * Export the exercise in IMS/QTI.
      *
-     * @param bool $standalone Wether it should include XML tag and DTD line. 
+     * @param bool $standalone Wether it should include XML tag and DTD line.
      * @return a string containing the XML flow
      * @author Amand Tihon <amand@alrj.org>
      */
     function export($standalone)
     {
         global $charset;
-        
+
         $head = $foot = "";
         if ($standalone) {
             $head = '<?xml version = "1.0" encoding = "' . $charset . '" standalone = "no"?>' . "\n"
@@ -275,7 +275,7 @@ class ImsSection
              . $this->export_questions()
              . $this->end_section()
              . $foot;
-        
+
         return $out;
     }
 }
@@ -283,10 +283,10 @@ class ImsSection
 /*
     Some quick notes on identifiers generation.
     The IMS format requires some blocks, like items, responses, feedbacks, to be uniquely
-    identified. 
+    identified.
     The unicity is mandatory in a single XML, of course, but it's prefered that the identifier stays
     coherent for an entire site.
-    
+
     Here's the method used to generate those identifiers.
     Question identifier :: "QST_" + <Question Id from the DB> + "_" + <Question numeric type>
     Response identifier :: <Question identifier> + "_A_" + <Response Id from the DB>
@@ -294,12 +294,12 @@ class ImsSection
     Feedback identifier :: <Question identifier> + "_F_" + <Response Id from the DB>
 */
 /**
- * An IMS/QTI item. It corresponds to a single question. 
+ * An IMS/QTI item. It corresponds to a single question.
  * This class allows export from Claroline to IMS/QTI XML format.
  * It is not usable as-is, but must be subclassed, to support different kinds of questions.
  *
  * Every start_*() and corresponding end_*(), as well as export_*() methods return a string.
- * 
+ *
  * @warning Attached files are NOT exported.
  * @author Amand Tihon <amand@alrj.org>
  */
@@ -321,7 +321,7 @@ class ImsItem
         $this->answer = $question->answer;
         $this->questionIdent = "QST_" . $question->selectId() ;
      }
-     
+
      /**
       * Start the XML flow.
       *
@@ -333,7 +333,7 @@ class ImsItem
       {
         return '<item title="' . htmlspecialchars($this->question->selectTitle()) . '" ident="' . $this->questionIdent . '">' . "\n";
       }
-      
+
       /**
        * End the XML flow, closing the </item> tag.
        *
@@ -343,7 +343,7 @@ class ImsItem
       {
         return "</item>\n";
       }
-     
+
      /**
       * Create the opening, with the question itself.
       *
@@ -357,7 +357,7 @@ class ImsItem
         return '<presentation label="' . $this->questionIdent . '"><flow>' . "\n"
              . '<material><mattext><![CDATA[' . $this->question->selectDescription() . "]]></mattext></material>\n";
      }
-     
+
      /**
       * End the </presentation> part, opened by export_header.
       *
@@ -367,17 +367,17 @@ class ImsItem
      {
         return "</flow></presentation>\n";
      }
-     
+
      /**
       * Start the response processing, and declare the default variable, SCORE, at 0 in the outcomes.
-      * 
+      *
       * @author Amand Tihon <amand@alrj.org>
       */
      function start_processing()
      {
         return '<resprocessing><outcomes><decvar vartype="Integer" defaultval="0" /></outcomes>' . "\n";
      }
-     
+
      /**
       * End the response processing part.
       *
@@ -388,7 +388,7 @@ class ImsItem
         return "</resprocessing>\n";
      }
 
-     
+
      /**
       * Export the question as an IMS/QTI Item.
       *
@@ -402,7 +402,7 @@ class ImsItem
      {
         global $charset;
         $head = $foot = "";
-        
+
         if( $standalone )
         {
             $head = '<?xml version = "1.0" encoding = "'.$charset.'" standalone = "no"?>' . "\n"
@@ -410,9 +410,9 @@ class ImsItem
                   . "<questestinterop>\n";
             $foot = "</questestinterop>\n";
         }
-        
+
         return $head
-               . $this->start_item() 
+               . $this->start_item()
                 . $this->start_presentation()
                     . $this->answer->imsExportResponses($this->questionIdent)
                 . $this->end_presentation()
@@ -422,7 +422,7 @@ class ImsItem
                 . $this->answer->imsExportFeedback($this->questionIdent)
                . $this->end_item()
               . $foot;
-     }     
+     }
 }
 
 
@@ -451,7 +451,7 @@ function export_exercise($exerciseId, $standalone=true)
 
 /**
  * Returns the XML flow corresponding to one question
- * 
+ *
  * @param int The question ID
  * @param bool standalone (ie including XML tag, DTD declaration, etc)
  */
@@ -471,7 +471,7 @@ function export_question($questionId, $standalone=true)
 	$question->position=$qst->position;
 	$question->picture=$qst->picture;
     $ims = new ImsAssessmentItem($question);
-    
+
     return $ims->export($standalone);
 
 }

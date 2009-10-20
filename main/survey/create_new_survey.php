@@ -37,7 +37,7 @@ $language_file = 'survey';
 require_once ('../inc/global.inc.php');
 
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
-		
+
 		function advanced_parameters() {
 			if(document.getElementById(\'options\').style.display == \'none\') {
 					document.getElementById(\'options\').style.display = \'block\';
@@ -45,9 +45,9 @@ $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 			} else {
 					document.getElementById(\'options\').style.display = \'none\';
 					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-			}		
+			}
 		}
-	</script>';	
+	</script>';
 
 // including additional libraries
 /** @todo check if these are all needed */
@@ -111,7 +111,7 @@ if ($_GET['action'] == 'edit' AND isset($survey_id) AND is_numeric($survey_id))
 	/*
 	$defaults['survey_share'] = array();
 	$defaults['survey_share']['survey_share'] = $survey_data['survey_share'];
-	
+
 	if (!is_numeric($survey_data['survey_share']) OR $survey_data['survey_share'] == 0)
 	{
 		$form_share_value = 'true';
@@ -121,7 +121,7 @@ if ($_GET['action'] == 'edit' AND isset($survey_id) AND is_numeric($survey_id))
 		$form_share_value = $defaults['survey_share']['survey_share'];
 	}
 	*/
-	
+
 	$defaults['anonymous'] = $survey_data['anonymous'];
 }
 else
@@ -152,7 +152,7 @@ $survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), 
 if ($_GET['action'] == 'edit') {
 	$survey_code->freeze();
 	$form->applyFilter('survey_code', 'api_strtoupper');
-} 
+}
 
 $form->addElement('html_editor', 'survey_title', get_lang('SurveyTitle'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '200'));
 $form->addElement('html_editor', 'survey_subtitle', get_lang('SurveySubTitle'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '100', 'ToolbarStartExpanded' => false));
@@ -192,16 +192,16 @@ $surveytypes[1] = get_lang('Conditional');
 
 
 if ($_GET['action'] == 'add')
-{		
+{
 	$form->addElement('hidden','survey_type',0);
-    $form -> addElement('html','<div id="options" style="display: none;">');		
+    $form -> addElement('html','<div id="options" style="display: none;">');
 	require_once(api_get_path(LIBRARY_PATH).'surveymanager.lib.php');
-	$survey_tree = new SurveyTree();	
-	$list_surveys = $survey_tree->createList($survey_tree->surveylist);	
-	$list_surveys[0]=''; 
+	$survey_tree = new SurveyTree();
+	$list_surveys = $survey_tree->createList($survey_tree->surveylist);
+	$list_surveys[0]='';
 	$form->addElement('select', 'parent_id', get_lang('ParentSurvey'), $list_surveys);
 	$defaults['parent_id']=0;
-} 
+}
 
 if ($survey_data['survey_type']==1 || $_GET['action'] == 'add' )
 {
@@ -210,18 +210,18 @@ if ($survey_data['survey_type']==1 || $_GET['action'] == 'add' )
 }
 
 if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id) )
-{	
+{
 	if ($survey_data['anonymous']==0  ) {
 		// Aditional Parameters
 		$form -> addElement('html','<div class="row">
 		<div class="label">
-			<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif',null,array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>
+			<a href="javascript: void(0);" onclick="javascript: advanced_parameters();" ><span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif',null,array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>
 		</div>
 		<div class="formw">
-			&nbsp;	
+			&nbsp;
 		</div>
 		</div>');
-		$form -> addElement('html','<div id="options" style="display:none">');		
+		$form -> addElement('html','<div id="options" style="display:none">');
 		$form->addElement('checkbox', 'show_form_profile', get_lang('ShowFormProfile'),'','onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
 
 		if ($survey_data['show_form_profile']== 1) {
@@ -229,23 +229,23 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id) 
 		} else {
 			$form -> addElement('html','<div id="options_field" style="display:none">');
 		}
-		
+
 		$field_list=SurveyUtil::make_field_list();
 		if (is_array ($field_list))
 		{
-			//TODO hide and show the list in a fancy DIV 			
+			//TODO hide and show the list in a fancy DIV
 			foreach ($field_list  as $key=> $field)
 			{
 				if ($field['visibility']==1)
 				{
-					$form->addElement('checkbox', 'profile_'.$key, ' ','&nbsp;&nbsp;'.$field['name'] );				
+					$form->addElement('checkbox', 'profile_'.$key, ' ','&nbsp;&nbsp;'.$field['name'] );
 					$input_name_list.= 'profile_'.$key.',';
 				}
 			}
 			// necesary to know the fields
 			$form->addElement('hidden', 'input_name_list', $input_name_list );
-			
-			//set defaults form fields		
+
+			//set defaults form fields
 			if ($survey_data['form_fields'])
 			{
 				$form_fields=explode('@',$survey_data['form_fields']);
@@ -258,10 +258,10 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id) 
 					}
 				}
 			}
-		}		
+		}
 		$form->addElement('html', '</div></div>');
 	}
- 	
+
 }
 $form -> addElement('html','</div><br />');
 if(isset($_GET['survey_id']) && $_GET['action']=='edit') {
@@ -269,7 +269,7 @@ if(isset($_GET['survey_id']) && $_GET['action']=='edit') {
 	$text=get_lang('ModifySurvey');
 } else {
 	$class="add";
-	$text=get_lang('CreateSurvey'); 
+	$text=get_lang('CreateSurvey');
 }
 $form->addElement('style_submit_button', 'submit_survey', $text, 'class="'.$class.'"');
 
@@ -283,7 +283,7 @@ $form->addRule('survey_title', '<div class="required">'.get_lang('ThisFieldIsReq
 $form->addRule('start_date', get_lang('InvalidDate'), 'date');
 $form->addRule('end_date', get_lang('InvalidDate'), 'date');
 $form->addRule(array ('start_date', 'end_date'), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
-	
+
 // setting the default values
 $form->setDefaults($defaults);
 
@@ -294,8 +294,8 @@ if( $form->validate() )
 	$values = $form->exportValues();
 	// storing the survey
 	$return = survey_manager::store_survey($values);
-	
-	/*// deleting the shared survey if the survey is getting unshared (this only happens when editing)	
+
+	/*// deleting the shared survey if the survey is getting unshared (this only happens when editing)
 	if (is_numeric($survey_data['survey_share']) AND $values['survey_share']['survey_share'] == 0 AND $values['survey_id']<>'')
 	{
 		survey_manager::delete_survey($survey_data['survey_share'], true);
@@ -310,10 +310,10 @@ if( $form->validate() )
 	{
 		// Displaying the header
 		Display::display_header($tool_name);
-		
+
 		// display the error
 		Display::display_error_message(get_lang($return['message']), false);
-		
+
 		// display the form
 		$form->display();
 	}

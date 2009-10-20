@@ -155,6 +155,7 @@ $PageRestored = "La pagina è stata ripristinata, puoi vederla cliccando";
 $RestoredFromVersion = "Ripristino dalla versione";
 $HWiki = "Aiuto: Wiki";
 $FirstSelectOnepage = "Seleziona prima una pagina, grazie.";
+$DefineTask = "Se nella descrizione viene scritto qualcosa, la pagina verrà considerata come pagina speciale di assegnazione di un compito";
 $ThisPageisBeginEditedBy = "In questo istante la pagina viene modificata da";
 $ThisPageisBeginEditedTryLater = "Riprova più tardi. Se la pagina non verrà salvata dall\'utente che la sta modificando, potrai modificarla tra ";
 $EditedByAnotherUser = "I cambiamenti non saranno salvati perché un altro utente ha modificato la pagina nel frattempo";
@@ -174,4 +175,5 @@ $Feedback2 = "Secondo messaggio";
 $Feedback3 = "Terzo messaggio";
 $FProgress = "Progresso";
 $PutATimeLimit = "Limiti di tempo";
+$StandardTask = "Compito predefinito";
 ?>

@@ -22,7 +22,7 @@
 
 
 /**
-============================================================================== 
+==============================================================================
 * This is a learning path creation and player tool in Dokeos - previously learnpath_handler.php
 *
 * @author Patrick Cool
@@ -30,14 +30,14 @@
 * @author Roan Embrechts, refactoring and code cleaning
 * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
 * @package dokeos.learnpath
-============================================================================== 
+==============================================================================
 */
 
 /*
 ==============================================================================
 		INIT SECTION
 ==============================================================================
-*/ 
+*/
 $this_section=SECTION_COURSES;
 
 api_protect_course_script();
@@ -46,7 +46,7 @@ api_protect_course_script();
 -----------------------------------------------------------
 	Libraries
 -----------------------------------------------------------
-*/ 
+*/
 //the main_api.lib.php, database.lib.php and display.lib.php
 //libraries are included by default
 
@@ -60,12 +60,12 @@ $language_file = "learnpath";
 -----------------------------------------------------------
 	Constants and variables
 -----------------------------------------------------------
-*/ 
-$is_allowed_to_edit = api_is_allowed_to_edit();
+*/
+$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 
-$tbl_lp = Database::get_course_table('lp');
-$tbl_lp_item = Database::get_course_table('lp_item');
-$tbl_lp_view = Database::get_course_table('lp_view');
+$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
+$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+$tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
 $isStudentView  = (int) $_REQUEST['isStudentView'];
 $learnpath_id   = (int) $_REQUEST['lp_id'];
@@ -100,9 +100,9 @@ if ( (! $is_allowed_to_edit) or ($isStudentView) )
 }
 //from here on, we are admin because of the previous condition, so don't check anymore
 
-$sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id"; 
-$result=api_sql_query($sql_query);
-$therow=Database::fetch_array($result); 
+$sql_query = "SELECT * FROM $tbl_lp WHERE id = $learnpath_id";
+$result=Database::query($sql_query);
+$therow=Database::fetch_array($result);
 
 //$admin_output = '';
 /*
@@ -110,7 +110,7 @@ $therow=Database::fetch_array($result);
 	Course admin section
 	- all the functions not available for students - always available in this case (page only shown to admin)
 -----------------------------------------------------------
-*/ 
+*/
 /*==================================================
 			SHOWING THE ADMIN TOOLS
  ==================================================*/
@@ -119,12 +119,12 @@ $therow=Database::fetch_array($result);
 
 /*==================================================
 	prerequisites setting end
- ==================================================*/		  
+ ==================================================*/
 if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
@@ -137,7 +137,7 @@ $interbreadcrumb[]= array ("url"=>api_get_self()."?action=admin_view&lp_id=$lear
 
 //Theme calls
 $show_learn_path=true;
-$lp_theme_css=$_SESSION['oLP']->get_theme(); 
+$lp_theme_css=$_SESSION['oLP']->get_theme();
 Display::display_header(null,'Path');
 //api_display_tool_title($therow['name']);
 
@@ -155,7 +155,7 @@ function stripslashes(str) {
 }
 function confirmation(name)
 {
-	name=stripslashes(name);	
+	name=stripslashes(name);
 	if (confirm("<?php echo $suredel; ?> " + name + " ?"))
 	{
 		return true;
@@ -163,7 +163,7 @@ function confirmation(name)
 	else
 	{
 		return false;
-	}	
+	}
 }
 </script>
 <?php
@@ -177,7 +177,7 @@ function confirmation(name)
 switch($_GET['action'])
 {
 	case 'edit_item':
-		
+
 		if(isset($is_success) && $is_success === true)
 		{
 			Display::display_confirmation_message(get_lang("_learnpath_item_edited"));
@@ -186,16 +186,16 @@ switch($_GET['action'])
 		{
 			echo $_SESSION['oLP']->display_edit_item($_GET['id']);
 		}
-		
+
 		break;
-	
+
 	case 'delete_item':
-		
+
 		if(isset($is_success) && $is_success === true)
 		{
 			Display::display_confirmation_message(get_lang("_learnpath_item_deleted"));
 		}
-		
+
 		break;
 }
 
@@ -205,17 +205,17 @@ if (isset($_POST['save_audio']))
 	// deleting the audio fragments
 	foreach ($_POST as $key=>$value) {
 		if (substr($key,0,9) == 'removemp3') {
-			$lp_items_to_remove_audio[] = str_ireplace('removemp3','',$key);			
+			$lp_items_to_remove_audio[] = str_ireplace('removemp3','',$key);
 			// removing the audio from the learning path item
-			$tbl_lp_item = Database::get_course_table('lp_item');
+			$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 			$in = implode(',',$lp_items_to_remove_audio);
 		}
 	}
 	if (count($lp_items_to_remove_audio)>0) {
 		$sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE id IN (".$in.")";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
-	}		
-	
+		$result = Database::query($sql, __FILE__, __LINE__);
+	}
+
 	// uploading the audio files
 	foreach ($_FILES as $key=>$value)
 	{
@@ -223,7 +223,7 @@ if (isset($_POST['save_audio']))
 		{
 			// the id of the learning path item
 			$lp_item_id = str_ireplace('mp3file','',$key);
-			
+
 			// create the audio folder if it does not exist yet
 			global $_course;
 			$filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/';
@@ -233,23 +233,22 @@ if (isset($_POST['save_audio']))
 				$perm = octdec(!empty($perm)?$perm:'0770');
 				mkdir($filepath.'audio',$perm);
 				$audio_id=add_document($_course,'/audio','folder',0,'audio');
-				api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id());				
+				api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id());
 			}
-		
-			// check if file already exits into document/audio/			
+
+			// check if file already exits into document/audio/
 			$file_name = $_FILES[$key]['name'];
 			$file_name=stripslashes($file_name);
 			//add extension to files without one (if possible)
-			$file_name=add_ext_on_mime($file_name,$_FILES[$key]['type']);
-						
+			$file_name = add_ext_on_mime($file_name,$_FILES[$key]['type']);
+
 			$clean_name = replace_dangerous_char($file_name);
-			$clean_name = replace_accents($clean_name);
 			//no "dangerous" files
-			$clean_name = disable_dangerous_file($clean_name);			
+			$clean_name = disable_dangerous_file($clean_name);
 
 			$check_file_path = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/audio/'.$clean_name;
-						
-			// if the file exists we generate a new name	
+
+			// if the file exists we generate a new name
 			if (file_exists($check_file_path)) {
 				$filename_components = explode('.',$clean_name);
 				// gettting the extension of the file
@@ -260,25 +259,25 @@ if (isset($_POST['save_audio']))
 				$clean_name = implode($filename_components) .'.'.$file_extension;
 				// using the new name in the $_FILES superglobal
 				$_FILES[$key]['name'] = $clean_name;
-				
+
 			}
-			
+
 			// upload the file in the documents tool
 			include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-			$file_path = handle_uploaded_document($_course, $_FILES[$key],api_get_path('SYS_COURSE_PATH').$_course['path'].'/document','/audio',api_get_user_id(),'','','','','',false);									
-								
+			$file_path = handle_uploaded_document($_course, $_FILES[$key],api_get_path('SYS_COURSE_PATH').$_course['path'].'/document','/audio',api_get_user_id(),'','','','','',false);
+
 			// getting the filename only
 			$file_components = explode('/',$file_path);
-			$file = $file_components[count($file_components)-1];	
+			$file = $file_components[count($file_components)-1];
 
 			// store the mp3 file in the lp_item table
-			$tbl_lp_item = Database::get_course_table('lp_item');
+			$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 			$sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file)."' WHERE id = '".Database::escape_string($lp_item_id)."'";
-			api_sql_query($sql_insert_audio, __FILE__, __LINE__);			
-			
+			Database::query($sql_insert_audio, __FILE__, __LINE__);
+
 		}
 	}
-	
+
 	Display::display_confirmation_message(get_lang('ChangesStored'));
 }
 
@@ -286,8 +285,8 @@ echo $_SESSION['oLP']->overview();
 
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
-*/ 
+*/
 Display::display_footer();
 ?>

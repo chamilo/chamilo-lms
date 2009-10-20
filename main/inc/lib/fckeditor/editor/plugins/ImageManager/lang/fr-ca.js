@@ -119,5 +119,5 @@ ImageManager.I18N = {
 
 	"OK"                          : "OK",
 	"Cancel"                      : "Cancel"
- 
+
 };

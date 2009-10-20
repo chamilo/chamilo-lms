@@ -1,7 +1,7 @@
 <?php //$id$
 //require_once('simpletest/autorun.php');
 
-class TestDummy extends UnitTestCase 
+class TestDummy extends UnitTestCase
 {
     function testDummyValues()
     {

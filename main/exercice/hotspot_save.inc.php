@@ -2,7 +2,7 @@
 /* For licensing terms, see /dokeos_license.txt */
 //error_log(__FILE__);
 /**
-*	
+*
 *	@package dokeos.exercise
 * 	@author Toon Keppens
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
@@ -45,6 +45,6 @@ if ($_GET['type'] == "poly" || $_GET['type'] == "delineation")
 	$hotspot_coordinates = api_substr($hotspot_coordinates,0,-2);
 }
 $sql = "UPDATE `$TBL_ANSWER` SET hotspot_coordinates = '".Database::escape_string($hotspot_coordinates)."',hotspot_type = '".Database::escape_string($hotspot_type)."' WHERE id = '".Database::escape_string($answerId)."' AND question_id ='".Database::escape_string($questionId)."' LIMIT 1 ;";
-$result = api_sql_query($sql,__FILE__,__LINE__);
+$result = Database::query($sql,__FILE__,__LINE__);
 echo "done=done";
 ?>

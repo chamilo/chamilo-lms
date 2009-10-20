@@ -64,7 +64,7 @@ if ($_POST['export_report'])
 
 			header('Content-type: application/octet-stream');
 			header('Content-Type: application/force-download');
-			
+
 			if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT']))
 			{
 				header('Content-Disposition: filename= '.$filename);
@@ -109,7 +109,7 @@ $table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
-$user_info 						= Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER);
+$user_info 						= Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER); // TODO: To be checked. TABLE_MAIN_SURVEY_REMINDER has not been defined.
 
 // getting the survey information
 
@@ -161,7 +161,7 @@ SurveyUtil::handle_reporting_actions();
 
 // actions bar
 echo '<div class="actions">';
-echo '<a href="survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png').' '.get_lang('BackTo').' '.strtolower(get_lang('Survey')).'</a>';
+echo '<a href="survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.strtolower(get_lang('Survey'))).' '.get_lang('BackTo').' '.strtolower(get_lang('Survey')).'</a>';
 echo '</div>';
 
 // content

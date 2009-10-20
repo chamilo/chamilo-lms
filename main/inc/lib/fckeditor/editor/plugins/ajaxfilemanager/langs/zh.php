@@ -9,10 +9,10 @@
 	define('DATE_TIME_FORMAT', 'Y/m/d H:i:s');
 	//Common
 	//Menu
-	
-	
-	
-	
+
+
+
+
 	define('MENU_SELECT', '选取');
 	define('MENU_DOWNLOAD', '下载');
 	define('MENU_PREVIEW', '预览');
@@ -23,7 +23,7 @@
 	define('MENU_DELETE', '删除');
 	define('MENU_PLAY', '播放');
 	define('MENU_PASTE', '粘贴');
-	
+
 	//Label
 		//Top Action
 		define('LBL_ACTION_REFRESH', '刷新');
@@ -39,7 +39,7 @@
 	define('LBL_MODIFIED', '更改于');
 		//File Information
 	define('LBL_FILE_INFO', '文件信息:');
-	define('LBL_FILE_NAME', '文件名:');	
+	define('LBL_FILE_NAME', '文件名:');
 	define('LBL_FILE_CREATED', '创建于:');
 	define('LBL_FILE_MODIFIED', '更改于:');
 	define('LBL_FILE_SIZE', '大小:');
@@ -83,7 +83,7 @@
 	define('PAGINATION_GO_PARENT', '返回上一层');
 	//System
 	define('SYS_DISABLED', '系统已关闭');
-	
+
 	//Cut
 	define('ERR_NOT_DOC_SELECTED_FOR_CUT', '没有文档被选取.');
 	//Copy
@@ -98,7 +98,7 @@
 	define('ERR_UNABLE_TO_MOVE_TO_SAME_DEST', '无法移动%s文件夹: 目标文件夹与被移动的相同');
 	define('ERR_UNABLE_TO_MOVE_NOT_FOUND', '无法移动%s文档: 被移动的文档已不存在');
 	define('ERR_UNABLE_TO_MOVE_NOT_ALLOWED', '无法移动%s文档: 被移动的文档无法访问');
- 
+
 	define('ERR_NOT_FILES_PASTED', '没有文档被粘贴');
 
 	//Search
@@ -111,7 +111,7 @@
 	define('LBL_SEARCH_ADV_OPTIONS', '高级搜索');
 	define('LBL_SEARCH_FILE_TYPES', '文件类型:');
 	define('SEARCH_TYPE_EXE', '可执行文件');
-	
+
 	define('SEARCH_TYPE_IMG', '图像');
 	define('SEARCH_TYPE_ARCHIVE', '压缩文档');
 	define('SEARCH_TYPE_HTML', 'HTML');
@@ -230,12 +230,12 @@
 	define('LOGIN_USERNAME', '用户名:');
 	define('LOGIN_PASSWORD', '密码:');
 	define('LOGIN_FAILED', '无效的用户名/密码.');
-	
-	
+
+
 	//88888888888   Below for Image Editor   888888888888888888888
-		//Warning 
+		//Warning
 		define('IMG_WARNING_NO_CHANGE_BEFORE_SAVE', '没有任何对此图像的操作记录.');
-		
+
 		//General
 		define('IMG_GEN_IMG_NOT_EXISTS', '图像不存在');
 		define('IMG_WARNING_LOST_CHANAGES', '所有未保存的操作将丢失,确定要继续?');
@@ -246,14 +246,14 @@
 		define('IMG_WARING_FLIP_H', '确定要水平翻转?');
 		define('IMG_WARING_FLIP_V', '确定要垂直翻转?');
 		define('IMG_INFO', '图像信息');
-		
+
 		//Mode
 			define('IMG_MODE_RESIZE', '收放:');
 			define('IMG_MODE_CROP', '剪切:');
 			define('IMG_MODE_ROTATE', '旋转:');
-			define('IMG_MODE_FLIP', '翻转:');		
+			define('IMG_MODE_FLIP', '翻转:');
 		//Button
-		
+
 			define('IMG_BTN_ROTATE_LEFT', '90&deg;逆转');
 			define('IMG_BTN_ROTATE_RIGHT', '90&deg;顺转');
 			define('IMG_BTN_FLIP_H', '垂直翻转');
@@ -278,10 +278,10 @@
 			define('IMG_LBL_SAVE_TO', '保存至:');
 			define('IMG_LBL_ROOT_FOLDER', '根文件夹');
 		//Editor
-		//Save as 
+		//Save as
 		define('IMG_NEW_NAME_COMMENTS', '请别附加图像文档的扩展名');
 		define('IMG_SAVE_AS_ERR_NAME_INVALID', '文件名只能含有英文字母,数字, - 和 _');
-		define('IMG_SAVE_AS_NOT_FOLDER_SELECTED', '没有选取目标文件夹.');	
+		define('IMG_SAVE_AS_NOT_FOLDER_SELECTED', '没有选取目标文件夹.');
 		define('IMG_SAVE_AS_FOLDER_NOT_FOUND', '目标文件夹不存在.');
 		define('IMG_SAVE_AS_NEW_IMAGE_EXISTS', '相同的文件名已存在.');
 
@@ -298,21 +298,21 @@
 		define('IMG_SAVE_FLIP_FAILED', '无法翻转图像');
 		define('IMG_SAVE_SESSION_IMG_OPEN_FAILED', '无法从进程文件夹打开图像文档');
 		define('IMG_SAVE_IMG_OPEN_FAILED', '无法打开图像文档');
-		
-		
+
+
 		//UNDO
 		define('IMG_UNDO_NO_HISTORY_AVAIALBE', '没有记录可恢复');
 		define('IMG_UNDO_COPY_FAILED', '无法恢复原来的图像文档');
 		define('IMG_UNDO_DEL_FAILED', '无法删除进程文件夹中的图像文档');
-	
+
 	//88888888888   Above for Image Editor   888888888888888888888
-	
+
 	//88888888888   Session   888888888888888888888
 		define('SESSION_PERSONAL_DIR_NOT_FOUND', '个人进程文件夹不存在');
 		define('SESSION_COUNTER_FILE_CREATE_FAILED', '无法打开进程计数文件.');
 		define('SESSION_COUNTER_FILE_WRITE_FAILED', '无法读写进程计数文件.');
 	//88888888888   Session   888888888888888888888
-	
+
 	//88888888888   Below for Text Editor   888888888888888888888
 		define('TXT_FILE_NOT_FOUND', '文件不存在.');
 		define('TXT_EXT_NOT_SELECTED', '请选择文件扩展名');
@@ -327,6 +327,6 @@
 		define('TXT_CONTENT_UPDATE_FAILED', '无法更新文件内容');
 		define('TXT_SAVE_AS_ERR_NAME_INVALID', '文件名只能含有英文字母,数字, - 和 _');
 	//88888888888   Above for Text Editor   888888888888888888888
-	
-	
+
+
 ?>

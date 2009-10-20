@@ -3,7 +3,7 @@
  *****************************************************/
 html {
 	height: 100%;
-} 
+}
 body {
 	/* hack ignored by non-IE to enable ie to support :hover on button */
         behavior:url("/main/css/csshover3.htc");
@@ -178,7 +178,7 @@ input[text] {
 .courses {
 	list-style-type: none;
 	margin-bottom: 5px;
-	height: 30px;	
+	height: 30px;
 }
 /* user_portal session list */
 .session_course_item .courses {
@@ -585,7 +585,7 @@ padding: 10px 0 40px 0;
 	margin-left: 0;
 }
  /* End hide from IE5/mac */
-*/ 
+*/
 /*****************************************************
  *  LOGIN AND LANGUAGE FORM                          *
  *****************************************************/
@@ -1038,7 +1038,8 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	border-bottom:1px solid #CCCCCC;
 }
 .message-content-body-left {
-	float:left;/*width:55%;  */
+	float:left;
+	width:30%;
 }
 .message-content-body-right {
 	float:right;
@@ -2475,13 +2476,13 @@ div.image-social-content center.friend {
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}	
+}
 #social-profile-container {
 	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:21%;	
+	width:21%;
 }
 #social-profile-content {
 	float:right;

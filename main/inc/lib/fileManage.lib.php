@@ -59,9 +59,9 @@ function update_db_info($action, $oldPath, $newPath="")
         $to_delete = "WHERE path LIKE BINARY '".$oldPath."' OR path LIKE BINARY '".$oldPath."/%'";
         $query = "DELETE FROM $dbTable " . $to_delete;
 
-        $result = api_sql_query("SELECT id FROM $dbTable " . $to_delete);
+        $result = Database::query("SELECT id FROM $dbTable " . $to_delete);
 
-        if (mysql_num_rows($result))
+        if (Database::num_rows($result))
         {
             require_once(api_get_path(INCLUDE_PATH) . "../metadata/md_funcs.php");
             $mdStore = new mdstore(TRUE);  // create if needed
@@ -69,7 +69,7 @@ function update_db_info($action, $oldPath, $newPath="")
             $mdType = (substr($dbTable, -13) == 'scormdocument') ?
                 'Scorm' : 'Document';
 
-            while ($row = mysql_fetch_array($result))
+            while ($row = Database::fetch_array($result))
             {
                 $eid = $mdType . '.' . $row['id'];
                 $mdStore->mds_delete($eid);
@@ -100,7 +100,7 @@ function update_db_info($action, $oldPath, $newPath="")
 	}
 	//echo $query;
 	//error_log($query,0);
-	api_sql_query($query,__FILE__,__LINE__);
+	Database::query($query,__FILE__,__LINE__);
 	//Display::display_normal_message("query = $query");
 }
 
@@ -782,8 +782,8 @@ class FileManager
 
 		$sql_query = "SELECT count(*) as number_existing FROM $glued_table WHERE path='$full_file_name'";
 		//api_display_debug_info($sql_query);
-		$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
-		$result = mysql_fetch_array($sql_result);
+		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
+		$result = Database::fetch_array($sql_result);
 
 		//determine which query to execute
 		if( $result["number_existing"] > 0 )
@@ -796,7 +796,7 @@ class FileManager
 			//no entry exists, create new one
 			$query="INSERT INTO $glued_table (path,visibility,filetype) VALUES('$full_file_name','$default_visibility','$filetype')";
 		}
-		api_sql_query($query,__FILE__,__LINE__);
+		Database::query($query,__FILE__,__LINE__);
 	}
 		/**
 	* Like in Java, creates the directory named by this abstract pathname,
@@ -819,7 +819,7 @@ class FileManager
 		else
 		{
 			FileManager :: mkdirs(dirname($path), $mode);
-		 	//mkdir($path, $mode); 
+		 	//mkdir($path, $mode);
 			return true;
 		}
 	}

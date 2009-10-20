@@ -20,4 +20,5 @@ $exeFinished = "Cevab&#305;n&#305;z&#305;n geçerli olmas&#305; için a&#351;a&#28
 $nextAnswer = "&#350;imdi yap&#305;ld&#305;ya t&#305;klay&#305;n&#305;z";
 $delineation = "Çizim";
 $labelDelineationMenu = "Çizimi kapat";
+$oar = "Riskli alan";
 ?>

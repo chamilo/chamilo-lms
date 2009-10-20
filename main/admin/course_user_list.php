@@ -24,5 +24,5 @@ if (count($list_course)==0) {
     <tr>
         <td><?php echo api_convert_encoding($list_course[$k],'UTF-8',$charset);?></td>
     </tr>
-<?php }?>	
+<?php }?>
 </table>

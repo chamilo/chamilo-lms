@@ -22,7 +22,7 @@
 ==============================================================================
 *	@package dokeos.admin
 *	@author Carlos Vargas
-*	This file is the calendar/agenda.php 
+*	This file is the calendar/agenda.php
 ==============================================================================
 */
 
@@ -60,8 +60,8 @@ $id_session=intval($_GET['id_session']);
 if(!api_is_platform_admin())
 {
 	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-	$rs = api_sql_query($sql,__FILE__,__LINE__);
-	if(mysql_result($rs,0,0)!=$_user['user_id'])
+	$rs = Database::query($sql,__FILE__,__LINE__);
+	if(Database::result($rs,0,0)!=$_user['user_id'])
 	{
 		api_not_allowed(true);
 	}
@@ -159,11 +159,11 @@ else
 // Variable definitions
 $dateNow 			= format_locale_date($dateTimeFormatLong);
 // Defining the shorts for the days. We use camelcase because these are arrays of language variables
-$DaysShort = array (get_lang("SundayShort"), get_lang("MondayShort"), get_lang("TuesdayShort"), get_lang("WednesdayShort"), get_lang("ThursdayShort"), get_lang("FridayShort"), get_lang("SaturdayShort"));
+$DaysShort = api_get_week_days_short();
 // Defining the days of the week to allow translation of the days. We use camelcase because these are arrays of language variables
-$DaysLong = array (get_lang("SundayLong"), get_lang("MondayLong"), get_lang("TuesdayLong"), get_lang("WednesdayLong"), get_lang("ThursdayLong"), get_lang("FridayLong"), get_lang("SaturdayLong"));
+$DaysLong = api_get_week_days_long();
 // Defining the months of the year to allow translation of the months. We use camelcase because these are arrays of language variables
-$MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong"));
+$MonthsLong = api_get_months_long();
 
 // Database table definitions
 $TABLEAGENDA 			= Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
@@ -266,23 +266,23 @@ if (api_is_allowed_to_edit(false,true))
 				}
                 display_agenda_items();
             } elseif ($_POST['submit_event']) {
-			
+
 		     $course_info = api_get_course_info();
 			    $event_start    = (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
                 $event_stop     = (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
-                
+
 				$id = agenda_add_item($course_info,$_POST['title'],$_POST['content'],$event_start,$event_stop,$_POST['selectedform'],false,$_POST['file_comment']);
-				
+
                 if(!empty($_POST['repeat'])) {
                 	$end_y = intval($_POST['repeat_end_year']);
                     $end_m = intval($_POST['repeat_end_month']);
                     $end_d = intval($_POST['repeat_end_day']);
                     $end   = mktime(23, 59, 59, $end_m, $end_d, $end_y);
                     $res = agenda_add_repeat_item($course_info,$id,$_POST['repeat_type'],$end,null,$_POST['file_comment']);
-                } 
+                }
                 if (api_get_setting('display_upcoming_events') == 'true') {
 					display_upcoming_events();
-				}           
+				}
 				display_agenda_items();
 			} else {
 				show_add_form();
@@ -376,7 +376,7 @@ if (!$_GET['action'] OR $_GET['action']=="showall"  OR $_GET['action']=="showcur
 		{
             if(!empty($_GET['agenda_id']))
             {
-                 display_one_agenda_item((int)$_GET['agenda_id']);   
+                 display_one_agenda_item((int)$_GET['agenda_id']);
             }
             else
             {
@@ -403,7 +403,7 @@ echo "&nbsp;</td></tr></table>";
 // The footer is displayed only if we are not in the learnpath
 if ($_GET['origin'] != 'learnpath')
 {
-	 
+
 	Display::display_footer();
 
 }

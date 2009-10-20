@@ -1,5 +1,5 @@
 <?php // $Id: group.php 22201 2009-07-17 19:57:03Z cfasanando $
- 
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -50,16 +50,16 @@ require_once '../inc/global.inc.php';
 $this_section=SECTION_COURSES;
 
 // notice for unauthorized people.
-api_protect_course_script(true); 
+api_protect_course_script(true);
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {
 	for (i=0;i<$(".actions").length;i++) {
 		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
 			$(".actions:eq("+i+")").hide();
-		}		
+		}
 	}
- } ); 
+ } );
  </script>';
 $nameTools = get_lang('GroupManagement');
 
@@ -76,11 +76,11 @@ if( api_get_setting('allow_group_categories') == 'false')
 {
 	$cat_table = Database::get_course_table(TABLE_GROUP_CATEGORY);
 	$sql = "SELECT * FROM $cat_table WHERE id = '".DEFAULT_GROUP_CATEGORY."'";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	$num = Database::num_rows($res);
 	if($num == 0)
 	{
-		api_sql_query("INSERT INTO ".$cat_table." ( id , title , description , forum_state , wiki_state, max_student , self_reg_allowed , self_unreg_allowed , groups_per_user , display_order ) VALUES ('2', '".lang2db($DefaultGroupCategory)."', '', '1', '1', '8', '0', '0', '0', '0');");
+		Database::query("INSERT INTO ".$cat_table." ( id , title , description , forum_state , wiki_state, max_student , self_reg_allowed , self_unreg_allowed , groups_per_user , display_order ) VALUES ('2', '".lang2db($DefaultGroupCategory)."', '', '1', '1', '8', '0', '0', '0', '0');");
 	}
 }
 
@@ -194,28 +194,28 @@ if (api_is_allowed_to_edit(false,true))
 		}
 	}
 }
-	
+
 echo '<div class="actions">';
 if (api_is_allowed_to_edit(false,true))
-{	
-	echo Display::return_icon('groupadd.gif', get_lang('NewGroupCreate')) . '<a href="group_creation.php?'.api_get_cidreq().'">'.get_lang('NewGroupCreate').'</a>&nbsp;';	
+{
+	echo Display::return_icon('groupadd.gif', get_lang('NewGroupCreate')) . '<a href="group_creation.php?'.api_get_cidreq().'">'.get_lang('NewGroupCreate').'</a>&nbsp;';
 	if( Database::count_rows(Database::get_course_table(TABLE_GROUP)) > 0) {
 		//echo '<a href="group_overview.php?'.api_get_cidreq().'">'.Display::return_icon('group_view.gif').'&nbsp;'.get_lang('GroupOverview').'</a>&nbsp;';
 		echo Display::return_icon('group.gif', get_lang('GroupOverview')) .'<a href="group_overview.php?'.api_get_cidreq().'">'.get_lang('GroupOverview').'</a>&nbsp;';
 	}
-	
-	if (get_setting('allow_group_categories') == 'true') {
+
+	if (api_get_setting('allow_group_categories') == 'true') {
 		echo Display::return_icon('folder_new.gif', get_lang('AddCategory')) . '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.get_lang('AddCategory').'</a>&nbsp;';
 	} else {
 		//echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('edit_group.gif').'&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
 		echo Display::return_icon('settings.gif', get_lang('PropModify')) . '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.get_lang('PropModify').'</a>&nbsp;';
 	}
 	//echo Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.get_lang('ExportAsCSV').'</a> ';
-	echo Display::return_icon('excel.gif', get_lang('ExportAsXLS')).' <a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.get_lang('ExportAsXLS').'</a>';	
+	echo Display::return_icon('excel.gif', get_lang('ExportAsXLS')).' <a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.get_lang('ExportAsXLS').'</a>';
 	//echo '<a href="group_creation.php?'.api_get_cidreq().'">'.Display::return_icon('group_add_big.gif').'&nbsp;'.get_lang('NewGroupCreate').'</a>&nbsp;';
 }
 $group_cats = GroupManager :: get_categories();
-if (get_setting('allow_group_categories') == 'true' && count($group_cats) > 1)
+if (api_get_setting('allow_group_categories') == 'true' && count($group_cats) > 1)
 {
 	//echo '<p><a href="?'.api_get_cidreq().'&show_all=1">'.get_lang('ShowAll').'</a></p>';
 	echo Display::return_icon('group.gif').' <a href="?'.api_get_cidreq().'&show_all=1">'.get_lang('ShowAll').'</a>';
@@ -229,7 +229,7 @@ foreach ($group_cats as $index => $category)
 	global $charset;
 	$group_list = array ();
 	$in_category = false;
-	if (get_setting('allow_group_categories') == 'true')
+	if (api_get_setting('allow_group_categories') == 'true')
 	{
 		if (isset ($_GET['show_all']) || (isset ($_GET['category']) && $_GET['category'] == $category['id']))
 		{
@@ -271,8 +271,11 @@ foreach ($group_cats as $index => $category)
 		// Determine wether current user is tutor for this course
 		$user_is_tutor = GroupManager :: is_tutor($_user['user_id']);
 		$group_data = array ();
-		foreach ($group_list as $index => $this_group)
-		{
+		foreach ($group_list as $index => $this_group) {
+			
+			//validacion when belongs to a session
+			$session_img = api_get_session_image($this_group['session_id'], $_user['status']);
+			
 			// all the tutors of this group
 			$tutorsids_of_group=GroupManager::get_subscribed_tutors($this_group['id'],true);
 
@@ -285,19 +288,19 @@ foreach ($group_cats as $index => $category)
 			}
 
 			// group name
-			if ((api_is_allowed_to_edit(false,true) || 
-					in_array($_user['user_id'],$tutorsids_of_group) || 
+			if ((api_is_allowed_to_edit(false,true) ||
+					in_array($_user['user_id'],$tutorsids_of_group) ||
 					$this_group['is_member'] ||
-					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_FORUM) || 
+					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_FORUM) ||
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_DOCUMENTS) ||
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_CALENDAR) ||
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_ANNOUNCEMENT) ||
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_WORK) ||
 					GroupManager::user_has_access($_user['user_id'],$this_group['id'],GROUP_TOOL_WIKI))
 					&& !(api_is_course_coach() && intval($this_group['session_id'])!=intval($_SESSION['id_session'])))
-			{				
+			{
 				isset($origin)?$orig=$origin:$orig=null;
-				$group_name = '<a href="group_space.php?'.api_get_cidreq().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.stripslashes($this_group['name']).'</a>';				
+				$group_name = '<a href="group_space.php?'.api_get_cidreq().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.stripslashes($this_group['name']).'</a>';
 				if (!empty($_SESSION['_user']['user_id']) && !empty($this_group['id_tutor']) && $_SESSION['_user']['user_id'] == $this_group['id_tutor'])
 				{
 					$group_name .= ' ('.get_lang('OneMyGroups').')';
@@ -310,6 +313,7 @@ foreach ($group_cats as $index => $category)
 				{
 					$group_name .= ' ('.$this_group['session_name'].')';
 				}
+				$group_name .= $session_img;
 				$row[] = $group_name.'<br/>'.stripslashes(trim($this_group['description']));
 			}
 			else
@@ -344,20 +348,20 @@ foreach ($group_cats as $index => $category)
 				foreach($tutorsids_of_group as $tutor_id){
 					$tutor = api_get_user_info($tutor_id);
 					if (api_get_setting("show_email_addresses") == "true")
-					{	
-						$tutor_info .= Display::encrypted_mailto_link($tutor['mail'],$tutor['firstName'].' '.$tutor['lastName']).', ';								
+					{
+						$tutor_info .= Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])).', ';
 					}
 					else
-					{	
+					{
 						if (api_is_allowed_to_edit()=='true')
 						{
-							$tutor_info .= Display::encrypted_mailto_link($tutor['mail'],$tutor['firstName'].' '.$tutor['lastName']).', ';
+							$tutor_info .= Display::encrypted_mailto_link($tutor['mail'], api_get_person_name($tutor['firstName'], $tutor['lastName'])).', ';
 						}
 						else
-						{											
-							$tutor_info .= $tutor['firstName'].' '.$tutor['lastName'].', ';
+						{
+							$tutor_info .= api_get_person_name($tutor['firstName'], $tutor['lastName']).', ';
 						}
-					}					
+					}
 				}
 			}
 			$tutor_info = api_substr($tutor_info,0,api_strlen($tutor_info)-2);
@@ -372,9 +376,9 @@ foreach ($group_cats as $index => $category)
 				$row[] = $edit_actions;
 			}
 			if (!empty($this_group['nbMember'])) {
-				$totalRegistered = $totalRegistered + $this_group['nbMember'];	
+				$totalRegistered = $totalRegistered + $this_group['nbMember'];
 			}
-			
+
 			$group_data[] = $row;
 		} // while loop
 		if (isset ($_GET['show_all']))
@@ -386,7 +390,7 @@ foreach ($group_cats as $index => $category)
 			$paging_options = array ();
 		}
 		$table = new SortableTableFromArrayConfig($group_data, 1);
-		isset($_GET['category'])?$my_cat = Security::remove_XSS($_GET['category']): $my_cat = null; 
+		isset($_GET['category'])?$my_cat = Security::remove_XSS($_GET['category']): $my_cat = null;
 		$table->set_additional_parameters(array('category'=>$my_cat));
 		$column = 0;
 		if (api_is_allowed_to_edit(false,true) and count($group_list) > 1)

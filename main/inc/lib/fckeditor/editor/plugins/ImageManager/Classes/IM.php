@@ -5,7 +5,7 @@
 ** Version.......:  1.0
 ** Author........:  Xiang Wei ZHUO <wei@zhuo.org>
 ** Filename......:  IM.php
-** Last changed..:  30 Aug 2003 
+** Last changed..:  30 Aug 2003
 ** Notes.........:  Orginal is from PEAR
 **/
 
@@ -100,7 +100,7 @@ Class Image_Transform_Driver_IM extends Image_Transform
      * @param int $crop_width new cropped image width
      * @param int $crop_height new cropped image height
      */
-    function crop($crop_x, $crop_y, $crop_width, $crop_height) 
+    function crop($crop_x, $crop_y, $crop_width, $crop_height)
     {
 		if (!is_numeric($crop_x)) die("crop_x must be numeric");
 		if (!is_numeric($crop_y)) die("crop_y must be numeric");
@@ -114,7 +114,7 @@ Class Image_Transform_Driver_IM extends Image_Transform
      *
      * @param boolean $horizontal true if horizontal flip, vertical otherwise
      */
-    function flip($horizontal) 
+    function flip($horizontal)
     {
         if($horizontal)
             $this->command['flop'] = "-flop";
@@ -212,7 +212,7 @@ Class Image_Transform_Driver_IM extends Image_Transform
         $cmd = '' . IMAGE_TRANSFORM_LIB_PATH . 'convert ';
 		$cmd .= implode(' ', $this->command) . " -quality $quality ";
 		$cmd .= '"'.($this->image) . '" "' . ($filename) . '" 2>&1';
-        
+
         //$cmd = str_replace('/', '\\', $cmd);
 		//echo($cmd.'<br>');
         exec($cmd,$retval);

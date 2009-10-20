@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 $langMdCallingTool = "Ba&#287;lant&#305;lar";
 $langMdTitle = "Ba&#287;lant&#305; ismi";
 $langMdDescription = "Ba&#287;lant&#305; aç&#305;klamas&#305;";
-$langMdCoverage = "Universal";
-$langMdCopyright = "Ghent University";
+$langMdCoverage = "Evrensel";
+$langMdCopyright = "Ghent Üniversitesi";
 $nameTools = "kullan&#305;lmayan lisan de&#287;i&#351;keni";
 $langTool = "Ba&#287;lant&#305;lar Metadata";
 $langNoScript = "Taray&#305;c&#305;n&#305;z yaz&#305;l&#305;m&#305; desteklemiyor, lütfen bu yaz&#305;n&#305;n alt&#305;ndaki ekran bölümünü önemsemeyin, çal&#305;&#351;mayacak.";

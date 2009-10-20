@@ -30,7 +30,7 @@ if ( !function_exists('version_compare') || version_compare( phpversion(), '5', 
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 			<style type="text/css" media="screen, projection">
 				/*<![CDATA[*/
-				@import "../css/public_admin/default.css";
+				@import "../css/dokeos_blue/default.css";
 				/*]]>*/
 			</style>
 		</head>
@@ -40,66 +40,35 @@ if ( !function_exists('version_compare') || version_compare( phpversion(), '5', 
 					<div id="header1"><a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a></div>
 					<div class="clear"></div>
 					<div id="header2">&nbsp;</div>
-					<div id="header3">&nbsp;</div>
+					<div id="header3">
+						<ul id="logout">
+							<li><a href="" target="_top"><span>&nbsp;</span></a></li>
+						</ul>
+						<ul>
+							<li id="current"><a href="#"><span>Installation</span></a></li>
+						</ul>
+						<div style="clear:both;" class="clear"></div>
+					</div>
+					<div id="header4">&nbsp;</div>
 				</div>
 
 				<div style="text-align: center;"><br /><br />
 						The version of scripting language on your server is wrong. Your server has to support PHP 5.x.x .<br />
-						<a href="../../documentation/installation_guide.html" target="_blank">Read the installation guide.</a><br /><br />
+						<a href="../../documentation/installation_guide.html" target="_blank">Read the installation guide</a><br /><br />
 				</div>
 				<div id="push"></div>
 				</div>
-				
+
 			<div id="footer">
 				<div class="copyright">Platform <a href="http://www.dokeos.com" target="_blank"> Dokeos </a> &copy; 2009 </div>
 				&nbsp;
 			</div>
-			
+
 		</body>
 </html>
 EOM;
 	header('Content-Type: text/html; charset=UTF-8');
 	die($error_message_php_version);
-}
-
-if (!function_exists('mb_strlen')) {
-	$error_message_mbstring = <<<EOM
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-		<head>
-			<title>PHP extension "mbstring" has not been installed!</title>
-			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-			<style type="text/css" media="screen, projection">
-				/*<![CDATA[*/
-				@import "../css/public_admin/default.css";
-				/*]]>*/
-			</style>
-		</head>
-		<body>
-			<div id="wrapper">
-				<div id="header">
-					<div id="header1"><a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a></div>
-					<div class="clear"></div>
-					<div id="header2">&nbsp;</div>
-					<div id="header3">&nbsp;</div>
-				</div>
-	
-				<div style="text-align: center;"><br /><br />
-						The Dokeos system needs PHP extension <strong>mbstring</strong> to be installed.<br />
-						See <a href="http://php.net/manual/en/mbstring.installation.php" target="_blank">http://php.net/manual/en/book.mbstring.php</a> for more information<br /><br />
-				</div>
-				<div id="push"></div>
-			</div>
-			<div id="footer">
-				<div class="copyright">Platform <a href="http://www.dokeos.com" target="_blank"> Dokeos </a> &copy; 2009 </div>
-				&nbsp;
-			</div>
-			
-			</body>
-</html>
-EOM;
-	header('Content-Type: text/html; charset=UTF-8');
-	die($error_message_mbstring);
 }
 
 /*
@@ -156,7 +125,11 @@ if (isset($install_language)) {
 	}
 }
 header('Content-Type: text/html; charset='. $charset);
-api_set_default_encoding($charset); // Initialization of the default encoding that will be used by the string routines.
+
+// Initialization of the internationalization library.
+api_initialize_internationalization();
+// Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
+api_set_internationalization_default_encoding($charset);
 
 require_once 'install_upgrade.lib.php'; //also defines constants
 require_once 'install_functions.inc.php';
@@ -176,7 +149,7 @@ error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 // overriding the timelimit (for large campusses that have to be migrated)
 @set_time_limit(0);
 
-//upgrading from any subversion of 1.6 is just like upgrading from 1.6.5 
+//upgrading from any subversion of 1.6 is just like upgrading from 1.6.5
 $update_from_version_6=array('1.6','1.6.1','1.6.2','1.6.3','1.6.4','1.6.5');
 //upgrading from any subversion of 1.8 avoids the additional step of upgrading from 1.6
 $update_from_version_8=array('1.8','1.8.2','1.8.3','1.8.4','1.8.5','1.8.6');
@@ -193,7 +166,7 @@ elseif(!empty($dokeos_version)) //variable coming from installedVersion, normall
 }
 
 $new_version = '1.8.6.1';
-$new_version_stable = false;
+$new_version_stable = true;
 $new_version_major = false;
 /*
 ==============================================================================
@@ -216,7 +189,7 @@ $emptyUpdatePath=true;
 $proposedUpdatePath = '';
 if(!empty($_POST['updatePath']))
 {
-	$proposedUpdatePath = $_POST['updatePath'];	
+	$proposedUpdatePath = $_POST['updatePath'];
 }
 
 if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_6']) {
@@ -240,7 +213,7 @@ if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_
 			if(substr($proposedUpdatePath,-1) != '/')
 			{
 				$proposedUpdatePath.='/';
-			}			
+			}
 			if(file_exists($proposedUpdatePath))
 			{
 				if(in_array($my_old_version,$update_from_version_8))
@@ -270,7 +243,7 @@ if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_
 				{
 					$_POST['updatePath'].='/';
 				}
-	
+
 				if(file_exists($_POST['updatePath']))
 				{
 					//1.6.x
@@ -419,10 +392,10 @@ elseif (!empty($_POST['step5']))
 }
 
 
-// Managing the $encryptPassForm 
+// Managing the $encryptPassForm
 if ($encryptPassForm=='1' ) {
-	$encryptPassForm = 'md5'; 
-} elseif ($encryptPassForm=='0') {	  	
+	$encryptPassForm = 'md5';
+} elseif ($encryptPassForm=='0') {
 	$encryptPassForm = 'none';
 }
 
@@ -435,7 +408,7 @@ if ($encryptPassForm=='1' ) {
 	<title>&mdash; <?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
 	<style type="text/css" media="screen, projection">
 		/*<![CDATA[*/
-		@import "../css/public_admin/default.css";
+		@import "../css/dokeos_blue/default.css";
 		/*]]>*/
 	</style>
 	<script type="text/javascript" src="../inc/lib/javascript/jquery.js"></script>
@@ -446,19 +419,19 @@ if ($encryptPassForm=='1' ) {
 					$('#dbStatsForm').removeAttr('disabled');
 					$('#dbUserForm').removeAttr('disabled');
 					$('#dbStatsForm').attr('value','dokeos_stats');
-					$('#dbUserForm').attr('value','dokeos_user');			
+					$('#dbUserForm').attr('value','dokeos_user');
 			} else if($('#singleDb1').attr('checked')==true){
 					$('#dbStatsForm').attr('disabled','disabled');
 					$('#dbUserForm').attr('disabled','disabled');
 					$('#dbStatsForm').attr('value','dokeos_main');
-					$('#dbUserForm').attr('value','dokeos_main');												
+					$('#dbUserForm').attr('value','dokeos_main');
 			}
 		//Allow dokeos install in IE
 		$("button").click(function() {
 			$("#is_executable").attr("value",$(this).attr("name"));
 		});
-			
-	 	} ); 	
+
+	 	} );
 	</script>
 	<script type="text/javascript">
 
@@ -467,15 +440,15 @@ if ($encryptPassForm=='1' ) {
 				$('#dbStatsForm').attr('disabled','true');
 				$('#dbUserForm').attr('disabled','true');
 				$('#dbStatsForm').attr('value','dokeos_main');
-				$('#dbUserForm').attr('value','dokeos_main');								
+				$('#dbUserForm').attr('value','dokeos_main');
 			} else if (my_option=='singleDb0') {
 				$('#dbStatsForm').removeAttr('disabled');
 				$('#dbUserForm').removeAttr('disabled');
 				$('#dbStatsForm').attr('value','dokeos_stats');
-				$('#dbUserForm').attr('value','dokeos_user');											
+				$('#dbUserForm').attr('value','dokeos_user');
 			}
 		}
-	</script>	
+	</script>
 	<script language="javascript">
 		init_visibility=0;
 		function show_hide_option() {
@@ -490,7 +463,7 @@ if ($encryptPassForm=='1' ) {
 				document.getElementById('optional_param5').style.display = '';
 				document.getElementById('optional_param6').style.display = '';
 				init_visibility = 1;
-			document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> <?php echo get_lang('OptionalParameters'); ?>';
+			document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> <?php echo get_lang('OptionalParameters'); ?>';
 			} else {
 				document.getElementById('optional_param1').style.display = 'none';
 				document.getElementById('optional_param2').style.display = 'none';
@@ -500,8 +473,8 @@ if ($encryptPassForm=='1' ) {
 				document.getElementById('optional_param4').style.display = 'none';
 				document.getElementById('optional_param5').style.display = 'none';
 				document.getElementById('optional_param6').style.display = 'none';
-			document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> <?php echo get_lang('OptionalParameters'); ?>';
-				init_visibility = 0;				
+			document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> <?php echo get_lang('OptionalParameters'); ?>';
+				init_visibility = 0;
 			}
 		}
 	</script>
@@ -519,7 +492,7 @@ if ($encryptPassForm=='1' ) {
 	<div id="header3">
 		<ul>
 			<li id="current"><a href="#"><span>Installation</span></a></li>
-		</ul>	
+		</ul>
 	</div>
 </div>
 
@@ -543,7 +516,7 @@ if ($encryptPassForm=='1' ) {
 <tr>
 <td>
 	<div id="note" style="float:right;">
-		<a href="../../documentation/installation_guide.html" target="_blank">Read the installation guide.</a>
+		<a href="../../documentation/installation_guide.html" target="_blank">Read the installation guide</a>
 	</div>
 </td>
 </tr>
@@ -640,13 +613,13 @@ elseif($_POST['step4'])
 		{   //for version 1.6
 			$urlForm = get_config_param('rootWeb');
 			$encryptPassForm = get_config_param('userPasswordCrypted');
-			// Managing the $encryptPassForm 
+			// Managing the $encryptPassForm
 			if ($encryptPassForm=='1' ) {
-				$encryptPassForm = 'md5'; 
-			} elseif ($encryptPassForm=='0') {	  	
+				$encryptPassForm = 'md5';
+			} elseif ($encryptPassForm=='0') {
 				$encryptPassForm = 'none';
 			}
-			
+
 			$allowSelfReg = get_config_param('allowSelfReg');
 			$allowSelfRegProf = get_config_param('allowSelfRegProf');
 		}
@@ -654,13 +627,13 @@ elseif($_POST['step4'])
 		{   //for version 1.8
 			$urlForm = $_configuration['root_web'];
 			$encryptPassForm = get_config_param('userPasswordCrypted');
-			// Managing the $encryptPassForm 
+			// Managing the $encryptPassForm
 			if ($encryptPassForm=='1' ) {
-				$encryptPassForm = 'md5'; 
-			} elseif ($encryptPassForm=='0') {	  	
+				$encryptPassForm = 'md5';
+			} elseif ($encryptPassForm=='0') {
 				$encryptPassForm = 'none';
 			}
-			
+
 			$allowSelfReg = false;
 			$tmp = get_config_param_from_db($dbHostForm,$dbUsernameForm,$dbPassForm,$db_name,'allow_registration');
 			if(!empty($tmp)) $allowSelfReg = $tmp;
@@ -691,8 +664,8 @@ elseif($_POST['step5'])
 	<?php echo get_lang('DBPassword').' : '.str_repeat('*',strlen($dbPassForm)); ?><br />
 	<?php if(!empty($dbPrefixForm)) echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br />'; ?>
 	<?php echo get_lang('MainDB').' : <b>'.$dbNameForm; ?></b><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br />
-	<?php 
-	if(!$singleDbForm) 
+	<?php
+	if(!$singleDbForm)
 	{
 		echo get_lang('StatDB').' : <b>'.$dbStatsForm.'</b>';
 		if($installType == 'new')
@@ -718,8 +691,13 @@ elseif($_POST['step5'])
 	?><br /><br/>
 
 	<?php echo get_lang('AdminEmail').' : '.$emailForm; ?><br />
-    <?php echo get_lang('AdminFirstName').' : '.$adminFirstName; ?><br />
-	<?php echo get_lang('AdminLastName').' : '.$adminLastName; ?><br />
+	<?php
+	if (api_is_western_name_order()) {
+		echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
+	} else {
+		echo get_lang('AdminLastName').' : '.$adminLastName, '<br />', get_lang('AdminFirstName').' : '.$adminFirstName, '<br />';
+	}
+	?>
 	<?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
 
 	<?php if($installType == 'new'): ?>
@@ -763,13 +741,13 @@ elseif($_POST['step6'])
 		$_configuration['main_database'] = $dbNameForm;
 		//$urlAppendPath = get_config_param('urlAppend');
         error_log('Starting migration process from '.$my_old_version.' ('.time().')',0);
-        
+
     	if ($userPasswordCrypted=='1' ) {
-			$userPasswordCrypted = 'md5'; 
-		} elseif ($userPasswordCrypted=='0') {	  	
-			$userPasswordCrypted = 'none'; 
-		} 
-			
+			$userPasswordCrypted = 'md5';
+		} elseif ($userPasswordCrypted=='0') {
+			$userPasswordCrypted = 'none';
+		}
+
 		switch($my_old_version)
 		{
 			case '1.6':
@@ -797,12 +775,12 @@ elseif($_POST['step6'])
                 include('update-files-1.8.4-1.8.5.inc.php');
 			case '1.8.5':
 				include('update-db-1.8.5-1.8.6.inc.php');
-                include('update-files-1.8.5-1.8.6.inc.php'); 
+                include('update-files-1.8.5-1.8.6.inc.php');
             case '1.8.6':
                 include('update-db-1.8.6-1.8.6.1.inc.php');
-                include('update-files-1.8.6-1.8.6.1.inc.php'); 
+                include('update-files-1.8.6-1.8.6.1.inc.php');
             default:
-                
+
 				break;
 		}
 	}

@@ -243,4 +243,5 @@ $AddLinkToCourse = "Agregar el enlace a la lección";
 $AddAssignmentToCourse = "Agregar la tarea a la lección";
 $AddForumToCourse = "Agregar el foro a la lección";
 $SaveAudioAndOrganization = "Guardar audio y Organización";
+$UploadOnlyMp3Files = "Por favor, envíe sólo archivos mp3";
 ?>

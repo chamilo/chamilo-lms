@@ -60,29 +60,29 @@ $(document).ready( function() {
 	for (i=0;i<$(".actions").length;i++) {
 		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
 			$(".actions:eq("+i+")").hide();
-		}		
+		}
 	}
-	
+
 	$("#div_target").attr("style","display:none;")//hide
-	
-	$("#id_check_target").click(function () { 
+
+	$("#id_check_target").click(function () {
       if($(this).attr("checked")==true) {
       	$("#div_target").attr("style","display:block;")//show
       } else {
      	 $("#div_target").attr("style","display:none;")//hide
       }
     });
-	
-    $(window).load(function () { 
+
+    $(window).load(function () {
       if($("#id_check_target").attr("checked")==true) {
       	$("#div_target").attr("style","display:block;")//show
       } else {
      	 $("#div_target").attr("style","display:none;")//hide
       }
     });
-	
-	
- } ); 
+
+
+ } );
 
  </script>';
 
@@ -109,11 +109,15 @@ $category_title = (!empty($_REQUEST['category_title'])?$_REQUEST['category_title
 $submitCategory = isset($_POST['submitCategory'])?true:false;
 $nameTools = get_lang('Links');
 
+//condition for the session
+$session_id = api_get_session_id();
+$condition_session = api_get_session_condition($session_id, false);
+
 if (isset($_GET['action']) && $_GET['action']=='addlink') {
 	$nameTools = '';
 	$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
 	$interbreadcrumb[] = array ('url' => 'link.php?action=addlink', 'name' => get_lang('AddLink'));
-}	
+}
 
 if (isset($_GET['action']) && $_GET['action']=='addcategory') {
 	$nameTools = '';
@@ -125,9 +129,9 @@ if (isset($_GET['action']) && $_GET['action']=='editlink') {
 	$nameTools = '';
 	$interbreadcrumb[] = array ('url' => 'link.php', 'name' => get_lang('Links'));
 	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('EditLink'));
-}	 	
-	
-				
+}
+
+
 // Database Table definitions
 $tbl_link = Database::get_course_table(TABLE_LINK);
 $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
@@ -158,7 +162,7 @@ $nameTools = get_lang("Links");
 
 if(isset($_GET['action'])) {
 	switch($_GET['action']) {
-		case "addlink":		
+		case "addlink":
 			if($link_submitted)
 			{
 				if(!addlinkcategory("link"))	// here we add a link
@@ -167,7 +171,7 @@ if(isset($_GET['action'])) {
 				}
 			}
 			break;
-		case "addcategory":		
+		case "addcategory":
 			if($category_submitted)
 			{
 				if(!addlinkcategory("category"))	// here we add a category
@@ -175,7 +179,7 @@ if(isset($_GET['action'])) {
 					unset($submitCategory);
 				}
 			}
-			break;		
+			break;
 		case "importcsv":
 			if($_POST["submitImport"])
 			{
@@ -185,7 +189,7 @@ if(isset($_GET['action'])) {
 		case "deletelink":
 			deletelinkcategory("link"); // here we delete a link
 			break;
-			
+
 		case "deletecategory":
 			deletelinkcategory("category"); // here we delete a category
 			break;
@@ -212,7 +216,7 @@ if(isset($_GET['action'])) {
 Display::display_introduction_section(TOOL_LINK);
 
 
-if (is_allowed_to_edit() and isset($_GET['action'])) {	
+if (api_is_allowed_to_edit(null, true) and isset($_GET['action'])) {
 	echo '<div class="actions">';
 	echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png',get_lang('BackToLinksOverview')).get_lang('BackToLinksOverview').'</a>';
 	echo '</div>';
@@ -220,7 +224,7 @@ if(api_get_setting('search_enabled')=='true') {
 	if (!extension_loaded('xapian')) {
 		Display::display_error_message(get_lang('SearchXapianModuleNotInstaled'));
 	}
-}	
+}
 	// Displaying the correct title and the form for adding a category or link. This is only shown when nothing
 	// has been submitted yet, hence !isset($submitLink)
 	if (($_GET['action']=="addlink" or $_GET['action']=="editlink") and empty($_POST['submitLink'])) {
@@ -247,7 +251,7 @@ if(api_get_setting('search_enabled')=='true') {
 						<input type="text" name="urllink" size="50" value="' . (empty($urllink)?'http://':api_htmlentities($urllink, ENT_COMPAT, $charset)) . '" />
 					</div>
 				</div>';
-		
+
 		echo '	<div class="row">
 					<div class="label">
 						'.get_lang('LinkName').'
@@ -267,8 +271,10 @@ if(api_get_setting('search_enabled')=='true') {
 				</div>';
 
 
-		$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
-		$resultcategories = api_sql_query($sqlcategories,__FILE__,__LINE__);
+
+
+		$sqlcategories = "SELECT * FROM ".$tbl_categories." $condition_session ORDER BY display_order DESC";
+		$resultcategories = Database::query($sqlcategories,__FILE__,__LINE__);
 
 		if (Database::num_rows($resultcategories)) {
 			echo '	<div class="row">
@@ -278,7 +284,7 @@ if(api_get_setting('search_enabled')=='true') {
 						<div class="formw">';
 			echo '			<select name="selectcategory">';
 			echo '			<option value="0">--</option>';
-			while ($myrow = Database::fetch_array($resultcategories)) 
+			while ($myrow = Database::fetch_array($resultcategories))
 			{
 				echo "		<option value=\"".$myrow["id"]."\"";
 				if ($myrow["id"]==$category)
@@ -287,8 +293,8 @@ if(api_get_setting('search_enabled')=='true') {
 			}
 			echo '			</select>';
 			echo '		</div>
-					</div>';			
-			
+					</div>';
+
 		}
 
 		echo '	<div class="row">
@@ -298,7 +304,7 @@ if(api_get_setting('search_enabled')=='true') {
 					<div class="formw">
 						<input id="id_check_target" class="checkbox" type="checkbox" name="onhomepage" id="onhomepage" value="1"'.$onhomepage.'><label for="onhomepage"> '.get_lang('Yes').'</label>
 					</div>
-				</div>';		
+				</div>';
 		echo '	<div class="row" id="div_target">
 					<div class="label">
 						'.get_lang('AddTargetOfLinkOnHomepage').'
@@ -324,8 +330,8 @@ if(api_get_setting('search_enabled')=='true') {
 						</div>
 						<div class="formw">
 							<input class="checkbox" type="checkbox" name="index_document" id="index_document" checked="checked"><label for="index_document"> '.get_lang('Yes').'</label>
-						</div>';			
-			
+						</div>';
+
 			foreach ($specific_fields as $specific_field) {
 				//Author : <input name="A" type="text" />
 
@@ -343,26 +349,26 @@ if(api_get_setting('search_enabled')=='true') {
 					}
 				}
 
-				$sf_textbox = '	
+				$sf_textbox = '
 						<div class="row">
 							<div class="label">%s</div>
 							<div class="formw">
 								<input name="%s" type="text" value="%s"/>
 							</div>
-						</div>';				
-				
+						</div>';
+
 				echo sprintf($sf_textbox, $specific_field['name'], $specific_field['code'], $default_values);
 			}
-		}	
-		
+		}
+
 		echo '	<div class="row">
 					<div class="label">
 					</div>
 					<div class="formw">
 						<button class="save" type="Submit" name="submitLink" value="OK">'.get_lang('SaveLink').'</button>
 					</div>
-				</div>';	
-	
+				</div>';
+
 		echo '</form>';
 	} elseif(($_GET['action']=="addcategory" or $_GET['action']=="editcategory") and !$submitCategory) {
 		echo '<div class="row">';
@@ -379,7 +385,7 @@ if(api_get_setting('search_enabled')=='true') {
 		{
 			echo "<input type=\"hidden\" name=\"id\" value=\"".$id."\" />";
 		}
-		
+
 		echo '	<div class="row">
 					<div class="label">
 						<span class="form_required">*</span> '.get_lang('CategoryName').'
@@ -388,7 +394,7 @@ if(api_get_setting('search_enabled')=='true') {
 						<input type="text" name="category_title" size="50" value="'.api_htmlentities($category_title,ENT_QUOTES,$charset).'" />
 					</div>
 				</div>';
-		
+
 		echo '	<div class="row">
 					<div class="label">
 						'.get_lang('Description').'
@@ -397,15 +403,15 @@ if(api_get_setting('search_enabled')=='true') {
 						<textarea rows="3" cols="50" name="description">'.api_htmlentities($description,ENT_QUOTES,$charset).'</textarea>
 					</div>
 				</div>';
-		
+
 		echo '	<div class="row">
 					<div class="label">
 					</div>
 					<div class="formw">
 						<button class="save" type="submit" name="submitCategory">'.$my_cat_title.' </button>
 					</div>
-				</div>';		
-		
+				</div>';
+
 		echo "</form>";
 	}
 	/*elseif(($_GET['action']=="importcsv") and !$submitImport)  // RH start
@@ -428,7 +434,7 @@ if (!empty($up)) {
 	movecatlink($up);
 }
 
-if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='addcategory' && $_GET['action']!='addlink') || $link_submitted || $category_submitted) {	
+if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='addcategory' && $_GET['action']!='addlink') || $link_submitted || $category_submitted) {
 	/*
 	-----------------------------------------------------------
 		Action Links
@@ -438,7 +444,7 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 			echo '<br/><br/><br/>';
 	}
 	echo '<div class="actions">';
-	if(is_allowed_to_edit()) {
+	if(api_is_allowed_to_edit(null, true)) {
 		$urlview = Security::remove_XSS($urlview);
 		echo Display::return_icon('linksnew.gif',get_lang('LinkAdd'))." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addlink&amp;category=".(!empty($category)?$category:'')."&amp;urlview=$urlview\">".get_lang("LinkAdd")."</a>\n";
 		echo Display::return_icon('folder_new.gif', get_lang("CategoryAdd"))." <a href=\"".api_get_self()."?".api_get_cidreq()."&action=addcategory&amp;urlview=".$urlview."\">".get_lang("CategoryAdd")."</a>\n";
@@ -446,8 +452,8 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 	}
 	//making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
 	//number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
-	$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
-	$resultcategories=api_sql_query($sqlcategories);
+	$sqlcategories = "SELECT * FROM ".$tbl_categories." $condition_session ORDER BY display_order DESC";
+	$resultcategories = Database::query($sqlcategories);
 	$aantalcategories = Database::num_rows($resultcategories);
 	if ($aantalcategories > 0) {
 		echo Display::return_icon('remove.gif', $shownone)." <a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=";
@@ -465,26 +471,28 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 	echo '</div>';
 
 	//Starting the table which contains the categories
-	$sqlcategories="SELECT * FROM ".$tbl_categories." ORDER BY display_order DESC";
-	$resultcategories=api_sql_query($sqlcategories);
-		
+	$sqlcategories = "SELECT * FROM ".$tbl_categories." $condition_session ORDER BY display_order DESC";
+	$resultcategories = Database::query($sqlcategories);
+
 	echo '<table class="data_table">';
 	// displaying the links which have no category (thus category = 0 or NULL), if none present this will not be displayed
 	$sqlLinks = "SELECT * FROM ".$tbl_link." WHERE category_id=0 or category_id IS NULL";
-	$result = api_sql_query($sqlLinks);
-	$numberofzerocategory=Database::num_rows($result);		
+	$result = Database::query($sqlLinks);
+	$numberofzerocategory=Database::num_rows($result);
 	if ($numberofzerocategory!==0) {
 		echo "<tr><th style=\"font-weight: bold; text-align:left;padding-left: 10px;\"><i>".get_lang('General')."</i></th></tr>";
-		echo '</table>';	
-		showlinksofcategory(0);		
+		echo '</table>';
+		showlinksofcategory(0);
 	}
-		
+
 	$i=0;
 	$catcounter=1;
 	$view="0";
 
-	while ($myrow=Database::fetch_array($resultcategories))
-	{
+	while ($myrow = Database::fetch_array($resultcategories)) {
+		//validacion when belongs to a session
+		$session_img = api_get_session_image($myrow['session_id'], $_user['status']);
+
 		//if (!isset($urlview))
 		if ($urlview == '')
 		{
@@ -499,61 +507,61 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 		// if the $urlview has a 1 for this categorie, this means it is expanded and should be desplayed as a
 		// - instead of a +, the category is no longer clickable and all the links of this category are displayed
 		$myrow["description"]=text_filter($myrow["description"]);
-		
+
 		if ($urlview[$i]=="1")
 		{
 			$newurlview=$urlview;
 			$newurlview[$i]="0";
-			
+
 			echo '<tr>';
 				echo '<table class="data_table">';
-				echo '<tr>';			
+				echo '<tr>';
 					echo '<th width="81%"  style="font-weight: bold; text-align:left;padding-left: 5px;">';
 					echo '<a href="'.api_get_self()."?".api_get_cidreq()."&urlview=".Security::remove_XSS($newurlview)."\">";
 					echo "<img src=../img/remove.gif>&nbsp;&nbsp;".api_htmlentities($myrow["category_title"],ENT_QUOTES,$charset)."</a><br/>&nbsp;&nbsp;&nbsp;".$myrow["description"];
-					
-					if (is_allowed_to_edit())
-						{	
-							echo '<th>';	
+
+					if (api_is_allowed_to_edit(null,true))
+						{
+							echo '<th>';
 							showcategoryadmintools($myrow["id"]);
-							echo '</th>';			
-						}
-					echo '</th>';						
-				echo '</tr>';
-				echo '</table>';		
-				echo showlinksofcategory($myrow["id"]);						
-			echo '</tr>';			
-		}
-		else
-		{		
-			echo '<tr>';
-				echo '<table class="data_table">';
-				echo '<tr>';			
-					echo '<th width="81%" style="font-weight: bold; text-align:left;padding-left: 5px;"><a href="'.api_get_self()."?".api_get_cidreq()."&urlview=";
-					echo is_array($view)?implode('',$view):$view;
-					echo "\"><img src=../img/add.gif>&nbsp;&nbsp;".  api_htmlentities($myrow["category_title"],ENT_QUOTES,$charset);
-					echo'</a><br />&nbsp;&nbsp;&nbsp;';
-					echo $myrow["description"];						
-						if (is_allowed_to_edit())
-						{		
-							echo '<th style="text-align:center;">';	
-							showcategoryadmintools($myrow["id"]);			
 							echo '</th>';
 						}
-					echo '</th>';			
+					echo '</th>';
 				echo '</tr>';
-				
-				
-				echo '</table>';						
-			echo '</tr>';				
+				echo '</table>';
+				echo showlinksofcategory($myrow["id"]);
+			echo '</tr>';
+		}
+		else
+		{
+			echo '<tr>';
+				echo '<table class="data_table">';
+				echo '<tr>';
+					echo '<th width="81%" style="font-weight: bold; text-align:left;padding-left: 5px;"><a href="'.api_get_self()."?".api_get_cidreq()."&urlview=";
+					echo is_array($view)?implode('',$view):$view;
+					echo "\"><img src=../img/add.gif>&nbsp;&nbsp;".  api_htmlentities($myrow["category_title"],ENT_QUOTES,$charset). $session_img;
+					echo'</a><br />&nbsp;&nbsp;&nbsp;';
+					echo $myrow["description"];
+						if (api_is_allowed_to_edit(null, true))
+						{
+							echo '<th style="text-align:center;">';
+							showcategoryadmintools($myrow["id"]);
+							echo '</th>';
+						}
+					echo '</th>';
+				echo '</tr>';
+
+
+				echo '</table>';
+			echo '</tr>';
 		}
 		// displaying the link of the category
 		$i++;
 	}
 	echo '</table>';
 	////////////////////////////////////////////////////////////////////////////
-}		
-		
+}
+
 
 
 Display::display_footer();

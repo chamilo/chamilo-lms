@@ -32,7 +32,7 @@
 		INIT SECTION
 ==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array('registration','admin');
 include ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
@@ -116,24 +116,24 @@ function get_number_of_classes()
 	$class_table = Database :: get_main_table(TABLE_MAIN_CLASS);
 	$course_class_table = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 	$sql = "SELECT * FROM $course_class_table WHERE course_code = '".$_SESSION['_course']['id']."'";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	$subscribed_classes = array();
-	while($obj = mysql_fetch_object($res))
+	while($obj = Database::fetch_object($res))
 	{
 		$subscribed_classes[] = $obj->class_id;
 	}
 	$sql = "SELECT c.id	FROM $class_table c WHERE 1 = 1";
 	if (isset ($_GET['keyword']))
 	{
-		$keyword = mysql_real_escape_string($_GET['keyword']);
+		$keyword = Database::escape_string($_GET['keyword']);
 		$sql .= " AND (c.name LIKE '%".$keyword."%')";
 	}
 	if( count($subscribed_classes) > 0)
 	{
 		$sql .= " AND c.id NOT IN ('".implode("','",$subscribed_classes)."')";
 	}
-	$res = api_sql_query($sql, __FILE__, __LINE__);
-	$result = mysql_num_rows($res);
+	$res = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::num_rows($res);
 	return $result;
 }
 /**
@@ -145,9 +145,9 @@ function get_class_data($from, $number_of_items, $column, $direction)
 	$course_class_table = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 	$class_user_table = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 	$sql = "SELECT * FROM $course_class_table WHERE course_code = '".$_SESSION['_course']['id']."'";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 	$subscribed_classes = array();
-	while($obj = mysql_fetch_object($res))
+	while($obj = Database::fetch_object($res))
 	{
 		$subscribed_classes[] = $obj->class_id;
 	}
@@ -162,7 +162,7 @@ function get_class_data($from, $number_of_items, $column, $direction)
 	$sql .= " WHERE 1 = 1";
 	if (isset ($_GET['keyword']))
 	{
-		$keyword = mysql_real_escape_string($_GET['keyword']);
+		$keyword = Database::escape_string($_GET['keyword']);
 		$sql .= " AND (c.name LIKE '%".$keyword."%')";
 	}
 	if( count($subscribed_classes) > 0)
@@ -172,9 +172,9 @@ function get_class_data($from, $number_of_items, $column, $direction)
 	$sql .= " GROUP BY c.id, c.name ";
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	$classes = array ();
-	while ($class = mysql_fetch_row($res))
+	while ($class = Database::fetch_row($res))
 	{
 		$classes[] = $class;
 	}

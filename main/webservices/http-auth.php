@@ -3,26 +3,26 @@
 $realm = 'The batcave';
 
 // Just a random id
-$nonce = uniqid(); 
+$nonce = uniqid();
 
 // Get the digest from the http header
 $digest = getDigest();
 
 // If there was no digest, show login
-if (is_null($digest)) requireLogin($realm,$nonce); 
+if (is_null($digest)) requireLogin($realm,$nonce);
 
 $digestParts = digestParse($digest);
 
 $validUser = 'admin';
 $validPass = 'admin';
 
-// Based on all the info we gathered we can figure out what the response should be 
+// Based on all the info we gathered we can figure out what the response should be
 $A1 = md5("{$digestParts['username']}:{$realm}:{$validPass}");
 $A2 = md5("{$_SERVER['REQUEST_METHOD']}:{$digestParts['uri']}");
 
 $validResponse = md5("{$A1}:{$digestParts['nonce']}:{$digestParts['nc']}:{$digestParts['cnonce']}:{$digestParts['qop']}:{$A2}");
 
-if ($digestParts['response']!=$validResponse)
+if ($digestParts['response'] != $validResponse)
   requireLogin($realm,$nonce);
 else {
   // We're in!
@@ -60,7 +60,7 @@ function requireLogin($realm,$nonce) {
 // This function extracts the separate values from the digest string
 function digestParse($digest) {
     // protect against missing data
-    $needed_parts = array('nonce'=>1, 'nc'=>1, 'cnonce'=>1, 'qop'=>1, 'username'=>1, 'uri'=>1, 'response'=>1);
+    $needed_parts = array('nonce' => 1, 'nc' => 1, 'cnonce' => 1, 'qop' => 1, 'username' => 1, 'uri' => 1, 'response' => 1);
     $data = array();
 
     preg_match_all('@(\w+)=(?:(?:")([^"]+)"|([^\s,$]+))@', $digest, $matches, PREG_SET_ORDER);
@@ -71,5 +71,3 @@ function digestParse($digest) {
     }
     return $needed_parts ? false : $data;
 }
-
-?> 

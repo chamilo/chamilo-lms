@@ -1,10 +1,10 @@
 /*
  * For FCKeditor 2.3
- * 
- * 
+ *
+ *
  * File Name: zh-cn.js
  * 	Chinese(simplify) language file for the youtube plugin.
- * 
+ *
  * File Authors:
  * 		Uprush (uprushworld@yahoo.co.jp) 2008/03/22
  */

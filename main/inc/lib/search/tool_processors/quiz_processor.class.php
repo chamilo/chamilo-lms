@@ -102,7 +102,7 @@ class quiz_processor extends search_processor {
         $sql = "SELECT * FROM $exercise_table
         		WHERE id = $exercise_id
 				LIMIT 1";
-        $dk_result = api_sql_query ($sql);
+        $dk_result = Database::query ($sql);
 
         //actually author isn't saved on exercise tool, but prepare for when it's ready
         $sql = "SELECT insert_user_id
@@ -119,10 +119,10 @@ class quiz_processor extends search_processor {
             $name = $row['title'];
             // get author
             $author = '';
-            $item_result = api_sql_query ($sql);
+            $item_result = Database::query ($sql);
             if ($item_result !== FALSE && $row = Database::fetch_array ($item_result)) {
                 $user_data = api_get_user_info($row['insert_user_id']);
-                $author = $user_data['firstName'] .' '. $user_data['lastName'];
+                $author = api_get_person_name($user_data['firstName'], $user_data['lastName']);
             }
         }
 

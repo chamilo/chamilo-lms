@@ -33,7 +33,7 @@
 		INIT SECTION
 ==============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array('registration','admin');
 include ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
@@ -117,11 +117,11 @@ function get_number_of_classes()
 	$sql = "SELECT c.id	FROM $class_table c, $course_class_table cc WHERE cc.class_id = c.id AND cc.course_code ='".$_SESSION['_course']['id']."'";
 	if (isset ($_GET['keyword']))
 	{
-		$keyword = mysql_real_escape_string($_GET['keyword']);
+		$keyword = Database::escape_string($_GET['keyword']);
 		$sql .= " AND (c.name LIKE '%".$keyword."%')";
 	}
-	$res = api_sql_query($sql, __FILE__, __LINE__);
-	$result = mysql_num_rows($res);
+	$res = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::num_rows($res);
 	return $result;
 }
 /**
@@ -146,15 +146,15 @@ function get_class_data($from, $number_of_items, $column, $direction)
 	$sql .= " WHERE c.id = cc.class_id AND cc.course_code = '".$_SESSION['_course']['id']."'";
 	if (isset ($_GET['keyword']))
 	{
-		$keyword = mysql_real_escape_string($_GET['keyword']);
+		$keyword = Database::escape_string($_GET['keyword']);
 		$sql .= " AND (c.name LIKE '%".$keyword."%')";
 	}
 	$sql .= " GROUP BY c.id, c.name ";
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
-	$res = api_sql_query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql, __FILE__, __LINE__);
 	$classes = array ();
-	while ($class = mysql_fetch_row($res))
+	while ($class = Database::fetch_row($res))
 	{
 		$classes[] = $class;
 	}

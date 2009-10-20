@@ -35,7 +35,7 @@ AddHTML($tag = "", $attribs = array())
 	This allows the end user to add a single (X)HTML element to the
 	kses object along with the (if any) attributes that the specific
 	(X)HTML element is allowed to have.
-	
+
 	See the file 'attribute-value-checks' for more information as to
 	the format of the data to be provided to this method.
 

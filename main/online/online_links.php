@@ -32,7 +32,7 @@
 
 define('FRAME','links');
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='chat';
 
 include('../inc/global.inc.php');
@@ -47,9 +47,9 @@ $tbl_user=Database::get_main_table(TABLE_MAIN_USER);
 $tbl_online_link=Database::get_course_table(TABLE_ONLINE_LINK);
 
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
-$result=api_sql_query($query,__FILE__,__LINE__);
+$result=Database::query($query,__FILE__,__LINE__);
 
-list($pseudoUser)=mysql_fetch_row($result);
+list($pseudoUser)=Database::fetch_row($result);
 
 $isAllowed=(empty($pseudoUser) || !$_cid)?false:true;
 $isMaster=$is_courseAdmin?true:false;
@@ -118,12 +118,12 @@ if($_POST['sent'])
 					SET name='".addslashes($link_name)."',
 						url='".addslashes($link_url)."'
 					WHERE id='$link'";
-			api_sql_query($query,__FILE__,__LINE__);
+			Database::query($query,__FILE__,__LINE__);
 		}
 		else
 		{
 			$query="INSERT INTO $tbl_online_link (name,url) VALUES('".addslashes($link_name)."','".addslashes($link_url)."')";
-			api_sql_query($query,__FILE__,__LINE__);
+			Database::query($query,__FILE__,__LINE__);
 		}
 	}
 
@@ -137,7 +137,7 @@ if($action == 'delete')
 	$link=intval($_GET['link']);
 
 	$query="DELETE FROM $tbl_online_link WHERE id='$link'";
-	api_sql_query($query,__FILE__,__LINE__);
+	Database::query($query,__FILE__,__LINE__);
 
 	mysql_close();
 	header('Location: '.api_get_self());
@@ -145,11 +145,11 @@ if($action == 'delete')
 }
 
 $query="SELECT id,name,url FROM $tbl_online_link ORDER BY name";
-$result=api_sql_query($query,__FILE__,__LINE__);
+$result=Database::query($query,__FILE__,__LINE__);
 
 $Links=array();
 
-while($row=mysql_fetch_array($result))
+while($row=Database::fetch_array($result))
 {
 	$Links[]=$row;
 

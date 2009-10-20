@@ -7,7 +7,7 @@
  * @package scorm.js
  */
 /**
- * Initialisation of the SCORM API section. 
+ * Initialisation of the SCORM API section.
  * Find the SCO functions (startTimer, computeTime, etc in the second section)
  * Find the Dokeos-proper functions (checkAnswers, etc in the third section)
  */
@@ -215,7 +215,7 @@ function doLMSSetValue(name, value)
 function doLMSCommit()
 {
 	if(API == null)
-	{      
+	{
 		alert(errMsgLocate +"\nLMSCommit was not successful.");
 		return "false";
 	}
@@ -329,7 +329,7 @@ function convertTotalSeconds(ts)
 	var strSec = new String(sec);
 	var strWholeSec = strSec;
 	var strFractionSec = "";
-	
+
 	if (strSec.indexOf(".") != -1)
 	{
 		strWholeSec =  strSec.substring(0, strSec.indexOf("."));
@@ -361,7 +361,7 @@ function convertTotalSeconds(ts)
  * Handles the use of the back button (saves data and closes SCO)
  */
 function doBack()
-{  
+{
 	checkAnswers(true);
 	doLMSSetValue( "cmi.core.exit", "suspend" );
 	computeTime();
@@ -451,7 +451,7 @@ function checkAnswers(interrupted)
 					{
 						interactionAnswers += idAnswer+'__|';// changed by isaac flores
 						myScore +=questions_answers_ponderation[idQuestion][idAnswer];
-						
+
 						/*for(k=0;k<questions_answers_correct[idQuestion].length;k++)
 						{
 							if(questions_answers_correct[idQuestion][k] == idAnswer)
@@ -641,8 +641,8 @@ function checkAnswers(interrupted)
 			doLMSSetValue('cmi.interactions.'+idQuestion+'.student_response',interactionAnswers);
 			doLMSSetValue('cmi.interactions.'+idQuestion+'.result',interactionScore);
 			//correct responses work by pattern, see SCORM Runtime Env Doc
-			//doLMSSetValue('cmi.interactions.'+idQuestion+'.correct_responses',questions_answers_correct[idQuestion]);		
-			//doLMSSetValue('cmi.interactions.'+idQuestion+'.correct_responses',interactionCorrectResponses);		
+			//doLMSSetValue('cmi.interactions.'+idQuestion+'.correct_responses',questions_answers_correct[idQuestion]);
+			//doLMSSetValue('cmi.interactions.'+idQuestion+'.correct_responses',interactionCorrectResponses);
 		}
 	}
 	doLMSSetValue('cmi.core.score.min',0);

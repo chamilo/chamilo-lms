@@ -66,4 +66,5 @@ $Setting = "Ayar";
 $DirectoryAndFilePermissions = "Klasör ve dosya izinleri";
 $NotWritable = "Yaz&#305;labilir de&#287;il";
 $Writable = "Yaz&#305;labilir";
+$Version_ = "Sürüm";
 ?>

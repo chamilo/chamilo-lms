@@ -53,7 +53,7 @@ class FormValidator extends HTML_QuickForm
 	{
 		$this->HTML_QuickForm($form_name, $method,$action, $target, $attributes, $trackSubmit);
 		// Load some custom elements and rules
-		$dir = dirname(__FILE__).'/';	
+		$dir = dirname(__FILE__).'/';
 		$this->registerElementType('html_editor', $dir.'Element/html_editor.php', 'HTML_QuickForm_html_editor');
 		$this->registerElementType('datepicker', $dir.'Element/datepicker.php', 'HTML_QuickForm_datepicker');
 		$this->registerElementType('datepickerdate', $dir.'Element/datepickerdate.php', 'HTML_QuickForm_datepickerdate');
@@ -257,8 +257,8 @@ EOT;
 		$this->addElement('html','<script language="javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>');
 		$this->addElement('html','<script type="text/javascript">var myUpload = new upload('.(abs(intval($delay))*1000).');</script>');
 	}
-	
-	
+
+
 	/**
 	 * Use the new functions (php 5.2) allowing to display a real upload progress.
 	 * @param upload_id the value of the field UPLOAD_IDENTIFIER
@@ -273,21 +273,21 @@ EOT;
 			$this -> add_progress_bar($delay);
 			return;
 		}
-		
+
 		if(!class_exists('xajax')) {
-			require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';		
+			require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
 		}
-		
+
 		$xajax_upload = new xajax(api_get_path(WEB_CODE_PATH).'inc/lib/upload.xajax.php');
-		
+
 		$xajax_upload -> registerFunction ('updateProgress');
-		
-	
+
+
 		// IMPORTANT : must be the first element of the form
 		$el = $this->insertElementBefore(FormValidator::createElement('html','<input type="hidden" name="UPLOAD_IDENTIFIER" value="'.$upload_id.'" />'), $elementAfter);
-		
+
 		$this->addElement('html','<br />');
-		
+
 		// add the div where the progress bar will be displayed
 		$this->addElement('html','
 		<div id="dynamic_div_container" style="display:none">
@@ -296,38 +296,38 @@ EOT;
 				<div id="dynamic_div_filled" style="width:0%;height:100%;background-image:url('.api_get_path(REL_PATH).'main/img/real_upload_step.gif);background-repeat:repeat-x;background-position:center;"></div>
 			</div>
 		</div>');
-		
+
 		if($waitAfterUpload){
 			$this->addElement('html','
 			<div id="dynamic_div_waiter_container" style="display:none">
 				<div id="dynamic_div_waiter_label">
 					'.get_lang('SlideshowConversion').'
-				</div>			
+				</div>
 				<div id="dynamic_div_waiter_frame">
 					<img src="'.api_get_path(WEB_CODE_PATH).'img/real_upload_frame.gif" />
-				</div>		
+				</div>
 			</div>
 
 		');
 		}
-		
+
 		// get the xajax code
 		$this->addElement('html',$xajax_upload -> getJavascript(api_get_path(WEB_CODE_PATH).'inc/lib/xajax'));
-		
+
 		// get the upload code
 		$this->addElement('html','<script language="javascript" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>');
 		$this->addElement('html','<script type="text/javascript">var myUpload = new upload('.(abs(intval($delay))*1000).');</script>');
-		
+
 		if(!$waitAfterUpload)
 		{
 			$waitAfterUpload = 0;
 		}
 		// add the upload event
 		$this->updateAttributes("onsubmit=\"myUpload.startRealUpload('dynamic_div','".$upload_id."','".$this->getAttribute('id')."',".$waitAfterUpload.")\"");
-		
-		
+
+
 	}
-	
+
 	/**
 	 * This function avoid to change directly QuickForm class.
 	 * When we use it, the element is threated as 'required' to be dealt during validation
@@ -337,9 +337,9 @@ EOT;
 	function add_multiple_required_rule($elements, $message)
 	{
 		$this->_required[] = $elements[0];
-		$this -> addRule ($elements , $message , 'multiple_required');		
+		$this -> addRule ($elements , $message , 'multiple_required');
 	}
-	
+
 	/**
 	 * Display the form.
 	 * If an element in the form didn't validate, an error message is showed

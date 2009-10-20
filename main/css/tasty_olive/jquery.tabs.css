@@ -18,7 +18,7 @@
 	padding: 0 0 0 4px;
     background:#ffffff;
     border-bottom:1px dotted #ffffff;
-    border-top:1px dotted #ffffff;  	
+    border-top:1px dotted #ffffff;
 }
 .tabs-nav:after { /* clearing without presentational markup, IE gets extra treatment */
 	display: block;

@@ -26,7 +26,7 @@
 ==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *                  HOME PAGE FOR EACH COURSE (BASIC TOOLS FIXED)
 *
 *	This page, included in every course's index.php is the home
@@ -36,7 +36,7 @@
 *	access to Professor's tools (statistics, edit forums...).
 *
 *	@package dokeos.course_home
-============================================================================== 
+==============================================================================
 */
 $hide = isset($_GET['hide']) && $_GET['hide'] == 'yes' ? 'yes' : null;
 $restore = isset($_GET['restore']) && $_GET['restore'] == 'yes' ? 'yes' : null;
@@ -64,14 +64,14 @@ if (is_allowed_to_edit())
  *     visibility = 2 - admin
  *
  * Who can change visibility ?
- * 
+ *
  *     admin = 0 - prof and admin
  *     admin = 1 - admin
  *
  * Show message to confirm that a tools must be hide from aivailable tools
  *
  *     visibility 0,1->2 - $remove
- * 
+ *
  * Process hiding a tools from aivailable tools.
  *
  *     visibility=2                         are only view  by Dokeos
@@ -88,15 +88,15 @@ if (is_allowed_to_edit())
 	if($remove)
 	{
 		$sql = "SELECT * FROM $TBL_ACCUEIL WHERE id=$id";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
-		$toolsRow = mysql_fetch_array($result);
+		$result = Database::query($sql,__FILE__,__LINE__);
+		$toolsRow = Database::fetch_array($result);
 		$tool_name = htmlspecialchars($toolsRow['name'] != "" ? $toolsRow['name'] : $toolsRow['link'],ENT_QUOTES,$charset);
 		if($toolsRow['img'] != "external.gif")
 		{
 			$toolsRow['link']=api_get_path(WEB_CODE_PATH).$toolsRow['link'];
 		}
 		$toolsRow['image']=api_get_path(WEB_CODE_PATH)."img/".$toolsRow['image'];
-	
+
 		echo 	"<br><br><br>\n";
 		echo	"<table class=\"message\" width=\"70%\" align=\"center\">\n",
 				"<tr><td width=\"7%\" align=\"center\">\n",
@@ -124,7 +124,7 @@ if (is_allowed_to_edit())
 
 	elseif ($destroy)
 	{
-		api_sql_query("UPDATE $TBL_ACCUEIL SET visibility='2' WHERE id=$id");
+		Database::query("UPDATE $TBL_ACCUEIL SET visibility='2' WHERE id=$id");
 	}
 
 /*--------------------------------------
@@ -133,7 +133,7 @@ if (is_allowed_to_edit())
 
 	elseif ($hide) // visibility 1 -> 0
 	{
-		api_sql_query("UPDATE $TBL_ACCUEIL SET visibility=0 WHERE id=$id");
+		Database::query("UPDATE $TBL_ACCUEIL SET visibility=0 WHERE id=$id");
 		Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
 	}
 
@@ -143,7 +143,7 @@ if (is_allowed_to_edit())
 
 	elseif ($restore) // visibility 0,2 -> 1
 	{
-		api_sql_query("UPDATE $TBL_ACCUEIL SET visibility=1  WHERE id=$id");
+		Database::query("UPDATE $TBL_ACCUEIL SET visibility=1  WHERE id=$id");
 		Display::display_confirmation_message(get_lang('ToolIsNowVisible'));
 	}
 
@@ -153,8 +153,8 @@ if (is_allowed_to_edit())
 
 	elseif (isset ($update) && $update)
 	{
-		$result 	= api_sql_query("SELECT * FROM $TBL_ACCUEIL WHERE id=$id");
-		$toolsRow 	= mysql_fetch_array($result);
+		$result 	= Database::query("SELECT * FROM $TBL_ACCUEIL WHERE id=$id");
+		$toolsRow 	= Database::fetch_array($result);
 		$racine		= $_configuration['root_sys']."/".$currentCourseID."/images/";
 		$chemin		= $racine;
 		$name	= $toolsRow[1];
@@ -257,7 +257,7 @@ if ($is_platformAdmin and is_allowed_to_edit())
 
 	elseif (isset($delete) && $delete)
 	{
-		api_sql_query("DELETE FROM $TBL_ACCUEIL WHERE id=$id AND added_tool=1");
+		Database::query("DELETE FROM $TBL_ACCUEIL WHERE id=$id AND added_tool=1");
 	}
 }
 

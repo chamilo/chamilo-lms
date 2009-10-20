@@ -67,7 +67,7 @@ select, input, button { font: 11px Tahoma,Verdana,sans-serif; }
 }
 button:hover {
     background-color:#cbcbcb;
-    color:#545454; 
+    color:#545454;
     border-style: inset;
 }
 /* button with image */
@@ -84,7 +84,7 @@ button.save, button.add, button.refresh, button.login, button.plus, button.uploa
     padding:5px 15px 5px 30px;
 }
 button.save:hover, button.add:hover, button.refresh:hover, button.login:hover, button.upload:hover, button.search:hover, button.plus:hover, button.minus:hover, button.next:hover, button.back:hover {
-    border-color: #D4E2F6;    
+    border-color: #D4E2F6;
     background-color:#D4E2F6;
     padding:5px 15px 5px 30px;
 }
@@ -95,7 +95,7 @@ button.cancel {
 }
 
 button.cancel:hover {
-    border-color: #F4E1D0;    
+    border-color: #F4E1D0;
     background-color: #FFE3DE;
 }
 /*including "save" image*/
@@ -119,7 +119,7 @@ button.refresh {
 button.login {
     background-image:url(images/button_login.gif);
 	margin:2px 5px 3px 5px !important;
-	
+
 }
 
 /*including "plus" image*/

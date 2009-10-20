@@ -1,6 +1,6 @@
 <?php
 /**
-	 *Session Action Class 
+	 *Session Action Class
 	 * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
 	 * @link www.phpletter.com
 	 * @since 22/May/2007
@@ -26,7 +26,7 @@
 				$_SESSION[$this->fromFolderIndex] = '';
 			}
 		}
-		
+
 		function SessionAction()
 		{
 			$this->__construct();
@@ -57,10 +57,10 @@
 		{
 			return (isset($_SESSION[$this->selectedDocIndex])?$_SESSION[$this->selectedDocIndex]:array());
 		}
-		
+
 		function setAction($action)
 		{
-			$_SESSION[$this->actionIndex] = $action;			
+			$_SESSION[$this->actionIndex] = $action;
 		}
 		/**
 		 * get the action

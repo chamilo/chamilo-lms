@@ -1,36 +1,39 @@
 <?php
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+==============================================================================
 */
+
+// TODO: Is this file deprecated?
+
 /**
-============================================================================== 
+==============================================================================
 *	@package dokeos.user
-============================================================================== 
+==============================================================================
 */
 
 /*==========================
             INIT
   ==========================*/
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file="registration";
 
 
@@ -88,16 +91,16 @@ if($register)
 
 	if($dataChecked)
 	{
-		$result=api_sql_query("SELECT user_id,
+		$result=Database::query("SELECT user_id,
 		                       (username='$username_form') AS loginExists,
 		                       (lastname='$lastname_form' AND firstname='$firstname_form' AND email='$email_form') AS userExists
 		                     FROM $tbl_user
 		                     WHERE username='$username_form' OR (lastname='$lastname_form' AND firstname='$firstname_form' AND email='$email_form')
-		                     ORDER BY userExists DESC, loginExists DESC");
+		                     ORDER BY userExists DESC, loginExists DESC", __FILE__, __LINE__);
 
-		if(mysql_num_rows($result))
+		if(Database::num_rows($result))
 		{
-			while($user=mysql_fetch_array($result))
+			while($user=Database::fetch_array($result))
 			{
 				// check if the user is already registered to the platform
 
@@ -140,10 +143,10 @@ if($register)
 		if ($_cid) $platformStatus = STUDENT;          // course registrartion context...
 		else       $platformStatus = $platformStatus; // admin section of the platform context...
 
-		//if ($userPasswordCrypted) $pw = md5($password_form);		
+		//if ($userPasswordCrypted) $pw = md5($password_form);
 		//else                      $pw = $password_form;
 		$pw = api_get_encrypted_password($password_form);
-		$result = api_sql_query("INSERT INTO $tbl_user
+		$result = Database::query("INSERT INTO $tbl_user
 		                       SET lastname       = '$lastname_form',
 		                           firstname    = '$firstname_form',
 		                           username  = '$username_form',
@@ -151,9 +154,9 @@ if($register)
 		                           email     = '$email_form',
 		                           status    = '$platformStatus',
 		                           official_code = '$official_code_form',
-		                           creator_id = '".$_user['user_id']."'");
+		                           creator_id = '".$_user['user_id']."'", __FILE__, __LINE__);
 
-		$userId = mysql_insert_id();
+		$userId = Database::insert_id();
 
 		if ($userId) $platformRegSucceed = true;
 	}
@@ -176,11 +179,11 @@ if($register)
 		 * if 0, the user is already registered to the course
 		 */
 
-		if (api_sql_query("INSERT INTO $tbl_courseUser
+		if (Database::query("INSERT INTO $tbl_courseUser
 						SET user_id     = '$userId',
 							course_code  = '$currentCourseID',
 							status      = '$admin_form',
-							tutor_id       = '$tutor_form'"))
+							tutor_id       = '$tutor_form'", __FILE__, __LINE__))
 		{
 			$courseRegSucceed = true;
 		}
@@ -197,37 +200,37 @@ if($register)
 		$emailto       = "$lastname_form $firstname_form <$email_form>";
 		$emailfromaddr = $administratorEmail;
 		$emailfromname = api_get_setting('siteName');
-		$emailsubject  = get_lang('YourReg').' '.get_setting('siteName');
+		$emailsubject  = get_lang('YourReg').' '.api_get_setting('siteName');
 
-		$emailheaders  = "From: ".get_setting('administratorSurname')." ".get_setting('administratorName')." <".$administratorEmail.">\n";
+		$emailheaders  = "From: ".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS)." <".$administratorEmail.">\n";
 		$emailheaders .= "Reply-To: ".$administratorEmail."\n";
 		$emailheaders .= "Return-Path: ".$administratorEmail."\n";
-		$emailheaders .= "charset: ".$charset."\n";
+		$emailheaders .= "charset: ".api_get_system_encoding()."\n";
 		$emailheaders .= "X-Mailer: PHP/" . phpversion() . "\n";
 		$emailheaders .= "X-Sender-IP: $REMOTE_ADDR"; // (small security precaution...)
-		$recipient_name = $firstname_form.' '.$lastname_form;
-		$sender_name = get_setting('administratorName').' '.get_setting('administratorSurname');
-	    $email_admin = get_setting('emailAdministrator');
-	    
+		$recipient_name = api_get_person_name($firstname_form, $lastname_form, null, PERSON_NAME_EMAIL_ADDRESS);
+		$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+	    $email_admin = api_get_setting('emailAdministrator');
+
 		$portal_url = $_configuration['root_web'];
 		if ($_configuration['multiple_access_urls']==true) {
-			$access_url_id = api_get_current_access_url_id();				
+			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1 ){
 				$url = api_get_access_url($access_url_id);
 				$portal_url = $url['url'];
 			}
-		}					
-						
+		}
+
 		if ($courseRegSucceed)
 		{
-			$emailbody = get_lang('Dear')." ".stripslashes("$firstname_form $lastname_form").",\n".get_lang('OneResp')." $currentCourseName ".get_lang('RegYou')." ".get_setting('siteName')." ".get_lang('Settings')." $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".get_setting('administratorSurname')." ".get_setting('administratorName')."\n".get_lang('Manager')." ".get_setting('siteName')." \nT. ".get_setting('administratorTelephone')."\n".get_lang('Email').": ".get_setting('emailAdministrator')."\n";
-			$message = get_lang('TheU')." ".stripslashes("$firstname_form $lastname_form")." ".get_lang('AddedToCourse')."<a href=\"user.php\">".get_lang('BackUser')."</a>\n";
+			$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname_form, $lastname_form)).",\n".get_lang('OneResp')." $currentCourseName ".get_lang('RegYou')." ".api_get_setting('siteName')." ".get_lang('Settings')." $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')." \nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email').": ".api_get_setting('emailAdministrator')."\n";
+			$message = get_lang('TheU')." ".stripslashes(api_get_person_name($firstname_form, $lastname_form))." ".get_lang('AddedToCourse')."<a href=\"user.php\">".get_lang('BackUser')."</a>\n";
 		}
 		else
 		{
-			$emailbody = get_lang('Dear')."  $firstname_form $lastname_form,\n ".get_lang('YouAreReg')."  ".get_setting('siteName')."  ".get_lang('Settings')." $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".get_setting('siteName')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".get_setting('administratorSurname')." ".get_setting('administratorName')."\n".get_lang('Manager')." ".get_setting('siteName')." \nT. ".get_setting('administratorTelephone')."\n".get_lang('Email').": ".get_setting('emailAdministrator')."\n";
+			$emailbody = get_lang('Dear')." ".api_get_person_name($firstname_form, $lastname_form).",\n ".get_lang('YouAreReg')."  ".api_get_setting('siteName')."  ".get_lang('Settings')." $username_form\n".get_lang('Pass').": $password_form\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is').": ".$portal_url."\n".get_lang('Problem')."\n".get_lang('Formula').",\n".api_get_person_name(api_get_setting('administratorName')." ".api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')." \nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email').": ".api_get_setting('emailAdministrator')."\n";
 
-			$message = stripslashes("$firstname_form $lastname_form")." ".get_lang('AddedU');
+			$message = stripslashes(api_get_person_name($firstname_form, $lastname_form))." ".get_lang('AddedU');
 		}
 
 		@api_mail($recipient_name, $email_form, $emailsubject, $emailbody, $sender_name,$email_admin);
@@ -248,9 +251,9 @@ if($register)
 
 $interbreadcrumb[] = array ("url"=>"user.php", "name"=> get_lang('Users'));
 
-$nameTools        = get_lang('AddAU');
+$nameTools = get_lang('AddAU');
 
-Display::display_header($nameTools,"User");
+Display::display_header($nameTools, "User");
 
 
 ?>
@@ -294,19 +297,34 @@ if(!empty($message))
 
 <?php
 }
-?>
 
+if (api_is_western_name_order()) {
+?>
+<tr>
+<td align="right"><?php echo get_lang('FirstName'); ?> :</td>
+<td><input type="text" size="15" name="firstname_form" value="<?php echo api_htmlentities(stripslashes($firstname_form), ENT_QUOTES, $charset); ?>" /></td>
+</tr>
 <tr>
 <td align="right"><?php echo get_lang('LastName'); ?> :</td>
-<td><input type="text" size="15" name="lastname_form" value="<?php echo htmlentities(stripslashes($lastname_form),ENT_QUOTES,$charset); ?>" /></td>
+<td><input type="text" size="15" name="lastname_form" value="<?php echo api_htmlentities(stripslashes($lastname_form), ENT_QUOTES, $charset); ?>" /></td>
+</tr>
+<?php
+} else {
+?>
+<tr>
+<td align="right"><?php echo get_lang('LastName'); ?> :</td>
+<td><input type="text" size="15" name="lastname_form" value="<?php echo api_htmlentities(stripslashes($lastname_form), ENT_QUOTES, $charset); ?>" /></td>
 </tr>
 <tr>
 <td align="right"><?php echo get_lang('FirstName'); ?> :</td>
-<td><input type="text" size="15" name="firstname_form" value="<?php echo api_htmlentities(stripslashes($firstname_form),ENT_QUOTES,$charset); ?>" /></td>
+<td><input type="text" size="15" name="firstname_form" value="<?php echo api_htmlentities(stripslashes($firstname_form), ENT_QUOTES, $charset); ?>" /></td>
 </tr>
+<?php
+}
+?>
 <tr>
 <td align="right"><?php echo get_lang('OfficialCode'); ?> :</td>
-<td><input type="text" size="15" name="official_code_form" value="<?php echo api_htmlentities(stripslashes($official_code_form),ENT_QUOTES,$charset); ?>" /></td>
+<td><input type="text" size="15" name="official_code_form" value="<?php echo api_htmlentities(stripslashes($official_code_form), ENT_QUOTES, $charset); ?>" /></td>
 </tr>
 <tr>
 <td align="right"><?php echo  get_lang('UserName') ?> :</td>

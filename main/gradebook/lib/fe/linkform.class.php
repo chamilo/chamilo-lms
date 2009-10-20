@@ -84,7 +84,7 @@ class LinkForm extends FormValidator
 			$select->addoption($line.' '.$cat[1],$cat[0]);
 			$line = '';
 		}
-   		$this->addElement('submit', null, get_lang('Ok'));		
+   		$this->addElement('submit', null, get_lang('Ok'));
 	}
 
 	protected function build_create() {
@@ -109,9 +109,9 @@ class LinkForm extends FormValidator
 			}
 			// disable this element if the link works with a dropdownlist
 			// and if there are no links left
-			if (!$link->needs_name_and_description() 
+			if (!$link->needs_name_and_description()
 				&& count($link->get_all_links()) == '0') {
-				$select->addoption($link->get_type_name(), $linktype, 'disabled');	
+				$select->addoption($link->get_type_name(), $linktype, 'disabled');
 			} else {
 					$select->addoption($link->get_type_name(), $linktype);
 			}

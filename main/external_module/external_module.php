@@ -36,7 +36,7 @@
 ==============================================================================
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='external_module';
 
 $iconForImportedTools='external.gif';
@@ -75,7 +75,7 @@ if($is_allowedToEdit && $_POST['formSent'] && $toolid)  // RH: new section
 		        "', target='" .  Database::escape_string($target) .
 		        "' WHERE id='" . Database::escape_string($id) . "'";
 
-		api_sql_query($sql, __FILE__, __LINE__);
+		Database::query($sql, __FILE__, __LINE__);
 
 		$linkAdded = TRUE;
 	}
@@ -95,7 +95,7 @@ elseif($is_allowedToEdit && $_POST['formSent'])
 			$link='http://'.$link;
 		}
 
-		api_sql_query("INSERT INTO $tbl_courseHome(name,link,image,visibility,admin,address,target) VALUES('".Database::escape_string($name_link)."','".Database::escape_string($link)."','$iconForImportedTools','1','0','$iconForInactiveImportedTools','$target')",__FILE__,__LINE__);
+		Database::query("INSERT INTO $tbl_courseHome(name,link,image,visibility,admin,address,target) VALUES('".Database::escape_string($name_link)."','".Database::escape_string($link)."','$iconForImportedTools','1','0','$iconForInactiveImportedTools','$target')",__FILE__,__LINE__);
 
 		$linkAdded=true;
 	}
@@ -125,7 +125,7 @@ else
     	$sql =  "SELECT name,link,target FROM $tbl_courseHome" .
         " WHERE id='" . Database::escape_string($toolid) . "'";
 
-    	$result = api_sql_query($sql, __FILE__, __LINE__);
+    	$result = Database::query($sql, __FILE__, __LINE__);
 
     	(Database::num_rows($result) == 1 && ($row = Database::fetch_array($result)))
     	    or die('? Could not fetch data with ' . htmlspecialchars($sql));
@@ -164,7 +164,7 @@ if(!empty($msgErr))
 </tr>
 <tr>
   <td align="right"><?php echo get_lang('Name'); ?> :</td>
-  <td><input type="text" name="name_link" size="50" value="<?php if($_POST['formSent']) echo htmlentities($name_link,ENT_QUOTES,$charset); else echo $toolid ? htmlspecialchars($row['name'],ENT_QUOTES,$charset) : ''; ?>"></td>
+  <td><input type="text" name="name_link" size="50" value="<?php if($_POST['formSent']) echo api_htmlentities($name_link,ENT_QUOTES,$charset); else echo $toolid ? htmlspecialchars($row['name'],ENT_QUOTES,$charset) : ''; ?>"></td>
 </tr>
 <tr>
   <td align="right"><?php echo get_lang('LinkTarget'); ?> :</td>

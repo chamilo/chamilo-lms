@@ -12,30 +12,48 @@
 --
 -- This first part is for the main database
 -- xxMAINxx
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_use_sub_language', NULL, 'radio', 'Platform', 'false', 'AllowUseSubLanguageTitle', 'AllowUseSubLanguageComment', NULL, NULL);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_use_sub_language', NULL, 'radio', 'Platform', 'false', 'AllowUseSubLanguageTitle', 'AllowUseSubLanguageComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_use_sub_language', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_use_sub_language', 'false', 'No');
 ALTER TABLE language ADD COLUMN parent_id tinyint unsigned;
 ALTER TABLE language ADD INDEX idx_dokeos_folder(dokeos_folder);
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('show_glossary_in_documents', NULL, 'radio', 'Course', 'none', 'ShowGlossaryInDocumentsTitle', 'ShowGlossaryInDocumentsComment', NULL, NULL);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_glossary_in_documents', NULL, 'radio', 'Course', 'none', 'ShowGlossaryInDocumentsTitle', 'ShowGlossaryInDocumentsComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'none', 'ShowGlossaryInDocumentsIsNone');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'ismanual', 'ShowGlossaryInDocumentsIsManual');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_documents', 'isautomatic', 'ShowGlossaryInDocumentsIsAutomatic');
-
 CREATE TABLE legal (legal_id int NOT NULL auto_increment, language_id int NOT NULL, date int NOT NULL default 0, content text, type int NOT NULL, changes text NOT NULL, version int, PRIMARY KEY (legal_id));
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'legal_accept','Legal',0,0);
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('allow_terms_conditions', NULL, 'radio', 'Platform', 'false', 'AllowTermsAndConditionsTitle', 'AllowTermsAndConditionsComment', NULL, NULL);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_terms_conditions', NULL, 'radio', 'Platform', 'false', 'AllowTermsAndConditionsTitle', 'AllowTermsAndConditionsComment', NULL, NULL,0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_terms_conditions', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_terms_conditions', 'false', 'No');
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_tutor_data',NULL,'radio','Platform','true','ShowTutorDataTitle','ShowTutorDataComment',NULL,NULL, 1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_teacher_data',NULL,'radio','Platform','true','ShowTeacherDataTitle','ShowTeacherDataComment',NULL,NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_tutor_data','true','Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_tutor_data','false','No');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_teacher_data','true','Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_teacher_data','false','No');
-INSERT IGNORE INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('dokeos_database_version',NULL,'textfield',NULL,'1.8.6.1.7945','DokeosDatabaseVersion','',NULL,NULL,1,0);
 ALTER TABLE user_friend ADD COLUMN last_edit DATETIME;
+ALTER TABLE reservation_item ADD always_available TINYINT NOT NULL default 0;
+CREATE TABLE gradebook_certificate( id bigint unsigned not null auto_increment, cat_id int unsigned not null, user_id int unsigned not null, score_certificate float unsigned not null default 0, date_certificate datetime not null default '0000-00-00 00:00:00', path_certificate text null, PRIMARY KEY(id));
+ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_category_id(cat_id);
+ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_user_id(user_id);
+ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_category_id_user_id(cat_id,user_id);
+ALTER TABLE gradebook_category ADD COLUMN document_id int unsigned default NULL;
+
+CREATE TABLE specific_field (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, code char(1) NOT NULL, name VARCHAR( 200 ) NOT NULL);
+CREATE TABLE specific_field_values (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, course_code VARCHAR( 40 ) NOT NULL, tool_id VARCHAR( 100 ) NOT NULL, ref_id INT NOT NULL, field_id INT NOT NULL, value VARCHAR( 200 ) NOT NULL);
+ALTER TABLE specific_field ADD CONSTRAINT unique_specific_field__code UNIQUE (code);
+CREATE TABLE search_engine_ref (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, course_code VARCHAR( 40 ) NOT NULL, tool_id VARCHAR( 100 ) NOT NULL, ref_id_high_level INT NOT NULL, ref_id_second_level INT NULL, search_did INT NOT NULL);
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('search_enabled',NULL,'radio','Tools','false','EnableSearchTitle','EnableSearchComment',NULL,NULL);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('search_prefilter_prefix',NULL, NULL,'Search','','SearchPrefilterPrefix','SearchPrefilterPrefixComment',NULL,NULL);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext) VALUES ('search_show_unlinked_results',NULL,'radio','Search','true','SearchShowUnlinkedResultsTitle','SearchShowUnlinkedResultsComment',NULL,NULL);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('search_enabled', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('search_enabled', 'false', 'No');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('search_show_unlinked_results', 'true', 'SearchShowUnlinkedResults');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('search_show_unlinked_results', 'false', 'SearchHideUnlinkedResults');
+ALTER TABLE gradebook_evaluation ADD COLUMN type varchar(40) NOT NULL default 'evaluation';
+INSERT IGNORE INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('dokeos_database_version',NULL,'textfield',NULL,'1.8.6.1.8225','DokeosDatabaseVersion','',NULL,NULL,1,0);
 
 -- xxSTATSxx
 

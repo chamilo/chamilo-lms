@@ -137,7 +137,7 @@ if (isset ($_GET['editres'])) {
 	$resultedit= Result :: load($edit_res_xml);
 	$edit_res_form= new EvalForm(EvalForm :: TYPE_RESULT_EDIT, $eval[0], $resultedit[0], 'edit_result_form', null, api_get_self() . '?editres=' . $resultedit[0]->get_id() . '&selecteval=' .$select_eval_edit);
 	if ($edit_res_form->validate()) {
-	
+
 		$values= $edit_res_form->exportValues();
 		$result= new Result();
 		$resultlog=new Result();
@@ -147,7 +147,7 @@ if (isset ($_GET['editres'])) {
 		$result->set_evaluation_id($select_eval_edit);
 		$row_value=isset($values['score']) ? (int)$values['score'] : 0 ;
 	if ((!empty ($row_value)) || ($row_value == 0)) {
-		$result->set_score($row_value);		
+		$result->set_score($row_value);
 	}
 		$result->save();
 		unset ($result);
@@ -162,7 +162,7 @@ $interbreadcrumb[]= array (
 ));
 $import_result_form = new DataForm(DataForm :: TYPE_IMPORT, 'import_result_form', null, api_get_self() . '?import=&selecteval=' . $_GET['selecteval']);
 if (!$import_result_form->validate()) {
-	Display :: display_header(get_lang('Import'));	
+	Display :: display_header(get_lang('Import'));
 }
 
 if ($_POST['formSent'] ) {
@@ -194,7 +194,7 @@ if ($_POST['formSent'] ) {
 					} else {
 						$added= '1';
 					}
-						
+
 				}
 			}
 			if ($importedresult['user_id'] == null) {
@@ -251,7 +251,7 @@ $interbreadcrumb[]= array (
 ));
 $export_result_form= new DataForm(DataForm :: TYPE_EXPORT, 'export_result_form', null, api_get_self() . '?export=&selecteval=' . $_GET['selecteval'], '_blank');
 if (!$export_result_form->validate()) {
-	Display :: display_header(get_lang('Export'));	
+	Display :: display_header(get_lang('Export'));
 }
 
 if ($export_result_form->validate()) {
@@ -274,13 +274,13 @@ if ($export_result_form->validate()) {
 		if (($eval[0]->has_results())) {
 			$score= $eval[0]->calc_score();
 			if ($score != null) {
-				$average= get_lang('Average') . ' : ' . round(100 * ($score[0] / $score[1]),2) . ' %';				
+				$average= get_lang('Average') . ' : ' . round(100 * ($score[0] / $score[1]),2) . ' %';
 			}
 		}
 		if ($eval[0]->get_course_code() == null) {
 			$course= get_lang('CourseIndependent');
 		} else {
-			$course= get_course_name_from_code($eval[0]->get_course_code());			
+			$course= get_course_name_from_code($eval[0]->get_course_code());
 		}
 
 		$pdf= new Cezpdf();
@@ -303,14 +303,24 @@ if ($export_result_form->validate()) {
 		$pdf->ezText($average, 12, array (
 			'justification' => 'left'
 		));
-		
+
 		$datagen = new ResultsDataGenerator ($eval[0],$allresults);
-		$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME,0,null,true);	
+		if (api_sort_by_first_name()) {
+			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_FIRSTNAME, 0, null, true);
+		} else {
+			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME,0,null,true);
+		}
 		$newarray = array();
+		$is_western_name_order = api_is_western_name_order();
 		foreach ($data_array as $data) {
 			$newitem = array();
-			$newitem[] = $data['lastname'];
-			$newitem[] = $data['firstname'];
+			if ($is_western_name_order) {
+				$newitem[] = $data['firstname'];
+				$newitem[] = $data['lastname'];
+			} else {
+				$newitem[] = $data['lastname'];
+				$newitem[] = $data['firstname'];
+			}
 			$newitem[] = $data['score'];
 			if ($displayscore->is_custom())
 				$newitem[] = $data['display'];
@@ -318,11 +328,19 @@ if ($export_result_form->validate()) {
 		}
 		$pdf->ezSetY(650);
 		if ($displayscore->is_custom()) {
-			$header_names = array(get_lang('LastName'),get_lang('FirstName'),get_lang('Score'),get_lang('Display'));			
-		}else {
-			$header_names = array(get_lang('LastName'),get_lang('FirstName'),get_lang('Score'));
+			if ($is_western_name_order) {
+				$header_names = array(get_lang('FirstName'),get_lang('LastName'),get_lang('Score'),get_lang('Display'));
+			} else {
+				$header_names = array(get_lang('LastName'),get_lang('FirstName'),get_lang('Score'),get_lang('Display'));
+			}
+		} else {
+			if ($is_western_name_order) {
+				$header_names = array(get_lang('FirstName'),get_lang('LastName'),get_lang('Score'));
+			} else {
+				$header_names = array(get_lang('LastName'),get_lang('FirstName'),get_lang('Score'));
+			}
 		}
-			
+
 		$pdf->ezTable($newarray,$header_names,'',array('showHeadings'=>1,'shaded'=>1,'showLines'=>1,'rowGap'=>3,'width'=> 500));
 		$pdf->ezStream();
 		exit;
@@ -356,7 +374,7 @@ if (isset ($_GET['resultdelete'])) {
 if (isset ($_POST['action'])) {
 	$number_of_selected_items= count($_POST['id']);
 	if ($number_of_selected_items == '0') {
-		Display :: display_warning_message(get_lang('NoItemsSelected'),false);		
+		Display :: display_warning_message(get_lang('NoItemsSelected'),false);
 	} else {
 	switch ($_POST['action']) {
 		case 'delete' :
@@ -372,19 +390,30 @@ if (isset ($_POST['action'])) {
 		}
 	}
 } // TODO - what if selecteval not set ?
-$addparams= array (
-'selecteval' => $eval[0]->get_id());
+$addparams = array ('selecteval' => $eval[0]->get_id());
 if (isset ($_GET['print'])) {
 	$datagen = new ResultsDataGenerator ($eval[0],$allresults);
-	$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME,0,null,true);	
-		if ($displayscore->is_custom()) {
-			$header_names = array(get_lang('LastName'),get_lang('FirstName'),get_lang('Score'),get_lang('Display'));			
-		}else {
-			$header_names = array(get_lang('LastName'),get_lang('FirstName'),get_lang('Score'));			
+	if (api_sort_by_first_name()) {
+		$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_FIRSTNAME, 0, null, true);
+	} else {
+		$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME,0,null,true);
+	}
+	if ($displayscore->is_custom()) {
+		if (api_is_western_name_order()) {
+			$header_names = array(get_lang('FirstName'),get_lang('LastName'),get_lang('Score'),get_lang('Display'));
+		} else {
+			$header_names = array(get_lang('LastName'),get_lang('FirstName'),get_lang('Score'),get_lang('Display'));
 		}
+	} else {
+		if (api_is_western_name_order()) {
+			$header_names = array(get_lang('FirstName'),get_lang('LastName'),get_lang('Score'));
+		}else {
+			$header_names = array(get_lang('LastName'),get_lang('FirstName'),get_lang('Score'));
+		}
+	}
 	$newarray = array();
 	foreach ($data_array as $data) {
-		$newarray[] = array_slice($data, 2);			
+		$newarray[] = array_slice($data, 2);
 	}
 	echo print_table($newarray, $header_names,get_lang('ViewResult'), $eval[0]->get_name());
 	exit;
@@ -418,13 +447,13 @@ if ((!isset ($_GET['export'])) && (!isset ($_GET['import']))) {
 		'url' => $_SESSION['gradebook_dest'].'?selectcat=' .$currentcat[0]->get_id(),
 		'name' => get_lang('Details')
 		  );
-	}	
+	}
 	$interbreadcrumb[]= array (
 	'url' => 'gradebook_view_result.php'.'?selecteval='.Security::remove_XSS($_GET['selecteval']),
 	'name' => get_lang('ViewResult'
 	));
-	
-	Display :: display_header('');	
+
+	Display :: display_header('');
 }
 if (isset ($_GET['addresultnostudents'])) {
 	Display :: display_warning_message(get_lang('AddResultNoStudents'),false);
@@ -479,7 +508,7 @@ if (isset ($_GET['importoverwritescore'])) {
 
 if (isset ($_GET['import_user_error'])) {
 	$userinfo= get_user_info_from_id($_GET['import_user_error']);
-	Display :: display_warning_message(get_lang('UserInfoDoesNotMatch') . ' ' . $userinfo['lastname'] . ' ' . $userinfo['firstname']);
+	Display :: display_warning_message(get_lang('UserInfoDoesNotMatch') . ' ' . api_get_person_name($userinfo['firstname'], $userinfo['lastname']));
 }
 if (isset ($_GET['allresdeleted'])) {
 	Display :: display_confirmation_message(get_lang('AllResultDeleted'));
@@ -487,7 +516,7 @@ if (isset ($_GET['allresdeleted'])) {
 
 if (isset ($_GET['import_score_error'])) {
 	$userinfo= get_user_info_from_id($_GET['import_score_error']);
-	Display :: display_warning_message(get_lang('ScoreDoesNotMatch') . ' ' . $userinfo['lastname'] . ' ' . $userinfo['firstname']);
+	Display :: display_warning_message(get_lang('ScoreDoesNotMatch') . ' ' . api_get_person_name($userinfo['firstname'], $userinfo['lastname']));
 }
 if ($file_type == null) { //show the result header
 		if (isset ($export_result_form) && !(isset ($edit_res_form))) {

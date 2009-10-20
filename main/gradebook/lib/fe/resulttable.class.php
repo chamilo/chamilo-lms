@@ -43,14 +43,14 @@ class ResultTable extends SortableTable
 	 * Constructor
 	 */
     function ResultTable ($evaluation, $results = array(), $iscourse, $addparams = null,$forprint = false) {
-    	parent :: __construct ('resultlist', null, null, 1);
+    	parent :: __construct ('resultlist', null, null, (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1);
 
 		$this->datagen = new ResultsDataGenerator($evaluation, $results, true);
 
 		$this->evaluation = $evaluation;
 		$this->iscourse = $iscourse;
 		$this->forprint = $forprint;
-		
+
 		if (isset ($addparams))  {
 			$this->set_additional_parameters($addparams);
 		}
@@ -62,8 +62,13 @@ class ResultTable extends SortableTable
 					'delete' => get_lang('Delete')
 			));
 		}
-		$this->set_header($column++, get_lang('LastName'));
-		$this->set_header($column++, get_lang('FirstName'));
+		if (api_is_western_name_order()) {
+			$this->set_header($column++, get_lang('FirstName'));
+			$this->set_header($column++, get_lang('LastName'));
+		} else {
+			$this->set_header($column++, get_lang('LastName'));
+			$this->set_header($column++, get_lang('FirstName'));
+		}
 		$this->set_header($column++, get_lang('Score'));
 		if ($scoredisplay->is_custom()) {
 			$this->set_header($column++, get_lang('Display'));
@@ -82,11 +87,12 @@ class ResultTable extends SortableTable
 	}
 
 
-	/** 
+	/**
 	 * Function used by SortableTable to generate the data to display
 	 */
 	function get_table_data ($from = 1) {
 
+		$is_western_name_order = api_is_western_name_order();
 		$scoredisplay = ScoreDisplay :: instance();
 
 		// determine sorting type
@@ -94,10 +100,18 @@ class ResultTable extends SortableTable
 		switch ($this->column) {
 			// Type
 			case (0 + $col_adjust):
-				$sorting = ResultsDataGenerator :: RDG_SORT_LASTNAME;
+				if ($is_western_name_order) {
+					$sorting = ResultsDataGenerator :: RDG_SORT_FIRSTNAME;
+				} else {
+					$sorting = ResultsDataGenerator :: RDG_SORT_LASTNAME;
+				}
 				break;
 			case (1 + $col_adjust):
-				$sorting = ResultsDataGenerator :: RDG_SORT_FIRSTNAME;
+				if ($is_western_name_order) {
+					$sorting = ResultsDataGenerator :: RDG_SORT_LASTNAME;
+				} else {
+					$sorting = ResultsDataGenerator :: RDG_SORT_FIRSTNAME;
+				}
 				break;
 			case (2 + $col_adjust):
 				$sorting = ResultsDataGenerator :: RDG_SORT_SCORE;
@@ -111,7 +125,7 @@ class ResultTable extends SortableTable
 		} else {
 			$sorting |= ResultsDataGenerator :: RDG_SORT_ASC;
 		}
-			
+
 		$data_array = $this->datagen->get_data($sorting, $from, $this->per_page);
 
 
@@ -121,9 +135,14 @@ class ResultTable extends SortableTable
 			$row = array ();
 			if ($this->iscourse == '1') {
 				 $row[] = $item['result_id'];
-			}	
-			$row[] = $item['lastname'];
-			$row[] = $item['firstname'];
+			}
+			if ($is_western_name_order) {
+				$row[] = $item['firstname'];
+				$row[] = $item['lastname'];
+			} else {
+				$row[] = $item['lastname'];
+				$row[] = $item['firstname'];
+			}
 			$row[] = $item['score'];
 			if ($scoredisplay->is_custom()) {
 				$row[] = $item['display'];
@@ -133,7 +152,7 @@ class ResultTable extends SortableTable
 			}
 			$sortable_data[] = $row;
 		}
-		
+
 		return $sortable_data;
 	}
 

@@ -102,6 +102,7 @@ $TotalUser = "Totaal van de gebruiker.";
 $AverageTotal = "Totaal gemiddelde";
 $Evaluation = "Evaluatie";
 $EvaluationAverage = "Gemiddelde van de evaluatie.";
+$EditCategory = "Bewerk categorie";
 $GradebookQualificationTotal = "Totaal";
 $FileUploadComplete = "Bestand met succes geüpload";
 $NoResultsAvailable = "Géén resultaten beschikbaar";

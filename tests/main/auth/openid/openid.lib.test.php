@@ -21,7 +21,7 @@ define('OPENID_NS_1_0', 'http://openid.net/signon/1.0');
 
 
 class TestOpenId extends UnitTestCase {
-	
+
 	function test_openid_create_message() {
 		$data='';
 		$serialized .= "$key:$value\n";
@@ -30,7 +30,7 @@ class TestOpenId extends UnitTestCase {
 		$this->assertTrue(is_string($serialized));
 		//var_dump($serialized);
 	}
-	
+
 	function test_openid_dh_base64_to_long() {
 		$str='';
 	    $b64 = base64_decode($str);
@@ -39,7 +39,7 @@ class TestOpenId extends UnitTestCase {
 		$this->assertTrue(is_string($b64));
 		//var_dump($res);
 	}
-	
+
 	function test_openid_dh_binary_to_long() {
 		$str='';
 		$bytes = array_merge(unpack('C*', $str));
@@ -48,21 +48,21 @@ class TestOpenId extends UnitTestCase {
 		$this->assertTrue(is_array($bytes));
 		//var_dump($bytes);
 	}
-	
+
 	function test_openid_dh_long_to_base64() {
 		$str='';
 		$res=_openid_dh_long_to_base64($str);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	function test_openid_dh_long_to_binary() {
 		$long='';
 		$res=_openid_dh_long_to_binary($long);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	function test_openid_dh_rand() {
 		$stop='';
 		$rbytes = _openid_dh_long_to_binary($stop);
@@ -77,7 +77,7 @@ class TestOpenId extends UnitTestCase {
 		//var_dump($res);
 		//var_dump($duplicate_cache);
 	}
-	
+
 	function test_openid_dh_xorsecret() {
 		$shared='';
 		$secret='';
@@ -85,21 +85,21 @@ class TestOpenId extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	function test_openid_encode_message() {
 		$message='';
 		$res=_openid_encode_message($message);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	function test_openid_fix_post() {
 		$post='';
 		$res=_openid_fix_post($post);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	function test_openid_get_bytes() {
 		static $f = null;
 		$num_bytes='';
@@ -107,7 +107,7 @@ class TestOpenId extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function test_openid_hmac() {
 		$key='';
 		$text='';
@@ -115,14 +115,14 @@ class TestOpenId extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	function test_openid_is_xri() {
 		$identifier='';
 		$res=_openid_is_xri($identifier);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function test_openid_link_href() {
 		$rel='';
 		$html='';
@@ -130,7 +130,7 @@ class TestOpenId extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function test_openid_meta_httpequiv() {
 		$equiv='';
 		$html='';
@@ -138,34 +138,34 @@ class TestOpenId extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function test_openid_nonce() {
 		$res=_openid_nonce();
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	function test_openid_normalize() {
 		$identifier='';
 		$res=_openid_normalize($identifier);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	function test_openid_normalize_url() {
 		$url='';
 		$res=_openid_normalize_url($url);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	function test_openid_normalize_xri() {
 		$xri='';
 		$res=_openid_normalize_xri($xri);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	function test_openid_parse_message() {
 		$message='';
 		$parsed_message = array();
@@ -173,14 +173,14 @@ class TestOpenId extends UnitTestCase {
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+
 	function test_openid_sha1() {
 		$text='';
 		$res=_openid_sha1($text);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	function test_openid_signature() {
 		$association='';
 		$message_array='';
@@ -189,7 +189,7 @@ class TestOpenId extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	function testbcpowmod() {
 		$base='';
 		$exp='';
@@ -198,7 +198,7 @@ class TestOpenId extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	function testopenid_redirect() {
 		$url='http://localhost/dokeossvn186/tests/all.test2.php';
 		$message='';
@@ -208,7 +208,7 @@ class TestOpenId extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-	
+
 	function testopenid_redirect_http() {
 		$url='http://localhost/dokeossvn186/tests/all.test2.php';
 		$message='';

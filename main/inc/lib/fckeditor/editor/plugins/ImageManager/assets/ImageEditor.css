@@ -66,9 +66,9 @@ body, td, p {
     z-index:6;
     border:1px solid #CCCCCC;
     background-color:#DDDDDD;
-    width:15px;     
+    width:15px;
     padding:0px;
-    height:20px; 
+    height:20px;
     cursor: pointer;
     top:2px;
 }

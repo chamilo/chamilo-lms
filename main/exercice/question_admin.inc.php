@@ -4,7 +4,7 @@
 	Dokeos - elearning and course management software
 
 	Copyright (c) 2004-2009 Dokeos SPRL
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
 
@@ -53,18 +53,18 @@ if(isset($_GET['editQuestion']))
 {
 	$objQuestion = Question::read ($_GET['editQuestion']);
 	$action = api_get_self()."?modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
-	
-	
+
+
 	if (isset($exerciseId) && !empty($exerciseId)) {
 		$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
 		$sql="SELECT max_score FROM $TBL_LP_ITEM
 			  WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
-		$result = api_sql_query($sql);
-		if (Database::num_rows($result) > 0) {			 
-			Display::display_warning_message(get_lang('EditingScoreCauseProblemsToExercisesInLP'));	
+		$result = Database::query($sql);
+		if (Database::num_rows($result) > 0) {
+			Display::display_warning_message(get_lang('EditingScoreCauseProblemsToExercisesInLP'));
 		}
 	}
-	
+
 } else {
 	$objQuestion = Question :: getInstance($_REQUEST['answerType']);
 	$action = api_get_self()."?modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
@@ -105,15 +105,15 @@ if(is_object($objQuestion))
 		$text=get_lang('ModifyQuestion');
 	} else {
 		$class="add";
-		$text=get_lang('AddQuestionToExercise'); 
-	}		
+		$text=get_lang('AddQuestionToExercise');
+	}
 
 	$types_information = $objQuestion->get_types_information();
 	$form_title_extra = get_lang($types_information[$_REQUEST['answerType']][1]);
-	
+
 	// form title
 	$form->addElement('header', '', $text.': '.$form_title_extra);
-	
+
 
 	// question form elements
 	$objQuestion -> createForm ($form,array('Height'=>150));
@@ -121,8 +121,8 @@ if(is_object($objQuestion))
 	// answer form elements
 	$objQuestion -> createAnswersForm ($form);
 
-	// submit button is implemented in every question type 
-	
+	// submit button is implemented in every question type
+
 	//$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
 	//$renderer = $form->defaultRenderer();
 	//$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','submitQuestion');
@@ -133,7 +133,7 @@ if(is_object($objQuestion))
 	 **********************/
 	if(isset($_POST['submitQuestion']) && $form->validate())
 	{
-		
+
 		// question
 	    $objQuestion -> processCreation($form,$objExercise);
 	    // answers

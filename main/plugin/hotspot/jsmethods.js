@@ -7,7 +7,7 @@ var requiredMinorVersion = 0;
 var requiredRevision = 0;
 // the version of javascript supported
 var jsVersion = 1.0;
-// 
+//
 
 var isIE  = (navigator.appVersion.indexOf("MSIE") != -1) ? true : false;
 var isWin = (navigator.appVersion.toLowerCase().indexOf("win") != -1) ? true : false;

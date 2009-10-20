@@ -1,5 +1,5 @@
 <?php
- 
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -79,7 +79,7 @@ if(isset($_GET['origin'])) {
 
 // javascript
 $htmlHeadXtra[] = '<script>
-		
+
 		function advanced_parameters() {
 				if(document.getElementById(\'id_qualify\').style.display == \'none\') {
 				document.getElementById(\'id_qualify\').style.display = \'block\';
@@ -90,7 +90,7 @@ $htmlHeadXtra[] = '<script>
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
 			}
 		}
-</script>';	
+</script>';
 /*
 ==============================================================================
 		MAIN DISPLAY SECTION
@@ -114,7 +114,7 @@ if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
 
-if (!empty($gradebook) && $gradebook=='view') {	
+if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
@@ -127,7 +127,7 @@ if (!empty($_GET['gidReq'])) {
 }
 
 if (!empty($_SESSION['toolgroup'])) {
-	
+
 	$_clean['toolgroup']=(int)$_SESSION['toolgroup'];
 	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
 	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
@@ -138,7 +138,7 @@ if (!empty($_SESSION['toolgroup'])) {
 	$interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook","name" => $nameTools);
 	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => $current_forum_category['cat_title']);
 	$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
-	$interbreadcrumb[]=array("url" => "newthread.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => get_lang('NewTopic'));	
+	$interbreadcrumb[]=array("url" => "newthread.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => get_lang('NewTopic'));
 }
 /*
 -----------------------------------------------------------
@@ -213,7 +213,7 @@ echo "<table class=\"data_table\" width='100%'>\n";
 
 if ($origin != 'learnpath') {
 	echo "\t<tr>\n\t\t<th align=\"left\"  colspan=\"2\">";
-	
+
 	echo '<span class="forum_title">'.prepare4display($current_forum['forum_title']).'</span>';
 
 	if (!empty ($current_forum['forum_comment'])) {

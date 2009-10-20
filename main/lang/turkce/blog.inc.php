@@ -32,7 +32,7 @@ $Role = "Görev";
 $Rate = "Puan";
 $Roles = "Görevler";
 $AddTask = "Yeni görev ekle";
-$AddTasks = "Yeni görev ekle";
+$AddTasks = "Yeni görevler ekle";
 $AssignTask = "Görev tan&#305;mla";
 $AssignTasks = "Tan&#305;ml&#305; görevler";
 $EditTask = "Görevi düzenle";
@@ -100,4 +100,6 @@ $TaskDeleted = "Görev silindi";
 $TaskAssignmentDeleted = "Görevdeki i&#351; silindi";
 $CommentDeleted = "Yorum silindi";
 $RatingAdded = "Derece eklendi";
+$BlogPosts = "Web günlü&#287;ü yaz&#305;lar&#305;";
+$BlogComments = "Web günlü&#287;ü yorumlar&#305;";
 ?>

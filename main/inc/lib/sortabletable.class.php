@@ -312,6 +312,114 @@ class SortableTable extends HTML_Table {
 		}
 		echo $html;
 	}
+	
+	/**
+	 * This function shows the content of a table in a grid.
+	 * Should not be use to edit information (edit/delete rows) only.
+	 * */
+	public function display_grid () {
+		global $charset;		
+		$empty_table = false;
+		$html = '';
+		if ($this->get_total_number_of_items() == 0) {
+			$cols = $this->getColCount();
+			$this->setCellAttributes(1, 0, 'style="font-style: italic;text-align:center;" colspan='.$cols);
+			if (api_is_xml_http_request()===true) {
+				$message_empty=api_utf8_encode(get_lang('TheListIsEmpty'));
+			} else {
+				$message_empty=get_lang('TheListIsEmpty');
+			}
+			$this->setCellContents(1, 0,$message_empty);
+			$empty_table = true;
+		}
+		$html='';
+		if (!$empty_table) {
+			$form = $this->get_page_select_form();
+			$nav = $this->get_navigation_html();
+			//this also must be moved			
+			$html = '<div class="sub-header">';
+			$html .= $form;			
+			$html .= $this->get_table_title().'<br />';			
+			$html .= $nav;			
+			$html .= '</div>';
+			if (count($this->form_actions) > 0) {				
+				$script= '<script language="JavaScript" type="text/javascript">
+																/*<![CDATA[*/
+																function setCheckbox(value) {
+													 				d = document.form_'.$this->table_name.';
+													 				for (i = 0; i < d.elements.length; i++) {
+													   					if (d.elements[i].type == "checkbox") {
+																		     d.elements[i].checked = value;
+													   					}
+													 				}
+																}
+																/*]]>*/
+															</script>';
+				$params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
+				$html .= '<form method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
+			}
+		}
+		$items = $this->get_clean_html(); // getting the items of the table
+		
+		// @todo this styles must be moved to default.css only for practly use this is here		 
+		echo '<style>
+				.grid_container { width:100%;}
+				.grid_item { height: 90px;border:1px dotted #ccc; width:300px; float:left; padding:5px; margin:5px;}
+				.grid_element_0 { width:100px; float:left;}
+				.grid_element_1 { width:180px; float:left; margin-bottom:15px;}
+				.grid_element_2 { width:150px; float:left;}
+		</style>';
+				
+		// the generating of style classes must be improved. Maybe we need a a table name to create style on the fly:
+		// i.e: .whoisonline_table_grid_container instead of  .grid_container
+		// where whoisonline is the table's name like drupal's template engine
+		
+		$html .= '<div class="grid_container">';		
+		if (is_array($items) && count($items)>0 ) {
+			foreach($items as $row) {						
+				$html.= '<div class="grid_item">';
+				$i=0;
+				foreach($row as $element) {
+					$html.='<div class="grid_element_'.$i.'">'.$element.'</div>';
+					$i++;
+				}		
+				$html.='</div>';
+			}			
+			$html .= '</div>';
+		}
+		$html .= '<div class="clear"></div>';
+		/*
+		if (!$empty_table) {
+			$html .= '<table style="width:100%;">';
+			$html .= '<tr>';
+			$html .= '<td colspan="2">';
+			if (count($this->form_actions) > 0) {
+				$html .= '<br/>';
+				$html .= '<a href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript:setCheckbox(true);return false;">'.get_lang('SelectAll').'</a> - ';
+				$html .= '<a href="?'.$params.'" onclick="javascript:setCheckbox(false);return false;">'.get_lang('UnSelectAll').'</a> ';
+				$html .= '<select name="action">';
+				foreach ($this->form_actions as $action => $label) {
+					$html .= '<option value="'.$action.'">'.$label.'</option>';
+				}
+				$html .= '</select>';
+				$html .= '&nbsp;&nbsp;<button type="submit" class="save" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.get_lang('Select').'</button>';
+			} else {
+				$html .= $form;
+			}
+			$html .= '</td>';
+			$html .= '<td style="text-align:right;">';
+			$html .= $nav;
+			$html .= '</td>';
+			$html .= '</tr>';
+			$html .= '</div>';
+			if (count($this->form_actions) > 0) {
+				$html .= '</form>';
+			}
+		}
+		*/
+		echo $html;
+	}
+	
 	/**
 	 * Get the HTML-code with the navigational buttons to browse through the
 	 * data-pages.
@@ -334,25 +442,41 @@ class SortableTable extends HTML_Table {
 		$offset = $pager->getOffsetByPageId();
 		$from = $offset[0] - 1;
 		$table_data = $this->get_table_data($from);
-		if (is_array($table_data))
-		{
-			foreach ($table_data as $index => $row)
-			{
+		if (is_array($table_data)) {
+			foreach ($table_data as $index => $row) {
 				$row = $this->filter_data($row);
 				$this->addRow($row);
 			}
 		}
 		$this->altRowAttributes(0, array ('class' => 'row_odd'), array ('class' => 'row_even'), true);
-		foreach ($this->th_attributes as $column => $attributes)
-		{
+		foreach ($this->th_attributes as $column => $attributes) {
 			$this->setCellAttributes(0, $column, $attributes);
 		}
-		foreach ($this->td_attributes as $column => $attributes)
-		{
+		foreach ($this->td_attributes as $column => $attributes) {
 			$this->setColAttributes($column, $attributes);
 		}
 		return $this->toHTML();
 	}
+	/**
+	 * This function return the items of the table
+	 * @return array table row items
+	 */
+	public function get_clean_html () {
+		$pager = $this->get_pager();
+		$val = $pager->getOffsetByPageId();
+		$offset = $pager->getOffsetByPageId();
+		$from = $offset[0] - 1;		
+		$table_data = $this->get_table_data($from);		
+		$new_table_data = array();
+		if (is_array($table_data)) {
+			foreach ($table_data as $index => $row) {
+				$row = $this->filter_data($row);
+				$new_table_data[] = $row;
+			}
+		}		
+		return $new_table_data;
+	}
+	
 	/**
 	 * Get the HTML-code wich represents a form to select how many items a page
 	 * should contain.

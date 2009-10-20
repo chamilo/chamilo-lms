@@ -2164,6 +2164,7 @@ class UserManager {
 			if ($height > 0) {
 				$dimension = api_getimagesize($picture['file']);
 				$margin = (($height - $dimension[1]) / 2);
+				//@ todo the padding-top should not be here
 				$picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension[0].'px; height:'.$dimension[1].';" ';
 			}
 		} else {

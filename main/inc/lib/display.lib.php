@@ -272,7 +272,7 @@ class Display {
 	 * @param array $query_vars Additional variables to add in the query-string
 	 * @author bart.mollet@hogent.be
 	 */
-	public static function display_sortable_table ($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $form_actions=array()) {
+	public static function display_sortable_table ($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $form_actions=array(),$style='table') {
 		global $origin;
 		$column = isset ($sorting_options['column']) ? $sorting_options['column'] : 0;
 		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;
@@ -287,7 +287,10 @@ class Display {
 			$table->set_header($index, $header_item[0], $header_item[1], $header_item[2], $header_item[3]);
 		}
 		$table->set_form_actions($form_actions);
-		$table->display();
+		if ($style=='table')
+			$table->display();
+		else 
+			$table->display_grid();
 	}
 
 

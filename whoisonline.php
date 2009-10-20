@@ -134,7 +134,7 @@ function display_user_list($user_list, $_plugins) {
 
 			$friends_profile = UserFriend::get_picture_user($uid, $image_array['file'], 92, 'medium_', ' width="90" height="90" ');
 			// reduce image
-			$table_row[] = '<center><a href="'.$url.'"><img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' border="1"></a></center>';
+			$table_row[] = '<a href="'.$url.'"><img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' border="1"></a>';
 			$table_row[] = '<a href="'.$url.'">'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</a>';
 
 			//$table_row[] = '<a href="'.$url.'">'.$user_info['lastName'].'</a>';
@@ -179,7 +179,7 @@ function display_user_list($user_list, $_plugins) {
 			echo '<form action="whoisonline.php" name="form_register_friend" id="form_register_friend" method="post">';
 		}*/
 
-		Display::display_sortable_table($table_header, $table_data, $sorting_options, array('per_page_default' => count($table_data)), $extra_params);
+		Display::display_sortable_table($table_header, $table_data, $sorting_options, array('per_page_default' => count($table_data)), $extra_params,array(),'grid');
 		/*if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true' ) {
 			echo '</form>';
 		}*/

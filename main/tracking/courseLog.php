@@ -560,6 +560,7 @@ if($_GET['studentlist'] == 'false') {
 			
 			if ($export_csv) {
 				$row[8] = strip_tags($row[8]);
+				$row[9] = strip_tags($row[9]);
 				$csv_content[] = $row;
 			}
 			

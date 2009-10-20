@@ -669,7 +669,16 @@ FCKSaveCommand.prototype.Execute = function()
 			// Let us check whether the button is styled, i.e. whether it is "nice".
 			if ( oForm.elements[i].getAttribute( 'class' )
 				// A workaround for the introduction sections.
-				|| oForm.elements[i].getAttribute( 'name' ) == 'intro_cmdUpdate' )
+				|| oForm.elements[i].getAttribute( 'name' ) == 'intro_cmdUpdate'
+				// and for Forums
+				|| oForm.elements[i].getAttribute( 'name' ) == 'SubmitForumCategory'
+				|| oForm.elements[i].getAttribute( 'name' ) == 'SubmitForum'
+				|| oForm.elements[i].getAttribute( 'name' ) == 'SubmitPost'
+				// and for Wikis
+				|| oForm.elements[i].getAttribute( 'name' ) == 'SaveWikiChange'
+				|| oForm.elements[i].getAttribute( 'name' ) == 'SaveWikiNew'
+				)
+				
 			{
 				try
 				{

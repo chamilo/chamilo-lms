@@ -145,7 +145,7 @@ function search_courses($id_session,$type) {
 			$sql = "SELECT c.code, c.visual_code, c.title, src.id_session
 					FROM $tbl_course c, $tbl_session_rel_course src
 					WHERE src.course_code = c.code
-					AND src.id_session = '".intval($id_session)."'";
+					AND src.id_session = '".$id_session."'";
 			$rs = Database::query($sql, __FILE__, __LINE__);
 
 			$course_list = array();

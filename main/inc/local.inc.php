@@ -818,7 +818,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 
 				if (!empty($_GET['id_session'])) {
 					$_SESSION['id_session'] = Database::escape_string($_GET['id_session']);
-					$sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.$_SESSION['id_session'] . '"';
+					$sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_SESSION['id_session']) . '"';
 					$rs = Database::query($sql,__FILE__,__LINE__);
 					list($_SESSION['session_name']) = Database::fetch_array($rs);
 				} else {
@@ -848,7 +848,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 		if (!empty($_GET['id_session'])) {
 			$tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
 			$_SESSION['id_session'] = Database::escape_string($_GET['id_session']);
-			$sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.$_SESSION['id_session'] . '"';
+			$sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_SESSION['id_session']). '"';
 			$rs = Database::query($sql,__FILE__,__LINE__);
 			list($_SESSION['session_name']) = Database::fetch_array($rs);
 		}

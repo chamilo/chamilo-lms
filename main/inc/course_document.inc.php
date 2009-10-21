@@ -19,7 +19,7 @@ if(!api_is_platform_admin()){
 
 //session
 if(isset($_GET['id_session']))
-	$_SESSION['id_session'] = $_GET['id_session'];
+	$_SESSION['id_session'] = intval($_GET['id_session']);
 
 $htmlHeadXtra[] =
 "<script type=\"text/javascript\">

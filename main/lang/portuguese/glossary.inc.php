@@ -1,22 +1,25 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$TermAddNew = "Acrescentar termo";
-$TermName = "Nome do termo";
+$TermAddNew = "Adicionar novo termo ao glossário";
+$TermName = "Termo";
 $TermDefinition = "Definição do termo";
-$TermDeleted = "Termo eliminado";
+$TermDeleted = "Termo removido";
 $TermUpdated = "Termo actualizado";
 $TermConfirmDelete = "Deseja mesmo eliminar este termo?";
-$TermAddButton = "Acrescentar este termo";
+$TermAddButton = "Guardar termo";
 $TermUpdateButton = "Actualizar termo";
 $TermEdit = "Editar termo";
 $TermDeleteAction = "Eliminar termo";
 $OrderBy = "Ordenar por";
 $CreationDate = "Data de criação";
-$UpdateDate = "Última modificação";
-$PreSelectedOrder = "Ordenar por selecção";
-$TermAdded = "Termo acrescentado";
-$YouMustEnterATermName = "Deve introduzir um termo";
-$YouMustEnterATermDefinition = "Tem de introduzir a definição do termo";
+$UpdateDate = "Actualizado";
+$PreSelectedOrder = "Pré-definido";
+$TermAdded = "Termo adicionado";
+$YouMustEnterATermName = "Tem de introduzir um termo";
+$YouMustEnterATermDefinition = "Tem de introduzir a definição de um termo";
+$TableView = "Visualizar tabela";
+$GlossaryTermAlreadyExistsYouShouldEditIt = "Este termo do glossário já existe. Por favor modifique o nome do termo.";
 $GlossaryManagement  = "Gestão do glossário";
+$TermMoved = "O termo foi movido";
 ?>

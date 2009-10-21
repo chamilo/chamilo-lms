@@ -1076,4 +1076,14 @@ $ShowSessionDataComment = "Show session data comment";
 $SubscribeSessionsToCategory = "Subscription sessions in the category";
 $SessionListInPlatform = "List of session in the platform";
 $SessionListInCategory = "List of sesiones in the categories";
+$ToExportSpecialSelect = "If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list.";
+$ErrorMsgSpecialExport = "There were no courses registered or may not have made the association with the sessions";
+$ConfigureInscription = "Setting the registration page";
+$MsgErrorSessionCategory = "Select category and sessions";
+$NumberOfSession = "Number sessions";
+$DeleteSelectedSessionCategory = "Delete only the selected categories without sessions";
+$DeleteSelectedFullSessionCategory = "Delete the selected categories to sessions";
+$EditTopRegister = "Edit Note";
+$InsertTabs = "Add Tabs";
+$EditTabs = "Edit Tabs";
 ?>

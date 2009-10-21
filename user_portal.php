@@ -1197,14 +1197,14 @@ if ($show_menu) {
 	echo '<div class="menusection">';
 	echo '<span class="menusectioncaption">'.get_lang('MenuUser').'</span>';
 	
-	//user image	
+	//user image
+	/*	@todo add a platform setting to add the user image  
 	$img_array= UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',true,true);
 	$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 92, 'medium_', ' width="90" height="90" ');
-	
 	echo '<div id="picture" style="">';
 		echo '<a href="/main/auth/profile.php"><img src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
 	echo '</div><br />';
-	
+	*/
 	//@todo add the Inbox, pending invitations, etc...
 	//echo get_lang('Inbox');
 	

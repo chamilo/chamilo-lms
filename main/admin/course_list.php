@@ -254,7 +254,7 @@ else
 	$form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'),'class="search"');
 	$form->addElement('static','search_advanced_link',null,'<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
 	echo '<div style="float:right;margin-top:5px;margin-right:5px;">
-			  <a href="'.api_get_path(WEB_CODE_PATH).'admin/course_add.php">'.Display::return_icon('course_add.gif',get_lang('AddSession')).get_lang('AddCourse').'</a>
+			  <a href="'.api_get_path(WEB_CODE_PATH).'admin/course_add.php">'.Display::return_icon('course_add.gif',get_lang('AddCourse')).get_lang('AddCourse').'</a>
 		 </div>';
 
 	echo '<div class="actions">';

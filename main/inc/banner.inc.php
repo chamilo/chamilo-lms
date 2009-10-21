@@ -300,7 +300,7 @@ if(is_file($homep.$menutabs.'_'.$lang.$ext) && is_readable($homep.$menutabs.'_'.
 if(api_get_self() != '/main/admin/configure_homepage.php') {
 	if(file_exists($homep.$menutabs.'_'.$lang.$ext)) {
 		$home_top_temp=file_get_contents($homep.$menutabs.'_'.$lang.$ext);
-	} else {
+	} else if (file_exists($homep.$menutabs.$ext)) {
 		$home_top_temp=file_get_contents($homep.$menutabs.$ext);
 	}
 	$open=str_replace('{rel_path}',api_get_path(REL_PATH),$home_top_temp);

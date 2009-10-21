@@ -1666,8 +1666,7 @@ if ($_GET['action']=='edit')
 				</select> %';
 				echo '<br/><br/>';
 				echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">';//prevent double post
-				echo '<input type="hidden" name="SaveWikiChange" value="'.get_lang('langSave').'">'; //for save icon
-				echo '<button class="save" type="submit" name="SaveWikiChange">'.get_lang('langSave').'</button>';//for save button
+				echo '<button class="save" type="submit" name="SaveWikiChange">'.get_lang('langSave').'</button>';//for save button Don't change name (see fckeditor/editor/plugins/customizations/fckplugin_compressed.js and fckplugin.js
 				echo '</div>';
 				echo '</form>';
 			}

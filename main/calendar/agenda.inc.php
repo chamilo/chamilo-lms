@@ -332,7 +332,7 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 					}
 
 					if (!empty($month_curday)) {
-						echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;action=view&amp;view=day&amp;day=".$curday."&amp;month=".$month."&amp;year=".$year."#".$curday."\">".$dayheader."</a>";
+						echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;action=view&amp;view=day&amp;day=".$curday."&amp;month=".$month."&amp;year=".$year."#".$curday."\">".$dayheader."</a>";
 					} else {
 						echo $dayheader;
 					}
@@ -420,7 +420,7 @@ function display_monthcalendar($month, $year)
 				$dayheader = "$curday";
 
 				if (key_exists($curday,$data)) {
-					$dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
+					$dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
 					foreach ($data[$curday] as $key=>$agenda_item)
 					{
 						foreach ($agenda_item as $key=>$value) {
@@ -1434,7 +1434,8 @@ function change_visibility($tool,$id)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
 function display_courseadmin_links() {
-	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('calendar_add.gif', get_lang('AgendaAdd'))." ".get_lang('AgendaAdd')."</a>";
+	//echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('calendar_add.gif', get_lang('AgendaAdd'))." ".get_lang('AgendaAdd')."</a>";
+	  echo "<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&action=add&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('calendar_add.gif', get_lang('AgendaAdd'))." ".get_lang('AgendaAdd')."</a>";
 	if (empty ($_SESSION['toolgroup']))
 	{
 		echo get_lang('UserGroupFilter');
@@ -2130,13 +2131,13 @@ function display_agenda_items()
 				$mylink = api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;id='.$myrow['id'];
 	    		echo '<td align="center">';
 	    		// edit
-    			echo '<a href="'.$mylink.'&amp;action=edit&amp;id_attach='.$attachment_list['id'].'" title="'.get_lang("ModifyCalendarItem").'">';
+    			echo '<a href="'.$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&amp;action=edit&amp;id_attach='.$attachment_list['id'].'" title="'.get_lang("ModifyCalendarItem").'">';
 	    		echo Display::return_icon('edit.gif', get_lang('ModifyCalendarItem'))."</a>";
 
-    			echo "<a href=\"".$mylink."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\"> ";
+    			echo "<a href=\"".$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;action=delete\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."')) return false;\"  title=\"".get_lang("Delete")."\"> ";
 	    		echo Display::return_icon('delete.gif', get_lang('Delete'))."</a>";
 
-    			echo '<a href="'.$mylink.'&amp;action=announce" title="'.get_lang("AddAnnouncement").'">';
+    			echo '<a href="'.$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&amp;action=announce" title="'.get_lang("AddAnnouncement").'">';
     			echo Display::return_icon('announce_add.gif', get_lang('AddAnnouncement'), array ('style' => 'width:16px; height:16px;'))."</a> ";
 
 	    		if ($myrow['visibility']==1)
@@ -2149,7 +2150,7 @@ function display_agenda_items()
 	    			$image_visibility="invisible.gif";
 				$text_visibility=get_lang("Show");
 	    		}
-    			echo 	'<a href="'.$mylink.'&amp;action=showhide" title="'.$text_visibility.'">',
+    			echo 	'<a href="'.$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&amp;action=showhide" title="'.$text_visibility.'">',
     					Display::return_icon($image_visibility, $text_visibility),'</a> ';
 			}
 
@@ -2587,7 +2588,7 @@ function show_add_form($id = '')
 
 	<!-- START OF THE FORM  -->
 
-	<form enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
+	<form enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$_GET['origin'].api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&amp;action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
 	<input type="hidden" name="id" value="<?php if (isset($id)) echo $id; ?>" />
 	<input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
 	<input type="hidden" name="id_attach" value="<?php echo Security::remove_XSS($_REQUEST['id_attach']); ?>" />
@@ -2988,7 +2989,7 @@ function show_add_form($id = '')
 					<div class="label">
 			 </div>
 					<div class="formw">';
-		if(isset($_GET['id'])) {
+		if(isset($_GET['id']) ) {
 		$class='save';
 			$text=get_lang('ModifyEvent');
 		} else {

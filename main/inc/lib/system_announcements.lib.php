@@ -51,12 +51,12 @@ class SystemAnnouncementManager
 				{
 					if (strlen($query_string) > 0)
 					{
-						$show_url = 'newsList.php#'.$announcement->id;
+						$show_url = 'news_list.php#'.$announcement->id;
 						//$show_url = $url.'?'.$query_string.'&announcement='.$announcement->id;
 					}
 					else
 					{
-						$show_url = 'newsList.php#'.$announcement->id;
+						$show_url = 'news_list.php#'.$announcement->id;
 						//$show_url = $url.'?announcement='.$announcement->id;
 					}
 					echo '<tr class="system_announcement">
@@ -84,7 +84,7 @@ class SystemAnnouncementManager
 
 			/*echo '<tr><td height="15px"></td></tr>';*/
 			echo '<tr><td colspan="2">';
-			echo '<a href="newsList.php">'.get_lang("More").'</a>';
+			echo '<a href="news_list.php">'.get_lang("More").'</a>';
 			echo '</td></tr>';
 			echo '</table>';
 			echo '</div>';
@@ -172,14 +172,14 @@ class SystemAnnouncementManager
 		if(!isset($_GET['start']) || $_GET['start'] == 0) {
 
 			if($nb_announcement > 20) {
-				echo '<a href="newsList.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
+				echo '<a href="news_list.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
 			}
 
 		} else {
-			echo '<a href="newsList.php?start='.$prev.'"> << '.get_lang('Prev').'</a>';
+			echo '<a href="news_list.php?start='.$prev.'"> << '.get_lang('Prev').'</a>';
 
 			if($nb_announcement > 20) {
-				echo '<a href="newsList.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
+				echo '<a href="news_list.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
 			}
 
 	}

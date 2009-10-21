@@ -1,26 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos SPRL
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 /*
  * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
  * Somes fixes by Julio Montoya
@@ -93,7 +72,7 @@ function rsort_sessions($a, $b) {
 */
 
 if (isset($_GET['id_coach']) && $_GET['id_coach'] != '') {
-	$id_coach = $_GET['id_coach'];
+	$id_coach = intval($_GET['id_coach']);
 } else {
 	$id_coach = $_user['user_id'];
 }
@@ -133,7 +112,7 @@ if ($nb_sessions > 0) {
 		}
 
 		if (isset($_GET['id_coach']) && $_GET['id_coach'] != '') {
-			$row[] = '<a href="student.php?id_session='.$session['id'].'&id_coach='.$_GET['id_coach'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+			$row[] = '<a href="student.php?id_session='.$session['id'].'&id_coach='.intval($_GET['id_coach']).'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
 		} else {
 			$row[] = '<a href="course.php?id_session='.$session['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
 		}

@@ -1,5 +1,5 @@
 <?php
-
+/* For licensing terms, see /dokeos_license.txt */
 /*
  * Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
@@ -44,7 +44,7 @@ $sort_by_first_name = api_sort_by_first_name();
 
 $order_clause = $sort_by_first_name ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 if (isset($_GET["teacher_id"]) && $_GET["teacher_id"] != 0) {
-	$teacher_id = $_GET["teacher_id"];
+	$teacher_id = intval($_GET["teacher_id"]);
 	$sql_formateurs = "SELECT user_id,lastname,firstname,email
 		FROM $tbl_user
 		WHERE user_id='$teacher_id'".$order_clause;

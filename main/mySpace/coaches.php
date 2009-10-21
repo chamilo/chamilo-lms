@@ -1,5 +1,5 @@
 <?php
-
+/* For licensing terms, see /dokeos_license.txt */
 /*
  * Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
@@ -47,7 +47,7 @@ $tbl_track_login 					= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_
 
 function is_coach() {
   	global $tbl_session_course;
-	$sql = "SELECT course_code FROM $tbl_session_course WHERE id_coach='".$_SESSION["_uid"]."'";
+	$sql = "SELECT course_code FROM $tbl_session_course WHERE id_coach='".intval($_SESSION["_uid"])."'";
 	$result = Database::query($sql, __FILE__, __LINE__);
 	if (Database::num_rows($result) > 0) {
 		return true;
@@ -66,7 +66,7 @@ if (isset($_POST['export'])) {
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 }
 if (isset($_GET["id_student"])) {
-	$id_student = $_GET["id_student"];
+	$id_student = intval($_GET["id_student"]);
 	$sql_coachs = "SELECT DISTINCT src.id_coach " .
 		"FROM $tbl_session_rel_course as src, $tbl_session_rel_course_rel_user as srcru " .
 		"WHERE src.id_coach<>'0' AND src.course_code=srcru.course_code AND srcru.id_user='$id_student' AND srcru.id_session=src.id_session";
@@ -78,7 +78,7 @@ if (isset($_GET["id_student"])) {
 	} else {
 		$sql_coachs = "SELECT DISTINCT id_coach, $tbl_user.user_id, lastname, firstname
 			FROM $tbl_user as user, $tbl_session_rel_course as session_rel_course, $tbl_course_user as course_rel_user
-			WHERE course_rel_user.course_code=session_rel_course.course_code AND course_rel_user.status='1' AND course_rel_user.user_id='".$_SESSION["_uid"]."'
+			WHERE course_rel_user.course_code=session_rel_course.course_code AND course_rel_user.status='1' AND course_rel_user.user_id='".intval($_SESSION["_uid"])."'
 			AND session_rel_course.id_coach=user.user_id".$order_clause;
 	}
 }

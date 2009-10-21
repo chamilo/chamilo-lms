@@ -97,11 +97,12 @@ function check_user_in_array($usernames, $user_array) {
 function user_available_in_session($username, $course_list, $id_session) {
 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 	$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
+	$id_session = intval($id_session);
+	$username = Database::escape_string($username);
 	foreach($course_list as $enreg_course) {
-		$sql_select = "SELECT u.user_id FROM $tbl_session_rel_course_rel_user rel INNER JOIN $table_user u
-		on (rel.id_user=u.user_id)
-		WHERE rel.id_session='$id_session' AND u.status='5' AND u.username ='$username' AND rel.course_code='$enreg_course'";
+		$sql_select = "	SELECT u.user_id FROM $tbl_session_rel_course_rel_user rel INNER JOIN $table_user u
+					   	ON (rel.id_user=u.user_id)
+						WHERE rel.id_session='$id_session' AND u.status='5' AND u.username ='$username' AND rel.course_code='$enreg_course'";
 		$rs = Database::query($sql_select, __FILE__, __LINE__);
 		if (Database::num_rows($rs) > 0) {
 			return Database::result($rs, 0, 0);
@@ -170,7 +171,7 @@ function get_user_creator($users, $course_list, $id_session) {
 		// database table definition
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-		$username = $user['UserName'];
+		$username = Database::escape_string($user['UserName']);
 		//echo "<br>";
 		$sql = "SELECT creator_id FROM $table_user WHERE username='$username' ";
 
@@ -245,6 +246,7 @@ function save_data($users, $course_list, $id_session) {
 	$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	$tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
+	$id_session = intval($id_session);
 	$sendMail = $_POST['sendMail'] ? 1 : 0;
 
 	// Adding users to the platform.
@@ -270,8 +272,9 @@ function save_data($users, $course_list, $id_session) {
 	foreach ($course_list as $enreg_course) {
 		$nbr_users = 0;
 		$new_users = array();
+		$enreg_course = Database::escape_string($enreg_course);
 		foreach ($users as $index => $user) {
-			$userid = $user['id'];
+			$userid = intval($user['id']);
 			$sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$userid')";
 			$course_session = array('course' => $enreg_course, 'added' => 1);
 			//$user['added_at_session'] = $course_session;
@@ -472,9 +475,9 @@ api_block_anonymous_users();
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('MySpace'));
 $id_session = '';
 if (isset($_GET['id_session']) && $_GET['id_session'] != '') {
- 	$id_session = Security::remove_XSS($_GET['id_session']);
+ 	$id_session = intval($_GET['id_session']);
 	$interbreadcrumb[] = array ('url' => 'session.php', 'name' => get_lang('Sessions'));
-	$interbreadcrumb[] = array ('url' => 'course.php?id_session='.$_GET['id_session'].'', 'name' => get_lang('Course'));
+	$interbreadcrumb[] = array ('url' => 'course.php?id_session='.$id_session.'', 'name' => get_lang('Course'));
 }
 
 // Set this option to true to enforce strict purification for usenames.
@@ -491,7 +494,7 @@ if (!api_is_coach()) {
 if (api_get_setting('add_users_by_coach') == 'true') {
 	if (!api_is_platform_admin()) {
 		if (isset($_REQUEST['id_session'])) {
-			$id_session = $_REQUEST['id_session'];
+			$id_session = intval($_REQUEST['id_session']);
 			$sql = 'SELECT id_coach FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
 			$rs = Database::query($sql, __FILE__, __LINE__);
 			if (Database::result($rs, 0, 0) != $_user['user_id']) {
@@ -509,7 +512,7 @@ set_time_limit(0);
 
 if ($_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
 	$file_type = $_POST['file_type'];
-	$id_session = $_POST['id_session'];
+	$id_session = intval($_POST['id_session']);
 	if ($file_type == 'csv') {
 		$users = parse_csv_data($_FILES['import_file']['tmp_name']);
 	} else {

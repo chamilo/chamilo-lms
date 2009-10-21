@@ -206,7 +206,7 @@ $course_quiz_answer = 'quiz_answer';
 $course_student_publication = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 
 if (isset ($_GET["user_id"]) && $_GET["user_id"] != "") {
-	$user_id = (int) $_GET["user_id"];
+	$user_id = intval($_GET['user_id']);
 } else {
 	$user_id = $_user['user_id'];
 }
@@ -329,9 +329,7 @@ if (!empty ($_GET['student'])) {
 	<a name="infosStudent"></a>
 				<table width="100%" border="0" >
 					<tr>
-
-							<?php
-
+<?php
 	$image_array = UserManager :: get_user_picture_path_by_id($info_user['user_id'], 'web', false, true);
 	echo '<td class="borderRight" width="10%" valign="top">';
 
@@ -351,12 +349,9 @@ if (!empty ($_GET['student'])) {
 	} else {
 		echo '<input type="image" ' . $img_attributes . ' onclick="javascript: return show_image(\'' . $url_big_image . '\',\'' . $big_image_width . '\',\'' . $big_image_height . '\');"/>';
 	}
-
 	echo '</td>';
 ?>
-
 			<td width="40%" valign="top">
-
 				<table width="100%" class="data_table">
 								<tr>
 									<th>
@@ -509,10 +504,10 @@ if (!empty ($_GET['student'])) {
 			$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 			$sql = 'SELECT id_session
-										FROM ' . $tbl_session_course_user . ' session_course_user
-										WHERE session_course_user.id_user = ' . intval($info_user['user_id']) . '
-										AND session_course_user.course_code = "' . Database :: escape_string($course_code_info) . '"
-										ORDER BY id_session DESC';
+					FROM ' . $tbl_session_course_user . ' session_course_user
+					WHERE session_course_user.id_user = ' . intval($info_user['user_id']) . '
+					AND session_course_user.course_code = "' . Database :: escape_string($course_code_info) . '"
+					ORDER BY id_session DESC';
 			$rs = Database::query($sql, __FILE__, __LINE__);
 			$num_row = Database :: num_rows($rs);
 			if ($num_row > 0) {
@@ -520,15 +515,15 @@ if (!empty ($_GET['student'])) {
 				if ($le_session_id > 0) {
 					// get session name and coach of the session
 					$sql = 'SELECT name, id_coach FROM ' . $tbl_session . '
-														WHERE id=' . $le_session_id;
+							WHERE id=' . $le_session_id;
 					$rs = Database::query($sql, __FILE__, __LINE__);
 					$session_name = Database :: result($rs, 0, 'name');
 					$session_coach_id = intval(Database :: result($rs, 0, 'id_coach'));
 
 					// get coach of the course in the session
 					$sql = 'SELECT id_coach FROM ' . $tbl_session_course . '
-														WHERE id_session=' . $le_session_id . '
-														AND course_code = "' . Database :: escape_string($_GET['course']) . '"';
+							WHERE id_session=' . $le_session_id . '
+							AND course_code = "' . Database :: escape_string($_GET['course']) . '"';
 					$rs = Database::query($sql, __FILE__, __LINE__);
 					$session_course_coach_id = intval(Database :: result($rs, 0, 0));
 
@@ -636,9 +631,8 @@ if (!empty ($_GET['student'])) {
 		$tbl_stats_attempts = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 		$tbl_quiz_questions = Database :: get_course_table(TABLE_QUIZ_QUESTION, $info_course['db_name']);
 
-		$sql_learnpath = "SELECT lp.name,lp.id
-										FROM $t_lp AS lp ORDER BY lp.name ASC
-									";
+		$sql_learnpath = "	SELECT lp.name,lp.id
+							FROM $t_lp AS lp ORDER BY lp.name ASC";
 
 		$result_learnpath = Database::query($sql_learnpath, __FILE__, __LINE__);
 
@@ -945,11 +939,11 @@ if (!empty ($_GET['student'])) {
 
 		$csv_content[] = array ();
 
-		$nb_assignments = Tracking :: count_student_assignments($info_user['user_id'], $info_course['code']);
-		$messages = Tracking :: count_student_messages($info_user['user_id'], $info_course['code']);
-		$links = Tracking :: count_student_visited_links($info_user['user_id'], $info_course['code']);
-		$documents = Tracking :: count_student_downloaded_documents($info_user['user_id'], $info_course['code']);
-		$chat_last_connection = Tracking :: chat_last_connection($info_user['user_id'], $info_course['code']);
+		$nb_assignments 		= Tracking :: count_student_assignments($info_user['user_id'], $info_course['code']);
+		$messages 				= Tracking :: count_student_messages($info_user['user_id'], $info_course['code']);
+		$links 					= Tracking :: count_student_visited_links($info_user['user_id'], $info_course['code']);
+		$documents				= Tracking :: count_student_downloaded_documents($info_user['user_id'], $info_course['code']);
+		$chat_last_connection 	= Tracking :: chat_last_connection($info_user['user_id'], $info_course['code']);
 
 		$csv_content[] = array (
 			get_lang('Student_publication'),

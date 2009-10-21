@@ -1,5 +1,5 @@
 <?php
-
+/* For licensing terms, see /dokeos_license.txt */
 /*
  * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
  */

@@ -20,10 +20,9 @@ define('USER_FIELD_TYPE_DATETIME', 7);
 define('USER_FIELD_TYPE_DOUBLE_SELECT', 8);
 define('USER_FIELD_TYPE_DIVIDER', 9);
 
-class UserManager {
-
+class UserManager 
+{
 	private function __construct () {
-
 	}
 
 	/**
@@ -68,7 +67,7 @@ class UserManager {
 		}
 
 		if ($_user['user_id']) {
-			$creator_id = $_user['user_id'];
+			$creator_id = intval($_user['user_id']);
 		} else {
 			$creator_id = '';
 		}
@@ -143,10 +142,12 @@ class UserManager {
 	 */
 	public static function can_delete_user($user_id) {
 		$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		if ($user_id != strval(intval($user_id))) return false;
+		if ($user_id === false) return false;
 		$sql = "SELECT * FROM $table_course_user WHERE status = '1' AND user_id = '".$user_id."'";
 		$res = Database::query($sql, __FILE__, __LINE__);
 		while ($course = Database::fetch_object($res)) {
-			$sql = "SELECT user_id FROM $table_course_user WHERE status='1' AND course_code ='".$course->course_code."'";
+			$sql = "SELECT user_id FROM $table_course_user WHERE status='1' AND course_code ='".Database::escape_string($course->course_code)."'";
 			$res2 = Database::query($sql, __FILE__, __LINE__);
 			if (Database::num_rows($res2) == 1) {
 				return false;
@@ -162,6 +163,10 @@ class UserManager {
 	 */
 	public static function delete_user($user_id) {
 		global $_configuration;
+		
+		if ($user_id != strval(intval($user_id))) return false;
+		if ($user_id === false) return false;
+		
 		if (!self::can_delete_user($user_id)) {
 			return false;
 		}
@@ -203,7 +208,8 @@ class UserManager {
 		$user_info = api_get_user_info($user_id);
 		if (strlen($user_info['picture_uri']) > 0) {
 			$img_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$user_id.'/'.$user_info['picture_uri'];
-			unlink($img_path);
+			if (file_exists($img_path))
+				unlink($img_path);
 		}
 
 		// Delete the personal course categories
@@ -233,7 +239,6 @@ class UserManager {
 		$sqlv = "DELETE FROM $t_ufv WHERE user_id = $user_id";
 		$resv = Database::query($sqlv, __FILE__, __LINE__);
 
-
 		if ($_configuration['multiple_access_urls']) {
 			require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 			$url_id = 1;
@@ -259,6 +264,8 @@ class UserManager {
 	 */
 	public static function update_openid($user_id, $openid) {
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+		if ($user_id != strval(intval($user_id))) return false;
+		if ($user_id === false) return false;
 		$sql = "UPDATE $table_user SET
 				openid='".Database::escape_string($openid)."'";
 		$sql .=	" WHERE user_id='$user_id'";
@@ -285,6 +292,8 @@ class UserManager {
 	 */
 	public static function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id = null, $hr_dept_id = 0, $extra = null, $language = 'english') {
 		global $userPasswordCrypted;
+		if ($user_id != strval(intval($user_id))) return false;
+		if ($user_id === false) return false;
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "UPDATE $table_user SET
 				lastname='".Database::escape_string($lastname)."',
@@ -329,7 +338,7 @@ class UserManager {
 	 */
 	public static function is_username_available($username) {
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-		$sql = "SELECT username FROM $table_user WHERE username = '".addslashes($username)."'";
+		$sql = "SELECT username FROM $table_user WHERE username = '".Database::escape_string($username)."'";
 		$res = Database::query($sql, __FILE__, __LINE__);
 		return Database::num_rows($res) == 0;
 	}
@@ -508,6 +517,7 @@ class UserManager {
 	 */
 	public static function get_user_info($username) {
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
+		$username = Database::escape_string($username);
 		$sql = "SELECT * FROM $user_table WHERE username='".$username."'";
 		$res = Database::query($sql, __FILE__, __LINE__);
 		if (Database::num_rows($res) > 0) {
@@ -560,6 +570,7 @@ class UserManager {
 	public static function get_teacher_list($course_id, $sel_teacher = '') {
 		$user_course_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
+		$course_id = Database::escape_string($course_id);
 		$sql_query = "SELECT * FROM $user_table a, $user_course_table b where a.user_id=b.user_id AND b.status=1 AND b.course_code='$course_id'";
 		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
 		echo "<select name=\"author\">";
@@ -770,10 +781,10 @@ class UserManager {
 	 * @return	A string containing the XHTML code to dipslay the production list, or FALSE
 	 */
 	public static function build_production_list($user_id, $force = false, $showdelete = false) {
+		
 		if (!$force && !empty($_POST['remove_production'])) {
 			return true; // postpone reading from the filesystem
 		}
-
 		$productions = self::get_user_productions($user_id);
 
 		if (empty($productions)) {
@@ -879,6 +890,8 @@ class UserManager {
 		$t_ufo = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 		$fname = Database::escape_string($fname);
+		if ($user_id != strval(intval($user_id))) return false;
+		if ($user_id === false) return false;
 		$fvalues = '';
 		if (is_array($fvalue)) {
 			foreach($fvalue as $val) {
@@ -980,7 +993,7 @@ class UserManager {
 		$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
 		$t_ufo = Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 		$columns = array('id', 'field_variable', 'field_type', 'field_display_text', 'field_default_value', 'field_order', 'field_filter', 'tms');
-
+		$column = intval($column);
 		$sort_direction = '';
 		if (in_array(strtoupper($direction), array('ASC', 'DESC'))) {
 			$sort_direction = strtoupper($direction);
@@ -1776,6 +1789,7 @@ class UserManager {
 		$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 		$user_id = intval($user_id);
+		$session_id = intval($session_id);
 		//we filter the courses from the URL
 		$join_access_url=$where_access_url='';
 		global $_configuration;
@@ -2191,6 +2205,7 @@ class UserManager {
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
         $title = api_utf8_decode($title);
         $content = api_utf8_decode($content);
+        $email_administrator = Database::escape_string($email_administrator);
 		//message in inbox
 		$sql_message_outbox = 'SELECT user_id from '.$table_user.' WHERE email="'.$email_administrator.'" ';
 		//$num_row_query = Database::num_rows($sql_message_outbox);

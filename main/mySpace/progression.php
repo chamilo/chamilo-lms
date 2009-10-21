@@ -1,5 +1,5 @@
 <?php
-
+/* For licensing terms, see /dokeos_license.txt */
 /*
  * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
@@ -33,10 +33,7 @@ $tbl_track_exercice = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EX
  	MAIN CODE
 ===============================================================================
 */
-$sql_course = "SELECT 	title,code
-	FROM $tbl_course as course
-	ORDER BY title ASC";
-
+$sql_course = "SELECT title,code FROM $tbl_course as course ORDER BY title ASC";
 $result_course = Database::query($sql_course, __FILE__, __LINE__);
 
 if (Database::num_rows($result_course) > 0) {

@@ -66,6 +66,7 @@ class UrlManager
 	*/
 	function udpate($url_id, $url, $description, $active)
 	{
+		$url_id = intval($url_id);
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 		$tms = time();
 		$sql = "UPDATE $table_access_url
@@ -88,6 +89,7 @@ class UrlManager
 	* */
 	function delete($id)
 	{
+		$id = intval($id);
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 		$sql= "DELETE FROM $table_access_url WHERE id = ".Database::escape_string($id);
 		$result = Database::query($sql,  __FILE__, __LINE__);
@@ -156,7 +158,7 @@ class UrlManager
 	 * @return array
 	 * */
 	function get_url_data_from_id($url_id)
-	{
+	{		
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 		$sql = "SELECT id, url, description, active FROM $table_access_url WHERE id = ".Database::escape_string($url_id);
 		$res = Database::query($sql, __FILE__, __LINE__);

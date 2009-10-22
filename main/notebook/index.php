@@ -36,12 +36,12 @@ event_access_tool(TOOL_NOTEBOOK);
 // tool name
 if ( isset($_GET['action']) && $_GET['action'] == 'addnote')
 {
-	$tool = get_lang('NoteAddNew');
+	$tool = 'NoteAddNew';
 	$interbreadcrumb[] = array ("url"=>"index.php", "name"=> get_lang('Notebook'));
 }
 if ( isset($_GET['action']) && $_GET['action'] == 'editnote')
 {
-	$tool = get_lang('ModifyNote');
+	$tool = 'ModifyNote';
 	$interbreadcrumb[] = array ("url"=>"index.php", "name"=> get_lang('Notebook'));
 }
 

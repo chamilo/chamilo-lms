@@ -351,9 +351,8 @@ class SessionManager {
 			if ($empty_users!==false) {
 				foreach ($existingUsers as $existing_user) {
 					if(!in_array($existing_user, $user_list)) {
-						$sql = "DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course' AND id_user='$existing_user'";
+						$sql = "DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course' AND id_user='$existing_user' AND status != 2 ";
 						Database::query($sql,__FILE__,__LINE__);
-
 						if(Database::affected_rows()) {
 							$nbr_users--;
 						}

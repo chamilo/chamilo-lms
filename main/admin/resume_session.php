@@ -215,7 +215,7 @@ else {
 		//select the number of users
 
 		$sql = " SELECT count(*) FROM $tbl_session_rel_user sru, $tbl_session_rel_course_rel_user srcru
-				WHERE srcru.id_user = sru.id_user AND srcru.course_code = '".Database::escape_string($course['code'])."'
+				WHERE srcru.id_user = sru.id_user AND srcru.id_session = sru.id_session AND srcru.course_code = '".Database::escape_string($course['code'])."'
 				AND srcru.id_session = '".intval($id_session)."'";
 
 		$rs = Database::query($sql, __FILE__, __LINE__);

@@ -3210,7 +3210,7 @@ function forum_search() {
 	$form->addElement('style_submit_button', null, get_lang('Search'), 'class="search"');
 
 	// setting the rules
-	$form->addRule('search_term', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+	$form->addRule('search_term', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addRule('search_term', get_lang('TooShort'),'minlength',3);
 
 	// The validation or display

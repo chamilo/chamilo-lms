@@ -45,6 +45,10 @@ Display::display_introduction_section(TOOL_GLOSSARY);
 
 if ($_GET['action'] == 'changeview' AND in_array($_GET['view'],array('list','table'))) {
 	$_SESSION['glossary_view'] = $_GET['view'];
+} else {
+  if (!isset($_SESSION['glossary_view'])) {
+    $_SESSION['glossary_view'] = 'table';//Default option
+  }
 }
 
 if (api_is_allowed_to_edit(null,true)) {
@@ -324,13 +328,13 @@ function display_glossary()
 	{
 		echo '<a href="index.php?'.api_get_cidreq().'&action=addglossary&msg=add">'.Display::return_icon('filenew.gif',get_lang('TermAddNew')).get_lang('TermAddNew').'</a>';
 	}
-	if ($_GET['view']=='table' || !isset($_GET['view'])){
+
+	if ((isset($_SESSION['glossary_view']) && $_SESSION['glossary_view'] == 'table') or (!isset($_SESSION['glossary_view']))){
 		echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.Display::return_icon('view_list.gif',get_lang('ListView')).get_lang('ListView').'</a>';
 	} else {
 		echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=table">'.Display::return_icon('view_table.gif',get_lang('TableView')).get_lang('TableView').'</a>';
 	}
 	echo '</div>';
-
 	if (!$_SESSION['glossary_view'] OR $_SESSION['glossary_view'] == 'table')
 	{
 		$table = new SortableTable('glossary', 'get_number_glossary_terms', 'get_glossary_data',0);

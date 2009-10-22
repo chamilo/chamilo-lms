@@ -33,7 +33,7 @@ event_access_tool(TOOL_GLOSSARY);
 // displaying the header
 
 if (isset($_GET['action']) && ($_GET['action'] == 'addglossary' || $_GET['action'] == 'edit_glossary')) {
-$tool=get_lang('GlossaryManagement');
+$tool='GlossaryManagement';
 $interbreadcrumb[] = array ("url"=>"index.php", "name"=> get_lang('Glossary'));
 }
 

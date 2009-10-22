@@ -2860,31 +2860,32 @@ class SurveyUtil {
 
 
 			// displaying the table: the content
-			foreach ($options as $key=>$value)
-			{
-				$absolute_number = $data[$value['question_option_id']]['total'];
-				if($number_of_answers == 0)
+			if(is_array($options)){
+				foreach ($options as $key=>$value)
 				{
-					$answers_number = 0;
+					$absolute_number = $data[$value['question_option_id']]['total'];
+					if($number_of_answers == 0)
+					{
+						$answers_number = 0;
+					}
+					else
+					{
+						$answers_number = $absolute_number/$number_of_answers*100;
+					}
+					echo '	<tr>';
+					echo '		<td>'.$value['option_text'].'</td>';
+					echo '		<td align="right"><a href="reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset).'&amp;viewoption='.$value['question_option_id'].'">'.$absolute_number.'</a></td>';
+					echo '		<td align="right">'.round($answers_number, 2).' %</td>';
+					echo '		<td align="right">';
+					$size = $answers_number*2;
+					if ($size > 0)
+					{
+						echo '<div style="border:1px solid #264269; background-color:#aecaf4; height:10px; width:'.$size.'px">&nbsp;</div>';
+					}
+					echo '		</td>';
+					echo '	</tr>';
 				}
-				else
-				{
-					$answers_number = $absolute_number/$number_of_answers*100;
-				}
-				echo '	<tr>';
-				echo '		<td>'.$value['option_text'].'</td>';
-				echo '		<td align="right"><a href="reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset).'&amp;viewoption='.$value['question_option_id'].'">'.$absolute_number.'</a></td>';
-				echo '		<td align="right">'.round($answers_number, 2).' %</td>';
-				echo '		<td align="right">';
-				$size = $answers_number*2;
-				if ($size > 0)
-				{
-					echo '<div style="border:1px solid #264269; background-color:#aecaf4; height:10px; width:'.$size.'px">&nbsp;</div>';
-				}
-				echo '		</td>';
-				echo '	</tr>';
 			}
-
 			// displaying the table: footer (totals)
 			echo '	<tr>';
 			echo '		<td style="border-top:1px solid black;"><b>'.get_lang('Total').'</b></td>';
@@ -3211,34 +3212,35 @@ class SurveyUtil {
 				echo '<td align="center">'.$value.'</td>';
 			}
 		}
-
-		foreach ($possible_options as $question_id=>$possible_option)
-		{
-			if ($questions[$question_id]['type'] == 'open')
+		if(is_array($possible_options)) {
+			foreach ($possible_options as $question_id=>$possible_option)
 			{
-				echo '<td align="center">';
-				echo $answers_of_user[$question_id]['0']['option_id'];
-				echo '</td>';
-			}
-			else
-			{
-				foreach ($possible_option as $option_id=>$value)
+				if ($questions[$question_id]['type'] == 'open')
 				{
 					echo '<td align="center">';
-					if (!empty($answers_of_user[$question_id][$option_id]))
+					echo $answers_of_user[$question_id]['0']['option_id'];
+					echo '</td>';
+				}
+				else
+				{
+					foreach ($possible_option as $option_id=>$value)
 					{
-						if ($answers_of_user[$question_id][$option_id]['value']<>0)
+						echo '<td align="center">';
+						if (!empty($answers_of_user[$question_id][$option_id]))
 						{
-							echo $answers_of_user[$question_id][$option_id]['value'];
-						}
-						else
-						{
-							echo 'v';
+							if ($answers_of_user[$question_id][$option_id]['value']<>0)
+							{
+								echo $answers_of_user[$question_id][$option_id]['value'];
+							}
+							else
+							{
+								echo 'v';
+							}
 						}
 					}
 				}
+	
 			}
-
 		}
 		echo '</tr>';
 	}

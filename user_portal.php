@@ -512,10 +512,11 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 				}
 			}
 
-			if ($s_course_status == 1) {
+			if ($s_course_status == 1 || ($s_course_status == 5 && empty($my_course['id_session']))) {
 				$result .= $course_teacher;
 			}
-			if ($s_course_status == 2 || ($is_coach && $s_course_status != 1)) {
+			
+			if (($s_course_status == 5 && !empty($my_course['id_session'])) || ($is_coach && $s_course_status != 1)) {
 				$result .= get_lang('Coachs').': '.implode(', ',$course_coachs);
 			}
 

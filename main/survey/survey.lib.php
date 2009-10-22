@@ -4017,15 +4017,17 @@ class SurveyUtil {
 		}
 
 		$counter = 0;
-		foreach ($answers_x as $user => $answers)
-		{
-			// check if the user has given $option_x as answer
-			if (in_array($check_x, $answers))
+		if(is_array($answers_x)){
+			foreach ($answers_x as $user => $answers)
 			{
-				// check if the user has given $option_y as an answer
-				if (in_array($check_y, $answers_y[$user]))
+				// check if the user has given $option_x as answer
+				if (in_array($check_x, $answers))
 				{
-					$counter++;
+					// check if the user has given $option_y as an answer
+					if (in_array($check_y, $answers_y[$user]))
+					{
+						$counter++;
+					}
 				}
 			}
 		}

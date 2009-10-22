@@ -3066,8 +3066,8 @@ class SurveyUtil {
 			// we show the questions if
 			// 1. there is no question filter and the export button has not been clicked
 			// 2. there is a quesiton filter but the question is selected for display
-			if (!($_POST['submit_question_filter']  OR $_POST['export_report']) OR in_array($row['question_id'], $_POST['questions_filter']))
-			{
+			//if (!($_POST['submit_question_filter']  OR $_POST['export_report']) OR in_array($row['question_id'], $_POST['questions_filter']))
+			if (!($_POST['submit_question_filter']) OR (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))) {
 				// we do not show comment and pagebreak question types
 				if ($row['type'] <> 'comment' AND $row['type'] <> 'pagebreak')
 				{
@@ -3111,24 +3111,25 @@ class SurveyUtil {
 				WHERE sq.survey_id = '".Database::escape_string($_GET['survey_id'])."'
 				ORDER BY sq.sort ASC, sqo.sort ASC";
 		$result = Database::query($sql, __FILE__, __LINE__);
-		while ($row = Database::fetch_array($result))
-		{
-			// we show the options if
-			// 1. there is no question filter and the export button has not been clicked
-			// 2. there is a question filter but the question is selected for display
-			if (!($_POST['submit_question_filter'] OR $_POST['export_report']) OR in_array($row['question_id'], $_POST['questions_filter']))
-			{
-				// we do not show comment and pagebreak question types
-				if ($row['type'] <> 'comment' AND $row['type'] <> 'pagebreak' AND $row['type'] <> 'open')
-				{
-					echo '			<th>';
-					echo $row['option_text'];
-					echo '</th>';
-					$possible_answers[$row['question_id']][$row['question_option_id']] =$row['question_option_id'];
+		
+			while ($row = Database::fetch_array($result)) {
+				// we show the options if
+				// 1. there is no question filter and the export button has not been clicked
+				// 2. there is a question filter but the question is selected for display
+				//if (!($_POST['submit_question_filter'] OR $_POST['export_report']) OR in_array($row['question_id'], $_POST['questions_filter']))
+				if (!($_POST['submit_question_filter']) OR (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))) {
+					// we do not show comment and pagebreak question types
+					if ($row['type'] <> 'comment' AND $row['type'] <> 'pagebreak' AND $row['type'] <> 'open')
+					{
+						echo '			<th>';
+						echo $row['option_text'];
+						echo '</th>';
+						$possible_answers[$row['question_id']][$row['question_option_id']] =$row['question_option_id'];
+					}
+					//no column at all if the question was not a question
 				}
-				//no column at all if the question was not a question
-			}
-		}
+			} 
+		
 		echo '	</tr>';
 
 		// getting all the answers of the users

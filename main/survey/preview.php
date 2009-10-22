@@ -114,6 +114,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='
 		// Getting all the questions for this page and add them to a multidimensional array where the first index is the page.
 		// as long as there is no pagebreak fount we keep adding questions to the page
 		$questions_displayed = array();
+		$paged_questions = array();
 		$counter = 0;
 		$sql = "SELECT * FROM $table_survey_question
 			WHERE survey_id = '".Database::escape_string($survey_id)."'
@@ -122,17 +123,14 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='
 
 		while ($row = Database::fetch_array($result))
 		{
-			if($row['type'] == 'pagebreak')
-			{
+			if($row['type'] == 'pagebreak') {
 				$counter++;
-			}
-			else
-			{
+			} else {
 				$paged_questions[$counter][] = $row['question_id'];
-			}
+					}
 		}
 
-		if (key_exists($_GET['show'],$paged_questions))
+		if (array_key_exists($_GET['show'], $paged_questions))
 		{
 			$sql = "SELECT 	survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type, survey_question.max_value,
 							survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort

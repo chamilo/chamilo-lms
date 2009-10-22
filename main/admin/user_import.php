@@ -423,8 +423,8 @@ if ($count_fields > 0) {
 
 <blockquote>
 <pre>
-<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;<font style="color:red;"><?php if (count($list) > 0) echo implode(';', $list).';'; ?></font>Courses;ClassName;
-<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;<font style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></font>xxx1|xxx2|xxx3;xxx;<br />
+<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;<font style="color:red;"><?php if (count($list) > 0) echo implode(';', $list).';'; ?></font>Courses;
+<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;<font style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></font>xxx1|xxx2|xxx3;<br />
 </pre>
 </blockquote>
 
@@ -443,10 +443,9 @@ if ($count_fields > 0) {
         <b>&lt;Email&gt;xxx&lt;/Email&gt;</b>
         &lt;OfficialCode&gt;xxx&lt;/OfficialCode&gt;
         &lt;PhoneNumber&gt;xxx&lt;/PhoneNumber&gt;
-        &lt;Status&gt;user/teacher/drh&lt;/Status&gt;         <?php if ($result_xml != '') { echo '<br /><font style="color:red;">', $result_xml; echo '</font>'; } ?>
+        &lt;Status&gt;user/teacher/drh<?php if ($result_xml != '') { echo '<br /><font style="color:red;">', $result_xml; echo '</font>'; } ?>&lt;/Status&gt;       
         &lt;Courses&gt;xxx1|xxx2|xxx3&lt;/Courses&gt;
-        &lt;ClassName&gt;class 1&lt;/ClassName&gt;
-    &lt;/Contact&gt;
+        &lt;/Contact&gt;
 &lt;/Contacts&gt;
 </pre>
 </blockquote>

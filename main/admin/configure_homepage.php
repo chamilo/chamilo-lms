@@ -667,7 +667,7 @@ switch($action){
 		</tr>
 		<tr>
 		  <td>&nbsp;</td>
-		  <td><input type="submit" value="<?php echo get_lang('Ok'); ?>"/></td>
+		  <td><button class="save" type="submit" value="<?php echo get_lang('Ok'); ?>"/><?php echo get_lang('Ok'); ?></button></td>
 		</tr>
 		</table>
 		</form>

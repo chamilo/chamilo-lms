@@ -35,7 +35,7 @@ $tbl_session_course_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_US
 
 $tool_name = get_lang('ImportSessionListXMLCSV');
 
-$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('AdministrationTools'));
+$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
 

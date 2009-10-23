@@ -497,7 +497,9 @@ if($_GET['studentlist'] == 'false') {
 				6 => '6 '.get_lang('Days'),
 				7 => '7 '.get_lang('Days'),
 				15 => '15 '.get_lang('Days'),
-				30 => '30 '.get_lang('Days')
+				30 => '30 '.get_lang('Days'),
+				'never' => get_lang('Never')
+				
 				);
 	
 	$el = $form -> addElement('select','since','<img width="22" align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" border="0" />'.get_lang('RemindInactivesLearnersSince'),$options);

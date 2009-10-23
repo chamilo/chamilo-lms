@@ -1015,15 +1015,28 @@ if ($display_form == true) {
 			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'), 7);
 			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('siteName'));
 		} elseif (isset($_GET['remindallinactives']) && $_GET['remindallinactives']=='true') {
+			// we want to remind inactive users. The $_GET['since'] parameter determines which users have to be warned (i.e the users who have been inactive for x days or more
 			$since = isset($_GET['since']) ? intval($_GET['since']) : 6;
+			// getting the users who have to be reminded
 			$to = Tracking :: get_inactives_students_in_course($_course['id'],$since, $_SESSION['id_session']);
+			// setting the variables for the form elements: the users who need to receive the message
 			foreach($to as &$user) {
 				$user = 'USER:'.$user;
 			}
+			// setting the variables for the form elements: the 'visible to' form element has to be expanded
 			$_SESSION['select_groupusers']="show";
+			// setting the variables for the form elements: the message has to be sent by email
 			$email_ann = '1';
-			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'),$since);
-			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('siteName'));						
+			// setting the variables for the form elements: the title of the email
+			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('siteName'),' > ',$_course['name']);				
+			// setting the variables for the form elements: the message of the email
+			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'),' > ',$_course['name'],$since);
+			// when we want to remind the users who have never been active then we have a different subject and content for the announcement
+			if ($_GET['since'] == 'never') {
+				$title_to_modify = get_lang('NoActivityYetTitle');
+				$content_to_modify = get_lang('NoActivityYetContent');
+			}
+			
 		} else {
 			echo get_lang("Everybody");
 		}

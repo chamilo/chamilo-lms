@@ -27,7 +27,7 @@ require '../inc/global.inc.php';
 // the section (for the tabs)
 $this_section = "session_my_space";
 
-
+// access restrictions
 $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
 
 if (!$is_allowedToTrack) {
@@ -47,7 +47,10 @@ require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
+require '../resourcelinker/resourcelinker.inc.php';
 
+// starting the output buffering when we are exporting the information
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 if ($export_csv) {
 	ob_start();
@@ -64,23 +67,7 @@ if (!empty($_GET['scormcontopen'])) {
     $lp_charset = $row['default_encoding'];
 }
 
-$htmlHeadXtra[] = "<style type='text/css'>
-/*<![CDATA[*/
-.secLine {background-color : #E6E6E6;}
-.content {padding-left : 15px;padding-right : 15px; }
-.specialLink{color : #0000FF;}
-/*]]>*/
-</style>
-<style media='print' type='text/css'>
-
-</style>";
-
-/*
------------------------------------------------------------
-	Constants and variables
------------------------------------------------------------
-*/
-// regroup table names for maintenance purpose
+// Database table definitions
 $TABLETRACK_ACCESS      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 $TABLETRACK_LINKS       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
 $TABLETRACK_DOWNLOADS   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
@@ -91,86 +78,65 @@ $TABLECOURSE	        = Database::get_main_table(TABLE_MAIN_COURSE);
 $TABLECOURSE_LINKS      = Database::get_course_table(TABLE_LINK);
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $TABLEQUIZ = Database :: get_course_table(TABLE_QUIZ_TEST);
-
-//$table_scormdata = Database::get_scorm_table(TABLE_SCORM_SCO_DATA);
-//$table_scormmain = Database::get_scorm_table(TABLE_SCORM_MAIN);
-//$tbl_learnpath_main = Database::get_course_table(TABLE_LEARNPATH_MAIN);
-//$tbl_learnpath_item = Database::get_course_table(TABLE_LEARNPATH_ITEM);
-//$tbl_learnpath_chapter = Database::get_course_table(TABLE_LEARNPATH_CHAPTER);
-
 $tbl_learnpath_main = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_learnpath_item = Database::get_course_table(TABLE_LP_ITEM);
 $tbl_learnpath_view = Database::get_course_table(TABLE_LP_VIEW);
 $tbl_learnpath_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
+// breadcrumbs 
 if (isset($_GET['origin']) && $_GET['origin']=='resume_session') {
     $interbreadcrumb[]=array('url' => '../admin/index.php','name' => get_lang('PlatformAdmin'));
     $interbreadcrumb[]=array('url' => '../admin/session_list.php','name' => get_lang('SessionList'));
     $interbreadcrumb[]=array('url' => '../admin/resume_session.php?id_session='.$_SESSION['id_session'],'name' => get_lang('SessionOverview'));
 }
 
+// this is probably not used
 $view = (isset($_REQUEST['view'])?$_REQUEST['view']:'');
 
-$nameTools = get_lang('Tracking');
 
-Display::display_header($nameTools, 'Tracking');
+// display the header
+Display::display_header(get_lang('Tracking'), 'Tracking');
 
-require api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
-require '../resourcelinker/resourcelinker.inc.php';
-
+// getting all the students of the course
 $a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true, (empty($_SESSION['id_session'])?null:$_SESSION['id_session']));
 $nbStudents = count($a_students);
 
-/**
- * count the number of students in this course (used for SortableTable)
- */
-function count_student_in_course() {
-	global $nbStudents;
-	return $nbStudents;
-}
 
-function sort_users($a, $b) {
-	return api_strcmp(trim(api_strtolower($a[$_SESSION['tracking_column']])), trim(api_strtolower($b[$_SESSION['tracking_column']])));
-}
 
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
-
+// Actions
 echo '<div class="actions">';
 if ($_GET['studentlist'] == 'false') {
 	echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a>&nbsp;|&nbsp;'.get_lang('CourseTracking');
 } else {
 	echo get_lang('StudentsTracking').' | <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>';
 }
-echo '&nbsp;<a href="#" onclick="window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>';
+echo '<a href="#" onclick="window.print()">'.Display::return_icon('printmgr.gif',get_lang('Print')).get_lang('Print').'</a>';
 if($_GET['studentlist'] == 'false') {	
-	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&studentlist=false"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&studentlist=false">'.Display::return_icon('csv.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
 } else {
-	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv">'.Display::return_icon('csv.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
 }
+echo display_additional_profile_fields();
 echo '</div>';
 
 
+// gettting all the additional information of an additional profile field
+if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
+	$additional_user_profile_info = get_addtional_profile_information_of_field($_GET['additional_profile_field']);
+}
+
+// displaying the return on training
 if($_GET['studentlist'] == 'false') {
-	echo'<br /><br />';
-	
-	
-	/***************************
-	 * LEARNING PATHS
-	 ***************************/
 	 
+	// learning path tracking
 	 echo '<div class="report_section">
-				<h4>
-					<img src="../img/scormbuilder.gif" align="absbottom">&nbsp;'.get_lang('AverageProgressInLearnpath').'
-				</h4>
+			<h4>'.Display::return_icon('scormbuilder.gif',get_lang('AverageProgressInLearnpath')).get_lang('AverageProgressInLearnpath').'</h4>
 			<table class="data_table">';
 			
 	$list = new LearnpathList($student);
 	$flat_list = $list->get_flat_list();
 	
+	// export information
 	if ($export_csv) {
     	$temp=array(get_lang('AverageProgressInLearnpath'),'');
     	$csv_content[] = array('','');
@@ -184,8 +150,6 @@ if($_GET['studentlist'] == 'false') {
 				
 				// get the progress in learning pathes	
 				$lp_avg_progress += learnpath::get_db_progress($lp_id,$student_id);
-				
-				
 			}
 			if($nbStudents > 0) {
 				$lp_avg_progress = $lp_avg_progress / $nbStudents;
@@ -205,13 +169,10 @@ if($_GET['studentlist'] == 'false') {
 	}
 	echo '</table></div>';
 	echo '<div class="clear"></div>';
-	/***************************
-	 * EXERCICES
-	 ***************************/
+
+	 // Exercices tracking
 	 echo '<div class="report_section">
-				<h4>
-					<img src="../img/quiz.gif" align="absbottom">&nbsp;'.get_lang('AverageResultsToTheExercices').' &nbsp;-&nbsp;<a href="../exercice/exercice.php?'.api_get_cidreq().'&show=result">'.get_lang('SeeDetail').'</a>
-				</h4>
+				<h4>'.Display::return_icon('quiz.gif',get_lang('AverageResultsToTheExercices')).get_lang('AverageResultsToTheExercices').'&nbsp;-&nbsp;<a href="../exercice/exercice.php?'.api_get_cidreq().'&show=result">'.get_lang('SeeDetail').'</a></h4>
 			<table class="data_table">';
 			
 	$sql = "SELECT id, title
@@ -288,14 +249,9 @@ if($_GET['studentlist'] == 'false') {
 	echo '</table></div>';
 	echo '<div class="clear"></div>';
 	
-	/**********************
-	 * FORUMS
-	 **********************/
-	 
+	 // forums tracking
 	 echo '<div class="report_section">
-				<h4>
-					<img src="../img/forum.gif" align="absbottom">&nbsp;'.get_lang('Forum').'&nbsp;-&nbsp;<a href="../forum/index.php?cidReq='.$_course['id'].'">'.get_lang('SeeDetail').'</a>
-				</h4>
+			<h4>'.Display::return_icon('forum.gif', get_lang('Forum')).get_lang('Forum').'&nbsp;-&nbsp;<a href="../forum/index.php?cidReq='.$_course['id'].'">'.get_lang('SeeDetail').'</a></h4>
 			<table class="data_table">';
 	$count_number_of_posts_by_course = Tracking :: count_number_of_posts_by_course($_course['id']);
 	$count_number_of_forums_by_course = Tracking :: count_number_of_forums_by_course($_course['id']);
@@ -312,14 +268,9 @@ if($_GET['studentlist'] == 'false') {
 	echo '</table></div>';
 	echo '<div class="clear"></div>';
 	
-	/**********************
-	 * CHAT
-	 **********************/
-	 
+	// chat tracking
 	 echo '<div class="report_section">
-				<h4>
-					<img src="../img/chat.gif" align="absbottom">&nbsp;'.get_lang('Chat').'</a>
-				</h4>
+			<h4>'.Display::return_icon('chat.gif',get_lang('Chat')).get_lang('Chat').'</h4>
 			<table class="data_table">';
 	$chat_connections_during_last_x_days_by_course = Tracking :: chat_connections_during_last_x_days_by_course($_course['id'],7);	
 	if ($export_csv) {
@@ -332,13 +283,9 @@ if($_GET['studentlist'] == 'false') {
 	echo '<div class="clear"></div>';
 	
 	
-	/**********************
-	 * TOOLS
-	 **********************/
+	// tools tracking
 	echo '<div class="report_section">
-				<h4>
-					<img src="../img/acces_tool.gif" align="absbottom">&nbsp;'.get_lang('ToolsMostUsed').'
-				</h4>
+				<h4>'.Display::return_icon('acces_tool.gif', get_lang('ToolsMostUsed')).get_lang('ToolsMostUsed').'</h4>
 			<table class="data_table">';
 			 
 	$sql = "SELECT access_tool, COUNT(DISTINCT access_user_id),count( access_tool ) as count_access_tool
@@ -371,23 +318,18 @@ if($_GET['studentlist'] == 'false') {
 	echo '<div class="clear"></div>';
 	
 	
-	/***************************
-	 * DOCUMENTS
-	 ***************************/
-	 
+	// Documents tracking
 	if ($_GET['num']==0 or empty($_GET['num'])){
 		$num=3;	
-		$link='&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&studentlist=false&num=1#ancle">'.get_lang('SeeDetail').'</a>';
+		$link='&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&studentlist=false&num=1#documents_tracking">'.get_lang('SeeDetail').'</a>';
 	} else {
 		$num=1000;
-		$link='&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&studentlist=false&num=0#ancle">'.get_lang('ViewMinus').'</a>';
+		$link='&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&studentlist=false&num=0#documents_tracking">'.get_lang('ViewMinus').'</a>';
 	}
 	 
 	 
-	 echo '<a name="ancle" id="a"></a><div class="report_section">
-				<h4>
-					<img src="../img/documents.gif" align="absbottom">&nbsp;'.get_lang('DocumentsMostDownloaded').$link.'
-				</h4>
+	 echo '<a name="documents_tracking" id="a"></a><div class="report_section">
+				<h4>'.Display::return_icon('documents.gif',get_lang('DocumentsMostDownloaded')).'&nbsp;'.get_lang('DocumentsMostDownloaded').$link.'</h4>
 			<table class="data_table">';			
 			
 			
@@ -429,14 +371,9 @@ if($_GET['studentlist'] == 'false') {
 	echo '<div class="clear"></div>';
 	
 	
-	/***************************
-	 * LINKS
-	 ***************************/
-	 
+	// links tracking
 	 echo '<div class="report_section">
-				<h4>
-					<img src="../img/link.gif" align="absbottom">&nbsp;'.get_lang('LinksMostClicked').'
-				</h4>
+				<h4>'.Display::return_icon('link.gif',get_lang('LinksMostClicked')).'&nbsp;'.get_lang('LinksMostClicked').'</h4>
 			<table class="data_table">';
 			
 	$sql = "SELECT cl.title, cl.url,count(DISTINCT sl.links_user_id), count(cl.title) as count_visits
@@ -528,7 +465,9 @@ if($_GET['studentlist'] == 'false') {
 		$table -> set_header(8, get_lang('FirstLogin'), false, 'align="center"');
 		$table -> set_header(9, get_lang('LatestLogin'), false, 'align="center"');
 		$table -> set_header(10, get_lang('Details'),false);
-	     
+		if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
+			$table -> set_header(11, get_lang('AdditionalProfileField'),false);
+		}	     
 	    if ($export_csv) {
 			$csv_content[] = array ();
 		}
@@ -568,6 +507,10 @@ if($_GET['studentlist'] == 'false') {
 			
 			$row[] = '<center><a href="../mySpace/myStudents.php?student='.$student_id.'&details=true&course='.$course_code.'&origin=tracking_course"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
 			
+			// we need to display an additional profile field
+			if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
+				$row[]=implode($additional_user_profile_info[$student_id]);
+			}
 			$all_datas[] = $row;		
 	
 		}
@@ -619,3 +562,82 @@ if($_GET['studentlist'] == 'false') {
 </table>
 <?php
 Display::display_footer();
+
+/**
+ * Display all the additionally defined user profile fields
+ * This function will only display the fields, not the values of the field because it does not act as a filter 
+ * but it adds an additional column instead. 
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @since October 2009
+ * @version 1.8.7
+ */
+function display_additional_profile_fields(){
+	// getting all the extra profile fields that are defined by the platform administrator
+	$extra_fields = UserManager :: get_extra_fields(0,50,5,'ASC');
+
+	// creating the form
+	$return = '<form action="courseLog.php" method="get" name="additional_profile_field_form" id="additional_profile_field_form">';  
+
+	// the select field with the additional user profile fields (= this is where we select the field of which we want to see
+	// the information the users have entered or selected. 
+	$return .= '<select name="additional_profile_field">';
+	$return .= '<option value="-">'.get_lang('SelectFieldToAdd').'</option>';
+	foreach ($extra_fields as $key=>$field)
+	{
+		if ($field[0] == $_GET['additional_profile_field']) {
+			$selected = 'selected="selected"';
+		}
+		else {
+			$selected = '';
+		}
+		$return .= '<option value="'.$field[0].'" '.$selected.'>'.$field[3].'</option>';
+	}
+	$return .= '</select>';
+
+	// the form elements for the $_GET parameters (because the form is passed through GET
+	foreach ($_GET as $key=>$value){
+		$return .= '<input type="hidden" name="'.$key.'" value="'.Security::Remove_XSS($value).'" />';
+	}
+
+	// the submit button
+	$return .= '<button class="save" type="submit">'.get_lang('AddAdditionalProfileField').'</button>';
+	$return .= '</form>';
+	return $return; 
+}
+
+/**
+ * This function gets all the information of a certrain ($field_id) additional profile field.
+ * It gets the information of all the users so that it can be displayed in the sortable table or in the csv or xls export
+ * 
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @since October 2009
+ * @version 1.8.7
+ */
+function get_addtional_profile_information_of_field($field_id){
+	// Database table definition
+	$table_user 			= Database::get_main_table(TABLE_MAIN_USER);
+	$table_user_field_values 	= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+
+	$sql = "SELECT user.user_id, field.field_value FROM $table_user user, $table_user_field_values field
+		WHERE user.user_id = field.user_id
+		AND field.field_id='".Database::escape_string($field_id)."'";
+	$result = api_sql_query($sql,__FILE__,__LINE__);
+	while($row = Database::fetch_array($result))
+	{
+		$return[$row['user_id']][] = $row['field_value'];
+	}
+	return $return;
+}
+
+/**
+ * count the number of students in this course (used for SortableTable)
+ */
+function count_student_in_course() {
+	global $nbStudents;
+	return $nbStudents;
+}
+
+function sort_users($a, $b) {
+	return api_strcmp(trim(api_strtolower($a[$_SESSION['tracking_column']])), trim(api_strtolower($b[$_SESSION['tracking_column']])));
+}

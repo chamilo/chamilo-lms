@@ -830,8 +830,7 @@ class DocumentManager {
 		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
 		//first, delete the actual document...
 		$document_id = self :: get_document_id($_course, $path);
-		//$new_path = $path.'_DELETED_'.$document_id;
-		$new_path = $path;
+		$new_path = $path.'_DELETED_'.$document_id;
 		$current_session_id = api_get_session_id();
 		if ($document_id)
 		{

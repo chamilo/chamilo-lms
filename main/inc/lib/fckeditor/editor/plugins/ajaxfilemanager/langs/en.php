@@ -13,7 +13,7 @@
 
 
 
-	define('MENU_SELECT', 'Select');
+	define('MENU_SELECT', 'Insert');
 	define('MENU_DOWNLOAD', 'Download');
 	define('MENU_PREVIEW', 'Preview');
 	define('MENU_RENAME', 'Rename');

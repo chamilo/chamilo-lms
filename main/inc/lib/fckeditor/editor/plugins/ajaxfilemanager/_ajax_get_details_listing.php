@@ -7,7 +7,8 @@
 							<th width="10" class="fileColumns">&nbsp;</th>
 							<th class="docName"><?php echo LBL_NAME; ?></th>
 							<th  width="70" class="fileColumns"><?php echo LBL_SIZE; ?></th>
-							<th class="fileColumns"><?php echo LBL_MODIFIED; ?></th>
+                            <!-- hidde by now while implementing this dokeos -->
+							<!--<th class="fileColumns"><?php // echo LBL_MODIFIED; ?></th> -->
 						</tr>
 					</thead>
 					<tbody id="fileList">
@@ -65,7 +66,8 @@
 										<td class="<?php echo $strClass; ?> docName"  id="tdnd<?php echo $count; ?>"><a id="aa<?php echo $count; ?>" href="<?php echo "../".$file['path']; ?>" target="_blank"><?php echo $file['name']; ?></a></td>
 
 										<td class="docInfo" id="tdrd<?php echo $count; ?>"><?php echo transformFileSize($file['size']); ?></td>
-										<td class="docInfo" id="tdth<?php echo $count; ?>"><?php echo @date(DATE_TIME_FORMAT,$file['mtime']); ?></td>
+                                         <!-- hidde by now while implementing this dokeos -->
+										<!--<td class="docInfo" id="tdth<?php //echo $count; ?>"><?php //echo @date(DATE_TIME_FORMAT,$file['mtime']); ?></td> -->
 									</tr>
 									<?php
 									}else
@@ -96,7 +98,8 @@
 
 											<td class="<?php echo $strClass; ?> docName" id="tdnd<?php echo $count; ?>"><a id="aa<?php echo $count; ?>" href="<?php echo "../".$file['path']; ?>" target="_blank"><?php echo $file['name']; ?></a></td>
 											<td class="docInfo" id="tdrd<?php echo $count; ?>">&nbsp;</td>
-											<td class="docInfo" id="tdth<?php echo $count; ?>"><?php echo @date(DATE_TIME_FORMAT,$file['mtime']); ?></td>
+                                             <!-- hidde by now while implementing this dokeos -->
+											<!--<td class="docInfo" id="tdth<?php// echo $count; ?>"><?php //echo @date(DATE_TIME_FORMAT,$file['mtime']); ?></td> -->
 										</tr>
 										<?php
 									}

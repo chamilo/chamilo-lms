@@ -9,7 +9,7 @@
 	//Common
 	//Menu
 
-	define('MENU_SELECT', 'Seleccionar');
+	define('MENU_SELECT', 'Insertar');
 	define('MENU_DOWNLOAD', 'Descargar');
 	define('MENU_PREVIEW', 'Previsualizar');
 	define('MENU_RENAME', 'Renombrar');

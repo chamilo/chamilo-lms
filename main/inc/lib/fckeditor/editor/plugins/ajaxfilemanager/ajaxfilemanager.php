@@ -348,8 +348,9 @@ $(document).ready(
 
 						</tr>
 						<tr>
-							<th><?php echo LBL_FOLDER_MODIFIED; ?></th>
-							<td colspan="3" id="folderMtime"><?php echo (!empty($folderInfo['mtime'])?date(DATE_TIME_FORMAT,$folderInfo['mtime']):'&nbsp;'); ?></td>
+                              <!-- comment these lines while integrating into dokeos -->
+							<th><?php //echo LBL_FOLDER_MODIFIED; ?></th>
+						<!--	<td colspan="3" id="folderMtime"><?php //echo (!empty($folderInfo['mtime'])?date(DATE_TIME_FORMAT,$folderInfo['mtime']):'&nbsp;'); ?></td> -->
 						</tr>
 						<tr>
 							<th><?php echo LBL_FOLDER_SUDDIR; ?></th>
@@ -362,10 +363,11 @@ $(document).ready(
 						</tr>
 
 						<tr>
-							<th><?php echo LBL_FOLDER_WRITABLE; ?></th>
-							<td id="folderWritable"><span class="<?php echo (isset($folderInfo['is_readable'])?($folderInfo['is_readable']?'flagYes':'flagNo'):'&nbsp;'); ?>">&nbsp;</span></td>
-							<th><?php echo LBL_FOLDER_READABLE; ?></th>
-							<td  id="folderReadable"><span class="<?php echo (isset($folderInfo['is_writable'])?($folderInfo['is_writable']?'flagYes':'flagNo'):'&nbsp;'); ?>">&nbsp;</span></td>
+                              <!-- comment these lines while integrating into dokeos -->
+							<th><?php // echo LBL_FOLDER_WRITABLE; ?></th>
+						<!--	<td id="folderWritable"><span class="<?php //echo (isset($folderInfo['is_readable'])?($folderInfo['is_readable']?'flagYes':'flagNo'):'&nbsp;'); ?>">&nbsp;</span></td> -->
+							<th><?php // echo LBL_FOLDER_READABLE; ?></th>
+							<!--<td  id="folderReadable"><span class="<?php //echo (isset($folderInfo['is_writable'])?($folderInfo['is_writable']?'flagYes':'flagNo'):'&nbsp;'); ?>">&nbsp;</span></td> -->
 
 						</tr>
 
@@ -388,8 +390,9 @@ $(document).ready(
 
 						</tr>
 						<tr>
-							<th><?php echo LBL_FILE_MODIFIED; ?></th>
-							<td colspan="3" id="fileMtime"></td>
+                            <!-- comment these lines while integrating into dokeos -->
+							<th><?php //echo LBL_FILE_MODIFIED; ?></th>
+							<!--<td colspan="3" id="fileMtime"></td> -->
 						</tr>
 						<tr>
 							<th><?php echo LBL_FILE_SIZE; ?></th>
@@ -401,10 +404,11 @@ $(document).ready(
 							<td  colspan="3" id="fileType"></td>
 						</tr>
 						<tr>
-							<th><?php echo LBL_FILE_WRITABLE; ?></th>
-							<td id="fileWritable"><span class="flagYes">&nbsp;</span></td>
-							<th><?php echo LBL_FILE_READABLE; ?></th>
-							<td id="fileReadable"><span class="flagNo">&nbsp;</span></td>
+                      <!-- comment these lines while integrating into dokeos -->
+							<th><?php //echo LBL_FILE_WRITABLE; ?></th>
+							<!--<td id="fileWritable"><span class="flagYes">&nbsp;</span></td> -->
+							<th><?php //echo LBL_FILE_READABLE; ?></th>
+							<!--<td id="fileReadable"><span class="flagNo">&nbsp;</span></td> -->
 						</tr>
 
 					</tbody>
@@ -413,7 +417,7 @@ $(document).ready(
         <p class="searchButtons" id="returnCurrentUrl">
 
         	<span class="right" id="linkSelect">
-        		<input type="button" value="<?php echo MENU_SELECT; ?>"  id="selectCurrentUrl" class="button">
+        		<input type="button" value="<?php echo MENU_SELECT; ?>"  id="selectCurrentUrl" class="select_button">
         	</span>
 
         </p>
@@ -430,13 +434,15 @@ $(document).ready(
           	<tbody>
 	          <tr>
 	          	<td>
-	          		<b><?php echo LBL_SEARCH_NAME; ?></b> <br />
+                <!-- comment these lines while integrating into dokeos -->
+	          		<b><?php //echo LBL_SEARCH_NAME; ?></b> <br />
 	            	<input type="text" class="input inputSearch" name="search_name" id="search_name" />
 	          	</td>
 	         </tr>
 	          <tr>
 	          	<td >
-	          	<b><?php echo LBL_SEARCH_FOLDER; ?></b><br />
+                      <!-- comment these lines while integrating into dokeos -->
+	          	<b><?php // echo LBL_SEARCH_FOLDER; ?></b><br />
 	          	<span id="searchFolderContainer">
 	          	<?php
 	          		if(CONFIG_LOAD_DOC_LATTER)
@@ -475,36 +481,44 @@ $(document).ready(
 		      <?php
 	          		}
 		      ?></span>
-	          </td>
+	       <!--   </td>
 	         </tr>
         		<tr>
-        			<td>
-        		<b><?php echo LBL_SEARCH_MTIME; ?></b><br />
-        		<input type="text" class="input inputMtime" name="search_mtime_from" id="search_mtime_from" value="<?php echo (!empty($_GET['search_mtime_from'])?$_GET['search_mtime_from']:''); ?>" />
-        		<span class="leftToRightArrow">&nbsp;</span>
-        		<input type="text" class="input inputMtime" name="search_mtime_to" id="search_mtime_to" value="<?php echo (!empty($_GET['search_mtime_to'])?$_GET['search_mtime_to']:''); ?>" />
-        	</td></tr>
+        			<td> -->
+        		<b><?php //echo LBL_SEARCH_MTIME; ?></b><br />
+        	<!--	<input type="text" class="input inputMtime" name="search_mtime_from" id="search_mtime_from" value="<?php //echo (!empty($_GET['search_mtime_from'])?$_GET['search_mtime_from']:''); ?>" /> -->
+        		<!--<span class="leftToRightArrow">&nbsp;</span> -->
+        		<!--<input type="text" class="input inputMtime" name="search_mtime_to" id="search_mtime_to" value="<?php //echo (!empty($_GET['search_mtime_to'])?$_GET['search_mtime_to']:''); ?>" /> -->                
+                
+                <!--This lines replace above lines while integrating into dokeos -->
+                <input type="hidden" name="search_mtime_from" id="search_mtime_from" value="<?php //echo (!empty($_GET['search_mtime_from'])?$_GET['search_mtime_from']:''); ?>" />
+        		<input type="hidden" name="search_mtime_to" id="search_mtime_to" value="<?php //echo (!empty($_GET['search_mtime_to'])?$_GET['search_mtime_to']:''); ?>" />                 
+                
+        <!--	</td></tr>
 
 			<tr>
-				<td>
-          	<b><?php echo LBL_SEARCH_RECURSIVELY; ?></b>&nbsp;&nbsp;
+				<td> -->
+                <!-- comment these lines while integrating into dokeos -->
+                </td><td><!--add a col while integratins -->
+          	<b><?php  // echo LBL_SEARCH_RECURSIVELY; ?></b>&nbsp;&nbsp;
 		<!--change for Dokeos recursively by default  -->
-          	<input type="radio" name="search_recursively" value="1" id="search_recursively_1" class="radio" <?php echo (empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php echo LBL_RECURSIVELY_YES; ?>
-          	<input type="radio" name="search_recursively" value="0" id="search_recursively_0" class="radio" <?php echo (!empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php echo LBL_RECURSIVELY_NO; ?>
+          	<input type="radio" name="search_recursively" value="1" id="search_recursively_1" class="radio" <?php echo (empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php //echo LBL_RECURSIVELY_YES; ?>
+        <!--  	<input type="radio" name="search_recursively" value="0" id="search_recursively_0" class="radio" <?php //echo (!empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php //echo LBL_RECURSIVELY_NO; ?> -->
+        
+        
           	</td>
           </tr>
           	</tbody>
 </table>
 
 
-
-
         <p class="searchButtons">
         	<span class="left" id="linkClose" style="display:none">
-        		<input  type="button" value="<?php echo LBL_ACTION_CLOSE; ?>" onclick="return cancelSelectFile();"  class="button">
+                  <!-- comment these lines while integrating into dokeos -->
+        		<!--<input  type="button" value="<?php // echo LBL_ACTION_CLOSE; ?>" onclick="return cancelSelectFile();"  class="button"> -->
         	</span>
         	<span class="right" id="linkSearch">
-        		<input type="button" value="<?php echo BTN_SEARCH; ?>" onclick="return search();" class="button">
+        		<input type="button" value="<?php echo BTN_SEARCH; ?>" onclick="return search();" class="search_button">
         	</span>
 
         </p>

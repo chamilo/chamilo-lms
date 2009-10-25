@@ -1057,9 +1057,9 @@ function store_agenda_item_as_announcement($item_id){
 		//build the announcement text
 		$content = $row['start_date']." - ".$row['end_date']."\n\n".$row['content'];
 		//insert announcement
-
-		$sql_ins = "INSERT INTO $table_ann (title,content,end_date,display_order) " .
-				"VALUES ('".Security::remove_XSS($row['title'])."','".$content."','".$row['end_date']."','$max')";
+                $session_id = api_get_session_id();
+		$sql_ins = "INSERT INTO $table_ann (title,content,end_date,display_order,session_id) " .
+				"VALUES ('".Security::remove_XSS($row['title'])."','".$content."','".$row['end_date']."','$max','$session_id')";
 		$res_ins = Database::query($sql_ins,__FILE__,__LINE__);
 		if($res > 0)
 		{

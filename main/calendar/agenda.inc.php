@@ -1404,18 +1404,18 @@ function load_edit_users($tool, $id)
 * This functions swithes the visibility a course resource using the visible field in 'last_tooledit' values: 0 = invisible
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function change_visibility($tool,$id)
+function change_visibility($tool,$id,$visibility)
 {
 	global $_course;
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	$tool=Database::escape_string($tool);
 	$id=Database::escape_string($id);
-
+    /*
 	$sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".TOOL_CALENDAR_EVENT."' AND ref='$id'";
 	$result=Database::query($sql,__FILE__,__LINE__) or die (Database::error());
 	$row=Database::fetch_array($result);
-
-	if ($row['visibility']=='1')
+	*/
+	if ($visibility == 0)
 	{
 		$sql_visibility="UPDATE $TABLE_ITEM_PROPERTY SET visibility='0' WHERE tool='$tool' AND ref='$id'";
 		api_item_property_update($_course,TOOL_CALENDAR_EVENT,$id,"invisible",api_get_user_id());
@@ -1710,11 +1710,14 @@ function showhide_agenda_item($id)
 	// change visibility -> studentview -> course manager view
 	if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())) and $_GET['isStudentView']<>"false")
 	{
-		if (isset($_GET['id'])&&$_GET['id']&&isset($_GET['action'])&&$_GET['action']=="showhide")
+		if (isset($_GET['id']) && isset($_GET['action']) && $_GET['action']=="showhide")
 		{
 			$id=(int)addslashes($_GET['id']);
-			change_visibility($nameTools,$id);
-			Display::display_confirmation_message(get_lang("VisibilityChanged"));
+			if (isset($_GET['next_action']) && $_GET['next_action'] == strval(intval($_GET['next_action']))) {
+				$visibility = $_GET['next_action'];
+				change_visibility($nameTools,$id,$visibility);
+				Display::display_confirmation_message(get_lang("VisibilityChanged"));
+			}
 		}
 	}
 }
@@ -2140,18 +2143,19 @@ function display_agenda_items()
     			echo '<a href="'.$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&amp;action=announce" title="'.get_lang("AddAnnouncement").'">';
     			echo Display::return_icon('announce_add.gif', get_lang('AddAnnouncement'), array ('style' => 'width:16px; height:16px;'))."</a> ";
 
-	    		if ($myrow['visibility']==1)
+	    		if (isset($_GET['next_action']) && $_GET['next_action']==1 && $_GET['next_action'] == strval(intval($_GET['next_action'])))
 	    		{
 	    			$image_visibility="visible.gif";
-				$text_visibility=get_lang("Hide");
+					$text_visibility=get_lang("Hide");
+					$next_action = 0;
 	    		}
 	    		else
 	    		{
 	    			$image_visibility="invisible.gif";
-				$text_visibility=get_lang("Show");
+					$text_visibility=get_lang("Show");
+					$next_action = 1;
 	    		}
-    			echo 	'<a href="'.$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&amp;action=showhide" title="'.$text_visibility.'">',
-    					Display::return_icon($image_visibility, $text_visibility),'</a> ';
+    			echo 	'<a href="'.$mylink.api_get_cidreq().'&amp;sort=asc&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;action=showhide&amp;next_action='.$next_action.'" title="'.$text_visibility.'">'.Display::return_icon($image_visibility, $text_visibility),'</a> ';
 			}
 
     	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())))

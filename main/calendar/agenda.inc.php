@@ -2143,7 +2143,7 @@ function display_agenda_items()
     			echo '<a href="'.$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&amp;action=announce" title="'.get_lang("AddAnnouncement").'">';
     			echo Display::return_icon('announce_add.gif', get_lang('AddAnnouncement'), array ('style' => 'width:16px; height:16px;'))."</a> ";
 
-	    		if (isset($_GET['next_action']) && $_GET['next_action']==1 && $_GET['next_action'] == strval(intval($_GET['next_action'])))
+	    		if ($myrow['visibility']==1)
 	    		{
 	    			$image_visibility="visible.gif";
 					$text_visibility=get_lang("Hide");

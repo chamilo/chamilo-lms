@@ -1213,6 +1213,7 @@ class Tracking {
 	{
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 		$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		$table_course_rel_user			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$inner = '';
 		if($session_id!=0)
 		{
@@ -1226,7 +1227,16 @@ class Tracking {
 				HAVING DATE_SUB( NOW(), INTERVAL '.$since.' DAY) > max_date ';
 		//HAVING DATE_ADD(max_date, INTERVAL '.$since.' DAY) < NOW() ';
 
-		$rs = Database::query($sql,__FILE__,__LINE__);
+		if ($since == 'never') {
+			$sql = 'SELECT course_user.user_id FROM '.$table_course_rel_user.' course_user
+						LEFT JOIN '. $tbl_track_login.' stats_login 
+						ON course_user.user_id = stats_login.user_id'.
+						$inner.'
+					WHERE course_user.course_code = \''.Database::escape_string($course_code).'\' 
+					AND stats_login.login_course_date IS NULL
+					GROUP BY course_user.user_id';
+		}		
+		$rs = api_sql_query($sql,__FILE__,__LINE__);
 		$inactive_users = array();
 		while($user = Database::fetch_array($rs))
 		{
@@ -1342,7 +1352,7 @@ class Tracking {
 		}
 
 		if ((int)$count_loop > 0) {
-			$avg_student_score = round(($average_data_sum / $count_loop), 2);
+			$avg_student_score = round(($average_data_sum / $count_loop * 100), 2);
 		}
 
 		return $avg_student_score;

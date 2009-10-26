@@ -35,14 +35,19 @@
 */
 // name of the language file that needs to be included
 $language_file = array('registration','admin');
-include ("../inc/global.inc.php");
+require '../inc/global.inc.php';
+// the section (for the tabs)
 $this_section = SECTION_COURSES;
+// access restriction
 if (!api_is_allowed_to_edit()) {
 	 api_not_allowed(true);
 }
-require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+// including additional libraries
+$libpath = api_get_path(LIBRARY_PATH);
+require_once $libpath.'course.lib.php';
+require_once $libpath.'sortabletable.class.php';
+require_once $libpath.'formvalidator/FormValidator.class.php';
+require_once $libpath.'usermanager.lib.php';
 
 /*
 ==============================================================================
@@ -188,8 +193,10 @@ if (!empty($_SESSION['session_user_name'])) {
  *  * Get the users to display on the current page.
  */
 function get_number_of_users() {
+	// Database table definition
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+	$table_user_field_values 	= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
 		$sql = "SELECT 	u.user_id
 						FROM $user_table u
@@ -215,8 +222,20 @@ function get_number_of_users() {
 	} else {
 		$sql = "SELECT 	u.user_id
 						FROM $user_table u
-						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
-						WHERE cu.user_id IS NULL";
+						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
+						
+		// we change the SQL when we have a filter
+		if (isset($_GET['subscribe_user_filter_value'])){
+			$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
+			$sql .=	"
+				LEFT JOIN $table_user_field_values field_values 
+					ON field_values.user_id = u.user_id 
+				WHERE cu.user_id IS NULL
+					AND field_values.field_id = '".Database::escape_string($field_identification[0])."' 
+					AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
+		} else	{
+			$sql .=	"WHERE cu.user_id IS NULL";
+		}		
 
 		global $_configuration;
 		if ($_configuration['multiple_access_urls']==true) {
@@ -239,23 +258,59 @@ function get_number_of_users() {
 
 	}
 
+	// when there is a keyword then we are searching and we have to change the SQL statement
 	if (isset ($_REQUEST['keyword'])) {
 		$keyword = Database::escape_string($_REQUEST['keyword']);
 		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'   OR email LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
+		// we also want to search for users who have something in their profile fields that matches the keyword
+		$additional_users = search_additional_profile_fields($keyword);
+					
+		// getting all the users of the course (to make sure that we do not display users that are already in the course)
+		if (!empty($_SESSION["id_session"])) {
+			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session']);
+		} else {
+			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true);
 	}
-	$res = Database::query($sql, __FILE__, __LINE__);
+		foreach ($a_course_users as $user_id=>$course_user) {
+			$users_of_course[] = $course_user['user_id'];
+	    }
+		
+	}
+	
+	
+	//executing the SQL statement
+	$res = api_sql_query($sql, __FILE__, __LINE__);
+	while ($user = Database::fetch_row($res)) {
+		$users[] = $user[0];
+	}	
 	$result = Database::num_rows($res);
+	// we add 1 for every additional user (a user where the keyword matches one of the additional profile fields)
+	// that is not yet in the course and not yet in the search result
+	if (isset ($_REQUEST['keyword'])) {	
+		foreach($additional_users as $additional_user_key=>$additional_user_value){
+			if (!in_array($additional_user_key,$users) AND !in_array($additional_user_key,$users_of_course)){
+				$result++;
+			}
+		}	
+	}
 	return $result;
 }
 /**
  * Get the users to display on the current page.
  */
 function get_user_data($from, $number_of_items, $column, $direction) {
+	global $_course;
+
+	// Database table definitions
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$tbl_session_rel_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+	$table_user_field_values 	= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+	
+	// adding teachers
 	$is_western_name_order = api_is_western_name_order();
 	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
+		// adding a teacher through a session
 		if (!empty($_SESSION["id_session"])) {
 			$sql = "SELECT
 					u.user_id AS col0,
@@ -269,9 +324,19 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					u.active 	AS col5,
 					u.user_id   AS col6
 					FROM $user_table u
-					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."'
-					WHERE cu.id_user IS NULL";
+					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."'";
+
+			// applying the filter of the additional user profile fields 	
+			if (isset($_GET['subscribe_user_filter_value'])){
+				$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
+				$sql .=	"
+					LEFT JOIN $table_user_field_values field_values 
+						ON field_values.user_id = u.user_id 
+					WHERE cu.user_id IS NULL
+						AND field_values.field_id = '".Database::escape_string($field_identification[0])."' 
+						AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
 		} else {
+		// adding a teacher NOT through a session
 			$sql = "SELECT
 					u.user_id AS col0,
 					u.official_code AS col1,
@@ -284,8 +349,20 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					u.active 	AS col5,
 					u.user_id   AS col6
 				FROM $user_table u
-				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
-				WHERE cu.user_id IS NULL";
+				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
+				
+				// applying the filter of the additional user profile fields 	
+				if (isset($_GET['subscribe_user_filter_value'])){
+					$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
+					$sql .=	"
+						LEFT JOIN $table_user_field_values field_values 
+							ON field_values.user_id = u.user_id 
+						WHERE cu.user_id IS NULL
+							AND field_values.field_id = '".Database::escape_string($field_identification[0])."' 
+							AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
+				} else	{
+					$sql .=	"WHERE cu.user_id IS NULL";
+				}
 				//showing only the courses of the current Dokeos access_url_id
 				global $_configuration;
 				if ($_configuration['multiple_access_urls']==true) {
@@ -306,10 +383,24 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 						FROM $user_table u
 						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
 						INNER JOIN  $tbl_url_rel_user as url_rel_user
-						ON (url_rel_user.user_id = u.user_id)
-						WHERE cu.user_id IS NULL AND access_url_id= $url_access_id ";
-					}
-				}
+					ON (url_rel_user.user_id = u.user_id) 
+					WHERE cu.user_id IS NULL AND access_url_id= $url_access_id ";				
+
+
+					// applying the filter of the additional user profile fields 	
+					if (isset($_GET['subscribe_user_filter_value'])){
+						$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
+						$sql .=	"
+							LEFT JOIN $table_user_field_values field_values 
+								ON field_values.user_id = u.user_id 
+							WHERE cu.user_id IS NULL
+								AND field_values.field_id = '".Database::escape_string($field_identification[0])."' 
+								AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
+					} else	{
+						$sql .=	"WHERE cu.user_id IS NULL AND access_url_id= $url_access_id ";
+					}		
+				}		
+			}
 		}
 	} else {
 		if (!empty($_SESSION["id_session"])) {
@@ -365,14 +456,45 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					INNER JOIN  $tbl_url_rel_user as url_rel_user
 					ON (url_rel_user.user_id = u.user_id)
 					WHERE cu.user_id IS NULL AND access_url_id= $url_access_id ";
+
+
+					// applying the filter of the additional user profile fields 	
+					if (isset($_GET['subscribe_user_filter_value'])){
+						$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
+						$sql .=	"
+							LEFT JOIN $table_user_field_values field_values 
+								ON field_values.user_id = u.user_id 
+							WHERE cu.user_id IS NULL
+								AND field_values.field_id = '".Database::escape_string($field_identification[0])."' 
+								AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
+					} else	{
+						$sql .=	"WHERE cu.user_id IS NULL AND access_url_id= $url_access_id ";
+					}		
+
 				}
 			}
 		}
 	}
+
+	// adding additional WHERE statements to the SQL for the search functionality
 	if (isset ($_REQUEST['keyword'])) {
 		$keyword = Database::escape_string($_REQUEST['keyword']);
 		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'   OR email LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
+		// we also want to search for users who have something in their profile fields that matches the keyword
+		$additional_users = search_additional_profile_fields($keyword);
+				
+		// getting all the users of the course (to make sure that we do not display users that are already in the course)
+		if (!empty($_SESSION["id_session"])) {
+			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session']);
+		} else {
+			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true);
 	}
+		foreach ($a_course_users as $user_id=>$course_user) {
+			$users_of_course[] = $course_user['user_id'];
+		}
+	}
+	
+	// Sorting and pagination (used by the sortable table)
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
 	$res = Database::query($sql, __FILE__, __LINE__);
@@ -384,6 +506,14 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 			$_SESSION['session_user_name'][] = api_get_person_name($user[2], $user[3]);
 		} else {
 			$_SESSION['session_user_name'][] = api_get_person_name($user[3], $user[2]);
+		}
+	}
+	// adding additional users based on the search on the additional profile fields
+	if (isset ($_REQUEST['keyword'])){
+		foreach($additional_users as $additional_user_key=>$additional_user_value){
+			if (!in_array($additional_user_key,$_SESSION['session_user_id']) AND !in_array($additional_user_key,$users_of_course)){
+				$users[]= array($additional_user_value['col0'],$additional_user_value['col1'],$additional_user_value['col2'].'*',$additional_user_value['col3'].'*',$additional_user_value['col4'],$additional_user_value['col5'], $additional_user_value['col6']);
+			}
 		}
 	}
 	return $users;
@@ -447,6 +577,11 @@ if ($_POST['keyword'])
 {
 	$actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_GET['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearSearchResults').'</a>';
 }
+if ($_GET['subscribe_user_filter_value'] AND !empty($_GET['subscribe_user_filter_value']))
+{
+	$actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_GET['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearFilterResults').'</a>';
+}
+display_extra_profile_fields_filter();
 
 $form = new FormValidator('search_user', 'POST',api_get_self().'?type='.$_REQUEST['type'],'',null,false);
 $renderer = & $form->defaultRenderer();
@@ -488,9 +623,106 @@ if (!empty($_POST['keyword'])) {
 // Display table
 $table->display();
 
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+// footer
 Display :: display_footer();
+
+/**
+ * Search the additional user profile fields defined by the platform administrator in 
+ * platform administration > profiling for a given keyword. 
+ * We not only search in the predefined options but also in the input fields wherer
+ * the user can enter some text. 
+ * 
+ * For this we get the additional profile field options that match the (search) keyword, 
+ * then we find all the users who have entered the (search)keyword in a input field of the 
+ * additional profile fields or have chosen one of the matching predefined options
+ *
+ * @param string $keyword a keyword we are looking for in the additional profile fields
+ * @return array $additional_users an array with the users who have an additional profile field that matches the keyword
+ */
+function search_additional_profile_fields($keyword)
+{
+	// database table definitions
+	$table_user_field_options 	= Database :: get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
+	$table_user_field_values 	= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+	$table_user 				= Database::get_main_table(TABLE_MAIN_USER);
+	$table_course_user		 	= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+	$table_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);					
+
+	// getting the field option text that match this keyword (for radio buttons and checkboxes)
+	$sql_profiling = "SELECT * FROM $table_user_field_options WHERE option_display_text LIKE '%".$keyword."%'";
+	$result_profiling = api_sql_query($sql_profiling, __FILE__, __LINE__);
+	while ($profiling_field_options = Database::fetch_array($result_profiling)) {
+		$profiling_field_options_exact_values[] = $profiling_field_options;
+	}
+	
+	foreach ($profiling_field_options_exact_values as $profilingkey=>$profilingvalue){
+		$profiling_field_options_exact_values_sql .= "OR (field_id = '".$profilingvalue['field_id']."' AND field_value='".$profilingvalue['option_value']."') ";
+	}
+	
+	// getting all the user ids of the users who have chosen on of the predefined fields that contain the keyword
+	// or all the users who have entered the keyword in a free-form field
+	$sql_profiling_values = "SELECT user.user_id as col0, user.official_code as col1, user.lastname as col2, user.firstname as col3, user.email as col4, user.active as col5, user.user_id as col6
+							FROM $table_user user, $table_user_field_values user_values 
+							WHERE user.user_id = user_values.user_id 
+							AND ( field_value LIKE '%".$keyword."%' 
+							".$profiling_field_options_exact_values_sql.")";
+	$result_profiling_values = api_sql_query($sql_profiling_values, __FILE__, __LINE__);
+	while ($profiled_users = Database::fetch_array($result_profiling_values)) {
+		$additional_users[$profiled_users['col0']] = $profiled_users;
+	}
+	
+	return $additional_users; 
+}
+/**
+ * This function displays a dropdown list with all the additional user profile fields defined by the platform administrator in 
+ * platform administration > profiling. Only the fields that have predefined fields are usefull for such a filter. 
+ *
+ */
+function display_extra_profile_fields_filter()
+{
+	// getting all the additional user profile fields
+	$extra = UserManager::get_extra_fields(0,50,5,'ASC');
+	
+	$return='<option value="">'.get_lang('SelectFilter').'</option>';
+	
+	// looping through the additional user profile fields
+	foreach($extra as $id => $field_details) {		
+		// $field_details[2] contains the type of the additional user profile field
+		switch($field_details[2]) {
+			// text fields cannot be used as a filter
+			case USER_FIELD_TYPE_TEXT:
+				break;
+			// text area fields cannot be used as a filter
+			case USER_FIELD_TYPE_TEXTAREA:				
+				break;
+			case USER_FIELD_TYPE_RADIO:
+			case USER_FIELD_TYPE_SELECT:
+			case USER_FIELD_TYPE_SELECT_MULTIPLE:		
+				$return .= '<optgroup label="'.$field_details[3].'">';
+				foreach($field_details[9] as $option_id => $option_details) {
+					if ($_GET['subscribe_user_filter_value'] == $field_details[0].'*'.$option_details[1]) {
+						$selected = 'selected="selected"';
+					} else {
+						$selected = false;
+					}
+					$return .= '<option value="'.$field_details[0].'*'.$option_details[1].'" '.$selected.'>'.$option_details[2].'</option>';
+				}				
+				$return .= '</optgroup>';
+				break;
+		}			
+	}
+	
+	echo '<form id="subscribe_user_filter" name="subscribe_user_filter" method="get" action="'.api_get_self().'?api_get_cidreq" style="float:left;">';
+	echo '	<input type="hidden" name="type" id="type" value="'.Security::Remove_XSS($_GET['type']).'" />';
+	echo   '<select name="subscribe_user_filter_value" id="subscribe_user_filter_value">'.$return.'</select>';
+	echo   '<button type="submit" name="submit_filter" id="submit_filter" value="" class="search">'.get_lang('Filter').'</button>';
+	echo '</form>';
+
+}
+
+function debug($var)
+{
+	echo '<pre>';
+	print_r($var);
+	echo '</pre>';
+}

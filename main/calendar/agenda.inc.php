@@ -1914,13 +1914,12 @@ function display_agenda_items()
 				 	// A.3.b.2 you are a student with no group filter possibly showall
 				 	//when showing all the events we do not show the group events
 				 	//todo showing ALL events including the groups events that are available
-
 				 	$sql="SELECT
 						agenda.*, toolitemproperties.*
 						FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
 						WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
 						AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-						AND toolitemproperties.visibility='1' AND toolitemproperties.to_group_id='0'
+						AND ( toolitemproperties.visibility='0' OR toolitemproperties.visibility='1')
 						$session_condition
 						GROUP BY toolitemproperties.ref
 						ORDER BY start_date ".$_SESSION['sort'];
@@ -1962,6 +1961,7 @@ function display_agenda_items()
 	// B. you are a student
 	else
 	{
+
 		if (is_array($group_memberships) and count($group_memberships)>0)
 		{
 			$sql="SELECT

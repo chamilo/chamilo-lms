@@ -703,6 +703,7 @@ $Menu = "Menú";
 $BackToUserList = "Tornar a la llista d\'usuaris";
 $GraphicNotAvailable = "Gràfic no disponible";
 $BackTo = "Tornar";
+$HistoryTrainingSessions = "Historial de sessions de formació";
 $ConversionFailled = "Conversió fallida";
 $AlreadyExists = "Ja existeix";
 $TheNewWordHasBeenAdded = "La nova paraula ha estat afegida al subconjunt de l\'idioma principal ";
@@ -719,4 +720,9 @@ $SurveyAdded = "Enquesta afegida";
 $WikiAdded = "Wiki afegit";
 $ReadOnly = "Solament lectura";
 $Unacceptable = "No acceptable";
+$DisplayTrainingList = "Mostrar la llista de cursos";
+$HistoryTrainingSession = "Historial de sessions de formació";
+$Until = "Fins";
+$FirstPage = "Primera pàgina";
+$LastPage = "Última pàgina";
 ?>

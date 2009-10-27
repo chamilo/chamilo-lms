@@ -1079,11 +1079,14 @@ $SessionListInCategory = "Lista de sesiones en la categoría";
 $ToExportSpecialSelect = "Si quiere exportar cursos que contenga sessiones, tendría que asegurarse de que estos sean incluidos en la exportación; para eso tendría que haberlos seleccionado en la lista.";
 $ErrorMsgSpecialExport = "No se encontraron cursos registrado o es posible que no se haya realizado la asociación con las sesiones";
 $ConfigureInscription = "Configuración de la página de registro";
-$MsgErrorSessionCategory = "Debe Seleccionar una categoría y las sessiones";
+$MsgErrorSessionCategory = "Debe seleccionar una categoría y las sessiones";
 $NumberOfSession = "Número de sesiones";
 $DeleteSelectedSessionCategory = "Eliminar solo las categorias seleccionadas sin sesiones";
 $DeleteSelectedFullSessionCategory = "Eliminar las categorias seleccionadas con las sesiones";
 $EditTopRegister = "Editar Aviso";
 $InsertTabs = "Insertar Tabs";
 $EditTabs = "Editar Tabs";
+$Coachs = "Tutores";
+$IsAdministrator = "Es administrador";
+$IsNotAdministrator = "No es administrador";
 ?>

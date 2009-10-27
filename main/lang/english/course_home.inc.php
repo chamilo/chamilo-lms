@@ -24,4 +24,7 @@ $Authoring = "Authoring";
 $Administration = "Administration";
 $IntroductionTextUpdated = "Intro was updated";
 $IntroductionTextDeleted = "Intro was deleted";
+$SessionIdentifier = "Identifier of session";
+$SessionName = "Session name";
+$SessionCategory = "Category of session";
 ?>

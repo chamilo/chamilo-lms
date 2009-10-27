@@ -1,32 +1,39 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$Inbox  = "Mensagens recebidas";
+$MessageEmptyMessageOrSubject = "Por favor forneça um assunto ou a mensagem";
+$Inbox  = "Caixa de entrada";
 $Messages = "Mensagens";
 $SendMessage = "Enviar mensagem";
 $NewMessage = "Nova mensagem";
-$ComposeMessage = "Escrever mensagem";
-$DeleteSelectedMessages = "Apagar mensagens seleccionadas";
+$ComposeMessage = "Compor mensagem";
+$DeleteSelectedMessages = "Eliminar as mensagens seleccionadas";
 $SelectAll = "Seleccionar todas";
-$DeselectAll  = "Anular selecção";
+$DeselectAll  = "Desceleccionar todas";
 $ReplyToMessage = "Responder";
-$BackToInbox = "Voltar à caixa de entrada";
+$BackToInbox = "Regressar à caixa de entrada";
 $MessageSentTo = "A mensagem foi enviada para";
 $SendMessageTo = "Enviar para";
 $Myself = "Eu";
 $From = "De";
 $To = "Para";
 $Date = "Data";
-$InvalidMessageId = "O id da mensagem a responder não é válido.";
+$InvalidMessageId = "O id da mensagem a quem responder não é válido.";
 $ErrorSendingMessage = "Houve um erro ao tentar enviar a mensagem.";
-$SureYouWantToDeleteSelectedMessages = "Tem a certeza que deseja apagar todas as mensagens seleccionadas?";
-$SelectedMessagesDeleted = "As mensagens seleccionadas foram apagadas";
-$EnterTitle = "Escrever um título";
+$SureYouWantToDeleteSelectedMessages = "Tem a certeza que deseja eliminar todas as mensagens seleccionadas?";
+$SelectedMessagesDeleted = "As mensagens seleccionadas foram eliminadas";
+$EnterTitle = "Por favor introduza um título";
 $TypeYourMessage = "Escrever a sua mensagem aqui";
-$DeleteMessage = "Apagar mensagem";
+$MessageDeleted = "A mensagem foi eliminada";
+$ConfirmDeleteMessage = "Tem a certeza que deseja eliminar a mensagem seleccionada?";
+$DeleteMessage = "Eliminar mensagem";
 $ReadMessage = "Ler mensagem";
+$SendInviteMessage = "Enviar mensagem de convite";
 $SendMessageInvitation = "Tem a certeza que deseja enviar estes convites?";
+$MessageTool = "Ferramenta mensagens";
 $SendMessage = "Enviar mensagem";
 $WriteAMessage = "Escrever uma mensagem";
+$AlreadyReadMessage = "Mensagem já lida";
+$UnReadMessage = "Mensagem por ler";
 $MessageSent = "Mensagem enviada";
 ?>

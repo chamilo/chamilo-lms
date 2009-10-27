@@ -324,6 +324,7 @@ function get_number_of_users()
 function get_user_data($from, $number_of_items, $column, $direction)
 {
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
+	$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 	$sql = "SELECT
                  u.user_id				AS col0,
                  u.official_code		AS col1,
@@ -351,7 +352,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
 		$keyword = Database::escape_string($_GET['keyword']);
 		$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%' )";
 	} elseif (isset ($_GET['keyword_firstname'])) {
-		$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 		$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
 		$keyword_lastname = Database::escape_string($_GET['keyword_lastname']);
 		$keyword_email = Database::escape_string($_GET['keyword_email']);
@@ -411,7 +411,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
         	   $user[7] = '-1';
             }
         }
-        // forget about the expiration date field
+        // forget about the expiration date field		      
         $users[] = array($user[0],$user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7],$user[8]);
 	}
 	return $users;
@@ -436,6 +436,8 @@ function modify_filter($user_id,$url_params,$row)
 {
 	global $charset;
 	global $_user;
+	global $_admins_list;
+	$is_admin = in_array($user_id,$_admins_list);
 	$statusname = api_get_status_langvars();
 	$user_is_anonymous = false;
 	if ($row['6'] == $statusname[ANONYMOUS]) {
@@ -488,6 +490,12 @@ function modify_filter($user_id,$url_params,$row)
 			$result .= Display::return_icon('delete_na.gif', get_lang('Delete'));
 		}
 	}
+		if ($is_admin) {
+			$result .= Display::return_icon('admin_star.png', get_lang('IsAdministrator'),array('width'=> 22, 'heigth'=> 22));
+		
+		} else {
+			$result .= Display::return_icon('admin_star_na.png', get_lang('IsNotAdministrator'));		
+		}
 	return $result;
 }
 
@@ -728,6 +736,15 @@ else
 	}
 	// Create a sortable table with user-data
 	$parameters['sec_token'] = Security::get_token();
+
+	// get the list of all admins to mark them in the users list
+	$admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
+	$sql_admin = "SELECT user_id FROM $admin_table";
+	$res_admin = Database::query($sql_admin);
+	$_admins_list = array();
+	while ($row_admin = Database::fetch_row($res_admin)) {
+		$_admins_list[] = $row_admin[0];
+	}
 
 	$table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 	$table->set_additional_parameters($parameters);

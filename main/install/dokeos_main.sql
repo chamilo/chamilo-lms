@@ -2259,3 +2259,26 @@ CREATE TABLE session_category (
   date_end date default NULL,
   PRIMARY KEY  (id)
 );
+
+
+--
+-- Table structure for table user tag
+--
+
+
+CREATE TABLE  user_tag (
+	id int NOT NULL auto_increment,
+	tag varchar(255) NOT NULL,
+	field_id int NOT NULL,
+	count int NOT NULL,
+	PRIMARY KEY  (id)
+);
+
+
+CREATE TABLE user_rel_tag (
+	id int NOT NULL auto_increment,
+	user_id int NOT NULL,
+	tag_id int NOT NULL,  
+	PRIMARY KEY  (id)
+);
+

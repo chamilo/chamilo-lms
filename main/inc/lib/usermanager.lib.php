@@ -19,6 +19,7 @@ define('USER_FIELD_TYPE_DATE', 6);
 define('USER_FIELD_TYPE_DATETIME', 7);
 define('USER_FIELD_TYPE_DOUBLE_SELECT', 8);
 define('USER_FIELD_TYPE_DIVIDER', 9);
+define('USER_FIELD_TYPE_TAG', 10); 
 
 class UserManager 
 {
@@ -893,6 +894,7 @@ class UserManager
 		if ($user_id != strval(intval($user_id))) return false;
 		if ($user_id === false) return false;
 		$fvalues = '';
+		//echo '<pre>'; print_r($fvalue);
 		if (is_array($fvalue)) {
 			foreach($fvalue as $val) {
 				$fvalues .= Database::escape_string($val).';';
@@ -910,6 +912,11 @@ class UserManager
 			// Check if enumerated field, if the option is available
 			$rowuf = Database::fetch_array($resuf);
 			switch ($rowuf['field_type']) {
+				case 10 :	
+					//Tags are process here	
+					UserManager::process_tags(explode(';', $fvalues), $user_id, $rowuf['id']);
+					return true;
+				break;
 				case 3:
 				case 4:
 				case 5:
@@ -932,7 +939,7 @@ class UserManager
 					}
 					break;
 				case 1:
-				case 2:
+				case 2:		
 				default:
 					break;
 			}
@@ -1433,6 +1440,19 @@ class UserManager
 		}
 		return $return;
 	}
+		
+	public static function get_all_extra_field_by_type($field_type) {
+		// database table definition
+		$table_field 			= Database::get_main_table(TABLE_MAIN_USER_FIELD);
+
+		// all the information of the field
+		$sql = "SELECT * FROM $table_field WHERE field_type='".Database::escape_string($field_type)."'";
+		$result = Database::query($sql, __FILE__, __LINE__);
+		while ($row = Database::fetch_array($result)) {
+			$return[] = $row['id'];
+		}
+		return $return;
+	}
 
 	/**
 	 * Get all the extra field information of a certain field (also the options)
@@ -1460,7 +1480,7 @@ class UserManager
 		}
 		return $return;
 	}
-
+	
 	/** Get extra user data by value
 	 * @param string the internal variable name of the field
 	 * @param string the internal value of the field
@@ -2223,4 +2243,274 @@ class UserManager
 			$rs = Database::query($sql_insert_outbox, __FILE__, __LINE__);
 		}
 	}
+	
+	/*
+	 * 
+	 * USER TAGS
+	 * 
+	 * Intructions to create a new user tag
+	 * 
+	 * 1. Create a new extra field in main/admin/user_fields.php with the "TAG" field type make it available and visible. Called it "books" for example.
+	 * 2. Go to profile main/auth/profile.php There you will see a special input (facebook style) that will show suggestions of tags. 
+	 * 3. Step 2 will not work since this special input needs a file called "main/user/books.php" In this case. In order to have this file copy and paste from this file main/user/tag.php
+	 * 4. All the tags are registered in the user_tag table and the relationship between user and tags is in the user_rel_tag table
+	 * 5. Test and enjoy.
+	 * 
+	 */
+	
+	/**
+	 * Gets the tags of a specific field_id 
+	 * 
+	 * @param int field_id
+	 * @param string how we are going to result value in array or in a string (json)
+	 * @return mixed 
+	 */
+	public static function get_tags($tag, $field_id, $return_format='json',$limit=10) {
+		// database table definition
+		$table_user_tag			= Database::get_main_table(TABLE_MAIN_USER_TAG);
+		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
+		$field_id = intval($field_id);			 //like '%$tag%' 
+		$limit = intval($limit);	
+		$tag = Database::escape_string($tag);			 
+		// all the information of the field
+		$sql = "SELECT id, tag from $table_user_tag
+				WHERE field_id = $field_id AND tag LIKE '$tag%' ORDER BY tag LIMIT $limit";
+		$result = Database::query($sql, __FILE__, __LINE__);
+		$return = array();		
+		if (Database::num_rows($result)>0) {
+			while ($row = Database::fetch_array($result,'ASSOC')) {
+				$return[] = array('caption'=>$row['tag'], 'value'=>$row['tag']);
+			}
+		}		
+		if ($return_format=='json') {
+			$return =  json_encode($return);
+		}
+		return $return;
+	}
+	
+	public static function get_top_tags($field_id, $limit=100) {		
+		// database table definition
+		$table_user_tag			= Database::get_main_table(TABLE_MAIN_USER_TAG);
+		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
+		$field_id = intval($field_id);
+		$limit = intval($limit);	
+		// all the information of the field
+		$sql = "SELECT count(*) count, tag FROM $table_user_tag_values  uv INNER JOIN $table_user_tag ut ON(ut.id = uv.tag_id)
+				WHERE field_id = $field_id GROUP BY tag_id ORDER BY count DESC LIMIT $limit";
+		$result = Database::query($sql, __FILE__, __LINE__);
+		$return = array();
+		if (Database::num_rows($result)>0) {
+			while ($row = Database::fetch_array($result,'ASSOC')) {
+				$return[] = $row;
+			}
+		}
+		return $return;		
+	}
+	
+	/**
+	 * Get user's tags
+	 * @param int field_id
+	 * @param int user_id
+	 * @return array
+	 */
+	public static function get_user_tags($user_id,$field_id) {
+		// database table definition
+		$table_user_tag			= Database::get_main_table(TABLE_MAIN_USER_TAG);
+		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
+		$field_id = intval($field_id);
+		$user_id = intval($user_id);
+	
+		// all the information of the field
+		$sql = "SELECT ut.id, tag,count FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.ID) 
+				WHERE field_id = $field_id AND user_id = $user_id ORDER BY tag";
+		$result = Database::query($sql, __FILE__, __LINE__);
+		$return = array();
+		if (Database::num_rows($result)> 0) {
+			while ($row = Database::fetch_array($result,'ASSOC')) {
+				$return[$row['id']] = array($row['tag'],$row['count']);
+			}
+		}
+		return $return;
+	}
+	
+	/**
+	 * Searchs user with a specific tag
+	 * @param string the tag
+	 * @param int field id of the tag
+	 * @return array
+	 */
+	public static function get_all_user_tags($tag, $field_id, $from, $number_of_items) {
+		// database table definition
+		$table_user_tag			= Database::get_main_table(TABLE_MAIN_USER_TAG);
+		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
+		$field_id = intval($field_id);
+		$tag = Database::escape_string($tag);
+		$from = intval($from);
+    	$number_of_items = intval($number_of_items);
+			
+		// all the information of the field
+		$sql = "SELECT u.user_id,u.username,firstname, lastname, tag FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.ID)
+					 INNER JOIN user u ON(uv.user_id =u.user_id)
+				WHERE field_id = $field_id AND tag LIKE '$tag%' ORDER BY tag";
+				
+		$sql .= " LIMIT $from,$number_of_items";				
+		$result = Database::query($sql, __FILE__, __LINE__);
+		$return = array();
+		if (Database::num_rows($result)> 0) {
+			while ($row = Database::fetch_array($result,'ASSOC')) {
+				$return[$row['user_id']] = $row;
+			}
+		}
+		return $return;
+	}
+	
+
+	/**
+	 * Get the tag id
+	 * @param int $tag
+	 * @param int $field_id
+	 * @return int 0 if fails otherwise the tag id
+	 */
+	public function get_tag_id($tag, $field_id) {
+		$table_user_tag			= Database::get_main_table(TABLE_MAIN_USER_TAG);
+		$tag = Database::escape_string($tag);
+		$field_id = intval($field_id);
+		//with COLLATE latin1_bin to select query in a case sensitive mode  
+		$sql = "SELECT id FROM $table_user_tag WHERE tag COLLATE latin1_bin  LIKE '$tag' AND field_id = $field_id";
+		$result = Database::query($sql, __FILE__, __LINE__);
+		if (Database::num_rows($result)>0) {
+			$row = Database::fetch_array($result,'ASSOC');
+			return $row['id'];
+		} else {
+			return 0;
+		}
+	}
+	
+	/**
+	 * Get the tag id
+	 * @param int $tag
+	 * @param int $field_id
+	 * @return int 0 if fails otherwise the tag id
+	 */
+	public function get_tag_id_from_id($tag_id, $field_id) {
+		$table_user_tag			= Database::get_main_table(TABLE_MAIN_USER_TAG);
+		$tag_id = intval($tag_id);
+		$field_id = intval($field_id);
+		$sql = "SELECT id FROM $table_user_tag WHERE id = '$tag_id' AND field_id = $field_id";
+		$result = Database::query($sql, __FILE__, __LINE__);
+		if (Database::num_rows($result)>0) {
+			$row = Database::fetch_array($result,'ASSOC');
+			return $row['id'];
+		} else {
+			return false;
+		}
+	}
+	
+	
+	/**
+	 * Adds a user-tag value
+	 * @param mixed $tag
+	 * @param int $user_id
+	 * @param int $field_id
+	 * @return bool
+	 */
+	public function add_tag($tag, $user_id, $field_id) {
+		// database table definition
+		$table_user_tag			= Database::get_main_table(TABLE_MAIN_USER_TAG);
+		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
+		$tag = Database::escape_string($tag);
+		$user_id = intval($user_id);
+		$field_id = intval($field_id);		
+			
+		//&&  (substr($tag,strlen($tag)-1) == '@')
+		/*$sent_by_user = false;		 
+		if ( substr($tag,0,1) == '@')  {
+			//is a value sent by the list
+			$sent_by_user = true;
+			$tag = substr($tag,1,strlen($tag)-2);
+		}
+		*/		
+		$tag_id = UserManager::get_tag_id($tag,$field_id);		
+		//@todo we don't create tags with numbers
+		if (is_numeric($tag)) {
+			//the form is sending an id this means that the user select it from the list so it MUST exists
+			/*$new_tag_id = UserManager::get_tag_id_from_id($tag,$field_id);
+			if ($new_tag_id !== false) {
+				$sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id  = $new_tag_id";
+				$result = Database::query($sql, __FILE__, __LINE__);			
+				$last_insert_id = $new_tag_id;
+			} else {
+				$sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
+				$result = Database::query($sql, __FILE__, __LINE__);
+				$last_insert_id = Database::get_last_insert_id();
+			}*/
+		} else {
+			//this is a new tag			
+			if ($tag_id == 0) {
+				//the tag doesn't exist
+				$sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
+				$result = Database::query($sql, __FILE__, __LINE__);
+				$last_insert_id = Database::get_last_insert_id();
+			} else {
+				//the tag exists we update it
+				$sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id  = $tag_id";
+				$result = Database::query($sql, __FILE__, __LINE__);			
+				$last_insert_id = $tag_id;	
+			}			
+		}
+		
+		if (!empty($last_insert_id) && ($last_insert_id!=0)) {
+			//we insert the relationship user-tag
+			$sql_select ="SELECT tag_id FROM $table_user_tag_values WHERE user_id = $user_id AND tag_id = $last_insert_id ";
+			$result = Database::query($sql_select, __FILE__, __LINE__);
+			//if the relationship does not exist we create it
+			if (Database::num_rows($result)==0) {
+				$sql = "INSERT INTO $table_user_tag_values SET user_id = $user_id, tag_id = $last_insert_id";
+				$result = Database::query($sql, __FILE__, __LINE__);
+			}		
+		}
+	}
+	/**
+	 * Deletes an user tag
+	 * @param int user id
+	 * @param int field id
+	 * 
+	 */
+	public function delete_user_tags($user_id, $field_id) {
+		// database table definition
+		$table_user_tag			= Database::get_main_table(TABLE_MAIN_USER_TAG);
+		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);	
+		$tags = UserManager::get_user_tags($user_id, $field_id);		
+		//echo '<pre>';var_dump($tags);
+		if(is_array($tags) && count($tags)>0) {
+			foreach ($tags as $key=>$tag) {
+				if ($tag[1]>'0') {				
+					$sql = "UPDATE $table_user_tag SET count = count - 1  WHERE id = $key ";
+					$result = Database::query($sql, __FILE__, __LINE__);
+				}
+				$sql = "DELETE FROM $table_user_tag_values WHERE user_id = $user_id AND tag_id = $key";
+				$result = Database::query($sql, __FILE__, __LINE__);
+			}	
+			
+		}		
+	}
+	
+	/**
+	 * Process the tag list comes from the UserManager::update_extra_field_value() function
+	 * @param array the tag list that will be added 
+	 * @param int user id
+	 * @param int field id
+	 * @return bool
+	 */
+	public function process_tags($tags, $user_id, $field_id) {
+		//We loop the tags and add it to the DB
+		if (is_array($tags)) {
+			foreach($tags as $tag) {
+				UserManager::add_tag($tag, $user_id, $field_id);
+			}			
+		} else {
+			UserManager::add_tag($tags,$user_id, $field_id);
+		}
+		return true;
+	}	
 }

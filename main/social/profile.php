@@ -731,38 +731,46 @@ echo '<div id="social-profile-container">';
 					$extra_information .= get_lang('ExtraInformation');
 					$extra_information .= '</div><br />';
 					$extra_information .='<div class="social-content-information">';
-					$extra_information_value = '';
+					$extra_information_value = '';					
 						foreach($extra_user_data as $key=>$data) {
-						// get display text, visibility and type from user_field table
-						$field_variable = str_replace('extra_','',$key);
-						$sql = "SELECT field_display_text,field_visible,field_type FROM $t_uf WHERE field_variable ='$field_variable'";
-						$res_field = Database::query($sql,__FILE__,__LINE__);
-						$row_field = Database::fetch_row($res_field);
-						$field_display_text = $row_field[0];
-						$field_visible = $row_field[1];
-						$field_type = $row_field[2];
-
-						if ($field_visible == 1) {
-							if (is_array($data)) {
-								$extra_information_value .= '<strong>'.ucfirst($field_display_text).':</strong> '.implode(',',$data).'<br />';
-							} else {
-								if ($field_type == 8) {
-									$id_options = explode(';',$data);
-									$value_options = array();
-									// get option display text from user_field_options table
-									foreach ($id_options as $id_option) {
-										$sql = "SELECT option_display_text FROM $t_ufo WHERE id = '$id_option'";
-										$res_options = Database::query($sql,__FILE__,__LINE__);
-										$row_options = Database::fetch_row($res_options);
-										$value_options[] = $row_options[0];
+							// get display text, visibility and type from user_field table
+							$field_variable = str_replace('extra_','',$key);
+							$sql = "SELECT field_display_text,field_visible,field_type,id FROM $t_uf WHERE field_variable ='$field_variable'";
+							$res_field = Database::query($sql,__FILE__,__LINE__);
+							$row_field = Database::fetch_row($res_field);
+							$field_display_text = $row_field[0];
+							$field_visible = $row_field[1];
+							$field_type = $row_field[2];
+							$field_id = $row_field[3];
+							if ($field_visible == 1) {
+								if (is_array($data)) {
+									$extra_information_value .= '<strong>'.ucfirst($field_display_text).':</strong> '.implode(',',$data).'<br />';
+								} else {
+									if ($field_type == 8) {
+										$id_options = explode(';',$data);
+										$value_options = array();
+										// get option display text from user_field_options table
+										foreach ($id_options as $id_option) {
+											$sql = "SELECT option_display_text FROM $t_ufo WHERE id = '$id_option'";
+											$res_options = Database::query($sql,__FILE__,__LINE__);
+											$row_options = Database::fetch_row($res_options);
+											$value_options[] = $row_options[0];
+										}
+										$extra_information_value .= '<strong>'.ucfirst($field_display_text).':</strong> '.implode(' ',$value_options).'<br />';
+									} elseif($field_type == 10) {
+										$user_tags = UserManager::get_user_tags($user_id, $field_id);
+										$tag_tmp = array();
+										foreach ($user_tags as $tags) {
+											$tag_tmp[] = $tags[0];
+										}									 
+										if (is_array($user_tags) && count($user_tags)>0) {							
+											$extra_information_value .= '<strong>'.ucfirst($field_display_text).':</strong> '.implode(', ',$tag_tmp).'<br />';
+										}
+									} else {
+										$extra_information_value .= '<strong>'.ucfirst($field_display_text).':</strong> '.$data.'<br />';
 									}
-									$extra_information_value .= '<strong>'.ucfirst($field_display_text).':</strong> '.implode(' ',$value_options).'<br />';
-								}
-								else {
-									$extra_information_value .= '<strong>'.ucfirst($field_display_text).':</strong> '.$data.'<br />';
 								}
 							}
-						}
 					}
 					// if there are information to show
 					if (!empty($extra_information_value)) {

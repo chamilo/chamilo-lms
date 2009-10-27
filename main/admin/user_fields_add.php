@@ -1,23 +1,5 @@
 <?php // $Id: user_fields_add.php 20845 2009-05-19 17:27:22Z cfasanando $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 *	@package dokeos.admin
@@ -123,6 +105,9 @@ $types[USER_FIELD_TYPE_DATE] = get_lang('FieldTypeDate');
 $types[USER_FIELD_TYPE_DATETIME] = get_lang('FieldTypeDatetime');
 $types[USER_FIELD_TYPE_DOUBLE_SELECT] 	= get_lang('FieldTypeDoubleSelect');
 $types[USER_FIELD_TYPE_DIVIDER] 		= get_lang('FieldTypeDivider');
+$types[USER_FIELD_TYPE_TAG] 		= get_lang('FieldTypeTag');
+
+
 $form->addElement('select','fieldtype',get_lang('FieldType'),$types,array('onchange'=>'change_image_user_field(this.value)'));
 $form->addRule('fieldtype', get_lang('ThisFieldIsRequired'), 'required');
 // Field display name
@@ -172,7 +157,7 @@ $form->setDefaults($defaults);
 	if(isset($_GET['field_id']) && !empty($_GET['field_id'])) {
 		$class="save";
 		$text=get_lang('buttonEditUserField');
-	} else {
+	} else { 
 		$class="add";
 		$text=get_lang('buttonAddUserField');
 	}

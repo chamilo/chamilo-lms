@@ -39,6 +39,11 @@ if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user[
 }
 
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+
+$htmlHeadXtra[] = '<script src="../inc/lib/javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+
+
 $htmlHeadXtra[] = '<script type="text/javascript">
 function confirmation(name) {
 	if (confirm("'.get_lang('AreYouSureToDelete', '').' " + name + " ?"))
@@ -52,33 +57,7 @@ function show_image(image,width,height) {
 	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
 
 }
-</script>';
 
-if (api_get_setting('allow_message_tool') == 'true') {
-	$htmlHeadXtra[] ='<script type="text/javascript">
-	$(document).ready(function(){
-		$(".message-content .message-delete").click(function(){
-			$(this).parents(".message-content").animate({ opacity: "hide" }, "slow");
-			$(".message-view").animate({ opacity: "show" }, "slow");
-		});
-
-	});
-	</script>';
-}
-$htmlHeadXtra[] ='<script type="text/javascript">
-function generate_open_id_form() {
-	$.ajax({
-		contentType: "application/x-www-form-urlencoded",
-		beforeSend: function(objeto) {
-		/*$("#div_api_key").html("Loading...");*/ },
-		type: "POST",
-		url: "../auth/generate_api_key.inc.php",
-		data: "num_key_id="+"",
-		success: function(datos) {
-		 $("#div_api_key").html(datos);
-		}
-	});
-}
 </script>';
 
 $interbreadcrumb[] = array('url' => '../auth/profile.php', 'name' => get_lang('ModifyProfile'));
@@ -92,6 +71,16 @@ $warning_msg = '';
 if (!empty($_GET['fe'])) {
 	$warning_msg .= get_lang('UplUnableToSaveFileFilteredExtension');
 	$_GET['fe'] = null;
+}
+
+$jquery_ready_content = '';
+if (api_get_setting('allow_message_tool') == 'true') {
+	$jquery_ready_content = <<<EOF
+			$(".message-content .message-delete").click(function(){
+				$(this).parents(".message-content").animate({ opacity: "hide" }, "slow");
+				$(".message-view").animate({ opacity: "show" }, "slow");
+			});
+EOF;
 }
 
 /*
@@ -392,8 +381,52 @@ foreach ($extra as $id => $field_details) {
 		case USER_FIELD_TYPE_DIVIDER:
 			$form->addElement('static', $field_details[1], '<br /><strong>'.$field_details[3].'</strong>');
 			break;
+		case USER_FIELD_TYPE_TAG:
+			//the magic should be here		
+			$user_tags = UserManager::get_user_tags(api_get_user_id(),$field_details[0]);
+			
+			$pre_html = '<div class="row">
+						<div class="label">'.$field_details[3].'</div>
+						<div class="formw">';
+			$post = '</div></div>';
+			
+			$tag_list = '';
+			if (is_array($user_tags) && count($user_tags)> 0) {
+				foreach ($user_tags as $tag) {
+					$tag_list .= '<option value="'.$tag[0].'" class="selected">'.$tag[0].'</option>';
+				}
+			}			
+			$multi_select = '<select id="extra_'.$field_details[1].'" name="extra_'.$field_details[1].'">
+           					'.$tag_list.'
+      						 </select>';			
+			$form->addElement('html',$pre_html.$multi_select.$post );
+			$url = api_get_path(WEB_CODE_PATH).'user';
+			//if cache is set to true the jquery will be called 1 time
+			$jquery_ready_content.= <<<EOF
+      		$("#extra_$field_details[1]").fcbkcomplete({
+	            json_url: "$url/$field_details[1].php?field_id=$field_details[0]",
+	            cache: false,
+	            filter_case: true,
+	            filter_hide: true,
+				firstselected: true,
+	            //onremove: "testme",
+				//onselect: "testme",
+	            filter_selected: true,
+	            newel: true        
+          	});	
+EOF;
+			break;
 	}
 }
+
+// the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
+$htmlHeadXtra[] ='<script type="text/javascript">
+$(document).ready(function(){
+	'.$jquery_ready_content.'
+});
+</script>';
+
+
 if (api_get_setting('profile', 'apikeys') == 'true') {
 	$form->addElement('html', '<div id="div_api_key">');
 	$form->addElement('text', 'api_key_generate', get_lang('MyApiKey'), array('size' => 40, 'id' => 'id_api_key_generate'));
@@ -548,8 +581,8 @@ if (!empty($_SESSION['production_uploaded'])) {
 } elseif ($form->validate()) {
 
 	$wrong_current_password = false;
-	$user_data = $form->exportValues();
-	
+//	$user_data = $form->exportValues();	
+	$user_data = $form->getSubmitValues();
 	// set password if a new one was provided
 	if (!empty($user_data['password0'])) {
 		if (check_user_password($user_data['password0'])) {
@@ -635,8 +668,19 @@ if (!empty($_SESSION['production_uploaded'])) {
 	$sql .= " WHERE user_id  = '".$_user['user_id']."'";
 	//var_dump($sql); exit();
 	Database::query($sql, __FILE__, __LINE__);
-	//update the extra fields
-	foreach ($extras as $key => $value) {
+	
+	// User tag process
+	//1. Deleting all user tags			
+	$list_extra_field_type_tag = UserManager::get_all_extra_field_by_type(USER_FIELD_TYPE_TAG);
+	if (is_array($list_extra_field_type_tag) && count($list_extra_field_type_tag)>0) {
+		foreach ($list_extra_field_type_tag as $id) {
+			UserManager::delete_user_tags(api_get_user_id(), $id);
+		}
+	}
+		
+	//2. Update the extra fields and user tags if available	 	
+	foreach ($extras as $key => $value) {		
+		//3. Tags are process in the UserManager::update_extra_field_value by the UserManager::process_tags function
 		$myres = UserManager::update_extra_field_value($_user['user_id'], $key, $value);
 	}
 
@@ -738,7 +782,7 @@ $big_image_width = $big_image_size[0];
 $big_image_height = $big_image_size[1];
 $url_big_image = $big_image.'?rnd='.time();
 
-// Style position:absolute has been removed for Opera-compatibility.
+// Style position:absolute has been removed for Opera-compatibility. 
 //echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:3px;width:250px;" >';
 echo '<div id="image-message-container" style="float:right;display:inline;padding:3px;width:250px;" >';
 

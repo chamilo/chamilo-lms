@@ -727,6 +727,7 @@ $Menu = "Menù";
 $BackToUserList = "Torna all\'elenco dei corsisti";
 $GraphicNotAvailable = "Grafico non disponibile";
 $BackTo = "Torna a";
+$HistoryTrainingSessions = "Storico delle sessioni formative";
 $ConversionFailled = "Conversione fallita";
 $AlreadyExists = "Già esistente";
 $TheNewWordHasBeenAdded = "Il nuovo termine è stato aggiunto";
@@ -743,4 +744,9 @@ $SurveyAdded = "Questionario aggiunto";
 $WikiAdded = "Wiki aggiunto";
 $ReadOnly = "Sola lettura";
 $Unacceptable = "Non accettabile";
+$DisplayTrainingList = "Mostra l\'elenco dei corsi";
+$HistoryTrainingSession = "Storico delle sessioni formative";
+$Until = "Fino a";
+$FirstPage = "Prima pagina";
+$LastPage = "Ultima pagina";
 ?>

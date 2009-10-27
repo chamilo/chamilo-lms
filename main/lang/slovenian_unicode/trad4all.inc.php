@@ -743,4 +743,7 @@ $SurveyAdded = "Vprašalnik je bil dodan";
 $WikiAdded = "Wiki je bil dodan";
 $ReadOnly = "Zgolj za branje";
 $Unacceptable = "Nesprejemljivo";
+$Until = "Do";
+$FirstPage = "Prva stran";
+$LastPage = "Zadnja stran";
 ?>

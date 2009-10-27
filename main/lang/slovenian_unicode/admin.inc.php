@@ -1064,4 +1064,7 @@ $StylesheetNotHasBeenAdded = "Predloga ne more biti dodana";
 $ItIsRecommendedInstallImagickExtension = "Priporočamo, da namestite imagick php razširitev za boljšo izkoriščanje resolucije pri generiranju ikon. V nasprotnem primeru ikone ne bodo prikazane v najboljši resoluciji. V primeru, da ta razšitev ni nameščena, bo uporabljena privzeta namestitev php-gd.";
 $EditSpecificSearchField = "Uredi specifično iskalno polje";
 $FieldName = "Ime polja";
+$EditTopRegister = "Uredi beležko";
+$InsertTabs = "Dodaj zavihke";
+$EditTabs = "Uredi zavihke";
 ?>

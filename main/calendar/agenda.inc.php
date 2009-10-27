@@ -810,7 +810,7 @@ function show_to_form($to_already_selected)
 		echo "\t\t</td>\n";
 		// the buttons for adding or removing groups/users
 		echo "\n\t\t<td valign=\"middle\">\n";
-		echo "\t\t<input type=\"button\" ",
+	/*	echo "\t\t<input type=\"button\" ",
 					"onclick=\"move(document.getElementById('not_selected_form'),document.getElementById('selected_form'))\" ",
 					"value=\"   &gt;&gt;   \" />",
 
@@ -818,7 +818,13 @@ function show_to_form($to_already_selected)
 
 					"\n\t\t<input type=\"button\" ",
 					"onclick=\"move(document.getElementById('selected_form'),document.getElementById('not_selected_form'))\" ",
-					"value=\"   &lt;&lt;   \" />";
+					"value=\"   class=\"arrow\"   \" />";
+*/
+?>
+<button class="arrowr" type="button" onclick="move(document.getElementById('not_selected_form'), document.getElementById('selected_form'))" onclick="move(document.getElementById('not_selected_form'), document.getElementById('selected_form'))"></button>	
+<br /> <br />
+<button class="arrowl" type="button" onclick="move(document.getElementById('selected_form'), document.getElementById('not_selected_form'))" onclick="move(document.getElementById('selected_form'), document.getElementById('not_selected_form'))"></button>
+<?php
 		echo "\t\t</td>\n";
 		echo "\n\t\t<td>\n";
 		echo "<strong>".get_lang('DestinationUsers')."</strong><br />";
@@ -827,6 +833,7 @@ function show_to_form($to_already_selected)
 		echo "\t</tr>\n";
 	echo "</table>";
 }
+
 
 
 /**

@@ -88,7 +88,7 @@ function display_form() {
 	// actions
 	$html .= '<div class="sectiontitle">';
 	// link back to the documents overview
-	$html .= '<a href="../admin/index.php">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('PlatformAdmin'),array('style'=>'vertical-align:middle')).get_lang('Back').' '.get_lang('To').' '.get_lang('PlatformAdmin').'</a>';
+	$html .= '<a href="../admin/index.php">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('PlatformAdmin'),array('style'=>'vertical-align:middle')).get_lang('BackTo').' '.get_lang('PlatformAdmin').'</a>';
 	$html .= '</div>';
 
 	$html .= '<div class="row"><div class="form_header">'.get_lang('CopyCourse').'</div></div>'; 

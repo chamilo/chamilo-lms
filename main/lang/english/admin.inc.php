@@ -1088,5 +1088,5 @@ $InsertTabs = "Add Tabs";
 $EditTabs = "Edit Tabs";
 $Coachs = "Coachs";
 $IsAdministrator = "Is administrator";
-$IsNotAdministrator = "Is not administrador";
+$IsNotAdministrator = "Is not administrator";
 ?>

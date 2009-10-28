@@ -77,7 +77,7 @@ Display :: display_header($tool_name);
 if($_GET['action'] != 'add' && $_GET['action'] != 'edit')
 {
 	echo '<div class="actions">';
-	echo '<a href="?action=add">'.Display::return_icon('announce_add.gif', get_lang('AddAnnouncement')).get_lang('AddAnnouncement').'</a>';
+	echo '<a href="?action=add">'.Display::return_icon('announce_add.gif', get_lang('langAddAnnouncement')).get_lang('langAddAnnouncement').'</a>';
 	echo '</div>';
 }
 $form_action = "";

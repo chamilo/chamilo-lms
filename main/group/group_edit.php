@@ -335,7 +335,7 @@ Display :: display_header($nameTools, "Group");
 <?php
 
 if (isset($_GET['show_message'])) {
-	echo Display::display_error_message(get_lang($_GET['show_message']));
+	echo Display::display_error_message($_GET['show_message']);
 }
 $defaults['referer'] = $referer;
 $form->setDefaults($defaults);

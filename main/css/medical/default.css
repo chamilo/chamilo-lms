@@ -2776,6 +2776,46 @@ button.arrowl {
 	background-image:url(images/2leftarrow.gif);
 	background-repeat:no-repeat;
 }
+/* input >> */
+input.arrowr {
+	-moz-border-radius-topleft : 5px;
+	-moz-border-radius-bottomright : 5px;
+	-moz-border-radius-bottomleft : 5px;
+	-moz-border-radius-topright : 5px;
+	padding-left:25px;
+	padding-top:20px;
+	background-position:10px;
+	background-color:#E5EDF9;
+	border-color: #D4E2F6;
+	border-width: 1px;
+	display:block;
+	font-size: 100%;
+	line-height :130%;
+	vertical-align:middle;
+	background-image:url(images/2rightarrow.gif);
+	background-repeat:no-repeat;
+}
+
+/* input << */
+input.arrowl {
+	margin:0px;
+	-moz-border-radius-topleft : 5px;
+	-moz-border-radius-bottomright : 5px;
+	-moz-border-radius-bottomleft : 5px;
+	-moz-border-radius-topright : 5px;
+	padding-right:25px;
+	padding-top:20px;
+	background-position:10px;
+	background-color:#E5EDF9;
+	border-color: #D4E2F6;
+	border-width: 1px;
+	display:block;
+	font-size: 100%;
+	line-height :130%;
+	vertical-align:middle;
+	background-image:url(images/2leftarrow.gif);
+	background-repeat:no-repeat;
+}
 .u-m-answer {
 	float:left;
 	width:100%;

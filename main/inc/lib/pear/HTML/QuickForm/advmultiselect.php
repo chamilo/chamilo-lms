@@ -330,7 +330,6 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             case 'add':
                 if (is_null($attributes)) {
                     $this->_addButtonAttributes = array('name'  => 'add',
-                                                        'value' => ' >> ',
                                                         'type'  => 'button'
                                                        );
                 } else {
@@ -342,7 +341,6 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             case 'remove':
                 if (is_null($attributes)) {
                     $this->_removeButtonAttributes = array('name'  => 'remove',
-                                                           'value' => ' << ',
                                                            'type'  => 'button'
                                                           );
                 } else {

@@ -67,7 +67,9 @@ function check_unzip() {
 // -->
 </script>";
 
-$is_allowed_to_edit = api_is_allowed_to_edit();
+
+//$is_allowed_to_edit = api_is_allowed_to_edit();
+$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 if(!$is_allowed_to_edit){
 	api_not_allowed(true);
 }

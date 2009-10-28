@@ -183,25 +183,26 @@ class GroupManager {
 		}
 
 		$groups = array ();
-		while ($thisGroup = Database::fetch_array($groupList))
-		{
-			if ($thisGroup['category_id'] == VIRTUAL_COURSE_CATEGORY)
-			{
-				$sql = "SELECT title FROM $table_course WHERE code = '".$thisGroup['name']."'";
-				$obj = Database::fetch_object(Database::query($sql,__FILE__,__LINE__));
-				$thisGroup['name'] = $obj->title;
-			}
-			if($thisGroup['session_id']!=0)
-			{
-				$sql_session = 'SELECT name FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$thisGroup['session_id'];
-				$rs_session = Database::query($sql_session,__FILE__,__LINE__);
-				if (Database::num_rows($rs_session)>0) {
-					$thisGroup['session_name'] = Database::result($rs_session,0,0);
-				} else {
-					//the session has probably been removed, so the group is now orphaned
+		if(is_array($thisGroup = Database::fetch_array($groupList))){
+			while ($thisGroup = Database::fetch_array($groupList)) {
+				if ($thisGroup['category_id'] == VIRTUAL_COURSE_CATEGORY)
+				{
+					$sql = "SELECT title FROM $table_course WHERE code = '".$thisGroup['name']."'";
+					$obj = Database::fetch_object(Database::query($sql,__FILE__,__LINE__));
+					$thisGroup['name'] = $obj->title;
 				}
+				if($thisGroup['session_id']!=0)
+				{
+					$sql_session = 'SELECT name FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$thisGroup['session_id'];
+					$rs_session = Database::query($sql_session,__FILE__,__LINE__);
+					if (Database::num_rows($rs_session)>0) {
+						$thisGroup['session_name'] = Database::result($rs_session,0,0);
+					} else {
+						//the session has probably been removed, so the group is now orphaned
+					}
+				}
+				$groups[] = $thisGroup;
 			}
-			$groups[] = $thisGroup;
 		}
 		return $groups;
 	}
@@ -809,8 +810,8 @@ class GroupManager {
 					$i--;
 				}
 			}
-			if(count($group_ids)==0)
-				return false;
+			if(count($group_ids)==0){
+				return false;}
 		}
 
 		global $_course;
@@ -825,7 +826,7 @@ class GroupManager {
 		 * Retrieve all the groups where enrollment is still allowed
 		 * (reverse) ordered by the number of place available
 		 */
-		$sql = "SELECT g.id gid, g.max_student-count(ug.user_id) nbPlaces, g.max_student
+		echo $sql = "SELECT g.id gid, g.max_student-count(ug.user_id) nbPlaces, g.max_student
 				FROM ".$group_table." g
 				LEFT JOIN  ".$group_user_table." ug
 				ON    `g`.`id` = `ug`.`group_id`

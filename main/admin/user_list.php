@@ -761,7 +761,7 @@ else
 	$table->set_header(5, get_lang('Email'));
 	$table->set_header(6, get_lang('Status'));
 	$table->set_header(7, get_lang('Active'));
-	$table->set_header(8, get_lang('Action'));
+	$table->set_header(8, get_lang('Action'), false);
 	$table->set_column_filter(5, 'email_filter');
 	$table->set_column_filter(6, 'status_filter');
 	$table->set_column_filter(7, 'active_filter');

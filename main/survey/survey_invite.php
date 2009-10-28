@@ -134,6 +134,8 @@ $users->setElementTemplate('
 </tr>
 </table>
 ');
+$users->setButtonAttributes('add',array('class'=>'arrowr'));
+$users->setButtonAttributes('remove',array('class'=>'arrowl'));
 // additional users
 $form->addElement('textarea', 'additional_users', get_lang('AdditonalUsers'), array ('cols' => 50, 'rows' => 2));
 // additional users comment

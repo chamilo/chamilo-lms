@@ -1086,4 +1086,7 @@ $DeleteSelectedFullSessionCategory = "Delete the selected categories to sessions
 $EditTopRegister = "Edit Note";
 $InsertTabs = "Add Tabs";
 $EditTabs = "Edit Tabs";
+$Coachs = "Coachs";
+$IsAdministrator = "Is administrator";
+$IsNotAdministrator = "Is not administrator";
 ?>

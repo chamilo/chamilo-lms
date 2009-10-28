@@ -24,4 +24,7 @@ $Authoring = "Creación de contenidos";
 $Administration = "Administración";
 $IntroductionTextUpdated = "El texto de introducción ha sido actualizado";
 $IntroductionTextDeleted = "El texto de introducción ha sido eliminado";
+$SessionIdentifier = "Identificador de la sesión";
+$SessionName = "Nombre de la sesión";
+$SessionCategory = "Categoría de la sesión";
 ?>

@@ -114,7 +114,7 @@ function show_to_form($to_already_selected)
 
 	// the buttons for adding or removing groups/users
 	echo "\n\t\t<td valign=\"middle\">\n";
-	echo "\t\t<input	type=\"button\"	",
+	/*echo "\t\t<input	type=\"button\"	",
 				"onClick=\"javascript: move(this.form.elements[0],this.form.elements[3])\" ",// 7 & 4 : fonts
 				"value=\"   >>   \">",
 
@@ -122,7 +122,13 @@ function show_to_form($to_already_selected)
 
 				"\n\t\t<input	type=\"button\"",
 				"onClick=\"javascript: move(this.form.elements[3],this.form.elements[0])\" ",
-				"value=\"   <<   \">";
+				"value=\"   <<   \">";*/
+				
+?>
+<button class="arrowr" type="button" onClick="javascript: move(this.form.elements[0], this.form.elements[3])" onClick="javascript: move(this.form.elements[0], this.form.elements[3])"></button>	
+<br /> <br />
+<button class="arrowl" type="button" onClick="javascript: move(this.form.elements[3], this.form.elements[0])" onClick="javascript: move(this.form.elements[3], this.form.elements[0])"></button>
+<?php
 	echo "\t\t</td>\n";
 	echo "\n\t\t<td>\n";
 

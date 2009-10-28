@@ -796,7 +796,7 @@ function display_agenda_items()
     	Display::display_icon('agenda.gif', get_lang('Agenda'));
     	if ($myrow['to_group_id']!=='0')
     	{
-    		echo Display::return_icon('group.gif', get_lang('Group'));
+    		echo Display::return_icon('group.gif', get_lang('AllUsersOfThePlatform'));
     	}
     	echo " ".$myrow['title']."\n";
     	echo "\t\t</th>\n";
@@ -812,7 +812,7 @@ function display_agenda_items()
     	{
     		if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id'] ) ) )
 			{ // a coach can only delete an element belonging to his session
-	    		echo '<th>'.get_lang('Modify');
+	    		echo '<th>'.get_lang('Actions');
 	    		echo '</th></tr>';
 			}
     	}

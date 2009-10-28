@@ -62,6 +62,14 @@ define('TABLE_MAIN_USER_FIELD',			'user_field');
 define('TABLE_MAIN_USER_FIELD_OPTIONS',	'user_field_options');
 define('TABLE_MAIN_USER_FIELD_VALUES',	'user_field_values');
 
+//User tags
+define('TABLE_MAIN_USER_TAG',			'user_tag');
+define('TABLE_MAIN_USER_REL_TAG',		'user_rel_tag');
+
+//User group
+define('TABLE_MAIN_USER_GROUP',			'user_group');
+define('TABLE_MAIN_USER_GROUP_VALUES',	'user_group_values');
+
 // Search engine
 define('TABLE_MAIN_SPECIFIC_FIELD',			'specific_field');
 define('TABLE_MAIN_SPECIFIC_FIELD_VALUES',	'specific_field_values');

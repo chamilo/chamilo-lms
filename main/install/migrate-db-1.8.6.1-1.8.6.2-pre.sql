@@ -34,6 +34,11 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_coac
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'false', 'No');
 
+CREATE TABLE user_tag (id int NOT NULL auto_increment, tag varchar(255) NOT NULL, field_id int NOT NULL, count int NOT NULL, PRIMARY KEY  (id));
+CREATE TABLE user_rel_tag (id int NOT NULL auto_increment,user_id int NOT NULL,tag_id int NOT NULL, PRIMARY KEY  (id));
+
+
+
 -- xxSTATSxx
 
 -- xxUSERxx

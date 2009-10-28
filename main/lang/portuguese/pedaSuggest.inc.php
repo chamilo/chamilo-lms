@@ -1,25 +1,25 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$GeneralDescription = "Descrição Geral";
-$GeneralDescriptionQuestions = "Qual o lugar do curso dentro do programa? Existem pré-requisitos? De que modo o curso está relacionado com outros cursos?";
-$GeneralDescriptionInformation = "Descrever o curso (número de horas, código oficial, sala de aula...) e o professor (nome, gabinete, telefone, email, etc.).";
+$GeneralDescription = "Descrição";
+$GeneralDescriptionQuestions = "Qual é o objectivo deste curso? Existem pré-requisitos? De que forma é que este curso está interligado com outros cursos?";
+$GeneralDescriptionInformation = "Descreva o curso (número de horas, número sser, localização) e o instrutor (nome, escritório, tel., E-mail, o horário de expediente....). ";
 $Objectives = "Objectivos";
-$ObjectivesInformation = "Apresentação dos objectivos gerais e objectivos específicos do curso.";
-$ObjectivesQuestions = "O que é que os alunos deverão saber no final do curso e o que é suposto fazerem durante o processo de aprendizagem.";
+$ObjectivesInformation = "Quais são os objectivos do curso (competências, resultados)?";
+$ObjectivesQuestions = "Qual deverá ser o resultado final, quando o aluno tiver concluído o curso? Quais são as actividades realizadas durante o curso?";
 $Topics = "Tópicos";
-$TopicsInformation = "Lista dos tópicos fundamentais do curso. Importância de cada tópico. Grau de dificuldades. Estrutura e interdependência de cada uma das partes.";
-$TopicsQuestions = "Como é que o curso evolui? A que devem tomar mais atenção? Há algum problema na compreensão dos diferentes capítulos? Quanto tempo se deverá dedicar a cada parte do curso?";
+$TopicsInformation = "Lista dos tópicos incluídos no curso. Importância de cada tópico. Nível de dificuldade. Estrutura e interdependência das diferentes partes.";
+$TopicsQuestions = "Como funciona o curso de formação? Onde é que o aluno deverá prestar cuidados especiais? Existem alguns problemas identificados na compreenção das diferentes áreas? Quanto tempo deverá dedicar a cada uma das diferentes áreas do curso?";
 $Methodology = "Metodologia";
-$MethodologyQuestions = "Que métodos e que actividades ajudarão a alcançar os objectivos do curso? Com que horário?";
-$MethodologyInformation = "Apresentação de actividades (conferências, trabalhos, grupos de investigação, laboratório, etc.).";
-$CourseMaterial = "Material do Curso";
-$CourseMaterialQuestions = "Há alguma sebenta, colectânea de textos, bibliografia, lista de ligações na Internet?";
+$MethodologyQuestions = "Quais os métodos e atividades que podem ajudar a alcançar os objectivos do curso? Qual seria o calendário/cronograma/horário/catálogo?";
+$MethodologyInformation = "Apresentação das actividades (conferências, artigos de jornais/imprensa, grupo de pesquisa, laboratórios...). ";
+$CourseMaterial = "Material do curso";
+$CourseMaterialQuestions = "Existe um livro do curso, uma colecção artigos de jornais/imprensa, uma bibliografia, uma lista de ligações/links na internet?";
 $CourseMaterialInformation = "Breve descrição dos materiais do curso.";
-$HumanAndTechnicalResources = "Recursos humanos e técnicos";
-$HumanAndTechnicalResourcesQuestions = "Há professores, tutores, ajuda, assistente social, psicólogo, sala de computadores?";
-$HumanAndTechnicalResourcesInformation = "Breve descrição sobre as diferentes pessoas a contactar e sobre os recursos materiais e técnicos.";
+$HumanAndTechnicalResources = "Recursos";
+$HumanAndTechnicalResourcesQuestions = "Considere os instrutores, tutores, técnico de helpdesk, gestores de cursos, e/ou materiais disponíveis";
+$HumanAndTechnicalResourcesInformation = "Identifique e descreva as diferentes pessoas a contactar e os dispositivos técnicos disponíveis.";
 $Assessment  = "Avaliação";
-$AssessmentQuestions = "Como serão avaliados os alunos? Há alguma estratégia a desenvolver em ordem à prossecução dos objectivos?";
-$AssessmentInformation = "Exemplo de questões de exame. Critérios de avaliação. Sugestões e truques.";
+$AssessmentQuestions = "Como serão avaliados os alunos? Existem algumas estratégias a desenvolver afim de conseguirem dominar o tópico/tema?";
+$AssessmentInformation = "Critérios para a aquisição de competências.";
 ?>

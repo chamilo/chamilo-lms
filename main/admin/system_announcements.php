@@ -77,7 +77,7 @@ Display :: display_header($tool_name);
 if($_GET['action'] != 'add' && $_GET['action'] != 'edit')
 {
 	echo '<div class="actions">';
-	echo '<a href="?action=add">'.Display::return_icon('announce_add.gif', get_lang('AddAnnouncement')).get_lang('AddAnnouncement').'</a>';
+	echo '<a href="?action=add">'.Display::return_icon('announce_add.gif', get_lang('langAddAnnouncement')).get_lang('langAddAnnouncement').'</a>';
 	echo '</div>';
 }
 $form_action = "";
@@ -123,7 +123,7 @@ if (isset ($_POST['action']))
 if (isset ($_GET['action']) && $_GET['action'] == 'delete')
 {
 	SystemAnnouncementManager :: delete_announcement($_GET['id']);
-	Display :: display_normal_message(get_lang('AnnouncementDeleted'));
+	Display :: display_confirmation_message(get_lang('AnnouncementDeleted'));
 }
 // Delete selected announcements
 if (isset ($_POST['action']) && $_POST['action'] == 'delete_selected')
@@ -132,7 +132,7 @@ if (isset ($_POST['action']) && $_POST['action'] == 'delete_selected')
 	{
 		SystemAnnouncementManager :: delete_announcement($id);
 	}
-	Display :: display_normal_message(get_lang('AnnouncementDeleted'));
+	Display :: display_confirmation_message(get_lang('AnnouncementDeleted'));
 	$action_todo = false;
 }
 // Add an announcement
@@ -237,7 +237,7 @@ if ($action_todo)
 			case 'add':
 				if(SystemAnnouncementManager::add_announcement($values['title'],$values['content'],$values['start'],$values['end'],$values['visible_teacher'],$values['visible_student'],$values['visible_guest'], $values['lang'],$values['send_mail']))
 				{
-					Display :: display_normal_message(get_lang('AnnouncementAdded'));
+					Display :: display_confirmation_message(get_lang('AnnouncementAdded'));
 				}
 				else
 				{
@@ -248,7 +248,7 @@ if ($action_todo)
 			case 'edit':
 				if (SystemAnnouncementManager::update_announcement($values['id'],$values['title'],$values['content'],$values['start'],$values['end'],$values['visible_teacher'],$values['visible_student'],$values['visible_guest'], $values['lang'],$values['send_mail']))
 				{
-					Display :: display_normal_message(get_lang('AnnouncementUpdated'));
+					Display :: display_confirmation_message(get_lang('AnnouncementUpdated'));
 				}
 				else
 				{

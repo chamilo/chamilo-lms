@@ -1087,4 +1087,6 @@ $EditTopRegister = "Modifica appunto";
 $InsertTabs = "Aggiungi separatore";
 $EditTabs = "Modifica separatore";
 $Coachs = "Tutor";
+$IsAdministrator = "E\' amministratore";
+$IsNotAdministrator = "Non è amministratore";
 ?>

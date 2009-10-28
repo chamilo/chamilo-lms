@@ -24,4 +24,7 @@ $Authoring = "Creació de continguts";
 $Administration = "Administració";
 $IntroductionTextUpdated = "El text d\'introducció ha estat actualitzat";
 $IntroductionTextDeleted = "El text d\'introducció ha estat eliminat";
+$SessionIdentifier = "Identificador de la sesión";
+$SessionName = "Nom de la sessió ";
+$SessionCategory = "Categoria de la sessió ";
 ?>

@@ -183,7 +183,7 @@ class GroupManager {
 		}
 
 		$groups = array ();
-		if(is_array($thisGroup = Database::fetch_array($groupList))){
+		$thisGroup= array();
 			while ($thisGroup = Database::fetch_array($groupList)) {
 				if ($thisGroup['category_id'] == VIRTUAL_COURSE_CATEGORY)
 				{
@@ -202,7 +202,7 @@ class GroupManager {
 					}
 				}
 				$groups[] = $thisGroup;
-			}
+			
 		}
 		return $groups;
 	}
@@ -826,7 +826,7 @@ class GroupManager {
 		 * Retrieve all the groups where enrollment is still allowed
 		 * (reverse) ordered by the number of place available
 		 */
-		echo $sql = "SELECT g.id gid, g.max_student-count(ug.user_id) nbPlaces, g.max_student
+		$sql = "SELECT g.id gid, g.max_student-count(ug.user_id) nbPlaces, g.max_student
 				FROM ".$group_table." g
 				LEFT JOIN  ".$group_user_table." ug
 				ON    `g`.`id` = `ug`.`group_id`

@@ -96,7 +96,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
         Display::display_warning_message(urldecode($_GET['warn']),false);
     }
     if(isset($_GET['action'])) {
-        Display::display_normal_message(stripslashes($_GET['message']),false);
+        Display::display_confirmation_message(stripslashes($_GET['message']),false);
     }
     ?>
 

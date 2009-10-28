@@ -23,12 +23,16 @@ CREATE TABLE session_category (id int(11) NOT NULL auto_increment, name varchar(
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_coach_to_edit_course_session', NULL, 'radio', 'Course', 'false', 'AllowCoachsToEditInsideTrainingSessions', 'AllowCoachsToEditInsideTrainingSessionsComment', NULL, NULL, 0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('show_courses_descriptions_in_catalog', NULL, 'radio', 'Course', 'true', 'ShowCoursesDescriptionsInCatalogTitle', 'ShowCoursesDescriptionsInCatalogComment', NULL, NULL, 1, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('show_glossary_in_extra_tools', NULL, 'radio', 'Course', 'false', 'ShowGlossaryInExtraToolsTitle', 'ShowGlossaryInExtraToolsComment', NULL, NULL,1,0);
 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_courses_descriptions_in_catalog', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_courses_descriptions_in_catalog', 'false', 'No');
 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_coach_to_edit_course_session', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_coach_to_edit_course_session', 'false', 'No');
+
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'false', 'No');
 
 -- xxSTATSxx
 

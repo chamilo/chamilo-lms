@@ -68,7 +68,10 @@ $language_file = 'exercice';
 
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
-
+if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
+  $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+  $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/glossary.js" type="text/javascript" language="javascript"></script>'; //Glossary
+ }
 /* ------------	ACCESS RIGHTS ------------ */
 // notice for unauthorized people.
 api_protect_course_script(true);
@@ -901,7 +904,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 	echo Display :: return_icon('edit.gif', get_lang('ModifyExercise')) . '<a href="exercise_admin.php?modifyExercise=yes&exerciseId=' . $objExercise->id . '">' . get_lang('ModifyExercise') . '</a>';
 	echo '</div>';
 }
-
+  echo '<div class="glossary-content">';
 $exerciseTitle = api_parse_tex($exerciseTitle);
 
 echo "<h3>" . $exerciseTitle . "</h3>";
@@ -1111,6 +1114,7 @@ if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType !
 
 if ($origin != 'learnpath') {
 	//so we are not in learnpath tool
+  echo '</div>'; //End glossary div
 	Display :: display_footer();
 } else {
 	echo '</body></html>';

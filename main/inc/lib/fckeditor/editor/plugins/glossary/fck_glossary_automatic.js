@@ -6,7 +6,7 @@ $(document).ready(function() {
 	 work_path = my_pathname.substr(0,my_pathname.indexOf('/courses/'));
      $.ajax({
         contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(objeto) {
+        beforeSend: function(content_object) {
         },
         type: "POST",
         url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
@@ -15,11 +15,11 @@ $(document).ready(function() {
 			  if (datos.length==0) {
 			  	return false;
 			  }
-                data_terms=datos.split("[|.|_|.|-|.|]");
+                data_terms=datas.split("[|.|_|.|-|.|]");
                 for(i=0;i<data_terms.length;i++) {
                     specific_terms=data_terms[i].split("__|__|");
-                   var my_specific_terms = new RegExp(specific_terms[1],"gi");
-				    new_html=my_text.replace(my_specific_terms,"<a href=\"javascript:void(0)\" class=\"glossary-ajax\" name=\"link"+specific_terms[0]+"\" onclick=\"\">"+specific_terms[1]+"</a>");
+                    var my_specific_terms = new RegExp('[^A-Za-z0-9/_\]('+specific_terms[1]+')',"gi");
+				    new_html=my_text.replace(my_specific_terms,"<span class=\"glossary-ajax\" style='color:blue'  name=\"link"+specific_terms[0]+"\">"+specific_terms[1]+"</span>");
                     $("body").html(new_html);
                     my_text=$("body").html();
                 }
@@ -36,13 +36,13 @@ $(document).ready(function() {
 	                my_glossary_id=data_notebook[1];
 	                $.ajax({
 	                    contentType: "application/x-www-form-urlencoded",
-	                    beforeSend: function(objeto) {
+	                    beforeSend: function(content_object) {
 	                    $("div#"+div_content_id).html("<img src="+my_protocol+"//"+location.host+work_path+"/main/inc/lib/javascript/indicator.gif />"); },
 	                    type: "POST",
 	                    url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
 	                    data: "glossary_id="+my_glossary_id,
-	                    success: function(datos) {
-	                        $("div#"+div_content_id).html(datos);
+	                    success: function(datas) {
+	                        $("div#"+div_content_id).html(datas);
 	                    }
 	                });
 	          });

@@ -242,6 +242,9 @@ $group_tutors_element->setElementTemplate('
 </table>
 ');
 
+$group_tutors_element->setButtonAttributes('add',array('class'=>'arrowr'));
+$group_tutors_element->setButtonAttributes('remove',array('class'=>'arrowl'));
+
 // Group members
 $group_member_list = GroupManager :: get_subscribed_users($current_group['id']);
 $selected_users = array ();
@@ -264,7 +267,8 @@ $group_members_element->setElementTemplate('
 </table>
 ');
 
-
+$group_members_element->setButtonAttributes('add',array('class'=>'arrowr'));
+$group_members_element->setButtonAttributes('remove',array('class'=>'arrowl'));
 $form->addFormRule('check_group_members');
 
 // submit button

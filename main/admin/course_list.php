@@ -125,15 +125,15 @@ function get_course_data($from, $number_of_items, $column, $direction)
 function modify_filter($code)
 {
 	global $charset;
-	return
+		return
 		'<a href="course_information.php?code='.$code.'">'.Display::return_icon('synthese_view.gif', get_lang('Info')).'</a>&nbsp;'.
-
 		//'<a href="../course_home/course_home.php?cidReq='.$code.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>&nbsp;'. // This is not the preferable way to go to the homepage.
 		'<a href="'.api_get_path(WEB_COURSE_PATH).$code.'/index.php">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>&nbsp;'.
-
+		'<a href="../coursecopy/backup.php?cidReq='.$code.'">'.Display::return_icon('backup.gif', get_lang('CreateBackup')).'</a>&nbsp;'.
 		'<a href="../tracking/courseLog.php?cidReq='.$code.'">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;'.
 		'<a href="course_edit.php?course_code='.$code.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;'.
 		'<a href="course_list.php?delete_course='.$code.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+	
 }
 /**
  * Return an icon representing the visibility of the course
@@ -286,7 +286,7 @@ else
 	$table->set_header(6, get_lang('UnsubscriptionAllowed'));
 	$table->set_header(7, get_lang('IsVirtualCourse'));
 	$table->set_header(8, get_lang('Teacher'));
-	$table->set_header(9, get_lang('Action'), false,'width="120px"');
+	$table->set_header(9, get_lang('Action'), false,'width="125px"');
 	$table->set_column_filter(9,'modify_filter');
 	$table->set_form_actions(array ('delete_courses' => get_lang('DeleteCourse')),'course');
 	$table->display();

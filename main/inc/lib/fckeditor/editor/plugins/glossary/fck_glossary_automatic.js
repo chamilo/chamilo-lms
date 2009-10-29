@@ -18,7 +18,7 @@ $(document).ready(function() {
                 data_terms=datas.split("[|.|_|.|-|.|]");
                 for(i=0;i<data_terms.length;i++) {
                     specific_terms=data_terms[i].split("__|__|");
-                    var my_specific_terms = new RegExp('[^A-Za-z0-9/_\]('+specific_terms[1]+')',"gi");
+                    var my_specific_terms = new RegExp('[^A-Za-z0-9/_\<>]('+specific_terms[1]+')',"");
 				    new_html=my_text.replace(my_specific_terms,"<span class=\"glossary-ajax\" style='color:blue'  name=\"link"+specific_terms[0]+"\">"+specific_terms[1]+"</span>");
                     $("body").html(new_html);
                     my_text=$("body").html();

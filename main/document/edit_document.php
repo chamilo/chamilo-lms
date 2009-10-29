@@ -599,7 +599,7 @@ if(isset($msgError))
 
 if( isset($info_message))
 {
-	Display::display_normal_message($info_message); //main API
+	Display::display_confirmation_message($info_message); //main API
 }
 
 

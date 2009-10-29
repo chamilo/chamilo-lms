@@ -286,7 +286,8 @@ if ($slide_id !== "all") {
 			echo '<tr>';
 			echo '<td align="center">';
 		
-			echo '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$pathurl.'&amp;file='.urlencode($path).$image_files_only[$slide].'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="'.get_lang('Modify').'" /></a><br />';
+		
+			echo '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$pathurl.'&amp;file='.urlencode($path).'/'.$image_files_only[$slide].'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="'.get_lang('Modify').'" /></a><br />';
 		
 			list($width, $high) = getimagesize($image);
 			echo $width.' x '.$high.' <br />';

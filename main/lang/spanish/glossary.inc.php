@@ -22,4 +22,6 @@ $TableView = "Ver como tabla";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Este termino del glosario ya existe, por favor cambielo por otro nombre";
 $GlossaryManagement  = "Administración de glosario";
 $TermMoved = "El término se ha movido";
+$ShowGlossaryInExtraToolsTitle = "Muestra los términos del glosario en las herramientas lecciones(scorm) y ejercicios";
+$ShowGlossaryInExtraToolsComment = "Desde aquí usted puede configurar como añadir  los términos del glosario en herramientas como lecciones(scorm) y ejercicios";
 ?>

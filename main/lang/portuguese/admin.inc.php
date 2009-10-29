@@ -1086,5 +1086,4 @@ $DeleteSelectedFullSessionCategory = "Eliminar as categorias seleccionadas para 
 $EditTopRegister = "Editar Nota";
 $InsertTabs = "Adicionar Separadores";
 $EditTabs = "Editar Separadores";
-$Coachs = "Tutores";
 ?>

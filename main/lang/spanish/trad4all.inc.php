@@ -749,4 +749,5 @@ $HistoryTrainingSession = "Historial de sesiones de formación";
 $Until = "Hasta";
 $FirstPage = "Primera página";
 $LastPage = "Última página";
+$Coachs = "Tutores";
 ?>

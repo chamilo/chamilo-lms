@@ -858,11 +858,10 @@ class CourseManager {
 		$course_code = Database::escape_string($course_code);
 
 		$users = array();
-
 		$where = array();
 		$sql = $session_id == 0
 			? 'SELECT DISTINCT course_rel_user.status, user.user_id, course_rel_user.role, course_rel_user.tutor_id '
-			: 'SELECT DISTINCT user.user_id ';
+			: 'SELECT DISTINCT user.user_id, user.status ';
 
 		$sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
 

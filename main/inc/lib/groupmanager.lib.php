@@ -820,7 +820,8 @@ class GroupManager {
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$group_table = Database :: get_course_table(TABLE_GROUP);
 		$group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
-		$complete_user_list = CourseManager :: get_real_and_linked_user_list($_course['sysCode']);
+		$session_id = api_get_session_id();
+		$complete_user_list = CourseManager :: get_real_and_linked_user_list($_course['sysCode'], true, $session_id);
         $number_groups_per_user = ($groups_per_user == GROUP_PER_MEMBER_NO_LIMIT ? INFINITE : $groups_per_user);
 		/*
 		 * Retrieve all the groups where enrollment is still allowed
@@ -854,7 +855,7 @@ class GroupManager {
 		}
 		//first sort by user_id to filter out duplicates
 		$complete_user_list = TableSort :: sort_table($complete_user_list, 'user_id');
-		$complete_user_list = self :: filter_duplicates($complete_user_list, "user_id");
+		$complete_user_list = self :: filter_duplicates($complete_user_list, 'user_id');
 		$complete_user_list = self :: filter_only_students($complete_user_list);
 		//now sort by # of group left
 		$complete_user_list = TableSort :: sort_table($complete_user_list, 'number_groups_left', SORT_DESC);

@@ -1983,8 +1983,7 @@ function display_wiki_search_results($search_term, $search_content=0)
 	if (Database::num_rows($result) > 0)
 	{
 		$row = array ();
-		while ($obj = Database::fetch_object($result))
-		{
+		while ($obj = Database::fetch_object($result)) {
 			//get author
 			$userinfo=Database::get_user_info_from_id($obj->user_id);
 
@@ -2028,11 +2027,11 @@ function display_wiki_search_results($search_term, $search_content=0)
 		$table = new SortableTableFromArrayConfig($rows,1,10,'SearchPages_table','','','ASC');
 		$table->set_additional_parameters(array('cidReq' =>$_GET['cidReq'],'action'=>$_GET['action'],'group_id'=>Security::remove_XSS($_GET['group_id'])));
 
-		$table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
-		$table->set_header(1,get_lang('Title'), true);
-		$table->set_header(2,get_lang('Author').' ('.get_lang('LastVersion').')', true);
-		$table->set_header(3,get_lang('Date').' ('.get_lang('LastVersion').')', true);
-		$table->set_header(4,get_lang('Actions'), true, array ('style' => 'width:100px;'));
+		$table->set_header(0,get_lang('Type'), false, array ('style' => 'width:30px;'));
+		$table->set_header(1,get_lang('Title'), false);
+		$table->set_header(2,get_lang('Author').' ('.get_lang('LastVersion').')', false);
+		$table->set_header(3,get_lang('Date').' ('.get_lang('LastVersion').')', false);
+		$table->set_header(4,get_lang('Actions'), false, array ('style' => 'width:100px;'));
 
 		$table->display();
 	}

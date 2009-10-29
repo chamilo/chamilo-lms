@@ -163,7 +163,7 @@ if ($my_action=='delete' AND isset($_GET['content']) AND isset($_GET['id']) AND 
 if (($my_action=='invisible' OR $my_action=='visible') AND isset($_GET['id']) AND api_is_allowed_to_edit(false,true)) {
 	$message=approve_post($_GET['id'],$_GET['action']); // note: this has to be cleaned first
 }
-if ($my_action=='move' and isset($_GET['post'])) {
+if ($my_action=='move' AND isset($_GET['post'])) {
 	$message=move_post_form();
 }
 
@@ -193,7 +193,7 @@ if ($my_message<>'PostDeletedSpecial') {
 	echo '<span style="float:right;">'.search_link().'</span>';
 	if ($origin != 'learnpath') {
 		echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToForumOverview')).' '.get_lang('BackToForumOverview').'</a>';
-		echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'">'.Display::return_icon('forum.gif',get_lang('BackToForum')).' '.get_lang('BackToForum').'</a>';
+		echo '<a href="viewforum.php?&forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$_SESSION['toolgroup'].'">'.Display::return_icon('forum.gif',get_lang('BackToForum')).' '.get_lang('BackToForum').'</a>';
 	}
 	// the reply to thread link should only appear when the forum_category is not locked AND the forum is not locked AND the thread is not locked.
 	// if one of the three levels is locked then the link should not be displayed

@@ -265,7 +265,7 @@ if ($slide_id !== "all") {
 		echo '<table align="center" border="0">';
 		echo '<tr>';
 		echo '<td align="center">';
-		echo "<img src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."' border='0'".$height_width_tags.">";
+		echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'><img src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."' border='0'".$height_width_tags."></a>";	
 		echo '</td>';
 		echo '</tr>';
 		echo '<tr>';
@@ -273,13 +273,28 @@ if ($slide_id !== "all") {
 		$aux= explode(".", htmlspecialchars($image_files_only[$slide]));
 	    $ext= $aux[count($aux)-1];
 		echo '<strong>'.basename(htmlspecialchars($image_files_only[$slide]), '.'.$ext).'</strong>';
-		echo '<br />'.$row['comment'].'<br />';
-		list($width, $high) = getimagesize($image);
-		echo $width.' x '.$high.' <br />';
-		echo round((filesize($image)/1024),2).' KB';
-	    echo ' - '.$ext;
 		echo '</td>';
 		echo '</tr>';
+		echo '<tr>';
+		echo '<td style="border:1px solid; border-color: #CCCCCC">';		
+		echo $row['comment'];
+		echo '</td>';
+		echo '</tr>';
+		
+		if (api_is_allowed_to_edit(null,true))
+		{
+			echo '<tr>';
+			echo '<td align="center">';
+		
+			echo '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$pathurl.'&amp;file='.urlencode($path).$image_files_only[$slide].'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="'.get_lang('Modify').'" /></a><br />';
+		
+			list($width, $high) = getimagesize($image);
+			echo $width.' x '.$high.' <br />';
+			echo round((filesize($image)/1024),2).' KB';
+			echo ' - '.$ext;
+			echo '</td>';
+			echo '</tr>';
+		}
 		echo '</table>';
 	} else {
 		Display::display_warning_message(get_lang('FileNotFound'));

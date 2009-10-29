@@ -18,12 +18,14 @@ $(document).ready(function() {
                 data_terms=datas.split("[|.|_|.|-|.|]");
                 for(i=0;i<data_terms.length;i++) {
                     specific_terms=data_terms[i].split("__|__|");
-                    var my_specific_terms = new RegExp('[^A-Za-z0-9/_\<>]('+specific_terms[1]+')',"g");
-				    new_html=my_text.replace(my_specific_terms,"<span class=\"glossary-ajax\" style='color:blue'  name=\"link"+specific_terms[0]+"\">"+specific_terms[1]+"</span>");
+                    var real_term = specific_terms[1];
+                    var my_specific_terms = new RegExp('([^A-Za-z0-9/_\<>])'+specific_terms[1]+'[\ .,]{0,1}',"gi");
+                    new_html=my_text.replace(my_specific_terms,function(m){return replace_complete_char(m)});
                     $("body").html(new_html);
                     my_text=$("body").html();
                 }
-
+              
+			  //mouse over event
 			  $("body .glossary-ajax").mouseover(function(){
 	            random_id=Math.round(Math.random()*100);
 	            div_show_id="div_show_id"+random_id;
@@ -46,14 +48,22 @@ $(document).ready(function() {
 	                    }
 	                });
 	          });
+			  
+			  //mouse out event
 	          $("body .glossary-ajax").mouseout(function(){
 		            var current_element,
 		            current_element=$(this);
 		            div_show_id=current_element.find("div").attr("id");
 		            $("div#"+div_show_id).remove();
 	          });
-
-
+            
+			//Callback Helper
+            function replace_complete_char(m) {
+               var complete_term_pattern = new RegExp(real_term,"i"); 
+               var tag = m.replace(complete_term_pattern," <span class=\"glossary-ajax\" style='color:blue' name=\"link"+specific_terms[0]+"\">$&</span>"); 
+               return tag;
+            }
+				
 				}
 
             });

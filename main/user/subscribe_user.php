@@ -335,6 +335,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					WHERE cu.user_id IS NULL
 						AND field_values.field_id = '".Database::escape_string($field_identification[0])."' 
 						AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
+			}
 		} else {
 		// adding a teacher NOT through a session
 			$sql = "SELECT
@@ -720,8 +721,7 @@ function display_extra_profile_fields_filter()
 
 }
 
-function debug($var)
-{
+function debug($var) {
 	echo '<pre>';
 	print_r($var);
 	echo '</pre>';

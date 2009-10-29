@@ -1068,5 +1068,4 @@ $DeleteSelectedFullSessionCategory = "Eliminar les categorias seleccionades amb 
 $EditTopRegister = "Editar avis";
 $InsertTabs = "Insertar Tabs";
 $EditTabs = "Editar Tabs";
-$Coachs = "Tutors";
 ?>

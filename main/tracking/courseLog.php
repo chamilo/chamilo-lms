@@ -123,18 +123,6 @@ require api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 $a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true, (empty($_SESSION['id_session']) ? null : $_SESSION['id_session']));
 $nbStudents = count($a_students);
 
-/**
- * count the number of students in this course (used for SortableTable)
- */
-function count_student_in_course() {
-	global $nbStudents;
-	return $nbStudents;
-}
-
-function sort_users($a, $b) {
-	return api_strcmp(trim(api_strtolower($a[$_SESSION['tracking_column']])), trim(api_strtolower($b[$_SESSION['tracking_column']])));
-}
-
 function count_item_resources() {
 	$table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);

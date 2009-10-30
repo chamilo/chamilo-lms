@@ -35,7 +35,7 @@ class DisplayGradebook
 		$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 		if ($shownavbar == '1' && $status==1) {
 			$header = '<div class="actions">';
-			$header .= '<a href="'.$_SESSION['gradebook_dest'].'?selectcat=' . $selectcat . '">'. Display::return_icon('folder_document.gif') . get_lang('FolderView') . '</a>';
+			$header .= '<a href="'.$_SESSION['gradebook_dest'].'?selectcat=' . $selectcat . '">'. Display::return_icon(('folder_up.gif'),get_lang('FolderView')) . get_lang('FolderView') . '</a>';
 			if ($evalobj->get_course_code() == null) {
 				$header .= '<a href="gradebook_add_user.php?selecteval=' . $evalobj->get_id() . '"><img src="../img/add_user_big.gif" alt="' . get_lang('AddStudent') . '" align="absmiddle" /> ' . get_lang('AddStudent') . '</a>';
 			}

@@ -750,4 +750,5 @@ $Until = "Until";
 $FirstPage = "First Page";
 $LastPage = "Last Page";
 $Coachs = "Coachs";
+$New = "New";
 ?>

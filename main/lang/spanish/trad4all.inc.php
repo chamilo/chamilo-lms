@@ -580,7 +580,7 @@ $DisplayOrder = "Orden";
 $SearchFeatureDoIndexDocument = "¿ Indexar el contenido del documento ?";
 $SearchFeatureDocumentLanguage = "Idioma del documento para la indexación";
 $With = "con";
-$GeneralCoach = "Coach general";
+$GeneralCoach = "Coordinador de tutores";
 $SaveDocument = "Guardar documento";
 $CategoryDeleted = "La categoría ha sido eliminada";
 $CategoryAdded = "Categoría añadida";
@@ -750,4 +750,5 @@ $Until = "Hasta";
 $FirstPage = "Primera página";
 $LastPage = "Última página";
 $Coachs = "Tutores";
+$New = "Nuevo";
 ?>

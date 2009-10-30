@@ -174,7 +174,7 @@ foreach ($courses as $enreg) {
 			}
 		} // end if (api_get_setting('use_session_mode') == 'true')
 
-		$tableTitle = $course_info['title'].' | Coach : '.$course_info['tutor_name'].((!empty($session_name)) ? ' | '.get_lang('Session').' : '.$session_name : '');
+		$tableTitle = $course_info['title'].' | '.get_lang('Coach').' : '.$course_info['tutor_name'].((!empty($session_name)) ? ' | '.get_lang('Session').' : '.$session_name : '');
 
 		?>
 		<table class="data_table" width="100%">

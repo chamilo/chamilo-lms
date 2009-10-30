@@ -1605,25 +1605,49 @@ function attach_glossary_into_scorm() {
      
      $.ajax({
         contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(objeto) {
+        beforeSend: function(content_object) {
         },
         type: "POST",
         url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
         data: "glossary_data=true",
-        success: function(datos) {
-        if (datos.length==0) {
+        success: function(datas) {
+        if (datas.length==0) {
           return false;
         }
 
-                data_terms=datos.split("[|.|_|.|-|.|]");
+                data_terms=datas.split("[|.|_|.|-|.|]");
+                var complex_array = new Array();
+                var cp_complex_array = new Array();
                 for(i=0;i<data_terms.length;i++) {
                     specific_terms=data_terms[i].split("__|__|");
                     var real_term = specific_terms[1];
-                    var my_specific_terms = new RegExp(specific_terms[1],"gi");
-                    new_html=my_text.replace(my_specific_terms,function(m){return replace_complete_char(m)});
-                    $frame_content.html(new_html);
-                    my_text=$frame_content.html();
+                    var real_code = specific_terms[0];
+                    complex_array[real_code] = real_term;
+                    cp_complex_array[real_code] = real_term;
                 }
+                
+                complex_array.reverse();
+                
+                for (var my_index in complex_array) {
+                    n = complex_array[my_index];
+                    if (n == null) {
+                        n = '';
+                    } else {
+                        for (var cp_my_index in cp_complex_array) {
+                            cp_data = cp_complex_array[cp_my_index];
+                            if (cp_data == null) {
+                                cp_data = '';
+                            } else {
+                                if (cp_data == n) {
+                                    my_index = cp_my_index;
+                                }
+                            }
+                        }
+                        $("iframe").contents().find('body').removeHighlight().highlight(n,my_index) 
+                    }                   
+                }
+              
+              var complex_array = new Array();
         //mouse over event
         $("iframe").contents().find('body').find('.glossary-ajax').mouseover(function(){
               random_id=Math.round(Math.random()*100);
@@ -1637,13 +1661,13 @@ function attach_glossary_into_scorm() {
                   my_glossary_id=data_notebook[1];
                   $.ajax({
                       contentType: "application/x-www-form-urlencoded",
-                      beforeSend: function(objeto) {
+                      beforeSend: function(content_object) {
                       $("iframe").contents().find('body').find("div#"+div_content_id).html("<img src="+my_protocol+"//"+location.host+work_path+"/main/inc/lib/javascript/indicator.gif />"); },
                       type: "POST",
                       url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
                       data: "glossary_id="+my_glossary_id,
-                      success: function(datos) {
-                          $("iframe").contents().find('body').find("div#"+div_content_id).html(datos);
+                      success: function(datas) {
+                          $("iframe").contents().find('body').find("div#"+div_content_id).html(datas);
                       }
                   });
             });
@@ -1654,13 +1678,6 @@ function attach_glossary_into_scorm() {
                 div_show_id=current_element.find("div").attr("id");
                $("iframe").contents().find('body').find("div#"+div_show_id).remove();
             });
-            
-            //Callback Helper
-            function replace_complete_char(m) {
-               var complete_term_pattern = new RegExp(real_term,"i"); 
-               var tag = m.replace(complete_term_pattern," <span class=\"glossary-ajax\" style='color:blue' name=\"link"+specific_terms[0]+"\">$&</span>"); 
-               return tag;
-            }
 
         }
 

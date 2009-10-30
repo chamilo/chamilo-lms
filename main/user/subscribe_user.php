@@ -225,7 +225,7 @@ function get_number_of_users() {
 						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
 						
 		// we change the SQL when we have a filter
-		if (isset($_GET['subscribe_user_filter_value'])){
+		if (isset($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
 			$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 			$sql .=	"
 				LEFT JOIN $table_user_field_values field_values 
@@ -262,8 +262,11 @@ function get_number_of_users() {
 	if (isset ($_REQUEST['keyword'])) {
 		$keyword = Database::escape_string($_REQUEST['keyword']);
 		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'   OR email LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
+		
 		// we also want to search for users who have something in their profile fields that matches the keyword
-		$additional_users = search_additional_profile_fields($keyword);
+		if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {
+			$additional_users = search_additional_profile_fields($keyword);
+		}
 					
 		// getting all the users of the course (to make sure that we do not display users that are already in the course)
 		if (!empty($_SESSION["id_session"])) {
@@ -286,7 +289,7 @@ function get_number_of_users() {
 	$result = Database::num_rows($res);
 	// we add 1 for every additional user (a user where the keyword matches one of the additional profile fields)
 	// that is not yet in the course and not yet in the search result
-	if (isset ($_REQUEST['keyword'])) {	
+	if (isset ($_REQUEST['keyword']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true') {	
 		foreach($additional_users as $additional_user_key=>$additional_user_value){
 			if (!in_array($additional_user_key,$users) AND !in_array($additional_user_key,$users_of_course)){
 				$result++;
@@ -327,7 +330,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."'";
 
 			// applying the filter of the additional user profile fields 	
-			if (isset($_GET['subscribe_user_filter_value'])){
+			if (isset($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
 				$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 				$sql .=	"
 					LEFT JOIN $table_user_field_values field_values 
@@ -353,7 +356,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
 				
 				// applying the filter of the additional user profile fields 	
-				if (isset($_GET['subscribe_user_filter_value'])){
+				if (isset($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
 					$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 					$sql .=	"
 						LEFT JOIN $table_user_field_values field_values 
@@ -389,7 +392,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 
 
 					// applying the filter of the additional user profile fields 	
-					if (isset($_GET['subscribe_user_filter_value'])){
+					if (isset($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
 						$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 						$sql .=	"
 							LEFT JOIN $table_user_field_values field_values 
@@ -460,7 +463,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 
 
 					// applying the filter of the additional user profile fields 	
-					if (isset($_GET['subscribe_user_filter_value'])){
+					if (isset($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
 						$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 						$sql .=	"
 							LEFT JOIN $table_user_field_values field_values 
@@ -481,8 +484,11 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	if (isset ($_REQUEST['keyword'])) {
 		$keyword = Database::escape_string($_REQUEST['keyword']);
 		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'   OR email LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
-		// we also want to search for users who have something in their profile fields that matches the keyword
-		$additional_users = search_additional_profile_fields($keyword);
+		
+		if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {
+			// we also want to search for users who have something in their profile fields that matches the keyword
+			$additional_users = search_additional_profile_fields($keyword);
+		}
 				
 		// getting all the users of the course (to make sure that we do not display users that are already in the course)
 		if (!empty($_SESSION["id_session"])) {
@@ -582,7 +588,9 @@ if ($_GET['subscribe_user_filter_value'] AND !empty($_GET['subscribe_user_filter
 {
 	$actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_GET['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearFilterResults').'</a>';
 }
-display_extra_profile_fields_filter();
+if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {
+	display_extra_profile_fields_filter();
+}
 
 $form = new FormValidator('search_user', 'POST',api_get_self().'?type='.$_REQUEST['type'],'',null,false);
 $renderer = & $form->defaultRenderer();

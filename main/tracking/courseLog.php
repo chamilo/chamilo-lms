@@ -116,9 +116,6 @@ $nameTools = get_lang('Tracking');
 // display the header
 Display::display_header($nameTools, 'Tracking');
 
-require api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
-require api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
-
 // getting all the students of the course
 $a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true, (empty($_SESSION['id_session']) ? null : $_SESSION['id_session']));
 $nbStudents = count($a_students);

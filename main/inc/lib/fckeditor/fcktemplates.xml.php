@@ -25,6 +25,7 @@ if (api_get_setting('show_glossary_in_documents') != 'none') {
 	if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
 		$js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"/>';
 	} else {
+    $js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"/>'.PHP_EOL;        
 		$js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"/>';
 	}
 }

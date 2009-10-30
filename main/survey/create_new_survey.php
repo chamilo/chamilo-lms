@@ -163,6 +163,8 @@ foreach ($lang_array['name'] as $key=>$value) {
 }
 $form->addElement('select', 'survey_language', get_lang('Language'), $languages);
 */
+// Pass the language of the survey in the form
+$form->addElement('hidden', 'survey_language');
 $form->addElement('datepickerdate', 'start_date', get_lang('StartDate'), array('form_name'=>'survey'));
 $form->addElement('datepickerdate', 'end_date', get_lang('EndDate'), array('form_name'=>'survey'));
 

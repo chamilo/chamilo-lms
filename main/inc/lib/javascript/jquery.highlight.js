@@ -23,6 +23,7 @@ jQuery.fn.highlight = function(pat,real_code) {
     var spannode = document.createElement('a');
     spannode.className = 'glossary-ajax';
     spannode.style.color = 'blue';
+	spannode.style.textDecoration = 'none';
     spannode.name = 'link'+real_code;
     spannode.href = '#';
     var SearchRegExp = new RegExp("(" + pat +")","gi");

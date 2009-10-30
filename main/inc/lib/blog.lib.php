@@ -119,12 +119,9 @@ class Blog {
 	/**
 	 * Creates a new blog in the given course
 	 * @author Toon Keppens
-	 *
 	 * @param Integer $course_id Id
 	 * @param String $title
 	 * @param Text $description
-	 *
-	 * @return void
 	 */
 	public static function create_blog ($title, $subtitle) {
 		global $_user;
@@ -170,12 +167,9 @@ class Blog {
 	/**
 	 * Update title and subtitle of a blog in the given course
 	 * @author Toon Keppens
-	 *
 	 * @param Integer $course_id Id
 	 * @param String $title
 	 * @param Text $description
-	 *
-	 * @return void
 	 */
 	public static function edit_blog ($blog_id, $title, $subtitle) {
 		global $_user;
@@ -200,10 +194,7 @@ class Blog {
 	/**
 	 * Deletes a blog and it's posts from the course database
 	 * @author Toon Keppens
-	 *
 	 * @param Integer $blog_id
-	 *
-	 * @return void
 	 */
 	public static function delete_blog ($blog_id) {
 		// Init
@@ -249,12 +240,9 @@ class Blog {
 	/**
 	 * Creates a new post in a given blog
 	 * @author Toon Keppens
-	 *
 	 * @param String $title
 	 * @param String $full_text
 	 * @param Integer $blog_id
-	 *
-	 * @return void
 	 */
 	public static function create_post ($title, $full_text, $file_comment, $blog_id) {
 		global $_user;
@@ -327,13 +315,10 @@ class Blog {
 	/**
 	 * Edits a post in a given blog
 	 * @author Toon Keppens
-	 *
 	 * @param Integer $blog_id
 	 * @param String $title
 	 * @param String $full_text
 	 * @param Integer $blog_id
-	 *
-	 * @return void
 	 */
 	public static function edit_post ($post_id, $title, $full_text, $blog_id) {
 		// Init
@@ -347,11 +332,8 @@ class Blog {
 	/**
 	 * Deletes an article and it's comments
 	 * @author Toon Keppens
-	 *
 	 * @param Integer $blog_id
 	 * @param Integer $post_id
-	 *
-	 * @return void
 	 */
 	public static function delete_post($blog_id, $post_id) {
 		// Init
@@ -378,14 +360,11 @@ class Blog {
 	/**
 	 * Creates a comment on a post in a given blog
 	 * @author Toon Keppens
-	 *
 	 * @param String $title
 	 * @param String $full_text
 	 * @param Integer $blog_id
 	 * @param Integer $post_id
 	 * @param Integer $parent_id
-	 *
-	 * @return void
 	 */
 	public static function create_comment($title, $full_text, $file_comment,$blog_id, $post_id, $parent_id, $task_id = 'NULL') {
 		global $_user;
@@ -458,11 +437,8 @@ class Blog {
 	/**
 	 * Deletes a comment from a blogpost
 	 * @author Toon Keppens
-	 *
 	 * @param Integer $blog_id
 	 * @param Integer $comment_id
-	 *
-	 * @return void
 	 */
 	public static function delete_comment ($blog_id, $post_id, $comment_id) {
 		// Init
@@ -496,13 +472,10 @@ class Blog {
 	/**
 	 * Creates a new task in a blog
 	 * @author Toon Keppens
-	 *
 	 * @param Integer $blog_id
 	 * @param String $title
 	 * @param String $description
 	 * @param String $color
-	 *
-	 * @return void
 	 */
 	public static function create_task ($blog_id, $title, $description, $articleDelete, $articleEdit, $commentsDelete, $color) {
 		// Init
@@ -569,13 +542,10 @@ class Blog {
 	/**
 	 * Edit a task in a blog
 	 * @author Toon Keppens
-	 *
 	 * @param Integer $task_id
 	 * @param String $title
 	 * @param String $description
 	 * @param String $color
-	 *
-	 * @return void
 	 */
 	public static function edit_task($blog_id, $task_id, $title, $description, $articleDelete, $articleEdit, $commentsDelete, $color) {
 		// Init
@@ -649,11 +619,8 @@ class Blog {
 
 	/**
 	 * Deletes a task from a blog
-	 *
 	 * @param Integer $blog_id
 	 * @param Integer $task_id
-	 *
-	 * @return void
 	 */
 	public static function delete_task ($blog_id, $task_id) {
 		// Init
@@ -666,11 +633,8 @@ class Blog {
 
 	/**
 	 * Deletes an assigned task from a blog
-	 *
 	 * @param Integer $blog_id
 	 * @param Integer $assignment_id
-	 *
-	 * @return void
 	 */
 	public static function delete_assigned_task ($blog_id, $task_id,$user_id) {
 		// Init
@@ -727,10 +691,7 @@ class Blog {
 	/**
 	 * Changes the visibility of a blog
 	 * @author Toon Keppens
-	 *
 	 * @param Integer $blog_id
-	 *
-	 * @return void
 	 */
 	public static function change_blog_visibility ($blog_id) {
 		// Init

@@ -604,7 +604,7 @@ if (api_is_allowed_to_edit()) {
 	$table->set_header($header_nr++, get_lang('Active'), false);
 	$table->set_column_filter(9, 'active_filter');
 	//actions column
-	$table->set_header($header_nr++, get_lang('Modify'), false);
+	$table->set_header($header_nr++, get_lang('Action'), false);
 	$table->set_column_filter($header_nr-1, 'modify_filter');
  	if (api_is_allowed_to_edit()) {
 		$table->set_form_actions(array('unsubscribe' => get_lang('Unreg')), 'user');

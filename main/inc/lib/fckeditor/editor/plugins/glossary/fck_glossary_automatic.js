@@ -1,9 +1,10 @@
 $(document).ready(function() {
     $(window).load(function () {
-     var my_text=$("body").html();
+		
      my_protocol = location.protocol;
 	 my_pathname=location.pathname;
 	 work_path = my_pathname.substr(0,my_pathname.indexOf('/courses/'));
+	 
      $.ajax({
         contentType: "application/x-www-form-urlencoded",
         beforeSend: function(content_object) {
@@ -11,19 +12,43 @@ $(document).ready(function() {
         type: "POST",
         url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
         data: "glossary_data=true",
-        success: function(datos) {
-			  if (datos.length==0) {
+        success: function(datas) {
+			  if (datas.length==0) {
 			  	return false;
 			  }
                 data_terms=datas.split("[|.|_|.|-|.|]");
+                var complex_array = new Array();
+                var cp_complex_array = new Array();
                 for(i=0;i<data_terms.length;i++) {
                     specific_terms=data_terms[i].split("__|__|");
                     var real_term = specific_terms[1];
-                    var my_specific_terms = new RegExp('([^A-Za-z0-9/_\<>])'+specific_terms[1]+'[\ .,]{0,1}',"gi");
-                    new_html=my_text.replace(my_specific_terms,function(m){return replace_complete_char(m)});
-                    $("body").html(new_html);
-                    my_text=$("body").html();
+                    var real_code = specific_terms[0];
+                    complex_array[real_code] = real_term;
+                    cp_complex_array[real_code] = real_term;
                 }
+                
+                complex_array.reverse();
+                
+                for (var my_index in complex_array) {
+                    n = complex_array[my_index];
+                    if (n == null) {
+                        n = '';
+                    } else {
+                        for (var cp_my_index in cp_complex_array) {
+                            cp_data = cp_complex_array[cp_my_index];
+                            if (cp_data == null) {
+                                cp_data = '';
+                            } else {
+                                if (cp_data == n) {
+                                    my_index = cp_my_index;
+                                }
+                            }
+                        }
+                        $('body').removeHighlight().highlight(n,my_index) 
+                    }                   
+                }
+              
+              var complex_array = new Array();
               
 			  //mouse over event
 			  $("body .glossary-ajax").mouseover(function(){
@@ -56,14 +81,7 @@ $(document).ready(function() {
 		            div_show_id=current_element.find("div").attr("id");
 		            $("div#"+div_show_id).remove();
 	          });
-            
-			//Callback Helper
-            function replace_complete_char(m) {
-               var complete_term_pattern = new RegExp(real_term,"i"); 
-               var tag = m.replace(complete_term_pattern," <span class=\"glossary-ajax\" style='color:blue' name=\"link"+specific_terms[0]+"\">$&</span>"); 
-               return tag;
-            }
-				
+         
 				}
 
             });

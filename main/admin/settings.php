@@ -357,7 +357,7 @@ Display :: display_header($tool_name);
 // displaying the message that the settings have been stored
 if (!empty($_GET['action']) && $_GET['action'] == "stored")
 {
-	Display :: display_normal_message(get_lang('SettingsStored'));
+	Display :: display_confirmation_message(get_lang('SettingsStored'));
 }
 
 // the action images
@@ -467,7 +467,7 @@ function handle_plugins()
 		$category = $_GET['category'];
 		event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
 
-		Display :: display_normal_message(get_lang('SettingsStored'));
+		Display :: display_confirmation_message(get_lang('SettingsStored'));
 	}
 
 	echo get_lang('AvailablePlugins')."<br/><br/>";
@@ -928,7 +928,7 @@ function handle_search() {
                 $result = api_set_setting($key,$value,null,null);
         }
 
-        Display :: display_normal_message($SettingsStored);
+        Display :: display_confirmation_message($SettingsStored);
     } else {
         echo '<div id="search-options-form">';
         $form->display();

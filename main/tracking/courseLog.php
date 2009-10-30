@@ -116,24 +116,9 @@ $nameTools = get_lang('Tracking');
 // display the header
 Display::display_header($nameTools, 'Tracking');
 
-require api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
-require api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
-
 // getting all the students of the course
 $a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true, (empty($_SESSION['id_session']) ? null : $_SESSION['id_session']));
 $nbStudents = count($a_students);
-
-/**
- * count the number of students in this course (used for SortableTable)
- */
-function count_student_in_course() {
-	global $nbStudents;
-	return $nbStudents;
-}
-
-function sort_users($a, $b) {
-	return api_strcmp(trim(api_strtolower($a[$_SESSION['tracking_column']])), trim(api_strtolower($b[$_SESSION['tracking_column']])));
-}
 
 function count_item_resources() {
 	$table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -800,6 +785,21 @@ if ($_GET['studentlist'] == 'false') {
 </table>
 <?php
 Display::display_footer();
+
+
+/**
+ * Display all the additionally defined user profile fields
+ * This function will only display the fields, not the values of the field because it does not act as a filter 
+ * but it adds an additional column instead. 
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @since October 2009
+ * @version 1.8.7
+ */
+function display_additional_profile_fields(){
+	// getting all the extra profile fields that are defined by the platform administrator
+	$extra_fields = UserManager :: get_extra_fields(0,50,5,'ASC');
+
 	// creating the form
 	$return = '<form action="courseLog.php" method="get" name="additional_profile_field_form" id="additional_profile_field_form">';  
 

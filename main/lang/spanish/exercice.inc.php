@@ -308,7 +308,7 @@ $langDefaultUniqueAnswer1 = "leche";
 $langDefaultUniqueComment1 = "La leche es la base de numerosos productos lácteos, como la mantequilla, el queso, el yogur, entre otros";
 $langDefaultUniqueAnswer2 = "Avena";
 $langDefaultUniqueComment2 = "La avena es uno de los cereales más completos. Por sus cualidades energéticas y nutritivas ha sido la base de la alimentación de pueblos";
-$langDefaultMultipleQuestion = "¿Qué países no pertenecen al continente europeo?";
+$langDefaultMultipleQuestion = "¿Qué país no pertenece al continente europeo?";
 $langDefaultMultipleAnswer1 = "España";
 $langDefaultMultipleComment1 = "Es un país soberano miembro de la Unión Europea, constituido en Estado social y democrático de Derecho, y cuya forma de gobierno es la monarquía parlamentaria";
 $langDefaultMultipleAnswer2 = "Perú";
@@ -347,4 +347,5 @@ $TooManyIterationsPleaseTryUsingMoreStraightforwardPolygons = "Demasiadas iterac
 $Thresholds = "Thresholds";
 $Delineation = "Delineación";
 $QuestionTypeDoesNotBelongToFeedbackTypeInExercise = "Tipo de pregunta no pertenece al tipo de retroalimentación en ejercicios";
+$SessionIsReadOnly = "La sesión es de sólo lectura";
 ?>

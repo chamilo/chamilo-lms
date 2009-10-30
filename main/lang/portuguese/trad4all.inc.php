@@ -693,4 +693,5 @@ $SendAMessage = "Enviar uma mensagem";
 $Menu = "Menu";
 $BackToUserList = "Voltar para a lista de utilizadores";
 $GraphicNotAvailable = "Gráficos não disponíveis";
+$Coachs = "Tutores";
 ?>

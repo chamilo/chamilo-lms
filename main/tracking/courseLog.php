@@ -800,6 +800,21 @@ if ($_GET['studentlist'] == 'false') {
 </table>
 <?php
 Display::display_footer();
+
+
+/**
+ * Display all the additionally defined user profile fields
+ * This function will only display the fields, not the values of the field because it does not act as a filter 
+ * but it adds an additional column instead. 
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @since October 2009
+ * @version 1.8.7
+ */
+function display_additional_profile_fields(){
+	// getting all the extra profile fields that are defined by the platform administrator
+	$extra_fields = UserManager :: get_extra_fields(0,50,5,'ASC');
+
 	// creating the form
 	$return = '<form action="courseLog.php" method="get" name="additional_profile_field_form" id="additional_profile_field_form">';  
 

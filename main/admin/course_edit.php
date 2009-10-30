@@ -137,9 +137,9 @@ EOT;
 
 $renderer = $form->defaultRenderer();
 $renderer -> setElementTemplate($element_template, 'group');
-$form -> addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="50" align="center">' .
-		'<input class="arrowr" style="width:30px;height:30px" type="button" onclick="moveItem(document.getElementById(\'platform_teachers\'), document.getElementById(\'course_teachers\'))" ><br><br>' .
-		'<input class="arrowl" style="width:30px;height:30px" type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))" ></td><td>');
+$form -> addGroup($group,'group',get_lang('CourseTeachers'),'</td><td width="80" align="center">'.
+		'<input class="arrowr" style="width:30px;height:30px;padding-right:12px" type="button" onclick="moveItem(document.getElementById(\'platform_teachers\'), document.getElementById(\'course_teachers\'))" ><br><br>' .
+		'<input class="arrowl" style="width:30px;height:30px;padding-left:13px" type="button" onclick="moveItem(document.getElementById(\'course_teachers\'), document.getElementById(\'platform_teachers\'))" ></td><td>');
 
 
 $categories_select = $form->addElement('select', 'category_code', get_lang('CourseFaculty'), $categories);

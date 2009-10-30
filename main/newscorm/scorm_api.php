@@ -180,6 +180,7 @@ $(document).ready( function() {
 
 
 $(document).ready( function() {
+ $("iframe").contents().find('head').append('<script src="/main/inc/lib/javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>');    
  $("iframe#content_id").load( function(){
   //alert("Document title: " + $("iframe#content_id").attr('src'));
   info_lms_item[0]=info_lms_item[1];
@@ -1592,7 +1593,6 @@ if(lms_lp_type==1 || lms_item_type=='asset'){
 */
 function attach_glossary_into_scorm() {
   var f = $('#content_id')[0];
- 
   var doc = f.contentWindow ? f.contentWindow.document :
   f.contentDocument ? f.contentDocument : f.document; 
   
@@ -1614,11 +1614,12 @@ function attach_glossary_into_scorm() {
         if (datos.length==0) {
           return false;
         }
+
                 data_terms=datos.split("[|.|_|.|-|.|]");
                 for(i=0;i<data_terms.length;i++) {
                     specific_terms=data_terms[i].split("__|__|");
                     var real_term = specific_terms[1];
-                    var my_specific_terms = new RegExp('([^A-Za-z0-9/_\<>])'+specific_terms[1]+'[\ .,]{0,1}',"gi");
+                    var my_specific_terms = new RegExp(specific_terms[1],"gi");
                     new_html=my_text.replace(my_specific_terms,function(m){return replace_complete_char(m)});
                     $frame_content.html(new_html);
                     my_text=$frame_content.html();

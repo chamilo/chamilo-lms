@@ -45,8 +45,8 @@ require_once '../inc/lib/fckeditor/fckeditor.php';
 function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_item, $total_item)
 {
 	if (!ereg("MSIE", $_SERVER["HTTP_USER_AGENT"])) {
-		echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript"></script>';
-		echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';
+		//echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript"></script>';
+		//echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';
 	}
 
 

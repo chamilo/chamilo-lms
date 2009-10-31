@@ -277,7 +277,7 @@ if((api_is_allowed_to_edit(null,true)) && (($finish == 0) || ($finish == 2)))
 			<input type="file" name="userFile"><br /><br />
 			<button type="submit" class="upload" name="submit" value="'.get_lang('Send').'">'.get_lang('SendFile').'</button>
 		 </div>';
-	echo '<div>'.Display::display_icon('hotpotatoes.jpg','').'</div>';
+	echo '<div>'.Display::display_icon('hotpotatoes.jpg',get_lang('HotPotatoes')).'</div>';
 	echo '</div></div>';
 
 ?>

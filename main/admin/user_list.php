@@ -696,7 +696,7 @@ else
 						}
 						if($number_of_selected_users == $number_of_deleted_users)
 						{
-							Display :: display_normal_message(get_lang('SelectedUsersDeleted'));
+							Display :: display_confirmation_message(get_lang('SelectedUsersDeleted'));
 						}
 						else
 						{

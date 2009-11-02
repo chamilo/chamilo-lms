@@ -422,8 +422,8 @@ if ($ajax_search) {
 			if (array_key_exists($user['user_id'],$nosessionUsersList))
                 unset($nosessionUsersList[$user['user_id']]);
 		}
-		else if ( $sessionUsersList[$user['user_id']]['id_session']!=$id_session )
-			$nosessionUsersList[$user['user_id']] = $user ;
+/*		else if ( $sessionUsersList[$user['user_id']]['id_session']!=$id_session )
+			$nosessionUsersList[$user['user_id']] = $user ;*/
 	}
 }
 

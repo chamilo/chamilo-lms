@@ -180,7 +180,6 @@ $(document).ready( function() {
 
 
 $(document).ready( function() {
- $("iframe").contents().find('head').append('<script src="/main/inc/lib/javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>');    
  $("iframe#content_id").load( function(){
   //alert("Document title: " + $("iframe#content_id").attr('src'));
   info_lms_item[0]=info_lms_item[1];
@@ -188,7 +187,10 @@ $(document).ready( function() {
   <?php
   if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
   ?>
-    attach_glossary_into_scorm();
+  	if (lms_lp_type == 2) { //Only scorm
+  	    attach_glossary_into_scorm();	
+  	}
+
   <?php
   }
   ?>
@@ -1593,6 +1595,7 @@ if(lms_lp_type==1 || lms_item_type=='asset'){
 */
 function attach_glossary_into_scorm() {
   var f = $('#content_id')[0];
+
   var doc = f.contentWindow ? f.contentWindow.document :
   f.contentDocument ? f.contentDocument : f.document; 
   
@@ -1605,49 +1608,24 @@ function attach_glossary_into_scorm() {
      
      $.ajax({
         contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(content_object) {
+        beforeSend: function(objeto) {
         },
         type: "POST",
         url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
         data: "glossary_data=true",
-        success: function(datas) {
-        if (datas.length==0) {
+        success: function(datos) {
+        if (datos.length==0) {
           return false;
         }
-
-                data_terms=datas.split("[|.|_|.|-|.|]");
-                var complex_array = new Array();
-                var cp_complex_array = new Array();
+                data_terms=datos.split("[|.|_|.|-|.|]");
                 for(i=0;i<data_terms.length;i++) {
                     specific_terms=data_terms[i].split("__|__|");
                     var real_term = specific_terms[1];
-                    var real_code = specific_terms[0];
-                    complex_array[real_code] = real_term;
-                    cp_complex_array[real_code] = real_term;
+                    var my_specific_terms = new RegExp('(^|)'+specific_terms[1]+'[^ ]?',"gi");
+                    new_html=my_text.replace(my_specific_terms,function(m){return replace_complete_char(m)});
+                    $frame_content.html(new_html);
+                    my_text=$frame_content.html();
                 }
-                
-                complex_array.reverse();
-                
-                for (var my_index in complex_array) {
-                    n = complex_array[my_index];
-                    if (n == null) {
-                        n = '';
-                    } else {
-                        for (var cp_my_index in cp_complex_array) {
-                            cp_data = cp_complex_array[cp_my_index];
-                            if (cp_data == null) {
-                                cp_data = '';
-                            } else {
-                                if (cp_data == n) {
-                                    my_index = cp_my_index;
-                                }
-                            }
-                        }
-                        $("iframe").contents().find('body').removeHighlight().highlight(n,my_index) 
-                    }                   
-                }
-              
-              var complex_array = new Array();
         //mouse over event
         $("iframe").contents().find('body').find('.glossary-ajax').mouseover(function(){
               random_id=Math.round(Math.random()*100);
@@ -1661,13 +1639,13 @@ function attach_glossary_into_scorm() {
                   my_glossary_id=data_notebook[1];
                   $.ajax({
                       contentType: "application/x-www-form-urlencoded",
-                      beforeSend: function(content_object) {
+                      beforeSend: function(objeto) {
                       $("iframe").contents().find('body').find("div#"+div_content_id).html("<img src="+my_protocol+"//"+location.host+work_path+"/main/inc/lib/javascript/indicator.gif />"); },
                       type: "POST",
                       url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
                       data: "glossary_id="+my_glossary_id,
-                      success: function(datas) {
-                          $("iframe").contents().find('body').find("div#"+div_content_id).html(datas);
+                      success: function(datos) {
+                          $("iframe").contents().find('body').find("div#"+div_content_id).html(datos);
                       }
                   });
             });
@@ -1678,6 +1656,13 @@ function attach_glossary_into_scorm() {
                 div_show_id=current_element.find("div").attr("id");
                $("iframe").contents().find('body').find("div#"+div_show_id).remove();
             });
+            
+            //Callback Helper
+            function replace_complete_char(m) {
+               var complete_term_pattern = new RegExp(real_term,"i"); 
+               var tag = m.replace(complete_term_pattern," <span class=\"glossary-ajax\" style='color:blue' name=\"link"+specific_terms[0]+"\">$&</span>"); 
+               return tag;
+            }
 
         }
 

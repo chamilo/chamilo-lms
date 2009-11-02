@@ -652,7 +652,7 @@ else
 				case 'delete_user' :
 					if (api_is_platform_admin()) {
 						if ($user_id != $_user['user_id'] && UserManager :: delete_user($_GET['user_id'])) {
-							Display :: display_normal_message(get_lang('UserDeleted'));
+							Display :: display_confirmation_message(get_lang('UserDeleted'));
 						} else {
 							Display :: display_error_message(get_lang('CannotDeleteUserBecauseOwnsCourse'));
 						}

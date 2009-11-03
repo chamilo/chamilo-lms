@@ -183,7 +183,7 @@ if(count($sessions)>0){
 			$row[] = $my_course['k'];
 			$row[] = $my_course['i'];
 			$row[] = $my_course['s'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
-			$tools = '<a href="course_information.php?code='.$my_course['k'].'">'.Display::return_icon('synthese_view.gif').'</a>'.
+			$tools = '<a href="course_information.php?code='.$my_course['k'].'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
 					'<a href="'.api_get_path(WEB_COURSE_PATH).$my_course['d'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
 					'<a href="course_edit.php?course_code='.$my_course['k'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 
@@ -228,7 +228,7 @@ if (Database::num_rows($res) > 0)
 		$row[] = $course->code;
 		$row[] = $course->title;
 		$row[] = $course->status == STUDENT ? get_lang('Student') : get_lang('Teacher');
-		$tools = '<a href="course_information.php?code='.$course->code.'">'.Display::return_icon('synthese_view.gif', get_lang('SynthesisView')).'</a>'.
+		$tools = '<a href="course_information.php?code='.$course->code.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
 				'<a href="'.api_get_path(WEB_COURSE_PATH).$course->directory.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
 				'<a href="course_edit.php?course_code='.$course->code.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 		if( $course->status == STUDENT )
@@ -266,7 +266,7 @@ if (Database::num_rows($res) > 0)
 	{
 		$row = array();
 		$row[] = $class->name;
-		$row[] = '<a href="class_information.php?id='.$class->id.'">'.Display::return_icon('synthese_view.gif').'</a>';
+		$row[] = '<a href="class_information.php?id='.$class->id.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>';
 		$data[] = $row;
 	}
 	echo '<p><b>'.get_lang('Classes').'</b></p>';

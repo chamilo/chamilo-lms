@@ -43,14 +43,12 @@ $restore = isset($_GET['restore']) && $_GET['restore'] == 'yes' ? 'yes' : null;
 $id  = isset($_GET['id']) ? intval($_GET['id']) : null;
 
 include('../../main/course_home/btf_functions.php');  // RH: extra ../
-$is_AllowedToEdit = is_allowed_to_edit();  // RH: Allowed is not allowed...
-
 
 $TABLE_TOOLS = Database::get_main_table(TABLE_MAIN_COURSE_MODULE);
 $TBL_ACCUEIL = Database::get_course_table(TABLE_TOOL_LIST);
 
 // WORK with data post askable by admin of  course
-if (is_allowed_to_edit())
+if (api_is_allowed_to_edit(null,true))
 {
 /*  Work request */
 
@@ -161,19 +159,14 @@ if (is_allowed_to_edit())
 		$image		= $toolsRow[3];
 
 		echo	"<tr>\n",
-
 				"<td colspan=\"4\">\n",
-
 				"<table>\n",
-
 				"<tr>\n",
 				"<td>\n",
-
 				"<form method=\"post\" action=\"".api_get_self()."\">\n",
 				"<input type=\"hidden\" name=\"id\" value=\"$id\">\n",
 				"Image : ".Display::return_icon($image)."\n",
 				"</td>\n",
-
 				"<td>\n",
 				"<select name=\"image\">\n",
 				"<option selected>",$image,"</option>\n";
@@ -195,28 +188,21 @@ if (is_allowed_to_edit())
 		}
 
 		echo	"</select>\n",
-
 				"</td>\n",
 				"</tr>\n",
-
 				"<tr>\n",
 				"<td>",get_lang('NameOfTheLink')," : </td>\n",
 				"<td><input type=\"text\" name=\"name\" value=\"",$name,"\"></td>\n",
 				"</tr>\n",
-
 				"<tr>\n",
 				"<td>Lien :</td>\n",
 				"<td><input type=\"text\" name=\"link\" value=\"",$link,"\"></td>\n",
 				"</tr>\n",
-
 				"<tr>\n",
 				"<td colspan=\"2\"><input type=\"submit\" name=\"submit\" value=\"",get_lang('Ok'),"\"></td>\n",
 				"</tr>\n",
-
 				"</form>\n",
-
 				"</table>\n",
-
 				"</td>\n",
 				"</tr>\n";
 	}
@@ -225,14 +211,13 @@ if (is_allowed_to_edit())
 
 // work with data post askable by admin of  course
 
-if ($is_platformAdmin and is_allowed_to_edit())
+if ($is_platformAdmin && api_is_allowed_to_edit(null,true) && !api_is_coach())
 {
 	// Show message to confirm that a tools must be hide  from aivailable tools
 	// visibility 0,1->2
 	if($askDelete)
 	{
 		echo	"<table align=\"center\"><tr>\n",
-
 				"<td colspan=\"4\">\n",
 				"<br><br>\n",
 				"<font color=\"#ff0000\">",
@@ -245,7 +230,6 @@ if ($is_platformAdmin and is_allowed_to_edit())
 				"</font>\n",
 				"<br><br><br>\n",
 				"</td>\n",
-
 				"</tr>",
 				"</table>\n";
 	} // if remove
@@ -279,7 +263,7 @@ echo 	"</td>\n</tr>\n";
        PROF ONLY VIEW
   ==========================*/
 
-if (is_allowed_to_edit())
+if (api_is_allowed_to_edit(null,true) && !api_is_coach())
 {
 	echo	"<tr><td colspan=\"6\"><hr noshade size=\"1\" /></td></tr>\n",
 			"<tr>\n","<td colspan=\"6\">\n",
@@ -295,7 +279,7 @@ if (is_allowed_to_edit())
        TOOLS FOR PLATFORM ADMIN ONLY
   --------------------------------------*/
 
-if ($is_platformAdmin and is_allowed_to_edit())
+if ($is_platformAdmin && api_is_allowed_to_edit(null,true) && !api_is_coach())
 {
 	echo	"<tr>","<td colspan=\"6\">",
 			"<hr noshade size=\"1\" />",

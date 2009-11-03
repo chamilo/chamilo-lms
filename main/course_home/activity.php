@@ -54,7 +54,7 @@ function get_tools_category($course_tool_category) {
 	global $_user;
 	$web_code_path = api_get_path(WEB_CODE_PATH);
 	$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-	$is_allowed_to_edit = api_is_allowed_to_edit();
+	$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 	$is_platform_admin = api_is_platform_admin();
 	$all_tools_list = array();
 	
@@ -65,31 +65,33 @@ function get_tools_category($course_tool_category) {
 	switch ($course_tool_category) {
 
 		case TOOL_STUDENT_VIEW:
-				$result = Database::query("SELECT * FROM $course_tool_table WHERE visibility = '1' AND (category = 'authoring' OR category = 'interaction') $condition_session ORDER BY id",__FILE__,__LINE__);
+				
+				//$visibility_codition = !api_is_coach()?" visibility = '1' AND ":" ";
+				$sql = "SELECT * FROM $course_tool_table WHERE visibility = '1' AND (category = 'authoring' OR category = 'interaction') $condition_session ORDER BY id";				
+				$result = Database::query($sql,__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
 
 		case TOOL_AUTHORING:
-
-				$result = Database::query("SELECT * FROM $course_tool_table WHERE category = 'authoring' $condition_session ORDER BY id",__FILE__,__LINE__);
+				$sql = "SELECT * FROM $course_tool_table WHERE category = 'authoring' $condition_session ORDER BY id";
+				$result = Database::query($sql,__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
 
 		case TOOL_INTERACTION:
-
-				$result = Database::query("SELECT * FROM $course_tool_table WHERE category = 'interaction' $condition_session ORDER BY id",__FILE__,__LINE__);
+				$sql = "SELECT * FROM $course_tool_table WHERE category = 'interaction' $condition_session ORDER BY id";
+				$result = Database::query($sql,__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
 
 		case TOOL_ADMIN_VISIBLE:
-
-				$result = Database::query("SELECT * FROM $course_tool_table WHERE category = 'admin' AND visibility ='1' $condition_session ORDER BY id",__FILE__,__LINE__);
+				$sql = "SELECT * FROM $course_tool_table WHERE category = 'admin' AND visibility ='1' $condition_session ORDER BY id";
+				$result = Database::query($sql,__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
-
 		case TOOL_ADMIN_PLATEFORM:
-
-				$result = Database::query("SELECT * FROM $course_tool_table WHERE category = 'admin' $condition_session ORDER BY id",__FILE__,__LINE__);
+				$sql = "SELECT * FROM $course_tool_table WHERE category = 'admin' $condition_session ORDER BY id";
+				$result = Database::query($sql,__FILE__,__LINE__);
 				$colLink ="##003399";
 				break;
 
@@ -216,7 +218,7 @@ function show_tools_category($all_tools_list)
 	global $_user;
 	$web_code_path = api_get_path(WEB_CODE_PATH);
 	$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-	$is_allowed_to_edit = api_is_allowed_to_edit();
+	$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 	$is_platform_admin = api_is_platform_admin();
 
 	if (isset($all_tools_list)) {
@@ -234,7 +236,8 @@ function show_tools_category($all_tools_list)
 			// These links are only visible by the course manager.
 			unset($lnk);
 			echo '<td width="50%">' . "\n";
-			if ($is_allowed_to_edit) {
+			if ($is_allowed_to_edit && !api_is_coach()) {
+
 				if ($toolsRow['visibility'] == '1' && $toolsRow['admin'] !='1') {
 					$link['name'] = Display::return_icon('visible.gif', get_lang('Deactivate'),array('id'=>'linktool_'.$toolsRow["id"]));
 
@@ -377,9 +380,10 @@ function show_tools_category($all_tools_list)
 -----------------------------------------------------------
 */
 
-if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
-	if(api_is_allowed_to_edit()) { 
+//$session_id = api_get_session_id();
 
+if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
+	if(api_is_allowed_to_edit(null,true)) {
 		$tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 		$tool_id = Security::remove_XSS($_GET["id"]);
 		$tool_info = api_get_tool_information($tool_id);
@@ -396,7 +400,24 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
     	$requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
 	//HIDE AND REACTIVATE TOOL 
 	if ($_GET["id"]==strval(intval($_GET["id"]))) {
-		$sql="UPDATE $tool_table SET visibility=$requested_visible WHERE id='".$_GET["id"]."'";
+
+		/* -- session condition for visibility
+		 if (!empty($session_id)) {			
+			$sql = "select session_id FROM $tool_table WHERE id='".$_GET["id"]."' AND session_id = '$session_id'";
+			$rs = Database::query($sql,__FILE__,__LINE__);
+			if (Database::num_rows($rs) > 0) { 
+	 			$sql="UPDATE $tool_table SET visibility=$requested_visible WHERE id='".$_GET["id"]."' AND session_id = '$session_id'";
+			} else {
+				$sql_select = "select * FROM $tool_table WHERE id='".$_GET["id"]."'";
+				$res_select = Database::query($sql_select,__FILE__,__LINE__);
+				$row_select = Database::fetch_array($res_select);				
+				$sql = "INSERT INTO $tool_table(name,link,image,visibility,admin,address,added_tool,target,category,session_id)
+						VALUES('{$row_select['name']}','{$row_select['link']}','{$row_select['image']}','0','{$row_select['admin']}','{$row_select['address']}','{$row_select['added_tool']}','{$row_select['target']}','{$row_select['category']}','$session_id')";
+			}								
+		} else $sql="UPDATE $tool_table SET visibility=$requested_visible WHERE id='".$_GET["id"]."'";
+		*/		
+		
+		$sql="UPDATE $tool_table SET visibility=$requested_visible WHERE id='".$_GET["id"]."'";				
 		Database::query($sql,__FILE__,__LINE__);
 	}
 		/*
@@ -436,7 +457,7 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 	}
 } else {
 
-	if(api_is_allowed_to_edit()) {
+	if(api_is_allowed_to_edit(null,true)) {
 	 	/*
 		-----------------------------------------------------------
 			HIDE
@@ -444,7 +465,25 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		*/
 		if(!empty($_GET['hide'])) // visibility 1 -> 0
 		{
-			Database::query("UPDATE $tool_table SET visibility=0 WHERE id='".intval($_GET["id"])."'",__FILE__,__LINE__);
+			/* -- session condition for visibility
+			if (!empty($session_id)) {			
+				$sql = "select session_id FROM $tool_table WHERE id='".intval($_GET["id"])."' AND session_id = '".intval($session_id)."'";
+				$rs = Database::query($sql,__FILE__,__LINE__);
+				if (Database::num_rows($rs) > 0) { 
+		 			$sql="UPDATE $tool_table SET visibility=0 WHERE id='".intval($_GET["id"])."' AND session_id = '".intval($session_id)."'";
+				} else {
+					$sql_select = "select * FROM $tool_table WHERE id='".$_GET["id"]."'";
+					$res_select = Database::query($sql_select,__FILE__,__LINE__);
+					$row_select = Database::fetch_array($res_select);					
+					$sql = "INSERT INTO $tool_table(name,link,image,visibility,admin,address,added_tool,target,category,session_id)
+							VALUES('{$row_select['name']}','{$row_select['link']}','{$row_select['image']}','0','{$row_select['admin']}','{$row_select['address']}','{$row_select['added_tool']}','{$row_select['target']}','{$row_select['category']}','$session_id')";
+				}									
+			} else {				
+				$sql="UPDATE $tool_table SET visibility=0 WHERE id='".intval($_GET["id"])."'";
+			}*/
+			
+			$sql="UPDATE $tool_table SET visibility=0 WHERE id='".intval($_GET["id"])."'";
+			Database::query($sql,__FILE__,__LINE__);				
 			Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
 		}
 
@@ -455,7 +494,8 @@ if (isset($_GET['sent_http_request']) && $_GET['sent_http_request']==1) {
 		*/
 		elseif(!empty($_GET['restore'])) // visibility 0,2 -> 1
 		{
-			Database::query("UPDATE $tool_table SET visibility=1 WHERE id='".intval($_GET["id"])."'",__FILE__,__LINE__);
+			$sql = 	"UPDATE $tool_table SET visibility=1 WHERE id='".intval($_GET["id"])."'";			
+			Database::query($sql,__FILE__,__LINE__);
 			Display::display_confirmation_message(get_lang('ToolIsNowVisible'));
 		}
 	}
@@ -555,7 +595,8 @@ function show_session_data($id_session) {
 */
 
 // start of tools for CourseAdmins (teachers/tutors)
-if(api_is_allowed_to_edit()) {
+if(api_is_allowed_to_edit(null,true) && !api_is_coach()) {
+
     $current_protocol  = $_SERVER['SERVER_PROTOCOL'];
     $current_host      = $_SERVER['HTTP_HOST'];
     $server_protocol = substr($current_protocol,0,strrpos($current_protocol,'/'));

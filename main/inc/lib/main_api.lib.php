@@ -1921,16 +1921,15 @@ function api_display_debug_info($debug_info) {
 
 function api_is_allowed_to_edit($tutor=false,$coach=false,$session_coach = false) {
 
+	$my_session_id = api_get_session_id();
+	$is_allowed_coach_to_edit = api_is_coach();		
+	$session_visibility = api_get_session_visibility($my_session_id);
 	$is_courseAdmin = api_is_course_admin() || api_is_platform_admin();
 	if (!$is_courseAdmin && $tutor == true) {	//if we also want to check if the user is a tutor...
 		$is_courseAdmin = $is_courseAdmin || api_is_course_tutor();
 	}
 	if (!$is_courseAdmin && $coach == true) {	//if we also want to check if the user is a coach...';
-
-		// check if session visibility is read only for coachs
-		$is_allowed_coach_to_edit = api_is_course_coach();
-		$my_session_id = api_get_session_id();
-		$session_visibility = api_get_session_visibility($my_session_id);
+		// check if session visibility is read only for coachs				
 		if ($session_visibility==SESSION_VISIBLE_READ_ONLY) {
 			$is_allowed_coach_to_edit = false;
 		}
@@ -1942,12 +1941,24 @@ function api_is_allowed_to_edit($tutor=false,$coach=false,$session_coach = false
 		}
 
 	}
-	if (!$is_courseAdmin && $session_coach == true) {
+	if (!$is_courseAdmin && $session_coach == true) {		
 		$is_courseAdmin = $is_courseAdmin || api_is_coach();
 	}
 
 	if (api_get_setting('student_view_enabled') == 'true') {	//check if the student_view is enabled, and if so, if it is activated
-		$is_allowed = $is_courseAdmin && $_SESSION['studentview'] != "studentview";
+		if (!empty($my_session_id)) {
+			// check if session visibility is read only for coachs		
+			if ($session_visibility==SESSION_VISIBLE_READ_ONLY) {
+				$is_allowed_coach_to_edit = false;
+			}	
+			if (api_get_setting('allow_coach_to_edit_course_session') == 'true') { // check if coach is allowed to edit a course
+				$is_allowed = $is_allowed_coach_to_edit;
+			} else {
+				$is_allowed = false;
+			}	
+		} else {
+			$is_allowed = $is_courseAdmin && $_SESSION['studentview'] != "studentview";	
+		}		
 		return $is_allowed;
 	} else {
 		return $is_courseAdmin;

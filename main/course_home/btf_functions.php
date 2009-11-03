@@ -103,7 +103,7 @@ function showtools2($cat)
 	{
 		$tbl_link = Database :: get_course_table(TABLE_LINK);
 		$tbl_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-		if (api_is_allowed_to_edit())
+		if (api_is_allowed_to_edit(null,true))
 		{
 			$sql_links = "SELECT tl.*, tip.visibility
 								FROM $tbl_link tl
@@ -195,7 +195,7 @@ function showtools2($cat)
 		// INVISIBLE
 		else
 		{
-			if (api_is_allowed_to_edit())
+			if (api_is_allowed_to_edit(null,true))
 			{
 				if(strpos($toolsRow['name'],'visio_')!==false)
 				{
@@ -227,7 +227,7 @@ function showtools2($cat)
 		}
 
 		$lnk = array ();
-		if (api_is_allowed_to_edit() and $cat != "courseAdmin" && !strpos($toolsRow['link'], 'learnpath_handler.php?learnpath_id'))
+		if (api_is_allowed_to_edit(null,true) && $cat != "courseAdmin" && !strpos($toolsRow['link'], 'learnpath_handler.php?learnpath_id') && !api_is_coach())
 		{
 			if ($toolsRow["visibility"])
 			{

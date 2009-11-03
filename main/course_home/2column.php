@@ -195,7 +195,7 @@ function show_tools($course_tool_category)
 			// This part displays the links to hide or remove a tool.
 			// These links are only visible by the course manager.
 			unset($lnk);
-			if (api_is_allowed_to_edit())
+			if (api_is_allowed_to_edit(null,true) && !api_is_coach())
 			{
 				if ($toolsRow["visibility"] == '1')
 				{
@@ -264,7 +264,7 @@ function show_tools($course_tool_category)
 			if ($toolsRow["added_tool"] == 1 &&
 					api_is_allowed_to_edit() && !$toolsRow["visibility"])
 			*/
-			if ($toolsRow["added_tool"] == 1 && api_is_allowed_to_edit() && !$toolsRow["visibility"]
+			if ($toolsRow["added_tool"] == 1 && api_is_allowed_to_edit(null,true) && !$toolsRow["visibility"]
 				&& $toolsRow['image'] != 'scormbuilder.gif' && $toolsRow['image'] != 'scormbuilder_na.gif')
 				echo	"<a class=\"nobold\" href=\"" . api_get_path(WEB_PATH) .
 						'main/external_module/external_module.php' .
@@ -300,7 +300,7 @@ function show_tools($course_tool_category)
 	Work with data post askable by admin of course (franglais, clean this)
 -----------------------------------------------------------
 */
-if (api_is_allowed_to_edit())
+if (api_is_allowed_to_edit(null,true))
 {
 	/*  Work request */
 
@@ -408,7 +408,7 @@ echo "</div>";
 */
 
 // start of tools for CourseAdmins (teachers/tutors)
-if (api_is_allowed_to_edit())
+if (api_is_allowed_to_edit(null,true) && !api_is_coach())
 {
 	echo	"<div class=\"courseadminview\">";
 	echo	"<span class=\"viewcaption\">";
@@ -444,7 +444,7 @@ if (api_is_allowed_to_edit())
 -----------------------------------------------------------
 */
 
-if (api_is_platform_admin() && api_is_allowed_to_edit())
+if (api_is_platform_admin() && api_is_allowed_to_edit(null,true) && !api_is_coach())
 {
 	?>
 		<div class="platformadminview">

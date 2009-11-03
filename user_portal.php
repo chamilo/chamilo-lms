@@ -286,12 +286,13 @@ function display_edit_course_list_links() {
  *
  */
 function display_history_course_session() {
-	if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-		echo "<li><a href=\"user_portal.php\">".get_lang('DisplayTrainingList')."</a></li>";
-	} else {
-		echo "<li><a href=\"user_portal.php?history=1\">".get_lang('HistoryTrainingSessions')."</a></li>";
+	if (api_get_setting('use_session_mode')=='true') {
+		if (isset($_GET['history']) && intval($_GET['history']) == 1) {
+			echo "<li><a href=\"user_portal.php\">".get_lang('DisplayTrainingList')."</a></li>";
+		} else {
+				echo "<li><a href=\"user_portal.php?history=1\">".get_lang('HistoryTrainingSessions')."</a></li>";
+		}
 	}
-
 }
 
 /**
@@ -961,6 +962,9 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 
 if (isset($_GET['history']) && intval($_GET['history']) == 1) {
 	echo '<h3>'.get_lang('HistoryTrainingSession').'</h3>';
+	if (count($courses_tree)==1){
+		echo get_lang('YouDoNotHaveAnySessionInItsHistory');
+	}
 }
 
 if ( is_array($courses_tree) ) {

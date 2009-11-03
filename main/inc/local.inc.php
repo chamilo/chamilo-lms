@@ -815,7 +815,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 				$tbl_user 					= Database::get_main_table(TABLE_MAIN_USER);
 				$tbl_session_course 		= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 				$tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
+				
 				if (!empty($_GET['id_session'])) {
 					$_SESSION['id_session'] = Database::escape_string($_GET['id_session']);
 					$sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_SESSION['id_session']) . '"';
@@ -833,7 +833,6 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
     } else {
         api_session_unregister('_cid');
         api_session_unregister('_course');
-
     }
 } else { // continue with the previous values
 	if (empty($_SESSION['_course']) OR empty($_SESSION['_cid'])) { //no previous values...
@@ -842,7 +841,9 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 	} else {
 		$_cid 		= $_SESSION['_cid'   ];
    		$_course    = $_SESSION['_course'];
-
+   		if ($_cid != '') {
+        	$cidReset = true; // force the user validation
+		}        
    		// these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
    		// Moreover, if we want to track a course with another session it can be usefull
 		if (!empty($_GET['id_session'])) {
@@ -993,28 +994,34 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 			            } else {
 			            	$is_courseAdmin = false;
 			            }
-
 			            api_session_register('_courseUser');
-			        } else {
-		        		// Check if the user is a student is this session
-				        $sql = "SELECT * FROM ".$tbl_session_course_user."
-				        		WHERE id_user  = '".$_user['user_id']."'
-				        		AND id_session = '".api_get_session_id()."'
-								AND course_code = '$cidReq' AND status NOT IN(2)";
-
-				        $result = Database::query($sql,__FILE__,__LINE__);
-
-				        if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
-				        	while($row = Database::fetch_array($result)){
-					            $is_courseMember     = true;
-					            $is_courseTutor      = false;
-					            $is_courseAdmin      = false;
-					            $is_sessionAdmin     = false;
-
-					            api_session_register('_courseUser');
-				        	}
-
-						}
+			        } else {			        	
+			        	if (api_get_session_id() != 0) {
+			        		// Check if the user is a student is this session
+					        $sql = "SELECT * FROM ".$tbl_session_course_user."
+					        		WHERE id_user  = '".$_user['user_id']."'
+					        		AND id_session = '".api_get_session_id()."'
+									AND course_code = '$cidReq' AND status NOT IN(2)";		
+					        $result = Database::query($sql,__FILE__,__LINE__);	
+					        if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course					        
+					        	while($row = Database::fetch_array($result)){
+						            $is_courseMember     = true;
+						            $is_courseTutor      = false;
+						            $is_courseAdmin      = false;
+						            $is_sessionAdmin     = false;
+						            api_session_register('_courseUser');
+					        	}
+							}
+			        	} else {
+			        		//unregister user
+			        		$is_courseMember     = false;
+						    $is_courseTutor      = false;
+						    $is_courseAdmin      = false;
+						    $is_sessionAdmin     = false;
+						    api_session_unregister('_courseUser'); 
+						    //$_course['visibility'] = 0; this depends the 
+			        	}
+					
 			        }
 	        	}
 	        }
@@ -1026,7 +1033,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
         $is_courseTutor  = false;
         $is_courseCoach  = false;
         $is_sessionAdmin     = false;
-
         api_session_unregister('_courseUser');
     }
 
@@ -1074,6 +1080,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 	api_session_register('is_courseCoach');
 	api_session_register('is_sessionAdmin');
 } else { // continue with the previous values
+
 	if (isset($_SESSION ['_courseUser'])) {
     	$_courseUser          = $_SESSION ['_courseUser'];
 	}
@@ -1090,7 +1097,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 //////////////////////////////////////////////////////////////////////////////
 // GROUP INIT
 //////////////////////////////////////////////////////////////////////////////
-
 
 if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // session data refresh requested
     if ($gidReq && $_cid ) { // have keys to search data

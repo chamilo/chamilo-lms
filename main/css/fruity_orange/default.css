@@ -1308,14 +1308,25 @@ div.report_section h4 {
 	font-weight: bold;
 	color: #666;
 	list-style-type: none;
-	margin: 5px;
+	margin: 5px 5px 5px 40px;
 	padding: 5px;
 	margin-bottom: 10px;
 }
 .session_box_title {
+	margin-bottom: 7px;
 }
 .session_box_coach {
 }
+.session_course_item {
+	/* padding: 0px; */
+	margin: 7px 0px;
+}
+
+.session_course_item .courses {
+	margin-bottom: 5px;
+	height:35px;
+}
+
 /***************************************************************
  *  DOKEOS CONFIG SETTINGS OF THE PLATFORM ADMIN SECTION 	   *
  ***************************************************************/

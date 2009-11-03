@@ -841,9 +841,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 	} else {
 		$_cid 		= $_SESSION['_cid'   ];
    		$_course    = $_SESSION['_course'];
-   		if ($_cid != '') {
-        	$cidReset = true; // force the user validation
-		}        
+
    		// these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
    		// Moreover, if we want to track a course with another session it can be usefull
 		if (!empty($_GET['id_session'])) {
@@ -995,7 +993,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 			            	$is_courseAdmin = false;
 			            }
 			            api_session_register('_courseUser');
-			        } else {			        	
+			        } else {
 			        	if (api_get_session_id() != 0) {
 			        		// Check if the user is a student is this session
 					        $sql = "SELECT * FROM ".$tbl_session_course_user."

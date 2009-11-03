@@ -910,7 +910,7 @@ function api_get_anonymous_id() {
  * Returns the cidreq parameter name + current course id
  */
 function api_get_cidreq() {
-	return empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']);
+	return empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']).(api_get_session_id()==0?'':'&session_id='.api_get_session_id());
 }
 
 /**

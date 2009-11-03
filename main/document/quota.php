@@ -111,7 +111,7 @@ function display_quota($course_quota, $already_consumed_space)
 // actions
 echo '<div class="actions">';
 // link back to the documents overview
-echo '<a href="document.php">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview')).get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview').'</a>';
+echo '<a href="document.php">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
 echo '</div>';
 
 // getting the course quota

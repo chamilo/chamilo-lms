@@ -1241,6 +1241,40 @@ div.system_announcement {
 	font-weight: normal;
 	font-size: 80%;
 }
+
+/*SESSIONS*/
+.sessions_list {
+	line-height: 20px;
+	margin-top: 20px;
+}
+.sessions_list_inactive {
+	line-height: 20px;
+}
+.session_box {
+	background-color: #efefef;
+	border: 1px solid #666;
+	font-weight: bold;
+	color: #666;
+	list-style-type: none;
+	margin: 5px 5px 5px 40px;
+	padding: 5px;
+	margin-bottom: 10px;
+}
+.session_box_title {
+	margin-bottom: 7px;
+}
+.session_box_coach {
+}
+.session_course_item {
+	/* padding: 0px; */
+	margin: 7px 0px;
+}
+
+.session_course_item .courses {
+	margin-bottom: 5px;
+	height:35px;
+}
+
 /* Notebook */
 .notebook-add-form {
 	margin: 1em;

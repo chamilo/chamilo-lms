@@ -8,6 +8,8 @@
 *	@package dokeos.include
 ==============================================================================
 */
+$session_id     = api_get_session_id();
+$session_name   = api_get_session_name($my_session_id);
 ?>
 <div id="wrapper">
 
@@ -120,7 +122,7 @@ if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR 
 
 	// Display the who's online for the course
 	if (is_array($_course) AND api_get_setting('showonline','course') == "true" AND isset($_course['sysCode'])) {
-		echo "(<a href='".api_get_path(WEB_PATH)."whoisonline.php?cidReq=".$_course['sysCode']."' target='_top'>$number_online_in_course ".get_lang('InThisCourse')."</a>)";
+		echo "(<a href='".api_get_path(WEB_PATH)."whoisonline.php?cidReq=".$_course['sysCode'].' target='_top'>$number_online_in_course ".get_lang('InThisCourse')."</a>)";
 	}
 	echo '</li>';
 }
@@ -337,11 +339,9 @@ if ($_self == 'admin_intro_edition_page')
 $navigation = array();
 // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
 //hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
-$session_id     = api_get_session_id();
-$session_name   = api_get_session_name($my_session_id);
 $my_session_name= ($session_name==null) ? '' : '&nbsp;('.$session_name.')';
 if (isset ($_cid) and $_cid!=-1 and isset($_course) and !isset($_GET['hide_course_breadcrumb'])) {
-	$navigation_item['url'] = $web_course_path . $_course['path'].'/index.php';
+	$navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id)?'?id_session='.$session_id:'');
 	switch(api_get_setting('breadcrumbs_course_homepage')) {
 		case 'get_lang':
 			$navigation_item['title'] =  get_lang('CourseHomepageLink');

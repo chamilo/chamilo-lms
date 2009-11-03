@@ -87,9 +87,18 @@ if (!empty($return)) {
   <td width="30%"><?php echo get_lang('SessionCategoryName') ?>&nbsp;&nbsp;</td>
   <td width="70%"><input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); ?>"></td>
 </tr>
+<tr >
+<td colspan="2">
+	<a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('AddTimeLimit') ?></a>
+		<div style="display: <?php if($formSent && ($nb_days_acess_before!=0 || $nb_days_acess_after!=0)) echo 'block'; else echo 'none'; ?>;" id="options">
+	<br>
+	<div>
+<table border="0" cellpadding="5" cellspacing="0" width="100%">
+<tr><td colspan="2"><?php echo get_lang('TheTimeLimitsAreReferential');?></td>
+</tr>
 <tr>
-  <td width="30%"><?php echo get_lang('DateStart') ?>&nbsp;&nbsp;</td>
-  <td width="70%">
+  <td width="20%"><?php echo get_lang('DateStart') ?>&nbsp;&nbsp;</td>
+  <td width="80%">
   <select name="day_start">
 	<option value="1">01</option>
 	<option value="2" <?php if((!$formSent && $thisDay == 2) || ($formSent && $day_start == 2)) echo 'selected="selected"'; ?> >02</option>
@@ -153,8 +162,8 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
   </td>
 </tr>
 <tr>
-  <td width="30%"><?php echo get_lang('DateEnd') ?>&nbsp;&nbsp;</td>
-  <td width="70%">
+  <td width="20%"><?php echo get_lang('DateEnd') ?>&nbsp;&nbsp;</td>
+  <td width="80%">
   <select name="day_end">
 	<option value="1">01</option>
 	<option value="2" <?php if((!$formSent && $thisDay == 2) || ($formSent && $day_end == 2)) echo 'selected="selected"'; ?> >02</option>
@@ -217,6 +226,12 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
   </td>
 </tr>
 
+</table>
+</div>
+<br>
+</div>
+</td>
+</tr>
 <tr>
   <td>&nbsp;</td>
   <td><button class="save" type="submit" value="<?php echo get_lang('langAddACategory') ?>"><?php echo get_lang('langAddACategory') ?></button>

@@ -72,7 +72,7 @@ Display::display_header($tool_name);
 //api_display_tool_title($tool_name);
 ?>
 <p>
-<a href="<?php echo api_get_path(WEB_COURSE_PATH).$course->directory; ?>"><?php Display::display_icon('course_home.gif'); ?> <?php echo api_get_path(WEB_COURSE_PATH).$course->directory; ?></a>
+<a href="<?php echo api_get_path(WEB_COURSE_PATH).$course->directory; ?>"><?php Display::display_icon('course_home.gif', get_lang('CourseHomepage')); ?> <?php echo get_lang('CourseHomepage'); ?></a>
 <br/>
 <?php
 if(api_get_setting('server_type') == 'test')

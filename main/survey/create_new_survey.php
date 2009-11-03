@@ -156,7 +156,10 @@ if ($_GET['action'] == 'edit') {
 
 $form->addElement('html_editor', 'survey_title', get_lang('SurveyTitle'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '200'));
 $form->addElement('html_editor', 'survey_subtitle', get_lang('SurveySubTitle'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '100', 'ToolbarStartExpanded' => false));
+
 /*
+//Language selection has been disabled. If you want to re-enable, please
+//disable the following line (hidden language field).
 $lang_array = api_get_languages();
 foreach ($lang_array['name'] as $key=>$value) {
 	$languages[$lang_array['folder'][$key]] = $value;

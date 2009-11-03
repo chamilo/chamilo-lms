@@ -152,7 +152,7 @@ error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 //upgrading from any subversion of 1.6 is just like upgrading from 1.6.5
 $update_from_version_6=array('1.6','1.6.1','1.6.2','1.6.3','1.6.4','1.6.5');
 //upgrading from any subversion of 1.8 avoids the additional step of upgrading from 1.6
-$update_from_version_8=array('1.8','1.8.2','1.8.3','1.8.4','1.8.5','1.8.6');
+$update_from_version_8=array('1.8','1.8.2','1.8.3','1.8.4','1.8.5','1.8.6','1.8.6.1');
 $my_old_version = '';
 $tmp_version = get_config_param('dokeos_version');
 if(!empty($_POST['old_version'])) {
@@ -165,8 +165,8 @@ elseif(!empty($dokeos_version)) //variable coming from installedVersion, normall
 	$my_old_version = $dokeos_version;
 }
 
-$new_version = '1.8.6.1';
-$new_version_stable = true;
+$new_version = '1.8.6.2';
+$new_version_stable = false;
 $new_version_major = false;
 /*
 ==============================================================================
@@ -748,8 +748,7 @@ elseif($_POST['step6'])
 			$userPasswordCrypted = 'none';
 		}
 
-		switch($my_old_version)
-		{
+		switch ($my_old_version) {
 			case '1.6':
 			case '1.6.0':
 			case '1.6.1':
@@ -779,28 +778,24 @@ elseif($_POST['step6'])
             case '1.8.6':
                 include('update-db-1.8.6-1.8.6.1.inc.php');
                 include('update-files-1.8.6-1.8.6.1.inc.php');
+            case '1.8.6.1':
+                include('update-db-1.8.6.1-1.8.6.2.inc.php');
+                include('update-files-1.8.6.1-1.8.6.2.inc.php');
             default:
-
 				break;
 		}
-	}
-	else
-	{
+	} else {
 		include('install_db.inc.php');
 		include('install_files.inc.php');
 	}
 
 	display_after_install_message($installType, $nbr_courses);
-}
-elseif($_POST['step1'] || $badUpdatePath)
-{
+} elseif($_POST['step1'] || $badUpdatePath) {
 	//STEP 1 : REQUIREMENTS
 	//make sure that proposed path is set, shouldn't be necessary but...
 	if(empty($proposedUpdatePath)){$proposedUpdatePath = $_POST['updatePath'];}
 	display_requirements($installType, $badUpdatePath, $proposedUpdatePath, $update_from_version_8, $update_from_version_6);
-}
-else
-{
+} else {
 	//start screen
 	display_language_selection();
 }

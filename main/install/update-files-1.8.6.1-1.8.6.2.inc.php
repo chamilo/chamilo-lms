@@ -2,16 +2,10 @@
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
-* Updates the Dokeos files from version 1.8.6 to version 1.8.6.1
+* Updates the Dokeos files from version 1.8.6.1 to version 1.8.6.2
 * This script operates only in the case of an update, and only to change the
 * active version number (and other things that might need a change) in the
 * current configuration file.
-* As of 1.8.6, the Dokeos version has been added to configuration.php to
-* allow for edition (inc/conf is one of the directories that needs write
-* permissions on upgrade).
-* Being in configuration.php, it benefits from the configuration.dist.php
-* advantages that a new version doesn't overwrite it, thus letting the old
-* version be available until the end of the installation.
 * @package dokeos.install
 ==============================================================================
 */

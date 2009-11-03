@@ -122,7 +122,7 @@ if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR 
 
 	// Display the who's online for the course
 	if (is_array($_course) AND api_get_setting('showonline','course') == "true" AND isset($_course['sysCode'])) {
-		echo "(<a href='".api_get_path(WEB_PATH)."whoisonline.php?cidReq=".$_course['sysCode'].' target='_top'>$number_online_in_course ".get_lang('InThisCourse')."</a>)";
+		echo "(<a href='".api_get_path(WEB_PATH)."whoisonline.php?cidReq=".$_course['sysCode']."' target='_top'>$number_online_in_course ".get_lang('InThisCourse')."</a>)";
 	}
 	echo '</li>';
 }

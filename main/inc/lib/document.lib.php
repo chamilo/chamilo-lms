@@ -521,15 +521,17 @@ class DocumentManager {
 		
 		//condition for the session		
 		$current_session_id = api_get_session_id();					
-		$is_session_into_category = api_is_session_in_category($current_session_id,'20091U');				
+		$condition_session = " AND id_session = (SELECT IFNULL((SELECT DISTINCT id_session FROM $TABLE_ITEMPROPERTY WHERE ref = last.ref AND id_session = '$current_session_id'),0))";
 		
+		/*
+		$is_session_into_category = api_is_session_in_category($current_session_id,'20091U');				
 		$condition_session = "";
 		if ($is_session_into_category) {
 			$condition_session = " AND id_session = (SELECT IFNULL((SELECT DISTINCT id_session FROM $TABLE_ITEMPROPERTY WHERE ref = last.ref AND id_session = '$current_session_id'),0))";						
 		} else {					
 			$condition_session = " AND id_session = '$current_session_id' ";								
 		}
-		
+		*/
 		
 		$sql_session_id = "SELECT IFNULL((SELECT DISTINCT id_session FROM $TABLE_ITEMPROPERTY WHERE ref = last.ref AND id_session = '$current_session_id'),0)";								
 				
@@ -542,7 +544,7 @@ class DocumentManager {
 						AND ".$to_field." = ".$to_value."
 						AND last.visibility".$visibility_bit . $condition_session;								
 		
-		$result = Database::query($sql);
+		$result = Database::query($sql,__FILE__,__LINE__);
 		
 		if ($result && Database::num_rows($result) != 0)
 		{

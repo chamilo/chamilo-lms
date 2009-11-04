@@ -576,7 +576,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		}
 
 		//update item_property to change visibility
-		if(api_item_property_update($_course, TOOL_DOCUMENT, $update_id, $visibility_command, $_user['user_id']))
+		if(api_item_property_update($_course, TOOL_DOCUMENT, $update_id, $visibility_command, $_user['user_id'],null,null,null,null,$current_session_id))
 		{
 			Display::display_confirmation_message(get_lang("ViMod"));
 		}

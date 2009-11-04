@@ -83,25 +83,36 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	$from=$page * $limit;
 	$where = 'WHERE 1=1 ';
 	
+	//Prevent hacking keyword
+	if ( isset ($_GET['keyword'])) {
+		$keyword = Database::escape_string($_GET['keyword']);
+		} else if (isset ($_GET['keyword_name'])) {
+			$keyword_name = Database::escape_string($_GET['keyword_name']);
+			$keyword_category = Database::escape_string($_GET['keyword_category']);
+			$keyword_visibility = Database::escape_string($_GET['keyword_visibility']);
+			$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
+			$keyword_lastname = Database::escape_string($_GET['keyword_lastname']);
+			}
+	
 	//Process for the search advanced
 	if (!empty($_REQUEST['keyword_name'])) {
-		$where .= " AND s.name LIKE '%".addslashes($_REQUEST['keyword_name'])."%'";
+		$where .= " AND s.name LIKE '%".$keyword_name."%'";
 	} 
 	
 	if (!empty($_REQUEST['keyword_category'])) {
-		$where .= " AND sc.name LIKE '%".addslashes($_REQUEST['keyword_category'])."%'";
+		$where .= " AND sc.name LIKE '%".$keyword_category."%'";
 	}
 	
 	if (!empty($_REQUEST['keyword_visibility']) AND $_REQUEST['keyword_visibility']!='%') {
-		$where .= " AND s.visibility LIKE '%".addslashes($_REQUEST['keyword_visibility'])."%'";
+		$where .= " AND s.visibility LIKE '%".$keyword_visibility."%'";
 	}
 	
 	if (!empty($_REQUEST['keyword_firstname'])) {
-		$where .= " AND u.firstname LIKE '%".addslashes($_REQUEST['keyword_firstname'])."%'";
+		$where .= " AND u.firstname LIKE '%".$keyword_firstname."%'";
 	}
 	
 	if (!empty($_REQUEST['keyword_lastname'])) {
-		$where .= " AND u.lastname LIKE '%".addslashes($_REQUEST['keyword_lastname'])."%'";
+		$where .= " AND u.lastname LIKE '%".$keyword_lastname."%'";
 	}
 	
 	if (isset($_REQUEST['active']) && isset($_REQUEST['inactive'] )) {
@@ -125,6 +136,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		$where.= ' session_category_id = "'.$id_category.'" ';
 		$cond_url.= '&amp;id_category='.$id_category;	
 	}
+	
 	//Get list sessions
 	$sort = ($sort != "name_category")?  's.'.$sort : 'category_name';
 	$query = "SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name, s.visibility

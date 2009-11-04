@@ -190,6 +190,7 @@ if(api_get_setting('use_session_mode')=='true')
 			</button>
 	</form>
 </li>
+  <li><a href="session_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a></li>
   <li><a href="session_list.php"><?php echo get_lang('ListSession') ?></a></li>
   <li><a href="session_category_list.php"><?php echo get_lang('ListSessionCategory') ?></a></li>
   <li><a href="session_add.php"><?php echo get_lang('AddSession') ?></a></li>

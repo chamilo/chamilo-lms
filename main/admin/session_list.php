@@ -49,22 +49,31 @@ if ($action == 'delete') {
 
 $interbreadcrumb[]=array("url" => "index.php","name" => get_lang('PlatformAdmin'));
 
+//table for the search
 if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
-
+	
 	$interbreadcrumb[] = array ("url" => 'session_list.php', "name" => get_lang('SessionList'));
 	$tool_name = get_lang('SearchASession');
 	Display :: display_header($tool_name);
-
 	$form = new FormValidator('advanced_search','get');
 	$form->addElement('header', '', $tool_name);
+	$form->add_textfield('keyword_name', get_lang('NameOfTheSession'), false);
+	$form->add_textfield('keyword_category', get_lang('CategoryName'), false);
+	$form->add_textfield('keyword_firstname', get_lang('FirstName'), false);
+	$form->add_textfield('keyword_lastname', get_lang('LastName'), false);
+	$status_options = array();
+	$status_options['%'] = get_lang('All');
+	$status_options[SESSION_VISIBLE_READ_ONLY] = get_lang('ReadOnly');
+	$status_options[SESSION_VISIBLE] = get_lang('Visible');
+	$status_options[SESSION_INVISIBLE] = get_lang('Invisible');
+	$form->addElement('select','keyword_visibility',get_lang('Status'),$status_options);
 	$active_group = array();
 	$active_group[] = $form->createElement('checkbox','active','',get_lang('Active'));
 	$active_group[] = $form->createElement('checkbox','inactive','',get_lang('Inactive'));
 	$form->addGroup($active_group,'',get_lang('ActiveSession'),'<br/>',false);
-
+	$defaults['active'] = 0;
+	$defaults['inactive'] = 0;
 	$form->addElement('style_submit_button', 'submit',get_lang('Search'),'class="search"');
-	$defaults['active'] = 1;
-	$defaults['inactive'] = 1;
 	$form->setDefaults($defaults);
 	$form->display();
 
@@ -72,42 +81,51 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 
 	$limit=20;
 	$from=$page * $limit;
-	$where = '';
-	//if user is crfp admin only list its sessions
-	if(!api_is_platform_admin()) {
-		$where = 'WHERE session_admin_id='.intval($_user['user_id']);
-		$where .= (empty($_REQUEST['keyword']) ? "" : " AND s.name LIKE '%".addslashes($_REQUEST['keyword'])."%'");
-	} else {
-		$where .= (empty($_REQUEST['keyword']) ? "" : " WHERE s.name LIKE '%".addslashes($_REQUEST['keyword'])."%'");
+	$where = 'WHERE 1=1 ';
+	
+	//Process for the search advanced
+	if (!empty($_REQUEST['keyword_name'])) {
+		$where .= " AND s.name LIKE '%".addslashes($_REQUEST['keyword_name'])."%'";
+	} 
+	
+	if (!empty($_REQUEST['keyword_category'])) {
+		$where .= " AND sc.name LIKE '%".addslashes($_REQUEST['keyword_category'])."%'";
 	}
+	
+	if (!empty($_REQUEST['keyword_visibility']) AND $_REQUEST['keyword_visibility']!='%') {
+		$where .= " AND s.visibility LIKE '%".addslashes($_REQUEST['keyword_visibility'])."%'";
+	}
+	
+	if (!empty($_REQUEST['keyword_firstname'])) {
+		$where .= " AND u.firstname LIKE '%".addslashes($_REQUEST['keyword_firstname'])."%'";
+	}
+	
+	if (!empty($_REQUEST['keyword_lastname'])) {
+		$where .= " AND u.lastname LIKE '%".addslashes($_REQUEST['keyword_lastname'])."%'";
+	}
+	
 	if (isset($_REQUEST['active']) && isset($_REQUEST['inactive'] )) {
 		// if both are set we search all sessions
 		$cond_url = '&amp;active='.Security::remove_XSS($_REQUEST['active']);
 		$cond_url .= '&amp;inactive='.Security::remove_XSS($_REQUEST['inactive']);
 	} else {
 		if (isset($_REQUEST['active'])) {
-			if (empty($where)) {
-				$where .= ' WHERE ( (s.date_start <= CURDATE() AND s.date_end >= CURDATE()) OR s.date_start="0000-00-00" ) ';	
-			} else {
-				$where .= ' AND ( (s.date_start <= CURDATE() AND s.date_end >= CURDATE()) OR s.date_start="0000-00-00" ) ';
-			}
+			$where .= ' AND ( (s.date_start <= CURDATE() AND s.date_end >= CURDATE()) OR s.date_start="0000-00-00" ) ';
 			$cond_url = '&amp;active='.Security::remove_XSS($_REQUEST['active']);
 		}
 		if (isset($_REQUEST['inactive'])) {
-			if (empty($where)) {
-				$where .= ' WHERE ( (s.date_start > CURDATE() OR s.date_end < CURDATE()) AND s.date_start<>"0000-00-00" ) ';
-			} else {
-				$where .= ' AND ( (s.date_start > CURDATE() OR s.date_end < CURDATE()) AND s.date_start<>"0000-00-00" ) ';
-			}	
+			$where .= ' AND ( (s.date_start > CURDATE() AND s.date_end < CURDATE()) AND s.date_start<>"0000-00-00" ) ';
 			$cond_url = '&amp;inactive='.Security::remove_XSS($_REQUEST['inactive']);
 		}
 	}
+	
 	if(isset($_GET['id_category'])){
-		$where.= (empty($where))? ' AND ' : ' WHERE ';
+		$where.= ' AND ';
 		$id_category = Security::remove_XSS($id_category); 
 		$where.= ' session_category_id = "'.$id_category.'" ';
 		$cond_url.= '&amp;id_category='.$id_category;	
 	}
+	//Get list sessions
 	$sort = ($sort != "name_category")?  's.'.$sort : 'category_name';
 	$query = "SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name, s.visibility
 			 FROM $tbl_session s 
@@ -180,7 +198,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 
 	<div align="left">
 	<?php
-	if(count($Sessions)==0 && isset($_POST['keyword'])) {
+	//if(count($Sessions)==0 && isset($_POST['keyword'])) {
+	if(count($Sessions)==0) {
 		echo get_lang('NoSearchResults');
 		echo '	</div>';
 	} else {

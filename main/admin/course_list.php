@@ -109,7 +109,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
 	{
 		//place colour icons in front of courses
 		//$course[1] = get_course_visibility_icon($course[9]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[9].'/index.php">'.$course[1].'</a>';
-		$course[1] = get_course_visibility_icon($course[8]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[8].'/index.php">'.$course[1].'</a>';
+		$course[1] = get_course_visibility_icon($course[9]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[8].'/index.php">'.$course[1].'</a>';
 		$course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
 		$course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
 		//$course[7] = CourseManager :: is_virtual_course_from_system_code($course[7]) ? get_lang('Yes') : get_lang('No');

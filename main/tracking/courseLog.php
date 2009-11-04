@@ -600,7 +600,9 @@ if ($_GET['studentlist'] == 'false') {
 		6 => '6 '.get_lang('Days'),
 		7 => '7 '.get_lang('Days'),
 		15 => '15 '.get_lang('Days'),
-		30 => '30 '.get_lang('Days')
+		30 => '30 '.get_lang('Days'),
+		'never' => get_lang('Never')
+				
 	);
 
 	$el = $form -> addElement('select', 'since', '<img width="22" align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" border="0" />'.get_lang('RemindInactivesLearnersSince'), $options);
@@ -638,7 +640,8 @@ if ($_GET['studentlist'] == 'false') {
 		$table -> set_header(6, get_lang('Student_publication'),false);
 		$table -> set_header(7, get_lang('Messages'),false);
 		$table -> set_header(8, get_lang('FirstLogin'), false, 'align="center"');
-		$table -> set_header(9, get_lang('LatestLogin'), false, 'align="center"');		$table -> set_header(10, get_lang('Details'),false);
+		$table -> set_header(9, get_lang('LatestLogin'), false, 'align="center"');		
+		$table -> set_header(10, get_lang('Details'),false);
 		if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
 			$table -> set_header(11, get_lang('AdditionalProfileField'),false);
         }
@@ -678,18 +681,20 @@ if ($_GET['studentlist'] == 'false') {
 			$row[] = Tracking :: get_first_connection_date_on_the_course($student_id, $course_code);
 			$row[] = Tracking :: get_last_connection_date_on_the_course($student_id, $course_code);
 
+			$row[] = '<center><a href="../mySpace/myStudents.php?student='.$student_id.'&details=true&course='.$course_code.'&origin=tracking_course"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
+			
+			// we need to display an additional profile field
+			if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
+				$row[]=implode($additional_user_profile_info[$student_id]);
+			}
 			if ($export_csv) {
 				$row[8] = strip_tags($row[8]);
 				$row[9] = strip_tags($row[9]);
+				unset($row[10]);
 				$csv_content[] = $row;
 			}
-			$from = '';
-			if ($from_myspace) {
-				$from ='&from=myspace';
-			}
-			$row[] = '<center><a href="../mySpace/myStudents.php?student='.$student_id.'&details=true&course='.$course_code.'&origin=tracking_course'.$from.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
+			$all_datas[] = $row;		
 
-			$all_datas[] = $row;
 		}
 
 		usort($all_datas, 'sort_users');

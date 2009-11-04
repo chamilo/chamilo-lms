@@ -628,6 +628,7 @@ function update_Db_course($courseDbName)
 		start_time datetime NOT NULL default '0000-00-00 00:00:00',
 		end_time datetime NOT NULL default '0000-00-00 00:00:00',
 		feedback_type int NOT NULL default 0,
+    expired_time int NOT NULL default '0',
 		session_id smallint default 0,
 		PRIMARY KEY (id)
 		)";

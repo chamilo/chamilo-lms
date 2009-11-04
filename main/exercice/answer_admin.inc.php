@@ -1397,7 +1397,7 @@ if($modifyAnswers)
 			</script>
 		</td>
 		<td valign="top">
-			<form method="post" action="<?php echo api_get_self(); ?>?modifyAnswers=<?php echo $modifyAnswers; ?>" name="frm_exercise">
+			<form method="post" id="frm_exercise" action="<?php echo api_get_self(); ?>?modifyAnswers=<?php echo $modifyAnswers; ?>" name="frm_exercise">
 				<input type="hidden" name="formSent" value="1" />
 				<input type="hidden" name="nbrAnswers" value="<?php echo $nbrAnswers; ?>" />
 				<table border="0" cellpadding="3" cellspacing="0" style="border: 1px solid #4271b5; border-left:none; width: 100%; ">

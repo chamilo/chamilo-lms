@@ -83,6 +83,14 @@ $htmlHeadXtra[] = '<script>
 				document.exercise_admin.exerciseType[0].disabled=false;
 			}
 		}
+              
+    function option_time_expired() {
+      if(document.getElementById(\'timercontrol\').style.display == \'none\') {
+        document.getElementById(\'timercontrol\').style.display = \'block\';
+      } else {
+        document.getElementById(\'timercontrol\').style.display = \'none\';
+      }
+    }               
 		</script>';
 
 /*********************

@@ -40,6 +40,7 @@ CREATE TABLE user_rel_tag (id int NOT NULL auto_increment,user_id int NOT NULL,t
 
 
 -- xxSTATSxx
+ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
 
 -- xxUSERxx
 
@@ -55,3 +56,4 @@ ALTER TABLE tool ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id
 ALTER TABLE link_category ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);
 ALTER TABLE item_property ADD id_session INT NOT NULL DEFAULT 0;
 ALTER TABLE item_property DROP INDEX idx_item_property_toolref, ADD INDEX idx_item_property_toolref (tool, ref, id_session); 
+ALTER TABLE quiz ADD COLUMN expired_time int NOT NULL DEFAULT '0' AFTER feedback_type;

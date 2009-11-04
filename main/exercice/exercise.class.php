@@ -24,10 +24,10 @@ class Exercise
 	var $attempts;
 	var $feedbacktype;
 	var $end_time;
-    var $start_time;
+  var $start_time;
 	var $questionList;  // array with the list of this exercise's questions
 	var $results_disabled;
-
+  var $expired_time;
 	/**
 	 * constructor of the class
 	 *
@@ -45,8 +45,9 @@ class Exercise
 		$this->questionList=array();
 		$this->timeLimit = 0;
 		$this->end_time = '0000-00-00 00:00:00';
-        $this->start_time = '0000-00-00 00:00:00';
-        $this->results_disabled =1;
+    $this->start_time = '0000-00-00 00:00:00';
+    $this->results_disabled =1;
+    $this->expired_time = '0000-00-00 00:00:00';
 	}
 
 	/**
@@ -67,7 +68,7 @@ class Exercise
 	    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
     	#$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
-		$sql="SELECT title,description,sound,type,random,active, results_disabled, max_attempt,start_time,end_time,feedback_type FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
+		$sql="SELECT title,description,sound,type,random,active, results_disabled, max_attempt,start_time,end_time,feedback_type,expired_time FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
 		$result=Database::query($sql,__FILE__,__LINE__);
 
 		// if the exercise has been found
@@ -84,7 +85,8 @@ class Exercise
 			$this->attempts = $object->max_attempt;
 			$this->feedbacktype = $object->feedback_type;
 			$this->end_time = $object->end_time;
-            $this->start_time = $object->start_time;
+      		$this->start_time = $object->start_time;
+      		$this->expired_time = $object->expired_time;
 			$sql="SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($id)."' ORDER BY question_order";
 			$result=Database::query($sql,__FILE__,__LINE__);
 
@@ -375,7 +377,16 @@ class Exercise
 	{
 		$this->description=$description;
 	}
-
+  /**
+   * changes the exercise description
+   *
+   * @author - Isaac flores
+   * @param - int The expired time of the quiz
+   */
+  function updateExpiredTime($expired_time)
+  {
+    $this->expired_time = $expired_time;
+  }
 	/**
 	 * changes the exercise sound file
 	 *
@@ -511,7 +522,8 @@ class Exercise
 		$random = $this->random;
 		$active = $this->active;
 		$session_id = api_get_session_id();
-
+    	$expired_time = $this->expired_time;
+    
 		if ($feedbacktype==1){
 			$results_disabled = 1;
 		} else {
@@ -536,8 +548,9 @@ class Exercise
 						active='".Database::escape_string($active)."',
 						feedback_type='".Database::escape_string($feedbacktype)."',
 						start_time='$start_time',end_time='$end_time',
-						max_attempt='".Database::escape_string($attempts)."', " .
-						"results_disabled='".Database::escape_string($results_disabled)."'";
+						max_attempt='".Database::escape_string($attempts)."',
+            			expired_time='".Database::escape_string($expired_time)."',
+						results_disabled='".Database::escape_string($results_disabled)."'";
 				}
 			$sql .= " WHERE id='".Database::escape_string($id)."'";
 
@@ -935,29 +948,44 @@ class Exercise
 			$form -> addGroup($random,null,get_lang('RandomQuestions'),'<br />');
 
 			$attempt_option=range(0,10);
-	        $attempt_option[0]=get_lang('Infinite');
+	    $attempt_option[0]=get_lang('Infinite');
 
-	        $form -> addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts'),$attempt_option);
+	    $form -> addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts'),$attempt_option);
 
-	        $form -> addElement('checkbox', 'enabletimelimit',get_lang('EnableTimeLimits'),null,'onclick = "  return timelimit() "');
-
-			$var= Exercise::selectTimeLimit();
-
-			$form -> addElement('html','</div>');
+	    $form -> addElement('checkbox', 'enabletimelimit',get_lang('EnableTimeLimits'),null,'onclick = "  return timelimit() "');
+      $var= Exercise::selectTimeLimit();
 
 			if(($this -> start_time!='0000-00-00 00:00:00')||($this -> end_time!='0000-00-00 00:00:00'))
 				$form -> addElement('html','<div id="options2" style="display:block;">');
 			else
 				$form -> addElement('html','<div id="options2" style="display:none;">');
 
-	        //$form -> addElement('date', 'start_time', get_lang('ExeStartTime'), array('language'=>'es','format' => 'dMYHi'));
-	        //$form -> addElement('date', 'end_time', get_lang('ExeEndTime'), array('language'=>'es','format' => 'dMYHi'));
-	        $form->addElement('datepicker', 'start_time', get_lang('ExeStartTime'), array('form_name'=>'exercise_admin'));
+	    //$form -> addElement('date', 'start_time', get_lang('ExeStartTime'), array('language'=>'es','format' => 'dMYHi'));
+	    //$form -> addElement('date', 'end_time', get_lang('ExeEndTime'), array('language'=>'es','format' => 'dMYHi'));
+	    $form->addElement('datepicker', 'start_time', get_lang('ExeStartTime'), array('form_name'=>'exercise_admin'));
 			$form->addElement('datepicker', 'end_time', get_lang('ExeEndTime'), array('form_name'=>'exercise_admin'));
+       
+       //Timer control
+      $time_hours_option = range(0,12);
+      $time_minutes_option = range(0,59);
+      $form -> addElement('checkbox', 'enabletimercontrol',get_lang('EnableTimerControl'),null,'onclick = "option_time_expired()"');      
+      $expired_date = (int)$this->selectExpiredTime();
 
-			//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));
-			$form -> addElement('html','</div>');
-
+      if(($expired_date!='0')) {
+        $form -> addElement('html','<div id="timercontrol" style="display:block;">');
+      } else {
+        $form -> addElement('html','<div id="timercontrol" style="display:none;">');
+      }
+      $form -> addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTimerControlTotalMinutes'),array('style' => 'width : 35px'));
+      //$form -> addElement('select', 'enabletimercontroltotalminutes',get_lang('ExerciseTimerControlMinutes'),$time_minutes_option);
+      $form -> addElement('html','</div>');
+           
+      $form -> addElement('html','</div>');
+			//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));        
+      
+      $form -> addElement('html','</div>');  //End advanced setting
+  
+               
 	        $defaults = array();
 
 	        if (api_get_setting('search_enabled') === 'true') {
@@ -1020,8 +1048,16 @@ class Exercise
 	            	$defaults['enabletimelimit'] = 1;
 
 			    $defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00')? $this -> start_time : date('Y-m-d 12:00:00');
-	            $defaults['end_time'] = ($this->end_time!='0000-00-00 00:00:00')?$this -> end_time : date('Y-m-d 12:00:00',time()+84600);
-
+	        $defaults['end_time'] = ($this->end_time!='0000-00-00 00:00:00')?$this -> end_time : date('Y-m-d 12:00:00',time()+84600);
+          
+          //Get expired time
+          if($this -> expired_time != '0') {
+            $defaults['enabletimercontrol'] = 1;
+          	$defaults['enabletimercontroltotalminutes'] = $this -> expired_time;
+          } else {
+          	$defaults['enabletimercontroltotalminutes'] = 0;
+          }
+                
 			} else {
 				$defaults['exerciseType'] = 2;
 				$defaults['exerciseAttempts'] = 0;
@@ -1059,20 +1095,27 @@ class Exercise
 		$this -> updateType($form -> getSubmitValue('exerciseType'));
 		$this -> setRandom($form -> getSubmitValue('randomQuestions'));
 		$this -> updateResultsDisabled($form -> getSubmitValue('results_disabled'));
-
-		if($form -> getSubmitValue('enabletimelimit')==1)
-        {
+    $this -> updateExpiredTime($form -> getSubmitValue('enabletimercontroltotalminutes'));
+		if($form -> getSubmitValue('enabletimelimit')==1) {
            $start_time = $form -> getSubmitValue('start_time');
            $this->start_time = $start_time['Y'].'-'.$start_time['F'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00';
            $end_time = $form -> getSubmitValue('end_time');
            $this->end_time = $end_time['Y'].'-'.$end_time['F'].'-'.$end_time['d'].' '.$end_time['H'].':'.$end_time['i'].':00';
-        }
-          else
-  		{
+    } else {
            $this->start_time = '0000-00-00 00:00:00';
            $this->end_time = '0000-00-00 00:00:00';
         }
-        //echo $end_time;exit;
+
+    if($form -> getSubmitValue('enabletimercontrol') == 1) {
+           $expired_total_time = $form -> getSubmitValue('enabletimercontroltotalminutes');
+           if ($this->expired_time == 0) {
+               $this->expired_time = $expired_total_time;                    	
+           }
+
+    } else {
+           $this->expired_time = 0;
+        }
+                
         $this -> save($type);
 	}
 
@@ -1248,7 +1291,9 @@ class Exercise
 		    delete_all_values_for_item($course_id, TOOL_QUIZ, $this->id);
 	    }
     }
-
+  function selectExpiredTime() {
+  	   return $this->expired_time;
+  }
 }
 
 endif;

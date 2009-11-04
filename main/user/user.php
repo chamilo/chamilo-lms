@@ -280,7 +280,7 @@ if ($origin != 'learnpath') {
 }
 
 if (isset($message)) {
-	Display::display_normal_message($message);
+	Display::display_confirmation_message($message);
 }
 
 /*

@@ -466,7 +466,6 @@ DROP TABLE IF EXISTS session_rel_course;
 CREATE TABLE session_rel_course (
   id_session smallint unsigned NOT NULL default '0',
   course_code char(40) NOT NULL default '',
-  id_coach int unsigned NOT NULL default '0',
   nbr_users smallint unsigned NOT NULL default '0',
   PRIMARY KEY  (id_session,course_code),
   KEY course_code (course_code)

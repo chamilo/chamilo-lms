@@ -46,24 +46,22 @@ class Import
 	 * @param string $filename Path to the CSV-file which should be imported
 	 * @return array An array with all data from the CSV-file
 	 */
-	function csv_to_array($filename)
-	{
+	function csv_to_array($filename) {
 		$result = array ();
 		$handle = fopen($filename, "r");
-		if($handle === false)
-		{
+		if($handle === false) {
 			return $result;
-		}
-		$keys = fgetcsv($handle, 1000, ";");
-		while (($row_tmp = fgetcsv($handle, 1000, ";")) !== FALSE)
-		{
-
+		}		
+		$keys = fgetcsv($handle, 4096, ";");
+		while (($row_tmp = fgetcsv($handle, 4096, ";")) !== FALSE) {
 			$row = array ();
-			foreach ($row_tmp as $index => $value)
-			{
-				$row[$keys[$index]] = $value;
-			}
-			$result[] = $row;
+			//avoid empty lines in csv			
+			if (is_array($row_tmp) && count($row_tmp)>0 && $row_tmp[0]!= '') {
+				foreach ($row_tmp as $index => $value) {				
+					$row[$keys[$index]] = $value;				
+				}
+				$result[] = $row;
+			}			
 		}
 		fclose($handle);
 		return $result;

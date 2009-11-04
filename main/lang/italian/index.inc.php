@@ -65,4 +65,5 @@ $FolderCreated = "Nuova cartella creata";
 $LinkAdded = "Nuovo collegamento aggiunto";
 $AnnouncementAdded = "Avviso aggiunto";
 $AgendaAdded = "Voce nell\'agenda aggiunta";
+$YouDoNotHaveAnySessionInItsHistory = "Non ci sono tue sessioni nello storico";
 ?>

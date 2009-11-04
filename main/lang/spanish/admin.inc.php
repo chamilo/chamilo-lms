@@ -1088,4 +1088,6 @@ $InsertTabs = "Insertar Tabs";
 $EditTabs = "Editar Tabs";
 $IsAdministrator = "Es administrador";
 $IsNotAdministrator = "No es administrador";
+$AddTimeLimit = "Añadir límite de tiempo";
+$EditTimeLimit = "Editar límite de tiempo";
 ?>

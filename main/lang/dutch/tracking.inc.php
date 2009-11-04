@@ -231,4 +231,6 @@ $ForumPostsNumber = "Aantal berichten";
 $CourseInformation = "Training informatie";
 $NoAdditionalFieldsWillBeExported = "De extra velden worden niet geëxporteerd";
 $CourseProgress = "Voortgang";
+$SelectFieldToAdd = "Kies het gebruikersprofiel veld om toe te voegen";
+$AddAdditionalProfileField = "Voeg het veld van het gebruikersprofiel toe";
 ?>

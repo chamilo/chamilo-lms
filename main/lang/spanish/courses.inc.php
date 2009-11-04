@@ -79,5 +79,5 @@ $SessionName = "Nombre de la sesión";
 $SessionCategory = "Categoría de la sesión";
 $Expand = "Expandir";
 $Collapse = "Contraer";
-$CourseDetails = "Detalles del curso";
+$CourseDetails = "Descripción del curso";
 ?>

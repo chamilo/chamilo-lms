@@ -241,4 +241,6 @@ $TrainingTime = "Time";
 $CourseProgress = "Progress";
 $ViewMinus = "View minus";
 $ResourcesTracking = "Report on resource";
+$SelectFieldToAdd = "Select user profile field to add";
+$AddAdditionalProfileField = "Add user profile field";
 ?>

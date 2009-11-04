@@ -65,4 +65,5 @@ $FolderCreated = "Ha sido creado un nuevo directorio";
 $LinkAdded = "Ha sido añadido un nuevo enlace";
 $AnnouncementAdded = "Ha sido añadido un anuncio";
 $AgendaAdded = "Ha sido añadido un evento de la agenda ";
+$YouDoNotHaveAnySessionInItsHistory = "Usted no tiene ninguna sesion de formación de su historia";
 ?>

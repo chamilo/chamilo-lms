@@ -91,4 +91,5 @@ $ClearSearchResults = "Cancella i risultati della ricerca";
 $SendInvitation = "Manda un invito";
 $SocialInvitationToFriends = "Invita ad unirsi al mio gruppo di amici";
 $MyCertificates = "Il mio certificato";
+$ToChangeYourEmailMustTypeYourPassword = "Per cambiare l\'indirizzo e-mail devi riscrivere la password";
 ?>

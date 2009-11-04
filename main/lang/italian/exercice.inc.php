@@ -347,4 +347,5 @@ $TooManyIterationsPleaseTryUsingMoreStraightforwardPolygons = "Traccia di nuovo 
 $Thresholds = "Soglia";
 $Delineation = "Demarcazione";
 $QuestionTypeDoesNotBelongToFeedbackTypeInExercise = "Tipo di quesito non coerente con il tipo di feedback del test";
+$SessionIsReadOnly = "La sessione è di sola lettura";
 ?>

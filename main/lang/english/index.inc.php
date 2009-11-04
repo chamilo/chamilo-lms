@@ -65,4 +65,5 @@ $FolderCreated = "New folder created";
 $LinkAdded = "New link added";
 $AnnouncementAdded = "Announcement added";
 $AgendaAdded = "Event added";
+$YouDoNotHaveAnySessionInItsHistory = "You do not have any training session in its history";
 ?>

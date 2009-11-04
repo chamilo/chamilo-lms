@@ -506,7 +506,7 @@ if(isset($_GET['createdir']))
 echo '<div class="actions">';
 
 // link back to the documents overview
-echo '<a href="document.php?curdirpath='.$path.'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview')).get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview').'</a>';
+echo '<a href="document.php?curdirpath='.$path.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
 
 // link to create a folder
 if(!isset($_GET['createdir']))

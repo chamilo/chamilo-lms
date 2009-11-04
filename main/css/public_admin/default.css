@@ -1369,25 +1369,14 @@ div.report_section h4 {
 	font-weight: bold;
 	color: #666;
 	list-style-type: none;
-	margin: 5px 5px 5px 40px;
+	margin: 5px;
 	padding: 5px;
 	margin-bottom: 10px;
 }
 .session_box_title {
-	margin-bottom: 7px;
 }
 .session_box_coach {
 }
-.session_course_item {
-	/* padding: 0px; */
-	margin: 7px 0px;
-}
-
-.session_course_item .courses {
-	margin-bottom: 5px;
-	height:35px;
-}
-
 /***************************************************************
  *  DOKEOS CONFIG SETTINGS OF THE PLATFORM ADMIN SECTION 	   *
  ***************************************************************/
@@ -2409,6 +2398,15 @@ span.radio {
   color:#555;
   padding:0px 10px 0 0;
   font-weight:normal;
+}
+.buttom_extra_submit_next{
+	background-image:url(images/button_next.gif);
+	background-repeat:no-repeat;
+	background-position:left center;
+	padding-left:30px;
+	background-color:#E5EDF9;
+	border-color : #D4E2F6;
+	height:25px;
 }
 /*SOCIAL TOOL*/
 div.image-social-content {

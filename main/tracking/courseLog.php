@@ -821,7 +821,9 @@ function display_additional_profile_fields(){
 
 	// the form elements for the $_GET parameters (because the form is passed through GET
 	foreach ($_GET as $key=>$value){
-		$return .= '<input type="hidden" name="'.$key.'" value="'.Security::Remove_XSS($value).'" />';
+		if ($key <> 'additional_profile_field')	{
+			$return .= '<input type="hidden" name="'.$key.'" value="'.Security::Remove_XSS($value).'" />';
+		}
 	}
 
 	// the submit button

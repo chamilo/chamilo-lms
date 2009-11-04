@@ -25,18 +25,20 @@ function validate_data($users) {
 	global $defined_auth_sources;
 	$errors = array();
 	$usernames = array();
+	
+	// 1. Check if mandatory fields are set.
+	$mandatory_fields = array('LastName', 'FirstName');
+	if (api_get_setting('registration', 'email') == 'true') {
+		$mandatory_fields[] = 'Email';
+	}
 	foreach ($users as $index => $user) {
-		// 1. Check if mandatory fields are set.
-		$mandatory_fields = array('LastName', 'FirstName');
-		if (api_get_setting('registration', 'email') == 'true') {
-			$mandatory_fields[] = 'Email';
-		}
-		foreach ($mandatory_fields as $key => $field) {
+		foreach ($mandatory_fields as $field) {
 			if (empty($user[$field])) {
 				$user['error'] = get_lang($field.'Mandatory');
 				$errors[] = $user;
 			}
 		}
+		
 		// 2. Check username, first, check whether it is empty.
 		if (!UserManager::is_username_empty($user['UserName'])) {
 			// 2.1. Check whether username is too long.
@@ -171,7 +173,7 @@ function save_data($users) {
 			if ($send_mail) {
 				$recipient_name = api_get_person_name($user['FirstName'], $user['LastName'], null, PERSON_NAME_EMAIL_ADDRESS);
 				$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-				$emailbody = get_lang('Dear').api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('Settings')." $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path('WEB_PATH')." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";
+				$emailbody = get_lang('Dear').' '.api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path('WEB_PATH')." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";
 				$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 				$email_admin = api_get_setting('emailAdministrator');
 				@api_mail($recipient_name, $user['Email'], $emailsubject, $emailbody, $sender_name, $email_admin);
@@ -290,8 +292,8 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	$tok = Security::get_token();
 
 	if (strcmp($file_type, 'csv') === 0) { //&& strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {
-		$users = parse_csv_data($_FILES['import_file']['tmp_name']);
-		$errors = validate_data($users);
+		$users	= parse_csv_data($_FILES['import_file']['tmp_name']);		
+		$errors = validate_data($users);		
 		$error_kind_file = false;
 	} elseif (strcmp($file_type, 'xml') === 0) { // && strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {
 		$users = parse_xml_data($_FILES['import_file']['tmp_name']);
@@ -317,22 +319,16 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	}
 
 	$inserted_in_course = array();
-
-	if (strcmp($file_type, 'csv') === 0) // this replace if (strcmp($_FILES['import_file']['type'], 'text/'.$file_type.'') === 0)
-	{
-		save_data($users_to_insert);
-		
-	} elseif (strcmp($file_type, 'xml') === 0) {
-		
-		save_data($users_to_insert);
-		
-	} else {
-		
+	// this replace if (strcmp($_FILES['import_file']['type'], 'text/'.$file_type.'') === 0)
+	if (strcmp($file_type, 'csv') === 0) {
+		save_data($users_to_insert);		
+	} elseif (strcmp($file_type, 'xml') === 0) {		
+		save_data($users_to_insert);		
+	} else {		
 		$error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
 		header('Location: '.api_get_self().'?warn='.urlencode($error_message).'&amp;file_type='.$file_type.'&amp;sec_token='.$tok);
-		exit ();
-	}
-	
+		exit;
+	}	
 
 	if (count($errors) > 0) {
 		$see_message_import = get_lang('FileImportedJustUsersThatAreNotRegistered');

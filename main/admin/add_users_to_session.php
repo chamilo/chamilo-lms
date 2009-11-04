@@ -7,7 +7,7 @@
 */
 
 // name of the language file that needs to be included
-$language_file='admin';
+$language_file=array('admin','registration');
 
 // resetting the course id
 $cidReset=true;
@@ -236,8 +236,8 @@ if($_POST['form_sent']) {
 	}
 
 	if ($form_sent == 1) {
-
-		SessionManager::suscribe_users_to_session($id_session,$UserList,true);
+		//added a parameter to send emails when registering a user
+		SessionManager::suscribe_users_to_session($id_session,$UserList,true,true);
 
 		//adding the session to the access_url_rel_session table
 		global $_configuration;

@@ -185,7 +185,7 @@ if(api_get_setting('use_session_mode')=='true')
  <h4><?php Display::display_icon('agenda.gif', get_lang('Sessions')); ?> <?php echo get_lang('Sessions') ?></h4>
  <ul>
  <li style="list-style-type:none"><form method="POST" action="session_list.php">
-	<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
+	<input type="text" name="keyword_name" value="<?php echo $keyword_url; ?>"/>
 	<button class="search" type="submit"> <?php echo get_lang('Search');?>
 			</button>
 	</form>

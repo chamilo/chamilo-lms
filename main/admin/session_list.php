@@ -189,7 +189,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	  </div>';
 	?>
 	<form method="POST" action="session_list.php">
-		<input type="text" name="keyword" value="<?php echo Security::remove_XSS($_GET['keyword']); ?>"/>
+		<input type="text" name="keyword_name" value="<?php echo Security::remove_XSS($_GET['keyword_name']); ?>"/>
 		<button class="search" type="submit" name="name" value="<?php echo get_lang('Search') ?>"><?php echo get_lang('Search') ?></button>
 		<a href="session_list.php?search=advanced"><?php echo get_lang('AdvancedSearch'); ?></a>
 		</form>

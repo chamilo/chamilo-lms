@@ -1920,7 +1920,7 @@ div.image-social-content center.friend {
  *  BUTTONS	                                         *
  *****************************************************/
 /* BUTTONS */
-button {
+button,input[type="submit"] {
 	margin:5px 5px 3px 0px !important;
 	background-color: #DFDFDF;
 	border-width: 1px;
@@ -1938,23 +1938,23 @@ button {
 	padding:5px 15px 5px 15px;
 	vertical-align:middle;
 }
-button:hover {
+button:hover input[type="submit"]:hover{
 	background-color:#cbcbcb;
 	color:#545454;
 	border-style: inset;
 }
 /* button with image */
-button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back {
+button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back, input[type="submit"].submit_next {
 	padding-left:30px;
 	background-position:10px;
 	background-repeat:no-repeat;
 }
 /* POSITIVE */
-button.save, button.add, button.search, button.refresh, button.upload, button.login, button.plus, button.minus, button.next, button.back {
+button.save, button.add, button.search, button.refresh, button.upload, button.login, button.plus, button.minus, button.next, button.back, input[type="submit"].submit_next  {
 	background-color:#E5EDF9;
 	border-color: #D4E2F6;
 }
-button.save:hover, button.refresh:hover, button.upload:hover, button.add:hover, button.search:hover, button.login:hover, button.plus:hover, button.minus:hover, button.next:hover, button.back:hover {
+button.save:hover, button.refresh:hover, button.upload:hover, button.add:hover, button.search:hover, button.login:hover, button.plus:hover, button.minus:hover, button.next:hover, button.back:hover, input[type="submit"].submit_next:hover {
 	border-color: #D4E2F6;
 	background-color:#D4E2F6;
 }
@@ -1997,7 +1997,7 @@ button.minus {
 	background-image:url(images/button_minus.gif);
 }
 /*including "next" image*/
-button.next {
+button.next,input[type="submit"].submit_next  {
 	background-image:url(images/button_next.gif);
 }
 /*including "back" image*/

@@ -69,6 +69,7 @@ if ($_POST['formSent']) {
 			// $root = @simplexml_load_string(api_utf8_encode_xml(file_get_contents($_FILES['import_file']['tmp_name'])));
 			// To ease debugging let us use:
 			$content = file_get_contents($_FILES['import_file']['tmp_name']);
+			
 			$content = api_utf8_encode_xml($content);
 			$root = @simplexml_load_string($content);
 			unset($content);
@@ -241,6 +242,7 @@ if ($_POST['formSent']) {
 
 				// Creating sessions from <Sessions> base node.
 				if (count($root->Session) > 0) {
+					
 					foreach ($root->Session as $node_session) {
 
 						$course_counter = 0;
@@ -287,6 +289,9 @@ if ($_POST['formSent']) {
 							}
 						}
 
+						$visibility = trim(api_utf8_decode($node_session->Visibility));
+						$session_category_id = trim(api_utf8_decode($node_session->SessionCategory));
+
 						if (!$updatesession) {
 							// Always create a session.
 							$unique_name = false; // This MUST be initializead.
@@ -311,6 +316,8 @@ if ($_POST['formSent']) {
 									id_coach = '$coach_id',
 									date_start = '$date_start',
 									date_end = '$date_end',
+									visibility = '$visibility',
+									session_category_id = '$session_category_id',		
 									session_admin_id=".intval($_user['user_id']);
 							$rs_session = Database::query($sql_session, __FILE__, __LINE__);
 							$session_id = Database::insert_id();
@@ -326,6 +333,8 @@ if ($_POST['formSent']) {
 										id_coach = '$coach_id',
 										date_start = '$date_start',
 										date_end = '$date_end',
+										visibility = '$visibility',
+										session_category_id = '$session_category_id',		
 										session_admin_id=".intval($_user['user_id']);
 								$rs_session = Database::query($sql_session, __FILE__, __LINE__);
 								$session_id = Database::insert_id();
@@ -335,7 +344,9 @@ if ($_POST['formSent']) {
 								$sql_session = "UPDATE $tbl_session SET
 										id_coach = '$coach_id',
 										date_start = '$date_start',
-										date_end = '$date_end'
+										date_end = '$date_end',
+										visibility = '$visibility',
+										session_category_id = '$session_category_id'		
 									WHERE name = '$session_name'";
 								$rs_session = Database::query($sql_session, __FILE__, __LINE__);
 								$session_id = Database::query("SELECT id FROM $tbl_session WHERE name='$session_name'", __FILE__, __LINE__);
@@ -358,6 +369,7 @@ if ($_POST['formSent']) {
 							UrlManager::add_session_to_url($session_id, 1);
 						}
 
+
 						// Adding users to the new session.
 						foreach ($node_session->User as $node_user) {
 							$username = UserManager::purify_username(api_utf8_decode($node_user), $purification_option_for_usernames);
@@ -371,24 +383,18 @@ if ($_POST['formSent']) {
 							}
 						}
 
+
 						// Adding courses to a session.
+						
+						
+						
 						foreach ($node_session->Course as $node_course) {
 							$course_code = Database::escape_string(trim(api_utf8_decode($node_course->CourseCode)));
 							// Verify that the course pointed by the course code node exists.
 							if (CourseManager::course_exists($course_code)) {
 								// If the course exists we continue.
 								$course_info = CourseManager::get_course_information($course_code);
-								// Searching the coach.
-								$coach = UserManager::purify_username(api_utf8_decode($node_course->Coach), $purification_option_for_usernames);
-								if (!empty($coach)) {
-									$coach_id = UserManager::get_user_id_from_username($coach);
-									if ($coach_id === false) {
-										$error_message .= get_lang('UserDoesNotExist').' : '.$coach.'<br />';
-										$coach_id = '';
-									}
-								} else {
-									$coach_id = '';
-								}
+							
 								$session_course_relation = SessionManager::relation_session_course_exist($session_id, $course_code);
 								if (!$session_course_relation) {
 									$sql_course = "INSERT INTO $tbl_session_course SET
@@ -396,34 +402,53 @@ if ($_POST['formSent']) {
 											id_session='$session_id'";
 									$rs_course = Database::query($sql_course, __FILE__, __LINE__);
 								}
-								if (Database::affected_rows()) {
-									$course_counter++;
-									$users_in_course_counter = 0;
-									foreach ($node_course->User as $node_user) {
-										$username = UserManager::purify_username(api_utf8_decode($node_user), $purification_option_for_usernames);
-										$user_id = UserManager::get_user_id_from_username($username);
-										if ($user_id !== false) {
-											// Adding to session_rel_user table.
-											$sql = "INSERT IGNORE INTO $tbl_session_user SET
-													id_user='$user_id',
-													id_session = '$session_id'";
-											$rs_user = Database::query($sql, __FILE__, __LINE__);
-											$user_counter++;
-											// Adding to session_rel_user_rel_course table.
-											$sql = "INSERT IGNORE INTO $tbl_session_course_user SET
-													id_user='$user_id',
-													course_code='$course_code',
-													id_session = '$session_id'";
-											$rs_users = Database::query($sql, __FILE__, __LINE__);
-											$users_in_course_counter++;
-										} else {
-											$error_message .= get_lang('UserDoesNotExist').' : '.$username.'<br />';
-										}
+								
+								$course_coachs = explode(",",$node_course->Coach);
+																
+								// adding coachs to session course user							
+								foreach ($course_coachs as $course_coach) {
+									$coach_id = UserManager::purify_username(api_utf8_decode($course_coach), $purification_option_for_usernames);
+									$coach_id = UserManager::get_user_id_from_username($course_coach);
+									if ($coach_id !== false) {
+										$sql = "INSERT IGNORE INTO $tbl_session_course_user SET
+												id_user='$coach_id',
+												course_code='$course_code',
+												id_session = '$session_id',
+												status = 2 ";
+										$rs_coachs = Database::query($sql, __FILE__, __LINE__);
+									} else {
+										$error_message .= get_lang('UserDoesNotExist').' : '.$user.'<br />';
 									}
-									$update_session_course = "UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='$course_code'";
-									Database::query($update_session_course, __FILE__, __LINE__);
-									$inserted_in_course[$course_code] = $course_info['title'];
 								}
+								
+								// adding users
+								$course_counter++;
+								$users_in_course_counter = 0;									
+								foreach ($node_course->User as $node_user) {
+									$username = UserManager::purify_username(api_utf8_decode($node_user), $purification_option_for_usernames);
+									$user_id = UserManager::get_user_id_from_username($username);
+									if ($user_id !== false) {
+										// Adding to session_rel_user table.
+										$sql = "INSERT IGNORE INTO $tbl_session_user SET
+												id_user='$user_id',
+												id_session = '$session_id'";
+										$rs_user = Database::query($sql, __FILE__, __LINE__);
+										$user_counter++;
+										// Adding to session_rel_user_rel_course table.
+										$sql = "INSERT IGNORE INTO $tbl_session_course_user SET
+												id_user='$user_id',
+												course_code='$course_code',
+												id_session = '$session_id'";
+										$rs_users = Database::query($sql, __FILE__, __LINE__);
+										$users_in_course_counter++;
+									} else {
+										$error_message .= get_lang('UserDoesNotExist').' : '.$username.'<br />';
+									}
+								}
+								$update_session_course = "UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='$course_code'";
+								Database::query($update_session_course, __FILE__, __LINE__);
+								$inserted_in_course[$course_code] = $course_info['title'];
+
 							}
 
 							if (CourseManager::course_exists($course_code, true)) {
@@ -434,52 +459,62 @@ if ($_POST['formSent']) {
 									if ($vcourse['code'] == $course_code) {
 										// Ignore, this has already been inserted.
 									} else {
-										$coach = UserManager::purify_username(api_utf8_decode($node_course->Coach), $purification_option_for_usernames);
-										if (!empty($coach)) {
-											$coach_id = UserManager::get_user_id_from_username($coach);
-											if ($user_id === false) {
-												$error_message .= get_lang('UserDoesNotExist').' : '.$coach.'<br />';
-												$coach_id = '';
-											}
-										} else {
-											$coach_id = '';
-										}
-
+										
 										$sql_course = "INSERT INTO $tbl_session_course SET
 												course_code = '".$vcourse['code']."',
 												id_session='$session_id'";
 										$rs_course = Database::query($sql_course, __FILE__, __LINE__);
-										if (Database::affected_rows()) {
-											$course_counter++;
-											$users_in_course_counter = 0;
-											foreach ($node_course->User as $node_user) {
-												$username = UserManager::purify_username(api_utf8_decode($node_user), $purification_option_for_usernames);
-												$user_id = UserManager::get_user_id_from_username($username);
-												if ($user_id !== false) {
-													$sql = "INSERT IGNORE INTO $tbl_session_user SET
-															id_user='$user_id',
-															id_session = '$session_id'";
-													$rs_user = Database::query($sql, __FILE__, __LINE__);
-													if (Database::affected_rows()) {
-														$user_counter++;
-													}
-													$sql = "INSERT IGNORE INTO $tbl_session_course_user SET
-															id_user='$user_id',
-															course_code='".$vcourse['code']."',
-															id_session = '$session_id'";
-													$rs_users = Database::query($sql, __FILE__, __LINE__);
-													if (Database::affected_rows()) {
-														$users_in_course_counter++;
-													}
-												} else {
-													$error_message .= get_lang('UserDoesNotExist').' : '.$username.'<br />';
-												}
+										
+										$course_coachs = explode(",",$node_course->Coach);
+																
+										// adding coachs to session course user							
+										foreach ($course_coachs as $course_coach) {
+											$coach_id = UserManager::purify_username(api_utf8_decode($course_coach), $purification_option_for_usernames);
+											$coach_id = UserManager::get_user_id_from_username($course_coach);
+											if ($coach_id !== false) {
+												$sql = "INSERT IGNORE INTO $tbl_session_course_user SET
+														id_user='$coach_id',
+														course_code='{$vcourse['code']}',
+														id_session = '$session_id',
+														status = 2 ";
+												$rs_coachs = Database::query($sql, __FILE__, __LINE__);
+											} else {
+												$error_message .= get_lang('UserDoesNotExist').' : '.$user.'<br />';
 											}
-											Database::query("UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='$course_code'",__FILE__,__LINE__);
 										}
+								
+										// adding users
+										$course_counter++;
+										$users_in_course_counter = 0;									
+										foreach ($node_course->User as $node_user) {
+											$username = UserManager::purify_username(api_utf8_decode($node_user), $purification_option_for_usernames);
+											$user_id = UserManager::get_user_id_from_username($username);
+											if ($user_id !== false) {
+												// Adding to session_rel_user table.
+												$sql = "INSERT IGNORE INTO $tbl_session_user SET
+														id_user='$user_id',
+														id_session = '$session_id'";
+												$rs_user = Database::query($sql, __FILE__, __LINE__);
+												$user_counter++;
+												// Adding to session_rel_user_rel_course table.
+												$sql = "INSERT IGNORE INTO $tbl_session_course_user SET
+														id_user='$user_id',
+														course_code='{$vcourse['code']}',
+														id_session = '$session_id'";
+												$rs_users = Database::query($sql, __FILE__, __LINE__);
+												$users_in_course_counter++;
+											} else {
+												$error_message .= get_lang('UserDoesNotExist').' : '.$username.'<br />';
+											}
+										}
+										$update_session_course = "UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='$course_code'";
+										Database::query($update_session_course, __FILE__, __LINE__);
+										$inserted_in_course[$course_code] = $course_info['title'];
+
 									}
 									$inserted_in_course[$vcourse['code']] = $vcourse['title'];
 								}
+
 							} else {
 								// Tthe course does not exist.
 								$error_message .= get_lang('CourseDoesNotExist').' : '.$course_code.'<br />';
@@ -502,6 +537,7 @@ if ($_POST['formSent']) {
 			///////////////////
 
 			$content = file($_FILES['import_file']['tmp_name']);
+
 			if (!api_strstr($content[0], ';')) {
 				$error_message = get_lang('NotCSV');
 			} else {
@@ -523,6 +559,7 @@ if ($_POST['formSent']) {
 						}
 					}
 				}
+				
 				// looping the sessions
 				foreach ($sessions as $enreg) {
 					$user_counter = 0;
@@ -531,6 +568,8 @@ if ($_POST['formSent']) {
 					$session_name = $enreg['SessionName'];
 					$date_start = $enreg['DateStart'];
 					$date_end = $enreg['DateEnd'];
+					$visibility = $enreg['Visibility'];
+					$session_category_id = $enreg['SessionCategory'];
 
 					// searching a coach
 					if (!empty($enreg['Coach'])) {
@@ -569,6 +608,8 @@ if ($_POST['formSent']) {
 								id_coach = '$coach_id',
 								date_start = '$date_start',
 								date_end = '$date_end',
+								visibility = '$visibility',
+								session_category_id = '$session_category_id',				
 								session_admin_id=".intval($_user['user_id']);
 						$rs_session = Database::query($sql_session, __FILE__, __LINE__);
 						$session_id = Database::insert_id();
@@ -582,7 +623,10 @@ if ($_POST['formSent']) {
 									name = '$session_name',
 									id_coach = '$coach_id',
 									date_start = '$date_start',
-									date_end = '$date_end'";
+									date_end = '$date_end',
+									visibility = '$visibility',
+									session_category_id = '$session_category_id'";
+								
 							$rs_session = Database::query($sql_session, __FILE__, __LINE__);
 							// We get the last insert id.
 							$my_session_result = SessionManager::get_session_by_name($session_name);
@@ -593,7 +637,9 @@ if ($_POST['formSent']) {
 							$sql_session = "UPDATE $tbl_session SET
 									id_coach = '$coach_id',
 									date_start = '$date_start',
-									date_end = '$date_end'
+									date_end = '$date_end',
+									visibility = '$visibility',
+									session_category_id = '$session_category_id'		
 								WHERE name = '$session_name'";
 							$rs_session = Database::query($sql_session, __FILE__, __LINE__);
 							$session_id = Database::query("SELECT id FROM $tbl_session WHERE name='$session_name'", __FILE__, __LINE__);
@@ -626,6 +672,7 @@ if ($_POST['formSent']) {
 
 					foreach ($courses as $course) {
 						$course_code = api_strtoupper(api_substr($course, 0, api_strpos($course, '[')));
+
 						if (CourseManager::course_exists($course_code)) {
 
 							// If the course exists we continue
@@ -649,12 +696,34 @@ if ($_POST['formSent']) {
 							$rs_course = Database::query($sql_course, __FILE__, __LINE__);
 							$course_counter++;
 
-							$users = api_substr($course, api_strpos($course, '[', 1) + 1 , api_strpos($course, ']', 1));
-							$users = explode('|', $enreg['Users']);
+							$course_split = array();							
+							$tok = strtok($course, "[]");							
+							while ($tok !== false) {
+							    $course_split[] = $tok;
+							    $tok = strtok("[]");
+							}
+							
+							$course_coachs = explode(",",$course_split[1]);
+							$course_users = explode(",",$course_split[2]);
+							
+							// adding coachs to session course user							
+							foreach ($course_coachs as $course_coach) {
+								$coach_id = UserManager::get_user_id_from_username($course_coach);
+								if ($coach_id !== false) {
+									$sql = "INSERT IGNORE INTO $tbl_session_course_user SET
+											id_user='$coach_id',
+											course_code='$course_code',
+											id_session = '$session_id',
+											status = 2 ";
+									$rs_coachs = Database::query($sql, __FILE__, __LINE__);
+								} else {
+									$error_message .= get_lang('UserDoesNotExist').' : '.$user.'<br />';
+								}
+							}
+														
 							$users_in_course_counter = 0;
-
 							// Adding the relationship "Session - Course - User".
-							foreach ($users as $user) {
+							foreach ($course_users as $user) {
 								$user_id = UserManager::get_user_id_from_username($user);
 								if ($user_id !== false) {
 									$sql = "INSERT IGNORE INTO $tbl_session_course_user SET
@@ -667,7 +736,8 @@ if ($_POST['formSent']) {
 									$error_message .= get_lang('UserDoesNotExist').' : '.$user.'<br />';
 								}
 							}
-							Database::query("UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='$course_code'", __FILE__, __LINE__);
+							$sql = "UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='$course_code'";
+							Database::query($sql,__FILE__,__LINE__);
 
 							$course_info = CourseManager::get_course_information($course_code);
 							$inserted_in_course[$course_code] = $course_info['title'];
@@ -676,53 +746,61 @@ if ($_POST['formSent']) {
 						}
 
 						if (CourseManager::course_exists($course_code, true)) {
+
 							$list = CourseManager :: get_courses_info_from_visual_code($course_code);
+							
 							foreach ($list as $vcourse) {
-								if ($vcourse['code'] == $course_code) {
+								if ($vcourse['code'] == $course_code) {									
 									// Ignore, this has already been inserted.
 								} else {
+									
 									$coach = api_strstr($course, '[');
 									$coach = api_substr($coach, 1, api_strpos($coach,']') - 1);
-
-									if (!empty($coach)) {
-										$sql_coach = "SELECT user_id FROM $tbl_user WHERE username='$coach'";
-										$rs_coach = Database::query($sql_coach,__FILE__,__LINE__);
-										list($coach) = (Database::fetch_array($rs_coach));
-									} else {
-										$coach = '';
-									}
+																		
 									// Adding the relationship "Session - Course".
 									$sql_course = "INSERT IGNORE INTO $tbl_session_course SET
-											course_code = '".$vcourse['code']."',
-											id_session='$session_id'";
-
+													course_code = '".$vcourse['code']."',
+													id_session='$session_id'";
+									
 									$rs_course = Database::query($sql_course, __FILE__, __LINE__);
-									if (Database::affected_rows()) {
-										$course_counter++;
-										$users = api_substr($course , api_strpos($course,'[', 1) + 1, api_strpos($course,']', 1));
-										$users = explode('|', $enreg['Users']);
-										$users_in_course_counter = 0;
-										foreach ($users as $user) {
-											$sqlUser = "SELECT user_id FROM $tbl_user WHERE username='".$user."'";
-											$rs_user = Database::query($sqlUser);
-											list($user_id) = (Database::fetch_array($rs_user));
-											$sql = "INSERT INTO $tbl_session_course_user SET
+									
+									// adding coachs to session course user							
+									foreach ($course_coachs as $course_coach) {
+										$coach_id = UserManager::get_user_id_from_username($course_coach);
+										if ($coach_id !== false) {
+											$sql = "INSERT IGNORE INTO $tbl_session_course_user SET
+													id_user='$coach_id',
+													course_code='{$vcourse['code']}',
+													id_session = '$session_id',
+													status = 2 ";
+											$rs_coachs = Database::query($sql, __FILE__, __LINE__);
+										} else {
+											$error_message .= get_lang('UserDoesNotExist').' : '.$user.'<br />';
+										}
+									}
+																
+									$users_in_course_counter = 0;
+									// Adding the relationship "Session - Course - User".
+									foreach ($course_users as $user) {
+										$user_id = UserManager::get_user_id_from_username($user);
+										if ($user_id !== false) {
+											$sql = "INSERT IGNORE INTO $tbl_session_course_user SET
 													id_user='$user_id',
-													course_code='".$vcourse['code']."',
+													course_code='{$vcourse['code']}',
 													id_session = '$session_id'";
 											$rs_users = Database::query($sql, __FILE__, __LINE__);
-											if (Database::affected_rows()) {
-												$users_in_course_counter++;
-											}
+											$users_in_course_counter++;
+										} else {
+											$error_message .= get_lang('UserDoesNotExist').' : '.$user.'<br />';
 										}
-										Database::query("UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='".$vcourse['code']."'", __FILE__, __LINE__);
 									}
+									Database::query("UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE course_code='".$vcourse['code']."'", __FILE__, __LINE__);	
 								}
 							}
 							$inserted_in_course[$vcourse['code']] = $vcourse['title'];
 						}
 					}
-
+												
 					$sql_update_users = "UPDATE $tbl_session SET nbr_users='$user_counter', nbr_courses='$course_counter' WHERE id='$session_id'";
 					Database::query($sql_update_users, __FILE__, __LINE__);
 				}

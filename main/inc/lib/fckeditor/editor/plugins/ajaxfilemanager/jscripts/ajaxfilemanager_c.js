@@ -140,8 +140,8 @@ return false;}; function getUrl(index,limitNeeded , viewNeeded, searchNeeded)
 }
 if(typeof(viewNeeded) == 'boolean' && viewNeeded)
 { queryStr += (queryStr == ''?'':'&') + 'view=' + getView(); excluded[excluded.length] = 'view';}
-if(typeof(searchNeeded) == 'boolean' && searchNeeded && searchRequired)
-{ var search_recursively = 0; $('input[@name=search_recursively][@checked]').each( function()
+if(typeof(searchNeeded) == 'boolean' && searchNeeded && searchRequired) // Below a temporal hack for Dokeos, change var search_recursively from = 0 to = 1 while radio button is deactivated into ajaxfilemanager.php Now alltime is recursively
+{ var search_recursively = 1; $('input[@name=search_recursively][@checked]').each( function()
 { search_recursively = this.value;} ); var searchFolder = document.getElementById('search_folder'); queryStr += (queryStr == ''?'':'&') + 'search=1&search_name=' + $('#search_name').val() + '&search_recursively=' + search_recursively + '&search_mtime_from=' + $('#search_mtime_from').val() + '&search_mtime_to=' + $('#search_mtime_to').val() + '&search_folder=' + searchFolder.options[searchFolder.selectedIndex].value; excluded[excluded.length] = 'search'; excluded[excluded.length] = 'search_recursively'; excluded[excluded.length] = 'search_mtime_from'; excluded[excluded.length] = 'search_mtime_to'; excluded[excluded.length] = 'search_folder'; excluded[excluded.length] = 'search_name'; excluded[excluded.length] = 'search';}
 return appendQueryString(appendQueryString(urls[index], queryString), queryStr, excluded);}; function changeView()
 { var url = getUrl('view', true, true); $('#rightCol').empty(); ajaxStart('#rightCol'); $('#rightCol').load(url, {}, function(){ ajaxStop('#rightCol img.ajaxLoadingImg'); urls.present = getUrl('home', true, true); initAfterListingLoaded();});}; function goParentFolder()

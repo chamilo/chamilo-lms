@@ -256,7 +256,7 @@ if($modifyAnswers)
 
 ?>
 
-<form method="post" action="<?php echo api_get_self(); ?>?hotspotadmin=<?php echo $modifyAnswers; ?>" name="frm_exercise">
+<form method="post" action="<?php echo api_get_self(); ?>?hotspotadmin=<?php echo $modifyAnswers; ?>" id="frm_exercise" name="frm_exercise">
 <table border="0" cellpadding="0" cellspacing="2" width="100%">
 	<tr>
 		<td colspan="2" valign="bottom">

@@ -4578,7 +4578,7 @@ function DokeosWSSuscribeCoursesToSession($params) {
 			if (!$exists) {
 				// if the course isn't subscribed yet
 
-				$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course (id_session,course_code, id_coach) VALUES ('$id_session','$enreg_course','$id_coach')";
+				$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course (id_session,course_code) VALUES ('$id_session','$enreg_course')";
 				Database::query($sql_insert_rel_course, __FILE__, __LINE__);
 
 				// We add the current course in the existing courses array, to avoid adding another time the current course

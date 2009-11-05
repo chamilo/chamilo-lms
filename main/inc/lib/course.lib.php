@@ -827,9 +827,9 @@ class CourseManager {
 
 		// A course coach?
 		if (Database::num_rows(Database::query("SELECT id_coach
-					FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." AS session_course
+					FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." 
 					WHERE id_session='".$_SESSION['id_session']."'
-					AND id_coach = '$user_id'
+					AND id_user = '$user_id' AND status = 2
 					AND course_code='$course_code'", __FILE__, __LINE__))) {
 			return true;
 		}
@@ -920,15 +920,15 @@ class CourseManager {
 		$users = array();
 
 		// We get the coach for the given course in a given session.
-		$rs = Database::query('SELECT id_coach FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE).
-				' WHERE id_session="'.$session_id.'" AND course_code="'.$course_code.'"', __FILE__, __LINE__);
+		$rs = Database::query('SELECT id_user FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
+				' WHERE id_session="'.$session_id.'" AND course_code="'.$course_code.'" AND status = 2', __FILE__, __LINE__);
 		while ($user = Database::fetch_array($rs)) {
-			$user_info = Database::get_user_info_from_id($user['id_coach']);
+			$user_info = Database::get_user_info_from_id($user['id_user']);
 			$user_info['status'] = $user['status'];
 			$user_info['role'] = $user['role'];
 			$user_info['tutor_id'] = $user['tutor_id'];
 			$user_info['email'] = $user['email'];
-			$users[$user['id_coach']] = $user_info;
+			$users[$user['id_user']] = $user_info;
 		}
 
 		// We get the session coach.
@@ -1727,14 +1727,17 @@ class CourseManager {
 	 * @author @author Carlos Vargas <carlos.vargas@dokeos.com>, Dokeos Latino
 	 */
 	public static function get_email_of_tutor_to_session($session) {
-		$row_email = Database::fetch_array(Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)."
-				WHERE id_session='".Database::escape_string($session)."'", __FILE__, __LINE__));
+		$row_email = Database::fetch_array(Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
+				WHERE id_session='".Database::escape_string($session)."' AND status = 2", __FILE__, __LINE__));
+				
 		$result_user = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
-				WHERE user_id=".$row_email['id_coach'], __FILE__, __LINE__);
+				WHERE user_id=".$row_email['id_user'], __FILE__, __LINE__);
+				
 		while ($row_emails = Database::fetch_array($result_user)) {
 			$name_tutor = api_get_person_name($row_emails['firstname'], $row_emails['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
 			$mail_tutor = array($row_emails['email'] => $name_tutor);
 		}
+		
 		return $mail_tutor;
 	}
 

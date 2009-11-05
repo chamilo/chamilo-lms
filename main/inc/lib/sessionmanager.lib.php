@@ -308,7 +308,7 @@ class SessionManager {
 	  * @param	bool		Whether to unsubscribe existing users (true, default) or not (false)
 	  * @return	void		Nothing, or false on error
 	  **/
-	public static function suscribe_users_to_session ($id_session,$user_list, $visibility=SESSION_VISIBLE_READ_ONLY, $empty_users=true) {
+	public static function suscribe_users_to_session ($id_session,$user_list, $visibility=SESSION_VISIBLE_READ_ONLY, $empty_users=true,$send_email=false) {
 
 	  	if ($id_session!= strval(intval($id_session))) return false;
 	   	foreach($user_list as $intUser){
@@ -318,16 +318,21 @@ class SessionManager {
 		$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	   	$tbl_session_rel_user 				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 	   	$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
-
-	   	if (empty($visibility)) {
-	   		$sql = "SELECT visibility FROM $tbl_session WHERE id_session='$id_session'";
-			$result = Database::query($sql,__FILE__,__LINE__);
-			$row = Database::fetch_array($result);
-			$visibility = $row['visibility'];
-			if (empty($visibility))
-				$visibility = SESSION_VISIBLE_READ_ONLY; // by default readonly 1
+		
+		$session_info 		= api_get_session_info($id_session);
+		$session_name 		= $session_info['name'];
+		
+		//from function parameter
+		$session_visibility = $visibility;		
+	   	if (empty($session_visibility)) {
+	   		$session_visibility = $session_info['name']; 
+	   		$session_visivility	= $session_info['visibility']; //loaded from DB
+	   		//default status loaded if empty
+			if (empty($session_visivility))
+				$session_visibility = SESSION_VISIBLE_READ_ONLY; // by default readonly 1
 	   	}
-
+		$session_info = api_get_session_info($id_session);
+		$session_name = $session_info['name'];
 
 	   	$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session'";
 		$result = Database::query($sql,__FILE__,__LINE__);
@@ -341,6 +346,44 @@ class SessionManager {
 
 		while($row=Database::fetch_array($result)) {
 			$course_list[]=$row['course_code'];
+		}
+		
+		
+		if ($send_email == true) {
+		    global $_configuration;
+			//sending emails only
+			if(is_array($user_list) && count($user_list)>0) {			
+				foreach($user_list as $enreg_user) {				
+				    if (!in_array($enreg_user,$existingUsers )) {
+					    //send email                             
+					    $emailbody 	= '';
+					    $emailheaders = '';
+					    
+					    $user_info 	= UserManager::get_user_info_by_id($enreg_user);				
+					    $firstname 	= $user_info['firstname'];
+					    $lastname 	= $user_info['lastname'];
+					    $email 		= $user_info['email'];
+						
+					    $emailto = '"'.$firstname.' '.$lastname.'" <'.$email.'>';
+					    $emailsubject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
+					    $emailheaders = 'From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
+					    $emailheaders .= 'Reply-To: '.get_setting('emailAdministrator');
+
+					    if ($_configuration['multiple_access_urls']==true) {
+				            $access_url_id = api_get_current_access_url_id();
+				            if ($access_url_id != -1 ){
+				            	$url 		= api_get_access_url($access_url_id);				            	
+				            	$emailbody	= get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreRegisterToSession')." : ". $session_name  ." \n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');			            	
+				            }
+					    } else {
+					    	$emailbody	= get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreRegisterToSession')." : ". $session_name ." \n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
+					    }
+					    
+					    @api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
+					    
+					}
+				}
+			}		
 		}
 
 		foreach ($course_list as $enreg_course) {
@@ -363,7 +406,7 @@ class SessionManager {
 			foreach ($user_list as $enreg_user) {
 				if(!in_array($enreg_user, $existingUsers)) {
 	                $enreg_user = Database::escape_string($enreg_user);
-					$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user,visibility) VALUES('$id_session','$enreg_course','$enreg_user','$visibility')";
+					$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user,visibility) VALUES('$id_session','$enreg_course','$enreg_user','$session_visivility')";
 					Database::query($insert_sql,__FILE__,__LINE__);
 					if(Database::affected_rows()) {
 						$nbr_users++;
@@ -453,7 +496,7 @@ class SessionManager {
 			}
 			if (!$exists) {
 				//if the course isn't subscribed yet
-				$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course (id_session,course_code, id_coach) VALUES ('$id_session','$enreg_course','$id_coach')";
+				$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course (id_session,course_code) VALUES ('$id_session','$enreg_course')";
 				Database::query($sql_insert_rel_course ,__FILE__,__LINE__);
 				//We add the current course in the existing courses array, to avoid adding another time the current course
 				$existingCourses[]=array('course_code'=>$enreg_course);

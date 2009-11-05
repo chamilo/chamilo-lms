@@ -36,7 +36,6 @@ $TABLETRACK_DEFAULT = $_configuration['statistics_database'].".track_e_default";
 		FUNCTIONS
 ==============================================================================
 */
-
 /**
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @desc Record information for open event (when homepage is opened)
@@ -446,11 +445,16 @@ function create_event_exercice($exo_id)
 		$row = Database::fetch_array($sql);
 		return $row['exe_id'];
 	}
-
-	$sql = "INSERT INTO $TABLETRACK_EXERCICES ( exe_user_id, exe_cours_id )
-			VALUES (  ".$user_id.",  '".$_cid."' )";
+    if (isset($_SESSION['expired_time'])) {
+    	$expired_date = $_SESSION['expired_time'];
+    } else {
+    	$expired_date = '0000-00-00 00:00:00';
+    }
+	$sql = "INSERT INTO $TABLETRACK_EXERCICES ( exe_user_id, exe_cours_id,expired_time_control,exe_exo_id)
+			VALUES (  ".$user_id.",  '".$_cid."' ,'".$expired_date."','".$exo_id."')";
 	$res = @Database::query($sql,__FILE__,__LINE__);
 	$id= Database::insert_id();
+  unset($_SESSION['expired_time']);
 	return $id;
 }
 

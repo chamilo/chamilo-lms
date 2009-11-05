@@ -512,7 +512,7 @@ $(document).ready(
 
         <p class="searchButtons">
         	<span class="left" id="linkClose" style="display:none">
-                  <!-- comment these lines while integrating into dokeos -->
+                  <!-- comment these lines while integrating into Dokeos -->
         		<!--<input  type="button" value="<?php // echo LBL_ACTION_CLOSE; ?>" onclick="return cancelSelectFile();"  class="button"> -->
         	</span>
         	<span class="right" id="linkSearch">

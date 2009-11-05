@@ -70,7 +70,7 @@
 		$pagination->setNextText(PAGINATION_NEXT);
 		$pagination->setLastText(PAGINATION_LAST);
 		$pagination->setLimit(!empty($_GET['limit'])?intval($_GET['limit']):CONFIG_DEFAULT_PAGINATION_LIMIT);
-		echo $pagination->getPaginationHTML();
+		//echo $pagination->getPaginationHTML(); // temporal comment while is fixed pagination integration on Dokeos
 
 		///////Dokeos fix for count hidden folders
 			$count_hideItem =0;

@@ -1178,7 +1178,7 @@ if (!empty ($error)) {
 			}
 			$submit_btn .= "</button>";
       if ($exercise_row['expired_time'] != 0) {
-      	   echo $submit_btn ="<input class='buttom_extra_submit_next' type='submit' value='".$name_btn."' />";
+      	   echo $submit_btn ="<input class='submit_next' type='submit' value='".$name_btn."' />";
       } else {
       	  echo $submit_btn;
       }

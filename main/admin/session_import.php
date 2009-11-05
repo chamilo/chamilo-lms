@@ -392,8 +392,7 @@ if ($_POST['formSent']) {
 								$session_course_relation = SessionManager::relation_session_course_exist($session_id, $course_code);
 								if (!$session_course_relation) {
 									$sql_course = "INSERT INTO $tbl_session_course SET
-											course_code = '$course_code',
-											id_coach='$coach_id',
+											course_code = '$course_code',											
 											id_session='$session_id'";
 									$rs_course = Database::query($sql_course, __FILE__, __LINE__);
 								}
@@ -448,7 +447,6 @@ if ($_POST['formSent']) {
 
 										$sql_course = "INSERT INTO $tbl_session_course SET
 												course_code = '".$vcourse['code']."',
-												id_coach='$coach_id',
 												id_session='$session_id'";
 										$rs_course = Database::query($sql_course, __FILE__, __LINE__);
 										if (Database::affected_rows()) {
@@ -646,8 +644,7 @@ if ($_POST['formSent']) {
 							}
 							// Adding the course to a session
 							$sql_course = "INSERT IGNORE INTO $tbl_session_course SET
-									course_code = '$course_code',
-									id_coach='$coach_id',
+									course_code = '$course_code',									
 									id_session='$session_id'";
 							$rs_course = Database::query($sql_course, __FILE__, __LINE__);
 							$course_counter++;
@@ -697,7 +694,6 @@ if ($_POST['formSent']) {
 									// Adding the relationship "Session - Course".
 									$sql_course = "INSERT IGNORE INTO $tbl_session_course SET
 											course_code = '".$vcourse['code']."',
-											id_coach='$coach',
 											id_session='$session_id'";
 
 									$rs_course = Database::query($sql_course, __FILE__, __LINE__);

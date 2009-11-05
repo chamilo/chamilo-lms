@@ -93,7 +93,7 @@ if($_GET['action'] == 'delete')
 
 	}
 
-	if(!empty($_GET['user'])){
+	if (!empty($_GET['user'])) {
 		Database::query("DELETE FROM $tbl_session_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']),__FILE__,__LINE__);
 		$nbr_affected_rows=Database::affected_rows();
 		Database::query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
@@ -202,13 +202,12 @@ if($session['nbr_courses']==0){
 }
 else {
 	// select the courses
-	$sql = "SELECT code,title,visual_code, nbr_users, lastname, firstname, username
-			FROM $tbl_course,$tbl_session_rel_course
-			LEFT JOIN $tbl_user
-				ON $tbl_session_rel_course.id_coach = $tbl_user.user_id
-			WHERE course_code=code
-			AND id_session='$id_session'
+	$sql = "SELECT code,title,visual_code, nbr_users
+			FROM $tbl_course,$tbl_session_rel_course			
+			WHERE course_code = code			
+			AND	id_session='$id_session'
 			ORDER BY title";
+
 	$result=Database::query($sql,__FILE__,__LINE__);
 	$courses=Database::store_result($result);
 	foreach($courses as $course){

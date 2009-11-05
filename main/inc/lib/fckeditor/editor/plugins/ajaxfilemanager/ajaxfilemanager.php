@@ -214,7 +214,7 @@ $(document).ready(
   	<div id="header">
   		<dl id="currentFolderInfo">
   			<dt><?php echo LBL_CURRENT_FOLDER_PATH; ?></dt>
-  			<dd id="currentFolderPath"><?php echo $folderInfo['path']; ?></dd>
+  			<dt id="currentFolderPath"><?php echo $folderInfo['path']; ?></dt><!-- hack for breadcrumb for Dokeos change <dd> by <dt> -->
   		</dl>
     	<div id="viewList">
 
@@ -466,7 +466,7 @@ $(document).ready(
 
 					foreach(getFolderListing(CONFIG_SYS_ROOT_PATH) as $k=>$v)
 					{
-                              	if(hideFolderName($k))
+                        if(hideFolderName($k))
 						{
 						//shows only those permitted by Dokeos
 						?>
@@ -477,7 +477,8 @@ $(document).ready(
 					}
 
 					?>
-		            </select>
+		          </select>
+                    
 		      <?php
 	          		}
 		      ?></span>

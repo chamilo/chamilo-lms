@@ -83,13 +83,24 @@ if (!empty($course))
 			$Users[$coach['user_id']] = $coach;
 
 		// select session course coach
-		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session_course t3 WHERE t1.user_id=t2.user_id AND t3.id_coach=t2.user_id AND t3.id_session = '".$_SESSION['id_session']."' AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' ORDER BY username";
-		$result=Database::query($query,__FILE__,__LINE__);
-		if($coach = Database::fetch_array($result))
-			$Users[$coach['user_id']] = $coach;
+		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri 
+				FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session_course_user t3 
+				WHERE t1.user_id=t2.user_id 
+				AND t3.id_user=t2.user_id AND t3.status=2 
+				AND t3.id_session = '".$_SESSION['id_session']."' 
+				AND t3.course_code = '".$_course['sysCode']."' 
+				AND t2.last_connection>'".$date_inter."' ORDER BY username";
 
+		$result=Database::query($query,__FILE__,__LINE__);		
+		$course_coachs = array();
+		while ($coachs = Database::fetch_array($result)) {
+			//$course_coachs[] = $coachs['user_id'];	
+			$Users[$coachs['user_id']] = $coachs;
+		}
+
+		//if($coach = Database::fetch_array($result))
+			//$Users[$coach['user_id']] = $coach;
 	}
-
 
 	$user_id=$enreg['user_id'];
 	include('header_frame.inc.php');
@@ -99,6 +110,7 @@ if (!empty($course))
 	<?php
 	foreach($Users as $enreg)
 	{
+		
 		if(!isset($_SESSION['id_session']))
 		{
 			$status=$enreg['status'];

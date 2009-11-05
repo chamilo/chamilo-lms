@@ -359,9 +359,9 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	if (api_strlen($error_message) > 150) {
 		$_SESSION['session_message_import_users'] = $error_message;
 		$error_message = 'session_message';
-	}
-	header('Location: user_list.php?action=show_message&message='.urlencode($see_message_import).'&warn='.urlencode($error_message).'&sec_token='.$tok);
-	exit ();
+	}	
+	header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=show_message&message='.urlencode($see_message_import).'&warn='.urlencode($error_message).'&sec_token='.$tok);
+	exit;
 }
 
 Display :: display_header($tool_name);

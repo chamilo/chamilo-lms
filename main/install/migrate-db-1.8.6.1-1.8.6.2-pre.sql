@@ -57,3 +57,5 @@ ALTER TABLE link_category ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (s
 ALTER TABLE item_property ADD id_session INT NOT NULL DEFAULT 0;
 ALTER TABLE item_property DROP INDEX idx_item_property_toolref, ADD INDEX idx_item_property_toolref (tool, ref, id_session); 
 ALTER TABLE quiz ADD COLUMN expired_time int NOT NULL DEFAULT '0' AFTER feedback_type;
+ALTER TABLE group_info ADD COLUMN chat_state TINYINT DEFAULT 1, ADD INDEX (chat_state);
+ALTER TABLE group_category ADD COLUMN chat_state TINYINT DEFAULT 1, ADD INDEX (chat_state);

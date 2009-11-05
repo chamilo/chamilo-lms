@@ -628,7 +628,7 @@ function update_Db_course($courseDbName)
 		start_time datetime NOT NULL default '0000-00-00 00:00:00',
 		end_time datetime NOT NULL default '0000-00-00 00:00:00',
 		feedback_type int NOT NULL default 0,
-    expired_time int NOT NULL default '0',
+    	expired_time int NOT NULL default '0',
 		session_id smallint default 0,
 		PRIMARY KEY (id)
 		)";
@@ -1001,6 +1001,7 @@ function update_Db_course($courseDbName)
 		announcements_state tinyint unsigned NOT NULL default 0,
 		forum_state tinyint unsigned NOT NULL default 0,
 		wiki_state tinyint unsigned NOT NULL default 1,
+		chat_state tinyint unsigned NOT NULL default 1,
 		secret_directory varchar(255) default NULL,
 		self_registration_allowed tinyint unsigned NOT NULL default '0',
 		self_unregistration_allowed tinyint unsigned NOT NULL default '0',
@@ -1019,6 +1020,7 @@ function update_Db_course($courseDbName)
 		announcements_state tinyint unsigned NOT NULL default 1,
 		forum_state tinyint unsigned NOT NULL default 1,
 		wiki_state tinyint unsigned NOT NULL default 1,
+		chat_state tinyint unsigned NOT NULL default 1,
 		max_student smallint unsigned NOT NULL default 8,
 		self_reg_allowed tinyint unsigned NOT NULL default 0,
 		self_unreg_allowed tinyint unsigned NOT NULL default 0,

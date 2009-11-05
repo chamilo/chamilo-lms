@@ -214,7 +214,7 @@ $(document).ready(
   	<div id="header">
   		<dl id="currentFolderInfo">
   			<dt><?php echo LBL_CURRENT_FOLDER_PATH; ?></dt>
-  			<dd id="currentFolderPath"><?php echo $folderInfo['path']; ?></dd>
+  			<dt id="currentFolderPath"><?php echo $folderInfo['path']; ?></dt><!-- hack for breadcrumb for Dokeos change <dd> by <dt> -->
   		</dl>
     	<div id="viewList">
 
@@ -466,7 +466,7 @@ $(document).ready(
 
 					foreach(getFolderListing(CONFIG_SYS_ROOT_PATH) as $k=>$v)
 					{
-                              	if(hideFolderName($k))
+                        if(hideFolderName($k))
 						{
 						//shows only those permitted by Dokeos
 						?>
@@ -477,7 +477,8 @@ $(document).ready(
 					}
 
 					?>
-		            </select>
+		          </select>
+                    
 		      <?php
 	          		}
 		      ?></span>
@@ -502,10 +503,8 @@ $(document).ready(
                 </td><td><!--add a col while integratins -->
           	<b><?php  // echo LBL_SEARCH_RECURSIVELY; ?></b>&nbsp;&nbsp;
 		<!--change for Dokeos recursively by default  -->
-          	<input type="radio" name="search_recursively" value="1" id="search_recursively_1" class="radio" <?php echo (empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php //echo LBL_RECURSIVELY_YES; ?>
+     <!--     	<input type="radio" name="search_recursively" value="1" id="search_recursively_1" class="radio" <?php //echo (empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php //echo LBL_RECURSIVELY_YES; ?> -->       
         <!--  	<input type="radio" name="search_recursively" value="0" id="search_recursively_0" class="radio" <?php //echo (!empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php //echo LBL_RECURSIVELY_NO; ?> -->
-        
-        
           	</td>
           </tr>
           	</tbody>
@@ -514,7 +513,7 @@ $(document).ready(
 
         <p class="searchButtons">
         	<span class="left" id="linkClose" style="display:none">
-                  <!-- comment these lines while integrating into dokeos -->
+                  <!-- comment these lines while integrating into Dokeos -->
         		<!--<input  type="button" value="<?php // echo LBL_ACTION_CLOSE; ?>" onclick="return cancelSelectFile();"  class="button"> -->
         	</span>
         	<span class="right" id="linkSearch">

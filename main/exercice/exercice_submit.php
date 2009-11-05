@@ -280,7 +280,7 @@ if ($exercise_row['expired_time'] != 0) {
     });
     </script>";
 }
-
+error_log(print_r($_COOKIE,true));
 if ($_configuration['live_exercise_tracking'] == true && $exerciseType == 2 && $exerciseFeedbackType != 1) {
 	$query = 'SELECT * FROM ' . $stat_table . $condition;
 	$result_select = Database::query($query, __FILE__, __LINE__);

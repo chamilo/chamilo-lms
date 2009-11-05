@@ -79,7 +79,7 @@ if (is_array($forums_of_groups)) {
 	}
 }
 
-if 	($current_group['doc_state']!=1 and $current_group['calendar_state']!=1 and $current_group['work_state']!=1 and $current_group['announcements_state']!=1 and $current_group['wiki_state']!=1 and $forum_state_public!=1) {
+if 	($current_group['doc_state']!=1 and $current_group['calendar_state']!=1 and $current_group['work_state']!=1 and $current_group['announcements_state']!=1 and $current_group['wiki_state']!=1 and $current_group['chat_state']!=1 and $forum_state_public!=1) {
 	if (!api_is_allowed_to_edit(null,true) and !GroupManager :: is_user_in_group($_user['user_id'], $current_group['id'])) {
 		echo api_not_allowed($print_headers);
 	}
@@ -214,6 +214,13 @@ if (api_is_allowed_to_edit(false,true) OR GroupManager :: is_user_in_group($_SES
 		//link to the wiki area of this group
 		$tools .= "<div style='margin-bottom: 5px;'><a href=\"../wiki/index.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('wiki.gif', get_lang("GroupWiki"))."&nbsp;".get_lang("GroupWiki")."</a></div>";
 	}
+	
+	if ( $current_group['chat_state'] != TOOL_NOT_AVAILABLE)
+	{
+		//link to the chat area of this group
+		$tools .= "<div style='margin-bottom: 5px;'><a href=\"../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('chat.gif', get_lang("Chat"))."&nbsp;".get_lang("Chat")."</a></div>";
+	}
+	
 	echo '<div class="actions-message" style="margin-bottom:4px;"><b>'.get_lang("Tools").':</b></div>';
 	if (!empty($tools))
 	{
@@ -261,6 +268,12 @@ if (api_is_allowed_to_edit(false,true) OR GroupManager :: is_user_in_group($_SES
 	{
 		//link to the wiki area of this group
 		$tools .= "<a href=\"../wiki/index.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('wiki.gif', get_lang('GroupWiki'))."&nbsp;".get_lang('GroupWiki')."</a><br/>";
+	}
+	
+	if ( $current_group['chat_state'] == TOOL_PUBLIC )
+	{
+		//link to the chat area of this group
+		$tools .= "<a href=\"../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('chat.gif', get_lang('Chat'))."&nbsp;".get_lang('Chat')."</a><br/>";
 	}
 
 	echo '<br/>';

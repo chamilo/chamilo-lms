@@ -321,9 +321,10 @@ class SortableTable extends HTML_Table {
 		global $charset;		
 		$empty_table = false;
 		$html = '';
+		
 		if ($this->get_total_number_of_items() == 0) {
 			$cols = $this->getColCount();
-			$this->setCellAttributes(1, 0, 'style="font-style: italic;text-align:center;" colspan='.$cols);
+			//$this->setCellAttributes(1, 0, 'style="font-style: italic;text-align:center;" colspan='.$cols);
 			if (api_is_xml_http_request()===true) {
 				$message_empty=api_utf8_encode(get_lang('TheListIsEmpty'));
 			} else {
@@ -336,12 +337,30 @@ class SortableTable extends HTML_Table {
 		if (!$empty_table) {
 			$form = $this->get_page_select_form();
 			$nav = $this->get_navigation_html();
+			
+			// @todo This style css must be moved to default.css only for dev		 
+			echo '<style>
+					.grid_container { width:100%;}
+					.grid_item { height: 120px; width:98px;  border:1px dotted #ccc; float:left; padding:5px; margin:8px;}
+					.grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+					.grid_element_1 { width:100px; float:left; text-align:center;margin-bottom:5px;}
+					.grid_element_2 { width:150px; float:left;}
+					
+					.grid_selectbox { width:50%; float:left;}
+					.grid_title 	{ width:30%; float:left;}
+					.grid_nav 		{ float:right;}
+						
+			</style>';
+		
+		
 			//this also must be moved			
 			$html = '<div class="sub-header">';
-			$html .= $form;			
-			$html .= $this->get_table_title().'<br />';			
-			$html .= $nav;			
+			$html .= '<div class="grid_selectbox">'.$form.'</div>';			
+			$html .= '<div class="grid_title">'.$this->get_table_title().'</div>';			
+			$html .= '<div class="grid_nav">'.$nav.'</div>';			
 			$html .= '</div>';
+			
+			$html .= '<div class="clear"></div>';
 			if (count($this->form_actions) > 0) {				
 				$script= '<script language="JavaScript" type="text/javascript">
 																/*<![CDATA[*/
@@ -361,14 +380,7 @@ class SortableTable extends HTML_Table {
 		}
 		$items = $this->get_clean_html(); // getting the items of the table
 		
-		// @todo this styles must be moved to default.css only for practly use this is here		 
-		echo '<style>
-				.grid_container { width:100%;}
-				.grid_item { height: 90px;border:1px dotted #ccc; width:300px; float:left; padding:5px; margin:5px;}
-				.grid_element_0 { width:100px; float:left;}
-				.grid_element_1 { width:180px; float:left; margin-bottom:15px;}
-				.grid_element_2 { width:150px; float:left;}
-		</style>';
+
 				
 		// the generating of style classes must be improved. Maybe we need a a table name to create style on the fly:
 		// i.e: .whoisonline_table_grid_container instead of  .grid_container

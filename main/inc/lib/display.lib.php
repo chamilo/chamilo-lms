@@ -273,7 +273,7 @@ class Display {
 	 * @param string The style that the table will show. You can set 'table' or 'grid' string  
 	 * @author bart.mollet@hogent.be
 	 */
-	public static function display_sortable_table ($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $form_actions=array(),$style='table') {
+	public static function display_sortable_table ($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $form_actions=array(), $style='table') {
 		global $origin;
 		$column = isset ($sorting_options['column']) ? $sorting_options['column'] : 0;
 		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;

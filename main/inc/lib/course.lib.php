@@ -755,8 +755,8 @@ class CourseManager {
 			return true;
 		}
 
-		if (Database::num_rows(Database::query('SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE).
-				' WHERE id_coach = '.$user_id.' AND course_code="'.$course_code.'"', __FILE__, __LINE__)) > 0) {
+		if (Database::num_rows(Database::query('SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
+				' WHERE id_user = '.$user_id.' AND status=2 AND course_code="'.$course_code.'"', __FILE__, __LINE__)) > 0) {
 			return true;
 		}
 

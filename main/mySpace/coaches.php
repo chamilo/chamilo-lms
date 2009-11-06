@@ -67,21 +67,22 @@ if (isset($_POST['export'])) {
 }
 if (isset($_GET["id_student"])) {
 	$id_student = intval($_GET["id_student"]);
-	$sql_coachs = "SELECT DISTINCT src.id_coach " .
-		"FROM $tbl_session_rel_course as src, $tbl_session_rel_course_rel_user as srcru " .
-		"WHERE src.id_coach<>'0' AND src.course_code=srcru.course_code AND srcru.id_user='$id_student' AND srcru.id_session=src.id_session";
+	$sql_coachs = "SELECT DISTINCT srcru.id_user as id_coach" .
+		"FROM $tbl_session_rel_course_rel_user as srcru " .
+		"WHERE srcru.id_user='$id_student' AND srcru.status=2";
 } else {
 	if (api_is_platform_admin()) {
-		$sql_coachs = "SELECT DISTINCT id_coach, user_id, lastname, firstname
-			FROM $tbl_user, $tbl_session_rel_course
-			WHERE id_coach=user_id".$order_clause;
+		$sql_coachs = "SELECT DISTINCT srcru.id_user as id_coach, user_id, lastname, firstname
+			FROM $tbl_user, $tbl_session_rel_course_rel_user srcru
+			WHERE srcru.id_user=user_id AND srcru.status=2 ".$order_clause;
 	} else {
-		$sql_coachs = "SELECT DISTINCT id_coach, $tbl_user.user_id, lastname, firstname
-			FROM $tbl_user as user, $tbl_session_rel_course as session_rel_course, $tbl_course_user as course_rel_user
-			WHERE course_rel_user.course_code=session_rel_course.course_code AND course_rel_user.status='1' AND course_rel_user.user_id='".intval($_SESSION["_uid"])."'
-			AND session_rel_course.id_coach=user.user_id".$order_clause;
+		$sql_coachs = "SELECT DISTINCT id_user as id_coach, $tbl_user.user_id, lastname, firstname
+			FROM $tbl_user as user, $tbl_session_rel_course_user as srcu, $tbl_course_user as course_rel_user
+			WHERE course_rel_user.course_code=srcu.course_code AND course_rel_user.status='1' AND course_rel_user.user_id='".intval($_SESSION["_uid"])."'
+			AND srcu.id_user=user.user_id AND srcu.status=2 ".$order_clause;
 	}
 }
+
 $result_coachs = Database::query($sql_coachs, __FILE__, __LINE__);
 
 if (api_is_western_name_order()) {

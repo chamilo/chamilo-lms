@@ -231,13 +231,16 @@ $current_timestamp = time();
 $expected_time = $current_timestamp+$total_seconds;
 
 $plugin_expired_time=date('M d, Y H:i:s',$expected_time);
+$clock_expired_time=date('Y-m-d H:i:s',$expected_time);
 
 
-if ($exerciseType == 1) {
-  if (!isset($_SESSION['expired_time'])) {
-		  $_SESSION['expired_time'] = $expired_time;
-  }
+if (!isset($_SESSION['expired_time'])) {
+	  $_SESSION['expired_time'] = $clock_expired_time;
+    $_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);
+} else {
+  	$plugin_expired_time =  $_SESSION['end_expired_time'];
 }
+
 
 if ($exercise_row['expired_time'] != 0) { 
     $htmlHeadXtra[] = "<script type=\"text/javascript\">
@@ -1179,7 +1182,7 @@ if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType !
 	if ($table_recorded_not_exist) { //$table_recorded_not_exist
     if ($exercise_row['expired_time'] != 0) {
       $sql_fields = "expired_time_control, ";
-      $sql_fields_values = "'"."$expired_time"."',";     
+      $sql_fields_values = "'"."$clock_expired_time"."',";     
     } else {
       $sql_fields = "";
       $sql_fields_values = "";

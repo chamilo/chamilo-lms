@@ -88,6 +88,10 @@ if ( empty ( $action ) ) {
     $action = $_GET['action'];
 }
 
+//Unset session for clock time
+unset($_SESSION['expired_time']);
+unset($_SESSION['end_expired_time']);
+
 $is_allowedToEdit=api_is_allowed_to_edit(null,true) || $is_courseTutor;
 $nameTools=get_lang('CorrectTest');
 

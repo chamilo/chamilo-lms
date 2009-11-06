@@ -626,9 +626,9 @@ if ($is_platform_admin && $view == 'admin') {
 
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-		$sqlCoachs = "SELECT DISTINCT id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
-			FROM $tbl_user, $tbl_session_course, $tbl_track_login
-			WHERE id_coach=user_id AND login_user_id=user_id
+		$sqlCoachs = "SELECT DISTINCT scu.id_user as id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
+			FROM $tbl_user, $tbl_session_course_user scu, $tbl_track_login
+			WHERE scu.id_user=user_id AND scu.status=2  AND login_user_id=user_id
 			GROUP BY user_id ";
 		//	ORDER BY login_date ".$tracking_direction;
 
@@ -636,9 +636,9 @@ if ($is_platform_admin && $view == 'admin') {
 			$tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
-				$sqlCoachs = "SELECT DISTINCT id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
-					FROM $tbl_user, $tbl_session_course, $tbl_track_login , $tbl_session_rel_access_url session_rel_url
-					WHERE id_coach=user_id AND login_user_id=user_id AND access_url_id = $access_url_id AND session_rel_url.session_id=id_session
+				$sqlCoachs = "SELECT DISTINCT scu.id_user as id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
+					FROM $tbl_user, $tbl_session_course_user scu, $tbl_track_login , $tbl_session_rel_access_url session_rel_url
+					WHERE scu.id_user=user_id AND scu.status=2 AND login_user_id=user_id AND access_url_id = $access_url_id AND session_rel_url.session_id=id_session
 					GROUP BY user_id ";
 			}
 		}

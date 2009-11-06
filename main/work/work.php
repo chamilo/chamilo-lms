@@ -110,6 +110,7 @@ $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 $table_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 $table_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+$table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 /*
 -----------------------------------------------------------
 	Constants and variables
@@ -1034,10 +1035,10 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 
 			//coach of the course
 			$sql_resp = 'SELECT user.email as myemail
-									FROM ' . $table_session_course . ' session_course
+									FROM ' . $table_session_course_user . ' scu
 									INNER JOIN ' . $table_user . ' user
-										ON user.user_id = session_course.id_coach
-									WHERE session_course.id_session = ' . intval($id_session);
+										ON user.user_id = scu.id_user AND scu.status=2
+									WHERE scu.id_session = ' . intval($id_session);
 			$res_resp = Database::query($sql_resp, __FILE__, __LINE__);
 			while ($row_email = Database :: fetch_array($res_resp)) {
 				if (!empty ($row_email['myemail'])) {

@@ -9,6 +9,7 @@ api_block_anonymous_users();
 
 $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 /*
 -----------------------------------------------------------
@@ -27,16 +28,16 @@ Display::display_header(get_lang('UserOnlineListSession'));
 		</td>
 	</tr>
 	<tr>
-		<th class="head">
+		<th>
 			<?php echo get_lang('Name'); ?>
 		</th>
-		<th class="head">
+		<th>
 			<?php echo get_lang('InCourse'); ?>
 		</th>
-		<th class="head">
+		<th>
 			<?php echo get_lang('Email'); ?>
 		</th>
-		<th class="head">
+		<th>
 			<?php echo get_lang('Chat'); ?>
 		</th>
 	</tr>
@@ -49,9 +50,9 @@ Display::display_header(get_lang('UserOnlineListSession'));
 										date_start,
 										date_end
 									FROM $tbl_session as session
-									INNER JOIN $tbl_session_course as session_rel_course
-										ON session_rel_course.id_coach = ".$_user['user_id']."
-										AND session.id = session_rel_course.id_session
+									INNER JOIN $tbl_session_course_user as srcru
+										ON srcru.id_user = ".$_user['user_id']." AND srcru.status=2
+										AND session.id = srcru.id_session
 									ORDER BY date_start, date_end, name",__FILE__,__LINE__);
 
 		while ($session = Database:: fetch_array($result)) {

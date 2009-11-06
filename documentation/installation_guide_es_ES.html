@@ -34,16 +34,16 @@
 
 <ul>
 
-  <li>Vista rapida de las <a href="http://www.dokeos.com/en/node/58">Características de Dokeos&nbsp;</a></li>
+  <li>Vista rápida de las <a href="http://www.dokeos.com/en/node/58">Características de Dokeos&nbsp;</a></li>
 
   <li>Prueba Dokeos en <a href="http://campus.dokeos.com">Free Campus</a></li>
 
 </ul>
 
 
-<p>Esta guía explica como instalar la Gestión de Aprendizaje de Dokeos. Explica como instalar la conversión a PowerPoint Dokeos Oogie
-y la videoconferencia de Dokeos sin embargo estos paquetes
-no son requeridos para usar Dokeos LMS. &nbsp;Por favor lea completamente este documento antes de proceder con la instalación. </p>
+<p>Esta guía explica como instalar el Sistema de Gestión de Aprendizaje de Dokeos. Explica como instalar la conversión a PowerPoint Dokeos Oogie
+y la videoconferencia de Dokeos, aunque estos paquetes
+no son requeridos para usar Dokeos LMS. &nbsp;Por favor, lea completamente este documento antes de proceder con la instalación. </p>
 
 
 Si desea ahorrar tiempo, problemas y dinero, alternativamente puede tener su Portal de Dokeos <a href="http://www.dokeos.com/en/node/6">desplegado</a> o <a href="http://www.dokeos.com/en/node/32">instalado</a> por Dokeos o alguno de sus socios.<br />
@@ -53,7 +53,7 @@ Si desea ahorrar tiempo, problemas y dinero, alternativamente puede tener su Por
 
 <ol>
 
-  <li><a href="#1._Pre-requisites">Pre-requisitos</a></li>
+  <li><a href="#1._Pre-requisites">Prerrequisitos</a></li>
 
   <li><a href="#2._Installation_of_Dokeos_LMS">Instalación de Dokeos LMS</a></li>
 
@@ -65,7 +65,7 @@ Si desea ahorrar tiempo, problemas y dinero, alternativamente puede tener su Por
 
   <li><a href="#6._LDAP">LDAP&nbsp;</a></li>
 
-  <li><a href="#7._Mathematical_formulas">Formulas Matemáticas con LaTeX</a></li>
+  <li><a href="#7._Mathematical_formulas">Fórmulas Matemáticas con LaTeX</a></li>
 
 </ol>
 
@@ -73,7 +73,7 @@ Si desea ahorrar tiempo, problemas y dinero, alternativamente puede tener su Por
 <br />
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="1._Pre-requisites"></a>1. Pre-requisitos</h2>
+<h2><a name="1._Pre-requisites"></a>1. Prerrequisitos</h2>
 
 
 Dokeos
@@ -83,26 +83,26 @@ control remoto y escalabilidad. <br />
 
 <br />
 
-Dokeos es principalmente un LMS que se ejecuta con <span style="font-weight: bold;">Apache 1.3, 2.0</span>, <span style="font-weight: bold;">MySQL 5.1</span> y <span style="font-weight: bold;">PHP 5.1</span> (tambien llamada la trilogía <span style="font-weight: bold;">AMP</span>). <br />
+Dokeos es  un LMS que se ejecuta con <span style="font-weight: bold;">Apache 1.3, 2.0</span>, <span style="font-weight: bold;">MySQL 5.1</span> y <span style="font-weight: bold;">PHP 5.1</span> (trilogía también llamada  <span style="font-weight: bold;">AMP</span>).<br />
 
 <br />
 
 
-Puede ser enriquecida con conversión a &nbsp;PowerPoint (característica llamada Dokeos
-Oogie) mediante el uso de <span style="font-weight: bold;">OpenOffice.org</span> + Java. Quizas usted también desee agregar el plugin de Videoconferencia de Dokeos mediante el uso de <span style="font-weight: bold;">RED5</span>
-servidor de codigo abierto de Flash. <br />
+Puede ser enriquecida con la conversión a &nbsp;PowerPoint (característica llamada Dokeos
+Oogie) mediante el uso de <span style="font-weight: bold;">OpenOffice.org</span> + Java. Quizás  también quiera agregar el plugin de Videoconferencia de Dokeos mediante el uso de <span style="font-weight: bold;">RED5</span>
+servidor de código abierto de Flash. <br />
 
 
 <br />
 
-Todo este software es software de código abierto y está disponible libremente. <br />
+Todo este software es software de código abierto y está disponible libremente.<br />
 
 <br />
 
-Para ejecutar Dokeos <span style="font-weight: bold;">LMS</span> en su servidor, usted necesita instalar WAMP, LAMP o MAMP:
+Para ejecutar Dokeos <span style="font-weight: bold;">LMS</span> en su servidor,  necesita instalar WAMP, LAMP o MAMP:
 <ul>
 
-  <li>Para instalar <span style="font-weight: bold;">WAMP</span> (AMP en Windows), nosotros recomendamos el instalador <a href="http://www.apachefriends.org/en/xampp.html">XAMPP</a> .exe<a href="http://www.apachefriends.org/en/xampp.html"></a></li>
+  <li>Para instalar <span style="font-weight: bold;">WAMP</span> (AMP en Windows),  recomendamos el instalador <a href="http://www.apachefriends.org/en/xampp.html">XAMPP</a> .exe<a href="http://www.apachefriends.org/en/xampp.html"></a></li>
 
   <li>Para instalar <span style="font-weight: bold;">LAMP</span>
 (AMP en Linux), use el administrador de paquetes de su distribución favorita (Synaptic, RPMFinder etc.).
@@ -121,16 +121,15 @@ Por ejemplo, en un servidor Ubuntu,&nbsp;use Shell o Synaptic siguiendo la
 
 Usted necesitará una cuenta de acceso y una contraseña que le permita administrar y crear
 al menos una base de datos. De manera predeterminada, Dokeos creará una nueva base de datos
-para cada curso creado. Esto significa que su proveedor debera permitirle crear y
-administrar varias bases de datos. Usted también puede instalar Dokeos y usar
-sólo una base de datos, en ese caso, usted tiene que seleccionar esta opción durante
+para cada curso. Esto significa que su proveedor deberá permitirle crear y
+administrar varias bases de datos. Usted también puede instalar Dokeos con una sola base de datos, en ese caso,  deberá seleccionar esta opción durante
 la instalación.
 <br />
 
 
 <br />
 
-Para aprovechar la ventaja de la conversión <span style="font-weight: bold;">Oogie</span> de PowerPoint / Impress, usted necesita: <br />
+Para aprovechar la ventaja de la conversión <span style="font-weight: bold;">Oogie</span> de PowerPoint / Impress,  necesita: <br />
 
 
 <ul>
@@ -144,12 +143,12 @@ Para aprovechar la ventaja de la conversión <span style="font-weight: bold;">Oo
 
 <br />
 
-Para aprovechar la ventaja de la <span style="font-weight: bold;">Videoconferencia</span> de Dokeos, usted necesita:<br />
+Para aprovechar la ventaja de la <span style="font-weight: bold;">Videoconferencia</span> de Dokeos, necesita:<br />
 
 
 <ul>
 
-  <li><a href="http://osflash.org/red5">Servidor de Flash de Codigo Abierto RED5</a><a href="http://osflash.org/red5"></a></li>
+  <li><a href="http://osflash.org/red5">Servidor de Flash de Código Abierto RED5</a><a href="http://osflash.org/red5"></a></li>
 
 </ul>
 
@@ -165,24 +164,24 @@ Para aprovechar la ventaja de la <span style="font-weight: bold;">Videoconferenc
 
   <li><a href="http://www.dokeos.com/node/33">Descargar Dokeos LMS</a></li>
 
-  <li>Descomprimirlo</li>
+  <li>Descomprimirlo.</li>
 
-  <li>Copiar el directorio de dokeos en su directorio web de Apache. Este puede ser
-    <span style="font-weight: bold;">C:\xampp\htdocs\</span> en un servidor Windows o <span style="font-weight: bold;">/var/www/html/</span> en un servidor Linux</li>
+  <li>Copiar el directorio de Dokeos en su directorio web de Apache. Este puede ser
+    <span style="font-weight: bold;">C:\xampp\htdocs\</span> en un servidor Windows o <span style="font-weight: bold;">/var/www/html/</span> en un servidor Linux.</li>
 
   <li>Abrir su navegador web (Internet Explorer, Firefox...) y escribir
     <span style="font-weight: bold;">http://localhost/dokeos/</span> si se instala de manera local o
-    <span style="font-weight: bold;">http://www.domain.com/dokeos/</span> si se instala remotamente</li>
+    <span style="font-weight: bold;">http://www.domain.com/dokeos/</span> si se instala remotamente.</li>
 
   <li>Seguir el proceso de instalación web. Usted puede aceptar todos los valores
-predeterminados. Considere cambiar la contraseña de administrador y recuerdela.&nbsp;</li>
+predeterminados. Considere cambiar la contraseña de administrador y recuérdela.&nbsp;</li>
 
 </ul>
 
 
 <br />
 
-Los siguientes directorios necesitan tener permisos de lectura, escritura y ejecución para todos:
+Los siguientes directorios necesitan tener permisos de lectura, escritura y ejecución para todos el mundo:
 <ul>
   <li>dokeos/main/inc/conf/</li>
   <li>dokeos/main/upload/users/</li>
@@ -193,30 +192,30 @@ Los siguientes directorios necesitan tener permisos de lectura, escritura y ejec
 </ul>
 
 (donde 'dokeos' es el directorio en el cual usted instaló Dokeos)
-<p>En Linux, Mac OS X y sistemas operativos BSD usted puede usar el comando CHMOD
-777 para esto (aunque nosotros recomendamos que busque asistencia de un
+<p>En Linux, Mac OS X y sistemas operativos BSD  puede usar el comando CHMOD
+777 para esto (aunque nosotros recomendamos que busque la ayuda de un
 administrador de sistemas con experiencia).
-En Windows, es probable que usted necesite revisar las propiedades de las carpetas (mediante el uso
-del clic derecho en ellas).
+En Windows, es probable que  necesite revisar las propiedades de los directorios (mediante el uso
+del clic derecho en ellos).
 </p>
 
 <p>
 2.5. Los siguientes archivos necesitan tener permisos de lectura y escritura
-para el navegador web, solo durante la instalación de Dokeos:
+para el navegador web, sólo durante la instalación de Dokeos:
 </p>
 
 <ul>
 
-  <li>dokeos/main/inc/conf/configuration.php (si esta presente)</li>
+  <li>dokeos/main/inc/conf/configuration.php (si está presente)</li>
 
 </ul>
 
 
 <p>En Linux, Mac OS X y sistemas operativos BSD usted puede usar el comando CHMOD
-666 para esto (aunque nosotros recomendamos que busque asistencia de un
+666 para esto (aunque nosotros recomendamos que busque la ayuda de un
 administrador de sistemas con experiencia).
-En Windows, es probable que usted necesite revisar las propiedades de las carpetas (mediante el uso
-del clic derecho en ellas).
+En Windows, es probable que usted necesite revisar las propiedades de los directorios (mediante el uso
+del clic derecho en ellos).
 
 </p>
 
@@ -226,40 +225,40 @@ del clic derecho en ellas).
 <p>
 <b>NOTAS:</b><br />
 
-No modifique los archivos home_*.html directamente. En vez de ello,
-seleccione "Configurar la pagina de inicio" en la sección de administración de Dokeos.</p>
+No modifique los archivos home_*.html directamente. En vez de hacer esto,
+seleccione "Configurar la página de inicio" en la sección de administración de Dokeos.</p>
 
 <p><span style="font-weight: bold;">Windows</span> : con paquetes combinados como XAMPP, disponibles por todo lado, la cuenta de acceso y contraseña
-   para MySQL probablemente permanecera vacia.</p>
+   para MySQL probablemente permanecerá vacía.</p>
 
 <p></p>
 
 
-<h3><strong> Configuración y seguridad despues de la instalación</strong></h3>
+<h3><strong> Configuración y seguridad después de la instalación</strong></h3>
 
 <ul>
 
   <li><strong>Proteger su archivo de configuración: </strong>
-asegurarse que nadie pueda sobreescribirlo. Usted puede encontrar el archivo de configuración en la <em>(carpeta de dokeos)</em>/main/inc/conf/configuration.php.
-Hacerla de solo lectura (windows/xwindows: clic derecho en el archivo para editar las propiedades.
+asegurarse que nadie pueda sobrescribirlo. Usted puede encontrar el archivo de configuración en el <em>(directorio de Dokeos)</em>/main/inc/conf/configuration.php.
+Hacerlo de solo lectura (windows/xwindows: clic derecho en el archivo para editar las propiedades.
 linux/bsd/macosx: usar el comando chmod 444). El archivo de
-configuración es creado por Apache, por lo tanto usted necesita ser adminitrador para cambiar sus
+configuración es creado por Apache, por lo tanto usted necesita ser administrador para cambiar sus
 permisos.</li>
 
-  <li><strong>Proteger su carpeta de instalación: </strong>
-si la <em>(carpeta de dokeos)</em>carpeta /main/install
-es aun accesible, alguien podria instalar de nuevo sobre su versión existente
-(usted puede perder sus datos de esta manera). Mover la carpeta a algún lugar
-fuera de los directorios web para que no se encuentre accesible, cambiar su nombre, o
-editar sus propiedades para que nadie pueda leerlo o ejecutarlo.</li>
+  <li><strong>Proteger su directorio de instalación: </strong>
+si el <em>(directorio de Dokeos)</em> directorio /main/install
+sigue accesible, alguien podría instalar de nuevo sobre la versión existente
+(usted puede perder sus datos de esta manera). Por ello es muy importante que mueva el directorio a algún lugar
+fuera de los directorios web para que no se encuentre accesible, cambie su nombre, o
+edite sus propiedades para que nadie pueda leerlo o ejecutarlo.</li>
 
   <li><strong>Para mayor seguridad: </strong>
-hacer que los archivos posean permisos de escritura por todos ayudaria a instalar, y resolveria varias
-dudas a las personas sin mucha experiencia en administracion. Sin embargo, es mas seguro
-hacer al propietario del proceso de apache (usualmente llamado apache
-o www-data) tambien propietario de todos los archivos y carpetas de dokeos. De esta manera,
-estos archivos solo tendrian permisos de lectura y escritura por el propietario
-del proceso Apache, y ya no permiso a todo el mundo.</li>
+hacer que todos los archivos posean permisos de escritura facilita la instalación y resuelve muchas
+dudas a las personas con poca experiencia en administración. Sin embargo, en lugar de esto, es más seguro
+hacer que el propietario del proceso de Apache (usualmente llamado apache
+o www-data) sea también propietario de todos los archivos y carpetas de Dokeos. De esta manera,
+estos archivos sólo tendrán permisos de lectura y escritura para el propietario
+del proceso Apache y  no para todo el mundo.</li>
 
   <li><strong>Configurar su instalación de Dokeos: </strong>
 en la sección de administración de Dokeos, usted puede usar las Opciones de Configuración de Dokeos para ajustar el comportamiento de su instalación.</li>
@@ -267,7 +266,7 @@ en la sección de administración de Dokeos, usted puede usar las Opciones de Co
   <li><strong>Configurar correo de Dokeos: </strong>
 por lo general Dokeos usa las configuraciones de correo del archivo php.ini. Sin embargo,
 la herramienta de anuncios usa phpMailer (otro proyecto de software libre)
-y las configuraciones para esta herramienta pueden ser ajustadas en <em>(la carpeta de dokeos)</em>/main/inc/conf/mail.conf.php.</li>
+y las configuraciones para esta herramienta pueden ser ajustadas en <em>(directorio de dokeos)</em>/main/inc/conf/mail.conf.php.</li>
 
 
 </ul>
@@ -278,24 +277,24 @@ y las configuraciones para esta herramienta pueden ser ajustadas en <em>(la carp
 <h3>Configuración PHP</h3>
 
 
-Para obtener lo mejor de Dokeos, usted necesita afinar las configuraciones de PHP. Considerar: <br />
+Para obtener lo mejor de Dokeos, necesita ajustar la configuración de PHP. Considere: <br />
 
 <ul>
 
-  <li>Editar el archivo php.ini (en windows puede ser ubicado en <span style="font-weight: bold;">C:\xampp\php\php.ini</span>, en Ubuntu Linux : <span style="font-weight: bold;">/etc/php5/apache2/php.ini</span></li>
+  <li>Editar el archivo php.ini (en Windows puede estar ubicado en <span style="font-weight: bold;">C:\xampp\php\php.ini</span>, en Ubuntu Linux : <span style="font-weight: bold;">/etc/php5/apache2/php.ini</span></li>
 
-  <li>buscar la palabra "max" y incrementar los valores para optimizar el servidor</li>
+  <li>Buscar la palabra "max" y incrementar los valores para optimizar el servidor</li>
 
-  <li>quizas usted desee terminar; con los siguiente valores: </li>
+  <li>Quizás  desee terminar con los siguiente valores: </li>
 
 </ul>
 
 <br />
 
 <div class="code">
-			  max_execution_time = 300&nbsp;&nbsp;&nbsp; ; Maximo tiempo de ejecucion para cada script, en segundos<br />
+			  max_execution_time = 300&nbsp;&nbsp;&nbsp; ; Tiempo máximo de ejecucion para cada script, en segundos<br />
 
-			  max_input_time = 600 ; Maxima cantidad de tiempo para cada script que pueda gastar analizando datos solicitados<br />
+			  max_input_time = 600 ; Tiempo máximo que cada script que puede emplear para analizar los datos solicitados<br />
 
 			  memory_limit = 256M&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ; Maxima cantidad de memoria que un script puede consumir (128MB)<br />
 
@@ -308,7 +307,7 @@ Para obtener lo mejor de Dokeos, usted necesita afinar las configuraciones de PH
 
 <p>
 Algunos usuarios pueden encontrar problemas si en sus configuraciones de PHP no
-encajan las siguientes:</p>
+se ajustan a las siguientes:</p>
 
 <ul>
 
@@ -346,7 +345,7 @@ necesario, puede estar configurado en Off y Dokeos funcionará bien.
   <li>(opcional) php-ldap si se desea habilitar el uso de la autenticación de LDAP</li>
 
 </ul>
-<p>Puede necesitar tambien estos módulos y paquetes:</p>
+<p>También puede necesitar  estos módulos y paquetes:</p>
 <ul>
 <li>php-ctype</li>
 <li>php-gd</li>
@@ -363,8 +362,8 @@ necesario, puede estar configurado en Off y Dokeos funcionará bien.
 
 <hr />
 <h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Actualizar desde una versión previa de Dokeos</h2>
-Antes de actualizar, nosotros recomendamos <b>seriamente</b> hacer una copia de seguridad de los directorios
-previos de Dokeos y las bases de datos. Si no esta seguro de como hacer esto, por favor solicite
+Antes de actualizar, le recomendamos <b>seriamente</b> que haga una copia de seguridad de los directorios
+y bases de datos de Dokeos que previamente haya en su servidor. Si no está seguro de cómo hacer esto solicite
 asistencia a su proveedor de servicios de almacenamiento.<br />
 
 <p></p>
@@ -375,25 +374,25 @@ asistencia a su proveedor de servicios de almacenamiento.<br />
 
 <em>Si usted actualiza desde Dokeos 1.8.x</em> :&nbsp;
 <ul>
-  <li> revisar que usted no haya dejado alguna hoja de estilo personalizada o imagen*</li>
-  <li> descargar el paquete de instalación de Dokeos 1.8.6 desde la <a href="http://www.dokeos.com/en/node/33">pagina de descarga de Dokeos</a></li>
-  <li> descomprimir los nuevos archivos de Dokeos 1.8.6 sobre los archivos de la version anterior</li>
-  <li> apunte su navegador a su portal URL + main/install/</li>
-  <li> escoja su idioma y clic en&nbsp;<span style="font-style: italic;">Actualizar desde 1.8.x</span></li>
+  <li> Revisar que  no ha dejado alguna hoja de estilo personalizada o imagen*</li>
+  <li> Descargar el paquete de instalación de Dokeos 1.8.6 desde la <a href="http://www.dokeos.com/en/node/33">página de descarga de Dokeos</a></li>
+  <li> Descomprimir los nuevos archivos de Dokeos 1.8.6 sobre los archivos de la version anterior</li>
+  <li> Apunte su navegador a su portal URL + main/install/</li>
+  <li> Escoja su idioma y haga clic en&nbsp;<span style="font-style: italic;">Actualizar desde 1.8.x</span></li>
 </ul>
 
 <br />
 
-<font size="-1">* Los estilos e imagenes están ubicados en el directorio main/css o main/img.
- Usted aun puede recuperarlos desde la copia de seguridad si es que usted la hizo.
- Cualquier estilo o imagen modificada que use el nombre predeterminado style/image sera
- sobreescrita en el siguiente paso. Para evitar perder cualquier personalizacion, siempre
- asegurese de copiar styles/images bajo un nuevo nombre y use y modifique la copia,
- no el original. El original siempre sera sobreescrito por nuevas versiones.
+<font size="-1">* Los estilos e imágenes están ubicados en el directorio main/css o main/img.
+ Usted puede recuperarlos desde la copia de seguridad en el caso de que usted hya tenido la precaución de realizarla.
+ Cualquier estilo o imagen modificada que use el nombre predeterminado style/image será
+ sobrescrita en el siguiente paso. Para evitar perder cualquier personalización, siempre
+ asegúrese de copiar styles/images bajo un nuevo nombre y use y modifique la copia,
+ no el original. El original siempre sera sobrescrito por nuevas versiones.
  En Dokeos 1.8.5, hemos cambiado el nombre de varios temas CSS.
- La compatibilidad hacia atras esta asegurada por el hecho de que una actualizacion solo agrega
- los nuevos temas, sin embargo usted debe tratar y usar estos nuevos temas en lugar de quedarse con los
- antiguos que estaran obsoletos dentro de poco (sin mantenimiento).</font>
+ La compatibilidad hacia atrás está asegurada por el hecho de que una actualización sólo agrega
+ los nuevos temas, sin embargo usted debe  usar estos nuevos temas en lugar de quedarse con los
+ antiguos que quedarán obsoletos dentro de poco (sin mantenimiento).</font>
 <br />
 
 <p></p>
@@ -401,38 +400,38 @@ asistencia a su proveedor de servicios de almacenamiento.<br />
 <h3>3.2 Actualizar desde Dokeos 1.6.x</h3>
 
 
-<em>Si usted actualiza desde una version anterior a Dokeos (1.6.x)</em>, lo primero
-y mas importante por hacer es *mover* su directorio actual hacia otro
+<em>Si usted actualiza desde una versión anterior a Dokeos (1.6.x)</em>, lo primero
+y mas importante a hacer es *mover* su directorio actual hacia otro
 lugar.<br />
 Una manera simple de hacer esto es crear un subdirectorio llamado "version_antigua"
 en su directorio actual de Dokeos y luego mover todo dentro de este, usando un
 sencillo comando "mover" (ejem. en Linux: mkdir version_antigua; mv *
 version_antigua/), luego dar permisos de escritura al directorio version_antigua para el servidor web
-para que los directorios courses/ y upload/ puedan moverse desde la antigua instalacion a la nueva.<br />
+para que los directorios courses/ y upload/ puedan moverse desde la antigua instalación a la nueva.<br />
 <br />
 El proceso completo es como sigue:
 <ul>
-  <li> mover los contenidos del directorio de Dokeos a un subdirectorio llamado
+  <li> Mover los contenidos del directorio de Dokeos a un subdirectorio llamado
     <em>version_antigua</em> y darle permisos de escritura por el servidor web. Esto
 es importante para permitir mover los directorios courses/ y upload/
 a la nueva instalacion</li>
-  <li> descargar el paquete de instalacion de Dokeos 1.8.6 desde la
-    <a href="http://www.dokeos.com/en/node/33">pagina de descarga de Dokeos</a></li>
+  <li> Descargar el paquete de instalacion de Dokeos 1.8.6 desde la
+    <a href="http://www.dokeos.com/en/node/33">página de descarga de Dokeos</a></li>
   <li> descomprimir los nuevos archivos de Dokeos 1.8.6 en el directorio principal de Dokeos. El nuevo
 directorio <em>principal</em> debe estar ubicado directamente dentro de su
-carpeta raiz de Dokeos</li>
-  <li> apuntar su navegador a la URL de su portal</li>
-  <li> escoja su idioma y clic en&nbsp;<span style="font-style: italic;">Actualizar desde 1.6.x</span> y confirmar el
-directorio actual de la version antigua</li>
+directorio raiz de Dokeos</li>
+  <li> Apuntar su navegador a la URL de su portal</li>
+  <li> Escoja su idioma y haga clic en&nbsp;<span style="font-style: italic;">Actualizar desde 1.6.x</span> y confirme el
+directorio actual de la versión antigua</li>
 </ul>
 
 <br />
 
-<em> NOTA: </em> La actualizacion desde 1.6.x a 1.8.x implica una revision de
-los graficos y estilos personalizados. La nueva version usa un nuevo conjunto completo
-de iconos y estilos, lo cual significa que aquellos provenientes de la version 1.6 no pueden ser
-simplemente reusados. La buena noticia es que la version 1.8.x le permite crear
-su propio estilo en una carpeta css separada, la cual se puede reusar en
+<em> NOTA: </em> La actualización desde 1.6.x a 1.8.x implica una revisión de
+los gráficos y estilos personalizados. La nueva versión usa un completo nuevo conjunto 
+de iconos y estilos, lo cual significa que aquellos provenientes de la versión 1.6 no pueden ser
+simplemente reusados. La buena noticia es que la versión 1.8.x le permite crear
+su propio estilo en un directorio css separado, el cual se puede reusar en
 todas las versiones 1.8.x
 <br />
 
@@ -441,8 +440,8 @@ todas las versiones 1.8.x
 <p>
 <b>ADVERTENCIA:</b><br />
 
-No elimine el directorio de instalacion previo de Dokeos antes de instalar
-el nuevo. Usted puede remover la ruta antigua, cuando la actualizacion sea finalizada satisfactoriamente.
+No elimine el directorio de instalación previo de Dokeos antes de instalar
+el nuevo. Usted puede eliminar la ruta antigua, cuando la actualización haya finalizado satisfactoriamente.
 </p>
 
 
@@ -450,7 +449,7 @@ el nuevo. Usted puede remover la ruta antigua, cuando la actualizacion sea final
 <b>NOTA:</b><br />
 
 No modifique los archivos de home_*.html directamente. En lugar de ello,
-seleccione "Configurar la pagina de inicio" en la sección de administración de Dokeos.
+seleccione "Configurar la página de inicio" en la sección de administración de Dokeos.
 </p>
 
 <p>
@@ -467,26 +466,26 @@ Los siguientes directorios necesitan permisos de lectura, escritura y ejecución
   <li>dokeos/home/</li>
 </ul>
 
-En Linux, Mac OS X y sistemas operativos BSD se puede arreglar rapidamente esto, mediante el uso
-del comando CHMOD 777, sin embargo si usted esta inseguro, nosotros le recomandamos que busque
+En Linux, Mac OS X y sistemas operativos BSD esto se puede arreglar rápidamente  mediante el uso
+del comando CHMOD 777, sin embargo si usted no está seguro,  le recomandamos que busque
 asistencia para su propio SO en <a href="http://www.dokeos.com/en/node/66">nuestro foro</a>.
-En Windows, quizas usted necesite revisar las propiedades de las carpetas.
+En Windows, quizás necesite revisar las propiedades de las carpetas.
 <p>
 </p>
 <h3>3.4 Guía de Actualizacion Rapida desde 1.6.x para Linux</h3>
 
 
-La siguiente guía de actualizacion rapida asume lo siguiente:
+La siguiente guía de actualización rápida rapida asume lo siguiente:
 <ul>
-  <li>el nombre de usuario de la base de datos de Dokeos (para MySQL) es "dokeos_db_user" y su acceso es "dokeos_user"</li>
-  <li>actualmente la instalacion de Dokeos esta en /var/www/dokeos/ y tiene permisos 777</li>
-  <li>la URL de su portal es http://www.portalurl.com/</li>
+  <li>El nombre de usuario de la base de datos de Dokeos (para MySQL) es "dokeos_db_user" y su acceso es "dokeos_user"</li>
+  <li>Actualmente la instalacion de Dokeos esta en /var/www/dokeos/ y tiene permisos 777</li>
+  <li>La URL de su portal es http://www.portalurl.com/</li>
 </ul>
 
 <br />
 
 
-Escribir en la linea de comandos:
+Escribir en la línea de comandos:
 <ul>
   <li>cd /tmp</li>
   <li>mysqldump -u dokeos_db_user -p --all-databases --result-file=/home/dokeos_user/dokeos_old.sql</li>
@@ -520,9 +519,9 @@ Luego:
 <h2><a name="4._Troubleshooting"></a>4. Solución de problemas</h2>
 
 
-<p>Si usted tiene problemas, ir al <a href="http://www.dokeos.com">Sitio Web de Dokeos</a> y haga una pregunta en el
-<a href="http://www.dokeos.com/en/node/66">foro de soporte</a>. Por favor primero lea los mensajes previos para ver si existe ya
-una respuesta a su pregunta. Nosotros tambien mantenemos una lista de
+<p>Si usted tiene problemas, vaya al <a href="http://www.dokeos.com">Sitio Web de Dokeos</a> y haga una pregunta en el
+<a href="http://www.dokeos.com/en/node/66">foro de soporte</a>. Por favor, primero lea los mensajes previos para ver si existe ya
+una respuesta a su pregunta. Nosotros también mantenemos una lista de
 <a href="http://www.dokeos.com/wiki/index.php/FAQ">Preguntas Frecuentes</a>.
 </p>
 
@@ -533,11 +532,11 @@ una respuesta a su pregunta. Nosotros tambien mantenemos una lista de
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="5._Administration_section"></a>5. Sección de Administración</h2>
 
-<p>Para acceder a la sección de administracion de Dokeos, abra el navegador,
-dirijase a su direccion de Dokeos y acceda a el con el usuario admin.
-Luego usted vera un enlace a la "Seccion de administracion de la plataforma" en la parte superior
-de la pagina web. En ese lugar usted puede administrar usuarios, cursos, secciones, apariencia del portal
-contenido de la pagina principal, categorias de cursos, entre otros.</p>
+<p>Para acceder a la sección de administración de Dokeos, abra el navegador,
+diríjase a su dirección de Dokeos y acceda a el con el usuario admin.
+Luego usted verá un enlace a la "Seccion de administracion de la plataforma" en la parte superior
+de la página web. En ese lugar usted puede administrar usuarios, cursos, secciones, apariencia del portal
+contenido de la página principal, categorías de cursos, entre otros.</p>
 
 <p>
 </p>
@@ -547,7 +546,7 @@ contenido de la pagina principal, categorias de cursos, entre otros.</p>
 <p>
 <i>Esta parte es opcional, solamente organizaciones con un servidor LDAP necesitan leer esto.</i><br />
 
-Un modulo LDAP esta ya provisto en Dokeos, pero tiene que ser configurado para hacerlo funcionar.
+Un modulo LDAP está ya implementado en Dokeos, pero debe ser configurado para que tenga un correcto funcionamiento.
 </p>
 
 
@@ -555,7 +554,7 @@ Un modulo LDAP esta ya provisto en Dokeos, pero tiene que ser configurado para h
 
 <p>
 Servidores Linux: Es posible que se requiera recompilar php con soporte ldap.
-Distribuciones nuevas tambien permiten descargar rpms para los paquetes adicionales.
+Distribuciones nuevas también permiten descargar rpms para los paquetes adicionales.
 </p>
 
 
@@ -563,7 +562,7 @@ Distribuciones nuevas tambien permiten descargar rpms para los paquetes adiciona
 
 
 <p>
-En (la carpeta de dokeos)/main/inc/conf/configuration.php, aproximadamente en la line 90, se puede ver<br />
+En (la carpeta de Dokeos)/main/inc/conf/configuration.php, aproximadamente en la line 90, se puede ver<br />
 
 //for new login module<br />
 
@@ -575,7 +574,7 @@ En (la carpeta de dokeos)/main/inc/conf/configuration.php, aproximadamente en la
 
 <br />
 
-remover // de las dos ultimas lineas para activar LDAP.<br />
+eliminar // de las dos últimas líneas para activar LDAP.<br />
 
 </p>
 
@@ -604,7 +603,7 @@ Como ejemplo, usted debe encontrar tipos de valores como los siguientes:<br />
 
 Dirección principal del servidor LDAP: "miservidorldap.com";  // su servidor ldap<br />
 
-Puerto principal del servidor LDAP: 389;                 // su numero de puerto de su servidor ldap<br />
+Puerto principal del servidor LDAP: 389;                 // el número de puerto de su servidor ldap<br />
 
 dominio LDAP: "dc=xx, dc=yy, dc=zz"; //dominio<br />
 
@@ -615,12 +614,12 @@ dominio LDAP: "dc=xx, dc=yy, dc=zz"; //dominio<br />
 
 <p>
 De manera predeterminada, Dokeos revisará si el campo "employeenumber" tiene un valor. Si lo tiene, entonces Dokeos
-considerara que este usuario es profesor.<br />
+considerará que este usuario es profesor.<br />
 
 Si usted desea cambiar este comportamiento, usted puede editar main/auth/ldap/authldap.php, la función ldap_put_user_info_locally(),
-y cambiar la condición <em>if (empty($info_array[$tutor_field]))</em> a lo que encaje para usted.<br />
+y cambiar la condición <em>if (empty($info_array[$tutor_field]))</em> a la que a usted mejor le convenga.<br />
 
-Adicionalmente usted puede remover esta revisión, eliminando la condicion y dejando solamente la linea <em>$status = STUDENT;</em>
+Adicionalmente usted puede suprimir esta revisión, eliminando la condición y dejando solamente la linea <em>$status = STUDENT;</em>
 </p>
 
 
@@ -628,32 +627,29 @@ Adicionalmente usted puede remover esta revisión, eliminando la condicion y dej
 
 
 <p>
-Algunos servidores LDAP no permiten usos anonimos de los servicios del directorio.<br />
+Algunos servidores LDAP no permiten usos anónimos de los servicios del directorio.<br />
 En este caso, usted debe rellenar los campos apropiados en el
-panel de administracion (ejm. "manager" y "mypassword") y Dokeos tratará
-de autenticarse usando esto, o volver al modo anonimo antes de darse por vencido.</p>
+panel de administración (ej. "manager" y "mypassword") y Dokeos tratará
+de autentificarse usando esto, o volver al modo anónimo antes de darse por vencido.</p>
 
 
 <h3>Importar LDAP en sesiones</h3>
 
-<p>Existe un nuevo grupo de scripts que permiten ahora insertar usuarios
-desde LDAP directamente a una sesion de Dokeos. Sin embargo, esto se basa en un
-conjunto de opciones estaticas en los atributos de contacto de LDAP.<br />
+<p>Existe un nuevo grupo de scripts que permiten  insertar usuarios
+desde LDAP directamente a una sesión de Dokeos. Sin embargo, esto se basa en un
+conjunto de opciones estáticas en los atributos de contacto de LDAP.<br />
 
-Los campos usados intensivamente por el modulo de Dokeos son:<br />
+Los campos usados intensivamente por el módulo de Dokeos son:<br />
 
 </p>
 
 <ul>
 
-	<li>uid, el cual encaja con el username en Dokeos</li>
-
-	<li>userPassword, el cual encaja con la contraseña del usuario, aunque
-esta parte solamente funcionara con contraseñas no encriptadas por ahora, pero no seria
-necesario si se usa el servidor LDAP para autenticación.</li>
+	<li>uid, el cual se corresponde con el username en Dokeos</li>
+	<li>userPassword, el cual se corresponde con la contraseña del usuario. Aunque esta parte, por ahora, solamente funcionará con contraseñas no encriptadas,  no será necesaria si se usa el servidor LDAP para la autentificación.</li>
 
 	<li>ou debe terminar con el año de registro de la persona o cualquier
-criterio que usted use para filtrar a los usuarios, de manera que ellos puedan ser obtenidos
+criterio que usted use para filtrar a los usuarios, de manera que ellos puedan obtenerse
 con ese criterio</li>
 
 	<li>sn es usadl como el campo lastname en Dokeos</li>
@@ -666,11 +662,11 @@ con ese criterio</li>
 
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="7._Mathematical_formulas"></a>7. Formulas Matemáticas con LaTeX</h2>
+<h2><a name="7._Mathematical_formulas"></a>7. Fórmulas Matemáticas con LaTeX</h2>
 
-<i>Esta parte es opcional, solo las organizaciones que deseen usar formulas matemáticas dentro del editor en linea podran querer leer esto.</i><br />
+<i>Esta parte es opcional, sólo interesa a las organizaciones que deseen usar fórmulas matemáticas dentro del editor en línea.</i><br />
 
-Usted puede habilitar la escritura de ecuaciones matemáticas dentro del editor en linea de Dokeos (FCKEditor) aplicando los siguientes pasos:
+Usted puede habilitar la escritura de ecuaciones matemáticas dentro del editor en línea de Dokeos (FCKEditor) aplicando los siguientes pasos:
 <ul>
 
 	<li>1. Configurar su instalación de Apache para agregar un directorio cgi-bin que contenga un enlace simbólico a mimetex.cgi en <i>dokeos/main/inc/lib/mimetex/</i>(*ver debajo)</li>
@@ -691,20 +687,20 @@ FCKConfig.ToolbarSets donde usted desee que el icono de LaTeX aparezca
 
 ] ;</div>
 
-				Usted puede agregarlo a todas las herramientas, o solamente a las herramientas de documentos y pruebas, por ejemplo<br />
+				Usted puede agregarlo a todas las herramientas, o sólo a alguna de ellas (por ej., documentos y ejercicios)<br />
         <br />
 			</li>
     </ul>
 	  </li>
 
-	<li>4. En raras ocasiones (sólo si se detecta algún problema), las opciones de configuración del fichero /dokeos/main/inc/lib/fckeditor/fckeditor.php tendrán que ser editadas manualmente</li>
+	<li>4. En raras ocasiones puede ser necesario realizar ajustes manuales editando el fichero /dokeos/main/inc/lib/fckeditor/fckeditor.php</li>
 
 	<li>5. Limpiar la cache de su navegador para probarlo (muy importante). Esto se puede hacer mediante el uso de la página de configuraciones de su navegador</li>
 
     <li>6. Realice estos cambios:</li>
 </ul>
 
-<i>Agregar el directorio cgi-bin correspondiente a su configuración de Apache puede ser lograda de esta manera, en Apache 2:</i>
+<i>Agregar el directorio cgi-bin correspondiente a su configuración de Apache puede ser realizada de esta manera, en Apache 2:</i>
 
 <div class="code">
 		  ScriptAlias /cgi-bin/ /var/www/cgi-bin/<br />
@@ -724,15 +720,14 @@ FCKConfig.ToolbarSets donde usted desee que el icono de LaTeX aparezca
 	</div>
 
 
-<i>Agregar un enlace simbólico bajo Windows, puede ser logrado mediante la creación de un
+<i>Agregar un enlace simbólico bajo Windows, puede ser realizado mediante la creación de un
 acceso directo al archivo mimetex.exe desde el directorio cgi-bin, o bajo
 Linux usando el siguiente comando:</i>
 
 <div class="code">ln -s /var/www/dokeos/main/inc/lib/mimetex/mimetex.cgi /var/www/cgi-bin/mimetex.cgi</div>
 <p>Si no quiere modificar su Apache, alternativamente a  este punto 6: copie mimetex.exe (para Windows) o mimetex.cgi (para Linux) en su cgi-bin/ </p>
 <p>&nbsp;</p>
-<p>Este procedimiento creará un nuevo icono disponible en su editor en linea de Dokeos
-  , el cual hara posible la inserción de formulas matemáticas en sus documentos.<br />
+<p>Este procedimiento creará un nuevo icono en su editor en línea de Dokeos, el cual hará posible la inserción de fórmulas matemáticas en sus documentos.<br />
   <br />
 
 

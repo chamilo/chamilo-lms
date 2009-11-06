@@ -218,7 +218,14 @@ if (api_is_allowed_to_edit(false,true) OR GroupManager :: is_user_in_group($_SES
 	if ( $current_group['chat_state'] != TOOL_NOT_AVAILABLE)
 	{
 		//link to the chat area of this group
-		$tools .= "<div style='margin-bottom: 5px;'><a href=\"../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('chat.gif', get_lang("Chat"))."&nbsp;".get_lang("Chat")."</a></div>";
+		if(api_get_course_setting('allow_open_chat_window')==true)
+		{
+			$tools .= "<div style='margin-bottom: 5px;'><a href=\"javascript: void(0);\" onclick=\"window.open('../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."','window_chat_group_".$_SESSION['_cid']."_".$_SESSION['_gid']."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no') \" >".Display::return_icon('chat.gif', get_lang("Chat"))."&nbsp;".get_lang("Chat")."</a></div>";		
+		}
+		else
+		{
+			$tools .= "<div style='margin-bottom: 5px;'><a href=\"../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('chat.gif', get_lang("Chat"))."&nbsp;".get_lang("Chat")."</a></div>";
+		}
 	}
 	
 	echo '<div class="actions-message" style="margin-bottom:4px;"><b>'.get_lang("Tools").':</b></div>';
@@ -273,7 +280,14 @@ if (api_is_allowed_to_edit(false,true) OR GroupManager :: is_user_in_group($_SES
 	if ( $current_group['chat_state'] == TOOL_PUBLIC )
 	{
 		//link to the chat area of this group
-		$tools .= "<a href=\"../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('chat.gif', get_lang('Chat'))."&nbsp;".get_lang('Chat')."</a><br/>";
+		if(api_get_course_setting('allow_open_chat_window')==true)
+		{
+			$tools .= "<div style='margin-bottom: 5px;'><a href=\"javascript: void(0);\" onclick=\"window.open('../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."','window_chat_group_".$_SESSION['_cid']."_".$_SESSION['_gid']."','height=380, width=625, left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no') \" >".Display::return_icon('chat.gif', get_lang("Chat"))."&nbsp;".get_lang("Chat")."</a></div>";		
+		}
+		else
+		{
+			$tools .= "<div style='margin-bottom: 5px;'><a href=\"../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('chat.gif', get_lang("Chat"))."&nbsp;".get_lang("Chat")."</a></div>";
+		}
 	}
 
 	echo '<br/>';

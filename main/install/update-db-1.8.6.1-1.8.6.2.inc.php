@@ -156,31 +156,49 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						}
 					}
 				}
+				
+				
 				// There might now be multiple course coaches. This implies
 				// moving the previous course coach elements from the
 				// session_rel_course table to the session_rel_course_rel_user
 				// table with status 2
 				// Select all the current course coaches in sessions 
+				
 				$sql = "SELECT id_session, course_code, id_coach 
-				        FROM session_rel_course_rel_user 
+				        FROM session_rel_course 
 				        ORDER BY id_session, course_code";
+				
 				$res = mysql_query($sql);
+
 				if ($res === false) {
 				    error_log('Could not query session course coaches table: '.mysql_error());
 				} else {
 					// For each coach found, add him as a course coach in the
 					// session_rel_course_rel_user table
 					while ($row = mysql_fetch_array($res)) {
-						$sql_ins = "INSERT INTO session_rel_course_rel_user 
-						  (id_session, course_code, id_user, status) 
-						  VALUES 
-						  (".$row['id_session'].",".$row['course_code'].",".$row['id_coach'].",2)";
-						$res_ins = mysql_query($sql_ins);
-						if ($res_ins === false) {
+						
+						// chech if coach is a student
+						$sql = "SELECT 1 FROM session_rel_course_rel_user 
+									 WHERE id_session='{$row[id_session]}' AND course_code='{$row[course_code]}' AND id_user='{$row[id_coach]}'";
+						$rs  =	mysql_query($sql);			
+						
+						if (mysql_num_rows($rs)>0) {
+							$sql_upd = "UPDATE session_rel_course_rel_user SET status=2 
+										WHERE id_session='{$row[id_session]}' AND course_code='{$row[course_code]}' AND id_user='{$row[id_coach]}'";
+						} else {
+							$sql_ins = "INSERT INTO session_rel_course_rel_user(id_session, course_code, id_user, status) 
+						  				VALUES ('{$row[id_session]}','{$row[course_code]}','{$row[id_coach]}',2)";	
+						}
+
+						$rs_coachs = mysql_query($sql_ins);
+
+						if ($rs_coachs === false) {
 							error_log('Could not move course coach to new table: '.mysql_error());
 						}
+
 					}
 				}
+
 			}
 		}
 		// now clean the deprecated id_coach field from the session_rel_course 
@@ -352,7 +370,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 								error_log("In ".$row_course['db_name'].", executed: $query",0);
 							}
 						}
-					}
+					}					
    				}
 			}
 		}

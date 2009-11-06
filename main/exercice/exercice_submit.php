@@ -223,64 +223,42 @@ $rs_sql = Database::query($sql_track,__FILE__,__LINE__);
 $exists_into_database = Database::num_rows($rs_sql);
 $exercise_row1 = Database::fetch_array($rs_sql);
 
-if ($exists_into_database == 0) {
-  //Get info of database
-  $total_minutes = $exercise_row["expired_time"];
-  if ($total_minutes >= 60) {
-      $new_total_hours = ($total_minutes/60);
-      $db_new_only_hours = floor($new_total_hours); //Hours
-      $db_new_total_minutes = round(($new_total_hours - $db_new_only_hours)*60,0); //Minutes
+//Init
+$total_minutes = $exercise_row["expired_time"];
 
-  } else {
-  	$total_minutes = $exercise_row["expired_time"];
-  }
+$total_seconds = $total_minutes*60;
+$current_timestamp = time();
+$expected_time = $current_timestamp+$total_seconds;
 
-  //Get info of server
-  $my_expired_hour = date('H',time());
-  $my_expired_minutes = date('i',time());
+$plugin_expired_time=date('M d, Y H:i:s',$expected_time);
 
-  //Sum minutes
-  $my_total_minutes = $my_expired_minutes +$total_minutes;
 
-  if ($my_total_minutes >= 60) {
-  	  $new_total_hours = ($my_total_minutes/60);
-      $new_only_hours = floor($new_total_minutes);
-      $new_total_minutes = round(($new_total_hours - $new_only_hours)*60,0); 
-  } else {
-  	 $new_only_hours = 0;
-     $new_total_minutes = $my_total_minutes;
-  }
-
-  $add_new_hours = $new_only_hours + $db_new_only_hours+$my_expired_hour;
-  $add_new_minutes = $db_new_total_minutes+$new_total_minutes;
-  $expired_time = date('M d, Y H:i:s',time());//Add quiz configuration
-  $datetime = new DateTime($expired_time);
-
-  $datetime->setTime($add_new_hours, $add_new_minutes, 0);
-  $plugin_expired_time = $datetime->format('M d, Y H:i:s');
-  $expired_time = $datetime->format('Y-m-d H:i:s');
-  $start_time = date('Y-m-d H:i:s',time()); 
-  
-} else {
-  $plugin_expired_time = date('M d, Y H:i:s',strtotime($exercise_row1["expired_time_control"]));
-  $expired_time = date('Y-m-d H:i:s',strtotime($exercise_row1["expired_time_control"]));    
-}
 if ($exerciseType == 1) {
-    if (!isset($_SESSION['expired_time'])) {
-    		$_SESSION['expired_time'] = $expired_time;
-    }
-
+  if (!isset($_SESSION['expired_time'])) {
+		  $_SESSION['expired_time'] = $expired_time;
+  }
 }
-//Time control - core
-if ($exercise_row['expired_time'] != 0) {   
+
+if ($exercise_row['expired_time'] != 0) { 
     $htmlHeadXtra[] = "<script type=\"text/javascript\">
-    $(document).ready(function(){
-       jQuery('#text-content').epiclock({mode: EC_COUNTDOWN, format: 'x{<sup>".get_lang('Hours')."</sup>} i{<sup>".get_lang('Minutes')."</sup>} s{<sup>".get_lang('Seconds')."</sup>}',target: '".$plugin_expired_time."',onTimer: function(){ $('form#my_frm_exercise').submit() }}).clocks(EC_RUN);
+    $(document).ready(function(){    
+       $('#text-content').epiclock({
+         mode: EC_COUNTDOWN,
+         format: 'x{<sup>".get_lang('Hours')."</sup>} i{<sup>".get_lang('Minutes')."</sup>} s{<sup>".get_lang('Seconds')."</sup>}',
+         target: '".$plugin_expired_time."',
+         onTimer: function(){ $('form#my_frm_exercise').submit() }
+       }).clocks(EC_RUN);
+         
        $('.rounded').corners('transparent');
+         
+       $('#submit_save').click(function () { 
+      
+      });  
+           
     });
     </script>";
 }
-error_log(print_r($_COOKIE,true));
+
 if ($_configuration['live_exercise_tracking'] == true && $exerciseType == 2 && $exerciseFeedbackType != 1) {
 	$query = 'SELECT * FROM ' . $stat_table . $condition;
 	$result_select = Database::query($query, __FILE__, __LINE__);
@@ -1153,7 +1131,7 @@ if (!empty ($error)) {
 	echo "<!-- <button type='submit' name='buttonCancel' class='cancel'>" . get_lang('Cancel') . "</button>
 		   &nbsp;&nbsp; //--><br />";
 	echo '<div style="padding-left:10px; margin-top:-10px;">';
-	$submit_btn = "<button class='next' type='submit' name='submit'>";
+	$submit_btn = "<button class='next' type='submit' name='submit' name='submit_save' id='submit_save'>";
 	//	$submit_btn.=get_lang('ValidateAnswer');
 	if ($objExercise->selectFeedbackType() == 1 && $_SESSION['objExercise']->selectType() == 2) {
 		$submit_btn = '';
@@ -1178,7 +1156,7 @@ if (!empty ($error)) {
 			}
 			$submit_btn .= "</button>";
       if ($exercise_row['expired_time'] != 0) {
-      	   echo $submit_btn ="<input class='submit_next' type='submit' value='".$name_btn."' />";
+      	   echo $submit_btn ="<input class='submit_next' type='submit' id='submit_save' value='".$name_btn."' name='submit_save'/>";
       } else {
       	  echo $submit_btn;
       }

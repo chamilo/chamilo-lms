@@ -326,7 +326,7 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 		save_data($users_to_insert);		
 	} else {		
 		$error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
-		header('Location: '.api_get_self().'?warn='.urlencode($error_message).'&amp;file_type='.$file_type.'&amp;sec_token='.$tok);
+		header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_import.php?warn='.urlencode($error_message).'&amp;file_type='.$file_type.'&amp;sec_token='.$tok);
 		exit;
 	}	
 
@@ -378,7 +378,7 @@ if ($error_kind_file === true) {
 	Display :: display_error_message($error_message);
 }
 
-$form = new FormValidator('user_import');
+$form = new FormValidator('user_import','post','user_import.php');
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));

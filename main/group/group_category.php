@@ -81,7 +81,7 @@ if (api_get_setting('allow_group_categories') == 'true')
 	{
 		$nameTools = get_lang('AddCategory');
 		// default values for new category
-		$category = array ('groups_per_user' => 1, 'doc_state' => TOOL_PRIVATE, 'work_state' => TOOL_PRIVATE, 'wiki_state' => TOOL_PRIVATE, 'calendar_state' => TOOL_PRIVATE, 'announcements_state'=> TOOL_PRIVATE, 'forum_state' => TOOL_PRIVATE, 'max_student' => 0);
+		$category = array ('groups_per_user' => 1, 'doc_state' => TOOL_PRIVATE, 'work_state' => TOOL_PRIVATE, 'wiki_state' => TOOL_PRIVATE , 'chat_state' => TOOL_PRIVATE, 'calendar_state' => TOOL_PRIVATE, 'announcements_state'=> TOOL_PRIVATE, 'forum_state' => TOOL_PRIVATE, 'max_student' => 0);
 	}
 }
 else
@@ -189,6 +189,11 @@ $form->addElement('radio', 'wiki_state', get_lang('GroupWiki'), get_lang('NotAva
 $form->addElement('radio', 'wiki_state', null, get_lang('Public'), TOOL_PUBLIC);
 $form->addElement('radio', 'wiki_state', null, get_lang('Private'), TOOL_PRIVATE);
 
+// Chat Settings
+$form->addElement('radio', 'chat_state', get_lang('Chat'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
+$form->addElement('radio', 'chat_state', null, get_lang('Public'), TOOL_PUBLIC);
+$form->addElement('radio', 'chat_state', null, get_lang('Private'), TOOL_PRIVATE);
+
 // Submit
 $form->addElement('style_submit_button', 'submit', get_lang('PropModify'), 'class="save"');
 // If form validates -> save data
@@ -208,12 +213,12 @@ if ($form->validate())
 	switch ($values['action'])
 	{
 		case 'update_settings' :
-			GroupManager :: update_category($values['id'], $values['title'], $values['description'], $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $values['forum_state'], $values['wiki_state'], $self_reg_allowed, $self_unreg_allowed, $max_member, $values['groups_per_user']);
+			GroupManager :: update_category($values['id'], $values['title'], $values['description'], $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $values['forum_state'], $values['wiki_state'], $values['chat_state'], $self_reg_allowed, $self_unreg_allowed, $max_member, $values['groups_per_user']);
 			$msg = urlencode(get_lang("GroupPropertiesModified"));
 			header('Location: group.php?action=show_msg&msg='.$msg.'&category='.$values['id']);
 			break;
 		case 'add_category' :
-			GroupManager :: create_category($values['title'], $values['description'], $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $values['forum_state'], $values['wiki_state'], $self_reg_allowed, $self_unreg_allowed, $max_member, $values['groups_per_user']);
+			GroupManager :: create_category($values['title'], $values['description'], $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $values['forum_state'], $values['wiki_state'], $values['chat_state'], $self_reg_allowed, $self_unreg_allowed, $max_member, $values['groups_per_user']);
 			$msg = urlencode(get_lang("CategoryCreated"));
 			header('Location: group.php?action=show_msg&msg='.$msg);
 			break;

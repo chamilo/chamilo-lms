@@ -7,7 +7,7 @@
 							<th width="10" class="fileColumns">&nbsp;</th>
 							<th class="docName"><?php echo LBL_NAME; ?></th>
 							<th  width="70" class="fileColumns"><?php echo LBL_SIZE; ?></th>
-                            <!-- hidde by now while implementing this dokeos -->
+                            <!-- hide while implementing this Dokeos -->
 							<!--<th class="fileColumns"><?php // echo LBL_MODIFIED; ?></th> -->
 						</tr>
 					</thead>
@@ -25,7 +25,7 @@
 								$strClass = ($file['is_writable']?"left":" leftDisabled");
 
 								///First step for hidden some type of Dokeos files and folders
-								//Juan Carlos Ra�a
+								//Juan Carlos Raña
 
 									//hidden files and folders deleted by Dokeos. Hidde folders css, hotpotatoes, chat_files
 									$deleted_by_dokeos_file=' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
@@ -52,7 +52,7 @@
 									$shared_folder='shared folder';	 //'shared folder' not 'shared_folder' because  in $file['name'] _ is replaced with blank see class.manager.php
 
 								///Second step: hiding as the case
-								//Juan Carlos Ra�a
+								//Juan Carlos Raña
 
 								if((!ereg($deleted_by_dokeos_file, $file['name']) || !ereg($deleted_by_dokeos_folder, $file['path'])) && !ereg($css_folder_dokeos, $file['path']) && !ereg($hotpotatoes_folder_dokeos, $file['path']) && !ereg($chat_files_dokeos, $file['path']) && $show_doc_group==true && $file['name'][0]!='.')
 								{
@@ -62,11 +62,11 @@
 									?>
 									<tr class="<?php echo $css; ?>" id="row<?php echo $count; ?>"  >
 										<td align="center" id="tdz<?php echo $count; ?>"><span id="flag<?php echo $count; ?>" class="<?php echo $file['flag']; ?>">&nbsp;</span><input type="checkbox"  name="check[]" id="cb<?php echo $count; ?>" value="<?php echo $file['path']; ?>" <?php echo $strDisabled; ?> /></td>
-										<td align="center" class="fileColumns" id="tdst<?php echo $count; ?>">&nbsp;<a id="a<?php echo $count; ?>" href="<?php echo "../".$file['path']; ?>" target="_blank"><span class="<?php echo $file['cssClass']; ?>">&nbsp;</span></a></td><!-- Juan Carlos Ra�a Fix for Dokeos: On the path I put a directory up echo "../".$ file [ 'path'], what makes good show when pressed next on window preview, don't only one image -->
+										<td align="center" class="fileColumns" id="tdst<?php echo $count; ?>">&nbsp;<a id="a<?php echo $count; ?>" href="<?php echo "../".$file['path']; ?>" target="_blank"><span class="<?php echo $file['cssClass']; ?>">&nbsp;</span></a></td><!-- Juan Carlos Raña Fix for Dokeos: On the path I put a directory up echo "../".$ file [ 'path'], what makes good show when pressed next on window preview, don't only one image -->
 										<td class="<?php echo $strClass; ?> docName"  id="tdnd<?php echo $count; ?>"><a id="aa<?php echo $count; ?>" href="<?php echo "../".$file['path']; ?>" target="_blank"><?php echo $file['name']; ?></a></td>
 
 										<td class="docInfo" id="tdrd<?php echo $count; ?>"><?php echo transformFileSize($file['size']); ?></td>
-                                         <!-- hidde by now while implementing this dokeos -->
+                                         <!-- hide while implementing this Dokeos -->
 										<!--<td class="docInfo" id="tdth<?php //echo $count; ?>"><?php //echo @date(DATE_TIME_FORMAT,$file['mtime']); ?></td> -->
 									</tr>
 									<?php
@@ -98,7 +98,7 @@
 
 											<td class="<?php echo $strClass; ?> docName" id="tdnd<?php echo $count; ?>"><a id="aa<?php echo $count; ?>" href="<?php echo "../".$file['path']; ?>" target="_blank"><?php echo $file['name']; ?></a></td>
 											<td class="docInfo" id="tdrd<?php echo $count; ?>">&nbsp;</td>
-                                             <!-- hidde by now while implementing this dokeos -->
+                                             <!-- hide while implementing this Dokeos -->
 											<!--<td class="docInfo" id="tdth<?php// echo $count; ?>"><?php //echo @date(DATE_TIME_FORMAT,$file['mtime']); ?></td> -->
 										</tr>
 										<?php

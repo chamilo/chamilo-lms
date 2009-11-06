@@ -69,7 +69,7 @@ if($_POST['formSent'] )
 	$session_id=$_POST['session_id'];
 	if(empty($session_id))
 	{
-		$sql = "SELECT id,name,id_coach,username,date_start,date_end FROM $tbl_session INNER JOIN $tbl_user
+		$sql = "SELECT id,name,id_coach,username,date_start,date_end,visibility,session_category_id FROM $tbl_session INNER JOIN $tbl_user
 					ON $tbl_user.user_id = $tbl_session.id_coach ORDER BY id";
 
 		global $_configuration;
@@ -77,7 +77,7 @@ if($_POST['formSent'] )
 			$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1){
-			$sql = "SELECT id, name,id_coach,username,date_start,date_end FROM $tbl_session s INNER JOIN $tbl_session_rel_access_url as session_rel_url
+			$sql = "SELECT id, name,id_coach,username,date_start,date_end,visibility,session_category_id FROM $tbl_session s INNER JOIN $tbl_session_rel_access_url as session_rel_url
 				ON (s.id= session_rel_url.session_id) INNER JOIN $tbl_user u ON (u.user_id = s.id_coach)
 				WHERE access_url_id = $access_url_id
 				ORDER BY id";
@@ -88,7 +88,7 @@ if($_POST['formSent'] )
 	}
 	else
 	{
-		$sql = "SELECT id,name,username,date_start,date_end
+		$sql = "SELECT id,name,username,date_start,date_end,visibility,session_category_id
 				FROM $tbl_session
 				INNER JOIN $tbl_user
 					ON $tbl_user.user_id = $tbl_session.id_coach
@@ -125,7 +125,7 @@ if($_POST['formSent'] )
 		if($file_type == 'csv')
 		{
 			$cvs = true;
-			fputs($fp,"SessionName;Coach;DateStart;DateEnd;Users;Courses;\n");
+			fputs($fp,"SessionName;Coach;DateStart;DateEnd;Visibility;SessionCategory;Users;Courses;\n");
 		}
 		else
 		{
@@ -140,15 +140,19 @@ if($_POST['formSent'] )
 			$row['username'] = str_replace(';',',',$row['username']);
 			$row['date_start'] = str_replace(';',',',$row['date_start']);
 			$row['date_end'] = str_replace(';',',',$row['date_end']);
+			$row['visibility'] = str_replace(';',',',$row['visibility']);
+			$row['session_category'] = str_replace(';',',',$row['session_category_id']);
 			if($cvs){
-				$add.= $row['name'].';'.$row['username'].';'.$row['date_start'].';'.$row['date_end'].';';
+				$add.= $row['name'].';'.$row['username'].';'.$row['date_start'].';'.$row['date_end'].';'.$row['visibility'].';'.$row['session_category'].';';
 			}
 			else {
 				$add = "\t<Session>\n"
 						 ."\t\t<SessionName>$row[name]</SessionName>\n"
 						 ."\t\t<Coach>$row[username]</Coach>\n"
 						 ."\t\t<DateStart>$row[date_start]</DateStart>\n"
-						 ."\t\t<DateEnd>$row[date_end]</DateEnd>\n";
+						 ."\t\t<DateEnd>$row[date_end]</DateEnd>\n"
+						 ."\t\t<Visibility>$row[visibility]</Visibility>\n"
+						 ."\t\t<SessionCategory>$row[session_category]</SessionCategory>\n";
 			}
 
 			//users
@@ -176,37 +180,55 @@ if($_POST['formSent'] )
 			$add .= $users;
 
 			//courses
-			$sql = "SELECT DISTINCT $tbl_course.code, $tbl_user.username FROM $tbl_course
-					INNER JOIN $tbl_session_course
-						ON $tbl_course.code = $tbl_session_course.course_code
-						AND $tbl_session_course.id_session = '".$row['id']."'
-					LEFT JOIN $tbl_user
-						ON $tbl_user.user_id = $tbl_session_course.id_coach";
+			$sql = "SELECT DISTINCT $tbl_course.code 
+					FROM $tbl_course
+					INNER JOIN $tbl_session_course_user
+						ON $tbl_course.code = $tbl_session_course_user.course_code								
+						AND $tbl_session_course_user.id_session = '".$row['id']."'";
+													
 			$rsCourses = Database::query($sql,__FILE__,__LINE__);
 
 			$courses = '';
 			while($rowCourses = Database::fetch_array($rsCourses)){
 
-				if($cvs){
+				// get coachs from a course
+				$sql = "SELECT u.username 
+					FROM $tbl_session_course_user scu
+					INNER JOIN $tbl_user u ON u.user_id = scu.id_user		
+					WHERE scu.course_code = '{$rowCourses['code']}'
+						AND scu.id_session = '".$row['id']."' AND scu.status = 2 ";				
+
+				$rs_coachs = Database::query($sql,__FILE__,__LINE__);
+				$coachs = array();
+				while ($row_coachs = Database::fetch_array($rs_coachs)) {
+					$coachs[] = $row_coachs['username']; 
+				}
+				
+				$coachs = implode(",",$coachs); 					
+								
+				if($cvs){										
 					$courses .= str_replace(';',',',$rowCourses['code']);
-					$courses .= '['.str_replace(';',',',$rowCourses['username']).'][';
+					$courses .= '['.str_replace(';',',',$coachs).'][';
 				}
 				else {
 					$courses .= "\t\t<Course>\n";
 					$courses .= "\t\t\t<CourseCode>$rowCourses[code]</CourseCode>\n";
-					$courses .= "\t\t\t<Coach>$rowCourses[username]</Coach>\n";
+					$courses .= "\t\t\t<Coach>$coachs</Coach>\n";
 				}
 
 				// rel user courses
-				$sql = "SELECT DISTINCT username
-						FROM $tbl_user
-						INNER JOIN $tbl_session_course_user
-							ON $tbl_session_course_user.id_user = $tbl_user.user_id
-							AND $tbl_session_course_user.course_code='".$rowCourses['code']."'
-							AND id_session='".$row['id']."'";
+				$sql = "SELECT DISTINCT u.username
+						FROM $tbl_session_course_user scu
+						INNER JOIN $tbl_session_user su ON scu.id_user = su.id_user AND scu.id_session = su.id_session		
+						INNER JOIN $tbl_user u
+						ON scu.id_user = u.user_id
+						AND scu.course_code='".$rowCourses['code']."'
+						AND scu.id_session='".$row['id']."'";				
 
 				$rsUsersCourse = Database::query($sql,__FILE__,__LINE__);
+				$userscourse = '';
 				while($rowUsersCourse = Database::fetch_array($rsUsersCourse)){
+					
 					if($cvs){
 						$userscourse .= str_replace(';',',',$rowUsersCourse['username']).',';
 					}
@@ -224,11 +246,10 @@ if($_POST['formSent'] )
 					$courses .= "\t\t</Course>\n";
 				}
 			}
+
 			if(!empty($courses) && $cvs)
 				$courses = api_substr($courses , 0, api_strlen($courses)-1);
 			$add .= $courses;
-
-
 
 			if($cvs) {
 				$breakline = api_is_windows_os()?"\r\n":"\n";

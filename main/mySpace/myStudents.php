@@ -511,8 +511,13 @@ if (!empty ($_GET['student'])) {
 			$rs = Database::query($sql, __FILE__, __LINE__);
 			$num_row = Database :: num_rows($rs);
 			if ($num_row > 0) {
+				
+				
+				
 				$le_session_id = intval(Database :: result($rs, 0, 0));
 				if ($le_session_id > 0) {
+					
+					
 					// get session name and coach of the session
 					$sql = 'SELECT name, id_coach FROM ' . $tbl_session . '
 							WHERE id=' . $le_session_id;
@@ -521,16 +526,35 @@ if (!empty ($_GET['student'])) {
 					$session_coach_id = intval(Database :: result($rs, 0, 'id_coach'));
 
 					// get coach of the course in the session
+					$sql = 'SELECT id_user FROM ' . $tbl_session_course_user . '
+							WHERE id_session=' . $le_session_id . '
+							AND course_code = "' . Database :: escape_string($_GET['course']) . '" AND status=2';					
+					/*
 					$sql = 'SELECT id_coach FROM ' . $tbl_session_course . '
 							WHERE id_session=' . $le_session_id . '
 							AND course_code = "' . Database :: escape_string($_GET['course']) . '"';
+					*/
+							
 					$rs = Database::query($sql, __FILE__, __LINE__);
-					$session_course_coach_id = intval(Database :: result($rs, 0, 0));
+					//$session_course_coach_id = intval(Database :: result($rs, 0, 0));
+					$course_coachs = array();
+					while ($row_coachs = Database::fetch_array($rs)) {
+						$course_coachs[] = $row_coachs['id_user'];
+					}
 
-					if ($session_course_coach_id != 0) {
+					if (!empty($course_coachs)) {
+						$info_tutor_name = array();
+						foreach ($course_coachs as $course_coach) {
+							$coach_infos = UserManager :: get_user_info_by_id($course_coach);
+							$info_tutor_name[] = api_get_person_name($coach_infos['firstname'], $coach_infos['lastname']);	
+						}
+						$info_course['tutor_name'] = implode(",",$info_tutor_name);						
+					}
+					
+					/*if ($session_course_coach_id != 0) {
 						$coach_infos = UserManager :: get_user_info_by_id($session_course_coach_id);
 						$info_course['tutor_name'] = api_get_person_name($coach_infos['firstname'], $coach_infos['lastname']);
-					}
+					}*/
 					elseif ($session_coach_id != 0) {
 						$coach_infos = UserManager :: get_user_info_by_id($session_coach_id);
 						$info_course['tutor_name'] = api_get_person_name($coach_infos['firstname'], $coach_infos['lastname']);

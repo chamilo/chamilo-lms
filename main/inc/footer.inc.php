@@ -72,11 +72,15 @@ if (api_get_setting('show_tutor_data')=='true'){
 	if (isset($id_course) && $id_course!=-1) {
 		echo '<span id="coursemanager">';
 		if ($id_session!=0){
-			$mail=CourseManager::get_email_of_tutor_to_session($id_session);
-			echo '&nbsp;'.get_lang('Tutor')." : ";
-			foreach ($mail as $v=>$k) {
-				echo Display::encrypted_mailto_link($v,$k);
-			}
+			$coachs_email=CourseManager::get_email_of_tutor_to_session($id_session,$id_course);
+
+				$email_link = array();
+				foreach ($coachs_email as $coach_email) {				
+					foreach ($coach_email as $email=>$username) {
+						$email_link[] = Display::encrypted_mailto_link($email,$username);
+					}
+				}				
+			echo '&nbsp;'.get_lang('Coachs')." : ".implode("&nbsp;|&nbsp;",$email_link);				
 		}
 		echo '</span>';
 	}

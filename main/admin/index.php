@@ -96,9 +96,18 @@ if (api_is_platform_admin()) {
 		<li><a href="user_add.php">		<?php echo get_lang('AddUsers') ?></a></li>
 		<li><a href="user_export.php">	<?php echo get_lang('ExportUserListXMLCSV') ?></a></li>
 		<li><a href="user_import.php">	<?php echo get_lang('ImportUserListXMLCSV') ?></a></li>
-		<li><a href="user_fields.php">	<?php echo get_lang('ManageUserFields'); ?></a></li>
-	</ul>
-	</div>
+		<?php
+		if(isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap'])>0){
+			?>
+			<!-- dynamic ldap code -->
+			  <li><a href="ldap_users_list.php"><?php echo get_lang('ImportLDAPUsersIntoPlatform');?></a></li> 
+			<!-- dynamic ldap code -->
+			<?php
+			}
+		?>
+		<li><a href="user_fields.php">	<?php echo get_lang('ManageUserFields'); ?></a></li>	
+		</ul>
+		</div>
 <?php
 }
 else
@@ -139,6 +148,16 @@ if(api_is_platform_admin()) {
 	<?php if (api_get_setting('search_enabled')=='true') { ?>
 	  <li><a href="specific_fields.php"><?php echo get_lang('SpecificSearchFields'); ?></a></li>
 	<?php } ?>
+	<?php
+		if(isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap'])>0){
+		?>
+		<!-- dynamic ldap code -->
+		<li><a href="ldap_import_students.php"><?php echo get_lang('ImportLDAPUsersIntoCourse');?></a></li>
+		<!-- dynamic ldap code -->
+		<?php
+		}
+	?>
+	
 	</ul>
 	</div>
 
@@ -195,10 +214,19 @@ if(api_get_setting('use_session_mode')=='true')
   <li><a href="session_category_list.php"><?php echo get_lang('ListSessionCategory') ?></a></li>
   <li><a href="session_add.php"><?php echo get_lang('AddSession') ?></a></li>
   <li><a href="session_import.php"><?php echo get_lang('ImportSessionListXMLCSV') ?></a></li>
+  <?php
+		if(isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap'])>0){
+		?>
+		<!-- dynamic ldap code -->
+		 <li><a href="ldap_import_students_to_session.php"><?php echo get_lang('ImportLDAPUsersIntoSession');?></a></li>
+		<!-- dynamic ldap code -->
+		<?php
+		}
+	?>
   <li><a href="session_export.php"><?php echo get_lang('ExportSessionListXMLCSV') ?></a></li>
   <li><a href="../coursecopy/copy_course_session.php"><?php echo get_lang('CopyFromCourseInSessionToAnotherSession') ?></a></li>
   </ul>
-</div>
+  </div>
 
 <?php
 }
@@ -244,7 +272,7 @@ if(api_is_platform_admin()){
   </ul>
 </div>
 <?php
-	if(isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap'])>0){
+	/*if(isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap'])>0){
 	?>
 	<!-- dynamic ldap code -->
 	<div class="admin_section">
@@ -258,7 +286,7 @@ if(api_is_platform_admin()){
 	</div>
 	<!-- dynamic ldap code -->
 	<?php
-	}
+	}*/
 ?>
 <div class="admin_section">
  <h4><?php Display::display_icon('dokeos.gif', 'Dokeos'); ?> Dokeos.com</h4>

@@ -1721,24 +1721,42 @@ class CourseManager {
 	}
 
 	/**
-	 * Get emails of tutors to course
-	 * @param string session session
-	 * @return string email of tutor to session
-	 * @author @author Carlos Vargas <carlos.vargas@dokeos.com>, Dokeos Latino
+	 * Get coachs' emails by session 
+	 * @param int session id
+	 * @param string course code
+	 * @return array  array(email => name_tutor)  by coach
+	 * @author Carlos Vargas <carlos.vargas@dokeos.com>
 	 */
-	public static function get_email_of_tutor_to_session($session) {
-		$row_email = Database::fetch_array(Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-				WHERE id_session='".Database::escape_string($session)."' AND status = 2", __FILE__, __LINE__));
+	public static function get_email_of_tutor_to_session($session_id,$course_code) {
+		
+		$tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+		$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+		$coachs_emails = array();
+		
+		$course_code = Database::escape_string($course_code);
+		$session_id = intval($session_id);
+		
+		$sql = "SELECT id_user FROM $tbl_session_course_user WHERE id_session='$session_id' AND course_code='$course_code' AND status =2";
+		$rs  = Database::query($sql,__FILE__,__LINE__);
 				
-		$result_user = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
-				WHERE user_id=".$row_email['id_user'], __FILE__, __LINE__);
-				
-		while ($row_emails = Database::fetch_array($result_user)) {
-			$name_tutor = api_get_person_name($row_emails['firstname'], $row_emails['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-			$mail_tutor = array($row_emails['email'] => $name_tutor);
+		if (Database::num_rows($rs) > 0) {
+			
+			$user_ids = array();
+			while ($row = Database::fetch_array($rs)) {
+				$user_ids[] = $row['id_user'];
+			}
+					
+			$sql = "SELECT firstname,lastname,email FROM $tbl_user WHERE user_id IN (".implode(",",$user_ids).")";		
+			$rs_user = Database::query($sql,__FILE__,__LINE__);
+			
+			while ($row_emails = Database::fetch_array($rs_user)) {								
+				$name_tutor = api_get_person_name($row_emails['firstname'], $row_emails['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+				$mail_tutor = array($row_emails['email'] => $name_tutor);
+				$coachs_emails[] = $mail_tutor;
+			}
 		}
 		
-		return $mail_tutor;
+		return $coachs_emails;
 	}
 
 	/**

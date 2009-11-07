@@ -150,7 +150,7 @@ if ($_POST['form_sent']) {
 					CourseManager::subscribe_user($user_id,$course_code);
 				}
 			}
-			Display :: display_normal_message(get_lang('UsersAreSubscibedToCourse'));
+			Display :: display_confirmation_message(get_lang('UsersAreSubscibedToCourse'));
 		}
 	}
 }

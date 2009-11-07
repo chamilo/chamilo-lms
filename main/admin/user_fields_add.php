@@ -62,7 +62,17 @@ function change_image_user_field (image_value) {
 	}
 }
 
+	function advanced_parameters() {
+			if(document.getElementById(\'options\').style.display == \'none\') {
+				document.getElementById(\'options\').style.display = \'block\';
+				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 
+			} else {
+
+				document.getElementById(\'options\').style.display = \'none\';
+				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+			}
+		}
 
 </script>';
 // Database table definitions
@@ -85,15 +95,13 @@ else
 // Create the form
 $form = new FormValidator('user_fields_add');
 $form->addElement('header', '', $tool_name);
-// Field variable name
-$form->addElement('hidden','fieldid',(int)$_GET['field_id']);
-$form->addElement('text','fieldlabel',get_lang('FieldLabel'));
-$form->applyFilter('fieldlabel','html_filter');
-$form->applyFilter('fieldlabel','trim');
-$form->addRule('fieldlabel', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('fieldlabel', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
-$form->addRule('fieldlabel', '', 'maxlength',20);
-$form->addRule('fieldlabel', get_lang('FieldTaken'), 'fieldlabel_available');
+
+// Field display name
+$form->addElement('text','fieldtitle',get_lang('FieldTitle'));
+$form->applyFilter('fieldtitle','html_filter');
+$form->applyFilter('fieldtitle','trim');
+$form->addRule('fieldtitle', get_lang('ThisFieldIsRequired'), 'required');
+
 // Field type
 $types = array();
 $types[USER_FIELD_TYPE_TEXT]  = get_lang('FieldTypeText');
@@ -107,17 +115,35 @@ $types[USER_FIELD_TYPE_DOUBLE_SELECT] 	= get_lang('FieldTypeDoubleSelect');
 $types[USER_FIELD_TYPE_DIVIDER] 		= get_lang('FieldTypeDivider');
 $types[USER_FIELD_TYPE_TAG] 		= get_lang('FieldTypeTag');
 
-
 $form->addElement('select','fieldtype',get_lang('FieldType'),$types,array('onchange'=>'change_image_user_field(this.value)'));
 $form->addRule('fieldtype', get_lang('ThisFieldIsRequired'), 'required');
-// Field display name
-$form->addElement('text','fieldtitle',get_lang('FieldTitle'));
-$form->applyFilter('fieldtitle','html_filter');
-$form->applyFilter('fieldtitle','trim');
-$form->addRule('fieldtitle', get_lang('ThisFieldIsRequired'), 'required');
+
+//Advanced parameters
+$form -> addElement('html','<div class="row">
+			<div class="label">&nbsp;</div>
+			<div class="formw">
+				<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>
+			</div>
+			</div>');
+$form -> addElement('html','<div id="options" style="display:none">');
+
+// Field variable name
+$wanted_code = UserManager::get_extra_fields();
+//$form->addElement('hidden','fieldid',(int)$_GET['field_id']);
+$form->addElement('hidden','wanted_code');
+$form->addElement('text','fieldlabel',get_lang('FieldLabel'));
+$form->applyFilter('fieldlabel','html_filter');
+$form->applyFilter('fieldlabel','trim');
+$form->applyFilter('fieldlabel','strtolower');
+//$form->addRule('fieldlabel', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('fieldlabel', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
+$form->addRule('fieldlabel', '', 'maxlength',20);
+$form->addRule('fieldlabel', get_lang('FieldTaken'), 'fieldlabel_available');
+
 // Field options
 $form->addElement('text','fieldoptions',get_lang('FieldPossibleValues').Display::return_icon('info3.gif', get_lang('FieldPossibleValuesComment'), array('align' => 'absmiddle', 'hspace' => '3px')));
 $form->applyFilter('fieldoptions','trim');
+
 if (is_numeric($_GET['field_id']))
 {
 	$form->addElement('static', 'option_reorder', '', '<a href="user_fields_options.php?field_id='.Security::remove_XSS($_GET['field_id']).'">'.get_lang('ReorderOptions').'</a>');
@@ -161,6 +187,8 @@ $form->setDefaults($defaults);
 		$class="add";
 		$text=get_lang('buttonAddUserField');
 	}
+	
+$form -> addElement('html','</div>');
 // Submit button
 $form->addElement('style_submit_button', 'submit',$text, 'class='.$class.'');
 // Validate form

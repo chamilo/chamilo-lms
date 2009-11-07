@@ -69,6 +69,17 @@ $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 $filter_confirm_msg = true;
 $filter_warning_msg = true;
+
+///direct access to one evaluation
+$cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
+if (empty($cats))
+{
+	$cats = Category :: load(0, null, $course_code, null, null, $session_id, false);//first time
+	$first_time=1;
+}
+$_GET['selectcat'] = $cats[0]->get_id();
+//
+
 if (isset($_GET['isStudentView'])) {
 	if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
 		$interbreadcrumb[]= array (
@@ -79,7 +90,7 @@ if (isset($_GET['isStudentView'])) {
 }
 
 if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
-	Display :: display_header(get_lang('Details'));
+	Display :: display_header();
 
 	//Introduction tool: student view
 	Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'AssessmentsIntroduction'));
@@ -465,13 +476,6 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 			'name' => get_lang('Gradebook')
 		);
 
-			if (!isset($_GET['gradebooklist_direction'])) {
-				$interbreadcrumb[]= array (
-			    'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
-			    'name' => get_lang('Details')
-			  );
-			}
-
 		Display :: display_header('');
 	} else {
 		Display :: display_header(get_lang('Gradebook'));
@@ -755,10 +759,20 @@ if (api_is_platform_admin() || api_is_allowed_to_create_course()  || $status==1)
 	//
 	} else {
 			if ( ((isset ($_GET['selectcat']) && $_GET['selectcat']==0) || ((isset($_GET['cidReq']) && $_GET['cidReq']!==''))) || isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') {
-			$cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
-			DisplayGradebook :: display_reduce_header_gradebook($cats[0],$is_course_admin, $is_platform_admin, $simple_search_form, false, false);
+				$cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
+				if(!$first_time=1)
+				{
+					DisplayGradebook :: display_reduce_header_gradebook($cats[0],$is_course_admin, $is_platform_admin, $simple_search_form, false, false);
+				}
 		}
 	}
 }
-$gradebooktable->display();
+if($first_time==1 && api_is_allowed_to_edit())
+{
+	echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?cidReq='.$course_code.'" />';
+}
+else
+{
+	$gradebooktable->display();
+}
 Display :: display_footer();

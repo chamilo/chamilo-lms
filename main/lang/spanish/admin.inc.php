@@ -1090,4 +1090,5 @@ $IsAdministrator = "Es administrador";
 $IsNotAdministrator = "No es administrador";
 $AddTimeLimit = "Añadir límite de tiempo";
 $EditTimeLimit = "Editar límite de tiempo";
+$TheTimeLimitsAreReferential = "El plazo de una categoría es referencial, no afectará a los límites de una sesión de formación";
 ?>

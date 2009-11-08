@@ -187,4 +187,7 @@ $EditPresences = "Modify presences";
 $TotalWeightMustNotBeMoreThan = "Total weight must not be more than";
 $ThereIsNotACertificateAvailableByDefault = "There is no certificate available by default";
 $CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan = "Certificate minimun score is required and must not be more than";
+$LinkMod = "Save";
+$EditLink = "Modify link to the online activity";
+$CategoryDeleted = "The category has been deleted";
 ?>

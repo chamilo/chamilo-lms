@@ -751,4 +751,5 @@ $FirstPage = "First Page";
 $LastPage = "Last Page";
 $Coachs = "Coachs";
 $New = "New";
+$YouMustToInstallTheExtensionLDAP = "You must to install the extension LDAP";
 ?>

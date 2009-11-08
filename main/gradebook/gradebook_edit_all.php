@@ -115,7 +115,7 @@ function get_table_type_course($type,$course) {
 }
 $submitted=isset($_POST['submitted'])?$_POST['submitted']:'';
 if($submitted==1) {
-	Display :: display_normal_message(get_lang('GradebookWeightUpdated')) . '<br /><br />';
+	Display :: display_confirmation_message(get_lang('GradebookWeightUpdated')) . '<br /><br />';
 	if (isset($_POST['evaluation'])) {
 		require_once 'lib/be/evaluation.class.php';
 		$eval_log = new Evaluation();

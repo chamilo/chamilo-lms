@@ -176,4 +176,5 @@ $User = "User";
 $LostPass = "Forgot your password ?";
 $EnterEmailUserAndWellSendYouPassword = "Enter the username or the email address with which you registered and we will send your password.";
 $NoUserAccountWithThisEmailAddress = "There is no account with this user and/or e-mail address";
+$WithTheFollowingSettings = "with the following settings:";
 ?>

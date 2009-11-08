@@ -161,7 +161,7 @@ function build_type_icon_tag($kind) {
  */
 function get_icon_file_name ($type) {
 	if ($type == 'cat') {
-		return api_get_path(WEB_CODE_PATH) . 'img/folder_document.gif';
+		return api_get_path(WEB_CODE_PATH) . 'img/gradebook.gif';
 	} elseif ($type == 'evalempty') {
 		return api_get_path(WEB_CODE_PATH) . 'img/empty.gif';
 	} elseif ($type == 'evalnotempty') {

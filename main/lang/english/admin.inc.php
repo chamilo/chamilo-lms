@@ -1090,4 +1090,5 @@ $IsAdministrator = "Is administrator";
 $IsNotAdministrator = "Is not administrator";
 $AddTimeLimit = "Add time limit";
 $EditTimeLimit = "Edit time limit";
+$TheTimeLimitsAreReferential = "The time limit of a category is referential, will not affect the boundaries of a training session";
 ?>

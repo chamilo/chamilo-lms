@@ -1088,4 +1088,7 @@ $InsertTabs = "Aggiungi separatore";
 $EditTabs = "Modifica separatore";
 $IsAdministrator = "E\' amministratore";
 $IsNotAdministrator = "Non è amministratore";
+$AddTimeLimit = "Aggiungi un limite di tempo";
+$EditTimeLimit = "Modifica il limite di tempo";
+$TheTimeLimitsAreReferential = "I limiti temporali assegnati alla categoria sono indicativi, non influenzano l\'effettiva durata di una sessione";
 ?>

@@ -1,7 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langLineNumber = "Número da Linha";
+$langLineNumber = "Linha Número";
 $langLine = "linha";
 $langLines = "linhas";
 $langLineOrLines = "linha(s)";

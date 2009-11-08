@@ -78,6 +78,13 @@ if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
 //This library is necessary for the time control feature
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.epiclock.min.js" type="text/javascript" language="javascript"></script>'; //jQuery
 
+if (!ereg("MSIE",$_SERVER["HTTP_USER_AGENT"])) {
+	$htmlHeadXtra[] = "<script type='text/javascript' language='javascript'>
+	$(document).ready( function(){
+		$('.rounded').corners();
+		$('.exercise_options').corners();
+	});</script>";	
+}
 /* ------------	ACCESS RIGHTS ------------ */
 // notice for unauthorized people.
 api_protect_course_script(true);

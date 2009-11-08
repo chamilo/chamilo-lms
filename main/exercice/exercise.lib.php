@@ -80,7 +80,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 
 			echo $questionName.'</div>';
 			$s='';
-			$s.="<table class='exercise_questions' style='margin:5px;padding:5px;'>
+			$s.="<table class='exercise_questions' style='margin:4px;padding:2px;'>
 				<tr><td valign='top' colspan='2'>";
 			$questionDescription=api_parse_tex($questionDescription);
 			$s.=$questionDescription;
@@ -97,12 +97,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		}
 		$s.= '</table>';
 		if (!ereg("MSIE",$_SERVER["HTTP_USER_AGENT"])) {
-			$s.="<script>$(document).ready( function(){
-				  $('.rounded').corners();
-				  $('.exercise_options').corners();
-				});</script>";
 			$s.="<div class=\"rounded exercise_questions\" style=\"width: 720px; padding: 3px; background-color:#ccc;\">";
-
 		} else {
 			$option_ie="margin-left:10px";
 		}

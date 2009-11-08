@@ -101,7 +101,7 @@ $actions = '<div class="actions">';
 
 if (isset ($_GET['selectcat'])) {
 	$interbreadcrumb[]= array ('url' => 'gradebook_flatview.php?selectcat=' . Security::remove_XSS($_GET['selectcat']), 'name' => get_lang('FlatView'));
-	$actions.= '<a href=gradebook_flatview.php?selectcat=' .Security::remove_XSS($_GET['selectcat']) . '>' . Display::return_icon('back.png', get_lang('BackTo')).get_lang('BackTo').' '.get_lang('FlatView').'</a>&nbsp&nbsp';
+	$actions.= '<a href=gradebook_flatview.php?selectcat=' .Security::remove_XSS($_GET['selectcat']) . '>' . Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('FlatView')).get_lang('BackTo').' '.get_lang('FlatView').'</a>&nbsp&nbsp';
 
 }
 if (isset ($_GET['selecteval'])) {

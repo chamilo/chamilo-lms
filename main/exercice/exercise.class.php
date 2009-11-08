@@ -976,7 +976,7 @@ class Exercise
       } else {
         $form -> addElement('html','<div id="timercontrol" style="display:none;">');
       }
-      $form -> addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTimerControlTotalMinutes'),array('style' => 'width : 35px'));
+      $form -> addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTotalDurationInMinutes'),array('style' => 'width : 35px'));
       //$form -> addElement('select', 'enabletimercontroltotalminutes',get_lang('ExerciseTimerControlMinutes'),$time_minutes_option);
       $form -> addElement('html','</div>');
            

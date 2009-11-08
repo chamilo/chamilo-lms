@@ -22,7 +22,8 @@ jQuery.fn.highlight = function(pat,real_code) {
    if (pos >= 0) {
     var spannode = document.createElement('a');
     spannode.className = 'glossary-ajax';
-    spannode.style.color = 'blue';
+    spannode.style.color = '#084B8A';
+    spannode.style.fontWeight='100';
 	spannode.style.textDecoration = 'none';
     spannode.name = 'link'+real_code;
     spannode.href = '#';
@@ -32,11 +33,10 @@ jQuery.fn.highlight = function(pat,real_code) {
     if (MatchRegExp == null) {
         MatchRegExp = new Array();
     }
-	//alert(node.nodeValue+'-----'+'---'+node.nodeValue[pat.length+1])
     if (MatchRegExp.length > 0 && node.nodeValue[pat.length+1] != '') {
      	var middlebit = node.splitText(pos);
     	var endbit = middlebit.splitText(pat.length);
-    	if (endbit.nodeValue[0] == null || endbit.nodeValue[0] == ' ') {
+    	if (endbit.nodeValue[0] == null || endbit.nodeValue[0] == ' ' || endbit.nodeValue[0] == '.' || endbit.nodeValue[0] == ',' || endbit.nodeValue[0] == ';' || endbit.nodeValue[0] == '"') {
         	var middleclone = middlebit.cloneNode(true);
     		spannode.appendChild(middleclone);
         	middlebit.parentNode.replaceChild(spannode, middlebit);

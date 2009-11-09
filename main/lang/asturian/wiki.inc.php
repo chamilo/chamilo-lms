@@ -1,6 +1,7 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$WikiSearchResults = "Resultaos de la gueta nel Wiki";
 $Wiki = "Wiki";
 $StartPage = "Páxina d\'entamu del Wiki";
 $EditThisPage = "Editar esta páxina";
@@ -151,4 +152,28 @@ $Restore = "Restaurar";
 $CurrentVersion = "Versión actual";
 $LastVersion = "Última versión";
 $PageRestored = "La páxina restauróse. Pue vela calcando en ";
+$RestoredFromVersion = "Páxina restaurada dende la versión";
+$HWiki = "Aida: Wiki";
+$FirstSelectOnepage = "Primero seleiciona una páxina";
+$DefineTask = "Si escribes dalgún conteníu na descripción, la páxina consideraráse como una páxina especial pa facer una tarea";
+$ThisPageisBeginEditedBy = "Nesti momentu esta páxina ta siendo editada por";
+$ThisPageisBeginEditedTryLater = "Por favor, inténtalo más tarde. Si l\'usuariu qu\'actualmente ta editando la páxina nun la guarda, esta páxina quedará disponible nun másimu de";
+$EditedByAnotherUser = "Los tos cambeos nun serán guardaos porque otru usuariu camudó la páxina mientres la editabes";
+$WarningMaxEditingTime = "Tienes 20 minutos pa editar esta páxina. Transcurríu esi tiempu, si nun guardaste la páxina, otru usuariu podrá camudala y perderás los tos cambeos";
+$TheTaskDoesNotBeginUntil = "Tovía nun ye la fecha d\'aniciu";
+$TheDeadlineHasBeenCompleted = "Sobrepasastete de la data llímite";
+$HasReachedMaxNumWords = "Sobrepasastete del númberu de pallabres permitíes";
+$HasReachedMaxiNumVersions = "Pasastete del númberu de versiones permitíes";
+$DescriptionOfTheTask = "Descripción de la tarea";
+$OtherSettings = "Otros requerimientos";
+$NMaxWords = "Númberu másimu de pallabres";
+$NMaxVersion = "Númberu másimu de versiones";
+$Feedback = "Orientaciones";
+$AddFeedback = "Amestar mensaxes d\'orientación asociaos al progresu na páxina";
+$Feedback1 = "Primer mensax";
+$Feedback2 = "Segundu mensax";
+$Feedback3 = "Tercer mensax";
+$FProgress = "Progresu";
+$PutATimeLimit = "Afitar una llimitación temporal";
+$StandardTask = "Tarea standard";
 ?>

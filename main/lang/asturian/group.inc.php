@@ -45,6 +45,8 @@ $langStudentsNotInThisGroups  = "Usuarios que nun son d\'esti grupu";
 $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Un usuariu pue ser miembru d\'un másimu de ";
 $langQtyOfUserCanSubscribe_PartAfterNumber  = " grupos";
 $langGroupLimit = "Llende";
+$CreateGroup = "Criar grupu(os)";
+$ProceedToCreateGroup = "Confirmar la criación de grupu(os)";
 $langStudentRegAllowed = "Los estudiantes puen matriculase nos grupos";
 $langGroupAllowStudentUnregistration = "Los usuarios puen esborrase d\'un grupu";
 $langAllGroups = "Tolos grupos";
@@ -89,4 +91,5 @@ $GroupsFromClasses = "Grupos de clases";
 $GroupsFromClassesInfo = "Información de grupos de clases";
 $Group = "Grupu";
 $ForumOfGroup = "Foru del grupu:";
+$BackToGroupList = "Volver a la llista de grupos";
 ?>

@@ -124,5 +124,10 @@ $NoFilesHere = "Nun hai archivos equí";
 $NoFilesHere = "Nun hai archivos equí";
 $NewDropboxFileUploaded = "Un archivu nuevu unvióse al buzón de llabores / deberes";
 $NewDropboxFileUploadedContent = "Im archivu nuevu unvióse al buzón de llabores / deberes del so cursu";
+$langAddEdit = "Amestar/Editar";
 $ErrorNoFilesInFolder = "Compruebe polo menos un archivu";
+$dropbox_lang["upload"] = "Unviar";
+$AddComment  = "Amestar comentariu";
+$SentCatgoryDeleted = "La carpeta desaniciose";
+$ReceivedCatgoryDeleted = "La carpeta desaniciose";
 ?>

@@ -44,4 +44,8 @@ $langShowLinkOnHomepage = "Amosar esti enllaz en forma iconu na páxina d\'entamu
 $langCsvImport = "Importar CSV";
 $General = "Xeneral";
 $SearchFeatureDoIndexLink = "¿Facer índiz tamién del títulu y la descripición?";
+$langSaveLink = "Guardar l\'enllaz";
+$langSaveCategory = "Guardar la categoría";
+$BackToLinksOverview = "Volver a la llista d\'enllaces";
+$AddTargetOfLinkOnHomepage = "Seleiciona\'l mou nel que s\'amosará l\'enllaz na páxina principal del cursu";
 ?>

@@ -24,4 +24,7 @@ $Authoring = "Crear conteníos";
 $Administration = "Alministración";
 $IntroductionTextUpdated = "El testu d\'entamu actualizóse";
 $IntroductionTextDeleted = "Testu d\'entamu esborráu";
+$SessionIdentifier = "Identificador de la sesión";
+$SessionName = "Nome de la sesión";
+$SessionCategory = "Categoría de la sesión";
 ?>

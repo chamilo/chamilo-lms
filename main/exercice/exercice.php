@@ -1313,7 +1313,9 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 					}					
 					if ($is_allowedToEdit) {
 						//echo ' <a href="exercice_history.php?cidReq=' . security::remove_XSS($_GET['cidReq']) . '&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
-						$html_link.=' <a href="exercice_history.php?cidReq=' . security::remove_XSS($_GET['cidReq']) . '&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';						
+						if ($filter==2){
+							$html_link.=' <a href="exercice_history.php?cidReq=' . security::remove_XSS($_GET['cidReq']) . '&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
+						}				
 					}
 				} else {
 					if ($revised) {

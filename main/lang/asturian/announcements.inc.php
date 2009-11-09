@@ -51,4 +51,9 @@ $SelectEverybody = "Seleicionar toos";
 $SelectedUsersGroups = "Grupu d\'usuarios seleicionaos";
 $LearnerMessage = "Mensaxe d\'un alumnu";
 $TitleIsRequired = "El títulu ye obligatoriu";
+$AnnounceSentByEmail = "Anunciu unviáu per corréu electrónicu";
+$AnnounceSentToUserSelection = "Anunciu unviáu a una seleición d\'usuarios";
+$SendAnnouncement = "Unviar anunciu";
+$ModifyAnnouncement = "Camudar anunciu";
+$ButtonPublishAnnouncement = "Unviar anunciu";
 ?>

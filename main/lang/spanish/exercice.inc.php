@@ -348,4 +348,6 @@ $Thresholds = "Thresholds";
 $Delineation = "Delineación";
 $QuestionTypeDoesNotBelongToFeedbackTypeInExercise = "Tipo de pregunta no pertenece al tipo de retroalimentación en ejercicios";
 $SessionIsReadOnly = "La sesión es de sólo lectura";
+$EnableTimerControl = "Habilitar control de tiempo";
+$ExerciseTotalDurationInMinutes = "Duración total en minutos del ejercicio";
 ?>

@@ -20,4 +20,5 @@ $exeFinished = "Tán seleicionaes toles zones. Agora pue volver asignar les sos r
 $nextAnswer = "Calque enriba: &done=done";
 $delineation = "Llende";
 $labelDelineationMenu = "Cerrar llende";
+$oar = "Zona de riesgu";
 ?>

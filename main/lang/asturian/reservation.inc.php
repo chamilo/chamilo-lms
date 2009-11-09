@@ -118,4 +118,17 @@ $ReservationCancelled = "Reserva cancelada #NAME# nun ta disponible pol momentu"
 $ReservationActive = "La posibilidá de reserva ta otra vez activa, #NAME# ta habilitada otra vez";
 $ReservationUnavailable = "Estimáu/ada Señor/a,\\n\\n#NAME# nun ta disponible pol momentu, polo que la so reserva de #BEGIN# hasta #END# quedó cancelada.\\nVa recibir un corréu electrónicu si torna a tar disponible. Disculpe les molesties.";
 $ReservationAvailable = "Estimáu/ada Señor/a,\\n\\nQueremos informalu de que #NAME# ta otra vez disponible, polo que la so reserva de #BEGIN# hasta #END# ta otra vez activa.";
+$Resources = "Recursos";
+$EditBookingPeriod = "Editar períodu de reserva";
+$CreateResourceType = "Criar triba de recursu";
+$ModifyResourceType = "Camudar triba de recursu";
+$ViewResourceTypes = "Ver les tribes de recursos";
+$ViewResources = "Ver los recursos";
+$ViewBookingPeriods = "Ver los períodos de reserva";
+$AlwaysAvailable = "Siempre disponible";
+$SelectResourceTypeAndResource = "Seleiciona la triba de recursu";
+$Step1SelectResourceType = "Pasu 1: Seleiciona la triba de recursu";
+$Step2SelectResource = "Pasu 2: Seleiciona\'l recursu";
+$Step3SelectBookingPeriod = "Pasu 3: Seleiciona\'l períodu de reserva";
+$NoReservations = "Nun s\'almiten reserves";
 ?>

@@ -15,4 +15,5 @@ $langBackAndForget  = "Volver y descartar";
 $CourseDescriptionUpdated = "La descripción del cursu actualizóse";
 $CourseDescriptionDeleted = "La descripción del cursu esborróse";
 $CourseDescriptionIntro = "Pa crear la descripción d\'un cursu calque nos apartaos que quier que tenga y complételos.";
+$langSaveDescription = "Guardar descripción";
 ?>

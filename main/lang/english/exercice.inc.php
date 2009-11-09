@@ -348,4 +348,6 @@ $Thresholds = "Thresholds";
 $Delineation = "Delineation";
 $QuestionTypeDoesNotBelongToFeedbackTypeInExercise = "Question type does not belong to feedback type in exercise";
 $SessionIsReadOnly = "The session is read only";
+$EnableTimerControl = "Enable time control";
+$ExerciseTotalDurationInMinutes = "Total duration in minutes of the test";
 ?>

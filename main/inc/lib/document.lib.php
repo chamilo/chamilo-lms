@@ -488,6 +488,7 @@ class DocumentManager {
 	public static function get_all_document_data ($_course, $path = '/', $to_group_id = 0, $to_user_id = NULL, $can_see_invisible = false) {
 		$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
 		$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+		$TABLE_COURSE = Database::get_main_table(TABLE_MAIN_COURSE);
 
 		//if to_user_id = NULL -> change query (IS NULL)
 		//$to_user_id = (is_null($to_user_id))?'IS NULL':'= '.$to_user_id;
@@ -520,21 +521,9 @@ class DocumentManager {
 		$added_slash = ($path == '/') ? '' : '/';
 		
 		//condition for the session		
-		$current_session_id = api_get_session_id();					
-		$condition_session = " AND id_session = (SELECT IFNULL((SELECT DISTINCT id_session FROM $TABLE_ITEMPROPERTY WHERE ref = last.ref AND id_session = '$current_session_id'),0))";
-		
-		/*
-		$is_session_into_category = api_is_session_in_category($current_session_id,'20091U');				
-		$condition_session = "";
-		if ($is_session_into_category) {
-			$condition_session = " AND id_session = (SELECT IFNULL((SELECT DISTINCT id_session FROM $TABLE_ITEMPROPERTY WHERE ref = last.ref AND id_session = '$current_session_id'),0))";						
-		} else {					
-			$condition_session = " AND id_session = '$current_session_id' ";								
-		}
-		*/
-		
-		$sql_session_id = "SELECT IFNULL((SELECT DISTINCT id_session FROM $TABLE_ITEMPROPERTY WHERE ref = last.ref AND id_session = '$current_session_id'),0)";								
-				
+		$current_session_id = api_get_session_id();
+		$condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $TABLE_COURSE WHERE code = '{$_course[id]}')))";
+
 		$sql = "SELECT *
 						FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 						WHERE docs.id = last.ref
@@ -543,7 +532,7 @@ class DocumentManager {
 						AND last.tool = '".TOOL_DOCUMENT."'
 						AND ".$to_field." = ".$to_value."
 						AND last.visibility".$visibility_bit . $condition_session;								
-		
+
 		$result = Database::query($sql,__FILE__,__LINE__);
 		
 		if ($result && Database::num_rows($result) != 0)

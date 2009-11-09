@@ -549,11 +549,14 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	}
 	// adding additional users based on the search on the additional profile fields
 	if (isset ($_REQUEST['keyword'])){
-		foreach($additional_users as $additional_user_key=>$additional_user_value){
-			if (!in_array($additional_user_key,$_SESSION['session_user_id']) AND !in_array($additional_user_key,$users_of_course)){
-				$users[]= array($additional_user_value['col0'],$additional_user_value['col1'],$additional_user_value['col2'].'*',$additional_user_value['col3'].'*',$additional_user_value['col4'],$additional_user_value['col5'], $additional_user_value['col6']);
+		if (is_array($additional_users)) {
+			foreach($additional_users as $additional_user_key=>$additional_user_value){
+				if (!in_array($additional_user_key,$_SESSION['session_user_id']) AND !in_array($additional_user_key,$users_of_course)){
+					$users[]= array($additional_user_value['col0'],$additional_user_value['col1'],$additional_user_value['col2'].'*',$additional_user_value['col3'].'*',$additional_user_value['col4'],$additional_user_value['col5'], $additional_user_value['col6']);
+				}
 			}
 		}
+		
 	}
 	return $users;
 }

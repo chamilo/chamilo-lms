@@ -198,6 +198,42 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 
 					}
 				}
+				
+				// Remove duplicated rows for 'show_tutor_data' AND 'show_teacher_data' into settings_current table
+				
+				$sql = "SELECT id FROM settings_current WHERE variable='show_tutor_data' ORDER BY id";
+				$rs_chk_id1 = mysql_query($sql);
+				
+				if ($rs_chk_id1 === false) {
+				    error_log('Could not query settings_current ids table: '.mysql_error());
+				} else { 					
+					$i = 1;
+					while ($row_id1 = mysql_fetch_array($rs_chk_id1)) {
+						$id = $row_id1['id'];
+						if ($i>1) {							
+							$sql_del = "DELETE FROM settings_current WHERE id = '$id'";
+							mysql_query($sql_del);
+						}						
+						$i++;
+					}					
+				}
+				
+				$sql = "SELECT id FROM settings_current WHERE variable='show_teacher_data' ORDER BY id";
+				$rs_chk_id2 = mysql_query($sql);
+				
+				if ($rs_chk_id2 === false) {
+				    error_log('Could not query settings_current ids table: '.mysql_error());
+				} else { 					
+					$i = 1;
+					while ($row_id2 = mysql_fetch_array($rs_chk_id2)) {
+						$id = $row_id2['id'];
+						if ($i>1) {							
+							$sql_del = "DELETE FROM settings_current WHERE id = '$id'";
+							mysql_query($sql_del);
+						}						
+						$i++;
+					}					
+				}
 
 			}
 		}

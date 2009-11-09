@@ -813,6 +813,7 @@ function update_Db_course($courseDbName)
  		date_of_qualification datetime NOT NULL default '0000-00-00 00:00:00',
  		parent_id INT UNSIGNED NOT NULL DEFAULT 0,
 		qualificator_id INT UNSIGNED NOT NULL DEFAULT 0,
+		weight float(6,2) UNSIGNED NOT NULL default 0,
 		session_id INT UNSIGNED NOT NULL default 0,
 		PRIMARY KEY (id)
 		)";
@@ -830,7 +831,7 @@ function update_Db_course($courseDbName)
         ")";
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLWORKS . "` ADD INDEX ( session_id )" ;
-
+	Database::query($sql, __FILE__, __LINE__);
 	/*
 	-----------------------------------------------------------
 		Links tool

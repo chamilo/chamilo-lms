@@ -583,6 +583,7 @@ if (api_is_allowed_to_edit(null,true)) {
 										   parent_id	= '',
 										   qualificator_id	= '',
 										   date_of_qualification	= '0000-00-00 00:00:00',
+										   weight   = '".Database::escape_string(Security::remove_XSS($_POST['weight']))."',
 										   session_id   = ".intval($id_session);
 
 					Database::query($sql_add_publication, __FILE__, __LINE__);

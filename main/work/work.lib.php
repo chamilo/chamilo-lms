@@ -381,7 +381,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$mydir_temp = '/'.$my_sub_dir.$dir;
 		}
 
-		$sql_select_directory= "SELECT prop.lastedit_date, id, author, has_properties, view_properties, description, qualification,id FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE ";
+		$sql_select_directory= "SELECT prop.lastedit_date, id, author, has_properties, view_properties, description, qualification,weight,id FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE ";
 					if (!empty($_SESSION['toolgroup'])) {
 						$sql_select_directory.=" work.post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
 					} else {
@@ -421,8 +421,14 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				$defaults = array('my_group[dir_name]'=>html_entity_decode($dir),'description'=>html_entity_decode($row['description']));
 				$form_folder-> addElement('textarea','description',get_lang('Description'),array('rows'=>5,'cols'=>50));
 				$qualification_input[] = FormValidator :: createElement('text','qualification');
-
 				$form_folder -> addGroup($qualification_input,'qualification',get_lang('QualificationNumberOver'),'size="10"');
+
+				if ($row['weight'] > 0) {
+					$weight_input[] = FormValidator :: createElement('text','weight');
+					$form_folder -> addGroup($weight_input,'weight',get_lang('WeightInTheGradebook'),'size="10"');						
+				}
+
+				
 				$there_is_a_end_date =false;
 				if($row['view_properties']=='1') {
 					if($homework['expires_on']!='0000-00-00 00:00:00'){
@@ -450,7 +456,13 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 										$parts = split(' ',$default);
 										list($d_year,$d_month,$d_day) = split('-',$parts[0]);
 										list($d_hour,$d_minute) = split(':',$parts[1]);
-
+									if ((int)$row['weight'] == 0) {
+										$form_folder -> addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'),'onclick="javascript:if(this.checked==true){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');
+										$form_folder -> addElement('html','<div id=\'option3\' style="display:none">');
+										$weight_input2[] = FormValidator :: createElement('text','weight');
+										$form_folder -> addGroup($weight_input2,'weight',get_lang('WeightInTheGradebook'),'size="10"');	
+										$form_folder -> addElement('html','</div>');										
+									}
 									if($homework['expires_on']='0000-00-00 00:00:00') {
 										$homework['expires_on']=date("Y-m-d H:i:s");
 										$there_is_a_expire_date = true;
@@ -467,6 +479,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 										$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('EndsAt'));
 										$form_folder -> addElement('html','</div>');
 									}
+
 									$form_folder -> addRule (array('expires','ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
 
 						$form_folder -> addElement('html','</div>');
@@ -484,6 +497,9 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 
 				if(!empty($row['qualification'])) {
 					$defaults = array_merge($defaults,array('qualification[qualification]'=>$row['qualification']));
+				}
+				if(!empty($row['weight'])) {
+					$defaults = array_merge($defaults,array('weight[weight]'=>$row['weight']));
 				}
 				$form_folder -> setDefaults($defaults);
 				$display_edit_form=true;
@@ -516,8 +532,8 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 
 					}
 					//if($_POST['qualification']['qualification']!='')
-						Database::query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string(Security::remove_XSS($_POST['description']))."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".' WHERE id = '."'".$row['id']."'",__FILE__,__LINE__);
-						//Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".' WHERE course_code = '."'".api_get_course_id()."'".' AND ref_id = '."'".$row['id']."'".'',__FILE__,__LINE__);
+						Database::query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string(Security::remove_XSS($_POST['description']))."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE id = '."'".$row['id']."'",__FILE__,__LINE__);
+						Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE course_code = '."'".api_get_course_id()."'".' AND ref_id = '."'".$row['id']."'".'',__FILE__,__LINE__);
 
 					Display::display_confirmation_message(get_lang('FolderEdited'));
 

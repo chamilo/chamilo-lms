@@ -127,15 +127,9 @@ $form -> addElement('html','<div class="row">
 			</div>');
 $form -> addElement('html','<div id="options" style="display:none">');
 
-// Field variable name
-$wanted_code = UserManager::get_extra_fields();
-//$form->addElement('hidden','fieldid',(int)$_GET['field_id']);
-$form->addElement('hidden','wanted_code');
+$form->addElement('hidden','fieldid',Security::remove_XSS($_GET['field_id']));
 $form->addElement('text','fieldlabel',get_lang('FieldLabel'));
 $form->applyFilter('fieldlabel','html_filter');
-$form->applyFilter('fieldlabel','trim');
-$form->applyFilter('fieldlabel','strtolower');
-//$form->addRule('fieldlabel', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('fieldlabel', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
 $form->addRule('fieldlabel', '', 'maxlength',20);
 $form->addRule('fieldlabel', get_lang('FieldTaken'), 'fieldlabel_available');
@@ -198,7 +192,11 @@ if( $form->validate())
 	if($check)
 	{
 		$field = $form->exportValues();
-		$fieldlabel = $field['fieldlabel'];
+		
+				
+		$fieldlabel = empty($field['fieldlabel'])?$field['fieldtitle']:$field['fieldlabel'];		
+		$fieldlabel = trim(strtolower(str_replace(" ","_",$fieldlabel)));
+		
 		$fieldtype = $field['fieldtype'];
 		$fieldtitle = $field['fieldtitle'];
 		$fielddefault = $field['fielddefaultvalue'];

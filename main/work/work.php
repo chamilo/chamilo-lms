@@ -390,8 +390,28 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null,true); //has to come after dis
 
 
 if (!empty ($_POST['changeProperties'])) {
+	// changing the tool setting: default visibility of an uploaded document
 	$query = "UPDATE " . $main_course_table . " SET show_score='" . $uploadvisibledisabled . "' WHERE code='" . $_course['sysCode'] . "'";
 	Database::query($query, __FILE__, __LINE__);
+
+	// changing the tool setting: is a student allowed to delete his/her own document
+	// database table definition
+	$table_course_setting = Database :: get_course_table(TOOL_COURSE_SETTING);
+	
+	// counting the number of occurrences of this setting (if 0 => add, if 1 => update)
+	$query = "SELECT * FROM " . $table_course_setting . " WHERE variable = 'student_delete_own_publication'";
+	$result = Database::query($query, __FILE__, __LINE__);
+	$number_of_setting = Database::num_rows($result);
+	echo $number_of_setting;
+	
+	if ($number_of_setting == 1){
+		$query = "UPDATE " . $table_course_setting . " SET value='" . Database::escape_string($_POST['student_delete_own_publication']) . "' WHERE variable='student_delete_own_publication'";
+		Database::query($query, __FILE__, __LINE__);	 
+	} else {
+		$query = "INSERT INTO " . $table_course_setting . " (variable, value, category) VALUES ('student_delete_own_publication','" . Database::escape_string($_POST['student_delete_own_publication']) . "','work')";
+		Database::query($query, __FILE__, __LINE__);			
+	}
+	echo $query;
 
 	$_course['show_score'] = $uploadvisibledisabled;
 } else {
@@ -776,7 +796,7 @@ else {
 			$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=" .Database::escape_string($delete);
 			$author_qry = Database::query($author_sql, __FILE__, __LINE__);
 
-			if (Database :: num_rows($author_qry) == 1) {
+			if (Database :: num_rows($author_qry) == 1 AND api_get_course_setting('student_delete_own_publication') == 1) {
 				//we found the current user is the author
 				$queryString1 = "SELECT url FROM  " . $work_table . "  WHERE id = '$delete'";
 				$queryString2 = "DELETE FROM  " . $work_table . "  WHERE id='$delete'";
@@ -796,6 +816,9 @@ else {
 						}
 					}
 				}
+				Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));
+			} else {
+				Display::display_error_message(get_lang('YouAreNotAllowedToDeleteThisDocument'));				
 			}
 		}
 	}

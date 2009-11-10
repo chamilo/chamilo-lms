@@ -109,6 +109,7 @@ function display_tool_options($uploadvisibledisabled, $origin,$base_work_dir,$cu
 	echo '<form method="post" action="'.api_get_self().'?origin='.$origin.'&gradebook='.$gradebook.'&display_tool_options=true">';
 	echo '<div class="row"><div class="form_header">'.get_lang('EditToolOptions').'</div></div>';
 	display_default_visibility_form($uploadvisibledisabled);
+	display_studentsdelete_form();
 	echo '<div class="row">
 				<div class="formw">
 					<button type="submit" class="save" name="changeProperties" value="'.get_lang('Ok').'">'.get_lang('Ok').'</button>
@@ -141,6 +142,40 @@ function display_default_visibility_form($uploadvisibledisabled) {
 		</div>
 	</div>
 	<?php
+}
+
+/**
+ * Display a part of the form to edit the settings of the tool
+ * In this case weither the students are allowed to delete their own publication or not (by default not)
+ *
+ * @return html code
+ * @since Dokeos 1.8.6.2
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ */
+function display_studentsdelete_form()
+{
+	// by default api_get_course_setting returns -1 and the code only expects 0 or 1 so anything tha
+	// is different than 1 will be converted into 0
+	$current_course_setting_value = api_get_course_setting('student_delete_own_publication');
+	if ($current_course_setting_value <> 1)
+	{
+		$current_course_setting_value = 0;
+	}
+	?>
+	<div class="row">
+		<div class="label">
+			<?php echo get_lang('StudentAllowedToDeleteOwnPublication'); ?>
+		</div>
+		<div class="formw">
+			<input class="checkbox" type="radio" name="student_delete_own_publication" value="0"
+			<?php if($current_course_setting_value==0) echo "checked";  ?> />
+		<?php echo get_lang("No");?><br />
+		<input class="checkbox" type="radio" name="student_delete_own_publication" value="1"
+			<?php if($current_course_setting_value==1) echo "checked";  ?> />
+				<?php echo get_lang("Yes"); ?>
+		</div>
+	</div>
+	<?php	
 }
 
 /**
@@ -237,7 +272,7 @@ function create_group_date_select($prefix='') {
 */
 function display_student_publications_list($work_dir,$sub_course_dir,$currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_in_where_query='')
 {
-	global $charset,$timeNoSecFormat,$dateFormatShort,$gradebook;
+	global $charset,$timeNoSecFormat,$dateFormatShort,$gradebook, $_user;
 	// Database table names
 	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -325,9 +360,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	$table_header[] = array(get_lang('Date'),true);
 
 	if ($origin != 'learnpath') {
-		if ($is_allowed_to_edit) {
 		$table_header[] = array(get_lang('Modify'),true);
-		}
 		$table_header[] = array('RealDate',false);
 	}
 
@@ -341,11 +374,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	}
 
 	$column_show[]=1; //date
-
-	if( $is_allowed_to_edit && $origin != 'learnpath') {
-		$column_show[]=1; //modify
-	}
-
+	$column_show[]=1; // modify
 	$column_show[]=0;	 //real date in correct format
 
 
@@ -654,7 +683,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			if( $is_allowed_to_edit) {
 				$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
 					'&curdirpath='.$my_sub_dir.'&origin='.$origin.'&gradebook='.$gradebook.'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';
-				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&delete_dir='.$mydir.'&delete2='.$id2.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('DirDelete').'"  ><img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('DirDelete').'" title="'.get_lang('DirDelete').'"></a>';
+				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&delete_dir='.$mydir.'&delete2='.$id2.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('DirDelete').'"  >'.Display::return_icon('delete.gif',get_lang('DirDelete')).'</a>';
 				$row[] = $action;
 			} else {
 				$row[] = "";
@@ -712,7 +741,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 
 				$action = '';
 				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;parent_id='.$work->parent_id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif" alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';
-				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('WorkDelete').'" ><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'" title="'.get_lang('WorkDelete').'"></a>';
+				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('WorkDelete').'" >'.Display::return_icon('delete.gif',get_lang('WorkDelete')).'</a>';
 				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;move='.$work->id.'" title="'.get_lang('Move').'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="'.get_lang('Move').'" /></a>';
 				if($work->accepted == '1') {
 					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;make_invisible='.$work->id.'&amp;'.$sort_params.'" title="'.get_lang('Invisible').'" ><img src="../img/visible.gif" alt="'.get_lang('Invisible').'" title="'.get_lang('Invisible').'"></a>';
@@ -721,10 +750,13 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				}
 
 				$row[] = $action;
-			} elseif($is_author) {
+			// the user that is not course admin can only edit/delete own document
+			} elseif($row2['insert_user_id'] == $_user['user_id']) {
 				$action = '';
 				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;edit='.$work->id.'" title="'.get_lang('Modify').'"  ><img src="../img/edit.gif"  alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';
-				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('WorkDelete').'"  ><img src="../img/delete.gif" alt="'.get_lang('WorkDelete').'" title="'.get_lang('WorkDelete').'" ></a>';
+				if (api_get_course_setting('student_delete_own_publication')==1) {
+					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.urlencode($my_sub_dir).'&amp;origin='.$origin.'&gradebook='.$gradebook.'&amp;delete='.$work->id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('WorkDelete').'"  >'.Display::return_icon('delete.gif',get_lang('WorkDelete')).'</a>';
+				}
 
 				$row[] = $action;
 			} else {

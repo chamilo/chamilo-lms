@@ -1895,14 +1895,16 @@ function display_agenda_items()
 				WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
 				AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
 				AND ( toolitemproperties.to_group_id=$group_id OR toolitemproperties.to_group_id='0')
-				AND toolitemproperties.visibility='1'
+				AND toolitemproperties.lastedit_type<>'CalendareventDeleted'
 				$session_condition
 				GROUP BY toolitemproperties.ref
 				ORDER BY start_date ".$_SESSION['sort'];
+				//removed 	- > AND toolitemproperties.visibility='1'		
 		}
 		// A.3 you are a course admin without any group or user filter
 		else
 		{
+	
 			// A.3.a you are a course admin without user or group filter but WITH studentview
 			// => see all the messages of all the users and groups without editing possibilities
 			if ($_GET['isStudentView']=='true')
@@ -1988,7 +1990,6 @@ function display_agenda_items()
 	// B. you are a student
 	else
 	{
-
 		if (is_array($group_memberships) and count($group_memberships)>0)
 		{
 			$sql="SELECT

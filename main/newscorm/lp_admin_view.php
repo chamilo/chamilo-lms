@@ -233,7 +233,7 @@ if (isset($_POST['save_audio']))
 				$perm = octdec(!empty($perm)?$perm:'0770');
 				mkdir($filepath.'audio',$perm);
 				$audio_id=add_document($_course,'/audio','folder',0,'audio');
-				api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id());
+				api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id(),null,null,null,null,api_get_session_id());
 			}
 
 			// check if file already exits into document/audio/

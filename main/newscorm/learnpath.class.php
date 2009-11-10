@@ -560,7 +560,7 @@ class learnpath {
 				$perm = octdec(!empty ($perm) ? $perm : '0770');
 				mkdir($filepath . 'audio', $perm);
 				$audio_id = add_document($_course, '/audio', 'folder', 0, 'audio');
-				api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id());
+				api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id(),null,null,null,null,api_get_session_id());
 			}
 
 			// upload the file in the documents tool
@@ -1026,7 +1026,7 @@ class learnpath {
 				$perm = octdec(!empty ($perm) ? $perm : '0770');
 				mkdir($filepath . 'audio', $perm);
 				$audio_id = add_document($_course, '/audio', 'folder', 0, 'audio');
-				api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id());
+				api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id(),null,null,null,null,api_get_session_id());
 			}
 
 			//upload file in documents
@@ -4967,7 +4967,7 @@ class learnpath {
 				$document_id = add_document($_course, $save_file_path, 'file', $file_size, $filename . '.html');
 
 				if ($document_id) {
-					api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id());
+					api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id(),null,null,null,null,api_get_session_id());
 
 					//update parent folders
 					//item_property_update_on_folder($_course, $_GET['dir'], $_user['user_id']);
@@ -7709,13 +7709,24 @@ class learnpath {
 		global $_course;
 
 		$tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
+		$tbl_item_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
+		$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+		$path = '/';
+		$path = Database::escape_string(str_replace('_', '\_', $path));
+		$added_slash = ($path == '/') ? '' : '/';
 
-		$sql_doc = "
-					SELECT *
-					FROM " . $tbl_doc . "
-					WHERE
-						path NOT LIKE '%_DELETED_%'
-					ORDER BY path ASC";
+		//condition for the session		
+		$current_session_id = api_get_session_id();
+		$condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $tbl_course WHERE code = '{$_course[id]}')))";
+
+		$sql_doc = "SELECT docs.*
+						FROM  $tbl_item_prop AS last, $tbl_doc  AS docs
+						WHERE docs.id = last.ref
+						AND docs.path LIKE '".$path.$added_slash."%'
+						AND docs.path NOT LIKE '%_DELETED_%'		
+						AND last.tool = '".TOOL_DOCUMENT."' $condition_session ORDER BY docs.path ASC";		
+
+		//$sql_doc = "SELECT * FROM $tbl_doc WHERE path NOT LIKE '%_DELETED_%' ORDER BY path ASC";								
 		$res_doc = Database::query($sql_doc, __FILE__, __LINE__);
 
 		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . '>'.Display::return_icon('folder_document.gif',get_lang('Documents'),array('style'=>'margin-right:5px;', 'height' => '16px')).' '. get_lang('Documents') . '</div>';
@@ -7801,14 +7812,17 @@ class learnpath {
 		$tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
 		$tbl_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
 
+		$session_id = api_get_session_id();
+		$condition_session = api_get_session_condition($session_id);
+
 		$sql_quiz = "
 					SELECT *
 					FROM " . $tbl_quiz . "
-					WHERE active<>'-1'
+					WHERE active<>'-1' $condition_session
 					ORDER BY title ASC";
 
 		$sql_hot = "SELECT * FROM " . $tbl_doc . " " .
-		" WHERE path LIKE '" . $uploadPath . "/%/%htm%'" .
+		" WHERE path LIKE '" . $uploadPath . "/%/%htm%'  $condition_session " .
 		" ORDER BY id ASC";
 
 		$res_quiz = Database::query($sql_quiz, __FILE__, __LINE__);
@@ -7857,10 +7871,10 @@ class learnpath {
 	function get_links() {
 		$tbl_link = Database :: get_course_table(TABLE_LINK);
 
-		$sql_link = "
-					SELECT *
-					FROM " . $tbl_link . "
-					ORDER BY title ASC";
+		$session_id = api_get_session_id();
+		$condition_session = api_get_session_condition($session_id,false);
+		
+		$sql_link = "SELECT * FROM $tbl_link $condition_session ORDER BY title ASC";
 		$res_link = Database::query($sql_link, __FILE__, __LINE__);
 
 		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resLink').style.display == 'block') {document.getElementById('resLink').style.display = 'none';} else {document.getElementById('resLink').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_LINK . '.gif" style="margin-right:5px;" title="" />' . get_lang("Links") . '</div>';
@@ -7895,10 +7909,10 @@ class learnpath {
 	function get_student_publications() {
 		$tbl_student = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 
-		$sql_student = "
-					SELECT *
-					FROM " . $tbl_student . "
-					ORDER BY title ASC";
+		$session_id = api_get_session_id();
+		$condition_session = api_get_session_condition($session_id,false);
+		
+		$sql_student = "SELECT * FROM $tbl_student  $condition_session ORDER BY title ASC";
 		$res_student = Database::query($sql_student, __FILE__, __LINE__);
 
 		$return .= '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resStudent').style.display == 'block') {document.getElementById('resStudent').style.display = 'none';} else {document.getElementById('resStudent').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.gif" style="margin-right:5px;" title="" />' . get_lang('Student_publication') . '</div>';
@@ -7946,9 +7960,13 @@ class learnpath {
 									}
 									</script>
 									';
+
+			if (!empty($forum['forum_id'])) {
 			$return .= '<img alt="" src="../img/lp_forum.gif" style="margin-right:5px;" title="" />';
 			$return .= '<a style="cursor:hand" onclick="toggle_forum(' . $forum['forum_id'] . ')" style="vertical-align:middle"><img src="' . api_get_path(WEB_IMG_PATH) . 'add.gif" id="forum_' . $forum['forum_id'] . '_opener" align="absbottom" /></a>
 									<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_FORUM . '&amp;forum_id=' . $forum['forum_id'] . '&amp;lp_id=' . $this->lp_id . '" style="vertical-align:middle">' . $forum['forum_title'] . '</a><ul style="display:none" id="forum_' . $forum['forum_id'] . '_content">';
+			}
+						
 			$a_threads = get_threads($forum['forum_id']);
 			if (is_array($a_threads)) {
 				foreach ($a_threads as $thread) {

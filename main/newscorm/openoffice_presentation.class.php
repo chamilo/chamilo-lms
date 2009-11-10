@@ -65,7 +65,7 @@ class OpenofficePresentation extends OpenofficeDocument {
 			$i++;
 			// add the png to documents
 			$document_id = add_document($_course,$this->created_dir.'/'.urlencode($file_name),'file',filesize($this->base_work_dir.$this->created_dir.'/'.$file_name),$slide_name);
-			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',api_get_user_id(),0,0);
+			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',api_get_user_id(),0,0,null,null,api_get_session_id());
 
 
             // Generating the thumbnail
@@ -117,7 +117,7 @@ class OpenofficePresentation extends OpenofficeDocument {
 			if ($document_id){
 
 				//put the document in item_property update
-				api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',api_get_user_id(),0,0);
+				api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',api_get_user_id(),0,0,null,null,api_get_session_id());
 
 				$previous = learnpath::add_item(0, $previous, 'document', $document_id, $slide_name, '');
 				if($this->first_item == 0){
@@ -209,7 +209,7 @@ class OpenofficePresentation extends OpenofficeDocument {
 
 			$did = add_document($_course, $this->created_dir.'/'.urlencode($file_name), 'file', filesize($this->base_work_dir.$this->created_dir.'/'.$file_name), $slide_name);
 			if ($did)
-				api_item_property_update($_course, TOOL_DOCUMENT, $did, 'DocumentAdded', $_SESSION['_uid'], 0, NULL);
+				api_item_property_update($_course, TOOL_DOCUMENT, $did, 'DocumentAdded', $_SESSION['_uid'], 0, null,null,null,api_get_session_id());
 
 		}
 

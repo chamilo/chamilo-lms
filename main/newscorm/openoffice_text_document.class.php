@@ -163,7 +163,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 			if ($document_id){
 
 				//put the document in item_property update
-				api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_SESSION['_uid'],0,0);
+				api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_SESSION['_uid'],0,0,null,null,api_get_session_id());
 
 				$infos = pathinfo($this->filepath);
 				$slide_name = strip_tags(nl2br($item_title));
@@ -210,7 +210,7 @@ class OpenOfficeTextDocument extends OpenofficeDocument {
 			if ($document_id){
 
 				//put the document in item_property update
-				api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_SESSION['_uid'],0,0);
+				api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$_SESSION['_uid'],0,0,null,null,api_get_session_id());
 
 				$infos = pathinfo($this->filepath);
 				$slide_name = 'Page '.str_repeat('0',2-strlen($key)).$key;

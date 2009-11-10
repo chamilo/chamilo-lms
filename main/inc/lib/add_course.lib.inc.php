@@ -691,6 +691,7 @@ function update_Db_course($courseDbName)
 		title VARCHAR(255),
 		content TEXT,
 		session_id smallint default 0,
+		description_type tinyint unsigned NOT NULL default 0,		
 		UNIQUE (id)
 		)";
 	Database::query($sql, __FILE__, __LINE__);

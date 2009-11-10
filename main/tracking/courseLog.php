@@ -305,7 +305,11 @@ echo '&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print();"
 if($_GET['studentlist'] == 'false') {
 	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&studentlist=false"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
 } elseif ($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
-	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv">'.Display::return_icon('csv.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
+	$addional_param = '';
+	if (isset($_GET['additional_profile_field'])) {
+		$addional_param ='additional_profile_field='.intval($_GET['additional_profile_field']);
+	}
+	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.'">'.Display::return_icon('csv.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
 }
 if($_GET['studentlist'] == 'true' || empty($_GET['studentlist'])) {
 	echo display_additional_profile_fields();
@@ -739,7 +743,7 @@ if ($_GET['studentlist'] == 'false') {
 	}
 
 	// send the csv file if asked
-	if ($export_csv) {
+	if ($export_csv) {			
 		if ($is_western_name_order) {
 			$csv_headers = array (
 				get_lang('OfficialCode', ''),
@@ -766,6 +770,10 @@ if ($_GET['studentlist'] == 'false') {
 				get_lang('FirstLogin', ''),
 				get_lang('LatestLogin', '')
 			);
+		}
+		
+		if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
+			$csv_headers[]=get_lang('AdditionalProfileField');
 		}
 		ob_end_clean();
 		array_unshift($csv_content, $csv_headers); // adding headers before the content

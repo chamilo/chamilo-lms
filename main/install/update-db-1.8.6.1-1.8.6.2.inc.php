@@ -407,6 +407,32 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							}
 						}
 					}					
+					
+					// fill description type into course_description table
+					
+					$t_course_description = $row_course['db_name'].".course_description";
+
+                    if($singleDbForm)
+                    {                    	
+                        $t_course_description = "$prefix{$row_course['db_name']}_course_description";
+                    }
+
+					// get all ids and update description_type field with them from course_description table
+					$sql_sel = "SELECT id FROM $t_course_description";
+					$rs_sel = mysql_query($sql_sel);
+					
+					if ($rs_sel === false) {
+				    	error_log('Could not query course_description ids table: '.mysql_error());
+					} else { 											
+						if (mysql_num_rows($rs_sel) > 0) {													
+							while ($row_ids = mysql_fetch_array($rs_sel)) {
+								$description_id = $row_ids['id']; 								
+								$sql_upd = "UPDATE $t_course_description SET description_type='$description_id' WHERE id='$description_id'";
+								mysql_query($sql_upd);
+							}							
+						}						
+					}
+										
    				}
 			}
 		}

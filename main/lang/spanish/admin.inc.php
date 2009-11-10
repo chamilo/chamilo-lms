@@ -1091,4 +1091,6 @@ $IsNotAdministrator = "No es administrador";
 $AddTimeLimit = "Añadir límite de tiempo";
 $EditTimeLimit = "Editar límite de tiempo";
 $TheTimeLimitsAreReferential = "El plazo de una categoría es referencial, no afectará a los límites de una sesión de formación";
+$ShowGlossaryInExtraToolsTitle = "Muestra los términos del glosario en las herramientas lecciones(scorm) y ejercicios";
+$ShowGlossaryInExtraToolsComment = "Desde aquí usted puede configurar como añadir  los términos del glosario en herramientas como lecciones(scorm) y ejercicios";
 ?>

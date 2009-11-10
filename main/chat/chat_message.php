@@ -275,7 +275,7 @@ if (!empty($course) && !empty($_user['user_id']))
         <textarea name="message" style="width: 320px; height: 35px" onkeydown="send_message(event);" onclick="javascript:insert_smile(this);"></textarea>
         </td>
         <td>
-        <input type="submit" value="<?php echo get_lang("Send"); ?>" class="background_submit">
+        <button type="submit" value="<?php echo get_lang("Send"); ?>" class="background_submit"><?php echo get_lang("Send"); ?></button>
         </td>
 	</tr>
     <tr>

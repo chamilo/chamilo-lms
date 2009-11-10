@@ -819,7 +819,7 @@ Display::display_footer();
  * @since October 2009
  * @version 1.8.7
  */
-function display_additional_profile_fields(){
+function display_additional_profile_fields() {
 	// getting all the extra profile fields that are defined by the platform administrator
 	$extra_fields = UserManager :: get_extra_fields(0,50,5,'ASC');
 
@@ -830,15 +830,17 @@ function display_additional_profile_fields(){
 	// the information the users have entered or selected. 
 	$return .= '<select name="additional_profile_field">';
 	$return .= '<option value="-">'.get_lang('SelectFieldToAdd').'</option>';
-	foreach ($extra_fields as $key=>$field)
-	{
-		if ($field[0] == $_GET['additional_profile_field']) {
-			$selected = 'selected="selected"';
+
+	foreach ($extra_fields as $key=>$field) {
+		// show only extra fields that are visible, added by J.Montoya  
+		if ($field[6]==1) {
+			if ($field[0] == $_GET['additional_profile_field'] ) {
+				$selected = 'selected="selected"';
+			} else {
+				$selected = '';
+			}
+			$return .= '<option value="'.$field[0].'" '.$selected.'>'.$field[3].'</option>';
 		}
-		else {
-			$selected = '';
-		}
-		$return .= '<option value="'.$field[0].'" '.$selected.'>'.$field[3].'</option>';
 	}
 	$return .= '</select>';
 
@@ -848,7 +850,6 @@ function display_additional_profile_fields(){
 			$return .= '<input type="hidden" name="'.$key.'" value="'.Security::Remove_XSS($value).'" />';
 		}
 	}
-
 	// the submit button
 	$return .= '<button class="save" type="submit">'.get_lang('AddAdditionalProfileField').'</button>';
 	$return .= '</form>';
@@ -895,6 +896,7 @@ function get_addtional_profile_information_of_field_by_user($field_id, $users){
 	$table_user 				= Database::get_main_table(TABLE_MAIN_USER);
 	$table_user_field_values 	= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);	
 	$result 					= UserManager::get_extra_field_information($field_id);	
+	
 	if (!empty($users)) {
 		if ($result['field_type'] == USER_FIELD_TYPE_TAG ) {	
 			foreach($users as $user_id) {

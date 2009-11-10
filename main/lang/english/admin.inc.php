@@ -1091,4 +1091,6 @@ $IsNotAdministrator = "Is not administrator";
 $AddTimeLimit = "Add time limit";
 $EditTimeLimit = "Edit time limit";
 $TheTimeLimitsAreReferential = "The time limit of a category is referential, will not affect the boundaries of a training session";
+$ShowGlossaryInExtraToolsTitle = "Show the glossary terms in extra tools";
+$ShowGlossaryInExtraToolsComment = "From here you can configure how to add the glossary terms in extra tools as learning path and exercice tool";
 ?>

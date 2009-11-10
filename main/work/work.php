@@ -402,7 +402,6 @@ if (!empty ($_POST['changeProperties'])) {
 	$query = "SELECT * FROM " . $table_course_setting . " WHERE variable = 'student_delete_own_publication'";
 	$result = Database::query($query, __FILE__, __LINE__);
 	$number_of_setting = Database::num_rows($result);
-	echo $number_of_setting;
 	
 	if ($number_of_setting == 1){
 		$query = "UPDATE " . $table_course_setting . " SET value='" . Database::escape_string($_POST['student_delete_own_publication']) . "' WHERE variable='student_delete_own_publication'";
@@ -411,7 +410,6 @@ if (!empty ($_POST['changeProperties'])) {
 		$query = "INSERT INTO " . $table_course_setting . " (variable, value, category) VALUES ('student_delete_own_publication','" . Database::escape_string($_POST['student_delete_own_publication']) . "','work')";
 		Database::query($query, __FILE__, __LINE__);			
 	}
-	echo $query;
 
 	$_course['show_score'] = $uploadvisibledisabled;
 } else {

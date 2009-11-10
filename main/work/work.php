@@ -1471,8 +1471,8 @@ if (!$display_upload_form && !$display_tool_options) {
 
 		if ($origin != 'learnpath') {
 			$form_filter = '<form method="post" action="'.api_get_self().'?cidReq='.$cidreq.'&curdirpath='.$curdirpath.'&gradebook='.$gradebook.'">';
-			$form_filter .= make_select('filter',array(0=>get_lang('SelectAFilter'),1=>get_lang('FilterByNotRevised'),2=>get_lang('FilterByRevised'),3=>get_lang('FilterByNotExpired')),$filter);
-			$form_filter .= '<input type="submit" value="'.get_lang('FilterAssignments').'"</form>';
+			$form_filter .= make_select('filter',array(0=>get_lang('SelectAFilter'),1=>get_lang('FilterByNotRevised'),2=>get_lang('FilterByRevised'),3=>get_lang('FilterByNotExpired')),$filter).'&nbsp&nbsp';
+			$form_filter .= '<button type="submit" class="save" value="'.get_lang('FilterAssignments').'">'.get_lang('FilterAssignments').'</button></form>';
 			echo $form_filter;
 		}
 

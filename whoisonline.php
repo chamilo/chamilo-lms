@@ -231,36 +231,36 @@ function display_individual_user($user_id) {
 			$big_image_height = $big_image_size[1];
 			$url_big_image = $big_image.'?rnd='.time();
 			echo '<input type="image" src="'.$fullurl.'" alt="'.$alt.'" onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/><br />';
-			global $user_anonymous;
-			if (api_get_setting('allow_social_tool') == 'true' && api_get_user_id() <> $user_anonymous && api_get_user_id() <> 0) {
-				echo '<br />';
-				echo '<a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$safe_user_id.'">'.get_lang('ViewSharedProfile').'</a>';
-				echo '<br />';
-								
-				$user_anonymous = api_get_anonymous_id();
-				
-				if ($safe_user_id != api_get_user_id() && !api_is_anonymous($safe_user_id)) {
-					$user_relation = UserFriend::get_relation_between_contacts(api_get_user_id(), $safe_user_id);
-					if ($user_relation == 0 || $user_relation == 6) {
-						echo  '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=300&width=610&user_friend='.$safe_user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a><br />
-								<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$safe_user_id.'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
-					} else {
-						echo  '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$safe_user_id.'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
-					}
-				}	
-					
-				
-				
-			}
 		} else {
 			echo Display::return_icon('unknown.jpg', get_lang('Unknown'));
 			echo '<br />';
+		}
+		
+		echo '<br />'.$status.'<br />';
+		
+		global $user_anonymous;
+		if (api_get_setting('allow_social_tool') == 'true' && api_get_user_id() <> $user_anonymous && api_get_user_id() <> 0) {
+			echo '<br />';
+			echo '<a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$safe_user_id.'">'.get_lang('ViewSharedProfile').'</a>';
+			echo '<br />';
+							
+			$user_anonymous = api_get_anonymous_id();
+			
+			if ($safe_user_id != api_get_user_id() && !api_is_anonymous($safe_user_id)) {
+				$user_relation = UserFriend::get_relation_between_contacts(api_get_user_id(), $safe_user_id);
+				if ($user_relation == 0 || $user_relation == 6) {
+					echo  '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=300&width=610&user_friend='.$safe_user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a><br />
+						   <a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$safe_user_id.'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
+				} else {
+					echo  '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$safe_user_id.'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
+				}
+			}
 		}
 
 		if (api_get_setting('show_email_addresses') == 'true') {
 			echo Display::encrypted_mailto_link($user_object->email,$user_object->email).'<br />';
 		}
-		echo $status.'<br />';
+		
 		echo '</div>';
 		if ($user_object->competences) {
 			echo '<dt><div class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div></dt>';

@@ -746,7 +746,7 @@ echo '<div id="social-profile-container">';
 								if (is_array($data)) {
 									$extra_information_value .= '<strong>'.ucfirst($field_display_text).':</strong> '.implode(',',$data).'<br />';
 								} else {
-									if ($field_type == 8) {
+									if ($field_type == USER_FIELD_TYPE_DOUBLE_SELECT) {
 										$id_options = explode(';',$data);
 										$value_options = array();
 										// get option display text from user_field_options table
@@ -757,11 +757,11 @@ echo '<div id="social-profile-container">';
 											$value_options[] = $row_options[0];
 										}
 										$extra_information_value .= '<strong>'.ucfirst($field_display_text).':</strong> '.implode(' ',$value_options).'<br />';
-									} elseif($field_type == 10) {
+									} elseif($field_type == USER_FIELD_TYPE_TAG ) {
 										$user_tags = UserManager::get_user_tags($user_id, $field_id);
 										$tag_tmp = array();
 										foreach ($user_tags as $tags) {
-											$tag_tmp[] = $tags[0];
+											$tag_tmp[] = $tags['tag'];
 										}									 
 										if (is_array($user_tags) && count($user_tags)>0) {							
 											$extra_information_value .= '<strong>'.ucfirst($field_display_text).':</strong> '.implode(', ',$tag_tmp).'<br />';

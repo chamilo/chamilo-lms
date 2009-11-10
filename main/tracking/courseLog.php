@@ -119,6 +119,19 @@ Display::display_header($nameTools, 'Tracking');
 // getting all the students of the course
 $a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true, (empty($_SESSION['id_session']) ? null : $_SESSION['id_session']));
 $nbStudents = count($a_students);
+			
+// gettting all the additional information of an additional profile field
+if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_profile_field'])) { 
+	//$additional_user_profile_info = get_addtional_profile_information_of_field($_GET['additional_profile_field']);
+	$user_array = array();
+	foreach($a_students as $key=>$item){
+		$user_array[] = $key;
+	}
+	//fetching only the user that are loaded NOT ALL user in the portal
+	$additional_user_profile_info = get_addtional_profile_information_of_field_by_user($_GET['additional_profile_field'],$user_array);
+}
+
+
 
 function count_item_resources() {
 	$table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -271,6 +284,9 @@ function get_tool_name_table($tool) {
 				 'id_tool' => $id_tool);
 }
 
+	
+
+
 /*
 ==============================================================================
 		MAIN CODE
@@ -291,7 +307,9 @@ if($_GET['studentlist'] == 'false') {
 } elseif ($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
 	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv">'.Display::return_icon('csv.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
 }
-echo display_additional_profile_fields();
+if($_GET['studentlist'] == 'true' || empty($_GET['studentlist'])) {
+	echo display_additional_profile_fields();
+}
 echo '</div>';
 
 
@@ -653,7 +671,7 @@ if ($_GET['studentlist'] == 'false') {
 	    $course_code = $_course['id'];
 		foreach ($a_students as $student_id => $student) {
 			$student_datas = UserManager :: get_user_info_by_id($student_id);
-
+			
 			$avg_time_spent = $avg_student_score = $avg_student_progress = $total_assignments = $total_messages = 0;
 			$nb_courses_student = 0;
 			$avg_time_spent = Tracking :: get_time_spent_on_the_course($student_id, $course_code);
@@ -685,7 +703,8 @@ if ($_GET['studentlist'] == 'false') {
 			
 			// we need to display an additional profile field
 			if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
-				$row[]=implode($additional_user_profile_info[$student_id]);
+				if (is_array($additional_user_profile_info[$student_id]))
+					$row[]=implode(', ', $additional_user_profile_info[$student_id]);
 			}
 			if ($export_csv) {
 				$row[8] = strip_tags($row[8]);
@@ -693,8 +712,7 @@ if ($_GET['studentlist'] == 'false') {
 				unset($row[10]);
 				$csv_content[] = $row;
 			}
-			$all_datas[] = $row;		
-
+			$all_datas[] = $row;
 		}
 
 		usort($all_datas, 'sort_users');
@@ -852,7 +870,7 @@ function get_addtional_profile_information_of_field($field_id){
 
 	$sql = "SELECT user.user_id, field.field_value FROM $table_user user, $table_user_field_values field
 		WHERE user.user_id = field.user_id
-		AND field.field_id='".Database::escape_string($field_id)."'";
+		AND field.field_id='".intval($field_id)."'";
 	$result = api_sql_query($sql,__FILE__,__LINE__);
 	while($row = Database::fetch_array($result))
 	{
@@ -860,6 +878,53 @@ function get_addtional_profile_information_of_field($field_id){
 	}
 	return $return;
 }
+
+/**
+ * This function gets all the information of a certrain ($field_id) additional profile field for a specific list of users is more efficent than  get_addtional_profile_information_of_field() function
+ * It gets the information of all the users so that it can be displayed in the sortable table or in the csv or xls export
+ * 
+ * @author	Julio Montoya <gugli100@gmail.com>
+ * @param	int field id 
+ * @param	array list of user ids
+ * @return	array 
+ * @since	Nov 2009
+ * @version	1.8.6.2
+ */
+function get_addtional_profile_information_of_field_by_user($field_id, $users){
+	// Database table definition
+	$table_user 				= Database::get_main_table(TABLE_MAIN_USER);
+	$table_user_field_values 	= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);	
+	$result 					= UserManager::get_extra_field_information($field_id);	
+	if (!empty($users)) {
+		if ($result['field_type'] == USER_FIELD_TYPE_TAG ) {	
+			foreach($users as $user_id) {
+				$user_result = UserManager::get_user_tags($user_id, $field_id);
+				$tag_list = array();
+				foreach($user_result as $item) {
+					$tag_list[] = $item['tag'];
+				}			
+				$return[$user_id][] = implode(', ',$tag_list);
+			}
+		} else {		
+			$new_user_array = array();
+			foreach($users as $user_id) {
+				$new_user_array[]= "'".$user_id."'";
+			}
+			$users = implode(',',$new_user_array);	
+			//selecting only the necessary information NOT ALL the user list
+			$sql = "SELECT user.user_id, field.field_value FROM $table_user user INNER JOIN $table_user_field_values field
+					ON (user.user_id = field.user_id) 
+					WHERE field.field_id=".intval($field_id)." AND user.user_id IN ($users)";
+					
+			$result = api_sql_query($sql,__FILE__,__LINE__);
+			while($row = Database::fetch_array($result)) {
+				$return[$row['user_id']][] = $row['field_value'];
+			}
+		}
+	}		
+	return $return;
+}
+
 
 /**
  * count the number of students in this course (used for SortableTable)

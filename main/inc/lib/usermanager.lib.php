@@ -2251,7 +2251,7 @@ class UserManager
 	 * 
 	 * USER TAGS
 	 * 
-	 * Intructions to create a new user tag
+	 * Intructions to create a new user tag by Julio Montoya <gugli100@gmail.com>
 	 * 
 	 * 1. Create a new extra field in main/admin/user_fields.php with the "TAG" field type make it available and visible. Called it "books" for example.
 	 * 2. Go to profile main/auth/profile.php There you will see a special input (facebook style) that will show suggestions of tags. 
@@ -2267,6 +2267,8 @@ class UserManager
 	 * @param int field_id
 	 * @param string how we are going to result value in array or in a string (json)
 	 * @return mixed 
+	 * @since Nov 2009
+	 * @version 1.8.6.2
 	 */
 	public static function get_tags($tag, $field_id, $return_format='json',$limit=10) {
 		// database table definition
@@ -2330,7 +2332,7 @@ class UserManager
 		$return = array();
 		if (Database::num_rows($result)> 0) {
 			while ($row = Database::fetch_array($result,'ASSOC')) {
-				$return[$row['id']] = array($row['tag'],$row['count']);
+				$return[$row['id']] = array('tag'=>$row['tag'],'count'=>$row['count']);
 			}
 		}
 		return $return;
@@ -2487,7 +2489,7 @@ class UserManager
 		//echo '<pre>';var_dump($tags);
 		if(is_array($tags) && count($tags)>0) {
 			foreach ($tags as $key=>$tag) {
-				if ($tag[1]>'0') {				
+				if ($tag['count']>'0') {				
 					$sql = "UPDATE $table_user_tag SET count = count - 1  WHERE id = $key ";
 					$result = Database::query($sql, __FILE__, __LINE__);
 				}
@@ -2506,6 +2508,7 @@ class UserManager
 	 * @return bool
 	 */
 	public function process_tags($tags, $user_id, $field_id) {
+		
 		//We loop the tags and add it to the DB
 		if (is_array($tags)) {
 			foreach($tags as $tag) {

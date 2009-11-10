@@ -393,7 +393,7 @@ foreach ($extra as $id => $field_details) {
 			$tag_list = '';
 			if (is_array($user_tags) && count($user_tags)> 0) {
 				foreach ($user_tags as $tag) {
-					$tag_list .= '<option value="'.$tag[0].'" class="selected">'.$tag[0].'</option>';
+					$tag_list .= '<option value="'.$tag['tag'].'" class="selected">'.$tag['tag'].'</option>';
 				}
 			}			
 			$multi_select = '<select id="extra_'.$field_details[1].'" name="extra_'.$field_details[1].'">

@@ -42,7 +42,7 @@ class DisplayGradebook
 			elseif (!$evalobj->has_results()) {
 				$header .= '<a href="gradebook_add_result.php?selectcat=' . $selectcat . '&selecteval=' . $evalobj->get_id() . '"><img src="../img/filenew.gif" alt="' . get_lang('AddResult') . '" align="absmiddle"/> ' . get_lang('AddResult') . '</a>';
 			}
-			$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&import="><img src="../img/calendar_down.gif" border="0" alt="" />' . ' ' . get_lang('ImportResult') . '</a>';
+			$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&import="><img src="../img/import_data.gif" border="0" alt="" />' . ' ' . get_lang('ImportResult') . '</a>';
 			if ($evalobj->has_results()) {
 				$header .= '<a href="' . api_get_self() . '?&selecteval=' . $evalobj->get_id() . '&export="><img src="../img/file_pdf.gif" border="0" alt="" />' . ' ' . get_lang('ExportResult') . '</a>';
 				$header .= '<a href="gradebook_edit_result.php?selecteval=' . $evalobj->get_id() .'"><img src="../img/edit.gif" alt="' . get_lang('EditResult') . '" align="absmiddle" /> ' . get_lang('EditResult') . '</a>';

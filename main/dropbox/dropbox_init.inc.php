@@ -91,7 +91,8 @@ $user_id = api_get_user_id();
 $course_code = $_course['sysCode'];
 $course_info = Database::get_course_info($course_code);
 
-$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code);
+$session_id = api_get_session_id();
+$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code,$session_id);
 
 
 /*
@@ -268,16 +269,16 @@ if (($_POST['action']=='download_received' || $_POST['action']=='download_sent')
  * ========================================
  * Prevents access of all users that are not course members
  */
-if((!$is_allowed_in_course || !$is_courseMember) && !api_is_allowed_to_edit())
-{
-	if ($origin != 'learnpath')
-	{
+
+if((!$is_allowed_in_course || !$is_course_member) && !api_is_allowed_to_edit(null,true)) {
+
+	if ($origin != 'learnpath') {
 		api_not_allowed(true);//print headers/footers
-	}else{
+	} else {
 		api_not_allowed();
 	}
-	exit();
-}
+	exit();	
+}	
 
 /*
 ==============================================================================

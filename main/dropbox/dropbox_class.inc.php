@@ -376,6 +376,9 @@ class Dropbox_Person
 
 		//Note: perhaps include an ex coursemember check to delete old files
 
+		$session_id = api_get_session_id();
+		$condition_session = api_get_session_condition($session_id);
+			
 		$post_tbl = Database::get_course_table(TABLE_DROPBOX_POST);
 		$person_tbl = Database::get_course_table(TABLE_DROPBOX_PERSON);
 		$file_tbl = Database::get_course_table(TABLE_DROPBOX_FILE);
@@ -384,11 +387,10 @@ class Dropbox_Person
 				FROM $post_tbl r, $person_tbl p
 				WHERE r.dest_user_id = '".addslashes($this->userId)."'
 					AND r.dest_user_id = p.user_id
-					AND r.file_id = p.file_id";
+					AND r.file_id = p.file_id $condition_session";
 
-		if (intval($_SESSION['id_session']>0)) {
-			$sql .= " AND r.session_id = ".intval($_SESSION['id_session']);
-		}
+		//if (intval($_SESSION['id_session']>0)) { $sql .= " AND r.session_id = ".intval($_SESSION['id_session']); }
+
         $result = Database::query($sql,__FILE__,__LINE__);
 		while ($res = Database::fetch_array($result)) {
 			$temp = new Dropbox_Work($res["file_id"]);
@@ -401,11 +403,10 @@ class Dropbox_Person
 				FROM $file_tbl f, $person_tbl p
 				WHERE f.uploader_id = '".addslashes($this->userId)."'
 				AND f.uploader_id = p.user_id
-				AND f.id = p.file_id";
+				AND f.id = p.file_id $condition_session";
 
-		if(intval($_SESSION['id_session']>0)) {
-			$sql .= " AND f.session_id = ".intval($_SESSION['id_session']);
-		}
+		//if(intval($_SESSION['id_session']>0)) { $sql .= " AND f.session_id = ".intval($_SESSION['id_session']); }
+
         $result =Database::query($sql,__FILE__,__LINE__);
 		while ($res = Database::fetch_array($result)) {
 			$this->sentWork[] = new Dropbox_SentWork($res["id"]);

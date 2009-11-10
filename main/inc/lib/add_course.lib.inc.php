@@ -1125,8 +1125,11 @@ function update_Db_course($courseDbName)
   			received tinyint unsigned NOT NULL default 0,
   			sent tinyint unsigned NOT NULL default 0,
   			user_id int NOT NULL default 0,
+  			session_id smallint NOT NULL default 0,		
   			PRIMARY KEY  (cat_id)
   			)";
+	Database::query($sql, __FILE__, __LINE__);
+	$sql = "ALTER TABLE `".$TABLETOOLDROPBOXCATEGORY . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
 
 	$sql = "CREATE TABLE `".$TABLETOOLDROPBOXFEEDBACK."` (

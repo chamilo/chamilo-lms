@@ -298,10 +298,12 @@ if ($display_all_form === true) {
 
 					// looping through the selected values and assigning the selected values to either the first or second select form
 					foreach ($selected_values as $key => $selected_value) {
-						if (key_exists($selected_value, $values[0])) {
-							$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
-						} else {
-							$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
+							if(is_array($values)){
+							if (array_key_exists($selected_value, $values[0])) {
+								$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
+							} else {
+								$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
+							}
 						}
 					}
 				}

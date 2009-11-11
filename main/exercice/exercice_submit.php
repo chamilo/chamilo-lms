@@ -254,7 +254,7 @@ if ($exercise_row['expired_time'] != 0) {
     $(document).ready(function(){    
        $('#text-content').epiclock({
          mode: EC_COUNTDOWN,
-         format: 'x{<sup>".get_lang('Hours')."</sup>} i{<sup>".get_lang('Minutes')."</sup>} s{<sup>".get_lang('Seconds')."</sup>}',
+         format: 'x{ : } i{ : } s{}',
          target: '".$plugin_expired_time."',
          onTimer: function(){ $('form#my_frm_exercise').submit() }
        }).clocks(EC_RUN);

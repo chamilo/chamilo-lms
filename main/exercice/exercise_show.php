@@ -1097,7 +1097,7 @@ if ($origin != 'learnpath') {
 		echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
 		echo '</body></html>';
 	} else {
-		Display::display_normal_message(get_lang('ExerciseFinished'));
+		Display::display_normal_message(get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'));
 	}
 }
 //destroying the session

@@ -62,3 +62,5 @@ ALTER TABLE group_category ADD COLUMN chat_state TINYINT DEFAULT 1, ADD INDEX (c
 ALTER TABLE student_publication ADD COLUMN weight float(6,2) UNSIGNED NOT NULL DEFAULT 0;
 ALTER TABLE course_description ADD COLUMN description_type TINYINT NOT NULL DEFAULT 0;
 ALTER TABLE dropbox_category ADD COLUMN session_id smallint NOT NULL DEFAULT 0, ADD INDEX (session_id);
+ALTER TABLE chat_connected ADD COLUMN session_id  smallint NOT NULL DEFAULT 0, ADD INDEX (session_id);
+ALTER TABLE chat_connected ADD COLUMN to_group_id INT NOT NULL DEFAULT 0;

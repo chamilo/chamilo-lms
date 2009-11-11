@@ -39,6 +39,8 @@ include (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 //$course=api_get_course_id();
 
 $course=$_GET['cidReq'];
+$session_id = intval($_SESSION['id_session']);
+$group_id 	= intval($_SESSION['_gid']);
 
 // if we have the session set up
 if (!empty($course))
@@ -77,40 +79,58 @@ if (!empty($course))
 		}
 	}
 
-	if(!file_exists($chatPath.'messages-'.$dateNow.'.log.html'))
+	$filename_chat = '';
+	if (!empty($group_id)) {
+		$filename_chat = 'messages-'.$dateNow.'_gid-'.$group_id.'.log.html';
+	} else if (!empty($session_id)) {
+		$filename_chat = 'messages-'.$dateNow.'_sid-'.$session_id.'.log.html';
+	} else {
+		$filename_chat = 'messages-'.$dateNow.'.log.html';				
+	}
+
+	if(!file_exists($chatPath.$filename_chat))
 	{
-		@fclose(fopen($chatPath.'messages-'.$dateNow.'.log.html','w'));
+		@fclose(fopen($chatPath.$filename_chat,'w'));
 		if (!api_is_anonymous()) {
-			$doc_id=add_document($_course,'/chat_files/messages-'.$dateNow.'.log.html','file',0,'messages-'.$dateNow.'.log.html');
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
+			$doc_id=add_document($_course,'/chat_files/'.$filename_chat,'file',0,$filename_chat);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'],$group_id,null,null,null,$session_id);
 			item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
 		}
 	}
 
+	$basename_chat = '';
+	if (!empty($group_id)) {
+		$basename_chat = 'messages-'.$dateNow.'_gid-'.$group_id;
+	} else if (!empty($session_id)) {
+		$basename_chat = 'messages-'.$dateNow.'_sid-'.$session_id;
+	} else {
+		$basename_chat = 'messages-'.$dateNow;				
+	}
+
 	if($reset && $isMaster)
 	{
-		$i=1;
 
-		while(file_exists($chatPath.'messages-'.$dateNow.'-'.$i.'.log.html'))
+		$i=1;
+		while(file_exists($chatPath.$basename_chat.'-'.$i.'.log.html'))
 		{
 			$i++;
 		}
 
-		@rename($chatPath.'messages-'.$dateNow.'.log.html',$chatPath.'messages-'.$dateNow.'-'.$i.'.log.html');
+		@rename($chatPath.$basename_chat.'.log.html',$chatPath.$basename_chat.'-'.$i.'.log.html');
 
-		@fclose(fopen($chatPath.'messages-'.$dateNow.'.log.html','w'));
+		@fclose(fopen($chatPath.$basename_chat.'.log.html','w'));
 
-		$doc_id=add_document($_course,'/chat_files/messages-'.$dateNow.'-'.$i.'.log.html','file',filesize($chatPath.'messages-'.$dateNow.'-'.$i.'.log.html'),'messages-'.$dateNow.'-'.$i.'.log.html');
+		$doc_id=add_document($_course,'/chat_files/'.$basename_chat.'-'.$i.'.log.html','file',filesize($chatPath.$basename_chat.'-'.$i.'.log.html'),$basename_chat.'-'.$i.'.log.html');
 
-		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
+		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'],$group_id,null,null,null,$session_id);
 		item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
 
-		$doc_id = DocumentManager::get_document_id($_course,'/chat_files/messages-'.$dateNow.'.log.html');
+		$doc_id = DocumentManager::get_document_id($_course,'/chat_files/'.$basename_chat.'.log.html');
 
 		update_existing_document($_course, $doc_id,0);
 	}
 
-	$content=file($chatPath.'messages-'.$dateNow.'.log.html');
+	$content=file($chatPath.$basename_chat.'.log.html');
 	$nbr_lines=sizeof($content);
 	$remove=$nbr_lines-100;
 

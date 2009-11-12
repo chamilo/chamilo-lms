@@ -21,14 +21,13 @@ class Wiki extends Resource
 	function Wiki($id, $reflink, $title, $content, $user_id, $group_id, $timestamp, $template, $menu)
 	{
 		parent::Resource($id,RESOURCE_WIKI);
+		$this->page_id					= $id;
 		$this->reflink 					= $reflink;
 		$this->title 					= $title;
 		$this->content					= $content;
 		$this->user_id					= $user_id;
 		$this->group_id					= $group_id;
 		$this->dtime					= $timestamp;
-		$this->template					= $template;
-		$this->menu						= $menu;
 	}
 
 	function show()

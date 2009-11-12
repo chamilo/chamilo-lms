@@ -1432,6 +1432,7 @@ class CourseRestorer
 		{
 			// wiki table of the target course
 			$table_wiki = Database :: get_course_table('wiki', $this->course->destination_db);
+			$table_wiki_conf 	= Database :: get_course_table('wiki_conf', $this->course->destination_db);
 
 			// storing all the resources that have to be copied in an array
 			$resources = $this->course->resources;
@@ -1452,6 +1453,13 @@ class CourseRestorer
 				$result = Database::query($sql, __FILE__, __LINE__);
 				$new_id = Database::insert_id();
 				$this->course->resources[RESOURCE_WIKI][$id]->destination_id = $new_id;
+				
+				// we also add an entry in wiki_conf
+				$sql = "INSERT INTO $table_wiki_conf 
+						(page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_size, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit) 
+						VALUES
+						('".Database::escape_string($wiki->page_id)."', '', '', '', '', '', '', '', NULL, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0)";
+				$result = Database::query($sql, __FILE__, __LINE__);						
 			}
 		}
 	}	

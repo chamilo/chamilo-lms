@@ -1,5 +1,5 @@
 <?php
-require_once('resource.class.php');
+require_once('Resource.class.php');
 
 /**
  * Class for migrating the wiki

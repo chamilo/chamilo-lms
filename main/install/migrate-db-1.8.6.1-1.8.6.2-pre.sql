@@ -14,12 +14,33 @@
 -- xxMAINxx
 ALTER TABLE gradebook_evaluation ADD COLUMN type varchar(40) NOT NULL;
 ALTER TABLE session ADD COLUMN visibility int NOT NULL default 1;
-ALTER TABLE session_rel_course_rel_user ADD COLUMN visibility int NOT NULL default 1;
-CREATE TABLE session_category (id int(11) NOT NULL auto_increment, name varchar(100) default NULL, date_start date default NULL, date_end date default NULL, PRIMARY KEY  (id));
 ALTER TABLE session ADD COLUMN session_category_id INT NOT NULL;
+
+ALTER TABLE session_rel_course_rel_user ADD COLUMN visibility int NOT NULL default 1;
+ALTER TABLE session_rel_course_rel_user ADD COLUMN status int NOT NULL default 0;
+CREATE TABLE session_category (id int(11) NOT NULL auto_increment, name varchar(100) default NULL, date_start date default NULL, date_end date default NULL, PRIMARY KEY  (id));
+
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_coach_to_edit_course_session', NULL, 'radio', 'Course', 'false', 'AllowCoachsToEditInsideTrainingSessions', 'AllowCoachsToEditInsideTrainingSessionsComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('show_courses_descriptions_in_catalog', NULL, 'radio', 'Course', 'true', 'ShowCoursesDescriptionsInCatalogTitle', 'ShowCoursesDescriptionsInCatalogComment', NULL, NULL, 1, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('show_glossary_in_extra_tools', NULL, 'radio', 'Course', 'false', 'ShowGlossaryInExtraToolsTitle', 'ShowGlossaryInExtraToolsComment', NULL, NULL,1,0);
+
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_courses_descriptions_in_catalog', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_courses_descriptions_in_catalog', 'false', 'No');
+
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_coach_to_edit_course_session', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_coach_to_edit_course_session', 'false', 'No');
+
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'false', 'No');
+
+CREATE TABLE user_tag (id int NOT NULL auto_increment, tag varchar(255) NOT NULL, field_id int NOT NULL, count int NOT NULL, PRIMARY KEY  (id));
+CREATE TABLE user_rel_tag (id int NOT NULL auto_increment,user_id int NOT NULL,tag_id int NOT NULL, PRIMARY KEY  (id));
+
 
 
 -- xxSTATSxx
+ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
 
 -- xxUSERxx
 
@@ -33,3 +54,13 @@ ALTER TABLE link ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id
 ALTER TABLE wiki ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);
 ALTER TABLE tool ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);
 ALTER TABLE link_category ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);
+ALTER TABLE item_property ADD id_session INT NOT NULL DEFAULT 0;
+ALTER TABLE item_property DROP INDEX idx_item_property_toolref, ADD INDEX idx_item_property_toolref (tool, ref, id_session); 
+ALTER TABLE quiz ADD COLUMN expired_time int NOT NULL DEFAULT '0' AFTER feedback_type;
+ALTER TABLE group_info ADD COLUMN chat_state TINYINT DEFAULT 1, ADD INDEX (chat_state);
+ALTER TABLE group_category ADD COLUMN chat_state TINYINT DEFAULT 1, ADD INDEX (chat_state);
+ALTER TABLE student_publication ADD COLUMN weight float(6,2) UNSIGNED NOT NULL DEFAULT 0;
+ALTER TABLE course_description ADD COLUMN description_type TINYINT NOT NULL DEFAULT 0;
+ALTER TABLE dropbox_category ADD COLUMN session_id smallint NOT NULL DEFAULT 0, ADD INDEX (session_id);
+ALTER TABLE chat_connected ADD COLUMN session_id  smallint NOT NULL DEFAULT 0, ADD INDEX (session_id);
+ALTER TABLE chat_connected ADD COLUMN to_group_id INT NOT NULL DEFAULT 0;

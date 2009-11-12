@@ -51,11 +51,11 @@ api_display_tool_title(get_lang('GradebookQualifyLog'));
 echo '</div>';
 /*
 $t_user=	 Database :: get_main_table(TABLE_MAIN_USER);
-$t_link_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);	
+$t_link_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 $evaledit = EvalLink :: load($_GET['visiblelink']);
 
 $sql="SELECT lk.name,lk.description,lk.date_log,lk.weight,lk.visible,lk.type,us.username from ".$t_link_log." lk inner join ".$t_user." us on lk.user_id_log=us.user_id where lk.id_linkeval_log=".$evaledit[0]->get_id()." and lk.type='link';";
-$result=api_sql_query($sql);
+$result=Database::query($sql);
 echo '<table width="100%" border="0" >';
 	echo '<tr>';
 		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('GradebookNameLog').'</strong></td>';
@@ -69,7 +69,7 @@ echo '</tr>';
 while($row=Database::fetch_array($result)){
 
 if ('0000-00-00 00:00:00'!=$row[2]) {
-	$date_log=date('d-m-Y H:i:s',$row[2]);	
+	$date_log=date('d-m-Y H:i:s',$row[2]);
 } else {
 	$date_log='0000-00-00 00:00:00';
 }
@@ -93,10 +93,10 @@ echo '</table>';
 
 $t_user     = Database :: get_main_table(TABLE_MAIN_USER);
 $t_link_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
-$visible_link=Security::remove_XSS($_GET['visiblelink']);	
+$visible_link=Security::remove_XSS($_GET['visiblelink']);
 $evaledit   = EvalLink :: load($visible_link);
 $sql="SELECT lk.name,lk.description,lk.weight,lk.visible,lk.type,lk.date_log,us.username from ".$t_link_log." lk inner join ".$t_user." us on lk.user_id_log=us.user_id where lk.id_linkeval_log=".$evaledit[0]->get_id()." and lk.type='link';";
-$result=api_sql_query($sql);
+$result=Database::query($sql);
 $list_info=array();
 while ($row=Database::fetch_row($result)) {
 	$list_info[]=$row;

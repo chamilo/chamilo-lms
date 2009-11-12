@@ -1,13 +1,13 @@
 <?php
 
 class Testcdocu extends UnitTestCase{
-	
+
 	public function Testcdocu(){
-		
+
 		$this->UnitTestCase('Determine the course of document function tests');
-	
+
 	}
-	
+
 	public function testGetlist(){
 		$directory='';
 		$res = getlist($directory);
@@ -19,7 +19,7 @@ class Testcdocu extends UnitTestCase{
 		}
 		//var_dump($res);
 	}
-	
+
 	public function testCheckAndCreateResourceDirectory(){
 		global $_course, $_user;
 		global $group_properties, $to_group_id;
@@ -33,11 +33,11 @@ class Testcdocu extends UnitTestCase{
 		$res = check_and_create_resource_directory($repository_path, $resource_directory, $resource_directory_name);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === true || $res === false);
-		var_dump($res);		
+		var_dump($res);
 	}
-	
-	
-	
+
+
+
 }
 
 

@@ -141,7 +141,7 @@ echo '	</tr>';
 $sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email FROM $table_survey_invitation survey_invitation
 			LEFT JOIN $table_user user ON  survey_invitation.user = user.user_id
 			WHERE survey_invitation.survey_code = '".Database::escape_string($survey_data['code'])."'";
-$res = api_sql_query($sql, __FILE__, __LINE__);
+$res = Database::query($sql, __FILE__, __LINE__);
 while ($row = mysql_fetch_assoc($res))
 {
 	if (!$_GET['view'] OR $_GET['view'] == 'invited' OR ($_GET['view'] == 'answered' AND in_array($row['user'], $answered_data)) OR ($_GET['view'] == 'unanswered' AND !in_array($row['user'], $answered_data)))

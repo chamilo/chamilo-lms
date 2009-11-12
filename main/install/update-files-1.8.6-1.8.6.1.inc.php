@@ -1,4 +1,4 @@
-<?php 
+<?php
 /* See license terms in /dokeos_license.txt */
 /**
 ==============================================================================
@@ -11,7 +11,7 @@
 * permissions on upgrade).
 * Being in configuration.php, it benefits from the configuration.dist.php
 * advantages that a new version doesn't overwrite it, thus letting the old
-* version be available until the end of the installation. 
+* version be available until the end of the installation.
 * @package dokeos.install
 ==============================================================================
 */
@@ -40,7 +40,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			$line = '$_configuration[\'dokeos_stable\'] = '.($new_version_stable?'true':'false').';'."\r\n";
 		}
 		elseif(stristr($line,'$userPasswordCrypted'))
-		{			
+		{
 			$line = '$userPasswordCrypted 									= \''.($userPasswordCrypted).'\';'."\r\n";
 		}
 		elseif(stristr($line,'?>'))
@@ -59,22 +59,22 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	}
 	if(!$found_stable)
 	{
-		fwrite($fh,'$_configuration[\'dokeos_stable\'] = '.($new_version_stable?'true':'false').';'."\r\n");		
+		fwrite($fh,'$_configuration[\'dokeos_stable\'] = '.($new_version_stable?'true':'false').';'."\r\n");
 	}
 	fwrite($fh,'?>');
-	fclose($fh);	
-	
-	
+	fclose($fh);
+
+
 	$perm = api_get_setting('permissions_for_new_directories');
 	$perm = octdec(!empty($perm)?$perm:'0770');
 	$old_umask = umask(0);
-	
+
 	////create a specific directory for global thumbails
 	//home > default_platform_document > template_thumb
 	if(!is_dir($pathForm.'home/default_platform_document/template_thumb')){
 		mkdir($pathForm.'home/default_platform_document/template_thumb',$perm);
 	}
-	
+
 }
 else
 {

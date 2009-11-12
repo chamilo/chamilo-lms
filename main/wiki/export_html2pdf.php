@@ -23,30 +23,30 @@
 /**
 *   Export html to pdf
 * 	@Author Juan Carlos Raña <herodoto@telefonica.net>
-* 	
+*
 */
 
- 
+
 include("../inc/global.inc.php");
 api_block_anonymous_users();
 
 require('../inc/lib/html2pdf/html2pdf.class.php');
 
-$contentPDF=stripslashes(api_html_entity_decode($_POST['contentPDF'], ENT_QUOTES, $charset)); 
-$titlePDF=stripslashes(api_html_entity_decode($_POST['titlePDF'], ENT_QUOTES, $charset)); 
+$contentPDF=stripslashes(api_html_entity_decode($_POST['contentPDF'], ENT_QUOTES, $charset));
+$titlePDF=stripslashes(api_html_entity_decode($_POST['titlePDF'], ENT_QUOTES, $charset));
 
 ob_start();//activate Output -Buffer
 ///////////////////////
 ?>
 <page backtop="10mm" backbottom="10mm" footer="page">
-      <page_header> 
+      <page_header>
            <?php echo $titlePDF.'<br/><hr/>'?>
-      </page_header> 
-      <page_footer> 
+      </page_header>
+      <page_footer>
             <?php echo '<hr/>'; ?>
-      </page_footer> 
+      </page_footer>
  </page>
- 
+
  <?php
 /////////////////////
 echo $contentPDF;
@@ -54,7 +54,7 @@ $htmlbuffer=ob_get_contents();// Store Output-Buffer in one variable
 ob_end_clean();// delete Output-Buffer
 
 /////bridge to  dokeos lang
-	@ $langhtml2pdf = Database :: get_language_isocode($language_interface);
+	@ $langhtml2pdf = api_get_language_isocode($language_interface);
 
 	// Some code translations are needed.
 	$langhtml2pdf = strtolower(str_replace('_', '-', $langhtml2pdf));

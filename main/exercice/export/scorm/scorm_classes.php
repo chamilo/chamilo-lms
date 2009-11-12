@@ -33,7 +33,7 @@ define('FREE_ANSWER', 		5);
 define('HOTSPOT',			6);
 
 /**
- * The ScormQuestion class is a gateway to getting the answers exported 
+ * The ScormQuestion class is a gateway to getting the answers exported
  * (the question is just an HTML text, while the answers are the most important).
  * It is important to note that the SCORM export process is done in two parts.
  * First, the HTML part (which is the presentation), and second the JavaScript
@@ -53,29 +53,29 @@ class ScormQuestion extends Question
 			case MCUA :
 				$this->answer = new ScormAnswerMultipleChoice($this->id, false);
                 $this->answer->questionJSId = $this->js_id;
-				break; 
+				break;
 			case MCMA :
-				$this->answer = new ScormAnswerMultipleChoice($this->id, true);	
+				$this->answer = new ScormAnswerMultipleChoice($this->id, true);
                 $this->answer->questionJSId = $this->js_id;
 				break;
 			case TF :
-				$this->answer = new ScormAnswerTrueFalse($this->id); 
+				$this->answer = new ScormAnswerTrueFalse($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
 			case FIB :
-				$this->answer = new ScormAnswerFillInBlanks($this->id); 
+				$this->answer = new ScormAnswerFillInBlanks($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
 			case MATCHING :
-				$this->answer = new ScormAnswerMatching($this->id); 
+				$this->answer = new ScormAnswerMatching($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
 			case FREE_ANSWER :
-				$this->answer = new ScormAnswerFree($this->id); 
+				$this->answer = new ScormAnswerFree($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
 			case HOTSPOT:
-				$this->answer = new ScormAnswerHotspot($this->id); 
+				$this->answer = new ScormAnswerHotspot($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
 			default :
@@ -86,12 +86,12 @@ class ScormQuestion extends Question
 
 		return true;
 	}
-	
+
 	function export()
 	{
 		$html = $this->getQuestionHTML();
 		$js   = $this->getQuestionJS();
-		
+
 		if( is_object($this->answer) )
 		{
 			list($js2,$html2) = $this->answer->export();
@@ -99,7 +99,7 @@ class ScormQuestion extends Question
 			$html .= $html2;
 		}
 		return array($js,$html);
-		
+
 	}
     function createAnswersForm($form)
     {
@@ -173,8 +173,8 @@ class ScormAnswerMultipleChoice extends Answer
 			foreach( $this->answer as $i => $answer )
 			{
 				$identifier = 'question_'.$this->questionJSId.'_multiple_'.$i;
-				$html .=	
-		    		'<tr>' . "\n" 
+				$html .=
+		    		'<tr>' . "\n"
 				.	'<td align="center" width="5%">' . "\n"
 		    	.	'<input name="'.$identifier.'" id="'.$identifier.'" value="'.$i.'" type="checkbox" />' . "\n"
 		    	.	'</td>' . "\n"
@@ -202,11 +202,11 @@ class ScormAnswerMultipleChoice extends Answer
         	$jstmp = '';
         	$jstmpc = '';
 			foreach( $this->answer as $i => $answer )
-			{			
+			{
 	        	$identifier = 'question_'.$this->questionJSId.'_unique_'.$i;
-	        	$identifier_name = 'question_'.$this->questionJSId.'_unique_answer';        	
-				$html .=	
-		    		'<tr>' . "\n" 
+	        	$identifier_name = 'question_'.$this->questionJSId.'_unique_answer';
+				$html .=
+		    		'<tr>' . "\n"
 				.	'<td align="center" width="5%">' . "\n"
 		    	.	'<input name="'.$identifier_name.'" id="'.$identifier.'" value="'.$i.'" type="radio"/>' . "\n"
 		    	.	'</td>' . "\n"
@@ -238,7 +238,7 @@ class ScormAnswerMultipleChoice extends Answer
 class ScormAnswerTrueFalse extends Answer
 {
 	/**
-     * Return the XML flow for the possible answers. 
+     * Return the XML flow for the possible answers.
      * That's one <response_lid>, containing several <flow_label>
      *
      * @author Amand Tihon <amand@alrj.org>
@@ -250,8 +250,8 @@ class ScormAnswerTrueFalse extends Answer
 		$identifier = 'question_'.$this->questionJSId.'_tf';
 		$identifier_true  = $identifier.'_true';
 		$identifier_false = $identifier.'_false';
-		$html .=	
-    		'<tr>' . "\n" 
+		$html .=
+    		'<tr>' . "\n"
 		.	'<td align="center" width="5%">' . "\n"
     	.	'<input name="'.$identifier_true.'" id="'.$identifier_true.'" value="'.$this->trueGrade.'" type="radio" '
 		.		'/>' . "\n"
@@ -261,7 +261,7 @@ class ScormAnswerTrueFalse extends Answer
     	.	'</td>' . "\n"
     	.	'</tr>' . "\n\n";
     	$html .=
-			'<tr>' . "\n" 
+			'<tr>' . "\n"
 		.	'<td align="center" width="5%">' . "\n"
 		.	'<input name="'.$identifier_false.'" id="'.$identifier_false.'" value="'.$this->falseGrade.'" type="radio" '
 		.		'/>' . "\n"
@@ -292,7 +292,7 @@ class ScormAnswerTrueFalse extends Answer
 /**
  * This class handles the SCORM export of fill-in-the-blanks questions
  */
-class ScormAnswerFillInBlanks extends Answer 
+class ScormAnswerFillInBlanks extends Answer
 {
 	/**
      * Export the text with missing words.
@@ -307,7 +307,7 @@ class ScormAnswerFillInBlanks extends Answer
     	$html = '<tr><td colspan="2"><table width="100%">' . "\n";
 		// get all enclosed answers
 		$blankList = array();
-		// build replacement 
+		// build replacement
 		$replacementList = array();
 		foreach( $this->answer as $i => $answer )
 		{
@@ -336,17 +336,17 @@ class ScormAnswerFillInBlanks extends Answer
 			$jstmpc .= "'".api_htmlentities(api_substr($texstring,1,-1),ENT_QUOTES,$charset)."',";
 				$my_weight=explode('@',$weights[$i-1]);
 				if (count($my_weight)==2) {
-					$weight_db=$my_weight[0];	
+					$weight_db=$my_weight[0];
 				} else {
-					$weight_db=$my_weight[0];	
-				}						
+					$weight_db=$my_weight[0];
+				}
 	    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.']['.$i.'] = '.$weight_db.";\n";
 			$i++;
 			$startlocations=api_strpos($answer,'[');
 			$endlocations=api_strpos($answer,']');
 		}
 
-		$html .= 	'<tr>' . "\n" 
+		$html .= 	'<tr>' . "\n"
 				.	'<td>' . "\n"
 		    	.	$answer  . "\n"
 	    		.	'</td>' . "\n"
@@ -358,7 +358,7 @@ class ScormAnswerFillInBlanks extends Answer
     	$js .= $jstmpw;
         return array($js,$html);
     }
-    
+
 }
 
 /**
@@ -376,10 +376,10 @@ class ScormAnswerMatching extends Answer
     	$html = '<tr><td colspan="2"><table width="100%">' . "\n";
   		// prepare list of right proposition to allow
 		// - easiest display
-		// - easiest randomisation if needed one day 
-		// (here I use array_values to change array keys from $code1 $code2 ... to 0 1 ...)	
+		// - easiest randomisation if needed one day
+		// (here I use array_values to change array keys from $code1 $code2 ... to 0 1 ...)
 		if (is_array($this->rightList)) {
-			$displayedRightList = array_values($this->rightList);	
+			$displayedRightList = array_values($this->rightList);
 		}
 		// get max length of displayed array
 		$arrayLength = max( count($this->leftList), count($this->rightList) );
@@ -422,24 +422,24 @@ class ScormAnswerMatching extends Answer
 	            {
 					$s.='<option value="'.$key.'">'.$val['Lettre'].'</option>';
 				}  // end foreach()
-	
+
 				$s.='</select>&nbsp;&nbsp;</td>'."\n";
 				$s.='<td width="40%" valign="top">';
 				if(isset($Select[$cpt2])) $s.='<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
 					else $s.='&nbsp;';
 				$s.="</td>\n</tr>\n";
-	
+
 				$jstmpc .= '['.$answerCorrect.','.$cpt2.'],';
-				
+
 				$my_weight=explode('@',$weight);
 				if (count($my_weight)==2) {
-					$weight=$my_weight[0];	
+					$weight=$my_weight[0];
 				} else {
-					$weight=$my_weight[0];	
+					$weight=$my_weight[0];
 				}
 		    	$jstmpw .= 'questions_answers_ponderation['.$qId.']['.$cpt2.'] = '.$weight.";\n";
 				$cpt2++;
-	
+
 				// if the left side of the "matching" has been completely shown
 				if($answerId == $nbrAnswers)
 				{
@@ -465,14 +465,14 @@ class ScormAnswerMatching extends Answer
     	$js .= $jstmpw;
 		$html .= $s;
 		$html .= '</table></td></tr>' . "\n";
-        return array($js,$html); 
+        return array($js,$html);
     }
 }
 
 /**
  * This class handles the SCORM export of free-answer questions
  */
-class ScormAnswerFree extends Answer 
+class ScormAnswerFree extends Answer
 {
 	/**
      * Export the text with missing words.
@@ -487,7 +487,7 @@ class ScormAnswerFree extends Answer
     	$js = '';
     	$html = '<tr><td colspan="2"><table width="100%">' . "\n";
 		// some javascript must be added for that kind of questions
-		$html .= '<tr>' . "\n" 
+		$html .= '<tr>' . "\n"
 				.	'<td>' . "\n"
 		    	. '<textarea name="question_'.$qId.'_free" id="question_'.$qId.'_free" rows="20" cols="100"></textarea>' . "\n"
 		    	.	'</td>' . "\n"
@@ -508,7 +508,7 @@ class ScormAnswerFree extends Answer
 /**
  * This class handles the SCORM export of hotpot questions
  */
-class ScormAnswerHotspot extends Answer 
+class ScormAnswerHotspot extends Answer
 {
 	/**
 	 * Returns the javascript code that goes with HotSpot exercises
@@ -670,7 +670,7 @@ class ScormAnswerHotspot extends Answer
     	$html = '<tr><td colspan="2"><table width="100%">' . "\n";
 		// some javascript must be added for that kind of questions
 		$html .= '';
-		
+
 		// Get the answers, make a list
 		$nbrAnswers=$this->selectNbrAnswers();
 
@@ -726,9 +726,9 @@ class ScormAnswerHotspot extends Answer
 						}
 						// -->
 					</script></td>
-					<td valign='top'>$answer_list</td></tr>";		
+					<td valign='top'>$answer_list</td></tr>";
 		$html .= '</table></td></tr>' . "\n";
-		
+
 		// currently the free answers cannot be displayed, so ignore the textarea
 		$html = '<tr><td colspan="2">'.get_lang('ThisItemIsNotExportable').'</td></tr>';
         return array($js,$html);

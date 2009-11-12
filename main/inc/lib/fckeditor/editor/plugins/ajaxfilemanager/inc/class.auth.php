@@ -1,6 +1,6 @@
-<?php 
+<?php
 /**
- * the purpose I added this class is to make the file system much flexible 
+ * the purpose I added this class is to make the file system much flexible
  * for customization.
  * Actually,  this is a kind of interface and you should modify it to fit your system
  * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
@@ -12,9 +12,9 @@
 		var $__loginIndexInSession = 'ajax_user';
 		function __construct()
 		{
-			
+
 		}
-		
+
 		function Auth()
 		{
 			$this->__construct();
@@ -39,7 +39,7 @@
 			{
 				$_SESSION[$this->__loginIndexInSession] = true;
 				return true;
-			}else 
+			}else
 			{
 				return false;
 			}

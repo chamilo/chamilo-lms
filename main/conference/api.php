@@ -34,7 +34,7 @@ if ($debug>0)
 
 
 /*==== Flash loose the cookie ===*/
-/* needed when using the nice upload window : 
+/* needed when using the nice upload window :
 if ($_SERVER['HTTP_USER_AGENT'] == 'Shockwave Flash') {
 	$sid = $_REQUEST['sid'];
 	if ($debug>0) error_log("reusing: ".$sid);
@@ -64,7 +64,7 @@ $_course['path'] = $_course['directory'];
 // FIXME: add_document needs this to work
 $_course['dbName'] = $_course['db_name'];
 
-// FIXME: check if CourseManager::get_user_in_course_status return != 
+// FIXME: check if CourseManager::get_user_in_course_status return !=
 //	COURSEMANAGER when the code is not valid
 if ($debug>0) error_log($coursePath, 0);
 
@@ -126,19 +126,19 @@ else if ($action == "upload")
 	}
 
 	echo '<html><body><script language="javascript">setTimeout(1000,window.close());</script></body></html>';
-} 
-else if ($action == "service") 
+}
+else if ($action == "service")
 {
 	/*==== List files ====*/
 	if ($debug>0) error_log("sending file list",0);
 	$subaction = $_REQUEST["subaction"];
 	$is_manager = (CourseManager::get_user_in_course_status($user_id, $cidReq) == COURSEMANAGER);
-	if ($subaction == "list") 
+	if ($subaction == "list")
 	{
 		// FIXME: check security around $_REQUEST["cwd"]
 		$cwd = $_REQUEST["cwd"];
 
-		
+
 		// treat /..
 		$nParent = 0; // the number of /.. into the url
 		while (substr($cwd, -3, 3) == "/..")
@@ -150,10 +150,10 @@ else if ($action == "service")
 		}
 		for (;$nParent >0; $nParent--){
 			$cwd = (strrpos($cwd,'/')>-1 ? substr($cwd, 0, strrpos($cwd,'/')) : $cwd);
-		}		
+		}
 
 		if (strlen($cwd) == 0) $cwd="/";
-		
+
 		if (Security::check_abs_path($cwd,api_get_path(SYS_PATH)))
 			die();
 
@@ -164,7 +164,7 @@ else if ($action == "service")
 		/* $canDelete = ($canDelete && $isBellowVideoConfUploadPath);
 		*/
 		$can_delete = ($is_manager && $is_below_videoconf_dir);
-		
+
 		// get files list
 		$files = DocumentManager::get_all_document_data($_course, $cwd, 0, NULL, false);
 		printf("<dokeosobject><fileListMeta></fileListMeta><fileList>");
@@ -175,17 +175,17 @@ else if ($action == "service")
 		{
 			// converting to UTF-8
 			$files[$k]['title'] = api_convert_encoding(
-						api_strlen($files[$k]['title']) > 32 ? 
-							api_substr($files[$k]['title'],0, 32)."..." : 
+						api_strlen($files[$k]['title']) > 32 ?
+							api_substr($files[$k]['title'],0, 32)."..." :
 							$files[$k]['title'],
-						'utf-8',api_get_setting('platform_charset')); 
+						'utf-8',api_get_setting('platform_charset'));
 			// removing '<', '>' and '_'
 			$files[$k]['title'] = str_replace(array('<','>','_'),' ', $files[$k]['title']);
 		}
 
 		if(is_array($files))
 		{
-	
+
 			foreach($files as $i)
 			{
 				if ($i["filetype"] == "folder")
@@ -204,8 +204,8 @@ else if ($action == "service")
 		printf("</files><ppts>");
 		printf("</ppts>");
 		printf("</fileList></dokeosobject>");
-	} 
-	else if ($subaction == "delete") 
+	}
+	else if ($subaction == "delete")
 	{
 		/*==== PERMISSION ====*/
 		$permissions = CourseManager::get_user_in_course_status($user_id, $cidReq);
@@ -222,7 +222,7 @@ else if ($action == "service")
 			die();
 		}
 		DocumentManager::delete_document($_course, $path, $coursePath);
-		echo "<result>OK</result>"; // We have to return something to OpenLaszlo 
+		echo "<result>OK</result>"; // We have to return something to OpenLaszlo
 	}
 }
 else if ($action == "download")

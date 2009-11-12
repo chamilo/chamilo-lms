@@ -9,11 +9,11 @@ class TestXht extends UnitTestCase {
 	public function setUp(){
 		$this->xhtdoc = new xhtdoc();
 	}
-	
+
 	public function tearDown(){
 		$this->xhtdoc = null;
 	}
-	
+
 	public function testXhtHtmlwchars(){
 		global $charset;
 		$s='';
@@ -21,15 +21,15 @@ class TestXht extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	public function testXhtIsAssoclist(){
 		$s ='';
 		$res = xht_is_assoclist($s);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === true || $res === false);
 		//var_dump($res);
-	}	
-	
+	}
+
 	public function testXhtExplodeAssoclist(){
 		$S =array(aaasasa);
 		$res = xht_explode_assoclist($S);
@@ -39,7 +39,7 @@ class TestXht extends UnitTestCase {
 		$this->assertFalse(is_array($res));
 		//var_dump($res);
 	}
-	
+
 	public function testXhtFillTemplate(){
 		$template_name=null;
 		$cur_elem = 0;
@@ -47,18 +47,18 @@ class TestXht extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	public function testxhtSubstitute(){
 		global $charset;
 		$subtext='';
-		$cur_elem = 0; 
-		$pre = ''; 
+		$cur_elem = 0;
+		$pre = '';
 		$post = '';
 		$res = xhtdoc::xht_substitute($subtext, $cur_elem = 0, $pre = '', $post = '');
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	public function testXhtAddTemplate(){
 		$template_name='';
 		$httext='';
@@ -66,14 +66,14 @@ class TestXht extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	public function testXhtdoc(){
 		$htt_file_contents='document';
 		$res = xhtdoc::xhtdoc($htt_file_contents);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	public function testShowParam(){
 		global $charset;
 		$result = '';

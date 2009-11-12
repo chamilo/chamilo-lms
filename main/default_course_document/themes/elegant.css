@@ -48,7 +48,7 @@ margin:1em;
 /* TEMPLATES STYLES */
 
 #course-content #cover{
-	padding:2em 0px;  				 
+	padding:2em 0px;
 	}
 
 #course-content .dial_horizontal{
@@ -64,7 +64,7 @@ margin:1em;
  background-image:url(../images/dialogs/dialog_left_500x500.png);
  padding:30px;
  padding-left:80px
- 
+
  }*/
 #course-content p{
   font-size:medium;
@@ -73,7 +73,7 @@ margin:1em;
 /* Template cover */
 
 #cover {
-  padding:1em 0px;  
+  padding:1em 0px;
 
 }
 
@@ -99,7 +99,7 @@ list-style-image:url(img/puce_hover.png);
 }
 
 #argument_2{
-  
+
 }
 
 #glossary{

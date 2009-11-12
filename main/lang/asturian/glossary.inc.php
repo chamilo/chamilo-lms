@@ -19,4 +19,9 @@ $TermAdded = "Términu amestáu";
 $YouMustEnterATermName = "Usté tien d\'escribir un nome de términu";
 $YouMustEnterATermDefinition = "Tien d\'escribir un definición del términu";
 $TableView = "Ver cuadru";
+$GlossaryTermAlreadyExistsYouShouldEditIt = "Esti terminu del glosariu ya esiste, por favor, camudálu por otru nome";
+$GlossaryManagement  = "Alministración de glosariu";
+$TermMoved = "El términu movíose";
+$ShowGlossaryInExtraToolsTitle = "Amuesa los términos del glosariu nes ferramientes lleiciones y exercicios";
+$ShowGlossaryInExtraToolsComment = "Dende equí puedes configurar cómo amestar los términos del glosariu en ferramientes como leiciones y exercicios";
 ?>

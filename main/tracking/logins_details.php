@@ -50,7 +50,7 @@ if(!isset($_REQUEST['view']))
 else
 	$view = $_REQUEST['view'];
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "tracking";
 include('../inc/global.inc.php');
 
@@ -116,8 +116,8 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
                         AND `gu`.`group_id` = '$_gid'
                         AND `u`.`user_id` = '$uInfo'";
     }
-    $query = api_sql_query($sql,__FILE__,__LINE__);
-    $res = @mysql_fetch_array($query);
+    $query = Database::query($sql,__FILE__,__LINE__);
+    $res = @Database::fetch_array($query);
     if(is_array($res))
     {
         $res[2] == "" ? $res2 = get_lang('NoEmail') : $res2 = Display::encrypted_mailto_link($res[2]);

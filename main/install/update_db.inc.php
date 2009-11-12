@@ -60,9 +60,9 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 
 		exit ();
 	}
-	
-	//get_config_param() comes from install_functions.inc.php and 
-	//actually gets the param from 
+
+	//get_config_param() comes from install_functions.inc.php and
+	//actually gets the param from
 	$_configuration['db_glue'] = get_config_param('dbGlu');
 
 	if ($singleDbForm)
@@ -114,7 +114,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	//if this script has been included by index.php, not update_courses.php, so
 	// that we want to change the main databases as well...
 	$only_test = false;
-	if (defined('DOKEOS_INSTALL')) 
+	if (defined('DOKEOS_INSTALL'))
 	{
 		/**
 		 * Update the databases "pre" migration
@@ -151,7 +151,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		//$sql_upd = "UPDATE user SET registration_date=NOW()";
 		//$res_upd = mysql_query($sql_upd);
 		//end of manual updates
-		
+
 		//get the stats queries list (s_q_list)
 		$s_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','stats');
 		if(count($s_q_list)>0)
@@ -195,8 +195,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		/*
 		$language_table = "`$dbNameForm`.`language`";
 		fill_language_table($language_table);
-		
-		//set the settings from the form or the old config into config settings. 
+
+		//set the settings from the form or the old config into config settings.
 		//These settings are considered "safe" because they are entered by the admin
 		$installation_settings['institution_form'] = $institutionForm;
 		$installation_settings['institution_url_form'] = $institutionUrlForm;
@@ -208,11 +208,11 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		$installation_settings['allow_self_registration'] = $allowSelfReg;
 		$installation_settings['allow_teacher_self_registration'] = $allowSelfRegProf;
 		$installation_settings['admin_phone_form'] = $adminPhoneForm;
-		
+
 		//put the settings into the settings table (taken from CSV file)
 		$current_settings_table = "`$dbNameForm`.`settings_current`";
 		fill_current_settings_table($current_settings_table, $installation_settings);
-		
+
 		//put the options into the options table (taken from CSV file)
 		$settings_options_table = "`$dbNameForm`.`settings_options`";
 		fill_settings_options_table($settings_options_table);
@@ -275,7 +275,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				//update group_category.forum_state
 				//update group_info.tutor_id (put it in group_tutor table?)
 				//update group_info.forum_state, forum_id
-				
+
 				//update forum tables (migrate from bb_ tables to forum_ tables)
 				//migrate categories
 				$sql_orig = "SELECT * FROM bb_categories";
@@ -423,49 +423,49 @@ else
 
 
 /**
-* This function stores the forum category in the database. The new category is added to the end. 
+* This function stores the forum category in the database. The new category is added to the end.
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @todo is this the same function as in forumfunction.inc.php? If this is the case then it should not appear here.
 */
 function store_forumcategory($values)
 {
-	global $table_categories; 
+	global $table_categories;
 	global $_course;
-	global $_user; 
-	
+	global $_user;
+
 	// find the max cat_order. The new forum category is added at the end => max cat_order + &
 	$sql="SELECT MAX(cat_order) as sort_max FROM ".mysql_real_escape_string($table_categories);
-	$result=api_sql_query($sql);
+	$result=Database::query($sql);
 	$row=mysql_fetch_array($result);
 	$new_max=$row['sort_max']+1;
 
 	$sql="INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order) VALUES ('".mysql_real_escape_string($values['forum_category_title'])."','".mysql_real_escape_string($values['forum_category_comment'])."','".mysql_real_escape_string($new_max)."')";
-	api_sql_query($sql); 
+	Database::query($sql);
 	$last_id=mysql_insert_id();
 	api_item_property_update($_course, TOOL_FORUM_CATEGORY, $last_id,"ForumCategoryAdded", $_user['user_id']);
 	return array('id'=>$last_id,'title'=>$values['forum_category_title']) ;
 }
 
 /**
-* This function stores the forum in the database. The new forum is added to the end. 
+* This function stores the forum in the database. The new forum is added to the end.
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @todo is this the same function as in forumfunction.inc.php? If this is the case then it should not appear here.
 */
 function store_forum($values)
 {
-	global $table_forums; 
+	global $table_forums;
 	global $_course;
-	global $_user; 
+	global $_user;
 
 	// find the max forum_order for the given category. The new forum is added at the end => max cat_order + &
 	$sql="SELECT MAX(forum_order) as sort_max FROM ".$table_forums." WHERE forum_category=".mysql_real_escape_string($values['forum_category']);
-	$result=api_sql_query($sql);
+	$result=Database::query($sql);
 	$row=mysql_fetch_array($result);
 	$new_max=$row['sort_max']+1;
 
-	
-	$sql="INSERT INTO ".$table_forums." 
-				(forum_title, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order) 
+
+	$sql="INSERT INTO ".$table_forums."
+				(forum_title, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order)
 				VALUES ('".mysql_real_escape_string($values['forum_title'])."',
 					'".mysql_real_escape_string($values['forum_comment'])."',
 					'".mysql_real_escape_string($values['forum_category'])."',
@@ -473,46 +473,46 @@ function store_forum($values)
 					'".mysql_real_escape_string($values['students_can_edit_group']['students_can_edit'])."',
 					'".mysql_real_escape_string($values['approval_direct_group']['approval_direct'])."',
 					'".mysql_real_escape_string($values['allow_attachments_group']['allow_attachments'])."',
-					'".mysql_real_escape_string($values['allow_new_threads_group']['allow_new_threads'])."', 
-					'".mysql_real_escape_string($values['default_view_type_group']['default_view_type'])."', 
-					'".mysql_real_escape_string($values['group_forum'])."', 
-					'".mysql_real_escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."', 
+					'".mysql_real_escape_string($values['allow_new_threads_group']['allow_new_threads'])."',
+					'".mysql_real_escape_string($values['default_view_type_group']['default_view_type'])."',
+					'".mysql_real_escape_string($values['group_forum'])."',
+					'".mysql_real_escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
 					'".mysql_real_escape_string($new_max)."')";
-	api_sql_query($sql, __LINE__,__FILE__); 
+	Database::query($sql, __LINE__,__FILE__);
 	$last_id=mysql_insert_id();
 	api_item_property_update($_course, TOOL_FORUM, $last_id,"ForumCategoryAdded", $_user['user_id']);
 	return array('id'=>$last_id, 'title'=>$values['forum_title']);
 }
 
 /**
-* This function stores a new thread. This is done through an entry in the forum_thread table AND 
+* This function stores a new thread. This is done through an entry in the forum_thread table AND
 * in the forum_post table because. The threads are also stored in the item_property table. (forum posts are not (yet))
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @todo is this the same function as in forumfunction.inc.php? If this is the case then it should not appear here.
 */
 function store_thread($values)
 {
-	global $table_threads; 
-	global $table_posts; 
-	global $_user; 
-	global $_course; 
-	global $current_forum; 
-	
+	global $table_threads;
+	global $table_posts;
+	global $_user;
+	global $_course;
+	global $current_forum;
+
 	// We first store an entry in the forum_thread table because the thread_id is used in the forum_post table
-	$sql="INSERT INTO $table_threads (thread_title, forum_id, thread_poster_id, thread_poster_name, thread_views, thread_date, thread_sticky) 
+	$sql="INSERT INTO $table_threads (thread_title, forum_id, thread_poster_id, thread_poster_name, thread_views, thread_date, thread_sticky)
 			VALUES ('".mysql_real_escape_string($values['post_title'])."',
 					'".mysql_real_escape_string($values['forum_id'])."',
-					'".mysql_real_escape_string($values['user_id'])."', 
-					'".mysql_real_escape_string($values['poster_name'])."', 
-					'".mysql_real_escape_string($values['topic_views'])."', 
+					'".mysql_real_escape_string($values['user_id'])."',
+					'".mysql_real_escape_string($values['poster_name'])."',
+					'".mysql_real_escape_string($values['topic_views'])."',
 					'".mysql_real_escape_string($values['post_date'])."',
 					'".mysql_real_escape_string($values['thread_sticky'])."')";
-	$result=api_sql_query($sql, __LINE__, __FILE__);
+	$result=Database::query($sql, __LINE__, __FILE__);
 	$last_thread_id=mysql_insert_id();
 	api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id,"ForumThreadAdded", $_user['user_id']);
 	// if the forum properties tell that the posts have to be approved we have to put the whole thread invisible
-	// because otherwise the students will see the thread and not the post in the thread. 
-	// we also have to change $visible because the post itself has to be visible in this case (otherwise the teacher would have 
+	// because otherwise the students will see the thread and not the post in the thread.
+	// we also have to change $visible because the post itself has to be visible in this case (otherwise the teacher would have
 	// to make the thread visible AND the post
 	if ($values['visible']==0)
 	{
@@ -520,7 +520,7 @@ function store_thread($values)
 		$visible=1;
 	}
 
-	return $last_thread_id; 
+	return $last_thread_id;
 }
 
 /**
@@ -532,21 +532,21 @@ function store_thread($values)
 */
 function migrate_threads_of_forum($phpbb_forum_id, $new_forum_id)
 {
-	global $phpbb_threads; 
-	global $table_forums; 
-	
+	global $phpbb_threads;
+	global $table_forums;
+
 	$table_users = Database :: get_main_table(TABLE_MAIN_USER);
-	
-	$sql_phpbb_threads="SELECT forum.*, users.user_id 
-							FROM $phpbb_threads forum, $table_users users 
-							WHERE forum_id='".mysql_real_escape_string($phpbb_forum_id)."' 
+
+	$sql_phpbb_threads="SELECT forum.*, users.user_id
+							FROM $phpbb_threads forum, $table_users users
+							WHERE forum_id='".mysql_real_escape_string($phpbb_forum_id)."'
 							AND forum.nom=users.lastname AND forum.prenom=users.firstname
 							";
-	$result_phpbb_threads=api_sql_query($sql_phpbb_threads);
+	$result_phpbb_threads=Database::query($sql_phpbb_threads);
 	$threads_counter=0;
 	while ($row_phpbb_threads=mysql_fetch_array($result_phpbb_threads))
 	{
-		$values['post_title']=$row_phpbb_threads['topic_title']; 
+		$values['post_title']=$row_phpbb_threads['topic_title'];
 		$values['forum_id']=$new_forum_id;
 		$values['user_id']=$row_phpbb_threads['user_id'];
 		$values['poster_name']=0;
@@ -556,20 +556,20 @@ function migrate_threads_of_forum($phpbb_forum_id, $new_forum_id)
 		$values['visible']=$row_phpbb_threads['visible'];
 		//my_print_r($values);
 		$new_forum_thread_id=store_thread($values);
-		
+
 		// now we migrate the posts of the given thread
 		$posts_counter=$posts_counter+migrate_posts_of_thread($row_phpbb_threads['topic_id'], $new_forum_thread_id, $new_forum_id);
-		
+
 		$threads_counter++;
 	}
-	
+
 	// Now we update the forum_forum table with the total number of posts for the given forum.
-	$sql="UPDATE $table_forums 
+	$sql="UPDATE $table_forums
 			SET forum_posts='".mysql_real_escape_string($posts_counter)."',
-			forum_threads='".mysql_real_escape_string($threads_counter)."' 
+			forum_threads='".mysql_real_escape_string($threads_counter)."'
 			WHERE forum_id='".mysql_real_escape_string($new_forum_id)."'";
-	//echo $sql; 
-	$result=api_sql_query($sql);
+	//echo $sql;
+	$result=Database::query($sql);
 	return array("threads"=>$threads_counter, "posts"=>$posts_counter);
 }
 
@@ -583,39 +583,39 @@ function migrate_threads_of_forum($phpbb_forum_id, $new_forum_id)
 function migrate_posts_of_thread($phpbb_thread_id, $new_forum_thread_id, $new_forum_id)
 {
 	global $phpbb_posts;
-	global $phpbb_poststext; 
-	global $table_posts; 
-	global $table_threads; 
-	global $added_resources; 
-	
+	global $phpbb_poststext;
+	global $table_posts;
+	global $table_threads;
+	global $added_resources;
+
 	$table_users = Database :: get_main_table(TABLE_MAIN_USER);
 	$table_added_resources = Database::get_course_table(TABLE_LINKED_RESOURCES);
-	
-	
+
+
 	$post_counter=0;
-	
-	$sql_phpbb_posts="SELECT posts.*, posts_text.*, users.user_id, users.lastname, users.firstname FROM $phpbb_posts posts, $phpbb_poststext posts_text, $table_users users 
+
+	$sql_phpbb_posts="SELECT posts.*, posts_text.*, users.user_id, users.lastname, users.firstname FROM $phpbb_posts posts, $phpbb_poststext posts_text, $table_users users
 						WHERE posts.post_id=posts_text.post_id
-						AND posts.nom=users.lastname 
+						AND posts.nom=users.lastname
 						AND posts.prenom=users.firstname
 						AND posts.topic_id='".mysql_real_escape_string($phpbb_thread_id)."'
 						";
-	$result_phpbb_posts=api_sql_query($sql_phpbb_posts);
+	$result_phpbb_posts=Database::query($sql_phpbb_posts);
 	while($row_phpbb_posts=mysql_fetch_array($result_phpbb_posts))
 	{
 		$values=array();
 		$values['post_title']=$row_phpbb_posts['post_title'];
 		$values['post_text']=$row_phpbb_posts['post_text'];
 		$values['thread_id']=$new_forum_thread_id;
-		$values['forum_id']=$new_forum_id; 
-		$values['user_id']=$row_phpbb_posts['user_id']; 
+		$values['forum_id']=$new_forum_id;
+		$values['user_id']=$row_phpbb_posts['user_id'];
 		$values['post_date']=$row_phpbb_posts['post_time'];
 		$values['post_notification']=$row_phpbb_posts['topic_notify'];
-		$values['post_parent_id']=0; 
-		$values['visible']=1;		
-	
+		$values['post_parent_id']=0;
+		$values['visible']=1;
+
 		// We first store an entry in the forum_post table
-		$sql="INSERT INTO $table_posts (post_title, post_text, thread_id, forum_id, poster_id,  post_date, post_notification, post_parent_id, visible) 
+		$sql="INSERT INTO $table_posts (post_title, post_text, thread_id, forum_id, poster_id,  post_date, post_notification, post_parent_id, visible)
 				VALUES ('".mysql_real_escape_string($values['post_title'])."',
 						'".mysql_real_escape_string($values['post_text'])."',
 						'".mysql_real_escape_string($values['thread_id'])."',
@@ -625,32 +625,32 @@ function migrate_posts_of_thread($phpbb_thread_id, $new_forum_thread_id, $new_fo
 						'".mysql_real_escape_string($values['post_notification'])."',
 						'".mysql_real_escape_string($values['post_parent_id'])."',
 						'".mysql_real_escape_string($values['visible'])."')";
-		$result=api_sql_query($sql, __LINE__, __FILE__);
+		$result=Database::query($sql, __LINE__, __FILE__);
 		$post_counter++;
 		$last_post_id=mysql_insert_id();
-		
-		
+
+
 		// We check if there added resources and if so we update them
 		if (in_array($row_phpbb_posts['post_id'],$added_resources))
 		{
-			$sql_update_added_resource="UPDATE $table_added_resources 
+			$sql_update_added_resource="UPDATE $table_added_resources
 					SET source_type='forum_post', source_id='".mysql_real_escape_string($last_post_id)."'
 					WHERE source_type='".mysql_real_escape_string(TOOL_BB_POST)."' AND source_id='".mysql_real_escape_string($row_phpbb_posts['post_id'])."'";
 			echo $sql_update_added_resource;
-			$result=api_sql_query($sql_update_added_resource, __LINE__, __FILE__);
+			$result=Database::query($sql_update_added_resource, __LINE__, __FILE__);
 		}
 
 
 	}
-	
-	// update the thread_last_post of the post table AND the 
-	$sql="UPDATE $table_threads SET thread_last_post='".mysql_real_escape_string($last_post_id)."', 
+
+	// update the thread_last_post of the post table AND the
+	$sql="UPDATE $table_threads SET thread_last_post='".mysql_real_escape_string($last_post_id)."',
 			thread_replies='".mysql_real_escape_string($post_counter-1)."'
 			WHERE thread_id='".mysql_real_escape_string($new_forum_thread_id)."'";
-	//echo $sql; 
-	$result=api_sql_query($sql, __LINE__, __FILE__);
-	//echo $sql; 
-	return $post_counter; 
+	//echo $sql;
+	$result=Database::query($sql, __LINE__, __FILE__);
+	//echo $sql;
+	return $post_counter;
 }
 
 /**
@@ -663,9 +663,9 @@ function get_added_resources()
 	$table_added_resources = Database::get_course_table(TABLE_LINKED_RESOURCES);
 	$return_array=array();
 
-	// TODO: now we also migrate the added resources. 
+	// TODO: now we also migrate the added resources.
 	$sql_added_resources="SELECT * FROM $table_added_resources WHERE source_type='".mysql_real_escape_string(TOOL_BB_POST)."'";
-	$result=api_sql_query($sql_added_resources);
+	$result=Database::query($sql_added_resources);
 	while ($row=mysql_fetch_array($result))
 	{
 		$return_array[]=$row['source_id'];
@@ -674,17 +674,17 @@ function get_added_resources()
 }
 
 /**
-* This function gets the forum category information based on the name 
+* This function gets the forum category information based on the name
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @todo is this the same function as in forumfunction.inc.php? If this is the case then it should not appear here.
 */
 function get_forumcategory_id_by_name($forum_category_name)
 {
 	global $table_categories;
-	
+
 	$sql="SELECT cat_id FROM $table_categories WHERE cat_title='".mysql_real_escape_string($forum_category_name)."'";
-	//echo $sql; 
-	$result=api_sql_query($sql,__LINE__,__FILE__);
+	//echo $sql;
+	$result=Database::query($sql,__LINE__,__FILE__);
 	$row=mysql_fetch_array($result);
 	//echo $row['cat_id'];
 	return $row['cat_id'];

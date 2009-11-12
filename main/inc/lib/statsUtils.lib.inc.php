@@ -1,39 +1,39 @@
 <?php
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) various contributors
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	This is the statistic utility functions library for Dokeos.
 *	Include/require it in your code to use its functionality.
 *
 *	@package dokeos.library
-============================================================================== 
+==============================================================================
 */
 
 /*
-============================================================================== 
+==============================================================================
 		FUNCTIONS
-============================================================================== 
+==============================================================================
 */
 
 /**
@@ -62,7 +62,7 @@ function getOneResult($sql)
  * @desc Return many results of a query in a 1 column tab
  */
 function getManyResults1Col($sql)
-{ 
+{
 	$res = mysql_query($sql);
 
 	if (mysql_errno())
@@ -73,7 +73,7 @@ function getManyResults1Col($sql)
 	{
 		$i = 0;
 		while ($resA = mysql_fetch_array($res))
-		{ 
+		{
 			$resu[$i++] = $resA[0];
 		}
 	}
@@ -88,7 +88,7 @@ function getManyResults1Col($sql)
  * @desc Return many results of a query
  */
 function getManyResults2Col($sql)
-{ 
+{
 	$res = mysql_query($sql);
 
 	if (mysql_errno())
@@ -99,13 +99,13 @@ function getManyResults2Col($sql)
 	{
 		$i = 0;
 		while ($resA = mysql_fetch_array($res))
-		{ 
+		{
 			$resu[$i][0] = $resA[0];
 			$resu[$i][1] = $resA[1];
 			$i++;
 		}
 	}
-	
+
 	return $resu;
 }
 
@@ -117,7 +117,7 @@ function getManyResults2Col($sql)
          in $resu[$i][0], $resu[$i][1],$resu[$i][2]
  */
 function getManyResults3Col($sql)
-{ 
+{
 	$res = mysql_query($sql);
 
 	if (mysql_errno())
@@ -128,14 +128,14 @@ function getManyResults3Col($sql)
 	{
 		$i = 0;
 		while ($resA = mysql_fetch_array($res))
-		{ 
+		{
 			$resu[$i][0]=$resA[0];
 			$resu[$i][1]=$resA[1];
 			$resu[$i][2]=$resA[2];
-			$i++; 
+			$i++;
 		}
 	}
-	
+
 	return $resu;
 }
 
@@ -146,12 +146,12 @@ function getManyResults3Col($sql)
  * @desc Return many results of a query in a X column tab
          in $resu[$i][0], $resu[$i][1],$resu[$i][2],...
          this function is more 'standard' but use a little
-         more ressources 
+         more ressources
          So I encourage to use the dedicated for 1, 2 or 3
          columns of results
  */
 function getManyResultsXCol($sql,$X)
-{ 
+{
 	$res = mysql_query($sql);
 
 	if (mysql_errno())
@@ -162,22 +162,22 @@ function getManyResultsXCol($sql,$X)
 	{
 		$i = 0;
 		while ($resA = mysql_fetch_array($res))
-		{ 
+		{
 			for($j = 0; $j < $X ; $j++)
 			{
 				$resu[$i][$j]=$resA[$j];
 			}
-			$i++; 
+			$i++;
 		}
 	}
-	
+
 	return $resu;
 }
 /**
 
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param sql : a sql query (as a string)
- * @return hours_array 
+ * @return hours_array
  * @desc        Return an assoc array.  Keys are the hours, values are
                 the number of time this hours was found.
                 key 'total' return the sum of all number of time hours
@@ -187,7 +187,7 @@ function hoursTab($sql)
 {
 	$hours_array = array('total' => 0);
 	$res = mysql_query($sql);
-	
+
 	if (mysql_errno())
 	{
 		echo "\n<!-- **** ".mysql_errno().": ".mysql_error()." In : $sql **** -->\n";
@@ -212,7 +212,7 @@ function hoursTab($sql)
 		}
 		mysql_free_result($res);
 	}
-	
+
 	return $hours_array;
 }
 
@@ -255,7 +255,7 @@ function daysTab($sql)
 		}
 		mysql_free_result($res);
 	}
-	
+
 	return $days_array;
 }
 
@@ -263,7 +263,7 @@ function daysTab($sql)
 
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param sql : a sql query (as a string)
- * @return month_array 
+ * @return month_array
  * @desc        Return an assoc array.  Keys are the days, values are
                 the number of time this hours was found.
                 key "total" return the sum of all number of time days
@@ -274,7 +274,7 @@ function monthTab($sql)
 	$MonthsLong = array (get_lang('JanuaryLong'), get_lang('FebruaryLong'), get_lang('MarchLong'), get_lang('AprilLong'), get_lang('MayLong'), get_lang('JuneLong'), get_lang('JulyLong'), get_lang('AugustLong'), get_lang('SeptemberLong'), get_lang('OctoberLong'), get_lang('NovemberLong'), get_lang('DecemberLong'));
     $month_array = array('total' => 0);
 	$res = mysql_query($sql);
-	
+
 	if (mysql_errno())
 	{
 		echo "\n<!-- **** ".mysql_errno().": ".mysql_error()." In : $sql **** -->\n";
@@ -295,7 +295,7 @@ function monthTab($sql)
 		}
 		mysql_free_result($res);
 	}
-	
+
 	return $month_array;
 }
 
@@ -304,7 +304,7 @@ function monthTab($sql)
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param period_array : an array provided by hoursTab($sql) or daysTab($sql)
  * @param periodTitle : title of the first column, type of period
- * @param linkOnPeriod : 
+ * @param linkOnPeriod :
  * @desc        Display a 4 column array
                 Columns are : hour of day, graph, number of hits and %
                 First line are titles
@@ -334,7 +334,7 @@ function makeHitsTable($period_array, $periodTitle, $linkOnPeriod = '???')
 	$maxSize = $factor * 100; //pixels
 	while(list($periodPiece, $cpt) = each($period_array))
 	{
-		if($periodPiece != 'total')    
+		if($periodPiece != 'total')
 		{
 			$pourcent = round(100 * $cpt / $period_array['total']);
 			$barwidth = $factor * $pourcent ;
@@ -345,12 +345,12 @@ function makeHitsTable($period_array, $periodTitle, $linkOnPeriod = '???')
 				<td width='60%' style='padding-top: 3px;' align='center'>"
 				// display hitbar
 				."<img src='../img/bar_1.gif' width='1' height='12' alt='$periodPiece : $cpt hits &ndash; $pourcent %' />";
-			if($pourcent != 0)            
+			if($pourcent != 0)
 				echo "<img src='../img/bar_1u.gif' width='$barwidth' height='12' alt='$periodPiece : $cpt hits &ndash; $pourcent %' />";
 				// display 100% bar
 			if($pourcent != 100 && $pourcent != 0)
 				echo "<img src='../img/bar_1m.gif' width='1' height='12' alt='$periodPiece : $cpt hits &ndash; $pourcent %' />";
-			if($pourcent != 100)    
+			if($pourcent != 100)
 				echo "<img src='../img/bar_1r.gif' width='".($maxSize-$barwidth)."' height='12' alt='$periodPiece : $cpt hits &ndash; $pourcent %' />";
 			echo "<img src='../img/bar_1.gif' width='1' height='12' alt='$periodPiece : $cpt hits &ndash; $pourcent %' />
 				</td>
@@ -369,13 +369,13 @@ function makeHitsTable($period_array, $periodTitle, $linkOnPeriod = '???')
 	            ".get_lang('Total')."
 	        </td>
 	        <td align='right' width='60%'>
-	            &nbsp;  
+	            &nbsp;
 	        </td>
 	        <td align='center' width='10%'>
-	            ".$period_array['total']." 
+	            ".$period_array['total']."
 	        </td>
 	        <td width='15%'>
-                &nbsp; 
+                &nbsp;
 	        </td>
 	    </tr>
 	";
@@ -392,7 +392,7 @@ function makeHitsTable($period_array, $periodTitle, $linkOnPeriod = '???')
                 titles of columns are title1 and title2
  */
 function buildTab2col($array_of_results, $title1, $title2)
-{ 
+{
 	echo "<table cellpadding='2' cellspacing='1' border='1' align='center'>\n";
 	echo "<tr>
 	        <td bgcolor='#E6E6E6'>
@@ -404,10 +404,10 @@ function buildTab2col($array_of_results, $title1, $title2)
 	    </tr>\n";
 
 	if (is_array($array_of_results))
-	{ 
+	{
 		for($j = 0 ; $j < count($array_of_results) ; $j++)
 		{
-			echo '<tr>'; 
+			echo '<tr>';
 			echo '<td bgcolor="#eeeeee">'.$array_of_results[$j][0].'</td>';
 			echo '<td align="right">'.$array_of_results[$j][1].'</td>';
 			echo "</tr>\n";
@@ -415,7 +415,7 @@ function buildTab2col($array_of_results, $title1, $title2)
 	}
 	else
 	{
-		echo '<tr>'; 
+		echo '<tr>';
 		echo '<td colspan="2" align="center">'.get_lang('NoResult').'</td>';
 		echo "</tr>\n";
 	}
@@ -458,22 +458,22 @@ function buildTab2ColNoTitle($array_of_results)
  * @param array_of_results : a 2 columns array
  * @desc        this function is used to display
                 integrity errors in the platform
-                if array_of_results is not an array there is 
+                if array_of_results is not an array there is
                 no error, else errors are displayed
  */
 function buildTabDefcon($array_of_results)
 {
 	echo "<table width='60%' cellpadding='2' cellspacing='1' border='0' align=center class='minitext'>\n";
-	
+
 	if (is_array($array_of_results))
-	{ 
-		// there are some strange cases... 
-		echo '<tr>'; 
+	{
+		// there are some strange cases...
+		echo '<tr>';
 		echo '<td colspan="2" align="center" bgcolor="#eeeeee"><font color="#ff0000">'.get_lang('Defcon').'</font></td>';
 		echo "</tr>\n";
 
 		for($j = 0 ; $j < count($array_of_results) ; $j++)
-		{ 
+		{
 			if($array_of_results[$j][0] == "")
 			{
 				$key = get_lang('NULLValue');
@@ -482,7 +482,7 @@ function buildTabDefcon($array_of_results)
 			{
 				$key = $array_of_results[$j][0];
 			}
-			echo '<tr>'; 
+			echo '<tr>';
 			echo '<td width="70%" class="content">'.$key.'</td>';
 			echo '<td width="30%" align="right">'.$array_of_results[$j][1].'</td>';
 			echo "</tr>\n";
@@ -491,7 +491,7 @@ function buildTabDefcon($array_of_results)
 	else
 	{
 		// all right
-		echo '<tr>'; 
+		echo '<tr>';
 		echo '<td colspan="2" align="center"><font color="#00ff00">'.get_lang('AllRight').'</font></td>';
 		echo "</tr>\n";
 	}

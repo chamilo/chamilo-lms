@@ -7,26 +7,26 @@ class TestLegal extends UnitTestCase{
 
 	public $lmanager;
 	public function TestLegal(){
-		
+
 		$this->UnitTestCase('');
 	}
-	
+
 	public function setUp(){
-		
+
 		$this->lmanager = new LegalManager();
 	}
-	
+
 	public function tearDown(){
-		
+
 		$this->lmanager = null;
-		
+
 	}
-	
+
 	public function testAdd(){
 		$instans = new MockDatabase();
 		$language='';
-		$content=''; 
-		$type=''; 
+		$content='';
+		$type='';
 		$changes='';
 		$res = LegalManager::add($language, $content, $type, $changes);
 		$instans->expectMaximumCallCount(Database,13);
@@ -40,9 +40,9 @@ class TestLegal extends UnitTestCase{
 	}
 	/*
 	public function testDelete(){
-		
+
 	}*/
-	
+
 	public function testGetLastConditionVersion(){
 		$instans = new MockDatabase();
 		$language='english';
@@ -55,7 +55,7 @@ class TestLegal extends UnitTestCase{
 		//var_dump($res);
 		//var_dump($instans);
 	}
-	
+
 	public function testGetLastCondition(){
 		$instans = new MockDatabase();
 		$language='english';
@@ -71,7 +71,7 @@ class TestLegal extends UnitTestCase{
 		//var_dump($res);
 		//var_dump($instans);
 	}
-	
+
 	public function testShowLastCondition(){
 		$term_preview=1;
 		$preview ='';
@@ -80,7 +80,7 @@ class TestLegal extends UnitTestCase{
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	public function testGetLastVersion(){
 		$instans = new MockDatabase();
 		$language='en';
@@ -97,20 +97,20 @@ class TestLegal extends UnitTestCase{
 		//var_dump($res);
 		//var_dump($instans);
 	}
-	
+
 	public function testget_legal_data(){
 		$instans = new MockDatabase();
-		$from=''; 
-		$number_of_items=''; 
+		$from='';
+		$number_of_items='';
 		$column='';
 		$res = LegalManager::get_legal_data($from, $number_of_items, $column);
 		$instans->expectOnce(Database);
 		$this->assertTrue(is_array($res));
 		$this->assertTrue($instans);
 		//var_dump($res);
-		//var_dump($instans);	
+		//var_dump($instans);
 	}
-	
+
 	public function testCount(){
 		$instans = new MockDatabase();
 		$res = LegalManager::count();

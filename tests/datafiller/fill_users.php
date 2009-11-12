@@ -2,7 +2,7 @@
 /**
  * This script contains a data filling procedure for users
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
- * 
+ *
  */
 /**
  * Initialisation section
@@ -12,7 +12,7 @@ require_once '../../main/inc/lib/usermanager.lib.php';
 /**
  * Loads the data and injects it into the Dokeos database, using the Dokeos
  * internal functions.
- * @return  array  List of user IDs for the users that have just been inserted 
+ * @return  array  List of user IDs for the users that have just been inserted
  */
 function fill_users() {
     $users = array(); //declare only to avoid parsing notice

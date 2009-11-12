@@ -105,14 +105,14 @@ class ResultsDataGenerator
 		if ($sorting & self :: RDG_SORT_LASTNAME) {
 			usort($table, array('ResultsDataGenerator', 'sort_by_last_name'));
 		} elseif ($sorting & self :: RDG_SORT_FIRSTNAME) {
-			usort($table, array('ResultsDataGenerator', 'sort_by_first_name'));	
+			usort($table, array('ResultsDataGenerator', 'sort_by_first_name'));
 		} elseif ($sorting & self :: RDG_SORT_SCORE) {
 			usort($table, array('ResultsDataGenerator', 'sort_by_score'));
 		} elseif ($sorting & self :: RDG_SORT_MASK) {
-			usort($table, array('ResultsDataGenerator', 'sort_by_mask'));			
+			usort($table, array('ResultsDataGenerator', 'sort_by_mask'));
 		}
 		if ($sorting & self :: RDG_SORT_DESC) {
-			$table = array_reverse($table);			
+			$table = array_reverse($table);
 		}
 		return array_slice($table, $start, $count);
 
@@ -122,7 +122,7 @@ class ResultsDataGenerator
 		if ($score != null) {
 			$display_type = SCORE_DIV_PERCENT;
 			if ($ignore_score_color) {
-				$display_type |= SCORE_IGNORE_SPLIT;				
+				$display_type |= SCORE_IGNORE_SPLIT;
 			}
 			$scoredisplay = ScoreDisplay :: instance();
 			return $scoredisplay->display_score
@@ -131,7 +131,7 @@ class ResultsDataGenerator
 					 $realscore ? SCORE_ONLY_DEFAULT : SCORE_ONLY_CUSTOM);
 			}
 			else {
-				return '';			
+				return '';
 		  }
 	}
 
@@ -143,15 +143,15 @@ class ResultsDataGenerator
 	function sort_by_first_name($item1, $item2) {
 		return api_strcmp($item1['firstname'], $item2['firstname']);
 	}
-	
+
 	function sort_by_score($item1, $item2) {
 		if ($item1['score'] == $item2['score']) {
-			return 0;			
+			return 0;
 		}else {
-			return ($item1['score'] < $item2['score'] ? -1 : 1);			
+			return ($item1['score'] < $item2['score'] ? -1 : 1);
 		}
 	}
-	
+
 	function sort_by_mask ($item1, $item2) {
 		$score1 = (isset($item1['score']) ? array($item1['score'],$this->evaluation->get_max()) : null);
 		$score2 = (isset($item2['score']) ? array($item2['score'],$this->evaluation->get_max()) : null);

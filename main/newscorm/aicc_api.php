@@ -1,6 +1,6 @@
-<?php // $Id: $ 
+<?php // $Id: $
 /**
-============================================================================== 
+==============================================================================
 *	API event handler functions for AICC / CMIv4 in API communication mode
 *
 *	@author   Denes Nagy <darkden@freemail.hu>
@@ -9,29 +9,29 @@
 *	@access   public
 *	@package  dokeos.learnpath
 * 	@license	GNU/GPL - See Dokeos license directory for details
-============================================================================== 
+==============================================================================
 */
 /**
- * This script is divided into three sections. 
+ * This script is divided into three sections.
  * The first section (below) is the initialisation part.
  * The second section is the AICC object part
  * The third section defines the event handlers for Dokeos' internal messaging
  * and frames refresh
- * 
+ *
  * This script implements the API messaging for AICC. The HACP messaging is
  * made by another set of scripts.
  */
 /*
-============================================================================== 
+==============================================================================
 	   INIT SECTION
-============================================================================== 
-*/ 
+==============================================================================
+*/
 
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
 
 //Load common libraries using a compatibility script to bridge between 1.6 and 1.8
-require_once('back_compat.inc.php');  
+require_once('back_compat.inc.php');
 //Load learning path libraries so we can use the objects to define the initial values
 //of the API
 require_once('learnpath.class.php');
@@ -50,10 +50,10 @@ if(!is_object($oItem)){
 $autocomplete_when_80pct = 0;
 
 /*
-============================================================================== 
+==============================================================================
 		JavaScript Functions
-============================================================================== 
-*/ 
+==============================================================================
+*/
 ?>var scorm_logs=<?php echo (empty($oLP->scorm_debug)?'0':'3');?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
 var lms_logs=0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
 //logit_lms('scormfunctions.php included',0);
@@ -154,7 +154,7 @@ function LMSGetValue(param) {
 	}else if(param == 'cmi.core.student_name'){
 		  <?php
 			$who=addslashes(api_get_person_name($_user['firstName'], $_user['lastName']));
-		    echo "result='$who';"; 
+		    echo "result='$who';";
 		  ?>
 	}else if(param == 'cmi.core.lesson_location'){
 		result=lesson_location;
@@ -193,10 +193,10 @@ function LMSGetValue(param) {
 		case 'cmi.core.entry'			:
 			result='';
 			break;
-		case 'cmi.core.exit'			: 
+		case 'cmi.core.exit'			:
 			result='';
 			break;
-		case 'cmi.core.lesson_status'	: 
+		case 'cmi.core.lesson_status'	:
 		    if(lesson_status != '') {
 		    	result=lesson_status;
 		    }
@@ -204,51 +204,51 @@ function LMSGetValue(param) {
 		    	result='not attempted';
 		    }
 		    break;
-		case 'cmi.core.student_id'	   : 
+		case 'cmi.core.student_id'	   :
 			result='<?php echo $_user['user_id']; ?>';
 			break;
-		case 'cmi.core.student_name'	: 
+		case 'cmi.core.student_name'	:
 		  <?php
 		    $who=addslashes(api_get_person_name($_user['firstName'], $_user['lastName']));
-		    echo "result='$who';"; 
+		    echo "result='$who';";
 		  ?>	break;
 		case 'cmi.core.lesson_location'	:
 			result='';
 			break;
-		case 'cmi.core.total_time'	:	
+		case 'cmi.core.total_time'	:
 			result=total_time;
 			break;
-		case 'cmi.core.score._children'	: 
+		case 'cmi.core.score._children'	:
 			result='raw,min,max';
 			break;
-		case 'cmi.core.score.raw'	: 
+		case 'cmi.core.score.raw'	:
 			result=score;
 			break;
 		case 'cmi.core.score.max'	:
 			result=max;
 			break;
-		case 'cmi.core.score.min'	: 
+		case 'cmi.core.score.min'	:
 			result=min;
 			break;
-		case 'cmi.core.score'		: 
+		case 'cmi.core.score'		:
 			result=score;
 			break;
-		case 'cmi.core.credit'		: 
+		case 'cmi.core.credit'		:
 			result='no-credit';
 			break;
-		case 'cmi.core.lesson_mode'	: 
+		case 'cmi.core.lesson_mode'	:
 			result='normal';
 			break;
-		case 'cmi.suspend_data'		: 
+		case 'cmi.suspend_data'		:
 			result='<?php echo $oItem->get_suspend_data();?>';
 			break;
-		case 'cmi.launch_data'		: 
+		case 'cmi.launch_data'		:
 			result='';
 			break;
-		case 'cmi.objectives._count': 
+		case 'cmi.objectives._count':
 			result='<?php echo $oItem->get_view_count();?>';
 			break;
-		default 					: 
+		default 					:
 			result='';
 			break;
 	}
@@ -263,7 +263,7 @@ function LMSSetValue(param, val) {
 	case 'cmi.core.score.max'		: max = val;			break;
 	case 'cmi.core.score.min'		: min = val;			break;
 	case 'cmi.core.lesson_location' : lesson_location = val;break;
-	case 'cmi.core.lesson_status'	: 
+	case 'cmi.core.lesson_status'	:
 		saved_lesson_status = lesson_status;
 		lesson_status = val;
 		<?php if($oLP->mode != 'fullscreen'){ ?>
@@ -278,7 +278,7 @@ function LMSSetValue(param, val) {
 	}
     //var update = update_toc();
 	//var update_progress = update_progress_bar();
-	<?php 
+	<?php
 	if ($oLP->force_commit == 1){
 		echo "    var mycommit = LMSCommit('force');";
 	}
@@ -292,7 +292,7 @@ function savedata(origin) { //origin can be 'commit', 'finish' or 'terminate'
     }
     <?php }?>
     param = 'id='+lms_item_id+'&origin='+origin+'&score='+score+'&max='+max+'&min='+min+'&lesson_status='+lesson_status+'&time='+session_time+'&suspend_data='+suspend_data;
-	
+
     url="http://<?php
     $self=api_get_self();
     $url=$_SERVER['HTTP_HOST'].$self;
@@ -312,11 +312,11 @@ function LMSCommit(val) {
 	return('true');
 }
 function LMSFinish(val) {
-	if (( commit == false )) { 	
-		logit_scorm('LMSFinish() (no LMSCommit())',1); 
+	if (( commit == false )) {
+		logit_scorm('LMSFinish() (no LMSCommit())',1);
 	}
 	if ( commit == true ) {
-		logit_scorm('LMSFinish() called',1);		
+		logit_scorm('LMSFinish() called',1);
 		savedata('finish');
 	}
 	return('true');
@@ -376,7 +376,7 @@ function addEvent(elm, evType, fn, useCapture){
 /**
  * Add listeners to the page objects. This has to be defined for
  * the current context as it acts on objects that should exist
- * on the page 
+ * on the page
  */
 function addListeners(){
 	//exit if the browser doesn't support ID or tag retrieval
@@ -404,7 +404,7 @@ function addListeners(){
 /**
  * Load an item into the content frame:
  * - making sure the previous item status have been saved
- * - first updating the current item ID (to save the right item) 
+ * - first updating the current item ID (to save the right item)
  * - updating the frame src
  */
 function load_item(item_id,url){
@@ -550,7 +550,7 @@ function update_progress_bar(nbr_complete, nbr_total, mode)
 		percentage = Math.round(percentage);
 		var pr_text  = myframe.document.getElementById('progress_text');
 		var pr_full  = myframe.document.getElementById('progress_img_full');
-		
+
 		var pr_empty = myframe.document.getElementById('progress_img_empty');
 		pr_full.width = percentage;
 		pr_empty.width = 100-percentage;
@@ -561,7 +561,7 @@ function update_progress_bar(nbr_complete, nbr_total, mode)
 				break;
 			case '%':
 			default:
-				mytext = percentage + '%'; 
+				mytext = percentage + '%';
 				break;
 		}
 		pr_text.innerHTML = mytext;
@@ -598,12 +598,12 @@ function update_message_frame(msg_msg)
 /**
  * Function that handles the saving of an item and switching from an item to another.
  * Once called, this function should be able to do the whole process of (1) saving the
- * current item, (2) refresh all the values inside the SCORM API object, (3) open the 
- * new item into the content_id frame, (4) refresh the table of contents, (5) refresh 
+ * current item, (2) refresh all the values inside the SCORM API object, (3) open the
+ * new item into the content_id frame, (4) refresh the table of contents, (5) refresh
  * the progress bar (completion), (6) refresh the message frame
  * @param	integer		Dokeos ID for the current item
- * @param	string		This parameter can be a string specifying the next 
- *						item (like 'next', 'previous', 'first' or 'last') or the id to the next item  
+ * @param	string		This parameter can be a string specifying the next
+ *						item (like 'next', 'previous', 'first' or 'last') or the id to the next item
  */
 function switch_item(current_item, next_item){
 	/*
@@ -620,10 +620,10 @@ function switch_item(current_item, next_item){
 	//(1) save the current item
 	logit_lms('Called switch_item with params '+lms_item_id+' and '+next_item+'',0);
 	xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location);
-	
+
 	//(2) Refresh all the values inside this SCORM API object - use AJAX
 	xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item);
-	
+
 	//(3) open the new item in the content_id frame
 	var cont_f = document.getElementById('content_id');
 	if(!cont_f){logit_lms('In switch - content frame not found',0);return false;}
@@ -638,7 +638,7 @@ function switch_item(current_item, next_item){
 			break;
 	}
 	cont_f.src = 'lp_controller.php?action=content&lp_id='+lms_lp_id+'&item_id='+next_item;
-	
+
 	//(4) refresh table of contents
 	/*
 	var toc_f = document.getElementById('toc_id');
@@ -646,7 +646,7 @@ function switch_item(current_item, next_item){
 	var myrefresh = toc_f.src;
 	toc_f.src = myrefresh;
 	*/
-	
+
 	//(5) refresh the progress bar
 	/*
 	var prg_f = document.getElementById('nav_id');
@@ -654,7 +654,7 @@ function switch_item(current_item, next_item){
 	var myrefresh = prg_f.src;
 	prg_f.src = myrefresh;
 	*/
-	
+
 	//(6) refresh the message box (included in switch_item_details)
 	return true;
 }
@@ -691,18 +691,18 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
             's': score,
             'max': max,
             'min': min,
-            'status': lesson_status, 
-            't': session_time, 
+            'status': lesson_status,
+            't': session_time,
             'suspend': suspend_data,
             'loc': lesson_location,
-            'interact': interac_string, 
+            'interact': interac_string,
             'core_exit': lms_item_core_exit
         }
         */
         $.ajax({
             type:"GET",
             data: params,
-            url: "lp_ajax_save_item.php", 
+            url: "lp_ajax_save_item.php",
             dataType: "script",
             async: false
             }
@@ -718,7 +718,7 @@ function xajax_start_timer() {
         url: "lp_ajax_start_timer.php",
         dataType: "script",
         async: false
-    }); 
+    });
 }
 /**
  * Save a specific item's objectives into the LMS through

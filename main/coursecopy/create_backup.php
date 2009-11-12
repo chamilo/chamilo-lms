@@ -1,38 +1,38 @@
 <?php
 // $Id: create_backup.php 20084 2009-04-24 20:10:43Z aportugal $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos SPRL
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Bart Mollet (bart.mollet@hogent.be)
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 /**
  * ==============================================================================
  * Create a backup.
- * 
+ *
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package dokeos.backup
  * ==============================================================================
  */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = array ('exercice', 'admin', 'coursebackup');
 
 // including the global file
@@ -75,7 +75,7 @@ api_display_tool_title($nameTools);
 ==============================================================================
 		MAIN CODE
 ==============================================================================
-*/ 
+*/
 if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (isset ($_POST['backup_option']) && $_POST['backup_option'] == 'full_backup'))
 {
 	if (isset ($_POST['action']) && $_POST['action'] == 'course_select_form')
@@ -105,7 +105,7 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 elseif (isset ($_POST['backup_option']) && $_POST['backup_option'] == 'select_items')
 {
 	$cb = new CourseBuilder('partial');
-	$course = $cb->build();	
+	$course = $cb->build();
 	Display::display_normal_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'));
 	CourseSelectForm :: display_form($course);
 }
@@ -120,7 +120,7 @@ else
 	else
 	{
 		echo get_lang('SelectOptionForBackup');
-		
+
 		include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 		$form = new FormValidator('create_backup_form','POST');
 		$renderer = $form->defaultRenderer();
@@ -129,18 +129,18 @@ else
 		$form->addElement('radio', 'backup_option', '',  get_lang('LetMeSelectItems'), 'select_items');
 		$form->addElement('html','<br />');
 		$form->addElement('style_submit_button', null, get_lang('CreateBackup'), 'class="save"');
-		
+
 		$form->add_progress_bar();
-		
+
 		$values['backup_option'] = 'full_backup';
 		$form->setDefaults($values);
-		
+
 		$form->display();
 	}
 }
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
 */
 Display::display_footer();

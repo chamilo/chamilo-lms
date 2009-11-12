@@ -102,7 +102,7 @@ function save_scores($file, $score)
 	'".Database::escape_string($_cid)."',
 	'".Database::escape_string($score)."',
 	'".Database::escape_string($weighting)."')";
-	$res = api_sql_query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql,__FILE__,__LINE__);
 
 	if ($origin == 'learnpath')
 	{
@@ -112,7 +112,7 @@ function save_scores($file, $score)
 		//record the results in the learning path, using the SCORM interface (API)
 	    $jscript2run .= '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$score.','.$weighting.');</script>';
 	}
-		
+
 }
 
 // Save the Scores

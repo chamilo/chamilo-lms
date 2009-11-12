@@ -3,8 +3,8 @@ ASCIIMathML.js
 ==============
 This file contains JavaScript functions to convert ASCII math notation
 and LaTeX to Presentation MathML. Simple graphics commands are also
-translated to SVG images. The conversion is done while the (X)HTML 
-page loads, and should work with Firefox/Mozilla/Netscape 7+ and Internet 
+translated to SVG images. The conversion is done while the (X)HTML
+page loads, and should work with Firefox/Mozilla/Netscape 7+ and Internet
 Explorer 6/7 + MathPlayer (http://www.dessci.com/en/products/mathplayer/) +
 Adobe SVGview 3.03 (http://www.adobe.com/svg/viewer/install/).
 
@@ -28,22 +28,22 @@ it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation; either version 2.1 of the License, or (at
 your option) any later version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT 
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License 
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
 (at http://www.gnu.org/licences/lgpl.html) for more details.
 */
 
 var mathcolor = "blue";        // change it to "" (to inherit) or another color
 //var mathfontsize = "1em";      // change to e.g. 1.2em for larger math
 var mathfontsize = "1.2em";      // Modified by Ivan Tcholakov, 10-AUG-2009.
-var mathfontfamily = "serif";  // change to "" to inherit (works in IE) 
+var mathfontfamily = "serif";  // change to "" to inherit (works in IE)
                                // or another family (e.g. "arial")
 var automathrecognize = false; // writing "amath" on page makes this true
 var checkForMathML = true;     // check if browser can display MathML
 var notifyIfNoMathML = true;   // display note at top if no MathML capability
 var alertIfNoMathML = false;   // show alert box if no MathML capability
-var translateOnLoad = true;    // set to false to do call translators from js 
+var translateOnLoad = true;    // set to false to do call translators from js
 var translateLaTeX = true;     // false to preserve $..$, $$..$$
 var translateLaTeXformatting = true; // false to preserve \emph,\begin{},\end{}
 var translateASCIIMath = true; // false to preserve `..`
@@ -59,7 +59,7 @@ var dsvglocation = ""; // path to d.svg (blank if same as ASCIIMathML.js loc)
 
 var isIE = document.createElementNS==null;
 
-if (document.getElementById==null) 
+if (document.getElementById==null)
   alert("This webpage requires a recent browser such as\
 \nMozilla/Netscape 7+ or Internet Explorer 6+MathPlayer")
 
@@ -79,7 +79,7 @@ function AMnoMathMLNote() {
   an.appendChild(document.createTextNode("ASCIIMathML"));
   an.setAttribute("href","http://www.chapman.edu/~jipsen/asciimath.html");
   nd.appendChild(an);
-  nd.appendChild(document.createTextNode(" notation use Internet Explorer 6+"));  
+  nd.appendChild(document.createTextNode(" notation use Internet Explorer 6+"));
   an = AMcreateElementXHTML("a");
   an.appendChild(document.createTextNode("MathPlayer"));
   an.setAttribute("href","http://www.dessci.com/en/products/mathplayer/download.htm");
@@ -90,7 +90,7 @@ function AMnoMathMLNote() {
 }
 
 function AMisMathMLavailable() {
-  if (navigator.appName.slice(0,8)=="Netscape") 
+  if (navigator.appName.slice(0,8)=="Netscape")
     if (navigator.appVersion.slice(0,1)>="5") return null;
     else return AMnoMathMLNote();
   else if (navigator.appName.slice(0,9)=="Microsoft")
@@ -121,7 +121,7 @@ var AMcal = [0xEF35,0x212C,0xEF36,0xEF37,0x2130,0x2131,0xEF38,0x210B,0x2110,0xEF
 var AMfrk = [0xEF5D,0xEF5E,0x212D,0xEF5F,0xEF60,0xEF61,0xEF62,0x210C,0x2111,0xEF63,0xEF64,0xEF65,0xEF66,0xEF67,0xEF68,0xEF69,0xEF6A,0x211C,0xEF6B,0xEF6C,0xEF6D,0xEF6E,0xEF6F,0xEF70,0xEF71,0x2128];
 var AMbbb = [0xEF8C,0xEF8D,0x2102,0xEF8E,0xEF8F,0xEF90,0xEF91,0x210D,0xEF92,0xEF93,0xEF94,0xEF95,0xEF96,0x2115,0xEF97,0x2119,0x211A,0x211D,0xEF98,0xEF99,0xEF9A,0xEF9B,0xEF9C,0xEF9D,0xEF9E,0x2124];
 
-var CONST = 0, UNARY = 1, BINARY = 2, INFIX = 3, LEFTBRACKET = 4, 
+var CONST = 0, UNARY = 1, BINARY = 2, INFIX = 3, LEFTBRACKET = 4,
     RIGHTBRACKET = 5, SPACE = 6, UNDEROVER = 7, DEFINITION = 8,
     LEFTRIGHT = 9, TEXT = 10; // token types
 
@@ -358,8 +358,8 @@ var AMnames = []; //list of input symbols
 function AMinitSymbols() {
   var texsymbols = [], i;
   for (i=0; i<AMsymbols.length; i++)
-    if (AMsymbols[i].tex) 
-      texsymbols[texsymbols.length] = {input:AMsymbols[i].tex, 
+    if (AMsymbols[i].tex)
+      texsymbols[texsymbols.length] = {input:AMsymbols[i].tex,
         tag:AMsymbols[i].tag, output:AMsymbols[i].output, ttype:AMsymbols[i].ttype};
   AMsymbols = AMsymbols.concat(texsymbols);
   AMsymbols.sort(compareNames);
@@ -382,7 +382,7 @@ function AMcreateMmlNode(t,frag) {
 }
 
 function define(oldstr,newstr) {
-  AMsymbols = AMsymbols.concat([{input:oldstr, tag:"mo", output:newstr, 
+  AMsymbols = AMsymbols.concat([{input:oldstr, tag:"mo", output:newstr,
                                  tex:null, ttype:DEFINITION}]);
   AMsymbols.sort(compareNames);
   for (i=0; i<AMsymbols.length; i++) AMnames[i] = AMsymbols[i].input;
@@ -391,14 +391,14 @@ function define(oldstr,newstr) {
 function AMremoveCharsAndBlanks(str,n) {
 //remove n characters and any following blanks
   var st;
-  if (str.charAt(n)=="\\" && str.charAt(n+1)!="\\" && str.charAt(n+1)!=" ") 
+  if (str.charAt(n)=="\\" && str.charAt(n+1)!="\\" && str.charAt(n+1)!=" ")
     st = str.slice(n+1);
   else st = str.slice(n);
   for (var i=0; i<st.length && st.charCodeAt(i)<=32; i=i+1);
   return st.slice(i);
 }
 
-function AMposition(arr, str, n) { 
+function AMposition(arr, str, n) {
 // return position >=n where str appears or would be inserted
 // assumes arr is sorted
   if (n==0) {
@@ -439,7 +439,7 @@ function AMgetSymbol(str) {
   AMpreviousSymbol=AMcurrentSymbol;
   if (match!=""){
     AMcurrentSymbol=AMsymbols[mk].ttype;
-    return AMsymbols[mk]; 
+    return AMsymbols[mk];
   }
 // if str[0] is a digit or - return maxsubstring of digits.digits
   AMcurrentSymbol=CONST;
@@ -510,21 +510,21 @@ function AMparseSexpr(str) { //parses str and returns [node,tailstr]
     return [null,str];
   }
   if (symbol.ttype == DEFINITION) {
-    str = symbol.output+AMremoveCharsAndBlanks(str,symbol.input.length); 
+    str = symbol.output+AMremoveCharsAndBlanks(str,symbol.input.length);
     symbol = AMgetSymbol(str);
   }
   switch (symbol.ttype) {
   case UNDEROVER:
   case CONST:
-    str = AMremoveCharsAndBlanks(str,symbol.input.length); 
+    str = AMremoveCharsAndBlanks(str,symbol.input.length);
     return [AMcreateMmlNode(symbol.tag,        //its a constant
                              document.createTextNode(symbol.output)),str];
   case LEFTBRACKET:   //read (expr+)
     AMnestingDepth++;
-    str = AMremoveCharsAndBlanks(str,symbol.input.length); 
+    str = AMremoveCharsAndBlanks(str,symbol.input.length);
     result = AMparseExpr(str,true);
     AMnestingDepth--;
-    if (typeof symbol.invisible == "boolean" && symbol.invisible) 
+    if (typeof symbol.invisible == "boolean" && symbol.invisible)
       node = AMcreateMmlNode("mrow",result[0]);
     else {
       node = AMcreateMmlNode("mo",document.createTextNode(symbol.output));
@@ -556,7 +556,7 @@ function AMparseSexpr(str) { //parses str and returns [node,tailstr]
       str = AMremoveCharsAndBlanks(str,i+1);
       return [AMcreateMmlNode("mrow",newFrag),str];
   case UNARY:
-      str = AMremoveCharsAndBlanks(str,symbol.input.length); 
+      str = AMremoveCharsAndBlanks(str,symbol.input.length);
       result = AMparseSexpr(str);
       if (result[0]==null) return [AMcreateMmlNode(symbol.tag,
                              document.createTextNode(symbol.output)),str];
@@ -602,7 +602,7 @@ function AMparseSexpr(str) { //parses str and returns [node,tailstr]
         return [node,result[1]];
       }
   case BINARY:
-    str = AMremoveCharsAndBlanks(str,symbol.input.length); 
+    str = AMremoveCharsAndBlanks(str,symbol.input.length);
     result = AMparseSexpr(str);
     if (result[0]==null) return [AMcreateMmlNode("mo",
                            document.createTextNode(symbol.input)),str];
@@ -611,16 +611,16 @@ function AMparseSexpr(str) { //parses str and returns [node,tailstr]
     if (result2[0]==null) return [AMcreateMmlNode("mo",
                            document.createTextNode(symbol.input)),str];
     AMremoveBrackets(result2[0]);
-    if (symbol.input=="root" || symbol.input=="stackrel") 
+    if (symbol.input=="root" || symbol.input=="stackrel")
       newFrag.appendChild(result2[0]);
     newFrag.appendChild(result[0]);
     if (symbol.input=="frac") newFrag.appendChild(result2[0]);
     return [AMcreateMmlNode(symbol.tag,newFrag),result2[1]];
   case INFIX:
-    str = AMremoveCharsAndBlanks(str,symbol.input.length); 
+    str = AMremoveCharsAndBlanks(str,symbol.input.length);
     return [AMcreateMmlNode("mo",document.createTextNode(symbol.output)),str];
   case SPACE:
-    str = AMremoveCharsAndBlanks(str,symbol.input.length); 
+    str = AMremoveCharsAndBlanks(str,symbol.input.length);
     node = AMcreateElementMathML("mspace");
     node.setAttribute("width","1ex");
     newFrag.appendChild(node);
@@ -633,7 +633,7 @@ function AMparseSexpr(str) { //parses str and returns [node,tailstr]
   case LEFTRIGHT:
 //    if (rightvert) return [null,str]; else rightvert = true;
     AMnestingDepth++;
-    str = AMremoveCharsAndBlanks(str,symbol.input.length); 
+    str = AMremoveCharsAndBlanks(str,symbol.input.length);
     result = AMparseExpr(str,false);
     AMnestingDepth--;
     var st = "";
@@ -651,7 +651,7 @@ function AMparseSexpr(str) { //parses str and returns [node,tailstr]
     }
   default:
 //alert("default");
-    str = AMremoveCharsAndBlanks(str,symbol.input.length); 
+    str = AMremoveCharsAndBlanks(str,symbol.input.length);
     return [AMcreateMmlNode(symbol.tag,        //its a constant
                              document.createTextNode(symbol.output)),str];
   }
@@ -719,9 +719,9 @@ function AMparseExpr(str,rightbracket) {
       node.appendChild(result[0]);
       newFrag.appendChild(node);
       symbol = AMgetSymbol(str);
-    } 
+    }
     else if (node!=undefined) newFrag.appendChild(node);
-  } while ((symbol.ttype != RIGHTBRACKET && 
+  } while ((symbol.ttype != RIGHTBRACKET &&
            (symbol.ttype != LEFTRIGHT || rightbracket)
            || AMnestingDepth == 0) && symbol!=null && symbol.output!="");
   if (symbol.ttype == RIGHTBRACKET || symbol.ttype == LEFTRIGHT) {
@@ -733,7 +733,7 @@ function AMparseExpr(str,rightbracket) {
       var right = newFrag.childNodes[len-1].lastChild.firstChild.nodeValue;
       if (right==")" || right=="]") {
         var left = newFrag.childNodes[len-1].firstChild.firstChild.nodeValue;
-        if (left=="(" && right==")" && symbol.output != "}" || 
+        if (left=="(" && right==")" && symbol.output != "}" ||
             left=="[" && right=="]") {
         var pos = []; // positions of commas
         var matrix = true;
@@ -741,12 +741,12 @@ function AMparseExpr(str,rightbracket) {
         for (i=0; matrix && i<m; i=i+2) {
           pos[i] = [];
           node = newFrag.childNodes[i];
-          if (matrix) matrix = node.nodeName=="mrow" && 
-            (i==m-1 || node.nextSibling.nodeName=="mo" && 
+          if (matrix) matrix = node.nodeName=="mrow" &&
+            (i==m-1 || node.nextSibling.nodeName=="mo" &&
             node.nextSibling.firstChild.nodeValue==",")&&
             node.firstChild.firstChild.nodeValue==left &&
             node.lastChild.firstChild.nodeValue==right;
-          if (matrix) 
+          if (matrix)
             for (var j=0; j<node.childNodes.length; j++)
               if (node.childNodes[j].firstChild.nodeValue==",")
                 pos[i][pos[i].length]=j;
@@ -891,7 +891,7 @@ function AMprocessNodeR(n, linebreaks) {
           checkForMathML = false;
           var nd = AMisMathMLavailable();
           AMnoMathML = nd != null;
-          if (AMnoMathML && notifyIfNoMathML) 
+          if (AMnoMathML && notifyIfNoMathML)
             if (alertIfNoMathML)
               alert("To view the ASCIIMathML notation use Internet Explorer 6 +\nMathPlayer (free from www.dessci.com)\n\
                 or Firefox/Mozilla/Netscape");
@@ -1037,7 +1037,7 @@ function LMnoMathMLNote() {
   an.appendChild(document.createTextNode("LaTeXMathML"));
   an.setAttribute("href","http://www.maths.nott.ac.uk/personal/drw/lm.html");
   nd.appendChild(an);
-  nd.appendChild(document.createTextNode(" notation use Internet Explorer 6+")); 
+  nd.appendChild(document.createTextNode(" notation use Internet Explorer 6+"));
   an = LMcreateElementXHTML("a");
   an.appendChild(document.createTextNode("MathPlayer"));
   an.setAttribute("href","http://www.dessci.com/en/products/mathplayer/download.htm");
@@ -1067,7 +1067,7 @@ var LMfrk = [0xEF5D,0xEF5E,0x212D,0xEF5F,0xEF60,0xEF61,0xEF62,0x210C,0x2111,0xEF
 var LMbbb = [0xEF8C,0xEF8D,0x2102,0xEF8E,0xEF8F,0xEF90,0xEF91,0x210D,0xEF92,0xEF93,0xEF94,0xEF95,0xEF96,0x2115,0xEF97,0x2119,0x211A,0x211D,0xEF98,0xEF99,0xEF9A,0xEF9B,0xEF9C,0xEF9D,0xEF9E,0x2124];
 
 //var CONST = 0, UNARY = 1, BINARY = 2, INFIX = 3, LEFTBRACKET = 4,
-//    RIGHTBRACKET = 5, SPACE = 6, UNDEROVER = 7, DEFINITION = 8, TEXT = 10, 
+//    RIGHTBRACKET = 5, SPACE = 6, UNDEROVER = 7, DEFINITION = 8, TEXT = 10,
 var BIG = 11, LONG = 12, STRETCHY = 13, MATRIX = 14; // token types
 
 var LMsqrt = {input:"\\sqrt",	tag:"msqrt", output:"sqrt",	ttype:UNARY},
@@ -2126,10 +2126,10 @@ function LMprocessNode(n, linebreaks, spanclassLM) {
       st = n.innerHTML;
     } catch(err) {}
     var am = /amath|agraph/i.test(st);
-    if ((st==null || st.indexOf("\$ ")!=-1 || st.indexOf("\$<")!=-1 || 
+    if ((st==null || st.indexOf("\$ ")!=-1 || st.indexOf("\$<")!=-1 ||
          st.indexOf("\\begin")!=-1 || am || st.slice(-1)=="$" ||
          st.indexOf("\$\n")!=-1)&& !/edit-content|HTMLArea|wikiedit/.test(st)){
-      if (!avoidinnerHTML && translateLaTeXformatting) 
+      if (!avoidinnerHTML && translateLaTeXformatting)
         st = simpleLaTeXformatting(st);
       if (st!=null && am && !avoidinnerHTML) {
 //alert(st)
@@ -2189,10 +2189,10 @@ it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation; either version 2.1 of the License, or (at
 your option) any later version.
 
-This program is distributed in the hope that it will be useful, 
+This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser
-General Public License (at http://www.gnu.org/license/lgpl.html) 
+General Public License (at http://www.gnu.org/license/lgpl.html)
 for more details.*/
 
 // you can change these
@@ -2246,7 +2246,7 @@ var aboveleft = "aboveleft";
 var aboveright = "aboveright";
 var belowleft = "belowleft";
 var belowright = "belowright";
-var xmin, xmax, ymin, ymax, xscl, yscl, 
+var xmin, xmax, ymin, ymax, xscl, yscl,
     xgrid, ygrid, xtick, ytick, initialized;
 var strokewidth, strokedasharray, stroke, fill, strokeopacity, fillopacity;
 var fontstyle, fontfamily, fontsize, fontweight, fontstroke, fontfill;
@@ -2268,7 +2268,7 @@ var arccsc = function(x) { return arcsin(1/x) };
 var arccot = function(x) { return arctan(1/x) };
 var sinh = function(x) { return (Math.exp(x)-Math.exp(-x))/2 };
 var cosh = function(x) { return (Math.exp(x)+Math.exp(-x))/2 };
-var tanh = 
+var tanh =
   function(x) { return (Math.exp(x)-Math.exp(-x))/(Math.exp(x)+Math.exp(-x)) };
 var sech = function(x) { return 1/cosh(x) };
 var csch = function(x) { return 1/sinh(x) };
@@ -2359,7 +2359,7 @@ function isSVGavailable() {
   an.setAttribute("href",
     "http://www.chapman.edu/~jipsen/svg/svgenabledmozillafirefox.html");
   nd.appendChild(an);
-  if (navigator.appName.slice(0,8)=="Netscape") 
+  if (navigator.appName.slice(0,8)=="Netscape")
     if (window['SVGElement']) return null;
     else return nd;
   else if (navigator.appName.slice(0,9)=="Microsoft")
@@ -2391,7 +2391,7 @@ function getY(evt) { // return mouse y-coord in user coordinate system
 
 function translateandeval(src) { //modify user input to JavaScript syntax
   var errstr;
-  // replace plot(f(x),...) with plot("f(x)",...)  
+  // replace plot(f(x),...) with plot("f(x)",...)
   src = src.replace(/plot\(\x20*([^\"f\[][^\n\r;]+?)\,/g,"plot\(\"$1\",");
   src = src.replace(/plot\(\x20*([^\"f\[][^\n\r;]+)\)/g,"plot(\"$1\")");
 
@@ -2406,7 +2406,7 @@ function translateandeval(src) { //modify user input to JavaScript syntax
     with (Math) eval(src);          // here the svgpicture object is created
   } catch(err) {
     if (err!="wait") {
-      if (typeof err=="object") 
+      if (typeof err=="object")
         errstr = err.name+" "+err.message+" "+err.number+" "+err.description;
       else errstr = err;
       alert(errstr+"\n"+src)
@@ -2437,7 +2437,7 @@ use Firefox 2.0 or later");
   }
  if (nd == null) {
   for (index = 0; index < len; index++) {
-   width = null; height = null; 
+   width = null; height = null;
    xmin = null; xmax = null; ymin = null; ymax = null;
    xscl = null; xgrid = null; yscl = null; ygrid = null;
    initialized = false;
@@ -2468,7 +2468,7 @@ use Firefox 2.0 or later");
    }
    if (ht==null) ht ="";
 //   if (ht!="") defaultborder = 25;
-   if (ht=="" || src=="") 
+   if (ht=="" || src=="")
     if (document.getElementById("picture"+(index+1)+"input")==null) {
       node = myCreateElementXHTML("textarea");
       arr = src.split("\n");
@@ -2566,7 +2566,7 @@ function changepicturesize(evt,factor) {
   updatePicture(name);
 }
 
-var sinceFirstClick = 0; // ondblclick simulation from 
+var sinceFirstClick = 0; // ondblclick simulation from
 var dblClkTimer;         // http://www.enja.org/david/?cat=13 Thanks!
 function timer() {
   if(sinceFirstClick<60) {
@@ -2589,7 +2589,7 @@ function mClick(evt) {
       clearTimeout(dblClkTimer);
       sinceFirstClick = 0;
       dblClkTimer = setTimeout("timer()",10);
-    }	      
+    }
   } else {
     sinceFirstClick = 0;
     dblClkTimer = setTimeout("timer()",10);
@@ -2622,9 +2622,9 @@ function initPicture(x_min,x_max,y_min,y_max) { // set up the graph
   if (y_max!=null) ymax = y_max;
   if (xmin==null) xmin = defaultxmin;
   if (xmax==null) xmax = defaultxmax;
- if (typeof xmin != "number" || typeof xmax != "number" || xmin >= xmax) 
+ if (typeof xmin != "number" || typeof xmax != "number" || xmin >= xmax)
    alert("Picture requires at least two numbers: xmin < xmax");
- else if (y_max != null && (typeof y_min != "number" || 
+ else if (y_max != null && (typeof y_min != "number" ||
           typeof y_max != "number" || y_min >= y_max))
    alert("initPicture(xmin,xmax,ymin,ymax) requires numbers ymin < ymax");
  else {
@@ -2633,7 +2633,7 @@ function initPicture(x_min,x_max,y_min,y_max) { // set up the graph
     if (width==null || width=="") width=defaultwidth;
   }
   picture.setAttribute("width",width);
-  if (height==null) { 
+  if (height==null) {
     height = picture.getAttribute("height");
     if (height==null || height=="") height=defaultheight;
   }
@@ -2661,15 +2661,15 @@ function initPicture(x_min,x_max,y_min,y_max) { // set up the graph
       throw "wait";
     }
     svgpicture = picture.getSVGDocument().getElementById("root");
-    while (svgpicture.childNodes.length>0) 
-      svgpicture.removeChild(svgpicture.lastChild); 
+    while (svgpicture.childNodes.length>0)
+      svgpicture.removeChild(svgpicture.lastChild);
     svgpicture.setAttribute("width",width);
     svgpicture.setAttribute("height",height);
     svgpicture.setAttribute("name",picture.getAttribute("id"));
     doc = picture.getSVGDocument();
     var nd = document.getElementById(picture.getAttribute("id")+"mml");
     if (nd!=null) // clear out MathML layer
-      while (nd.childNodes.length>0) nd.removeChild(nd.lastChild); 
+      while (nd.childNodes.length>0) nd.removeChild(nd.lastChild);
   } else {
     var qnode = document.createElementNS("http://www.w3.org/2000/svg","svg");
     qnode.setAttribute("id",picture.getAttribute("id"));
@@ -2729,7 +2729,7 @@ function line(p,q,id,endpts) { // segment connecting points p,q (coordinates in 
     (height-p[1]*yunitlength-origin[1])+" "+
     (q[0]*xunitlength+origin[0])+","+(height-q[1]*yunitlength-origin[1]));
   node.setAttribute("stroke-width", strokewidth);
-  if (strokedasharray!=null) 
+  if (strokedasharray!=null)
     node.setAttribute("stroke-dasharray", strokedasharray);
   node.setAttribute("stroke", stroke);
   node.setAttribute("fill", fill);
@@ -2771,7 +2771,7 @@ function path(plist,id,c,endpts) {
   }
   node.setAttribute("d", st);
   node.setAttribute("stroke-width", strokewidth);
-  if (strokedasharray!=null) 
+  if (strokedasharray!=null)
     node.setAttribute("stroke-dasharray", strokedasharray);
   node.setAttribute("stroke", stroke);
   node.setAttribute("fill", fill);
@@ -2818,11 +2818,11 @@ function circle(center,radius,id) { // coordinates in units
   node.setAttribute("fill-opacity", fillopacity);
 }
 
-function loop(p,d,id) { 
+function loop(p,d,id) {
 // d is a direction vector e.g. [1,0] means loop starts in that direction
   if (d==null) d=[1,0];
   path([p,[p[0]+d[0],p[1]+d[1]],[p[0]-d[1],p[1]+d[0]],p],id,"C");
-  if (marker=="arrow" || marker=="arrowdot") 
+  if (marker=="arrow" || marker=="arrowdot")
     arrowhead([p[0]+Math.cos(1.4)*d[0]-Math.sin(1.4)*d[1],
                p[1]+Math.sin(1.4)*d[0]+Math.cos(1.4)*d[1]],p);
 }
@@ -2925,7 +2925,7 @@ function text(p,st,pos,id,fontsty) {
         node.style.position = "absolute";
         dnode.appendChild(node);
       }
-      while (node.childNodes.length>0) node.removeChild(node.lastChild); 
+      while (node.childNodes.length>0) node.removeChild(node.lastChild);
       node.appendChild(document.createTextNode(st));
 //      node.lastChild.nodeValue = st;
       node.style.left = ""+(p[0]*xunitlength+origin[0])+"px";
@@ -2958,7 +2958,7 @@ function text(p,st,pos,id,fontsty) {
     svgpicture.appendChild(node);
     node.appendChild(doc.createTextNode(st));
   }
-  while (node.childNodes.length>1) node.removeChild(node.lastChild); 
+  while (node.childNodes.length>1) node.removeChild(node.lastChild);
 //  node.appendChild(document.createTextNode("\xA0"+st+"\xA0"));
 //alert("here");
   node.lastChild.nodeValue = "\xA0"+st+"\xA0";
@@ -3075,7 +3075,7 @@ function dot(center, typ, label, pos, id) {
     node.setAttribute("fill", (typ=="open"?"white":
                               (typ=="closed"?stroke:markerfill)));
   }
-  if (label!=null) 
+  if (label!=null)
     text(center,label,(pos==null?"below":pos),(id==null?id:id+"label"))
 }
 
@@ -3099,7 +3099,7 @@ function arrowhead(p,q) { // draw arrowhead at q (in units) add size param
     node.setAttribute("fill", stroke); /*was arrowfill*/
     node.setAttribute("stroke-opacity", strokeopacity);
     node.setAttribute("fill-opacity", fillopacity);
-    svgpicture.appendChild(node);    
+    svgpicture.appendChild(node);
   }
 }
 
@@ -3253,7 +3253,7 @@ function mathjs(st) {
       j--;
       while (j>=0 && (ch=st.charAt(j))>="a" && ch<="z" || ch>="A" && ch<="Z")
         j--;
-    } else { 
+    } else {
       return "Error: incorrect syntax in "+st+" at position "+j;
     }
     //find right argument
@@ -3280,7 +3280,7 @@ function mathjs(st) {
       k++;
       while (k<st.length && (ch=st.charAt(k))>="a" && ch<="z" ||
                ch>="A" && ch<="Z") k++;
-    } else { 
+    } else {
       return "Error: incorrect syntax in "+st+" at position "+k;
     }
     st = st.slice(0,j+1)+"Math.pow("+st.slice(j+1,i)+","+st.slice(i+1,k)+")"+
@@ -3313,7 +3313,7 @@ function mathjs(st) {
       j--;
       while (j>=0 && (ch=st.charAt(j))>="a" && ch<="z" || ch>="A" && ch<="Z")
         j--;
-    } else { 
+    } else {
       return "Error: incorrect syntax in "+st+" at position "+j;
     }
     st = st.slice(0,j+1)+"factorial("+st.slice(j+1,i)+")"+st.slice(i+1);
@@ -3325,7 +3325,7 @@ function plot(fun,x_min,x_max,points,id,endpts) {
   var pth = [];
   var f = function(x) { return x }, g = fun;
   var name = null;
-  if (typeof fun=="string") 
+  if (typeof fun=="string")
     eval("g = function(x){ with(Math) return "+mathjs(fun)+" }");
   else if (typeof fun=="object") {
     eval("f = function(t){ with(Math) return "+mathjs(fun[0])+" }");
@@ -3353,7 +3353,7 @@ function plot(fun,x_min,x_max,points,id,endpts) {
 
 function slopefield(fun,dx,dy) {
   var g = fun;
-  if (typeof fun=="string") 
+  if (typeof fun=="string")
     eval("g = function(x,y){ with(Math) return "+mathjs(fun)+" }");
   var gxy,x,y,u,v,dz;
   if (dx==null) dx=1;
@@ -3427,8 +3427,8 @@ function calculate(inputId,outputId) {
   } catch(e) {
     err = "syntax incomplete";
   }
-  if (!isNaN(res) && res!="Infinity") 
-    str = "`"+str+" =` "+(Math.abs(res-Math.round(res*1000000)/1000000)<1e-15?Math.round(res*1000000)/1000000:res)+err; 
+  if (!isNaN(res) && res!="Infinity")
+    str = "`"+str+" =` "+(Math.abs(res-Math.round(res*1000000)/1000000)<1e-15?Math.round(res*1000000)/1000000:res)+err;
   else if (str!="") str = "`"+str+"` = undefined"; //debug:+mathjs(str);
   var outnode = document.getElementById(outputId);
   var n = outnode.childNodes.length;

@@ -22,7 +22,8 @@
 	Mail: info@dokeos.com
 ==============================================================================
 */
-require_once('Resource.class.php');
+
+require_once 'Resource.class.php';
 
 /**
  * ScormDocument class

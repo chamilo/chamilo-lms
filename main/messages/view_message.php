@@ -6,7 +6,7 @@
 	Copyright (c) 2009 Dokeos SPRL
 	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
 	Copyright (c) Facultad de Matematicas, UADY (México)
-	Copyright (c) Evie, Free University of Brussels (Belgium)	
+	Copyright (c) Evie, Free University of Brussels (Belgium)
 	Copyright (c) 2009 Isaac Flores Paz <isaac.flores.paz@gmail.com>
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -47,7 +47,7 @@ if (isset($_GET['id_send']) || isset($_GET['id'])) {
 		$interbreadcrumb[]= array (
 				'url' => '../social/'.$_SESSION['social_dest'].'?#remote-tab-2',
 				'name' => get_lang('SocialNetwork')
-		);	
+		);
 		$interbreadcrumb[]= array (
 			'url' => 'inbox.php',
 			'name' => get_lang('Inbox')
@@ -69,7 +69,7 @@ if (isset($_GET['id_send']) || isset($_GET['id'])) {
 		'url' => 'outbox.php',
 		'name' => get_lang('Outbox')
 	);
-	}	
+	}
 }
 /*
 ==============================================================================

@@ -7,7 +7,7 @@ if ( count( get_included_files() ) == 1 ) die( '---' );
  * @license http://www.gnu.org/copyleft/gpl.html (GPL) GENERAL PUBLIC LICENSE
  *
  * @author Claro Team <cvs@claroline.net>
- * @author Yannick Warnier <yannick.warnier@dokeos.com> 
+ * @author Yannick Warnier <yannick.warnier@dokeos.com>
  */
 
 require dirname(__FILE__) . '/scorm_classes.php';
@@ -24,12 +24,12 @@ define(FREE_ANSWER,     5);
 define(HOT_SPOT, 		6);
 define(HOT_SPOT_ORDER, 	7);
 /**
- * A SCORM item. It corresponds to a single question. 
+ * A SCORM item. It corresponds to a single question.
  * This class allows export from Dokeos SCORM 1.2 format of a single question.
  * It is not usable as-is, but must be subclassed, to support different kinds of questions.
  *
  * Every start_*() and corresponding end_*(), as well as export_*() methods return a string.
- * 
+ *
  * @warning Attached files are NOT exported.
  */
 class ScormAssessmentItem
@@ -52,7 +52,7 @@ class ScormAssessmentItem
         $this->standalone = $standalone;
         //echo "<pre>".print_r($this,1)."</pre>";
      }
-     
+
      /**
       * Start the XML flow.
       *
@@ -70,7 +70,7 @@ class ScormAssessmentItem
         }
         return $head;
      }
-      
+
      /**
       * End the XML flow, closing the </item> tag.
       *
@@ -121,7 +121,7 @@ class ScormAssessmentItem
 	}
     /**
      * Start the itemBody
-     * 
+     *
      */
     function start_js()
     {
@@ -138,13 +138,13 @@ class ScormAssessmentItem
 		$js .= 'var questions_answers = new Array();' . "\n";
 		$js .= 'var questions_answers_correct = new Array();' . "\n";
 		$js .= 'var questions_types = new Array();' . "\n";
-		$js .= "\n" . 
+		$js .= "\n" .
 			'/**
              * Assigns any event handler to any element
              * @param	object	Element on which the event is added
              * @param	string	Name of event
              * @param	string	Function to trigger on event
-             * @param	boolean	Capture the event and prevent 
+             * @param	boolean	Capture the event and prevent
              */
             function addEvent(elm, evType, fn, useCapture)
             { //by Scott Andrew
@@ -156,7 +156,7 @@ class ScormAssessmentItem
             		return r;
             	} else {
             		elm[\'on\' + evType] = fn;
-            	} 
+            	}
             }
             /**
              * Adds the event listener
@@ -173,7 +173,7 @@ class ScormAssessmentItem
             	//addEvent(my_button,\'change\',checkAnswers,false);
             	addEvent(window,\'unload\',unloadPage,false);
             }'."\n\n";
-		
+
 		$js .= '';
 		//$js .= 'addEvent(window,\'load\',loadPage,false);'."\n";
 		//$js .= 'addEvent(window,\'unload\',unloadPage,false);'."\n";
@@ -192,14 +192,14 @@ class ScormAssessmentItem
     }
     /**
      * Start the itemBody
-     * 
+     *
      */
     function start_body()
     {
     	if($this->standalone){return '<body>'. "\n".'<form id="dokeos_scorm_form" method="post" action="">'."\n";}
     	return '';
     }
-     
+
     /**
      * End the itemBody part.
      *
@@ -233,7 +233,7 @@ class ScormAssessmentItem
 	               . $js
 	               . $this->end_js()
 	               . $this->end_header()
-	               . $this->start_body() 
+	               . $this->start_body()
 	        //         .$this->answer->imsExportResponsesDeclaration($this->questionIdent)
 	        //         . $this->start_item_body()
 	        //           . $this->answer->scormExportResponses($this->questionIdent, $this->question->question, $this->question->description, $this->question->picture)
@@ -247,7 +247,7 @@ class ScormAssessmentItem
 		{
 			return array($js,$html);
 		}
-    }     
+    }
 }
 
 /**
@@ -264,7 +264,7 @@ class ScormAssessmentItem
 class ScormSection
 {
     var $exercise;
-    
+
     /**
      * Constructor.
      * @param $exe The Exercise instance to export
@@ -274,8 +274,8 @@ class ScormSection
     {
         $this->exercise = $exe;
     }
-    
-     
+
+
      /**
       * Start the XML flow.
       *
@@ -289,7 +289,7 @@ class ScormSection
 		$head = '<?xml version="1.0" encoding="'.$charset.'" standalone="no"?>' . "\n".'<html>'."\n";
         return $head;
      }
-      
+
      /**
       * End the XML flow, closing the </item> tag.
       *
@@ -334,7 +334,7 @@ class ScormSection
 	}
     /**
      * Start the itemBody
-     * 
+     *
      */
     function start_js()
     {
@@ -461,13 +461,13 @@ class ScormSection
 		$js .= 'var questions_answers = new Array();' . "\n";
 		$js .= 'var questions_answers_correct = new Array();' . "\n";
 		$js .= 'var questions_types = new Array();' . "\n";
-		$js .= "\n" . 
+		$js .= "\n" .
 			'/**
              * Assigns any event handler to any element
              * @param	object	Element on which the event is added
              * @param	string	Name of event
              * @param	string	Function to trigger on event
-             * @param	boolean	Capture the event and prevent 
+             * @param	boolean	Capture the event and prevent
              */
             function addEvent(elm, evType, fn, useCapture)
             { //by Scott Andrew
@@ -479,7 +479,7 @@ class ScormSection
             		return r;
             	} else {
             		elm[\'on\' + evType] = fn;
-            	} 
+            	}
             }
             /**
              * Adds the event listener
@@ -503,7 +503,7 @@ class ScormSection
               mybtn.setAttribute(\'disabled\',\'disabled\');
             }
             '."\n";
-		
+
 		$js .= '';
 		//$js .= 'addEvent(window,\'load\',loadPage,false);'."\n";
 		//$js .= 'addEvent(window,\'unload\',unloadPage,false);'."\n";
@@ -520,7 +520,7 @@ class ScormSection
     }
     /**
      * Start the itemBody
-     * 
+     *
      */
     function start_body()
     {
@@ -529,7 +529,7 @@ class ScormSection
 			'<form id="dokeos_scorm_form" method="post" action="">'."\n".
 			'<table width="100%">'."\n";
     }
-     
+
     /**
      * End the itemBody part.
      *
@@ -550,7 +550,7 @@ class ScormSection
     function export()
     {
         global $charset;
-        
+
         $head = "";
         if ($this->standalone) {
             $head = '<?xml version = "1.0" encoding = "' . $charset . '" standalone = "no"?>' . "\n"
@@ -567,7 +567,7 @@ class ScormSection
                . $js
                . $this->end_js()
                . $this->end_header()
-               . $this->start_body() 
+               . $this->start_body()
         //         .$this->answer->imsExportResponsesDeclaration($this->questionIdent)
         //         . $this->start_item_body()
         //           . $this->answer->scormExportResponses($this->questionIdent, $this->question->question, $this->question->description, $this->question->picture)
@@ -575,10 +575,10 @@ class ScormSection
         			.$html
                . $this->end_body()
                . $this->end_page();
-        
+
         return $res;
-    }     
-    
+    }
+
     /**
      * Export the questions, as a succession of <items>
      * @author Amand Tihon <amand@alrj.org>
@@ -623,7 +623,7 @@ function export_exercise($exerciseId, $standalone=true)
 
 /**
  * Returns the HTML + JS flow corresponding to one question
- * 
+ *
  * @param int The question ID
  * @param bool standalone (ie including XML tag, DTD declaration, etc)
  * @param int  The JavaScript ID for this question. Due to the nature of interactions, we must have a natural sequence for questions in the generated JavaScript.

@@ -40,13 +40,13 @@
 */
 function display_announcement($announcement_id)
 {
-	global $_user, $dateFormatLong;	
-	
+	global $_user, $dateFormatLong;
+
 	if ($announcement_id != strval(intval($announcement_id))) { return false; } // potencial sql injection
-	
+
 	$tbl_announcement 	= Database::get_course_table(TABLE_ANNOUNCEMENT);
 	$tbl_item_property	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-	
+
 	if ($_user['user_id'])
 	{
 		$sql_query = "	SELECT announcement.*, toolitemproperties.*
@@ -69,9 +69,9 @@ function display_announcement($announcement_id)
 						AND toolitemproperties.to_group_id='0'
 						AND toolitemproperties.visibility='1'";
 	}
-	$sql_result = api_sql_query($sql_query,__FILE__,__LINE__);
+	$sql_result = Database::query($sql_query,__FILE__,__LINE__);
 	$result = Database::fetch_array($sql_result);
-	
+
 	if ($result !== false) // A sanity check.
 	{
 		$title		 = $result['title'];
@@ -81,7 +81,7 @@ function display_announcement($announcement_id)
 		$last_post_datetime = $result['insert_date'];// post time format  datetime de mysql
 		list($last_post_date, $last_post_time) = split(" ", $last_post_datetime);
 	}
-	
+
 	echo "<table height=\"100\" width=\"100%\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\" id=\"agenda_list\">\n";
 	echo "<tr class=\"data\"><td>" . $title . "</td></tr>\n";
 	echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " . api_ucfirst(format_locale_date($dateFormatLong,strtotime($last_post_date) ) ) . "</td></tr>\n";
@@ -105,16 +105,16 @@ function show_to_form($to_already_selected)
 
 	echo "\n<table id=\"recipient_list\" style=\"display: none;\">\n";
 	echo "\t<tr>\n";
-	
+
 	// the form containing all the groups and all the users of the course
 	echo "\t\t<td>\n";
 	echo "<strong>".get_lang('Users')."</strong><br />";
 	construct_not_selected_select_form($group_list,$user_list,$to_already_selected);
 	echo "\t\t</td>\n";
-	
+
 	// the buttons for adding or removing groups/users
 	echo "\n\t\t<td valign=\"middle\">\n";
-	echo "\t\t<input	type=\"button\"	",
+	/*echo "\t\t<input	type=\"button\"	",
 				"onClick=\"javascript: move(this.form.elements[0],this.form.elements[3])\" ",// 7 & 4 : fonts
 				"value=\"   >>   \">",
 
@@ -122,10 +122,16 @@ function show_to_form($to_already_selected)
 
 				"\n\t\t<input	type=\"button\"",
 				"onClick=\"javascript: move(this.form.elements[3],this.form.elements[0])\" ",
-				"value=\"   <<   \">";
+				"value=\"   <<   \">";*/
+				
+?>
+<button class="arrowr" type="button" onClick="javascript: move(this.form.elements[0], this.form.elements[3])" onClick="javascript: move(this.form.elements[0], this.form.elements[3])"></button>	
+<br /> <br />
+<button class="arrowl" type="button" onClick="javascript: move(this.form.elements[3], this.form.elements[0])" onClick="javascript: move(this.form.elements[3], this.form.elements[0])"></button>
+<?php
 	echo "\t\t</td>\n";
 	echo "\n\t\t<td>\n";
-	
+
 	// the form containing the selected groups and users
 	echo "<strong>".get_lang('DestinationUsers')."</strong><br />";
 	construct_selected_select_form($group_list,$user_list,$to_already_selected);
@@ -172,9 +178,9 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 				echo	"\t\t<option value=\"USER:",$this_user["user_id"],"\">",
 					"", api_get_person_name($this_user['firstName'], $this_user['lastName']),
 					"</option>\n";
-			}	
+			}
 		}
-		
+
 	}
 	echo "\t\t</select>\n";
 }
@@ -224,7 +230,7 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 			}
 		}
 	} else {
-		if ($to_already_selected=='everyone') {						
+		if ($to_already_selected=='everyone') {
 			// adding the groups to the select form
 			if (is_array($ref_array_groups))
 			{
@@ -237,11 +243,11 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 							"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
 							"</option>\n";
 					}
-				}					
+				}
 			}
 			// adding the individual users to the select form
 			foreach($ref_array_users as $this_user)
-			{					
+			{
 				if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
 				{
 					echo	"\t\t<option value=\"USER:",$this_user['user_id'],"\">",
@@ -265,16 +271,16 @@ function show_to_form_group($group_id)
 	echo "\t<tr>\n";
 
 	echo "\t\t<td>\n";
-	
+
 	echo "\t\t<select name=\"not_selected_form[]\" size=5 style=\"width:200px\" multiple>\n";
 	$group_users = GroupManager::get_subscribed_users($group_id);
 	foreach ($group_users as $user){
 		echo '<option value="'.$user['user_id'].'">'.api_get_person_name($user['firstname'], $user['lastname']).'</option>';
 	}
 	echo '</select>';
-	
+
 	echo "\t\t</td>\n";
-	
+
 	// the buttons for adding or removing groups/users
 	echo "\n\t\t<td valign=\"middle\">\n";
 	echo "\t\t<input	type=\"button\"	",
@@ -288,10 +294,10 @@ function show_to_form_group($group_id)
 				"value=\"   <<   \">";
 	echo "\t\t</td>\n";
 	echo "\n\t\t<td>\n";
-	
+
 	echo "\t\t<select name=\"selectedform[]\" size=5 style=\"width:200px\" multiple>\n";
 	echo '</select>';
-	
+
 	echo "\t\t</td>\n";
 	echo "\t</tr>\n";
 	echo "</table>";
@@ -312,7 +318,7 @@ function get_course_users()
 {
 	//this would return only the users from real courses:
 	//$user_list = CourseManager::get_user_list_from_course_code(api_get_course_id());
-	
+
 	$user_list = CourseManager::get_real_and_linked_user_list(api_get_course_id(), true, $_SESSION['id_session']);
 	return $user_list;
 }
@@ -338,12 +344,12 @@ function load_edit_users($tool, $id)
 {
 	global $_course;
 	global $tbl_item_property;
-	
+
 	$tool = Database::escape_string($tool);
 	$id = Database::escape_string($id);
-	
+
 	$sql="SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
-	$result=api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
+	$result=Database::query($sql,__FILE__,__LINE__) or die (mysql_error());
 	while ($row=Database::fetch_array($result))
 	{
 		$to_group=$row['to_group_id'];
@@ -437,41 +443,41 @@ function to_javascript()
 
 		arrFbox.sort();
 		arrTbox.sort();
-				
+
 		var arrFboxGroup = new Array();
 		var arrFboxUser = new Array();
-		var prefix_x;											
-				
+		var prefix_x;
+
 		for (x = 0; x < arrFbox.length; x++) {
-			prefix_x = arrFbox[x].substring(0,2);		
+			prefix_x = arrFbox[x].substring(0,2);
 			if (prefix_x == 'G:') {
-				arrFboxGroup.push(arrFbox[x]);					
+				arrFboxGroup.push(arrFbox[x]);
 			} else {
-				arrFboxUser.push(arrFbox[x]);					
-			}		  
-		}		
-		
+				arrFboxUser.push(arrFbox[x]);
+			}
+		}
+
 		arrFboxGroup.sort();
 		arrFboxUser.sort();
-		arrFbox = arrFboxGroup.concat(arrFboxUser);				
-										
+		arrFbox = arrFboxGroup.concat(arrFboxUser);
+
 		var arrTboxGroup = new Array();
-		var arrTboxUser = new Array();	
-		var prefix_y;						
-					
+		var arrTboxUser = new Array();
+		var prefix_y;
+
 		for (y = 0; y < arrTbox.length; y++) {
-			prefix_y = arrTbox[y].substring(0,2);				
+			prefix_y = arrTbox[y].substring(0,2);
 			if (prefix_y == 'G:') {
 				arrTboxGroup.push(arrTbox[y]);
 			} else {
 				arrTboxUser.push(arrTbox[y]);
-			}			
-		}													
-					
+			}
+		}
+
 		arrTboxGroup.sort();
 		arrTboxUser.sort();
-		arrTbox = arrTboxGroup.concat(arrTboxUser);		
-				
+		arrTbox = arrTboxGroup.concat(arrTboxUser);
+
 		fbox.length	= 0;
 		tbox.length	= 0;
 
@@ -501,23 +507,23 @@ function to_javascript()
 
 
 	function selectAll(cbList,bSelect,showwarning)
-	{	
-			
+	{
+
 		if (document.getElementById('emailTitle').value==''){
 			document.getElementById('msg_error').innerHTML='".get_lang('FieldRequired')."';
 			document.getElementById('msg_error').style.display='block';
-			document.getElementById('emailTitle').focus();		
+			document.getElementById('emailTitle').focus();
 		}else {
 			if (cbList.length <	1) {
 				if (!confirm(\"".get_lang('Send2All')."\")) {
-					return false;		
-				} 			
-			} 	
+					return false;
+				}
+			}
 			for	(var i=0; i<cbList.length; i++)
-			cbList[i].selected = cbList[i].checked = bSelect;					
-			document.f1.submit();	
-		}				
-															
+			cbList[i].selected = cbList[i].checked = bSelect;
+			document.f1.submit();
+		}
+
 	}
 
 	function reverseAll(cbList)
@@ -584,7 +590,7 @@ function sent_to_form($sent_to_array)
 				$output.="\t<option value=\"\">G: ".$group_names[$group_id]['name']."</option>\n";
 			}
 		}
-		
+
 		if (isset($sent_to_array['users']))
 		{
 			if (is_array($sent_to_array['users']))
@@ -596,7 +602,7 @@ function sent_to_form($sent_to_array)
 				}
 			}
 		}
-		
+
 		// ending the form
 		$output.="</select>\n";
 	}
@@ -664,17 +670,17 @@ function sent_to($tool, $id)
 {
 	global $_course;
 	global $tbl_item_property;
-	
+
 	$tool = Database::escape_string($tool);
 	$id = Database::escape_string($id);
-	
-	$sent_to_group = array();
-	$sent_to = array();	
-	
-	$sql="SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='".$id."'";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
 
-	
+	$sent_to_group = array();
+	$sent_to = array();
+
+	$sql="SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='".$id."'";
+	$result = Database::query($sql,__FILE__,__LINE__);
+
+
 	while ($row=Database::fetch_array($result)) {
 		// if to_group_id is null then it is sent to a specific user
 		// if to_group_id = 0 then it is sent to everybody
@@ -711,14 +717,14 @@ function sent_to($tool, $id)
 function change_visibility_announcement($tool,$id)
 {
 	global $_course;
-	global $tbl_item_property;	
-	
+	global $tbl_item_property;
+
 	$tool = Database::escape_string($tool);
 	$id = Database::escape_string($id);
-	
+
 	$sql="SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
 
-	$result=api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
+	$result=Database::query($sql,__FILE__,__LINE__) or die (mysql_error());
 	$row=Database::fetch_array($result);
 
 	if ($row['visibility']=='1')
@@ -730,7 +736,7 @@ function change_visibility_announcement($tool,$id)
 		$sql_visibility="UPDATE $tbl_item_property SET visibility='1' WHERE tool='$tool' AND ref='$id'";
 	}
 
-	$result=api_sql_query($sql_visibility,__FILE__,__LINE__) or die (mysql_error());
+	$result=Database::query($sql_visibility,__FILE__,__LINE__) or die (mysql_error());
 }
 
 
@@ -753,8 +759,8 @@ function store_advalvas_item($emailTitle,$newContent, $order, $to)
 	$order = intval($order);
 	// store in the table announcement
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
-	$result = api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
-	$last_id= Database::get_last_insert_id();
+	$result = Database::query($sql,__FILE__,__LINE__) or die (mysql_error());
+	$last_id= Database::insert_id();
 
 	// store in item_property (first the groups, then the users
 	if (!is_null($to)) // !is_null($to): when no user is selected we send it to everyone
@@ -765,7 +771,7 @@ function store_advalvas_item($emailTitle,$newContent, $order, $to)
 		{
 			foreach ($send_to['groups'] as $group)
 			{
-				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_user['user_id'], $group); 
+				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_user['user_id'], $group);
 			}
 		}
 
@@ -801,10 +807,10 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 	$emailTitle = Database::escape_string(Security::remove_XSS($emailTitle));
 	$newContent = Database::escape_string(Security::remove_XSS($newContent,COURSEMANAGERLOWSECURITY));
 	$order = intval($order);
-	// store in the table announcement	
+	// store in the table announcement
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
-	$result = api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
-	$last_id= Database::get_last_insert_id();
+	$result = Database::query($sql,__FILE__,__LINE__) or die (mysql_error());
+	$last_id= Database::insert_id();
 
 	// store in item_property (first the groups, then the users
 	if (!isset($to_users)) // !isset($to): when no user is selected we send it to everyone
@@ -815,7 +821,7 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 		{
 			foreach ($send_to['groups'] as $group)
 			{
-				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_user['user_id'], $group); 
+				api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", $_user['user_id'], $group);
 			}
 		}
 	}
@@ -845,26 +851,26 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 */
 function edit_advalvas_item($id,$emailTitle,$newContent,$to)
 {
-	
+
 	global $_course;
 	global $nameTools;
 	global $_user;
 
 	global $tbl_announcement;
 	global $tbl_item_property;
-	
+
 	$newContent=stripslashes($newContent);
 	$emailTitle = Database::escape_string(Security::remove_XSS($emailTitle));
 	$newContent = Database::escape_string(Security::remove_XSS($newContent,COURSEMANAGERLOWSECURITY));
-	
+
 	// store the modifications in the table announcement
 	$sql = "UPDATE $tbl_announcement SET content='$newContent', title = '$emailTitle' WHERE id='$id'";
 
-	$result = api_sql_query($sql,__FILE__,__LINE__) or die (mysql_error());
+	$result = Database::query($sql,__FILE__,__LINE__) or die (mysql_error());
 
 	// we remove everything from item_property for this
 	$sql_delete="DELETE FROM $tbl_item_property WHERE ref='$id' AND tool='announcement'";
-	$result = api_sql_query($sql_delete,__FILE__,__LINE__) or die (mysql_error());
+	$result = Database::query($sql_delete,__FILE__,__LINE__) or die (mysql_error());
 
 	// store in item_property (first the groups, then the users
 	if (!is_null($to)) // !is_null($to): when no user is selected we send it to everyone
@@ -908,7 +914,7 @@ function send_announcement_email($user_list, $course_code, $_course, $mail_title
 {
 	global $charset;
 	global $_user;
-			
+
 	foreach ($user_list as $this_user) {
 		/*  Header : Bericht van uw lesgever - GES ($course_code) - Morgen geen les! ($mail_title)
 			Body :  John Doe (prenom + nom) <john_doe@hotmail.com> (email)
@@ -922,12 +928,12 @@ function send_announcement_email($user_list, $course_code, $_course, $mail_title
 		$mail_body .= api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS).' ';
 		$mail_body .= '<'.$_user['mail'].">\n";
 		$mail_body .= $_course['official_code'].' '.$_course['name'];
-		
+
 		//set the charset and use it for the encoding of the email - small fix, not really clean (should check the content encoding origin first)
 		//here we use the encoding used for the webpage where the text is encoded (ISO-8859-1 in this case)
 		if(empty($charset)){$charset='ISO-8859-1';}
 		$encoding = 'Content-Type: text/plain; charset='. $charset;
-		
+
 		$newmail = api_mail(api_get_person_name($this_user['firstname'], $this_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $this_user['email'], $mail_subject, $mail_body, api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail'], $encoding);
 	}
 }
@@ -936,21 +942,21 @@ function update_mail_sent($insert_id)
 {
 	global $_course;
 	global $tbl_announcement;
-	if ($insert_id != strval(intval($insert_id))) { return false; } 
+	if ($insert_id != strval(intval($insert_id))) { return false; }
 	$insert_id = Database::escape_string($insert_id);
 	// store the modifications in the table tbl_annoucement
 	$sql = "UPDATE $tbl_announcement SET email_sent='1' WHERE id='$insert_id'";
-	api_sql_query($sql,__FILE__,__LINE__);
+	Database::query($sql,__FILE__,__LINE__);
 }
 
 /**
- * Gets all announcements from a user by course 
+ * Gets all announcements from a user by course
  * @param	string course db
- * @param	int user id 
+ * @param	int user id
  * @return	string an html with the content
  */
 function get_all_annoucement_by_user_course($course_db, $user_id)
-{	
+{
 	$tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT, $course_db);
 	$tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db);
 	if (!empty($user_id) && is_numeric($user_id)) {
@@ -963,7 +969,7 @@ function get_all_annoucement_by_user_course($course_db, $user_id)
 						AND toolitemproperties.visibility='1'
 						AND announcement.session_id  = 0
 						ORDER BY display_order DESC";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql,__FILE__,__LINE__);
 		$num_rows = Database::num_rows($result);
 		$content = '';
 		$i=0;

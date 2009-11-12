@@ -53,7 +53,7 @@ class Statistics
 		{
 			$sql .= " WHERE category_code = '".Database::escape_string($category_code)."'";
 		}
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$obj = Database::fetch_object($res);
 		return $obj->number;
 	}
@@ -70,34 +70,34 @@ class Statistics
 		$course_user_table 	= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
 		$user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
-		
+
 		$sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table WHERE status = ".intval(Database::escape_string($status))." ";
 		if (isset ($category_code))
 		{
 			$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = ".intval(Database::escape_string($status))." AND c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."'";
 		}
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$obj = Database::fetch_object($res);
 		return $obj->number;
 	}
-	
+
 	/**
-	 * Count activities from track_e_default_table 
+	 * Count activities from track_e_default_table
 	 * @return int Number of activities counted
 	 */
 	function get_number_of_activities()
-	{  
+	{
 		// Database table definitions
-		$track_e_default  = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);  
-		  
-		$sql = "SELECT count(default_id) AS total_number_of_items FROM $track_e_default, $table_user user WHERE default_user_id = user.user_id ";  
-		  
+		$track_e_default  = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
+
+		$sql = "SELECT count(default_id) AS total_number_of_items FROM $track_e_default, $table_user user WHERE default_user_id = user.user_id ";
+
 		if (isset($_GET['keyword'])) {
 		$keyword = Database::escape_string($_GET['keyword']);
 		$sql .= " AND (user.username LIKE '%".$keyword."%' OR default_event_type LIKE '%".$keyword."%' OR default_value_type LIKE '%".$keyword."%' OR default_value LIKE '%".$keyword."%') ";
 		}
-		   
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$obj = Database::fetch_object($res);
 		return $obj->total_number_of_items;
 	}
@@ -110,37 +110,37 @@ class Statistics
 		$track_e_default 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-		
+
 		$sql = "SELECT
 				 	default_event_type  as col0,
 					default_value_type	as col1,
-					default_value		as col2,																
-					user.username 	as col3, 					
-					default_date 	as col4									
+					default_value		as col2,
+					user.username 	as col3,
+					default_date 	as col4
 				FROM $track_e_default track_default, $table_user user
 				WHERE track_default.default_user_id = user.user_id ";
-				
+
 		if (isset($_GET['keyword'])) {
 		$keyword = Database::escape_string($_GET['keyword']);
 		$sql .= " AND (user.username LIKE '%".$keyword."%' OR default_event_type LIKE '%".$keyword."%' OR default_value_type LIKE '%".$keyword."%' OR default_value LIKE '%".$keyword."%') ";
-		}		
-						 				 
-		if (!empty($column) && !empty($direction)) {						 				 
-			$sql .=	" ORDER BY col$column $direction"; 
+		}
+
+		if (!empty($column) && !empty($direction)) {
+			$sql .=	" ORDER BY col$column $direction";
 		} else {
 			$sql .=	" ORDER BY col4 DESC ";
 		}
-		$sql .=	" LIMIT $from,$number_of_items ";				
-											
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$sql .=	" LIMIT $from,$number_of_items ";
+
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$activities = array ();
 		while ($row = Database::fetch_row($res)) {
 			$row[4] = api_format_date(DATE_TIME_FORMAT_LONG, strtotime($row[4]));
 			$activities[] = $row;
-		}		
+		}
 		return $activities;
 	}
-		
+
 	/**
 	 * Get all course categories
 	 * @return array All course categories (code => name)
@@ -149,7 +149,7 @@ class Statistics
 	{
 		$category_table = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 		$sql = "SELECT * FROM $category_table ORDER BY tree_pos";
-		$res = api_sql_query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$categories = array ();
 		while ($category = Database::fetch_object($res))
 		{
@@ -263,7 +263,7 @@ class Statistics
 				$sql = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table." GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
 				break;
 		}
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$result = array();
 		while($obj = Database::fetch_object($res))
 		{
@@ -296,7 +296,7 @@ class Statistics
 		$sql[get_lang('Total')] 	 = "SELECT count(login_user_id) AS number  FROM $table";
 		foreach($sql as $index => $query)
 		{
-			$res = api_sql_query($query,__FILE__,__LINE__);
+			$res = Database::query($query,__FILE__,__LINE__);
 			$obj = Database::fetch_object($res);
 			$total_logins[$index] = $obj->number;
 		}
@@ -314,7 +314,7 @@ class Statistics
 			$tool_names[$tool] = get_lang(ucfirst($tool), '');
 		}
 		$sql = "SELECT access_tool, count( access_id ) AS number_of_logins FROM $table WHERE access_tool IN ('".implode("','",$tools)."') GROUP BY access_tool ";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$result = array();
 		while($obj = Database::fetch_object($res))
 		{
@@ -329,7 +329,7 @@ class Statistics
 	{
 		$table = Database::get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT course_language, count( code ) AS number_of_courses FROM $table GROUP BY course_language ";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$result = array();
 		while($obj = Database::fetch_object($res))
 		{
@@ -344,52 +344,52 @@ class Statistics
 	{
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT COUNT(*) AS n FROM $user_table";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$count1 = Database::fetch_object($res);
 		$sql = "SELECT COUNT(*) AS n FROM $user_table WHERE LENGTH(picture_uri) > 0";
-		$res = api_sql_query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql,__FILE__,__LINE__);
 		$count2 = Database::fetch_object($res);
 		$result[get_lang('No')] = $count1->n - $count2->n; // #users without picture
 		$result[get_lang('Yes')] = $count2->n; // #users with picture
 		Statistics::print_stats(get_lang('CountUsers').' ('.get_lang('UserPicture').')',$result,true);
 	}
-	
-	function print_activities_stats() {				
-		
+
+	function print_activities_stats() {
+
 		echo '<h4>'.get_lang('ImportantActivities').'</h4>';
-				
+
 		// Create a search-box
 		$form = new FormValidator('search_simple','get',api_get_path(WEB_CODE_PATH).'admin/statistics/index.php?action=activities','','width=200px',false);
 		$renderer =& $form->defaultRenderer();
 		$renderer->setElementTemplate('<span>{element}</span> ');
 		$form->addElement('hidden','action','activities');
 		$form->addElement('hidden','activities_direction','DESC');
-		$form->addElement('hidden','activities_column','4');		
+		$form->addElement('hidden','activities_column','4');
 		$form->addElement('text','keyword',get_lang('keyword'));
-		$form->addElement('style_submit_button', 'submit', get_lang('SearchActivities'),'class="search"');							 
-		echo '<div class="actions">';		
-			$form->display();				
+		$form->addElement('style_submit_button', 'submit', get_lang('SearchActivities'),'class="search"');
+		echo '<div class="actions">';
+			$form->display();
 		echo '</div>';
-		
-				
+
+
 		$table = new SortableTable('activities', array('Statistics','get_number_of_activities'), array('Statistics','get_activities_data'),4,50,'DESC');
 		$parameters = array();
-		
-		$parameters['action'] = 'activities';		
+
+		$parameters['action'] = 'activities';
 		if (isset($_GET['keyword'])) {
 			$parameters['keyword'] = Security::remove_XSS($_GET['keyword']);
 		}
-		
-		$table->set_additional_parameters($parameters);											
+
+		$table->set_additional_parameters($parameters);
 		$table->set_header(0, get_lang('EventType'));
 		$table->set_header(1, get_lang('DataType'));
-		$table->set_header(2, get_lang('Value'));		
+		$table->set_header(2, get_lang('Value'));
 		$table->set_header(3, get_lang('UserName'));
-		$table->set_header(4, get_lang('Date'));		
+		$table->set_header(4, get_lang('Date'));
 		$table->display();
-		
+
 	}
-	
+
 	/**
 	 * Shows statistics about the time of last visit to each course.
 	 */
@@ -407,7 +407,7 @@ class Statistics
 	    	$direction = SORT_ASC;
 	    } else {
 	    	$direction = isset($_GET['direction']) ? $_GET['direction'] : SORT_ASC;
-	    }		
+	    }
 		$form = new FormValidator('courselastvisit','get');
 		$form->addElement('hidden','action','courselastvisit');
 		$form->add_textfield('date_diff',get_lang('Days'),true);
@@ -421,13 +421,13 @@ class Statistics
 			$date_diff = $values['date_diff'];
 			$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 			$sql = "SELECT * FROM $table GROUP BY access_cours_code HAVING access_cours_code <> '' AND DATEDIFF( NOW() , access_date ) >= ". $date_diff;
-			$res = api_sql_query($sql,__FILE__,__LINE__);
+			$res = Database::query($sql,__FILE__,__LINE__);
 			$number_of_courses = Database::num_rows($res);
 			$sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
 			$from = ($page_nr -1) * $per_page;
 			$sql .= ' LIMIT '.$from.','.$per_page;
 			echo '<p>'.get_lang('LastAccess').' &gt;= '.$date_diff.' '.get_lang('Days').'</p>';
-			$res = api_sql_query($sql, __FILE__, __LINE__);
+			$res = Database::query($sql, __FILE__, __LINE__);
 			if (Database::num_rows($res) > 0)
 			{
 				$courses = array ();

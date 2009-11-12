@@ -49,9 +49,9 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 
 		exit ();
 	}
-	
-	//get_config_param() comes from install_functions.inc.php and 
-	//actually gets the param from 
+
+	//get_config_param() comes from install_functions.inc.php and
+	//actually gets the param from
 	$_configuration['db_glue'] = get_config_param('dbGlu');
 
 	if ($singleDbForm)
@@ -111,7 +111,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	// that we want to change the main databases as well...
 	$only_test = false;
 	$log = 0;
-	if (defined('DOKEOS_INSTALL')) 
+	if (defined('DOKEOS_INSTALL'))
 	{
 		if ($singleDbForm)
 		{
@@ -142,7 +142,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			if(strlen($dbNameForm)>40){
 				error_log('Database name '.$dbNameForm.' is too long, skipping',0);
 			}elseif(!in_array($dbNameForm,$dblist)){
-				error_log('Database '.$dbNameForm.' was not found, skipping',0);				
+				error_log('Database '.$dbNameForm.' was not found, skipping',0);
 			}else{
 				mysql_select_db($dbNameForm);
 				foreach($m_q_list as $query){
@@ -158,11 +158,11 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 				}
 			}
 		}
-		
-		
+
+
 		//get the stats queries list (s_q_list)
 		$s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql','stats');
-	
+
 		if(count($s_q_list)>0)
 		{
 			//now use the $s_q_list
@@ -173,7 +173,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			if(strlen($dbStatsForm)>40){
 				error_log('Database name '.$dbStatsForm.' is too long, skipping',0);
 			}elseif(!in_array($dbStatsForm,$dblist)){
-				error_log('Database '.$dbStatsForm.' was not found, skipping',0);				
+				error_log('Database '.$dbStatsForm.' was not found, skipping',0);
 			}else{
 				mysql_select_db($dbStatsForm);
 				foreach($s_q_list as $query){
@@ -201,7 +201,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			if(strlen($dbUserForm)>40){
 				error_log('Database name '.$dbUserForm.' is too long, skipping',0);
 			}elseif(!in_array($dbUserForm,$dblist)){
-				error_log('Database '.$dbUserForm.' was not found, skipping',0);				
+				error_log('Database '.$dbUserForm.' was not found, skipping',0);
 			}else{
 				mysql_select_db($dbUserForm);
 				foreach($u_q_list as $query){
@@ -216,7 +216,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		}
 		//the SCORM database doesn't need a change in the pre-migrate part - ignore
 	}
-	
+
 
 	/*
 	-----------------------------------------------------------
@@ -231,12 +231,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	-----------------------------------------------------------
 	*/
 
-	$prefix = ''; 
+	$prefix = '';
 	if ($singleDbForm)
 	{
-		$prefix =  get_config_param ('table_prefix');			
+		$prefix =  get_config_param ('table_prefix');
 	}
-	
+
 	//get the courses databases queries list (c_q_list)
 	$c_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql','course');
 
@@ -249,7 +249,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		}
 		elseif(!in_array($dbNameForm,$dblist))
 		{
-			error_log('Database '.$dbNameForm.' was not found, skipping',0);				
+			error_log('Database '.$dbNameForm.' was not found, skipping',0);
 		}
 		else
 		{
@@ -276,75 +276,75 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					 * without a database name
 					 */
 					if (!$singleDbForm) //otherwise just use the main one
-					{									
+					{
 						mysql_select_db($row_course['db_name']);
 					}
-                    
+
 					foreach($c_q_list as $query)
 					{
 						if ($singleDbForm) //otherwise just use the main one
 						{
-							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix{$row_course['db_name']}_$2$3",$query);												
+							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix{$row_course['db_name']}_$2$3",$query);
 						}
-						
+
 						if($only_test)
 						{
 							error_log("mysql_query(".$row_course['db_name'].",$query)",0);
 						}
 						else
 						{
-							$res = mysql_query($query);						
+							$res = mysql_query($query);
 							if($log)
 							{
 								error_log("In ".$row_course['db_name'].", executed: $query",0);
 							}
 						}
 					}
-					
+
 					$t_wiki = $row_course['db_name'].".wiki";
                     $t_wiki_conf = $row_course['db_name'].".wiki_conf";
-                    
+
                     if($singleDbForm)
-                    {                        
+                    {
                         $t_wiki = "$prefix{$row_course['db_name']}_wiki";
                         $t_wiki_conf = "$prefix{$row_course['db_name']}_wiki_conf";
                     }
-                    
+
                     //update correct page_id to wiki table, actually only store 0
                     $query = "SELECT id, reflink FROM $t_wiki";
                     $res_page = mysql_query($query);
-                    $wiki_id = $reflink = array(); 
+                    $wiki_id = $reflink = array();
 
 					if (mysql_num_rows($res_page) > 0 ) {
-	                    while ($row_page = mysql_fetch_row($res_page)) {                    	
+	                    while ($row_page = mysql_fetch_row($res_page)) {
 	                    	$wiki_id[] = $row_page[0];
-	                    	$reflink[] = $row_page[1];                    	 
+	                    	$reflink[] = $row_page[1];
 	                    }
 					}
-                                        
+
                     $reflink_unique = array_unique($reflink);
                     $reflink_flip = array_flip($reflink_unique);
-                    
-                    if (is_array($wiki_id)) {  					 
-	                    foreach ($wiki_id as $key=>$wiki_page) {                   	                    	
+
+                    if (is_array($wiki_id)) {
+	                    foreach ($wiki_id as $key=>$wiki_page) {
 	                    	$pag_id = $reflink_flip[$reflink[$key]];
 	                    	$sql= "UPDATE $t_wiki SET page_id='".($pag_id + 1)."' WHERE id = '$wiki_page'";
-	                    	$res_update = mysql_query($sql);		                     		       					       				                        	
-	                    }					
+	                    	$res_update = mysql_query($sql);
+	                    }
                     }
 
-                    //insert page_id into wiki_conf table, actually this table is empty					
-				   	$query = "SELECT DISTINCT page_id FROM $t_wiki ORDER BY page_id";	
+                    //insert page_id into wiki_conf table, actually this table is empty
+				   	$query = "SELECT DISTINCT page_id FROM $t_wiki ORDER BY page_id";
 				   	$myres_wiki = mysql_query($query);
-				   	
-				   	if (mysql_num_rows($myres_wiki) > 0 ) {					
+
+				   	if (mysql_num_rows($myres_wiki) > 0 ) {
 					   	while ($row_wiki = mysql_fetch_row($myres_wiki)) {
 					   		$page_id = $row_wiki[0];
-					   		$query="INSERT INTO ".$t_wiki_conf." (page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3) VALUES ('".$page_id."','','','','','','','')";				   
-	                   		$myres_wiki_conf = mysql_query($query); 					   	
+					   		$query="INSERT INTO ".$t_wiki_conf." (page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3) VALUES ('".$page_id."','','','','','','','')";
+	                   		$myres_wiki_conf = mysql_query($query);
 					   	}
 				   	}
-					
+
    				}
 			}
 		}

@@ -21,7 +21,6 @@ $_test_sys_library_path = $_test_sys_code_path.'inc/lib/';
 
 require_once($_current_dir.'simpletest/unit_tester.php');
 require_once($_sys_include_path.'global.inc.php');
-require_once($_sys_library_path.'rmdirr.lib.php');
 
 //header('Content-Type: text/html; charset=' . $charset);
 header('Content-Type: text/html; charset=' . 'UTF-8');

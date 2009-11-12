@@ -66,7 +66,7 @@ input[type=button], input[type=submit] {
 	font-weight:bold;
 	color:#000;
 }
-/* header 1 styles */ 
+/* header 1 styles */
 #header1 {
 	padding: 4px;
 	background-color: #7171b7;
@@ -90,7 +90,7 @@ input[type=button], input[type=submit] {
 	float: right;
 	font-weight: bold;
 }
-/* header 2 styles */ 
+/* header 2 styles */
 #header2 {
 	min-height:10px;
 	padding:  0.2em 0.5em;
@@ -119,7 +119,7 @@ input[type=button], input[type=submit] {
 #Header2Right ul li a {
 	color:#f1d40d;
 }
-/* header 3 styles */ 
+/* header 3 styles */
 #header3 {
 	padding: 0.8em 0.5em 0.4em 0.5em;
 	background: #fff;
@@ -179,7 +179,7 @@ input[type=button], input[type=submit] {
 	float: right;
 	width: auto;
 }
-/* header 4 styles */ 
+/* header 4 styles */
 #header4 {
 	background-color: transparent;
 	color: #009;
@@ -270,7 +270,7 @@ a.breadcrumb0 {
 .courses {
 	list-style-type: none;
 	margin-bottom: 5px;
-	height: 30px;	
+	height: 30px;
 }
 /* user_portal session list */
 .session_course_item .courses {
@@ -1268,6 +1268,40 @@ div.system_announcement_content {
 	font-weight: normal;
 	font-size: 80%;
 }
+
+/*SESSIONS*/
+.sessions_list {
+	line-height: 20px;
+	margin-top: 20px;
+}
+.sessions_list_inactive {
+	line-height: 20px;
+}
+.session_box {
+	background-color: #efefef;
+	border: 1px solid #666;
+	font-weight: bold;
+	color: #666;
+	list-style-type: none;
+	margin: 5px 5px 5px 40px;
+	padding: 5px;
+	margin-bottom: 10px;
+}
+.session_box_title {
+	margin-bottom: 7px;
+}
+.session_box_coach {
+}
+.session_course_item {
+	/* padding: 0px; */
+	margin: 7px 0px;
+}
+
+.session_course_item .courses {
+	margin-bottom: 5px;
+	height:35px;
+}
+
 /* Notebook */
 .notebook-add-form {
 	margin: 1em;
@@ -1566,12 +1600,12 @@ div.system_announcement_content {
 }
 .message-content-body-left {
 	float:left;
-	width:55%;
+	width:30%;
 }
 .message-content-body-right {
 	float:right;
 	text-align:left;
-	width:45%;
+	width:60%;
 }
 .message-body-title {
 	float:right;
@@ -1685,6 +1719,32 @@ span.radio {
 /* Quizzes tool */
 .quiz_export_link {
 	float: right;
+}
+/*Exercice timer*/
+#square{
+  padding:15px;
+  background-color:#EEEEEE;
+  border:1px solid #CCCCCC;
+  margin-right : 25px;
+  width : 190px;margin-bottom:10px;
+}
+#wrapper-clock{
+  width:100%;
+  margin:0;
+}
+.count_down{
+  padding: 3px;
+  font-family:Georgia, "Times New Roman", Times, serif;
+  font-size:38px;
+  font-weight:bold;
+  color:#222;
+}
+.count_down sup{
+  font-family:"Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
+  font-size:12px;
+  color:#555;
+  padding:0px 10px 0 0;
+  font-weight:normal;
 }
 /*SOCIAL TOOL*/
 div.image-social-content {
@@ -1812,13 +1872,13 @@ div.image-social-content center.friend {
 	text-align:left;
 	margin:0 auto;
 	float: left;
-}	
+}
 #social-profile-container {
 	/* width: 705px; */
 }
 #social-profile-left {
 	float:left;
-	width:21%;	
+	width:21%;
 }
 #social-profile-content {
 	float:right;
@@ -1913,7 +1973,7 @@ div.image-social-content center.friend {
  *  BUTTONS	                                         *
  *****************************************************/
 /* BUTTONS */
-button {
+button,input[type="submit"] {
 	margin:5px 5px 3px 0px !important;
 	background-color: #DFDFDF;
 	border-width: 1px;
@@ -1931,23 +1991,23 @@ button {
 	padding:5px 15px 5px 15px;
 	vertical-align:middle;
 }
-button:hover {
+button:hover input[type="submit"]:hover{
 	background-color:#cbcbcb;
 	color:#545454;
 	border-style: inset;
 }
 /* button with image */
-button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back {
+button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back, input[type="submit"].submit_next {
 	padding-left:30px;
 	background-position:10px;
 	background-repeat:no-repeat;
 }
 /* POSITIVE */
-button.save, button.add, button.search, button.refresh, button.upload, button.login, button.plus, button.minus, button.next, button.back {
+button.save, button.add, button.search, button.refresh, button.upload, button.login, button.plus, button.minus, button.next, button.back, input[type="submit"].submit_next  {
 	background-color:#E5EDF9;
 	border-color: #D4E2F6;
 }
-button.save:hover, button.refresh:hover, button.upload:hover, button.add:hover, button.search:hover, button.login:hover, button.plus:hover, button.minus:hover, button.next:hover, button.back:hover {
+button.save:hover, button.refresh:hover, button.upload:hover, button.add:hover, button.search:hover, button.login:hover, button.plus:hover, button.minus:hover, button.next:hover, button.back:hover, input[type="submit"].submit_next:hover {
 	border-color: #D4E2F6;
 	background-color:#D4E2F6;
 }
@@ -1990,7 +2050,7 @@ button.minus {
 	background-image:url(images/button_minus.gif);
 }
 /*including "next" image*/
-button.next {
+button.next,input[type="submit"].submit_next  {
 	background-image:url(images/button_next.gif);
 }
 /*including "back" image*/
@@ -2113,6 +2173,46 @@ button.arrowl {
 }
 /*including "arrowl" image*/
 button.arrowl {
+	background-image:url(images/2leftarrow.gif);
+	background-repeat:no-repeat;
+}
+/* input >> */
+input.arrowr {
+	-moz-border-radius-topleft : 5px;
+	-moz-border-radius-bottomright : 5px;
+	-moz-border-radius-bottomleft : 5px;
+	-moz-border-radius-topright : 5px;
+	padding-left:25px;
+	padding-top:20px;
+	background-position:10px;
+	background-color:#E5EDF9;
+	border-color: #D4E2F6;
+	border-width: 1px;
+	display:block;
+	font-size: 100%;
+	line-height :130%;
+	vertical-align:middle;
+	background-image:url(images/2rightarrow.gif);
+	background-repeat:no-repeat;
+}
+
+/* input << */
+input.arrowl {
+	margin:0px;
+	-moz-border-radius-topleft : 5px;
+	-moz-border-radius-bottomright : 5px;
+	-moz-border-radius-bottomleft : 5px;
+	-moz-border-radius-topright : 5px;
+	padding-right:25px;
+	padding-top:20px;
+	background-position:10px;
+	background-color:#E5EDF9;
+	border-color: #D4E2F6;
+	border-width: 1px;
+	display:block;
+	font-size: 100%;
+	line-height :130%;
+	vertical-align:middle;
 	background-image:url(images/2leftarrow.gif);
 	background-repeat:no-repeat;
 }

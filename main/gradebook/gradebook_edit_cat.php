@@ -40,7 +40,7 @@ if ($form->validate()) {
 	$cat->set_name($values['name']);
 	if (empty ($values['course_code'])) {
 		$cat->set_course_code(null);
-	}else {	
+	}else {
 		$cat->set_course_code($values['course_code']);
 	}
 	$cat->set_description($values['description']);
@@ -49,9 +49,9 @@ if ($form->validate()) {
 	$cat->set_weight($values['weight']);
 	$cat->set_certificate_min_score($values['certif_min_score']);
 	if (empty ($values['visible'])) {
-		$visible = 0;		
+		$visible = 0;
 	} else {
-		$visible = 1;	
+		$visible = 1;
 	}
 	$cat->set_visible($visible);
 	$cat->save();

@@ -110,19 +110,19 @@ class Answer
 	{
 		global $_course;
 		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
-		
+
 		$questionId=$this->questionId;
 		//$answerType=$this->selectType();
 
 		$sql="SELECT id,answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination FROM
 		      $TBL_ANSWER WHERE question_id ='".Database::escape_string($questionId)."' ORDER BY position";
 
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 
 		$i=1;
 
 		// while a record is found
-		while($object=mysql_fetch_object($result))
+		while($object=Database::fetch_object($result))
 		{
 			$this->id[$i]=$object->id;
 			$this->answer[$i]=$object->answer;
@@ -165,12 +165,12 @@ class Answer
 				"FROM $TBL_ANSWER WHERE question_id='".Database::escape_string($questionId)."' " .
 				"ORDER BY $field $order";
 
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 
 		$i=1;
 
 		// while a record is found
-		while($object=mysql_fetch_object($result))
+		while($object=Database::fetch_object($result))
 		{
 			$this->answer[$i]=$object->answer;
 			$this->correct[$i]=$object->correct;
@@ -206,7 +206,7 @@ class Answer
 	{
 		return $this->questionId;
 	}
-	
+
 	/**
 	 * returns the question ID of the destination question
 	 *
@@ -217,7 +217,7 @@ class Answer
 	{
 		return $this->destination[$id];
 	}
-	
+
 /**
 	 * returns the answer title
 	 *
@@ -228,7 +228,7 @@ class Answer
 	function selectAnswer($id)
 	{
 		return $this->answer[$id];
-	}	
+	}
 	/**
 	 * returns the answer title from an answer's position
 	 *
@@ -294,7 +294,7 @@ class Answer
 	 {
 	 	$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 	 	$sql = "SELECT * FROM $TBL_QUESTIONS WHERE id = '".Database::escape_string($this->questionId)."'";
-	 	$res = api_sql_query($sql,__FILE__,__LINE__);
+	 	$res = Database::query($sql,__FILE__,__LINE__);
 	 	if(Database::num_rows($res)<=0){
 	 		return null;
 	 	}
@@ -390,7 +390,7 @@ class Answer
 	function createAnswer($answer,$correct,$comment,$weighting,$position,$new_hotspot_coordinates = NULL, $new_hotspot_type = NULL,$destination='')
 	{
 		$this->new_nbrAnswers++;
-		$id=$this->new_nbrAnswers;		
+		$id=$this->new_nbrAnswers;
 		$this->new_answer[$id]=$answer;
 		$this->new_correct[$id]=$correct;
 		$this->new_comment[$id]=$comment;
@@ -398,7 +398,7 @@ class Answer
 		$this->new_position[$id]=$position;
 		$this->new_hotspot_coordinates[$id]=$new_hotspot_coordinates;
 		$this->new_hotspot_type[$id]=$new_hotspot_type;
-		$this->new_destination[$id]=$destination;	
+		$this->new_destination[$id]=$destination;
 	}
 
 	/**
@@ -424,7 +424,7 @@ class Answer
 				"WHERE id = '".Database::escape_string($position)."' " .
 				"AND question_i` = '".Database::escape_string($questionId)."'";
 
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 	}
 
 	/**
@@ -440,7 +440,7 @@ class Answer
 
 		// removes old answers before inserting of new ones
 		$sql="DELETE FROM $TBL_REPONSES WHERE question_id='".Database::escape_string($questionId)."'";
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 
 		// inserts new answers into data base
 		$sql="INSERT INTO $TBL_REPONSES" .
@@ -457,12 +457,12 @@ class Answer
 			$hotspot_coordinates	= Database::escape_string($this->new_hotspot_coordinates[$i]);
 			$hotspot_type			= Database::escape_string($this->new_hotspot_type[$i]);
 			$destination			= Database::escape_string($this->new_destination[$i]);
-			
+
 			$sql.="('$i','$questionId','$answer','$correct','$comment',
 					'$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
-		}		
+		}
 		$sql = api_substr($sql,0,-1);
-		api_sql_query($sql,__FILE__,__LINE__);
+		Database::query($sql,__FILE__,__LINE__);
 
 		// moves $new_* arrays
 		$this->answer=$this->new_answer;
@@ -512,7 +512,7 @@ class Answer
 			}
 
 			$sql=api_substr($sql,0,-1);
-			api_sql_query($sql,__FILE__,__LINE__);
+			Database::query($sql,__FILE__,__LINE__);
 		}
 	}
 }

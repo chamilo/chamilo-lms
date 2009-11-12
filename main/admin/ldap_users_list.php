@@ -47,7 +47,7 @@ api_protect_admin_script();
 require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 $action = $_GET["action"];
 $login_as_user_id = $_GET["user_id"];
-	
+
 // Login as ...
 if ($_GET['action'] == "login_as" && isset ($login_as_user_id))
 {
@@ -127,7 +127,7 @@ if (isset ($_GET['action']))
 					Display :: display_normal_message($message,false);
 				}
 				break;
-			default : 
+			default :
 				Display :: display_header($tool_name);
 		}
 		Security::clear_token();
@@ -190,9 +190,9 @@ if (isset ($_POST['action']))
 				else
 				{
 					Display :: display_normal_message(get_lang('NoUserAdded'));
-				}				
+				}
 				break;
-				
+
 		}
 		Security::clear_token();
 	}
@@ -210,7 +210,7 @@ else
 	$form->add_textfield('keyword_lastname',get_lang('LastName'),false);
 	$form->add_textfield('keyword_firstname',get_lang('FirstName'),false);
 }
-if (isset($_GET['id_session'])) 
+if (isset($_GET['id_session']))
 	$form->addElement('hidden','id_session',$_GET['id_session']);
 
 $type = array();
@@ -232,7 +232,7 @@ $parameters['keyword_username'] = $_GET['keyword_username'];
 $parameters['keyword_firstname'] = $_GET['keyword_firstname'];
 $parameters['keyword_lastname'] = $_GET['keyword_lastname'];
 $parameters['keyword_email'] = $_GET['keyword_email'];
-if (isset($_GET['id_session'])) 
+if (isset($_GET['id_session']))
 	$parameters['id_session'] = $_GET['id_session'];
 // Create a sortable table with user-data
 

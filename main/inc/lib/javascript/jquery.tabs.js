@@ -470,7 +470,7 @@ $.fn.tabs = function(initial, settings) {
                 if (!$.browser.msie) { // not in IE to prevent ClearType font issue
                     resetCSS['opacity'] = '';
                 }
-                
+
                 // switch tab, animation prevents browser scrolling to the fragment
                 function switchTab() {
                     if (settings.bookmarkable && trueClick) { // add to history only if true click occured, not a triggered click
@@ -478,7 +478,7 @@ $.fn.tabs = function(initial, settings) {
                     }
                     toHide.animate(hideAnim, hideSpeed, function() { //
                         $(clicked).parents('li:eq(0)').addClass(settings.selectedClass).siblings().removeClass(settings.selectedClass);
-                        toHide.addClass(settings.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.                        
+                        toHide.addClass(settings.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.
                         if (typeof onHide == 'function') {
                             onHide(clicked, toShow[0], toHide[0]);
                         }

@@ -2,16 +2,16 @@
 require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 
 class TestDocumentManager extends UnitTestCase {
-	
+
 	/**
 	 * This check if a document has the readonly property checked, then see if the user
 	 * is the owner of this file, if all this is true then return true.
-	 * 
+	 *
 	 * @param array  $_course
 	 * @param int    $user_id id of the current user
 	 * @param string $file path stored in the database
 	 * @param int    $document_id in case you dont have the file path ,insert the id of the file here and leave $file in blank ''
-	 * @return boolean true/false	 
+	 * @return boolean true/false
 	 **/
 	public function testcheck_readonly() {
 		$_course='';
@@ -21,7 +21,7 @@ class TestDocumentManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * This deletes a document by changing visibility to 2, renaming it to filename_DELETED_#id
 	 * Files/folders that are inside a deleted folder get visibility 2
@@ -34,13 +34,13 @@ class TestDocumentManager extends UnitTestCase {
 	 */
 	function testdelete_document() {
 		$_course['dbName']='';
-		$path=''; 
+		$path='';
 		$base_work_dir='';
 		$res=DocumentManager::delete_document($_course, $path, $base_work_dir);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	 * Removes documents from search engine database
 	 *
@@ -55,7 +55,7 @@ class TestDocumentManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	*	Get the content type of a file by checking the extension
 	*	We could use mime_content_type() with php-versions > 4.3,
@@ -70,7 +70,7 @@ class TestDocumentManager extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	* This function streams a file to the client
 	*
@@ -85,7 +85,7 @@ class TestDocumentManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	*   @todo ??not only check if a file is visible, but also check if the user is allowed to see the file??
 	*   @return true if the user is allowed to see the document, false otherwise (bool)
@@ -97,7 +97,7 @@ class TestDocumentManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	/**
 	* Fetches all document data for the given user/group
 	*
@@ -106,15 +106,15 @@ class TestDocumentManager extends UnitTestCase {
 	* @param int $to_group_id
 	* @param int $to_user_id
 	* @param boolean $can_see_invisible
-	* @return array with all document data 
+	* @return array with all document data
 	*/
 	function testget_all_document_data() {
 		$_course['dbName']='';
 		$res=DocumentManager::get_all_document_data();
 		$this->assertTrue(is_array($_course));
 		//var_dump($_course);
-	} 
-	
+	}
+
 	/**
 	 * Gets the paths of all folders in a course
 	 * can show all folders (exept for the deleted ones) or only visible ones
@@ -129,7 +129,7 @@ class TestDocumentManager extends UnitTestCase {
 		$this->assertTrue(is_array($_course));
 		//var_dump($_course);
 	}
-	
+
 	/**
 	* @return the document folder quuta of the current course, in bytes
 	*/
@@ -139,7 +139,7 @@ class TestDocumentManager extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
-	
+
 	/** Gets the id of a document with a given path
 	 *
 	 * @param array $_course
@@ -153,11 +153,11 @@ class TestDocumentManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
-	/** This check if a document is a folder or not	 
+
+	/** This check if a document is a folder or not
 	 * @param array  $_course
 	 * @param int    $document_id of the item
-	 * @return boolean true/false	 
+	 * @return boolean true/false
 	 **/
 	function testis_folder() {
 		$_course['dbName']='';
@@ -165,7 +165,7 @@ class TestDocumentManager extends UnitTestCase {
 		$res=DocumentManager::is_folder($_course, $document_id);
 		$this->assertTrue(is_bool($res));
 	}
-	
+
 	/**
 	 * return true if the documentpath have visibility=1 as item_property
 	 *
@@ -178,7 +178,7 @@ class TestDocumentManager extends UnitTestCase {
 		$res=DocumentManager::is_visible($doc_path, $course);
 		$this->assertTrue(is_bool($res));
 	}
-	
+
 	/**
 	 * Allow to set a specific document as a new template for FCKEditor for a particular user in a particular course
 	 *
@@ -193,18 +193,18 @@ class TestDocumentManager extends UnitTestCase {
 		$description='';
 		$document_id_for_template='';
 		$couse_code='';
-		$user_id=''; 
+		$user_id='';
 		$image='';
 		$res=DocumentManager::set_document_as_template($title, $description, $document_id_for_template, $couse_code, $user_id, $image);
 		$this->assertTrue(is_bool($res));
 	}
-	
+
 	function teststring_send_for_download() {
 		$full_string='';
 		$res=DocumentManager::string_send_for_download($full_string);
 		$this->assertTrue(is_bool($res));
 	}
-	
+
 	/**
 	 * Unset a document as template
 	 *

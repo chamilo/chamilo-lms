@@ -61,8 +61,8 @@ class UserForm extends FormValidator
 		}
 		$this->setDefaults();
 	}
-	
-	protected function build_simple_search() {	
+
+	protected function build_simple_search() {
 		if (isset($_GET['search']) && (!empty($_GET['search']))) {
 		   	$this->setDefaults(array(
    		    'keyword' => Security::remove_XSS($_GET['search'])
@@ -73,7 +73,7 @@ class UserForm extends FormValidator
 		$this->addElement('text','keyword','');
 		$this->addElement('style_submit_button','submit',get_lang('Search'),'class="search"');
 	}
-	
+
 	protected function build_user_info_form() {
 		if (api_is_western_name_order()) {
 			$this->addElement('static', 'fname', get_lang('FirstName'), $this->user_info['firstname']);

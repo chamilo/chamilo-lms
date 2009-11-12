@@ -241,4 +241,6 @@ $TrainingTime = "Tempo di accesso";
 $CourseProgress = "Avanzamento";
 $ViewMinus = "Mostra meno";
 $ResourcesTracking = "Report sulle risorse";
+$SelectFieldToAdd = "Seleziona il campo del profilo utente da aggiungere";
+$AddAdditionalProfileField = "Aggiungi un campo del profilo utente";
 ?>

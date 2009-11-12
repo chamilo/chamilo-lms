@@ -63,7 +63,7 @@ class LinkAddEditForm extends FormValidator
 		}
 		$defaults = array();
 		$this->addElement('hidden', 'zero', 0);
-		
+
 		if (!empty($_GET['editlink']))
 		{
 			$this->addElement('header', '', get_lang('EditLink'));
@@ -91,7 +91,7 @@ class LinkAddEditForm extends FormValidator
 								$link->get_name().' ['.$link->get_type_name().']');
 			$this->addElement('hidden','name_link',$link->get_name(),array('id'=>'name_link'));
 		}
-			
+
 		// ELEMENT: weight
 		$this->add_textfield('weight', get_lang('Weight'),true,array('size'=>'4','maxlength'=>'4'));
 		$this->addRule('weight',get_lang('OnlyNumbers'),'numeric');
@@ -111,20 +111,20 @@ class LinkAddEditForm extends FormValidator
 			if ($form_type == self :: TYPE_EDIT) {
 				$defaults['max'] = $link->get_max();
 			}
-				
+
 		}
-		
+
 		// ELEMENT: date
 		//$this->add_datepicker('date',get_lang('Date'));
 		//$defaults['date'] = ($form_type == self :: TYPE_EDIT ? $link->get_date() : time());
-		
-		
+
+
 		// ELEMENT: description
 		if ($link->needs_name_and_description()) {
 			$this->addElement('textarea', 'description', get_lang('Description'), array ('rows' => '3','cols' => '34'));
 			if ($form_type == self :: TYPE_EDIT) {
 				$defaults['description'] = $link->get_description();
-			}		
+			}
 		}
 
 		// ELEMENT: visible

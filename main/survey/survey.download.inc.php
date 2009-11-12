@@ -22,7 +22,7 @@
  *	@package dokeos.survey
  *	@author Arnaud Ligot <arnaud@cblue.be>
  *	@version $Id: $
- *	
+ *
  *	small peace code to enable user to access images included into survey
  *	which are accessible by non authenticated users. This file is included
  *	by document/download.php
@@ -34,7 +34,7 @@ function check_download_survey($course, $invitation, $doc_url) {
 
 	// getting all the course information
 	$_course = CourseManager::get_course_information($course);
-	
+
 	// Database table definitions
 	$table_survey 					= Database :: get_course_table(TABLE_SURVEY, $_course['db_name']);
 	$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION, $_course['db_name']);
@@ -46,8 +46,8 @@ function check_download_survey($course, $invitation, $doc_url) {
 
 	// now we check if the invitationcode is valid
 	$sql = "SELECT * FROM $table_survey_invitation WHERE invitation_code = '".Database::escape_string($invitation)."'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
-	if (mysql_num_rows($result) < 1)
+	$result = Database::query($sql, __FILE__, __LINE__);
+	if (Database::num_rows($result) < 1)
 	{
 		Display :: display_error_message(get_lang('WrongInvitationCode'), false);
 		Display :: display_footer();
@@ -64,16 +64,16 @@ function check_download_survey($course, $invitation, $doc_url) {
 	}
 
 	// very basic security check: check if a text field from a survey/answer/option contains the name of the document requested
-	
+
 
 	//////////////
 	// fetch survey ID
 	//////////////
-	
+
 	// If this is the case there will be a language choice
 	$sql = "SELECT * FROM $table_survey WHERE code='".Database::escape_string($survey_invitation['survey_code'])."'";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
-	if (mysql_num_rows($result) > 1)
+	$result = Database::query($sql, __FILE__, __LINE__);
+	if (Database::num_rows($result) > 1)
 	{
 		if ($_POST['language'])
 		{
@@ -101,10 +101,10 @@ function check_download_survey($course, $invitation, $doc_url) {
 	}
 	$sql = "select count(*) from $table_survey where survey_id = ".$survey_invitation['survey_id']."
 								and (
-									title LIKE '%$doc_url%' 
-									or subtitle LIKE '%$doc_url%' 
-									or intro LIKE '%$doc_url%' 
-									or surveythanks LIKE '%$doc_url%' 
+									title LIKE '%$doc_url%'
+									or subtitle LIKE '%$doc_url%'
+									or intro LIKE '%$doc_url%'
+									or surveythanks LIKE '%$doc_url%'
 								)
 		union select count(*) from $table_survey_question  where survey_id = ".$survey_invitation['survey_id']."
 								and (
@@ -115,9 +115,9 @@ function check_download_survey($course, $invitation, $doc_url) {
 								and (
 									option_text LIKE '%$doc_url%'
 								)";
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 
-	if (mysql_num_rows($result) == 0)
+	if (Database::num_rows($result) == 0)
 	{
 		Display :: display_error_message(get_lang('WrongInvitationCode'), false);
 		Display :: display_footer();

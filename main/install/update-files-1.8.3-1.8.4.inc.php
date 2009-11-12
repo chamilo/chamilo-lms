@@ -32,7 +32,7 @@
 * permissions on upgrade).
 * Being in configuration.php, it benefits from the configuration.dist.php
 * advantages that a new version doesn't overwrite it, thus letting the old
-* version be available until the end of the installation. 
+* version be available until the end of the installation.
 * @package dokeos.install
 ==============================================================================
 */
@@ -76,7 +76,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	}
 	if(!$found_stable)
 	{
-		fwrite($fh,'$_configuration[\'dokeos_stable\'] = '.($new_version_stable?'true':'false').';'."\r\n");		
+		fwrite($fh,'$_configuration[\'dokeos_stable\'] = '.($new_version_stable?'true':'false').';'."\r\n");
 	}
 	fwrite($fh,'?>');
 	fclose($fh);

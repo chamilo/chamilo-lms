@@ -25,7 +25,7 @@ form{margin: 0;}
 	background-color: #d9dbdc;
 }
 #leftCol legend {
-	
+
 	/*
 	position: absolute;
 	top: -.5em;
@@ -48,30 +48,32 @@ input{ padding: 0; background-color: transparent;}
 #wrapper
 {
     margin: 0px 0px;
+	margin-top:15px;
 	min-width:760px;
 	width:100%;
     padding:0px;
-		
+
 }
 #body{
 position:absolute;
 top:60px;
 width:100%;
 border-color:#0000CC;
+margin-top:15px;
 }
 #leftCol{
 	background:#e8e8e8;
-	width:265px;
+	width:200px;
 	float:left;
 	text-align:left;
-	
+
 }
 #rightCol{
 	width:100%;
 	border: none;
-	margin-left: -265px;
+	margin-left: -200px;
 	float:right;
-	
+
 
 }
 #rightCol img.ajaxLoadingImg{
@@ -79,15 +81,15 @@ margin-left: 50%;
 margin-top:100px;
 }
 #content{
-  margin-left: 265px;
+margin-left: 200px;
 overflow: auto;
-overflow-x: hidden;	
+overflow-x: hidden;
 max-height:380px;
 }
  .pagination_content{
-  margin-left: 265px;
+  margin-left: 200px;
 overflow: auto;
-overflow-x: hidden;	   
+overflow-x: hidden;
  }
 .leftToRightArrow{
 	background-image:url(../images/arrow_right.png);
@@ -183,7 +185,6 @@ float:left;
 	font-size: 14px;
 	font-weight: bold;
 	color: #666666;
-	
 }
 #currentFolderInfo dt{
 	font-size:12px;
@@ -459,41 +460,83 @@ a.pagination_active{font-weight: bold; color: #CC0000;}
 }
 
 .button{
-	font: bold 10px Verdana, Arial, Helvetica, sans-serif;
-	background:url(../images/button.gif);
-	width:90px;
-	height:20px;
-	border:none;
+	border:1px solid #4171b5;
+	background:#F0F0F0;
+	padding:5px 15px 5px 15px;
+	font-weight:bold;
+	color:#4171b5;
+	margin: 5px;
+}
+
+.select_button{
+	font-family: bold arial, verdana, helvetica, sans-serif;
+	font-size: 100%;
+	line-height :130%;
+	text-decoration: none;
+	color: black;
+	cursor: pointer;
+	padding:5px 15px 5px 15px;
+	vertical-align:middle;
+	border:1px solid #4171b5;
+	background:#F0F0F0;
+	padding-left:30px;
+	padding-right:10px;
+	font-weight:bold;
+	color:#4171b5;
+	background: url(../images/button_accept.gif);
+	background-position:10px;
+	background-repeat:no-repeat;
+}
+
+.search_button{
+	font-family: bold arial, verdana, helvetica, sans-serif;
+	font-size: 100%;
+	line-height :130%;
+	text-decoration: none;
+	color: black;
+	cursor: pointer;
+	padding:5px 15px 5px 15px;
+	vertical-align:middle;
+	border:1px solid #4171b5;
+	background:#F0F0F0;
+	padding-left:30px;
+	padding-right:10px;
+	font-weight:bold;
+	color:#4171b5;
+	background: url(../images/button_search.gif);
+	background-position:10px;
+	background-repeat:no-repeat;
+
 }
 
 /**  Detail View */
 #tableList{
 font-size:100%;
-width:100%; 
+width:100%;
 }
 #tableList thead th{
 	text-align:left;
 	color:#7a92c2;
 	padding:8px 8px 6px 8px;
 	background-color: #DDDBD2;
-} 
+}
 #tableList thead th.docName{
-	background:#DDDBD2; 
+	background:#DDDBD2;
 	padding:2px 0px 2px 20px;
-	border-right-width: 2px;	
+	border-right-width: 2px;
 	border-right-style: groove;
-} 
+}
 #tableList tbody td		{ background:#f2f1ee; padding:0; }
-#tableList tbody td.docName	{ 
-	background-color:#fff; 
-	height: 22px; 
+#tableList tbody td.docName	{
+	background-color:#fff;
+	height: 22px;
 	border-right-width: 2px;
 	border-right-style: groove;
 	padding:2px 0px 2px 20px;
 }
-#tableList tbody td.docInfo{ 
-	background-color:#f2f1ee; 
-	height: 22px; 
+#tableList tbody td.docInfo{
+	background-color:#f2f1ee;
+	height: 22px;
 	border-right-width: 2px;
 	border-right-style: groove;
 	padding:2px 0px 2px 20px;

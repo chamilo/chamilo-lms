@@ -1,40 +1,40 @@
 <?php
 /*
 vim: set expandtab tabstop=4 shiftwidth=4:
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	This is the file display library for Dokeos.
 *	Include/require it in your code to use its functionality.
 *
 *	@package dokeos.library
-============================================================================== 
+==============================================================================
 */
 
 
 /*
-============================================================================== 
+==============================================================================
 		GENERIC FUNCTIONS : FOR OLDER PHP VERSIONS
-============================================================================== 
+==============================================================================
 */
 if ( ! function_exists('array_search') )
 {
@@ -62,10 +62,10 @@ if ( ! function_exists('array_search') )
 }
 
 /*
-============================================================================== 
+==============================================================================
 		FILE DISPLAY FUNCTIONS
-============================================================================== 
-*/ 
+==============================================================================
+*/
 /**
  * Define the image to display for each file extension.
  * This needs an existing image repository to work.
@@ -236,9 +236,9 @@ function folder_size($dir_name)
 
 	if ($dir_handle = opendir($dir_name))
 	{
-		while (($entry = readdir($dir_handle)) !== false) 
+		while (($entry = readdir($dir_handle)) !== false)
 		{
-			if($entry == '.' || $entry == '..') 
+			if($entry == '.' || $entry == '..')
 				continue;
 
         	if(is_dir($dir_name.'/'.$entry))
@@ -246,7 +246,7 @@ function folder_size($dir_name)
         	else
         		$size += filesize($dir_name.'/'.$entry);
 		}
-		
+
 		closedir($dir_handle);
     }
 
@@ -262,11 +262,11 @@ function folder_size($dir_name)
  * @return 	Total size
  */
 function get_total_folder_size($path, $can_see_invisible = false)
-{	
+{
 	$table_itemproperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	$table_document = Database::get_course_table(TABLE_DOCUMENT);
 	$tool_document = TOOL_DOCUMENT;
-	
+
 	$visibility_rule = 'props.visibility ' . ($can_see_invisible ? '<> 2' : '= 1');
 
 	$sql = <<<EOQ
@@ -278,16 +278,16 @@ SELECT SUM(size)
 		AND $visibility_rule
 EOQ;
 
-	$result = api_sql_query($sql,__FILE__,__LINE__);
-		
-	if($result && mysql_num_rows($result) != 0)
-	{	
-		$row = mysql_fetch_row($result);
+	$result = Database::query($sql,__FILE__,__LINE__);
+
+	if($result && Database::num_rows($result) != 0)
+	{
+		$row = Database::fetch_row($result);
 		return $row[0] == null ? 0 : $row[0];
 	}
 	else
 	{
 		return 0;
-	} 
+	}
 }
 ?>

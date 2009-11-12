@@ -20,5 +20,5 @@ $exeFinished = "Tutte le risposte sono state fornite. Ora puoi risistemare le sc
 $nextAnswer = "Ora clicca su &done=done";
 $delineation = "Delimita";
 $labelDelineationMenu = "Chiudi la delimitazione";
-$OAR = "Valutazione complessiva";
+$oar = "Valutazione complessiva";
 ?>

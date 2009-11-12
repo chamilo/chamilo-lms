@@ -100,7 +100,7 @@ function format_locale_date($date_format, $time_stamp = -1, $language = null)
 /**
 * @desc this function does some parsing on the text that gets inputted. This parsing can be of any kind
 * 		LaTeX notation, Word Censoring, Glossary Terminology (extension will available soon), Musical Notations, ...
-*		The inspiration for this filter function came from Moodle an phpBB who both use a similar approach 
+*		The inspiration for this filter function came from Moodle an phpBB who both use a similar approach
 * @param $input string. some text
 * @return $output string. some text that contains the parsed elements.
 * @example [tex]\sqrt(2)[/tex]
@@ -111,48 +111,48 @@ function text_filter($input, $filter=true)
 {
 
 	//$input=stripslashes($input);
-	
+
 	if ($filter==true)
 	{
 		// ***  parse [tex]...[/tex] tags  *** //
 		// which will return techexplorer or image html depending on the capabilities of the
 		// browser of the user (using some javascript that checks if the browser has the TechExplorer plugin installed or not)
 		$input=_text_parse_tex($input);
-	
-		
+
+
 		// *** parse [teximage]...[/teximage] tags *** //
 		// these force the gif rendering of LaTeX using the mimetex gif renderer
 		//$input=_text_parse_tex_image($input);
-		
-		
+
+
 		// *** parse [texexplorer]...[/texexplorer] tags  *** //
 		// these force the texeplorer LaTeX notation
 		$input=_text_parse_texexplorer($input);
-		
+
 		// *** Censor Words *** //
 		// censor words. This function removes certain words by [censored]
-		// this can be usefull when the campus is open to the world. 
+		// this can be usefull when the campus is open to the world.
 		// $input=text_censor_words($input);
-		
+
 		// *** parse [?]...[/?] tags *** //
 		// for the glossary tool (see http://www.dokeos.com/extensions)
 		$input=_text_parse_glossary($input);
-	
+
 		// parse [wiki]...[/wiki] tags
-		// this is for the coolwiki plugin. 
-		// $input=text_parse_wiki($input); 
-		
+		// this is for the coolwiki plugin.
+		// $input=text_parse_wiki($input);
+
 		// parse [tool]...[/tool] tags
 		// this parse function adds a link to a certain tool
 		// $input=text_parse_tool($input);
-		
+
 		// parse [user]...[/user] tags
-		
+
 		// parse [email]...[/email] tags
-		
+
 		// parse [code]...[/code] tags
 	}
-	
+
 	return $input;
 }
 
@@ -170,10 +170,10 @@ function _text_parse_tex($textext)
 {
 	//$textext = str_replace(array ("[tex]", "[/tex]"), array ('[*****]', '[/*****]'), $textext);
 	//$textext=stripslashes($texttext);
-	
+
 	$input_array=preg_split("/(\[tex]|\[\/tex])/",$textext,-1, PREG_SPLIT_DELIM_CAPTURE);
-	
-	
+
+
 	foreach ($input_array as $key=>$value)
 	{
 		if ($key>0 && $input_array[$key-1]=='[tex]' AND $input_array[$key+1]=='[/tex]')
@@ -184,7 +184,7 @@ function _text_parse_tex($textext)
 			//echo 'LaTeX: <embed type="application/x-techexplorer" texdata="'.stripslashes($value).'" autosize="true" pluginspage="http://www.integretechpub.com/techexplorer/"><br />';
 		}
 	}
-	
+
 	$output=implode('',$input_array);
 	return $output;
 }
@@ -229,7 +229,7 @@ function _text_parse_tool($input)
 	// an array with all the valid tools
 	$tools[]=array(TOOL_ANNOUNCEMENT, 'announcements/announcements.php');
 	$tools[]=array(TOOL_CALENDAR_EVENT, 'calendar/agenda.php');
-	
+
 	// check if the name between the [tool] [/tool] tags is a valid one
 }
 
@@ -242,41 +242,41 @@ function _text_parse_tool($input)
 */
 function latex_gif_renderer($latex_code)
 {
-	global $_course; 
-	
+	global $_course;
+
 	// setting the paths and filenames
 	$mimetex_path=api_get_path(LIBRARY_PATH).'mimetex/';
 	$temp_path=api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp/';
 	$latex_filename=md5($latex_code).'.gif';
-	
+
 	if(!file_exists($temp_path.$latex_filename) OR isset($_GET['render']))
 	{
 		if ((PHP_OS == "WINNT") || (PHP_OS == "WIN32") || (PHP_OS == "Windows"))
 		{
 			$mimetex_command=$mimetex_path.'mimetex.exe -e "'.$temp_path.md5($latex_code).'.gif" '.escapeshellarg($latex_code).'';
 		}
-		else 
+		else
 		{
 			$mimetex_command=$mimetex_path.'mimetex.linux -e "'.$temp_path.md5($latex_code).'.gif" '.escapeshellarg($latex_code);
 		}
-		exec($mimetex_command);	
-		//echo 'volgende shell commando werd uitgevoerd:<br /><pre>'.$mimetex_command.'</pre><hr>'; 
+		exec($mimetex_command);
+		//echo 'volgende shell commando werd uitgevoerd:<br /><pre>'.$mimetex_command.'</pre><hr>';
 	}
-	
+
 	$return  = "<a href=\"\" onclick=\"newWindow=window.open('".api_get_path(WEB_CODE_PATH)."inc/latex.php?code=".urlencode($latex_code)."&amp;filename=$latex_filename','latexCode','toolbar=no,location=no,scrollbars=yes,resizable=yes,status=yes,width=375,height=250,left=200,top=100');\">";
 	$return .= '<img src="'.api_get_path(WEB_COURSE_PATH).$_course['path'].'/temp/'.$latex_filename.'" alt="'.$latex_code.'" border="0" /></a>';
-	return $return; 
+	return $return;
 }
 
 
 /**
- * Returns the difference between the current date (date(now)) with the parameter $date in a string format like "2 days, 1 hour" 
- * Example: $date="2008-03-07 15:44:08"; 
- * 			date_to_str($date) it will return 3 days, 20 hours 		
- *  
+ * Returns the difference between the current date (date(now)) with the parameter $date in a string format like "2 days, 1 hour"
+ * Example: $date="2008-03-07 15:44:08";
+ * 			date_to_str($date) it will return 3 days, 20 hours
+ *
  * @param  string The string has to be the result of a date function in this format -> date("Y-m-d H:i:s",time());
- * @return string The difference between the current date and the parameter in a literal way "3 days, 2 hour" * 
- * @author Julio Montoya 
+ * @return string The difference between the current date and the parameter in a literal way "3 days, 2 hour" *
+ * @author Julio Montoya
  */
 
 function date_to_str_ago($date)
@@ -298,7 +298,7 @@ function date_to_str_ago($date)
 		$min_day=get_lang('MinDay');
 		$min_hour=get_lang('MinHour');
 		$min_minute=get_lang('MinMinute');
-	
+
 		$min_decades=get_lang('MinDecades');
 		$min_years=get_lang('MinYears');
 		$min_months=get_lang('MinMonths');
@@ -306,11 +306,11 @@ function date_to_str_ago($date)
 		$min_days=get_lang('MinDays');
 		$min_hours=get_lang('MinHours');
 		$min_minutes=get_lang('MinMinutes');
-	
+
 		// original 1
 		//$sec_time=array("century"=>3.1556926*pow(10,9),"decade"=>315569260,"year"=>31556926,"month"=>2629743.83,"week"=>604800,"day"=>86400,"hour"=>3600,"minute"=>60,"second"=>1);
 		//$sec_time=array(get_lang('MinDecade')=>315569260,get_lang('MinYear')=>31556926,get_lang('MinMonth')=>2629743.83,get_lang('MinWeek')=>604800,get_lang('MinDay')=>86400,get_lang('MinHour')=>3600,get_lang('MinMinute')=>60);
-		$sec_time_time=array(315569260,31556926,2629743.83,604800,86400,3600,60);		
+		$sec_time_time=array(315569260,31556926,2629743.83,604800,86400,3600,60);
 		$sec_time_sing=array($min_decade,$min_year,$min_month,$min_week,$min_day,$min_hour,$min_minute);
 		$sec_time_plu =array($min_decades,$min_years,$min_months,$min_weeks,$min_days,$min_hours,$min_minutes);
 		$initialized = true;
@@ -335,68 +335,68 @@ function date_to_str_ago($date)
 	$act_day=date('d');
 	$act_mth=date('n');
 	$act_yr = date('Y');
-	
+
 	if ($dst_day==$act_day && $dst_mth==$act_mth && $dst_yr == $act_yr ) {
 		return $today;
 	}
 
 	if ($dst_day==$act_day-1 && $dst_mth==$act_mth && $dst_yr == $act_yr ) {
 		return $yesterday;
-	}	
-				
-	$str_result=array();	
+	}
+
+	$str_result=array();
 	$time_result=array();
 	$key_result=array();
-	
+
 	$str='';
-	$i=0;		
+	$i=0;
 	for ($i=0;$i<count($sec_time_time);$i++) {
-		$seconds=$sec_time_time[$i];			
+		$seconds=$sec_time_time[$i];
 		if($seconds > $time) {
 			continue;
-		}					
+		}
 		$current_value=intval($time/$seconds);
-					
-		if ($current_value != 1) {			
+
+		if ($current_value != 1) {
 			$date_str=	$sec_time_plu[$i];
 		} else {
 			$date_str=	$sec_time_sing[$i];
-	
-		}			
+
+		}
 		$key_result[]=$sec_time_sing[$i];
-					
-		$str_result[]=$current_value.' '.$date_str;		
-		$time_result[]=	$current_value;				
-		$str.=$current_value.$date_str;				
-		$time%=$seconds;			
+
+		$str_result[]=$current_value.' '.$date_str;
+		$time_result[]=	$current_value;
+		$str.=$current_value.$date_str;
+		$time%=$seconds;
 	}
-			
+
 	if ($key_result[0]== $min_day && $key_result[1]== $min_minute) {
 		$key_result[1]=' 0 '.$min_hours;
 		$str_result[0]=$time_result[0].' '.$key_result[0];
-		$str_result[1]=$key_result[1];		
+		$str_result[1]=$key_result[1];
 	}
-	
+
 	if ($key_result[0]== $min_year && ($key_result[1]== $min_day || $key_result[1]== $min_week)) {
 		$key_result[1]=' 0 '.$min_months;
 		$str_result[0]=$time_result[0].' '.$key_result[0];
-		$str_result[1]=$key_result[1];		
+		$str_result[1]=$key_result[1];
 	}
-	
+
 	if (!empty($str_result[1])) {
 		$str=$str_result[0].', '.$str_result[1];
 	} else {
 		$str=$str_result[0];
-	}	
-	return $str;	
+	}
+	return $str;
 }
 /**
- * This functions cuts a paragraph 
+ * This functions cuts a paragraph
  * i.e cut('Merry Xmas from Lima',13) = "Merry Xmas fr..."
- * @param string the text to "cut" 
+ * @param string the text to "cut"
  * @param int count of chars
  * @param bool	Whether to embed in a <span title="...">...</span>
- * @return string 
+ * @return string
  * */
 function cut($text,$maxchar,$embed=false)
 {
@@ -407,17 +407,17 @@ function cut($text,$maxchar,$embed=false)
 		return api_substr($text, 0, $maxchar).'...'	;
 	} else {
 		return $text;
-	}	
+	}
 }
 /**
  * Show a number as only integers if no decimals, but will show 2 decimals if exist.
- * 
- * @param mixed number to convert 
+ *
+ * @param mixed number to convert
  * @param int  decimal points 0=never, 1=if needed, 2=always
  * @return mixed an integer or a float depends on the parameter
  */
-function float_format($number, $flag = 1) 
-{ 
+function float_format($number, $flag = 1)
+{
 	if (is_numeric($number)) { // a number
 		if (!$number) { // zero
 			$result = ($flag == 2 ? '0.00' : '0'); // output zero

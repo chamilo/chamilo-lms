@@ -27,7 +27,7 @@
 * This script allows the user to manage files and directories on a remote http server.
 *
 * The user can : - upload a file
-*				 
+*
 * The script respects the strategical split between process and display, so the first
 * part is only processing code (init, process, display preparation) and the second
 * part is only display (HTML)
@@ -67,7 +67,9 @@ function check_unzip() {
 // -->
 </script>";
 
-$is_allowed_to_edit = api_is_allowed_to_edit();
+
+//$is_allowed_to_edit = api_is_allowed_to_edit();
+$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 if(!$is_allowed_to_edit){
 	api_not_allowed(true);
 }

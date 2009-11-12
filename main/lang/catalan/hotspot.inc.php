@@ -18,4 +18,7 @@ $labelPolyMenu = "Tancar polígon";
 $triesleft = "Intents restants";
 $exeFinished = "Totes les zones han estat seleccionades. Ara podeu modificar les vostres respostes o clicar per validar.";
 $nextAnswer = "Ara cliqueu a: &done=done";
+$delineation = "Delimitació";
+$labelDelineationMenu = "Tancar delimitació";
+$oar = "àrea de risc";
 ?>

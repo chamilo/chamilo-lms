@@ -6,7 +6,7 @@ $langSubTitle = "Añadir enlace externo o interno a la página principal del curso
 $langAddPage            = "Añadir página";
 $langSendPage           = "Página a enviar";
 $langCouldNot           = "El archivo no puede enviarse";
-$langOkSentLink         = "El enlace ha sido enviado. Ahora está accesible desde la <a href=\"%s/index.php\">página principal del curso</a>";
+$langOkSentLink         = "El enlace ha sido añadido. Ahora es accesible desde la <a href=\"%s/index.php\">página principal del curso</a>";
 $langTooBig             = "No ha seleccionado el archivo a enviar o es demasiado grande";
 $langExplanation        = "La página debe estar en formato HTML (ej. \\\"my_page.htm\\\"). Se enlazará a la página inicial. Si quiere enviar documentos que no sean HTML (PDF, Word, Power Point, Video, etc.) utilice la <a href=../document/document.php>herramienta Documentos</a>";
 $langPgTitle            = "Título de la página";

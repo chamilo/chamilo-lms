@@ -166,7 +166,7 @@ class SimpleScorer {
     function paintException($exception) {
         $this->_exceptions++;
     }
-    
+
     /**
      *    Prints the message for skipping tests.
      *    @param string $message    Text of skip condition.
@@ -253,7 +253,7 @@ class SimpleReporter extends SimpleScorer {
         $this->_size = null;
         $this->_progress = 0;
     }
-    
+
     /**
      *    Gets the formatter for variables and other small
      *    generic data items.
@@ -469,7 +469,7 @@ class SimpleReporterDecorator {
     function &createInvoker(&$invoker) {
         return $this->_reporter->createInvoker($invoker);
     }
-    
+
     /**
      *    Gets the formatter for variables and other small
      *    generic data items.
@@ -571,7 +571,7 @@ class SimpleReporterDecorator {
     function paintException($exception) {
         $this->_reporter->paintException($exception);
     }
-    
+
     /**
      *    Prints the message for skipping tests.
      *    @param string $message    Text of skip condition.
@@ -689,7 +689,7 @@ class MultipleReporter {
         }
         return $invoker;
     }
-    
+
     /**
      *    Gets the formatter for variables and other small
      *    generic data items.
@@ -800,7 +800,7 @@ class MultipleReporter {
             $this->_reporters[$i]->paintError($message);
         }
     }
-    
+
     /**
      *    Chains to the wrapped reporter.
      *    @param Exception $exception    Exception to display.

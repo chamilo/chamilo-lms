@@ -22,23 +22,25 @@
 	Mail: info@dokeos.com
 ==============================================================================
 */
-require_once ('Course.class.php');
-require_once ('Event.class.php');
-require_once ('Link.class.php');
-require_once ('ToolIntro.class.php');
-require_once ('LinkCategory.class.php');
-require_once ('ForumCategory.class.php');
-require_once ('Forum.class.php');
-require_once ('ForumTopic.class.php');
-require_once ('ForumPost.class.php');
-require_once ('CourseDescription.class.php');
-require_once ('Learnpath.class.php');
-require_once ('Survey.class.php');
-require_once ('SurveyQuestion.class.php');
-require_once ('mkdirr.php');
-require_once ('rmdirr.php');
-require_once ('Glossary.class.php');
-include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
+
+require_once 'Course.class.php';
+require_once 'Event.class.php';
+require_once 'Link.class.php';
+require_once 'ToolIntro.class.php';
+require_once 'LinkCategory.class.php';
+require_once 'ForumCategory.class.php';
+require_once 'Forum.class.php';
+require_once 'ForumTopic.class.php';
+require_once 'ForumPost.class.php';
+require_once 'CourseDescription.class.php';
+require_once 'Learnpath.class.php';
+require_once 'Survey.class.php';
+require_once 'SurveyQuestion.class.php';
+//require_once 'mkdirr.php';
+//require_once 'rmdirr.php';
+require_once 'Glossary.class.php';
+require_once 'wiki.class.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 define('FILE_SKIP', 1);
 define('FILE_RENAME', 2);
@@ -81,8 +83,8 @@ class CourseRestorer
 	 * @param string $destination_course_code The code of the Dokeos-course in
 	 * which the resources should be stored. Default: Current Dokeos-course.
 	 */
-	function restore($destination_course_code = '')
-	{		
+	function restore($destination_course_code = '',$session_id = 0)
+	{
 		if ($destination_course_code == '') {
 			$course_info = api_get_course_info();
 			$this->course->destination_db = $course_info['dbName'];
@@ -93,26 +95,42 @@ class CourseRestorer
 			$this->course->destination_path = $course_info['directory'];
 		}
 		// platform encoding
-		$course_charset = $this->course->encoding; 
-		
-		$this->restore_links();
-		$this->restore_tool_intro();
-		$this->restore_events();
-		$this->restore_announcements();
-		$this->restore_documents();
-		$this->restore_scorm_documents();
-		$this->restore_course_descriptions();
-		// Enabled by Ivan Tcholakov, 30-AUG-2009.
-		////$this->restore_forums();
-		$this->restore_forums();
-		//
-		$this->restore_quizzes(); // after restore_documents! (for correct import of sound/video)
-		$this->restore_learnpaths();
-		$this->restore_surveys();
-		$this->restore_student_publication();
-		$this->restore_glossary();
+		$course_charset = $this->course->encoding;
+
+		if (!empty($session_id)) {
+			$this->restore_documents($session_id,$destination_course_code);
+			$this->restore_quizzes($session_id);
+			$this->restore_glossary($session_id);
+			$this->restore_learnpaths($session_id);
+			$this->restore_links($session_id);
+			$this->restore_course_descriptions($session_id);
+			$this->restore_wiki();
+		} else {
+			$this->restore_links();
+			$this->restore_tool_intro();
+			$this->restore_events();
+			$this->restore_announcements();
+			$this->restore_documents();
+			$this->restore_scorm_documents();
+			$this->restore_course_descriptions();
+			$this->restore_quizzes(); // after restore_documents! (for correct import of sound/video)
+			$this->restore_learnpaths();
+			$this->restore_surveys();
+			$this->restore_student_publication();
+			$this->restore_glossary();
+			$this->restore_wiki();
+		}
+
+
 		// Restore the item properties
 		$table = Database :: get_course_table(TABLE_ITEM_PROPERTY, $this->course->destination_db);
+
+		$condition_session = "";
+
+		if (!empty($session_id)) {
+			$condition_session = " , id_session='".intval($session_id)."'";
+		}
+
 		foreach ($this->course->resources as $type => $resources) {
 			if (is_array($resources)) {
 				foreach ($resources as $id => $resource) {
@@ -121,7 +139,7 @@ class CourseRestorer
 						// First check if there isn't allready a record for this resource
 						$sql = "SELECT * FROM $table WHERE tool = '".$property['tool']."' AND ref = '".$resource->destination_id."'";
 
-						$res = api_sql_query($sql,__FILE__,__LINE__);
+						$res = Database::query($sql,__FILE__,__LINE__);
 						if( Database::num_rows($res) == 0) {
 							// The to_group_id and to_user_id are set to default values as users/groups possibly not exist in the target course
 							$sql = "INSERT INTO $table SET
@@ -136,9 +154,9 @@ class CourseRestorer
 									start_visible 		= '".Database::escape_string($property['start_visible'])."',
 									end_visible 		= '".Database::escape_string($property['end_visible'])."',
 									to_user_id  		= '".Database::escape_string($property['to_user_id'])."',
-									to_group_id 		= '0'";
+									to_group_id 		= '0' $condition_session" ;
 													;
-							api_sql_query($sql, __FILE__, __LINE__);
+							Database::query($sql, __FILE__, __LINE__);
 						}
 					}
 				}
@@ -148,7 +166,7 @@ class CourseRestorer
 		$table = Database :: get_course_table(TABLE_LINKED_RESOURCES, $this->course->destination_db);
 		foreach ($this->course->resources as $type => $resources)
 		{
-			if (is_array($resources)) 
+			if (is_array($resources))
 				foreach ($resources as $id => $resource)
 				{
 					$linked_resources = $resource->get_linked_resources();
@@ -158,7 +176,7 @@ class CourseRestorer
 						{
 							$to_resource = $this->course->resources[$to_type][$to_id];
 							$sql = "INSERT INTO ".$table." SET source_type = '".$type."', source_id = '".$resource->destination_id."', resource_type='".$to_type."', resource_id='".$to_resource->destination_id."' ";
-							api_sql_query($sql, __FILE__, __LINE__);
+							Database::query($sql, __FILE__, __LINE__);
 						}
 					}
 				}
@@ -167,9 +185,9 @@ class CourseRestorer
 	/**
 	 * Restore documents
 	 */
-	function restore_documents()
-	{		
-		if ($this->course->has_resources(RESOURCE_DOCUMENT)) {			
+	function restore_documents($session_id = 0,$destination_course_code = '')
+	{
+		if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
 			$table = Database :: get_course_table(TABLE_DOCUMENT, $this->course->destination_db);
 			$resources = $this->course->resources;
 			$destination_course['dbName']= $this->course->destination_db;
@@ -178,26 +196,26 @@ class CourseRestorer
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 				$perm = api_get_setting('permissions_for_new_directories');
 			    $perm = octdec(!empty($perm)?$perm:0770);
-			    $dirs = explode('/', dirname($document->path));	
+			    $dirs = explode('/', dirname($document->path));
 			    if (count($dirs)==1) {
 			    	if ($this->file_type==FOLDER) {
 			    		$new = substr($document->path, 8);
 			    		$created_dir = create_unexisting_directory($destination_course,api_get_user_id(),0, 0 ,$path.'document',$new,basename($new));
 			    	}
-			    } else {			    	    								
-					$my_temp = '';		
-					for ($i=1; $i<=count($dirs); $i++) {			
-						$my_temp .= $dirs[$i];					
-						if (!is_dir($path.'document/'.$my_temp)) {											
-							$sql = "SELECT id FROM ".$table." WHERE path='/".Database::escape_string($my_temp)."'"; 
-							//echo '<br>';							
-							$res = api_sql_query($sql, __FILE__, __LINE__);							
-							$num_result = Database::num_rows($res);					
+			    } else {
+					$my_temp = '';
+					for ($i=1; $i<=count($dirs); $i++) {
+						$my_temp .= $dirs[$i];
+						if (!is_dir($path.'document/'.$my_temp)) {
+							$sql = "SELECT id FROM ".$table." WHERE path='/".Database::escape_string($my_temp)."'";
+							//echo '<br>';
+							$res = Database::query($sql, __FILE__, __LINE__);
+							$num_result = Database::num_rows($res);
 							if ($num_result==0) {
 								$created_dir = create_unexisting_directory($destination_course,api_get_user_id(),0, 0 ,$path.'document','/'.$my_temp,basename($my_temp));
 							}
 						}
-						$my_temp .= '/';																
+						$my_temp .= '/';
 					}
 			    }
 			    /*
@@ -212,21 +230,21 @@ class CourseRestorer
 				echo '<br>';
 				*/
 				if ($document->file_type == DOCUMENT) {
-					if (file_exists($path.$document->path)) {	
+					if (file_exists($path.$document->path)) {
 						switch ($this->file_option) {
-							case FILE_OVERWRITE :								
+							case FILE_OVERWRITE :
 								$this->course->backup_path.'/'.$document->path;
 								copy($this->course->backup_path.'/'.$document->path, $path.$document->path);
 								$sql = "SELECT id FROM ".$table." WHERE path='/".substr($document->path, 9)."'";
-								$res = api_sql_query($sql, __FILE__, __LINE__);
+								$res = Database::query($sql, __FILE__, __LINE__);
 								$obj = Database::fetch_object($res);
 								$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $obj->id;
 								$sql = "UPDATE ".$table." SET comment = '".Database::escape_string($document->comment)."', title='".Database::escape_string($document->title)."', size='".$document->size."' WHERE id = '".$obj->id."'";
-								api_sql_query($sql, __FILE__, __LINE__);
+								Database::query($sql, __FILE__, __LINE__);
 								break;
 							case FILE_SKIP :
 								$sql = "SELECT id FROM ".$table." WHERE path='/".Database::escape_string(substr($document->path, 9))."'";
-								$res = api_sql_query($sql, __FILE__, __LINE__);
+								$res = Database::query($sql, __FILE__, __LINE__);
 								$obj = Database::fetch_object($res);
 								$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $obj->id;
 								break;
@@ -248,20 +266,76 @@ class CourseRestorer
 									$new_file_name = $file_name_no_ext.'_'.$i.$ext;
 									$file_exists = file_exists($path.$new_file_name);
 								}
-								copy($this->course->backup_path.'/'.$document->path, $path.$new_file_name);
-								$sql = "INSERT INTO ".$table." SET path = '/".Database::escape_string(substr($new_file_name, 9))."', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."'";
-								api_sql_query($sql, __FILE__, __LINE__);
-								$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::get_last_insert_id();
-								//also insert into item_property
-								/*
-								api_item_property_update(
-										array('dbName'=>$this->course->destination_db,
-										TOOL_DOCUMENT,
-										$this->course->resource[RESOURCE_DOCUMENT][$id]->destination_id,
-										'DocumentAdded',
-										);
-								*/
-								break;
+
+
+								if (!empty($session_id)) {
+
+									$document_path = explode('/',$document->path,3);
+									$course_path = $path;								// "/var/www/wiener/courses/"
+									$orig_base_folder = $document_path[1];
+									$orig_base_path   = $course_path.$document_path[0].'/'.$document_path[1];
+
+									if (is_dir($orig_base_path)) {
+
+										$new_base_foldername = $orig_base_folder;	// e.g: "carpeta1"
+										$new_base_path   = $orig_base_path;			// e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1"
+
+										if ($_SESSION['orig_base_foldername'] != $new_base_foldername) {
+											unset($_SESSION['new_base_foldername']);
+											unset($_SESSION['orig_base_foldername']);
+											unset($_SESSION['new_base_path']);
+										}
+
+										$folder_exists = file_exists($new_base_path);
+										if ($folder_exists) {
+											$_SESSION['orig_base_foldername'] = $new_base_foldername; 		// e.g: carpeta1 in session
+											$x = '';
+											while ($folder_exists) {
+												$x = $x + 1;
+												$new_base_foldername = $document_path[1].'_'.$x;
+												$new_base_path = $orig_base_path.'_'.$x;
+												if ($_SESSION['new_base_foldername'] == $new_base_foldername) break;
+												$folder_exists = file_exists($new_base_path);
+											}
+											$_SESSION['new_base_foldername'] = $new_base_foldername;
+											$_SESSION['new_base_path'] = $new_base_path;
+										}
+
+										if (isset($_SESSION['new_base_foldername']) && isset($_SESSION['new_base_path'])) {
+											$new_base_foldername = $_SESSION['new_base_foldername'];
+											$new_base_path = $_SESSION['new_base_path'];
+										}
+
+										$dest_document_path = $new_base_path.'/'.$document_path[2];		// e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1/collaborative.png"
+										$basedir_dest_path = dirname($dest_document_path);				// e.g: "/var/www/wiener/courses/CURSO4/document/carpeta1_1/subcarpeta1"
+										$dest_filename = basename($dest_document_path);  				// e.g: "collaborative.png"
+										$base_path_document = $course_path.$document_path[0];			// e.g: "/var/www/wiener/courses/CURSO4/document"
+										$course_info = api_get_course_info($destination_course_code);
+										$path_title = '/'.$new_base_foldername.'/'.$document_path[2];
+
+										copy_folder_course_session($basedir_dest_path, $base_path_document,$session_id,$course_info, $document);
+
+										copy($course_path.$document->path, $dest_document_path);
+										$sql = "INSERT INTO $table SET path = '$path_title', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string(basename($path_title))."' ,filetype='".$document->file_type."', size= '".$document->size."', session_id = '$session_id'";
+
+										Database::query($sql, __FILE__, __LINE__);
+										$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::insert_id();
+
+										} else {
+											copy($path.$document->path, $path.$new_file_name);
+											$sql = "INSERT INTO ".$table." SET path = '/".Database::escape_string(substr($new_file_name, 9))."', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."', session_id = '$session_id'";
+											Database::query($sql, __FILE__, __LINE__);
+											$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::insert_id();
+										}
+
+									} else {
+										copy($this->course->backup_path.'/'.$document->path, $path.$new_file_name);
+										$sql = "INSERT INTO ".$table." SET path = '/".Database::escape_string(substr($new_file_name, 9))."', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."'";
+										Database::query($sql, __FILE__, __LINE__);
+										$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::insert_id();
+									}
+									break;
+
 						} // end switch
 					} // end if file exists
 					else
@@ -272,8 +346,8 @@ class CourseRestorer
 						{
 							copy($this->course->backup_path.'/'.$document->path, $path.$document->path);
 							$sql = "INSERT INTO ".$table." SET path = '/".substr($document->path, 9)."', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."'";
-							api_sql_query($sql, __FILE__, __LINE__);
-							$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::get_last_insert_id();
+							Database::query($sql, __FILE__, __LINE__);
+							$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::insert_id();
 						}
 						else
 						{
@@ -291,24 +365,28 @@ class CourseRestorer
 							}
 						}
 					} // end file doesn't exist
-				}				
+				}
 				else
 				{
 					/*$sql = "SELECT id FROM ".$table." WHERE path = '/".Database::escape_string(substr($document->path, 9))."'";
-					$res = api_sql_query($sql,__FILE__,__LINE__);
+					$res = Database::query($sql,__FILE__,__LINE__);
 					if( Database::num_rows($res)> 0)
 					{
 						$obj = Database::fetch_object($res);
-						$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $obj->id;	
+						$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $obj->id;
 					}
 					else
 					{
 						$sql = "INSERT INTO ".$table." SET path = '/".Database::escape_string(substr($document->path, 9))."', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."'";
-						api_sql_query($sql, __FILE__, __LINE__);
-						$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::get_last_insert_id();
+						Database::query($sql, __FILE__, __LINE__);
+						$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::insert_id();
 					}*/
 				} // end folder
 			} // end for each
+		// Delete sessions for the copy the new folder in session
+		unset($_SESSION['new_base_foldername']);
+		unset($_SESSION['orig_base_foldername']);
+		unset($_SESSION['new_base_path']);
 		}
 	}
 
@@ -328,7 +406,7 @@ class CourseRestorer
 
 				$perm = api_get_setting('permissions_for_new_directories');
 			        $perm = octdec(!empty($perm)?$perm:'0770');
-				mkdirr(dirname($path.$document->path),$perm);
+				@mkdir(dirname($path.$document->path), $perm, true);
 
 				if (file_exists($path.$document->path))
 				{
@@ -343,7 +421,7 @@ class CourseRestorer
 						case FILE_SKIP :
 							break;
 						case FILE_RENAME :
-							$i = 1; 
+							$i = 1;
 
 							$ext = explode('.', basename($document->path));
 
@@ -419,8 +497,8 @@ class CourseRestorer
 					", locked = ".(int)Database::escape_string($forum->locked).
 					", session_id = ".(int)Database::escape_string($forum->session_id).
 					", forum_image = '".Database::escape_string($forum->image)."'";
-				api_sql_query($sql, __FILE__, __LINE__);
-				$new_id = Database::get_last_insert_id();
+				Database::query($sql, __FILE__, __LINE__);
+				$new_id = Database::insert_id();
 				$this->course->resources[RESOURCE_FORUM][$id]->destination_id = $new_id;
 				$forum_topics = 0;
 				if (is_array($this->course->resources[RESOURCE_FORUMTOPIC]))
@@ -438,7 +516,7 @@ class CourseRestorer
 				{
 					$last_post = $this->course->resources[RESOURCE_FORUMPOST][$forum->last_post];
 					$sql = "UPDATE ".$table_forum." SET forum_threads = ".$forum_topics.", forum_last_post = ".(int)$last_post->destination_id." WHERE forum_id = ".(int)$new_id;
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 				}
 			}
 		}
@@ -467,8 +545,8 @@ class CourseRestorer
 				"', cat_order = ".(int)Database::escape_string($forum_cat->order).
 				", locked = ".(int)Database::escape_string($forum_cat->locked).
 				", session_id = ".(int)Database::escape_string($forum_cat->session_id);
-			api_sql_query($sql, __FILE__, __LINE__);
-			$new_id = Database::get_last_insert_id();
+			Database::query($sql, __FILE__, __LINE__);
+			$new_id = Database::insert_id();
 			$this->course->resources[RESOURCE_FORUMCATEGORY][$id]->destination_id = $new_id;
 			return $new_id;
 		}
@@ -495,8 +573,8 @@ class CourseRestorer
 			"', thread_weight = ".(float)Database::escape_string($topic->weight).
 			", thread_title_qualify = '".Database::escape_string($topic->title_qualify).
 			"', thread_qualify_max = ".(float)Database::escape_string($topic->qualify_max);
-		api_sql_query($sql, __FILE__, __LINE__);
-		$new_id = Database::get_last_insert_id();
+		Database::query($sql, __FILE__, __LINE__);
+		$new_id = Database::insert_id();
 		$this->course->resources[RESOURCE_FORUMTOPIC][$id]->destination_id = $new_id;
 		$topic_replies = -1;
 		foreach ($this->course->resources[RESOURCE_FORUMPOST] as $post_id => $post)
@@ -511,12 +589,12 @@ class CourseRestorer
 		if (is_object($last_post))
 		{
 			$sql = "UPDATE ".$table." SET thread_last_post = ".(int)$last_post->destination_id;
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		}
 		if ($topic_replies >= 0)
 		{
 			$sql = "UPDATE ".$table." SET thread_replies = ".$topic_replies;
-			api_sql_query($sql, __FILE__, __LINE__);
+			Database::query($sql, __FILE__, __LINE__);
 		}
 		return $new_id;
 	}
@@ -540,15 +618,15 @@ class CourseRestorer
 			"', post_notification = ".(int)Database::escape_string($post->topic_notify).
 			", post_parent_id = ".(int)Database::escape_string($post->parent_post_id).
 			", visible = ".(int)Database::escape_string($post->visible);
-		api_sql_query($sql, __FILE__, __LINE__);
-		$new_id = Database::get_last_insert_id();
+		Database::query($sql, __FILE__, __LINE__);
+		$new_id = Database::insert_id();
 		$this->course->resources[RESOURCE_FORUMPOST][$id]->destination_id = $new_id;
 		return $new_id;
 	}
 	/**
 	 * Restore links
 	 */
-	function restore_links()
+	function restore_links($session_id = 0)
 	{
 		if ($this->course->has_resources(RESOURCE_LINK))
 		{
@@ -556,13 +634,20 @@ class CourseRestorer
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_LINK] as $id => $link)
 			{
-				$cat_id = $this->restore_link_category($link->category_id);
+				$cat_id = $this->restore_link_category($link->category_id,$session_id);
 				$sql = "SELECT MAX(display_order) FROM  $link_table WHERE category_id='" . Database::escape_string($cat_id). "'";
-				$result = api_sql_query($sql, __FILE__, __LINE__);
+				$result = Database::query($sql, __FILE__, __LINE__);
     			list($max_order) = Database::fetch_array($result);
-				$sql = "INSERT INTO ".$link_table." SET url = '".Database::escape_string($link->url)."', title = '".Database::escape_string($link->title)."', description = '".Database::escape_string($link->description)."', category_id='".$cat_id."', on_homepage = '".$link->on_homepage."', display_order='".($max_order+1)."'";
-				api_sql_query($sql, __FILE__, __LINE__);
-				$this->course->resources[RESOURCE_LINK][$id]->destination_id = Database::get_last_insert_id();
+
+    			$condition_session = "";
+    			if (!empty($session_id)) {
+    				$condition_session = " , session_id = '$session_id' ";
+    			}
+
+				$sql = "INSERT INTO ".$link_table." SET url = '".Database::escape_string($link->url)."', title = '".Database::escape_string($link->title)."', description = '".Database::escape_string($link->description)."', category_id='".$cat_id."', on_homepage = '".$link->on_homepage."', display_order='".($max_order+1)."' $condition_session";
+
+				Database::query($sql, __FILE__, __LINE__);
+				$this->course->resources[RESOURCE_LINK][$id]->destination_id = Database::insert_id();
 			}
 		}
 	}
@@ -578,20 +663,26 @@ class CourseRestorer
 			foreach ($resources[RESOURCE_TOOL_INTRO] as $id => $tool_intro)
 			{
 				$sql = "DELETE FROM ".$tool_intro_table." WHERE id='".Database::escape_string($tool_intro->id)."'";
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 
 				$sql = "INSERT INTO ".$tool_intro_table." SET id='".Database::escape_string($tool_intro->id)."', intro_text = '".Database::escape_string($tool_intro->intro_text)."'";
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 
-				$this->course->resources[RESOURCE_TOOL_INTRO][$id]->destination_id = Database::get_last_insert_id();
+				$this->course->resources[RESOURCE_TOOL_INTRO][$id]->destination_id = Database::insert_id();
 			}
 		}
 	}
 	/**
 	 * Restore a link-category
 	 */
-	function restore_link_category($id)
+	function restore_link_category($id,$session_id = 0)
 	{
+
+		$condition_session = "";
+		if (!empty($session_id)) {
+			$condition_session = " , session_id = '$session_id' ";
+		}
+
 		if ($id == 0)
 			return 0;
 		$link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY, $this->course->destination_db);
@@ -600,12 +691,12 @@ class CourseRestorer
 		if (is_object($link_cat) && !$link_cat->is_restored())
 		{
 			$sql = "SELECT MAX(display_order) FROM  $link_cat_table";
-			$result=api_sql_query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql,__FILE__,__LINE__);
 			list($orderMax)=Database::fetch_array($result,'NUM');
 			$display_order=$orderMax+1;
-			$sql = "INSERT INTO ".$link_cat_table." SET category_title = '".Database::escape_string($link_cat->title)."', description='".Database::escape_string($link_cat->description)."', display_order='".$display_order."' ";
-			api_sql_query($sql, __FILE__, __LINE__);
-			$new_id = Database::get_last_insert_id();
+			$sql = "INSERT INTO ".$link_cat_table." SET category_title = '".Database::escape_string($link_cat->title)."', description='".Database::escape_string($link_cat->description)."', display_order='".$display_order."' $condition_session ";
+			Database::query($sql, __FILE__, __LINE__);
+			$new_id = Database::insert_id();
 			$this->course->resources[RESOURCE_LINKCATEGORY][$id]->destination_id = $new_id;
 			return $new_id;
 		}
@@ -623,15 +714,15 @@ class CourseRestorer
 			foreach ($resources[RESOURCE_EVENT] as $id => $event)
 			{
 				$sql = "INSERT INTO ".$table." SET title = '".Database::escape_string($event->title)."', content = '".Database::escape_string($event->content)."', start_date = '".$event->start_date."', end_date = '".$event->end_date."'";
-				api_sql_query($sql, __FILE__, __LINE__);
-				$this->course->resources[RESOURCE_EVENT][$id]->destination_id = Database::get_last_insert_id();
+				Database::query($sql, __FILE__, __LINE__);
+				$this->course->resources[RESOURCE_EVENT][$id]->destination_id = Database::insert_id();
 			}
 		}
 	}
 	/**
 	 * Restore course-description
 	 */
-	function restore_course_descriptions()
+	function restore_course_descriptions($session_id = 0)
 	{
 		if ($this->course->has_resources(RESOURCE_COURSEDESCRIPTION))
 		{
@@ -646,15 +737,21 @@ class CourseRestorer
 				} else {
 					$course_destination=$this->course->destination_path;
 				}
-				
+
 				$course_info=api_get_course_info(api_get_course_id());
 				$search='../courses/'.$course_info['path'].'/document';
 				$replace_search_by='../courses/'.$course_destination.'/document';
 				$description_content=str_replace($search,$replace_search_by,$cd->content);
 
-				$sql = "INSERT INTO ".$table." SET title = '".Database::escape_string($cd->title)."', content = '".Database::escape_string($description_content)."'";
-				api_sql_query($sql, __FILE__, __LINE__);
-				$this->course->resources[RESOURCE_COURSEDESCRIPTION][$id]->destination_id = Database::get_last_insert_id();
+				$condition_session = "";
+				if (!empty($session_id)) {
+					$session_id = intval($session_id);
+					$condition_session = " , session_id = '$session_id' ";
+				}
+
+				$sql = "INSERT INTO ".$table." SET title = '".Database::escape_string($cd->title)."', content = '".Database::escape_string($description_content)."' $condition_session";
+				Database::query($sql, __FILE__, __LINE__);
+				$this->course->resources[RESOURCE_COURSEDESCRIPTION][$id]->destination_id = Database::insert_id();
 			}
 		}
 	}
@@ -675,15 +772,15 @@ class CourseRestorer
 							"end_date = '".$announcement->date."', " .
 							"display_order = '".$announcement->display_order."', " .
 							"email_sent = '".$announcement->email_sent."'";
-				api_sql_query($sql, __FILE__, __LINE__);
-				$this->course->resources[RESOURCE_ANNOUNCEMENT][$id]->destination_id = Database::get_last_insert_id();
+				Database::query($sql, __FILE__, __LINE__);
+				$this->course->resources[RESOURCE_ANNOUNCEMENT][$id]->destination_id = Database::insert_id();
 			}
 		}
 	}
 	/**
 	 * Restore Quiz
 	 */
-	function restore_quizzes()
+	function restore_quizzes($session_id = 0)
 	{
 		if ($this->course->has_resources(RESOURCE_QUIZ))
 		{
@@ -699,13 +796,20 @@ class CourseRestorer
 					if ($this->course->resources[RESOURCE_DOCUMENT][$quiz->media]->is_restored())
 					{
 						$sql = "SELECT path FROM ".$table_doc." WHERE id = ".$resources[RESOURCE_DOCUMENT][$quiz->media]->destination_id;
-						$doc = api_sql_query($sql, __FILE__, __LINE__);
+						$doc = Database::query($sql, __FILE__, __LINE__);
 						$doc = Database::fetch_object($doc);
 						$doc = str_replace('/audio/', '', $doc->path);
 					}
 				}
 				if ($id != -1)
 				{
+
+					$condition_session = "";
+    				if (!empty($session_id)) {
+    					$session_id = intval($session_id);
+    					$condition_session = " , session_id = '$session_id' ";
+    				}
+
 					// Normal tests are stored in the database.
 					$sql = "INSERT INTO ".$table_qui.
 						" SET title = '".Database::escape_string($quiz->title).
@@ -719,9 +823,10 @@ class CourseRestorer
 						", access_condition = '".$quiz->access_condition.
 						"', start_time = '".$quiz->start_time.
 						"', end_time = '".$quiz->end_time.
-						"', feedback_type = ".(int)$quiz->feedback_type;
-					api_sql_query($sql, __FILE__, __LINE__);
-					$new_id = Database::get_last_insert_id();
+						"', feedback_type = ".(int)$quiz->feedback_type.
+						$condition_session;
+					Database::query($sql, __FILE__, __LINE__);
+					$new_id = Database::insert_id();
 				}
 				else
 				{
@@ -733,7 +838,7 @@ class CourseRestorer
 				{
 					$qid = $this->restore_quiz_question($question_id);
 					$sql = "INSERT IGNORE INTO ".$table_rel." SET question_id = ".$qid.", exercice_id = ".$new_id."";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 				}
 			}
 		}
@@ -757,12 +862,12 @@ class CourseRestorer
 			$table_que = Database :: get_course_table(TABLE_QUIZ_QUESTION, $this->course->destination_db);
 			$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER, $this->course->destination_db);
 			$sql = "INSERT INTO ".$table_que." SET question = '".addslashes($question->question)."', description = '".addslashes($question->description)."', ponderation = '".addslashes($question->ponderation)."', position = '".addslashes($question->position)."', type='".addslashes($question->quiz_type)."', picture='".addslashes($question->picture)."', level='".addslashes($question->level)."'";
-			api_sql_query($sql, __FILE__, __LINE__);
-			$new_id = Database::get_last_insert_id();
+			Database::query($sql, __FILE__, __LINE__);
+			$new_id = Database::insert_id();
 			foreach ($question->answers as $index => $answer)
 			{
 				$sql = "INSERT INTO ".$table_ans." SET id= '". ($index +1)."',question_id = '".$new_id."', answer = '".Database::escape_string($answer['answer'])."', correct = '".$answer['correct']."', comment = '".Database::escape_string($answer['comment'])."', ponderation='".$answer['ponderation']."', position = '".$answer['position']."', hotspot_coordinates = '".$answer['hotspot_coordinates']."', hotspot_type = '".$answer['hotspot_type']."'";
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 			}
 			$this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id = $new_id;
 		}
@@ -781,15 +886,15 @@ class CourseRestorer
 			$table_ans = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_SURVEY] as $id => $survey)
-			{	
-				
+			{
+
 				$sql_check =   'SELECT survey_id FROM '.$table_sur.'
 								WHERE code = "'.Database::escape_string($survey->code).'"
 								AND lang="'.Database::escape_string($survey->lang).'"
 								';
-				
-				$result_check = api_sql_query($sql_check, __FILE__, __LINE__);
-				
+
+				$result_check = Database::query($sql_check, __FILE__, __LINE__);
+
 				$doc = '';
 				$sql = "INSERT INTO ".$table_sur." " .
 						"SET code = '".Database::escape_string($survey->code)."', " .
@@ -808,19 +913,19 @@ class CourseRestorer
 						"answered = '0', " .
 						"invite_mail = '".Database::escape_string($survey->invite_mail)."', " .
 						"reminder_mail = '".Database::escape_string($survey->reminder_mail)."'";
-				
+
 				//An existing survey exists with the same code and the same language
 				if(Database::num_rows($result_check) == 1)
 				{
-										
+
 					switch ($this->file_option) {
-						
+
 						case FILE_SKIP:
 							//Do nothing
 							break;
-							
+
 						case FILE_RENAME:
-							
+
 							$survey_code = $survey->code.'_';
 							$i=1;
 							$temp_survey_code = $survey_code.$i;
@@ -829,7 +934,7 @@ class CourseRestorer
 								$temp_survey_code = $survey_code.++$i;
 							}
 							$survey_code = $temp_survey_code;
-							
+
 							$sql = "INSERT INTO ".$table_sur." " .
 									"SET code = '".Database::escape_string($survey_code)."', " .
 									"title = '".Database::escape_string($survey->title)."', " .
@@ -847,11 +952,11 @@ class CourseRestorer
 									"answered = '0', " .
 									"invite_mail = '".Database::escape_string($survey->invite_mail)."', " .
 									"reminder_mail = '".Database::escape_string($survey->reminder_mail)."'";
-							
+
 							//Insert the new source survey
-							api_sql_query($sql, __FILE__, __LINE__);
-							
-							$new_id = Database::get_last_insert_id();
+							Database::query($sql, __FILE__, __LINE__);
+
+							$new_id = Database::insert_id();
 							$this->course->resources[RESOURCE_SURVEY][$id]->destination_id = $new_id;
 							foreach ($survey->question_ids as $index => $question_id)
 							{
@@ -859,37 +964,37 @@ class CourseRestorer
 								$sql = "UPDATE ".$table_que." " .
 										"SET survey_id = ".$new_id." WHERE " .
 										"question_id = ".$qid."";
-								api_sql_query($sql, __FILE__, __LINE__);
+								Database::query($sql, __FILE__, __LINE__);
 								$sql = "UPDATE ".$table_ans." ".
 										"SET survey_id = ".$new_id." WHERE " .
 										"question_id = ".$qid."";
-								api_sql_query($sql, __FILE__, __LINE__);
+								Database::query($sql, __FILE__, __LINE__);
 							}
-							
+
 							break;
-							
+
 						case FILE_OVERWRITE:
-														
+
 							// Delete the existing survey with the same code and language and import the one of the source course
-							
+
 							// getting the information of the survey (used for when the survey is shared)
 							require_once(api_get_path(SYS_CODE_PATH).'survey/survey.lib.php');
-							
+
 							$sql_select_existing_survey = "SELECT * FROM $table_sur WHERE survey_id='".Database::escape_string(Database::result($result_check,0,0))."'";
-							$result = api_sql_query($sql_select_existing_survey, __FILE__, __LINE__);
+							$result = Database::query($sql_select_existing_survey, __FILE__, __LINE__);
 							$survey_data = Database::fetch_array($result,'ASSOC');
-							
+
 							// if the survey is shared => also delete the shared content
 							if (is_numeric($survey_data['survey_share']))
 							{
 								survey_manager::delete_survey($survey_data['survey_share'], true,$this->course->destination_db);
 							}
 							$return = survey_manager :: delete_survey($survey_data['survey_id'],false,$this->course->destination_db);
-							
+
 							//Insert the new source survey
-							api_sql_query($sql, __FILE__, __LINE__);
-							
-							$new_id = Database::get_last_insert_id();
+							Database::query($sql, __FILE__, __LINE__);
+
+							$new_id = Database::insert_id();
 							$this->course->resources[RESOURCE_SURVEY][$id]->destination_id = $new_id;
 							foreach ($survey->question_ids as $index => $question_id)
 							{
@@ -897,26 +1002,26 @@ class CourseRestorer
 								$sql = "UPDATE ".$table_que." " .
 										"SET survey_id = ".$new_id." WHERE " .
 										"question_id = ".$qid."";
-								api_sql_query($sql, __FILE__, __LINE__);
+								Database::query($sql, __FILE__, __LINE__);
 								$sql = "UPDATE ".$table_ans." ".
 										"SET survey_id = ".$new_id." WHERE " .
 										"question_id = ".$qid."";
-								api_sql_query($sql, __FILE__, __LINE__);
+								Database::query($sql, __FILE__, __LINE__);
 							}
-							
+
 							break;
-							
+
 						default:
 							break;
 					}
-					
-					
+
+
 				}
 				//No existing survey with the same language and the same code, we just copy the survey
 				else
 				{
-					api_sql_query($sql, __FILE__, __LINE__);
-					$new_id = Database::get_last_insert_id();
+					Database::query($sql, __FILE__, __LINE__);
+					$new_id = Database::insert_id();
 					$this->course->resources[RESOURCE_SURVEY][$id]->destination_id = $new_id;
 					foreach ($survey->question_ids as $index => $question_id)
 					{
@@ -924,30 +1029,30 @@ class CourseRestorer
 						$sql = "UPDATE ".$table_que." " .
 								"SET survey_id = ".$new_id." WHERE " .
 								"question_id = ".$qid."";
-						api_sql_query($sql, __FILE__, __LINE__);
+						Database::query($sql, __FILE__, __LINE__);
 						$sql = "UPDATE ".$table_ans." ".
 								"SET survey_id = ".$new_id." WHERE " .
 								"question_id = ".$qid."";
-						api_sql_query($sql, __FILE__, __LINE__);
+						Database::query($sql, __FILE__, __LINE__);
 					}
 				}
-				
+
 			}
 		}
 	}
-	
+
 	/**
 	 * Check availability of a survey code
 	 */
 	function is_survey_code_available($survey_code)
-	{		
+	{
 		$table_sur = Database :: get_course_table(TABLE_SURVEY, $this->course->destination_db);
 		$sql = "SELECT * FROM $table_sur WHERE code='".Database::escape_string($survey_code)."'";
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		if(Database::num_rows($result) > 0) return false; else return true;
-		
+
 	}
-	
+
 	/**
 	 * Restore survey-questions
 	 */
@@ -966,7 +1071,7 @@ class CourseRestorer
 			}
 			$table_que = Database :: get_course_table(TABLE_SURVEY_QUESTION, $this->course->destination_db);
 			$table_ans = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION, $this->course->destination_db);
-			
+
 			$sql = "INSERT INTO ".$table_que." " .
 					"SET survey_id = 		'".Database::escape_string($question->survey_id)."', " .
 					"survey_question = 		'".Database::escape_string($question->survey_question)."', " .
@@ -976,9 +1081,9 @@ class CourseRestorer
 					"sort = 				'".Database::escape_string($question->sort)."', " .
 					"shared_question_id = 	'".Database::escape_string($question->shared_question_id)."', " .
 					"max_value = 			'".Database::escape_string($question->max_value)."' ";
-			api_sql_query($sql, __FILE__, __LINE__);
-			
-			$new_id = Database::get_last_insert_id();
+			Database::query($sql, __FILE__, __LINE__);
+
+			$new_id = Database::insert_id();
 			foreach ($question->answers as $index => $answer) {
 				$sql = "INSERT INTO ".$table_ans." " .
 						"SET " .
@@ -987,7 +1092,7 @@ class CourseRestorer
 						"sort 		 = '".Database::escape_string($answer['sort'])."', " .
 						"survey_id 	 = '".Database::escape_string($question->survey_id)."'";
 
-				api_sql_query($sql, __FILE__, __LINE__);
+				Database::query($sql, __FILE__, __LINE__);
 			}
 			$this->course->resources[RESOURCE_SURVEYQUESTION][$id]->destination_id = $new_id;
 		}
@@ -997,7 +1102,7 @@ class CourseRestorer
 	/**
 	 * Restore learnpaths
 	 */
-	function restore_learnpaths()
+	function restore_learnpaths($session_id = 0)
 	{
 		if ($this->course->has_resources(RESOURCE_LEARNPATH)) {
 			$table_main 	= Database :: get_course_table(TABLE_LP_MAIN, $this->course->destination_db);
@@ -1007,6 +1112,13 @@ class CourseRestorer
 			$resources = $this->course->resources;
 
 			foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp) {
+
+				$condition_session = "";
+				if (!empty($session_id)) {
+					$session_id = intval($session_id);
+					$condition_session = " , session_id = '$session_id' ";
+				}
+
 				$sql = "INSERT INTO ".$table_main." " .
 						"SET lp_type = '".$lp->lp_type."', " .
 								"name = '".Database::escape_string($lp->name)."', " .
@@ -1022,14 +1134,14 @@ class CourseRestorer
 								"display_order = '".Database::escape_string($lp->display_order)."', " .
 								"js_lib= '".Database::escape_string($lp->js_lib)."', " .
 								"content_license= '".Database::escape_string($lp->content_license)."', " .
-								"debug= '".Database::escape_string($lp->debug)."' ";
-				api_sql_query($sql, __FILE__, __LINE__);
+								"debug= '".Database::escape_string($lp->debug)."' $condition_session ";
+				Database::query($sql, __FILE__, __LINE__);
 
-				$new_lp_id = Database::get_last_insert_id();
+				$new_lp_id = Database::insert_id();
 
 				if($lp->visibility) {
 					$sql = "INSERT INTO $table_tool SET name='".Database::escape_string($lp->name)."', link='newscorm/lp_controller.php?action=view&lp_id=$new_lp_id', image='scormbuilder.gif', visibility='1', admin='0', address='squaregrey.gif'";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 				}
 
 				$new_item_ids = array();
@@ -1037,9 +1149,9 @@ class CourseRestorer
 				$previous_item_ids = array();
 				$next_item_ids = array();
 				$old_prerequisite = array();
-				$old_refs = array();				
+				$old_refs = array();
 				$prerequisite_ids = array();
-				
+
 				foreach ($lp->get_items() as $index => $item) {
 					/*
 					if ($item['id'] != 0)
@@ -1057,17 +1169,21 @@ class CourseRestorer
 					} else {
 						$ref = $item['ref'];
 					}*/
-					
+
 					// we set the ref code here and then we update in a for loop
 					$ref = $item['ref'];
-					
+
 					//Dealing with path the same way as ref as some data has been put into path when it's a
 					//local resource
 					$path = Database::escape_string($item['path']);
 					if(strval(intval($path)) === $path) {
-						$path = $this->get_new_id($item['item_type'],$path);
+						if (!empty($session_id)) {
+							$path = intval($path);
+						} else {
+							$path = $this->get_new_id($item['item_type'],$path);
+						}
 					}
-					
+
 					$sql = "INSERT INTO ".$table_item." SET " .
 							"lp_id = '".Database::escape_string($new_lp_id)."', " .
 							"item_type='".Database::escape_string($item['item_type'])."', " .
@@ -1085,9 +1201,9 @@ class CourseRestorer
 							"prerequisite = '".Database::escape_string($item['prerequisite'])."', " .
 							"parameters='".Database::escape_string($item['parameters'])."', " .
 							"launch_data = '".Database::escape_string($item['launch_dataprereq_type'])."'";
-							
-					api_sql_query($sql, __FILE__, __LINE__);
-					$new_item_id = Database::get_last_insert_id();
+
+					Database::query($sql, __FILE__, __LINE__);
+					$new_item_id = Database::insert_id();
 					//save a link between old and new item IDs
 					$new_item_ids[$item['id']] = $new_item_id;
 					//save a reference of items that need a parent_item_id refresh
@@ -1096,7 +1212,7 @@ class CourseRestorer
 					$previous_item_ids[$new_item_id] = $item['previous_item_id'];
 					//save a reference of items that need a next_item_id refresh
 					$next_item_ids[$new_item_id] = $item['next_item_id'];
-					
+
 					if (!empty($item['prerequisite'])) {
 						if ($lp->lp_type =='2') {
 							// if is an sco
@@ -1105,7 +1221,7 @@ class CourseRestorer
 							$old_prerequisite[$new_item_id]= $new_item_ids[$item['prerequisite']];
 						}
 					}
-					
+
 					if (!empty($ref)) {
 						if ($lp->lp_type =='2') {
 							// if is an sco
@@ -1114,33 +1230,33 @@ class CourseRestorer
 							$old_refs[$new_item_id]= $new_item_ids[$ref];
 						}
 					}
-					
+
 					$prerequisite_ids[$new_item_id] = $item['prerequisite'];
-				}			
-						
+				}
+
 				// updating prerequisites
 				foreach ($old_prerequisite  as $key=>$my_old_prerequisite) {
-					if($my_old_prerequisite != ''){																	
-						$sql = "UPDATE ".$table_item." SET prerequisite = '".$my_old_prerequisite."' WHERE id = '".$key."'  ";			
-						api_sql_query($sql, __FILE__, __LINE__);					
-					}																		
+					if($my_old_prerequisite != ''){
+						$sql = "UPDATE ".$table_item." SET prerequisite = '".$my_old_prerequisite."' WHERE id = '".$key."'  ";
+						Database::query($sql, __FILE__, __LINE__);
+					}
 				}
-				
+
 				//updating refs
-				foreach ($old_refs  as $key=>$my_old_ref) {					
-					if ($my_old_ref != '') {										
-						$sql = "UPDATE ".$table_item." SET ref = '".$my_old_ref."' WHERE id = '".$key."'  ";						
-						api_sql_query($sql, __FILE__, __LINE__);					
-					}																		
+				foreach ($old_refs  as $key=>$my_old_ref) {
+					if ($my_old_ref != '') {
+						$sql = "UPDATE ".$table_item." SET ref = '".$my_old_ref."' WHERE id = '".$key."'  ";
+						Database::query($sql, __FILE__, __LINE__);
+					}
 				}
-				
+
 				foreach ($parent_item_ids as $new_item_id => $parent_item_old_id) {
 					$parent_new_id = 0;
 					if($parent_item_old_id != 0){
 						$parent_new_id = $new_item_ids[$parent_item_old_id];
 					}
 					$sql = "UPDATE ".$table_item." SET parent_item_id = '".$parent_new_id."' WHERE id = '".$new_item_id."'";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 				}
 				foreach ($previous_item_ids as $new_item_id => $previous_item_old_id) {
 					$previous_new_id = 0;
@@ -1148,17 +1264,17 @@ class CourseRestorer
 						$previous_new_id = $new_item_ids[$previous_item_old_id];
 					}
 					$sql = "UPDATE ".$table_item." SET previous_item_id = '".$previous_new_id."' WHERE id = '".$new_item_id."'";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 				}
-				
+
 				foreach ($next_item_ids as $new_item_id => $next_item_old_id) {
 					$next_new_id = 0;
 					if($next_item_old_id != 0){
 						$next_new_id = $new_item_ids[$next_item_old_id];
 					}
 					$sql = "UPDATE ".$table_item." SET next_item_id = '".$next_new_id."' WHERE id = '".$new_item_id."'";
-					api_sql_query($sql, __FILE__, __LINE__);
-				}				
+					Database::query($sql, __FILE__, __LINE__);
+				}
 
 				foreach ($prerequisite_ids as $new_item_id => $prerequisite_old_id)
 				{
@@ -1167,12 +1283,12 @@ class CourseRestorer
 						$prerequisite_new_id = $new_item_ids[$prerequisite_old_id];
 					}
 					$sql = "UPDATE ".$table_item." SET prerequisite = '".$prerequisite_new_id."' WHERE id = '".$new_item_id."'";
-					api_sql_query($sql, __FILE__, __LINE__);
+					Database::query($sql, __FILE__, __LINE__);
 				}
 
-				$this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;				
+				$this->course->resources[RESOURCE_LEARNPATH][$id]->destination_id = $new_lp_id;
 			}
-				
+
 		}
 	}
 	/**
@@ -1185,20 +1301,20 @@ class CourseRestorer
 
 		$my_tbl_db_spa_origin=Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT,$my_course_info['dbName']);
 		$my_tbl_db_spa_destination = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT, $this->course->destination_db);
-		
+
 		$my_tbl_db_origin=Database :: get_course_table(TABLE_STUDENT_PUBLICATION,$my_course_info['dbName']);
 		$my_tbl_db_destination = Database :: get_course_table(TABLE_STUDENT_PUBLICATION, $this->course->destination_db);
-		
+
 		$my_tbl_db_item_property_origin=Database :: get_course_table(TABLE_ITEM_PROPERTY, $my_course_info['dbName']);
 		$my_tbl_db_item_property_destination=Database :: get_course_table(TABLE_ITEM_PROPERTY, $this->course->destination_db);
-		
+
 		//query in student publication
-		
+
 		$query_sql_fin_sp='INSERT IGNORE INTO '.$my_tbl_db_destination.'' .
 		'(id,url,title,description,author,active,accepted,post_group_id,sent_date,' .
 		'filetype,has_properties,view_properties,qualification,date_of_qualification,' .
 		'parent_id,qualificator_id,session_id) ';
-		
+
 		$query_sql_ini_sp='SELECT id,url,title,description,author,active,accepted,post_group_id,' .
 		'sent_date,filetype,has_properties,view_properties,qualification,date_of_qualification,' .
 		'parent_id,qualificator_id,session_id FROM '.$my_tbl_db_origin.' WHERE filetype="folder" ';
@@ -1208,35 +1324,35 @@ class CourseRestorer
 		$origin='../../courses/'.$course_info['path'].'/work/';
 
 		self::allow_create_all_directory($origin,$destination,false);
-		
+
 		//query in item property
-		
+
 		$query_sql_fin_ip='INSERT IGNORE INTO '.$my_tbl_db_item_property_destination.'' .
 		'(tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,' .
 		'to_user_id,visibility,start_visible,end_visible) ';
-		
+
 		$query_sql_ini_ip='SELECT tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,' .
 		'lastedit_user_id,to_group_id,to_user_id,visibility,start_visible,
 		end_visible FROM '.$my_tbl_db_item_property_origin.' ip INNER JOIN '.$my_tbl_db_origin.' sp' .
 		' ON ip.ref=sp.id WHERE tool="work" ';
-		
-		
+
+
 		$query_sql_fin_sa='INSERT IGNORE INTO '.$my_tbl_db_spa_destination.'' .
 		'(id,expires_on,ends_on,add_to_calendar,enable_qualification,publication_id) ';
-		
+
 		$query_sql_ini_sa='SELECT sa.id,sa.expires_on,sa.ends_on,sa.add_to_calendar,sa.enable_qualification,sa.publication_id FROM '.$my_tbl_db_spa_origin.' sa INNER JOIN '.$my_tbl_db_origin.' sp
 		ON sa.publication_id=sp.id WHERE filetype="folder" ';
-		
+
 		$query_sql_sp    = $query_sql_fin_sp.$query_sql_ini_sp;
 		$query_sql_ip    = $query_sql_fin_ip.$query_sql_ini_ip;
 		$query_sql_sa    = $query_sql_fin_sa.$query_sql_ini_sa;
-		
-		api_sql_query($query_sql_sp,__FILE__,__LINE__);
-		api_sql_query($query_sql_ip,__FILE__,__LINE__);
-		api_sql_query($query_sql_sa,__FILE__,__LINE__);
-		
+
+		Database::query($query_sql_sp,__FILE__,__LINE__);
+		Database::query($query_sql_ip,__FILE__,__LINE__);
+		Database::query($query_sql_sa,__FILE__,__LINE__);
+
 	}
-	
+
 /**
  * copy all directory and sub directory
  * @param string The path origin
@@ -1244,11 +1360,11 @@ class CourseRestorer
  * @param boolean Option Overwrite
  * @return void()
  */
-	function allow_create_all_directory($source, $dest, $overwrite = false){		
+	function allow_create_all_directory($source, $dest, $overwrite = false){
    		if(!is_dir($dest)) {
     		mkdir($dest);
     	}
-    
+
 	    if ($handle = opendir($source)) {        // if the folder exploration is sucsessful, continue
 	        while (false !== ($file = readdir($handle))) { // as long as storing the next file to $file is successful, continue
 	            if ($file != '.' && $file != '..') {
@@ -1287,7 +1403,7 @@ class CourseRestorer
 	/**
 	 * Restore glossary
 	 */
-	function restore_glossary()
+	function restore_glossary($session_id = 0)
 	{
 		if ($this->course->has_resources(RESOURCE_GLOSSARY))
 		{
@@ -1295,10 +1411,55 @@ class CourseRestorer
 			$t_item_propery = Database :: get_course_table(TABLE_ITEM_PROPERTY, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_GLOSSARY] as $id => $glossary) {
-				$this->course->resources[RESOURCE_GLOSSARY][$id]->destination_id = $glossary->glossary_id;
- 			    $sql = "INSERT INTO ".$table_glossary." SET glossary_id = '".Database::escape_string($glossary->glossary_id)."', name = '".Database::escape_string($glossary->name)."', description = '".Database::escape_string($glossary->description)."', display_order='".Database::escape_string($glossary->display_order)."'";
-			 	Database::query($sql, __FILE__, __LINE__);
 
+				$condition_session = "";
+    			if (!empty($session_id)) {
+    				$session_id = intval($session_id);
+    				$condition_session = " , session_id = '$session_id' ";
+    			}
+
+				$sql = "INSERT INTO ".$table_glossary." SET  name = '".Database::escape_string($glossary->name)."', description = '".Database::escape_string($glossary->description)."', display_order='".Database::escape_string($glossary->display_order)."' $condition_session ";
+				Database::query($sql, __FILE__, __LINE__);
+				$this->course->resources[RESOURCE_GLOSSARY][$id]->destination_id = Database::insert_id();
+
+			}
+		}
+	}
+	
+	function restore_wiki()
+	{
+		if ($this->course->has_resources(RESOURCE_WIKI))
+		{
+			// wiki table of the target course
+			$table_wiki = Database :: get_course_table('wiki', $this->course->destination_db);
+			$table_wiki_conf 	= Database :: get_course_table('wiki_conf', $this->course->destination_db);
+
+			// storing all the resources that have to be copied in an array
+			$resources = $this->course->resources;
+
+			foreach ($resources[RESOURCE_WIKI] as $id => $wiki)
+			{
+				//$wiki = new Wiki($obj->page_id, $obj->reflink, $obj->title, $obj->content, $obj->user_id, $obj->group_id, $obj->dtime);
+				// the sql statement to insert the groups from the old course to the new course
+				$sql = "INSERT INTO $table_wiki (page_id, reflink, title, content, user_id, group_id, dtime)
+							VALUES (
+							'".Database::escape_string($wiki->page_id)."',
+							'".Database::escape_string($wiki->reflink)."',
+							'".Database::escape_string($wiki->title)."',
+							'".Database::escape_string($wiki->content)."',
+							'".Database::escape_string($wiki->user_id)."', " .
+							(empty($wiki->group_id) ? 'NULL' : Database::escape_string($wiki->group_id)).",
+							'".Database::escape_string($wiki->dtime)."')";
+				$result = Database::query($sql, __FILE__, __LINE__);
+				$new_id = Database::insert_id();
+				$this->course->resources[RESOURCE_WIKI][$id]->destination_id = $new_id;
+				
+				// we also add an entry in wiki_conf
+				$sql = "INSERT INTO $table_wiki_conf 
+						(page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_size, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit) 
+						VALUES
+						('".Database::escape_string($wiki->page_id)."', '', '', '', '', '', '', '', NULL, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0)";
+				$result = Database::query($sql, __FILE__, __LINE__);						
 			}
 		}
 	}	

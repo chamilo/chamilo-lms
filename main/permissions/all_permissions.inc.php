@@ -1,7 +1,7 @@
 <?php
 /**
-* In this page all the possible rights inside a course are defined. 
-* This is the start for the Matrix that you'll use to assign rights to 
+* In this page all the possible rights inside a course are defined.
+* This is the start for the Matrix that you'll use to assign rights to
 * a user, group or role
 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
 */

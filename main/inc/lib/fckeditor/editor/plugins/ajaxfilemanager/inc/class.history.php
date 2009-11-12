@@ -15,7 +15,7 @@
 		/**
 		 * constructor
 		 *
-		 * @param string $path the path to the image 
+		 * @param string $path the path to the image
 		 * @param object $session an instance of session class
 		 */
 		function __construct($path, &$session)
@@ -26,14 +26,14 @@
 			{
 				$_SESSION[$this->path] = array();
 			}
-			
+
 		}
 		/**
 		 * constructor
 		 *
-		 * @param string $path the path to the image 
+		 * @param string $path the path to the image
 		 * @param object $session an instance of session class
-		 */		
+		 */
 		function History($path, &$session)
 		{
 			$this->__construct($path, $session);
@@ -66,11 +66,11 @@
 						if(file_exists($this->session->getSessionDir() . $v['name']))
 						{
 							$output++;
-						}else 
+						}else
 						{
-							
+
 						}
-						
+
 					}
 				}
 			}
@@ -85,7 +85,7 @@
 		function getLastestRestorable()
 		{
 			if(isset($_SESSION[$this->path]) && is_array($_SESSION[$this->path]) && sizeof($_SESSION[$this->path]))
-			{	
+			{
 				$sessionImages = array_reverse($_SESSION[$this->path], true);
 				$lastestKey = '';
 				foreach($sessionImages as $k=>$v)
@@ -94,11 +94,11 @@
 					{
 						return $sessionImages[$k];
 					}
-				}							
-				
+				}
+
 			}
 			return  array();
-			
+
 		}
 		/**
 		 * get the original image which is kept in the session folder
@@ -119,12 +119,12 @@
 						{
 							return array('info'=>$_SESSION[$this->path][$k], 'key'=>$k);
 						}
-						
+
 					}
 				}
-			}	
+			}
 			return $outputs;
-				
+
 		}
 		/**
 		 * remove the lastest restorable state
@@ -146,10 +146,10 @@
 					}
 				}
 			}
-			return false;		
+			return false;
 		}
 
-		
-		
+
+
 	}
 ?>

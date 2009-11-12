@@ -45,9 +45,9 @@ FCKDialog.Prompt = function( message, default_value, action, title, width, heigh
 	}
 
 	var custom_value = {} ;
-	custom_value.default_value = default_value
+	custom_value.default_value = default_value ;
 	custom_value.action = action ;
 	custom_value.message = message ;
-	
+
 	FCKDialog.OpenDialog( 'FCKDialog_Prompt', title, FCKConfig.PluginsPath + 'prompt/fck_prompt.html', width, height, custom_value ) ;
 }

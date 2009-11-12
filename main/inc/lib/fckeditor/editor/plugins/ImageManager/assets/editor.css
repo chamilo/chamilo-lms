@@ -9,7 +9,7 @@
 		{
 			width: 29px;
 			height: 20px;
-			background-color: #eef;			
+			background-color: #eef;
 			padding: 15px 20px;
 			position: absolute;
 			left: 0; top: 0;
@@ -42,7 +42,7 @@
 			border-top: 1px solid white;
 			border-right: 1px solid white;
 		}
-		
+
 		#contents
 		{
 			width: 600px;
@@ -50,14 +50,14 @@
 			position: absolute;
 			left: 70px; top: 51px;
 		}
-		
+
 		#editor
 		{
 			width: 600px;
 			height: 445px;
 		}
 
-		#toolbar a 
+		#toolbar a
 		{
 			padding: 5px 3px;
 			width: 52px;
@@ -73,7 +73,7 @@
 			background-color: #F9F9FF;
 			border-color: #669;
 		}
-		
+
 		#toolbar a.iconActive
 		{
 			border-color: #669;
@@ -83,13 +83,13 @@
 		{
 			display: block;
 			text-decoration: none;
-			
+
 		}
 		#toolbar a img
 		{
 			border: 0 none;
 		}
-		
+
 		#tools .textInput
 		{
 			width: 3em;
@@ -126,7 +126,7 @@
 		#tools #tool_inputs
 		{
 			padding-top: 10px;
-			float: left;			
+			float: left;
 		}
 		#tools .div
 		{
@@ -161,7 +161,7 @@
 	 top: 6px;
 	 margin: 0 -5px 0 -10px;
 
-	
+
 }
 
 
@@ -179,9 +179,9 @@
     z-index:6;
     border:1px solid #CCCCCC;
     background-color:#DDDDDD;
-    width:15px;     
+    width:15px;
     padding:0px;
-    height:20px; 
+    height:20px;
     cursor: pointer;
     top:2px;
 }

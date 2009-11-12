@@ -65,7 +65,7 @@ if ( ($cid=api_get_course_id()) != -1) { // with cid
         $filter[] = dokeos_get_boolean_query($prefix . $term);
 
         $sf_terms = get_usual_sf_terms($filter, $specific_fields);
-        
+
     } else { // no cid and all/any terms
         foreach ($specific_fields as $specific_field) {
             foreach(xapian_get_all_terms(1000, $specific_field['code']) as $raw_term) {

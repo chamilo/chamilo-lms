@@ -44,18 +44,18 @@ class ImsQuestion extends Question
 		{
 			case MCUA :
 				$this->answer = new ImsAnswerMultipleChoice($this->id, false);
-				break; 
+				break;
 			case MCMA :
-				$this->answer = new ImsAnswerMultipleChoice($this->id, true);	
+				$this->answer = new ImsAnswerMultipleChoice($this->id, true);
 				break;
 			case TF :
-				$this->answer = new ImsAnswerTrueFalse($this->id); 
+				$this->answer = new ImsAnswerTrueFalse($this->id);
 				break;
 			case FIB :
-				$this->answer = new ImsAnswerFillInBlanks($this->id); 
+				$this->answer = new ImsAnswerFillInBlanks($this->id);
 				break;
 			case MATCHING :
-				$this->answer = new ImsAnswerMatching($this->id); 
+				$this->answer = new ImsAnswerMatching($this->id);
 				break;
 			default :
 				$this->answer = null;
@@ -88,13 +88,13 @@ class ImsQuestion extends Question
 
             $this->setAttachment($file);
         }
-    } 
-} 
+    }
+}
 
 class ImsAnswerMultipleChoice extends answerMultipleChoice
 {
 	/**
-     * Return the XML flow for the possible answers. 
+     * Return the XML flow for the possible answers.
      * That's one <response_lid>, containing several <flow_label>
      *
      * @author Amand Tihon <amand@alrj.org>
@@ -111,36 +111,36 @@ class ImsAnswerMultipleChoice extends answerMultipleChoice
         {
 			$out = '<response_lid ident="MCS_' . $questionIdent . '" rcardinality="Single" rtiming="No"><render_choice shuffle="No">' . "\n";
         }
-        
+
         // Loop over answers
         foreach( $this->answerList as $answer )
         {
             $responseIdent = $questionIdent . "_A_" . $answer['id'];
-            
+
             $out.= '  <flow_label><response_label ident="' . $responseIdent . '">'.(!$this->multipleAnswer ? '<flow_mat class="list">':'').'<material>' . "\n"
                 . '    <mattext><![CDATA[' . $answer['answer'] . ']]></mattext>' . "\n"
                 . '  </material>'.(!$this->multipleAnswer ? '</flow_mat>':'').'</response_label></flow_label>' . "\n";
         }
         $out.= "</render_choice></response_lid>\n";
-        
+
         return $out;
     }
-    
+
     /**
-     * Return the XML flow of answer processing : a succession of <respcondition>. 
+     * Return the XML flow of answer processing : a succession of <respcondition>.
      *
      * @author Amand Tihon <amand@alrj.org>
      */
     function imsExportProcessing($questionIdent)
     {
         $out = '';
-        
+
         foreach( $this->answerList as $answer )
         {
             $responseIdent = $questionIdent . "_A_" . $answer['id'];
             $feedbackIdent = $questionIdent . "_F_" . $answer['id'];
             $conditionIdent = $questionIdent . "_C_" . $answer['id'];
-            
+
             if( $this->multipleAnswer )
         	{
 	            $out .= '<respcondition title="' . $conditionIdent . '" continue="Yes"><conditionvar>' . "\n"
@@ -151,9 +151,9 @@ class ImsAnswerMultipleChoice extends answerMultipleChoice
 	            $out .= '<respcondition title="' . $conditionIdent . '"><conditionvar>' . "\n"
 				.	 '  <varequal respident="MCS_' . $questionIdent . '">' . $responseIdent . '</varequal>' . "\n";
         	}
-               
+
             $out .= "  </conditionvar>\n" . '  <setvar action="Add">' . $answer['grade'] . "</setvar>\n";
-                
+
             // Only add references for actually existing comments/feedbacks.
             if( !empty($answer['comment']) )
             {
@@ -163,10 +163,10 @@ class ImsAnswerMultipleChoice extends answerMultipleChoice
         }
         return $out;
     }
-         
+
      /**
       * Export the feedback (comments to selected answers) to IMS/QTI
-      * 
+      *
       * @author Amand Tihon <amand@alrj.org>
       */
      function imsExportFeedback($questionIdent)
@@ -198,7 +198,7 @@ class ImsAnswerMultipleChoice extends answerMultipleChoice
 
         $this->answerList = array(); //re-initialize answer object content
 
-        
+
 
         foreach ($answerArray as $key => $answer)
         {
@@ -219,7 +219,7 @@ class ImsAnswerMultipleChoice extends answerMultipleChoice
                 $grade = $questionArray['weighting'][$key];
             }
             if (in_array($key,$questionArray['correct_answers'])) $is_correct = true; else $is_correct = false;
-            $addedAnswer = array( 
+            $addedAnswer = array(
                             'answer' => $answer['value'],
                             'correct' => $is_correct,
                             'grade' => $grade,
@@ -234,7 +234,7 @@ class ImsAnswerMultipleChoice extends answerMultipleChoice
 class ImsAnswerTrueFalse extends answerTrueFalse
 {
 	/**
-     * Return the XML flow for the possible answers. 
+     * Return the XML flow for the possible answers.
      * That's one <response_lid>, containing several <flow_label>
      *
      * @author Amand Tihon <amand@alrj.org>
@@ -243,83 +243,83 @@ class ImsAnswerTrueFalse extends answerTrueFalse
     {
         // Opening of the response block.
         $out = '<response_lid ident="TF_' . $questionIdent . '" rcardinality="Single" rtiming="No"><render_choice shuffle="No">' . "\n";
-       
+
         // true
-        $response_ident = $questionIdent . '_A_true';    
-		$out .= 
+        $response_ident = $questionIdent . '_A_true';
+		$out .=
 			'  <flow_label><response_label ident="'.$response_ident.'"><flow_mat class="list"><material>' . "\n"
 		.	'    <mattext><![CDATA[' . get_lang('True') . ']]></mattext>' . "\n"
 		.	'  </material></flow_mat></response_label></flow_label>' . "\n";
 
-		// false       
-		$response_ident = $questionIdent . '_A_false'; 
-        $out .= 
+		// false
+		$response_ident = $questionIdent . '_A_false';
+        $out .=
 			'  <flow_label><response_label ident="'.$response_ident.'"><flow_mat class="list"><material>' . "\n"
 		.	'    <mattext><![CDATA[' . get_lang('False') . ']]></mattext>' . "\n"
 		.	'  </material></flow_mat></response_label></flow_label>' . "\n";
-		
+
         $out .= '</render_choice></response_lid>' . "\n";
-        
+
         return $out;
     }
 
     /**
-     * Return the XML flow of answer processing : a succession of <respcondition>. 
+     * Return the XML flow of answer processing : a succession of <respcondition>.
      *
      * @author Amand Tihon <amand@alrj.org>
      */
     function imsExportProcessing($questionIdent)
     {
         $out = '';
-        
+
         // true
 		$response_ident = $questionIdent. '_A_true';
         $feedback_ident = $questionIdent . '_F_true';
         $condition_ident = $questionIdent . '_C_true';
-            
-		$out .= 
+
+		$out .=
 			'<respcondition title="' . $condition_ident . '"><conditionvar>' . "\n"
 		.	'  <varequal respident="TF_' . $questionIdent . '">' . $response_ident . '</varequal>' . "\n"
 		.	'  </conditionvar>' . "\n" . '  <setvar action="Add">' . $this->trueGrade . '</setvar>' . "\n";
-                
+
         // Only add references for actually existing comments/feedbacks.
         if( !empty($this->trueFeedback) )
         {
             $out.= '  <displayfeedback feedbacktype="Response" linkrefid="' . $this->trueFeedback . '" />' . "\n";
         }
-        
+
 		$out .= '</respcondition>' . "\n";
 
 		// false
 		$response_ident = $questionIdent. '_A_false';
         $feedback_ident = $questionIdent . '_F_false';
         $condition_ident = $questionIdent . '_C_false';
-				
-		$out .= 
+
+		$out .=
 			'<respcondition title="' . $condition_ident . '"><conditionvar>' . "\n"
 		.	'  <varequal respident="TF_' . $questionIdent . '">' . $response_ident . '</varequal>' . "\n"
 		.	'  </conditionvar>' . "\n" . '  <setvar action="Add">' . $this->falseGrade . '</setvar>' . "\n";
-                
+
         // Only add references for actually existing comments/feedbacks.
         if( !empty($this->falseFeedback) )
         {
             $out.= '  <displayfeedback feedbacktype="Response" linkrefid="' . $feedback_ident . '" />' . "\n";
         }
-        
+
 		$out .= '</respcondition>' . "\n";
-		
+
         return $out;
     }
-         
+
      /**
       * Export the feedback (comments to selected answers) to IMS/QTI
-      * 
+      *
       * @author Amand Tihon <amand@alrj.org>
       */
      function imsExportFeedback($questionIdent)
      {
         $out = "";
-        
+
         if( !empty($this->trueFeedback) )
         {
             $feedback_ident = $questionIdent . '_F_true';
@@ -327,7 +327,7 @@ class ImsAnswerTrueFalse extends answerTrueFalse
                 . '  <mattext><![CDATA[' . $this->trueFeedback . "]]></mattext>\n"
                 . "</material></flow_mat></itemfeedback>\n";
         }
-        
+
 		if( !empty($this->falseFeedback) )
         {
             $feedback_ident = $questionIdent . '_F_false';
@@ -339,7 +339,7 @@ class ImsAnswerTrueFalse extends answerTrueFalse
      }
 }
 
-class ImsAnswerFillInBlanks extends answerFillInBlanks 
+class ImsAnswerFillInBlanks extends answerFillInBlanks
 {
 	/**
      * Export the text with missing words.
@@ -352,7 +352,7 @@ class ImsAnswerFillInBlanks extends answerFillInBlanks
     function imsExportResponses($questionIdent)
     {
         global $charset;
-    
+
         $out = "<flow>\n";
 
         $responsePart = explode(']', $this->answer);
@@ -360,7 +360,7 @@ class ImsAnswerFillInBlanks extends answerFillInBlanks
         foreach($responsePart as $part)
         {
             $response_ident = $questionIdent . "_A_" . $i;
-        
+
             if( strpos($part,'[') !== false )
             {
                 list($rawText, $blank) = explode('[', $part);
@@ -375,7 +375,7 @@ class ImsAnswerFillInBlanks extends answerFillInBlanks
             {
                 $out.="  <material><mattext><![CDATA[" . $rawText . "]]></mattext></material>\n";
             }
-            
+
             if ($blank!="")
             {
                 $out.= '  <response_str ident="' . $response_ident . '" rcardinality="Single" rtiming="No">' . "\n"
@@ -389,9 +389,9 @@ class ImsAnswerFillInBlanks extends answerFillInBlanks
         $out.="</flow>\n";
 
         return $out;
-        
+
     }
-    
+
     /**
      * Exports the response processing.
      *
@@ -403,10 +403,10 @@ class ImsAnswerFillInBlanks extends answerFillInBlanks
     function imsExportProcessing($questionIdent)
     {
         $out = "";
-        
+
 		$answerCount = count($this->answerList);
-		
-		for( $i = 0; $i < $answerCount ; $i++ ) 
+
+		for( $i = 0; $i < $answerCount ; $i++ )
         {
             $response_ident = $questionIdent . "_A_" . $i;
             $out.= '  <respcondition continue="Yes"><conditionvar>' . "\n"
@@ -416,10 +416,10 @@ class ImsAnswerFillInBlanks extends answerFillInBlanks
         }
         return $out;
     }
-    
+
 	/**
       * Export the feedback (comments to selected answers) to IMS/QTI
-      * 
+      *
       * @author Amand Tihon <amand@alrj.org>
       */
      function imsExportFeedback($questionIdent)
@@ -447,7 +447,7 @@ class ImsAnswerFillInBlanks extends answerFillInBlanks
         }
 
         //build correct_answsers array
-        
+
         if (isset($questionArray['weighting']))
         {
             $this->gradeList = $questionArray['weighting'];
@@ -471,20 +471,20 @@ class ImsAnswerMatching extends answerMatching
             $out.= '<response_lid ident="' . $responseIdent . '" rcardinality="Single" rtiming="No">' . "\n"
                  . '<material><mattext><![CDATA[' . $leftElt['answer'] . "]]></mattext></material>\n"
                  . '  <render_choice shuffle="No"><flow_label>' . "\n";
-                 
-            foreach( $this->rightList as $rightElt ) 
+
+            foreach( $this->rightList as $rightElt )
             {
                 $out.= '    <response_label ident="' . $rightElt['code'] . '"><material>' . "\n"
                      . "      <mattext><![CDATA[" . $rightElt['answer'] . "]]></mattext>\n"
                      . "    </material></response_label>\n";
             }
-            
+
             $out.= "</flow_label></render_choice></response_lid>\n";
         }
-        
-       return $out; 
+
+       return $out;
     }
-    
+
     /**
      * Export the response processing part
      * @author Amand Tihon <amand@alrj.org>
@@ -501,11 +501,11 @@ class ImsAnswerMatching extends answerMatching
                  . "  </respcondition>\n";
         }
         return $out;
-    }   
-    
+    }
+
 	/**
       * Export the feedback (comments to selected answers) to IMS/QTI
-      * 
+      *
       * @author Amand Tihon <amand@alrj.org>
       */
      function imsExportFeedback($questionIdent)
@@ -528,7 +528,7 @@ class ImsAnswerMatching extends answerMatching
         //This tick to remove examples in the answers!!!!
         $this->leftList = array();
         $this->rightList = array();
-        
+
         //find right and left column
 
         $right_column = array_pop($answerArray);
@@ -561,5 +561,5 @@ class ImsAnswerMatching extends answerMatching
             }
         }
     }
-} 
+}
 ?>

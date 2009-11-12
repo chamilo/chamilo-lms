@@ -139,4 +139,16 @@ $AddAssessment = "Adicionar esta atividade de aula a avaliação";
 $FolderView = "Página Inicial da Avaliação";
 $GradebookSkillsRanking = "Sistema de pontuação";
 $SaveScoringRules = "Salvar pesos no relatório";
+$AttachCertificate = "Anexar Certificado";
+$GradebookSeeListOfStudentsCertificates = "Visualizar lista de certificados de alunos";
+$CreateCertificate = "Criar Certificado";
+$UploadCertificate = "Enviar Certificado";
+$CertificateName = "Nome do Certificado";
+$CertificateOverview = "Visualizar Certificado";
+$CreateCertificateWithTags = "Criar um Certificado com esta etiqueta";
+$PreviewCertificate = "Pré-visualização do Certificado";
+$IsDefaultCertificate = "Certificado marcado como padrão";
+$BackTo = "Voltar para";
+$Numero = "N";
+$ThereIsNotACertificateAvailableByDefault = "Não existe nenhum Certificado marcado como padrão";
 ?>

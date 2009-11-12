@@ -53,10 +53,10 @@ $tool_name = get_lang('DelCourse');
 if (isset($_GET['delete']) && $_GET['delete'] == 'yes')
 {
 	CourseManager :: delete_course($_course['sysCode']);
-	
+
 	$obj_cat=new Category();
 	$obj_cat->update_category_delete($_course['sysCode']);
-	
+
 	// DELETE CONFIRMATION MESSAGE
 	unset ($_course);
 	unset ($_cid);
@@ -69,7 +69,7 @@ else
 {
 	$message = "&quot;".$currentCourseName."&quot; "."(".$currentCourseCode.") "."<p>".get_lang("ByDel")."</p>"."<p>"."<a href=\"maintenance.php\">".get_lang("N")."</a>"."&nbsp;&nbsp;|&nbsp;&nbsp;"."<a href=\"".api_get_self()."?delete=yes\">".get_lang("Y")."</a>"."</p>";
 	$interbreadcrumb[] = array ("url" => "maintenance.php", "name" => get_lang('Maintenance'));
-} 
+}
 Display :: display_header($tool_name, "Settings");
 api_display_tool_title($tool_name);
 Display::display_warning_message($message,false);

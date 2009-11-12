@@ -88,7 +88,7 @@ function get_and_unzip_uploaded_exercise()
 
 function import_exercise($file)
 {
-    
+
     global $exercise_info;
     global $element_pile;
     global $non_HTML_tag_to_avoid;
@@ -181,9 +181,9 @@ function import_exercise($file)
         array_push ($backlog_message, '<b>'.$question_number.'-</b> Question found (' .$key. ')  : <b>' . $question['title'] . '</b>');
 		if (isset($question['statement'])) array_push ($backlog_message, '* Statement : ' . $question['statement']);
 		array_push ($backlog_message, '* Type : '      . $question['type']);
-		
+
 		foreach ($exercise_info['question'][$key]['answer'] as $answer)
-		{	
+		{
             if ($question['type']=="MATCHING")
             {
                 array_push ($backlog_message, '** Matchset : ');
@@ -256,13 +256,13 @@ function import_exercise($file)
         $question->setType($question_array['type']);
 
         if ($question->validate())
-        { 
+        {
             $question_id = $question->save();
 
             if ($question_id)
             {
                 //3.create answers
-    
+
                 $question->setAnswer();
                 $question->import($exercise_info['question'][$key], $exercise_info['question'][$key]['tempdir']);
                 $exercise->addQuestion($question_id);
@@ -426,10 +426,10 @@ function startElement($parser, $name, $attributes)
         {
             //in case of FIB question, we replace the IMS-QTI tag b y the correct answer between "[" "]",
             //we first save with claroline tags ,then when the answer will be parsed, the claroline tags will be replaced
-    
+
             if ($current_element=='INLINECHOICEINTERACTION')
             {
-           
+
                   $current_question_item_body .="**claroline_start**".$attributes['RESPONSEIDENTIFIER']."**claroline_end**";
             }
             if ($current_element=='TEXTENTRYINTERACTION')
@@ -443,7 +443,7 @@ function startElement($parser, $name, $attributes)
                 $current_question_item_body .= "<BR/>";
             }
         }
-        
+
     }
 
     switch ($current_element)
@@ -460,20 +460,20 @@ function startElement($parser, $name, $attributes)
             $exercise_info['question'][$current_question_ident]['tempdir'] = $questionTempDir;
         }
         break;
-		
+
         case 'SECTION' :
         {
          	//retrieve exercise name
-			
+
 			$exercise_info['name'] = $attributes['TITLE'];
-               
+
         }
 		break;
-		
+
 		case 'RESPONSEDECLARATION' :
         {
          	//retrieve question type
-			
+
 			if ( "multiple" == $attributes['CARDINALITY'])
 			{
 				$exercise_info['question'][$current_question_ident]['type'] = 'MCMA';
@@ -514,7 +514,7 @@ function startElement($parser, $name, $attributes)
             $exercise_info['question'][$current_question_ident]['response_text'] = $current_question_item_body;
 
             //replace claroline tags
-            
+
         }
         break;
 
@@ -654,18 +654,18 @@ function elementData($parser,$data)
     global $non_HTML_tag_to_avoid;
     global $current_inlinechoice_id;
     global $cardinality;
-	
+
     $current_element       = end($element_pile);
 	if (sizeof($element_pile)>=2) $parent_element        = $element_pile[sizeof($element_pile)-2]; else $parent_element = "";
 	if (sizeof($element_pile)>=3) $grant_parent_element  = $element_pile[sizeof($element_pile)-3]; else $grant_parent_element = "";
-	
+
 	//treat the record of the full content of itembody tag (needed for question statment and/or FIB text:
 
     if ($record_item_body && (!in_array($current_element,$non_HTML_tag_to_avoid)))
     {
         $current_question_item_body .= $data;
     }
-	
+
     switch ($current_element)
     {
         case 'SIMPLECHOICE':

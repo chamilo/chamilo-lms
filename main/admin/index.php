@@ -55,7 +55,7 @@ $tool_name=get_lang('PlatformAdmin');
 Display::display_header($nameTools);
 
 
-if(api_is_platform_admin()) 
+if(api_is_platform_admin())
 {
 	if(is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php'))
 	{
@@ -71,13 +71,13 @@ if(api_is_platform_admin())
 		register_site();
 		Display :: display_confirmation_message(get_lang('VersionCheckEnabled'));
 	}
-	
+
 	/*
 	==============================================================================
 			MAIN SECTION
 	==============================================================================
 	*/
-	$keyword_url = Security::remove_XSS((empty($_GET['keyword'])?'':$_GET['keyword']));	
+	$keyword_url = Security::remove_XSS((empty($_GET['keyword'])?'':$_GET['keyword']));
 }
 
 if (api_is_platform_admin()) {
@@ -85,7 +85,7 @@ if (api_is_platform_admin()) {
 		<div class="admin_section">
 	<h4><?php Display::display_icon('members.gif', get_lang('Users')); ?> <?php echo api_ucfirst(get_lang('Users')); ?></h4>
 	<ul>
-		<li style="list-style-type:none"><form method="get" action="user_list.php">	
+		<li style="list-style-type:none"><form method="get" action="user_list.php">
 			<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
 			<button class="search" type="submit"> <?php echo get_lang('Search');?>
 			</button>
@@ -96,9 +96,18 @@ if (api_is_platform_admin()) {
 		<li><a href="user_add.php">		<?php echo get_lang('AddUsers') ?></a></li>
 		<li><a href="user_export.php">	<?php echo get_lang('ExportUserListXMLCSV') ?></a></li>
 		<li><a href="user_import.php">	<?php echo get_lang('ImportUserListXMLCSV') ?></a></li>
-		<li><a href="user_fields.php">	<?php echo get_lang('ManageUserFields'); ?></a></li>
-	</ul>
-	</div>
+		<?php
+		if(isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap'])>0){
+			?>
+			<!-- dynamic ldap code -->
+			  <li><a href="ldap_users_list.php"><?php echo get_lang('ImportLDAPUsersIntoPlatform');?></a></li> 
+			<!-- dynamic ldap code -->
+			<?php
+			}
+		?>
+		<li><a href="user_fields.php">	<?php echo get_lang('ManageUserFields'); ?></a></li>	
+		</ul>
+		</div>
 <?php
 }
 else
@@ -106,7 +115,7 @@ else
 	?>
 	<div class="admin_section">
 	<h4><?php Display::display_icon('members.gif', get_lang('Users')); ?> <?php echo api_ucfirst(get_lang('Users')); ?></h4>
-	<ul>		
+	<ul>
 		<li><a href="user_list.php">	<?php echo get_lang('UserList') ?></a></li>
 		<li><a href="../mySpace/user_add.php">		<?php echo get_lang('AddUsers') ?></a></li>
 
@@ -120,14 +129,14 @@ if(api_is_platform_admin()) {
 ?>
 	<div class="admin_section">
 <h4><?php Display::display_icon('course.gif', get_lang('Courses')); ?> <?php echo api_ucfirst(get_lang('Courses')); ?></h4>
-		<ul><li style="list-style-type:none"><form method="get" action="course_list.php">	
+		<ul><li style="list-style-type:none"><form method="get" action="course_list.php">
 		<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
 		<button class="search" type="submit"> <?php echo get_lang('Search');?>
 			</button>
 		</form></li>
 		<li>
 		<a href="course_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a>
-	
+
 	</li>
 	<li><a href="course_list.php"><?php echo get_lang('CourseList') ?></a></li>
 	<li><a href="course_add.php"><?php echo get_lang('AddCourse') ?></a></li>
@@ -139,39 +148,51 @@ if(api_is_platform_admin()) {
 	<?php if (api_get_setting('search_enabled')=='true') { ?>
 	  <li><a href="specific_fields.php"><?php echo get_lang('SpecificSearchFields'); ?></a></li>
 	<?php } ?>
+	<?php
+		if(isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap'])>0){
+		?>
+		<!-- dynamic ldap code -->
+		<li><a href="ldap_import_students.php"><?php echo get_lang('ImportLDAPUsersIntoCourse');?></a></li>
+		<!-- dynamic ldap code -->
+		<?php
+		}
+	?>
+	
 	</ul>
 	</div>
-	
+
 	<div class="admin_section">
 	 <h4><?php Display::display_icon('settings.gif', get_lang('Platform')); ?> <?php echo api_ucfirst(get_lang('Platform')); ?></h4>
 	 <ul>
 	  <li><a href="settings.php"><?php echo get_lang('DokeosConfigSettings') ?></a></li>
+	  <li><a href="special_exports.php"><?php echo get_lang('SpecialExports') ?></a></li>
 	  <li><a href="system_announcements.php"><?php echo get_lang('SystemAnnouncements') ?></a></li>
 	  <li><a href="languages.php"><?php echo get_lang('Languages'); ?></a></li>
 	  <li><a href="configure_homepage.php"><?php echo get_lang('ConfigureHomePage'); ?></a></li>
+	  <li><a href="configure_inscription.php"><?php echo get_lang('ConfigureInscription'); ?></a></li>
 	  <li><a href="statistics/index.php"><?php echo get_lang('ToolName'); ?> </a></li>
 	  <li><a href="calendar.php"><?php echo get_lang('GlobalAgenda'); ?> </a></li>
 	  <?php if(!empty($phpMyAdminPath)) { ?>
 	  <li><a href="<?php echo $phpMyAdminPath; ?>" target="_blank"><?php echo get_lang("AdminDatabases"); ?></a><br />(<?php echo get_lang("DBManagementOnlyForServerAdmin"); ?>)</li>
 	  <?php } ?>
-	  <?php 
+	  <?php
 	  if(!empty($_configuration['multiple_access_urls']))
 	  {
 	    echo '<li><a href="access_urls.php">'.get_lang('ConfigureMultipleAccessURLs').'</a></li>';
 	  }
-	  
+
 	  if (api_get_setting('allow_reservation')=='true') {
 		  	echo '<li><a href="../reservation/m_category.php">'.get_lang('BookingSystem').'</a></li>';
 	  }
-	  
+
   	  if (api_get_setting('allow_terms_conditions')=='true') {
 		  	echo '<li><a href="legal_add.php">'.get_lang('TermsAndConditions').'</a></li>';
 	  }
-		
+
 	  ?>
 	 </ul>
 	</div>
-	
+
 	<?php
 }
 
@@ -183,17 +204,29 @@ if(api_get_setting('use_session_mode')=='true')
  <h4><?php Display::display_icon('agenda.gif', get_lang('Sessions')); ?> <?php echo get_lang('Sessions') ?></h4>
  <ul>
  <li style="list-style-type:none"><form method="POST" action="session_list.php">
-	<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
+	<input type="text" name="keyword_name" value="<?php echo $keyword_url; ?>"/>
 	<button class="search" type="submit"> <?php echo get_lang('Search');?>
 			</button>
 	</form>
 </li>
+  <li><a href="session_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a></li>
   <li><a href="session_list.php"><?php echo get_lang('ListSession') ?></a></li>
+  <li><a href="session_category_list.php"><?php echo get_lang('ListSessionCategory') ?></a></li>
   <li><a href="session_add.php"><?php echo get_lang('AddSession') ?></a></li>
   <li><a href="session_import.php"><?php echo get_lang('ImportSessionListXMLCSV') ?></a></li>
+  <?php
+		if(isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap'])>0){
+		?>
+		<!-- dynamic ldap code -->
+		 <li><a href="ldap_import_students_to_session.php"><?php echo get_lang('ImportLDAPUsersIntoSession');?></a></li>
+		<!-- dynamic ldap code -->
+		<?php
+		}
+	?>
   <li><a href="session_export.php"><?php echo get_lang('ExportSessionListXMLCSV') ?></a></li>
+  <li><a href="../coursecopy/copy_course_session.php"><?php echo get_lang('CopyFromCourseInSessionToAnotherSession') ?></a></li>
   </ul>
-</div>
+  </div>
 
 <?php
 }
@@ -239,9 +272,9 @@ if(api_is_platform_admin()){
   </ul>
 </div>
 <?php
-	if(isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap'])>0){
+	/*if(isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap'])>0){
 	?>
-	<!-- dynamic ldap code --> 
+	<!-- dynamic ldap code -->
 	<div class="admin_section">
 	 <h4><?php Display::display_icon('members.gif', 'LDAP'); ?> LDAP</h4>
 	 <ul>
@@ -252,14 +285,14 @@ if(api_is_platform_admin()){
 	 </ul>
 	</div>
 	<!-- dynamic ldap code -->
-	<?php 
-	}
+	<?php
+	}*/
 ?>
 <div class="admin_section">
  <h4><?php Display::display_icon('dokeos.gif', 'Dokeos'); ?> Dokeos.com</h4>
  <ul>
   <li><a href="http://www.dokeos.com/" target="_blank"><?php echo get_lang('DokeosHomepage'); ?></a></li>
-  <li><a href="http://www.dokeos.com/forum/" target="_blank"><?php echo get_lang('DokeosForum'); ?></a></li>  
+  <li><a href="http://www.dokeos.com/forum/" target="_blank"><?php echo get_lang('DokeosForum'); ?></a></li>
   <li><a href="http://www.dokeos.com/extensions/" target="_blank"><?php echo get_lang('DokeosExtensions'); ?></a></li>
   <li>
   <?php
@@ -287,19 +320,19 @@ function version_check()
 {
 	$tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 	$sql = 'SELECT selected_value FROM  '.$tbl_settings.' WHERE variable="registered" ';
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 	$row=Database::fetch_array($result,'ASSOC');
-								
+
 	// The site has not been registered yet
 	//if (api_get_setting('registered')=='false')
-	
+
 	$return = '';
 	if ($row['selected_value']=='false')
-	{	
+	{
 		$return .= '<form action="'.api_get_self().'" id="VersionCheck" name="VersionCheck" method="post">';
 		$return .= get_lang('VersionCheckExplanation');
 		$return .= '<input type="checkbox" name="donotlistcampus" value="1" id="checkbox" />'.get_lang('HideCampusFromPublicDokeosPlatformsList');
-		$return .= '<input type="submit" name="Register" value="'.get_lang('EnableVersionCheck').'" id="register" />';
+		$return .= '<button type="submit" class="save" name="Register" value="'.get_lang('EnableVersionCheck').'" id="register" />'.get_lang('EnableVersionCheck').'</button>';
 		$return .= '</form>';
 	}
 	else
@@ -338,13 +371,13 @@ function register_site()
 
 	// the SQL statment
 	$sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='registered'";
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 
 	//
 	if ($_POST['donotlistcampus'])
 	{
 		$sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='donotlistcampus'";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql,__FILE__,__LINE__);
 	}
 
 	// reload the settings
@@ -367,13 +400,13 @@ function check_dokeos_version2()
 	{
 		// the number of courses
 		$sql="SELECT count(code) FROM ".Database::get_main_table(TABLE_MAIN_COURSE);
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 		$row = Database::fetch_array($result);
 		$number_of_courses = $row[0];
 
 		// the number of users
 		$sql="SELECT count(user_id) FROM ".Database::get_main_table(TABLE_MAIN_USER);
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 		$row = Database::fetch_array($result);
 		$number_of_users = $row[0];
 

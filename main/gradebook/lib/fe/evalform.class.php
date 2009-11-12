@@ -45,7 +45,7 @@ class EvalForm extends FormValidator
 	private $evaluation_object;
 	private $result_object;
 	private $extra;
-	
+
 	/**
 	 * Builds a form containing form items based on a given parameter
 	 * @param int form_type 1=add, 2=edit,3=move,4=result_add
@@ -103,7 +103,7 @@ class EvalForm extends FormValidator
 				$select->addOption($letter,$letter,'selected');
 			} else {
 				$select->addOption($letter,$letter);
-			}	
+			}
 		}
 		$select= $this->addElement('select', 'add_users', null, null, array (
 			'multiple' => 'multiple',
@@ -113,13 +113,13 @@ class EvalForm extends FormValidator
 		foreach ($this->evaluation_object->get_not_subscribed_students() as $user) {
 			if ( (!isset($this->extra)) || empty($this->extra) || api_strtoupper(api_substr($user[1],0,1)) == $this->extra ) {
 				$select->addoption($user[1] . ' ' . $user[2] . ' (' . $user[3] . ')', $user[0]);
-			}	
+			}
 		}
 		$this->addElement('submit', 'submit_button', get_lang('AddUserToEval'));
 //		$this->setDefaults(array (
 //			'formSent' => '1'
 //		));
-		
+
 	}
 	/**
 	 * This function builds a form to edit all results in an evaluation
@@ -137,14 +137,14 @@ class EvalForm extends FormValidator
 			<div class="formw">
 			<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element} / '.$this->evaluation_object->get_max().'
 			</div>
-			</div>';		
+			</div>';
 
 		$results_and_users = array();
 		foreach ($this->result_object as $result) {
 			$user= get_user_info_from_id($result->get_user_id());
 			$results_and_users[] = array ('result' => $result, 'user' => $user);
 		}
-		
+
 		usort($results_and_users, array ('EvalForm', 'sort_by_user'));
 
 
@@ -152,7 +152,7 @@ class EvalForm extends FormValidator
 		foreach ($results_and_users as $result_and_user) {
 			$user = $result_and_user['user'];
 			$result = $result_and_user['result'];
-			
+
 			$renderer =& $this->defaultRenderer();
 			$this->add_textfield('score[' . $result->get_id() . ']',
 								 $this->build_stud_label($user['user_id'], $user['lastname'], $user['firstname']),
@@ -305,7 +305,7 @@ class EvalForm extends FormValidator
 		{
 			$form_title = get_lang('EditEvaluation');
 		}
-	
+
 		$this->addElement('header', '', $form_title);
 		$this->addElement('hidden', 'zero', 0);
 		$this->addElement('hidden', 'hid_user_id');

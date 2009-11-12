@@ -1,42 +1,42 @@
 <?php
 // $Id: DummyCourseCreator.class.php 15087 2008-04-25 04:37:14Z yannoo $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Bart Mollet (bart.mollet@hogent.be)
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
-============================================================================== 
+==============================================================================
 */
-require_once ('Course.class.php');
-require_once ('Document.class.php');
-require_once ('Event.class.php');
-require_once ('Link.class.php');
-require_once ('LinkCategory.class.php');
-require_once ('ForumCategory.class.php');
-require_once ('Forum.class.php');
-require_once ('ForumTopic.class.php');
-require_once ('ForumPost.class.php');
-require_once ('CourseDescription.class.php');
-require_once ('Learnpath.class.php');
-require_once ('CourseRestorer.class.php');
-require_once ('mkdirr.php');
-require_once ('rmdirr.php');
+
+require_once 'Course.class.php';
+require_once 'Document.class.php';
+require_once 'Event.class.php';
+require_once 'Link.class.php';
+require_once 'LinkCategory.class.php';
+require_once 'ForumCategory.class.php';
+require_once 'Forum.class.php';
+require_once 'ForumTopic.class.php';
+require_once 'ForumPost.class.php';
+require_once 'CourseDescription.class.php';
+require_once 'Learnpath.class.php';
+require_once 'CourseRestorer.class.php';
+
 class DummyCourseCreator
 {
 	/**
@@ -44,7 +44,7 @@ class DummyCourseCreator
 	 */
 	var $course;
 	/**
-	 * 
+	 *
 	 */
 	var $default_property = array();
 	/**
@@ -65,7 +65,7 @@ class DummyCourseCreator
 		$course = Database::get_course_info($course_code);
 		$this->course = new Course();
 		$tmp_path = api_get_path(SYS_COURSE_PATH).$course['directory'].'/document/tmp_'.uniqid('');
-		mkdirr($tmp_path);
+		@mkdir($tmp_path, 0755, true);
 		$this->course->backup_path = $tmp_path;
 		$this->create_dummy_links();
 		$this->create_dummy_events();
@@ -108,7 +108,7 @@ class DummyCourseCreator
 			$dir_to_make = $course_doc_path.$path;
 			if (!is_dir($dir_to_make))
 			{
-				mkdirr(str_replace('/',DIRECTORY_SEPARATOR,$dir_to_make));
+				@mkdir($dir_to_make, 0755, true);
 			}
 			$file = $course_doc_path.$path.$filename;
 			$fp = fopen($file, 'w');
@@ -122,7 +122,7 @@ class DummyCourseCreator
 		foreach($directories as $path => $flag)
 		{
 			$path = substr($path,0,strlen($path)-1);
-			$document = new Document($doc_id++,'/'.$path, $this->get_dummy_content('description'),$this->get_dummy_content('title'),'folder',0);	
+			$document = new Document($doc_id++,'/'.$path, $this->get_dummy_content('description'),$this->get_dummy_content('title'),'folder',0);
 			$property['lastedit_type'] = 'FolderCreated';
 			$document->item_properties[] = $property;
 			$this->course->add_resource($document);
@@ -192,7 +192,7 @@ class DummyCourseCreator
 		}
 		// create links
 		$number_of_links = rand(5, 50);
-		$on_homepage = rand(0,20) == 0 ? 1 : 0; 
+		$on_homepage = rand(0,20) == 0 ? 1 : 0;
 		$property = $this->default_property;
 		$property['lastedit_type'] = 'LinkAdded';
 		$property['tool'] = TOOL_LINK;
@@ -215,17 +215,19 @@ class DummyCourseCreator
 		$last_forum_post = array ();
 		$last_topic_post = array ();
 		// create categorys
+		$order = 1;
 		for ($i = 1; $i <= $number_of_categories; $i ++)
 		{
-			$forumcat = new ForumCategory($i, $this->get_dummy_content('title'));
+			$forumcat = new ForumCategory($i, $this->get_dummy_content('title'), $this->get_dummy_content('description'), $order, 0, 0);
 			$this->course->add_resource($forumcat);
+			$order++;
 		}
 		// create posts
 		for ($post_id = 1; $post_id <= $number_of_posts; $post_id ++)
 		{
 			$topic_id = rand(1, $number_of_topics);
 			$last_topic_post[$topic_id] = $post_id;
-			$post = new ForumPost($post_id, $this->get_dummy_content('title'), $this->get_dummy_content('text'), 0, '127.0.0.1', 'Dokeos', 'Administrator', 0, 0, $topic_id);
+			$post = new ForumPost($post_id, $this->get_dummy_content('title'), $this->get_dummy_content('text'), date('Y-m-d H:i:s'), 1, 'Dokeos Administrator', 0, 0, $topic_id, 0, 1);
 			$this->course->add_resource($post);
 		}
 		// create topics
@@ -269,7 +271,7 @@ class DummyCourseCreator
 				$resource = $resources[rand(0,count($resources)-1)];
 				$item = array();
 				$item['type'] = $resource->type;
-				$item['id'] = $resource->source_id;	
+				$item['id'] = $resource->source_id;
 				$item['display_order'] = $item_id;
 				$item['title'] = $this->get_dummy_content('title');
 				$item['description'] = $this->get_dummy_content('description');
@@ -277,14 +279,14 @@ class DummyCourseCreator
 				if( rand(0,5) == 1 && $item_id > 1)
 				{
 					$item['prereq_type'] = 'i';
-					$item['prereq'] = rand($global_item_id - $item_id,$global_item_id-1);	
+					$item['prereq'] = rand($global_item_id - $item_id,$global_item_id-1);
 				}
 				$chapter['items'][] = $item;
 				$global_item_id++;
 			}
-			$chapters[] = $chapter;	
+			$chapters[] = $chapter;
 		}
-		$lp = new Learnpath($i,$this->get_dummy_content('title'),$this->get_dummy_content('description'),1,$chapters);	
+		$lp = new Learnpath($i,$this->get_dummy_content('title'),$this->get_dummy_content('description'),1,$chapters);
 		$this->course->add_resource($lp);
 		}
 	}
@@ -303,7 +305,7 @@ class DummyCourseCreator
 		 case 'description':
 		 	$descriptions = explode(".",$dummy_text);
 		 	return $descriptions[rand(0,count($descriptions)-1)];
-		 	break;	
+		 	break;
 		 case 'title':
 		 	$dummy_text = str_replace(array("\n",'.',',',"\t"),array(' ','','',' '),$dummy_text);
 		 	$titles = explode(" ",$dummy_text);

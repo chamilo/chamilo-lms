@@ -13,7 +13,7 @@ $config['ToolbarSets']['Normal'] = array(
 	array('Link','Unlink','Anchor','Glossary'),
 	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex','asciimath','Table','SpecialChar'),
 	array('Outdent','Indent','TextColor','BGColor','-','OrderedList','UnorderedList','JustifyLeft','JustifyCenter','JustifyRight'),
-	'/',	
+	'/',
 	array('Style','FontFormat','FontName','FontSize'),
 	array('Bold','Italic','Underline','-','Source'),
 );//save, FitWindow don't run well here

@@ -54,7 +54,7 @@ class DropboxLink extends EvalLink
 				.' WHERE uploader_id = '.$stud_id
 				." AND title = '".Database::escape_string($eval->get_name())."'";
 
-		$result = api_sql_query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		if ($fileurl = Database::fetch_row($result)) {
 	    	$course_info = Database :: get_course_info($this->get_course_code());
 
@@ -66,21 +66,21 @@ class DropboxLink extends EvalLink
 
 			return $url;
 		} else {
-			return null;			
+			return null;
 		}
 	}
 
     public function get_type_name() {
     	return get_lang('DokeosDropbox');
     }
-    
+
 	public function is_allowed_to_change_name() {
 		return false;
 	}
 
-    
+
 // INTERNAL FUNCTIONS
-    
+
     /**
      * Lazy load function to get the dropbox database table
      */

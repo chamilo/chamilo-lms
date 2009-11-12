@@ -2,10 +2,10 @@
 /* For licensing terms, see /dokeos_license.txt */
 
 /**
-============================================================================== 
+==============================================================================
 *	@package dokeos.admin
 * 	@todo use formvalidator for the form
-============================================================================== 
+==============================================================================
 */
 
 // name of the language file that needs to be included
@@ -62,12 +62,12 @@ function search_coachs($needle)
 				$order_clause.
 				' LIMIT 10';
 
-		global $_configuration;	
-		if ($_configuration['multiple_access_urls']==true) {		
-			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+		global $_configuration;
+		if ($_configuration['multiple_access_urls']==true) {
+			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
-			if ($access_url_id != -1){			
-				
+			if ($access_url_id != -1){
+
 				$sql = 'SELECT username, lastname, firstname FROM '.$tbl_user.' user
 				INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
 				WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
@@ -75,12 +75,12 @@ function search_coachs($needle)
 				OR lastname LIKE "'.$needle.'%")
 				AND status=1'.
 				$order_clause.
-				' LIMIT 10';			
-				
+				' LIMIT 10';
+
 			}
-		}		
-				
-		$rs = api_sql_query($sql, __FILE__, __LINE__);
+		}
+
+		$rs = Database::query($sql, __FILE__, __LINE__);
 		while ($user = Database :: fetch_array($rs)) {
 			$return .= '<a href="javascript: void(0);" onclick="javascript: fill_coach_field(\''.$user['username'].'\')">'.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')</a><br />';
 		}
@@ -106,17 +106,19 @@ function fill_coach_field (username) {
 if ($_POST['formSent']) {
 	$formSent=1;
 	$name= $_POST['name'];
-	$year_start= $_POST['year_start']; 
-	$month_start=$_POST['month_start']; 
-	$day_start=$_POST['day_start']; 
-	$year_end=$_POST['year_end']; 
-	$month_end=$_POST['month_end']; 
-	$day_end=$_POST['day_end']; 
-	$nb_days_acess_before = $_POST['nb_days_acess_before']; 
-	$nb_days_acess_after = $_POST['nb_days_acess_after']; 
+	$year_start= $_POST['year_start'];
+	$month_start=$_POST['month_start'];
+	$day_start=$_POST['day_start'];
+	$year_end=$_POST['year_end'];
+	$month_end=$_POST['month_end'];
+	$day_end=$_POST['day_end'];
+	$nb_days_acess_before = $_POST['nb_days_acess_before'];
+	$nb_days_acess_after = $_POST['nb_days_acess_after'];
 	$nolimit=$_POST['nolimit'];
 	$coach_username=$_POST['coach_username'];
-	$return = SessionManager::create_session($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$coach_username);
+	$id_session_category = $_POST['session_category'];
+	$id_visibility = $_POST['session_visibility'];
+	$return = SessionManager::create_session($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$coach_username, $id_session_category,$id_visibility);
 	if ($return == strval(intval($return))) {
 		// integer => no error on session creation
 		header('Location: add_courses_to_session.php?id_session='.$return.'&add=true&msg=');
@@ -148,36 +150,36 @@ if (!empty($return)) {
 <form method="post" name="form" action="<?php echo api_get_self(); ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
 <div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
-<table border="0" cellpadding="5" cellspacing="0" width="600">
+<table border="0" cellpadding="5" cellspacing="0" width="650">
 <tr>
-  <td width="30%"><?php echo get_lang('SessionName') ?>&nbsp;&nbsp;</td>
-  <td width="70%"><input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); ?>"></td>
+  <td width="40%"><?php echo get_lang('SessionName') ?>&nbsp;&nbsp;</td>
+  <td width="60%"><input type="text" name="name" size="50" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); ?>"></td>
 </tr>
 <tr>
-  <td width="30%"><?php echo get_lang('CoachName') ?>&nbsp;&nbsp;</td>
-  <td width="70%">
+  <td width="40%"><?php echo get_lang('CoachName') ?>&nbsp;&nbsp;</td>
+  <td width="60%">
 <?php
 
 $sql = 'SELECT COUNT(1) FROM '.$tbl_user.' WHERE status=1';
-$rs = api_sql_query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql, __FILE__, __LINE__);
 $count_users = Database::result($rs, 0, 0);
 
 if (intval($count_users)<50) {
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
-	$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;	
-	global $_configuration;	
-	if ($_configuration['multiple_access_urls']==true) {		
-		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+	$sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
+	global $_configuration;
+	if ($_configuration['multiple_access_urls']==true) {
+		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$access_url_id = api_get_current_access_url_id();
-		if ($access_url_id != -1){					
+		if ($access_url_id != -1){
 			$sql = 'SELECT username, lastname, firstname FROM '.$tbl_user.' user
 			INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-			WHERE access_url_id = '.$access_url_id.'  AND status=1'.$order_clause;			
+			WHERE access_url_id = '.$access_url_id.'  AND status=1'.$order_clause;
 		}
-	}	
-	
-	$result=api_sql_query($sql,__FILE__,__LINE__);
-	$Coaches=api_store_result($result);
+	}
+
+	$result=Database::query($sql,__FILE__,__LINE__);
+	$Coaches=Database::store_result($result);
 	?>
 	<select name="coach_username" value="true" style="width:250px;">
 		<option value="0"><?php get_lang('None'); ?></option>
@@ -196,14 +198,32 @@ if (intval($count_users)<50) {
 
 </td>
 </tr>
+<?php
+	$id_session_category = '';
+	$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+	$sql = 'SELECT id, name FROM '.$tbl_session_category.' ORDER BY name ASC';
+	$result = Database::query($sql,__FILE__,__LINE__);
+	$Categories = Database::store_result($result);
+?>
 <tr>
-  <td width="30%"><?php echo get_lang('NoTimeLimits') ?></td>
-  <td width="70%">
+  <td width="40%"><?php echo get_lang('SessionCategory') ?></td>
+  <td width="60%">
+  	<select name="session_category" value="true" style="width:250px;">
+		<option value="0"><?php get_lang('None'); ?></option>
+		<?php foreach($Categories as $Rows): ?>
+		<option value="<?php echo $Rows['id']; ?>" <?php if($Rows['id'] == $id_session_category) echo 'selected="selected"'; ?>><?php echo $Rows['name']; ?></option>
+		<?php endforeach; ?>
+	</select>
+  </td>
+</tr>
+<tr>
+  <td width="40%"><?php echo get_lang('NoTimeLimits') ?></td>
+  <td width="60%">
   	<input type="checkbox" name="nolimit" onChange="setDisable(this)" />
   </td>
 <tr>
-  <td width="30%"><?php echo get_lang('DateStartSession') ?>&nbsp;&nbsp;</td>
-  <td width="70%">
+  <td width="40%"><?php echo get_lang('DateStartSession') ?>&nbsp;&nbsp;</td>
+  <td width="60%">
   <select name="day_start">
 	<option value="1">01</option>
 	<option value="2" <?php if((!$formSent && $thisDay == 2) || ($formSent && $day_start == 2)) echo 'selected="selected"'; ?> >02</option>
@@ -267,8 +287,8 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
   </td>
 </tr>
 <tr>
-  <td width="30%"><?php echo get_lang('DateEndSession') ?>&nbsp;&nbsp;</td>
-  <td width="70%">
+  <td width="40%"><?php echo get_lang('DateEndSession') ?>&nbsp;&nbsp;</td>
+  <td width="60%">
   <select name="day_end">
 	<option value="1">01</option>
 	<option value="2" <?php if((!$formSent && $thisDay == 2) || ($formSent && $day_end == 2)) echo 'selected="selected"'; ?> >02</option>
@@ -344,6 +364,22 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
 		</div>
 	</td>
 </tr>
+
+
+<tr>
+  <td width="40%"><?php echo get_lang('SessionVisibility') ?></td>
+  <td width="60%">
+  	<select name="session_visibility" style="width:250px;">
+		<?php
+		$visibility_list = array(SESSION_VISIBLE_READ_ONLY=>get_lang('ReadOnly'), SESSION_VISIBLE=>get_lang('Visible'), SESSION_INVISIBLE=>api_ucfirst(get_lang('Invisible')));
+		foreach($visibility_list as $key=>$item): ?>
+		<option value="<?php echo $key; ?>" <?php if($item == $visibility_id) echo 'selected="selected"'; ?>><?php echo $item; ?></option>
+		<?php endforeach; ?>
+	</select>
+  </td>
+</tr>
+
+
 <tr>
   <td>&nbsp;</td>
   <td><button class="save" type="submit" value="<?php echo get_lang('NextStep') ?>"><?php echo get_lang('NextStep') ?></button>
@@ -364,6 +400,8 @@ function setDisable(select){
 	document.form.month_end.disabled = (select.checked) ? true : false;
 	document.form.year_end.disabled = (select.checked) ? true : false;
 
+	document.form.session_visibility.disabled = (select.checked) ? true : false;
+	document.form.session_visibility.selectedIndex = 0;
 }
 </script>
 <?php

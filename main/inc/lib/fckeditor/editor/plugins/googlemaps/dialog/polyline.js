@@ -25,7 +25,7 @@ function createPoint(lat, lng, pLevel) {
     Level: pLevel
   };
 
-	if (currentIndex>-1) 
+	if (currentIndex>-1)
 		points.splice(currentIndex+1, 0, newPoint) ;
 	else
 	  points.push(newPoint);
@@ -34,7 +34,7 @@ function createPoint(lat, lng, pLevel) {
 	point_marker.focusable = true ; // To signal that the map must get the focus.
   map.addOverlay(point_marker);
 
-	if (currentIndex>-1) 
+	if (currentIndex>-1)
 		point_markers.splice(currentIndex+1, 0, point_marker) ;
 	else
 	  point_markers.push(point_marker);
@@ -155,9 +155,9 @@ function deletePoint() {
 }
 
 
-// Create the encoded polyline and level strings. 
+// Create the encoded polyline and level strings.
 function createEncodings() {
-	if (points.length==0) 
+	if (points.length==0)
 	{
 		document.getElementById('encodedLevels').value = '';
 		document.getElementById('encodedPolyline').value = '';

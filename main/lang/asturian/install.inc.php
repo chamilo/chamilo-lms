@@ -113,4 +113,7 @@ $DokeosArtLicense = "Les imáxenes y les galeríes de medios de Dokeos usen imáxen
 $PleasGoBackToStep1 = "Por favor, torne al Pasu 1";
 $OptionalParameters = "Parámetros opcionales";
 $FailedConectionDatabase = "La conesión a la base de datos falló. Pue ser que\'l nome d\'usuariu, la seña o el prefixu de la base datos nun valgan. Reviselos y vuelva intentalo.";
+$EncryptMethodUserPass = "Métodu d\'encriptación";
+$UpgradeFromDokeos16x = "Anovar dende Dokeos 1.6.x";
+$UpgradeFromDokeos18x = "Anovar dende Dokeos 1.8.x";
 ?>

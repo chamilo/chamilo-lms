@@ -68,7 +68,7 @@ function confirmation(name)
 	if (confirm(\" ".trim(get_lang('AreYouSureToDelete'))." ?\"))
 		{return true;}
 	else
-		{return false;} 
+		{return false;}
 }
 </script>";
 
@@ -130,7 +130,7 @@ $result = mysql_query ("SELECT * FROM $tbl_document
 				WHERE path LIKE    '".$curDirPath."/%'
 				AND   path NOT LIKE '".$curDirPath."/%/%'");
 
-if ($result) while($row = mysql_fetch_array($result, MYSQL_ASSOC))
+if ($result) while($row = Database::fetch_array($result, 'ASSOC'))
 {
   $attribute['path'      ][] = $row['path'      ];
   $attribute['visibility'][] = $row['visibility'];
@@ -162,9 +162,9 @@ if ( is_array($attribute) && ( count($attribute['path']) > 0 ) )
 {
   $queryClause = ' WHERE path IN ( "'.implode('" , "' , $attribute['path']).'" )';
 
-  api_sql_query("DELETE FROM $tbl_document ".$queryClause,__FILE__,__LINE__);
+  Database::query("DELETE FROM $tbl_document ".$queryClause,__FILE__,__LINE__);
 
-  api_sql_query("DELETE FROM $tbl_document WHERE comment LIKE '' AND visibility LIKE 'v'",__FILE__,__LINE__);
+  Database::query("DELETE FROM $tbl_document WHERE comment LIKE '' AND visibility LIKE 'v'",__FILE__,__LINE__);
   // The second query clean the DB 'in case of' empty records (no comment an visibility=v)
   // These kind of records should'nt be there, but we never know...
 
@@ -352,8 +352,8 @@ if ($fileList)
       $sqlpath="/".$fileList['name'][$fileKey]."";
     }
     $sql="SELECT name FROM $tbl_document WHERE ((path='$sqlpath') and (filetype='folder'))";
-    $result=api_sql_query($sql,__FILE__,__LINE__);
-    $row=mysql_fetch_array($result);
+    $result=Database::query($sql,__FILE__,__LINE__);
+    $row=Database::fetch_array($result);
     if ($row['name']) { $name=$row['name']; } else { $name=$dspFileName; }
     echo	"<tr align=\"center\"", " class=".$oddclass.">\n",
         	"<td align=\"left\" valign='middle'>&nbsp;",
@@ -416,20 +416,20 @@ if (!$curDirPath) {
 
   echo "<tr><td colspan='4'>&nbsp;</td></tr>";
   $sql="select * from $tbl_learnpath_main";
-  $result=api_sql_query($sql,__FILE__,__LINE__);
+  $result=Database::query($sql,__FILE__,__LINE__);
   $counter=0;
-  while ($row=mysql_fetch_array($result)) {
+  while ($row=Database::fetch_array($result)) {
     $counter++;
     if (($counter % 2)==0) { $oddclass="row_odd"; } else { $oddclass="row_even"; }
 
     $id=$row["learnpath_id"];
     $sql2="SELECT * FROM $tbl_learnpath_main where learnpath_id=$id";
-    $result2=api_sql_query($sql2,__FILE__,__LINE__);
-    $row2=mysql_fetch_array($result2);
+    $result2=Database::query($sql2,__FILE__,__LINE__);
+    $row2=Database::fetch_array($result2);
     $name=$row2['learnpath_name'];
     $sql3="SELECT * FROM $tbl_tool where (name=\"$name\" and image='scormbuilder.gif')";
-    $result3=api_sql_query($sql3,__FILE__,__LINE__);
-    $row3=mysql_fetch_array($result3);
+    $result3=Database::query($sql3,__FILE__,__LINE__);
+    $row3=Database::fetch_array($result3);
     if ((api_is_allowed_to_edit()) or ((!api_is_allowed_to_edit()) and ($row3["visibility"] == '1'))) {
       $row['learnpath_name']=str_replace(' ','&nbsp;',$row['learnpath_name']);
       if ($row3["visibility"] != '1') { $style=' class="invisible"'; } else { $style=''; }

@@ -52,9 +52,12 @@ FCKConfig.SmileyWindowHeight = 250 ;
  */
 
 // This is a list of all supported by the online editor languages.
-FCKConfig.AvailableLanguages = 'en,af,ar,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,gl,gu,he,hi,hr,hu,is,it,ja,km,ko,lt,lv,mn,ms,nb,nl,no,pl,pt-br,pt,ro,ru,sk,sl,sr-latn,sr,sv,th,tr,uk,vi,zh-cn,zh' ;
-// Loadding additional script that ensures the English language will be shown for plugins, if they are not provided with the requiested language files.
-LoadScript( FCKConfig.PluginsPath + 'customizations/fckplugin_load.js' ) ;
+FCKConfig.AvailableLanguages = 'en,af,ar,ast,bg,bn,bs,ca,cs,da,de,el,en-au,en-ca,en-uk,eo,es,et,eu,fa,fi,fo,fr-ca,fr,fur,gl,gu,he,hi,hr,hu,id,is,it,ja,ka,km,ko,lt,lv,mk,mn,ms,nb,nl,no,oc,pl,prs,ps,pt-br,pt,qu,ro,ru,sk,sl,sr-latn,sr,sv,sw,th,tr,uk,vi,yo,zh-cn,zh' ;
+// This script selects for loading source/compressed versions of some javascripts and ensures that the English language
+// would be shown for plugins, if they are not provided with the requiested language files.
+LoadScript( ( window.document.location.toString().indexOf('fckeditor.original.html') != -1 ) // Please, do not disable this script.
+	? ( FCKConfig.PluginsPath + 'customizations/fckplugin_load.js' )
+	: ( FCKConfig.PluginsPath + 'customizations/fckplugin_load_compressed.js' ) ) ;
 // Reading the list of the enabled in myconfig.php plugins.
 FCKConfig.LoadPlugin = eval( '(' + FCKConfig.PageConfig.LoadPlugin + ')' ) ;
 // Loading the enabled plugins.
@@ -80,14 +83,6 @@ FCKConfig.GoogleMaps_Key = 'ABQIAAAAlXu5Pw6DFAUgqM2wQn01gxT2yXp_ZAY8_ufC3CFXhHIE
 
 // You may add your own plugins here, i.e. write something as follows:
 // FCKConfig.Plugins.Add('my_plugin', 'en') ;
-
-
-/*
- * File Manager.
- */
-
-//Upload path for the Image manager. Leave it empty.
-FCKConfig.IMUploadPath = '' ;
 
 
 /*

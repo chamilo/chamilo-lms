@@ -6,26 +6,26 @@
  * @package ImageManager
  */
 
-	require_once('config.inc.php'); 
+	require_once('config.inc.php');
 	require_once('Classes/ImageManager.php');
-	
+
 	$manager = new ImageManager($IMConfig);
 	$dirs = $manager->getDirs();
 	$var = explode('/',$_GET['base_url_alt']);
 	/*
-	// if the base_url_alt parameter there is a default_course_document we change the allow upload parameter	
+	// if the base_url_alt parameter there is a default_course_document we change the allow upload parameter
 	if (($var[count($var)-2] == 'default_course_document') && !api_is_platform_admin())
-	{ 
+	{
 		$IMConfig['allow_upload']=false;
-	}	
+	}
 	*/
 	//clean injection string (XSS)
-	$base_url_alt = str_replace('"','',$_GET['base_url_alt']);		
-		
+	$base_url_alt = str_replace('"','',$_GET['base_url_alt']);
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $IMConfig['language']; ?>" lang="<?php echo $IMConfig['language']; ?>">
 <head>
 <title>Insert Image</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -112,7 +112,7 @@ body {
 
 	function Init()
 	{
-		if (window.opener)
+		if ( window.opener )
 		{
 			document.getElementById('dialog_title').style.visibility = '' ;
 		}
@@ -135,7 +135,7 @@ body {
 
 </head>
 
-<body onload="javascript: Init();">
+<body dir="<?php echo $IMConfig['text_direction']; ?>" onload="javascript: Init();">
 <div id="dialog_title" class="PopupTitle" style="visibility: hidden;">Insert Image</div>
 <form action="images.php" id="uploadForm" method="post" enctype="multipart/form-data">
 <fieldset style="margin-left: 15px; margin-right: 15px;"><legend>Image Manager</legend>
@@ -143,13 +143,13 @@ body {
 	<label for="dirPath">Directory</label>
 	<select name="dir" class="dirWidth" id="dirPath" onchange="javascript: updateDir(this);" style="width: 400px;">
 	<option value="/">/</option>
-<?php 		
+<?php
 	  foreach($dirs as $relative=>$fullpath) { ?>
-	  	<?php if($relative == '/images/gallery/') {?>	    
+	  	<?php if($relative == '/images/gallery/') {?>
 		<option value="<?php echo rawurlencode($relative); ?>" selected="selected"><?php echo $relative; ?></option>
 		<?php } else {?>
 		<option value="<?php echo rawurlencode($relative); ?>"><?php echo $relative; ?></option>
-		<?php } ?>	
+		<?php } ?>
 <?php } ?>
 	</select>
 	<a href="javascript: void(0);" onclick="javascript: goUpDir();" title="Directory Up"><img src="img/btnFolderUp.gif" height="15" width="15" alt="Directory Up" />&nbsp;<span>Directory Up</span></a>
@@ -172,7 +172,7 @@ body {
 			<td rowspan="3" align="right">&nbsp;</td>
 			<td align="right"><label for="f_vert">V Space</label></td>
 			<td><input type="text" id="f_vert" class="smallWidth" value="" /></td>
-		</tr>		
+		</tr>
 		<tr>
 			<td align="right"><label for="f_alt">Alt</label></td>
 			<td><input type="text" id="f_alt" class="largelWidth" value="" /></td>
@@ -213,7 +213,7 @@ body {
 			<td align="right"><label for="f_border">Border</label></td>
 			<td><input type="text" id="f_border" class="smallWidth" value="" /></td>
 		</tr>
-		<tr> 
+		<tr>
 <?php if (count($IMConfig['maxWidth']) > 1 && $IMConfig['allow_upload']){ ?>
 			<td align="right"><label for="uploadSize" style="white-space: nowrap;">Upload Size</label></td>
 			<td>

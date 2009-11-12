@@ -1,25 +1,25 @@
 <?php
 /**
  * Logiciel : HTML2PDF - classe ParsingHTML
- * 
- * Convertisseur HTML => PDF, utilise fpdf de Olivier PLATHEY 
- * Distribué sous la licence LGPL. 
+ *
+ * Convertisseur HTML => PDF, utilise fpdf de Olivier PLATHEY
+ * Distribuï¿½ sous la licence LGPL.
  *
  * @author		Laurent MINGUET <webmaster@spipu.net>
  * @version		3.24 - 05/08/2009
  */
- 
+
 if (!defined('__CLASS_PARSINGHTML__'))
 {
 	define('__CLASS_PARSINGHTML__', true);
-	
+
 	class parsingHTML
 	{
-		var $html	= '';			// code HTML à parser
-		var $code	= array();		// code HTML parsé
-		var $num	= 0;			// numéro de table
+		var $html	= '';			// code HTML ï¿½ parser
+		var $code	= array();		// code HTML parsï¿½
+		var $num	= 0;			// numï¿½ro de table
 		var $level	= 0;			// niveaux de table
-		
+
 		/**
 		 * Constructeur
 		 *
@@ -30,11 +30,11 @@ if (!defined('__CLASS_PARSINGHTML__'))
 			$this->num		= 0;
 			$this->level	= array($this->num);
 			$this->html		= '';
-			$this->code		= array();	
+			$this->code		= array();
 		}
-		
+
 		/**
-		 * Définir le code HTML à parser
+		 * Dï¿½finir le code HTML ï¿½ parser
 		 *
 		 * @param	string code html
 		 * @return	null
@@ -42,9 +42,9 @@ if (!defined('__CLASS_PARSINGHTML__'))
 		function setHTML($html)
 		{
 			$html = preg_replace('/<!--(.*)-->/isU', '', $html);
-			$this->html = $html;	
+			$this->html = $html;
 		}
-		
+
 		/**
 		 * parser le code HTML
 		 *
@@ -53,14 +53,14 @@ if (!defined('__CLASS_PARSINGHTML__'))
 		function parse()
 		{
 			$parents = array();
-			// récupérer le code à parser
+			// rï¿½cupï¿½rer le code ï¿½ parser
 			$content = $this->html;
-						
+
 			// chercher les balises HTML du code
 			$tmp = array();
 			$this->searchCode($content, $tmp);
-			
-			// identifier les balises une à une
+
+			// identifier les balises une ï¿½ une
 			$pre_in = false;
 			$pre_br = array(
 						'name' => 'br',
@@ -84,7 +84,7 @@ if (!defined('__CLASS_PARSINGHTML__'))
 						{
 							// remplacer tous les espaces, tabulations, saufs de ligne multiples par de simples espaces
 							$part[1] = preg_replace('/([\s]+)/is', ' ', $part[1]);
-					
+
 							$todos[] = array(
 											'name'	=> 'write',
 											'close'	=> false,
@@ -96,7 +96,7 @@ if (!defined('__CLASS_PARSINGHTML__'))
 					{
 						$part[1] = str_replace("\r", '', $part[1]);
 						$part[1] = explode("\n", $part[1]);
-						
+
 						foreach($part[1] as $k => $txt)
 						{
 							$txt = str_replace("\t", '        ', $txt);
@@ -130,7 +130,7 @@ if (!defined('__CLASS_PARSINGHTML__'))
 							}
 							else
 							{
-								$parents[count($parents)] = $res['name'];						
+								$parents[count($parents)] = $res['name'];
 							}
 						}
 						if ($res['name']=='pre' || $res['name']=='code')
@@ -139,10 +139,10 @@ if (!defined('__CLASS_PARSINGHTML__'))
 						}
 						$todos[] = $res;
 					}
-				}	
+				}
 			}
 
-			// pour chaque action identifiée, il faut nettoyer le début et la fin des textes
+			// pour chaque action identifiï¿½e, il faut nettoyer le dï¿½but et la fin des textes
 			// en fonction des balises qui l'entourent.
 			$nb = count($todos);
 			for($k=0; $k<$nb; $k++)
@@ -150,69 +150,69 @@ if (!defined('__CLASS_PARSINGHTML__'))
 				//si c'est un texte
 				if ($todos[$k]['name']=='write')
 				{
-					// et qu'une balise spécifique le précède => on nettoye les espaces du début du texte
+					// et qu'une balise spï¿½cifique le prï¿½cï¿½de => on nettoye les espaces du dï¿½but du texte
 					if ($k>0 && in_array($todos[$k-1]['name'], array('table', 'tr', 'td', 'th', 'br', 'div', 'hr', 'p', 'ul', 'ol', 'li')))
 						$todos[$k]['param']['txt'] = preg_replace('/^([\s]*)([^\s])/isU', '$2', 	$todos[$k]['param']['txt']);
 
-					// et qu'une balise spécifique le suit => on nettoye les espaces de la fin du texte
+					// et qu'une balise spï¿½cifique le suit => on nettoye les espaces de la fin du texte
 					if ($k<count($todos)-1 && in_array($todos[$k+1]['name'], array('table', 'tr', 'td', 'th', 'br', 'div', 'hr', 'p', 'ol', 'ul', 'li')))
 						$todos[$k]['param']['txt'] = preg_replace('/([^\s])([\s]*)$/isU', '$1', 	$todos[$k]['param']['txt']);
 				}
 			}
 			if (count($parents)) @HTML2PDF::makeError(5, __FILE__, __LINE__, $parents);
-			
-			// liste des actions sauvée
+
+			// liste des actions sauvï¿½e
 			$this->code = $todos;
 		}
-		
+
 		/**
 		 * parser le code HTML
 		 *
-		 * @param	string	contenu à parser.
-		 * @param	&array	tableau de retour des données
+		 * @param	string	contenu ï¿½ parser.
+		 * @param	&array	tableau de retour des donnï¿½es
 		 * @return	null
 		 */
 		function searchCode($content, &$tmp)
 		{
-			// séparer les balises du texte
+			// sï¿½parer les balises du texte
 			$tmp = array();
 			$reg = '/(<[^>]+>)|([^<]+)+/isU';
 
-			// pour chaque élément trouvé :
+			// pour chaque ï¿½lï¿½ment trouvï¿½ :
 			$str = '';
 			$offset = 0;
 			while(preg_match($reg, $content, $parse, PREG_OFFSET_CAPTURE, $offset))
 			{
-				// si une balise a été détectée
+				// si une balise a ï¿½tï¿½ dï¿½tectï¿½e
 				if ($parse[1][0])
 				{
-					// sauvegarde du texte précédent si il existe
+					// sauvegarde du texte prï¿½cï¿½dent si il existe
 					if ($str!=='')	$tmp[] = array('txt',$str);
-		
+
 					// sauvegarde de la balise
 					$tmp[] = array('code',trim($parse[1][0]));
-					
+
 					// initialisation du texte suivant
-					$str = ''; 	
+					$str = '';
 				}
 				else
 				{
-					// ajout du texte à la fin de celui qui est déjà détecté
+					// ajout du texte ï¿½ la fin de celui qui est dï¿½jï¿½ dï¿½tectï¿½
 					$str.= $parse[2][0];
 				}
 				// Update offset to the end of the match
 				$offset = $parse[0][1] + strlen($parse[0][0]);
-				unset($parse);					
+				unset($parse);
 			}
-			// si un texte est présent à la fin, on l'enregistre
+			// si un texte est prï¿½sent ï¿½ la fin, on l'enregistre
 			if ($str!='') $tmp[] = array('txt',$str);
 			unset($str);
 		}
-		
+
 		/**
 		 * analyse une balise HTML
 		 *
-		 * @param	string	code HTML à identifier
+		 * @param	string	code HTML ï¿½ identifier
 		 * @return	array	action correspondante
 		 */
 		function analiseCode($code)
@@ -222,32 +222,32 @@ if (!defined('__CLASS_PARSINGHTML__'))
 			preg_match('/'.$balise.'/isU', $code, $match);
 			$close	= ($match[1]=='/' ? true : false);
 			$name	= strtolower($match[2]);
-			
-			// paramètres obligatoires en fonction du nom de la balise
+
+			// paramï¿½tres obligatoires en fonction du nom de la balise
 			$param	= array();
 			$param['style'] = '';
 			if ($name=='img')	{ $param['alt'] = '';	$param['src'] = ''; }
 			if ($name=='a')		{ $param['href'] = '';	}
-			
-			// lecture des paramétres du type nom=valeur
+
+			// lecture des paramï¿½tres du type nom=valeur
 			$prop = '([a-zA-Z0-9_]+)=([^"\'\s>]+)';
 			preg_match_all('/'.$prop.'/is', $code, $match);
 			for($k=0; $k<count($match[0]); $k++)
 				$param[trim(strtolower($match[1][$k]))] = trim($match[2][$k]);
 
-			// lecture des paramétres du type nom="valeur"
+			// lecture des paramï¿½tres du type nom="valeur"
 			$prop = '([a-zA-Z0-9_]+)=["]([^"]*)["]';
 			preg_match_all('/'.$prop.'/is', $code, $match);
 			for($k=0; $k<count($match[0]); $k++)
 				$param[trim(strtolower($match[1][$k]))] = trim($match[2][$k]);
 
-			// lecture des paramétres du type nom='valeur'
+			// lecture des paramï¿½tres du type nom='valeur'
 			$prop = "([a-zA-Z0-9_]+)=[']([^']*)[']";
 			preg_match_all('/'.$prop.'/is', $code, $match);
 			for($k=0; $k<count($match[0]); $k++)
 				$param[trim(strtolower($match[1][$k]))] = trim($match[2][$k]);
-		
-			// mise en conformité en style de chaque paramètre
+
+			// mise en conformitï¿½ en style de chaque paramï¿½tre
 			$color	= "#000000";
 			$border	= null;
 			foreach($param as $key => $val)
@@ -258,7 +258,7 @@ if (!defined('__CLASS_PARSINGHTML__'))
 					case 'width':
 						unset($param[$key]);
 						$param['style'] = 'width: '.$val.'px; '.$param['style'];
-						break;	
+						break;
 
 					case 'align':
 						if ($name!=='table')
@@ -267,38 +267,38 @@ if (!defined('__CLASS_PARSINGHTML__'))
 							$param['style'] = 'text-align: '.$val.'; '.$param['style'];
 						}
 						break;
-						
+
 					case 'valign':
 						unset($param[$key]);
 						$param['style'] = 'vertical-align: '.$val.'; '.$param['style'];
 						break;
-						
+
 					case 'height':
 						unset($param[$key]);
-						$param['style'] = 'height: '.$val.'px; '.$param['style'];	
-						break;	
+						$param['style'] = 'height: '.$val.'px; '.$param['style'];
+						break;
 
 					case 'bgcolor':
 						unset($param[$key]);
-						$param['style'] = 'background: '.$val.'; '.$param['style'];					
-						break;	
+						$param['style'] = 'background: '.$val.'; '.$param['style'];
+						break;
 
 					case 'bordercolor':
 						unset($param[$key]);
 						$color = $val;
-						break;	
+						break;
 
 					case 'border':
 						unset($param[$key]);
 						if (preg_match('/^[0-9]$/isU', $val)) $val = $val.'px';
 						$border = $val;
 						break;
-					
+
 					case 'cellpadding':
 					case 'cellspacing':
 						if (preg_match('/^([0-9]+)$/isU', $val)) $param[$key] = $val.'px';
 						break;
-						
+
 					case 'colspan':
 					case 'rowspan':
 						$val = preg_replace('/[^0-9]/isU', '', $val);
@@ -310,10 +310,10 @@ if (!defined('__CLASS_PARSINGHTML__'))
 			if ($border!==null)
 			{
 				if ($border)	$param['style'] = 'border: solid '.$border.' '.$color.'; '.$param['style'];
-				else			$param['style'] = 'border: none'; 
+				else			$param['style'] = 'border: none';
 			}
-			
-			// lecture des styles - décomposition
+
+			// lecture des styles - dï¿½composition
 			$styles = explode(';', $param['style']);
 			$param['style'] = array();
 			foreach($styles as $style)
@@ -321,68 +321,68 @@ if (!defined('__CLASS_PARSINGHTML__'))
 				$tmp = explode(':', $style);
 				if (count($tmp)>1)
 				{
-					$cod = $tmp[0]; unset($tmp[0]); $tmp = implode(':', $tmp); 
+					$cod = $tmp[0]; unset($tmp[0]); $tmp = implode(':', $tmp);
 					$param['style'][trim(strtolower($cod))] = preg_replace('/[\s]+/isU', ' ', trim($tmp));
 				}
 			}
-			
-			// détermination du niveau de table pour les ouverture, avec ajout d'un level
+
+			// dï¿½termination du niveau de table pour les ouverture, avec ajout d'un level
 			if (in_array($name, array('ul', 'ol', 'table')) && !$close)
 			{
 				$this->num++;
 				$this->level[count($this->level)] = $this->num;
-			} 
-			
-			// attribution du niveau de table où se trouve l'élément
+			}
+
+			// attribution du niveau de table oï¿½ se trouve l'ï¿½lï¿½ment
 			if (!isset($param['num'])) $param['num'] = $this->level[count($this->level)-1];
 
 			// pour les fins de table : suppression d'un level
 			if (in_array($name, array('ul', 'ol', 'table')) && $close)
 			{
-				unset($this->level[count($this->level)-1]);			
-			} 
+				unset($this->level[count($this->level)-1]);
+			}
 
-			// retour de l'action identifiée
+			// retour de l'action identifiï¿½e
 			return array('name' => $name, 'close' => $close ? 1 : 0, 'param' => $param);
 		}
-		
-		// récupérer un niveau complet d'HTML entre une ouverture de balise et la fermeture correspondante
+
+		// rï¿½cupï¿½rer un niveau complet d'HTML entre une ouverture de balise et la fermeture correspondante
 		function getLevel($k)
 		{
 			// si le code n'existe pas : fin
 			if (!isset($this->code[$k])) return '';
-			
-			// quelle balise faudra-t-il détecter
+
+			// quelle balise faudra-t-il dï¿½tecter
 			$detect = $this->code[$k]['name'];
-			
+
 			$level = 0;		// niveau de profondeur
 			$end = false;	// etat de fin de recherche
 			$code = '';		// code extrait
-			
+
 			// tant que c'est pas fini, on boucle
 			while (!$end)
 			{
 				// action courante
 				$row = $this->code[$k];
-				
+
 				// si write => on ajoute le texte
 				if ($row['name']=='write')
 				{
-					$code.= $row['param']['txt'];	
+					$code.= $row['param']['txt'];
 				}
 				// sinon, c'est une balise html
 				else
 				{
 					$not = false; // indicateur de non prise en compte de la balise courante
-					
+
 					// si c'est la balise que l'on cherche
 					if ($row['name']==$detect)
 					{
-						if ($level==0) { $not = true; }					// si on est à la premiere balise : on l'ignore
+						if ($level==0) { $not = true; }					// si on est ï¿½ la premiere balise : on l'ignore
 						$level+= ($row['close'] ? -1 : 1);				// modification du niveau en cours en fonction de l'ouvertre / fermeture
 						if ($level==0) { $not = true; $end = true; }	// si on est au niveau 0 : on a fini
 					}
-					
+
 					// si on doit prendre en compte la balise courante
 					if (!$not)
 					{
@@ -400,19 +400,19 @@ if (!defined('__CLASS_PARSINGHTML__'))
 							else
 							{
 								$code.= ' '.$key.'="'.$val.'"';
-							}	
+							}
 						}
 						$code.= '>';
 					}
 				}
-				
-				// on continue tant qu'il y a du code à analyser...
+
+				// on continue tant qu'il y a du code ï¿½ analyser...
 				if (isset($this->code[$k+1]))
 					$k++;
 				else
-					$end = true;	
+					$end = true;
 			}
-			
+
 			// retourne la position finale et le code HTML extrait
 			return array($k, $code);
 		}

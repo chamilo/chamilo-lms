@@ -6,8 +6,8 @@ Installation Instructions
 1. Unzip the Flash plugin zip and paste it into "editor/plugins/"
 2. In fckconfig.js make the following additions;
 3. add the following line after where "FCKConfig.PluginsPath" is defined
- FCKConfig.Plugins.Add("Flash", "en,ru"); 
-4. Add 'Flash' to your toolsbarset in fckconfig.js. E.G., 
+ FCKConfig.Plugins.Add("Flash", "en,ru");
+4. Add 'Flash' to your toolsbarset in fckconfig.js. E.G.,
 
   FCKConfig.ToolbarSets["Default"] = [
     ['Flash', 'Bold', 'Italic']
@@ -26,6 +26,6 @@ The FlashBrowserURL line will be slightly different depending on how you've conf
 Please let me know if you experience any issues.
 
 
-References 
+References
 1 - Hernux Flash Patch [http://sourceforge.net/tracker/index.php?func=detail&aid=1051555&group_id=75348&atid=543655]
 2 - Installing the FindReplace Plugin [https://sourceforge.net/forum/message.php?msg_id=2943394]

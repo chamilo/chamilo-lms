@@ -28,7 +28,7 @@ require_once('HTML/QuickForm/Renderer/Default.php');
  * elements from their display, and being able to use QuickForm in
  * widget-based template systems.  See the online docs for more info.
  * For a usage example see: docs/renderers/QuickHtml_example.php
- * 
+ *
  * @access public
  * @package QuickForm
  */
@@ -43,7 +43,7 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
 
     // }}}
     // {{{ constructor
-    
+
     /**
      * Constructor
      *
@@ -102,7 +102,7 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
         $elementKey = null;
         // Find the key for the element
         foreach ($this->renderedElements as $key => $data) {
-            if ($data['name'] == $elementName && 
+            if ($data['name'] == $elementName &&
                 // See if the value must match as well
                 (is_null($elementValue) ||
                  $data['value'] == $elementValue)) {
@@ -112,12 +112,12 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
         }
 
         if (is_null($elementKey)) {
-            $msg = is_null($elementValue) ? "Element $elementName does not exist." : 
+            $msg = is_null($elementValue) ? "Element $elementName does not exist." :
                 "Element $elementName with value of $elementValue does not exist.";
             return PEAR::raiseError(null, QUICKFORM_UNREGISTERED_ELEMENT, null, E_USER_WARNING, $msg, 'HTML_QuickForm_Error', true);
         } else {
             if ($this->renderedElements[$elementKey]['rendered']) {
-                $msg = is_null($elementValue) ? "Element $elementName has already been rendered." : 
+                $msg = is_null($elementValue) ? "Element $elementName has already been rendered." :
                     "Element $elementName with value of $elementValue has already been rendered.";
                 return PEAR::raiseError(null, QUICKFORM_ERROR, null, E_USER_WARNING, $msg, 'HTML_QuickForm_Error', true);
             } else {
@@ -140,7 +140,7 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
      *
      * @access public
      * @return mixed HTML string of element if $immediateRender is set, else we just add the
-     *               html to the global _html string 
+     *               html to the global _html string
      */
     function renderElement(&$element, $required, $error)
     {
@@ -148,9 +148,9 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
         parent::renderElement($element, $required, $error);
         if (!$this->_inGroup) {
             $this->renderedElements[] = array(
-                    'name' => $element->getName(), 
-                    'value' => $element->getValue(), 
-                    'html' => $this->_html, 
+                    'name' => $element->getName(),
+                    'value' => $element->getValue(),
+                    'html' => $this->_html,
                     'rendered' => false);
         }
         $this->_html = '';
@@ -161,7 +161,7 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
 
     /**
      * Gets the html for a hidden element and adds it to the array.
-     * 
+     *
      * @param object     An HTML_QuickForm_hidden object being visited
      * @access public
      * @return void
@@ -169,12 +169,12 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
     function renderHidden(&$element)
     {
         $this->renderedElements[] = array(
-                'name' => $element->getName(), 
-                'value' => $element->getValue(), 
-                'html' => $element->toHtml(), 
+                'name' => $element->getName(),
+                'value' => $element->getValue(),
+                'html' => $element->toHtml(),
                 'rendered' => false);
     } // end func renderHidden
-    
+
     // }}}
     // {{{ finishGroup()
 
@@ -191,9 +191,9 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
         $this->_html = '';
         parent::finishGroup($group);
         $this->renderedElements[] = array(
-                'name' => $group->getName(), 
-                'value' => $group->getValue(), 
-                'html' => $this->_html, 
+                'name' => $group->getName(),
+                'value' => $group->getValue(),
+                'html' => $this->_html,
                 'rendered' => false);
         $this->_html = '';
     } // end func finishGroup

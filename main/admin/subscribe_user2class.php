@@ -23,9 +23,9 @@
 ==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	@package dokeos.admin
-============================================================================== 
+==============================================================================
 */
 // name of the language file that needs to be included
 $language_file = 'admin';
@@ -34,7 +34,10 @@ $cidReset = true;
 
 require ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'classmanager.lib.php');
+
+$this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
+
 $course = $_GET['course'];
 $class_id = intval($_GET['idclass']);
 $form_sent = 0;
@@ -50,9 +53,9 @@ $tbl_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 $tbl_user 		= Database :: get_main_table(TABLE_MAIN_USER);
 
 $sql = "SELECT name FROM $tbl_class WHERE id='$class_id'";
-$result = api_sql_query($sql, __FILE__, __LINE__);
+$result = Database::query($sql, __FILE__, __LINE__);
 
-if (!list ($class_name) = mysql_fetch_row($result))
+if (!list ($class_name) = Database::fetch_row($result))
 {
 	header('Location: class_list.php?filtreCours='.urlencode($course));
 	exit ();
@@ -112,14 +115,14 @@ Display :: display_header($tool_name);
 //api_display_tool_title($tool_name);
 $target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
 $sql = "SELECT u.user_id,lastname,firstname,username FROM $tbl_user u LEFT JOIN $tbl_class_user cu ON u.user_id=cu.user_id AND class_id='$class_id' WHERE ".$target_name." LIKE '".$first_letter_left."%' AND class_id IS NULL ORDER BY ". (count($left_user_list) > 0 ? "(user_id IN(".implode(',', $left_user_list).")) DESC," : "")." ".$target_name;
-$result = api_sql_query($sql, __FILE__, __LINE__);
-$left_users = api_store_result($result);
+$result = Database::query($sql, __FILE__, __LINE__);
+$left_users = Database::store_result($result);
 $sql = "SELECT u.user_id,lastname,firstname,username FROM $tbl_user u,$tbl_class_user cu WHERE cu.user_id=u.user_id AND class_id='$class_id' AND ".$target_name." LIKE '".$first_letter_right."%' ORDER BY ". (count($right_user_list) > 0 ? "(user_id IN(".implode(',', $right_user_list).")) DESC," : "")." ".$target_name;
-$result = api_sql_query($sql, __FILE__, __LINE__);
-$right_users = api_store_result($result);
+$result = Database::query($sql, __FILE__, __LINE__);
+$right_users = Database::store_result($result);
 if (!empty ($error_message))
 {
-	Display :: display_normal_message($error_message); 
+	Display :: display_normal_message($error_message);
 }
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?course=<?php echo urlencode($course); ?>&amp;idclass=<?php echo $class_id; ?>" style="margin:0px;">
@@ -129,19 +132,19 @@ if (!empty ($error_message))
    <td width="40%" align="center">
     <b><?php echo get_lang('UsersOutsideClass'); ?> :</b>
     <br/><br/>
-    <?php echo get_lang('FirstLetterUser'); ?> : 
+    <?php echo get_lang('FirstLetterUser'); ?> :
     <select name="firstLetterLeft" onchange="javascript:document.formulaire.formSent.value='2'; document.formulaire.submit();">
      <option value="">--</option>
       <?php
       echo Display :: get_alphabet_options($first_letter_left);
-      ?>  
+      ?>
     </select>
    </td>
    <td width="20%">&nbsp;</td>
    <td width="40%" align="center">
     <b><?php echo get_lang('UsersInsideClass'); ?> :</b>
     <br/><br/>
-    <?php echo get_lang('FirstLetterUser'); ?> : 
+    <?php echo get_lang('FirstLetterUser'); ?> :
     <select name="firstLetterRight" onchange="javascript:document.formulaire.formSent.value='2'; document.formulaire.submit();">
      <option value="">--</option>
 <?php
@@ -186,7 +189,7 @@ foreach ($right_users as $user)
 <?php
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
 */
 Display :: display_footer();

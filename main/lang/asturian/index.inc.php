@@ -65,4 +65,5 @@ $FolderCreated = "Creóse un direutoriu nuevu";
 $LinkAdded = "Amestóse un enllaz nuevu";
 $AnnouncementAdded = "Amestóse una anuncia";
 $AgendaAdded = "Amestóse un eventu a la axenda";
+$YouDoNotHaveAnySessionInItsHistory = "Nun tienes nenguna sesión de formación na to hestoria";
 ?>

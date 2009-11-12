@@ -25,10 +25,10 @@ $ModifyNote = "Modificar nota";
 $BackToNoteList = "Regresar a la lista de anotaciones";
 $NotebookManagement = "Administración de nota personal";
 $BackToNotesList = "Volver al listado de notas";
-$NotesSortedByTitleAsc = "Notas en orden ascendente por título";
-$NotesSortedByTitleDESC = "Notas en orden descendente por título";
-$NotesSortedByUpdateDateAsc = "Notas en orden ascendente por fecha de actualización";
-$NotesSortedByUpdateDateDESC = "Notas en orden descendente por fecha de actualización";
-$NotesSortedByCreationDateAsc = "Notas en orden ascendente por fecha de creación";
-$NotesSortedByCreationDateDESC = "Notas en orden descendente por fecha de creación";
+$NotesSortedByTitleAsc = "Notas ordenadas por título (A-Z)";
+$NotesSortedByTitleDESC = "Notas ordenadas por título (Z-A)";
+$NotesSortedByUpdateDateAsc = "Notas ordenadas por fecha de actualización (antiguas - recientes)";
+$NotesSortedByUpdateDateDESC = "Notas ordenadas por fecha de actualización (recientes - antiguas)";
+$NotesSortedByCreationDateAsc = "Notas ordenadas por fecha de creación (antiguas - recientes)";
+$NotesSortedByCreationDateDESC = "Notas ordenadas por fecha de creación (recientes - antiguas)";
 ?>

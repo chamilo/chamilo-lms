@@ -1,7 +1,7 @@
 
 AsciiMathML formula editor for Dokeos
 Author: Ivan Tcholakov (ivantcholakov@gmail.com), August 2009.
- 
+
 This work is a port for the FCKEditor of Equation plugin for the Xinha editor (http://xinha.org)
 by Raimund Meyer (ray) xinha@raimundmeyer.de, November 2006.
 

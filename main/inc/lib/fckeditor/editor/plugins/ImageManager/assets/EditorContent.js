@@ -3,11 +3,11 @@
 ** Version.......:  1.0
 ** Author........:  Xiang Wei ZHUO <wei@zhuo.org>
 ** Filename......:  EditorContents.js
-** Last changed..:  31 Mar 2004 
+** Last changed..:  31 Mar 2004
 ** Notes.........:  Handles most of the interface routines for the ImageEditor.
 *
 * Added:  29 Mar 2004  - Constrainted resizing/scaling
-**/ 
+**/
 
 
 function MM_findObj(n, d) { //v4.01
@@ -29,7 +29,7 @@ function P7_Snap() { //v2.62 by PVII
     if(document.getElementById) {
      d="document.getElementsByName('"+args[k]+"')[0]";
      if(!eval(d)) {d="document.getElementById('"+args[k]+"')";if(!eval(d)) {d=da;}}
-    }else if(document.all) {d=da;} 
+    }else if(document.all) {d=da;}
     if (document.all || document.getElementById) {
      while (tx==1) {p+=".offsetParent";
       if(eval(d+p)) {x+=parseInt(eval(d+p+".offsetLeft"));y+=parseInt(eval(d+p+".offsetTop"));
@@ -66,9 +66,9 @@ var dragapproved=false
 var z,x,y,status, ant, canvas, content, pic_width, pic_height, image, resizeHandle, oa_w, oa_h, oa_x, oa_y, mx2, my2;
 
 
-function init_resize() 
+function init_resize()
 {
-    if(mode == "scale") 
+    if(mode == "scale")
     {
         P7_Snap('theImage','ant',0,0);
 
@@ -81,7 +81,7 @@ function init_resize()
             pic_width = image.width;
             pic_height = image.height;
         }
-        
+
         if (ant == null)
             ant = MM_findObj("ant");
 
@@ -94,7 +94,7 @@ function init_resize()
     }
 }
 
-initEditor = function () 
+initEditor = function ()
 {
     init_crop();
     init_resize();
@@ -105,20 +105,20 @@ initEditor = function ()
         toggleMarker() ;
 }
 
-function init_crop() 
+function init_crop()
 {
     //if(mode == "crop") {
         P7_Snap('theImage','ant',0,0);
     //}
 }
 
-function setMode(newMode) 
+function setMode(newMode)
 {
     mode = newMode;
     reset();
 }
 
-function reset() 
+function reset()
 {
     if (ant == null)
         ant = MM_findObj("ant");
@@ -134,7 +134,7 @@ function reset()
 
     jg_doc.clear();
     if(mode != 'measure')
-        showStatus();   
+        showStatus();
 
     if(mode == "scale") {
         init_resize();
@@ -143,7 +143,7 @@ function reset()
     P7_Snap('theImage','ant',0,0);
 }
 
-function toggleMarker() 
+function toggleMarker()
 {
     //alert("Toggle");
     if (ant == null)
@@ -153,12 +153,12 @@ function toggleMarker()
         ant.className="selectionWhite";
     else
         ant.className="selection";
-    
+
     if (jg_doc.getColor() == "#000000")
         jg_doc.setColor("#FFFFFF");
     else
         jg_doc.setColor("#000000");
-    
+
     drawBoundHandle
     jg_doc.paint();
 }
@@ -209,13 +209,13 @@ function move(e)
                 ant.style.height = -1*h
             }
         }
-        
+
         showStatus();
         return false
     }
 }
 
-function moveContent(e) 
+function moveContent(e)
 {
     if (dragapproved)
     {
@@ -239,13 +239,13 @@ function moveContent(e)
 }
 
 //Code add for constraints by Frédéric Klee <fklee@isuisse.com>
-function moveHandle(e) 
+function moveHandle(e)
 {
     if (dragapproved)
     {
         var w = ns6? e.clientX - x : event.clientX - x;
         var h = ns6? e.clientY - y : event.clientY - y;
-        
+
 		//var constrained = MM_findObj('constProp', window.top.document);
 		var constrained = MM_findObj('constProp', window.parent.document);
         var orginal_height = document.theImage.height ;
@@ -253,14 +253,14 @@ function moveHandle(e)
         rapp = orginal_width/orginal_height ;
         rapp_inv = orginal_height / orginal_width ;
 
-        switch(resizeHandle) 
+        switch(resizeHandle)
         {
 
             case "s-resize":
-                if (oa_h + h >= 0) 
+                if (oa_h + h >= 0)
 				{
                     ant.style.height = oa_h + h;
-					if(constrained.checked) 
+					if(constrained.checked)
 					{
 						ant.style.width = rapp * (oa_h + h) ;
                         ant.style.left = oa_x - rapp * h/2;
@@ -272,7 +272,7 @@ function moveHandle(e)
                 if(oa_w + w >= 0)
 				{
                     ant.style.width = oa_w + w;
-					if(constrained.checked) 
+					if(constrained.checked)
 					{
                         ant.style.height = rapp_inv * (oa_w + w) ;
                         ant.style.top = oa_y - rapp_inv * w/2;
@@ -285,7 +285,7 @@ function moveHandle(e)
                 {
                     ant.style.top = oa_y + h;
                     ant.style.height = oa_h - h;
-					if(constrained.checked) 
+					if(constrained.checked)
 					{
 						ant.style.width = rapp * (oa_h - h) ;
                         ant.style.left = oa_x + rapp * h/2;
@@ -294,11 +294,11 @@ function moveHandle(e)
                 }
                 break;
             case "w-resize":
-                if(oa_w - w >= 0) 
+                if(oa_w - w >= 0)
 				{
                     ant.style.left = oa_x + w;
                     ant.style.width = oa_w - w;
-					if(constrained.checked) 
+					if(constrained.checked)
 					{
 						ant.style.height = rapp_inv * (oa_w - w) ;
 						ant.style.top = oa_y + rapp_inv * w/2;
@@ -310,7 +310,7 @@ function moveHandle(e)
                     ant.style.left = oa_x + w;
                     ant.style.width = oa_w - w;
                     ant.style.top = oa_y + h;
-                    if(constrained.checked) 
+                    if(constrained.checked)
                         ant.style.height = rapp_inv * (oa_w - w) ;
                     else
                         ant.style.height = oa_h - h;
@@ -320,14 +320,14 @@ function moveHandle(e)
                 if (oa_h - h >= 0 && oa_w + w >= 0){
                     ant.style.top = oa_y + h;
 					ant.style.width = oa_w + w;
-					if(constrained.checked) 
+					if(constrained.checked)
                         ant.style.height = rapp_inv * (oa_w + w) ;
                     else
                         ant.style.height = oa_h - h;
                 }
                 break;
             case "se-resize":
-                if (oa_h + h >= 0 && oa_w + w >= 0) 
+                if (oa_h + h >= 0 && oa_w + w >= 0)
                 {
                     ant.style.width = oa_w + w;
                     if(constrained.checked)
@@ -347,10 +347,10 @@ function moveHandle(e)
                        ant.style.height = oa_h + h;
 				}
         }
-        
+
         showStatus();
         return false;
-        
+
     }
 }
 
@@ -358,20 +358,20 @@ function drags(e)
 {
     if (!ie&&!ns6)
         return
-    
+
     var firedobj=ns6? e.target : event.srcElement
     var topelement=ns6? "HTML" : "BODY"
 
     while (firedobj.tagName && firedobj.tagName != topelement &&
-            !(firedobj.className=="crop" 
-                || firedobj.className=="handleBox" 
+            !(firedobj.className=="crop"
+                || firedobj.className=="handleBox"
                 || firedobj.className=="selection" || firedobj.className=="selectionWhite"))
     {
         firedobj=ns6? firedobj.parentNode : firedobj.parentElement
     }
 
     if(firedobj.className=="handleBox") {
-        
+
         if(content != null) {
             if(content.width != null && content.height != null) {
                 content.width = 0;
@@ -380,7 +380,7 @@ function drags(e)
             //alert(content.width+":"+content.height);
         }
         resizeHandle = firedobj.id;
-        
+
         /*if(status!=null) {
             status.innerHTML  = " obj:"+firedobj.id;
         }*/
@@ -399,10 +399,10 @@ function drags(e)
     }
     else
     if((firedobj.className == "selection" || firedobj.className=="selectionWhite")&& mode == "crop") {
-        
+
         x=ns6? e.clientX: event.clientX
         y=ns6? e.clientY: event.clientY
-        
+
         oa_x = parseInt(ant.style.left);
         oa_y = parseInt(ant.style.top);
 
@@ -471,15 +471,15 @@ function drags(e)
         }
 }
 
-function measure(e) 
+function measure(e)
 {
     if (dragapproved)
     {
         mx2 = ns6? e.clientX : event.clientX;
         my2 = ns6? e.clientY : event.clientY;
-        
+
         jg_doc.clear();
-        jg_doc.setStroke(Stroke.DOTTED); 
+        jg_doc.setStroke(Stroke.DOTTED);
         jg_doc.drawLine(x,y,mx2,my2);
         jg_doc.paint();
         showStatus();
@@ -487,7 +487,7 @@ function measure(e)
     }
 }
 
-function setMarker(nx,ny,nw,nh) 
+function setMarker(nx,ny,nw,nh)
 {
     if (ant == null)
         ant = MM_findObj("ant");
@@ -532,20 +532,20 @@ function setMarker(nx,ny,nw,nh)
         ant.style.height = -1*nh
     }
 
-    
+
 }
 
-function max(x,y) 
+function max(x,y)
 {
     if(y > x)
         return x;
-    else 
+    else
         return y;
 }
 
-function drawBoundHandle() 
+function drawBoundHandle()
 {
-    if(ant == null || ant.style == null) 
+    if(ant == null || ant.style == null)
         return false;
 
     var ah = parseInt(ant.style.height);
@@ -578,7 +578,7 @@ function drawBoundHandle()
     //jg_doc.paint();
 }
 
-function showStatus() 
+function showStatus()
 {
     if(ant == null || ant.style == null) {
         return false;
@@ -618,7 +618,7 @@ function showStatus()
             m_a.value = ma + "";
 
         if(r_ra != null &&!isNaN(ma))
-            r_ra.value = ma;            
+            r_ra.value = ma;
 
         //alert("mx1:"+mx1+" my1"+my1);
         return false;
@@ -633,7 +633,7 @@ function showStatus()
     var cy = ay-pic_y<0?0:ay-pic_y;
     cx = cx>pic_width?pic_width:cx;
     cy = cy>pic_height?pic_height:cy;
-    
+
     var cw = ax-pic_x>0?aw:aw-(pic_x-ax);
     var ch = ay-pic_y>0?ah:ah-(pic_y-ay);
 
@@ -641,7 +641,7 @@ function showStatus()
     cw = ax+aw<pic_x+pic_width?cw:cw-(ax+aw-pic_x-pic_width);
 
     ch = ch<0?0:ch; cw = cw<0?0:cw;
-    
+
     if (ant.style.visibility == "hidden")
     {
         cx = ""; cy = ""; cw=""; ch="";
@@ -650,11 +650,11 @@ function showStatus()
     if(mode == 'crop') {
         if(t_cx != null)
             t_cx.value = cx;
-        if (t_cy != null)   
+        if (t_cy != null)
             t_cy.value = cy;
         if(t_cw != null)
             t_cw.value = cw;
-        if (t_ch != null)   
+        if (t_ch != null)
             t_ch.value = ch;
     }
     else if(mode == 'scale') {
@@ -662,7 +662,7 @@ function showStatus()
         var sw = aw, sh = ah;
 
         if (s_sw.value.indexOf('%')>0 && s_sh.value.indexOf('%')>0)
-        {   
+        {
             sw = cw/pic_width;
             sh = ch/pic_height;
         }
@@ -697,7 +697,7 @@ function dragStopped()
         var ax = parseInt(ant.style.left);
         var ay = parseInt(ant.style.top);
         jg_doc.clear();
-        
+
         if(content != null) {
             if(content.width != null && content.height != null) {
                 content.width = aw-1;
@@ -708,7 +708,7 @@ function dragStopped()
         if(mode == "crop") {
             //alert(pic_y);
             jg_doc.fillRectPattern(pic_x,pic_y,pic_width,ay-pic_y,pattern);
-            
+
             var h1 = ah;
             var y1 = ay;
             if (ah+ay >= pic_height+pic_y)
@@ -736,7 +736,7 @@ function dragStopped()
 
         drawBoundHandle();
         jg_doc.paint();
-    
+
         showStatus();
     return false;
 }

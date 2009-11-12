@@ -1,6 +1,9 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$PublishSurvey = "Esplublizar encuesta";
+$CompareQuestions = "Comparar entrugues";
+$InformationUpdated = "Información anovada";
 $SurveyTitle = "Títulu de la encuesta";
 $SurveyIntroduction = "Introducción de la encuesta";
 $CreateNewSurvey = "Crear encuesta";
@@ -191,4 +194,12 @@ $NoLogOfDuration = "Nun hai rexistru de duración";
 $AutoInviteLink = "Los usuarios que nun tán invitaos puen usar esti enllaz pa facer la encuesta:";
 $CompleteTheSurveysQuestions = "Respuenda a les entrugues de la encuesta";
 $SurveysDeleted = "Encuestes esborraes";
+$RemindUnanswered = "Remembrar sólo pa los usuarios que nun retrucaron";
+$ModifySurvey = "Camudar encuesta";
+$CreateQuestionSurvey = "Criar entruga";
+$ModifyQuestionSurvey = "Camudar entruga";
+$BackToSurvey = "Volver a la encuesta";
+$UpdateInformation = "Anovamientu d\'información";
+$PleaseFillSurvey = "Por favor, rellena la encuesta";
+$ReportingOverview = "Sumariu d\'informes";
 ?>

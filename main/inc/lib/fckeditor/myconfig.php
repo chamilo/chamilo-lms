@@ -80,7 +80,10 @@ $config['ToolbarSets']['Directory'] = 'default';
 $config['LoadPlugin'][] = 'customizations';
 
 // dragresizetable & tablecommands : Plugins for improvement table-related operations.
-$config['LoadPlugin'][] = 'dragresizetable';
+if (trim(get_lang('text_dir', '')) != 'rtl') {
+	// This plugin works properly only when language writting system is "from left to right (ltr)".
+	$config['LoadPlugin'][] = 'dragresizetable';
+}
 $config['LoadPlugin'][] = 'tablecommands';
 
 // prompt : This plugin is a dialog implementation as a replacemet of the javascript function prompt().
@@ -272,6 +275,9 @@ if ((api_get_setting('advanced_filemanager') == 'true')) {
 //$config['FontFormats'] = 'p;h1;h2;h3;h4;h5;h6;pre;address;div';
 $config['FontFormats'] = 'p;h1;h2;h3;h4;h5'; // A reduced format list.
 
+// The following setting guarantees white backgroung for the editing area
+// for all browsers. You may disable or change it if you wish.
+$config['EditorAreaStyles'] = 'body { background-color: #ffffff; }';
 
 /*
  * Additional note:

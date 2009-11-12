@@ -1,47 +1,47 @@
-<?php // $Id: course_virtual.php 20441 2009-05-10 07:39:15Z ivantcholakov $ 
+<?php // $Id: course_virtual.php 20441 2009-05-10 07:39:15Z ivantcholakov $
 /*
-============================================================================== 
+==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004-2005 Dokeos S.A.
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
-============================================================================== 
+==============================================================================
 */
 /**
-============================================================================== 
+==============================================================================
 *	@author Roan Embrechts - initial admin interface
 *	@package dokeos.admin
-============================================================================== 
+==============================================================================
 */
 
 /*
-============================================================================== 
+==============================================================================
 		INIT SECTION
-============================================================================== 
-*/ 
+==============================================================================
+*/
 
-// name of the language file that needs to be included 
-$language_file = 'admin'; 
+// name of the language file that needs to be included
+$language_file = 'admin';
 $extra_lang_file = "create_course";
 
-// global settings initialisation 
+// global settings initialisation
 // also provides access to main api (inc/lib/main_api.lib.php)
-include("../inc/global.inc.php"); 
+include("../inc/global.inc.php");
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -53,7 +53,7 @@ if (isset($extra_lang_file)) include(api_get_path(INCLUDE_PATH)."../lang/".$lang
 -----------------------------------------------------------
 	Libraries
 -----------------------------------------------------------
-*/ 
+*/
 
 include_once(api_get_path(LIBRARY_PATH) . 'course.lib.php');
 
@@ -61,7 +61,7 @@ include_once(api_get_path(LIBRARY_PATH) . 'course.lib.php');
 -----------------------------------------------------------
 	Constants
 -----------------------------------------------------------
-*/ 
+*/
 
 define ("CREATE_VIRTUAL_COURSE_OPTION", "create_virtual_course");
 define ("DISPLAY_VIRTUAL_COURSE_LIST_OPTION", "display_virtual_course_list");
@@ -80,19 +80,19 @@ define ("COURSE_CATEGORY_FORM_NAME" , "course_category");
 -----------------------------------------------------------
 	Header
 -----------------------------------------------------------
-*/ 
+*/
 
-$tool_name = get_lang('AdminManageVirtualCourses'); // title of the page (should come from the language file) 
+$tool_name = get_lang('AdminManageVirtualCourses'); // title of the page (should come from the language file)
 
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 
 Display::display_header($tool_name);
 
 /*
-============================================================================== 
+==============================================================================
 		DISPLAY FUNCTIONS
-============================================================================== 
-*/ 
+==============================================================================
+*/
 
 function make_strong($text)
 {
@@ -122,7 +122,7 @@ function get_language_folder_list($dirname)
 }
 
 /**
-* Displays a select element (drop down menu) so the user can select 
+* Displays a select element (drop down menu) so the user can select
 * the course language.
 * @todo function does not belong here, move to (display?) library,
 * @todo language display used apparently no longer existing array, converted to english for now.
@@ -131,25 +131,25 @@ function get_language_folder_list($dirname)
 function display_language_select($element_name)
 {
 	global $platformLanguage;
-	
+
 	//get language list
 	$dirname = api_get_path(SYS_PATH)."main/lang/";
 	$language_list = get_language_folder_list($dirname);
 	sort($language_list);
-	
+
 	//build array with strings to display
 	foreach ($language_list as $this_language)
-	{	
+	{
 		$language_to_display[$this_language] = $this_language;
 	}
-	
+
 	//sort alphabetically
 	//warning: key,value association needs to be maintained --> asort instead of sort
 	asort($language_to_display);
-			 
+
 	$user_selected_language = $_SESSION["user_language_choice"];
 	if (! isset($user_selected_language) ) $user_selected_language = $platformLanguage;
-	
+
 	//display
 	echo "<select name=\"$element_name\">";
 	foreach ($language_to_display as $key => $value)
@@ -171,9 +171,9 @@ function display_language_select($element_name)
 *	We display the course code, but internally store the course id.
 */
 function display_real_course_code_select($element_name)
-{	
+{
 	$real_course_list = CourseManager::get_real_course_list();
-			
+
 	echo "<select name=\"$element_name\" size=\"".SELECT_BOX_SIZE."\" >\n";
 	foreach($real_course_list as $real_course)
 	{
@@ -200,10 +200,10 @@ function display_create_virtual_course_form()
 	<table>
 	<tr valign="top">
 	<td colspan="2">
-	
+
 	</td>
 	</tr>
-	
+
 	<tr valign="top">
 	<td align="right">
 		<?php
@@ -214,20 +214,20 @@ function display_create_virtual_course_form()
 		?>
 	</td>
 	</tr>
-	
+
 	<tr valign="top">
 	<td align="right"><?php echo make_strong(get_lang('CourseFaculty')) . "&nbsp;"; ?> </td>
 	<td>
 		<?php
 			echo "<select name=\"".COURSE_CATEGORY_FORM_NAME."\">";
-			
+
 			$sql_query = "SELECT code, name
 									FROM $category_table
 									WHERE auth_course_child ='TRUE'
 									ORDER BY tree_pos";
-			$category_result = api_sql_query($sql_query, __FILE__, __LINE__);
-		
-			while ($current_category = mysql_fetch_array($category_result))
+			$category_result = Database::query($sql_query, __FILE__, __LINE__);
+
+			while ($current_category = Database::fetch_array($category_result))
 			{
 				echo "<option value=\"", $current_category["code"], "\"";
 				echo ">(", $current_category["code"], ") ", $current_category["name"];
@@ -238,7 +238,7 @@ function display_create_virtual_course_form()
 	<br /><?php echo make_strong(get_lang('TargetFac'))  . "&nbsp;" ?>
 	</td>
 	</tr>
-	
+
 	<tr valign="top">
 	<td align="right"><?php echo make_strong(get_lang('Code'))  . "&nbsp;" ?> </td>
 	<td>
@@ -248,10 +248,10 @@ function display_create_virtual_course_form()
 	?>
 	</td>
 	</tr>
-	
+
 	<tr valign="top">
 	<td align="right">
-	<?php echo make_strong(get_lang('RealCourseCode'))  . "&nbsp;" ?> 
+	<?php echo make_strong(get_lang('RealCourseCode'))  . "&nbsp;" ?>
 	</td>
 	<td>
 		<?php
@@ -260,12 +260,12 @@ function display_create_virtual_course_form()
 		?>
 	</td>
 	</tr>
-	
+
 	<tr valign="top">
 	<td align="right">
-		<?php 
+		<?php
 			echo make_strong(get_lang('CourseLanguage')) . "&nbsp;";
-		?> 
+		?>
 	</td>
 	<td> <?php  display_language_select(LANGUAGE_SELECT_FORM_NAME); ?>
 
@@ -299,19 +299,19 @@ function display_virtual_course_list()
 		echo "<i>".get_lang('ThereAreNoVirtualCourses')."</i>";
 		return;
 	}
-	
-	$column_header[] = array(get_lang('Title'),true);					
-	$column_header[] = array(get_lang('Code'),true);				
-	$column_header[] = array(get_lang('VisualCode'),true);				
-	$column_header[] = array(get_lang('LinkedCourseTitle'),true);	
-	$column_header[] = array(get_lang('LinkedCourseCode'),true);		
+
+	$column_header[] = array(get_lang('Title'),true);
+	$column_header[] = array(get_lang('Code'),true);
+	$column_header[] = array(get_lang('VisualCode'),true);
+	$column_header[] = array(get_lang('LinkedCourseTitle'),true);
+	$column_header[] = array(get_lang('LinkedCourseCode'),true);
 	$table_data = array();
 	for($i = 0; $i < count($course_list); $i++)
 	{
 		$course_list[$i] = Database::generate_abstract_course_field_names($course_list[$i]);
 		$target_course_code = $course_list[$i]["target_course_code"];
 		$real_course_info = Database::get_course_info($target_course_code);
-		
+
 		$row = array();
 		$row[] = $course_list[$i]["title"];
 		$row[] = $course_list[$i]["system_code"];
@@ -325,9 +325,9 @@ function display_virtual_course_list()
 
 
 /*
-============================================================================== 
+==============================================================================
 		TOOL LOGIC FUNCTIONS
-============================================================================== 
+==============================================================================
 */
 
 /**
@@ -336,25 +336,25 @@ function display_virtual_course_list()
 *	Call this function instead of create_virtual_course
 */
 function attempt_create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category)
-{		
-	//better: create parameter list, check the entire list, when false display errormessage	
+{
+	//better: create parameter list, check the entire list, when false display errormessage
 	CourseManager::check_parameter_or_fail($real_course_code, "Unspecified parameter: real course id.");
 	CourseManager::check_parameter_or_fail($course_title, "Unspecified parameter: course title.");
 	CourseManager::check_parameter_or_fail($wanted_course_code, "Unspecified parameter: wanted course code.");
 	CourseManager::check_parameter_or_fail($course_language, "Unspecified parameter: course language.");
 	CourseManager::check_parameter_or_fail($course_category, "Unspecified parameter: course category.");
-	
+
 	$message = get_lang('AttemptedCreationVirtualCourse') . "<br/>";
 	$message .= get_lang('CourseTitle') . " " . $course_title . "<br/>";
 	$message .= get_lang('WantedCourseCode') . " " . $wanted_course_code . "<br/>";
 	$message .= get_lang('CourseLanguage') . " " . $course_language . "<br/>";
 	$message .= get_lang('CourseFaculty') . " " . $course_category . "<br/>";
 	$message .= get_lang('LinkedToRealCourseCode') . " " . $real_course_code . "<br/>";
-	
+
 	Display::display_normal_message($message);
-	
+
 	$creation_success = CourseManager::create_virtual_course( $real_course_code, $course_title, $wanted_course_code, $course_language, $course_category );
-	
+
 	if ($creation_success == true)
 	{
 		Display::display_normal_message( $course_title . " - " . get_lang('CourseCreationSucceeded') );
@@ -362,12 +362,12 @@ function attempt_create_virtual_course($real_course_code, $course_title, $wanted
 	}
 	return false;
 }
-	
+
 /*
-============================================================================== 
+==============================================================================
 		MAIN CODE
-============================================================================== 
-*/ 
+==============================================================================
+*/
 
 $action = $_GET["action"];
 $attempt_create_virtual_course = $_POST["submit_create_virtual_course"];
@@ -381,18 +381,18 @@ if ( isset($attempt_create_virtual_course) && $attempt_create_virtual_course )
 	$wanted_course_code = $_POST[WANTED_COURSE_CODE_FORM_NAME];
 	$course_language = $_POST[LANGUAGE_SELECT_FORM_NAME];
 	$course_category = $_POST[COURSE_CATEGORY_FORM_NAME];
-	
+
 	$message = get_lang('AttemptedCreationVirtualCourse') . "<br/>";
 	$message .= get_lang('CourseTitle') . " " . $course_title . "<br/>";
 	$message .= get_lang('WantedCourseCode') . " " . $wanted_course_code . "<br/>";
 	$message .= get_lang('CourseLanguage') . " " . $course_language . "<br/>";
 	$message .= get_lang('CourseFaculty') . " " . $course_category . "<br/>";
 	$message .= get_lang('LinkedToRealCourseCode') . " " . $real_course_code . "<br/>";
-	
+
 	Display::display_normal_message($message);
-	
+
 	$creation_success = CourseManager::attempt_create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category);
-	
+
 	if ($creation_success == true)
 	{
 		Display::display_normal_message( $course_title . " - " . get_lang('CourseCreationSucceeded') );
@@ -419,8 +419,8 @@ switch($action)
 
 /*
 ==============================================================================
-		FOOTER 
+		FOOTER
 ==============================================================================
-*/ 
+*/
 Display::display_footer();
 ?>

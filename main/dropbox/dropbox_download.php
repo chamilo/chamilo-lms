@@ -42,23 +42,23 @@ if ( isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action']=
 	{
 		// here we also incorporate the person table to make sure that deleted sent documents are not included.
 		$sql="SELECT DISTINCT file.id, file.filename, file.title FROM ".$dropbox_cnf["tbl_file"]." file, ".$dropbox_cnf["tbl_person"]." person
-				WHERE file.uploader_id='".mysql_real_escape_string($_user['user_id'])."'
-				AND file.cat_id='".mysql_real_escape_string($_GET['cat_id'])."'
-				AND person.user_id='".mysql_real_escape_string($_user['user_id'])."'
+				WHERE file.uploader_id='".Database::escape_string($_user['user_id'])."'
+				AND file.cat_id='".Database::escape_string($_GET['cat_id'])."'
+				AND person.user_id='".Database::escape_string($_user['user_id'])."'
 				AND person.file_id=file.id
 				" ;
 	}
 	if ($_GET['sent_received']=='received')
 	{
 		$sql="SELECT DISTINCT file.id, file.filename, file.title FROM ".$dropbox_cnf["tbl_file"]." file, ".$dropbox_cnf["tbl_person"]." person, ".$dropbox_cnf["tbl_post"]." post
-				WHERE post.cat_id='".mysql_real_escape_string($_GET['cat_id'])."'
-				AND person.user_id='".mysql_real_escape_string($_user['user_id'])."'
+				WHERE post.cat_id='".Database::escape_string($_GET['cat_id'])."'
+				AND person.user_id='".Database::escape_string($_user['user_id'])."'
 				AND person.file_id=file.id
 				AND post.file_id=file.id
 				" ;
 	}
-	$result=api_sql_query($sql,__FILE__,__LINE__);
-	while ($row=mysql_fetch_array($result))
+	$result=Database::query($sql,__FILE__,__LINE__);
+	while ($row=Database::fetch_array($result))
 	{
 		$files_to_download[]=$row['id'];
 	}
@@ -97,9 +97,9 @@ if ( ! isset( $_GET['id']) || ! is_numeric( $_GET['id']))
 $allowed_to_download=false;
 
 // Check if the user has sent or received the file.
-$sql="SELECT * FROM ".$dropbox_cnf["tbl_person"]." WHERE file_id='".mysql_real_escape_string($_GET['id'])."' AND user_id='".mysql_real_escape_string($_user['user_id'])."'";
-$result=api_sql_query($sql);
-if (mysql_num_rows($result)>0)
+$sql="SELECT * FROM ".$dropbox_cnf["tbl_person"]." WHERE file_id='".Database::escape_string($_GET['id'])."' AND user_id='".Database::escape_string($_user['user_id'])."'";
+$result=Database::query($sql);
+if (Database::num_rows($result)>0)
 {
 	$allowed_to_download=true;
 }

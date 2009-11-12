@@ -38,7 +38,7 @@ foreach($file as $value)
 		$explode[1] = trim($explode[1]);
 		$explode[1] = substr($explode[1], 0, strlen($explode[1]) - 1);
 		$explode[1] = ereg_replace('"', '', $explode[1]);
-		
+
 		$temp[] = $explode[0] . '=' . $explode[1];
 	}
 }

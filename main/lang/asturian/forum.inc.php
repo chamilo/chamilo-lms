@@ -126,4 +126,17 @@ $QualifyWeight = "Porcentaxe d\'esta nota na nota final";
 $QualifyNumeric = "Nota numbérica pa ";
 $AlterQualifyThread = "Editar la nota del tema";
 $ForumMoved = "Esti foru ta movíu a otru sitiu";
+$YouMustAssignWeightOfQualification = "Tienes qu\'asignar el pesu de la cualificación";
+$DeleteAttachmentFile = "Desaniciar ficheru axuntu";
+$EditAnAttachment = "Editar un axuntu";
+$SeeForum = "Ver foru";
+$CreateForum = "Criar foru";
+$ModifyForum = "Camudar foru";
+$CreateThread = "Criar tema";
+$ModifyThread = "Camudar tema";
+$EditForum = "Editar foru";
+$BackToForum = "Volver al foru";
+$BackToForumOverview = "Volver a la vista xeneral del foru";
+$BackToThread = "Volver al filo";
+$ForumcategoryLocked = "Categoría de foru bloquiáu";
 ?>

@@ -35,7 +35,7 @@ class SystemAnnouncementManager
 				break;
 		}
 		$sql .= " ORDER BY date_start DESC LIMIT 0,7";
-		$announcements = api_sql_query($sql,__FILE__,__LINE__);
+		$announcements = Database::query($sql,__FILE__,__LINE__);
 		if (Database::num_rows($announcements))
 		{
 			$query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
@@ -51,12 +51,12 @@ class SystemAnnouncementManager
 				{
 					if (strlen($query_string) > 0)
 					{
-						$show_url = 'newsList.php#'.$announcement->id;
+						$show_url = 'news_list.php#'.$announcement->id;
 						//$show_url = $url.'?'.$query_string.'&announcement='.$announcement->id;
 					}
 					else
 					{
-						$show_url = 'newsList.php#'.$announcement->id;
+						$show_url = 'news_list.php#'.$announcement->id;
 						//$show_url = $url.'?announcement='.$announcement->id;
 					}
 					echo '<tr class="system_announcement">
@@ -84,7 +84,7 @@ class SystemAnnouncementManager
 
 			/*echo '<tr><td height="15px"></td></tr>';*/
 			echo '<tr><td colspan="2">';
-			echo '<a href="newsList.php">'.get_lang("More").'</a>';
+			echo '<a href="news_list.php">'.get_lang("More").'</a>';
 			echo '</td></tr>';
 			echo '</table>';
 			echo '</div>';
@@ -117,7 +117,7 @@ class SystemAnnouncementManager
 		} else {
 			$sql .= " ORDER BY date_start DESC LIMIT ".($start+1).",20";
 		}
-		$announcements = api_sql_query($sql,__FILE__,__LINE__);
+		$announcements = Database::query($sql,__FILE__,__LINE__);
 
 		if (Database::num_rows($announcements)) {
 			$query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
@@ -172,14 +172,14 @@ class SystemAnnouncementManager
 		if(!isset($_GET['start']) || $_GET['start'] == 0) {
 
 			if($nb_announcement > 20) {
-				echo '<a href="newsList.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
+				echo '<a href="news_list.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
 			}
 
 		} else {
-			echo '<a href="newsList.php?start='.$prev.'"> << '.get_lang('Prev').'</a>';
+			echo '<a href="news_list.php?start='.$prev.'"> << '.get_lang('Prev').'</a>';
 
 			if($nb_announcement > 20) {
-				echo '<a href="newsList.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
+				echo '<a href="news_list.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
 			}
 
 	}
@@ -210,7 +210,7 @@ class SystemAnnouncementManager
 			}
  		}
 		$sql .= 'LIMIT '.$start.',21';
-		$announcements = api_sql_query($sql,__FILE__,__LINE__);
+		$announcements = Database::query($sql,__FILE__,__LINE__);
 		$i = 0;
 		while($rows = Database::fetch_array($announcements))
 		{
@@ -229,7 +229,7 @@ class SystemAnnouncementManager
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 
 		$sql = "SELECT *, IF( NOW() BETWEEN date_start AND date_end, '1', '0') AS visible FROM ".$db_table." ORDER BY date_start ASC";
-		$announcements = api_sql_query($sql,__FILE__,__LINE__);
+		$announcements = Database::query($sql,__FILE__,__LINE__);
 		$all_announcements = array();
 		while ($announcement = Database::fetch_object($announcements))
 		{
@@ -262,7 +262,7 @@ class SystemAnnouncementManager
 		if (!checkdate($date_start[1], $date_start[2], $date_start[0])) {
 			Display :: display_normal_message(get_lang('InvalidStartDate'));
 			return false;
-		} 
+		}
 		if (($date_end[1] || $date_end[2] || $date_end[0]) && !checkdate($date_end[1], $date_end[2], $date_end[0])) {
 			Display :: display_normal_message(get_lang('InvalidEndDate'));
 			return false;
@@ -278,10 +278,10 @@ class SystemAnnouncementManager
 		$lang = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
 		$sql = "INSERT INTO ".$db_table." (title,content,date_start,date_end,visible_teacher,visible_student,visible_guest, lang)
 												VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$lang.")";
-		if ($send_mail==1) {	
-			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);	
-		}		
-		return api_sql_query($sql,__FILE__,__LINE__);
+		if ($send_mail==1) {
+			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);
+		}
+		return Database::query($sql,__FILE__,__LINE__);
 	}
 	/**
 	 * Updates an announcement to the database
@@ -324,11 +324,11 @@ class SystemAnnouncementManager
 		$id = intval($id);
 		$sql = "UPDATE ".$db_table." SET lang=$lang,title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
 		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' WHERE id='".$id."'";
-		
+
 		if ($send_mail==1) {
-			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);	
+			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);
 		}
-		return api_sql_query($sql,__FILE__,__LINE__);
+		return Database::query($sql,__FILE__,__LINE__);
 	}
 	/**
 	 * Deletes an announcement
@@ -340,7 +340,7 @@ class SystemAnnouncementManager
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$id = intval($id);
 		$sql = "DELETE FROM ".$db_table." WHERE id='".$id."'";
-		return api_sql_query($sql,__FILE__,__LINE__);
+		return Database::query($sql,__FILE__,__LINE__);
 	}
 	/**
 	 * Gets an announcement
@@ -352,7 +352,7 @@ class SystemAnnouncementManager
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$id = intval($id);
 		$sql = "SELECT * FROM ".$db_table." WHERE id='".$id."'";
-		$announcement = Database::fetch_object(api_sql_query($sql,__FILE__,__LINE__));
+		$announcement = Database::fetch_object(Database::query($sql,__FILE__,__LINE__));
 		return $announcement;
 	}
 	/**
@@ -367,14 +367,14 @@ class SystemAnnouncementManager
 		$announcement_id = intval($announcement_id);
 		$field = ($user == VISIBLE_TEACHER ? 'visible_teacher' : ($user == VISIBLE_STUDENT ? 'visible_student' : 'visible_guest'));
 		$sql = "UPDATE ".$db_table." SET ".$field." = '".$visible."' WHERE id='".$announcement_id."'";
-		return api_sql_query($sql,__FILE__,__LINE__);
+		return Database::query($sql,__FILE__,__LINE__);
 	}
-	
+
 	function send_system_announcement_by_email($title,$content,$teacher, $student)
 	{
-		global $_user; 
+		global $_user;
 		global $_setting;
-		global $charset; 
+		global $charset;
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		if ($teacher<>0 AND $student == '0') {
 			$sql = "SELECT * FROM $user_table WHERE email<>'' AND status = '1'";
@@ -388,8 +388,8 @@ class SystemAnnouncementManager
 		if ($teacher == '0' AND $student == '0') {
 			return true;
 		}
-			
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+
+		$result = Database::query($sql,__FILE__,__LINE__);
 		while($row = Database::fetch_array($result,'ASSOC'))
 		{
 			api_mail_html(api_get_person_name($row['firstname'], $row['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $row['email'], api_html_entity_decode(stripslashes($title), ENT_QUOTES, $charset), api_html_entity_decode(stripslashes($content), ENT_QUOTES, $charset), api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), api_get_setting('emailAdministrator'), api_get_setting('emailAdministrator'));

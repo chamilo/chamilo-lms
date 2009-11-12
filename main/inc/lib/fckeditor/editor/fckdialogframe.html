@@ -68,7 +68,7 @@ var F = E ;
 // So let's use functions to access its members instead.
 function Args()
 {
-	return F ; 
+	return F ;
 	//return frameElement._DialogArguments ;
 }
 
@@ -92,7 +92,7 @@ var langDir = document.documentElement.dir = E.FCKLang.Dir ;
 // For IE6-, the fck_dialog_ie6.js is loaded, used to fix limitations in the browser.
 if ( FCKBrowserInfo.IsIE && !FCKBrowserInfo.IsIE7 )
 	document.write( '<' + 'script type="text/javascript" src="' + FCKConfig.SkinPath + 'fck_dialog_ie6.js"><' + '\/script>' ) ;
-	
+
 FCKTools.RegisterDollarFunction( window ) ;
 
 // Sets the Skin CSS
@@ -110,8 +110,8 @@ document.write( '<link href="' + FCKConfig.SkinPath + 'fck_dialog.css" type="tex
 		// Make the title area draggable.
 		var titleElement = $( 'header' ) ;
 	} ;
-	
-	
+
+
 	window.LoadInnerDialog = function()
 	{
 		if ( window.onresize )
@@ -121,11 +121,11 @@ document.write( '<link href="' + FCKConfig.SkinPath + 'fck_dialog.css" type="tex
 		//E.FCKLanguageManager.TranslatePage( document ) ;
 
 		// Create the IFRAME that holds the dialog contents.
-		
+
 		window.frames["frmMain"].document.location.href =Args().Page;
 		//$( 'innerContents' ).innerHTML = '<iframe id="frmMain" src="' + Args().Page + '" name="frmMain" frameborder="0" width="100%" height="100%" scrolling="auto" style="visibility: hidden;" allowtransparency="true"><\/iframe>' ;
 	} ;
-	
+
 	window.InnerDialogLoaded = function()
 	{
 		// If the dialog has been closed before the iframe is loaded, do nothing.
@@ -146,7 +146,7 @@ document.write( '<link href="' + FCKConfig.SkinPath + 'fck_dialog.css" type="tex
 // ]]>
 		</script>
 	</head>
-		
+
 	<body onload="Init();" class="PopupBody">
 		<table height="100%" cellspacing="0" cellpadding="0" width="100%" border="0">
 			<tr>
@@ -155,7 +155,7 @@ document.write( '<link href="' + FCKConfig.SkinPath + 'fck_dialog.css" type="tex
 						document.write( Args().Title ) ;
 					</script>
 				</td>
-			</tr>	
+			</tr>
 			<tr>
 				<td id="FrameCell" height="100%" valign="top">
 					<iframe id="frmMain" src="fckblank.html" name="frmMain" frameborder="0" height="505px" width="100%" scrolling="no">

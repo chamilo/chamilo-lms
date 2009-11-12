@@ -332,4 +332,17 @@ $MinOverlap = "Overlap Mínimo";
 $MaxExcess = "Excesso máximo ";
 $MaxMissing = "Maximo missing ";
 $IfNoError = "Se não existir nenhum erro ";
+$LearnerHasNoMistake = "O estudante não cometeu erros";
+$YourAnswer = "Sua resposta";
+$YourDelineation = "Seu traçado :";
+$ResultIs = "Seu resultado é :";
+$Overlap = "Área sobreposta";
+$Missing = "Área faltante";
+$Excess = "Área excessiva";
+$Min = "Mínimo";
+$Max = "Máximo";
+$Requirements = "Requisitos";
+$OARHit = "Uma (ou mais) área de risco foi selecionada";
+$TooManyIterationsPleaseTryUsingMoreStraightforwardPolygons = "Muitas iterações ao tentar calcular sua resposta. Por favor, tente desenhar novamente de uma forma mais simples.";
+$Delineation = "Traçado";
 ?>

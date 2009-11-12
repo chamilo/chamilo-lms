@@ -3,25 +3,25 @@
 
 
 class TestFileManager extends UnitTestCase {
-	
+
 	public $fmanager;
 	public function TestFileManager(){
-		
+
 		$this->UnitTestCase ('File Display Manager');
-		
-		
+
+
 	}
-	
+
 	public function setUp(){
-		
+
 		$this->fmanager = new FileManager();
 	}
-	
+
 	public function tearDown(){
-		
+
 		$this->fmanager = null;
 	}
-	
+
 	//todo public function testUpdatedbInfo
 	//todo public function testCheckNameExist
 	//todo public function testMyDelete
@@ -40,7 +40,7 @@ class TestFileManager extends UnitTestCase {
 	//todo public function testCompatLoadFile
 	//todo public function testSetDefaultSettings
 	//todo public function testMkdirs
-	
+
 	public function testUpdatedbInfo(){
 		$action ='';
 		$oldPath ='';
@@ -48,7 +48,7 @@ class TestFileManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	public function testCheckNameExist(){
 		$filePath ='';
 		$res = check_name_exist($filePath);
@@ -57,16 +57,16 @@ class TestFileManager extends UnitTestCase {
 		$this->assertTrue($res === false);
 		//var_dump($res);
 	}
-	
+
 	public function testMyDelete(){
 		$file='';
 		$res = my_delete($file);
-		$this->assertFalse($res); 
+		$this->assertFalse($res);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res===false);
 		//var_dump($res);
 	}
-	
+
 	public function testRemoveDir(){
 		$dir='';
 		$res = removeDir($dir);
@@ -74,7 +74,7 @@ class TestFileManager extends UnitTestCase {
 		$this->assertFalse($res === true);
 		//var_dump($res);
 	}
-	
+
 	public function testMyRename(){
 		$filePath ='documents';
 		$newFileName='';
@@ -83,7 +83,7 @@ class TestFileManager extends UnitTestCase {
 		$this->assertTrue($res === false);
 		//var_dump($res);
 	}
-	
+
 	public function testMove(){
 		$source ='';
 		$target ='';
@@ -93,7 +93,7 @@ class TestFileManager extends UnitTestCase {
 		$this->assertFalse($res);
 		//var_dump($res);
 	}
-	
+
 	public function testCopyDirTo(){
 		$origDirPath='';
 		$destination='';
@@ -101,15 +101,15 @@ class TestFileManager extends UnitTestCase {
 		$this->assertTrue($res===null);
 		$this->assertNull($res);
 	}
-	
-	public function testIndexDir(){ 
+
+	public function testIndexDir(){
 		$path='/var/www/path/';
 	  	$res = index_dir($path);
 		$this->assertFalse(is_array($res));
 		$this->assertNull($res);
 		//var_dump($res);
 	}
-	
+
 	public function testIndexAndSortDir(){
 		$path='/var/www/path/';
 		$res = index_and_sort_dir($path);
@@ -119,7 +119,7 @@ class TestFileManager extends UnitTestCase {
 		$this->assertTrue($res === false);
 		//var_dump($res);
 	}
-	
+
 	public function testFormDirList(){
 		$sourceType='';
 		$sourceComponent='';
@@ -129,8 +129,8 @@ class TestFileManager extends UnitTestCase {
 		$this->assertTrue($res);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
-	} 
-	
+	}
+
 	public function testMkpath(){
 		$path='/var/www/path/';
 		$res =mkpath($path, $verbose=false);
@@ -139,14 +139,14 @@ class TestFileManager extends UnitTestCase {
 		$this->assertTrue($res === null);
 		//var_dump($res);
 	}
-	
+
 	public function testGetextension(){
 		$filename='documents';
 		$res =getextension($filename);
 		$this->assertTrue($res);
 		$this->assertTrue(is_array($res));
 	}
-	
+
 	public function testDirsize(){
 		$root='';
 		$res =dirsize($root,$recursive=true);
@@ -155,7 +155,7 @@ class TestFileManager extends UnitTestCase {
 		$this->assertTrue($res ===0);
 		//var_dump($res);
 	}
-	
+
 	public function testListAllDirectories(){
 		$path='/var/www/path/';
 		$res = $this->fmanager->list_all_directories($path);
@@ -163,7 +163,7 @@ class TestFileManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	public function testListAllFiles(){
 		$dirArray='documents';
 		$res = $this->fmanager->list_all_files($dirArray);
@@ -172,7 +172,7 @@ class TestFileManager extends UnitTestCase {
 		$this->assertTrue($res ===null);
 		//var_dump($res);
 	}
-	
+
 	public function testCompatLoadFile(){
 		$file_name='images';
 		$res = $this->fmanager->compat_load_file($file_name);
@@ -180,7 +180,7 @@ class TestFileManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
-	
+
 	public function testSetDefaultSettings(){
 		$upload_path='/var/www/path/ruta';
 		$filename='doc';
@@ -189,7 +189,7 @@ class TestFileManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+
 	public function testMkdirs(){
 		$path='/var/www/path/ruta';
 		$res = $this->fmanager->mkdirs($path);

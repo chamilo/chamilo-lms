@@ -46,7 +46,7 @@ else
  * @param	string	Result title
  * @param	string	Result URL
  * @param	string	Short excerpt of the result document
- * @param	
+ * @param
  */
 function result_output($id,$title,$url='',$excerpt='',$date='',$rating=''){
 	if(empty($id) OR empty($title)){return false;}
@@ -66,15 +66,15 @@ function result_output($id,$title,$url='',$excerpt='',$date='',$rating=''){
 include('../../../main/inc/header.inc.php');
 ?>
 
-<form method="get" action="<?php echo $search_url; ?>"><input 
-type="hidden" name="ps" value="1000"/><input 
-type="hidden" name="o" value="0"/><input 
-type="hidden" name="m" value="any"/><input 
-type="hidden" name="wm" value="sub"/><input 
-type="hidden" name="wf" value="2221"/><input 
-type="hidden" name="s" value="RDP"/><input 
-type="hidden" name="sy" value="1"/><input 
-type="text" name="q" value="<?php echo urldecode($my_query);?>" size="10" style="margin: 4px 6px; border: 1px solid #B6BB8C; color:#4D4F3A; height: 15px;padding:0px;"><input 
+<form method="get" action="<?php echo $search_url; ?>"><input
+type="hidden" name="ps" value="1000"/><input
+type="hidden" name="o" value="0"/><input
+type="hidden" name="m" value="any"/><input
+type="hidden" name="wm" value="sub"/><input
+type="hidden" name="wf" value="2221"/><input
+type="hidden" name="s" value="RDP"/><input
+type="hidden" name="sy" value="1"/><input
+type="text" name="q" value="<?php echo urldecode($my_query);?>" size="10" style="margin: 4px 6px; border: 1px solid #B6BB8C; color:#4D4F3A; height: 15px;padding:0px;"><input
 type="submit" name="submit" value="<?php echo $lang_search_button; ?>" style="margin: 4px 6px; border: 1px solid #B6BB8C; color:#4D4F3A; height:17px;vertical-align:top;padding:0px"></form>
 <?php
 $i = 1;
@@ -93,7 +93,7 @@ if($to_print != ''){
 	echo "<div class='search_info'>".$i.' '.$lang_search_found."</div><br/>\n";
 	echo $to_print;
 }else{
-	echo "<div class='search_info'>".$lang_no_result_found."</div><br/>\n"; 
+	echo "<div class='search_info'>".$lang_no_result_found."</div><br/>\n";
 }
 include('../../../main/inc/footer.inc.php');
 ?>

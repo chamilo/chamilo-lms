@@ -1,8 +1,8 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langActivate = "Activeren";
-$langDeactivate = "Inactiveren";
+$langActivate = "Zichtbaar maken";
+$langDeactivate = "Verbergen";
 $langInLnk  = "Deze modules en links zijn nu inactief.";
 $langDelLk = "Wilt u deze link verwijderen?";
 $langCourseCreate  = "Maak een webcursus";

@@ -43,7 +43,7 @@ $tbl_user 		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_chat_connected 	= Database::get_course_chat_connected_table();
 
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
-$result=api_sql_query($query,__FILE__,__LINE__);
+$result=Database::query($query,__FILE__,__LINE__);
 
 list($pseudoUser)=Database::fetch_row($result);
 
@@ -57,27 +57,48 @@ $isMaster=$is_courseAdmin?true:false;
 
 $dateNow=date('Y-m-d');
 
+$group_id = intval($_SESSION['_gid']);
+$session_id = intval($_SESSION['id_session']);
+$session_condition = api_get_session_condition($session_id);
+$group_condition = " AND to_group_id = '$group_id'";
+
+$extra_condition = '';
+if (!empty($group_id)) {
+	$extra_condition = $group_condition;
+} else {
+	$extra_condition = $session_condition;
+}
+
 $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
 $chatPath=$documentPath.'chat_files/';
 
+$basename_chat = '';
+if (!empty($group_id)) {
+	$basename_chat = 'messages-'.$dateNow.'_gid-'.$group_id;
+} else if (!empty($session_id)) {
+	$basename_chat = 'messages-'.$dateNow.'_sid-'.$session_id;
+} else {
+	$basename_chat = 'messages-'.$dateNow;				
+}
+
 $chat_size_old=intval($_POST['chat_size_old']);
-$chat_size_new=filesize($chatPath.'messages-'.$dateNow.'.log.html');
+$chat_size_new=filesize($chatPath.$basename_chat.'.log.html');
 
 $sql="SELECT user_id FROM $tbl_chat_connected WHERE user_id='".$_user['user_id']."'";
-$result=api_sql_query($sql);
+$result=Database::query($sql);
 
 //The user_id exists so we must do an UPDATE and not a INSERT
 $current_time=date('Y-m-d H:i:s');
 if (Database::num_rows($result)==0) {
-	$query="INSERT INTO $tbl_chat_connected(user_id,last_connection) VALUES('".$_user['user_id']."','".$current_time."')";
+	$query="INSERT INTO $tbl_chat_connected(user_id,last_connection,session_id,to_group_id) VALUES('".$_user['user_id']."','$current_time','$session_id','$group_id')";
 } else {
-	$query="UPDATE $tbl_chat_connected set last_connection='".$current_time."' WHERE user_id='".$_user['user_id']."'";
+	$query="UPDATE $tbl_chat_connected set last_connection='".$current_time."' WHERE user_id='".$_user['user_id']."' AND session_id='$session_id' AND to_group_id='$group_id'";
 }
 
-api_sql_query($query,__FILE__,__LINE__);
+Database::query($query,__FILE__,__LINE__);
 
-$query="SELECT COUNT(user_id) FROM $tbl_chat_connected WHERE last_connection>'".date('Y-m-d H:i:s',time()-60*5)."'";
-$result=api_sql_query($query,__FILE__,__LINE__);
+$query="SELECT COUNT(user_id) FROM $tbl_chat_connected WHERE last_connection>'".date('Y-m-d H:i:s',time()-60*5)."' $extra_condition";
+$result=Database::query($query,__FILE__,__LINE__);
 
 $connected_old=intval($_POST['connected_old']);
 list($connected_new) = Database::fetch_row($result);
@@ -113,12 +134,12 @@ if ($_SESSION["origin"] == 'whoisonline') {  //check if our target has denied ou
 	$talk_to=$_SESSION["target"];
 	$track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$sql="select chatcall_text from $track_user_table where ( user_id = $talk_to )";
-	$result=api_sql_query($sql,__FILE__,__LINE__);
-	$row=mysql_fetch_array($result);
+	$result=Database::query($sql,__FILE__,__LINE__);
+	$row=Database::fetch_array($result);
 	if ($row['chatcall_text'] == 'DENIED') {
-		echo "<script language=javascript> alert('".get_lang('ChatDenied')."'); </script>";	
+		echo "<script language=javascript> alert('".get_lang('ChatDenied')."'); </script>";
 		$sql="update $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text='' where (user_id = $talk_to)";
-		$result=api_sql_query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql,__FILE__,__LINE__);
 	}
 }
 

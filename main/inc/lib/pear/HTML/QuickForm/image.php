@@ -22,7 +22,7 @@ require_once("HTML/QuickForm/input.php");
 
 /**
  * HTML class for a image type element
- * 
+ *
  * @author       Adam Daniel <adaniel1@eesus.jnj.com>
  * @author       Bertrand Mansion <bmansion@mamasam.com>
  * @version      1.0
@@ -35,10 +35,10 @@ class HTML_QuickForm_image extends HTML_QuickForm_input
 
     /**
      * Class constructor
-     * 
+     *
      * @param     string    $elementName    (optional)Element name attribute
      * @param     string    $src            (optional)Image source
-     * @param     mixed     $attributes     (optional)Either a typical HTML attribute string 
+     * @param     mixed     $attributes     (optional)Either a typical HTML attribute string
      *                                      or an associative array
      * @since     1.0
      * @access    public
@@ -56,7 +56,7 @@ class HTML_QuickForm_image extends HTML_QuickForm_input
 
     /**
      * Sets source for image element
-     * 
+     *
      * @param     string    $src  source for image element
      * @since     1.0
      * @access    public
@@ -72,7 +72,7 @@ class HTML_QuickForm_image extends HTML_QuickForm_input
 
     /**
      * Sets border size for image element
-     * 
+     *
      * @param     string    $border  border for image element
      * @since     1.0
      * @access    public
@@ -88,7 +88,7 @@ class HTML_QuickForm_image extends HTML_QuickForm_input
 
     /**
      * Sets alignment for image element
-     * 
+     *
      * @param     string    $align  alignment for image element
      * @since     1.0
      * @access    public
@@ -104,7 +104,7 @@ class HTML_QuickForm_image extends HTML_QuickForm_input
 
     /**
      * Freeze the element so that only its value is returned
-     * 
+     *
      * @access    public
      * @return    void
      */

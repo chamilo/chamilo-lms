@@ -41,7 +41,7 @@ function get_users_in_course($course_id) {
 			.' AND course_rel_user.status='.STUDENT
 			." AND course_rel_user.course_code='".$course_id."'"
 			.$order_clause;
-	$result = api_sql_query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql, __FILE__, __LINE__);
 	return get_user_array_from_sql_result($result);
 }
 
@@ -63,7 +63,7 @@ function get_user_array_from_sql_result($result) {
 function get_all_users ($evals = array(), $links = array()) {
 	$coursecodes = array();
 	$users = array();
-	
+
 	foreach ($evals as $eval) {
 		$coursecode = $eval->get_course_code();
 		// evaluation in course
@@ -75,16 +75,16 @@ function get_all_users ($evals = array(), $links = array()) {
 		} else {// course independent evaluation
 			$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 			$tbl_res = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-			
+
 			$sql = 'SELECT user.user_id,lastname,firstname'
 					.' FROM '.$tbl_res.' as res, '.$tbl_user.' as user'
 					.' WHERE res.evaluation_id = '.$eval->get_id()
 					.' AND res.user_id = user.user_id';
-			$result = api_sql_query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql, __FILE__, __LINE__);
 			$users = array_merge($users,get_user_array_from_sql_result($result));
 		}
 	}
-	
+
 	foreach ($links as $link) {
 		// links are always in a course
 		$coursecode = $link->get_course_code();
@@ -104,13 +104,13 @@ function get_all_users ($evals = array(), $links = array()) {
 function find_students($mask= '') {
 	// students shouldn't be here // don't search if mask empty
 	if (!api_is_allowed_to_create_course() || empty ($mask)) {
-		return null;		
+		return null;
 	}
 	$tbl_user= Database :: get_main_table(TABLE_MAIN_USER);
 	$tbl_cru= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$sql= 'SELECT DISTINCT user.user_id, user.lastname, user.firstname, user.email' . ' FROM ' . $tbl_user . ' user';
 	if (!api_is_platform_admin()) {
-		$sql .= ', ' . $tbl_cru . ' cru';	
+		$sql .= ', ' . $tbl_cru . ' cru';
 	}
 
 	$sql .= ' WHERE user.status = ' . STUDENT;
@@ -118,11 +118,11 @@ function find_students($mask= '') {
 	$sql .= ' OR user.firstname LIKE '."'%" . $mask . "%')";
 
 	if (!api_is_platform_admin()) {
-		$sql .= ' AND user.user_id = cru.user_id' . ' AND cru.course_code in' . ' (SELECT course_code' . ' FROM ' . $tbl_cru . ' WHERE user_id = ' . api_get_user_id() . ' AND status = ' . COURSEMANAGER . ')';	
+		$sql .= ' AND user.user_id = cru.user_id' . ' AND cru.course_code in' . ' (SELECT course_code' . ' FROM ' . $tbl_cru . ' WHERE user_id = ' . api_get_user_id() . ' AND status = ' . COURSEMANAGER . ')';
 	}
 	$sql .= ' ORDER BY lastname';
-	$result= api_sql_query($sql, __FILE__, __LINE__);
-	$db_users= api_store_result($result);
+	$result= Database::query($sql, __FILE__, __LINE__);
+	$db_users= Database::store_result($result);
 	return $db_users;
 }
 
@@ -134,7 +134,7 @@ function find_students($mask= '') {
 function get_user_info_from_id($userid) {
 	$user_table= Database :: get_main_table(TABLE_MAIN_USER);
 	$sql= 'SELECT * FROM ' . $user_table . ' WHERE user_id=' . $userid;
-	$res= api_sql_query($sql, __FILE__, __LINE__);
+	$res= Database::query($sql, __FILE__, __LINE__);
 	$user= Database::fetch_array($res,ASSOC);
 	return $user;
 }

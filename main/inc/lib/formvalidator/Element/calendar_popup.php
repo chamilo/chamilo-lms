@@ -3,20 +3,20 @@
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
-	
+
 	Copyright (c) 2004-2005 Dokeos S.A.
 	Copyright (c) Bart Mollet, Hogeschool Gent
-	
+
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
-	
+
 	This program is free software; you can redistribute it and/or
 	modify it under the terms of the GNU General Public License
 	as published by the Free Software Foundation; either version 2
 	of the License, or (at your option) any later version.
-	
+
 	See the GNU General Public License for more details.
-	
+
 	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
 	Mail: info@dokeos.com
 ==============================================================================
@@ -36,14 +36,14 @@ $DaysShort = api_get_week_days_short();
 $DaysLong = api_get_week_days_long();
 // Defining the months of the year to allow translation of the months
 $MonthsLong = api_get_months_long();
-@ $iso_lang = Database :: get_language_isocode($language_interface);
+@ $iso_lang = api_get_language_isocode($language_interface);
 if (empty ($iso_lang) )
 {
 	//if there was no valid iso-code, use the english one
 	$iso_lang = 'en';
 }
 ?>
-<!DOCTYPE html 
+<!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $iso_lang; ?>" lang="<?php echo $iso_lang; ?>">
@@ -55,7 +55,7 @@ if (empty ($iso_lang) )
 @import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/<?php echo api_get_setting('stylesheets'); ?>/default.css";
 table.calendar
 {
-	width: 100%;	
+	width: 100%;
 	font-size: 11px;
 	font-family: verdana, arial, helvetica, sans-serif;
 }
@@ -74,12 +74,12 @@ table.calendar td
 {
 	width: 25px;
 	height: 25px;
-	background-color: #f5f5f5;	
+	background-color: #f5f5f5;
 	text-align: center;
 }
 table.calendar td.selected
 {
-	border: 1px solid #ff0000; 
+	border: 1px solid #ff0000;
 	background-color: #FFCECE;
 }
 table.calendar td a

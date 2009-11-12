@@ -50,7 +50,7 @@ function doSubmit(action)
         var url = "editorFrame.php?img="+currentImageFile+"&action=watermark&opacity=" + opacity + '&watermarkFullPath=' + watermarkFullPath + '&watermarkX=' + watermarkX + '&watermarkY=' + watermarkY;
 
         location.href = url;
-    }   
+    }
     else if (action == 'crop')
     {
 		//show message
@@ -59,7 +59,7 @@ function doSubmit(action)
 		var url = "editorFrame.php?img="+currentImageFile+"&action=crop&params="+parseInt(t_cx.value)+','+parseInt(t_cy.value)+','+ parseInt(t_cw.value)+','+parseInt(t_ch.value);
 
         location.href = url;
-    }   
+    }
     else if (action == 'scale')
     {
 		//show message
@@ -76,7 +76,7 @@ function doSubmit(action)
 
         var flip = topDoc.getElementById('flip');
 
-        if(flip.value == 'hoz' || flip.value == 'ver') 
+        if(flip.value == 'hoz' || flip.value == 'ver')
             location.href = "editorFrame.php?img="+currentImageFile+"&action=flip&params="+flip.value;
         else if (isNaN(parseFloat(r_ra.value))==false)
             location.href = "editorFrame.php?img="+currentImageFile+"&action=rotate&params="+parseFloat(r_ra.value);
@@ -91,7 +91,7 @@ function doSubmit(action)
         var s_quality = topDoc.getElementById('sliderfieldsave');
 
         var format = s_format.value.split(",");
-        if(s_file.value.length <= 0) 
+        if(s_file.value.length <= 0)
 		{
             alert(i18n('Please enter a filename to save.'));
         }
@@ -108,11 +108,11 @@ function doSubmit(action)
 
 
 function addEvent(obj, evType, fn)
-{ 
-	if (obj.addEventListener) { obj.addEventListener(evType, fn, true); return true; } 
-	else if (obj.attachEvent) {  var r = obj.attachEvent("on"+evType, fn);  return r;  } 
-	else {  return false; } 
-} 
+{
+	if (obj.addEventListener) { obj.addEventListener(evType, fn, true); return true; }
+	else if (obj.attachEvent) {  var r = obj.attachEvent("on"+evType, fn);  return r;  }
+	else {  return false; }
+}
 
 var jg_doc;
 

@@ -1,23 +1,5 @@
 <?php // $Id: user_fields_add.php 20845 2009-05-19 17:27:22Z cfasanando $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 *	@package dokeos.admin
@@ -44,44 +26,54 @@ function change_image_user_field (image_value) {
 	if (image_value==1) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_text.png', get_lang('AddUserFields'))."'".');
-			
+
 	} else if (image_value==2) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_text_area.png', get_lang('AddUserFields'))."'".');
-				
+
 	} else if (image_value==3) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('add_user_field_howto.png', get_lang('AddUserFields'))."'".');
-				
+
 	} else if (image_value==4) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_drop_down.png', get_lang('AddUserFields'))."'".');
-				
+
 	} else if (image_value==5) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_multidropdown.png', get_lang('AddUserFields'))."'".');
-				
+
 	} else if (image_value==6) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_data.png', get_lang('AddUserFields'))."'".');
-				
+
 	} else if (image_value==7) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_date_time.png', get_lang('AddUserFields'))."'".');
-				
+
 	} else if (image_value==8) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_doubleselect.png', get_lang('AddUserFields'))."'".');
-				
+
 	} else if (image_value==9) {
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_divider.png', get_lang('AddUserFields'))."'".');
-				
+
 	}
-}		
-	
-		
-		
+}
+
+	function advanced_parameters() {
+			if(document.getElementById(\'options\').style.display == \'none\') {
+				document.getElementById(\'options\').style.display = \'block\';
+				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+
+			} else {
+
+				document.getElementById(\'options\').style.display = \'none\';
+				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+			}
+		}
+
 </script>';
 // Database table definitions
 $table_admin	= Database :: get_main_table(TABLE_MAIN_ADMIN);
@@ -96,22 +88,20 @@ if ($_GET['action']<>'edit')
 {
 	$tool_name = get_lang('AddUserFields');
 }
-else 
+else
 {
 	$tool_name = get_lang('EditUserFields');
 }
 // Create the form
 $form = new FormValidator('user_fields_add');
 $form->addElement('header', '', $tool_name);
-// Field variable name
-$form->addElement('hidden','fieldid',(int)$_GET['field_id']);
-$form->addElement('text','fieldlabel',get_lang('FieldLabel'));
-$form->applyFilter('fieldlabel','html_filter');
-$form->applyFilter('fieldlabel','trim');
-$form->addRule('fieldlabel', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('fieldlabel', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
-$form->addRule('fieldlabel', '', 'maxlength',20);
-$form->addRule('fieldlabel', get_lang('FieldTaken'), 'fieldlabel_available');
+
+// Field display name
+$form->addElement('text','fieldtitle',get_lang('FieldTitle'));
+$form->applyFilter('fieldtitle','html_filter');
+$form->applyFilter('fieldtitle','trim');
+$form->addRule('fieldtitle', get_lang('ThisFieldIsRequired'), 'required');
+
 // Field type
 $types = array();
 $types[USER_FIELD_TYPE_TEXT]  = get_lang('FieldTypeText');
@@ -123,16 +113,31 @@ $types[USER_FIELD_TYPE_DATE] = get_lang('FieldTypeDate');
 $types[USER_FIELD_TYPE_DATETIME] = get_lang('FieldTypeDatetime');
 $types[USER_FIELD_TYPE_DOUBLE_SELECT] 	= get_lang('FieldTypeDoubleSelect');
 $types[USER_FIELD_TYPE_DIVIDER] 		= get_lang('FieldTypeDivider');
+$types[USER_FIELD_TYPE_TAG] 		= get_lang('FieldTypeTag');
+
 $form->addElement('select','fieldtype',get_lang('FieldType'),$types,array('onchange'=>'change_image_user_field(this.value)'));
 $form->addRule('fieldtype', get_lang('ThisFieldIsRequired'), 'required');
-// Field display name
-$form->addElement('text','fieldtitle',get_lang('FieldTitle'));
-$form->applyFilter('fieldtitle','html_filter');
-$form->applyFilter('fieldtitle','trim');
-$form->addRule('fieldtitle', get_lang('ThisFieldIsRequired'), 'required');
+
+//Advanced parameters
+$form -> addElement('html','<div class="row">
+			<div class="label">&nbsp;</div>
+			<div class="formw">
+				<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>
+			</div>
+			</div>');
+$form -> addElement('html','<div id="options" style="display:none">');
+
+$form->addElement('hidden','fieldid',Security::remove_XSS($_GET['field_id']));
+$form->addElement('text','fieldlabel',get_lang('FieldLabel'));
+$form->applyFilter('fieldlabel','html_filter');
+$form->addRule('fieldlabel', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
+$form->addRule('fieldlabel', '', 'maxlength',20);
+$form->addRule('fieldlabel', get_lang('FieldTaken'), 'fieldlabel_available');
+
 // Field options
 $form->addElement('text','fieldoptions',get_lang('FieldPossibleValues').Display::return_icon('info3.gif', get_lang('FieldPossibleValuesComment'), array('align' => 'absmiddle', 'hspace' => '3px')));
 $form->applyFilter('fieldoptions','trim');
+
 if (is_numeric($_GET['field_id']))
 {
 	$form->addElement('static', 'option_reorder', '', '<a href="user_fields_options.php?field_id='.Security::remove_XSS($_GET['field_id']).'">'.get_lang('ReorderOptions').'</a>');
@@ -149,8 +154,8 @@ if (is_numeric($_GET['field_id']))
 	$defaults['fieldtitle'] = $form_information['field_display_text'];
 	$defaults['fieldlabel'] = $form_information['field_variable'];
 	$defaults['fieldtype'] = $form_information['field_type'];
-	$defaults['fielddefaultvalue'] = $form_information['field_default_value'];									
-	
+	$defaults['fielddefaultvalue'] = $form_information['field_default_value'];
+
 	$count = 0;
 	// we have to concatenate the options
 	if (count($form_information['options'])>0) {
@@ -160,7 +165,7 @@ if (is_numeric($_GET['field_id']))
 			{
 				$defaults['fieldoptions'] = $defaults['fieldoptions'].'; '.$option['option_display_text'];
 			}
-			else 
+			else
 			{
 				$defaults['fieldoptions'] = $option['option_display_text'];
 			}
@@ -172,10 +177,12 @@ $form->setDefaults($defaults);
 	if(isset($_GET['field_id']) && !empty($_GET['field_id'])) {
 		$class="save";
 		$text=get_lang('buttonEditUserField');
-	} else {
+	} else { 
 		$class="add";
-		$text=get_lang('buttonAddUserField'); 
+		$text=get_lang('buttonAddUserField');
 	}
+	
+$form -> addElement('html','</div>');
 // Submit button
 $form->addElement('style_submit_button', 'submit',$text, 'class='.$class.'');
 // Validate form
@@ -185,18 +192,22 @@ if( $form->validate())
 	if($check)
 	{
 		$field = $form->exportValues();
-		$fieldlabel = $field['fieldlabel'];
+		
+				
+		$fieldlabel = empty($field['fieldlabel'])?$field['fieldtitle']:$field['fieldlabel'];		
+		$fieldlabel = trim(strtolower(str_replace(" ","_",$fieldlabel)));
+		
 		$fieldtype = $field['fieldtype'];
 		$fieldtitle = $field['fieldtitle'];
 		$fielddefault = $field['fielddefaultvalue'];
 		$fieldoptions = $field['fieldoptions']; //comma-separated list of options
-		
+
 		if (is_numeric($field['fieldid']) AND !empty($field['fieldid']))
 		{
 			UserManager:: save_extra_field_changes($field['fieldid'],$fieldlabel,$fieldtype,$fieldtitle,$fielddefault,$fieldoptions);
 			$message = get_lang('FieldEdited');
 		}
-		else 
+		else
 		{
 			$field_id = UserManager::create_extra_field($fieldlabel,$fieldtype,$fieldtitle,$fielddefault,$fieldoptions);
 			$message = get_lang('FieldAdded');
@@ -230,32 +241,32 @@ echo '<div id="id_image_user_field">';
 if(!empty($defaults['fieldtype'])) {
 	$image_value = $defaults['fieldtype'];
 	if ($image_value==1) {
-		echo '<br />'.Display::return_icon('userfield_text.png', get_lang('AddUserFields'));					
+		echo '<br />'.Display::return_icon('userfield_text.png', get_lang('AddUserFields'));
 	} else if ($image_value==2) {
-		echo '<br />'.Display::return_icon('userfield_text_area.png', get_lang('AddUserFields'));						
+		echo '<br />'.Display::return_icon('userfield_text_area.png', get_lang('AddUserFields'));
 	} else if ($image_value==3) {
-		echo '<br />'.Display::return_icon('add_user_field_howto.png', get_lang('AddUserFields'));						
+		echo '<br />'.Display::return_icon('add_user_field_howto.png', get_lang('AddUserFields'));
 	} else if ($image_value==4) {
-		echo '<br />'.Display::return_icon('userfield_drop_down.png', get_lang('AddUserFields'));						
+		echo '<br />'.Display::return_icon('userfield_drop_down.png', get_lang('AddUserFields'));
 	} else if ($image_value==5) {
-		echo '<br />'.Display::return_icon('userfield_multidropdown.png', get_lang('AddUserFields'));								
+		echo '<br />'.Display::return_icon('userfield_multidropdown.png', get_lang('AddUserFields'));
 	} else if ($image_value==6) {
-		echo '<br />'.Display::return_icon('userfield_data.png', get_lang('AddUserFields'));						
+		echo '<br />'.Display::return_icon('userfield_data.png', get_lang('AddUserFields'));
 	} else if ($image_value==7) {
-		echo '<br />'.Display::return_icon('userfield_date_time.png', get_lang('AddUserFields'));								
+		echo '<br />'.Display::return_icon('userfield_date_time.png', get_lang('AddUserFields'));
 	} else if ($image_value==8) {
-		echo '<br />'.Display::return_icon('userfield_doubleselect.png', get_lang('AddUserFields'));									
+		echo '<br />'.Display::return_icon('userfield_doubleselect.png', get_lang('AddUserFields'));
 	} else if ($image_value==9) {
-		echo '<br />'.Display::return_icon('userfield_divider.png', get_lang('AddUserFields'));						
+		echo '<br />'.Display::return_icon('userfield_divider.png', get_lang('AddUserFields'));
 	}
 } else {
-	echo '<br />'.Display::return_icon('userfield_text.png', get_lang('AddUserFields'));	
-}	
-echo '</div>';	
-			
-			
+	echo '<br />'.Display::return_icon('userfield_text.png', get_lang('AddUserFields'));
+}
+echo '</div>';
 
-		
+
+
+
 
 
 // footer

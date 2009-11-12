@@ -38,9 +38,7 @@ if ( isset($httpHeadXtra) && $httpHeadXtra )
 }
 
 // Get language iso-code for this page - ignore errors
-// The error ignorance is due to the non compatibility of function_exists()
-// with the object syntax of Database::get_language_isocode()
-@$document_language = Database::get_language_isocode($language_interface);
+@$document_language = api_get_language_isocode($language_interface);
 if(empty($document_language))
 {
   //if there was no valid iso-code, use the english one
@@ -170,18 +168,18 @@ if ( ( navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.
 	window.attachEvent( 'onunload', function()
 		{
 			window['__flash__removeCallback'] = function ( instance, name )
-			{ 
+			{
 				try
-				{ 
+				{
 					if ( instance )
-					{ 
-						instance[name] = null ; 
-					} 
+					{
+						instance[name] = null ;
+					}
 				}
 				catch ( flashEx )
 				{
 
-				} 
+				}
 			} ;
 		}
 	) ;

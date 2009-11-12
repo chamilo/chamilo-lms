@@ -104,4 +104,12 @@ $AllowUserImageForumDeactivate = "Oculta les imatges dels usuaris al fòrum";
 $AllowLearningPathTheme = "Permet temes als itineraris formatius";
 $AllowLearningPathThemeAllow = "Permès";
 $AllowLearningPathThemeDisallow = "No permès";
+$ConfigChat = "Configuració del xat";
+$AllowOpenchatWindow = "Obrir el xat en una nova finestra";
+$AllowOpenChatWindowActivate = "Activar obrir el xat en una nova finestra";
+$AllowOpenChatWindowDeactivate = "Desactivar obrir el xat en una nova finestra ";
+$NewUserEmailAlert = "Avisar per correu electrònic l\'autosubscripció d\'un nou usuari.";
+$NewUserEmailAlertEnable = "Activar l\'avis per correu electrònic al professor del curs de l\'autosubscripció d\'un nou usuari.";
+$NewUserEmailAlertToTeacharAndTutor = "Activar l\'avís per correu electrònic al professor i als tutors del curs de l\'autosubscripció d\'un nou usuari. ";
+$NewUserEmailAlertDisable = "Desactivar l\'avís per correu electrònic al professor i als tutors del curs de la l\'autosubscripció d\'un nou usuari. ";
 ?>

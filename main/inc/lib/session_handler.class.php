@@ -150,7 +150,7 @@ class session_handler {
 		{
 			$result=$this->sqlQuery("SELECT COUNT(session_id) FROM ".$this->connexion['base'].".php_session");
 
-			list($nbr_results)=mysql_fetch_row($result);
+			list($nbr_results)=Database::fetch_row($result);
 
 			if($nbr_results > 5000)
 			{

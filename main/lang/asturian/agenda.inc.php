@@ -67,4 +67,11 @@ $RepeatedEventViewOriginalEvent = "Ver l\'eventu primeru";
 $ICalFileImport = "Importar un ficheru iCal/ics";
 $AllUsersOfThePlatform = "Tolos usuarios de la Plataforma";
 $GlobalEvent = "Eventu global";
+$ModifyEvent = "Camudar eventu";
+$EndDateCannotBeBeforeTheStartDate = "Data final nun deberá ser menos que la data d\'aniciu";
+$AgendaSortChronologicallyUp = "Ordenar eventos (antigüos/recientes)";
+$AgendaSortChronologicallyDown = "Ordenar eventos (recientes/antigüos)";
+$ItemForUserSelection = "Eventu dirixíu a una seleición d\'usuarios";
+$IsNotiCalFormatFile = "Nun ye un ficheru de formatu iCal";
+$RepeatEvent = "Repetir eventu";
 ?>

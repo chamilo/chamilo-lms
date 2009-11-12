@@ -1,7 +1,7 @@
 <?php
 /**
  * OpenID login method
- * 
+ *
  * The OpenID login method relies on authentication servers providing a public
  * URL that can confirm the identity of a person, thus avoiding the spread
  * use of password transmissions over non-secure lines (for Dokeos, it is a
@@ -14,7 +14,7 @@ require_once 'openid.conf.php';
 require_once 'openid.lib.php';
 require_once 'xrds.lib.php';
 
-function openid_form() 
+function openid_form()
 {
 	return '<div class="menusection"><span class="menusectioncaption">'.get_lang('OpenIdAuthentication').'</span><form name="openid_login" method="post"><label for="openid_url">'.get_lang('OpenIDURL').' <a href="main/auth/openid/whatis.php" title="'.get_lang('OpenIDWhatIs').'">'.Display::return_icon('info3.gif',get_lang('Info')).'</a></label><input type="text" id="openid_url" name="openid_url" style="background: url(main/img/openid_small_logo.png) no-repeat; background-color: #fff; background-position: 0 50%; padding-left:18px;" value="http://"></input><input type="submit" name="openid_login" value="'.get_lang('Enter').'" /><br /><br /></form></div>';
 }
@@ -29,7 +29,7 @@ function openid_form()
  * @param $claimed_id The OpenID to authenticate
  * @param $return_to The endpoint to return to from the OpenID Provider
  */
-function openid_begin($claimed_id, $return_to = '', $form_values = array()) 
+function openid_begin($claimed_id, $return_to = '', $form_values = array())
 {
 
   $claimed_id = _openid_normalize($claimed_id);
@@ -80,7 +80,7 @@ function openid_begin($claimed_id, $return_to = '', $form_values = array())
  * @return $response Response values for further processing with
  *   $response['status'] set to one of 'success', 'failed' or 'cancel'.
  */
-function openid_complete($response) 
+function openid_complete($response)
 {
   // Default to failed response
   $response['status'] = 'failed';
@@ -186,10 +186,10 @@ function openid_association($op_endpoint) {
   // Remove Old Associations:
   //TODO
   $openid_association = Database::get_main_table(TABLE_MAIN_OPENID_ASSOCIATION);
-  api_sql_query("DELETE FROM $openid_association WHERE created + expires_in < %d", time());
+  Database::query("DELETE FROM $openid_association WHERE created + expires_in < %d", time());
 
   // Check to see if we have an association for this IdP already
-  $assoc_handle = api_sql_query("SELECT assoc_handle FROM $openid_association WHERE idp_endpoint_uri = '%s'", $op_endpoint);
+  $assoc_handle = Database::query("SELECT assoc_handle FROM $openid_association WHERE idp_endpoint_uri = '%s'", $op_endpoint);
   if (Database::num_rows($assoc_handle)<=1) {
     $mod = OPENID_DH_DEFAULT_MOD;
     $gen = OPENID_DH_DEFAULT_GEN;
@@ -220,7 +220,7 @@ function openid_association($op_endpoint) {
     }
     //TODO
    	$openid_association = Database::get_main_table(TABLE_MAIN_OPENID_ASSOCIATION);
-    api_sql_query(sprintf("INSERT INTO $openid_association (idp_endpoint_uri, session_type, assoc_handle, assoc_type, expires_in, mac_key, created) VALUES('%s', '%s', '%s', '%s', %d, '%s', %d)",
+    Database::query(sprintf("INSERT INTO $openid_association (idp_endpoint_uri, session_type, assoc_handle, assoc_type, expires_in, mac_key, created) VALUES('%s', '%s', '%s', '%s', %d, '%s', %d)",
              $op_endpoint, $assoc_response['session_type'], $assoc_response['assoc_handle'], $assoc_response['assoc_type'], $assoc_response['expires_in'], $assoc_response['mac_key'], time()));
 
     $assoc_handle = $assoc_response['assoc_handle'];
@@ -251,7 +251,7 @@ function openid_association_request($public) {
 }
 
 /**
- * 
+ *
  */
 function openid_authentication_request($claimed_id, $identity, $return_to = '', $assoc_handle = '', $version = 2) {
 
@@ -275,7 +275,7 @@ function openid_authentication_request($claimed_id, $identity, $return_to = '', 
   }
 
   // Simple Registration - we don't ask lastname and firstname because the only
-  // available similar data is "fullname" and we would have to guess where to split 
+  // available similar data is "fullname" and we would have to guess where to split
   $request['openid.sreg.required'] = 'nickname,email';
   $request['openid.ns.sreg'] = "http://openid.net/extensions/sreg/1.1";
 
@@ -300,7 +300,7 @@ function openid_verify_assertion($op_endpoint, $response) {
 	//TODO
   $openid_association = Database::get_main_table(TABLE_MAIN_OPENID_ASSOCIATION);
   $sql = sprintf("SELECT * FROM $openid_association WHERE assoc_handle = '%s'", $response['openid.assoc_handle']);
-  $res = api_sql_query($sql);
+  $res = Database::query($sql);
   $association = Database::fetch_object($res);
   if ($association && isset($association->session_type)) {
     $keys_to_sign = explode(',', $response['openid.signed']);

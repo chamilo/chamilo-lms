@@ -35,7 +35,7 @@
        DOKEOS INIT SETTINGS
 ===============================================================================
 */
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "group";
 require_once ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
@@ -55,16 +55,16 @@ if (isset ($_POST['action']))
 	{
 		case 'create_groups' :
 			$groups = array ();
-			
+
 			for ($i = 0; $i < $_POST['number_of_groups']; $i ++)
 			{
 				$group1['name'] = api_strlen($_POST['group_'.$i.'_name']) == 0 ? get_lang('Group').' '.$i : $_POST['group_'.$i.'_name'] ;
-				$group1['category'] = isset($_POST['group_'.$i.'_category'])?$_POST['group_'.$i.'_category']:null;				
+				$group1['category'] = isset($_POST['group_'.$i.'_category'])?$_POST['group_'.$i.'_category']:null;
 				$group1['tutor'] = isset($_POST['group_'.$i.'_tutor'])?$_POST['group_'.$i.'_tutor']:null;
 				$group1['places'] = isset($_POST['group_'.$i.'_places'])?$_POST['group_'.$i.'_places']:null;
 				$groups[] = $group1;
 			}
-			
+
 			foreach ($groups as $index => $group)
 			{
 				if (!empty($_POST['same_tutor']))
@@ -109,7 +109,7 @@ $nameTools = get_lang('GroupCreation');
 $interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang('Groups'));
 Display :: display_header($nameTools, "Group");
 
-if (!is_allowed_to_edit())
+if (!api_is_allowed_to_edit(false,true))
 {
 	api_not_allowed();
 }
@@ -134,6 +134,7 @@ elseif (isset ($_POST['number_of_groups']))
 	$number_of_groups = intval($_POST['number_of_groups']);
 	if ($number_of_groups > 1)
 	{
+		
 ?>
 	<script type="text/javascript">
 	<!--
@@ -254,7 +255,30 @@ EOT;
 		}
 		//$group_el[] = & $form->createElement('select', 'group_'.$group_number.'_tutor', null, $tutor_options, array ('id' => 'tutor_'.$group_number));
 		$group_el[] = & $form->createElement('text', 'group_'.$group_number.'_places', null, array ('size' => 3, 'id' => 'places_'.$group_number));
-		$defaults['group_'.$group_number.'_name'] = get_lang('GroupSingle').' '.$group_id ++;
+		
+
+		if($_POST['number_of_groups']<10000)
+		{
+			if ($group_id<10)
+			{
+				$prev='000';
+			}
+			elseif ($group_id<100)
+			{
+				$prev='00';
+			}
+			elseif ($group_id<1000)
+			{
+				$prev='0';
+			}
+			else
+			{
+				$prev='';
+			}
+		}		
+				
+		$defaults['group_'.$group_number.'_name'] = get_lang('GroupSingle').' '.$prev.$group_id ++;		
+		
 		$form->addGroup($group_el, 'group_'.$group_number, null, '</td><td>', false);
 	}
 	$defaults['action'] = 'create_groups';

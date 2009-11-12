@@ -74,11 +74,11 @@ class GradebookDataGenerator
 	 * 4: date
 	 * 5: student's score (if student logged in)
 	 */
-	public function get_data ($sorting = 0, $start = 0, $count = null, $ignore_score_color = false) {	
-		$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());	
+	public function get_data ($sorting = 0, $start = 0, $count = null, $ignore_score_color = false) {
+		$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 		// do some checks on count, redefine if invalid value
 		if (!isset($count)) {
-			$count = count ($this->items) - $start;			
+			$count = count ($this->items) - $start;
 		}
 		if ($count < 0) {
 			$count = 0;
@@ -86,18 +86,18 @@ class GradebookDataGenerator
 		$allitems = $this->items;
 		// sort array
 		if ($sorting & self :: GDG_SORT_TYPE) {
-			usort($allitems, array('GradebookDataGenerator', 'sort_by_type'));			
+			usort($allitems, array('GradebookDataGenerator', 'sort_by_type'));
 		} elseif ($sorting & self :: GDG_SORT_NAME) {
-			usort($allitems, array('GradebookDataGenerator', 'sort_by_name'));			
+			usort($allitems, array('GradebookDataGenerator', 'sort_by_name'));
 		} elseif ($sorting & self :: GDG_SORT_DESCRIPTION) {
-			usort($allitems, array('GradebookDataGenerator', 'sort_by_description'));			
+			usort($allitems, array('GradebookDataGenerator', 'sort_by_description'));
 		} elseif ($sorting & self :: GDG_SORT_WEIGHT) {
-			usort($allitems, array('GradebookDataGenerator', 'sort_by_weight'));			
+			usort($allitems, array('GradebookDataGenerator', 'sort_by_weight'));
 		} elseif ($sorting & self :: GDG_SORT_DATE) {
-			usort($allitems, array('GradebookDataGenerator', 'sort_by_date'));			
+			usort($allitems, array('GradebookDataGenerator', 'sort_by_date'));
 		}
 		if ($sorting & self :: GDG_SORT_DESC) {
-			$allitems = array_reverse($allitems);			
+			$allitems = array_reverse($allitems);
 		}
 		// get selected items
 		$visibleitems = array_slice($allitems, $start, $count);
@@ -123,7 +123,7 @@ class GradebookDataGenerator
 					//$row[] = $this->get_certificate_link ($item);
 					$data[] = $row;
 				 }
-		    
+
 		return $data;
 
 	}
@@ -131,7 +131,7 @@ class GradebookDataGenerator
 	/**
 	 * Returns the link to the certificate generation, if the score is enough, otherwise
 	 * returns an empty string. This only works with categories.
-	 * @param	object Item 
+	 * @param	object Item
 	 */
 	function get_certificate_link($item) {
 		if(is_a($item, 'Category')) {
@@ -151,12 +151,12 @@ class GradebookDataGenerator
 
 	function sort_by_type($item1, $item2) {
 		if ($item1->get_item_type() == $item2->get_item_type()) {
-			return $this->sort_by_name($item1,$item2);		
+			return $this->sort_by_name($item1,$item2);
 		} else {
-			return ($item1->get_item_type() < $item2->get_item_type() ? -1 : 1);			
+			return ($item1->get_item_type() < $item2->get_item_type() ? -1 : 1);
 		}
 	}
-	
+
 	function sort_by_description($item1, $item2) {
 		$result = api_strcmp($item1->get_description(), $item2->get_description());
 		if ($result == 0) {
@@ -164,23 +164,23 @@ class GradebookDataGenerator
 		}
 		return $result;
 	}
-	
+
 	function sort_by_weight($item1, $item2) {
 		if ($item1->get_weight() == $item2->get_weight()) {
-			return $this->sort_by_name($item1,$item2);		
+			return $this->sort_by_name($item1,$item2);
 		} else {
-			return ($item1->get_weight() < $item2->get_weight() ? -1 : 1);			
+			return ($item1->get_weight() < $item2->get_weight() ? -1 : 1);
 		}
 	}
-	
+
 	function sort_by_date($item1, $item2) {
 		if ($item1->get_date() == $item2->get_date()) {
-			return $this->sort_by_name($item1,$item2);			
+			return $this->sort_by_name($item1,$item2);
 		} else {
-			return ($item1->get_date() < $item2->get_date() ? -1 : 1);			
+			return ($item1->get_date() < $item2->get_date() ? -1 : 1);
 		}
 	}
-	
+
 
 // Other functions
 
@@ -195,7 +195,7 @@ class GradebookDataGenerator
 				if ($score != null) {
 					$displaytype = SCORE_PERCENT;
 					if ($ignore_score_color) {
-						$displaytype |= SCORE_IGNORE_SPLIT;			
+						$displaytype |= SCORE_IGNORE_SPLIT;
 					}
 						return get_lang('Total') . ' : '. $scoredisplay->display_score($score,$displaytype);
 				} else {
@@ -206,7 +206,7 @@ class GradebookDataGenerator
 			case 'L' :
 				$displaytype = SCORE_DIV_PERCENT;
 				if ($ignore_score_color) {
-					$displaytype |= SCORE_IGNORE_SPLIT;					
+					$displaytype |= SCORE_IGNORE_SPLIT;
 				}
 				return $scoredisplay->display_score($score,$displaytype);
 		}
@@ -215,9 +215,9 @@ class GradebookDataGenerator
 	private function build_date_column ($item) {
 		$date = $item->get_date();
 		if (!isset($date) || empty($date)) {
-			return '';			
+			return '';
 		} else {
-			return date("j/n/Y g:i", $date);			
+			return date("j/n/Y g:i", $date);
 		}
 	}
 }

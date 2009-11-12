@@ -33,7 +33,7 @@ YouTube Plugin For FCKeditor をご利用いただき、有難うございます
 
 インストール手順
 
-１．解凍された youtube フォルダを fckeditor/editor/plugins/ にコピーする 
+１．解凍された youtube フォルダを fckeditor/editor/plugins/ にコピーする
 
 ２．fckeditor/fckconfig.js の最後に追加する
 　　FCKConfig.Plugins.Add( 'youtube', 'en,ja' ) ;

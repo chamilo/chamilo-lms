@@ -45,6 +45,8 @@ $langStudentsNotInThisGroups  = "Usuaris fora d\'aquest grup";
 $langQtyOfUserCanSubscribe_PartBeforeNumber  = "Un usuari pot ser mebre de un màxim de";
 $langQtyOfUserCanSubscribe_PartAfterNumber  = "Grups";
 $langGroupLimit = "Límit";
+$CreateGroup = "Crear grup(s)";
+$ProceedToCreateGroup = "Confirmar la creació de grup";
 $langStudentRegAllowed = "Els estudiants es poden auto-enregistrar en els grups";
 $langGroupAllowStudentUnregistration = "Els propis usuaris poden anul·lar la seva inscripció dels grups";
 $langAllGroups = "Tots els grups";
@@ -89,4 +91,5 @@ $GroupsFromClasses = "Grups de classes";
 $GroupsFromClassesInfo = "Utilitzant aquesta opció, podreu crear grups basats en les classes inscrites en el curs. ";
 $Group = "Grup";
 $ForumOfGroup = "Fòrum del grup:";
+$BackToGroupList = "Tornar a la llista de grups";
 ?>

@@ -32,7 +32,7 @@
 
 define('FRAME','master');
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file='chat';
 
 include('../inc/global.inc.php');
@@ -45,9 +45,9 @@ $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_online_link=Database::get_course_table(TABLE_ONLINE_LINK);
 
 $query="SELECT t1.user_id,username,picture_uri,t2.status FROM $tbl_user t1,$tbl_course_user t2 WHERE t1.user_id=t2.user_id AND course_code='$_cid' AND (t1.user_id='".$_user['user_id']."' OR t2.status='1')";
-$result=api_sql_query($query,__FILE__,__LINE__);
+$result=Database::query($query,__FILE__,__LINE__);
 
-while($row=mysql_fetch_array($result))
+while($row=Database::fetch_array($result))
 {
 	if($row['user_id'] == $_user['user_id'])
 	{
@@ -115,9 +115,9 @@ if(!$isMaster)
 	}
 
 	$query="SELECT id,name,url FROM $tbl_online_link ORDER BY name";
-	$result=api_sql_query($query,__FILE__,__LINE__);
+	$result=Database::query($query,__FILE__,__LINE__);
 
-	$Links=api_store_result($result);
+	$Links=Database::store_result($result);
 }
 
 include('header_frame.inc.php');

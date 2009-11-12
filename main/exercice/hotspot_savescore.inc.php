@@ -45,15 +45,15 @@ $coordinates = substr($coordinates,0,-1);
 $TBL_TRACK_E_HOTSPOT = Database::get_statistic_table(STATISTIC_TRACK_E_HOTSPOTS);
 // Save into db
 $sql = "INSERT INTO $TBL_TRACK_E_HOTSPOT (`user_id` , `course_id` , `quiz_id` , `question_id` , `answer_id` , `correct` , `coordinate` ) VALUES (
-			'".Database::escape_string($_user['user_id'])."', 
-			'".Database::escape_string($courseCode)."', 
-			'".Database::escape_string($exerciseId)."', 
-			'".Database::escape_string($questionId)."', 
-			'".Database::escape_string($answerId)."', 
-			'".Database::escape_string($hit)."', 
+			'".Database::escape_string($_user['user_id'])."',
+			'".Database::escape_string($courseCode)."',
+			'".Database::escape_string($exerciseId)."',
+			'".Database::escape_string($questionId)."',
+			'".Database::escape_string($answerId)."',
+			'".Database::escape_string($hit)."',
 			'".Database::escape_string($coordinates)."')";
-$result = api_sql_query($sql,__FILE__,__LINE__);
+$result = Database::query($sql,__FILE__,__LINE__);
 // Save insert id into session if users changes answer.
-$insert_id = mysql_insert_id();
+$insert_id = Database::insert_id();
 $_SESSION['exerciseResult'][$questionId]['ids'][$answerOrderId] = $insert_id;
 ?>

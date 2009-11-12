@@ -45,6 +45,7 @@ define('RESOURCE_SCORM', 'Scorm');
 define('RESOURCE_SURVEY','survey');
 define('RESOURCE_SURVEYQUESTION','survey_question');
 define('RESOURCE_SURVEYINVITATION','survey_invitation');
+define('RESOURCE_WIKI','wiki');
 
 /**
  * Representation of a resource in a Dokeos-course.

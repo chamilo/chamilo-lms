@@ -33,7 +33,7 @@ class HTML_QuickForm_Rule
 
    /**
     * Validates a value
-    * 
+    *
     * @access public
     * @abstract
     */
@@ -44,7 +44,7 @@ class HTML_QuickForm_Rule
 
    /**
     * Sets the rule name
-    * 
+    *
     * @access public
     */
     function setName($ruleName)

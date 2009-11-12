@@ -6,11 +6,11 @@
 */
 
 /**
-============================================================================== 
+==============================================================================
 *	Dokeos Metadata: update indexabletext for all eid_type records
 *
 *	@package dokeos.metadata
-============================================================================== 
+==============================================================================
 */
 
 
@@ -23,14 +23,14 @@ define('TPLEN', strlen(EID_TYPE) + 1);
 
 require('md_' . strtolower(EID_TYPE) . '.php');
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = 'md_' . strtolower(EID_TYPE);
 include('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 
 $nameTools = get_lang('Tool');
 
-($nameTools && get_lang('Sorry')) or give_up( 
+($nameTools && get_lang('Sorry')) or give_up(
     'Language file ' . $language_file . " doesn't define 'Tool' and 'Sorry'");
 
 $_course = api_get_course_info(); isset($_course) or give_up(get_lang('Sorry'));
@@ -54,18 +54,18 @@ Display::display_header($nameTools);
 echo '<h3>', htmlspecialchars(EID_TYPE, ENT_QUOTES, $charset), '</h3>', "\n";
 
 $result = $mdStore->mds_get_many('eid,mdxmltext', "eid LIKE '" . EID_TYPE . ".%'");
-echo get_lang('TotalMDEs'), $total = mysql_num_rows($result), "<br><br>\n";
+echo get_lang('TotalMDEs'), $total = Database::num_rows($result), "<br><br>\n";
 
 if ($total > 100) set_time_limit((int) ($total / 10));
 
-while ($row = mysql_fetch_array($result))
+while ($row = Database::fetch_array($result))
 {
     $eid = $row['eid']; $xmltext = $row['mdxmltext'];
     $xhtDoc->xht_xmldoc = new xmddoc(explode("\n", $xmltext));
-    
-    $mdStore->mds_put($eid, 
+
+    $mdStore->mds_put($eid,
         $xhtDoc->xht_fill_template('INDEXABLETEXT'), 'indexabletext');
-    
+
     echo htmlspecialchars($eid, ENT_QUOTES, $charset), ' ';
 }
 

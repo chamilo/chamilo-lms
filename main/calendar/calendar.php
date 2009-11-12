@@ -36,14 +36,14 @@ $DaysShort = api_get_week_days_short();
 $DaysLong = api_get_week_days_long();
 // Defining the months of the year to allow translation of the months
 $MonthsLong = api_get_months_long();
-@ $iso_lang = Database :: get_language_isocode($language_interface);
+@ $iso_lang = api_get_language_isocode($language_interface);
 if (empty ($iso_lang) )
 {
 	//if there was no valid iso-code, use the english one
 	$iso_lang = 'en';
 }
 ?>
-<!DOCTYPE html 
+<!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $iso_lang; ?>" lang="<?php echo $iso_lang; ?>">
@@ -66,12 +66,12 @@ if (empty ($iso_lang) )
 table.calendar td
 {
 
-	background-color: #f5f5f5;	
+	background-color: #f5f5f5;
 	text-align: center;
 }
 .data_table td.selected
 {
-	border: 1px solid #ff0000; 
+	border: 1px solid #ff0000;
 	background-color: #FFCECE;
 }
 .data_table td a

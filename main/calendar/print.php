@@ -26,7 +26,7 @@ require_once '../inc/global.inc.php';
 $TABLEAGENDA 		= Database::get_course_table(TABLE_AGENDA);
 
 $sql 			= "SELECT * FROM $TABLEAGENDA WHERE id IN($id) ORDER BY start_date DESC";
-$result			= api_sql_query($sql,__FILE__,__LINE__);
+$result			= Database::query($sql,__FILE__,__LINE__);
 ?>
 
 <html>

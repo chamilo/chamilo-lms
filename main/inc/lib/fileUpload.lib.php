@@ -71,26 +71,6 @@ function api_replace_parameter($upload_path, $buffer, $param_name="src")
 ==============================================================================
 */
 
-/**
- * Replaces all accentuated characters by non-accentuated characters for filenames, as
- * well as special HTML characters by their HTML entity's first letter.
- * 
- * Although this method is not absolute, it gives good results in general. It first
- * transforms the string to HTML entities (&ocirc;, @oslash;, etc) then removes the
- * HTML character part to result in simple characters (o, o, etc).
- * In the case of special characters (out of alphabetical value) like &nbsp; and &lt;,
- * it will still replace them by the first letter of the HTML entity (n, l, ...) but it
- * is still an acceptable method, knowing we're filtering filenames here...
- * @param	string	The accentuated string
- * @return	string	The escaped string, not absolutely correct but satisfying
- */
-function replace_accents($string){
-	global $charset;
-	$string = api_htmlentities($string,ENT_QUOTES,$charset);
-	$res = preg_replace("/&([a-z])[a-z]+;/i","$1",$string);
-	return $res;
-}
-
 //------------------------------------------------------------------------------
 
 /**
@@ -246,17 +226,17 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 	$uploaded_file['name']=stripslashes($uploaded_file['name']);
 	//add extension to files without one (if possible)
 	$uploaded_file['name']=add_ext_on_mime($uploaded_file['name'],$uploaded_file['type']);
-
+	$current_session_id = api_get_session_id();
 	//check if there is enough space to save the file
 	if (!enough_space($uploaded_file['size'], $maxFilledSpace))
 	{
 		Display::display_error_message(get_lang('UplNotEnoughSpace'));
 		return false;
 	}
-	
+
 	//if the want to unzip, check if the file has a .zip (or ZIP,Zip,ZiP,...) extension
 	if ($unzip == 1 && preg_match("/.zip$/", strtolower($uploaded_file['name'])) )
-	{	
+	{
 		return unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $maxFilledSpace, $output, $to_group_id);
 		//display_message("Unzipping file");
 	}
@@ -268,53 +248,52 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 	}
 	else
 	{
-	//clean up the name and prevent dangerous files
-	//remove strange characters
-	$clean_name = replace_dangerous_char($uploaded_file['name']);
-	$clean_name = replace_accents($clean_name);
-	//no "dangerous" files
-	$clean_name = disable_dangerous_file($clean_name);
-	if(!filter_extension($clean_name))
-	{
-		Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
-		return false;
-	}
-	else
-	{
-		//extension is good
-		//echo "<br/>clean name = ".$clean_name;
-		//echo "<br/>upload_path = ".$upload_path;
-		//if the upload path differs from / (= root) it will need a slash at the end
-		if ($upload_path!='/')
-			$upload_path = $upload_path.'/';
-		//echo "<br/>upload_path = ".$upload_path;
-		$file_path = $upload_path.$clean_name;
-		//echo "<br/>file path = ".$file_path;
-		//full path to where we want to store the file with trailing slash
-		$where_to_save = $base_work_dir.$upload_path;
-		//at least if the directory doesn't exist, tell so
-		if(!is_dir($where_to_save)){
-			Display::display_error_message(get_lang('DestDirectoryDoesntExist').' ('.$upload_path.')');
+		//clean up the name, only ASCII characters should stay.
+		$clean_name = replace_dangerous_char($uploaded_file['name']);
+		//no "dangerous" files
+		$clean_name = disable_dangerous_file($clean_name);
+		if(!filter_extension($clean_name))
+		{
+			Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
 			return false;
 		}
-		//echo "<br/>where to save = ".$where_to_save;
-		// full path of the destination
-		$store_path = $where_to_save.$clean_name;
-		//echo "<br/>store path = ".$store_path;
-		//name of the document without the extension (for the title)
-		$document_name = get_document_title($uploaded_file['name']);
-		//size of the uploaded file (in bytes)
-		$file_size = $uploaded_file['size'];
-		
-		$files_perm = api_get_setting('permissions_for_new_files');
-		$files_perm = octdec(!empty($files_perm)?$files_perm:'0770');
-		
+		else
+		{
+			//extension is good
+			//echo "<br/>clean name = ".$clean_name;
+			//echo "<br/>upload_path = ".$upload_path;
+			//if the upload path differs from / (= root) it will need a slash at the end
+			if ($upload_path!='/') {
+				$upload_path = $upload_path.'/';
+			}
+			//echo "<br/>upload_path = ".$upload_path;
+			$file_path = $upload_path.$clean_name;
+			//echo "<br/>file path = ".$file_path;
+			//full path to where we want to store the file with trailing slash
+			$where_to_save = $base_work_dir.$upload_path;
+			//at least if the directory doesn't exist, tell so
+			if(!is_dir($where_to_save)){
+				Display::display_error_message(get_lang('DestDirectoryDoesntExist').' ('.$upload_path.')');
+				return false;
+			}
+			//echo "<br/>where to save = ".$where_to_save;
+			// full path of the destination
+			$store_path = $where_to_save.$clean_name;
+			//echo "<br/>store path = ".$store_path;
+			//name of the document without the extension (for the title)
+			$document_name = get_document_title($uploaded_file['name']);
+			//size of the uploaded file (in bytes)
+			$file_size = $uploaded_file['size'];
+
+			$files_perm = api_get_setting('permissions_for_new_files');
+			$files_perm = octdec(!empty($files_perm)?$files_perm:'0770');
+
 			//what to do if the target file exists
 			switch ($what_if_file_exists)
-				{
+			{
 				//overwrite the file if it exists
 				case 'overwrite':
-	
+
 					//check if the target file exists, so we can give another message
 					if (file_exists($store_path))
 					{
@@ -336,7 +315,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 								//update filesize
 								update_existing_document($_course,$document_id,$uploaded_file['size']);
 								//update document item_property
-								api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentUpdated',$user_id,$to_group_id,$to_user_id);
+								api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentUpdated',$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
 							}
 							//if the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course,$upload_path,$user_id);
@@ -353,7 +332,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 							if ($document_id)
 							{
 								//put the document in item_property update
-								api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id);
+								api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
 							}
 							//if the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course,$upload_path,$user_id);
@@ -368,23 +347,23 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 						return false;
 					}
 					break;
-	
+
 				//rename the file if it exists
 				case 'rename':
 					$new_name = unique_name($where_to_save, $clean_name);
 					$store_path = $where_to_save.$new_name;
 					$new_file_path = $upload_path.$new_name;
-	
+
 					if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path))
 					{
 						chmod($store_path,$files_perm);
-						
+
 						//put the document data in the database
 						$document_id = add_document($_course,$new_file_path,'file',$file_size,$document_name);
 						if ($document_id)
 						{
 							//update document item_property
-							api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id);
+							api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
 						}
 						//if the file is in a folder, we need to update all parent folders
 						item_property_update_on_folder($_course,$upload_path,$user_id);
@@ -400,7 +379,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 						return false;
 					}
 					break;
-	
+
 				//only save the file if it doesn't exist or warn user if it does exist
 				default:
 					if (file_exists($store_path))
@@ -410,15 +389,15 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 					else
 					{
 						if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path))
-						{							
+						{
 							chmod($store_path,$files_perm);
-								
+
 							//put the document data in the database
 							$document_id = add_document($_course,$file_path,'file',$file_size,$document_name);
 							if ($document_id)
 							{
 								//update document item_property
-								api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id);
+								api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
 							}
 							//if the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course,$upload_path,$user_id);
@@ -569,11 +548,11 @@ function documents_total_space($to_group_id='0')
 	AND props.to_group_id='".$to_group_id."'
 	AND props.visibility <> 2";
 
-	$result = api_sql_query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql,__FILE__,__LINE__);
 
-	if($result && mysql_num_rows($result)!=0)
+	if($result && Database::num_rows($result)!=0)
 	{
-		$row = mysql_fetch_row($result);
+		$row = Database::fetch_row($result);
 
 		return $row[0];
 	}
@@ -903,13 +882,13 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 	global $_user;
 	global $to_user_id;
 	global $to_group_id;
-	
+
 	$zip_file = new pclZip($uploaded_file['tmp_name']);
 
 	// Check the zip content (real size and file extension)
 
 	$zip_content_array = $zip_file->listContent();
-	
+
 	foreach((array) $zip_content_array as $this_content)
 	{
 		$real_filesize += $this_content['size'];
@@ -935,7 +914,7 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 	$save_dir = getcwd();
 	chdir($base_work_dir.$upload_path);
 	//we extract using a callback function that "cleans" the path
-	$unzipping_state = $zip_file->extract(PCLZIP_CB_PRE_EXTRACT, 'clean_up_files_in_zip');	
+	$unzipping_state = $zip_file->extract(PCLZIP_CB_PRE_EXTRACT, 'clean_up_files_in_zip');
 	// Add all documents in the unzipped folder to the database
 	add_all_documents_in_folder_to_database($_course,$_user['user_id'],$base_work_dir,$upload_path == '/' ? '' : $upload_path, $to_group_id);
 	//Display::display_normal_message(get_lang('UplZipExtractSuccess'));
@@ -1081,7 +1060,7 @@ function clean_up_path(&$path)
 
 /**
  * Check if the file is dangerous, based on extension and/or mimetype.
- * The list of extensions accepted/rejected can be found from 
+ * The list of extensions accepted/rejected can be found from
  * api_get_setting('upload_extensions_exclude') and api_get_setting('upload_extensions_include')
  * @param	string 	filename passed by reference. The filename will be modified if filter rules say so! (you can include path but the filename should look like 'abc.html')
  * @return	int		0 to skip file, 1 to keep file
@@ -1157,14 +1136,15 @@ function filter_extension(&$filename)
 function add_document($_course,$path,$filetype,$filesize,$title,$comment=NULL, $readonly=0)
 {
 	global $charset;
+	$session_id = api_get_session_id();
 	$table_document = Database::get_course_table(TABLE_DOCUMENT,$_course['dbName']);
 	$sql="INSERT INTO $table_document
-	(`path`,`filetype`,`size`,`title`, `comment`, readonly)
+	(`path`, `filetype`, `size`, `title`, `comment`, `readonly`, `session_id`)
 	VALUES ('$path','$filetype','$filesize','".
-	Database::escape_string(htmlspecialchars($title, ENT_QUOTES, $charset))."', '$comment',$readonly)";
-	if(api_sql_query($sql,__FILE__,__LINE__))
+	Database::escape_string(htmlspecialchars($title, ENT_QUOTES, $charset))."', '$comment', $readonly, $session_id)";
+	if(Database::query($sql,__FILE__,__LINE__))
 	{
-		//display_message("Added to database (id ".mysql_insert_id().")!");
+		//display_message("Added to database (id ".Database::insert_id().")!");
 		return Database::insert_id();
 	}
 	else
@@ -1193,10 +1173,10 @@ function get_document_id() moved to document.lib.php
  * @return boolean true /false
  */
 function update_existing_document($_course,$document_id,$filesize,$readonly=0)
-{ 
+{
 	$document_table = Database::get_course_table(TABLE_DOCUMENT,$_course['dbName']);
 	$sql="UPDATE $document_table SET size = '$filesize' , readonly = '$readonly' WHERE id='$document_id'";
-	if(api_sql_query($sql,__FILE__,__LINE__))
+	if(Database::query($sql,__FILE__,__LINE__))
 	{
 		return true;
 	}
@@ -1248,7 +1228,7 @@ function item_property_update_on_folder($_course,$path,$user_id)
 			if($folder_id)
 			{
 				$sql = "UPDATE $TABLE_ITEMPROPERTY SET `lastedit_date`='$time',`lastedit_type`='DocumentInFolderUpdated', `lastedit_user_id`='$user_id' WHERE tool='".TOOL_DOCUMENT."' AND ref='$folder_id'";
-				api_sql_query($sql,__FILE__,__LINE__);
+				Database::query($sql,__FILE__,__LINE__);
 			}
 		}
 	}
@@ -1316,14 +1296,14 @@ function set_default_settings($upload_path,$filename,$filetype="file")
 	//$dbTable already has `backticks`!
 	//$query="select count(*) as bestaat from `$dbTable` where path='$upload_path/$filename'";
 	$query="select count(*) as bestaat from $dbTable where path='$upload_path/$filename'";
-	$result=api_sql_query($query,__FILE__,__LINE__);
-	$row=mysql_fetch_array($result);
+	$result=Database::query($query,__FILE__,__LINE__);
+	$row=Database::fetch_array($result);
 	if($row["bestaat"]>0)
 		//$query="update `$dbTable` set path='$upload_path/$filename',visibility='$default_visibility', filetype='$filetype' where path='$upload_path/$filename'";
 		$query="update $dbTable set path='$upload_path/$filename',visibility='$default_visibility', filetype='$filetype' where path='$upload_path/$filename'";
 	else //$query="INSERT INTO `$dbTable` (path,visibility,filetype) VALUES('$upload_path/$filename','$default_visibility','$filetype')";
 		$query="INSERT INTO $dbTable (path,visibility,filetype) VALUES('$upload_path/$filename','$default_visibility','$filetype')";
-	api_sql_query($query,__FILE__,__LINE__);
+	Database::query($query,__FILE__,__LINE__);
 }
 
 //------------------------------------------------------------------------------
@@ -1418,7 +1398,8 @@ function create_unexisting_directory($_course,$user_id,$to_group_id,$to_user_id,
 		if ($document_id)
 		{
 		//update document item_property
-		api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'FolderCreated',$user_id,$to_group_id,$to_user_id);
+		$current_session_id = api_get_session_id();
+		api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'FolderCreated',$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
 		return $desired_dir_name.$nb;
 		}
 	}
@@ -1838,7 +1819,7 @@ function build_missing_files_form($missing_files,$upload_path,$file_name)
 				}
 				$form .= "</table>\n"
 						."<button type='submit' name=\"cancel_submit_image\" value=\"".get_lang('Cancel')."\" class=\"cancel\">".get_lang('Cancel')."</button>"
-						."<button type='submit' name=\"submit_image\" value=\"".get_lang('Ok')."\" class=\"save\">".get_lang('Ok')."</button>"									
+						."<button type='submit' name=\"submit_image\" value=\"".get_lang('Ok')."\" class=\"save\">".get_lang('Ok')."</button>"
 						."</form>\n";
 				return $form;
 }
@@ -1854,11 +1835,10 @@ function build_missing_files_form($missing_files,$upload_path,$file_name)
  */
 function add_all_documents_in_folder_to_database($_course,$user_id,$base_work_dir,$current_path='',$to_group_id=0)
 {
-
-	$path = $base_work_dir.$current_path;
-	
-	//open dir
-	$handle=opendir($path);
+$current_session_id = api_get_session_id();
+$path = $base_work_dir.$current_path;
+//open dir
+$handle=opendir($path);
 	//run trough
 	while($file=readdir($handle))
 	{
@@ -1866,7 +1846,7 @@ function add_all_documents_in_folder_to_database($_course,$user_id,$base_work_di
 
 	   $completepath="$path/$file";
 	   //directory?
-  
+
 	   if (is_dir($completepath))
 	   {
 	   	$title=get_document_title($file);
@@ -1876,7 +1856,7 @@ function add_all_documents_in_folder_to_database($_course,$user_id,$base_work_di
 		if(!DocumentManager::get_document_id($_course, $current_path.'/'.$safe_file))
 		{
 			$document_id=add_document($_course,$current_path.'/'.$safe_file,'folder',0,$title);
-			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id, $to_group_id);
+			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id, $to_group_id,null,null,null,$current_session_id);
 			//echo $current_path.'/'.$safe_file." added!<br/>";
 
 		}
@@ -1889,22 +1869,58 @@ function add_all_documents_in_folder_to_database($_course,$user_id,$base_work_di
 			//rename
 			$safe_file=disable_dangerous_file(replace_dangerous_char($file));
 			@rename($base_work_dir.$current_path.'/'.$file,$base_work_dir.$current_path.'/'.$safe_file);
-			
+
 			if(!DocumentManager::get_document_id($_course, $current_path.'/'.$safe_file))
 			{
 			$title=get_document_title($file);
 			$size = filesize($base_work_dir.$current_path.'/'.$safe_file);
 			$document_id = add_document($_course,$current_path.'/'.$safe_file,'file',$size,$title);
-			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id);
+			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id,$to_group_id,null,null,null,$current_session_id);
 			//echo $current_path.'/'.$safe_file." added!<br/>";
 			}
 	    }
 	}
 }
 
-// could be usefull in some cases...
-function remove_accents($string){
+
+/*
+==============================================================================
+		DEPRECATED FUNCTIONS
+==============================================================================
+*/
+
+/**
+ * @deprecated Use transliteration instead, it is applicable for all languages.
+ *
+ * Replaces all accentuated characters by non-accentuated characters for filenames, as
+ * well as special HTML characters by their HTML entity's first letter.
+ *
+ * Although this method is not absolute, it gives good results in general. It first
+ * transforms the string to HTML entities (&ocirc;, @oslash;, etc) then removes the
+ * HTML character part to result in simple characters (o, o, etc).
+ * In the case of special characters (out of alphabetical value) like &nbsp; and &lt;,
+ * it will still replace them by the first letter of the HTML entity (n, l, ...) but it
+ * is still an acceptable method, knowing we're filtering filenames here...
+ * @param	string	The accentuated string
+ * @return	string	The escaped string, not absolutely correct but satisfying
+ */
+function replace_accents($string, $encoding = null) {
+	/*
+	global $charset;
+	$string = api_htmlentities($string,ENT_QUOTES,$charset);
+	$res = preg_replace("/&([a-z])[a-z]+;/i","$1",$string);
+	return $res;
+	*/
+	return api_transliterate($string, 'x', $encoding);
+}
+
+/**
+ *  @deprecated Use transliteration instead, it is applicable for all languages.
+ */
+function remove_accents($string, $encoding = null) {
+	/*
 	$string = strtr ( $string, "�����������������������������������������������������", "AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuyNn");
 	return $string;
+	*/
+	return api_transliterate($string, 'x', $encoding);
 }
-?>

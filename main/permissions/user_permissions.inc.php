@@ -73,12 +73,12 @@ if (api_get_setting('user_roles')=='true')
 	$current_user_role_permissions_of_user=get_roles_permissions('user',$user_id);
 	$inherited_permissions=permission_array_merge($inherited_permissions,$current_user_role_permissions_of_user);
 	// NOTE: deze array moet nog gemerged worden met de $inherited_permissions array
-	// (heet momenteel nog $current_group_permissions_of_user omdat voorlopig enkel de 
-	// groepsgeërfde permissions in beschouwing worden genomen
+	// (heet momenteel nog $current_group_permissions_of_user omdat voorlopig enkel de
+	// groepsgeï¿½rfde permissions in beschouwing worden genomen
 	// dit moet ook de rol permissies van rollen die toegekend worden aan een gebruiker
 	// en de rol permissies van rollen die toegekend worden aan de groepen van een gebruiker
 	// omvatten.
-	// NOTE: checken als de rollen brol wel degelijk geactiveerd is voordat we dit allemaal 
+	// NOTE: checken als de rollen brol wel degelijk geactiveerd is voordat we dit allemaal
 	// ophalen.
 	// platform roles that are assigned to the user
 	$current_user_role_permissions_of_user=get_roles_permissions('user',$user_id, 'platform');
@@ -134,7 +134,7 @@ echo '<strong>'.get_lang('UserPermissions').'</strong>';
 echo "<table class=\"data_table\">\n";
 
 // the header
-echo "\t<tr>\n";	
+echo "\t<tr>\n";
 echo "\t\t<th>".get_lang('Module')."</th>\n";
 foreach ($header_array as $header_key=>$header_value)
 {
@@ -145,7 +145,7 @@ echo "\t</tr>\n";
 // the main area with the checkboxes or images
 foreach ($tool_rights as $tool=>$rights) // $tool_rights contains all the possible tools and their rights
 {
-	echo "\t<tr>\n";	
+	echo "\t<tr>\n";
 	echo "\t\t<td>\n";
 	if (strstr($tool,'BLOG'))
 	{
@@ -160,12 +160,12 @@ foreach ($tool_rights as $tool=>$rights) // $tool_rights contains all the possib
 	{
 		echo get_lang($tool);
 	}
-	
-	echo "\t\t</td>\n"; 
+
+	echo "\t\t</td>\n";
 
 	foreach ($header_array as $key=>$value)
 	{
-		
+
 		echo "\t\t<td align='center'>\n";
 		if (in_array($value,$rights))
 		{
@@ -177,11 +177,11 @@ foreach ($tool_rights as $tool=>$rights) // $tool_rights contains all the possib
 			{
 				display_image_matrix($current_user_permissions, $tool, $value,$inherited_permissions, $course_admin);
 			}
-		}		
+		}
 		// note: in a later stage this part will be replaced by a function
 		// so that we can easily switch between a checkbox approach or an image approach
-		// where every click is in fact a change of status. In the checkbox approach you first have to 
-		// do the changes and then store them by clicking the submit button. 
+		// where every click is in fact a change of status. In the checkbox approach you first have to
+		// do the changes and then store them by clicking the submit button.
 		echo "\t\t</td>\n";
 	}
 	echo "\t</tr>\n";

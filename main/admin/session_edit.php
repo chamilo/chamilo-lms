@@ -27,9 +27,9 @@ $tool_name = get_lang('EditSession');
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
 
-$result=api_sql_query("SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end FROM $tbl_session WHERE id='$id'",__FILE__,__LINE__);
+$result=Database::query("SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility FROM $tbl_session WHERE id='$id'",__FILE__,__LINE__);
 
-if (!$infos=mysql_fetch_array($result)) {
+if (!$infos=Database::fetch_array($result)) {
 	header('Location: session_list.php');
 	exit();
 }
@@ -43,17 +43,20 @@ if (!api_is_platform_admin() && $infos['session_admin_id']!=$_user['user_id']) {
 if ($_POST['formSent']) {
 	$formSent=1;
 	$name= $_POST['name'];
-	$year_start= $_POST['year_start']; 
-	$month_start=$_POST['month_start']; 
-	$day_start=$_POST['day_start']; 
-	$year_end=$_POST['year_end']; 
-	$month_end=$_POST['month_end']; 
-	$day_end=$_POST['day_end']; 
-	$nb_days_acess_before = $_POST['nb_days_access_before']; 
-	$nb_days_acess_after = $_POST['nb_days_access_after']; 
+	$year_start= $_POST['year_start'];
+	$month_start=$_POST['month_start'];
+	$day_start=$_POST['day_start'];
+	$year_end=$_POST['year_end'];
+	$month_end=$_POST['month_end'];
+	$day_end=$_POST['day_end'];
+	$nb_days_acess_before = $_POST['nb_days_access_before'];
+	$nb_days_acess_after = $_POST['nb_days_access_after'];
 	$nolimit=$_POST['nolimit'];
 	$id_coach=$_POST['id_coach'];
-	$return = SessionManager::edit_session($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach);
+	$id_session_category = $_POST['session_category'];
+	$id_visibility = $_POST['session_visibility'];
+
+	$return = SessionManager::edit_session($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit, $id_coach, $id_session_category,$id_visibility);
 	if ($return == strval(intval($return))) {
 		header('Location: resume_session.php?id_session='.$return);
 		exit();
@@ -64,7 +67,7 @@ $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, usern
 $sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
 
 if ($_configuration['multiple_access_urls']==true){
-	$table_access_url_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);	
+	$table_access_url_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1) {
 		$sql="SELECT DISTINCT u.user_id,lastname,firstname,username FROM $tbl_user u INNER JOIN $table_access_url_rel_user url_rel_user
@@ -73,9 +76,9 @@ if ($_configuration['multiple_access_urls']==true){
 	}
 }
 
-$result=api_sql_query($sql,__FILE__,__LINE__);
+$result=Database::query($sql,__FILE__,__LINE__);
 
-$Coaches=api_store_result($result);
+$Coaches=Database::store_result($result);
 $thisYear=date('Y');
 
 // display the header
@@ -94,7 +97,7 @@ if (!empty($return)) {
 
 <div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
 
-<table border="0" cellpadding="5" cellspacing="0" width="600">
+<table border="0" cellpadding="5" cellspacing="0" width="650">
 
 <tr>
   <td width="30%"><?php echo get_lang('SessionName') ?>&nbsp;&nbsp;</td>
@@ -119,6 +122,25 @@ unset($Coaches);
 
   </select></td>
 </tr>
+<?php
+	$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+	//$access_url_id = api_get_current_access_url_id();
+	$sql = 'SELECT id, name FROM '.$tbl_session_category.' ORDER BY name ASC';
+	$result = Database::query($sql,__FILE__,__LINE__);
+	$Categories = Database::store_result($result);
+?>
+<tr>
+  <td width="30%"><?php echo get_lang('SessionCategory') ?></td>
+  <td width="70%">
+  	<select name="session_category" value="true" style="width:250px;">
+		<option value="0"><?php get_lang('None'); ?></option>
+		<?php foreach($Categories as $Rows): ?>
+		<option value="<?php echo $Rows['id']; ?>" <?php if($Rows['id'] == $infos['session_category_id']) echo 'selected="selected"'; ?>><?php echo $Rows['name']; ?></option>
+		<?php endforeach; ?>
+	</select>
+  </td>
+</tr>
+
 <tr>
   <td width="30%"><?php echo get_lang('NoTimeLimits') ?></td>
   <td width="70%">
@@ -289,11 +311,26 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
 		</div>
 	</td>
 </tr>
+
+<tr>
+  <td width="30%"><?php echo get_lang('SessionVisibility') ?></td>
+  <td width="70%">
+  	<select name="session_visibility" style="width:250px;">
+		<?php
+		$visibility_list = array(SESSION_VISIBLE_READ_ONLY=>get_lang('ReadOnly'), SESSION_VISIBLE=>get_lang('Visible'), SESSION_INVISIBLE=>api_ucfirst(get_lang('Invisible')));
+		foreach($visibility_list as $key=>$item): ?>
+		<option value="<?php echo $key; ?>" <?php if($key == $infos['visibility']) echo 'selected="selected"'; ?>><?php echo $item; ?></option>
+		<?php endforeach; ?>
+	</select>
+  </td>
+</tr>
+
+
 <tr>
   <td>&nbsp;</td>
   <td>
 <button class="save" type="submit" value="<?php echo get_lang('ModifyThisSession') ?>"><?php echo get_lang('ModifyThisSession') ?></button>
-  
+
   </td>
 </tr>
 
@@ -314,6 +351,9 @@ function setDisable(select){
 	document.form.month_end.disabled = (select.checked) ? true : false;
 	document.form.year_end.disabled = (select.checked) ? true : false;
 
+	document.form.session_visibility.disabled = (select.checked) ? true : false;
+
+	document.form.session_visibility.selectedIndex = 0;
 
 }
 </script>

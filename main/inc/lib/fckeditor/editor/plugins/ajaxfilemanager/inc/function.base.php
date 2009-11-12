@@ -10,7 +10,7 @@ require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "config.php");
 /**
  * force to ensure existence of stripos
  */
-if (!function_exists("stripos")) 
+if (!function_exists("stripos"))
 {
   function stripos($str,$needle,$offset=0)
   {
@@ -103,14 +103,14 @@ function displayArray($array, $comments="")
 			if(array_search(strtolower(getFileExt($filePath)), $validExts) !== false)
 			{
 				return true;
-			}else 
+			}else
 			{
 				return false;
 			}
 		}elseif(array_search(strtolower(getFileExt($filePath)), $invalidExts) === false)
 		{
 			return true;
-		}else 
+		}else
 		{
 			return false;
 		}
@@ -123,9 +123,9 @@ function displayArray($array, $comments="")
 /**
  *  transform file relative path to absolute path
  * @param  string $value the path to the file
- * @return string 
+ * @return string
  */
-function relToAbs($value) 
+function relToAbs($value)
 {
 	return backslashToSlash(preg_replace("/(\\\\)/","\\", getRealPath($value)));
 
@@ -181,10 +181,10 @@ function removeTrailingSlash($value) {
 /**
  * append a trailing slash
  *
- * @param string $value 
+ * @param string $value
  * @return string
  */
-function addTrailingSlash($value) 
+function addTrailingSlash($value)
 {
 	if(preg_match('@^.*[^/]{1}$@i', $value))
 	{
@@ -204,13 +204,13 @@ function transformFilePath($value) {
 	$value = addTrailingSlash(backslashToSlash(getRealPath($value)));
 	if(!empty($rootPath) && ($i = strpos($value, $rootPath)) !== false)
 	{
-		$value = ($i == 0?substr($value, strlen($rootPath)):"/");		
+		$value = ($i == 0?substr($value, strlen($rootPath)):"/");
 	}
 	$value = prependSlash($value);
 	return $value;
 }
 /**
- * prepend slash 
+ * prepend slash
  *
  * @param string $value
  * @return string
@@ -220,8 +220,8 @@ function prependSlash($value)
 		if (($value && $value[0] != '/') || !$value )
 		{
 			$value = "/" . $value;
-		}			
-		return $value;	
+		}
+		return $value;
 }
 
 
@@ -235,7 +235,7 @@ function prependSlash($value)
 		{
 			die();
 		}
-		
+
 	}
 
 /**
@@ -264,7 +264,7 @@ function addNoCacheHeaders() {
 			}else
 			{
 				$output .= "?" . $extra;
-			}			
+			}
 		}
 
 		return $output;
@@ -335,10 +335,10 @@ function addNoCacheHeaders() {
 		{
 			return true;
 		}
-		return false;		
+		return false;
 	}
-	
-	
+
+
 	/**
 	 * get thumbnail width and height
 	 *
@@ -419,12 +419,12 @@ function myRealPath($path) {
 		}
     // check if path begins with "/" ie. is absolute
     // if it isnt concat with script path
-    
+
     if (strpos($path,"/") !== 0 ) {
         $base=dirname($_SERVER['SCRIPT_FILENAME']);
         $path=$base."/".$path;
     }
- 
+
     // canonicalize
     $path=explode('/', $path);
     $newpath=array();
@@ -457,12 +457,12 @@ function myRealPath($path) {
  	 if(($path = realpath($value)) && $path != $value)
  	 {
  	 	$output = $path;
- 	 }else 
+ 	 }else
  	 {
  	 	$output = myRealPath($value);
  	 }
  	 return $output;
- 	
+
  }
 	/**
 	 * get file url
@@ -479,21 +479,21 @@ function myRealPath($path) {
 		$urlsuffix = "";
 
 	$value = backslashToSlash(getRealPath($value));
-		
+
 
 		$pos = stripos($value, $wwwroot);
 		if ($pos !== false && $pos == 0)
 		{
 			$output  = $urlprefix . substr($value, strlen($wwwroot)) . $urlsuffix;
-		}else 
+		}else
 		{
 			$output = $value;
 		}
 		return "http://" .  addTrailingSlash(backslashToSlash($_SERVER['HTTP_HOST'])) . removeBeginingSlash(backslashToSlash($output));
 	}
-	
+
 /**
- * 
+ *
  *	transfer file size number to human friendly string
  * @param integer $size.
  * @return String
@@ -512,9 +512,9 @@ function transformFileSize($size) {
 	}else
 	{
 		return $size . " b";
-	}	
+	}
 }
-	
+
 	/**
 	 * remove beginging slash
 	 *
@@ -530,7 +530,7 @@ function transformFileSize($size) {
 		}
 		return $value;
 	}
-	
+
 /**
  * get site root path
  *
@@ -551,44 +551,44 @@ function getRootPath() {
 		}elseif(isset($_SERVER["SCRIPT_NAME"]) && isset($_SERVER["PATH_TRANSLATED"]) && ($output = str_replace(backslashToSlash($_SERVER["SCRIPT_NAME"]), "", str_replace("//", "/", backslashToSlash($_SERVER["PATH_TRANSLATED"])))) && is_dir($output))
 		{
 			return $output;
-		}else 
+		}else
 		{
 			return '';
-		}	
+		}
 
 	return null;
 }
 
-	
+
 	/**
 	 * add beginging slash
 	 *
 	 * @param string $value
 	 * @return string
-	 */	
+	 */
 	function addBeginingSlash($value)
 	{
 		if(strpos($value, "/") !== 0 && !empty($value))
 		{
 			$value .= "/" . $value;
 		}
-		return $value;		
+		return $value;
 	}
 
 
-	
 
-	
+
+
 	/**
 	 * get a file extension
 	 *
 	 * @param string $fileName the path to a file or just the file name
-	 */	
+	 */
 	function getFileExt($filePath)
 	{
 		return @substr(@strrchr($filePath, "."), 1);
 	}
-	
+
 		/**
 		 * reuturn the relative path between two url
 		 *
@@ -651,8 +651,8 @@ function getRootPath() {
     {
     	$output = intval($output) * 1024 * 1024;
     }
-    
-    return $output;  	
+
+    return $output;
   }
 	/**
 	 * get file content
@@ -684,35 +684,35 @@ function getRootPath() {
                    $fh = @opendir($path);
                    if($fh)
                    {
-                            $count = 1;                          
+                            $count = 1;
                             while($file = @readdir($fh))
                             {
                                      $newPath = removeTrailingSlash(backslashToSlash($path . "/" . $file));
                                      if(isListingDocument($newPath) && $file != '.' && $file != '..' && is_dir($newPath))
-                                     {                                          
+                                     {
                                                if(!empty($indexNumber))
                                                {//this is not root folder
-                                               					
+
                                                         $outputs[$prefixNumber . $indexNumber . "." . $count . $prefixName . $file] = $newPath;
-                                                        getFolderListing($newPath,  $prefixNumber . $indexNumber . "." . $count , $prefixNumber, $prefixName, $outputs);                                                 
-                                               }else 
+                                                        getFolderListing($newPath,  $prefixNumber . $indexNumber . "." . $count , $prefixNumber, $prefixName, $outputs);
+                                               }else
                                                {//this is root folder
 
                                                         $outputs[$count . $prefixName . $file] = $newPath;
                                                         getFolderListing($newPath, $count, $prefixNumber, $prefixName, $outputs);
                                                }
                                                $count++;
-                                     }                                    
+                                     }
                             }
                             @closedir($fh);
                    }
                    return $outputs;
          }
 
-         
+
          /**
-          * get the valid text editor extension 
-          * which is calcualte from the CONFIG_EDITABALE_VALID_EXTS 
+          * get the valid text editor extension
+          * which is calcualte from the CONFIG_EDITABALE_VALID_EXTS
           * exclude those specified in CONFIG_UPLOAD_INVALID_EXTS
           * and those are not specified in CONFIG_UPLOAD_VALID_EXTS
           *
@@ -730,7 +730,7 @@ function getRootPath() {
          			{
          				unset($validEditorExts[$k]);
          			}
-         		}        		
+         		}
          	}
          	if(CONFIG_UPLOAD_INVALID_EXTS)
          	{//exlcude those exists in CONFIG_UPLOAD_INVALID_EXTS
@@ -743,11 +743,11 @@ function getRootPath() {
          			}
          		}
          	}
-         	return $validEditorExts;        	
-         	
+         	return $validEditorExts;
+
          }
     /**
-     * check if file name or folder name is valid against a regular expression 
+     * check if file name or folder name is valid against a regular expression
      *
      * @param string $pattern regular expression, separated by , if multiple
      * @param string $string
@@ -768,19 +768,19 @@ function getRootPath() {
                     {
                         return true;
                     }
-                }               
+                }
             }
             else if(eregi($pattern, $string))
             {
                 return true;
             }
             return false;
-           
-        }       
 
-		
+        }
+
+
     /**
-     * check if file name or folder name is invalid against a regular expression 
+     * check if file name or folder name is invalid against a regular expression
      *
      * @param string $pattern regular expression, separated by , if multiple
      * @param string $string
@@ -801,16 +801,16 @@ function getRootPath() {
                     {
                         return true;
                     }
-                }               
+                }
             }
             else if(eregi($pattern, $string))
             {
                 return true;
             }
             return false;
-           
-        }  
-   			
+
+        }
+
 
 		/**
 		 * cut the file down to fit the list page
@@ -824,9 +824,9 @@ function getRootPath() {
 				$fileName = substr($fileName, 0, $maxLeng - strlen($indicate)) . $indicate;
 			}
 			return $fileName;
-			
+
 		}
-		if (!function_exists('mime_content_type')) 
+		if (!function_exists('mime_content_type'))
 		{
 		   function mime_content_type ( $f )
 		   {
@@ -849,26 +849,26 @@ function getRootPath() {
 			$hotpotatoes_folder_dokeos='HotPotatoes_files';
 			$chat_files_dokeos='chat_files';
 			$thumbs_folder='.thumbs';
-			
-			//hidden directory of the group if the user is not a member of the group					
+
+			//hidden directory of the group if the user is not a member of the group
 			$group_folder='_groupdocs';
-			
+
 			//show group's directory only if I'm member
-			$show_doc_group=true;								
+			$show_doc_group=true;
 			if(ereg($group_folder, $folderName))
 			{
 				$show_doc_group=false;
 				if($is_user_in_group)
 				{
-					$show_doc_group=true;					
+					$show_doc_group=true;
 				}
-			}		
-			
+			}
+
 			if(!ereg($deleted_by_dokeos, $folderName) && !ereg($css_folder_dokeos, $folderName) && !ereg($hotpotatoes_folder_dokeos, $folderName) && !ereg($chat_files_dokeos, $folderName) && !ereg($thumbs_folder, $folderName) && $show_doc_group==true)
-			{			
+			{
 				return substr($folderName,strpos($folderName, '-'),strlen($folderName)); //hide the firsts numbers
 			}
-		
+
 		}
 
 
@@ -886,54 +886,54 @@ function getRootPath() {
 
 
 
-			    		
+
       			if(is_dir($path))
       			{
  				$includeDir = trimlrm(CONFIG_SYS_INC_DIR_PATTERN);
-				$excludeDir = trimlrm(CONFIG_SYS_EXC_DIR_PATTERN);     				
+				$excludeDir = trimlrm(CONFIG_SYS_EXC_DIR_PATTERN);
 				$found_includeDir = strpos($includeDir, $file);
-				$found_excludeDir = strpos($excludeDir, $file);      				
+				$found_excludeDir = strpos($excludeDir, $file);
       				if((!CONFIG_SYS_INC_DIR_PATTERN || (!($found_includeDir === FALSE))) && (!CONFIG_SYS_EXC_DIR_PATTERN || (($found_excludeDir === FALSE))))
       				{
       					return true;
-      				}else 
+      				}else
       				{
       					return false;
       				}
       			}elseif(is_file($path))
       			{
 				$includeFile = trimlrm(CONFIG_SYS_INC_FILE_PATTERN);
-				$excludeFile = trimlrm(CONFIG_SYS_EXC_FILE_PATTERN);            				
+				$excludeFile = trimlrm(CONFIG_SYS_EXC_FILE_PATTERN);
 				$found_includeFile = strpos($includeFile, $file);
-				$found_excludeFile = strpos($excludeFile, $file);	      				
+				$found_excludeFile = strpos($excludeFile, $file);
       				if((!CONFIG_SYS_INC_FILE_PATTERN || (!($found_includeFile === FALSE))) && (!CONFIG_SYS_EXC_FILE_PATTERN ||   (($found_excludeFile === FALSE))))
       				{
       					return true;
-      				}else 
+      				}else
       				{
       					return false;
       				}
       			}
          	}elseif(CONFIG_SYS_PATTERN_FORMAT == 'csv')
          	{//comma delimited file/folder name
-         		
+
          		if(is_dir($path))
          		{
-         		
+
 	 				$includeDir = trimlrm(CONFIG_SYS_INC_DIR_PATTERN);
 					$excludeDir = trimlrm(CONFIG_SYS_EXC_DIR_PATTERN);
-					        
+
 					if(!empty($includeDir) && !empty($excludeDir))
 					{
-						
+
 						$validDir = explode(',', $includeDir);
-						
+
 						$invalidDir = explode(",", $excludeDir);
 
 						if(array_search(basename($path), $validDir) !== false && array_search(basename($path), $invalidDir) === false)
 						{
 							return true;
-						}else 
+						}else
 						{
 							return false;
 						}
@@ -943,28 +943,28 @@ function getRootPath() {
 						if(array_search(basename($path), $validDir) !== false)
 						{
 							return true;
-						}else 
+						}else
 						{
 							return false;
 						}
-						
+
 					}elseif(!empty($excludeFile))
 					{
 						$invalidDir = explode(",", $excludeDir);
 						if(array_search(basename($path), $invalidDir) === false)
 						{
 							return true;
-						}else 
+						}else
 						{
 							return false;
 						}
 					}
 					return true;
-					
+
          		}elseif(is_file($path))
          		{
 				$includeFile = trimlrm(CONFIG_SYS_INC_FILE_PATTERN);
-				$excludeFile = trimlrm(CONFIG_SYS_EXC_FILE_PATTERN);   
+				$excludeFile = trimlrm(CONFIG_SYS_EXC_FILE_PATTERN);
 				if(!empty($includeFile) && !empty($excludeFile))
 				{
 					$validFile = explode(',', $includeFile);
@@ -972,7 +972,7 @@ function getRootPath() {
 					if(array_search(basename($path), $validFile) !== false && array_search(basename($path), $invalidFile) === false)
 					{
 						return true;
-					}else 
+					}else
 					{
 						return false;
 					}
@@ -982,7 +982,7 @@ function getRootPath() {
 					if(array_search(basename($path), $validFile) !== false)
 					{
 						return true;
-					}else 
+					}else
 					{
 						return false;
 					}
@@ -992,7 +992,7 @@ function getRootPath() {
 					if(array_search(basename($path), $invalidFile) === false)
 					{
 						return true;
-					}else 
+					}else
 					{
 						return false;
 					}
@@ -1000,24 +1000,24 @@ function getRootPath() {
 				return true;
          		}
          	}
-         	else 
+         	else
          	{//regular expression
 	          	if(is_dir($path) )
 	         	{
 	         		if(isValidPattern(CONFIG_SYS_INC_DIR_PATTERN, $path) && !isInvalidPattern(CONFIG_SYS_EXC_DIR_PATTERN, $path))
 	         		{
-	         			 return true;	
-	         		}else 
+	         			 return true;
+	         		}else
 	         		{
 	         			return false;
 	         		}
-	         	
+
 	         	}elseif(is_file($path))
 	         	{
 	         		if(isValidPattern(CONFIG_SYS_INC_FILE_PATTERN, $path) && !isInvalidPattern(CONFIG_SYS_EXC_FILE_PATTERN, $path)  )
 	         		{
 	         			return true;
-	         		}else 
+	         		}else
 	         		{
 	         			return false;
 	         		}
@@ -1025,18 +1025,18 @@ function getRootPath() {
          	}
          	return false;
 
-         }		
-		
+         }
+
 		/**
 		 * force to down the specified file
 		 *
 		 * @param string $path
-		 * 
+		 *
 		 */
 		function downloadFile($path, $newFileName=null)
 		{
 				if(file_exists($path) && is_file($path))
-				{	
+				{
 					$mimeContentType = 'application/octet-stream';
 					if(function_exists('finfo_open'))
 					{
@@ -1045,15 +1045,15 @@ function getRootPath() {
 							$mimeContentType = @finfo_file($fp, basename($path));
 							@finfo_close($fp);
 						}
-						
+
 					}elseif(($temMimeContentType = @mime_content_type($path)) && !empty($temMimeContentType))
 					{
 						$mimeContentType = $temMimeContentType;
 					}
-					
- 					
-					
-						
+
+
+
+
 
 			// START ANDR� SILVA DOWNLOAD CODE
 			// required for IE, otherwise Content-disposition is ignored
@@ -1062,37 +1062,37 @@ function getRootPath() {
 			header("Pragma: public"); // required
 			header("Expires: 0");
 			header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-			header("Cache-Control: private",false); // required for certain browsers 
+			header("Cache-Control: private",false); // required for certain browsers
 			header("Content-Type: " . $mimeContentType );
 			// change, added quotes to allow spaces in filenames, by Rajkumar Singh
 			header("Content-Disposition: attachment; filename=\"".(is_null($newFileName)?basename($path):$newFileName)."\";" );
 			header("Content-Transfer-Encoding: binary");
 			header("Content-Length: ".filesize($path));
-		
+
 			readfile($path);
 			exit();
-			// END ANDR� SILVA DOWNLOAD CODE												
+			// END ANDR� SILVA DOWNLOAD CODE
 				}
-		
+
 		}
 
   /**
    * remove all white spaces
    *
-   * @param string $hayStack 
+   * @param string $hayStack
    * @param string $whiteSpaceChars
    * @return string
    */
   function trimlrm ($hayStack, $whiteSpaceChars="\t\n\r\0\x0B")
   {
   	return str_replace($whiteSpaceChars, '', trim($hayStack));
-  }		
-  
+  }
+
   /**
    * get the parent path of the specified path
    *
    * @param string $path
-   * @return string 
+   * @return string
    */
   function getParentFolderPath($path)
   {
@@ -1103,12 +1103,12 @@ function getRootPath() {
   	if(isUnderRoot($parentPath))
   	{
   		return $parentPath;
-  	}else 
+  	}else
   	{
   		return CONFIG_SYS_DEFAULT_PATH;
   	}
   }
-  
+
   function getCurrentFolderPath()
   {
   		$folderPathIndex = 'path';
@@ -1124,41 +1124,41 @@ function getRootPath() {
 		{
 			$currentFolderPath = CONFIG_SYS_DEFAULT_PATH;
 		}
-		
+
 		$currentFolderPath = (isUnderRoot($currentFolderPath)?backslashToSlash((addTrailingSlash($currentFolderPath))):CONFIG_SYS_DEFAULT_PATH);
-		
-		//keep track of this folder path in session 
+
+		//keep track of this folder path in session
 		$_SESSION[$lastVisitedFolderPathIndex] = $currentFolderPath;
-		
+
 
 		if(!file_exists($currentFolderPath))
 		{
 			die(ERR_FOLDER_NOT_FOUND . $currentFolderPath);
-		}  	
+		}
   }
-  
+
        if(!function_exists("imagerotate"))
         {
             function imagerotate($src_img, $angle, $bicubic=false)
             {
     // convert degrees to radians
-    
+
     $angle =  (360 - $angle) + 180;
     $angle = deg2rad($angle);
-   
+
     $src_x = imagesx($src_img);
     $src_y = imagesy($src_img);
-   
+
     $center_x = floor($src_x/2);
     $center_y = floor($src_y/2);
-   
+
     $rotate = imagecreatetruecolor($src_x, $src_y);
     imagealphablending($rotate, false);
     imagesavealpha($rotate, true);
 
     $cosangle = cos($angle);
     $sinangle = sin($angle);
-   
+
     for ($y = 0; $y < $src_y; $y++) {
       for ($x = 0; $x < $src_x; $x++) {
     // rotate...
@@ -1166,7 +1166,7 @@ function getRootPath() {
       + $center_x;
     $old_y = (($center_y-$y) * $cosangle - ($center_x-$x) * $sinangle)
       + $center_y;
-   
+
     if ( $old_x >= 0 && $old_x < $src_x
          && $old_y >= 0 && $old_y < $src_y ) {
       if ($bicubic == true) {
@@ -1176,12 +1176,12 @@ function getRootPath() {
         $sX  = $old_x + 1;
         $siX  = $old_x;
         $siX2 = $old_x - 1;
-       
+
         $c1 = imagecolorsforindex($src_img, imagecolorat($src_img, $siX, $siY2));
         $c2 = imagecolorsforindex($src_img, imagecolorat($src_img, $siX, $siY));
         $c3 = imagecolorsforindex($src_img, imagecolorat($src_img, $siX2, $siY2));
         $c4 = imagecolorsforindex($src_img, imagecolorat($src_img, $siX2, $siY));
-       
+
         $r = ($c1['red']  + $c2['red']  + $c3['red']  + $c4['red']  ) << 14;
         $g = ($c1['green'] + $c2['green'] + $c3['green'] + $c4['green']) << 6;
         $b = ($c1['blue']  + $c2['blue']  + $c3['blue']  + $c4['blue'] ) >> 2;
@@ -1197,7 +1197,7 @@ function getRootPath() {
     imagesetpixel($rotate, $x, $y, $color);
       }
     }
-    return $rotate;          	
+    return $rotate;
 /*                $src_x = @imagesx($src_img);
                 $src_y = @imagesy($src_img);
                 if ($angle == 180)
@@ -1210,19 +1210,19 @@ function getRootPath() {
                     $dest_x = $src_y;
                     $dest_y = $src_x;
                 }
-                elseif ($src_x >= $src_y) 
+                elseif ($src_x >= $src_y)
                 {
                     $dest_x = $src_y;
                     $dest_y = $src_x;
-                }     
+                }
 		 		if(function_exists('ImageCreateTrueColor'))
 		 		{
 					$rotate = @ImageCreateTrueColor($dst_w,$dst_h);
 				} else {
 					$rotate = @ImageCreate($dst_w,$dst_h);
-				}                   
+				}
                 @imagealphablending($rotate, false);
-               
+
                 switch ($angle)
                 {
                     case 270:
@@ -1259,5 +1259,5 @@ function getRootPath() {
                 };
                 return $rotate;*/
             }
-        }  
+        }
 ?>

@@ -233,4 +233,14 @@ $ChatConnectionsDuringLastXDays = "Conesiones al chat nos últimos %s díes";
 $ChatLastConnection = "Última conesión al chat";
 $CourseInformation = "Información del Cursu";
 $NoAdditionalFieldsWillBeExported = "Los campos adicionales nun se van esportar";
+$langSendNotification = "Unviar les notificaciones";
+$TimeOfActiveByTraining = "Tiempu de formación (suma del timpu de permanencia de tolos escolinos)";
+$AvgAllUsersInAllCourses = "Promediu de tolos alumnos";
+$AvgExercisesScore = "Puntuación nos exercicios";
+$TrainingTime = "Tiempu nel cursu";
+$CourseProgress = "Progresu na lleición";
+$ViewMinus = "Ver amenorgáu";
+$ResourcesTracking = "Informe sobro recursos";
+$SelectFieldToAdd = "Seleicionar un campu del perfil d\'usuariu";
+$AddAdditionalProfileField = "Amestar un campu del perfil d\'usuariu";
 ?>

@@ -23,26 +23,26 @@ $action=$_REQUEST['action'];
 $sort=in_array($_GET['sort'],array('lastname','firstname','username'))?$_GET['sort']:api_sort_by_first_name()?'firstname':'lastname';
 $idChecked = (is_array($_GET['idChecked']) ? $_GET['idChecked'] : (is_array($_POST['idChecked']) ? $_POST['idChecked'] : null));
 if (is_array($idChecked)) {
-	$my_temp = array(); 
+	$my_temp = array();
 	foreach ($idChecked as $id){
 		$my_temp[]= intval($id);// forcing the intval
 	}
 	$idChecked = $my_temp;
 }
-$result=api_sql_query("SELECT name,title FROM $tbl_session,$tbl_course WHERE id='$id_session' AND code='".addslashes($course_code)."'",__FILE__,__LINE__);
+$result=Database::query("SELECT name,title FROM $tbl_session,$tbl_course WHERE id='$id_session' AND code='".addslashes($course_code)."'",__FILE__,__LINE__);
 
-if(!list($session_name,$course_title)=mysql_fetch_row($result))
+if(!list($session_name,$course_title)=Database::fetch_row($result))
 {
 	header('Location: session_course_list.php?id_session='.$id_session);
 	exit();
 }
 
-if($action == 'delete') {	
+if($action == 'delete') {
 	if(is_array($idChecked) && count($idChecked)>0 ) {
 		$idChecked=implode(',',$idChecked);
-		api_sql_query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='".addslashes($course_code)."' AND id_user IN($idChecked)",__FILE__,__LINE__);
-		$nbr_affected_rows=mysql_affected_rows();
-		api_sql_query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session' AND course_code='".addslashes($course_code)."'",__FILE__,__LINE__);
+		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='".addslashes($course_code)."' AND id_user IN($idChecked)",__FILE__,__LINE__);
+		$nbr_affected_rows=Database::affected_rows();
+		Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session' AND course_code='".addslashes($course_code)."'",__FILE__,__LINE__);
 	}
 	header('Location: '.api_get_self().'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);
 	exit();
@@ -52,8 +52,8 @@ $limit=20;
 $from=$page * $limit;
 $is_western_name_order = api_is_western_name_order();
 
-$result=api_sql_query("SELECT user_id,".($is_western_name_order ? 'firstname,lastname' : 'lastname,firstname').",username FROM $tbl_session_rel_course_rel_user,$tbl_user WHERE user_id=id_user AND id_session='$id_session' AND course_code='".addslashes($course_code)."' ORDER BY $sort LIMIT $from,".($limit+1),__FILE__,__LINE__);
-$Users=api_store_result($result);
+$result=Database::query("SELECT user_id,".($is_western_name_order ? 'firstname,lastname' : 'lastname,firstname').",username FROM $tbl_session_rel_course_rel_user,$tbl_user WHERE user_id=id_user AND id_session='$id_session' AND course_code='".addslashes($course_code)."' ORDER BY $sort LIMIT $from,".($limit+1),__FILE__,__LINE__);
+$Users=Database::store_result($result);
 
 $nbr_results=sizeof($Users);
 

@@ -21,13 +21,13 @@
 require_once('HTML/QuickForm/Renderer.php');
 
 /**
- * A static renderer for HTML_QuickForm compatible 
+ * A static renderer for HTML_QuickForm compatible
  * with HTML_Template_IT and HTML_Template_Sigma.
  *
  * As opposed to the dynamic renderer, this renderer needs
  * every elements and labels in the form to be specified by
  * placeholders at the position you want them to be displayed.
- * 
+ *
  * @author Bertrand Mansion <bmansion@mamasam.com>
  * @access public
  */
@@ -88,7 +88,7 @@ class HTML_QuickForm_Renderer_ITStatic extends HTML_QuickForm_Renderer
     var $_error = '<font color="red">{error}</font><br />{html}';
 
    /**
-    * Collected HTML for hidden elements, if needed  
+    * Collected HTML for hidden elements, if needed
     * @var string
     */
     var $_hidden = '';
@@ -125,7 +125,7 @@ class HTML_QuickForm_Renderer_ITStatic extends HTML_QuickForm_Renderer
 
    /**
     * Called when visiting a form, after processing all form elements
-    * 
+    *
     * @param    object     An HTML_QuickForm object being visited
     * @access   public
     * @return   void
@@ -250,7 +250,7 @@ class HTML_QuickForm_Renderer_ITStatic extends HTML_QuickForm_Renderer
 
    /**
     * Called when visiting a hidden element
-    * 
+    *
     * @param    object     An HTML_QuickForm_hidden object being visited
     * @access   public
     * @return   void

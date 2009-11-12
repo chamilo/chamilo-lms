@@ -18,20 +18,20 @@ If you modify code and redistribute, you may ADD your copyright to this notice.
 */
 
 /**
-============================================================================== 
+==============================================================================
 *   Dokeos Metadata: search Dokeos course objects via PhpDig 1.8.6
 *
 *   customized search.php 1.8.6 for Dokeos 1.6 assumes $template == "array"
 *
 *   @package dokeos.metadata
-============================================================================== 
+==============================================================================
 */
 
-// name of the language file that needs to be included 
+// name of the language file that needs to be included
 $language_file = "md_mix";
 include('../../../main/inc/global.inc.php');
 if (! $is_allowed_in_course) api_not_allowed();
-    
+
 // start of part copied (with some changes) from standard PhpDig search.php
 $relative_script_path = '.';
 $no_connect = 0;
@@ -75,11 +75,11 @@ extract(phpdigHttpVars(
 $_course = api_get_course_info(); $ckw = $_course['path'] . '/CourseKwds.js';
 define('KEYWORDS_CACHE', api_get_path('SYS_COURSE_PATH') . $ckw);
 
-if (file_exists(KEYWORDS_CACHE)) $kcdt = 
+if (file_exists(KEYWORDS_CACHE)) $kcdt =
     htmlspecialchars(date('Y/m/d H:i:s', filemtime(KEYWORDS_CACHE)));
 
 $keywordscache = $kcdt ?
-    '<script type="text/javascript" src="' . api_get_path('WEB_COURSE_PATH') . $ckw . '"></script>' . 
+    '<script type="text/javascript" src="' . api_get_path('WEB_COURSE_PATH') . $ckw . '"></script>' .
     '<br /><small><i>(CourseKwds cache: ' . $kcdt . ')</i></small>' : '';
 
 
@@ -95,19 +95,19 @@ $htmlHeadXtra[] = '
     {
         var mdsc = getObj("mdsc");
         if (!mdsc) { alert("? Form does not contain mdsc"); return false; }
-        
+
         mdsc.value = s; return true;
     }
     function checkEnter(ev)
     {
         if (!ev) ev = window.event;
-        
+
         if (ev.altKey) {alert(document.getElementById("kwds_string").value); return;}
-        
+
         if (ev.keyCode == 13)
         {
-            document.getElementById("kwdswere_string").value = 
-                document.getElementById("kwds_string").value; 
+            document.getElementById("kwdswere_string").value =
+                document.getElementById("kwds_string").value;
             if (prepSearch(ev)) getObj("form_submit").form.submit();
         }
     }
@@ -116,16 +116,16 @@ $htmlHeadXtra[] = '
 
 Display::display_header($nameTools); echo "\n";
 
-echo '<table width="100%"><tr><td><h3>', get_lang('Search'), '</h3></td>', 
+echo '<table width="100%"><tr><td><h3>', get_lang('Search'), '</h3></td>',
     '<td align="right"><a href="http://www.phpdig.net"><img src="phpdig_powered_2.gif"/></a></td></tr></table>';
 
 
-// Store new extra criteria (course manager only, see below), or execute 
+// Store new extra criteria (course manager only, see below), or execute
 // PhpDig Search and echo result message + table with results + pages bar
 
 if (!$query_string) $query_string = trim($mdsc);
 
-$ckwcdt = file_exists($ckwc = KEYWORDS_CACHE . 'c') ? 
+$ckwcdt = file_exists($ckwc = KEYWORDS_CACHE . 'c') ?
     date('Y/m/d H:i:s', filemtime($ckwc)) : '?'; $pkwc = '';
 
 if (substr($query_string, 0, 2) == '<>' && api_is_allowed_to_edit())
@@ -135,22 +135,22 @@ if (substr($query_string, 0, 2) == '<>' && api_is_allowed_to_edit())
         $fckwc = fopen($ckwc, 'rb'); $pkwc = fread($fckwc, filesize($ckwc));
         fclose($fckwc); unset($fckwc);
     }
-    
+
     if(($fckwc = fopen($ckwc, 'wb')))
     {
         fwrite($fckwc, $query_string); fclose($fckwc); unset($fckwc);
-        $ckwcdt = file_exists($ckwc) ? 
+        $ckwcdt = file_exists($ckwc) ?
             date('Y/m/d H:i:s', filemtime($ckwc)) : '? Write Error';
     }
     else $ckwcdt = '? Open Error';
-    
-    $phpdigSearchResults = array('result_message' => $ckw . 'c: ' . $ckwcdt, 
+
+    $phpdigSearchResults = array('result_message' => $ckw . 'c: ' . $ckwcdt,
         'pages_bar' => '', 'results' => array());
 }
 else
 {
-    $phpdigSearchResults = phpdigSearch($id_connect, $query_string, $option, 
-        $refine, $refine_url, $lim_start, $limite, $browse, $site, $path, 
+    $phpdigSearchResults = phpdigSearch($id_connect, $query_string, $option,
+        $refine, $refine_url, $lim_start, $limite, $browse, $site, $path,
         $relative_script_path, $template, $adlog_flag, $rssdf, $template_demo);
 }
 
@@ -171,7 +171,7 @@ echo $result_message, '<br><br><table border="1">', "\n";
 if ($phpdigSearchResults['results']) foreach ($phpdigSearchResults['results'] as $searchResult)
 {
     $url = $searchResult['complete_path'];
-    
+
     if (ereg("/[^?/]*\\?.*thumb=", $url))
     {
         // direct URL: $thumburl = ereg_replace("/[^?/]*\\?.*thumb=", "/", $url);
@@ -182,22 +182,22 @@ if ($phpdigSearchResults['results']) foreach ($phpdigSearchResults['results'] as
         $thumburl = "tpl_img/link.gif";
     }
 
-    echo '<tr><td align="center"><a target="_blank" href="', $url, '"><img src="', $thumburl, 
-        '"/></a></td><td><a target="_blank" href="', $url, '">', $searchResult['link_title'], 
+    echo '<tr><td align="center"><a target="_blank" href="', $url, '"><img src="', $thumburl,
+        '"/></a></td><td><a target="_blank" href="', $url, '">', $searchResult['link_title'],
         '</a><br>', $searchResult['text'], '</td></tr>', "\n";
 }
 
 echo '</table><br>';
 
 if ($result_message && ($hits > 10))
-    echo "Results page ", str_replace('?template_demo=', 
+    echo "Results page ", str_replace('?template_demo=',
         '?kwdswere_string=' . urlencode($kwdswere_string), $pages_bar), '<br><br>';
 
 /*  Extra criteria: A course manager can define and edit them in the TEXTAREA.
-    If he types in something as in the example below, and clicks 'Go', the new 
-    criteria are stored and the old ones are displayed. So it is easy to 
+    If he types in something as in the example below, and clicks 'Go', the new
+    criteria are stored and the old ones are displayed. So it is easy to
     restore the old ones. To confirm the new ones, empty the TEXTAREA.
-    
+
 <>This selection empties extra criteria
 <searchword>Label
 <keyword-kw>Descriptive text
@@ -209,21 +209,21 @@ $tdhtm = '';
 function tdhtm($xc)
 {
     $eol = '<br/>'; if ($xc{0} == '<') $xc = substr($xc, 1);
-    
+
     if (($eov = strpos($xc, '>')) === FALSE)
             $value = $label = $xc;
     else
     {
         $value = substr($xc, 0, $eov); $label = substr($xc, $eov+1);
-        
+
         if (($eot = strpos($label, '<')) !== FALSE)
         {
             $eol = substr($label, $eot); $label = substr($label, 0, $eot);
         }
     }
-    
-    return '<input type="radio" name="xc" onclick="mdscSet(' . "'" . 
-        htmlspecialchars($value) . "'" . ')">' . 
+
+    return '<input type="radio" name="xc" onclick="mdscSet(' . "'" .
+        htmlspecialchars($value) . "'" . ')">' .
         htmlspecialchars($label) . '</input>' . $eol;
 }
 

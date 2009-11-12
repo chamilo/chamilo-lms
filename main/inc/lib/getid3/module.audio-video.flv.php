@@ -11,29 +11,29 @@
 // +----------------------------------------------------------------------+
 // | getID3() - http://getid3.sourceforge.net or http://www.getid3.org    |
 // +----------------------------------------------------------------------+
-// | Authors: James Heinrich <infoØgetid3*org>                            |
-// |          Allan Hansen <ahØartemis*dk>                                |
+// | Authors: James Heinrich <infoï¿½getid3*org>                            |
+// |          Allan Hansen <ahï¿½artemis*dk>                                |
 // +----------------------------------------------------------------------+
 // | module.archive.gzip.php                                              |
 // | module for analyzing GZIP files                                      |
 // | dependencies: NONE                                                   |
 // +----------------------------------------------------------------------+
-// | FLV module by Seth Kaufman <sethØwhirl-i.gig*com>                    |
+// | FLV module by Seth Kaufman <sethï¿½whirl-i.gig*com>                    |
 // |                                                                      |
 // | * version 0.1 (26 June 2005)                                         |
 // |                                                                      |
-// | minor modifications by James Heinrich <infoØgetid3*org>              |
+// | minor modifications by James Heinrich <infoï¿½getid3*org>              |
 // | * version 0.1.1 (15 July 2005)                                       |
 // |                                                                      |
 // | Support for On2 VP6 codec and meta information by                    |
-// | Steve Webster <steve.websterØfeaturecreep*com>                       |
+// | Steve Webster <steve.websterï¿½featurecreep*com>                       |
 // | * version 0.2 (22 February 2006)                                     |
 // |                                                                      |
 // | Modified to not read entire file into memory                         |
-// | by James Heinrich <infoØgetid3*org>                                  |
+// | by James Heinrich <infoï¿½getid3*org>                                  |
 // | * version 0.3 (15 June 2006)                                         |
 // |                                                                      |
-// | Modifications by Allan Hansen <ahØartemis*dk>                        |
+// | Modifications by Allan Hansen <ahï¿½artemis*dk>                        |
 // | Adapted module for PHP5 and getID3 2.0.0.                            |
 // +----------------------------------------------------------------------+
 //
@@ -43,7 +43,7 @@
 
 class getid3_flv extends getid3_handler
 {
-    
+
     const TAG_AUDIO    =  8;
     const TAG_VIDEO    =  9;
     const TAG_META     = 18;
@@ -52,14 +52,14 @@ class getid3_flv extends getid3_handler
     const VIDEO_SCREEN = 3;
     const VIDEO_VP6    = 4;
 
-    
+
 	public function Analyze()
 	{
 	    $info = &$this->getid3->info;
-	    
+
 	    $info['flv'] = array ();
 	    $info_flv = &$info['flv'];
-	    
+
 		fseek($this->getid3->fp, $info['avdataoffset'], SEEK_SET);
 
 		$flv_data_length = $info['avdataend'] - $info['avdataoffset'];
@@ -81,7 +81,7 @@ class getid3_flv extends getid3_handler
 
 		$duration = 0;
 		while ((ftell($this->getid3->fp) + 1) < $info['avdataend']) {
-			
+
 			$this_tag_header = fread($this->getid3->fp, 16);
 
 			$previous_tag_length = getid3_lib::BigEndian2Int(substr($this_tag_header,  0, 4));
@@ -92,7 +92,7 @@ class getid3_flv extends getid3_handler
 			$next_offset         = ftell($this->getid3->fp) - 1 + $data_length;
 
 			switch ($tag_type) {
-				
+
 				case getid3_flv::TAG_AUDIO:
 					if (!isset($info_flv['audio']['audioFormat'])) {
 						$info_flv['audio']['audioFormat']     =  $last_header_byte & 0x07;
@@ -114,7 +114,7 @@ class getid3_flv extends getid3_handler
 							$picture_size_type = (getid3_lib::BigEndian2Int(substr($flv_video_header, 3, 2))) >> 7;
 							$picture_size_type = $picture_size_type & 0x0007;
 							$info_flv['header']['videoSizeType'] = $picture_size_type;
-							
+
 							switch ($picture_size_type) {
 								case 0:
 									$picture_size_enc = getid3_lib::BigEndian2Int(substr($flv_video_header, 5, 2));
@@ -220,7 +220,7 @@ class getid3_flv extends getid3_handler
 
 
 	public static function FLVaudioFormat($id) {
-	    
+
 		static $lookup = array(
 			0 => 'uncompressed',
 			1 => 'ADPCM',
@@ -233,7 +233,7 @@ class getid3_flv extends getid3_handler
 
 
 	public static function FLVaudioRate($id) {
-	    
+
 		static $lookup = array(
 			0 =>  5500,
 			1 => 11025,
@@ -245,7 +245,7 @@ class getid3_flv extends getid3_handler
 
 
 	public static function FLVaudioBitDepth($id) {
-	    
+
 		static $lookup = array(
 			0 =>  8,
 			1 => 16,
@@ -255,7 +255,7 @@ class getid3_flv extends getid3_handler
 
 
 	public static function FLVvideoCodec($id) {
-	    
+
 		static $lookup = array(
 			getid3_flv::VIDEO_H263   => 'Sorenson H.263',
 			getid3_flv::VIDEO_SCREEN => 'Screen video',
@@ -267,52 +267,52 @@ class getid3_flv extends getid3_handler
 
 
 
-class AMFStream 
+class AMFStream
 {
 	public $bytes;
 	public $pos;
 
 
 	public function AMFStream($bytes) {
-	    
+
 		$this->bytes = $bytes;
 		$this->pos = 0;
 	}
 
 
 	public function readByte() {
-	    
+
 		return getid3_lib::BigEndian2Int(substr($this->bytes, $this->pos++, 1));
 	}
 
 
 	public function readInt() {
-	    
+
 		return ($this->readByte() << 8) + $this->readByte();
 	}
 
 
 	public function readLong() {
-	    
+
 		return ($this->readByte() << 24) + ($this->readByte() << 16) + ($this->readByte() << 8) + $this->readByte();
 	}
 
 
 	public function readDouble() {
-	    
+
 		return getid3_lib::BigEndian2Float($this->read(8));
 	}
 
 
 	public function readUTF() {
-	    
+
 		$length = $this->readInt();
 		return $this->read($length);
 	}
 
 
 	public function readLongUTF() {
-	    
+
 		$length = $this->readLong();
 		return $this->read($length);
 	}
@@ -325,9 +325,9 @@ class AMFStream
 		return $val;
 	}
 
-	
+
 	public function peekByte() {
-	    
+
 		$pos = $this->pos;
 		$val = $this->readByte();
 		$this->pos = $pos;
@@ -345,7 +345,7 @@ class AMFStream
 
 
 	public function peekLong() {
-	    
+
 		$pos = $this->pos;
 		$val = $this->readLong();
 		$this->pos = $pos;
@@ -353,8 +353,8 @@ class AMFStream
 	}
 
 
-	public function peekDouble() {  
-	    
+	public function peekDouble() {
+
 		$pos = $this->pos;
 		$val = $this->readDouble();
 		$this->pos = $pos;
@@ -363,7 +363,7 @@ class AMFStream
 
 
 	public function peekUTF() {
-	    
+
 		$pos = $this->pos;
 		$val = $this->readUTF();
 		$this->pos = $pos;
@@ -372,7 +372,7 @@ class AMFStream
 
 
 	public function peekLongUTF() {
-	    
+
 		$pos = $this->pos;
 		$val = $this->readLongUTF();
 		$this->pos = $pos;
@@ -382,18 +382,18 @@ class AMFStream
 
 
 
-class AMFReader 
+class AMFReader
 {
 	public $stream;
 
 	public function __construct($stream) {
-	    
+
 		$this->stream = $stream;
 	}
 
 
 	public function readData() {
-	    
+
 		$value = null;
 
 		$type = $this->stream->readByte();
@@ -464,26 +464,26 @@ class AMFReader
 	}
 
 
-	public function readDouble() {    
-	    
+	public function readDouble() {
+
 		return $this->stream->readDouble();
 	}
 
 
 	public function readBoolean() {
-	    
+
 		return $this->stream->readByte() == 1;
 	}
-           
-           
+
+
 	public function readString() {
-	    
+
 		return $this->stream->readUTF();
 	}
 
 
 	public function readObject() {
-	    
+
 		// Get highest numerical index - ignored
 		$highestIndex = $this->stream->readLong();
 
@@ -505,7 +505,7 @@ class AMFReader
 
 
 	public function readMixedArray() {
-	    
+
 		// Get highest numerical index - ignored
 		$highestIndex = $this->stream->readLong();
 
@@ -531,7 +531,7 @@ class AMFReader
 
 
 	public function readArray() {
-	    
+
 		$length = $this->stream->readLong();
 
 		$data = array();
@@ -545,7 +545,7 @@ class AMFReader
 
 
 	public function readDate() {
-	    
+
 		$timestamp = $this->stream->readDouble();
 		$timezone = $this->stream->readInt();
 		return $timestamp;
@@ -553,19 +553,19 @@ class AMFReader
 
 
 	public function readLongString() {
-	    
+
 		return $this->stream->readLongUTF();
 	}
 
 
 	public function readXML() {
-	    
+
 		return $this->stream->readLongUTF();
 	}
 
 
-	public function readTypedObject() {  
-	    
+	public function readTypedObject() {
+
 		$className = $this->stream->readUTF();
 		return $this->readObject();
 	}

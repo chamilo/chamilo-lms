@@ -35,9 +35,9 @@ Aug 7, 2005 Version 1.4.7
   <html> works without the xmlns attribute)
 
 - for IE the script now writes out the <object ...> and <?import ...> tags
-  simplifying the header file significantly 
+  simplifying the header file significantly
 
-- script now uses a generic onload (by www.brothercake.com) so 
+- script now uses a generic onload (by www.brothercake.com) so
   no need for onload="translate()" in <body> (but earlier pages still work)
 
 - ASCIIMathML.js can now be used on any HTML page by just adding one line to
@@ -57,7 +57,7 @@ Aug 7, 2005 Version 1.4.7
 Apr 23, 2005 Version 1.4.6
 (at http://www.chapman.edu/~jipsen/mathml/ASCIIMathML146.js)
 
-- added "showasciiformulaonhover" variable; if true then pointing at a MathML 
+- added "showasciiformulaonhover" variable; if true then pointing at a MathML
   expression shows the ascii form that produces the expression
 
 - added "decimalsign" variable; default is "."
@@ -139,7 +139,7 @@ Aug 16, 2004 Version 1.4.1
 July 13, 2004 Version 1.4
 (at http://www.chapman.edu/~jipsen/mathml/ASCIIMathML4.js)
 
-- cleaned up the js code, thanks to some very helpful suggestions by Alex V. 
+- cleaned up the js code, thanks to some very helpful suggestions by Alex V.
 
 - most global variables prefixed with "AM" to avoid conflict with ASCIIsvg.js
 
@@ -159,7 +159,7 @@ July 13, 2004 Version 1.4
 Mar 26, 2004 Version 1.3
 (at http://www.chapman.edu/~jipsen/mathml/ASCIIMathML3.js)
 
-- fixed parser so that unary/binary symbols without arguments are treated 
+- fixed parser so that unary/binary symbols without arguments are treated
   as constants (previously generated js error)
 
 - noticed that ASCIIMathML.js does not require XML, actually works in HTML
@@ -207,17 +207,17 @@ Jan 9, 2004 Version 1.1
 - added \vdash, \models (actually &vDash;!), \vartheta, \bigwedge, \bigvee,
   \bigcup, \bigcap, \propto, \oint to symbol table, with ASCII equivalents
 
-- renamed "subset, supset" to their entity names "sube, supe", 
+- renamed "subset, supset" to their entity names "sube, supe",
   added "sub, sup" and their LaTeX equivalents \subset, \supset
 
 - updated webpages
 
 -------------------------------
 
-Jan 6, 2004 Version 1.0 
+Jan 6, 2004 Version 1.0
 (now at http://www.chapman.edu/~jipsen/mathml/ASCIIMathML0.js)
 
-- calligraphic, black board bold and fraktur fonts are finally working 
+- calligraphic, black board bold and fraktur fonts are finally working
   also in Mozilla/Netscape 7
 
 - added a download page

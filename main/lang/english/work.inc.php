@@ -73,4 +73,6 @@ $FolderEdited = "Folder edited";
 $UpdateWork = "Update this task";
 $MakeAllPapersInvisible = "Make all papers invisible";
 $MakeAllPapersVisible = "Make all papers visible";
+$TheDocumentHasBeenDeleted = "The document has been deleted.";
+$YouAreNotAllowedToDeleteThisDocument = "You are not allowed to delete this document";
 ?>

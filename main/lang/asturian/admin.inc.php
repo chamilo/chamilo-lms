@@ -1091,4 +1091,7 @@ $IsNotAdministrator = "Nun ye alministrador";
 $AddTimeLimit = "Amestar llímite de tiempu";
 $EditTimeLimit = "Editar llímite de tiempu";
 $TheTimeLimitsAreReferential = "El plazu d\'una categoría ye referencial, nun afeutará a los llímites d\'una sesión de formación";
+$ShowGlossaryInExtraToolsTitle = "Amuesa los términos del glosariu nes ferramientes extres";
+$ShowGlossaryInExtraToolsComment = "Dende equí puedes configurar como amestar los términos del glosariu en ferramientes como lleiciones y exercicios";
+$FieldTypeTag = "Etiqueta d\'usuariu";
 ?>

@@ -73,4 +73,6 @@ $FolderEdited = "De folder is gewijzigd";
 $UpdateWork = "Werk taak bij";
 $MakeAllPapersInvisible = "Maak alle documenten onzichtbaar";
 $MakeAllPapersVisible = "Maak alle documenten zichtbaar";
+$TheDocumentHasBeenDeleted = "Het bestand is verwijderd.";
+$YouAreNotAllowedToDeleteThisDocument = "U hebt onvoldoende rechten om dit document te verwijderen";
 ?>

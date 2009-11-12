@@ -151,7 +151,7 @@ $langBack  = "Volver a la página anterior";
 $langLogDeleteCat   = "Categoría eliminada";
 $langRecountChildren  = "Recontar los hijos";
 $langUpInSameLevel  = "Subir en este nivel";
-$langSeconds = "segundos";
+$langSeconds = "Segundos";
 $langMailTo  = "Correo a: ";
 $lang_no_access_here  = "No tiene autorización para acceder aquí ";
 $lang_php_info  = "información del sistema";
@@ -1093,4 +1093,5 @@ $EditTimeLimit = "Editar límite de tiempo";
 $TheTimeLimitsAreReferential = "El plazo de una categoría es referencial, no afectará a los límites de una sesión de formación";
 $ShowGlossaryInExtraToolsTitle = "Muestra los términos del glosario en las herramientas lecciones(scorm) y ejercicios";
 $ShowGlossaryInExtraToolsComment = "Desde aquí usted puede configurar como añadir  los términos del glosario en herramientas como lecciones(scorm) y ejercicios";
+$FieldTypeTag = "User tag";
 ?>

@@ -350,4 +350,5 @@ $QuestionTypeDoesNotBelongToFeedbackTypeInExercise = "Question type does not bel
 $SessionIsReadOnly = "The session is read only";
 $EnableTimerControl = "Enable time control";
 $ExerciseTotalDurationInMinutes = "Total duration in minutes of the test";
+$ToContinueUseMenu = "To continue this course, please use the side-menu.";
 ?>

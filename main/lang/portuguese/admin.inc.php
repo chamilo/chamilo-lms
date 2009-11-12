@@ -1086,4 +1086,12 @@ $DeleteSelectedFullSessionCategory = "Eliminar as categorias seleccionadas para 
 $EditTopRegister = "Editar Nota";
 $InsertTabs = "Adicionar Separadores";
 $EditTabs = "Editar Separadores";
+$IsAdministrator = "É administrador";
+$IsNotAdministrator = "Não é administrador";
+$AddTimeLimit = "Adicionar limite de tempo";
+$EditTimeLimit = "Editar limite de tempo";
+$TheTimeLimitsAreReferential = "O limite de tempo de uma categoria é referencial, não irá afectar os limites de tempo de uma sessão de um curso";
+$ShowGlossaryInExtraToolsTitle = "Mostrar o glossário de termos nas ferramentas extra";
+$ShowGlossaryInExtraToolsComment = "Neste local pode configurar como adicionar o glossário de termos nas ferramentas extras como um percurso/caminho de aprendizagem e ferramenta de exercício";
+$FieldTypeTag = "Etiqueta/comando do utilizador";
 ?>

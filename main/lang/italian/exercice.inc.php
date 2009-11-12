@@ -350,4 +350,5 @@ $QuestionTypeDoesNotBelongToFeedbackTypeInExercise = "Tipo di quesito non coeren
 $SessionIsReadOnly = "La sessione è di sola lettura";
 $EnableTimerControl = "Abilita il controllo del tempo";
 $ExerciseTotalDurationInMinutes = "Durata totale del test in minuti";
+$ToContinueUseMenu = "Per procedere usa il menù a lato";
 ?>

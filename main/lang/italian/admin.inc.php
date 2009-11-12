@@ -1091,4 +1091,7 @@ $IsNotAdministrator = "Non è amministratore";
 $AddTimeLimit = "Aggiungi un limite di tempo";
 $EditTimeLimit = "Modifica il limite di tempo";
 $TheTimeLimitsAreReferential = "I limiti temporali assegnati alla categoria sono indicativi, non influenzano l\'effettiva durata di una sessione";
+$ShowGlossaryInExtraToolsTitle = "Mostra le definizioni del glossario in esercizi e moduli";
+$ShowGlossaryInExtraToolsComment = "Qui puoi configurare il modo in cui le definizioni del glossario saranno visualizzate in test e moduli didattici";
+$FieldTypeTag = "Tag utente";
 ?>

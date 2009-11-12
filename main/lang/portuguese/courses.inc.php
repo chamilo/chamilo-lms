@@ -75,4 +75,9 @@ $CourseCategoryEditStored = "Categoria actualizada";
 $buttonCreateCourseCategory = "Guardar/salvar categoria de curso";
 $buttonSaveCategory = "Guardar/salvar categoria";
 $buttonChangeCategory = "Editar/modificar categoria";
+$SessionName = "Nome da sessão";
+$SessionCategory = "Categoria da sessão";
+$Expand = "Expandir";
+$Collapse = "Recolher";
+$CourseDetails = "Descrição do curso";
 ?>

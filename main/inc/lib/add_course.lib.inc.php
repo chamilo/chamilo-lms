@@ -2421,7 +2421,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 
 		$send_mail_to_admin = api_get_setting('send_email_to_admin_when_create_course');
 		
-		if ($send_mail_to_admin==true){
+		if ($send_mail_to_admin=='true'){
 			$siteName=api_get_setting('siteName');
 			$recipient_email = api_get_setting('emailAdministrator');
 			$recipient_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'));

@@ -52,6 +52,8 @@ class CourseSelectForm
 		$resource_titles[RESOURCE_TOOL_INTRO] = get_lang('ToolIntro');
 		$resource_titles[RESOURCE_SURVEY] = get_lang('Survey');
 		$resource_titles[RESOURCE_GLOSSARY] = get_lang('Glossary');
+		$resource_titles[RESOURCE_WIKI] = get_lang('Wiki');
+		
 ?>
 		<script language="JavaScript" type="text/javascript">
 			function exp(item) {

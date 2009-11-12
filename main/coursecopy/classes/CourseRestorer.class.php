@@ -39,6 +39,7 @@ require_once 'SurveyQuestion.class.php';
 //require_once 'mkdirr.php';
 //require_once 'rmdirr.php';
 require_once 'Glossary.class.php';
+require_once 'wiki.class.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 define('FILE_SKIP', 1);
@@ -103,6 +104,7 @@ class CourseRestorer
 			$this->restore_learnpaths($session_id);
 			$this->restore_links($session_id);
 			$this->restore_course_descriptions($session_id);
+			$this->restore_wiki();
 		} else {
 			$this->restore_links();
 			$this->restore_tool_intro();
@@ -116,6 +118,7 @@ class CourseRestorer
 			$this->restore_surveys();
 			$this->restore_student_publication();
 			$this->restore_glossary();
+			$this->restore_wiki();
 		}
 
 
@@ -1422,5 +1425,36 @@ class CourseRestorer
 			}
 		}
 	}
+	
+	function restore_wiki()
+	{
+		if ($this->course->has_resources(RESOURCE_WIKI))
+		{
+			// wiki table of the target course
+			$table_wiki = Database :: get_course_table('wiki', $this->course->destination_db);
+
+			// storing all the resources that have to be copied in an array
+			$resources = $this->course->resources;
+
+			foreach ($resources[RESOURCE_WIKI] as $id => $wiki)
+			{
+				//$wiki = new Wiki($obj->page_id, $obj->reflink, $obj->title, $obj->content, $obj->user_id, $obj->group_id, $obj->dtime);
+				// the sql statement to insert the groups from the old course to the new course
+				$sql = "INSERT INTO $table_wiki (page_id, reflink, title, content, user_id, group_id, dtime)
+							VALUES (
+							'".Database::escape_string($wiki->page_id)."',
+							'".Database::escape_string($wiki->reflink)."',
+							'".Database::escape_string($wiki->title)."',
+							'".Database::escape_string($wiki->content)."',
+							'".Database::escape_string($wiki->user_id)."', " .
+							(empty($wiki->group_id) ? 'NULL' : Database::escape_string($wiki->group_id)).",
+							'".Database::escape_string($wiki->dtime)."')";
+				$result = Database::query($sql, __FILE__, __LINE__);
+				echo $sql;
+				$new_id = Database::insert_id();
+				$this->course->resources[RESOURCE_WIKI][$id]->destination_id = $new_id;
+			}
+		}
+	}	
 }
 ?>

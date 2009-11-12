@@ -13,6 +13,7 @@
 */
 
 include_once (api_get_path(LIBRARY_PATH).'database.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 
 /*
 ==============================================================================
@@ -2418,6 +2419,18 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 		$user_id = api_get_user_id();
 		event_system(LOG_COURSE_CREATE, LOG_COURSE_CODE, $courseSysCode, $time, $user_id, $courseSysCode);
 
+		$send_mail_to_admin = api_get_setting('send_email_to_admin_when_create_course');
+		
+		if ($send_mail_to_admin==true){
+			$siteName=api_get_setting('siteName');
+			$recipient_email = api_get_setting('emailAdministrator');
+			$recipient_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'));
+			$urlsite = api_get_path(WEB_PATH);
+			$iname = api_get_setting('Institution');
+			$subject=get_lang('NewCourseCreatedIn').' '.$siteName.' - '.$iname;
+			$message=sprintf(get_lang('MessageOfNewCourseToAdmin'),$recipient_name, $siteName,$iname,$title,$category,$titular,$course_language);
+			api_mail($recipient_name, $recipient_email, $subject, $message,$siteName,$recipient_email);	
+		}
 
 	}
 	return 0;

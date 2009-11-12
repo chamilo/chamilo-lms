@@ -37,7 +37,9 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('show_gloss
 CREATE TABLE user_tag (id int NOT NULL auto_increment, tag varchar(255) NOT NULL, field_id int NOT NULL, count int NOT NULL, PRIMARY KEY  (id));
 CREATE TABLE user_rel_tag (id int NOT NULL auto_increment,user_id int NOT NULL,tag_id int NOT NULL, PRIMARY KEY  (id));
 
-
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('send_email_to_admin_when_create_course',NULL,'radio','Platform','true','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('send_email_to_admin_when_create_course','true','Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('send_email_to_admin_when_create_course','false','No');
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';

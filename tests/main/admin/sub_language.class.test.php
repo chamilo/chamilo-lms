@@ -77,23 +77,29 @@ class TestSubLanguageManager extends UnitTestCase {
 	
 	public function testwrite_data_in_file(){
 		//create a new directory of sub language
-		$path_sub_language = '/var/www/prueba2';
+		$dirname 	= '/var/www/prueba2';
+		$filename 	= 'gradebook.inc.php';
+		$file = $dirname.DIRECTORY_SEPARATOR.$filename;
+
+		$path_sub_language = $dirname;
 		$res1 = SubLanguageManager::add_directory_of_sub_language($path_sub_language);		
 		
 		//add file in language directory of sub language
-		$dokeos_path_file = '/var/www/prueba2/gradebook.inc.php';
+		$dokeos_path_file = $file;
 		$res2 = SubLanguageManager::add_file_in_language_directory($dokeos_path_file);
 
 		//write data in file of sub language
-		$path_file = '/var/www/prueba2/gradebook.inc.php';
+		$path_file = $file;
 		$new_sub_language='caucasico';
 		$variable_sub_language='extremo';
 		$res3 = SubLanguageManager::write_data_in_file($path_file,$new_sub_language,$variable_sub_language);
-	
-		//remove directory of sub language
-		if (file_exists($path_sub_language)) {
-			SubLanguageManager :: remove_directory_of_sub_language($path_sub_language);
-		}	
+		
+		//remove directory and its content of sub language
+		if (file_exists($file)) {
+			unlink($file);
+			rmdir($dirname);	
+		}
+				
 		$this->assertFalse($res3);
 		$this->assertTrue(is_null($res3));
 		//var_dump($res1, $res2 , $res3);
@@ -114,16 +120,15 @@ class TestSubLanguageManager extends UnitTestCase {
 			$this->assertFalse($path_sub_language);
 		}
 		if (file_exists($path_sub_language)) {
-			SubLanguageManager :: remove_directory_of_sub_language($path_sub_language);
+			rmdir($path_sub_language);	
 		}
-		//var_dump($res);
 	}
 
 	/**
 	 * Delete sub language of database
 	 * @param Integer id's.
 	 * @return null
-	 */
+ 	 */ 
 	public function Testremoved_sub_language() {
 		$parent_id = $_GET['id'];
 		$sub_language_id = $_GET['sub_language_id'];
@@ -220,8 +225,9 @@ class TestSubLanguageManager extends UnitTestCase {
 		$res = SubLanguageManager :: add_directory_of_sub_language($path_sub_language, 0777);
 		
 		// remove a directory of sub language
-		$path = '/var/www/prueba123';
-		$res = SubLanguageManager :: remove_directory_of_sub_language($path);
+		if (file_exists($path_sub_language)) {
+			rmdir($path_sub_language);	
+		}
 		$this->assertTrue(is_bool($res));
 		// var_dump($res);
 	}

@@ -249,7 +249,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 						<tr>";
 					$answer=api_parse_tex($answer);
 					$s.="<td width='40%' valign='top'><b>".$cpt2."</b>.&nbsp;".$answer."</td>
-						  <td width='20%' align='center'>&nbsp;&nbsp;<select name='choice[".$questionId."][".$answerId."]'>
+						  <td width='20%' valign='top' align='center'>&nbsp;&nbsp;<select name='choice[".$questionId."][".$answerId."]'>
 							<option value='0'>--</option>";
 
 		            // fills the list-box

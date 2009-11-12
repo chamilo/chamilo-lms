@@ -41,6 +41,7 @@ CREATE TABLE user_rel_tag (id int NOT NULL auto_increment,user_id int NOT NULL,t
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE track_e_online ADD INDEX (course);
 
 -- xxUSERxx
 

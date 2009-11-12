@@ -131,12 +131,13 @@ ALTER TABLE track_e_attempt ADD INDEX (user_id);
 ALTER TABLE track_e_attempt ADD INDEX (question_id);
 
 CREATE TABLE track_e_attempt_recording (
-exe_id int unsigned NOT NULL, 
-question_id int unsigned NOT NULL,  
-marks int NOT NULL,  
-insert_date datetime NOT NULL default '0000-00-00 00:00:00',  
-author int unsigned NOT NULL,  
-teacher_comment text NOT NULL);
+  exe_id int unsigned NOT NULL, 
+  question_id int unsigned NOT NULL,  
+  marks int NOT NULL,  
+  insert_date datetime NOT NULL default '0000-00-00 00:00:00',  
+  author int unsigned NOT NULL,  
+  teacher_comment text NOT NULL
+);
 ALTER TABLE track_e_attempt_recording ADD INDEX (exe_id);
 
 CREATE TABLE track_e_hotpotatoes (
@@ -230,3 +231,4 @@ CREATE TABLE track_e_hotspot (
 ALTER TABLE track_e_course_access ADD INDEX (user_id);
 ALTER TABLE track_e_course_access ADD INDEX (login_course_date);
 ALTER TABLE track_e_course_access ADD INDEX (course_code);
+ALTER TABLE track_e_online ADD INDEX (course);

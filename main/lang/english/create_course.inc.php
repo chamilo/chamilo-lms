@@ -102,6 +102,6 @@ $IntroductionWiki = "The word Wiki is short for WikiWikiWeb. Wikiwiki is a Hawai
 $CreateCourseArea = "Create this training";
 $CreateCourse = "Create a training";
 $Create = "Create";
-$MessageOfNewCourseToAdmin = "Dear %s, \\n\\n This message is to inform you that has created a new course on platform %s - %s \\n\\n Name of course: %s \\n categorie: %s \\n Teacher: %s \\n Language: %s\";";
+$MessageOfNewCourseToAdmin = "This message is to inform you that has created a new course on platform";
 $NewCourseCreatedIn = "New course created in";
 ?>

@@ -1094,4 +1094,6 @@ $TheTimeLimitsAreReferential = "El plazo de una categoría es referencial, no afe
 $ShowGlossaryInExtraToolsTitle = "Muestra los términos del glosario en las herramientas lecciones(scorm) y ejercicios";
 $ShowGlossaryInExtraToolsComment = "Desde aquí usted puede configurar como añadir  los términos del glosario en herramientas como lecciones(scorm) y ejercicios";
 $FieldTypeTag = "User tag";
+$SendEmailToAdminTitle = "Aviso por correo electrónico, de la creación de un nuevo curso";
+$SendEmailToAdminComment = "Enviar un correo electrónico al administardor de la plataforma, cada vez que un profesor cree un nuevo curso";
 ?>

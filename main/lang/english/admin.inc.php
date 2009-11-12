@@ -1094,4 +1094,6 @@ $TheTimeLimitsAreReferential = "The time limit of a category is referential, wil
 $ShowGlossaryInExtraToolsTitle = "Show the glossary terms in extra tools";
 $ShowGlossaryInExtraToolsComment = "From here you can configure how to add the glossary terms in extra tools as learning path and exercice tool";
 $FieldTypeTag = "User tag";
+$SendEmailToAdminTitle = "Email alert, of creation  a new course";
+$SendEmailToAdminComment = "Send an email to administardor of the platform, each time the teacher register a new course";
 ?>

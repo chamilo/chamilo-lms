@@ -2431,10 +2431,10 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 			$urlsite = api_get_path(WEB_PATH);
 			$iname = api_get_setting('Institution');
 			$subject=get_lang('NewCourseCreatedIn').' '.$siteName.' - '.$iname;
-			$message =  get_lang('Dear').' '.$recipient_name.' '.get_lang('MessageOfNewCourseToAdmin').$siteName.' - '.$iname.'\n';
-			$message .= get_lang('CourseName').' '.$title.'\n';
-			$message .= get_lang('Category').' '.$category.'\n';
-			$message .= get_lang('Tutor').' '.$titular.'\n';
+			$message =  get_lang('Dear').' '.$recipient_name.' '.get_lang('MessageOfNewCourseToAdmin').$siteName.' - '.$iname."\n";
+			$message .= get_lang('CourseName').' '.$title."\n";
+			$message .= get_lang('Category').' '.$category."\n";
+			$message .= get_lang('Tutor').' '.$titular."\n";
 			$message .= get_lang('Language').' '.$course_language;
 			
 			api_mail($recipient_name, $recipient_email, $subject, $message,$siteName,$recipient_email);	

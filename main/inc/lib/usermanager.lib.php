@@ -2519,4 +2519,24 @@ class UserManager
 		}
 		return true;
 	}	
+	/**
+	 * Gives a list of emails from all administrators
+	 * @author cvargas carlos.vargas@dokeos.com
+	 * @return array
+	 */
+	 public function get_emails_from_all_administrators() {
+	 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
+	 	$table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
+	 	
+	 	$sql = "SELECT email from $table_user as u, $table_admin as a WHERE u.user_id=a.user_id";
+	 	$result = Database::query($sql, __FILE__, __LINE__);
+		$return = array();
+		if (Database::num_rows($result)> 0) {
+			while ($row = Database::fetch_array($result,'ASSOC')) {
+				$return[$row['email']] = $row;
+			}
+		}
+		return $return;
+	 }	
+	
 }

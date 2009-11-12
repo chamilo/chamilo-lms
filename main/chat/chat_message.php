@@ -43,6 +43,8 @@ $language_file = array ('chat');
 require('../inc/global.inc.php');
 
 $course=api_get_course_id();
+$session_id = intval($_SESSION['id_session']);
+$group_id 	= intval($_SESSION['_gid']);
 
 /////
 // Juan Carlos Ra�a insert smileys and self-closing window
@@ -222,28 +224,35 @@ if (!empty($course) && !empty($_user['user_id']))
 		$message=str_replace($emoticon_text203, $emoticon_img203, $message);
 		$message=str_replace($emoticon_text204, $emoticon_img204, $message);
 
-
-
-
 		$timeNow=date('d/m/y H:i:s');
+		
+		$basename_chat = '';
+		if (!empty($group_id)) {
+			$basename_chat = 'messages-'.$dateNow.'_gid-'.$group_id;
+		} else if (!empty($session_id)) {
+			$basename_chat = 'messages-'.$dateNow.'_sid-'.$session_id;
+		} else {
+			$basename_chat = 'messages-'.$dateNow;				
+		}
+		
 		if (!api_is_anonymous()) {
 			if(!empty($message))
 			{
 				$message=make_clickable($message);
 
-				if(!file_exists($chatPath.'messages-'.$dateNow.'.log.html'))
+				if(!file_exists($chatPath.$basename_chat.'.log.html'))
 				{
-					$doc_id=add_document($_course,'/chat_files/messages-'.$dateNow.'.log.html','file',0,'messages-'.$dateNow.'.log.html');
+					$doc_id=add_document($_course,'/chat_files/'.$basename_chat.'.log.html','file',0,$basename_chat.'.log.html');
 
-					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id']);
+					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'],$group_id,null,null,null,$session_id);
 					item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
 				}
 				else
 				{
-					$doc_id = DocumentManager::get_document_id($_course,'/chat_files/messages-'.$dateNow.'.log.html');
+					$doc_id = DocumentManager::get_document_id($_course,'/chat_files/'.$basename_chat.'.log.html');
 				}
 
-				$fp=fopen($chatPath.'messages-'.$dateNow.'.log.html','a');
+				$fp=fopen($chatPath.$basename_chat.'.log.html','a');
 
 				if($isMaster)
 				{
@@ -259,7 +268,7 @@ if (!empty($course) && !empty($_user['user_id']))
 
 				fclose($fp);
 
-				$chat_size=filesize($chatPath.'messages-'.$dateNow.'.log.html');
+				$chat_size=filesize($chatPath.$basename_chat.'.log.html');
 
 				update_existing_document($_course, $doc_id,$chat_size);
 				item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);

@@ -36,7 +36,18 @@ include('../inc/global.inc.php');
 include('../inc/lib/course.lib.php');
 include('../inc/lib/usermanager.lib.php');
 
-$course=api_get_course_id();
+$course = api_get_course_id();
+$group_id = intval($_SESSION['_gid']);
+$session_id = intval($_SESSION['id_session']);
+$session_condition = api_get_session_condition($session_id);
+$group_condition = " AND to_group_id = '$group_id'";
+
+$extra_condition = '';
+if (!empty($group_id)) {
+	$extra_condition = $group_condition;
+} else {
+	$extra_condition = $session_condition;
+}
 
 if (!empty($course))
 {
@@ -48,7 +59,7 @@ if (!empty($course))
 	$tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
 	$tbl_chat_connected	= Database::get_course_table(CHAT_CONNECTED_TABLE,$_course['dbName']);
 
-	$query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
+	$query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";	
 	$result=Database::query($query,__FILE__,__LINE__);
 
 	list($pseudoUser)=Database::fetch_array($result);
@@ -62,14 +73,14 @@ if (!empty($course))
 
 	if(!isset($_SESSION['id_session']))
 	{
-		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,t3.status FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_course_user t3 WHERE t1.user_id=t2.user_id AND t3.user_id=t2.user_id AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' ORDER BY username";
+		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,t3.status FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_course_user t3 WHERE t1.user_id=t2.user_id AND t3.user_id=t2.user_id AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' $extra_condition ORDER BY username";		
 		$result=Database::query($query,__FILE__,__LINE__);
-		$Users=Database::store_result($result);
+		$Users=Database::store_result($result);		
 	}
 	else
 	{
 		// select learners
-		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session_course_user t3 WHERE t1.user_id=t2.user_id AND t3.id_user=t2.user_id AND t3.id_session = '".$_SESSION['id_session']."' AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' ORDER BY username";
+		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session_course_user t3 WHERE t1.user_id=t2.user_id AND t3.id_user=t2.user_id AND t3.id_session = '".$_SESSION['id_session']."' AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' $extra_condition ORDER BY username";
 		$result=Database::query($query,__FILE__,__LINE__);
 		while($learner = Database::fetch_array($result))
 		{
@@ -77,7 +88,7 @@ if (!empty($course))
 		}
 
 		// select session coach
-		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session t3 WHERE t1.user_id=t2.user_id AND t3.id_coach=t2.user_id AND t3.id = '".$_SESSION['id_session']."' AND t2.last_connection>'".$date_inter."' ORDER BY username";
+		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session t3 WHERE t1.user_id=t2.user_id AND t3.id_coach=t2.user_id AND t3.id = '".$_SESSION['id_session']."' AND t2.last_connection>'".$date_inter."' $extra_condition ORDER BY username";
 		$result=Database::query($query,__FILE__,__LINE__);
 		if($coach = Database::fetch_array($result))
 			$Users[$coach['user_id']] = $coach;
@@ -89,7 +100,7 @@ if (!empty($course))
 				AND t3.id_user=t2.user_id AND t3.status=2 
 				AND t3.id_session = '".$_SESSION['id_session']."' 
 				AND t3.course_code = '".$_course['sysCode']."' 
-				AND t2.last_connection>'".$date_inter."' ORDER BY username";
+				AND t2.last_connection>'".$date_inter."' $extra_condition ORDER BY username";
 
 		$result=Database::query($query,__FILE__,__LINE__);		
 		$course_coachs = array();

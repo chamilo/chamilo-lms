@@ -20,6 +20,7 @@ require_once 'Survey.class.php';
 require_once 'SurveyQuestion.class.php';
 require_once 'Glossary.class.php';
 require_once 'CourseSession.class.php';
+require_once 'wiki.class.php';
 
 /**
  * Class which can build a course-object from a Dokeos-course.
@@ -70,6 +71,7 @@ class CourseBuilder
 			$this->build_learnpaths($session_id,$course_code);
 			$this->build_links($session_id,$course_code);
 			$this->build_course_descriptions($session_id,$course_code);
+			$this->build_wiki();
 
 		} else {
 
@@ -82,10 +84,12 @@ class CourseBuilder
 			$this->build_tool_intro();
 			$this->build_documents();
 			$this->build_course_descriptions();
+			$this->build_wiki();
 			$this->build_quizzes();
 			$this->build_learnpaths();
 			$this->build_surveys();
 			$this->build_glossary();
+			
 		}
 
 		//TABLE_LINKED_RESOURCES is the "resource" course table, which is deprecated, apparently
@@ -693,4 +697,19 @@ class CourseBuilder
 		}
 		return $list;
 	}
+	
+	function build_wiki() 
+	{
+		// Database table definition
+		$tbl_wiki = Database::get_course_table('wiki');
+
+ 		$sql = 'SELECT * FROM ' . $tbl_wiki . ' INNER JOIN (SELECT MAX(id) as wikiid FROM ' . $tbl_wiki . ' GROUP BY page_id)ids ON id=ids.wikiid ORDER BY dtime DESC, group_id, reflink';
+
+		$db_result = api_sql_query($sql, __FILE__, __LINE__);
+		while ($obj = mysql_fetch_object($db_result))
+		{
+			$wiki = new Wiki($obj->page_id, $obj->reflink, $obj->title, $obj->content, $obj->user_id, $obj->group_id, $obj->dtime);
+			$this->course->add_resource($wiki);
+		}
+	}	
 }

@@ -20,7 +20,7 @@ $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
 $language_file[] = 'admin';
 $language_file[] = 'tracking';
 $language_file[] = 'scorm';
-
+$cidReset = true;
 // including the global Dokeos file
 require '../inc/global.inc.php';
 

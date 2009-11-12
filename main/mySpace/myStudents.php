@@ -8,7 +8,7 @@
 
 // name of the language file that needs to be included
 $language_file = array('registration', 'index', 'tracking', 'exercice', 'admin');
-//$cidReset = true;
+$cidReset = true;
 
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
@@ -152,7 +152,7 @@ if (isset ($_GET['details'])) {
 
 api_block_anonymous_users();
 
-if (!api_is_allowed_to_edit() && !api_is_coach() && $_user['status'] != DRH && $_user['status'] != SESSIONADMIN) {
+if (!api_is_allowed_to_edit() && !api_is_coach() && $_user['status'] != DRH && $_user['status'] != SESSIONADMIN && !api_is_platform_admin(true)) {
 	api_not_allowed(true);
 }
 

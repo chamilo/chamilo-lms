@@ -4,7 +4,7 @@
 $language_file = array('registration', 'tracking', 'exercice', 'admin');
 
 $cidReset = true;
-$this_section = 'session_my_space';
+
 
 require '../inc/global.inc.php';
 
@@ -12,7 +12,7 @@ require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-
+$this_section = SECTION_TRACKING;
 $nameTools = get_lang('MyProgress');
 
 api_block_anonymous_users();

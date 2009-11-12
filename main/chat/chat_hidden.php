@@ -72,8 +72,17 @@ if (!empty($group_id)) {
 $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
 $chatPath=$documentPath.'chat_files/';
 
+$basename_chat = '';
+if (!empty($group_id)) {
+	$basename_chat = 'messages-'.$dateNow.'_gid-'.$group_id;
+} else if (!empty($session_id)) {
+	$basename_chat = 'messages-'.$dateNow.'_sid-'.$session_id;
+} else {
+	$basename_chat = 'messages-'.$dateNow;				
+}
+
 $chat_size_old=intval($_POST['chat_size_old']);
-$chat_size_new=filesize($chatPath.'messages-'.$dateNow.'.log.html');
+$chat_size_new=filesize($chatPath.$basename_chat.'.log.html');
 
 $sql="SELECT user_id FROM $tbl_chat_connected WHERE user_id='".$_user['user_id']."' $extra_condition";
 $result=Database::query($sql);

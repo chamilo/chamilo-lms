@@ -135,9 +135,12 @@ if (!empty($course) && !empty($_user['user_id']))
 			$perm = octdec(!empty($perm)?$perm:'0770');
 			@mkdir($chatPath,$perm);
 			@chmod($chatPath,$perm);
+			
+			/*
 			$doc_id=add_document($_course,'/chat_files','folder',0,'chat_files');
 			$sql_insert = "INSERT INTO ".$TABLEITEMPROPERTY . " (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$doc_id,'DocumentAdded',1,0,NULL,0)";
 			Database::query($sql_insert ,__FILE__,__LINE__);
+			*/
 		}
 	}
 

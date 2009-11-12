@@ -84,7 +84,7 @@ if (!empty($group_id)) {
 $chat_size_old=intval($_POST['chat_size_old']);
 $chat_size_new=filesize($chatPath.$basename_chat.'.log.html');
 
-$sql="SELECT user_id FROM $tbl_chat_connected WHERE user_id='".$_user['user_id']."'";
+$sql="SELECT user_id FROM $tbl_chat_connected WHERE user_id='".$_user['user_id']."' $extra_condition";
 $result=Database::query($sql);
 
 //The user_id exists so we must do an UPDATE and not a INSERT

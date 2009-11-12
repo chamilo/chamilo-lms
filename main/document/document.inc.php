@@ -348,7 +348,7 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template,$
 	else
 	{		
 		$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
-        	if (strcmp($path,'/audio')===0 or strcmp($path,'/flash')===0 or strcmp($path,'/images')===0 or strcmp($path,'/shared_folder')===0 or strcmp($path,'/video')===0) { 
+        	if (strcmp($path,'/audio')===0 or strcmp($path,'/flash')===0 or strcmp($path,'/images')===0 or strcmp($path,'/shared_folder')===0 or strcmp($path,'/video')===0 or strcmp($path,'/chat_files')===0) { 
         		$modify_icons .= '&nbsp;'.Display::return_icon('delete_na.gif',get_lang('ThisFolderCannotBeDeleted'));
         	} else {
         		$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /></a>';

@@ -984,11 +984,10 @@ function update_Db_course($courseDbName)
 		user_id int unsigned NOT NULL default '0',
 		last_connection datetime NOT NULL default '0000-00-00 00:00:00',
 		session_id smallint NOT NULL default 0,
-		to_group_id INT NOT NULL default 0, 
-		PRIMARY KEY (user_id)
+		to_group_id INT NOT NULL default 0		
 		)";
 	Database::query($sql, __FILE__, __LINE__);
-	$sql = "ALTER TABLE `".$TABLETOOLCHATCONNECTED . "` ADD INDEX ( session_id ) ";
+	$sql = "ALTER TABLE `".$TABLETOOLCHATCONNECTED . "` ADD INDEX `char_connected_index`(user_id, session_id, to_group_id) ";
 	Database::query($sql, __FILE__, __LINE__);
 	/*
 	-----------------------------------------------------------
@@ -2121,6 +2120,10 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
 
 		Database::query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/video','".get_lang('Video')."','folder','0')", __FILE__, __LINE__);
+		$example_doc_id = Database :: insert_id();
+		Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
+
+		Database::query("INSERT INTO `".$TABLETOOLDOCUMENT . "`(path,title,filetype,size) VALUES ('/chat_files','chat_files','folder','0')", __FILE__, __LINE__);
 		$example_doc_id = Database :: insert_id();
 		Database::query("INSERT INTO `".$TABLEITEMPROPERTY . "` (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)", __FILE__, __LINE__);
 

@@ -74,8 +74,11 @@ if (!empty($course))
 			$perm = octdec(!empty($perm)?$perm:'0770');
 			@mkdir($chatPath,$perm);
 			@chmod($chatPath,$perm);
+			
+			/*
 			$doc_id=add_document($_course,'/chat_files','folder',0,'chat_files');
 			Database::query("INSERT INTO ".$TABLEITEMPROPERTY . " (tool,insert_user_id,insert_te,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$doc_id,'DocumentAdded',1,0,NULL,0)");
+			*/
 		}
 	}
 

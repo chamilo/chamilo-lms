@@ -1450,7 +1450,6 @@ class CourseRestorer
 							(empty($wiki->group_id) ? 'NULL' : Database::escape_string($wiki->group_id)).",
 							'".Database::escape_string($wiki->dtime)."')";
 				$result = Database::query($sql, __FILE__, __LINE__);
-				echo $sql;
 				$new_id = Database::insert_id();
 				$this->course->resources[RESOURCE_WIKI][$id]->destination_id = $new_id;
 			}

@@ -965,7 +965,11 @@ class Exercise
 	    $form->addElement('datepicker', 'start_time', get_lang('ExeStartTime'), array('form_name'=>'exercise_admin'));
 			$form->addElement('datepicker', 'end_time', get_lang('ExeEndTime'), array('form_name'=>'exercise_admin'));
        
-       //Timer control
+       
+      //$form -> addElement('select', 'enabletimercontroltotalminutes',get_lang('ExerciseTimerControlMinutes'),$time_minutes_option);
+      $form -> addElement('html','</div>');
+           
+      //Timer control
       $time_hours_option = range(0,12);
       $time_minutes_option = range(0,59);
       $form -> addElement('checkbox', 'enabletimercontrol',get_lang('EnableTimerControl'),null,'onclick = "option_time_expired()"');      
@@ -977,9 +981,9 @@ class Exercise
         $form -> addElement('html','<div id="timercontrol" style="display:none;">');
       }
       $form -> addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTotalDurationInMinutes'),array('style' => 'width : 35px'));
-      //$form -> addElement('select', 'enabletimercontroltotalminutes',get_lang('ExerciseTimerControlMinutes'),$time_minutes_option);
-      $form -> addElement('html','</div>');
-           
+      
+      
+      
       $form -> addElement('html','</div>');
 			//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));        
       

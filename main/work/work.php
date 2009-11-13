@@ -119,7 +119,11 @@ $table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURS
 $tool_name = get_lang('StudentPublications');
 $user_id = api_get_user_id();
 $course_code = $_course['sysCode'];
-$is_course_member = $is_courseMember || api_is_platform_admin();
+$session_id = api_get_session_id();
+
+$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code,$session_id);
+$is_course_member = $is_course_member || api_is_platform_admin();
+
 $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH) . $_course["path"] . "/";
 $currentCourseRepositoryWeb = api_get_path(WEB_COURSE_PATH) . $_course["path"] . "/";
 $currentUserFirstName = $_user['firstName'];
@@ -378,7 +382,7 @@ if (!empty($_SESSION['toolgroup'])){
 //stats
 event_access_tool(TOOL_STUDENTPUBLICATION);
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null,true); //has to come after display_tool_view_option();
+$is_allowed_to_edit = api_is_allowed_to_edit(); //has to come after display_tool_view_option();
 //api_display_tool_title($tool_name);
 
 /*

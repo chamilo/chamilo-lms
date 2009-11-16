@@ -642,8 +642,8 @@ function selectAll(cbList,bSelect,showwarning)
 		msg_err2 = document.getElementById(\"err_start_date\");
 		msg_err3 = document.getElementById(\"err_end_date\");
 		msg_err4 = document.getElementById(\"err_title\");
-
-		/*if (start_date > ends_date) {
+			
+		if (start_date > ends_date) {
 			msg_err1.style.display =\"block\";
 			msg_err1.innerHTML=\"".get_lang('EndDateCannotBeBeforeTheStartDate')."\";
 			msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";
@@ -659,7 +659,7 @@ function selectAll(cbList,bSelect,showwarning)
 			msg_err4.style.display =\"block\";
 			msg_err4.innerHTML=\"".get_lang('FieldRequired')."\";
 			msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";
-		}  else {
+		} else {
 			if (cbList.length <	1) {
 				if (!confirm(\"".get_lang('Send2All')."\")) {
 					return false;
@@ -668,38 +668,18 @@ function selectAll(cbList,bSelect,showwarning)
 			for	(var i=0; i<cbList.length; i++)
 			cbList[i].selected = cbList[i].checked = bSelect;
 			document.new_calendar_item.submit();
-		}*/ 
-			if (start_date > ends_date) {
-			msg_err1.style.display =\"block\";
-			msg_err1.innerHTML=\"".get_lang('EndDateCannotBeBeforeTheStartDate')."\";
-			msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";
-		} else if (checkDate(start_month,start_day,start_year) == false) {
-			msg_err2.style.display =\"block\";
-			msg_err2.innerHTML=\"".get_lang('InvalidDate')."\";
-			msg_err1.innerHTML=\"\";msg_err3.innerHTML=\"\";
-		} else if (checkDate(ends_month,ends_day,ends_year) == false) {
-			msg_err3.style.display =\"block\";
-			msg_err3.innerHTML=\"".get_lang('InvalidDate')."\";
-			msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";
-		} else if (document.new_calendar_item.title.value == '') {
-			msg_err4.style.display =\"block\";
-			msg_err4.innerHTML=\"".get_lang('FieldRequired')."\";
-			msg_err1.innerHTML=\"\";msg_err2.innerHTML=\"\";msg_err3.innerHTML=\"\";
-		} 
-				 else {
-			document.new_calendar_item.submit();
 		}
 
 }
 
-	function reverseAll(cbList)
+function reverseAll(cbList)
+{
+	for	(var i=0; i<cbList.length; i++)
 	{
-		for	(var i=0; i<cbList.length; i++)
-		{
-			cbList[i].checked  = !(cbList[i].checked)
-			cbList[i].selected = !(cbList[i].selected)
-		}
+		cbList[i].checked  = !(cbList[i].checked)
+		cbList[i].selected = !(cbList[i].selected)
 	}
+}
 
 function plus_attachment() {
 				if (document.getElementById('options').style.display == 'none') {

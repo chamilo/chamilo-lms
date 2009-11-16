@@ -780,7 +780,7 @@ function store_advalvas_item($emailTitle,$newContent, $order, $to, $file_comment
 	
 	//store the attach file
 	$last_id= Database::insert_id();
-	$save_attachment = add_announcement_attachment_file($last_id, $_FILES['user_upload'], $file_comment);
+	$save_attachment = add_announcement_attachment_file($last_id, $file_comment, $_FILES['user_upload']);
 	
 	// store in item_property (first the groups, then the users
 	if (!is_null($to)) // !is_null($to): when no user is selected we send it to everyone
@@ -892,7 +892,7 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to, $file_comment='')
 	
 	if(empty($last_id)){
 		$last_id = $id;
-	$save_attachment = add_announcement_attachment_file($last_id, $_FILES['user_upload'], $file_comment);
+	$save_attachment = add_announcement_attachment_file($last_id, $file_comment, $_FILES['user_upload']);
 	
 	}
 	
@@ -1057,47 +1057,42 @@ function get_attachment($announcement_id) {
  *
  */
 
-function add_announcement_attachment_file($last_id, $file = array(), $file_comment) {
+function add_announcement_attachment_file($last_id, $file_comment, $file = array()) {
 	global $_course;
 	$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 	
-	// Storing the attachments	
-    if(empty($_FILES['user_upload'])) {
-		$upload_ok = process_uploaded_file($_FILES['user_upload']);
-	}
+	if (is_array($file) && $file['error'] == 0 ) {
+		$courseDir   = $_course['path'].'/upload/announcements';
+		$sys_course_path = api_get_path(SYS_COURSE_PATH);
+		$updir = $sys_course_path.$courseDir;
+		
+		// Try to add an extension to the file if it hasn't one
+		$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
+		// user's file name
+		$file_name =$_FILES['user_upload']['name'];
 
-	if (!empty($upload_ok)) {
-			$courseDir   = $_course['path'].'/upload/announcements';
-			$sys_course_path = api_get_path(SYS_COURSE_PATH);
-			$updir = $sys_course_path.$courseDir;
-			
-			// Try to add an extension to the file if it hasn't one
-			$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
-			// user's file name
-			$file_name =$_FILES['user_upload']['name'];
+		if (!filter_extension($new_file_name))  {
+			Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+		} else {
+			$new_file_name = uniqid('');
+			$new_path=$updir.'/'.$new_file_name;
+			$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
+			$safe_file_comment= Database::escape_string($file_comment);
+			$safe_file_name = Database::escape_string($file_name);
+			$safe_new_file_name = Database::escape_string($new_file_name);
+			// Storing the attachments if any
+			//if ($result) {
+				$sql='INSERT INTO '.$tbl_announcement_attachment.'(filename,comment, path,announcement_id,size) '.
+					 "VALUES ( '".$safe_file_name."', '".$file_comment."', '".$safe_new_file_name."' , '".$last_id."', '".$_FILES['user_upload']['size']."' )";
+				$result=Database::query($sql, __LINE__, __FILE__);
+				$message.=' / '.get_lang('FileUploadSucces').'<br />';
 
-			if (!filter_extension($new_file_name))  {
-				Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
-			} else {
-				$new_file_name = uniqid('');
-				$new_path=$updir.'/'.$new_file_name;
-				$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
-				$safe_file_comment= Database::escape_string($file_comment);
-				$safe_file_name = Database::escape_string($file_name);
-				$safe_new_file_name = Database::escape_string($new_file_name);
-				// Storing the attachments if any
-				//if ($result) {
-					$sql='INSERT INTO '.$tbl_announcement_attachment.'(filename,comment, path,announcement_id,size) '.
-						 "VALUES ( '".$safe_file_name."', '".$file_comment."', '".$safe_new_file_name."' , '".$last_id."', '".$_FILES['user_upload']['size']."' )";
-					$result=Database::query($sql, __LINE__, __FILE__);
-					$message.=' / '.get_lang('FileUploadSucces').'<br />';
+				//$last_id_file=Database::insert_id();
+				//api_item_property_update($_course, 'announcement_attachment', $last_id_file ,'AnnouncementAttachmentAdded', api_get_user_id());
 
-					//$last_id_file=Database::insert_id();
-					//api_item_property_update($_course, 'announcement_attachment', $last_id_file ,'AnnouncementAttachmentAdded', api_get_user_id());
-
-				//}
-			}
+			//}
 		}
+	}
 }
 
 /**

@@ -61,7 +61,8 @@ input[type=button], input[type=submit] {
 	font-weight: bold;
 }
 #header1 {
-	padding-left: 30px;
+	padding:  0.2em 0.5em;
+	height:35px;
 }
 #header1 a {
 	color: #d6e3f5;
@@ -78,8 +79,12 @@ input[type=button], input[type=submit] {
 }
 /* header 2 styles */
 #header2 {
-	float: right;
-	clear: right;
+	position: relative; /* to avoid the IE peekabo bug*/
+	font-size: 1.0em;
+	font-weight: normal;
+	min-height:10px;
+	padding:  0.2em 0.5em;
+	padding-bottom: 0.2em;
 }
 #header2 a {
 	color: #d6e3f5;

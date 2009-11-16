@@ -61,6 +61,7 @@ require_once $libpath.'debug.lib.inc.php';
 require_once $libpath.'system_announcements.lib.php';
 require_once $libpath.'groupmanager.lib.php';
 require_once $libpath.'usermanager.lib.php';
+require_once 'main/survey/survey.lib.php';
 
 api_block_anonymous_users(); // only users who are logged in can proceed
 
@@ -716,7 +717,7 @@ function show_notification($my_course) {
 	$sqlLastTrackInCourse = "SELECT * FROM $t_track_e_access
 									 USE INDEX (access_cours_code, access_user_id)
 									 WHERE access_cours_code = '".$my_course['k']."'
-									 AND access_user_id = '$user_id'";
+									 AND access_user_id = '$user_id' AND access_session_id ='".$my_course['id_session']."'";
 	$resLastTrackInCourse = Database::query($sqlLastTrackInCourse, __FILE__, __LINE__);
 	$oldestTrackDate = "3000-01-01 00:00:00";
 	while ($lastTrackInCourse = Database::fetch_array($resLastTrackInCourse)) {
@@ -733,7 +734,7 @@ function show_notification($my_course) {
 					WHERE tet.lastedit_date > '$oldestTrackDate'
 					AND ctt.name = tet.tool
 					AND ctt.visibility = '1'
-					AND tet.lastedit_user_id != $user_id
+					AND tet.lastedit_user_id != $user_id AND tet.id_session = '".$my_course['id_session']."'
 					ORDER BY tet.lastedit_date";
 
 	$res = Database::query($sql);
@@ -742,14 +743,19 @@ function show_notification($my_course) {
 	$group_ids[] = 0; //add group 'everyone'
 	//filter all selected items
 	while ($res && ($item_property = Database::fetch_array($res))) {
-		if ((!isset ($lastTrackInCourseDate[$item_property['tool']])
-				|| $lastTrackInCourseDate[$item_property['tool']] < $item_property['lastedit_date'])
-			&& ((in_array($item_property['to_group_id'], $group_ids) && $item_property['tool'] != TOOL_DROPBOX)
-				|| $item_property['to_user_id'] == $user_id)
-			&& ($item_property['visibility'] == '1'
-				|| ($my_course['s'] == '1' && $item_property['visibility'] == '0')
-				|| !isset ($item_property['visibility']))) {
-			$notifications[$item_property['tool']] = $item_property;
+					
+		if ((!isset ($lastTrackInCourseDate[$item_property['tool']]) || $lastTrackInCourseDate[$item_property['tool']] < $item_property['lastedit_date'])
+			&& ((in_array($item_property['to_group_id'], $group_ids) && ($item_property['tool'] != TOOL_DROPBOX && $item_property['tool'] != TOOL_NOTEBOOK && $item_property['tool'] != TOOL_CHAT)))
+			&& ($item_property['visibility'] == '1' || ($my_course['s'] == '1' && $item_property['visibility'] == '0') || !isset ($item_property['visibility']))) {
+
+			if (($item_property['tool'] == TOOL_ANNOUNCEMENT || $item_property['tool'] == TOOL_CALENDAR_EVENT) && (($item_property['to_user_id'] != $user_id ) && (!isset($item_property['to_group_id']) || !in_array($item_property['to_group_id'],$group_ids)) )) continue;
+						
+			if ($item_property['tool'] == TOOL_SURVEY) {				
+				$survey_info = survey_manager::get_survey($item_property['ref'],0,$my_course['k']);				
+				$invited_users = SurveyUtil::get_invited_users($survey_info['code'],$course_database);												
+				if (!in_array($user_id,$invited_users['course_users'])) continue;				
+			}					
+			$notifications[$item_property['tool']] = $item_property;						
 		}
 	}
 	//show all tool icons where there is something new

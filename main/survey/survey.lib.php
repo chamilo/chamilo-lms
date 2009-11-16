@@ -43,7 +43,7 @@ class survey_manager
 	 * @param integer $survey_id the id of the survey
 	 * @param boolean $shared this parameter determines if we have to get the information of a survey from the central (shared) database or from the
 	 * 		  course database
-	 *
+	 * @param string course code optional
 	 * @return array
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -51,12 +51,15 @@ class survey_manager
 	 *
 	 * @todo this is the same function as in create_new_survey.php
 	 */
-	function get_survey($survey_id,$shared=0)
+	function get_survey($survey_id,$shared=0,$course_code='')
 	{
 		global $_course;
 
 		// table definition
-		if (isset($_GET['course'])) {
+		
+		if (!empty($course_code)) {
+			$my_course_id = $course_code;
+		} else if (isset($_GET['course'])) {
 			$my_course_id=Security::remove_XSS($_GET['course']);
 		} else {
 			$my_course_id=api_get_course_id();
@@ -4280,6 +4283,7 @@ class SurveyUtil {
 	 * This function gets all the invited users for a given survey code.
 	 *
 	 * @param	string	Survey code
+	 * @param	string	optional - course database
 	 * @return 	array	Array containing the course users and additional users (non course users)
 	 *
 	 * @todo consider making $defaults['additional_users'] also an array
@@ -4287,10 +4291,15 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function get_invited_users($survey_code)
+	function get_invited_users($survey_code,$course_db='')
 	{
 		// Database table definition
-		$table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION);
+		if (!empty($course_db)) {
+			$table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION,$course_db);
+		} else {
+			$table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION);	
+		}
+
 	 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
 		// Selecting all the invitations of this survey AND the additional emailaddresses (the left join)

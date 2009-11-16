@@ -122,6 +122,12 @@ $default_description_title_editable[5] = true;
 $default_description_title_editable[6] = true;
 $default_description_title_editable[7] = true;
 
+/*
+-----------------------------------------------------------
+	Tracking
+-----------------------------------------------------------
+*/
+event_access_tool(TOOL_COURSE_DESCRIPTION);
 
 /*
 ==============================================================================

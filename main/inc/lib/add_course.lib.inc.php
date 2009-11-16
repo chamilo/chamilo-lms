@@ -219,6 +219,8 @@ function prepare_course_repository($courseRepository, $courseId)
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/calendar", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/calendar/images", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/work", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/announcements", $perm);
+	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/upload/announcements/images", $perm);
 
 	//create .htaccess in dropbox
 	$fp = fopen(api_get_path(SYS_COURSE_PATH).$courseRepository . "/dropbox/.htaccess", "w");
@@ -283,7 +285,8 @@ function update_Db_course($courseDbName)
 	$TABLETOOLAGENDAATTACHMENT	= $courseDbName . 'calendar_event_attachment';
 
 	// Announcements
-	$TABLETOOLANNOUNCEMENTS 	= $courseDbName . 'announcement';
+	$TABLETOOLANNOUNCEMENTS 			= $courseDbName . 'announcement';
+	$TABLETOOLANNOUNCEMENTSATTACHMENT	= $courseDbName . 'announcement_attachment';
 
 	// Resourcelinker
 	$TABLEADDEDRESOURCES 		= $courseDbName . 'resource';
@@ -402,7 +405,18 @@ function update_Db_course($courseDbName)
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLANNOUNCEMENTS . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
-
+	
+	// Announcement Attachment
+	$sql = "CREATE TABLE  `".$TABLETOOLANNOUNCEMENTSATTACHMENT."` (
+			  id int NOT NULL auto_increment,
+			  path varchar(255) NOT NULL,
+			  comment text,
+			  size int NOT NULL default 0,
+			  announcement_id int NOT NULL,
+			  filename varchar(255) NOT NULL,
+			  PRIMARY KEY (id)
+			)";
+	Database::query($sql, __FILE__, __LINE__);
 
 	/*
 	-----------------------------------------------------------

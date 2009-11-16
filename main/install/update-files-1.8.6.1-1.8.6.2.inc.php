@@ -68,6 +68,16 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	if(!is_dir($pathForm.'home/default_platform_document/template_thumb')){
 		mkdir($pathForm.'home/default_platform_document/template_thumb',$perm);
 	}
+	
+	//upload > announcements
+	if(!is_dir($currentCourseRepositorySys."upload/announcements")){
+		mkdir($currentCourseRepositorySys."upload/announcements",$perm);
+		}
+
+	//upload > announcements > images
+	if(!is_dir($currentCourseRepositorySys."upload/announcements/images")){
+		mkdir($currentCourseRepositorySys."upload/announcements/images",$perm);
+		}
 
 }
 else

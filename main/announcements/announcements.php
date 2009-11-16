@@ -1,4 +1,4 @@
-<?php //$Id: announcements.php 22259 2009-07-20 18:56:45Z ivantcholakov $
+<?php //$Id: announcements.php 2009-11-13 18:56:45Z aportugal $
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -89,6 +89,7 @@ $tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USE
 $tbl_group     			= Database::get_course_table(TABLE_GROUP);
 $tbl_groupUser  		= Database::get_course_table(TABLE_GROUP_USER);
 $tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT);
+$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 $tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 /*
@@ -137,6 +138,7 @@ if (!empty($_POST['addresources'])) // When the "Add Resource" button is clicked
 */
 event_access_tool(TOOL_ANNOUNCEMENT);
 
+
 /*
 -----------------------------------------------------------
 	Libraries
@@ -148,7 +150,8 @@ require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
 require_once(api_get_path(INCLUDE_PATH).'conf/mail.conf.php');
 require_once(api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
-require_once(api_get_path(LIBRARY_PATH) . '/fckeditor/fckeditor.php');
+require_once(api_get_path(LIBRARY_PATH).'/fckeditor/fckeditor.php');
+require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 /*
 -----------------------------------------------------------
 	POST TO
@@ -438,7 +441,8 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			$sql="SELECT * FROM  $tbl_announcement WHERE id='$id'";
 			$result = Database::query($sql,__FILE__,__LINE__);
 			$myrow = Database::fetch_array($result);
-
+			$last_id = $id;
+			$edit_attachment = edit_announcement_attachment_file($last_id, $_FILES['user_upload'], $file_comment);
 			if ($myrow) {
 				$announcement_to_modify 	= $myrow['id'];
 				$content_to_modify 		= $myrow['content'];
@@ -533,6 +537,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 	$emailTitle=(!empty($_POST['emailTitle'])?$safe_emailTitle:'');
 	$newContent=(!empty($_POST['newContent'])?$safe_newContent:'');
+	
 	$submitAnnouncement=isset($_POST['submitAnnouncement'])?$_POST['submitAnnouncement']:0;
 
 	$id = 0;
@@ -557,6 +562,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		} else {
 			//insert mode
 			if ($ctok == $_POST['sec_token']) {
+				
 				if (!$surveyid) {
 					$result = Database::query("SELECT MAX(display_order) FROM $tbl_announcement WHERE session_id=".intval($_SESSION['id_session'])." OR session_id=0",__FILE__,__LINE__);
 					list($orderMax) = Database::fetch_row($result);
@@ -564,8 +570,8 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 					if (!empty($_SESSION['toolgroup'])) {
 						$insert_id=store_advalvas_group_item($safe_emailTitle,$safe_newContent,$order,array('GROUP:'.$_SESSION['toolgroup']),$_POST['selectedform']);
 					} else {
-						$insert_id=store_advalvas_item($safe_emailTitle,$safe_newContent,$order,$_POST['selectedform']);
-					}
+						$insert_id=store_advalvas_item($safe_emailTitle,$safe_newContent,$order,$_POST['selectedform'],$_POST['file_comment']);
+					}					
 				    store_resources($_SESSION['source_type'],$insert_id);
 				    $_SESSION['select_groupusers']="hide";
 				    $message = get_lang('AnnouncementAdded');
@@ -1015,7 +1021,7 @@ if ($display_form == true) {
 	$title_to_modify=stripslashes($title_to_modify);
 
 	// DISPLAY ADD ANNOUNCEMENT COMMAND
-	echo '<form method="post" name="f1" action="'.api_get_self().'?publish_survey='.Security::remove_XSS($surveyid).'&id='.Security::remove_XSS($_GET['id']).'&db_name='.$db_name.'&cidReq='.Security::remove_XSS($_GET['cidReq']).'" style="margin:0px;">'."\n";
+	echo '<form method="post" name="f1" enctype = "multipart/form-data" action="'.api_get_self().'?publish_survey='.Security::remove_XSS($surveyid).'&id='.Security::remove_XSS($_GET['id']).'&db_name='.$db_name.'&cidReq='.Security::remove_XSS($_GET['cidReq']).'" style="margin:0px;">'."\n";
 	if (empty($_GET['id'])) {
 		$form_name = get_lang('AddAnnouncement');
 	} else {
@@ -1158,6 +1164,32 @@ if ($display_form == true) {
 	$oFCKeditor->Value		= $content_to_modify;
 
 	echo $oFCKeditor->CreateHtml();
+
+	//File attachment
+
+	echo '	<div style="float:left; padding:5px 5px;" >
+				<div class="label">
+					<a href="javascript://" onclick="return plus_attachment();"><span id="plus"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AddAnAttachment').'</span></a>
+				</div>
+				<div class="formw">
+					<table id="options" style="display: none;">
+					<tr>
+						<td colspan="2">
+					        <label for="file_name">'.get_lang('FileName').'&nbsp;</label>
+					        <input type="file" name="user_upload"/>
+					    </td>
+					 </tr>
+					 <tr>
+					    <td colspan="2">
+					    	<label for="comment">'.get_lang('FileComment').'</label><br />
+					    	<textarea name="file_comment" rows ="4" cols = "34" ></textarea>
+					    </td>
+				    </tr>
+			    </table>
+			 </div>
+			</div>';
+
+
 
 	echo'<br />';
 	if (empty($_SESSION['toolgroup'])) {
@@ -1394,7 +1426,7 @@ if ($display_announcement_list && !$surveyid) {
 			$sent_to_form=sent_to_form($sent_to);
 			$user_info=api_get_user_info($myrow['insert_user_id']);
 
-				echo '&nbsp;&nbsp;&nbsp;'.get_lang('By').' : &nbsp;'.str_replace(' ', '&nbsp;', api_get_person_name($user_info['firstName'], $user_info['lastName']));
+			echo '&nbsp;&nbsp;&nbsp;'.get_lang('By').' : &nbsp;'.str_replace(' ', '&nbsp;', api_get_person_name($user_info['firstName'], $user_info['lastName']));
 			echo "\t\t\t\t\t</th>\n","\t\t\t\t</tr>\n";
 			echo "\t\t\t\t<tr class='row_odd'>\n\t\t\t\t\t<td class=\"announcements_datum\" colspan=\"3\">";
 			echo get_lang('AnnouncementPublishedOn')," : ",api_ucfirst(format_locale_date($dateFormatLong,strtotime($last_post_date)));
@@ -1449,7 +1481,35 @@ if ($display_announcement_list && !$surveyid) {
 					echo	"<a href=\"".api_get_self()."?".api_get_cidreq()."&down=".$myrow["id"]."&sec_token=".$stok."\">".
 							Display::return_icon('down.gif', get_lang('Down'))."</a>";
 				}
-
+				
+				//delete attachment file
+				if($_GET['action'] == 'delete') {
+					$id = $_GET['id_attach'];
+					delete_announcement_attachment_file($id);
+				}
+					
+				// show attachment list
+				$attachment_list = array();
+				$attachment_list = get_attachment($myrow['id']);
+								
+				if (count($attachment_list)>0) {
+				$realname=$attachment_list['path'];
+				$user_filename=$attachment_list['filename'];
+				$full_file_name = 'download.php?file='.$realname;
+				echo '<br/>';
+				echo '<br/>';
+				echo Display::return_icon('attachment.gif',get_lang('Attachment'));
+				echo '<a href="'.$full_file_name.'';
+				echo ' "> '.$user_filename.' </a>';
+				echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
+				
+				if (api_is_allowed_to_edit()) {
+					echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete&id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';
+				}
+				
+			}					
+	    		
+																	
 				echo "</td>\n</tr>\n";
 
 				$iterator ++;
@@ -1467,6 +1527,7 @@ if ($display_announcement_list && !$surveyid) {
 
 echo "</table>";
 if (!empty($display_specific_announcement)) display_announcement($announcement_id);
+
 
 /*
 ==============================================================================

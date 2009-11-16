@@ -134,6 +134,7 @@ define('TABLE_AGENDA_REPEAT', 'calendar_event_repeat');
 define('TABLE_AGENDA_REPEAT_NOT', 'calendar_event_repeat_not');
 define('TABLE_AGENDA_ATTACHMENT', 'calendar_event_attachment');
 define('TABLE_ANNOUNCEMENT', 'announcement');
+define('TABLE_ANNOUNCEMENT_ATTACHMENT', 'announcement_attachment');
 define('TABLE_CHAT_CONNECTED', 'chat_connected'); // @todo: probably no longer in use !!!
 define('TABLE_COURSE_DESCRIPTION', 'course_description');
 define('TABLE_DOCUMENT', 'document');

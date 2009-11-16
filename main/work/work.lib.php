@@ -1016,11 +1016,15 @@ function del_dir($base_work_dir,$dir,$id) {
 	//delete from DB the directories
 	$sql = "DELETE FROM $table WHERE filetype = 'folder' AND url LIKE BINARY '/".$dir."%'";
 	$res = Database::query($sql,__FILE__,__LINE__);
-
+	
 	require_once(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
-	//my_delete($base_work_dir.$dir);
 	$new_dir= $dir.'_DELETED_'.$id;
-	rename($base_work_dir.$dir, $base_work_dir.$new_dir);
+	
+	if (api_get_setting('permanently_remove_deleted_files') == 'true'){
+		my_delete($base_work_dir.$dir);
+	} else {
+		rename($base_work_dir.$dir, $base_work_dir.$new_dir);
+	}
 }
 
 /**

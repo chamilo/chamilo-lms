@@ -431,34 +431,6 @@ if ($origin=='learnpath') {
 
 Display :: display_introduction_section(TOOL_STUDENTPUBLICATION);
 
-/*
------------------------------------------------------------
-	COMMANDS SECTION (reserved for course administrator)
------------------------------------------------------------
-*/
-if (api_is_allowed_to_edit(null,true)) {
-
-	/*-------------------------------------------
-				DELETE WORK COMMAND
-	-----------------------------------------*/
-	if (!empty($delete)) {
-		if (isset($delete) && $delete == "all") {
-			$queryString1 = "SELECT url FROM " . $work_table . "";
-			$queryString2 = "DELETE FROM  " . $work_table . "";
-			$queryString3 = "DELETE FROM  " . $TSTDPUBASG . "";
-
-		} else {
-			$queryString1 = "SELECT url FROM  " . $work_table . "  WHERE id = '$delete'";
-			$queryString2 = "DELETE FROM  " . $work_table . "  WHERE id='$delete'";
-			$queryString3 = "DELETE FROM  " . $TSTDPUBASG . "  WHERE publication_id='$delete'";
-		}
-
-		$result1 = Database::query($queryString1, __FILE__, __LINE__);
-		$result2 = Database::query($queryString2, __FILE__, __LINE__);
-		$result3 = Database::query($queryString3, __FILE__, __LINE__);
-	}
-}
-
 	/*-------------------------------------------
 	           EDIT COMMAND WORK COMMAND
 	  -----------------------------------------*/
@@ -696,17 +668,15 @@ if (api_is_allowed_to_edit(null,true)) {
 
 		$delete_directory=$_REQUEST['delete_dir'];
 		$id=$_REQUEST['delete2'];
-		del_dir($base_work_dir . '/', $delete_directory,$id);
+		del_dir($base_work_dir . '/', $delete_directory,$id);	
+		
 		Display :: display_confirmation_message(get_lang('DirDeleted') . ': '.$delete_directory);
 	}
 	if (!empty ($_REQUEST['delete2'])) {
 
-
 		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
 		}
-
-
 		$delete_2=$_REQUEST['delete2'];
 		// gets calendar_id from student_publication_assigment
 		$sql = "SELECT add_to_calendar FROM $TSTDPUBASG WHERE publication_id ='$delete_2'";
@@ -785,20 +755,44 @@ else {
 	/*-------------------------------------------
 				DELETE WORK COMMAND
 	-----------------------------------------*/
+	
+	
 	if ($delete) {
-
 		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
 		}
-
-		if ($delete == "all") {
-			/*not authorized to this user */
+		if ($delete == "all" && api_is_allowed_to_edit(null,true)) {		
+		
+			$queryString1 = "SELECT url FROM " . $work_table . "";
+			$queryString2 = "DELETE FROM  " . $work_table . "";
+			$queryString3 = "DELETE FROM  " . $TSTDPUBASG . "";
+			
+			$result1 = Database::query($queryString1, __FILE__, __LINE__);
+			$result2 = Database::query($queryString2, __FILE__, __LINE__);
+			$result3 = Database::query($queryString3, __FILE__, __LINE__);
+	
+			$path = $currentCourseRepositorySys."work/";
+			$d = dir($path);
+			
+			if (api_get_setting('permanently_remove_deleted_files') == 'true'){
+				
+				while (false !== $entry = $d->read()) {
+					if ($entry == '.' || $entry == '..') continue;
+					rmdirr($path.$entry);
+				}
+			} else {
+				while (false !== $entry = $d->read()) {
+					if ($entry == '.' || $entry == '..' || substr($entry,0,8) == 'DELETED_') continue;
+					$new_file='DELETED_'.$entry;
+					rename($path.$entry, $path.$new_file);
+				}
+			}
 		} else {
 			//Get the author ID for that document from the item_property table
 			$author_sql = "SELECT * FROM $iprop_table WHERE tool = 'work' AND insert_user_id='$user_id' AND ref=" .Database::escape_string($delete);
 			$author_qry = Database::query($author_sql, __FILE__, __LINE__);
 
-			if (Database :: num_rows($author_qry) == 1 AND api_get_course_setting('student_delete_own_publication') == 1) {
+			if (Database :: num_rows($author_qry) == 1 AND api_get_course_setting('student_delete_own_publication') == 1 OR api_is_allowed_to_edit(null,true)) {
 				//we found the current user is the author
 				$queryString1 = "SELECT url FROM  " . $work_table . "  WHERE id = '$delete'";
 				$queryString2 = "DELETE FROM  " . $work_table . "  WHERE id='$delete'";
@@ -807,15 +801,20 @@ else {
 				$result1 = Database::query($queryString1, __FILE__, __LINE__);
 				$result2 = Database::query($queryString2, __FILE__, __LINE__);
 				$result3 = Database::query($queryString3, __FILE__, __LINE__);
-
 				if ($result1) {
-					api_item_property_update($_course, 'work', $delete, 'DocumentDeleted', $user_id);
-					while ($thisUrl = Database::fetch_array($result1)) {
-						// check the url really points to a file in the work area
-						// (some work links can come from groups area...)
-						if (substr(dirname($thisUrl['url']), -4) == "work") {
-							@ unlink($currentCourseRepositorySys . "work/" . $thisWork);
-						}
+					api_item_property_update($_course, 'work', $delete, 'DocumentDeleted', $user_id);	
+					$row=Database::fetch_array($result1);
+					$work=$row['url'];
+					
+					require_once(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
+					$extension = pathinfo($work, PATHINFO_EXTENSION);
+					$basename_file = basename($work, '.'.$extension);		
+					$new_dir=$work.'_DELETED_'.$delete.'.'.$extension;
+					
+					if (api_get_setting('permanently_remove_deleted_files') == 'true'){
+						my_delete($currentCourseRepositorySys.'/'.$work);	
+					} else {
+						rename($currentCourseRepositorySys."/".$work, $currentCourseRepositorySys."/".$new_dir);
 					}
 				}
 				Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));

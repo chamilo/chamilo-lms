@@ -8,7 +8,7 @@
 
 // name of the language file that needs to be included
 $language_file = array('registration', 'index', 'tracking', 'exercice', 'admin');
-$cidReset = true;
+
 
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
@@ -45,7 +45,7 @@ if (isset ($_GET['from']) && $_GET['from'] == 'myspace') {
 
 $nameTools = get_lang("StudentDetails");
 //$nameTools = SECTION_PLATFORM_ADMIN;
-
+$cidReset = true;
 $get_course_code = Security :: remove_XSS($_GET['course']);
 if (isset ($_GET['details'])) {
 	if (!empty ($_GET['origin']) && $_GET['origin'] == 'user_course') {

@@ -27,21 +27,27 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	$origin = isset($_GET['origin'])?Security::remove_XSS($_GET['origin']):'';
 
 	$origin = api_get_tools_lists($origin);
-
+	echo '<div class="actions">';
+	
 	if (strlen($cur_dir_path) > 0 && $cur_dir_path != '/') {
 		$parent_dir = dirname($cur_dir_path);
-		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&curdirpath='.$parent_dir.'">'.Display::return_icon('folder_up.gif', get_lang('Up')).' '.get_lang('Up').'</a>';
+		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&curdirpath='.$parent_dir.'">'.Display::return_icon('back.png',get_lang('BackToWorksList')).' '.get_lang('BackToWorksList').'</a>';
 	}
-	echo '<div class="actions">';
-	if ($_GET['display_tool_options'] == 'true' OR $_GET['display_upload_form'] == 'true' )
+	else
 	{
-		if ($origin!='learnpath') {
-			echo '<a href="work.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToWorksList')).' '.get_lang('BackToWorksList').'</a>';
+		if ($_GET['display_tool_options'] == 'true' OR $_GET['display_upload_form'] == 'true' )
+		{
+			if ($origin!='learnpath') {
+				echo '<a href="work.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToWorksList')).' '.get_lang('BackToWorksList').'</a>';
+			}
 		}
 	}
 	if (! $always_show_tool_options && api_is_allowed_to_edit(null,true) && $origin != 'learnpath') {
 		// Create dir
-		$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'">'.Display::return_icon('folder_new.gif', get_lang('CreateAssignment')).' '.get_lang('CreateAssignment').' </a>';
+		if ($cur_dir_path=='/')
+		{
+			$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'">'.Display::return_icon('works_new.gif', get_lang('CreateAssignment')).' '.get_lang('CreateAssignment').' </a>';
+		}
 		// Options
 		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".$origin."&amp;display_tool_options=true&amp;origin=".$origin."&amp;gradebook=".$gradebook."\">".Display::return_icon('acces_tool.gif', get_lang("EditToolOptions")).' ' . get_lang("EditToolOptions") . "</a>";
 	}
@@ -613,7 +619,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$action = '';
 		$row = array();
 		$class = '';
-		$row[] = '<img src="../img/folder_document.gif" border="0" hspace="5" align="middle" alt="'.get_lang('Assignment').'" title="'.get_lang('Assignment').'" />'; //image
+		$row[] = '<img src="../img/works.gif" border="0" hspace="5" align="middle" alt="'.get_lang('Assignment').'" title="'.get_lang('Assignment').'" />'; //image
 		//$a_count_directory=count_dir($work_dir.'/'.$dir,false);
 
 		$cant_files=0;

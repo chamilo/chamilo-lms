@@ -22,6 +22,7 @@ require_once '../inc/lib/fileDisplay.lib.php';
 function display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form)
 {
 	global $gradebook;
+	global $charset;
 	$display_output = "";
 	$origin = isset($_GET['origin'])?Security::remove_XSS($_GET['origin']):'';
 
@@ -54,8 +55,13 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	if (api_is_allowed_to_edit(null,true) && $origin != 'learnpath' && api_is_allowed_to_session_edit(false,true))
 	{
 		// delete all files
-		$display_output .= 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;delete=all\" ".
-			"onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".
+		if (api_get_setting('permanently_remove_deleted_files') == 'true'){
+			$message=get_lang('ConfirmYourChoiceDeleteAllfiles');
+		} else {
+			$message=get_lang('ConfirmYourChoice');
+		}
+		
+		$display_output .= 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;delete=all\" "."onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities($message,ENT_QUOTES,$charset))."')) return false;\">".
 			Display::return_icon('delete.gif', get_lang('Delete')).' '.get_lang('DeleteAllFiles')."</a>";
 
 		// make all files visible or invisible
@@ -1019,7 +1025,6 @@ function del_dir($base_work_dir,$dir,$id) {
 	
 	require_once(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 	$new_dir= $dir.'_DELETED_'.$id;
-	
 	if (api_get_setting('permanently_remove_deleted_files') == 'true'){
 		my_delete($base_work_dir.$dir);
 	} else {

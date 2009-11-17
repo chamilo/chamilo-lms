@@ -687,7 +687,7 @@ class UserManager
 
 		// Let us delete them.
 		if (!empty($old_file)) {
-			if (KEEP_THE_OLD_IMAGE_AFTER_CHANGE) {
+			if (api_get_setting('permanently_remove_deleted_files') == 'false') {
 				$prefix = 'saved_'.date('Y_m_d_H_i_s').'_'.uniqid('').'_';
 				@rename($path.'small_'.$old_file, $path.$prefix.'small_'.$old_file);
 				@rename($path.'medium_'.$old_file, $path.$prefix.'medium_'.$old_file);

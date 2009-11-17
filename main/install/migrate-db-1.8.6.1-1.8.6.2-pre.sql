@@ -45,6 +45,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('send_email
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE track_e_online ADD INDEX (course);
 
 -- xxUSERxx
 

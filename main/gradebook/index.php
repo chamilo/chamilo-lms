@@ -764,7 +764,7 @@ if ($category != '0') {
 			
 			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?visiblecat=' . $cats[0]->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=0 "><img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang('Visible') . '" alt="'.get_lang('Visible').'" />'.get_lang('Visible').'</a>';
 			$opt_cat_descrip1 = strip_tags($opt_cat_descrip);
-			echo '<div align="left" style="float:left"><img  src="../img/info3.gif" border="0" title="' . $opt_cat_descrip1 . '" alt="'.$opt_cat_descrip1.'" /> '.$op_cat_weight.' '.'&nbsp;&nbsp;'.$opt_cat_cert_min.'&nbsp;&nbsp;'.$opt_cat_descrip.'</div>';
+			echo '<div  align="left" style="float:left"><img  src="../img/info3.gif" border="0" title="' . $opt_cat_descrip1 . '" alt="'.$opt_cat_descrip1.'" /> '.$op_cat_weight.' '.'&nbsp;&nbsp;'.$opt_cat_cert_min.'&nbsp;&nbsp;'.$opt_cat_descrip.'</div>';
 			echo $modify_icons;
 			echo '</div>';
 		}

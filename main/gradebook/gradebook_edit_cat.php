@@ -64,5 +64,6 @@ $interbreadcrumb[] = array (
 	'name' => get_lang('Gradebook'
 ));
 Display :: display_header(get_lang('EditCategory'));
+echo '<div class="actions-message">'.get_lang('EditCategory').'</div>';
 $form->display();
 Display :: display_footer();

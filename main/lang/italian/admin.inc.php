@@ -1094,4 +1094,6 @@ $TheTimeLimitsAreReferential = "I limiti temporali assegnati alla categoria sono
 $ShowGlossaryInExtraToolsTitle = "Mostra le definizioni del glossario in esercizi e moduli";
 $ShowGlossaryInExtraToolsComment = "Qui puoi configurare il modo in cui le definizioni del glossario saranno visualizzate in test e moduli didattici";
 $FieldTypeTag = "Tag utente";
+$SendEmailToAdminTitle = "Avviso della creazione di un nuovo corso tramite e-mail";
+$SendEmailToAdminComment = "Ogni volta che un docente crea un nuovo corso, verrà inviata un\'e-mail all\'amministratore";
 ?>

@@ -241,4 +241,6 @@ $TrainingTime = "Čas v tečaju";
 $CourseProgress = "Napredovanje v tečaju";
 $ViewMinus = "Poglej manj";
 $ResourcesTracking = "Poročilo vira";
+$SelectFieldToAdd = "Izberite polje uporabniškega profila ";
+$AddAdditionalProfileField = "Dodaj polje uporabniškega profila";
 ?>

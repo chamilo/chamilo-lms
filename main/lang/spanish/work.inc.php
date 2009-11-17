@@ -73,4 +73,8 @@ $FolderEdited = "Tarea modificada";
 $UpdateWork = "Actualizar la tarea";
 $MakeAllPapersInvisible = "Ocultar todos los documentos";
 $MakeAllPapersVisible = "Hacer todos los documentos visibles";
+$StudentAllowedToDeleteOwnPublication = "Permitir a los estudiantes eliminar sus propias tareas";
+$TheDocumentHasBeenDeleted = "El documento ha sido borrado.";
+$YouAreNotAllowedToDeleteThisDocument = "Usted no está autorizado para eliminar este documento";
+$ConfirmYourChoiceDeleteAllfiles = "Confirme su elección, se eliminarán todos los archivos y no se podrán recuperar";
 ?>

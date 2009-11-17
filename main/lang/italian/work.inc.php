@@ -73,6 +73,8 @@ $FolderEdited = "Cartella modificata";
 $UpdateWork = "Aggiorna l\'elaborato";
 $MakeAllPapersInvisible = "Rendi tutti gli elaborati non visibili";
 $MakeAllPapersVisible = "Rendi tutti gli elaborati visibili";
+$StudentAllowedToDeleteOwnPublication = "Consenti agli studenti di eliminare i documenti da loro inviati";
 $TheDocumentHasBeenDeleted = "Documento eliminato";
 $YouAreNotAllowedToDeleteThisDocument = "Non hai il permesso di eliminare il documento";
+$ConfirmYourChoiceDeleteAllfiles = "TUTTI I FILE SARANNO ELIMINATI E NON POTRANNO ESSERE RECUPERATI CONFERMANDO LA SCELTA";
 ?>

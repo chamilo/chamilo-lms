@@ -584,7 +584,9 @@ function display_add_form()
 		{
 			$complete_user_list_for_dropbox = CourseManager :: get_teacher_list_from_course_code($course_info['code']);
 		}
-	}
+	}    
+
+	
 
 	foreach ($complete_user_list_for_dropbox as $k => $e) {
 	    $complete_user_list_for_dropbox[$k] = $e + array('lastcommafirst' => api_get_person_name($e['firstname'], $e['lastname']));
@@ -613,6 +615,8 @@ function display_add_form()
 		Create the options inside the select box:
 		List all selected users their user id as value and a name string as display
 	*/
+
+	$current_user_id = '';
 	foreach ($complete_user_list_for_dropbox as $current_user)
 	{
 		if ( ($dropbox_person -> isCourseTutor
@@ -622,8 +626,10 @@ function display_add_form()
 		|| $current_user['tutor_id']==1				// always allow tutors
 		) && $current_user['user_id'] != $_user['user_id'] ) 	// don't include yourself
 		{
+			if ($current_user['user_id'] == $current_user_id) continue;
 			$full_name = $current_user['lastcommafirst'];
-			echo '<option value="user_' . $current_user['user_id'] . '">' . $full_name . '</option>';
+			$current_user_id = $current_user['user_id'];
+			echo '<option value="user_' . $current_user_id . '">' . $full_name . '</option>';
 		}
 	}
 

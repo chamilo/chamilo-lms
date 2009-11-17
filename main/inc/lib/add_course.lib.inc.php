@@ -2438,6 +2438,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 
 		$send_mail_to_admin = api_get_setting('send_email_to_admin_when_create_course');
 		
+		//@todo improve code to send to all current portal admins
 		if ($send_mail_to_admin=='true'){
 			$siteName=api_get_setting('siteName');
 			$recipient_email = api_get_setting('emailAdministrator');
@@ -2445,7 +2446,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 			$urlsite = api_get_path(WEB_PATH);
 			$iname = api_get_setting('Institution');
 			$subject=get_lang('NewCourseCreatedIn').' '.$siteName.' - '.$iname;
-			$message =  get_lang('Dear').' '.$recipient_name.' '.get_lang('MessageOfNewCourseToAdmin').$siteName.' - '.$iname."\n";
+			$message =  get_lang('Dear').' '.$recipient_name.",\n\n".get_lang('MessageOfNewCourseToAdmin').' '.$siteName.' - '.$iname."\n";
 			$message .= get_lang('CourseName').' '.$title."\n";
 			$message .= get_lang('Category').' '.$category."\n";
 			$message .= get_lang('Tutor').' '.$titular."\n";

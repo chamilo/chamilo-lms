@@ -654,6 +654,8 @@ function sent_to_form($sent_to_array)
 * This function separates the users from the groups
 * users have a value USER:XXX (with XXX the dokeos id
 * groups have a value GROUP:YYY (with YYY the group id)
+* @param    array   Array of strings that define the type and id of each destination
+* @return   array   Array of groups and users (each an array of IDs)
 */
 function separate_users_groups($to)
 {
@@ -661,10 +663,10 @@ function separate_users_groups($to)
 		list($type, $id) = explode(':', $to_item);
 		switch($type) {
 			case 'GROUP':
-				$grouplist[] =$id;
+				$grouplist[] = intval($id);
 				break;
 			case 'USER':
-				$userlist[] =$id;
+				$userlist[] = intval($id);
 				break;
 		}
 	}
@@ -680,8 +682,11 @@ function separate_users_groups($to)
 	 			SENT_TO()
   ======================================*/
 /**
-* returns all the users and all the groups a specific announcement item
+* Returns all the users and all the groups a specific announcement item
 * has been sent to
+* @param    string  The tool (announcement, agenda, ...)
+* @param    int     ID of the element of the corresponding type
+* @return   array   Array of users and groups to whom the element has been sent 
 */
 function sent_to($tool, $id)
 {
@@ -730,6 +735,9 @@ function sent_to($tool, $id)
 * This functions swithes the visibility a course resource
 * using the visibility field in 'item_property'
 * values: 0 = invisibility for
+* @param    string  The tool (announcement, agenda, ...)
+* @param    int     ID of the element of the corresponding type
+* @return   bool    The result of the update operation, or nothing on failure
 */
 function change_visibility_announcement($tool,$id)
 {
@@ -752,34 +760,42 @@ function change_visibility_announcement($tool,$id)
 	{
 		$sql_visibility="UPDATE $tbl_item_property SET visibility='1' WHERE tool='$tool' AND ref='$id'";
 	}
-
-	$result=Database::query($sql_visibility,__FILE__,__LINE__) or die (mysql_error());
+    $result=Database::query($sql_visibility,__FILE__,__LINE__);
+    if ($(mysql_error());
 }
 
-
-/*====================================================
-	            STORE_ADVALVAS_ITEM
-====================================================*/
-
-function store_advalvas_item($emailTitle,$newContent, $order, $to, $file_comment='') {
+/**
+ * Store an announcement in the database (including its attached file if any)
+ * @param string    Announcement title (pure text)
+ * @param string    Content of the announcement (can be HTML)
+ * @param int       Display order in the list of announcements
+ * @param array     Array of users and groups to send the announcement to 
+ * @param string    Comment describing the attachment
+ * @return int      false on failure, ID of the announcement on success 
+ */
+function store_advalvas_item($emailTitle, $newContent, $order, $to, $file_comment='') {
 
 	global $_course;
 	global $nameTools;
 	global $_user;
 
-	global $tbl_announcement;
-	global $tbl_item_property;
-	$newContent=stripslashes($newContent);
+	$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
+	$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
+	// filter data
 	$emailTitle = Database::escape_string(Security::remove_XSS($emailTitle));
 	$newContent = Database::escape_string(Security::remove_XSS($newContent,COURSEMANAGERLOWSECURITY));
 	$order = intval($order);
 	
 	// store in the table announcement
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
-	$result = Database::query($sql,__FILE__,__LINE__) or die (mysql_error());
+	$result = Database::query($sql,__FILE__,__LINE__);
+	if ($result === false) {
+		return false;
+	}
 	
 	//store the attach file
-	$last_id= Database::insert_id();
+	$last_id = Database::insert_id();
 	$save_attachment = add_announcement_attachment_file($last_id, $file_comment, $_FILES['user_upload']);
 	
 	// store in item_property (first the groups, then the users
@@ -1054,12 +1070,14 @@ function get_attachment($announcement_id) {
  * This function add a attachment file into announcement
  * @param string  a comment about file
  * @param int last id from announcement table
- *
+ * @return int  -1 if failed, 0 if unknown (should not happen), 1 if success
  */
 
 function add_announcement_attachment_file($last_id, $file_comment, $file = array()) {
 	global $_course;
 	$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
+	$return = 0;
+	$last_id = intval($last_id);
 	
 	if (is_array($file) && $file['error'] == 0 ) {
 		$courseDir   = $_course['path'].'/upload/announcements';
@@ -1069,42 +1087,44 @@ function add_announcement_attachment_file($last_id, $file_comment, $file = array
 		// Try to add an extension to the file if it hasn't one
 		$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
 		// user's file name
-		$file_name =$_FILES['user_upload']['name'];
+		$file_name = $_FILES['user_upload']['name'];
 
 		if (!filter_extension($new_file_name))  {
+			$return = -1;
 			Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
 		} else {
 			$new_file_name = uniqid('');
-			$new_path=$updir.'/'.$new_file_name;
-			$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
-			$safe_file_comment= Database::escape_string($file_comment);
-			$safe_file_name = Database::escape_string($file_name);
+			$new_path           = $updir.'/'.$new_file_name;
+			$result             = @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
+			$safe_file_comment  = Database::escape_string($file_comment);
+			$safe_file_name     = Database::escape_string($file_name);
 			$safe_new_file_name = Database::escape_string($new_file_name);
 			// Storing the attachments if any
 			//if ($result) {
-				$sql='INSERT INTO '.$tbl_announcement_attachment.'(filename,comment, path,announcement_id,size) '.
-					 "VALUES ( '".$safe_file_name."', '".$file_comment."', '".$safe_new_file_name."' , '".$last_id."', '".$_FILES['user_upload']['size']."' )";
-				$result=Database::query($sql, __LINE__, __FILE__);
-				$message.=' / '.get_lang('FileUploadSucces').'<br />';
-
+				$sql = 'INSERT INTO '.$tbl_announcement_attachment.'(filename, comment, path, announcement_id, size) '.
+					   "VALUES ( '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$last_id', '".intval($_FILES['user_upload']['size'])."' )";
+				$result = Database::query($sql, __LINE__, __FILE__);
+				//$message .= ' / '.get_lang('FileUploadSucces').'<br />';
+                $return = 1;
 				//$last_id_file=Database::insert_id();
 				//api_item_property_update($_course, 'announcement_attachment', $last_id_file ,'AnnouncementAttachmentAdded', api_get_user_id());
 
 			//}
 		}
 	}
+	return $return;
 }
 
 /**
  * This function edit a attachment file into announcement
  * @param string  a comment about file
  * @param int Agenda Id
- *  @param int attachment file Id
+ * @param int attachment file Id
  */
 function edit_announcement_attachment_file($last_id, $file = array(), $file_comment) {
-
 	global $_course;
 	$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
+    $return = 0;
 	// Storing the attachments
 
     if(!empty($_FILES['user_upload'])) {
@@ -1112,35 +1132,37 @@ function edit_announcement_attachment_file($last_id, $file = array(), $file_comm
 	}
 
 	if (!empty($upload_ok)) {
-			$courseDir   = $_course['path'].'/upload/announcements';
-			$sys_course_path = api_get_path(SYS_COURSE_PATH);
-			$updir = $sys_course_path.$courseDir;
+		$courseDir   = $_course['path'].'/upload/announcements';
+		$sys_course_path = api_get_path(SYS_COURSE_PATH);
+		$updir = $sys_course_path.$courseDir;
 
-			// Try to add an extension to the file if it hasn't one
-			$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
-			// user's file name
-			$file_name =$_FILES['user_upload'] ['name'];
-
-			if (!filter_extension($new_file_name))  {
-				Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+		// Try to add an extension to the file if it hasn't one
+		$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
+		// user's file name
+		$file_name =$_FILES['user_upload'] ['name'];
+		if (!filter_extension($new_file_name)) {
+			$return -1;
+			Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+		} else {
+			$new_file_name = uniqid('');
+			$new_path = $updir.'/'.$new_file_name;
+			$result = @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
+			$safe_file_comment = Database::escape_string($file_comment);
+			$safe_file_name = Database::escape_string($file_name);
+			$safe_new_file_name = Database::escape_string($new_file_name);	
+			$sql = "UPDATE $tbl_announcement_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', announcement_id = '$last_id', size ='".intval($_FILES['user_upload']['size'])."'
+				 WHERE announcement_id = '$last_id'";
+			$result = Database::query($sql, __FILE__,__LINE__);
+			if ($result === false) {
+				$return = -1;
+                Display :: display_error_message(get_lang('UplUnableToSaveFile'));
 			} else {
-				$new_file_name = uniqid('');
-				$new_path=$updir.'/'.$new_file_name;
-				$result= @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
-				$safe_file_comment= Database::escape_string($file_comment);
-				$safe_file_name = Database::escape_string($file_name);
-				$safe_new_file_name = Database::escape_string($new_file_name);	
-				// Storing the attachments if any
-				//if ($result) {
-					$sql="UPDATE $tbl_announcement_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', announcement_id = '$last_id', size ='".$_FILES['user_upload']['size']."'
-						 WHERE announcement_id = '$last_id'";
-					$result=Database::query($sql, __FILE__,__LINE__);
-					$message.=' / '.get_lang('FileUploadSucces').'<br />';
-					//api_item_property_update($_course, 'announcement_attachment', $last_id ,'AnnouncementAttachmentUpdated', api_get_user_id());
-
-				//}
+                $return = 1;
 			}
+			//$message .= ' / '.get_lang('FileUploadSucces').'<br />';
 		}
+	}
+	return $return;
 }
 
 /**

@@ -1,29 +1,6 @@
 <?php //$Id: announcements.php 2009-11-13 18:56:45Z aportugal $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 /**
-==============================================================================
  * @author Frederik Vermeire <frederik.vermeire@pandora.be>, UGent Internship
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: code cleaning
  * @abstract The task of the internship was to integrate the 'send messages to specific users' with the
@@ -33,7 +10,6 @@
  * @todo make AWACS out of the configuration settings
  * @todo this file is 1200+ lines without any functions -> needs to be split into
  * multiple functions
-==============================================================================
 */
 /*
 ==============================================================================
@@ -144,22 +120,23 @@ event_access_tool(TOOL_ANNOUNCEMENT);
 	Libraries
 -----------------------------------------------------------
 */
-require_once(api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+$lib = api_get_path(LIBRARY_PATH); //avoid useless function calls
+require_once($lib.'groupmanager.lib.php');
 require_once('announcements.inc.php');
-require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
+require_once($lib.'mail.lib.inc.php');
 require_once(api_get_path(INCLUDE_PATH).'conf/mail.conf.php');
-require_once(api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
-require_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'/fckeditor/fckeditor.php');
-require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+require_once($lib.'debug.lib.inc.php');
+require_once($lib.'tracking.lib.php');
+require_once($lib.'fckeditor/fckeditor.php');
+require_once($lib.'fileUpload.lib.php');
 /*
 -----------------------------------------------------------
 	POST TO
 -----------------------------------------------------------
 */
 
-$safe_emailTitle = $_POST['emailTitle'];
-$safe_newContent = $_POST['newContent'];
+$safe_emailTitle = Security::remove_XSS($_POST['emailTitle']);
+$safe_newContent = Security::remove_XSS($_POST['newContent']);
 
 if (!empty($_POST['To']))
 {
@@ -168,7 +145,7 @@ if (!empty($_POST['To']))
 	}
 	$display_form = true;
 
-	$form_elements= array ('emailTitle'=>$safe_emailTitle, 'newContent'=>$safe_newContent, 'id'=>$_POST['id'], 'emailoption'=>$_POST['email_ann']);
+	$form_elements= array ('emailTitle'=>$safe_emailTitle, 'newContent'=>$safe_newContent, 'id'=>Security::remove_XSS($_POST['id']), 'emailoption'=>Security::remove_XSS($_POST['email_ann']));
     $_SESSION['formelements']=$form_elements;
 
     $form_elements            	= $_SESSION['formelements'];
@@ -186,7 +163,7 @@ if (!empty($_POST['To']))
 -----------------------------------------------------------
 */
 
-$setting_select_groupusers=true;
+$setting_select_groupusers = true;
 if (empty($_POST['To']) and !$_SESSION['select_groupusers'])
 {
 	$_SESSION['select_groupusers']="hide";
@@ -331,9 +308,9 @@ else
 	$display_announcement_list = false;
 	$display_specific_announcement = true;
 	$announcement_id = $_REQUEST['ann_id'];
-	?> <link rel="stylesheet" type="text/css" href="<?php echo $clarolineRepositoryWeb ?>css/default.css">
+	?> <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.$my_style; ?>/default.css">
 	<!-- css file for announcements -->
-	<link href="../css/announcements.css" rel="stylesheet" type="text/css">
+	<link href="../css/<?php echo $my_style; ?>/announcements.css" rel="stylesheet" type="text/css">
 	<?php
 }
 
@@ -353,17 +330,14 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	// $_GET['isStudentView']<>"false" is added to prevent that the visibility
 	// is changed after you do the following:
 	// change visibility -> studentview -> course manager view
-	if (!isset($_GET['isStudentView']) || $_GET['isStudentView']!='false')
-	{
-		if (isset($_GET['id']) AND $_GET['id'] AND isset($_GET['action']) AND $_GET['action']=="showhide")
-		{
+	if (!isset($_GET['isStudentView']) || $_GET['isStudentView']!='false') {
+		if (isset($_GET['id']) AND $_GET['id'] AND isset($_GET['action']) AND $_GET['action']=="showhide") {
 			if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
 				api_not_allowed();
 			}
 			
-			$id=intval(addslashes($_GET['id']));
-			if(!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id))
-			{
+			$id=intval($_GET['id']);
+			if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
 				if ($ctok == $_GET['sec_token']) {
 					change_visibility_announcement(TOOL_ANNOUNCEMENT,$id);
 					$message = get_lang("VisibilityChanged");
@@ -409,7 +383,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	if (!empty($_GET['action']) and $_GET['action']=='delete_all') {
 
 		//Database::query("DELETE FROM $tbl_announcement",__FILE__,__LINE__);
-		if(api_is_allowed_to_edit()) {
+		if (api_is_allowed_to_edit()) {
 			Database::query("UPDATE $tbl_item_property SET visibility='2' WHERE tool='".TOOL_ANNOUNCEMENT."'",__FILE__,__LINE__);
 
 			delete_all_resources_type("Ad_Valvas");

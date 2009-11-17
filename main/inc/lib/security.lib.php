@@ -1,23 +1,6 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2007 Dokeos S.A.
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 /**
-==============================================================================
 * This is the security library for Dokeos.
 *
 * This library is based on recommendations found in the PHP5 Certification
@@ -36,7 +19,7 @@
 * For files inclusions (using dynamic paths) use check_rel_path() and check_abs_path()
 *
 * @package dokeos.library
-==============================================================================
+* @author Yannick Warnier <ywarnier@beeznest.org>
 */
 /**
  * Security class
@@ -211,8 +194,11 @@ class Security {
 			case 'float':
 				$result = (float) $var;
 				break;
-			case 'string':
-
+			case 'string/html':
+                $result = self::remove_XSS($var);
+				break;
+			case 'string/db':
+				$result = Database::escape_string($var);
 				break;
 			case 'array':
 				//an array variable shouldn't be given to the filter

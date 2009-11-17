@@ -17,7 +17,7 @@ $langAdmitError = "Reconocer los erros propios p\'animar al interlocutor a facer
 $langNoSeduction = "Non. Nun ye una manera de seducir nin tampoco un métodu basáu nel exemplu.";
 $langForce = "Obligar al interlocutor, con entrugues y más entrugues, a que reconoza que nun sabe lo que diz saber.";
 $langIndeed = "Correutu. La ironía socrática ye un métodu interrogativu. El términu griegu\\\"eirotao\\\" quier dicir, amás, \\\"entrugar\\\"";
-$langContradiction = "Usar el principiu de non contrdicción pa que l\'interlocutor llegue a un llugar del que nun pue salir.";
+$langContradiction = "Usar el principiu de non contrdicción pa que l\'interlocutor llegue a un llugar del que nun puedes colar.";
 $langNotFalse = "Esti retruque nun ye falsu. Ye correuto que poner n\'evidencia la ignorancia del interlocutor faese poniendo n\'evidencia les contradicciones en qu\'acaben les sos tesis.";
 $langAgenda = "Axenda";
 $langVideo = "Videu";
@@ -102,4 +102,6 @@ $IntroductionWiki = "La palabra Wiki ye una abreviatura de WikiWikiWeb. Wikiwiki
 $CreateCourseArea = "Criar cursu";
 $CreateCourse = "Criar cursu";
 $Create = "Crear";
+$MessageOfNewCourseToAdmin = "Esti mensax ye pa informate que se crió un cursu nuevu na plataforma";
+$NewCourseCreatedIn = "Nuevu cursu criáu en";
 ?>

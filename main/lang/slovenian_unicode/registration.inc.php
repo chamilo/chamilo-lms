@@ -181,4 +181,5 @@ $User = "Uporabnik";
 $LostPass = "Si pozabil(a) geslo ?";
 $EnterEmailUserAndWellSendYouPassword = "Vnesi uporabniško ime ali e-poštni naslov s katerim si registriran(a) in poslali vam bomo geslo.";
 $NoUserAccountWithThisEmailAddress = "Tu ni uporabniškega računa s tem uporabniškim imenom ali e-poštnim naslovom";
+$WithTheFollowingSettings = "z naslednjimi nastavitvami:";
 ?>

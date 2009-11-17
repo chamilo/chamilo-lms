@@ -91,4 +91,5 @@ $ClearSearchResults = "Počisti rezultate iskanja";
 $SendInvitation = "Pošlji vabilo";
 $SocialInvitationToFriends = "Vabilo za pridružitev k moji skupini prijateljev";
 $MyCertificates = "Moji certifikati";
+$ToChangeYourEmailMustTypeYourPassword = "Za spremembo poštnega naslova morate vnesti vaše geslo";
 ?>

@@ -65,4 +65,5 @@ $FolderCreated = "Nova mapa je bila ustvarjena";
 $LinkAdded = "Nova povezava je bila dodana";
 $AnnouncementAdded = "Obvestilo je bilo dodano";
 $AgendaAdded = "Zapis agende je bil dodan";
+$YouDoNotHaveAnySessionInItsHistory = "V zgodovini nimate beležene nobene seje tečaja";
 ?>

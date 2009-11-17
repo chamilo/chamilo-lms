@@ -73,4 +73,7 @@ $FolderEdited = "Mapa je bila ažurirana";
 $UpdateWork = "Ažuriraj to opravilo";
 $MakeAllPapersInvisible = "Naredi vse objave nevidne";
 $MakeAllPapersVisible = "Naredi vse objave vidne";
+$StudentAllowedToDeleteOwnPublication = "Dovoli tečajnikom brisanje tvojih lastnih objav";
+$TheDocumentHasBeenDeleted = "Dokument je bil odstranjen.";
+$YouAreNotAllowedToDeleteThisDocument = "Brisanje tega dokumenta ni dovoljeno.";
 ?>

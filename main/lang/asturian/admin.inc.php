@@ -1094,4 +1094,6 @@ $TheTimeLimitsAreReferential = "El plazu d\'una categoría ye referencial, nun af
 $ShowGlossaryInExtraToolsTitle = "Amuesa los términos del glosariu nes ferramientes extres";
 $ShowGlossaryInExtraToolsComment = "Dende equí puedes configurar como amestar los términos del glosariu en ferramientes como lleiciones y exercicios";
 $FieldTypeTag = "Etiqueta d\'usuariu";
+$SendEmailToAdminTitle = "Avisu por corréu electrónicu, de la criación d\'un cursu nuevu";
+$SendEmailToAdminComment = "Unviar un corréu electrónicu al alministrador de la plataforma, cada vegada qu\'un mayestru crie un cursu nuevu";
 ?>

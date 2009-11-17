@@ -73,6 +73,8 @@ $FolderEdited = "Folder edited";
 $UpdateWork = "Update this task";
 $MakeAllPapersInvisible = "Make all papers invisible";
 $MakeAllPapersVisible = "Make all papers visible";
+$StudentAllowedToDeleteOwnPublication = "Allow to the students delete your own publication";
 $TheDocumentHasBeenDeleted = "The document has been deleted.";
 $YouAreNotAllowedToDeleteThisDocument = "You are not allowed to delete this document";
+$ConfirmYourChoiceDeleteAllfiles = "Confirm your choice will delete all files and can not be recovered";
 ?>

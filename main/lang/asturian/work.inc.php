@@ -73,6 +73,7 @@ $FolderEdited = "Tarea camudada";
 $UpdateWork = "Anovar la tarea";
 $MakeAllPapersInvisible = "Anubrir tolos documentos";
 $MakeAllPapersVisible = "Facer tolos documentos visibles";
+$StudentAllowedToDeleteOwnPublication = "Permitir a los escolinos desaniciar les sos propies tarees";
 $TheDocumentHasBeenDeleted = "El documentu foi desaniciáu";
 $YouAreNotAllowedToDeleteThisDocument = "Nun tienes permisos pa desaniciar esti documentu";
 ?>

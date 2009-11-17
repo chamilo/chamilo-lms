@@ -347,4 +347,8 @@ $TooManyIterationsPleaseTryUsingMoreStraightforwardPolygons = "Preveč iteracij 
 $Thresholds = "Pragovi";
 $Delineation = "Orisovanje";
 $QuestionTypeDoesNotBelongToFeedbackTypeInExercise = "Tip vprašanja ne pripada tipom s povratno informacijo v vaji";
+$SessionIsReadOnly = "Seja je zgolj bralna";
+$EnableTimerControl = "Omogoči časovno kontrolo";
+$ExerciseTotalDurationInMinutes = "Skupno trajanje testa v minutah";
+$ToContinueUseMenu = "Za nadaljevanje v tem tečaju uporabite stranski menu";
 ?>

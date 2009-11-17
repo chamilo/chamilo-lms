@@ -102,4 +102,6 @@ $IntroductionWiki = "Besedica Wiki je okrajšava za WikiWikiWeb. WikiWiki je bes
 $CreateCourseArea = "Ustvari področje tečaja";
 $CreateCourse = "Ustvari tečaj";
 $Create = "Ustvari";
+$MessageOfNewCourseToAdmin = "To sporočilo vam je bilo poslano vsled kreiranja novega tečaja na platformi";
+$NewCourseCreatedIn = "Nov tečaj je bil kreiran v";
 ?>

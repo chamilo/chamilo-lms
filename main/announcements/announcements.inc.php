@@ -831,17 +831,15 @@ function store_advalvas_item($emailTitle, $newContent, $order, $to, $file_commen
 }
 
 
-function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_users)
+function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_users, $file_comment='')
 {
 	global $_course;
 	global $nameTools;
 	global $_user;
 	
-	global $tbl_announcement;
-	global $tbl_item_property;
-	
 	// database definitions
-	$tbl_announcement	= Database::get_course_table(TABLE_ANNOUNCEMENT);
+	$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
+	$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	
 	$newContent=stripslashes($newContent);
 	$emailTitle = Database::escape_string(Security::remove_XSS($emailTitle));
@@ -851,7 +849,13 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 	// store in the table announcement
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
 	$result = Database::query($sql,__FILE__,__LINE__) or die (mysql_error());
+	if ($result === false) {
+		return false;
+	}
+	
+	//store the attach file
 	$last_id = Database::insert_id();
+	$save_attachment = add_announcement_attachment_file($last_id, $file_comment, $_FILES['user_upload']);
 	
 	// store in item_property (first the groups, then the users
 	if (!isset($to_users)) // !isset($to): when no user is selected we send it to everyone

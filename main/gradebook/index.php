@@ -750,20 +750,21 @@ if ($category != '0') {
 		
 		//hack for inside courses menu cat	
 		if (api_is_allowed_to_edit()) {
-			
-			$op_cat_weight= get_lang('Weight').': '.$cats[0]->get_weight();			
-			$opt_cat_cert_min= get_lang('CertificateMinScore').': '.$cats[0]->get_certificate_min_score();
-			$opt_cat_descrip= get_lang('GradebookDescriptionLog').': '.$cats[0]->get_description();					
-			
+
+			$op_cat_weight= '<strong>'.get_lang('Weight').'</strong>'.': '.((intval($cats[0]->get_weight())>0) ? $cats[0]->get_weight() : 0);			
+			$opt_cat_cert_min= '<strong>'.get_lang('CertificateMinScore').'</strong>'.': '.(intval($cats[0]->get_certificate_min_score()>0) ? $cats[0]->get_certificate_min_score() : 0);
+			$opt_cat_descrip= '<strong>'.get_lang('GradebookDescriptionLog').'</strong>'.': '.(($cats[0]->get_description() == "" || is_null($cats[0]->get_description())) ? get_lang('None') : $cats[0]->get_description());					
+
 			$visibility_icon= ($cats[0]->is_visible() == 0) ? 'invisible' : 'visible';
 			$visibility_command= ($cats[0]->is_visible() == 0) ? 'set_visible' : 'set_invisible';
 			echo '<div class="actions" align="right">';
-			$modify_icons= '<a href="gradebook_edit_cat.php?editcat=' . $cats[0]->get_id() . ' &amp;cidReq='.$cats[0]->get_course_code().'"><img src="../img/edit.gif" border="0" title="' . get_lang('EditCategory') . '" alt="'.get_lang('EditCategory').'" />'.get_lang('EditCategory').'</a>';
+			$modify_icons= '<a  href="gradebook_edit_cat.php?editcat=' . $cats[0]->get_id() . ' &amp;cidReq='.$cats[0]->get_course_code().'"><img src="../img/edit.gif" border="0" title="' . get_lang('EditCategory') . '" alt="'.get_lang('EditCategory').'" />'.get_lang('EditCategory').'</a>';
 			
-			$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cats[0]->get_id() . '&amp;selectcat=0&amp;cidReq='.$cats[0]->get_course_code().'" onclick="return confirmation();"><img src="../img/delete.gif" border="0" title="' . get_lang('DeleteAll') . '" alt="'.get_lang('DeleteAll').'" />'.get_lang('DeleteAll').'</a>';
+			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?deletecat=' . $cats[0]->get_id() . '&amp;selectcat=0&amp;cidReq='.$cats[0]->get_course_code().'" onclick="return confirmation();"><img src="../img/delete.gif" border="0" title="' . get_lang('DeleteAll') . '" alt="'.get_lang('DeleteAll').'" />'.get_lang('DeleteAll').'</a>';
 			
-			$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblecat=' . $cats[0]->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=0 "><img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang('Visible') . '" alt="'.get_lang('Visible').'" />'.get_lang('Visible').'</a>';
-			echo '<div align="left"><img src="../img/info3.gif" border="0" title="' . $opt_cat_descrip . '" alt="'.$opt_cat_descrip.'" /> '.$op_cat_weight.' '.$opt_cat_cert_min.'</div>';
+			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?visiblecat=' . $cats[0]->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=0 "><img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang('Visible') . '" alt="'.get_lang('Visible').'" />'.get_lang('Visible').'</a>';
+			$opt_cat_descrip1 = strip_tags($opt_cat_descrip);
+			echo '<div align="left" style="float:left"><img  src="../img/info3.gif" border="0" title="' . $opt_cat_descrip1 . '" alt="'.$opt_cat_descrip1.'" /> '.$op_cat_weight.' '.'&nbsp;&nbsp;'.$opt_cat_cert_min.'&nbsp;&nbsp;'.$opt_cat_descrip.'</div>';
 			echo $modify_icons;
 			echo '</div>';
 		}

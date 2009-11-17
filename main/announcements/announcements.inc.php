@@ -737,7 +737,7 @@ function sent_to($tool, $id)
 * values: 0 = invisibility for
 * @param    string  The tool (announcement, agenda, ...)
 * @param    int     ID of the element of the corresponding type
-* @return   bool    The result of the update operation, or nothing on failure
+* @return   bool    False on failure, True on success
 */
 function change_visibility_announcement($tool,$id)
 {
@@ -761,7 +761,10 @@ function change_visibility_announcement($tool,$id)
 		$sql_visibility="UPDATE $tbl_item_property SET visibility='1' WHERE tool='$tool' AND ref='$id'";
 	}
     $result=Database::query($sql_visibility,__FILE__,__LINE__);
-    if ($(mysql_error());
+    if ($result === false) { 
+        return false;
+    }
+    return true;
 }
 
 /**

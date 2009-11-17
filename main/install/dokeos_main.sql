@@ -734,7 +734,8 @@ VALUES
 ('allow_coach_to_edit_course_session',NULL,'radio','Course','false','AllowCoachsToEditInsideTrainingSessions','AllowCoachsToEditInsideTrainingSessionsComment',NULL,NULL, 0),
 ('show_glossary_in_extra_tools', NULL, 'radio', 'Course', 'false', 'ShowGlossaryInExtraToolsTitle', 'ShowGlossaryInExtraToolsComment', NULL, NULL,1),
 ('dokeos_database_version', NULL, 'textfield', NULL,'1.8.6.1.8565','DokeosDatabaseVersion','',NULL,NULL,0),
-('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1);
+('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1),
+('go_to_course_after_login',NULL,'radio','Course','false','GoToCourseAfterLoginTitle','GoToCourseAfterLoginComment',NULL,NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -921,7 +922,9 @@ VALUES
 ('show_glossary_in_extra_tools', 'true', 'Yes'),
 ('show_glossary_in_extra_tools', 'false', 'No'),
 ('send_email_to_admin_when_create_course','true','Yes'),
-('send_email_to_admin_when_create_course','false','No');
+('send_email_to_admin_when_create_course','false','No'),
+('go_to_course_after_login','true','Yes'),
+('go_to_course_after_login','false','No');
 
 UNLOCK TABLES;
 

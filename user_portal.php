@@ -62,7 +62,7 @@ require_once $libpath.'system_announcements.lib.php';
 require_once $libpath.'groupmanager.lib.php';
 require_once $libpath.'usermanager.lib.php';
 require_once 'main/survey/survey.lib.php';
-
+require_once $libpath.'sessionmanager.lib.php';
 api_block_anonymous_users(); // only users who are logged in can proceed
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>';
@@ -110,12 +110,22 @@ define('CONFVAL_dateFormatForInfosFromCourses', get_lang('dateFormatLong'));
 //define("CONFVAL_limitPreviewTo",SCRIPTVAL_NoTimeLimit);
 define("CONFVAL_limitPreviewTo", SCRIPTVAL_NewEntriesOfTheDayOfLastLogin);
 
+// this is the main function to get the course list
+$personal_course_list = UserManager::get_personal_session_course_list($_user['user_id']);
 
-/*if(api_is_allowed_to_create_course() && !isset($_GET['sessionview'])){
-	$nosession = true;
-} else {
-	$nosession = false;
-}*/
+// check if a user is enrolled only in one course for going directly to the course after the login
+if (api_get_setting('go_to_course_after_login') == 'true') {
+	if (!isset($_SESSION['coursesAlreadyVisited']) && is_array($personal_course_list) && count($personal_course_list) == 1) {					 
+				
+		$key = array_keys($personal_course_list);
+		$course_info = $personal_course_list[$key[0]]; 		
+		
+		$course_directory = $course_info['d'];
+		$id_session = isset($course_info['id_session'])?$course_info['id_session']:0;	
+		header('location:'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$id_session);
+		exit;
+	} 
+}
 
 $nosession = false;
 
@@ -125,7 +135,6 @@ if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
 
 $nameTools = get_lang('MyCourses');
 $this_section = SECTION_COURSES;
-
 
 /*
 -----------------------------------------------------------
@@ -844,8 +853,7 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 	   --------------------------------------*/
 	// compose a structured array of session categories, sessions and courses
 	// for the current user
-	require_once $libpath.'sessionmanager.lib.php';
-
+		
 	if (isset($_GET['history']) && intval($_GET['history']) == 1) {
 		$courses_tree = UserManager::get_sessions_by_category($_user['user_id'],true,true);
 	} else {
@@ -865,10 +873,7 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 		}
 	}
 
-	$list = '';
-	// this is the main function to get the course list
-	$personal_course_list = UserManager::get_personal_session_course_list($_user['user_id']);
-
+	$list = '';		
 	foreach ($personal_course_list as $my_course) {
 		$thisCourseDbName = $my_course['db'];
 		$thisCourseSysCode = $my_course['k'];

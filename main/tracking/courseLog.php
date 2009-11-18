@@ -717,16 +717,17 @@ if ($_GET['studentlist'] == 'false') {
 				$csv_content[] = $row;
 			}
 			$all_datas[] = $row;
+		}		
+		$clean_order = array('ASC','DESC');
+		if(in_array($_GET['tracking_direction'],$clean_order) && $_GET['tracking_direction'] == 'ASC'){	
+			usort($all_datas, 'sort_users');
+		} else if (in_array($_GET['tracking_direction'],$clean_order) && $_GET['tracking_direction'] == 'DESC') {
+			usort($all_datas, 'sort_users_desc');
 		}
-
-		usort($all_datas, 'sort_users');
 		$page = $table->get_pager()->getCurrentPageID();
 		$all_datas = array_slice($all_datas, ($page-1)*$table -> per_page, $table -> per_page);
-
-		if ($export_csv) {
-			usort($csv_content, 'sort_users');
-		}
-
+		// if ($export_csv) { usort($csv_content, 'sort_users'); }
+		
 		foreach ($all_datas as $row) {
 			$table -> addRow($row,'align="right"');
 		}
@@ -945,5 +946,9 @@ function count_student_in_course() {
 }
 
 function sort_users($a, $b) {
-	return api_strcmp(trim(api_strtolower($a[$_SESSION['tracking_column']])), trim(api_strtolower($b[$_SESSION['tracking_column']])));
+	return strcmp(trim(api_strtolower($a[$_SESSION['tracking_column']])), trim(api_strtolower($b[$_SESSION['tracking_column']])));
+}
+
+function sort_users_desc($a, $b) {
+	return strcmp( trim(api_strtolower($b[$_SESSION['tracking_column']])), trim(api_strtolower($a[$_SESSION['tracking_column']])));
 }

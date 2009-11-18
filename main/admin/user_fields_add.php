@@ -23,39 +23,49 @@ api_protect_admin_script();
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function change_image_user_field (image_value) {
+	
 	if (image_value==1) {
+		document.getElementById(\'options\').style.display = \'none\';
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_text.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==2) {
+		document.getElementById(\'options\').style.display = \'none\';
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_text_area.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==3) {
+		document.getElementById(\'options\').style.display = \'block\';				
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('add_user_field_howto.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==4) {
+		document.getElementById(\'options\').style.display = \'block\';		
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_drop_down.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==5) {
+		document.getElementById(\'options\').style.display = \'block\';		
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_multidropdown.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==6) {
+		document.getElementById(\'options\').style.display = \'none\';
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_data.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==7) {
+		document.getElementById(\'options\').style.display = \'none\';		
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_date_time.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==8) {
+		document.getElementById(\'options\').style.display = \'block\';			
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_doubleselect.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==9) {
+		document.getElementById(\'options\').style.display = \'none\';
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_divider.png', get_lang('AddUserFields'))."'".');
 
@@ -63,15 +73,15 @@ function change_image_user_field (image_value) {
 }
 
 	function advanced_parameters() {
+			
 			if(document.getElementById(\'options\').style.display == \'none\') {
 				document.getElementById(\'options\').style.display = \'block\';
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 
 			} else {
-
-				document.getElementById(\'options\').style.display = \'none\';
-				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
-			}
+					document.getElementById(\'options\').style.display = \'none\';
+					document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+				}
 		}
 
 </script>';
@@ -125,8 +135,14 @@ $form -> addElement('html','<div class="row">
 				<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>
 			</div>
 			</div>');
-$form -> addElement('html','<div id="options" style="display:none">');
+//When edit, the combobox displey the field type displeyed else none 	
+if ( (isset($_GET['action']) && $_GET['action'] == 'edit') && in_array($_GET['field_type'],array(3,4,5,8))) {
+	$form -> addElement('html','<div id="options" style="display:block">');
+} else {
+	$form -> addElement('html','<div id="options" style="display:none">');
+}
 
+//field label
 $form->addElement('hidden','fieldid',Security::remove_XSS($_GET['field_id']));
 $form->addElement('text','fieldlabel',get_lang('FieldLabel'));
 $form->applyFilter('fieldlabel','html_filter');
@@ -134,7 +150,7 @@ $form->addRule('fieldlabel', get_lang('OnlyLettersAndNumbersAllowed'), 'username
 $form->addRule('fieldlabel', '', 'maxlength',20);
 $form->addRule('fieldlabel', get_lang('FieldTaken'), 'fieldlabel_available');
 
-// Field options
+// Field options possible
 $form->addElement('text','fieldoptions',get_lang('FieldPossibleValues').Display::return_icon('info3.gif', get_lang('FieldPossibleValuesComment'), array('align' => 'absmiddle', 'hspace' => '3px')));
 $form->applyFilter('fieldoptions','trim');
 
@@ -142,6 +158,7 @@ if (is_numeric($_GET['field_id']))
 {
 	$form->addElement('static', 'option_reorder', '', '<a href="user_fields_options.php?field_id='.Security::remove_XSS($_GET['field_id']).'">'.get_lang('ReorderOptions').'</a>');
 }
+
 // Field default value
 $form->addElement('text','fielddefaultvalue',get_lang('FieldDefaultValue'));
 $form->applyFilter('fielddefaultvalue','trim');
@@ -173,6 +190,7 @@ if (is_numeric($_GET['field_id']))
 		}
 	}
 }
+
 $form->setDefaults($defaults);
 	if(isset($_GET['field_id']) && !empty($_GET['field_id'])) {
 		$class="save";
@@ -189,14 +207,10 @@ $form->addElement('style_submit_button', 'submit',$text, 'class='.$class.'');
 if( $form->validate())
 {
 	$check = Security::check_token('post');
-	if($check)
-	{
+	if($check) {
 		$field = $form->exportValues();
-		
-				
 		$fieldlabel = empty($field['fieldlabel'])?$field['fieldtitle']:$field['fieldlabel'];		
-		$fieldlabel = trim(strtolower(str_replace(" ","_",$fieldlabel)));
-		
+		$fieldlabel = trim(strtolower(str_replace(" ","_",$fieldlabel)));	
 		$fieldtype = $field['fieldtype'];
 		$fieldtitle = $field['fieldtitle'];
 		$fielddefault = $field['fielddefaultvalue'];
@@ -227,8 +241,7 @@ if( $form->validate())
 // Display form
 Display::display_header($tool_name);
 //api_display_tool_title($tool_name);
-if(!empty($_GET['message']))
-{
+if(!empty($_GET['message'])) {
 	Display::display_normal_message($_GET['message']);
 }
 //else
@@ -263,11 +276,6 @@ if(!empty($defaults['fieldtype'])) {
 	echo '<br />'.Display::return_icon('userfield_text.png', get_lang('AddUserFields'));
 }
 echo '</div>';
-
-
-
-
-
 
 // footer
 Display::display_footer();

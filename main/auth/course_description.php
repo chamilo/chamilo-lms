@@ -35,7 +35,7 @@ function show_course_description() {
 	$database_course = CourseManager::get_name_database_course($_GET['code']);
 	$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $database_course);
 
-	$sql = "SELECT * FROM $tbl_course_description ORDER BY id";
+	$sql = "SELECT * FROM $tbl_course_description WHERE session_id=0 ORDER BY id";
 	$result = Database::query($sql, __FILE__, __LINE__);
 	while ($description = Database::fetch_object($result)) {
 		$descriptions[$description->id] = $description;

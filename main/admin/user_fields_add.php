@@ -26,26 +26,31 @@ function change_image_user_field (image_value) {
 	
 	if (image_value==1) {
 		document.getElementById(\'options\').style.display = \'none\';
+		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_text.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==2) {
 		document.getElementById(\'options\').style.display = \'none\';
+		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_text_area.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==3) {
-		document.getElementById(\'options\').style.display = \'block\';				
+		document.getElementById(\'options\').style.display = \'block\';
+		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';				
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('add_user_field_howto.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==4) {
-		document.getElementById(\'options\').style.display = \'block\';		
+		document.getElementById(\'options\').style.display = \'block\';
+		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';		
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_drop_down.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==5) {
-		document.getElementById(\'options\').style.display = \'block\';		
+		document.getElementById(\'options\').style.display = \'block\';
+		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';		
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_multidropdown.png', get_lang('AddUserFields'))."'".');
 
@@ -55,19 +60,28 @@ function change_image_user_field (image_value) {
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_data.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==7) {
-		document.getElementById(\'options\').style.display = \'none\';		
+		document.getElementById(\'options\').style.display = \'none\';
+		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';		
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_date_time.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==8) {
-		document.getElementById(\'options\').style.display = \'block\';			
+		document.getElementById(\'options\').style.display = \'block\';
+		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';			
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_doubleselect.png', get_lang('AddUserFields'))."'".');
 
 	} else if (image_value==9) {
 		document.getElementById(\'options\').style.display = \'none\';
+		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 		$("div#id_image_user_field").html("&nbsp;");
 		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_divider.png', get_lang('AddUserFields'))."'".');
+
+	} else if (image_value==10) {
+		document.getElementById(\'options\').style.display = \'none\';
+		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+		$("div#id_image_user_field").html("&nbsp;");
+		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_divider.png', get_lang('UserTag'))."'".');
 
 	}
 }
@@ -271,6 +285,8 @@ if(!empty($defaults['fieldtype'])) {
 		echo '<br />'.Display::return_icon('userfield_doubleselect.png', get_lang('AddUserFields'));
 	} else if ($image_value==9) {
 		echo '<br />'.Display::return_icon('userfield_divider.png', get_lang('AddUserFields'));
+	} else if ($image_value==10) {
+		echo '<br />'.Display::return_icon('userfield_divider.png', get_lang('UserTag'));
 	}
 } else {
 	echo '<br />'.Display::return_icon('userfield_text.png', get_lang('AddUserFields'));

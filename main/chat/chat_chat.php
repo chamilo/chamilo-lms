@@ -96,7 +96,8 @@ if (!empty($course))
 		@fclose(fopen($chatPath.$filename_chat,'w'));
 		if (!api_is_anonymous()) {
 			$doc_id=add_document($_course,'/chat_files/'.$filename_chat,'file',0,$filename_chat);
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'],$group_id,null,null,null,$session_id);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'],$group_id,null,null,null,$session_id);			
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],$group_id,null,null,null,$session_id);
 			item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
 		}
 	}
@@ -126,6 +127,7 @@ if (!empty($course))
 		$doc_id=add_document($_course,'/chat_files/'.$basename_chat.'-'.$i.'.log.html','file',filesize($chatPath.$basename_chat.'-'.$i.'.log.html'),$basename_chat.'-'.$i.'.log.html');
 
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'],$group_id,null,null,null,$session_id);
+		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],$group_id,null,null,null,$session_id);
 		item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
 
 		$doc_id = DocumentManager::get_document_id($_course,'/chat_files/'.$basename_chat.'.log.html');

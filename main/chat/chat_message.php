@@ -248,6 +248,7 @@ if (!empty($course) && !empty($_user['user_id']))
 					$doc_id=add_document($_course,'/chat_files/'.$basename_chat.'.log.html','file',0,$basename_chat.'.log.html');
 
 					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'],$group_id,null,null,null,$session_id);
+					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],$group_id,null,null,null,$session_id);
 					item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
 				}
 				else

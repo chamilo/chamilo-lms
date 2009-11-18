@@ -386,7 +386,13 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 $referer = empty($_GET['referer']) ? 'index.php' : api_htmlentities(strip_tags($_GET['referer']), ENT_QUOTES);
 
 if (isset($_GET['id'])) {
-	echo '<a href="whoisonline.php" class="fake_button_back">'.get_lang('Back').'</a>';
+	
+	if ($_GET['origin'] == 'user_list') {
+		echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php" class="fake_button_back">'.get_lang('Back').'</a>';		
+	} else {
+		echo '<a href="whoisonline.php" class="fake_button_back">'.get_lang('Back').'</a>';
+	}
+
 } else {
 	echo '<a href="'.$referer.'" class="fake_button_back">'.get_lang('BackHome').'</a>';
 }

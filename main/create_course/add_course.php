@@ -77,8 +77,9 @@ $form->add_textfield('wanted_code', get_lang('Code'),false,array('size'=>'$maxle
 $form->applyFilter('wanted_code', 'html_filter');
 $form->addRule('wanted_code',get_lang('Max'),'maxlength',$maxlength);
 
-$titular= &$form->add_textfield('tutor_name', get_lang('Professors'),true,array('size'=>'60'));
-$form->applyFilter('tutor_name', 'html_filter');
+$titular= &$form->add_textfield('tutor_name', get_lang('Professors'),null,array('size'=>'60','disabled'=>'disabled'));
+$form->addElement('static',null,null,get_lang('ExplicationTrainers'));
+//$form->applyFilter('tutor_name', 'html_filter');
 
 $form->addElement('select_language', 'course_language', get_lang('Ln'));
 $form->applyFilter('select_language', 'html_filter');

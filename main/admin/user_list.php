@@ -323,6 +323,8 @@ function get_number_of_users()
  */
 function get_user_data($from, $number_of_items, $column, $direction)
 {
+	global $_configuration,$origin;
+	
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 	$sql = "SELECT
@@ -341,8 +343,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                  ", u.expiration_date      AS exp ".
             " FROM $user_table u ";
 
-    // adding the filter to see the user's only of the current access_url
-    global $_configuration;
+    // adding the filter to see the user's only of the current access_url    
     if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
     	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
@@ -403,6 +404,15 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	$users = array ();
     $t = time();
 	while ($user = Database::fetch_row($res)) {
+
+		$image_path = UserManager::get_user_picture_path_by_id($user[0], 'web', false, true);
+		$user_profile = UserManager::get_picture_user($user[0], $image_path['file'], 22, 'small_', ' width="22" height="22" ');
+		if (!api_is_anonymous()) {
+			$photo = '<center><a href="'.api_get_path(WEB_PATH).'whoisonline.php?origin=user_list&id='.$user[0].'" title="'.get_lang('Info').'"  ><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2],$user[3]).'"  title="'.api_get_person_name($user[2], $user[3]).'" /></a></center>';
+		} else {
+			$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2], $user[3]).'" title="'.api_get_person_name($user[2], $user[3]).'" /></center>';
+		}				
+
         if ($user[7] == 1 && $user[9] != '0000-00-00 00:00:00') {
             // check expiration date
             $expiration_time = convert_mysql_date($user[9]);
@@ -412,7 +422,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             }
         }
         // forget about the expiration date field		      
-        $users[] = array($user[0],$user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7],$user[8]);
+        $users[] = array($user[0],$photo,$user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7],$user[8]);
 	}
 	return $users;
 }
@@ -746,26 +756,35 @@ else
 		$_admins_list[] = $row_admin[0];
 	}
 
+				$image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
+				$user_profile = UserManager::get_picture_user($user_id, $image_path['file'], 22, 'small_', ' width="22" height="22" ');
+				if (!api_is_anonymous()) {
+					$photo = '<center><a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;uInfo='.$user_id.'" title="'.get_lang('Info').'"  ><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'"  title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" /></a></center>';
+				} else {
+					$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" title="'.api_get_person_name($o_course_user['firstname'], $o_course_user['lastname']).'" /></center>';
+				}
+
 	$table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false);
-	$table->set_header(1, get_lang('OfficialCode'));
+	$table->set_header(1, get_lang('Photo'));	
+	$table->set_header(2, get_lang('OfficialCode'));
 	if (api_is_western_name_order()) {
-		$table->set_header(2, get_lang('FirstName'));
-		$table->set_header(3, get_lang('LastName'));
-	} else {
-		$table->set_header(2, get_lang('LastName'));
 		$table->set_header(3, get_lang('FirstName'));
+		$table->set_header(4, get_lang('LastName'));
+	} else {
+		$table->set_header(3, get_lang('LastName'));
+		$table->set_header(4, get_lang('FirstName'));
 	}
-	$table->set_header(4, get_lang('LoginName'));
-	$table->set_header(5, get_lang('Email'));
-	$table->set_header(6, get_lang('Status'));
-	$table->set_header(7, get_lang('Active'));
-	$table->set_header(8, get_lang('Action'), false,'width="170px"');
-	$table->set_column_filter(5, 'email_filter');
-	$table->set_column_filter(6, 'status_filter');
-	$table->set_column_filter(7, 'active_filter');
-	$table->set_column_filter(8, 'modify_filter');
+	$table->set_header(5, get_lang('LoginName'));
+	$table->set_header(6, get_lang('Email'));
+	$table->set_header(7, get_lang('Status'));
+	$table->set_header(8, get_lang('Active'));
+	$table->set_header(9, get_lang('Action'), false,'width="170px"');
+	$table->set_column_filter(6, 'email_filter');
+	$table->set_column_filter(7, 'status_filter');
+	$table->set_column_filter(8, 'active_filter');
+	$table->set_column_filter(9, 'modify_filter');
 	if (api_is_platform_admin())
 		$table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));
 	$table->display();

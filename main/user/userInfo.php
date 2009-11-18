@@ -410,13 +410,13 @@ elseif ($displayMode == "viewMainInfoEdit")
 					"<tr align=\"center\" bgcolor=\"#E6E6E6\">\n",
 						"<td align=\"left\">", get_lang('Name'), "</td>\n",
 						"<td width=\"100px\" align=\"left\">", get_lang('Description'), "</td>\n",
-						"<td>", get_lang('Tutor'), "</td>\n",
+						//"<td>", get_lang('Tutor'), "</td>\n",
 						"<td>", get_lang('CourseManager'), "</td>\n",
 					"</tr>\n",
 					"<tr align=\"center\">",
 						"<td align=\"left\"><b>", htmlize(api_get_person_name($mainUserInfo['firstName'], $mainUserInfo['lastName'])), "</b></td>\n",
-						"<td align=\"left\"><input type=\"text\" name =\"role\" value=\"", $mainUserInfo['role'], "\" maxlength=\"40\" /></td>",
-						"<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteTutor\" value=\"1\" ", $tutorChecked, " /></td>";
+						"<td align=\"left\"><input type=\"text\" name =\"role\" value=\"", $mainUserInfo['role'], "\" maxlength=\"40\" /></td>";
+						//"<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteTutor\" value=\"1\" ", $tutorChecked, " /></td>";
 
 		if (!($is_courseAdmin && $_user['user_id'] == $userIdViewed))
 		{
@@ -503,7 +503,7 @@ elseif ($displayMode == "viewContentList") // default display
 				"<tr align=\"center\" bgcolor=\"#E6E6E6\">\n",
 				"<td align=\"left\">",get_lang('Name'),"</td>\n",
 				"<td width=\"100px\" align=\"left\">",get_lang('Description'),"</td>\n",
-				"<td>",get_lang('Tutor'),"</td>\n",
+				//"<td>",get_lang('Tutor'),"</td>\n",
 				"<td>",get_lang('CourseManager'),"</td>\n",
 				($allowedToEditDef?"<td>".get_lang('Edit')."</td>\n":""),
                 ($is_allowedToTrack?"<td>".get_lang('Tracking')."</td>\n":""),
@@ -519,7 +519,7 @@ elseif ($displayMode == "viewContentList") // default display
 				// deprecated feature
 				if ($mainUserInfo['tutor_id'] == 1)
 				{
-					echo "<td>",get_lang('Tutor'),"</td>\n";
+					//echo "<td>",get_lang('Tutor'),"</td>\n";
 				}
 				else
 				{

@@ -140,7 +140,8 @@ if(api_is_platform_admin()) {
 	</li>
 	<li><a href="course_list.php"><?php echo get_lang('CourseList') ?></a></li>
 	<li><a href="course_add.php"><?php echo get_lang('AddCourse') ?></a></li>
-	<li><a href="course_import.php"><?php echo get_lang('ImportCourses'); ?></a></li>
+	<li><a href="course_export.php"><?php echo get_lang('ExportCourses'); ?></a></li>
+	<li><a href="course_import.php"><?php echo get_lang('ImportCourses'); ?></a></li>	
 	<!--<li><a href="course_virtual.php"><?php //echo get_lang('AdminManageVirtualCourses') ?></a></li>-->
 	<li><a href="course_category.php"><?php echo get_lang('AdminCategories'); ?></a></li>
 	<li><a href="subscribe_user2course.php"><?php echo get_lang('AddUsersToACourse'); ?></a></li>

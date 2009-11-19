@@ -170,7 +170,7 @@ class CourseManager {
 	 */
 	public static function get_courses_list($from = 0, $howmany = 0, $orderby = 1, $orderdirection = 'ASC', $visibility = -1, $startwith = '') {
 
-		$sql = "SELECT code, title FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." ";
+		$sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." ";
 		if (!empty($startwith)) {
 			$sql .= "WHERE LIKE title '".Database::escape_string($startwith)."%' ";
 			if ($visibility !== -1 && $visibility == strval(intval($visibility))) {

@@ -72,7 +72,8 @@ function validate_data($courses) {
 				}
 			}
 			$coursecodes[$course['Code']] = 1;
-		}
+		}				
+		/*
 		// 3. Check whether teacher exists.
 		if (!UserManager::is_username_empty($course['Teacher'])) {
 			$teacher = UserManager::purify_username($course['Teacher'], $purification_option_for_usernames);
@@ -81,6 +82,7 @@ function validate_data($courses) {
 				$errors[] = $course;
 			}
 		}
+		*/		
 		// 4. Check whether course category exists.
 		if (isset ($course['CourseCategory']) && strlen($course['CourseCategory']) != 0) {
 			$category_table = Database :: get_main_table(TABLE_MAIN_CATEGORY);
@@ -102,14 +104,40 @@ function validate_data($courses) {
 function save_data($courses) {
 	global $_configuration, $firstExpirationDelay;
 	global $purification_option_for_usernames;
+	
+	$user_table = Database::get_main_table(TABLE_MAIN_USER);	
 	$msg = '';
 	foreach ($courses as $index => $course) {
 		$course_language = api_get_valid_language($course['Language']);
 		$keys = define_course_keys($course['Code'], '', $_configuration['db_prefix']);
-		$user_table = Database::get_main_table(TABLE_MAIN_USER);
-		$sql = "SELECT user_id, ".(api_is_western_name_order(null, $course_language) ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)")." AS name FROM $user_table WHERE username = '".Database::escape_string(UserManager::purify_username($course['Teacher'], $purification_option_for_usernames))."'";
-		$res = Database::query($sql,__FILE__,__LINE__);
-		$teacher = Database::fetch_object($res);
+		
+		$titular = $uidCreator = $username = '';
+		
+		// get username from name (firstname lastname)
+		if (!UserManager::is_username_empty($course['Teacher'])) {
+			$teacher = UserManager::purify_username($course['Teacher'], $purification_option_for_usernames);
+			if (UserManager::is_username_available($teacher)) {				
+				$sql 	= "SELECT username FROM $user_table WHERE ".(api_is_western_name_order(null, $course_language) ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)")." = '{$course['Teacher']}' LIMIT 1";	
+				$rs 	= Database::query($sql,__FILE__,__LINE__);
+				$user   = Database::fetch_object($rs);
+				$username = $user->username;								
+			} else {
+				$username = $teacher;
+			} 
+		}
+
+		// get name and uid creator from username
+		if (!empty($username)) {			
+				$sql = "SELECT user_id, ".(api_is_western_name_order(null, $course_language) ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)")." AS name FROM $user_table WHERE username = '".Database::escape_string(UserManager::purify_username($username, $purification_option_for_usernames))."'";
+				$res = Database::query($sql,__FILE__,__LINE__);
+				$teacher 	= Database::fetch_object($res);
+				$titular 	= $teacher->name;
+				$uidCreator = $teacher->user_id;
+		} else {
+				$titular 	= $course['Teacher'];
+				$uidCreator = 1;
+		}
+		
 		$visual_code = $keys['currentCourseCode'];
 		$code = $keys['currentCourseId'];
 		$db_name = $keys['currentCourseDbName'];
@@ -119,7 +147,7 @@ function save_data($courses) {
 		update_Db_course($db_name);
 		fill_course_repository($directory);
 		fill_Db_course($db_name, $directory, $course_language, array());
-		register_course($code, $visual_code, $directory, $db_name, $teacher->name, $course['CourseCategory'], $course['Title'], $course_language, $teacher->user_id, $expiration_date);
+		register_course($code, $visual_code, $directory, $db_name, $titular, $course['CourseCategory'], $course['Title'], $course_language, $uidCreator, $expiration_date);
 		$msg .= '<a href="'.api_get_path(WEB_COURSE_PATH).$directory.'/">'.$code.'</a> '.get_lang('Created').'<br />';
 	}
     if (!empty($msg)) {

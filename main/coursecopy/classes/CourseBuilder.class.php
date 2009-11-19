@@ -534,7 +534,7 @@ class CourseBuilder
 		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
-			$cd = new CourseDescription($obj->id, $obj->title, $obj->content);
+			$cd = new CourseDescription($obj->id, $obj->title, $obj->content, $obj->description_type);
 			$this->course->add_resource($cd);
 		}
 	}

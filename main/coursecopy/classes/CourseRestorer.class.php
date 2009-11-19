@@ -748,8 +748,7 @@ class CourseRestorer
 					$session_id = intval($session_id);
 					$condition_session = " , session_id = '$session_id' ";
 				}
-
-				$sql = "INSERT INTO ".$table." SET title = '".Database::escape_string($cd->title)."', content = '".Database::escape_string($description_content)."' $condition_session";
+				$sql = "INSERT INTO ".$table." SET description_type = '".Database::escape_string($cd->description_type)."',title = '".Database::escape_string($cd->title)."', content = '".Database::escape_string($description_content)."' $condition_session";
 				Database::query($sql, __FILE__, __LINE__);
 				$this->course->resources[RESOURCE_COURSEDESCRIPTION][$id]->destination_id = Database::insert_id();
 			}

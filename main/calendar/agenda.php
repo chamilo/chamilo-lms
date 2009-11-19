@@ -395,7 +395,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 								if ($_POST['submit_event']) {
 									display_agenda_items();
 								} else {
-										show_add_form();
+									show_add_form();
 								}
 								break;
 		case 'edit' :

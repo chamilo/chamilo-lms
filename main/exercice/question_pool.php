@@ -134,6 +134,27 @@ if($is_allowedToEdit)
 		api_session_register('objExercise');
 		header("Location: admin.php?exerciseId=$fromExercise");
 		exit();
+	} else if( isset($_POST['recup']) && is_array($_POST['recup']) && $fromExercise) {
+		$list_recup = $_POST['recup'];
+		foreach ($list_recup as $recup) {
+			$recup = intval($recup);
+			// if the question exists
+			if($objQuestionTmp = Question :: read($recup)) {
+				// adds the exercise ID represented by $fromExercise into the list of exercises for the current question
+				$objQuestionTmp->addToList($fromExercise);
+			}
+			// destruction of the Question object
+			unset($objQuestionTmp);
+	        if(!$objExcercise instanceOf Exercise) {
+	        	$objExercise = new Exercise();
+	            $objExercise->read($fromExercise);
+	        }
+			// adds the question ID represented by $recup into the list of questions for the current exercise
+			$objExercise->addToList($recup);
+		}
+		api_session_register('objExercise');
+		header("Location: admin.php?exerciseId=$fromExercise");
+		exit();
 	}
 }
 
@@ -223,7 +244,7 @@ if($is_allowedToEdit)
 	<button class="save" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Ok') ?></button>
     </form>
 </div>
-
+<form method="post" action="<?php echo $url.'?'.api_get_cidreq().'&fromExercise='.$fromExercise; ?>" >
 <table class="data_table">
 <?php
 	$from=$page*$limitQuestPage;
@@ -312,7 +333,7 @@ if($is_allowedToEdit)
 	$nbrQuestions=Database::num_rows($result);
 
     echo '<tr>',
-      '<td colspan="',($fromExercise?3:3),'">',
+      '<td colspan="',($fromExercise?4:4),'">',
     	'<table border="0" cellpadding="0" cellspacing="0" width="100%">',
     	'<tr>',
     	  '<td>';
@@ -338,13 +359,14 @@ if($is_allowedToEdit)
 <tr bgcolor="#e6e6e6">';
 
 	if(!empty($fromExercise)) {
-        echo '<th>',get_lang('Question'),'</th>',
+        echo '<th width="4%"> </th>', 
+            '<th>',get_lang('Question'),'</th>',
             '<th>',get_lang('Level'),'</th>',
             '<th>',get_lang('Reuse'),'</th>';
 	} else {
         echo '<td width="60%" align="center">',get_lang('Question'),'</td>',
             '<td width="20%" align="center">',get_lang('Modify'),'</td>',
-            '<td width="20%" align="center">',get_lang('Delete'),'</td>';
+            '<td width="16%" align="center">',get_lang('Delete'),'</td>';
 	}
     echo '</tr>';
 	$i=1;
@@ -365,6 +387,7 @@ if($is_allowedToEdit)
       //if (!$fromExercise || !isset($objExercise) || !($objExercise instanceOf Exercise) || (!$objExercise->isInList($row['id'])))
 		if (!$fromExercise || !isset($objExercise) || !($objExercise instanceOf Exercise) || (is_array($objExercise->questionList)) ) {
             echo '<tr ',($i%2==0?'class="row_odd"':'class="row_even"'),'>';
+            echo '<td align="center"> <input type="checkbox" value="'.$row['id'].'" name="recup[]"/></td>';
             echo '  <td><a href="admin.php?',api_get_cidreq(),'&editQuestion=',$row['id'],'&fromExercise=',$fromExercise,'">',$row['question'],'</a></td>';
             echo '  <td align="center" >';
 			if (empty($fromExercise)) {
@@ -394,10 +417,13 @@ if($is_allowedToEdit)
 
 	if (!$nbrQuestions) {
         echo '<tr>',
-            '<td colspan="',($fromExercise?3:3),'">',get_lang('NoQuestion'),'</td>',
+            '<td colspan="',($fromExercise?4:4),'">',get_lang('NoQuestion'),'</td>',
             '</tr>';
 	}
     echo '</table>';
+    echo '<div style="width:100%; border-top:1px dotted #4171B5;"> 
+    	  <button class="save" type="submit">'.get_lang('Reuse').'</button>
+    	  </div></form>';
 	Display::display_footer();
 } else {
 	// if not admin of course

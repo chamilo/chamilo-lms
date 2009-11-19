@@ -174,12 +174,12 @@ function returnDate(d,m,y) {
 			window.close();
 		}
 	}
-	datevalues[0].selectedIndex = (d-1) ;
+	datevalues[0].selectedIndex = (d-1);
 	datevalues[1].selectedIndex = m;
 	date = new Date();
-	year = 1900;
-	datevalues[2].selectedIndex = (y-year);
-
+	year = date.getFullYear();
+	year = (year-7);
+	datevalues[2].selectedIndex = (y-year); 
 	for(i = 0; i<= 3; i++)
 	{
 		attributes = datevalues[i].attributes;

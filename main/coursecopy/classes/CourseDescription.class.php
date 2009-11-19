@@ -7,7 +7,7 @@
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Bart Mollet (bart.mollet@hogent.be)
-
+	Copyright (c) Isaac flores <florespaz_isaac@hotmail.com>
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
 
@@ -40,16 +40,21 @@ class CourseDescription extends Resource
 	 */
 	var $content;
 	/**
+	 * The description type
+	 */
+	var $description_type;	
+	/**
 	 * Create a new course description
 	 * @param int $id
 	 * @param string $title
 	 * @param string $content
 	 */
-	function CourseDescription($id,$title,$content)
+	function CourseDescription($id,$title,$content,$description_type)
 	{
 		parent::Resource($id,RESOURCE_COURSEDESCRIPTION);
 		$this->title = $title;
 		$this->content = $content;
+		$this->description_type = $description_type;
 	}
 	/**
 	 * Show this Event

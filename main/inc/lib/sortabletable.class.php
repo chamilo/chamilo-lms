@@ -378,10 +378,7 @@ class SortableTable extends HTML_Table {
 				$html .= '<form method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
 			}
 		}
-		$items = $this->get_clean_html(); // getting the items of the table
-		
-
-				
+		$items = $this->get_clean_html(); // getting the items of the table				
 		// the generating of style classes must be improved. Maybe we need a a table name to create style on the fly:
 		// i.e: .whoisonline_table_grid_container instead of  .grid_container
 		// where whoisonline is the table's name like drupal's template engine
@@ -429,6 +426,103 @@ class SortableTable extends HTML_Table {
 			}
 		}
 		*/
+		echo $html;
+	}
+	
+	public function display_simple_grid($vibility_options, $hide_navigation) {
+		global $charset;		
+		$empty_table = false;
+		$html = '';		
+		if ($this->get_total_number_of_items() == 0) {
+			$cols = $this->getColCount();
+			//$this->setCellAttributes(1, 0, 'style="font-style: italic;text-align:center;" colspan='.$cols);
+			if (api_is_xml_http_request()===true) {
+				$message_empty=api_utf8_encode(get_lang('TheListIsEmpty'));
+			} else {
+				$message_empty=get_lang('TheListIsEmpty');
+			}
+			$this->setCellContents(1, 0,$message_empty);
+			$empty_table = true;
+		}
+		$html='';
+		
+		if (!$empty_table) {
+			//if we show the pagination					
+			if ($hide_navigation == false ) {
+				$form = $this->get_page_select_form();	
+				$nav = $this->get_navigation_html();
+				
+				//this also must be moved			
+				$html = '<div class="sub-header">';
+				$html .= '<div class="grid_selectbox">'.$form.'</div>';			
+				$html .= '<div class="grid_title">'.$this->get_table_title().'</div>';			
+				$html .= '<div class="grid_nav">'.$nav.'</div>';			
+				$html .= '</div>';
+			}
+			$html .= '<div class="clear"></div>';
+			if (count($this->form_actions) > 0) {			
+				$script= '<script language="javaScript" type="text/javascript">
+							/*<![CDATA[*/
+							function setCheckbox(value) {
+				 				d = document.form_'.$this->table_name.';
+				 				for (i = 0; i < d.elements.length; i++) {
+				   					if (d.elements[i].type == "checkbox") {
+									     d.elements[i].checked = value;
+				   					}
+				 				}
+							}
+							/*]]>*/
+						</script>';
+				$params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
+				$html .= '<form method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
+			}
+		}
+		
+		// @todo This style css must be moved to default.css only for dev		 
+		echo '<style>				
+				.search_users_grid_container { width:100%;}
+				.search_users_grid_item { width:400px;  height: 90px;  border:1px dotted #ccc; float:left; padding:5px; margin:8px;}
+				.search_users_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+				.search_users_grid_element_1 { width:100px; float:left; text-align:center;margin-bottom:5px;}
+				.search_users_grid_element_2 { width:150px; float:left;}
+				
+				.search_users_grid_selectbox { width:50%; float:left;}
+				.search_users_grid_title 	{ width:30%; float:left;}
+				.search_users_grid_nav 		{ float:right;}
+					
+		</style>';
+			
+		$items = $this->get_clean_html(); // getting the items of the table				
+		// the generating of style classes must be improved. Maybe we need a a table name to create style on the fly:
+		// i.e: .whoisonline_table_grid_container instead of  .grid_container
+		// where whoisonline is the table's name like drupal's template engine
+		
+		if (is_array($vibility_options)) {
+			$filter = false; // the 2nd condition of the if will be loaded			 
+		} else {
+			if ($vibility_options === false) {
+				$filter = false;
+			} else {
+				$filter = true;
+			}
+		}
+		
+		$html .= '<div class="'.$this->table_name.'_grid_container">';		
+		if (is_array($items) && count($items)>0 ) {			 
+			foreach($items as $row) {				
+				$html.= '<div class="'.$this->table_name.'_grid_item">';
+				$i=0;
+				foreach($row as $element) {					
+					if ( $filter === true || $vibility_options[$i] == true) {
+						$html.='<div class="'.$this->table_name.'_grid_element_'.$i.'">'.$element.'</div>';
+					}
+					$i++;
+				}		
+				$html.='</div>';
+			}
+		}
+		$html.='</div>';
+		$html .= '<div class="clear"></div>';
 		echo $html;
 	}
 	

@@ -6,7 +6,7 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-
+Display :: display_header('');
 // @todo here we must show the user information as read only
 //User picture size is calculated from SYSTEM path
 $user_info= UserManager::get_user_info_by_id(api_get_user_id());

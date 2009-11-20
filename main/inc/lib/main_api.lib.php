@@ -143,6 +143,7 @@ define('SECTION_COURSE_ADMIN', 'course_admin');
 define('SECTION_PLATFORM_ADMIN', 'platform_admin');
 define('SECTION_MYGRADEBOOK', 'mygradebook');
 define('SECTION_TRACKING','session_my_space');
+define('SECTION_SOCIAL', 'social');
 
 // CONSTANT name for local authentication source
 define('PLATFORM_AUTH_SOURCE', 'platform');
@@ -2285,8 +2286,6 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 	$time = date("Y-m-d H:i:s", $time);
 	if (!empty($session_id)) {
 		$session_id = intval($session_id);
-	} else {
-		$session_id = api_get_session_id();
 	}
 
 	// Definition of tables

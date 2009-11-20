@@ -17,10 +17,12 @@ $request=api_is_xml_http_request();
 $language_variable=api_xml_http_response_encode(get_lang('ContactsGroups'));
 //api_display_tool_title($language_variable);
 $user_id=api_get_user_id();
-$list_groups=UserFriend::show_list_type_friends();
+$list_groups=SocialManager::show_list_type_friends();
+
+
 
 for ($p=0;$p<count($list_groups);$p++) {
-	$list_path_friends=UserFriend::get_list_path_web_by_user_id ($user_id,$list_groups[$p]['id']);
+	$list_path_friends=SocialManager::get_list_path_web_by_user_id ($user_id,$list_groups[$p]['id']);
 ?>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="data_table">
           <tr>
@@ -65,7 +67,7 @@ for ($p=0;$p<count($list_groups);$p++) {
 				} else {
 					$big='big_';
 				}
-				$friends_profile = UserFriend::get_picture_user($list_friends_id[$j], $list_friends_file[$j], 92);
+				$friends_profile = SocialManager::get_picture_user($list_friends_id[$j], $list_friends_file[$j], 92);
 				$friend_html.='<div id="div_'.$list_friends_id[$j].'" class="image_friend_network">' .
 							  '<a href="javascript:void(0)" onclick=load_thick("'.$list_friends_dir[$j].$big.$list_friends_file[$j].'","") title="" class="thickbox">' .
 							  '<span><center><img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$list_friends_id[$j].'" title="'.api_xml_http_response_encode($user_name).'" /></center></span>'.

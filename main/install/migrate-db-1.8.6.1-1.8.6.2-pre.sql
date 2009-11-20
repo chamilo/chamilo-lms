@@ -34,7 +34,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_coac
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'false', 'No');
 
-CREATE TABLE user_tag (id int NOT NULL auto_increment, tag varchar(255) NOT NULL, field_id int NOT NULL, count int NOT NULL, PRIMARY KEY  (id));
+CREATE TABLE tag (id int NOT NULL auto_increment, tag varchar(255) NOT NULL, field_id int NOT NULL, count int NOT NULL, PRIMARY KEY  (id));
 CREATE TABLE user_rel_tag (id int NOT NULL auto_increment,user_id int NOT NULL,tag_id int NOT NULL, PRIMARY KEY  (id));
 
 CREATE TABLE announcement_attachment ( id int NOT NULL auto_increment, path varchar(255) NOT NULL, comment text, size int NOT NULL default 0, announcement_id int NOT NULL, filename varchar(255) NOT NULL, PRIMARY KEY (id) );
@@ -46,6 +46,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('send_email
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('go_to_course_after_login', NULL, 'radio', 'Course', 'false', 'GoToCourseAfterLoginTitle', 'GoToCourseAfterLoginComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('go_to_course_after_login', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('go_to_course_after_login', 'false', 'No');
+
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
@@ -71,7 +72,3 @@ ALTER TABLE group_category ADD COLUMN chat_state TINYINT DEFAULT 1, ADD INDEX (c
 ALTER TABLE student_publication ADD COLUMN weight float(6,2) UNSIGNED NOT NULL DEFAULT 0;
 ALTER TABLE course_description ADD COLUMN description_type TINYINT NOT NULL DEFAULT 0;
 ALTER TABLE dropbox_category ADD COLUMN session_id smallint NOT NULL DEFAULT 0, ADD INDEX (session_id);
-ALTER TABLE chat_connected ADD COLUMN session_id  smallint NOT NULL DEFAULT 0;
-ALTER TABLE chat_connected ADD COLUMN to_group_id INT NOT NULL DEFAULT 0;
-ALTER TABLE chat_connected DROP PRIMARY KEY;  
-ALTER TABLE chat_connected ADD INDEX char_connected_index(user_id,session_id,to_group_id);  

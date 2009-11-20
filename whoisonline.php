@@ -19,7 +19,8 @@ require_once './main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
-
+//social tab
+$this_section = SECTION_SOCIAL;
 // table definitions
 $track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 
@@ -130,10 +131,14 @@ function display_user_list($user_list, $_plugins) {
 			$uid = $user[0];
 			$user_info = api_get_user_info($uid);
 			$table_row = array();
-			$url = '?id='.$uid.$course_url;
+			if (api_get_setting('allow_social_tool')=='true') {
+				$url = '/main/social/profile.php?u='.$uid.$course_url;
+			} else {
+				$url = '?id='.$uid.$course_url;
+			}
 			$image_array = UserManager::get_user_picture_path_by_id($uid, 'system', false, true);
 
-			$friends_profile = UserFriend::get_picture_user($uid, $image_array['file'], 92, 'medium_', ' width="90" height="90" ');
+			$friends_profile = SocialManager::get_picture_user($uid, $image_array['file'], 92, 'medium_', ' width="90" height="90" ');
 			// reduce image
 			$name = api_get_person_name($user_info['firstName'], $user_info['lastName']);
 			$table_row[] = '<a href="'.$url.'"><img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'" '.$friends_profile['style'].' border="1"></a>';
@@ -247,7 +252,7 @@ function display_individual_user($user_id) {
 			$user_anonymous = api_get_anonymous_id();
 			
 			if ($safe_user_id != api_get_user_id() && !api_is_anonymous($safe_user_id)) {
-				$user_relation = UserFriend::get_relation_between_contacts(api_get_user_id(), $safe_user_id);
+				$user_relation = SocialManager::get_relation_between_contacts(api_get_user_id(), $safe_user_id);
 				if ($user_relation == 0 || $user_relation == 6) {
 					echo  '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=300&width=610&user_friend='.$safe_user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a><br />
 						   <a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$safe_user_id.'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
@@ -366,6 +371,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 
 	if ($user_list) {
 		if (!isset($_GET['id'])) {
+			echo UserManager::get_search_form($_GET['q']);
 			display_user_list($user_list, $_plugins);
 		} else {
 			//individual user information - also displays header info

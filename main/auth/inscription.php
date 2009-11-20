@@ -156,8 +156,8 @@ if ($display_all_form === true) {
 	$form->addRule('username', get_lang('UsernameWrong'), 'username');
 	$form->addRule('username', get_lang('UserTaken'), 'username_available');
 	//	PASSWORD
-	$form->addElement('password', 'pass1', get_lang('Pass'),         array('size' => 40));
-	$form->addElement('password', 'pass2', get_lang('Confirmation'), array('size' => 40));
+	$form->addElement('password', 'pass1', get_lang('Pass'),         array('size' => 20));
+	$form->addElement('password', 'pass2', get_lang('Confirmation'), array('size' => 20));
 	$form->addRule('pass1', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
@@ -165,7 +165,7 @@ if ($display_all_form === true) {
 		$form->addRule('password1', get_lang('PassTooEasy').': '.api_generate_password(), 'callback', 'api_check_password');
 
 	//	PHONE
-	$form->addElement('text', 'phone', get_lang('Phone'), array('size' => 40));
+	$form->addElement('text', 'phone', get_lang('Phone'), array('size' => 20));
 	if (api_get_setting('registration', 'phone') == 'true')
 		$form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
 

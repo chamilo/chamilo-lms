@@ -2271,7 +2271,7 @@ CREATE TABLE session_category (
 --
 
 
-CREATE TABLE  user_tag (
+CREATE TABLE tag (
 	id int NOT NULL auto_increment,
 	tag varchar(255) NOT NULL,
 	field_id int NOT NULL,
@@ -2285,5 +2285,36 @@ CREATE TABLE user_rel_tag (
 	user_id int NOT NULL,
 	tag_id int NOT NULL,  
 	PRIMARY KEY  (id)
+);
+
+--
+-- Table structure for user platform groups
+--
+
+CREATE TABLE `group` (
+  id int NOT NULL AUTO_INCREMENT,
+  name varchar(255) NOT NULL,
+  description varchar(255) NOT NULL,
+  picture_uri varchar(255) NOT NULL,
+  url varchar(255) NOT NULL,
+  visibility int NOT NULL,
+  updated_on varchar(255) NOT NULL,
+  created_on varchar(255) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE group_rel_tag (
+  id int NOT NULL AUTO_INCREMENT,
+  tag_id int NOT NULL,
+  group_id int NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE group_rel_user (
+  id int NOT NULL AUTO_INCREMENT,
+  group_id int NOT NULL,
+  user_id int NOT NULL,
+  relation_type int NOT NULL,
+  PRIMARY KEY (id)
 );
 

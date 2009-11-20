@@ -93,6 +93,13 @@ if ($request===false) {
 	);
 	Display::display_header('');
 }
+
+echo '<div class=actions>';
+	echo '<a href="/main/messages/inbox.php">'.Display::return_icon('inbox.png',api_xml_http_response_encode(get_lang('Inbox'))).api_xml_http_response_encode(get_lang('Inbox')).'</a>';
+	echo '<a href="/main/messages/new_message.php">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
+	echo '<a href="/main/messages/outbox.php">'.Display::return_icon('outbox.png',api_xml_http_response_encode(get_lang('Outbox'))).api_xml_http_response_encode(get_lang('Outbox')).'</a>';
+echo '</div>';	
+
 /**************************************************************/
 $info_delete_outbox=array();
 $info_delete_outbox=explode(',',$_GET['form_delete_outbox']);
@@ -112,9 +119,7 @@ if( trim($info_delete_outbox[0])=='delete' ) {
 }
 /**************************************************************/
 $table_message = Database::get_main_table(TABLE_MESSAGE);
-echo '<div id="div_content_messages_sent">&nbsp;&nbsp;';
-//api_display_tool_title(api_xml_http_response_encode(get_lang('Outbox')));
-echo '</div>';
+
 $user_sender_id=api_get_user_id();
 if ($_REQUEST['action']=='delete') {
 	$delete_list_id=array();

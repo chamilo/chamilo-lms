@@ -1,15 +1,11 @@
 <?php //$id: $
 /* For licensing terms, see /dokeos_license.txt */
 /**
-* This is the profile social main page
+* This is the home of a social network user, here we should show the latest info/status of our friends 
 * @author Julio Montoya <gugli100@gmail.com>
-* @author Isaac Flores Paz <florespaz_isaac@hotmail.com>
 * @package dokeos.social
 */
 
-/**
- * Init
- */
 $language_file = array('registration','messages','userInfo','admin','forum','blog');
 $cidReset = true;
 require '../inc/global.inc.php';
@@ -192,7 +188,6 @@ if (isset($_GET['shared'])) {
 	$link_shared='';
 }
 $interbreadcrumb[]= array ('url' =>$my_link,'name' => get_lang('ModifyProfile') );
-
 $interbreadcrumb[]= array (
 	'url' => '../social/profile.php?'.$link_shared.'#remote-tab-1',
 	'name' => get_lang('ViewMySharedProfile')
@@ -213,12 +208,11 @@ if (isset($_GET['u'])) {
 }
 $_SESSION['social_user_id'] = $user_id;
 
+
 /**
  * Display
  */
 Display :: display_header(null);
-
-
 
 // @todo here we must show the user information as read only
 //User picture size is calculated from SYSTEM path
@@ -228,10 +222,15 @@ $img_array= UserManager::get_user_picture_path_by_id($user_id,'web',true,true);
 //print_r($user_info);
 // Added by Ivan Tcholakov, 03-APR-2009.
 if (USE_JQUERY_CORNERS_SCRIPT) {
-	echo $s="<script>$(document).ready( function(){
+echo $s="<script>$(document).ready( function(){
 		  $('.rounded').corners();
 		});</script>";
 }
+
+
+//echo '<div id="actions">';
+//echo '<a href="../auth/profile.php?show=1"">'.Display::return_icon('edit.gif').'&nbsp;'.api_convert_encoding(get_lang('EditInformation'),'UTF-8',$charset).'</a>';
+//echo '</div>';
 
 //Setting some course info
 $my_user_id=isset($_GET['u']) ? Security::remove_XSS($_GET['u']) : api_get_user_id();
@@ -239,6 +238,8 @@ $personal_course_list = UserManager::get_personal_session_course_list($my_user_i
 $course_list_code = array();
 $i=1;
 //print_r($personal_course_list);
+
+
 
 if (is_array($personal_course_list)) {
 	foreach ($personal_course_list as $my_course) {
@@ -256,17 +257,28 @@ if (is_array($personal_course_list)) {
 	$course_list_code = array_unique_dimensional($course_list_code);
 }
 
-//show the action menu
-SocialManager::show_social_menu();
+
+echo '<div class="actions">';
+echo '<a href="profile.php">'.Display::return_icon('shared_profile.png').' '.get_lang('MySharedProfile').'</a>';
+echo '<a href="friends.php">'.Display::return_icon('lp_users.png').' '.get_lang('Friends').'</a>';
+echo '<a href="../messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Inbox').'</a>';
+echo '<a href="group.php">'.Display::return_icon('group.gif').' '.get_lang('MyGroups').'</a>';
+echo '<a href="/main/social/search.php">'.Display::return_icon('search.gif').' '.get_lang('Search').'</a>';
+
+echo '<span style="float:right; padding-top:7px;">'.
+	 '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
+	 '</span>';
+	 
+echo '</div>';
+
 
 echo '<div class="actions-title">';
 if ($user_id == api_get_user_id())
 	echo get_lang('ViewMySharedProfile');
 else
 	echo get_lang('ViewSharedProfile').' - '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
+
 echo '</div>';
-
-
 
 echo '<div id="social-profile-wrapper">';
 // RIGHT COLUMN
@@ -310,7 +322,7 @@ echo '<div id="social-profile-wrapper">';
 						else
 							$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friends').'</div>';
 						if (api_get_user_id() == $user_id)
-					$friend_html.= '<div style="float:right;"><a href="friends.php">'.get_lang('SeeAll').'</a></div>';
+					$friend_html.= '<div style="float:right;"><a href="index.php?#remote-tab-6">'.get_lang('SeeAll').'</a></div>';
 					$friend_html.= '</div>'; // close div friend-header
 
 				for ($k=0;$k<$loop_friends;$k++) {
@@ -463,28 +475,9 @@ echo '<div id="social-profile-container">';
 			echo '<div class="social-content-image">';
 			echo '<div class="social-background-content" style="width:95%;" align="center">';
 			echo '<br/>';
-    	  	echo '<img src='.$img_array['dir'].$img_array['file'].' /> <br /><br />';
+    	  	echo '<a href="../auth/profile.php?show=1"><img src='.$img_array['dir'].$img_array['file'].' /></a><br /><br />';
     	  	echo '</div>';
     	  	echo '</div>';
-    	  	
-    	  	
-    	  	if (api_get_user_id() == $user_id) {
-    	  	/*	// if i'm me
-    	  		echo '<div>';
-    	  		echo Display::return_icon('email.gif');
-    	  		echo '&nbsp;<a href="../social/index.php#remote-tab-2">'.get_lang('MyInbox').'</a>&nbsp;';
-    	  		echo '</div>';
-    	  		echo '<div>';
-    	  		echo Display::return_icon('edit.gif');
-    	  		echo '&nbsp;<a href="../auth/profile.php?show=1">'.get_lang('EditInformation').'</a>&nbsp;';
-    	  		echo '</div>';*/
-    	  	} else {
-    	  		echo '<br/>';
-    	  		echo '<div class="actions" style="margin-right:5px;">';
-    	  		echo '&nbsp;<a href="../messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />';
-    	  		echo '</div>';
-    	  	}    	  	
-    	  	echo '<br />';
 
     	  	// Send message or Add to friend links
     	  	/*if (!$show_full_profile) {
@@ -535,7 +528,7 @@ echo '<div id="social-profile-container">';
 										$tag_tmp = array();
 										foreach ($user_tags as $tags) {
 											//$tag_tmp[] = $tags['tag'];
-											$tag_tmp[] = '<a href="/main/social/search.php?q='.$tags['tag'].'">'.$tags['tag'].'</a>';
+											$tag_tmp[] = '<a href="../tag/?q='.$tags['tag'].'">'.$tags['tag'].'</a>';
 										}					 				 
 										if (is_array($user_tags) && count($user_tags)>0) {							
 											$extra_information_value .= '<strong>'.ucfirst($field_display_text).':</strong> '.implode(', ',$tag_tmp).'<br />';
@@ -609,102 +602,8 @@ echo '<div id="social-profile-container">';
 	echo '<div id="social-profile-content">';
 
 		    //--- Basic Information
-		    echo '<div class="sectiontitle">';
-			echo get_lang('Information');  //class="social-profile-info"
-			echo '</div>';
-			echo '<div class="social-content-information">';
-			if ($show_full_profile) {
-				echo '<div class="social-profile-info" >';
-					echo '<dt>'.get_lang('UserName').'</dt>
-						  <dd>'. $user_info['username'].'	</dd>';
-					if (!empty($user_info['firstname']) || !empty($user_info['lastname']))
-						echo '<dt>'.get_lang('Name').'</dt>
-						  	  <dd>'. api_get_person_name($user_info['firstname'], $user_info['lastname']).'</dd>';
-					if (!empty($user_info['official_code']))
-						echo '<dt>'.get_lang('OfficialCode').'</dt>
-						  <dd>'.$user_info['official_code'].'</dd>';
-					if (!empty($user_info['email']))
-						if (api_get_setting('show_email_addresses')=='true')
-							echo '<dt>'.get_lang('Email').'</dt>
-						  <dd>'.$user_info['email'].'</dd>';
-					if (!empty($user_info['phone']))
-						echo '<dt>'.get_lang('Phone').'</dt>
-						  <dd>'. $user_info['phone'].'</dd>';
-					echo '</dl>';
-				echo '</div>';
-			} else {
-				echo '<div class="social-profile-info" >';
-					echo '<dl>';
-					if (!empty($user_info['firstname']) || !empty($user_info['lastname']))
-						echo '<dt>'.get_lang('Name').'</dt>
-						  <dd>'. api_get_person_name($user_info['firstname'], $user_info['lastname']).'</dd>';
-				echo '</div>';
-			}
 
-			echo '<div class="clear"></div><br />';
-			echo '</div>';
-			// COURSES LIST
-			if ($show_full_profile) {
-				//print_r($personal_course_list);
-				//echo '<pre>';
-				if ( is_array($list) ) {
-					echo '<div class="sectiontitle">';
-					echo api_ucfirst(get_lang('MyCourses'));
-					echo '</div>';
-					echo '<div class="social-content-training">';
-					//Courses whithout sessions
-					$old_user_category = 0;
-					$i=1;
-					foreach($list as $key=>$value) {
-						if ( empty($value[2]) ) { //if out of any session
-							echo $value[1];
-							//echo '<div id="loading'.$i.'">&nbsp;</div>';
-							//class="social-profile-rounded maincourse"
-							echo '<div id="social_content'.$i.'"  style="background : #EFEFEF; padding:0px; ">';
-							echo '</div>';
-							$i++;
-						}
-					}
-					$listActives = $listInactives = $listCourses = array();
-					foreach ( $list as $key=>$value ) {
-						if ( $value['active'] ) { //if the session is still active (as told by get_logged_user_course_html())
-							$listActives[] = $value;
-						} elseif ( !empty($value[2]) ) { //if there is a session but it is not active
-							$listInactives[] = $value;
-						}
-					}
-					/*
-					// --- Session registered
-					api_display_tool_title(get_lang('Sessions'));
-					if(count($listActives)>0) {
-						echo "<ul class=\"courseslist\">\n";
-						foreach ($listActives as $key => $value) {
-							if (!empty($value[2])) {
-								if ((isset($old_session) && $old_session != $value[2]) or ((!isset($old_session)) && isset($value[2]))) {
-									$old_session = $value[2];
-									if ($key != 0) {
-										echo '</ul>';
-									}
-									//echo '<ul class="session_box"><li class="session_box_title">'.$value[3]['title'].' '.$value[3]['dates'].'</li>';
-									echo '<ul>';
-									if ( !empty($value[3]['coach']) ) {
-										echo '<li class="session_box_coach">'.$value[3]['coach'].'</li>';
-									}
-									echo '</ul>';
-									echo '<ul class="session_course_item">';
-								}
-							}
-							echo $value[1];
-						}
-						echo '</ul>';
-					}
-					*/
-				}
-				echo '</ul><br />';
-                echo SocialManager::get_user_feeds($user_id);
-        		echo '</div>';
-		    }
-            echo '</div>';
+          echo 'ssss';
         echo '</div>';
     echo '</div>';
 echo '</div>'; //from the main

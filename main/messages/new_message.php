@@ -213,14 +213,14 @@ if (isset($_GET['rs'])) {
 		'name' => get_lang('ComposeMessage')
 	);
 
-if ($request===false) {
 	Display::display_header('');
-}
 
-//api_display_tool_title($nameTools);
+
 echo '<div class=actions>';
-echo '<a onclick="close_div_show(\'div_content_messages\')" href="javascript:void(0)">'.Display::return_icon('folder_up.gif',api_xml_http_response_encode(get_lang('BackToInbox'))).api_xml_http_response_encode(get_lang('BackToInbox')).'</a>';
-echo '</div>';
+	echo '<a href="/main/messages/inbox.php">'.Display::return_icon('inbox.png',api_xml_http_response_encode(get_lang('Inbox'))).api_xml_http_response_encode(get_lang('Inbox')).'</a>';
+	echo '<a href="/main/messages/new_message.php">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
+	echo '<a href="/main/messages/outbox.php">'.Display::return_icon('outbox.png',api_xml_http_response_encode(get_lang('Outbox'))).api_xml_http_response_encode(get_lang('Outbox')).'</a>';
+echo '</div>';	
 if (!isset($_POST['compose'])) {
 	if(isset($_GET['re_id'])) {
 		$message_id = $_GET['re_id'];

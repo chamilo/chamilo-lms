@@ -89,14 +89,14 @@ Question :: display_type_menu ($objExercise->feedbacktype);
 echo '</div>';
 ?>
 
-<table class="data_table">
-	<tr class="row_odd">
+<div class="content_table"><table class="data_table">
+	<span class="row_odd">
 		<th><?php echo get_lang('Question'); ?></th>
 		<th><?php echo get_lang('Type');?></th>
 		<th><?php echo get_lang('Difficulty'); ?></th>
 		<!--<th><?php //echo get_lang('Export'); ?></th>-->
 		<th><?php echo get_lang('Modify'); ?></th>
-	</tr>
+	</span>
 
 <?php
 if($nbrQuestions) {
@@ -110,13 +110,12 @@ if($nbrQuestions) {
 			<tr <?php if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"'; ?>>
 				<td><?php echo "$i. ".$objQuestionTmp->selectTitle(); ?></td>
 				<td><?php eval('echo get_lang('.get_class($objQuestionTmp).'::$explanationLangVar);'); ?></td>
-			  	<td align="center"><?php echo $objQuestionTmp->selectLevel(); ?></td>
-			  	<!--<td align="center"><a href="<?php echo api_get_self(); ?>?action=exportqti2&questionId=<?php echo $id; ?>"><img src="../img/export.png" border="0" align="absmiddle" alt="IMS/QTI" /></a></td>-->
-			  	<td> <a href="<?php echo api_get_self(); ?>?myid=1&ed
-					itQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" alt="<?php echo get_lang('Modify'); ?>" /></a> <a href="<?php echo api_get_self(); ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="<?php echo get_lang('Delete'); ?>" /></a>
-				<?php
-				if($i != 1) { ?>
-						<a href="<?php echo api_get_self(); ?>?moveUp=<?php echo $id; ?>"><img src="../img/up.gif" border="0" alt="<?php echo get_lang('MoveUp'); ?>"></a>
+			  	<td align="center"><?php echo $objQuestionTmp->selectLevel(); ?></td>		  	
+			  	<td>
+			  	<a href="<?php echo api_get_self(); ?>?myid=1&editQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" alt="<?php echo get_lang('Modify'); ?>" /></a> 
+				<a href="<?php echo api_get_self(); ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="<?php echo get_lang('Delete'); ?>" /></a>
+				<?php if($i != 1) { ?>
+				<a href="<?php echo api_get_self(); ?>?moveUp=<?php echo $id; ?>"><img src="../img/up.gif" border="0" alt="<?php echo get_lang('MoveUp'); ?>"></a>
 				<?php if($i == $nbrQuestions) {
 			    		echo '<img src="../img/down_na.gif">';
 					}
@@ -126,7 +125,7 @@ if($nbrQuestions) {
 						echo '<img src="../img/up_na.gif">';
 					}
 				?>
-						<a href="<?php echo api_get_self(); ?>?moveDown=<?php echo $id; ?>"><img src="../img/down.gif" border="0" alt="<?php echo get_lang('MoveDown'); ?>"></a>
+				<a href="<?php echo api_get_self(); ?>?moveDown=<?php echo $id; ?>"><img src="../img/down.gif" border="0" alt="<?php echo get_lang('MoveDown'); ?>"></a>
 				<?php } ?>
 			    </td>
 			    <?php
@@ -139,7 +138,7 @@ if($nbrQuestions) {
 	}
 }
 ?>
-</table>
+</table></div>
 <table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
 <?php
 if(!$i) {

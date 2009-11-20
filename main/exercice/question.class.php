@@ -1084,7 +1084,7 @@ abstract class Question
 			//2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
 			$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER]);
 		}
-		echo '<ul class="question_menu" style="padding:0px; margin:-2px;">';
+		echo '<ul class="question_menu">';
 		foreach ($question_type_custom_list as $i=>$a_type) {
 			// include the class of the type
 			include_once($a_type[0]);

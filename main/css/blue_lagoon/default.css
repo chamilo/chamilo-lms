@@ -144,9 +144,7 @@ input.link_alike:hover {
 	padding: 0px;
 	margin: 0px;
 }
-input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-	background-image:url(images/shadow.gif);
-}
+
 /* user_portal course status icon */
 .coursestatusicons {
 	border: 0px solid #000;
@@ -2613,4 +2611,33 @@ input.arrowl {
 	overflow:auto;
 	background-color:#eee;
 	width:500px;
+}
+
+
+
+/* UI improvements */
+* {
+	outline :none;
+}
+input, select, textarea {	
+	-moz-border-radius-bottomleft:5px;
+	-moz-border-radius-bottomright:5px;
+	-moz-border-radius-topleft:5px;
+	-moz-border-radius-topright:5px;
+	-x-system-font:none;
+	border:1px solid #CCCCCC;
+	color:#666666;
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:120%;
+	font-size-adjust:none;
+	font-stretch:normal;
+	font-style:normal;
+	font-variant:normal;
+	font-weight:normal;
+	line-height:normal;
+	padding:5px;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+	background-image:url(images/shadow.gif);
 }

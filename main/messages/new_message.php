@@ -98,7 +98,25 @@ $(document).ready(function (){
 		});
       });
 });
-	</script>';
+		
+var counter_image = 1;	
+function remove_image_form(id_elem1) {
+	var elem1 = document.getElementById(id_elem1);
+	elem1.parentNode.removeChild(elem1);        
+} 								
+function add_image_form() {
+    counter_image = counter_image + 1;														
+	// Multiple filepaths for image form					
+	var filepaths = document.getElementById("filepaths");		
+	var elem1 = document.createElement("div");			
+	elem1.setAttribute("id","filepath_"+counter_image);							
+	filepaths.appendChild(elem1);	
+	id_elem1 = "filepath_"+counter_image;		
+	id_elem1 = "\'"+id_elem1+"\'";
+	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"28\" />&nbsp;<input type=\"text\" name=\"legend[]\" size=\"28\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"'.api_get_path(WEB_CODE_PATH).'img/delete.gif\"></a>";				
+}		
+		
+</script>';
 
 $nameTools = api_xml_http_response_encode(get_lang('ComposeMessage'));
 
@@ -147,11 +165,17 @@ function manage_form ($default, $select_from_user_list = null) {
 	global $charset;
 	$table_message = Database::get_main_table(TABLE_MESSAGE);
 	$request=api_is_xml_http_request();
+	
+	/*
 	if ($request===true) {
-		$form = new FormValidator('compose_message','post','index.php?sendform=true#remote-tab-2');
+		$form = new FormValidator('compose_message','post','index.php?sendform=true#remote-tab-2',null,array('enctype'=>'multipart/form-data'));
 	} else {
 		$form = new FormValidator('compose_message');
 	}
+	*/
+	
+	$form = new FormValidator('compose_message',null,null,null,array('enctype'=>'multipart/form-data'));
+	
 	if (isset($select_from_user_list)) {
 		$form->add_textfield('id_text_name', api_xml_http_response_encode(get_lang('SendMessageTo')),true,array('size' => 40,'id'=>'id_text_name','onkeyup'=>'send_request_and_search()','autocomplete'=>'off','style'=>'padding:0px'));
 		$form->addRule('id_text_name', api_xml_http_response_encode(get_lang('ThisFieldIsRequired')), 'required');
@@ -171,6 +195,16 @@ function manage_form ($default, $select_from_user_list = null) {
 		$form->addElement('hidden','re_id',Security::remove_XSS($_GET['re_id']));
 		$form->addElement('hidden','save_form','save_form');
 	}
+	
+	$form->addElement('html','<div class="row"><div class="label">'.get_lang('FilesAttachment').'</div><div class="formw">
+			<span id="filepaths">
+			<div id="filepath_1">
+			<input type="file" name="attach_1"  size="28" />
+			<input type="text" name="legend[]" size="28" />
+			</div></span></div></div> 
+					');
+	$form->addElement('html','<div class="row"><div class="formw"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a>&nbsp;('.get_lang('MaximunFileSizeXMB').')</div></div>');
+	
 	$form->addElement('style_submit_button','compose',api_xml_http_response_encode(get_lang('SendMessage')),'class="save"');
 	$form->setRequiredNote(api_xml_http_response_encode('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>'));
 	$form->setDefaults($default);
@@ -179,8 +213,10 @@ function manage_form ($default, $select_from_user_list = null) {
 		$receiver_user_id = $values['user_list'];
 		$title = $values['title'];
 		$content = $values['content'];
+		$file_comments = $_POST['legend'];
+
 		//all is well, send the message
-		MessageManager::send_message($receiver_user_id, $title, $content);
+		MessageManager::send_message($receiver_user_id, $title, $content, $_FILES, $file_comments);
 		MessageManager::display_success_message($receiver_user_id);
 	} else {
 		$form->display();

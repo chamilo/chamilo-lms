@@ -1,7 +1,9 @@
 <?php
 /* For licensing terms, see /dokeos_license.txt */
-require_once api_get_path(LIBRARY_PATH).'/main_api.lib.php';
-require_once api_get_path(LIBRARY_PATH).'/online.inc.php';
+require_once api_get_path(LIBRARY_PATH).'online.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 class MessageManager
 {
@@ -139,7 +141,7 @@ class MessageManager
 				$message[2] = '<a href="view_message.php?id='.$result[0].'">'.GetFullUserName(($result[1])).'</a>';;
 				$message[3] = '<a href="view_message.php?id='.$result[0].'">'.$result[2].'</a>';
 				$message[5] = '<a href="new_message.php?re_id='.$result[0].'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
-						  '&nbsp;&nbsp;<a delete_one_message('.$result[0].') href="#inbox.php?action=deleteone&id='.$result[0].'">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
+						  '&nbsp;&nbsp;<a delete_one_message('.$result[0].') href="inbox.php?action=deleteone&id='.$result[0].'">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			}
 			$message[4] = ($result[3]); //date stays the same
 			foreach($message as $key => $value) {
@@ -152,7 +154,7 @@ class MessageManager
 		return $message_list;
 	}
 
-	 public static function send_message ($receiver_user_id, $title, $content) {
+	 public static function send_message ($receiver_user_id, $title, $content, $file_attachments, $file_comments) {
         global $charset;
         if (is_numeric($receiver_user_id)) {
 			$table_message = Database::get_main_table(TABLE_MESSAGE);
@@ -163,17 +165,44 @@ class MessageManager
 			$res_exist = Database::query($sql,__FILE__,__LINE__);
 			$row_exist = Database::fetch_array($res_exist,'ASSOC');
 			if ($row_exist['count'] ==0) {
-				$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
-						 " VALUES (".
-				 		 "'".api_get_user_id()."', '".Database::escape_string($receiver_user_id)."', '1', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
-				 		 ")";
+								 		 
 				//message in outbox
 				$sql = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
 						 " VALUES (".
 				 		 "'".api_get_user_id()."', '".Database::escape_string($receiver_user_id)."', '4', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
 				 		 ")";
 				$rs = Database::query($sql,__FILE__,__LINE__);
-				$result = Database::query($query,__FILE__,__LINE__);
+				$outbox_last_id = Database::insert_id();
+				
+				// save attachment file for outbox messages
+				if (is_array($file_attachments)) {
+					$o = 0;
+					foreach ($file_attachments as $file_attach) {						
+						if ($file_attach['error'] == 0) {
+							self::save_message_attachment_file($file_attach,$file_comments[$o],$outbox_last_id,api_get_user_id());
+						}
+						$o++;	
+					}
+				}
+				
+				//message in inbox
+				$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
+						 " VALUES (".
+				 		 "'".api_get_user_id()."', '".Database::escape_string($receiver_user_id)."', '1', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
+				 		 ")";
+				$result = Database::query($query,__FILE__,__LINE__);				
+				$inbox_last_id = Database::insert_id();
+				
+				// save attachment file for inbox messages
+				if (is_array($file_attachments)) {
+					$i = 0;
+					foreach ($file_attachments as $file_attach) {						
+						if ($file_attach['error'] == 0) {
+							self::save_message_attachment_file($file_attach,$file_comments[$i],$inbox_last_id,null,$receiver_user_id);
+						}
+						$i++;	
+					}
+				}																				
 				return $result;
 			}
         } else {
@@ -182,18 +211,22 @@ class MessageManager
 
 		return false;
 	}
-
-	 public static function delete_message_by_user_receiver ($user_receiver_id,$id) {
+	
+	public static function delete_message_by_user_receiver ($user_receiver_id,$id) {
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		if ($id != strval(intval($id))) return false;
 		$id = Database::escape_string($id);
-		$sql="SELECT COUNT(*) as count FROM $table_message WHERE id=".$id." AND msg_status<>4;";
+		$sql="SELECT * FROM $table_message WHERE id=".$id." AND msg_status<>4;";
 		$rs=Database::query($sql,__FILE__,__LINE__);
-		$row=Database::fetch_array($rs,'ASSOC');
-		if ($row['count']==1) {
-			$query = "DELETE FROM $table_message " .
-			"WHERE user_receiver_id=".Database::escape_string($user_receiver_id)." AND id=".$id;
-			$result = Database::query($query,__FILE__,__LINE__);
+		
+		if (Database::num_rows($rs) > 0 ) {
+			$row = Database::fetch_array($rs);
+			// delete attachment file
+			$res = self::delete_message_attachment_file($id,$user_receiver_id);
+			// delete message
+			$query = "UPDATE $table_message SET msg_status=3 WHERE user_receiver_id=".Database::escape_string($user_receiver_id)." AND id=".$id;
+			//$query = "DELETE FROM $table_message WHERE user_receiver_id=".Database::escape_string($user_receiver_id)." AND id=".$id;
+			$result = Database::query($query,__FILE__,__LINE__);			
 			return $result;
 		} else {
 			return false;
@@ -209,11 +242,102 @@ class MessageManager
 	public static function delete_message_by_user_sender ($user_sender_id,$id) {
 		if ($id != strval(intval($id))) return false;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
-		$query = "DELETE FROM $table_message " .
-				 "WHERE user_sender_id=".Database::escape_string($user_sender_id)." AND id=".Database::escape_string($id);
-		$result = Database::query($query,__FILE__,__LINE__);
-		return $result;
+		
+		$id = intval($id);
+		$user_sender_id = intval($user_sender_id);
+		
+		$sql="SELECT * FROM $table_message WHERE id='$id'";
+		$rs=Database::query($sql,__FILE__,__LINE__);
+		
+		if (Database::num_rows($rs) > 0 ) {
+			$row = Database::fetch_array($rs);
+			// delete attachment file
+			$res = self::delete_message_attachment_file($id,$user_sender_id);
+			// delete message
+			$query = "UPDATE $table_message SET msg_status=3 WHERE user_sender_id='$user_sender_id' AND id='$id'";
+			//$query = "DELETE FROM $table_message WHERE user_sender_id='$user_sender_id' AND id='$id'";
+			$result = Database::query($query,__FILE__,__LINE__);					
+			return $result;		
+		}				
+		return false;
 	}
+	
+	public static function save_message_attachment_file($file_attach,$file_comment,$message_id,$receiver_user_id=0,$sender_user_id=0) {
+
+		$tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
+
+		// Try to add an extension to the file if it hasn't one
+		$new_file_name = add_ext_on_mime(stripslashes($file_attach['name']), $file_attach['type']);
+		
+		// user's file name
+		$file_name =$file_attach['name'];
+	
+		if (!filter_extension($new_file_name))  {
+			Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
+		} else {
+			$new_file_name = uniqid('');						
+
+			$message_user_id = '';
+			if (!empty($receiver_user_id)) {
+				$message_user_id = $receiver_user_id;
+			} else {
+				$message_user_id = $sender_user_id;
+			}			
+			
+			// User-reserved directory where photos have to be placed.
+			$path_user_info = UserManager::get_user_picture_path_by_id($message_user_id, 'system', true);
+			$path_message_attach = $path_user_info['dir'].'message_attachments/';
+					
+			// If this directory does not exist - we create it.
+			if (!file_exists($path_message_attach)) {
+				$perm = api_get_setting('permissions_for_new_directories');
+				$perm = octdec(!empty($perm) ? $perm : '0770');
+				@mkdir($path_message_attach, $perm, true);
+			}				
+
+			$new_path=$path_message_attach.$new_file_name;			
+			if (!empty($receiver_user_id)) {				
+				$result= @copy($file_attach['tmp_name'], $new_path);				
+			} else {
+				$result= @move_uploaded_file($file_attach['tmp_name'], $new_path);	
+			}
+
+			$safe_file_comment= Database::escape_string($file_comment);
+			$safe_file_name = Database::escape_string($file_name);
+			$safe_new_file_name = Database::escape_string($new_file_name);
+						
+			// Storing the attachments if any			
+			$sql="INSERT INTO $tbl_message_attach(filename,comment, path,message_id,size)
+				  VALUES ( '$safe_file_name', '$safe_file_comment', '$safe_new_file_name' , '$message_id', '".$file_attach['size']."' )";
+			$result=Database::query($sql, __LINE__, __FILE__);
+			$message.=' / '.get_lang('FileUploadSucces').'<br />';
+	
+		}	
+	}
+
+	public static function delete_message_attachment_file($message_id,$message_uid) {
+
+		$table_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
+		
+		$sql= "SELECT * FROM $table_message_attach WHERE message_id = '$message_id'";
+		$rs	= Database::query($sql,__FILE__,__LINE__);
+		
+		$new_paths = array();
+		while ($row = Database::fetch_array($rs)) {
+			$path 		= $row['path'];
+			$attach_id  = $row['id'];			
+			$new_path 	= $path.'_DELETED_'.$attach_id;
+			$path_user_info = UserManager::get_user_picture_path_by_id($message_uid, 'system', true);
+			$path_message_attach = $path_user_info['dir'].'message_attachments/';					
+			if (is_file($path_message_attach.$path)) {				
+				if(rename($path_message_attach.$path, $path_message_attach.$new_path)) {					
+					$sql_upd = "UPDATE $table_message_attach set path='$new_path' WHERE id ='$attach_id'";
+					$rs_upd = Database::query($sql_upd,__FILE__,__LINE__);					
+				} 							
+			}						
+		}				
+	}	
+	
 	public static function update_message ($user_id, $id) {
 		if ($id != strval(intval($id)) || $user_id != strval(intval($user_id))) return false;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
@@ -288,8 +412,8 @@ class MessageManager
 				$message[3] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",$result[2]).'</a>';
 				$message[5] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			} else {
-				$message[2] = '<a onclick="show_sent_message ('.$result[0].')" href="#../messages/view_message.php?id_send='.$result[0].'">'.GetFullUserName($result[4]).'</a>';
-				$message[3] = '<a onclick="show_sent_message ('.$result[0].')" href="#../messages/view_message.php?id_send='.$result[0].'">'.$result[2].'</a>';
+				$message[2] = '<a onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].'">'.GetFullUserName($result[4]).'</a>';
+				$message[3] = '<a onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].'">'.$result[2].'</a>';
 				$message[5] = '<a href="new_message.php?re_id='.$result[0].'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
 						  '&nbsp;&nbsp;<a href="outbox.php?action=deleteone&id='.$result[0].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			}
@@ -315,23 +439,50 @@ class MessageManager
 		$result = Database::fetch_array($sql_result);
 		return $result['number_messages'];
 	}
-	public static function show_message_box () {
+	
+	public static function show_message_box() {
 		global $charset;
+		
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
+		$tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
+		
+		$message_id = '';
 		if (isset($_GET['id_send']) && is_numeric($_GET['id_send'])) {
 			$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".intval(Database::escape_string($_GET['id_send']))." AND msg_status=4;";
 			$result = Database::query($query,__FILE__,__LINE__);
 		    $path='outbox.php';
+		    $message_id = intval($_GET['id_send']);
 		} else {
 			if (is_numeric($_GET['id'])) {
 				$query = "UPDATE $table_message SET msg_status = '0' WHERE user_receiver_id=".api_get_user_id()." AND id='".intval(Database::escape_string($_GET['id']))."';";
 				$result = Database::query($query,__FILE__,__LINE__);
 				$query = "SELECT * FROM $table_message WHERE msg_status<>4 AND user_receiver_id=".api_get_user_id()." AND id='".intval(Database::escape_string($_GET['id']))."';";
-				$result = Database::query($query,__FILE__,__LINE__);
-			}
+				$result = Database::query($query,__FILE__,__LINE__);				
+			}			
 			$path='inbox.php';
+			$message_id = intval($_GET['id']);
 		}
+
 		$row = Database::fetch_array($result);
+		
+		// get file attachments by message id
+		$files_attachments = '';
+		if (!empty($message_id)) {
+			$sql = "SELECT * FROM $tbl_message_attach WHERE message_id = '$message_id'";
+			$rs_file = Database::query($sql,__FILE__,__LINE__);				
+			if (Database::num_rows($rs_file) > 0) {
+				$attach_icon = Display::return_icon('attachment.gif');						
+				$archiveURL=api_get_path(WEB_CODE_PATH).'messages/download.php?type=inbox&file=';				
+				while ($row_file = Database::fetch_array($rs_file)) {				
+					$archiveFile = $row_file['path'];
+					$filename = $row_file['filename'];
+					$filesize = format_file_size($row_file['size']);
+					$filecomment = $row_file['comment'];
+					$files_attachments .= $attach_icon.'&nbsp;<a href="'.$archiveURL.$archiveFile.'">'.$filename.'</a>&nbsp;('.$filesize.')'.(!empty($filecomment)?'&nbsp;-&nbsp;'.$filecomment:'').'<br />'; 
+				}
+			}						
+		}
+		
 		$user_con = self::users_connected_by_id();
 		$band=0;
 		$reply='';
@@ -374,19 +525,45 @@ class MessageManager
 		            </TR>
 		          </TBODY>
 		        </TABLE>
+		        '.$files_attachments.'				        		
 		        <DIV class=HT style="PADDING-BOTTOM: 5px"> </DIV></TD>
 		      <TD width=10>&nbsp;</TD>
 		    </TR>
 		</TABLE>';
 	}
+	
 	public static function show_message_box_sent () {
+		
 		global $charset;
+		
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
+		$tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
+		
+		$message_id = '';
 		if (is_numeric($_GET['id_send'])) {
 			$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".intval(Database::escape_string($_GET['id_send']))." AND msg_status=4;";
 			$result = Database::query($query,__FILE__,__LINE__);
+			$message_id = intval($_GET['id_send']);
 		}
 		$path='outbox.php';
+
+		// get file attachments by message id
+		$files_attachments = '';
+		if (!empty($message_id)) {
+			$sql = "SELECT * FROM $tbl_message_attach WHERE message_id = '$message_id'";
+			$rs_file = Database::query($sql,__FILE__,__LINE__);				
+			if (Database::num_rows($rs_file) > 0) {
+				$attach_icon = Display::return_icon('attachment.gif');						
+				$archiveURL=api_get_path(WEB_CODE_PATH).'messages/download.php?type=outbox&file=';				
+				while ($row_file = Database::fetch_array($rs_file)) {				
+					$archiveFile = $row_file['path'];
+					$filename = $row_file['filename'];
+					$filesize = format_file_size($row_file['size']);
+					$filecomment = $row_file['comment'];
+					$files_attachments .= $attach_icon.'&nbsp;<a href="'.$archiveURL.$archiveFile.'">'.$filename.'</a>&nbsp;('.$filesize.')'.(!empty($filecomment)?'&nbsp;-&nbsp;'.$filecomment:'').'<br />'; 
+				}
+			}						
+		}
 
 		$row = Database::fetch_array($result);
 		$user_con = self::users_connected_by_id();
@@ -425,6 +602,7 @@ class MessageManager
 		            </TR>
 		          </TBODY>
 		        </TABLE>
+		        '.$files_attachments.'		
 		        <DIV class=HT style="PADDING-BOTTOM: 5px"> </DIV></TD>
 		      <TD width=10>&nbsp;</TD>
 		    </TR>

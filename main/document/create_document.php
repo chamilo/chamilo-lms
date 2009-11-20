@@ -447,7 +447,7 @@ if ($form->validate()) {
 	$texte=Security::remove_XSS($texte,COURSEMANAGERLOWSECURITY);
 
 	if (!strstr($texte, '/css/frames.css')) {
-		$texte = str_replace('</head>', '<link rel="stylesheet" href="./css/frames.css" type="text/css" /></head>', $texte);
+		$texte = str_replace('</head>', '<style> body{margin:10px;}</style> <link rel="stylesheet" href="./css/frames.css" type="text/css" /></head>', $texte);
 	}
 	if ($fp = @ fopen($filepath.$filename.'.'.$extension, 'w')) {
 		$texte = text_filter($texte);

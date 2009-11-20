@@ -65,27 +65,35 @@ require_once "../inc/global.inc.php";
 require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH)	. 'formvalidator/FormValidator.class.php';
 require_once 'document.inc.php';
 
 // adding extra javascript to the form
-$htmlHeadXtra[] =
-"<script type=\"text/javascript\">
-<!-- //
+$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; 
+$htmlHeadXtra[] = '<script type="text/javascript">
+
 function check_unzip() {
 	if(document.upload.unzip.checked==true){
 	document.upload.if_exists[0].disabled=true;
 	document.upload.if_exists[1].checked=true;
 	document.upload.if_exists[2].disabled=true;
+	} else {
+			document.upload.if_exists[0].checked=true;
+			document.upload.if_exists[0].disabled=false;
+			document.upload.if_exists[2].disabled=false;
+			}
 	}
-	else {
-	document.upload.if_exists[0].checked=true;
-	document.upload.if_exists[0].disabled=false;
-	document.upload.if_exists[2].disabled=false;
+		
+function advanced_parameters() {
+	if(document.getElementById(\'options\').style.display == \'none\') {
+	document.getElementById(\'options\').style.display = \'block\';
+	document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+	} else {
+			document.getElementById(\'options\').style.display = \'none\';
+			document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+			}
 	}
-}
-// -->
-</script>";
+</script>';
 
 /**
  * Obtains the text inside the file with the right parser
@@ -524,8 +532,6 @@ echo(build_directory_selector($folders,$path,$group_properties['directory']));
 
 <?php
 
-
-
 $form = new FormValidator('upload','POST',api_get_self(),'','enctype="multipart/form-data"');
 
 // form title
@@ -540,7 +546,16 @@ if(api_get_setting('use_document_title')=='true')
 	$form->addElement('text','title',get_lang('Title'),'size="20" style="width:300px;"');
 	$form->addElement('textarea','comment',get_lang('Comment'),'wrap="virtual" style="width:300px;"');
 }
+//Advanced parameters
+	$form -> addElement('html','<div class="row">
+			<div class="label">&nbsp;</div>
+			<div class="formw">
+				<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>
+			</div>
+			</div>');
+$form -> addElement('html','<div id="options" style="display:none">');
 
+//check box options
 $form->addElement('checkbox','unzip',get_lang('Options'),get_lang('Uncompress'),'onclick="check_unzip()" value="1"');
 
 if(api_get_setting('search_enabled')=='true')
@@ -563,13 +578,16 @@ $form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lan
 $form->addElement('radio', 'if_exists', '', get_lang('UplOverwriteLong'), 'overwrite');
 $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename');
 
+//button send document
 $form->addElement('style_submit_button', 'submitDocument', get_lang('SendDocument'),'class="upload"');
-
 $form->add_real_progress_bar('DocumentUpload','user_upload');
 
 $defaults = array('index_document'=>'checked="checked"');
+
 $form->setDefaults($defaults);
 
+//close the java script and avoid the footer up
+$form -> addElement('html','</div>');
 $form->display();
 
 ?>

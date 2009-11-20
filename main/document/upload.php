@@ -577,7 +577,7 @@ if(api_get_setting('search_enabled')=='true')
 $form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lang('UplDoNothing'), 'nothing');
 $form->addElement('radio', 'if_exists', '', get_lang('UplOverwriteLong'), 'overwrite');
 $form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename');
-
+$form -> addElement('html','</div>');
 //button send document
 $form->addElement('style_submit_button', 'submitDocument', get_lang('SendDocument'),'class="upload"');
 $form->add_real_progress_bar('DocumentUpload','user_upload');
@@ -587,7 +587,7 @@ $defaults = array('index_document'=>'checked="checked"');
 $form->setDefaults($defaults);
 
 //close the java script and avoid the footer up
-$form -> addElement('html','</div>');
+
 $form->display();
 
 ?>

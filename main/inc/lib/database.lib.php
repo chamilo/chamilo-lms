@@ -63,12 +63,15 @@ define('TABLE_MAIN_USER_FIELD_OPTIONS',	'user_field_options');
 define('TABLE_MAIN_USER_FIELD_VALUES',	'user_field_values');
 
 //User tags
-define('TABLE_MAIN_USER_TAG',			'user_tag');
+define('TABLE_MAIN_TAG',				'tag');
 define('TABLE_MAIN_USER_REL_TAG',		'user_rel_tag');
 
-//User group
-define('TABLE_MAIN_USER_GROUP',			'user_group');
-define('TABLE_MAIN_USER_GROUP_VALUES',	'user_group_values');
+
+//User groups
+define('TABLE_MAIN_GROUP',				'group');
+define('TABLE_MAIN_USER_REL_GROUP',		'group_rel_user');
+define('TABLE_MAIN_GROUP_REL_TAG',		'group_rel_tag');
+
 
 // Search engine
 define('TABLE_MAIN_SPECIFIC_FIELD',			'specific_field');
@@ -791,12 +794,14 @@ class Database {
 	 *
 	 * @author Olivier Brouckaert
 	 * @param  resource $result - the return value of the query
+	 * @param  option BOTH, ASSOC, or NUM
 	 * @return array - the value returned by the query
+	 * 
 	 */
-	public static function store_result($result) {
+	public static function store_result($result, $option = 'BOTH') {
 		$array = array();
 		if ($result !== false) { // For isolation from database engine's behaviour.
-			while ($row = self::fetch_array($result)) {
+			while ($row = self::fetch_array($result, $option)) {
 				$array[] = $row;
 			}
 		}

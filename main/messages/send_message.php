@@ -71,8 +71,8 @@ if ($panel_id==4) {
 	if ($subject_message=='clear') {
 		$subject_message=null;
 	}
-	UserFriend::send_invitation_friend_user($user_id,$subject_message,$content_message);
+	SocialManager::send_invitation_friend_user($user_id,$subject_message,$content_message);
 } elseif ($panel_id==5) {
-	UserFriend::send_invitation_friend_user($user_id,$subject_message,$content_message);
+	SocialManager::send_invitation_friend_user($user_id,$subject_message,$content_message);
 }
 ?>

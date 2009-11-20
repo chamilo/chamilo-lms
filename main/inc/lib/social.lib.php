@@ -7,8 +7,9 @@ define(SOCIALFRIEND,3);
 define(SOCIALGOODFRIEND,4);
 define(SOCIALENEMY,5);
 define(SOCIALDELETED,6);
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
-class UserFriend extends UserManager {
+class SocialManager extends UserManager {
 
 	private function __construct() {
 
@@ -331,5 +332,249 @@ class UserFriend extends UserManager {
 
 			}
 		}
+	}
+	
+	/**
+	 * Get user's feeds
+	 * @param   int User ID
+	 * @param   int Limit of posts per feed
+	 * @return  string  HTML section with all feeds included
+	 * @author  Yannick Warnier
+	 * @since   Dokeos 1.8.6.1
+	 */
+	function get_user_feeds($user,$limit=5) {
+	    if (!function_exists('fetch_rss')) { return '';}
+		$fields = UserManager::get_extra_fields();
+	    $feed_fields = array();
+	    $feeds = array();
+	    $res = '<div class="sectiontitle">'.get_lang('RSSFeeds').'</div>';
+	    $res .= '<div class="social-content-training">';
+	    $feed = UserManager::get_extra_user_data_by_field($user,'rssfeeds');
+	    if(empty($feed)) { return ''; }
+	    $feeds = split(';',$feed['rssfeeds']);
+	    if (count($feeds)==0) { return ''; }
+	    foreach ($feeds as $url) {
+		if (empty($url)) { continue; }
+	        $rss = fetch_rss($url);
+	    	$res .= '<h2>'.$rss->channel['title'].'</h2>';
+	        $res .= '<div class="social-rss-channel-items">';
+	        $i = 1;
+	        foreach ($rss->items as $item) {
+	            if ($limit>=0 and $i>$limit) {break;}
+	        	$res .= '<h3><a href="'.$item['link'].'">'.$item['title'].'</a></h3>';
+	            $res .= '<div class="social-rss-item-date">'.api_get_datetime($item['date_timestamp']).'</div>';
+	            $res .= '<div class="social-rss-item-content">'.$item['description'].'</div><br />';
+	            $i++;
+	        }
+	        $res .= '</div>';
+	    }
+	    $res .= '</div>';
+	    $res .= '<div class="clear"></div><br />';
+	    return $res;
+	}
+	
+	/**
+	 * Helper functions definition
+	 */
+	function get_logged_user_course_html($my_course, $count) {
+		global $nosession;
+		if (api_get_setting('use_session_mode')=='true' && !$nosession) {
+			global $now, $date_start, $date_end;
+		}
+		//initialise
+		$result = '';
+		// Table definitions
+		$main_user_table 		 = Database :: get_main_table(TABLE_MAIN_USER);
+		$tbl_session 			 = Database :: get_main_table(TABLE_MAIN_SESSION);
+		$course_database 		 = $my_course['db'];
+		$course_tool_table 		 = Database :: get_course_table(TABLE_TOOL_LIST, $course_database);
+		$tool_edit_table 		 = Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_database);
+		$course_group_user_table = Database :: get_course_table(TOOL_USER, $course_database);
+	
+		$user_id = api_get_user_id();
+		$course_system_code = $my_course['k'];
+		$course_visual_code = $my_course['c'];
+		$course_title = $my_course['i'];
+		$course_directory = $my_course['d'];
+		$course_teacher = $my_course['t'];
+		$course_teacher_email = isset($my_course['email'])?$my_course['email']:'';
+		$course_info = Database :: get_course_info($course_system_code);
+		//error_log(print_r($course_info,true));
+		$course_access_settings = CourseManager :: get_access_settings($course_system_code);
+	
+		$course_visibility = $course_access_settings['visibility'];
+	
+		$user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_system_code);
+		//function logic - act on the data
+		$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($my_course['k']);
+		if ($is_virtual_course) {
+			// If the current user is also subscribed in the real course to which this
+			// virtual course is linked, we don't need to display the virtual course entry in
+			// the course list - it is combined with the real course entry.
+			$target_course_code = CourseManager :: get_target_of_linked_course($course_system_code);
+			$is_subscribed_in_target_course = CourseManager :: is_user_subscribed_in_course(api_get_user_id(), $target_course_code);
+			if ($is_subscribed_in_target_course) {
+				return; //do not display this course entry
+			}
+		}
+		$has_virtual_courses = CourseManager :: has_virtual_courses_from_code($course_system_code, api_get_user_id());
+		if ($has_virtual_courses) {
+			$return_result = CourseManager :: determine_course_title_from_course_info(api_get_user_id(), $course_info);
+			$course_display_title = $return_result['title'];
+			$course_display_code = $return_result['code'];
+		} else {
+			$course_display_title = $course_title;
+			$course_display_code = $course_visual_code;
+		}
+		$s_course_status=$my_course['s'];
+		$s_htlm_status_icon="";
+	
+		if ($s_course_status==1) {
+			$s_htlm_status_icon=Display::return_icon('teachers.gif', get_lang('Teacher'));
+		}
+		if ($s_course_status==2) {
+			$s_htlm_status_icon=Display::return_icon('coachs.gif', get_lang('GeneralCoach'));
+		}
+		if ($s_course_status==5) {
+			$s_htlm_status_icon=Display::return_icon('students.gif', get_lang('Student'));
+		}
+	
+		//display course entry
+		$result .= '<div id="div_'.$count.'">';
+		//$result .= '<a id="btn_'.$count.'" href="#" onclick="toogle_function(this,\''.$course_database.'\')">';
+		$result .= '<h2><img src="../img/nolines_plus.gif" id="btn_'.$count.'" onclick="toogle_function(this,\''.$course_database.'\' )">';
+		$result .= $s_htlm_status_icon;
+	
+		//show a hyperlink to the course, unless the course is closed and user is not course admin
+		if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
+			$result .= '<a href="javascript:void(0)" id="ln_'.$count.'"  onclick=toogle_function(this,\''.$course_database.'\');>&nbsp;'.$course_title.'</a></h2>';
+			/*
+			if(api_get_setting('use_session_mode')=='true' && !$nosession) {
+				if(empty($my_course['id_session'])) {
+					$my_course['id_session'] = 0;
+				}
+				if($user_in_course_status == COURSEMANAGER || ($date_start <= $now && $date_end >= $now) || $date_start=='0000-00-00') {
+					//$result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$my_course['id_session'].'">'.$course_display_title.'</a>';
+					$result .= '<a href="#">'.$course_display_title.'</a>';
+				}
+			} else {
+				//$result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/">'.$course_display_title.'</a>';
+				$result .= '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/">'.$course_display_title.'</a>';
+			}*/
+		} else {
+			$result .= $course_display_title." "." ".get_lang('CourseClosed')."";
+		}
+		// show the course_code and teacher if chosen to display this
+		// we dont need this!
+		/*
+				if (api_get_setting('display_coursecode_in_courselist') == 'true' OR api_get_setting('display_teacher_in_courselist') == 'true') {
+					$result .= '<br />';
+				}
+				if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+					$result .= $course_display_code;
+				}
+				if (api_get_setting('display_coursecode_in_courselist') == 'true' AND api_get_setting('display_teacher_in_courselist') == 'true') {
+					$result .= ' &ndash; ';
+				}
+				if (api_get_setting('display_teacher_in_courselist') == 'true') {
+					$result .= $course_teacher;
+					if(!empty($course_teacher_email)) {
+						$result .= ' ('.$course_teacher_email.')';
+					}
+				}
+		*/
+		$current_course_settings = CourseManager :: get_access_settings($my_course['k']);
+		// display the what's new icons
+		//	$result .= show_notification($my_course);
+		if ((CONFVAL_showExtractInfo == SCRIPTVAL_InCourseList || CONFVAL_showExtractInfo == SCRIPTVAL_Both) && $nbDigestEntries > 0) {
+			reset($digest);
+			$result .= '<ul>';
+			while (list ($key2) = each($digest[$thisCourseSysCode])) {
+				$result .= '<li>';
+				if ($orderKey[1] == 'keyTools') {
+					$result .= "<a href=\"$toolsList[$key2] [\"path\"] $thisCourseSysCode \">";
+					$result .= "$toolsList[$key2][\"name\"]</a>";
+				} else {
+					$result .= format_locale_date(CONFVAL_dateFormatForInfosFromCourses, strtotime($key2));
+				}
+				$result .= '</li>';
+				$result .= '<ul>';
+				reset($digest[$thisCourseSysCode][$key2]);
+				while (list ($key3, $dataFromCourse) = each($digest[$thisCourseSysCode][$key2])) {
+					$result .= '<li>';
+					if ($orderKey[2] == 'keyTools') {
+						$result .= "<a href=\"$toolsList[$key3] [\"path\"] $thisCourseSysCode \">";
+						$result .= "$toolsList[$key3][\"name\"]</a>";
+					} else {
+						$result .= format_locale_date(CONFVAL_dateFormatForInfosFromCourses, strtotime($key3));
+					}
+					$result .= '<ul compact="compact">';
+					reset($digest[$thisCourseSysCode][$key2][$key3]);
+					while (list ($key4, $dataFromCourse) = each($digest[$thisCourseSysCode][$key2][$key3])) {
+						$result .= '<li>';
+						$result .= htmlspecialchars(substr(strip_tags($dataFromCourse), 0, CONFVAL_NB_CHAR_FROM_CONTENT));
+						$result .= '</li>';
+					}
+					$result .= '</ul>';
+					$result .= '</li>';
+				}
+				$result .= '</ul>';
+				$result .= '</li>';
+			}
+			$result .= '</ul>';
+		}
+		$result .= '</li>';
+		$result .= '</div>';
+	
+		if (api_get_setting('use_session_mode')=='true' && !$nosession) {
+			$session = '';
+			$active = false;
+			if (!empty($my_course['session_name'])) {
+	
+				// Request for the name of the general coach
+				$sql = 'SELECT lastname, firstname
+						FROM '.$tbl_session.' ts  LEFT JOIN '.$main_user_table .' tu
+						ON ts.id_coach = tu.user_id
+						WHERE ts.id='.(int) $my_course['id_session']. ' LIMIT 1';
+				$rs = Database::query($sql, __FILE__, __LINE__);
+				$sessioncoach = Database::store_result($rs);
+				$sessioncoach = $sessioncoach[0];
+	
+				$session = array();
+				$session['title'] = $my_course['session_name'];
+				if ( $my_course['date_start']=='0000-00-00' ) {
+					$session['dates'] = get_lang('WithoutTimeLimits');
+					if ( api_get_setting('show_session_coach') === 'true' ) {
+						$session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($sessioncoach['firstname'], $sessioncoach['lastname']);
+					}
+					$active = true;
+				} else {
+					$session ['dates'] = ' - '.get_lang('From').' '.$my_course['date_start'].' '.get_lang('To').' '.$my_course['date_end'];
+					if ( api_get_setting('show_session_coach') === 'true' ) {
+						$session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($sessioncoach['firstname'], $sessioncoach['lastname']);
+					}
+					$active = ($date_start <= $now && $date_end >= $now)?true:false;
+				}
+			}
+			$output = array ($my_course['user_course_cat'], $result, $my_course['id_session'], $session, 'active'=>$active);
+		} else {
+			$output = array ($my_course['user_course_cat'], $result);
+		}
+		//$my_course['creation_date'];
+		return $output;
+	}
+	
+	public static function show_social_menu() {
+		echo '<div class="actions">';
+			echo '<a href="/main/social/profile.php">'.Display::return_icon('shared_profile.png').' '.get_lang('MySharedProfile').'</a>';			
+			echo '<a href="/main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
+			echo '<a href="/main/social/friends.php">'.Display::return_icon('lp_users.png').' '.get_lang('Friends').'</a>';
+			echo '<a href="/main/social/invitations.php">'.Display::return_icon('lp_users.png').' '.get_lang('Invitations').'</a>';
+			echo '<a href="/main/social/groups.php">'.Display::return_icon('group.gif').' '.get_lang('MyGroups').'</a>';
+			echo '<a href="/main/social/search.php">'.Display::return_icon('search.gif').' '.get_lang('Search').'</a>';	
+			echo '<span style="float:right; padding-top:7px;">'.
+				 '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
+				 '</span>';		 
+		echo '</div>';
 	}
 }

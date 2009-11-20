@@ -23,9 +23,9 @@ if (isset($_POST['is_my_friend'])) {
 }
 
 if (isset($_POST['friend_id'])) {
-	UserFriend::register_friend ((int)$the_current_user_id,(int)$my_current_friend,(int)$relation_type);
-	UserFriend::register_friend ((int)$my_current_friend,(int)$the_current_user_id,(int)$relation_type);
-	UserFriend::invitation_accepted ((int)$my_current_friend,(int)$the_current_user_id);
+	SocialManager::register_friend ((int)$the_current_user_id,(int)$my_current_friend,(int)$relation_type);
+	SocialManager::register_friend ((int)$my_current_friend,(int)$the_current_user_id,(int)$relation_type);
+	SocialManager::invitation_accepted ((int)$my_current_friend,(int)$the_current_user_id);
 	if (isset($_POST['is_my_friend'])) {
 		echo api_xml_http_response_encode(get_lang('AddedContactToList'));
 	} else {
@@ -34,14 +34,14 @@ if (isset($_POST['friend_id'])) {
 
 }
 if (isset($_POST['denied_friend_id'])) {
-	UserFriend::invitation_denied((int)$my_denied_current_friend,(int)$the_current_user_id);
+	SocialManager::invitation_denied((int)$my_denied_current_friend,(int)$the_current_user_id);
 	Display::display_confirmation_message(api_xml_http_response_encode(get_lang('InvitationDenied')));
 }
 if (isset($_POST['delete_friend_id'])) {
-	UserFriend::removed_friend((int)$my_delete_friend);
+	SocialManager::removed_friend((int)$my_delete_friend);
 }
 if(isset($_POST['user_id_friend_q']) && isset($_POST['type_friend_q'])) {
-	UserFriend::qualify_friend((int)$friend_id_qualify,(int)$type_friend_qualify);
+	SocialManager::qualify_friend((int)$friend_id_qualify,(int)$type_friend_qualify);
 	echo api_xml_http_response_encode(get_lang('AttachContactsToGroupSuccesfuly'));
 }
 ?>

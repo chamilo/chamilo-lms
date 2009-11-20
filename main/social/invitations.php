@@ -6,8 +6,17 @@ require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'image.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
-$this_section = SECTION_MYPROFILE;
-$_SESSION['this_section']=$this_section;
+$this_section = SECTION_SOCIAL;
+
+$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
+
+Display :: display_header($tool_name, 'Groups');
+SocialManager::show_social_menu();
+echo '<div class="actions-title">';
+echo get_lang('Invitations');
+echo '</div>';
+	 
+	 
 api_block_anonymous_users();
 $request=api_is_xml_http_request();
 $language_variable=api_xml_http_response_encode(get_lang('PendingInvitations'));
@@ -115,3 +124,5 @@ cellpadding="0" cellspacing="0" bgcolor="#9DACBF">
 <br/>
 <?php
 }
+Display::display_footer();
+?>

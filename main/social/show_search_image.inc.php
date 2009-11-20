@@ -34,9 +34,9 @@ $list_path_friends=array();
 $user_id=api_get_user_id();
 $name_search=Security::remove_XSS($_POST['search_name_q']);
 if (isset($name_search) && $name_search!='undefined') {
-	$list_path_friends=UserFriend::get_list_path_web_by_user_id($user_id,null,$name_search);
+	$list_path_friends=SocialManager::get_list_path_web_by_user_id($user_id,null,$name_search);
 } else {
-	$list_path_friends=UserFriend::get_list_path_web_by_user_id($user_id);
+	$list_path_friends=SocialManager::get_list_path_web_by_user_id($user_id);
 }
 $friend_html='';
 $number_of_images=8;
@@ -64,7 +64,7 @@ if (count($list_path_friends)!=0) {
 			if ($list_friends_file[$j]<>"") {
 				$user_info=api_get_user_info($list_friends_id[$j]);
 				$user_name=api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName']));
-				$friends_profile = UserFriend::get_picture_user($list_friends_id[$j], $list_friends_file[$j], 92);
+				$friends_profile = SocialManager::get_picture_user($list_friends_id[$j], $list_friends_file[$j], 92);
 				$friend_html.='<div onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$list_friends_id[$j].'  >
 				<span><center><img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$list_friends_id[$j].'" title="'.$user_name.'" onclick=load_thick(\'qualify_contact.inc.php?path_user="'.urlencode($list_friends_dir[$j].$list_friends_file[$j]).'&amp;id_user="'.$list_friends_id[$j].'"\',"") /></center></span>
 				<img onclick="delete_friend (this)" id=img_'.$list_friends_id[$j].' src="../img/blank.gif" alt="" title=""  class="image-delete" /> <center class="friend">'.$user_name.'</center></div>';

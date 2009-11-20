@@ -1,26 +1,5 @@
 <?php // $Id: index.php 22269 2009-07-21 15:06:15Z juliomontoya $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 /**
 ==============================================================================
 *	Index of the admin tools
@@ -96,7 +75,11 @@ if (api_is_platform_admin()) {
 		<li><a href="user_add.php">		<?php echo get_lang('AddUsers') ?></a></li>
 		<li><a href="user_export.php">	<?php echo get_lang('ExportUserListXMLCSV') ?></a></li>
 		<li><a href="user_import.php">	<?php echo get_lang('ImportUserListXMLCSV') ?></a></li>
+		<?php if (api_get_setting('allow_social_tool')=='true') { ?>
+			<li><a href="group_add.php">	<?php echo get_lang('AddGroups') ?></a></li>  
+			<li><a href="group_list.php">	<?php echo get_lang('GroupList') ?></a></li>		
 		<?php
+		}
 		if(isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap'])>0){
 			?>
 			<!-- dynamic ldap code -->

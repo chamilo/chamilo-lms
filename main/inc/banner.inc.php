@@ -233,6 +233,16 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 			$menu_navigation['session_my_space'] = $possible_tabs['session_my_progress'];
 		}
 	}
+	
+	
+	// Social Networking 
+	//if (api_get_setting('show_tabs', 'social') == 'true') {
+	if (1) {
+		$navigation['social'] = $possible_tabs['social'];
+	} else{
+		$menu_navigation['social'] = $possible_tabs['social'];
+	}
+	
 
 
 	if(api_is_platform_admin(true)) {
@@ -520,6 +530,13 @@ function get_tabs() {
 		$navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH).'auth/my_progress.php';
 		$navigation['session_my_progress']['title'] = get_lang('MyProgress');
 	}
+	
+	// Social
+	if (api_get_setting('allow_social_tool')=='true') {
+			$navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/profile.php';
+			$navigation['social']['title'] = get_lang('SocialNetwork');
+	}
+	
 
 	// Platform administration
 	if (api_is_platform_admin(true)) {

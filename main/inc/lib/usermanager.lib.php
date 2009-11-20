@@ -639,13 +639,15 @@ class UserManager
 		} else {
 			$dir = $base.'upload/users/'.$user_id.'/';
 		}
-
 		if (empty($picture_filename) && $anonymous) {
 			return array('dir' => $base.'img/', 'file' => 'unknown.jpg');
 		}
-
 		return array('dir' => $dir, 'file' => $picture_filename);
 	}
+	
+	
+	
+	
 
 	/**
 	 * Creates new user pfotos in various sizes of a user, or deletes user pfotos.
@@ -2195,6 +2197,7 @@ class UserManager
         $image_array_sys = self::get_user_picture_path_by_id($user_id, 'system', false, true);
         $image_array = self::get_user_picture_path_by_id($user_id, 'web', false, true);
         $file = $image_array_sys['dir'].$size_picture.$picture_file;
+        
     	if (file_exists($file)) {
             $picture['file'] = $image_array['dir'].$size_picture.$picture_file;
 			$picture['style'] = '';
@@ -2206,10 +2209,10 @@ class UserManager
 			}
 		} else {
 			//$file = api_get_path(SYS_CODE_PATH).$patch_profile.$user_id.'/'.$picture_file;
-            $file = $image_array_sys['dir'].$picture_file;
-			if (file_exists($file)) {
+            $file = $image_array_sys['dir'].$picture_file;            
+			if (file_exists($file) && !is_dir($file)) {				
 				$picture['file'] = $image_array['dir'].$picture_file;
-			} else {
+			} else {				
 				$picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
 			}
 		}
@@ -2272,7 +2275,7 @@ class UserManager
 	 */
 	public static function get_tags($tag, $field_id, $return_format='json',$limit=10) {
 		// database table definition
-		$table_user_tag			= Database::get_main_table(TABLE_MAIN_USER_TAG);
+		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
 		$field_id = intval($field_id);			 //like '%$tag%' 
 		$limit = intval($limit);	
@@ -2295,10 +2298,10 @@ class UserManager
 	
 	public static function get_top_tags($field_id, $limit=100) {		
 		// database table definition
-		$table_user_tag			= Database::get_main_table(TABLE_MAIN_USER_TAG);
+		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
-		$field_id = intval($field_id);
-		$limit = intval($limit);	
+		$field_id 				= intval($field_id);
+		$limit 					= intval($limit);	
 		// all the information of the field
 		$sql = "SELECT count(*) count, tag FROM $table_user_tag_values  uv INNER JOIN $table_user_tag ut ON(ut.id = uv.tag_id)
 				WHERE field_id = $field_id GROUP BY tag_id ORDER BY count DESC LIMIT $limit";
@@ -2320,7 +2323,7 @@ class UserManager
 	 */
 	public static function get_user_tags($user_id,$field_id) {
 		// database table definition
-		$table_user_tag			= Database::get_main_table(TABLE_MAIN_USER_TAG);
+		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
 		$field_id = intval($field_id);
 		$user_id = intval($user_id);
@@ -2338,33 +2341,37 @@ class UserManager
 		return $return;
 	}
 	
-	/**
-	 * Searchs user with a specific tag
-	 * @param string the tag
-	 * @param int field id of the tag
+
+		/**
+	 * Get user's tags
+	 * @param int field_id
+	 * @param int user_id
 	 * @return array
 	 */
-	public static function get_all_user_tags($tag, $field_id, $from, $number_of_items) {
+	public static function get_user_tags_to_string($user_id,$field_id) {
 		// database table definition
-		$table_user_tag			= Database::get_main_table(TABLE_MAIN_USER_TAG);
+		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
 		$field_id = intval($field_id);
-		$tag = Database::escape_string($tag);
-		$from = intval($from);
-    	$number_of_items = intval($number_of_items);
-			
+		$user_id = intval($user_id);
+	
 		// all the information of the field
-		$sql = "SELECT u.user_id,u.username,firstname, lastname, tag FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.ID)
-					 INNER JOIN user u ON(uv.user_id =u.user_id)
-				WHERE field_id = $field_id AND tag LIKE '$tag%' ORDER BY tag";
-				
-		$sql .= " LIMIT $from,$number_of_items";				
+		$sql = "SELECT ut.id, tag,count FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.ID) 
+				WHERE field_id = $field_id AND user_id = $user_id ORDER BY tag";
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$return = array();
 		if (Database::num_rows($result)> 0) {
 			while ($row = Database::fetch_array($result,'ASSOC')) {
-				$return[$row['user_id']] = $row;
+				$return[$row['id']] = array('tag'=>$row['tag'],'count'=>$row['count']);
 			}
+		}
+		$user_tags = $return;
+		$tag_tmp = array();
+		foreach ($user_tags as $tag) {
+			$tag_tmp[] = '<a href="/main/search/?q='.$tag['tag'].'">'.$tag['tag'].'</a>';
+		}
+		if (is_array($user_tags) && count($user_tags)>0) {							
+			$return = implode(', ',$tag_tmp);
 		}
 		return $return;
 	}
@@ -2377,7 +2384,7 @@ class UserManager
 	 * @return int 0 if fails otherwise the tag id
 	 */
 	public function get_tag_id($tag, $field_id) {
-		$table_user_tag			= Database::get_main_table(TABLE_MAIN_USER_TAG);
+		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$tag = Database::escape_string($tag);
 		$field_id = intval($field_id);
 		//with COLLATE latin1_bin to select query in a case sensitive mode  
@@ -2398,7 +2405,7 @@ class UserManager
 	 * @return int 0 if fails otherwise the tag id
 	 */
 	public function get_tag_id_from_id($tag_id, $field_id) {
-		$table_user_tag			= Database::get_main_table(TABLE_MAIN_USER_TAG);
+		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$tag_id = intval($tag_id);
 		$field_id = intval($field_id);
 		$sql = "SELECT id FROM $table_user_tag WHERE id = '$tag_id' AND field_id = $field_id";
@@ -2421,7 +2428,7 @@ class UserManager
 	 */
 	public function add_tag($tag, $user_id, $field_id) {
 		// database table definition
-		$table_user_tag			= Database::get_main_table(TABLE_MAIN_USER_TAG);
+		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
 		$tag = Database::escape_string($tag);
 		$user_id = intval($user_id);
@@ -2483,7 +2490,7 @@ class UserManager
 	 */
 	public function delete_user_tags($user_id, $field_id) {
 		// database table definition
-		$table_user_tag			= Database::get_main_table(TABLE_MAIN_USER_TAG);
+		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);	
 		$tags = UserManager::get_user_tags($user_id, $field_id);		
 		//echo '<pre>';var_dump($tags);
@@ -2518,5 +2525,193 @@ class UserManager
 			UserManager::add_tag($tags,$user_id, $field_id);
 		}
 		return true;
-	}	
+	}
+	
+	
+	/**
+	 * Searchs an user (tags, firstname, lastname and email )
+	 * @param string the tag
+	 * @param int field id of the tag
+	 * @return array
+	 */
+	public static function get_all_user_tags($tag, $field_id = 0, $from=0, $number_of_items=10) {
+		// database table definition
+		
+		$user_table 			= Database::get_main_table(TABLE_MAIN_USER);
+		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
+		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
+		$field_id = intval($field_id);
+		$tag = Database::escape_string($tag);
+		$from = intval($from);
+    	$number_of_items = intval($number_of_items);
+    	$where_field = "";
+		if ($field_id != 0) {
+			$where_field = " field_id = $field_id AND ";
+		}
+		// all the information of the field
+		 $sql = "SELECT u.user_id,u.username,firstname, lastname, email, tag, picture_uri FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.id)
+				INNER JOIN $user_table u ON(uv.user_id =u.user_id)
+				WHERE $where_field tag LIKE '$tag%' ORDER BY tag";
+				
+		$sql .= " LIMIT $from,$number_of_items";
+		
+		$result = Database::query($sql, __FILE__, __LINE__);
+		$return = array();
+		if (Database::num_rows($result)> 0) {
+			while ($row = Database::fetch_array($result,'ASSOC')) {
+				$return[$row['user_id']] = $row;
+			}
+		}
+		 
+		$keyword = $tag;
+		$sql = "SELECT u.user_id, u.username, firstname, lastname, email, picture_uri FROM $user_table u";
+		global $_configuration;
+		if ($_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+			$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+			$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
+		}
+		
+		if (isset ($keyword)) {
+				$keyword = Database::escape_string($keyword);
+				//OR u.official_code LIKE '%".$keyword."%' 
+				// OR u.email LIKE '%".$keyword."%'
+				$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%'  )";
+			}
+		$keyword_active = true;
+		//only active users
+		if ($keyword_active) {
+			$sql .= " AND u.active='1'";
+		} 
+	
+	    // adding the filter to see the user's only of the current access_url
+		if ($_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+	    		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
+	    }
+		$direction = 'ASC';
+	    if (!in_array($direction, array('ASC','DESC'))) {
+	    	$direction = 'ASC';
+	    }
+	    
+	    $column = intval($column);
+	    $from = intval($from);
+	    $number_of_items = intval($number_of_items);
+	
+		//$sql .= " ORDER BY col$column $direction ";
+		$sql .= " LIMIT $from,$number_of_items";
+
+		$res = Database::query($sql, __FILE__, __LINE__);
+		if (Database::num_rows($res)> 0) {
+			while ($row = Database::fetch_array($res,'ASSOC')) { 
+				if (!in_array($row['user_id'], $return)) {			
+					$return[$row['user_id']] = $row;
+				}
+			}
+		}
+		return $return;
+	}
+	
+	/**
+	 * Show the search form
+	 * @param string the value of the search box
+	 * 
+	 */
+	public function get_search_form($query) {
+		echo'<form method="get" action="/main/social/search.php">
+
+		<table cellspacing="0" cellpadding="0" id="SearchTable">
+		<tbody><tr>
+		<td>
+			<div id="SearchQueryChunk">
+			<div id="SearchQueryNav">
+				<b>Search</b > (Users, Groups)				
+			</div>
+			<div>
+				<input type="text" size="30" value="'.Security::remove_XSS($query).'" tabindex="1" id="standard_q" name="q"/>				
+				<input type="submit" value="search"/>
+			</div>					
+		</td>
+		</tr>
+		</tbody></table></form>';
+	}
+	//deprecated
+	public function get_public_users($keyword, $from = 0, $number_of_items= 20, $column=2, $direction='ASC') {	
+			
+			$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
+			$sql = "SELECT
+		                 u.user_id				AS col0,
+		                 u.official_code		AS col1,
+						 ".(api_is_western_name_order()
+		                 ? "u.firstname 			AS col2,
+		                 u.lastname 			AS col3,"
+		                 : "u.lastname 			AS col2,
+		                 u.firstname 			AS col3,")."
+		                 u.username				AS col4,
+		                 u.email				AS col5,
+		                 u.status				AS col6,
+		                 u.active				AS col7,
+		                 u.user_id				AS col8 ".
+		                 ", u.expiration_date      AS exp ".
+		            " FROM $user_table u ";
+		
+		    // adding the filter to see the user's only of the current access_url
+		    global $_configuration;
+		    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+		    	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+		    	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
+		    }
+		
+			if (isset ($keyword)) {
+				$keyword = Database::escape_string($keyword);
+				//OR u.official_code LIKE '%".$keyword."%' 
+				$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%'  OR u.email LIKE '%".$keyword."%' )";
+			}
+			$keyword_active = true;
+			//only active users
+			if ($keyword_active) {
+				$sql .= " AND u.active='1'";
+			} 
+		
+		    // adding the filter to see the user's only of the current access_url
+			if ($_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+		    		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
+		    }
+		
+		    if (!in_array($direction, array('ASC','DESC'))) {
+		    	$direction = 'ASC';
+		    }
+		    
+		    $column = intval($column);
+		    $from = intval($from);
+		    $number_of_items = intval($number_of_items);
+		
+			$sql .= " ORDER BY col$column $direction ";
+			$sql .= " LIMIT $from,$number_of_items";
+			$res = Database::query($sql, __FILE__, __LINE__);
+		
+			$users = array ();
+		    $t = time();
+			while ($user = Database::fetch_row($res)) {
+		        if ($user[7] == 1 && $user[9] != '0000-00-00 00:00:00') {
+		            // check expiration date
+		            $expiration_time = convert_mysql_date($user[9]);
+		            // if expiration date is passed, store a special value for active field
+		            if ($expiration_time < $t) {
+		        	   $user[7] = '-1';
+		            }
+		        }
+		        // forget about the expiration date field		      
+		        $users[] = array($user[0],$user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7],$user[8]);
+			}
+			return $users;
+		}
+	function show_menu(){
+		echo '<div class="actions">';
+		echo '<a href="/main/auth/profile.php">'.Display::return_icon('profile.png').' '.get_lang('PersonalData').'</a>';
+		echo '<a href="/main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.	get_lang('Inbox').'</a>';
+		echo '<a href="/main/messages/outbox.php">'.Display::return_icon('outbox.png').' '.	get_lang('Outbox').'</a>';
+		echo '<span style="float:right; padding-top:7px;">'.
+			 '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
+			 '</span>';		 
+		echo '</div>';
+	}
 }

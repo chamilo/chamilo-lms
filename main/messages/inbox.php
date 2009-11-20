@@ -136,35 +136,45 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 	}
 }
 
-if ($request===false) {
-	$interbreadcrumb[]= array (
-		'url' => '#',
-		'name' => get_lang('Messages')
-	);
-	$interbreadcrumb[]= array (
-		'url' => 'outbox.php',
-		'name' => get_lang('Outbox')
-	);
-	$interbreadcrumb[]= array (
-		'url' => 'inbox.php',
-		'name' => get_lang('Inbox')
-	);
-	Display::display_header('');
-	$link_ref="new_message.php";
-} else {
-	$link_ref="../messages/new_message.php?rs=1";
-}
+
+$link_ref="new_message.php";
+
 $table_message = Database::get_main_table(TABLE_MESSAGE);
-/*echo '<div id="div_content_messages">&nbsp;&nbsp;';
+
+
 //api_display_tool_title(api_xml_http_response_encode(get_lang('Inbox')));
-echo '<div class=actions>';
-echo '<a onclick="compose_and_show_message(\'show\',\'1\')" href="javascript:void(0)">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
-echo '</div>';
-echo '</div>';*/
-if (!isset($_GET['del_msg'])) {
+if ($_GET['f']=='social') {
+	$this_section = SECTION_SOCIAL;
+	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Profile'));
+	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));	
+} else {
+	$this_section = SECTION_MYPROFILE;
+	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Profile'));
+	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));
+}
+
+Display::display_header('');
+
+if ($_GET['f']=='social') {
+	require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+	SocialManager::show_social_menu();
+	echo '<div class="actions-title">';
+	echo get_lang('Messages');
+	echo '</div>';
+} else {
+	//comes from normal profile
+	echo '<div class=actions>';
+		echo '<a href="/main/messages/inbox.php">'.Display::return_icon('inbox.png',api_xml_http_response_encode(get_lang('Inbox'))).api_xml_http_response_encode(get_lang('Inbox')).'</a>';
+		echo '<a href="/main/messages/new_message.php">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
+		echo '<a href="/main/messages/outbox.php">'.Display::return_icon('outbox.png',api_xml_http_response_encode(get_lang('Outbox'))).api_xml_http_response_encode(get_lang('Outbox')).'</a>';
+	echo '</div>';	
+}
+	
+
+if (!isset($_GET['del_msg'])) {	
 	inbox_display();
 } else {
-	$num_msg = $_POST['total'];
+	$num_msg = intval($_POST['total']);
 	for ($i=0;$i<$num_msg;$i++) {
 		if($_POST[$i]) {
 			//the user_id was necesarry to delete a message??

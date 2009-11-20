@@ -17,18 +17,8 @@
 
 // Language files that should be included.
 $language_file = array('registration', 'messages', 'userInfo');
-
 $cidReset = true;
-
 require_once '../inc/global.inc.php';
-
-if (!isset($_GET['show'])) {
-	 if (api_get_setting('allow_social_tool') == 'true' || api_get_setting('allow_message_tool') == 'true') {
-		header('Location:../social/index.php');
-		exit;
-	}
-}
-
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 $this_section = SECTION_MYPROFILE;
@@ -39,7 +29,6 @@ if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user[
 }
 
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
@@ -714,15 +703,23 @@ Display :: display_header('');
 
 if (api_get_setting('extended_profile') == 'true') {
 	echo '<div class="actions">';
+	
+	if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
+		echo '<a href="/main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
+	}
+	if (api_get_setting('allow_message_tool') == 'true') {
+		echo '<a href="/main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
+	}	
 	$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
+	echo '<span style="float:right; padding-top:7px;">';
+				 
 	if (isset($_GET['type']) && $_GET['type'] == 'extended') {
 		echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
 	} else {
 		echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</a>';
 	}
-	if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
-		echo '<a href="../social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
-	}
+	echo '</span>';
+
 	echo '</div>';
 }
 
@@ -797,7 +794,7 @@ if (api_get_setting('allow_message_tool') == 'true') {
 	$number_of_outbox_message = MessageManager::get_number_of_messages_sent();
 	$cant_out_box = ' ('.$number_of_outbox_message.')';
 	$cant_msg = ' ('.$number_of_new_messages.')';
-	$number_of_new_messages_of_friend = UserFriend::get_message_number_invitation_by_user_id(api_get_user_id());
+	$number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
 	//echo '<div class="message-view" style="display:none;">'.get_lang('ViewMessages').'</div>';
 	echo '<div class="message-content">
 			<h2 class="message-title">'.get_lang('Messages').'</h2>

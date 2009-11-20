@@ -219,4 +219,4 @@ include(api_get_path(LIBRARY_PATH).'/javascript/email_links.lib.js.php');
 
 <?php
 //  Banner
-include(api_get_path(INCLUDE_PATH)."banner.inc.php");
+include api_get_path(INCLUDE_PATH).'banner.inc.php';

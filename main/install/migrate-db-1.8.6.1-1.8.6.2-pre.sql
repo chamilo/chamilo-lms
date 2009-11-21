@@ -47,6 +47,13 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('go_to_course_after_login', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('go_to_course_after_login', 'false', 'No');
 
+CREATE TABLE IF NOT EXISTS message_attachment (id int NOT NULL AUTO_INCREMENT, path varchar(255) NOT NULL, comment text, size int NOT NULL default 0, message_id int NOT NULL, filename varchar(255) NOT NULL, PRIMARY KEY(id));
+
+CREATE TABLE `group` (id int NOT NULL AUTO_INCREMENT, name varchar(255) NOT NULL, description varchar(255) NOT NULL, picture_uri varchar(255) NOT NULL, url varchar(255) NOT NULL, visibility int NOT NULL, updated_on varchar(255) NOT NULL, created_on varchar(255) NOT NULL, PRIMARY KEY (id));
+
+CREATE TABLE group_rel_tag (id int NOT NULL AUTO_INCREMENT, tag_id int NOT NULL, group_id int NOT NULL, PRIMARY KEY (id));
+
+CREATE TABLE group_rel_user (id int NOT NULL AUTO_INCREMENT, group_id int NOT NULL, user_id int NOT NULL, relation_type int NOT NULL, PRIMARY KEY (id));
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';

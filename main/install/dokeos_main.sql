@@ -2318,3 +2318,16 @@ CREATE TABLE group_rel_user (
   PRIMARY KEY (id)
 );
 
+--
+-- Table structure for table message attachment
+--
+
+CREATE TABLE IF NOT EXISTS message_attachment (
+  id int NOT NULL AUTO_INCREMENT,
+  path varchar(255) NOT NULL,
+  comment text,
+  size int NOT NULL default 0,
+  message_id int NOT NULL,
+  filename varchar(255) NOT NULL,
+  PRIMARY KEY  (id)
+)

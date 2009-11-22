@@ -245,7 +245,7 @@ if (!isset($_SESSION['expired_time'])) {
 	 $_SESSION['expired_time'] = $clock_expired_time;
      $_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);
 } else {
-  	$plugin_expired_time =  $_SESSION['end_expired_time'];
+  	$plugin_expired_time = $_SESSION['end_expired_time'];
 }
 
 
@@ -722,7 +722,6 @@ if ($formSent) {
 
 					//clean incomplete
 					$update_query = 'UPDATE ' . $stat_table . ' SET ' . "status = '', data_tracking='', exe_date = '" . date('Y-m-d H:i:s') . "' $sql_exe_result " . ' WHERE exe_id = ' . Database::escape_string($exe_id);
-					//error_log($update_query);
 					Database::query($update_query, __FILE__, __LINE__);
 				}
 				header("Location: exercise_show.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
@@ -974,10 +973,10 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 						}
 						// -->
 						</script>";
-	Display :: display_header($nameTools, "Exercise");
-		if (!api_is_allowed_to_session_edit() ) {
-			Display :: display_warning_message(get_lang('SessionIsReadOnly'));
-		}
+	    Display :: display_header($nameTools, "Exercise");
+	if (!api_is_allowed_to_session_edit() ) {
+		Display :: display_warning_message(get_lang('SessionIsReadOnly'));
+	}
 } else {
 	if (empty ($charset)) {
 		$charset = 'ISO-8859-15';

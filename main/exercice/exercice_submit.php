@@ -235,15 +235,15 @@ $total_minutes = $exercise_row["expired_time"];
 
 $total_seconds = $total_minutes*60;
 $current_timestamp = time();
-$expected_time = $current_timestamp+$total_seconds;
+$expected_time = $current_timestamp + $total_seconds;
 
-$plugin_expired_time=date('M d, Y H:i:s',$expected_time);
-$clock_expired_time=date('Y-m-d H:i:s',$expected_time);
+$plugin_expired_time = date('M d, Y H:i:s',$expected_time);
+$clock_expired_time = date('Y-m-d H:i:s',$expected_time);
 
 
 if (!isset($_SESSION['expired_time'])) {
-	  $_SESSION['expired_time'] = $clock_expired_time;
-    $_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);
+	 $_SESSION['expired_time'] = $clock_expired_time;
+     $_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);
 } else {
   	$plugin_expired_time =  $_SESSION['end_expired_time'];
 }

@@ -397,6 +397,19 @@ function event_link($link_id)
 function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$learnpath_id=0,$learnpath_item_id=0, $duration)
 {
 	if ($exeid!='') {
+
+    $current_time = time();
+    if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
+    	$expired_date = $_SESSION['expired_time'];
+    	$expired_time = strtotime($expired_date);
+    }
+
+    //Validation in case of fraud
+    $total_time_allowed = $expired_time + 30;
+    if ($total_time_allowed < $current_time) {
+    	$score = 0;
+    }
+  
 		$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		$reallyNow = time();
 		$sql = "UPDATE $TABLETRACK_EXERCICES SET
@@ -410,6 +423,7 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$l
 				   exe_date= FROM_UNIXTIME(".$reallyNow."),status = '', data_tracking='',start_date =FROM_UNIXTIME(".Database::escape_string($_SESSION['exercice_start_date']).")
 				 WHERE exe_id = '".Database::escape_string($exeid)."'";
 		$res = @Database::query($sql,__FILE__,__LINE__);
+		unset($_SESSION['expired_time']);
 		return $res;
 	} else
 		return false;
@@ -445,16 +459,16 @@ function create_event_exercice($exo_id)
 		$row = Database::fetch_array($sql);
 		return $row['exe_id'];
 	}
-    if (isset($_SESSION['expired_time'])) {
+    if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
     	$expired_date = $_SESSION['expired_time'];
     } else {
     	$expired_date = '0000-00-00 00:00:00';
     }
+    
 	$sql = "INSERT INTO $TABLETRACK_EXERCICES ( exe_user_id, exe_cours_id,expired_time_control,exe_exo_id)
 			VALUES (  ".$user_id.",  '".$_cid."' ,'".$expired_date."','".$exo_id."')";
 	$res = @Database::query($sql,__FILE__,__LINE__);
 	$id= Database::insert_id();
-  unset($_SESSION['expired_time']);
 	return $id;
 }
 
@@ -479,6 +493,20 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 
 	global $_configuration, $_user, $_cid;
 	$TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+    $current_time = time();
+    if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
+    	$expired_date = $_SESSION['expired_time'];
+    	$expired_time = strtotime($expired_date);
+    }
+
+    //Validation in case of fraud
+    $total_time_allowed = $expired_time + 30;
+    if ($total_time_allowed < $current_time) {
+    	$score = 0;
+    	$answer = 0;
+    	$j = 0;
+    }
 
 	// if tracking is disabled record nothing
 	if (!$_configuration['tracking_enabled'])
@@ -557,6 +585,17 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
 		return 0;
 	}
 
+    $current_time = time();
+    if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
+    	$expired_date = $_SESSION['expired_time'];
+    	$expired_time = strtotime($expired_date);
+    }
+
+    //Validation in case of fraud
+    $total_time_allowed = $expired_time + 30;
+    if ($total_time_allowed < $current_time) {
+    	$correct = 0;
+    }
 	$tbl_track_e_hotspot = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 	$sql = "INSERT INTO $tbl_track_e_hotspot " .
 			"(hotspot_user_id, hotspot_course_code, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate)".

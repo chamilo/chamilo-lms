@@ -2094,11 +2094,11 @@ span.radio {
 }
 /*Exercice timer*/
 #square{
-  padding:15px;
+  padding:5px;
   background-color:#EEEEEE;
   border:1px solid #CCCCCC;
-  margin-right : 25px;
-  width : 190px;margin-bottom:10px;
+  margin-right : 24px;
+  width : 155px;margin-bottom:5px;
 }
 #wrapper-clock{
   width:100%;
@@ -2107,7 +2107,7 @@ span.radio {
 .count_down{
   padding: 3px;
   font-family:Georgia, "Times New Roman", Times, serif;
-  font-size:38px;
+  font-size:30px;
   font-weight:bold;
   color:#222;
 }

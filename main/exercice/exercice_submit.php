@@ -703,8 +703,26 @@ if ($formSent) {
 				header("Location: exercise_result.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
 			} else {
 				if ($exe_id != '') {
+					//Verify if the current test is fraudulent
+				    $current_time = time();
+				    if (isset($_SESSION['expired_time'])) {
+				    	$expired_date = $_SESSION['expired_time'];
+				    	$expired_time = strtotime($expired_date);
+					    
+					    //Validation in case of fraud
+					    $total_time_allowed = $expired_time + 30;
+					    if ($total_time_allowed < $current_time) {
+					    	$sql_exe_result = ",exe_result = 0";
+					    }
+				    				    	
+				    } else {
+				    	$sql_exe_result = "";
+				    }
+				
+
 					//clean incomplete
-					$update_query = 'UPDATE ' . $stat_table . ' SET ' . "status = '', data_tracking='', exe_date = '" . date('Y-m-d H:i:s') . "' " . ' WHERE exe_id = ' . Database::escape_string($exe_id);
+					$update_query = 'UPDATE ' . $stat_table . ' SET ' . "status = '', data_tracking='', exe_date = '" . date('Y-m-d H:i:s') . "' $sql_exe_result " . ' WHERE exe_id = ' . Database::escape_string($exe_id);
+					//error_log($update_query);
 					Database::query($update_query, __FILE__, __LINE__);
 				}
 				header("Location: exercise_show.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");

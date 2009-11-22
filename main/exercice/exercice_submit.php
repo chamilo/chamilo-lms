@@ -997,7 +997,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 }
 //Timer control
 if ($exercise_row['expired_time'] != 0) { 
-  echo '<div align="right" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" class="count_down"></div></div></div>';
+  echo '<div align="right" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';
 }
 $exerciseTitle = api_parse_tex($exerciseTitle);
 echo "<h3>" . $exerciseTitle . "</h3>";

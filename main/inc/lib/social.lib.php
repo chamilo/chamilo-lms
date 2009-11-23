@@ -571,10 +571,13 @@ class SocialManager extends UserManager {
 			echo '<a href="/main/social/friends.php">'.Display::return_icon('lp_users.png').' '.get_lang('Friends').'</a>';
 			echo '<a href="/main/social/invitations.php">'.Display::return_icon('lp_users.png').' '.get_lang('Invitations').'</a>';
 			echo '<a href="/main/social/groups.php">'.Display::return_icon('group.gif').' '.get_lang('MyGroups').'</a>';
-			echo '<a href="/main/social/search.php">'.Display::return_icon('search.gif').' '.get_lang('Search').'</a>';	
+			echo '<a href="/main/social/search.php">'.Display::return_icon('search.gif').' '.get_lang('Search').'</a>';
+			echo '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';	
+			/*
 			echo '<span style="float:right; padding-top:7px;">'.
 				 '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
-				 '</span>';		 
+				 '</span>';
+			*/		 
 		echo '</div>';
 	}
 }

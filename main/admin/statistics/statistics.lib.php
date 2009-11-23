@@ -413,45 +413,44 @@ class Statistics
 		$form->add_textfield('date_diff',get_lang('Days'),true);
 		$form->addRule('date_diff','InvalidNumber','numeric');
 		$form->addElement('submit','ok',get_lang('Ok'));
-		$defaults['date_diff'] = 60;
+		if (!isset($_GET['date_diff'])) {
+			$defaults['date_diff'] = 60;
+		} else {
+			$defaults['date_diff'] = Security::Remove_XSS($_GET['date_diff']);
+		}
 		$form->setDefaults($defaults);
-		if($form->validate()) {
-			$form->display();
-			$values = $form->exportValues();
-			$date_diff = $values['date_diff'];
-			$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-			$sql = "SELECT * FROM $table GROUP BY access_cours_code HAVING access_cours_code <> '' AND DATEDIFF( NOW() , access_date ) >= ". $date_diff;
-			$res = Database::query($sql,__FILE__,__LINE__);
-			$number_of_courses = Database::num_rows($res);
-			$sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
-			$from = ($page_nr -1) * $per_page;
-			$sql .= ' LIMIT '.$from.','.$per_page;
-			echo '<p>'.get_lang('LastAccess').' &gt;= '.$date_diff.' '.get_lang('Days').'</p>';
-			$res = Database::query($sql, __FILE__, __LINE__);
-			if (Database::num_rows($res) > 0)
+		$form->display();
+		$values = $form->exportValues();
+		$date_diff = $values['date_diff'];
+		$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+		$sql = "SELECT * FROM $table GROUP BY access_cours_code HAVING access_cours_code <> '' AND DATEDIFF( NOW() , access_date ) <= ". $date_diff;
+		$res = Database::query($sql,__FILE__,__LINE__);
+		$number_of_courses = Database::num_rows($res);
+		$sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
+		$from = ($page_nr -1) * $per_page;
+		$sql .= ' LIMIT '.$from.','.$per_page;
+		echo '<p>'.get_lang('LastAccess').' &gt;= '.$date_diff.' '.get_lang('Days').'</p>';
+		$res = Database::query($sql, __FILE__, __LINE__);
+		if (Database::num_rows($res) > 0)
+		{
+			$courses = array ();
+			while ($obj = Database::fetch_object($res))
 			{
-				$courses = array ();
-				while ($obj = Database::fetch_object($res))
-				{
-					$course = array ();
-					$course[]= '<a href="'.api_get_path(WEB_PATH).'courses/'.$obj->access_cours_code.'">'.$obj->access_cours_code.' <a>';
-					$course[] = $obj->access_date;
-					$courses[] = $course;
-				}
-				$parameters['action'] = 'courselastvisit';
-				$parameters['date_diff'] = $date_diff;
-				$table_header[] = array ("Coursecode", true);
-				$table_header[] = array ("Last login", true);
-				Display :: display_sortable_table($table_header, $courses, array ('column'=>$column,'direction'=>$direction), array (), $parameters);
+				$course = array ();
+				$course[]= '<a href="'.api_get_path(WEB_PATH).'courses/'.$obj->access_cours_code.'">'.$obj->access_cours_code.' <a>';
+				$course[] = $obj->access_date;
+				$courses[] = $course;
 			}
-			else
-			{
-				echo get_lang('NoSearchResults');
-			}
+			$parameters['action'] = 'courselastvisit';
+			$parameters['date_diff'] = $date_diff;
+			$parameters['action'] = 'courselastvisit';
+			$table_header[] = array ("Coursecode", true);
+			$table_header[] = array ("Last login", true);
+			Display :: display_sortable_table($table_header, $courses, array ('column'=>$column,'direction'=>$direction), array (), $parameters);
 		}
 		else
 		{
-			$form->display();
+			echo get_lang('NoSearchResults');
 		}
 	}
 }

@@ -534,30 +534,19 @@ $msg_is_not_password = false;
 if (!empty($_SESSION['change_email'])) {
 	$msg_fail_changue_email= ($_SESSION['change_email'] == 'success');
 	unset($_SESSION['change_email']);
-}
-
-if (!empty($_SESSION['is_not_password'])) {
+} elseif (!empty($_SESSION['is_not_password'])) {
 	$msg_is_not_password = ($_SESSION['is_not_password'] == 'success');
 	unset($_SESSION['is_not_password']);
-}
-
-if (!empty($_SESSION['profile_update'])) {
+} elseif (!empty($_SESSION['profile_update'])) {
 	$update_success = ($_SESSION['profile_update'] == 'success');
 	unset($_SESSION['profile_update']);
-}
-
-if (!empty($_SESSION['image_uploaded'])) {
+} elseif (!empty($_SESSION['image_uploaded'])) {
 	$upload_picture_success = ($_SESSION['image_uploaded'] == 'success');
 	unset($_SESSION['image_uploaded']);
-}
-
-if (!empty($_SESSION['production_uploaded'])) {
-
+} elseif (!empty($_SESSION['production_uploaded'])) {
 	$upload_production_success = ($_SESSION['production_uploaded'] == 'success');
 	unset($_SESSION['production_uploaded']);
-
 } elseif (isset($_POST['remove_production'])) {
-
 	foreach (array_keys($_POST['remove_production']) as $production) {
 		UserManager::remove_user_production($_user['user_id'], urldecode($production));
 	}
@@ -566,7 +555,6 @@ if (!empty($_SESSION['production_uploaded'])) {
 	}
 	$form->removeElement('productions_list');
 	$file_deleted = true;
-
 } elseif ($form->validate()) {
 
 	$wrong_current_password = false;
@@ -711,14 +699,15 @@ if (api_get_setting('extended_profile') == 'true') {
 		echo '<a href="/main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
 	}	
 	$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
-	echo '<span style="float:right; padding-top:7px;">';
+	
+	//echo '<span style="float:right; padding-top:7px;">';
 				 
 	if (isset($_GET['type']) && $_GET['type'] == 'extended') {
 		echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
 	} else {
 		echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</a>';
 	}
-	echo '</span>';
+	//echo '</span>';
 
 	echo '</div>';
 }

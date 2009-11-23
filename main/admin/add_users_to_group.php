@@ -39,7 +39,7 @@ $tbl_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 $tool_name = get_lang('SubscribeUsersToGroup');
 $group_id = intval($_GET['id']);
 
-$add_type = 'single';
+$add_type = 'multiple';
 if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
@@ -210,13 +210,19 @@ if($_POST['form_sent']) {
 	$UserList			= $_POST['sessionUsersList'];
 	$ClassList			= $_POST['sessionClassesList'];
 	
+	$group_id			= intval($_POST['id']);
+	
 	if(!is_array($UserList)) {
 		$UserList=array();
 	}
 
 	if ($form_sent == 1) {
-		//added a parameter to send emails when registering a user
-	//	SessionManager::suscribe_users_to_session($id_session,$UserList,true,true);
+		
+		GroupPortalManager::delete_users($group_id);
+		$result = GroupPortalManager::add_users_to_groups($UserList, array($group_id));
+		
+		
+		//SessionManager::suscribe_users_to_session($id_session,$UserList,true,true);
 
 		//adding the session to the access_url_rel_session table
 		/*global $_configuration;
@@ -269,7 +275,7 @@ if ($ajax_search) {
 				WHERE access_url_id = $access_url_id
 				$order_clause";
 		}
-	}
+	}	
 	$result=Database::query($sql,__FILE__,__LINE__);
 	$Users=Database::store_result($result);
 	foreach ($Users as $user) {
@@ -332,14 +338,12 @@ if ($ajax_search) {
 				LEFT JOIN $tbl_session_rel_user
 				ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
 				$where_filter
-			$order_clause";
-			
-		} else {
-			
+			$order_clause";			
+		} else {			
 			$sql="SELECT  u.user_id, lastname, firstname, username, group_id
 				FROM $tbl_user u
 				LEFT JOIN $tbl_group_rel_user gu
-				ON (gu.user_id = u.user_id) WHERE gu.group_id = $group_id
+				ON (gu.user_id = u.user_id) AND gu.group_id = $group_id
 			$order_clause";
 		}
 		
@@ -364,14 +368,14 @@ if ($ajax_search) {
 			if($user['group_id'] != $group_id)
 				$nosessionUsersList[$user['user_id']] = $user ;
 		}
-		var_dump($nosessionUsersList);
+		
 		$user_anonymous=api_get_anonymous_id();
-	/*	foreach($nosessionUsersList as $key_user_list =>$value_user_list) {
+		foreach($nosessionUsersList as $key_user_list =>$value_user_list) {
 			if ($nosessionUsersList[$key_user_list]['user_id']==$user_anonymous) {
 				unset($nosessionUsersList[$key_user_list]);
 			}
-		}*/
-		
+		}
+
 		//filling the correct users in list
 		$sql="SELECT u.user_id, lastname, firstname, username, group_id
 			FROM $tbl_user u
@@ -392,6 +396,7 @@ if ($ajax_search) {
 				$order_clause";
 			}
 		}
+		
 		$result=Database::query($sql,__FILE__,__LINE__);
 		$Users=Database::store_result($result);
 		
@@ -402,7 +407,7 @@ if ($ajax_search) {
 		}
 		
 		foreach ($Users as $user) {
-			if($user['group_id'] == $group_id){
+			if($user['group_id'] == $group_id) {
 				$sessionUsersList[$user['user_id']] = $user;
 				if (array_key_exists($user['user_id'],$nosessionUsersList))
 		            unset($nosessionUsersList[$user['user_id']]);
@@ -411,25 +416,21 @@ if ($ajax_search) {
 }
 
 if ($add_type == 'multiple') {
-	//$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
-	//$link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
+	$link_add_type_unique = '<a href="'.api_get_self().'?id='.$group_id.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
+	$link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
 } else {
-	//$link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
-	//$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
-	/*
-	 * <div class="actions">
-	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>
-</div>
-	 */
+	$link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
+	$link_add_type_multiple = '<a href="'.api_get_self().'?id='.$group_id.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
-
-
 ?>
 
+<div class="actions">
+	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>
+</div>
 
 <?php echo '<div class="row"><div class="form_header">'.$tool_name.' ('.$session_info['name'].')</div></div><br/>'; ?>
 
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']); ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $group_id; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 
 <?php
 if ($add_type=='multiple') {
@@ -461,6 +462,7 @@ if ($add_type=='multiple') {
 ?>
 
 <input type="hidden" name="form_sent" value="1" />
+<input type="hidden" name="id" value="<?=$group_id?>" />
 <input type="hidden" name="add_type"  />
 
 <?php
@@ -537,7 +539,7 @@ if(!empty($errorMsg)) {
 	<?php
   }
   ?>
-	<br /><br /><br /><br /><br /><br />
+	<br /><br /><br /><br /><br />
   </td>
   <td align="center">
   <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:360px;">
@@ -559,13 +561,7 @@ unset($sessionUsersList);
 	<td colspan="3" align="center">
 		<br />
 		<?php
-		if(isset($_GET['add'])) {
-			echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('FinishSessionCreation').'</button>';
-        } else {
-            //@todo see that the call to "valide()" doesn't duplicate the onsubmit of the form (necessary to avoid delete on "enter" key pressed)
-			echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToGroup').'</button>';
-
-        }
+		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToGroup').'</button>';
 		?>
 	</td>
 </tr>

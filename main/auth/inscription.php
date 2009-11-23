@@ -380,6 +380,7 @@ if (api_get_setting('openid_authentication') == 'true' && !empty($_GET['openid']
 	$defaults['openid'] = Security::remove_XSS($_GET['openid']);
 }
 $defaults['status'] = STUDENT;
+$defaults = array_merge($defaults, $extra_data);
 $form->setDefaults($defaults);
 
 if ($form->validate()) {

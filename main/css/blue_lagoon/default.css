@@ -149,7 +149,7 @@ input.link_alike:hover {
 .coursestatusicons {
 	border: 0px solid #000;
 	float: left;
-	padding-right: 5px;
+	padding-right: 8px;
 	width: auto;
 }
 /* user_portal course list */
@@ -2120,7 +2120,13 @@ div.comments {
 	border-bottom:1px solid #999999;
 	border-top:1px solid #999999;
 	background-color:#efefef;
-	height:100%;
+	padding:2px;
+	margin-bottom: 5px;
+	vertical-align:middle;
+	float:left;
+	width:100%;
+}
+.content_table {
 	padding:2px;
 	margin-bottom: 5px;
 	vertical-align:middle;
@@ -2441,7 +2447,7 @@ button.upload {
 }
 
 .icon_image_content {
-	width:70px;
+	width:80px;
 	height:5em;
 	text-align: center;
 	padding-top: 3px;
@@ -2452,6 +2458,9 @@ button.upload {
 .question_menu {
 	list-style:none;
 	float:left;
+	padding:0px;
+	margin:-2px;
+	min-height:100px;
 }
 .question_menu li {
 	float:left;
@@ -2616,6 +2625,8 @@ input.arrowl {
 
 
 /* UI improvements */
+
+
 * {
 	outline :none;
 }
@@ -2640,4 +2651,17 @@ input, select, textarea {
 
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image:url(images/shadow.gif);
+}
+
+.independent_course_item a {
+	font-size:120%;
+}
+
+.session_course_item a {
+	font-size:120%;
+}
+
+
+#maincontent .courseslist li {
+	margin-bottom:8px;
 }

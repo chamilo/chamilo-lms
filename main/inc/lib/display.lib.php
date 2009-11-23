@@ -317,6 +317,7 @@ class Display {
 		$column =  0;
 		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;
 		$table = new SortableTableFromArray($content, $column, $default_items_per_page, $name);		
+		
 		if (is_array($query_vars)) {
 			$table->set_additional_parameters($query_vars);
 		}		

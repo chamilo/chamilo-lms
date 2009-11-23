@@ -34,8 +34,9 @@ define('FRAME','hidden');
 
 $language_file = array ('chat');
 
-require('../inc/global.inc.php');
-include_once '../inc/lib/course.lib.php';
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once 'chat_functions.lib.php';
 //$tbl_user=$mainDbName."`.`user";
 //$tbl_chat_connected=$_course['dbNameGlu'].'chat_connected';
@@ -69,9 +70,17 @@ if (!empty($group_id)) {
 	$extra_condition = $session_condition;
 }
 
-$documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
-$chatPath=$documentPath.'chat_files/';
+// get chat path
+$chatPath = '';
+$documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+if (!empty($group_id)) {
+	$group_info = GroupManager :: get_group_properties($group_id);
+	$chatPath=$documentPath.$group_info['directory'].'/chat_files/';
+} else {		
+	$chatPath=$documentPath.'/chat_files/';			
+}
 
+// get chat file
 $basename_chat = '';
 if (!empty($group_id)) {
 	$basename_chat = 'messages-'.$dateNow.'_gid-'.$group_id;

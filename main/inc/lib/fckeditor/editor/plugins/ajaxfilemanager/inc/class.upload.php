@@ -6,6 +6,7 @@
 	 * @since 22/April/2007
 	 *
 	 */
+	 require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';//from Dokeos
 class Upload
 {
 	var $fileType = ""; //the file type
@@ -203,7 +204,7 @@ class Upload
 		{
 			$this->fileBaseName = $fileBaseName;
 		}
-		$this->fileBaseName=str_replace(' ','_',$this->fileBaseName);// Juan Carlos Ra�a Because fix long names. See: ajaxfilemanager/inc/class.manager.php
+		$this->fileBaseName=disable_dangerous_file(replace_dangerous_char(str_replace(' ','_',$this->fileBaseName)));// Juan Carlos Raña replace space by _ because fix long names. See: ajaxfilemanager/inc/class.manager.php. And add cleaning from dokeos replace_dangerous_char() and disable_dangerous_file()
 		$fileName = $this->fileBaseName . $this->fileExtension;
 		$filePath = $dest . $fileName;
 

@@ -124,7 +124,7 @@ $nbStudents = count($a_students);
 if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_profile_field'])) { 
 	//$additional_user_profile_info = get_addtional_profile_information_of_field($_GET['additional_profile_field']);
 	$user_array = array();
-	foreach($a_students as $key=>$item){
+	foreach ($a_students as $key=>$item) {
 		$user_array[] = $key;
 	}
 	//fetching only the user that are loaded NOT ALL user in the portal
@@ -662,10 +662,12 @@ if ($_GET['studentlist'] == 'false') {
 		$table -> set_header(6, get_lang('Student_publication'),false);
 		$table -> set_header(7, get_lang('Messages'),false);
 		$table -> set_header(8, get_lang('FirstLogin'), false, 'align="center"');
-		$table -> set_header(9, get_lang('LatestLogin'), false, 'align="center"');		
-		$table -> set_header(10, get_lang('Details'),false);
+		$table -> set_header(9, get_lang('LatestLogin'), false, 'align="center"');				
 		if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
-			$table -> set_header(11, get_lang('AdditionalProfileField'),false);
+			$table -> set_header(10, get_lang('AdditionalProfileField'),false);
+			$table -> set_header(11, get_lang('Details'),false);
+        } else {
+        	$table -> set_header(10, get_lang('Details'),false);
         }
 	    if ($export_csv) {
 			$csv_content[] = array ();
@@ -703,13 +705,15 @@ if ($_GET['studentlist'] == 'false') {
 			$row[] = Tracking :: get_first_connection_date_on_the_course($student_id, $course_code);
 			$row[] = Tracking :: get_last_connection_date_on_the_course($student_id, $course_code);
 
-			$row[] = '<center><a href="../mySpace/myStudents.php?student='.$student_id.'&details=true&course='.$course_code.'&origin=tracking_course"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
-			
 			// we need to display an additional profile field
 			if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
-				if (is_array($additional_user_profile_info[$student_id]))
+				if (is_array($additional_user_profile_info[$student_id])) {
 					$row[]=implode(', ', $additional_user_profile_info[$student_id]);
+				} else {
+					$row[]='&nbsp;';
+				}
 			}
+			$row[] = '<center><a href="../mySpace/myStudents.php?student='.$student_id.'&details=true&course='.$course_code.'&origin=tracking_course"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
 			if ($export_csv) {
 				$row[8] = strip_tags($row[8]);
 				$row[9] = strip_tags($row[9]);
@@ -904,10 +908,10 @@ function get_addtional_profile_information_of_field_by_user($field_id, $users){
 	// Database table definition
 	$table_user 				= Database::get_main_table(TABLE_MAIN_USER);
 	$table_user_field_values 	= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);	
-	$result 					= UserManager::get_extra_field_information($field_id);	
-	
+	$result_extra_field 		= UserManager::get_extra_field_information($field_id);	
+
 	if (!empty($users)) {
-		if ($result['field_type'] == USER_FIELD_TYPE_TAG ) {	
+		if ($result_extra_field['field_type'] == USER_FIELD_TYPE_TAG ) {	
 			foreach($users as $user_id) {
 				$user_result = UserManager::get_user_tags($user_id, $field_id);
 				$tag_list = array();
@@ -929,6 +933,29 @@ function get_addtional_profile_information_of_field_by_user($field_id, $users){
 					
 			$result = api_sql_query($sql,__FILE__,__LINE__);
 			while($row = Database::fetch_array($result)) {
+				
+				if (!empty($row['field_value'])) {
+					if ($result_extra_field['field_type'] == USER_FIELD_TYPE_DOUBLE_SELECT) {
+						$id_double_select = explode(';',$row['field_value']);
+						if (is_array($id_double_select)) {
+							$value1 = $result_extra_field['options'][$id_double_select[0]]['option_value'];
+							$value2 = $result_extra_field['options'][$id_double_select[1]]['option_value'];
+							$row['field_value'] = ($value1.';'.$value2);
+						}
+					} else if ($result_extra_field['field_type'] == USER_FIELD_TYPE_DATE) {
+						$datetime = explode(';',$row['field_value']);	
+						if (is_array($datetime)) {					
+							$time = mktime(0,0,0,$datetime[1],$datetime[0],$datetime[2]);
+							$row['field_value'] = date('Y-m-d',$time);	
+						}					
+					} else if ($result_extra_field['field_type'] == USER_FIELD_TYPE_DATETIME) {
+						$datetime = explode(';',$row['field_value']);
+						if (is_array($datetime)) {						
+							$time = mktime($datetime[3],$datetime[4],0,$datetime[1],$datetime[0],$datetime[2]);
+							$row['field_value'] = date('Y-m-d H:i:s',$time);
+						}												
+					} 
+				}				
 				$return[$row['user_id']][] = $row['field_value'];
 			}
 		}

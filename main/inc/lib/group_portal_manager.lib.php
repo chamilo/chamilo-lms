@@ -4,7 +4,7 @@
 ==============================================================================
 *	This library provides functions for the access_url management.
 *	Include/require it in your code to use its functionality.
-*
+*	@author Julio Montoya <gugli100@gmail.com>
 *	@package dokeos.library
 ==============================================================================
 */
@@ -147,7 +147,10 @@ class GroupPortalManager
 	/**
 	 * Gets data of all groups
 	 * @author Julio Montoya
-	 * @return array
+	 * @param int	visibility
+	 * @param int	from which record the results will begin (use for pagination)
+	 * @param int	number of items
+	 * @return array	
 	 * */
 	function get_all_group_data($visibility = GROUP_PERMISSION_OPEN, $from=0, $number_of_items=10)	
 	{
@@ -163,6 +166,11 @@ class GroupPortalManager
 		return $data;
 	}
 	
+	/**
+	 * Gets the group data
+	 * 
+	 * 
+	 */
 	function get_group_data($group_id)	
 	{
 		$table	= Database :: get_main_table(TABLE_MAIN_GROUP);
@@ -177,6 +185,12 @@ class GroupPortalManager
 		return $item;
 	}
 	
+	/**
+	 * Gets the tags from a given group
+	 * @param int	group id
+	 * @param bool show group links or not 
+	 * 
+	 */
 	function get_group_tags($group_id, $show_tag_links = true)	
 	{
 		$tag					= Database :: get_main_table(TABLE_MAIN_TAG);
@@ -283,7 +297,7 @@ class GroupPortalManager
 		$array = array();
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
 				if ($with_image == true) {
-					$picture = UserManager::get_picture_user($row['user_id'], $row['picture_uri'],80);
+					$picture = UserManager::get_picture_user($row['user_id'], $row['picture_uri'],80,'medium_');
 					$img = '<img src="'.$picture['file'].'" />';
 					$row['picture_uri'] = $img;
 				}
@@ -374,8 +388,9 @@ class GroupPortalManager
 	* @author Julio Montoya
 	* @param int user id
 	* @param int group_id
-	* @return boolean true if success
+	* @return int 0 if there are not relationship otherwise return GROUP_USER_PERMISSION_ADMIN or GROUP_USER_PERMISSION_READER constants
 	* */
+	
 	function get_user_group_role($user_id, $group_id)
 	{
 		$table_group_rel_user= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
@@ -425,35 +440,6 @@ class GroupPortalManager
 	}
 
 
-	/**
-	 * Add a group of users into a group of URLs
-	 * @author Julio Montoya
-	 * @param  array of user_ids
-	 * @param  array of url_ids
-	 * */
-	function add_users_to_urls($user_list, $url_list)
-	{
-		$table_url_rel_user= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-		$result_array=array();
-
-		if (is_array($user_list) && is_array($url_list)){
-			foreach ($url_list as $url_id) {
-				foreach ($user_list as $user_id) {
-					$count = UrlManager::relation_url_user_exist($user_id,$url_id);
-					if ($count==0) {
-						$sql = "INSERT INTO $table_url_rel_user
-		               			SET user_id = ".Database::escape_string($user_id).", access_url_id = ".Database::escape_string($url_id);
-						$result = Database::query($sql, __FILE__, __LINE__);
-						if($result)
-							$result_array[$url_id][$user_id]=1;
-						else
-							$result_array[$url_id][$user_id]=0;
-					}
-				}
-			}
-		}
-		return 	$result_array;
-	}
 
 
 	/**
@@ -539,33 +525,39 @@ class GroupPortalManager
 		}
 		return $result;
 	}
-
-	function add_course_to_url($course_code, $url_id=1)
-	{
-		$table_url_rel_course= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-		if (empty($url_id)) $url_id=1;
-		$count = UrlManager::relation_url_course_exist($course_code,$url_id);
-		if (empty($count)) {
-			$sql = "INSERT INTO $table_url_rel_course
-           			SET course_code = '".Database::escape_string($course_code)."', access_url_id = ".Database::escape_string($url_id);
-			$result = Database::query($sql, __FILE__, __LINE__);
+	
+	
+	/**
+	 * Add a group of users into a group of URLs
+	 * @author Julio Montoya
+	 * @param  array of user_ids
+	 * @param  array of url_ids
+	 * */
+	function add_users_to_groups($user_list, $group_list, $relation_type = GROUP_USER_PERMISSION_READER) {
+		$table_url_rel_group = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
+		$result_array = array();
+		$relation_type = intval($relation_type);
+		
+		if (is_array($user_list) && is_array($group_list)) {
+			foreach ($group_list as $group_id) {
+				foreach ($user_list as $user_id) {
+					$role = self::get_user_group_role($user_id,$group_id);
+					if ($role == 0) {
+						$sql = "INSERT INTO $table_url_rel_group
+		               			SET user_id = ".intval($user_id).", group_id = ".intval($group_id).", relation_type = ".intval($relation_type)."";
+		               	
+						$result = Database::query($sql, __FILE__, __LINE__);
+						if ($result)
+							$result_array[$group_id][$user_id]=1;
+						else
+							$result_array[$group_id][$user_id]=0;
+					}
+				}
+			}
 		}
-		return $result;
+		return 	$result_array;
 	}
 
-
-	function add_session_to_url($session_id, $url_id=1)
-	{
-		$table_url_rel_session= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-		if (empty($url_id)) $url_id=1;
-		$count = UrlManager::relation_url_session_exist($session_id,$url_id);
-		if (empty($count)) {
-			$sql = "INSERT INTO $table_url_rel_session
-           			SET session_id = ".Database::escape_string($session_id).", access_url_id = ".Database::escape_string($url_id);
-			$result = Database::query($sql, __FILE__, __LINE__);
-		}
-		return $result;
-	}
 
 
 	/**
@@ -815,14 +807,14 @@ class GroupPortalManager
 	
 	
 	/**
-	 * Creates new user pfotos in various sizes of a user, or deletes user pfotos.
+	 * Creates new group pictures in various sizes of a user, or deletes user pfotos.
 	 * Note: This method relies on configuration setting from dokeos/main/inc/conf/profile.conf.php
-	 * @param int $user_id			The user internal identitfication number.
-	 * @param string $file			The common file name for the newly created pfotos. It will be checked and modified for compatibility with the file system.
+	 * @param	int	The group id 
+	 * @param	string $file			The common file name for the newly created pfotos. It will be checked and modified for compatibility with the file system.
 	 * If full name is provided, path component is ignored.
 	 * If an empty name is provided, then old user photos are deleted only, @see UserManager::delete_user_picture() as the prefered way for deletion.
-	 * @param string $source_file	The full system name of the image from which user photos will be created.
-	 * @return string/bool			Returns the resulting common file name of created images which usually should be stored in database.
+	 * @param	string		$source_file	The full system name of the image from which user photos will be created.
+	 * @return	string/bool	Returns the resulting common file name of created images which usually should be stored in database.
 	 * When deletion is recuested returns empty string. In case of internal error or negative validation returns FALSE.
 	 */
 	public static function update_group_picture($group_id, $file = null, $source_file = null) {
@@ -919,7 +911,7 @@ class GroupPortalManager
 	}
 	
 	/**
-	 * Get user picture URL or path from user ID (returns an array).
+	 * Gets the group picture URL or path from group ID (returns an array).
 	 * The return format is a complete path, enabling recovery of the directory
 	 * with dirname() or the file with basename(). This also works for the
 	 * functions dealing with the user's productions, as they are located in
@@ -981,7 +973,7 @@ class GroupPortalManager
 		return array('dir' => $dir, 'file' => $picture_filename);
 	}
 	
-	    /**
+	/**
 	 * Resize a picture
 	 *
 	 * @param  string file picture
@@ -1006,10 +998,11 @@ class GroupPortalManager
 		}
 		return $temp;
 	}
-	    /**
-     * Gets the current user image
-     * @param string user id
-     * @param string picture user name
+	
+	/**
+     * Gets the current group image
+     * @param string group id
+     * @param string picture group name
      * @param string height
      * @param string picture size it can be small_,  medium_  or  big_
      * @param string style css

@@ -42,7 +42,7 @@ class TestAddCourse extends UnitTestCase {
 				'category_code'=>'2121',
 				'course_language'=>'english',
 				'course_admin_id'=>'1211',
-				'db_prefix'=> $_configuration['db_prefix'],
+				'db_prefix'=> $_configuration['db_prefix'].'COD12',
 				'firstExpirationDelay'=>'112'
 				);
 		//$keys = define_course_keys($wanted_code, "", $db_prefix);

@@ -25,6 +25,7 @@
  * @since      File available since Release 0.1
  */
 
+if (class_exists('pear')) { return; }
 /**#@+
  * ERROR constants
  */
@@ -760,6 +761,7 @@ class PEAR
 
 // {{{ _PEAR_call_destructors()
 
+if (!function_exists('_PEAR_call_destructors')) {
 function _PEAR_call_destructors()
 {
     global $_PEAR_destructor_object_list;
@@ -793,6 +795,7 @@ function _PEAR_call_destructors()
             call_user_func_array($value[0], $value[1]);
         }
     }
+}
 }
 
 // }}}

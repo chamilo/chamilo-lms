@@ -8,13 +8,14 @@ class TestAddCourse extends UnitTestCase {
     }
 
     function testRegisterCourse() {
+	    global $_configuration;
         //($courseSysCode, $courseScreenCode, $courseRepository, $courseDbName,
 		//$titular, $category, $title, $course_language, $uidCreator, $expiration_date = "", $teachers=array())
 	    $course = array(
 		    'courseSysCode'=> 'COD12',
 		    'courseScreenCode' =>'221',
 		    'courseRepository' =>'21',
-		    'courseDbName' =>'ARITM',
+		    'courseDbName' => $_configuration['db_prefix'].'ARITM',
 		    'titular' =>'R. Wofgar',
 		    'category' =>'Math',
 		    'title' =>'metodologia de calculo diferencial',
@@ -30,6 +31,7 @@ class TestAddCourse extends UnitTestCase {
 	}
 
     function TestCreateCourse(){
+		global $_configuration;
 		//$wanted_code, $title, $tutor_name, $category_code,
 		//$course_language, $course_admin_id, $db_prefix,
 		//$firstExpirationDelay
@@ -40,7 +42,7 @@ class TestAddCourse extends UnitTestCase {
 				'category_code'=>'2121',
 				'course_language'=>'english',
 				'course_admin_id'=>'1211',
-				'db_prefix'=>'22',
+				'db_prefix'=> $_configuration['db_prefix'],
 				'firstExpirationDelay'=>'112'
 				);
 		//$keys = define_course_keys($wanted_code, "", $db_prefix);
@@ -122,7 +124,7 @@ class TestAddCourse extends UnitTestCase {
 
 	function TestFillDbCourse(){
 		global $_configuration, $clarolineRepositoryWeb, $_user;
-		$courseDbName = $_configuration['table_prefix'].$courseDbName.$_configuration['db_glue'];
+		$courseDbName = $_configuration['db_prefix'].$courseDbName.$_configuration['db_glue'];
 		$courseRepository = 'sdffsdf';
 		$language = 'english';
 		$default_document_array ='1212121';

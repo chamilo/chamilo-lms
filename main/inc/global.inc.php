@@ -51,6 +51,12 @@ if (file_exists($main_configuration_file_path)) {
 	$_configuration = array();
 }
 
+// Ensure that _configuration is in the global scope before loading 
+// main_api.lib.php. This is particularly helpful for unit tests
+if (!isset($GLOBALS['_configuration'])) {
+  $GLOBALS['_configuration'] = $_configuration;
+}
+
 // Include the main Dokeos platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
 

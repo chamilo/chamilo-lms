@@ -883,10 +883,15 @@ class learnpath {
 		$sql = 'SELECT gl.id FROM ' . $tbl_grade_link . ' gl WHERE gl.type="4" AND gl.ref_id="' . $id . '";';
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = Database :: fetch_array($result, 'ASSOC');
-		$link = LinkFactory :: load($row['id']);
-		if ($link[0] != null) {
-			$link[0]->delete();
+		
+		//fixing gradebook link deleted see #5229
+		if (!empty($row['id'])) {
+	   		$link = LinkFactory :: load($row['id']);
+	    	if ($link[0] != null) {
+	       		$link[0]->delete();
+	    	}
 		}
+		
 		//TODO: also delete items and item-views
 		if (api_get_setting('search_enabled') == 'true') {
 			require_once (api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');

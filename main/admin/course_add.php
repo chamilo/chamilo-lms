@@ -74,8 +74,8 @@ $form->applyFilter('title','trim');
 $form->add_textfield( 'visual_code', get_lang('CourseCode'),false,array('size'=>'20','maxlength'=>20));
 $form->applyFilter('visual_code','api_strtoupper');
 $form->applyFilter('visual_code','html_filter');
+$form->addRule('visual_code',get_lang('Max'),'maxlength',$maxlength);
 
-$form->addRule('wanted_code',get_lang('Max'),'maxlength',$maxlength);
 $form->addElement('select', 'tutor_id', get_lang('CourseTitular'), $teachers);
 $form->applyFilter('tutor_id','html_filter');
 

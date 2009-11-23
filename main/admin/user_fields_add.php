@@ -81,7 +81,7 @@ function change_image_user_field (image_value) {
 		document.getElementById(\'options\').style.display = \'none\';
 		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 		$("div#id_image_user_field").html("&nbsp;");
-		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_divider.png', get_lang('UserTag'))."'".');
+		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_user_tag.png', get_lang('UserTag'))."'".');
 
 	}
 }
@@ -162,7 +162,7 @@ $form->addElement('text','fieldlabel',get_lang('FieldLabel'));
 $form->applyFilter('fieldlabel','html_filter');
 $form->addRule('fieldlabel', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
 $form->addRule('fieldlabel', '', 'maxlength',20);
-$form->addRule('fieldlabel', get_lang('FieldTaken'), 'fieldlabel_available');
+//$form->addRule('fieldlabel', get_lang('FieldTaken'), 'fieldlabel_available');
 
 // Field options possible
 $form->addElement('text','fieldoptions',get_lang('FieldPossibleValues').Display::return_icon('info3.gif', get_lang('FieldPossibleValuesComment'), array('align' => 'absmiddle', 'hspace' => '3px')));
@@ -286,7 +286,7 @@ if(!empty($defaults['fieldtype'])) {
 	} else if ($image_value==9) {
 		echo '<br />'.Display::return_icon('userfield_divider.png', get_lang('AddUserFields'));
 	} else if ($image_value==10) {
-		echo '<br />'.Display::return_icon('userfield_divider.png', get_lang('UserTag'));
+		echo '<br />'.Display::return_icon('userfield_user_tag.png', get_lang('UserTag'));
 	}
 } else {
 	echo '<br />'.Display::return_icon('userfield_text.png', get_lang('AddUserFields'));

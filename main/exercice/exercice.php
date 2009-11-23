@@ -532,11 +532,13 @@ if ($is_allowedToEdit) {
 					$sql = 'SELECT gl.id FROM ' . $tbl_grade_link . ' gl WHERE gl.type="1" AND gl.ref_id="' . $exerciseId . '";';
 					$result = Database::query($sql, __FILE__, __LINE__);
 					$row = Database :: fetch_array($result, 'ASSOC');
-
-					$link = LinkFactory :: load($row['id']);
-					if ($link[0] != null) {
-						$link[0]->delete();
-					}
+					//see 
+					if (!empty($row['id'])) {
+                 		$link = LinkFactory :: load($row['id']);
+                     		if ($link[0] != null) {
+                            	$link[0]->delete();
+                     		}
+           			}
 					Display :: display_confirmation_message(get_lang('ExerciseDeleted'));
 					break;
 				case 'enable' : // enables an exercise

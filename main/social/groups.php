@@ -25,9 +25,13 @@ if ($group_id != 0 ) {
 	$picture	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,'medium_');
 	$tags		= GroupPortalManager::get_group_tags($group_id,true);
 	$users		= GroupPortalManager::get_users_by_group($group_id,true);
-		
-		
-	//var_dump($users);
+	
+	//@todo this must be move to default.css for dev use only
+	echo '<style> 		
+			#group_members { width:250px; height:300px; overflow-x:none; overflow-y: auto;}
+			.group_member_item { width:80px; float:left;}
+			
+	</style>';
 	
 	
 	//Group's title
@@ -60,13 +64,13 @@ if ($group_id != 0 ) {
 		echo '</div>';
 	}
 	
-	echo '<div id="group_members">';
-		echo get_lang('Members').' : ';
-		foreach($users as $user) {	
-			echo $user['picture_uri'].$user['firstname'].$user['lastname'].'<br />';
+	echo get_lang('Members').' : ';
+	echo '<div id="group_members">';		
+		foreach($users as $user) {			
+			echo '<div class="group_member_item">'.$user['picture_uri'].$user['firstname'].$user['lastname'].'</div>';
 		}
 	echo '</div>';
-		
+	
 		
 	echo '<div id="group_permissions">';
 	if (in_array(api_get_user_id(), $users)) {

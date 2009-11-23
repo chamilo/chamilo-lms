@@ -269,15 +269,18 @@ if (isset ($_GET['visiblelink'])) {
 }
 if (isset ($_GET['deletelink'])) {
 	block_students();
-	$link= LinkFactory :: load(Security::remove_XSS($_GET['deletelink']));
-	if ($link[0] != null) {
-		$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.Security::remove_XSS($_GET['deletelink']).');';
-		Database::query($sql);
-		$link[0]->delete();
+	//fixing #5229
+	if (!empty($_GET['deletelink'])) {	
+		$link= LinkFactory :: load(Security::remove_XSS($_GET['deletelink']));
+		if ($link[0] != null) {
+			$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.Security::remove_XSS($_GET['deletelink']).');';
+			Database::query($sql);
+			$link[0]->delete();
+		}
+		unset ($link);
+		$confirmation_message = get_lang('LinkDeleted');
+		$filter_confirm_msg = false;
 	}
-	unset ($link);
-	$confirmation_message = get_lang('LinkDeleted');
-	$filter_confirm_msg = false;
 }
 $course_to_crsind = isset ($course_to_crsind) ? $course_to_crsind : '';
 if ($course_to_crsind && !isset($_GET['confirm'])) {
@@ -328,11 +331,14 @@ if (isset ($_POST['action'])) {
 						$number_of_deleted_evaluations++;
 					}
 					if (api_substr($indexstr, 0, 4) == 'LINK') {
-						$link= LinkFactory :: load(api_substr($indexstr, 4));
-						if ($link[0] != null) {
-							$link[0]->delete();
+						$id = api_substr($indexstr, 4);
+						if (!empty($id)) {
+							$link= LinkFactory :: load();
+							if ($link[0] != null) {
+								$link[0]->delete();
+							}
+							$number_of_deleted_links++;
 						}
-						$number_of_deleted_links++;
 					}
 				}
 				$confirmation_message = get_lang('DeletedCategories') . ' : <b>' . $number_of_deleted_categories . '</b><br />' . get_lang('DeletedEvaluations') . ' : <b>' . $number_of_deleted_evaluations . '</b><br />' . get_lang('DeletedLinks') . ' : <b>' . $number_of_deleted_links . '</b><br /><br />' . get_lang('TotalItems') . ' : <b>' . $number_of_selected_items . '</b>';

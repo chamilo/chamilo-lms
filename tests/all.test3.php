@@ -1,5 +1,5 @@
 <?php
-ini_set('memory_limit','128M');
+ini_set('memory_limit','256M');
 require_once('simpletest/unit_tester.php');
 require_once(dirname(__FILE__).'/../main/inc/global.inc.php');
 require_once('simpletest/web_tester.php');

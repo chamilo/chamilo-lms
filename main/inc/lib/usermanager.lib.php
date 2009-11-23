@@ -2652,7 +2652,7 @@ class UserManager
 			</div>
 			<div>
 				<input type="text" size="30" value="'.Security::remove_XSS($query).'" tabindex="1" id="standard_q" name="q"/>				
-				<input type="submit" value="search"/>
+				<button class="search" value="search"/>'.get_lang('Search').'</button>
 			</div>					
 		</td>
 		</tr>

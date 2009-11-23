@@ -491,8 +491,15 @@ class SortableTable extends HTML_Table {
 				.search_users_grid_nav 		{ float:right;}
 					
 		</style>';
-			
-		$items = $this->get_clean_html(); // getting the items of the table				
+		
+		if ($hide_navigation == true ) {
+			$items = $this->table_data; //this is a faster way to get what we want
+		} else {
+			//the normal way
+			$items = $this->get_clean_html(); // getting the items of the table
+		}
+		
+					
 		// the generating of style classes must be improved. Maybe we need a a table name to create style on the fly:
 		// i.e: .whoisonline_table_grid_container instead of  .grid_container
 		// where whoisonline is the table's name like drupal's template engine

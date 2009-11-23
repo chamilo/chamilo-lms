@@ -217,6 +217,8 @@ if($_POST['form_sent']) {
 	}
 
 	if ($form_sent == 1) {
+		
+		GroupPortalManager::delete_users($group_id);
 		$result = GroupPortalManager::add_users_to_groups($UserList, array($group_id));
 		
 		

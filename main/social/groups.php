@@ -104,22 +104,51 @@ if ($group_id != 0 ) {
 
 	
 } else {
-	echo '<h1>'.get_lang('Newest').'</h1>';
-	echo '<h1>'.get_lang('Popular').'</h1>';
-	echo '<h1>'.get_lang('MyGroups').'</h1>';
 	
+	// Newest groups ----------------
+	$results = GroupPortalManager::get_groups_by_age(10 , true);
+	$groups = array();
+	foreach ($results as $result) {
+		$id = $result['id'];
+		$url_open  = '<a href="groups.php?id='.$id.'">';
+		$url_close = '</a>';		
+		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close);
+	}
+	if (count($groups) > 0) {
+		echo '<h1>'.get_lang('Newest').'</h1>';	
+		Display::display_sortable_grid('search_users', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));		
+	}
+	
+	// Pop groups ----------------	
+	$results = GroupPortalManager::get_groups_by_popularity(10 , true);
+	$groups = array();
+	foreach ($results as $result) {
+		$id = $result['id'];
+		$url_open  = '<a href="groups.php?id='.$id.'">';
+		$url_close = '</a>';		
+		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,$result['count']);
+	}
+	if (count($groups) > 0) {
+		echo '<h1>'.get_lang('Popular').'</h1>';
+		Display::display_sortable_grid('search_users', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true));
+	}
+	
+	
+	// My groups
 	$results = GroupPortalManager::get_groups_by_user(api_get_user_id(), 0, true);
 	$groups = array();
 	foreach ($results as $result) {
 		$id = $result['id'];
 		$url_open  = '<a href="groups.php?id='.$id.'">';
-		$url_close = '</a>';
-		
+		$url_close = '</a>';		
 		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close);
 	}
-	
-	Display::display_sortable_grid('search_users', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
-	
+	echo '<h1>'.get_lang('MyGroups').'</h1>';
+	if (count($groups) > 0) {		
+		Display::display_sortable_grid('search_users', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
+	} else {
+		echo get_lang('CreateAgroup');
+	}
 }
 
 

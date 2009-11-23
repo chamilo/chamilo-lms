@@ -376,7 +376,6 @@ function api_get_path($path_type, $path = null) {
 		// Configuration data for already installed system.
 		//
 		$root_sys = $_configuration['root_sys'];
-echo 'root sys is '.$root_sys;
 		if (!isset($_configuration['access_url']) || $_configuration['access_url'] == 1 || $_configuration['access_url'] == '') {
 			//by default we call the $_configuration['root_web'] we don't query to the DB
 			//$url_info= api_get_access_url(1);
@@ -473,7 +472,6 @@ echo 'root sys is '.$root_sys;
 		$paths[LIBRARY_PATH] = $paths[SYS_CODE_PATH].$paths[LIBRARY_PATH];
 		$paths[CONFIGURATION_PATH] = $paths[SYS_CODE_PATH].$paths[CONFIGURATION_PATH];
 		$paths[WEB_LIBRARY_PATH] = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
-print_r($paths);
 
 		$is_this_function_initialized = true;
 	}

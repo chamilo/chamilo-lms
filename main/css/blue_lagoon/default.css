@@ -149,7 +149,7 @@ input.link_alike:hover {
 .coursestatusicons {
 	border: 0px solid #000;
 	float: left;
-	padding-right: 5px;
+	padding-right: 8px;
 	width: auto;
 }
 /* user_portal course list */
@@ -2653,12 +2653,15 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image:url(images/shadow.gif);
 }
 
-
-
 .independent_course_item a {
 	font-size:120%;
 }
 
 .session_course_item a {
 	font-size:120%;
+}
+
+
+#maincontent .courseslist li {
+	margin-bottom:8px;
 }

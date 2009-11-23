@@ -20,7 +20,7 @@ echo '</div>';
 
 $group_id	= intval($_GET['id']);
 
-if ($group_id != 0 ) {	
+if ($group_id != 0 ) {
 	$group_info = GroupPortalManager::get_group_data($group_id); 
 	$picture	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,'medium_');
 	$tags		= GroupPortalManager::get_group_tags($group_id,true);
@@ -73,30 +73,35 @@ if ($group_id != 0 ) {
 	
 		
 	echo '<div id="group_permissions">';
-	if (in_array(api_get_user_id(), $users)) {
+
+
+	
+	if (is_array($users[api_get_user_id()]) && count($users[api_get_user_id()]) > 0) {
 		//im a member
-		if (isset($users[api_get_user_id()]) && $users[api_get_user_id()]['relation_info']!='') {
-			$my_group_role = $users[api_get_get_user_id()]['relation_info'];
+
+		if ($users[api_get_user_id()]['relation_type']!='') {
+			
+			$my_group_role = $users[api_get_user_id()]['relation_type'];
 			// just a reader
 			if ($my_group_role  == GROUP_USER_PERMISSION_READER) {
-				echo 'Im just a reader';
-				echo 'Invite others';
-				echo 'Leave group';
+				echo 'Leave group/';
+				echo 'Invite others/';				
 			//the main admin
 			} elseif ($my_group_role  == GROUP_USER_PERMISSION_ADMIN) {
-				echo 'Imm the admin';
-				echo 'Edit group';
+				echo 'Im the admin/';
+				echo 'Edit group/';
 				echo 'Invite others';					
 			}
 		} else {
 			//im not a member
-			echo 'I should register';
+			echo 'Join group';
 		}
 	} else {
 		//im not a member
-		echo 'I should register';		 		
+		echo 'Join group';		 		
 	}	
 	echo '</div>';
+
 	
 } else {
 	echo '<h1>'.get_lang('Newest').'</h1>';

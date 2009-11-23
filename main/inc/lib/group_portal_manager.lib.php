@@ -667,10 +667,10 @@ class GroupPortalManager
 	* @param  int url id
 	* @return boolean true if success
 	* */
-	function delete_url_rel_session($session_id, $url_id)
+	function delete_user_rel_group($user_id, $group_id)
 	{
-		$table_url_rel_session = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-		$sql= "DELETE FROM $table_url_rel_session WHERE session_id = ".Database::escape_string($session_id)." AND access_url_id=".Database::escape_string($url_id)."  ";
+		$table = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
+		$sql= "DELETE FROM $table WHERE user_id = ".intval($user_id)." AND group_id=".intval($group_id)."  ";
 		$result = Database::query($sql,  __FILE__, __LINE__);
 		return $result;
 	}

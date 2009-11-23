@@ -21,6 +21,17 @@ echo '</div>';
 $group_id	= intval($_GET['id']);
 
 if ($group_id != 0 ) {
+	
+	if (isset($_GET['action']) && $_GET['action']=='leave') {
+		$user_leaved = intval($_GET['u']);
+		GroupPortalManager::delete_user_rel_group($user_leaved, $group_id);	
+	}
+	
+	if (isset($_GET['action']) && $_GET['action']=='join') {
+		$user_join = intval($_GET['u']);
+		GroupPortalManager::add_user_to_group($user_join, $group_id);	
+	}	
+	
 	$group_info = GroupPortalManager::get_group_data($group_id); 
 	$picture	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,'medium_');
 	$tags		= GroupPortalManager::get_group_tags($group_id,true);
@@ -73,8 +84,6 @@ if ($group_id != 0 ) {
 	
 		
 	echo '<div id="group_permissions">';
-
-
 	
 	if (is_array($users[api_get_user_id()]) && count($users[api_get_user_id()]) > 0) {
 		//im a member
@@ -82,23 +91,23 @@ if ($group_id != 0 ) {
 		if ($users[api_get_user_id()]['relation_type']!='') {
 			
 			$my_group_role = $users[api_get_user_id()]['relation_type'];
-			// just a reader
+			// I'm just a reader
 			if ($my_group_role  == GROUP_USER_PERMISSION_READER) {
-				echo 'Leave group/';
+				echo '<a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.get_lang('LeaveGroup').'</a>';
 				echo 'Invite others/';				
 			//the main admin
 			} elseif ($my_group_role  == GROUP_USER_PERMISSION_ADMIN) {
 				echo 'Im the admin/';
-				echo 'Edit group/';
+				echo '<a href="group_edit.php?id='.$group_id.'">'.get_lang('EditGroup').'</a>';
 				echo 'Invite others';					
 			}
 		} else {
 			//im not a member
-			echo 'Join group';
+			echo '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a>';			
 		}
 	} else {
 		//im not a member
-		echo 'Join group';		 		
+		echo '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a>';
 	}	
 	echo '</div>';
 

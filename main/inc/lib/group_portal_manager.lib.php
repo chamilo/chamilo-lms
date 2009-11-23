@@ -260,7 +260,7 @@ class GroupPortalManager
 		$sql = "SELECT g.picture_uri, g.name, g.description, g.id  
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
-				ON gu.group_id = g.id WHERE gu.user_id = $user_id $where_relation_condition ";
+				ON gu.group_id = g.id WHERE gu.user_id = $user_id $where_relation_condition ORDER BY created_on desc ";
 				
 		$result=Database::query($sql,__FILE__,__LINE__);
 		$array = array();
@@ -274,6 +274,76 @@ class GroupPortalManager
 		}
 		return $array;
 	}
+	
+	
+		/** Gets the inner join of users and group table
+	 * @author Julio Montoya
+	 * @return int  access url id
+	 * @return array   Database::store_result of the result
+	 * */
+	function get_groups_by_popularity($num = 10, $with_image = false)
+	{
+		$where = '';
+		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
+		$tbl_group				= Database::get_main_table(TABLE_MAIN_GROUP);	
+		if (empty($num)) {
+			$num = 10;
+		} else {
+			$num = intval($num);
+		}
+		
+		$sql = "SELECT count(user_id) as count, g.picture_uri, g.name, g.description, g.id  
+				FROM $tbl_group g
+				INNER JOIN $table_group_rel_user gu
+				ON gu.group_id = g.id GROUP BY g.id ORDER BY count DESC LIMIT $num";
+				
+		$result=Database::query($sql,__FILE__,__LINE__);
+		$array = array();
+		while ($row = Database::fetch_array($result, 'ASSOC')) {
+				if ($with_image == true) {
+					$picture = self::get_picture_group($row['id'], $row['picture_uri'],80);
+					$img = '<img src="'.$picture['file'].'" />';
+					$row['picture_uri'] = $img;
+				}
+				$array[$row['id']] = $row;			
+		}
+		return $array;
+	}
+	
+	/** Gets the last groups created
+	 * @author Julio Montoya
+	 * @return int  access url id
+	 * @return array   Database::store_result of the result
+	 * */
+	function get_groups_by_age($num = 10, $with_image = false)
+	{
+		$where = '';
+		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
+		$tbl_group				= Database::get_main_table(TABLE_MAIN_GROUP);
+
+		if (empty($num)) {
+			$num = 10;
+		} else {
+			$num = intval($num);
+		}
+		$sql = "SELECT g.picture_uri, g.name, g.description, g.id  
+				FROM $tbl_group g
+				INNER JOIN $table_group_rel_user gu
+				ON gu.group_id = g.id ORDER BY created_on desc LIMIT $num ";
+				
+		$result=Database::query($sql,__FILE__,__LINE__);
+		$array = array();
+		while ($row = Database::fetch_array($result, 'ASSOC')) {
+				if ($with_image == true) {
+					$picture = self::get_picture_group($row['id'], $row['picture_uri'],80);
+					$img = '<img src="'.$picture['file'].'" />';
+					$row['picture_uri'] = $img;
+				}
+				$array[$row['id']] = $row;			
+		}
+		return $array;
+	}
+	
 	
 	function get_users_by_group($group_id='', $with_image = false)
 	{
@@ -396,10 +466,10 @@ class GroupPortalManager
 		$table_group_rel_user= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$return_value = 0;
 		if (!empty($user_id) && !empty($group_id)) {
-			$sql	= "SELECT relation_type FROM $table_group_rel_user WHERE id = ".intval($group_id)." AND  user_id = ".intval($user_id)." ";
+			$sql	= "SELECT relation_type FROM $table_group_rel_user WHERE group_id = ".intval($group_id)." AND  user_id = ".intval($user_id)." ";
 			$result = Database::query($sql,  __FILE__, __LINE__);		
 			if (Database::num_rows($result)>0) {	
-				$row 	= Database::fetch_row($result);
+				$row = Database::fetch_array($result,'ASSOC');
 				$return_value = $row['relation_type'];
 			}			
 		}
@@ -545,7 +615,7 @@ class GroupPortalManager
 					if ($role == 0) {
 						$sql = "INSERT INTO $table_url_rel_group
 		               			SET user_id = ".intval($user_id).", group_id = ".intval($group_id).", relation_type = ".intval($relation_type)."";
-		               	
+		      		               	
 						$result = Database::query($sql, __FILE__, __LINE__);
 						if ($result)
 							$result_array[$group_id][$user_id]=1;
@@ -567,10 +637,10 @@ class GroupPortalManager
 	* @param int url id
 	* @return boolean true if success
 	* */
-	function delete_url_rel_user($user_id, $url_id)
+	function delete_users($group_id)
 	{
-		$table_url_rel_user= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-		$sql= "DELETE FROM $table_url_rel_user WHERE user_id = ".Database::escape_string($user_id)." AND access_url_id=".Database::escape_string($url_id)."  ";
+		$table_= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
+		$sql= "DELETE FROM $table_ WHERE group_id = ".intval($group_id);
 		$result = Database::query($sql,  __FILE__, __LINE__);
 		return $result;
 	}
@@ -597,10 +667,10 @@ class GroupPortalManager
 	* @param  int url id
 	* @return boolean true if success
 	* */
-	function delete_url_rel_session($session_id, $url_id)
+	function delete_user_rel_group($user_id, $group_id)
 	{
-		$table_url_rel_session = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-		$sql= "DELETE FROM $table_url_rel_session WHERE session_id = ".Database::escape_string($session_id)." AND access_url_id=".Database::escape_string($url_id)."  ";
+		$table = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
+		$sql= "DELETE FROM $table WHERE user_id = ".intval($user_id)." AND group_id=".intval($group_id)."  ";
 		$result = Database::query($sql,  __FILE__, __LINE__);
 		return $result;
 	}

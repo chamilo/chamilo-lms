@@ -162,7 +162,7 @@ $form->addElement('text','fieldlabel',get_lang('FieldLabel'));
 $form->applyFilter('fieldlabel','html_filter');
 $form->addRule('fieldlabel', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
 $form->addRule('fieldlabel', '', 'maxlength',20);
-$form->addRule('fieldlabel', get_lang('FieldTaken'), 'fieldlabel_available');
+//$form->addRule('fieldlabel', get_lang('FieldTaken'), 'fieldlabel_available');
 
 // Field options possible
 $form->addElement('text','fieldoptions',get_lang('FieldPossibleValues').Display::return_icon('info3.gif', get_lang('FieldPossibleValuesComment'), array('align' => 'absmiddle', 'hspace' => '3px')));

@@ -4,6 +4,7 @@ require_once(api_get_path(SYS_CODE_PATH).'auth/lost_password.lib.php');
 Mock::generate('Display');
 class TestLostPassword extends UnitTestCase {
 
+	/* function commented in platform code
 	function testget_email_headers(){
 		global $charset;
 		$res = get_email_headers();
@@ -11,6 +12,7 @@ class TestLostPassword extends UnitTestCase {
  		$this->assertTrue(is_string($res));
  		//var_dump($res);
 	}
+	*/
 
 	function testget_secret_word(){
 		global $_configuration;
@@ -40,7 +42,6 @@ class TestLostPassword extends UnitTestCase {
 		global $_configuration;
 		ob_start();
 		$user=array('abc');
-		$emailHeaders = get_email_headers(); // Email Headers
 		$emailSubject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
 		$userAccountList = get_user_account_list($user, true); // BODY
 		$emailTo = $user[0]["email"];

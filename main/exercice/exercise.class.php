@@ -576,7 +576,7 @@ class Exercise
 			$cond1=Database::escape_string(Security::remove_XSS($exercise));
 			$cond2=Database::escape_string(Security::remove_XSS(api_html_entity_decode($description),COURSEMANAGERLOWSECURITY));
 		}*/
-			$sql="INSERT INTO $TBL_EXERCICES (start_time, end_time, title, description, sound, type, random,active, results_disabled, max_attempt, feedback_type, session_id)
+			$sql="INSERT INTO $TBL_EXERCICES (start_time, end_time, title, description, sound, type, random,active, results_disabled, max_attempt, feedback_type, expired_time, session_id)
 					VALUES(
 						'$start_time','$end_time',
 						'".Database::escape_string($exercise)."',
@@ -588,6 +588,7 @@ class Exercise
 						'".Database::escape_string($results_disabled)."',
 						'".Database::escape_string($attempts)."',
 						'".Database::escape_string($feedbacktype)."',
+						'".Database::escape_string($expired_time)."',
 						'".Database::escape_string($session_id)."'
 						)";
 			Database::query($sql,__FILE__,__LINE__);
@@ -983,7 +984,6 @@ class Exercise
       $form -> addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTotalDurationInMinutes'),array('style' => 'width : 35px'));
       
       
-      
       $form -> addElement('html','</div>');
 			//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));        
       
@@ -1099,7 +1099,7 @@ class Exercise
 		$this -> updateType($form -> getSubmitValue('exerciseType'));
 		$this -> setRandom($form -> getSubmitValue('randomQuestions'));
 		$this -> updateResultsDisabled($form -> getSubmitValue('results_disabled'));
-    $this -> updateExpiredTime($form -> getSubmitValue('enabletimercontroltotalminutes'));
+    	$this -> updateExpiredTime($form -> getSubmitValue('enabletimercontroltotalminutes'));
 		if($form -> getSubmitValue('enabletimelimit')==1) {
            $start_time = $form -> getSubmitValue('start_time');
            $this->start_time = $start_time['Y'].'-'.$start_time['F'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00';

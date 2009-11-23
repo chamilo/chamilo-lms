@@ -16,8 +16,8 @@
  * @return	void
  */
 
-require_once '../document/document.inc.php';
-require_once '../inc/lib/fileDisplay.lib.php';
+require_once dirname(__FILE__).'/../document/document.inc.php';
+require_once dirname(__FILE__).'/../inc/lib/fileDisplay.lib.php';
 
 function display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form)
 {

@@ -12,7 +12,7 @@ require_once(api_get_path(LIBRARY_PATH) .'/groupmanager.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'social.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'upload.xajax.php');
+//require_once(api_get_path(LIBRARY_PATH).'upload.xajax.php');
 require_once(api_get_path(LIBRARY_PATH).'xht.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'xmd.lib.php');
 require_once('main/inc/lib/fileDisplay.lib.test.php');
@@ -113,7 +113,7 @@ class AllTests extends TestSuite {
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/tablesort.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/text.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/tracking.lib.test.php');
-      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/upload.xajax.test.php');
+//      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/upload.xajax.test.php'); -- deprecated library
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/urlmanager.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/usermanager.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');

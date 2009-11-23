@@ -495,6 +495,7 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 	$TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
     $current_time = time();
+
     if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
     	$expired_date = $_SESSION['expired_time'];
     	$expired_time = strtotime($expired_date);
@@ -502,6 +503,7 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 
     //Validation in case of fraud
     $total_time_allowed = $expired_time + 30;
+ 
     if ($total_time_allowed < $current_time) {
     	$score = 0;
     	$answer = 0;
@@ -523,7 +525,7 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 	{
 		$user_id = api_get_anonymous_id();
 	}
-
+    $_SESSION['current_exercice_attempt'][$user_id] = $exeId;
 	$sql = "INSERT INTO $TBL_TRACK_ATTEMPT
 			  (
 			   exe_id,
@@ -559,7 +561,7 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 		('."'$exeId','".$quesId."','$score','".date('Y-m-d H:i:s')."',''".')';
 		Database::query($recording_changes,__FILE__,__LINE__);
 	}
-	if (isset($quesId) && isset($exeId) && isset($user_id)) {
+	if (!empty($quesId) && !empty($exeId) && !empty($user_id)) {
 		$res = Database::query($sql,__FILE__,__LINE__);
 		return $res;
 	} else {

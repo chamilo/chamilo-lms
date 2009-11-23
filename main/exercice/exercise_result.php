@@ -1010,7 +1010,7 @@ foreach ($questionList as $questionId) {
 			// In fact, we are not storing the results by answer ID, but by *position*, which is stored in $choice
 			exercise_attempt($questionScore,$choice,$quesId,$exeId,0);
 		} elseif ($answerType == HOT_SPOT) {
-			exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
+			exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);							
 			if (is_array($exerciseResultCoordinates[$quesId])) {
 				foreach($exerciseResultCoordinates[$quesId] as $idx => $val) {
 					exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val);

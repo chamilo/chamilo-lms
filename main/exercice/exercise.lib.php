@@ -337,7 +337,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		{
 			$s="<div id=\"question_title\" class=\"sectiontitle\">
 				".get_lang('Question').' ';
-
+			$s.="<input type='hidden' name='hidden_hotspot_id' value='$questionId'>";
 			$s.=$current_item;
 			//@todo I need to the get the feedback type
 			//if($answerType == 2)

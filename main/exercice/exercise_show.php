@@ -15,12 +15,12 @@
 $language_file=array('exercice','tracking');
 
 // including the global dokeos file
-include('../inc/global.inc.php');
-include('../inc/lib/course.lib.php');
+include_once '../inc/global.inc.php';
+include_once '../inc/lib/course.lib.php';
 // including additional libraries
-include_once('exercise.class.php');
-include_once('question.class.php'); //also defines answer type constants
-include_once('answer.class.php');
+include_once 'exercise.class.php';
+include_once 'question.class.php'; //also defines answer type constants
+include_once 'answer.class.php';
 include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 if ( empty ( $origin ) ) {
@@ -87,8 +87,26 @@ if ( empty ( $exeId ) ) {
 if ( empty ( $action ) ) {
     $action = $_GET['action'];
 }
+$current_user_id = api_get_user_id();
+$current_user_id = "'".$current_user_id."'";
+$current_attempt = $_SESSION['current_exercice_attempt'][$current_user_id];
 
+//Is fraudulent exercice
+$current_time = time();
+
+if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
+	$expired_date = $_SESSION['expired_time'];
+	$expired_time = strtotime($expired_date);
+
+	//Validation in case of fraud
+	$total_time_allowed = $expired_time + 30;
+	if ($total_time_allowed < $current_time) {
+	  $sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position=0 WHERE exe_id = '$current_attempt' ";
+	  Database::query($sql_fraud,__FILE__,__LINE__);
+	}	
+}
 //Unset session for clock time
+unset($_SESSION['current_exercice_attempt'][$current_user_id]);
 unset($_SESSION['expired_time']);
 unset($_SESSION['end_expired_time']);
 

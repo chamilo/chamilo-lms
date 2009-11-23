@@ -307,6 +307,12 @@ if ($formSent) {
 		$exerciseResultCoordinates = array ();
 	}
 
+    //Only for hotspot
+	if (!isset($choice) && isset($_REQUEST['hidden_hotspot_id'])) {
+		$hotspot_id = (int)($_REQUEST['hidden_hotspot_id']);
+		$choice = array($hotspot_id => '');
+	}
+
 	// if the user has answered at least one question
 	if (is_array($choice)) {
 		if ($debug > 0) {
@@ -330,7 +336,7 @@ if ($formSent) {
 		} else {
 			// gets the question ID from $choice. It is the key of the array
 			list ($key) = array_keys($choice);
-
+            //error_log('Question ID'.$key);
 			// if the user didn't already answer this question
 			if (!isset ($exerciseResult[$key])) {
 				// stores the user answer into the array
@@ -351,6 +357,7 @@ if ($formSent) {
 					$counter = 0;
 					$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 					$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
+					
 					//foreach($questionList as $questionId)
 					if (true) {
 						$exeId = $exe_id;
@@ -358,7 +365,6 @@ if ($formSent) {
 						$counter++;
 						// gets the student choice for this question
 						$choice = $exerciseResult[$questionId];
-
 						// creates a temporary Question object
 						$objQuestionTmp = Question :: read($questionId);
 
@@ -654,6 +660,7 @@ if ($formSent) {
 								$answer = $choice;
 								exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
 							} elseif ($answerType == HOT_SPOT) {
+								    //error_log('HOTS POT 2');
 								exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
 								if (is_array($exerciseResultCoordinates[$key])) {
 									foreach($exerciseResultCoordinates[$key] as $idx => $val) {

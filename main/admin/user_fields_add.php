@@ -81,7 +81,7 @@ function change_image_user_field (image_value) {
 		document.getElementById(\'options\').style.display = \'none\';
 		document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 		$("div#id_image_user_field").html("&nbsp;");
-		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_divider.png', get_lang('UserTag'))."'".');
+		$("div#id_image_user_field").html('."'<br />".Display::return_icon('userfield_user_tag.png', get_lang('UserTag'))."'".');
 
 	}
 }
@@ -286,7 +286,7 @@ if(!empty($defaults['fieldtype'])) {
 	} else if ($image_value==9) {
 		echo '<br />'.Display::return_icon('userfield_divider.png', get_lang('AddUserFields'));
 	} else if ($image_value==10) {
-		echo '<br />'.Display::return_icon('userfield_divider.png', get_lang('UserTag'));
+		echo '<br />'.Display::return_icon('userfield_user_tag.png', get_lang('UserTag'));
 	}
 } else {
 	echo '<br />'.Display::return_icon('userfield_text.png', get_lang('AddUserFields'));

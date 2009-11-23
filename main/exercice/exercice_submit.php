@@ -336,7 +336,6 @@ if ($formSent) {
 		} else {
 			// gets the question ID from $choice. It is the key of the array
 			list ($key) = array_keys($choice);
-            //error_log('Question ID'.$key);
 			// if the user didn't already answer this question
 			if (!isset ($exerciseResult[$key])) {
 				// stores the user answer into the array
@@ -660,7 +659,6 @@ if ($formSent) {
 								$answer = $choice;
 								exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
 							} elseif ($answerType == HOT_SPOT) {
-								    //error_log('HOTS POT 2');
 								exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
 								if (is_array($exerciseResultCoordinates[$key])) {
 									foreach($exerciseResultCoordinates[$key] as $idx => $val) {

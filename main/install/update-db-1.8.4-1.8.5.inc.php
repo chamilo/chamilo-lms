@@ -343,7 +343,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 
 					$course_dir=$sys_course_path.$row_course['directory'].'/work';
 
-					$dir_to_array =directory_to_array($course_dir,true);
+					$dir_to_array = my_directory_to_array($course_dir,true);
 					$only_dir=array();
 
 					$sql_select= "SELECT filetype FROM " . $my_course_table . " WHERE  filetype = 'folder'";

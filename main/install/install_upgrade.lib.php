@@ -29,7 +29,7 @@ define("COURSES_HTACCESS_FILENAME", "htaccess.dist");
 define("DOKEOS_CONFIG_FILENAME", "configuration.dist.php");
 
 // Added by Ivan Tcholakov, 29-SEP-2009.
-require_once '../inc/lib/database.lib.php';
+require_once dirname(__FILE__).'/../inc/lib/database.lib.php';
 
 /*
 ==============================================================================
@@ -471,7 +471,7 @@ function get_sql_file_contents($file,$section,$print_errors=true)
 	return $section_contents;
 }
 
-function directory_to_array($directory)
+function my_directory_to_array($directory)
 {
 	$array_items = array();
 	if ($handle = opendir($directory))
@@ -482,7 +482,7 @@ function directory_to_array($directory)
 			{
 				if (is_dir($directory. "/" . $file))
 				{
-					$array_items = array_merge($array_items, directory_to_array($directory. "/" . $file));
+					$array_items = array_merge($array_items, my_directory_to_array($directory. "/" . $file));
 					$file = $directory . "/" . $file;
 					$array_items[] = preg_replace("/\/\//si", "/", $file);
 				}

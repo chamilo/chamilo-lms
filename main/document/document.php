@@ -630,8 +630,8 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 
 		// upload the file
 		if (!empty($_FILES['template_image']['name'])) {
-			echo 'uploading';
-			include_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+
+			require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 			$upload_ok = process_uploaded_file($_FILES['template_image']);
 
 			if ($upload_ok) {

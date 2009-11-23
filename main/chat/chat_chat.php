@@ -33,9 +33,10 @@
 define('FRAME','chat');
 
 $language_file = array ('chat');
-require('../inc/global.inc.php');
-include(api_get_path(LIBRARY_PATH).'document.lib.php');
-include (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 //$course=api_get_course_id();
 
 $course=$_GET['cidReq'];
@@ -56,10 +57,17 @@ if (!empty($course))
 	$isMaster=$is_courseAdmin?true:false;
 
 
-	$dateNow=date('Y-m-d');
+	$dateNow=date('Y-m-d');	
+	$basepath_chat = '';		
+	$documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+	if (!empty($group_id)) {
+		$group_info = GroupManager :: get_group_properties($group_id);
+		$basepath_chat = $group_info['directory'].'/chat_files';		
+	} else {
+		$basepath_chat = '/chat_files';				
+	}
+	$chatPath=$documentPath.$basepath_chat.'/';
 
-	$documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
-	$chatPath=$documentPath.'chat_files/';
 	$TABLEITEMPROPERTY= Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 	if(!is_dir($chatPath))
@@ -74,11 +82,13 @@ if (!empty($course))
 			$perm = octdec(!empty($perm)?$perm:'0770');
 			@mkdir($chatPath,$perm);
 			@chmod($chatPath,$perm);
-			
-			/*
-			$doc_id=add_document($_course,'/chat_files','folder',0,'chat_files');
-			Database::query("INSERT INTO ".$TABLEITEMPROPERTY . " (tool,insert_user_id,insert_te,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$doc_id,'DocumentAdded',1,0,NULL,0)");
-			*/
+			// save chat files document for group into item property			
+			if (!empty($group_id)) {
+				$doc_id=add_document($_course,$basepath_chat,'folder',0,'chat_files');
+				$sql = "INSERT INTO $TABLEITEMPROPERTY (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
+						VALUES ('document',1,NOW(),NOW(),$doc_id,'FolderCreated',1,$group_id,NULL,0)";
+				Database::query($sql,__FILE__,__LINE__);		
+			}
 		}
 	}
 
@@ -95,10 +105,10 @@ if (!empty($course))
 	{
 		@fclose(fopen($chatPath.$filename_chat,'w'));
 		if (!api_is_anonymous()) {
-			$doc_id=add_document($_course,'/chat_files/'.$filename_chat,'file',0,$filename_chat);
+			$doc_id=add_document($_course,$basepath_chat.'/'.$filename_chat,'file',0,$filename_chat);
 			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'],$group_id,null,null,null,$session_id);			
 			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],$group_id,null,null,null,$session_id);
-			item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
+			item_property_update_on_folder($_course,$basepath_chat, $_user['user_id']);
 		}
 	}
 
@@ -124,13 +134,13 @@ if (!empty($course))
 
 		@fclose(fopen($chatPath.$basename_chat.'.log.html','w'));
 
-		$doc_id=add_document($_course,'/chat_files/'.$basename_chat.'-'.$i.'.log.html','file',filesize($chatPath.$basename_chat.'-'.$i.'.log.html'),$basename_chat.'-'.$i.'.log.html');
+		$doc_id=add_document($_course,$basepath_chat.'/'.$basename_chat.'-'.$i.'.log.html','file',filesize($chatPath.$basename_chat.'-'.$i.'.log.html'),$basename_chat.'-'.$i.'.log.html');
 
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'],$group_id,null,null,null,$session_id);
 		api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],$group_id,null,null,null,$session_id);
-		item_property_update_on_folder($_course,'/chat_files', $_user['user_id']);
+		item_property_update_on_folder($_course,$basepath_chat, $_user['user_id']);
 
-		$doc_id = DocumentManager::get_document_id($_course,'/chat_files/'.$basename_chat.'.log.html');
+		$doc_id = DocumentManager::get_document_id($_course,$basepath_chat.'/'.$basename_chat.'.log.html');
 
 		update_existing_document($_course, $doc_id,0);
 	}

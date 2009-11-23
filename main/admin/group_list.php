@@ -105,8 +105,8 @@ function get_group_data($from, $number_of_items, $column, $direction)
 
 	$users = array ();
     $t = time();
-	while ($group = Database::fetch_row($res)) {
-        // forget about the expiration date field		      
+	while ($group = Database::fetch_row($res)) {		
+		$group['1'] = '<a href="/main/social/groups.php?id='.$group['0'].'">'.$group['1'].'</a>';      
         $groups[] = $group;
 	}
 	return $groups;
@@ -180,8 +180,6 @@ function modify_filter($group_id,$url_params,$row)
 		$result .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_users_to_group.php?id='.$group_id.'">'.Display::return_icon('add_user_big.gif',get_lang('AddUsersToGroup')).'</a>';
 		$result .= '<a href="group_edit.php?id='.$group_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;&nbsp;';
 		$result .= '<a href="group_list.php?action=delete_group&amp;group_id='.$group_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-		
-		
 	}
 	return $result;
 }

@@ -2208,8 +2208,18 @@ class UserManager
             $file = $image_array_sys['dir'].$picture_file;            
 			if (file_exists($file) && !is_dir($file)) {				
 				$picture['file'] = $image_array['dir'].$picture_file;
-			} else {				
-				$picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
+			} else {
+				switch ($size_picture) {
+					case 'big_' : 
+						$picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg'; break;
+					case 'medium_' : 
+						$picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_50_50.jpg'; break;
+					case 'small_' : 
+						$picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg'; break;
+					default:
+						$picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg'; break;
+				}
+				
 			}
 		}
 		return $picture;
@@ -2565,10 +2575,9 @@ class UserManager
 			$where_field = " field_id = $field_id AND ";
 		}
 		// all the information of the field
-		 $sql = "SELECT u.user_id,u.username,firstname, lastname, email, tag, picture_uri FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.id)
+		$sql = "SELECT u.user_id,u.username,firstname, lastname, email, tag, picture_uri FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.id)
 				INNER JOIN $user_table u ON(uv.user_id =u.user_id)
-				WHERE $where_field tag LIKE '$tag%' ORDER BY tag";
-				
+				WHERE $where_field tag LIKE '$tag%' ORDER BY tag";				
 		$sql .= " LIMIT $from,$number_of_items";
 		
 		$result = Database::query($sql, __FILE__, __LINE__);

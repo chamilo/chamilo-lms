@@ -327,15 +327,18 @@ if (isset ($_GET['visiblelink'])) {
 if (isset ($_GET['deletelink'])) {
 	block_students();
 	$get_delete_link=Security::remove_XSS($_GET['deletelink']);
-	$link= LinkFactory :: load($get_delete_link);
-	if ($link[0] != null) {
-		$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.$get_delete_link.');';
-		Database::query($sql);
-		$link[0]->delete();
+	//fixing #5229
+	if (!empty($get_delete_link)) {
+		$link= LinkFactory :: load($get_delete_link);
+		if ($link[0] != null) {
+			$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.$get_delete_link.');';
+			Database::query($sql);
+			$link[0]->delete();
+		}
+		unset ($link);
+		$confirmation_message = get_lang('LinkDeleted');
+		$filter_confirm_msg = false;
 	}
-	unset ($link);
-	$confirmation_message = get_lang('LinkDeleted');
-	$filter_confirm_msg = false;
 }
 
 if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
@@ -387,12 +390,15 @@ if (isset ($_POST['action'])) {
 						$number_of_deleted_evaluations++;
 					}
 					if (substr($indexstr, 0, 4) == 'LINK') {
-						$link= LinkFactory :: load(substr($indexstr, 4));
-						if ($link[0] != null) {
-							$link[0]->delete();
+						//fixing #5229
+						$id = substr($indexstr, 4);
+						if (!empty($id)) {
+							$link= LinkFactory :: load($id);
+							if ($link[0] != null) {
+								$link[0]->delete();
+							}
+							$number_of_deleted_links++;
 						}
-
-						$number_of_deleted_links++;
 					}
 				}
 				$confirmation_message = get_lang('DeletedCategories') . ' : <b>' . $number_of_deleted_categories . '</b><br />' . get_lang('DeletedEvaluations') . ' : <b>' . $number_of_deleted_evaluations . '</b><br />' . get_lang('DeletedLinks') . ' : <b>' . $number_of_deleted_links . '</b><br /><br />' . get_lang('TotalItems') . ' : <b>' . $number_of_selected_items . '</b>';

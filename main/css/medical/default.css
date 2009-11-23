@@ -2147,6 +2147,13 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	float:left;
 	width:100%;
 }
+.content_table {
+	padding:2px;
+	margin-bottom: 5px;
+	vertical-align:middle;
+	float:left;
+	width:100%;
+}
 .actionsbig a {
 	float:left;
 	padding-left:12px;
@@ -2708,7 +2715,7 @@ button.upload {
 }
 
 .icon_image_content {
-	width:70px;
+	width:80px;
 	cursor:hand;
 	height:8em;
 	text-align: center;
@@ -2720,6 +2727,9 @@ button.upload {
 .question_menu {
 	list-style:none;
 	float:left;
+	padding:0px;
+	margin:-2px;
+	min-height:100px;
 }
 .question_menu li {
 	float:left;

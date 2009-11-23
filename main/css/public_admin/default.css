@@ -2163,7 +2163,13 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	border-bottom:1px solid #999999;
 	border-top:1px solid #999999;
 	background-color:#efefef;
-	height:100%;
+	padding:2px;
+	margin-bottom: 5px;
+	vertical-align:middle;
+	float:left;
+	width:100%;
+}
+.content_table {
 	padding:2px;
 	margin-bottom: 5px;
 	vertical-align:middle;
@@ -2719,13 +2725,14 @@ button.upload {
 }
 
 .icon_image_content {
-	width:70px;
+	width:80px;
 	cursor:hand;
 	height:10em;
 	text-align: center;
 	padding-right: 5px;
 	padding-left: 5px;
 }
+
 #expire_session div {
 	float:left;
 	padding-left:15px;
@@ -2760,6 +2767,9 @@ button.upload {
 .question_menu {
 	list-style:none;
 	float:left;
+	padding:0px;
+	margin:-2px;
+	min-height:100px;
 }
 .question_menu li {
 	float:left;

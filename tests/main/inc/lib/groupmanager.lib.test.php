@@ -5,7 +5,7 @@ require_once(api_get_path(LIBRARY_PATH).'classmanager.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'tablesort.lib.php');
-require_once(dirname(__FILE__).'/../../../simpletest/mock_objects.php');
+//require_once(dirname(__FILE__).'/../../../simpletest/mock_objects.php');
 
 Mock::generate('Database');
 Mock::generate('ClassManager');

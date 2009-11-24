@@ -210,7 +210,7 @@ class GroupPortalManager
 		if ($show_tag_links == true) {
 			if (is_array($tags) && count($tags)>0) {
 				foreach ($tags as $tag) {
-					$tag_tmp[] = '<a href="/main/social/search.php?q='.$tag['tag'].'">'.$tag['tag'].'</a>';
+					$tag_tmp[] = '<a href="'.api_get_path(WEB_PATH).'main/social/search.php?q='.$tag['tag'].'">'.$tag['tag'].'</a>';
 				}		
 				if (is_array($tags) && count($tags)>0) {							
 					$tags= implode(', ',$tag_tmp);

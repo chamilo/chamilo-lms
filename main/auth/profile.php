@@ -702,10 +702,10 @@ if (api_get_setting('extended_profile') == 'true') {
 	echo '<div class="actions">';
 	
 	if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
-		echo '<a href="/main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
+		echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
 	}
 	if (api_get_setting('allow_message_tool') == 'true') {
-		echo '<a href="/main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
+		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
 	}	
 	$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
 	

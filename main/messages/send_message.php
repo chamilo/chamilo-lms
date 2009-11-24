@@ -64,7 +64,7 @@ if ($panel_id==3) {
 	<dd><a href="javascript:void(0)" onclick="change_panel('1','<?php echo $user_id; ?>')"><?php echo api_xml_http_response_encode(get_lang('SendMessage'));?></a></dd>
 </dl>
 <?php
-//	<dd><a href="main/social/index.php#remote-tab-5"> echo api_xml_http_response_encode(get_lang('SocialSeeContacts'));</a></dd>
+//	<dd><a href="'.api_get_path(WEB_PATH).'main/social/index.php#remote-tab-5"> echo api_xml_http_response_encode(get_lang('SocialSeeContacts'));</a></dd>
 }
 
 if ($panel_id==4) {

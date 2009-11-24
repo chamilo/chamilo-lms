@@ -535,7 +535,7 @@ echo '<div id="social-profile-container">';
 										$tag_tmp = array();
 										foreach ($user_tags as $tags) {
 											//$tag_tmp[] = $tags['tag'];
-											$tag_tmp[] = '<a href="/main/social/search.php?q='.$tags['tag'].'">'.$tags['tag'].'</a>';
+											$tag_tmp[] = '<a href="'.api_get_path(WEB_PATH).'main/social/search.php?q='.$tags['tag'].'">'.$tags['tag'].'</a>';
 										}					 				 
 										if (is_array($user_tags) && count($user_tags)>0) {							
 											$extra_information_value .= '<strong>'.ucfirst($field_display_text).':</strong> '.implode(', ',$tag_tmp).'<br />';

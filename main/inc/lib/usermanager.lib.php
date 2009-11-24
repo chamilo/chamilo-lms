@@ -2374,7 +2374,7 @@ class UserManager
 		$user_tags = $return;
 		$tag_tmp = array();
 		foreach ($user_tags as $tag) {
-			$tag_tmp[] = '<a href="/main/search/?q='.$tag['tag'].'">'.$tag['tag'].'</a>';
+			$tag_tmp[] = '<a href="'.api_get_path(WEB_PATH).'main/search/?q='.$tag['tag'].'">'.$tag['tag'].'</a>';
 		}
 		if (is_array($user_tags) && count($user_tags)>0) {							
 			$return = implode(', ',$tag_tmp);
@@ -2641,7 +2641,7 @@ class UserManager
 	 * 
 	 */
 	public function get_search_form($query) {
-		echo'<form method="get" action="/main/social/search.php">
+		echo'<form method="get" action="'.api_get_path(WEB_PATH).'main/social/search.php">
 
 		<table cellspacing="0" cellpadding="0" id="SearchTable">
 		<tbody><tr>

@@ -34,7 +34,7 @@ if ($query != '') {
 			
 			foreach($users as $user) {
 				$picture = UserManager::get_picture_user($user['user_id'], $user['picture_uri'],80);
-				$url_open = '<a href="/main/social/profile.php?u='.$user['user_id'].'">';
+				$url_open = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'].'">';
 				$url_close ='</a>';
 				$img = $url_open.'<img src="'.$picture['file'].'" />'.$url_close;
 				$user['firstname'] = $url_open.$user['firstname'].$url_close;
@@ -53,8 +53,8 @@ if ($query != '') {
 				$picture = GroupPortalManager::get_picture_group($group['id'], $group['picture_uri'],80);
 				$img = '<img src="'.$picture['file'].'" />';
 				$tags = GroupPortalManager::get_group_tags($group['id']);
-				$group['name'] = '<a href="/main/social/groups.php?id='.$group['id'].'">'.$group['name'].'</a>';
-				$img = '<a href="/main/social/groups.php?id='.$group['id'].'">'.$img.'</a>';
+				$group['name'] = '<a href="'.api_get_path(WEB_PATH).'main/social/groups.php?id='.$group['id'].'">'.$group['name'].'</a>';
+				$img = '<a href="'.api_get_path(WEB_PATH).'main/social/groups.php?id='.$group['id'].'">'.$img.'</a>';
 				$results[] = array($img, $group['name'],$group['description'],$tags);			
 			}		
 		}		

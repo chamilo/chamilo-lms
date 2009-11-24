@@ -259,8 +259,9 @@ define('TABLE_GLOSSARY', 'glossary');
 // Notebook
 define('TABLE_NOTEBOOK', 'notebook');
 
-// Message
+// Message 
 define('TABLE_MESSAGE', 'message');
+define('TABLE_MESSAGE_ATTACHMENT', 'message_attachment');
 
 // Metadata
 define('TABLE_METADATA', 'metadata');

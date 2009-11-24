@@ -49,7 +49,7 @@ $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Description
-$form->addElement('text', 'description', get_lang('Description'));
+$form->addElement('textarea', 'description', get_lang('Description'));
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
 
@@ -71,8 +71,9 @@ if (strlen($group_data['picture_uri']) > 0) {
 $status = array();
 $status[GROUP_PERMISSION_OPEN] 		= get_lang('Open');
 $status[GROUP_PERMISSION_CLOSED]	= get_lang('Closed');
-
+$status[GROUP_PERMISSION_APPROVAL_NEEDED]	= get_lang('ApprovalNeeded');
 $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $status, array());
+
 
 // Submit button
 $form->addElement('style_submit_button', 'submit', get_lang('ModifyInformation'), 'class="save"');

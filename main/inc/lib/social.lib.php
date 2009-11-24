@@ -1,12 +1,16 @@
 <?php //$id: $
 /* For licensing terms, see /dokeos_license.txt */
-define(USERUNKNOW,0);
-define(SOCIALUNKNOW,1);
-define(SOCIALPARENT,2);
-define(SOCIALFRIEND,3);
-define(SOCIALGOODFRIEND,4);
-define(SOCIALENEMY,5);
-define(SOCIALDELETED,6);
+
+// Relation type between users
+
+define('USERUNKNOW',	'0');
+define('SOCIALUNKNOW',	'1');
+define('SOCIALPARENT',	'2');
+define('SOCIALFRIEND',	'3');
+define('SOCIALGOODFRIEND','4');
+define('SOCIALENEMY',	'5');
+define('SOCIALDELETED',	'6');
+
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 class SocialManager extends UserManager {
@@ -17,27 +21,33 @@ class SocialManager extends UserManager {
 	/**
 	 * Allow to register contact to social network
 	 * @author isaac flores paz <isaac.flores@dokeos.com>
+	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code
 	 * @param int user friend id
 	 * @param int user id
-	 * @param int kind of relation between users
+	 * @param int relation between users see constants definition
 	 * @return void
 	 */
-	public static function register_friend ($friend_id,$my_user_id,$relation_type) {
+	public static function register_friend ($friend_id,$my_user_id,$relation_type) {		
 		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
-		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' . ((int)$friend_id).' AND user_id='.((int)$my_user_id);
-
+		
+		$friend_id = intval($friend_id);
+		$my_user_id = intval($my_user_id);
+		$relation_type = intval($relation_type);
+		
+		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' .$friend_id.' AND user_id='.$my_user_id;
+		error_log($sql);
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = Database :: fetch_array($result, 'ASSOC');
 		if ($row['count'] == 0) {
 			$current_date=date('Y-m-d H:i:s');
-			$sql_i = 'INSERT INTO ' . $tbl_my_friend . '(friend_user_id,user_id,relation_type,last_edit)values(' . ((int)$friend_id) . ','.((int)$my_user_id).','.((int)$relation_type).',"'.$current_date.'");';
+			$sql_i = 'INSERT INTO ' . $tbl_my_friend . '(friend_user_id,user_id,relation_type,last_edit)values(' . $friend_id . ','.$my_user_id.','.$relation_type.',"'.$current_date.'");';
 			Database::query($sql_i, __FILE__, __LINE__);
 		} else {
-			$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' . ((int)$friend_id) . ' AND user_id='.((int)$my_user_id);
+			$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' . $friend_id . ' AND user_id='.$my_user_id;
 			$result = Database::query($sql, __FILE__, __LINE__);
 			$row = Database :: fetch_array($result, 'ASSOC');
 			if ($row['count'] == 1) {
-				$sql_i = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.((int)$relation_type).' WHERE friend_user_id=' . ((int)$friend_id).' AND user_id='.((int)$my_user_id);
+				$sql_i = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.$relation_type.' WHERE friend_user_id=' . $friend_id.' AND user_id='.$my_user_id;
 				Database::query($sql_i, __FILE__, __LINE__);
 			}
 		}
@@ -46,23 +56,26 @@ class SocialManager extends UserManager {
 	/**
 	 * Allow to delete contact to social network
 	 *@author isaac flores paz <isaac.flores@dokeos.com>
+	 *@author Julio Montoya <gugli100@gmail.com> Cleaning code
 	 *@param int user friend id
-	 *@return void
 	 */
 	public static function removed_friend ($friend_id) {
-		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
+		$tbl_my_friend  = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
 		$tbl_my_message = Database :: get_main_table(TABLE_MAIN_MESSAGE);
+		
 		$user_id=api_get_user_id();
-		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE user_id=' . ((int)$user_id) . ' AND relation_type<>6 AND friend_user_id='.((int)$friend_id);
+		$friend_id = intval($friend_id);
+		
+		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE user_id=' . $user_id . ' AND relation_type<>6 AND friend_user_id='.$friend_id;
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = Database :: fetch_array($result, 'ASSOC');
 		if ($row['count'] == 1) {
 			//Delete user friend
-			$sql_i = 'UPDATE ' . $tbl_my_friend . ' SET relation_type=6 WHERE user_id=' . ((int)$user_id).' AND friend_user_id='.((int)$friend_id);
-			$sql_j = 'UPDATE ' . $tbl_my_message . ' SET msg_status=7 WHERE user_receiver_id=' . ((int)$user_id).' AND user_sender_id='.((int)$friend_id);
+			$sql_i = 'UPDATE ' . $tbl_my_friend .' SET relation_type='.SOCIALDELETED.' WHERE user_id=' . $user_id.' AND friend_user_id='.$friend_id;
+			$sql_j = 'UPDATE ' . $tbl_my_message.' SET msg_status=7 WHERE user_receiver_id=' . $user_id.' AND user_sender_id='.$friend_id;
 			//Delete user
-			$sql_ij = 'UPDATE ' . $tbl_my_friend . ' SET relation_type=6 WHERE user_id=' . ((int)$friend_id).' AND friend_user_id='.((int)$user_id);
-			$sql_ji = 'UPDATE ' . $tbl_my_message . ' SET msg_status=7 WHERE user_receiver_id=' . ((int)$friend_id).' AND user_sender_id='.((int)$user_id);
+			$sql_ij = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.SOCIALDELETED.' WHERE user_id=' . $friend_id.' AND friend_user_id='.$user_id;
+			$sql_ji = 'UPDATE ' . $tbl_my_message . ' SET msg_status=7 WHERE user_receiver_id=' . $friend_id.' AND user_sender_id='.$user_id;
 			Database::query($sql_i, __FILE__, __LINE__);
 			Database::query($sql_j, __FILE__, __LINE__);
 			Database::query($sql_ij, __FILE__, __LINE__);
@@ -189,8 +202,9 @@ class SocialManager extends UserManager {
 		return $list_path_image_friend;
 	}
 	/**
-	 * allow to sent an invitation to my contacts
+	 * Sends an invitation to contacts
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @author Julio Montya <gugli100@gmail.com> Cleaning code
 	 * @param int user id
 	 * @param int user friend id
 	 * @param string title of the message
@@ -198,22 +212,29 @@ class SocialManager extends UserManager {
 	 * @return boolean
 	 */
 	public static function send_invitation_friend ($user_id,$friend_id,$message_title,$message_content) {
-		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);
-		$current_date=date('Y-m-d H:i:s',time());
+		$tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
+		$user_id = intval($user_id);
+		$friend_id = intval($friend_id);		
+		$message_title = Database::escape_string($message_title);
+		$message_content = Database::escape_string($message_content);
+		
+		$current_date = date('Y-m-d H:i:s',time());
 		$status_invitation=5;//status of pending invitation
-		$sql_exist='SELECT COUNT(*) AS count FROM '.$tbl_message.' WHERE user_sender_id='.((int)$user_id).' AND user_receiver_id='.((int)$friend_id).' AND msg_status IN(5,6,7);';
+		$sql_exist='SELECT COUNT(*) AS count FROM '.$tbl_message.' WHERE user_sender_id='.($user_id).' AND user_receiver_id='.($friend_id).' AND msg_status IN(5,6,7);';
+
 		$res_exist=Database::query($sql_exist,__FILE__,__LINE__);
 		$row_exist=Database::fetch_array($res_exist,'ASSOC');
-		if ($row_exist['count']==0) {
-			$sql='INSERT INTO '.$tbl_message.'(user_sender_id,user_receiver_id,msg_status,send_date,title,content) VALUES('.((int)$user_id).','.((int)$friend_id).','.((int)$status_invitation).',"'.$current_date.'","'.$message_title.'","'.$message_content.'")';
+		if ($row_exist['count']==0) {			
+			$sql='INSERT INTO '.$tbl_message.'(user_sender_id,user_receiver_id,msg_status,send_date,title,content) VALUES('.$user_id.','.$friend_id.','.$status_invitation.',"'.$current_date.'","'.$message_title.'","'.$message_content.'")';
 			Database::query($sql,__FILE__,__LINE__);
 			return true;
 		} elseif ($row_exist['count']==1) {
-			$sql_if_exist='SELECT COUNT(*) AS count FROM '.$tbl_message.' WHERE user_sender_id='.((int)$user_id).' AND user_receiver_id='.((int)$friend_id).' AND msg_status=7';
+			//invitation already exist
+			$sql_if_exist='SELECT COUNT(*) AS count FROM '.$tbl_message.' WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status=7';
 			$res_if_exist=Database::query($sql_if_exist,__FILE__,__LINE__);
 			$row_if_exist=Database::fetch_array($res_if_exist,'ASSOC');
 			if ($row_if_exist['count']==1) {
-				$sql_if_exist_up='UPDATE '.$tbl_message.'SET msg_status=5 WHERE user_sender_id='.((int)$user_id).' AND user_receiver_id='.((int)$friend_id).';';
+				$sql_if_exist_up='UPDATE '.$tbl_message.'SET msg_status=5 WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.';';
 				Database::query($sql_if_exist_up,__FILE__,__LINE__);
 				return true;
 			} else {
@@ -234,13 +255,14 @@ class SocialManager extends UserManager {
 	public static function get_message_number_invitation_by_user_id ($user_receiver_id) {
 		$status_invitation=5;//status of pending invitation
 		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);
-		$sql='SELECT COUNT(*) as count_message_in_box FROM '.$tbl_message.' WHERE user_receiver_id='.((int)$user_receiver_id).' AND msg_status=5;';
+		$sql='SELECT COUNT(*) as count_message_in_box FROM '.$tbl_message.' WHERE user_receiver_id='.((int)$user_receiver_id).' AND msg_status=5';
 		$res=Database::query($sql,__FILE__,__LINE__);
 		$row=Database::fetch_array($res,'ASSOC');
 		return $row['count_message_in_box'];
 	}
+	
 	/**
-	 * get invitation list by user id
+	 * Get invitation list received by user
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
 	 * @param int user id
 	 * @return array()
@@ -248,13 +270,32 @@ class SocialManager extends UserManager {
 	public static function get_list_invitation_of_friends_by_user_id ($user_id) {
 		$list_friend_invitation=array();
 		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);
-		$sql='SELECT user_sender_id,send_date,title,content FROM '.$tbl_message.' WHERE user_receiver_id='.((int)$user_id).' AND msg_status=5;';
+		$sql='SELECT user_sender_id,send_date,title,content FROM '.$tbl_message.' WHERE user_receiver_id='.((int)$user_id).' AND msg_status = 5';
 		$res=Database::query($sql,__FILE__,__LINE__);
 		while ($row=Database::fetch_array($res,'ASSOC')) {
 			$list_friend_invitation[]=$row;
 		}
 		return $list_friend_invitation;
 	}
+	
+	/**
+	 * Get invitation list sent by user
+	 * @author Julio Montoya <gugli100@gmail.com>
+	 * @param int user id
+	 * @return array()
+	 */
+	 
+	public static function get_list_invitation_sent_by_user_id ($user_id) {
+		$list_friend_invitation=array();
+		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);		
+		$sql='SELECT user_receiver_id, send_date,title,content FROM '.$tbl_message.' WHERE user_sender_id = '.intval($user_id).' AND msg_status = 5';
+		$res=Database::query($sql,__FILE__,__LINE__);
+		while ($row=Database::fetch_array($res,'ASSOC')) {
+			$list_friend_invitation[$row['user_receiver_id']]=$row;
+		}
+		return $list_friend_invitation;
+	}
+	
 	/**
 	 * allow accept invitation
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
@@ -295,19 +336,20 @@ class SocialManager extends UserManager {
 		Database::query($sql,__FILE__,__LINE__);
 	}
 	/**
-	 * Send invitation a your friends
+	 * Sends invitations to friends
 	 * @author Isaac Flores Paz <isaac.flores.paz@gmail.com>
+	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code
 	 * @param void
 	 * @return string message invitation
 	 */
 	public static function send_invitation_friend_user ($userfriend_id,$subject_message='',$content_message='') {
 		//$id_user_friend=array();
-		$user_info=array();
-		$user_info=api_get_user_info($userfriend_id);
-		$succes=get_lang('MessageSentTo');
+		$user_info = array();
+		$user_info = api_get_user_info($userfriend_id);
+		$succes = get_lang('MessageSentTo');
 		$succes.= ' : '.api_get_person_name($user_info['firstName'], $user_info['lastName']);
-		if (isset($subject_message) && isset($content_message) && isset($userfriend_id)) {
-			$send_message = MessageManager::send_message(((int)$userfriend_id),Database::escape_string($subject_message), Database::escape_string($content_message));
+		if (isset($subject_message) && isset($content_message) && isset($userfriend_id)) {			
+			$send_message = MessageManager::send_message($userfriend_id, $subject_message, $content_message);
 			if ($send_message) {
 				echo Display::display_confirmation_message($succes,true);
 			} else {
@@ -318,16 +360,12 @@ class SocialManager extends UserManager {
 			$count_is_true=false;
 			$count_number_is_true=0;
 			if (isset($userfriend_id) && $userfriend_id>0) {
-				$user_info=array();
-				$user_id=api_get_user_id();
-				$user_info=api_get_user_info($user_id);
-				$message_title=get_lang('Invitation');
-				$message_content=$content_message;
-				$count_is_true=self::send_invitation_friend(((int)$user_id),((int)$userfriend_id),Database::escape_string($message_title),Database::escape_string($message_content));
+				$message_title = get_lang('Invitation');				
+				$count_is_true = self::send_invitation_friend(api_get_user_id(),$userfriend_id, $message_title, $content_message);
 				if ($count_is_true) {
 					echo Display::display_normal_message(get_lang('InvitationHasBeenSent'));
 				}else {
-					echo Display::display_error_message(get_lang('InvitationHasBeenNotSent'));
+					echo Display::display_error_message(get_lang('YouAlreadySentAnInvitation'));
 				}
 
 			}

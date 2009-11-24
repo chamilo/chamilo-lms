@@ -5,6 +5,20 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
+/* 
+ * @todo use constants!
+ */
+define('MESSAGE_STATUS_NEW',				'0');
+define('MESSAGE_STATUS_UNREAD',				'1');
+define('MESSAGE_STATUS_DELETED',			'2');
+
+define('MESSAGE_STATUS_INVITATION_PENDING',	'5');
+define('MESSAGE_STATUS_INVITATION_ACCEPTED','6');
+define('MESSAGE_STATUS_INVITATION_DENIED',	'7');
+
+
+
+
 class MessageManager
 {
 	function MessageManager() {
@@ -154,7 +168,7 @@ class MessageManager
 		return $message_list;
 	}
 
-	 public static function send_message ($receiver_user_id, $title, $content, $file_attachments, $file_comments) {
+	public static function send_message ($receiver_user_id, $title, $content, $file_attachments=array(), $file_comments = '') {
         global $charset;
         if (is_numeric($receiver_user_id)) {
 			$table_message = Database::get_main_table(TABLE_MESSAGE);
@@ -164,8 +178,7 @@ class MessageManager
 			$sql = "SELECT COUNT(*) as count FROM $table_message WHERE user_sender_id = ".api_get_user_id()." AND user_receiver_id='".Database::escape_string($receiver_user_id)."' AND title = '".Database::escape_string($title)."' AND content ='".Database::escape_string($content)."' ";
 			$res_exist = Database::query($sql,__FILE__,__LINE__);
 			$row_exist = Database::fetch_array($res_exist,'ASSOC');
-			if ($row_exist['count'] ==0) {
-								 		 
+			if ($row_exist['count'] ==0) {								 		 
 				//message in outbox
 				$sql = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
 						 " VALUES (".

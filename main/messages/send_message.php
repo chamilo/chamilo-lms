@@ -1,28 +1,6 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
+/* For licensing terms, see /dokeos_license.txt */
 
-	Copyright (c) 2009 Dokeos SPRL
-	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-	Copyright (c) Facultad de Matematicas, UADY (México)
-	Copyright (c) Evie, Free University of Brussels (Belgium)
-	Copyright (c) 2009 Isaac Flores Paz <isaac.flores@dokeos.com>
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-    Mail: info@dokeos.com
-==============================================================================
-*/
 $language_file = array('registration','messages','userInfo','admin');
 $cidReset=true;
 require_once '../inc/global.inc.php';
@@ -35,12 +13,14 @@ if (api_is_anonymous()) {
 	api_not_allowed();
 }
 
-$user_id=intval($_POST['user_id']);
-$panel_id=intval($_POST['panel_id']);
-$content_message=Security::remove_XSS($_POST['txt_content'],COURSEMANAGERLOWSECURITY); //check this is filtered on output
-$subject_message=Security::remove_XSS($_POST['txt_subject']); //check this is filtered on output
-$user_info=array();
-$user_info=api_get_user_info($user_id);
+$user_id	= intval($_POST['user_id']);
+$panel_id	= intval($_POST['panel_id']);
+
+$content_message = Security::remove_XSS($_POST['txt_content'],COURSEMANAGERLOWSECURITY); //check this is filtered on output
+$subject_message = Security::remove_XSS($_POST['txt_subject']); //check this is filtered on output
+$user_info = array();
+$user_info = api_get_user_info($user_id);
+
 if ($panel_id==2) {
 ?>
     <td height="20"><?php //echo api_xml_http_response_encode(get_lang('Info')).' :'; ?></td>

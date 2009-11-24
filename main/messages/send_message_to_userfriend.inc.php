@@ -1,4 +1,4 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /dokeos_license.txt */
 $language_file = array('registration','messages','userInfo','admin');
 $cidReset=true;
@@ -11,7 +11,7 @@ if (api_is_anonymous()) {
 	api_not_allowed();
 }
 
-if (api_get_setting('allow_message_tool')<>'true' && api_get_setting('allow_social_tool')<>'true'){
+if (api_get_setting('allow_message_tool') != 'true' && api_get_setting('allow_social_tool') != 'true'){
 	api_not_allowed();
 }
 

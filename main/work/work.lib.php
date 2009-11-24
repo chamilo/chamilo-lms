@@ -469,7 +469,6 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 					$form_folder -> addGroup($weight_input,'weight',get_lang('WeightInTheGradebook'),'size="10"');						
 				}
 
-				
 				$there_is_a_end_date =false;
 				if($row['view_properties']=='1') {
 					if($homework['expires_on']!='0000-00-00 00:00:00'){
@@ -480,7 +479,11 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 						$there_is_a_end_date = true;
 						$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('EndsAt'));
 					}
-					$form_folder -> addRule(array('expires','ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
+
+					if ($there_is_a_expire_date && $there_is_a_end_date) { 
+						$form_folder -> addRule(array('expires','ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');	
+					}
+										
 				} else {
 						$form_folder -> addElement('html','<div class="row">
 	 	                         <div class="label">&nbsp;</div>

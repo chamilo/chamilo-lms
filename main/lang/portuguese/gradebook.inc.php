@@ -187,4 +187,7 @@ $EditPresences = "Modificar presenças";
 $TotalWeightMustNotBeMoreThan = "A ponderação/peso total não deve ser superior a";
 $ThereIsNotACertificateAvailableByDefault = "Não existe nenhum certificado disponível por pré-definição";
 $CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan = "É necessário uma pontuação minima para o Certificado e não deve ser superior ";
+$LinkMod = "Guardar";
+$EditLink = "Modificar a link/ligação para a actividade online";
+$CategoryDeleted = "A categoria foi eliminada";
 ?>

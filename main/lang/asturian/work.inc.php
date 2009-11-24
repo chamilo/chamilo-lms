@@ -76,4 +76,5 @@ $MakeAllPapersVisible = "Facer tolos documentos visibles";
 $StudentAllowedToDeleteOwnPublication = "Permitir a los escolinos desaniciar les sos propies tarees";
 $TheDocumentHasBeenDeleted = "El documentu foi desaniciáu";
 $YouAreNotAllowedToDeleteThisDocument = "Nun tienes permisos pa desaniciar esti documentu";
+$ConfirmYourChoiceDeleteAllfiles = "Confirma la to eleición, desaniciaránse tolos ficheros y nun se podrán recuperar";
 ?>

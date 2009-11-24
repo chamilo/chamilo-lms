@@ -752,4 +752,5 @@ $LastPage = "Páxina cabera";
 $Coachs = "Tutores";
 $New = "Nuevu";
 $YouMustToInstallTheExtensionLDAP = "Tienes qu\'instalar la estensión LDAP";
+$AddAdditionalProfileField = "Amestar un campu del perfil d\'usuariu";
 ?>

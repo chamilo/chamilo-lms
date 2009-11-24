@@ -347,4 +347,8 @@ $TooManyIterationsPleaseTryUsingMoreStraightforwardPolygons = "Demasiadas iteraç
 $Thresholds = "Limitações";
 $Delineation = "Delineação";
 $QuestionTypeDoesNotBelongToFeedbackTypeInExercise = "O tipo de pergunta não corresponde ao tipo de feedback no exercício";
+$SessionIsReadOnly = "A sessão é apenas de leitura";
+$EnableTimerControl = "Activar controlo de tempo";
+$ExerciseTotalDurationInMinutes = "Tempo total em minutos de duração do exercício";
+$ToContinueUseMenu = "Para continuar neste curso, por favor utilize o menu lateral.";
 ?>

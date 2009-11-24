@@ -752,4 +752,5 @@ $LastPage = "Última página";
 $Coachs = "Tutores";
 $New = "Novo";
 $YouMustToInstallTheExtensionLDAP = "Necessita de instalar a extensão LDAP";
+$AddAdditionalProfileField = "Adicionar campo de perfil de utilizador";
 ?>

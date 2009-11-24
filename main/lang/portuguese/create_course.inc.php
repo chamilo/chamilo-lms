@@ -102,4 +102,6 @@ $IntroductionWiki = "O termo Wiki é uma abreviação de WikiWikiWeb. Wikiwiki é um
 $CreateCourseArea = "Criar este curso";
 $CreateCourse = "Criar um curso";
 $Create = "Criar";
+$MessageOfNewCourseToAdmin = "Esta mensagem é para informar que foi criado um novo curso na plataforma";
+$NewCourseCreatedIn = "Ñovo curso criado em";
 ?>

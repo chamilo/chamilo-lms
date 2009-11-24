@@ -1096,4 +1096,5 @@ $ShowGlossaryInExtraToolsComment = "Desde aquí usted puede configurar como añadi
 $FieldTypeTag = "User tag";
 $SendEmailToAdminTitle = "Aviso por correo electrónico, de la creación de un nuevo curso";
 $SendEmailToAdminComment = "Enviar un correo electrónico al administardor de la plataforma, cada vez que un profesor cree un nuevo curso";
+$UserTag = "Etiqueta de usuario";
 ?>

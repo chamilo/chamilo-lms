@@ -73,6 +73,8 @@ $FolderEdited = "Pasta/directório editado";
 $UpdateWork = "Actualizar esta tarefa";
 $MakeAllPapersInvisible = "Tornar todos os documentos invisíveis";
 $MakeAllPapersVisible = "Tornar todos os documento visíveis";
+$StudentAllowedToDeleteOwnPublication = "Permitir que os alunos possam eliminar as suas publicações";
 $TheDocumentHasBeenDeleted = "O documento foi eliminado.";
 $YouAreNotAllowedToDeleteThisDocument = "Não está autorizado a eliminar este documento";
+$ConfirmYourChoiceDeleteAllfiles = "Ao confirmar a sua opção eliminará todos os ficheiros e não será possível voltar a recuperá-los mais tarde";
 ?>

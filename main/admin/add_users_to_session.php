@@ -373,7 +373,7 @@ if ($ajax_search) {
 			$order_clause";
 			}
 		}
-		echo $sql;
+		
 		$result=Database::query($sql,__FILE__,__LINE__);
 		$Users=Database::store_result($result);
 		//var_dump($_REQUEST['id_session']);

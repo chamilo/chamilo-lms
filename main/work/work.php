@@ -557,11 +557,12 @@ Display :: display_introduction_section(TOOL_STUDENTPUBLICATION);
 
 					//----------------inser into agenda----------------------//
 				 	$agenda_id = 0;
-				 	if(!empty($_POST['type2']) && isset($_POST['add_to_calendar']) && $_POST['add_to_calendar']==1):
+				 	if(isset($_POST['add_to_calendar']) && $_POST['add_to_calendar']==1):
 						include_once('../calendar/agenda.inc.php');
 						include_once('../resourcelinker/resourcelinker.inc.php');
 						isset($course_info)?$course=$course_info:$course=null;
-						$agenda_id = agenda_add_item($course,$_POST['new_dir'],$_POST['new_dir'],date('Y-m-d H:i:s'),get_date_from_select('ends'),null,0);
+						$content='<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.substr(Security::remove_XSS($dir_name_sql), 1).'" >'.$_POST['new_dir'].'</a> - '.$_POST['description'];
+						$agenda_id = agenda_add_item($course,$_POST['new_dir'], $content,date('Y-m-d H:i:s'),'0000-00-00',null,0);
 					endif;
 					$sql_add_publication = "INSERT INTO " . $work_table . " SET " .
 										   "url         = '".Database::escape_string(Security::remove_XSS($dir_name_sql))."',
@@ -763,10 +764,19 @@ else {
 		}
 		if ($delete == "all" && api_is_allowed_to_edit(null,true)) {		
 		
-			$queryString1 = "SELECT url FROM " . $work_table . "";
-			$queryString2 = "DELETE FROM  " . $work_table . "";
-			$queryString3 = "DELETE FROM  " . $TSTDPUBASG . "";
+			$queryString1 = "SELECT url FROM ".$work_table."";
+			$queryString2 = "DELETE FROM  ".$work_table."";
+			$queryString3 = "DELETE FROM  ".$TSTDPUBASG. "";
 			
+			$sql_agenda = "SELECT add_to_calendar FROM ".$TSTDPUBASG." WHERE add_to_calendar <> 0";
+			$rs_agenda = Database::query($sql_agenda, __FILE__, __LINE__);
+			$t_agenda   = Database::get_course_table(TABLE_AGENDA);
+			while ($row_agenda=Database::fetch_array($rs_agenda)) {
+				$deleteagenda = "DELETE FROM  ".$t_agenda." WHERE id='".$row_agenda['add_to_calendar']."'";
+				$rsdeleteagenda = Database::query($deleteagenda, __FILE__, __LINE__);
+
+			}	
+					
 			$result1 = Database::query($queryString1, __FILE__, __LINE__);
 			$result2 = Database::query($queryString2, __FILE__, __LINE__);
 			$result3 = Database::query($queryString3, __FILE__, __LINE__);
@@ -1132,25 +1142,21 @@ if($is_special > 0):
 		if (!$not_ends_on) {
 			define('ASSIGNMENT_EXPIRES',$time_expires);
 		}
-		if(!empty($publication['description'])){
-			Display :: display_normal_message($publication['description']);
-		}
-
 		$ends_on = api_ucfirst(format_locale_date($dateFormatLong,strtotime($homework['ends_on']))).' ';
 		$ends_on .= ucfirst(strftime($timeNoSecFormat,strtotime($homework['ends_on'])));
 		$expires_on = api_ucfirst(format_locale_date($dateFormatLong,strtotime($homework['expires_on']))).' ';
 		$expires_on .= ucfirst(strftime($timeNoSecFormat,strtotime($homework['expires_on'])));
 		if($has_ended) {
-			Display :: display_error_message(get_lang('EndDateAlreadyPassed').' '.$ends_on);
 			display_action_links($cur_dir_path, $always_show_tool_options,true);
+			Display :: display_error_message(get_lang('EndDateAlreadyPassed').' '.$ends_on);
 		} elseif($has_expired) {
-			Display :: display_warning_message(get_lang('ExpiryDateAlreadyPassed').' '.$expires_on);
 			display_action_links($cur_dir_path, $always_show_tool_options,$always_show_upload_form);
+			Display :: display_warning_message(get_lang('ExpiryDateAlreadyPassed').' '.$expires_on);
 		} else {
 			if (!$not_ends_on) {
+			display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form);
 			Display :: display_normal_message(get_lang('ExpiryDateToSendWorkIs').' '.$expires_on);
 			}
-			display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form);
 		}
 	else:
 		display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form);
@@ -1385,8 +1391,9 @@ function draw_date_picker($prefix,$default='') {
 		$addtext .= '<div id="option3" style="padding:4px;display:none">';
 		$addtext .= '&nbsp;&nbsp;&nbsp;<div id="msg_error4" style="display:none;color:red"></div>';
 		$addtext .= draw_date_picker('ends').'<br />';
-		$addtext .= '&nbsp;&nbsp;'.make_checkbox('add_to_calendar').get_lang('AddToCalendar').'</div>';
 		$addtext .= '</div>';
+		$addtext .= '<br><br><b>'.get_lang('Agenda').'</b><br>';
+		$addtext .= '&nbsp;&nbsp;'.make_checkbox('add_to_calendar').get_lang('AddToCalendar').'</div>';
 		$addtext .= '</div>';
 
 		$new_folder_text .= '<div class="row">
@@ -1477,10 +1484,16 @@ if (!$display_upload_form && !$display_tool_options) {
 			$form_filter .= make_select('filter',array(0=>get_lang('SelectAFilter'),1=>get_lang('FilterByNotRevised'),2=>get_lang('FilterByRevised'),3=>get_lang('FilterByNotExpired')),$filter).'&nbsp&nbsp';
 			$form_filter .= '<button type="submit" class="save" value="'.get_lang('FilterAssignments').'">'.get_lang('FilterAssignments').'</button></form>';
 			echo $form_filter;
+			
+		}
+		if(!empty($publication['description'])){
+			echo '<br /><b>'.get_lang('Description').'</b>&nbsp;&nbsp;'.$publication['description'].'<br /><br />';
 		}
 
 	}
 	display_student_publications_list($base_work_dir . '/' . $my_cur_dir_path, 'work/' . $my_cur_dir_path, $currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_query);
+	
+
 }
 
 

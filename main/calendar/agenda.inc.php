@@ -428,10 +428,17 @@ function display_monthcalendar($month, $year)
 							if ($month == $month_start_date) {
 								$start_time= date("H:i",strtotime($value['start_date']));
 								$end_time= date("H:i",strtotime($value['end_date']));
-								$dayheader .= '<br />'.get_lang("StartTimeWindow").'&nbsp;<i>'.$start_time.'</i>&nbsp;-&nbsp;'.get_lang("EndTimeWindow").'&nbsp;<i>'.$end_time.'&nbsp;</i>';
-								$dayheader .= '<br />';
-								$dayheader .= $value['title'];
-								$dayheader .= '<br/>';
+
+								if ($value['end_date']=='0000-00-00 00:00:00'){ 
+									$dayheader .= '<br />'.get_lang("Work").'<br />';
+									$dayheader .= $value['title'];
+									$dayheader .= '<br/>';
+								} else {
+									$dayheader .= '<br />'.get_lang("StartTimeWindow").'&nbsp;<i>'.$start_time.'</i>&nbsp;-&nbsp;'.get_lang("EndTimeWindow").'&nbsp;<i>'.$end_time.'&nbsp;</i>';
+									$dayheader .= '<br />';
+									$dayheader .= $value['title'];
+									$dayheader .= '<br/>';
+								}
 							}
 								//$agendaitems = get_global_agenda_items($agendaitems, $curday, $month, $year, $startdayofweek, "month_view");
 								//echo $agendaitems['title'];
@@ -2119,12 +2126,11 @@ function display_agenda_items()
     	echo api_ucfirst(strftime($timeNoSecFormat,strtotime($myrow["start_date"])))."";
     	echo "</td>\n";
     	echo "\t\t<td>";
-    	if ($myrow["end_date"]<>"0000-00-00 00:00:00")
-    	{
+    	if ($myrow["end_date"]<>"0000-00-00 00:00:00") {
     		echo get_lang("EndTimeWindow").": ";
     		echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["end_date"])))."&nbsp;&nbsp;&nbsp;";
     		echo api_ucfirst(strftime($timeNoSecFormat,strtotime($myrow["end_date"])))."";
-    	}
+    	} 
     	echo "</td>\n";
 
     	// attachment list

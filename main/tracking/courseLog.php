@@ -932,8 +932,8 @@ function get_addtional_profile_information_of_field_by_user($field_id, $users){
 					WHERE field.field_id=".intval($field_id)." AND user.user_id IN ($users)";
 					
 			$result = api_sql_query($sql,__FILE__,__LINE__);
-			while($row = Database::fetch_array($result)) {
-				
+			while($row = Database::fetch_array($result)) {				
+				// get option value for field type double select by id
 				if (!empty($row['field_value'])) {
 					if ($result_extra_field['field_type'] == USER_FIELD_TYPE_DOUBLE_SELECT) {
 						$id_double_select = explode(';',$row['field_value']);
@@ -942,20 +942,9 @@ function get_addtional_profile_information_of_field_by_user($field_id, $users){
 							$value2 = $result_extra_field['options'][$id_double_select[1]]['option_value'];
 							$row['field_value'] = ($value1.';'.$value2);
 						}
-					} else if ($result_extra_field['field_type'] == USER_FIELD_TYPE_DATE) {
-						$datetime = explode(';',$row['field_value']);	
-						if (is_array($datetime)) {					
-							$time = mktime(0,0,0,$datetime[1],$datetime[0],$datetime[2]);
-							$row['field_value'] = date('Y-m-d',$time);	
-						}					
-					} else if ($result_extra_field['field_type'] == USER_FIELD_TYPE_DATETIME) {
-						$datetime = explode(';',$row['field_value']);
-						if (is_array($datetime)) {						
-							$time = mktime($datetime[3],$datetime[4],0,$datetime[1],$datetime[0],$datetime[2]);
-							$row['field_value'] = date('Y-m-d H:i:s',$time);
-						}												
 					} 
-				}				
+				}
+				// get other value from extra field				
 				$return[$row['user_id']][] = $row['field_value'];
 			}
 		}

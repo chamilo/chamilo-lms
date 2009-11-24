@@ -629,9 +629,23 @@ elseif (isset($_POST['remove_production'])) {
 	// build SQL query
 	$sql = "UPDATE $table_user SET";
 	unset($user_data['api_key_generate']);
-	foreach ($user_data as $key => $value) {
-		if (substr($key, 0, 6) == 'extra_') { //an extra field
-			$extras[substr($key, 6)] = $value;
+	foreach ($user_data as $key => $value) {		
+		if (substr($key, 0, 6) == 'extra_') { //an extra field			
+			$new_key = substr($key, 6);			
+			// format array date to 'Y-m-d' or date time  to 'Y-m-d H:i:s'
+			if (is_array($value) && isset($value['Y']) && isset($value['F']) && isset($value['d'])) {						
+				if (isset($value['H']) && isset($value['i'])) {
+					// extra field date time
+					$time = mktime($value['H'],$value['i'],0,$value['F'],$value['d'],$value['Y']);
+					$extras[$new_key] = date('Y-m-d H:i:s',$time);																		
+				} else {
+					// extra field date
+					$time = mktime(0,0,0,$value['F'],$value['d'],$value['Y']);
+					$extras[$new_key] = date('Y-m-d',$time);
+				}									
+			} else {
+				$extras[$new_key] = $value;
+			}												
 		} else {
 			$sql .= " $key = '".Database::escape_string($value)."',";
 		}

@@ -764,10 +764,19 @@ else {
 		}
 		if ($delete == "all" && api_is_allowed_to_edit(null,true)) {		
 		
-			$queryString1 = "SELECT url FROM " . $work_table . "";
-			$queryString2 = "DELETE FROM  " . $work_table . "";
-			$queryString3 = "DELETE FROM  " . $TSTDPUBASG . "";
+			$queryString1 = "SELECT url FROM ".$work_table."";
+			$queryString2 = "DELETE FROM  ".$work_table."";
+			$queryString3 = "DELETE FROM  ".$TSTDPUBASG. "";
 			
+			$sql_agenda = "SELECT add_to_calendar FROM ".$TSTDPUBASG." WHERE add_to_calendar <> 0";
+			$rs_agenda = Database::query($sql_agenda, __FILE__, __LINE__);
+			$t_agenda   = Database::get_course_table(TABLE_AGENDA);
+			while ($row_agenda=Database::fetch_array($rs_agenda)) {
+				$deleteagenda = "DELETE FROM  ".$t_agenda." WHERE id='".$row_agenda['add_to_calendar']."'";
+				$rsdeleteagenda = Database::query($deleteagenda, __FILE__, __LINE__);
+
+			}	
+					
 			$result1 = Database::query($queryString1, __FILE__, __LINE__);
 			$result2 = Database::query($queryString2, __FILE__, __LINE__);
 			$result3 = Database::query($queryString3, __FILE__, __LINE__);

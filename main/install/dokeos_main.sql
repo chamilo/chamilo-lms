@@ -2168,12 +2168,15 @@ CREATE TABLE message(
 	send_date datetime not null default '0000-00-00 00:00:00',
 	title varchar(255) not null,
 	content text not null,
+	group_id int unsigned not null default 0,
+	parent_id int unsigned not null default 0,
 	PRIMARY KEY(id)
 );
 ALTER TABLE message ADD INDEX idx_message_user_sender(user_sender_id);
 ALTER TABLE message ADD INDEX idx_message_user_receiver(user_receiver_id);
 ALTER TABLE message ADD INDEX idx_message_user_sender_user_receiver(user_sender_id,user_receiver_id);
-ALTER TABLE message ADD INDEX idx_message_msg_status(msg_status);
+ALTER TABLE message ADD INDEX idx_message_group(group_id);
+ALTER TABLE message ADD INDEX idx_message_parent(parent_id);
 
 INSERT INTO user_friend_relation_type (id,title)
 VALUES

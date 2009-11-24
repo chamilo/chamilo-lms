@@ -100,8 +100,8 @@ else
 	<h4><?php Display::display_icon('members.gif', get_lang('Users')); ?> <?php echo api_ucfirst(get_lang('Users')); ?></h4>
 	<ul>
 		<li><a href="user_list.php">	<?php echo get_lang('UserList') ?></a></li>
-		<li><a href="../mySpace/user_add.php">		<?php echo get_lang('AddUsers') ?></a></li>
-
+		<li><a href="../mySpace/user_add.php"><?php echo get_lang('AddUsers') ?></a></li>
+		<li><a href="user_import.php">	<?php echo get_lang('ImportUserListXMLCSV') ?></a></li>
 	</ul>
 	</div>
 <?php

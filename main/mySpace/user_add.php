@@ -27,10 +27,12 @@ $cidReset = true;
 // including necessary libraries
 require '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-include_once $libpath.'fileManage.lib.php';
-include_once $libpath.'fileUpload.lib.php';
-include_once $libpath.'usermanager.lib.php';
+require_once $libpath.'fileManage.lib.php';
+require_once $libpath.'fileUpload.lib.php';
+require_once $libpath.'usermanager.lib.php';
 require_once $libpath.'formvalidator/FormValidator.class.php';
+require_once $libpath.'image.lib.php';
+require_once $libpath.'mail.lib.inc.php';
 
 // user permissions
 api_protect_admin_script(true);
@@ -39,6 +41,7 @@ api_block_anonymous_users();
 // Database table definitions
 $table_admin 	= Database :: get_main_table(TABLE_MAIN_ADMIN);
 $table_user 	= Database :: get_main_table(TABLE_MAIN_USER);
+$database 		= Database::get_main_database();
 
 $htmlHeadXtra[] = '
 <script type="text/javascript">
@@ -85,7 +88,7 @@ if (isset($_GET["id_session"]) && $_GET["id_session"] != "") {
 
 $interbreadcrumb[] = array ('url' => '../admin/index.php', 'name' => get_lang('PlatformAdmin'));
 
-$tool_name = get_lang('AddUser');
+$tool_name = get_lang('AddUsers');
 // Create the form
 $form = new FormValidator('user_add');
 if (api_is_western_name_order()) {
@@ -171,10 +174,8 @@ if (api_is_session_admin()) {
 	$where = 'WHERE session_admin_id='.intval(api_get_user_id());
 	$where .= ' AND ( (session.date_start <= CURDATE() AND session.date_end >= CURDATE()) OR session.date_start="0000-00-00" ) ';
 	$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-	$result = Database::query("SELECT id,name,nbr_courses,date_start,date_end
-		FROM $tbl_session
-		$where
-		ORDER BY name",__FILE__,__LINE__);
+	$sql="SELECT id,name,nbr_courses,date_start,date_end FROM $tbl_session $where ORDER BY name";
+	$result = Database::query($sql,__FILE__,__LINE__);
 	$a_sessions = Database::store_result($result);
 	$session_list = array();
 	$session_list[0] = get_lang('SelectSession');
@@ -265,8 +266,10 @@ $defaults['session_id'] = api_get_session_id();
 
 $form->setDefaults($defaults);
 // Submit button
-$form->addElement('submit', 'submit', get_lang('Add'));
-$form->addElement('submit', 'submit_plus', get_lang('Add').'+');
+$select_level = array ();
+$html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit_plus', get_lang('Add').'+', 'class="add"');
+$html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
+$form->addGroup($html_results_enabled);
 // Validate form
 if ($form->validate()) {
 	$check = Security::check_token('post');

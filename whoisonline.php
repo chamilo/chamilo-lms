@@ -132,7 +132,7 @@ function display_user_list($user_list, $_plugins) {
 			$user_info = api_get_user_info($uid);
 			$table_row = array();
 			if (api_get_setting('allow_social_tool')=='true') {
-				$url = '/main/social/profile.php?u='.$uid.$course_url;
+				$url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$uid.$course_url;
 			} else {
 				$url = '?id='.$uid.$course_url;
 			}

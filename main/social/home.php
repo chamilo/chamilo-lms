@@ -381,7 +381,7 @@ echo '<div id="social-profile-wrapper">';
 						echo '<div style="padding-left:70px;">';
 								echo ' '.api_convert_encoding(substr($pending_invitations[$i]['content'],0,50),$charset,'UTF-8');
 							echo '<br />';
-							echo 'aaa<a id="btn_accepted_'.$pending_invitations[$i]['user_sender_id'].'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
+							echo '<a id="btn_accepted_'.$pending_invitations[$i]['user_sender_id'].'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
 							echo '<div id="id_response">&nbsp;</div>';
 						echo '</div>';
 					echo '</div>';

@@ -600,6 +600,11 @@ if(isset($msgError))
 if( isset($info_message))
 {
 	Display::display_confirmation_message($info_message); //main API
+	if (isset($_POST['origin']))
+	{
+		$slide_id=$_POST['origin_opt'];
+		nav_to_slideshow($slide_id);
+	}
 }
 
 
@@ -634,6 +639,8 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 	$form->addElement('hidden','file_path');
 	$form->addElement('hidden','commentPath');
 	$form->addElement('hidden','showedit');
+	$form->addElement('hidden','origin');
+	$form->addElement('hidden','origin_opt');
 
 	if($use_document_title)
 	{
@@ -692,18 +699,34 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 	$defaults['commentPath'] = $file;
 	$defaults['renameTo'] = $file_name;
 	$defaults['newComment'] = $oldComment;
+	$defaults['origin'] = Security::remove_XSS($_GET['origin']);
+	$defaults['origin_opt'] = Security::remove_XSS($_GET['origin_opt']);
 
 	$form->setDefaults($defaults);
 	// show templates
 	/*
 	$form->addElement('html','<div id="frmModel" style="display:block; height:525px; width:240px; position:absolute; top:115px; left:1px;"></div>');
 	*/
+	
+	
+	$origin=Security::remove_XSS($_GET['origin']);
+	if ($origin=='slideshow') {
+		$slide_id=$_GET['origin_opt'];
+		nav_to_slideshow($slide_id);
+	}
 	$form->display();
 
 	//Display::display_error_message(get_lang('ReadOnlyFile')); //main API
 
 }
 
+//for better navigation when a slide is been commented
+function nav_to_slideshow($slide_id)
+{
+		echo '<div class="actions">';		
+		echo '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ViewSlideshow')).get_lang('BackTo').' '.get_lang('ViewSlideshow').'</a>';		
+		echo '</div>';
+}
 /*
 ==============================================================================
 	   DOKEOS FOOTER

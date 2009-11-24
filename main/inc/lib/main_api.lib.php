@@ -3724,15 +3724,17 @@ function replace_dangerous_char($filename, $strict = 'loose') {
 	static $replace_strict = array('_');
 
 	$system_encoding = api_get_file_system_encoding();
-
+	
+	
+	//comment because (see support.dokeos.com/issues/5596)
 	// Compatibility: we keep the previous behaviour (Dokeos 1.8.6) for Latin 1 platforms (ISO-8859-15, ISO-8859-1, WINDOWS-1252, ...).
-	if (api_is_latin1($system_encoding)) {
-		$filename = ereg_replace("\.+$", "", substr(strtr(ereg_replace(
-			"[^!-~\x80-\xFF]", "_", trim($filename)), '\/:*?"<>|\'',
-			/* Keep C1 controls for UTF-8 streams */  '-----_---_'), 0, 250));
-		if ($strict != 'strict') return $filename;
-		return ereg_replace("[^!-~]", 'x', $filename);
-	}
+	//if (api_is_latin1($system_encoding)) {
+	//	$filename = ereg_replace("\.+$", "", substr(strtr(ereg_replace(
+	//		"[^!-~\x80-\xFF]", "_", trim($filename)), '\/:*?"<>|\'',
+	//		/* Keep C1 controls for UTF-8 streams */  '-----_---_'), 0, 250));
+	//	if ($strict != 'strict') return $filename;
+	//	return ereg_replace("[^!-~]", 'x', $filename);
+	// }
 
 	// For other platform encodings and various languages we use transliteration to ASCII filename string.
 	if (!api_is_valid_utf8($filename)) {

@@ -674,7 +674,7 @@ function api_protect_admin_script($allow_sessions_admins = false) {
 function api_block_anonymous_users() {
 	global $_user;
 	if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
-		include api_get_path(INCLUDE_PATH).'header.inc.php';
+		require_once api_get_path(INCLUDE_PATH).'header.inc.php';
 		api_not_allowed();
 		return false;
 	}
@@ -1010,7 +1010,7 @@ function api_session_start($already_installed = true) {
 		$storeSessionInDb = false;
 	}
 	if ($storeSessionInDb && function_exists('session_set_save_handler')) {
-		include_once api_get_path(LIBRARY_PATH).'session_handler.class.php';
+		require_once api_get_path(LIBRARY_PATH).'session_handler.class.php';
 		$session_handler = new session_handler();
 		@session_set_save_handler(array(& $session_handler, 'open'), array(& $session_handler, 'close'), array(& $session_handler, 'read'), array(& $session_handler, 'write'), array(& $session_handler, 'destroy'), array(& $session_handler, 'garbage'));
 	}
@@ -2165,7 +2165,7 @@ function api_not_allowed($print_headers = false) {
 			if ($print_headers && $origin != 'learnpath') { Display::display_footer(); }
 			die();
 		}
-		include_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+		require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 		$form = new FormValidator('formLogin', 'post', api_get_self().'?'.$_SERVER['QUERY_STRING']);
 		$form->addElement('static', null, null, 'Username');
 		$form->addElement('text', 'login', '', array('size' => USERNAME_MAX_LENGTH));
@@ -2810,7 +2810,7 @@ function api_plugin($location) {
 	global $_plugins;
 	if (isset($_plugins[$location]) && is_array($_plugins[$location])) {
 		foreach ($_plugins[$location] as $this_plugin) {
-			include api_get_path(SYS_PLUGIN_PATH)."$this_plugin/index.php";
+			require_once api_get_path(SYS_PLUGIN_PATH)."$this_plugin/index.php";
 		}
 	}
 }

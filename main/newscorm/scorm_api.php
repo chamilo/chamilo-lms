@@ -1043,7 +1043,7 @@ function dokeos_void_save_asset(myscore,mymax)
  */
 function logit_scorm(message,priority){
 
-	if(scorm_logs>priority){
+	if(scorm_logs>=priority){
 		if($("#lp_log_name") && $("#log_content")){
 			$("#log_content").append("SCORM: " + message + "<br/>");
 		}
@@ -1057,7 +1057,7 @@ function logit_scorm(message,priority){
  * @param	integer Priority (0 for top priority, 3 for lowest)
  */
 function logit_lms(message,priority){
-	if(lms_logs>priority){
+	if(lms_logs>=priority){
 		if ($("#lp_log_name") && $("#log_content")) {
 			$("#log_content").append("LMS: " + message + "<br />");
 		}
@@ -1242,7 +1242,7 @@ function switch_item(current_item, next_item){
 	logit_lms('Called switch_item with params '+lms_item_id+' and '+next_item+'',0);
 	if(lms_lp_type==1 || lms_item_type=='asset' || session_time == '0' || session_time == '0:00:00'){
 		if (lms_lp_type==1) {
-		xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, asset_timer, suspend_data, lesson_location,interactions, lms_item_core_exit);
+		    xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, asset_timer, suspend_data, lesson_location,interactions, lms_item_core_exit);
 		} else {
 			my_get_value_scorm=new Array();
     		my_get_value_scorm=ProcessValueScorm();
@@ -1329,7 +1329,7 @@ function switch_item(current_item, next_item){
 	var mysrc = 'lp_controller.php?action=content&lp_id='+lms_lp_id+'&item_id='+next_item;
 	var cont_f = $("#content_id");
 
-		<?php if($oLP->mode == 'fullscreen'){ ?>
+	<?php if($oLP->mode == 'fullscreen'){ ?>
 	cont_f = window.open(''+mysrc,'content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
 	cont_f.onload=function(){
 		info_lms_item[0]=info_lms_item[1];
@@ -1341,7 +1341,7 @@ function switch_item(current_item, next_item){
 		info_lms_item[1]= info_lms_item[1];
 	}
 
-		<?php } else { ?>
+	<?php } else { ?>
 			cont_f.attr("src",mysrc);
 	<?php } ?>
 

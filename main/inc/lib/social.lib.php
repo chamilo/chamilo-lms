@@ -164,6 +164,8 @@ class SocialManager extends UserManager {
 		}
 		return $list_ids_friends;
 	}
+	
+	
 	/**
 	 * get list web path of contacts by user id
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
@@ -185,7 +187,7 @@ class SocialManager extends UserManager {
 			}
 		}
 		return $combine_friend;
-	}
+	}	
 	/**
 	 * get web path of user invitate
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
@@ -201,6 +203,9 @@ class SocialManager extends UserManager {
 		}
 		return $list_path_image_friend;
 	}
+	
+
+	
 	/**
 	 * Sends an invitation to contacts
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>

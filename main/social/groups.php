@@ -28,25 +28,28 @@ if ($group_id != 0 ) {
 		
 	//Loading group information
 	if (isset($_GET['status']) && $_GET['status']=='sent') {
-		Display::display_confirmation_message(api_xml_http_response_encode(get_lang('MessageHasBeenSent')), false);
+		Display::display_confirmation_message(get_lang('MessageHasBeenSent'), false);
 	}	
 
 	if (isset($_GET['action']) && $_GET['action']=='leave') {
 		$user_leaved = intval($_GET['u']);
-		GroupPortalManager::delete_user_rel_group($user_leaved, $group_id);	
+		//I can "leave me myself"
+		if (api_get_user_id() == $user_leaved) {
+			GroupPortalManager::delete_user_rel_group($user_leaved, $group_id);
+		}	
 	}
 	
-	// add a user to a group if its open
-	
+	// add a user to a group if its open	
 	if (isset($_GET['action']) && $_GET['action']=='join') {
 		// we add a user only if is a open group
-		$user_join = intval($_GET['u']);		
-		if ($group_info['visibility'] != GROUP_PERMISSION_CLOSED) {
+		$user_join = intval($_GET['u']);	
+		if (api_get_user_id() == $user_join) {	
 			if ($group_info['visibility'] == GROUP_PERMISSION_OPEN) {
-				GroupPortalManager::add_user_to_group($user_join, $group_id);
+				GroupPortalManager::add_user_to_group($user_join, $group_id);				
 			} else {
 				GroupPortalManager::add_user_to_group($user_join, $group_id, GROUP_USER_PERMISSION_PENDING_INVITATION);
 			}
+				
 		}
 	}
 	
@@ -116,7 +119,6 @@ if ($group_id != 0 ) {
 	
 	if (is_array($users[api_get_user_id()]) && count($users[api_get_user_id()]) > 0) {
 		//im a member
-
 		if ($users[api_get_user_id()]['relation_type'] !='' ) {
 			
 			$my_group_role = $users[api_get_user_id()]['relation_type'];
@@ -129,9 +131,10 @@ if ($group_id != 0 ) {
 				echo 'Im the admin/';
 				echo '<a href="group_edit.php?id='.$group_id.'">'.get_lang('EditGroup').'</a>';
 				echo '<a href="group_members.php?id='.$group_id.'">'.get_lang('MemberList').'</a>';
-				echo 'Invite others';					
+				echo '<a href="group_invitation.php?id='.$group_id.'">'.get_lang('InviteFriends').'</a>';
+									
 			}  elseif ($my_group_role  == GROUP_USER_PERMISSION_PENDING_INVITATION) {
-				echo 'You should Wait';
+				echo get_lang('PendingApproval');
 			}
 		} else {
 			if ($group_info['visibility']!= GROUP_PERMISSION_CLOSED ) {
@@ -141,9 +144,7 @@ if ($group_id != 0 ) {
 		}
 	} else {
 		//im not a member
-		if ($group_info['visibility'] != GROUP_PERMISSION_CLOSED) {
-			echo '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a>';
-		}
+		echo '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a>';		
 	}	
 	echo '</div>'; // end layout permissions
 	echo '</div>'; // end layout left	

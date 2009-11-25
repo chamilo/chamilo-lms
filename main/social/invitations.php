@@ -6,6 +6,7 @@ require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'image.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 $this_section = SECTION_SOCIAL;
 
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
@@ -63,8 +64,8 @@ echo '</div>';
 	 
 
 $request = api_is_xml_http_request();
-$language_variable = api_xml_http_response_encode(get_lang('PendingInvitations'));
-$language_comment  = api_xml_http_response_encode(get_lang('SocialInvitesComment'));
+$language_variable = get_lang('PendingInvitations');
+$language_comment  = get_lang('SocialInvitesComment');
 //api_display_tool_title($language_variable);
 ?>
 <div id="id_response" align="center"></div>
@@ -74,6 +75,8 @@ $user_id = api_get_user_id();
 
 $list_get_invitation		= SocialManager::get_list_invitation_of_friends_by_user_id($user_id);
 $list_get_invitation_sent	= SocialManager::get_list_invitation_sent_by_user_id($user_id);
+
+$pending_invitations = GroupPortalManager::get_groups_by_user($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION,true);
 
 $number_loop=count($list_get_invitation);
 
@@ -171,5 +174,11 @@ if (count($list_get_invitation_sent) > 0 ){
 	<?php
 	}
 }
+
+if (count($pending_invitations) > 0) {
+	echo get_lang('GroupInvitations');
+	Display::display_sortable_grid('search_users', array(), $pending_invitations, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
+}
+	
 Display::display_footer();
 ?>

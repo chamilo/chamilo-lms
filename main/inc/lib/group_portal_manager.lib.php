@@ -8,11 +8,11 @@
 *	@package dokeos.library
 ==============================================================================
 */
-
+// Group permissions
 define('GROUP_PERMISSION_OPEN'	, '1');
 define('GROUP_PERMISSION_CLOSED', '2');
-define('GROUP_PERMISSION_APPROVAL_NEEDED', '3');
 
+// Group user permissions
 define('GROUP_USER_PERMISSION_ADMIN'	,'1'); // the admin of a group 
 define('GROUP_USER_PERMISSION_READER'	,'2'); // a normal user 
 define('GROUP_USER_PERMISSION_PENDING_INVITATION'	,'3'); // user pending invitation to a group
@@ -76,7 +76,7 @@ class GroupPortalManager
 
 
 	/**
-	* Deletes a group
+	* Deletes a group 
 	* @author Julio Montoya
 	* @param int id
 	* @return boolean true if success
@@ -87,6 +87,8 @@ class GroupPortalManager
 		$table = Database :: get_main_table(TABLE_MAIN_GROUP);
 		$sql= "DELETE FROM $table WHERE id = ".Database::escape_string($id);
 		$result = Database::query($sql,  __FILE__, __LINE__);
+		//deleting all relationshop with users and groups
+		self::delete_users($id);
 		return $result;
 	}
 
@@ -277,8 +279,7 @@ class GroupPortalManager
 		return $array;
 	}
 	
-	
-		/** Gets the inner join of users and group table
+	/** Gets the inner join of users and group table
 	 * @author Julio Montoya
 	 * @return int  access url id
 	 * @return array   Database::store_result of the result
@@ -293,11 +294,14 @@ class GroupPortalManager
 		} else {
 			$num = intval($num);
 		}
+		// only show admins and readers
+		$where_relation_condition = " WHERE  gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."') ";
+		
 		
 		$sql = "SELECT count(user_id) as count, g.picture_uri, g.name, g.description, g.id  
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
-				ON gu.group_id = g.id GROUP BY g.id ORDER BY count DESC LIMIT $num";
+				ON gu.group_id = g.id $where_relation_condition GROUP BY g.id ORDER BY count DESC LIMIT $num";
 				
 		$result=Database::query($sql,__FILE__,__LINE__);
 		$array = array();
@@ -317,7 +321,7 @@ class GroupPortalManager
 	 * @return int  access url id
 	 * @return array   Database::store_result of the result
 	 * */
-	function get_groups_by_age($num = 10, $with_image = false)
+	function get_groups_by_age($num = 10, $with_image = false, $relation_type = GROUP_USER_PERMISSION_READER)
 	{
 		$where = '';
 		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
@@ -328,10 +332,15 @@ class GroupPortalManager
 		} else {
 			$num = intval($num);
 		}
+		
+		// only show admins and readers
+		$where_relation_condition = " WHERE  gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."') ";
+		
+		
 		$sql = "SELECT g.picture_uri, g.name, g.description, g.id  
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
-				ON gu.group_id = g.id ORDER BY created_on desc LIMIT $num ";
+				ON gu.group_id = g.id $where_relation_condition ORDER BY created_on desc LIMIT $num ";
 				
 		$result=Database::query($sql,__FILE__,__LINE__);
 		$array = array();
@@ -353,8 +362,7 @@ class GroupPortalManager
 		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$tbl_user				= Database::get_main_table(TABLE_MAIN_USER);
 		$group_id 				= intval($group_id);
-		$limit 					= intval($limit);
-		
+		$limit 					= intval($limit);	
 		
 		if ($relation_type == 0) {			
 			$where_relation_condition = '';
@@ -479,6 +487,7 @@ class GroupPortalManager
 		}
 		return $return_value;
 	}
+	
 
 	/**
 	* Checks the relationship between an URL and a Course (return the num_rows)
@@ -496,91 +505,8 @@ class GroupPortalManager
 		return $num;
 	}
 
-
 	/**
-	* Checks the relationship between an URL and a Session (return the num_rows)
-	* @author Julio Montoya
-	* @param int user id
-	* @param int url id
-	* @return boolean true if success
-	* */
-	function relation_url_session_exist($session_id, $url_id)
-	{
-		$table_url_rel_session= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-		$sql= "SELECT session_id FROM $table_url_rel_session WHERE access_url_id = ".Database::escape_string($url_id)." AND session_id = ".Database::escape_string($session_id);
-		$result = Database::query($sql,  __FILE__, __LINE__);
-		$num = Database::num_rows($result);
-		return $num;
-	}
-
-
-
-
-	/**
-	 * Add a group of courses into a group of URLs
-	 * @author Julio Montoya
-	 * @param  array of course ids
-	 * @param  array of url_ids
-	 * */
-	function add_courses_to_urls($course_list,$url_list)
-	{
-		$table_url_rel_course= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-		$result_array=array();
-
-		if (is_array($course_list) && is_array($url_list)){
-			foreach ($url_list as $url_id) {
-				foreach ($course_list as $course_code) {
-					$count = UrlManager::relation_url_course_exist($course_code,$url_id);
-					if ($count==0) {
-						$sql = "INSERT INTO $table_url_rel_course
-		               			SET course_code = '".Database::escape_string($course_code)."', access_url_id = ".Database::escape_string($url_id);
-						$result = Database::query($sql, __FILE__, __LINE__);
-						if($result)
-							$result_array[$url_id][$course_code]=1;
-						else
-							$result_array[$url_id][$course_code]=0;
-					}
-				}
-			}
-		}
-		return 	$result_array;
-	}
-
-
-	/**
-	 * Add a group of sessions into a group of URLs
-	 * @author Julio Montoya
-	 * @param  array of session ids
-	 * @param  array of url_ids
-	 * */
-	function add_sessions_to_urls($session_list,$url_list)
-	{
-		$table_url_rel_session= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-		$result_array=array();
-
-		if (is_array($session_list) && is_array($url_list)){
-			foreach ($url_list as $url_id) {
-				foreach ($session_list as $session_id) {
-					$count = UrlManager::relation_url_session_exist($session_id,$url_id);
-					if ($count==0) {
-						$sql = "INSERT INTO $table_url_rel_session
-		               			SET session_id = ".Database::escape_string($session_id).", access_url_id = ".Database::escape_string($url_id);
-						$result = Database::query($sql, __FILE__, __LINE__);
-						if($result)
-							$result_array[$url_id][$session_id]=1;
-						else
-							$result_array[$url_id][$session_id]=0;
-					}
-				}
-			}
-		}
-		return 	$result_array;
-	}
-
-
-
-	/**
-	 * Add a user into a url
+	 * Add a user into a group
 	 * @author Julio Montoya
 	 * @param  user_id
 	 * @param  url_id
@@ -635,7 +561,7 @@ class GroupPortalManager
 
 
 	/**
-	* Deletes an url and user relationship
+	* Deletes a group  and user relationship
 	* @author Julio Montoya
 	* @param int user id
 	* @param int url id
@@ -780,40 +706,7 @@ class GroupPortalManager
 		}
 	}
 
-	/**
-	 * Updates the access_url_rel_session table with a given user list
-	 * @author Julio Montoya
-	 * @param array user list
-	 * @param int access_url_id
-	 * */
-	function update_urls_rel_session($session_list,$access_url_id)
-	{
-		$table_session	= Database :: get_main_table(TABLE_MAIN_SESSION);
-		$table_url_rel_session	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-
-		$sql = "SELECT session_id FROM $table_url_rel_session WHERE access_url_id=".Database::escape_string($access_url_id);
-		$result = Database::query($sql,__FILE__,__LINE__ );
-		$existing_sessions = array();
-
-		while($row = Database::fetch_array($result)){
-			$existing_sessions[] = $row['session_id'];
-		}
-
-		//adding users
-		foreach($session_list as $session) {
-			if(!in_array($session, $existing_sessions)) {
-				UrlManager::add_session_to_url($session,$access_url_id);
-			}
-		}
-
-		//deleting old users
-		foreach($existing_sessions as $existing_session) {
-			if(!in_array($existing_session, $session_list)) {
-				UrlManager::delete_url_rel_session($existing_session,$access_url_id);
-			}
-		}
-	}
-
+	
 
 	function get_access_url_from_user($user_id) {
 		$table_url_rel_user	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);

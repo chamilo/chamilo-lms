@@ -8,26 +8,11 @@ require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 api_block_anonymous_users();
 
-$nameTools = get_lang('AddGroup');
-$this_section = SECTION_SOCIAL;
-
-$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
-Display :: display_header($tool_name, 'Groups');
-
-//show the action menu
-SocialManager::show_social_menu();
-echo '<div class="actions-title">';
-echo get_lang('Groups');
-echo '</div>';
 
 global $charset;
 $table_message = Database::get_main_table(TABLE_MESSAGE);
-$request=api_is_xml_http_request();
-if ($request===true) {
-	$form = new FormValidator('add_group','post','index.php?add_group=1#remote-tab-7');
-} else {
-	$form = new FormValidator('add_group');
-}
+
+$form = new FormValidator('add_group');
 
 // name
 $form->addElement('text', 'name', get_lang('Name'));
@@ -55,11 +40,8 @@ $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allow
 $status = array();
 $status[GROUP_PERMISSION_OPEN] 		= get_lang('Open');
 $status[GROUP_PERMISSION_CLOSED]	= get_lang('Closed');
-$status[GROUP_PERMISSION_APPROVAL_NEEDED]	= get_lang('ApprovalNeeded');
 
 $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $status);
-
-
 $form->addElement('style_submit_button','add_group', get_lang('AddGroup'),'class="save"');
 
 $form->setRequiredNote(api_xml_http_response_encode('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>'));
@@ -83,12 +65,22 @@ if ($form->validate()) {
 		$picture_uri = GroupPortalManager::update_group_picture($group_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
 		GroupPortalManager::update($group_id, $name, $description, $url,$status, $picture_uri);
 	}
-		
-} else {
-	$form->display();	
+	header('Location: groups.php?id='.$group_id.'&action=show_message&message='.urlencode(get_lang('GroupAdded')));
+	exit();		
 }
 
+$nameTools = get_lang('AddGroup');
+$this_section = SECTION_SOCIAL;
 
+$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
+Display :: display_header($tool_name, 'Groups');
 
+//show the action menu
+SocialManager::show_social_menu();
+echo '<div class="actions-title">';
+echo get_lang('Groups');
+echo '</div>';
+
+$form->display();	
 	
 ?>

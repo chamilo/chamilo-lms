@@ -263,9 +263,9 @@ echo '<a href="profile.php">'.Display::return_icon('shared_profile.png').' '.get
 echo '<a href="friends.php">'.Display::return_icon('lp_users.png').' '.get_lang('Friends').'</a>';
 echo '<a href="../messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Inbox').'</a>';
 echo '<a href="group.php">'.Display::return_icon('group.gif').' '.get_lang('MyGroups').'</a>';
-echo '<a href="/main/social/search.php">'.Display::return_icon('search.gif').' '.get_lang('Search').'</a>';
+echo '<a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('search.gif').' '.get_lang('Search').'</a>';
 
-echo '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
+echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
 
 /*
 echo '<span style="float:right; padding-top:7px;">'.

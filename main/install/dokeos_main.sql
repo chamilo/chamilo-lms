@@ -2334,3 +2334,8 @@ CREATE TABLE IF NOT EXISTS message_attachment (
   filename varchar(255) NOT NULL,
   PRIMARY KEY  (id)
 )
+
+
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (10, 'tags','tags',0,0);
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (9, 'rssfeeds','RSS',0,0);
+

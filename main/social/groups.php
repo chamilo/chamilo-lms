@@ -95,7 +95,7 @@ if ($group_id != 0 ) {
 	}
 	
 	echo '<div id="actions" style="margin:10px">';
-	echo '<a href="/main/messages/new_message.php?group_id='.$group_id.'">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
+	echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
 	echo '</div>';
 
 	echo get_lang('Members').' : ';

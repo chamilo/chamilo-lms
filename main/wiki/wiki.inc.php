@@ -1833,11 +1833,12 @@ function auto_add_page_users($assignment_type)
 
 		//remove duplicates
 		$a_users_to_add = $a_users_to_add_with_duplicates;
-		array_walk($a_users_to_add, create_function('&$value,$key', '$value = json_encode($value);'));
+		//array_walk($a_users_to_add, create_function('&$value,$key', '$value = json_encode($value);'));
 		$a_users_to_add = array_unique($a_users_to_add);
-		array_walk($a_users_to_add, create_function('&$value,$key', '$value = json_decode($value, true);'));
+		//array_walk($a_users_to_add, create_function('&$value,$key', '$value = json_decode($value, true);'));
 	}
 
+	//echo print_r($a_users_to_add);
 
 	$all_students_pages = array();
 
@@ -1863,17 +1864,20 @@ function auto_add_page_users($assignment_type)
 	$link2teacher=$_POST['title']= $title_orig."_uass".api_get_user_id();
 
 	//first: teacher name, photo, and assignment description (original content)
-    $content_orig_A='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Teacher').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</div><br/><div>';
-	$content_orig_B='<h1>'.get_lang('AssignmentDescription').'</h1></div><br/>'.$_POST['content'];
+   // $content_orig_A='<div align="center" style="background-color: #F5F8FB;  border:double">'.$photo.'</br>'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</br>('.get_lang('Teacher').')</div><br/><div>';
 
+	$content_orig_A='<div align="center" style="background-color: #F5F8FB; border:solid; border-color: #E6E6E6"><table border="0"><tr><td style="font-size:24px">'.get_lang('AssignmentDesc').'</td></tr><tr><td>'.$photo.'</br>'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</td></tr></table></div>';
+	
+	$content_orig_B='<br/><div align="center" style="font-size:24px">'.get_lang('AssignmentDescription').': '.$title_orig.'</div><br/>'.$_POST['content'];
+	
     //Second: student list (names, photo and links to their works).
 	//Third: Create Students work pages.
+
 
    	foreach($a_users_to_add as $user_id=>$o_user_to_add)
 	{
 		if($o_user_to_add['user_id'] != api_get_user_id()) //except that puts the task
 		{
-
 			$assig_user_id= $o_user_to_add['user_id']; //identifies each page as created by the student, not by teacher
 			$image_path = UserManager::get_user_picture_path_by_id($assig_user_id,'web',false, true);
 			$image_repository = $image_path['dir'];
@@ -1905,11 +1909,13 @@ function auto_add_page_users($assignment_type)
 			{
 				$_POST['title']= $title_orig;
 				$_POST['comment']=get_lang('AssignmentFirstComToStudent');
-				$_POST['content']='<div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.$photo.get_lang('Student').': '.$name.'</div>[['.$link2teacher.' | '.get_lang('AssignmentLinktoTeacherPage').']] '; //If $content_orig_B is added here, the task written by the professor was copied to the page of each student. TODO: config options
+				$_POST['content']='<div align="center" style="background-color: #F5F8FB; border:solid; border-color: #E6E6E6"><table border="0"><tr><td style="font-size:24px">'.get_lang('AssignmentWork').'</td></tr><tr><td>'.$photo.'</br>'.$name.'</td></tr></table></div>[['.$link2teacher.' | '.get_lang('AssignmentLinktoTeacherPage').']] '; //If $content_orig_B is added here, the task written by the professor was copied to the page of each student. TODO: config options
 
 				//AssignmentLinktoTeacherPage
-			 	$all_students_pages[] = '<li>'.api_get_person_name($o_user_to_add['firstname'], $o_user_to_add['lastname']).' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>';
-
+			 	$all_students_pages[] = '<li>'.strtoupper($o_user_to_add['lastname']).', '.$o_user_to_add['firstname'].' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>'; //don't change this line without guaranteeing that users will be ordered by last names in the following format (surname, name)
+				
+				//$all_students_pages[] = '<li><table border="0"><tr><td width="200">'.api_get_person_name($o_user_to_add['lastname'], $o_user_to_add['firstname']).'</td><td>[['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</td></tr></table></li>';
+				
 				$_POST['assignment']=2;
 
 			}
@@ -1930,7 +1936,7 @@ function auto_add_page_users($assignment_type)
 				$_POST['title']= $title_orig;
 				$_POST['comment']=get_lang('AssignmentDesc');
 				sort($all_students_pages);
-				$_POST['content']=$content_orig_A.$content_orig_B.'<br/><div align="center" style="font-size:24px; background-color: #F5F8FB;  border:double">'.get_lang('AssignmentLinkstoStudentsPage').'<br/><strong>'.$title_orig.'</strong></div><div style="background-color: #F5F8FB; border:double"><ol>'.implode($all_students_pages).'</ol></div><br/>';
+				$_POST['content']=$content_orig_A.$content_orig_B.'<br/><div align="center" style="font-size:18px; background-color: #F5F8FB; border:solid; border-color:#E6E6E6">'.get_lang('AssignmentLinkstoStudentsPage').'</div><br/><div style="background-color: #F5F8FB; border:solid; border-color:#E6E6E6"><ol>'.implode($all_students_pages).'</ol></div><br/>';
 			 	$_POST['assignment']=1;
 
 			 }

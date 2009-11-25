@@ -200,23 +200,24 @@ class TestOpenId extends UnitTestCase {
 	}
 
 	function testopenid_redirect() {
-		$url='http://localhost/dokeossvn186/tests/all.test2.php';
-		$message='';
 		ob_start();
-		$res=openid_redirect($url, $message);
-		$this->assertTrue(is_null($res));
+		$url = api_get_path(WEB_PATH).'tests/all.test2.php';
+		$res = openid_redirect($url, $message = array());
 		ob_end_clean();
-		//var_dump($res);
+		$this->assertTrue(is_string($res));
 	}
 
 	function testopenid_redirect_http() {
-		$url='http://localhost/dokeossvn186/tests/all.test2.php';
-		$message='';
+		$url = api_get_path(WEB_PATH).'tests/all.test2.php';
 		ob_start();
-		$res=openid_redirect_http($url, $message);
-		$this->assertTrue(is_null($res));
+		$res=openid_redirect_http($url, $message = array());
+		
+		$dd = $this->assertTrue(is_null($res));
+		var_dump($dd);
+		
+		
 		ob_end_clean();
-		//var_dump($res);
+		
 	}
 }
 ?>

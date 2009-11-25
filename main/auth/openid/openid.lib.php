@@ -23,20 +23,21 @@ define('OPENID_NS_1_0', 'http://openid.net/signon/1.0');
 
 /**
  * Performs an HTTP 302 redirect (for the 1.x protocol).
+ * This function should be deprecated for 1.8.6.2 needs documentation
  */
 function openid_redirect_http($url, $message) {
   $query = array();
   foreach ($message as $key => $val) {
     $query[] = $key .'='. urlencode($val);
   }
-
   $sep = (strpos($url, '?') === FALSE) ? '?' : '&';
   header('Location: '. $url . $sep . implode('&', $query), TRUE, 302);
-  exit;
+  //exit;
 }
 
 /**
  * Creates a js auto-submit redirect for (for the 2.x protocol)
+ * This function should be deprecated for 1.8.6.2 needs documentation
  */
 function openid_redirect($url, $message) {
   $output = '<html><head><title>'.get_lang('OpenIDRedirect'). "</title></head>\n<body>";
@@ -51,9 +52,11 @@ function openid_redirect($url, $message) {
   $output .= '</form>';
   $output .= '<script type="text/javascript">document.getElementById("openid-redirect-form").submit();</script>';
   $output .= "</body></html>\n";
-  print $output;
+  //print $output;  
+  return $output;
   exit;
 }
+
 
 /**
  * Determine if the given identifier is an XRI ID.

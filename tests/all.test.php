@@ -1,27 +1,25 @@
 <?php
+
+//Set the time limit for the tests
 ini_set('memory_limit','128M');
-require_once('simpletest/unit_tester.php');
-require_once(dirname(__FILE__).'/../main/inc/global.inc.php');
-require_once(api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
-require_once('main/inc/lib/main_api.lib.test.php');
-require_once('main/inc/lib/add_course.lib.inc.test.php');
-require_once('main/inc/lib/blog.lib.test.php');
-require_once(api_get_path(LIBRARY_PATH).'/fileDisplay.lib.php');
-require_once(api_get_path(SYS_CODE_PATH) .'permissions/permissions_functions.inc.php');
-require_once(api_get_path(LIBRARY_PATH) .'/groupmanager.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'social.lib.php');
-//require_once(api_get_path(LIBRARY_PATH).'upload.xajax.php');
-require_once(api_get_path(LIBRARY_PATH).'xht.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'xmd.lib.php');
-require_once('main/inc/lib/fileDisplay.lib.test.php');
-require_once('main/inc/lib/fileManager.lib.test.php');
-require_once('main/inc/lib/geometry.lib.test.php');
-require_once('simpletest/web_tester.php');
-require_once('simpletest/mock_objects.php');
-require_once('simpletest/autorun.php');
-include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+
+//List of files than need some tests
+require_once 'simpletest/unit_tester.php';
+require_once 'simpletest/web_tester.php';
+require_once 'simpletest/mock_objects.php';
+require_once 'simpletest/autorun.php';
+require_once dirname(__FILE__).'/../main/inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'/fileDisplay.lib.php';
+require_once api_get_path(SYS_CODE_PATH) .'permissions/permissions_functions.inc.php';
+require_once api_get_path(LIBRARY_PATH) .'/groupmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+require_once api_get_path(LIBRARY_PATH).'xht.lib.php';
+require_once api_get_path(LIBRARY_PATH).'xmd.lib.php';
+include_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+
 $_SESSION['_user']['user_id'] = 1;
 
 class AllTests extends TestSuite {

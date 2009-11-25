@@ -128,6 +128,7 @@ $localLangName = "Esperanto";
 $email = "Retpo&#349;to  XX";
 $langCourseCodeAlreadyExists = "Tiu kurskodo jam ekzistas. Bonvolu elekti alian. ";
 $Statistics = "Statistikoj ";
+$langGrouplist = "Gruplisto ";
 $langPrevious = "Anta&#365;a ";
 $Courses = "kursoj";
 $In = "en ";

@@ -34,7 +34,6 @@ $Teachersubject = "Melding sendt til dine studenter";
 $langMessages  = "Meldinger";
 $langMessageToSelectedUsers  = "Meldinger til valgte brukere";
 $langDown = "ned";
-$langGrouplist = "liste grupper";
 $langSelectedGroups = "valgte grupper";
 $langMsg = "Meldinger";
 $langYes = "ja";

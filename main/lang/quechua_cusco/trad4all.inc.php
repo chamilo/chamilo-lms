@@ -147,6 +147,7 @@ $localLangName = "simi";
 $email = "e-chaski";
 $langCourseCodeAlreadyExists = "kay chinpuqa kashanña. Hoqta ajllaspa malliy.";
 $Statistics = "Yupanakuna";
+$langGrouplist = "huñusqakunaq sinrin";
 $langPrevious = "Ñaupaq";
 $DestDirectoryDoesntExist = "Wayaqepi allchanapaqqa mana kanchu";
 $Courses = "yachachinakuna";

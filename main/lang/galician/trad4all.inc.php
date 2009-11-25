@@ -165,6 +165,7 @@ $localLangName = "galego";
 $email = "correo electrónico";
 $langCourseCodeAlreadyExists = "Parece que o código do curso xa existe. Por favor, escolle outro código.";
 $Statistics = "Estatísticas";
+$langGrouplist = "lista de grupos";
 $langPrevious = "anterior";
 $DestDirectoryDoesntExist = "O directorio de destino non existe";
 $Courses = "cursos";

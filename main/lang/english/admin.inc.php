@@ -979,6 +979,7 @@ $SoberBrown = "Sober brown";
 $SteelGrey = "Steel grey";
 $TastyOlive = "Tasty olive";
 $AddNews  = "Add news ";
+$ExportCourses = "Export courses";
 $SearchDatabaseOpeningError = "Failed to open the search database";
 $SearchDatabaseVersionError = "The search database uses an unsupported format";
 $SearchDatabaseModifiedError = "The search database has been modified/broken";
@@ -1098,4 +1099,5 @@ $SendEmailToAdminTitle = "Email alert, of creation  a new course";
 $SendEmailToAdminComment = "Send an email to administardor of the platform, each time the teacher register a new course";
 $UserTag = "User tag";
 $SelectSession = "Select session";
+$GroupPermissions = "Group Permissions";
 ?>

@@ -171,6 +171,7 @@ $localLangName = "idioma";
 $email = "e-mail";
 $langCourseCodeAlreadyExists = "Trist, però aquell codi de curs ja existeix. Si us plau esculli\'n un altre.";
 $Statistics = "Estadístiques";
+$langGrouplist = "Llista de grups";
 $langPrevious = "previ";
 $DestDirectoryDoesntExist = "El directori de destinació no existeix";
 $Courses = "Cursos";

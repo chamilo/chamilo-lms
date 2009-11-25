@@ -164,6 +164,7 @@ $localLangName = "язык";
 $email = "эл. почта";
 $langCourseCodeAlreadyExists = "Извините, но такой код курса уже существует. Пожалуйста, выберите другой.";
 $Statistics = "Статистика";
+$langGrouplist = "Список группы";
 $langPrevious = "предыдущий";
 $DestDirectoryDoesntExist = "Целевая папка не существует";
 $Courses = "курсы";

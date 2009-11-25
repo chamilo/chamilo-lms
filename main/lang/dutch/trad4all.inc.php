@@ -171,6 +171,7 @@ $localLangName = "Nederlands";
 $email = "E-mail";
 $langCourseCodeAlreadyExists = "Deze cursuscode is al in gebruik. Gelieve een andere te kiezen.";
 $Statistics = "Statistieken";
+$langGrouplist = "Groepenlijst";
 $langPrevious = "Vorige";
 $DestDirectoryDoesntExist = "De bestemmingsmap bestaat niet";
 $Courses = "cursussen";

@@ -127,6 +127,7 @@ $langPlatform = "系統";
 $localLangName = "語言";
 $email = "電郵";
 $langCourseCodeAlreadyExists = "對不起，這課程編號已經存在，請選另外一個。";
+$langGrouplist = "群組清單";
 $langPrevious = "上一步";
 $DestDirectoryDoesntExist = "目標檔案夾不存在";
 $Courses = "課程";

@@ -164,6 +164,7 @@ $localLangName = "sprog";
 $email = "Email";
 $langCourseCodeAlreadyExists = "Beklager, men den valgte kursuskode eksisterer allerede. Vælg venligst en anden.";
 $Statistics = "Statistikker";
+$langGrouplist = "gruppeliste";
 $langPrevious = "forrige";
 $DestDirectoryDoesntExist = "Mappen eksisterer ikke";
 $Courses = "kurser";

@@ -39,7 +39,6 @@ $langDown = "lent";
 $langMsgSent = "Az üzenet elküldve a kiválasztott hallgatóknak";
 $langSelUser = "a honlap kiválasztott felhasználói";
 $langMessageToSelectedGroups = "Üzenet a kiválasztott csoportoknak";
-$langGrouplist = "csoport lista";
 $langSelectedGroups = "kijelölt csoportok";
 $langMsg = "Üzenetek";
 $langYes = "Igen";

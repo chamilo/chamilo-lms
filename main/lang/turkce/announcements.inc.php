@@ -39,7 +39,6 @@ $langDown = "a&#351;a&#287;&#305;";
 $langMsgSent = "Mesaj&#305;n&#305;z seçilen kullan&#305;c&#305;lara gönderildi.";
 $langSelUser = "seçilen kullan&#305;c&#305;";
 $langMessageToSelectedGroups = "Seçilen gruplara mesaj";
-$langGrouplist = "grup listesi";
 $langSelectedGroups = "seçilen gruplar";
 $langMsg = "Mesajlar";
 $langYes = "evet";

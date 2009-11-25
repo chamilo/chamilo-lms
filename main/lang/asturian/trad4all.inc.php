@@ -171,6 +171,7 @@ $localLangName = "llingua";
 $email = "e-maill";
 $langCourseCodeAlreadyExists = "Perdón, pero esti códigu yá esiste. Escueya otru, por favor.";
 $Statistics = "Estadístiques";
+$langGrouplist = "llistáu de grupos";
 $langPrevious = "Anterior";
 $DestDirectoryDoesntExist = "El direutoriu de destín nun esiste";
 $Courses = "cursos";

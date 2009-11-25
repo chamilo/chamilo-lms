@@ -39,7 +39,6 @@ $langDown = "žemyn";
 $langMsgSent = "Žinutė išsiųsta pasirinktiems studentams";
 $langSelUser = "išrinkti varotojai";
 $langMessageToSelectedGroups = "Žinutė pasirinktoms grupėms";
-$langGrouplist = "grupių sąrašas";
 $langSelectedGroups = "pasirinktos grupės";
 $langMsg = "Žinutės";
 $langYes = "taip";

@@ -39,7 +39,6 @@ $langDown = "lej&#257;";
 $langMsgSent = "Zi&#326;a tika nos&#363;t&#299;ta atz&#299;m&#275;tajiem studentiem";
 $langSelUser = "Iez&#299;m&#275;tie lietot&#257;ji";
 $langMessageToSelectedGroups = "Zi&#326;a iez&#299;m&#275;taj&#257;m grup&#257;m";
-$langGrouplist = "grupas saraksts";
 $langSelectedGroups = "iez&#299;m&#275;t&#257;s grupas";
 $langMsg = "Zi&#326;as";
 $langYes = "j&#257;";

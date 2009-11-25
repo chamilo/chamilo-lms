@@ -39,7 +39,6 @@ $langDown = "dolje";
 $langMsgSent = "Poruka je poslana odabranim studentima";
 $langSelUser = "odabrani korisnici";
 $langMessageToSelectedGroups = "Poruka odabranim skupinama";
-$langGrouplist = "popis skupina";
 $langSelectedGroups = "odabrane skupine";
 $langMsg = "Poruke";
 $langYes = "da";

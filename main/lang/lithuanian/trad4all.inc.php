@@ -139,6 +139,7 @@ $localLangName = "kalba";
 $email = "e-mail";
 $langCourseCodeAlreadyExists = "Sorry, but that course code already exists. Please choose another one.";
 $Statistics = "Statistika";
+$langGrouplist = "grupių sąrašas";
 $langPrevious = "ankstesnis";
 $DestDirectoryDoesntExist = "Katalogas neegzistuoja";
 $Courses = "kursai";

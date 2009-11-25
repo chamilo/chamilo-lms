@@ -393,7 +393,7 @@ else
 	echo '<div class="actions" style="width:100%;">';
 	if (api_is_platform_admin()) {
 		echo '<span style="float:right; padding-top:7px;">'.
-			 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/group_add.php">'.Display::return_icon('add_user_big.gif',get_lang('AddUsers')).get_lang('AddGroup').'</a>'.			 
+			 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/group_add.php">'.Display::return_icon('add_user_big.gif',get_lang('AddUsers')).get_lang('AddGroups').'</a>'.			 
 			 '</span>';
 	}
 	$form->display();

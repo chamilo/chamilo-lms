@@ -979,6 +979,7 @@ $SoberBrown = "Marrón sobrio";
 $SteelGrey = "Gris acero";
 $TastyOlive = "Sabor oliva";
 $AddNews  = "Crear anuncio";
+$ExportCourses = "Exportar cursos";
 $SearchDatabaseOpeningError = "No se pudo abrir la base de datos del motor de indexación,pruebe añadir un nuevo recurso (ejercicio,enlace,lección,etc) el cual será indexado al buscador";
 $SearchDatabaseVersionError = "La base de datos está en un formato no soportado";
 $SearchDatabaseModifiedError = "La base de datos ha sido modificada(alterada)";
@@ -1098,4 +1099,5 @@ $SendEmailToAdminTitle = "Aviso por correo electrónico, de la creación de un nue
 $SendEmailToAdminComment = "Enviar un correo electrónico al administardor de la plataforma, cada vez que un profesor cree un nuevo curso";
 $UserTag = "Etiqueta de usuario";
 $SelectSession = "Seleccionar sesión";
+$GroupPermissions = "Permisos del grupo";
 ?>

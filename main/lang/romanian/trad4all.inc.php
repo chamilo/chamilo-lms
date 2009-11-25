@@ -170,6 +170,7 @@ $localLangName = "limba";
 $email = "email";
 $langCourseCodeAlreadyExists = "Acest cod de curs exista deja, alege altul.";
 $Statistics = "Statistici";
+$langGrouplist = "lista grup";
 $langPrevious = "anterior";
 $DestDirectoryDoesntExist = "Dosarul de destinatie nu exista";
 $Courses = "cursuri";

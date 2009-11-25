@@ -135,6 +135,7 @@ $localLangName = "jezik";
 $email = "e-mail";
 $langCourseCodeAlreadyExists = "Takva šifra kursa ve&#263; postoji. Molim Vas, izaberite drugu. ";
 $Statistics = "Statistike";
+$langGrouplist = "Lista grupa";
 $langPrevious = "prethodna";
 $Courses = "kursevi";
 $In = "u";

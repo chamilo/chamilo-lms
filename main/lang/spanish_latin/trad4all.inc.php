@@ -136,6 +136,7 @@ $localLangName = "español";
 $email = "Correo electrónico";
 $langCourseCodeAlreadyExists = "El código del curso ya existe, Por favor seleccione otro.";
 $Statistics = "Estadística";
+$langGrouplist = "lista de grupos";
 $langPrevious = "anterior";
 $Courses = "Cursos";
 $In = "en";

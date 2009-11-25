@@ -128,6 +128,7 @@ $localLangName = "jazyk";
 $email = "e-mail";
 $langCourseCodeAlreadyExists = "Lituji, ale takový kód kurzu již existuje. Prosím zvolte jiný.";
 $Statistics = "Statistika";
+$langGrouplist = "seznam skupin";
 $langPrevious = "p&#345;edchozí";
 $DestDirectoryDoesntExist = "Cílový adresá&#345; neexistuje";
 $langShowAll = "Uka&#382; v&#353;e";

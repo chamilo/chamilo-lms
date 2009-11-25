@@ -39,7 +39,6 @@ $langDown = "Urachiy";
 $langMsgSent = "Willayqa apachikunña ajllasqa yachaqekunaman";
 $langSelUser = "ajllay haykuqmasikunata";
 $langMessageToSelectedGroups = "Willay huñusqa";
-$langGrouplist = "huñusqakunaq sinrin";
 $langSelectedGroups = "huñusqakuna ajllasqa";
 $langMsg = "Willaykuna";
 $langYes = "arí";

@@ -92,4 +92,6 @@ $SendInvitation = "Send invitation";
 $SocialInvitationToFriends = "Invite to join my group of friends";
 $MyCertificates = "My certificates";
 $ToChangeYourEmailMustTypeYourPassword = "To Change Your Email Must Type Your Password";
+$Invitations = "Invitations";
+$MyGroups = "My groups";
 ?>

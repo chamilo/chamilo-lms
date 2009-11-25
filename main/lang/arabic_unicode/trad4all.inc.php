@@ -165,6 +165,7 @@ $localLangName = "اللغة";
 $email = "البريد الإلكتروني";
 $langCourseCodeAlreadyExists = "عفوا ! رمز المقرر مستخدم مسبقا, فضلا اختر واحدا أخر. ";
 $Statistics = "احصائيات ";
+$langGrouplist = "قائمة المجموعات ";
 $langPrevious = "السابق";
 $DestDirectoryDoesntExist = "المجلد المقصود غير موجود ";
 $Courses = "مقررات ";

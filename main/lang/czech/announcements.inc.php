@@ -39,7 +39,6 @@ $langDown = "dol&#367;";
 $langMsgSent = "Správa byla odeslána vybraným student&#367;m";
 $langSelUser = "vybraní uživatelé kurzu";
 $langMessageToSelectedGroups = "Správa pro vybrané skupiny";
-$langGrouplist = "seznam skupin";
 $langSelectedGroups = "vybrané skupiny";
 $langMsg = "Správy";
 $langYes = "ano";

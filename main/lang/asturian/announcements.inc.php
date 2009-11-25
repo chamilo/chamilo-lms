@@ -39,7 +39,6 @@ $langDown = "embaxu";
 $langMsgSent = "El mensaxe unvióse a los alumnos seleicionaos";
 $langSelUser = "Seleicionar usuarios de la páxina";
 $langMessageToSelectedGroups = "Mensaxe a los grupos seleicionaos";
-$langGrouplist = "llistáu de grupos";
 $langSelectedGroups = "Grupos seleicionaos";
 $langMsg = "Mensaxes";
 $langYes = "Sí";

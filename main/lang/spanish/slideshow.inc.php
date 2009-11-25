@@ -18,6 +18,6 @@ $lang_next_slide = "Diapositiva siguiente";
 $lang_image = "Imagen";
 $lang_of = "de";
 $lang_view_slideshow = "Ver presentación";
-$First slide = "Primera diapositiva";
+$FirstSlide = "Primera diapositiva";
 $LastSlide = "Última diapositiva";
 ?>

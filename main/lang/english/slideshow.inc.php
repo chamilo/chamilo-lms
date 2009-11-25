@@ -18,6 +18,6 @@ $lang_next_slide = "Next image";
 $lang_image = "Image";
 $lang_of = "of";
 $lang_view_slideshow = "View Slideshow";
-$First slide = "First slide";
+$FirstSlide = "First slide";
 $LastSlide = "Last slide";
 ?>

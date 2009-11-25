@@ -1097,4 +1097,5 @@ $FieldTypeTag = "User tag";
 $SendEmailToAdminTitle = "Email alert, of creation  a new course";
 $SendEmailToAdminComment = "Send an email to administardor of the platform, each time the teacher register a new course";
 $UserTag = "User tag";
+$SelectSession = "Select session";
 ?>

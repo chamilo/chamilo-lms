@@ -39,7 +39,6 @@ $langDown = "avall";
 $langMsgSent = "El missatge ha estat enviat als estudiants seleccionats";
 $langSelUser = "Usuaris de la pàgina seleccionats";
 $langMessageToSelectedGroups = "Missatge per als grups seleccionats";
-$langGrouplist = "Llista de grups";
 $langSelectedGroups = "grups seleccionats";
 $langMsg = "Missatges";
 $langYes = "sí";

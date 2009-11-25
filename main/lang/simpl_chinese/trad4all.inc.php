@@ -162,6 +162,7 @@ $localLangName = "语言";
 $email = "电子邮件";
 $langCourseCodeAlreadyExists = "对不起，课程代码已经存在，请选择另外一个";
 $Statistics = "统计";
+$langGrouplist = "组列表";
 $langPrevious = "先前";
 $DestDirectoryDoesntExist = "&#30446;&#26631;&#25991;&#20214;&#22841;&#19981;&#23384;&#22312;";
 $Courses = "课程";

@@ -171,6 +171,7 @@ $localLangName = "jezik";
 $email = "e-pošta";
 $langCourseCodeAlreadyExists = "Oprostite, koda teèaja že obstaja. Izberite drugo kodo.";
 $Statistics = "Statistika";
+$langGrouplist = "seznam skupine";
 $langPrevious = "prejšnji";
 $DestDirectoryDoesntExist = "Ciljna mapa ne obstaja";
 $Courses = "teèaji";

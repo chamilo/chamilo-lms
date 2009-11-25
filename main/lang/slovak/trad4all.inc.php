@@ -171,6 +171,7 @@ $localLangName = "jazyk";
 $email = "e-mail";
 $langCourseCodeAlreadyExists = "Prepá&#269;te, ale tento kód kurzu je už použitý. Zvolte prosím iný.";
 $Statistics = "Štatistika";
+$langGrouplist = "zoznam skupín";
 $langPrevious = "predošlý";
 $DestDirectoryDoesntExist = "Cie&#318;ová zložka neexistuje";
 $Courses = "kurzy";

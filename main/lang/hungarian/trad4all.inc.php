@@ -171,6 +171,7 @@ $localLangName = "magyar";
 $email = "e-mail";
 $langCourseCodeAlreadyExists = "Sajnos ez a kurzus kód már létezik. Kérjük válassz egy másikat!";
 $Statistics = "Statisztikák";
+$langGrouplist = "csoport lista";
 $langPrevious = "el&#337;z&#337;";
 $DestDirectoryDoesntExist = "A célkönyvtár nem létezik";
 $Courses = "kurzusok";

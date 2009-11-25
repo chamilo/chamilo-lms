@@ -39,7 +39,6 @@ $langDown = "ned";
 $langMsgSent = "Meddelelsen er sendt til de valgte studerende";
 $langSelUser = "valgte brugere på siden";
 $langMessageToSelectedGroups = "Meddelelse til valgte grupper";
-$langGrouplist = "gruppeliste";
 $langSelectedGroups = "valgte grupper";
 $langMsg = "Meddelelser";
 $langYes = "ja";

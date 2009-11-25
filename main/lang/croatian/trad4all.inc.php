@@ -165,6 +165,7 @@ $localLangName = "jezik";
 $email = "elektroni&#269;ka pošta";
 $langCourseCodeAlreadyExists = "Žao nam je, ali ta je šifra kolegija ve&#263; u uporabi. Molimo odaberite drugu.";
 $Statistics = "Statistika";
+$langGrouplist = "popis skupina";
 $langPrevious = "prethodni";
 $DestDirectoryDoesntExist = "Odabrana mapa ne postoji";
 $Courses = "kolegiji";

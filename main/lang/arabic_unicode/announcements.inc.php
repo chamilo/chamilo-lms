@@ -39,7 +39,6 @@ $langDown = "للأسفل";
 $langMsgSent = "لقد تم إرسال الرسالة للطلبة المحددين ";
 $langSelUser = "المستخدمين المحددين ";
 $langMessageToSelectedGroups = "الرسالة للمجموعات المحددة";
-$langGrouplist = "قائمة المجموعات ";
 $langSelectedGroups = "المجموعات المحددة";
 $langMsg = "الرسائل";
 $langYes = "نعم";

@@ -39,7 +39,6 @@ $langDown = "dol";
 $langMsgSent = "Sporočilo je bilo odposlano izbranim uporabnikom";
 $langSelUser = "izbranim uporabnikom te strani";
 $langMessageToSelectedGroups = "Sporočilo izbranim skupinam";
-$langGrouplist = "seznam skupine";
 $langSelectedGroups = "izbrane skupine";
 $langMsg = "Sporočila";
 $langYes = "Da";

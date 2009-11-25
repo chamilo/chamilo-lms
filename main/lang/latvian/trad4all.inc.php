@@ -160,6 +160,7 @@ $localLangName = "valoda";
 $email = "e-pasts";
 $langCourseCodeAlreadyExists = "Hmm, bet šis kursa kods jau eksist&#275;. L&#363;dzu izv&#275;lies citu codu.";
 $Statistics = "Statistika";
+$langGrouplist = "grupas saraksts";
 $langPrevious = "iepriekš&#275;jo";
 $DestDirectoryDoesntExist = "Sa&#326;&#275;m&#275;j direktorija neeksist&#275;";
 $Courses = "kursi";

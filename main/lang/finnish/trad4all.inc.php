@@ -151,6 +151,7 @@ $localLangName = "kieli";
 $email = "sähköposti";
 $langCourseCodeAlreadyExists = "Kurssikoodi on jo käytössä. Ole hyvä ja valitse toinen.";
 $Statistics = "Tilastot";
+$langGrouplist = "ryhmälista";
 $langPrevious = "edellinen";
 $DestDirectoryDoesntExist = "Kohde hakemistoa ei ole olemassa";
 $Courses = "kurssit";

@@ -71,6 +71,7 @@ $lang_modify_resource = "修改/添加资源";
 $lang_resource = "资源";
 $lang_resources = "资源";
 $langPlatform = "系统";
+$langGrouplist = "群组列表";
 $langPrevious = "上一步";
 $langShowAll = "全部显示";
 $langPage = "页";

@@ -39,7 +39,6 @@ $langDown = "Malsupren ";
 $langMsgSent = "La mesa&#285;o estas sendita. ";
 $langSelUser = "uzuloj ";
 $langMessageToSelectedGroups = "Mesa&#285;oj al specifaj grupoj ";
-$langGrouplist = "Gruplisto ";
 $langSelectedGroups = "Elektitaj grupoj ";
 $langMsg = "Mesa&#285;oj";
 $langYes = "Jes ";

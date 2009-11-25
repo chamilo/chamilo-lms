@@ -259,7 +259,7 @@ if (is_array($personal_course_list)) {
 
 
 echo '<div class="actions">';
-echo '<a href="profile.php">'.Display::return_icon('shared_profile.png').' '.get_lang('MySharedProfile').'</a>';
+echo '<a href="profile.php">'.Display::return_icon('shared_profile.png').' '.get_lang('ViewMySharedProfile').'</a>';
 echo '<a href="friends.php">'.Display::return_icon('lp_users.png').' '.get_lang('Friends').'</a>';
 echo '<a href="../messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Inbox').'</a>';
 echo '<a href="group.php">'.Display::return_icon('group.gif').' '.get_lang('MyGroups').'</a>';

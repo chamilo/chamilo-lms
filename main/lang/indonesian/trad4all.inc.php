@@ -128,6 +128,7 @@ $localLangName = "bahasa";
 $email = "email";
 $langCourseCodeAlreadyExists = "Maaf, kode mata kuliah tsb sudah terpakai.  Silahkan pilih yang lain.";
 $Statistics = "Statistik";
+$langGrouplist = "daftar group";
 $langPrevious = "sebelumnya";
 $Courses = "mata kuliah";
 $In = "dalam";

@@ -171,6 +171,7 @@ $localLangName = "français";
 $email = "email";
 $langCourseCodeAlreadyExists = "Ce code existe déjà. Veuillez en choisir un autre.";
 $Statistics = "Statistiques";
+$langGrouplist = "Liste des groupes";
 $langPrevious = "précédent";
 $DestDirectoryDoesntExist = "Le répertoire de destination n\'existe pas";
 $Courses = "Formations";

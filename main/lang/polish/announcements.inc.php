@@ -39,7 +39,6 @@ $langDown = "dó&#322;";
 $langMsgSent = "Wiadomo&#347;&#263; zosta&#322;a wys&#322;ana do wybranych u&#380;ytkowników";
 $langSelUser = "wybranych u¿ytkowników kursu";
 $langMessageToSelectedGroups = "Wiadomo&#347;&#263; do wybranych grup";
-$langGrouplist = "lista grupy";
 $langSelectedGroups = "wybrane grupy";
 $langMsg = "Widomo&#347;ci";
 $langYes = "tak";

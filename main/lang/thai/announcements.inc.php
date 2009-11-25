@@ -39,7 +39,6 @@ $langDown = "ลง";
 $langMsgSent = "ข้อความได้ส่งไปให้ผู้เรียนที่ท่านเลือกแล้ว";
 $langSelUser = "เลือกผู้ใช้ในระบบ";
 $langMessageToSelectedGroups = "ข้อความถึงกลุ่ม";
-$langGrouplist = "รายชื่อกลุ่ม";
 $langSelectedGroups = "เลือกกลุ่ม";
 $langMsg = "ข้อความ";
 $langYes = "ใช่";

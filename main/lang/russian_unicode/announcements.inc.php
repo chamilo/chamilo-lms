@@ -39,7 +39,6 @@ $langDown = "вниз";
 $langMsgSent = "сообщение выбранным студентам отправлено ";
 $langSelUser = "Выбранные пользователи сайта";
 $langMessageToSelectedGroups = "Сообщение выбранным группам";
-$langGrouplist = "Список группы";
 $langSelectedGroups = "выбранные группы";
 $langMsg = "Сообщения";
 $langYes = "да";

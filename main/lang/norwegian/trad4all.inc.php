@@ -127,6 +127,7 @@ $localLangName = "språk";
 $email = "e-post";
 $langCourseCodeAlreadyExists = "Denne kurskoden finnes allerede.  Benytt en annen";
 $Statistics = "Statistikk";
+$langGrouplist = "liste grupper";
 $langPrevious = "forrige";
 $Courses = "kurs";
 $In = "i";

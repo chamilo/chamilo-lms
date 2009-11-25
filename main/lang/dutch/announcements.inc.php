@@ -39,7 +39,6 @@ $langDown = "Omlaag";
 $langMsgSent = "Het bericht is verzonden.";
 $langSelUser = "gebruikers";
 $langMessageToSelectedGroups = "Berichten naar specifieke groepen";
-$langGrouplist = "Groepenlijst";
 $langSelectedGroups = "Geselecteerde groepen";
 $langMsg = "Boodschappen";
 $langYes = "Ja";

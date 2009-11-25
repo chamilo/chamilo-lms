@@ -161,6 +161,7 @@ $localLangName = "j&#281;zyk";
 $email = "e-mail";
 $langCourseCodeAlreadyExists = "Przykro mi ale kurs tego kodu ju&#380; istnieje. Prosz&#281; wybierz inny.";
 $Statistics = "Statystyki";
+$langGrouplist = "lista grupy";
 $langPrevious = "poprzedni";
 $DestDirectoryDoesntExist = "Docelowy folder nie istnieje";
 $Courses = "kursów";

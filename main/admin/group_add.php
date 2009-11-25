@@ -36,7 +36,7 @@ if (!empty($_GET['message'])) {
 }
 
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$tool_name = get_lang('AddGroup');
+$tool_name = get_lang('AddGroups');
 
 // Create the form
 $form = new FormValidator('group_add');

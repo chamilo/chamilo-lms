@@ -39,7 +39,6 @@ $langDown = "alas";
 $langMsgSent = "Viesti on lähetetty valituille käyttäjille";
 $langSelUser = "valitut käyttäjät";
 $langMessageToSelectedGroups = "Viesti valituille ryhmille";
-$langGrouplist = "ryhmälista";
 $langSelectedGroups = "valitut ryhmät";
 $langMsg = "Viestit";
 $langYes = "kyllä";

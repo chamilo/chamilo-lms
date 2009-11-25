@@ -28,7 +28,6 @@ $langDown = "向下";
 $langMsgSent = "消息已经发送给选定的用户";
 $langSelUser = "选定的用户";
 $langMessageToSelectedGroups = "发送给选定群组的消息";
-$langGrouplist = "群组列表";
 $langSelectedGroups = "选定的群组";
 $langMsg = "消息";
 $langYes = "确定";

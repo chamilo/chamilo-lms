@@ -128,6 +128,7 @@ $localLangName = "ภาษา";
 $email = "อีเมล";
 $langCourseCodeAlreadyExists = "ขออภัย! รหัสวิชานี้มีอยู่แล้ว โปรดเลือกรหัสอื่นหรือกำหนดให้แตกต่างออกไป";
 $Statistics = "สถิติ";
+$langGrouplist = "รายชื่อกลุ่ม";
 $langPrevious = "ที่ผ่านมา";
 $Courses = "รายวิชา";
 $In = "ใน";

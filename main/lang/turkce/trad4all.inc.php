@@ -149,6 +149,7 @@ $localLangName = "lisan";
 $email = "e-posta";
 $langCourseCodeAlreadyExists = "Üzgünüm, Bu ders kodu zaten var. Lütfen ba&#351;ka bir kod belirleyiniz.";
 $Statistics = "&#304;statistik";
+$langGrouplist = "grup listesi";
 $langPrevious = "önceki";
 $Courses = "dersler";
 $In = "in";

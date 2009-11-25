@@ -167,6 +167,7 @@ $localLangName = "språk";
 $email = "e-post";
 $langCourseCodeAlreadyExists = "Tyvärr, denna kurs existerar redan. Var vänlig välj en annan.";
 $Statistics = "Statistik";
+$langGrouplist = "grupplista";
 $langPrevious = "föregående";
 $DestDirectoryDoesntExist = "Den önskade katalogen finns inte";
 $Courses = "kurser";

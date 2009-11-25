@@ -39,7 +39,6 @@ $langDown = "jos";
 $langMsgSent = "Mesajul a fost trimis catre studenti alesi";
 $langSelUser = "userii selectati ai site-ului";
 $langMessageToSelectedGroups = "Mesaj catre grupurile alese";
-$langGrouplist = "lista grup";
 $langSelectedGroups = "grupuri selectate";
 $langMsg = "Mesaje";
 $langYes = "da";

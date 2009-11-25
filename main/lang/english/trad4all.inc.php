@@ -171,6 +171,7 @@ $localLangName = "language";
 $email = "e-mail";
 $langCourseCodeAlreadyExists = "Sorry, but that training code already exists. Please choose another one.";
 $Statistics = "Statistics";
+$langGrouplist = "Groups list";
 $langPrevious = "previous";
 $DestDirectoryDoesntExist = "The target folder does not exist";
 $Courses = "Training";

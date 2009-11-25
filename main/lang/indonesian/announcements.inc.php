@@ -39,7 +39,6 @@ $langDown = "turun";
 $langMsgSent = "Pesan telah dikirim ke siswa yang dipilih";
 $langSelUser = "user pilihan situs ini";
 $langMessageToSelectedGroups = "Pesan ke group terseleksi";
-$langGrouplist = "daftar group";
 $langSelectedGroups = "group terseleksi";
 $langMsg = "Pesan";
 $langYes = "ya";

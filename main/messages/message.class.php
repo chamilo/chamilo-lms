@@ -5,6 +5,20 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
+/* 
+ * @todo use constants!
+ */
+define('MESSAGE_STATUS_NEW',				'0');
+define('MESSAGE_STATUS_UNREAD',				'1');
+define('MESSAGE_STATUS_DELETED',			'2');
+
+define('MESSAGE_STATUS_INVITATION_PENDING',	'5');
+define('MESSAGE_STATUS_INVITATION_ACCEPTED','6');
+define('MESSAGE_STATUS_INVITATION_DENIED',	'7');
+
+
+
+
 class MessageManager
 {
 	function MessageManager() {
@@ -154,29 +168,30 @@ class MessageManager
 		return $message_list;
 	}
 
-	 public static function send_message ($receiver_user_id, $title, $content, $file_attachments = array(), $file_comments = '', $group_id = 0, $parent_id = 0) {
+	public static function send_message ($receiver_user_id, $title, $content, $file_attachments = array(), $file_comments = '', $group_id = 0, $parent_id = 0) {	
         global $charset;
-
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
-        $group_id = intval($group_id);
+		$group_id = intval($group_id);
         $receiver_user_id = intval($receiver_user_id);
         $parent_id = intval($parent_id);
-                
-        if (is_numeric($receiver_user_id)) {        				
+
+        if (is_numeric($receiver_user_id)) {
+			$table_message = Database::get_main_table(TABLE_MESSAGE);
 	        $title = api_convert_encoding($title,$charset,'UTF-8');
-	        $content = api_convert_encoding($content,$charset,'UTF-8');	        
-			$sql = "SELECT COUNT(*) as count FROM $table_message WHERE user_sender_id = ".api_get_user_id()." AND user_receiver_id='$receiver_user_id' AND title = '".Database::escape_string($title)."' AND content ='".Database::escape_string($content)."' AND group_id='$group_id' AND parent_id='$parent_id'";
+	        $content = api_convert_encoding($content,$charset,'UTF-8');
+			//message in inbox
+			$sql = "SELECT COUNT(*) as count FROM $table_message WHERE user_sender_id = ".api_get_user_id()." AND user_receiver_id='".Database::escape_string($receiver_user_id)."' AND title = '".Database::escape_string($title)."' AND content ='".Database::escape_string($content)."' ";
 			$res_exist = Database::query($sql,__FILE__,__LINE__);
 			$row_exist = Database::fetch_array($res_exist,'ASSOC');
-			
-			if ($row_exist['count'] ==0) {						 
+			if ($row_exist['count'] == 0) {								 		 
 				//message in outbox
-				$sql = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id) ".
+				$sql = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content ) ".
 						 " VALUES (".
-				 		 "'".api_get_user_id()."', '".Database::escape_string($receiver_user_id)."', '4', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."','$group_id','$parent_id'".
+				 		 "'".api_get_user_id()."', '".Database::escape_string($receiver_user_id)."', '4', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
 				 		 ")";
 				$rs = Database::query($sql,__FILE__,__LINE__);
-				$outbox_last_id = Database::insert_id();				
+				$outbox_last_id = Database::insert_id();
+				
 				// save attachment file for outbox messages
 				if (is_array($file_attachments)) {
 					$o = 0;
@@ -194,6 +209,7 @@ class MessageManager
 				 		 ")";
 				$result = Database::query($query,__FILE__,__LINE__);				
 				$inbox_last_id = Database::insert_id();
+				
 				// save attachment file for inbox messages
 				if (is_array($file_attachments)) {
 					$i = 0;
@@ -206,6 +222,8 @@ class MessageManager
 				}																				
 				return $result;
 			}
+        } else {
+        	return false;
         }
 
 		return false;
@@ -261,56 +279,55 @@ class MessageManager
 		return false;
 	}
 	
-	
-	/**
-	 * Save message attachment file 
-	 * @param  array  	contain info about uploaded file
-	 * @param  string 	a comment about the file
-	 * @param  int		message id
-	 * @param  int		receiver user id
-	 * @param  int		sender user id
-	 * @return void
-	 */
 	public static function save_message_attachment_file($file_attach,$file_comment,$message_id,$receiver_user_id=0,$sender_user_id=0) {
 
 		$tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
 		// Try to add an extension to the file if it hasn't one
-		$new_file_name = add_ext_on_mime(stripslashes($file_attach['name']), $file_attach['type']);		
+		$new_file_name = add_ext_on_mime(stripslashes($file_attach['name']), $file_attach['type']);
+		
 		// user's file name
-		$file_name =$file_attach['name'];	
+		$file_name =$file_attach['name'];
+	
 		if (!filter_extension($new_file_name))  {
 			Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
 		} else {
 			$new_file_name = uniqid('');						
+
 			$message_user_id = '';
 			if (!empty($receiver_user_id)) {
 				$message_user_id = $receiver_user_id;
 			} else {
 				$message_user_id = $sender_user_id;
-			}						
+			}			
+			
 			// User-reserved directory where photos have to be placed.
 			$path_user_info = UserManager::get_user_picture_path_by_id($message_user_id, 'system', true);
-			$path_message_attach = $path_user_info['dir'].'message_attachments/';					
+			$path_message_attach = $path_user_info['dir'].'message_attachments/';
+					
 			// If this directory does not exist - we create it.
 			if (!file_exists($path_message_attach)) {
 				$perm = api_get_setting('permissions_for_new_directories');
 				$perm = octdec(!empty($perm) ? $perm : '0770');
 				@mkdir($path_message_attach, $perm, true);
 			}				
+
 			$new_path=$path_message_attach.$new_file_name;			
 			if (!empty($receiver_user_id)) {				
 				$result= @copy($file_attach['tmp_name'], $new_path);				
 			} else {
 				$result= @move_uploaded_file($file_attach['tmp_name'], $new_path);	
 			}
+
 			$safe_file_comment= Database::escape_string($file_comment);
 			$safe_file_name = Database::escape_string($file_name);
 			$safe_new_file_name = Database::escape_string($new_file_name);						
 			// Storing the attachments if any			
 			$sql="INSERT INTO $tbl_message_attach(filename,comment, path,message_id,size)
 				  VALUES ( '$safe_file_name', '$safe_file_comment', '$safe_new_file_name' , '$message_id', '".$file_attach['size']."' )";
-			$result=Database::query($sql, __LINE__, __FILE__);				
+			$result=Database::query($sql, __LINE__, __FILE__);
+			$message.=' / '.get_lang('FileUploadSucces').'<br />';
+	
 		}	
 	}
 
@@ -321,9 +338,11 @@ class MessageManager
 	 * @return void
 	 */
 	public static function delete_message_attachment_file($message_id,$message_uid) {
+
 		$message_id = intval($message_id);		
 		$message_uid = intval($message_uid);
 		$table_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
+		
 		$sql= "SELECT * FROM $table_message_attach WHERE message_id = '$message_id'";
 		$rs	= Database::query($sql,__FILE__,__LINE__);		
 		$new_paths = array();
@@ -445,7 +464,7 @@ class MessageManager
 			$i++;
 		}
 		return $message_list;
-	}		
+	}
 	/**
 	 * Gets information about number messages sent
 	 * @author Isaac FLores Paz <isaac.flores@dokeos.com>
@@ -591,6 +610,7 @@ class MessageManager
 				}
 			}						
 		}
+
 		$row = Database::fetch_array($result);
 		$user_con = self::users_connected_by_id();
 		$band=0;

@@ -71,6 +71,7 @@ if (strlen($group_data['picture_uri']) > 0) {
 $status = array();
 $status[GROUP_PERMISSION_OPEN] 		= get_lang('Open');
 $status[GROUP_PERMISSION_CLOSED]	= get_lang('Closed');
+$status[GROUP_PERMISSION_APPROVAL_NEEDED]	= get_lang('ApprovalNeeded');
 
 $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $status, array());
 

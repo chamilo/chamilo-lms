@@ -17,21 +17,22 @@ $friend_id_qualify       = Security::remove_XSS($_POST['user_id_friend_q']);
 $type_friend_qualify     = Security::remove_XSS($_POST['type_friend_q']); //filtered?
 $is_my_friend            = Security::remove_XSS($_POST['is_my_friend']); //filtered?
 if (isset($_POST['is_my_friend'])) {
-	$relation_type='3';//my friend
+	$relation_type=SOCIALFRIEND;//my friend
 } else {
-	$relation_type='1';//Contact unknown
+	$relation_type=SOCIALUNKNOW;//Contact unknown
 }
 
 if (isset($_POST['friend_id'])) {
-	SocialManager::register_friend ((int)$the_current_user_id,(int)$my_current_friend,(int)$relation_type);
-	SocialManager::register_friend ((int)$my_current_friend,(int)$the_current_user_id,(int)$relation_type);
-	SocialManager::invitation_accepted ((int)$my_current_friend,(int)$the_current_user_id);
+	
+	SocialManager::register_friend($the_current_user_id,$my_current_friend,$relation_type);
+	SocialManager::register_friend($my_current_friend,$the_current_user_id,$relation_type);
+	SocialManager::invitation_accepted($my_current_friend,$the_current_user_id);
+	
 	if (isset($_POST['is_my_friend'])) {
 		echo api_xml_http_response_encode(get_lang('AddedContactToList'));
 	} else {
 		Display::display_normal_message(api_xml_http_response_encode(get_lang('AddedContactToList')));
 	}
-
 }
 if (isset($_POST['denied_friend_id'])) {
 	SocialManager::invitation_denied((int)$my_denied_current_friend,(int)$the_current_user_id);

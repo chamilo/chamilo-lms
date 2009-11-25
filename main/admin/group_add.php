@@ -68,6 +68,8 @@ $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allow
 $status = array();
 $status[GROUP_PERMISSION_OPEN] 		= get_lang('Open');
 $status[GROUP_PERMISSION_CLOSED]	= get_lang('Closed');
+$status[GROUP_PERMISSION_APPROVAL_NEEDED]	= get_lang('ApprovalNeeded');
+
 $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $status);
 
 // Set default values

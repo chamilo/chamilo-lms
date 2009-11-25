@@ -391,9 +391,9 @@ echo '<div id="social-profile-wrapper">';
 			// Images uploaded by course
 			$file_list = '';
 			if (is_array($course_list_code) && count($course_list_code)>0) {
-			foreach ($course_list_code as $course) {
-				$file_list.= UserManager::get_user_upload_files_by_course($user_id,$course['code']);
-			}
+				foreach ($course_list_code as $course) {
+					$file_list.= UserManager::get_user_upload_files_by_course($user_id,$course['code']);
+				}
 			}
 
 			if (!empty($file_list)) {
@@ -456,7 +456,10 @@ echo '<div id="social-profile-wrapper">';
 
 
 echo '<div id="social-profile-container">';
+
+	//-------------------------------------
 	// LEFT COLUMN
+	
 	echo '<div id="social-profile-left">';
 
 			//--- User image
@@ -481,7 +484,19 @@ echo '<div id="social-profile-container">';
     	  	} else {
     	  		echo '<br/>';
     	  		echo '<div class="actions" style="margin-right:5px;">';
-    	  		echo '&nbsp;<a href="../messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />';
+    	  		echo '&nbsp;<a href="/main/messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />';
+    	  		
+    	  		//check if I already sent an invitation message
+    	  		$invitation_sent_list = SocialManager::get_list_invitation_sent_by_user_id(api_get_user_id());
+    	  		
+    	  		if (is_array($invitation_sent_list) && is_array($invitation_sent_list[$user_id]) && count($invitation_sent_list[$user_id]) >0 ) {  	  		
+    	  			echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('YouAlreadySentAnInvitation').'</a>';
+    	  		} else {
+    	  			echo '&nbsp;<a href="/main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=300&width=610&user_friend='.$user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a>';
+    	  		}
+				
+				
+    	  		
     	  		echo '</div>';
     	  	}    	  	
     	  	echo '<br />';

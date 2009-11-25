@@ -44,15 +44,6 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
-/*
-if (!api_is_platform_admin()) {
-	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-	$rs = Database::query($sql,__FILE__,__LINE__);
-	if(Database::result($rs,0,0)!=$_user['user_id']) {
-		api_not_allowed(true);
-	}
-}*/
-
 //checking for extra field with filter on
 include_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php');
@@ -203,48 +194,29 @@ $UserList=$SessionList=array();
 $users=$sessions=array();
 $noPHP_SELF=true;
 
+
+$group_info = GroupPortalManager::get_group_data($group_id);
+Display::display_header($tool_name);
+//api_display_tool_title($tool_name.' ('.$session_info['name'].')');
+
+
 if($_POST['form_sent']) {
 	$form_sent			= $_POST['form_sent'];
 	$firstLetterUser	= $_POST['firstLetterUser'];
 	$firstLetterSession	= $_POST['firstLetterSession'];
 	$UserList			= $_POST['sessionUsersList'];
-	$ClassList			= $_POST['sessionClassesList'];
-	
+	$ClassList			= $_POST['sessionClassesList'];	
 	$group_id			= intval($_POST['id']);
 	
 	if(!is_array($UserList)) {
 		$UserList=array();
 	}
-
-	if ($form_sent == 1) {
-		
+	if ($form_sent == 1) {		
 		GroupPortalManager::delete_users($group_id);
 		$result = GroupPortalManager::add_users_to_groups($UserList, array($group_id));
-		
-		
-		//SessionManager::suscribe_users_to_session($id_session,$UserList,true,true);
-
-		//adding the session to the access_url_rel_session table
-		/*global $_configuration;
-		require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
-		if ($_configuration['multiple_access_urls']==true) {
-			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-			$access_url_id = api_get_current_access_url_id();
-			UrlManager::add_session_to_url($id_session,$access_url_id);
-		} else {
-			// we are filling by default the access_url_rel_session table
-			UrlManager::add_session_to_url($id_session,1);
-		}*/
-		//if(empty($_GET['add']))
-			//header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
-		//else
-		header('Location: group_list.php');
+		Display :: display_confirmation_message(get_lang('UsersEdited'));
 	}
 }
-
-$group_info = GroupPortalManager::get_group_data($group_id);
-Display::display_header($tool_name);
-//api_display_tool_title($tool_name.' ('.$session_info['name'].')');
 
 $nosessionUsersList = $sessionUsersList = array();
 /*$sql = 'SELECT COUNT(1) FROM '.$tbl_user;
@@ -477,7 +449,7 @@ if(!empty($errorMsg)) {
   <td align="center"><b><?php echo get_lang('UserListInPlatform') ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('UserListInSession') ?> :</b></td>
+  <td align="center"><b><?php echo get_lang('UserListInGroup') ?> :</b></td>
 </tr>
 
 <?php if ($add_type=='multiple') { ?>

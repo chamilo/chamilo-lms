@@ -11,9 +11,11 @@
 
 define('GROUP_PERMISSION_OPEN'	, '1');
 define('GROUP_PERMISSION_CLOSED', '2');
+define('GROUP_PERMISSION_APPROVAL_NEEDED', '3');
 
-define('GROUP_USER_PERMISSION_ADMIN'	,'1');
-define('GROUP_USER_PERMISSION_READER'	,'2');
+define('GROUP_USER_PERMISSION_ADMIN'	,'1'); // the admin of a group 
+define('GROUP_USER_PERMISSION_READER'	,'2'); // a normal user 
+define('GROUP_USER_PERMISSION_PENDING_INVITATION'	,'3'); // user pending invitation to a group
 
 class GroupPortalManager
 {
@@ -257,7 +259,7 @@ class GroupPortalManager
 			$where_relation_condition = "AND gu.relation_type = $relation_type ";
 		}
 		
-		$sql = "SELECT g.picture_uri, g.name, g.description, g.id  
+		$sql = "SELECT g.picture_uri, g.name, g.description, g.id , gu.relation_type
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
 				ON gu.group_id = g.id WHERE gu.user_id = $user_id $where_relation_condition ORDER BY created_on desc ";
@@ -345,12 +347,14 @@ class GroupPortalManager
 	}
 	
 	
-	function get_users_by_group($group_id='', $with_image = false)
+	function get_users_by_group($group_id='', $with_image = false, $relation_type = 0, $limit = 100)
 	{
 		$where = '';
 		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$tbl_user				= Database::get_main_table(TABLE_MAIN_USER);
 		$group_id 				= intval($group_id);
+		$limit 					= intval($limit);
+		
 		
 		if ($relation_type == 0) {			
 			$where_relation_condition = '';
@@ -359,9 +363,9 @@ class GroupPortalManager
 			$where_relation_condition = "AND gu.relation_type = $relation_type ";
 		}
 		
-		$sql="SELECT u.user_id, u.firstname, u.lastname, picture_uri, relation_type FROM $tbl_user u
+		$sql="SELECT picture_uri, u.user_id, u.firstname, u.lastname, relation_type FROM $tbl_user u
 			INNER JOIN $table_group_rel_user gu
-			ON (gu.user_id = u.user_id) WHERE gu.group_id= $group_id $where_relation_condition ORDER BY relation_type, firstname";
+			ON (gu.user_id = u.user_id) WHERE gu.group_id= $group_id $where_relation_condition ORDER BY relation_type, firstname LIMIT $limit";
 			
 		$result=Database::query($sql,__FILE__,__LINE__);
 		$array = array();
@@ -708,6 +712,38 @@ class GroupPortalManager
 			}
 		}
 	}
+	
+	/**
+	 * Updates the group_rel_user table  with a given user and group ids
+	 * @author Julio Montoya
+	 * @param int  user id
+	 * @param int group id
+	 * @param int relation type 
+	 * */
+	function update_user_permission($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER)
+	{		
+		$table_group_rel_user	= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
+		$group_id = intval($group_id);
+		$user_id = intval($user_id);
+		
+		$sql = "UPDATE $table_group_rel_user
+   				SET relation_type = ".intval($relation_type)." WHERE user_id = $user_id AND group_id = $group_id" ;
+		$result = Database::query($sql, __FILE__, __LINE__);
+	}
+	
+	
+	function get_group_admin_list($user_id, $group_id)
+	{		
+		$table_group_rel_user	= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
+		$group_id = intval($group_id);
+		$user_id = intval($user_id);
+		
+		$sql = "UPDATE $table_group_rel_user
+   				SET relation_type = ".intval($relation_type)." WHERE user_id = $user_id AND group_id = $group_id" ;
+		$result = Database::query($sql, __FILE__, __LINE__);
+	}
+	
+	
 
 
 	/**

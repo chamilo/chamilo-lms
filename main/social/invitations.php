@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /dokeos_license.txt */
 
-$language_file = array('registration','messages','userInfo','admin');
+$language_file = array('messages','userInfo','admin');
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'image.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
@@ -10,119 +10,166 @@ $this_section = SECTION_SOCIAL;
 
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
 
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '
+<script type="text/javascript">
+		
+function denied_friend (element_input) {
+	name_button=$(element_input).attr("id");
+	name_div_id="id_"+name_button.substring(13);
+	user_id=name_div_id.split("_");
+	friend_user_id=user_id[1];	
+	 $.ajax({
+		contentType: "application/x-www-form-urlencoded",
+		beforeSend: function(objeto) {
+		$("#id_response").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
+		type: "POST",
+		url: "../social/register_friend.php",
+		data: "denied_friend_id="+friend_user_id,
+		success: function(datos) {
+		 $("div#"+name_div_id).hide("slow");
+		 $("#id_response").html(datos);
+		}
+	});
+}
+function register_friend(element_input) {
+ if(confirm("'.get_lang('AddToFriends').'")) {
+		name_button=$(element_input).attr("id");
+		name_div_id="id_"+name_button.substring(13);
+		user_id=name_div_id.split("_");
+		user_friend_id=user_id[1];
+		 $.ajax({
+			contentType: "application/x-www-form-urlencoded",
+			beforeSend: function(objeto) {
+			$("div#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
+			type: "POST",
+			url: "../social/register_friend.php",
+			data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",
+			success: function(datos) {  $("div#"+name_div_id).hide("slow");
+				$("form").submit()
+			}
+		});
+ }
+}
+
+</script>';
+api_block_anonymous_users();
+
 Display :: display_header($tool_name, 'Groups');
 SocialManager::show_social_menu();
 echo '<div class="actions-title">';
 echo get_lang('Invitations');
-echo '</div>';
+echo '</div>'; 
 	 
-	 
-api_block_anonymous_users();
-$request=api_is_xml_http_request();
-$language_variable=api_xml_http_response_encode(get_lang('PendingInvitations'));
-$language_comment=api_xml_http_response_encode(get_lang('SocialInvitesComment'));
+
+$request = api_is_xml_http_request();
+$language_variable = api_xml_http_response_encode(get_lang('PendingInvitations'));
+$language_comment  = api_xml_http_response_encode(get_lang('SocialInvitesComment'));
 //api_display_tool_title($language_variable);
 ?>
 <div id="id_response" align="center"></div>
 <?php
 $list_get_invitation=array();
-$list_get_path_web=array();
-$user_id=api_get_user_id();
-$list_get_invitation=SocialManager::get_list_invitation_of_friends_by_user_id($user_id);
-$list_get_path_web=SocialManager::get_list_web_path_user_invitation_by_user_id($user_id);
+$user_id = api_get_user_id();
+
+$list_get_invitation		= SocialManager::get_list_invitation_of_friends_by_user_id($user_id);
+$list_get_invitation_sent	= SocialManager::get_list_invitation_sent_by_user_id($user_id);
+
 $number_loop=count($list_get_invitation);
-if ($number_loop==0) {
-	Display::display_normal_message(api_xml_http_response_encode(get_lang('YouDontHaveInvites')));
+
+//@todo move this to default.css
+echo '<style>
+.confirm {
+	border-top:1px solid #D8DFEA;
 }
-for ($i=0;$i<$number_loop;$i++) {
-?>
-<div id="<?php echo 'id_'.$list_get_invitation[$i]['user_sender_id'] ?>" align="center">
-<table width="600" border="0" cellpadding="0" cellspacing="0">
-  <tr>
-    <td width="600" height="20" valign="top"><table width="100%" border="0"
-cellpadding="0" cellspacing="0" bgcolor="#9DACBF">
-      <tr>
-        <td width="600" height="20" valign="top" style="padding:4px;"><div align="left"><b><?php echo api_xml_http_response_encode(get_lang('RequestContact')); ?></b></div></td>
-        </tr>
-    </table></td>
-  </tr>
-  <tr>
-    <td height="135" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
-      <tr>
-        <td width="600" height="135" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
-          <tr>
-            <td width="600" height="110" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
-              <tr>
-                <td width="100" height="110" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#C8D5E4">
-                  <tr>
-                    <td width="100" height="110" style="padding:4px;" >
-		                <?php $friends_profile = SocialManager::get_picture_user($list_get_invitation[$i]['user_sender_id'], $list_get_path_web[$i]['file'], 92); ?>
-                    	<center><img src="<?php echo $friends_profile['file']; ?>" <?php echo $friends_profile['style']; ?> /></center></td>
-                    </tr>
-                  </table></td>
-                      <td width="500" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
-                          <tr>
-                            <td width="500" height="22" valign="top">
-                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
-                              <tr>
-                                <td width="500" height="22" valign="top" style="padding:2px;">
-                                <?php
-                                $user_id=$list_get_invitation[$i]['user_sender_id'];
-                                $user_info=api_get_user_info($user_id);
-                                echo api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName']));
-                                ?></td>
-                                </tr>
-                            </table></td>
-                          </tr>
-                          <tr>
-                            <td height="5" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
 
-                              <tr>
-                                <td width="500" height="5"></td>
-                                </tr>
-                            </table></td>
-                          </tr>
-                          <tr>
-                            <td height="22" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
-                              <tr>
-                                <td width="500" height="22" valign="top" style="padding:2px;"><?php
-                                $title=get_lang($list_get_invitation[$i]['title']);
-                                $content=get_lang($list_get_invitation[$i]['content']);
-                                echo api_xml_http_response_encode($title.' : '.$content);
-                                ?> </td>
-                                </tr>
-                            </table></td>
-                          </tr>
-                          <tr>
-                            <td height="61" valign="top" style="padding:2px;"><?php
-                            $date=$list_get_invitation[$i]['send_date'];
-                            echo api_xml_http_response_encode(get_lang('DateSend').' : '.$date);
-                            ?></td>
-                          </tr>
-                      </table></td>
-                    </tr>
-            </table></td>
-              </tr>
-          <tr>
-            <td height="25" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#9DACBF">
-              <tr>
-                <td width="600" height="25" valign="top" style="padding:4px;"><div align="right">
-       				<button class="save" name="btn_accepted" type="submit" id="<?php echo "btn_accepted_".$user_id ?>" value="<?php echo api_xml_http_response_encode(get_lang('Accept'));?>"onclick="javascript:register_friend(this)"><?php echo api_xml_http_response_encode(get_lang('Accept')) ?></button>
-     				<button class="cancel" name="btn_denied" type="submit" id="<?php echo "btn_deniedst_".$user_id ?>" value="<?php echo api_xml_http_response_encode(get_lang('Deny')); ?>" onclick="javascript:denied_friend(this)" ><?php echo api_xml_http_response_encode(get_lang('Deny'))?></button>
-                  </div></td>
-                    </tr>
-            </table></td>
-              </tr>
+</style>';
 
-        </table></td>
-        </tr>
 
-    </table></td>
-  </tr>
-</table>
-</div>
-<br/>
-<?php
+if ($number_loop==0) {
+	Display::display_normal_message(get_lang('NoPendingInvitations'));
+} else {
+	echo get_lang('InvitationReceived');	
+	
+	foreach ($list_get_invitation as $invitation) { 
+		$sender_user_id = $invitation['user_sender_id']
+		?>
+		<div id="<?php echo 'id_'.$sender_user_id ?>" class="confirm">
+		   	<?php 
+		   		$picture = UserManager::get_user_picture_path_by_id($sender_user_id,'web',false,true);
+		   		$friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
+		        $user_info	= api_get_user_info($sender_user_id);	        
+		        $title		= get_lang($invitation['title']);
+				$content	= get_lang($invitation['content']);
+		        $date		= $invitation['send_date'];                  
+		    ?>	   	
+			<table cellspacing="0" border="0">
+			<tbody>
+				<tr>
+					<td class="image">
+						<a href="profile.php?u=<?=$sender_user_id?>">
+						<img src="<?php echo $friends_profile['file']; ?>" <?php echo $friends_profile['style']; ?> /></a>
+					</td>
+					<td class="info">
+							<a class="profile_link" href="profile.php?u=<?=$sender_user_id?>"><?= api_get_person_name($user_info['firstName'], $user_info['lastName']);?></a>
+							<div>
+							<?= $title.' : '.$content;?>
+							</div>
+							<div>
+							<?= get_lang('DateSend').' : '.$date;?>
+							</div> 
+							<div class="buttons">
+		   						<button class="save" name="btn_accepted" type="submit" id="<?php echo "btn_accepted_".$sender_user_id ?>" value="<?php echo get_lang('Accept');?>"onclick="javascript:register_friend(this)">
+		   						<?php echo get_lang('Accept') ?></button>
+			     				<button class="cancel" name="btn_denied" type="submit" id="<?php echo "btn_deniedst_".$sender_user_id ?>" value="<?php echo get_lang('Deny'); ?>" onclick="javascript:denied_friend(this)" >
+			     				<?php echo get_lang('Deny')?></button>
+							</div>					
+					</td>
+				</tr>
+			</tbody>
+			</table>
+		</div>
+		<?php
+	}
+}
+echo '<div class="clear"></div>';
+
+if (count($list_get_invitation_sent) > 0 ){
+	echo get_lang('InvitationSent');
+	foreach ($list_get_invitation_sent as $invitation) { 
+		$sender_user_id = $invitation['user_receiver_id'];?>
+		<div id="<?php echo 'id_'.$sender_user_id ?>" class="confirm">
+		   	<?php 
+		   		$picture = UserManager::get_user_picture_path_by_id($sender_user_id,'web',false,true);
+		   		$friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
+		        $user_info	= api_get_user_info($sender_user_id);	  
+		              
+		        $title		= get_lang($invitation['title']);
+				$content	= get_lang($invitation['content']);
+		        $date		= $invitation['send_date'];                  
+		    ?>	   	
+			<table cellspacing="0" border="0">
+			<tbody>
+				<tr>
+					<td class="image">
+						<a href="profile.php?u=<?=$sender_user_id?>">
+						<img src="<?php echo $friends_profile['file']; ?>" <?php echo $friends_profile['style']; ?> /></a>
+					</td>
+					<td class="info">
+							<a class="profile_link" href="profile.php?u=<?=$sender_user_id?>"><?= api_get_person_name($user_info['firstName'], $user_info['lastName']);?></a>
+							<div>
+							<?= $title.' : '.$content;?>
+							</div>
+							<div>
+							<?= get_lang('DateSend').' : '.$date;?>
+							</div>		
+					</td>
+				</tr>
+			</tbody>
+			</table>
+		</div>
+	<?php
+	}
 }
 Display::display_footer();
 ?>

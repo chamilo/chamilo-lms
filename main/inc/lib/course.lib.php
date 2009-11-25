@@ -826,7 +826,7 @@ class CourseManager {
 		}
 
 		// A course coach?
-		if (Database::num_rows(Database::query("SELECT id_coach
+		if (Database::num_rows(Database::query("SELECT id_user
 					FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." 
 					WHERE id_session='".$_SESSION['id_session']."'
 					AND id_user = '$user_id' AND status = 2

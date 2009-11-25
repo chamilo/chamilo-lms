@@ -211,11 +211,7 @@ class TestOpenId extends UnitTestCase {
 		$url = api_get_path(WEB_PATH).'tests/all.test2.php';
 		ob_start();
 		$res=openid_redirect_http($url, $message = array());
-		
-		$dd = $this->assertTrue(is_null($res));
-		var_dump($dd);
-		
-		
+		$this->assertTrue(is_null($res));
 		ob_end_clean();
 		
 	}

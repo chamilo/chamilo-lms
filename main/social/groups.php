@@ -58,13 +58,6 @@ if ($group_id != 0 ) {
 	$users		= GroupPortalManager::get_users_by_group($group_id, true);
 	
 	
-	//@todo this must be move to default.css for dev use only
-	echo '<style> 		
-			#group_members { width:250px; height:300px; overflow-x:none; overflow-y: auto;}
-			.group_member_item { width:80px; height:100px; float:left; margin:5px 5px 15px 5px; }
-			
-	</style>';
-
 	echo '<div id="layout-left" style="float: left; width: 280px; height: 100%;">';
 
 	//Group's title

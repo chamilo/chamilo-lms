@@ -207,7 +207,7 @@ if (isset($_GET['u'])) {
 	$info_user=api_get_user_info(api_get_user_id());
 	$param_user='';
 }
-$_SESSION['social_user_id'] = $user_id;
+$_SESSION['social_user_id'] = intval($user_id);
 
 /**
  * Display
@@ -330,7 +330,6 @@ echo '<div id="social-profile-wrapper">';
 					}
 				}
 			} else {
-				// No friends!! :(
 					$friend_html .= '<div class="sectiontitle">'.get_lang('Friends').'</div>';
 					$friend_html.= '<div id="friend-container" class="social-friend-container">';
 					$friend_html.= '<div id="friend-header">';
@@ -467,17 +466,7 @@ echo '<div id="social-profile-container">';
     	  	echo '</div>';
     	  	
     	  	
-    	  	if (api_get_user_id() == $user_id) {
-    	  	/*	// if i'm me
-    	  		echo '<div>';
-    	  		echo Display::return_icon('email.gif');
-    	  		echo '&nbsp;<a href="../social/index.php#remote-tab-2">'.get_lang('MyInbox').'</a>&nbsp;';
-    	  		echo '</div>';
-    	  		echo '<div>';
-    	  		echo Display::return_icon('edit.gif');
-    	  		echo '&nbsp;<a href="../auth/profile.php?show=1">'.get_lang('EditInformation').'</a>&nbsp;';
-    	  		echo '</div>';*/
-    	  	} else {
+    
     	  		echo '<br/>';
     	  		echo '<div class="actions" style="margin-right:5px;">';
     	  		echo '&nbsp;<a href="/main/messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />';
@@ -493,16 +482,9 @@ echo '<div id="social-profile-container">';
     	  			}
     	  		}
 				
-				
-    	  		
     	  		echo '</div>';
-    	  	}    	  	
+     	  	
     	  	echo '<br />';
-
-    	  	// Send message or Add to friend links
-    	  	/*if (!$show_full_profile) {
-    	  		echo '&nbsp;&nbsp;<a href="../messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />';
-    	  	}*/
 
 			// Extra information
 
@@ -704,32 +686,6 @@ echo '<div id="social-profile-container">';
 							$listInactives[] = $value;
 						}
 					}
-					/*
-					// --- Session registered
-					api_display_tool_title(get_lang('Sessions'));
-					if(count($listActives)>0) {
-						echo "<ul class=\"courseslist\">\n";
-						foreach ($listActives as $key => $value) {
-							if (!empty($value[2])) {
-								if ((isset($old_session) && $old_session != $value[2]) or ((!isset($old_session)) && isset($value[2]))) {
-									$old_session = $value[2];
-									if ($key != 0) {
-										echo '</ul>';
-									}
-									//echo '<ul class="session_box"><li class="session_box_title">'.$value[3]['title'].' '.$value[3]['dates'].'</li>';
-									echo '<ul>';
-									if ( !empty($value[3]['coach']) ) {
-										echo '<li class="session_box_coach">'.$value[3]['coach'].'</li>';
-									}
-									echo '</ul>';
-									echo '<ul class="session_course_item">';
-								}
-							}
-							echo $value[1];
-						}
-						echo '</ul>';
-					}
-					*/
 				}
 				echo '</ul><br />';
 				
@@ -747,5 +703,7 @@ echo '<div id="social-profile-container">';
         echo '</div>';
     echo '</div>';
 echo '</div>'; //from the main
+
 echo '<form id="id_reload" name="id_reload" action="profile.php">&nbsp;</form>';
+
 Display :: display_footer();

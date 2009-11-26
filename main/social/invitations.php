@@ -80,15 +80,6 @@ $pending_invitations = GroupPortalManager::get_groups_by_user($user_id, GROUP_US
 
 $number_loop=count($list_get_invitation);
 
-//@todo move this to default.css
-echo '<style>
-.confirm {
-	border-top:1px solid #D8DFEA;
-}
-
-</style>';
-
-
 if ($number_loop==0) {
 	Display::display_normal_message(get_lang('NoPendingInvitations'));
 } else {

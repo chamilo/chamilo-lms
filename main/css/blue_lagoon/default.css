@@ -2182,11 +2182,11 @@ div.comments {
 /* styles from the my.profile.php file */
 .message-content {
 	float:right;
-	margin:20px auto;
-	background:#F5E38E;
-	border:2px solid #EBCA4F;
+	margin:5px auto;
+	background:#FFF;
+	border:1px dotted #ccc;
 	padding:10px;
-	width:200px;
+	width:50%;
 	position:relative;
 }
 .message-content .message-delete {
@@ -2207,8 +2207,8 @@ div.comments {
 	margin-right:-100px;
 }
 .message-title {
-	color:#ff0000;
-	font-size:15px;
+	/* color:#ff0000;*/
+	font-size:12px;
 }
 .message-body {
 	font-size:11px;

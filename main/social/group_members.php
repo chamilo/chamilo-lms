@@ -58,7 +58,8 @@ foreach($users as $user) {
 			$user['link'] = Display::return_icon('admin_star.png', get_lang('Admin'));
 		break;
 		case  GROUP_USER_PERMISSION_READER:
-			$user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=delete">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>';
+			$user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=delete">'.Display::return_icon('delete.png', get_lang('DeleteFromGroup')).'</a><br />'.
+							'<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=set_admin">'.Display::return_icon('delete.png', get_lang('LikeModerator')).'</a>';
 		break;		
 		case  GROUP_USER_PERMISSION_PENDING_INVITATION:
 			$user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=add">'.Display::return_icon('pending_invitation.png', get_lang('PendingInvitation')).'</a>';

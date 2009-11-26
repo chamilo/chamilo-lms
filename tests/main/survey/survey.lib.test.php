@@ -105,7 +105,7 @@ class TestSurvey extends UnitTestCase {
 		$instans->expectOnce($table_survey);
 		$res = $this->smanager->delete_survey($survey_id, $shared, $course_code);
 		$this->assertTrue($res);
-		$this->assertTrue(is_bool($res));
+		$this->assertTrue(is_string($res));
 		$this->assertTrue($table_survey);
 		//var_dump($table_survey_question_group);
 		//var_dump($res);

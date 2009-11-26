@@ -29,7 +29,7 @@ class TestImpor extends UnitTestCase {
 		global $users;
 		$res=save_data($users);
 		$this->assertTrue(is_null($res));
-		var_dump($res);
+		//var_dump($res);
 	}
 
 	function testvalidate_data() {

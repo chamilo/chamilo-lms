@@ -127,9 +127,9 @@ class TestInstallUpgrade extends UnitTestCase{
 		//var_dump($res);
 	}
 
-	public function testDirectoryToArray(){
+	public function testMyDirectoryToArray(){
 		$directory=array('aaa','bbb','ccc');
-		$res = directory_to_array($directory);
+		$res = my_directory_to_array($directory);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}

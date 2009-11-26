@@ -111,7 +111,7 @@ class TestUserInfoLib extends UnitTestCase {
 		$courseCode='TEST';
 		$res=get_main_user_info($user_id,$courseCode);
 		if(!is_bool($res))$this->assertTrue(is_array($res));
-		var_dump($res);
+		//var_dump($res);
 	}
 
 	function testhtmlize() {

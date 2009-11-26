@@ -35,7 +35,7 @@ class SocialManager extends UserManager {
 		$relation_type = intval($relation_type);
 		
 		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' .$friend_id.' AND user_id='.$my_user_id;
-		error_log($sql);
+		
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = Database :: fetch_array($result, 'ASSOC');
 		if ($row['count'] == 0) {
@@ -54,33 +54,48 @@ class SocialManager extends UserManager {
 	}
 
 	/**
-	 * Allow to delete contact to social network
-	 *@author isaac flores paz <isaac.flores@dokeos.com>
-	 *@author Julio Montoya <gugli100@gmail.com> Cleaning code
-	 *@param int user friend id
+	 * Deletes a contact	  
+	 * @param int user friend id
+	 * @param bool true will delete ALL friends relationship from $friend_id
+	 * @author isaac flores paz <isaac.flores@dokeos.com>
+	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code
 	 */
-	public static function removed_friend ($friend_id) {
+	public static function removed_friend ($friend_id, $real_removed = false) {
 		$tbl_my_friend  = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
 		$tbl_my_message = Database :: get_main_table(TABLE_MAIN_MESSAGE);
-		
-		$user_id=api_get_user_id();
 		$friend_id = intval($friend_id);
 		
-		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE user_id=' . $user_id . ' AND relation_type<>6 AND friend_user_id='.$friend_id;
-		$result = Database::query($sql, __FILE__, __LINE__);
-		$row = Database :: fetch_array($result, 'ASSOC');
-		if ($row['count'] == 1) {
+		if ($real_removed == true) {
+			
 			//Delete user friend
-			$sql_i = 'UPDATE ' . $tbl_my_friend .' SET relation_type='.SOCIALDELETED.' WHERE user_id=' . $user_id.' AND friend_user_id='.$friend_id;
-			$sql_j = 'UPDATE ' . $tbl_my_message.' SET msg_status=7 WHERE user_receiver_id=' . $user_id.' AND user_sender_id='.$friend_id;
-			//Delete user
-			$sql_ij = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.SOCIALDELETED.' WHERE user_id=' . $friend_id.' AND friend_user_id='.$user_id;
-			$sql_ji = 'UPDATE ' . $tbl_my_message . ' SET msg_status=7 WHERE user_receiver_id=' . $friend_id.' AND user_sender_id='.$user_id;
-			Database::query($sql_i, __FILE__, __LINE__);
-			Database::query($sql_j, __FILE__, __LINE__);
-			Database::query($sql_ij, __FILE__, __LINE__);
-			Database::query($sql_ji, __FILE__, __LINE__);
+			$sql_delete_relationship1 = 'UPDATE ' . $tbl_my_friend .' SET relation_type='.SOCIALDELETED.' WHERE friend_user_id='.$friend_id;			
+			$sql_delete_relationship2 = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.SOCIALDELETED.' WHERE user_id=' . $friend_id;
+			
+			Database::query($sql_delete_relationship1, __FILE__, __LINE__);
+			Database::query($sql_delete_relationship2, __FILE__, __LINE__);		
+			
+		} else {
+			$user_id=api_get_user_id();
+			$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE user_id=' . $user_id . ' AND relation_type<>6 AND friend_user_id='.$friend_id;
+			$result = Database::query($sql, __FILE__, __LINE__);
+			$row = Database :: fetch_array($result, 'ASSOC');
+			if ($row['count'] == 1) {
+				//Delete user friend
+				$sql_i = 'UPDATE ' . $tbl_my_friend .' SET relation_type='.SOCIALDELETED.' WHERE user_id=' . $user_id.' AND friend_user_id='.$friend_id;
+				$sql_j = 'UPDATE ' . $tbl_my_message.' SET msg_status=7 WHERE user_receiver_id=' . $user_id.' AND user_sender_id='.$friend_id;
+				//Delete user
+				$sql_ij = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.SOCIALDELETED.' WHERE user_id=' . $friend_id.' AND friend_user_id='.$user_id;
+				$sql_ji = 'UPDATE ' . $tbl_my_message . ' SET msg_status=7 WHERE user_receiver_id=' . $friend_id.' AND user_sender_id='.$user_id;
+				Database::query($sql_i, __FILE__, __LINE__);
+				Database::query($sql_j, __FILE__, __LINE__);
+				Database::query($sql_ij, __FILE__, __LINE__);
+				Database::query($sql_ji, __FILE__, __LINE__);
+			}			
 		}
+		
+		
+		
+
 	}
 	/**
 	 * Allow to see contacts list
@@ -385,13 +400,11 @@ class SocialManager extends UserManager {
 	 * @author  Yannick Warnier
 	 * @since   Dokeos 1.8.6.1
 	 */
-	function get_user_feeds($user,$limit=5) {
+	function get_user_feeds($user, $limit=5) {
 	    if (!function_exists('fetch_rss')) { return '';}
 		$fields = UserManager::get_extra_fields();
 	    $feed_fields = array();
 	    $feeds = array();
-	    $res = '<div class="sectiontitle">'.get_lang('RSSFeeds').'</div>';
-	    $res .= '<div class="social-content-training">';
 	    $feed = UserManager::get_extra_user_data_by_field($user,'rssfeeds');
 	    if(empty($feed)) { return ''; }
 	    $feeds = split(';',$feed['rssfeeds']);
@@ -411,8 +424,6 @@ class SocialManager extends UserManager {
 	        }
 	        $res .= '</div>';
 	    }
-	    $res .= '</div>';
-	    $res .= '<div class="clear"></div><br />';
 	    return $res;
 	}
 	
@@ -615,7 +626,7 @@ class SocialManager extends UserManager {
 			echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('lp_users.png').' '.get_lang('Invitations').'</a>';
 			echo '<a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.gif').' '.get_lang('MyGroups').'</a>';
 			echo '<a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('search.gif').' '.get_lang('Search').'</a>';
-			echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('ModifProfile').'</a>';	
+			echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('EditProfile').'</a>';	
 			/*
 			echo '<span style="float:right; padding-top:7px;">'.
 				 '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';

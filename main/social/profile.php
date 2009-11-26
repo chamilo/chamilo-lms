@@ -16,6 +16,8 @@ require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 require_once api_get_path(LIBRARY_PATH).'array.lib.php';
+require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
+
 $user_id = api_get_user_id();
 $show_full_profile = true;
 //social tab
@@ -200,10 +202,7 @@ $interbreadcrumb[]= array (
 
 if (isset($_GET['u']) && is_numeric($_GET['u'])) {
 	$info_user=api_get_user_info($_GET['u']);
-	$interbreadcrumb[]= array (
-		'url' => 'javascript: void(0);',
-		'name' => api_get_person_name($info_user['firstName'], $info_user['lastName'])
-	);
+	$interbreadcrumb[]= array ('url' => 'javascript: void(0);','name' => api_get_person_name($info_user['firstName'], $info_user['lastName']));
 }
 if (isset($_GET['u'])) {
 	$param_user='u='.Security::remove_XSS($_GET['u']);
@@ -345,35 +344,35 @@ echo '<div id="social-profile-wrapper">';
 			echo $friend_html;
 			//Pending invitations
 			if (!isset($_GET['u']) || (isset($_GET['u']) && $_GET['u']==api_get_user_id())) {
-			$pending_invitations = SocialManager::get_list_invitation_of_friends_by_user_id(api_get_user_id());
-			$list_get_path_web=SocialManager::get_list_web_path_user_invitation_by_user_id(api_get_user_id());
-			$count_pending_invitations = count($pending_invitations);
-			//echo '<div class="clear"></div><br />';
-				//javascript:register_friend(this)
-				//var_dump($pending_invitations);
-			echo '<div class="clear"></div><br />';
-			echo '<div id="social-profile-invitations" >';
-			if ($count_pending_invitations > 0) {
-				echo '<div class="sectiontitle">';
-					echo api_convert_encoding(get_lang('PendingInvitations'),$charset,'UTF-8');
-					echo '</div><br />';
-				for ($i=0;$i<$count_pending_invitations;$i++) {
-					//var_dump($invitations);
-						echo '<div id="dpending_'.$pending_invitations[$i]['user_sender_id'].'" class="friend_invitations">';
-						echo '<div style="float:left;width:60px;" >';
-							echo '<img style="margin-bottom:5px;" src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
+				$pending_invitations = SocialManager::get_list_invitation_of_friends_by_user_id(api_get_user_id());
+				$list_get_path_web=SocialManager::get_list_web_path_user_invitation_by_user_id(api_get_user_id());
+				$count_pending_invitations = count($pending_invitations);
+				//echo '<div class="clear"></div><br />';
+					//javascript:register_friend(this)
+					//var_dump($pending_invitations);
+				echo '<div class="clear"></div><br />';
+				echo '<div id="social-profile-invitations" >';
+				if ($count_pending_invitations > 0) {
+					echo '<div class="sectiontitle">';
+						echo api_convert_encoding(get_lang('PendingInvitations'),$charset,'UTF-8');
+						echo '</div><br />';
+					for ($i=0;$i<$count_pending_invitations;$i++) {
+						//var_dump($invitations);
+							echo '<div id="dpending_'.$pending_invitations[$i]['user_sender_id'].'" class="friend_invitations">';
+							echo '<div style="float:left;width:60px;" >';
+								echo '<img style="margin-bottom:5px;" src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
+							echo '</div>';
+							echo '<div style="padding-left:70px;">';
+									echo ' '.api_convert_encoding(substr($pending_invitations[$i]['content'],0,50),$charset,'UTF-8');
+								echo '<br />';
+								echo '<a id="btn_accepted_'.$pending_invitations[$i]['user_sender_id'].'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
+								echo '<div id="id_response">&nbsp;</div>';
+							echo '</div>';
 						echo '</div>';
-						echo '<div style="padding-left:70px;">';
-								echo ' '.api_convert_encoding(substr($pending_invitations[$i]['content'],0,50),$charset,'UTF-8');
-							echo '<br />';
-							echo '<a id="btn_accepted_'.$pending_invitations[$i]['user_sender_id'].'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
-							echo '<div id="id_response">&nbsp;</div>';
-						echo '</div>';
-					echo '</div>';
-					echo '<div class="clear"></div>';
+						echo '<div class="clear"></div>';
+					}
 				}
-			}
-			echo '</div>';
+				echo '</div>';
 			}
 
 			//--Productions
@@ -492,7 +491,9 @@ echo '<div id="social-profile-container">';
     	  		if (is_array($invitation_sent_list) && is_array($invitation_sent_list[$user_id]) && count($invitation_sent_list[$user_id]) >0 ) {  	  		
     	  			echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('YouAlreadySentAnInvitation').'</a>';
     	  		} else {
-    	  			echo '&nbsp;<a href="/main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=300&width=610&user_friend='.$user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a>';
+    	  			if (!$show_full_profile) {
+    	  				echo '&nbsp;<a href="/main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=300&width=610&user_friend='.$user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a>';
+    	  			}
     	  		}
 				
 				
@@ -556,7 +557,9 @@ echo '<div id="social-profile-container">';
 											$extra_information_value .= '<strong>'.ucfirst($field_display_text).':</strong> '.implode(', ',$tag_tmp).'<br />';
 										}
 									} else {
-										$extra_information_value .= '<strong>'.ucfirst($field_display_text).':</strong> '.$data.'<br />';
+										if (!empty($data)) {
+											$extra_information_value .= '<strong>'.ucfirst($field_display_text).':</strong> '.$data.'<br />';
+										}
 									}
 								}
 							}
@@ -568,23 +571,38 @@ echo '<div id="social-profile-container">';
 					$extra_information .= '</div>';
 					$extra_information .= '<br /><br />';
 				}
+				
 				// 	if there are information to show
 				if (!empty($extra_information_value))
 					echo $extra_information;
+				
+					$results = GroupPortalManager::get_groups_by_user($user_id , 0, true);
+					$groups = array();
 
+					foreach ($results as $result) {
+						$id = $result['id'];
+					$url_open  = '<a href="groups.php?id='.$id.'">';
+					$url_close = '</a>';
+					if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {			
+						$result['name'].= Display::return_icon('admin_star.png', get_lang('Admin'));
+					}
+					$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close);
+					}
+					echo '<h2>'.get_lang('MyGroups').'</h2>';
+					Display::display_sortable_grid('groups', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
+	
 
 				// ---- My Agenda Items
 				$my_agenda_items = show_simple_personal_agenda($user_id);
 				if (!empty($my_agenda_items)) {
 					echo '<div class="sectiontitle">';
-					echo get_lang('MyAgenda');
+						echo get_lang('MyAgenda');
 					echo '</div>';
 					$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 					echo '<div class="social-content-agenda">';
-					echo '<div class="social-background-content">';
-					echo $my_agenda_items;
-					echo '</div>';
-
+						echo '<div class="social-background-content">';
+						echo $my_agenda_items;
+						echo '</div>';
 					echo '<br /><br />';
 					echo '</div>';
 				}
@@ -658,6 +676,7 @@ echo '<div id="social-profile-container">';
 
 			echo '<div class="clear"></div><br />';
 			echo '</div>';
+			
 			// COURSES LIST
 			if ($show_full_profile) {
 				//print_r($personal_course_list);
@@ -716,8 +735,16 @@ echo '<div id="social-profile-container">';
 					*/
 				}
 				echo '</ul><br />';
-                echo SocialManager::get_user_feeds($user_id);
-        		echo '</div>';
+				
+				$user_feeds = SocialManager::get_user_feeds($user_id);
+				if (!empty($user_feeds )) {
+					echo '<div class="sectiontitle">'.get_lang('RSSFeeds').'</div>';
+	    			echo '<div class="social-content-training">';
+                	echo $user_feeds;
+                	echo '</div>';
+	    			echo '<div class="clear"></div><br />';
+        			echo '</div>';
+				}
 		    }
             echo '</div>';
         echo '</div>';

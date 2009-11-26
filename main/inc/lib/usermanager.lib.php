@@ -248,7 +248,14 @@ class UserManager
 			}
 			UrlManager::delete_url_rel_user($user_id, $url_id);
 		}
-
+		
+		if (api_get_setting('allow_social_tool')=='true' ) {
+			require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+			//Delete user from groups
+			
+			//Delete from user friend lists 
+			SocialManager::removed_friend($user_id,true);
+		}
 		// add event to system log
 		$time = time();
 		$user_id_manager = api_get_user_id();

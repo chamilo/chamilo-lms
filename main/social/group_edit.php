@@ -39,7 +39,6 @@ $group_data = Database::fetch_array($res, 'ASSOC');
 
 // Create the form
 $form = new FormValidator('group_edit', 'post', '', '', array('style' => 'width: 60%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')));
-$form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'id', $group_id);
 
 // name

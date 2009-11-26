@@ -227,8 +227,6 @@ global $_configuration;
 
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 
-
-
 if ($ajax_search) {
 	$sql="SELECT  u.user_id, lastname, firstname, username, group_id
 				FROM $tbl_user u
@@ -340,18 +338,16 @@ if ($ajax_search) {
 		foreach($friends as $friend) {			
 			$user_info=api_get_user_info($friend['friend_user_id']);
 			$group_friend_list = GroupPortalManager::get_groups_by_user($friend['friend_user_id']);
-			//var_dump($group_friend_list);
 			$friend_group_id = '';
-			if (in_array($group_id,$group_friend_list)) {
+			if (isset($group_friend_list[$group_id]) && $group_friend_list[$group_id]['id'] == $group_id) {
 				$friend_group_id = $group_id;
 			} 
-			$Users2[]=array('user_id' => $friend['friend_user_id'],  'firstname' =>$user_info['firstName'], 'lasttname' => $user_info['lastName'], 'username' =>$user_info['username'],'group_id'=>$friend_group_id );
+			$Users[]=array('user_id' => $friend['friend_user_id'],  'firstname' =>$user_info['firstName'], 'lasttname' => $user_info['lastName'], 'username' =>$user_info['username'],'group_id'=>$friend_group_id );
 		}
-		//var_dump($Users2);
-
+		
 	//	echo $sql;
-		$result = Database::query($sql,__FILE__,__LINE__);
-		$Users	= Database::store_result($result,'ASSOC');
+		//$result = Database::query($sql,__FILE__,__LINE__);
+		//$Users	= Database::store_result($result,'ASSOC');
 
 		foreach ($Users as $user) {
 			if($user['group_id'] != $group_id)
@@ -469,7 +465,7 @@ if(!empty($errorMsg)) {
   <td align="center"><b><?php echo get_lang('UserListInGroup') ?> :</b></td>
 </tr>
 
-<?php if ($add_type=='multiple') { ?>
+<?php if ($add_type=='no') { ?>
 <tr>
 <td align="center">
 

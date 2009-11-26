@@ -176,7 +176,7 @@ if (count($list_get_invitation_sent) > 0 ){
 }
 
 if (count($pending_invitations) > 0) {
-	echo get_lang('GroupInvitations');
+	echo get_lang('GroupsWaitingApproval');
 	Display::display_sortable_grid('search_users', array(), $pending_invitations, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
 }
 	

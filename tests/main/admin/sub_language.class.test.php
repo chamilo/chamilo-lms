@@ -15,12 +15,13 @@ class TestSubLanguageManager extends UnitTestCase {
 	public function testget_all_data_of_dokeos_folder(){
 		$dokeos_path_folder = '/var/www/dokeoshg1.8.6.1/';
 		$res = SubLanguageManager::get_all_data_of_dokeos_folder($dokeos_path_folder, $only_main_name = false);
-		$this->assertTrue(is_array($res));
-		$this->assertTrue($res);
+		$this->assertTrue(is_null($res));
+		$this->assertFalse($res);
 		//var_dump($res);
 	}
 
 	/**
+	 * 
 	 * 
 	 */
 	public function testget_all_information_of_sub_language(){
@@ -53,15 +54,15 @@ class TestSubLanguageManager extends UnitTestCase {
 	public function testget_all_language_variable_in_file(){
 		$dokeos_path_file = '/var/www/dokeoshg1.8.6.1/main/lang/spanish/link.inc.php';
 		$res = SubLanguageManager::get_all_language_variable_in_file($dokeos_path_file);
-		$this->assertTrue($res);
-		$this->assertTrue(is_array($res));
+		$this->assertFalse($res);
+		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
 	
-	/*
+	/**
 	 * 
 	 * 
-	 */
+	 */ 
 	public function testadd_file_in_language_directory(){
 		
 		$dirname = '/var/www/';				
@@ -71,7 +72,7 @@ class TestSubLanguageManager extends UnitTestCase {
 		unlink($dokeos_path_file);
 		$this->assertNull($res);
 		$this->assertTrue(is_null($res));
-		var_dump($res);
+		//var_dump($res);
 		
 	}
 	
@@ -98,8 +99,7 @@ class TestSubLanguageManager extends UnitTestCase {
 		if (file_exists($file)) {
 			unlink($file);
 			rmdir($dirname);	
-		}
-				
+		}	
 		$this->assertFalse($res3);
 		$this->assertTrue(is_null($res3));
 		//var_dump($res1, $res2 , $res3);
@@ -223,7 +223,6 @@ class TestSubLanguageManager extends UnitTestCase {
 		// create a directory of sub language
 		$path_sub_language = '/var/www/prueba123';
 		$res = SubLanguageManager :: add_directory_of_sub_language($path_sub_language, 0777);
-		
 		// remove a directory of sub language
 		if (file_exists($path_sub_language)) {
 			rmdir($path_sub_language);	

@@ -1215,43 +1215,41 @@ if ($show_menu) {
 	
 	//user image
 	//	@todo add a platform setting to add the user image
-	if (api_get_setting('allow_social_tool')=='true') {
+	if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool') == 'true') {
 		$img_array= UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',true,true);
 		$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 92, 'medium_', ' width="90" height="90" ');
 		echo '<div id="social_widget" style="">';
-			echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php"><img src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
-		/*
-		if (api_get_setting('allow_message_tool') == 'true') {
-			require_once api_get_path(LIBRARY_PATH).'message.lib.php';
-			require_once api_get_path(LIBRARY_PATH).'social.lib.php';
-			
-			$number_of_new_messages		= MessageManager::get_new_messages();
-			$number_of_outbox_message	= MessageManager::get_number_of_messages_sent();
-			$cant_out_box = ' ('.$number_of_outbox_message.')';
-			$cant_msg = ' ('.$number_of_new_messages.')';
-			$number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
-			//echo '<div class="message-view" style="display:none;">'.get_lang('ViewMessages').'</div>';
-			echo '<div class="message-content">
-					<h2 class="message-title">'.get_lang('Messages').'</h2>
-					<p>
-						<a href="../social/index.php#remote-tab-2" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />
-						<a href="../social/index.php#remote-tab-3" class="message-body">'.get_lang('Outbox').$cant_out_box.'</a><br />
-					</p>';
+		echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php"><img src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
 		
-			//if (api_get_setting('allow_social_tool') == 'true') {
-			//	 if ($number_of_new_messages_of_friend > 0) {
-			//		echo '<div class="message-content-internal">';
-			//		echo '<a href="../social/index.php#remote-tab-4" style="color:#000000">'. Display::return_icon('info3.gif', get_lang('NewMessage'), 'align="absmiddle"').'&nbsp;'.get_lang('Invitation ').'('.$number_of_new_messages_of_friend.')'.'</a>';
-			//		echo '</div><br />';
-			//	 }
-			// }
-			echo '<img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('Close').'" title="'.get_lang('Close').'"  class="message-delete" />';
-			if ($number_of_new_messages_of_friend > 0) {
-				echo '<br />';
-			}
-			echo '</div>';
+		
+			
+		require_once api_get_path(LIBRARY_PATH).'message.lib.php';
+		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+		
+		$number_of_new_messages		= MessageManager::get_new_messages();
+		$number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
+		$cant_msg  = '';
+		if ($number_of_new_messages > 0)
+			$cant_msg = ' ('.$number_of_new_messages.')';
+			
+		echo '<div class="message-content">
+				<h2 class="message-title">'.get_lang('Messages').'</h2>
+				<p>';
+				echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />';					
+				echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php" class="message-body">'.get_lang('Comppose').' </a><br />';
+		
+				if ($number_of_new_messages_of_friend > 0) {		
+					echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' ('.$number_of_new_messages_of_friend.') </a><br />';
+				}								
+		echo '</p>';
+				
+		echo '<img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('Close').'" title="'.get_lang('Close').'"  class="message-delete" />';
+		if ($number_of_new_messages_of_friend > 0) {
+			echo '<br />';
 		}
-		*/
+		echo '</div>';
+	
+		
 		echo '</div><br />';
 				
 	

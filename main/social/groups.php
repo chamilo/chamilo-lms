@@ -4,9 +4,9 @@
 $language_file = array('admin');
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'messages/message.class.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
 $this_section = SECTION_SOCIAL;
 

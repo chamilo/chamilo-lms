@@ -4,7 +4,6 @@
 $language_file = array('registration','messages','userInfo','admin');
 $cidReset=true;
 require_once '../inc/global.inc.php';
-require_once '../messages/message.class.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';

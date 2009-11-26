@@ -7,9 +7,6 @@
 * @package dokeos.social
 */
 
-/**
- * Init
- */
 $language_file = array('registration','messages','userInfo','admin','forum','blog');
 $cidReset = true;
 require '../inc/global.inc.php';

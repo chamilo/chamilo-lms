@@ -119,77 +119,69 @@ if ($_GET['chatid'] != '') {
  */
 function display_user_list($user_list, $_plugins) {
 	global $charset;
-	if ($_GET['id'] == '') {
+	if ($_GET["id"]=='') {
 		$extra_params = array();
 		$course_url = '';
-		if (strlen($_GET['cidReq']) > 0) {
+		if(strlen($_GET['cidReq']) > 0) {
 			$extra_params['cidReq'] = Security::remove_XSS($_GET['cidReq']);
 			$course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
-		}
-		
+		}		
 		foreach ($user_list as $user) {
-			$uid = $user[0];
+			$uid=$user[0];
 			$user_info = api_get_user_info($uid);
 			$table_row = array();
-			if (api_get_setting('allow_social_tool')=='true') {
-				$url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$uid.$course_url;
-			} else {
-				$url = '?id='.$uid.$course_url;
-			}
-			$image_array = UserManager::get_user_picture_path_by_id($uid, 'system', false, true);
-
-			$friends_profile = SocialManager::get_picture_user($uid, $image_array['file'], 92, 'medium_', ' width="90" height="90" ');
-			// reduce image
-			$name = api_get_person_name($user_info['firstName'], $user_info['lastName']);
-			$table_row[] = '<a href="'.$url.'"><img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'" '.$friends_profile['style'].' border="1"></a>';
-			$table_row[] = '<a href="'.$url.'" style="font-size:10px;">'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</a>';
-
+			$url = '?id='.$uid.$course_url;
+            $image_array=UserManager::get_user_picture_path_by_id($uid,'system',false,true);
+            
+            $friends_profile = SocialManager::get_picture_user($uid, $image_array['file'], 92, 'medium_', ' width="90" height="90" ');
+            //reduce image
+            $table_row[] = '<center><a href="'.$url.'"><img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' border="1"></a></center>';
+			$table_row[] = '<a href="'.$url.'">'.$user_info['firstName'].' '.$user_info['lastName'].'</a>';
+			
 			//$table_row[] = '<a href="'.$url.'">'.$user_info['lastName'].'</a>';
-
+			
 			if (api_get_setting('show_email_addresses') == 'true') {
 				$table_row[] = Display::encrypted_mailto_link($user_info['mail']);
 			}
-			$user_anonymous = api_get_anonymous_id();
-			/*
-			if (api_get_setting('allow_social_tool') == 'true' && api_get_user_id() <> $user_anonymous && api_get_user_id() <> 0) {
+			$user_anonymous=api_get_anonymous_id();
+			if (api_get_setting('allow_social_tool')=='true' && api_get_user_id()<>$user_anonymous && api_get_user_id()<>0) {
 				if ($user_info['user_id'] != api_get_user_id() && !api_is_anonymous($user_info['user_id'])) {
-					$user_relation = UserFriend::get_relation_between_contacts(api_get_user_id(), $user_info['user_id']);
-					// not in my contacts
-					if ($user_relation == 0 || $user_relation == 6) {
-						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=300&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a><br />
-									<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
+					$user_relation=SocialManager::get_relation_between_contacts(api_get_user_id(),$user_info['user_id']);
+					if ($user_relation==0 || $user_relation==6) {
+						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a><br />
+										<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
 					} else {
-						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
-					}
+						$table_row[] = '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=365&width=610&user_friend='.$user_info['user_id'].'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
+					}				
 				}
 			}
-			*/
 			$table_data[] = $table_row;
 		}
-		$table_header[] = array(get_lang('UserPicture'), false, 'width="90"');
-		$table_header[] = array(get_lang('Name'), true);
-		//$table_header[] = array(get_lang('LastName'), true);
-
+		$table_header[] = array(get_lang('UserPicture'),false,'width="90"');
+		$table_header[] = array(get_lang('Name'),true);
+		//$table_header[] = array(get_lang('LastName'),true);
+		
 		if (api_get_setting('show_email_addresses') == 'true') {
-			$table_header[] = array(get_lang('Email'), true);
+			$table_header[] = array(get_lang('Email'),true);
 		}
-		$user_anonymous = api_get_anonymous_id();
-		if (api_get_setting('allow_social_tool') == 'true' && api_get_user_id() <> $user_anonymous && api_get_user_id() <> 0) {
-			$table_header[] = array(get_lang('Friends'), false, 'width="200"');
-		}
+		$user_anonymous=api_get_anonymous_id();
+		if (api_get_setting('allow_social_tool')=='true' && api_get_user_id()<>$user_anonymous && api_get_user_id()<>0) {
+			$table_header[] = array(get_lang('Friends'),false,'width="200"');
+		}		
 		/*this feature is deprecated
-		if (api_get_setting('allow_message_tool') == 'true' && isset($_SESSION['_user'])) {
-			$table_header[] = array(get_lang('SendMessage'), true);
+		if ( api_get_setting('allow_message_tool')=='true' && isset($_SESSION['_user'])) {
+			$table_header[] = array(get_lang('SendMessage'),true);
 		}
 		*/
-		$sorting_options['column'] = (isset($_GET['column']) ? (int)$_GET['column'] : 2);
-		/*if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
+		$sorting_options['column'] = (isset ($_GET['column']) ? (int)$_GET['column'] : 2);
+		/*if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' ) {			
 			//send_invitation_friend_user();
-			echo '<div align="right"><input type="button" name="id_btn_send_invitation" id="id_btn_send_invitation" value="'.get_lang('SendInviteMessage').'"/></div>';
+			echo '<div align="right"><input type="button" name="id_btn_send_invitation" id="id_btn_send_invitation" value="'.get_lang('SendInviteMessage').'"/></div>';			
 			echo '<form action="whoisonline.php" name="form_register_friend" id="form_register_friend" method="post">';
 		}*/
-		Display::display_sortable_table($table_header, $table_data, $sorting_options, array('per_page' => 30), $extra_params,array(),'grid');
-		/*if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true' ) {
+		
+		Display::display_sortable_table($table_header,$table_data,$sorting_options,array('per_page_default'=>count($table_data)),$extra_params);		
+		/*if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true' ) {
 			echo '</form>';
 		}*/
 	}
@@ -370,8 +362,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 	}
 
 	if ($user_list) {
-		if (!isset($_GET['id'])) {
-			echo UserManager::get_search_form($_GET['q']);
+		if (!isset($_GET['id'])) {			
 			display_user_list($user_list, $_plugins);
 		} else {
 			//individual user information - also displays header info

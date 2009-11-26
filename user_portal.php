@@ -1216,18 +1216,25 @@ if ($show_menu) {
 	//user image
 	//	@todo add a platform setting to add the user image
 	if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool') == 'true') {
-		$img_array= UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',true,true);
+		$img_array= UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',true,true);		
+		$no_image =false;
+		if ($img_array['file'] == 'unknown.jpg') {
+			$no_image =true;
+		}		
 		$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 92, 'medium_', ' width="90" height="90" ');
+		
 		echo '<div id="social_widget" style="">';
-		echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php"><img src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
-		
-		
+		if ($no_image == false)
+			echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php"><img src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
+		else 
+			echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
 			
 		require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 		
-		$number_of_new_messages		= MessageManager::get_new_messages();
-		$number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
+		$number_of_new_messages				= MessageManager::get_new_messages();
+		$number_of_new_messages_of_friend	= SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
+		
 		$cant_msg  = '';
 		if ($number_of_new_messages > 0)
 			$cant_msg = ' ('.$number_of_new_messages.')';
@@ -1241,14 +1248,8 @@ if ($show_menu) {
 				if ($number_of_new_messages_of_friend > 0) {		
 					echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' ('.$number_of_new_messages_of_friend.') </a><br />';
 				}								
-		echo '</p>';
-				
-		echo '<img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('Close').'" title="'.get_lang('Close').'"  class="message-delete" />';
-		if ($number_of_new_messages_of_friend > 0) {
-			echo '<br />';
-		}
-		echo '</div>';
-	
+		echo '</p>';			
+		echo '</div>';	
 		
 		echo '</div><br />';
 				

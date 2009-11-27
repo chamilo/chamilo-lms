@@ -29,6 +29,8 @@ $tool_name = get_lang('ModifyCourseInfo');
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => "course_list.php", "name" => get_lang('AdminCourses'));
 
+define('USER_FIELD_TYPE_CHECKBOX', 10);
+
 /*
 -----------------------------------------------------------
 	Libraries
@@ -167,6 +169,26 @@ $form->addElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscrib
 $form->addElement('text','disk_quota',get_lang('CourseQuota'));
 $form->addRule('disk_quota', get_lang('ThisFieldIsRequired'),'required');
 $form->addRule('disk_quota',get_lang('ThisFieldShouldBeNumeric'),'numeric');
+
+$list_course_extra_field = CourseManager::get_course_extra_field_list($course_code);
+foreach($list_course_extra_field as $extra_field){
+	switch($extra_field['field_type']){
+		/* case USER_FIELD_TYPE_TEXT:
+		case USER_FIELD_TYPE_TEXTAREA:
+		case USER_FIELD_TYPE_RADIO: */
+		case USER_FIELD_TYPE_CHECKBOX:
+			$checked = (array_key_exists('extra_field_value', $extra_field) && $extra_field['extra_field_value'] == 1)? array('checked'=>'checked'): '';
+			$form->addElement('hidden', '_extra_'.$extra_field['field_variable'], 0);
+			$field_display_text=$extra_field['field_display_text'];
+			$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'],get_lang($field_display_text) , get_lang($extra_field['field_default_value']), $checked);
+			break;
+		/* case USER_FIELD_TYPE_SELECT_MULTIPLE:
+		case USER_FIELD_TYPE_DATE:
+		case USER_FIELD_TYPE_DATETIME:
+		case USER_FIELD_TYPE_DOUBLE_SELECT:
+		case USER_FIELD_TYPE_DIVIDER: */
+	}
+}
 $form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'),'onclick="valide()"; class="save"');
 // Set some default values
 
@@ -196,7 +218,17 @@ if( $form->validate())
         }
         $warn = substr($warn,0,-1);
     }
-
+    // an extra field
+    $extras = array();
+    foreach($course as $key => $value) {
+	    if(substr($key,0,6)=='extra_') {  
+			$extras[substr($key,6)] = $value;
+		}
+		if(substr($key,0,7)=='_extra_') {
+			if(!array_key_exists(substr($key,7), $extras)) $extras[substr($key,7)] = $value;
+		}
+    }
+    
 	$tutor_id = $course['tutor_name'];
 	$tutor_name=$platform_teachers[$tutor_id];
 
@@ -228,7 +260,14 @@ if( $form->validate())
 								unsubscribe='".Database::escape_string($unsubscribe)."'
 							WHERE code='".Database::escape_string($course_code)."'";
 	Database::query($sql, __FILE__, __LINE__);
-
+	
+	//update the extra fields
+	if(count($extras) > 0){ 
+		foreach($extras as $key => $value) {
+			CourseManager::update_course_extra_field_value($course_code, $key, $value);
+		}
+	}
+	
 	//Delete only teacher relations that doesn't match the selected teachers
 	$cond='';
 	if(count($teachers)>0){

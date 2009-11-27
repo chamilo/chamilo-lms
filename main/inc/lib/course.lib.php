@@ -1642,14 +1642,63 @@ class CourseManager {
 		$course_list = array();
 		$codes = array();
 
-		$result = Database::query('SELECT c.code,c.db_name,c.title
-				FROM '.Database::get_main_table(TABLE_MAIN_COURSE).' c
-				INNER JOIN '.Database::get_main_table(TABLE_MAIN_COURSE_USER).' cru
-				ON c.code=cru.course_code
-				WHERE cru.user_id='.$user_id, __FILE__, __LINE__);
-		while ($row = Database::fetch_array($result, 'ASSOC')) {
-			$course_list[] = $row;
-			$codes[] = $row['code'];
+		$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+		$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+		$tbl_course_field 			= Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
+		$tbl_course_field_value		= Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+		$tbl_user_course_category   = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+	
+		// get course list auto-register
+		$sql = "SELECT course_code FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf ON " .
+				" tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";	
+								
+		$special_course_result = Database::query($sql, __FILE__, __LINE__);					
+		if(Database::num_rows($special_course_result)>0) {
+			$special_course_list = array();
+			while ($result_row = Database::fetch_array($special_course_result)) {
+				$special_course_list[] = '"'.$result_row['course_code'].'"';
+			}
+		}
+		$with_special_courses = $without_special_courses = '';
+		if (!empty($special_course_list)) {
+			$with_special_courses = ' course.code IN ('.implode(',',$special_course_list).')';
+			$without_special_courses = ' AND course.code NOT IN ('.implode(',',$special_course_list).')';
+		}
+
+		if (!empty($with_special_courses)) {
+			$sql = "SELECT course.code, course.db_name db_name, course.title 
+												FROM    ".$tbl_course_user." course_rel_user
+												LEFT JOIN ".$tbl_course." course
+												ON course.code = course_rel_user.course_code
+												LEFT JOIN ".$tbl_user_course_category." user_course_category
+												ON course_rel_user.user_course_cat = user_course_category.id
+												WHERE  $with_special_courses 
+												GROUP BY course.code 
+												ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";																																		
+			$rs_special_course = api_sql_query($sql, __FILE__, __LINE__);		
+			if (Database::num_rows($rs_special_course) > 0) {		
+				while ($result_row = Database::fetch_array($rs_special_course)) {
+						$result_row['special_course'] = 1;						
+						$course_list[] = $result_row;
+						$codes[] = $result_row['code'];
+				}
+			}
+		}
+		
+		// get course list not auto-register		
+		$sql = "SELECT course.code,course.db_name,course.title
+				FROM $tbl_course course
+				INNER JOIN $tbl_course_user cru
+				ON course.code=cru.course_code
+				WHERE  cru.user_id='$user_id' $without_special_courses";
+							
+		$result = Database::query($sql, __FILE__, __LINE__);
+				
+		if (Database::num_rows($result)) {		
+			while ($row = Database::fetch_array($result, 'ASSOC')) {
+				$course_list[] = $row;
+				$codes[] = $row['code'];
+			}
 		}
 
 		if ($include_sessions === true) {
@@ -1895,6 +1944,32 @@ class CourseManager {
 				ON sc.id=s.session_category_id WHERE s.id="'.Database::escape_string($session_id).'"', __FILE__, __LINE__),
 			0, 'session_category');
 	}
+
+	/**
+	 * Get the course id of an course by the database name
+	 * @param string The database name
+	 * @return string The course id
+	 */
+	public static function get_course_extra_field_list($code) {
+		$tbl_course_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+		$tbl_course_field_value	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+		$sql_field = "SELECT id, field_type, field_variable, field_display_text, field_default_value 
+			FROM $tbl_course_field  WHERE field_visible = '1' ";
+		$res_field = api_sql_query($sql_field,__FILE__,__LINE__);
+		$extra_fields = array();
+		while($rowcf = Database::fetch_array($res_field)) {
+			$extra_field_id = $rowcf['id'];
+			$sql_field_value = "SELECT field_value FROM $tbl_course_field_value WHERE course_code = '$code' AND field_id = '$extra_field_id' ";
+			$res_field_value = api_sql_query($sql_field_value, __FILE__, __LINE__);
+			if(Database::num_rows($res_field_value) > 0 ) {
+				$r_field_value = Database::fetch_row($res_field_value);
+				$rowcf['extra_field_value'] = $r_field_value[0];
+			}
+			$extra_fields[] = $rowcf; 
+		}
+		return $extra_fields; 
+	}
+
 
 	/**
 	 * Get the database name of a course by the code

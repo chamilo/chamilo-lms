@@ -479,7 +479,7 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 	if ($s_course_status == 2 || ($is_coach && $s_course_status != 1)) {
 		$s_htlm_status_icon=Display::return_icon('coachs.gif', get_lang('GeneralCoach'));
 	}
-	if ($s_course_status == 5 && !$is_coach) {
+	if (($s_course_status == 5 && !$is_coach) || empty($s_course_status)) {
 		$s_htlm_status_icon=Display::return_icon('students.gif', get_lang('Student'));
 	}
 
@@ -523,7 +523,7 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 				}
 			}
 
-			if ($s_course_status == 1 || ($s_course_status == 5 && empty($my_course['id_session']))) {
+			if ($s_course_status == 1 || ($s_course_status == 5 && empty($my_course['id_session'])) || empty($s_course_status)) {
 				$result .= $course_teacher;
 			}
 			
@@ -541,6 +541,8 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 		}
 	}
 
+	$result .= (isset($course['special_course']))? ' '.Display::return_icon('klipper.png', get_lang('CourseAutoRegister')) : '';
+	
 	$current_course_settings = CourseManager :: get_access_settings($my_course['k']);
 
 	// display the what's new icons
@@ -861,8 +863,9 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 	}
 	foreach ($courses_tree as $cat => $sessions) {
 		$courses_tree[$cat]['details'] = SessionManager::get_session_category($cat);
-		if ($cat == 0) {
-			$courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id($_user['user_id'],false);
+
+		if ($cat == 0) {						
+			$courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id($_user['user_id'],false);											
 		}
 		$courses_tree[$cat]['sessions'] = array_flip(array_flip($sessions));
 		if (count($courses_tree[$cat]['sessions'])>0) {
@@ -1040,7 +1043,6 @@ if ( is_array($courses_tree) ) {
 					foreach ($session['courses'] as $course) {
 						//echo '<li class="session_course_item" id="session_course_item_'.$course['code'].'" style="padding:5px">';
 						$c = get_logged_user_course_html($course, $session['details']['id'], 'session_course_item');
-						//var_dump($c);
 						echo $c[1];
 						//echo $course['code'];
 						//echo '</li>';

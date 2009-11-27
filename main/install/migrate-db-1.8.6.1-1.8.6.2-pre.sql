@@ -64,6 +64,8 @@ INSERT INTO user_field (field_type, field_variable, field_display_text, field_vi
 
 UPDATE TABLE settings_current SET selected_value = '1.8.6.2.9070' WHERE variable = 'dokeos_database_version';
 
+INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','SpecialCourse', 'Yes', 1 , 1);
+
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
 ALTER TABLE track_e_online ADD INDEX (course);

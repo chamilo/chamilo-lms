@@ -219,6 +219,9 @@ CREATE TABLE course_field (
     PRIMARY KEY(id)
 );
 
+INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','SpecialCourse', 'Yes', 1 , 1);
+
+
 --
 -- Table structure for table course_field_values
 --

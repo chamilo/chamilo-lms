@@ -648,16 +648,19 @@ class TestCalendar extends UnitTestCase {
  	}
 
  	public function testAgendaImportIcal(){
- 		$course_info='course_test';
- 		$file='';
- 		$res = agenda_import_ical($course_info,$file);
+ 		$course_info = 'course_test';
+ 		$file_ical = '00000000000000-980.ics';
+ 		$file = api_get_path(SYS_PATH).'tests/main/admin/icals/'.$file_ical;
+ 		//var_dump($_FILES[$file_ical]);
+ 		$res = agenda_import_ical($course_info, $file);
+ 		//var_dump($res);
  		if(is_bool($res)){
  		$this->assertTrue(is_bool($res));
  		$this->assertTrue($res===false || $res === true);
  		}else{
  			$this->assertTrue($res);
  		}
- 		//var_dump($res);
+ 		
  	}
 
 

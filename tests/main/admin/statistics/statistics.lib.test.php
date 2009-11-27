@@ -136,9 +136,14 @@ class TestStatistics extends UnitTestCase{
 				WHERE track_default.default_user_id = user.user_id ";
 		$res = Database::query($sql, __FILE__, __LINE__);
 		$row = Database::fetch_row($res);
+
+		if (Database::num_rows($res) > 0) {
+			$this->assertTrue(is_array($row));
+		} else {
+			$this->assertFalse($row);
+		}
 		$resu = Statistics::get_activities_data($from, $number_of_items, $column, $direction);
     	$this->assertTrue(is_array($resu));
-    	$this->assertTrue($row);
     	//var_dump($resu);
     	//var_dump($row);
     	//var_dump($res);

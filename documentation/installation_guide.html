@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<title>Dokeos 1.8.6.2 Installation Guide</title><link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
+	<title>Chamilo 1.8.6.2 Installation Guide</title><link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
 	<link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
 	<style type="text/css">
 	<!--
@@ -10,13 +10,13 @@
 		pre { font-family: "Courier New", monospace }
 		p { margin-bottom: 0.21cm }
 		.code {margin: 1em 1em 1em 2em; padding: 0.5em; background-color: rgb(229, 229, 229); vertical-align: top; border: 1px solid #999999;}
-	--></style>
+	-->
+	</style>
 	</head>
 <body>
 
-
 <div id="header1">
-	<h1>Dokeos 1.8.6.2 FREE : Installation Guide</h1>
+	<h1>Chamilo 1.8.6.2 : Installation Guide</h1>
 </div>
 
 <a href="index.html">Documentation</a> &gt; Installation Guide
@@ -24,12 +24,8 @@
 <div id="main">
 <p></p>
 
-
-<p>Thank you for downloading Dokeos Babel FREE.</p>
-
-
+<p>Thank you for downloading Chamilo 1.8.6.2.</p>
 <ul>
-
   <li>Quick preview of <a href="http://www.dokeos.com/en/node/58">Dokeos features&nbsp;</a></li>
 
   <li>Test Dokeos on <a href="http://campus.dokeos.com">Free Campus</a></li>
@@ -44,35 +40,26 @@
 <ol>
 
   <li><a href="#1._Pre-requisites">Pre-requisites</a></li>
-
   <li><a href="#2._Installation_of_Dokeos_LMS">Installation of Dokeos LMS</a></li>
-
   <li><a href="#3._Upgrade_from_a_previous_version_of">Upgrade from a previous version of Dokeos</a></li>
-
   <li><a href="#4._Troubleshooting">Troubleshooting</a></li>
-
   <li><a href="#5._Administration_section">Administration section</a></li>
-
   <li><a href="#6._LDAP">LDAP&nbsp;</a></li>
-
   <li><a href="#7._Mathematical_formulas">Mathematical formulas with LaTeX</a></li>
 </ol>
 
-
 <br />
-
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="1._Pre-requisites"></a>1. Pre-requisites</h2>
 
-
-Dokeos
+Chamilo
 can be installed on Windows, Linux, Mac OS X and UNIX servers
 indifferently. However, we recommend the use of Linux server for
 optimal flexibility, remote control and scalability. <br />
 
 <br />
 
-Dokeos is mainly a LMS running <span style="font-weight: bold;">Apache 1.3, 2.0</span>, <span style="font-weight: bold;">MySQL 5.1</span> and <span style="font-weight: bold;">PHP 5.1</span> (the so called <span style="font-weight: bold;">AMP</span> trilogy). <br />
+Chamilo is mainly a LMS running <span style="font-weight: bold;">Apache 1.3, 2.0</span>, <span style="font-weight: bold;">MySQL 5.1</span> and <span style="font-weight: bold;">PHP 5.1</span> (the so called <span style="font-weight: bold;">AMP</span> trilogy). <br />
 
 
 <br />
@@ -81,7 +68,7 @@ All these software are open source and freely available. <br />
 
 <br />
 
-To run Dokeos <span style="font-weight: bold;">LMS</span> on your server, you need to install WAMP, LAMP or MAMP:
+To run Chamilo <span style="font-weight: bold;">LMS</span> on your server, you need to install WAMP, LAMP or MAMP:
 <ul>
 
   <li>To install <span style="font-weight: bold;">WAMP</span> (AMP on Windows), we recommend the <a href="http://www.apachefriends.org/en/xampp.html">XAMPP</a> .exe installer<a href="http://www.apachefriends.org/en/xampp.html"></a></li>
@@ -109,21 +96,21 @@ the installation.<span style="font-weight: bold;"><br />
 
 </span>
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="2._Installation_of_Dokeos_LMS"></a><span style="font-weight: bold;">2. Installation of Dokeos LMS</span></h2>
+<h2><a name="2._Installation_of_Dokeos_LMS"></a><span style="font-weight: bold;">2. Installation of Chamilo LMS</span></h2>
 
-<a href="http://www.dokeos.com/download.php"></a>
+<a href="http://www.chamilo.org/download.php"></a>
 <ul>
 
   <li><a href="http://www.dokeos.com/node/33">Download Dokeos LMS</a></li>
 
   <li>Unzip it</li>
 
-  <li>Copy the dokeos directory in your Apache web directory. This can be
+  <li>Copy the Chamilo directory in your Apache web directory. This can be
     <span style="font-weight: bold;">C:\xampp\htdocs\</span> on a Windows server or <span style="font-weight: bold;">/var/www/html/</span> on a Linux server</li>
 
   <li>Open your web browser (Internet Explorer, Firefox...) and type
-    <span style="font-weight: bold;">http://localhost/dokeos/</span> if you install locally or
-    <span style="font-weight: bold;">http://www.domain.com/dokeos/</span> if you install remotely</li>
+    <span style="font-weight: bold;">http://localhost/chamilo/</span> if you install locally or
+    <span style="font-weight: bold;">http://www.domain.com/chamilo/</span> if you install remotely</li>
 
   <li>Follow the web installation process. You can accept all default
 values. Consider changing the admin password to remember it.&nbsp;</li>
@@ -135,15 +122,15 @@ values. Consider changing the admin password to remember it.&nbsp;</li>
 The following directories need to be readable, writeable and executable for everyone:
 <ul>
 
-  <li>dokeos/main/inc/conf/</li>
-  <li>dokeos/main/upload/users/</li>
-  <li>dokeos/main/default_course_document/</li>
-  <li>dokeos/archive/</li>
-  <li>dokeos/courses/</li>
-  <li>dokeos/home/</li>
+  <li>chamilo/main/inc/conf/</li>
+  <li>chamilo/main/upload/users/</li>
+  <li>chamilo/main/default_course_document/</li>
+  <li>chamilo/archive/</li>
+  <li>chamilo/courses/</li>
+  <li>chamilo/home/</li>
 </ul>
 
-(where 'dokeos' is the directory in which you installed Dokeos)
+(where 'chamilo' is the directory in which you installed Chamilo)
 <p>On Linux, Mac OS X and BSD operating systems you can use the CHMOD
 777 command for this (although we recommend you seek advice from an
 experienced system administrator).
@@ -156,7 +143,7 @@ only during the installation process:</p>
 
 <ul>
 
-  <li>dokeos/main/inc/conf/configuration.php (if present)</li>
+  <li>chamilo/main/inc/conf/configuration.php (if present)</li>
 </ul>
 
 
@@ -173,7 +160,7 @@ folders (by right-clicking on them).</p>
 <b>NOTES:</b><br />
 
 Do not modify the home_*.html files directly. Instead,
-choose "Configure the homepage" in the Dokeos administration section.</p>
+choose "Configure the homepage" in the Chamilo administration section.</p>
 
 <p><span style="font-weight: bold;">Windows</span> : with combination packages like XAMPP, out of the box, login and password
    for MySQL should probably remain empty.</p>
@@ -186,14 +173,14 @@ choose "Configure the homepage" in the Dokeos administration section.</p>
 <ul>
 
   <li><strong>Protect your configuration file: </strong>
-make sure no one can overwrite it. You can find the config file in <em>(dokeos folder)</em>/main/inc/conf/configuration.php.
+make sure no one can overwrite it. You can find the config file in <em>(chamilo folder)</em>/main/inc/conf/configuration.php.
 Make it read-only (windows/xwindows: right-click the file to edit the
 properties. linux/bsd/macosx: use the chmod 444 command). The config
 file is created by Apache so you may need to be root user to change its
 permissions.</li>
 
   <li><strong>Protect your installation folder: </strong>
-if the <em>(dokeos folder)</em>/main/install
+if the <em>(chamilo folder)</em>/main/install
 folder is still accessible, someone could install over your existing
 version (you could lose your data that way). Move the folder somewhere
 out of the web directories so it is not accessible, change its name, or
@@ -203,17 +190,17 @@ edit its properties so no one can read or execute it.</li>
 making the files world-writable will help you install, and solves many
 issues for people without much admin experience. However, it's better
 security to make the owner of the apache process (often called apache
-or www-data) also owner of all the dokeos files and folders. Ths way,
+or www-data) also owner of all the chamilo files and folders. Ths way,
 these files need only be readable and writable by the Apache process
 owner, not by the entire world.</li>
 
-  <li><strong>Configure your Dokeos installation: </strong>
-in the administration section of Dokeos, you can use the Dokeos Config Settings to adjust the behavior of your installation.</li>
+  <li><strong>Configure your Chamilo installation: </strong>
+in the administration section of Chamilo, you can use the Chamilo Config Settings to adjust the behavior of your installation.</li>
 
-  <li><strong>Configure Dokeos mail: </strong>
-most of Dokeos uses the mail settings from the php.ini file. However,
+  <li><strong>Configure Chamilo mail: </strong>
+most of Chamilo uses the mail settings from the php.ini file. However,
 the announcements tool uses phpMailer (another free software project)
-and the settings for this tool can be adjusted in <em>(dokeos folder)</em>/main/inc/conf/mail.conf.php.</li>
+and the settings for this tool can be adjusted in <em>(chamilo folder)</em>/main/inc/conf/mail.conf.php.</li>
 </ul>
 
 <br />
@@ -222,7 +209,7 @@ and the settings for this tool can be adjusted in <em>(dokeos folder)</em>/main/
 <h3>PHP configuration</h3>
 
 
-To get the best of Dokeos, you need to finetune PHP settings. Consider : <br />
+To get the best of Chamilo, you need to finetune PHP settings. Consider : <br />
 
 <ul>
 
@@ -236,37 +223,27 @@ To get the best of Dokeos, you need to finetune PHP settings. Consider : <br />
 
 
 <div class="code">
-			  max_execution_time = 300&nbsp;&nbsp;&nbsp; ; Maximum execution time of each script, in seconds<br />
+	  max_execution_time = 300&nbsp;&nbsp;&nbsp; ; Maximum execution time of each script, in seconds<br />
+	  max_input_time = 600 ; Maximum amount of time each script may spend parsing request data<br />
+	  memory_limit = 256M&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ; Maximum amount of memory a script may consume (128MB)<br />
+	  post_max_size = 64M<br />
+	  upload_max_filesize = 100M
+</div>
 
-			  max_input_time = 600 ; Maximum amount of time each script may spend parsing request data<br />
-
-			  memory_limit = 256M&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ; Maximum amount of memory a script may consume (128MB)<br />
-
-			  post_max_size = 64M<br />
-
-			  upload_max_filesize = 100M</div>
-
-
-
-<p>
-Some users could meet problems if their PHP settings don't fit
+<p>Some users could meet problems if their PHP settings don't fit
 these ones:</p>
 
 <ul>
-
   <li>short_open_tag       = On</li>
-
   <li>safe_mode            = Off</li>
-
   <li>magic_quotes_gpc     = On</li>
-
   <li>magic_quotes_runtime = Off</li>
 </ul>
 
 
 
 <p>
-Past Dokeos versions required register_globals to be set to On. This is
+Past Chamilo versions required register_globals to be set to On. This is
 no longer necessary, this can be set to Off and Dokeos will work fine.</p>
 
 
@@ -274,26 +251,21 @@ no longer necessary, this can be set to Off and Dokeos will work fine.</p>
 
 <ul>
   <li>php-mysql The mysql shared extension for php</li>
-
   <li>php-pcre The pcre shared extension for php</li>
-
   <li>php-session The session shared extension for php</li>
-
-  <li>php-zlib The zlib shared extension for php</li>
-    
+  <li>php-zlib The zlib shared extension for php</li>    
   <li>(optional) php-ldap if you want to be able to use LDAP authentication</li>
 </ul>
 
 <p>You might also add the following php modules and packages:</p>
 <ul>
-<li>php-ctype</li>
-<li>php-gd</li>
-<li>php-iconv</li>
-<li>php-json</li> 
-<li>php-mbstring</li>
-<ul>
-<p><a href="http://dev.mysql.com/doc/mysql/en/index.html"></a><br />
-</p>
+	<li>php-ctype</li>
+	<li>php-gd</li>
+	<li>php-iconv</li>
+	<li>php-json</li> 
+	<li>php-mbstring</li>
+</ul>
+<p><a href="http://dev.mysql.com/doc/mysql/en/index.html"></a><br /></p>
 
 
 <hr />

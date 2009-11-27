@@ -2648,8 +2648,22 @@ class UserManager
 	 * 
 	 */
 	public function get_search_form($query) {
-		//Not available yet		
-		return '';
+		echo'<form method="get" action="'.api_get_path(WEB_PATH).'main/social/search.php">
+
+		<table cellspacing="0" cellpadding="0" id="SearchTable">
+		<tbody><tr>
+		<td>
+			<div id="SearchQueryChunk">
+			<div id="SearchQueryNav">
+				<b>Search</b > (Users, Groups)				
+			</div>
+			<div>
+				<input type="text" size="30" value="'.Security::remove_XSS($query).'" tabindex="1" id="standard_q" name="q"/>				
+				<button class="search" value="search"/>'.get_lang('Search').'</button>
+			</div>					
+		</td>
+		</tr>
+		</tbody></table></form>';
 	}
 	//deprecated
 	public function get_public_users($keyword, $from = 0, $number_of_items= 20, $column=2, $direction='ASC') {	
@@ -2722,8 +2736,7 @@ class UserManager
 			}
 			return $users;
 		}
-	function show_menu() {
-		/*
+	function show_menu(){
 		echo '<div class="actions">';
 		echo '<a href="/main/auth/profile.php">'.Display::return_icon('profile.png').' '.get_lang('PersonalData').'</a>';
 		echo '<a href="/main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.	get_lang('Inbox').'</a>';
@@ -2731,6 +2744,6 @@ class UserManager
 		echo '<span style="float:right; padding-top:7px;">'.
 			 '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
 			 '</span>';		 
-		echo '</div>';*/
+		echo '</div>';
 	}
 }

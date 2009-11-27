@@ -330,6 +330,7 @@ echo '<div id="social-profile-wrapper">';
 					}
 				}
 			} else {
+				// No friends!! :(
 					$friend_html .= '<div class="sectiontitle">'.get_lang('Friends').'</div>';
 					$friend_html.= '<div id="friend-container" class="social-friend-container">';
 					$friend_html.= '<div id="friend-header">';
@@ -560,15 +561,17 @@ echo '<div id="social-profile-container">';
 
 					foreach ($results as $result) {
 						$id = $result['id'];
-					$url_open  = '<a href="groups.php?id='.$id.'">';
-					$url_close = '</a>';
-					if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {			
-						$result['name'].= Display::return_icon('admin_star.png', get_lang('Admin'));
+						$url_open  = '<a href="groups.php?id='.$id.'">';
+						$url_close = '</a>';
+						if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {			
+							$result['name'].= Display::return_icon('admin_star.png', get_lang('Admin'));
+						}
+						$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close);
 					}
-					$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close);
+					if (count($groups)> 0) {
+						echo '<h2>'.get_lang('MyGroups').'</h2>';
+						Display::display_sortable_grid('groups', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
 					}
-					echo '<h2>'.get_lang('MyGroups').'</h2>';
-					Display::display_sortable_grid('groups', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
 	
 
 				// ---- My Agenda Items

@@ -59,8 +59,11 @@ ALTER TABLE message ADD COLUMN parent_id INT NOT NULL DEFAULT 0;
 ALTER TABLE message ADD INDEX idx_message_group(group_id);
 ALTER TABLE message ADD INDEX idx_message_parent(parent_id);
 
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (10, 'tags','tags',0,0);
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (9, 'rssfeeds','RSS',0,0);
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'rssfeeds','RSS',0,0);
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (10,'tags','tags',0,0);
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_tabs', 'social', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsSocial', 0);
 
 UPDATE TABLE settings_current SET selected_value = '1.8.6.2.9070' WHERE variable = 'dokeos_database_version';
 

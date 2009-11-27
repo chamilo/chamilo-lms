@@ -574,7 +574,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 		{ ?>
 			<div style="color:red; background-color:white; font-weight:bold; text-align:center;">
 				<?php echo get_lang('Error');?>!<br />
-				Dokeos <?php echo (isset($_POST['step2_update_6'])?implode('|',$update_from_version_6):implode('|',$update_from_version_8)).' '.get_lang('HasNotBeenFoundInThatDir'); ?>.
+				Chamilo <?php echo (isset($_POST['step2_update_6'])?implode('|',$update_from_version_6):implode('|',$update_from_version_8)).' '.get_lang('HasNotBeenFoundInThatDir'); ?>.
 			</div>
 		<?php }
 		else
@@ -781,21 +781,19 @@ function display_database_parameter($install_type, $parameter_name, $form_field_
  */
 function display_database_settings_form($installType, $dbHostForm, $dbUsernameForm, $dbPassForm, $dbPrefixForm, $enableTrackingForm, $singleDbForm, $dbNameForm, $dbStatsForm, $dbScormForm, $dbUserForm)
 {
-	if($installType == 'update')
-	{
+	if($installType == 'update') {
 		global $_configuration, $update_from_version_6;
-		if(in_array($_POST['old_version'],$update_from_version_6))
-		{
-	        $dbHostForm=get_config_param('dbHost');
-            $dbUsernameForm=get_config_param('dbLogin');
-            $dbPassForm=get_config_param('dbPass');
-            $dbPrefixForm=get_config_param('dbNamePrefix');
+		if(in_array($_POST['old_version'],$update_from_version_6)) {
+	        $dbHostForm		= get_config_param('dbHost');
+            $dbUsernameForm	= get_config_param('dbLogin');
+            $dbPassForm		= get_config_param('dbPass');
+            $dbPrefixForm	= get_config_param('dbNamePrefix');
             $enableTrackingForm=get_config_param('is_trackingEnabled');
-            $singleDbForm=get_config_param('singleDbEnabled');
-            $dbNameForm=get_config_param('mainDbName');
-            $dbStatsForm=get_config_param('statsDbName');
-            $dbScormForm=get_config_param('scormDbName');
-            $dbUserForm=get_config_param('user_personal_database');
+            $singleDbForm	=get_config_param('singleDbEnabled');
+            $dbNameForm		=get_config_param('mainDbName');
+            $dbStatsForm	=get_config_param('statsDbName');
+            $dbScormForm	=get_config_param('scormDbName');
+            $dbUserForm		=get_config_param('user_personal_database');
             $dbScormExists=true;
 		}
 		else
@@ -835,7 +833,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 			}
 			else
 			{
-				$dbUserForm=$dbPrefixForm.'dokeos_user';
+				$dbUserForm=$dbPrefixForm.'chamilo_user';
 			}
 		}
 		echo "<h2>" . display_step_sequence() .get_lang("DBSetting") . "</h2>";
@@ -843,7 +841,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	}else{
 		if(empty($dbPrefixForm)) //make sure there is a default value for db prefix
 		{
-			$dbPrefixForm = 'dokeos_';
+			$dbPrefixForm = 'chamilo_';
 		}
 		echo "<h2>" . display_step_sequence() .get_lang("DBSetting") . "</h2>";
 		echo get_lang("DBSettingIntro");
@@ -877,7 +875,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	display_database_parameter($installType, get_lang('DBPassword'), 'dbPassForm', $dbPassForm, $example_password);
 	//database prefix
 	display_database_parameter($installType, get_lang('DbPrefixForm'), 'dbPrefixForm', $dbPrefixForm, get_lang('DbPrefixCom'));
-	//fields for the four standard Dokeos databases
+	//fields for the four standard Chamilo databases
 	echo '<tr><td colspan="3"><a href="" onclick="javascript: show_hide_option();return false;" id="optionalparameters"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="show-hide" /> '.get_lang('OptionalParameters','').'</a></td></tr>';
 	display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm', $dbNameForm, '&nbsp;',null,'id="optional_param1" style="display:none;"');
 	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;',null,'id="optional_param2" style="display:none;"');
@@ -979,7 +977,7 @@ function display_configuration_parameter($install_type, $parameter_name, $form_f
 }
 
 /**
- * Displays step 4 of the installation - configuration settings about Dokeos itself.
+ * Displays step 4 of the installation - configuration settings about Chamilo itself.
  */
 function display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $allowSelfRegProf, $loginForm, $passForm)
 {
@@ -1049,9 +1047,9 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	}
 	echo "</tr>\n";
 
-	//Second parameter: Dokeos URL
+	//Second parameter: Chamilo URL
 	echo "<tr>\n";
-	echo '<td>'.get_lang('DokeosURL').' (<font color="red">'.get_lang('ThisFieldIsRequired')."</font>)&nbsp;&nbsp;</td>\n";
+	echo '<td>'.get_lang('ChamiloURL').' (<font color="red">'.get_lang('ThisFieldIsRequired')."</font>)&nbsp;&nbsp;</td>\n";
 
 	if($installType == 'update') echo '<td>'.api_htmlentities($urlForm, ENT_QUOTES, $charset)."</td>\n";
 	else echo '<td><input type="text" size="40" maxlength="100" name="urlForm" value="'.api_htmlentities($urlForm, ENT_QUOTES, $charset).'" />'."</td>\n";

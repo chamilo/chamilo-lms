@@ -56,8 +56,27 @@ if ($group_id != 0 ) {
 	$picture	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,'medium_');
 	$tags		= GroupPortalManager::get_group_tags($group_id, true);
 	$users		= GroupPortalManager::get_users_by_group($group_id, true);
+	//my relation with the group is set here
 	
+	if (is_array($users[api_get_user_id()]) && count($users[api_get_user_id()]) > 0) {
+		//im a member
+		if ($users[api_get_user_id()]['relation_type'] != '' ) {			
+			$my_group_role = $users[api_get_user_id()]['relation_type'];
+		} else {
+			$my_group_role = GROUP_USER_PERMISSION_ANONYMOUS;		
+		}
+	} else {
+		//im not a member
+		$my_group_role = GROUP_USER_PERMISSION_ANONYMOUS;		
+	}
+
 	
+	//@todo this must be move to default.css for dev use only
+	echo '<style> 		
+			#group_members { width:233px; height:300px; overflow-x:none; overflow-y: auto;}
+			.group_member_item { width:98px; height:86px; float:left; margin:5px 5px 15px 5px; }
+			.group_member_picture { height:65px; }; 
+	</style>';
 	echo '<div id="layout-left" style="float: left; width: 280px; height: 100%;">';
 
 	//Group's title
@@ -89,62 +108,58 @@ if ($group_id != 0 ) {
 			echo get_lang('Tags').' : '.$tags;
 		echo '</div>';
 	}
+		
+	if (in_array($my_group_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))) { 
+		echo '<div id="actions" style="margin:10px">';
+		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
+		echo '</div>';
+	}
 	
-	echo '<div id="actions" style="margin:10px">';
-	echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
-	echo '</div>';
-
-	echo get_lang('Members').' : ';
-	
+	echo get_lang('Members').' : ';	
 	echo '<div id="group_members">';		
-	foreach($users as $user) {
-		if ($user['relation_type'] != GROUP_USER_PERMISSION_PENDING_INVITATION) {
+	foreach($users as $user) {		
+		if (in_array($user['relation_type'] , array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))) {		
 			if ($user['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
 				$user['lastname'].= Display::return_icon('admin_star.png', get_lang('Admin'));
 			}
-			echo '<div class="group_member_item"><a href="profile.php?u='.$user['user_id'].'">'.$user['picture_uri'].$user['firstname'].$user['lastname'].'</a></div>';
+			echo '<div class="group_member_item"><a href="profile.php?u='.$user['user_id'].'"><div class="group_member_picture">'.$user['picture_uri'].'</div>'.$user['firstname'].$user['lastname'].'</a></div>';
 		}
 	}
 	echo '</div>';
 	
 		
-	echo '<div id="group_permissions">';
-	
-	if (is_array($users[api_get_user_id()]) && count($users[api_get_user_id()]) > 0) {
-		//im a member
-		if ($users[api_get_user_id()]['relation_type'] !='' ) {
-			
-			$my_group_role = $users[api_get_user_id()]['relation_type'];
+	echo '<div id="group_permissions">';	
+	switch ($my_group_role) {
+		case GROUP_USER_PERMISSION_READER:
 			// I'm just a reader
-			if ($my_group_role  == GROUP_USER_PERMISSION_READER) {
-				echo '<a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.get_lang('LeaveGroup').'</a>';
-				echo 'Invite others/';				
-			//the main admin
-			} elseif ($my_group_role  == GROUP_USER_PERMISSION_ADMIN) {
-				echo 'Im the admin/';
-				echo '<a href="group_edit.php?id='.$group_id.'">'.get_lang('EditGroup').'</a>';
-				echo '<a href="group_members.php?id='.$group_id.'">'.get_lang('MemberList').'</a>';
-				echo '<a href="group_invitation.php?id='.$group_id.'">'.get_lang('InviteFriends').'</a>';
-									
-			}  elseif ($my_group_role  == GROUP_USER_PERMISSION_PENDING_INVITATION) {
-				echo get_lang('PendingApproval');
-			}
-		} else {
-			if ($group_info['visibility']!= GROUP_PERMISSION_CLOSED ) {
-				//im not a member
-				echo '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a>';
-			}			
-		}
-	} else {
-		//im not a member
-		echo '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a>';		
-	}	
+			echo '<a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.get_lang('LeaveGroup').'</a>';
+			echo 'Invite others/';	
+			break;
+		case GROUP_USER_PERMISSION_ADMIN:
+			echo 'Im the admin/';
+			echo '<a href="group_edit.php?id='.$group_id.'">'.get_lang('EditGroup').'</a>';
+			echo '<a href="group_members.php?id='.$group_id.'">'.get_lang('MemberList').'</a>';
+			echo '<a href="group_invitation.php?id='.$group_id.'">'.get_lang('InviteFriends').'</a>';
+			break;
+		case GROUP_USER_PERMISSION_PENDING_INVITATION:
+			echo get_lang('PendingApproval');
+			break;
+		case GROUP_USER_PERMISSION_MODERATOR:
+			echo '<a href="group_members.php?id='.$group_id.'">'.get_lang('MemberList').'</a>';
+			echo '<a href="group_invitation.php?id='.$group_id.'">'.get_lang('InviteFriends').'</a>';
+			break;
+		case GROUP_USER_PERMISSION_ANONYMOUS:
+			echo '<a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a>';
+	}
 	echo '</div>'; // end layout permissions
+	
+	
 	echo '</div>'; // end layout left	
+	
 	echo '<div id="layout_right" style="margin-left: 282px;">';	
-	echo '<div class="messages">';	
-	MessageManager::display_messages_for_group($group_id);
-	echo '</div>'; // end layout messages
+		echo '<div class="messages">';	
+			MessageManager::display_messages_for_group($group_id);
+		echo '</div>'; // end layout messages
 	echo '</div>'; // end layout right
 
 	

@@ -1,8 +1,8 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
 /**
 ==============================================================================
-* GOAL : Dokeos installation
+* GOAL : Chamilo installation
 * As seen from the user, the installation proceeds in 6 steps.
 * The user is presented with several webpages where he/she has to make choices
 * and/or fill in data.
@@ -37,7 +37,7 @@ if ( !function_exists('version_compare') || version_compare( phpversion(), '5', 
 		<body>
 			<div id="wrapper">
 				<div id="header">
-					<div id="header1"><a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a></div>
+					<div id="header1"><a href="http://www.chamilo.org" target="_blank">Chamilo Homepage</a></div>
 					<div class="clear"></div>
 					<div id="header2">&nbsp;</div>
 					<div id="header3">
@@ -60,7 +60,7 @@ if ( !function_exists('version_compare') || version_compare( phpversion(), '5', 
 				</div>
 
 			<div id="footer">
-				<div class="copyright">Platform <a href="http://www.dokeos.com" target="_blank"> Dokeos </a> &copy; 2009 </div>
+				<div class="copyright">Platform <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; 2009 </div>
 				&nbsp;
 			</div>
 
@@ -285,16 +285,17 @@ if($installType=='update' && in_array($my_old_version,$update_from_version_8))
 }
 
 if(!isset($_GET['running'])) {
-	$dbHostForm='localhost';
-	$dbUsernameForm='root';
-	$dbPassForm='';
- 	$dbPrefixForm='';
-	$dbNameForm='dokeos_main';
-	$dbStatsForm='dokeos_stats';
-	$dbScormForm='dokeos_scorm';
-	$dbUserForm='dokeos_user';
+	
+	$dbHostForm		='localhost';
+	$dbUsernameForm	='root';
+	$dbPassForm		='';
+ 	$dbPrefixForm	='';
+	$dbNameForm		='chamilo_main';
+	$dbStatsForm	='chamilo_stats';
+	$dbScormForm	='chamilo_scorm';
+	$dbUserForm		='chamilo_user';
 
-	// extract the path to append to the url if Dokeos is not installed on the web root directory
+	// extract the path to append to the url if Chamilo is not installed on the web root directory
 	$urlAppendPath=str_replace('/main/install/index.php','',api_get_self());
   	$urlForm='http://'.$_SERVER['HTTP_HOST'].$urlAppendPath.'/';
 	$pathForm=str_replace('\\','/',realpath('../..')).'/';
@@ -305,18 +306,17 @@ if(!isset($_GET['running'])) {
 	{
 		$emailForm .= '.localdomain';
 	}
-	$adminLastName='Doe';
-	$adminFirstName='John';
-	$loginForm='admin';
-	$passForm=api_generate_password();
+	$adminLastName	= 'Doe';
+	$adminFirstName	= 'John';
+	$loginForm		= 'admin';
+	$passForm		= api_generate_password();
 
-	$campusForm='My campus';
-	$educationForm='Albert Einstein';
-	$adminPhoneForm='(000) 001 02 03';
-	$institutionForm='My Organisation';
-	$institutionUrlForm='http://www.dokeos.com';
-
-	$languageForm='english';
+	$campusForm		= 'My campus';
+	$educationForm	= 'Albert Einstein';
+	$adminPhoneForm	= '(000) 001 02 03';
+	$institutionForm= 'My Organisation';
+	$institutionUrlForm= 'http://www.chamilo.org';
+	$languageForm	= 'english';
 
 	$checkEmailByHashSent=0;
 	$ShowEmailnotcheckedToStudent=1;
@@ -327,9 +327,7 @@ if(!isset($_GET['running'])) {
 	$singleDbForm=0;
 	$encryptPassForm='md5';
 	$session_lifetime=360000;
-}
-else
-{
+} else {
 	foreach($_POST as $key=>$val)
 	{
 		$magic_quotes_gpc=ini_get('magic_quotes_gpc')?true:false;
@@ -405,7 +403,7 @@ if ($encryptPassForm=='1' ) {
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>&mdash; <?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
+	<title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
 	<style type="text/css" media="screen, projection">
 		/*<![CDATA[*/
 		@import "../css/dokeos_blue/default.css";
@@ -418,15 +416,15 @@ if ($encryptPassForm=='1' ) {
 			if ($('#singleDb1').attr('checked')==false) {
 					$('#dbStatsForm').removeAttr('disabled');
 					$('#dbUserForm').removeAttr('disabled');
-					$('#dbStatsForm').attr('value','dokeos_stats');
-					$('#dbUserForm').attr('value','dokeos_user');
+					$('#dbStatsForm').attr('value','chamilo_stats');
+					$('#dbUserForm').attr('value','chamilo_user');
 			} else if($('#singleDb1').attr('checked')==true){
 					$('#dbStatsForm').attr('disabled','disabled');
 					$('#dbUserForm').attr('disabled','disabled');
-					$('#dbStatsForm').attr('value','dokeos_main');
-					$('#dbUserForm').attr('value','dokeos_main');
+					$('#dbStatsForm').attr('value','chamilo_main');
+					$('#dbUserForm').attr('value','chamilo_main');
 			}
-		//Allow dokeos install in IE
+		//Allow Chamilo install in IE
 		$("button").click(function() {
 			$("#is_executable").attr("value",$(this).attr("name"));
 		});
@@ -439,13 +437,13 @@ if ($encryptPassForm=='1' ) {
 			if (my_option=='singleDb1') {
 				$('#dbStatsForm').attr('disabled','true');
 				$('#dbUserForm').attr('disabled','true');
-				$('#dbStatsForm').attr('value','dokeos_main');
-				$('#dbUserForm').attr('value','dokeos_main');
+				$('#dbStatsForm').attr('value','chamilo_main');
+				$('#dbUserForm').attr('value','chamilo_main');
 			} else if (my_option=='singleDb0') {
 				$('#dbStatsForm').removeAttr('disabled');
 				$('#dbUserForm').removeAttr('disabled');
-				$('#dbStatsForm').attr('value','dokeos_stats');
-				$('#dbUserForm').attr('value','dokeos_user');
+				$('#dbStatsForm').attr('value','chamilo_stats');
+				$('#dbUserForm').attr('value','chamilo_user');
 			}
 		}
 	</script>
@@ -487,7 +485,7 @@ if ($encryptPassForm=='1' ) {
 <div id="wrapper">
 
 <div id="header">
-	<div id="header1"><?php echo get_lang('DokeosInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?><?php if($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').(is_array($update_from_version)?implode('|',$update_from_version):''); ?></div>
+	<div id="header1"><?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?><?php if($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').(is_array($update_from_version)?implode('|',$update_from_version):''); ?></div>
 	<div id="header2">&nbsp;</div>
 	<div id="header3">
 		<ul>
@@ -500,7 +498,7 @@ if ($encryptPassForm=='1' ) {
 <form style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
 
 <div id="installation_steps" style="width:240px">
-	<img src="../img/bluelogo.gif" hspace="10" vspace="10" alt="Dokeos logo" />
+	<img src="../img/bluelogo.gif" hspace="10" vspace="10" alt="Chamilo logo" />
 	<ol>
 		<li <?php step_active('1'); ?>><?php echo get_lang('InstallationLanguage'); ?></li>
 		<li <?php step_active('2'); ?>><?php echo get_lang('Requirements'); ?></li>
@@ -579,9 +577,8 @@ if($_POST['step2'])
 {
 	//STEP 3 : LICENSE
 	display_license_agreement();
-}
-elseif($_POST['step3'])
-{
+} elseif($_POST['step3']) {
+	
 	//STEP 4 : MYSQL DATABASE SETTINGS
 	display_database_settings_form($installType, $dbHostForm, $dbUsernameForm, $dbPassForm, $dbPrefixForm, $enableTrackingForm, $singleDbForm, $dbNameForm, $dbStatsForm, $dbScormForm, $dbUserForm);
 }
@@ -710,7 +707,7 @@ elseif($_POST['step5'])
 	<?php echo get_lang('CampusName').' : '.$campusForm; ?><br />
 	<?php echo get_lang('InstituteShortName').' : '.$institutionForm; ?><br />
 	<?php echo get_lang('InstituteURL').' : '.$institutionUrlForm; ?><br />
-	<?php echo get_lang('DokeosURL').' : '.$urlForm; ?><br />
+	<?php echo get_lang('ChamiloURL').' : '.$urlForm; ?><br />
 
 	</blockquote>
 
@@ -726,7 +723,7 @@ elseif($_POST['step5'])
 	<table width="100%">
 	<tr>
 	  <td><button type="submit" class="back" name="step4" value="&lt; <?php echo get_lang('Previous'); ?>" /><?php echo get_lang('Previous'); ?></button></td>
-	  <td align="right"><input type="hidden" name="is_executable" id="is_executable" value="-" /><button class="save" type="submit" name="step6" value="<?php echo get_lang('InstallDokeos'); ?> &gt;" onclick="javascript:if(this.value == '<?php $msg = get_lang('PleaseWait');?>...') return false; else this.value='<?php $msg = get_lang('InstallDokeos');?>...';" ><?php echo $msg; ?></button></td>
+	  <td align="right"><input type="hidden" name="is_executable" id="is_executable" value="-" /><button class="save" type="submit" name="step6" value="<?php echo get_lang('InstallDokeos'); ?> &gt;" onclick="javascript:if(this.value == '<?php $msg = get_lang('PleaseWait');?>...') return false; else this.value='<?php $msg = get_lang('InstallChamilo');?>...';" ><?php echo $msg; ?></button></td>
 	</tr>
 	</table>
 
@@ -808,7 +805,7 @@ elseif($_POST['step6'])
 <div class="push"></div>
 </div><!-- wrapper end-->
 <div id="footer">
-	<div class="copyright"><?php echo get_lang('Platform');?> <a href="http://www.dokeos.com" target="_blank"> Dokeos <?php echo $new_version ?></a> &copy; <?php echo date('Y'); ?> </div>
+	<div class="copyright"><?php echo get_lang('Platform');?> <a href="http://www.chamilo.org" target="_blank"> Chamilo <?php echo $new_version ?></a> &copy; <?php echo date('Y'); ?> </div>
 	&nbsp;
 </div>
 </body>

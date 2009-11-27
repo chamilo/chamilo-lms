@@ -234,18 +234,14 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 		} else {
 			$menu_navigation['session_my_space'] = $possible_tabs['session_my_progress'];
 		}
-	}
-	
+	}	
 	
 	// Social Networking 
-	//if (api_get_setting('show_tabs', 'social') == 'true') {
-	if (1) {
+	if (api_get_setting('show_tabs', 'social') == 'true') {	
 		$navigation['social'] = $possible_tabs['social'];
 	} else{
 		$menu_navigation['social'] = $possible_tabs['social'];
 	}
-	
-
 
 	if(api_is_platform_admin(true)) {
 		if (api_get_setting('show_tabs', 'platform_administration') == 'true') {

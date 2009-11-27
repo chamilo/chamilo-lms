@@ -269,6 +269,8 @@ if ($exercise_row['expired_time'] != 0) {
     </script>";
 }
 
+//var_dump($plugin_expired_time);
+
 if ($_configuration['live_exercise_tracking'] == true && $exerciseType == 2 && $exerciseFeedbackType != 1) {
 	$query = 'SELECT * FROM ' . $stat_table . $condition;
 	$result_select = Database::query($query, __FILE__, __LINE__);
@@ -1002,7 +1004,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 }
 //Timer control
 if ($exercise_row['expired_time'] != 0) { 
-  echo '<div align="right" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';
+  echo '<div align="right" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';  
 }
 $exerciseTitle = api_parse_tex($exerciseTitle);
 echo "<h3>" . $exerciseTitle . "</h3>";
@@ -1218,14 +1220,13 @@ if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType !
     }
 
 		if ($exerciseType == 2) {
-    $sql = "INSERT INTO $stat_table($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,data_tracking,start_date,orig_lp_id,orig_lp_item_id)
-      VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";      
+    $sql = "INSERT INTO $stat_table($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,data_tracking,start_date,orig_lp_id,orig_lp_item_id,exe_duration)
+      VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id,)";      
 			Database::query($sql, __FILE__, __LINE__);
-      
 		} else {
     $sql = "INSERT INTO $stat_table ($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date,orig_lp_id,orig_lp_item_id)
        VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . api_get_session_id() . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";
-         Database::query($sql, __FILE__, __LINE__);
+         	Database::query($sql, __FILE__, __LINE__);
 		}
 
 	}

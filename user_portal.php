@@ -129,8 +129,12 @@ if (api_get_setting('go_to_course_after_login') == 'true') {
 
 $nosession = false;
 
-if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
-	$display_actives = !isset($_GET['inactives']);
+if(api_get_setting('use_session_mode')=='true' && !$nosession) {
+	if (isset($_GET['inactives'])){
+		$display_actives = false;
+	} else {
+		$display_actives = true;
+	}
 }
 
 $nameTools = get_lang('MyCourses');
@@ -395,7 +399,7 @@ function display_digest($toolsList, $digest, $orderKey, $courses) {
  * @todo move code for what's new icons to a separate function to clear things up
  * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
  */
-function get_logged_user_course_html($course, $session_id = 0, $class='courses') {
+function get_logged_user_course_html($course, $session_id = 0, $class='courses', $special = false) {
 	global $charset;
 	global $nosession;
 
@@ -431,7 +435,7 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 	$course_tool_table 			= Database :: get_course_table(TABLE_TOOL_LIST, $course_database);
 	$tool_edit_table 			= Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_database);
 	$course_group_user_table 	= Database :: get_course_table(TOOL_USER, $course_database);
-
+		
 	$user_id = api_get_user_id();
 	$course_system_code = $my_course['k'];
 	$course_visual_code = $my_course['c'];
@@ -443,23 +447,23 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 	$course_access_settings = CourseManager :: get_access_settings($course_system_code);
 	$course_id = isset($course_info['course_id'])?$course_info['course_id']:null;
 	$course_visibility = $course_access_settings['visibility'];
-
+	
 	$user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_system_code);
-
+		
 	//function logic - act on the data
 	$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($my_course['k']);
-	if ($is_virtual_course) {
+	if ($is_virtual_course) { 
 		// If the current user is also subscribed in the real course to which this
 		// virtual course is linked, we don't need to display the virtual course entry in
 		// the course list - it is combined with the real course entry.
-		$target_course_code = CourseManager :: get_target_of_linked_course($course_system_code);
+		$target_course_code = CourseManager :: get_target_of_linked_course($course_system_code);		
 		$is_subscribed_in_target_course = CourseManager :: is_user_subscribed_in_course(api_get_user_id(), $target_course_code);
-		if ($is_subscribed_in_target_course) {
+		if ($is_subscribed_in_target_course) {			
 			return; //do not display this course entry
 		}
 	}
 	$has_virtual_courses = CourseManager :: has_virtual_courses_from_code($course_system_code, api_get_user_id());
-	if ($has_virtual_courses) {
+	if ($has_virtual_courses) { 
 		$return_result = CourseManager :: determine_course_title_from_course_info(api_get_user_id(), $course_info);
 		$course_display_title = $return_result['title'];
 		$course_display_code = $return_result['code'];
@@ -512,8 +516,6 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 		$result .= ' &ndash; ';
 	}
 	if (api_get_setting('display_teacher_in_courselist') == 'true') {
-
-
 		if (api_get_setting('use_session_mode')=='true' && !$nosession) {
 			$coachs_course = api_get_coachs_from_course($my_course['id_session'],$course['code']);
 			$course_coachs = array();
@@ -522,27 +524,21 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 					$course_coachs[] = api_get_person_name($coach_course['firstname'], $coach_course['lastname']);
 				}
 			}
-
 			if ($s_course_status == 1 || ($s_course_status == 5 && empty($my_course['id_session']))) {
 				$result .= $course_teacher;
-			}
-			
+			}	
 			if (($s_course_status == 5 && !empty($my_course['id_session'])) || ($is_coach && $s_course_status != 1)) {
 				$result .= get_lang('Coachs').': '.implode(', ',$course_coachs);
 			}
-
-
 		} else {
 			$result .= $course_teacher;
 		}
-
 		if(!empty($course_teacher_email)) {
 			$result .= ' ('.$course_teacher_email.')';
 		}
 	}
-
+	$result .= ($special == true)? ' '.Display::return_icon('klipper.png', get_lang('CourseAutoRegister')) : '';
 	$current_course_settings = CourseManager :: get_access_settings($my_course['k']);
-
 	// display the what's new icons
 	$result .= show_notification($my_course);
 
@@ -561,7 +557,7 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 			}
 			$result .= '</li>';
 			$result .= '<ul>';
-			reset ($digest[$thisCourseSysCode][$key2]);
+			reset($digest[$thisCourseSysCode][$key2]);
 			while (list ($key3, $dataFromCourse) = each($digest[$thisCourseSysCode][$key2])) {
 				$result .= '<li>';
 				if ($orderKey[2] == 'keyTools') {
@@ -831,7 +827,6 @@ if ($maxCourse > 0) {
 	$toolsList['valvas']['path'] = api_get_path(WEB_CODE_PATH)."announcements/announcements.php?cidReq=";
 }
 
-echo '	<div class="maincontent" id="maincontent">'; // start of content for logged in users
 // Plugins for the my courses main area
 api_plugin('mycourses_main');
 
@@ -873,7 +868,12 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 		}
 	}
 
-	$list = '';		
+	$list = '';
+	// this is the main function to get the course list
+	$personal_course_list = UserManager::get_personal_session_course_list($_user['user_id']);
+	//var_dump($personal_course_list);
+	//die();
+	//$personal_course_list = array(); 
 	foreach ($personal_course_list as $my_course) {
 		$thisCourseDbName = $my_course['db'];
 		$thisCourseSysCode = $my_course['k'];
@@ -978,11 +978,124 @@ if (isset($_GET['history']) && intval($_GET['history']) == 1) {
 	}
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if ( is_array($courses_tree) ) {
 
 	foreach ($courses_tree as $key => $category) {
-
-
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+				
+				echo '	<div class="maincontent" id="maincontent">'; // start of content for logged in users
+		$special_course_list = UserManager::get_special_course_list();
+		if(count($special_course_list)>0) {
+			echo '<div id="course_default">';
+			foreach ($special_course_list as $my_course) {
+				//$list[] = get_logged_user_course_html($my_course, 0, null, true);
+			}
+			if ( is_array($list) ) {
+				//Courses whithout sessions
+				$old_user_category = 0;
+				foreach($list as $key=>$value) {
+					if ( empty($value[2]) ) { //if out of any session
+						$userdefined_categories = get_user_course_categories();
+						echo '<ul class="courseslist">';
+						if ($old_user_category<>$value[0]) {
+							if ($key<>0 OR $value[0]<>0) {// there are courses in the previous category
+								echo "\n</ul>";
+							}
+							echo "\n\n\t<ul class=\"user_course_category\"><li>".$userdefined_categories[$value[0]]."</li></ul>\n";
+							if ($key<>0 OR $value[0]<>0){ // there are courses in the previous category
+								echo "<ul class=\"courseslist\">";
+							}
+							$old_user_category=$value[0];
+						}
+						echo $value[1];
+						echo "</ul>\n";
+					}
+				}
+			}
+			echo '</div>';
+		} 
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		if ($key == 0) {
 
 		// sessions and courses that are not in a session category
@@ -1053,6 +1166,18 @@ if ( is_array($courses_tree) ) {
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 if ( is_array($list) ) {

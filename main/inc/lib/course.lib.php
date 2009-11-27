@@ -1897,6 +1897,32 @@ class CourseManager {
 	}
 
 	/**
+	 * Get the course id of an course by the database name
+	 * @param string The database name
+	 * @return string The course id
+	 */
+	public static function get_course_extra_field_list($code) {
+		$tbl_course_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+		$tbl_course_field_value	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+		$sql_field = "SELECT id, field_type, field_variable, field_display_text, field_default_value 
+			FROM $tbl_course_field  WHERE field_visible = '1' ";
+		$res_field = api_sql_query($sql_field,__FILE__,__LINE__);
+		$extra_fields = array();
+		while($rowcf = Database::fetch_array($res_field)) {
+			$extra_field_id = $rowcf['id'];
+			$sql_field_value = "SELECT field_value FROM $tbl_course_field_value WHERE course_code = '$code' AND field_id = '$extra_field_id' ";
+			$res_field_value = api_sql_query($sql_field_value, __FILE__, __LINE__);
+			if(Database::num_rows($res_field_value) > 0 ) {
+				$r_field_value = Database::fetch_row($res_field_value);
+				$rowcf['extra_field_value'] = $r_field_value[0];
+			}
+			$extra_fields[] = $rowcf; 
+		}
+		return $extra_fields;
+	}
+
+
+	/**
 	 * Get the database name of a course by the code
 	 * @param string The course code
 	 * @return string The database name

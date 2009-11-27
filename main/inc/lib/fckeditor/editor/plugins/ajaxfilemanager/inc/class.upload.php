@@ -204,7 +204,7 @@ class Upload
 		{
 			$this->fileBaseName = $fileBaseName;
 		}
-		$this->fileBaseName=disable_dangerous_file(replace_dangerous_char(str_replace(' ','_',$this->fileBaseName)));// Juan Carlos Raña replace space by _ because fix long names. See: ajaxfilemanager/inc/class.manager.php. And add cleaning from dokeos replace_dangerous_char() and disable_dangerous_file()
+		$this->fileBaseName=disable_dangerous_file(replace_dangerous_char(str_replace(' ','_',$this->fileBaseName),'strict'));// Juan Carlos Raña replace space by _ because fix long names. See: ajaxfilemanager/inc/class.manager.php. And add cleaning from dokeos replace_dangerous_char() and disable_dangerous_file()
 		$fileName = $this->fileBaseName . $this->fileExtension;
 		$filePath = $dest . $fileName;
 

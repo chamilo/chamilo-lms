@@ -5,7 +5,7 @@
 
 	Copyright (c) 2009 Dokeos SPRL
 	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-	Copyright (c) Facultad de Matematicas, UADY (México)
+	Copyright (c) Facultad de Matematicas, UADY (Mï¿½xico)
 	Copyright (c) Evie, Free University of Brussels (Belgium)
 	Copyright (c) 2009 Isaac Flores Paz <isaac.flores.paz@gmail.com>
 	For a full list of contributors, see "credits.txt".
@@ -46,11 +46,11 @@ if (api_get_setting('allow_message_tool')!='true'){
 	api_not_allowed();
 }
 
-
-require_once api_get_path(SYS_CODE_PATH).'messages/message.class.php';
 require_once api_get_path(LIBRARY_PATH).'text.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'message.lib.php';
+
 $request=api_is_xml_http_request();
 $nameTools = api_xml_http_response_encode(get_lang('Messages'));
 /*
@@ -241,18 +241,14 @@ if (isset($_GET['rs'])) {
 		'name' => get_lang('SocialNetwork')
 	);
 } else {
-	$interbreadcrumb[] = array ('url' => 'javascript: void(0);', 'name' => get_lang('Messages'));
-	$interbreadcrumb[]= array (
-		'url' => 'outbox.php',
-		'name' => get_lang('Outbox')
-	);
+	$interbreadcrumb[] = array ('url' => 'main/auth/profile.php', 'name' => get_lang('Profile'));
 	$interbreadcrumb[]= array (
 		'url' => 'inbox.php',
 		'name' => get_lang('Inbox')
 	);
 }
 	$interbreadcrumb[]= array (
-		'url' => 'javascript: void(0);',
+		'url' => '#',
 		'name' => get_lang('ComposeMessage')
 	);
 

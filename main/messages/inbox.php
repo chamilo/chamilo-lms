@@ -32,8 +32,8 @@
 $language_file = array('registration','messages','userInfo','admin','index');
 $cidReset=true;
 require_once '../inc/global.inc.php';
-require_once '../messages/message.class.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
+
 api_block_anonymous_users();
 if (isset($_GET['messages_page_nr'])) {
 	if (api_get_setting('allow_social_tool')=='true' &&  api_get_setting('allow_message_tool')=='true') {

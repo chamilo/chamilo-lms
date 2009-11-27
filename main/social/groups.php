@@ -4,9 +4,9 @@
 $language_file = array('admin');
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(SYS_CODE_PATH).'messages/message.class.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
 $this_section = SECTION_SOCIAL;
 
@@ -58,13 +58,6 @@ if ($group_id != 0 ) {
 	$users		= GroupPortalManager::get_users_by_group($group_id, true);
 	
 	
-	//@todo this must be move to default.css for dev use only
-	echo '<style> 		
-			#group_members { width:250px; height:300px; overflow-x:none; overflow-y: auto;}
-			.group_member_item { width:80px; height:100px; float:left; margin:5px 5px 15px 5px; }
-			
-	</style>';
-
 	echo '<div id="layout-left" style="float: left; width: 280px; height: 100%;">';
 
 	//Group's title

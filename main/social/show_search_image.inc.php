@@ -46,14 +46,9 @@ if (count($list_path_friends)!=0) {
 				$user_info=api_get_user_info($list_friends_id[$j]);
 				$user_name=api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName']));
 				$friends_profile = SocialManager::get_picture_user($list_friends_id[$j], $list_friends_file[$j], 92);
-				$friend_html.='<div onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$list_friends_id[$j].'>';
-				$friend_html.='<span><a href="profile.php?u='.$list_friends_id[$j].'"><center><img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$list_friends_id[$j].'" title="'.$user_name.'" /></center></a></span>';
-				$friend_html.='<img onclick="delete_friend (this)" id=img_'.$list_friends_id[$j].' src="../img/blank.gif" alt="" title=""  class="image-delete" /> <center class="friend">'.$user_name.'</center></div>';
-				/*
-				 * $friend_html.='&nbsp;<div onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$list_friends_id[$j].' style="float:left" >
-				 * <img src="'.$list_friends_dir[$j]."/".$list_friends_file[$j].'" width="90" height="110" style="margin-left:3px ;margin-rigth:3px;margin-top:10px;margin-bottom:3px;" id="imgfriend_'.$list_friends_id[$j].'" title="'.$user_name.'" onclick="qualify_friend(this)"/>
-				 * <img onclick="delete_friend (this)" id=img_'.$list_friends_id[$j].' src="../img/blank.gif" alt="" title=""  class="image-delete" /></div>&nbsp;';
-				 */
+				$friend_html.='<div onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$list_friends_id[$j].'  >
+				<span><center><img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$list_friends_id[$j].'" title="'.$user_name.'" onclick=load_thick(\'qualify_contact.inc.php?path_user="'.urlencode($list_friends_dir[$j].$list_friends_file[$j]).'&amp;id_user="'.$list_friends_id[$j].'"\',"") /></center></span>
+				<img onclick="delete_friend (this)" id=img_'.$list_friends_id[$j].' src="../img/blank.gif" alt="" title=""  class="image-delete" /> <center class="friend">'.$user_name.'</center></div>';
 			}
 			$j++;
 		}

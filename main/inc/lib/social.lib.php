@@ -632,8 +632,7 @@ class SocialManager extends UserManager {
 	}
 	
 	public static function show_social_menu() {
-		/*
-		echo '<div class="actions">'; 
+		echo '<div class="actions">';
 			echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png').' '.get_lang('ViewMySharedProfile').'</a>';			
 			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
 			echo '<a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.Display::return_icon('lp_users.png').' '.get_lang('Friends').'</a>';
@@ -641,11 +640,11 @@ class SocialManager extends UserManager {
 			echo '<a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.gif').' '.get_lang('Groups').'</a>';
 			echo '<a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('search.gif').' '.get_lang('Search').'</a>';
 			echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('EditProfile').'</a>';	
-			
+			/*
 			echo '<span style="float:right; padding-top:7px;">'.
 				 '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
 				 '</span>';
-				 
-		echo '</div>';*/
+			*/		 
+		echo '</div>';
 	}
 }

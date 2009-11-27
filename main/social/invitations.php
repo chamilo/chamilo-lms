@@ -80,15 +80,24 @@ $pending_invitations = GroupPortalManager::get_groups_by_user($user_id, GROUP_US
 
 $number_loop=count($list_get_invitation);
 
+//@todo move this to default.css
+echo '<style>
+.invitation_confirm {
+	border-top:1px solid #D8DFEA;
+}
+.invitation_image {
+	width:110px;
+}
+</style>';
 if ($number_loop==0) {
 	Display::display_normal_message(get_lang('NoPendingInvitations'));
 } else {
-	echo get_lang('InvitationReceived');	
+	echo '<h2>'.get_lang('InvitationReceived').'</h2>';	
 	
 	foreach ($list_get_invitation as $invitation) { 
 		$sender_user_id = $invitation['user_sender_id']
 		?>
-		<div id="<?php echo 'id_'.$sender_user_id ?>" class="confirm">
+		<div id="<?php echo 'id_'.$sender_user_id ?>" class="invitation_confirm">
 		   	<?php 
 		   		$picture = UserManager::get_user_picture_path_by_id($sender_user_id,'web',false,true);
 		   		$friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
@@ -128,11 +137,11 @@ if ($number_loop==0) {
 }
 echo '<div class="clear"></div>';
 
-if (count($list_get_invitation_sent) > 0 ){
-	echo get_lang('InvitationSent');
+if (count($list_get_invitation_sent) > 0 ){	
+	echo '<h2>'.get_lang('InvitationSent').'</h2>';
 	foreach ($list_get_invitation_sent as $invitation) { 
 		$sender_user_id = $invitation['user_receiver_id'];?>
-		<div id="<?php echo 'id_'.$sender_user_id ?>" class="confirm">
+		<div id="<?php echo 'id_'.$sender_user_id ?>" class="invitation_confirm">
 		   	<?php 
 		   		$picture = UserManager::get_user_picture_path_by_id($sender_user_id,'web',false,true);
 		   		$friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
@@ -145,7 +154,7 @@ if (count($list_get_invitation_sent) > 0 ){
 			<table cellspacing="0" border="0">
 			<tbody>
 				<tr>
-					<td class="image">
+					<td class="invitation_image">
 						<a href="profile.php?u=<?=$sender_user_id?>">
 						<img src="<?php echo $friends_profile['file']; ?>" <?php echo $friends_profile['style']; ?> /></a>
 					</td>
@@ -166,8 +175,8 @@ if (count($list_get_invitation_sent) > 0 ){
 	}
 }
 
-if (count($pending_invitations) > 0) {
-	echo get_lang('GroupsWaitingApproval');
+if (count($pending_invitations) > 0) {	
+	echo '<h2>'.get_lang('GroupsWaitingApproval').'</h2>';
 	Display::display_sortable_grid('search_users', array(), $pending_invitations, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
 }
 	

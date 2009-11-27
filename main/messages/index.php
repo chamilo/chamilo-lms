@@ -1,5 +1,5 @@
-<?php // $Id: index.php 20962 2009-05-25 03:15:53Z iflorespaz $
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /chamilo_license.txt */
 $language_file= 'messages';
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';

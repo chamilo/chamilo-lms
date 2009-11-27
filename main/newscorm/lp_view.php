@@ -229,7 +229,9 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 
 	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
 	$_SESSION['loaded_lp_view'] = true;
-	?>
+    ?>
+<body>
+<form>
 <input type="hidden" id="old_item" name ="old_item" value="0"/>
 <input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
 
@@ -410,11 +412,13 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 	window.onresize = updateContentHeight;
 	-->
 	</script>
-
+</form>
+</body>
 <?php
 }
 else
 {
+	//not fullscreen mode
 	include_once('../inc/reduced_header.inc.php');
 	//$displayAudioRecorder = (api_get_setting('service_visio','active')=='true') ? true : false;
 	//check if audio recorder needs to be in studentview
@@ -430,7 +434,8 @@ else
 	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
 	$_SESSION['loaded_lp_view'] = true;
 	?>
-
+<body>
+<form>
 	<input type="hidden" id="old_item" name ="old_item" value="0"/>
 	<input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
 
@@ -533,13 +538,15 @@ else
 	<!-- toc layout -->
 	<div id="toc_id" name="toc_name"  style="padding:0;margin-top:20px;height:60%;width:100%">
 		<div id="learningPathToc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
-		<!-- log message layout -->
 
-		<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:50px;overflow:auto;margin:15px">
+<?php if (!empty($_SESSION['oLP']->scorm_debug)) { //only show log  ?>
+        <!-- log message layout -->
+		<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
 			<div id="log_content"></div>
 			<div style="color: white;" onClick="cleanlog();">.</div>
 		</div>
-	<!-- end log message layout -->
+    <!-- end log message layout -->
+<?php } ?>
 		</div>
 
 	</div>
@@ -618,7 +625,8 @@ else
 	window.onresize = updateContentHeight;
 	-->
 	</script>
-
+</form>
+</body>
 <?php
 	/*
 	==============================================================================

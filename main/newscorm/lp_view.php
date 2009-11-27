@@ -609,4 +609,3 @@ window.onresize = updateContentHeight;
 }
 //restore global setting
 $_setting['show_navigation_menu'] = $save_setting;
-?>

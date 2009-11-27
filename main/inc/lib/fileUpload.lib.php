@@ -249,7 +249,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 	else
 	{
 		//clean up the name, only ASCII characters should stay.
-		$clean_name = replace_dangerous_char($uploaded_file['name']);
+		$clean_name = replace_dangerous_char($uploaded_file['name'], 'strict');
 		//no "dangerous" files
 		$clean_name = disable_dangerous_file($clean_name);
 		if(!filter_extension($clean_name))

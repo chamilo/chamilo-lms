@@ -13,11 +13,10 @@ class TestSubLanguageManager extends UnitTestCase {
 	 *  @return Array All file of dokeos folder
 	 */
 	public function testget_all_data_of_dokeos_folder(){
-		$dokeos_path_folder = '/var/www/dokeoshg1.8.6.1/';
+		$dokeos_path_folder = api_get_path(SYS_PATH);
 		$res = SubLanguageManager::get_all_data_of_dokeos_folder($dokeos_path_folder, $only_main_name = false);
-		$this->assertTrue(is_null($res));
-		$this->assertFalse($res);
-		//var_dump($res);
+		$this->assertTrue(is_array($res));
+		$this->assertTrue($res);
 	}
 
 	/**
@@ -52,12 +51,12 @@ class TestSubLanguageManager extends UnitTestCase {
 	 * 
 	 */
 	public function testget_all_language_variable_in_file(){
-		$dokeos_path_file = '/var/www/dokeoshg1.8.6.1/main/lang/spanish/link.inc.php';
-		$res = SubLanguageManager::get_all_language_variable_in_file($dokeos_path_file);
-		$this->assertFalse($res);
-		$this->assertTrue(is_null($res));
-		//var_dump($res);
-	}
+	  $dokeos_path_folder = api_get_path(SYS_LANG_PATH);
+	  $dokeos_path_file = $dokeos_path_folder.'spanish/link.inc.php';
+	  $res = SubLanguageManager::get_all_language_variable_in_file($dokeos_path_file);
+	  $this->assertTrue(is_array($res));
+	  $this->assertTrue($res);
+	 }
 	
 	/**
 	 * 

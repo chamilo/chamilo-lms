@@ -109,7 +109,7 @@ if ($number_loop==0) {
 			<table cellspacing="0" border="0">
 			<tbody>
 				<tr>
-					<td class="image">
+					<td class="invitation_image">
 						<a href="profile.php?u=<?=$sender_user_id?>">
 						<img src="<?php echo $friends_profile['file']; ?>" <?php echo $friends_profile['style']; ?> /></a>
 					</td>

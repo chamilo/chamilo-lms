@@ -15,8 +15,9 @@ define('GROUP_PERMISSION_CLOSED', '2');
 // Group user permissions
 define('GROUP_USER_PERMISSION_ADMIN'	,'1'); // the admin of a group 
 define('GROUP_USER_PERMISSION_READER'	,'2'); // a normal user
-define('GROUP_USER_PERMISSION_READER'	,'3'); // a moderator of a group
-define('GROUP_USER_PERMISSION_PENDING_INVITATION'	,'4'); // user pending invitation to a group
+define('GROUP_USER_PERMISSION_PENDING_INVITATION'	,'3'); // user pending invitation to a group
+define('GROUP_USER_PERMISSION_MODERATOR'	,'4'); // a moderator
+define('GROUP_USER_PERMISSION_ANONYMOUS'	,'5'); // an anonymous user  
 
 class GroupPortalManager
 {
@@ -88,8 +89,10 @@ class GroupPortalManager
 		$table = Database :: get_main_table(TABLE_MAIN_GROUP);
 		$sql= "DELETE FROM $table WHERE id = ".Database::escape_string($id);
 		$result = Database::query($sql,  __FILE__, __LINE__);
-		//deleting all relationshop with users and groups
+		//deleting all relationship with users and groups
 		self::delete_users($id);
+		// delete group image
+		self::delete_group_picture($id);
 		return $result;
 	}
 
@@ -357,7 +360,7 @@ class GroupPortalManager
 	}
 	
 	
-	function get_users_by_group($group_id='', $with_image = false, $relation_type = 0, $limit = 100)
+	function get_users_by_group($group_id='', $with_image = false, $relation_type = 0, $limit = 100, $image_size = 'medium_')
 	{
 		$where = '';
 		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
@@ -380,7 +383,7 @@ class GroupPortalManager
 		$array = array();
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
 				if ($with_image == true) {
-					$picture = UserManager::get_picture_user($row['user_id'], $row['picture_uri'],80,'medium_');
+					$picture = UserManager::get_picture_user($row['user_id'], $row['picture_uri'],80,$image_size);
 					$img = '<img src="'.$picture['file'].'" />';
 					$row['picture_uri'] = $img;
 				}
@@ -570,8 +573,8 @@ class GroupPortalManager
 	* */
 	function delete_users($group_id)
 	{
-		$table_= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
-		$sql= "DELETE FROM $table_ WHERE group_id = ".intval($group_id);
+		$table_	= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
+		$sql	= "DELETE FROM $table_ WHERE group_id = ".intval($group_id);
 		$result = Database::query($sql,  __FILE__, __LINE__);
 		return $result;
 	}
@@ -1040,8 +1043,8 @@ class GroupPortalManager
 		return $picture;
     }
     
-	public static function delete_group_picture($user_id) {
-		return self::update_group_picture($user_id);
+	public static function delete_group_picture($group_id) {
+		return self::update_group_picture($group_id);
 	}	
 }
 ?>

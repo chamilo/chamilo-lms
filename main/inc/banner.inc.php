@@ -237,7 +237,7 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 	}	
 	
 	// Social Networking 
-	if (api_get_setting('show_tabs', 'social') == 'true') {	
+	if (api_get_setting('show_tabs', 'social') == 'true') {
 		$navigation['social'] = $possible_tabs['social'];
 	} else{
 		$menu_navigation['social'] = $possible_tabs['social'];

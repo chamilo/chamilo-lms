@@ -139,7 +139,7 @@ class MessageManager
 		$i = 0;
 		$message_list = array ();
 		while ($result = Database::fetch_row($sql_result)) {
-			var_dump($result);
+			
 			if ($request===true) {
 				$message[0] = '<input type="checkbox" value='.$result[0].' name="id[]">';
 			 } else {

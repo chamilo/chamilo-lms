@@ -162,9 +162,6 @@ $(document).ready( function() {
   info_lms_item[0]='<?php echo $oItem->get_id();?>';
   info_lms_item[1]='<?php echo $oItem->get_id();?>';
 
-  $("#current_item_id").attr("value",<?php echo $oItem->get_id();?>);
-  $("#old_item").attr("value",<?php echo $oItem->get_id();?>);
-
   $("iframe#content_id").load( function(){
     info_lms_item[0]=info_lms_item[1];
     <?php

@@ -229,9 +229,6 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 	$_SESSION['loaded_lp_view'] = true;
     ?>
 <body>
-<input type="hidden" id="old_item" name ="old_item" value="0"/>
-<input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
-
 <div id="learning_path_main"  style="width:100%;height:100%;" >
 	<div id="learning_path_left_zone" style="float:left;width:280px;height:100%">
 		<!-- header -->
@@ -418,9 +415,6 @@ window.onresize = updateContentHeight;
 	$_SESSION['loaded_lp_view'] = true;
 ?>
 <body>
-	<input type="hidden" id="old_item" name ="old_item" value="0"/>
-	<input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
-
 <div id="learning_path_main"  style="width:100%;height:100%;" >
     <div id="learning_path_left_zone" style="float:left;width:280px;height:100%">
 

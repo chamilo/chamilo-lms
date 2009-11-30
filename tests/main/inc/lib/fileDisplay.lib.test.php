@@ -17,7 +17,7 @@ class TestFileDisplay extends UnitTestCase {
 	//todo public function testGetTotalFolderSize()
 
 	public function testArraySearch(){
-		$needle = '';
+		$needle = null;
 		$haystack = '';
 		$res = array_search($needle,$haystack);
 		$this->assertFalse($res);

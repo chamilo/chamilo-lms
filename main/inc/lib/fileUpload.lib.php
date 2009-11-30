@@ -1514,9 +1514,10 @@ function create_link_file($filePath, $url)
 				  .'<body>'
 				  .'</body>'
 				  .'</html>';
-
-	 $fp = fopen ($filePath, 'w') or die ('can not create file');
-	 fwrite($fp, $fileContent);
+	if (!($fp = fopen ($filePath, 'w'))) {
+		return false;
+	}
+	return fwrite($fp, $fileContent); 	 		 
 }
 
 //------------------------------------------------------------------------------

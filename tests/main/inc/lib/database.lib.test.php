@@ -227,8 +227,9 @@ class TestDatabase extends UnitTestCase {
 	function testGetUserInfoFromId() {
 		$user_id = '';
 		$res=$this->dbase->get_user_info_from_id($user_id);
-		$this->assertTrue(is_array($res));
-		$this->assertTrue($res);
+		$this->assertTrue(is_null($res));
+		$this->assertTrue($res === null);
+		//var_dump($res);
 	}
 
 	function testGetUserPersonalDatabase() {

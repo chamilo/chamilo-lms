@@ -2347,7 +2347,7 @@ class Blog {
 
 		//$sql_result = mysql_query($sql_query) or die(mysql_error());
 		if (!($sql_result = Database::query($sql_query, __FILE__, __LINE__))) {
-			die();
+			return false;
 		}
 
 		$user_data = array ();

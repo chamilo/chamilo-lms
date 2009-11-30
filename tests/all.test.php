@@ -4,6 +4,7 @@
 ini_set('memory_limit','128M');
 
 //List of files than need some tests
+ob_start();
 require_once 'simpletest/unit_tester.php';
 require_once 'simpletest/web_tester.php';
 require_once 'simpletest/mock_objects.php';
@@ -21,14 +22,14 @@ require_once api_get_path(LIBRARY_PATH).'xmd.lib.php';
 include_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 $_SESSION['_user']['user_id'] = 1;
-
+ob_end_clean();
 class AllTests extends TestSuite {
 
     function AllTests() {
         $this->TestSuite('All tests');
-
+ob_start();
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_course.lib.inc.test.php');
-      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/blog.lib.test.php');
+      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/blog.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/classmanager.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/course.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/database.lib.test.php');
@@ -73,8 +74,8 @@ class AllTests extends TestSuite {
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
 
-
-
+ob_end_clean();
+/*
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_course.lib.inc.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/blog.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/classmanager.lib.test.php');
@@ -117,7 +118,7 @@ class AllTests extends TestSuite {
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
       //$this->assertTrue(file_exists('/temp/test.log'));
-    }
+  */  }
 }
   $test = &new AllTests();
 //$test-> run( new HtmlReporter());

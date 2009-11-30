@@ -743,12 +743,9 @@ function savedata(origin) {
 	logit_lms('saving data (status='+lesson_status+' - interactions: '+ interactions.length +')',1);
 
 	old_item_id=info_lms_item[0];
-	// xajax_save_item is replaced to xajax_save_item_scorm for scorm LP's
-	//xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit);
 
 	xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, old_item_id,my_get_value_scorm);
 	//info_lms_item[0] is old_item_id and info_lms_item[1] is current_item_id
-	info_lms_item[0]=info_lms_item[0];
 	info_lms_item[1]=lms_item_id;
 
 	if(item_objectives.length>0) {
@@ -1222,6 +1219,7 @@ function update_message_frame(msg_msg)
 
 function switch_item(current_item, next_item){
     //backup these params
+    alert('Switching from '+current_item+' to '+next_item);
     var orig_current_item = current_item;
     var orig_next_item = next_item;
     var orig_lesson_status = lesson_status;
@@ -1256,15 +1254,14 @@ function switch_item(current_item, next_item){
          * savedata(unload) (and then the status cannot be "incompleted"
          * anymore)
          */
-        //if (lms_item_type=='sco' && lesson_status != 'completed' && lesson_status != 'passed' && lesson_status != 'browsed' && lesson_status != 'incomplete' && lesson_status != 'failed') {
-            /**
-             * savedata('finish') treats the special condition and saves the
-             * new status to the database, so switch_item_details() enjoys the
-             * new status
-             */
-        	//savedata('finish');
-        //}
-       // xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
+        /*if (lms_item_type=='sco' && lesson_status != 'completed' && lesson_status != 'passed' && lesson_status != 'browsed' && lesson_status != 'incomplete' && lesson_status != 'failed') {
+             // savedata('finish') treats the special condition and saves the
+             // new status to the database, so switch_item_details() enjoys the
+             // new status
+        	 savedata('finish');
+        }
+        xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location,interactions, lms_item_core_exit);
+        */
 
 	}
 	execute_stats='false';
@@ -1272,11 +1269,6 @@ function switch_item(current_item, next_item){
 	xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item);
 
 	status_info.push(lesson_status);
-
-	//current item
-
-	//old item
-	//info_lms_item[0]=next_item;
 
 	if (info_lms_item[1]==next_item && next_item!='next' && next_item!='previous') {
 		info_lms_item[0]=next_item;
@@ -1338,7 +1330,7 @@ function switch_item(current_item, next_item){
 
 	//(4) refresh the audio player if needed
 	$.ajax({
-		type: "GET",
+		type: "POST",
 		url: "lp_nav.php",
 		data: "",
 		success: function(tmp_data) {
@@ -1508,14 +1500,15 @@ function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id
         'vid': lms_view_id,
         'iid': lms_item_id,
         'next': next_item
-    }
+    };
     $.ajax({
-        type: "GET",
+        type: "POST",
         data: params,
         url: "lp_ajax_switch_item.php",
         dataType: "script",
         async: false
     });
+    alert('lesson_location is now '+lesson_location);
 }
 
 /**

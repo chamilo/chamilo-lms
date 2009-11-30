@@ -54,22 +54,20 @@ function deselect_all(formita)
 */
 
 //$nameTools = get_lang('Messages');
-$request=api_is_xml_http_request();
-if ($request===false) {
-	$interbreadcrumb[]= array (
-		'url' => '#',
-		'name' => get_lang('Messages')
-	);
-	$interbreadcrumb[]= array (
-		'url' => 'inbox.php',
-		'name' => get_lang('Inbox')
-	);
-	$interbreadcrumb[]= array (
-		'url' => 'outbox.php',
-		'name' => get_lang('Outbox')
-	);
-	Display::display_header('');
+
+
+//api_display_tool_title(api_xml_http_response_encode(get_lang('Inbox')));
+if ($_GET['f']=='social') {
+	$this_section = SECTION_SOCIAL;
+	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Profile'));
+	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));	
+} else {
+	$this_section = SECTION_MYPROFILE;
+	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Profile'));
+	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));
 }
+
+Display::display_header('');
 
 echo '<div class=actions>';
 	echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',api_xml_http_response_encode(get_lang('Inbox'))).api_xml_http_response_encode(get_lang('Inbox')).'</a>';
@@ -125,7 +123,6 @@ if ($_REQUEST['action']=='delete') {
 		FOOTER
 ==============================================================================
 */
-if ($request===false) {
-	Display::display_footer();
-}
+Display::display_footer();
+
 ?>

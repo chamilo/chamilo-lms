@@ -73,6 +73,7 @@ if (!empty($group_id)) {
 			<span id="filepaths"><div id="filepath_1"><input type="file" name="attach_1" size="20" /></div></span>
 			<div id="link-more-attach"><a href="javascript://" onclick="return add_image_form()"><?php echo get_lang('AddOneMoreFile') ?></a>&nbsp;(<?php echo get_lang('MaximunFileSizeXMB') ?>)</div>
 	   		<!--button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>" onclick="return ajaxFileUpload()"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button-->
+	   		<br />
 	   		<button class="save" type="submit" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>
 <?php } ?>
 	</dl>

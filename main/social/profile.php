@@ -220,7 +220,8 @@ Display :: display_header(null);
 //User picture size is calculated from SYSTEM path
 
 $img_array= UserManager::get_user_picture_path_by_id($user_id,'web',true,true);
-
+$big_image =  UserManager::get_picture_user($user_id, $img_array['file'],'','big_');
+$big_image = $big_image['file'].$big_image['dir'];
 //print_r($user_info);
 // Added by Ivan Tcholakov, 03-APR-2009.
 if (USE_JQUERY_CORNERS_SCRIPT) {
@@ -261,8 +262,6 @@ if ($user_id == api_get_user_id())
 else
 	echo get_lang('ViewSharedProfile').' - '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
 echo '</div>';
-
-
 
 echo '<div id="social-profile-wrapper">';
 // RIGHT COLUMN
@@ -455,7 +454,12 @@ echo '<div id="social-profile-container">';
 			echo '<div class="social-content-image">';
 			echo '<div class="social-background-content" style="width:95%;" align="center">';
 			echo '<br/>';
-    	  	echo '<img src='.$img_array['dir'].$img_array['file'].' /> <br /><br />';
+			
+			if ($img_array['file'] != 'unknown.jpg') {
+    	  		echo '<a class="thickbox" href="'.$big_image.'"><img src='.$img_array['dir'].$img_array['file'].' /> </a><br /><br />';
+			} else {
+				echo '<img src='.$img_array['dir'].$img_array['file'].' /><br /><br />';
+			}
     	  	echo '</div>';
     	  	echo '</div>';
     	  	   	  	
@@ -471,7 +475,7 @@ echo '<div id="social-profile-container">';
 	  			echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('YouAlreadySentAnInvitation').'</a>';
 	  		} else {
 	  			if (!$show_full_profile) {
-	  				echo '&nbsp;<a href="/main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=240&width=610&user_friend='.$user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a>';
+	  				echo '&nbsp;<a href="/main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=260&width=610&user_friend='.$user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a>';
 	  			}
 	  		}
 			

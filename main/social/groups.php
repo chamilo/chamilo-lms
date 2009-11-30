@@ -114,6 +114,8 @@ if ($group_id != 0 ) {
 	}
 	
 	$picture	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,'medium_');
+	$big_image	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'','big_');
+	
 	$tags		= GroupPortalManager::get_group_tags($group_id, true);
 	$users		= GroupPortalManager::get_users_by_group($group_id, true);
 	
@@ -148,7 +150,13 @@ overflow:hidden; };
 	
 	//image
 	echo '<div id="group_image">';
-		echo $img = '<img src="'.$picture['file'].'" />';
+	
+	if (basename($picture['file']) != 'unknown_group.png') {
+  		echo '<a class="thickbox" href="'.$big_image['file'].'"><img src='.$picture['file'].' /> </a><br /><br />';
+	} else {
+		echo '<img src='.$picture['file'].' /><br /><br />';
+	}			
+
 	echo '</div>';
 	
 	//description
@@ -175,7 +183,7 @@ overflow:hidden; };
 		
 	if (in_array($my_group_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))) { 
 		echo '<div id="actions" style="margin:10px">';
-		echo '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=365&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display :: return_icon('message_new.png', get_lang('ComposeMessage')).'&nbsp;'.get_lang('ComposeMessage').'</a>';
+		echo '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display :: return_icon('message_new.png', get_lang('ComposeMessage')).'&nbsp;'.get_lang('ComposeMessage').'</a>';
 		//echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
 		echo '</div>';
 	}

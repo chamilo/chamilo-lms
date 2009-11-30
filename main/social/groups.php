@@ -10,8 +10,63 @@ require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
 $this_section = SECTION_SOCIAL;
 
+$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/thickbox.js"></script>';
+//$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/ajaxfileupload.js"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="/main/inc/lib/javascript/thickbox.css" type="text/css" media="projection, screen">';
+
+$htmlHeadXtra[] = '<script type="text/javascript">
+
+var counter_image = 1;	
+function remove_image_form(id_elem1) {
+	var elem1 = document.getElementById(id_elem1);
+	elem1.parentNode.removeChild(elem1);
+	counter_image--;
+	var filepaths = document.getElementById("filepaths");		
+	if (filepaths.childNodes.length < 3) {		
+		var link_attach = document.getElementById("link-more-attach");		
+		if (link_attach) {
+			link_attach.innerHTML=\'<a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a>&nbsp;('.get_lang('MaximunFileSizeXMB').')\';
+		}			
+	}				        
+}
+		
+function add_image_form() {    														
+	// Multiple filepaths for image form					
+	var filepaths = document.getElementById("filepaths");	
+	if (document.getElementById("filepath_"+counter_image)) {
+		counter_image = counter_image + 1;				
+	}  else {
+		counter_image = counter_image; 
+	}
+	var elem1 = document.createElement("div");			
+	elem1.setAttribute("id","filepath_"+counter_image);							
+	filepaths.appendChild(elem1);	
+	id_elem1 = "filepath_"+counter_image;		
+	id_elem1 = "\'"+id_elem1+"\'";
+	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"'.api_get_path(WEB_CODE_PATH).'img/delete.gif\"></a>";						
+
+	if (filepaths.childNodes.length == 3) {		
+		var link_attach = document.getElementById("link-more-attach");		
+		if (link_attach) {
+			link_attach.innerHTML="";
+		}
+	}
+}	
+			
+	</script>';
+
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
 Display :: display_header($tool_name, 'Groups');
+
+// save message group
+if (isset($_POST['action']) && $_POST['action']=='send_message_group') {	
+	$title = $_POST['title'];
+	$content = $_POST['content'];
+	$group_id = $_POST['group_id'];
+	$parent_id = $_POST['parent_id'];	
+	MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id);
+}
 
 //show the action menu
 SocialManager::show_social_menu();
@@ -111,7 +166,8 @@ if ($group_id != 0 ) {
 		
 	if (in_array($my_group_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))) { 
 		echo '<div id="actions" style="margin:10px">';
-		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
+		echo '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=365&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display :: return_icon('message_new.png', get_lang('ComposeMessage')).'&nbsp;'.get_lang('ComposeMessage').'</a>';
+		//echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
 		echo '</div>';
 	}
 	

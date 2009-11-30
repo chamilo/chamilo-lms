@@ -9,16 +9,21 @@ if (api_get_setting('allow_message_tool')!='true'){
 	api_not_allowed();
 }
 
+
+/* This page should be deleted */
+ 
 if(api_get_user_id()!=0) {
-	echo '<script language="javascript" type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'messages/cookies.js"> </script> ';
-	echo '<script language="javascript" type="text/javascript">set_url("'.api_get_path(WEB_CODE_PATH).'messages/notify.php") ; notificar()</script> ';
+	//echo '<script language="javascript" type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'messages/cookies.js"> </script> ';
+	//echo '<script language="javascript" type="text/javascript">set_url("'.api_get_path(WEB_CODE_PATH).'messages/notify.php") ; notificar()</script> ';
 	$number_of_new_messages = MessageManager::get_new_messages();
+	
 	if(is_null($number_of_new_messages)) {
 		$number_of_new_messages = 0;
 	}
-	echo "<a href=inbox.php>".get_lang('Inbox')."(<span id=\"nuevos\" style=\"none\">".$number_of_new_messages."</span>)</a>";
+	/*echo "<a href=inbox.php>".get_lang('Inbox')."(<span id=\"nuevos\" style=\"none\">".$number_of_new_messages."</span>)</a>";
 	echo " - ";
-	echo "<a href=new_message.php>".get_lang('ComposeMessage')."</a>";
+	echo "<a href=new_message.php>".get_lang('ComposeMessage')."</a>";*/
+	$number_of_new_messages = -1;
 	if($number_of_new_messages > 0)
 	{
 	?>
@@ -36,7 +41,7 @@ if(api_get_user_id()!=0) {
 	<?php
 	}
 } else {
-	echo '<script language="javascript" type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'messages/cookies.js"> </script>';
-	echo '<script language="javascript" type="text/javascript">Set_Cookie( "nuevos", 0, 0, "/","","")</script> ';
+	//echo '<script language="javascript" type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'messages/cookies.js"> </script>';
+	//echo '<script language="javascript" type="text/javascript">Set_Cookie( "nuevos", 0, 0, "/","","")</script> ';
 }
 ?>

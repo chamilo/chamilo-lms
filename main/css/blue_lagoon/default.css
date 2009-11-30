@@ -2665,3 +2665,11 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 #maincontent .courseslist li {
 	margin-bottom:8px;
 }
+
+a.read {	
+	font-weight:normal;
+}
+
+a.unread {	
+	
+}

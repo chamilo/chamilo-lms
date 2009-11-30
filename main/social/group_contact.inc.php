@@ -1,5 +1,10 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
+/**
+ * @package dokeos.social
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
+ 
 
 $language_file = array('registration','messages','userInfo','admin');
 require '../inc/global.inc.php';

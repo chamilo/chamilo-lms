@@ -1233,9 +1233,16 @@ if ($show_menu) {
 			
 		require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+		require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 		
+		// New messages
 		$number_of_new_messages				= MessageManager::get_new_messages();
+		// New contact invitations
 		$number_of_new_messages_of_friend	= SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
+		
+		// New group invitations sent by a moderator
+		$group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,false);
+		$group_pending_invitations = count($group_pending_invitations);
 		
 		$cant_msg  = '';
 		if ($number_of_new_messages > 0)
@@ -1249,7 +1256,10 @@ if ($show_menu) {
 		
 				if ($number_of_new_messages_of_friend > 0) {		
 					echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' ('.$number_of_new_messages_of_friend.') </a><br />';
-				}								
+				}
+				if ( $group_pending_invitations > 0) {		
+					echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('GroupPendingInvitations').' ('.$group_pending_invitations.') </a><br />';
+				}				
 		echo '</p>';
 				
 		//echo '<img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('Close').'" title="'.get_lang('Close').'"  class="message-delete" />';
@@ -1304,19 +1314,10 @@ if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu']))
 }
 
 if (api_get_setting('allow_reservation') == 'true' && api_is_allowed_to_create_course() ){
-	//include_once('main/reservation/rsys.php');
 	echo '<div class="menusection">';
 	echo '<span class="menusectioncaption">'.get_lang('Booking').'</span>';
 	echo '<ul class="menulist">';
 	echo '<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br />';
-	//echo '<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br />';
-
-	/*require_once('main/reservation/rsys.php');
-	if(api_is_platform_admin() || Rsys :: check_user_status() == 1) { // Only for admins & teachers...
-		echo '<a href="main/reservation/m_item.php">'.get_lang('ManageItems').'</a><br />';
-		echo '<a href="main/reservation/m_reservation.php">'.get_lang('ManageReservationPeriods').'</a><br />';
-	}
-	*/
 	echo '</ul>';
 	echo '</div>';
 }

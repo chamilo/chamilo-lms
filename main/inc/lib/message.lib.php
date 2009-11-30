@@ -140,6 +140,7 @@ class MessageManager
 		$i = 0;
 		$message_list = array ();
 		while ($result = Database::fetch_row($sql_result)) {
+			
 			if ($request===true) {
 				$message[0] = '<input type="checkbox" value='.$result[0].' name="id[]">';
 			 } else {
@@ -147,12 +148,9 @@ class MessageManager
 			 }
 
 			if ($request===true) {
-				if($result[4]==0)
-            	{
+				if($result[4]==0) {
 					$message[1] = Display::return_icon('mail_open.png',get_lang('AlreadyReadMessage'));//Message already read
-				}
-				else
-				{
+				} else {
 					$message[1] = Display::return_icon('mail.png',get_lang('UnReadMessage'));//Message without reading
 				}
 
@@ -161,8 +159,13 @@ class MessageManager
 				$message[5] = '<a onclick="reply_to_messages(\'show\','.$result[0].',\'\')" href="javascript:void(0)">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
 						  '&nbsp;&nbsp;<a onclick="delete_one_message('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			} else {
-				$message[2] = '<a href="view_message.php?id='.$result[0].'">'.GetFullUserName(($result[1])).'</a>';;
-				$message[3] = '<a href="view_message.php?id='.$result[0].'">'.$result[2].'</a>';
+				if($result[4]==1) {
+					$class = 'class = "unread"';
+				} else {
+					$class = 'class = "read"';
+				}
+				$message[2] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.GetFullUserName(($result[1])).'</a>';;
+				$message[3] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.$result[2].'</a>';
 				$message[5] = '<a href="new_message.php?re_id='.$result[0].'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
 						  '&nbsp;&nbsp;<a delete_one_message('.$result[0].') href="inbox.php?action=deleteone&id='.$result[0].'">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			}
@@ -518,7 +521,7 @@ class MessageManager
 			}
 			$message[4] = $result[3]; //date stays the same
 			foreach($message as $key => $value) {
-				$message[$key] = api_xml_http_response_encode($value);
+				$message[$key] = $value;
 			}
 			$message_list[] = $message;
 			$i++;
@@ -541,29 +544,31 @@ class MessageManager
 	
 	/**
 	 * display message box in the inbox 
-	 * @return void
+	 * @return string html with the message content
 	 */
 	public static function show_message_box() {
 		global $charset;
 		
-		$table_message = Database::get_main_table(TABLE_MESSAGE);
+		$table_message 		= Database::get_main_table(TABLE_MESSAGE);
 		$tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 		
-		$message_id = '';
+		$message_id = '';	
 		if (isset($_GET['id_send']) && is_numeric($_GET['id_send'])) {
+			// when I get here ? by Julio Montoya
 			$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".intval(Database::escape_string($_GET['id_send']))." AND msg_status=4;";
 			$result = Database::query($query,__FILE__,__LINE__);
 		    $path='outbox.php';
 		    $message_id = intval($_GET['id_send']);
-		} else {
-			if (is_numeric($_GET['id'])) {
-				$query = "UPDATE $table_message SET msg_status = '0' WHERE user_receiver_id=".api_get_user_id()." AND id='".intval(Database::escape_string($_GET['id']))."';";
+		} else {			
+			if (is_numeric($_GET['id'])) {				
+				$message_id = intval($_GET['id']);
+				$query = "UPDATE $table_message SET msg_status = '".MESSAGE_STATUS_NEW."' WHERE user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
 				$result = Database::query($query,__FILE__,__LINE__);
-				$query = "SELECT * FROM $table_message WHERE msg_status<>4 AND user_receiver_id=".api_get_user_id()." AND id='".intval(Database::escape_string($_GET['id']))."';";
-				$result = Database::query($query,__FILE__,__LINE__);				
-			}			
-			$path='inbox.php';
-			$message_id = intval($_GET['id']);
+				
+				$query = "SELECT * FROM $table_message WHERE msg_status<>4 AND user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
+				$result = Database::query($query,__FILE__,__LINE__);
+			}						
+			$path='inbox.php';			
 		}
 
 		$row = Database::fetch_array($result);
@@ -577,17 +582,8 @@ class MessageManager
 		for ($i=0;$i<count($user_con);$i++)
 			if ($row[1]==$user_con[$i])
 				$band=1;
-		if ($band==1 && !isset($_GET['id_send'])) {
-			if (is_numeric($_GET['id'])) {
-				$reply = '<a onclick="reply_to_messages(\'show\','.Security::remove_XSS($_GET['id']).',\'\')" href="javascript:void(0)">'.Display::return_icon('message_reply.png',api_xml_http_response_encode(get_lang('ReplyToMessage'))).api_xml_http_response_encode(get_lang('ReplyToMessage')).'</a>';
-			}
-		}
-		echo '<div class=actions>';
-		echo '<a onclick="close_div_show(\'div_content_messages\')" href="javascript:void(0)">'.Display::return_icon('folder_up.gif',api_xml_http_response_encode(get_lang('BackToInbox'))).api_xml_http_response_encode(get_lang('BackToInbox')).'</a>';
-		echo $reply;
-		echo '<a onclick="delete_one_message('.$row[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',api_xml_http_response_encode(get_lang('DeleteMessage'))).''.api_xml_http_response_encode(get_lang('DeleteMessage')).'</a>';
-		echo '</div><br />';
-		echo '
+
+		$message_content =  '
 		<table class="message_view_table" >
 		    <TR>
 		      <TD width=10>&nbsp; </TD>
@@ -595,13 +591,25 @@ class MessageManager
 		      	<TABLE>
 		            <TR>
 		              <TD width="100%">
-		                    <TR> <h1>'.str_replace("\\","",api_xml_http_response_encode($row[5])).'</h1></TR>
+		                    <TR> <h1>'.str_replace("\\","",$row[5]).'</h1></TR>
 		              </TD>
+		              <TR>';
+			if (api_get_setting('allow_social_tool') == 'true') {
+				$user_image = '';
+				/*	@todo add user image
+				$user_image = UserManager::get_user_picture_path_by_id($row[1],'web', true,false);				
+				$user_image = UserManager::get_picture_user($row[1], $user_image['file'],'40');
+				$user_image = '<img src="'.$user_image['file'].'" style="'.$user_image['style'].'" >';
+				*/
+				$message_content .='<TD>'.get_lang('From').' '.$user_image.'<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$row[1].'">'.GetFullUserName($row[1]).'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.get_lang('Me').'</b> </TD>';
+				
+			} else {
+				$message_content .='<TD>'.get_lang('From').'&nbsp;'.GetFullUserName($row[1]).'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b> </TD>';
+			}
+		
+		 $message_content .='</TR>
 		              <TR>
-		              	<TD>'.api_xml_http_response_encode(get_lang('From').'&nbsp;<b>'.GetFullUserName($row[1]).'</b> '.api_strtolower(get_lang('To')).'&nbsp;  <b>'.GetFullUserName($row[2])).'</b> </TD>
-		              </TR>
-		              <TR>
-		              <TD >'.api_xml_http_response_encode(get_lang('Date').'&nbsp; '.$row[4]).'</TD>
+		              <TD >'.get_lang('Date').'&nbsp; '.$row[4].'</TD>
 		              </TR>
 		            </TR>
 		        </TABLE>
@@ -609,7 +617,7 @@ class MessageManager
 		        <TABLE height=209 width="100%" bgColor=#ffffff>
 		          <TBODY>
 		            <TR>
-		              <TD vAlign=top>'.str_replace("\\","",api_xml_http_response_encode($row[6])).'</TD>
+		              <TD vAlign=top>'.str_replace("\\","",$row[6]).'</TD>
 		            </TR>
 		          </TBODY>
 		        </TABLE>
@@ -618,6 +626,7 @@ class MessageManager
 		      <TD width=10>&nbsp;</TD>
 		    </TR>
 		</TABLE>';
+		return $message_content;
 	}
 	
 	
@@ -876,6 +885,7 @@ function inbox_display() {
 	$table->set_header(3,$title,false);
 	$table->set_header(4,api_xml_http_response_encode(get_lang('Date')),false,array('style' => 'width:150px;'));
 	$table->set_header(5,$action,false,array ('style' => 'width:100px;'));
+	
     echo '<div id="div_content_table_data">';
 	if ($request===true) {
 		echo '<form name="form_send" id="form_send" action="" method="post">';

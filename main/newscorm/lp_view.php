@@ -233,11 +233,11 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 <input type="hidden" id="old_item" name ="old_item" value="0"/>
 <input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
 
-<div id="learningPathMain"  style="width:100%;height:100%;" >
-	<div id="learningPathLeftZone" style="float:left;width:280px;height:100%">
+<div id="learning_path_main"  style="width:100%;height:100%;" >
+	<div id="learning_path_left_zone" style="float:left;width:280px;height:100%">
 		<!-- header -->
 		<div id="header">
-            <div id="learningPathHeader" style="font-size:14px;">
+            <div id="learning_path_header" style="font-size:14px;">
 	            <table>
 	                <tr>
 	                    <td>
@@ -323,7 +323,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 
 	<!-- toc layout -->
 	<div id="toc_id" name="toc_name"  style="padding:0;margin-top:20px;height:60%;width:100%">
-		<div id="learningPathToc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
+		<div id="learning_path_toc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
 			<!-- log message layout -->
 	
 			<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:50px;overflow:auto;margin:15px">
@@ -338,7 +338,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 <!-- end left Zone -->
 
 <!-- right Zone -->
-<div id="learningPathRightZone" style="margin-left:282px;border : 0pt solid blue;height:100%">
+<div id="learning_path_right_zone" style="margin-left:282px;border : 0pt solid blue;height:100%">
     <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>
 </div>
 <!-- end right Zone -->
@@ -364,8 +364,8 @@ var updateContentHeight = function() {
 		newRightZoneHeight = initialRightZoneHeight;
 		newLeftZoneHeight = newRightZoneHeight + rightZoneHeightOccupied - leftZoneHeightOccupied;
 	}
-	document.getElementById('learningPathToc').style.height = newLeftZoneHeight + 'px';
-	document.getElementById('learningPathRightZone').style.height = newRightZoneHeight + 'px';
+	document.getElementById('learning_path_toc').style.height = newLeftZoneHeight + 'px';
+	document.getElementById('learning_path_right_zone').style.height = newRightZoneHeight + 'px';
 	document.getElementById('content_id_blank').style.height = newRightZoneHeight + 'px';
 	if (document.body.clientHeight > winHeight) {
 		document.body.style.overflow = 'auto';
@@ -379,19 +379,19 @@ window.onload = function() {
 	screen_height = screen.height;
 	screen_width = screen.height;
 
-	document.getElementById('learningPathLeftZone').style.height = "100%";
-	document.getElementById('learningPathToc').style.height = "60%";
-	document.getElementById('learningPathToc').style.width = "100%";
-	document.getElementById('learningPathRightZone').style.height = "100%"
+	document.getElementById('learning_path_left_zone').style.height = "100%";
+	document.getElementById('learning_path_toc').style.height = "60%";
+	document.getElementById('learning_path_toc').style.width = "100%";
+	document.getElementById('learning_path_right_zone').style.height = "100%"
 	document.getElementById('content_id').style.height = "100%" ;
 
 	if (screen_height <= 600) {
 		document.getElementById('inner_lp_toc').style.height = "100px" ;
-		document.getElementById('learningPathLeftZone').style.height = "415px";
+		document.getElementById('learning_path_left_zone').style.height = "415px";
 	}
 
-	initialLeftZoneHeight = document.getElementById('learningPathToc').offsetHeight;
-	initialRightZoneHeight = document.getElementById('learningPathRightZone').offsetHeight;
+	initialLeftZoneHeight = document.getElementById('learning_path_toc').offsetHeight;
+	initialRightZoneHeight = document.getElementById('learning_path_right_zone').offsetHeight;
 	docHeight = document.body.clientHeight;
 	leftZoneHeightOccupied = docHeight - initialLeftZoneHeight;
 	rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
@@ -424,12 +424,12 @@ window.onresize = updateContentHeight;
 	<input type="hidden" id="old_item" name ="old_item" value="0"/>
 	<input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
 
-<div id="learningPathMain"  style="width:100%;height:100%;" >
-    <div id="learningPathLeftZone" style="float:left;width:280px;height:100%">
+<div id="learning_path_main"  style="width:100%;height:100%;" >
+    <div id="learning_path_left_zone" style="float:left;width:280px;height:100%">
 
 		<!-- header -->
 		<div id="header">
-	        <div id="learningPathHeader" style="font-size:14px;">
+	        <div id="learning_path_header" style="font-size:14px;">
 	            <table>
 	                <tr>
 	                    <td>
@@ -518,7 +518,7 @@ window.onresize = updateContentHeight;
 
 		<!-- toc layout -->
 		<div id="toc_id" name="toc_name"  style="padding:0;margin-top:20px;height:60%;width:100%">
-			<div id="learningPathToc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
+			<div id="learning_path_toc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
 	
     	<?php if (!empty($_SESSION['oLP']->scorm_debug)) { //only show log  ?>
 	        <!-- log message layout -->
@@ -535,7 +535,7 @@ window.onresize = updateContentHeight;
     <!-- end left Zone -->
 
     <!-- right Zone -->
-	<div id="learningPathRightZone" style="margin-left:282px;height:100%">
+	<div id="learning_path_right_zone" style="margin-left:282px;height:100%">
 		<iframe id="content_id" name="content_name" src="<?php echo $src; ?>" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>
 	</div>
     <!-- end right Zone -->
@@ -559,8 +559,8 @@ var updateContentHeight = function() {
 		newRightZoneHeight = initialRightZoneHeight;
 		newLeftZoneHeight = newRightZoneHeight + rightZoneHeightOccupied - leftZoneHeightOccupied;
 	}
-	document.getElementById('learningPathToc').style.height = newLeftZoneHeight + 'px';
-	document.getElementById('learningPathRightZone').style.height = newRightZoneHeight + 'px';
+	document.getElementById('learning_path_toc').style.height = newLeftZoneHeight + 'px';
+	document.getElementById('learning_path_right_zone').style.height = newRightZoneHeight + 'px';
 	document.getElementById('content_id').style.height = newRightZoneHeight + 'px';
 	if (document.body.clientHeight > winHeight) {
 		document.body.style.overflow = 'auto';
@@ -574,19 +574,19 @@ window.onload = function() {
 	screen_height = screen.height;
 	screen_width = screen.height;
 
-	document.getElementById('learningPathLeftZone').style.height = "100%";
-	document.getElementById('learningPathToc').style.height = "60%";
-	document.getElementById('learningPathToc').style.width = "100%";
-	document.getElementById('learningPathRightZone').style.height = "100%"
+	document.getElementById('learning_path_left_zone').style.height = "100%";
+	document.getElementById('learning_path_toc').style.height = "60%";
+	document.getElementById('learning_path_toc').style.width = "100%";
+	document.getElementById('learning_path_right_zone').style.height = "100%"
 	document.getElementById('content_id').style.height = "100%" ;
 
 	if (screen_height <= 600) {
 		document.getElementById('inner_lp_toc').style.height = "100px" ;
-		document.getElementById('learningPathLeftZone').style.height = "415px";
+		document.getElementById('learning_path_left_zone').style.height = "415px";
 	}
 
-	initialLeftZoneHeight = document.getElementById('learningPathToc').offsetHeight;
-	initialRightZoneHeight = document.getElementById('learningPathRightZone').offsetHeight;
+	initialLeftZoneHeight = document.getElementById('learning_path_toc').offsetHeight;
+	initialRightZoneHeight = document.getElementById('learning_path_right_zone').offsetHeight;
 	docHeight = document.body.clientHeight;
 	leftZoneHeightOccupied = docHeight - initialLeftZoneHeight;
 	rightZoneHeightOccupied = docHeight - initialRightZoneHeight;

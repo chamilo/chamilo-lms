@@ -229,7 +229,6 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 	$_SESSION['loaded_lp_view'] = true;
     ?>
 <body>
-<form>
 <input type="hidden" id="old_item" name ="old_item" value="0"/>
 <input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
 
@@ -402,7 +401,6 @@ window.onload = function() {
 window.onresize = updateContentHeight;
 -->
 </script>
-</form>
 </body>
 <?php
 } else {
@@ -420,7 +418,6 @@ window.onresize = updateContentHeight;
 	$_SESSION['loaded_lp_view'] = true;
 ?>
 <body>
-<form>
 	<input type="hidden" id="old_item" name ="old_item" value="0"/>
 	<input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
 
@@ -597,7 +594,6 @@ window.onload = function() {
 window.onresize = updateContentHeight;
 -->
 </script>
-</form>
 </body>
 <?php
 	/*

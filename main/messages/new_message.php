@@ -229,8 +229,9 @@ if (isset($_GET['rs'])) {
 		'url' => '#',
 		'name' => get_lang('ComposeMessage')
 	);
+$this_section = SECTION_MYPROFILE;
+Display::display_header('');
 
-	Display::display_header('');
 
 $group_id = intval($_REQUEST['group_id']);
 echo '<div class=actions>';

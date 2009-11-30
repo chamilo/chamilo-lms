@@ -1,5 +1,11 @@
 <?php
-$language_file= 'admin';
+/* For licensing terms, see /chamilo_license.txt */
+/**
+ * @package dokeos.social
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
+ 
+$language_file= 'userInfo';
 $cidReset=true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'/formvalidator/FormValidator.class.php';

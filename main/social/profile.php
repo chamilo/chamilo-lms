@@ -272,58 +272,50 @@ echo '<div id="social-profile-wrapper">';
 		if ($show_full_profile) {
 			$list_path_friends= $list_path_normal_friends = $list_path_parents = array();
 
-			$list_path_good_friends		= SocialManager::get_list_path_web_by_user_id($user_id, SOCIALGOODFRIEND);
-			$list_path_normal_friends	= SocialManager::get_list_path_web_by_user_id($user_id, SOCIALFRIEND);
-			$list_path_parents 			= SocialManager::get_list_path_web_by_user_id($user_id, SOCIALPARENT);
+			//SOCIALGOODFRIEND , SOCIALFRIEND, SOCIALPARENT
 
-			$list_path_friends = array_merge_recursive($list_path_good_friends, $list_path_normal_friends, $list_path_parents);
-
-			$friend_html='';
-			$number_of_images=3;
-			$number_friends=0;
-			$list_friends_id=array();
-			$list_friends_dir=array();
-			$list_friends_file=array();
-
-			if (count($list_path_friends)!=0) {
-				$friends_count = count($list_path_friends['id_friend']);
-
-				for ($z=0;$z< $friends_count ;$z++) {
-					$list_friends_id[]  = $list_path_friends['id_friend'][$z]['friend_user_id'];
-					$list_friends_dir[] = $list_path_friends['path_friend'][$z]['dir'];
-					$list_friends_file[]= $list_path_friends['path_friend'][$z]['file'];
-				}
-				$number_friends= count($list_friends_dir);
-				$number_loop   = ($number_friends/$number_of_images);
-				$loop_friends  = ceil($number_loop);
+			$friends = SocialManager::get_friends($user_id, SOCIALFRIEND);
+			
+			$friend_html		= '';
+			$number_of_images	= 3;
+			$number_friends		= 0;
+			$list_friends_id	= array();
+			$number_friends  	= count($friends); 
+			$number_of_images	= $number_friends;
+			if ($number_friends != 0) {
+				$number_loop	= ($number_friends/$number_of_images);
+				$loop_friends	= ceil($number_loop);
 				$j=0;
-				$friend_html .= '<div class="sectiontitle">'.get_lang('SocialFriend').'</div>';
-				$friend_html.= '<div id="friend-container" class="social-friend-container">';
+				$friend_html	.= '<div class="sectiontitle">'.get_lang('SocialFriend').'</div>';
+				$friend_html	.= '<div id="friend-container" class="social-friend-container">';
 					$friend_html.= '<div id="friend-header">';
 							//$friend_html.=  $friends_count.' '.get_lang('Friends');
-						if ($friends_count == 1)
-							$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friend').'</div>';
+						if ($number_friends == 1)
+							$friend_html.= '<div style="float:left;">'.$number_friends.' '.get_lang('Friend').'</div>';
 						else
-							$friend_html.= '<div style="float:left;">'.$friends_count.' '.get_lang('Friends').'</div>';
-						if (api_get_user_id() == $user_id)
-					$friend_html.= '<div style="float:right;"><a href="friends.php">'.get_lang('SeeAll').'</a></div>';
+							$friend_html.= '<div style="float:left;">'.$number_friends.' '.get_lang('Friends').'</div>';
+						if (api_get_user_id() == $user_id) {
+							$friend_html.= '<div style="float:right;"><a href="friends.php">'.get_lang('SeeAll').'</a></div>';
+						}
 					$friend_html.= '</div>'; // close div friend-header
 
 				for ($k=0;$k<$loop_friends;$k++) {
 					if ($j==$number_of_images) {
 						$number_of_images=$number_of_images*2;
 					}
+					
 					while ($j<$number_of_images) {
-						if ($list_friends_file[$j]<>"") {
-							$my_user_info=api_get_user_info($list_friends_id[$j]);
-							$name_user=api_get_person_name($my_user_info['firstName'], $my_user_info['lastName']);
-							$friend_html.='<div id=div_'.$list_friends_id[$j].' class="image_friend_network" ><span><center>';
+						if (isset($friends[$j])) {
+							$friend = $friends[$j];				
+							$name_user	= api_get_person_name($friend['firstName'], $friend['lastName']);
+							$friend_html.='<div id=div_'.$friend['friend_user_id'].' class="image_friend_network" ><span><center>';
 							// the height = 92 must be the sqme in the image_friend_network span style in default.css
-							$friends_profile = SocialManager::get_picture_user($list_friends_id[$j], $list_friends_file[$j], 92, 'medium_', 'width="85" height="90" ');
-							$friend_html.='<a href="profile.php?u='.$list_friends_id[$j].'&amp;'.$link_shared.'">';
-							$friend_html.='<img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$list_friends_id[$j].'" title="'.$name_user.'" />';
+							$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92, 'medium_', 'width="85" height="90" ');
+							
+							$friend_html.='<a href="profile.php?u='.$friend['friend_user_id'].'&amp;'.$link_shared.'">';
+							$friend_html.='<img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" />';
 							$friend_html.= '</center></span>';
-							$friend_html.= '<center class="friend">'.api_get_person_name($my_user_info['firstName'], $my_user_info['lastName']).'</a></center>';
+							$friend_html.= '<center class="friend">'.$name_user.'</a></center>';
 							$friend_html.= '</div>';
 						}
 						$j++;
@@ -339,6 +331,7 @@ echo '<div id="social-profile-wrapper">';
 			}
 			$friend_html.= '</div>';
 			echo $friend_html;
+			
 			//Pending invitations
 			if (!isset($_GET['u']) || (isset($_GET['u']) && $_GET['u']==api_get_user_id())) {
 				$pending_invitations = SocialManager::get_list_invitation_of_friends_by_user_id(api_get_user_id());
@@ -465,24 +458,23 @@ echo '<div id="social-profile-container">';
     	  	echo '<img src='.$img_array['dir'].$img_array['file'].' /> <br /><br />';
     	  	echo '</div>';
     	  	echo '</div>';
-    	  	
-    	  	
-    
-    	  		echo '<br/>';
-    	  		echo '<div class="actions" style="margin-right:5px;">';
-    	  		echo '&nbsp;<a href="/main/messages/send_message_to_userfriend.inc.php?height=365&width=610&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">'.Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />';
-    	  		
-    	  		//check if I already sent an invitation message
-    	  		$invitation_sent_list = SocialManager::get_list_invitation_sent_by_user_id(api_get_user_id());
-    	  		
-    	  		if (is_array($invitation_sent_list) && is_array($invitation_sent_list[$user_id]) && count($invitation_sent_list[$user_id]) >0 ) {  	  		
-    	  			echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('YouAlreadySentAnInvitation').'</a>';
-    	  		} else {
-    	  			if (!$show_full_profile) {
-    	  				echo '&nbsp;<a href="/main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=300&width=610&user_friend='.$user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a>';
-    	  			}
-    	  		}
-				
+    	  	   	  	
+	  		echo '<br/>';
+	  		echo '<div class="actions" style="margin-right:5px;">';
+	  		echo '&nbsp;<a href="/main/messages/send_message_to_userfriend.inc.php?height=300&width=610&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">';
+	  		echo Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />';
+	  		
+	  		//check if I already sent an invitation message
+	  		$invitation_sent_list = SocialManager::get_list_invitation_sent_by_user_id(api_get_user_id());
+	  		
+	  		if (is_array($invitation_sent_list) && is_array($invitation_sent_list[$user_id]) && count($invitation_sent_list[$user_id]) >0 ) {  	  		
+	  			echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('YouAlreadySentAnInvitation').'</a>';
+	  		} else {
+	  			if (!$show_full_profile) {
+	  				echo '&nbsp;<a href="/main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=240&width=610&user_friend='.$user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a>';
+	  			}
+	  		}
+			
     	  		echo '</div>';
      	  	
     	  	echo '<br />';
@@ -693,7 +685,7 @@ echo '<div id="social-profile-container">';
 				echo '</ul><br />';
 				
 				$user_feeds = SocialManager::get_user_feeds($user_id);
-				if (!empty($user_feeds )) {
+				if (is_array($user_feeds )) {
 					echo '<div class="sectiontitle">'.get_lang('RSSFeeds').'</div>';
 	    			echo '<div class="social-content-training">';
                 	echo $user_feeds;

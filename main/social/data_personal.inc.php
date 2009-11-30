@@ -1,6 +1,10 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
-
+/* For licensing terms, see /chamilo_license.txt */
+/**
+ * @package dokeos.social
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
+ 
 $language_file = array('registration','messages','userInfo','admin','forum','blog');
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';

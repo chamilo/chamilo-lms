@@ -1,12 +1,18 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
-
-$language_file = array('admin');
+/* For licensing terms, see /chamilo_license.txt */
+/**
+ * @package dokeos.social
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
+ 
+$language_file = array('userInfo');
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
+
+api_block_anonymous_users();
 
 $this_section = SECTION_SOCIAL;
 
@@ -24,8 +30,7 @@ $group_id	= intval($_GET['id']);
 $group_info = GroupPortalManager::get_group_data($group_id); 
 
 	
-if ($group_id != 0 ) {
-		
+if ($group_id != 0 ) {		
 	//Loading group information
 	if (isset($_GET['status']) && $_GET['status']=='sent') {
 		Display::display_confirmation_message(get_lang('MessageHasBeenSent'), false);
@@ -56,6 +61,7 @@ if ($group_id != 0 ) {
 	$picture	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,'medium_');
 	$tags		= GroupPortalManager::get_group_tags($group_id, true);
 	$users		= GroupPortalManager::get_users_by_group($group_id, true);
+	
 	//my relation with the group is set here
 	
 	if (is_array($users[api_get_user_id()]) && count($users[api_get_user_id()]) > 0) {
@@ -70,12 +76,15 @@ if ($group_id != 0 ) {
 		$my_group_role = GROUP_USER_PERMISSION_ANONYMOUS;		
 	}
 
-	
+
 	//@todo this must be move to default.css for dev use only
 	echo '<style> 		
 			#group_members { width:233px; height:300px; overflow-x:none; overflow-y: auto;}
 			.group_member_item { width:98px; height:86px; float:left; margin:5px 5px 15px 5px; }
-			.group_member_picture { height:65px; }; 
+			.group_member_picture { display:block;
+height:92px;
+margin:0;
+overflow:hidden; }; 
 	</style>';
 	echo '<div id="layout-left" style="float: left; width: 280px; height: 100%;">';
 
@@ -122,7 +131,13 @@ if ($group_id != 0 ) {
 			if ($user['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
 				$user['lastname'].= Display::return_icon('admin_star.png', get_lang('Admin'));
 			}
-			echo '<div class="group_member_item"><a href="profile.php?u='.$user['user_id'].'"><div class="group_member_picture">'.$user['picture_uri'].'</div>'.$user['firstname'].$user['lastname'].'</a></div>';
+			if ($user['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
+				$user['lastname'].= Display::return_icon('moderator_star.png', get_lang('Moderator'));
+			}
+			
+			echo '<div class="group_member_item"><a href="profile.php?u='.$user['user_id'].'">';
+				echo '<div class="group_member_picture">'.$user['image'].'</div>';
+				echo api_get_person_name($user['firstname'], $user['lastname']).'</a></div>';
 		}
 	}
 	echo '</div>';
@@ -142,6 +157,9 @@ if ($group_id != 0 ) {
 			echo '<a href="group_invitation.php?id='.$group_id.'">'.get_lang('InviteFriends').'</a>';
 			break;
 		case GROUP_USER_PERMISSION_PENDING_INVITATION:
+			echo get_lang('PendingApproval');
+			break;
+		case GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
 			echo get_lang('PendingApproval');
 			break;
 		case GROUP_USER_PERMISSION_MODERATOR:

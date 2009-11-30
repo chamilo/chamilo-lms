@@ -1,12 +1,16 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
-
-$language_file = array('messages','userInfo','admin');
+/* For licensing terms, see /chamilo_license.txt */
+/**
+ * @package dokeos.social
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
+$language_file = array('messages','userInfo');
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'image.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
+
 $this_section = SECTION_SOCIAL;
 
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
@@ -61,9 +65,33 @@ SocialManager::show_social_menu();
 echo '<div class="actions-title">';
 echo get_lang('Invitations');
 echo '</div>'; 
-	 
+// easy links
+if (is_array($_GET) && count($_GET)>0) {
+	foreach($_GET as $key => $value) { 
+		switch ($key) {
+			case 'accept':				
+				$user_role = GroupPortalManager::get_user_group_role(api_get_user_id(), $value);
+				if ($user_role == GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER) {				
+					GroupPortalManager::update_user_role(api_get_user_id(), $value, GROUP_USER_PERMISSION_READER);
+					$show_message = get_lang('UserIsSubscribeToThisGroup');
+				} else {
+					$show_message = get_lang('UserIsSubscribeToThisGroup');
+				}				
+			break 2;			
+			case 'deny':
+				// delete invitation
+				GroupPortalManager::delete_user_rel_group(api_get_user_id(), $value); 
+				$show_message = get_lang('GroupInvitationWasDeny');
+			break 2;
+		}		
+	}
+}
+ 
+ if (! empty($show_message)){
+	Display :: display_normal_message($show_message);
+}
 
-$request = api_is_xml_http_request();
+
 $language_variable = get_lang('PendingInvitations');
 $language_comment  = get_lang('SocialInvitesComment');
 //api_display_tool_title($language_variable);
@@ -75,8 +103,7 @@ $user_id = api_get_user_id();
 
 $list_get_invitation		= SocialManager::get_list_invitation_of_friends_by_user_id($user_id);
 $list_get_invitation_sent	= SocialManager::get_list_invitation_sent_by_user_id($user_id);
-
-$pending_invitations = GroupPortalManager::get_groups_by_user($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION,true);
+$pending_invitations = GroupPortalManager::get_groups_by_user($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,true);
 
 $number_loop=count($list_get_invitation);
 
@@ -89,9 +116,7 @@ echo '<style>
 	width:110px;
 }
 </style>';
-if ($number_loop==0) {
-	Display::display_normal_message(get_lang('NoPendingInvitations'));
-} else {
+if ($number_loop != 0) {
 	echo '<h2>'.get_lang('InvitationReceived').'</h2>';	
 	
 	foreach ($list_get_invitation as $invitation) { 
@@ -176,8 +201,18 @@ if (count($list_get_invitation_sent) > 0 ){
 }
 
 if (count($pending_invitations) > 0) {	
+	
 	echo '<h2>'.get_lang('GroupsWaitingApproval').'</h2>';
-	Display::display_sortable_grid('search_users', array(), $pending_invitations, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
+	$new_invitation = array();
+	
+	foreach ($pending_invitations as $invitation) {
+		$invitation['picture_uri'] = '<a href="groups.php?id='.$invitation['id'].'">'.$invitation['picture_uri'].'</a>';		
+		$invitation['name'] = '<a href="groups.php?id='.$invitation['id'].'">'.$invitation['name'].'</a>'; 
+		$invitation['join'] = '<a href="invitations.php?accept='.$invitation['id'].'">'.get_lang('AcceptInvitation').'</a>';
+		$invitation['deny'] = '<a href="invitations.php?deny='.$invitation['id'].'">'.get_lang('DenyInvitation').'</a>';
+		$new_invitation[]=$invitation;
+	}	
+	Display::display_sortable_grid('search_users', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false,false,true,true));
 }
 	
 Display::display_footer();

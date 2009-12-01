@@ -20,6 +20,11 @@ define('SOCIALGOODFRIEND','4');
 define('SOCIALENEMY',	'5');
 define('SOCIALDELETED',	'6');
 
+//PLUGIN PLACES
+define('SOCIAL_LEFT_PLUGIN',	'1');
+define('SOCIAL_CENTER_PLUGIN',	'2');
+define('SOCIAL_RIGHT_PLUGIN',	'3');
+
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
@@ -46,18 +51,23 @@ class SocialManager extends UserManager {
 		
 		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' .$friend_id.' AND user_id='.$my_user_id;
 		
+		
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = Database :: fetch_array($result, 'ASSOC');
+		error_log('1'.$row['count']);
 		if ($row['count'] == 0) {
 			$current_date=date('Y-m-d H:i:s');
 			$sql_i = 'INSERT INTO ' . $tbl_my_friend . '(friend_user_id,user_id,relation_type,last_edit)values(' . $friend_id . ','.$my_user_id.','.$relation_type.',"'.$current_date.'");';
+			error_log($sql_i);
 			Database::query($sql_i, __FILE__, __LINE__);
 		} else {
 			$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' . $friend_id . ' AND user_id='.$my_user_id;
 			$result = Database::query($sql, __FILE__, __LINE__);
 			$row = Database :: fetch_array($result, 'ASSOC');
+			error_log($row['count']);
 			if ($row['count'] == 1) {
 				$sql_i = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.$relation_type.' WHERE friend_user_id=' . $friend_id.' AND user_id='.$my_user_id;
+				error_log($sql_i);
 				Database::query($sql_i, __FILE__, __LINE__);
 			}
 		}
@@ -657,5 +667,228 @@ class SocialManager extends UserManager {
 				 '</span>';
 			*/		 
 		echo '</div>';
+	}
+	
+		
+		
+	/**
+	 * Displays a sortable table with the list of online users.
+	 * @param array $user_list
+	 */
+	function display_user_list($user_list, $_plugins) {
+		global $charset;
+		if ($_GET['id'] == '') {
+			$extra_params = array();
+			$course_url = '';
+			if (strlen($_GET['cidReq']) > 0) {
+				$extra_params['cidReq'] = Security::remove_XSS($_GET['cidReq']);
+				$course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
+			}
+			
+			foreach ($user_list as $user) {
+				$uid = $user[0];
+				$user_info = api_get_user_info($uid);
+				$table_row = array();
+				if (api_get_setting('allow_social_tool')=='true') {
+					$url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$uid.$course_url;
+				} else {
+					$url = '?id='.$uid.$course_url;
+				}
+				$image_array = UserManager::get_user_picture_path_by_id($uid, 'system', false, true);
+	
+				$friends_profile = SocialManager::get_picture_user($uid, $image_array['file'], 92, 'medium_', ' width="90" height="90" ');
+				// reduce image
+				$name = api_get_person_name($user_info['firstName'], $user_info['lastName']);
+				$table_row[] = '<a href="'.$url.'"><img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'" '.$friends_profile['style'].' border="1"></a>';
+				$table_row[] = '<a href="'.$url.'" style="font-size:10px;">'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</a>';
+	
+				//$table_row[] = '<a href="'.$url.'">'.$user_info['lastName'].'</a>';
+	
+				if (api_get_setting('show_email_addresses') == 'true') {
+					$table_row[] = Display::encrypted_mailto_link($user_info['mail']);
+				}
+				$user_anonymous = api_get_anonymous_id();
+				$table_data[] = $table_row;
+			}
+			$table_header[] = array(get_lang('UserPicture'), false, 'width="90"');
+			///$table_header[] = array(get_lang('Name'), true);
+			//$table_header[] = array(get_lang('LastName'), true);
+	
+			if (api_get_setting('show_email_addresses') == 'true') {
+				$table_header[] = array(get_lang('Email'), true);
+			}	
+			Display::display_sortable_table($table_header, $table_data, array(), array('per_page' => 30), $extra_params,array(),'grid');
+		}
+	}
+	/**
+	 * Displays the information of an individual user
+	 * @param int $user_id
+	 */
+	function display_individual_user($user_id) {
+		global $interbreadcrumb;
+		$safe_user_id = Database::escape_string($user_id);
+	
+		// to prevent a hacking attempt: http://www.dokeos.com/forum/viewtopic.php?t=5363
+		$user_table = Database::get_main_table(TABLE_MAIN_USER);
+		$sql = "SELECT * FROM $user_table WHERE user_id='".$safe_user_id."'";
+		$result = Database::query($sql, __FILE__, __LINE__);
+		if (Database::num_rows($result) == 1) {
+			$user_object = Database::fetch_object($result);
+			$name = GetFullUserName($user_id).($_SESSION['_uid'] == $user_id ? '&nbsp;<strong>('.get_lang('Me').')</strong>' : '' );
+			$alt = GetFullUserName($user_id).($_SESSION['_uid'] == $user_id ? '&nbsp;('.get_lang('Me').')' : '');
+			$status = ($user_object->status == COURSEMANAGER ? get_lang('Teacher') : get_lang('Student'));
+			$interbreadcrumb[] = array('url' => 'whoisonline.php', 'name' => get_lang('UsersOnLineList'));
+			Display::display_header($alt);
+			echo '<div class="actions-title">';
+			echo $alt;
+			echo '</div><br />';
+			echo '<div style="text-align: center">';
+			if (strlen(trim($user_object->picture_uri)) > 0) {
+				$sysdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'system');
+				$sysdir = $sysdir_array['dir'];
+				$webdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'web');
+				$webdir = $webdir_array['dir'];
+				$fullurl = $webdir.$user_object->picture_uri;
+				$system_image_path = $sysdir.$user_object->picture_uri;
+				list($width, $height, $type, $attr) = @getimagesize($system_image_path);
+				$resizing = (($height > 200) ? 'height="200"' : '');
+				$height += 30;
+				$width += 30;
+				$window_name = 'window'.uniqid('');
+				// get the path,width and height from original picture
+				$big_image = $webdir.'big_'.$user_object->picture_uri;
+				$big_image_size = api_getimagesize($big_image);
+				$big_image_width = $big_image_size[0];
+				$big_image_height = $big_image_size[1];
+				$url_big_image = $big_image.'?rnd='.time();
+				echo '<input type="image" src="'.$fullurl.'" alt="'.$alt.'" onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/><br />';
+			} else {
+				echo Display::return_icon('unknown.jpg', get_lang('Unknown'));
+				echo '<br />';
+			}
+			
+			echo '<br />'.$status.'<br />';
+			
+			global $user_anonymous;
+			if (api_get_setting('allow_social_tool') == 'true' && api_get_user_id() <> $user_anonymous && api_get_user_id() <> 0) {
+				echo '<br />';
+				echo '<a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$safe_user_id.'">'.get_lang('ViewSharedProfile').'</a>';
+				echo '<br />';
+								
+				$user_anonymous = api_get_anonymous_id();
+				
+				if ($safe_user_id != api_get_user_id() && !api_is_anonymous($safe_user_id)) {
+					$user_relation = SocialManager::get_relation_between_contacts(api_get_user_id(), $safe_user_id);
+					if ($user_relation == 0 || $user_relation == 6) {
+						echo  '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=300&width=610&user_friend='.$safe_user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a><br />
+							   <a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$safe_user_id.'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
+					} else {
+						echo  '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$safe_user_id.'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
+					}
+				}
+			}
+	
+			if (api_get_setting('show_email_addresses') == 'true') {
+				echo Display::encrypted_mailto_link($user_object->email,$user_object->email).'<br />';
+			}
+			
+			echo '</div>';
+			if ($user_object->competences) {
+				echo '<dt><div class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div></dt>';
+				echo '<dd>'.$user_object->competences.'</dd>';
+			}
+			if ($user_object->diplomas) {
+				echo '<dt><div class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div></dt>';
+				echo '<dd>'.$user_object->diplomas.'</dd>';
+			}
+			if ($user_object->teach) {
+				echo '<dt><div class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div></dt>';
+				echo '<dd>'.$user_object->teach.'</dd>';;
+			}
+			display_productions($user_object->user_id);
+			if ($user_object->openarea) {
+				echo '<dt><div class="actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div></dt>';
+				echo '<dd>'.$user_object->openarea.'</dd>';
+			}
+		}
+		else
+		{
+			Display::display_header(get_lang('UsersOnLineList'));
+			echo '<div class="actions-title">';
+			echo get_lang('UsersOnLineList');
+			echo '</div>';
+		}
+	}
+	/**
+	 * Display productions in whoisonline
+	 * @param int $user_id User id
+	 * @todo use the correct api_get_path instead of $clarolineRepositoryWeb
+	 */
+	function display_productions($user_id) {
+		$sysdir_array = UserManager::get_user_picture_path_by_id($user_id, 'system', true);
+		$sysdir = $sysdir_array['dir'].$user_id.'/';
+		$webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true);
+		$webdir = $webdir_array['dir'].$user_id.'/';
+		if (!is_dir($sysdir)) {
+			mkpath($sysdir);
+		}
+		/*
+		$handle = opendir($sysdir);
+		$productions = array();
+		while ($file = readdir($handle)) {
+			if ($file == '.' || $file == '..' || $file == '.htaccess') {
+				continue;						// Skip current and parent directories
+			}
+			if (preg_match('/('.$user_id.'|[0-9a-f]{13}|saved)_.+\.(png|jpg|jpeg|gif)$/i', $file)) {
+				// User's photos should not be listed as productions.
+				continue;
+			}
+			$productions[] = $file;
+		}
+		*/
+		$productions = UserManager::get_user_productions($user_id);
+	
+		if (count($productions) > 0) {
+			echo '<dt><strong>'.get_lang('Productions').'</strong></dt>';
+			echo '<dd><ul>';
+			foreach ($productions as $index => $file) {
+				// Only display direct file links to avoid browsing an empty directory
+				if (is_file($sysdir.$file) && $file != $webdir_array['file']) {
+					echo '<li><a href="'.$webdir.urlencode($file).'" target=_blank>'.$file.'</a></li>';
+				}
+				// Real productions are under a subdirectory by the User's id
+				if (is_dir($sysdir.$file)) {
+					$subs = scandir($sysdir.$file);
+					foreach ($subs as $my => $sub) {
+						if (substr($sub, 0, 1) != '.' && is_file($sysdir.$file.'/'.$sub)) {
+							echo '<li><a href="'.$webdir.urlencode($file).'/'.urlencode($sub).'" target=_blank>'.$sub.'</a></li>';
+						}
+					}
+				}
+			}
+			echo '</ul></dd>';
+		}
+	}
+	public static function get_plugins($place = SOCIAL_CENTER_PLUGIN) {
+		$content = '';
+		switch ($place) {
+			case SOCIAL_CENTER_PLUGIN:
+				$social_plugins = array(1, 2);
+				if (is_array($social_plugins) && count($social_plugins)>0) {
+				    $content.= '<div id="social-plugins">';
+				    foreach($social_plugins as $plugin ) {
+				    	$content.=  '<div class="social-plugin-item">';
+				    	$content.=  $plugin;
+				    	$content.=  '</div>';		    	
+				    }
+				    $content.=  '</div>';
+			    }
+			break;
+			case SOCIAL_LEFT_PLUGIN:
+			break;
+			case SOCIAL_RIGHT_PLUGIN:
+			break;
+		}	
+		return $content;
 	}
 }

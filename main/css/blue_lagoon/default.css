@@ -2207,7 +2207,7 @@ div.comments {
 	margin-right:-100px;
 }
 .message-title {
-	/* color:#ff0000;*/
+	color:#ff0000;
 	font-size:12px;
 }
 .message-body {
@@ -2624,7 +2624,7 @@ input.arrowl {
 
 
 
-/* UI improvements */
+/* UI improvements for 1.8.6.2 this should be move to the chamilo theme and reproduce in all CSS*/
 
 
 * {
@@ -2673,3 +2673,119 @@ a.read {
 a.unread {	
 	
 }
+
+
+#inbox-wrapper {width:100%;}
+
+#inbox {width:90%;float:left;}
+
+#inbox-menu ul {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin:0;
+	padding:0;
+	width:10%;
+	float:left;
+}
+
+#message-reply-link {
+	float:right;
+}
+
+.social-plugin-item {
+	float:left;
+	width:50%;
+	background-color:#ccc;
+	margin: 0px;
+}
+
+
+#social-plugins {
+	float:left;
+	background-color:#f00;
+	width:100%;
+	margin: 0px;
+	padding:2px;
+}
+
+.groups_grid_item {
+	width:80px;
+	float:left;
+	margin:5px;
+}
+
+.groups_grid_container {
+
+} 
+
+.message-item {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	-moz-border-radius-bottomleft:8px;
+	-moz-border-radius-bottomright:8px;
+	-moz-border-radius-topleft:8px;
+	-moz-border-radius-topright:8px;
+	background:#eee none repeat scroll 0 0;
+	margin:0 0 5px;
+	padding:10px;
+}
+
+.message-topic {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	-moz-border-radius-bottomleft:8px;
+	-moz-border-radius-bottomright:8px;
+	-moz-border-radius-topleft:8px;
+	-moz-border-radius-topright:8px;
+	background:#ccc none repeat scroll 0 0;
+	margin:0 0 5px;
+	padding:10px;
+
+}
+
+.message-group-title-topic {
+	font-size:180%;
+	margin:5px 0px 5px 0px;
+}
+.message-group-title {
+	font-size:120%;
+}
+
+.message-group-author {
+	margin:5px 0px 5px 0px;
+}
+
+.message-group-content {
+	line-height:150%
+}
+
+.view-message-content {
+	line-height:150%;
+	font-size:110%;
+}
+
+.actions {
+
+
+	background:#efefef;
+	border:1px solid #ccc;	
+	padding:2px;
+	margin-bottom: 5px;
+	vertical-align:middle;
+}
+
+.actions-title {
+
+	
+	background:#efefef;
+	border:1px solid #ccc;
+	padding:4px;
+	margin-bottom: 5px;
+	font-size:14px;
+	font-weight:bolder;
+	vertical-align:middle;
+}
+

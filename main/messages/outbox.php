@@ -69,11 +69,30 @@ if ($_GET['f']=='social') {
 
 Display::display_header('');
 
-echo '<div class=actions>';
-	echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',api_xml_http_response_encode(get_lang('Inbox'))).api_xml_http_response_encode(get_lang('Inbox')).'</a>';
-	echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
-	echo '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',api_xml_http_response_encode(get_lang('Outbox'))).api_xml_http_response_encode(get_lang('Outbox')).'</a>';
-echo '</div>';	
+
+if (api_get_setting('extended_profile') == 'true') {
+echo '<div class="actions">';
+
+if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
+	echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
+}
+if (api_get_setting('allow_message_tool') == 'true') {
+	echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
+}	
+$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
+
+//echo '<span style="float:right; padding-top:7px;">';
+			 
+if (isset($_GET['type']) && $_GET['type'] == 'extended') {
+	echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
+} else {
+	echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</a>';
+}
+//echo '</span>';
+
+echo '</div>';
+}
+
 
 /**************************************************************/
 $info_delete_outbox=array();
@@ -96,28 +115,47 @@ if( trim($info_delete_outbox[0])=='delete' ) {
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 
 $user_sender_id=api_get_user_id();
-if ($_REQUEST['action']=='delete') {
-	$delete_list_id=array();
-	if (isset($_POST['out'])) {
-		$delete_list_id=$_POST['out'];
-	}
-	if (isset($_POST['id'])) {
-		$delete_list_id=$_POST['id'];
-	}
-	for ($i=0;$i<count($delete_list_id);$i++) {
-		MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);
-	}
-	$delete_list_id=array();
-	outbox_display();
-} elseif ($_REQUEST['action']=='deleteone') {
-	$delete_list_id=array();
-	$id=Security::remove_XSS($_GET['id']);
-	MessageManager::delete_message_by_user_sender(api_get_user_id(),$id);
-	$delete_list_id=array();
-	outbox_display();
-}else {
-	outbox_display();
-}
+
+echo '<div id="inbox-wrapper">';
+	//LEFT COLUMN
+	echo '<div id="inbox-menu">';	
+		echo '<ul>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>'.'</li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>'.'</li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>'.'</li>';
+		echo '</ul>';	
+	echo '</div>';
+
+	echo '<div id="inbox">';
+			//MAIN CONTENT
+		if ($_REQUEST['action']=='delete') {
+			$delete_list_id=array();
+			if (isset($_POST['out'])) {
+				$delete_list_id=$_POST['out'];
+			}
+			if (isset($_POST['id'])) {
+				$delete_list_id=$_POST['id'];
+			}
+			for ($i=0;$i<count($delete_list_id);$i++) {
+				MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);
+			}
+			$delete_list_id=array();
+			outbox_display();
+		} elseif ($_REQUEST['action']=='deleteone') {
+			$delete_list_id=array();
+			$id=Security::remove_XSS($_GET['id']);
+			MessageManager::delete_message_by_user_sender(api_get_user_id(),$id);
+			$delete_list_id=array();
+			outbox_display();
+		}else {
+			outbox_display();
+		}
+	echo '</div>';
+
+echo '</div>';
+
+
+
 /*
 ==============================================================================
 		FOOTER

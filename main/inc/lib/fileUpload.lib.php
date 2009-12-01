@@ -248,8 +248,8 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 	}
 	else
 	{
-		//clean up the name, only ASCII characters should stay.
-		$clean_name = replace_dangerous_char($uploaded_file['name']);
+		//clean up the name, only ASCII characters should stay. (and strict)
+		$clean_name = replace_dangerous_char($uploaded_file['name'], 'strict');
 		//no "dangerous" files
 		$clean_name = disable_dangerous_file($clean_name);
 		if(!filter_extension($clean_name))
@@ -703,7 +703,7 @@ function treat_uploaded_file($uploadedFile, $baseWorkDir, $uploadPath, $maxFille
 		$fileName = trim($uploadedFile['name']);
 
 		// CHECK FOR NO DESIRED CHARACTERS
-		$fileName = replace_dangerous_char($fileName);
+		$fileName = replace_dangerous_char($fileName, 'strict');
 
 		// TRY TO ADD AN EXTENSION TO FILES WITOUT EXTENSION
 		$fileName = add_ext_on_mime($fileName,$uploadedFile['type']);
@@ -1867,7 +1867,7 @@ $handle=opendir($path);
 	    else
 		{
 			//rename
-			$safe_file=disable_dangerous_file(replace_dangerous_char($file));
+			$safe_file=disable_dangerous_file(replace_dangerous_char($file, 'strict'));
 			@rename($base_work_dir.$current_path.'/'.$file,$base_work_dir.$current_path.'/'.$safe_file);
 
 			if(!DocumentManager::get_document_id($_course, $current_path.'/'.$safe_file))

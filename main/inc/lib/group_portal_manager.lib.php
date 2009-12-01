@@ -186,7 +186,7 @@ class GroupPortalManager
 		$table	= Database :: get_main_table(TABLE_MAIN_GROUP);
 		$group_id = intval($group_id);
 		$user_condition = '';		
-		$sql = "SELECT name, description, picture_uri, visibility FROM $table WHERE id = $group_id ";
+		$sql = "SELECT name, description, picture_uri, url, visibility  FROM $table WHERE id = $group_id ";
 		$res = Database::query($sql, __FILE__, __LINE__);
 		$item = array(); 
 		if (Database::num_rows($res)>0) {
@@ -384,7 +384,7 @@ class GroupPortalManager
 			$where_relation_condition = "AND gu.relation_type IN ($relation_type) ";
 		}
 		
-		$sql="SELECT picture_uri, u.user_id, u.firstname, u.lastname, relation_type FROM $tbl_user u
+		$sql="SELECT picture_uri as image, u.user_id, u.firstname, u.lastname, relation_type FROM $tbl_user u
 			INNER JOIN $table_group_rel_user gu
 			ON (gu.user_id = u.user_id) WHERE gu.group_id= $group_id $where_relation_condition ORDER BY relation_type, firstname LIMIT $limit";
 			
@@ -392,7 +392,7 @@ class GroupPortalManager
 		$array = array();
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
 			if ($with_image == true) {
-				$picture = UserManager::get_picture_user($row['user_id'], $row['picture_uri'],$image_conf['height'],$image_conf['size']);			
+				$picture = UserManager::get_picture_user($row['user_id'], $row['picture_uri'],$image_conf['height'],$image_conf['size']);						
 				$row['image'] = '<img src="'.$picture['file'].'"  '.$picture['style'].'  />';
 			}
 			$array[$row['user_id']] = $row;			

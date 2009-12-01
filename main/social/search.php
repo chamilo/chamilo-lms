@@ -12,6 +12,8 @@ require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
+api_block_anonymous_users();
+
 $this_section = SECTION_SOCIAL;
 $tool_name = get_lang('Search');
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));

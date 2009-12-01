@@ -122,7 +122,7 @@ function show_compose_reply_to_message ($message_id, $receiver_id) {
 	$row = Database::fetch_array($result);
 
 	if (!isset($row[1])) {
-		echo api_xml_http_response_encode(get_lang('InvalidMessageId'));
+		echo get_lang('InvalidMessageId');
 		die();
 	}
 	echo api_xml_http_response_encode(get_lang('To').':&nbsp;<strong>'.	GetFullUserName($row[1]).'</strong>');
@@ -149,14 +149,14 @@ function manage_form ($default, $select_from_user_list = null) {
 	$form = new FormValidator('compose_message',null,null,null,array('enctype'=>'multipart/form-data'));	
 	if (empty($group_id)) {	
 		if (isset($select_from_user_list)) {
-			$form->add_textfield('id_text_name', api_xml_http_response_encode(get_lang('SendMessageTo')),true,array('size' => 40,'id'=>'id_text_name','onkeyup'=>'send_request_and_search()','autocomplete'=>'off','style'=>'padding:0px'));
-			$form->addRule('id_text_name', api_xml_http_response_encode(get_lang('ThisFieldIsRequired')), 'required');
+			$form->add_textfield('id_text_name', get_lang('SendMessageTo'),true,array('size' => 40,'id'=>'id_text_name','onkeyup'=>'send_request_and_search()','autocomplete'=>'off','style'=>'padding:0px'));
+			$form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
 			$form->addElement('html','<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>');
 			$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
 		} else {
 			if ($default['user_list']==0) {
-				$form->add_textfield('id_text_name', api_xml_http_response_encode(get_lang('SendMessageTo')),true,array('size' => 40,'id'=>'id_text_name','onkeyup'=>'send_request_and_search()','autocomplete'=>'off','style'=>'padding:0px'));
-				$form->addRule('id_text_name', api_xml_http_response_encode(get_lang('ThisFieldIsRequired')), 'required');
+				$form->add_textfield('id_text_name', get_lang('SendMessageTo'),true,array('size' => 40,'id'=>'id_text_name','onkeyup'=>'send_request_and_search()','autocomplete'=>'off','style'=>'padding:0px'));
+				$form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
 				$form->addElement('html','<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>');
 			}
 			$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
@@ -184,7 +184,7 @@ function manage_form ($default, $select_from_user_list = null) {
 	}
 		
 	$form->addElement('style_submit_button','compose',api_xml_http_response_encode(get_lang('SendMessage')),'class="save"');
-	$form->setRequiredNote(api_xml_http_response_encode('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>'));	
+	$form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');	
 	if (!empty($group_id) && !empty($message_id)) {
 		$message_info = MessageManager::get_message_by_id($message_id);		
 		$default['title']=get_lang('Re:').api_html_entity_decode($message_info['title'],ENT_QUOTES,$charset);		
@@ -280,6 +280,7 @@ echo '<div id="inbox-wrapper">';
 		//MAIN CONTENT
 		
 		if (!isset($_POST['compose'])) {
+			
 			if(isset($_GET['re_id'])) {
 				$message_id = $_GET['re_id'];
 				$receiver_id = api_get_user_id();
@@ -289,9 +290,11 @@ echo '<div id="inbox-wrapper">';
 			} else {
 				show_compose_to_any($_user['user_id']);
 		  	}
+		  	
 		} else {
 			
 			$restrict = false;
+			
 			if (isset($_POST['id_text_name'])) {
 				$restrict = $_POST['id_text_name'];
 			} else if (isset($_POST['group_id'])) {
@@ -304,6 +307,7 @@ echo '<div id="inbox-wrapper">';
 				//$default['user_list'] = $_POST['user_list'];
 				manage_form($default);
 			} else {
+				var_dump($restrict);
 				if ($restrict) {
 					$default['title'] = api_xml_http_response_encode($_POST['title']);			
 					if (!isset($_POST['group_id'])) {
@@ -314,7 +318,7 @@ echo '<div id="inbox-wrapper">';
 					}
 					manage_form($default);
 				} else {
-					Display::display_error_message(api_xml_http_response_encode(get_lang('ErrorSendingMessage')));
+					Display::display_error_message(get_lang('ErrorSendingMessage'));
 				}
 			}
 		}

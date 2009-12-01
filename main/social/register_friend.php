@@ -28,6 +28,7 @@ if (isset($_POST['friend_id'])) {
 	
 	SocialManager::register_friend($the_current_user_id,$my_current_friend,$relation_type);
 	SocialManager::register_friend($my_current_friend,$the_current_user_id,$relation_type);
+	
 	SocialManager::invitation_accepted($my_current_friend,$the_current_user_id);
 	
 	if (isset($_POST['is_my_friend'])) {

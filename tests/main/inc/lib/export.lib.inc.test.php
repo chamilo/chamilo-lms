@@ -17,7 +17,8 @@ class TestExport extends UnitTestCase {
 		$filename = 'export';
 		$res=Export::export_table_csv($data,$filename);
         $docman->expectOnce('DocumentManager::file_send_for_download',array($filename,true,$filename.'.csv'));
-		$this->assertTrue(is_null($res));
+		$this->assertFalse(is_null($res));
+		$this->assertTrue(is_bool($res));
         //var_dump($docman);
         //var_dump($res);
     }
@@ -28,12 +29,14 @@ class TestExport extends UnitTestCase {
 		$filename = 'export';
 		$res=Export::export_table_xls($data,$filename);
         $docman->expectOnce('DocumentManager::file_send_for_download',array($filename,true,$filename.'.xls'));
-		$this->assertTrue(is_null($res));
+		$this->assertTrue(($res)=== false);
+		$this->assertTrue(is_bool($res));
         //var_dump($docman);
         //var_dump($export);
  	}
 
  	function testExportTableXml() {
+ 		ob_start();
  		$docman = new MockDocumentManager();
 		$data = array();
 		$filename = 'export';
@@ -42,12 +45,15 @@ class TestExport extends UnitTestCase {
 		$encoding=null;
 		$res=Export::export_table_xml($data,$filename,$item_tagname,$wrapper_tagname,$encoding);
  		$docman->expectOnce('DocumentManager::file_send_for_download',array($filename,true,$filename.'.xml'));
-		$this->assertTrue(is_null($res));
+		ob_end_clean();
+		$this->assertTrue(is_bool($res));
+		$this->assertTrue(($res) === false);
 		//var_dump($docman);
         //var_dump($export);
  	}
-
+ 	
  	function testExportComplexTableXml() {
+ 		ob_start();
  		$docman = new MockDocumentManager();
 		$data = array();
 		$filename = 'export';
@@ -55,7 +61,9 @@ class TestExport extends UnitTestCase {
  		$encoding='ISO-8859-1';
  		$res=Export::export_complex_table_xml($data,$filename,$wrapper_tagname,$encoding);
  		$docman->expectOnce('DocumentManager::file_send_for_download',array($filename,true,$filename.'.xml'));
-		$this->assertTrue(is_null($res));
+		ob_end_clean();
+		$this->assertTrue(is_bool($res));
+		$this->assertFalse($res);
 		//var_dump($docman);
  	}
 
@@ -66,7 +74,7 @@ class TestExport extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
  	}
-
+ 	
  	function testBackupDatabase() {
  		$link='';
  		$db_name='';

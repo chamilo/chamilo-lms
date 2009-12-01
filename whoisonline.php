@@ -158,27 +158,8 @@ function display_user_list($user_list, $_plugins) {
 
 		if (api_get_setting('show_email_addresses') == 'true') {
 			$table_header[] = array(get_lang('Email'), true);
-		}
-		//$user_anonymous = api_get_anonymous_id();
-		/*
-		if (api_get_setting('allow_social_tool') == 'true' && api_get_user_id() <> $user_anonymous && api_get_user_id() <> 0) {
-			$table_header[] = array(get_lang('Friends'), false, 'width="200"');
-		}
-		//this feature is deprecated
-		if (api_get_setting('allow_message_tool') == 'true' && isset($_SESSION['_user'])) {
-			$table_header[] = array(get_lang('SendMessage'), true);
-		}*/
-		
-		//$sorting_options['column'] = (isset($_GET['column']) ? (int)$_GET['column'] : 2);
-		//if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
-			//send_invitation_friend_user();
-			//echo '<div align="right"><input type="button" name="id_btn_send_invitation" id="id_btn_send_invitation" value="'.get_lang('SendInviteMessage').'"/></div>';
-			//echo '<form action="whoisonline.php" name="form_register_friend" id="form_register_friend" method="post">';
-		//}
-		Display::display_sortable_table($table_header, $table_data, $sorting_options, array('per_page' => 30), $extra_params,array(),'grid');
-		//if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true' ) {
-		//	echo '</form>';
-	//	}
+		}	
+		Display::display_sortable_table($table_header, $table_data, array(), array('per_page' => 30), $extra_params,array(),'grid');
 	}
 }
 /**

@@ -10,61 +10,36 @@ if (api_get_setting('allow_message_tool')!='true'){
 	api_not_allowed();
 }
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
+$interbreadcrumb[]= array ('url' => 'inbox.php','name' => get_lang('Message'));
+$interbreadcrumb[]= array ('url' => '#','name' => get_lang('View'));
 
-if (isset($_GET['id_send']) || isset($_GET['id'])) {
-	if (isset($_GET['rs'])) {
-		$interbreadcrumb[]= array (
-			'url' => '#',
-			'name' => get_lang('Messages')
-		);
-		$interbreadcrumb[]= array (
-				'url' => '../social/'.$_SESSION['social_dest'].'?#remote-tab-2',
-				'name' => get_lang('SocialNetwork')
-		);
-		$interbreadcrumb[]= array (
-			'url' => 'inbox.php',
-			'name' => get_lang('Inbox')
-		);
-		$interbreadcrumb[]= array (
-			'url' => 'outbox.php',
-			'name' => get_lang('Outbox')
-		);
-	} else {
-	$interbreadcrumb[]= array (
-		'url' => '#',
-		'name' => get_lang('Messages')
-	);
-	$interbreadcrumb[]= array (
-		'url' => 'inbox.php',
-		'name' => get_lang('Inbox')
-	);
-	$interbreadcrumb[]= array (
-		'url' => 'outbox.php',
-		'name' => get_lang('Outbox')
-	);
-	}
-}
 /*
 ==============================================================================
 		HEADER
 ==============================================================================
 */
-$request=api_is_xml_http_request();
-if ($request===false) {
-	Display::display_header('');
-}
-//api_display_tool_title(api_xml_http_response_encode(get_lang('ReadMessage')));
-if (isset($_GET['id_send'])) {
-	MessageManager::show_message_box_sent();
+$this_section = SECTION_MYPROFILE;
+Display::display_header('');
+
+
+echo '<div class=actions>';
+echo '<a href="inbox.php">'.Display::return_icon('folder_up.gif',get_lang('BackToInbox')).get_lang('BackToInbox').'</a>';
+echo '<a href="new_message.php?re_id"'.intval($_GET['id']).'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).get_lang('ReplyToMessage').'</a>';
+echo '<a href="inbox.php?action=deleteone&id="'.intval($_GET['id']).'" >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).''.get_lang('DeleteMessage').'</a>';
+echo '</div><br />';
+
+
+$message = MessageManager::show_message_box();
+if (!empty($message)) {
+	echo $message;
 } else {
-	MessageManager::show_message_box();
+	api_not_allowed();
 }
+
 /*
 ==============================================================================
 		FOOTER
 ==============================================================================
 */
-if ($request===false) {
-	Display::display_footer();
-}
+Display::display_footer();
 ?>

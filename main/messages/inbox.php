@@ -2,7 +2,7 @@
 /* For licensing terms, see /chamilo_license.txt */
 
 // name of the language file that needs to be included
-$language_file = array('registration','messages','userInfo','admin','index');
+$language_file = array('registration','messages','userInfo');
 $cidReset=true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
@@ -111,7 +111,6 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 
 
 $link_ref="new_message.php";
-
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 
 

@@ -1,5 +1,5 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
 
 /**
 ==============================================================================
@@ -165,14 +165,16 @@ class SocialManager extends UserManager {
 		}
 	}
 	/**
-	 * get contacts id list
-	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * Gets friends id list
 	 * @param int  user id
 	 * @param int group id
 	 * @param string name to search
+	 * @param bool true will load firstname, lastname, and image name
 	 * @return array
+	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code, function renamed, $load_extra_info option added
+	 * @author isaac flores paz <florespaz@bidsoftperu.com> 
 	 */
-	public static function get_list_id_friends_by_user_id ($user_id,$id_group=null,$search_name=null) {
+	public static function get_friends($user_id, $id_group=null, $search_name=null, $load_extra_info = true) {
 		$list_ids_friends=array();
 		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
 		$tbl_my_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -182,10 +184,16 @@ class SocialManager extends UserManager {
 		}
 		if (isset($search_name) && is_string($search_name)===true) {
 			$sql.=' AND friend_user_id IN (SELECT user_id FROM '.$tbl_my_user.' WHERE '.(api_is_western_name_order() ? 'concat(firstName, lastName)' : 'concat(lastName, firstName)').' like concat("%","'.Database::escape_string($search_name).'","%"));';
-		}
+		}		
 		$res=Database::query($sql,__FILE__,__LINE__);
 		while ($row=Database::fetch_array($res,'ASSOC')) {
-			$list_ids_friends[]=$row;
+			if ($load_extra_info == true) {
+				$path = UserManager::get_user_picture_path_by_id($row['friend_user_id'],'web',false,true);
+				$my_user_info=api_get_user_info($row['friend_user_id']);
+				$list_ids_friends[]=array('friend_user_id'=>$row['friend_user_id'],'firstName'=>$my_user_info['firstName'] , 'lastName'=>$my_user_info['lastName'], 'username'=>$my_user_info['username'], 'image'=>$path['file']);
+			} else {
+				$list_ids_friends[]=$row;	
+			}			
 		}
 		return $list_ids_friends;
 	}
@@ -204,7 +212,7 @@ class SocialManager extends UserManager {
 		$list_path_friend=array();
 		$array_path_user=array();
 		$combine_friend = array();
-		$list_ids = self::get_list_id_friends_by_user_id ($user_id,$id_group,$search_name);
+		$list_ids = self::get_friends($user_id,$id_group,$search_name);
 		if (is_array($list_ids)) {
 			foreach ($list_ids as $values_ids) {
 				$list_path_image_friend[] = UserManager::get_user_picture_path_by_id($values_ids['friend_user_id'],'web',false,true);
@@ -234,7 +242,7 @@ class SocialManager extends UserManager {
 	/**
 	 * Sends an invitation to contacts
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
-	 * @author Julio Montya <gugli100@gmail.com> Cleaning code
+	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code
 	 * @param int user id
 	 * @param int user friend id
 	 * @param string title of the message
@@ -424,17 +432,20 @@ class SocialManager extends UserManager {
 	    if (count($feeds)==0) { return ''; }
 	    foreach ($feeds as $url) {
 		if (empty($url)) { continue; }
+
 	        $rss = fetch_rss($url);
 	    	$res .= '<h2>'.$rss->channel['title'].'</h2>';
 	        $res .= '<div class="social-rss-channel-items">';
 	        $i = 1;
-	        foreach ($rss->items as $item) {
-	            if ($limit>=0 and $i>$limit) {break;}
-	        	$res .= '<h3><a href="'.$item['link'].'">'.$item['title'].'</a></h3>';
-	            $res .= '<div class="social-rss-item-date">'.api_get_datetime($item['date_timestamp']).'</div>';
-	            $res .= '<div class="social-rss-item-content">'.$item['description'].'</div><br />';
-	            $i++;
-	        }
+			if (is_array($rss->items)) { 
+		        foreach ($rss->items as $item) {
+		            if ($limit>=0 and $i>$limit) {break;}
+		        	$res .= '<h3><a href="'.$item['link'].'">'.$item['title'].'</a></h3>';
+		            $res .= '<div class="social-rss-item-date">'.api_get_datetime($item['date_timestamp']).'</div>';
+		            $res .= '<div class="social-rss-item-content">'.$item['description'].'</div><br />';
+		            $i++;
+		        }
+			}
 	        $res .= '</div>';
 	    }
 	    return $res;

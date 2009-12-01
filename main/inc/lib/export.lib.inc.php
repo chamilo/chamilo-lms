@@ -64,7 +64,7 @@ class Export {
 		}
 		@fclose($handle);
 		DocumentManager :: file_send_for_download($file, true, $filename.'.csv');
-		exit();
+		return false;
 	}
 
 	/**
@@ -80,7 +80,7 @@ class Export {
 		}
 		@fclose($handle);
 		DocumentManager :: file_send_for_download($file, true, $filename.'.xls');
-		exit();
+		return false;
 	}
 
 	/**
@@ -113,7 +113,7 @@ class Export {
 		}
 		fclose($handle);
 		DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
-		exit;
+		return false;
 	}
 
     /**
@@ -140,7 +140,7 @@ class Export {
         }
         fclose($handle);
         DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
-        exit;
+        return false;
     }
 
     /**

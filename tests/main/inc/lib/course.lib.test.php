@@ -219,8 +219,7 @@ class TestCourse extends UnitTestCase{
 	public function testCreateCombinedCode(){
 		$res = $this->tcourse->create_combined_code();
 		$this->assertFalse($res);
-		$this->assertTrue(is_null($res));
-		$this->assertTrue($this->tcourse->create_combined_code()===null);
+		$this->assertTrue($this->tcourse->create_combined_code()=== '');
 	}
 
 	public function testGetVirtualCourseInfo(){
@@ -310,8 +309,9 @@ class TestCourse extends UnitTestCase{
 	public function testGetTeacherListFromCourseCode(){
 		$res = $this->tcourse->get_teacher_list_from_course_code();
 		$this->assertFalse($res);
-		$this->assertTrue(is_null($res));
-		$this->assertTrue($this->tcourse->get_teacher_list_from_course_code()===null);
+		$this->assertFalse(is_null($res));
+		$this->assertTrue($this->tcourse->get_teacher_list_from_course_code()=== array());
+		//var_dump($res);
 	}
 
 	public function testGetRealAndLinkedUserList(){

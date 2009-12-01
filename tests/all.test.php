@@ -29,7 +29,7 @@ class AllTests extends TestSuite {
         $this->TestSuite('All tests');
 ob_start();
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_course.lib.inc.test.php');
-      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/blog.lib.test.php');
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/blog.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/classmanager.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/course.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/database.lib.test.php');
@@ -40,7 +40,7 @@ ob_start();
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/export.lib.inc.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileDisplay.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileManager.lib.test.php');
-      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileUpload.lib.test.php');
+      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileUpload.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/geometry.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/groupmanager.lib.test.php');
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/image.lib.test.php');

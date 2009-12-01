@@ -1,8 +1,10 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
 /**
- * Provides a short controller for friends registration
+ * @package dokeos.social
+ * @author Julio Montoya <gugli100@gmail.com>
  */
+ 
  // names of the language files that needs to be included
 $language_file = array('registration','messages','userInfo','admin');
 require '../inc/global.inc.php';

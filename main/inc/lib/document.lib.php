@@ -311,7 +311,7 @@ class DocumentManager {
 		
 		$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 		
-		if ($is_allowed_to_edit())
+		if ($is_allowed_to_edit)
 		{
 			return true;
 		}

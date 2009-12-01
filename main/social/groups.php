@@ -1,17 +1,78 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
-
-$language_file = array('admin');
+/* For licensing terms, see /chamilo_license.txt */
+/**
+ * @package dokeos.social
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
+ 
+$language_file = array('userInfo');
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
+api_block_anonymous_users();
+
 $this_section = SECTION_SOCIAL;
+
+$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/thickbox.js"></script>';
+//$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/ajaxfileupload.js"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="/main/inc/lib/javascript/thickbox.css" type="text/css" media="projection, screen">';
+
+$htmlHeadXtra[] = '<script type="text/javascript">
+
+var counter_image = 1;	
+function remove_image_form(id_elem1) {
+	var elem1 = document.getElementById(id_elem1);
+	elem1.parentNode.removeChild(elem1);
+	counter_image--;
+	var filepaths = document.getElementById("filepaths");		
+	if (filepaths.childNodes.length < 3) {		
+		var link_attach = document.getElementById("link-more-attach");		
+		if (link_attach) {
+			link_attach.innerHTML=\'<a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a>&nbsp;('.get_lang('MaximunFileSizeXMB').')\';
+		}			
+	}				        
+}
+		
+function add_image_form() {    														
+	// Multiple filepaths for image form					
+	var filepaths = document.getElementById("filepaths");	
+	if (document.getElementById("filepath_"+counter_image)) {
+		counter_image = counter_image + 1;				
+	}  else {
+		counter_image = counter_image; 
+	}
+	var elem1 = document.createElement("div");			
+	elem1.setAttribute("id","filepath_"+counter_image);							
+	filepaths.appendChild(elem1);	
+	id_elem1 = "filepath_"+counter_image;		
+	id_elem1 = "\'"+id_elem1+"\'";
+	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"'.api_get_path(WEB_CODE_PATH).'img/delete.gif\"></a>";						
+
+	if (filepaths.childNodes.length == 3) {		
+		var link_attach = document.getElementById("link-more-attach");		
+		if (link_attach) {
+			link_attach.innerHTML="";
+		}
+	}
+}	
+			
+	</script>';
 
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
 Display :: display_header($tool_name, 'Groups');
+
+// save message group
+if (isset($_POST['action']) && $_POST['action']=='send_message_group') {	
+	$title = $_POST['title'];
+	$content = $_POST['content'];
+	$group_id = $_POST['group_id'];
+	$parent_id = $_POST['parent_id'];	
+	MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id);
+}
 
 //show the action menu
 SocialManager::show_social_menu();
@@ -24,8 +85,7 @@ $group_id	= intval($_GET['id']);
 $group_info = GroupPortalManager::get_group_data($group_id); 
 
 	
-if ($group_id != 0 ) {
-		
+if ($group_id != 0 ) {		
 	//Loading group information
 	if (isset($_GET['status']) && $_GET['status']=='sent') {
 		Display::display_confirmation_message(get_lang('MessageHasBeenSent'), false);
@@ -54,8 +114,11 @@ if ($group_id != 0 ) {
 	}
 	
 	$picture	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,'medium_');
+	$big_image	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'','big_');
+	
 	$tags		= GroupPortalManager::get_group_tags($group_id, true);
 	$users		= GroupPortalManager::get_users_by_group($group_id, true);
+	
 	//my relation with the group is set here
 	
 	if (is_array($users[api_get_user_id()]) && count($users[api_get_user_id()]) > 0) {
@@ -70,12 +133,15 @@ if ($group_id != 0 ) {
 		$my_group_role = GROUP_USER_PERMISSION_ANONYMOUS;		
 	}
 
-	
+
 	//@todo this must be move to default.css for dev use only
 	echo '<style> 		
 			#group_members { width:233px; height:300px; overflow-x:none; overflow-y: auto;}
 			.group_member_item { width:98px; height:86px; float:left; margin:5px 5px 15px 5px; }
-			.group_member_picture { height:65px; }; 
+			.group_member_picture { display:block;
+height:92px;
+margin:0;
+overflow:hidden; }; 
 	</style>';
 	echo '<div id="layout-left" style="float: left; width: 280px; height: 100%;">';
 
@@ -84,7 +150,13 @@ if ($group_id != 0 ) {
 	
 	//image
 	echo '<div id="group_image">';
-		echo $img = '<img src="'.$picture['file'].'" />';
+	
+	if (basename($picture['file']) != 'unknown_group.png') {
+  		echo '<a class="thickbox" href="'.$big_image['file'].'"><img src='.$picture['file'].' /> </a><br /><br />';
+	} else {
+		echo '<img src='.$picture['file'].' /><br /><br />';
+	}			
+
 	echo '</div>';
 	
 	//description
@@ -111,7 +183,8 @@ if ($group_id != 0 ) {
 		
 	if (in_array($my_group_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))) { 
 		echo '<div id="actions" style="margin:10px">';
-		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
+		echo '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display :: return_icon('message_new.png', get_lang('ComposeMessage')).'&nbsp;'.get_lang('ComposeMessage').'</a>';
+		//echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
 		echo '</div>';
 	}
 	
@@ -122,7 +195,13 @@ if ($group_id != 0 ) {
 			if ($user['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
 				$user['lastname'].= Display::return_icon('admin_star.png', get_lang('Admin'));
 			}
-			echo '<div class="group_member_item"><a href="profile.php?u='.$user['user_id'].'"><div class="group_member_picture">'.$user['picture_uri'].'</div>'.$user['firstname'].$user['lastname'].'</a></div>';
+			if ($user['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
+				$user['lastname'].= Display::return_icon('moderator_star.png', get_lang('Moderator'));
+			}
+			
+			echo '<div class="group_member_item"><a href="profile.php?u='.$user['user_id'].'">';
+				echo '<div class="group_member_picture">'.$user['image'].'</div>';
+				echo api_get_person_name($user['firstname'], $user['lastname']).'</a></div>';
 		}
 	}
 	echo '</div>';
@@ -142,6 +221,9 @@ if ($group_id != 0 ) {
 			echo '<a href="group_invitation.php?id='.$group_id.'">'.get_lang('InviteFriends').'</a>';
 			break;
 		case GROUP_USER_PERMISSION_PENDING_INVITATION:
+			echo get_lang('PendingApproval');
+			break;
+		case GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
 			echo get_lang('PendingApproval');
 			break;
 		case GROUP_USER_PERMISSION_MODERATOR:

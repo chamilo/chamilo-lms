@@ -2191,6 +2191,7 @@ class UserManager
      * @return array with the file and the style of an image i.e $array['file'] $array['style']
      */
    public static function get_picture_user($user_id, $picture_file, $height, $size_picture = 'medium_', $style = '') {
+   	
     	$patch_profile = 'upload/users/';
     	$picture = array();
     	$picture['style'] = $style;

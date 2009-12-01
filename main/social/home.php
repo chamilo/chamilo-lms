@@ -1,11 +1,10 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
 /**
-* This is the home of a social network user, here we should show the latest info/status of our friends 
-* @author Julio Montoya <gugli100@gmail.com>
-* @package dokeos.social
-*/
-
+ * @package dokeos.social
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
+ 
 $language_file = array('registration','messages','userInfo','admin','forum','blog');
 $cidReset = true;
 require '../inc/global.inc.php';

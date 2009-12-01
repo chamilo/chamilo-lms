@@ -140,7 +140,6 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
     if (!empty($myistring)) {
         $myistring = substr($myistring,1);
     }
-error_log('New lesson location: '.$mylesson_location);
     $return .=
             "olms.score=".$myscore.";" .
             "olms.max=".$mymax.";" .
@@ -214,10 +213,8 @@ error_log('New lesson location: '.$mylesson_location);
     $mylp->set_error_msg('');
     $mylp->prerequisites_match(); //check the prerequisites are all complete
     if($debug>1){error_log('Prereq_match() returned '.htmlentities($mylp->error),0);}
-    $return .= "update_message_frame('".str_replace("'","\'",api_htmlentities($mylp->error, ENT_QUOTES, api_get_system_encoding()))."');";
     $_SESSION['scorm_item_id'] = $new_item_id;//Save the new item ID for the exercise tool to use
     $_SESSION['lpobject'] = serialize($mylp);
-error_log('Returning '.$return);
     return $return;
     //return $objResponse;
 }

@@ -972,12 +972,15 @@ class Exercise
       //$form -> addElement('select', 'enabletimercontroltotalminutes',get_lang('ExerciseTimerControlMinutes'),$time_minutes_option);
       $form -> addElement('html','</div>');
       
+
       	$check_option=$this -> selectType();
-	    if ($check_option==1) {
+//      var_dump($check_option);
+
+	    if ($check_option==1 && isset($_GET['exerciseId'])) {
 	    	$diplay = 'none';
 	    } else {
 	    	$diplay = 'block';
-	    }
+	    } 
       
     $form -> addElement('html','<div id="divtimecontrol"  style="display:'.$diplay.';">');
            

@@ -73,12 +73,12 @@ $my_style=$platform_theme;
 */
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 
-$htmlHeadXtra[] = '<script language="javascript">
-function cleanlog(){
-  if(document.getElementById){
-  	document.getElementById("log_content").innerHTML = "";
-  }
-}
+$htmlHeadXtra[] = '<script language="javascript" type="text/javascript">
+$(document).ready(function (){
+    $("div#log_content_cleaner").bind("click", function(){
+      $("div#log_content").empty();
+    });
+});
 </script>';
 
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
@@ -324,7 +324,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 	
 			<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:50px;overflow:auto;margin:15px">
 				<div id="log_content"></div>
-				<div style="color: white;" onClick="cleanlog();">.</div>
+				<div id="log_content_cleaner" style="color: white;">.</div>
 			</div>
     		<!-- end log message layout -->
         </div>
@@ -515,7 +515,7 @@ window.onresize = updateContentHeight;
 	        <!-- log message layout -->
 			<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
 				<div id="log_content"></div>
-				<div style="color: white;" onClick="cleanlog();">.</div>
+				<div id="log_content_cleaner" style="color: white;">.</div>
 			</div>
 	        <!-- end log message layout -->
 	   <?php } ?>

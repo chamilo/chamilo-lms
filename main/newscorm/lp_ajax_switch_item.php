@@ -140,35 +140,30 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
     if (!empty($myistring)) {
         $myistring = substr($myistring,1);
     }
-    //$objResponse->addScript(
+error_log('New lesson location: '.$mylesson_location);
     $return .=
-            "score=".$myscore.";" .
-            "max=".$mymax.";" .
-            "min=".$mymin.";" .
-            "lesson_status='".$mylesson_status."';" .
-            "lesson_location='".$mylesson_location."';" .
-            "session_time='".$mysession_time."';" .
-            "suspend_data='".$mysuspend_data."';" .
-            "total_time = '".$mytotal_time."';" .
-            "mastery_score = '".$mymastery_score."';" .
-            "max_time_allowed = '".$mymax_time_allowed."';" .
-            "launch_data = '".$mylaunch_data."';" .
-            "interactions = new Array(".$myistring.");" .
-            "item_objectives = new Array();" .
-            "G_lastError = 0;" .
-            "G_LastErrorMessage = 'No error';";
-            //);
+            "olms.score=".$myscore.";" .
+            "olms.max=".$mymax.";" .
+            "olms.min=".$mymin.";" .
+            "olms.lesson_status='".$mylesson_status."';" .
+            "olms.lesson_location='".$mylesson_location."';" .
+            "olms.session_time='".$mysession_time."';" .
+            "olms.suspend_data='".$mysuspend_data."';" .
+            "olms.total_time = '".$mytotal_time."';" .
+            "olms.mastery_score = '".$mymastery_score."';" .
+            "olms.max_time_allowed = '".$mymax_time_allowed."';" .
+            "olms.launch_data = '".$mylaunch_data."';" .
+            "olms.interactions = new Array(".$myistring.");" .
+            "olms.item_objectives = new Array();" .
+            "olms.G_lastError = 0;" .
+            "olms.G_LastErrorMessage = 'No error';" ;
     /*
      * and re-initialise the rest
-     * -saved_lesson_status = 'not attempted'
      * -lms_lp_id
      * -lms_item_id
      * -lms_old_item_id
      * -lms_new_item_id
-     * -lms_been_synchronized
      * -lms_initialized
-     * -lms_total_lessons
-     * -lms_complete_lessons
      * -lms_progress_bar_mode
      * -lms_view_id
      * -lms_user_id
@@ -187,48 +182,43 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
     $myobjectives_count = $mylpi->get_objectives_count();
     $mycore_exit = $mylpi->get_core_exit();
 
-    //$objResponse->addScript(
     $return .=
-            "saved_lesson_status='not attempted';" .
-            "lms_lp_id=".$lp_id.";" .
-            "lms_item_id=".$new_item_id.";" .
-            "lms_old_item_id=0;" .
-            "lms_been_synchronized=0;" .
-            "lms_initialized=0;" .
-            "lms_total_lessons=".$mytotal.";" .
-            "lms_complete_lessons=".$mycomplete.";" .
-            "lms_progress_bar_mod='".$myprogress_mode."';" .
-            "lms_view_id=".$view_id.";" .
-            "lms_user_id=".$user_id.";" .
-            "next_item=".$new_item_id.";" . //this one is very important to replace possible literal strings
-            "lms_next_item=".$mynext.";" .
-            "lms_previous_item=".$myprevious.";" .
-            "lms_item_type = '".$myitemtype."';" .
-            "lms_item_credit = '".$mycredit."';" .
-            "lms_item_lesson_mode = '".$mylesson_mode."';" .
-            "lms_item_launch_data = '".$mylaunch_data."';" .
-            "lms_item_interactions_count = '".$myinteractions_count."';" .
-            "lms_item_objectives_count = '".$myinteractions_count."';" .
-            "lms_item_core_exit = '".$mycore_exit."';" .
-            "asset_timer = 0;";
+            //"saved_lesson_status='not attempted';" .
+            "olms.lms_lp_id=".$lp_id.";" .
+            "olms.lms_item_id=".$new_item_id.";" .
+            "olms.lms_old_item_id=0;" .
+            //"lms_been_synchronized=0;" .
+            "olms.lms_initialized=0;" .
+            //"lms_total_lessons=".$mytotal.";" .
+            //"lms_complete_lessons=".$mycomplete.";" .
+            //"lms_progress_bar_mode='".$myprogress_mode."';" .
+            "olms.lms_view_id=".$view_id.";" .
+            "olms.lms_user_id=".$user_id.";" .
+            "olms.next_item=".$new_item_id.";" . //this one is very important to replace possible literal strings
+            "olms.lms_next_item=".$mynext.";" .
+            "olms.lms_previous_item=".$myprevious.";" .
+            "olms.lms_item_type = '".$myitemtype."';" .
+            "olms.lms_item_credit = '".$mycredit."';" .
+            "olms.lms_item_lesson_mode = '".$mylesson_mode."';" .
+            "olms.lms_item_launch_data = '".$mylaunch_data."';" .
+            "olms.lms_item_interactions_count = '".$myinteractions_count."';" .
+            "olms.lms_item_objectives_count = '".$myinteractions_count."';" .
+            "olms.lms_item_core_exit = '".$mycore_exit."';" .
+            "olms.asset_timer = 0;";
             //);
-    //$objResponse->addScript("update_toc('unhighlight','".$current_item."');");
-    //$objResponse->addScript("update_toc('highlight','".$new_item_id."');");
-    //$objResponse->addScript("update_toc('$mylesson_status','".$new_item_id."');");
-    //$objResponse->addScript("update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');");
     $return .= "update_toc('unhighlight','".$current_item."');".
-            "update_toc('highlight','".$new_item_id."');".
-            "update_toc('$mylesson_status','".$new_item_id."');".
-            "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');";
+                "update_toc('highlight','".$new_item_id."');".
+                "update_toc('$mylesson_status','".$new_item_id."');".
+                "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');";
 
     $mylp->set_error_msg('');
     $mylp->prerequisites_match(); //check the prerequisites are all complete
     if($debug>1){error_log('Prereq_match() returned '.htmlentities($mylp->error),0);}
-    //$objResponse->addScript("update_message_frame('".str_replace("'","\'",htmlentities($mylp->error))."');");
     $return .= "update_message_frame('".str_replace("'","\'",api_htmlentities($mylp->error, ENT_QUOTES, api_get_system_encoding()))."');";
     $_SESSION['scorm_item_id'] = $new_item_id;//Save the new item ID for the exercise tool to use
     $_SESSION['lpobject'] = serialize($mylp);
+error_log('Returning '.$return);
     return $return;
     //return $objResponse;
 }
-echo switch_item_details($_GET['lid'],$_GET['uid'],$_GET['vid'],$_GET['iid'],$_GET['next']);
+echo switch_item_details($_POST['lid'],$_POST['uid'],$_POST['vid'],$_POST['iid'],$_POST['next']);

@@ -16,6 +16,6 @@ function start_timer()
     $time = time();
     //$objResponse->addScript("asset_timer='$time';asset_timer_total=0;");
     //return $objResponse;
-    return "asset_timer='$time';asset_timer_total=0;";
+    return "olms.asset_timer='$time';olms.asset_timer_total=0;";
 }
 echo start_timer();

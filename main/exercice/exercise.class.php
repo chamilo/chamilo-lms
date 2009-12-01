@@ -915,7 +915,7 @@ class Exercise
 				$radios = array();
 				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageOne'),'2','onclick = "check_per_page_one() " ');
 				
-				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageAll'),'1','onclick = "check_per_page_all() " ');
+				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageAll'),'1',array('onclick' => 'check_per_page_all()', 'id'=>'OptionPageAll'));
 				
 				$form -> addGroup($radios, null, get_lang('QuestionsPerPage'));
 			} else {
@@ -972,13 +972,19 @@ class Exercise
       //$form -> addElement('select', 'enabletimercontroltotalminutes',get_lang('ExerciseTimerControlMinutes'),$time_minutes_option);
       $form -> addElement('html','</div>');
       
+      	$check_option=$this -> selectType();
+	    if ($check_option==1) {
+	    	$diplay = 'none';
+	    } else {
+	    	$diplay = 'block';
+	    }
       
-    $form -> addElement('html','<div id="divtimecontrol" style="display:block;">');
+    $form -> addElement('html','<div id="divtimecontrol"  style="display:'.$diplay.';">');
            
       //Timer control
       $time_hours_option = range(0,12);
       $time_minutes_option = range(0,59);
-      $form -> addElement('checkbox', 'enabletimercontrol',get_lang('EnableTimerControl'),null,array('onclick' =>'option_time_expired()','id'=>'enabletimercontrol'));      
+      $form -> addElement('checkbox', 'enabletimercontrol',get_lang('EnableTimerControl'),null,array('onclick' =>'option_time_expired()','id'=>'enabletimercontrol','onload'=>'check_load_time()'));      
       $expired_date = (int)$this->selectExpiredTime();
 
       if(($expired_date!='0')) {
@@ -1044,7 +1050,6 @@ class Exercise
 				} else {
 					$defaults['randomQuestions'] = $this -> random;
 				}
-
 				$defaults['exerciseType'] = $this -> selectType();
 				$defaults['exerciseTitle'] = $this -> selectTitle();
 				$defaults['exerciseDescription'] = $this -> selectDescription();

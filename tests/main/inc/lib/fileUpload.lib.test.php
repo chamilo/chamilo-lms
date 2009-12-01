@@ -24,7 +24,7 @@ class TestFileUpload extends UnitTestCase {
           //$docman->expectOnce('DocumentManager::get_document_id',array($_course, $current_path.'/'.$safe_file));
 	      //$this->assertTrue(is_object($docman));
 	        $this->assertTrue(is_null($res));
-	        var_dump($res);
+	        //var_dump($res);
 		}
 
 		function testAddDocument() {

@@ -49,16 +49,18 @@ class TestStats extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testdecodeOpenInfos() {
+	function testdecodeOpenInfos() {  // 3 excepciones
+    	ob_start();
     	global $TABLETRACK_OPEN;
     	$ignore = ignore_user_abort();
       	$res=decodeOpenInfos();
+    	ob_end_clean();
     	$this->assertTrue(is_null($res));
     	$this->assertTrue(is_numeric($ignore));
     	//var_dump($res);
  	}
 
-	function testextractAgent() {
+	function testextractAgent() { 
 		$user_agent=$_SERVER['HTTP_USER_AGENT'];
 		$list_browsers=array();
 		$list_os=array();

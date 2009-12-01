@@ -2624,7 +2624,7 @@ input.arrowl {
 
 
 
-/* UI improvements */
+/* UI improvements for 1.8.6.2 this should be move to the chamilo theme and reproduce in all CSS*/
 
 
 * {
@@ -2673,3 +2673,19 @@ a.read {
 a.unread {	
 	
 }
+
+
+#inbox-wrapper {width:100%;}
+
+#inbox {width:90%;float:left;}
+
+#inbox-menu ul {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin:0;
+	padding:0;
+	width:10%;
+	float:left;
+}
+

@@ -913,8 +913,10 @@ class Exercise
 			//	$form -> addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
 				// test type
 				$radios = array();
-				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageOne'),'2');
-				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageAll'),'1');
+				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageOne'),'2','onclick = "check_per_page_one() " ');
+				
+				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageAll'),'1','onclick = "check_per_page_all() " ');
+				
 				$form -> addGroup($radios, null, get_lang('QuestionsPerPage'));
 			} else {
 				// if is Directfeedback but has not questions we can allow to modify the question type
@@ -969,11 +971,14 @@ class Exercise
        
       //$form -> addElement('select', 'enabletimercontroltotalminutes',get_lang('ExerciseTimerControlMinutes'),$time_minutes_option);
       $form -> addElement('html','</div>');
+      
+      
+    $form -> addElement('html','<div id="divtimecontrol" style="display:block;">');
            
       //Timer control
       $time_hours_option = range(0,12);
       $time_minutes_option = range(0,59);
-      $form -> addElement('checkbox', 'enabletimercontrol',get_lang('EnableTimerControl'),null,'onclick = "option_time_expired()"');      
+      $form -> addElement('checkbox', 'enabletimercontrol',get_lang('EnableTimerControl'),null,array('onclick' =>'option_time_expired()','id'=>'enabletimercontrol'));      
       $expired_date = (int)$this->selectExpiredTime();
 
       if(($expired_date!='0')) {
@@ -981,14 +986,13 @@ class Exercise
       } else {
         $form -> addElement('html','<div id="timercontrol" style="display:none;">');
       }
-      $form -> addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTotalDurationInMinutes'),array('style' => 'width : 35px'));
-      
-      
+      	
+      	$form -> addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTotalDurationInMinutes'),array('style' => 'width : 35px','id' => 'enabletimercontroltotalminutes'));
       $form -> addElement('html','</div>');
 			//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));        
       
       $form -> addElement('html','</div>');  //End advanced setting
-  
+      $form -> addElement('html','</div>');  
                
 	        $defaults = array();
 

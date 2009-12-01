@@ -80,13 +80,14 @@ class session_handler {
 	}
 
 	public function sqlQuery ($query,$die_on_error=true) {
+		
 		$result=mysql_query($query,$this->idConnexion);
 
 		if($die_on_error && !$result)
 		{
 			$this->sqlClose();
-
-			exit();
+			return;
+			//exit();
 		}
 
 		return $result;

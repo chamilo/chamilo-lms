@@ -351,7 +351,8 @@ class TestMainApi extends UnitTestCase {
     	$this->assertTrue(is_string($res));
     	//var_dump($res);
 	}
-
+	
+/* function deprecated
    	function testGetLang(){
         global $language_interface, $language_interface_initial_value, $language_file,$variable;
    	 	$res = get_lang($variable, $notrans = 'DLTT', $language = null);
@@ -380,7 +381,7 @@ class TestMainApi extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
    	}
-
+*/
    	function testApiIsPlatformAdmin(){
    		ob_start();
 		global $_user;
@@ -610,7 +611,7 @@ class TestMainApi extends UnitTestCase {
 		$message="prueba de envio";
 		$send_mail=mail();
 		$res=api_send_mail($to, $subject, $message, $additional_headers = null, $additional_parameters = null);
-		$this->assertTrue(is_bool($res));
+		$this->assertTrue(is_numeric($res));
 		$this->assertTrue(is_null($send_mail));
 		//var_dump($res);
 		//var_dump($send_mail);

@@ -1320,7 +1320,9 @@ function search_img_from_html($htmlFile)
 {
 	$imgFilePath = array();
 
-	$fp = fopen($htmlFile, "r") or die('<center>can not open file</center>');
+	if(!$fp = fopen($htmlFile, "r")){ //or die('<center>can not open file</center>');
+		return ; 
+	}
 
 	// search and store occurences of the <IMG> tag in an array
 	$size_file=(filesize($htmlFile)===0) ? 1 : filesize($htmlFile);
@@ -1490,8 +1492,13 @@ function replace_img_path_in_html_file($originalImgPath, $newImgPath, $htmlFile)
 	/*
 	 * Write the resulted new file
 	 */
-	$fp = fopen($htmlFile, 'w')      or die('<center>cannot open file</center>');
-	fwrite($fp, $new_html_content)   or die('<center>cannot write in file</center>');
+	if (!$fp = fopen($htmlFile, 'w')){   //or die('<center>cannot open file</center>');
+		return;
+	}
+	
+	if (!fwrite($fp, $new_html_content)){ //   or die('<center>cannot write in file</center>');
+		return;
+	}
 }
 
 //------------------------------------------------------------------------------

@@ -50,7 +50,7 @@ class TestGroupManager extends UnitTestCase {
 		global $_course, $_user;
 		$res = GroupManager::create_group($name, $category_id, $tutor, $places);
 		$this->assertTrue(is_numeric($res));
-		$this->assertTrue($res);
+		$this->assertTrue(($res) == int);
 		//var_dump($res);
 	}
 

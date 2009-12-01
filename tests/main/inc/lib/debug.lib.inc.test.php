@@ -45,7 +45,7 @@ class TestDebug extends UnitTestCase {
 		ob_end_clean();
 		//print_r($res);
 		$this->assertTrue(array($_user));
-		var_dump($res);
+		//var_dump($res);
 	}
 
 	function testPrintVar() {

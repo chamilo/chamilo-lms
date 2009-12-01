@@ -184,15 +184,15 @@ olms.lms_item_core_exit = '<?php echo $oItem->get_core_exit();?>';
 olms.asset_timer = 0;
 
 //Backup for old values
-var old_score = 0;
-var old_max = 0;
-var old_min = 0;
-var old_lesson_status = '';
-var old_session_time = '';
-var old_suspend_data = '';
-var lms_old_item_id = 0;
+//var olms.old_score = 0;
+//var old_max = 0;
+//var old_min = 0;
+//var old_lesson_status = '';
+//var old_session_time = '';
+//var old_suspend_data = '';
+//var olms.lms_old_item_id = 0;
 
-var execute_stats='false';
+olms.execute_stats=false;
 
 
 // Initialize stuff when the page is loaded
@@ -215,8 +215,13 @@ $(document).ready( function() {
   });
 });
 
+
 /**
- * Function called mandatorily by the SCORM content to start the SCORM communication
+ * The following section represents a set of mandatory functions for SCORM
+ */
+/**
+ * Function called mandatorily by the SCORM content to start the SCORM comm
+ * @return  string  'true' or 'false'. Returning a string is mandatory (SCORM).
  */
 function LMSInitialize() {  //this is the initialize function of all APIobjects
 
@@ -229,7 +234,7 @@ function LMSInitialize() {  //this is the initialize function of all APIobjects
 	olms.G_LastError = G_NoError ;
 	olms.G_LastErrorMessage = 'No error';
 	//reinit to list
-	reinit_update_table_list();
+	reinit_updatable_vars_list();
 
 	olms.lms_initialized=0;
 	dummy = olms.lesson_location;
@@ -246,11 +251,19 @@ function LMSInitialize() {  //this is the initialize function of all APIobjects
 	}
 }
 
+/**
+ * Twin sister of LMSInitialize(). Only provided for backwards compatibility.
+ */
 function Initialize()
 {  //this is the initialize function of all APIobjects
   return LMSInitialize();
 }
 
+/**
+ * Gets a value in the current SCORM context and returns it to the calling SCO
+ * @param   string  The name of the value we want
+ * @return  string  All return values must be string (see SCORM)
+ */
 function LMSGetValue(param)
 {
 	//logit_scorm("LMSGetValue('"+param+"')",1);
@@ -474,11 +487,18 @@ function LMSGetValue(param)
 	logit_scorm("LMSGetValue\n\t('"+param+"') returned '"+result+"'",1);
 	return result;
 }
-
+/**
+ * Twin sister of LMSGetValue(). Only provided for backwards compatibility.
+ */
 function GetValue(param) {
 	return LMSGetValue(param);
 }
-
+/**
+ * Sets a SCORM variable's value through a call from the SCO.
+ * @param   string  The SCORM variable's name
+ * @param   string  The SCORM variable's new value
+ * @param   string  'true','false' or an error code
+ */
 function LMSSetValue(param, val) {
 
 	logit_scorm("LMSSetValue\n\t('"+param+"','"+val+"')",0);
@@ -503,7 +523,6 @@ function LMSSetValue(param, val) {
 		olms.updatable_vars_list['cmi.core.lesson_location']=true;
 		return_value='true';
 	} else if ( param == "cmi.core.lesson_status" ) {
-//		olms.saved_lesson_status = olms.lesson_status;
 		olms.lesson_status = val;
 		olms.updatable_vars_list['cmi.core.lesson_status']=true;
 	    return_value='true';
@@ -700,13 +719,19 @@ function LMSSetValue(param, val) {
 	?>
 	return(return_value);
 }
-
+/**
+ * Twin sister of LMSSetValue(). Only provided for backwards compatibility.
+ */
 function SetValue(param, val) {
 	return LMSSetValue(param, val);
 }
-
+/**
+ * Saves the current data from JS memory to the LMS database
+ * @param   string  The origin of the call to save the data ('commit','finish', 'unload' or 'terminate')
+ * @note    origin actually seems deprecated now
+ */
 function savedata(origin) {
-	//origin can be 'commit', 'finish' or 'terminate'
+	//origin can be 'commit', 'finish' or 'terminate' (depending on the calling function)
     if ((olms.lesson_status != 'completed') && (olms.lesson_status != 'passed') && (olms.mastery_score >=0) && (olms.score >= olms.mastery_score)) {
         olms.lesson_status = 'passed';
         olms.updatable_vars_list['cmi.core.lesson_status']=true;
@@ -718,7 +743,7 @@ function savedata(origin) {
     <?php }?>
     ;
     } else {
-        /*
+        /* DEPRECATED
          * See notes in switch_item for why this has been disabled
     	if ((origin== 'finish' || origin == 'unload') && olms.lesson_status != 'completed' && olms.lesson_status != 'passed' && olms.lesson_status != 'browsed' && olms.lesson_status != 'failed' && olms.lesson_status != 'incomplete')  {
 	    	// The SCORM1.2 Runtime object document says for the "cmi.core.lesson_status" variable:
@@ -740,48 +765,55 @@ function savedata(origin) {
         */
     }
 
-    my_get_value_scorm=new Array();
-    my_get_value_scorm=process_value_scorm();
-
 	logit_lms('saving data (status='+olms.lesson_status+' - interactions: '+ olms.interactions.length +')',1);
 
 	old_item_id=olms.info_lms_item[0];
 
-	xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id,my_get_value_scorm);
+	xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
 	//olms.info_lms_item[0] is old_item_id and olms.info_lms_item[1] is current_item_id
 	olms.info_lms_item[1]=olms.lms_item_id;
 
 	if(olms.item_objectives.length>0) {
 		xajax_save_objectives(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,old_item_id,olms.item_objectives);
 	}
-	execute_stats='false';
+	olms.execute_stats=false;
 
 	//clean array
 	olms.variable_to_send=new Array();
-	my_get_value_scorm=new Array();
 }
-/*
- * See notes in switch_item for why this has been disabled
-function savedata_onunload() {
-	savedata('unload');
-}
-*/
-
+/**
+ * Send the Commit signal to the LMS (save the data for this element without 
+ * closing the current process)
+ * From SCORM 1.2 RTE: If the API Adapter is caching values received from the 
+ * SCO via an LMSSetValue(), this call requires that any values not yet 
+ * persisted by the LMS be persisted.
+ * @param   string      Must be empty string for conformance with SCORM 1.2
+ */
 function LMSCommit(val) {
 	logit_scorm('LMSCommit()',0);
 	olms.G_LastError = G_NoError ;
 	olms.G_LastErrorMessage = 'No error';
-
-			savedata('commit');
-		reinit_update_table_list();
-	    //commit = 'false' ; //now changes have been commited, no need to update until next SetValue()
+	savedata('commit');
+	reinit_updatable_vars_list();
+    //commit = 'false' ; //now changes have been commited, no need to update until next SetValue()
 	return('true');
 }
 
+/**
+ * Twin sister of LMSCommit(). Only provided for backwards compatibility.
+ */
 function Commit(val) {
 	return LMSCommit(val);
 }
-
+/**
+ * Send the closure signal to the LMS. This saves the data and closes the current SCO.
+ * From SCORM 1.2 RTE: The SCO must call this when it has determined that it no 
+ * longer needs to communicate with the LMS, if it successfully called 
+ * LMSInitialize at any previous point.  This call signifies two things:
+ * 1.The SCO can be assured that any data set using LMSSetValue() calls has been persisted by the LMS.
+ * 2.The SCO has finished communicating with the LMS.
+ * @param   string 
+ */
 function LMSFinish(val) {
 	olms.G_LastError = G_NoError ;
 	olms.G_LastErrorMessage = 'No error';
@@ -799,41 +831,65 @@ function LMSFinish(val) {
 		//}
 
 		//reinit to list
-		reinit_update_table_list()
+		reinit_updatable_vars_list()
 		return('true');
 }
-
+/**
+ * Twin sister of LMSFinish(). Only provided for backwards compatibility.
+ */
 function Finish(val) {
 	return LMSFinish(val);
 }
-
+/**
+ * Returns the last error code as a string
+ * @return  string  Error code
+ */
 function LMSGetLastError() {
 	logit_scorm('LMSGetLastError()',1);
 	return(olms.G_LastError.toString());
 }
-
+/**
+ * Twin sister of LMSGetLastError(). Only provided for backwards compatibility.
+ */
 function GetLastError() {
 	return LMSGetLastError();
 }
-
+/**
+ * Returns the last error code literal for a given error code
+ * @param   int     Error code
+ * @return  string  Last error
+ */
 function LMSGetErrorString(errCode){
 	logit_scorm('LMSGetErrorString()',1);
 	return(olms.G_LastErrorString);
 }
-
+/**
+ * Twin sister of LMSGetErrorString(). Only provided for backwards compatibility.
+ */
 function GetErrorString(errCode){
 	return LMSGetErrorString(errCode);
 }
-
+/**
+ * Returns a more explanatory, full English, error message
+ * @param   int     Error code
+ * @return  string  Diagnostic
+ */
 function LMSGetDiagnostic(errCode){
 	logit_scorm('LMSGetDiagnostic()',1);
 	return(API.LMSGetLastError());
 }
-
+/**
+ * Twin sister of LMSGetDiagnostic(). Only provided for backwards compatibility.
+ */
 function GetDiagnostic(errCode){
 	return LMSGetDiagnostic(errCode);
 }
-
+/**
+ * Acts as a "commit"
+ * This function is not standard SCORM 1.2 and is probably deprecated in all
+ * meanings of the term.
+ * @return  string  'true' or 'false', depening on whether the LMS has initialized the SCORM process or not 
+ */
 function Terminate()
 {
 	if (olms.lms_initialized == 0) {
@@ -847,19 +903,16 @@ function Terminate()
 		olms.G_LastErrorMessage = 'No error';
 		olms.commit = true;
 		savedata('terminate');
-		return (true);
+		return ('true');
 	}
 }
-<?php
-//--------------------------------------------------------------------//
 /**
- * Dokeos-specific code that deals with event handling and inter-frames
+ * LMS-specific code that deals with event handling and inter-frames
  * messaging/refreshing.
- * Note that from now on, the Dokeos JS code in this library will act as
+ * Note that from now on, the LMS JS code in this library will act as
  * a controller, of the MVC pattern, and receive all requests for frame
  * updates, then redispatch to any frame concerned.
  */
-?>
 /**
  * Defining the AJAX-object class to be made available from other frames
  */
@@ -870,7 +923,9 @@ function XAJAXobject() {
   this.xajax_save_item = xajax_save_item;
 }
 
-//it is not sure that the scos use the above declarations
+/**
+ * It is not sure that the SCOs use the above declarations
+ */
 
 oXAJAX = new XAJAXobject();
 oxajax = new XAJAXobject();
@@ -937,7 +992,7 @@ function load_item(item_id,url){
 		logit_lms('Loading item '+item_id,2);
 		var cont_f = document.getElementById('content_id');
 		if(cont_f.src){
-			lms_old_item_id = olms.lms_item_id;
+			olms.lms_old_item_id = olms.lms_item_id;
 			var lms_new_item_id = item_id;
 			//load new content page into content frame
 			if(olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
@@ -945,8 +1000,8 @@ function load_item(item_id,url){
 			}
 			cont_f.src = url;
 
-			update_toc('unhighlight',lms_old_item_id);
-			update_toc('highlight',lms_old_item_id);
+			update_toc('unhighlight',olms.lms_old_item_id);
+			update_toc('highlight',olms.lms_old_item_id);
 			return true;
 		}
 		logit_lms('cont_f.src has no properties',0);
@@ -960,10 +1015,10 @@ function load_item(item_id,url){
  */
 function dokeos_save_asset(){
 	// only for dokeos lps
-	if (execute_stats=='true') {
-		execute_stats='false';
+	if (olms.execute_stats==true) {
+		olms.execute_stats=false;
 	} else {
-		execute_stats='true';
+		olms.execute_stats=true;
 	}
 
 	if(olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
@@ -1101,7 +1156,7 @@ function update_toc(update_action,update_id,change_ids)
  * Update the stats frame using a reload of the frame to avoid unsynched data
  */
 function update_stats() {
-	if (execute_stats=='true') {
+	if (olms.execute_stats==true) {
 		try {
 		cont_f = document.getElementById('content_id');
 		cont_f.src="lp_controller.php?action=stats";
@@ -1110,7 +1165,7 @@ function update_stats() {
 			return false;
 		}
 	}
-	execute_stats='false';
+	olms.execute_stats=false;
 }
 
 /**
@@ -1168,8 +1223,12 @@ function update_progress_bar(nbr_complete, nbr_total, mode)
 
 	return true;
 }
-
-function process_value_scorm () {
+/**
+ * Analyses the variables that have been modified through this SCO's life and
+ * put them into an array for later shipping to lp_ajax_save_item.php
+ * @return  array   Array of SCO variables
+ */
+function process_scorm_values () {
 
     for (i=0;i<olms.scorm_variables.length;i++) {
 
@@ -1177,11 +1236,14 @@ function process_value_scorm () {
             olms.variable_to_send.push(olms.scorm_variables[i]);
         }
     }
-
     return olms.variable_to_send;
 }
-
-function reinit_update_table_list () {
+/**
+ * Reinitializes the SCO's modified variables to an empty list.
+ * @return  void
+ * @uses The global updatable_vars_list array to register this
+ */
+function reinit_updatable_vars_list () {
 
     for (i=0;i<olms.scorm_variables.length;i++) {
 
@@ -1190,21 +1252,6 @@ function reinit_update_table_list () {
         }
     }
     olms.lesson_status='';
-
-}
-
-/**
- * Updates the message frame with the given string
- */
-function update_message_frame(msg_msg)
-{
-	if(msg_msg==null){msg_msg='';}
-	if(!($("#msg_div_id"))){
-		logit_lms('In update_message_frame() - message frame has no document property',0);
-	}else{
-		logit_lms('In update_message_frame() - updating frame',0);
-		$("#msg_div_id").html(msg_msg);
-	}
 }
 /**
  * Function that handles the saving of an item and switching from an item to another.
@@ -1231,9 +1278,7 @@ function switch_item(current_item, next_item){
 		if (olms.lms_lp_type==1) {
 		    xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.asset_timer, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
 		} else {
-			my_get_value_scorm=new Array();
-    		my_get_value_scorm=process_value_scorm();
-        	xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id,my_get_value_scorm);
+        	xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id);
         }
 		if(olms.item_objectives.length>0) {
 		xajax_save_objectives(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,olms.item_objectives);
@@ -1266,7 +1311,7 @@ function switch_item(current_item, next_item){
         */
 
 	}
-	execute_stats='false';
+	olms.execute_stats=false;
 	//(2) Refresh all the values inside this SCORM API object - use AJAX
 	xajax_switch_item_details(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,next_item);
 
@@ -1339,9 +1384,23 @@ function switch_item(current_item, next_item){
 }
 /**
  * Save a specific item (with its interactions, if any) into the LMS through
- * an AJAX call. Originally, we used the xajax library. Now we use jQuery.
+ * an AJAX call to lp_ajax_save_item.php. 
  * Because of the need to pass an array, we have to build the parameters
- * manually into GET[]
+ * manually into GET[].
+ * @param   int     ID of the learning path (for the LMS)
+ * @param   int     ID of the user
+ * @param   int     ID of the view of this learning path
+ * @param   int     ID of the item currently looked at
+ * @param   float   Score
+ * @param   float   Max score
+ * @param   float   Min score
+ * @param   string  Lesson status
+ * @param   string  Current session time (in 'xxxx:xx:xx.xx' format)
+ * @param   string  Suspend data (maximum 255 chars)
+ * @param   string  Lesson location (which page we've reached in the SCO)
+ * @param   array   Interactions
+ * @param   string  Core exit value (up to 4096 chars)
+ * @return  void
  */
 function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit) {
         params='';
@@ -1374,11 +1433,13 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
        }
 }
 
-function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,info_get_lms) {
+function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id) {
 
 	var is_interactions='false';
 	var params='';
 	params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id+'&iid='+lms_item_id;
+    var my_get_value_scorm=new Array();
+    my_get_value_scorm=process_scorm_values();
 
 	for (k=0;k<info_get_lms.length;k++) {
 		if (my_get_value_scorm[k]=='cmi.core.session_time') {
@@ -1446,6 +1507,7 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id,
         async: false
     });
     params='';
+    my_get_value_scorm = null;
 }
 
 /**

@@ -319,8 +319,15 @@ if (api_is_allowed_to_edit(false,true))
 		case "delete":
 			$id=(int)$_GET['id'];
 			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id ) ) )
-			{ // a coach can only delete an element belonging to his session
-				delete_agenda_item($id);
+			{ // a coach can only delete an element belonging to his session			
+				if (is_allowed_to_edit()  && !api_is_anonymous()) {					
+					if (!empty($id)) {						
+						$res_del = delete_agenda_item($id);
+						if ($res_del) {
+							Display::display_normal_message(get_lang("AgendaDeleteSuccess"));
+						}								
+					}					
+				}
 			}
 				if (api_get_setting('display_upcoming_events') == 'true') {
 					display_upcoming_events();

@@ -1948,7 +1948,7 @@ function lang2db($string)
 *	Fills the course database with some required content and example content.
 *	@version 1.2
 */
-function fill_Db_course($courseDbName, $courseRepository, $language,$default_document_array)
+function fill_Db_course($courseDbName, $courseRepository, $language,$default_document_array = array())
 {
 	global $_configuration, $clarolineRepositoryWeb, $_user;
 

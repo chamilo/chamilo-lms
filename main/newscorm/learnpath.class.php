@@ -2668,7 +2668,6 @@ class learnpath {
         if ($this->debug > 2) {
             error_log('New LP - In learnpath::get_items_details_as_js() - TOC array: ' . print_r($toc, true), 0);
         }
-        error_log($toc);
         return $toc;
     }
 	/**

@@ -235,6 +235,21 @@ function LMSInitialize() {  //this is the initialize function of all APIobjects
 	olms.G_LastErrorMessage = 'No error';
 	//reinit to list
 	reinit_updatable_vars_list();
+	// Get LMS values for this item
+	params = {
+        'lid': olms.lms_lp_id,
+        'uid': olms.lms_user_id,
+        'vid': olms.lms_view_id,
+        'iid': olms.lms_item_id
+    };
+    $.ajax({
+        type: "POST",
+        url: "lp_ajax_initialize.php",
+        data: "",
+        success: function(tmp_data) {
+                $("#media").html(tmp_data);
+    }
+    });
 
 	olms.lms_initialized=0;
 	dummy = olms.lesson_location;
@@ -245,7 +260,20 @@ function LMSInitialize() {  //this is the initialize function of all APIobjects
 		logit_scorm('Error '+ G_InvalidArgumentError + G_InvalidArgumentErrorMessage, 0);
 		return('false');
 	} else {
-        logit_scorm('LMSInitialise()',0);
+	   // log a more complete object dump when initializing, so we know what data hasn't been cleaned
+	   var log = '<br />item              : '+  olms.lms_item_id
+	             + '<br />score           : '+ olms.score
+                 + '<br />max             : '+ olms.max
+                 + '<br />min             : '+ olms.min
+                 + '<br />lesson_status   : '+ olms.lesson_status
+                 + '<br />session_time    : '+ olms.session_time
+                 + '<br />lesson_location : '+ olms.lesson_location
+                 + '<br />suspend_data    : '+ olms.suspend_data
+                 + '<br />total_time      : '+ olms.total_time
+                 + '<br />mastery_score   : '+ olms.mastery_score
+                 + '<br />max_time_allowed: '+ olms.max_time_allowed+'<br />';
+	             
+        logit_scorm('LMSInitialise()'+log,0);
         olms.lms_initialized=1;
         return('true');
 	}
@@ -275,7 +303,7 @@ function LMSGetValue(param)
 	if (olms.lms_initialized == 0) {
 		 olms.G_LastError 		= G_NotInitialized;
 		 olms.G_LastErrorMessage = G_NotInitializedMessage;
-		 logit_scorm('Error '+ G_NotInitialized + ' ' +G_NotInitializedMessage, 0);
+		 logit_scorm('LMSGetValue('+param+'):<br />=> Error '+ G_NotInitialized + ' ' +G_NotInitializedMessage, 0);
 		 return '';
 	}
 

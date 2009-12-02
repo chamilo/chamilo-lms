@@ -719,7 +719,19 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		                        $sender_name = api_get_person_name($_SESSION['_user']['lastName'], $_SESSION['_user']['firstName'], null, PERSON_NAME_EMAIL_ADDRESS);
 		                        $sender_email = $_SESSION['_user']['mail'];
 		                        
-								api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email);
+								$data_file = array();
+								if (!empty($_FILES['user_upload'])) {
+									$courseDir = $_course['path'].'/upload/announcements/';
+									$sys_course_path = api_get_path(SYS_COURSE_PATH);
+									$sql = 'SELECT path, filename FROM '.$tbl_announcement_attachment.'
+									  	    WHERE id = "'.$insert_id.'"';
+									$result = Database::query($sql, __FILE__, __LINE__);
+									$row = Database::fetch_array($result);
+									$data_file = array('path' => $sys_course_path.$courseDir.$row['path'],
+													   'filename' => $row['filename']);
+								}
+		                        
+								api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file);
 	                        }
 
 							$sql_date="SELECT * FROM $db_name WHERE survey_id='$surveyid'";

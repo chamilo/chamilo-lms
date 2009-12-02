@@ -3741,6 +3741,7 @@ function get_repeated_events_day_view($course_info,$start=0,$end=0,$params)
 	return $events;
 }
 /**
+ * (This function is not been use in the code)
  * Get repeated events of a course between two dates (timespan of a week).
  * Returns an array containing the events
  * @param	string	Course info array (as returned by api_get_course_info())

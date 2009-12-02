@@ -70,7 +70,7 @@ function APIobject() {
   this.LMSGetDiagnostic=LMSGetDiagnostic;
   this.GetDiagnostic=LMSGetDiagnostic;
   this.Terminate=Terminate;  //only in Scorm 1.3
-  this.save_asset = dokeos_save_asset;
+  this.save_asset = lms_save_asset;
   this.void_save_asset = dokeos_void_save_asset;
 }
 
@@ -798,7 +798,6 @@ function LMSCommit(val) {
     //commit = 'false' ; //now changes have been commited, no need to update until next SetValue()
 	return('true');
 }
-
 /**
  * Twin sister of LMSCommit(). Only provided for backwards compatibility.
  */
@@ -952,6 +951,7 @@ function addEvent(elm, evType, fn, useCapture){
  * the current context as it acts on objects that should exist
  * on the page
  * possibly deprecated
+ * @todo Try to use $(document).unload(lms_save_asset()) instead of the addEvent() method
  */
 function addListeners(){
 	//exit if the browser doesn't support ID or tag retrieval
@@ -969,14 +969,9 @@ function addListeners(){
 		logit_lms('Dokeos LP or asset',2);
 		//if this path is a Dokeos learnpath, then start manual save
 		//when something is loaded in there
-		addEvent(window,'unload',dokeos_save_asset,false);
+		addEvent(window,'unload',lms_save_asset,false);
 		logit_lms('Added event listener on content_id for unload',2);
 	}
-    /* See notes in switch_item() for why this has been disabled
-    if (olms.lms_lp_type==2) {
-        addEvent(window,'unload',savedata_onunload,false);
-	}
-    */
 	logit_lms('Quitting addListeners()',2);
 }
 
@@ -996,7 +991,7 @@ function load_item(item_id,url){
 			var lms_new_item_id = item_id;
 			//load new content page into content frame
 			if(olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
-				dokeos_save_asset();
+				lms_save_asset();
 			}
 			cont_f.src = url;
 
@@ -1013,7 +1008,7 @@ function load_item(item_id,url){
  * Save a Dokeos learnpath item's time and mark as completed upon
  * leaving it
  */
-function dokeos_save_asset(){
+function lms_save_asset(){
 	// only for dokeos lps
 	if (olms.execute_stats==true) {
 		olms.execute_stats=false;
@@ -1022,7 +1017,7 @@ function dokeos_save_asset(){
 	}
 
 	if(olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
-		logit_lms('dokeos_save_asset',2);
+		logit_lms('lms_save_asset',2);
 	    xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.session_time, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
 	    if(olms.item_objectives.length>0)
 		{
@@ -1032,14 +1027,14 @@ function dokeos_save_asset(){
 }
 /**
  * Save a Dokeos learnpath item's time and mark as completed upon leaving it.
- * Same function as dokeos_save_asset() but saves it with empty params
+ * Same function as lms_save_asset() but saves it with empty params
  * to use values set from another side in the database. Only used by Dokeos quizzes.
  * Also save the score locally because it hasn't been done through SetValue().
  * Saving the status will be dealt with by the XAJAX function.
  */
 function dokeos_void_save_asset(myscore,mymax)
 {
-	logit_lms('dokeos_save_asset',2);
+	logit_lms('lms_save_asset',2);
 	olms.score = myscore;
 	if((mymax == null) || (mymax == '')){mymax = 100;} //assume a default of 100, otherwise the score will not get saved (see lpi->set_score())
     xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, myscore, mymax);
@@ -1059,7 +1054,6 @@ function logit_scorm(message,priority){
 	}
 
 }
-
 /**
  * Logs information about LMS activity into the log frame
  * @param	string	Message to log
@@ -1072,9 +1066,8 @@ function logit_lms(message,priority){
 		}
 	}
 }
-
 /**
- * update the Table Of Contents frame, by changing CSS styles, mostly
+ * Update the Table Of Contents frame, by changing CSS styles, mostly
  * @param	string	Action to be taken
  * @param	integer	Item id to update
  */
@@ -1387,6 +1380,8 @@ function switch_item(current_item, next_item){
  * an AJAX call to lp_ajax_save_item.php. 
  * Because of the need to pass an array, we have to build the parameters
  * manually into GET[].
+ * This function has a twin sister for SCO elements (xajax_save_item_scorm)
+ * which takes into account the interactions.
  * @param   int     ID of the learning path (for the LMS)
  * @param   int     ID of the user
  * @param   int     ID of the view of this learning path
@@ -1401,6 +1396,7 @@ function switch_item(current_item, next_item){
  * @param   array   Interactions
  * @param   string  Core exit value (up to 4096 chars)
  * @return  void
+ * @uses lp_ajax_save_item.php through an AJAX call
  */
 function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit) {
         params='';
@@ -1409,18 +1405,6 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
         params += '&status='+lesson_status+'&t='+session_time;
         params += '&suspend='+suspend_data+'&loc='+lesson_location;
         params += '&core_exit='+lms_item_core_exit;
-        interact_string = '';
-        for (i in interactions){
-        	interact_string += '&interact['+i+']=';
-            interact_temp = '[';
-            for (j in interactions[i]) {
-            	interact_temp += interactions[i][j]+',';
-            }
-            interact_temp = interact_temp.substr(0,(interact_temp.length-2)) + ']';
-            interact_string += encodeURIComponent(interact_temp);
-        }
-        //interact_string = encodeURIComponent(interact_string.substr(0,(interact_string.length-1)));
-        params += interact_string;
         if ( olms.lms_lp_type==1) {
           $.ajax({
             type:"GET",
@@ -1432,7 +1416,18 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
         );
        }
 }
-
+/**
+ * Save a SCORM item's variables, getting its SCORM values from 
+ * updatable_vars_list. Takes interactions into account and considers whether
+ * variables have been modified or not.
+ * @param   int     ID of the learning path
+ * @param   int     ID of the user
+ * @param   int     ID of the view
+ * @param   int     ID of the item
+ * @return void
+ * @uses olms.updatable_vars_list
+ * @uses lp_ajax_save_item.php through an AJAX call
+ */
 function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id) {
 
 	var is_interactions='false';
@@ -1512,7 +1507,9 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
 
 /**
  * Starts the timer with the server clock time.
- * Originally, we used the xajax library. Now we use jQuery
+ * @return void
+ * @todo check the timer stuff really works
+ * @uses    lp_ajax_start_timer.php
  */
 function xajax_start_timer() {
     $.ajax({
@@ -1523,8 +1520,13 @@ function xajax_start_timer() {
     });
 }
 /**
- * Save a specific item's objectives into the LMS through
- * an AJAX call. Originally, we used the xajax library. Now we use jQuery
+ * Save a specific item's objectives into the LMS through an Synch JAX call
+ * @param   int     ID of the learning path
+ * @param   int     ID of the user
+ * @param   int     ID of the view
+ * @param   int     ID of the item
+ * @param   array   SCO's recorded objectives
+ * @uses    lp_ajax_save_objectives.php
  */
 function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives) {
     params='';
@@ -1550,8 +1552,13 @@ function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,ite
     });
 }
 /**
- * Switch between two items through
- * an AJAX call. Originally, we used the xajax library. Now we use jQuery
+ * Switch between two items through an AJAX call.
+ * @param   int     ID of the learning path
+ * @param   int     ID of the user
+ * @param   int     ID of the view
+ * @param   int     ID of the item
+ * @param   int     ID of the next item
+ * @uses    lp_ajax_switch_item.php
  */
 function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item) {
     params = {
@@ -1569,19 +1576,14 @@ function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id
         async: false
     });
 }
-
 /**
- * Refresh local variables on successful return of a switch_item call
+ * Add the "addListeners" function to the "onload" event of the window and
+ * start the timer if necessary (asset)
  */
-function refresh_vars() {
-    // soon
-}
-
 addEvent(window,'load',addListeners,false);
 if(olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
 	xajax_start_timer();
 }
-
 /**
  * Allow attach the glossary terms into html document of scorm. This has
  * nothing to do with SCORM itself, and should not interfere w/ SCORM either.

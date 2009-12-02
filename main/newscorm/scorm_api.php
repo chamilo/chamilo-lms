@@ -164,7 +164,6 @@ olms.info_lms_item=new Array();
 // olms.saved_lesson_status = 'not attempted';
 olms.lms_lp_id = <?php echo $oLP->get_id();?>;
 olms.lms_item_id = <?php echo $oItem->get_id();?>;
-//var lms_new_item_id = 0; //temporary value (only there between a load_item() and a LMSInitialize())
 olms.lms_initialized = 0;
 //olms.lms_total_lessons = <?php echo $oLP->get_total_items_count(); ?>;
 //olms.lms_complete_lessons = <?php echo $oLP->get_complete_items_count();?>;
@@ -181,6 +180,8 @@ olms.lms_item_credit = '<?php echo $oItem->get_credit();?>';
 olms.lms_item_lesson_mode = '<?php echo $oItem->get_lesson_mode();?>';
 olms.lms_item_launch_data = '<?php echo $oItem->get_launch_data();?>';
 olms.lms_item_core_exit = '<?php echo $oItem->get_core_exit();?>';
+<?php echo $oLP->get_items_details_as_js('olms.lms_item_types')?>
+
 olms.asset_timer = 0;
 
 //Backup for old values
@@ -201,7 +202,7 @@ $(document).ready( function() {
   olms.info_lms_item[0]='<?php echo $oItem->get_id();?>';
   olms.info_lms_item[1]='<?php echo $oItem->get_id();?>';
 
-  $("iframe#content_id").load( function(){
+  $("#content_id").load( function(){
     olms.info_lms_item[0]=olms.info_lms_item[1];
     <?php
     if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
@@ -212,6 +213,9 @@ $(document).ready( function() {
     <?php
     }
     ?>
+    if (olms.lms_item_types['i'+olms.info_lms_item[1]] != 'sco') {
+      LMSInitialize();
+    }
   });
 });
 
@@ -261,7 +265,8 @@ function LMSInitialize() {  //this is the initialize function of all APIobjects
 	    });
 	   // log a more complete object dump when initializing, so we know what data hasn't been cleaned
 	   var log = '<br />item              : '+  olms.lms_item_id
-	             + '<br />score           : '+ olms.score
+	             + '<br />item_type       : '+ olms.lms_item_type
+                 + '<br />score           : '+ olms.score
                  + '<br />max             : '+ olms.max
                  + '<br />min             : '+ olms.min
                  + '<br />lesson_status   : '+ olms.lesson_status
@@ -1007,35 +1012,6 @@ function addListeners(){
 }
 
 /**
- * Load an item into the content frame:
- * - making sure the previous item status have been saved
- * - first updating the current item ID (to save the right item)
- * - updating the frame src
- * possibly deprecated
- */
-function load_item(item_id,url){
-	if(document.getElementById('content_id')) {
-		logit_lms('Loading item '+item_id,2);
-		var cont_f = document.getElementById('content_id');
-		if(cont_f.src){
-			olms.lms_old_item_id = olms.lms_item_id;
-			var lms_new_item_id = item_id;
-			//load new content page into content frame
-			if(olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
-				lms_save_asset();
-			}
-			cont_f.src = url;
-
-			update_toc('unhighlight',olms.lms_old_item_id);
-			update_toc('highlight',olms.lms_old_item_id);
-			return true;
-		}
-		logit_lms('cont_f.src has no properties',0);
-	}
-	logit_lms('content_id has no properties',0);
-	return false;
-}
-/**
  * Save a Dokeos learnpath item's time and mark as completed upon
  * leaving it
  */
@@ -1296,6 +1272,8 @@ function switch_item(current_item, next_item){
     var orig_current_item = current_item;
     var orig_next_item = next_item;
     var orig_lesson_status = olms.lesson_status;
+    var orig_item_type = olms.lms_item_types['i'+current_item];
+    var next_item_type = olms.lms_item_types['i'+next_item];
     
     /*
      There are four "cases" for switching items:
@@ -1304,16 +1282,48 @@ function switch_item(current_item, next_item){
      (2) asset switching to sco
          We need to save, switching not necessary (LMSInitialize does the job)
      (3) sco switching to asset
-         We need to switch, and the commit *should* be automatic when the 
-         SCO unloads
+         We need to switch the document in the content frame, but we cannot
+         switch the item details, otherwise the LMSFinish() call (that *must* 
+         be triggered by the SCO when it unloads) will use bad values. However,
+         we need to load the new asset's context once the SCO has unloaded
      (4) sco switching to sco
-         We don't neet to switch nor commit, Commit on unload and 
+         We don't neet to switch nor commit, LMSFinish() on unload and 
          LMSInitialize on load will do the job
-     In any case, we need to change the current document frame
+     In any case, we need to change the current document frame.
+     These cases, although clear here, are however very difficult to implement
     */
+    logit_lms('Called switch_item with params '+olms.lms_item_id+' and '+next_item+'',0);
     
+    
+    if (orig_item_type != 'sco') {
+      if (next_item_type != 'sco' ) {
+        //case 1
+        xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.asset_timer, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
+        xajax_switch_item_details(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,next_item);    
+      } else {
+        //case 2
+        xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.asset_timer, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
+        xajax_switch_item_details(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,next_item);    
+      }
+    } else {
+      if (next_item_type != 'sco') {
+        //case 3
+        xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id);
+        reinit_updatable_vars_list();
+        xajax_switch_item_toc(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,next_item);    
+      } else {
+        //case 4
+        xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id);
+        reinit_updatable_vars_list();
+        xajax_switch_item_toc(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,next_item);
+      }
+      if (olms.item_objectives.length>0) {
+        xajax_save_objectives(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,olms.item_objectives);
+      }
+    }
+    
+/*  
 	//(1) save the current item
-	logit_lms('Called switch_item with params '+olms.lms_item_id+' and '+next_item+'',0);
 	if (olms.lms_lp_type==1 || olms.lms_item_type=='asset' || olms.session_time == '0' || olms.session_time == '0:00:00') {
 		if (olms.lms_lp_type==1) {
 		    xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.asset_timer, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
@@ -1324,6 +1334,7 @@ function switch_item(current_item, next_item){
 		  xajax_save_objectives(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,olms.item_objectives);
 	    }
 	}else{
+*/	
         /**
          * Because of SCORM 1.2's special rule about unsent commits and the fact
          * that a SCO should be SET TO 'completed' IF NO STATUS WAS SENT (and
@@ -1350,12 +1361,19 @@ function switch_item(current_item, next_item){
         }
         xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.session_time, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
         */
+/*
 
 	}
-	olms.execute_stats=false;
 	//(2) Refresh all the values inside this SCORM API object - use AJAX
-	xajax_switch_item_details(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,next_item);
+    xajax_switch_item_details(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,next_item);
+*/
 
+    olms.execute_stats=false;
+    
+    // Considering info_lms_item[0] is initially the oldest and info_lms_item[1]
+    // is the newest item, and considering we are done switching the items now,
+    // we need to update these markers so that the new item is loaded when
+    // changing the document in the content frame
 	if (olms.info_lms_item[1]==next_item && next_item!='next' && next_item!='previous') {
 		olms.info_lms_item[0]=next_item;
 		olms.info_lms_item[1]=next_item;
@@ -1622,6 +1640,32 @@ function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id
         url: "lp_ajax_switch_item.php",
         dataType: "script",
         async: false
+    });
+}
+/**
+ * Switch between two items through an AJAX call, but only update the TOC and
+ * progress bar.
+ * @param   int     ID of the learning path
+ * @param   int     ID of the user
+ * @param   int     ID of the view
+ * @param   int     ID of the item
+ * @param   int     ID of the next item
+ * @uses    lp_ajax_switch_toc.php
+ */
+function xajax_switch_item_toc(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item) {
+    params = {
+        'lid': lms_lp_id,
+        'uid': lms_user_id,
+        'vid': lms_view_id,
+        'iid': lms_item_id,
+        'next': next_item
+    };
+    $.ajax({
+        type: "POST",
+        data: params,
+        url: "lp_ajax_switch_item_toc.php",
+        dataType: "script",
+        async: true
     });
 }
 /**

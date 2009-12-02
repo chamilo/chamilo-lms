@@ -272,7 +272,7 @@ function LMSInitialize() {  //this is the initialize function of all APIobjects
                  + '<br />mastery_score   : '+ olms.mastery_score
                  + '<br />max_time_allowed: '+ olms.max_time_allowed+'<br />';
 	             
-        logit_scorm('LMSInitialise()'+log,0);
+        logit_scorm('LMSInitialize()'+log,0);
         olms.lms_initialized=1;
         return('true');
 	}
@@ -1466,7 +1466,7 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
 	for (k=0;k<my_scorm_values.length;k++) {
 		if (my_scorm_values[k]=='cmi.core.session_time') {
 			params += '&t='+olms.session_time;
-		} else if (my_scorm_values[k]=='cmi.core.lesson_status' && lesson_status!='') {
+		} else if (my_scorm_values[k]=='cmi.core.lesson_status' && olms.lesson_status!='') {
 			 params += '&status='+olms.lesson_status;
 		} else if (my_scorm_values[k]=='cmi.core.score.raw') {
 			 params += '&s='+olms.score;

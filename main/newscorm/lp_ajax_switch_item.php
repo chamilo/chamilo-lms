@@ -140,6 +140,15 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
     if (!empty($myistring)) {
         $myistring = substr($myistring,1);
     }
+    /*
+     * The following lines should reinitialize the values for the SCO
+     * However, due to many complications, we are now relying more on the
+     * LMSInitialize() call and its underlying lp_ajax_initialize.php call
+     * so this code is technically deprecated (but the change of item_id should
+     * remain). However, due to numerous technical issues with SCORM, we prefer
+     * leaving it as a double-lock security. If removing, please test carefully
+     * with both SCORM and dokeos learning path tracking.
+     */ 
     $return .=
             "olms.score=".$myscore.";" .
             "olms.max=".$mymax.";" .

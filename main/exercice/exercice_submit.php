@@ -211,39 +211,65 @@ $condition = ' WHERE ' .
 	'session_id = ' . "'" . (int) $_SESSION['id_session'] . "'";
 
 $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
-
-$result = Database::query("SELECT type,feedback_type,expired_time FROM $TBL_EXERCICES WHERE id=$exerciseId", __FILE__, __LINE__);
+$sql_track_exercice = "SELECT type,feedback_type,expired_time FROM $TBL_EXERCICES WHERE id=$exerciseId";
+$result = Database::query($sql_track_exercice, __FILE__, __LINE__);
 $exercise_row = Database :: fetch_array($result);
 $exerciseType = $exercise_row['type'];
 $exerciseFeedbackType = $exercise_row['feedback_type'];
 
-//Timer - Get expired_time for a student
-$condition = ' WHERE ' .
-'exe_exo_id =   '."'".Database::escape_string($exerciseId)."'".' AND ' .
-'exe_user_id =  '."'".api_get_user_id()."'".' AND ' .
-'exe_cours_id = '."'".api_get_course_id()."'".' AND ' .
-'status = '."'incomplete'".' AND '.
-'session_id = '."'".api_get_session_id()."'";
-$sql_track = 'SELECT exe_id,expired_time_control FROM '.$stat_table.$condition;
-
-$rs_sql = Database::query($sql_track,__FILE__,__LINE__);
-$exists_into_database = Database::num_rows($rs_sql);
-$exercise_row1 = Database::fetch_array($rs_sql);
-
-//Init
+//Get the expired time of the current exercice in track_e_exercices
 $total_minutes = $exercise_row["expired_time"];
 
 $total_seconds = $total_minutes*60;
 $current_timestamp = time();
-$expected_time = $current_timestamp + $total_seconds;
-
-$plugin_expired_time = date('M d, Y H:i:s',$expected_time);
-$clock_expired_time = date('Y-m-d H:i:s',$expected_time);
-
 
 if (!isset($_SESSION['expired_time'])) {
-	 $_SESSION['expired_time'] = $clock_expired_time;
-     $_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);
+	//In case that the current session php is broken
+	//Timer - Get expired_time for a student
+	$condition = ' WHERE ' .
+	'exe_exo_id =   '."'".Database::escape_string($exerciseId)."'".' AND ' .
+	'exe_user_id =  '."'".api_get_user_id()."'".' AND ' .
+	'exe_cours_id = '."'".api_get_course_id()."'".' AND ' .
+	'status = '."'incomplete'".' AND '.
+	'session_id = '."'".api_get_session_id()."'";
+	
+	$sql_track = 'SELECT exe_id,expired_time_control FROM '.$stat_table.$condition;
+	$rs_sql = Database::query($sql_track,__FILE__,__LINE__);
+	$exists_into_database = Database::num_rows($rs_sql);
+	$track_exercice_row = Database::fetch_array($rs_sql);
+	$expired_time_of_this_attempt = $track_exercice_row['expired_time_control'];
+	
+	//Get the last attempt the an exercice
+	$sql_track_attempt = 'SELECT max(tms) as last_attempt_date FROM '.$exercice_attemp_table.' WHERE exe_id="'.$track_exercice_row['exe_id'].'"';
+	$rs_last_attempt = Database::query($sql_track_attempt,__FILE__,__LINE__);
+	$row_last_attempt = Database::fetch_array($rs_last_attempt);
+	$my_last_attempt_date = $row_last_attempt['last_attempt_date'];
+	
+	//change the date format
+	$my_last_attempt_date = strtotime($my_last_attempt_date);
+	$expired_time_of_this_attempt = strtotime($expired_time_of_this_attempt);
+
+	//New expired time
+	$new_expired_time_in_seconds = $expired_time_of_this_attempt - $my_last_attempt_date;
+	
+	if ($exists_into_database == 1) {
+	    $expected_time = $current_timestamp + $new_expired_time_in_seconds;
+
+		$plugin_expired_time = date('M d, Y H:i:s',$expected_time);
+		$clock_expired_time = date('Y-m-d H:i:s',$expected_time);
+				
+	 	$_SESSION['expired_time'] = $clock_expired_time;
+     	$_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);		
+	} else {
+		$expected_time = $current_timestamp + $total_seconds;
+		
+		$plugin_expired_time = date('M d, Y H:i:s',$expected_time);
+		$clock_expired_time = date('Y-m-d H:i:s',$expected_time);
+				
+	 	$_SESSION['expired_time'] = $clock_expired_time;
+     	$_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);		
+	}
+
 } else {
   	$plugin_expired_time = $_SESSION['end_expired_time'];
 }

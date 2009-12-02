@@ -1292,21 +1292,37 @@ function reinit_updatable_vars_list () {
  */
 
 function switch_item(current_item, next_item){
-    //backup these params
+    // backup these params
     var orig_current_item = current_item;
     var orig_next_item = next_item;
     var orig_lesson_status = olms.lesson_status;
+    
+    /*
+     There are four "cases" for switching items:
+     (1) asset switching to asset
+         We need to save, then switch
+     (2) asset switching to sco
+         We need to save, switching not necessary (LMSInitialize does the job)
+     (3) sco switching to asset
+         We need to switch, and the commit *should* be automatic when the 
+         SCO unloads
+     (4) sco switching to sco
+         We don't neet to switch nor commit, Commit on unload and 
+         LMSInitialize on load will do the job
+     In any case, we need to change the current document frame
+    */
+    
 	//(1) save the current item
 	logit_lms('Called switch_item with params '+olms.lms_item_id+' and '+next_item+'',0);
-	if(olms.lms_lp_type==1 || olms.lms_item_type=='asset' || olms.session_time == '0' || olms.session_time == '0:00:00'){
+	if (olms.lms_lp_type==1 || olms.lms_item_type=='asset' || olms.session_time == '0' || olms.session_time == '0:00:00') {
 		if (olms.lms_lp_type==1) {
 		    xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.asset_timer, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
 		} else {
         	xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id);
         }
-		if(olms.item_objectives.length>0) {
-		xajax_save_objectives(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,olms.item_objectives);
-	}
+		if (olms.item_objectives.length>0) {
+		  xajax_save_objectives(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,olms.item_objectives);
+	    }
 	}else{
         /**
          * Because of SCORM 1.2's special rule about unsent commits and the fact
@@ -1325,11 +1341,12 @@ function switch_item(current_item, next_item){
          * savedata(unload) (and then the status cannot be "incompleted"
          * anymore)
          */
-        /*if (olms.lms_item_type=='sco' && olms.lesson_status != 'completed' && olms.lesson_status != 'passed' && olms.lesson_status != 'browsed' && olms.lesson_status != 'incomplete' && olms.lesson_status != 'failed') {
-             // savedata('finish') treats the special condition and saves the
-             // new status to the database, so switch_item_details() enjoys the
-             // new status
-        	 savedata('finish');
+        /*
+        if (olms.lms_item_type=='sco' && olms.lesson_status != 'completed' && olms.lesson_status != 'passed' && olms.lesson_status != 'browsed' && olms.lesson_status != 'incomplete' && olms.lesson_status != 'failed') {
+            // savedata('finish') treats the special condition and saves the
+            // new status to the database, so switch_item_details() enjoys the
+            // new status
+        	savedata('finish');
         }
         xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.session_time, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
         */

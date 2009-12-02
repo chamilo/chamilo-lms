@@ -249,7 +249,7 @@ if (!isset($_SESSION['expired_time'])) {
 }
 
 
-if ($exercise_row['expired_time'] != 0) { 
+if ($exercise_row['expired_time'] != 0) { //Sends the exercice form when the expired time is finished 
     $htmlHeadXtra[] = "<script type=\"text/javascript\">
     $(document).ready(function(){    
        $('#text-content').epiclock({

@@ -155,7 +155,6 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
       //$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; //Disposition-Notification
     }
 
-
    if ($sender_name!="")
    {
       $mail->FromName = $sender_name;
@@ -165,8 +164,10 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
       $mail->FromName = $platform_email['SMTP_FROM_NAME'];
    }
       $mail->Subject = $subject;
-      $mail->AltBody    = strip_tags(str_replace('<br />',"\n",$message));
-      $mail->Body    = '<html><head></head><body>'.$message.'</body></html>';
+      
+      //$lp_charset = api_get_setting('platform_charset');
+      $mail->AltBody = strip_tags(str_replace('<br />',"\n", api_html_entity_decode($message)));
+      $mail->Body = '<html><head></head><body>'.$message.'</body></html>';
       //only valid address
       if(is_array($recipient_email))
       {

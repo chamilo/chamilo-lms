@@ -233,26 +233,9 @@ function LMSInitialize() {  //this is the initialize function of all APIobjects
 	 */
 	olms.G_LastError = G_NoError ;
 	olms.G_LastErrorMessage = 'No error';
-	//reinit to list
-	reinit_updatable_vars_list();
-	// Get LMS values for this item
-	params = {
-        'lid': olms.lms_lp_id,
-        'uid': olms.lms_user_id,
-        'vid': olms.lms_view_id,
-        'iid': olms.lms_item_id
-    };
-    $.ajax({
-        type: "POST",
-        url: "lp_ajax_initialize.php",
-        data: "",
-        success: function(tmp_data) {
-                $("#media").html(tmp_data);
-    }
-    });
+
 
 	olms.lms_initialized=0;
-	dummy = olms.lesson_location;
 	// if there are more parameters than ""
 	if (arguments.length>1) {
 		olms.G_LastError 		= G_InvalidArgumentError;
@@ -260,6 +243,22 @@ function LMSInitialize() {  //this is the initialize function of all APIobjects
 		logit_scorm('Error '+ G_InvalidArgumentError + G_InvalidArgumentErrorMessage, 0);
 		return('false');
 	} else {
+	    //reinit the list of modified variables
+	    reinit_updatable_vars_list();
+	    // Get LMS values for this item
+	    params = {
+	        'lid': olms.lms_lp_id,
+	        'uid': olms.lms_user_id,
+	        'vid': olms.lms_view_id,
+	        'iid': olms.lms_item_id
+	    };
+	    $.ajax({
+	        type: "POST",
+	        url: "lp_ajax_initialize.php",
+	        data: params,
+	        dataType: 'script',
+	        async: false
+	    });
 	   // log a more complete object dump when initializing, so we know what data hasn't been cleaned
 	   var log = '<br />item              : '+  olms.lms_item_id
 	             + '<br />score           : '+ olms.score
@@ -346,7 +345,7 @@ function LMSGetValue(param)
 		olms.G_LastError = G_ElementIsWriteOnly;
 	}else if(param == 'cmi.core.lesson_status'){
 	// ---- cmi.core.lesson_status
-	    if(lesson_status != '') {
+	    if(olms.lesson_status != '') {
 	    	result=olms.lesson_status;
 	    } else {
 	    	//result='not attempted';
@@ -842,30 +841,30 @@ function Commit(val) {
  * @param   string 
  */
 function LMSFinish(val) {
-	olms.G_LastError = G_NoError ;
-	olms.G_LastErrorMessage = 'No error';
-	// if olms.commit == false, then the SCORM didn't ask for a commit, so we
-	// should at least report that
-	if (( olms.commit == false )) {
-		logit_scorm('LMSFinish() (no LMSCommit())',1);
+    olms.G_LastError = G_NoError ;
+    olms.G_LastErrorMessage = 'No error';
+    // if olms.commit == false, then the SCORM didn't ask for a commit, so we
+    // should at least report that
+    if (( olms.commit == false )) {
+        logit_scorm('LMSFinish() (no LMSCommit())',1);
 
-	}
+    }
 
-		//if ( olms.commit == true ) {
-			logit_scorm('LMSFinish() called',1);
-			savedata('finish');
-		    olms.commit = false;
-		//}
+    //if ( olms.commit == true ) {
+    	logit_scorm('LMSFinish() called',1);
+    	savedata('finish');
+        olms.commit = false;
+    //}
 
-		//reinit to list
-		reinit_updatable_vars_list()
-		return('true');
+    //reinit the list of modified variables
+    reinit_updatable_vars_list()
+    return('true');
 }
 /**
  * Twin sister of LMSFinish(). Only provided for backwards compatibility.
  */
 function Finish(val) {
-	return LMSFinish(val);
+    return LMSFinish(val);
 }
 /**
  * Returns the last error code as a string
@@ -1461,35 +1460,35 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
 	var is_interactions='false';
 	var params='';
 	params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id+'&iid='+lms_item_id;
-    var my_get_value_scorm=new Array();
-    my_get_value_scorm=process_scorm_values();
+    var my_scorm_values=new Array();
+    my_scorm_values=process_scorm_values();
 
-	for (k=0;k<info_get_lms.length;k++) {
-		if (my_get_value_scorm[k]=='cmi.core.session_time') {
+	for (k=0;k<my_scorm_values.length;k++) {
+		if (my_scorm_values[k]=='cmi.core.session_time') {
 			params += '&t='+olms.session_time;
-		} else if (my_get_value_scorm[k]=='cmi.core.lesson_status' && lesson_status!='') {
+		} else if (my_scorm_values[k]=='cmi.core.lesson_status' && lesson_status!='') {
 			 params += '&status='+olms.lesson_status;
-		} else if (my_get_value_scorm[k]=='cmi.core.score.raw') {
+		} else if (my_scorm_values[k]=='cmi.core.score.raw') {
 			 params += '&s='+olms.score;
-		} else if (my_get_value_scorm[k]=='cmi.core.score.max') {
+		} else if (my_scorm_values[k]=='cmi.core.score.max') {
         	params += '&max='+olms.max;
-		} else if (my_get_value_scorm[k]=='cmi.core.score.min') {
+		} else if (my_scorm_values[k]=='cmi.core.score.min') {
 	        params += '&min='+olms.min;
-		} else if (my_get_value_scorm[k]=='cmi.core.lesson_location') {
+		} else if (my_scorm_values[k]=='cmi.core.lesson_location') {
 	        params += '&loc='+olms.lesson_location;
-		} else if (my_get_value_scorm[k]=='cmi.completion_status') {
+		} else if (my_scorm_values[k]=='cmi.completion_status') {
 
-		} else if (my_get_value_scorm[k]=='cmi.score.scaled') {
+		} else if (my_scorm_values[k]=='cmi.score.scaled') {
 
-		} else if (my_get_value_scorm[k]=='cmi.suspend_data') {
+		} else if (my_scorm_values[k]=='cmi.suspend_data') {
 	        params += '&suspend='+olms.suspend_data;
-		} else if (my_get_value_scorm[k]=='cmi.completion_status') {
+		} else if (my_scorm_values[k]=='cmi.completion_status') {
 
-		} else if (my_get_value_scorm[k]=='cmi.core.exit') {
+		} else if (my_scorm_values[k]=='cmi.core.exit') {
 	        params += '&core_exit='+olms.lms_item_core_exit;
 		}
 
-		if (my_get_value_scorm[k]=='interactions') {
+		if (my_scorm_values[k]=='interactions') {
 			is_interactions='true';
 		} else {
 			is_interactions='false';
@@ -1530,7 +1529,7 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
         async: false
     });
     params='';
-    my_get_value_scorm = null;
+    my_scorm_values = null;
 }
 
 /**

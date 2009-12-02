@@ -120,7 +120,7 @@ function initialize_item($lp_id,$user_id,$view_id,$next_item)
             "olms.G_lastError = 0;" .
             "olms.G_LastErrorMessage = 'No error';" ;
     /*
-     * and re-initialise the rest
+     * and re-initialise the rest (proper to the LMS)
      * -lms_lp_id
      * -lms_item_id
      * -lms_old_item_id
@@ -146,12 +146,12 @@ function initialize_item($lp_id,$user_id,$view_id,$next_item)
 
     $return .=
             "olms.lms_lp_id=".$lp_id.";" .
-            "olms.lms_item_id=".$new_item_id.";" .
+            "olms.lms_item_id=".$next_item.";" .
             "olms.lms_old_item_id=0;" .
             "olms.lms_initialized=0;" .
             "olms.lms_view_id=".$view_id.";" .
             "olms.lms_user_id=".$user_id.";" .
-            "olms.next_item=".$new_item_id.";" . //this one is very important to replace possible literal strings
+            "olms.next_item=".$next_item.";" . //this one is very important to replace possible literal strings
             "olms.lms_next_item=".$mynext.";" .
             "olms.lms_previous_item=".$myprevious.";" .
             "olms.lms_item_type = '".$myitemtype."';" .
@@ -166,8 +166,8 @@ function initialize_item($lp_id,$user_id,$view_id,$next_item)
     $mylp->set_error_msg('');
     $mylp->prerequisites_match(); //check the prerequisites are all complete
     if($debug>1){error_log('Prereq_match() returned '.htmlentities($mylp->error),0);}
-    $_SESSION['scorm_item_id'] = $new_item_id;//Save the new item ID for the exercise tool to use
-    $_SESSION['lpobject'] = serialize($mylp);
+    //$_SESSION['scorm_item_id'] = $new_item_id;//Save the new item ID for the exercise tool to use
+    //$_SESSION['lpobject'] = serialize($mylp);
     return $return;
 }
 echo initialize_item($_POST['lid'],$_POST['uid'],$_POST['vid'],$_POST['iid']);

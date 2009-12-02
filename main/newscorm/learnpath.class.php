@@ -2648,6 +2648,29 @@ class learnpath {
 		}
 		return $toc;
 	}
+    /**
+     * Generate and return the table of contents for this learnpath. The JS
+     * table returned is used inside of scorm_api.php
+     * @return  string  A JS array vairiable construction
+     */
+    function get_items_details_as_js($varname='olms.lms_item_types') {
+        if ($this->debug > 0) {
+            error_log('New LP - In learnpath::get_items_details_as_js()', 0);
+        }
+        $toc = $varname.' = new Array();';
+        //echo "<pre>".print_r($this->items,true)."</pre>";
+        foreach ($this->ordered_items as $item_id) {
+            if ($this->debug > 2) {
+                error_log('New LP - learnpath::get_items_details_as_js(): getting info for item ' . $item_id, 0);
+            }
+            $toc.= $varname."['i$item_id'] = '".$this->items[$item_id]->get_type()."';";
+        }
+        if ($this->debug > 2) {
+            error_log('New LP - In learnpath::get_items_details_as_js() - TOC array: ' . print_r($toc, true), 0);
+        }
+        error_log($toc);
+        return $toc;
+    }
 	/**
 	 * Gets the learning path type
 	 * @param	boolean		Return the name? If false, return the ID. Default is false.

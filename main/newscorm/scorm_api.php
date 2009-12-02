@@ -270,7 +270,11 @@ function LMSInitialize() {  //this is the initialize function of all APIobjects
                  + '<br />suspend_data    : '+ olms.suspend_data
                  + '<br />total_time      : '+ olms.total_time
                  + '<br />mastery_score   : '+ olms.mastery_score
-                 + '<br />max_time_allowed: '+ olms.max_time_allowed+'<br />';
+                 + '<br />max_time_allowed: '+ olms.max_time_allowed
+                 + '<br />lms_lp_id  : '+olms.lms_lp_id
+                 + '<br />lms_user_id: '+olms.lms_user_id
+                 + '<br />lms_view_id: '+olms.lms_view_id
+                ;
 	             
         logit_scorm('LMSInitialize()'+log,0);
         olms.lms_initialized=1;

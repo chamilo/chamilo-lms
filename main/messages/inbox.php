@@ -126,6 +126,7 @@ if ($_GET['f']=='social') {
 }
 
 Display::display_header('');
+$social_parameter = '';
 
 if ($_GET['f']=='social') {
 	require_once api_get_path(LIBRARY_PATH).'social.lib.php';
@@ -133,35 +134,76 @@ if ($_GET['f']=='social') {
 	echo '<div class="actions-title">';
 	echo get_lang('Messages');
 	echo '</div>';
+	$social_parameter = '?f=social';
 } else {
 	//comes from normal profile
+	/*
 	echo '<div class=actions>';
 		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',api_xml_http_response_encode(get_lang('Inbox'))).api_xml_http_response_encode(get_lang('Inbox')).'</a>';
 		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
 		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',api_xml_http_response_encode(get_lang('Outbox'))).api_xml_http_response_encode(get_lang('Outbox')).'</a>';
-	echo '</div>';	
-}
+	echo '</div>';	*/
 	
-
-if (!isset($_GET['del_msg'])) {	
-	inbox_display();
-} else {
-	$num_msg = intval($_POST['total']);
-	for ($i=0;$i<$num_msg;$i++) {
-		if($_POST[$i]) {
-			//the user_id was necesarry to delete a message??
-			MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);
-		}
+	
+	echo '<div class="actions">';
+	
+	if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
+		echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
 	}
-	inbox_display();
+	if (api_get_setting('allow_message_tool') == 'true') {
+		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
+	}	
+	$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
+	
+	//echo '<span style="float:right; padding-top:7px;">';
+				 
+	if (isset($_GET['type']) && $_GET['type'] == 'extended') {
+		echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
+	} else {
+		echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</a>';
+	}
+	//echo '</span>';
+
+	echo '</div>';
+
+
 }
+
+
+echo '<div id="inbox-wrapper">';
+		//LEFT CONTENT
+	echo '<div id="inbox-menu">';	
+		echo '<ul>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$social_parameter.'">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>'.'</li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$social_parameter.'">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>'.'</li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php'.$social_parameter.'">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>'.'</li>';
+		echo '</ul>';	
+	echo '</div>';
+
+	echo '<div id="inbox">';
+			//MAIN CONTENT
+	if (!isset($_GET['del_msg'])) {	
+		inbox_display();
+	} else {
+		$num_msg = intval($_POST['total']);
+		for ($i=0;$i<$num_msg;$i++) {
+			if($_POST[$i]) {
+				//the user_id was necesarry to delete a message??
+				MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);
+			}
+		}
+		inbox_display();
+	}
+	echo '</div>';
+
+echo '</div>';
 
 /*
 ==============================================================================
 		FOOTER
 ==============================================================================
 */
-if ($request===false) {
-	Display::display_footer();
-}
+
+Display::display_footer();
+
 ?>

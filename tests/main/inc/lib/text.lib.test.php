@@ -63,9 +63,11 @@ class TestText extends UnitTestCase {
 	}
 
 	function testlatex_gif_renderer() {
-		$latex_code='';
+		ob_start();
+		$latex_code="";
 		global $_course;
 		$res=latex_gif_renderer($latex_code);
+		ob_end_clean();
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}

@@ -60,6 +60,9 @@ require api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 // starting the output buffering when we are exporting the information
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 if ($export_csv) {
+	if (isset($_REQUEST['id_session']) && $_REQUEST['id_session'] != 0 ) {
+    	$_SESSION['id_session'] = intval($_REQUEST['id_session']);
+	}
 	ob_start();
 }
 $csv_content = array();
@@ -303,13 +306,13 @@ if ($_GET['studentlist'] == 'false') {
 }
 echo '&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printmgr.gif',get_lang('Print')).get_lang('Print').'</a>';
 if($_GET['studentlist'] == 'false') {
-	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&studentlist=false"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv&studentlist=false"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
 } elseif ($_GET['studentlist'] == '' || $_GET['studentlist'] == 'true') {
 	$addional_param = '';
 	if (isset($_GET['additional_profile_field'])) {
 		$addional_param ='additional_profile_field='.intval($_GET['additional_profile_field']);
 	}
-	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.'">'.Display::return_icon('csv.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
+	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv&'.$addional_param.'">'.Display::return_icon('csv.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
 }
 if($_GET['studentlist'] == 'true' || empty($_GET['studentlist'])) {
 	echo display_additional_profile_fields();

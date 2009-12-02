@@ -83,7 +83,6 @@ echo '</div>';
 // getting group information
 $group_id	= intval($_GET['id']);
 $group_info = GroupPortalManager::get_group_data($group_id); 
-
 	
 if ($group_id != 0 ) {		
 	//Loading group information
@@ -112,6 +111,7 @@ if ($group_id != 0 ) {
 				
 		}
 	}
+	echo GroupPortalManager::show_group_column_information($group_id);
 	
 	$picture	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,'medium_');
 	$big_image	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'','big_');
@@ -139,16 +139,16 @@ if ($group_id != 0 ) {
 			#group_members { width:233px; height:300px; overflow-x:none; overflow-y: auto;}
 			.group_member_item { width:98px; height:86px; float:left; margin:5px 5px 15px 5px; }
 			.group_member_picture { display:block;
-height:92px;
-margin:0;
-overflow:hidden; }; 
+				height:92px;
+				margin:0;
+				overflow:hidden; }; 
 	</style>';
 	echo '<div id="layout-left" style="float: left; width: 280px; height: 100%;">';
 
 	//Group's title
 	echo '<h1>'.$group_info['name'].'</h1>';
 	
-	//image
+	//Group's image 
 	echo '<div id="group_image">';
 	
 	if (basename($picture['file']) != 'unknown_group.png') {
@@ -159,10 +159,16 @@ overflow:hidden; };
 
 	echo '</div>';
 	
-	//description
+	//Group's description 
 	echo '<div id="group_description">';
 		echo $group_info['description'];
 	echo '</div>';
+	
+	//Group's description 
+	echo '<div id="group-url">';
+		echo $group_info['url'];
+	echo '</div>';
+	
 	
 	//Privacy
 	echo '<div id="group_privacy">';
@@ -174,20 +180,22 @@ overflow:hidden; };
 		}
 	echo '</div>';
 	
-	//group tags
+	//Group's tags
 	if (!empty($tags)) {
 		echo '<div id="group_tags">';
 			echo get_lang('Tags').' : '.$tags;
 		echo '</div>';
 	}
 		
+	//Compose message link
 	if (in_array($my_group_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))) { 
 		echo '<div id="actions" style="margin:10px">';
-		echo '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display :: return_icon('message_new.png', get_lang('ComposeMessage')).'&nbsp;'.get_lang('ComposeMessage').'</a>';
+		echo '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display :: return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a>';
 		//echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
 		echo '</div>';
 	}
 	
+	//Members
 	echo get_lang('Members').' : ';	
 	echo '<div id="group_members">';		
 	foreach($users as $user) {		
@@ -206,7 +214,8 @@ overflow:hidden; };
 	}
 	echo '</div>';
 	
-		
+	//loading group permission
+	
 	echo '<div id="group_permissions">';	
 	switch ($my_group_role) {
 		case GROUP_USER_PERMISSION_READER:
@@ -237,6 +246,9 @@ overflow:hidden; };
 	
 	
 	echo '</div>'; // end layout left	
+	
+	
+	//-- Show message groups
 	
 	echo '<div id="layout_right" style="margin-left: 282px;">';	
 		echo '<div class="messages">';	
@@ -270,11 +282,18 @@ overflow:hidden; };
 		$id = $result['id'];
 		$url_open  = '<a href="groups.php?id='.$id.'">';
 		$url_close = '</a>';		
-		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,$result['count']);
+		
+		if ($result['count'] == 1 ) {
+			$result['count'] = $result['count'].' '.get_lang('Member');	
+		} else {
+			$result['count'] = $result['count'].' '.get_lang('Members');
+		}
+		
+		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,$result['count'],$result['description']);
 	}
 	if (count($groups) > 0) {
 		echo '<h1>'.get_lang('Popular').'</h1>';
-		Display::display_sortable_grid('search_users', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true));
+		Display::display_sortable_grid('search_users', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
 	}
 	
 	

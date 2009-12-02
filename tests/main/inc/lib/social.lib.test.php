@@ -98,7 +98,7 @@ class TestSocial extends UnitTestCase{
 		//var_dump($instans1);
 		//var_dump($instans2);
 	}
-
+/*
 	public function testGetListIdFriendsByUserId (){
 		$instans= new MockDatabase();
 		$user_id = 1;
@@ -111,7 +111,7 @@ class TestSocial extends UnitTestCase{
 		//var_dump($res);
 		//var_dump($instans);
 	}
-
+*/
 	public function testGetListPathWebByUserId(){
 		$instans = new MockUserManager();
 		$user_id=1;

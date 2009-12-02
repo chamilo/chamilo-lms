@@ -323,7 +323,7 @@ if ($add_type == 'multiple') {
 ?>
 
 <div class="actions">
-	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>
+	<?php $link_add_type_unique ?>&nbsp;|&nbsp;<?php $link_add_type_multiple ?>
 </div>
 
 <?php echo '<div class="row"><div class="form_header">'.$tool_name.' ('.$session_info['name'].')</div></div><br/>'; ?>
@@ -559,8 +559,10 @@ function makepost(select){
 
 //current group members		
 $members = GroupPortalManager::get_users_by_group($group_id,true,array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER));
-echo get_lang('UsersAlreadyInvited');
-Display::display_sortable_grid('search_users', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true));
+if (is_array($members) && count($members)>0) {
+	echo get_lang('UsersAlreadyInvited');
+	Display::display_sortable_grid('search_users', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true));
+}
 
 
 /*

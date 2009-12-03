@@ -219,9 +219,6 @@ CREATE TABLE course_field (
     PRIMARY KEY(id)
 );
 
-INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','SpecialCourse', 'Yes', 1 , 1);
-
-
 --
 -- Table structure for table course_field_values
 --
@@ -647,7 +644,7 @@ VALUES
 ('service_ppt2lp', 'ftp_password', 'textfield', NULL, NULL, 'FtpPassword', NULL, NULL, NULL, 0),
 ('service_ppt2lp', 'path_to_lzx', 'textfield', NULL, NULL, '', NULL, NULL, NULL, 0),
 ('service_ppt2lp', 'size', 'radio', NULL, '720x540', '', NULL, NULL, NULL, 0),
-('wcag_anysurfer_public_pages', NULL, 'radio','Platform','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL, 0),
+('wcag_anysurfer_public_pages', NULL, 'radio','Editor','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL, 0),
 ('stylesheets', NULL, 'textfield','stylesheets','dokeos_blue','',NULL, NULL, NULL, 1),
 ('upload_extensions_list_type', NULL, 'radio', 'Security', 'blacklist', 'UploadExtensionsListType', 'UploadExtensionsListTypeComment', NULL, NULL, 0),
 ('upload_extensions_blacklist', NULL, 'textfield', 'Security', '', 'UploadExtensionsBlacklist', 'UploadExtensionsBlacklistComment', NULL, NULL, 0),
@@ -669,7 +666,6 @@ VALUES
 ('show_tabs', 'platform_administration', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsPlatformAdministration', 1),
 ('show_tabs', 'my_agenda', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyAgenda', 1),
 ('show_tabs', 'my_profile', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyProfile', 1),
-('show_tabs', 'social', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsSocial', 0),
 ('default_forum_view', NULL, 'radio', 'Course', 'flat', 'DefaultForumViewTitle','DefaultForumViewComment',NULL,NULL, 0),
 ('platform_charset',NULL,'textfield','Platform','iso-8859-15','PlatformCharsetTitle','PlatformCharsetComment','platform',NULL, 0),
 ('noreply_email_address', '', 'textfield', 'Platform', '', 'NoReplyEmailAddress', 'NoReplyEmailAddressComment', NULL, NULL, 0),
@@ -720,7 +716,7 @@ VALUES
 ('course_create_active_tools','survey','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Survey', 0),
 ('course_create_active_tools','glossary','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary', 0),
 ('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook', 0),
-('advanced_filemanager',NULL,'radio','Platform','false','AdvancedFileManagerTitle','AdvancedFileManagerComment',NULL,NULL, 0),
+('advanced_filemanager',NULL,'radio','Editor','false','AdvancedFileManagerTitle','AdvancedFileManagerComment',NULL,NULL, 0),
 ('allow_reservation', NULL, 'radio', 'Tools', 'false', 'AllowReservationTitle', 'AllowReservationComment', NULL, NULL, 0),
 ('profile','apikeys','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'ApiKeys', 0),
 ('allow_message_tool', NULL, 'radio', 'Tools', 'false', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL,0),
@@ -739,7 +735,13 @@ VALUES
 ('show_glossary_in_extra_tools', NULL, 'radio', 'Course', 'false', 'ShowGlossaryInExtraToolsTitle', 'ShowGlossaryInExtraToolsComment', NULL, NULL,1),
 ('dokeos_database_version', NULL, 'textfield', NULL,'1.8.6.2.9070','DokeosDatabaseVersion','',NULL,NULL,0),
 ('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1),
-('go_to_course_after_login',NULL,'radio','Course','false','GoToCourseAfterLoginTitle','GoToCourseAfterLoginComment',NULL,NULL, 0);
+('go_to_course_after_login',NULL,'radio','Course','false','GoToCourseAfterLoginTitle','GoToCourseAfterLoginComment',NULL,NULL, 0),
+('math_mimetex',NULL,'radio','Editor','false','MathMimetexTitle','MathMimetexComment',NULL,NULL, 0),
+('math_asciimathML',NULL,'radio','Editor','false','MathASCIImathMLTitle','MathASCIImathMLComment',NULL,NULL, 0),
+('youtube_for_students',NULL,'radio','Editor','true','YoutubeForStudentsTitle','YoutubeForStudentsComment',NULL,NULL, 0),
+('block_copy_paste_for_students',NULL,'radio','Editor','false','BlockCopyPasteForStudentsTitle','BlockCopyPasteForStudentsComment',NULL,NULL, 0),
+('more_buttons_maximized_mode',NULL,'radio','Editor','false','MoreButtonsForMaximizedModeTitle','MoreButtonsForMaximizedModeComment',NULL,NULL, 0);
+
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -928,7 +930,17 @@ VALUES
 ('send_email_to_admin_when_create_course','true','Yes'),
 ('send_email_to_admin_when_create_course','false','No'),
 ('go_to_course_after_login','true','Yes'),
-('go_to_course_after_login','false','No');
+('go_to_course_after_login','false','No'),
+('math_mimetex','true','Yes'),
+('math_mimetex','false','No'),
+('math_asciimathML','true','Yes'),
+('math_asciimathML','false','No'),
+('youtube_for_students','true','Yes'),
+('youtube_for_students','false','No'),
+('block_copy_paste_for_students','true','Yes'),
+('block_copy_paste_for_students','false','No'),
+('more_buttons_maximized_mode','true','Yes'),
+('more_buttons_maximized_mode','false','No');
 
 UNLOCK TABLES;
 
@@ -2277,6 +2289,7 @@ CREATE TABLE session_category (
 -- Table structure for table user tag
 --
 
+
 CREATE TABLE tag (
 	id int NOT NULL auto_increment,
 	tag varchar(255) NOT NULL,
@@ -2336,8 +2349,9 @@ CREATE TABLE IF NOT EXISTS message_attachment (
   message_id int NOT NULL,
   filename varchar(255) NOT NULL,
   PRIMARY KEY  (id)
-);
+)
 
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'rssfeeds','RSS',0,0);
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (10,'tags','tags',0,0);
+
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (10, 'tags','tags',0,0);
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (9, 'rssfeeds','RSS',0,0);
 

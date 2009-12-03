@@ -258,7 +258,12 @@ if ($exercise_row['expired_time'] != 0) {
 	
 			$plugin_expired_time = date('M d, Y H:i:s',$expected_time);
 			$clock_expired_time = date('Y-m-d H:i:s',$expected_time);
-					
+
+			//We modify the "expired_time_control" field in track_e_exercices for this attempt
+		 	$sql_track_e_exe = "UPDATE $stat_table SET expired_time_control = '".$clock_expired_time."' WHERE exe_id = '".$track_exercice_row['exe_id']."'";
+		 	Database::query($sql_track_e_exe,__FILE__,__LINE__);
+            
+            //Sessions  that contain the expired time				
 		 	$_SESSION['expired_time'] = $clock_expired_time;
 	     	$_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);		
 		} else {
@@ -266,7 +271,8 @@ if ($exercise_row['expired_time'] != 0) {
 			
 			$plugin_expired_time = date('M d, Y H:i:s',$expected_time);
 			$clock_expired_time = date('Y-m-d H:i:s',$expected_time);
-					
+
+            //Sessions  that contain the expired time	
 		 	$_SESSION['expired_time'] = $clock_expired_time;
 	     	$_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);		
 		}

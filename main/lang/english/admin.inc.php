@@ -1103,7 +1103,9 @@ $GroupPermissions = "Group Permissions";
 $MessagesSent = "Messages sent";
 $MessagesReceived = "Messages received";
 $CountFriends = "Number of friends";
-
+$SpecialCourse = "Special course";
+$MathMimetexTitle = "mimeTEX mathematical editor";
+$MathMimetexComment = "Enable mimeTeX mathematical editor";
 $MathASCIImathMLTitle = "SCIImathML mathematical editor";
 $MathASCIImathMLComment = "Enable SCIImathML mathematical editor";
 $YoutubeForStudentsTitle = "Allow students to insert videos from YouTube";

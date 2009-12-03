@@ -740,7 +740,8 @@ VALUES
 ('math_asciimathML',NULL,'radio','Editor','false','MathASCIImathMLTitle','MathASCIImathMLComment',NULL,NULL, 0),
 ('youtube_for_students',NULL,'radio','Editor','true','YoutubeForStudentsTitle','YoutubeForStudentsComment',NULL,NULL, 0),
 ('block_copy_paste_for_students',NULL,'radio','Editor','false','BlockCopyPasteForStudentsTitle','BlockCopyPasteForStudentsComment',NULL,NULL, 0),
-('more_buttons_maximized_mode',NULL,'radio','Editor','false','MoreButtonsForMaximizedModeTitle','MoreButtonsForMaximizedModeComment',NULL,NULL, 0);
+('more_buttons_maximized_mode',NULL,'radio','Editor','false','MoreButtonsForMaximizedModeTitle','MoreButtonsForMaximizedModeComment',NULL,NULL, 0),
+('students_download_folders',NULL,'radio','Tools','true','AllowStudentsDownloadFoldersTitle','AllowStudentsDownloadFoldersComment',NULL,NULL, 0);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -940,7 +941,9 @@ VALUES
 ('block_copy_paste_for_students','true','Yes'),
 ('block_copy_paste_for_students','false','No'),
 ('more_buttons_maximized_mode','true','Yes'),
-('more_buttons_maximized_mode','false','No');
+('more_buttons_maximized_mode','false','No'),
+('students_download_folders','true','Yes'),
+('students_download_folders','false','No');
 
 UNLOCK TABLES;
 

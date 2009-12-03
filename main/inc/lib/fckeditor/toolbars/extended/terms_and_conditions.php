@@ -3,36 +3,27 @@
 // See license terms in dokeos/documentation/license.txt
 
 // Training tools
-// Test, feedback to an answer
+// Survey
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('Link','Unlink','Bold','Italic','TextColor','BGColor','mimetex')
+	array('Style','FontFormat','FontName','FontSize'),
+	array('Bold','Italic','Underline'),
+	array('JustifyLeft','JustifyCenter','JustifyRight')
 );
 
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.
 $config['ToolbarSets']['Maximized'] = array(
-	array('FitWindow'),
-	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),
-	array('OrderedList','UnorderedList','-','Outdent','Indent'),
-	array('JustifyLeft','JustifyCenter','JustifyRight'),
-	array('Undo','Redo','-','SelectAll','RemoveFormat'),
-	'/',
 	array('Style','FontFormat','FontName','FontSize'),
-	array('TextColor','BGColor'),
-	array('SpecialChar','mimetex')
+	array('Bold','Italic','Underline'),
+	array('JustifyLeft','JustifyCenter','JustifyRight')
 );
-
-// Sets whether the toolbar can be collapsed/expanded or not.
-// Possible values: true , false
-//$config['ToolbarCanCollapse'] = true;
-
 // Sets how the editor's toolbar should start - expanded or collapsed.
 // Possible values: true , false
-$config['ToolbarStartExpanded'] = false;
+//$config['ToolbarStartExpanded'] = true;
 
 //This option sets the location of the toolbar.
 // Possible values: 'In' , 'None' , 'Out:[TargetId]' , 'Out:[TargetWindow]([TargetId])'
@@ -47,3 +38,4 @@ $config['ToolbarStartExpanded'] = false;
 // Possible values, examples: 300 , '250' , '100%' , ...
 //$config['Width'] = '100%';
 //$config['Height'] = '120';
+?>

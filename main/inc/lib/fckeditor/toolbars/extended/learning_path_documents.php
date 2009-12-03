@@ -9,19 +9,14 @@
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('FitWindow','Save','Preview'),
-	array('Bold','Italic','Underline'),
-	array('OrderedList','UnorderedList','-','Outdent','Indent'),
-	array('JustifyLeft','JustifyCenter','JustifyRight'),
-	array('Undo','Redo','-','Find','-','SelectAll','RemoveFormat'),
-	array('Link','Unlink','Glossary'),
-	array('Image','Flash'),
+	array('PasteWord','-','Undo','Redo'),
+	array('Link','Unlink','Anchor','Glossary'),
+	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex','asciimath','Table','SpecialChar'),
+	array('Outdent','Indent','TextColor','BGColor','-','OrderedList','UnorderedList','JustifyLeft','JustifyCenter','JustifyRight'),
 	'/',
 	array('Style','FontFormat','FontName','FontSize'),
-	array('TextColor','BGColor'),
-	array('Rule','Table','SpecialChar','mimetex','asciimath'),
-	array('Source')
-);
+	array('Bold','Italic','Underline','-','Source'),
+);//save, FitWindow don't run well here
 
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.

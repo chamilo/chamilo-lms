@@ -979,6 +979,7 @@ $SoberBrown = "Sober brown";
 $SteelGrey = "Steel grey";
 $TastyOlive = "Tasty olive";
 $AddNews  = "Aggiungi avvisi";
+$ExportCourses = "Esporta corsi";
 $SearchDatabaseOpeningError = "Non è possibile accedere al database di indicizzazione dei contenuti";
 $SearchDatabaseVersionError = "Il formato del database non è supportato";
 $SearchDatabaseModifiedError = "Database di indicizzazione modificato";
@@ -1097,4 +1098,7 @@ $FieldTypeTag = "Tag utente";
 $SendEmailToAdminTitle = "Avviso della creazione di un nuovo corso tramite e-mail";
 $SendEmailToAdminComment = "Ogni volta che un docente crea un nuovo corso, verrà inviata un\'e-mail all\'amministratore";
 $UserTag = "Etichetta utente";
+$SelectSession = "Seleziona la sessione";
+$GroupPermissions = "Permessi del gruppo";
+$SpecialCourse = "Corso speciale";
 ?>

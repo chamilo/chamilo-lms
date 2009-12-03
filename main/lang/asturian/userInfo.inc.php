@@ -92,4 +92,6 @@ $SendInvitation = "Unviar invitación";
 $SocialInvitationToFriends = "Invitar a xunise a la mio rede de collacios";
 $MyCertificates = "Los mios certificaos";
 $ToChangeYourEmailMustTypeYourPassword = "Pa camudar el to corréu electrónicu tienes qu\'escribir la to contraseña";
+$Invitations = "Invitaciones";
+$MyGroups = "Los mios grupos";
 ?>

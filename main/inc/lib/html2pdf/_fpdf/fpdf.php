@@ -896,7 +896,11 @@ function Ln($h=null)
 	else
 		$this->y+=$h;
 }
-
+/*
+ * en commentaire car erreur PHP : 
+ * Strict Standards: Declaration of FPDF_Alpha::Image() should be compatible with that of FPDF::Image()
+ */
+/*
 function Image($file, $x=null, $y=null, $w=0, $h=0, $type='', $link='')
 {
 	//Put an image on the page
@@ -952,7 +956,7 @@ function Image($file, $x=null, $y=null, $w=0, $h=0, $type='', $link='')
 	if($link)
 		$this->Link($x,$y,$w,$h,$link);
 }
-
+*/
 function GetX()
 {
 	//Get x position
@@ -1730,5 +1734,3 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && $_SERVER['HTTP_USER_AGENT']=='contype')
 	header('Content-Type: application/pdf');
 	exit;
 }
-
-?>

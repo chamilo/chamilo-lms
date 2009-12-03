@@ -1115,4 +1115,6 @@ $Editor = "WYSIWYG Editor";
 $GoToCourseAfterLoginTitle = "Go directly to the course after login";
 $GoToCourseAfterLoginComment = "When a user is registered in one course, go directly to the course after login";
 $GroupList = "Group List";
+$AllowStudentsDownloadFoldersTitle = "Allow students to download directories";
+$AllowStudentsDownloadFoldersComment = "Allow to students pack and download a complete directory in the document tool";
 ?>

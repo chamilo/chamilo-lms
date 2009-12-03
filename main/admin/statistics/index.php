@@ -50,14 +50,15 @@ require_once ('statistics.lib.php');
 $strCourse  = get_lang('Courses');
 $strUsers = get_lang('Users');
 $strSystem = get_lang('System');
+$strSocial = get_lang('Social');
 
-
+// courses ...
 $tools[$strCourse]['action=courses'] = get_lang('CountCours');
 $tools[$strCourse]['action=tools'] = get_lang('PlatformToolAccess');
 $tools[$strCourse]['action=courselastvisit'] = get_lang('LastAccess');
 $tools[$strCourse]['action=coursebylanguage'] = get_lang('CountCourseByLanguage');
 
-
+// users ...
 $tools[$strUsers]['action=users'] = get_lang('CountUsers');
 $tools[$strUsers]['action=recentlogins'] = get_lang('Logins');
 $tools[$strUsers]['action=logins&amp;type=month'] = get_lang('Logins').' ('.get_lang('PeriodMonth').')';
@@ -65,8 +66,13 @@ $tools[$strUsers]['action=logins&amp;type=day'] = get_lang('Logins').' ('.get_la
 $tools[$strUsers]['action=logins&amp;type=hour'] = get_lang('Logins').' ('.get_lang('PeriodHour').')';
 $tools[$strUsers]['action=pictures'] = get_lang('CountUsers').' ('.get_lang('UserPicture').')';
 
+// system ...
 $tools[$strSystem]['action=activities'] = get_lang('ImportantActivities');
 
+// social ...
+$tools[$strSocial]['action=messagesent'] = get_lang('MessagesSent');
+$tools[$strSocial]['action=messagereceived'] = get_lang('MessagesReceived');
+$tools[$strSocial]['action=friends'] = get_lang('CountFriends');
 
 echo '<table><tr>';
 foreach($tools as $section => $items)
@@ -94,7 +100,6 @@ switch($_GET['action'])
 		}
 		// courses for each course category
 		statistics::print_stats(get_lang('CountCours'),$courses);
-
 		break;
 	case 'users':
 		// total amount of users
@@ -115,7 +120,6 @@ switch($_GET['action'])
 		statistics::print_stats(get_lang('Teachers'),$teachers);
 		// students for each course category
 		statistics::print_stats(get_lang('Students'),$students);
-
 		break;
 	case 'coursebylanguage':
 		statistics::print_course_by_language_stats();
@@ -137,6 +141,19 @@ switch($_GET['action'])
 		break;
 	case 'activities':
 		statistics::print_activities_stats();
+		break;
+	case 'messagesent':
+		$messages_sent = statistics::get_messages('sent');
+		statistics::print_stats(get_lang('MessagesSent'), $messages_sent);
+		break;
+	case 'messagereceived':
+		$messages_received = statistics::get_messages('received');
+		statistics::print_stats(get_lang('MessagesReceived'), $messages_received);
+		break;
+	case 'friends':
+		// total amount of friends
+		$friends = statistics::get_friends();
+		statistics::print_stats(get_lang('CountFriends'), $friends);
 		break;
 }
 

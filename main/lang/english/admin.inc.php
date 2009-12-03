@@ -1100,4 +1100,7 @@ $SendEmailToAdminComment = "Send an email to administardor of the platform, each
 $UserTag = "User tag";
 $SelectSession = "Select session";
 $GroupPermissions = "Group Permissions";
+$MessagesSent = "Messages sent";
+$MessagesReceived = "Messages received";
+$CountFriends = "Number of friends";
 ?>

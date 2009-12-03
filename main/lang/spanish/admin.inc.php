@@ -1100,4 +1100,7 @@ $SendEmailToAdminComment = "Enviar un correo electrónico al administardor de la 
 $UserTag = "Etiqueta de usuario";
 $SelectSession = "Seleccionar sesión";
 $GroupPermissions = "Permisos del grupo";
+$MessagesSent = "Mensajes enviados";
+$MessagesReceived = "Mensajes recibidos";
+$CountFriends = "Número de amigos";
 ?>

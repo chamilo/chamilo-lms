@@ -9,17 +9,13 @@
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('FitWindow','Save','Preview'),
+	array('NewPage','Templates','Save','Print','PageBreak','FitWindow','-','PasteWord','-','Undo','Redo','-','SelectAll','-','Find'),
 	array('Bold','Italic','Underline'),
-	array('OrderedList','UnorderedList','-','Outdent','Indent'),
-	array('JustifyLeft','JustifyCenter','JustifyRight'),
-	array('Undo','Redo','-','Find','-','SelectAll','RemoveFormat'),
-	array('Link','Unlink'),
-	array('Image','Flash'),
-	'/',
-	array('Style','FontFormat','FontName','FontSize'),
-	array('TextColor','BGColor'),
-	array('Rule','Table','SpecialChar'),
+	array('Link','Unlink','Anchor'),
+	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex','asciimath'),
+	array('Table','Smiley','SpecialChar','googlemaps'),
+	array('FontFormat','FontName','FontSize'),
+	array('JustifyLeft','JustifyCenter','JustifyRight','-','OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor'),
 	array('Source')
 );
 

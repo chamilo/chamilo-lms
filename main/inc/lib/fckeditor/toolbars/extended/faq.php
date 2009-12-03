@@ -7,7 +7,16 @@
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
 // This is the visible toolbar set when the editor has "normal" size.
+
 $config['ToolbarSets']['Normal'] = array(
+	array('Save','Preview','Source')
+);
+
+
+// This is the visible toolbar set when the editor is maximized.
+// If it has not been defined, then the toolbar set for the "normal" size is used.
+
+$config['ToolbarSets']['Maximized'] = array(
 	//array('FitWindow','Save'),
 	array('Save'),
 	array('Bold','Italic','Underline'),
@@ -16,13 +25,6 @@ $config['ToolbarSets']['Normal'] = array(
 	array('Link','Unlink')
 );
 
-// This is the visible toolbar set when the editor is maximized.
-// If it has not been defined, then the toolbar set for the "normal" size is used.
-/*
-$config['ToolbarSets']['Maximized'] = array(
-	array('FitWindow','-') // ...
-);
-*/
 
 // Sets whether the toolbar can be collapsed/expanded or not.
 // Possible values: true , false

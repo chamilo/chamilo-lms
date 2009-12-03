@@ -2,43 +2,25 @@
 // Dokeos - elearning and course management software
 // See license terms in dokeos/documentation/license.txt
 
-// Users tools
-// User profile optional fields
+// Training tools
+// Survey
 
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('FitWindow','-','PasteWord','-','Undo','Redo'),
-	array('Link','Unlink','Anchor'),
-	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex'),
-	array('Table','Smiley'),
-	'/',
-	array('FontName','FontSize'),
+	array('Style','FontFormat','FontName','FontSize'),
 	array('Bold','Italic','Underline'),
-	array('JustifyLeft','JustifyCenter','-','OrderedList','UnorderedList','-','TextColor','BGColor'),
-	array('Source')
+	array('JustifyLeft','JustifyCenter','JustifyRight')
 );
 
 // This is the visible toolbar set when the editor is maximized.
 // If it has not been defined, then the toolbar set for the "normal" size is used.
+/*
 $config['ToolbarSets']['Maximized'] = array(
-	array('FitWindow','NewPage','Preview'),
-	array('Cut','Copy','Paste','PasteText','PasteWord'),
-	array('Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'),
-	array('Link','Unlink','Anchor'),
-	'/',
-	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'),
-	array('OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'),
-	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
-	array('Rule','SpecialChar'),
-	array('Image','imgmapPopup','Flash','MP3','EmbedMovies','flvPlayer','googlemaps','Smiley'),
-	'/',
-	array('Style','FontFormat','FontName','FontSize'),
-	array('TextColor','BGColor'),
-	array('Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp'),
-	array('ShowBlocks')
+	array('FitWindow','-') // ...
 );
+*/
 
 // Sets whether the toolbar can be collapsed/expanded or not.
 // Possible values: true , false
@@ -46,7 +28,7 @@ $config['ToolbarSets']['Maximized'] = array(
 
 // Sets how the editor's toolbar should start - expanded or collapsed.
 // Possible values: true , false
-$config['ToolbarStartExpanded'] = false;
+//$config['ToolbarStartExpanded'] = true;
 
 //This option sets the location of the toolbar.
 // Possible values: 'In' , 'None' , 'Out:[TargetId]' , 'Out:[TargetWindow]([TargetId])'
@@ -60,4 +42,5 @@ $config['ToolbarStartExpanded'] = false;
 // Here new width and height of the editor may be set.
 // Possible values, examples: 300 , '250' , '100%' , ...
 //$config['Width'] = '100%';
-//$config['Height'] = '130';
+//$config['Height'] = '120';
+?>

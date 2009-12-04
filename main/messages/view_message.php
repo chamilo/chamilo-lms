@@ -2,7 +2,7 @@
 /* For licensing terms, see /chamilo_license.txt */
 
 // name of the language file that needs to be included
-$language_file= 'messages';
+$language_file= array('messages','userInfo');
 $cidReset= true;
 require_once '../inc/global.inc.php';
 api_block_anonymous_users();
@@ -75,7 +75,16 @@ echo '<div id="inbox-wrapper">';
 
 	echo '<div id="inbox">';
 		//MAIN CONTENT
-		$message = MessageManager::show_message_box($_GET['id']);
+		
+		if (empty($_GET['id'])) {
+			$id_message = $_GET['id_send'];
+			$source = 'outbox';
+		} else {
+			$id_message = $_GET['id'];
+			$source = 'inbox';
+		}
+		
+		$message = MessageManager::show_message_box($id_message,$source);
 		if (!empty($message)) {
 			echo $message;
 			

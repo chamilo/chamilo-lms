@@ -3,10 +3,10 @@
  * asciimath plugin Spanish language file.
  * Encoding: UTF-8.
  *
- * Author:
+ * Author: Juan Carlos Raña Trabado
  */
 
-FCKLang["DlgAsciiMath"] = 'Insertar una fórmula AsciiMath' ;
+FCKLang["DlgAsciiMath"] = 'Insertar una fórmula ASCIIMath' ;
 FCKLang["DlgAsciiMathFormulaEditor"] = 'Editor de ecuaciones' ;
 FCKLang["DlgAsciiMathInput"] = 'Insertar' ;
 FCKLang["DlgAsciiMathClear"] = 'Limpiar' ;

@@ -165,6 +165,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 	if (!$show_as_icon)
 	{
 		//build download link (icon)
+				
 		$forcedownload_link=($filetype=='folder')?api_get_self().'?'.api_get_cidreq().'&action=downloadfolder&amp;path='.$url_path.$req_gid:api_get_self().'?'.api_get_cidreq().'&amp;action=download&amp;id='.$url_path.$req_gid;
 		//folder download or file download?
 		$forcedownload_icon=($filetype=='folder')?'folder_zip.gif':'filesave.gif';
@@ -220,7 +221,18 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 
 	if (!$show_as_icon)
 	{
-		$force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'),array('height'=>'16', 'width' => '16')).'</a>';
+		if($filetype=="folder")
+		{	
+			if(api_is_allowed_to_edit() || api_is_platform_admin() || api_get_setting('students_download_folders') == 'true')
+			{
+				$force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'),array('height'=>'16', 'width' => '16')).'</a>';
+			}
+		}
+		else
+		{
+			$force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'),array('height'=>'16', 'width' => '16')).'</a>';
+		}
+		
 		return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html;
 	}
 	else

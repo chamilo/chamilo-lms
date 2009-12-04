@@ -27,4 +27,5 @@ $IntroductionTextDeleted = "Testu d\'entamu esborráu";
 $SessionIdentifier = "Identificador de la sesión";
 $SessionName = "Nome de la sesión";
 $SessionCategory = "Categoría de la sesión";
+$SessionData = "Datos de la sesión";
 ?>

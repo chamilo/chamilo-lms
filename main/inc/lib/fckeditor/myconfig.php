@@ -66,9 +66,20 @@
 // Then, you may modify the newly copied toolbar definitions at your will, just keep correct php-syntax.
 // It is not mandatory you to create custom files for all the toolbars. In case of missing file in the directory with the
 // custom toobar definitions the system would read the correspondent "factory" toolbar definition (form 'default' directory).
-$config['ToolbarSets']['Directory'] = 'default';
-// You may try this provided example of custom toolbars:
-//$config['ToolbarSets']['Directory'] = 'extended';
+
+
+// This is the visible toolbar set when the editor is maximized.
+// If it has not been defined, then the toolbar set for the "normal" size is used.
+// if do you prefer configure for each toolbar edit main/inc/lib/fckeditor/toolbars/
+
+if ((api_get_setting('more_buttons_maximized_mode') == 'true'))
+{
+	$config['ToolbarSets']['Directory'] = 'extended';
+}
+else
+{	
+	$config['ToolbarSets']['Directory'] = 'default';
+}
 
 
 /*
@@ -119,8 +130,15 @@ $config['LoadPlugin'][] = 'fckEmbedMovies';
 $config['LoadPlugin'][] = 'flvPlayer';
 
 // youtube : Adds a dilog for inserting YouTube video-streams.
-if (api_is_allowed_to_edit() || api_is_platform_admin()) { // (not for students)
+if ((api_get_setting('youtube_for_students') == 'true')) {
+	
 	$config['LoadPlugin'][] = 'youtube';
+	
+}
+else{
+	if (api_is_allowed_to_edit() || api_is_platform_admin()) { // (not for students)
+		$config['LoadPlugin'][] = 'youtube';
+	}
 }
 
 // googlemaps : Adds a dilog for inserting Google maps.
@@ -136,8 +154,11 @@ $config['LoadPlugin'][] = 'googlemaps';
 // mimetex : Adds a dilog for inserting mathematical formulas. In order this plugin to work prpoperly, preliminary changes
 // in your server configuration have to be done. The MimeTex executable file has to be installed, see the installation guide.
 //
-// Uncomment the line below (remove the double slash at the beginning) to enable the 'mimetex' plugin:
-//$config['LoadPlugin'][] = 'mimetex';
+if ((api_get_setting('math_mimetex') == 'true')) {
+	
+	$config['LoadPlugin'][] = 'mimetex';
+}
+
 //
 // Some additional settings become active only when the 'mimetex' plugin has been enabled:
 //
@@ -166,7 +187,11 @@ $config['MimetexExecutableDetectionTimeout'] = 0.05;
 // After enabling it, this plugin is configured to work with full-page html documents out-of-the box.
 // You may try it in the "Documents" and "Wiki" tools.
 // Browser compatibility: Internet Explorer 6.0+ with MathPlayer plugin, Mozilla Firefox 2.0+, Opera 9.5+
-//$config['LoadPlugin'][] = 'asciimath';
+
+if ((api_get_setting('math_asciimathML') == 'true')) {
+	
+	$config['LoadPlugin'][] = 'asciimath';
+}
 
 // wikilink : Adds a dialog for inserting wiki-formatted links.
 $config['LoadPlugin'][] = 'wikilink';
@@ -278,6 +303,15 @@ $config['FontFormats'] = 'p;h1;h2;h3;h4;h5'; // A reduced format list.
 // The following setting guarantees white backgroung for the editing area
 // for all browsers. You may disable or change it if you wish.
 $config['EditorAreaStyles'] = 'body { background-color: #ffffff; }';
+
+// A setting for blocking copy/paste functions of the editor.
+// This setting activates on leaners only. For users with other statuses there is no blocking copy/paste.
+// if do you prefer configure for each toolbar edit main/inc/lib/fckeditor/toolbars/
+if ((api_get_setting('block_copy_paste_for_students') == 'true'))
+{
+
+	$config['BlockCopyPaste'] = true;
+}
 
 /*
  * Additional note:

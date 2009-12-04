@@ -3,20 +3,20 @@
  * asciimath plugin Spanish language file.
  * Encoding: UTF-8.
  *
- * Author:
+ * Author: Juan Carlos Raña Trabado
  */
 
-FCKLang["DlgAsciiMath"] = 'AsciiMath Formula Input' ;
-FCKLang["DlgAsciiMathFormulaEditor"] = 'Formula Editor' ;
-FCKLang["DlgAsciiMathInput"] = 'Input' ;
-FCKLang["DlgAsciiMathClear"] = 'Clear' ;
-FCKLang["DlgAsciiMathDelete"] = 'Delete' ;
-FCKLang["DlgAsciiMathPreview"] = 'Preview' ;
-FCKLang["DlgAsciiMathBasedOn"] = 'Based on ASCIIMathML by ' ;
-FCKLang["DlgAsciiMathForMoreInfo"] = 'For more information on AsciiMathML visit this page: ' ;
-FCKLang["DlgAsciiMathShowMathML"] = 'Show MathML' ;
-FCKLang["DlgAsciiMathFormulaPreview"] = 'Formula Preview' ;
-FCKLang["DlgAsciiIncompatibleBrowser"] = 'Your browser is not able to show mathematical formulas. Please, use %s1 or Internet Explorer with %s2 plugin.' ;
-FCKLang["DlgAsciiMathOldIE"] = 'Your browser is not able to show mathematical formulas. You need to upgrade to Internet Explorer 6.0+. Then you need to install the MathPlayer 2 plugin for Internet Explorer. Please, see %s for more information.' ;
-FCKLang["DlgAsciiMathInstallMathPlayer"] = 'Your browser is not able to show mathematical formulas. You need to install the MathPlayer 2 plugin for Internet Explorer. Please, see %s for more information.' ;
-FCKLang["DlgAsciiMathOldMathPlayer"] = 'Your browser is not able to show mathematical formulas. You need to upgrade the MathPlayer plugin for Internet Explorer to version 2. Please, see %s for more information.' ;
+FCKLang["DlgAsciiMath"] = 'Insertar una fórmula ASCIIMath' ;
+FCKLang["DlgAsciiMathFormulaEditor"] = 'Editor de ecuaciones' ;
+FCKLang["DlgAsciiMathInput"] = 'Insertar' ;
+FCKLang["DlgAsciiMathClear"] = 'Limpiar' ;
+FCKLang["DlgAsciiMathDelete"] = 'Eliminar' ;
+FCKLang["DlgAsciiMathPreview"] = 'Previsualización' ;
+FCKLang["DlgAsciiMathBasedOn"] = 'Basado en ASCIIMathML por ' ;
+FCKLang["DlgAsciiMathForMoreInfo"] = 'Para más información sobre AsciiMathML visite esta página: ' ;
+FCKLang["DlgAsciiMathShowMathML"] = 'Mostrar MathML' ;
+FCKLang["DlgAsciiMathFormulaPreview"] = 'Previsualización de la ecuación' ;
+FCKLang["DlgAsciiIncompatibleBrowser"] = 'Su navegador no puede mostrar fórmulas matemáticas. Use %s1 o Internet Explorer con el plugin %s2 ' ;
+FCKLang["DlgAsciiMathOldIE"] = 'Su navegador no puede mostrar fórmulas matemáticas. Actualícese a Internet Explorer 6.0+. Tras esto, tendra que instalar el plugin MathPlayer 2 para Internet Explorer. Para más información vea %s' ;
+FCKLang["DlgAsciiMathInstallMathPlayer"] = 'Su navegador no puede mostrar fórmulas matemáticas. Necesita instalar el plugin MathPlayer 2 para Internet Explorer. Para más información vea %s' ;
+FCKLang["DlgAsciiMathOldMathPlayer"] = 'Su navegador no puede mostrar fórmulas matemáticas. Necesita actualizar el plugin MathPlayer para Internet Explorer a la version 2. Para más información vea %s' ;

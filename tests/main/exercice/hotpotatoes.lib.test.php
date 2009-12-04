@@ -33,6 +33,8 @@ class TestHotpotatoes extends UnitTestCase {
 		$res=GenerateHiddenList($imgparams);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
+
+		
 	}
 
 	function testGenerateHpFolder() {
@@ -44,13 +46,40 @@ class TestHotpotatoes extends UnitTestCase {
 
 	function testGetComment() {
 		global $dbTable;
-		$path = 'test';
-		$course_code='test';
-		$query ="select comment from $dbTable where path='$path'";
-		$res=GetComment($path,$course_code);
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
+		global $_configuration;
+
+ 		require_once api_get_path(SYS_PATH).'tests/main/inc/lib/add_course.lib.inc.test.php';
+		
+		// create a course
+		
+		$course_datos = array(
+				'wanted_code'=> 'COD21',
+				'title'=>'metodologia de calculo diferencial',
+				'tutor_name'=>'R. J. Wolfagan',
+				'category_code'=>'2121',
+				'course_language'=>'english',
+				'course_admin_id'=>'1211',
+				'db_prefix'=> $_configuration['db_prefix'].'COD21',
+				'db_prefix'=> $_configuration['db_prefix'].'COD21',
+				'firstExpirationDelay'=>'112'
+				);
+		$res = create_course($course_datos['wanted_code'], $course_datos['title'],
+							 $course_datos['tutor_name'], $course_datos['category_code'],
+							 $course_datos['course_language'],$course_datos['course_admin_id'],
+							 $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);
+		if ($res) {
+			$start = 0;
+	 		$end = 0;
+	 		$params='';
+			$course_code = 'COD21';			
+			$path = 'exercice_submit.php';
+			$query ="select comment from $dbTable where path='$path'";
+			$res=GetComment($path,$course_code);
+			
+			$this->assertTrue(is_string($res));
+			//var_dump($res);
+				}
+		}
 
 	/*  Deprecated
 	function testGetFileName() {
@@ -92,11 +121,13 @@ class TestHotpotatoes extends UnitTestCase {
 	}
 
 	function testGetQuizName() {
+		$course_code = 'COD21';	
 		$fname='exercice_submit.php';
 		$fpath='main/exercice/exercice_submit.php';
 		$res=GetQuizName($fname,$fpath);
+
 		$this->assertTrue(is_string($res));
-		//var_dump($e_contents);
+		//var_dump($res);
 	}
 
 	function testGetSrcName() {
@@ -167,9 +198,11 @@ class TestHotpotatoes extends UnitTestCase {
 	}
 
 	function testWriteFileCont() {
+		$course_code = 'COD21';	
 		$full_file_path='/main/exercice/';
 		$content='test test test';
 		$res=WriteFileCont($full_file_path,$content);
+		$resu = CourseManager::delete_course($course_code);	
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}

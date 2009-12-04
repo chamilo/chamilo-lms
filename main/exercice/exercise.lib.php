@@ -202,30 +202,31 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				$answer=str_replace("{texcode}",$texstring,$answer);
 
 			}
-
 			// unique answer
 			if($answerType == UNIQUE_ANSWER) {
 				$s.="<input type='hidden' name='choice2[".$questionId."]' value='0'>
 				<tr>
 				 <td>
 				 	<div class='u-m-answer'>
-					<p style='float:left; padding-right:4px;'><input class='checkbox' type='radio' name='choice[".$questionId."]' value='".$answerId."'></p>";
+					<p style='float:left; padding-right:4px;'>
+					<span><input class='checkbox' type='radio' name='choice[".$questionId."]' value='".$answerId."'></p></span>";
 				$answer=api_parse_tex($answer);
-				$s.=$answer;
+				$s.=strip_tags($answer);
 				$s.="</div></td></tr>";
 
 			} elseif($answerType == MULTIPLE_ANSWER) {
 			// multiple answers
-				$s.="<tr>
+				$s.="<input type='hidden' name='choice2[".$questionId."]' value='0'>
+				<tr>
 				  <td>
-				  	<div class='u-m-answer'>
-				  	<p style='float:left; padding-right:4px;'><input class='checkbox' type='checkbox' name='choice[".$questionId."][".$answerId."]' value='1'>
-				  	<input type='hidden' name='choice2[".$questionId."][0]' value='0'></p>";
+					 <div class='u-m-answer'>
+					 <p style='float:left; padding-right:4px;'>
+					 <span><input class='checkbox' type='checkbox' name='choice[".$questionId."][".$answerId."]' value='1'></p></span>";
 				$answer = api_parse_tex($answer);
-				$s.=$answer;
+				$s.=strip_tags($answer);
 				$s.="</div></td></tr>";
-
 			}
+
 			// fill in blanks
 			elseif($answerType == FILL_IN_BLANKS)
 			{
@@ -245,11 +246,13 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 					$s.="
 					<tr>
 					  <td colspan='2'>
-						<table border='0' cellpadding='0' cellspacing='0' width='100%'>
-						<tr>";
+						<div style='width:100%;' >";	
 					$answer=api_parse_tex($answer);
-					$s.="<td width='40%' valign='top'><b>".$cpt2."</b>.&nbsp;".$answer."</td>
-						  <td width='20%' valign='top' align='center'>&nbsp;&nbsp;<select name='choice[".$questionId."][".$answerId."]'>
+					//left part questions
+					$s.='	<span style=\' float:left; width:5%;\'><b>'.$cpt2.'</b>.&nbsp;</span>
+							<span style=\' float:left; width:95%;\'>'.$answer.'</span>';
+							
+					$s.="<td width='20%' valign='top' align='center'>&nbsp;&nbsp;<select name='choice[".$questionId."][".$answerId."]'>
 							<option value='0'>--</option>";
 
 		            // fills the list-box
@@ -257,16 +260,20 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 						$s.="<option value='".$key."'>".$val['Lettre']."</option>";
 					}  // end foreach()
 
-					$s.="</select>&nbsp;&nbsp;</td>
-						  <td width='40%' valign='top'>";
+					$s.="</select>&nbsp;&nbsp;</td>";
+					
+					//right part (answers)
+					$s.="<td ><div style='width:100%;'>";	 
 					if(isset($Select[$cpt2]))
-						$s.='<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
+						$s.='<span style=\'float:left; width:5%;\'><b>'.$Select[$cpt2]['Lettre'].'.</b></span>
+							 <span style=\' float:left; width:95%;\'>'.$Select[$cpt2]['Reponse'].'</span>';
 					else
 						$s.='&nbsp;';
 					$s.="
-					</td>
-						</tr>
-						</table>
+						</div></td>";
+						 
+					$s.="			
+						</div>
 					  </td>
 					</tr>";
 
@@ -300,7 +307,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		if (!ereg("MSIE", $_SERVER["HTTP_USER_AGENT"])) {
 			$s .= '</table>';
 		}
-		$s .= '</div>';
+		$s .= '</div><br />';
 
 		// destruction of the Answer object
 		unset($objAnswerTmp);

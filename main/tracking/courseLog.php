@@ -650,7 +650,23 @@ if ($_GET['studentlist'] == 'false') {
 	$tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : 'DESC';
 
 	if (count($a_students) > 0) {
-		$table = new SortableTable('tracking', 'count_student_in_course', null, ($is_western_name_order xor $sort_by_first_name) ? 2 : 1);
+		
+	    if ($export_csv) {
+			$csv_content[] = array ();
+		}
+
+	    $all_datas = array();
+	    $course_code = $_course['id'];
+		
+		$user_ids = array_keys($a_students);
+		$table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
+		
+		$parameters['cidReq'] 		= Security::remove_XSS($_GET['cidReq']);
+		$parameters['studentlist'] 	= Security::remove_XSS($_GET['studentlist']);
+		$parameters['from'] 	= Security::remove_XSS($_GET['myspace']);
+		
+		$table->set_additional_parameters($parameters);
+		
 		$table -> set_header(0, get_lang('OfficialCode'), false, 'align="center"');
 		if ($is_western_name_order) {
 			$table -> set_header(1, get_lang('FirstName'), false, 'align="center"');
@@ -666,86 +682,15 @@ if ($_GET['studentlist'] == 'false') {
 		$table -> set_header(7, get_lang('Messages'),false);
 		$table -> set_header(8, get_lang('FirstLogin'), false, 'align="center"');
 		$table -> set_header(9, get_lang('LatestLogin'), false, 'align="center"');				
-		if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
-			$table -> set_header(10, get_lang('AdditionalProfileField'),false);
-			$table -> set_header(11, get_lang('Details'),false);
-        } else {
-        	$table -> set_header(10, get_lang('Details'),false);
-        }
-	    if ($export_csv) {
-			$csv_content[] = array ();
-		}
-
-	    $all_datas = array();
-	    $course_code = $_course['id'];
-		foreach ($a_students as $student_id => $student) {
-			$student_datas = UserManager :: get_user_info_by_id($student_id);
-			
-			$avg_time_spent = $avg_student_score = $avg_student_progress = $total_assignments = $total_messages = 0;
-			$nb_courses_student = 0;
-			$avg_time_spent = Tracking :: get_time_spent_on_the_course($student_id, $course_code);
-			$avg_student_score = Tracking :: get_average_test_scorm_and_lp($student_id, $course_code);
-			$avg_student_progress = Tracking :: get_avg_student_progress($student_id, $course_code);
-			$total_assignments = Tracking :: count_student_assignments($student_id, $course_code);
-			$total_messages = Tracking :: count_student_messages($student_id, $course_code);
-
-			$row = array();
-			$row[] = $student_datas['official_code'];
-			if ($is_western_name_order) {
-				$row[] = $student_datas['firstname'];
-				$row[] = $student_datas['lastname'];
-			} else {
-				$row[] = $student_datas['lastname'];
-				$row[] = $student_datas['firstname'];
-			}
-			$row[] = api_time_to_hms($avg_time_spent);
-			if (is_null($avg_student_score)) {$avg_student_score=0;}
-			if (is_null($avg_student_progress)) {$avg_student_progress=0;}
-			$row[] = $avg_student_progress.'%';
-			$row[] = $avg_student_score.'%';
-			$row[] = $total_assignments;
-			$row[] = $total_messages;
-			$row[] = Tracking :: get_first_connection_date_on_the_course($student_id, $course_code);
-			$row[] = Tracking :: get_last_connection_date_on_the_course($student_id, $course_code);
-
-			// we need to display an additional profile field
-			if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
-				if (is_array($additional_user_profile_info[$student_id])) {
-					$row[]=implode(', ', $additional_user_profile_info[$student_id]);
-				} else {
-					$row[]='&nbsp;';
-				}
-			}
-			$row[] = '<center><a href="../mySpace/myStudents.php?student='.$student_id.'&details=true&course='.$course_code.'&origin=tracking_course"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
-			if ($export_csv) {
-				$row[8] = strip_tags($row[8]);
-				$row[9] = strip_tags($row[9]);
-				unset($row[10]);
-				$csv_content[] = $row;
-			}
-			$all_datas[] = $row;
-		}		
-		$clean_order = array('ASC','DESC');
-		if(in_array($_GET['tracking_direction'],$clean_order) && $_GET['tracking_direction'] == 'ASC'){	
-			usort($all_datas, 'sort_users');
-		} else if (in_array($_GET['tracking_direction'],$clean_order) && $_GET['tracking_direction'] == 'DESC') {
-			usort($all_datas, 'sort_users_desc');
-		}
-		$page = $table->get_pager()->getCurrentPageID();
-		$all_datas = array_slice($all_datas, ($page-1)*$table -> per_page, $table -> per_page);
-		// if ($export_csv) { usort($csv_content, 'sort_users'); }
+		//if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
+			$table -> set_header(10, get_lang('AdditionalProfileField'),false);			
+        /*} else {
+        	$table -> set_header(10, ,false);
+        }*/
+		$table -> set_header(11, get_lang('Details'),false);
+		$table->display();
 		
-		foreach ($all_datas as $row) {
-			$table -> addRow($row,'align="right"');
-		}
-		$table -> setColAttributes(0, array('align' => 'left'));
-		$table -> setColAttributes(1, array('align' => 'left'));
-		$table -> setColAttributes(2, array('align' => 'left'));
-		$table -> setColAttributes(7, array('align' => 'right'));
-		$table -> setColAttributes(8, array('align' => 'center'));
-		$table -> setColAttributes(9, array('align' => 'center'));
-		$table -> display();
-
+		
 	} else {
 		echo get_lang('NoUsersInCourseTracking');
 	}
@@ -907,7 +852,7 @@ function get_addtional_profile_information_of_field($field_id){
  * @since	Nov 2009
  * @version	1.8.6.2
  */
-function get_addtional_profile_information_of_field_by_user($field_id, $users){
+function get_addtional_profile_information_of_field_by_user($field_id, $users) {
 	// Database table definition
 	$table_user 				= Database::get_main_table(TABLE_MAIN_USER);
 	$table_user_field_values 	= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);	
@@ -955,7 +900,6 @@ function get_addtional_profile_information_of_field_by_user($field_id, $users){
 	return $return;
 }
 
-
 /**
  * count the number of students in this course (used for SortableTable)
  */
@@ -970,4 +914,104 @@ function sort_users($a, $b) {
 
 function sort_users_desc($a, $b) {
 	return strcmp( trim(api_strtolower($b[$_SESSION['tracking_column']])), trim(api_strtolower($a[$_SESSION['tracking_column']])));
+}
+
+/**
+ * Get number of users for sortable with pagination 
+ * @return int
+ */
+function get_number_of_users() {		
+		global $user_ids;		
+		return count($user_ids);
+}
+/**
+ * Get data for users list in sortable with pagination 
+ * @return array
+ */
+function get_user_data($from, $number_of_items, $column, $direction) {
+	
+	global $user_ids, $course_code, $additional_user_profile_info, $export_csv, $is_western_name_order;
+	
+	$course_code = Database::escape_string($course_code);
+	$course_info = CourseManager :: get_course_information($course_code);
+	$tbl_track_cours_access = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+	$tbl_user 				= Database :: get_main_table(TABLE_MAIN_USER);		
+	$tbl_item_property 		= Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_info['db_name']);
+	$tbl_forum_post  		= Database :: get_course_table(TABLE_FORUM_POST, $course_info['db_name']);
+	$tbl_course_lp_view 	= Database :: get_course_table(TABLE_LP_VIEW, $course_info['db_name']);	
+	$tbl_course_lp 			= Database :: get_course_table(TABLE_LP_MAIN, $course_info['db_name']);
+
+	// get all users data from a course for sortable with limit
+	$condition_user = "";
+	if (is_array($user_ids)) {
+		$condition_user = " WHERE user.user_id IN (".implode(',',$user_ids).") "; 
+	} else {
+		$condition_user = " WHERE user.user_id = '$user_ids' ";
+	}			
+	$sql = "SELECT user.user_id as col0, 
+			user.official_code as col1, 
+			user.lastname as col2, 
+			user.firstname as col3, 
+			count(item_prop.tool) as col4,
+			count(post.post_id) as col5,
+			(SELECT login_course_date FROM $tbl_track_cours_access track_course WHERE track_course.user_id = user.user_id AND course_code = '$course_code' ORDER BY login_course_date DESC LIMIT 0,1) as col6,					
+			(SELECT SUM(UNIX_TIMESTAMP(logout_course_date)-UNIX_TIMESTAMP(login_course_date)) FROM $tbl_track_cours_access track_course WHERE track_course.user_id = user.user_id AND track_course.course_code='$course_code') as col7
+			FROM $tbl_user as user
+			LEFT JOIN $tbl_item_property item_prop ON item_prop.insert_user_id = user.user_id AND item_prop.tool='work'
+			LEFT JOIN $tbl_forum_post  post ON post.poster_id = user.user_id
+			$condition_user
+			GROUP BY col0, col1, col2, col3, col6";
+	if (!in_array($direction, array('ASC','DESC'))) {
+    	$direction = 'ASC';
+    }
+    $column = intval($column);
+    $from = intval($from);
+    $number_of_items = intval($number_of_items);
+	$sql .= " ORDER BY col$column $direction ";
+	$sql .= " LIMIT $from,$number_of_items";	
+	$res = Database::query($sql, __FILE__, __LINE__);	
+	$users = array ();
+    $t = time();
+   	$row = array();
+	while ($user = Database::fetch_row($res)) {
+		
+		$row[0] = $user[1];
+		if ($is_western_name_order) {
+			$row[1] = $user[3];
+			$row[2] = $user[2];
+		} else {
+			$row[1] = $user[2];
+			$row[2] = $user[3];
+		}
+		$row[3] = api_time_to_hms($user[7]);		
+		$avg_student_score = Tracking::get_average_test_scorm_and_lp($user[0], $course_code);
+		$avg_student_progress = Tracking::get_avg_student_progress($user[0], $course_code);			
+		if (empty($avg_student_score)) {$avg_student_score=0;}
+		if (empty($avg_student_progress)) {$avg_student_progress=0;}
+		$row[4] = $avg_student_progress.'%';
+		$row[5] = $avg_student_score.'%';
+		$row[6] = $user[4];
+		$row[7] = $user[5];
+		$row[8] = Tracking::get_first_connection_date_on_the_course($user[0], $course_code);
+		$row[9] = Tracking::get_last_connection_date_on_the_course($user[0], $course_code);
+				
+		// we need to display an additional profile field
+		if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
+			if (is_array($additional_user_profile_info[$user[0]])) {
+				$row[10]=implode(', ', $additional_user_profile_info[$user[0]]);
+			} else {
+				$row[10]='&nbsp;';
+			}
+		}		
+		$row[11] = '<center><a href="../mySpace/myStudents.php?student='.$user[0].'&details=true&course='.$course_code.'&origin=tracking_course"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
+		if ($export_csv) {
+			$row[8] = strip_tags($row[8]);
+			$row[9] = strip_tags($row[9]);
+			unset($row[10]);
+			$csv_content[] = $row;
+		}
+        // store columns in array $users
+        $users[] = array($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7],$row[8],$row[9],$row[10],$row[11]);
+	}
+	return $users;
 }

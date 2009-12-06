@@ -1115,4 +1115,6 @@ $Editor = "Editor WYSIWYG";
 $GoToCourseAfterLoginTitle = "Ir directamente para o curso após efectuar o login/acesso";
 $GoToCourseAfterLoginComment = "Quando um utilizador se encontra registado num curso, ir directamente para o curso após o login/acesso";
 $GroupList = "Lista do Grupo";
+$AllowStudentsDownloadFoldersTitle = "Permitir aos alunos descarregar pastas/directórios";
+$AllowStudentsDownloadFoldersComment = "Permitir aos alunos criar um pacote e descarregar uma pasta/directório completo na ferramenta documentos";
 ?>

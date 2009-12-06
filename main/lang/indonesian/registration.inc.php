@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "File haru dalam format CSV. Jangan tambah spasi. Struk
 $langTracking = "Tracking";
 $langEnter2passToChange = "Masukkan password dua kali untuk merubahnya.  Jika tidak ingin merubah, biarkan kosong.";
 $langAuthInfo = "Autentikasi";
-$langDelImage = "Hapus foto";
 $langUpdateImage = "Ubah foto";
 $langImageWrong = "Ukuran file harus lebih kecil dari";
 $langAddImage = "Foto";

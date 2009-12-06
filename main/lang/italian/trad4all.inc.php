@@ -26,6 +26,7 @@ $LoginName = "Nome utente";
 $AutostartMp3 = "Premi OK se desideri far partire il brano al caricamento";
 $Assignments = "Elaborati";
 $Forum = "Forum";
+$langDelImage = "Elimina immagine";
 $langCode = "Codice del Corso";
 $langUp = "Risali";
 $Down = "giù";

@@ -26,6 +26,7 @@ $LoginName = "Login";
 $AutostartMp3 = "Do you want audio file to START automatically?";
 $Assignments = "Assignments";
 $Forum = "Forum";
+$langDelImage = "Remove picture";
 $langCode = "Training code";
 $langUp = "Up";
 $Down = "down";

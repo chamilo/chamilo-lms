@@ -26,6 +26,7 @@ $LoginName = "Uporabniško ime";
 $AutostartMp3 = "Kliknite OK, če želite, da bo avdio datoteka predvajana avtomatično";
 $Assignments = "Zadolžitve";
 $Forum = "Forum";
+$langDelImage = "Odstrani sliko";
 $langCode = "Koda tečaja";
 $langUp = "Gor";
 $Down = "dol";

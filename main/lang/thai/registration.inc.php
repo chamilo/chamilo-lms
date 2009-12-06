@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "ไฟล์ต้องเป็นCSV,อย่าเว้นวรรค, โครงสร้างต้องเป็นดังนี้ 
 $langTracking = "การติดตามผล";
 $langEnter2passToChange = "การเปลี่ยนรหัสผ่านใหม่ ให้กรอกรหัสผ่านที่ตั้งใหม่ทั้งสองชอง หากไม่เปลี่ยนก็ปล่อยว่างไว้";
 $langAuthInfo = "การรับรองสิทธิ์";
-$langDelImage = "เอาภาพออก";
 $langUpdateImage = "เปลี่ยนภาพ";
 $langImageWrong = "ขนาดไฟล์ต้องไม่เกิน";
 $langAddImage = "ภาพ";

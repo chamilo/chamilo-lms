@@ -17,6 +17,7 @@ $langEdit = "Rediger";
 $Language = "Språk";
 $LoginName = "Pålogging";
 $Forum = "Forum";
+$langDelImage = "Fjern bilde";
 $langCode = "Kurskode";
 $langUp = "Opp";
 $Down = "ned";

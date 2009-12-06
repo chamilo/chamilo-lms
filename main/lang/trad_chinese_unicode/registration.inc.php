@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "檔案應該是CSV格式，請不要加空格，架構
 $langTracking = "學習進度";
 $langEnter2passToChange = "修改密碼請重複輸入兩次，否則保持為空。";
 $langAuthInfo = "有效";
-$langDelImage = "移除圖片";
 $langUpdateImage = "更換圖片";
 $langImageWrong = "檔案尺寸要小於";
 $langAddImage = "圖片";

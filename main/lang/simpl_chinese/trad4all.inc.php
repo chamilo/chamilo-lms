@@ -25,6 +25,7 @@ $Language = "语言";
 $LoginName = "登录";
 $Assignments = "学生作业";
 $Forum = "论坛";
+$langDelImage = "移除图片";
 $langCode = "课程代码";
 $langUp = "向上";
 $Down = "向下";

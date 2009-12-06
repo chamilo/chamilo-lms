@@ -1100,9 +1100,6 @@ $SendEmailToAdminComment = "Send an email to administardor of the platform, each
 $UserTag = "User tag";
 $SelectSession = "Select session";
 $GroupPermissions = "Group Permissions";
-$MessagesSent = "Messages sent";
-$MessagesReceived = "Messages received";
-$CountFriends = "Number of friends";
 $SpecialCourse = "Special course";
 $MathMimetexTitle = "mimeTEX mathematical editor";
 $MathMimetexComment = "Enable mimeTeX mathematical editor";
@@ -1119,5 +1116,5 @@ $GoToCourseAfterLoginTitle = "Go directly to the course after login";
 $GoToCourseAfterLoginComment = "When a user is registered in one course, go directly to the course after login";
 $GroupList = "Group List";
 $AllowStudentsDownloadFoldersTitle = "Allow students to download directories";
-$AllowStudentsDownloadFoldersComment = "Allow to students pack and download a complete directory in the document tool";
+$AllowStudentsDownloadFoldersComment = "Permitir a los estudiantes empaquetar y descargar un directorio completo en la herramienta documentos";
 ?>

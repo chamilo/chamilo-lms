@@ -26,6 +26,7 @@ $LoginName = "Login";
 $AutostartMp3 = "Klick OK, wenn die Audio Datei automatisch abgespielt werden soll";
 $Assignments = "Unterlagen der Teilnehmer/innen";
 $Forum = "Foren";
+$langDelImage = "Bild entfernen";
 $langCode = "Kurscode";
 $langUp = "nach oben";
 $Down = "nach unten";

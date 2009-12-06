@@ -25,6 +25,7 @@ $LoginName = "登入名稱";
 $AutostartMp3 = "若你想音訊檔自動插放，請按「確定」。";
 $Assignments = "課業";
 $Forum = "討論區";
+$langDelImage = "移除圖片";
 $langCode = "代碼";
 $langUp = "向上";
 $Down = "向下";

@@ -4,7 +4,6 @@ for more information: see languages.txt in the lang folder.
 $langShouldBeCSVFormat = "Súbor by mal by&#357; v CSV formáte. Nepridávajte medzery. Štruktúra by mala by&#357; správne:";
 $langEnter2passToChange = "Pre zmenenie zadajte svoje nové heslo dva krát. Inak nechajte polí&#269;ka prázdne.";
 $langAuthInfo = "Overenie";
-$langDelImage = "Odstráni&#357; obrázok";
 $langUpdateImage = "Zmeni&#357; obrázok";
 $langImageWrong = "Ve&#318;kos&#357; súboru by mala by&#357; menšia ako";
 $langAddImage = "Obrázok";

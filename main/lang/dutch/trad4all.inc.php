@@ -26,6 +26,7 @@ $LoginName = "Gebruikersnaam";
 $AutostartMp3 = "Druk OK als u het audiobestand automatisch wilt laten afspelen";
 $Assignments = "Opdrachten";
 $Forum = "Forum";
+$langDelImage = "Verwijder foto";
 $langCode = "Cursuscode";
 $langUp = "Hoger niveau";
 $Down = "omlaag";

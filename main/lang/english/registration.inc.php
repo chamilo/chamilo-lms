@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "File should be CSV format. Do not add spaces. Structur
 $langTracking = "Reporting";
 $langEnter2passToChange = "To change your password, enter your current password in the field above and your new password in both fields below. To maintain the current password, leave the three fields empty.";
 $langAuthInfo = "Authentication";
-$langDelImage = "Remove picture";
 $langUpdateImage = "Change picture";
 $langImageWrong = "The file size should be smaller than";
 $langAddImage = "Picture";

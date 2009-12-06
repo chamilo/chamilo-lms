@@ -24,6 +24,7 @@ $Language = "Valoda";
 $LoginName = "lietot&#257;jv&#257;rds";
 $Assignments = "Studentu publik&#257;cijas";
 $Forum = "Diskusija";
+$langDelImage = "Dz&#275;st att&#275;lu";
 $langCode = "Kursa kods";
 $langUp = "Augšup";
 $Down = "Lejup";

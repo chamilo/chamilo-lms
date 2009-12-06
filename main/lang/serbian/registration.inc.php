@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "Fajl treba da bude u CSV formatu. Nemojte dodavati raz
 $langTracking = "Pra&#263;enje";
 $langEnter2passToChange = "Unesite vašu lozinku dva puta da biste je promenili. U suprotnom ostavite polja prazna.";
 $langAuthInfo = "Autorizacija";
-$langDelImage = "Ukloni sliku";
 $langUpdateImage = "Promeni sliku";
 $langImageWrong = "Veli&#269;ina fajla bi trebala da bude manja od";
 $langAddImage = "Slika";

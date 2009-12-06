@@ -24,6 +24,7 @@ $Language = "Bahasa";
 $LoginName = "Login";
 $Assignments = "Tugas-tugas";
 $Forum = "Forum";
+$langDelImage = "Hapus foto";
 $langCode = "Kode Mata Kuliah";
 $langUp = "Ke Atas";
 $Down = "turun";

@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "Plik powinien by&#263; w formacie CSV. Nie dodawaj spa
 $langTracking = "&#346;ledzenie";
 $langEnter2passToChange = "Podaj nowe has&#322;o dwukrotnie";
 $langAuthInfo = "Autoryzacja";
-$langDelImage = "Usu&#324; obrazek";
 $langUpdateImage = "Zmie&#324; obrazek";
 $langImageWrong = "Rozmiar pliku powinien by&#263; mniejszy ni&#380;";
 $langAddImage = "Obrazek";

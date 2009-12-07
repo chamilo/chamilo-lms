@@ -74,6 +74,7 @@ $my_style=$platform_theme;
 //$htmlHeadXtra[] = '<script type="text/javascript" src="lp_view.lib.js"></script>';
 //$htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/')."\n";
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>'; //jQuery
 
 $htmlHeadXtra[] = '<script language="javascript">
 function cleanlog(){
@@ -110,11 +111,9 @@ unset($_SESSION['questionList']);
  */
 
 
-if (!isset($src))
- {
+if (!isset($src)) {
  	$src = '';
-	switch($lp_type)
-	{
+	switch($lp_type) {
 		case 1:
 			$_SESSION['oLP']->stop_previous_item();
 			$htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
@@ -264,8 +263,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 			        <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
 			        <img width="115" height="100" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
 			        <?php
-						else
-						: echo Display :: display_icon('unknown_250_100.jpg', ' ');
+						else : echo Display :: display_icon('unknown_250_100.jpg', ' ');
 						endif;
 						?>
 					</span>
@@ -412,19 +410,14 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 	</script>
 
 <?php
-}
-else
-{
+} else {
 	include_once('../inc/reduced_header.inc.php');
 	//$displayAudioRecorder = (api_get_setting('service_visio','active')=='true') ? true : false;
 	//check if audio recorder needs to be in studentview
 	$course_id=$_SESSION["_course"]["id"];
-	if($_SESSION["status"][$course_id]==5)
-	{
+	if($_SESSION["status"][$course_id]==5) {
 		$audio_recorder_studentview = true;
-	}
-	else
-	{
+	} else {
 		$audio_recorder_studentview = false;
 	}
 	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
@@ -435,7 +428,6 @@ else
 	<input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
 
 <div id="learningPathMain"  style="width:100%;height:100%;" >
-
 	<div id="learningPathLeftZone" style="float:left;width:280px;height:100%">
 
 		<!-- header -->
@@ -568,6 +560,8 @@ else
 	var initialLeftZoneHeight = 0;
 	var initialRightZoneHeight = 0;
 
+	// Fixes the content height of the frame
+	
 	var updateContentHeight = function() {
 		winHeight = (window.innerHeight != undefined ? window.innerHeight : document.documentElement.clientHeight);
 		newLeftZoneHeight = winHeight - leftZoneHeightOccupied;
@@ -587,7 +581,7 @@ else
 			document.body.style.overflow = 'auto';
 		} else {
 			document.body.style.overflow = 'hidden';
-		}
+		}		
 	};
 
 	window.onload = function() {
@@ -613,8 +607,47 @@ else
 		rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
 		document.body.style.overflow = 'hidden';
 		updateContentHeight();
+		
+		//loads the glossary library
+		
+		<?php
+		if (api_get_setting('show_glossary_in_extra_tools') == 'true') {  	
+			if (api_get_setting('show_glossary_in_documents') == 'ismanual') {  	  	 	
+		  	 	?>		  	 	
+		    $(document).ready(function() {   
+		      $.frameReady(function(){   
+		       //  $("<div>I am a div courses</div>").prependTo("body");		     
+		      }, "top.content_name",   
+		      { load: [   
+		      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
+		            {type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
+		            {type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
+		      	 ] 
+		      }		   
+		      );
+		   });		   		  	 	
+		<?php
+		  	 } elseif(api_get_setting('show_glossary_in_documents') == 'isautomatic') {
+		?>		
+		    $(document).ready(function() {   
+		      $.frameReady(function(){   
+		       //  $("<div>I am a div courses</div>").prependTo("body");
+		     
+		      }, "top.content_name",   
+		      { load: [   
+		      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
+		            {type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
+		            {type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
+		      	 ] 
+		      }
+		   
+		      );
+		   });
+		<?php
+		  	 }
+		  }
+		?>
 	}
-
 	window.onresize = updateContentHeight;
 	-->
 	</script>

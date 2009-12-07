@@ -48,8 +48,8 @@ $show_message = '';
 if (isset($_GET['action']) && $_GET['action']=='add') {
 	// we add a user only if is a open group
 	$user_join = intval($_GET['u']);
-	//if i'm the admin	
-	if (isset($admins[api_get_user_id()]) && $admins[api_get_user_id()]['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
+	//if i'm a moderator		
+	if (GroupPortalManager::is_group_moderator(api_get_user_id())) {
 		GroupPortalManager::update_user_role($user_join, $group_id);
 		$show_message = get_lang('UserAdded');
 	}	
@@ -58,8 +58,8 @@ if (isset($_GET['action']) && $_GET['action']=='add') {
 if (isset($_GET['action']) && $_GET['action']=='delete') {	
 	// we add a user only if is a open group
 	$user_join = intval($_GET['u']);
-	//if i'm the admin		
-	if (isset($admins[api_get_user_id()]) && $admins[api_get_user_id()]['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
+	//if i'm a moderator		
+	if (GroupPortalManager::is_group_moderator(api_get_user_id())) {
 		GroupPortalManager::delete_user_rel_group($user_join, $group_id); 
 		$show_message = get_lang('UserDeleted');
 	}
@@ -69,11 +69,22 @@ if (isset($_GET['action']) && $_GET['action']=='set_moderator') {
 	// we add a user only if is a open group
 	$user_moderator= intval($_GET['u']);
 	//if i'm the admin		
-	if (isset($admins[api_get_user_id()]) && $admins[api_get_user_id()]['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
+	if (GroupPortalManager::is_group_admin(api_get_user_id())) {
 		GroupPortalManager::update_user_role($user_moderator, $group_id, GROUP_USER_PERMISSION_MODERATOR); 
 		$show_message = get_lang('UserChangeToModerator');
 	}
 }
+
+if (isset($_GET['action']) && $_GET['action']=='delete_moderator') {	
+	// we add a user only if is a open group
+	$user_moderator= intval($_GET['u']);
+	//only group admins can do that	
+	if (GroupPortalManager::is_group_admin(api_get_user_id())) {	
+		GroupPortalManager::update_user_role($user_moderator, $group_id, GROUP_USER_PERMISSION_READER); 
+		$show_message = get_lang('UserChangeToReader');
+	}
+}
+
 
 
 if (! empty($show_message)){
@@ -83,29 +94,41 @@ if (! empty($show_message)){
 $users	= GroupPortalManager::get_users_by_group($group_id, true, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR));
 $new_member_list = array();
 
-foreach($users as $user) {	 
-	switch ($user['relation_type']) {
-		case  GROUP_USER_PERMISSION_ADMIN:
-			$user['link'] = Display::return_icon('admin_star.png', get_lang('Admin'));
-		break;
-		case  GROUP_USER_PERMISSION_READER:
-			$user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=delete">'.Display::return_icon('del_user_big.gif', get_lang('DeleteFromGroup')).'</a><br />'.
-							'<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=set_moderator">'.Display::return_icon('admins.gif', get_lang('AddModerator')).'</a>';
-		break;		
-		case  GROUP_USER_PERMISSION_PENDING_INVITATION:
-			$user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=add">'.Display::return_icon('pending_invitation.png', get_lang('PendingInvitation')).'</a>';
-		break;
-		case  GROUP_USER_PERMISSION_MODERATOR:
-			$user['link'] = Display::return_icon('moderator_star.png', get_lang('Moderator'));
-		break;				
-	}
-	$new_member_list[] = $user;
-}
 
-if (count($new_member_list) > 0) {
-	Display::display_sortable_grid('search_users', array(), $new_member_list, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true,false,true,true));		
-}
+	//Shows left column
+	echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
 	
+	
+	//-- Show message groups
+	
+	echo '<div id="layout_right" style="margin-left: 282px;">';	
+		
+	// Display form
+	foreach($users as $user) {	 
+		switch ($user['relation_type']) {
+			case  GROUP_USER_PERMISSION_ADMIN:
+				$user['link'] = Display::return_icon('admin_star.png', get_lang('Admin'));
+			break;
+			case  GROUP_USER_PERMISSION_READER:
+				$user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=delete">'.Display::return_icon('del_user_big.gif', get_lang('DeleteFromGroup')).'</a><br />'.
+								'<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=set_moderator">'.Display::return_icon('admins.gif', get_lang('AddModerator')).'</a>';
+			break;		
+			case  GROUP_USER_PERMISSION_PENDING_INVITATION:
+				$user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=add">'.Display::return_icon('pending_invitation.png', get_lang('PendingInvitation')).'</a>';
+			break;
+			case  GROUP_USER_PERMISSION_MODERATOR:
+				$user['link'] = Display::return_icon('moderator_star.png', get_lang('Moderator')).
+				'<a href="group_members.php?id='.$group_id.'&u='.$user['user_id'].'&action=delete_moderator">'.Display::return_icon('del_user_big.gif', get_lang('DeleteModerator')).'</a>';
+			break;				
+		}
+		$new_member_list[] = $user;
+	}
+	
+	if (count($new_member_list) > 0) {			
+		Display::display_sortable_grid('search_users', array(), $new_member_list, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true,false,true,true));		
+	}
+	
+	echo '</div>'; // end layout right
 	
 Display :: display_footer();
 ?>

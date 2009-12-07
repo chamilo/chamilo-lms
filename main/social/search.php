@@ -35,7 +35,7 @@ if ($query != '') {
 		$users = UserManager::get_all_user_tags($query, 0, 0, 5);	
 				
 		$results = array();
-		if (is_array($users)) {
+		if (is_array($users) && count($users)> 0) {
 			echo '<h2>'.get_lang('Users').'</h2>';
 			
 			foreach($users as $user) {
@@ -47,6 +47,8 @@ if ($query != '') {
 				
 				$results[] = array($img, $user['firstname'],$user['lastname'],$user['tag']);			
 			}		
+		} else {
+			echo get_lang('SorryNoResults');
 		}
 		Display::display_sortable_grid('search_users', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false ,true);
 		

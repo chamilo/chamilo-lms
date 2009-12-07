@@ -459,7 +459,8 @@ class SortableTable extends HTML_Table {
 				$html .= '<div class="grid_nav">'.$nav.'</div>';			
 				$html .= '</div>';
 			}
-			$html .= '<div class="clear"></div>';
+			
+			//$html .= '<div class="clear"></div>';
 			if (count($this->form_actions) > 0) {			
 				$script= '<script language="javaScript" type="text/javascript">
 							/*<![CDATA[*/

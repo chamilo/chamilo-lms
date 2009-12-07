@@ -135,7 +135,8 @@ echo '<div id="inbox-wrapper">';
 	echo '</div>';
 
 	echo '<div id="inbox">';
-			//MAIN CONTENT
+	
+		//MAIN CONTENT
 		if ($_REQUEST['action']=='delete') {
 			$delete_list_id=array();
 			if (isset($_POST['out'])) {
@@ -158,6 +159,7 @@ echo '<div id="inbox-wrapper">';
 		}else {
 			outbox_display();
 		}
+		
 	echo '</div>';
 
 echo '</div>';

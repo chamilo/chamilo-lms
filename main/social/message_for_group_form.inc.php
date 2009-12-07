@@ -52,13 +52,13 @@ if (!empty($group_id)) {
 <div id="id_content_panel_init">
 	<dl>
 	<?php
-			if (api_get_setting('allow_message_tool')=='true') {		
+			if (api_get_setting('allow_message_tool')=='true') {	
 	            //normal message
 		   		 $user_info=api_get_user_info($userfriend_id);
 		  		 echo api_xml_http_response_encode(get_lang('To')); ?> :&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode($to_group); ?>
 		  		 <br />
 		 		 <br /><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br />
-		 		 <input id="txt_subject_id" name="title" type="text" style="width:300px;" value="<?php echo $title_group ?>"><br/>
+		 		 <input id="txt_subject_id" name="title" type="text" style="width:450px;" value="<?php echo $title_group ?>"><br/>
 		   		 <br /><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br />
 		   		 <textarea id="txt_area_invite" name="content" rows="3" cols="68"></textarea><br/>
 		   		 <br /><?php echo api_xml_http_response_encode(get_lang('AttachmentFiles')); ?> :<br />

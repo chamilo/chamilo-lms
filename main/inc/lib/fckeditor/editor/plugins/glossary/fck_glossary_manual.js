@@ -1,5 +1,15 @@
-$(document).ready(function() {
-    $(window).load(function () {
+/**
+
+Makes posible to load glossary items from the Glossary Tool
+This library will be loaded in:
+
+document/showinframes.php
+newscorm/lp_view.php
+newscorm/scorm_api.php
+
+*/
+//$(document).ready(function() {
+//    $(window).load(function () {
 	  my_protocol = location.protocol;
 	  my_pathname=location.pathname;
 	  work_path = my_pathname.substr(0,my_pathname.indexOf('/courses/'));
@@ -29,5 +39,6 @@ $(document).ready(function() {
 	        div_show_id=current_element.find("div").attr("id");
 	        $("div#"+div_show_id).remove();
 	    });
-    });
-});
+		
+//    });
+//});

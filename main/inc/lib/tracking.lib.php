@@ -92,31 +92,20 @@ class Tracking {
 	function get_time_spent_on_the_course($user_id, $course_code) {
 		// protect datas
 		$user_id = intval($user_id);
-		$course_code = addslashes($course_code);
-
+		$course_code = addslashes($course_code);		
 		$tbl_track_course = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-
-		$sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
-						WHERE user_id = ' . $user_id . '
-						AND course_code="' . $course_code . '"';
-
+		$condition_user = "";
+		if (is_array($user_id)) {
+			$condition_user = " AND user_id IN (".implode(',',$user_id).") ";
+		} else {
+			$condition_user = " AND user_id = '$user_id' ";
+		}				
+		$sql = " SELECT SUM(UNIX_TIMESTAMP(logout_course_date)-UNIX_TIMESTAMP(login_course_date)) as nb_seconds 
+				FROM $tbl_track_course
+				WHERE course_code='$course_code' $condition_user";
 		$rs = Database::query($sql,__FILE__,__LINE__);
-
-		$nb_seconds = 0;
-
-		while ($a_connections = Database::fetch_array($rs)) {
-
-			$s_login_date = $a_connections["login_course_date"];
-			$s_logout_date = $a_connections["logout_course_date"];
-
-			$i_timestamp_login_date = strtotime($s_login_date);
-			$i_timestamp_logout_date = strtotime($s_logout_date);
-
-			$nb_seconds += ($i_timestamp_logout_date - $i_timestamp_login_date);
-
-		}
-
-		return $nb_seconds;
+		$row = Database::fetch_array($rs);				
+		return $row['nb_seconds']; 
 	}
 
 	function get_first_connection_date($student_id) {
@@ -903,55 +892,49 @@ class Tracking {
 	function count_student_assignments($student_id, $course_code) {
 		require_once (api_get_path(LIBRARY_PATH) . 'course.lib.php');
 
-		// protect datas
-		$student_id = intval($student_id);
-		$course_code = addslashes($course_code);
-
+		// protect datas		
+		$course_code = Database::escape_string($course_code);
 		// get the informations of the course
 		$a_course = CourseManager :: get_course_information($course_code);
-
-		if(!empty($a_course['db_name']))
-		{
+		if (!empty($a_course['db_name'])) {
 			// table definition
-			$tbl_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY, $a_course['db_name']);
-			$sql = 'SELECT 1
-							FROM ' . $tbl_item_property . '
-							WHERE insert_user_id=' . $student_id . '
-							AND tool="work"';
+			$tbl_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY, $a_course['db_name']);			
+			$condition_user = "";
+			if (is_array($student_id)) {				
+				$condition_user = " AND insert_user_id IN (".implode(',',$student_id).") ";
+			} else {
+				$condition_user = " AND insert_user_id = '$student_id' ";				
+			}			
+			$sql = "SELECT count(tool) FROM $tbl_item_property WHERE tool='work' $condition_user ";
 			$rs = Database::query($sql, __LINE__, __FILE__);
-			return Database::num_rows($rs);
+			$row = Database::fetch_row($rs);
+			return $row[0];
 		}
-		else
-		{
-			return null;
-		}
+		return null;		
 	}
 
 	function count_student_messages($student_id, $course_code) {
 		require_once (api_get_path(LIBRARY_PATH) . 'course.lib.php');
 
 		// protect datas
-		$student_id = intval($student_id);
 		$course_code = addslashes($course_code);
-
 		// get the informations of the course
 		$a_course = CourseManager :: get_course_information($course_code);
-
-		if(!empty($a_course['db_name']))
-		{
+		if (!empty($a_course['db_name'])) {
 			// table definition
-			$tbl_messages = Database :: get_course_table(TABLE_FORUM_POST, $a_course['db_name']);
-			$sql = 'SELECT 1
-							FROM ' . $tbl_messages . '
-							WHERE poster_id=' . $student_id;
-
+			$tbl_messages = Database :: get_course_table(TABLE_FORUM_POST, $a_course['db_name']);			
+			$condition_user = "";
+			if (is_array($student_id)) {
+				$condition_user = " WHERE poster_id IN (".implode(',',$student_id).") ";
+			} else {
+				$condition_user = " WHERE poster_id = '$student_id' ";
+			}			
+			$sql = "SELECT count(post_id) FROM $tbl_messages $condition_user ";		
 			$rs = Database::query($sql, __LINE__, __FILE__);
-			return Database::num_rows($rs);
-		}
-		else
-		{
-			return null;
-		}
+			$row = Database::fetch_row($rs);
+			return $row[0];
+		}		
+		return null;		
 	}
 
 /**

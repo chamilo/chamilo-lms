@@ -1,14 +1,24 @@
-$(document).ready(function() {
-    $(window).load(function () {
-		
+/**
+
+Makes posible to load glossary items from the Glossary Tool
+This library will be loaded in:
+
+document/showinframes.php
+newscorm/lp_view.php
+newscorm/scorm_api.php
+
+*/
+
+/*$(document).ready(function() {
+    $(window).load(function() {
+	*/	
      my_protocol = location.protocol;
 	 my_pathname=location.pathname;
 	 work_path = my_pathname.substr(0,my_pathname.indexOf('/courses/'));
 	 
      $.ajax({
         contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(content_object) {
-        },
+        beforeSend: function(content_object) {},
         type: "POST",
         url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
         data: "glossary_data=true",
@@ -16,13 +26,14 @@ $(document).ready(function() {
 			  if (datas.length==0) {
 			  	return false;
 			  }
-                data_terms=datas.split("[|.|_|.|-|.|]");
+			  // glossary terms 
+              data_terms=datas.split("[|.|_|.|-|.|]");
                 var complex_array = new Array();
                 var cp_complex_array = new Array();
                 for(i=0;i<data_terms.length;i++) {
                     specific_terms=data_terms[i].split("__|__|");
-                    var real_term = specific_terms[1];
-                    var real_code = specific_terms[0];
+                    var real_term = specific_terms[1]; // glossary term 
+                    var real_code = specific_terms[0]; // glossary id
                     complex_array[real_code] = real_term;
                     cp_complex_array[real_code] = real_term;
                 }
@@ -44,15 +55,16 @@ $(document).ready(function() {
                                 }
                             }
                         }
+						//alert(n + ' ' + my_index);
                         $('body').removeHighlight().highlight(n,my_index) 
                     }                   
                 }
-              
+             
               var complex_array = new Array();
               
 			  //mouse over event
-			  $("body .glossary-ajax").mouseover(function(){
-	            random_id=Math.round(Math.random()*100);
+				$("body .glossary-ajax").mouseover(function(){
+	          	random_id=Math.round(Math.random()*100);
 	            div_show_id="div_show_id"+random_id;
 	            div_content_id="div_content_id"+random_id;
 	             $(this).append("<div id="+div_show_id+" ><div id="+div_content_id+">&nbsp;</div></div>");
@@ -60,6 +72,7 @@ $(document).ready(function() {
 	             $("div#"+div_content_id).attr("style","background-color:#F2F2F2;color:#0B3861;margin-left:8px;margin-right:8px;margin-top:5px;margin-bottom:5px;");
 	                notebook_id=$(this).attr("name");
 	                data_notebook=notebook_id.split("link");
+				
 	                my_glossary_id=data_notebook[1];
 	                $.ajax({
 	                    contentType: "application/x-www-form-urlencoded",
@@ -85,5 +98,6 @@ $(document).ready(function() {
 				}
 
             });
+/*			
         });
-});
+});*/

@@ -1180,7 +1180,7 @@ api_session_register('status');
 		RIGHT MENU
 ==============================================================================
 */
-echo '	<div class="menu">';
+echo '	<div id="menu">';
 
 // api_display_language_form(); // moved to the profile page.
 

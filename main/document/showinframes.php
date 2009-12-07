@@ -158,13 +158,11 @@ $path_info= pathinfo($file_url_sys);
 	-->	
 </script>
 </head>
-<body style="margin:0px;padding:0px" OnResize="updateContentHeight()">
+<body style="margin:0px;padding:0px;" OnResize="updateContentHeight()">
 	<iframe border="0" frameborder="0" scrolling="no" style="width:100%;" id="headerFrame" src="headerpage.php?file=<?php echo $file.'&amp;'.api_get_cidreq(); ?>"> </iframe>
 	<?php
-	if (file_exists($file_url_sys)) {
-		//echo '<div style="overflow:scroll">aca';			
-		echo '<iframe border="0" frameborder="0" scrolling="yes"  style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&rand='.mt_rand(1,10000).'"></iframe>';
-		//echo '</div>';			
+	if (file_exists($file_url_sys)) {			
+		echo '<iframe border="0" frameborder="0" scrolling="auto"  style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&rand='.mt_rand(1,10000).'"></iframe>';
 	} else {				
 		echo '<frame name="mainFrame" id="mainFrame" src=showinframes.php?nopages=1 />';
 	}

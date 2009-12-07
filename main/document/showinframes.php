@@ -104,89 +104,68 @@ $path_info= pathinfo($file_url_sys);
 <script language="javascript" src="<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.frameready.js"></script>
 
 
-	<script type="text/javascript">
-	// Fixes the content height of the frame	
-	var leftZoneHeightOccupied = 0;
-	var rightZoneHeightOccupied = 0;
-	var initialLeftZoneHeight = 0;
-	var initialRightZoneHeight = 0;
+<script type="text/javascript">
+	<!--
 	
 	var updateContentHeight = function() {
-		winHeight = (window.innerHeight != undefined ? window.innerHeight : document.documentElement.clientHeight);
-		
-		newLeftZoneHeight = winHeight - leftZoneHeightOccupied;		
-		
-		newRightZoneHeight = winHeight - rightZoneHeightOccupied;
-		if (newLeftZoneHeight <= initialLeftZoneHeight) {
-			newLeftZoneHeight = initialLeftZoneHeight;
-			newRightZoneHeight = newLeftZoneHeight + leftZoneHeightOccupied - rightZoneHeightOccupied;
-		}
-		if (newRightZoneHeight <= initialRightZoneHeight) {
-			newRightZoneHeight = initialRightZoneHeight;
-			newLeftZoneHeight = newRightZoneHeight + rightZoneHeightOccupied - leftZoneHeightOccupied;
-		}
-
-		document.getElementById('mainFrame').style.height = newRightZoneHeight + 'px';
-		if (document.body.clientHeight > winHeight) {
-			document.body.style.overflow = 'auto';
-		} else {
-			document.body.style.overflow = 'hidden';
-		}		
+		initialHeight = document.getElementById('headerFrame').offsetHeight; 
+		docHeight = document.body.clientHeight;
+		document.getElementById('mainFrame').style.height = (docHeight-initialHeight)+"px";						
 	};
-</script>	
-<?php
-  	 if (api_get_setting('show_glossary_in_documents') == 'ismanual') {	 	
-  	 	?>
-  		<script type="text/javascript">
-    	$(document).ready(function() {
-    	updateContentHeight();
-      	$.frameReady(function(){   
-	       //  	$("<div>I am a div courses</div>").prependTo("body");
-     
-	      }, "top.mainFrame",   
-	      { load: [   
-	      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
-	            {type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
-	            {type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
-	      	 ] 
-	      }
-	   
-	      );
-	      	window.onresize = updateContentHeight;
-	   }
-	   );
-</script>  	 	
-<?php
-  	 } elseif(api_get_setting('show_glossary_in_documents') == 'isautomatic') {
-?>
-	<script type="text/javascript">
-	    $(document).ready(function() {
-	    	updateContentHeight(); 
-	    		window.onresize = updateContentHeight;  
-	      $.frameReady(function(){   
-	       //  $("<div>I am a div courses</div>").prependTo("body");
-	     
-	      }, "top.mainFrame",   
-	      { load: [   
-	      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
-	            {type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
-	            {type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
-	      	 ] 
-	      }	   
-	      );
-	   }
-	   );
-	</script>
-<?php
-  	 }
-?>  
+	
+	// Fixes the content height of the frame			
+	window.onload = function() {
+
+		updateContentHeight();
+				
+		//loads the glossary library		
+		<?php 	
+			if (api_get_setting('show_glossary_in_documents') == 'ismanual') {  	  	 	
+		  	 	?>		  	 	
+		    $(document).ready(function() {   
+		      $.frameReady(function(){   
+		       //  $("<div>I am a div courses</div>").prependTo("body");		     
+		      }, "top.mainFrame",   
+		      { load: [   
+		      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
+		            {type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
+		            {type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
+		      	 ] 
+		      }		   
+		      );
+		   });		   		  	 	
+		<?php
+		  	 } elseif(api_get_setting('show_glossary_in_documents') == 'isautomatic') {
+		?>		
+		    $(document).ready(function() {   
+		      $.frameReady(function(){   
+		       //  $("<div>I am a div courses</div>").prependTo("body");
+		     
+		      }, "top.mainFrame",   
+		      { load: [   
+		      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
+		            {type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
+		            {type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
+		      	 ] 
+		      }
+		   
+		      );
+		   });
+		<?php
+		  	 }		  
+		?>
+	}
+	-->	
+</script>
 </head>
-<body>
-	<iframe border="0" frameborder="0" scrolling="no" style="width:100%;"   src="headerpage.php?file=<?php echo $file.'&amp;'.api_get_cidreq(); ?>"> </iframe>
+<body style="margin:0px;padding:0px" OnResize="updateContentHeight()">
+	<iframe border="0" frameborder="0" scrolling="no" style="width:100%;" id="headerFrame" src="headerpage.php?file=<?php echo $file.'&amp;'.api_get_cidreq(); ?>"> </iframe>
 	<?php
-		if (file_exists($file_url_sys)) {			
-		echo '<iframe border="0" frameborder="0" scrolling="no" height="100%" style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&rand='.mt_rand(1,10000).'"></iframe>';			
-	} else {			
+	if (file_exists($file_url_sys)) {
+		//echo '<div style="overflow:scroll">aca';			
+		echo '<iframe border="0" frameborder="0" scrolling="yes"  style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&rand='.mt_rand(1,10000).'"></iframe>';
+		//echo '</div>';			
+	} else {				
 		echo '<frame name="mainFrame" id="mainFrame" src=showinframes.php?nopages=1 />';
 	}
 	?>

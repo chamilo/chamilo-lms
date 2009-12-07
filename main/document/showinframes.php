@@ -120,9 +120,9 @@ $path_info= pathinfo($file_url_sys);
 				
 		//loads the glossary library		
 		<?php 	
-			if (api_get_setting('show_glossary_in_documents') == 'ismanual') {  	  	 	
+			if (api_get_setting('show_glossary_in_documents') == 'ismanual') {	  	 	
 		  	 	?>		  	 	
-		    $(document).ready(function() {   
+	//	    $(document).ready(function() {   
 		      $.frameReady(function(){   
 		       //  $("<div>I am a div courses</div>").prependTo("body");		     
 		      }, "top.mainFrame",   
@@ -133,11 +133,11 @@ $path_info= pathinfo($file_url_sys);
 		      	 ] 
 		      }		   
 		      );
-		   });		   		  	 	
+	//	   });		   		  	 	
 		<?php
 		  	 } elseif(api_get_setting('show_glossary_in_documents') == 'isautomatic') {
 		?>		
-		    $(document).ready(function() {   
+		//    $(document).ready(function() {
 		      $.frameReady(function(){   
 		       //  $("<div>I am a div courses</div>").prependTo("body");
 		     
@@ -150,7 +150,7 @@ $path_info= pathinfo($file_url_sys);
 		      }
 		   
 		      );
-		   });
+		//   });
 		<?php
 		  	 }		  
 		?>

@@ -2729,7 +2729,7 @@ a.unread {
 	-moz-border-radius-bottomright:8px;
 	-moz-border-radius-topleft:8px;
 	-moz-border-radius-topright:8px;
-	background:#eee none repeat scroll 0 0;
+	background:#F5F5F5 none repeat scroll 0 0;
 	margin:0 0 5px;
 	padding:10px;
 }
@@ -2742,7 +2742,7 @@ a.unread {
 	-moz-border-radius-bottomright:8px;
 	-moz-border-radius-topleft:8px;
 	-moz-border-radius-topright:8px;
-	background:#ccc none repeat scroll 0 0;
+	background:#E6EEFB  none repeat scroll 0 0;
 	margin:0 0 5px;
 	padding:10px;
 
@@ -2780,9 +2780,7 @@ a.unread {
 	vertical-align:middle;
 }
 
-.actions-title {
-
-	
+.actions-title {	
 	background:#efefef;
 	border:1px solid #ccc;
 	padding:4px;
@@ -2792,3 +2790,18 @@ a.unread {
 	vertical-align:middle;
 }
 
+#group_description {
+	margin: 5px 0px 5px 0px;
+}
+
+#group_privacy {
+	margin: 5px 0px 5px 0px;
+}
+
+#group_permissions ul {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}

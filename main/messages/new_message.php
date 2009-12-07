@@ -50,31 +50,24 @@ function validate(form,list)
 
 </script>';
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+
 $htmlHeadXtra[] = '<script type="text/javascript">
-$(document).ready(function (){
-	cont=0;
-      $("#id_text_name").bind("keyup", function(){
-      	name=$("#id_text_name").get(0).value;
-		$.ajax({
-				contentType: "application/x-www-form-urlencoded",
-				beforeSend: function(objeto) {
-				/*$("#id_div_search").html("Searching...");*/ },
-				type: "POST",
-				url: "../social/select_options.php",
-				data: "search="+name,
-				success: function(datos){
-				$("#id_div_search").html(datos)
-				$("#id_search_name").bind("click", function(){
-					name_option=$("select#id_search_name option:selected").text();
-					code_option=$("select#id_search_name option:selected").val();
-					 $("#user_list").attr("value", code_option);
-					 $("#id_text_name").attr("value", name_option);
-					 $("#id_div_search").html("");
-					 cont++;
-				 });
-				}
-		});
-      });
+$(document).ready(function (){		
+		
+      		$("#users").fcbkcomplete({
+	            json_url: "'.api_get_path(WEB_PATH).'main/social/select_options.php?",
+	            cache: false,
+	            filter_case: true,
+	            filter_hide: true,
+				firstselected: true,
+	            //onremove: "testme",
+				//onselect: "testme",
+	            filter_selected: true,
+	            newel: true        
+          	});	
 });
 		
 var counter_image = 1;	
@@ -96,7 +89,7 @@ function add_image_form() {
 		
 </script>';
 
-$nameTools = api_xml_http_response_encode(get_lang('ComposeMessage'));
+$nameTools = get_lang('ComposeMessage');
 
 /*
 ==============================================================================
@@ -147,19 +140,47 @@ function manage_form ($default, $select_from_user_list = null) {
 	$message_id = intval($_GET['message_id']);
 
 	$form = new FormValidator('compose_message',null,null,null,array('enctype'=>'multipart/form-data'));	
-	if (empty($group_id)) {	
+	if (empty($group_id)) {
 		if (isset($select_from_user_list)) {
 			$form->add_textfield('id_text_name', get_lang('SendMessageTo'),true,array('size' => 40,'id'=>'id_text_name','onkeyup'=>'send_request_and_search()','autocomplete'=>'off','style'=>'padding:0px'));
 			$form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
 			$form->addElement('html','<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>');
 			$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
 		} else {
-			if ($default['user_list']==0) {
-				$form->add_textfield('id_text_name', get_lang('SendMessageTo'),true,array('size' => 40,'id'=>'id_text_name','onkeyup'=>'send_request_and_search()','autocomplete'=>'off','style'=>'padding:0px'));
-				$form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
-				$form->addElement('html','<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>');
+			if (count($default['users'])==0) {
+				
+				//the magic should be here		
+			$pre_html = '<div class="row">
+						<div class="label">'.get_lang('SendTo').'</div>
+						<div class="formw">';
+			$post = '</div></div>';
+			
+						
+			$multi_select = '<select id="users" name="users">
+      						 </select>';			
+			$form->addElement('html',$pre_html.$multi_select.$post );
+			$url = api_get_path(WEB_CODE_PATH).'user';
+			//if cache is set to true the jquery will be called 1 time
+			$jquery_ready_content.= <<<EOF
+      		$("#extra_$field_details[1]").fcbkcomplete({
+	            json_url: "$url/$field_details[1].php?field_id=$field_details[0]",
+	            cache: false,
+	            filter_case: true,
+	            filter_hide: true,
+				firstselected: true,
+	            //onremove: "testme",
+				//onselect: "testme",
+	            filter_selected: true,
+	            newel: true        
+          	});	
+EOF;
+				
+		
+			//	$form->add_textfield('id_text_name', get_lang('SendMessageTo'),true,array('size' => 40,'id'=>'id_text_name','onkeyup'=>'send_request_and_search()','autocomplete'=>'off','style'=>'padding:0px'));
+//				$form->addRule('id_text_name', get_lang('ThisFieldIsRequired'), 'required');
+	//			$form->addElement('html','<div id="id_div_search" style="padding:0px" class="message-select-box" >&nbsp;</div>');
 			}
-			$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
+			//$form->addElement('hidden','user_list',0,array('id'=>'user_list'));
 		}
 	} else {		
 		$group_info = GroupPortalManager::get_group_data($group_id);
@@ -167,8 +188,11 @@ function manage_form ($default, $select_from_user_list = null) {
 		$form->addElement('hidden','group_id',$group_id);
 		$form->addElement('hidden','parent_id',$message_id);		
 	}
-	$form->add_textfield('title', api_xml_http_response_encode(get_lang('Title')));	
-	$form->add_html_editor('content', '', false, false, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
+	$form->add_textfield('title', api_xml_http_response_encode(get_lang('Title')));
+		
+	//$form->add_html_editor('content', '', false, false, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
+	$form->addElement('textarea','content', get_lang('Message'), array('cols' => 75,'rows'=>5));
+	
 	if (isset($_GET['re_id'])) {
 		$form->addElement('hidden','re_id',Security::remove_XSS($_GET['re_id']));
 		$form->addElement('hidden','save_form','save_form');
@@ -190,17 +214,23 @@ function manage_form ($default, $select_from_user_list = null) {
 		$default['title']=get_lang('Re:').api_html_entity_decode($message_info['title'],ENT_QUOTES,$charset);		
 	}		
 	$form->setDefaults($default);
-	if ($form->validate()) {				
-		$values = $form->exportValues();				
-		$receiver_user_id = $values['user_list'];
-		$title = $values['title'];
-		$content = $values['content'];
+	if ($form->validate()) {
+		$values = $default;
+
+		$user_list = $values['users'];
 		$file_comments = $_POST['legend'];
-		$group_id = $values['group_id'];
-		$parent_id = $values['parent_id'];
-		//all is well, send the message
-		MessageManager::send_message($receiver_user_id, $title, $content, $_FILES, $file_comments, $group_id, $parent_id);		
-		MessageManager::display_success_message($receiver_user_id);	
+		$title 		= $values['title'];
+		$content 	= $values['content'];
+		
+		$group_id	= $values['group_id'];
+		$parent_id 	= $values['parent_id'];
+		if (is_array($user_list) && count($user_list)> 0) {
+			//all is well, send the message
+			foreach ($user_list as $user) {				
+				MessageManager::send_message($user, $title, $content, $_FILES, $file_comments, $group_id, $parent_id);
+				MessageManager::display_success_message($user);	
+			}			
+		}			
 	} else {
 		$form->display();
 	}
@@ -219,6 +249,7 @@ if ($_GET['f']=='social') {
 	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Profile'));
 	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));
 }
+
 Display::display_header('');
 
 
@@ -230,8 +261,7 @@ if ($group_id != 0) {
 	echo '<a href="'.api_get_path(WEB_PATH).'main/social/groups.php?id='.$group_id.'">'.Display::return_icon('back.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('BackToGroup')).'</a>';
 	echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
 	echo '</div>';
-} else {
-	
+} else {	
 	if ($_GET['f']=='social') {
 		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 		SocialManager::show_social_menu();
@@ -247,16 +277,8 @@ if ($group_id != 0) {
 		if (api_get_setting('allow_message_tool') == 'true') {
 			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
 		}	
-		$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
-		
-		//echo '<span style="float:right; padding-top:7px;">';
-					 
-		if (isset($_GET['type']) && $_GET['type'] == 'extended') {
-			echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
-		} else {
-			echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</a>';
-		}
-		//echo '</span>';
+		echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?type=reduced">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
+
 		echo '</div>';
 	}
 	
@@ -291,12 +313,10 @@ echo '<div id="inbox-wrapper">';
 				show_compose_to_any($_user['user_id']);
 		  	}
 		  	
-		} else {
-			
-			$restrict = false;
-			
-			if (isset($_POST['id_text_name'])) {
-				$restrict = $_POST['id_text_name'];
+		} else {			
+			$restrict = false;			
+			if (isset($_POST['users'])) {
+				$restrict = $_POST['users'];
 			} else if (isset($_POST['group_id'])) {
 				$restrict = $_POST['group_id'];
 			} 
@@ -304,15 +324,12 @@ echo '<div id="inbox-wrapper">';
 			if (isset($_GET['re_id'])) {
 				$default['title'] = api_xml_http_response_encode($_POST['title']);
 				$default['content'] = api_xml_http_response_encode($_POST['content']);
-				//$default['user_list'] = $_POST['user_list'];
 				manage_form($default);
-			} else {
-				var_dump($restrict);
+			} else {			
 				if ($restrict) {
 					$default['title'] = api_xml_http_response_encode($_POST['title']);			
 					if (!isset($_POST['group_id'])) {
-						$default['id_text_name'] = api_xml_http_response_encode($_POST['id_text_name']);
-						$default['user_list'] = $_POST['user_list'];
+						$default['users']	 = $_POST['users'];
 					} else {
 						$default['group_id'] = $_POST['group_id'];
 					}

@@ -559,7 +559,7 @@ function makepost(select){
 $members = GroupPortalManager::get_users_by_group($group_id, true, array(GROUP_USER_PERMISSION_PENDING_INVITATION));
 if (is_array($members) && count($members)>0) {
 	echo get_lang('UsersAlreadyInvited');
-	Display::display_sortable_grid('search_users', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true));
+	Display::display_sortable_grid('search_users', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true));
 }
 
 

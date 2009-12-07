@@ -4,7 +4,7 @@
  * @package dokeos.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
- 
+$cidReset=true;
 $language_file = array('userInfo');
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
@@ -63,7 +63,8 @@ function add_image_form() {
 			
 	</script>';
 
-$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
+$interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
+$interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Groups'));
 Display :: display_header($tool_name, 'Groups');
 
 // save message group
@@ -83,7 +84,6 @@ echo '</div>';
 
 // getting group information
 $group_id	= intval($_GET['id']);
-
 	
 if ($group_id != 0 ) {
 	//Loading group information
@@ -108,7 +108,7 @@ if ($group_id != 0 ) {
 			if ($group_info['visibility'] == GROUP_PERMISSION_OPEN) {
 				GroupPortalManager::add_user_to_group($user_join, $group_id);				
 			} else {
-				GroupPortalManager::add_user_to_group($user_join, $group_id, GROUP_USER_PERMISSION_PENDING_INVITATION);
+				GroupPortalManager::add_user_to_group($user_join, $group_id, GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER);
 			}				
 		}
 	}

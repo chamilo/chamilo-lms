@@ -7,6 +7,7 @@
  
 // name of the language file that needs to be included
 $language_file = array('registration','admin','userInfo');
+$cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
@@ -16,7 +17,7 @@ api_block_anonymous_users();
 
 $this_section = SECTION_SOCIAL;
 $tool_name = get_lang('Search');
-$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
+$interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 
 Display :: display_header($tool_name);
 //show the action menu

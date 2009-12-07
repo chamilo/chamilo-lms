@@ -13,8 +13,6 @@ if (api_get_setting('allow_message_tool')!='true'){
 /* This page should be deleted */
  
 if(api_get_user_id()!=0) {
-	//echo '<script language="javascript" type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'messages/cookies.js"> </script> ';
-	//echo '<script language="javascript" type="text/javascript">set_url("'.api_get_path(WEB_CODE_PATH).'messages/notify.php") ; notificar()</script> ';
 	$number_of_new_messages = MessageManager::get_new_messages();
 	
 	if(is_null($number_of_new_messages)) {

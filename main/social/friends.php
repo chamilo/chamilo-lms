@@ -6,6 +6,7 @@
  */
 
 $language_file = array('userInfo');
+$cidReset=true;
 require '../inc/global.inc.php';
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
@@ -109,7 +110,8 @@ function clear_form () {
 }
 </script>';
 
-$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
+$interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
+$interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Friends'));
 
 Display :: display_header($tool_name, 'Groups');
 SocialManager::show_social_menu();

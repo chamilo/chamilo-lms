@@ -755,7 +755,10 @@ class MessageManager
 				$html.= '<div class="'.$message_item.'" id="message-item-'.$count.'" style="margin-left: '.$indent.'px;">';
 					
 					//if (!isset($message['children'])) {
-					$html.= '<div id="message-reply-link"><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$message['id'].'" class="thickbox" title="'.api_xml_http_response_encode(get_lang('Reply')).'">'.Display :: return_icon('forumthread_new.gif', api_xml_http_response_encode(get_lang('Reply'))).'&nbsp;'.api_xml_http_response_encode(get_lang('Reply')).'</a></div>';
+					//only for admins
+					$html.= '<div id="message-reply-link"><a href="'.api_get_path(WEB_CODE_PATH).'social/groups.php?action=delete_message&group_id='.$group_id.'&message_id='.$message['id'].'">'.Display :: return_icon('delete.gif', get_lang('Delete')).'&nbsp;'.get_lang('Delete').'</a></div>';
+					$html.= '<div id="message-reply-link"><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$message['id'].'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('forumthread_new.gif', get_lang('Reply')).'&nbsp;'.get_lang('Reply').'</a></div>';
+
 						//echo '<a href="/main/messages/new_message.php?group_id='.$group_id.'&message_id='.$message['id'].'">'.Display::return_icon('forumthread_new.gif',api_xml_http_response_encode(get_lang('Reply'))).'&nbsp;'.api_xml_http_response_encode(get_lang('Reply')).'</a>';
 					//}
 					

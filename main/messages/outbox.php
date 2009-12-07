@@ -14,7 +14,7 @@ require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 api_block_anonymous_users();
 if (isset($_GET['messages_page_nr'])) {
 	if (api_get_setting('allow_social_tool')=='true' &&  api_get_setting('allow_message_tool')=='true') {
-		header('Location:../social/index.php?pager="'.Security::remove_XSS($_GET['messages_page_nr']).'"&remote=3#remote-tab-3');
+		header('Location:outbox.php?pager="'.Security::remove_XSS($_GET['messages_page_nr']).'"&remote=3#remote-tab-3');
 	}
 }
 if (api_get_setting('allow_message_tool')!='true'){
@@ -87,17 +87,7 @@ if ($_GET['f']=='social') {
 		if (api_get_setting('allow_message_tool') == 'true') {
 			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
 		}	
-		$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
-		
-		//echo '<span style="float:right; padding-top:7px;">';
-					 
-		if (isset($_GET['type']) && $_GET['type'] == 'extended') {
-			echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
-		} else {
-			echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</a>';
-		}
-		//echo '</span>';
-		
+		echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?type=reduced">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
 		echo '</div>';
 	}
 }

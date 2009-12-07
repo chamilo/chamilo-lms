@@ -184,22 +184,18 @@ function register_friend(element_input) {
 
 </script>';
 if (isset($_GET['shared'])) {
-	$my_link='../social/index.php';
+	$my_link='../social/profile.php';
 	$link_shared='shared='.Security::remove_XSS($_GET['shared']);
 } else {
-	$my_link='../auth/profile.php';
+	$my_link='../social/profile.php';
 	$link_shared='';
 }
-$interbreadcrumb[]= array ('url' =>$my_link,'name' => get_lang('ModifyProfile') );
-
-$interbreadcrumb[]= array (
-	'url' => '../social/profile.php?'.$link_shared.'#remote-tab-1',
-	'name' => get_lang('ViewMySharedProfile')
-);
+$interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social') );
+//$interbreadcrumb[]= array ('url' => '../social/profile.php?'.$link_shared.'#remote-tab-1','name' => get_lang('ViewMySharedProfile'));
 
 if (isset($_GET['u']) && is_numeric($_GET['u'])) {
 	$info_user=api_get_user_info($_GET['u']);
-	$interbreadcrumb[]= array ('url' => 'javascript: void(0);','name' => api_get_person_name($info_user['firstName'], $info_user['lastName']));
+	$interbreadcrumb[]= array ('url' => '#','name' => api_get_person_name($info_user['firstName'], $info_user['lastName']));
 }
 if (isset($_GET['u'])) {
 	$param_user='u='.Security::remove_XSS($_GET['u']);

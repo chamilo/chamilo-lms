@@ -5,6 +5,7 @@
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $language_file = array('messages','userInfo');
+$cidReset=true;
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'image.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
@@ -13,7 +14,8 @@ require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 $this_section = SECTION_SOCIAL;
 
-$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
+$interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
+$interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Invitations'));
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '

@@ -18,6 +18,9 @@ $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Invitations'));
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
+
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 		
@@ -213,9 +216,11 @@ if (count($pending_invitations) > 0) {
 		$invitation['name'] = '<a href="groups.php?id='.$invitation['id'].'">'.$invitation['name'].'</a>'; 
 		$invitation['join'] = '<a href="invitations.php?accept='.$invitation['id'].'">'.get_lang('AcceptInvitation').'</a>';
 		$invitation['deny'] = '<a href="invitations.php?deny='.$invitation['id'].'">'.get_lang('DenyInvitation').'</a>';
+		$invitation['send_message'] = '<a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?height=300&width=610&user_friend='.$invitation['id'].'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">';
+		$invitation['send_message'] .= Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a>';
 		$new_invitation[]=$invitation;
 	}	
-	Display::display_sortable_grid('search_users', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false,false,true,true));
+	Display::display_sortable_grid('search_users', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false,false,true,true,true,true));
 }
 	
 Display::display_footer();

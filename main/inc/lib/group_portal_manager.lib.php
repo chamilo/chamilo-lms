@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
 /**
 ==============================================================================
 *	This library provides functions for the access_url management.
@@ -15,12 +15,9 @@ define('GROUP_PERMISSION_CLOSED', '2');
 // Group user permissions
 define('GROUP_USER_PERMISSION_ADMIN'	,'1'); // the admin of a group 
 define('GROUP_USER_PERMISSION_READER'	,'2'); // a normal user
-
-define('GROUP_USER_PERMISSION_PENDING_INVITATION'	,'3'); 	//   When an admin/moderator invite a user
-define('GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER'	,'4'); // When a user whats to join to a group
-
+define('GROUP_USER_PERMISSION_PENDING_INVITATION'	,'3'); 	//   When an admin/moderator invites a user
+define('GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER'	,'4'); // an user joins a group
 define('GROUP_USER_PERMISSION_MODERATOR'	,'5'); // a moderator
-
 define('GROUP_USER_PERMISSION_ANONYMOUS'	,'6'); // an anonymous user  
 
 class GroupPortalManager
@@ -234,8 +231,6 @@ class GroupPortalManager
 		return $tags;
 	}	
 
-	
-
 	/**
 	 * Gets the id, url, description, and active status of ALL URLs
 	 * @author Julio Montoya
@@ -288,23 +283,23 @@ class GroupPortalManager
 	}
 	
 	/** Gets the inner join of users and group table
+	 * @return int  quantity of records
+	 * @return bool show groups with image or not
+	 * @return array  with group content 
 	 * @author Julio Montoya
-	 * @return int  access url id
-	 * @return array   Database::store_result of the result
 	 * */
-	public static function get_groups_by_popularity($num = 10, $with_image = false)
+	public static function get_groups_by_popularity($num = 6, $with_image = true)
 	{
 		$where = '';
 		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$tbl_group				= Database::get_main_table(TABLE_MAIN_GROUP);	
 		if (empty($num)) {
-			$num = 10;
+			$num = 6;
 		} else {
 			$num = intval($num);
 		}
 		// only show admins and readers
 		$where_relation_condition = " WHERE  gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."') ";
-		
 		
 		$sql = "SELECT count(user_id) as count, g.picture_uri, g.name, g.description, g.id  
 				FROM $tbl_group g
@@ -325,30 +320,25 @@ class GroupPortalManager
 	}
 	
 	/** Gets the last groups created
-	 * @author Julio Montoya
-	 * @return int  access url id
-	 * @return array   Database::store_result of the result
+	 * @return int  quantity of records
+	 * @return bool show groups with image or not
+	 * @return array  with group content
+	 * @author Julio Montoya 
 	 * */
-	public static function get_groups_by_age($num = 10, $with_image = false, $relation_type = GROUP_USER_PERMISSION_READER)
+	public static function get_groups_by_age($num = 6, $with_image = true)
 	{
 		$where = '';
 		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$tbl_group				= Database::get_main_table(TABLE_MAIN_GROUP);
 
 		if (empty($num)) {
-			$num = 10;
+			$num = 6;
 		} else {
 			$num = intval($num);
-		}
-		
-		// only show admins and readers
-		$where_relation_condition = " WHERE  gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."') ";
-		
-		
+		}			
 		$sql = "SELECT g.picture_uri, g.name, g.description, g.id  
 				FROM $tbl_group g
-				INNER JOIN $table_group_rel_user gu
-				ON gu.group_id = g.id $where_relation_condition ORDER BY created_on desc LIMIT $num ";
+				ORDER BY created_on desc LIMIT $num ";
 				
 		$result=Database::query($sql,__FILE__,__LINE__);
 		$array = array();
@@ -1145,8 +1135,7 @@ class GroupPortalManager
 		//Group's description 
 		echo '<div id="group-url">';
 			echo $group_info['url'];
-		echo '</div>';
-		
+		echo '</div>';		
 		
 		//Privacy
 		echo '<div id="group_privacy">';
@@ -1164,14 +1153,49 @@ class GroupPortalManager
 				echo get_lang('Tags').' : '.$tags;
 			echo '</div>';
 		}
-			
-		/*//Compose message link
-		if (in_array($my_group_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR, GROUP_USER_PERMISSION_READER))) {	 
-			echo '<div id="actions" style="margin:10px">';
-			echo '<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display :: return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a>';
-			//echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
-			echo '</div>';
-		}*/
+		
+		//loading group permission
+		
+		echo '<div id="group_permissions" class="actions">';
+		echo '<ul>';
+		
+		switch ($my_group_role) {
+			case GROUP_USER_PERMISSION_READER:
+				// I'm just a reader
+				echo get_lang('IamAReader');
+				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a></li>';
+				echo '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.get_lang('LeaveGroup').'</a></li>';
+				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.get_lang('InviteFriends').'</a></li>';
+					
+				break;
+			case GROUP_USER_PERMISSION_ADMIN:
+				echo get_lang('IamAnAdmin');
+				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a></li>';
+	
+				echo '<li><a href="group_edit.php?id='.$group_id.'">'.			Display::return_icon('edit.gif', get_lang('EditGroup')).'&nbsp;'.get_lang('EditGroup').'</a></li>';
+				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList')).'&nbsp;'.get_lang('MemberList').'</a></li>';
+				echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList')).'&nbsp;'.get_lang('WaitingList').'</a></li>';
+				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends')).'&nbsp;'.get_lang('InviteFriends').'</a></li>';
+				break;
+			case GROUP_USER_PERMISSION_PENDING_INVITATION:				
+				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang(YouHaveBeenInvitedJoinNow).'</a></li>';
+				break;
+			case GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
+				echo get_lang('WaitingForAdminResponse');
+				break;
+			case GROUP_USER_PERMISSION_MODERATOR:
+				echo get_lang('IamAModerator');
+				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a></li>';		
+				echo '<li><a href="group_members.php?id='.$group_id.'">'.get_lang('MemberList').'</a></li>';
+				echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.get_lang('WaitingList').'</a></li>';
+				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.get_lang('InviteFriends').'</a></li>';
+				break;
+			case GROUP_USER_PERMISSION_ANONYMOUS:
+				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a></li>';
+		}
+		echo '</ul>';
+		echo '</div>'; // end layout permissions
+		
 		
 		//Members
 		echo get_lang('Members').' : ';	
@@ -1192,47 +1216,6 @@ class GroupPortalManager
 			}
 		echo '</div>';
 		
-		
-		//loading group permission
-		
-		echo '<div id="group_permissions">';
-		echo '<ul>';
-		
-		switch ($my_group_role) {
-			case GROUP_USER_PERMISSION_READER:
-				// I'm just a reader
-				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display :: return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a></li>';
-				echo '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.get_lang('LeaveGroup').'</a></li>';
-				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.get_lang('InviteFriends').'</a></li>';
-					
-				break;
-			case GROUP_USER_PERMISSION_ADMIN:
-				echo 'Im the admin/';
-				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display :: return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a></li>';
-	
-				echo '<li><a href="group_edit.php?id='.$group_id.'">'.get_lang('EditGroup').'</a>';
-				echo '<li><a href="group_members.php?id='.$group_id.'">'.get_lang('MemberList').'</a>';
-				echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.get_lang('WaitingList').'</a></li>';
-				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.get_lang('InviteFriends').'</a></li>';
-				break;
-			case GROUP_USER_PERMISSION_PENDING_INVITATION:				
-				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang(YouHaveBeenInvitedJoinNow).'</a></li>';
-				break;
-			case GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
-				echo get_lang('WaitingForAdminResponse');
-				break;
-			case GROUP_USER_PERMISSION_MODERATOR:
-				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display :: return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a></li>';
-		
-				echo '<li><a href="group_members.php?id='.$group_id.'">'.get_lang('MemberList').'</a></li>';
-				echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.get_lang('WaitingList').'</a></li>';
-				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.get_lang('InviteFriends').'</a></li>';
-				break;
-			case GROUP_USER_PERMISSION_ANONYMOUS:
-				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a></li>';
-		}
-		echo '</ul>';
-		echo '</div>'; // end layout permissions
 		
 	
 	echo '</div>'; // end layout left	

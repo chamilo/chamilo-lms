@@ -701,6 +701,7 @@ class SocialManager extends UserManager {
 				$name = api_get_person_name($user_info['firstName'], $user_info['lastName']);
 				$table_row[] = '<a href="'.$url.'"><img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'" '.$friends_profile['style'].' border="1"></a>';
 				$table_row[] = '<a href="'.$url.'" style="font-size:10px;">'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</a>';
+				
 	
 				//$table_row[] = '<a href="'.$url.'">'.$user_info['lastName'].'</a>';
 	

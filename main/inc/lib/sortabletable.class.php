@@ -479,20 +479,6 @@ class SortableTable extends HTML_Table {
 			}
 		}
 		
-		// @todo This style css must be moved to default.css only for dev		 
-		echo '<style>				
-				.search_users_grid_container { width:100%;}
-				.search_users_grid_item { width:400px;  height: 90px;  border:1px dotted #ccc; float:left; padding:5px; margin:8px;}
-				.search_users_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
-				.search_users_grid_element_1 { width:100px; float:left; text-align:center;margin-bottom:5px;}
-				.search_users_grid_element_2 { width:150px; float:left;}
-				
-				.search_users_grid_selectbox { width:50%; float:left;}
-				.search_users_grid_title 	{ width:30%; float:left;}
-				.search_users_grid_nav 		{ float:right;}
-					
-		</style>';
-		
 		if ($hide_navigation == true ) {
 			$items = $this->table_data; //this is a faster way to get what we want
 		} else {

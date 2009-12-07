@@ -136,7 +136,7 @@ if ($group_id != 0 ) {
 		
 	// Newest groups --------
 	
-	$results = GroupPortalManager::get_groups_by_age(10 , true);
+	$results = GroupPortalManager::get_groups_by_age();
 	$groups = array();
 	foreach ($results as $result) {
 		$id = $result['id'];
@@ -146,12 +146,12 @@ if ($group_id != 0 ) {
 	}
 	if (count($groups) > 0) {
 		echo '<h1>'.get_lang('Newest').'</h1>';	
-		Display::display_sortable_grid('search_users', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));		
+		Display::display_sortable_grid('groups', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));		
 	}	
 	
 	// Pop groups -----
 	
-	$results = GroupPortalManager::get_groups_by_popularity(10 , true);
+	$results = GroupPortalManager::get_groups_by_popularity();
 	$groups = array();
 	foreach ($results as $result) {
 		$id = $result['id'];
@@ -168,7 +168,7 @@ if ($group_id != 0 ) {
 	}
 	if (count($groups) > 0) {
 		echo '<h1>'.get_lang('Popular').'</h1>';
-		Display::display_sortable_grid('search_users', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
+		Display::display_sortable_grid('groups', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
 	}
 	
 	
@@ -190,7 +190,7 @@ if ($group_id != 0 ) {
 	echo '<h1>'.get_lang('MyGroups').'</h1>';
 	echo '<a href="group_add.php">'.get_lang('CreateAgroup').'</a>';
 	if (count($groups) > 0) {		
-		Display::display_sortable_grid('search_users', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
+		Display::display_sortable_grid('groups', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
 	}
 }	
 Display :: display_footer();

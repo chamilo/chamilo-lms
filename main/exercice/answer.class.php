@@ -80,7 +80,15 @@ class Answer
 		$this->cancel();
 
 		// fills arrays
-		$this->read();
+		Exercise::read($_REQUEST['exerciseId']);		
+		if($this->random_answers=='1')
+		{
+			$this->readOrderedBy('rand()', '');// randomize answers
+		}
+		else
+		{
+			$this->read(); // natural order
+		}
 	}
 
 	/**
@@ -114,7 +122,7 @@ class Answer
 		$questionId=$this->questionId;
 		//$answerType=$this->selectType();
 
-		$sql="SELECT id,answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination FROM
+		$sql="SELECT id,answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination, id_auto FROM
 		      $TBL_ANSWER WHERE question_id ='".Database::escape_string($questionId)."' ORDER BY position";
 
 		$result=Database::query($sql,__FILE__,__LINE__);
@@ -133,6 +141,7 @@ class Answer
 			$this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
 			$this->hotspot_type[$i]=$object->hotspot_type;
 			$this->destination[$i]=$object->destination;
+			$this->autoId[$i]=$object->id_auto;
 			$i++;
 		}
 
@@ -161,7 +170,7 @@ class Answer
 		$questionId=$this->questionId;
 		//$answerType=$this->selectType();
 
-		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type,destination " .
+		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type, destination, id_auto " .
 				"FROM $TBL_ANSWER WHERE question_id='".Database::escape_string($questionId)."' " .
 				"ORDER BY $field $order";
 
@@ -178,12 +187,25 @@ class Answer
 			$this->weighting[$i]=$object->ponderation;
 			$this->position[$i]=$object->position;
 			$this->destination[$i]=$object->destination;
-
+			$this->autoId[$i]=$object->id_auto;
 			$i++;
 		}
 
 		$this->nbrAnswers=$i-1;
 	}
+
+
+	/**
+	 * returns the autoincrement id identificator
+	 *
+	 * @author - Juan Carlos Raña
+	 * @return - integer - answer num
+	 */
+	function selectAutoId($id)
+	{
+		return $this->autoId[$id];
+	}
+
 
 	/**
 	 * returns the number of answers in this question

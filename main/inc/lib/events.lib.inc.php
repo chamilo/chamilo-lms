@@ -20,16 +20,16 @@
 ==============================================================================
 */
 // REGROUP TABLE NAMES FOR MAINTENANCE PURPOSE
-$TABLETRACK_LOGIN = $_configuration['statistics_database'].".track_e_login";
-$TABLETRACK_OPEN = $_configuration['statistics_database'].".track_e_open";
-$TABLETRACK_ACCESS = $_configuration['statistics_database'].".track_e_access";
-$TABLETRACK_DOWNLOADS = $_configuration['statistics_database'].".track_e_downloads";
-$TABLETRACK_UPLOADS = $_configuration['statistics_database'].".track_e_uploads";
-$TABLETRACK_LINKS = $_configuration['statistics_database'].".track_e_links";
-$TABLETRACK_EXERCICES = $_configuration['statistics_database'].".track_e_exercices";
+$TABLETRACK_LOGIN 		= $_configuration['statistics_database'].".track_e_login";
+$TABLETRACK_OPEN 		= $_configuration['statistics_database'].".track_e_open";
+$TABLETRACK_ACCESS 		= $_configuration['statistics_database'].".track_e_access";
+$TABLETRACK_DOWNLOADS	= $_configuration['statistics_database'].".track_e_downloads";
+$TABLETRACK_UPLOADS 	= $_configuration['statistics_database'].".track_e_uploads";
+$TABLETRACK_LINKS 		= $_configuration['statistics_database'].".track_e_links";
+$TABLETRACK_EXERCICES 	= $_configuration['statistics_database'].".track_e_exercices";
 $TABLETRACK_SUBSCRIPTIONS = $_configuration['statistics_database'].".track_e_subscriptions";
-$TABLETRACK_LASTACCESS = $_configuration['statistics_database'].".track_e_lastaccess"; //for "what's new" notification
-$TABLETRACK_DEFAULT = $_configuration['statistics_database'].".track_e_default";
+$TABLETRACK_LASTACCESS 	= $_configuration['statistics_database'].".track_e_lastaccess"; //for "what's new" notification
+$TABLETRACK_DEFAULT 	= $_configuration['statistics_database'].".track_e_default";
 
 /*
 ==============================================================================
@@ -398,20 +398,31 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$l
 {
 	if ($exeid!='') {
 
-    $current_time = time();
-    if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
-    	$expired_date = $_SESSION['expired_time'];
-    	$expired_time = strtotime($expired_date);
-    }
-
-    //Validation in case of fraud
-    $total_time_allowed = $expired_time + 30;
-    if ($total_time_allowed < $current_time) {
-    	$score = 0;
-    }
-  
+	    $current_time = time();
+	    if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
+	    	$expired_date = $_SESSION['expired_time'];
+	    	$expired_time = strtotime($expired_date);
+	    }
+	
+	    //Validation in case of fraud
+	    $total_time_allowed = $expired_time + 30;
+	    if ($total_time_allowed < $current_time) {
+	    	$score = 0;
+	    }
+	    
+	    $now = time();
+	    
+	    //Validation in case of wrong start_date 
+	    if (isset($_SESSION['exercice_start_date'])) { 
+	    	$start_date = $_SESSION['exercice_start_date'];	    	
+	    	$diff  = abs($start_date - $now);	    	
+	    	if ($diff > 14400) { // 14400 = 4h*60*60 more than 4h of diff
+	    		$start_date = $now - 1800; //	Now - 30min    			    		
+	    	}
+	    }
+	  
 		$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-		$reallyNow = time();
+		
 		$sql = "UPDATE $TABLETRACK_EXERCICES SET
 				   exe_exo_id 	= 	'".Database::escape_string($exo_id)."',
 				   exe_result	=	  '".Database::escape_string($score)."',
@@ -420,8 +431,9 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$l
 				   orig_lp_id = '".Database::escape_string($learnpath_id)."',
 				   orig_lp_item_id = '".Database::escape_string($learnpath_item_id)."',
 				   exe_duration = '".Database::escape_string($duration)."',
-				   exe_date= FROM_UNIXTIME(".$reallyNow."),status = '', data_tracking='',start_date =FROM_UNIXTIME(".Database::escape_string($_SESSION['exercice_start_date']).")
+				   exe_date= FROM_UNIXTIME(".$now."),status = '', data_tracking='', start_date = FROM_UNIXTIME(".Database::escape_string($start_date).")
 				 WHERE exe_id = '".Database::escape_string($exeid)."'";
+		error_log($sql);  
 		$res = @Database::query($sql,__FILE__,__LINE__);
 		unset($_SESSION['expired_time']);
 		return $res;

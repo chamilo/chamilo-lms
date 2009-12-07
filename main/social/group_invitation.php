@@ -56,10 +56,9 @@ if (empty($group_id)) {
 		api_not_allowed();
 	}
 	//only admin or moderator can do that
-	$user_role = GroupPortalManager::get_user_group_role(api_get_user_id(), $group_id);
-	if (!in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
+	if (!GroupPortalManager::is_group_member($group_id)) {
 		api_not_allowed();		
-	}
+	}	
 }
 
 function search_users($needle,$type) {
@@ -213,9 +212,6 @@ echo '<div class="actions-title">';
 echo get_lang('Invitations');
 echo '</div>'; 
 
-
-
-
 if($_POST['form_sent']) {
 	$form_sent			= $_POST['form_sent'];
 	$firstLetterUser	= $_POST['firstLetterUser'];
@@ -229,15 +225,15 @@ if($_POST['form_sent']) {
 	}
 	if ($form_sent == 1) {
 		//invite this users
-		$result = GroupPortalManager::add_users_to_groups($user_list, array($group_id), GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER);
+		$result = GroupPortalManager::add_users_to_groups($user_list, array($group_id), GROUP_USER_PERMISSION_PENDING_INVITATION);
 		$title = 'YouAreInvitedToGroup'.$group_id;
 		$content = 'YouAreInvitedToGroupContent'.$group_id;
-		
-		//send invitation message
-		foreach($user_list as $user_id ){
-			MessageManager::send_message($user_id, $title, $content);
-		}
-		
+		if (is_array($user_list) && count($user_list) > 0) {
+			//send invitation message
+			foreach($user_list as $user_id ){
+				MessageManager::send_message($user_id, $title, $content);
+			}
+		}		
 	}
 	
 }
@@ -245,7 +241,6 @@ if($_POST['form_sent']) {
 $nosessionUsersList = $sessionUsersList = array();
 $ajax_search = $add_type == 'unique' ? true : false;
 global $_configuration;
-
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 
 if ($ajax_search) {
@@ -274,17 +269,17 @@ if ($ajax_search) {
 	foreach ($Users as $user) {
 		$sessionUsersList[$user['user_id']] = $user ;
 	}
-} else {
-		
-		$friends = SocialManager::get_friends(api_get_user_id());
-			
+} else {		
+		$friends = SocialManager::get_friends(api_get_user_id());	
+				
 		$suggest_friends = false;
 		
 		if (!$friends) {
 			$suggest_friends = true;	
-		} else {			
+		} else {
 			foreach($friends as $friend) {
-				$group_friend_list = GroupPortalManager::get_groups_by_user($friend['friend_user_id'], 0);								
+				$group_friend_list = GroupPortalManager::get_groups_by_user($friend['friend_user_id'], 0);				
+				//var_dump($group_friend_list);								
 				$friend_group_id = '';
 				if (isset($group_friend_list[$group_id]) && $group_friend_list[$group_id]['id'] == $group_id) {
 					$friend_group_id = $group_id;
@@ -308,10 +303,7 @@ if ($ajax_search) {
 				unset($nosessionUsersList[$key_user_list]);
 			}
 		}
-					
-
 }
-
 
 if ($add_type == 'multiple') {
 	$link_add_type_unique = '<a href="'.api_get_self().'?id='.$group_id.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
@@ -320,14 +312,15 @@ if ($add_type == 'multiple') {
 	$link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
 	$link_add_type_multiple = '<a href="'.api_get_self().'?id='.$group_id.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
+	/* <?php $link_add_type_unique ?>&nbsp;|&nbsp;<?php $link_add_type_multiple ?> */
+
+	//Shows left column
+	echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
+	
+	//-- Show group content	
+	echo '<div id="layout_right" style="margin-left: 282px;">';
 ?>
-
-<div class="actions">
-	<?php $link_add_type_unique ?>&nbsp;|&nbsp;<?php $link_add_type_multiple ?>
-</div>
-
-<?php echo '<div class="row"><div class="form_header">'.$tool_name.' ('.$session_info['name'].')</div></div><br/>'; ?>
-
+	
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $group_id; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 
 <?php
@@ -463,6 +456,11 @@ unset($sessionUsersList);
 </tr>
 </table>
 </form>
+<?php
+
+
+	echo '</div>'; // end layout right
+?>
 
 <script type="text/javascript">
 <!--
@@ -558,7 +556,7 @@ function makepost(select){
 <?php
 
 //current group members		
-$members = GroupPortalManager::get_users_by_group($group_id,true,array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER));
+$members = GroupPortalManager::get_users_by_group($group_id, true, array(GROUP_USER_PERMISSION_PENDING_INVITATION));
 if (is_array($members) && count($members)>0) {
 	echo get_lang('UsersAlreadyInvited');
 	Display::display_sortable_grid('search_users', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true));

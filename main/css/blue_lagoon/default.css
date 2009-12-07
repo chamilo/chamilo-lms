@@ -2624,6 +2624,9 @@ input.arrowl {
 
 
 
+
+
+
 /* UI improvements for 1.8.6.2 this should be move to the chamilo theme and reproduce in all CSS*/
 
 
@@ -2759,7 +2762,8 @@ a.unread {
 }
 
 .message-group-content {
-	line-height:150%
+	line-height:150%;
+	margin: 5px 0px 8px 0px;
 }
 
 .view-message-content {

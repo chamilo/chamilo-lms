@@ -137,15 +137,28 @@ $big_image_size = api_getimagesize($big_image);
 $big_image_width = $big_image_size[0];
 $big_image_height = $big_image_size[1];
 $url_big_image = $big_image.'?rnd='.time();
-
+/*
 if ($image == '') {
 	echo '<img '.$img_attributes.' />';
 } else {
 	echo '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 }
+*/
 
-// Display form
+
+//Shows left column
+echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
+
+
+//-- Show message groups
+
+echo '<div id="layout_right" style="margin-left: 282px;">';	
+	
+		// Display form
 $form->display();
+	
+echo '</div>'; // end layout right
+
 
 // Footer
 Display::display_footer();

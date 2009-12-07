@@ -501,19 +501,20 @@ class MessageManager
 			 } else {
 				$message[0] = ($result[0]);
 			 }
-
+			 
+			$class = 'class = "read"';
+			
 			if ($request===true) {
-			   if ($result[5]==4)
-			   {
+			   if ($result[5]==4) {
 			   		$message[1] = Display::return_icon('mail_send.png',get_lang('MessageSent'));//Message Sent
 			   }
 				$message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.GetFullUserName($result[4]).'</a>';
 				$message[3] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",$result[2]).'</a>';
 				$message[5] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			} else {
-				$message[2] = '<a onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].'">'.GetFullUserName($result[4]).'</a>';
-				$message[3] = '<a onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].'">'.$result[2].'</a>';
-				$message[5] = '<a href="new_message.php?re_id='.$result[0].'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
+				$message[2] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].'">'.GetFullUserName($result[4]).'</a>';
+				$message[3] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].'">'.$result[2].'</a>';
+				$message[5] = '<a '.$class.' href="new_message.php?re_id='.$result[0].'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
 						  '&nbsp;&nbsp;<a href="outbox.php?action=deleteone&id='.$result[0].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			}
 			$message[4] = $result[3]; //date stays the same
@@ -542,31 +543,30 @@ class MessageManager
 	/**
 	 * display message box in the inbox 
 	 * @param int the message id
+	 * @param string inbox or outbox strings are available
 	 * @return string html with the message content
 	 */
-	public static function show_message_box($message_id) {
+	public static function show_message_box($message_id, $source = 'inbox') {
 		$table_message 		= Database::get_main_table(TABLE_MESSAGE);
 		$tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
+		$message_id = intval($message_id);	
 		
-		
-	/*	if (isset($_GET['id_send']) && is_numeric($_GET['id_send'])) {
-			// when I get here ? by Julio Montoya
-			$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".intval(Database::escape_string($_GET['id_send']))." AND msg_status=4;";
-			$result = Database::query($query,__FILE__,__LINE__);
-		    $path='outbox.php';
-		    $message_id = intval($_GET['id_send']);
-		} else {*/
-		
-		$message_id = intval($message_id);			
-		if (is_numeric($message_id) && !empty($message_id)) {
-			$query = "UPDATE $table_message SET msg_status = '".MESSAGE_STATUS_NEW."' WHERE user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
-			$result = Database::query($query,__FILE__,__LINE__);
-			
-			$query = "SELECT * FROM $table_message WHERE msg_status<>4 AND user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
-			$result = Database::query($query,__FILE__,__LINE__);
-		}						
+		if ($source == 'outbox') {
+			if (isset($message_id) && is_numeric($message_id)) {
+				$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".$message_id." AND msg_status=4;";
+				$result = Database::query($query,__FILE__,__LINE__);
+			    $path='outbox.php';		    
+			}
+		} else {	
+			if (is_numeric($message_id) && !empty($message_id)) {
+				$query = "UPDATE $table_message SET msg_status = '".MESSAGE_STATUS_NEW."' WHERE user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
+				$result = Database::query($query,__FILE__,__LINE__);
+				
+				$query = "SELECT * FROM $table_message WHERE msg_status<>4 AND user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
+				$result = Database::query($query,__FILE__,__LINE__);
+			}						
 			$path='inbox.php';			
-		//}
+		}
 
 		$row = Database::fetch_array($result);
 		
@@ -621,6 +621,11 @@ class MessageManager
 		        <div id="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>				        		
 		        <DIV class=HT style="PADDING-BOTTOM: 5px">';
 		        
+		    if ($source == 'outbox') {
+		    	$message_content .= '<a href="outbox.php">'.Display::return_icon('back.png',get_lang('ReturnToOutbox')).get_lang('ReturnToOutbox').'</a> &nbsp';
+		    } else {
+		    	$message_content .= '<a href="inbox.php">'.Display::return_icon('back.png',get_lang('ReturnToInbox')).get_lang('ReturnToInbox').'</a> &nbsp';
+		    }
 			$message_content .= '<a href="new_message.php?re_id='.$message_id.'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).get_lang('ReplyToMessage').'</a> &nbsp';
 			$message_content .= '<a href="inbox.php?action=deleteone&id='.$message_id.'" >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).''.get_lang('DeleteMessage').'</a>&nbsp';
 
@@ -720,13 +725,13 @@ class MessageManager
 	 * @param int group id
 	 */
 	public static function display_messages_for_group($group_id) {
-				
-		global $origin;						
+						
 		$rows = self::get_messages_by_group($group_id);						
 		$rows = self::calculate_children($rows);
 		$group_info = GroupPortalManager::get_group_data($group_id);		
 		$count=0;
-		if (is_array($rows) && count($rows)> 0) {	
+		$html = '';
+		if (is_array($rows) && count($rows)> 0) {
 			foreach ($rows as $message) {
 				$indent	= $message['indent_cnt']*'20';
 				$user_sender_info = UserManager::get_user_info_by_id($message['user_sender_id']);
@@ -745,25 +750,28 @@ class MessageManager
 				
 				// get file attachments by message id
 				$files_attachments = self::get_links_message_attachment_files($message['id']);
-							
+				
 				$name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);						
-				echo '<div class="'.$message_item.'" id="message-item-'.$count.'" style="margin-left: '.$indent.'px;">';
+				$html.= '<div class="'.$message_item.'" id="message-item-'.$count.'" style="margin-left: '.$indent.'px;">';
 					
 					//if (!isset($message['children'])) {
-					echo '<div id="message-reply-link"><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$message['id'].'" class="thickbox" title="'.api_xml_http_response_encode(get_lang('Reply')).'">'.Display :: return_icon('forumthread_new.gif', api_xml_http_response_encode(get_lang('Reply'))).'&nbsp;'.api_xml_http_response_encode(get_lang('Reply')).'</a></div>';
+					$html.= '<div id="message-reply-link"><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$message['id'].'" class="thickbox" title="'.api_xml_http_response_encode(get_lang('Reply')).'">'.Display :: return_icon('forumthread_new.gif', api_xml_http_response_encode(get_lang('Reply'))).'&nbsp;'.api_xml_http_response_encode(get_lang('Reply')).'</a></div>';
 						//echo '<a href="/main/messages/new_message.php?group_id='.$group_id.'&message_id='.$message['id'].'">'.Display::return_icon('forumthread_new.gif',api_xml_http_response_encode(get_lang('Reply'))).'&nbsp;'.api_xml_http_response_encode(get_lang('Reply')).'</a>';
 					//}
 					
-					echo '<div class="'.$message_title_item.'">'.$message['title'].'&nbsp;(&nbsp;'.date_to_str_ago($message['send_date']).'&nbsp;)&nbsp;</div>';
+					$html.= '<div class="'.$message_title_item.'">'.$message['title'].'&nbsp;</div>';
 											
-					echo '<div class="message-group-author">'.get_lang('From').'&nbsp;<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$message['user_sender_id'].'">'.$name.'&nbsp;</a></div>';		
-					echo '<div class="message-group-content">'.$message['content'].'</div>';
-					echo '<div class="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>';
+					$html.= '<div class="message-group-author">'.get_lang('From').'&nbsp;<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$message['user_sender_id'].'">'.$name.'&nbsp;</a></div>';		
+					$html.= '<div class="message-group-content">'.$message['content'].'</div>';
+					$html.= '<div class="message-group-date">'.get_lang('PostIn').' '.date_to_str_ago($message['send_date']).'</div>';
 					
-				echo '</div>';
+					$html.= '<div class="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>';
+					
+				$html.= '</div>';
 				$count++;						
 			}
 		}
+		return $html;
 	}
 	
 	/**
@@ -931,6 +939,7 @@ function outbox_display() {
 	$request=api_is_xml_http_request();
 	global $charset;
 	if ($_SESSION['social_exist']===true) {
+		
 		$redirect="#remote-tab-3";
 		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
 			$success= get_lang('SelectedMessagesDeleted')."&nbsp<br><a href=\""."../social/index.php?$redirect\">".get_lang('BackToOutbox')."</a>";
@@ -941,51 +950,51 @@ function outbox_display() {
 	} else {
 		$success= get_lang('SelectedMessagesDeleted')."&nbsp</b>"."<br><a href=\""."outbox.php\">".get_lang('BackToOutbox')."</a>";
 	}
-if (isset ($_REQUEST['action'])) {
-	switch ($_REQUEST['action']) {
-		case 'delete' :
-		$number_of_selected_messages = count($_POST['id']);
-		if ($number_of_selected_messages!=0) {
-			foreach ($_POST['id'] as $index => $message_id) {
-				MessageManager::delete_message_by_user_receiver(api_get_user_id(), $message_id);
+	if (isset ($_REQUEST['action'])) {
+		switch ($_REQUEST['action']) {
+			case 'delete' :
+			$number_of_selected_messages = count($_POST['id']);
+			if ($number_of_selected_messages!=0) {
+				foreach ($_POST['id'] as $index => $message_id) {
+					MessageManager::delete_message_by_user_receiver(api_get_user_id(), $message_id);
+				}
 			}
+			Display::display_normal_message(api_xml_http_response_encode($success),false);
+			break;
+			case 'deleteone' :
+			MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
+			Display::display_confirmation_message(api_xml_http_response_encode($success),false);
+			echo '<br/>';
+			break;
 		}
-		Display::display_normal_message(api_xml_http_response_encode($success),false);
-		break;
-		case 'deleteone' :
-		MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_GET['id']);
-		Display::display_confirmation_message(api_xml_http_response_encode($success),false);
-		echo '<br/>';
-		break;
 	}
-}
-
-// display sortable table with messages of the current user
-$table = new SortableTable('messages', 'get_number_of_messages_send_mask', 'get_message_data_send_mask', 3,get_number_of_messages_send_mask(),'DESC');
-$title=api_xml_http_response_encode(get_lang('Title'));
-$action=api_xml_http_response_encode(get_lang('Actions'));
-$table->set_header(0, '', false,array ('style' => 'width:20px;'));
-$table->set_header(1, api_xml_http_response_encode(get_lang('Status')),false,array ('style' => 'width:30px;'));
-$table->set_header(2, api_xml_http_response_encode(get_lang('To')),false);
-$table->set_header(3, $title,false);
-$table->set_header(4, api_xml_http_response_encode(get_lang('Date')),false,array ('style' => 'width:150px;'));
-$table->set_header(5,$action, false,array ('style' => 'width:100px;'));
-echo '<div id="div_content_table_data_sent">';
-	if ($request===true) {
-		echo '<form name="form_send_out" id="form_send_out" action="" method="post">';
-		echo '<input type="hidden" name="action" value="delete" />';
-		$table->display();
-		echo '</form>';
-		if (get_number_of_messages_send_mask() > 0) {
-			echo '<a href="javascript:void(0)" onclick="selectall_cheks()">'.api_xml_http_response_encode(get_lang('SelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
-			echo '<a href="javascript:void(0)" onclick="unselectall_cheks()">'.api_xml_http_response_encode(get_lang('UnSelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
-			echo '<button class="save" name="delete" type="button" value="'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'" onclick="submit_form(\'outbox\')">'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'</button>';
+	
+	// display sortable table with messages of the current user
+	$table = new SortableTable('messages', 'get_number_of_messages_send_mask', 'get_message_data_send_mask', 3,get_number_of_messages_send_mask(),'DESC');
+	$title=api_xml_http_response_encode(get_lang('Title'));
+	$action=api_xml_http_response_encode(get_lang('Actions'));
+	$table->set_header(0, '', false,array ('style' => 'width:20px;'));
+	$table->set_header(1, api_xml_http_response_encode(get_lang('Status')),false,array ('style' => 'width:30px;'));
+	$table->set_header(2, api_xml_http_response_encode(get_lang('To')),false);
+	$table->set_header(3, $title,false);
+	$table->set_header(4, api_xml_http_response_encode(get_lang('Date')),false,array ('style' => 'width:150px;'));
+	$table->set_header(5,$action, false,array ('style' => 'width:100px;'));
+	echo '<div id="div_content_table_data_sent">';
+		if ($request===true) {
+			echo '<form name="form_send_out" id="form_send_out" action="" method="post">';
+			echo '<input type="hidden" name="action" value="delete" />';
+			$table->display();
+			echo '</form>';
+			if (get_number_of_messages_send_mask() > 0) {
+				echo '<a href="javascript:void(0)" onclick="selectall_cheks()">'.api_xml_http_response_encode(get_lang('SelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
+				echo '<a href="javascript:void(0)" onclick="unselectall_cheks()">'.api_xml_http_response_encode(get_lang('UnSelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
+				echo '<button class="save" name="delete" type="button" value="'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'" onclick="submit_form(\'outbox\')">'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'</button>';
+			}
+		} else {
+			$table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
+			$table->display();
 		}
-	} else {
-		$table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
-		$table->display();
-	}
-echo '</div>';
+	echo '</div>';
 }
 function get_number_of_messages_send_mask() {
 	return MessageManager::get_number_of_messages_sent();

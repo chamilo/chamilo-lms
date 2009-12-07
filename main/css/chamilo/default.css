@@ -2875,7 +2875,7 @@ button.login {
 
 button.login:hover{
 	background-color:#FFF;
-	border: solid 1px #FFF;
+/*	border: solid 1px #FFF; */
 }
 
 /*including "plus" image*/

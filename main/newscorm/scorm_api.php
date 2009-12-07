@@ -186,12 +186,41 @@ $(document).ready( function() {
   info_lms_item[1]= info_lms_item[1];
   <?php
   if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
-  ?>
-  	if (lms_lp_type == 2) { //Only scorm
-  	    attach_glossary_into_scorm();	
+  	
+  	 if (api_get_setting('show_glossary_in_documents') == 'ismanual') { 
+  	 	//Will be always automatic
+  	 	 ?> 	
+		$.frameReady(function(){
+	   		//  $("<div>I am a div courses</div>").prependTo("body");     
+	     }, "top.content_name",   
+	      { load: [
+	      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
+	          	{type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
+	          	{type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
+	      ] }
+	      );	
+	            
+	  	if (lms_lp_type == 2) { //Only scorm 		
+	  	    //attach_glossary_into_scorm();	
+	  	}
+  	<?php
+  	 } else {  	 
+  ?> 	
+	$.frameReady(function(){   
+   		//  $("<div>I am a div courses</div>").prependTo("body");     
+      }, "top.content_name",   
+      { load: [   
+      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
+          	{type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
+          	{type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
+      ] }
+      );
+	      
+  	if (lms_lp_type == 2) { //Only scorm 		
+  	    //attach_glossary_into_scorm();	
   	}
-
   <?php
+  	 }
   }
   ?>
  });
@@ -1590,10 +1619,13 @@ if(lms_lp_type==1 || lms_item_type=='asset'){
 }
 
 /**
-*Allow attach the glossary terms into html document of scorm
-*Added by Isaac flores
+
+* Allow attach the glossary terms into html document of scorm
+* Added by Isaac flores
+* This function should be deprecated
 */
 function attach_glossary_into_scorm() {
+
   var f = $('#content_id')[0];
 
   var doc = f.contentWindow ? f.contentWindow.document :

@@ -1,11 +1,12 @@
 /*
 highlight v3
+
 Highlights arbitrary terms.
 <http://johannburkard.de/blog/programming/javascript/highlight-javascript-text-higlighting-jquery-plugin.html>
 MIT license.
 
 Johann Burkard <http://johannburkard.de> <mailto:jb@eaio.com>
-Julio Montoya <gugli100@gmail.com> fixes for Chamilo 1.8.6.2 Glossary tool to strict search 
+Julio Montoya <gugli100@gmail.com> fixes for the Glossary tool to strict search 
 
 */
 

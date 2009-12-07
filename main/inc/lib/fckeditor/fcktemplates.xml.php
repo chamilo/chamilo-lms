@@ -19,6 +19,7 @@ $css = loadCSS(api_get_setting('stylesheets'));
 
 
 // load libreries js
+/* This libraries will be loaded in the showinframes.php file
 $js = '';
 if (api_get_setting('show_glossary_in_documents') != 'none') {
 	$js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"/>'.PHP_EOL;
@@ -29,7 +30,7 @@ if (api_get_setting('show_glossary_in_documents') != 'none') {
 		$js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"/>';
 	}
 }
-
+*/
 // setting some paths
 $img_dir = api_get_path(REL_CODE_PATH).'img/';
 $default_course_dir = api_get_path(REL_CODE_PATH).'default_course_document/';

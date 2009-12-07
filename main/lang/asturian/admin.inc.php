@@ -979,6 +979,7 @@ $SoberBrown = "Marrón sobriu";
 $SteelGrey = "Gris aceru";
 $TastyOlive = "Sabor oliva";
 $AddNews  = "Criar anunciu";
+$ExportCourses = "Esportar cursos";
 $SearchDatabaseOpeningError = "Nun pudo abrise la base de datos del motor d\'indexáu, preba a amestar un recursu nuevu (exerciciu, enllaz, lleición, etc) el cual será indexáu al guetador";
 $SearchDatabaseVersionError = "La base de datos ta nun formatu nun sofitáu";
 $SearchDatabaseModifiedError = "La base de datos foi camudada";
@@ -1096,4 +1097,8 @@ $ShowGlossaryInExtraToolsComment = "Dende equí puedes configurar como amestar lo
 $FieldTypeTag = "Etiqueta d\'usuariu";
 $SendEmailToAdminTitle = "Avisu por corréu electrónicu, de la criación d\'un cursu nuevu";
 $SendEmailToAdminComment = "Unviar un corréu electrónicu al alministrador de la plataforma, cada vegada qu\'un mayestru crie un cursu nuevu";
+$UserTag = "Etiqueta d\'usuariu";
+$SelectSession = "Seleicionar sesión";
+$GroupPermissions = "Permisos del grupu";
+$SpecialCourse = "Cursu especial";
 ?>

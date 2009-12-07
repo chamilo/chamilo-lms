@@ -9,10 +9,7 @@
 
 // This is the visible toolbar set when the editor has "normal" size.
 $config['ToolbarSets']['Normal'] = array(
-	array('FitWindow'),
-	array('Bold','Italic','Underline','-','Subscript','Superscript'),
-	array('Undo','Redo'),
-	array('SpecialChar','mimetex')
+    array('FitWindow','Bold','Image','Link','PasteWord','MP3','mimetex','Table','Subscript','Superscript','Source')
 );
 
 // This is the visible toolbar set when the editor is maximized.

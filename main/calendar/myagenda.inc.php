@@ -298,6 +298,8 @@ function show_new_personal_item_form($id = "")
 	$year = $today['year'];
 	$hours = $today['hours'];
 	$minutes = $today['minutes'];
+	$content=stripslashes($content);
+	$title=stripslashes($title);
 	// if an $id is passed to this function this means we are editing an item
 	// we are loading the information here (we do this after everything else
 	// to overwrite the default information)
@@ -327,16 +329,19 @@ function show_new_personal_item_form($id = "")
 			return false;
 		}
 	}
-	echo "<form method=\"post\" action=\"myagenda.php?action=add_personal_agenda_item&amp;id=$id\" name=\"newedit_form\">\n";
-	echo "<table width=\"100%\" id=\"newedit_form\">\n";
-	echo "\t<tr class=\"title\">\n\t\t<td colspan=\"3\"><h4>";
+	
+	echo '<form method="post" action="myagenda.php?action=add_personal_agenda_item&amp;id=$id" name="newedit_form">';
+	echo '<div id="newedit_form">';
+	echo '<div class="title">';
 	echo ($_GET['action'] == 'edit_personal_agenda_item') ? get_lang("ModifyPersonalCalendarItem") : get_lang("AddPersonalCalendarItem");
-	echo "</h4></td>\n\t</tr>\n";
-	echo "\t<tr class=\"subtitle\">\n\t\t<td>\n";
-	echo "<!-- date: 1 -> 31 -->\n";
-	echo "\t\t".get_lang("Date").": \n";
+	echo '</div>';
+	echo '<div>';
+	echo '<!-- date: 1 -> 31 -->';
+	echo '<br/>';
+	echo ''.get_lang("Date").':	';
+	
 	// ********** The form containing the days (0->31) ********** \\
-	echo "<select name=\"frm_day\">\n";
+	echo '<select name="frm_day">';
 	// small loop for filling all the dates
 	// 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
 	for ($i = 1; $i <= 31; $i ++)
@@ -353,17 +358,17 @@ function show_new_personal_item_form($id = "")
 		// the current day is indicated with [] around the date
 		if ($value == $day)
 		{
-			echo "\t\t\t\t <option value=\"".$value."\" selected>".$i."</option>\n";
+			echo '<option value='.$value.' selected>'.$i.'</option>';
 		}
 		else
 		{
-			echo "\t\t\t\t <option value=\"".$value."\">".$i."</option>\n";
+			echo '<option value='.$value.'>'.$i.'</option>';
 		}
 	}
-	echo "</select>\n\n";
+	echo '</select>';
 	// ********** The form containing the months (jan->dec) ********** \\
-	echo "<!-- month: january -> december -->\n";
-	echo "<select name=\"frm_month\">\n";
+	echo '<!-- month: january -> december -->';
+	echo '<select name="frm_month">';
 	for ($i = 1; $i <= 12; $i ++)
 	{
 		// values have to have double digits
@@ -378,31 +383,31 @@ function show_new_personal_item_form($id = "")
 		// the current month is indicated with [] around the month name
 		if ($value == $month)
 		{
-			echo "\t<option value=\"".$value."\" selected>".$MonthsLong[$i -1]."</option>\n";
+			echo '<option value='.$value.' selected>'.$MonthsLong[$i -1].'</option>';
 		}
 		else
 		{
-			echo "\t<option value=\"".$value."\">".$MonthsLong[$i -1]."</option>\n";
+			echo '<option value='.$value.'>'.$MonthsLong[$i -1].'</option>';
 		}
 	}
-	echo "</select>\n\n";
+	echo '</select>';
 	// ********** The form containing the years ********** \\
-	echo "<!-- year -->\n";
-	echo "<select name=\"frm_year\">";
-	echo "<option value=\"". ($year -1)."\">". ($year -1)."</option>\n";
-	echo "<option value=\"".$year."\" selected>".$year."</option>\n";
+	echo '<!-- year -->';
+	echo '<select name="frm_year">';
+	echo '<option value='. ($year -1).'>'. ($year -1).'</option>';
+	echo '<option value='.$year.' selected>'.$year.'</option>';
 	for ($i = 1; $i <= 5; $i ++)
 	{
 		$value = $year + $i;
-		echo "\t<option value=\"".$value."\">".$value."</option>\n";
+		echo '<option value='.$value.'>'.$value.'</option>';
 	}
-	echo "</select>";
+	echo '</select>&nbsp;&nbsp;';
 	echo "<a title=\"Kalender\" href=\"javascript:openCalendar('newedit_form', 'frm_')\">".Display::return_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;'))."</a>";
-	echo "&nbsp;&nbsp;";
+	echo '&nbsp;&nbsp;';
 	// ********** The form containing the hours  (00->23) ********** \\
-	echo "<!-- time: hour -->\n";
-	echo get_lang("Time").": \n";
-	echo "<select name=\"frm_hour\">\n";
+	echo '<!-- time: hour -->';
+	echo get_lang("Time").': ';
+	echo '<select name="frm_hour">';
 	for ($i = 1; $i <= 24; $i ++)
 	{
 		// values have to have double digits
@@ -417,14 +422,14 @@ function show_new_personal_item_form($id = "")
 		// the current hour is indicated with [] around the hour
 		if ($hours == $value)
 		{
-			echo "\t\t\t\t<option value=\"".$value."\" selected> ".$value." </option>\n";
+			echo '<option value='.$value.' selected>'.$value.'</option>';
 		}
 		else
 		{
-			echo "\t\t\t\t<option value=\"".$value."\"> ".$value." </option>\n";
+			echo '<option value='.$value.'> '.$value.' </option>';
 		}
 	}
-	echo "</select>";
+	echo '</select>';
 	// ********** The form containing the minutes ********** \\
 	echo "<select name=\"frm_minute\">";
 	echo "<option value=\"".$minutes."\">".$minutes."</option>";
@@ -440,22 +445,37 @@ function show_new_personal_item_form($id = "")
 	echo "<option value=\"45\">45</option>";
 	echo "<option value=\"50\">50</option>";
 	echo "<option value=\"55\">55</option>";
-	echo "</select>";
-	echo "</td></tr>";
+	echo '</select>';
+	echo '</div><br/>';
 	// ********** The title field ********** \\
-	echo "<tr class=\"subtitle\"><td colspan=\"2\">";
-	echo get_lang('Title').': <input type="text" name="frm_title" size="50" value="'.$title.'" />';
-	echo "</td></tr>";
+	echo '<div>';
+	echo ''.get_lang('Title').' : <input type="text" name="frm_title" size="50" value="'.$title.'" />';
+	echo '</div>';
 	// ********** The text field ********** \\
-	echo "<tr><td colspan=\"2\">";
-	//api_disp_html_area('frm_content', $text, '300px');
-	echo'<textarea name="frm_content" style="width: 450px; height: 100px;">'.$text.'</textarea>';
-	echo "</td></tr>";
+	echo '<div class="formw">';
+			require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
+
+			$oFCKeditor = new FCKeditor('frm_content') ;
+
+			$oFCKeditor->Width		= '80%';
+			$oFCKeditor->Height		= '200';
+
+			if(!api_is_allowed_to_edit(null,true)) {
+				$oFCKeditor->ToolbarSet = 'AgendaStudent';
+			} else {
+				$oFCKeditor->ToolbarSet = 'Agenda';
+			}
+			$oFCKeditor->Value		= $content;
+			$return =	$oFCKeditor->CreateHtml();
+			echo $return;
+	echo '</div>';
 	// ********** The Submit button********** \\
-	echo "<tr><td colspan=\"2\">";
+	echo '<div>';
 	echo '<button type="submit" class="add" name="Submit" value="'.get_lang('AddEvent').'" >'.get_lang('AddEvent').'</button>';
-	echo "</td></tr>";
-	echo "</table>\n</form>\n";
+	echo '</div>';
+	echo '</div>';
+	echo '</form>';
+	
 }
 /**
  * This function shows all the forms that are needed form adding a new personal agenda item

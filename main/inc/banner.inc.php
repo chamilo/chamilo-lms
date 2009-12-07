@@ -236,13 +236,16 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 		}
 	}	
 	
-	// Social Networking 
+	// Social Networking
 	if (api_get_setting('show_tabs', 'social') == 'true') {
-		$navigation['social'] = $possible_tabs['social'];
+		if (api_get_setting('allow_social_tool') == 'true') {
+			$navigation['social'] = $possible_tabs['social'];
+		}
 	} else{
 		$menu_navigation['social'] = $possible_tabs['social'];
 	}
-
+	
+	// Administration
 	if(api_is_platform_admin(true)) {
 		if (api_get_setting('show_tabs', 'platform_administration') == 'true') {
 			$navigation['platform_admin'] = $possible_tabs['platform_admin'];

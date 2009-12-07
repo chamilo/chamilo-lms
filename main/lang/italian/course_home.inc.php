@@ -27,4 +27,5 @@ $IntroductionTextDeleted = "Testo introduttivo eliminato";
 $SessionIdentifier = "Identificatore della sessione";
 $SessionName = "Nome della sessione";
 $SessionCategory = "Categoria della sessione";
+$SessionData = "Dati della sessione";
 ?>

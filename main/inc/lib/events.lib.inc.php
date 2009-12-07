@@ -511,17 +511,17 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
     if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
     	$expired_date = $_SESSION['expired_time'];
     	$expired_time = strtotime($expired_date);
-    }
 
-    //Validation in case of fraud
-    $total_time_allowed = $expired_time + 30;
- 
-    if ($total_time_allowed < $current_time) {
-    	$score = 0;
-    	$answer = 0;
-    	$j = 0;
-    }
 
+	    //Validation in case of fraud
+	    $total_time_allowed = $expired_time + 30;
+	 
+	    if ($total_time_allowed < $current_time) {
+	    	$score = 0;
+	    	$answer = 0;
+	    	$j = 0;
+	    }
+    }
 	// if tracking is disabled record nothing
 	if (!$_configuration['tracking_enabled'])
 	{

@@ -453,5 +453,51 @@ class Statistics
 			echo get_lang('NoSearchResults');
 		}
 	}
+	
+	/**
+	 * Displays the statistics of the messages sent and received by each user in the social network
+	 * @param string	Type of message sent or received
+	 * @return array	Message list
+	 */
+	function get_messages($message_type) {
+		$message_table = Database::get_main_table(TABLE_MAIN_MESSAGE);
+		$user_table = Database::get_main_table(TABLE_MAIN_USER);
+		switch ($message_type) {
+			case 'sent':
+				$field = 'user_sender_id';
+				break;
+			case 'received':
+				$field = 'user_receiver_id';
+				break;
+		}
+		$sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message
+					FROM ".$message_table." m LEFT JOIN ".$user_table." u ON m.$field = u.user_id
+				GROUP BY m.$field";
+		$res = Database::query($sql, __FILE__, __LINE__);
+		$messages_sent = array();
+		while ($messages = Database::fetch_array($res)) {
+			$users = $messages['firstname'].' '.$messages['lastname'].' ('.$messages['username'].')';
+			$messages_sent[$users] = $messages['count_message'];
+		}
+		return $messages_sent;
+	}
+	
+	/**
+	 * Count the number of friends for social network users
+	 */
+	function get_friends() {
+		$user_friend_table = Database::get_main_table(TABLE_MAIN_USER_FRIEND);
+		$user_table = Database::get_main_table(TABLE_MAIN_USER);
+		$sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
+					FROM ".$user_friend_table." uf LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id
+				GROUP BY uf.user_id";
+		$res = Database::query($sql, __FILE__, __LINE__);
+		$list_friends = array();
+		while ($friends = Database::fetch_array($res)) {
+			$users = $friends['firstname'].' '.$friends['lastname'].' ('.$friends['username'].')';
+			$list_friends[$users] = $friends['count_friend'];
+		}
+		return $list_friends;
+	}
 }
 ?>

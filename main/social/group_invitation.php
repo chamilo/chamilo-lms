@@ -290,10 +290,11 @@ if ($ajax_search) {
 				}
 			}			
 		}
-		
-		foreach ($Users as $user) {
-			if($user['group_id'] != $group_id)
-				$nosessionUsersList[$user['user_id']] = $user ;
+		if (is_array($Users) && count($Users) > 0 ) {
+			foreach ($Users as $user) {
+				if($user['group_id'] != $group_id)
+					$nosessionUsersList[$user['user_id']] = $user ;
+			}
 		}
 
 		//deleting anonymous users

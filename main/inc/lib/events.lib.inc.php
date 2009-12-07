@@ -433,7 +433,7 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$l
 				   exe_duration = '".Database::escape_string($duration)."',
 				   exe_date= FROM_UNIXTIME(".$now."),status = '', data_tracking='', start_date = FROM_UNIXTIME(".Database::escape_string($start_date).")
 				 WHERE exe_id = '".Database::escape_string($exeid)."'";
-		error_log($sql);  
+		
 		$res = @Database::query($sql,__FILE__,__LINE__);
 		unset($_SESSION['expired_time']);
 		return $res;

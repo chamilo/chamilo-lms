@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langTracking = "Seuranta";
 $langEnter2passToChange = "Vaihtaaksesi salasanasi syötä se kaksi kertaa. Muussa tapauksessa jätä kentät tyhjiksi.";
-$langDelImage = "Poista kuva";
 $langUpdateImage = "Vaihda kuva";
 $langImageWrong = "Tiedoston koon pitäisi olla pienempi kuin";
 $langAddImage = "Kuva";

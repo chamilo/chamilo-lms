@@ -134,7 +134,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 			$answer=$objAnswerTmp->selectAnswer($answerId);
 			$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-
+			$numAnswer=$objAnswerTmp->selectAutoId($answerId);
 			if($answerType == FILL_IN_BLANKS) {
 				// splits text and weightings that are joined with the character '::'
 				list($answer)=explode('::',$answer);
@@ -209,10 +209,10 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				 <td>
 				 	<div class='u-m-answer'>
 					<p style='float:left; padding-right:4px;'>
-					<span><input class='checkbox' type='radio' name='choice[".$questionId."]' value='".$answerId."'></p></span>";
-				$answer=api_parse_tex($answer);
-				$s.=strip_tags($answer);
-				$s.="</div></td></tr>";
+					<span><input class='checkbox' type='radio' name='choice[".$questionId."]' value='".$numAnswer."'></p></span>";
+                    $answer=api_parse_tex($answer);
+                    $s.=strip_tags($answer);
+                    $s.="</div></td></tr>";
 
 			} elseif($answerType == MULTIPLE_ANSWER) {
 			// multiple answers
@@ -221,7 +221,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				  <td>
 					 <div class='u-m-answer'>
 					 <p style='float:left; padding-right:4px;'>
-					 <span><input class='checkbox' type='checkbox' name='choice[".$questionId."][".$answerId."]' value='1'></p></span>";
+					 <span><input class='checkbox' type='checkbox' name='choice[".$questionId."][".$numAnswer."]' value='1'></p></span>";
 				$answer = api_parse_tex($answer);
 				$s.=strip_tags($answer);
 				$s.="</div></td></tr>";
@@ -234,7 +234,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 			}
 			// free answer
 
-			// matching
+			// matching // TODO: replace $answerId by $numAnswer
 			else {
 				if(!$answerCorrect) {
 					// options (A, B, C, ...) that will be put into the list-box

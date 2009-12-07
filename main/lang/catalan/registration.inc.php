@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "L\'arxiu ha d\'estar format CSV. No afegeixi espais. L
 $langTracking = "Seguiment";
 $langEnter2passToChange = "Per a canviar la contrasenya, introdueixi la nova contrasenya en aquests dos camps. Si desitja mantenir l\'actual, deixi buits els dos camps. ";
 $langAuthInfo = "Autentificació";
-$langDelImage = "Eliminar foto";
 $langUpdateImage = "Canviar foto";
 $langImageWrong = "L\'arxiu ha de tenir una grandària menor de ";
 $langAddImage = "Incloure foto";

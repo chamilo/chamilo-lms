@@ -26,6 +26,7 @@ $LoginName = "Login(logare)";
 $AutostartMp3 = "Apasati ok daca doriti ca fisierul audio sa fie redat in mod automat";
 $Assignments = "Publicatiile studentilor";
 $Forum = "Forum";
+$langDelImage = "Sterge imaginea";
 $langCode = "Codul cursului";
 $langUp = "Sus";
 $Down = "jos";

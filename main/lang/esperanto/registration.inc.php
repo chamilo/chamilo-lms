@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "La dosiero estu CSV-formata. Ne enmetu spacetojn. La s
 $langTracking = "Statistikoj ";
 $langEnter2passToChange = "Dufoje enigi novan pasvorton, a&#365; enigi nenion por konservi vian aktualan";
 $langAuthInfo = "A&#365;tentikigo ";
-$langDelImage = "Forigi foton ";
 $langUpdateImage = "&#348;an&#285;i foton ";
 $langImageWrong = "La grando de la foto estu maksimume ";
 $langAddImage = "Foto ";

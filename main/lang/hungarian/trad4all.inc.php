@@ -26,6 +26,7 @@ $LoginName = "Azonosító";
 $AutostartMp3 = "Kattintson az OK-ra, ha azt szeretné, hogy a hangfájl lejátszása automatikusan elinduljon";
 $Assignments = "Hallgatói publikációk";
 $Forum = "Fórum";
+$langDelImage = "Kép eltávolítása";
 $langCode = "Kurzus kód";
 $langUp = "Fel";
 $Down = "le";

@@ -24,6 +24,7 @@ $Language = "Idioma";
 $LoginName = "Usuario";
 $Assignments = "Assignments";
 $Forum = "Forum";
+$langDelImage = "Eliminar fotografía";
 $langCode = "Código del curso";
 $langUp = "Subir";
 $Down = "abajo";

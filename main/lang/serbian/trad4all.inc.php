@@ -25,6 +25,7 @@ $LoginName = "Korisni&#269;ko ime";
 $AutostartMp3 = "Da li želite da se audio datoteka startuje automatski?";
 $Assignments = "publikacije polaznika ";
 $Forum = "Forum ";
+$langDelImage = "Ukloni sliku";
 $langCode = "Šifra kursa";
 $langUp = "Gore";
 $Down = "dole";

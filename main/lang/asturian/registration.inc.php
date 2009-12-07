@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "L\'archivu tien de tar en formatu CSV. Nun ponga espac
 $langTracking = "Siguimientu";
 $langEnter2passToChange = "Pa cambiar la seña, escriba la nueva nestos dos campos. Si quier caltener l\'actual, nun escriba nada.";
 $langAuthInfo = "Identificación";
-$langDelImage = "Esborrar foto";
 $langUpdateImage = "Cambiar foto";
 $langImageWrong = "L\'archivu tien de tener un tamañu menor de ";
 $langAddImage = "Incluyir foto";

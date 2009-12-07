@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "Filen ska være i CSV format. Tilføj ikke mellemrum. St
 $langTracking = "Statistik";
 $langEnter2passToChange = "Indtast dit adgangskode to gange for at ændre det. Hvis ikke, skal du lade felterne stå tomme.";
 $langAuthInfo = "Godkendelse";
-$langDelImage = "Fjern billede";
 $langUpdateImage = "Ændre billede";
 $langImageWrong = "Filstørrelsen skal være mindre end";
 $langAddImage = "Billede";

@@ -25,6 +25,7 @@ $LoginName = "Kullan&#305;c&#305; ad&#305;";
 $AutostartMp3 = "Ses dosyas&#305;n&#305; otomatik ba&#351;latmak istiyor musunuz ?";
 $Assignments = "Ö&#287;renci Çal&#305;&#351;malar&#305;";
 $Forum = "Forum";
+$langDelImage = "Fotoyu kald&#305;r";
 $langCode = "Ders kodu";
 $langUp = "Yukar&#305;";
 $Down = "a&#351;a&#287;&#305;";

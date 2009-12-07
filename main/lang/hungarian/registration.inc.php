@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "A fájlnak CSV formátumúnak kell lennie. Ne tegyen bele
 $langTracking = "Naplózás";
 $langEnter2passToChange = "Írja be kétszer jelszavát a megváltoztatásához. Hagyja üresen a mez&#337;ket, ha nem kívánja megváltoztatni jelszavát.";
 $langAuthInfo = "Ellen&#337;rzés";
-$langDelImage = "Kép eltávolítása";
 $langUpdateImage = "Kép cseréje";
 $langImageWrong = "A fájl mérte nem lehet nagyobb, mint";
 $langAddImage = "Kép";

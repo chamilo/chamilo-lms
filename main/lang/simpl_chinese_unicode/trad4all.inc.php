@@ -12,6 +12,7 @@ $langGroup = "小组";
 $langEdit = "编辑";
 $langGroupForum = "小组论坛";
 $LoginName = "登录名";
+$langDelImage = "移除图片";
 $langCode = "代码";
 $langUp = "向上";
 $langUniqueSelect = "单选题";

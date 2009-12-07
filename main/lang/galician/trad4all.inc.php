@@ -26,6 +26,7 @@ $LoginName = "Nome de usuario";
 $AutostartMp3 = "Pulse OK se desexa que o arquivo de audio se reproduza automaticamente.";
 $Assignments = "Tarefas dos estudantes";
 $Forum = "Foro";
+$langDelImage = "Borrar imaxe";
 $langCode = "Código do curso";
 $langUp = "Subir";
 $Down = "Descargar";

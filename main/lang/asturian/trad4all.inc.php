@@ -26,6 +26,7 @@ $LoginName = "Usuariu/a";
 $AutostartMp3 = "Calque Aceutar si quier que l\'archivu d\'audiu eche andar automáticamente";
 $Assignments = "Trabayos";
 $Forum = "Foru";
+$langDelImage = "Esborrar foto";
 $langCode = "Códigu del cursu";
 $langUp = "Subir";
 $Down = "Baxar";

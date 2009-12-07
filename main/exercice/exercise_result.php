@@ -609,6 +609,8 @@ foreach ($questionList as $questionId) {
 		$answerComment=$objAnswerTmp->selectComment($answerId);
 		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 		$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
+		$numAnswer=$objAnswerTmp->selectAutoId($answerId);
+		
 		switch ($answerType) {
 			// for unique answer
 			case UNIQUE_ANSWER :
@@ -616,7 +618,7 @@ foreach ($questionList as $questionId) {
 					// then give him the corresponding score
 					// (maybe a negative score, positive score or 0)
 					// Positive score should only be given when we are going over the right answer
-					$studentChoice=($choice == $answerId)?1:0;
+					$studentChoice=($choice == $numAnswer)?1:0;
 					if($studentChoice) {
 					  	$questionScore+=$answerWeighting;
 						$totalScore+=$answerWeighting;
@@ -624,7 +626,7 @@ foreach ($questionList as $questionId) {
 					break;
 			// for multiple answers
 			case MULTIPLE_ANSWER :
-					$studentChoice=$choice[$answerId];
+					$studentChoice=$choice[$numAnswer];
 					if($studentChoice) {
 						$questionScore+=$answerWeighting;
 						$totalScore+=$answerWeighting;
@@ -794,7 +796,7 @@ foreach ($questionList as $questionId) {
 
 
 					break;
-			// for matching
+			// for matching TODO: replace $answerId id by $numAnswer
 			case MATCHING :
 					if($answerCorrect)
 					{

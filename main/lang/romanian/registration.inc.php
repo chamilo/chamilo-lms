@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "Fisierul este in format CSV. Nu adaugati spatii. Struc
 $langTracking = "Urmarire";
 $langEnter2passToChange = "Introdu parola de doua ori pentru a o schimba. Altfel lasa campurile libere";
 $langAuthInfo = "Autentificare";
-$langDelImage = "Sterge imaginea";
 $langUpdateImage = "Schimba imaginea";
 $langImageWrong = "Fisierul trebuie sa fie mai mic de";
 $langAddImage = "Imagine";

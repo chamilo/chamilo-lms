@@ -26,6 +26,7 @@ $LoginName = "Login";
 $AutostartMp3 = "Odtwarzaj automatycznie pliki d&#378;wi&#281;kowe?";
 $Assignments = "Przypisania";
 $Forum = "Forum";
+$langDelImage = "Usu&#324; obrazek";
 $langCode = "Kod kursu";
 $langUp = "Do góry";
 $Down = "Na dó&#322;";

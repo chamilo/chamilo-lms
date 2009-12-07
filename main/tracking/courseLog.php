@@ -951,16 +951,10 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	$sql = "SELECT user.user_id as col0, 
 			user.official_code as col1, 
 			user.lastname as col2, 
-			user.firstname as col3, 
-			count(item_prop.tool) as col4,
-			count(post.post_id) as col5,
-			(SELECT login_course_date FROM $tbl_track_cours_access track_course WHERE track_course.user_id = user.user_id AND course_code = '$course_code' ORDER BY login_course_date DESC LIMIT 0,1) as col6,					
-			(SELECT SUM(UNIX_TIMESTAMP(logout_course_date)-UNIX_TIMESTAMP(login_course_date)) FROM $tbl_track_cours_access track_course WHERE track_course.user_id = user.user_id AND track_course.course_code='$course_code') as col7
+			user.firstname as col3			
 			FROM $tbl_user as user
-			LEFT JOIN $tbl_item_property item_prop ON item_prop.insert_user_id = user.user_id AND item_prop.tool='work'
-			LEFT JOIN $tbl_forum_post  post ON post.poster_id = user.user_id
-			$condition_user
-			GROUP BY col0, col1, col2, col3, col6";
+			$condition_user ";
+
 	if (!in_array($direction, array('ASC','DESC'))) {
     	$direction = 'ASC';
     }
@@ -983,15 +977,15 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 			$row[1] = $user[2];
 			$row[2] = $user[3];
 		}
-		$row[3] = api_time_to_hms($user[7]);		
+		$row[3] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user[0], $course_code));		
 		$avg_student_score = Tracking::get_average_test_scorm_and_lp($user[0], $course_code);
 		$avg_student_progress = Tracking::get_avg_student_progress($user[0], $course_code);			
 		if (empty($avg_student_score)) {$avg_student_score=0;}
 		if (empty($avg_student_progress)) {$avg_student_progress=0;}
 		$row[4] = $avg_student_progress.'%';
 		$row[5] = $avg_student_score.'%';
-		$row[6] = $user[4];
-		$row[7] = $user[5];
+		$row[6] = Tracking::count_student_assignments($user[0], $course_code);$user[4];
+		$row[7] = Tracking::count_student_messages($user[0], $course_code);//$user[5];
 		$row[8] = Tracking::get_first_connection_date_on_the_course($user[0], $course_code);
 		$row[9] = Tracking::get_last_connection_date_on_the_course($user[0], $course_code);
 				

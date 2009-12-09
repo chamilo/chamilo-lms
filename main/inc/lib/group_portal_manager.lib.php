@@ -566,20 +566,21 @@ class GroupPortalManager
 		return 	$result_array;
 	}
 
-
-
-
 	/**
 	* Deletes a group  and user relationship
 	* @author Julio Montoya
 	* @param int user id
-	* @param int url id
+	* @param int relation type (optional)
 	* @return boolean true if success
 	* */
-	public static function delete_users($group_id)
+	public static function delete_users($group_id,$relation_type='')
 	{
 		$table_	= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
-		$sql	= "DELETE FROM $table_ WHERE group_id = ".intval($group_id);
+		$condition_relation = "";
+		if (!empty($relation_type)) {
+			$condition_relation = " AND relation_type = '$relation_type'";
+		}		
+		$sql	= "DELETE FROM $table_ WHERE group_id = ".intval($group_id).$condition_relation;
 		$result = Database::query($sql,  __FILE__, __LINE__);
 		return $result;
 	}

@@ -999,6 +999,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 			$row[8] = strip_tags($row[8]);
 			$row[9] = strip_tags($row[9]);
 			unset($row[10]);
+			unset($row[11]);
 			$csv_content[] = $row;
 		}
         // store columns in array $users

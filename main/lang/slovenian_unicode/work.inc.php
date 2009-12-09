@@ -76,4 +76,5 @@ $MakeAllPapersVisible = "Naredi vse objave vidne";
 $StudentAllowedToDeleteOwnPublication = "Dovoli tečajnikom brisanje tvojih lastnih objav";
 $TheDocumentHasBeenDeleted = "Dokument je bil odstranjen.";
 $YouAreNotAllowedToDeleteThisDocument = "Brisanje tega dokumenta ni dovoljeno.";
+$ConfirmYourChoiceDeleteAllfiles = "Potrditev izbire bo odstranila vse datoteke, ki jih v nadaljevanju ne bo mogoče povrniti";
 ?>

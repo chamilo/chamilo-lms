@@ -26,6 +26,7 @@ $SearchUsers = "Pretraži korisnike";
 $CreateUser = "Kreiraj korisnika";
 $ModifyInformation = "Izmeni informaciju";
 $ModifyUser = "Izmeni polaznika";
+$ModifyCoach = "Ažuriraj trenera";
 $ModifyThisSession = "Izmeni ovu sesiju";
 $langCourseBackup = "Napravi back-up ovog kursa";
 $langCourseTitular = "Predava&#269;";

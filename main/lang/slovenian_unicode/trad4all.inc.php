@@ -753,4 +753,5 @@ $FirstPage = "Prva stran";
 $LastPage = "Zadnja stran";
 $Coachs = "Coach-i";
 $YouMustToInstallTheExtensionLDAP = "Namestiti morate LDAP razširitev";
+$AddAdditionalProfileField = "Dodaj polje uporabnikovega profila";
 ?>

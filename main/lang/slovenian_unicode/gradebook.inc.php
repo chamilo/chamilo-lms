@@ -169,6 +169,7 @@ $DeletePresences = "Odstrani prisotnost";
 $GradebookListOfStudentsCertificates = "Seznam certifikatov tečajnikov iz redovalnice";
 $NewPresence = "Nova prisotnost";
 $EditPresence = "Uredi prisotnost";
+$SavedEditPresence = "Shrani ažurirano prisotnost";
 $PresenceSheetFormatExplanation = "Uporabite listo prisotnosti, ki si jo lahko prenesete (zgoraj). Ta lista vsebuje seznam vseh tečajnikov in učnega osebja. Prvi stolpec XLS datoteke predstavlja uradno kodo tečajnika, sledi tečajnikov priimek in ime. Spremenite zgolj četrti stolpec z oznakama : 0 = odsoten, 1 = prisoten.";
 $ValidatePresenceSheet = "Potrdi seznam prisotnih";
 $BackTo = "Nazaj na";

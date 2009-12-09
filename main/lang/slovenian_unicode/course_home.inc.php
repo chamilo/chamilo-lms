@@ -27,4 +27,5 @@ $IntroductionTextDeleted = "Uvodno besedilo je bilo odstranjeno";
 $SessionIdentifier = "Identifikator seje";
 $SessionName = "Ime seje";
 $SessionCategory = "Kategorija seje";
+$SessionData = "Podatki seje";
 ?>

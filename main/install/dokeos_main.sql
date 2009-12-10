@@ -741,7 +741,10 @@ VALUES
 ('youtube_for_students',NULL,'radio','Editor','true','YoutubeForStudentsTitle','YoutubeForStudentsComment',NULL,NULL, 0),
 ('block_copy_paste_for_students',NULL,'radio','Editor','false','BlockCopyPasteForStudentsTitle','BlockCopyPasteForStudentsComment',NULL,NULL, 0),
 ('more_buttons_maximized_mode',NULL,'radio','Editor','false','MoreButtonsForMaximizedModeTitle','MoreButtonsForMaximizedModeComment',NULL,NULL, 0),
-('students_download_folders',NULL,'radio','Tools','true','AllowStudentsDownloadFoldersTitle','AllowStudentsDownloadFoldersComment',NULL,NULL, 0);
+('students_download_folders',NULL,'radio','Tools','true','AllowStudentsDownloadFoldersTitle','AllowStudentsDownloadFoldersComment',NULL,NULL, 0),
+('show_tabs', 'social', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsSocial', 0),
+('allow_students_to_create_groups_in_social',NULL,'radio','Tools','false','AllowStudentsToCreateGroupsInSocialTitle','AllowStudentsToCreateGroupsInSocialComment',NULL,NULL, 0),
+('allow_send_message_to_all_platform_users',NULL,'radio','Tools','false','AllowSendMessageToAllPlatformUsersTitle','AllowSendMessageToAllPlatformUsersComment',NULL,NULL, 0);
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -943,8 +946,11 @@ VALUES
 ('more_buttons_maximized_mode','true','Yes'),
 ('more_buttons_maximized_mode','false','No'),
 ('students_download_folders','true','Yes'),
-('students_download_folders','false','No');
-
+('students_download_folders','false','No'),
+('allow_students_to_create_groups_in_social','true','Yes'),
+('allow_students_to_create_groups_in_social','false','No'),
+('allow_send_message_to_all_platform_users','true','Yes'),
+('allow_send_message_to_all_platform_users','false','No');
 UNLOCK TABLES;
 
 /*!40000 ALTER TABLE settings_options ENABLE KEYS */;
@@ -2331,6 +2337,8 @@ CREATE TABLE group_rel_tag (
   group_id int NOT NULL,
   PRIMARY KEY (id)
 );
+ALTER TABLE `group_rel_tag` ADD INDEX ( group_id );
+ALTER TABLE `group_rel_tag` ADD INDEX ( tag_id );
 
 CREATE TABLE group_rel_user (
   id int NOT NULL AUTO_INCREMENT,
@@ -2339,7 +2347,9 @@ CREATE TABLE group_rel_user (
   relation_type int NOT NULL,
   PRIMARY KEY (id)
 );
-
+ALTER TABLE `group_rel_user` ADD INDEX ( group_id );
+ALTER TABLE `group_rel_user` ADD INDEX ( user_id );
+ALTER TABLE `group_rel_user` ADD INDEX ( relation_type );
 --
 -- Table structure for table message attachment
 --
@@ -2352,9 +2362,7 @@ CREATE TABLE IF NOT EXISTS message_attachment (
   message_id int NOT NULL,
   filename varchar(255) NOT NULL,
   PRIMARY KEY  (id)
-)
-
+);
 
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (10, 'tags','tags',0,0);
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (9, 'rssfeeds','RSS',0,0);
-

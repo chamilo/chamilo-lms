@@ -188,7 +188,15 @@ if ($group_id != 0 ) {
 		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,cut($result['description'],140));
 	}
 	echo '<h1>'.get_lang('MyGroups').'</h1>';
-	echo '<a href="group_add.php">'.get_lang('CreateAgroup').'</a>';
+
+	if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
+		echo '<a href="group_add.php">'.get_lang('CreateAgroup').'</a>';	
+	} else {
+		if (api_is_allowed_to_edit(null,true)) {
+			echo '<a href="group_add.php">'.get_lang('CreateAgroup').'</a>';
+		}
+	}
+	
 	if (count($groups) > 0) {		
 		Display::display_sortable_grid('groups', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
 	}

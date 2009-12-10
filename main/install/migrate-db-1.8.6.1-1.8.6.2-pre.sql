@@ -69,6 +69,22 @@ UPDATE TABLE settings_current SET selected_value = '1.8.6.2.9070' WHERE variable
 
 INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','SpecialCourse', 'Yes', 1 , 1);
 
+ALTER TABLE `group_rel_user` ADD INDEX ( group_id );
+ALTER TABLE `group_rel_user` ADD INDEX ( user_id );
+ALTER TABLE `group_rel_user` ADD INDEX ( relation_type );
+ALTER TABLE `group_rel_tag`  ADD INDEX ( group_id );
+ALTER TABLE `group_rel_tag`  ADD INDEX ( tag_id );
+
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_students_to_create_groups_in_social', NULL, 'radio', 'Tools', 'false', 'AllowStudentsToCreateGroupsInSocialTitle', 'AllowStudentsToCreateGroupsInSocialComment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_students_to_create_groups_in_social', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_students_to_create_groups_in_social', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_send_message_to_all_platform_users', NULL, 'radio', 'Tools', 'false', 'AllowSendMessageToAllPlatformUsersTitle', 'AllowSendMessageToAllPlatformUsersComment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_send_message_to_all_platform_users', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_send_message_to_all_platform_users', 'false', 'No');
+
+
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
 ALTER TABLE track_e_online ADD INDEX (course);

@@ -2843,6 +2843,24 @@ a.unread {
 .groups_grid_element_2 { width:150px; float:left;}
 
 
+/* Groups boxes */
+.group_invitation_grid_container { width:100%;}
+.group_invitation_grid_item {
+	border:1px dotted #CCCCCC;
+	float:left;
+	height:85px;
+	margin:8px;
+	padding:5px;
+	width:300px;
+}
+.group_invitation_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.group_invitation_grid_element_1 { width:100px; float:left; text-align:left;margin-bottom:5px;}
+.group_invitation_grid_element_2 { width:150px; float:left;}
+
+
+
+
+
 /* User boxes */
 .search_users_grid_container { width:100%;}
 .search_users_grid_item { width:400px;  height: 90px;  border:1px dotted #ccc; float:left; padding:5px; margin:8px;}

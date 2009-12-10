@@ -147,8 +147,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 	if ($user_list) {
 		if (!isset($_GET['id'])) {
 			if (!api_is_anonymous())
-				echo UserManager::get_search_form($_GET['q']);
-				
+				echo UserManager::get_search_form($_GET['q']);				
 			SocialManager::display_user_list($user_list, $_plugins);
 		} else {
 			//individual user information - also displays header info

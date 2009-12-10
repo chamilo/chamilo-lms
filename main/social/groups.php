@@ -177,15 +177,20 @@ if ($group_id != 0 ) {
 	$results = GroupPortalManager::get_groups_by_user(api_get_user_id(), 0, true);
 	
 	$groups = array();
-
-	foreach ($results as $result) {
-		$id = $result['id'];
-		$url_open  = '<a href="groups.php?id='.$id.'">';
-		$url_close = '</a>';
-		if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {			
-			$result['name'].= Display::return_icon('admin_star.png', get_lang('Admin'));
+	if (is_array($results) && count($results) > 0) {
+		foreach ($results as $result) {
+			$id = $result['id'];
+			$url_open  = '<a href="groups.php?id='.$id.'">';
+			$url_close = '</a>';
+			if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {			
+				$result['name'].= Display::return_icon('admin_star.png', get_lang('Admin'));
+			}
+			if ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			
+				$result['name'].= Display::return_icon('moderator_star.png', get_lang('Moderator'));
+			}
+			
+			$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,cut($result['description'],140));
 		}
-		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,cut($result['description'],140));
 	}
 	echo '<h1>'.get_lang('MyGroups').'</h1>';
 

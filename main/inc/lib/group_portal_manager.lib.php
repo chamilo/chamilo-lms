@@ -1164,9 +1164,9 @@ class GroupPortalManager
 			case GROUP_USER_PERMISSION_READER:
 				// I'm just a reader
 				echo get_lang('IamAReader');
-				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a></li>';
-				echo '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.get_lang('LeaveGroup').'</a></li>';
+				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a></li>';				
 				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.get_lang('InviteFriends').'</a></li>';
+				echo '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.get_lang('LeaveGroup').'</a></li>';
 					
 				break;
 			case GROUP_USER_PERMISSION_ADMIN:
@@ -1190,6 +1190,7 @@ class GroupPortalManager
 				echo '<li><a href="group_members.php?id='.$group_id.'">'.get_lang('MemberList').'</a></li>';
 				echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.get_lang('WaitingList').'</a></li>';
 				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.get_lang('InviteFriends').'</a></li>';
+				echo '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.get_lang('LeaveGroup').'</a></li>';
 				break;
 			case GROUP_USER_PERMISSION_ANONYMOUS:
 				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a></li>';
@@ -1211,8 +1212,8 @@ class GroupPortalManager
 					}
 					
 					echo '<div class="group_member_item"><a href="profile.php?u='.$user['user_id'].'">';
-						echo '<div class="group_member_picture">'.$user['image'].'</div>';
-						echo api_get_person_name($user['firstname'], $user['lastname']).'</a></div>';
+					echo '<div class="group_member_picture">'.$user['image'].'</div>';
+					echo api_get_person_name($user['firstname'], $user['lastname']).'</a></div>';
 				}
 			}
 		echo '</div>';

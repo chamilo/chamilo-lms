@@ -2807,4 +2807,64 @@ class UserManager
 		}
 		return $course_list;
 	}
+	/**
+	 * Gives a list of course auto-register (field special_course)
+	 * @return array  list of course
+	 * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>
+	 * @since Dokeos 1.8.6.2
+	 */
+	public static function get_special_course_list() {
+		// Database Table Definitions
+		$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		$tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
+		$tbl_course_field 			= Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
+		$tbl_course_field_value		= Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+		$tbl_user_course_category   = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+		
+		//we filter the courses from the URL
+		$join_access_url=$where_access_url='';		
+		global $_configuration;
+		if ($_configuration['multiple_access_urls']==true) {
+			$access_url_id = api_get_current_access_url_id();
+			if($access_url_id!=-1) {
+				$tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);		
+				$join_access_url= "LEFT JOIN $tbl_url_course url_rel_course ON url_rel_course.course_code= course.code";
+				$where_access_url=" AND access_url_id = $access_url_id ";
+			}
+		}
+		
+		// Filter special courses
+		$sql_special_course = "SELECT course_code FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf ON " .
+				" tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
+		$special_course_result = Database::query($sql_special_course, __FILE__, __LINE__);
+		$code_special_courses = '';
+		if(Database::num_rows($special_course_result)>0) {
+			$special_course_list = array();
+			while ($result_row = Database::fetch_array($special_course_result)) {
+				$special_course_list[] = '"'.$result_row['course_code'].'"';
+			}
+			$code_special_courses = ' course.code IN ('.join($special_course_list, ',').') ';
+		}
+		
+		// variable initialisation
+		$course_list_sql = '';
+		$course_list = array();
+		if(!empty($code_special_courses)){
+			$course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
+											FROM    ".$tbl_course_user." course_rel_user
+											LEFT JOIN ".$tbl_course." course
+											ON course.code = course_rel_user.course_code
+											LEFT JOIN ".$tbl_user_course_category." user_course_category
+											ON course_rel_user.user_course_cat = user_course_category.id
+											$join_access_url
+											WHERE  $code_special_courses $where_access_url 
+											GROUP BY course.code 
+											ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";
+			$course_list_sql_result = api_sql_query($course_list_sql, __FILE__, __LINE__);
+			while ($result_row = Database::fetch_array($course_list_sql_result)) {
+				$course_list[] = $result_row;
+			}
+		}
+		return $course_list;
+	}
 }

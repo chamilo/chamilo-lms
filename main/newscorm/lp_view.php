@@ -71,16 +71,14 @@ $my_style=$platform_theme;
 	Header
 -----------------------------------------------------------
 */
-//$htmlHeadXtra[] = '<script type="text/javascript" src="lp_view.lib.js"></script>';
-//$htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/')."\n";
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 
-$htmlHeadXtra[] = '<script language="javascript">
-function cleanlog(){
-  if(document.getElementById){
-  	document.getElementById("log_content").innerHTML = "";
-  }
-}
+$htmlHeadXtra[] = '<script language="javascript" type="text/javascript">
+$(document).ready(function (){
+    $("div#log_content_cleaner").bind("click", function(){
+      $("div#log_content").empty();
+    });
+});
 </script>';
 
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
@@ -229,45 +227,42 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 
 	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
 	$_SESSION['loaded_lp_view'] = true;
-	?>
-<input type="hidden" id="old_item" name ="old_item" value="0"/>
-<input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
-
-<div id="learningPathMain"  style="width:100%;height:100%;" >
-	<div id="learningPathLeftZone" style="float:left;width:280px;height:100%">
+    ?>
+<body>
+<div id="learning_path_main"  style="width:100%;height:100%;" >
+	<div id="learning_path_left_zone" style="float:left;width:280px;height:100%">
 		<!-- header -->
 		<div id="header">
-		        <div id="learningPathHeader" style="font-size:14px;">
-		            <table>
-		                <tr>
-		                    <td>
-		                        <a href="lp_controller.php?action=return_to_course_homepage" target="_self" onclick="window.parent.API.save_asset();">
-		                        	<img src="../img/lp_arrow.gif" />
-		                        </a>
-		                    </td>
-		                    <td>
-		                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_self" onclick="window.parent.API.save_asset();">
-		                        <?php echo api_convert_encoding(get_lang('CourseHomepageLink'), $charset, api_get_system_encoding()); ?></a>
-		                    </td>
-		                </tr>
-		            </table>
-		        </div>
+            <div id="learning_path_header" style="font-size:14px;">
+	            <table>
+	                <tr>
+	                    <td>
+	                        <a href="lp_controller.php?action=return_to_course_homepage" target="_self" onclick="window.parent.API.save_asset();">
+	                        <img src="../img/lp_arrow.gif" />
+	                        </a>
+	                    </td>
+	                    <td>
+	                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_self" onclick="window.parent.API.save_asset();">
+	                        <?php echo api_convert_encoding(get_lang('CourseHomepageLink'), $charset, api_get_system_encoding()); ?></a>
+	                    </td>
+	                </tr>
+	            </table>
+	        </div>
 		</div>
 		<!-- end header -->
 
-<!-- Image preview Layout -->
-	<div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px">
+        <!-- Image preview Layout -->
+        <div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px">
 		<?php $image = '../img/lp_author_background.gif'; ?>
 			<div id="preview_image" style="padding:5px;background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;height:110px">
 		       	<div style="width:100; float:left;height:105;margin:5px">
 		       		<span>
-			        <?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
-			        <img width="115" height="100" src="<?php echo api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image(); ?>">
-			        <?php
-						else
-						: echo Display :: display_icon('unknown_250_100.jpg', ' ');
-						endif;
-						?>
+			        <?php 
+			        if ($_SESSION['oLP']->get_preview_image()!='') {
+			            echo '<img width="115px" height="100px" src="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'">';
+			        } else {
+                        echo Display :: display_icon('unknown_250_100.jpg', ' ');
+			        }; ?>
 					</span>
 		       	</div>
 
@@ -295,9 +290,9 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 						$sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE lp_id = '" . $_SESSION['oLP']->lp_id."'";
 						$res_media= Database::query($sql, __FILE__, __LINE__);
 
-						if(Database::num_rows($res_media) > 0){
-							while($row_media= Database::fetch_array($res_media)) {
-							     if(!empty($row_media['audio'])) {$show_audioplayer = true; break;}
+						if (Database::num_rows($res_media) > 0) {
+							while ($row_media= Database::fetch_array($res_media)) {
+							     if (!empty($row_media['audio'])) {$show_audioplayer = true; break;}
 							}
 						}
 					?>
@@ -311,9 +306,9 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 
 	</div>
 	<!-- end image preview Layout -->
-				<div id="author_name" style="position:relative;top:2px;left:0px;margin:0;padding:0;text-align:center;width:100%">
-					<?php echo $_SESSION['oLP']->get_author() ?>
-				</div>
+	<div id="author_name" style="position:relative;top:2px;left:0px;margin:0;padding:0;text-align:center;width:100%">
+		<?php echo $_SESSION['oLP']->get_author() ?>
+	</div>
 
 	<!-- media player layaout -->
 	<?php $style_media = (($show_audioplayer)?' style= "position:relative;top:10px;left:10px;margin:8px;font-size:32pt;height:20px;"':'style="height:15px"'); ?>
@@ -324,160 +319,143 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 
 	<!-- toc layout -->
 	<div id="toc_id" name="toc_name"  style="padding:0;margin-top:20px;height:60%;width:100%">
-		<div id="learningPathToc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
-		<!-- log message layout -->
-
-		<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:50px;overflow:auto;margin:15px">
-			<div id="log_content"></div>
-			<div style="color: white;" onClick="cleanlog();">.</div>
-		</div>
-	<!-- end log message layout -->
-		</div>
-
+		<div id="learning_path_toc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
+			<!-- log message layout -->
+	
+			<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:50px;overflow:auto;margin:15px">
+				<div id="log_content"></div>
+				<div id="log_content_cleaner" style="color: white;">.</div>
+			</div>
+    		<!-- end log message layout -->
+        </div>
 	</div>
 	<!-- end toc layout -->
-
-
-	</div>
+</div>
 <!-- end left Zone -->
 
 <!-- right Zone -->
-	<div id="learningPathRightZone" style="margin-left:282px;border : 0pt solid blue;height:100%">
-		<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>
-	</div>
+<div id="learning_path_right_zone" style="margin-left:282px;border : 0pt solid blue;height:100%">
+    <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>
+</div>
 <!-- end right Zone -->
 
 </div>
 
-	<script language="JavaScript" type="text/javascript">
-	// Need to be called after the <head> to be sure window.oxajax is defined
-  	var dokeos_xajax_handler = window.oxajax;
-	</script>
-    <script language="JavaScript" type="text/javascript">
-	<!--
-	var leftZoneHeightOccupied = 0;
-	var rightZoneHeightOccupied = 0;
-	var initialLeftZoneHeight = 0;
-	var initialRightZoneHeight = 0;
+<script language="JavaScript" type="text/javascript">
+<!--
+var leftZoneHeightOccupied = 0;
+var rightZoneHeightOccupied = 0;
+var initialLeftZoneHeight = 0;
+var initialRightZoneHeight = 0;
 
-	var updateContentHeight = function() {
-		winHeight = (window.innerHeight != undefined ? window.innerHeight : document.documentElement.clientHeight);
-		newLeftZoneHeight = winHeight - leftZoneHeightOccupied;
-		newRightZoneHeight = winHeight - rightZoneHeightOccupied;
-		if (newLeftZoneHeight <= initialLeftZoneHeight) {
-			newLeftZoneHeight = initialLeftZoneHeight;
-			newRightZoneHeight = newLeftZoneHeight + leftZoneHeightOccupied - rightZoneHeightOccupied;
-		}
-		if (newRightZoneHeight <= initialRightZoneHeight) {
-			newRightZoneHeight = initialRightZoneHeight;
-			newLeftZoneHeight = newRightZoneHeight + rightZoneHeightOccupied - leftZoneHeightOccupied;
-		}
-		document.getElementById('learningPathToc').style.height = newLeftZoneHeight + 'px';
-		document.getElementById('learningPathRightZone').style.height = newRightZoneHeight + 'px';
-		document.getElementById('content_id_blank').style.height = newRightZoneHeight + 'px';
-		if (document.body.clientHeight > winHeight) {
-			document.body.style.overflow = 'auto';
-		} else {
-			document.body.style.overflow = 'hidden';
-		}
-	};
-
-	window.onload = function() {
-
-		screen_height = screen.height;
-		screen_width = screen.height;
-
-		document.getElementById('learningPathLeftZone').style.height = "100%";
-		document.getElementById('learningPathToc').style.height = "60%";
-		document.getElementById('learningPathToc').style.width = "100%";
-		document.getElementById('learningPathRightZone').style.height = "100%"
-		document.getElementById('content_id').style.height = "100%" ;
-
-		if (screen_height <= 600) {
-			document.getElementById('inner_lp_toc').style.height = "100px" ;
-			document.getElementById('learningPathLeftZone').style.height = "415px";
-		}
-
-		initialLeftZoneHeight = document.getElementById('learningPathToc').offsetHeight;
-		initialRightZoneHeight = document.getElementById('learningPathRightZone').offsetHeight;
-		docHeight = document.body.clientHeight;
-		leftZoneHeightOccupied = docHeight - initialLeftZoneHeight;
-		rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
+var updateContentHeight = function() {
+	winHeight = (window.innerHeight != undefined ? window.innerHeight : document.documentElement.clientHeight);
+	newLeftZoneHeight = winHeight - leftZoneHeightOccupied;
+	newRightZoneHeight = winHeight - rightZoneHeightOccupied;
+	if (newLeftZoneHeight <= initialLeftZoneHeight) {
+		newLeftZoneHeight = initialLeftZoneHeight;
+		newRightZoneHeight = newLeftZoneHeight + leftZoneHeightOccupied - rightZoneHeightOccupied;
+	}
+	if (newRightZoneHeight <= initialRightZoneHeight) {
+		newRightZoneHeight = initialRightZoneHeight;
+		newLeftZoneHeight = newRightZoneHeight + rightZoneHeightOccupied - leftZoneHeightOccupied;
+	}
+	document.getElementById('learning_path_toc').style.height = newLeftZoneHeight + 'px';
+	document.getElementById('learning_path_right_zone').style.height = newRightZoneHeight + 'px';
+	document.getElementById('content_id_blank').style.height = newRightZoneHeight + 'px';
+	if (document.body.clientHeight > winHeight) {
+		document.body.style.overflow = 'auto';
+	} else {
 		document.body.style.overflow = 'hidden';
-		updateContentHeight();
+	}
+};
+
+window.onload = function() {
+
+	screen_height = screen.height;
+	screen_width = screen.height;
+
+	document.getElementById('learning_path_left_zone').style.height = "100%";
+	document.getElementById('learning_path_toc').style.height = "60%";
+	document.getElementById('learning_path_toc').style.width = "100%";
+	document.getElementById('learning_path_right_zone').style.height = "100%"
+	document.getElementById('content_id').style.height = "100%" ;
+
+	if (screen_height <= 600) {
+		document.getElementById('inner_lp_toc').style.height = "100px" ;
+		document.getElementById('learning_path_left_zone').style.height = "415px";
 	}
 
-	window.onresize = updateContentHeight;
-	-->
-	</script>
-
-<?php
+	initialLeftZoneHeight = document.getElementById('learning_path_toc').offsetHeight;
+	initialRightZoneHeight = document.getElementById('learning_path_right_zone').offsetHeight;
+	docHeight = document.body.clientHeight;
+	leftZoneHeightOccupied = docHeight - initialLeftZoneHeight;
+	rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
+	document.body.style.overflow = 'hidden';
+	updateContentHeight();
 }
-else
-{
+
+window.onresize = updateContentHeight;
+-->
+</script>
+</body>
+<?php
+} else {
+	//not fullscreen mode
 	include_once('../inc/reduced_header.inc.php');
 	//$displayAudioRecorder = (api_get_setting('service_visio','active')=='true') ? true : false;
 	//check if audio recorder needs to be in studentview
 	$course_id=$_SESSION["_course"]["id"];
-	if($_SESSION["status"][$course_id]==5)
-	{
+	if ($_SESSION["status"][$course_id]==5) {
 		$audio_recorder_studentview = true;
-	}
-	else
-	{
+	} else {
 		$audio_recorder_studentview = false;
 	}
 	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
 	$_SESSION['loaded_lp_view'] = true;
-	?>
-
-	<input type="hidden" id="old_item" name ="old_item" value="0"/>
-	<input type="hidden" id="current_item_id" name ="current_item_id" value="0" />
-
-<div id="learningPathMain"  style="width:100%;height:100%;" >
-
-	<div id="learningPathLeftZone" style="float:left;width:280px;height:100%">
+?>
+<body>
+<div id="learning_path_main"  style="width:100%;height:100%;" >
+    <div id="learning_path_left_zone" style="float:left;width:280px;height:100%">
 
 		<!-- header -->
 		<div id="header">
-		        <div id="learningPathHeader" style="font-size:14px;">
-		            <table>
-		                <tr>
-		                    <td>
-		                        <a href="lp_controller.php?action=return_to_course_homepage" target="_self" onclick="window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
-		                    </td>
-		                    <td>
-		                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_self" onclick="window.parent.API.save_asset();">
-		                        <?php echo api_convert_encoding(get_lang('CourseHomepageLink'), $charset, api_get_system_encoding()); ?></a>
-		                    </td>
-		                </tr>
-		            </table>
-		        </div>
+	        <div id="learning_path_header" style="font-size:14px;">
+	            <table>
+	                <tr>
+	                    <td>
+	                        <a href="lp_controller.php?action=return_to_course_homepage" target="_self" onclick="window.parent.API.save_asset();"><img src="../img/lp_arrow.gif" /></a>
+	                    </td>
+	                    <td>
+	                        <a class="link" href="lp_controller.php?action=return_to_course_homepage" target="_self" onclick="window.parent.API.save_asset();">
+	                        <?php echo api_convert_encoding(get_lang('CourseHomepageLink'), $charset, api_get_system_encoding()); ?></a>
+	                    </td>
+	                </tr>
+	            </table>
+	        </div>
 		</div>
 		<!-- end header -->
 
-<!-- Image preview Layout -->
-	<div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px;">
-		<?php $image = '../img/lp_author_background.gif'; ?>
-
+        <!-- Image preview Layout -->
+        <div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px;">
+		    <?php $image = '../img/lp_author_background.gif'; ?>
 			<div id="preview_image" style="padding:5px;background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;height:110px">
-
 		       	<div style="width:100; float:left;height:105;margin:5px">
 		       		<span style="width:104px; height:96px; float:left; vertical-align:bottom;">
-			        <center><?php if ($_SESSION['oLP']->get_preview_image()!=''): ?>
-			        <?php
+			        <center>
+			        <?php 
+			        if ($_SESSION['oLP']->get_preview_image()!='') {
 			        	$picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
-			        	if($picture['1'] < 96) $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" ';
+			        	if($picture['1'] < 96) { $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" '; }
 			        	$size = ($picture['0'] > 104 && $picture['1'] > 96 )? ' width="104" height="96" ': $style;
-			        	$flie = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image();
-			        	echo '<img '.$size.' src="'.$flie.'">';
-			        ?>
-			        <?php
-						else
-						: echo Display :: display_icon('unknown_250_100.jpg', ' ');
-						endif;
-						?></center>
-					</span>
+			        	$my_path = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image();
+			        	echo '<img '.$size.' src="'.$my_path.'">';
+			        } else {
+						echo Display :: display_icon('unknown_250_100.jpg', ' ');
+					}
+					?>
+				    </center>
+				    </span>
 		       	</div>
 
 				<div id="nav_id" name="nav_name" class="lp_nav" style="margin-left:105;height:90">
@@ -503,9 +481,9 @@ else
 						$sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE lp_id = '" . $_SESSION['oLP']->lp_id."'";
 						$res_media= Database::query($sql, __FILE__, __LINE__);
 
-						if(Database::num_rows($res_media) > 0){
-							while($row_media= Database::fetch_array($res_media)) {
-							     if(!empty($row_media['audio'])) {$show_audioplayer = true; break;}
+						if (Database::num_rows($res_media) > 0) {
+							while ($row_media= Database::fetch_array($res_media)) {
+							     if (!empty($row_media['audio'])) {$show_audioplayer = true; break;}
 							}
 						}
 					?>
@@ -515,110 +493,102 @@ else
 						<div style="height:20px"><?php echo $progress_bar; ?></div>
 					</div>
 				</div>
+    		</div>
+	   </div>
+	   <!-- end image preview Layout -->
+		<div id="author_name" style="position:relative;top:2px;left:0px;margin:0;padding:0;text-align:center;width:100%">
+			<?php echo $_SESSION['oLP']->get_author() ?>
 		</div>
 
-	</div>
-	<!-- end image preview Layout -->
-				<div id="author_name" style="position:relative;top:2px;left:0px;margin:0;padding:0;text-align:center;width:100%">
-					<?php echo $_SESSION['oLP']->get_author() ?>
-				</div>
-
-	<!-- media player layaout -->
-	<?php $style_media = (($show_audioplayer)?' style= "position:relative;top:10px;left:10px;margin:8px;font-size:32pt;height:20px;"':'style="height:15px"'); ?>
-	<div id="media"  <?php echo $style_media ?>>
-		<?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?>
-	</div>
-	<!-- end media player layaout -->
-
-	<!-- toc layout -->
-	<div id="toc_id" name="toc_name"  style="padding:0;margin-top:20px;height:60%;width:100%">
-		<div id="learningPathToc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
-		<!-- log message layout -->
-
-		<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:50px;overflow:auto;margin:15px">
-			<div id="log_content"></div>
-			<div style="color: white;" onClick="cleanlog();">.</div>
+		<!-- media player layaout -->
+		<?php $style_media = (($show_audioplayer)?' style= "position:relative;top:10px;left:10px;margin:8px;font-size:32pt;height:20px;"':'style="height:15px"'); ?>
+		<div id="media"  <?php echo $style_media ?>>
+			<?php echo (!empty($mediaplayer))?$mediaplayer:'&nbsp;' ?>
 		</div>
-	<!-- end log message layout -->
+		<!-- end media player layaout -->
+
+		<!-- toc layout -->
+		<div id="toc_id" name="toc_name"  style="padding:0;margin-top:20px;height:60%;width:100%">
+			<div id="learning_path_toc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
+	
+    	<?php if (!empty($_SESSION['oLP']->scorm_debug)) { //only show log  ?>
+	        <!-- log message layout -->
+			<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
+				<div id="log_content"></div>
+				<div id="log_content_cleaner" style="color: white;">.</div>
+			</div>
+	        <!-- end log message layout -->
+	   <?php } ?>
+			</div>
 		</div>
-
+		<!-- end toc layout -->
 	</div>
-	<!-- end toc layout -->
+    <!-- end left Zone -->
 
-
-	</div>
-<!-- end left Zone -->
-
-<!-- right Zone -->
-	<div id="learningPathRightZone" style="margin-left:282px;height:100%">
+    <!-- right Zone -->
+	<div id="learning_path_right_zone" style="margin-left:282px;height:100%">
 		<iframe id="content_id" name="content_name" src="<?php echo $src; ?>" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>
 	</div>
-<!-- end right Zone -->
-
+    <!-- end right Zone -->
 </div>
+<script language="JavaScript" type="text/javascript">
+<!--
+var leftZoneHeightOccupied = 0;
+var rightZoneHeightOccupied = 0;
+var initialLeftZoneHeight = 0;
+var initialRightZoneHeight = 0;
 
-    <script language="JavaScript" type="text/javascript">
-	// Need to be called after the <head> to be sure window.oxajax is defined
-  	var dokeos_xajax_handler = window.oxajax;
-	</script>
-    <script language="JavaScript" type="text/javascript">
-	<!--
-	var leftZoneHeightOccupied = 0;
-	var rightZoneHeightOccupied = 0;
-	var initialLeftZoneHeight = 0;
-	var initialRightZoneHeight = 0;
-
-	var updateContentHeight = function() {
-		winHeight = (window.innerHeight != undefined ? window.innerHeight : document.documentElement.clientHeight);
-		newLeftZoneHeight = winHeight - leftZoneHeightOccupied;
-		newRightZoneHeight = winHeight - rightZoneHeightOccupied;
-		if (newLeftZoneHeight <= initialLeftZoneHeight) {
-			newLeftZoneHeight = initialLeftZoneHeight;
-			newRightZoneHeight = newLeftZoneHeight + leftZoneHeightOccupied - rightZoneHeightOccupied;
-		}
-		if (newRightZoneHeight <= initialRightZoneHeight) {
-			newRightZoneHeight = initialRightZoneHeight;
-			newLeftZoneHeight = newRightZoneHeight + rightZoneHeightOccupied - leftZoneHeightOccupied;
-		}
-		document.getElementById('learningPathToc').style.height = newLeftZoneHeight + 'px';
-		document.getElementById('learningPathRightZone').style.height = newRightZoneHeight + 'px';
-		document.getElementById('content_id').style.height = newRightZoneHeight + 'px';
-		if (document.body.clientHeight > winHeight) {
-			document.body.style.overflow = 'auto';
-		} else {
-			document.body.style.overflow = 'hidden';
-		}
-	};
-
-	window.onload = function() {
-
-		screen_height = screen.height;
-		screen_width = screen.height;
-
-		document.getElementById('learningPathLeftZone').style.height = "100%";
-		document.getElementById('learningPathToc').style.height = "60%";
-		document.getElementById('learningPathToc').style.width = "100%";
-		document.getElementById('learningPathRightZone').style.height = "100%"
-		document.getElementById('content_id').style.height = "100%" ;
-
-		if (screen_height <= 600) {
-			document.getElementById('inner_lp_toc').style.height = "100px" ;
-			document.getElementById('learningPathLeftZone').style.height = "415px";
-		}
-
-		initialLeftZoneHeight = document.getElementById('learningPathToc').offsetHeight;
-		initialRightZoneHeight = document.getElementById('learningPathRightZone').offsetHeight;
-		docHeight = document.body.clientHeight;
-		leftZoneHeightOccupied = docHeight - initialLeftZoneHeight;
-		rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
+var updateContentHeight = function() {
+	winHeight = (window.innerHeight != undefined ? window.innerHeight : document.documentElement.clientHeight);
+	newLeftZoneHeight = winHeight - leftZoneHeightOccupied;
+	newRightZoneHeight = winHeight - rightZoneHeightOccupied;
+	if (newLeftZoneHeight <= initialLeftZoneHeight) {
+		newLeftZoneHeight = initialLeftZoneHeight;
+		newRightZoneHeight = newLeftZoneHeight + leftZoneHeightOccupied - rightZoneHeightOccupied;
+	}
+	if (newRightZoneHeight <= initialRightZoneHeight) {
+		newRightZoneHeight = initialRightZoneHeight;
+		newLeftZoneHeight = newRightZoneHeight + rightZoneHeightOccupied - leftZoneHeightOccupied;
+	}
+	document.getElementById('learning_path_toc').style.height = newLeftZoneHeight + 'px';
+	document.getElementById('learning_path_right_zone').style.height = newRightZoneHeight + 'px';
+	document.getElementById('content_id').style.height = newRightZoneHeight + 'px';
+	if (document.body.clientHeight > winHeight) {
+		document.body.style.overflow = 'auto';
+	} else {
 		document.body.style.overflow = 'hidden';
-		updateContentHeight();
+	}
+};
+
+window.onload = function() {
+
+	screen_height = screen.height;
+	screen_width = screen.height;
+
+	document.getElementById('learning_path_left_zone').style.height = "100%";
+	document.getElementById('learning_path_toc').style.height = "60%";
+	document.getElementById('learning_path_toc').style.width = "100%";
+	document.getElementById('learning_path_right_zone').style.height = "100%"
+	document.getElementById('content_id').style.height = "100%" ;
+
+	if (screen_height <= 600) {
+		document.getElementById('inner_lp_toc').style.height = "100px" ;
+		document.getElementById('learning_path_left_zone').style.height = "415px";
 	}
 
-	window.onresize = updateContentHeight;
-	-->
-	</script>
+	initialLeftZoneHeight = document.getElementById('learning_path_toc').offsetHeight;
+	initialRightZoneHeight = document.getElementById('learning_path_right_zone').offsetHeight;
+	docHeight = document.body.clientHeight;
+	leftZoneHeightOccupied = docHeight - initialLeftZoneHeight;
+	rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
+	document.body.style.overflow = 'hidden';
+	updateContentHeight();
+}
 
+window.onresize = updateContentHeight;
+-->
+</script>
+</body>
 <?php
 	/*
 	==============================================================================
@@ -629,4 +599,3 @@ else
 }
 //restore global setting
 $_setting['show_navigation_menu'] = $save_setting;
-?>

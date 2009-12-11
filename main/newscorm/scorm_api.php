@@ -198,38 +198,15 @@ olms.execute_stats=false;
 
 // Initialize stuff when the page is loaded
 $(document).ready( function() {
-  //
+ $("iframe#content_id").load( function(){
   olms.info_lms_item[0]='<?php echo $oItem->get_id();?>';
   olms.info_lms_item[1]='<?php echo $oItem->get_id();?>';
 
-  $("#content_id").load( function(){
-    olms.info_lms_item[0]=olms.info_lms_item[1];
-    <?php
-    if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
-    ?>
-      if (olms.lms_lp_type == 2) { //Only scorm
-        attach_glossary_into_scorm();   
-      }
-    <?php
-    }
-    ?>
-    if (olms.lms_item_types['i'+olms.info_lms_item[1]] != 'sco') {
-      LMSInitialize();
-    }
-  });
-});
-
-$("iframe#content_id").load( function(){
-  //
-  olms.info_lms_item[0]='<?php echo $oItem->get_id();?>';
-  olms.info_lms_item[1]='<?php echo $oItem->get_id();?>';
-  
   <?php
-  if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
-  	
+  if (api_get_setting('show_glossary_in_extra_tools') == 'true') {  	
   	 if (api_get_setting('show_glossary_in_documents') == 'ismanual') { 
   	 	//Will be always automatic
-  	 	 ?> 	
+  	 	 ?>
 		$.frameReady(function(){
 	   		//  $("<div>I am a div courses</div>").prependTo("body");     
 	     }, "top.content_name",   

@@ -198,14 +198,16 @@ olms.execute_stats=false;
 
 // Initialize stuff when the page is loaded
 $(document).ready( function() {
- $("iframe#content_id").load( function(){
+  //
   olms.info_lms_item[0]='<?php echo $oItem->get_id();?>';
   olms.info_lms_item[1]='<?php echo $oItem->get_id();?>';
+
+  $("#content_id").load( function(){
+    olms.info_lms_item[0]=olms.info_lms_item[1];
 
   <?php
   if (api_get_setting('show_glossary_in_extra_tools') == 'true') {  	
   	 if (api_get_setting('show_glossary_in_documents') == 'ismanual') { 
-  	 	//Will be always automatic
   	 	 ?>
 		$.frameReady(function(){
 	   		//  $("<div>I am a div courses</div>").prependTo("body");     
@@ -216,10 +218,6 @@ $(document).ready( function() {
 	          	{type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
 	      ] }
 	      );	
-	            
-	  	if (lms_lp_type == 2) { //Only scorm 		
-	  	    //attach_glossary_into_scorm();	
-	  	}
   	<?php
   	 } else {  	 
   ?> 	
@@ -236,17 +234,12 @@ $(document).ready( function() {
   	 }
   }
   ?>
-  
-    $("#content_id").load( function(){
-    olms.info_lms_item[0]=olms.info_lms_item[1];
+
     if (olms.lms_item_types['i'+olms.info_lms_item[1]] != 'sco') {
       LMSInitialize();
     }
   });
-  
- });
 });
-
 
 
 /**

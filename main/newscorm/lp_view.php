@@ -71,8 +71,6 @@ $my_style=$platform_theme;
 	Header
 -----------------------------------------------------------
 */
-//$htmlHeadXtra[] = '<script type="text/javascript" src="lp_view.lib.js"></script>';
-//$htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/')."\n";
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>'; //jQuery
 
@@ -291,9 +289,9 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 						$sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE lp_id = '" . $_SESSION['oLP']->lp_id."'";
 						$res_media= Database::query($sql, __FILE__, __LINE__);
 
-						if(Database::num_rows($res_media) > 0){
-							while($row_media= Database::fetch_array($res_media)) {
-							     if(!empty($row_media['audio'])) {$show_audioplayer = true; break;}
+						if (Database::num_rows($res_media) > 0) {
+							while ($row_media= Database::fetch_array($res_media)) {
+							     if (!empty($row_media['audio'])) {$show_audioplayer = true; break;}
 							}
 						}
 					?>
@@ -307,9 +305,9 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 
 	</div>
 	<!-- end image preview Layout -->
-				<div id="author_name" style="position:relative;top:2px;left:0px;margin:0;padding:0;text-align:center;width:100%">
-					<?php echo $_SESSION['oLP']->get_author() ?>
-				</div>
+	<div id="author_name" style="position:relative;top:2px;left:0px;margin:0;padding:0;text-align:center;width:100%">
+		<?php echo $_SESSION['oLP']->get_author() ?>
+	</div>
 
 	<!-- media player layaout -->
 	<?php $style_media = (($show_audioplayer)?' style= "position:relative;top:10px;left:10px;margin:8px;font-size:32pt;height:20px;"':'style="height:15px"'); ?>
@@ -320,93 +318,86 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 
 	<!-- toc layout -->
 	<div id="toc_id" name="toc_name"  style="padding:0;margin-top:20px;height:60%;width:100%">
-		<div id="learningPathToc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
-		<!-- log message layout -->
-
-		<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:50px;overflow:auto;margin:15px">
-			<div id="log_content"></div>
-			<div style="color: white;" onClick="cleanlog();">.</div>
-		</div>
-	<!-- end log message layout -->
-		</div>
-
+		<div id="learning_path_toc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
+			<!-- log message layout -->
+	
+			<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:50px;overflow:auto;margin:15px">
+				<div id="log_content"></div>
+				<div id="log_content_cleaner" style="color: white;">.</div>
+			</div>
+    		<!-- end log message layout -->
+        </div>
 	</div>
 	<!-- end toc layout -->
-
-
-	</div>
+</div>
 <!-- end left Zone -->
 
 <!-- right Zone -->
-	<div id="learningPathRightZone" style="margin-left:282px;border : 0pt solid blue;height:100%">
-		<iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>
-	</div>
+<div id="learning_path_right_zone" style="margin-left:282px;border : 0pt solid blue;height:100%">
+    <iframe id="content_id_blank" name="content_name_blank" src="blank.php" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>
+</div>
 <!-- end right Zone -->
 
 </div>
 
-	<script language="JavaScript" type="text/javascript">
-	// Need to be called after the <head> to be sure window.oxajax is defined
-  	var dokeos_xajax_handler = window.oxajax;
-	</script>
-    <script language="JavaScript" type="text/javascript">
-	<!--
-	var leftZoneHeightOccupied = 0;
-	var rightZoneHeightOccupied = 0;
-	var initialLeftZoneHeight = 0;
-	var initialRightZoneHeight = 0;
+<script language="JavaScript" type="text/javascript">
+<!--
+var leftZoneHeightOccupied = 0;
+var rightZoneHeightOccupied = 0;
+var initialLeftZoneHeight = 0;
+var initialRightZoneHeight = 0;
 
-	var updateContentHeight = function() {
-		winHeight = (window.innerHeight != undefined ? window.innerHeight : document.documentElement.clientHeight);
-		newLeftZoneHeight = winHeight - leftZoneHeightOccupied;
-		newRightZoneHeight = winHeight - rightZoneHeightOccupied;
-		if (newLeftZoneHeight <= initialLeftZoneHeight) {
-			newLeftZoneHeight = initialLeftZoneHeight;
-			newRightZoneHeight = newLeftZoneHeight + leftZoneHeightOccupied - rightZoneHeightOccupied;
-		}
-		if (newRightZoneHeight <= initialRightZoneHeight) {
-			newRightZoneHeight = initialRightZoneHeight;
-			newLeftZoneHeight = newRightZoneHeight + rightZoneHeightOccupied - leftZoneHeightOccupied;
-		}
-		document.getElementById('learningPathToc').style.height = newLeftZoneHeight + 'px';
-		document.getElementById('learningPathRightZone').style.height = newRightZoneHeight + 'px';
-		document.getElementById('content_id_blank').style.height = newRightZoneHeight + 'px';
-		if (document.body.clientHeight > winHeight) {
-			document.body.style.overflow = 'auto';
-		} else {
-			document.body.style.overflow = 'hidden';
-		}
-	};
-
-	window.onload = function() {
-
-		screen_height = screen.height;
-		screen_width = screen.height;
-
-		document.getElementById('learningPathLeftZone').style.height = "100%";
-		document.getElementById('learningPathToc').style.height = "60%";
-		document.getElementById('learningPathToc').style.width = "100%";
-		document.getElementById('learningPathRightZone').style.height = "100%"
-		document.getElementById('content_id').style.height = "100%" ;
-
-		if (screen_height <= 600) {
-			document.getElementById('inner_lp_toc').style.height = "100px" ;
-			document.getElementById('learningPathLeftZone').style.height = "415px";
-		}
-
-		initialLeftZoneHeight = document.getElementById('learningPathToc').offsetHeight;
-		initialRightZoneHeight = document.getElementById('learningPathRightZone').offsetHeight;
-		docHeight = document.body.clientHeight;
-		leftZoneHeightOccupied = docHeight - initialLeftZoneHeight;
-		rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
+var updateContentHeight = function() {
+	winHeight = (window.innerHeight != undefined ? window.innerHeight : document.documentElement.clientHeight);
+	newLeftZoneHeight = winHeight - leftZoneHeightOccupied;
+	newRightZoneHeight = winHeight - rightZoneHeightOccupied;
+	if (newLeftZoneHeight <= initialLeftZoneHeight) {
+		newLeftZoneHeight = initialLeftZoneHeight;
+		newRightZoneHeight = newLeftZoneHeight + leftZoneHeightOccupied - rightZoneHeightOccupied;
+	}
+	if (newRightZoneHeight <= initialRightZoneHeight) {
+		newRightZoneHeight = initialRightZoneHeight;
+		newLeftZoneHeight = newRightZoneHeight + rightZoneHeightOccupied - leftZoneHeightOccupied;
+	}
+	document.getElementById('learning_path_toc').style.height = newLeftZoneHeight + 'px';
+	document.getElementById('learning_path_right_zone').style.height = newRightZoneHeight + 'px';
+	document.getElementById('content_id_blank').style.height = newRightZoneHeight + 'px';
+	if (document.body.clientHeight > winHeight) {
+		document.body.style.overflow = 'auto';
+	} else {
 		document.body.style.overflow = 'hidden';
-		updateContentHeight();
+	}
+};
+
+window.onload = function() {
+
+	screen_height = screen.height;
+	screen_width = screen.height;
+
+	document.getElementById('learning_path_left_zone').style.height = "100%";
+	document.getElementById('learning_path_toc').style.height = "60%";
+	document.getElementById('learning_path_toc').style.width = "100%";
+	document.getElementById('learning_path_right_zone').style.height = "100%"
+	document.getElementById('content_id').style.height = "100%" ;
+
+	if (screen_height <= 600) {
+		document.getElementById('inner_lp_toc').style.height = "100px" ;
+		document.getElementById('learning_path_left_zone').style.height = "415px";
 	}
 
-	window.onresize = updateContentHeight;
-	-->
-	</script>
+	initialLeftZoneHeight = document.getElementById('learning_path_toc').offsetHeight;
+	initialRightZoneHeight = document.getElementById('learning_path_right_zone').offsetHeight;
+	docHeight = document.body.clientHeight;
+	leftZoneHeightOccupied = docHeight - initialLeftZoneHeight;
+	rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
+	document.body.style.overflow = 'hidden';
+	updateContentHeight();
+}
 
+window.onresize = updateContentHeight;
+-->
+</script>
+</body>
 <?php
 } else {
 	//not fullscreen mode
@@ -414,14 +405,14 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 	//$displayAudioRecorder = (api_get_setting('service_visio','active')=='true') ? true : false;
 	//check if audio recorder needs to be in studentview
 	$course_id=$_SESSION["_course"]["id"];
-	if($_SESSION["status"][$course_id]==5) {
+	if ($_SESSION["status"][$course_id]==5) {
 		$audio_recorder_studentview = true;
 	} else {
 		$audio_recorder_studentview = false;
 	}
 	//set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php)
 	$_SESSION['loaded_lp_view'] = true;
-	?>
+?>
 <body>
 <div id="learning_path_main"  style="width:100%;height:100%;" >
     <div id="learning_path_left_zone" style="float:left;width:280px;height:100%">
@@ -447,9 +438,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
         <!-- Image preview Layout -->
         <div id="author_image" name="author_image" class="lp_author_image" style="height:23%; width:100%;margin-left:5px;">
 		    <?php $image = '../img/lp_author_background.gif'; ?>
-
 			<div id="preview_image" style="padding:5px;background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;height:110px">
-
 		       	<div style="width:100; float:left;height:105;margin:5px">
 		       		<span style="width:104px; height:96px; float:left; vertical-align:bottom;">
 			        <center>
@@ -540,111 +529,106 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 		<iframe id="content_id" name="content_name" src="<?php echo $src; ?>" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>
 	</div>
     <!-- end right Zone -->
-
 </div>
+<script language="JavaScript" type="text/javascript">
+<!--
+var leftZoneHeightOccupied = 0;
+var rightZoneHeightOccupied = 0;
+var initialLeftZoneHeight = 0;
+var initialRightZoneHeight = 0;
 
-   	<script language="JavaScript" type="text/javascript">
-	// Need to be called after the <head> to be sure window.oxajax is defined
-  	var dokeos_xajax_handler = window.oxajax;
-	</script>
-    <script language="JavaScript" type="text/javascript">
-	<!--
-	var leftZoneHeightOccupied = 0;
-	var rightZoneHeightOccupied = 0;
-	var initialLeftZoneHeight = 0;
-	var initialRightZoneHeight = 0;
-
-	// Fixes the content height of the frame
-	
-	var updateContentHeight = function() {
-		winHeight = (window.innerHeight != undefined ? window.innerHeight : document.documentElement.clientHeight);
-		newLeftZoneHeight = winHeight - leftZoneHeightOccupied;
-		newRightZoneHeight = winHeight - rightZoneHeightOccupied;
-		if (newLeftZoneHeight <= initialLeftZoneHeight) {
-			newLeftZoneHeight = initialLeftZoneHeight;
-			newRightZoneHeight = newLeftZoneHeight + leftZoneHeightOccupied - rightZoneHeightOccupied;
-		}
-		if (newRightZoneHeight <= initialRightZoneHeight) {
-			newRightZoneHeight = initialRightZoneHeight;
-			newLeftZoneHeight = newRightZoneHeight + rightZoneHeightOccupied - leftZoneHeightOccupied;
-		}
-		document.getElementById('learningPathToc').style.height = newLeftZoneHeight + 'px';
-		document.getElementById('learningPathRightZone').style.height = newRightZoneHeight + 'px';
-		document.getElementById('content_id').style.height = newRightZoneHeight + 'px';
-		if (document.body.clientHeight > winHeight) {
-			document.body.style.overflow = 'auto';
-		} else {
-			document.body.style.overflow = 'hidden';
-		}		
-	};
-
-	window.onload = function() {
-
-		screen_height = screen.height;
-		screen_width = screen.height;
-
-		document.getElementById('learningPathLeftZone').style.height = "100%";
-		document.getElementById('learningPathToc').style.height = "60%";
-		document.getElementById('learningPathToc').style.width = "100%";
-		document.getElementById('learningPathRightZone').style.height = "100%"
-		document.getElementById('content_id').style.height = "100%" ;
-
-		if (screen_height <= 600) {
-			document.getElementById('inner_lp_toc').style.height = "100px" ;
-			document.getElementById('learningPathLeftZone').style.height = "415px";
-		}
-
-		initialLeftZoneHeight = document.getElementById('learningPathToc').offsetHeight;
-		initialRightZoneHeight = document.getElementById('learningPathRightZone').offsetHeight;
-		docHeight = document.body.clientHeight;
-		leftZoneHeightOccupied = docHeight - initialLeftZoneHeight;
-		rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
-		document.body.style.overflow = 'hidden';
-		updateContentHeight();
-		
-		//loads the glossary library
-		
-		<?php
-		if (api_get_setting('show_glossary_in_extra_tools') == 'true') {  	
-			if (api_get_setting('show_glossary_in_documents') == 'ismanual') {  	  	 	
-		  	 	?>		  	 	
-		    $(document).ready(function() {   
-		      $.frameReady(function(){   
-		       //  $("<div>I am a div courses</div>").prependTo("body");		     
-		      }, "top.content_name",   
-		      { load: [   
-		      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
-		            {type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
-		            {type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
-		      	 ] 
-		      }		   
-		      );
-		   });		   		  	 	
-		<?php
-		  	 } elseif(api_get_setting('show_glossary_in_documents') == 'isautomatic') {
-		?>		
-		    $(document).ready(function() {   
-		      $.frameReady(function(){   
-		       //  $("<div>I am a div courses</div>").prependTo("body");
-		     
-		      }, "top.content_name",   
-		      { load: [   
-		      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
-		            {type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
-		            {type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
-		      	 ] 
-		      }
-		   
-		      );
-		   });
-		<?php
-		  	 }
-		  }
-		?>
+var updateContentHeight = function() {
+	winHeight = (window.innerHeight != undefined ? window.innerHeight : document.documentElement.clientHeight);
+	newLeftZoneHeight = winHeight - leftZoneHeightOccupied;
+	newRightZoneHeight = winHeight - rightZoneHeightOccupied;
+	if (newLeftZoneHeight <= initialLeftZoneHeight) {
+		newLeftZoneHeight = initialLeftZoneHeight;
+		newRightZoneHeight = newLeftZoneHeight + leftZoneHeightOccupied - rightZoneHeightOccupied;
 	}
-	window.onresize = updateContentHeight;
-	-->
-	</script>
+	if (newRightZoneHeight <= initialRightZoneHeight) {
+		newRightZoneHeight = initialRightZoneHeight;
+		newLeftZoneHeight = newRightZoneHeight + rightZoneHeightOccupied - leftZoneHeightOccupied;
+	}
+	document.getElementById('learning_path_toc').style.height = newLeftZoneHeight + 'px';
+	document.getElementById('learning_path_right_zone').style.height = newRightZoneHeight + 'px';
+	document.getElementById('content_id').style.height = newRightZoneHeight + 'px';
+	if (document.body.clientHeight > winHeight) {
+		document.body.style.overflow = 'auto';
+	} else {
+		document.body.style.overflow = 'hidden';
+	}
+};
+
+window.onload = function() {
+
+	screen_height = screen.height;
+	screen_width = screen.height;
+
+	document.getElementById('learning_path_left_zone').style.height = "100%";
+	document.getElementById('learning_path_toc').style.height = "60%";
+	document.getElementById('learning_path_toc').style.width = "100%";
+	document.getElementById('learning_path_right_zone').style.height = "100%"
+	document.getElementById('content_id').style.height = "100%" ;
+
+	if (screen_height <= 600) {
+		document.getElementById('inner_lp_toc').style.height = "100px" ;
+		document.getElementById('learning_path_left_zone').style.height = "415px";
+	}
+
+	initialLeftZoneHeight = document.getElementById('learning_path_toc').offsetHeight;
+	initialRightZoneHeight = document.getElementById('learning_path_right_zone').offsetHeight;
+	docHeight = document.body.clientHeight;
+	leftZoneHeightOccupied = docHeight - initialLeftZoneHeight;
+	rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
+	document.body.style.overflow = 'hidden';
+	updateContentHeight();
+	
+	//loads the glossary library	
+		
+	<?php
+	if (api_get_setting('show_glossary_in_extra_tools') == 'true') {  	
+		if (api_get_setting('show_glossary_in_documents') == 'ismanual') {  	  	 	
+	  	 	?>		  	 	
+	    $(document).ready(function() {   
+	      $.frameReady(function(){   
+	       //  $("<div>I am a div courses</div>").prependTo("body");		     
+	      }, "top.content_name",   
+	      { load: [   
+	      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
+	            {type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
+	            {type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
+	      	 ] 
+	      }		   
+	      );
+	   });		   		  	 	
+	<?php
+	  	 } elseif(api_get_setting('show_glossary_in_documents') == 'isautomatic') {
+	?>		
+	    $(document).ready(function() {   
+	      $.frameReady(function(){   
+	       //  $("<div>I am a div courses</div>").prependTo("body");
+	     
+	      }, "top.content_name",   
+	      { load: [   
+	      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
+	            {type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
+	            {type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
+	      	 ] 
+	      }
+	   
+	      );
+	   });
+	<?php
+	  	 }
+	  }
+	?>
+	}
+}
+
+window.onresize = updateContentHeight;
+-->
+</script>
+</body>
 <?php
 	/*
 	==============================================================================

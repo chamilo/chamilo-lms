@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "Failas turi buti CSV formato. Napalikite tarpų. Struk
 $langTracking = "Įvertinimų sekimas";
 $langEnter2passToChange = "Keisdami įveskite savo slaptažodį dukart. Kitaip palikite šiuos laukus tuščius.";
 $langAuthInfo = "Autentifikacija";
-$langDelImage = "Pašalinti nuotrauką";
 $langUpdateImage = "Pakeisti nuotrauką";
 $langImageWrong = "Failo dydis turi buti mažesnis negu";
 $langAddImage = "Nuotrauka";

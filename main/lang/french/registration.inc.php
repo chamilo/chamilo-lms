@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "Le fichier devrait être au format CSV. N\'ajoutez pas 
 $langTracking = "Suivi";
 $langEnter2passToChange = "La saisie du nouveau mot de passe ainsi que sa confirmation sont nécessaires en cas de modification de votre mot de passe. <br />Dans tous les autres cas, laissez ces deux champs vides.";
 $langAuthInfo = "Paramètres de connexion";
-$langDelImage = "Supprimer la photo";
 $langUpdateImage = "Changer de photo";
 $langImageWrong = "La taille de l\'image doit être inférieure à";
 $langAddImage = "Photo";

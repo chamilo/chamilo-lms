@@ -188,16 +188,16 @@ if ($display_all_form === true) {
 
 	//	EXTENDED FIELDS
 	if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true') {
-		$form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+		$form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
 	}
 	if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mydiplomas') == 'true') {
-		$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+		$form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
 	}
 	if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'myteach') == 'true') {
-		$form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+		$form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
 	}
 	if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mypersonalopenarea') == 'true') {
-		$form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+		$form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
 	}
 	if (api_get_setting('extended_profile') == 'true') {
 		if (api_get_setting('extendedprofile_registrationrequired', 'mycomptetences') == 'true') {
@@ -228,7 +228,7 @@ if ($display_all_form === true) {
 				if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 				break;
 			case USER_FIELD_TYPE_TEXTAREA:
-				$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+				$form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));
 				//$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
 				$form->applyFilter('extra_'.$field_details[1], 'stripslashes');
 				$form->applyFilter('extra_'.$field_details[1], 'trim');
@@ -598,3 +598,4 @@ if (!isset($_POST['username'])) {
 */
 
 Display :: display_footer();
+?>

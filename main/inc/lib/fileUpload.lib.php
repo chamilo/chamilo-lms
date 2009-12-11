@@ -248,8 +248,8 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 	}
 	else
 	{
-		//clean up the name, only ASCII characters should stay.
-		$clean_name = replace_dangerous_char($uploaded_file['name']);
+		//clean up the name, only ASCII characters should stay. (and strict)
+		$clean_name = replace_dangerous_char($uploaded_file['name'], 'strict');
 		//no "dangerous" files
 		$clean_name = disable_dangerous_file($clean_name);
 		if(!filter_extension($clean_name))
@@ -703,7 +703,7 @@ function treat_uploaded_file($uploadedFile, $baseWorkDir, $uploadPath, $maxFille
 		$fileName = trim($uploadedFile['name']);
 
 		// CHECK FOR NO DESIRED CHARACTERS
-		$fileName = replace_dangerous_char($fileName);
+		$fileName = replace_dangerous_char($fileName, 'strict');
 
 		// TRY TO ADD AN EXTENSION TO FILES WITOUT EXTENSION
 		$fileName = add_ext_on_mime($fileName,$uploadedFile['type']);
@@ -1320,7 +1320,9 @@ function search_img_from_html($htmlFile)
 {
 	$imgFilePath = array();
 
-	$fp = fopen($htmlFile, "r") or die('<center>can not open file</center>');
+	if(!$fp = fopen($htmlFile, "r")){ //or die('<center>can not open file</center>');
+		return ; 
+	}
 
 	// search and store occurences of the <IMG> tag in an array
 	$size_file=(filesize($htmlFile)===0) ? 1 : filesize($htmlFile);
@@ -1490,8 +1492,13 @@ function replace_img_path_in_html_file($originalImgPath, $newImgPath, $htmlFile)
 	/*
 	 * Write the resulted new file
 	 */
-	$fp = fopen($htmlFile, 'w')      or die('<center>cannot open file</center>');
-	fwrite($fp, $new_html_content)   or die('<center>cannot write in file</center>');
+	if (!$fp = fopen($htmlFile, 'w')){   //or die('<center>cannot open file</center>');
+		return;
+	}
+	
+	if (!fwrite($fp, $new_html_content)){ //   or die('<center>cannot write in file</center>');
+		return;
+	}
 }
 
 //------------------------------------------------------------------------------
@@ -1514,9 +1521,10 @@ function create_link_file($filePath, $url)
 				  .'<body>'
 				  .'</body>'
 				  .'</html>';
-
-	 $fp = fopen ($filePath, 'w') or die ('can not create file');
-	 fwrite($fp, $fileContent);
+	if (!($fp = fopen ($filePath, 'w'))) {
+		return false;
+	}
+	return fwrite($fp, $fileContent); 	 		 
 }
 
 //------------------------------------------------------------------------------
@@ -1867,7 +1875,7 @@ $handle=opendir($path);
 	    else
 		{
 			//rename
-			$safe_file=disable_dangerous_file(replace_dangerous_char($file));
+			$safe_file=disable_dangerous_file(replace_dangerous_char($file, 'strict'));
 			@rename($base_work_dir.$current_path.'/'.$file,$base_work_dir.$current_path.'/'.$safe_file);
 
 			if(!DocumentManager::get_document_id($_course, $current_path.'/'.$safe_file))

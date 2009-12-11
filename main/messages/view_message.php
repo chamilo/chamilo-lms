@@ -1,35 +1,8 @@
-<?php // $Id: view_message.php 20962 2009-05-25 03:15:53Z iflorespaz $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
+<?php
+/* For licensing terms, see /chamilo_license.txt */
 
-	Copyright (c) 2009 Dokeos SPRL
-	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-	Copyright (c) Facultad de Matematicas, UADY (México)
-	Copyright (c) Evie, Free University of Brussels (Belgium)
-	Copyright (c) 2009 Isaac Flores Paz <isaac.flores.paz@gmail.com>
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-    Mail: info@dokeos.com
-==============================================================================
-*/
-
-/*
-==============================================================================
-		INIT SECTION
-=========================================================================5====
-*/
 // name of the language file that needs to be included
-$language_file= 'messages';
+$language_file = array('registration','messages','userInfo');
 $cidReset= true;
 require_once '../inc/global.inc.php';
 api_block_anonymous_users();
@@ -37,61 +10,88 @@ if (api_get_setting('allow_message_tool')!='true'){
 	api_not_allowed();
 }
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
+$interbreadcrumb[]= array ('url' => 'inbox.php','name' => get_lang('Message'));
+$interbreadcrumb[]= array ('url' => '#','name' => get_lang('View'));
 
-if (isset($_GET['id_send']) || isset($_GET['id'])) {
-	if (isset($_GET['rs'])) {
-		$interbreadcrumb[]= array (
-			'url' => '#',
-			'name' => get_lang('Messages')
-		);
-		$interbreadcrumb[]= array (
-				'url' => '../social/'.$_SESSION['social_dest'].'?#remote-tab-2',
-				'name' => get_lang('SocialNetwork')
-		);
-		$interbreadcrumb[]= array (
-			'url' => 'inbox.php',
-			'name' => get_lang('Inbox')
-		);
-		$interbreadcrumb[]= array (
-			'url' => 'outbox.php',
-			'name' => get_lang('Outbox')
-		);
-	} else {
-	$interbreadcrumb[]= array (
-		'url' => '#',
-		'name' => get_lang('Messages')
-	);
-	$interbreadcrumb[]= array (
-		'url' => 'inbox.php',
-		'name' => get_lang('Inbox')
-	);
-	$interbreadcrumb[]= array (
-		'url' => 'outbox.php',
-		'name' => get_lang('Outbox')
-	);
-	}
-}
 /*
 ==============================================================================
 		HEADER
 ==============================================================================
 */
-$request=api_is_xml_http_request();
-if ($request===false) {
-	Display::display_header('');
-}
-//api_display_tool_title(api_xml_http_response_encode(get_lang('ReadMessage')));
-if (isset($_GET['id_send'])) {
-	MessageManager::show_message_box_sent();
+if ($_GET['f']=='social') {
+	$this_section = SECTION_SOCIAL;
+	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Profile'));
+	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));	
 } else {
-	MessageManager::show_message_box();
+	$this_section = SECTION_MYPROFILE;
+	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Profile'));
+	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));
 }
+Display::display_header('');
+
+if ($_GET['f']=='social') {
+	require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+	SocialManager::show_social_menu();
+	echo '<div class="actions-title">';
+	echo get_lang('Messages');
+	echo '</div>';
+	$social_parameter = '?f=social';
+} else {
+	
+	
+	if (api_get_setting('extended_profile') == 'true') {
+		echo '<div class="actions">';
+		
+		if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
+			echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
+		}
+		if (api_get_setting('allow_message_tool') == 'true') {
+			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
+		}	
+		echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?type=reduced">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
+		
+		echo '</div>';
+	}
+}
+
+echo '<div id="inbox-wrapper">';
+	//LEFT COLUMN
+	echo '<div id="inbox-menu">';	
+		echo '<ul>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$social_parameter.'">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>'.'</li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$social_parameter.'">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>'.'</li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php'.$social_parameter.'">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>'.'</li>';
+		echo '</ul>';	
+	echo '</div>';
+
+	echo '<div id="inbox">';
+		//MAIN CONTENT
+		
+		if (empty($_GET['id'])) {
+			$id_message = $_GET['id_send'];
+			$source = 'outbox';
+		} else {
+			$id_message = $_GET['id'];
+			$source = 'inbox';
+		}
+		
+		$message = MessageManager::show_message_box($id_message,$source);
+		if (!empty($message)) {
+			echo $message;
+			
+	
+		} else {
+			api_not_allowed();
+		}
+
+	echo '</div>';
+
+echo '</div>';
+
 /*
 ==============================================================================
 		FOOTER
 ==============================================================================
 */
-if ($request===false) {
-	Display::display_footer();
-}
+Display::display_footer();
 ?>

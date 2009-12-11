@@ -1,8 +1,10 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
 /**
- * Provides a short controller for friends registration
+ * @package dokeos.social
+ * @author Julio Montoya <gugli100@gmail.com>
  */
+ 
  // names of the language files that needs to be included
 $language_file = array('registration','messages','userInfo','admin');
 require '../inc/global.inc.php';
@@ -26,6 +28,7 @@ if (isset($_POST['friend_id'])) {
 	
 	SocialManager::register_friend($the_current_user_id,$my_current_friend,$relation_type);
 	SocialManager::register_friend($my_current_friend,$the_current_user_id,$relation_type);
+	
 	SocialManager::invitation_accepted($my_current_friend,$the_current_user_id);
 	
 	if (isset($_POST['is_my_friend'])) {
@@ -35,14 +38,14 @@ if (isset($_POST['friend_id'])) {
 	}
 }
 if (isset($_POST['denied_friend_id'])) {
-	SocialManager::invitation_denied((int)$my_denied_current_friend,(int)$the_current_user_id);
+	SocialManager::invitation_denied($my_denied_current_friend,$the_current_user_id);
 	Display::display_confirmation_message(api_xml_http_response_encode(get_lang('InvitationDenied')));
 }
 if (isset($_POST['delete_friend_id'])) {
-	SocialManager::removed_friend((int)$my_delete_friend);
+	SocialManager::removed_friend($my_delete_friend);
 }
 if(isset($_POST['user_id_friend_q']) && isset($_POST['type_friend_q'])) {
-	SocialManager::qualify_friend((int)$friend_id_qualify,(int)$type_friend_qualify);
+	SocialManager::qualify_friend($friend_id_qualify,$type_friend_qualify);
 	echo api_xml_http_response_encode(get_lang('AttachContactsToGroupSuccesfuly'));
 }
 ?>

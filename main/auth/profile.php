@@ -29,7 +29,7 @@ if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user[
 }
 
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script src="../inc/lib/javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
 
@@ -697,11 +697,11 @@ if (isset($_GET['show'])) {
 
 	if ((api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') || (api_get_setting('allow_social_tool') == 'true')) {
 
-		$interbreadcrumb[] = array ('url' => 'javascript: void(0);', 'name' => get_lang('SocialNetwork'));
+		//$interbreadcrumb[] = array ('url' => 'javascript: void(0);', 'name' => get_lang('SocialNetwork'));
 
 	} elseif ((api_get_setting('allow_social_tool') == 'false' && api_get_setting('allow_message_tool') == 'true')) {
 
-		$interbreadcrumb[] = array('url' => 'javascript: void(0);', 'name' => get_lang('MessageTool'));
+		//$interbreadcrumb[] = array('url' => 'javascript: void(0);', 'name' => get_lang('MessageTool'));
 	}
 }
 
@@ -722,23 +722,18 @@ if (api_get_setting('extended_profile') == 'true') {
 		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
 	}	
 	$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
-	
-	//echo '<span style="float:right; padding-top:7px;">';
 				 
 	if (isset($_GET['type']) && $_GET['type'] == 'extended') {
 		echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
 	} else {
 		echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</a>';
 	}
-	//echo '</span>';
 
 	echo '</div>';
 }
 
 if (!empty($file_deleted)) {
-
 	Display :: display_confirmation_message(get_lang('FileDeleted'), false);
-
 } elseif (!empty($update_success)) {
 	$message = get_lang('ProfileReg');
 
@@ -800,6 +795,7 @@ if ($image == 'unknown.jpg') {
 } else {
 	echo '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 }
+/* This was moved to user_portal.php
 if (api_get_setting('allow_message_tool') == 'true') {
 	include api_get_path(LIBRARY_PATH).'message.lib.php';
 	$number_of_new_messages = MessageManager::get_new_messages();
@@ -815,19 +811,20 @@ if (api_get_setting('allow_message_tool') == 'true') {
 				<a href="../social/index.php#remote-tab-3" class="message-body">'.get_lang('Outbox').$cant_out_box.'</a><br />
 			</p>';
 
-	/*if (api_get_setting('allow_social_tool') == 'true') {
-		 if ($number_of_new_messages_of_friend > 0) {
-			echo '<div class="message-content-internal">';
-			echo '<a href="../social/index.php#remote-tab-4" style="color:#000000">'. Display::return_icon('info3.gif', get_lang('NewMessage'), 'align="absmiddle"').'&nbsp;'.get_lang('Invitation ').'('.$number_of_new_messages_of_friend.')'.'</a>';
-			echo '</div><br />';
-		 }
-	 }*/
+	//if (api_get_setting('allow_social_tool') == 'true') {
+	//	 if ($number_of_new_messages_of_friend > 0) {
+	//		echo '<div class="message-content-internal">';
+	//		echo '<a href="../social/index.php#remote-tab-4" style="color:#000000">'. Display::return_icon('info3.gif', get_lang('NewMessage'), 'align="absmiddle"').'&nbsp;'.get_lang('Invitation ').'('.$number_of_new_messages_of_friend.')'.'</a>';
+	//		echo '</div><br />';
+	//	 }
+	// }
 	echo '<img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('Close').'" title="'.get_lang('Close').'"  class="message-delete" />';
 	if ($number_of_new_messages_of_friend > 0) {
 		echo '<br />';
 	}
 	echo '</div>';
 }
+*/
 echo '</div>';
 $form->display();
 Display :: display_footer();

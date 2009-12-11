@@ -26,8 +26,10 @@ if(!api_is_allowed_to_edit(null,true)) {
 
 $htmlHeadXtra[] = '<script>
 
-		function advanced_parameters() {
-			if(document.getElementById(\'options\').style.display == \'none\') {
+		function advanced_parameters()
+		{
+			if(document.getElementById(\'options\').style.display == \'none\')
+			{
 				document.getElementById(\'options\').style.display = \'block\';
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 
@@ -38,33 +40,39 @@ $htmlHeadXtra[] = '<script>
 			}
 		}
 
-
 		function FCKeditor_OnComplete( editorInstance )
-			{
-			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
+		{
+			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name ))
+			   {
 			      HideFCKEditorByInstanceName (editorInstance.Name);
 			   }
-			}
-
-			function HideFCKEditorByInstanceName ( editorInstanceName ) {
-			   if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" ) {
-			      document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
-			      }
-			}
-		function show_media() {
-			var my_display = document.getElementById(\'HiddenFCKexerciseDescription\').style.display;
-				if(my_display== \'none\' || my_display == \'\') {
-				document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'block\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'\';
-			} else {
-				document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'none\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'\';
-
-			}
 		}
 
-		function timelimit() {
-			if(document.getElementById(\'options2\').style.display == \'none\') {
+		function HideFCKEditorByInstanceName ( editorInstanceName )
+		{
+			if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" )
+			{
+			      document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
+			}
+		}
+		
+		function show_media()
+		{
+			var my_display = document.getElementById(\'HiddenFCKexerciseDescription\').style.display;
+				if(my_display== \'none\' || my_display == \'\')
+				{
+					document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'block\';
+					document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'\';
+				} else {
+					document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'none\';
+					document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'\';
+				}
+		}
+
+		function timelimit()
+		{
+			if(document.getElementById(\'options2\').style.display == \'none\')
+			{
 				document.getElementById(\'options2\').style.display = \'block\';
 			} else {
 				document.getElementById(\'options2\').style.display = \'none\';
@@ -75,7 +83,8 @@ $htmlHeadXtra[] = '<script>
 		{
 			var index = document.exercise_admin.exerciseFeedbackType.selectedIndex;
 
-			if (index == \'1\') {
+			if (index == \'1\') 
+			{
 				document.exercise_admin.exerciseType[1].checked=true;
 				document.exercise_admin.exerciseType[0].disabled=true;
 
@@ -84,13 +93,35 @@ $htmlHeadXtra[] = '<script>
 			}
 		}
               
-    function option_time_expired() {
-      if(document.getElementById(\'timercontrol\').style.display == \'none\') {
-        document.getElementById(\'timercontrol\').style.display = \'block\';
-      } else {
-        document.getElementById(\'timercontrol\').style.display = \'none\';
-      }
-    }               
+	    function option_time_expired()
+	    {
+		    if(document.getElementById(\'timercontrol\').style.display == \'none\')
+		    {
+		      document.getElementById(\'timercontrol\').style.display = \'block\';
+		    } else {
+		      document.getElementById(\'timercontrol\').style.display = \'none\';
+		    }
+	    }  	
+      	
+     	function check_per_page_one()
+     	{
+     		if (document.getElementById(\'divtimecontrol\').style.display==\'none\')
+     		{
+     			document.getElementById(\'divtimecontrol\').style.display=\'block\';
+     			document.getElementById(\'divtimecontrol\').display=block;
+     			document.getElementById(\'timecontrol\').display=none;
+     		}
+		}
+
+		function check_per_page_all()
+     	{
+			if (document.getElementById(\'divtimecontrol\').style.display==\'block\')
+			{
+				document.getElementById(\'divtimecontrol\').style.display=\'none\';
+				document.getElementById(\'enabletimercontroltotalminutes\').value=\'\';
+			}
+		}
+                   
 		</script>';
 
 /*********************

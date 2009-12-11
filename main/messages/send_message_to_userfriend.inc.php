@@ -1,12 +1,12 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
 $language_file = array('registration','messages','userInfo','admin');
 $cidReset=true;
 require_once '../inc/global.inc.php';
-require_once '../messages/message.class.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+
 if (api_is_anonymous()) {
 	api_not_allowed();
 }
@@ -45,19 +45,25 @@ if ( isset($_REQUEST['user_friend']) ) {
 		if (api_get_setting('allow_message_tool')=='true') {
 			if ($panel == 1) {
                 //normal message
-		   		 $user_info=api_get_user_info($userfriend_id);
-		  		 echo api_xml_http_response_encode(get_lang('To')); ?> :&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName'])); ?>
-		  		 <br />
-		 		 <br /><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br /><input id="txt_subject_id" type="text" style="width:300px;"><br/>
-		   		 <br /><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br /><textarea id="txt_area_invite" rows="4" cols="41"></textarea>
-		   		 <br /><br />
-		   		 <button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>" onclick="action_database_panel('5','<?php echo $userfriend_id;?>')"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>
+		   		 $user_info=api_get_user_info($userfriend_id); ?>
+		   		 <div id="display_response_id" style="height:200px;">
+			  		 <?php echo api_xml_http_response_encode(get_lang('To')); ?> :&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName'])); ?>			  		 
+			  		 <br />
+			 		 <br /><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br /><input id="txt_subject_id" type="text" style="width:300px;"><br/>
+			   		 <br /><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br /><textarea id="txt_area_invite" rows="4" cols="40"></textarea>
+			   		 <br />
+			   		 <button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>" onclick="action_database_panel('5','<?php echo $userfriend_id;?>')"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>
+		   		 </div>
 <?php
 			} else {
                 // friend invitation message
-				echo api_xml_http_response_encode(get_lang('AddPersonalMessage'));  ?> :<br /><br />
-				<textarea id="txt_area_invite" rows="5" cols="41"></textarea><br /><br />
- 				<button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SocialAddToFriends')); ?>" onclick="action_database_panel('4','<?php echo $userfriend_id;?>')" ><?php echo api_xml_http_response_encode(get_lang('SocialAddToFriends')) ?></button>
+                ?>
+                <div id="display_response_id" style="height:200px;">
+					<?= api_xml_http_response_encode(get_lang('AddPersonalMessage'));  ?> :<br /><br />				
+					<textarea id="txt_area_invite" rows="5" cols="40"></textarea><br /><br />
+ 					<button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SocialAddToFriends')); ?>" onclick="action_database_panel('4','<?php echo $userfriend_id;?>')" >
+ 					<?php echo api_xml_http_response_encode(get_lang('SocialAddToFriends')) ?></button>
+ 				</div>
 <?php
 				}
 			}
@@ -67,9 +73,4 @@ if ( isset($_REQUEST['user_friend']) ) {
         </td>
     </tr>
         </div>
-    <tr>
-        <td>
-			<div id="display_response_id" style="position:relative"></div>
-		</td>
-	</tr>
 </table>

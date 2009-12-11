@@ -26,6 +26,7 @@ $LoginName = "Prihasovacie meno";
 $AutostartMp3 = "Kliknite na OK, ak si želáte, aby bol zvukový súbor spustený automaticky. ";
 $Assignments = "Zadania";
 $Forum = "Fórum";
+$langDelImage = "Odstráni&#357; obrázok";
 $langCode = "Kód kurzu";
 $langUp = "Hore";
 $Down = "dole";

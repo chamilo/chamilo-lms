@@ -24,6 +24,7 @@ $Language = "Lingvo";
 $LoginName = "Uzula nomo";
 $Assignments = "Studentaj publika&#309;oj ";
 $Forum = "Forumo ";
+$langDelImage = "Forigi foton ";
 $langCode = "Kurskodo ";
 $langUp = "Pli alta nivelo";
 $Down = "malsupren";

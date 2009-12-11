@@ -562,7 +562,7 @@ Display :: display_introduction_section(TOOL_STUDENTPUBLICATION);
 						include_once('../resourcelinker/resourcelinker.inc.php');
 						isset($course_info)?$course=$course_info:$course=null;
 						$content='<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.substr(Security::remove_XSS($dir_name_sql), 1).'" >'.$_POST['new_dir'].'</a> - '.$_POST['description'];
-						$agenda_id = agenda_add_item($course,$_POST['new_dir'], $content,date('Y-m-d H:i:s'),'0000-00-00',null,0);
+						$agenda_id = agenda_add_item($course,$_POST['new_dir'], $content,date('Y-m-d H:i:s'),'0000-00-00',array('GROUP:'.$toolgroup),0);
 					endif;
 					$sql_add_publication = "INSERT INTO " . $work_table . " SET " .
 										   "url         = '".Database::escape_string(Security::remove_XSS($dir_name_sql))."',
@@ -1486,11 +1486,13 @@ if (!$display_upload_form && !$display_tool_options) {
 			echo $form_filter;
 			
 		}
-		if(!empty($publication['description'])){
-			echo '<br /><b>'.get_lang('Description').'</b>&nbsp;&nbsp;'.$publication['description'].'<br /><br />';
-		}
-
 	}
+	if(!empty($publication['description'])){
+			echo '<div class="actions">';
+			echo '<br /><b>'.get_lang('Description').':</b>&nbsp;&nbsp;'.$publication['description'].'<br /><br />';
+			echo '</div>';
+	}
+	
 	display_student_publications_list($base_work_dir . '/' . $my_cur_dir_path, 'work/' . $my_cur_dir_path, $currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_query);
 	
 

@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "Dosya CSV format&#305;nda olmal&#305;d&#305;r.Bo&#351;
 $langTracking = "&#304;zleme";
 $langEnter2passToChange = "&#350;ifre de&#287;i&#351;ikli&#287;i için yeni &#351;ifrenizi iki kere girmelisiniz, aksi taktirde bu alan&#305; bo&#351; b&#305;rak&#305;n&#305;z.";
 $langAuthInfo = "Giri&#351;";
-$langDelImage = "Fotoyu kald&#305;r";
 $langUpdateImage = "Resmi de&#287;i&#351;tir";
 $langImageWrong = "Dosya boyutunun olabilece&#287;i büyüklük:";
 $langAddImage = "Resim";

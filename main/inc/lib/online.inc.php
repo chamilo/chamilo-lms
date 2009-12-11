@@ -122,7 +122,7 @@ function online_logout() {
     global $logout_no_redirect;
     if (!$logout_no_redirect) {
         header("Location: index.php$query_string");
-        exit;
+        return;
     }
 }
 

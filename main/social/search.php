@@ -1,16 +1,23 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
-
+/* For licensing terms, see /chamilo_license.txt */
+/**
+ * @package dokeos.social
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
+ 
 // name of the language file that needs to be included
-$language_file = array('registration','admin');
+$language_file = array('registration','admin','userInfo');
+$cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
+api_block_anonymous_users();
+
 $this_section = SECTION_SOCIAL;
 $tool_name = get_lang('Search');
-$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
+$interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 
 Display :: display_header($tool_name);
 //show the action menu
@@ -29,7 +36,7 @@ if ($query != '') {
 		$users = UserManager::get_all_user_tags($query, 0, 0, 5);	
 				
 		$results = array();
-		if (is_array($users)) {
+		if (is_array($users) && count($users)> 0) {
 			echo '<h2>'.get_lang('Users').'</h2>';
 			
 			foreach($users as $user) {
@@ -41,6 +48,8 @@ if ($query != '') {
 				
 				$results[] = array($img, $user['firstname'],$user['lastname'],$user['tag']);			
 			}		
+		} else {
+			echo get_lang('SorryNoResults');
 		}
 		Display::display_sortable_grid('search_users', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false ,true);
 		

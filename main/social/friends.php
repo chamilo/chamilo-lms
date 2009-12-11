@@ -1,7 +1,12 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
+/**
+ * @package dokeos.social
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
 
-$language_file = array('admin');
+$language_file = array('userInfo');
+$cidReset=true;
 require '../inc/global.inc.php';
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
@@ -9,6 +14,8 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'image.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+
+api_block_anonymous_users();
 
 $this_section = SECTION_SOCIAL;
 
@@ -96,10 +103,15 @@ function hide_icon_delete(element_html)  {
 	$(ident).attr("title","");
 }
 		
-
+function clear_form () {
+	$("input[@type=radio]").attr("checked", false);
+	$("div#div_qualify_image").html("");
+	$("div#div_info_user").html("");
+}
 </script>';
 
-$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
+$interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
+$interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Friends'));
 
 Display :: display_header($tool_name, 'Groups');
 SocialManager::show_social_menu();
@@ -118,12 +130,12 @@ $user_id=api_get_user_id();
 $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,true);
 ?>
 <div align="center" >
-<table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-content-table">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" >
   <tr>
     <td height="25" valign="top">
-    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="social-subtitle-search">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" >
       <tr>
-        <td width="100%"  valign="top" class="social-align-box">&nbsp;&nbsp;<?php echo api_xml_http_response_encode(get_lang('Search')) .'&nbsp;&nbsp; : &nbsp;&nbsp;'; ?>
+        <td width="100%"  valign="top" class="social-align-box">&nbsp;&nbsp;<?php echo get_lang('Search') .'&nbsp;&nbsp; : &nbsp;&nbsp;'; ?>
         	<input class="social-search-image" type="text" class="search-image" id="id_search_image" name="id_search_image" value="" onkeyup="search_image_social(this)" />
         </td>
       </tr>
@@ -133,13 +145,13 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
     <td height="175" valign="top">
     <table width="100%" border="0" cellpadding="0" cellspacing="0" >
       <tr>
-	<td height="153" valign="top">
-<?php
-echo '<div id="div_content_table">';
-require_once 'show_search_image.inc.php';
-echo '</div>';
-?>
-        </td>
+		<td height="153" valign="top">
+			<?php
+			echo '<div id="div_content_table">';
+			require_once 'show_search_image.inc.php';
+			echo '</div>';
+			?>
+		</td>
         </tr>
     </table></td>
   </tr>

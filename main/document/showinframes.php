@@ -100,21 +100,72 @@ $path_info= pathinfo($file_url_sys);
 <title>
 <?php echo $browser_display_title;?>
 </title>
-</head>
-	<frameset rows="<?php echo $frameheight; ?>,*" border="0" frameborder="no" >
-		<frame name="top" scrolling="no" noresize target="contents" src="headerpage.php?file=<?php echo $file.'&amp;'.api_get_cidreq(); ?>" />
+<script language="javascript" src="<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"></script>
+<script language="javascript" src="<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.frameready.js"></script>
+
+
+<script type="text/javascript">
+	<!--
+	
+	var updateContentHeight = function() {
+		initialHeight = document.getElementById('headerFrame').offsetHeight; 
+		docHeight = document.body.clientHeight;
+		document.getElementById('mainFrame').style.height = (docHeight-initialHeight)+"px";						
+	};
+	
+	// Fixes the content height of the frame			
+	window.onload = function() {
+
+		updateContentHeight();
+				
+		//loads the glossary library		
+		<?php 	
+			if (api_get_setting('show_glossary_in_documents') == 'ismanual') {	  	 	
+		  	 	?>		  	 	
+	//	    $(document).ready(function() {   
+		      $.frameReady(function(){   
+		       //  $("<div>I am a div courses</div>").prependTo("body");		     
+		      }, "top.mainFrame",   
+		      { load: [   
+		      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
+		            {type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
+		            {type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
+		      	 ] 
+		      }		   
+		      );
+	//	   });		   		  	 	
 		<?php
-		if (file_exists($file_url_sys)) {
-			echo '<frame name="main" id="framemain" src="'.$file_url_web.'?'.api_get_cidreq().'&rand='.mt_rand(1,10000).'" />';
-		} else {
-			echo '<frame name="main" id="framemain" src=showinframes.php?nopages=1 />';
-		}
+		  	 } elseif(api_get_setting('show_glossary_in_documents') == 'isautomatic') {
+		?>		
+		//    $(document).ready(function() {
+		      $.frameReady(function(){   
+		       //  $("<div>I am a div courses</div>").prependTo("body");
+		     
+		      }, "top.mainFrame",   
+		      { load: [   
+		      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
+		            {type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
+		            {type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
+		      	 ] 
+		      }
+		   
+		      );
+		//   });
+		<?php
+		  	 }		  
 		?>
-	<noframes>
-	<body>
-		<p>This page uses frames, but your browser doesn't support them.<br/>
-			We suggest you try Mozilla, Firefox, Safari, Opera, or other browsers updated this millenium.</p>
-	</body>
-	</noframes>
-	<frame src="#"></frameset>
+	}
+	-->	
+</script>
+</head>
+<body style="margin:0px;padding:0px;" OnResize="updateContentHeight()">
+	<iframe border="0" frameborder="0" scrolling="no" style="width:100%;" id="headerFrame" src="headerpage.php?file=<?php echo $file.'&amp;'.api_get_cidreq(); ?>"> </iframe>
+	<?php
+	if (file_exists($file_url_sys)) {			
+		echo '<iframe border="0" frameborder="0" scrolling="auto"  style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&rand='.mt_rand(1,10000).'"></iframe>';
+	} else {				
+		echo '<frame name="mainFrame" id="mainFrame" src=showinframes.php?nopages=1 />';
+	}
+	?>
+</body>
 </html>

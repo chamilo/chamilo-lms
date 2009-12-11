@@ -26,6 +26,7 @@ $LoginName = "Login";
 $AutostartMp3 = "Klik på ok, hvis audio-filen skal afspilles automatisk ";
 $Assignments = "Afleveringer";
 $Forum = "Forum";
+$langDelImage = "Fjern billede";
 $langCode = "Kursuskode";
 $langUp = "op";
 $Down = "ned";

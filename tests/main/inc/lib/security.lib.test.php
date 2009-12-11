@@ -1,5 +1,6 @@
 <?php
 require_once(api_get_path(LIBRARY_PATH).'security.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 
 class TestSecurity extends UnitTestCase {
 
@@ -40,15 +41,16 @@ class TestSecurity extends UnitTestCase {
 	}
 
 	function testfilter() {
-			$var='';
-			$res=Security::filter();
+			$var ='';
+			$type='string';
+			$options=array();
+			$res=Security::filter($var, $type, $options);
 			$this->assertTrue(is_bool($res));
 			//var_dump($res);
 	}
 
-	 function testfilter_filename($filename) {
-	 		require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-	 		$filename='';
+	function testfilter_filename() {
+	 		$filename = 'security/.htaccess';
 	 		$res=Security::filter_filename($filename);
 			$this->assertTrue(is_string($res));
 			//var_dump($res);
@@ -85,8 +87,9 @@ class TestSecurity extends UnitTestCase {
 
 	function testremove_XSS() {
 			global $charset;
-			$var='';
-			$res=Security::remove_XSS();
+			$var ='';
+			$user_status=ANONYMOUS;
+			$res=Security::remove_XSS($var,$user_status=ANONYMOUS);
 			if(!empty($res)) {
 				$this->assertTrue(is_array($res));
 			} else {

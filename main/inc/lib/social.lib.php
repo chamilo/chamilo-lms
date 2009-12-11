@@ -1,8 +1,17 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
+
+/**
+==============================================================================
+*	This class provides methods for the social network management.
+*	Include/require it in your code to use its features.
+*
+*	@package dokeos.library
+==============================================================================
+*/
+
 
 // Relation type between users
-
 define('USERUNKNOW',	'0');
 define('SOCIALUNKNOW',	'1');
 define('SOCIALPARENT',	'2');
@@ -11,7 +20,13 @@ define('SOCIALGOODFRIEND','4');
 define('SOCIALENEMY',	'5');
 define('SOCIALDELETED',	'6');
 
+//PLUGIN PLACES
+define('SOCIAL_LEFT_PLUGIN',	'1');
+define('SOCIAL_CENTER_PLUGIN',	'2');
+define('SOCIAL_RIGHT_PLUGIN',	'3');
+
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
 class SocialManager extends UserManager {
 
@@ -35,52 +50,72 @@ class SocialManager extends UserManager {
 		$relation_type = intval($relation_type);
 		
 		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' .$friend_id.' AND user_id='.$my_user_id;
-		error_log($sql);
+		
+		
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = Database :: fetch_array($result, 'ASSOC');
+		error_log('1'.$row['count']);
 		if ($row['count'] == 0) {
 			$current_date=date('Y-m-d H:i:s');
 			$sql_i = 'INSERT INTO ' . $tbl_my_friend . '(friend_user_id,user_id,relation_type,last_edit)values(' . $friend_id . ','.$my_user_id.','.$relation_type.',"'.$current_date.'");';
+			error_log($sql_i);
 			Database::query($sql_i, __FILE__, __LINE__);
 		} else {
 			$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' . $friend_id . ' AND user_id='.$my_user_id;
 			$result = Database::query($sql, __FILE__, __LINE__);
 			$row = Database :: fetch_array($result, 'ASSOC');
+			error_log($row['count']);
 			if ($row['count'] == 1) {
 				$sql_i = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.$relation_type.' WHERE friend_user_id=' . $friend_id.' AND user_id='.$my_user_id;
+				error_log($sql_i);
 				Database::query($sql_i, __FILE__, __LINE__);
 			}
 		}
 	}
 
 	/**
-	 * Allow to delete contact to social network
-	 *@author isaac flores paz <isaac.flores@dokeos.com>
-	 *@author Julio Montoya <gugli100@gmail.com> Cleaning code
-	 *@param int user friend id
+	 * Deletes a contact	  
+	 * @param int user friend id
+	 * @param bool true will delete ALL friends relationship from $friend_id
+	 * @author isaac flores paz <isaac.flores@dokeos.com>
+	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code
 	 */
-	public static function removed_friend ($friend_id) {
+	public static function removed_friend ($friend_id, $real_removed = false) {
 		$tbl_my_friend  = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
 		$tbl_my_message = Database :: get_main_table(TABLE_MAIN_MESSAGE);
-		
-		$user_id=api_get_user_id();
 		$friend_id = intval($friend_id);
 		
-		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE user_id=' . $user_id . ' AND relation_type<>6 AND friend_user_id='.$friend_id;
-		$result = Database::query($sql, __FILE__, __LINE__);
-		$row = Database :: fetch_array($result, 'ASSOC');
-		if ($row['count'] == 1) {
+		if ($real_removed == true) {
+			
 			//Delete user friend
-			$sql_i = 'UPDATE ' . $tbl_my_friend .' SET relation_type='.SOCIALDELETED.' WHERE user_id=' . $user_id.' AND friend_user_id='.$friend_id;
-			$sql_j = 'UPDATE ' . $tbl_my_message.' SET msg_status=7 WHERE user_receiver_id=' . $user_id.' AND user_sender_id='.$friend_id;
-			//Delete user
-			$sql_ij = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.SOCIALDELETED.' WHERE user_id=' . $friend_id.' AND friend_user_id='.$user_id;
-			$sql_ji = 'UPDATE ' . $tbl_my_message . ' SET msg_status=7 WHERE user_receiver_id=' . $friend_id.' AND user_sender_id='.$user_id;
-			Database::query($sql_i, __FILE__, __LINE__);
-			Database::query($sql_j, __FILE__, __LINE__);
-			Database::query($sql_ij, __FILE__, __LINE__);
-			Database::query($sql_ji, __FILE__, __LINE__);
+			$sql_delete_relationship1 = 'UPDATE ' . $tbl_my_friend .' SET relation_type='.SOCIALDELETED.' WHERE friend_user_id='.$friend_id;			
+			$sql_delete_relationship2 = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.SOCIALDELETED.' WHERE user_id=' . $friend_id;
+			
+			Database::query($sql_delete_relationship1, __FILE__, __LINE__);
+			Database::query($sql_delete_relationship2, __FILE__, __LINE__);		
+			
+		} else {
+			$user_id=api_get_user_id();
+			$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE user_id=' . $user_id . ' AND relation_type<>6 AND friend_user_id='.$friend_id;
+			$result = Database::query($sql, __FILE__, __LINE__);
+			$row = Database :: fetch_array($result, 'ASSOC');
+			if ($row['count'] == 1) {
+				//Delete user friend
+				$sql_i = 'UPDATE ' . $tbl_my_friend .' SET relation_type='.SOCIALDELETED.' WHERE user_id=' . $user_id.' AND friend_user_id='.$friend_id;
+				$sql_j = 'UPDATE ' . $tbl_my_message.' SET msg_status=7 WHERE user_receiver_id=' . $user_id.' AND user_sender_id='.$friend_id;
+				//Delete user
+				$sql_ij = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.SOCIALDELETED.' WHERE user_id=' . $friend_id.' AND friend_user_id='.$user_id;
+				$sql_ji = 'UPDATE ' . $tbl_my_message . ' SET msg_status=7 WHERE user_receiver_id=' . $friend_id.' AND user_sender_id='.$user_id;
+				Database::query($sql_i, __FILE__, __LINE__);
+				Database::query($sql_j, __FILE__, __LINE__);
+				Database::query($sql_ij, __FILE__, __LINE__);
+				Database::query($sql_ji, __FILE__, __LINE__);
+			}			
 		}
+		
+		
+		
+
 	}
 	/**
 	 * Allow to see contacts list
@@ -140,14 +175,16 @@ class SocialManager extends UserManager {
 		}
 	}
 	/**
-	 * get contacts id list
-	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * Gets friends id list
 	 * @param int  user id
 	 * @param int group id
 	 * @param string name to search
+	 * @param bool true will load firstname, lastname, and image name
 	 * @return array
+	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code, function renamed, $load_extra_info option added
+	 * @author isaac flores paz <florespaz@bidsoftperu.com> 
 	 */
-	public static function get_list_id_friends_by_user_id ($user_id,$id_group=null,$search_name=null) {
+	public static function get_friends($user_id, $id_group=null, $search_name=null, $load_extra_info = true) {
 		$list_ids_friends=array();
 		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
 		$tbl_my_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -157,10 +194,16 @@ class SocialManager extends UserManager {
 		}
 		if (isset($search_name) && is_string($search_name)===true) {
 			$sql.=' AND friend_user_id IN (SELECT user_id FROM '.$tbl_my_user.' WHERE '.(api_is_western_name_order() ? 'concat(firstName, lastName)' : 'concat(lastName, firstName)').' like concat("%","'.Database::escape_string($search_name).'","%"));';
-		}
+		}		
 		$res=Database::query($sql,__FILE__,__LINE__);
 		while ($row=Database::fetch_array($res,'ASSOC')) {
-			$list_ids_friends[]=$row;
+			if ($load_extra_info == true) {
+				$path = UserManager::get_user_picture_path_by_id($row['friend_user_id'],'web',false,true);
+				$my_user_info=api_get_user_info($row['friend_user_id']);
+				$list_ids_friends[]=array('friend_user_id'=>$row['friend_user_id'],'firstName'=>$my_user_info['firstName'] , 'lastName'=>$my_user_info['lastName'], 'username'=>$my_user_info['username'], 'image'=>$path['file']);
+			} else {
+				$list_ids_friends[]=$row;	
+			}			
 		}
 		return $list_ids_friends;
 	}
@@ -179,7 +222,7 @@ class SocialManager extends UserManager {
 		$list_path_friend=array();
 		$array_path_user=array();
 		$combine_friend = array();
-		$list_ids = self::get_list_id_friends_by_user_id ($user_id,$id_group,$search_name);
+		$list_ids = self::get_friends($user_id,$id_group,$search_name);
 		if (is_array($list_ids)) {
 			foreach ($list_ids as $values_ids) {
 				$list_path_image_friend[] = UserManager::get_user_picture_path_by_id($values_ids['friend_user_id'],'web',false,true);
@@ -209,7 +252,7 @@ class SocialManager extends UserManager {
 	/**
 	 * Sends an invitation to contacts
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
-	 * @author Julio Montya <gugli100@gmail.com> Cleaning code
+	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code
 	 * @param int user id
 	 * @param int user friend id
 	 * @param string title of the message
@@ -226,9 +269,10 @@ class SocialManager extends UserManager {
 		$current_date = date('Y-m-d H:i:s',time());
 		$status_invitation=5;//status of pending invitation
 		$sql_exist='SELECT COUNT(*) AS count FROM '.$tbl_message.' WHERE user_sender_id='.($user_id).' AND user_receiver_id='.($friend_id).' AND msg_status IN(5,6,7);';
-
+		error_log($sql_exist);
 		$res_exist=Database::query($sql_exist,__FILE__,__LINE__);
 		$row_exist=Database::fetch_array($res_exist,'ASSOC');
+		
 		if ($row_exist['count']==0) {			
 			$sql='INSERT INTO '.$tbl_message.'(user_sender_id,user_receiver_id,msg_status,send_date,title,content) VALUES('.$user_id.','.$friend_id.','.$status_invitation.',"'.$current_date.'","'.$message_title.'","'.$message_content.'")';
 			Database::query($sql,__FILE__,__LINE__);
@@ -260,7 +304,7 @@ class SocialManager extends UserManager {
 	public static function get_message_number_invitation_by_user_id ($user_receiver_id) {
 		$status_invitation=5;//status of pending invitation
 		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);
-		$sql='SELECT COUNT(*) as count_message_in_box FROM '.$tbl_message.' WHERE user_receiver_id='.((int)$user_receiver_id).' AND msg_status=5';
+		$sql='SELECT COUNT(*) as count_message_in_box FROM '.$tbl_message.' WHERE user_receiver_id='.((int)$user_receiver_id).' AND msg_status='.MESSAGE_STATUS_INVITATION_PENDING;
 		$res=Database::query($sql,__FILE__,__LINE__);
 		$row=Database::fetch_array($res,'ASSOC');
 		return $row['count_message_in_box'];
@@ -275,7 +319,7 @@ class SocialManager extends UserManager {
 	public static function get_list_invitation_of_friends_by_user_id ($user_id) {
 		$list_friend_invitation=array();
 		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);
-		$sql='SELECT user_sender_id,send_date,title,content FROM '.$tbl_message.' WHERE user_receiver_id='.((int)$user_id).' AND msg_status = 5';
+		$sql='SELECT user_sender_id,send_date,title,content FROM '.$tbl_message.' WHERE user_receiver_id='.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
 		$res=Database::query($sql,__FILE__,__LINE__);
 		while ($row=Database::fetch_array($res,'ASSOC')) {
 			$list_friend_invitation[]=$row;
@@ -293,7 +337,7 @@ class SocialManager extends UserManager {
 	public static function get_list_invitation_sent_by_user_id ($user_id) {
 		$list_friend_invitation=array();
 		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);		
-		$sql='SELECT user_receiver_id, send_date,title,content FROM '.$tbl_message.' WHERE user_sender_id = '.intval($user_id).' AND msg_status = 5';
+		$sql='SELECT user_receiver_id, send_date,title,content FROM '.$tbl_message.' WHERE user_sender_id = '.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
 		$res=Database::query($sql,__FILE__,__LINE__);
 		while ($row=Database::fetch_array($res,'ASSOC')) {
 			$list_friend_invitation[$row['user_receiver_id']]=$row;
@@ -302,29 +346,29 @@ class SocialManager extends UserManager {
 	}
 	
 	/**
-	 * allow accept invitation
-	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * Accepts invitation
 	 * @param int user sender id
 	 * @param int user receiver id
-	 * @return void()
+	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code
 	 */
 	public static function invitation_accepted ($user_send_id,$user_receiver_id) {
 		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);
-		$msg_status=6;// friend accepted
-		$sql='UPDATE '.$tbl_message.' SET msg_status='.$msg_status.' WHERE user_sender_id='.((int)$user_send_id).' AND user_receiver_id='.((int)$user_receiver_id).';';
+		$sql='UPDATE '.$tbl_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_ACCEPTED.' WHERE user_sender_id='.((int)$user_send_id).' AND user_receiver_id='.((int)$user_receiver_id).';';
 		Database::query($sql,__FILE__,__LINE__);
 	}
 	/**
-	 * allow deny invitation
-	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * Denies invitation	 
 	 * @param int user sender id
 	 * @param int user receiver id
-	 * @return void()
+	 * @author isaac flores paz <florespaz@bidsoftperu.com>
+	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code
 	 */
 	public static function invitation_denied ($user_send_id,$user_receiver_id) {
 		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);
-		$msg_status=7;
-		$sql='UPDATE '.$tbl_message.' SET msg_status='.$msg_status.' WHERE user_sender_id='.((int)$user_send_id).' AND user_receiver_id='.((int)$user_receiver_id).';';
+		//$msg_status=7;
+		//$sql='UPDATE '.$tbl_message.' SET msg_status='.$msg_status.' WHERE user_sender_id='.((int)$user_send_id).' AND user_receiver_id='.((int)$user_receiver_id).';';
+		$sql='DELETE FROM '.$tbl_message.' WHERE user_sender_id='.((int)$user_send_id).' AND user_receiver_id='.((int)$user_receiver_id).';';
 		Database::query($sql,__FILE__,__LINE__);
 	}
 	/**
@@ -354,6 +398,7 @@ class SocialManager extends UserManager {
 		$succes = get_lang('MessageSentTo');
 		$succes.= ' : '.api_get_person_name($user_info['firstName'], $user_info['lastName']);
 		if (isset($subject_message) && isset($content_message) && isset($userfriend_id)) {			
+			error_log('1');
 			$send_message = MessageManager::send_message($userfriend_id, $subject_message, $content_message);
 			if ($send_message) {
 				echo Display::display_confirmation_message($succes,true);
@@ -362,6 +407,7 @@ class SocialManager extends UserManager {
 			}
 			exit;
 		} elseif (isset($userfriend_id) && !isset($subject_message)) {
+			error_log('2');
 			$count_is_true=false;
 			$count_number_is_true=0;
 			if (isset($userfriend_id) && $userfriend_id>0) {
@@ -385,34 +431,33 @@ class SocialManager extends UserManager {
 	 * @author  Yannick Warnier
 	 * @since   Dokeos 1.8.6.1
 	 */
-	function get_user_feeds($user,$limit=5) {
+	function get_user_feeds($user, $limit=5) {
 	    if (!function_exists('fetch_rss')) { return '';}
 		$fields = UserManager::get_extra_fields();
 	    $feed_fields = array();
 	    $feeds = array();
-	    $res = '<div class="sectiontitle">'.get_lang('RSSFeeds').'</div>';
-	    $res .= '<div class="social-content-training">';
 	    $feed = UserManager::get_extra_user_data_by_field($user,'rssfeeds');
 	    if(empty($feed)) { return ''; }
 	    $feeds = split(';',$feed['rssfeeds']);
 	    if (count($feeds)==0) { return ''; }
 	    foreach ($feeds as $url) {
 		if (empty($url)) { continue; }
+
 	        $rss = fetch_rss($url);
 	    	$res .= '<h2>'.$rss->channel['title'].'</h2>';
 	        $res .= '<div class="social-rss-channel-items">';
 	        $i = 1;
-	        foreach ($rss->items as $item) {
-	            if ($limit>=0 and $i>$limit) {break;}
-	        	$res .= '<h3><a href="'.$item['link'].'">'.$item['title'].'</a></h3>';
-	            $res .= '<div class="social-rss-item-date">'.api_get_datetime($item['date_timestamp']).'</div>';
-	            $res .= '<div class="social-rss-item-content">'.$item['description'].'</div><br />';
-	            $i++;
-	        }
+			if (is_array($rss->items)) { 
+		        foreach ($rss->items as $item) {
+		            if ($limit>=0 and $i>$limit) {break;}
+		        	$res .= '<h3><a href="'.$item['link'].'">'.$item['title'].'</a></h3>';
+		            $res .= '<div class="social-rss-item-date">'.api_get_datetime($item['date_timestamp']).'</div>';
+		            $res .= '<div class="social-rss-item-content">'.$item['description'].'</div><br />';
+		            $i++;
+		        }
+			}
 	        $res .= '</div>';
 	    }
-	    $res .= '</div>';
-	    $res .= '<div class="clear"></div><br />';
 	    return $res;
 	}
 	
@@ -613,14 +658,238 @@ class SocialManager extends UserManager {
 			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
 			echo '<a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.Display::return_icon('lp_users.png').' '.get_lang('Friends').'</a>';
 			echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('lp_users.png').' '.get_lang('Invitations').'</a>';
-			echo '<a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.gif').' '.get_lang('MyGroups').'</a>';
+			echo '<a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.gif').' '.get_lang('Groups').'</a>';
 			echo '<a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('search.gif').' '.get_lang('Search').'</a>';
-			echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('ModifProfile').'</a>';	
+			echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('EditProfile').'</a>';	
 			/*
 			echo '<span style="float:right; padding-top:7px;">'.
 				 '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
 				 '</span>';
 			*/		 
 		echo '</div>';
+	}
+	
+		
+		
+	/**
+	 * Displays a sortable table with the list of online users.
+	 * @param array $user_list
+	 */
+	function display_user_list($user_list, $_plugins) {
+		global $charset;
+		if ($_GET['id'] == '') {
+			$extra_params = array();
+			$course_url = '';
+			if (strlen($_GET['cidReq']) > 0) {
+				$extra_params['cidReq'] = Security::remove_XSS($_GET['cidReq']);
+				$course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
+			}
+			
+			foreach ($user_list as $user) {
+				$uid = $user[0];
+				$user_info = api_get_user_info($uid);
+				$table_row = array();
+				if (api_get_setting('allow_social_tool')=='true') {
+					$url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$uid.$course_url;
+				} else {
+					$url = '?id='.$uid.$course_url;
+				}
+				$image_array = UserManager::get_user_picture_path_by_id($uid, 'system', false, true);
+	
+				$friends_profile = SocialManager::get_picture_user($uid, $image_array['file'], 92, 'medium_', ' width="90" height="90" ');
+				// reduce image
+				$name = api_get_person_name($user_info['firstName'], $user_info['lastName']);
+				$table_row[] = '<a href="'.$url.'"><img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'" '.$friends_profile['style'].' border="1"></a>';
+				$table_row[] = '<a href="'.$url.'" style="font-size:10px;">'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</a>';
+				
+	
+				//$table_row[] = '<a href="'.$url.'">'.$user_info['lastName'].'</a>';
+	
+				if (api_get_setting('show_email_addresses') == 'true') {
+					$table_row[] = Display::encrypted_mailto_link($user_info['mail']);
+				}
+				$user_anonymous = api_get_anonymous_id();
+				$table_data[] = $table_row;
+			}
+			$table_header[] = array(get_lang('UserPicture'), false, 'width="90"');
+			///$table_header[] = array(get_lang('Name'), true);
+			//$table_header[] = array(get_lang('LastName'), true);
+	
+			if (api_get_setting('show_email_addresses') == 'true') {
+				$table_header[] = array(get_lang('Email'), true);
+			}	
+			Display::display_sortable_table($table_header, $table_data, array(), array('per_page' => 30), $extra_params,array(),'grid');
+		}
+	}
+	/**
+	 * Displays the information of an individual user
+	 * @param int $user_id
+	 */
+	function display_individual_user($user_id) {
+		global $interbreadcrumb;
+		$safe_user_id = Database::escape_string($user_id);
+	
+		// to prevent a hacking attempt: http://www.dokeos.com/forum/viewtopic.php?t=5363
+		$user_table = Database::get_main_table(TABLE_MAIN_USER);
+		$sql = "SELECT * FROM $user_table WHERE user_id='".$safe_user_id."'";
+		$result = Database::query($sql, __FILE__, __LINE__);
+		if (Database::num_rows($result) == 1) {
+			$user_object = Database::fetch_object($result);
+			$name = GetFullUserName($user_id).($_SESSION['_uid'] == $user_id ? '&nbsp;<strong>('.get_lang('Me').')</strong>' : '' );
+			$alt = GetFullUserName($user_id).($_SESSION['_uid'] == $user_id ? '&nbsp;('.get_lang('Me').')' : '');
+			$status = ($user_object->status == COURSEMANAGER ? get_lang('Teacher') : get_lang('Student'));
+			$interbreadcrumb[] = array('url' => 'whoisonline.php', 'name' => get_lang('UsersOnLineList'));
+			Display::display_header($alt);
+			echo '<div class="actions-title">';
+			echo $alt;
+			echo '</div><br />';
+			echo '<div style="text-align: center">';
+			if (strlen(trim($user_object->picture_uri)) > 0) {
+				$sysdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'system');
+				$sysdir = $sysdir_array['dir'];
+				$webdir_array = UserManager::get_user_picture_path_by_id($safe_user_id, 'web');
+				$webdir = $webdir_array['dir'];
+				$fullurl = $webdir.$user_object->picture_uri;
+				$system_image_path = $sysdir.$user_object->picture_uri;
+				list($width, $height, $type, $attr) = @getimagesize($system_image_path);
+				$resizing = (($height > 200) ? 'height="200"' : '');
+				$height += 30;
+				$width += 30;
+				$window_name = 'window'.uniqid('');
+				// get the path,width and height from original picture
+				$big_image = $webdir.'big_'.$user_object->picture_uri;
+				$big_image_size = api_getimagesize($big_image);
+				$big_image_width = $big_image_size[0];
+				$big_image_height = $big_image_size[1];
+				$url_big_image = $big_image.'?rnd='.time();
+				echo '<input type="image" src="'.$fullurl.'" alt="'.$alt.'" onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/><br />';
+			} else {
+				echo Display::return_icon('unknown.jpg', get_lang('Unknown'));
+				echo '<br />';
+			}
+			
+			echo '<br />'.$status.'<br />';
+			
+			global $user_anonymous;
+			if (api_get_setting('allow_social_tool') == 'true' && api_get_user_id() <> $user_anonymous && api_get_user_id() <> 0) {
+				echo '<br />';
+				echo '<a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$safe_user_id.'">'.get_lang('ViewSharedProfile').'</a>';
+				echo '<br />';
+								
+				$user_anonymous = api_get_anonymous_id();
+				
+				if ($safe_user_id != api_get_user_id() && !api_is_anonymous($safe_user_id)) {
+					$user_relation = SocialManager::get_relation_between_contacts(api_get_user_id(), $safe_user_id);
+					if ($user_relation == 0 || $user_relation == 6) {
+						echo  '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=300&width=610&user_friend='.$safe_user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a><br />
+							   <a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$safe_user_id.'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
+					} else {
+						echo  '<a href="main/messages/send_message_to_userfriend.inc.php?view_panel=1&height=310&width=610&user_friend='.$safe_user_id.'" class="thickbox" title="'.get_lang('SendAMessage').'">'.Display :: return_icon('mail_send.png', get_lang('SendAMessage')).'&nbsp;'.get_lang('SendAMessage').'</a>';
+					}
+				}
+			}
+	
+			if (api_get_setting('show_email_addresses') == 'true') {
+				echo Display::encrypted_mailto_link($user_object->email,$user_object->email).'<br />';
+			}
+			
+			echo '</div>';
+			if ($user_object->competences) {
+				echo '<dt><div class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div></dt>';
+				echo '<dd>'.$user_object->competences.'</dd>';
+			}
+			if ($user_object->diplomas) {
+				echo '<dt><div class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div></dt>';
+				echo '<dd>'.$user_object->diplomas.'</dd>';
+			}
+			if ($user_object->teach) {
+				echo '<dt><div class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div></dt>';
+				echo '<dd>'.$user_object->teach.'</dd>';;
+			}
+			display_productions($user_object->user_id);
+			if ($user_object->openarea) {
+				echo '<dt><div class="actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div></dt>';
+				echo '<dd>'.$user_object->openarea.'</dd>';
+			}
+		}
+		else
+		{
+			Display::display_header(get_lang('UsersOnLineList'));
+			echo '<div class="actions-title">';
+			echo get_lang('UsersOnLineList');
+			echo '</div>';
+		}
+	}
+	/**
+	 * Display productions in whoisonline
+	 * @param int $user_id User id
+	 * @todo use the correct api_get_path instead of $clarolineRepositoryWeb
+	 */
+	function display_productions($user_id) {
+		$sysdir_array = UserManager::get_user_picture_path_by_id($user_id, 'system', true);
+		$sysdir = $sysdir_array['dir'].$user_id.'/';
+		$webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true);
+		$webdir = $webdir_array['dir'].$user_id.'/';
+		if (!is_dir($sysdir)) {
+			mkpath($sysdir);
+		}
+		/*
+		$handle = opendir($sysdir);
+		$productions = array();
+		while ($file = readdir($handle)) {
+			if ($file == '.' || $file == '..' || $file == '.htaccess') {
+				continue;						// Skip current and parent directories
+			}
+			if (preg_match('/('.$user_id.'|[0-9a-f]{13}|saved)_.+\.(png|jpg|jpeg|gif)$/i', $file)) {
+				// User's photos should not be listed as productions.
+				continue;
+			}
+			$productions[] = $file;
+		}
+		*/
+		$productions = UserManager::get_user_productions($user_id);
+	
+		if (count($productions) > 0) {
+			echo '<dt><strong>'.get_lang('Productions').'</strong></dt>';
+			echo '<dd><ul>';
+			foreach ($productions as $index => $file) {
+				// Only display direct file links to avoid browsing an empty directory
+				if (is_file($sysdir.$file) && $file != $webdir_array['file']) {
+					echo '<li><a href="'.$webdir.urlencode($file).'" target=_blank>'.$file.'</a></li>';
+				}
+				// Real productions are under a subdirectory by the User's id
+				if (is_dir($sysdir.$file)) {
+					$subs = scandir($sysdir.$file);
+					foreach ($subs as $my => $sub) {
+						if (substr($sub, 0, 1) != '.' && is_file($sysdir.$file.'/'.$sub)) {
+							echo '<li><a href="'.$webdir.urlencode($file).'/'.urlencode($sub).'" target=_blank>'.$sub.'</a></li>';
+						}
+					}
+				}
+			}
+			echo '</ul></dd>';
+		}
+	}
+	public static function get_plugins($place = SOCIAL_CENTER_PLUGIN) {
+		$content = '';
+		switch ($place) {
+			case SOCIAL_CENTER_PLUGIN:
+				$social_plugins = array(1, 2);
+				if (is_array($social_plugins) && count($social_plugins)>0) {
+				    $content.= '<div id="social-plugins">';
+				    foreach($social_plugins as $plugin ) {
+				    	$content.=  '<div class="social-plugin-item">';
+				    	$content.=  $plugin;
+				    	$content.=  '</div>';		    	
+				    }
+				    $content.=  '</div>';
+			    }
+			break;
+			case SOCIAL_LEFT_PLUGIN:
+			break;
+			case SOCIAL_RIGHT_PLUGIN:
+			break;
+		}	
+		return $content;
 	}
 }

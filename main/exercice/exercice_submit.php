@@ -1,29 +1,5 @@
 <?php
-// $Id: exercice_submit.php 22201 2009-07-17 19:57:03Z cfasanando $
-
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /dokeos_license.txt */
 
 /**
 *	Exercise submission
@@ -71,9 +47,10 @@ $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';
 
-if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
-  $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/glossary.js" type="text/javascript" language="javascript"></script>'; //Glossary
-  $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>'; 
+if (api_get_setting('show_glossary_in_extra_tools') == 'true') { 
+  	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/glossary.js" type="text/javascript" language="javascript"></script>'; //Glossary
+  	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
+   
 }
 //This library is necessary for the time control feature
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.epiclock.min.js" type="text/javascript" language="javascript"></script>'; //jQuery
@@ -147,6 +124,7 @@ $error = '';
 if (!isset ($exerciseType)) {
 	$exe_start_date = time();
 	$_SESSION['exercice_start_date'] = $exe_start_date;
+	error_log($_SESSION['exercice_start_date']);	
 }
 // if the user has clicked on the "Cancel" button
 if ($buttonCancel) {
@@ -211,45 +189,78 @@ $condition = ' WHERE ' .
 	'session_id = ' . "'" . (int) $_SESSION['id_session'] . "'";
 
 $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
-
-$result = Database::query("SELECT type,feedback_type,expired_time FROM $TBL_EXERCICES WHERE id=$exerciseId", __FILE__, __LINE__);
+$sql_track_exercice = "SELECT type,feedback_type,expired_time FROM $TBL_EXERCICES WHERE id=$exerciseId";
+$result = Database::query($sql_track_exercice, __FILE__, __LINE__);
 $exercise_row = Database :: fetch_array($result);
 $exerciseType = $exercise_row['type'];
 $exerciseFeedbackType = $exercise_row['feedback_type'];
 
-//Timer - Get expired_time for a student
-$condition = ' WHERE ' .
-'exe_exo_id =   '."'".Database::escape_string($exerciseId)."'".' AND ' .
-'exe_user_id =  '."'".api_get_user_id()."'".' AND ' .
-'exe_cours_id = '."'".api_get_course_id()."'".' AND ' .
-'status = '."'incomplete'".' AND '.
-'session_id = '."'".api_get_session_id()."'";
-$sql_track = 'SELECT exe_id,expired_time_control FROM '.$stat_table.$condition;
-
-$rs_sql = Database::query($sql_track,__FILE__,__LINE__);
-$exists_into_database = Database::num_rows($rs_sql);
-$exercise_row1 = Database::fetch_array($rs_sql);
-
-//Init
+//Get the expired time of the current exercice in track_e_exercices
 $total_minutes = $exercise_row["expired_time"];
 
 $total_seconds = $total_minutes*60;
 $current_timestamp = time();
-$expected_time = $current_timestamp + $total_seconds;
 
-$plugin_expired_time = date('M d, Y H:i:s',$expected_time);
-$clock_expired_time = date('Y-m-d H:i:s',$expected_time);
+if ($exercise_row['expired_time'] != 0) {
+	if (!isset($_SESSION['expired_time'])) {
+		//In case that the current session php is broken
+		//Timer - Get expired_time for a student
+		$condition = ' WHERE ' .
+		'exe_exo_id =   '."'".Database::escape_string($exerciseId)."'".' AND ' .
+		'exe_user_id =  '."'".api_get_user_id()."'".' AND ' .
+		'exe_cours_id = '."'".api_get_course_id()."'".' AND ' .
+		'status = '."'incomplete'".' AND '.
+		'session_id = '."'".api_get_session_id()."'";
+		
+		$sql_track = 'SELECT exe_id,expired_time_control FROM '.$stat_table.$condition;
+		$rs_sql = Database::query($sql_track,__FILE__,__LINE__);
+		$exists_into_database = Database::num_rows($rs_sql);
+		$track_exercice_row = Database::fetch_array($rs_sql);
+		$expired_time_of_this_attempt = $track_exercice_row['expired_time_control'];
+		
+		//Get the last attempt of an exercice
+		$sql_track_attempt = 'SELECT max(tms) as last_attempt_date FROM '.$exercice_attemp_table.' WHERE exe_id="'.$track_exercice_row['exe_id'].'"';
+		$rs_last_attempt = Database::query($sql_track_attempt,__FILE__,__LINE__);
+		$row_last_attempt = Database::fetch_array($rs_last_attempt);
+		$my_last_attempt_date = $row_last_attempt['last_attempt_date'];
+		
+		//change the date format
+		$my_last_attempt_date = strtotime($my_last_attempt_date);
+		$expired_time_of_this_attempt = strtotime($expired_time_of_this_attempt);
+	
+		//New expired time
+		$new_expired_time_in_seconds = $expired_time_of_this_attempt - $my_last_attempt_date;
+		
+		if ($exists_into_database == 1) {
+		    $expected_time = $current_timestamp + $new_expired_time_in_seconds;
+	
+			$plugin_expired_time = date('M d, Y H:i:s',$expected_time);
+			$clock_expired_time = date('Y-m-d H:i:s',$expected_time);
 
+			//We modify the "expired_time_control" field in track_e_exercices for this attempt
+		 	$sql_track_e_exe = "UPDATE $stat_table SET expired_time_control = '".$clock_expired_time."' WHERE exe_id = '".$track_exercice_row['exe_id']."'";
+		 	Database::query($sql_track_e_exe,__FILE__,__LINE__);
+            
+            //Sessions  that contain the expired time				
+		 	$_SESSION['expired_time'] = $clock_expired_time;
+	     	$_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);		
+		} else {
+			$expected_time = $current_timestamp + $total_seconds;
+			
+			$plugin_expired_time = date('M d, Y H:i:s',$expected_time);
+			$clock_expired_time = date('Y-m-d H:i:s',$expected_time);
 
-if (!isset($_SESSION['expired_time'])) {
-	 $_SESSION['expired_time'] = $clock_expired_time;
-     $_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);
-} else {
-  	$plugin_expired_time = $_SESSION['end_expired_time'];
+            //Sessions  that contain the expired time	
+		 	$_SESSION['expired_time'] = $clock_expired_time;
+	     	$_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);		
+		}
+	
+	} else {
+	  	$plugin_expired_time = $_SESSION['end_expired_time'];
+	}
 }
 
-
-if ($exercise_row['expired_time'] != 0) { 
+if ($exercise_row['expired_time'] != 0) { //Sends the exercice form when the expired time is finished 
     $htmlHeadXtra[] = "<script type=\"text/javascript\">
     $(document).ready(function(){    
        $('#text-content').epiclock({
@@ -710,7 +721,8 @@ if ($formSent) {
 				if ($exe_id != '') {
 					//Verify if the current test is fraudulent
 				    $current_time = time();
-				    if (isset($_SESSION['expired_time'])) {
+
+				    if (isset($_SESSION['expired_time']) && $exercise_row['expired_time'] != 0) {
 				    	$expired_date = $_SESSION['expired_time'];
 				    	$expired_time = strtotime($expired_date);
 					    
@@ -1209,25 +1221,25 @@ echo '</div>';
 if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType != 1) {
 	//if($questionNum < 2){
 	if ($table_recorded_not_exist) { //$table_recorded_not_exist
-    if ($exercise_row['expired_time'] != 0) {
-      $sql_fields = "expired_time_control, ";
-      $sql_fields_values = "'"."$clock_expired_time"."',";     
-    } else {
-      $sql_fields = "";
-      $sql_fields_values = "";
-    }
-
+	    if ($exercise_row['expired_time'] != 0) {
+	      $sql_fields = "expired_time_control, ";
+	      $sql_fields_values = "'"."$clock_expired_time"."',";     
+	    } else {
+	      $sql_fields = "";
+	      $sql_fields_values = "";
+	    } error_log($exerciseType);   
+	
 		if ($exerciseType == 2) {
-    $sql = "INSERT INTO $stat_table($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,data_tracking,start_date,orig_lp_id,orig_lp_item_id)
-      VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";      
-			Database::query($sql, __FILE__, __LINE__);
-      
+	    	$sql = "INSERT INTO $stat_table($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,data_tracking,start_date,orig_lp_id,orig_lp_item_id)
+	      			VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";
+	      error_log($sql);      
+			Database::query($sql, __FILE__, __LINE__);      
 		} else {
-    $sql = "INSERT INTO $stat_table ($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date,orig_lp_id,orig_lp_item_id)
-       VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . api_get_session_id() . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";
-         Database::query($sql, __FILE__, __LINE__);
+	    	$sql = "INSERT INTO $stat_table ($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date,orig_lp_id,orig_lp_item_id)
+	       			VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . api_get_session_id() . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";
+	       			error_log($sql);  
+			Database::query($sql, __FILE__, __LINE__);
 		}
-
 	}
 }
 

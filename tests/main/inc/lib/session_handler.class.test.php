@@ -76,17 +76,28 @@ class TestSessionHandler extends UnitTestCase {
 	}
 
 	function testsqlQuery() {
+		
+		global $_configuration;
+		
+		$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+		$query = 'select user_id from '.$tbl_user;
+		
 		$instancia = new session_handler();
-		$res=$instancia->sqlQuery();
-		$this->assertTrue(is_bool($res));
-		//var_dump($res);
+		$instancia->idConnexion = mysql_connect($_configuration['db_host'],
+												$_configuration['db_user'],
+												$_configuration['db_password']);
+		
+		$res= $instancia->sqlQuery($query, false);
+		$this->assertTrue(is_resource($res));
+		$this->assertTrue($res);
+		
 	}
 
 	function testwrite() {
 		$instancia = new session_handler();
 		$sess_id='';
 		$sess_value='';
-		$res=$instancia->write();
+		$res=$instancia->write($sess_id,$sess_value);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}

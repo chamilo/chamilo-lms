@@ -315,7 +315,7 @@ class Display {
 	public static function display_sortable_grid ($name, $header, $content, $paging_options = array (), $query_vars = null, $form_actions=array(), $vibility_options = true) {
 		global $origin;
 		$column =  0;
-		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;
+		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;		
 		$table = new SortableTableFromArray($content, $column, $default_items_per_page, $name);		
 		
 		if (is_array($query_vars)) {

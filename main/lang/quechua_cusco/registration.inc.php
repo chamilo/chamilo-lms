@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "Khipuqa CSV nisqapi kashan. Ama imatapas yapankichu. I
 $langTracking = "Qatikuy";
 $langEnter2passToChange = "Qelqa pakata t\'ijrachinapqa haykuchiy hoq musuq qelqa pakata kay kanchakunapi. Sichus qepakuyta munaq ñaupaqwan chayqa, ajnallata saqey  iskhay kanchakunata.";
 $langAuthInfo = "Cheqaqchana";
-$langDelImage = "Wankita horqoy";
 $langUpdateImage = "Hoq wankita churay";
 $langImageWrong = "Khipuqa kanqapuni kay yupamanta huch\'uykama";
 $langAddImage = "Wankitawan churay";

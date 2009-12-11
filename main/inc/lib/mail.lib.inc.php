@@ -109,15 +109,16 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
  * @param string			email body
  * @param string			sender name
  * @param string			sender e-mail
+ * @param array				data file (path and filename)
  * @param array				extra headers in form $headers = array($name => $value) to allow parsing
  * @return                  returns true if mail was sent
  * @see                     class.phpmailer.php
  */
-function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name="", $sender_email="", $extra_headers=null) {
-
+function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name = "", $sender_email = "", $extra_headers = null, $data_file = array()) {
+	
    global $regexp;
    global $platform_email;
-
+   
    $mail = new PHPMailer();
    $mail->Mailer  = $platform_email['SMTP_MAILER'];
    $mail->Host    = $platform_email['SMTP_HOST'];
@@ -155,7 +156,6 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
       //$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; //Disposition-Notification
     }
 
-
    if ($sender_name!="")
    {
       $mail->FromName = $sender_name;
@@ -165,9 +165,16 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
       $mail->FromName = $platform_email['SMTP_FROM_NAME'];
    }
       $mail->Subject = $subject;
-      $mail->AltBody    = strip_tags(str_replace('<br />',"\n",$message));
-      $mail->Body    = '<html><head></head><body>'.$message.'</body></html>';
-      //only valid address
+      
+      $mail->AltBody = strip_tags(str_replace('<br />',"\n", api_html_entity_decode($message)));
+      $mail->Body = '<html><head></head><body>'.$message.'</body></html>';
+      
+      // attachment ...
+      if (!empty($data_file)) {
+      	$mail->AddAttachment($data_file['path'], $data_file['filename']);
+      }
+      
+      // only valid address
       if(is_array($recipient_email))
       {
       	$i = 0;

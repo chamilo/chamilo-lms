@@ -1,12 +1,13 @@
-<?php // $Id: user_edit.php 22233 2009-07-20 09:54:05Z ivantcholakov $
-/* For licensing terms, see /dokeos_license.txt */
+<?php 
+/* For licensing terms, see /chamilo_license.txt */
 /**
-==============================================================================
-*	@package dokeos.admin
-==============================================================================
-*/
+ * @package dokeos.social
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
+ 
+
 // Language files that should be included
-$language_file = array('admin');
+$language_file = array('userInfo');
 $cidReset = true;
 include '../inc/global.inc.php';
 $this_section = SECTION_SOCIAL;
@@ -39,22 +40,21 @@ $group_data = Database::fetch_array($res, 'ASSOC');
 
 // Create the form
 $form = new FormValidator('group_edit', 'post', '', '', array('style' => 'width: 60%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')));
-$form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'id', $group_id);
 
 // name
-$form->addElement('text', 'name', get_lang('Name'));
+$form->addElement('text', 'name', get_lang('Name'), array('size'=>30));
 $form->applyFilter('name', 'html_filter');
 $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'));
+$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>5, 'cols'=>50));
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
 
 // url
-$form->addElement('text', 'url', get_lang('URL'));
+$form->addElement('text', 'url', get_lang('URL'), array('size'=>30));
 $form->applyFilter('url', 'html_filter');
 $form->applyFilter('url', 'trim');
 
@@ -137,15 +137,28 @@ $big_image_size = api_getimagesize($big_image);
 $big_image_width = $big_image_size[0];
 $big_image_height = $big_image_size[1];
 $url_big_image = $big_image.'?rnd='.time();
-
+/*
 if ($image == '') {
 	echo '<img '.$img_attributes.' />';
 } else {
 	echo '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 }
+*/
 
-// Display form
+
+//Shows left column
+echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
+
+
+//-- Show message groups
+
+echo '<div id="layout_right" style="margin-left: 282px;">';	
+	
+		// Display form
 $form->display();
+	
+echo '</div>'; // end layout right
+
 
 // Footer
 Display::display_footer();

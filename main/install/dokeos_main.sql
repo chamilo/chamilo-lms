@@ -644,7 +644,7 @@ VALUES
 ('service_ppt2lp', 'ftp_password', 'textfield', NULL, NULL, 'FtpPassword', NULL, NULL, NULL, 0),
 ('service_ppt2lp', 'path_to_lzx', 'textfield', NULL, NULL, '', NULL, NULL, NULL, 0),
 ('service_ppt2lp', 'size', 'radio', NULL, '720x540', '', NULL, NULL, NULL, 0),
-('wcag_anysurfer_public_pages', NULL, 'radio','Platform','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL, 0),
+('wcag_anysurfer_public_pages', NULL, 'radio','Editor','false','PublicPagesComplyToWAITitle','PublicPagesComplyToWAIComment', NULL, NULL, 0),
 ('stylesheets', NULL, 'textfield','stylesheets','dokeos_blue','',NULL, NULL, NULL, 1),
 ('upload_extensions_list_type', NULL, 'radio', 'Security', 'blacklist', 'UploadExtensionsListType', 'UploadExtensionsListTypeComment', NULL, NULL, 0),
 ('upload_extensions_blacklist', NULL, 'textfield', 'Security', '', 'UploadExtensionsBlacklist', 'UploadExtensionsBlacklistComment', NULL, NULL, 0),
@@ -716,7 +716,7 @@ VALUES
 ('course_create_active_tools','survey','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Survey', 0),
 ('course_create_active_tools','glossary','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary', 0),
 ('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook', 0),
-('advanced_filemanager',NULL,'radio','Platform','false','AdvancedFileManagerTitle','AdvancedFileManagerComment',NULL,NULL, 0),
+('advanced_filemanager',NULL,'radio','Editor','false','AdvancedFileManagerTitle','AdvancedFileManagerComment',NULL,NULL, 0),
 ('allow_reservation', NULL, 'radio', 'Tools', 'false', 'AllowReservationTitle', 'AllowReservationComment', NULL, NULL, 0),
 ('profile','apikeys','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'ApiKeys', 0),
 ('allow_message_tool', NULL, 'radio', 'Tools', 'false', 'AllowMessageToolTitle', 'AllowMessageToolComment', NULL, NULL,0),
@@ -735,7 +735,17 @@ VALUES
 ('show_glossary_in_extra_tools', NULL, 'radio', 'Course', 'false', 'ShowGlossaryInExtraToolsTitle', 'ShowGlossaryInExtraToolsComment', NULL, NULL,1),
 ('dokeos_database_version', NULL, 'textfield', NULL,'1.8.6.2.9070','DokeosDatabaseVersion','',NULL,NULL,0),
 ('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1),
-('go_to_course_after_login',NULL,'radio','Course','false','GoToCourseAfterLoginTitle','GoToCourseAfterLoginComment',NULL,NULL, 0);
+('go_to_course_after_login',NULL,'radio','Course','false','GoToCourseAfterLoginTitle','GoToCourseAfterLoginComment',NULL,NULL, 0),
+('math_mimetex',NULL,'radio','Editor','false','MathMimetexTitle','MathMimetexComment',NULL,NULL, 0),
+('math_asciimathML',NULL,'radio','Editor','false','MathASCIImathMLTitle','MathASCIImathMLComment',NULL,NULL, 0),
+('youtube_for_students',NULL,'radio','Editor','true','YoutubeForStudentsTitle','YoutubeForStudentsComment',NULL,NULL, 0),
+('block_copy_paste_for_students',NULL,'radio','Editor','false','BlockCopyPasteForStudentsTitle','BlockCopyPasteForStudentsComment',NULL,NULL, 0),
+('more_buttons_maximized_mode',NULL,'radio','Editor','false','MoreButtonsForMaximizedModeTitle','MoreButtonsForMaximizedModeComment',NULL,NULL, 0),
+('students_download_folders',NULL,'radio','Tools','true','AllowStudentsDownloadFoldersTitle','AllowStudentsDownloadFoldersComment',NULL,NULL, 0),
+('show_tabs', 'social', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsSocial', 0),
+('allow_students_to_create_groups_in_social',NULL,'radio','Tools','false','AllowStudentsToCreateGroupsInSocialTitle','AllowStudentsToCreateGroupsInSocialComment',NULL,NULL, 0),
+('allow_send_message_to_all_platform_users',NULL,'radio','Tools','false','AllowSendMessageToAllPlatformUsersTitle','AllowSendMessageToAllPlatformUsersComment',NULL,NULL, 0);
+
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -924,8 +934,23 @@ VALUES
 ('send_email_to_admin_when_create_course','true','Yes'),
 ('send_email_to_admin_when_create_course','false','No'),
 ('go_to_course_after_login','true','Yes'),
-('go_to_course_after_login','false','No');
-
+('go_to_course_after_login','false','No'),
+('math_mimetex','true','Yes'),
+('math_mimetex','false','No'),
+('math_asciimathML','true','Yes'),
+('math_asciimathML','false','No'),
+('youtube_for_students','true','Yes'),
+('youtube_for_students','false','No'),
+('block_copy_paste_for_students','true','Yes'),
+('block_copy_paste_for_students','false','No'),
+('more_buttons_maximized_mode','true','Yes'),
+('more_buttons_maximized_mode','false','No'),
+('students_download_folders','true','Yes'),
+('students_download_folders','false','No'),
+('allow_students_to_create_groups_in_social','true','Yes'),
+('allow_students_to_create_groups_in_social','false','No'),
+('allow_send_message_to_all_platform_users','true','Yes'),
+('allow_send_message_to_all_platform_users','false','No');
 UNLOCK TABLES;
 
 /*!40000 ALTER TABLE settings_options ENABLE KEYS */;
@@ -2312,6 +2337,8 @@ CREATE TABLE group_rel_tag (
   group_id int NOT NULL,
   PRIMARY KEY (id)
 );
+ALTER TABLE `group_rel_tag` ADD INDEX ( group_id );
+ALTER TABLE `group_rel_tag` ADD INDEX ( tag_id );
 
 CREATE TABLE group_rel_user (
   id int NOT NULL AUTO_INCREMENT,
@@ -2320,7 +2347,9 @@ CREATE TABLE group_rel_user (
   relation_type int NOT NULL,
   PRIMARY KEY (id)
 );
-
+ALTER TABLE `group_rel_user` ADD INDEX ( group_id );
+ALTER TABLE `group_rel_user` ADD INDEX ( user_id );
+ALTER TABLE `group_rel_user` ADD INDEX ( relation_type );
 --
 -- Table structure for table message attachment
 --
@@ -2333,9 +2362,7 @@ CREATE TABLE IF NOT EXISTS message_attachment (
   message_id int NOT NULL,
   filename varchar(255) NOT NULL,
   PRIMARY KEY  (id)
-)
-
+);
 
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (10, 'tags','tags',0,0);
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (9, 'rssfeeds','RSS',0,0);
-

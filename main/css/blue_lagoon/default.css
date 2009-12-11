@@ -2182,11 +2182,11 @@ div.comments {
 /* styles from the my.profile.php file */
 .message-content {
 	float:right;
-	margin:20px auto;
-	background:#F5E38E;
-	border:2px solid #EBCA4F;
-	padding:10px;
-	width:200px;
+	margin:0px 10px;
+	background:#FFF;
+	border:1px dotted #ccc;
+	padding: 0px 10px 0 10px;
+/*	width:50%; */
 	position:relative;
 }
 .message-content .message-delete {
@@ -2208,7 +2208,7 @@ div.comments {
 }
 .message-title {
 	color:#ff0000;
-	font-size:15px;
+	font-size:12px;
 }
 .message-body {
 	font-size:11px;
@@ -2595,7 +2595,6 @@ input.arrowl {
 	background-repeat:no-repeat;
 }
 .u-m-answer {
-	float:left;
 	width:100%;
 }
 .u-m-answer p {
@@ -2624,7 +2623,10 @@ input.arrowl {
 
 
 
-/* UI improvements */
+
+
+
+/* UI improvements for 1.8.6.2 this should be move to the chamilo theme and reproduce in all CSS*/
 
 
 * {
@@ -2664,4 +2666,225 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 
 #maincontent .courseslist li {
 	margin-bottom:8px;
+}
+
+a.read {	
+	font-weight:normal;
+}
+
+a.unread {	
+	
+}
+
+
+#inbox-wrapper {width:100%;}
+
+#inbox {width:80%;float:right;}
+
+#inbox-menu  {
+	width:150px;
+	float:left;
+}
+
+#inbox-menu ul {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin:0;
+	padding:0px;
+}
+#inbox-menu ul li{
+
+	padding:2px 0px;
+}
+
+#message-reply-link {
+	float:right;
+}
+
+.social-plugin-item {
+	float:left;
+	width:50%;
+	background-color:#ccc;
+	margin: 0px;
+}
+
+
+#social-plugins {
+	float:left;
+	background-color:#f00;
+	width:100%;
+	margin: 0px;
+	padding:2px;
+}
+
+.groups_grid_item {
+	width:80px;
+	float:left;
+	margin:5px;
+}
+
+.groups_grid_container {
+
+} 
+
+.message-item {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	-moz-border-radius-bottomleft:8px;
+	-moz-border-radius-bottomright:8px;
+	-moz-border-radius-topleft:8px;
+	-moz-border-radius-topright:8px;
+	background:#F5F5F5 none repeat scroll 0 0;
+	margin:0 0 5px;
+	padding:10px;
+}
+
+.message-topic {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	-moz-border-radius-bottomleft:8px;
+	-moz-border-radius-bottomright:8px;
+	-moz-border-radius-topleft:8px;
+	-moz-border-radius-topright:8px;
+	background:#E6EEFB  none repeat scroll 0 0;
+	margin:0 0 5px;
+	padding:10px;
+
+}
+
+.message-group-title-topic {
+	font-size:180%;
+	margin:5px 0px 5px 0px;
+}
+.message-group-title {
+	font-size:120%;
+}
+
+.message-group-author {
+	margin:5px 0px 5px 0px;
+}
+
+.message-group-content {
+	line-height:150%;
+	margin: 5px 0px 8px 0px;
+}
+
+.view-message-content {
+	line-height:150%;
+	font-size:110%;
+}
+
+.actions {
+	background:#efefef;
+	border:1px solid #ccc;	
+	padding:2px;
+	margin-bottom: 5px;
+	vertical-align:middle;
+}
+
+.actions-title {	
+	background:#efefef;
+	border:1px solid #ccc;
+	padding:4px;
+	margin-bottom: 5px;
+	font-size:14px;
+	font-weight:bolder;
+	vertical-align:middle;
+}
+
+#group_description {
+	margin: 10px 0px 10px 0px;
+}
+
+#group_privacy {
+	margin: 10px 0px 10px 0px;
+}
+
+#group_permissions {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	-moz-border-radius-bottomleft:8px;
+	-moz-border-radius-bottomright:8px;
+	-moz-border-radius-topleft:8px;
+	-moz-border-radius-topright:8px;
+	background:#EEE none repeat scroll 0 0;
+
+	margin: 20px 0px 20px 0px;
+}
+
+#group_permissions ul {	
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+
+#group_permissions ul li {
+	margin: 10px 0px 10px 5px;
+}
+
+/* Groups boxes */
+.groups_grid_container { width:100%;}
+.groups_grid_item {
+	border:1px dotted #CCCCCC;
+	float:left;
+	height:85px;
+	margin:8px;
+	padding:5px;
+	width:300px;
+}
+.groups_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.groups_grid_element_1 { width:100px; float:left; text-align:left;margin-bottom:5px;}
+.groups_grid_element_2 { width:150px; float:left;}
+
+
+/* Groups boxes */
+.group_invitation_grid_container { width:100%;}
+.group_invitation_grid_item {
+	border:1px dotted #CCCCCC;
+	float:left;
+	height:85px;
+	margin:8px;
+	padding:5px;
+	width:300px;
+}
+.group_invitation_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.group_invitation_grid_element_1 { width:100px; float:left; text-align:left;margin-bottom:5px;}
+.group_invitation_grid_element_2 { width:150px; float:left;}
+
+
+
+
+
+/* User boxes */
+.search_users_grid_container { width:100%;}
+.search_users_grid_item { width:400px;  height: 90px;  border:1px dotted #ccc; float:left; padding:5px; margin:8px;}
+.search_users_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.search_users_grid_element_1 { width:100px; float:left; text-align:center;margin-bottom:5px;}
+.search_users_grid_element_2 { width:150px; float:left;}
+
+.search_users_grid_selectbox { width:50%; float:left;}
+.search_users_grid_title 	{ width:30%; float:left;}
+.search_users_grid_nav 		{ float:right;}
+
+#menu {
+	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
+	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;
+	-opera-border-radius: 10px; border: 1px solid #e1e1e0;
+	width:240px;
+	margin-top:40px;
+	margin-right:10px;
+	margin-bottom:40px;
+	padding-left:10px;
+	padding-right:20px;
+	padding-top:5px;
+	float: right;
+	min-height: 150px;
+	padding-bottom:30px;	
+
 }

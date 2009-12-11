@@ -1,5 +1,11 @@
 <?php
-$language_file= 'admin';
+/* For licensing terms, see /chamilo_license.txt */
+/**
+ * @package dokeos.social
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
+ 
+$language_file= 'userInfo';
 $cidReset=true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'/formvalidator/FormValidator.class.php';
@@ -15,19 +21,19 @@ $table_message = Database::get_main_table(TABLE_MESSAGE);
 $form = new FormValidator('add_group');
 
 // name
-$form->addElement('text', 'name', get_lang('Name'));
+$form->addElement('text', 'name', get_lang('Name'), array('size'=>30));
 $form->applyFilter('name', 'html_filter');
 $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'));
+$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>5, 'cols'=>50));
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
 
 
 // url
-$form->addElement('text', 'url', get_lang('URL'));
+$form->addElement('text', 'url', get_lang('URL'), array('size'=>30));
 $form->applyFilter('url', 'html_filter');
 $form->applyFilter('url', 'trim');
 

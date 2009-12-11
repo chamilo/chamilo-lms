@@ -91,8 +91,8 @@ class TestDocumentManager extends UnitTestCase {
 	*   @return true if the user is allowed to see the document, false otherwise (bool)
 	*/
 	function testfile_visible_to_user() {
-		$this_course='';
-		$doc_url='';
+		$this_course= null;
+		$doc_url= true;
 		$res=DocumentManager::file_visible_to_user($this_course, $doc_url);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);

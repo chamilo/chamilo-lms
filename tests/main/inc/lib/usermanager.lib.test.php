@@ -65,10 +65,11 @@ class TestUserManager extends UnitTestCase
     function testDeleteUser() {
     	$user_id='';
     	$res = UserManager::delete_user($user_id);
-    	$this->assertTrue($res);
+    	$this->assertTrue(is_bool($res));
     	$_configuration['user_id']='';
-    	$res= UserManager::delete_user($_configuration['user_id']);
-    	$this->assertTrue($res);
+    	$res1= UserManager::delete_user($_configuration['user_id']);
+    	$this->assertTrue(is_bool($res1));
+    	//var_dump($res1);
     }
     /*
     function testUpdateUser() {

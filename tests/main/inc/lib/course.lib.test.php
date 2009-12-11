@@ -219,8 +219,7 @@ class TestCourse extends UnitTestCase{
 	public function testCreateCombinedCode(){
 		$res = $this->tcourse->create_combined_code();
 		$this->assertFalse($res);
-		$this->assertTrue(is_null($res));
-		$this->assertTrue($this->tcourse->create_combined_code()===null);
+		$this->assertTrue($this->tcourse->create_combined_code()=== '');
 	}
 
 	public function testGetVirtualCourseInfo(){
@@ -310,8 +309,9 @@ class TestCourse extends UnitTestCase{
 	public function testGetTeacherListFromCourseCode(){
 		$res = $this->tcourse->get_teacher_list_from_course_code();
 		$this->assertFalse($res);
-		$this->assertTrue(is_null($res));
-		$this->assertTrue($this->tcourse->get_teacher_list_from_course_code()===null);
+		$this->assertFalse(is_null($res));
+		$this->assertTrue($this->tcourse->get_teacher_list_from_course_code()=== array());
+		//var_dump($res);
 	}
 
 	public function testGetRealAndLinkedUserList(){
@@ -329,7 +329,7 @@ class TestCourse extends UnitTestCase{
 
 	public function testGetGroupListOfCourse(){
 		$grouplist = new MockDatabase();
-		$course_code = 'TEST';
+		$course_code = 'COD12';
 		$course_info = Database :: get_course_info($course_code);
 		$database_name = $course_info['db_name'];
 		$session_id=1;
@@ -344,7 +344,7 @@ class TestCourse extends UnitTestCase{
 
 	public function testAttemptCreateVirtualCourse(){
 	     $createvirtual = new MockDisplay();
-	     $real_course_code = 'TEST';
+	     $real_course_code = 'COD12';
  		 $course_title = 'test';
  		 $wanted_course_code = '01';
   	     $course_language= 'english';
@@ -364,7 +364,7 @@ class TestCourse extends UnitTestCase{
 		$user_id = api_get_user_id();
 		$real_course_code = 'TEST';
 		$course_title = 'test';
-		$wanted_course_code = '01';
+		$wanted_course_code = 'COD12';
 		$course_language= 'english';
 		$course_category= 'lang';
 		$course_sys_code = '';
@@ -389,12 +389,16 @@ class TestCourse extends UnitTestCase{
 		//var_dump($createvirtualcourse);
 	}
 
-	public function testDeleteCourse(){
+	public function testDeleteCourse($course_code = ''){
 		global $_configuration;
-		$code = '01';
+		$code = 'COD12';
+		if (!empty($course_code)) {
+			$code = $course_code;
+		} 
 		$res = $this->tcourse->delete_course($code);
 		$this->assertTrue($this->tcourse->delete_course()===null);
 		$this->assertTrue(is_null($res));
+		
 	}
 
 	public function testCreateDatabaseDump(){
@@ -408,7 +412,7 @@ class TestCourse extends UnitTestCase{
 
 	public function testUserCourseSort(){
 		$user_id ='01';
-		$course_code='0001';
+		$course_code='COD12';
 		$res = $this->tcourse->UserCourseSort($user_id,$course_code);
 		$this->assertTrue($res);
 		$this->assertTrue(is_numeric($res));
@@ -433,7 +437,7 @@ class TestCourse extends UnitTestCase{
 
 	public function testEmailToTutor() {
 		$user_id= '';
-		$course_code= 'test';
+		$course_code= 'COD12';
 		$res=CourseManager::email_to_tutor($course_code,$user_id);
 		$this->assertTrue(is_string($course_code));
 		//var_dump($res);
@@ -488,7 +492,7 @@ class TestCourse extends UnitTestCase{
 	}
 
 	public function testUpdateCourseExtraFieldValue(){
-		$course_code = '0001';
+		$course_code = 'COD12';
 		$fname = '';
 		$fvalue= '';
 		$res = $this->tcourse->update_course_extra_field_value($course_code,$fname,$fvalue='');

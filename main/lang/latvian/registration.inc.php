@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "Failam j&#257;b&#363;t CSV form&#257;t&#257;. Nepievie
 $langTracking = "Sekot l&#299;dz";
 $langEnter2passToChange = "Ievadiet paroli divreiz, lai veiktu t&#257;s mai&#326;u. Ja nev&#275;laties to dar&#299;t, atst&#257;jiet lauci&#326;us tukšus.";
 $langAuthInfo = "Autoriz&#275;šan&#257;s";
-$langDelImage = "Dz&#275;st att&#275;lu";
 $langUpdateImage = "Main&#299;t &#291;&#299;metni";
 $langImageWrong = "Dokumenta izm&#275;ram j&#257;b&#363;t maz&#257;kam par";
 $langAddImage = "Att&#275;ls";

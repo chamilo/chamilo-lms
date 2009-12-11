@@ -20,7 +20,6 @@
 ==============================================================================
 */
 define("DOKEOS_MAIN_DATABASE_FILE", "dokeos_main.sql");
-
 define("LANGUAGE_DATA_FILENAME", "language_data.csv");
 define("COUNTRY_DATA_FILENAME", "country_data.csv");
 define("SETTING_OPTION_DATA_FILENAME", "setting_option_data.csv");
@@ -223,11 +222,17 @@ function write_dokeos_config_file($path)
 * have to be replaced by the settings entered by the user during installation.
 *
 * @param array $installation_settings list of settings entered by the user
+* @param string  optional path about the script for database
+* @return void
 */
-function load_main_database($installation_settings)
-{
-	$dokeos_main_sql_file_string = file_get_contents(DOKEOS_MAIN_DATABASE_FILE);
-
+function load_main_database($installation_settings,$db_script='')
+{	
+	if (!empty($db_script)) {
+		$dokeos_main_sql_file_string = file_get_contents($db_script);
+	} else {
+		$dokeos_main_sql_file_string = file_get_contents(DOKEOS_MAIN_DATABASE_FILE);	
+	}
+	
 	//replace symbolic parameters with user-specified values
 	foreach ($installation_settings as $key => $value)
 	{

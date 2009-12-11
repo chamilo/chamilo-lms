@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
 /**
 ==============================================================================
 *	This file is responsible for  passing requested file attachments from messages

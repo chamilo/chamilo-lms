@@ -636,6 +636,7 @@ function update_Db_course($courseDbName)
 		sound varchar(50) default NULL,
 		type tinyint unsigned NOT NULL default 1,
 		random smallint(6) NOT NULL default 0,
+		random_answers tinyint unsigned NOT NULL default 0,
 		active tinyint NOT NULL default 0,
 		results_disabled TINYINT UNSIGNED NOT NULL DEFAULT 0,
 		access_condition TEXT DEFAULT NULL,
@@ -681,9 +682,13 @@ function update_Db_course($courseDbName)
 	    hotspot_coordinates text,
 	    hotspot_type enum('square','circle','poly','delineation') default NULL,
 	    destination text NOT NULL,
-		PRIMARY KEY (id, question_id)
+		id_auto int NOT NULL AUTO_INCREMENT,		
+		PRIMARY KEY (id, question_id),
+		UNIQUE KEY id_auto (id_auto)
 		)";
 	Database::query($sql, __FILE__, __LINE__);
+
+
 
 	// Exercise tool - Test/question relations
 	$sql = "
@@ -1948,7 +1953,7 @@ function lang2db($string)
 *	Fills the course database with some required content and example content.
 *	@version 1.2
 */
-function fill_Db_course($courseDbName, $courseRepository, $language,$default_document_array)
+function fill_Db_course($courseDbName, $courseRepository, $language,$default_document_array = array())
 {
 	global $_configuration, $clarolineRepositoryWeb, $_user;
 
@@ -2251,12 +2256,12 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 			Exercise tool
 		-----------------------------------------------------------
 		*/
-		Database::query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '1', '1', '".lang2db(get_lang('Ridiculise')) . "', '0', '".lang2db(get_lang('NoPsychology')) . "', '-5', '1','','','')",__FILE__,__LINE__);
-		Database::query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '2', '1', '".lang2db(get_lang('AdmitError')) . "', '0', '".lang2db(get_lang('NoSeduction')) . "', '-5', '2','','','')", __FILE__, __LINE__);
-		Database::query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '3', '1', '".lang2db(get_lang('Force')) . "', '1', '".lang2db(get_lang('Indeed')) . "', '5', '3','','','')", __FILE__, __LINE__);
-		Database::query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '4', '1', '".lang2db(get_lang('Contradiction')) . "', '1', '".lang2db(get_lang('NotFalse')) . "', '5', '4','','','')", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '1', '1', '".lang2db(get_lang('Ridiculise')) . "', '0', '".lang2db(get_lang('NoPsychology')) . "', '-5', '1','','','','')",__FILE__,__LINE__);
+		Database::query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '2', '1', '".lang2db(get_lang('AdmitError')) . "', '0', '".lang2db(get_lang('NoSeduction')) . "', '-5', '2','','','','')", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '3', '1', '".lang2db(get_lang('Force')) . "', '1', '".lang2db(get_lang('Indeed')) . "', '5', '3','','','','')", __FILE__, __LINE__);
+		Database::query("INSERT INTO `".$TABLEQUIZANSWERSLIST . "` VALUES ( '4', '1', '".lang2db(get_lang('Contradiction')) . "', '1', '".lang2db(get_lang('NotFalse')) . "', '5', '4','','','','')", __FILE__, __LINE__);
 		$html=addslashes('<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.lang2db(get_lang('Antique')).'</td></tr></table>');
-		Database::query('INSERT INTO `'.$TABLEQUIZ . '` (title, description, type, random, active, results_disabled ) VALUES ("'.lang2db(get_lang('ExerciceEx')) . '", "'.$html.'", "1", "0", "1", "0")', __FILE__, __LINE__);
+		Database::query('INSERT INTO `'.$TABLEQUIZ . '` (title, description, type, random, random_answers, active, results_disabled ) VALUES ("'.lang2db(get_lang('ExerciceEx')) . '", "'.$html.'", "1", "0", "0", "1", "0")', __FILE__, __LINE__);
 		Database::query("INSERT INTO `".$TABLEQUIZQUESTIONLIST . "` (id, question, description, ponderation, position, type, picture, level) VALUES ( '1', '".lang2db(get_lang('SocraticIrony')) . "', '".lang2db(get_lang('ManyAnswers')) . "', '10', '1', '2','',1)", __FILE__, __LINE__);
 		Database::query("INSERT INTO `".$TABLEQUIZQUESTION . "` (question_id, exercice_id, question_order) VALUES (1,1,1)", __FILE__, __LINE__);
 

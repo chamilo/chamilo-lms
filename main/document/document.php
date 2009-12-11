@@ -144,7 +144,7 @@ $group_member_with_upload_rights = false;
 if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='')
 {
 	//needed for group related stuff
-	include_once(api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php');
+	require_once(api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php');
 	//get group info
 	$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
 	$noPHP_SELF=true;
@@ -283,9 +283,9 @@ if (isset($_GET['action']) && $_GET['action']=="download")
 //-------------------------------------------------------------------//
 
 //download of an completed folder
-if(isset($_GET['action']) && $_GET['action']=="downloadfolder")
-{
-	include('downloadfolder.inc.php');
+if(isset($_GET['action']) && $_GET['action']=="downloadfolder" && (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin()))
+{			
+		require('downloadfolder.inc.php');
 }
 //-------------------------------------------------------------------//
 
@@ -405,7 +405,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 			}
 		}
 
-		include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
+		require_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
 		//this is needed for the update_db_info function
 		//$dbTable = $_course['dbNameGlu']."document";
 		$dbTable = Database::get_course_table(TABLE_DOCUMENT);
@@ -448,7 +448,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 			}
 		}
 
-		include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
+		require_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
 
 		if(DocumentManager::delete_document($_course,$_GET['delete'],$base_work_dir))
 		{
@@ -504,7 +504,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 	if(isset($_POST['create_dir']) && $_POST['dirname']!='')
 	{
 		//needed for directory creation
-		include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
+		require_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 		$post_dir_name=Security::remove_XSS($_POST['dirname']);
 
 		if ($post_dir_name=='../' || $post_dir_name=='.' || $post_dir_name=='..')
@@ -843,7 +843,7 @@ $column_show=array();
 	}
 	if ($docs_and_folders!=null) {
 		global $total_size;
-		if ($total_size!=0){ ?>
+		if ($total_size!=0  &&  (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin())){ ?>
 	<!-- download zipped folder -->
 			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder"><img src="../img/zip_save.gif" border="0" title="<?php echo get_lang("Save"); ?> (ZIP)" alt="" /></a>
 			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder"><?php echo get_lang("Save"); ?> (ZIP)</a>&nbsp;
@@ -851,7 +851,7 @@ $column_show=array();
 		}
 	}
 	// Slideshow by Patrick Cool, May 2004
-	include("document_slideshow.inc.php");
+	require("document_slideshow.inc.php");
 	if ($image_present)
 	{
 		echo "<a href=\"slideshow.php?".api_get_cidreq()."&curdirpath=".$curdirpathurl."\"><img src=\"../img/images_gallery.gif\" border=\"0\" title=\"".get_lang('ViewSlideshow')."\"/>&nbsp;". get_lang('ViewSlideshow') . "</a>";

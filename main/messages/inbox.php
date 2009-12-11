@@ -1,43 +1,16 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
+/* For licensing terms, see /chamilo_license.txt */
 
-	Copyright (c) 2009 Dokeos SPRL
-	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-	Copyright (c) Facultad de Matematicas, UADY (México)
-	Copyright (c) Evie, Free University of Brussels (Belgium)
-	Copyright (c) 2009 Isaac Flores Paz <isaac.flores@dokeos.com>
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-    Mail: info@dokeos.com
-==============================================================================
-*/
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
 // name of the language file that needs to be included
-$language_file = array('registration','messages','userInfo','admin','index');
+$language_file = array('registration','messages','userInfo');
 $cidReset=true;
 require_once '../inc/global.inc.php';
-require_once '../messages/message.class.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
+
 api_block_anonymous_users();
 if (isset($_GET['messages_page_nr'])) {
 	if (api_get_setting('allow_social_tool')=='true' &&  api_get_setting('allow_message_tool')=='true') {
-		header('Location:../social/index.php?pager="'.Security::remove_XSS($_GET['messages_page_nr']).'"&remote=2#remote-tab-2');
+		header('Location:inbox.php');
 	}
 }
 if (api_get_setting('allow_message_tool')!='true'){
@@ -138,22 +111,22 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 
 
 $link_ref="new_message.php";
-
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 
 
 //api_display_tool_title(api_xml_http_response_encode(get_lang('Inbox')));
 if ($_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
-	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Profile'));
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/profile.php','name' => get_lang('Profile'));
 	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));	
 } else {
 	$this_section = SECTION_MYPROFILE;
-	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Profile'));
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
 	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));
 }
 
 Display::display_header('');
+$social_parameter = '';
 
 if ($_GET['f']=='social') {
 	require_once api_get_path(LIBRARY_PATH).'social.lib.php';
@@ -161,35 +134,66 @@ if ($_GET['f']=='social') {
 	echo '<div class="actions-title">';
 	echo get_lang('Messages');
 	echo '</div>';
+	$social_parameter = '?f=social';
 } else {
 	//comes from normal profile
+	/*
 	echo '<div class=actions>';
 		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',api_xml_http_response_encode(get_lang('Inbox'))).api_xml_http_response_encode(get_lang('Inbox')).'</a>';
 		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
 		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',api_xml_http_response_encode(get_lang('Outbox'))).api_xml_http_response_encode(get_lang('Outbox')).'</a>';
-	echo '</div>';	
-}
+	echo '</div>';	*/
 	
-
-if (!isset($_GET['del_msg'])) {	
-	inbox_display();
-} else {
-	$num_msg = intval($_POST['total']);
-	for ($i=0;$i<$num_msg;$i++) {
-		if($_POST[$i]) {
-			//the user_id was necesarry to delete a message??
-			MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);
-		}
+	
+	echo '<div class="actions">';
+	
+	if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
+		echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
 	}
-	inbox_display();
+	if (api_get_setting('allow_message_tool') == 'true') {
+		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
+	}	
+	echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?type=reduced">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
+	echo '</div>';
+
+
 }
+
+
+echo '<div id="inbox-wrapper">';
+		//LEFT CONTENT
+	echo '<div id="inbox-menu">';	
+		echo '<ul>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$social_parameter.'">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>'.'</li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$social_parameter.'">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>'.'</li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php'.$social_parameter.'">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>'.'</li>';
+		echo '</ul>';	
+	echo '</div>';
+
+	echo '<div id="inbox">';
+			//MAIN CONTENT
+	if (!isset($_GET['del_msg'])) {	
+		inbox_display();
+	} else {
+		$num_msg = intval($_POST['total']);
+		for ($i=0;$i<$num_msg;$i++) {
+			if($_POST[$i]) {
+				//the user_id was necesarry to delete a message??
+				MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);
+			}
+		}
+		inbox_display();
+	}
+	echo '</div>';
+
+echo '</div>';
 
 /*
 ==============================================================================
 		FOOTER
 ==============================================================================
 */
-if ($request===false) {
-	Display::display_footer();
-}
+
+Display::display_footer();
+
 ?>

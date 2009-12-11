@@ -110,7 +110,8 @@ if (substr($refer_script,0,15) == "/fillsurvey.php") {
 }
 
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
-$full_file_name = $sys_course_path.$_course['path'].'/document'.$doc_url;
+//$full_file_name = $sys_course_path.$_course['path'].'/document'.$doc_url;
+$full_file_name = $sys_course_path.$_course['path'].'/document'.str_replace('+',' ',$doc_url);
 
 // check visibility of document and paths
 $is_allowed_to_edit = api_is_allowed_to_edit();

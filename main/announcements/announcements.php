@@ -135,8 +135,8 @@ require_once($lib.'fileUpload.lib.php');
 -----------------------------------------------------------
 */
 
-$safe_emailTitle = Security::remove_XSS($_POST['emailTitle']);
-$safe_newContent = Security::remove_XSS($_POST['newContent']);
+$safe_emailTitle = $_POST['emailTitle'];
+$safe_newContent = $_POST['newContent'];
 
 if (!empty($_POST['To']))
 {
@@ -666,14 +666,11 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			    		}
 			    	}
 
-					if ($sqlmail!='') {
+					if ($sqlmail != '') {
 						$result = Database::query($sqlmail,__FILE__,__LINE__);
-
 				    	/*=================================================================================
 							    				send email one by one to avoid antispam
 					    =================================================================================*/
-
-
 						$db_name = Database::get_course_table(TABLE_MAIN_SURVEY);
 						while ($myrow = Database::fetch_array($result)) {
 							/*    Header : Bericht van uw lesgever - GES ($_cid)
@@ -686,7 +683,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 						    */
 
 							$emailSubject = "[" . $_course['official_code'] . "] " . $emailTitle;
-
+							
 	                        if ($surveyid) {
 	                        	$newContentone=str_replace("#page#","choose_language.php",$newContent);
 								$newContenttwo=str_replace("#temp#",$template,$newContentone);
@@ -695,11 +692,8 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	                            $newContentfive=str_replace("#db_name#",$db_name,$newContentfour);
 								$newContentsix=str_replace("#uid#",$myrow["user_id"],$newContentfive);
 	                			$message=stripslashes($newContentsix);
-
 							    $sender_name = api_get_person_name($_SESSION['_user']['lastName'], $_SESSION['_user']['firstName'], null, PERSON_NAME_EMAIL_ADDRESS);
 							    $email = $_SESSION['_user']['mail'];
-
-
 								$headers="From:$sender_name\r\nReply-to: $email\r\nContent-type: text/html; charset=iso-8859-15";
 								//@mail($myrow["email"],stripslashes($emailTitle),$message,$headers);
 								api_mail('',$myrow["email"],stripslashes($emailTitle),$message,$sender_name,$email);
@@ -715,19 +709,29 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	                            $mail_body .= api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS)." \n";
 	                            $mail_body .= "<br /> \n<a href=\"".api_get_path(WEB_COURSE_PATH).$_course['id']."\">";
 	                            $mail_body .= $_course['official_code'].' '.$_course['name'] . "</a>";
-
+	                            
 								//set the charset and use it for the encoding of the email - small fix, not really clean (should check the content encoding origin first)
 								//here we use the encoding used for the webpage where the text is encoded (ISO-8859-1 in this case)
-
-								//$to_email_address =$_POST['emailsAdd'];
-								//$mail_body;
-								$headers = array();
-	                          	if (empty($charset)) { $charset='ISO-8859-1';}
-								$headers['Content-Type'] = 'text/html';
-								$headers['charset'] = $charset;
-		                        $mailid=$myrow["email"];
-
-								$newmail = api_mail_html(api_get_person_name($myrow["lastname"], $myrow["firstname"], null, PERSON_NAME_EMAIL_ADDRESS), $myrow["email"], stripslashes($emailSubject), $mail_body, api_get_person_name($_SESSION['_user']['lastName'], $_SESSION['_user']['firstName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail'],$headers);
+								
+								$recipient_name	= api_get_person_name($myrow["lastname"], $myrow["firstname"], null, PERSON_NAME_EMAIL_ADDRESS);
+		                        $mailid = $myrow["email"];
+		                        
+		                        $sender_name = api_get_person_name($_SESSION['_user']['lastName'], $_SESSION['_user']['firstName'], null, PERSON_NAME_EMAIL_ADDRESS);
+		                        $sender_email = $_SESSION['_user']['mail'];
+		                        
+								$data_file = array();
+								if (!empty($_FILES['user_upload'])) {
+									$courseDir = $_course['path'].'/upload/announcements/';
+									$sys_course_path = api_get_path(SYS_COURSE_PATH);
+									$sql = 'SELECT path, filename FROM '.$tbl_announcement_attachment.'
+									  	    WHERE id = "'.$insert_id.'"';
+									$result = Database::query($sql, __FILE__, __LINE__);
+									$row = Database::fetch_array($result);
+									$data_file = array('path' => $sys_course_path.$courseDir.$row['path'],
+													   'filename' => $row['filename']);
+								}
+		                        
+								api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file);
 	                        }
 
 							$sql_date="SELECT * FROM $db_name WHERE survey_id='$surveyid'";

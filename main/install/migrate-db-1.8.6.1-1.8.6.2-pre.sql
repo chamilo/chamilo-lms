@@ -59,10 +59,31 @@ ALTER TABLE message ADD COLUMN parent_id INT NOT NULL DEFAULT 0;
 ALTER TABLE message ADD INDEX idx_message_group(group_id);
 ALTER TABLE message ADD INDEX idx_message_parent(parent_id);
 
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (10, 'tags','tags',0,0);
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (9, 'rssfeeds','RSS',0,0);
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'rssfeeds','RSS',0,0);
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (10,'tags','tags',0,0);
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_tabs', 'social', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsSocial', 0);
 
 UPDATE TABLE settings_current SET selected_value = '1.8.6.2.9070' WHERE variable = 'dokeos_database_version';
+
+INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','SpecialCourse', 'Yes', 1 , 1);
+
+ALTER TABLE `group_rel_user` ADD INDEX ( group_id );
+ALTER TABLE `group_rel_user` ADD INDEX ( user_id );
+ALTER TABLE `group_rel_user` ADD INDEX ( relation_type );
+ALTER TABLE `group_rel_tag`  ADD INDEX ( group_id );
+ALTER TABLE `group_rel_tag`  ADD INDEX ( tag_id );
+
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_students_to_create_groups_in_social', NULL, 'radio', 'Tools', 'false', 'AllowStudentsToCreateGroupsInSocialTitle', 'AllowStudentsToCreateGroupsInSocialComment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_students_to_create_groups_in_social', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_students_to_create_groups_in_social', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_send_message_to_all_platform_users', NULL, 'radio', 'Tools', 'false', 'AllowSendMessageToAllPlatformUsersTitle', 'AllowSendMessageToAllPlatformUsersComment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_send_message_to_all_platform_users', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_send_message_to_all_platform_users', 'false', 'No');
+
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
@@ -88,3 +109,5 @@ ALTER TABLE group_category ADD COLUMN chat_state TINYINT DEFAULT 1, ADD INDEX (c
 ALTER TABLE student_publication ADD COLUMN weight float(6,2) UNSIGNED NOT NULL DEFAULT 0;
 ALTER TABLE course_description ADD COLUMN description_type TINYINT NOT NULL DEFAULT 0;
 ALTER TABLE dropbox_category ADD COLUMN session_id smallint NOT NULL DEFAULT 0, ADD INDEX (session_id);
+ALTER TABLE quiz ADD COLUMN random_answers TINYINT UNSIGNED NOT NULL DEFAULT 0 AFTER random;
+ALTER TABLE quiz_answer ADD COLUMN id_auto INT NOT NULL AUTO_INCREMENT, ADD UNIQUE INDEX (id_auto);

@@ -25,6 +25,7 @@ $LoginName = "Haykuqmasi";
 $AutostartMp3 = "Chaskiy nisqata q\'apiy, pachanmanta uyariyta munaspaqa";
 $Assignments = "Llank\'aykuna";
 $Forum = "Rimarinakuy";
+$langDelImage = "Wankita horqoy";
 $langCode = "Yachachinaq chinpun";
 $langUp = "Wichachiy";
 $Down = "Urayachiy";

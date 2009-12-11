@@ -3,7 +3,6 @@ for more information: see languages.txt in the lang folder.
 */
 $langTracking = "Statestikk";
 $langAuthInfo = "Autentifikasjon";
-$langDelImage = "Fjern bilde";
 $langUpdateImage = "Endre bilde";
 $langImageWrong = "Filstørrelsen skal være mindre enn ";
 $langAddImage = "Bilde";

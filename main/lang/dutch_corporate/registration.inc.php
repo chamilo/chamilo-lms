@@ -5,7 +5,6 @@ $langShouldBeCSVFormat = "Het bestand moet in CSV-formaat zijn. Voeg geen spatie
 $langTracking = "Statistieken";
 $langEnter2passToChange = "Nieuw wachtwoord tweemaal invullen, of blanco laten om het huidige te behouden.";
 $langAuthInfo = "Authenticatie";
-$langDelImage = "Verwijder foto";
 $langUpdateImage = "Wijzig foto";
 $langImageWrong = "De bestandsgrootte voor de foto moet kleiner zijn dan";
 $langAddImage = "Foto";

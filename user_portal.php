@@ -479,7 +479,7 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 	if ($s_course_status == 2 || ($is_coach && $s_course_status != 1)) {
 		$s_htlm_status_icon=Display::return_icon('coachs.gif', get_lang('GeneralCoach'));
 	}
-	if ($s_course_status == 5 && !$is_coach) {
+	if (($s_course_status == 5 && !$is_coach) || empty($s_course_status)) {
 		$s_htlm_status_icon=Display::return_icon('students.gif', get_lang('Student'));
 	}
 
@@ -523,7 +523,7 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 				}
 			}
 
-			if ($s_course_status == 1 || ($s_course_status == 5 && empty($my_course['id_session']))) {
+			if ($s_course_status == 1 || ($s_course_status == 5 && empty($my_course['id_session'])) || empty($s_course_status)) {
 				$result .= $course_teacher;
 			}
 			
@@ -541,6 +541,8 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 		}
 	}
 
+	$result .= (isset($course['special_course']))? ' '.Display::return_icon('klipper.png', get_lang('CourseAutoRegister')) : '';
+	
 	$current_course_settings = CourseManager :: get_access_settings($my_course['k']);
 
 	// display the what's new icons
@@ -861,8 +863,9 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 	}
 	foreach ($courses_tree as $cat => $sessions) {
 		$courses_tree[$cat]['details'] = SessionManager::get_session_category($cat);
-		if ($cat == 0) {
-			$courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id($_user['user_id'],false);
+
+		if ($cat == 0) {						
+			$courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id($_user['user_id'],false);											
 		}
 		$courses_tree[$cat]['sessions'] = array_flip(array_flip($sessions));
 		if (count($courses_tree[$cat]['sessions'])>0) {
@@ -1040,7 +1043,6 @@ if ( is_array($courses_tree) ) {
 					foreach ($session['courses'] as $course) {
 						//echo '<li class="session_course_item" id="session_course_item_'.$course['code'].'" style="padding:5px">';
 						$c = get_logged_user_course_html($course, $session['details']['id'], 'session_course_item');
-						//var_dump($c);
 						echo $c[1];
 						//echo $course['code'];
 						//echo '</li>';
@@ -1178,7 +1180,7 @@ api_session_register('status');
 		RIGHT MENU
 ==============================================================================
 */
-echo '	<div class="menu">';
+echo '	<div id="menu">';
 
 // api_display_language_form(); // moved to the profile page.
 
@@ -1214,16 +1216,62 @@ if ($show_menu) {
 	echo '<span class="menusectioncaption">'.get_lang('MenuUser').'</span>';
 	
 	//user image
-	/*	@todo add a platform setting to add the user image  
-	$img_array= UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',true,true);
-	$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 92, 'medium_', ' width="90" height="90" ');
-	echo '<div id="picture" style="">';
-		echo '<a href="/main/auth/profile.php"><img src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
-	echo '</div><br />';
-	*/
-	//@todo add the Inbox, pending invitations, etc...
-	//echo get_lang('Inbox');
+	//	@todo add a platform setting to add the user image
+	if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool') == 'true') {
+		$img_array= UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',true,true);		
+		$no_image =false;
+		if ($img_array['file'] == 'unknown.jpg') {
+			$no_image =true;
+		}		
+		$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 92, 'medium_', ' width="90" height="90" ');
+		
+		echo '<div id="social_widget" style="">';
+		if ($no_image == false)
+			echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php"><img src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
+		else 
+			echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
+			
+		require_once api_get_path(LIBRARY_PATH).'message.lib.php';
+		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+		require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
+		
+		// New messages
+		$number_of_new_messages				= MessageManager::get_new_messages();
+		// New contact invitations
+		$number_of_new_messages_of_friend	= SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
+		
+		// New group invitations sent by a moderator
+		$group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,false);
+		$group_pending_invitations = count($group_pending_invitations);
+		
+		$cant_msg  = '';
+		if ($number_of_new_messages > 0)
+			$cant_msg = ' ('.$number_of_new_messages.')';
+			
+		echo '<div class="message-content">
+				<h2 class="message-title">'.get_lang('Messages').'</h2>
+				<p>';
+				echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />';					
+				echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php" class="message-body">'.get_lang('Comppose').' </a><br />';
+		
+				if ($number_of_new_messages_of_friend > 0) {		
+					echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' ('.$number_of_new_messages_of_friend.') </a><br />';
+				}
+				if ( $group_pending_invitations > 0) {		
+					echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('GroupPendingInvitations').' ('.$group_pending_invitations.') </a><br />';
+				}				
+		echo '</p>';
+				
+		//echo '<img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('Close').'" title="'.get_lang('Close').'"  class="message-delete" />';
+		echo '</div>';
 	
+		
+		echo '</div><br />';
+				
+	
+	}  
+	
+
 	
 	
 	echo '<ul class="menulist">';
@@ -1266,19 +1314,10 @@ if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu']))
 }
 
 if (api_get_setting('allow_reservation') == 'true' && api_is_allowed_to_create_course() ){
-	//include_once('main/reservation/rsys.php');
 	echo '<div class="menusection">';
 	echo '<span class="menusectioncaption">'.get_lang('Booking').'</span>';
 	echo '<ul class="menulist">';
 	echo '<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br />';
-	//echo '<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br />';
-
-	/*require_once('main/reservation/rsys.php');
-	if(api_is_platform_admin() || Rsys :: check_user_status() == 1) { // Only for admins & teachers...
-		echo '<a href="main/reservation/m_item.php">'.get_lang('ManageItems').'</a><br />';
-		echo '<a href="main/reservation/m_reservation.php">'.get_lang('ManageReservationPeriods').'</a><br />';
-	}
-	*/
 	echo '</ul>';
 	echo '</div>';
 }

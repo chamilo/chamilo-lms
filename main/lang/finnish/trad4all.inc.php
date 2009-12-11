@@ -26,6 +26,7 @@ $LoginName = "Kirjaudu";
 $AutostartMp3 = "Haluatko että ääni soitetaan automaattisesti?";
 $Assignments = "Oppilaan tehtävät";
 $Forum = "Keskustelualue";
+$langDelImage = "Poista kuva";
 $langCode = "Kurssikoodi";
 $langUp = "Ylös";
 $Down = "alas";

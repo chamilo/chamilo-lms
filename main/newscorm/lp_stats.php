@@ -139,6 +139,7 @@ if (isset($_GET['lp_id']) && isset($_GET['my_lp_id'])) {
 		} else {
 			$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '" AND status <> "incomplete" ORDER BY exe_date';
 		}
+		echo $sql_attempts;
 	}
 
 }
@@ -185,7 +186,7 @@ if (is_array($list) && count($list) > 0){
 			" AND v.user_id = " . $user_id . " " .
 			" ORDER BY iv.view_count $qry_order ";
 		}
-
+		echo $sql.'<br/>';
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$num = Database :: num_rows($result);
 		$time_for_total = 'NaN';
@@ -231,7 +232,9 @@ if (is_array($list) && count($list) > 0){
 			}
 
 			$counter++;
-			do {
+			
+			do { 
+				echo $row['iv_view_count'];
 				//check if there are interactions below
 				$extend_attempt_link = '';
 				$extend_this_attempt = 0;
@@ -478,7 +481,7 @@ if (is_array($list) && count($list) > 0){
 						$res_score = Database::query($sql,__FILE__,__LINE__);
 						$row_score = Database::fetch_array($res_score);
 
-						$sql = "SELECT SUM(total_time) as total_time FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '".(int)$my_id."' and lp_view_id = '".(int)$my_lp_view_id."'";
+						echo $sql = "SELECT SUM(total_time) as total_time FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '".(int)$my_id."' and lp_view_id = '".(int)$my_lp_view_id."'";
 						$res_time = Database::query($sql,__FILE__,__LINE__);
 						$row_time = Database::fetch_array($res_time);
 
@@ -506,6 +509,7 @@ if (is_array($list) && count($list) > 0){
 				}
 			}
 			$time_for_total = $subtotal_time;
+			echo $subtotal_time.' - ';
 			$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
 			if (empty ($title)) {
 				$title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
@@ -677,7 +681,7 @@ if (is_array($list) && count($list) > 0){
 									}
 									//$view_score = ($my_score == 0 ? '0.00/'.$my_maxscore : ($my_maxscore == 0 ? $my_score : $my_score . '/' . $my_maxscore));
 								}
-
+echo $time_attemp;
 								$output .= '<tr class="'.$oddclass.'" ><td>&nbsp;</td><td>'.$extend_attempt_link.'</td><td colspan="3">' . api_convert_encoding(get_lang('Attempt'), $lp_charset, $dokeos_charset) . ' ' . $n . '</td>'
 							 			. '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . '</div></font></td><td colspan="2"><div class="mystatus" align="center">' . $view_score  . '</div></td><td colspan="2"><div class="mystatus">' . $time_attemp . '</div></td>';
 							 	if ($origin != 'tracking') {

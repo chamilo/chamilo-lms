@@ -25,6 +25,7 @@ $Language = "Kalba";
 $LoginName = "Prisijungimo vardas";
 $Assignments = "Studentų publikacijos";
 $Forum = "Forumas";
+$langDelImage = "Pašalinti nuotrauką";
 $langCode = "Course code";
 $langUp = "Aukštyn";
 $Down = "žemyn";

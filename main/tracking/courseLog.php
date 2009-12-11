@@ -930,7 +930,7 @@ function get_number_of_users() {
  */
 function get_user_data($from, $number_of_items, $column, $direction) {
 	
-	global $user_ids, $course_code, $additional_user_profile_info, $export_csv, $is_western_name_order;
+	global $user_ids, $course_code, $additional_user_profile_info, $export_csv, $is_western_name_order, $csv_content;
 	
 	$course_code = Database::escape_string($course_code);
 	$course_info = CourseManager :: get_course_information($course_code);
@@ -1002,6 +1002,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 			$row[8] = strip_tags($row[8]);
 			$row[9] = strip_tags($row[9]);
 			unset($row[10]);
+			unset($row[11]);
 			$csv_content[] = $row;
 		}
         // store columns in array $users

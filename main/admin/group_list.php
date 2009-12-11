@@ -105,7 +105,14 @@ function get_group_data($from, $number_of_items, $column, $direction)
 
 	$users = array ();
     $t = time();
-	while ($group = Database::fetch_row($res)) {		
+    
+    // Status
+	$status = array();
+	$status[GROUP_PERMISSION_OPEN] 		= get_lang('Open');
+	$status[GROUP_PERMISSION_CLOSED]	= get_lang('Closed');
+	
+	while ($group = Database::fetch_row($res)) {
+		$group[3] = $status[$group[3]];	
 		$group['1'] = '<a href="/main/social/groups.php?id='.$group['0'].'">'.$group['1'].'</a>';      
         $groups[] = $group;
 	}

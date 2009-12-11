@@ -117,11 +117,11 @@ $table_message = Database::get_main_table(TABLE_MESSAGE);
 //api_display_tool_title(api_xml_http_response_encode(get_lang('Inbox')));
 if ($_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
-	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Profile'));
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/profile.php','name' => get_lang('Profile'));
 	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));	
 } else {
 	$this_section = SECTION_MYPROFILE;
-	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Profile'));
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
 	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));
 }
 

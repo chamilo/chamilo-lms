@@ -863,8 +863,7 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 	}
 	foreach ($courses_tree as $cat => $sessions) {
 		$courses_tree[$cat]['details'] = SessionManager::get_session_category($cat);
-
-		if ($cat == 0) {						
+		if ($cat == 0) {
 			$courses_tree[$cat]['courses'] = CourseManager::get_courses_list_by_user_id($_user['user_id'],false);											
 		}
 		$courses_tree[$cat]['sessions'] = array_flip(array_flip($sessions));

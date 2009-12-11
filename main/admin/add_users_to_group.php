@@ -163,7 +163,7 @@ function search_users($needle,$type,$relation_type) {
 					}
 				}
 				$rs_multiple = Database::query($sql, __FILE__, __LINE__);
-				$return_origin .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
+				$return_origin .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';				
 				while ($user = Database :: fetch_array($rs_multiple)) {
 					$person_name = api_get_person_name($user['firstname'], $user['lastname']);
 		            $return_origin .= '<option value="'.$user['user_id'].'">'.$person_name.' ('.$user['username'].')</option>';
@@ -223,7 +223,9 @@ $users=$sessions=array();
 $noPHP_SELF=true;
 
 $group_info = GroupPortalManager::get_group_data($group_id);
-Display::display_header($tool_name);
+$group_name = $group_info['name']; 
+
+Display::display_header($group_name);
 
 if($_POST['form_sent']) {
 	
@@ -236,8 +238,18 @@ if($_POST['form_sent']) {
 	if(!is_array($UserList)) {
 		$UserList=array();
 	}
-	if ($form_sent == 1) {		
-		GroupPortalManager::delete_users($group_id, $relation_type);
+	if ($form_sent == 1) {
+		if ($relation_type == GROUP_USER_PERMISSION_PENDING_INVITATION) {	
+			$relations = array(GROUP_USER_PERMISSION_PENDING_INVITATION,GROUP_USER_PERMISSION_READER);
+			$users_by_group = GroupPortalManager::get_users_by_group($group_id,null,$relations);
+			$user_id_relation = array_keys($users_by_group);		
+			$user_relation_diff = array_diff($user_id_relation,$UserList);
+			foreach ($user_relation_diff as $user_id) {
+				GroupPortalManager::delete_user_rel_group($user_id,$group_id);
+			}
+		} else {
+			GroupPortalManager::delete_users($group_id, $relation_type);			
+		}		
 		$result = GroupPortalManager::add_users_to_groups($UserList, array($group_id), $relation_type);
 		Display :: display_confirmation_message(get_lang('UsersEdited'));
 	}
@@ -277,8 +289,25 @@ if ($ajax_search) {
 
 } else {
 	
+	$many_users = false;	
+	$sql = "SELECT count(user_id) FROM $tbl_user user
+			WHERE ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND user_id<>'$user_anonymous' $without_user_id ";
+	if ($_configuration['multiple_access_urls']==true) {			
+		$access_url_id = api_get_current_access_url_id();
+		if ($access_url_id != -1) {
+			$sql = "SELECT count(user.user_id) FROM $tbl_user user
+					INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=user.user_id)
+					WHERE access_url_id = '$access_url_id'
+					AND ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' 
+					AND user.user_id<>'$user_anonymous' $without_user_id ";
+		}
+	}				
+	$rs_count  = Database::query($sql,__FILE__,__LINE__);
+	$row_count = Database::fetch_row($rs_count);	
+	if ($row_count > 2) $many_users = true;
+		
 	// data for origin list	
-	if (isset($_POST['id']) && isset($_POST['firstLetterUser'])) {					
+	if (isset($_POST['id']) && isset($_POST['firstLetterUser'])) {				
 		$id = intval($_POST['id']);
 		$needle = Database::escape_string($_POST['firstLetterUser']);
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
@@ -420,13 +449,15 @@ if(!empty($errorMsg)) {
 <td align="center">
 
 <?php echo get_lang('FirstLetterUser'); ?> :
-     <select name="firstLetterUser" id="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple',document.getElementById('relation').value)" >
-      <option value = "%">--</option>
-      <?php
-      	$selected_letter = isset($_POST['firstLetterUser'])?$_POST['firstLetterUser']:'';      	
-        echo Display :: get_alphabet_options($selected_letter);
-      ?>
-     </select>
+	<div id="firstLetter">
+	     <select name="firstLetterUser" id="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple',document.getElementById('relation').value)" >
+	      <option value = "%"><?php echo get_lang('All') ?></option>
+	      <?php
+	      	$selected_letter = isset($_POST['firstLetterUser'])?$_POST['firstLetterUser']:'';      	
+	        echo Display :: get_alphabet_options($selected_letter);
+	      ?>
+	     </select>
+     </div>
 </td>
 <td align="center">&nbsp;</td>
 </tr>

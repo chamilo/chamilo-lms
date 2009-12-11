@@ -174,10 +174,10 @@ function manage_form ($default, $select_from_user_list = null) {
 		$form->addElement('hidden','group_id',$group_id);
 		$form->addElement('hidden','parent_id',$message_id);		
 	}
-	$form->add_textfield('title', get_lang('Title'),true ,array('size' => 75));
+	$form->add_textfield('title', get_lang('Title'),true ,array('size' => 77));
 		
 	//$form->add_html_editor('content', '', false, false, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
-	$form->addElement('textarea','content', get_lang('Message'), array('cols' => 75,'rows'=>5));
+	$form->addElement('textarea','content', get_lang('Message'), array('cols' => 75,'rows'=>8));
 	
 	if (isset($_GET['re_id'])) {
 		$form->addElement('hidden','re_id',Security::remove_XSS($_GET['re_id']));
@@ -227,11 +227,11 @@ function manage_form ($default, $select_from_user_list = null) {
 */
 if ($_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
-	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Profile'));
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/profile.php','name' => get_lang('Profile'));
 	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));	
 } else {
 	$this_section = SECTION_MYPROFILE;
-	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Profile'));
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
 	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));
 }
 

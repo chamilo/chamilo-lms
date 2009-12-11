@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
 
 /**
 *	Exercise submission
@@ -47,10 +47,9 @@ $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';
 
-if (api_get_setting('show_glossary_in_extra_tools') == 'true') { 
-  	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/glossary.js" type="text/javascript" language="javascript"></script>'; //Glossary
-  	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
-   
+if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
+	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/glossary.js" type="text/javascript" language="javascript"></script>'; //Glossary
+	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>'; 
 }
 //This library is necessary for the time control feature
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.epiclock.min.js" type="text/javascript" language="javascript"></script>'; //jQuery
@@ -124,7 +123,6 @@ $error = '';
 if (!isset ($exerciseType)) {
 	$exe_start_date = time();
 	$_SESSION['exercice_start_date'] = $exe_start_date;
-	error_log($_SESSION['exercice_start_date']);	
 }
 // if the user has clicked on the "Cancel" button
 if ($buttonCancel) {
@@ -1227,19 +1225,20 @@ if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType !
 	    } else {
 	      $sql_fields = "";
 	      $sql_fields_values = "";
-	    } error_log($exerciseType);   
+	    }  
 	
 		if ($exerciseType == 2) {
 	    	$sql = "INSERT INTO $stat_table($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,data_tracking,start_date,orig_lp_id,orig_lp_item_id)
 	      			VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";
-	      error_log($sql);      
+     
 			Database::query($sql, __FILE__, __LINE__);      
 		} else {
 	    	$sql = "INSERT INTO $stat_table ($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date,orig_lp_id,orig_lp_item_id)
 	       			VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . api_get_session_id() . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";
-	       			error_log($sql);  
+	   
 			Database::query($sql, __FILE__, __LINE__);
 		}
+
 	}
 }
 

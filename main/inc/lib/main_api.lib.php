@@ -345,7 +345,8 @@ function api_get_path($path_type, $path = null) {
 		INCLUDE_PATH => 'inc/',
 		LIBRARY_PATH => 'inc/lib/',
 		CONFIGURATION_PATH => 'inc/conf/',
-		WEB_LIBRARY_PATH => 'inc/lib/'
+		WEB_LIBRARY_PATH => 'inc/lib/',
+		WEB_AJAX_PATH => 'inc/ajax/'
 	);
 
 	static $resource_paths = array(
@@ -437,42 +438,42 @@ function api_get_path($path_type, $path = null) {
 
 		//
 		// Initialization of a table taht contains common-purpose paths.
-		//
-		$paths[WEB_PATH] = $root_web;
-		$paths[SYS_PATH] = $root_sys;
-		$paths[REL_PATH] = $root_rel;
+		$paths[WEB_PATH] 			= $root_web;
+		$paths[SYS_PATH] 			= $root_sys;
+		$paths[REL_PATH] 			= $root_rel;
 		$paths[WEB_SERVER_ROOT_PATH] = $server_base_web.'/';
 		$paths[SYS_SERVER_ROOT_PATH] = $server_base_sys.'/';
-		$paths[WEB_COURSE_PATH] = $root_web.$course_folder;
-		$paths[SYS_COURSE_PATH] = $root_sys.$course_folder;
-		$paths[REL_COURSE_PATH] = $root_rel.$course_folder;
-		$paths[REL_CODE_PATH] = $root_rel.$code_folder;
-		$paths[WEB_CODE_PATH] = $root_web.$code_folder;
+		$paths[WEB_COURSE_PATH] 	= $root_web.$course_folder;
+		$paths[SYS_COURSE_PATH] 	= $root_sys.$course_folder;
+		$paths[REL_COURSE_PATH] 	= $root_rel.$course_folder;
+		$paths[REL_CODE_PATH] 		= $root_rel.$code_folder;
+		$paths[WEB_CODE_PATH] 		= $root_web.$code_folder;
 		// Elimination of an obsolete configuration setting.
 		//$paths[SYS_CODE_PATH] = $GLOBALS['clarolineRepositorySys'];
-		$paths[SYS_CODE_PATH] = $root_sys.$code_folder;
+		$paths[SYS_CODE_PATH] 		= $root_sys.$code_folder;
 		//
 		// Now we can switch into api_get_path() "terminology".
-		$paths[SYS_LANG_PATH] = $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
-		$paths[WEB_IMG_PATH] = $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
+		$paths[SYS_LANG_PATH] 		= $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
+		$paths[WEB_IMG_PATH] 		= $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
 		// TODO: This path may depend on the configuration option? To be researched.
 		// Maybe a new constant like WEB_USER_CSS_PATH has to be defined?
-		$paths[WEB_CSS_PATH] = $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
+		$paths[WEB_CSS_PATH] 		= $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
 		//
-		$paths[GARBAGE_PATH] = $paths[SYS_PATH].$paths[GARBAGE_PATH]; // Deprecated?
-		$paths[SYS_PLUGIN_PATH] = $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
-		$paths[WEB_PLUGIN_PATH] = $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
-		$paths[SYS_ARCHIVE_PATH] = $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
-		$paths[WEB_ARCHIVE_PATH] = $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
+		$paths[GARBAGE_PATH] 		= $paths[SYS_PATH].$paths[GARBAGE_PATH]; // Deprecated?
+		$paths[SYS_PLUGIN_PATH] 	= $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
+		$paths[WEB_PLUGIN_PATH] 	= $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
+		$paths[SYS_ARCHIVE_PATH] 	= $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
+		$paths[WEB_ARCHIVE_PATH] 	= $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
 		// A change for Dokeos 1.8.6.2
 		// Calculation in the previous way does not rely on configuration settings and in some cases gives unexpected results.
 		//$paths[INCLUDE_PATH] = $include_path_sys; // Old behaviour, Dokeos 1.8.6.1.
-		$paths[INCLUDE_PATH] = $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH]; // New behaviour, coherrent with the model, Dokeos 1.8.6.2.
+		$paths[INCLUDE_PATH] 		= $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH]; // New behaviour, coherrent with the model, Dokeos 1.8.6.2.
 		//
-		$paths[LIBRARY_PATH] = $paths[SYS_CODE_PATH].$paths[LIBRARY_PATH];
-		$paths[CONFIGURATION_PATH] = $paths[SYS_CODE_PATH].$paths[CONFIGURATION_PATH];
-		$paths[WEB_LIBRARY_PATH] = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
-
+		$paths[LIBRARY_PATH] 		= $paths[SYS_CODE_PATH].$paths[LIBRARY_PATH];
+		$paths[CONFIGURATION_PATH] 	= $paths[SYS_CODE_PATH].$paths[CONFIGURATION_PATH];
+		$paths[WEB_LIBRARY_PATH] 	= $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
+		$paths[WEB_AJAX_PATH] 	 	= $paths[WEB_CODE_PATH].$paths[WEB_AJAX_PATH];
+		
 		$is_this_function_initialized = true;
 	}
 

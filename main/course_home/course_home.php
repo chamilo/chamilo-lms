@@ -1,31 +1,7 @@
-<?php // $Id: course_home.php 22294 2009-07-22 19:27:47Z iflorespaz $
-
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2005 Dokeos S.A.
-	Copyright (c) 2003 Ghent University
-	Copyright (c) 2001 Universite Catholique de Louvain
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php 
+/* For licensing terms, see /chamilo_license.txt */
 /**
-==============================================================================
-*         HOME PAGE FOR EACH COURSE
+        HOME PAGE FOR EACH COURSE
 *
 *	This page, included in every course's index.php is the home
 *	page. To make administration simple, the teacher edits his
@@ -49,18 +25,11 @@
 *
 *
 *	@package dokeos.course_home
-==============================================================================
 */
 
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
-
+/* 		INIT SECTION		*/
 // Name of the language file that needs to be included.
 $language_file = 'course_home';
-
 $use_anonymous = true;
 
 // Inlcuding the global initialization file.
@@ -88,7 +57,7 @@ $(document).ready(function() {
 				$("#id_confirmation_message").hide();
 			},
 			type: "GET",
-			url: "'.api_get_path(WEB_CODE_PATH).'course_home/activity.php",
+			url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=set_visibility",
 			data: "id=" + my_tool_id + "&sent_http_request=1",
 			success: function(data) {
 				eval("var info=" + data);
@@ -139,11 +108,7 @@ if (isset($_SESSION['_gid'])) {
 // The section for the tabs
 $this_section = SECTION_COURSES;
 
-/*
------------------------------------------------------------
-	Libraries
------------------------------------------------------------
-*/
+// Libraries
 include_once api_get_path(LIBRARY_PATH).'course.lib.php';
 include_once api_get_path(LIBRARY_PATH).'debug.lib.inc.php';
 
@@ -165,19 +130,15 @@ define ('TOOL_ADMIN_PLATEFORM', 'tooladminplatform');
 //define ('TOOL_ADMIN_COURS_INVISIBLE', 'tooladmincoursinvisible');
 define ('TOOL_STUDENT_VIEW', 'toolstudentview');
 define ('TOOL_ADMIN_VISIBLE', 'tooladminvisible');
-/*
 
------------------------------------------------------------
-	Virtual course support code
------------------------------------------------------------
-*/
-$user_id = api_get_user_id();
-$course_code = $_course['sysCode'];
-$course_info = Database::get_course_info($course_code);
 
-$return_result = CourseManager::determine_course_title_from_course_info($_user['user_id'], $course_info);
-$course_title = $return_result['title'];
-$course_code = $return_result['code'];
+/*	Virtual course support code	*/
+$user_id 		= api_get_user_id();
+$course_code 	= $_course['sysCode'];
+$course_info 	= Database::get_course_info($course_code);
+$return_result	= CourseManager::determine_course_title_from_course_info($_user['user_id'], $course_info);
+$course_title	= $return_result['title'];
+$course_code	= $return_result['code'];
 
 $_course['name'] = $course_title;
 $_course['official_code'] = $course_code;

@@ -2,7 +2,7 @@
 /**
  * This script contains the server part of the xajax interaction process. The client part is located
  * in lp_api.php or other api's.
- * This is a first attempt at using xajax and AJAX in general, so the code might be a bit unsettling.
+ * This script updated the TOC of the SCORM without updating the SCO's attributes 
  * @package dokeos.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
@@ -22,19 +22,11 @@ require_once('back_compat.inc.php');
  * @param   integer Current item ID
  * @param   integer New item ID
  */
-function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
+function switch_item_toc($lp_id,$user_id,$view_id,$current_item,$next_item)
 {
     $debug=0;
     $return = '';
-    if($debug>0){error_log('In xajax_switch_item_details('.$lp_id.','.$user_id.','.$view_id.','.$current_item.','.$next_item.')',0);}
-    //$objResponse = new xajaxResponse();
-    /*$item_id may be one of:
-     * -'next'
-     * -'previous'
-     * -'first'
-     * -'last'
-     * - a real item ID
-     */
+    if($debug>0){error_log('In xajax_switch_item_toc('.$lp_id.','.$user_id.','.$view_id.','.$current_item.','.$next_item.')',0);}
     require_once('learnpath.class.php');
     require_once('scorm.class.php');
     require_once('aicc.class.php');
@@ -135,47 +127,11 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
     $myic = $mylpi->get_interactions_count();
     $myistring = '';
     for ($i=0;$i<$myic;$i++) {
-    	$myistring .= ",[".$i.",'','','','','','','']";
+        $myistring .= ",[".$i.",'','','','','','','']";
     }
     if (!empty($myistring)) {
         $myistring = substr($myistring,1);
     }
-    /*
-     * The following lines should reinitialize the values for the SCO
-     * However, due to many complications, we are now relying more on the
-     * LMSInitialize() call and its underlying lp_ajax_initialize.php call
-     * so this code is technically deprecated (but the change of item_id should
-     * remain). However, due to numerous technical issues with SCORM, we prefer
-     * leaving it as a double-lock security. If removing, please test carefully
-     * with both SCORM and dokeos learning path tracking.
-     */ 
-    $return .=
-            "olms.score=".$myscore.";" .
-            "olms.max=".$mymax.";" .
-            "olms.min=".$mymin.";" .
-            "olms.lesson_status='".$mylesson_status."';" .
-            "olms.lesson_location='".$mylesson_location."';" .
-            "olms.session_time='".$mysession_time."';" .
-            "olms.suspend_data='".$mysuspend_data."';" .
-            "olms.total_time = '".$mytotal_time."';" .
-            "olms.mastery_score = '".$mymastery_score."';" .
-            "olms.max_time_allowed = '".$mymax_time_allowed."';" .
-            "olms.launch_data = '".$mylaunch_data."';" .
-            "olms.interactions = new Array(".$myistring.");" .
-            "olms.item_objectives = new Array();" .
-            "olms.G_lastError = 0;" .
-            "olms.G_LastErrorMessage = 'No error';" ;
-    /*
-     * and re-initialise the rest
-     * -lms_lp_id
-     * -lms_item_id
-     * -lms_old_item_id
-     * -lms_new_item_id
-     * -lms_initialized
-     * -lms_progress_bar_mode
-     * -lms_view_id
-     * -lms_user_id
-     */
     $mytotal = $mylp->get_total_items_count_without_chapters();
     $mycomplete = $mylp->get_complete_items_count();
     $myprogress_mode = $mylp->get_progress_bar_mode();
@@ -226,5 +182,5 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
     $_SESSION['lpobject'] = serialize($mylp);
     return $return;
     //return $objResponse;
-}
-echo switch_item_details($_POST['lid'],$_POST['uid'],$_POST['vid'],$_POST['iid'],$_POST['next']);
+    }
+echo switch_item_toc($_POST['lid'],$_POST['uid'],$_POST['vid'],$_POST['iid'],$_POST['next']);

@@ -141,7 +141,7 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
     if($mylpi->get_type()!='sco')
     { //if this object's JS status has not been updated by the SCORM API, update now
         //$objResponse->addScript("lesson_status='".$mystatus."';");
-        $return .= "lesson_status='".$mystatus."';";
+        $return .= "olms.lesson_status='".$mystatus."';";
     }
     //$objResponse->addScript("update_toc('".$mystatus."','".$item_id."');");
     $return .= "update_toc('".$mystatus."','".$item_id."');";

@@ -7,6 +7,7 @@
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) 2003-2008 Vrije Universiteit Brussel (VUB)
 	Copyright (c) 2004-2008 Hoogeschool Gent (HoGent)
+	Copyright (c) Denes Nagy (darkden@freemail.hu)
 	For a full list of contributors detaining copyrights over parts of
 	the Dokeos software, see "documentation/credits.html".
 	The full license can be read in "documentation/license.html".

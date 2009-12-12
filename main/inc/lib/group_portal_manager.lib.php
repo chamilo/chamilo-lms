@@ -2,7 +2,7 @@
 /* For licensing terms, see /chamilo_license.txt */
 /**
 ==============================================================================
-*	This library provides functions for the access_url management.
+*	This library provides functions for the group management.
 *	Include/require it in your code to use its functionality.
 *	@author Julio Montoya <gugli100@gmail.com>
 *	@package dokeos.library
@@ -97,29 +97,7 @@ class GroupPortalManager
 		return $result;
 	}
 
-	/**
-	 *
-	 * */
-	public static function url_exist($url)
-	{
-		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-		$sql = "SELECT id FROM $table_access_url WHERE url = '".Database::escape_string($url)."' ";
-		$res = Database::query($sql,__FILE__,__LINE__);
-		$num = Database::num_rows($res);
-		return $num;
-	}
 
-	/**
-	 *
-	 * */
-	public static function url_id_exist($url)
-	{
-		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-		$sql = "SELECT id FROM $table_access_url WHERE id = '".Database::escape_string($url)."' ";
-		$res = Database::query($sql,__FILE__,__LINE__);
-		$num = Database::num_rows($res);
-		return $num;
-	}
 
 	/**
 	 * This function get the quantity of URLs
@@ -136,22 +114,6 @@ class GroupPortalManager
 		return $result;
 	}
 
-	/**
-	 * Gets the id, url, description, and active status of ALL URLs
-	 * @author Julio Montoya
-	 * @return array
-	 * */
-	public static function get_url_data()
-	{
-		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-		$sql = "SELECT id, url, description, active  FROM $table_access_url";
-		$res = Database::query($sql, __FILE__, __LINE__);
-		$urls = array ();
-		while ($url = Database::fetch_array($res)) {
-			$urls[] = $url;
-		}
-		return $urls;
-	}
 	
 	/**
 	 * Gets data of all groups
@@ -231,24 +193,10 @@ class GroupPortalManager
 		return $tags;
 	}	
 
-	/**
-	 * Gets the id, url, description, and active status of ALL URLs
-	 * @author Julio Montoya
-	 * @return array
-	 * */
-	public static function get_url_data_from_id($url_id)
-	{		
-		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-		$sql = "SELECT id, url, description, active FROM $table_access_url WHERE id = ".Database::escape_string($url_id);
-		$res = Database::query($sql, __FILE__, __LINE__);
-		$row = Database::fetch_array($res);
-		return $row;
-	}
-
 	/** Gets the inner join from users and group table
-	 * @author Julio Montoya
 	 * @return int  access url id
 	 * @return array   Database::store_result of the result
+	 * @author Julio Montoya
 	 * */
 	public static function get_groups_by_user($user_id='', $relation_type = GROUP_USER_PERMISSION_READER, $with_image = false)
 	{
@@ -586,21 +534,6 @@ class GroupPortalManager
 	}
 
 	/**
-	* Deletes an url and course relationship
-	* @author Julio Montoya
-	* @param  char  course code
-	* @param  int url id
-	* @return boolean true if success
-	* */
-	public static function delete_url_rel_course($course_code, $url_id)
-	{
-		$table_url_rel_course= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-		$sql= "DELETE FROM $table_url_rel_course WHERE course_code = '".Database::escape_string($course_code)."' AND access_url_id=".Database::escape_string($url_id)."  ";
-		$result = Database::query($sql,  __FILE__, __LINE__);
-		return $result;
-	}
-
-	/**
 	* Deletes an url and session relationship
 	* @author Julio Montoya
 	* @param  char  course code
@@ -729,18 +662,6 @@ class GroupPortalManager
 		return $url_list;
 	}
 
-	/**
-	 *
-	 * */
-	public static function get_url_id($url)
-	{
-		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-		$sql = "SELECT id FROM $table_access_url WHERE url = '".Database::escape_string($url)."'";
-		$result = Database::query($sql);
-		$access_url_id = Database::result($result, 0, 0);
-		return $access_url_id;
-	}
-	
 	
 	public static function get_all_group_tags($tag, $from=0, $number_of_items=10) {
 		// database table definition
@@ -1079,7 +1000,12 @@ class GroupPortalManager
 			return false;
 		}			
 	}
-	
+	/**
+	 * Shows the left column of the group page
+	 * @param int group id
+	 * @param int user id
+	 * 
+	 */
 	public static function show_group_column_information($group_id, $user_id) {
 		
 		$group_info = GroupPortalManager::get_group_data($group_id); 
@@ -1216,14 +1142,8 @@ class GroupPortalManager
 					echo api_get_person_name($user['firstname'], $user['lastname']).'</a></div>';
 				}
 			}
-		echo '</div>';
-		
-		
-	
-	echo '</div>'; // end layout left	
-	
-		
-		
+		echo '</div>';	
+	echo '</div>'; // end layout left		
 	}
 }
 ?>

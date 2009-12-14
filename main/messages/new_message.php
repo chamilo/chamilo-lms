@@ -57,7 +57,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function (){		
 		
       		$("#users").fcbkcomplete({
-	            json_url: "find_users.php?",
+	            json_url: "'.api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users",
 	            cache: false,
 	            filter_case: true,
 	            filter_hide: true,

@@ -78,10 +78,10 @@ switch ($action) {
 		      		'view'    => $requested_view
 				);
 				print(json_encode($response_data));
-				exit;
 			}
 	break;
 	default:
 		echo '';
 }
+exit;
 ?>

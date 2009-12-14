@@ -221,6 +221,8 @@ define('INCLUDE_PATH', 'INCLUDE_PATH');
 define('LIBRARY_PATH', 'LIBRARY_PATH');
 define('CONFIGURATION_PATH', 'CONFIGURATION_PATH');
 define('WEB_LIBRARY_PATH', 'WEB_LIBRARY_PATH');
+define('WEB_AJAX_PATH', 'WEB_AJAX_PATH');
+
 // Constants for requesting path conversion.
 define('TO_WEB', 'TO_WEB');
 define('TO_SYS', 'TO_SYS');

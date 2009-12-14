@@ -215,28 +215,30 @@ class MessageManager
 				
 				if (!empty($group_id)) {
 					//message in inbox for group										
-					$users_by_group = GroupPortalManager::get_users_by_group($group_id);
-					$users_ids = array_keys($users_by_group);					
-					foreach ($users_ids as $user_id) {
-						$receiver_user_id = $user_id;														 
-						$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id ) ".
-								 " VALUES ('$user_sender_id', '$receiver_user_id', '1', '".date('Y-m-d H:i:s')."','$title','$content','$group_id','$parent_id')";
-						$result = Database::query($query,__FILE__,__LINE__);				
-						$inbox_last_id = Database::insert_id();					
-						// save attachment file for inbox messages
-						if (is_array($file_attachments)) {
-							$i = 0;
-							foreach ($file_attachments as $file_attach) {						
-								if ($file_attach['error'] == 0) {
-									self::save_message_attachment_file($file_attach,$file_comments[$i],$inbox_last_id,null,$receiver_user_id);
+					$users_by_group = GroupPortalManager::get_all_users_by_group($group_id);
+					$users_ids = array_keys($users_by_group);	
+					if (is_array($users_ids) && count($users_ids) > 0) {				
+						foreach ($users_ids as $user_id) {
+							$receiver_user_id = $user_id;														 
+							$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id ) ".
+									 " VALUES ('$user_sender_id', '$receiver_user_id', '1', '".date('Y-m-d H:i:s')."','$title','$content','$group_id','$parent_id')";
+							$result = Database::query($query,__FILE__,__LINE__);				
+							$inbox_last_id = Database::insert_id();					
+							// save attachment file for inbox messages
+							if (is_array($file_attachments)) {
+								$i = 0;
+								foreach ($file_attachments as $file_attach) {						
+									if ($file_attach['error'] == 0) {
+										self::save_message_attachment_file($file_attach,$file_comments[$i],$inbox_last_id,null,$receiver_user_id);
+									}
+									$i++;
 								}
-								$i++;
-							}
-						}						
-						// update parent id for other receiver users belongs the group						
-						if (!empty($parent_id)) {
-							self::update_parent_ids_from_reply($parent_id, $receiver_user_id, $inbox_last_id);
-						}													
+							}						
+							// update parent id for other receiver users belongs the group						
+							if (!empty($parent_id)) {
+								self::update_parent_ids_from_reply($parent_id, $receiver_user_id, $inbox_last_id);
+							}													
+						}
 					}
 				} else {		
 								

@@ -870,6 +870,10 @@ class SocialManager extends UserManager {
 			echo '</ul></dd>';
 		}
 	}
+	/**
+	 * Dummy function 
+	 * 
+	 */
 	public static function get_plugins($place = SOCIAL_CENTER_PLUGIN) {
 		$content = '';
 		switch ($place) {

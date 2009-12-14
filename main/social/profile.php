@@ -434,7 +434,7 @@ echo '<div id="social-profile-wrapper">';
 			echo '</div>';
 			
 			//Load right plugin's
-		    echo SocialManager::get_plugins(SOCIAL_RIGHT_PLUGIN);
+		    //echo SocialManager::get_plugins(SOCIAL_RIGHT_PLUGIN);
 		    	
 		} else {
 			echo '<div class="clear"></div><br />';
@@ -614,12 +614,10 @@ echo '<div id="social-profile-container">';
 	    	  		echo '<div class="social-content-announcements">';
 	    	  		echo $announcement_content.'<br/>';
 	    	  		echo '</div>';
-	    	  	}
-	    	  	
+	    	  	}    	  	
 	    	  	
 	    	  	//Load left plugin
-		    	echo SocialManager::get_plugins(SOCIAL_LEFT_PLUGIN);
-		    
+		    	//echo SocialManager::get_plugins(SOCIAL_LEFT_PLUGIN);	    
 		    
     	  	}
     echo '</div>';
@@ -711,7 +709,7 @@ echo '<div id="social-profile-container">';
 		    }
 		    
    		    //Load plugin center
-		    echo SocialManager::get_plugins(SOCIAL_CENTER_PLUGIN);
+		    //echo SocialManager::get_plugins(SOCIAL_CENTER_PLUGIN);
 
 
 			//--------------------------

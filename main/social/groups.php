@@ -113,8 +113,10 @@ if ($group_id != 0 ) {
 		}
 	}
 	
-	//Shows left column
+	
+	//-- Shows left column
 	echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
+	//---
 		
 	//-- Show message groups	
 	echo '<div id="layout_right" style="margin-left: 282px;">';	
@@ -187,16 +189,16 @@ if ($group_id != 0 ) {
 			}
 			if ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			
 				$result['name'].= Display::return_icon('moderator_star.png', get_lang('Moderator'));
-			}
-			
+			}			
 			$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,cut($result['description'],140));
 		}
 	}
 	echo '<h1>'.get_lang('MyGroups').'</h1>';
-
+	// Everybody can create groups
 	if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
 		echo '<a href="group_add.php">'.get_lang('CreateAgroup').'</a>';	
 	} else {
+		// Only admins and teachers can create groups		
 		if (api_is_allowed_to_edit(null,true)) {
 			echo '<a href="group_add.php">'.get_lang('CreateAgroup').'</a>';
 		}

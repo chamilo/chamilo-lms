@@ -302,16 +302,28 @@ class GroupPortalManager
 	}
 	
 	/**
-	 * Gets the members of a group
+	 * Gets the group's members
 	 */
-	public static function get_users_by_group($group_id='', $with_image = false, $relation_type = array(), $limit = 100, $image_conf = array('size'=>'medium_','height'=>80))
+	public static function get_users_by_group($group_id, $with_image = false, $relation_type = array(), $from = 0, $limit = 15, $image_conf = array('size'=>'medium_','height'=>80))
 	{
 		$where = '';
 		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$tbl_user				= Database::get_main_table(TABLE_MAIN_USER);
 		$group_id 				= intval($group_id);
-		$limit 					= intval($limit);	
+		$from					= intval($from);	
+		$limit 					= intval($limit);
 		
+		if (empty($group_id)){
+			return array();
+		}
+		
+		if (empty($limit)) {
+			$limit = 15;
+		}
+		if (empty($from)) {
+			$from = 0;
+		}
+				
 		if (count($relation_type) == 0) {			
 			$where_relation_condition = '';
 		} else {
@@ -326,7 +338,7 @@ class GroupPortalManager
 		
 		$sql="SELECT picture_uri as image, u.user_id, u.firstname, u.lastname, relation_type FROM $tbl_user u
 			INNER JOIN $table_group_rel_user gu
-			ON (gu.user_id = u.user_id) WHERE gu.group_id= $group_id $where_relation_condition ORDER BY relation_type, firstname LIMIT $limit";
+			ON (gu.user_id = u.user_id) WHERE gu.group_id= $group_id $where_relation_condition ORDER BY relation_type, firstname LIMIT $from, $limit";
 			
 		$result=Database::query($sql,__FILE__,__LINE__);
 		$array = array();
@@ -335,6 +347,32 @@ class GroupPortalManager
 				$picture = UserManager::get_picture_user($row['user_id'], $row['picture_uri'],$image_conf['height'],$image_conf['size']);						
 				$row['image'] = '<img src="'.$picture['file'].'"  '.$picture['style'].'  />';
 			}
+			$array[$row['user_id']] = $row;			
+		}
+		return $array;
+	}
+	
+	/**
+	 * Gets all the members of a group no matter the relationship for more specifications use get_users_by_group
+	 * @param int group id
+	 * @return array
+	 */
+	public static function get_all_users_by_group($group_id)
+	{
+		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
+		$tbl_user				= Database::get_main_table(TABLE_MAIN_USER);
+		$group_id 				= intval($group_id);
+		
+		if (empty($group_id)){
+			return array();
+		}		
+		$sql="SELECT u.user_id, u.firstname, u.lastname, relation_type FROM $tbl_user u
+			INNER JOIN $table_group_rel_user gu
+			ON (gu.user_id = u.user_id) WHERE gu.group_id= $group_id ORDER BY relation_type, firstname";
+			
+		$result=Database::query($sql,__FILE__,__LINE__);
+		$array = array();
+		while ($row = Database::fetch_array($result, 'ASSOC')) {
 			$array[$row['user_id']] = $row;			
 		}
 		return $array;
@@ -422,9 +460,8 @@ class GroupPortalManager
 	* @author Julio Montoya
 	* @param int user id
 	* @param int group_id
-	* @return int 0 if there are not relationship otherwise return GROUP_USER_PERMISSION_ADMIN or GROUP_USER_PERMISSION_READER constants
-	* */
-	
+	* @return int 0 if there are not relationship otherwise returns the user group
+	* */	
 	public static function get_user_group_role($user_id, $group_id)
 	{
 		$table_group_rel_user= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
@@ -974,8 +1011,12 @@ class GroupPortalManager
 		return self::update_group_picture($group_id);
 	}	
 	
-	public static function is_group_admin($group_id) {
-		$user_role	= GroupPortalManager::get_user_group_role(api_get_user_id(), $group_id);	
+	
+	public static function is_group_admin($group_id, $user_id = 0) {
+		if (empty($user_id)) {
+			$user_id = api_get_user_id();
+		}
+		$user_role	= GroupPortalManager::get_user_group_role($user_id, $group_id);	
 		if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN))) {
 			return true;
 		} else {
@@ -983,8 +1024,11 @@ class GroupPortalManager
 		}			
 	}
 	
-	public static function is_group_moderator($group_id) {
-		$user_role	= GroupPortalManager::get_user_group_role(api_get_user_id(), $group_id);	
+	public static function is_group_moderator($group_id, $user_id = 0) {
+		if (empty($user_id)) {
+			$user_id = api_get_user_id();
+		}
+		$user_role	= GroupPortalManager::get_user_group_role($user_id, $group_id);	
 		if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
 			return true;
 		} else {
@@ -992,8 +1036,11 @@ class GroupPortalManager
 		}			
 	}
 	
-	public static function is_group_member($group_id) {		
-		$user_role	= GroupPortalManager::get_user_group_role(api_get_user_id(), $group_id);
+	public static function is_group_member($group_id, $user_id = 0) {
+		if (empty($user_id)) {
+			$user_id = api_get_user_id();
+		}
+		$user_role	= GroupPortalManager::get_user_group_role($user_id, $group_id);
 		if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR, GROUP_USER_PERMISSION_READER))) {
 			return true;
 		} else {
@@ -1013,22 +1060,11 @@ class GroupPortalManager
 		$big_image	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'','big_');
 		
 		$tags		= GroupPortalManager::get_group_tags($group_id, true);
-		$users		= GroupPortalManager::get_users_by_group($group_id, true);
+		$members	= GroupPortalManager::get_users_by_group($group_id, true);
 		
 		
 		//my relation with the group is set here
-		
-		if (is_array($users[api_get_user_id()]) && count($users[api_get_user_id()]) > 0) {
-			//im a member
-			if ($users[api_get_user_id()]['relation_type'] != '' ) {			
-				$my_group_role = $users[api_get_user_id()]['relation_type'];
-			} else {
-				$my_group_role = GROUP_USER_PERMISSION_ANONYMOUS;		
-			}
-		} else {
-			//im not a member
-			$my_group_role = GROUP_USER_PERMISSION_ANONYMOUS;		
-		}
+		$my_group_role = self::get_user_group_role($user_id, $group_id);
 		
 		//@todo this must be move to default.css for dev use only
 		echo '<style> 		
@@ -1118,8 +1154,9 @@ class GroupPortalManager
 				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.get_lang('InviteFriends').'</a></li>';
 				echo '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.get_lang('LeaveGroup').'</a></li>';
 				break;
-			case GROUP_USER_PERMISSION_ANONYMOUS:
+			default:
 				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a></li>';
+			break;
 		}
 		echo '</ul>';
 		echo '</div>'; // end layout permissions
@@ -1128,20 +1165,27 @@ class GroupPortalManager
 		//Members
 		echo get_lang('Members').' : ';	
 		echo '<div id="group_members">';		
-			foreach($users as $user) {		
-				if (in_array($user['relation_type'] , array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))) {		
-					if ($user['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
-						$user['lastname'].= Display::return_icon('admin_star.png', get_lang('Admin'));
+			foreach($members as $member) {
+				// if is a member
+				if (in_array($member['relation_type'] , array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))) {
+					//add icons		
+					if ($member['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
+						$member['lastname'].= Display::return_icon('admin_star.png', get_lang('Admin'));
 					}
-					if ($user['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
-						$user['lastname'].= Display::return_icon('moderator_star.png', get_lang('Moderator'));
-					}
-					
-					echo '<div class="group_member_item"><a href="profile.php?u='.$user['user_id'].'">';
-					echo '<div class="group_member_picture">'.$user['image'].'</div>';
-					echo api_get_person_name($user['firstname'], $user['lastname']).'</a></div>';
+					if ($member['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
+						$member['lastname'].= Display::return_icon('moderator_star.png', get_lang('Moderator'));
+					}					
+					echo '<div class="group_member_item"><a href="profile.php?u='.$member['user_id'].'">';
+					echo '<div class="group_member_picture">'.$member['image'].'</div>';
+					echo api_get_person_name($member['firstname'], $member['lastname']).'</a></div>';
 				}
 			}
+			
+			if ($my_group_role == GROUP_USER_PERMISSION_READER) {
+				echo '<div class="group_member_more"><a href="group_members.php?id='.$group_id.'">';
+				echo get_lang('More').'</a></div>';
+			}
+			
 		echo '</div>';	
 	echo '</div>'; // end layout left		
 	}

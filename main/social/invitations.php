@@ -75,12 +75,12 @@ if (is_array($_GET) && count($_GET)>0) {
 	foreach($_GET as $key => $value) { 
 		switch ($key) {
 			case 'accept':				
-				$user_role = GroupPortalManager::get_user_group_role(api_get_user_id(), $value);
-				if ($user_role == GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER) {				
+				$user_role = GroupPortalManager::get_user_group_role(api_get_user_id(), $value);				
+				if (in_array($user_role , array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,GROUP_USER_PERMISSION_PENDING_INVITATION))) {				
 					GroupPortalManager::update_user_role(api_get_user_id(), $value, GROUP_USER_PERMISSION_READER);
-					$show_message = get_lang('UserIsSubscribeToThisGroup');
+					$show_message = get_lang('UserIsSubscribedToThisGroup');
 				} else {
-					$show_message = get_lang('UserIsSubscribeToThisGroup');
+					$show_message = get_lang('UserIsNotSubscribedToThisGroup');
 				}				
 			break 2;			
 			case 'deny':
@@ -108,7 +108,7 @@ $user_id = api_get_user_id();
 
 $list_get_invitation		= SocialManager::get_list_invitation_of_friends_by_user_id($user_id);
 $list_get_invitation_sent	= SocialManager::get_list_invitation_sent_by_user_id($user_id);
-$pending_invitations 		= GroupPortalManager::get_groups_by_user($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION,true);
+$pending_invitations 		= GroupPortalManager::get_groups_by_user($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION, true);
 //$pending_invitations_by_me 	= GroupPortalManager::get_groups_by_user($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,true);
 
 $number_loop=count($list_get_invitation);

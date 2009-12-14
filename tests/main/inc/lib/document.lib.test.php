@@ -2,15 +2,37 @@
 require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 
 class TestDocumentManager extends UnitTestCase {
+		
+		
+	public function CreateCourse(){		
+		global $_configuration;
+	$course_datos = array('wanted_code'=> 'CURSO1',
+						  'title'=>'CURSO1',
+			    		  'tutor_name'=>'R. J. Wolfagan',
+						  'category_code'=>'2121',
+						  'course_language'=>'english',
+						  'course_admin_id'=>'1211',
+						  'db_prefix'=> $_configuration['db_prefix'],
+						  'firstExpirationDelay'=>'112'
+						  );
+	$res = create_course($course_datos['wanted_code'], $course_datos['title'],
+						 $course_datos['tutor_name'], $course_datos['category_code'],
+						 $course_datos['course_language'],$course_datos['course_admin_id'],
+						 $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);
+ 	 	
+	 
+	}
 
-	/**
-	 * This check if a document has the readonly property checked, then see if the user
-	 * is the owner of this file, if all this is true then return true.
+	
+    /**
+	 * This check if a document has the readonly property checked, then see if 
+	 * the user is the owner of this file, if all this is true then return true.
 	 *
 	 * @param array  $_course
 	 * @param int    $user_id id of the current user
 	 * @param string $file path stored in the database
-	 * @param int    $document_id in case you dont have the file path ,insert the id of the file here and leave $file in blank ''
+	 * @param int    $document_id in case you dont have the file path ,insert the 
+	 * id of the file here and leave $file in blank ''
 	 * @return boolean true/false
 	 **/
 	public function testcheck_readonly() {
@@ -23,14 +45,16 @@ class TestDocumentManager extends UnitTestCase {
 	}
 
 	/**
-	 * This deletes a document by changing visibility to 2, renaming it to filename_DELETED_#id
+	 * This deletes a document by changing visibility to 2, renaming it to 
+	 * filename_DELETED_#id
 	 * Files/folders that are inside a deleted folder get visibility 2
 	 *
 	 * @param array $_course
 	 * @param string $path, path stored in the database
 	 * @param string ,$base_work_dir, path to the documents folder
 	 * @return boolean true/false
-	 * @todo now only files/folders in a folder get visibility 2, we should rename them too.
+	 * @todo now only files/folders in a folder get visibility 2, we should 
+	 * rename them too.
 	 */
 	function testdelete_document() {
 		$_course['dbName']='';
@@ -81,21 +105,25 @@ class TestDocumentManager extends UnitTestCase {
 	*/
 	function testfile_send_for_download() {
 		$full_file_name='';
-		$res=DocumentManager::file_send_for_download();
+		$forced = false;
+		$name = '';
+		$res=DocumentManager::file_send_for_download($full_file_name, $forced, $name);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
 
 	/**
-	*   @todo ??not only check if a file is visible, but also check if the user is allowed to see the file??
-	*   @return true if the user is allowed to see the document, false otherwise (bool)
+	*   @todo ??not only check if a file is visible, but also check if the user 
+	* 	is allowed to see the file??
+	*   @return true if the user is allowed to see the document, false otherwise 
+	* 	(bool)
 	*/
 	function testfile_visible_to_user() {
-		$this_course= null;
-		$doc_url= true;
-		$res=DocumentManager::file_visible_to_user($this_course, $doc_url);
-		$this->assertTrue(is_bool($res));
-		//var_dump($res);
+	$this_course= 'CURSO1';
+	$doc_url='http://www.chamilo123.com/courses/CURSO1/document/video/painting.mpg?cidReq=CURSO1';
+	$res=DocumentManager::file_visible_to_user($this_course, $doc_url);
+	$this->assertTrue(is_bool($res));
+	//var_dump($res);
 	}
 
 	/**
@@ -110,7 +138,12 @@ class TestDocumentManager extends UnitTestCase {
 	*/
 	function testget_all_document_data() {
 		$_course['dbName']='';
-		$res=DocumentManager::get_all_document_data();
+		$path = '/';
+		$to_group_id = 0;
+		$to_user_id = NULL;
+		$can_see_invisible = false;
+		$res=DocumentManager::get_all_document_data($_course, $path, $to_group_id, 
+		$to_user_id, $can_see_invisible);
 		$this->assertTrue(is_array($_course));
 		//var_dump($_course);
 	}
@@ -160,7 +193,8 @@ class TestDocumentManager extends UnitTestCase {
 	 * @return boolean true/false
 	 **/
 	function testis_folder() {
-		$_course['dbName']='';
+		$_course['dbName'] = 'chamilo_CURSO1';
+		$document_id = 1;
 		$document_id = Database::escape_string($document_id);
 		$res=DocumentManager::is_folder($_course, $document_id);
 		$this->assertTrue(is_bool($res));
@@ -180,7 +214,8 @@ class TestDocumentManager extends UnitTestCase {
 	}
 
 	/**
-	 * Allow to set a specific document as a new template for FCKEditor for a particular user in a particular course
+	 * Allow to set a specific document as a new template for FCKEditor for a 
+	 * particular user in a particular course
 	 *
 	 * @param string $title
 	 * @param string $description
@@ -195,16 +230,28 @@ class TestDocumentManager extends UnitTestCase {
 		$couse_code='';
 		$user_id='';
 		$image='';
-		$res=DocumentManager::set_document_as_template($title, $description, $document_id_for_template, $couse_code, $user_id, $image);
+		$res=DocumentManager::set_document_as_template($title, $description, 
+													   $document_id_for_template,
+													   $couse_code, $user_id, 
+													   $image
+													  );
 		$this->assertTrue(is_bool($res));
 	}
-
+/* this function shows some exceptions by causes of the same simpletest, because
+ * this funcion that would be testing, contains headers
 	function teststring_send_for_download() {
 		$full_string='';
-		$res=DocumentManager::string_send_for_download($full_string);
+		$forced = false; 
+		$name = '';
+		$filename = $name;
+		$len = strlen($full_string);
+		$res=DocumentManager::string_send_for_download($full_string,
+													   $forced,
+													   $name
+													  );
 		$this->assertTrue(is_bool($res));
 	}
-
+*/
 	/**
 	 * Unset a document as template
 	 *
@@ -217,9 +264,31 @@ class TestDocumentManager extends UnitTestCase {
 		$document_id=Database::escape_string($document_id);
 		$course_code=Database::escape_string($course_code);
 		$user_id=Database::escape_string($user_id);
-		$res=DocumentManager::unset_document_as_template($document_id, $course_code, $user_id);
+		$res=DocumentManager::unset_document_as_template($document_id, 
+														 $course_code, 
+														 $user_id
+														);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
+	
+	public function DeleteCourse(){
+		$this->dmanager = null;
+	 	$code = 'CURSO1';				
+		$res = CourseManager::delete_course($code);			
+		$path = api_get_path(SYS_PATH).'archive';		
+		if ($handle = opendir($path)) {
+			while (false !== ($file = readdir($handle))) {				
+				if (strpos($file,$code)!==false) {										
+					if (is_dir($path.'/'.$file)) {						
+						rmdirr($path.'/'.$file);						
+					}				
+				}				
+			}
+			closedir($handle);
+		}	
+
+	}
+	
 }
 ?>

@@ -1,6 +1,7 @@
 <?php
 require_once(api_get_path(LIBRARY_PATH).'database.lib.php');
-
+require_once(api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
+require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 class TestDatabase extends UnitTestCase {
 
 	 public $dbase;
@@ -9,13 +10,44 @@ class TestDatabase extends UnitTestCase {
 	 }
 
 	 public function setUp() {
+	 	global $_configuration;
  	 	$this->dbase = new Database();
+ 	 	
+ 	 	$course_datos = array(
+				'wanted_code'=> 'COD16',
+				'title'=>'CURSO1',
+				'tutor_name'=>'R. J. Wolfagan',
+				'category_code'=>'2121',
+				'course_language'=>'english',
+				'course_admin_id'=>'1211',
+				'db_prefix'=> $_configuration['db_prefix'],
+				'firstExpirationDelay'=>'112'
+				);
+		$res = create_course($course_datos['wanted_code'], $course_datos['title'],
+							 $course_datos['tutor_name'], $course_datos['category_code'],
+							 $course_datos['course_language'],$course_datos['course_admin_id'],
+							 $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);
+ 	 	
 	 }
 
 	 public function tearDown() {
 	 	$this->dbase = null;
+	 	$code = 'COD16';				
+		$res = CourseManager::delete_course($code);			
+		$path = api_get_path(SYS_PATH).'archive';		
+		if ($handle = opendir($path)) {
+			while (false !== ($file = readdir($handle))) {				
+				if (strpos($file,$code)!==false) {										
+					if (is_dir($path.'/'.$file)) {						
+						rmdirr($path.'/'.$file);						
+					}				
+				}				
+			}
+			closedir($handle);
+		}
+	 	
 	 }
-
+	
 	public function testAffectedRows() {
 		$res=$this->dbase->affected_rows();
 		$this->assertTrue(is_numeric($res));
@@ -205,7 +237,7 @@ class TestDatabase extends UnitTestCase {
 
 		function testGetScorm_table() {
 		$short_table_name='';
-		$res=$this->dbase->get_scorm_table();
+		$res=$this->dbase->get_scorm_table($short_table_name);
 		$this->assertTrue(is_string($res));
 		$this->assertTrue($res);
 	}
@@ -227,8 +259,8 @@ class TestDatabase extends UnitTestCase {
 	function testGetUserInfoFromId() {
 		$user_id = '';
 		$res=$this->dbase->get_user_info_from_id($user_id);
-		$this->assertTrue(is_null($res));
-		$this->assertTrue($res === null);
+		$this->assertTrue(is_array($res));
+		$this->assertTrue($res);
 		//var_dump($res);
 	}
 
@@ -241,7 +273,7 @@ class TestDatabase extends UnitTestCase {
 
 	function testGetUserPersonalTable(){
 		$short_table_name='';
-		$res=$this->dbase->	get_user_personal_table();
+		$res=$this->dbase->	get_user_personal_table($short_table_name);
 		$this->assertTrue(is_string($res));
 		$this->assertTrue($res);
 	}
@@ -259,9 +291,11 @@ class TestDatabase extends UnitTestCase {
 	}
 
 	function testNumRows() {
-		$res='';
-		$resul=$this->dbase->num_rows($res);
-		$this->assertTrue(is_string($res));
+		$sql= 	"SELECT * FROM chamilo_main.user";
+		$res = Database::query($sql);		
+		$resul=Database::num_rows($res);
+		$this->assertTrue(is_numeric($resul));
+		//var_Dump($res);
 	}
 
 	function testQuery() {
@@ -271,12 +305,12 @@ class TestDatabase extends UnitTestCase {
 	}
 
 	function testResult() {
-		$sql="SELECT 1";
-		$resource=$this->dbase->query($sql,__FILE__,__LINE__);
-		$rows='1';
-		$res=$this->dbase->result($resource,$rows);
+		$sql="SELECT * FROM chamilo_main.user";
+		$resource= Database::query($sql,__FILE__,__LINE__);
+		$row= 1;
+		$res= Database::result($resource, $row);
+		$this->assertTrue(is_string($res));
 		//var_dump($res);
-		$this->assertTrue(is_bool($res));
 	}
 
 	function testStoreResult(){

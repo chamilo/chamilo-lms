@@ -1017,10 +1017,13 @@ function update_mail_sent($insert_id)
  */
 function get_all_annoucement_by_user_course($course_db, $user_id)
 {
+	if (empty($course_db) || empty($user_id)) {
+		return '';
+	}
 	$tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT, $course_db);
 	$tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db);
 	if (!empty($user_id) && is_numeric($user_id)) {
-		$user_id = Database::escape_string($user_id);
+		$user_id = intval($user_id);
 		$sql="SELECT announcement.*, toolitemproperties.*
 						FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
 						WHERE announcement.id = toolitemproperties.ref

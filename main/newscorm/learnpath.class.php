@@ -1083,7 +1083,7 @@ class learnpath {
 			if ($old_next != 0) {
 				$sql_update_previous = "
 						    		UPDATE " . $tbl_lp_item . "
-						    		SET previous_item_id = " . $old_previous . "
+						    		SET previous_item_id = " . $old_previous . " 
 						    		WHERE id = " . $old_next;
 				$res_update_previous = Database::query($sql_update_previous, __FILE__, __LINE__);
 
@@ -1095,7 +1095,7 @@ class learnpath {
 				    		UPDATE " . $tbl_lp_item . "
 				    		SET display_order = display_order - 1
 				    		WHERE
-				    			display_order > " . $old_order . " AND
+				    			display_order > " . $old_order . " AND lp_id = " . $this->lp_id . " AND
 				    			parent_item_id = " . $old_parent;
 			$res_update_order = Database::query($sql_update_order, __FILE__, __LINE__);
 

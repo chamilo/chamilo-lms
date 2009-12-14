@@ -281,7 +281,7 @@ $action = $_GET["action"];
 
 if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-	$interbreadcrumb[] = array ("url" => 'user_list.php', "name" => get_lang('UserList'));
+	$interbreadcrumb[] = array ("url" => 'group_list.php', "name" => get_lang('GroupList'));
 	$tool_name = get_lang('SearchAUser');
 	Display :: display_header($tool_name);
 	//api_display_tool_title($tool_name);
@@ -311,7 +311,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 else
 {
 	$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-	$tool_name = get_lang('UserList');
+	$tool_name = get_lang('GroupList');
 	Display :: display_header($tool_name, "");
 
 	//api_display_tool_title($tool_name);
@@ -353,38 +353,25 @@ else
 			Security::clear_token();
 		}
 	}
-	if (isset ($_POST['action']))
-	{
+	if (isset ($_POST['action'])) {
 		$check = Security::check_token('get');
-		if($check)
-		{
-			switch ($_POST['action'])
-			{
+		if ($check) {
+			switch ($_POST['action']) {
 				case 'delete' :
-					if (api_is_platform_admin()) {
-						$number_of_selected_users = count($_POST['id']);
-						$number_of_deleted_users = 0;
-						if (is_array($_POST['id'])) {
-							foreach ($_POST['id'] as $index => $user_id)
-							{
-								if($user_id != $_user['user_id'])
-								{
-									if(UserManager :: delete_user($user_id))
-									{
-										$number_of_deleted_users++;
-									}
-								}
-							}
-						}
-						if($number_of_selected_users == $number_of_deleted_users)
-						{
-							Display :: display_confirmation_message(get_lang('SelectedUsersDeleted'));
-						}
-						else
-						{
-							Display :: display_error_message(get_lang('SomeUsersNotDeleted'));
+					if (api_is_platform_admin()) {						
+						$number_of_selected_groups = count($_POST['id']);
+						$number_of_deleted_groups = 0;
+						foreach ($_POST['id'] as $index => $group_id) {								
+							if (GroupPortalManager :: delete($group_id)) {
+								$number_of_deleted_groups++;
+							}								
 						}
 					}
+					if ($number_of_selected_groups == $number_of_deleted_groups) {
+						Display :: display_confirmation_message(get_lang('SelectedGroupsDeleted'));
+					} else {
+						Display :: display_error_message(get_lang('SomeGroupsNotDeleted'));
+					}				
 					break;
 			}
 			Security::clear_token();

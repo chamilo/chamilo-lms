@@ -389,11 +389,12 @@ foreach ($extra as $id => $field_details) {
            					'.$tag_list.'
       						 </select>';			
 			$form->addElement('html',$pre_html.$multi_select.$post );
-			$url = api_get_path(WEB_CODE_PATH).'user';
+			$url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
+			
 			//if cache is set to true the jquery will be called 1 time
 			$jquery_ready_content.= <<<EOF
       		$("#extra_$field_details[1]").fcbkcomplete({
-	            json_url: "$url/$field_details[1].php?field_id=$field_details[0]",
+	            json_url: "$url?a=search_tags&field_id=$field_details[0]",
 	            cache: false,
 	            filter_case: true,
 	            filter_hide: true,

@@ -47,13 +47,21 @@
   <li>User tags added DT#5508</li>
   <li>Who is online look revamped DT#5490</li>
   <li>New search tool added DT#5610 </li>	
-  <li>User groups added  DT#5611 </li>  
+  <li><strong>User platform groups</strong> added  DT#5611 posibility to send group messages, add moderators, readers, etc</li>  
   <li>Social network tab added</li>
   <li>Easy construction of presentations with the images of document tool</li>
   <li>Upgrade from FCKEditor 2.6.4.1 to <strong>FCKEditor 2.6.5, Build 23959</strong> has been implemented. (#2867)</li>
   <li>Settings WYSIWYG editor from Platform Admin Area</li>
   <li>Upgrade html2pdf libray to 3.26</li>
   <li>Upgrade mimetex to 1.71</li>
+  <li>Social network menu interface revamped</li>
+  <li>Who's on line interface improved </li>
+  <li>Message tool improved: More simply to use, no annoing unuseless ajax menu </li>
+  <li>Message tool: Send multiple attachements, send emails to many users </li>  
+  <li>User portal page improved when Social Network is enabled.(User image, in box, and subscriptions links are showed) </li>
+  <li>New inc/ajax library added to reorder ajax calls in Chamilo see CT#431 </li>
+  <li>RSS Feed added by default to the extra field aswell as the user tag (Needs to change visibility)</li>
+  <li>Reporting tab performance improved (main/mySpace/courseLog.php file)</li>   
 
 </ul>
 <h3>Debugging</h3>
@@ -66,7 +74,7 @@
 <br />
 <h3>CSS changes</h3>
 <ul>
-  <li>No major change, no old styles update required</li>
+  <li>New Chamilo theme added </li>
 </ul>
 <h3>Known issues</h3>
 <ul>
@@ -74,7 +82,20 @@
 </ul>
 <h3>Deprecated files</h3>
 <ul>
-  <li>No important file removed, no change required</li>
+  <li>main/btf_functions.php file deleted. All functions are in the new class inc/lib/course_home.lib.php</li>
+  <li>Message tool
+  	<ul>
+  		<li>main/messages/message.class.php moved to inc/lib/message.lib.php</li>
+  		<li>In main/messages directory this files are useless: message.css, cookies.js</li>
+  	</ul>
+	</li>
+<li>Social tool
+  	<ul>
+  		<li>Horrible filename message_for_group_form_inc.php moved to the inc/ajax library</li>
+  		<li>main/social/select_options.php moved to  inc/ajax library</li>
+  	</ul>
+	</li>
+	  
 </ul>
 <br />
 <h1>Dokeos 1.8.6.1 - August 2009</h1>

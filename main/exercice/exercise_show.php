@@ -577,7 +577,11 @@ if ($show_results) {
 					$ind = $row['answer'];
 					$choice[$ind] = 1;
 				}
-				$studentChoice=$choice[$answerId];
+
+				$numAnswer=$objAnswerTmp->selectAutoId($answerId);
+								
+				$studentChoice=$choice[$numAnswer];				
+				
 				if ($studentChoice) {
 					$questionScore+=$answerWeighting;
 					$totalScore+=$answerWeighting;
@@ -619,7 +623,10 @@ if ($show_results) {
 				$queryans = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
 				$resultans = Database::query($queryans, __FILE__, __LINE__);
 				$choice = Database::result($resultans,0,"answer");
-				$studentChoice=($choice == $answerId)?1:0;
+
+				$numAnswer=$objAnswerTmp->selectAutoId($answerId);
+								
+				$studentChoice=($choice == $numAnswer)?1:0;
 				if ($studentChoice) {
 				  	$questionScore+=$answerWeighting;
 					$totalScore+=$answerWeighting;

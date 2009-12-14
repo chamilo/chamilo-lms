@@ -80,8 +80,9 @@ class Answer
 		$this->cancel();
 
 		// fills arrays
-		Exercise::read($_REQUEST['exerciseId']);		
-		if($this->random_answers=='1')
+		$objExercise = new Exercise();
+		$objExercise->read($_REQUEST['exerciseId']);		
+		if($objExercise->random_answers=='1')
 		{
 			$this->readOrderedBy('rand()', '');// randomize answers
 		}
@@ -198,7 +199,7 @@ class Answer
 	/**
 	 * returns the autoincrement id identificator
 	 *
-	 * @author - Juan Carlos Raña
+	 * @author - Juan Carlos Raï¿½a
 	 * @return - integer - answer num
 	 */
 	function selectAutoId($id)

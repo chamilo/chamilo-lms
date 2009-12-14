@@ -228,8 +228,7 @@ if($_POST['form_sent']) {
 	if(!is_array($user_list)) {
 		$user_list=array();
 	}
-	if ($form_sent == 1) {
-		var_dump($group_info);
+	if ($form_sent == 1) {		
 		//invite this users
 		$result = GroupPortalManager::add_users_to_groups($user_list, array($group_id), GROUP_USER_PERMISSION_PENDING_INVITATION);
 		$title = get_lang('YouAreInvitedToGroup').' '.$group_info['name'];

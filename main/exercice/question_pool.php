@@ -65,6 +65,9 @@ if(isset($_GET['exerciseId'])){
 if(isset($_GET['exerciseLevel'])){
 	$exerciseLevel = intval($_GET['exerciseLevel']);
 }
+if(isset($_GET['answerType'])){
+	$answerType = intval($_GET['answerType']);
+}
 if(!empty($_GET['page'])){
 	$page = intval($_GET['page']);
 }
@@ -205,8 +208,8 @@ if($is_allowedToEdit)
 
 	<?php echo get_lang('Filter'); ?> :
 	<select name="exerciseId">
-	<option value="0">-- <?php echo get_lang('AllExercises'); ?> --</option>
-	<option value="-1" <?php if($exerciseId == -1) echo 'selected="selected"'; ?>>-- <?php echo get_lang('OrphanQuestions'); ?> --</option>
+	<option value="0"><?php echo get_lang('AllExercises'); ?></option>
+	<option value="-1" <?php if($exerciseId == -1) echo 'selected="selected"'; ?>><?php echo get_lang('OrphanQuestions'); ?></option>
 	<?php
 	$sql="SELECT id,title FROM $TBL_EXERCICES WHERE id<>'".Database::escape_string($fromExercise)."' AND active<>'-1' ORDER BY id";
 	$result=Database::query($sql,__FILE__,__LINE__);
@@ -233,14 +236,40 @@ if($is_allowedToEdit)
 				if ($exerciseLevel == $level)
 					$selected = ' selected="selected" ';
 				if ($level==-1) {
-					echo '<option value="'.$level.'" '.$selected.'>-- '.get_lang('AllExercises').' --</option>';
+					echo '<option value="'.$level.'" '.$selected.'>'.get_lang('Any').'</option>';
 				} else   {
 					echo '<option value="'.$level.'" '.$selected.'>'.$level.'</option>';
 				}
 			}
 		}
 		echo '</select> ';
+		
+		//
+    	echo get_lang('AnswerType');
+    	echo ' : <select name="answerType">';	
+		//answer type
+		if (!isset($answerType)) $answerType = -1;
+		{
+			
+			
+			for ($answer_type = -1; $answer_type <=6; $answer_type++) {
+				$selected ='';
+				if ($answer_type!=0) {
+					if ($answerType == $answer_type)
+					$selected = ' selected="selected" ';
+					if ($answer_type==-1) {echo '<option value="-1" '.$selected.'>'.get_lang('Any').'</option>'; } // check 0 or -1				
+					elseif ($answer_type==1) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('UniqueAnswer').'</option>'; }
+					elseif ($answer_type==2) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('MultipleAnswer').'</option>'; }
+					elseif ($answer_type==3) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('langFillBlanks').'</option>'; } 		
+					elseif ($answer_type==4) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('langMatching').'</option>'; }
+					elseif ($answer_type==5) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('FreeAnswer').'</option>'; }		
+					elseif ($answer_type==6) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('HotSpot').'</option>'; }
+				}
+			}
+		}
+		echo '</select> ';
 	?>
+    
 	<button class="save" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Ok') ?></button>
     </form>
 </div>
@@ -258,13 +287,20 @@ if($is_allowedToEdit)
 
 		if (isset($exerciseLevel) && $exerciseLevel != -1) {
 			$where .= ' level='.$exerciseLevel.' AND ';
-		}
-
+		}	
+		
+		if (isset($answerType) && $answerType != -1) {
+			$where .= ' type='.$answerType.' AND ';
+		}	
+		
 		$sql="SELECT id,question,type,level
 				FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS
 			  	WHERE $where question_id=id AND exercice_id='".Database::escape_string($exerciseId)."'
 				ORDER BY question_order";
+				
+				
 	} elseif($exerciseId == -1) {
+
 		// if we have selected the option 'Orphan questions' in the list-box 'Filter'
 
 		// 1. Old logic: When a test is deleted, the correspondent records in 'quiz' and 'quiz_rel_question' tables are deleted.
@@ -299,11 +335,17 @@ if($is_allowedToEdit)
 		if (isset($exerciseLevel) && $exerciseLevel!= -1 ) {
 			$level_where = ' level='.$exerciseLevel.' AND ';
 		}
+		
+		$answer_where = '';
+		if (isset($answerType) && $answerType!= -1 ) {
+			$answer_where = ' questions.type='.$answerType.' AND ';
+		}
+		
 		$sql='SELECT questions.id, questions.question, questions.type, quizz_questions.exercice_id , level
 				FROM '.$TBL_QUESTIONS.' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions
 				ON questions.id=quizz_questions.question_id LEFT JOIN '.$TBL_EXERCICES.' as exercices
 				ON exercice_id=exercices.id
-				WHERE '.$level_where.' (quizz_questions.exercice_id IS NULL OR exercices.active = -1 )  '.$type_where.'
+				WHERE '.$answer_where.' '.$level_where.' (quizz_questions.exercice_id IS NULL OR exercices.active = -1 )  '.$type_where.'
 				LIMIT '.$from.', '.($limitQuestPage + 1);
 
 	} else {
@@ -316,12 +358,21 @@ if($is_allowedToEdit)
 			$where = ' WHERE type = 1 ';
 		}
 
+
 		if (isset($exerciseLevel) && $exerciseLevel != -1) {
 			if (strlen($where)>0)
 				$where .= ' AND level='.$exerciseLevel.' ';
 			else
 				$where = ' WHERE level='.$exerciseLevel.' ';
 		}
+		
+		if (isset($answerType) && $answerType != -1) {
+			if (strlen($where)>0)
+				$where .= ' AND type='.$answerType.' ';
+			else
+				$where = ' WHERE type='.$answerType.' ';
+		}		
+		
 		$sql="SELECT id,question,type,level FROM $TBL_QUESTIONS $where ";
 
 		// forces the value to 0

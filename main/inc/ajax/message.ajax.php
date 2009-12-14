@@ -1,7 +1,7 @@
 <?php
+/* For licensing terms, see /chamilo_license.txt */
 /**
- * This class response to the Ajax calls
- * 
+ * Responses to AJAX calls 
  */
 require_once '../global.inc.php';
 $action = $_GET['a'];
@@ -9,14 +9,16 @@ $action = $_GET['a'];
 switch ($action) {	
 	case 'find_users':
 	
+		if (api_is_anonymous()){
+			echo '';
+			break;
+		}
 		$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 		$tbl_my_user		= Database :: get_main_table(TABLE_MAIN_USER);
 		$tbl_my_user_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
 		$tbl_user 			= Database :: get_main_table(TABLE_MAIN_USER);
 		$search				= Database::escape_string(Security::remove_XSS($_POST['search']));
 		$current_date		= date('Y-m-d H:i:s',time());
-		
-		api_block_anonymous_users();
 		
 		$user_id = api_get_user_id();
 		$is_western_name_order = api_is_western_name_order();
@@ -42,8 +44,7 @@ switch ($action) {
 			$sql='SELECT DISTINCT u.user_id as id, '.($is_western_name_order ? 'concat(u.firstname," ",u.lastname," ","( ",u.email," )")' : 'concat(u.lastname," ",u.firstname," ","( ",u.email," )")').' as name
 			 FROM '.$tbl_my_user.' u INNER JOIN '.$track_online_table.' t ON u.user_id=t.login_user_id
 			 WHERE DATE_ADD(login_date,INTERVAL "'.$valid.'" MINUTE) >= "'.$current_date.'" AND '.($is_western_name_order ? 'concat(u.firstname, " ", u.lastname)' : 'concat(u.lastname, " ", u.firstname)').' like CONCAT("%","'.$search.'","%") ';
-		}
-		
+		}		
 		$result=Database::query($sql,__FILE__,__LINE__);
 		
 		if (Database::num_rows($result)>0) {
@@ -51,14 +52,11 @@ switch ($action) {
 				$return[] = array('caption'=>$row['name'], 'value'=>$row['id']);
 			}
 		}
-		$return =  json_encode($return);
-		echo $return;		
-		break;
-	
-	
-	
+		echo json_encode($return);	
+		break;	
 	default:
 		echo '';
+	
 }
 exit;
 ?>

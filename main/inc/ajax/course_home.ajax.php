@@ -1,7 +1,7 @@
 <?php
+/* For licensing terms, see /chamilo_license.txt */
 /**
- * This class response to the Ajax calls
- * 
+ * Responses to AJAX calls 
  */
 require_once '../global.inc.php';
 $action = $_GET['a'];

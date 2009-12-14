@@ -1,20 +1,23 @@
 <?php
+/* For licensing terms, see /chamilo_license.txt */
 /**
- * This class response to the Ajax calls
- * 
+ * Responses to AJAX calls 
  */
 require_once '../global.inc.php';
-$action = $_GET['a'];
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+$action = $_GET['a'];
 
 switch ($action) {	
 	case 'search_tags':
-			
-		/* For licensing terms, see /dokeos_license.txt */		
-		$field_id = intval($_GET['field_id']);
-		$tag = $_GET['tag'];
-		echo UserManager::get_tags($tag, $field_id,'json','10');			
-		break;
+		if (api_is_anonymous()){
+			echo '';
+			break;
+		} else {		
+			$field_id = intval($_GET['field_id']);
+			$tag = $_GET['tag'];
+			echo UserManager::get_tags($tag, $field_id,'json','10');			
+			break;
+		}
 	default:
 		echo '';
 }

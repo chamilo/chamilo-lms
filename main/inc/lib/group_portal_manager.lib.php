@@ -1077,7 +1077,7 @@ class GroupPortalManager
 		echo '<div id="layout-left" style="float: left; width: 280px; height: 100%;">';
 	
 		//Group's title
-		echo '<h1>'.$group_info['name'].'</h1>';
+		echo '<h1><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a></h1>';
 		
 		//Group's image 
 		echo '<div id="group_image">';
@@ -1126,8 +1126,10 @@ class GroupPortalManager
 			case GROUP_USER_PERMISSION_READER:
 				// I'm just a reader
 				echo get_lang('IamAReader');
-				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a></li>';				
-				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.get_lang('InviteFriends').'</a></li>';
+								
+				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a></li>';
+				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList')).'&nbsp;'.get_lang('MessageList').'</a></li>';
+				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends')).'&nbsp;'.get_lang('InviteFriends').'</a></li>';
 				echo '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.get_lang('LeaveGroup').'</a></li>';
 					
 				break;
@@ -1135,24 +1137,28 @@ class GroupPortalManager
 				echo get_lang('IamAnAdmin');
 				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a></li>';
 	
+				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList')).'&nbsp;'.get_lang('MessageList').'</a></li>';	
 				echo '<li><a href="group_edit.php?id='.$group_id.'">'.			Display::return_icon('edit.gif', get_lang('EditGroup')).'&nbsp;'.get_lang('EditGroup').'</a></li>';
 				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList')).'&nbsp;'.get_lang('MemberList').'</a></li>';
 				echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList')).'&nbsp;'.get_lang('WaitingList').'</a></li>';
 				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends')).'&nbsp;'.get_lang('InviteFriends').'</a></li>';
+				
 				break;
 			case GROUP_USER_PERMISSION_PENDING_INVITATION:				
-				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang(YouHaveBeenInvitedJoinNow).'</a></li>';
+				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('YouHaveBeenInvitedJoinNow').'</a></li>';
 				break;
 			case GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
 				echo get_lang('WaitingForAdminResponse');
 				break;
 			case GROUP_USER_PERMISSION_MODERATOR:
 				echo get_lang('IamAModerator');
-				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a></li>';		
-				echo '<li><a href="group_members.php?id='.$group_id.'">'.get_lang('MemberList').'</a></li>';
-				echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.get_lang('WaitingList').'</a></li>';
-				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.get_lang('InviteFriends').'</a></li>';
-				echo '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.get_lang('LeaveGroup').'</a></li>';
+				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a></li>';
+				
+				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList')).'&nbsp;'.get_lang('MessageList').'</a></li>';							
+				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList')).'&nbsp;'.get_lang('MemberList').'</a></li>';
+				echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList')).'&nbsp;'.get_lang('WaitingList').'</a></li>';
+				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends')).'&nbsp;'.get_lang('InviteFriends').'</a></li>';
+				
 				break;
 			default:
 				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a></li>';
@@ -1180,11 +1186,12 @@ class GroupPortalManager
 					echo api_get_person_name($member['firstname'], $member['lastname']).'</a></div>';
 				}
 			}
-			
-			if ($my_group_role == GROUP_USER_PERMISSION_READER) {
+			if (count($members) > 15) { 
+				//More link
 				echo '<div class="group_member_more"><a href="group_members.php?id='.$group_id.'">';
 				echo get_lang('More').'</a></div>';
 			}
+			
 			
 		echo '</div>';	
 	echo '</div>'; // end layout left		

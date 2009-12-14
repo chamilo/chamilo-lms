@@ -4,7 +4,6 @@
  * @package dokeos.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
- 
 
 // Language files that should be included
 $language_file = array('userInfo');
@@ -35,6 +34,12 @@ if (Database::num_rows($res) != 1) {
 	header('Location: groups.php?id='.$group_id);
 	exit;
 }
+
+//only group admins can edit the group
+if (!GroupPortalManager::is_group_admin($group_id)) {
+	api_not_allowed();		
+}	
+
 
 $group_data = Database::fetch_array($res, 'ASSOC');
 

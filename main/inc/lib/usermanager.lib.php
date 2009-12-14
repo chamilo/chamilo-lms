@@ -2292,7 +2292,7 @@ class UserManager
 		// database table definition
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
-		$field_id	= intval($field_id);			 //like '%$tag%' 
+		$field_id	= intval($field_id);			  
 		$limit		= intval($limit);	
 		$tag 		= trim(Database::escape_string($tag));
 					 

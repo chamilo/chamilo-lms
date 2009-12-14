@@ -11,6 +11,10 @@ require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 
+$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/thickbox.js"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="/main/inc/lib/javascript/thickbox.css" type="text/css" media="projection, screen">';
+
 $this_section = SECTION_SOCIAL;
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
 
@@ -77,7 +81,7 @@ if (isset($_GET['action']) && $_GET['action']=='set_moderator') {
 
 
 
-if (! empty($show_message)){
+if (!empty($show_message)){
 	Display :: display_normal_message($show_message);
 }
 
@@ -104,6 +108,8 @@ echo '<div id="layout_right" style="margin-left: 282px;">';
 	
 	if (count($new_member_list) > 0) {			
 		Display::display_sortable_grid('search_users', array(), $new_member_list, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true,false,true,true));		
+	} else {
+		Display :: display_normal_message(get_lang('ThereAreNotUsersInTheWaitingList'));
 	}
 
 echo '</div>'; // end layout right

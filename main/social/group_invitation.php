@@ -16,6 +16,11 @@ require('../inc/global.inc.php');
 require_once ('../inc/lib/xajax/xajax.inc.php');
 api_block_anonymous_users();
 
+$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/thickbox.js"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="/main/inc/lib/javascript/thickbox.css" type="text/css" media="projection, screen">';
+
+
 $xajax = new xajax();
 //$xajax->debugOn();
 $xajax -> registerFunction ('search_users');
@@ -224,14 +229,18 @@ if($_POST['form_sent']) {
 		$user_list=array();
 	}
 	if ($form_sent == 1) {
+		var_dump($group_info);
 		//invite this users
 		$result = GroupPortalManager::add_users_to_groups($user_list, array($group_id), GROUP_USER_PERMISSION_PENDING_INVITATION);
-		$title = 'YouAreInvitedToGroup'.$group_id;
-		$content = 'YouAreInvitedToGroupContent'.$group_id;
+		$title = get_lang('YouAreInvitedToGroup').' '.$group_info['name'];
+		$content = get_lang('YouAreInvitedToGroupContent').' '.$group_info['name'].' <br />';
+		$content .= get_lang('ToSubscribeClickInTheLinkBelow').' <br />';
+		$content .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php?accept='.$group_id.'">'.get_lang('Subscribe').'</a>';
+		
 		if (is_array($user_list) && count($user_list) > 0) {
 			//send invitation message
 			foreach($user_list as $user_id ){
-				MessageManager::send_message($user_id, $title, $content);
+				$result = MessageManager::send_message($user_id, $title, $content);				
 			}
 		}		
 	}

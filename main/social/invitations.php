@@ -109,7 +109,6 @@ $user_id = api_get_user_id();
 $list_get_invitation		= SocialManager::get_list_invitation_of_friends_by_user_id($user_id);
 $list_get_invitation_sent	= SocialManager::get_list_invitation_sent_by_user_id($user_id);
 $pending_invitations 		= GroupPortalManager::get_groups_by_user($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION, true);
-//$pending_invitations_by_me 	= GroupPortalManager::get_groups_by_user($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,true);
 
 $number_loop=count($list_get_invitation);
 
@@ -216,8 +215,8 @@ if (count($pending_invitations) > 0) {
 		$invitation['name'] = '<a href="groups.php?id='.$invitation['id'].'">'.$invitation['name'].'</a>'; 
 		$invitation['join'] = '<a href="invitations.php?accept='.$invitation['id'].'">'.get_lang('AcceptInvitation').'</a>';
 		$invitation['deny'] = '<a href="invitations.php?deny='.$invitation['id'].'">'.get_lang('DenyInvitation').'</a>';
-		$invitation['send_message'] = '<a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?height=300&width=610&user_friend='.$invitation['id'].'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">';
-		$invitation['send_message'] .= Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a>';
+		//$invitation['send_message'] = '<a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?height=300&width=610&user_friend='.$invitation['id'].'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">';
+		//$invitation['send_message'] .= Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a>';
 		$new_invitation[]=$invitation;
 	}	
 	Display::display_sortable_grid('search_users', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false,false,true,true,true,true));

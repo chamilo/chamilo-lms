@@ -1240,7 +1240,7 @@ if ($show_menu) {
 		$number_of_new_messages_of_friend	= SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
 		
 		// New group invitations sent by a moderator
-		$group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,false);
+		$group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION,false);
 		$group_pending_invitations = count($group_pending_invitations);
 		
 		$cant_msg  = '';

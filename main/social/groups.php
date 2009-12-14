@@ -136,6 +136,42 @@ if ($group_id != 0 ) {
 	
 } else {
 		
+		
+	// My groups -----
+	
+	$results = GroupPortalManager::get_groups_by_user(api_get_user_id(), 0, true);
+	
+	$groups = array();
+	if (is_array($results) && count($results) > 0) {
+		foreach ($results as $result) {
+			$id = $result['id'];
+			$url_open  = '<a href="groups.php?id='.$id.'">';
+			$url_close = '</a>';
+			if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {			
+				$result['name'].= Display::return_icon('admin_star.png', get_lang('Admin'));
+			}
+			if ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			
+				$result['name'].= Display::return_icon('moderator_star.png', get_lang('Moderator'));
+			}			
+			$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,cut($result['description'],140));
+		}
+	}
+	echo '<h1>'.get_lang('MyGroups').'</h1>';
+	// Everybody can create groups
+	if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
+		echo '<a href="group_add.php">'.get_lang('CreateAgroup').'</a>';	
+	} else {
+		// Only admins and teachers can create groups		
+		if (api_is_allowed_to_edit(null,true)) {
+			echo '<a href="group_add.php">'.get_lang('CreateAgroup').'</a>';
+		}
+	}
+	
+	if (count($groups) > 0) {		
+		Display::display_sortable_grid('groups', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
+	}
+	
+	
 	// Newest groups --------
 	
 	$results = GroupPortalManager::get_groups_by_age();
@@ -174,39 +210,7 @@ if ($group_id != 0 ) {
 	}
 	
 	
-	// My groups -----
-	
-	$results = GroupPortalManager::get_groups_by_user(api_get_user_id(), 0, true);
-	
-	$groups = array();
-	if (is_array($results) && count($results) > 0) {
-		foreach ($results as $result) {
-			$id = $result['id'];
-			$url_open  = '<a href="groups.php?id='.$id.'">';
-			$url_close = '</a>';
-			if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {			
-				$result['name'].= Display::return_icon('admin_star.png', get_lang('Admin'));
-			}
-			if ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			
-				$result['name'].= Display::return_icon('moderator_star.png', get_lang('Moderator'));
-			}			
-			$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,cut($result['description'],140));
-		}
-	}
-	echo '<h1>'.get_lang('MyGroups').'</h1>';
-	// Everybody can create groups
-	if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
-		echo '<a href="group_add.php">'.get_lang('CreateAgroup').'</a>';	
-	} else {
-		// Only admins and teachers can create groups		
-		if (api_is_allowed_to_edit(null,true)) {
-			echo '<a href="group_add.php">'.get_lang('CreateAgroup').'</a>';
-		}
-	}
-	
-	if (count($groups) > 0) {		
-		Display::display_sortable_grid('groups', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
-	}
+
 }	
 Display :: display_footer();
 ?>

@@ -24,6 +24,8 @@ define('MESSAGE_STATUS_NEW',				'0');
 define('MESSAGE_STATUS_UNREAD',				'1');
 define('MESSAGE_STATUS_DELETED',			'2');
 
+///define('MESSAGE_STATUS_DELETED',			'4');
+
 define('MESSAGE_STATUS_INVITATION_PENDING',	'5');
 define('MESSAGE_STATUS_INVITATION_ACCEPTED','6');
 define('MESSAGE_STATUS_INVITATION_DENIED',	'7');
@@ -192,74 +194,79 @@ class MessageManager
 	        $content = api_convert_encoding($content,$charset,'UTF-8');
 	        $content = Database::escape_string($content);
 			//message in inbox
-			$sql = "SELECT COUNT(*) as count FROM $table_message WHERE user_sender_id = ".$user_sender_id." AND user_receiver_id='$receiver_user_id' AND title = '$title' AND content ='$content' AND group_id = '$group_id' AND parent_id = '$parent_id'";
-			$res_exist = Database::query($sql,__FILE__,__LINE__);
-			$row_exist = Database::fetch_array($res_exist,'ASSOC');
-			if ($row_exist['count'] == 0) {
-				//message in outbox for user friend or group
-				$sql = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id ) ".
-						 " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".date('Y-m-d H:i:s')."','$title','$content', '$group_id', '$parent_id')";
-				$rs = Database::query($sql,__FILE__,__LINE__);
-				$outbox_last_id = Database::insert_id();
+			
+			//useless query
+			//echo $sql = "SELECT COUNT(*) as count FROM $table_message WHERE user_sender_id = ".$user_sender_id." AND user_receiver_id='$receiver_user_id' AND title = '$title' AND content ='$content' AND group_id = '$group_id' AND parent_id = '$parent_id'";		
+			//$res_exist = Database::query($sql,__FILE__,__LINE__);
+			//$row_exist = Database::fetch_array($res_exist,'ASSOC');
+			
+			//We should ALWAYS sent emails
+			//if ($row_exist['count'] == 0) {
 				
-				// save attachment file for outbox messages
-				if (is_array($file_attachments)) {
-					$o = 0;
-					foreach ($file_attachments as $file_attach) {						
-						if ($file_attach['error'] == 0) {
-							self::save_message_attachment_file($file_attach,$file_comments[$o],$outbox_last_id,$user_sender_id);
-						}
-						$o++;
+			//message in outbox for user friend or group
+			$sql = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id ) ".
+					 " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".date('Y-m-d H:i:s')."','$title','$content', '$group_id', '$parent_id')";
+			$rs = Database::query($sql,__FILE__,__LINE__);
+			$outbox_last_id = Database::insert_id();
+			
+			// save attachment file for outbox messages
+			if (is_array($file_attachments)) {
+				$o = 0;
+				foreach ($file_attachments as $file_attach) {						
+					if ($file_attach['error'] == 0) {
+						self::save_message_attachment_file($file_attach,$file_comments[$o],$outbox_last_id,$user_sender_id);
+					}
+					$o++;
+				}
+			}
+			
+			if (!empty($group_id)) {
+				//message in inbox for group										
+				$users_by_group = GroupPortalManager::get_all_users_by_group($group_id);
+				$users_ids = array_keys($users_by_group);	
+				if (is_array($users_ids) && count($users_ids) > 0) {				
+					foreach ($users_ids as $user_id) {
+						$receiver_user_id = $user_id;														 
+						$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id ) ".
+								 " VALUES ('$user_sender_id', '$receiver_user_id', '1', '".date('Y-m-d H:i:s')."','$title','$content','$group_id','$parent_id')";
+						$result = Database::query($query,__FILE__,__LINE__);				
+						$inbox_last_id = Database::insert_id();					
+						// save attachment file for inbox messages
+						if (is_array($file_attachments)) {
+							$i = 0;
+							foreach ($file_attachments as $file_attach) {						
+								if ($file_attach['error'] == 0) {
+									self::save_message_attachment_file($file_attach,$file_comments[$i],$inbox_last_id,null,$receiver_user_id);
+								}
+								$i++;
+							}
+						}						
+						// update parent id for other receiver users belongs the group						
+						if (!empty($parent_id)) {
+							self::update_parent_ids_from_reply($parent_id, $receiver_user_id, $inbox_last_id);
+						}													
 					}
 				}
-				
-				if (!empty($group_id)) {
-					//message in inbox for group										
-					$users_by_group = GroupPortalManager::get_all_users_by_group($group_id);
-					$users_ids = array_keys($users_by_group);	
-					if (is_array($users_ids) && count($users_ids) > 0) {				
-						foreach ($users_ids as $user_id) {
-							$receiver_user_id = $user_id;														 
-							$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id ) ".
-									 " VALUES ('$user_sender_id', '$receiver_user_id', '1', '".date('Y-m-d H:i:s')."','$title','$content','$group_id','$parent_id')";
-							$result = Database::query($query,__FILE__,__LINE__);				
-							$inbox_last_id = Database::insert_id();					
-							// save attachment file for inbox messages
-							if (is_array($file_attachments)) {
-								$i = 0;
-								foreach ($file_attachments as $file_attach) {						
-									if ($file_attach['error'] == 0) {
-										self::save_message_attachment_file($file_attach,$file_comments[$i],$inbox_last_id,null,$receiver_user_id);
-									}
-									$i++;
-								}
-							}						
-							// update parent id for other receiver users belongs the group						
-							if (!empty($parent_id)) {
-								self::update_parent_ids_from_reply($parent_id, $receiver_user_id, $inbox_last_id);
-							}													
+			} else {		
+							
+				//message in inbox for user friend								 
+				$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id ) ".
+						 " VALUES ('$user_sender_id', '$receiver_user_id', '1', '".date('Y-m-d H:i:s')."','$title','$content','$group_id','$parent_id')";
+				$result = Database::query($query,__FILE__,__LINE__);				
+				$inbox_last_id = Database::insert_id();					
+				// save attachment file for inbox messages
+				if (is_array($file_attachments)) {
+					$i = 0;
+					foreach ($file_attachments as $file_attach) {						
+						if ($file_attach['error'] == 0) {
+							self::save_message_attachment_file($file_attach,$file_comments[$i],$inbox_last_id,null,$receiver_user_id);
 						}
+						$i++;	
 					}
-				} else {		
-								
-					//message in inbox for user friend								 
-					$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id ) ".
-							 " VALUES ('$user_sender_id', '$receiver_user_id', '1', '".date('Y-m-d H:i:s')."','$title','$content','$group_id','$parent_id')";
-					$result = Database::query($query,__FILE__,__LINE__);				
-					$inbox_last_id = Database::insert_id();					
-					// save attachment file for inbox messages
-					if (is_array($file_attachments)) {
-						$i = 0;
-						foreach ($file_attachments as $file_attach) {						
-							if ($file_attach['error'] == 0) {
-								self::save_message_attachment_file($file_attach,$file_comments[$i],$inbox_last_id,null,$receiver_user_id);
-							}
-							$i++;	
-						}
-					}					
-				}														
-				return $result;
-			}
+				}					
+			}														
+			return $result;
+			//}
         }         
 		return false;
 	}

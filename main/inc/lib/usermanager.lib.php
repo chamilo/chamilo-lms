@@ -6,6 +6,7 @@
 *	Include/require it in your code to use its functionality.
 *
 *	@package dokeos.library
+*	@author Julio Montoya <gugli100@gmail.com> Social network groups added 2009/12
 ==============================================================================
 */
 
@@ -918,14 +919,14 @@ class UserManager
 			// Check if enumerated field, if the option is available
 			$rowuf = Database::fetch_array($resuf);
 			switch ($rowuf['field_type']) {
-				case 10 :	
-					//Tags are process here	
+				case USER_FIELD_TYPE_TAG :	
+					//4. Tags are process here comes from main/auth/profile.php	
 					UserManager::process_tags(explode(';', $fvalues), $user_id, $rowuf['id']);
 					return true;
 				break;
-				case 3:
-				case 4:
-				case 5:
+				case USER_FIELD_TYPE_RADIO:
+				case USER_FIELD_TYPE_SELECT:
+				case USER_FIELD_TYPE_SELECT_MULTIPLE:
 					$sqluo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowuf['id'];
 					$resuo = Database::query($sqluo, __FILE__, __LINE__);
 					$values = split(';',$fvalues);
@@ -2272,8 +2273,8 @@ class UserManager
 	 * 
 	 * 1. Create a new extra field in main/admin/user_fields.php with the "TAG" field type make it available and visible. Called it "books" for example.
 	 * 2. Go to profile main/auth/profile.php There you will see a special input (facebook style) that will show suggestions of tags. 
-	 * 3. Step 2 will not work since this special input needs a file called "main/user/books.php" In this case. In order to have this file copy and paste from this file main/user/tag.php
-	 * 4. All the tags are registered in the user_tag table and the relationship between user and tags is in the user_rel_tag table
+	 * 3. All the tags are registered in the user_tag table and the relationship between user and tags is in the user_rel_tag table
+	 * 4. Tags are independent this means that tags can't be shared between tags + book + hobbies.
 	 * 5. Test and enjoy.
 	 * 
 	 */
@@ -2291,9 +2292,10 @@ class UserManager
 		// database table definition
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
-		$field_id = intval($field_id);			 //like '%$tag%' 
-		$limit = intval($limit);	
-		$tag = Database::escape_string($tag);			 
+		$field_id	= intval($field_id);			 //like '%$tag%' 
+		$limit		= intval($limit);	
+		$tag 		= trim(Database::escape_string($tag));
+					 
 		// all the information of the field
 		$sql = "SELECT id, tag from $table_user_tag
 				WHERE field_id = $field_id AND tag LIKE '$tag%' ORDER BY tag LIMIT $limit";
@@ -2356,10 +2358,10 @@ class UserManager
 	}
 	
 
-		/**
+	/**
 	 * Get user's tags
-	 * @param int field_id
 	 * @param int user_id
+	 * @param int field_id
 	 * @return array
 	 */
 	public static function get_user_tags_to_string($user_id,$field_id) {
@@ -2393,9 +2395,9 @@ class UserManager
 
 	/**
 	 * Get the tag id
-	 * @param int $tag
-	 * @param int $field_id
-	 * @return int 0 if fails otherwise the tag id
+	 * @param int tag
+	 * @param int field_id
+	 * @return int returns 0 if fails otherwise the tag id
 	 */
 	public function get_tag_id($tag, $field_id) {
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
@@ -2414,8 +2416,8 @@ class UserManager
 	
 	/**
 	 * Get the tag id
-	 * @param int $tag
-	 * @param int $field_id
+	 * @param int tag
+	 * @param int field_id
 	 * @return int 0 if fails otherwise the tag id
 	 */
 	public function get_tag_id_from_id($tag_id, $field_id) {
@@ -2435,9 +2437,9 @@ class UserManager
 	
 	/**
 	 * Adds a user-tag value
-	 * @param mixed $tag
-	 * @param int $user_id
-	 * @param int $field_id
+	 * @param mixed tag
+	 * @param int The user id
+	 * @param int field id of the tag
 	 * @return bool
 	 */
 	public function add_tag($tag, $user_id, $field_id) {
@@ -2445,6 +2447,7 @@ class UserManager
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
 		$tag = Database::escape_string($tag);
+		$tag = trim($tag);
 		$user_id = intval($user_id);
 		$field_id = intval($field_id);		
 			
@@ -2456,8 +2459,11 @@ class UserManager
 			$tag = substr($tag,1,strlen($tag)-2);
 		}
 		*/		
-		$tag_id = UserManager::get_tag_id($tag,$field_id);		
-		//@todo we don't create tags with numbers
+		$tag_id = UserManager::get_tag_id($tag,$field_id);	
+		/* IMPORTANT	
+		 *  @todo we don't create tags with numbers
+		 * 
+		 */
 		if (is_numeric($tag)) {
 			//the form is sending an id this means that the user select it from the list so it MUST exists
 			/*$new_tag_id = UserManager::get_tag_id_from_id($tag,$field_id);
@@ -2528,8 +2534,7 @@ class UserManager
 	 * @param int field id
 	 * @return bool
 	 */
-	public function process_tags($tags, $user_id, $field_id) {
-		
+	public function process_tags($tags, $user_id, $field_id) {		
 		//We loop the tags and add it to the DB
 		if (is_array($tags)) {
 			foreach($tags as $tag) {
@@ -2566,18 +2571,22 @@ class UserManager
 	 * Searchs an user (tags, firstname, lastname and email )
 	 * @param string the tag
 	 * @param int field id of the tag
+	 * @param int where to start in the query 
+	 * @param int number of items 
 	 * @return array
 	 */
-	public static function get_all_user_tags($tag, $field_id = 0, $from=0, $number_of_items=10) {
+	public static function get_all_user_tags($tag, $field_id = 0, $from = 0, $number_of_items = 10) {
 		// database table definition
 		
 		$user_table 			= Database::get_main_table(TABLE_MAIN_USER);
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
-		$field_id = intval($field_id);
+		
 		$tag = Database::escape_string($tag);
+		$field_id = intval($field_id);
 		$from = intval($from);
-    	$number_of_items = intval($number_of_items);
+		$number_of_items = intval($number_of_items);
+		
     	$where_field = "";
 		if ($field_id != 0) {
 			$where_field = " field_id = $field_id AND ";
@@ -2737,16 +2746,20 @@ class UserManager
 			}
 			return $users;
 		}
+	/**
+	 * Shows the user menu 
+	 */
 	function show_menu(){
 		echo '<div class="actions">';
-		echo '<a href="/main/auth/profile.php">'.Display::return_icon('profile.png').' '.get_lang('PersonalData').'</a>';
-		echo '<a href="/main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.	get_lang('Inbox').'</a>';
+		echo '<a href="/main/auth/profile.php">'.	Display::return_icon('profile.png').' '.get_lang('PersonalData').'</a>';
+		echo '<a href="/main/messages/inbox.php">'.	Display::return_icon('inbox.png').' '.	get_lang('Inbox').'</a>';
 		echo '<a href="/main/messages/outbox.php">'.Display::return_icon('outbox.png').' '.	get_lang('Outbox').'</a>';
 		echo '<span style="float:right; padding-top:7px;">'.
 			 '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
 			 '</span>';		 
 		echo '</div>';
 	}
+	
 	/**
 	 * Gives a list of course auto-register (field special_course)
 	 * @return array  list of course

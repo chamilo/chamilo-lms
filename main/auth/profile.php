@@ -680,9 +680,11 @@ elseif (isset($_POST['remove_production'])) {
 	}
 		
 	//2. Update the extra fields and user tags if available	 	
-	foreach ($extras as $key => $value) {		
-		//3. Tags are process in the UserManager::update_extra_field_value by the UserManager::process_tags function
-		$myres = UserManager::update_extra_field_value($_user['user_id'], $key, $value);
+	if (is_array($extras) && count($extras)> 0) {
+		foreach ($extras as $key => $value) {		
+			//3. Tags are process in the UserManager::update_extra_field_value by the UserManager::process_tags function
+			$myres = UserManager::update_extra_field_value($_user['user_id'], $key, $value);
+		}
 	}
 
 	// re-init the system to take new settings into account

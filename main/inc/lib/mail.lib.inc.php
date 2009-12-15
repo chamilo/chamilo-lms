@@ -173,22 +173,16 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
       if (!empty($data_file)) {
       	$mail->AddAttachment($data_file['path'], $data_file['filename']);
       }
-      
+    
       // only valid address
-      if(is_array($recipient_email))
-      {
-      	$i = 0;
-		foreach($recipient_email as $dest)
-		{
-	      if(eregi( $regexp, $dest ))
-	      {
-	     	 $mail->AddAddress($dest, ($i>1?'':$recipient_name));
+      if(is_array($recipient_email)) {
+		foreach($recipient_email as $dest) {
+	      if(eregi( $regexp, $dest )) {	
+	     	 $mail->AddAddress($dest, $recipient_name);
+	     	 //$mail->AddAddress($dest, ($i>1?'':$recipient_name));
 	      }
-	      $i++;
 		}
-      }
-      else
-      {
+      } else {
 	      if(eregi( $regexp, $recipient_email ))
 	      {
 	     	 $mail->AddAddress($recipient_email, $recipient_name);

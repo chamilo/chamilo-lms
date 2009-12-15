@@ -1094,6 +1094,7 @@ if ($origin != 'learnpath') {
 }
 
 if(count($arrques)>0) {
+	
 	$mycharset = api_get_setting('platform_charset');
 	$msg = '<html><head>
 		<link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
@@ -1102,7 +1103,7 @@ if(count($arrques)>0) {
 	<body><br />
 	<p>'.get_lang('OpenQuestionsAttempted').' :
 	</p>
-	<p>'.get_lang('AttemptDetails').' : ><br />
+	<p>'.get_lang('AttemptDetails').' : <br />
 	</p>
 	<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
 						<tr>
@@ -1123,6 +1124,7 @@ if(count($arrques)>0) {
 	</tr></table>
 	<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
 	 <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
+	 
 	for($i=0;$i<sizeof($arrques);$i++) {
 		  $msg.='
 			<tr>
@@ -1143,38 +1145,48 @@ if(count($arrques)>0) {
 			$msg1= str_replace("#i#",$i,$msg);
 			$msg= str_replace("#course#",$courseName,$msg1);
 	}
-		$msg.='</table><br>
-	 	<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
-	<a href="#url#">#url#</a></span></body></html>';
+	
+	$msg.='</table><br>
+ 			<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
+			<a href="#url#">#url#</a></span></body></html>';
 
-		$msg1= str_replace("#url#",$url,$msg);
-		$mail_content = $msg1;
-		$student_name = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName']);
-		$subject = get_lang('OpenQuestionsAttempted');
+	$msg1= str_replace("#url#",$url,$msg);
+	$mail_content = $msg1;
+	
+/*
+	$student_name = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName']);
+	$subject = get_lang('OpenQuestionsAttempted');
 
-		$from = api_get_setting('noreply_email_address');
-		if($from == '') {
-			if(isset($_SESSION['id_session']) && $_SESSION['id_session'] != ''){
-				$sql = 'SELECT user.email,user.lastname,user.firstname FROM '.TABLE_MAIN_SESSION.' as session, '.TABLE_MAIN_USER.' as user
-						WHERE session.id_coach = user.user_id
-						AND session.id = "'.Database::escape_string($_SESSION['id_session']).'"
-						';
-				$result=Database::query($sql,__FILE__,__LINE__);
-				$from = Database::result($result,0,'email');
-				$from_name = api_get_person_name(Database::result($result,0,'firstname'), Database::result($result,0,'lastname'), null, PERSON_NAME_EMAIL_ADDRESS);
-			} else {
-				$array = explode(' ',$_SESSION['_course']['titular']);
-				$firstname = $array[1];
-				$lastname = $array[0];
-				$sql = 'SELECT email,lastname,firstname FROM '.TABLE_MAIN_USER.'
-						WHERE firstname = "'.Database::escape_string($firstname).'"
-						AND lastname = "'.Database::escape_string($lastname).'"
-				';
-				$result=Database::query($sql,__FILE__,__LINE__);
-				$from = Database::result($result,0,'email');
-				$from_name = api_get_person_name(Database::result($result,0,'firstname'), Database::result($result,0,'lastname'), null, PERSON_NAME_EMAIL_ADDRESS);
-			}
+	$from = api_get_setting('noreply_email_address');
+	if($from == '') {
+		if(isset($_SESSION['id_session']) && $_SESSION['id_session'] != ''){
+			$sql = 'SELECT user.email,user.lastname,user.firstname FROM '.TABLE_MAIN_SESSION.' as session, '.TABLE_MAIN_USER.' as user
+					WHERE session.id_coach = user.user_id
+					AND session.id = "'.Database::escape_string($_SESSION['id_session']).'"
+					';
+			$result=Database::query($sql,__FILE__,__LINE__);
+			$from = Database::result($result,0,'email');
+			$from_name = api_get_person_name(Database::result($result,0,'firstname'), Database::result($result,0,'lastname'), null, PERSON_NAME_EMAIL_ADDRESS);
+		} else {
+			$array = explode(' ',$_SESSION['_course']['titular']);
+			$firstname = $array[1];
+			$lastname = $array[0];
+			$sql = 'SELECT email,lastname,firstname FROM '.TABLE_MAIN_USER.'
+					WHERE firstname = "'.Database::escape_string($firstname).'"
+					AND lastname = "'.Database::escape_string($lastname).'"
+			';
+			$result=Database::query($sql,__FILE__,__LINE__);
+			$from = Database::result($result,0,'email');
+			$from_name = api_get_person_name(Database::result($result,0,'firstname'), Database::result($result,0,'lastname'), null, PERSON_NAME_EMAIL_ADDRESS);
 		}
-	api_mail_html($student_name, $to, $subject, $mail_content, $from_name, $from, array('encoding'=>$mycharset,'charset'=>$mycharset));
+	}
+	api_mail_html($student_name, $to, $subject, $mail_content, $from_name, $from, array('encoding'=>$mycharset,'charset'=>$mycharset));*/
+
+
+	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+	$email_admin = api_get_setting('emailAdministrator');
+			
+	$subject = get_lang('OpenQuestionsAttempted');
+	$result = api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));	
 }
 ?>

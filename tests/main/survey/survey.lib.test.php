@@ -35,7 +35,7 @@ class TestSurvey extends UnitTestCase {
 		$this->personality = null;
 		$this->multipleresponse = null;
 	}
-	/*
+	
 	public function testGetSurvey() {
 		$instans = new MockDatabase();
 		global $_course;
@@ -71,7 +71,7 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($res);
 		//var_dump($table_survey);
 	}
-	/*
+	
 	public function testStoreSharedSurvey($values){
 		$instans = new MockDatabase();
 		$values=array('');
@@ -93,7 +93,7 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($res);
 		//var_dump($table_survey);
 		//var_dump($table_survey);
-	}*/
+	}
 
 	public function testDeleteSurvey(){
 		$instans = new MockDatabase();
@@ -288,7 +288,7 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($result);
 		//var_dump($res);
 	}
-	/*
+	
 	public function testDeleteSharedSurveyQuestion(){
 		$instans = new MockDatabase();
 		$survey_id=1;
@@ -407,7 +407,7 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($result);
 		//var_dump($sql);
 	}
-*/
+
 	public function testCreateForm(){
 		$instans = new MockDisplay();
 		global $charset;

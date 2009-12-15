@@ -27,17 +27,19 @@ class AllTests extends TestSuite {
 
     function AllTests() {
         $this->TestSuite('All tests');
+        
 ob_start();
+
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_course.lib.inc.test.php'); // 431 excepciones
-      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/blog.lib.test.php');  // 137 excepciones
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/blog.lib.test.php');  // 43 excepciones
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/classmanager.lib.test.php'); // sin excepciones
-      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/course.lib.test.php'); // 91 excepciones
-      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/database.lib.test.php'); // 4 excepciones
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/course.lib.test.php'); // sin excepciones
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/database.lib.test.php'); // sin excepciones
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/debug.lib.inc.test.php'); // sin excepciones
-      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/display.lib.test.php'); // 6 excepciones
-      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/document.lib.test.php'); // 14 excepciones
-      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/events.lib.inc.test.php'); // 3 excepciones
-      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/export.lib.inc.test.php'); // 24 excepciones
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/display.lib.test.php'); // 2 excepciones
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/document.lib.test.php'); // sin excepciones
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/events.lib.inc.test.php'); // sin excepciones
+      $this->addTestFile(dirname(__FILE__).'/main/inc/lib/export.lib.inc.test.php'); // 24 excepciones
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileDisplay.lib.test.php'); // sin excepciones
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileManager.lib.test.php');  // 14 excepciones
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileUpload.lib.test.php'); // 33 excepciones
@@ -60,7 +62,7 @@ ob_start();
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/surveymanager.lib.test.php'); //49 excepciones
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/system_announcements.lib.test.php'); // 5 excepciones
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/tablesort.lib.test.php'); // 2 excepciones
-        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/text.lib.test.php'); // sin excepciones
+      //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/text.lib.test.php'); // sin excepciones
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/tracking.lib.test.php'); // 12 excepciones
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/upload.xajax.test.php');  deprecated
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php'); // 9 excepciones
@@ -71,6 +73,7 @@ ob_start();
       //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php'); // 26 excepciones
 
 ob_end_clean();
+
 /*
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_course.lib.inc.test.php');
       $this->addTestFile(dirname(__FILE__).'/main/inc/lib/blog.lib.test.php');

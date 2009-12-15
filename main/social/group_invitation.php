@@ -14,6 +14,7 @@ $cidReset=true;
 // including some necessary dokeos files
 require('../inc/global.inc.php');
 require_once ('../inc/lib/xajax/xajax.inc.php');
+
 api_block_anonymous_users();
 
 $htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
@@ -362,7 +363,7 @@ if ($add_type=='multiple') {
 ?>
 
 <input type="hidden" name="form_sent" value="1" />
-<input type="hidden" name="id" value="<?=$group_id?>" />
+<input type="hidden" name="id" value="<?php echo $group_id?>" />
 <input type="hidden" name="add_type"  />
 
 <?php

@@ -19,7 +19,6 @@ $this_section = SECTION_SOCIAL;
 
 $htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/thickbox.js"></script>';
-//$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/ajaxfileupload.js"></script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="/main/inc/lib/javascript/thickbox.css" type="text/css" media="projection, screen">';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
@@ -68,12 +67,17 @@ $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Groups'));
 Display :: display_header($tool_name, 'Groups');
 
 // save message group
-if (isset($_POST['action']) && $_POST['action']=='send_message_group') {	
-	$title = $_POST['title'];
-	$content = $_POST['content'];
-	$group_id = $_POST['group_id'];
-	$parent_id = $_POST['parent_id'];	
-	MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id);
+if (isset($_POST['token']) && $_POST['token'] == $_SESSION['sec_token']) {
+	if (isset($_POST['action']) && $_POST['action']=='send_message_group') {	
+		$title = $_POST['title'];
+		$content = $_POST['content'];
+		$group_id = $_POST['group_id'];
+		$parent_id = $_POST['parent_id'];	
+		MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id);
+		Security::clear_token();
+	}	
+} else {
+	$tok = Security::get_token();	
 }
 
 //show the action menu

@@ -29,7 +29,9 @@ class TestEvents extends UnitTestCase {
 		global $_configuration;
 		global $_course;
 		global $TABLETRACK_LASTACCESS;
-		$res=event_access_tool();
+		$tool = '';
+		$id_session = 0;
+		$res=event_access_tool($tool, $id_session);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
@@ -39,8 +41,8 @@ class TestEvents extends UnitTestCase {
 		global $_user;
 		global $_cid;
 		global $TABLETRACK_DOWNLOADS;
-		$doc_url='';
-		$res=event_download();
+		$doc_url= '';
+		$res=event_download($doc_url);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
@@ -51,7 +53,7 @@ class TestEvents extends UnitTestCase {
 		global $_cid;
 		global $TABLETRACK_LINKS;
 		$link_id='';
-		$res=event_link();
+		$res=event_link($link_id);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}

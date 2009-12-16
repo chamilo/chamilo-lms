@@ -2665,7 +2665,7 @@ class UserManager
 		<td>
 			<div id="SearchQueryChunk">
 			<div id="SearchQueryNav">
-				<b>Search</b > (Users, Groups)				
+				<b>'.get_lang('Search').'</b > ('.get_lang('UsersGroups').')				
 			</div>
 			<div>
 				<input type="text" size="30" value="'.Security::remove_XSS($query).'" tabindex="1" id="standard_q" name="q"/>				

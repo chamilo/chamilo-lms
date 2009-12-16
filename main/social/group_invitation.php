@@ -434,8 +434,11 @@ if(!empty($errorMsg)) {
   <?php
   } else {
   ?>
-  	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"></button>
-	<?php
+  	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" ></button>
+	<br /><br />
+	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" ></button>
+	<br /><br />
+  	<?php
   }
   ?>
 	<br /><br /><br /><br /><br />

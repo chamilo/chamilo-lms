@@ -64,4 +64,14 @@ $RepeatMonthlyByDayR = "Mese&#269;no, po danu, ograni&#269;en";
 $RepeatYearly = "Godišnje";
 $RepeatEnd = "Ponovi završni datum";
 $RepeatedEventViewOriginalEvent = "Pogledaj originalni doga&#273;aj";
+$ICalFileImport = "Uvezi iCal/ics Outlook dokument ";
+$AllUsersOfThePlatform = "Svi korisnici sistema";
+$GlobalEvent = "Globalni dogadjaj";
+$ModifyEvent = "Uredi dogadjaj";
+$EndDateCannotBeBeforeTheStartDate = "Datum kraja  ne može biti pre datuma po&#269;etka ";
+$AgendaSortChronologicallyUp = "Sortiraj zapise rasporeda po rastucem nizu";
+$AgendaSortChronologicallyDown = "Sortiraj zapise rasporeda po opadajucem";
+$ItemForUserSelection = "Selekcija korisnika";
+$IsNotiCalFormatFile = "Ova datoteka nije u formatu iCal ";
+$RepeatEvent = "Ponovi dogadjaj";
 ?>

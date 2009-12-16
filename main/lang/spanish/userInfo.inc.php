@@ -171,4 +171,7 @@ $EditNormalProfile = "Edición básica del perfil";
 $GroupPendingInvitations = "Invitaciones de grupo pendiente";
 $LeaveGroup = "Dejar grupo";
 $UserIsNotSubscribedToThisGroup = "Usuario no esta inscrito a este grupo";
+$InvitationReceived = "Invitación aceptada";
+$InvitationSent = "Invitación enviada";
+$YouAlreadySentAnInvitation = "Usted ya ha enviado una invitación";
 ?>

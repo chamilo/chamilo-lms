@@ -28,4 +28,7 @@ $langUnreg = "Retirar suscripción";
 $langGroupUserManagement = "Administración de grupo";
 $langUnregister = "Desunscribir";
 $langAddAUser = "Añadir usuarios";
+$InvitationReceived = "Invitación recibida";
+$InvitationSent = "Invitación envida";
+$YouAlreadySentAnInvitation = "Ud. ya ha enviado una invitación";
 ?>

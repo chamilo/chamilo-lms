@@ -171,4 +171,7 @@ $EditNormalProfile = "Edit normal profile";
 $GroupPendingInvitations = "Group pending invitations";
 $LeaveGroup = "Leave group";
 $UserIsNotSubscribedToThisGroup = "User is not subscribed to this group";
+$InvitationReceived = "Invitation received";
+$InvitationSent = "Invitation Sent";
+$YouAlreadySentAnInvitation = "You already sent an invitation";
 ?>

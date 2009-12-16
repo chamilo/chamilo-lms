@@ -576,19 +576,15 @@ if ($formSent) {
 									break;
 									// for matching
 								case MATCHING :
-									if ($answerCorrect) {
-										if ($answerCorrect == $choice[$answerId]) {
-											$questionScore += $answerWeighting;
-											$totalScore += $answerWeighting;
-											$choice[$answerId] = $matching[$choice[$answerId]];
+
+									$numAnswer=$objAnswerTmp->selectAutoId($answerId);
+
+									if ($answerCorrect) {										
+										if ($answerCorrect == $choice[$numAnswer]) {											
+											$questionScore+=$answerWeighting;
+											$totalScore+=$answerWeighting;
 										}
-										elseif (!$choice[$answerId]) {
-											$choice[$answerId] = '&nbsp;&nbsp;&nbsp;';
-										} else {
-											$choice[$answerId] = '<font color="red"><s>' . $matching[$choice[$answerId]] . '</s></font>';
-										}
-									} else {
-										$matching[$answerId] = $answer;
+										$matching[$numAnswer] =  $choice[$numAnswer];
 									}
 									break;
 									// for hotspot with no order
@@ -642,25 +638,11 @@ if ($formSent) {
 								}
 							}
 							elseif ($answerType == MATCHING) {
-								$j = sizeof($matching) + 1;
 
-								for ($i = 0; $i < sizeof($choice); $i++, $j++) {
-									$val = $choice[$j];
-									if (preg_match_all('#<font color="red"><s>([0-9a-z ]*)</s></font>#', $val, $arr1)) {
-										$val = $arr1[1][0];
-									}
-									$val = $val;
-									$val = strip_tags($val);
-									$sql = "select position from $table_ans where question_id='" . Database :: escape_string($questionId) . "' and answer='" . Database :: escape_string($val) . "' AND correct=0";
-									$res = Database::query($sql, __FILE__, __LINE__);
-									if (Database :: num_rows($res) > 0) {
-										$answer = Database :: result($res, 0, "position");
-									} else {
-										$answer = '';
-									}
-									exercise_attempt($questionScore, $answer, $quesId, $exeId, $j);
-
+								foreach ($matching as $j => $val) {									
+									exercise_attempt($questionScore, $val, $quesId, $exeId, $j);
 								}
+
 							} elseif ($answerType == FREE_ANSWER) {
 								$answer = $choice;
 								exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);

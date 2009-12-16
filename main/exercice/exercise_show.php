@@ -843,16 +843,15 @@ if ($show_results) {
 			$objAnswerTmp=new Answer($questionId);
 			$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 			$TBL_TRACK_ATTEMPT= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
-			$sql_select_answer = 'SELECT id, answer, correct, position FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct<>0';
-			$sql_answer = 'SELECT position, answer FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct=0';
+			$sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct=0';
 			$res_answer = Database::query($sql_answer, __FILE__, __LINE__);
 			// getting the real answer
 			$real_list =array();
 			while ($real_answer = Database::fetch_array($res_answer)) {
-				$real_list[$real_answer['position']]= $real_answer['answer'];
+				$real_list[$real_answer['id']]= $real_answer['answer'];
 			}
 
+			$sql_select_answer = 'SELECT id, answer, correct, id_auto FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct<>0';
 			$res_answers = Database::query($sql_select_answer, __FILE__, __LINE__);
 
 			echo '<table width="100%" height="71" border="0" cellspacing="3" cellpadding="3" >';
@@ -866,46 +865,37 @@ if ($show_results) {
 			$questionScore=0;
 
 			while ($a_answers = Database::fetch_array($res_answers)) {
+				
 				$i_answer_id = $a_answers['id']; //3
 				$s_answer_label = $a_answers['answer'];  // your dady - you mother
 				$i_answer_correct_answer = $a_answers['correct']; //1 - 2
-				$i_answer_position = $a_answers['position']; // 3 - 4
-
-				$sql_user_answer =
-						'SELECT answers.answer
-						FROM '.$TBL_TRACK_ATTEMPT.' as track_e_attempt
-						INNER JOIN '.$table_ans.' as answers
-							ON answers.position = track_e_attempt.answer
-							AND track_e_attempt.question_id=answers.question_id
-						WHERE answers.correct = 0
-						AND track_e_attempt.exe_id = "'.Database::escape_string($id).'"
-						AND track_e_attempt.question_id = "'.Database::escape_string($questionId).'"
-						AND track_e_attempt.position="'.Database::escape_string($i_answer_position).'"';
-
-
-				$res_user_answer = Database::query($sql_user_answer, __FILE__, __LINE__);
+				$i_answer_id_auto = $a_answers['id_auto']; // 3 - 4
+				
+				$sql_user_answer = "SELECT answer 
+									FROM $TBL_TRACK_ATTEMPT 
+									WHERE exe_id = '$id' AND question_id = '$questionId' AND position='$i_answer_id_auto'";
+				$res_user_answer = Database::query($sql_user_answer, __FILE__, __LINE__);					
+				
 				if (Database::num_rows($res_user_answer)>0 ) {
 					$s_user_answer = Database::result($res_user_answer,0,0); //  rich - good looking
 				} else {
-					$s_user_answer = '';
+					$s_user_answer = 0;
 				}
-
-				//$s_correct_answer = $s_answer_label; // your ddady - your mother
-				$s_correct_answer = $real_list[$i_answer_correct_answer];
-
+				
 				$i_answerWeighting=$objAnswerTmp->selectWeighting($i_answer_id);
-
-				//if($s_user_answer == $s_correct_answer) // rich == your ddady?? wrong
-				//echo $s_user_answer.' - '.$real_list[$i_answer_correct_answer];
-
-				if ($s_user_answer == $real_list[$i_answer_correct_answer]) { // rich == your ddady?? wrong
-					$questionScore+=$i_answerWeighting;
-					$totalScore+=$i_answerWeighting;
-				} else {
-					$s_user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$s_user_answer.'</span>';
+				
+				$user_answer = '';
+				if (!empty($s_user_answer)) {
+					if ($s_user_answer == $i_answer_correct_answer)	{
+						$questionScore+=$i_answerWeighting;
+						$totalScore+=$i_answerWeighting;
+						$user_answer = '<span>'.$real_list[$i_answer_correct_answer].'</span>';											
+					} else {
+						$user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$real_list[$s_user_answer].'</span>';
+					}
 				}
 				echo '<tr>';
-				echo '<td>'.$s_answer_label.'</td><td>'.$s_user_answer.' / <b><span style="color: #008000;">'.$s_correct_answer.'</span></b></td>';
+				echo '<td>'.$s_answer_label.'</td><td>'.$user_answer.' / <b><span style="color: #008000;">'.$real_list[$i_answer_correct_answer].'</span></b></td>';
 				echo '</tr>';
 			}
 			echo '</table>';

@@ -110,9 +110,30 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		// only used for the answer type "Matching"
 		if($answerType == MATCHING)
 		{
-			$cpt1='A';
+			$x = 1;
+			$letter = 'A';
 			$cpt2=1;
 			$Select=array();
+			$answer_matching = $cpt1 = array();		
+
+			for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
+				$answerCorrect = $objAnswerTmp->isCorrect($answerId);
+				$numAnswer = $objAnswerTmp->selectAutoId($answerId);
+				$answer=$objAnswerTmp->selectAnswer($answerId);
+				if(!$answerCorrect) {
+					// options (A, B, C, ...) that will be put into the list-box
+					$cpt1[$x] = $letter;
+					$answer_matching[$x]=$objAnswerTmp->selectAnswerByAutoId($numAnswer);
+					$x++;
+					$letter++;						
+				}
+			}
+			
+			foreach($answer_matching as $value) {				
+				$Select[$value['id']]['Lettre'] =  $cpt1[$value['id']];
+				$Select[$value['id']]['Reponse'] = $value['answer'];
+			}
+					
 		}
 		elseif($answerType == FREE_ANSWER)
 		{
@@ -236,13 +257,8 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 
 			// matching // TODO: replace $answerId by $numAnswer
 			else {
-				if(!$answerCorrect) {
-					// options (A, B, C, ...) that will be put into the list-box
-					$Select[$answerId]['Lettre']=$cpt1++;
-					// answers that will be shown at the right side
-					$answer = api_parse_tex($answer);
-					$Select[$answerId]['Reponse']=$answer;
-				} else {
+				
+				if ($answerCorrect) {
 					$s.="
 					<tr>
 					  <td colspan='2'>
@@ -252,7 +268,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 					$s.='	<span style=\' float:left; width:5%;\'><b>'.$cpt2.'</b>.&nbsp;</span>
 							<span style=\' float:left; width:95%;\'>'.$answer.'</span>';
 							
-					$s.="<td width='20%' valign='top' align='center'>&nbsp;&nbsp;<select name='choice[".$questionId."][".$answerId."]'>
+					$s.="<td width='20%' valign='top' align='center'>&nbsp;&nbsp;<select name='choice[".$questionId."][".$numAnswer."]'>
 							<option value='0'>--</option>";
 
 		            // fills the list-box
@@ -296,8 +312,6 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 								</table>
 							  </td>
 							</tr>";
-
-
 							$cpt2++;
 						}	// end while()
 					}  // end if()

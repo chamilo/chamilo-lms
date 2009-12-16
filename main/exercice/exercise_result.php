@@ -798,25 +798,17 @@ foreach ($questionList as $questionId) {
 					break;
 			// for matching TODO: replace $answerId id by $numAnswer
 			case MATCHING :
-					if($answerCorrect)
-					{
-						if($answerCorrect == $choice[$answerId])
-						{
+					if ($answerCorrect) {						
+						if ($answerCorrect == $choice[$numAnswer]) {					
 							$questionScore+=$answerWeighting;
-							$totalScore+=$answerWeighting;
-							$choice[$answerId]=$matching[$choice[$answerId]];
-						}
-						elseif(!$choice[$answerId])
-						{
-							$choice[$answerId]='&nbsp;&nbsp;&nbsp;';
-						}
-						else
-						{
-							$choice[$answerId]='<font color="red"><s>'.$matching[$choice[$answerId]].'</s></font>';
-						}
-					}
-					else
-					{
+							$totalScore+=$answerWeighting;							
+							$choice[$numAnswer]=$matching[$choice[$numAnswer]];
+						} elseif(!$choice[$numAnswer]) {
+							$choice[$numAnswer]='&nbsp;&nbsp;&nbsp;';
+						} else {
+							$choice[$numAnswer]='<font color="red"><s>'.$matching[$choice[$numAnswer]].'</s></font>';
+						}						
+					} else {
 						$matching[$answerId]=$answer;
 					}
 					break;
@@ -917,7 +909,7 @@ foreach ($questionList as $questionId) {
 						echo $answer; ?>
 					</td>
 					<td width="50%">
-						<?php echo $choice[$answerId]; ?> / <font color="green"><b>
+						<?php echo $choice[$numAnswer]; ?> / <font color="green"><b>
 						<?php
 						$matching[$answerCorrect]=api_parse_tex($matching[$answerCorrect]);
 						echo $matching[$answerCorrect]; ?></b></font>

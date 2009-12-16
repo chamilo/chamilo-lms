@@ -343,9 +343,11 @@ class GroupPortalManager
 		$result=Database::query($sql,__FILE__,__LINE__);
 		$array = array();
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
+			$image_path = UserManager::get_user_picture_path_by_id($row['user_id'], 'web', false, true);
+			$user_profile = UserManager::get_picture_user($row['user_id'], $image_path['file'], 60, 'medium_');
 			if ($with_image == true) {
 				$picture = UserManager::get_picture_user($row['user_id'], $row['picture_uri'],$image_conf['height'],$image_conf['size']);						
-				$row['image'] = '<img src="'.$picture['file'].'"  '.$picture['style'].'  />';
+				$row['image'] = '<img src="'.$user_profile['file'].'"  '.$picture['style'].'  width="60" height="60"/>';
 			}
 			$array[$row['user_id']] = $row;			
 		}

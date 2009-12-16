@@ -46,7 +46,19 @@ function show_image(image,width,height) {
 	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
 
 }
-
+function generate_open_id_form() {
+	$.ajax({
+		contentType: "application/x-www-form-urlencoded",
+		beforeSend: function(objeto) {
+		/*$("#div_api_key").html("Loading...");*/ },
+		type: "POST",
+		url: "../auth/generate_api_key.inc.php",
+		data: "num_key_id="+"",
+		success: function(datos) {
+		 $("#div_api_key").html(datos);
+		}
+	});
+}
 </script>';
 
 $interbreadcrumb[] = array('url' => '../auth/profile.php', 'name' => get_lang('ModifyProfile'));
@@ -421,7 +433,7 @@ if (api_get_setting('profile', 'apikeys') == 'true') {
 	$form->addElement('html', '<div id="div_api_key">');
 	$form->addElement('text', 'api_key_generate', get_lang('MyApiKey'), array('size' => 40, 'id' => 'id_api_key_generate'));
 	$form->addElement('html', '</div>');
-	$form->addElement('button', 'generate_api_key', get_lang('GenerateApiKey'), array('id' => 'id_generate_api_key', 'onclick' => 'javascript: generate_open_id_form();')); //generate_open_id_form()
+	$form->addElement('button', 'generate_api_key', get_lang('GenerateApiKey'), array('id' => 'id_generate_api_key', 'onclick' => 'generate_open_id_form()')); //generate_open_id_form()
 }
 //	SUBMIT
 if (is_profile_editable()) {

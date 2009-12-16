@@ -1076,7 +1076,7 @@ class GroupPortalManager
 					margin:0;
 					overflow:hidden; }; 
 		</style>';
-		echo '<div id="layout-left" style="float: left; width: 280px; height: 100%;">';
+		echo '<div id="layout-left" style="float: left; width: 270px; height: 100%;">';
 	
 		//Group's title
 		echo '<h1><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a></h1>';

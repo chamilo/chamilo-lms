@@ -185,6 +185,27 @@ $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$courseDir;
 $noPHP_SELF=true;
 
+
+//what's the current path?
+if(isset($_GET['curdirpath']) && $_GET['curdirpath']!='')
+{
+	$path = $_GET['curdirpath'];
+}
+elseif (isset($_POST['curdirpath']))
+{
+	$path = $_POST['curdirpath'];
+}
+else
+{
+	$path = '/';
+}
+
+//check the path: if the path is not found (no document id), set the path to /
+if(!DocumentManager::get_document_id($_course,$path))
+{
+	$path = '/';
+}
+
 //this needs cleaning!
 if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='') //if the group id is set, check if the user has the right to be here
 {
@@ -205,7 +226,7 @@ if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='') //if the group id is set, 
 		api_not_allowed(true);
 	}
 }
-elseif($is_allowed_to_edit) //admin for "regular" upload, no group documents
+elseif($is_allowed_to_edit || is_my_shared_folder($_user['user_id'], $path)) //admin for "regular" upload, no group documents. And check if is my shared folder
 {
 	$to_group_id = 0;
 	$req_gid = '';
@@ -215,25 +236,7 @@ else  //no course admin and no group member...
 	api_not_allowed(true);
 }
 
-//what's the current path?
-if(isset($_GET['path']) && $_GET['path']!='')
-{
-	$path = $_GET['path'];
-}
-elseif (isset($_POST['curdirpath']))
-{
-	$path = $_POST['curdirpath'];
-}
-else
-{
-	$path = '/';
-}
 
-//check the path: if the path is not found (no document id), set the path to /
-if(!DocumentManager::get_document_id($_course,$path))
-{
-	$path = '/';
-}
 //group docs can only be uploaded in the group directory
 if($to_group_id!=0 && $path=='/')
 {
@@ -506,7 +509,7 @@ if(isset($_GET['createdir']))
 	$new_folder_text .= '</form>';
 	//show the form
 	//Display::display_normal_message($new_folder_text, false);
-
+   
 	echo create_dir_form();
 }
 
@@ -517,7 +520,7 @@ echo '<div class="actions">';
 echo '<a href="document.php?curdirpath='.$path.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
 
 // link to create a folder
-if(!isset($_GET['createdir']))
+if(!isset($_GET['createdir']) && !is_my_shared_folder($_user['user_id'], $path))
 {
 	echo '<a href="'.api_get_self().'?path='.$path.'&amp;createdir=1">'.Display::return_icon('folder_new.gif', get_lang('CreateDir')).get_lang('CreateDir').'</a>';
 }
@@ -525,7 +528,9 @@ echo '</div>';
 
 //form to select directory
 $folders = DocumentManager::get_all_document_folders($_course,$to_group_id,$is_allowed_to_edit);
+
 echo(build_directory_selector($folders,$path,$group_properties['directory']));
+
 ?>
 
 <!-- start upload form -->

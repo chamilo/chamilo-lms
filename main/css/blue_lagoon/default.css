@@ -2957,6 +2957,20 @@ a.unread {
 .list_members_grid_element_3 { width:100px; float:left; text-align:center; margin-bottom:5px;}
 .list_members_grid_element_5 { width:100%;  text-align:center;}
 
+/*SEARCH USER*/
+.search_user_grid_container { width:100%;}
+.search_user_grid_item { width:100px; border:1px dotted #ccc; float:left; padding:5px; margin:5px;}
+.search_user_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.search_user_grid_element_1 { width:100%;  text-align:center;}
+.search_user_grid_element_2 { width:100%;  text-align:center;}
+
+/*SEARCH GROUP*/
+.search_group_grid_container { width:100%;}
+.search_group_grid_item { width:500px; height: 120px; border:1px dotted #ccc; float:left; padding:5px; margin:5px;}
+.search_group_grid_element_0 { width:100px; height: 90px; float:left; text-align:center; margin-bottom:5px; padding-top:15px;}
+.search_group_grid_element_1 { width:100%;  text-align:left; padding-top:15px;  padding-bottom:15px;}
+.search_group_grid_element_2 { width:100%;  text-align:left;}
+
 
 #menu {
 	-moz-border-radius: 10px; border: 1px solid #e1e1e0;

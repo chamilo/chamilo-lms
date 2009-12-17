@@ -51,7 +51,7 @@ if ($query != '') {
 		} else {
 			echo get_lang('SorryNoResults');
 		}
-		Display::display_sortable_grid('search_users', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false ,true);
+		Display::display_sortable_grid('search_user', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false ,true);
 		
 		//get users from tags
 		$groups = GroupPortalManager::get_all_group_tags($query);
@@ -67,7 +67,7 @@ if ($query != '') {
 				$results[] = array($img, $group['name'],$group['description'],$tags);			
 			}		
 		}		
-		Display::display_sortable_grid('search_users', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars,  false, array(true,true,true,true,true));			    
+		Display::display_sortable_grid('search_group', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars,  false, array(true,true,true,true,true));			    
 	}		
 } else {
 	//we should show something

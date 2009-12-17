@@ -48,18 +48,20 @@ $form = new FormValidator('group_edit', 'post', '', '', array('style' => 'width:
 $form->addElement('hidden', 'id', $group_id);
 
 // name
-$form->addElement('text', 'name', get_lang('Name'), array('size'=>30));
+$form->addElement('text', 'name', get_lang('Name'), array('size'=>60));
 $form->applyFilter('name', 'html_filter');
 $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('name', '', 'maxlength',120);
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>5, 'cols'=>50));
+$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>8, 'cols'=>58));
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
+$form->addRule('name', '', 'maxlength',255);
 
 // url
-$form->addElement('text', 'url', get_lang('URL'), array('size'=>30));
+$form->addElement('text', 'url', get_lang('URL'), array('size'=>35));
 $form->applyFilter('url', 'html_filter');
 $form->applyFilter('url', 'trim');
 

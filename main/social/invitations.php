@@ -140,16 +140,16 @@ if ($number_loop != 0) {
 			<tbody>
 				<tr>
 					<td class="invitation_image">
-						<a href="profile.php?u=<?=$sender_user_id?>">
+						<a href="profile.php?u=<? echo $sender_user_id; ?>">
 						<img src="<?php echo $friends_profile['file']; ?>" <?php echo $friends_profile['style']; ?> /></a>
 					</td>
 					<td class="info">
-							<a class="profile_link" href="profile.php?u=<?=$sender_user_id?>"><?= api_get_person_name($user_info['firstName'], $user_info['lastName']);?></a>
+							<a class="profile_link" href="profile.php?u=<?php echo $sender_user_id;?>"><? echo api_get_person_name($user_info['firstName'], $user_info['lastName']);?></a>
 							<div>
-							<?= $title.' : '.$content;?>
+							<?php echo $title.' : '.$content;?>
 							</div>
 							<div>
-							<?= get_lang('DateSend').' : '.$date;?>
+							<?php echo get_lang('DateSend').' : '.$date;?>
 							</div> 
 							<div class="buttons">
 		   						<button class="save" name="btn_accepted" type="submit" id="<?php echo "btn_accepted_".$sender_user_id ?>" value="<?php echo get_lang('Accept');?>"onclick="javascript:register_friend(this)">
@@ -185,16 +185,16 @@ if (count($list_get_invitation_sent) > 0 ){
 			<tbody>
 				<tr>
 					<td class="invitation_image">
-						<a href="profile.php?u=<?=$sender_user_id?>">
+						<a href="profile.php?u=<?php echo $sender_user_id;?>">
 						<img src="<?php echo $friends_profile['file']; ?>" <?php echo $friends_profile['style']; ?> /></a>
 					</td>
 					<td class="info">
-							<a class="profile_link" href="profile.php?u=<?=$sender_user_id?>"><?= api_get_person_name($user_info['firstName'], $user_info['lastName']);?></a>
+							<a class="profile_link" href="profile.php?u=<?php echo $sender_user_id; ?>"><?php echo api_get_person_name($user_info['firstName'], $user_info['lastName']);?></a>
 							<div>
-							<?= $title.' : '.$content;?>
+							<?php echo $title.' : '.$content;?>
 							</div>
 							<div>
-							<?= get_lang('DateSend').' : '.$date;?>
+							<?php echo get_lang('DateSend').' : '.$date;?>
 							</div>		
 					</td>
 				</tr>

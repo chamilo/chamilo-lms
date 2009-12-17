@@ -190,7 +190,7 @@ function manage_form ($default, $select_from_user_list = null) {
 				<input type="file" name="attach_1"  size="28" />
 				<input type="text" name="legend[]" size="28" />
 				</div></span></div></div>');
-		$form->addElement('html','<div class="row"><div class="formw"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a>&nbsp;('.get_lang('MaximunFileSizeXMB').')</div></div>');
+		$form->addElement('html','<div class="row"><div class="formw"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a>&nbsp;('.sprintf(get_lang('MaximunFileSizeXMB'),25).')</div></div>');
 	}
 		
 	$form->addElement('style_submit_button','compose',api_xml_http_response_encode(get_lang('SendMessage')),'class="save"');

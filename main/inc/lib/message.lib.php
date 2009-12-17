@@ -545,9 +545,9 @@ class MessageManager
 		
 		if ($source == 'outbox') {
 			if (isset($message_id) && is_numeric($message_id)) {
-				$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".$message_id." AND msg_status=4;";
+				$query	= "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".$message_id." AND msg_status=4;";
 				$result = Database::query($query,__FILE__,__LINE__);
-			    $path='outbox.php';		    
+			    $path	= 'outbox.php';		    
 			}
 		} else {	
 			if (is_numeric($message_id) && !empty($message_id)) {
@@ -556,7 +556,7 @@ class MessageManager
 				
 				$query = "SELECT * FROM $table_message WHERE msg_status<>4 AND user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
 				$result = Database::query($query,__FILE__,__LINE__);
-			}						
+			}			
 			$path='inbox.php';			
 		}
 
@@ -574,10 +574,10 @@ class MessageManager
 
 		$message_content =  '
 		<table class="message_view_table" >
-		    <TR>
-		      <TD width=10>&nbsp; </TD>
-		      <TD vAlign=top width="100%">
-		      	<TABLE>
+		    <tr>
+		      <td width=10>&nbsp; </td>
+		      <td vAlign=top width="100%">
+		      	<table>
 		            <TR>
 		              <TD width="100%">
 		               <h1>'.str_replace("\\","",$row[5]).'</h1>
@@ -590,10 +590,19 @@ class MessageManager
 				$user_image = UserManager::get_picture_user($row[1], $user_image['file'],'40');
 				$user_image = '<img src="'.$user_image['file'].'" style="'.$user_image['style'].'" >';
 				*/
-				$message_content .='<TD>'.get_lang('From').' '.$user_image.'<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$row[1].'">'.GetFullUserName($row[1]).'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.get_lang('Me').'</b> </TD>';
+				if ($source == 'outbox') {
+//					$message_content .='<TD>'.get_lang('From').'&nbsp;'.GetFullUserName($row[2]).'</b> '.api_strtolower(get_lang('To')).' <b>'.GetFullUserName($row[1]).'</b> </TD>';
+					$message_content .='<TD>'.get_lang('From').' '.$user_image.'<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$row[1].'">'.GetFullUserName($row[1]).'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.GetFullUserName($row[2]).'</b> </TD>';
+				} else {
+					$message_content .='<TD>'.get_lang('From').' '.$user_image.'<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$row[1].'">'.GetFullUserName($row[1]).'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.get_lang('Me').'</b> </TD>';
+				}
 				
 			} else {
-				$message_content .='<TD>'.get_lang('From').'&nbsp;'.GetFullUserName($row[1]).'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b> </TD>';
+				if ($source == 'outbox') {
+					$message_content .='<TD>'.get_lang('From').'&nbsp;'.GetFullUserName($row[1]).'</b> '.api_strtolower(get_lang('To')).' <b>'.GetFullUserName($row[2]).'</b> </TD>';
+				} else {
+					$message_content .='<TD>'.get_lang('From').'&nbsp;'.GetFullUserName($row[1]).'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b> </TD>';	
+				}
 			}
 		
 		 $message_content .='</TR>
@@ -615,10 +624,11 @@ class MessageManager
 		        
 		    if ($source == 'outbox') {
 		    	$message_content .= '<a href="outbox.php">'.Display::return_icon('back.png',get_lang('ReturnToOutbox')).get_lang('ReturnToOutbox').'</a> &nbsp';
-		    } else {
+		    } else {		    	
 		    	$message_content .= '<a href="inbox.php">'.Display::return_icon('back.png',get_lang('ReturnToInbox')).get_lang('ReturnToInbox').'</a> &nbsp';
+		    	$message_content .= '<a href="new_message.php?re_id='.$message_id.'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).get_lang('ReplyToMessage').'</a> &nbsp';
 		    }
-			$message_content .= '<a href="new_message.php?re_id='.$message_id.'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).get_lang('ReplyToMessage').'</a> &nbsp';
+			
 			$message_content .= '<a href="inbox.php?action=deleteone&id='.$message_id.'" >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).''.get_lang('DeleteMessage').'</a>&nbsp';
 
 		        

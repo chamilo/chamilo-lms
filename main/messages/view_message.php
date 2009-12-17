@@ -1,7 +1,10 @@
 <?php
 /* For licensing terms, see /chamilo_license.txt */
+/**
+*	@package dokeos.messages
+*/
 
-// name of the language file that needs to be included
+
 $language_file = array('registration','messages','userInfo');
 $cidReset= true;
 require_once '../inc/global.inc.php';
@@ -37,8 +40,6 @@ if ($_GET['f']=='social') {
 	echo '</div>';
 	$social_parameter = '?f=social';
 } else {
-	
-	
 	if (api_get_setting('extended_profile') == 'true') {
 		echo '<div class="actions">';
 		

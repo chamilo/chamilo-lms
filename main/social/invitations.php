@@ -132,8 +132,8 @@ if ($number_loop != 0) {
 		   		$picture = UserManager::get_user_picture_path_by_id($sender_user_id,'web',false,true);
 		   		$friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
 		        $user_info	= api_get_user_info($sender_user_id);	        
-		        $title		= get_lang($invitation['title']);
-				$content	= get_lang($invitation['content']);
+		        $title		= api_convert_encoding($invitation['title'],$charset);
+				$content	= api_convert_encoding($invitation['content'],$charset);
 		        $date		= $invitation['send_date'];                  
 		    ?>	   	
 			<table cellspacing="0" border="0">
@@ -177,8 +177,8 @@ if (count($list_get_invitation_sent) > 0 ){
 		   		$friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
 		        $user_info	= api_get_user_info($sender_user_id);	  
 		              
-		        $title		= get_lang($invitation['title']);
-				$content	= get_lang($invitation['content']);
+		        $title		= api_convert_encoding($invitation['title'], $charset);
+				$content	= api_convert_encoding($invitation['content'],$charset);
 		        $date		= $invitation['send_date'];                  
 		    ?>	   	
 			<table cellspacing="0" border="0">

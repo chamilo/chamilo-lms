@@ -351,4 +351,5 @@ $SessionIsReadOnly = "La sessione è di sola lettura";
 $EnableTimerControl = "Abilita il controllo del tempo";
 $ExerciseTotalDurationInMinutes = "Durata totale del test in minuti";
 $ToContinueUseMenu = "Per procedere usa il menù a lato";
+$RandomAnswers = "Mescola le risposte";
 ?>

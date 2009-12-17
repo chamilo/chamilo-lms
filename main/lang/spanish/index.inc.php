@@ -66,4 +66,7 @@ $LinkAdded = "Ha sido añadido un nuevo enlace";
 $AnnouncementAdded = "Ha sido añadido un anuncio";
 $AgendaAdded = "Ha sido añadido un evento de la agenda ";
 $YouDoNotHaveAnySessionInItsHistory = "En su historial no hay ninguna sesión de formación";
+$Messages = "Mensajes";
+$Inbox = "Bandeja de entrada";
+$Comppose = "Redactar";
 ?>

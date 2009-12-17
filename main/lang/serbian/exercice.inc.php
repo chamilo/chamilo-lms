@@ -155,4 +155,5 @@ $langUseExistantQuestion = "Upotreba postoje&#263;eg pitanja";
 $freeAnswer = "Slobodan odgovor";
 $notCorrectedYet = "Ovaj odgovor još nije ispravljan. U me&#273;uvremenu rezultat za ovo pitanje je podešen na 0 i utu&#269;e na kona&#269;an rezultat.";
 $adminHP = "Hot Potatoes administracija";
+$ResultsDisabled = "Prikazivanje rezultata nije vidljivo za polaznike ";
 ?>

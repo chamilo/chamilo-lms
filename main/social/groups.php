@@ -157,7 +157,7 @@ if ($group_id != 0 ) {
 			if ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			
 				$result['name'].= Display::return_icon('moderator_star.png', get_lang('Moderator'));
 			}			
-			$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,cut($result['description'],70));
+			$groups[]= array($url_open.$result['picture_uri'].$url_close, cut($url_open.$result['name'],200,true).$url_close,cut($result['description'],180,true));
 		}
 	}
 	echo '<br/>';
@@ -174,7 +174,7 @@ if ($group_id != 0 ) {
 	echo '<h1>'.get_lang('MyGroups').'</h1>';
 	
 	if (count($groups) > 0) {		
-		Display::display_sortable_grid('groups', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
+		Display::display_sortable_grid('mygroups', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
 	}
 	
 	
@@ -186,11 +186,11 @@ if ($group_id != 0 ) {
 		$id = $result['id'];
 		$url_open  = '<a href="groups.php?id='.$id.'">';
 		$url_close = '</a>';		
-		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,cut($result['description'],70));
+		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,cut($result['description'],220,true));
 	}
 	if (count($groups) > 0) {
 		echo '<h1>'.get_lang('Newest').'</h1>';	
-		Display::display_sortable_grid('groups', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));		
+		Display::display_sortable_grid('newest', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));		
 	}	
 	
 	// Pop groups -----
@@ -208,11 +208,11 @@ if ($group_id != 0 ) {
 			$result['count'] = $result['count'].' '.get_lang('Members');
 		}
 		
-		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,$result['count'],cut($result['description'],70));
+		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,$result['count'],cut($result['description'],100,true));
 	}
 	if (count($groups) > 0) {
 		echo '<h1>'.get_lang('Popular').'</h1>';
-		Display::display_sortable_grid('groups', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
+		Display::display_sortable_grid('popular', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
 	}
 	
 	

@@ -2951,11 +2951,11 @@ a.unread {
 
 /*LIST MEMBERS*/
 .list_members_grid_container { width:100%;}
-.list_members_grid_item { width:100px;  height: 120px;  border:1px dotted #ccc; float:left; padding:5px; margin:8px;}
+.list_members_grid_item { width:100px;  height: 125px;  border:1px dotted #ccc; float:left; padding:5px; margin:8px;}
 .list_members_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
 .list_members_grid_element_2 { width:100px; float:left; text-align:center; margin-bottom:5px;}
 .list_members_grid_element_3 { width:100px; float:left; text-align:center; margin-bottom:5px;}
-.list_members_grid_element_5 { width:100%;  text-align:left;}
+.list_members_grid_element_5 { width:100%;  text-align:center;}
 
 
 #menu {

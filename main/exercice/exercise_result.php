@@ -1150,7 +1150,7 @@ if(count($arrques)>0) {
 		$student_name = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName']);
 		$subject = get_lang('OpenQuestionsAttempted');
 
-		$from = api_get_setting('noreply_email_address');
+		/*$from = api_get_setting('noreply_email_address');
 		if($from == '') {
 			if(isset($_SESSION['id_session']) && $_SESSION['id_session'] != ''){
 				$sql = 'SELECT user.email,user.lastname,user.firstname FROM '.TABLE_MAIN_SESSION.' as session, '.TABLE_MAIN_USER.' as user
@@ -1174,5 +1174,13 @@ if(count($arrques)>0) {
 			}
 		}
 	api_mail_html($student_name, $to, $subject, $mail_content, $from_name, $from, array('encoding'=>$mycharset,'charset'=>$mycharset));
+	*/
+	
+	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+	$email_admin = api_get_setting('emailAdministrator');
+			
+	$subject = get_lang('OpenQuestionsAttempted');
+	$result = api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));	
+	
 }
 ?>

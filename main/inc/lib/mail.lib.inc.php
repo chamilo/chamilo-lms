@@ -170,14 +170,15 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
       //only valid address
       if(is_array($recipient_email))
       {
-      	$i = 0;
+      	//$i = 0;
 		foreach($recipient_email as $dest)
 		{
 	      if(eregi( $regexp, $dest ))
 	      {
-	     	 $mail->AddAddress($dest, ($i>1?'':$recipient_name));
+	     	 $mail->AddAddress($dest, $recipient_name);
+	     	 //$mail->AddAddress($dest, ($i>1?'':$recipient_name));
 	      }
-	      $i++;
+	      //$i++;
 		}
       }
       else

@@ -1121,4 +1121,5 @@ $AllowStudentsToCreateGroupsInSocialTitle = "Permitir a los alumnos de crear gru
 $AllowStudentsToCreateGroupsInSocialComment = "Permitir a los alumnos crear sus propios grupos en la red social";
 $AllowSendMessageToAllPlatformUsersTitle = "Permitir enviar mensajes a todos los usuarios de la plataforma";
 $AllowSendMessageToAllPlatformUsersComment = "Permite poder enviar mensajes a todos los usuarios de la plataforma";
+$TabsSocial = "Pestaña red social";
 ?>

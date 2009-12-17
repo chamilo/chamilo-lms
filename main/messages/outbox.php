@@ -116,7 +116,7 @@ $user_sender_id=api_get_user_id();
 
 echo '<div id="inbox-wrapper">';
 	//LEFT COLUMN
-	echo '<div id="inbox-menu">';	
+	echo '<div id="inbox-menu" class="actions">';	
 		echo '<ul>';
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$social_parameter.'">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>'.'</li>';
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$social_parameter.'">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>'.'</li>';

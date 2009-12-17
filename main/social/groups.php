@@ -148,15 +148,19 @@ if ($group_id != 0 ) {
 	$groups = array();
 	if (is_array($results) && count($results) > 0) {
 		foreach ($results as $result) {
+			//cutting text
+			//$result['name'] = cut($result['name'],150);
+			//$result['description'] = cut($result['description'],180);
+			
 			$id = $result['id'];
 			$url_open  = '<a href="groups.php?id='.$id.'">';
 			$url_close = '</a>';
-			if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {			
-				//$result['name'] .= Display::return_icon('admin_star.png', get_lang('Admin'));
+			if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {		 	
+				$result['name'] .= Display::return_icon('admin_star.png', get_lang('Admin'));
 			} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			
-				$result['name'] = Display::return_icon('moderator_star.png', get_lang('Moderator'));
+				$result['name'] .= Display::return_icon('moderator_star.png', get_lang('Moderator'));
 			}			
-			$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.cut($result['name'],200).$url_close, cut($result['description'],180));
+			$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close, cut($result['description'],180,true));
 		}
 	}
 	echo '<br/>';
@@ -182,10 +186,11 @@ if ($group_id != 0 ) {
 	$results = GroupPortalManager::get_groups_by_age();
 	$groups = array();
 	foreach ($results as $result) {
+		
 		$id = $result['id'];
 		$url_open  = '<a href="groups.php?id='.$id.'">';
 		$url_close = '</a>';		
-		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,cut($result['description'],220,true));
+		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close, cut($result['description'],180,true));
 	}
 	if (count($groups) > 0) {
 		echo '<h1>'.get_lang('Newest').'</h1>';	
@@ -207,7 +212,7 @@ if ($group_id != 0 ) {
 			$result['count'] = $result['count'].' '.get_lang('Members');
 		}
 		
-		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,$result['count'],cut($result['description'],100,true));
+		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,$result['count'],cut($result['description'],180,true));
 	}
 	if (count($groups) > 0) {
 		echo '<h1>'.get_lang('Popular').'</h1>';

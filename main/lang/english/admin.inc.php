@@ -1121,4 +1121,5 @@ $AllowStudentsToCreateGroupsInSocialTitle = "Allow students to create groups in 
 $AllowStudentsToCreateGroupsInSocialComment = "Allow students to create groups in social network";
 $AllowSendMessageToAllPlatformUsersTitle = "Allow send message to all platform users";
 $AllowSendMessageToAllPlatformUsersComment = "Allow send message to all platform users";
+$TabsSocial = "Tabs social";
 ?>

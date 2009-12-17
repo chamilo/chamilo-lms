@@ -28,7 +28,7 @@ function remove_image_form(id_elem1) {
 	var elem1 = document.getElementById(id_elem1);
 	elem1.parentNode.removeChild(elem1);
 	counter_image--;
-	var filepaths = document.getElementById("filepaths");		
+	var filepaths = document.getElementById("filepaths");	
 	if (filepaths.childNodes.length < 3) {		
 		var link_attach = document.getElementById("link-more-attach");		
 		if (link_attach) {
@@ -66,6 +66,12 @@ $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Groups'));
 Display :: display_header($tool_name, 'Groups');
 
+//show the action menu
+SocialManager::show_social_menu();
+echo '<div class="actions-title">';
+echo get_lang('Groups');
+echo '</div>';
+
 // save message group
 if (isset($_POST['token']) && $_POST['token'] == $_SESSION['sec_token']) {
 	if (isset($_POST['action']) && $_POST['action']=='send_message_group') {	
@@ -73,18 +79,15 @@ if (isset($_POST['token']) && $_POST['token'] == $_SESSION['sec_token']) {
 		$content = $_POST['content'];
 		$group_id = $_POST['group_id'];
 		$parent_id = $_POST['parent_id'];	
-		MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id);
+		$res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id);		
+		if (is_string($res)) {			
+			Display::display_error_message($res);
+		}		
 		Security::clear_token();
 	}	
 } else {
 	$tok = Security::get_token();	
 }
-
-//show the action menu
-SocialManager::show_social_menu();
-echo '<div class="actions-title">';
-echo get_lang('Groups');
-echo '</div>';
 
 // getting group information
 $group_id	= intval($_GET['id']);

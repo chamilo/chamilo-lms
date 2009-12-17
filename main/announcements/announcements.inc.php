@@ -712,7 +712,7 @@ function sent_to($tool, $id)
 	while ($row=Database::fetch_array($result)) {
 		// if to_group_id is null then it is sent to a specific user
 		// if to_group_id = 0 then it is sent to everybody
-		if (!is_null($row['to_group_id']))
+		if ($row['to_group_id'] != 0)
 		{
 			$sent_to_group[]=$row['to_group_id'];
 		}

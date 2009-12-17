@@ -350,7 +350,8 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		$answer_list = '<div style="padding: 10px; margin-left: 0px; border: 1px solid #A4A4A4; height: 408px; width: 200px;"><b>'.get_lang('HotspotZones').'</b><dl>';
 		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
 		{
-			$answer_list .= '<dt>'.$answerId.'.- '.$objAnswerTmp->selectAnswer($answerId).'</dt><br>';
+			$answers = $objAnswerTmp->selectAnswerByAutoId($objAnswerTmp->selectAutoId($answerId));			
+			$answer_list .= '<dt>'.$answers['id'].'.- '.$objAnswerTmp->selectAnswer($answerId).'</dt><br>';
 		}
 		$answer_list .= '</dl></div>';
 

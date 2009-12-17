@@ -329,7 +329,7 @@ function display_free_answer($answer,$id,$questionId) {
 	?>
 		<tr>
 		<td>
-			<?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
+			<?php if (!empty($answer)) {echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY));} ?>
 		</td> <?php if(!api_is_allowed_to_edit(null,true)) {?>
         <td>
         <?php

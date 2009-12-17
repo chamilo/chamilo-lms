@@ -8,6 +8,11 @@
 * 	@version $Id: exercise.class.php 22046 2009-07-14 01:45:19Z ivantcholakov $
 */
 
+define('ALL_ON_ONE_PAGE',1);
+define('ONE_PER_PAGE',2);
+define('EXERCISE_FEEDBACK_TYPE_END',0);
+define('EXERCISE_FEEDBACK_TYPE_DIRECT',1);
+define('EXERCISE_FEEDBACK_TYPE_EXAM',2);
 
 if(!class_exists('Exercise')):
 
@@ -238,7 +243,7 @@ class Exercise
 	/**
 	 * returns random answers status.
 	 *
-	 * @author - Juan Carlos Raña
+	 * @author - Juan Carlos Raï¿½a
 	 */
 	function selectRandomAnswers()
 	{
@@ -483,7 +488,7 @@ class Exercise
 	/**
 	 * sets to 0 if answers are not selected randomly
 	 * if answers are selected randomly
-	 * @author - Juan Carlos Raña
+	 * @author - Juan Carlos Raï¿½a
 	 * @param - integer $random_answers - random answers
 	 */
 	function updateRandomAnswers($random_answers)

@@ -398,20 +398,18 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$l
 {
 	if ($exeid!='') {
 
-	    $current_time = time();
+		// Validation in case of fraud with actived control time
 	    if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
+	    	$current_time = time();
 	    	$expired_date = $_SESSION['expired_time'];
-	    	$expired_time = strtotime($expired_date);
+	    	$expired_time = strtotime($expired_date);	    	
+	    	$total_time_allowed = $expired_time + 30;
+		    if ($total_time_allowed < $current_time) {
+		    	$score = 0;
+		    }	    
 	    }
-	
-	    //Validation in case of fraud
-	    $total_time_allowed = $expired_time + 30;
-	    if ($total_time_allowed < $current_time) {
-	    	$score = 0;
-	    }
-	    
-	    $now = time();
-	    
+
+	    $now = time();	    
 	    //Validation in case of wrong start_date 
 	    if (isset($_SESSION['exercice_start_date'])) { 
 	    	$start_date = $_SESSION['exercice_start_date'];	    	
@@ -506,16 +504,12 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 	global $_configuration, $_user, $_cid;
 	$TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-    $current_time = time();
-
+	//Validation in case of fraud with actived control time 
     if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
+    	$current_time = time();
     	$expired_date = $_SESSION['expired_time'];
     	$expired_time = strtotime($expired_date);
-
-
-	    //Validation in case of fraud
-	    $total_time_allowed = $expired_time + 30;
-	 
+	    $total_time_allowed = $expired_time + 30;	 
 	    if ($total_time_allowed < $current_time) {
 	    	$score = 0;
 	    	$answer = 0;
@@ -599,17 +593,17 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
 		return 0;
 	}
 
-    $current_time = time();
+	//Validation in case of fraud  with actived control time   
     if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
+    	$current_time = time();
     	$expired_date = $_SESSION['expired_time'];
     	$expired_time = strtotime($expired_date);
+    	$total_time_allowed = $expired_time + 30;
+	    if ($total_time_allowed < $current_time) {
+	    	$correct = 0;
+	    }	
     }
 
-    //Validation in case of fraud
-    $total_time_allowed = $expired_time + 30;
-    if ($total_time_allowed < $current_time) {
-    	$correct = 0;
-    }
 	$tbl_track_e_hotspot = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 	$sql = "INSERT INTO $tbl_track_e_hotspot " .
 			"(hotspot_user_id, hotspot_course_code, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate)".

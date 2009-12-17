@@ -278,7 +278,7 @@ if ($exercise_row['expired_time'] != 0) { //Sends the exercice form when the exp
     </script>";
 }
 
-if ($_configuration['live_exercise_tracking'] == true && $exerciseType == 2 && $exerciseFeedbackType != 1) {
+if ($_configuration['live_exercise_tracking'] == true && $exerciseType == ONE_PER_PAGE && $exerciseFeedbackType != EXERCISE_FEEDBACK_TYPE_DIRECT) {
 	$query = 'SELECT * FROM ' . $stat_table . $condition;
 	$result_select = Database::query($query, __FILE__, __LINE__);
 	if (Database :: num_rows($result_select) > 0) {
@@ -293,7 +293,7 @@ if ($_configuration['live_exercise_tracking'] == true && $exerciseType == 2 && $
 				$recorded['exerciseResult'][$row['question_id']] = 1;
 			}
 			$exerciseResult = $_SESSION['exerciseResult'] = $recorded['exerciseResult'];
-			$exerciseType = 2;
+			$exerciseType = ONE_PER_PAGE;
 			$questionNum = count($recorded['exerciseResult']);
 			$questionNum++;
 			$questionList = $_SESSION['questionList'] = $recorded['questionList'];
@@ -328,8 +328,7 @@ if ($formSent) {
 			echo str_repeat('&nbsp;', 0) . '$choice is an array' . "<br />\n";
 		}
 
-		if ($exerciseType == 1)
-		{
+		if ($exerciseType == ALL_ON_ONE_PAGE) {
 			// $exerciseResult receives the content of the form.
 			// Each choice of the student is stored into the array $choice
 			$exerciseResult = $choice;
@@ -351,7 +350,7 @@ if ($formSent) {
 				$exerciseResult[$key] = $choice[$key];
 
 				//saving each question
-				if ($_configuration['live_exercise_tracking'] == true && $exerciseType == 2 && $exerciseFeedbackType != 1) {
+				if ($_configuration['live_exercise_tracking'] == true && $exerciseType == ONE_PER_PAGE && $exerciseFeedbackType != EXERCISE_FEEDBACK_TYPE_DIRECT) {
 
 					$nro_question = $questionNum; // - 1;
 
@@ -402,29 +401,23 @@ if ($formSent) {
 							$answerComment = $objAnswerTmp->selectComment($answerId);
 							$answerCorrect = $objAnswerTmp->isCorrect($answerId);
 							$answerWeighting = $objAnswerTmp->selectWeighting($answerId);
-
+							$numAnswer=$objAnswerTmp->selectAutoId($answerId);
 							switch ($answerType) {
 								// for unique answer
 								case UNIQUE_ANSWER :
-									$studentChoice = ($choice == $answerId) ? 1 : 0;
-
+									$studentChoice=($choice == $numAnswer)?1:0;
 									if ($studentChoice) {
-										$questionScore += $answerWeighting;
-										$totalScore += $answerWeighting;
+									  	$questionScore+=$answerWeighting;
+										$totalScore+=$answerWeighting;
 									}
-
 									break;
 									// for multiple answers
 								case MULTIPLE_ANSWER :
-
-									$studentChoice = $choice[$answerId];
-
+									$studentChoice=$choice[$numAnswer];													
 									if ($studentChoice) {
-										$questionScore += $answerWeighting;
-										$totalScore += $answerWeighting;
-									}
-
-									break;
+										$questionScore+=$answerWeighting;
+										$totalScore+=$answerWeighting;
+									}																		break;
 									// for fill in the blanks
 								case FILL_IN_BLANKS :
 
@@ -578,7 +571,6 @@ if ($formSent) {
 								case MATCHING :
 
 									$numAnswer=$objAnswerTmp->selectAutoId($answerId);
-
 									if ($answerCorrect) {										
 										if ($answerCorrect == $choice[$numAnswer]) {											
 											$questionScore+=$answerWeighting;
@@ -590,7 +582,6 @@ if ($formSent) {
 									// for hotspot with no order
 								case HOT_SPOT :
 									$studentChoice = $choice[$answerId];
-
 									if ($studentChoice) {
 										$questionScore += $answerWeighting;
 										$totalScore += $answerWeighting;
@@ -639,7 +630,7 @@ if ($formSent) {
 							}
 							elseif ($answerType == MATCHING) {
 
-								foreach ($matching as $j => $val) {									
+								foreach ($matching as $j => $val) {
 									exercise_attempt($questionScore, $val, $quesId, $exeId, $j);
 								}
 
@@ -652,7 +643,7 @@ if ($formSent) {
 							} elseif ($answerType == HOT_SPOT) {
 								exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
 								if (is_array($exerciseResultCoordinates[$key])) {
-									foreach($exerciseResultCoordinates[$key] as $idx => $val) {
+									foreach($exerciseResultCoordinates[$key] as $idx => $val) {										
 										exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val);
 									}
 								}
@@ -662,9 +653,8 @@ if ($formSent) {
 						}
 					}
 					// end huge foreach() block that loops over all questions
-
 					//at loops over all questions
-					if (isset($exe_id)) {
+					if (isset($exe_id)) {						
 						$sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . (int) $totalScore . ',exe_weighting = exe_weighting + ' . (int) $totalWeighting . ' WHERE exe_id = ' . Database::escape_string($exe_id);
 						Database::query($sql_update, __FILE__, __LINE__);
 					}
@@ -683,9 +673,7 @@ if ($formSent) {
 	// the script "exercise_result.php" will take the variable $exerciseResult from the session
 	api_session_register('exerciseResult');
 	api_session_register('exerciseResultCoordinates');
-	define('ALL_ON_ONE_PAGE',1);
-	define('ONE_PER_PAGE',2);
-
+	
 	// if all questions on one page OR if it is the last question (only for an exercise with one question per page)
 
     if ($exerciseType == ALL_ON_ONE_PAGE || $questionNum >= $nbrQuestions) {
@@ -696,7 +684,7 @@ if ($formSent) {
 		if ( api_is_allowed_to_session_edit() ) {
 			// goes to the script that will show the result of the exercise
 			if ($exerciseType == ALL_ON_ONE_PAGE) {
-				header("Location: exercise_result.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
+				header("Location: exercise_result.php?exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
 			} else {
 				if ($exe_id != '') {
 					//Verify if the current test is fraudulent
@@ -1074,7 +1062,7 @@ if (!empty ($error)) {
 			$i++;
 			$objQuestionTmp = Question :: read($questionId);
 			// for sequential exercises
-			if ($exerciseType == 2) {
+			if ($exerciseType == ONE_PER_PAGE) {
 				// if it is not the right question, goes to the next loop iteration
 				if ($questionNum != $i) {
 					continue;
@@ -1097,7 +1085,7 @@ if (!empty ($error)) {
 	}
 	$s = "<p>$exerciseDescription</p>";
 
-	if ($exerciseType == 2)
+	if ($exerciseType == ONE_PER_PAGE)
 	{
 		$s2 = "&exerciseId=" . $exerciseId;
 	}
@@ -1120,13 +1108,13 @@ if (!empty ($error)) {
 	$i = 1;
 	foreach ($questionList as $questionId) {
 		// for sequential exercises
-		if ($exerciseType == 2) {
+		if ($exerciseType == ONE_PER_PAGE) {
 			// if it is not the right question, goes to the next loop iteration
 			if ($questionNum != $i) {
 				$i++;
 				continue;
 			} else {
-				if ($exerciseFeedbackType != 1) {
+				if ($exerciseFeedbackType != EXERCISE_FEEDBACK_TYPE_DIRECT) {
 					// if the user has already answered this question
 					if (isset ($exerciseResult[$questionId])) {
 						// construction of the Question object
@@ -1146,7 +1134,7 @@ if (!empty ($error)) {
 		showQuestion($questionId, false, $origin, $i, $nbrQuestions);
 		$i++;
 		// for sequential exercises
-		if ($exerciseType == 2) {
+		if ($exerciseType == ONE_PER_PAGE) {
 			// quits the loop
 			break;
 		}
@@ -1171,7 +1159,7 @@ if (!empty ($error)) {
 
 	} else {
 		if (api_is_allowed_to_session_edit() ) {
-			if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
+			if ($exerciseType == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum) {
 				$submit_btn .= get_lang('ValidateAnswer');
         $name_btn = get_lang('ValidateAnswer');
 			} else {
@@ -1198,8 +1186,8 @@ if (!empty ($error)) {
 }
 echo '</div>';
 
-if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType != 1) {
-	//if($questionNum < 2){
+if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+	
 	if ($table_recorded_not_exist) { //$table_recorded_not_exist
 	    if ($exercise_row['expired_time'] != 0) {
 	      $sql_fields = "expired_time_control, ";
@@ -1209,15 +1197,14 @@ if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType !
 	      $sql_fields_values = "";
 	    }  
 	
-		if ($exerciseType == 2) {
+		if ($exerciseType == ONE_PER_PAGE) {
 	    	$sql = "INSERT INTO $stat_table($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,data_tracking,start_date,orig_lp_id,orig_lp_item_id)
 	      			VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";
      
 			Database::query($sql, __FILE__, __LINE__);      
 		} else {
-	    	$sql = "INSERT INTO $stat_table ($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date,orig_lp_id,orig_lp_item_id)
+	    	echo $sql = "INSERT INTO $stat_table ($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date,orig_lp_id,orig_lp_item_id)
 	       			VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . api_get_session_id() . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";
-	   
 			Database::query($sql, __FILE__, __LINE__);
 		}
 

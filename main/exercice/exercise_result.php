@@ -158,7 +158,7 @@ $exerciseTitle=$objExercise->selectTitle();
 $exerciseDescription=$objExercise->selectDescription();
 
 $gradebook = '';
-if (isset($_SESSION['gradebook'])){
+if (isset($_SESSION['gradebook'])) {
 	$gradebook=	$_SESSION['gradebook'];
 }
 
@@ -594,11 +594,20 @@ foreach ($questionList as $questionId) {
 	}
 
 	// construction of the Answer object
+	$user_answer = '';
 	$objAnswerTmp=new Answer($questionId);
 	$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 	$questionScore=0;
 	if ($answerType == FREE_ANSWER) {
 		$nbrAnswers = 1;
+	}
+
+	// get answer list for matching
+	$sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" ';
+	$res_answer = Database::query($sql_answer, __FILE__, __LINE__);	
+	$answer_matching =array();
+	while ($real_answer = Database::fetch_array($res_answer)) {
+		$answer_matching[$real_answer['id']]= $real_answer['answer'];
 	}
 
 	// We're inside *one* question. Go through each possible answer for this question
@@ -725,8 +734,7 @@ foreach ($questionList as $questionId) {
 					$chosen_list=array();
 
 					for($i=0;$i<count($real_correct_tags);$i++) {
-						if ($i==0)
-						{
+						if ($i==0) {
 							$answer.=$real_text[0];
 						}
 
@@ -796,20 +804,17 @@ foreach ($questionList as $questionId) {
 
 
 					break;
-			// for matching TODO: replace $answerId id by $numAnswer
+			// for matching 
 			case MATCHING :
-					if ($answerCorrect) {						
-						if ($answerCorrect == $choice[$numAnswer]) {					
+					if ($answerCorrect) {																			
+						if ($answerCorrect == $choice[$numAnswer]) {																		
 							$questionScore+=$answerWeighting;
-							$totalScore+=$answerWeighting;							
-							$choice[$numAnswer]=$matching[$choice[$numAnswer]];
-						} elseif(!$choice[$numAnswer]) {
-							$choice[$numAnswer]='&nbsp;&nbsp;&nbsp;';
+							$totalScore+=$answerWeighting;
+							$user_answer = '<span>'.$answer_matching[$choice[$numAnswer]].'</span>';
 						} else {
-							$choice[$numAnswer]='<font color="red"><s>'.$matching[$choice[$numAnswer]].'</s></font>';
-						}						
-					} else {
-						$matching[$answerId]=$answer;
+						   	$user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$answer_matching[$choice[$numAnswer]].'</span>';
+						}
+						$matching[$numAnswer] =  $choice[$numAnswer];
 					}
 					break;
 			// for hotspot with no order
@@ -898,24 +903,12 @@ foreach ($questionList as $questionId) {
 			{
 				display_hotspot_order_answer($answerId, $answer, $studentChoice, $answerComment);
 			}
-			else
+			elseif($answerType==MATCHING)
 			{
 				if ($origin != 'learnpath') {
-				?>
-					<tr>
-					<td width="50%">
-						<?php
-						$answer=api_parse_tex($answer);
-						echo $answer; ?>
-					</td>
-					<td width="50%">
-						<?php echo $choice[$numAnswer]; ?> / <font color="green"><b>
-						<?php
-						$matching[$answerCorrect]=api_parse_tex($matching[$answerCorrect]);
-						echo $matching[$answerCorrect]; ?></b></font>
-					</td>
-					</tr>
-				<?php
+					echo '<tr>';
+					echo '<td>'.api_parse_tex($answer_matching[$answerId]).'</td><td>'.api_parse_tex($user_answer).' / <b><span style="color: #008000;">'.api_parse_tex($answer_matching[$answerCorrect]).'</span></b></td>';
+					echo '</tr>';					
 				}
 			}
 		}
@@ -978,21 +971,9 @@ foreach ($questionList as $questionId) {
 			} else {
 				exercise_attempt($questionScore, 0 ,$quesId,$exeId,0);
 			}
-		} elseif ($answerType==MATCHING) {
-			$j=sizeof($matching)+1;
-			for ($i=0;$i<sizeof($choice);$i++,$j++) {
-				$val = $choice[$j];
-				if (preg_match_all ('#<font color="red"><s>([0-9a-z ]*)</s></font>#', $val, $arr1))
-					$val = $arr1[1][0];
-				$val=strip_tags($val);
-				$sql = "SELECT position from $table_ans where question_id='".Database::escape_string($questionId)."' and answer='".Database::escape_string($val)."' AND correct=0";
-				$res = Database::query($sql, __FILE__, __LINE__);
-				if (Database::num_rows($res)>0) {
-					$answer = Database::result($res,0,"position");
-				} else {
-					$answer = 0;
-				}
-				exercise_attempt($questionScore,$answer,$quesId,$exeId,$j);
+		} elseif ($answerType==MATCHING) {		
+			foreach ($matching as $j => $val) {							
+				exercise_attempt($questionScore, $val, $quesId, $exeId, $j);
 			}
 		}
 		elseif ($answerType==FREE_ANSWER) {
@@ -1063,8 +1044,9 @@ if ($_configuration['tracking_enabled']) {
 	$safe_lp_id = $learnpath_id==''?0:(int)$learnpath_id;
 	$safe_lp_item_id = $learnpath_item_id==''?0:(int)$learnpath_item_id;
 	$quizDuration = (!empty($_SESSION['quizStartTime']) ? time() - $_SESSION['quizStartTime'] : 0);
-	if (api_is_allowed_to_session_edit() )  
+	if (api_is_allowed_to_session_edit() ) { 
 		update_event_exercice($exeId, $objExercise->selectId(),$totalScore,$totalWeighting,api_get_session_id(),$safe_lp_id,$safe_lp_item_id,$quizDuration);
+	}
 }
 
 if($objExercise->results_disabled) {

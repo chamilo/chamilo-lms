@@ -2839,8 +2839,64 @@ a.unread {
 	width:300px;
 }
 .groups_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
-.groups_grid_element_1 { width:100px; float:left; text-align:left;margin-bottom:5px;}
+.groups_grid_element_1 { width:100px; float:left; text-align:left;	margin-bottom:5px;}
 .groups_grid_element_2 { width:150px; float:left;}
+
+/*POPULAR GROUP*/
+.popular_grid_container { width:100%;}
+.popular_grid_item {
+	border:1px dotted #CCCCCC;
+	float:left;
+	height:90px;
+	margin:5px;
+	padding:5px;
+	width:500px;
+}
+.popular_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.popular_grid_element_1 { width:350px; float:left; text-align:left;	margin-bottom:1px; padding:1px;}
+.popular_grid_element_2 { width:200px; float:left;}
+.popular_grid_element_3 { width:200px; float:left; text-align:justify;}
+
+/*NEWEST GROUP*/
+.newest_grid_container { width:100%;}
+.newest_grid_item {
+	border:1px dotted #CCCCCC;
+	float:left;
+	height:90px;
+	margin:5px;
+	padding:5px;
+	width:500px;
+}
+.newest_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.newest_grid_element_1 { width:350px; float:left; text-align:left;	margin-bottom:1px; padding:1px;}
+.newest_grid_element_2 { width:400px; float:left; text-align:justify;}
+
+/*MY GROUPS*/
+.mygroups_grid_container { width:100%;}
+.mygroups_grid_item {
+	border:1px dotted #CCCCCC;
+	float:left;
+	height:90px;
+	margin:5px;
+	padding:5px;
+	width:500px;
+}
+.mygroups_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.mygroups_grid_element_1 { width:350px; float:left; text-align:left;	margin-bottom:1px; padding:1px;}
+.mygroups_grid_element_2 { width:400px; float:left; text-align:justify;}
+
+/*PROFILE*/
+.profile_grid_container { width:100%;}
+.profile_grid_item {
+	border:1px dotted #CCCCCC;
+	float:left;
+	height:90px;
+	margin:5px;
+	padding:5px;
+	width:270px;
+}
+.profile_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.profile_grid_element_1 { width:170px; float:left; text-align:left;	margin-bottom:1px; }
 
 
 /* Groups boxes */
@@ -2858,8 +2914,19 @@ a.unread {
 .group_invitation_grid_element_2 { width:150px; float:left;}
 
 
-
-
+/*INVITATION IN PROFILE*/
+.invitation_profile_grid_container { width:100%;}
+.invitation_profile_grid_item {
+	border:1px dotted #CCCCCC;
+	float:left;
+	height:90px;
+	margin:5px;
+	padding:5px;
+	width:100px;
+}
+.invitation_profile_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.invitation_profile_grid_element_2 { width:100px; float:left; text-align:center;}
+.invitation_profile_grid_element_3 { width:100px; float:left; text-align:center;}
 
 /* User boxes */
 .search_users_grid_container { width:100%;}
@@ -2871,6 +2938,25 @@ a.unread {
 .search_users_grid_selectbox { width:50%; float:left;}
 .search_users_grid_title 	{ width:30%; float:left;}
 .search_users_grid_nav 		{ float:right;}
+
+
+/*WAITING USER*/
+.waiting_user_grid_container { width:100%;}
+.waiting_user_grid_item { width:500px;  height: 120px;  border:1px dotted #ccc; float:left; padding:5px; margin:5px;}
+.waiting_user_grid_element_0 { width:100px; height: 90px; float:left; text-align:center; margin-bottom:5px; padding-top:15px;}
+.waiting_user_grid_element_1 { width:400px; float:left; text-align:left; margin-bottom:5px}
+.waiting_user_grid_element_2 { width:400px; float:left; text-align:justify;margin-bottom:5px}
+.waiting_user_grid_element_5 { width:100%;  text-align:left;}
+.waiting_user_grid_element_6 { width:100%;  text-align:left;}
+
+/*LIST MEMBERS*/
+.list_members_grid_container { width:100%;}
+.list_members_grid_item { width:100px;  height: 120px;  border:1px dotted #ccc; float:left; padding:5px; margin:8px;}
+.list_members_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.list_members_grid_element_2 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.list_members_grid_element_3 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.list_members_grid_element_5 { width:100%;  text-align:left;}
+
 
 #menu {
 	-moz-border-radius: 10px; border: 1px solid #e1e1e0;

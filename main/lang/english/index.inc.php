@@ -69,4 +69,5 @@ $YouDoNotHaveAnySessionInItsHistory = "You do not have any training session in i
 $Messages = "Messages";
 $Inbox = "Inbox";
 $Comppose = "Comppose";
+$PendingInvitations = "Pending invitations";
 ?>

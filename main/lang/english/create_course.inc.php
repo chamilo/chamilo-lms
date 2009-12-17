@@ -104,4 +104,5 @@ $CreateCourse = "Create a training";
 $Create = "Create";
 $MessageOfNewCourseToAdmin = "This message is to inform you that has created a new course on platform";
 $NewCourseCreatedIn = "New course created in";
+$ExplicationTrainers = "The trainer is set as you for now. You can change this setting later in the training configuration settings";
 ?>

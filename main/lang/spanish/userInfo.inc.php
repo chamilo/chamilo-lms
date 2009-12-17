@@ -174,4 +174,5 @@ $UserIsNotSubscribedToThisGroup = "Usuario no esta inscrito a este grupo";
 $InvitationReceived = "Invitación aceptada";
 $InvitationSent = "Invitación enviada";
 $YouAlreadySentAnInvitation = "Usted ya ha enviado una invitación";
+$AllowSendMessageToAllPlatformUsersTitle = "Permitir enviar mensajes a todos los usuarios de la plataforma";
 ?>

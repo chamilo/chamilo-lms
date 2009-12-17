@@ -65,4 +65,8 @@ $FolderCreated = "Un nouveau dossier a été créé";
 $LinkAdded = "Un nouveau lien a été ajouté";
 $AnnouncementAdded = "Une annonce a été ajoutée";
 $AgendaAdded = "Un événement d\'agenda a été ajouté";
+$YouDoNotHaveAnySessionInItsHistory = "Vous n\'avez pas de session dans votre historique";
+$Messages = "Messages";
+$Inbox = "Boîte de réception";
+$Comppose = "Nouveau message";
 ?>

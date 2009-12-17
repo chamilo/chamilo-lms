@@ -102,4 +102,6 @@ $IntroductionWiki = "Le mot \"Wiki\" est un raccourci pour WikiWikiWeb. Wikiwiki
 $CreateCourseArea = "Créer cette formation";
 $CreateCourse = "Créer formation";
 $Create = "Créer";
+$MessageOfNewCourseToAdmin = "Ce petit message pour vous informer qu\'un nouveau cours a été créé sur la plateforme";
+$NewCourseCreatedIn = "Nouveau cours créé dans";
 ?>

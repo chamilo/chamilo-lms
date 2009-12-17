@@ -482,6 +482,7 @@ $Inactive = "Neaktivan";
 $SessionOverview = "Pregled sesije";
 $Host = "Server";
 $UserOnHost = "Korisni&#269;ko ime";
+$FtpPassword = "FTP lozinka";
 $DateStartSession = "Po&#269;etni datum";
 $ReconfigureExtension = "Rekonfiguriši ekstenzije";
 $ChooseNewsLanguage = "Izaberite novi jezik";

@@ -24,4 +24,8 @@ $Authoring = "Production";
 $Administration = "Administration";
 $IntroductionTextUpdated = "L\'intro a été mise à jour";
 $IntroductionTextDeleted = "L\'intro a été supprimée";
+$SessionIdentifier = "Identifiant de session";
+$SessionName = "Titre de session";
+$SessionCategory = "Catégorie de session";
+$SessionData = "Info de session";
 ?>

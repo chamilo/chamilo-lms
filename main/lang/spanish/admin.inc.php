@@ -1117,4 +1117,8 @@ $GoToCourseAfterLoginComment = "Cuando un usuario está inscrito sólamente en un 
 $GroupList = "Lista de grupos";
 $AllowStudentsDownloadFoldersTitle = "Permitir a los estudiantes descargar directorios";
 $AllowStudentsDownloadFoldersComment = "Permitir a los estudiantes empaquetar y descargar un directorio completo en la herramienta documentos";
+$AllowStudentsToCreateGroupsInSocialTitle = "Permitir a los alumnos de crear grupos en la red social";
+$AllowStudentsToCreateGroupsInSocialComment = "Permitir a los alumnos crear sus propios grupos en la red social";
+$AllowSendMessageToAllPlatformUsersTitle = "Permitir enviar mensajes a todos los usuarios de la plataforma";
+$AllowSendMessageToAllPlatformUsersComment = "Permite poder enviar mensajes a todos los usuarios de la plataforma";
 ?>

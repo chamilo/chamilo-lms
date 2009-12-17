@@ -36,7 +36,7 @@ if (!empty($group_id)) {
 	$to_group   = $group_info['name'];
 	if (!empty($message_id)) {
 		$message_info = MessageManager::get_message_by_id($message_id);		
-		$title_group  = get_lang('Re:').api_html_entity_decode($message_info['title'],ENT_QUOTES,$charset);	
+		$title_group  = get_lang('Re:').api_xml_http_response_encode($message_info['title']);	
 	} 	
 }
 

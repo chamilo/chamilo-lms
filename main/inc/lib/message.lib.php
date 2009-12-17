@@ -185,7 +185,18 @@ class MessageManager
         $receiver_user_id = intval($receiver_user_id);
         $parent_id = intval($parent_id);
 		$user_sender_id = api_get_user_id();
-
+		
+		$total_filesize = 0;
+		if (is_array($file_attachments)) {
+			foreach ($file_attachments as $file_attach) {
+				$total_filesize += $file_attach['size'];
+			}
+		}
+		
+		if ($total_filesize > intval(api_get_setting('message_max_upload_filesize'))) {			
+			return sprintf(get_lang("FilesSizeExceedsX"),format_file_size(api_get_setting('message_max_upload_filesize')));
+		}
+		
         if (!empty($receiver_user_id) || !empty($group_id)) {
         	// message for user friend
 	        $title = api_convert_encoding($title,$charset);
@@ -331,7 +342,6 @@ class MessageManager
 		
 		// user's file name
 		$file_name =$file_attach['name'];
-	
 		if (!filter_extension($new_file_name))  {
 			Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
 		} else {

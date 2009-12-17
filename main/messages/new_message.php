@@ -69,23 +69,36 @@ $(document).ready(function (){
           	});	
 });
 		
-var counter_image = 1;	
+var counter_image = 1;
+/*		
 function remove_image_form(id_elem1) {
 	var elem1 = document.getElementById(id_elem1);
-	elem1.parentNode.removeChild(elem1);        
-} 								
-function add_image_form() {
-    counter_image = counter_image + 1;														
+	elem1.parentNode.removeChild(elem1);			        
+}
+*/	
+function add_image_form() {    														
 	// Multiple filepaths for image form					
-	var filepaths = document.getElementById("filepaths");		
+	var filepaths = document.getElementById("filepaths");	
+	if (document.getElementById("filepath_"+counter_image)) {
+		counter_image = counter_image + 1;				
+	}  else {
+		counter_image = counter_image; 
+	}
 	var elem1 = document.createElement("div");			
 	elem1.setAttribute("id","filepath_"+counter_image);							
 	filepaths.appendChild(elem1);	
 	id_elem1 = "filepath_"+counter_image;		
 	id_elem1 = "\'"+id_elem1+"\'";
-	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"28\" />&nbsp;<input type=\"text\" name=\"legend[]\" size=\"28\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"'.api_get_path(WEB_CODE_PATH).'img/delete.gif\"></a>";				
-}		
-		
+	//document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"'.api_get_path(WEB_CODE_PATH).'img/delete.gif\"></a>";						
+	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"28\" />&nbsp;<input type=\"text\" name=\"legend[]\" size=\"28\" /></a>";
+	if (filepaths.childNodes.length == 6) {		
+		var link_attach = document.getElementById("link-more-attach");		
+		if (link_attach) {
+			link_attach.innerHTML="";
+		}
+	}
+}
+				
 </script>';
 
 $nameTools = get_lang('ComposeMessage');
@@ -190,7 +203,7 @@ function manage_form ($default, $select_from_user_list = null) {
 				<input type="file" name="attach_1"  size="28" />
 				<input type="text" name="legend[]" size="28" />
 				</div></span></div></div>');
-		$form->addElement('html','<div class="row"><div class="formw"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a>&nbsp;('.sprintf(get_lang('MaximunFileSizeXMB'),25).')</div></div>');
+		$form->addElement('html','<div class="row"><div class="formw"><span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize'))).')</div></div>');
 	}
 		
 	$form->addElement('style_submit_button','compose',api_xml_http_response_encode(get_lang('SendMessage')),'class="save"');
@@ -212,8 +225,14 @@ function manage_form ($default, $select_from_user_list = null) {
 		if (is_array($user_list) && count($user_list)> 0) {
 			//all is well, send the message
 			foreach ($user_list as $user) {				
-				MessageManager::send_message($user, $title, $content, $_FILES, $file_comments, $group_id, $parent_id);
-				MessageManager::display_success_message($user);	
+				$res = MessageManager::send_message($user, $title, $content, $_FILES, $file_comments, $group_id, $parent_id);
+				if ($res) {
+					if (is_string($res)) {
+						Display::display_error_message($res);
+					} else {
+						MessageManager::display_success_message($user);
+					}
+				}	
 			}			
 		} 		
 	} else {

@@ -152,12 +152,11 @@ if ($group_id != 0 ) {
 			$url_open  = '<a href="groups.php?id='.$id.'">';
 			$url_close = '</a>';
 			if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {			
-				$result['name'].= Display::return_icon('admin_star.png', get_lang('Admin'));
-			}
-			if ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			
-				$result['name'].= Display::return_icon('moderator_star.png', get_lang('Moderator'));
+				//$result['name'] .= Display::return_icon('admin_star.png', get_lang('Admin'));
+			} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			
+				$result['name'] = Display::return_icon('moderator_star.png', get_lang('Moderator'));
 			}			
-			$groups[]= array($url_open.$result['picture_uri'].$url_close, cut($url_open.$result['name'],200,true).$url_close,cut($result['description'],180,true));
+			$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.cut($result['name'],200).$url_close, cut($result['description'],180));
 		}
 	}
 	echo '<br/>';

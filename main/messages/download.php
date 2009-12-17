@@ -21,6 +21,7 @@ session_cache_limiter('public');
 
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 // IMPORTANT to avoid caching of documents
@@ -46,10 +47,9 @@ $title = str_replace(' ','_', $row['filename']);
 $message_id = $row['message_id'];
 
 // allow download only for user sender and user receiver
-$sql = "SELECT user_sender_id, user_receiver_id FROM $tbl_messsage WHERE id = '$message_id'";
+$sql = "SELECT user_sender_id, user_receiver_id, group_id FROM $tbl_messsage WHERE id = '$message_id'";
 $rs= Database::query($sql, __FILE__, __LINE__);
 $row_users= Database::fetch_row($rs);
-
 $current_uid = api_get_user_id(); 
 if (!in_array($current_uid,$row_users)) {
 	api_not_allowed();
@@ -66,7 +66,12 @@ if (in_array($_GET['type'],$message_type)) {
 	}	
 }
 
-$path_user_info = UserManager::get_user_picture_path_by_id($message_uid, 'system', true);
+if (!empty($row_users[2])) {	
+	$path_user_info = GroupPortalManager::get_group_picture_path_by_id($row_users[2], 'system', true);
+} else {
+	$path_user_info = UserManager::get_user_picture_path_by_id($message_uid, 'system', true);	
+}
+
 $full_file_name = $path_user_info['dir'].'message_attachments/'.$file_url;
 
 // launch event

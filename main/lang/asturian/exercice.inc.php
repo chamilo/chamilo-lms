@@ -351,4 +351,5 @@ $SessionIsReadOnly = "La sesión ye de sólo llectura";
 $EnableTimerControl = "Activar control de tiempu";
 $ExerciseTotalDurationInMinutes = "Duración total en minutos del exerciciu";
 $ToContinueUseMenu = "Pa siguir esta lleición, por favor, usa\'l menú llateral";
+$RandomAnswers = "Rempuestes al debalu";
 ?>

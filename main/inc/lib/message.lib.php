@@ -22,9 +22,8 @@ require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
  */
 define('MESSAGE_STATUS_NEW',				'0');
 define('MESSAGE_STATUS_UNREAD',				'1');
-define('MESSAGE_STATUS_DELETED',			'2');
-
-///define('MESSAGE_STATUS_DELETED',			'4');
+define('MESSAGE_STATUS_DELETED',			'3');
+define('MESSAGE_STATUS_OUTBOX',				'4');
 
 define('MESSAGE_STATUS_INVITATION_PENDING',	'5');
 define('MESSAGE_STATUS_INVITATION_ACCEPTED','6');
@@ -189,9 +188,9 @@ class MessageManager
 
         if (!empty($receiver_user_id) || !empty($group_id)) {
         	// message for user friend
-	        $title = api_convert_encoding($title,$charset,'UTF-8');
+	        $title = api_convert_encoding($title,$charset);
 	        $title = Database::escape_string($title);
-	        $content = api_convert_encoding($content,$charset,'UTF-8');
+	        $content = api_convert_encoding($content,$charset);
 	        $content = Database::escape_string($content);
 			//message in inbox
 			
@@ -202,72 +201,44 @@ class MessageManager
 			
 			//We should ALWAYS sent emails
 			//if ($row_exist['count'] == 0) {
-				
-			//message in outbox for user friend or group
-			$sql = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id ) ".
-					 " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".date('Y-m-d H:i:s')."','$title','$content', '$group_id', '$parent_id')";
-			$rs = Database::query($sql,__FILE__,__LINE__);
-			$outbox_last_id = Database::insert_id();
 			
-			// save attachment file for outbox messages
+			//message in inbox for user friend								 
+			$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id ) ".
+					 " VALUES ('$user_sender_id', '$receiver_user_id', '1', '".date('Y-m-d H:i:s')."','$title','$content','$group_id','$parent_id')";
+			$result = Database::query($query,__FILE__,__LINE__);				
+			$inbox_last_id = Database::insert_id();		
+						
+			// save attachment file for inbox messages
 			if (is_array($file_attachments)) {
-				$o = 0;
+				$i = 0;
 				foreach ($file_attachments as $file_attach) {						
 					if ($file_attach['error'] == 0) {
-						self::save_message_attachment_file($file_attach,$file_comments[$o],$outbox_last_id,$user_sender_id);
+						self::save_message_attachment_file($file_attach,$file_comments[$i],$inbox_last_id,null,$receiver_user_id,$group_id);
 					}
-					$o++;
+					$i++;	
 				}
 			}
-			
-			if (!empty($group_id)) {
-				//message in inbox for group										
-				$users_by_group = GroupPortalManager::get_all_users_by_group($group_id);
-				$users_ids = array_keys($users_by_group);	
-				if (is_array($users_ids) && count($users_ids) > 0) {				
-					foreach ($users_ids as $user_id) {
-						$receiver_user_id = $user_id;														 
-						$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id ) ".
-								 " VALUES ('$user_sender_id', '$receiver_user_id', '1', '".date('Y-m-d H:i:s')."','$title','$content','$group_id','$parent_id')";
-						$result = Database::query($query,__FILE__,__LINE__);				
-						$inbox_last_id = Database::insert_id();					
-						// save attachment file for inbox messages
-						if (is_array($file_attachments)) {
-							$i = 0;
-							foreach ($file_attachments as $file_attach) {						
-								if ($file_attach['error'] == 0) {
-									self::save_message_attachment_file($file_attach,$file_comments[$i],$inbox_last_id,null,$receiver_user_id);
-								}
-								$i++;
-							}
-						}						
-						// update parent id for other receiver users belongs the group						
-						if (!empty($parent_id)) {
-							self::update_parent_ids_from_reply($parent_id, $receiver_user_id, $inbox_last_id);
-						}													
-					}
-				}
-			} else {		
-							
-				//message in inbox for user friend								 
-				$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id ) ".
-						 " VALUES ('$user_sender_id', '$receiver_user_id', '1', '".date('Y-m-d H:i:s')."','$title','$content','$group_id','$parent_id')";
-				$result = Database::query($query,__FILE__,__LINE__);				
-				$inbox_last_id = Database::insert_id();					
-				// save attachment file for inbox messages
+				
+			if (empty($group_id)) {	
+				//message in outbox for user friend or group
+				$sql = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id ) ".
+						 " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".date('Y-m-d H:i:s')."','$title','$content', '$group_id', '$parent_id')";
+				$rs = Database::query($sql,__FILE__,__LINE__);
+				$outbox_last_id = Database::insert_id();
+				
+				// save attachment file for outbox messages
 				if (is_array($file_attachments)) {
-					$i = 0;
+					$o = 0;
 					foreach ($file_attachments as $file_attach) {						
 						if ($file_attach['error'] == 0) {
-							self::save_message_attachment_file($file_attach,$file_comments[$i],$inbox_last_id,null,$receiver_user_id);
+							self::save_message_attachment_file($file_attach,$file_comments[$o],$outbox_last_id,$user_sender_id);
 						}
-						$i++;	
+						$o++;
 					}
-				}					
-			}														
+				}
+			}
 			return $result;
-			//}
-        }         
+        }
 		return false;
 	}
 
@@ -351,7 +322,7 @@ class MessageManager
 		return false;
 	}
 	
-	public static function save_message_attachment_file($file_attach,$file_comment,$message_id,$receiver_user_id=0,$sender_user_id=0) {
+	public static function save_message_attachment_file($file_attach,$file_comment,$message_id,$receiver_user_id=0,$sender_user_id=0,$group_id=0) {
 
 		$tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
@@ -374,7 +345,13 @@ class MessageManager
 			}			
 			
 			// User-reserved directory where photos have to be placed.
-			$path_user_info = UserManager::get_user_picture_path_by_id($message_user_id, 'system', true);
+			
+			if (!empty($group_id)) {
+				$path_user_info = GroupPortalManager::get_group_picture_path_by_id($group_id, 'system', true);
+			} else {
+				$path_user_info = UserManager::get_user_picture_path_by_id($message_user_id, 'system', true);	
+			}
+
 			$path_message_attach = $path_user_info['dir'].'message_attachments/';
 					
 			// If this directory does not exist - we create it.
@@ -405,7 +382,7 @@ class MessageManager
 	 * @param  int		message user id (receiver user id or sender user id) 
 	 * @return void
 	 */
-	public static function delete_message_attachment_file($message_id,$message_uid) {
+	public static function delete_message_attachment_file($message_id,$message_uid,$group_id=0) {
 
 		$message_id = intval($message_id);		
 		$message_uid = intval($message_uid);
@@ -418,7 +395,13 @@ class MessageManager
 			$path 		= $row['path'];
 			$attach_id  = $row['id'];			
 			$new_path 	= $path.'_DELETED_'.$attach_id;
-			$path_user_info = UserManager::get_user_picture_path_by_id($message_uid, 'system', true);
+			
+			if (!empty($group_id)) {
+				$path_user_info = GroupPortalManager::get_group_picture_path_by_id($group_id, 'system', true);
+			} else {
+				$path_user_info = UserManager::get_user_picture_path_by_id($message_uid, 'system', true);	
+			}
+
 			$path_message_attach = $path_user_info['dir'].'message_attachments/';					
 			if (is_file($path_message_attach.$path)) {				
 				if(rename($path_message_attach.$path, $path_message_attach.$new_path)) {					
@@ -449,7 +432,7 @@ class MessageManager
 	 	$table_message = Database::get_main_table(TABLE_MESSAGE);
 	 	$current_uid = api_get_user_id();
 	 	$group_id = intval($group_id);	 			
-		$query = "SELECT * FROM $table_message WHERE group_id='$group_id' AND msg_status <> 4 AND user_receiver_id = '$current_uid' ORDER BY id";		
+		$query = "SELECT * FROM $table_message WHERE group_id='$group_id' AND msg_status <> 4 ORDER BY id";		
 		$rs = Database::query($query,__FILE__,__LINE__);		
 		$data = array();
 		if (Database::num_rows($rs) > 0) {
@@ -580,7 +563,7 @@ class MessageManager
 		$row = Database::fetch_array($result);
 		
 		// get file attachments by message id
-		$files_attachments = self::get_links_message_attachment_files($message_id);
+		$files_attachments = self::get_links_message_attachment_files($message_id,$source);
 		
 		$user_con = self::users_connected_by_id();
 		$band=0;
@@ -666,7 +649,7 @@ class MessageManager
 		$path='outbox.php';
 
 		// get file attachments by message id
-		$files_attachments = self::get_links_message_attachment_files($message_id);
+		$files_attachments = self::get_links_message_attachment_files($message_id,'outbox');
 	
 		$row = Database::fetch_array($result);
 		$user_con = self::users_connected_by_id();
@@ -828,9 +811,10 @@ class MessageManager
 	/**
 	 * Get array of links (download) for message attachment files    
 	 * @param int  		message id 
+	 * @param string	type message list (inbox/outbox)
 	 * @return array 
 	 */	
-	public static function get_links_message_attachment_files($message_id) {
+	public static function get_links_message_attachment_files($message_id,$type='') {
 		
 		$tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 		$message_id = intval($message_id);
@@ -838,11 +822,15 @@ class MessageManager
 		// get file attachments by message id
 		$links_attach_file = array();
 		if (!empty($message_id)) {
-			$sql = "SELECT * FROM $tbl_message_attach WHERE message_id = '$message_id'";
+			
+			$sql = "SELECT * FROM $tbl_message_attach WHERE message_id = '$message_id'";		
+				
 			$rs_file = Database::query($sql,__FILE__,__LINE__);				
 			if (Database::num_rows($rs_file) > 0) {
-				$attach_icon = Display::return_icon('attachment.gif');						
-				$archiveURL=api_get_path(WEB_CODE_PATH).'messages/download.php?type=inbox&file=';				
+				$attach_icon = Display::return_icon('attachment.gif');
+
+				$archiveURL=api_get_path(WEB_CODE_PATH).'messages/download.php?type='.$type.'&file=';				
+				
 				while ($row_file = Database::fetch_array($rs_file)) {
 					$archiveFile= $row_file['path'];
 					$filename 	= $row_file['filename'];

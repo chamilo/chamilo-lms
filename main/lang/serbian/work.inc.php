@@ -28,4 +28,17 @@ $CreateDirectory = "Kreiraj direktorijum";
 $langCurrentDir = "teku&#263;i folder";
 $UploadADocument = "U&#269;itaj dokument";
 $EditToolOptions = "Izmeni opcije alata";
+$AddToCalendar = "Dodaj u kalendar ";
+$MoveXTo = "Premesti %s u ";
+$ModifyDirectory = "Potvrdi izmenu direktorijuma";
+$DeleteAllFiles = "Obriši sve dokumente";
+$BackToWorksList = "Povratak na popis zadataka ";
+$FileInvisible = "Datoteka je sakrivena ";
+$CreateAssignment = "Kreirajte zadatak";
+$UpdateWork = "Ažuriraj trenutni zadatak ";
+$MakeAllPapersInvisible = "Sakrij sve dokumente";
+$MakeAllPapersVisible = "Postavi sve dokumente da su vidljivi";
+$TheDocumentHasBeenDeleted = "Dokument je obrisan";
+$YouAreNotAllowedToDeleteThisDocument = "Nemate autorizaciju da obrišete ovaj dokument";
+$ConfirmYourChoiceDeleteAllfiles = "Potvrdjivanjem vašeg izbora &#263;e obrisati sve fajlove i to ne&#263;e biti mogu&#263;e naknadno ispraviti";
 ?>

@@ -46,6 +46,7 @@ if (!empty($group_id)) {
 <input type="hidden" name="action" value="send_message_group" />
 <input type="hidden" name="group_id" value="<?php echo $group_id ?>" />
 <input type="hidden" name="parent_id" value="<?php echo $message_id ?>" />
+<input type="hidden" name="token" value="<?php echo $_SESSION['sec_token'] ?>" />
 <table width="600" border="0" height="220">
     <tr height="180">
         <td align="left">

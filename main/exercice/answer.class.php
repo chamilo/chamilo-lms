@@ -252,6 +252,23 @@ class Answer
 	{
 		return $this->answer[$id];
 	}
+	
+	
+	function selectAnswerByAutoId($auto_id) {
+		
+		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
+		$auto_id = intval($auto_id);
+		$sql="SELECT id, answer FROM $TBL_ANSWER WHERE id_auto='$auto_id'";
+		$rs = Database::query($sql, __FILE__, __LINE__);
+		
+		if (Database::num_rows($rs)>0) {
+			$row = Database::fetch_array($rs);
+			return $row;
+		}
+		return false; 
+
+	}
+	
 	/**
 	 * returns the answer title from an answer's position
 	 *

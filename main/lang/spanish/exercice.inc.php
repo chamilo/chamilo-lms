@@ -291,7 +291,7 @@ $ShowResultsToStudents = "Mostrar los resultados a los estudiantes";
 $ProcedToQuestions = "Preparar preguntas";
 $AddQuestionToExercise = "Añadir pregunta";
 $PresentationQuestions = "Presentación de las preguntas";
-$UniqueAnswer = "Respuesta única";
+$UniqueAnswer = "Elección múltiple";
 $MultipleAnswer = "Respuesta multiple";
 $FreeAnswer = "Respuesta abierta";
 $HotSpot = "Zonas de imagen";
@@ -349,6 +349,7 @@ $Delineation = "Delineación";
 $QuestionTypeDoesNotBelongToFeedbackTypeInExercise = "Tipo de pregunta no pertenece al tipo de retroalimentación en ejercicios";
 $SessionIsReadOnly = "La sesión es de sólo lectura";
 $EnableTimerControl = "Habilitar control de tiempo";
-$ExerciseTotalDurationInMinutes = "Duración total en minutos del ejercicio";
+$ExerciseTotalDurationInMinutes = "Duración del ejercicio (en minutos)";
 $ToContinueUseMenu = "Para continuar esta lección, por favor use el menú lateral.";
+$RandomAnswers = "Barajar respuestas";
 ?>

@@ -137,11 +137,11 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 
 		($countsetting['0']%10) < 5 ?$b=$countsetting['0']-10:$b=$countsetting['0'];
 		if ($i % 10 == 0 and $i<$b){
-			if ($_GET['category'] <> "Languages"){
+			
 				$form->addElement('html','<div align="right">');
 				$form->addElement('style_submit_button', null,get_lang('SaveSettings'), 'class="save"');
 				$form->addElement('html','</div>');
-			}
+		
 		}
 		$i++;
 
@@ -273,11 +273,11 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 				$form->addElement('static', null, get_lang($row['comment']), get_lang('CurrentValue').' : '.$row['selected_value'],$hideme);
 		}
 	}
-	if ($_GET['category'] <> "Languages"){
+	
 		$form->addElement('html','<div align="right">');
 		$form->addElement('style_submit_button', null,get_lang('SaveSettings'), 'class="save"');
 		$form->addElement('html','</div>');
-	}
+
 	$form->setDefaults($default_values);
 	if ($form->validate())
 	{

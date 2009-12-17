@@ -546,4 +546,19 @@ function create_dir_form()
 
 	return $new_folder_text;
 }
+
+/**
+ * get if the user is in his shared folder
+ * @return return bool Return true when user is in his shared folder
+ */
+
+function is_my_shared_folder($user_id, $path)
+{
+	if('/shared_folder/sf_user_'.$user_id==Security::remove_XSS($path))
+	{
+		return true;		
+	}
+	return false;
+}
+
 ?>

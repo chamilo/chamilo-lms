@@ -140,6 +140,9 @@ $dbl_click_id = 0; // used to avoid double-click
 $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 $group_member_with_upload_rights = false;
 
+
+
+
 //if the group id is set, we show them group documents
 if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='')
 {
@@ -240,6 +243,21 @@ if (!(DocumentManager::is_visible($curdirpath, $_course)||$is_allowed_to_edit)){
 
 $course_quota = DocumentManager::get_course_quota();
 $current_session_id = api_get_session_id();
+
+/*
+-----------------------------------------------------------
+	Create the current user shared folder if no exist
+-----------------------------------------------------------
+*/
+
+if (!file_exists($base_work_dir.'/shared_folder/sf_user_'.api_get_user_id()))
+{
+	$usf_dir_title=api_get_person_name($_user['firstName'], $_user['lastName']);
+	$usf_dir_name='/shared_folder/sf_user_'.api_get_user_id();
+	$to_group_id=0;
+	create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$usf_dir_name,$usf_dir_title);
+}
+
 /*
 ==============================================================================
 		MAIN SECTION
@@ -760,6 +778,7 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 		//data for checkbox
 		if (($is_allowed_to_edit || $group_member_with_upload_rights) AND count($docs_and_folders)>1) {
 			$row[] = $id['path'];
+			
 		}
 
 		// Show the Owner of the file only in groups
@@ -824,22 +843,28 @@ else
 
 $column_show=array();
 
-
-	if ($is_allowed_to_edit || $group_member_with_upload_rights)
+	if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder($_user['user_id'],$curdirpath))// TODO:check enable more options for shared folders
 	{
 		/* CREATE NEW DOCUMENT OR NEW DIRECTORY / GO TO UPLOAD / DOWNLOAD ZIPPED FOLDER */
 		?>
 			<!-- create new document or directory -->
-			<a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/filenew.gif" border="0" alt="" title="<?php echo get_lang('CreateDoc'); ?>" /></a>
-			<a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang("CreateDoc"); ?></a>&nbsp;&nbsp;
+            <?php if (!is_my_shared_folder($_user['user_id'],$curdirpath))
+            {?>
+                <a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/filenew.gif" border="0" alt="" title="<?php echo get_lang('CreateDoc'); ?>" /></a>
+                <a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang("CreateDoc"); ?></a>&nbsp;&nbsp;
+      <?php }?>   
 			<!-- file upload link -->
-			<a href="upload.php?<?php echo api_get_cidreq();?>&path=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/submit_file.gif" border="0" title="<?php echo get_lang('UplUploadDocument'); ?>" alt="" /></a>
-			<a href="upload.php?<?php echo api_get_cidreq();?>&path=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang('UplUploadDocument'); ?></a>&nbsp;
+            
+			<a href="upload.php?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/submit_file.gif" border="0" title="<?php echo get_lang('UplUploadDocument'); ?>" alt="" /></a>
+			<a href="upload.php?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang('UplUploadDocument'); ?></a>&nbsp;
 			<!-- create directory -->
-			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1"><img src="../img/folder_new.gif" border="0" title="<?php echo get_lang('CreateDir'); ?>" alt ="" /></a>
-			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1"><?php echo get_lang("CreateDir"); ?></a>&nbsp;
-			<a href="quota.php?<?php echo api_get_cidreq();?>"><?php Display::display_icon('statistics.gif', get_lang("ShowCourseQuotaUse")); ?><?php echo get_lang("ShowCourseQuotaUse"); ?></a>
+            <?php if (!is_my_shared_folder($_user['user_id'],$curdirpath))
+            {?>
+                <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1"><img src="../img/folder_new.gif" border="0" title="<?php echo get_lang('CreateDir'); ?>" alt ="" /></a>
+                <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1"><?php echo get_lang("CreateDir"); ?></a>&nbsp;
+                <a href="quota.php?<?php echo api_get_cidreq();?>"><?php Display::display_icon('statistics.gif', get_lang("ShowCourseQuotaUse")); ?><?php echo get_lang("ShowCourseQuotaUse"); ?></a>
 		<?php
+			}
 	}
 	if ($docs_and_folders!=null) {
 		global $total_size;

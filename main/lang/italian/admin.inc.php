@@ -1117,4 +1117,8 @@ $GoToCourseAfterLoginComment = "Se l\'utente è iscritto ad un solo corso, potà e
 $GroupList = "Elenco dei gruppi";
 $AllowStudentsDownloadFoldersTitle = "Permetti il download delle directory da parte dei corsisti";
 $AllowStudentsDownloadFoldersComment = "I corsisti potranno scaricare una versione compressa di intere directory nella sezione Documenti";
+$AllowStudentsToCreateGroupsInSocialTitle = "Consenti ai corsisti di creare gruppi nel social network";
+$AllowStudentsToCreateGroupsInSocialComment = "Consenti ai corsisti di creare gruppi nel social network";
+$AllowSendMessageToAllPlatformUsersTitle = "Consenti l\'invio di messaggi verso tutti gli utenti";
+$AllowSendMessageToAllPlatformUsersComment = "Consenti l\'invio di messaggi verso tutti gli utenti";
 ?>

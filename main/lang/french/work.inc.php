@@ -73,4 +73,8 @@ $FolderEdited = "Répertoire mis à jour";
 $UpdateWork = "Mettre le document à jour";
 $MakeAllPapersInvisible = "Rendre tous travaux invisibles";
 $MakeAllPapersVisible = "Rendre tous travaux visibles";
+$StudentAllowedToDeleteOwnPublication = "Autoriser les apprenants à supprimer leurs propres tâches";
+$TheDocumentHasBeenDeleted = "Le document a été supprimé.";
+$YouAreNotAllowedToDeleteThisDocument = "Vous n\'êtes pas autorisé à supprimer ce document";
+$ConfirmYourChoiceDeleteAllfiles = "Veuillez confirmer votre choix. Tous les fichiers seront supprimés sans possibilité de récupération postérieure";
 ?>

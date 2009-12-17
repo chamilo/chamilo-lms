@@ -104,4 +104,5 @@ $CreateCourse = "Crea un corso";
 $Create = "Crea";
 $MessageOfNewCourseToAdmin = "Caro %s, \\n\\n questo messaggio ti informa che sulla piattaforma %s - %s \\n\\n è stato creato il nuovo corso\\n Titolo: %s \\n Categoria: %s \\n Creato da: %s \\n Lingua: %s\";";
 $NewCourseCreatedIn = "Nuovo corso creato in ";
+$ExplicationTrainers = "Ora sei tu il docente del corso; in seguito potrai configurare altre persone come docenti.";
 ?>

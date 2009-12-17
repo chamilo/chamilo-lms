@@ -69,4 +69,5 @@ $YouDoNotHaveAnySessionInItsHistory = "En su historial no hay ninguna sesión de 
 $Messages = "Mensajes";
 $Inbox = "Bandeja de entrada";
 $Comppose = "Redactar";
+$PendingInvitations = "Invitaciones pendientes";
 ?>

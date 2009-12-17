@@ -1116,5 +1116,9 @@ $GoToCourseAfterLoginTitle = "Go directly to the course after login";
 $GoToCourseAfterLoginComment = "When a user is registered in one course, go directly to the course after login";
 $GroupList = "Group List";
 $AllowStudentsDownloadFoldersTitle = "Allow students to download directories";
-$AllowStudentsDownloadFoldersComment = "Permitir a los estudiantes empaquetar y descargar un directorio completo en la herramienta documentos";
+$AllowStudentsDownloadFoldersComment = "Allow students to pack and download a complete directory from the document tool";
+$AllowStudentsToCreateGroupsInSocialTitle = "Allow students to create groups in social network";
+$AllowStudentsToCreateGroupsInSocialComment = "Allow students to create groups in social network";
+$AllowSendMessageToAllPlatformUsersTitle = "Allow send message to all platform users";
+$AllowSendMessageToAllPlatformUsersComment = "Allow send message to all platform users";
 ?>

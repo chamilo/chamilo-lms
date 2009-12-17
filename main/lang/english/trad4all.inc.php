@@ -751,10 +751,10 @@ $Unacceptable = "Unacceptable";
 $DisplayTrainingList = "Display training list";
 $HistoryTrainingSession = "History training ";
 $Until = "Until";
-$FirstPage = "First Page";
-$LastPage = "Last Page";
+$FirstPage = "First page";
+$LastPage = "Last page";
 $Coachs = "Coachs";
 $New = "New";
-$YouMustToInstallTheExtensionLDAP = "You must to install the extension LDAP";
+$YouMustToInstallTheExtensionLDAP = "You must install the extension LDAP";
 $AddAdditionalProfileField = "Add user profile field";
 ?>

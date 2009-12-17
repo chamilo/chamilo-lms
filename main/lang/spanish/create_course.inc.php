@@ -104,4 +104,5 @@ $CreateCourse = "Crear curso";
 $Create = "Crear";
 $MessageOfNewCourseToAdmin = "Este mensaje es para informarle que se ha creado un nuevo curso en la plataforma";
 $NewCourseCreatedIn = "Nuevo curso creado en";
+$ExplicationTrainers = "El profesor está definido como Ud por ahora. Podrá cambiarlo en la página de configuración del curso";
 ?>

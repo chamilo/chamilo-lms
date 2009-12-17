@@ -66,4 +66,8 @@ $LinkAdded = "Nuovo collegamento aggiunto";
 $AnnouncementAdded = "Avviso aggiunto";
 $AgendaAdded = "Voce nell\'agenda aggiunta";
 $YouDoNotHaveAnySessionInItsHistory = "Non ci sono tue sessioni nello storico";
+$Messages = "Messaggi";
+$Inbox = "Posta in entrata";
+$Comppose = "Componi";
+$PendingInvitations = "Inviti in attesa";
 ?>

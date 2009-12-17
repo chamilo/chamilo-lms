@@ -54,4 +54,5 @@ $langTeach = "Šta može da predaje";
 $langProductions = "Produkcije";
 $langSendChatRequest = "P&#1086;šalji sagovorniku zahtev za Chat";
 $langRequestDenied = "Poziv je odbijen.";
+$Inbox = "Inbox";
 ?>

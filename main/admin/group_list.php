@@ -113,7 +113,7 @@ function get_group_data($from, $number_of_items, $column, $direction)
 	
 	while ($group = Database::fetch_row($res)) {
 		$group[3] = $status[$group[3]];	
-		$group['1'] = '<a href="/main/social/groups.php?id='.$group['0'].'">'.$group['1'].'</a>';      
+		$group['1'] = '<a href="'.api_get_path(WEB_CODE_PATH).'social/groups.php?id='.$group['0'].'">'.$group['1'].'</a>';      
         $groups[] = $group;
 	}
 	return $groups;

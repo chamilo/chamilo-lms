@@ -215,7 +215,7 @@ if ($group_id != 0 ) {
 			$result['count'] = $result['count'].' '.get_lang('Members');
 		}
 		
-		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,$result['count'],cut($result['description'],180,true));
+		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,$result['count'],cut($result['description'],120,true));
 	}
 	if (count($groups) > 0) {
 		echo '<h1>'.get_lang('Popular').'</h1>';

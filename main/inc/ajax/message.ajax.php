@@ -53,7 +53,9 @@ switch ($action) {
 			}
 		}
 		echo json_encode($return);	
-		break;	
+		break;
+		
+		
 	default:
 		echo '';
 	

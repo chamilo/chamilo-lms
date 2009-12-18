@@ -20,33 +20,13 @@ api_block_anonymous_users();
 $this_section = SECTION_SOCIAL;
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-1.1.3.1.pack.js" type="text/javascript"></script>';
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.history_remote.pack.js" type="text/javascript"></script>';
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.tabs.pack.js" type="text/javascript"></script>';
+//$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-1.1.3.1.pack.js" type="text/javascript"></script>';
+//$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.history_remote.pack.js" type="text/javascript"></script>';
+//$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.tabs.pack.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript">
 	
 	
-function add_group (my_action,name_rs) {
-	if(my_action=="show") {
-		$("div#div_content_messages").html("");
-		$("div#div_content_table_data").html("");
-		$(".confirmation-message").remove();
-		$(".normal-message").remove();
-		$(".error-message").remove();
-			$.ajax({
-			contentType: "application/x-www-form-urlencoded",
-			type: "GET",
-			url: "group_add.php",
-			data:"rs="+name_rs,
-			success: function(datos) {
-			 $("div#div_add_group").html(datos);
-			}
-		});
-	}
-}
-		
-		
 			
 function delete_friend (element_div) {
 	id_image=$(element_div).attr("id");
@@ -55,10 +35,9 @@ function delete_friend (element_div) {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
 			type: "POST",
-			url: "../social/register_friend.php",
+			url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=delete_friend",
 			data: "delete_friend_id="+user_id[1],
 			success: function(datos) {
-			//alert(datos);
 			 $("div#"+"div_"+user_id[1]).hide("slow");
 			 $("div#"+"div_"+user_id[1]).html("");
 			 clear_form ();
@@ -70,13 +49,12 @@ function delete_friend (element_div) {
 		
 		
 		
-		
 function search_image_social(element_html)  {
 	name_search=$(element_html).attr("value");
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		type: "POST",
-		url: "../social/show_search_image.inc.php",
+		url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=show_my_friends",
 		data: "search_name_q="+name_search,
 		success: function(datos) {
 			$("div#div_content_table").html(datos);
@@ -120,14 +98,9 @@ echo '<div class="actions-title">';
 echo get_lang('MyFriends');
 echo '</div>';
 
-	 
-//$list_path_friends=array();
-$request=api_is_xml_http_request();
-$language_variable=api_xml_http_response_encode(get_lang('Contacts'));
-//api_display_tool_title($language_variable);
+$language_variable	= api_xml_http_response_encode(get_lang('Contacts'));
+$user_id	= api_get_user_id();
 
-$user_id=api_get_user_id();
-$image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,true);
 ?>
 <div align="center" >
 <table width="100%" border="0" cellpadding="0" cellspacing="0" >
@@ -148,7 +121,48 @@ $image_path = UserManager::get_user_picture_path_by_id ($user_id,'web',false,tru
 		<td height="153" valign="top">
 			<?php
 			echo '<div id="div_content_table">';
-			require_once 'show_search_image.inc.php';
+			
+				$list_path_friends	= array();
+				$user_id	= api_get_user_id();
+				$name_search= Security::remove_XSS($_POST['search_name_q']);
+				$number_friends = 0;
+				
+				if (isset($name_search) && $name_search!='undefined') {
+					$friends = SocialManager::get_friends($user_id,null,$name_search);
+				} else {
+					$friends = SocialManager::get_friends($user_id);
+				}
+				
+				$friend_html = '';
+				$number_of_images = 8;
+				
+				$number_friends = count($friends);
+				if ($number_friends != 0) {
+					$number_loop   = ($number_friends/$number_of_images);
+					$loop_friends  = ceil($number_loop);
+					$j=0;
+					$friend_html.= '<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="" >';
+					for ($k=0;$k<$loop_friends;$k++) {
+						$friend_html.='<tr><td valign="top">';
+						if ($j==$number_of_images) {
+							$number_of_images=$number_of_images*2;
+						}
+						while ($j<$number_of_images) {
+							if (isset($friends[$j])) {
+								$friend = $friends[$j];
+								$user_name = api_xml_http_response_encode($friend['firstName'], $friend['lastName']);
+								$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92);
+								$friend_html.='<div onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$friends[$j]['friend_user_id'].'>';
+								$friend_html.='<span><a href="profile.php?u='.$friend['friend_user_id'].'"><center><img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" /></center></a></span>';
+								$friend_html.='<img onclick="delete_friend (this)" id=img_'.$friend['friend_user_id'].' src="../img/blank.gif" alt="" title=""  class="image-delete" /> <center class="friend">'.$user_name.'</center></div>';				
+							}
+							$j++;
+						}
+						$friend_html.='</td></tr>';
+					}
+					$friend_html.='<br/></table>';
+				}
+				echo $friend_html;
 			echo '</div>';
 			?>
 		</td>

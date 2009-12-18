@@ -1250,8 +1250,12 @@ if ($show_menu) {
 		echo '<div class="message-content">
 				<h2 class="message-title">'.get_lang('Messages').'</h2>
 				<p>';
-				echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />';					
-				echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php" class="message-body">'.get_lang('Comppose').' </a><br />';
+				$link = '';
+				if (api_get_setting('show_tabs', 'social') == 'true') {
+					$link = '?f=social';
+				}
+				echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />';					
+				echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'" class="message-body">'.get_lang('Comppose').' </a><br />';
 		
 				if ($number_of_new_messages_of_friend > 0) {		
 					echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' ('.$number_of_new_messages_of_friend.') </a><br />';

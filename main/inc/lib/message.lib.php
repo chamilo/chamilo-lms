@@ -162,8 +162,16 @@ class MessageManager
 				} else {
 					$class = 'class = "read"';
 				}
-				$message[2] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.GetFullUserName(($result[1])).'</a>';;
-				$message[3] = '<a '.$class.' href="view_message.php?id='.$result[0].'">'.$result[2].'</a>';
+				
+				$link = '';
+				
+				if ($_GET['f']=='social') {
+					$link = '&f=social';
+				}
+				
+				
+				$message[2] = '<a '.$class.' href="view_message.php?id='.$result[0].$link.'">'.GetFullUserName(($result[1])).'</a>';;
+				$message[3] = '<a '.$class.' href="view_message.php?id='.$result[0].$link.'">'.$result[2].'</a>';
 				$message[5] = '<a href="new_message.php?re_id='.$result[0].'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
 						  '&nbsp;&nbsp;<a delete_one_message('.$result[0].') href="inbox.php?action=deleteone&id='.$result[0].'">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			}
@@ -510,14 +518,19 @@ class MessageManager
 			   if ($result[5]==4) {
 			   		$message[1] = Display::return_icon('mail_send.png',get_lang('MessageSent'));//Message Sent
 			   }
+			   
 				$message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.GetFullUserName($result[4]).'</a>';
 				$message[3] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",$result[2]).'</a>';
 				$message[5] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			} else {
-				$message[2] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].'">'.GetFullUserName($result[4]).'</a>';
-				$message[3] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].'">'.$result[2].'</a>';
-				$message[5] = '<a '.$class.' href="new_message.php?re_id='.$result[0].'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
-						  '&nbsp;&nbsp;<a href="outbox.php?action=deleteone&id='.$result[0].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
+				$link = '';
+				if ($_GET['f']=='social') {
+					$link = '&f=social';
+				}
+				
+				$message[2] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.GetFullUserName($result[4]).'</a>';
+				$message[3] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.$result[2].'</a>';
+				$message[5] = '<a href="outbox.php?action=deleteone&id='.$result[0].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			}
 			$message[4] = $result[3]; //date stays the same
 			foreach($message as $key => $value) {
@@ -601,7 +614,6 @@ class MessageManager
 				$user_image = '<img src="'.$user_image['file'].'" style="'.$user_image['style'].'" >';
 				*/
 				if ($source == 'outbox') {
-//					$message_content .='<TD>'.get_lang('From').'&nbsp;'.GetFullUserName($row[2]).'</b> '.api_strtolower(get_lang('To')).' <b>'.GetFullUserName($row[1]).'</b> </TD>';
 					$message_content .='<TD>'.get_lang('From').' '.$user_image.'<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$row[1].'">'.GetFullUserName($row[1]).'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.GetFullUserName($row[2]).'</b> </TD>';
 				} else {
 					$message_content .='<TD>'.get_lang('From').' '.$user_image.'<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$row[1].'">'.GetFullUserName($row[1]).'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.get_lang('Me').'</b> </TD>';
@@ -631,15 +643,18 @@ class MessageManager
 		        </TABLE>
 		        <div id="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>				        		
 		        <DIV class=HT style="PADDING-BOTTOM: 5px">';
-		        
+		    $social_link = '';
+		    if ($_GET['f'] == 'social') {
+		    	$social_link = 'f=social';
+		    }
 		    if ($source == 'outbox') {
-		    	$message_content .= '<a href="outbox.php">'.Display::return_icon('back.png',get_lang('ReturnToOutbox')).get_lang('ReturnToOutbox').'</a> &nbsp';
+		    	$message_content .= '<a href="outbox.php?'.$social_link.'">'.Display::return_icon('back.png',get_lang('ReturnToOutbox')).get_lang('ReturnToOutbox').'</a> &nbsp';
 		    } else {		    	
-		    	$message_content .= '<a href="inbox.php">'.Display::return_icon('back.png',get_lang('ReturnToInbox')).get_lang('ReturnToInbox').'</a> &nbsp';
-		    	$message_content .= '<a href="new_message.php?re_id='.$message_id.'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).get_lang('ReplyToMessage').'</a> &nbsp';
+		    	$message_content .= '<a href="inbox.php?'.$social_link.'">'.Display::return_icon('back.png',get_lang('ReturnToInbox')).get_lang('ReturnToInbox').'</a> &nbsp';
+		    	$message_content .= '<a href="new_message.php?re_id='.$message_id.'&'.$social_link.'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).get_lang('ReplyToMessage').'</a> &nbsp';
 		    }
 			
-			$message_content .= '<a href="inbox.php?action=deleteone&id='.$message_id.'" >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).''.get_lang('DeleteMessage').'</a>&nbsp';
+			$message_content .= '<a href="inbox.php?action=deleteone&id='.$message_id.'&'.$social_link.'" >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).''.get_lang('DeleteMessage').'</a>&nbsp';
 
 		        
 		        	
@@ -926,6 +941,11 @@ function inbox_display() {
 	$table->set_header(4,api_xml_http_response_encode(get_lang('Date')),false,array('style' => 'width:150px;'));
 	$table->set_header(5,$action,false,array ('style' => 'width:100px;'));
 	
+	if ($_REQUEST['f']=='social') {
+		$parameters['f'] = 'social';
+		$table->set_additional_parameters($parameters);
+	}	
+	
     echo '<div id="div_content_table_data">';
 	if ($request===true) {
 		echo '<form name="form_send" id="form_send" action="" method="post">';
@@ -958,17 +978,22 @@ function outbox_display() {
 	$table_message = Database::get_main_table(TABLE_MESSAGE);
 	$request=api_is_xml_http_request();
 	global $charset;
-	if ($_SESSION['social_exist']===true) {
+	
+	$social_link = false;
+	if ($_REQUEST['f']=='social') {
+		$social_link ='f=social';
+	}
+	
+	
+	if ($_SESSION['social_exist']===true) {	
 		
-		$redirect="#remote-tab-3";
 		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
-			$success= get_lang('SelectedMessagesDeleted')."&nbsp<br><a href=\""."../social/index.php?$redirect\">".get_lang('BackToOutbox')."</a>";
+			$success= get_lang('SelectedMessagesDeleted')."&nbsp<br><a href=\""."../social/index.php?$social_link\">".get_lang('BackToOutbox')."</a>";
 		}else {
-			$success=get_lang('SelectedMessagesDeleted')."&nbsp<br><a href=\""."../social/index.php?$redirect\">".get_lang('BackToOutbox')."</a>";
+			$success=get_lang('SelectedMessagesDeleted')."&nbsp<br><a href=\""."../social/index.php?$social_link\">".get_lang('BackToOutbox')."</a>";
 		}
-
 	} else {
-		$success= get_lang('SelectedMessagesDeleted')."&nbsp</b>"."<br><a href=\""."outbox.php\">".get_lang('BackToOutbox')."</a>";
+		$success= get_lang('SelectedMessagesDeleted').'&nbsp</b><br /><a href="outbox.php?'.$social_link.'">'.get_lang('BackToOutbox').'</a>';
 	}
 	if (isset ($_REQUEST['action'])) {
 		switch ($_REQUEST['action']) {
@@ -988,9 +1013,10 @@ function outbox_display() {
 			break;
 		}
 	}
-	
+
+			
 	// display sortable table with messages of the current user
-	$table = new SortableTable('messages', 'get_number_of_messages_send_mask', 'get_message_data_send_mask', 3,get_number_of_messages_send_mask(),'DESC');
+	$table = new SortableTable('messages', 'get_number_of_messages_send_mask', 'get_message_data_send_mask', 3, get_number_of_messages_send_mask(), 'DESC');
 	$title=api_xml_http_response_encode(get_lang('Title'));
 	$action=api_xml_http_response_encode(get_lang('Actions'));
 	$table->set_header(0, '', false,array ('style' => 'width:20px;'));
@@ -999,10 +1025,19 @@ function outbox_display() {
 	$table->set_header(3, $title,false);
 	$table->set_header(4, api_xml_http_response_encode(get_lang('Date')),false,array ('style' => 'width:150px;'));
 	$table->set_header(5,$action, false,array ('style' => 'width:100px;'));
+
+		
+	if ($_REQUEST['f']=='social') {
+		$parameters['f'] = 'social';
+		$table->set_additional_parameters($parameters);
+	}	
 	echo '<div id="div_content_table_data_sent">';
+	
 		if ($request===true) {
 			echo '<form name="form_send_out" id="form_send_out" action="" method="post">';
+			
 			echo '<input type="hidden" name="action" value="delete" />';
+				
 			$table->display();
 			echo '</form>';
 			if (get_number_of_messages_send_mask() > 0) {

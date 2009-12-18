@@ -66,10 +66,12 @@ function register_friend(element_input) {
 api_block_anonymous_users();
 
 Display :: display_header($tool_name, 'Groups');
-SocialManager::show_social_menu();
+
 echo '<div class="actions-title">';
 echo get_lang('Invitations');
-echo '</div>'; 
+echo '</div>';
+
+
 // easy links
 if (is_array($_GET) && count($_GET)>0) {
 	foreach($_GET as $key => $value) { 
@@ -92,14 +94,22 @@ if (is_array($_GET) && count($_GET)>0) {
 	}
 }
  
- if (! empty($show_message)){
+if (! empty($show_message)){
 	Display :: display_normal_message($show_message);
 }
 
 
 $language_variable = get_lang('PendingInvitations');
 $language_comment  = get_lang('SocialInvitesComment');
-//api_display_tool_title($language_variable);
+
+echo '<div id="social_wrapper">';
+
+	//this include the social menu div
+	SocialManager::show_social_menu(array('messages'));	
+	
+	echo '<div id="social_main">';
+	
+	
 ?>
 <div id="id_response" align="center"></div>
 <?php
@@ -112,15 +122,6 @@ $pending_invitations 		= GroupPortalManager::get_groups_by_user($user_id, GROUP_
 
 $number_loop=count($list_get_invitation);
 
-//@todo move this to default.css
-echo '<style>
-.invitation_confirm {
-	border-top:1px solid #D8DFEA;
-}
-.invitation_image {
-	width:110px;
-}
-</style>';
 if ($number_loop != 0) {
 	echo '<h2>'.get_lang('InvitationReceived').'</h2>';	
 	
@@ -222,6 +223,9 @@ if (count($pending_invitations) > 0) {
 	}
 	Display::display_sortable_grid('waiting_user', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false,false,true,true,true,true));
 }
-	
+		
+	echo '</div>';	
+echo '</div>';
+
 Display::display_footer();
 ?>

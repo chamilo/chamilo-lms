@@ -20,11 +20,18 @@ $tool_name = get_lang('Search');
 $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 
 Display :: display_header($tool_name);
-//show the action menu
-SocialManager::show_social_menu();
+
 echo '<div class="actions-title">';
 echo get_lang('Search');
 echo '</div>';
+
+echo '<div id="social_wrapper">';
+
+	//this include the social menu div
+	SocialManager::show_social_menu(array('messages'));	
+	
+	echo '<div id="social_main">';
+	
 
 $query = $_GET['q'];
 echo UserManager::get_search_form($query);
@@ -72,5 +79,8 @@ if ($query != '') {
 } else {
 	//we should show something
 }
+	echo '</div>';	
+echo '</div>';
+
 Display :: display_footer();
 ?>

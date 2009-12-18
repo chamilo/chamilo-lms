@@ -20,7 +20,7 @@ if (api_get_setting('allow_students_to_create_groups_in_social') == 'false' && !
 
 global $charset;
 
-$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 textarea = "";
 num_characters_permited = 255;

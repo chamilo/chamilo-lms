@@ -10,7 +10,6 @@
 ==============================================================================
 */
 
-
 // Relation type between users
 define('USERUNKNOW',		0);
 define('SOCIALUNKNOW',		1);
@@ -646,15 +645,24 @@ class SocialManager extends UserManager {
 		return $output;
 	}
 	
-	public static function show_social_menu() {
-		echo '<div class="actions">';
-			echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png').' '.get_lang('ViewMySharedProfile').'</a>';			
-			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
-			echo '<a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.Display::return_icon('lp_users.png').' '.get_lang('Friends').'</a>';
-			echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('lp_users.png').' '.get_lang('Invitations').'</a>';
-			echo '<a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.gif').' '.get_lang('Groups').'</a>';
-			echo '<a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('search.gif').' '.get_lang('Search').'</a>';
-			echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('EditProfile').'</a>';	
+	public static function show_social_menu($show = '' ) {
+		echo '<div class="social_menu">';
+			echo '<ul>';
+			echo '<li>'.get_lang('Menu').'</li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.Display::return_icon('home.png').' '.get_lang('Home').'</a></li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a></li>';
+			if ($show == 'messages') {
+				echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a></li>';
+				echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a></li>';
+				echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a></li>';
+			}	
+	
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('lp_users.png').' '.get_lang('Invitations').'</a></li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png').' '.get_lang('ViewMySharedProfile').'</a></li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.Display::return_icon('lp_users.png').' '.get_lang('Friends').'</a></li>';			
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.gif').' '.get_lang('Groups').'</a></li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('search.gif').' '.get_lang('Search').'</a></li>';
+			//echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('EditProfile').'</a>';	
 			/*
 			echo '<span style="float:right; padding-top:7px;">'.
 				 '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';

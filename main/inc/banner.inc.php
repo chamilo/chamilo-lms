@@ -198,8 +198,8 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 		$menu_navigation['mycourses'] = $possible_tabs['mycourses'];
 	}
 
-	// My Profile
-	if (api_get_setting('show_tabs', 'my_profile') == 'true') {
+	// My Profile 
+	if (api_get_setting('show_tabs', 'my_profile') == 'true' && api_get_setting('show_tabs', 'social') != 'true') { 
 		$navigation['myprofile'] = $possible_tabs['myprofile'];
 	} else {
 		$menu_navigation['myprofile'] = $possible_tabs['myprofile'];

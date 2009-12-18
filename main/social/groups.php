@@ -17,9 +17,9 @@ api_block_anonymous_users();
 
 $this_section = SECTION_SOCIAL;
 
-$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
-$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/thickbox.js"></script>';
-$htmlHeadXtra[] = '<link rel="stylesheet" href="/main/inc/lib/javascript/thickbox.css" type="text/css" media="projection, screen">';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>'; 
+$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 
@@ -66,8 +66,7 @@ $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Groups'));
 Display :: display_header($tool_name, 'Groups');
 
-//show the action menu
-SocialManager::show_social_menu();
+
 echo '<div class="actions-title">';
 echo get_lang('Groups');
 echo '</div>';
@@ -91,7 +90,16 @@ if (isset($_POST['token']) && $_POST['token'] == $_SESSION['sec_token']) {
 
 // getting group information
 $group_id	= intval($_GET['id']);
+
+echo '<div id="social_wrapper">';
+
+	//this include the social menu div
+	SocialManager::show_social_menu(array('messages'));	
 	
+	echo '<div id="social_main">';
+	
+
+
 if ($group_id != 0 ) {
 	//Loading group information
 	if (isset($_GET['status']) && $_GET['status']=='sent') {
@@ -141,87 +149,89 @@ if ($group_id != 0 ) {
 		echo '</div>'; // end layout messages
 	echo '</div>'; // end layout right
 	
-} else {
+} else {		
+		
+		// My groups -----
+		
+		$results = GroupPortalManager::get_groups_by_user(api_get_user_id(), 0, true);
+		
+		$groups = array();
+		if (is_array($results) && count($results) > 0) {
+			foreach ($results as $result) {
+				//cutting text
+				//$result['name'] = cut($result['name'],150);
+				//$result['description'] = cut($result['description'],180);
+				
+				$id = $result['id'];
+				$url_open  = '<a href="groups.php?id='.$id.'">';
+				$url_close = '</a>';
+				if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {		 	
+					$result['name'] .= Display::return_icon('admin_star.png', get_lang('Admin'));
+				} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			
+					$result['name'] .= Display::return_icon('moderator_star.png', get_lang('Moderator'));
+				}			
+				$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close, cut($result['description'],180,true));
+			}
+		}
+		echo '<br/>';
+		// Everybody can create groups
+		if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
+			echo '<a href="group_add.php">'.get_lang('CreateAgroup').'</a>';	
+		} else {
+			// Only admins and teachers can create groups		
+			if (api_is_allowed_to_edit(null,true)) {
+				echo '<a href="group_add.php">'.get_lang('CreateAgroup').'</a>';
+			}
+		}
+		
+		echo '<h1>'.get_lang('MyGroups').'</h1>';
+		
+		if (count($groups) > 0) {		
+			Display::display_sortable_grid('mygroups', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
+		}
 		
 		
-	// My groups -----
-	
-	$results = GroupPortalManager::get_groups_by_user(api_get_user_id(), 0, true);
-	
-	$groups = array();
-	if (is_array($results) && count($results) > 0) {
+		// Newest groups --------
+		
+		$results = GroupPortalManager::get_groups_by_age();
+		$groups = array();
 		foreach ($results as $result) {
-			//cutting text
-			//$result['name'] = cut($result['name'],150);
-			//$result['description'] = cut($result['description'],180);
 			
 			$id = $result['id'];
 			$url_open  = '<a href="groups.php?id='.$id.'">';
-			$url_close = '</a>';
-			if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {		 	
-				$result['name'] .= Display::return_icon('admin_star.png', get_lang('Admin'));
-			} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			
-				$result['name'] .= Display::return_icon('moderator_star.png', get_lang('Moderator'));
-			}			
+			$url_close = '</a>';		
 			$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close, cut($result['description'],180,true));
 		}
-	}
-	echo '<br/>';
-	// Everybody can create groups
-	if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
-		echo '<a href="group_add.php">'.get_lang('CreateAgroup').'</a>';	
-	} else {
-		// Only admins and teachers can create groups		
-		if (api_is_allowed_to_edit(null,true)) {
-			echo '<a href="group_add.php">'.get_lang('CreateAgroup').'</a>';
+		if (count($groups) > 0) {
+			echo '<h1>'.get_lang('Newest').'</h1>';	
+			Display::display_sortable_grid('newest', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));		
+		}	
+		
+		// Pop groups -----
+		
+		$results = GroupPortalManager::get_groups_by_popularity();
+		$groups = array();
+		foreach ($results as $result) {
+			$id = $result['id'];
+			$url_open  = '<a href="groups.php?id='.$id.'">';
+			$url_close = '</a>';		
+			
+			if ($result['count'] == 1 ) {
+				$result['count'] = $result['count'].' '.get_lang('Member');	
+			} else {
+				$result['count'] = $result['count'].' '.get_lang('Members');
+			}
+			
+			$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,$result['count'],cut($result['description'],120,true));
 		}
-	}
-	
-	echo '<h1>'.get_lang('MyGroups').'</h1>';
-	
-	if (count($groups) > 0) {		
-		Display::display_sortable_grid('mygroups', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
-	}
-	
-	
-	// Newest groups --------
-	
-	$results = GroupPortalManager::get_groups_by_age();
-	$groups = array();
-	foreach ($results as $result) {
-		
-		$id = $result['id'];
-		$url_open  = '<a href="groups.php?id='.$id.'">';
-		$url_close = '</a>';		
-		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close, cut($result['description'],180,true));
-	}
-	if (count($groups) > 0) {
-		echo '<h1>'.get_lang('Newest').'</h1>';	
-		Display::display_sortable_grid('newest', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));		
-	}	
-	
-	// Pop groups -----
-	
-	$results = GroupPortalManager::get_groups_by_popularity();
-	$groups = array();
-	foreach ($results as $result) {
-		$id = $result['id'];
-		$url_open  = '<a href="groups.php?id='.$id.'">';
-		$url_close = '</a>';		
-		
-		if ($result['count'] == 1 ) {
-			$result['count'] = $result['count'].' '.get_lang('Member');	
-		} else {
-			$result['count'] = $result['count'].' '.get_lang('Members');
+		if (count($groups) > 0) {
+			echo '<h1>'.get_lang('Popular').'</h1>';
+			Display::display_sortable_grid('popular', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
 		}
 		
-		$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,$result['count'],cut($result['description'],120,true));
-	}
-	if (count($groups) > 0) {
-		echo '<h1>'.get_lang('Popular').'</h1>';
-		Display::display_sortable_grid('popular', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
-	}
+	echo '</div>';
 	
+echo '</div>';
 	
 
 }	

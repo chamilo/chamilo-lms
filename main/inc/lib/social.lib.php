@@ -25,6 +25,10 @@ define('SOCIAL_LEFT_PLUGIN',	1);
 define('SOCIAL_CENTER_PLUGIN',	2);
 define('SOCIAL_RIGHT_PLUGIN',	3);
 
+define('MESSAGE_STATUS_INVITATION_PENDING',	'5');
+define('MESSAGE_STATUS_INVITATION_ACCEPTED','6');
+define('MESSAGE_STATUS_INVITATION_DENIED',	'7');
+
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
@@ -269,7 +273,7 @@ class SocialManager extends UserManager {
 		$message_content = Database::escape_string($message_content);
 		
 		$current_date = date('Y-m-d H:i:s',time());		
-		echo $sql_exist='SELECT COUNT(*) AS count FROM '.$tbl_message.' WHERE user_sender_id='.($user_id).' AND user_receiver_id='.($friend_id).' AND msg_status IN(5,6,7);';
+		$sql_exist='SELECT COUNT(*) AS count FROM '.$tbl_message.' WHERE user_sender_id='.($user_id).' AND user_receiver_id='.($friend_id).' AND msg_status IN(5,6,7);';
 		
 		$res_exist=Database::query($sql_exist,__FILE__,__LINE__);
 		$row_exist=Database::fetch_array($res_exist,'ASSOC');
@@ -350,7 +354,7 @@ class SocialManager extends UserManager {
 	 */
 	public static function invitation_accepted ($user_send_id,$user_receiver_id) {
 		$tbl_message=Database::get_main_table(TABLE_MAIN_MESSAGE);
-		$sql='UPDATE '.$tbl_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_ACCEPTED.' WHERE user_sender_id='.((int)$user_send_id).' AND user_receiver_id='.((int)$user_receiver_id).';';
+		echo $sql='UPDATE '.$tbl_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_ACCEPTED.' WHERE user_sender_id='.((int)$user_send_id).' AND user_receiver_id='.((int)$user_receiver_id).';';
 		Database::query($sql,__FILE__,__LINE__);
 	}
 	/**
@@ -388,6 +392,8 @@ class SocialManager extends UserManager {
 	 * @return string message invitation
 	 */
 	public static function send_invitation_friend_user ($userfriend_id,$subject_message='',$content_message='') {
+		global $charset;
+		
 		//$id_user_friend=array();
 		$user_info = array();
 		$user_info = api_get_user_info($userfriend_id);
@@ -407,10 +413,11 @@ class SocialManager extends UserManager {
 			if (isset($userfriend_id) && $userfriend_id>0) {
 				$message_title = get_lang('Invitation');				
 				$count_is_true = self::send_invitation_friend(api_get_user_id(),$userfriend_id, $message_title, $content_message);
+				
 				if ($count_is_true) {
-					echo Display::display_normal_message(get_lang('InvitationHasBeenSent'));
+					echo Display::display_normal_message(api_htmlentities(get_lang('InvitationHasBeenSent'), ENT_QUOTES,$charset),false);
 				}else {
-					echo Display::display_error_message(get_lang('YouAlreadySentAnInvitation'));
+					echo Display::display_error_message(api_htmlentities(get_lang('YouAlreadySentAnInvitation'), ENT_QUOTES,$charset),false);
 				}
 
 			}

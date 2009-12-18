@@ -13,23 +13,23 @@ if (api_get_setting('allow_message_tool')!='true'){
 	api_not_allowed();
 }
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
-$interbreadcrumb[]= array ('url' => 'inbox.php','name' => get_lang('Message'));
-$interbreadcrumb[]= array ('url' => '#','name' => get_lang('View'));
+
 
 /*
 ==============================================================================
 		HEADER
 ==============================================================================
 */
-if ($_GET['f']=='social') {
+if ($_REQUEST['f']=='social') {
 	$this_section = SECTION_SOCIAL;
-	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Profile'));
-	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));	
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/profile.php','name' => get_lang('Social'));
+	$interbreadcrumb[]= array ('url' => 'inbox.php?f=social','name' => get_lang('Inbox'));	
 } else {
 	$this_section = SECTION_MYPROFILE;
 	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Profile'));
-	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));
+	$interbreadcrumb[]= array ('url' => 'inbox.php','name' => get_lang('Inbox'));
 }
+$interbreadcrumb[]= array ('url' => '#','name' => get_lang('View'));
 Display::display_header('');
 
 if ($_GET['f']=='social') {

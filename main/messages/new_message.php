@@ -245,8 +245,8 @@ function manage_form ($default, $select_from_user_list = null) {
 */
 if ($_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/profile.php','name' => get_lang('Profile'));
-	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));	
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/profile.php','name' => get_lang('Social'));
+	$interbreadcrumb[]= array ('url' => 'outbox.php?f=social','name' => get_lang('Inbox'));	
 } else {
 	$this_section = SECTION_MYPROFILE;
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));

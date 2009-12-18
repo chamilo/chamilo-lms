@@ -52,8 +52,7 @@ if (isset($_POST['load_ajax'])) {
 				//------Blog posts
 				$result = get_blog_post_from_user($course_db, $user_id);
 				if (!empty($result)) {
-					echo '<div class="clear"></div><br />';
-					api_display_tool_title(api_xml_http_response_encode(get_lang('BlogPosts')));
+					api_display_tool_title(api_xml_http_response_encode(get_lang('Blog')));
 					echo '<div class="social-background-content" style="background:#FAF9F6; padding:0px;">';
 					echo api_xml_http_response_encode($result);
 					echo '</div>';
@@ -64,8 +63,8 @@ if (isset($_POST['load_ajax'])) {
 				//------Blog comments
 				$result = get_blog_comment_from_user($course_db, $user_id);
 				if (!empty($result)) {
+					echo '<div class="social-background-content" style="background:#FAF9F6; padding-left:10px;">';
 					api_display_tool_title(api_xml_http_response_encode(get_lang('BlogComments')));
-					echo '<div class="social-background-content" style="background:#FAF9F6; padding:0px;">';
 					echo api_xml_http_response_encode($result);
 					echo '</div>';
 					echo '<br />';

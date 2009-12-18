@@ -3934,8 +3934,8 @@ function get_thread_user_post($course_db, $thread_id, $user_id )
 			 				if (is_array($post_list) && count($post_list)>0) {
 
 			 					$hand_forums.= '<div id="social-thread">';
-				 				$hand_forums.= Display::return_icon('forumthread.gif');
-				 				$hand_forums.= $thread['thread_title'].' ';
+				 				$hand_forums.= Display::return_icon('forumthread.gif', get_lang('Thread'));
+				 				$hand_forums.= ' '.$thread['thread_title'].' ';
 				 				foreach($post_list as $posts) {
 				 					$hand_forums.= '<div id="social-post">';
 				 					$hand_forums.= '<strong>'.$posts['post_title'].'</strong>';
@@ -3952,7 +3952,7 @@ function get_thread_user_post($course_db, $thread_id, $user_id )
 					if ($post_counter > 0 ) {
 						$forum_results .='<div id="social-forum">';
 		 				$forum_results .='<div class="clear"></div><br />';
-		 				$forum_results .='<div class="actions" style="margin-left:5px;margin-right:5px;">'.Display::return_icon('forum.gif').'&nbsp;&nbsp;&nbsp;&nbsp;'.$forum['forum_title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../forum/viewforum.php?cidReq='.$my_course_code.'&gidReq=&forum='.$forum['forum_id'].' " >'.get_lang('SeeForum').'</a></div></div>';
+		 				$forum_results .='<div class="actions" style="margin-left:5px;margin-right:5px;">'.Display::return_icon('forum.gif',get_lang('Forum')).'&nbsp;'.$forum['forum_title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../forum/viewforum.php?cidReq='.$my_course_code.'&gidReq=&forum='.$forum['forum_id'].' " >'.get_lang('SeeForum').'</a></div></div>';
 		 				$forum_results .='<br / >';
 						$forum_results .=$hand_forums;
 						$forum_results .='</div>';

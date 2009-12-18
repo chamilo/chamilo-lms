@@ -122,19 +122,15 @@ function change_panel (mypanel_id,myuser_id) {
 			}
 		});
 }
-function action_database_panel (option_id,myuser_id) {
+function action_database_panel (option_id, myuser_id) {
 
 	if (option_id==5) {
 		my_txt_subject=$("#txt_subject_id").val();
 	} else {
 		my_txt_subject="clear";
 	}
-		my_txt_content=$("#txt_area_invite").val();
-	if (my_txt_content.length==0 || my_txt_subject.length==0) {
-		$("#display_response_id").html("&nbsp;&nbsp;&nbsp;'.get_lang('MessageInvitationNotSent', '').'");
-		setTimeout("message_information_display()",3000);
-		return false;
-	}
+	my_txt_content=$("#txt_area_invite").val();
+
 	$.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {
@@ -173,7 +169,7 @@ function register_friend(element_input) {
 			beforeSend: function(objeto) {
 			$("div#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 			type: "POST",
-			url: "../social/register_friend.php",
+			url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=add_friend",
 			data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",
 			success: function(datos) {
 				$("form").submit()
@@ -471,7 +467,7 @@ echo '<div id="social-profile-container">';
 	  		}	  		
 	  		//check if I already sent an invitation message
 	  		$invitation_sent_list = SocialManager::get_list_invitation_sent_by_user_id(api_get_user_id());
-	  		
+	  			  		
 	  		if (is_array($invitation_sent_list) && is_array($invitation_sent_list[$user_id]) && count($invitation_sent_list[$user_id]) >0 ) {  	  		
 	  			$html_actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('YouAlreadySentAnInvitation').'</a>';
 	  		} else {

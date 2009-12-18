@@ -34,7 +34,7 @@ function denied_friend (element_input) {
 		beforeSend: function(objeto) {
 		$("#id_response").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 		type: "POST",
-		url: "../social/register_friend.php",
+		url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=deny_friend",
 		data: "denied_friend_id="+friend_user_id,
 		success: function(datos) {
 		 $("div#"+name_div_id).hide("slow");
@@ -53,7 +53,7 @@ function register_friend(element_input) {
 			beforeSend: function(objeto) {
 			$("div#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 			type: "POST",
-			url: "../social/register_friend.php",
+			url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=add_friend",
 			data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",
 			success: function(datos) {  $("div#"+name_div_id).hide("slow");
 				$("form").submit()

@@ -62,7 +62,7 @@ require_once $libpath.'magpierss/rss_fetch.inc';
 api_block_anonymous_users();
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript" language="javascript"></script>'; //jQuery corner
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript" language="javascript"></script>'; 
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js"></script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
 $htmlHeadXtra[] = '
@@ -179,6 +179,7 @@ function register_friend(element_input) {
 }
 
 </script>';
+
 if (isset($_GET['shared'])) {
 	$my_link='../social/profile.php';
 	$link_shared='shared='.Security::remove_XSS($_GET['shared']);
@@ -246,7 +247,7 @@ if (is_array($personal_course_list)) {
 }
 
 //show the action menu
-SocialManager::show_social_menu();
+//SocialManager::show_social_menu();
 
 echo '<div class="actions-title">';
 if ($user_id == api_get_user_id())

@@ -49,7 +49,7 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('go_to_cour
 
 CREATE TABLE IF NOT EXISTS message_attachment (id int NOT NULL AUTO_INCREMENT, path varchar(255) NOT NULL, comment text, size int NOT NULL default 0, message_id int NOT NULL, filename varchar(255) NOT NULL, PRIMARY KEY(id));
 
-CREATE TABLE `group` (id int NOT NULL AUTO_INCREMENT, name varchar(255) NOT NULL, description varchar(255) NOT NULL, picture_uri varchar(255) NOT NULL, url varchar(255) NOT NULL, visibility int NOT NULL, updated_on varchar(255) NOT NULL, created_on varchar(255) NOT NULL, PRIMARY KEY (id));
+CREATE TABLE groups (id int NOT NULL AUTO_INCREMENT, name varchar(255) NOT NULL, description varchar(255) NOT NULL, picture_uri varchar(255) NOT NULL, url varchar(255) NOT NULL, visibility int NOT NULL, updated_on varchar(255) NOT NULL, created_on varchar(255) NOT NULL, PRIMARY KEY (id));
 CREATE TABLE group_rel_tag (id int NOT NULL AUTO_INCREMENT, tag_id int NOT NULL, group_id int NOT NULL, PRIMARY KEY (id));
 CREATE TABLE group_rel_user (id int NOT NULL AUTO_INCREMENT, group_id int NOT NULL, user_id int NOT NULL, relation_type int NOT NULL, PRIMARY KEY (id));
 
@@ -69,11 +69,11 @@ UPDATE TABLE settings_current SET selected_value = '1.8.6.2.9070' WHERE variable
 
 INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','SpecialCourse', 'Yes', 1 , 1);
 
-ALTER TABLE `group_rel_user` ADD INDEX ( group_id );
-ALTER TABLE `group_rel_user` ADD INDEX ( user_id );
-ALTER TABLE `group_rel_user` ADD INDEX ( relation_type );
-ALTER TABLE `group_rel_tag`  ADD INDEX ( group_id );
-ALTER TABLE `group_rel_tag`  ADD INDEX ( tag_id );
+ALTER TABLE group_rel_user ADD INDEX ( group_id );
+ALTER TABLE group_rel_user ADD INDEX ( user_id );
+ALTER TABLE group_rel_user ADD INDEX ( relation_type );
+ALTER TABLE group_rel_tag  ADD INDEX ( group_id );
+ALTER TABLE group_rel_tag  ADD INDEX ( tag_id );
 
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_students_to_create_groups_in_social', NULL, 'radio', 'Tools', 'false', 'AllowStudentsToCreateGroupsInSocialTitle', 'AllowStudentsToCreateGroupsInSocialComment', NULL, NULL, 0);

@@ -2693,8 +2693,7 @@ a.unread {
 	margin:0;
 	padding:0px;
 }
-#inbox-menu ul li{
-
+#inbox-menu ul li {
 	padding:2px 0px;
 }
 
@@ -2939,7 +2938,6 @@ a.unread {
 .search_users_grid_title 	{ width:30%; float:left;}
 .search_users_grid_nav 		{ float:right;}
 
-
 /*WAITING USER*/
 .waiting_user_grid_container { width:100%;}
 .waiting_user_grid_item { width:500px;  height: 120px;  border:1px dotted #ccc; float:left; padding:5px; margin:5px;}
@@ -2986,5 +2984,31 @@ a.unread {
 	float: right;
 	min-height: 150px;
 	padding-bottom:30px;	
+}
 
+/*  SOCIAL MENU VERTICAL */
+.social_menu  {
+	width:150px;
+	float:left;
+}
+
+.social_menu ul {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin:0;
+	padding:0px;
+}
+
+.social_menu ul li {
+	padding:2px 0px;
+}
+
+/* INVITATIONS */
+ 
+.invitation_confirm {
+	border-top:1px solid #D8DFEA;
+}
+.invitation_image {
+	width:110px;
 }

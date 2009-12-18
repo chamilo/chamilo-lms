@@ -64,7 +64,7 @@ function get_tabs() {
 	
 	// Social
 	if (api_get_setting('allow_social_tool')=='true') {
-			$navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/profile.php';
+			$navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
 			$navigation['social']['title'] = get_lang('SocialNetwork');
 	}
 	

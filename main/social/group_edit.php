@@ -20,7 +20,7 @@ require_once $libpath.'image.lib.php';
 require_once $libpath.'mail.lib.inc.php';
 require_once $libpath.'social.lib.php';
 
-$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 textarea = "";
 num_characters_permited = 255;

@@ -20,13 +20,9 @@ api_block_anonymous_users();
 $this_section = SECTION_SOCIAL;
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-//$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-1.1.3.1.pack.js" type="text/javascript"></script>';
-//$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.history_remote.pack.js" type="text/javascript"></script>';
-//$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.tabs.pack.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript">
-	
-	
+
 			
 function delete_friend (element_div) {
 	id_image=$(element_div).attr("id");
@@ -92,12 +88,19 @@ $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Friends'));
 
 Display :: display_header($tool_name, 'Groups');
-SocialManager::show_social_menu();
+
 
 echo '<div class="actions-title">';
 echo get_lang('MyFriends');
 echo '</div>';
 
+echo '<div id="social_wrapper">';
+
+	//this include the social menu div
+	SocialManager::show_social_menu(array('messages'));	
+	
+	echo '<div id="social_main">';
+	
 $language_variable	= api_xml_http_response_encode(get_lang('Contacts'));
 $user_id	= api_get_user_id();
 
@@ -172,5 +175,9 @@ $user_id	= api_get_user_id();
 </table>
 </div>
 <?php
+		
+	echo '</div>';
+	
+echo '</div>';
 Display :: display_footer();
 ?>

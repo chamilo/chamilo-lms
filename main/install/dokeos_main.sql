@@ -2302,7 +2302,7 @@ CREATE TABLE session_category (
 
 CREATE TABLE tag (
 	id int NOT NULL auto_increment,
-	tag varchar(255) NOT NULL,
+	tag char(80) NOT NULL,
 	field_id int NOT NULL,
 	count int NOT NULL,
 	PRIMARY KEY  (id)
@@ -2320,7 +2320,7 @@ CREATE TABLE user_rel_tag (
 -- Table structure for user platform groups
 --
 
-CREATE TABLE `group` (
+CREATE TABLE groups (
   id int NOT NULL AUTO_INCREMENT,
   name varchar(255) NOT NULL,
   description varchar(255) NOT NULL,
@@ -2338,8 +2338,9 @@ CREATE TABLE group_rel_tag (
   group_id int NOT NULL,
   PRIMARY KEY (id)
 );
-ALTER TABLE `group_rel_tag` ADD INDEX ( group_id );
-ALTER TABLE `group_rel_tag` ADD INDEX ( tag_id );
+
+ALTER TABLE group_rel_tag ADD INDEX ( group_id );
+ALTER TABLE group_rel_tag ADD INDEX ( tag_id );
 
 CREATE TABLE group_rel_user (
   id int NOT NULL AUTO_INCREMENT,
@@ -2348,9 +2349,9 @@ CREATE TABLE group_rel_user (
   relation_type int NOT NULL,
   PRIMARY KEY (id)
 );
-ALTER TABLE `group_rel_user` ADD INDEX ( group_id );
-ALTER TABLE `group_rel_user` ADD INDEX ( user_id );
-ALTER TABLE `group_rel_user` ADD INDEX ( relation_type );
+ALTER TABLE group_rel_user ADD INDEX ( group_id );
+ALTER TABLE group_rel_user ADD INDEX ( user_id );
+ALTER TABLE group_rel_user ADD INDEX ( relation_type );
 --
 -- Table structure for table message attachment
 --

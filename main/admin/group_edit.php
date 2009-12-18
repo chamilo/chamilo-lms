@@ -28,6 +28,20 @@ $interbreadcrumb[] = array('url' => 'group_list.php','name' => get_lang('GroupLi
 
 $table_group = Database::get_main_table(TABLE_MAIN_GROUP);
 
+$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript">
+textarea = "";
+num_characters_permited = 255;
+function text_longitud(){
+   num_characters = document.forms[0].description.value.length;
+  if (num_characters > num_characters_permited){
+      document.forms[0].description.value = textarea;
+   }else{
+      textarea = document.forms[0].description.value;
+   } 
+} 
+</script>';
+
 $sql = "SELECT * FROM $table_group WHERE id = '".$group_id."'";
 $res = Database::query($sql, __FILE__, __LINE__);
 if (Database::num_rows($res) != 1) {
@@ -43,17 +57,15 @@ $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'id', $group_id);
 
 // name
-$form->addElement('text', 'name', get_lang('Name'), array('size'=>60));
+$form->addElement('text', 'name', get_lang('Name'), array('size'=>60, 'maxlength'=>120));
 $form->applyFilter('name', 'html_filter');
 $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('name', '', 'maxlength',120);
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>8, 'cols'=>58));
+$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>3, 'cols'=>58, onKeyDown => "text_longitud()", onKeyUp => "text_longitud()"));
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
-$form->addRule('name', '', 'maxlength',255);
 
 // url
 $form->addElement('text', 'url', get_lang('URL'), array('size'=>35));

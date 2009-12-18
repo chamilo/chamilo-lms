@@ -20,6 +20,20 @@ require_once $libpath.'image.lib.php';
 require_once $libpath.'mail.lib.inc.php';
 require_once $libpath.'social.lib.php';
 
+$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript">
+textarea = "";
+num_characters_permited = 255;
+function text_longitud(){
+   num_characters = document.forms[0].description.value.length;
+  if (num_characters > num_characters_permited){
+      document.forms[0].description.value = textarea;
+   }else{
+      textarea = document.forms[0].description.value;
+   } 
+} 
+</script>';
+
 $group_id = isset($_GET['id']) ? intval($_GET['id']) : intval($_POST['id']);
 $tool_name = get_lang('GroupEdit');
 
@@ -40,7 +54,6 @@ if (!GroupPortalManager::is_group_admin($group_id)) {
 	api_not_allowed();		
 }	
 
-
 $group_data = Database::fetch_array($res, 'ASSOC');
 
 // Create the form
@@ -48,14 +61,13 @@ $form = new FormValidator('group_edit', 'post', '', '', array('style' => 'width:
 $form->addElement('hidden', 'id', $group_id);
 
 // name
-$form->addElement('text', 'name', get_lang('Name'), array('size'=>60));
+$form->addElement('text', 'name', get_lang('Name'), array('size'=>60, 'maxlength'=>120));
 $form->applyFilter('name', 'html_filter');
 $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('name', '', 'maxlength',120);
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>8, 'cols'=>58));
+$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>3, 'cols'=>58, onKeyDown => "text_longitud()", onKeyUp => "text_longitud()"));
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
 $form->addRule('name', '', 'maxlength',255);
@@ -72,7 +84,6 @@ $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allow
 if (strlen($group_data['picture_uri']) > 0) {
 	$form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
 }
-
 
 // Status
 $status = array();

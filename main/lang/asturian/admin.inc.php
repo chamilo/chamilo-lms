@@ -1117,4 +1117,9 @@ $GoToCourseAfterLoginComment = "Cuando un usuariu te apuntáu sólamente nun cursu
 $GroupList = "Llista de grupos";
 $AllowStudentsDownloadFoldersTitle = "Permitir a los escolinos baxar direutorios";
 $AllowStudentsDownloadFoldersComment = "Permitir a los escolinos empaquetar y baxar un direutoriu completu na ferramienta documentos";
+$AllowStudentsToCreateGroupsInSocialTitle = "Permitir que los alumnos creen grupos na rede social";
+$AllowStudentsToCreateGroupsInSocialComment = "Permitir que los alumnos creen los sos grupos particulares na rede social";
+$AllowSendMessageToAllPlatformUsersTitle = "Permitir l\'unvíu de mensaxes a tolos usuarios de la plataforma";
+$AllowSendMessageToAllPlatformUsersComment = "Permite que se pueda unviar mensaxes a tolos usuarios de la plataforma";
+$TabsSocial = "Pestaña Rede social";
 ?>

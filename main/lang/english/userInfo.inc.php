@@ -121,7 +121,7 @@ $Members = "Members";
 $Admin = "Administrator";
 $AttachmentFiles = "Attachments";
 $AddOneMoreFile = "Add one more file";
-$MaximunFileSizeX = "Maximun file size %s MB";
+$MaximunFileSizeX = "Maximun file size: %s";
 $ModifyInformation = "Modify information";
 $GroupList = "Groups list";
 $GroupEdit = "Edit group";
@@ -175,4 +175,5 @@ $InvitationReceived = "Invitation received";
 $InvitationSent = "Invitation sent";
 $YouAlreadySentAnInvitation = "You already sent an invitation";
 $AllowSendMessageToAllPlatformUsersTitle = "Allow users to send message to all platform users";
+$InvitationDenied = "Invitation denied";
 ?>

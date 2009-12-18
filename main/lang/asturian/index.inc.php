@@ -66,4 +66,8 @@ $LinkAdded = "Amestóse un enllaz nuevu";
 $AnnouncementAdded = "Amestóse una anuncia";
 $AgendaAdded = "Amestóse un eventu a la axenda";
 $YouDoNotHaveAnySessionInItsHistory = "Nun tienes nenguna sesión de formación na to hestoria";
+$Messages = "Mensaxes";
+$Inbox = "Buzón d\'entrada";
+$Comppose = "Redautar";
+$PendingInvitations = "Invitaciones pendientes";
 ?>

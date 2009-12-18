@@ -104,4 +104,5 @@ $CreateCourse = "Criar cursu";
 $Create = "Crear";
 $MessageOfNewCourseToAdmin = "Esti mensax ye pa informate que se crió un cursu nuevu na plataforma";
 $NewCourseCreatedIn = "Nuevu cursu criáu en";
+$ExplicationTrainers = "El mayestru ta definíu como Ud. Va poder cambialo na páxina de configuración del cursu.";
 ?>

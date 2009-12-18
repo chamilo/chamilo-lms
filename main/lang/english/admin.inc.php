@@ -1122,4 +1122,6 @@ $AllowStudentsToCreateGroupsInSocialComment = "Allow students to create groups i
 $AllowSendMessageToAllPlatformUsersTitle = "Allow send message to all platform users";
 $AllowSendMessageToAllPlatformUsersComment = "Allow send message to all platform users";
 $TabsSocial = "Tabs social";
+$MessageMaxUploadFilesizeTitle = "Message max upload file size";
+$MessageMaxUploadFilesizeComment = "Message max upload file size";
 ?>

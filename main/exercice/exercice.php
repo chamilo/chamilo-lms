@@ -471,7 +471,7 @@ if (!empty ($_POST['export_report']) && $_POST['export_report'] == 'export_repor
 		switch ($_POST['export_format']) {
 			case 'xls' :
 				$export = new ExerciseResult();
-				$export->exportCompleteReportXLS($documentPath, $user_id, $_SESSION['export_user_fields']);
+				$export->exportCompleteReportXLS($documentPath, $user_id, $_SESSION['export_user_fields'], $_POST['export_filter']);
 				exit;
 				break;
 			case 'csv' :
@@ -795,9 +795,11 @@ if (($is_allowedToEdit) and ($origin != 'learnpath')) {
 			echo '<form id="form1a" name="form1a" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '">';
 			echo '<input type="hidden" name="export_report" value="export_report">';
 			echo '<input type="hidden" name="export_format" value="csv">';
+			echo '<input type="hidden" name="export_filter" value="'.(empty($filter)?1:intval($filter)).'">';
 			echo '</form>';
 			echo '<form id="form1b" name="form1b" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '">';
 			echo '<input type="hidden" name="export_report" value="export_report">';
+			echo '<input type="hidden" name="export_filter" value="'.(empty($filter)?1:intval($filter)).'">';			
 			echo '<input type="hidden" name="export_format" value="xls">';
 			echo '</form>';
 			//echo '<form id="form1c" name="form1c" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';

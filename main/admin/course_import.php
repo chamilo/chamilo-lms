@@ -89,7 +89,7 @@ function validate_data($courses) {
 			$sql = "SELECT * FROM $category_table WHERE code = '".Database::escape_string($course['CourseCategory'])."'";
 			$res = Database::query($sql, __FILE__, __LINE__);
 			if (Database::num_rows($res) == 0) {
-				$course['error'] = get_lang('UnkownCategory').' ('.$course['CourseCategory'].')';
+				$course['error'] = get_lang('UnkownCategoryCourseCode').' ('.$course['CourseCategory'].')';
 				$errors[] = $course;
 			}
 		}
@@ -197,15 +197,19 @@ if ($_POST['formSent']) {
 	if (empty($_FILES['import_file']['tmp_name'])) {
 		$error_message = get_lang('UplUploadFailed');
 		Display :: display_error_message($error_message, false);
-	} else {
-		$file_type = $_POST['file_type'];
-		$courses = parse_csv_data($_FILES['import_file']['tmp_name']);
-		$errors = validate_data($courses);
-		if (count($errors) == 0) {
-			//$users = complete_missing_data($courses);
-			save_data($courses);
-			//header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('FileImported')));
-			//exit ();
+	} else {				
+		$allowed_file_mimetype = array('csv');
+		
+		$ext_import_file = substr($_FILES['import_file']['name'],(strrpos($_FILES['import_file']['name'],'.')+1));
+		
+		if (!in_array($ext_import_file,$allowed_file_mimetype)) {
+			Display :: display_error_message(get_lang('YouMustImportAFileAccordingToSelectedOption'));
+		} else {
+			$courses = parse_csv_data($_FILES['import_file']['tmp_name']);
+			$errors = validate_data($courses);
+			if (count($errors) == 0) {
+				save_data($courses);
+			}	
 		}
 	}
 }

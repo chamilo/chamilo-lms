@@ -109,7 +109,7 @@ class ExerciseResult
 	 * @param	string		The document path (for HotPotatoes retrieval)
 	 * @param	integer		User ID. Optional. If no user ID is provided, we take all the results. Defauts to null
 	 */
-	function _getExercisesReporting($document_path,$user_id=null)
+	function _getExercisesReporting($document_path,$user_id=null,$filter=0)
 	{
 		$return = array();
     	$TBL_EXERCISES          = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -160,12 +160,42 @@ class ExerciseResult
 
 		$NoTestRes = 0;
 		$NoHPTestRes = 0;
-		$j=0;
+		$j=0;				
+		
+		if ($filter) {
+			switch ($filter) {
+				case 1 :
+					$filter_by_not_revised = true;
+					break;
+				case 2 :
+					$filter_by_revised = true;
+					break;
+				default :
+					null;
+			}
+		}
+		
 		//Print the results of tests
 		if(is_array($results))
 		{
 			for($i = 0; $i < sizeof($results); $i++)
 			{
+				
+				$revised = false;
+				$sql_exe = 'SELECT exe_id FROM ' . Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING) . '
+										  WHERE author != ' . "''" . ' AND exe_id = ' . "'" . Database :: escape_string($results[$i][5]) . "'" . ' LIMIT 1';
+				$query = Database::query($sql_exe, __FILE__, __LINE__);
+	
+				if (Database :: num_rows($query) > 0) {
+					$revised = true;
+				}
+				if ($filter_by_not_revised && $revised == true) {
+					continue;
+				}
+				if ($filter_by_revised && $revised == false) {
+					continue;
+				}
+				
 				$return[$i] = array();
 				$id = $results[$i][5];
 				$mailid = $results[$i][6];
@@ -220,10 +250,10 @@ class ExerciseResult
 	 * @param	boolean		Whether to include user fields or not
 	 * @return	boolean		False on error
 	 */
-	public function exportCompleteReportCSV($document_path='',$user_id=null, $export_user_fields)
+	public function exportCompleteReportCSV($document_path='',$user_id=null, $export_user_fields = array(), $export_filter = 0)
 	{
 		global $charset;
-		$this->_getExercisesReporting($document_path,$user_id);
+		$this->_getExercisesReporting($document_path,$user_id,$export_filter);
 		$filename = 'exercise_results_'.date('YmdGis').'.csv';
 		if(!empty($user_id))
 		{
@@ -302,11 +332,18 @@ class ExerciseResult
 	 * Exports the complete report as an XLS file
 	 * @return	boolean		False on error
 	 */
-	public function exportCompleteReportXLS($document_path='',$user_id=null, $export_user_fields)
+	public function exportCompleteReportXLS($document_path='',$user_id=null, $export_user_fields=array(), $export_filter = 0)
 	{
 		global $charset;
-		$this->_getExercisesReporting($document_path,$user_id);
+		
+		
+		
+		$this->_getExercisesReporting($document_path,$user_id,$export_filter);
 		$filename = 'exercise_results_'.date('YmdGis').'.xls';
+		
+		
+		
+		
 		if(!empty($user_id))
 		{
 			$filename = 'exercise_results_user_'.$user_id.'_'.date('YmdGis').'.xls';
@@ -317,11 +354,21 @@ class ExerciseResult
 		$worksheet =& $workbook->addWorksheet('Report '.date('YmdGis'));
 		$line = 0;
 		$column = 0; //skip the first column (row titles)
-		if(!empty($this->results[0]['user']))
-		{
+		
+		// check if exists column 'user'
+		$with_column_user = false;		
+		foreach ($this->results as $result) {			
+			if (!empty($result['user'])) {
+				$with_column_user = true;
+				break;
+			}
+		}
+
+		if($with_column_user) {
 			$worksheet->write($line,$column,get_lang('User'));
 			$column++;
 		}
+		
 		if($export_user_fields)
 		{
 			//show user fields section with a big th colspan that spans over all fields
@@ -341,6 +388,8 @@ class ExerciseResult
 		$column++;
 		$worksheet->write($line,$column,get_lang('Weighting'));
 		$line++;
+
+
 
 		foreach($this->results as $row)
 		{

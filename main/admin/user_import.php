@@ -280,25 +280,34 @@ if (is_array($extAuthSource)) {
 }
 
 $tool_name = get_lang('ImportUserListXMLCSV');
-
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
 $extra_fields = Usermanager::get_extra_fields(0, 0, 5, 'ASC', false);
 $user_id_error = array();
+$error_message = '';
+
 if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	$file_type = $_POST['file_type'];
 	Security::clear_token();
 	$tok = Security::get_token();
-
-	if (strcmp($file_type, 'csv') === 0) { //&& strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {
-		$users	= parse_csv_data($_FILES['import_file']['tmp_name']);		
-		$errors = validate_data($users);		
-		$error_kind_file = false;
-	} elseif (strcmp($file_type, 'xml') === 0) { // && strcmp($_FILES['import_file']['type'],'text/'.$file_type.'')===0) {
-		$users = parse_xml_data($_FILES['import_file']['tmp_name']);
-		$errors = validate_data($users);
-		$error_kind_file = false;
+	$allowed_file_mimetype = array('csv','xml');	
+	$error_kind_file = false;
+	
+	$ext_import_file = substr($_FILES['import_file']['name'],(strrpos($_FILES['import_file']['name'],'.')+1));
+	
+	if (in_array($ext_import_file,$allowed_file_mimetype)) {
+		if (strcmp($file_type, 'csv') === 0 && $ext_import_file==$allowed_file_mimetype[0]) { 
+			$users	= parse_csv_data($_FILES['import_file']['tmp_name']);		
+			$errors = validate_data($users);		
+			$error_kind_file = false;
+		} elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file==$allowed_file_mimetype[1]) { 
+			$users = parse_xml_data($_FILES['import_file']['tmp_name']);
+			$errors = validate_data($users);
+			$error_kind_file = false;
+		} else {
+			$error_kind_file = true;
+		}
 	} else {
 		$error_kind_file = true;
 	}
@@ -326,8 +335,6 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 		save_data($users_to_insert);		
 	} else {		
 		$error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
-		header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_import.php?warn='.urlencode($error_message).'&amp;file_type='.$file_type.'&amp;sec_token='.$tok);
-		exit;
 	}	
 
 	if (count($errors) > 0) {
@@ -335,6 +342,7 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	} else {
 		$see_message_import = get_lang('FileImported');
 	}
+	/*
 	$msg2 = '';
 	if (count($inserted_in_course) > 1) {
 		$msg2 .= '<br>'.get_lang('UsersSubscribedToSeveralCoursesBecauseOfVirtualCourses').':';
@@ -344,47 +352,42 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 		$msg2 = substr($msg2, 0, -1);
 		$msg2 .= '</br>';
 	}
-
+	*/
+	
 	if (count($errors) != 0) {
-		$error_message = '<ul>';
+		$warning_message = '<ul>';
 		foreach ($errors as $index => $error_user) {
-			$error_message .= '<li><b>'.$error_user['error'].'</b>: ';
-			$error_message .= '<strong>'.$error_user['UserName'].'</strong>&nbsp;('.api_get_person_name($error_user['FirstName'], $error_user['LastName']).')';
-			$error_message .= '</li>';
+			$warning_message .= '<li><b>'.$error_user['error'].'</b>: ';
+			$warning_message .= '<strong>'.$error_user['UserName'].'</strong>&nbsp;('.api_get_person_name($error_user['FirstName'], $error_user['LastName']).')';
+			$warning_message .= '</li>';
 		}
-		$error_message .= '</ul>';
+		$warning_message .= '</ul>';
+	} 
+	
+	// if the warning message is too long then we display the warning message trough a session
+	if (api_strlen($warning_message) > 150) {
+		$_SESSION['session_message_import_users'] = $warning_message;
+		$warning_message = 'session_message';
+	}
+    
+    if ($error_kind_file) {
+		$error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
+	} else {
+		header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=show_message&warn='.urlencode($warning_message).'&message='.urlencode($see_message_import).'&sec_token='.$tok);
+		exit;	
 	}
 
-	// if the warning message is too long then we display the warning message trough a session
-	if (api_strlen($error_message) > 150) {
-		$_SESSION['session_message_import_users'] = $error_message;
-		$error_message = 'session_message';
-	}	
-	header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=show_message&message='.urlencode($see_message_import).'&warn='.urlencode($error_message).'&sec_token='.$tok);
-	exit;
 }
-
 Display :: display_header($tool_name);
-//api_display_tool_title($tool_name);
 
-if ($_FILES['import_file']['size'] == 0 AND $_POST) {
-	Display::display_error_message(get_lang('ThisFieldIsRequired'));
-}
-
-if ($error_kind_file === true) {
-	Display :: display_error_message(get_lang('YouMustImportAFileAccordingToSelectedOption'));
-} else if (isset($_GET['warn'])) {
-	$error_message = Security::remove_XSS($_GET['warn']);
-	Display :: display_error_message($error_message);
+if (!empty($error_message)) {
+	Display::display_error_message($error_message);
 }
 
 $form = new FormValidator('user_import','post','user_import.php');
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
-//$form->addRule('import_file', get_lang('ThisFieldIsRequired'), 'required'); // This rule does not work, probably due to the security mechanism here.
-$allowed_file_types = array ('xml', 'csv');
-//$form->addRule('import_file', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types); // This rule does not work, probably due to the security mechanism here.
 $form->addElement('radio', 'file_type', get_lang('FileType'), 'XML (<a href="exemple.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');
 $form->addElement('radio', 'file_type', null, 'CSV (<a href="exemple.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');
 $form->addElement('radio', 'sendMail', get_lang('SendMailToUsers'), get_lang('Yes'), 1);

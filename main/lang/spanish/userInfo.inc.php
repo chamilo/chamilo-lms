@@ -176,4 +176,6 @@ $InvitationSent = "Invitación enviada";
 $YouAlreadySentAnInvitation = "Usted ya ha enviado una invitación";
 $AllowSendMessageToAllPlatformUsersTitle = "Permitir enviar mensajes a todos los usuarios de la plataforma";
 $InvitationDenied = "Invitación denegada";
+$UserAdded = "Usuario agregado";
+$FilesSizeExceedsX = "Tamaña del archivo excedido";
 ?>

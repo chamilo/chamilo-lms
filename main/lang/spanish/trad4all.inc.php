@@ -757,4 +757,6 @@ $Coachs = "Tutores";
 $New = "Nuevo";
 $YouMustToInstallTheExtensionLDAP = "Tu debes instalar la extension LDAP ";
 $AddAdditionalProfileField = "Añadir un campo del perfil de usuario";
+$InvitationDenied = "Invitación denegada";
+$UserAdded = "Usuario agregado";
 ?>

@@ -162,7 +162,7 @@ if(api_is_allowed_to_edit(null,true) && !api_is_coach()) {
 	?>
 		<div class="Authoringview">
 			<table width="100%">
-				<?php $my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW); show_tools_category($my_list);?>
+				<?php $my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW); CourseHome::show_tools_category($my_list);?>
 			</table>
 		</div>
 	<?php

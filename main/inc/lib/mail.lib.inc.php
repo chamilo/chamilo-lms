@@ -110,11 +110,13 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
  * @param string			sender name
  * @param string			sender e-mail
  * @param array				extra headers in form $headers = array($name => $value) to allow parsing
+ * @param array				data file (path and filename)
  * @return                  returns true if mail was sent
  * @see                     class.phpmailer.php
  */
-function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name="", $sender_email="", $extra_headers=null) {
 
+function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name = "", $sender_email = "", $extra_headers = null, $data_file = array()) {
+ 
    global $regexp;
    global $platform_email;
 
@@ -164,9 +166,14 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
    {
       $mail->FromName = $platform_email['SMTP_FROM_NAME'];
    }
-      $mail->Subject = $subject;
-      $mail->AltBody    = strip_tags(str_replace('<br />',"\n",$message));
-      $mail->Body    = '<html><head></head><body>'.$message.'</body></html>';
+      $mail->Subject = $subject;            
+      $mail->AltBody = strip_tags(str_replace('<br />',"\n", api_html_entity_decode($message)));
+      $mail->Body = '<html><head></head><body>'.$message.'</body></html>';
+      // attachment ...
+      if (!empty($data_file)) {
+      	$mail->AddAttachment($data_file['path'], $data_file['filename']);
+      }
+
       //only valid address
       if(is_array($recipient_email))
       {

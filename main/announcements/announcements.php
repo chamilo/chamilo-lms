@@ -135,8 +135,8 @@ require_once($lib.'fileUpload.lib.php');
 -----------------------------------------------------------
 */
 
-$safe_emailTitle = Security::remove_XSS($_POST['emailTitle']);
-$safe_newContent = Security::remove_XSS($_POST['newContent']);
+$safe_emailTitle = $_POST['emailTitle'];
+$safe_newContent = $_POST['newContent'];
 
 if (!empty($_POST['To']))
 {
@@ -718,16 +718,23 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 								//set the charset and use it for the encoding of the email - small fix, not really clean (should check the content encoding origin first)
 								//here we use the encoding used for the webpage where the text is encoded (ISO-8859-1 in this case)
-
-								//$to_email_address =$_POST['emailsAdd'];
-								//$mail_body;
-								$headers = array();
-	                          	if (empty($charset)) { $charset='ISO-8859-1';}
-								$headers['Content-Type'] = 'text/html';
-								$headers['charset'] = $charset;
-		                        $mailid=$myrow["email"];
-
-								$newmail = api_mail_html(api_get_person_name($myrow["lastname"], $myrow["firstname"], null, PERSON_NAME_EMAIL_ADDRESS), $myrow["email"], stripslashes($emailSubject), $mail_body, api_get_person_name($_SESSION['_user']['lastName'], $_SESSION['_user']['firstName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail'],$headers);
+								
+								$recipient_name	= api_get_person_name($myrow["lastname"], $myrow["firstname"], null, PERSON_NAME_EMAIL_ADDRESS);
+		                        $mailid = $myrow["email"];
+		                        $sender_name = api_get_person_name($_SESSION['_user']['lastName'], $_SESSION['_user']['firstName'], null, PERSON_NAME_EMAIL_ADDRESS);
+		                        $sender_email = $_SESSION['_user']['mail'];
+								$data_file = array();
+								if (!empty($_FILES['user_upload'])) {
+									$courseDir = $_course['path'].'/upload/announcements/';
+									$sys_course_path = api_get_path(SYS_COURSE_PATH);
+									$sql = 'SELECT path, filename FROM '.$tbl_announcement_attachment.'
+									  	    WHERE announcement_id  = "'.$insert_id.'"';
+									$result = Database::query($sql, __FILE__, __LINE__);
+									$row = Database::fetch_array($result);
+									$data_file = array('path' => $sys_course_path.$courseDir.$row['path'],
+													   'filename' => $row['filename']);
+								}								
+								api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file);
 	                        }
 
 							$sql_date="SELECT * FROM $db_name WHERE survey_id='$surveyid'";

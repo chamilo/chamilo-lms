@@ -792,8 +792,8 @@ function store_advalvas_item($emailTitle, $newContent, $order, $to, $file_commen
 	$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 	// filter data
-	$emailTitle = Database::escape_string(Security::remove_XSS($emailTitle));
-	$newContent = Database::escape_string(Security::remove_XSS($newContent,COURSEMANAGERLOWSECURITY));
+	$emailTitle = Database::escape_string($emailTitle);
+	$newContent = Database::escape_string($newContent);
 	$order = intval($order);
 	
 	// store in the table announcement
@@ -848,8 +848,8 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 	$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	
 	$newContent=stripslashes($newContent);
-	$emailTitle = Database::escape_string(Security::remove_XSS($emailTitle));
-	$newContent = Database::escape_string(Security::remove_XSS($newContent,COURSEMANAGERLOWSECURITY));
+	$emailTitle = Database::escape_string($emailTitle);
+	$newContent = Database::escape_string($newContent,COURSEMANAGERLOWSECURITY);
 	$order = intval($order);
 	
 	// store in the table announcement
@@ -911,8 +911,8 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to, $file_comment='')
 	global $tbl_item_property;
 
 	$newContent=stripslashes($newContent);
-	$emailTitle = Database::escape_string(Security::remove_XSS($emailTitle));
-	$newContent = Database::escape_string(Security::remove_XSS($newContent,COURSEMANAGERLOWSECURITY));
+	$emailTitle = Database::escape_string($emailTitle);
+	$newContent = Database::escape_string($newContent,COURSEMANAGERLOWSECURITY);
 	$order = intval($order);
 	
 	// store the modifications in the table announcement

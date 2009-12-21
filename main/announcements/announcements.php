@@ -724,7 +724,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 									$courseDir = $_course['path'].'/upload/announcements/';
 									$sys_course_path = api_get_path(SYS_COURSE_PATH);
 									$sql = 'SELECT path, filename FROM '.$tbl_announcement_attachment.'
-									  	    WHERE id = "'.$insert_id.'"';
+									  	    WHERE announcement_id = "'.$insert_id.'"';
 									$result = Database::query($sql, __FILE__, __LINE__);
 									$row = Database::fetch_array($result);
 									$data_file = array('path' => $sys_course_path.$courseDir.$row['path'],

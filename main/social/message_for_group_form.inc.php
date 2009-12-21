@@ -7,6 +7,9 @@ require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fckeditor/fckeditor.php';
+
+$tok = Security::get_token();
 
 if (api_is_anonymous()) {
 	api_not_allowed();
@@ -29,24 +32,35 @@ if ( isset($_REQUEST['user_friend']) ) {
 
 $group_id = intval($_GET['group_id']);
 $message_id = intval($_GET['message_id']);
+$actions = array('add_message_group','edit_message_group','reply_message_group');
+
+$allowed_action = (isset($_GET['action']) && in_array($_GET['action'],$actions))?Security::remove_XSS($_GET['action']):'';
+
 $to_group = '';
-$title_group = '';
-if (!empty($group_id)) {
+$subject = '';
+$message = '';
+if (!empty($group_id) && $allowed_action) {
 	$group_info = GroupPortalManager::get_group_data($group_id);
 	$to_group   = $group_info['name'];
 	if (!empty($message_id)) {
-		$message_info = MessageManager::get_message_by_id($message_id);		
-		$title_group  = get_lang('Re:').api_xml_http_response_encode($message_info['title']);	
+		$message_info = MessageManager::get_message_by_id($message_id);
+		if ($allowed_action == 'reply_message_group') {				
+			$subject  = get_lang('Re:').api_xml_http_response_encode($message_info['title']);
+		} else {
+			$subject  = api_xml_http_response_encode($message_info['title']);
+			$message  = api_xml_http_response_encode($message_info['content']);
+		}	
 	} 	
 }
 
 ?>
 
 <form name="form" action="groups.php?id=<?php echo $group_id ?>" method="POST" enctype="multipart/form-data">
-<input type="hidden" name="action" value="send_message_group" />
+<input type="hidden" name="action" value="<?php echo $allowed_action ?>" />
 <input type="hidden" name="group_id" value="<?php echo $group_id ?>" />
 <input type="hidden" name="parent_id" value="<?php echo $message_id ?>" />
-<input type="hidden" name="token" value="<?php echo $_SESSION['sec_token'] ?>" />
+<input type="hidden" name="message_id" value="<?php echo $message_id ?>" />
+<input type="hidden" name="token" value="<?php echo $tok ?>" />
 <table width="600" border="0" height="220">
     <tr height="180">
         <td align="left">
@@ -55,30 +69,30 @@ if (!empty($group_id)) {
 	<?php
 			if (api_get_setting('allow_message_tool')=='true') {	
 	            //normal message
-		   		 $user_info=api_get_user_info($userfriend_id);
-		  		 echo api_xml_http_response_encode(get_lang('To')); ?> :&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode($to_group); ?>
-		  		 <br />
-		 		 <br /><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br />
-		 		 <input id="txt_subject_id" name="title" type="text" style="width:450px;" value="<?php echo $title_group ?>"><br/>
-		   		 <br /><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br />
-		   		 <textarea id="txt_area_invite" name="content" rows="3" cols="68"></textarea><br/>
-		   		 <br /><?php echo api_xml_http_response_encode(get_lang('AttachmentFiles')); ?> :<br />
-	
+		   		$user_info=api_get_user_info($userfriend_id);
+		  		echo api_xml_http_response_encode(get_lang('To')); ?> :&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode($to_group); ?>
+		  		<br />
+		 		<br /><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br />
+		 		<input id="txt_subject_id" name="title" type="text" style="width:450px;" value="<?php echo $subject ?>"><br/>
+		   		<br /><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br />		   		
+		   		<?php
+				$oFCKeditor = new FCKeditor('content') ;
+				$oFCKeditor->ToolbarSet = 'profile';
+				$oFCKeditor->Width		= '100%';
+				$oFCKeditor->Height		= '120';
+				$oFCKeditor->Value		= $message;					
+				$return =	$oFCKeditor->CreateHtml();	
+				echo $return;
+		   		?>		   		
+		   		<br /><br /><?php echo api_xml_http_response_encode(get_lang('AttachmentFiles')); ?> :<br />
 				<span id="filepaths"><div id="filepath_1"><input type="file" name="attach_1" size="20" /></div></span>
-				<div id="link-more-attach"><a href="javascript://" onclick="return add_image_form()"><?php echo get_lang('AddOneMoreFile') ?></a>&nbsp;(<?php echo api_xml_http_response_encode(sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize')))) ?>)</div>
-		   		<!--button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>" onclick="return ajaxFileUpload()"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button-->
+				<div id="link-more-attach"><a href="javascript://" onclick="return add_image_form()"><?php echo get_lang('AddOneMoreFile') ?></a>&nbsp;(<?php echo api_xml_http_response_encode(sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize')))) ?>)</div>		   		
 		   		<br />
 		   		<button class="save" type="submit" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>
 	<?php } ?>
 	</dl>
-
 </td>
 </tr>
 </div>
-<tr>
-	<td>
-		<div id="display_response_id" style="position:relative"></div>
-	</td>
-</tr>
 </table>
 </form>

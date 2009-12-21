@@ -186,7 +186,19 @@ class MessageManager
 		return $message_list;
 	}
 
-	public static function send_message ($receiver_user_id, $title, $content, $file_attachments = array(), $file_comments = '', $group_id = 0, $parent_id = 0) {	
+	/**
+	 * save message for social network 
+	 * @param int 	  receiver user id
+	 * @param string  subject
+	 * @param string  content
+	 * @param array   attachment files array($_FILES) (optional)
+	 * @param array   comments about attachment files (optional)
+	 * @param int     group id (optional)
+	 * @param int     parent id (optional)
+	 * @param int 	  message id for updating the message (optional)
+	 * @return bool
+	 */	 
+	public static function send_message ($receiver_user_id, $subject, $content, $file_attachments = array(), $file_comments = array(), $group_id = 0, $parent_id = 0, $edit_message_id = 0) {	
         global $charset;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$group_id = intval($group_id);
@@ -207,11 +219,10 @@ class MessageManager
 		
         if (!empty($receiver_user_id) || !empty($group_id)) {
         	// message for user friend
-	        $title = api_convert_encoding($title,$charset);
-	        $title = Database::escape_string($title);
+	        $subject = api_convert_encoding($subject,$charset);
+	        $subject = Database::escape_string($subject);
 	        $content = api_convert_encoding($content,$charset);
 	        $content = Database::escape_string($content);
-			//message in inbox
 			
 			//useless query
 			//echo $sql = "SELECT COUNT(*) as count FROM $table_message WHERE user_sender_id = ".$user_sender_id." AND user_receiver_id='$receiver_user_id' AND title = '$title' AND content ='$content' AND group_id = '$group_id' AND parent_id = '$parent_id'";		
@@ -221,11 +232,17 @@ class MessageManager
 			//We should ALWAYS sent emails
 			//if ($row_exist['count'] == 0) {
 			
-			//message in inbox for user friend								 
-			$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id ) ".
-					 " VALUES ('$user_sender_id', '$receiver_user_id', '1', '".date('Y-m-d H:i:s')."','$title','$content','$group_id','$parent_id')";
-			$result = Database::query($query,__FILE__,__LINE__);				
-			$inbox_last_id = Database::insert_id();		
+			//message in inbox for user friend			
+			if ($edit_message_id) {				
+				$query = " UPDATE $table_message SET update_date = '".date('Y-m-d H:i:s')."', title = '$subject', content = '$content' WHERE id = '$edit_message_id' ";				 
+				$result = Database::query($query,__FILE__,__LINE__);				
+				$inbox_last_id = $edit_message_id;					
+			} else {
+				$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
+					 " VALUES ('$user_sender_id', '$receiver_user_id', '1', '".date('Y-m-d H:i:s')."','$subject','$content','$group_id','$parent_id', '".date('Y-m-d H:i:s')."')";
+				$result = Database::query($query,__FILE__,__LINE__);				
+				$inbox_last_id = Database::insert_id();	
+			}
 						
 			// save attachment file for inbox messages
 			if (is_array($file_attachments)) {
@@ -240,8 +257,8 @@ class MessageManager
 				
 			if (empty($group_id)) {	
 				//message in outbox for user friend or group
-				$sql = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id ) ".
-						 " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".date('Y-m-d H:i:s')."','$title','$content', '$group_id', '$parent_id')";
+				$sql = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
+						 " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".date('Y-m-d H:i:s')."','$subject','$content', '$group_id', '$parent_id', '".date('Y-m-d H:i:s')."')";
 				$rs = Database::query($sql,__FILE__,__LINE__);
 				$outbox_last_id = Database::insert_id();
 				
@@ -341,6 +358,16 @@ class MessageManager
 		return false;
 	}
 	
+	/**
+	 * save message attachment files 
+	 * @param  array 	$_FILES['name']
+	 * @param  string  	a comment about the uploaded file
+	 * @param  int		message id
+	 * @param  int		receiver user id (optional)
+	 * @param  int		sender user id (optional)
+	 * @param  int		group id (optional) 
+	 * @return void
+	 */
 	public static function save_message_attachment_file($file_attach,$file_comment,$message_id,$receiver_user_id=0,$sender_user_id=0,$group_id=0) {
 
 		$tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
@@ -388,16 +415,15 @@ class MessageManager
 			// Storing the attachments if any			
 			$sql="INSERT INTO $tbl_message_attach(filename,comment, path,message_id,size)
 				  VALUES ( '$safe_file_name', '$safe_file_comment', '$safe_new_file_name' , '$message_id', '".$file_attach['size']."' )";
-			$result=Database::query($sql, __LINE__, __FILE__);
-			$message.=' / '.get_lang('FileUploadSucces').'<br />';
-	
+			$result=Database::query($sql, __LINE__, __FILE__);	
 		}	
 	}
 
 	/**
-	 * Delete message attachment file (logicaly updating the row with a suffix _DELETE_id)
-	 * @param  int		message id
-	 * @param  int		message user id (receiver user id or sender user id) 
+	 * Delete message attachment files (logically updating the row with a suffix _DELETE_id)
+	 * @param  int	message id
+	 * @param  int	message user id (receiver user id or sender user id) 
+	 * @param  int	group id (optional) 
 	 * @return void
 	 */
 	public static function delete_message_attachment_file($message_id,$message_uid,$group_id=0) {
@@ -430,21 +456,38 @@ class MessageManager
 		}				
 	}	
 	
-	public static function update_message ($user_id, $id) {
-		if ($id != strval(intval($id)) || $user_id != strval(intval($user_id))) return false;
+	/**
+	 * update messages by user id and message id  
+	 * @param  int		user id
+	 * @param  int		message id
+	 * @return resource
+	 */
+	public static function update_message ($user_id, $message_id) {
+		if ($message_id != strval(intval($message_id)) || $user_id != strval(intval($user_id))) return false;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
-		$query = "UPDATE $table_message SET msg_status = '0' WHERE msg_status<>4 AND user_receiver_id=".Database::escape_string($user_id)." AND id='".Database::escape_string($id)."'";
+		$query = "UPDATE $table_message SET msg_status = '0' WHERE msg_status<>4 AND user_receiver_id=".intval($user_id)." AND id='".intval($message_id)."'";
 		$result = Database::query($query,__FILE__,__LINE__);
 	}
 
-	 public static function get_message_by_user ($user_id,$id) {
-	 	if ($id != strval(intval($id)) || $user_id != strval(intval($user_id))) return false;
+	/**
+	 * get messages by user id and message id  
+	 * @param  int		user id
+	 * @param  int		message id
+	 * @return array
+	 */
+	 public static function get_message_by_user ($user_id,$message_id) {
+	 	if ($message_id != strval(intval($message_id)) || $user_id != strval(intval($user_id))) return false;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
-		$query = "SELECT * FROM $table_message WHERE user_receiver_id=".Database::escape_string($user_id)." AND id='".Database::escape_string($id)."'";
+		$query = "SELECT * FROM $table_message WHERE user_receiver_id=".intval($user_id)." AND id='".intval($message_id)."'";
 		$result = Database::query($query,__FILE__,__LINE__);
 		return $row = Database::fetch_array($result);
 	}
 	
+	/**
+	 * get messages by group id  
+	 * @param  int		group id
+	 * @return array
+	 */
 	public static function get_messages_by_group($group_id) {	 	
 		if ($group_id != strval(intval($group_id))) return false;		
 	 	$table_message = Database::get_main_table(TABLE_MESSAGE);
@@ -456,6 +499,43 @@ class MessageManager
 		if (Database::num_rows($rs) > 0) {
 			while ($row = Database::fetch_array($rs)) {
 				$data[] = $row;
+			}		
+		}
+		return $data;
+	}
+	
+	/**
+	 * get messages by parent id optionally with limit  
+	 * @param  int		parent id
+	 * @param  int		group id (optional)
+	 * @param  int		offset (optional)
+	 * @param  int		limit (optional) 
+	 * @return array
+	 */
+	public static function get_messages_by_parent($parent_id,$group_id = '',$offset = 0,$limit = 0) {
+		if ($parent_id != strval(intval($parent_id))) return false;		
+	 	$table_message = Database::get_main_table(TABLE_MESSAGE);
+	 	$current_uid = api_get_user_id();
+	 	$parent_id = intval($parent_id);	 			
+	 	
+	 	$condition_group_id = "";
+	 	if ($group_id !== '') {
+	 		$group_id = intval($group_id);
+	 		$condition_group_id = " AND group_id = '$group_id' ";
+	 	}
+
+	 	$condition_limit = "";	 	
+	 	if ($offset && $limit) {
+	 		$offset = ($offset - 1) * $limit;  		
+	 		$condition_limit = " LIMIT $offset,$limit ";	
+	 	}
+	 	
+		$query = "SELECT * FROM $table_message WHERE parent_id='$parent_id' AND msg_status <> 4 $condition_group_id ORDER BY send_date DESC $condition_limit ";
+		$rs = Database::query($query,__FILE__,__LINE__);		
+		$data = array();
+		if (Database::num_rows($rs) > 0) {
+			while ($row = Database::fetch_array($rs)) {
+				$data[$row['id']] = $row;
 			}		
 		}
 		return $data;
@@ -755,54 +835,157 @@ class MessageManager
 						
 		$rows = self::get_messages_by_group($group_id);						
 		$rows = self::calculate_children($rows);
-		$group_info = GroupPortalManager::get_group_data($group_id);		
+		$group_info = GroupPortalManager::get_group_data($group_id);
+		$current_user_id = api_get_user_id();		
 		$count=0;
 		$html = '';
 		if (is_array($rows) && count($rows)> 0) {
-			foreach ($rows as $message) {
-				$indent	= $message['indent_cnt']*'20';
-				$user_sender_info = UserManager::get_user_info_by_id($message['user_sender_id']);
-				
-				if (!empty($message['parent_id'])) {				
-					$message_parent_info = self::get_message_by_id($message['parent_id']);								
-					$user_parent_info = UserManager::get_user_info_by_id($message_parent_info['user_sender_id']);
-					$name_user_parent = api_get_person_name($user_parent_info['firstname'], $user_parent_info['lastname']);
-					
-					$message_item = 'message-item';
-					$message_title_item = 'message-group-title';
-				} else {
-					$message_item = 'message-topic';
-					$message_title_item = 'message-group-title-topic';		
-				}
-				
-				// get file attachments by message id
-				$files_attachments = self::get_links_message_attachment_files($message['id']);
-				
-				$name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);						
-				$html.= '<div class="'.$message_item.'" id="message-item-'.$count.'" style="margin-left: '.$indent.'px;">';
-					
-					//if (!isset($message['children'])) {
-					//only for admins
-					//$html.= '<div id="message-reply-link"><a href="'.api_get_path(WEB_CODE_PATH).'social/groups.php?action=delete_message&group_id='.$group_id.'&message_id='.$message['id'].'">'.Display :: return_icon('delete.gif', get_lang('Delete')).'&nbsp;'.get_lang('Delete').'</a></div>';
-					$html.= '<div id="message-reply-link"><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$message['id'].'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('forumthread_new.gif', get_lang('Reply')).'&nbsp;'.get_lang('Reply').'</a></div>';
 
-						//echo '<a href="/main/messages/new_message.php?group_id='.$group_id.'&message_id='.$message['id'].'">'.Display::return_icon('forumthread_new.gif',api_xml_http_response_encode(get_lang('Reply'))).'&nbsp;'.api_xml_http_response_encode(get_lang('Reply')).'</a>';
-					//}
+				// prepare array for topics with its items
+				$topics = array();
+				$x = 0;		
+				foreach ($rows as $index=>$value) {					
+					if (empty($value['parent_id'])) {
+						$x = $index; 						
+						$topics[$x] = $value;											
+					} else {
+						$topics[$x]['items'][] = $value;
+					}
+				}			
+				uasort($topics,array('MessageManager','order_desc_date'));
+
+				// pager
+				$page  = isset($_GET['page_nr'])?intval($_GET['page_nr']):1;
+				$total_topics = count($topics);
+				$topics_per_page = 5;
+				$pager = self::get_pager_for_message_group($group_id,$page,$total_topics,$topics_per_page);			
+				$html .= '	<div class="pager">
+							<table width="100%">
+							<tr><td style="width:25%">&nbsp;</td><td style="text-align:center">'.$pager['details'].'</td><td style="text-align:right;width:25%">'.$pager['links'].'</td></tr></table></div>';
+				
+				// topics and items
+				$parents = array_keys(self::get_messages_by_parent(0,$group_id,$page,$topics_per_page));
+				$html .= '<div id="accordion">';		
+				foreach ($topics as $index => $topic) {
 					
-					$html.= '<div class="'.$message_title_item.'">'.$message['title'].'&nbsp;</div>';
-											
-					$html.= '<div class="message-group-author">'.get_lang('From').'&nbsp;<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$message['user_sender_id'].'">'.$name.'&nbsp;</a></div>';		
-					$html.= '<div class="message-group-content">'.$message['content'].'</div>';
-					$html.= '<div class="message-group-date">'.get_lang('PostIn').' '.date_to_str_ago($message['send_date']).'</div>';
+					if (!in_array($index,$parents)) continue;	
 					
-					$html.= '<div class="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>';
-					
-				$html.= '</div>';
-				$count++;						
-			}
+					// topics
+					$indent	= 0;
+					$user_sender_info = UserManager::get_user_info_by_id($topic['user_sender_id']);
+					$files_attachments = self::get_links_message_attachment_files($topic['id']);
+					$name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
+					$html .= '<div class="message-topic" >';
+					$html .= '<a href="#" class="head" id="head_'.$topic['id'].'">
+								'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align: middle')).'
+								<span class="message-group-title-topic">'.$topic['title'].'</span>
+								<span class="message-group-date">('.get_lang('PostIn').' '.date_to_str_ago($topic['send_date']).($topic['send_date']!=$topic['update_date']?' - '.get_lang('UpdatedIn').' '.date_to_str_ago($topic['send_date']):'').')</span>
+							  </a>';							
+						$html .= '<div>';
+							$html.= '<div style="margin-left: '.$indent.'px;margin-bottom:10px">';
+								$html.= '<div id="message-reply-link" style="margin-right:10px">
+										<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('forumthread_new.gif', get_lang('Reply')).'</a>';
+								
+								if ($topic['user_sender_id'] == $current_user_id) {
+									$html.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.gif', get_lang('Edit')).'</a>';
+								}
+								
+								$html.=	'</div>';
+								//$html.= '<div class="message-group-title-topic">'.$topic['title'].'&nbsp;</div>';												
+								$html.= '<div class="message-group-author">'.get_lang('From').'&nbsp;<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a></div>';		
+								$html.= '<div class="message-group-content">'.$topic['content'].'</div>';
+								//$html.= '<div class="message-group-date">'.get_lang('PostIn').' '.date_to_str_ago($topic['send_date']).'</div>';						
+								$html.= '<div class="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>';						
+							$html.= '</div>';
+					// items											
+					if (is_array($topic['items'])) {
+						foreach ($topic['items'] as $item) {							
+							$indent	= $item['indent_cnt']*'15';
+							$user_sender_info = UserManager::get_user_info_by_id($item['user_sender_id']);
+							$files_attachments = self::get_links_message_attachment_files($item['id']);
+							$name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
+							$html.= '<div class="message-item" style="margin-left: '.$indent.'px;">';
+								$html.= '<div id="message-reply-link">
+										<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$item['id'].'&action=reply_message_group" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('forumthread_new.gif', get_lang('Reply')).'</a>';
+								if ($item['user_sender_id'] == $current_user_id) {
+									$html.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$item['id'].'&action=edit_message_group" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.gif', get_lang('Edit')).'</a>';
+								} 	
+								$html.= '</div>';
+								$html.= '<div class="message-group-title">'.$item['title'].'&nbsp;</div>';												
+								$html.= '<div class="message-group-author">'.get_lang('From').'&nbsp;<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$item['user_sender_id'].'">'.$name.'&nbsp;</a></div>';		
+								$html.= '<div class="message-group-content">'.$item['content'].'</div>';
+								$html.= '<div class="message-group-date">'.get_lang('PostIn').' '.date_to_str_ago($item['send_date']).($item['send_date']!=$item['update_date']?' - '.get_lang('UpdatedIn').' '.date_to_str_ago($item['send_date']):'').'</div>';						
+								$html.= '<div class="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>';						
+							$html.= '</div>';										
+						}
+					}
+						$html .= '</div>';	
+					$html .= '</div>';	
+				}
+				$html .= '</div>';
+				
+				// pager
+				$html .= '	<div class="pager">
+							<table width="100%">
+							<tr><td style="width:25%">&nbsp;</td><td>&nbsp;</td><td style="text-align:right;width:25%">'.$pager['links'].'</td></tr></table></div>';
 		}
 		return $html;
 	}
+
+	/**
+	 *  Get pager for messages of group
+	 *  @param int 		group id
+	 *  @param int 		current page
+	 *  @param int 		total rows
+	 *  @param int 		rows per page
+	 *  @return array 	pager with details and links
+	 */
+	public static function get_pager_for_message_group($group_id,$page,$num_rows,$rows_per_page) {
+		
+		$link 		= '';
+		$details	= '';
+		$pager 		= array();
+		$group_id 	= intval($group_id);
+		$page 		= intval($page);
+		$num_rows 	= intval($num_rows);
+		$first_page = 1;
+		$last_page 	= ceil($num_rows/$rows_per_page);
+		
+		// get details		
+		if ($page == $first_page) {
+			$details = $page.' - '.($page*$rows_per_page).' / '.$num_rows;	
+		} else if ($page > $first_page && $page < $last_page) {
+			$details = ((($page-1)*$rows_per_page)+1).' - '.($page*$rows_per_page).' / '.$num_rows;
+		} else {
+			$details = ((($page-1)*$rows_per_page)+1).' - '.($num_rows).' / '.$num_rows;
+		}		
+		$pager['details'] = $details;
+		
+		
+		// get links for pager	
+		$href = api_get_path(WEB_CODE_PATH).'social/groups.php?id='.$group_id;		
+		if ($page > 1) {
+			$link .= '<a title="'.get_lang('FirstPage').'" href="'.$href.'&page_nr='.$first_page.'">';
+			$link .= Display::return_icon('first.png',get_lang('FirstPage'),array('style'=>'vertical-align: middle'));
+			$link .= '</a>';
+			$link .= '<a title="'.get_lang('PreviousPage').'" href="'.$href.'&page_nr='.($page-1).'">';
+			$link .= Display::return_icon('prev.png',get_lang('PreviousPage'),array('style'=>'vertical-align: middle'));
+	 		$link .= '</a>';	
+		}
+		$link .= $page.'/'.$last_page;
+		if ($page < $last_page) {
+			$link .= '<a title="'.get_lang('NextPage').'" href="'.$href.'&page_nr='.($page+1).'">';
+			$link .= Display::return_icon('next.png',get_lang('NextPage'),array('style'=>'vertical-align: middle'));
+			$link .= '</a>';
+			$link .= '<a title="'.get_lang('LastPage').'" href="'.$href.'&page_nr='.$last_page.'">';
+			$link .= Display::return_icon('last.png',get_lang('PreviousPage'),array('style'=>'vertical-align: middle'));
+	 		$link .= '</a>';	
+		}		
+		$pager['links'] = $link;
+		 		
+ 		return $pager;
+	}
+
 	
 	/**
 	 * Add children to messages by id is used for nested view messages  
@@ -841,6 +1024,16 @@ class MessageManager
 				self::message_recursive_sort($rows, $messages, $child, $indent);
 			}
 		}
+	}
+	
+	/**
+	 * Sort date by desc from a multi-dimensional array    
+	 * @param array1  first array to compare
+	 * @param array2  second array to compare 
+	 * @return bool
+	 */	
+	public function order_desc_date($array1,$array2) {
+		return strcmp($array2['send_date'],$array1['send_date']);	
 	}
 	
 	/**

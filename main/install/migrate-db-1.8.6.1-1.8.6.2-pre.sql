@@ -86,6 +86,8 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_send
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('message_max_upload_filesize', NULL, 'textfield', 'Tools', '20971520', 'MessageMaxUploadFilesizeTitle','MessageMaxUploadFilesizeComment',NULL,NULL, 0);
 
+ALTER TABLE message ADD COLUMN update_date DATETIME  NOT NULL DEFAULT '0000-00-00 00:00:00'; 
+
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
 ALTER TABLE track_e_online ADD INDEX (course);

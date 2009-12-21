@@ -2167,9 +2167,9 @@ function api_not_allowed($print_headers = false) {
 		}
 		require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 		$form = new FormValidator('formLogin', 'post', api_get_self().'?'.$_SERVER['QUERY_STRING']);
-		$form->addElement('static', null, null, 'Username');
+		$form->addElement('static', null, null, get_lang('UserName'));
 		$form->addElement('text', 'login', '', array('size' => USERNAME_MAX_LENGTH));
-		$form->addElement('static', null, null, 'Password');
+		$form->addElement('static', null, null, get_lang('Password'));
 		$form->addElement('password', 'password', '', array('size' => 15));
 		$form->addElement('style_submit_button', 'submitAuth', get_lang('Enter'),'class="login"');
 		$test ='<div id="expire_session"><br />'.$form->return_form().'</div>';

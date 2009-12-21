@@ -212,29 +212,38 @@ function manage_form ($default, $select_from_user_list = null) {
 		$default['title']=get_lang('Re:').api_html_entity_decode($message_info['title'],ENT_QUOTES,$charset);		
 	}		
 	$form->setDefaults($default);
+	
 	if ($form->validate()) {
-		$values 		= $default;		
-		$user_list		= $values['users'];
-		$file_comments	= $_POST['legend'];
-		$title 			= $values['title'];
-		$content 		= $values['content'];		
-		$group_id		= $values['group_id'];
-		$parent_id 		= $values['parent_id'];
 		
-		if (is_array($user_list) && count($user_list)> 0) {
-			//all is well, send the message
-			foreach ($user_list as $user) {				
-				$res = MessageManager::send_message($user, $title, $content, $_FILES, $file_comments, $group_id, $parent_id);
-				if ($res) {
-					if (is_string($res)) {
-						Display::display_error_message($res);
-					} else {
-						MessageManager::display_success_message($user);
-					}
-				}	
+		$check = Security::check_token('post');
+		if ($check) {			
+			$values 		= $default;		
+			$user_list		= $values['users'];
+			$file_comments	= $_POST['legend'];
+			$title 			= $values['title'];
+			$content 		= $values['content'];		
+			$group_id		= $values['group_id'];
+			$parent_id 		= $values['parent_id'];
+			
+			if (is_array($user_list) && count($user_list)> 0) {
+				//all is well, send the message
+				foreach ($user_list as $user) {				
+					$res = MessageManager::send_message($user, $title, $content, $_FILES, $file_comments, $group_id, $parent_id);
+					if ($res) {
+						if (is_string($res)) {
+							Display::display_error_message($res);
+						} else {
+							MessageManager::display_success_message($user);
+						}
+					}	
+				}			
 			}			
-		} 		
+		}
+		Security::clear_token();		 		
 	} else {
+		$token = Security::get_token();
+		$form->addElement('hidden','sec_token');
+		$form->setConstants(array('sec_token' => $token));
 		$form->display();
 	}
 }
@@ -283,9 +292,6 @@ if ($group_id != 0) {
 	}
 	
 }
-
-	
-
 
 echo '<div id="inbox-wrapper" >';
 	//LEFT COLUMN

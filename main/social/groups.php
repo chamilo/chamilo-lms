@@ -45,47 +45,76 @@ function add_image_form() {
 	}  else {
 		counter_image = counter_image; 
 	}
-	var elem1 = document.createElement("div");			
-	elem1.setAttribute("id","filepath_"+counter_image);							
-	filepaths.appendChild(elem1);	
-	id_elem1 = "filepath_"+counter_image;		
+	var elem1 = document.createElement("div");
+	elem1.setAttribute("id","filepath_"+counter_image);
+	filepaths.appendChild(elem1);
+	id_elem1 = "filepath_"+counter_image;
 	id_elem1 = "\'"+id_elem1+"\'";
-	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"'.api_get_path(WEB_CODE_PATH).'img/delete.gif\"></a>";						
+	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"'.api_get_path(WEB_CODE_PATH).'img/delete.gif\"></a>";
 
-	if (filepaths.childNodes.length == 3) {		
-		var link_attach = document.getElementById("link-more-attach");		
+	if (filepaths.childNodes.length == 3) {
+		var link_attach = document.getElementById("link-more-attach");
 		if (link_attach) {
 			link_attach.innerHTML="";
 		}
 	}
-}	
-			
+}
+
+jQuery(document).ready(function() {
+   $(".head").click(function() {   			
+		$(this).next().slideToggle("slow");
+		
+		image_clicked = $("#" + this.id + " img").attr("src");	
+		
+		image_clicked_info = image_clicked.split("/");
+		image_real_clicked = image_clicked_info[image_clicked_info.length-1];
+		image_path = image_clicked.split("img");
+		current_path = image_path[0]+"img/";
+
+		if (image_real_clicked == "div_show.gif") {
+			current_path = current_path+"div_hide.gif";
+			$("#" + this.id + " img").attr("src", current_path);
+		} else {
+			current_path = current_path+"div_show.gif";
+			$("#" + this.id + " img").attr("src", current_path)
+		}
+		
+		return false;
+ 	}).next().hide();
+});
+
 	</script>';
 
 $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Groups'));
 Display :: display_header($tool_name, 'Groups');
 
-
 echo '<div class="actions-title">';
 echo get_lang('Groups');
 echo '</div>';
 
 // save message group
-if (isset($_POST['token']) && $_POST['token'] == $_SESSION['sec_token']) {
-	if (isset($_POST['action']) && $_POST['action']=='send_message_group') {	
+if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
+
+	if (isset($_POST['action'])) {	
 		$title = $_POST['title'];
 		$content = $_POST['content'];
-		$group_id = $_POST['group_id'];
-		$parent_id = $_POST['parent_id'];	
-		$res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id);		
+		$group_id = intval($_POST['group_id']);
+		$parent_id = intval($_POST['parent_id']);
+				
+		if ($_POST['action'] == 'edit_message_group') {
+			$edit_message_id = 	intval($_POST['message_id']);					
+			$res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id, $edit_message_id);
+		} else {		
+			$res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id);	
+		}
+						
 		if (is_string($res)) {			
 			Display::display_error_message($res);
 		}		
 		Security::clear_token();
-	}	
-} else {
-	$tok = Security::get_token();	
+	}
+		
 }
 
 // getting group information
@@ -94,7 +123,7 @@ $group_id	= intval($_GET['id']);
 echo '<div id="social_wrapper">';
 
 	//this include the social menu div
-	SocialManager::show_social_menu(array('messages'));	
+	//SocialManager::show_social_menu(array('messages'));	
 	
 	echo '<div id="social_main">';
 	
@@ -134,7 +163,7 @@ if ($group_id != 0 ) {
 	//---
 		
 	//-- Show message groups	
-	echo '<div id="layout_right" style="margin-left: 282px;">';	
+	echo '<div id="layout_right" style="margin-left: 290px;">';	
 		echo '<div class="messages">';
 			if (GroupPortalManager::is_group_member($group_id)) {
 				$content = MessageManager::display_messages_for_group($group_id);				

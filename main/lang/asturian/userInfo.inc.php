@@ -175,4 +175,7 @@ $InvitationReceived = "Invitación aceptada";
 $InvitationSent = "Invitación unviada";
 $YouAlreadySentAnInvitation = "Usté yá unvió una invitación";
 $AllowSendMessageToAllPlatformUsersTitle = "Dar permisu pa unviar mensaxes a tolos usuarios de la plataforma";
+$InvitationDenied = "Invitaición non apectada";
+$UserAdded = "Usuariu amestáu";
+$FilesSizeExceedsX = "Tamañu del archivu pergrande";
 ?>

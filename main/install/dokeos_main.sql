@@ -2196,6 +2196,7 @@ CREATE TABLE message(
 	content text not null,
 	group_id int unsigned not null default 0,
 	parent_id int unsigned not null default 0,
+	update_date datetime not null default '0000-00-00 00:00:00',
 	PRIMARY KEY(id)
 );
 ALTER TABLE message ADD INDEX idx_message_user_sender(user_sender_id);

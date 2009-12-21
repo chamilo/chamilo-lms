@@ -757,4 +757,6 @@ $Coachs = "Tutores";
 $New = "Nuevu";
 $YouMustToInstallTheExtensionLDAP = "Tienes qu\'instalar la estensión LDAP";
 $AddAdditionalProfileField = "Amestar un campu del perfil d\'usuariu";
+$InvitationDenied = "Invitación non aceptada";
+$UserAdded = "Usuariu amestáu";
 ?>

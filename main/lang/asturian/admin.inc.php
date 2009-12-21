@@ -1122,4 +1122,6 @@ $AllowStudentsToCreateGroupsInSocialComment = "Permitir que los alumnos creen lo
 $AllowSendMessageToAllPlatformUsersTitle = "Permitir l\'unvíu de mensaxes a tolos usuarios de la plataforma";
 $AllowSendMessageToAllPlatformUsersComment = "Permite que se pueda unviar mensaxes a tolos usuarios de la plataforma";
 $TabsSocial = "Pestaña Rede social";
+$MessageMaxUploadFilesizeTitle = "Mensaxe: tamañu máximu del archivu a subir";
+$MessageMaxUploadFilesizeComment = "Mensaxe: tamañu máximu del archivu permitíu pa subir";
 ?>

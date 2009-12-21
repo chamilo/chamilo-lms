@@ -45,7 +45,7 @@ if (!empty($group_id) && $allowed_action) {
 	if (!empty($message_id)) {
 		$message_info = MessageManager::get_message_by_id($message_id);
 		if ($allowed_action == 'reply_message_group') {				
-			$subject  = get_lang('Re:').api_xml_http_response_encode($message_info['title']);
+			$subject  = get_lang('Reply').':'.api_xml_http_response_encode($message_info['title']);
 		} else {
 			$subject  = api_xml_http_response_encode($message_info['title']);
 			$message  = api_xml_http_response_encode($message_info['content']);

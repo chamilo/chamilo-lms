@@ -759,4 +759,5 @@ $YouMustToInstallTheExtensionLDAP = "You must install the extension LDAP";
 $AddAdditionalProfileField = "Add user profile field";
 $InvitationDenied = "Invitation denied";
 $UserAdded = "User added";
+$UpdatedIn = "Updated in";
 ?>

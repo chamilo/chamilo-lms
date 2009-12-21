@@ -80,4 +80,5 @@ $SessionCategory = "Categoría de la sesión";
 $Expand = "Expandir";
 $Collapse = "Contraer";
 $CourseDetails = "Descripción del curso";
+$GroupPendingInvitations = "Invitaciones pendientes de grupo";
 ?>

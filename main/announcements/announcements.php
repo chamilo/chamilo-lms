@@ -527,7 +527,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		if (isset($id)&&$id) {
 			// there is an Id => the announcement already exists => update mode
 			if ($ctok == $_POST['sec_token']) {
-				$edit_id = edit_advalvas_item($id,$emailTitle,$newContent,$_POST['selectedform']);
+				$file_comment = $_POST['file_comment'];
+				$file = $_FILES['user_upload'];		
+				$edit_id = edit_advalvas_item($id,$emailTitle,$newContent,$_POST['selectedform'],$file,$file_comment);
 				if (!$delete) {
 				    update_added_resources("Ad_Valvas", $id);
 				}
@@ -541,10 +543,12 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 					$result = Database::query("SELECT MAX(display_order) FROM $tbl_announcement WHERE session_id=".intval($_SESSION['id_session'])." OR session_id=0",__FILE__,__LINE__);
 					list($orderMax) = Database::fetch_row($result);
 					$order = $orderMax + 1;
-					if (!empty($_SESSION['toolgroup'])) {
-						$insert_id=store_advalvas_group_item($safe_emailTitle,$safe_newContent,$order,array('GROUP:'.$_SESSION['toolgroup']),$_POST['selectedform']);
+					$file = $_FILES['user_upload'];
+					$file_comment = $_POST['file_comment'];
+					if (!empty($_SESSION['toolgroup'])) {						
+						$insert_id=store_advalvas_group_item($safe_emailTitle,$safe_newContent,$order,array('GROUP:'.$_SESSION['toolgroup']),$_POST['selectedform'],$file,$file_comment);
 					} else {
-						$insert_id=store_advalvas_item($safe_emailTitle,$safe_newContent,$order,$_POST['selectedform'],$_POST['file_comment']);
+						$insert_id=store_advalvas_item($safe_emailTitle,$safe_newContent,$order,$_POST['selectedform'],$file,$file_comment);
 					}					
 				    store_resources($_SESSION['source_type'],$insert_id);
 				    $_SESSION['select_groupusers']="hide";

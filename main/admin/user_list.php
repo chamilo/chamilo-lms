@@ -450,7 +450,7 @@ function modify_filter($user_id,$url_params,$row)
 	$is_admin = in_array($user_id,$_admins_list);
 	$statusname = api_get_status_langvars();
 	$user_is_anonymous = false;
-	if ($row['6'] == $statusname[ANONYMOUS]) {
+	if ($row['7'] == $statusname[ANONYMOUS]) {
 		$user_is_anonymous =true;
 	}
 	if (!$user_is_anonymous) {
@@ -471,7 +471,7 @@ function modify_filter($user_id,$url_params,$row)
 	}
 
     //only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
-    if (api_is_platform_admin() || (api_is_session_admin() && $row['6'] == $statusname[STUDENT])) {
+    if (api_is_platform_admin() || (api_is_session_admin() && $row['7'] == $statusname[STUDENT])) {
     	if (!$user_is_anonymous) {
         	$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
     	} else {
@@ -480,7 +480,7 @@ function modify_filter($user_id,$url_params,$row)
     } else {
     	$result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
     }
-	if ($row['6'] != $statusname[STUDENT]) {
+	if ($row['7'] != $statusname[STUDENT]) {
 		$result .= Display::return_icon('statistics_na.gif', get_lang('Reporting')).'&nbsp;&nbsp;';
 	} else {
 		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;&nbsp;';

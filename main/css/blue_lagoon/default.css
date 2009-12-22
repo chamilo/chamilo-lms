@@ -2770,6 +2770,11 @@ a.unread {
 	line-height:150%;
 	margin: 5px 0px 8px 0px;
 }
+.message-group-date {
+	color:#666;
+	float:right;	
+}
+
 
 .view-message-content {
 	line-height:150%;
@@ -3002,6 +3007,19 @@ a.unread {
 
 .social_menu ul li {
 	padding:2px 0px;
+}
+
+#social_main {
+	float:left;
+	width: 90%;
+}
+
+#social_left {
+	float:left;
+}
+
+#social_right {
+	float:right;
 }
 
 /* INVITATIONS */

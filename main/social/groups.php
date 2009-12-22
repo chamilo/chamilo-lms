@@ -60,9 +60,17 @@ function add_image_form() {
 	}
 }
 
+function validate_text_empty (str,msg) {
+	var str = str.replace(/^\s*|\s*$/g,"");
+	if (str.length == 0) {		 		
+		alert(msg);
+		return true;			
+	}			
+}
+
 jQuery(document).ready(function() {
    $(".head").click(function() {   			
-		$(this).next().slideToggle("slow");
+		$(this).next().next().slideToggle("fast");
 		
 		image_clicked = $("#" + this.id + " img").attr("src");	
 		
@@ -80,9 +88,8 @@ jQuery(document).ready(function() {
 		}
 		
 		return false;
- 	}).next().hide();
+ 	}).next().next().hide();
 });
-
 	</script>';
 
 $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
@@ -108,7 +115,8 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 		} else {		
 			$res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id);	
 		}
-						
+		
+		// display error messages 						
 		if (is_string($res)) {			
 			Display::display_error_message($res);
 		}		
@@ -123,7 +131,7 @@ $group_id	= intval($_GET['id']);
 echo '<div id="social_wrapper">';
 
 	//this include the social menu div
-	//SocialManager::show_social_menu(array('messages'));	
+	SocialManager::show_social_menu(array('messages'));	
 	
 	echo '<div id="social_main">';
 	

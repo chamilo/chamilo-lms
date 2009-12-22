@@ -443,7 +443,7 @@ class SocialManager extends UserManager {
 	    foreach ($feeds as $url) {
 		if (empty($url)) { continue; }
 
-	        $rss = fetch_rss($url);
+	        $rss = @fetch_rss($url);
 	    	$res .= '<h2>'.$rss->channel['title'].'</h2>';
 	        $res .= '<div class="social-rss-channel-items">';
 	        $i = 1;
@@ -656,12 +656,15 @@ class SocialManager extends UserManager {
 		echo '<div class="social_menu">';
 			echo '<ul>';
 			echo '<li>'.get_lang('Menu').'</li>';
-			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.Display::return_icon('home.png').' '.get_lang('Home').'</a></li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.Display::return_icon('home.gif').' '.get_lang('Home').'</a></li>';
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a></li>';
+			
 			if ($show == 'messages') {
-				echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a></li>';
-				echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a></li>';
-				echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a></li>';
+				echo '<ul class="social_menu_messages">';
+					echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a></li>';
+					echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a></li>';
+					echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a></li>';
+				echo '</ul>';
 			}	
 	
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('lp_users.png').' '.get_lang('Invitations').'</a></li>';
@@ -709,7 +712,7 @@ class SocialManager extends UserManager {
 				// reduce image
 				$name = api_get_person_name($user_info['firstName'], $user_info['lastName']);
 				$table_row[] = '<a href="'.$url.'"><img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'" '.$friends_profile['style'].' border="1"></a>';
-				$table_row[] = '<a href="'.$url.'" style="font-size:10px;">'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</a>';
+				$table_row[] = '<a href="'.$url.'" style="font-size:10px;">'.api_get_person_name(cut($user_info['firstName'],15), cut($user_info['lastName'],15)).'</a>';
 				
 	
 				//$table_row[] = '<a href="'.$url.'">'.$user_info['lastName'].'</a>';
@@ -815,7 +818,7 @@ class SocialManager extends UserManager {
 				echo '<dt><div class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div></dt>';
 				echo '<dd>'.$user_object->teach.'</dd>';;
 			}
-			display_productions($user_object->user_id);
+			SocialManager::display_productions($user_object->user_id);
 			if ($user_object->openarea) {
 				echo '<dt><div class="actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div></dt>';
 				echo '<dd>'.$user_object->openarea.'</dd>';

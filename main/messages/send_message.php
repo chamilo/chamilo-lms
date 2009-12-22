@@ -49,15 +49,14 @@ if ($panel_id == 2 || $panel_id == 4 )  {
 	<dd><a href="javascript:void(0)" onclick="change_panel('1','<?php echo $user_id; ?>')"><?php echo api_xml_http_response_encode(get_lang('SendMessage'));?></a></dd>
 </dl>
 <?php
-}elseif($panel_id == 5 && empty($content_message)) {
+}elseif($panel_id == 5 && empty($subject_message)) {
 ?>
 	 <div id="display_response_id" style="height:200px;">
 	 <?php echo api_xml_http_response_encode(get_lang('To')); ?> :&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName'])); ?>			  		 
 	 <br />
-	 <br /><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br /><input id="txt_subject_id" type="text" style="width:300px;"><br/>
-	 <br /><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br /><textarea id="txt_area_invite" rows="4" cols="40"></textarea>
-	 <?php echo api_xml_http_response_encode(get_lang('YouShouldWriteAMessage'));  ?><br />
-	 <br />
+	 <br /><span style="color:red">*</span><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br /><input id="txt_subject_id" type="text" style="width:300px;"><br/>
+	 <br /><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br /><textarea id="txt_area_invite" rows="3" cols="40"></textarea>	 
+	 <?php echo Display::display_error_message(api_xml_http_response_encode(get_lang('YouShouldWriteASubject')));  ?>	 
 	 <button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>" onclick="action_database_panel('5','<?php echo $user_id;?>')">
 	 <?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>
 	 </div>
@@ -68,7 +67,7 @@ if ($panel_id==4 && !empty($content_message)) {
 		$subject_message=null;
 	}	
 	SocialManager::send_invitation_friend_user($user_id,$subject_message,$content_message);
-} elseif ($panel_id==5 && !empty($content_message) ) {
+} elseif ($panel_id==5 && !empty($subject_message) ) {
 	SocialManager::send_invitation_friend_user($user_id,$subject_message,$content_message);
 }
 ?>

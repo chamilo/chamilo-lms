@@ -41,27 +41,32 @@ if ($query != '') {
 	if (isset($query) && $query!='') {		
 		//get users from tags
 		$users = UserManager::get_all_user_tags($query, 0, 0, 5);	
+		$groups = GroupPortalManager::get_all_group_tags($query);
+		
+		if (empty($users) && empty($groups)) {
+			echo get_lang('SorryNoResults');	
+		}
 				
 		$results = array();
 		if (is_array($users) && count($users)> 0) {
-			echo '<h2>'.get_lang('Users').'</h2>';
-			
+			echo '<h2>'.get_lang('Users').'</h2>';			
 			foreach($users as $user) {
 				$picture = UserManager::get_picture_user($user['user_id'], $user['picture_uri'],80);
 				$url_open = '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user['user_id'].'">';
 				$url_close ='</a>';
 				$img = $url_open.'<img src="'.$picture['file'].'" />'.$url_close;
 				$user['firstname'] = $url_open.$user['firstname'].$url_close;
+				$user['lastname'] = $url_open.$user['lastname'].$url_close;
 				
 				$results[] = array($img, $user['firstname'],$user['lastname'],$user['tag']);			
 			}		
-		} else {
-			echo get_lang('SorryNoResults');
-		}
+		}		
 		Display::display_sortable_grid('search_user', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false ,true);
 		
 		//get users from tags
-		$groups = GroupPortalManager::get_all_group_tags($query);
+		
+		
+				
 		$results = array();
 		if (is_array($groups) && count($groups)>0) {
 			echo '<h2>'.get_lang('Groups').'</h2>';
@@ -74,7 +79,8 @@ if ($query != '') {
 				$results[] = array($img, $group['name'],$group['description'],$tags);			
 			}		
 		}		
-		Display::display_sortable_grid('search_group', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars,  false, array(true,true,true,true,true));			    
+		Display::display_sortable_grid('search_group', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars,  false, array(true,true,true,true,true));
+					    
 	}		
 } else {
 	//we should show something

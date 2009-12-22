@@ -131,7 +131,7 @@ $group_id	= intval($_GET['id']);
 echo '<div id="social_wrapper">';
 
 	//this include the social menu div
-	SocialManager::show_social_menu(array('messages'));	
+	SocialManager::show_social_menu('groups');	
 	
 	echo '<div id="social_main">';
 	

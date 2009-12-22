@@ -671,6 +671,16 @@ class SocialManager extends UserManager {
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png').' '.get_lang('ViewMySharedProfile').'</a></li>';
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.Display::return_icon('lp_users.png').' '.get_lang('Friends').'</a></li>';			
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.gif').' '.get_lang('Groups').'</a></li>';
+			
+			
+			if ($show == 'groups') {
+				echo '<ul class="social_menu_groups">';
+					echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('edit.gif',get_lang('CreateAgroup')).get_lang('CreateAgroup').'</a></li>';
+					echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.gif',get_lang('MyGroups')).get_lang('MyGroups').'</a></li>';
+					
+				echo '</ul>';
+			}	
+			
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('search.gif').' '.get_lang('Search').'</a></li>';
 			//echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('EditProfile').'</a>';	
 			/*

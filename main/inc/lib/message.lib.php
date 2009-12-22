@@ -213,7 +213,10 @@ class MessageManager
 			}
 		}
 		
-		if ($total_filesize > intval(api_get_setting('message_max_upload_filesize'))) {			
+		// validating fields
+		if (empty($subject)) {
+			return get_lang('YouShouldWriteASubject');
+		} else if ($total_filesize > intval(api_get_setting('message_max_upload_filesize'))) {			
 			return sprintf(get_lang("FilesSizeExceedsX"),format_file_size(api_get_setting('message_max_upload_filesize')));
 		}
 		

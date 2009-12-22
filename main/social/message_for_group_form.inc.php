@@ -72,7 +72,7 @@ if (!empty($group_id) && $allowed_action) {
 		   		$user_info=api_get_user_info($userfriend_id);
 		  		echo api_xml_http_response_encode(get_lang('To')); ?> :&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode($to_group); ?>
 		  		<br />
-		 		<br /><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br />
+		 		<br /><span style="color:red">*</span><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br />
 		 		<input id="txt_subject_id" name="title" type="text" style="width:450px;" value="<?php echo $subject ?>"><br/>
 		   		<br /><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br />		   		
 		   		<?php
@@ -86,9 +86,10 @@ if (!empty($group_id) && $allowed_action) {
 		   		?>		   		
 		   		<br /><br /><?php echo api_xml_http_response_encode(get_lang('AttachmentFiles')); ?> :<br />
 				<span id="filepaths"><div id="filepath_1"><input type="file" name="attach_1" size="20" /></div></span>
-				<div id="link-more-attach"><a href="javascript://" onclick="return add_image_form()"><?php echo get_lang('AddOneMoreFile') ?></a>&nbsp;(<?php echo api_xml_http_response_encode(sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize')))) ?>)</div>		   		
+				<div id="link-more-attach"><a href="javascript://" onclick="return add_image_form()"><?php echo get_lang('AddOneMoreFile') ?></a>&nbsp;(<?php echo api_xml_http_response_encode(sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize')))) ?>)</div>		   				   				   		
 		   		<br />
-		   		<button class="save" type="submit" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>
+		   		<button class="save" onclick="if(validate_text_empty(this.form.title.value,'<?php echo get_lang('YouShouldWriteASubject')?>')){return false;}" type="submit" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>
+		   		<div><span style="color:red">*</span><?php echo get_lang('FieldRequired') ?></div>
 	<?php } ?>
 	</dl>
 </td>

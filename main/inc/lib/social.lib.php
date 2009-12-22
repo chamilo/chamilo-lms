@@ -443,7 +443,7 @@ class SocialManager extends UserManager {
 	    foreach ($feeds as $url) {
 		if (empty($url)) { continue; }
 
-	        $rss = fetch_rss($url);
+	        $rss = @fetch_rss($url);
 	    	$res .= '<h2>'.$rss->channel['title'].'</h2>';
 	        $res .= '<div class="social-rss-channel-items">';
 	        $i = 1;
@@ -712,7 +712,7 @@ class SocialManager extends UserManager {
 				// reduce image
 				$name = api_get_person_name($user_info['firstName'], $user_info['lastName']);
 				$table_row[] = '<a href="'.$url.'"><img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'" '.$friends_profile['style'].' border="1"></a>';
-				$table_row[] = '<a href="'.$url.'" style="font-size:10px;">'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</a>';
+				$table_row[] = '<a href="'.$url.'" style="font-size:10px;">'.api_get_person_name(cut($user_info['firstName'],15), cut($user_info['lastName'],15)).'</a>';
 				
 	
 				//$table_row[] = '<a href="'.$url.'">'.$user_info['lastName'].'</a>';
@@ -818,7 +818,7 @@ class SocialManager extends UserManager {
 				echo '<dt><div class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div></dt>';
 				echo '<dd>'.$user_object->teach.'</dd>';;
 			}
-			display_productions($user_object->user_id);
+			SocialManager::display_productions($user_object->user_id);
 			if ($user_object->openarea) {
 				echo '<dt><div class="actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div></dt>';
 				echo '<dd>'.$user_object->openarea.'</dd>';

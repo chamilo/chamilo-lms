@@ -49,10 +49,11 @@ if ( isset($_REQUEST['user_friend']) ) {
 		   		 <div id="display_response_id" style="height:200px;">
 			  		 <?php echo api_xml_http_response_encode(get_lang('To')); ?> :&nbsp;&nbsp;&nbsp;&nbsp;<?php echo api_xml_http_response_encode(api_get_person_name($user_info['firstName'], $user_info['lastName'])); ?>			  		 
 			  		 <br />
-			 		 <br /><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br /><input id="txt_subject_id" type="text" style="width:300px;"><br/>
-			   		 <br /><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br /><textarea id="txt_area_invite" rows="4" cols="40"></textarea>
+			 		 <br /><span style="color:red">*</span><?php echo api_xml_http_response_encode(get_lang('Subject')); ?> :<br /><input id="txt_subject_id" type="text" style="width:300px;"><br/>
+			   		 <br /><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br /><textarea id="txt_area_invite" rows="3" cols="40"></textarea>			   		 
+			   		 <div><span style="color:red">*</span><?php echo get_lang('FieldRequired') ?></div>
 			   		 <br />
-			   		 <button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>" onclick="action_database_panel('5','<?php echo $userfriend_id;?>')"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>
+			   		 <button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>" onclick="action_database_panel('5','<?php echo $userfriend_id;?>')"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>			   		 
 		   		 </div>
 <?php
 			} else {
@@ -64,8 +65,7 @@ if ( isset($_REQUEST['user_friend']) ) {
  					<button class="save" type="button" value="<?php echo api_xml_http_response_encode(get_lang('SocialAddToFriends')); ?>" onclick="action_database_panel('4','<?php echo $userfriend_id;?>')" >
  					<?php echo api_xml_http_response_encode(get_lang('SendInvitation')) ?></button>
  				</div>
-<?php
-				}
+<?php			}
 			}
 ?>
 			</dl>

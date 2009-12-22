@@ -349,7 +349,7 @@ class GroupPortalManager
 			$user_profile = UserManager::get_picture_user($row['user_id'], $image_path['file'], 60, 'medium_');
 			if ($with_image == true) {
 				$picture = UserManager::get_picture_user($row['user_id'], $row['picture_uri'],$image_conf['height'],$image_conf['size']);						
-				$row['image'] = '<img src="'.$user_profile['file'].'"  '.$picture['style'].'  width="60" height="60"/>';
+				$row['image'] = '<img src="'.$user_profile['file'].'"  '.$picture['style'].'  />';
 			}
 			$array[$row['user_id']] = $row;			
 		}
@@ -1071,11 +1071,11 @@ class GroupPortalManager
 		
 		//@todo this must be move to default.css for dev use only
 		echo '<style> 		
-				#group_members { width:233px; height:300px; overflow-x:none; overflow-y: auto;}
-				.group_member_item { width:98px; height:86px; float:left; margin:5px 5px 15px 5px; }
+				#group_members { width:270px; height:300px; overflow-x:none; overflow-y: auto;}
+				.group_member_item { width:100px; height:130px; float:left; margin:5px 5px 15px 5px; }
 				.group_member_picture { display:block;				
 					margin:0;
-					overflow:hidden; }; 
+					overflow:hidden; };
 		</style>';
 		echo '<div id="layout-left" style="float: left; width: 270px; height: 100%;">';
 	
@@ -1185,14 +1185,15 @@ class GroupPortalManager
 				if (in_array($member['relation_type'] , array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))) {
 					//add icons		
 					if ($member['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
-						$member['lastname'].= Display::return_icon('admin_star.png', get_lang('Admin'));
-					}
-					if ($member['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
-						$member['lastname'].= Display::return_icon('moderator_star.png', get_lang('Moderator'));
-					}					
+						$icon= Display::return_icon('admin_star.png', get_lang('Admin'));
+					}elseif ($member['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
+						$icon= Display::return_icon('moderator_star.png', get_lang('Moderator'));
+					} else{
+						$icon= '';
+					}			
 					echo '<div class="group_member_item"><a href="profile.php?u='.$member['user_id'].'">';
 					echo '<div class="group_member_picture">'.$member['image'].'</div>';
-					echo api_get_person_name($member['firstname'], $member['lastname']).'</a></div>';
+					echo api_get_person_name(cut($member['firstname'],15),cut($member['lastname'],15)).'<br />'.$icon.'</a></div>';
 				}
 			}
 			if (count($members) > 15) { 

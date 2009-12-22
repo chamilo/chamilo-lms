@@ -115,7 +115,7 @@ switch ($action) {
 			$number_loop   = ($number_friends/$number_of_images);
 			$loop_friends  = ceil($number_loop);
 			$j=0;
-			$friend_html.= '<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="" >';
+			$friend_html.= '<br /><table width="100%" border="0" cellpadding="0" cellspacing="0" >';
 			for ($k=0;$k<$loop_friends;$k++) {
 				$friend_html.='<tr><td valign="top">';
 				if ($j==$number_of_images) {
@@ -139,8 +139,7 @@ switch ($action) {
 		echo $friend_html;	
 		break;	
 	default:
-		echo '';
-	
+		echo '';	
 }
 exit;
 ?>

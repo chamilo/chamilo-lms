@@ -878,9 +878,19 @@ class MessageManager
 					$html .= '<div class="message-topic" >';
 					$html .= '<a href="#" class="head" id="head_'.$topic['id'].'">
 								'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align: middle')).'
-								<span class="message-group-title-topic">'.$topic['title'].'</span>
-								<span class="message-group-date">('.get_lang('PostIn').' '.date_to_str_ago($topic['send_date']).($topic['send_date']!=$topic['update_date']?' - '.get_lang('UpdatedIn').' '.date_to_str_ago($topic['send_date']):'').')</span>
-							  </a>';							
+								<span class="message-group-title-topic">'.$topic['title'].'</span>';
+					//$html .= '<span class="message-group-date">('.get_lang('PostIn').' '.date_to_str_ago($topic['send_date']).($topic['send_date']!=$topic['update_date']?' - '.get_lang('LastUpdate').' '.date_to_str_ago($topic['send_date']):'').')</span>';
+					$html .= '</a>';
+					
+					if ($topic['send_date']!=$topic['update_date']) {
+						if (!empty($topic['update_date']) && $topic['update_date'] != '0000-00-00 00:00:00' ) {						
+							$html .= '<span class="message-group-date"> '.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).'</span>';
+						}	
+					} else {
+							$html .= '<span class="message-group-date"> '.get_lang('Created').' '.date_to_str_ago($topic['send_date']).'</span>';
+					}			
+				 
+											
 						$html .= '<div>';
 							$html.= '<div style="margin-left: '.$indent.'px;margin-bottom:10px">';
 								$html.= '<div id="message-reply-link" style="margin-right:10px">
@@ -914,7 +924,17 @@ class MessageManager
 								$html.= '<div class="message-group-title">'.$item['title'].'&nbsp;</div>';												
 								$html.= '<div class="message-group-author">'.get_lang('From').'&nbsp;<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$item['user_sender_id'].'">'.$name.'&nbsp;</a></div>';		
 								$html.= '<div class="message-group-content">'.$item['content'].'</div>';
-								$html.= '<div class="message-group-date">'.get_lang('PostIn').' '.date_to_str_ago($item['send_date']).($item['send_date']!=$item['update_date']?' - '.get_lang('UpdatedIn').' '.date_to_str_ago($item['send_date']):'').'</div>';						
+								
+								if ($item['send_date'] != $item['update_date']) {
+									if (!empty($item['update_date']) && $item['update_date'] != '0000-00-00 00:00:00' ) {						
+										$html .= '<span class="message-group-date"> '.get_lang('LastUpdate').' '.date_to_str_ago($item['update_date']).'</span>';
+									}	
+								} else {
+									$html .= '<span class="message-group-date"> '.get_lang('Created').' '.date_to_str_ago($item['send_date']).'</span>';
+								}	
+					
+								//$html.= '<div class="message-group-date">'.get_lang('PostIn').' '.date_to_str_ago($item['send_date']).($item['send_date']!=$item['update_date']?' - '.get_lang('UpdatedIn').' '.date_to_str_ago($item['send_date']):'').'</div>';
+														
 								$html.= '<div class="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>';						
 							$html.= '</div>';										
 						}

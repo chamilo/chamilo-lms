@@ -41,9 +41,7 @@ function delete_friend (element_div) {
 		});
 	}
 }
-		
-		
-		
+			
 		
 function search_image_social(element_html)  {
 	name_search=$(element_html).attr("value");

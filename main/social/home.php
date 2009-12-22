@@ -31,12 +31,64 @@ echo '<div id="social_wrapper">';
 	
 	echo '<div id="social_main">';
 	
-		echo '<div id="social_center">';
-		echo 'myinfo';
-		echo '</div>';
+		echo '<div id="social_main_sub">';
 		
-		echo '<div id="social_right">';
-		echo 'group info';
+			echo '<div id="social_top">';
+			echo get_lang('User Online').'120';
+			echo '</div>';
+		
+			echo '<div id="social_left">';
+			echo 'myinfo';
+			
+				echo '<div id="social_center">';
+				echo '</div>';	
+				echo '<div id="social_center">';
+				echo '</div>';
+				echo '<div id="social_center">';
+				echo '</div>';
+				
+			echo '</div>';
+			
+			echo '<div id="social_right">';
+					
+				$results = GroupPortalManager::get_groups_by_age(1);
+				
+				$groups = array();
+				foreach ($results as $result) {
+					
+					$id = $result['id'];
+					$url_open  = '<a href="groups.php?id='.$id.'">';
+					$url_close = '</a>';		
+					$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close, cut($result['description'],180,true));
+				}
+				if (count($groups) > 0) {		
+					echo '<h3>'.get_lang('Popular').'</h3>';	
+					Display::display_sortable_grid('newest', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));		
+				}
+				
+				
+				$results = GroupPortalManager::get_groups_by_popularity(1);
+				$groups = array();
+				foreach ($results as $result) {
+					$id = $result['id'];
+					$url_open  = '<a href="groups.php?id='.$id.'">';
+					$url_close = '</a>';		
+					
+					if ($result['count'] == 1 ) {
+						$result['count'] = $result['count'].' '.get_lang('Member');	
+					} else {
+						$result['count'] = $result['count'].' '.get_lang('Members');
+					}
+					
+					$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,$result['count'],cut($result['description'],120,true));
+				}
+				if (count($groups) > 0) {
+					echo '<h3>'.get_lang('Popular').'</h3>';
+					Display::display_sortable_grid('popular', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
+				}
+			
+			echo '</div>';
+			
 		echo '</div>';
 		
 	echo '</div>';

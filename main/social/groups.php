@@ -62,7 +62,7 @@ function add_image_form() {
 
 jQuery(document).ready(function() {
    $(".head").click(function() {   			
-		$(this).next().slideToggle("fast");
+		$(this).next().next().slideToggle("fast");
 		
 		image_clicked = $("#" + this.id + " img").attr("src");	
 		
@@ -80,7 +80,7 @@ jQuery(document).ready(function() {
 		}
 		
 		return false;
- 	}).next().hide();
+ 	}).next().next().hide();
 });
 
 	</script>';
@@ -123,7 +123,7 @@ $group_id	= intval($_GET['id']);
 echo '<div id="social_wrapper">';
 
 	//this include the social menu div
-	//SocialManager::show_social_menu(array('messages'));	
+	SocialManager::show_social_menu(array('messages'));	
 	
 	echo '<div id="social_main">';
 	

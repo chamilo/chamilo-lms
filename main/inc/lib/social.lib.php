@@ -656,12 +656,15 @@ class SocialManager extends UserManager {
 		echo '<div class="social_menu">';
 			echo '<ul>';
 			echo '<li>'.get_lang('Menu').'</li>';
-			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.Display::return_icon('home.png').' '.get_lang('Home').'</a></li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.Display::return_icon('home.gif').' '.get_lang('Home').'</a></li>';
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a></li>';
+			
 			if ($show == 'messages') {
-				echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a></li>';
-				echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a></li>';
-				echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a></li>';
+				echo '<ul class="social_menu_messages">';
+					echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a></li>';
+					echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a></li>';
+					echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a></li>';
+				echo '</ul>';
 			}	
 	
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('lp_users.png').' '.get_lang('Invitations').'</a></li>';

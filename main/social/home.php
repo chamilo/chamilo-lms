@@ -63,7 +63,7 @@ echo '<div id="social_wrapper">';
 				}
 				if (count($groups) > 0) {		
 					echo '<h3>'.get_lang('Popular').'</h3>';	
-					Display::display_sortable_grid('newest', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));		
+					Display::display_sortable_grid('home_group', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));		
 				}
 				
 				
@@ -84,7 +84,7 @@ echo '<div id="social_wrapper">';
 				}
 				if (count($groups) > 0) {
 					echo '<h3>'.get_lang('Popular').'</h3>';
-					Display::display_sortable_grid('popular', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
+					Display::display_sortable_grid('home_group', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
 				}
 			
 			echo '</div>';

@@ -1065,8 +1065,7 @@ class GroupPortalManager
 		
 		$tags		= GroupPortalManager::get_group_tags($group_id, true);
 		$members	= GroupPortalManager::get_users_by_group($group_id, true);
-		
-		
+
 		//my relation with the group is set here
 		$my_group_role = self::get_user_group_role($user_id, $group_id);
 		
@@ -1144,7 +1143,10 @@ class GroupPortalManager
 				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList')).'&nbsp;'.get_lang('MessageList').'</a></li>';	
 				echo '<li><a href="group_edit.php?id='.$group_id.'">'.			Display::return_icon('edit.gif', get_lang('EditGroup')).'&nbsp;'.get_lang('EditGroup').'</a></li>';
 				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList')).'&nbsp;'.get_lang('MemberList').'</a></li>';
-				echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList')).'&nbsp;'.get_lang('WaitingList').'</a></li>';
+								
+				if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED) {				
+					echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList')).'&nbsp;'.get_lang('WaitingList').'</a></li>';
+				}				
 				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends')).'&nbsp;'.get_lang('InviteFriends').'</a></li>';
 				
 				break;
@@ -1160,7 +1162,10 @@ class GroupPortalManager
 				
 				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList')).'&nbsp;'.get_lang('MessageList').'</a></li>';							
 				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList')).'&nbsp;'.get_lang('MemberList').'</a></li>';
-				echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList')).'&nbsp;'.get_lang('WaitingList').'</a></li>';
+				
+				if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED) {
+					echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList')).'&nbsp;'.get_lang('WaitingList').'</a></li>';
+				}				
 				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends')).'&nbsp;'.get_lang('InviteFriends').'</a></li>';
 				
 				break;

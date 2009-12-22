@@ -62,7 +62,7 @@ function add_image_form() {
 
 jQuery(document).ready(function() {
    $(".head").click(function() {   			
-		$(this).next().slideToggle("slow");
+		$(this).next().slideToggle("fast");
 		
 		image_clicked = $("#" + this.id + " img").attr("src");	
 		

@@ -2617,7 +2617,7 @@ class UserManager
 				$keyword = Database::escape_string($keyword);
 				//OR u.official_code LIKE '%".$keyword."%' 
 				// OR u.email LIKE '%".$keyword."%'
-				$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%'  )";
+				$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%' OR concat(u.firstname,' ',u.lastname) LIKE '%".$keyword."%' OR concat(u.lastname,' ',u.firstname) LIKE '%".$keyword."%' )";
 			}
 		$keyword_active = true;
 		//only active users

@@ -442,8 +442,7 @@ class SocialManager extends UserManager {
 	    if (count($feeds)==0) { return ''; }
 	    foreach ($feeds as $url) {
 		if (empty($url)) { continue; }
-
-	        $rss = fetch_rss($url);
+	        $rss = @fetch_rss($url);        
 	    	$res .= '<h2>'.$rss->channel['title'].'</h2>';
 	        $res .= '<div class="social-rss-channel-items">';
 	        $i = 1;

@@ -8,16 +8,16 @@
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
 // This is the visible toolbar set when the editor has "normal" size.
-$config['ToolbarSets']['Normal'] = array(
-	array('FitWindow','-','PasteWord','-','Undo','Redo'),
-	array('Link','Unlink','Anchor'),
+$config['ToolbarSets']['Normal'] = array(	
+	array('Link','Unlink'),
 	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex'),
 	array('Table','Smiley'),
+	array('TextColor','BGColor'),
+	array('Source'),
 	'/',
 	array('FontName','FontSize'),
 	array('Bold','Italic','Underline'),
-	array('JustifyLeft','JustifyCenter','-','OrderedList','UnorderedList','-','TextColor','BGColor'),
-	array('Source')
+	array('JustifyLeft','JustifyCenter','-','OrderedList','UnorderedList')	
 );
 
 // This is the visible toolbar set when the editor is maximized.

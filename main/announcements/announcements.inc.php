@@ -958,7 +958,7 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to,$file = array(), $fi
 		{
 			foreach ($send_to['users'] as $user)
 			{
-					api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", $_user['user_id'], '', $user);
+					api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", $_user['user_id'], 0, $user);
 			}
 		}
 	}
@@ -1033,11 +1033,11 @@ function get_all_annoucement_by_user_course($course_db, $user_id)
 	$tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db);
 	if (!empty($user_id) && is_numeric($user_id)) {
 		$user_id = intval($user_id);
-		$sql="SELECT announcement.*, toolitemproperties.*
+		$sql="SELECT DISTINCT announcement.title, announcement.content 
 						FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
 						WHERE announcement.id = toolitemproperties.ref
 						AND toolitemproperties.tool='announcement'
-						AND (toolitemproperties.insert_user_id='".$user_id."' AND toolitemproperties.to_group_id='0')
+						AND (toolitemproperties.insert_user_id='$user_id' AND (toolitemproperties.to_group_id='0' OR toolitemproperties.to_group_id is null))
 						AND toolitemproperties.visibility='1'
 						AND announcement.session_id  = 0
 						ORDER BY display_order DESC";

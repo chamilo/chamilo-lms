@@ -77,14 +77,14 @@ if (!empty($group_id) && $allowed_action) {
 		   		<br /><?php echo api_xml_http_response_encode(get_lang('Message')); ?> :<br />		   		
 		   		<?php
 				$oFCKeditor = new FCKeditor('content') ;
-				$oFCKeditor->ToolbarSet = 'profile';
+				$oFCKeditor->ToolbarSet = 'messages';
 				$oFCKeditor->Width		= '100%';
-				$oFCKeditor->Height		= '120';
+				$oFCKeditor->Height		= '130';
 				$oFCKeditor->Value		= $message;					
 				$return =	$oFCKeditor->CreateHtml();	
 				echo $return;
 		   		?>		   		
-		   		<br /><br /><?php echo api_xml_http_response_encode(get_lang('AttachmentFiles')); ?> :<br />
+		   		<br /><?php echo api_xml_http_response_encode(get_lang('AttachmentFiles')); ?> :<br />
 				<span id="filepaths"><div id="filepath_1"><input type="file" name="attach_1" size="20" /></div></span>
 				<div id="link-more-attach"><a href="javascript://" onclick="return add_image_form()"><?php echo get_lang('AddOneMoreFile') ?></a>&nbsp;(<?php echo api_xml_http_response_encode(sprintf(get_lang('MaximunFileSizeX'),format_file_size(api_get_setting('message_max_upload_filesize')))) ?>)</div>		   				   				   		
 		   		<br />

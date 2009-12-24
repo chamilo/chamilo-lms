@@ -50,7 +50,6 @@ if (api_get_setting('profile', 'picture') == 'true') {
 }
 
 Display :: display_header(null);
-
 $user_info = api_get_user_info(api_get_user_id());
 
 echo '<div id="social_wrapper">';
@@ -67,18 +66,20 @@ echo '<div id="social_wrapper">';
 			echo '</div>';
 		
 			echo '<div id="social_left">';
-
-				//@todo fix this code aswell as in main/auth/profile.php				
 				
-				$user_image_array = UserManager::get_picture_user(api_get_user_id(), $user_info['picture_uri'], 200, USER_IMAGE_SIZE_MEDIUM);
-				
+				$user_image_array = UserManager::get_picture_user(api_get_user_id(), $user_info['picture_uri'], 200, USER_IMAGE_SIZE_MEDIUM);				
 				
 				if ($user_image_array['file'] != 'unknown.jpg') {
 	    	  		echo '<img src='.$user_image_array['dir'].$user_image_array['file'].' /> <br /><br />';
 				} else {
 					echo '<img src='.$user_image_array['dir'].$user_image_array['file'].' /><br /><br />';
 				}
-
+				echo '<div>';
+					echo get_lang('Name').': '.api_get_person_name($user_info['firstName'], $user_info['lastName']);
+				echo '</div>';
+				
+				echo UserManager::get_search_form($query);
+				
 			
 				echo '<div id="social_center">';
 				echo '</div>';	
@@ -93,16 +94,18 @@ echo '<div id="social_wrapper">';
 					
 				$results = GroupPortalManager::get_groups_by_age(1);
 				
+				
 				$groups = array();
 				foreach ($results as $result) {
 					
 					$id = $result['id'];
 					$url_open  = '<a href="groups.php?id='.$id.'">';
-					$url_close = '</a>';		
+					$url_close = '</a>';
+					$result['picture_uri'] = '<img class="imageGroups" src="'.$result['picture_uri'].'" hspace="4" height="50" border="2" align="left" width="50" />';
 					$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close, cut($result['description'],180,true));
 				}
 				if (count($groups) > 0) {		
-					echo '<h3>'.get_lang('Popular').'</h3>';	
+					echo '<h3>'.get_lang('Newest').'</h3>';	
 					Display::display_sortable_grid('home_group', array(), $groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));		
 				}
 				
@@ -119,7 +122,7 @@ echo '<div id="social_wrapper">';
 					} else {
 						$result['count'] = $result['count'].' '.get_lang('Members');
 					}
-					
+					$result['picture_uri'] = '<img class="imageGroups" src="'.$result['picture_uri'].'" hspace="4" height="50" border="2" align="left" width="50" />';
 					$groups[]= array($url_open.$result['picture_uri'].$url_close, $url_open.$result['name'].$url_close,$result['count'],cut($result['description'],120,true));
 				}
 				if (count($groups) > 0) {

@@ -213,7 +213,8 @@ Display :: display_header(null);
 //User picture size is calculated from SYSTEM path
 
 $img_array= UserManager::get_user_picture_path_by_id($user_id,'web',true,true);
-$big_image =  UserManager::get_picture_user($user_id, $img_array['file'],'','big_');
+$big_image =  UserManager::get_picture_user($user_id, $img_array['file'],'',USER_IMAGE_SIZE_BIG);
+ 
 $big_image = $big_image['file'].$big_image['dir'];
 //print_r($user_info);
 // Added by Ivan Tcholakov, 03-APR-2009.
@@ -302,7 +303,7 @@ echo '<div id="social-profile-wrapper">';
 							$name_user	= api_get_person_name($friend['firstName'], $friend['lastName']);
 							$friend_html.='<div id=div_'.$friend['friend_user_id'].' class="image_friend_network" ><span><center>';
 							// the height = 92 must be the sqme in the image_friend_network span style in default.css
-							$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92, 'medium_', 'width="85" height="90" ');
+							$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92, USER_IMAGE_SIZE_MEDIUM , 'width="85" height="90" ');
 							
 							$friend_html.='<a href="profile.php?u='.$friend['friend_user_id'].'&amp;'.$link_shared.'">';
 							$friend_html.='<img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'" />';

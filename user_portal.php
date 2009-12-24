@@ -1222,7 +1222,7 @@ if ($show_menu) {
 		if ($img_array['file'] == 'unknown.jpg') {
 			$no_image =true;
 		}		
-		$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 92, 'medium_', ' width="90" height="90" ');
+		$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 92, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
 		
 		echo '<div id="social_widget" style="">';
 		if ($no_image == false)

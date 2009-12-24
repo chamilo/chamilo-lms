@@ -145,9 +145,8 @@ function LoginDelete($user_id)
  * @param   string      Statistics database name - useless
  * @param   int         Number of minutes to account logins for
  * @return  array       For each line, a list of user IDs and login dates, or FALSE on error or empty results
- * @todo remove parameter $statistics_database which is no longer necessary
  */
-function WhoIsOnline($uid=0,$statistics_database='',$valid)
+function WhoIsOnline($uid=0, $valid)
 {
 	$valid = (int) $valid;
 	$current_date=date('Y-m-d H:i:s',time());

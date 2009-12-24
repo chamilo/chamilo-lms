@@ -477,9 +477,8 @@ elseif ($displayMode == "viewContentList") // default display
 		echo '<input type="image" src="'.$image_array['dir'].$image_array['file'].'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 		}
 
-		// is the user online ?
-		$statistics_database = Database :: get_statistic_database();	
-		$users_online = WhoIsOnline($userIdViewed, $statistics_database, 30);
+		// is the user online ?			
+		$users_online = WhoIsOnline($userIdViewed, 30);
 		foreach ($users_online as $online) {
 			if (in_array($userIdViewed, $online)) {	
 				

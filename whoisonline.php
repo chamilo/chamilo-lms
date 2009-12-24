@@ -120,7 +120,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 	if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
 		$user_list = Who_is_online_in_this_course($_user['user_id'], api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
 	} else {
-		$user_list = WhoIsOnline($_user['user_id'], $_configuration['statistics_database'], api_get_setting('time_limit_whosonline'));
+		$user_list = WhoIsOnline($_user['user_id'], api_get_setting('time_limit_whosonline'));
 	}
 
 	$total = count($user_list);

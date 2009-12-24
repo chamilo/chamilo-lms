@@ -134,7 +134,7 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 // getting group information
 $group_id	= intval($_GET['id']);
 
-$who_is_on_line = get_lang('UsersOnline').' '.count(WhoIsOnline(api_get_user_id(), $statistics_database, api_get_setting('time_limit_whosonline')));
+$who_is_on_line = get_lang('UsersOnline').' '.count(WhoIsOnline(api_get_user_id(), api_get_setting('time_limit_whosonline')));
 
 echo '<div class="actions-title-groups">';
 //echo get_lang('Groups');

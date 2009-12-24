@@ -238,10 +238,9 @@ if (!empty ($_GET['student'])) {
 	}
 	echo '</div>';
 
-	// is the user online ?
-	$statistics_database = Database :: get_statistic_database();
+	// is the user online ?	
 	$student_online = Security :: remove_XSS($_GET['student']);
-	$users_online = WhoIsOnline($student_online, $statistics_database, 30);
+	$users_online = WhoIsOnline($student_online, 30);
 	foreach ($users_online as $online) {
 		if (in_array($_GET['student'], $online)) {
 			$online = get_lang('Yes');

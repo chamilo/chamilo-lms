@@ -90,10 +90,9 @@ class TestOnline extends UnitTestCase {
 		//var_dump($rarray);
 	}
 
-	function testWhoIsOnline()  {
-		$statistics_database='';
+	function testWhoIsOnline()  {		
 		$valid='';
-		$res=WhoIsOnline($uid=0,$statistics_database='',$valid);
+		$res=WhoIsOnline($uid=0,$valid);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}

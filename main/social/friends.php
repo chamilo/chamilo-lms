@@ -110,7 +110,7 @@ $user_id	= api_get_user_id();
     <table width="100%" border="0" cellpadding="0" cellspacing="0" >
       <tr>
         <td width="100%"  valign="top" class="social-align-box">&nbsp;&nbsp;<?php echo get_lang('Search') .'&nbsp;&nbsp; : &nbsp;&nbsp;'; ?>
-        	<input class="social-search-image" type="text" class="search-image" id="id_search_image" name="id_search_image" value="" onkeyup="search_image_social(this)" />
+        	<input class="social-search-image" type="text" id="id_search_image" name="id_search_image" value="" onkeyup="search_image_social(this)" />
         </td>
       </tr>
     </table></td>

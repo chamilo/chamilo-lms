@@ -2301,12 +2301,8 @@ div.image-social-content center.friend {
 }
 .social-search-image {
 	color:#000033;
-	margin-top:2px;
-	border-bottom:1px solid #6B6262;
-	border-left:1px solid #6B6262;
-	border-right:1px solid #6B6262;
-	border-top:1px solid #6B6262;
-	width:250px;
+	margin-top:2px;	
+	width:200px;
 }
 .social-subtitle-search {
 	background:#ffffff;

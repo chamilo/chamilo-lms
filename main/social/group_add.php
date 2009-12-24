@@ -105,5 +105,5 @@ echo get_lang('Groups');
 echo '</div>';
 
 $form->display();	
-	
+Display :: display_footer();
 ?>

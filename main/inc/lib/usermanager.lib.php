@@ -22,6 +22,14 @@ define('USER_FIELD_TYPE_DOUBLE_SELECT', 8);
 define('USER_FIELD_TYPE_DIVIDER', 9);
 define('USER_FIELD_TYPE_TAG', 10); 
 
+//User image sizes
+
+define('USER_IMAGE_SIZE_ORIGINAL',	1);
+define('USER_IMAGE_SIZE_BIG', 		2);
+define('USER_IMAGE_SIZE_MEDIUM', 	3);
+define('USER_IMAGE_SIZE_SMALL', 	4);
+
+
 class UserManager 
 {
 	private function __construct () {
@@ -2191,7 +2199,7 @@ class UserManager
      * @param string style css
      * @return array with the file and the style of an image i.e $array['file'] $array['style']
      */
-   public static function get_picture_user($user_id, $picture_file, $height, $size_picture = 'medium_', $style = '') {
+   public static function get_picture_user($user_id, $picture_file, $height, $size_picture = USER_IMAGE_SIZE_MEDIUM , $style = '') {
    	
     	$patch_profile = 'upload/users/';
     	$picture = array();
@@ -2200,6 +2208,24 @@ class UserManager
     		$picture['file'] = api_get_path(WEB_CODE_PATH).'img/'.$picture_file;
     		return $picture;
     	}
+    	
+    	switch ($size_picture) {
+    		case USER_IMAGE_SIZE_ORIGINAL :
+    			$size_picture = '';
+    		break;
+    		case USER_IMAGE_SIZE_BIG :
+    			$size_picture = 'big_';
+    		break;
+    		case USER_IMAGE_SIZE_MEDIUM :
+    			$size_picture = 'medium_';
+    		break;
+    		case USER_IMAGE_SIZE_SMALL :
+    			$size_picture = 'small_';
+    		break;    		
+    		default:
+    			$size_picture = 'medium_';
+    	}
+
         $image_array_sys = self::get_user_picture_path_by_id($user_id, 'system', false, true);
         $image_array = self::get_user_picture_path_by_id($user_id, 'web', false, true);
         $file = $image_array_sys['dir'].$size_picture.$picture_file;

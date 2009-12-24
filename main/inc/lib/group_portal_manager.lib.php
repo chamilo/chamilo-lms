@@ -288,7 +288,7 @@ class GroupPortalManager
 	/**
 	 * Gets the group's members
 	 */
-	public static function get_users_by_group($group_id, $with_image = false, $relation_type = array(), $from = 0, $limit = 15, $image_conf = array('size'=>'medium_','height'=>80))
+	public static function get_users_by_group($group_id, $with_image = false, $relation_type = array(), $from = 0, $limit = 15, $image_conf = array('size'=>USER_IMAGE_SIZE_MEDIUM,'height'=>80))
 	{
 		$where = '';
 		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
@@ -328,7 +328,7 @@ class GroupPortalManager
 		$array = array();
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
 			$image_path = UserManager::get_user_picture_path_by_id($row['user_id'], 'web', false, true);
-			$user_profile = UserManager::get_picture_user($row['user_id'], $image_path['file'], 60, 'medium_');
+			$user_profile = UserManager::get_picture_user($row['user_id'], $image_path['file'], 60, USER_IMAGE_SIZE_MEDIUM);
 			if ($with_image == true) {
 				$picture = UserManager::get_picture_user($row['user_id'], $row['picture_uri'],$image_conf['height'],$image_conf['size']);						
 				$row['image'] = '<img src="'.$user_profile['file'].'"  '.$picture['style'].'  />';

@@ -2566,7 +2566,7 @@ function display_user_image($user_id,$name, $origin='') {
 		$image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false, true);
 		$image_repository = $image_path['dir'];
 		$existing_image = $image_path['file'];
-		$friends_profile = UserManager::get_picture_user($user_id, $image_path['file'], 0, 'medium_' , 'width="96" height="96" ');
+		$friends_profile = UserManager::get_picture_user($user_id, $image_path['file'], 0, USER_IMAGE_SIZE_MEDIUM , 'width="96" height="96" ');
 		return 	$link.'<img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' alt="'.$name.'"  title="'.$name.'" /></a>';
 	} else {
 		return $link.'<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.$name.'"  title="'.$name.'"  /></a>';

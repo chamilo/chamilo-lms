@@ -22,9 +22,9 @@ require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
  */
 define('MESSAGE_STATUS_NEW',				'0');
 define('MESSAGE_STATUS_UNREAD',				'1');
+//2 ??
 define('MESSAGE_STATUS_DELETED',			'3');
 define('MESSAGE_STATUS_OUTBOX',				'4');
-
 define('MESSAGE_STATUS_INVITATION_PENDING',	'5');
 define('MESSAGE_STATUS_INVITATION_ACCEPTED','6');
 define('MESSAGE_STATUS_INVITATION_DENIED',	'7');
@@ -85,7 +85,7 @@ class MessageManager
 			return false;
 		}
 		$i=0;
-		$query = "SELECT * FROM $table_message WHERE user_receiver_id=".api_get_user_id()." AND msg_status=1";
+		$query = "SELECT * FROM $table_message WHERE user_receiver_id=".api_get_user_id()." AND msg_status=".MESSAGE_STATUS_UNREAD;
 		$result = Database::query($query,__FILE__,__LINE__);
 		$i = Database::num_rows($result);
 		return $i;
@@ -314,6 +314,7 @@ class MessageManager
 	public static function delete_message_by_user_receiver ($user_receiver_id,$id) {
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		if ($id != strval(intval($id))) return false;
+		$user_receiver_id = intval($user_receiver_id);
 		$id = Database::escape_string($id);
 		$sql="SELECT * FROM $table_message WHERE id=".$id." AND msg_status<>4;";
 		$rs=Database::query($sql,__FILE__,__LINE__);
@@ -323,7 +324,7 @@ class MessageManager
 			// delete attachment file
 			$res = self::delete_message_attachment_file($id,$user_receiver_id);
 			// delete message
-			$query = "UPDATE $table_message SET msg_status=3 WHERE user_receiver_id=".Database::escape_string($user_receiver_id)." AND id=".$id;
+			$query = "UPDATE $table_message SET msg_status=3 WHERE user_receiver_id=".$user_receiver_id." AND id=".$id;
 			//$query = "DELETE FROM $table_message WHERE user_receiver_id=".Database::escape_string($user_receiver_id)." AND id=".$id;
 			$result = Database::query($query,__FILE__,__LINE__);			
 			return $result;
@@ -362,7 +363,7 @@ class MessageManager
 	}
 	
 	/**
-	 * save message attachment files 
+	 * Saves a message attachment files 
 	 * @param  array 	$_FILES['name']
 	 * @param  string  	a comment about the uploaded file
 	 * @param  int		message id
@@ -496,7 +497,7 @@ class MessageManager
 	 	$table_message = Database::get_main_table(TABLE_MESSAGE);
 	 	$current_uid = api_get_user_id();
 	 	$group_id = intval($group_id);	 			
-		$query = "SELECT * FROM $table_message WHERE group_id='$group_id' AND msg_status <> 4 ORDER BY id";		
+		$query = "SELECT * FROM $table_message WHERE group_id=$group_id AND msg_status <> ".MESSAGE_STATUS_OUTBOX." ORDER BY id";		
 		$rs = Database::query($query,__FILE__,__LINE__);		
 		$data = array();
 		if (Database::num_rows($rs) > 0) {
@@ -533,7 +534,7 @@ class MessageManager
 	 		$condition_limit = " LIMIT $offset,$limit ";	
 	 	}
 	 	
-		$query = "SELECT * FROM $table_message WHERE parent_id='$parent_id' AND msg_status <> 4 $condition_group_id ORDER BY send_date DESC $condition_limit ";
+		$query = "SELECT * FROM $table_message WHERE parent_id='$parent_id' AND msg_status <> ".MESSAGE_STATUS_OUTBOX." $condition_group_id ORDER BY send_date DESC $condition_limit ";
 		$rs = Database::query($query,__FILE__,__LINE__);		
 		$data = array();
 		if (Database::num_rows($rs) > 0) {
@@ -582,7 +583,7 @@ class MessageManager
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$request=api_is_xml_http_request();
 		$sql_query = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3, user_receiver_id as col4, msg_status as col5 FROM $table_message " .
-					 "WHERE user_sender_id=".api_get_user_id()." AND msg_status=4 " .
+					 "WHERE user_sender_id=".api_get_user_id()." AND msg_status=".MESSAGE_STATUS_OUTBOX." " .
 					 "ORDER BY col$column $direction LIMIT $from,$number_of_items";
 
 		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
@@ -632,7 +633,7 @@ class MessageManager
 	 */
 	 public static function get_number_of_messages_sent () {
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
-		$sql_query = "SELECT COUNT(*) as number_messages FROM $table_message WHERE msg_status=4 AND user_sender_id=".api_get_user_id();
+		$sql_query = "SELECT COUNT(*) as number_messages FROM $table_message WHERE msg_status=".MESSAGE_STATUS_OUTBOX." AND user_sender_id=".api_get_user_id();
 		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
 		$result = Database::fetch_array($sql_result);
 		return $result['number_messages'];

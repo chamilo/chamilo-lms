@@ -97,23 +97,6 @@ class GroupPortalManager
 		return $result;
 	}
 
-
-
-	/**
-	 * This function get the quantity of URLs
-	 * @author Julio Montoya
-	 * @return int count of urls
-	 * */
-	public static function url_count()
-	{
-		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-		$sql = "SELECT count(id) as count_result FROM $table_access_url";
-		$res = Database::query($sql, __FILE__, __LINE__);
-		$url = Database::fetch_array($res,'ASSOC');
-		$result = $url['count_result'];
-		return $result;
-	}
-
 	
 	/**
 	 * Gets data of all groups
@@ -382,83 +365,6 @@ class GroupPortalManager
 		return $array;
 	}
 	
-
-
-	 /** Gets the inner join of access_url and the course table
-	 * @author Julio Montoya
-	 * @return int  access url id
-	 * @return array   Database::store_result of the result
-	 * */
-	public static function get_url_rel_course_data($access_url_id='')
-	{
-		$where ='';
-		$table_url_rel_course	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-		$tbl_course 			= Database :: get_main_table(TABLE_MAIN_COURSE);
-
-		if (!empty($access_url_id))
-			$where ="WHERE $table_url_rel_course.access_url_id = ".Database::escape_string($access_url_id);
-
-		$sql="SELECT course_code, title, access_url_id
-				FROM $tbl_course u
-				INNER JOIN $table_url_rel_course
-				ON $table_url_rel_course.course_code = code
-				$where
-				ORDER BY title, code";
-
-		$result=Database::query($sql,__FILE__,__LINE__);
-		$courses=Database::store_result($result);
-		return $courses;
-	}
-
-	/** Gets the inner join of access_url and the session table
-	 * @author Julio Montoya
-	 * @return int  access url id
-	 * @return array   Database::store_result of the result
-	 * */
-	public static function get_url_rel_session_data($access_url_id='')
-	{
-		$where ='';
-		$table_url_rel_session	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-		$tbl_session 			= Database :: get_main_table(TABLE_MAIN_SESSION);
-
-		if (!empty($access_url_id))
-			$where ="WHERE $table_url_rel_session.access_url_id = ".Database::escape_string($access_url_id);
-
-		$sql="SELECT id, name, access_url_id
-				FROM $tbl_session u
-				INNER JOIN $table_url_rel_session
-				ON $table_url_rel_session.session_id = id
-				$where
-				ORDER BY name, id";
-
-		$result=Database::query($sql,__FILE__,__LINE__);
-		$sessions=Database::store_result($result);
-		return $sessions;
-	}
-
-
-
-	/**
-	 * Sets the status of an URL 1 or 0
-	 * @author Julio Montoya
-	 * @param string lock || unlock
-	 * @param int url id
-	 * */
-	public static function set_url_status($status, $url_id)
-	{
-		$url_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-		if ($status=='lock') {
-			$status_db='0';
-		}
-		if ($status=='unlock') {
-			$status_db='1';
-		}
-		if(($status_db=='1' OR $status_db=='0') AND is_numeric($url_id)) {
-			$sql="UPDATE $url_table SET active='".Database::escape_string($status_db)."' WHERE id='".Database::escape_string($url_id)."'";
-			$result = Database::query($sql, __FILE__, __LINE__);
-		}
-	}
-
 	/**
 	* Gets the relationship between a group and a User 
 	* @author Julio Montoya
@@ -481,23 +387,7 @@ class GroupPortalManager
 		return $return_value;
 	}
 	
-
-	/**
-	* Checks the relationship between an URL and a Course (return the num_rows)
-	* @author Julio Montoya
-	* @param int user id
-	* @param int url id
-	* @return boolean true if success
-	* */
-	public static function relation_url_course_exist($course_id, $url_id)
-	{
-		$table_url_rel_course= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-		$sql= "SELECT course_code FROM $table_url_rel_course WHERE access_url_id = ".Database::escape_string($url_id)." AND course_code = '".Database::escape_string($course_id)."'";
-		$result = Database::query($sql,  __FILE__, __LINE__);
-		$num = Database::num_rows($result);
-		return $num;
-	}
-
+	
 	/**
 	 * Add a user into a group
 	 * @author Julio Montoya
@@ -588,40 +478,6 @@ class GroupPortalManager
 		$result = Database::query($sql,  __FILE__, __LINE__);
 		return $result;
 	}
-
-
-	/**
-	 * Updates the access_url_rel_user table  with a given user list
-	 * @author Julio Montoya
-	 * @param array user list
-	 * @param int access_url_id
-	 * */
-	public static function update_urls_rel_user($user_list,$access_url_id)
-	{
-		$table_access_url	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-		$table_url_rel_user	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-
-		$sql = "SELECT user_id FROM $table_url_rel_user WHERE access_url_id=".Database::escape_string($access_url_id);
-		$result = Database::query($sql,__FILE__,__LINE__ );
-		$existingUsers = array();
-
-		while($row = Database::fetch_array($result)){
-			$existingUsers[] = $row['user_id'];
-		}
-
-		//adding users
-		foreach($user_list as $enreg_user) {
-			if(!in_array($enreg_user, $existingUsers)) {
-				UrlManager::add_user_to_url($enreg_user,$access_url_id);
-			}
-		}
-		//deleting old users
-		foreach($existingUsers as $existing_user) {
-			if(!in_array($existing_user, $user_list)) {
-				UrlManager::delete_url_rel_user($existing_user,$access_url_id);
-			}
-		}
-	}
 	
 	/**
 	 * Updates the group_rel_user table  with a given user and group ids
@@ -653,56 +509,6 @@ class GroupPortalManager
 		$result = Database::query($sql, __FILE__, __LINE__);
 	}
 	
-	
-
-
-	/**
-	 * Updates the access_url_rel_course table  with a given user list
-	 * @author Julio Montoya
-	 * @param array user list
-	 * @param int access_url_id
-	 * */
-	public static function update_urls_rel_course($course_list,$access_url_id)
-	{
-		$table_course			= Database :: get_main_table(TABLE_MAIN_COURSE);
-		$table_url_rel_course	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-
-		$sql = "SELECT course_code FROM $table_url_rel_course WHERE access_url_id=".Database::escape_string($access_url_id);
-		$result = Database::query($sql,__FILE__,__LINE__ );
-		$existing_courses = array();
-
-		while($row = Database::fetch_array($result)){
-			$existing_courses[] = $row['course_code'];
-		}
-
-		//adding courses
-		foreach($course_list as $course) {
-			if(!in_array($course, $existing_courses)) {
-				UrlManager::add_course_to_url($course,$access_url_id);
-			}
-		}
-
-		//deleting old courses
-		foreach($existing_courses as $existing_course) {
-			if(!in_array($existing_course, $course_list)) {
-				UrlManager::delete_url_rel_course($existing_course,$access_url_id);
-			}
-		}
-	}
-
-	
-
-	public static function get_access_url_from_user($user_id) {
-		$table_url_rel_user	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-		$table_url	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-		$sql = "SELECT url, access_url_id FROM $table_url_rel_user url_rel_user INNER JOIN $table_url u
-			    ON (url_rel_user.access_url_id = u.id)
-			    WHERE user_id = ".Database::escape_string($user_id);
-		$result = Database::query($sql,  __FILE__, __LINE__);
-		$url_list = Database::store_result($result);
-		return $url_list;
-	}
-
 	
 	public static function get_all_group_tags($tag, $from=0, $number_of_items=10) {
 		// database table definition
@@ -1100,7 +906,7 @@ class GroupPortalManager
 		
 		//Group's description 
 		echo '<div id="group-url">';
-			echo $group_info['url'];
+			echo '<a target="_blank" href="'.$group_info['url'].'">'.$group_info['url'].'</a>';
 		echo '</div>';		
 		
 		//Privacy

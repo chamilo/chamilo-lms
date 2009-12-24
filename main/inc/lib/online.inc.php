@@ -1,25 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) Istvan Mandak
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /chamilo_license.txt */
 /**
 ==============================================================================
 *	Code library for showing Who is online
@@ -142,7 +122,6 @@ function LoginDelete($user_id)
 /**
  * Gives a list of people online now (and in the last $valid minutes)
  * @param   int User ID - useless
- * @param   string      Statistics database name - useless
  * @param   int         Number of minutes to account logins for
  * @return  array       For each line, a list of user IDs and login dates, or FALSE on error or empty results
  */
@@ -166,15 +145,13 @@ function WhoIsOnline($uid=0, $valid)
 	}
 
 	$result = @Database::query($query,__FILE__,__LINE__);
-	if (count($result)>0)
-	{
+	if (count($result)>0) {
 		$rtime = time();
 		$rdate = date("Y-m-d H:i:s",$rtime);
 		$validtime = mktime(date("H"),date("i")-$valid,date("s"),date("m"),date("d"),date("Y"));
 		$rarray = array();
 
-		while(list($login_user_id,$login_date)= Database::fetch_row($result))
-		{
+		while(list($login_user_id,$login_date)= Database::fetch_row($result)) {
 			$barray = array();
 			array_push($barray,$login_user_id);
 			array_push($barray,$login_date);
@@ -189,15 +166,12 @@ function WhoIsOnline($uid=0, $valid)
 			// db timestamp
 			$dbtime = mktime($hour,$minute,$secund,$month,$day,$year);
 
-			if ($dbtime>$validtime)
-			{
+			if ($dbtime>$validtime) {
 				array_push($rarray,$barray);
 			}
 		}
 		return $rarray;
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }
@@ -214,11 +188,9 @@ function GetFullUserName($uid)
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$query = "SELECT firstname,lastname FROM ".$user_table." WHERE user_id='$uid'";
 	$result = @Database::query($query,__FILE__,__LINE__);
-	if (count($result)>0)
-	{
+	if (count($result)>0) {
 		$str = '';
-		while(list($firstname,$lastname)= Database::fetch_array($result))
-		{
+		while(list($firstname,$lastname)= Database::fetch_array($result)) {
 			$str = str_replace(' ', '&nbsp;', api_get_person_name($firstname, $lastname));
 			return $str;
 		}
@@ -234,8 +206,7 @@ function chatcall() {
 
 	global $_user, $_cid;
 
-	if (!$_user['user_id'])
-	{
+	if (!$_user['user_id']) {
 		return (false);
 	}
 	$track_user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -295,15 +266,13 @@ function who_is_online_in_this_course($uid, $valid, $coursecode=null)
 
 	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE course='".$coursecode."' AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW() ";
 	$result = Database::query($query,__FILE__,__LINE__);
-	if (count($result)>0)
-	{
+	if (count($result)>0) {
 		$rtime = time();
 		$rdate = date("Y-m-d H:i:s",$rtime);
 		$validtime = mktime(date("H"),date("i")-$valid,date("s"),date("m"),date("d"),date("Y"));
 		$rarray = array();
 
-		while(list($login_user_id,$login_date)= Database::fetch_row($result))
-		{
+		while(list($login_user_id,$login_date)= Database::fetch_row($result)) {
 			$barray = array();
 			array_push($barray,$login_user_id);
 			array_push($barray,$login_date);
@@ -323,9 +292,7 @@ function who_is_online_in_this_course($uid, $valid, $coursecode=null)
 			}
 		}
 		return $rarray;
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }

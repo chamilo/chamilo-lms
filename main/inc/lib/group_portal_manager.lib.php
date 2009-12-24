@@ -206,8 +206,8 @@ class GroupPortalManager
 			while ($row = Database::fetch_array($result, 'ASSOC')) {
 					if ($with_image == true) {
 						$picture = self::get_picture_group($row['id'], $row['picture_uri'],80);
-						$img = '<img src="'.$picture['file'].'" />';
-						$row['picture_uri'] = $img;
+						//$img = '<img class="imageGroups" src="'.$picture['file'].'" hspace="4" height="44" border="2" align="left" width="44" />';
+						$row['picture_uri'] = $picture['file'];
 					}
 					$array[$row['id']] = $row;			
 			}
@@ -232,8 +232,7 @@ class GroupPortalManager
 			$num = intval($num);
 		}
 		// only show admins and readers
-		$where_relation_condition = " WHERE  gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."') ";
-		
+		$where_relation_condition = " WHERE  gu.relation_type IN ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."') ";		
 		$sql = "SELECT count(user_id) as count, g.picture_uri, g.name, g.description, g.id  
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
@@ -244,8 +243,8 @@ class GroupPortalManager
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
 				if ($with_image == true) {
 					$picture = self::get_picture_group($row['id'], $row['picture_uri'],80);
-					$img = '<img src="'.$picture['file'].'" />';
-					$row['picture_uri'] = $img;
+					//$img = '<img src="'.$picture['file'].'" />';
+					$row['picture_uri'] = $picture['file'];
 				}
 				$array[$row['id']] = $row;			
 		}
@@ -276,12 +275,12 @@ class GroupPortalManager
 		$result=Database::query($sql,__FILE__,__LINE__);
 		$array = array();
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
-				if ($with_image == true) {
-					$picture = self::get_picture_group($row['id'], $row['picture_uri'],80);
-					$img = '<img src="'.$picture['file'].'" />';
-					$row['picture_uri'] = $img;
-				}
-				$array[$row['id']] = $row;			
+			if ($with_image == true) {
+				$picture = self::get_picture_group($row['id'], $row['picture_uri'],80);
+				//$img = '<img src="'.$picture['file'].'" />';
+				$row['picture_uri'] = $picture['file'];
+			}	
+			$array[$row['id']] = $row;			
 		}
 		return $array;
 	}

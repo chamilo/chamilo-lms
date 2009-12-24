@@ -2156,6 +2156,21 @@ div.comments {
 	font-weight:bolder;
 	vertical-align:middle;
 }
+
+.actions-title-groups {
+	//background:#efefef;
+	//border-bottom:1px dotted #999999;
+	//border-top:1px dotted #999999;
+	padding-left:0px;
+	padding-right:0px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	margin-bottom: 5px;
+	font-size:14px;
+	font-weight:bolder;
+	vertical-align:middle;
+}
+
 /**********************************************
  *  MESSAGE TOOL                           *
  **********************************************/
@@ -2351,6 +2366,27 @@ div.image-social-content center.friend {
 	float:right;
 	width:30%;
 	margin-left: 4px;
+}
+#socialContent{
+	width:100%;
+	height:auto;
+	overflow:hidden;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+#socialContentRigth{
+	height:auto;
+	float:rigth;
+	overflow:hidden;
+	}
+#socialContentLeft {
+	float:left;
+	height:auto;
+	margin-right:16px;
+	min-height:300px;
+	width:160px;
+	overflow:hidden;
 }
 /*****************************************************
  *  BUTTONS	                                         *
@@ -2847,47 +2883,74 @@ a.unread {
 .groups_grid_element_2 { width:150px; float:left;}
 
 /*POPULAR GROUP*/
-.popular_grid_container { width:100%;}
 .popular_grid_item {
-	border:1px dotted #CCCCCC;
 	float:left;
-	height:90px;
-	margin:5px;
-	padding:5px;
-	width:500px;
+	width:350px;
+	height:165px;
+	margin-top:20px;			
+	}
+	
+.popular_grid_element_1 {
+	width:330px;
+	height:165px;
+	padding-left:10px;
+	padding-right:10px;
+	background-image:url(../../img/boxmygroupscontent.jpg);
+	background-repeat:repeat-y;
+	overflow:hidden;
 }
-.popular_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
-.popular_grid_element_1 { width:350px; float:left; text-align:left;	margin-bottom:1px; padding:1px;}
-.popular_grid_element_2 { width:200px; float:left;}
-.popular_grid_element_3 { width:200px; float:left; text-align:justify;}
+
 
 /*NEWEST GROUP*/
-.newest_grid_container { width:100%;}
+
 .newest_grid_item {
-	border:1px dotted #CCCCCC;
 	float:left;
-	height:90px;
-	margin:5px;
-	padding:5px;
-	width:500px;
+	width:350px;
+	height:165px;
+	margin-top:20px;
+	}
+	
+.newest_grid_element_1 { 
+	width:330px;
+	height:165px;
+	padding-left:10px;
+	padding-right:10px;
+	background-image:url(../../img/boxmygroupscontent.jpg);
+	background-repeat:repeat-y;
+	overflow:hidden;
 }
-.newest_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
-.newest_grid_element_1 { width:350px; float:left; text-align:left;	margin-bottom:1px; padding:1px;}
-.newest_grid_element_2 { width:400px; float:left; text-align:justify;}
 
 /*MY GROUPS*/
-.mygroups_grid_container { width:100%;}
+
+
 .mygroups_grid_item {
-	border:1px dotted #CCCCCC;
 	float:left;
-	height:90px;
-	margin:5px;
-	padding:5px;
-	width:500px;
+	width:350px;
+	height:165px;
+	margin-top:20px;
 }
-.mygroups_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
-.mygroups_grid_element_1 { width:350px; float:left; text-align:left;	margin-bottom:1px; padding:1px;}
-.mygroups_grid_element_2 { width:400px; float:left; text-align:justify;}
+	
+.mygroups_grid_element_1 { 
+	width:330px;
+	height:165px;
+	padding-left:10px;
+	padding-right:10px;
+	background-image:url(../../img/boxmygroupscontent.jpg);
+	background-repeat:repeat-y;
+	overflow:hidden;
+}
+
+.box_description_group_title {
+	float:right;width:80%;
+}
+.box_description_group_content {
+	float:right;width:80%;height:40px;
+}
+.box_description_group_actions {
+	float:right;width:80%;text-align:right;margin-top:4px;
+}
+
+//.mygroups_grid_element_2 { width:400px; float:left; text-align:justify;}
 
 /*PROFILE*/
 .profile_grid_container { width:100%;}
@@ -3020,6 +3083,118 @@ a.unread {
 
 #social_right {
 	float:right;
+}
+
+/*  SOCIAL MENU VERTICAL */
+.socialMenu  {
+	width:150px;
+	height:auto;
+}
+
+.socialMenu ul {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin:0;
+	padding:0px;
+}
+
+.socialMenu li {
+	margin-bottom:8px;
+	padding-bottom:4px;
+	background-image:url(../../img/line-social.jpg);
+	background-position:bottom;
+	background-repeat:repeat-x;
+}
+
+.socialMenu ul li a{
+	padding:2px 0px;
+}
+
+.socialMenuSubLevel {
+	margin-left:20px;}
+	
+.menuTitle{
+	width:150px;
+	float:left;
+	height:20px;
+	background-color:#32578b;
+	margin-bottom:10px;
+}
+.TitleRigth{
+	width:88%;
+	float:right;
+	height:20px;
+	background-color:#32578b;
+	margin-bottom:10px;
+}
+.menuTex1{
+	color:#fff;
+	font-size:14px;
+	font-weight:normal;
+	}
+.menuTex2{
+	color:#000;
+	font-weight:normal;
+	font-size:12px;
+	}
+.menuTex3{
+	color:#94cdf9;
+	font-weight:normal;
+	font-size:12px;
+	font-weight:bold;
+	}
+
+/*BOX MY GROPUPS*/
+
+#boxmyGroups{
+	height:auto;
+	overflow:hidden;
+	}
+
+#boxmyGroupsLeft{
+	width:100%;
+	//float:left;
+	height:auto;
+}
+#boxmyGroupsRigth{
+	width:350px;
+	float:left;
+	height:auto;
+}
+
+.boxMygroupsContent {
+	width:350px;
+	height:auto;
+	margin-top:20px;
+	}
+	
+.myGroupsContent{
+	width:330px;
+	height:auto;
+	overflow:hidden;
+	padding-left:10px;
+	padding-right:10px;
+	background-image:url(../../img/boxmygroupscontent.jpg);
+	background-repeat:repeat-y;
+	overflow:hidden;
+}
+
+.imageGroups{
+	border: 2px solid #cac9c9;
+	}
+
+
+.groupTex1{
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:#686868;
+}
+
+.groupText2{
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:#666699;
 }
 
 /* INVITATIONS */

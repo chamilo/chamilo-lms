@@ -53,9 +53,12 @@ if (!empty($group_id) && $allowed_action) {
 	} 	
 }
 
+$page_item  = !empty($_GET['page_item_nr'])?intval($_GET['page_item_nr']):1;
+$page_topic  = !empty($_GET['page_nr'])?intval($_GET['page_nr']):1;
+
 ?>
 
-<form name="form" action="groups.php?id=<?php echo $group_id ?>" method="POST" enctype="multipart/form-data">
+<form name="form" action="groups.php?id=<?php echo $group_id ?>&div_id=<?php echo Security::remove_XSS($_GET['div_id']) ?>&page_nr=<?php echo $page_topic ?>&page_item_nr=<?php echo $page_item ?>" method="POST" enctype="multipart/form-data">
 <input type="hidden" name="action" value="<?php echo $allowed_action ?>" />
 <input type="hidden" name="group_id" value="<?php echo $group_id ?>" />
 <input type="hidden" name="parent_id" value="<?php echo $message_id ?>" />

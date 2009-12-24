@@ -51,6 +51,9 @@ if (api_get_setting('profile', 'picture') == 'true') {
 
 Display :: display_header(null);
 $user_info = api_get_user_info(api_get_user_id());
+$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));
+$user_online_count = count($user_online_list); 
+	
 
 echo '<div id="social_wrapper">';
 
@@ -62,28 +65,30 @@ echo '<div id="social_wrapper">';
 		echo '<div id="social_main_sub">';
 		
 			echo '<div id="social_top">';
-			echo get_lang('FriendsOnline').'120';
+			echo get_lang('FriendsOnline').' '.$user_online_count;
 			echo '</div>';
 		
 			echo '<div id="social_left">';
 				
 				$user_image_array = UserManager::get_picture_user(api_get_user_id(), $user_info['picture_uri'], 200, USER_IMAGE_SIZE_MEDIUM);				
 				
+				echo '<div class="user_info">';
+				
 				if ($user_image_array['file'] != 'unknown.jpg') {
 	    	  		echo '<img src='.$user_image_array['dir'].$user_image_array['file'].' /> <br /><br />';
 				} else {
 					echo '<img src='.$user_image_array['dir'].$user_image_array['file'].' /><br /><br />';
 				}
-				echo '<div>';
+				
 					echo get_lang('Name').': '.api_get_person_name($user_info['firstName'], $user_info['lastName']);
 				echo '</div>';
 				
-				echo UserManager::get_search_form($query);
 				
-				$user_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));	
 				
-				SocialManager::display_user_list($user_list);
-			
+				
+				echo '<div class="user_online">';
+				SocialManager::display_user_list($user_online_list);
+				echo '</div>';	
 			
 				echo '<div id="social_center">';
 				echo '</div>';	
@@ -95,7 +100,9 @@ echo '<div id="social_wrapper">';
 			echo '</div>';
 			
 			echo '<div id="social_right">';
-					
+				
+				echo UserManager::get_search_form($query);
+				
 				$results = GroupPortalManager::get_groups_by_age(1);
 				
 				

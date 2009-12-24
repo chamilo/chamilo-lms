@@ -882,6 +882,19 @@ class GroupPortalManager
 					margin:0;
 					overflow:hidden; };
 		</style>';
+		
+		/*
+		echo '<div align="center" class="menuTitle"><span class="menuTex1">Nombre del Grupo en que me encuentro</span></div>
+		<ul>
+		<li><img src="images/newtopic.png"/> <a href="#"><span>New Topic</span></a></li>
+		<li><img src="images/messagelist.png"/> <a href="#"><span>Message list</span></a></li>
+		<li><img src="images/edit.png"/> <a href="#"><span>Edit Group</span></a></li>
+		<li><img src="images/friends.jpg"/> <a href="#"><span>Members list</span></a></li>
+		<li><img src="images/groups.jpg"/> <a href="#"><span>Invite Friends</span></a></li>
+		</ul>';
+		*/
+		
+		
 		echo '<div id="layout-left" style="float: left; width: 270px; height: 100%;">';
 	
 		//Group's title
@@ -1009,7 +1022,8 @@ class GroupPortalManager
 			
 			
 		echo '</div>';	
-	echo '</div>'; // end layout left		
+	echo '</div>'; // end layout left	
+		
 	}
 }
 ?>

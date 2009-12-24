@@ -2808,6 +2808,7 @@ a.unread {
 }
 
 
+ 
 .view-message-content {
 	line-height:150%;
 	font-size:110%;
@@ -2940,7 +2941,12 @@ a.unread {
 	float:right;width:80%;
 }
 .box_description_group_content {
-	float:right;width:80%;height:40px;
+	float:right;
+	width:80%;
+	height:45px;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:#666666;
 }
 .box_description_group_actions {
 	float:right;width:80%;text-align:right;margin-top:4px;
@@ -3118,7 +3124,7 @@ a.unread {
 	margin-bottom:10px;
 }
 .TitleRigth{
-	width:88%;
+	width:84%;
 	float:right;
 	height:20px;
 	background-color:#32578b;
@@ -3140,7 +3146,12 @@ a.unread {
 	font-size:12px;
 	font-weight:bold;
 	}
-
+.menuTex4{
+ font-family:Verdana, Geneva, sans-serif;
+ color:#000;
+ font-weight:normal;
+ font-size:12px;
+ }
 /*BOX MY GROPUPS*/
 
 #boxmyGroups{
@@ -3176,23 +3187,40 @@ a.unread {
 	overflow:hidden;
 }
 
-.imageGroups{
+.imageGroups {
 	border: 2px solid #cac9c9;
 	}
 
 
-.groupTex1{
+.groupTex1 {
 	font-family:Verdana, Geneva, sans-serif;
 	font-size:12px;
-	color:#686868;
+	color:#686868;	
 }
 
-.groupText2{
+
+
+.groupText2 {
 	font-family:Verdana, Geneva, sans-serif;
 	font-size:12px;
 	color:#666699;
+	font-weight:bold;
 }
 
+.groupText3 {
+ font-family:Verdana, Geneva, sans-serif;
+ font-size:12px;
+ color:#000;
+ font-weight:bold;
+ text-transform:capitalize;
+ margin-top:35px;
+}
+
+.groupText4 {
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:#666666;
+}
 /* INVITATIONS */
  
 .invitation_confirm {

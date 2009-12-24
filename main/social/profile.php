@@ -67,7 +67,7 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRAR
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
 $htmlHeadXtra[] = '
 <script type="text/javascript">
-function toogle_function (element_html, course_code){
+function toogle_course (element_html, course_code){
 	elem_id=$(element_html).attr("id");
 	id_elem=elem_id.split("_");
 	ident="div#div_group_"+id_elem[1];
@@ -91,7 +91,7 @@ function toogle_function (element_html, course_code){
 		beforeSend: function(objeto) {
 		$("div#"+content).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 		type: "POST",
-		url: "../social/data_personal.inc.php",
+		url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=toogle_course",
 		data: "load_ajax="+id_elem+"&action="+action+"&course_code="+course_code,
 		success: function(datos) {
 		 //$("div#"+name_div_id).hide("slow");

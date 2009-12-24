@@ -4,7 +4,6 @@
 *	@package dokeos.messages
 */
 
-
 $language_file = array('registration','messages','userInfo');
 $cidReset= true;
 require_once '../inc/global.inc.php';
@@ -77,8 +76,7 @@ echo '<div id="inbox-wrapper">';
 		} else {
 			$id_message = $_GET['id'];
 			$source = 'inbox';
-		}
-		
+		}		
 		$message = MessageManager::show_message_box($id_message,$source);
 		if (!empty($message)) {
 			echo $message;

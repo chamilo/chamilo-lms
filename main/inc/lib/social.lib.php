@@ -529,13 +529,13 @@ class SocialManager extends UserManager {
 	
 		//display course entry
 		$result .= '<div id="div_'.$count.'">';
-		//$result .= '<a id="btn_'.$count.'" href="#" onclick="toogle_function(this,\''.$course_database.'\')">';
-		$result .= '<h2><img src="../img/nolines_plus.gif" id="btn_'.$count.'" onclick="toogle_function(this,\''.$course_database.'\' )">';
+		//$result .= '<a id="btn_'.$count.'" href="#" onclick="toogle_course(this,\''.$course_database.'\')">';
+		$result .= '<h2><img src="../img/nolines_plus.gif" id="btn_'.$count.'" onclick="toogle_course(this,\''.$course_database.'\' )">';
 		$result .= $s_htlm_status_icon;
 	
 		//show a hyperlink to the course, unless the course is closed and user is not course admin
 		if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
-			$result .= '<a href="javascript:void(0)" id="ln_'.$count.'"  onclick=toogle_function(this,\''.$course_database.'\');>&nbsp;'.$course_title.'</a></h2>';
+			$result .= '<a href="javascript:void(0)" id="ln_'.$count.'"  onclick=toogle_course(this,\''.$course_database.'\');>&nbsp;'.$course_title.'</a></h2>';
 			/*
 			if(api_get_setting('use_session_mode')=='true' && !$nosession) {
 				if(empty($my_course['id_session'])) {

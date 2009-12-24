@@ -684,11 +684,11 @@ class MessageManager
 		      <td width=10>&nbsp; </td>
 		      <td vAlign=top width="100%">
 		      	<table>
-		            <TR>
-		              <TD width="100%">
+		            <tr>
+		              <td width="100%">
 		               <h1>'.str_replace("\\","",$row[5]).'</h1>
-		              </TD>
-		              <TR>';
+		              </td>
+		              <tr>';
 			if (api_get_setting('allow_social_tool') == 'true') {
 				$user_image = '';
 				/*	@todo add user image
@@ -697,33 +697,33 @@ class MessageManager
 				$user_image = '<img src="'.$user_image['file'].'" style="'.$user_image['style'].'" >';
 				*/
 				if ($source == 'outbox') {
-					$message_content .='<TD>'.get_lang('From').' '.$user_image.'<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$row[1].'">'.GetFullUserName($row[1]).'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.GetFullUserName($row[2]).'</b> </TD>';
+					$message_content .='<td>'.get_lang('From').' '.$user_image.'<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$row[1].'">'.GetFullUserName($row[1]).'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.GetFullUserName($row[2]).'</b> </TD>';
 				} else {
-					$message_content .='<TD>'.get_lang('From').' '.$user_image.'<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$row[1].'">'.GetFullUserName($row[1]).'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.get_lang('Me').'</b> </TD>';
+					$message_content .='<td>'.get_lang('From').' '.$user_image.'<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$row[1].'">'.GetFullUserName($row[1]).'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.get_lang('Me').'</b> </TD>';
 				}
 				
 			} else {
 				if ($source == 'outbox') {
-					$message_content .='<TD>'.get_lang('From').'&nbsp;'.GetFullUserName($row[1]).'</b> '.api_strtolower(get_lang('To')).' <b>'.GetFullUserName($row[2]).'</b> </TD>';
+					$message_content .='<td>'.get_lang('From').'&nbsp;'.GetFullUserName($row[1]).'</b> '.api_strtolower(get_lang('To')).' <b>'.GetFullUserName($row[2]).'</b> </TD>';
 				} else {
-					$message_content .='<TD>'.get_lang('From').'&nbsp;'.GetFullUserName($row[1]).'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b> </TD>';	
+					$message_content .='<td>'.get_lang('From').'&nbsp;'.GetFullUserName($row[1]).'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b> </TD>';	
 				}
 			}
 		
-		 $message_content .='</TR>
-		              <TR>
-		              <TD >'.get_lang('Date').'&nbsp; '.$row[4].'</TD>
-		              </TR>
-		            </TR>
-		        </TABLE>
+		 $message_content .='</tr>
+		              <tr>
+		              <td>'.get_lang('Date').'&nbsp; '.$row[4].'</TD>
+		              </tr>
+		            </tr>
+		        </table>
 		        <br />
-		        <TABLE height=209 width="100%" bgColor=#ffffff>
+		        <table height=209 width="100%" bgColor=#ffffff>
 		          <TBODY>
 		            <TR>
 		              <TD vAlign=top class="view-message-content">'.str_replace("\\","",$row[6]).'</TD>
 		            </TR>
 		          </TBODY>
-		        </TABLE>
+		        </table>
 		        <div id="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>				        		
 		        <DIV class=HT style="PADDING-BOTTOM: 5px">';
 		    $social_link = '';
@@ -735,16 +735,13 @@ class MessageManager
 		    } else {		    	
 		    	$message_content .= '<a href="inbox.php?'.$social_link.'">'.Display::return_icon('back.png',get_lang('ReturnToInbox')).get_lang('ReturnToInbox').'</a> &nbsp';
 		    	$message_content .= '<a href="new_message.php?re_id='.$message_id.'&'.$social_link.'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).get_lang('ReplyToMessage').'</a> &nbsp';
-		    }
-			
+		    }			
 			$message_content .= '<a href="inbox.php?action=deleteone&id='.$message_id.'&'.$social_link.'" >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).''.get_lang('DeleteMessage').'</a>&nbsp';
 
-		        
-		        	
-		$message_content .='</DIV></TD>
+			$message_content .='</DIV></TD>
 		      <TD width=10></TD>
 		    </TR>
-		</TABLE>';
+		</table>';
 		return $message_content;
 	}
 	

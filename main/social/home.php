@@ -80,6 +80,10 @@ echo '<div id="social_wrapper">';
 				
 				echo UserManager::get_search_form($query);
 				
+				$user_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));	
+				
+				SocialManager::display_user_list($user_list);
+			
 			
 				echo '<div id="social_center">';
 				echo '</div>';	

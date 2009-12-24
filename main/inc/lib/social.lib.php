@@ -729,7 +729,7 @@ class SocialManager extends UserManager {
 	 * Displays a sortable table with the list of online users.
 	 * @param array $user_list
 	 */
-	function display_user_list($user_list, $_plugins) {
+	function display_user_list($user_list) {
 		global $charset;
 		if ($_GET['id'] == '') {
 			$extra_params = array();
@@ -755,10 +755,7 @@ class SocialManager extends UserManager {
 				$name = api_get_person_name($user_info['firstName'], $user_info['lastName']);
 				$table_row[] = '<a href="'.$url.'"><img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'" '.$friends_profile['style'].' border="1"></a>';
 				$table_row[] = '<a href="'.$url.'" style="font-size:10px;">'.api_get_person_name(cut($user_info['firstName'],15), cut($user_info['lastName'],15)).'</a>';
-				
-	
-				//$table_row[] = '<a href="'.$url.'">'.$user_info['lastName'].'</a>';
-	
+
 				if (api_get_setting('show_email_addresses') == 'true') {
 					$table_row[] = Display::encrypted_mailto_link($user_info['mail']);
 				}
@@ -772,7 +769,7 @@ class SocialManager extends UserManager {
 			if (api_get_setting('show_email_addresses') == 'true') {
 				$table_header[] = array(get_lang('Email'), true);
 			}	
-			Display::display_sortable_table($table_header, $table_data, array(), array('per_page' => 30), $extra_params,array(),'grid');
+			Display::display_sortable_table($table_header, $table_data, array(), array('per_page' => 30), $extra_params, array(),'grid');
 		}
 	}
 	/**

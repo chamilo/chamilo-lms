@@ -92,7 +92,7 @@ class TestOnline extends UnitTestCase {
 
 	function testWhoIsOnline()  {		
 		$valid='';
-		$res=WhoIsOnline($uid=0,$valid);
+		$res=WhoIsOnline($valid);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}

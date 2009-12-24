@@ -120,7 +120,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 	if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
 		$user_list = Who_is_online_in_this_course($_user['user_id'], api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
 	} else {
-		$user_list = WhoIsOnline($_user['user_id'], api_get_setting('time_limit_whosonline'));
+		$user_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));
 	}
 
 	$total = count($user_list);
@@ -148,7 +148,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 		if (!isset($_GET['id'])) {
 			if (!api_is_anonymous())
 				echo UserManager::get_search_form($_GET['q']);				
-			SocialManager::display_user_list($user_list, $_plugins);
+			SocialManager::display_user_list($user_list);
 		} else {
 			//individual user information - also displays header info
 			SocialManager::display_individual_user(Security::remove_XSS($_GET['id']));

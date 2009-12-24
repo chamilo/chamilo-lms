@@ -121,11 +121,10 @@ function LoginDelete($user_id)
 
 /**
  * Gives a list of people online now (and in the last $valid minutes)
- * @param   int User ID - useless
  * @param   int         Number of minutes to account logins for
  * @return  array       For each line, a list of user IDs and login dates, or FALSE on error or empty results
  */
-function WhoIsOnline($uid=0, $valid)
+function WhoIsOnline($valid)
 {
 	$valid = (int) $valid;
 	$current_date=date('Y-m-d H:i:s',time());

@@ -33,8 +33,9 @@
 
 <form method="post" action="{-P self-}">
     <textarea rows="4" class="mda" name="mda" id="mda" title="{-L ConfirmDelete-}"></textarea>
-    <input type="submit" value="{-L Store-}" onClick="return checkBeforeSubmit(event);"></input>
-    <input type="submit" value="{-L DeleteAll-}" onClick="return setPendingOperation('~~', event);"></input>
+	<button class="save" type="submit" value="{-L Store-}" onClick="javascript: return checkBeforeSubmit(event);">{-L Store-}</button>
+	<button class="minus" type="submit" value="{-L DeleteAll-}" onClick="javascript:return setPendingOperation('~~', event);">{-L DeleteAll-}</button>
+
 </form>
 
 <textarea rows="10" class="mda" name="mdt" id="mdt">{-H {-P mdt-}-}</textarea>

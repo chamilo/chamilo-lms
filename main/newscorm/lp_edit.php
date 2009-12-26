@@ -54,6 +54,11 @@ $form->addElement('text', 'lp_name', api_ucfirst(get_lang('_title')),array('size
 $form->applyFilter('lp_name', 'html_filter');
 $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 
+//Metadata
+//$clean_scorm_id=Security::remove_XSS($_GET['lp_id']);
+//$metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Scorm.'.$clean_scorm_id).'">'.get_lang('AddMetadata').'</a>';
+//$form->addElement('static',null,get_lang('Metadata'),$metadata_link);
+
 //Encoding
 $encoding_select = &$form->addElement('select', 'lp_encoding', get_lang('Charset'));
 $encodings = array('UTF-8','ISO-8859-1','ISO-8859-15','cp1251','cp1252','KOI8-R','BIG5','GB2312','Shift_JIS','EUC-JP');

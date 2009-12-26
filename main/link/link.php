@@ -241,6 +241,7 @@ if(api_get_setting('search_enabled')=='true') {
 		if ($_GET['action']=="editlink")
 		{
 			echo "<input type=\"hidden\" name=\"id\" value=\"".Security::remove_XSS($_GET['id'])."\" />";
+			$clean_link_id=trim(Security::remove_XSS($_GET['id']));
 		}
 
 		echo '	<div class="row">
@@ -260,7 +261,14 @@ if(api_get_setting('search_enabled')=='true') {
 						<input type="text" name="title" size="50" value="' . api_htmlentities($title,ENT_QUOTES,$charset) . '" />
 					</div>
 				</div>';
-
+		echo '	<div class="row">
+					<div class="label">
+						'.get_lang('Metadata').'
+					</div>
+					<div class="formw">
+						<a href="../metadata/index.php?eid='.urlencode('Link.'.$clean_link_id).'">'.get_lang('AddMetadata').'</a>
+					</div>
+				</div>';
 		echo '	<div class="row">
 					<div class="label">
 						'.get_lang('Description').'

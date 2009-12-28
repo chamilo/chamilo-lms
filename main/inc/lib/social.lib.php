@@ -741,7 +741,7 @@ class SocialManager extends UserManager {
 				}
 				$image_array = UserManager::get_user_picture_path_by_id($uid, 'system', false, true);
 	
-				$friends_profile = SocialManager::get_picture_user($uid, $image_array['file'], 44, USER_IMAGE_SIZE_MEDIUM , ' width="44px" height="44px" ');
+				$friends_profile = SocialManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL );
 				// reduce image
 				$name = api_get_person_name($user_info['firstName'], $user_info['lastName']);
 

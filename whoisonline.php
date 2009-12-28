@@ -127,13 +127,30 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 	if (!isset($_GET['id'])) {
 		Display::display_header(get_lang('UsersOnLineList'));
 		
-		if (!api_is_anonymous())
-			echo SocialManager::show_social_menu();
-		
+		$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));
+		$user_online_count = count($user_online_list); 		
+		echo '<div class="actions-title-groups">';
+		echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
+				<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
+				</tr></table>';
+		/*
+		echo '<div class="menuTitle" align="center"><span class="menuTex1">'.get_lang('Menu').'</span></div>';
+		echo '<div class="TitleRigth">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.$who_is_on_line.'</span></a></div>';
+		*/		
+		echo '</div>';
+		/*
 		echo '<div class="actions-title">';
 		echo get_lang('UsersOnLineList');
 		echo '</div>';
-		echo '<div class="actions-message">'.get_lang('TotalOnLine').' : '.$total.'</div>';
+		*/
+
+		echo '<div id="socialContentLeft">';	
+			//this include the social menu div
+			if (!api_is_anonymous()) {
+				SocialManager::show_social_menu('whoisonline');
+			}	
+		echo '</div>';
+  
 		if ($_GET['id'] == '') {
 			echo '<p><a class="refresh" href="javascript:window.location.reload()">'.get_lang('Refresh').'</a></p>';
 		} else {
@@ -146,20 +163,32 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 
 	if ($user_list) {
 		if (!isset($_GET['id'])) {
-			if (!api_is_anonymous())
-				echo UserManager::get_search_form($_GET['q']);				
+			
+			echo '<div id="socialContentRigth">';	
+			//this include the social menu div
+			if (!api_is_anonymous()) {
+				echo UserManager::get_search_form($_GET['q']);
+			}	
 			SocialManager::display_user_list($user_list);
+			echo '</div>';
+			/*
+			if (!api_is_anonymous()) {
+				echo UserManager::get_search_form($_GET['q']);
+			}								
+			SocialManager::display_user_list($user_list);
+			*/
 		} else {
 			//individual user information - also displays header info
 			SocialManager::display_individual_user(Security::remove_XSS($_GET['id']));
 		}
 	} elseif (isset($_GET['id'])) {
 		Display::display_header(get_lang('UsersOnLineList'));
-		
 		echo '<div class="actions-title">';
 		echo get_lang('UsersOnLineList');
-		echo '</div>';
+		echo '</div>';		
 	}
+	
+	
 } else {
 	Display::display_header(get_lang('UsersOnLineList'));
 	Display::display_error_message(get_lang('AccessNotAllowed'));

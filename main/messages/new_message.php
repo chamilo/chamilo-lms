@@ -275,9 +275,23 @@ if ($group_id != 0) {
 	echo '</div>';
 } else {	
 	if ($_GET['f']=='social') {
+		
+		$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));
+		$user_online_count = count($user_online_list); 
+		echo '<div class="actions-title-groups">';
+		echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
+				<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
+				</tr></table>';
+		/*
+		echo '<div class="menuTitle" align="center"><span class="menuTex1">'.get_lang('Menu').'</span></div>';
+		echo '<div class="TitleRigth">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.$who_is_on_line.'</span></a></div>';
+		*/
+		echo '</div>';	
+		/*
 		echo '<div class="actions-title">';
 		echo get_lang('Messages');
 		echo '</div>';
+		*/
 	} else {
 		echo '<div class=actions>';
 		if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
@@ -294,8 +308,10 @@ if ($group_id != 0) {
 }
 
 echo '<div id="inbox-wrapper" >';
+	$id_content_right = '';
 	//LEFT COLUMN
-	if (api_get_setting('allow_social_tool') != 'true') { 
+	if (api_get_setting('allow_social_tool') != 'true') {
+		$id_content_right = 'inbox';
 		echo '<div id="inbox-menu" class="actions">';
 		echo '<ul>';
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>'.'</li>';
@@ -304,14 +320,17 @@ echo '<div id="inbox-wrapper" >';
 		echo '</ul>';
 		echo '</div>';
 	} else {
-		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
-		SocialManager::show_social_menu('messages');		
+		require_once api_get_path(LIBRARY_PATH).'social.lib.php';		
+		echo '<div id="socialContentLeft">';	
+			//this include the social menu div
+			SocialManager::show_social_menu('messages');
+		echo '</div>';
+		$id_content_right = 'socialContentRigth';				
 	}
 
-	echo '<div id="inbox">';
+	echo '<div id="'.$id_content_right.'">';
 	
-		//MAIN CONTENT
-		
+		//MAIN CONTENT		
 		if (!isset($_POST['compose'])) {					
 			if(isset($_GET['re_id'])) {
 				show_compose_reply_to_message($_GET['re_id'], api_get_user_id());

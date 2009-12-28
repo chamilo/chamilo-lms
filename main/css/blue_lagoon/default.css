@@ -2264,16 +2264,17 @@ div.image-social-content {
 	margin:2px;
 	padding: 8px 4px 4px 4px;
 	background: #ffffff;
-	height:125px;
+	height:105px;
 	width:82px;
 	z-index:5;
 	cursor:pointer;
 	position:relative;
+	overflow:hidden;
 }
 div.image-social-content span {
 	overflow:hidden;
 	display:block;
-	height:92px;
+	height:75px;
 }
 div.image-social-content img {
 	vertical-align:middle;
@@ -2708,7 +2709,6 @@ a.unread {
 	
 }
 
-
 #inbox-wrapper {width:100%;}
 
 #inbox {width:80%;float:right;}
@@ -2758,6 +2758,29 @@ a.unread {
 .groups_grid_container {
 
 } 
+
+.contentPostGroup{
+	width:660px;
+	background-image:url(../../img/content-post-group2.jpg);
+	background-repeat:repeat-y;
+	padding-left:20px;
+	padding-right:20px;
+}
+
+#div_content_table {
+	width:660px;
+	background-image:url(../../img/content-post-group2.jpg);
+	background-repeat:repeat-y;
+	padding-left:20px;
+	padding-right:20px;
+}
+
+.groupPost{
+	width:700px;
+	height:auto;
+	overflow:hidden;
+	margin-top:20px;
+}
 
 .message-item {
 	-moz-background-clip:border;
@@ -3049,17 +3072,38 @@ a.unread {
 
 /*SEARCH USER*/
 .search_user_grid_container { width:100%;}
-.search_user_grid_item { width:100px; border:1px dotted #ccc; float:left; padding:5px; margin:5px;}
+.search_user_grid_item { width:100px; height:100px; border:1px dotted #ccc; float:left; padding:5px; margin:5px; overflow:hidden;}
 .search_user_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.search_user_grid_element_0 img {width:50px;height:50px;border:3px solid #E6E6E6;}
 .search_user_grid_element_1 { width:100%;  text-align:center;}
 .search_user_grid_element_2 { width:100%;  text-align:center;}
 
 /*SEARCH GROUP*/
+
+.search_group_grid_item {
+	float:left;
+	width:350px;
+	height:165px;
+	margin-top:20px;
+}
+	
+.search_group_grid_element_1 { 
+	width:330px;
+	height:165px;
+	padding-left:10px;
+	padding-right:10px;
+	background-image:url(../../img/boxmygroupscontent.jpg);
+	background-repeat:repeat-y;
+	overflow:hidden;
+}
+
+/*
 .search_group_grid_container { width:100%;}
 .search_group_grid_item { width:500px; height: 120px; border:1px dotted #ccc; float:left; padding:5px; margin:5px;}
 .search_group_grid_element_0 { width:100px; height: 90px; float:left; text-align:center; margin-bottom:5px; padding-top:15px;}
 .search_group_grid_element_1 { width:100%;  text-align:left; padding-top:15px;  padding-bottom:15px;}
 .search_group_grid_element_2 { width:100%;  text-align:left;}
+*/
 
 
 #menu {

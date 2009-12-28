@@ -136,49 +136,27 @@ $table_message = Database::get_main_table(TABLE_MESSAGE);
 $user_sender_id=api_get_user_id();
 
 echo '<div id="inbox-wrapper">';
-	//LEFT COLUMN
-	
+	$id_content_right = '';
+	//LEFT COLUMN	
 	if (api_get_setting('allow_social_tool') != 'true') { 
+		$id_content_right = 'outbox';
 		echo '<div id="inbox-menu" class="actions">';
 		echo '<ul>';
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>'.'</li>';
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>'.'</li>';
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>'.'</li>';
 		echo '</ul>';
-		echo '</div>';
-		echo '<div id="inbox">';	
-			//MAIN CONTENT
-			if ($_REQUEST['action']=='delete') {
-				$delete_list_id=array();
-				if (isset($_POST['out'])) {
-					$delete_list_id=$_POST['out'];
-				}
-				if (isset($_POST['id'])) {
-					$delete_list_id=$_POST['id'];
-				}
-				for ($i=0;$i<count($delete_list_id);$i++) {
-					MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);
-				}
-				$delete_list_id=array();
-				outbox_display();
-			} elseif ($_REQUEST['action']=='deleteone') {
-				$delete_list_id=array();
-				$id=Security::remove_XSS($_GET['id']);
-				MessageManager::delete_message_by_user_sender(api_get_user_id(),$id);
-				$delete_list_id=array();
-				outbox_display();
-			}else {
-				outbox_display();
-			}		
-		echo '</div>';
+		echo '</div>';		
 	} else {
 		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
-		
+		$id_content_right = 'socialContentRigth';
 		echo '<div id="socialContentLeft">';	
 			//this include the social menu div
 			SocialManager::show_social_menu('messages');
-		echo '</div>';
-		echo '<div id="socialContentRigth">';
+		echo '</div>';			
+	}
+	
+	echo '<div id="'.$id_content_right.'">';
 			//MAIN CONTENT
 			if ($_REQUEST['action']=='delete') {
 				$delete_list_id=array();
@@ -202,10 +180,7 @@ echo '<div id="inbox-wrapper">';
 			}else {
 				outbox_display();
 			}
-		echo '</div>';			
-	}
-	
-	
+	echo '</div>';	
 
 echo '</div>';
 

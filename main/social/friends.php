@@ -88,16 +88,29 @@ $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Friends'));
 Display :: display_header($tool_name, 'Groups');
 
 
+$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));
+$user_online_count = count($user_online_list); 
+echo '<div class="actions-title-groups">';
+echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
+		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
+		</tr></table>';
+/*
+echo '<div class="menuTitle" align="center"><span class="menuTex1">'.get_lang('Menu').'</span></div>';
+echo '<div class="TitleRigth">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.$who_is_on_line.'</span></a></div>';
+*/
+echo '</div>';
+/*
 echo '<div class="actions-title">';
 echo get_lang('MyFriends');
 echo '</div>';
+*/
+echo '<div id="socialContent">';
 
-echo '<div id="social_wrapper">';
-
-	//this include the social menu div
-	SocialManager::show_social_menu(array('messages'));	
-	
-	echo '<div id="social_main">';
+	echo '<div id="socialContentLeft">';	
+		//this include the social menu div
+		SocialManager::show_social_menu('friends');	
+	echo '</div>';
+	echo '<div id="socialContentRigth">';
 	
 $language_variable	= api_xml_http_response_encode(get_lang('Contacts'));
 $user_id	= api_get_user_id();
@@ -121,6 +134,8 @@ $user_id	= api_get_user_id();
       <tr>
 		<td height="153" valign="top">
 			<?php
+			echo '<div class="groupPost">';
+			echo '<div>'.Display::return_icon('content-post-group1.jpg').'</div>';
 			echo '<div id="div_content_table">';
 			
 				$list_path_friends	= array();
@@ -151,10 +166,10 @@ $user_id	= api_get_user_id();
 						while ($j<$number_of_images) {
 							if (isset($friends[$j])) {
 								$friend = $friends[$j];
-								$user_name = api_xml_http_response_encode($friend['firstName'], $friend['lastName']);
+								$user_name = api_xml_http_response_encode($friend['firstName'].' '.$friend['lastName']);
 								$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92);
 								$friend_html.='<div onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$friends[$j]['friend_user_id'].'>';
-								$friend_html.='<span><a href="profile.php?u='.$friend['friend_user_id'].'"><center><img src="'.$friends_profile['file'].'" '.$friends_profile['style'].' id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" /></center></a></span>';
+								$friend_html.='<span><a href="profile.php?u='.$friend['friend_user_id'].'"><center><img src="'.$friends_profile['file'].'" style="width:60px;height:60px;border:3pt solid #eee" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" /></center></a></span>';
 								$friend_html.='<img onclick="delete_friend (this)" id=img_'.$friend['friend_user_id'].' src="../img/blank.gif" alt="" title=""  class="image-delete" /> <center class="friend">'.$user_name.'</center></div>';				
 							}
 							$j++;
@@ -164,6 +179,7 @@ $user_id	= api_get_user_id();
 					$friend_html.='<br/></table>';
 				}
 				echo $friend_html;
+			echo '</div>';
 			echo '</div>';
 			?>
 		</td>

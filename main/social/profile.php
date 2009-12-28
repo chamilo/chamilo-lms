@@ -555,7 +555,7 @@ echo '<div id="social-profile-container">';
 				if (!empty($extra_information_value))
 					echo $extra_information;
 				
-					$results = GroupPortalManager::get_groups_by_user($user_id , 0, true);
+					$results = GroupPortalManager::get_groups_by_user($user_id , 0);
 					$groups = array();
 
 					foreach ($results as $result) {
@@ -564,7 +564,10 @@ echo '<div id="social-profile-container">';
 						$url_close = '</a>';
 						if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {			
 							$result['name'].= Display::return_icon('admin_star.png', get_lang('Admin'));
-						}
+						} 						
+						
+						$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);							
+						$result['picture_uri'] = '<img class="imageGroups" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
 						$groups[]= array($url_open.$result['picture_uri'].$url_close, 												$url_open.$result['name'].$url_close);
 					}
 					if (count($groups)> 0) {

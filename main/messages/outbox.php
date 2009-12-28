@@ -79,14 +79,24 @@ if ($_GET['f']=='social') {
 Display::display_header('');
 
 if ($_GET['f']=='social') {
-		echo '<div class="actions-title">';
-	echo get_lang('Messages');
+	
+	$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));
+	$user_online_count = count($user_online_list); 
+	echo '<div class="actions-title-groups">';
+	echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
+			<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
+			</tr></table>';
+	/*
+	echo '<div class="menuTitle" align="center"><span class="menuTex1">'.get_lang('Menu').'</span></div>';
+	echo '<div class="TitleRigth">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.$who_is_on_line.'</span></a></div>';
+	*/
 	echo '</div>';
-/*	require_once api_get_path(LIBRARY_PATH).'social.lib.php';
-	SocialManager::show_social_menu();
+	/*
 	echo '<div class="actions-title">';
 	echo get_lang('Messages');
-	echo '</div>';*/
+	echo '</div>';
+	*/
+
 } else {
 	
 	if (api_get_setting('extended_profile') == 'true') {
@@ -136,38 +146,66 @@ echo '<div id="inbox-wrapper">';
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>'.'</li>';
 		echo '</ul>';
 		echo '</div>';
+		echo '<div id="inbox">';	
+			//MAIN CONTENT
+			if ($_REQUEST['action']=='delete') {
+				$delete_list_id=array();
+				if (isset($_POST['out'])) {
+					$delete_list_id=$_POST['out'];
+				}
+				if (isset($_POST['id'])) {
+					$delete_list_id=$_POST['id'];
+				}
+				for ($i=0;$i<count($delete_list_id);$i++) {
+					MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);
+				}
+				$delete_list_id=array();
+				outbox_display();
+			} elseif ($_REQUEST['action']=='deleteone') {
+				$delete_list_id=array();
+				$id=Security::remove_XSS($_GET['id']);
+				MessageManager::delete_message_by_user_sender(api_get_user_id(),$id);
+				$delete_list_id=array();
+				outbox_display();
+			}else {
+				outbox_display();
+			}		
+		echo '</div>';
 	} else {
 		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
-		SocialManager::show_social_menu('messages');		
+		
+		echo '<div id="socialContentLeft">';	
+			//this include the social menu div
+			SocialManager::show_social_menu('messages');
+		echo '</div>';
+		echo '<div id="socialContentRigth">';
+			//MAIN CONTENT
+			if ($_REQUEST['action']=='delete') {
+				$delete_list_id=array();
+				if (isset($_POST['out'])) {
+					$delete_list_id=$_POST['out'];
+				}
+				if (isset($_POST['id'])) {
+					$delete_list_id=$_POST['id'];
+				}
+				for ($i=0;$i<count($delete_list_id);$i++) {
+					MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);
+				}
+				$delete_list_id=array();
+				outbox_display();
+			} elseif ($_REQUEST['action']=='deleteone') {
+				$delete_list_id=array();
+				$id=Security::remove_XSS($_GET['id']);
+				MessageManager::delete_message_by_user_sender(api_get_user_id(),$id);
+				$delete_list_id=array();
+				outbox_display();
+			}else {
+				outbox_display();
+			}
+		echo '</div>';			
 	}
 	
-	echo '<div id="inbox">';
 	
-		//MAIN CONTENT
-		if ($_REQUEST['action']=='delete') {
-			$delete_list_id=array();
-			if (isset($_POST['out'])) {
-				$delete_list_id=$_POST['out'];
-			}
-			if (isset($_POST['id'])) {
-				$delete_list_id=$_POST['id'];
-			}
-			for ($i=0;$i<count($delete_list_id);$i++) {
-				MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);
-			}
-			$delete_list_id=array();
-			outbox_display();
-		} elseif ($_REQUEST['action']=='deleteone') {
-			$delete_list_id=array();
-			$id=Security::remove_XSS($_GET['id']);
-			MessageManager::delete_message_by_user_sender(api_get_user_id(),$id);
-			$delete_list_id=array();
-			outbox_display();
-		}else {
-			outbox_display();
-		}
-		
-	echo '</div>';
 
 echo '</div>';
 

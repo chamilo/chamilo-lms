@@ -118,7 +118,7 @@ $user_id = api_get_user_id();
 
 $list_get_invitation		= SocialManager::get_list_invitation_of_friends_by_user_id($user_id);
 $list_get_invitation_sent	= SocialManager::get_list_invitation_sent_by_user_id($user_id);
-$pending_invitations 		= GroupPortalManager::get_groups_by_user($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION, true);
+$pending_invitations 		= GroupPortalManager::get_groups_by_user($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION);
 
 $number_loop=count($list_get_invitation);
 
@@ -212,7 +212,11 @@ if (count($pending_invitations) > 0) {
 	$new_invitation = array();
 	
 	foreach ($pending_invitations as $invitation) {
-		$invitation['picture_uri'] = '<a href="groups.php?id='.$invitation['id'].'">'.$invitation['picture_uri'].'</a>';		
+		
+		$picture = GroupPortalManager::get_picture_group($invitation['id'], $invitation['picture_uri'],80);							
+		$img = '<img class="imageGroups" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
+		
+		$invitation['picture_uri'] = '<a href="groups.php?id='.$invitation['id'].'">'.$img.'</a>';		
 		$invitation['name'] = '<a href="groups.php?id='.$invitation['id'].'">'.cut($invitation['name'],120,true).'</a>';
 		$invitation['join'] = '<a href="invitations.php?accept='.$invitation['id'].'">'.get_lang('AcceptInvitation').'</a>';
 		$invitation['deny'] = '<a href="invitations.php?deny='.$invitation['id'].'">'.get_lang('DenyInvitation').'</a>';

@@ -206,8 +206,8 @@ class GroupPortalManager
 			while ($row = Database::fetch_array($result, 'ASSOC')) {
 					if ($with_image == true) {
 						$picture = self::get_picture_group($row['id'], $row['picture_uri'],80);
-						//$img = '<img class="imageGroups" src="'.$picture['file'].'" hspace="4" height="44" border="2" align="left" width="44" />';
-						$row['picture_uri'] = $picture['file'];
+						$img = '<img src="'.$picture['file'].'" />';
+						$row['picture_uri'] = $img;
 					}
 					$array[$row['id']] = $row;			
 			}
@@ -243,8 +243,8 @@ class GroupPortalManager
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
 				if ($with_image == true) {
 					$picture = self::get_picture_group($row['id'], $row['picture_uri'],80);
-					//$img = '<img src="'.$picture['file'].'" />';
-					$row['picture_uri'] = $picture['file'];
+					$img = '<img src="'.$picture['file'].'" />';
+					$row['picture_uri'] = $img;
 				}
 				$array[$row['id']] = $row;			
 		}
@@ -277,8 +277,8 @@ class GroupPortalManager
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
 			if ($with_image == true) {
 				$picture = self::get_picture_group($row['id'], $row['picture_uri'],80);
-				//$img = '<img src="'.$picture['file'].'" />';
-				$row['picture_uri'] = $picture['file'];
+				$img = '<img src="'.$picture['file'].'" />';
+				$row['picture_uri'] = $img;
 			}	
 			$array[$row['id']] = $row;			
 		}
@@ -326,12 +326,11 @@ class GroupPortalManager
 			
 		$result=Database::query($sql,__FILE__,__LINE__);
 		$array = array();
-		while ($row = Database::fetch_array($result, 'ASSOC')) {
-			$image_path = UserManager::get_user_picture_path_by_id($row['user_id'], 'web', false, true);
-			$user_profile = UserManager::get_picture_user($row['user_id'], $image_path['file'], 60, USER_IMAGE_SIZE_MEDIUM);
-			if ($with_image == true) {
-				$picture = UserManager::get_picture_user($row['user_id'], $row['picture_uri'],$image_conf['height'],$image_conf['size']);						
-				$row['image'] = '<img src="'.$user_profile['file'].'"  '.$picture['style'].'  />';
+		while ($row = Database::fetch_array($result, 'ASSOC')) {			
+			if ($with_image == true) {				
+				$image_path = UserManager::get_user_picture_path_by_id($row['user_id'], 'web', false, true);												
+				$picture = UserManager::get_picture_user($row['user_id'], $image_path['file'],$image_conf['height'],$image_conf['size']);										
+				$row['image'] = '<img src="'.$picture['file'].'"  '.$picture['style'].'  />';
 			}
 			$array[$row['user_id']] = $row;			
 		}
@@ -864,12 +863,12 @@ class GroupPortalManager
 	 */
 	public static function show_group_column_information($group_id, $user_id) {
 		
-		$group_info = GroupPortalManager::get_group_data($group_id); 
-		$picture	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,'medium_');
-		$big_image	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'','big_');
-		
-		$tags		= GroupPortalManager::get_group_tags($group_id, true);
-		$members	= GroupPortalManager::get_users_by_group($group_id, true);
+		$group_info 	= GroupPortalManager::get_group_data($group_id); 
+		$picture		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,'medium_');
+		$big_image		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'','big_');		
+		$tags			= GroupPortalManager::get_group_tags($group_id, true);
+		$members		= GroupPortalManager::get_users_by_group($group_id);
+		$groups_by_user	= GroupPortalManager::get_groups_by_user($user_id, 0);
 
 		//my relation with the group is set here
 		$my_group_role = self::get_user_group_role($user_id, $group_id);
@@ -882,18 +881,115 @@ class GroupPortalManager
 					margin:0;
 					overflow:hidden; };
 		</style>';
+
+		//loading group permission
+		
+		echo '<div align="center" class="menuTitle"><span class="menuTex1">'.cut($group_info['name'],40,true).'</span></div>';
+		echo '<ul>';
+		
+		switch ($my_group_role) {
+			case GROUP_USER_PERMISSION_READER:
+				// I'm just a reader
+				//echo get_lang('IamAReader');								
+				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('NewTopic').'</span></a></li>';
+				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList')).'&nbsp;'.get_lang('MessageList').'</a></li>';
+				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends')).'&nbsp;'.get_lang('InviteFriends').'</a></li>';
+				echo '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.get_lang('LeaveGroup').'</a></li>';					
+				break;
+			case GROUP_USER_PERMISSION_ADMIN:
+				//echo get_lang('IamAnAdmin');
+				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('NewTopic').'</span></a></li>';
+				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('MessageList').'</span></a></li>';	
+				echo '<li><a href="group_edit.php?id='.$group_id.'">'.			Display::return_icon('edit.gif', get_lang('EditGroup'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('EditGroup').'</span></a></li>';
+				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('MemberList').'</span></a></li>';								
+				if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED) {				
+					echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('WaitingList').'</span></a></li>';
+				}				
+				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('InviteFriends').'</span></a></li>';				
+				break;
+			case GROUP_USER_PERMISSION_PENDING_INVITATION:				
+				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'"><span class="menuTex4" >'.get_lang('YouHaveBeenInvitedJoinNow').'</span></a></li>';
+				break;
+			case GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
+				echo get_lang('WaitingForAdminResponse');
+				break;
+			case GROUP_USER_PERMISSION_MODERATOR:
+				//echo get_lang('IamAModerator');
+				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('NewTopic').'</span></a></li>';				
+				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('MessageList').'</span></a></li>';							
+				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('MemberList').'</span></a></li>';				
+				if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED) {
+					echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('WaitingList').'</span></a></li>';
+				}				
+				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('InviteFriends').'</span></a></li>';				
+				break;
+			default:
+				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'"><span class="menuTex4" >'.get_lang('JoinGroup').'</a></span></li>';
+			break;
+		}
+		echo '</ul>';
+						
+		//Members
+		echo '<div align="center" class="menuTitle"><span class="menuTex1">'.get_lang('Members').'</span></div>';
+		echo '<div align="center">';		
+			$min_count_members = 4;
+			$i = 1;
+			foreach($members as $member) {				
+				if ($i > $min_count_members) break;				
+				// if is a member
+				if (in_array($member['relation_type'] , array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))) {
+					//add icons		
+					if ($member['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
+						$icon= Display::return_icon('admin_star.png', get_lang('Admin'));
+					}elseif ($member['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
+						$icon= Display::return_icon('moderator_star.png', get_lang('Moderator'));
+					} else{
+						$icon= '';
+					}
+					$image_path = UserManager::get_user_picture_path_by_id($member['user_id'], 'web', false, true);				
+					$picture = UserManager::get_picture_user($member['user_id'], $image_path['file'], 60, USER_IMAGE_SIZE_MEDIUM);					
+					echo '<a href="profile.php?u='.$member['user_id'].'">';
+					echo '<img height="44" border="2" align="middle" width="44" vspace="10" class="imageGroups" src="'.$picture['file'].'"/>';
+					echo '<div>'.api_get_person_name(cut($member['firstname'],15),cut($member['lastname'],15)).'&nbsp;'.$icon.'</div></a>';
+					$i++;
+				}				
+			}			
+			if (count($members) > $min_count_members) { 
+				//More link
+				echo '<div class="group_member_more" style="margin-top:20px;"><a href="group_members.php?id='.$group_id.'">'.get_lang('SeeMore').'</a></div>';
+			}			
+		echo '</div>';
+		echo '<br />';
+		// my other groups				
+		if (count($groups_by_user) > 0) {												
+			echo '<div align="center" class="menuTitle"><span class="menuTex1">'.get_lang('MyOtherGroups').'</span></div>';
+			echo '<div align="center">';		
+				$min_count_groups = 4;
+				$i = 1;
+				$more_link = false;
+				foreach($groups_by_user as $group) {			
+					if ($group['id'] == $group_id) continue;
+					if ($i > $min_count_groups) {
+						$more_link = true;
+						break;
+					}									
+					$picture = GroupPortalManager::get_picture_group($group['id'], $group['picture_uri'],80);																						
+					echo '<a href="groups.php?id='.$group['id'].'">';
+					echo '<img height="44" border="2" align="middle" width="44" vspace="10" class="imageGroups" src="'.$picture['file'].'"/>';
+					echo '<div>'.cut($group['name'],50,true).'</div></a>';
+					$i++;
+				}			
+				if ($more_link) { 
+					//More link
+					echo '<div class="mygroups_more" style="margin-top:20px;"><a href="mygroups.php?u='.$user_id.'">'.get_lang('SeeMore').'</a></div>';
+				}			
+			echo '</div>';				
+		}
+		
+		
+	
 		
 		/*
-		echo '<div align="center" class="menuTitle"><span class="menuTex1">Nombre del Grupo en que me encuentro</span></div>
-		<ul>
-		<li><img src="images/newtopic.png"/> <a href="#"><span>New Topic</span></a></li>
-		<li><img src="images/messagelist.png"/> <a href="#"><span>Message list</span></a></li>
-		<li><img src="images/edit.png"/> <a href="#"><span>Edit Group</span></a></li>
-		<li><img src="images/friends.jpg"/> <a href="#"><span>Members list</span></a></li>
-		<li><img src="images/groups.jpg"/> <a href="#"><span>Invite Friends</span></a></li>
-		</ul>';
-		*/
-		
 		
 		echo '<div id="layout-left" style="float: left; width: 270px; height: 100%;">';
 	
@@ -1023,6 +1119,7 @@ class GroupPortalManager
 			
 		echo '</div>';	
 	echo '</div>'; // end layout left	
+	*/
 		
 	}
 }

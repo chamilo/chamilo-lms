@@ -2949,7 +2949,11 @@ a.unread {
 	color:#666666;
 }
 .box_description_group_actions {
-	float:right;width:80%;text-align:right;margin-top:4px;
+	float:right;
+	width:80%;
+	text-align:right;
+	margin-top:4px;
+	margin-right:4px;
 }
 
 //.mygroups_grid_element_2 { width:400px; float:left; text-align:justify;}
@@ -2983,6 +2987,24 @@ a.unread {
 .group_invitation_grid_element_2 { width:150px; float:left;}
 
 
+/* home group boxes */
+
+.home_group_grid_element_1 {
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:#666699;
+	font-weight:bold;
+	margin:2px;
+	padding:2px;
+}
+.home_group_grid_element_2 {
+	float:right;
+	width:80%;
+	height:45px;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:#666666;
+}
 /*INVITATION IN PROFILE*/
 .invitation_profile_grid_container { width:100%;}
 .invitation_profile_grid_item {
@@ -3119,7 +3141,7 @@ a.unread {
 .menuTitle{
 	width:150px;
 	float:left;
-	height:20px;
+	height:auto;
 	background-color:#32578b;
 	margin-bottom:10px;
 }
@@ -3160,14 +3182,15 @@ a.unread {
 	}
 
 #boxmyGroupsLeft{
-	width:100%;
-	//float:left;
+	width:350px;
+	float:left;
 	height:auto;
 }
 #boxmyGroupsRigth{
 	width:350px;
 	float:left;
 	height:auto;
+	margin-left:50px;
 }
 
 .boxMygroupsContent {
@@ -3180,7 +3203,7 @@ a.unread {
 	width:330px;
 	height:auto;
 	overflow:hidden;
-	padding-left:10px;
+	padding-left:15px;
 	padding-right:10px;
 	background-image:url(../../img/boxmygroupscontent.jpg);
 	background-repeat:repeat-y;
@@ -3216,11 +3239,23 @@ a.unread {
  margin-top:35px;
 }
 
+.home_group_title {
+	border-bottom:1pt dotted #000;
+	padding:2px;
+	margin-bottom:5px;
+	font-weight:bold;
+}
+
 .groupText4 {
 	font-family:Verdana, Geneva, sans-serif;
 	font-size:12px;
 	color:#666666;
 }
+
+.inicioUserOnline {
+	border:3px solid #E6E6E6;
+}
+
 /* INVITATIONS */
  
 .invitation_confirm {

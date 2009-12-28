@@ -136,9 +136,22 @@ Display::display_header('');
 $social_parameter = '';
 
 if ($_GET['f']=='social') {
+	$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));
+	$user_online_count = count($user_online_list); 
+	echo '<div class="actions-title-groups">';
+	echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
+			<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
+			</tr></table>';
+	/*
+	echo '<div class="menuTitle" align="center"><span class="menuTex1">'.get_lang('Menu').'</span></div>';
+	echo '<div class="TitleRigth">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.$who_is_on_line.'</span></a></div>';
+	*/
+	echo '</div>';
+	/*
 	echo '<div class="actions-title">';
 	echo get_lang('Messages');
 	echo '</div>';
+	*/
 	$social_parameter = '?f=social';
 } else {
 	//comes from normal profile
@@ -157,7 +170,6 @@ if ($_GET['f']=='social') {
 
 }
 
-
 echo '<div id="inbox-wrapper">';
 		//LEFT CONTENT
 			
@@ -169,29 +181,44 @@ echo '<div id="inbox-wrapper">';
 			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>'.'</li>';
 		echo '</ul>';
 		echo '</div>';
+		echo '<div id="inbox">';
+			//MAIN CONTENT
+			if (!isset($_GET['del_msg'])) {	
+				inbox_display();
+			} else {
+				$num_msg = intval($_POST['total']);
+				for ($i=0;$i<$num_msg;$i++) {
+					if($_POST[$i]) {
+						//the user_id was necesarry to delete a message??
+						MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);
+					}
+				}
+				inbox_display();
+			}
+		echo '</div>';	
 	} else {
 		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
-		SocialManager::show_social_menu('messages');		
-	}
-	
-	
-	
-
-	echo '<div id="inbox">';
+		
+		echo '<div id="socialContentLeft">';	
+			//this include the social menu div
+			SocialManager::show_social_menu('messages');
+		echo '</div>';
+		echo '<div id="socialContentRigth">';
 			//MAIN CONTENT
-	if (!isset($_GET['del_msg'])) {	
-		inbox_display();
-	} else {
-		$num_msg = intval($_POST['total']);
-		for ($i=0;$i<$num_msg;$i++) {
-			if($_POST[$i]) {
-				//the user_id was necesarry to delete a message??
-				MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);
+			if (!isset($_GET['del_msg'])) {	
+				inbox_display();
+			} else {
+				$num_msg = intval($_POST['total']);
+				for ($i=0;$i<$num_msg;$i++) {
+					if($_POST[$i]) {
+						//the user_id was necesarry to delete a message??
+						MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);
+					}
+				}
+				inbox_display();
 			}
-		}
-		inbox_display();
+		echo '</div>';	
 	}
-	echo '</div>';
 
 echo '</div>';
 

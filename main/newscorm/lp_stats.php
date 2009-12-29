@@ -186,7 +186,7 @@ if (is_array($list) && count($list) > 0){
 			" AND v.user_id = " . $user_id . " " .
 			" ORDER BY iv.view_count $qry_order ";
 		}
-		echo $sql.'<br/>';
+		$sql.'<br/>';
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$num = Database :: num_rows($result);
 		$time_for_total = 'NaN';
@@ -509,7 +509,7 @@ if (is_array($list) && count($list) > 0){
 				}
 			}
 			$time_for_total = $subtotal_time;
-			echo $subtotal_time.' - ';
+			$subtotal_time.' - ';
 			$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
 			if (empty ($title)) {
 				$title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);

@@ -481,7 +481,7 @@ if (is_array($list) && count($list) > 0){
 						$res_score = Database::query($sql,__FILE__,__LINE__);
 						$row_score = Database::fetch_array($res_score);
 
-						echo $sql = "SELECT SUM(total_time) as total_time FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '".(int)$my_id."' and lp_view_id = '".(int)$my_lp_view_id."'";
+						$sql = "SELECT SUM(total_time) as total_time FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '".(int)$my_id."' and lp_view_id = '".(int)$my_lp_view_id."'";
 						$res_time = Database::query($sql,__FILE__,__LINE__);
 						$row_time = Database::fetch_array($res_time);
 

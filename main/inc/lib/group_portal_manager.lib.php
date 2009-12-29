@@ -981,7 +981,7 @@ class GroupPortalManager
 				}			
 				if ($more_link) { 
 					//More link
-					echo '<div class="mygroups_more" style="margin-top:20px;"><a href="mygroups.php?u='.$user_id.'">'.get_lang('SeeMore').'</a></div>';
+					echo '<div class="mygroups_more" style="margin-top:20px;"><a href="groups.php?view=mygroups">'.get_lang('SeeMore').'</a></div>';
 				}			
 			echo '</div>';				
 		}

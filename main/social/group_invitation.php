@@ -212,10 +212,22 @@ $users=$sessions=array();
 
 
 Display :: display_header($tool_name, 'Groups');
-SocialManager::show_social_menu();
+$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));
+$user_online_count = count($user_online_list); 
+echo '<div class="actions-title-groups">';
+echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
+		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
+		</tr></table>';
+/*
+echo '<div class="menuTitle" align="center"><span class="menuTex1">'.get_lang('Menu').'</span></div>';
+echo '<div class="TitleRigth">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.$who_is_on_line.'</span></a></div>';
+*/
+echo '</div>';
+/*
 echo '<div class="actions-title">';
 echo get_lang('Invitations');
 echo '</div>'; 
+*/
 
 if($_POST['form_sent']) {
 	$form_sent			= $_POST['form_sent'];
@@ -324,10 +336,15 @@ if ($add_type == 'multiple') {
 	/* <?php $link_add_type_unique ?>&nbsp;|&nbsp;<?php $link_add_type_multiple ?> */
 
 	//Shows left column
-	echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
+	//echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
 	
-	//-- Show group content	
-	echo '<div id="layout_right" style="margin-left: 282px;">';
+	echo '<div id="socialContent">';
+		echo '<div id="socialContentLeft">';	
+			//this include the social menu div
+			SocialManager::show_social_menu('group_messages',$group_id);
+		echo '</div>';
+		
+	echo '<div class="socialContentRight">';
 ?>
 	
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $group_id; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
@@ -371,7 +388,7 @@ if(!empty($errorMsg)) {
 }
 ?>
 
-<table border="0" cellpadding="5" cellspacing="0" width="100%">
+<table border="0" cellpadding="5" cellspacing="0" width="80%">
 <!-- Users -->
 <tr>
   <td align="center"><b><?php echo get_lang('Friends') ?> :</b>
@@ -470,8 +487,18 @@ unset($sessionUsersList);
 </form>
 <?php
 
+//current group members		
+$members = GroupPortalManager::get_users_by_group($group_id, true, array(GROUP_USER_PERMISSION_PENDING_INVITATION));
+if (is_array($members) && count($members)>0) {
+	echo get_lang('UsersAlreadyInvited');
+	Display::display_sortable_grid('invitation_profile', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true));
+}
 
 	echo '</div>'; // end layout right
+
+echo '</div>'; // 	
+	
+	
 ?>
 
 <script type="text/javascript">
@@ -566,14 +593,6 @@ function makepost(select){
 
 </script>
 <?php
-
-//current group members		
-$members = GroupPortalManager::get_users_by_group($group_id, true, array(GROUP_USER_PERMISSION_PENDING_INVITATION));
-if (is_array($members) && count($members)>0) {
-	echo get_lang('UsersAlreadyInvited');
-	Display::display_sortable_grid('invitation_profile', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true));
-}
-
 
 /*
 ==============================================================================

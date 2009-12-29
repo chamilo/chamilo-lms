@@ -86,7 +86,7 @@ echo '<div id="socialContent">';
                             <div><p><strong>'.get_lang('Name').'</strong><br /><span class="groupText4">'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</span></p></div>
                             <div><p><strong>'.get_lang('Email').'</strong><br /><span class="groupText4">'.($user_info['email']?$user_info['email']:'').'</span></p></div>
                             <div><p><strong>'.get_lang('Phone').'</strong><br /><span class="groupText4">'.($user_info['phone']?$user_info['phone']:'').'</span></p></div>
-                            <div class="box_description_group_actions" ><a href="profile.php">'.get_lang('SeeMore').$url_close.'</div>	            
+                            <div class="box_description_group_actions" ><a href="profile.php">'.get_lang('SeeMore').$url_close.'</a></div>	            
                         </div>                        
 					</div>';
  

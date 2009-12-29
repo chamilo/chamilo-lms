@@ -139,7 +139,7 @@ if (isset($_GET['lp_id']) && isset($_GET['my_lp_id'])) {
 		} else {
 			$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '" AND status <> "incomplete" ORDER BY exe_date';
 		}
-		echo $sql_attempts;
+			$sql_attempts;
 	}
 
 }
@@ -234,7 +234,7 @@ if (is_array($list) && count($list) > 0){
 			$counter++;
 			
 			do { 
-				echo $row['iv_view_count'];
+				$row['iv_view_count'];
 				//check if there are interactions below
 				$extend_attempt_link = '';
 				$extend_this_attempt = 0;
@@ -681,7 +681,7 @@ if (is_array($list) && count($list) > 0){
 									}
 									//$view_score = ($my_score == 0 ? '0.00/'.$my_maxscore : ($my_maxscore == 0 ? $my_score : $my_score . '/' . $my_maxscore));
 								}
-echo $time_attemp;
+								$time_attemp;
 								$output .= '<tr class="'.$oddclass.'" ><td>&nbsp;</td><td>'.$extend_attempt_link.'</td><td colspan="3">' . api_convert_encoding(get_lang('Attempt'), $lp_charset, $dokeos_charset) . ' ' . $n . '</td>'
 							 			. '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . '</div></font></td><td colspan="2"><div class="mystatus" align="center">' . $view_score  . '</div></td><td colspan="2"><div class="mystatus">' . $time_attemp . '</div></td>';
 							 	if ($origin != 'tracking') {

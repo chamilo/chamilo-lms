@@ -450,7 +450,7 @@ function build_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
 	$form .= '<div class="row">';
 	$form .= '	<div class="label"></div>';
 	$form .= '	<div class="formw">';
-	$form .= '		<button type="submit" class="next" name="move_file_submit">'.get_lang('MoveFile').'</button>'."\n";
+	$form .= '		<button type="submit" class="next" name="move_file_submit">'.get_lang('MoveElement').'</button>'."\n";
 	$form .= '	</div>';
 	$form .= '</div>';
 

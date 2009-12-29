@@ -914,17 +914,17 @@ if ($show == 'test') {
 ?>
 
 <!--" /></a>-->
-			<a href="exercice.php?choice=delete&exerciseId=<?php echo $row['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset)); echo " ".$row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" alt="<?php echo api_htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>
+			<a href="exercice.php?choice=delete&exerciseId=<?php echo $row['id']; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset)); echo " ".$row['title']; echo "?"; ?>')) return false;"> <img src="../img/delete.gif" border="0" title="<?php echo get_lang('Delete'); ?>" alt="<?php echo api_htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>
 			<?php
 				//if active
 				if ($row['active']) {
 ?>
-	      		<a href="exercice.php?choice=disable&page=<?php echo $page; ?>&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/visible.gif" border="0" alt="<?php echo api_htmlentities(get_lang('Deactivate'),ENT_QUOTES,$charset); ?>" /></a>
+	      		<a href="exercice.php?choice=disable&page=<?php echo $page; ?>&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/visible.gif"  border="0" title="<?php echo get_lang('Deactivate'); ?>" alt="<?php echo api_htmlentities(get_lang('Deactivate'),ENT_QUOTES,$charset); ?>" /></a>
 	    		<?php
 				} else {
 					// else if not active
 ?>
-	      		<a href="exercice.php?choice=enable&page=<?php echo $page; ?>&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/invisible.gif" border="0" alt="<?php echo api_htmlentities(get_lang('Activate'),ENT_QUOTES,$charset); ?>" /></a>
+	      		<a href="exercice.php?choice=enable&page=<?php echo $page; ?>&exerciseId=<?php echo $row['id']; ?>"> <img src="../img/invisible.gif" border="0"  title="<?php echo get_lang('Activate'); ?>" alt="<?php echo api_htmlentities(get_lang('Activate'),ENT_QUOTES,$charset); ?>" /></a>
 	    		<?php
 				}
 				echo "</td>";
@@ -1051,26 +1051,26 @@ if ($show == 'test') {
 	   <td><?php echo ($ind+($page*$limitExPage)).'.'; ?></td>
        <td><a href="showinframes.php?file=<?php echo $path?>&cid=<?php echo $_course['official_code'];?>&uid=<?php echo $_user['user_id'];?>" <?php if(!$active) echo 'class="invisible"'; ?>><?php echo $title?></a></td>
   <td></td>
-      <td><a href="adminhp.php?hotpotatoesName=<?php echo $path; ?>"> <img src="../img/edit.gif" border="0" alt="<?php echo api_htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>" /></a>
-       <img src="../img/wizard_gray_small.gif" border="0" title="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" />
-  <a href="<?php echo $exercicePath; ?>?hpchoice=delete&amp;file=<?php echo $path; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSure'),ENT_QUOTES,$charset).$title."?"); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="<?php echo api_htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>
+      <td><a href="adminhp.php?hotpotatoesName=<?php echo $path; ?>"> <img src="../img/edit.gif" border="0" title="<?php echo get_lang('Modify'); ?>" alt="<?php echo api_htmlentities(get_lang('Modify'),ENT_QUOTES,$charset); ?>" /></a>
+       <img src="../img/wizard_gray_small.gif" border="0" title="<?php echo api_htmlentities(get_lang('NotMarkActivity'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" />
+  <a href="<?php echo $exercicePath; ?>?hpchoice=delete&amp;file=<?php echo $path; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSure'),ENT_QUOTES,$charset).$title."?"); ?>')) return false;"><img src="../img/delete.gif" border="0" title="<?php echo get_lang('Delete'); ?>" alt="<?php echo api_htmlentities(get_lang('Delete'),ENT_QUOTES,$charset); ?>" /></a>
     <?php
 
 					// if active
 					if ($active) {
 						$nbrActiveTests = $nbrActiveTests +1;
 ?>
-      <a href="<?php echo $exercicePath; ?>?hpchoice=disable&amp;page=<?php echo $page; ?>&amp;file=<?php echo $path; ?>"><img src="../img/visible.gif" border="0" alt="<?php echo api_htmlentities(get_lang('Deactivate'),ENT_QUOTES,$charset); ?>" /></a>
+      <a href="<?php echo $exercicePath; ?>?hpchoice=disable&amp;page=<?php echo $page; ?>&amp;file=<?php echo $path; ?>"><img src="../img/visible.gif" border="0" title="<?php echo get_lang('Deactivate'); ?>" alt="<?php echo api_htmlentities(get_lang('Deactivate'),ENT_QUOTES,$charset); ?>" /></a>
     <?php
 
 					} else { // else if not active
 ?>
-    <a href="<?php echo $exercicePath; ?>?hpchoice=enable&amp;page=<?php echo $page; ?>&amp;file=<?php echo $path; ?>"><img src="../img/invisible.gif" border="0" alt="<?php echo api_htmlentities(get_lang('Activate'),ENT_QUOTES,$charset); ?>" /></a>
+    <a href="<?php echo $exercicePath; ?>?hpchoice=enable&amp;page=<?php echo $page; ?>&amp;file=<?php echo $path; ?>"><img src="../img/invisible.gif" border="0" title="<?php echo get_lang('Activate'); ?>" alt="<?php echo api_htmlentities(get_lang('Activate'),ENT_QUOTES,$charset); ?>" /></a>
     <?php
 
-					}
-					echo '<img src="../img/lp_quiz_na.gif" border="0" alt="" />';
-					/****************/
+					}?>
+					<img src="../img/lp_quiz_na.gif" border="0" title="<?php echo get_lang('NotMarkActivity')?>" alt="" />
+					<?php/****************/
 ?></td>
       <?php
 

@@ -9,7 +9,7 @@
 
 $language_file = array('registration','messages','userInfo','admin','forum','blog');
 $cidReset = true;
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 require_once api_get_path(LIBRARY_PATH).'array.lib.php';
@@ -477,7 +477,6 @@ echo '<div id="social-profile-container">';
 	  				$html_actions .=  '&nbsp;<a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=260&width=610&user_friend='.$user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a>';
 	  			}
 	  		}
-			
     	 
     	  	if (!empty($html_actions )) {
     	  		echo '<div class="actions" style="margin-right:5px;">';
@@ -487,7 +486,6 @@ echo '<div id="social-profile-container">';
     	  	}
      	 
 			// Extra information
-
     	  	if ($show_full_profile) {
 				//-- Extra Data
 				$t_uf	= Database :: get_main_table(TABLE_MAIN_USER_FIELD);
@@ -696,17 +694,16 @@ echo '<div id="social-profile-container">';
 						}
 					}
 				}
-				echo '</ul><br />';
-				
+				echo '</ul><br />';				
 				$user_feeds = SocialManager::get_user_feeds($user_id);
-				if (is_array($user_feeds )) {
+				if (!empty($user_feeds )) {
 					echo '<div class="sectiontitle">'.get_lang('RSSFeeds').'</div>';
 	    			echo '<div class="social-content-training">';
                 	echo $user_feeds;
                 	echo '</div>';
 	    			echo '<div class="clear"></div><br />';
         			echo '</div>';
-				}
+				}				
 		    }
 		    
    		    //Load plugin center

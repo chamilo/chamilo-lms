@@ -149,22 +149,19 @@ echo '</div>';
 
 echo '<div id="socialContent">';
 
-
 	echo '<div id="socialContentLeft">';	
 		//this include the social menu div
 		if ($group_id != 0 ) {
 			SocialManager::show_social_menu('group_messages',$group_id);	
 		} else {
 			SocialManager::show_social_menu('groups');
-		}
-		
+		}	
 	echo '</div>';
 
 	echo '<div id="socialContentRigth">';
 
-	
-	
-if ($group_id != 0 ) {
+if ($group_id != 0 ) {	
+	$group_info = GroupPortalManager::get_group_data($group_id);
 	//Loading group information
 	if (isset($_GET['status']) && $_GET['status']=='sent') {
 		Display::display_confirmation_message(get_lang('MessageHasBeenSent'), false);
@@ -182,8 +179,7 @@ if ($group_id != 0 ) {
 	if (isset($_GET['action']) && $_GET['action']=='join') {
 		// we add a user only if is a open group
 		$user_join = intval($_GET['u']);	
-		if (api_get_user_id() == $user_join && !empty($group_id)) {
-			$group_info = GroupPortalManager::get_group_data($group_id);
+		if (api_get_user_id() == $user_join && !empty($group_id)) {			
 			if ($group_info['visibility'] == GROUP_PERMISSION_OPEN) {
 				GroupPortalManager::add_user_to_group($user_join, $group_id);				
 			} else {
@@ -195,22 +191,55 @@ if ($group_id != 0 ) {
 	//-- Shows left column
 	//echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
 	//---
-		
-	//-- Show message groups	
-	echo '<div id="layout_right" style="margin-left: 290px;">';	
-		echo '<div class="messages">';
-			if (GroupPortalManager::is_group_member($group_id)) {
-				$content = MessageManager::display_messages_for_group($group_id);				
-				if (!empty($content)) {
-					echo $content;				
+			
+	// details about the current group
+	echo '<div class="head_group" >';
+		echo '<div id="group_image" style="float:left;height:110px">';
+				$picture	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,'medium_');
+				$big_image	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'','big_');	
+				if (basename($picture['file']) != 'unknown_group.png') {
+					echo '<a class="thickbox" href="'.$big_image['file'].'"><img src='.$big_image['file'].' width="85" height="85" style="border:4px solid #eee;"/> </a><br /><br />';
 				} else {
-					echo get_lang('YouShouldCreateATopic');	
+					echo '<img src='.$picture['file'].' width="85" height="85" style="border:4px solid #eee;" /><br /><br />';
+				}		
+		echo '</div>';
+		echo '<div id="group_details" style="margin-left:105px">';
+				//Group's title
+				echo '<h3><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a></h3>';
+				//Group's description 
+				echo '<div id="group_description">'.$group_info['description'].'</div>';
+				echo '<div id="group-url"><a target="_blank" href="'.$group_info['url'].'">'.$group_info['url'].'</a></div>';
+				//Privacy
+				echo '<div id="group_privacy">';
+				echo get_lang('Privacy').' : ';
+				if ($group_info['visibility']== GROUP_PERMISSION_OPEN) {
+				echo get_lang('ThisIsAnOpenGroup');
+				} elseif ($group_info['visibility']== GROUP_PERMISSION_CLOSED) {
+				echo get_lang('ThisIsACloseGroup');
 				}
+				echo '</div>';
+				//Group's tags
+				if (!empty($tags)) {
+					echo '<div id="group_tags">'.get_lang('Tags').' : '.$tags.'</div>';
+				}				
+		echo '</div>';
+	echo '</div>';
+	echo '<div class="clear"></div>';
+	
+	//-- Show message groups
+	echo '<div class="messages">';
+	echo '<h2>'.get_lang('Topics').'</h2>';
+		if (GroupPortalManager::is_group_member($group_id)) {
+			$content = MessageManager::display_messages_for_group($group_id);				
+			if (!empty($content)) {
+				echo $content;				
 			} else {
-				echo get_lang('YouShouldJoinTheGroup');
+				echo get_lang('YouShouldCreateATopic');	
 			}
-		echo '</div>'; // end layout messages
-	echo '</div>'; // end layout right
+		} else {
+			echo get_lang('YouShouldJoinTheGroup');
+		}
+	echo '</div>'; // end layout messages
 	
 } else {		
 
@@ -329,8 +358,7 @@ if ($group_id != 0 ) {
 		   		echo '<div class="groupText3">'.strtoupper(get_lang('MyGroups')).'</div>';                  
 		        if (count($grid_my_groups) > 0) {
 		        	Display::display_sortable_grid('mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));
-		        }
-		        	        	                 		
+		        }		        	        	                 		
 				if (count($grid_newest_groups) > 0) {
 					echo '<div class="groupText3">'.strtoupper(get_lang('Newest')).'</div>';				
 					Display::display_sortable_grid('newest', array(), $grid_newest_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));		

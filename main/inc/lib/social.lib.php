@@ -674,7 +674,7 @@ class SocialManager extends UserManager {
 		if ($show == 'messages') {
 				echo '<ul class="social_menu_messages">';
 					echo '<li class="socialMenuSubLevel"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png', get_lang('Inbox'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Inbox').'</span></a></li>';
-					echo '<li class="socialMenuSubLevel"><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('message_new.png', get_lang('ComposeMessage'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('ComposeMessage').'</span></a></li>';
+					echo '<li class="socialMenuSubLevel"><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('message_new.png', get_lang('ComposeMessage'), array('hspace'=>'6','style'=>'float:left')).'<span class="menuTex4" >'.get_lang('ComposeMessage').'</span></a></li>';
 					echo '<li class="socialMenuSubLevel"><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png', get_lang('Outbox'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Outbox').'</span></a></li>';
 				echo '</ul>';
 			}
@@ -695,23 +695,9 @@ class SocialManager extends UserManager {
                 </div>'; 
         
         if ($show == 'group_messages' && !empty($group_id)) {
-        	
         	echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
-        	
-        }        		
-        /*
-              echo  '<div align="center" class="menuTitle"><span class="menuTex1">Nombre del Grupo en que me encuentro</span></div>
-				<ul>
-				<li><img src="images/newtopic.png"/> <a href="#"><span>New Topic</span></a></li>
-				<li><img src="images/messagelist.png"/> <a href="#"><span>Message list</span></a></li>
-				<li><img src="images/edit.png"/> <a href="#"><span>Edit Group</span></a></li>
-				<li><img src="images/friends.jpg"/> <a href="#"><span>Members list</span></a></li>
-				<li><img src="images/groups.jpg"/> <a href="#"><span>Invite Friends</span></a></li>
-				</ul>';		
-            */    		
-           echo '</div>';
-		
-		
+        }        		  		
+        echo '</div>';
 	}
 	
 		

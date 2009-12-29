@@ -865,7 +865,7 @@ class GroupPortalManager
 		
 		$group_info 	= GroupPortalManager::get_group_data($group_id); 
 		$picture		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,'medium_');
-		$big_image		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'','big_');		
+		$big_image		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'','big_');	
 		$tags			= GroupPortalManager::get_group_tags($group_id, true);
 		$members		= GroupPortalManager::get_users_by_group($group_id);
 		$groups_by_user	= GroupPortalManager::get_groups_by_user($user_id, 0);

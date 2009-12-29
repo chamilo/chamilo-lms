@@ -488,9 +488,15 @@ unset($sessionUsersList);
 <?php
 
 //current group members		
-$members = GroupPortalManager::get_users_by_group($group_id, true, array(GROUP_USER_PERMISSION_PENDING_INVITATION));
+$members = GroupPortalManager::get_users_by_group($group_id, false, array(GROUP_USER_PERMISSION_PENDING_INVITATION));
 if (is_array($members) && count($members)>0) {
-	echo get_lang('UsersAlreadyInvited');
+	
+	foreach ($members as &$member) {
+		$image_path = UserManager::get_user_picture_path_by_id($member['user_id'], 'web', false, true);												
+		$picture = UserManager::get_picture_user($member['user_id'], $image_path['file'],80);										
+		$member['image'] = '<img src="'.$picture['file'].'"  width="50px" height="50px"  />';
+	}	
+	echo '<span class="groupTex1"><strong>'.get_lang('UsersAlreadyInvited').'</strong></span>';
 	Display::display_sortable_grid('invitation_profile', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true));
 }
 

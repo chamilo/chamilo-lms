@@ -157,8 +157,9 @@ function manage_form ($default, $select_from_user_list = null) {
 	
 	$group_id = intval($_REQUEST['group_id']);
 	$message_id = intval($_GET['message_id']);
+	$param_f = isset($_GET['f'])?Security::remove_XSS($_GET['f']):'';
 
-	$form = new FormValidator('compose_message',null,null,null,array('enctype'=>'multipart/form-data'));	
+	$form = new FormValidator('compose_message',null,api_get_self().'?f='.$param_f,null,array('enctype'=>'multipart/form-data'));	
 	if (empty($group_id)) {		
 		if (isset($select_from_user_list)) {
 			$form->add_textfield('id_text_name', get_lang('SendMessageTo'),true,array('size' => 40,'id'=>'id_text_name','onkeyup'=>'send_request_and_search()','autocomplete'=>'off','style'=>'padding:0px'));

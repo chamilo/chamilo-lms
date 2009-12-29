@@ -2767,6 +2767,20 @@ a.unread {
 	padding-right:20px;
 }
 
+#contentPostReply{
+	width:600px;
+	margin-left:60px;
+}
+
+.contentPostReplybg{
+	width:560px;
+	height:auto;
+	padding-left:20px;
+	padding-right:20px;
+	background-image:url(../../img/content-post-reply02.jpg);
+	background-repeat:repeat-y;
+}
+
 #div_content_table {
 	width:660px;
 	background-image:url(../../img/content-post-group2.jpg);
@@ -2779,7 +2793,7 @@ a.unread {
 	width:700px;
 	height:auto;
 	overflow:hidden;
-	margin-top:20px;
+	margin-bottom:20px;
 }
 
 .message-item {
@@ -3033,12 +3047,13 @@ a.unread {
 .invitation_profile_grid_item {
 	border:1px dotted #CCCCCC;
 	float:left;
-	height:90px;
+	height:110px;
 	margin:5px;
 	padding:5px;
 	width:100px;
 }
 .invitation_profile_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.invitation_profile_grid_element_0 img {width:50px;height:50px;border:3px solid #E6E6E6;}
 .invitation_profile_grid_element_2 { width:100px; float:left; text-align:center;}
 .invitation_profile_grid_element_3 { width:100px; float:left; text-align:center;}
 
@@ -3064,8 +3079,9 @@ a.unread {
 
 /*LIST MEMBERS*/
 .list_members_grid_container { width:100%;}
-.list_members_grid_item { width:100px;  height: 125px;  border:1px dotted #ccc; float:left; padding:5px; margin:8px;}
+.list_members_grid_item { width:105px;  height: 150px;  border:1px dotted #ccc; float:left; padding:5px; margin:8px;}
 .list_members_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.list_members_grid_element_0 img {width:50px;height:50px;border:3px solid #E6E6E6;}
 .list_members_grid_element_2 { width:100px; float:left; text-align:center; margin-bottom:5px;}
 .list_members_grid_element_3 { width:100px; float:left; text-align:center; margin-bottom:5px;}
 .list_members_grid_element_5 { width:100%;  text-align:center;}
@@ -3224,6 +3240,12 @@ a.unread {
 	height:auto;
 	overflow:hidden;
 	}
+
+#boxmyGroupMessages {
+	height:auto;
+	overflow:hidden;
+	width:700px;
+}
 
 #boxmyGroupsLeft{
 	width:350px;

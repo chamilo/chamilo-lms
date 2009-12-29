@@ -102,7 +102,7 @@ if (! empty($show_message)){
 	Display :: display_normal_message($show_message);
 }
 
-$users	= GroupPortalManager::get_users_by_group($group_id, true, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR), 0 , 1000);
+$users	= GroupPortalManager::get_users_by_group($group_id, false, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR), 0 , 1000);
 $new_member_list = array();
 
 echo '<div id="socialContent">';
@@ -133,6 +133,11 @@ echo '<div id="socialContent">';
 						}
 					break;				
 				}
+				
+				$image_path = UserManager::get_user_picture_path_by_id($user['user_id'], 'web', false, true);												
+				$picture = UserManager::get_picture_user($user['user_id'], $image_path['file'],80);										
+				$user['image'] = '<img src="'.$picture['file'].'"  width="50px" height="50px"  />';
+				
 			$new_member_list[] = $user;
 		}		
 		if (count($new_member_list) > 0) {			

@@ -20,7 +20,7 @@ $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
 $language_file[] = 'admin';
 $language_file[] = 'tracking';
 $language_file[] = 'scorm';
-$cidReset = true;
+//$cidReset = true; //TODO: delete this line bug 457
 // including the global Dokeos file
 require '../inc/global.inc.php';
 

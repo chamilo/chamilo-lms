@@ -178,4 +178,5 @@ $AllowSendMessageToAllPlatformUsersTitle = "Dar permisu pa unviar mensaxes a tol
 $InvitationDenied = "Invitaición non apectada";
 $UserAdded = "Usuariu amestáu";
 $FilesSizeExceedsX = "Tamañu del archivu pergrande";
+$YouShouldWriteASubject = "Tienes qu\'escribir l\'asuntu";
 ?>

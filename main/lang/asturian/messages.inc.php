@@ -36,4 +36,5 @@ $WriteAMessage = "Escribir un mensax";
 $AlreadyReadMessage = "Mensax lleíu";
 $UnReadMessage = "Mensax ensin lleer";
 $MessageSent = "Mensax unviáu";
+$YouShouldWriteAMessage = "Tienes qu\'escribir un mensax";
 ?>

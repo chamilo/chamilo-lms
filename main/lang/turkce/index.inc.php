@@ -65,4 +65,9 @@ $FolderCreated = "Yeni klasör olu&#351;turuldu";
 $LinkAdded = "Yeni ba&#287;lant&#305; eklendi";
 $AnnouncementAdded = "Duyuru eklendi";
 $AgendaAdded = "Ajandaya eklendi";
+$YouDoNotHaveAnySessionInItsHistory = "Tarihçede kay&#305;tl&#305; e&#287;itim sömestriniz yoktur.";
+$Messages = "Mesajlar";
+$Inbox = "Gelen Kutusu";
+$Comppose = "Olu&#351;tur";
+$PendingInvitations = "Bekleyen Davetler";
 ?>

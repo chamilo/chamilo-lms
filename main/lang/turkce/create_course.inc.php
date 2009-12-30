@@ -102,4 +102,7 @@ $IntroductionWiki = "Wiki kelimesi WikiWikiWeb in k&#305;sa halidr. WikiWiki Haw
 $CreateCourseArea = "Bu e&#287;itimi olu&#351;tur";
 $CreateCourse = "Bir e&#287;itim olu&#351;tur";
 $Create = "Olu&#351;tur";
+$MessageOfNewCourseToAdmin = "Bu mesaj platformda yeni bir ders yarat&#305;ld&#305;&#287;&#305; için bilgilendirme amaçl&#305;d&#305;r.";
+$NewCourseCreatedIn = "Yeni dersin yarat&#305;ld&#305;&#287;&#305; yer";
+$ExplicationTrainers = "E&#287;itmen &#351;u an için ayarlad&#305;. Ancak ayarlar&#305;n&#305;z&#305; daha sonra e&#287;itim ayarlar&#305;ndan de&#287;i&#351;tirebilirsiniz.";
 ?>

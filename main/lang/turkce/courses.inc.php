@@ -80,4 +80,5 @@ $SessionCategory = "Oturum kategorisi";
 $Expand = "Geni&#351;let";
 $Collapse = "Daralt";
 $CourseDetails = "Kurs detaylar&#305;";
+$GroupPendingInvitations = "Bekleyen Grup Davetleri";
 ?>

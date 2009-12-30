@@ -754,4 +754,8 @@ $LastPage = "Zadnja stran";
 $Coachs = "Coach-i";
 $YouMustToInstallTheExtensionLDAP = "Namestiti morate LDAP razširitev";
 $AddAdditionalProfileField = "Dodaj polje uporabnikovega profila";
+$InvitationDenied = "Povabilo je bilo zavrnjeno";
+$UserAdded = "Uporabnik je bil dodan";
+$Metadata = "Matapodatki";
+$langAddMetadata  = "Poglej/Uredi metapodatke";
 ?>

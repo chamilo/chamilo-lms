@@ -24,4 +24,8 @@ $Authoring = "Yazar";
 $Administration = "Yönetim";
 $IntroductionTextUpdated = "Giri&#351; güncellendi";
 $IntroductionTextDeleted = "Giri&#351; silindi";
+$SessionIdentifier = "Sömestr Tan&#305;mlay&#305;c&#305;s&#305;";
+$SessionName = "Sömestr Ad&#305;";
+$SessionCategory = "Sömestr Kategorisi";
+$SessionData = "Sömestr Verileri";
 ?>

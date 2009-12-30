@@ -1121,4 +1121,7 @@ $AllowStudentsToCreateGroupsInSocialTitle = "Consenti ai corsisti di creare grup
 $AllowStudentsToCreateGroupsInSocialComment = "Consenti ai corsisti di creare gruppi nel social network";
 $AllowSendMessageToAllPlatformUsersTitle = "Consenti l\'invio di messaggi verso tutti gli utenti";
 $AllowSendMessageToAllPlatformUsersComment = "Consenti l\'invio di messaggi verso tutti gli utenti";
+$TabsSocial = "Etichetta social network";
+$MessageMaxUploadFilesizeTitle = "Messaggio: dimensione massima file da caricare";
+$MessageMaxUploadFilesizeComment = "Messaggio: dimensione massima file da caricare";
 ?>

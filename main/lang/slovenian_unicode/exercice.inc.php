@@ -351,4 +351,5 @@ $SessionIsReadOnly = "Seja je zgolj bralna";
 $EnableTimerControl = "Omogoči časovno kontrolo";
 $ExerciseTotalDurationInMinutes = "Skupno trajanje testa v minutah";
 $ToContinueUseMenu = "Za nadaljevanje v tem tečaju uporabite stranski menu";
+$RandomAnswers = "Premešaj vrstni red odgovorov";
 ?>

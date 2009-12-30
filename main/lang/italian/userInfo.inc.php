@@ -175,4 +175,8 @@ $InvitationReceived = "Invito ricevuto";
 $InvitationSent = "Invito spedito";
 $YouAlreadySentAnInvitation = "Hai inviato già un invito";
 $AllowSendMessageToAllPlatformUsersTitle = "Consenti agli utenti di inviare messaggi a tutti gli utenti";
+$InvitationDenied = "Invito non accettato";
+$UserAdded = "Utente aggiunto";
+$FilesSizeExceedsX = "Superata la dimensione massima del file";
+$YouShouldWriteASubject = "Devi scrivere l\'oggetto del messaggio";
 ?>

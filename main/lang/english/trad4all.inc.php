@@ -760,4 +760,6 @@ $AddAdditionalProfileField = "Add user profile field";
 $InvitationDenied = "Invitation denied";
 $UserAdded = "User added";
 $UpdatedIn = "Updated in";
+$Metadata = "Metadata";
+$langAddMetadata  = "View/Edit Metadata";
 ?>

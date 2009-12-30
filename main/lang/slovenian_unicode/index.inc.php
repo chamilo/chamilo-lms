@@ -66,4 +66,8 @@ $LinkAdded = "Nova povezava je bila dodana";
 $AnnouncementAdded = "Obvestilo je bilo dodano";
 $AgendaAdded = "Zapis agende je bil dodan";
 $YouDoNotHaveAnySessionInItsHistory = "V zgodovini nimate beležene nobene seje tečaja";
+$Messages = "Sporočila";
+$Inbox = "Prejeto";
+$Comppose = "Sestavi novo";
+$PendingInvitations = "Čakajoča povabila";
 ?>

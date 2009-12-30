@@ -178,4 +178,5 @@ $AllowSendMessageToAllPlatformUsersTitle = "Permitir enviar mensajes a todos los
 $InvitationDenied = "Invitación denegada";
 $UserAdded = "Usuario agregado";
 $FilesSizeExceedsX = "Tamaña del archivo excedido";
+$YouShouldWriteASubject = "Debe escribir el asunto";
 ?>

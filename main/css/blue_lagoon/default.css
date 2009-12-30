@@ -2330,7 +2330,7 @@ div.image-social-content center.friend {
 	text-align:left;
 	clear:left;
 	float:left;
-	width:100px;
+	width:80px;
 }
 .social-profile-info dd {
 	padding:1px 0px 3px 0px;
@@ -3234,6 +3234,76 @@ a.unread {
  font-weight:normal;
  font-size:12px;
  }
+
+/* BOX SHARED PROFILE */
+
+.boxProfile {
+	width:100%;
+	height:auto;
+	overflow:hidden;
+} 
+
+.social-friend-container {
+	width:100%;
+	overflow:hidden;
+}
+
+.boxProfileContent {
+	width:350px;
+	height:auto;
+	margin-top:20px;
+	float:left;
+} 
+
+.profileContent{
+	width:330px;
+	height:auto;
+	padding-left:15px;
+	padding-right:10px;
+	background-image:url(../../img/boxmygroupscontent.jpg);
+	background-repeat:repeat-y;
+	overflow:hidden;
+}
+
+.shared_profile_mygroups_grid_container {
+	width:100%;
+	overflow:hidden;
+}
+.shared_profile_mygroups_grid_item {
+	width:42%;
+	float:left;
+	height:140px;
+	margin:20px;
+}
+
+.box_shared_profile_group_title {
+	border-bottom:1pt dotted #000;
+	padding:5px;
+	vertical-align:middle;
+	font-size:12pt;
+	font-weight:bold;
+	margin-bottom:5px
+}
+
+.box_shared_profile_group_description {
+	height:100px;
+	margin-left:65px;
+}
+
+.box_shared_profile_group_image {
+	height:80px;
+	width:60px;
+	float:left;
+}
+
+.box_shared_profile_group_actions {
+	text-align:right;
+}
+
+.box_shared_profile_group_actions {
+
+}
+ 
 /*BOX MY GROPUPS*/
 
 #boxmyGroups{
@@ -3268,7 +3338,6 @@ a.unread {
 .myGroupsContent{
 	width:330px;
 	height:auto;
-	overflow:hidden;
 	padding-left:15px;
 	padding-right:10px;
 	background-image:url(../../img/boxmygroupscontent.jpg);

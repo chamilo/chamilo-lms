@@ -892,9 +892,9 @@ class GroupPortalManager
 				// I'm just a reader
 				//echo get_lang('IamAReader');								
 				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('NewTopic').'</span></a></li>';
-				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList')).'&nbsp;'.get_lang('MessageList').'</a></li>';
-				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends')).'&nbsp;'.get_lang('InviteFriends').'</a></li>';
-				echo '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.get_lang('LeaveGroup').'</a></li>';					
+				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('MessageList').'</span></a></li>';
+				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('InviteFriends').'</span></a></li>';
+				echo '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'"><span class="menuTex4" >'.get_lang('LeaveGroup').'</span></a></li>';					
 				break;
 			case GROUP_USER_PERMISSION_ADMIN:
 				//echo get_lang('IamAnAdmin');

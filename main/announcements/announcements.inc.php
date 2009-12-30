@@ -1022,12 +1022,12 @@ function update_mail_sent($insert_id)
  * Gets all announcements from a user by course
  * @param	string course db
  * @param	int user id
- * @return	string an html with the content
+ * @return	array html with the content and count of announcements or false otherwise
  */
 function get_all_annoucement_by_user_course($course_db, $user_id)
 {
 	if (empty($course_db) || empty($user_id)) {
-		return '';
+		return false;
 	}
 	$tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT, $course_db);
 	$tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db);
@@ -1041,27 +1041,28 @@ function get_all_annoucement_by_user_course($course_db, $user_id)
 						AND toolitemproperties.visibility='1'
 						AND announcement.session_id  = 0
 						ORDER BY display_order DESC";
-		$result = Database::query($sql,__FILE__,__LINE__);
-		$num_rows = Database::num_rows($result);
+		$rs = Database::query($sql,__FILE__,__LINE__);
+		$num_rows = Database::num_rows($rs);
 		$content = '';
 		$i=0;
-		if (Database::num_rows($result)>0) {
-			while ($myrow = Database::fetch_array($result)) {
-				if ($i<=4) {
+		$result = array();
+		if ($num_rows>0) {
+			while ($myrow = Database::fetch_array($rs)) {
+				//if ($i<=4) {
 					$content.= '<strong>'.$myrow['title'].'</strong><br /><br />';
 					$content.= $myrow['content'];
-				} else {
+				/*} else {
 					break;
-				}
+				}*/
 				$i++;
 			}
-			return $content;
-		} else {
-			return $content;
-		}
-	} else {
-		return '';
+			$result['content'] = $content;
+			$result['count'] = $i;
+			return $result;
+		} 
+		return false;		
 	}
+	return false;
 }
 
 /*

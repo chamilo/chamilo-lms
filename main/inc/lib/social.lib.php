@@ -651,8 +651,11 @@ class SocialManager extends UserManager {
 		return $output;
 	}
 	
-	public static function show_social_menu($show = '',$group_id = 0) {
+	public static function show_social_menu($show = '',$group_id = 0, $user_id = 0, $show_full_profile = false) {
 		
+		$img_array= UserManager::get_user_picture_path_by_id($user_id,'web',true,true);
+		$big_image =  UserManager::get_picture_user($user_id, $img_array['file'],'',USER_IMAGE_SIZE_BIG);
+		$big_image = $big_image['file'].$big_image['dir'];
 		
 		// Everybody can create groups
 		if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
@@ -664,39 +667,145 @@ class SocialManager extends UserManager {
 			}
 		}
 		
-		echo '<div class="socialMenu" >            	
-                <div>
-                	<ul>
-                    	<li><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.Display::return_icon('home.gif',get_lang('Home'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Home').'</span></a></li>
-                        <li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png',get_lang('Messages'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Messages').'</span></a></li>';
-
-		if ($show == 'messages') {
-				echo '<ul class="social_menu_messages">';
-					echo '<li class="socialMenuSubLevel"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png', get_lang('Inbox'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Inbox').'</span></a></li>';
-					echo '<li class="socialMenuSubLevel"><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('message_new.png', get_lang('ComposeMessage'), array('hspace'=>'6','style'=>'float:left')).'<span class="menuTex4" >'.get_lang('ComposeMessage').'</span></a></li>';
-					echo '<li class="socialMenuSubLevel"><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png', get_lang('Outbox'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Outbox').'</span></a></li>';
-				echo '</ul>';
-			}
-                        
-        echo	'<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png',get_lang('ViewMySharedProfile'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('ViewMySharedProfile').'</span></a></li>
-        			<li><a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.Display::return_icon('lp_users.png',get_lang('Friends'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Friends').'</span></a></li>
-                    <li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.gif',get_lang('Groups'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Groups').'</span></a></li>';
-        
-        if ($show == 'groups') {
-				echo '<ul class="social_menu_groups">';
-					echo $create_group_item;
-					echo '<li class="socialMenuSubLevel"><a href="'.api_get_path(WEB_PATH).'main/social/groups.php?view=mygroups">'.Display::return_icon('group.gif',get_lang('MyGroups'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('MyGroups').'</span></a></li>';
+		echo '<div class="socialMenu" >';		
+		if ($show != 'shared_profile') {			            	        	        	        
+	        echo 	'<div>
+	                	<ul>
+	                    	<li><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.Display::return_icon('home.gif',get_lang('Home'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Home').'</span></a></li>
+	                        <li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png',get_lang('Messages'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Messages').'</span></a></li>';
+			if ($show == 'messages') {
+				
+					echo '<ul class="social_menu_messages">';
+						echo '<li class="socialMenuSubLevel"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png', get_lang('Inbox'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Inbox').'</span></a></li>';
+						echo '<li class="socialMenuSubLevel"><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('message_new.png', get_lang('ComposeMessage'), array('hspace'=>'6','style'=>'float:left')).'<span class="menuTex4" >'.get_lang('ComposeMessage').'</span></a></li>';
+						echo '<li class="socialMenuSubLevel"><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png', get_lang('Outbox'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Outbox').'</span></a></li>';
+					echo '</ul>';
 					
+				}
+	        
+	        if ($show == 'invitations') {
+	        	echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('mail.png',get_lang('Invitations'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Invitations').'</span></a></li>';
+	        	
+	        } 
+	                     
+	        echo	'<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png',get_lang('ViewMySharedProfile'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('ViewMySharedProfile').'</span></a></li>
+	        			<li><a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.Display::return_icon('lp_users.png',get_lang('Friends'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Friends').'</span></a></li>
+	                    <li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.gif',get_lang('Groups'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Groups').'</span></a></li>';
+	                    	        
+	        if ($show == 'groups') {
+					echo '<ul class="social_menu_groups">';
+						echo $create_group_item;
+						echo '<li class="socialMenuSubLevel"><a href="'.api_get_path(WEB_PATH).'main/social/groups.php?view=mygroups">'.Display::return_icon('group.gif',get_lang('MyGroups'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('MyGroups').'</span></a></li>';
+						
+					echo '</ul>';
+				}                                        	
+	                        echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('search.gif',get_lang('Search'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Search').'</span></a></li>
+	                    </ul>
+	                </div>'; 	        
+	        if ($show == 'group_messages' && !empty($group_id)) {
+	        	echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
+	        }
+		}
+
+        if ($show == 'shared_profile') {
+        	
+        	//echo '<div class="socialMenu" >';            	        	                	
+	        	//--- User image
+				echo '<div class="social-content-image">';
+					echo '<div class="social-background-content" style="width:80%;" ><center>';
+						if ($img_array['file'] != 'unknown.jpg') {
+			    	  		echo '<a class="thickbox" href="'.$big_image.'"><img src='.$img_array['dir'].$img_array['file'].' width="150px" /> </a><br /><br />';
+						} else {
+							echo '<img src='.$img_array['dir'].$img_array['file'].' width="150px"/><br /><br />';
+						}
+		    	  	echo '</center></div>';
+	    	  	echo '</div>';
+	    	  	if ($show_full_profile) {  	  	   	  	        	
+		        	echo '<div align="center" class="menuTitle" ><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></div>';        
+		        	echo 	'<div>
+		                	<ul>
+		                     <li><a href="'.api_get_path(WEB_PATH).'main/social/home.php">'.Display::return_icon('home.gif',get_lang('Home'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Home').'</span></a></li>
+		                     <li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png',get_lang('Messages'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Messages').'</span></a></li>';
+		        	echo	'<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png',get_lang('ViewMySharedProfile'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('ViewMySharedProfile').'</span></a></li>
+		        			 <li><a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.Display::return_icon('lp_users.png',get_lang('Friends'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Friends').'</span></a></li>
+		                     <li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.gif',get_lang('Groups'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Groups').'</span></a></li>';
+		            echo   '</ul></div>';
+	    	  	}
+	    	  	
+	    	  	$html_actions = '';
+		  		if ($user_id != api_get_user_id()) {
+		  			$html_actions =  '&nbsp;<a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?height=300&width=610&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">';
+		  			$html_actions .= Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a><br />';	  		
+		  		}	  		
+		  		//check if I already sent an invitation message
+		  		$invitation_sent_list = SocialManager::get_list_invitation_sent_by_user_id(api_get_user_id());
+		  			  		
+		  		if (is_array($invitation_sent_list) && is_array($invitation_sent_list[$user_id]) && count($invitation_sent_list[$user_id]) >0 ) {  	  		
+		  			$html_actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('YouAlreadySentAnInvitation').'</a>';
+		  		} else {
+		  			if (!$show_full_profile) {
+		  				$html_actions .=  '&nbsp;<a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=260&width=610&user_friend='.$user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a>';
+		  			}
+		  		}
+		  		echo $html_actions;
+
+        	/*
+        	// ---- My Agenda Items
+			$my_agenda_items = show_simple_personal_agenda($user_id);
+			if (!empty($my_agenda_items)) {
+				echo '<div class="sectiontitle">';
+					echo get_lang('MyAgenda');
+				echo '</div>';
+				$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+				echo '<div class="social-content-agenda">';
+					echo '<div class="social-background-content">';
+					echo $my_agenda_items;
+					echo '</div>';
+				echo '<br /><br />';
+				echo '</div>';
+			}
+			*/
+			if ($show_full_profile) {
+				$personal_course_list = UserManager::get_personal_session_course_list($user_id);
+				$course_list_code = array();
+				$i=1;				
+				if (is_array($personal_course_list)) {
+					foreach ($personal_course_list as $my_course) {
+						if ($i<=10) {
+							$list[] = SocialManager::get_logged_user_course_html($my_course,$i);
+							$course_list_code[] = array('code'=>$my_course['c'],'dbName'=>$my_course['db']);				
+						} else {
+							break;
+						}
+						$i++;
+					}
+					//to avoid repeted courses
+					$course_list_code = array_unique_dimensional($course_list_code);
+				}
+					
+				echo '<div align="center" class="menuTitle" ><span class="menuTex1">'.strtoupper(get_lang('Announcement')).'</span></div>';
+				echo '<div>';
+				echo '<ul>';
+					//-----Announcements
+					$my_announcement_by_user_id= intval($user_id);
+			    	foreach ($course_list_code as $course) {
+		    			$content = get_all_annoucement_by_user_course($course['dbName'],$my_announcement_by_user_id);
+		    			$course_info=api_get_course_info($course['code']);
+		    	  		if (!empty($content)) {
+		    				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cidReq='.$course['code'].'"'.Display::return_icon('valves.gif',get_lang('Announcements'),array('hspace'=>'6')).'<span class="menuTex4">'.$course_info['name'].' ('.$content['count'].')</span></a></li>';  				    	  			
+		    	  		}
+		    	  	}
 				echo '</ul>';
-			}                                        	
-                        echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('search.gif',get_lang('Search'),array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('Search').'</span></a></li>
-                    </ul>
-                </div>'; 
+				echo '</div>';
+			}
+			
+			
+			
+	    	  	
+        }                		  		
         
-        if ($show == 'group_messages' && !empty($group_id)) {
-        	echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
-        }        		  		
         echo '</div>';
+
 	}
 	
 		

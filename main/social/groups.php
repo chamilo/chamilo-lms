@@ -102,10 +102,6 @@ $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Groups'));
 Display :: display_header($tool_name, 'Groups');
 
-
-
-
-
 // save message group
 if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 
@@ -127,8 +123,7 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 			Display::display_error_message($res);
 		}		
 		Security::clear_token();
-	}
-		
+	}	
 }
 
 // getting group information

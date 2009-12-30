@@ -442,12 +442,11 @@ class SocialManager extends UserManager {
 	    if (count($feeds)==0) { return ''; }
 	    foreach ($feeds as $url) {
 		if (empty($url)) { continue; }
-
-	        $rss = @fetch_rss($url);
-	    	$res .= '<h2>'.$rss->channel['title'].'</h2>';
-	        $res .= '<div class="social-rss-channel-items">';
-	        $i = 1;
-			if (is_array($rss->items)) { 
+	        $rss = @fetch_rss($url);	        	    	
+	        $i = 1;	        
+			if (!empty($rss->items)) {
+				$res .= '<h2>'.$rss->channel['title'].'</h2>';
+	        	$res .= '<div class="social-rss-channel-items">'; 
 		        foreach ($rss->items as $item) {
 		            if ($limit>=0 and $i>$limit) {break;}
 		        	$res .= '<h3><a href="'.$item['link'].'">'.$item['title'].'</a></h3>';
@@ -455,8 +454,8 @@ class SocialManager extends UserManager {
 		            $res .= '<div class="social-rss-item-content">'.$item['description'].'</div><br />';
 		            $i++;
 		        }
-			}
-	        $res .= '</div>';
+		        $res .= '</div>';
+			}	        
 	    }
 	    return $res;
 	}

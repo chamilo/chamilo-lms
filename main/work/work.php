@@ -146,6 +146,17 @@ isset($_REQUEST['title'])?$title = Database :: escape_string($_REQUEST['title'])
 isset($_REQUEST['uploadvisibledisabled'])?$uploadvisibledisabled = Database :: escape_string($_REQUEST['uploadvisibledisabled']):$uploadvisibledisabled='';
 isset($_REQUEST['id'])?$id = strval(intval($_REQUEST['id'])):$id='';
 
+
+// get data for publication assignment
+$has_expired = false;
+$has_ended = false;
+isset($_GET['curdirpath'])?$curdirpath=Database::escape_string($_GET['curdirpath']):$curdirpath='';
+$sql = Database::query('SELECT description,id FROM '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION).' WHERE filetype = '."'folder'".' and has_properties != '."''".' and url = '."'/".$curdirpath."'".' LIMIT 1',__FILE__,__LINE__);
+$is_special = Database::num_rows($sql);
+if($is_special > 0) {
+	$publication = Database::fetch_array($sql);
+}
+
 //directories management
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $course_dir = $sys_course_path . $_course['path'];
@@ -200,11 +211,16 @@ if ($always_show_tool_options) {
 if ($always_show_upload_form) {
 	$display_upload_form = true;
 }
-if (isset($_GET['list']) && Security::remove_XSS($_GET['list'])=='witout') {
+if (isset($_GET['list']) && Security::remove_XSS($_GET['list'])=='without') {
 	$display_list_users_without_publication= true;
 } else {
 	$display_list_users_without_publication= false;
 }
+
+if (isset($_GET['action']) && $_GET['action'] == 'send_mail') {
+	send_reminder_users_without_publication($publication['id']);
+} 
+
 api_protect_course_script(true);
 
 /*
@@ -1109,10 +1125,10 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 			// Here we are forming one large header line
 			// Every header must be followed by a \n except the last
 			@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
-			
-			$emailbody_user=get_lang('MessageConfirmSendingOfTask')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
+
+			$emailbody_user = get_lang('Dear')." ".$currentUserFirstName .' '.$currentUserLastName ."\n";			
+			$emailbody_user .= get_lang('MessageConfirmSendingOfTask')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
 			$emailbody_user .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n"; 
-			$emailbody_user .= get_lang('UserName')." : ".$currentUserFirstName .' '.$currentUserLastName ."\n";
 			$emailbody_user .= get_lang('DateSent')." : ".date('d/m/Y H:i')."\n";
 			$emailbody_user .= get_lang('FileName')." : ".$title."\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');;
 			
@@ -1139,15 +1155,17 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 	 Display links to upload form and tool options
   =======================================
 */
+/*
 $has_expired = false;
 $has_ended = false;
 isset($_GET['curdirpath'])?$curdirpath=Database::escape_string($_GET['curdirpath']):$curdirpath='';
 $sql = Database::query('SELECT description,id FROM '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION).' WHERE filetype = '."'folder'".' and has_properties != '."''".' and url = '."'/".$curdirpath."'".' LIMIT 1',__FILE__,__LINE__);
 $is_special = Database::num_rows($sql);
+*/
 if($is_special > 0):
 	$is_special = true;
 	define('IS_ASSIGNMENT',1);
-	$publication = Database::fetch_array($sql);
+	//$publication = Database::fetch_array($sql);
 	$sql = Database::query('SELECT * FROM '.$TSTDPUBASG.' WHERE publication_id = '.(string)$publication['id'].' LIMIT 1',__FILE__,__LINE__);
 	$homework = Database::fetch_array($sql);
 
@@ -1520,13 +1538,6 @@ if (!$display_upload_form && !$display_tool_options) {
 		display_student_publications_list($base_work_dir . '/' . $my_cur_dir_path, 'work/' . $my_cur_dir_path, $currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_query);
 	}
 }
-/*
-==============================================================================
-		Display list of student without publication
-==============================================================================
-*/
-
-
 /*
 ==============================================================================
 		Footer

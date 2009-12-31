@@ -48,7 +48,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 		// Create dir
 		if ($cur_dir_path=='/')
 		{
-			$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;curdirpath='.$cur_dir_path.'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'">'.Display::return_icon('works_new.gif', get_lang('CreateAssignment')).' '.get_lang('CreateAssignment').' </a>';
+			$display_output .=	'<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'">'.Display::return_icon('works_new.gif', get_lang('CreateAssignment')).' '.get_lang('CreateAssignment').' </a>';
 		}
 		// Options
 		$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=".$origin."&amp;display_tool_options=true&amp;origin=".$origin."&amp;gradebook=".$gradebook."\">".Display::return_icon('acces_tool.gif', get_lang("EditToolOptions")).' ' . get_lang("EditToolOptions") . "</a>";
@@ -83,43 +83,34 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 			$columnStatus = Database::fetch_array($sql_result);
 
 			if ($columnStatus['Default'] == 1) {
-				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;make_invisible=all\">".
+				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;origin=$origin&amp;gradebook=$gradebook&amp;make_invisible=all\">".
 						Display::return_icon('visible.gif', get_lang('MakeAllPapersInvisible')).' '.get_lang('MakeAllPapersInvisible').
 						"</a>\n";
 			} else {
-				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;make_visible=all\">".
+				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;origin=$origin&amp;gradebook=$gradebook&amp;make_visible=all\">".
 						Display::return_icon('invisible.gif', get_lang('MakeAllPapersVisible')).' '.get_lang('MakeAllPapersVisible').
 						"</a>\n";
 			}
 		}
 	}
 	if (api_is_allowed_to_edit(null,true)) {
+		global $publication;
 		if (empty($curdirpath) or $curdirpath != '.' or $cur_dir_path != '/') {
 			if (empty($_GET['list']) or Security::remove_XSS($_GET['list'])=='with'){
-				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;list=witout\">".
+				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;list=without\">".
 				Display::return_icon('un_check.gif', get_lang('ViewUsersWithoutTask')).' '.get_lang('ViewUsersWithoutTask').
 				"</a>\n";
 			} else {
 				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;list=with\">".
 				Display::return_icon('check.gif', get_lang('ViewUsersWithTask')).' '.get_lang('ViewUsersWithTask').
 				"</a>\n";
+
+				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;list=without&amp;action=send_mail&amp;sec_token=".$_SESSION['sec_token']."\">".
+				Display::return_icon('messagebox_warning.gif', get_lang('ReminderMessage')).' '.get_lang('ReminderMessage').
+				"</a>\n";
 			}
 		}
 	}
-	
-	
-		// BEGIN : form to remind inactives susers
-	$form = new FormValidator('reminder_form', 'get', api_get_path(REL_CODE_PATH).'announcements/announcements.php');
-
-	$renderer = $form->defaultRenderer();
-	$renderer->setElementTemplate('<span>{label} {element}</span>&nbsp;<button class="save" type="submit">'.get_lang('SendNotification').'</button>','since');
-
-	$form -> addElement('hidden', 'action', 'add');
-	$form -> addElement('hidden', 'remindallinactives', 'true');
-
-	$form -> display();
-	
-	
 	if ($display_output != "") {
 		echo $display_output;
 	}
@@ -1461,7 +1452,7 @@ function get_work_id($path) {
  * @return array 
  * @author cvargas carlos.vargas@beeznest.com
  */
-function get_list_users_without_publication($task_id){
+function get_list_users_without_publication($task_id) {
 	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -1491,14 +1482,15 @@ function get_list_users_without_publication($task_id){
 	$users_without_tasks = array();
 	while ($row_users = Database::fetch_row($result_users)) {		
 		if (in_array($row_users[0],$users_with_tasks)) continue;	
-		$user_id = array_shift($row_users);						
-		$row_users[2] = Display::encrypted_mailto_link($row_users[2],$row_users[2]);			
+		$user_id = array_shift($row_users);
+		$row_users[3] = $row_users[2];						
+		$row_users[2] = Display::encrypted_mailto_link($row_users[2],$row_users[2]);
+					
 		$users_without_tasks[] = $row_users;
 	}
 			
 	return $users_without_tasks;
 }
-
 /**
 * Display list of users who have not given the task
 *
@@ -1506,16 +1498,14 @@ function get_list_users_without_publication($task_id){
 * @return array
 * @author cvargas carlos.vargas@beeznest.com cfasanando, christian.fasanado@beeznest.com
 */
-function display_list_users_without_publication($task_id)
-{
+function display_list_users_without_publication($task_id) {
 	global $origin;
-
 	$table_header[] = array(get_lang('FirstName'),true);
 	$table_header[] = array(get_lang('LastName'),false);
 	$table_header[] = array(get_lang('Email'),false);
 	// table_data
 	$table_data = get_list_users_without_publication($task_id);
-		
+	
 	$sorting_options=array();
 	$sorting_options['column']=1;
 	$paging_options=array();
@@ -1531,4 +1521,28 @@ function display_list_users_without_publication($task_id)
 	$column_show[]=1;
 	$column_show[]=1;
 	Display::display_sortable_config_table($table_header,$table_data,$sorting_options, $paging_options,$my_params,$column_show);
+}
+/**
+* Send reminder to users who have not given the task
+*
+* @param int
+* @return array
+* @author cvargas carlos.vargas@beeznest.com cfasanando, christian.fasanado@beeznest.com
+*/
+function send_reminder_users_without_publication($task_id) {
+
+	global $_course,$my_cur_dir_path,$currentUserFirstName,$currentUserLastName,$currentUserEmail;
+	$emailsubject = "[" . api_get_setting('siteName') . "] ";
+	$sender_name = $currentUserFirstName.' '.$currentUserLastName;
+	$email_admin = $currentUserEmail;
+	// The body can be as long as you wish, and any combination of text and variables
+	$emailbody_user .= get_lang('ReminderToSubmitPendingTask')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
+	$emailbody_user .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n\n".get_lang('Teacher')." : ".$currentUserFirstName.' '.$currentUserLastName."\n".get_lang('Email')." : ".$currentUserEmail;
+	
+	$list_users= get_list_users_without_publication($task_id);
+	
+	foreach ($list_users as $users) {
+		$name_user = $users[1].' '.$users[0];
+		@api_mail($name_user, $users[3], $emailsubject, $emailbody_user, $sender_name,$email_admin);			
+	}	
 }

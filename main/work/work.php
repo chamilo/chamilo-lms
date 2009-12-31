@@ -88,6 +88,7 @@ require_once (api_get_path(LIBRARY_PATH) . 'security.lib.php');
 require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php');
 require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once(api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 // Section (for the tabs)
@@ -128,6 +129,7 @@ $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH) . $_course["path"] .
 $currentCourseRepositoryWeb = api_get_path(WEB_COURSE_PATH) . $_course["path"] . "/";
 $currentUserFirstName = $_user['firstName'];
 $currentUserLastName = $_user['lastName'];
+$currentUserEmail = $_user['mail'];
 
 isset($_POST['authors'])?$authors = Database :: escape_string($_POST['authors']):$authors='';
 isset($_REQUEST['delete'])?$delete = Database :: escape_string($_REQUEST['delete']):$delete='';
@@ -197,6 +199,11 @@ if ($always_show_tool_options) {
 }
 if ($always_show_upload_form) {
 	$display_upload_form = true;
+}
+if (isset($_GET['list']) && Security::remove_XSS($_GET['list'])=='witout') {
+	$display_list_users_without_publication= true;
+} else {
+	$display_list_users_without_publication= false;
 }
 api_protect_course_script(true);
 
@@ -1069,7 +1076,7 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 			}
 
 			//coach of the course
-			$sql_resp = 'SELECT user.email as myemail
+			$sql_resp = 'SELECT user.email as myemail 
 									FROM ' . $table_session_course_user . ' scu
 									INNER JOIN ' . $table_user . ' user
 										ON user.user_id = scu.id_user AND scu.status=2
@@ -1084,6 +1091,7 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 		}
 
 		if (count($emailto) > 0) {
+			
 			$emailto = implode(',', $emailto);
 			$emailfromaddr = api_get_setting('emailAdministrator');
 			$emailfromname = api_get_setting('siteName');
@@ -1092,11 +1100,24 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 		    $email_admin = api_get_setting('emailAdministrator');
 			// The body can be as long as you wish, and any combination of text and variables
 
-			$emailbody = get_lang('SendMailBody').' '.api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;curdirpath=".$my_cur_dir_path." (" . stripslashes($title) . ")\n\n" . api_get_setting('administratorName') . " " . api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');
-
+			$emailbody = get_lang('SendMailBody')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
+			$emailbody .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n"; 
+			$emailbody .= get_lang('UserName')." : ".$currentUserFirstName .' '.$currentUserLastName ."\n";
+			$emailbody .= get_lang('DateSent')." : ".date('d/m/Y H:i')."\n";
+			$emailbody .= get_lang('FileName')." : ".$title."\n\n".get_lang('DownloadLink')."\n";
+			$emailbody .= api_get_path(WEB_CODE_PATH)."work/work.php?".api_get_cidreq()."&amp;curdirpath=".$my_cur_dir_path."\n\n" . api_get_setting('administratorName') . " " . api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');
 			// Here we are forming one large header line
 			// Every header must be followed by a \n except the last
 			@api_mail('', $emailto, $emailsubject, $emailbody, $sender_name,$email_admin);
+			
+			$emailbody_user=get_lang('MessageConfirmSendingOfTask')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
+			$emailbody_user .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n"; 
+			$emailbody_user .= get_lang('UserName')." : ".$currentUserFirstName .' '.$currentUserLastName ."\n";
+			$emailbody_user .= get_lang('DateSent')." : ".date('d/m/Y H:i')."\n";
+			$emailbody_user .= get_lang('FileName')." : ".$title."\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname') . "\n" . get_lang('Manager') . " " . api_get_setting('siteName') . "\n" . get_lang('Email') . " : " . api_get_setting('emailAdministrator');;
+			
+			//Mail to user
+			@api_mail('', $currentUserEmail, $emailsubject, $emailbody_user, $sender_name,$email_admin);
 
 		}
 	}
@@ -1283,7 +1304,7 @@ if ($is_course_member) {
 
 		$form->add_real_progress_bar('uploadWork', 'DownloadFile');
 		$form->setDefaults($defaults);
-		$form->addRule('file', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+		//$form->addRule('file', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
 		$form->display();
 
 
@@ -1487,16 +1508,23 @@ if (!$display_upload_form && !$display_tool_options) {
 			
 		}
 	}
-	if(!empty($publication['description'])){
-			echo '<div class="actions">';
-			echo '<br /><b>'.get_lang('Description').':</b>&nbsp;&nbsp;'.$publication['description'].'<br /><br />';
-			echo '</div>';
+	
+	if ($display_list_users_without_publication) {
+		display_list_users_without_publication($publication['id']);
+	} else {	
+		if(!empty($publication['description'])){
+				echo '<div class="actions">';
+				echo '<br /><b>'.get_lang('Description').':</b>&nbsp;&nbsp;'.$publication['description'].'<br /><br />';
+				echo '</div>';
+		}
+		display_student_publications_list($base_work_dir . '/' . $my_cur_dir_path, 'work/' . $my_cur_dir_path, $currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_query);
 	}
-	
-	display_student_publications_list($base_work_dir . '/' . $my_cur_dir_path, 'work/' . $my_cur_dir_path, $currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_query);
-	
-
 }
+/*
+==============================================================================
+		Display list of student without publication
+==============================================================================
+*/
 
 
 /*

@@ -38,7 +38,7 @@ if (empty($group_id)) {
 
 
 Display :: display_header($tool_name, 'Groups');
-$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));
+$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'), true);
 $user_online_count = count($user_online_list); 
 echo '<div class="actions-title-groups">';
 echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
@@ -98,9 +98,7 @@ if (isset($_GET['action']) && $_GET['action']=='delete_moderator') {
 	}
 }
 
-if (! empty($show_message)){
-	Display :: display_normal_message($show_message);
-}
+
 
 $users	= GroupPortalManager::get_users_by_group($group_id, false, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR), 0 , 1000);
 $new_member_list = array();
@@ -108,9 +106,12 @@ $new_member_list = array();
 echo '<div id="socialContent">';
 	echo '<div id="socialContentLeft">';	
 	//this include the social menu div
-	SocialManager::show_social_menu('group_messages',$group_id);
+	SocialManager::show_social_menu('member_list',$group_id);
 	echo '</div>';
-	echo '<div class="socialContentRight">';		
+	echo '<div id="socialContentRigth">';
+		if (! empty($show_message)){
+			Display :: display_normal_message($show_message);
+		}	
 		foreach($users as $user) {		
 				switch ($user['relation_type']) {
 					case  GROUP_USER_PERMISSION_ADMIN:

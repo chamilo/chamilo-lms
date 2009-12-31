@@ -122,24 +122,46 @@ function LoginDelete($user_id)
 /**
  * Gives a list of people online now (and in the last $valid minutes)
  * @param   int         Number of minutes to account logins for
+ * @param   bool		optionally if it's set to true shows who friends from social network is online otherwise just shows all users online
  * @return  array       For each line, a list of user IDs and login dates, or FALSE on error or empty results
  */
-function WhoIsOnline($valid)
+function WhoIsOnline($valid, $friends = false)
 {
 	$valid = (int) $valid;
 	$current_date=date('Y-m-d H:i:s',time());
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
-
+	$friend_user_table = Database::get_main_table(TABLE_MAIN_USER_FRIEND);
+	$query = '';
+	if ($friends) {
+		// 	who friends from social network is online	
+		$query = "	SELECT distinct login_user_id,login_date 
+					FROM $track_online_table 
+					INNER JOIN $friend_user_table ON friend_user_id = login_user_id AND relation_type=3
+					WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' ";
+	} else {
+		// all users online
+		$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";	
+	}
+	
 	global $_configuration;
 	if ($_configuration['multiple_access_urls']==true) {
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-		$access_url_id = api_get_current_access_url_id();
-		if ($access_url_id != -1){
-			$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." track
-			INNER JOIN $tbl_user_rel_access_url user_rel_url
-			ON (user_rel_url.user_id = track.login_user_id)
-			WHERE access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
+		$access_url_id = api_get_current_access_url_id();		
+		if ($access_url_id != -1) {
+			if ($friends) {
+				// 	who friends from social network is online	
+				$query = "	SELECT distinct login_user_id,login_date 
+							FROM $track_online_table 
+							INNER JOIN $tbl_user_rel_access_url user_rel_url ON (user_rel_url.user_id = track.login_user_id)		
+							INNER JOIN $friend_user_table ON friend_user_id = login_user_id AND relation_type=3
+							WHERE access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' ";
+			} else {
+				// all users online
+				$query = "	SELECT login_user_id,login_date FROM ".$track_online_table ." track
+							INNER JOIN $tbl_user_rel_access_url user_rel_url
+							ON (user_rel_url.user_id = track.login_user_id)
+							WHERE access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";	
+			}
 		}
 	}
 

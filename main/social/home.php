@@ -52,7 +52,7 @@ if (api_get_setting('profile', 'picture') == 'true') {
 Display :: display_header(null);
 $user_info = UserManager :: get_user_info_by_id(api_get_user_id());
 //$user_info = api_get_user_info(api_get_user_id());
-$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));
+$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'),true);
 $user_online_count = count($user_online_list); 
 
 echo '<div class="actions-title-groups">';
@@ -70,9 +70,9 @@ echo '<div id="socialContent">';
 
 	echo '<div id="socialContentLeft">';	
 	//this include the social menu div
-	SocialManager::show_social_menu();	
+	SocialManager::show_social_menu('home');	
 	echo '</div>';
-	echo '<div class="socialContentRight">';
+	echo '<div id="socialContentRigth">';
 		echo '<div id="boxmyGroups">';
 			echo '<div id="boxmyGroupsLeft">';
 						
@@ -89,6 +89,8 @@ echo '<div id="socialContent">';
                             <div class="box_description_group_actions" ><a href="profile.php">'.get_lang('SeeMore').$url_close.'</a></div>	            
                         </div>                        
 					</div>';
+			
+			if (count($user_online_list) > 0) {
  
 			echo '<div class="boxMygroupsContent">
                     	<div>'.Display::return_icon('boxmygroups.jpg').'</div>
@@ -99,6 +101,7 @@ echo '<div id="socialContent">';
             echo '</div>
                       </div>
                    </div>';
+			}
 			
 			echo '</div>';
 

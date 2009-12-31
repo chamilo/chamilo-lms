@@ -250,16 +250,10 @@ if (is_array($personal_course_list)) {
 //show the action menu
 //SocialManager::show_social_menu();
 
-$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));
+$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'), true);
 $user_online_count = count($user_online_list);
-//if ($user_id == api_get_user_id()) {
-	$title = get_lang('ViewMySharedProfile');
-/*} else {
-	$title = get_lang('ViewSharedProfile').' - '.api_get_person_name($user_info['firstname'], $user_info['lastname']);	
-}
-*/
 echo '<div class="actions-title-groups">';
-echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.$title.'</span></center></td>
+echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.get_lang('ViewMySharedProfile').'</span></center></td>
 		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
 		</tr></table>';
 /*
@@ -502,8 +496,11 @@ echo '<div id="socialContentRigth">';
 				$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
 				$item_name = '<div class="box_shared_profile_group_title">'.strtoupper($name). $icon.'</div>';
 				$item_description = '<div class="box_shared_profile_group_description">'.get_lang('DescriptionGroup').'<p>'.cut($result['description'],120,true).'</p></div>';  															
-				$result['picture_uri'] = '<div class="box_shared_profile_group_image"><img class="imageGroups" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" /></div>';			
-				$item_actions = '<div class="box_shared_profile_group_actions"><a href="groups.php?id='.$id.'">'.get_lang('SeeMore').$url_close.'</div>';
+				$result['picture_uri'] = '<div class="box_shared_profile_group_image"><img class="imageGroups" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" /></div>';
+				$item_actions = '';
+				if (api_get_user_id() == $user_id) {
+					$item_actions = '<div class="box_shared_profile_group_actions"><a href="groups.php?id='.$id.'">'.get_lang('SeeMore').$url_close.'</div>';	
+				}							
 				$grid_my_groups[]= array($item_name,$url_open.$result['picture_uri'].$url_close, $item_description.$item_actions);
 				$i++;					
 			}
@@ -521,10 +518,12 @@ echo '<div id="socialContentRigth">';
 						} else {
 							$count_groups = count($results).' '.get_lang('Groups');
 						}
-						echo '<div>'.$count_groups.'</div>';	
-						if ($i > $max_numbers_of_group) {
-		    				echo '<div class="box_shared_profile_group_actions"><a href="groups.php?view=mygroups">'.get_lang('SeeAllMyGroups').'</a></div>';
-		    			}															    			
+						echo '<div>'.$count_groups.'</div>';
+						if (api_get_user_id() == $user_id) {
+							if ($i > $max_numbers_of_group) {							
+		    					echo '<div class="box_shared_profile_group_actions"><a href="groups.php?view=mygroups">'.get_lang('SeeAllMyGroups').'</a></div>';
+		    				}								
+						}														    			
 		    			Display::display_sortable_grid('shared_profile_mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));	    			
 					echo '</div>';	
 				echo '</div>';			
@@ -583,8 +582,7 @@ echo '<div id="socialContentRigth">';
 				echo '</div>';
 			}
 		}
-	
-	
+
 	//--Productions
 	$production_list =  UserManager::build_production_list($user_id);
 	// Images uploaded by course
@@ -664,8 +662,7 @@ echo '<div id="socialContentRigth">';
 								echo cut($user_info['competences'],$cut_size);
 								echo '</div>';
 								echo '<br />';
-							}
-				
+							}				
 							if (!empty($user_info['diplomas'])) {
 								echo '<div class="social-background-content" style="width:100%;" >';
 								echo '<div class="social-actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div>';
@@ -687,8 +684,7 @@ echo '<div id="socialContentRigth">';
 								echo '</div>';
 								echo '<br />';
 							}
-						echo '</div>';
-							
+						echo '</div>';							
 					echo '</div>';
 				echo '</div>';
 			}

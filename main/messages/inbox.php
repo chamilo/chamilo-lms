@@ -135,8 +135,8 @@ if ($_GET['f']=='social') {
 Display::display_header('');
 $social_parameter = '';
 
-if ($_GET['f']=='social') {
-	$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));
+if ($_GET['f']=='social' || api_get_setting('allow_social_tool') == 'true') {
+	$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'),true);
 	$user_online_count = count($user_online_list); 
 	echo '<div class="actions-title-groups">';
 	echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
@@ -187,7 +187,7 @@ echo '<div id="inbox-wrapper">';
 		$id_content_right = 'socialContentRigth';
 		echo '<div id="socialContentLeft">';	
 			//this include the social menu div
-			SocialManager::show_social_menu('messages');
+			SocialManager::show_social_menu('messages_inbox');
 		echo '</div>';		
 	}
 
@@ -206,7 +206,6 @@ echo '<div id="inbox-wrapper">';
 				inbox_display();
 			}
 	echo '</div>';	
-
 echo '</div>';
 
 /*
@@ -216,5 +215,3 @@ echo '</div>';
 */
 
 Display::display_footer();
-
-?>

@@ -39,11 +39,24 @@ if (empty($group_id)) {
 
 
 Display :: display_header($tool_name, 'Groups');
-SocialManager::show_social_menu();
+
+$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'),true);
+$user_online_count = count($user_online_list); 
+echo '<div class="actions-title-groups">';
+echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
+		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
+		</tr></table>';
+/*
+echo '<div class="menuTitle" align="center"><span class="menuTex1">'.get_lang('Menu').'</span></div>';
+echo '<div class="TitleRigth">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.$who_is_on_line.'</span></a></div>';
+*/
+echo '</div>';
+/*
 echo '<div class="actions-title">';
 echo get_lang('GroupWaitingList');
-echo '</div>'; 
-
+echo '</div>';
+*/
+ 
 // Group information
 $admins		= GroupPortalManager::get_users_by_group($group_id, true, array(GROUP_USER_PERMISSION_ADMIN), 0, 1000);
 $show_message = ''; 
@@ -79,40 +92,40 @@ if (isset($_GET['action']) && $_GET['action']=='set_moderator') {
 	}
 }
 
-
-
-if (!empty($show_message)){
-	Display :: display_normal_message($show_message);
-}
-
 $users	= GroupPortalManager::get_users_by_group($group_id, true, array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER), 0, 1000);
 $new_member_list = array();
 
 //Shows left column
-echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());	
-
-//-- Show message groups	
-echo '<div id="layout_right" style="margin-left: 282px;">';	
-	
-	// Display form
-	foreach($users as $user) {	 
-		switch ($user['relation_type']) {			
-			case  GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
-			$user['link']  = '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=accept">'.Display::return_icon('add_user.gif', get_lang('Accept')).'</a>';
-			$user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=set_moderator">'.Display::return_icon('add_teacher_big.gif', get_lang('Moderator')).'</a>';
-			$user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=deny">'.Display::return_icon('delete.gif', get_lang('Deny')).'</a>';
-			break;				
+//echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());	
+echo '<div id="socialContent">';
+	echo '<div id="socialContentLeft">';	
+	//this include the social menu div
+	SocialManager::show_social_menu('waiting_list',$group_id);	
+	echo '</div>';
+	echo '<div id="socialContentRigth">';			
+		if (!empty($show_message)){
+			Display :: display_normal_message($show_message);
+		}		
+		// Display form
+		foreach($users as $user) {	 
+			switch ($user['relation_type']) {			
+				case  GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
+				$user['link']  = '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=accept">'.Display::return_icon('add_user.gif', get_lang('Accept')).'</a>';
+				$user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=set_moderator">'.Display::return_icon('add_teacher_big.gif', get_lang('Moderator')).'</a>';
+				$user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$user['user_id'].'&action=deny">'.Display::return_icon('delete.gif', get_lang('Deny')).'</a>';
+				break;				
+			}
+			$new_member_list[] = $user;
 		}
-		$new_member_list[] = $user;
-	}
-	
-	if (count($new_member_list) > 0) {			
-		Display::display_sortable_grid('search_users', array(), $new_member_list, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true,false,true,true));		
-	} else {
-		Display :: display_normal_message(get_lang('ThereAreNotUsersInTheWaitingList'));
-	}
+		
+		if (count($new_member_list) > 0) {			
+			Display::display_sortable_grid('search_users', array(), $new_member_list, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true,false,true,true));		
+		} else {
+			Display :: display_normal_message(get_lang('ThereAreNotUsersInTheWaitingList'));
+		}				
+	echo '</div>';
+echo '</div>';
 
-echo '</div>'; // end layout right
 	
 Display :: display_footer();
 ?>

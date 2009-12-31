@@ -98,7 +98,7 @@ $this_section = SECTION_SOCIAL;
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
 Display :: display_header($tool_name, 'Groups');
 
-$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));
+$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'),true);
 $user_online_count = count($user_online_list); 
 echo '<div class="actions-title-groups">';
 echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
@@ -117,7 +117,7 @@ echo '</div>';
 echo '<div id="socialContent">';
 	echo '<div id="socialContentLeft">';
 		//show the action menu			
-		SocialManager::show_social_menu('groups');
+		SocialManager::show_social_menu('group_add');
 	echo '</div>';
 	echo '<div id="socialContentRigth">';
 		$form->display();	

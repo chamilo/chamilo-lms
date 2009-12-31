@@ -861,7 +861,7 @@ class GroupPortalManager
 	 * @param int user id
 	 * 
 	 */
-	public static function show_group_column_information($group_id, $user_id) {
+	public static function show_group_column_information($group_id, $user_id, $show = '') {
 		
 		$group_info 	= GroupPortalManager::get_group_data($group_id); 
 		$picture		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,'medium_');
@@ -892,20 +892,20 @@ class GroupPortalManager
 				// I'm just a reader
 				//echo get_lang('IamAReader');								
 				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('NewTopic').'</span></a></li>';
-				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('MessageList').'</span></a></li>';
-				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('InviteFriends').'</span></a></li>';
+				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList'), array('hspace'=>'6')).'<span class="'.($show=='messages_list'?'menu_active':'menuTex4').'" >'.get_lang('MessageList').'</span></a></li>';
+				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'menu_active':'menuTex4').'" >'.get_lang('InviteFriends').'</span></a></li>';
 				echo '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'"><span class="menuTex4" >'.get_lang('LeaveGroup').'</span></a></li>';					
 				break;
 			case GROUP_USER_PERMISSION_ADMIN:
 				//echo get_lang('IamAnAdmin');
 				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('NewTopic').'</span></a></li>';
-				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('MessageList').'</span></a></li>';	
-				echo '<li><a href="group_edit.php?id='.$group_id.'">'.			Display::return_icon('edit.gif', get_lang('EditGroup'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('EditGroup').'</span></a></li>';
-				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('MemberList').'</span></a></li>';								
-				if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED) {				
-					echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('WaitingList').'</span></a></li>';
-				}				
-				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('InviteFriends').'</span></a></li>';				
+				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList'), array('hspace'=>'6')).'<span class="'.($show=='messages_list'?'menu_active':'menuTex4').'" >'.get_lang('MessageList').'</span></a></li>';	
+				echo '<li><a href="group_edit.php?id='.$group_id.'">'.			Display::return_icon('edit.gif', get_lang('EditGroup'), array('hspace'=>'6')).'<span class="'.($show=='group_edit'?'menu_active':'menuTex4').'" >'.get_lang('EditGroup').'</span></a></li>';
+				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList'), array('hspace'=>'6')).'<span class="'.($show=='member_list'?'menu_active':'menuTex4').'" >'.get_lang('MemberList').'</span></a></li>';								
+				//if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED) {				
+					echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList'), array('hspace'=>'6')).'<span class="'.($show=='waiting_list'?'menu_active':'menuTex4').'" >'.get_lang('WaitingList').'</span></a></li>';
+				//}				
+				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'menu_active':'menuTex4').'" >'.get_lang('InviteFriends').'</span></a></li>';				
 				break;
 			case GROUP_USER_PERMISSION_PENDING_INVITATION:				
 				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'"><span class="menuTex4" >'.get_lang('YouHaveBeenInvitedJoinNow').'</span></a></li>';
@@ -916,12 +916,12 @@ class GroupPortalManager
 			case GROUP_USER_PERMISSION_MODERATOR:
 				//echo get_lang('IamAModerator');
 				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('NewTopic').'</span></a></li>';				
-				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('MessageList').'</span></a></li>';							
-				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('MemberList').'</span></a></li>';				
+				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList'), array('hspace'=>'6')).'<span class="'.($show=='messages_list'?'menu_active':'menuTex4').'" >'.get_lang('MessageList').'</span></a></li>';							
+				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList'), array('hspace'=>'6')).'<span class="'.($show=='member_list'?'menu_active':'menuTex4').'" >'.get_lang('MemberList').'</span></a></li>';				
 				if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED) {
-					echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('WaitingList').'</span></a></li>';
+					echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList'), array('hspace'=>'6')).'<span class="'.($show=='waiting_list'?'menu_active':'menuTex4').'" >'.get_lang('WaitingList').'</span></a></li>';
 				}				
-				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('InviteFriends').'</span></a></li>';				
+				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'menu_active':'menuTex4').'" >'.get_lang('InviteFriends').'</span></a></li>';				
 				break;
 			default:
 				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'"><span class="menuTex4" >'.get_lang('JoinGroup').'</a></span></li>';

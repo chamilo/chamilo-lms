@@ -3235,6 +3235,13 @@ a.unread {
  font-size:12px;
  }
 
+.menu_active{
+ font-family:Verdana, Geneva, sans-serif;
+ color:#000;
+ font-weight:bold;
+ font-size:12px;
+ }
+
 /* BOX SHARED PROFILE */
 
 .boxProfile {

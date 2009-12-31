@@ -902,9 +902,9 @@ class GroupPortalManager
 				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList'), array('hspace'=>'6')).'<span class="'.($show=='messages_list'?'menu_active':'menuTex4').'" >'.get_lang('MessageList').'</span></a></li>';	
 				echo '<li><a href="group_edit.php?id='.$group_id.'">'.			Display::return_icon('edit.gif', get_lang('EditGroup'), array('hspace'=>'6')).'<span class="'.($show=='group_edit'?'menu_active':'menuTex4').'" >'.get_lang('EditGroup').'</span></a></li>';
 				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList'), array('hspace'=>'6')).'<span class="'.($show=='member_list'?'menu_active':'menuTex4').'" >'.get_lang('MemberList').'</span></a></li>';								
-				//if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED) {				
+				if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED) {				
 					echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList'), array('hspace'=>'6')).'<span class="'.($show=='waiting_list'?'menu_active':'menuTex4').'" >'.get_lang('WaitingList').'</span></a></li>';
-				//}				
+				}				
 				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'menu_active':'menuTex4').'" >'.get_lang('InviteFriends').'</span></a></li>';				
 				break;
 			case GROUP_USER_PERMISSION_PENDING_INVITATION:				

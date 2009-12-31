@@ -271,6 +271,7 @@ else
 echo '</div>';
 */
 
+echo '<div id="socialContent">';
 
 echo '<div id="socialContentLeft">';	
 	//this include the social menu div
@@ -456,13 +457,14 @@ echo '<div id="socialContentRigth">';
 				// No friends!! :(
 					$friend_html .= '<div><h3>'.get_lang('SocialFriend').'</h3></div>';
 					$friend_html.= '<div id="friend-container" class="social-friend-container">';
-					$friend_html.= '<div id="friend-header">';
-				$friend_html.= '<div style="float:left; padding:0px 8px 0px 8px;">'.get_lang('NoFriendsInYourContactList').'<br /><a href="'.api_get_path(WEB_PATH).'whoisonline.php">'.get_lang('TryAndFindSomeFriends').'</a></div>';
-				$friend_html.= '</div>'; // close div friend-header
+						$friend_html.= '<div id="friend-header">';
+							$friend_html.= '<div style="float:left; padding:0px 8px 0px 8px;">'.get_lang('NoFriendsInYourContactList').'<br /><a href="'.api_get_path(WEB_PATH).'whoisonline.php">'.get_lang('TryAndFindSomeFriends').'</a></div>';
+						$friend_html.= '</div>'; // close div friend-header
 			}
 			$friend_html.= '</div>';
 			echo $friend_html;
 			
+			echo '</div>';
 			echo '</div>';
 		}
 					
@@ -692,6 +694,7 @@ echo '<div id="socialContentRigth">';
 	echo '</div>'; // close div tag .boxProfile
 }
 echo '</div>'; // close div tag .socialContentRight
-
 echo '<form id="id_reload" name="id_reload" action="profile.php">&nbsp;</form>';
+echo '</div>';
+
 Display :: display_footer();

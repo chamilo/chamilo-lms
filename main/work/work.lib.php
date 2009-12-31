@@ -25,6 +25,8 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	global $charset;
 	$display_output = "";
 	$origin = isset($_GET['origin'])?Security::remove_XSS($_GET['origin']):'';
+	$curdirpath = isset($_GET['curdirpath'])?Security::remove_XSS($_GET['curdirpath']):empty($curdirpath);
+	
 
 	$origin = api_get_tools_lists($origin);
 	echo '<div class="actions">';
@@ -58,8 +60,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 
 	}
 
-	if (api_is_allowed_to_edit(null,true) && $origin != 'learnpath' && api_is_allowed_to_session_edit(false,true))
-	{
+	if (api_is_allowed_to_edit(null,true) && $origin != 'learnpath' && api_is_allowed_to_session_edit(false,true)) {
 		// delete all files
 		if (api_get_setting('permanently_remove_deleted_files') == 'true'){
 			$message=get_lang('ConfirmYourChoiceDeleteAllfiles');
@@ -67,9 +68,12 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 			$message=get_lang('ConfirmYourChoice');
 		}
 		
-		$display_output .= 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;delete=all\" "."onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities($message,ENT_QUOTES,$charset))."')) return false;\">".
+		if (empty($curdirpath) or $curdirpath != '.') {
+			$display_output .= 	'<a href="#">'.Display::return_icon('delete_na.gif', get_lang('Delete')).get_lang('DeleteAllFiles').'</a>';
+		} else {
+			$display_output .= 	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;delete=all\" "."onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities($message,ENT_QUOTES,$charset))."')) return false;\">".
 			Display::return_icon('delete.gif', get_lang('Delete')).' '.get_lang('DeleteAllFiles')."</a>";
-
+		}
 		// make all files visible or invisible
 		$work_table 		= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 		$sql_query = "SHOW COLUMNS FROM ".$work_table." LIKE 'accepted'";
@@ -88,11 +92,35 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 						"</a>\n";
 			}
 		}
-
 	}
+	if (api_is_allowed_to_edit(null,true)) {
+		if (empty($curdirpath) or $curdirpath != '.' or $cur_dir_path != '/') {
+			if (empty($_GET['list']) or Security::remove_XSS($_GET['list'])=='with'){
+				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;list=witout\">".
+				Display::return_icon('un_check.gif', get_lang('ViewUsersWithoutTask')).' '.get_lang('ViewUsersWithoutTask').
+				"</a>\n";
+			} else {
+				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;list=with\">".
+				Display::return_icon('check.gif', get_lang('ViewUsersWithTask')).' '.get_lang('ViewUsersWithTask').
+				"</a>\n";
+			}
+		}
+	}
+	
+	
+		// BEGIN : form to remind inactives susers
+	$form = new FormValidator('reminder_form', 'get', api_get_path(REL_CODE_PATH).'announcements/announcements.php');
 
-	if ($display_output != "")
-	{
+	$renderer = $form->defaultRenderer();
+	$renderer->setElementTemplate('<span>{label} {element}</span>&nbsp;<button class="save" type="submit">'.get_lang('SendNotification').'</button>','since');
+
+	$form -> addElement('hidden', 'action', 'add');
+	$form -> addElement('hidden', 'remindallinactives', 'true');
+
+	$form -> display();
+	
+	
+	if ($display_output != "") {
 		echo $display_output;
 	}
 	echo '</div>';
@@ -618,7 +646,6 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				}
 			}
 		}
-
 		$action = '';
 		$row = array();
 		$class = '';
@@ -802,6 +829,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$my_params = array ('edit_dir' => Security::remove_XSS($_GET['edit_dir']));
 	}
 	$my_params['origin'] = $origin;
+		
 	Display::display_sortable_config_table($table_header,$table_data,$sorting_options, $paging_options,$my_params,$column_show,$column_order);
 }
 
@@ -1426,4 +1454,81 @@ function get_work_id($path) {
 	} else {
 		return false;
 	}
+}
+/**
+ * Get list of users who have not given the task
+ * @param int 
+ * @return array 
+ * @author cvargas carlos.vargas@beeznest.com
+ */
+function get_list_users_without_publication($task_id){
+	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+	$iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+	$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+	$session_course_rel_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+	
+	//condition for the session
+	$session_id = api_get_session_id();
+	
+	if (!empty($session_id)){
+		$sql="SELECT C.id_user as id FROM $work_table AS S, $session_course_rel_user AS C, $iprop_table AS I WHERE C.id_user=I.insert_user_id and S.id=I.ref and S.parent_id='$task_id' and course_code='".api_get_course_id()."' and S.session_id='".$session_id."'";	
+	} else {
+		$sql="SELECT C.user_id as id FROM $work_table AS S, $table_course_user AS C, $iprop_table AS I WHERE C.user_id=I.insert_user_id and S.id=I.ref and C.status=5 and S.parent_id='$task_id' and course_code='".api_get_course_id()."'";		
+	}
+	$result = Database::query($sql, __FILE__, __LINE__);
+	$users_with_tasks = array();
+	while($row = Database::fetch_array($result)) {
+		$users_with_tasks[] = $row['id'];	
+	}
+
+	if (!empty($session_id)){
+    	$sql_users = "SELECT cu.id_user, u.lastname, u.firstname, u.email FROM $session_course_rel_user AS cu, $table_user AS u WHERE cu.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.id_user and cu.id_session='".$session_id."'";
+	} else {
+		$sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email FROM $table_course_user AS cu, $table_user AS u WHERE cu.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.user_id";	
+	}
+	$result_users = Database::query($sql_users, __FILE__, __LINE__);	
+	$users_without_tasks = array();
+	while ($row_users = Database::fetch_row($result_users)) {		
+		if (in_array($row_users[0],$users_with_tasks)) continue;	
+		$user_id = array_shift($row_users);						
+		$row_users[2] = Display::encrypted_mailto_link($row_users[2],$row_users[2]);			
+		$users_without_tasks[] = $row_users;
+	}
+			
+	return $users_without_tasks;
+}
+
+/**
+* Display list of users who have not given the task
+*
+* @param int
+* @return array
+* @author cvargas carlos.vargas@beeznest.com cfasanando, christian.fasanado@beeznest.com
+*/
+function display_list_users_without_publication($task_id)
+{
+	global $origin;
+
+	$table_header[] = array(get_lang('FirstName'),true);
+	$table_header[] = array(get_lang('LastName'),false);
+	$table_header[] = array(get_lang('Email'),false);
+	// table_data
+	$table_data = get_list_users_without_publication($task_id);
+		
+	$sorting_options=array();
+	$sorting_options['column']=1;
+	$paging_options=array();
+	if (isset($_GET['curdirpath'])) {
+		$my_params = array ('curdirpath' => Security::remove_XSS($_GET['curdirpath']));
+	}
+	if (isset($_GET['edit_dir'])) {
+		$my_params = array ('edit_dir' => Security::remove_XSS($_GET['edit_dir']));
+	}
+	$my_params['origin'] = $origin;
+	//$column_show
+	$column_show[]=1;
+	$column_show[]=1;
+	$column_show[]=1;
+	Display::display_sortable_config_table($table_header,$table_data,$sorting_options, $paging_options,$my_params,$column_show);
 }

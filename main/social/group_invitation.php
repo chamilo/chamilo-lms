@@ -212,7 +212,7 @@ $users=$sessions=array();
 
 
 Display :: display_header($tool_name, 'Groups');
-$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));
+$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'), true);
 $user_online_count = count($user_online_list); 
 echo '<div class="actions-title-groups">';
 echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
@@ -341,10 +341,10 @@ if ($add_type == 'multiple') {
 	echo '<div id="socialContent">';
 		echo '<div id="socialContentLeft">';	
 			//this include the social menu div
-			SocialManager::show_social_menu('group_messages',$group_id);
+			SocialManager::show_social_menu('invite_friends',$group_id);
 		echo '</div>';
 		
-	echo '<div class="socialContentRight">';
+	echo '<div id="socialContentRigth">';
 ?>
 	
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $group_id; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>

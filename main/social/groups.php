@@ -129,7 +129,7 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 // getting group information
 $group_id	= intval($_GET['id']);
 
-$who_is_on_line = get_lang('UsersOnline').' '.count(WhoIsOnline(api_get_setting('time_limit_whosonline')));
+$who_is_on_line = get_lang('UsersOnline').' '.count(WhoIsOnline(api_get_setting('time_limit_whosonline'),true));
 
 echo '<div class="actions-title-groups">';
 echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
@@ -147,9 +147,13 @@ echo '<div id="socialContent">';
 	echo '<div id="socialContentLeft">';	
 		//this include the social menu div
 		if ($group_id != 0 ) {
-			SocialManager::show_social_menu('group_messages',$group_id);	
+			SocialManager::show_social_menu('messages_list',$group_id);	
 		} else {
-			SocialManager::show_social_menu('groups');
+			$show_menu = 'groups';
+			if (isset($_GET['view']) && $_GET['view'] == 'mygroups') {
+				$show_menu = $_GET['view'];
+			} 	
+			SocialManager::show_social_menu($show_menu);
 		}	
 	echo '</div>';
 

@@ -88,7 +88,7 @@ $interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Friends'));
 Display :: display_header($tool_name, 'Groups');
 
 
-$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));
+$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'),true);
 $user_online_count = count($user_online_list); 
 echo '<div class="actions-title-groups">';
 echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>

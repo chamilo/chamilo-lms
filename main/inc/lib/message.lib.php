@@ -837,7 +837,7 @@ class MessageManager
 		$rows = self::calculate_children($rows);
 		$group_info = GroupPortalManager::get_group_data($group_id);
 		$current_user_id = api_get_user_id();		
-		$count=0;
+		$count_items = 0;
 		$html = '';
 		if (is_array($rows) && count($rows)> 0) {
 
@@ -923,7 +923,15 @@ class MessageManager
 									<tr><td style="width:25%">&nbsp;</td><td style="text-align:center">'.$pager_items['details'].'</td><td style="text-align:right;width:25%">'.$pager_items['links'].'</td></tr></table></div>';
 
 						$topic_slice['items'] = array_slice($topic['items'],($page_item-1)*($items_per_page),$items_per_page);						
-								
+						
+						$count_items = count($topic['items']);												
+						$current_page = $count_items/$items_per_page;						
+						if (is_int($current_page)) {
+							$page_item_nr = $current_page + 1;
+						} else {
+							$page_item_nr = intval($_GET['page_item_nr']);
+						}
+
 						foreach ($topic_slice['items'] as $item) {
 							
 							$indent	= $item['indent_cnt']*'15';
@@ -936,10 +944,11 @@ class MessageManager
 							$html.= '<div class="social-box-container3" >';	
 								$html .= '<div>'.Display::return_icon('content-post-reply01.jpg').'</div>';
 								$html .= '<div class="social-box-content3">';
-								$html.= '<div id="message-reply-link">
-										<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$item['id'].'&action=reply_message_group&div_id=content_'.$topic['id'].'&page_nr='.Security::remove_XSS($_GET['page_nr']).'&page_item_nr='.Security::remove_XSS($_GET['page_item_nr']).'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('forumthread_new.gif', get_lang('Reply')).'</a>';
+								$html.= '<div id="message-reply-link">';
+								//$html.=	'<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$item['id'].'&action=reply_message_group&div_id=content_'.$topic['id'].'&page_nr='.Security::remove_XSS($_GET['page_nr']).'&page_item_nr='.Security::remove_XSS($_GET['page_item_nr']).'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('forumthread_new.gif', get_lang('Reply')).'</a>';
+								$html.=	'<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$item['id'].'&action=reply_message_group&div_id=content_'.$topic['id'].'&page_nr='.intval($_GET['page_nr']).'&page_item_nr='.intval($page_item_nr).'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('forumthread_new.gif', get_lang('Reply')).'</a>';
 								if ($item['user_sender_id'] == $current_user_id) {
-									$html.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$item['id'].'&action=edit_message_group&div_id=content_'.$topic['id'].'&page_nr='.Security::remove_XSS($_GET['page_nr']).'&page_item_nr='.Security::remove_XSS($_GET['page_item_nr']).'" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.gif', get_lang('Edit')).'</a>';
+									$html.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$item['id'].'&action=edit_message_group&div_id=content_'.$topic['id'].'&page_nr='.intval($_GET['page_nr']).'&page_item_nr='.intval($_GET['page_item_nr']).'" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.gif', get_lang('Edit')).'</a>';
 								} 	
 								$html.= '</div>';
 								$html.= '<div class="message-group-title">'.$item['title'].'&nbsp;</div>';												

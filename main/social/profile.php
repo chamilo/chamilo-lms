@@ -460,8 +460,9 @@ echo '<div id="social-content-right">';
 	echo '</div>'; // close div tag .social-box-main1
 
 	if ($show_full_profile) {
+				
 		// MY GROUPS		    
-	    $results = GroupPortalManager::get_groups_by_user(api_get_user_id(), 0);	
+	    $results = GroupPortalManager::get_groups_by_user($my_user_id, 0);	
 		$grid_my_groups = array();
 		$max_numbers_of_group = 4;
 		if (is_array($results) && count($results) > 0) {
@@ -485,8 +486,8 @@ echo '<div id="social-content-right">';
 					$count_users_group = $count_users_group.' '.get_lang('Members');
 				}										
 				$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
-				$item_name = '<div class="box_shared_profile_group_title">'.strtoupper($name). $icon.'</div>';
-				$item_description = '<div class="box_shared_profile_group_description">'.get_lang('DescriptionGroup').'<p>'.cut($result['description'],120,true).'</p></div>';  															
+				$item_name = '<div class="box_shared_profile_group_title"><span class="social-groups-text1">'.strtoupper($name).'</span>'. $icon.'</div>';
+				$item_description = '<div class="box_shared_profile_group_description"><span class="social-groups-text2">'.get_lang('DescriptionGroup').'</span><p class="social-groups-text4">'.cut($result['description'],120,true).'</p></div>';  															
 				$result['picture_uri'] = '<div class="box_shared_profile_group_image"><img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" /></div>';
 				$item_actions = '';
 				if (api_get_user_id() == $user_id) {

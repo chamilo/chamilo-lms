@@ -213,6 +213,7 @@ switch ($safe['action']) {
 	case 'sortmycourses':
 	default:
 		//api_display_tool_title(get_lang('SortMyCourses'));
+		display_search_courses();
 		$user_courses = get_courses_of_user($_user['user_id']);
 		display_courses($_user['user_id'], true, $user_courses);
 		break;

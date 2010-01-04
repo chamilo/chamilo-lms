@@ -2222,7 +2222,7 @@ div.comments {
 	margin-right:-100px;
 }
 .message-title {
-	color:#ff0000;
+/*	color:#ff0000; */
 	font-size:12px;
 }
 .message-body {
@@ -2464,7 +2464,7 @@ div.image-social-content center.friend {
 	color:#000;
 	font-weight:bold;
 	font-size:12px;
-	vertical-align:bottom;
+	vertical-align:bottom;	
 }
 .social-menu-title-right {
 	width:84%;
@@ -3274,6 +3274,7 @@ a.read {
 .search_user_grid_element_0 img {width:50px;height:50px;border:2px solid #E6E6E6;}
 .search_user_grid_element_1 { width:100%;  text-align:center;}
 .search_user_grid_element_2 { width:100%;  text-align:center;}
+.search_user_grid_element_3 { width:100%;  text-align:center;}
 
 /*SEARCH GROUP*/
 
@@ -3310,8 +3311,9 @@ a.read {
 	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
 	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;
 	-opera-border-radius: 10px; border: 1px solid #e1e1e0;
-	width:240px;
-	margin-top:40px;
+	
+	width:270px;
+	margin-top:20px;
 	margin-right:10px;
 	margin-bottom:40px;
 	padding-left:10px;

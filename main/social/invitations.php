@@ -110,7 +110,7 @@ echo '<div id="social-content">';
 			Display :: display_normal_message($show_message);
 		}
 	
-		echo '<div id="id_response" align="center"></div>';
+			echo '<div id="id_response" align="center"></div>';
 			$list_get_invitation=array();
 			$user_id = api_get_user_id();
 			

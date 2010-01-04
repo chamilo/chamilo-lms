@@ -249,8 +249,8 @@ echo '<div id="social-content">';
 
 echo '<div id="social-content-right">';
 
-	echo '<div id="social-content-online">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="'.api_get_path(WEB_PATH).'whoisonline.php" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a>';	
-	echo '</div>';
+	//echo '<div id="social-content-online">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="'.api_get_path(WEB_PATH).'whoisonline.php" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a>';	
+	//echo '</div>';
 
 	
 	echo '<div class="social-box-main1">';
@@ -408,18 +408,12 @@ echo '<div id="social-content-right">';
 				$j=1;
 				for ($k=0;$k<$number_friends;$k++) {
 
-					if ($j > $number_of_images) break;
-					/*
-					if ($j==$number_of_images) {
-						$number_of_images=$number_of_images*2;
-					}
-					*/
-					
-					//while ($j<$number_of_images) {
+					if ($j > $number_of_images) break;			
 					if (isset($friends[$k])) {
 						$friend = $friends[$k];				
 						$name_user	= api_get_person_name($friend['firstName'], $friend['lastName']);
 						$friend_html.='<div id=div_'.$friend['friend_user_id'].' class="image_friend_network" ><span><center>';
+						
 						// the height = 92 must be the sqme in the image_friend_network span style in default.css
 						$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92, USER_IMAGE_SIZE_MEDIUM , 'width="85" height="90" ');
 						
@@ -428,9 +422,7 @@ echo '<div id="social-content-right">';
 						$friend_html.= '</center></span>';
 						$friend_html.= '<center class="friend">'.$name_user.'</a></center>';
 						$friend_html.= '</div>';
-					}
-						//$j++;
-					//}					
+					}			
 					$j++;
 				}
 			} else {

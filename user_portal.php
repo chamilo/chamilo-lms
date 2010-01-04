@@ -1243,6 +1243,7 @@ if ($show_menu) {
 		$group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION,false);
 		$group_pending_invitations = count($group_pending_invitations);
 		
+		$total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
 		$cant_msg  = '';
 		if ($number_of_new_messages > 0)
 			$cant_msg = ' ('.$number_of_new_messages.')';
@@ -1255,17 +1256,14 @@ if ($show_menu) {
 					$link = '?f=social';
 				}
 				echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />';					
-				echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'" class="message-body">'.get_lang('Comppose').' </a><br />';
+				echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'" class="message-body">'.get_lang('Compose').' </a><br />';
 		
-				if ($number_of_new_messages_of_friend > 0) {		
-					echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' ('.$number_of_new_messages_of_friend.') </a><br />';
+				if ($total_invitations > 0) {		
+					echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' ('.$total_invitations.') </a><br />';
 				}
-				if ( $group_pending_invitations > 0) {		
-					echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('GroupPendingInvitations').' ('.$group_pending_invitations.') </a><br />';
-				}				
+			
 		echo '</p>';
 				
-		//echo '<img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('Close').'" title="'.get_lang('Close').'"  class="message-delete" />';
 		echo '</div>';
 	
 		

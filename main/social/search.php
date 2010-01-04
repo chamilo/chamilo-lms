@@ -53,12 +53,12 @@ echo '<div id="social-content">';
 						$img = $url_open.'<img src="'.$picture['file'].'" />'.$url_close;
 						$user['firstname'] = $url_open.$user['firstname'].$url_close;
 						$user['lastname'] = $url_open.$user['lastname'].$url_close;						
-						$results[] = array($img, $user['firstname'],$user['lastname'],$user['tag']);			
+						$results[] = array($img, $user['firstname'],$user['lastname'], $user['tag']);			
 					}					
 					echo '<div class="social-box-container2">';
 					echo '<div>'.Display::return_icon('content-post-group1.jpg').'</div>';
 					echo '<div id="div_content_table" class="social-box-content2">';					
-							Display::display_sortable_grid('search_user', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false ,true);
+						Display::display_sortable_grid('search_user', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false ,true);
 					echo '</div>';
 					echo '</div>';						
 				}	

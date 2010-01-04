@@ -443,7 +443,12 @@ function display_anonymous_right_menu() {
 			echo "</ul>";
 			echo "</div>";
 		}
-
+		
+		//deleting the myprofile link
+		if (api_get_setting('allow_social_tool') == true) {
+			unset($menu_navigation['myprofile']);	
+		}
+		
 		if (!empty($menu_navigation)) {
 			echo "<div class=\"menusection\">";
 			echo "<span class=\"menusectioncaption\">".get_lang("MainNavigation")."</span>";

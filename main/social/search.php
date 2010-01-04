@@ -89,12 +89,14 @@ echo '<div id="social-content">';
 						$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';			
 						$grid_item_1 = Display::return_icon('boxmygroups.jpg');						
 						$item_1 = '<div>'.$url_open.$result['picture_uri'].'<p class="social-groups-text1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg').'</div>';
-						$item_2 = '';
-						$item_3 = '';
+					
 						if ($result['description'] != '') {
 							$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.get_lang('DescriptionGroup').'</span></div>';
 							$item_3 = '<div class="box_description_group_content" >'.cut($result['description'],100,true).'</div>';
-						}	
+						} else {
+							$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2"></span></div>';
+							$item_3 = '<div class="box_description_group_content" ></div>';
+						}
 						$item_4 = '<div class="box_description_group_actions" >'.$url_open.get_lang('SeeMore').$url_close.'</div>';			
 						$grid_item_2 = $item_1.$item_2.$item_3.$item_4;				
 						$grid_my_groups[]= array($grid_item_1,$grid_item_2);
@@ -122,11 +124,12 @@ echo '<div id="social-content">';
 						$group['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';			
 						$grid_item_1 = Display::return_icon('boxmygroups.jpg');						
 						$item_1 = '<div>'.$url_open.$group['picture_uri'].'<p class="social-groups-text1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg').'</div>';
-							$item_2 = '';
-						$item_3 = '';
 						if ($group['description'] != '') {
 							$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.get_lang('DescriptionGroup').'</span></div>';
 							$item_3 = '<div class="box_description_group_content" >'.cut($group['description'],100,true).'</div>';
+						} else {						
+							$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2"></span></div>';
+							$item_3 = '<div class="box_description_group_content" ></div>';						
 						}
 						$item_4 = '<div class="box_description_group_tags" >'.$tags.'</div>';	
 						$item_5 = '<div class="box_description_group_actions" >'.$url_open.get_lang('SeeMore').$url_close.'</div>';			

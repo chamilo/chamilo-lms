@@ -125,9 +125,6 @@ if ( $form->validate()) {
 
 Display::display_header($tool_name);
 
-$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'),true);
-$user_online_count = count($user_online_list); 
-echo '</div>';
 // Group picture
 $image_path = GroupPortalManager::get_group_picture_path_by_id($group_id,'web');
 $image_dir = $image_path['dir'];

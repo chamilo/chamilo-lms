@@ -478,7 +478,13 @@ echo '<div id="social-content-right">';
 				}										
 				$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
 				$item_name = '<div class="box_shared_profile_group_title">'.$url_open.'<span class="social-groups-text1">'.api_strtoupper($name).'</span>'. $icon.$url_close.'</div>';
-				$item_description = '<div class="box_shared_profile_group_description"><span class="social-groups-text2">'.get_lang('DescriptionGroup').'</span><p class="social-groups-text4">'.cut($result['description'],120,true).'</p></div>';  															
+				
+				if ($result['description'] != '') { 
+					$item_description = '<div class="box_shared_profile_group_description"><span class="social-groups-text2">'.get_lang('DescriptionGroup').'</span><p class="social-groups-text4">'.cut($result['description'],100,true).'</p></div>';
+				} else {
+					$item_description = '<div class="box_shared_profile_group_description"><span class="social-groups-text2"></span><p class="social-groups-text4"></p></div>';
+				}
+				  															
 				$result['picture_uri'] = '<div class="box_shared_profile_group_image"><img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" /></div>';
 				$item_actions = '';
 				if (api_get_user_id() == $user_id) {

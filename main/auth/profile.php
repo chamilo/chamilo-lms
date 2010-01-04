@@ -733,8 +733,10 @@ if (isset($_GET['show'])) {
 Display :: display_header('');
 
 if (api_get_setting('allow_social_tool') != 'true') {
+	
 	if (api_get_setting('extended_profile') == 'true') {
-		echo '<div class="actions">';	
+		echo '<div class="actions">';
+		
 		if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
 			echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
 		}
@@ -748,6 +750,7 @@ if (api_get_setting('allow_social_tool') != 'true') {
 		} else {
 			echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</a>';
 		}
+	
 		echo '</div>';
 	}
 }
@@ -807,30 +810,7 @@ $big_image_height = $big_image_size[1];
 $url_big_image = $big_image.'?rnd='.time();
 
 
-if (api_get_setting('allow_social_tool') == 'true') {
-	
-	echo '<div class="social-header">';
-	
-	echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="social-menu-text1">'.strtoupper(get_lang('Menu')).'</span></center></td>';	
-	echo '<td width="15px">&nbsp;</td>';
-	
-	if (api_get_setting('extended_profile') == 'true') {
-		//echo '<td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>';
-		echo '<td bgcolor="#32578b">';
-		
-		$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
-					 
-		if (isset($_GET['type']) && $_GET['type'] == 'extended') {
-			echo '<a href="profile.php?type=reduced'.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</span></a>';
-		} else {
-			echo '<a href="profile.php?type=extended'.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</span></a>';
-		}
-		echo '</td>';
-	}
-	echo '</tr></table>';
-	echo '</div>';
-		
-	
+if (api_get_setting('allow_social_tool') == 'true') {	
 	echo '<div id="social-content">';
 	
 		echo '<div id="social-content-left">';
@@ -838,6 +818,19 @@ if (api_get_setting('allow_social_tool') == 'true') {
 		echo '</div>';
 	
 		echo '<div id="social-content-right">';
+		
+			echo '<div id="social-content-online">';
+				if (api_get_setting('extended_profile') == 'true') {				
+					$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';							 
+					if (isset($_GET['type']) && $_GET['type'] == 'extended') {
+						echo '<a href="profile.php?type=reduced'.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</span></a>';
+					} else {
+						echo '<a href="profile.php?type=extended'.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</span></a>';
+					}				
+				}			
+			echo '</div>';
+			
+		
 			// Style position:absolute has been removed for Opera-compatibility. 
 			//echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:3px;width:250px;" >';
 			echo '<div id="image-message-container" style="float:right;display:inline;padding:3px;width:250px;" >';

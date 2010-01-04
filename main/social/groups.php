@@ -271,7 +271,7 @@ if ($group_id != 0 ) {
 				$url_open  = '<a href="groups.php?id='.$id.'">';
 				$url_close = '</a>';
 				
-				$name = strtoupper(cut($result['name'],25,true));				
+				$name = api_strtoupper(cut($result['name'],25,true));				
 				if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {		 	
 					$name .= Display::return_icon('admin_star.png', get_lang('Admin'), array('style'=>'vertical-align:middle'));
 				} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			
@@ -288,7 +288,7 @@ if ($group_id != 0 ) {
 				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';			
 				$grid_item_1 = Display::return_icon('boxmygroups.jpg');						
 				$item_1 = '<div>'.$url_open.$result['picture_uri'].'<p class="social-groups-text1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg').'</div>';
-				$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.strtoupper(get_lang('DescriptionGroup')).'</span></div>';
+				$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.get_lang('GroupDescription').'</span></div>';
 				$item_3 = '<div class="box_description_group_content" >'.cut($result['description'],100,true).'</div>';	
 				$item_4 = '<div class="box_description_group_actions" >'.$url_open.get_lang('SeeMore').$url_close.'</div>';			
 				$grid_item_2 = $item_1.$item_2.$item_3.$item_4;				
@@ -310,12 +310,12 @@ if ($group_id != 0 ) {
 				$count_users_group = $count_users_group.' '.get_lang('Members');
 			}	
 			
-			$name = strtoupper(cut($result['name'],30,true));			
+			$name = api_strtoupper(cut($result['name'],30,true));			
 			$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);							
 			$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';									
 			$grid_item_1 = Display::return_icon('boxmygroups.jpg');						
 			$item_1 = '<div>'.$url_open.$result['picture_uri'].'<p class="social-groups-text1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg').'</div>';
-			$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.strtoupper(get_lang('DescriptionGroup')).'</span></div>';
+			$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.get_lang('GroupDescription').'</span></div>';
 			$item_3 = '<div class="box_description_group_content" >'.cut($result['description'],100,true).'</div>';	
 			$item_4 = '<div class="box_description_group_actions" >'.$url_open.get_lang('SeeMore').$url_close.'</div>';			
 			$grid_item_2 = $item_1.$item_2.$item_3.$item_4;
@@ -337,12 +337,12 @@ if ($group_id != 0 ) {
 			}			
 			$count_users_group = $result['count'];	
 			
-			$name = strtoupper(cut($result['name'],30,true));			
+			$name = api_strtoupper(cut($result['name'],30,true));			
 			$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);							
 			$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';									
 			$grid_item_1 = Display::return_icon('boxmygroups.jpg');						
 			$item_1 = '<div>'.$url_open.$result['picture_uri'].'<p class="social-groups-text1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg').'</div>';
-			$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.strtoupper(get_lang('DescriptionGroup')).'</span></div>';
+			$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.get_lang('GroupDescription').'</span></div>';
 			$item_3 = '<div class="box_description_group_content" >'.cut($result['description'],100,true).'</div>';	
 			$item_4 = '<div class="box_description_group_actions" >'.$url_open.get_lang('SeeMore').$url_close.'</div>';			
 			$grid_item_2 = $item_1.$item_2.$item_3.$item_4;
@@ -356,33 +356,33 @@ if ($group_id != 0 ) {
 		   	if (isset($_GET['view']) && in_array($_GET['view'],$allowed_views)) {
 		   		$view_group = $_GET['view'];
 		   		switch ($view_group) {
-		   			case 'mygroups' :	echo '<div class="social-groups-text3">'.strtoupper(get_lang('MyGroups')).'</div>';                  
+		   			case 'mygroups' :	echo '<div class="social-groups-text3">'.api_strtoupper(get_lang('MyGroups')).'</div>';                  
 		        						if (count($grid_my_groups) > 0) {
 		        							Display::display_sortable_grid('mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));
 		        						}
 		        						break;
 		        	case 'newest' :		if (count($grid_newest_groups) > 0) {
-											echo '<div class="social-groups-text3">'.strtoupper(get_lang('Newest')).'</div>';				
+											echo '<div class="social-groups-text3">'.api_strtoupper(get_lang('Newest')).'</div>';				
 											Display::display_sortable_grid('newest', array(), $grid_newest_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));		
 										}
 		        						break;
 		        	default 		:	if (count($grid_pop_groups) > 0) {
-											echo '<div class="social-groups-text3">'.strtoupper(get_lang('Popular')).'</div>';
+											echo '<div class="social-groups-text3">'.api_strtoupper(get_lang('Popular')).'</div>';
 											Display::display_sortable_grid('popular', array(), $grid_pop_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
 										}
 		        						break;					 
 		   		}		   		
 		   	} else {
-		   		echo '<div class="social-groups-text3">'.strtoupper(get_lang('MyGroups')).'</div>';                  
+		   		echo '<div class="social-groups-text3">'.api_strtoupper(get_lang('MyGroups')).'</div>';                  
 		        if (count($grid_my_groups) > 0) {
 		        	Display::display_sortable_grid('mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));
 		        }		        	        	                 		
 				if (count($grid_newest_groups) > 0) {
-					echo '<div class="social-groups-text3">'.strtoupper(get_lang('Newest')).'</div>';				
+					echo '<div class="social-groups-text3">'.api_strtoupper(get_lang('Newest')).'</div>';				
 					Display::display_sortable_grid('newest', array(), $grid_newest_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));		
 				}
 				if (count($grid_pop_groups) > 0) {
-					echo '<div class="social-groups-text3">'.strtoupper(get_lang('Popular')).'</div>';
+					echo '<div class="social-groups-text3">'.api_strtoupper(get_lang('Popular')).'</div>';
 					Display::display_sortable_grid('popular', array(), $grid_pop_groups, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
 				}
 		   	}		   	
@@ -394,5 +394,3 @@ if ($group_id != 0 ) {
 	
 echo '</div>';	
 Display :: display_footer();
-?>
-

@@ -2329,7 +2329,6 @@ div.image-social-content center.friend {
 	height:auto;
 	float:rigth;
 	overflow:hidden;	
-	width:800px;
 }
 #social-content-left {
 	float:left;
@@ -2573,12 +2572,12 @@ div.image-social-content center.friend {
 .social-groups-text1 {
 	font-family:Verdana, Geneva, sans-serif;
 	font-size:12px;
-	color:#686868;	
+	color:#669;	
 }
 .social-groups-text2 {
 	font-family:Verdana, Geneva, sans-serif;
 	font-size:12px;
-	color:#666699;
+	color:#686868;
 	font-weight:bold;
 }
 .social-groups-text3 {

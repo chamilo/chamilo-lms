@@ -7722,12 +7722,11 @@ class learnpath {
 
 		}
 		$return .= $this->write_resources_tree($resources_sorted);
-
-		$return .= '</div>';
-
-		if (Database :: num_rows($res_doc) == 0)
+	if (Database :: num_rows($res_doc) == 0)
 			$return .= '<div class="lp_resource_element">' . get_lang("NoDocuments") . '</div>';
-
+		
+		$return .= '</div>';
+		
 		return $return;
 	}
 

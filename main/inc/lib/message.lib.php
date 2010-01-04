@@ -933,7 +933,7 @@ class MessageManager
 							
 							
 							//$html.= '<div class="message-item" style="margin-left: '.$indent.'px;">';
-							$html.= '<div id="contentPostReply" >';	
+							$html.= '<div class="social-box-container3" >';	
 								$html .= '<div>'.Display::return_icon('content-post-reply01.jpg').'</div>';
 								$html .= '<div class="social-box-content3">';
 								$html.= '<div id="message-reply-link">

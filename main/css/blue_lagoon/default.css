@@ -2315,6 +2315,9 @@ div.image-social-content center.friend {
 	text-align:left;
 	float:left;
 }
+.social-header {
+	margin-bottom:8px;
+}
 #social-content {
 	width:100%;
 	height:auto;

@@ -648,7 +648,7 @@ class GroupPortalManager
 		if (!in_array($extension, $allowed_types)) {
 			return false;
 		}
-
+		
 		// This is the common name for the new photos.
 		if (KEEP_THE_NAME_WHEN_CHANGE_IMAGE && !empty($old_file)) {
 			$old_extension = strtolower(substr(strrchr($old_file, '.'), 1));
@@ -664,7 +664,7 @@ class GroupPortalManager
 			// the correspondent directories to be found successfully.
 			$filename = $group_id.'_'.$filename;
 		}
-
+		
 		// Storing the new photos in 4 versions with various sizes.
 
 		$picture_info = @getimagesize($source_file);
@@ -673,9 +673,9 @@ class GroupPortalManager
 		$medium = self::resize_picture($source_file, 85);
 		$normal = self::resize_picture($source_file, 200);
 		$big = new image($source_file); // This is the original picture.
-
 		$ok = false;
 		$detected = array(1 => 'GIF', 2 => 'JPG', 3 => 'PNG');
+
 		if (in_array($type, array_keys($detected))) {
 			$ok = $small->send_image($detected[$type], $path.'small_'.$filename)
 				&& $medium->send_image($detected[$type], $path.'medium_'.$filename)
@@ -863,6 +863,8 @@ class GroupPortalManager
 	 */
 	public static function show_group_column_information($group_id, $user_id, $show = '') {
 		
+		global $relation_group_title;
+		
 		$group_info 	= GroupPortalManager::get_group_data($group_id); 
 		$picture		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,'medium_');
 		$big_image		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'','big_');	
@@ -884,85 +886,87 @@ class GroupPortalManager
 
 		//loading group permission
 		
-		echo '<div align="center" class="menuTitle"><span class="menuTex1">'.cut($group_info['name'],40,true).'</span></div>';
-		echo '<ul>';
+		echo '<div align="center" class="social-menu-title"><span class="social-menu-text1">'.cut($group_info['name'],40,true).'</span></div>';
+		echo '<ul class="social-menu-groups">';
 		
 		switch ($my_group_role) {
 			case GROUP_USER_PERMISSION_READER:
 				// I'm just a reader
-				//echo get_lang('IamAReader');								
-				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('NewTopic').'</span></a></li>';
-				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList'), array('hspace'=>'6')).'<span class="'.($show=='messages_list'?'menu_active':'menuTex4').'" >'.get_lang('MessageList').'</span></a></li>';
-				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'menu_active':'menuTex4').'" >'.get_lang('InviteFriends').'</span></a></li>';
-				echo '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'"><span class="menuTex4" >'.get_lang('LeaveGroup').'</span></a></li>';					
+				$relation_group_title = get_lang('IamAReader');								
+				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('NewTopic').'</span></a></li>';
+				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList'), array('hspace'=>'6')).'<span class="'.($show=='messages_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MessageList').'</span></a></li>';
+				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('InviteFriends').'</span></a></li>';
+				echo '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'"><span class="social-menu-text4" >'.get_lang('LeaveGroup').'</span></a></li>';					
 				break;
 			case GROUP_USER_PERMISSION_ADMIN:
-				//echo get_lang('IamAnAdmin');
-				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('NewTopic').'</span></a></li>';
-				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList'), array('hspace'=>'6')).'<span class="'.($show=='messages_list'?'menu_active':'menuTex4').'" >'.get_lang('MessageList').'</span></a></li>';	
-				echo '<li><a href="group_edit.php?id='.$group_id.'">'.			Display::return_icon('edit.gif', get_lang('EditGroup'), array('hspace'=>'6')).'<span class="'.($show=='group_edit'?'menu_active':'menuTex4').'" >'.get_lang('EditGroup').'</span></a></li>';
-				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList'), array('hspace'=>'6')).'<span class="'.($show=='member_list'?'menu_active':'menuTex4').'" >'.get_lang('MemberList').'</span></a></li>';								
+				$relation_group_title = get_lang('IamAnAdmin');
+				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('NewTopic').'</span></a></li>';
+				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList'), array('hspace'=>'6')).'<span class="'.($show=='messages_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MessageList').'</span></a></li>';	
+				echo '<li><a href="group_edit.php?id='.$group_id.'">'.			Display::return_icon('edit.gif', get_lang('EditGroup'), array('hspace'=>'6')).'<span class="'.($show=='group_edit'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('EditGroup').'</span></a></li>';
+				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList'), array('hspace'=>'6')).'<span class="'.($show=='member_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MemberList').'</span></a></li>';								
 				if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED) {				
-					echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList'), array('hspace'=>'6')).'<span class="'.($show=='waiting_list'?'menu_active':'menuTex4').'" >'.get_lang('WaitingList').'</span></a></li>';
+					echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList'), array('hspace'=>'6')).'<span class="'.($show=='waiting_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('WaitingList').'</span></a></li>';
 				}				
-				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'menu_active':'menuTex4').'" >'.get_lang('InviteFriends').'</span></a></li>';				
+				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('InviteFriends').'</span></a></li>';				
 				break;
 			case GROUP_USER_PERMISSION_PENDING_INVITATION:				
-				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'"><span class="menuTex4" >'.get_lang('YouHaveBeenInvitedJoinNow').'</span></a></li>';
+				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'"><span class="social-menu-text4" >'.get_lang('YouHaveBeenInvitedJoinNow').'</span></a></li>';
 				break;
 			case GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
-				echo get_lang('WaitingForAdminResponse');
+				$relation_group_title =  get_lang('WaitingForAdminResponse');
 				break;
 			case GROUP_USER_PERMISSION_MODERATOR:
-				//echo get_lang('IamAModerator');
-				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="menuTex4" >'.get_lang('NewTopic').'</span></a></li>';				
-				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList'), array('hspace'=>'6')).'<span class="'.($show=='messages_list'?'menu_active':'menuTex4').'" >'.get_lang('MessageList').'</span></a></li>';							
-				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList'), array('hspace'=>'6')).'<span class="'.($show=='member_list'?'menu_active':'menuTex4').'" >'.get_lang('MemberList').'</span></a></li>';				
+				$relation_group_title = get_lang('IamAModerator');
+				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('NewTopic').'</span></a></li>';				
+				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList'), array('hspace'=>'6')).'<span class="'.($show=='messages_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MessageList').'</span></a></li>';							
+				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList'), array('hspace'=>'6')).'<span class="'.($show=='member_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MemberList').'</span></a></li>';				
 				if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED) {
-					echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList'), array('hspace'=>'6')).'<span class="'.($show=='waiting_list'?'menu_active':'menuTex4').'" >'.get_lang('WaitingList').'</span></a></li>';
+					echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList'), array('hspace'=>'6')).'<span class="'.($show=='waiting_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('WaitingList').'</span></a></li>';
 				}				
-				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'menu_active':'menuTex4').'" >'.get_lang('InviteFriends').'</span></a></li>';				
+				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('InviteFriends').'</span></a></li>';				
 				break;
 			default:
-				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'"><span class="menuTex4" >'.get_lang('JoinGroup').'</a></span></li>';
+				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'"><span class="social-menu-text4" >'.get_lang('JoinGroup').'</a></span></li>';
 			break;
 		}
 		echo '</ul>';
 						
 		//Members
-		echo '<div align="center" class="menuTitle"><span class="menuTex1">'.get_lang('Members').'</span></div>';
-		echo '<div align="center">';		
-			$min_count_members = 4;
-			$i = 1;
-			foreach($members as $member) {				
-				if ($i > $min_count_members) break;				
-				// if is a member
-				if (in_array($member['relation_type'] , array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))) {
-					//add icons		
-					if ($member['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
-						$icon= Display::return_icon('admin_star.png', get_lang('Admin'));
-					}elseif ($member['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
-						$icon= Display::return_icon('moderator_star.png', get_lang('Moderator'));
-					} else{
-						$icon= '';
-					}
-					$image_path = UserManager::get_user_picture_path_by_id($member['user_id'], 'web', false, true);				
-					$picture = UserManager::get_picture_user($member['user_id'], $image_path['file'], 60, USER_IMAGE_SIZE_MEDIUM);					
-					echo '<a href="profile.php?u='.$member['user_id'].'">';
-					echo '<img height="44" border="2" align="middle" width="44" vspace="10" class="imageGroups" src="'.$picture['file'].'"/>';
-					echo '<div>'.api_get_person_name(cut($member['firstname'],15),cut($member['lastname'],15)).'&nbsp;'.$icon.'</div></a>';
-					$i++;
-				}				
-			}			
-			if (count($members) > $min_count_members) { 
-				//More link
-				echo '<div class="group_member_more" style="margin-top:20px;"><a href="group_members.php?id='.$group_id.'">'.get_lang('SeeMore').'</a></div>';
-			}			
-		echo '</div>';
-		echo '<br />';
-		// my other groups				
-		if (count($groups_by_user) > 0) {												
-			echo '<div align="center" class="menuTitle"><span class="menuTex1">'.get_lang('MyOtherGroups').'</span></div>';
+		if (count($members) > 0) {
+			echo '<div align="center" class="social-menu-title"><span class="social-menu-text1">'.get_lang('Members').'</span></div>';
+			echo '<div align="center">';		
+				$min_count_members = 4;
+				$i = 1;
+				foreach($members as $member) {				
+					if ($i > $min_count_members) break;				
+					// if is a member
+					if (in_array($member['relation_type'] , array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))) {
+						//add icons		
+						if ($member['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
+							$icon= Display::return_icon('admin_star.png', get_lang('Admin'));
+						}elseif ($member['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
+							$icon= Display::return_icon('moderator_star.png', get_lang('Moderator'));
+						} else{
+							$icon= '';
+						}
+						$image_path = UserManager::get_user_picture_path_by_id($member['user_id'], 'web', false, true);				
+						$picture = UserManager::get_picture_user($member['user_id'], $image_path['file'], 60, USER_IMAGE_SIZE_MEDIUM);					
+						echo '<a href="profile.php?u='.$member['user_id'].'">';
+						echo '<img height="44" border="2" align="middle" width="44" vspace="10" class="social-groups-image" src="'.$picture['file'].'"/>';
+						echo '<div>'.api_get_person_name(cut($member['firstname'],15),cut($member['lastname'],15)).'&nbsp;'.$icon.'</div></a>';
+						$i++;
+					}				
+				}			
+				if (count($members) > $min_count_members) { 
+					//More link
+					echo '<div class="group_member_more" style="margin-top:20px;"><a href="group_members.php?id='.$group_id.'">'.get_lang('SeeMore').'</a></div>';
+				}			
+			echo '</div>';		
+			echo '<br />';
+		}
+		// my other groups								
+		if (count($groups_by_user) > 1) {												
+			echo '<div align="center" class="social-menu-title"><span class="social-menu-text1">'.get_lang('MyOtherGroups').'</span></div>';
 			echo '<div align="center">';		
 				$min_count_groups = 4;
 				$i = 1;
@@ -975,7 +979,7 @@ class GroupPortalManager
 					}									
 					$picture = GroupPortalManager::get_picture_group($group['id'], $group['picture_uri'],80);																						
 					echo '<a href="groups.php?id='.$group['id'].'">';
-					echo '<img height="44" border="2" align="middle" width="44" vspace="10" class="imageGroups" src="'.$picture['file'].'"/>';
+					echo '<img height="44" border="2" align="middle" width="44" vspace="10" class="social-groups-image" src="'.$picture['file'].'"/>';
 					echo '<div>'.cut($group['name'],50,true).'</div></a>';
 					$i++;
 				}			
@@ -984,143 +988,7 @@ class GroupPortalManager
 					echo '<div class="mygroups_more" style="margin-top:20px;"><a href="groups.php?view=mygroups">'.get_lang('SeeMore').'</a></div>';
 				}			
 			echo '</div>';				
-		}
-		
-		
-	
-		
-		/*
-		
-		echo '<div id="layout-left" style="float: left; width: 270px; height: 100%;">';
-	
-		//Group's title
-		echo '<h1><a href="groups.php?id='.$group_id.'">'.$group_info['name'].'</a></h1>';
-		
-		//Group's image 
-		echo '<div id="group_image">';
-		
-		if (basename($picture['file']) != 'unknown_group.png') {
-	  		echo '<a class="thickbox" href="'.$big_image['file'].'"><img src='.$picture['file'].' /> </a><br /><br />';
-		} else {
-			echo '<img src='.$picture['file'].' /><br /><br />';
 		}			
-	
-		echo '</div>';
-		
-		//Group's description 
-		echo '<div id="group_description">';
-			echo $group_info['description'];
-		echo '</div>';
-		
-		//Group's description 
-		echo '<div id="group-url">';
-			echo '<a target="_blank" href="'.$group_info['url'].'">'.$group_info['url'].'</a>';
-		echo '</div>';		
-		
-		//Privacy
-		echo '<div id="group_privacy">';
-			echo get_lang('Privacy').' : ';
-			if ($group_info['visibility']== GROUP_PERMISSION_OPEN) {
-				echo get_lang('ThisIsAnOpenGroup');
-			} elseif ($group_info['visibility']== GROUP_PERMISSION_CLOSED) {
-				echo get_lang('ThisIsACloseGroup');
-			}
-		echo '</div>';
-		
-		//Group's tags
-		if (!empty($tags)) {
-			echo '<div id="group_tags">';
-				echo get_lang('Tags').' : '.$tags;
-			echo '</div>';
-		}
-		
-		//loading group permission
-		
-		echo '<div id="group_permissions" class="actions">';
-		echo '<ul>';
-		
-		switch ($my_group_role) {
-			case GROUP_USER_PERMISSION_READER:
-				// I'm just a reader
-				echo get_lang('IamAReader');
-								
-				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a></li>';
-				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList')).'&nbsp;'.get_lang('MessageList').'</a></li>';
-				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends')).'&nbsp;'.get_lang('InviteFriends').'</a></li>';
-				echo '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.get_lang('LeaveGroup').'</a></li>';
-					
-				break;
-			case GROUP_USER_PERMISSION_ADMIN:
-				echo get_lang('IamAnAdmin');
-				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a></li>';
-	
-				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList')).'&nbsp;'.get_lang('MessageList').'</a></li>';	
-				echo '<li><a href="group_edit.php?id='.$group_id.'">'.			Display::return_icon('edit.gif', get_lang('EditGroup')).'&nbsp;'.get_lang('EditGroup').'</a></li>';
-				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList')).'&nbsp;'.get_lang('MemberList').'</a></li>';
-								
-				if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED) {				
-					echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList')).'&nbsp;'.get_lang('WaitingList').'</a></li>';
-				}				
-				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends')).'&nbsp;'.get_lang('InviteFriends').'</a></li>';
-				
-				break;
-			case GROUP_USER_PERMISSION_PENDING_INVITATION:				
-				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('YouHaveBeenInvitedJoinNow').'</a></li>';
-				break;
-			case GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
-				echo get_lang('WaitingForAdminResponse');
-				break;
-			case GROUP_USER_PERMISSION_MODERATOR:
-				echo get_lang('IamAModerator');
-				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic')).'&nbsp;'.get_lang('NewTopic').'</a></li>';
-				
-				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList')).'&nbsp;'.get_lang('MessageList').'</a></li>';							
-				echo '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('coachs.gif', get_lang('MemberList')).'&nbsp;'.get_lang('MemberList').'</a></li>';
-				
-				if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED) {
-					echo '<li><a href="group_waiting_list.php?id='.$group_id.'">'.	Display::return_icon('group_na.gif', get_lang('WaitingList')).'&nbsp;'.get_lang('WaitingList').'</a></li>';
-				}				
-				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends')).'&nbsp;'.get_lang('InviteFriends').'</a></li>';
-				
-				break;
-			default:
-				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.get_lang('JoinGroup').'</a></li>';
-			break;
-		}
-		echo '</ul>';
-		echo '</div>'; // end layout permissions
-		
-		
-		//Members
-		echo get_lang('Members').' : ';	
-		echo '<div id="group_members">';		
-			foreach($members as $member) {
-				// if is a member
-				if (in_array($member['relation_type'] , array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER,GROUP_USER_PERMISSION_MODERATOR))) {
-					//add icons		
-					if ($member['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {
-						$icon= Display::return_icon('admin_star.png', get_lang('Admin'));
-					}elseif ($member['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {
-						$icon= Display::return_icon('moderator_star.png', get_lang('Moderator'));
-					} else{
-						$icon= '';
-					}			
-					echo '<div class="group_member_item"><a href="profile.php?u='.$member['user_id'].'">';
-					echo '<div class="group_member_picture">'.$member['image'].'</div>';
-					echo api_get_person_name(cut($member['firstname'],15),cut($member['lastname'],15)).'<br />'.$icon.'</a></div>';
-				}
-			}
-			if (count($members) > 15) { 
-				//More link
-				echo '<div class="group_member_more"><a href="group_members.php?id='.$group_id.'">';
-				echo get_lang('More').'</a></div>';
-			}
-			
-			
-		echo '</div>';	
-	echo '</div>'; // end layout left	
-	*/
-		
 	}
 }
 ?>

@@ -32,6 +32,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $this_section = SECTION_SOCIAL;
 
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
+$interbreadcrumb[]= array ('url' =>'groups.php','name' => get_lang('Groups'));
 
 // Database Table Definitions
 $tbl_group			= Database::get_main_table(TABLE_MAIN_GROUP);
@@ -210,17 +211,16 @@ $errorMsg=$firstLetterUser=$firstLetterSession='';
 $UserList=$SessionList=array();
 $users=$sessions=array();
 
-
 Display :: display_header($tool_name, 'Groups');
 $user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'), true);
 $user_online_count = count($user_online_list); 
 echo '<div class="actions-title-groups">';
-echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
-		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
+echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="social-menu-text1">'.strtoupper(get_lang('Menu')).'</span></center></td>
+		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
 		</tr></table>';
 /*
-echo '<div class="menuTitle" align="center"><span class="menuTex1">'.get_lang('Menu').'</span></div>';
-echo '<div class="TitleRigth">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.$who_is_on_line.'</span></a></div>';
+echo '<div class="social-menu-title" align="center"><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
+echo '<div class="social-menu-title-right">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.$who_is_on_line.'</span></a></div>';
 */
 echo '</div>';
 /*
@@ -338,13 +338,13 @@ if ($add_type == 'multiple') {
 	//Shows left column
 	//echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
 	
-	echo '<div id="socialContent">';
-		echo '<div id="socialContentLeft">';	
+	echo '<div id="social-content">';
+		echo '<div id="social-content-left">';	
 			//this include the social menu div
 			SocialManager::show_social_menu('invite_friends',$group_id);
 		echo '</div>';
 		
-	echo '<div id="socialContentRigth">';
+	echo '<div id="social-content-right">';
 ?>
 	
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $group_id; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
@@ -496,7 +496,7 @@ if (is_array($members) && count($members)>0) {
 		$picture = UserManager::get_picture_user($member['user_id'], $image_path['file'],80);										
 		$member['image'] = '<img src="'.$picture['file'].'"  width="50px" height="50px"  />';
 	}	
-	echo '<span class="groupTex1"><strong>'.get_lang('UsersAlreadyInvited').'</strong></span>';
+	echo '<span class="social-groups-text1"><strong>'.get_lang('UsersAlreadyInvited').'</strong></span>';
 	Display::display_sortable_grid('invitation_profile', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true));
 }
 

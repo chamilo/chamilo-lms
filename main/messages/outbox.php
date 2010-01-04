@@ -83,12 +83,12 @@ if ($_GET['f']=='social') {
 	$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'),true);
 	$user_online_count = count($user_online_list); 
 	echo '<div class="actions-title-groups">';
-	echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
-			<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
+	echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="social-menu-text1">'.strtoupper(get_lang('Menu')).'</span></center></td>
+			<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
 			</tr></table>';
 	/*
-	echo '<div class="menuTitle" align="center"><span class="menuTex1">'.get_lang('Menu').'</span></div>';
-	echo '<div class="TitleRigth">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.$who_is_on_line.'</span></a></div>';
+	echo '<div class="social-menu-title" align="center"><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
+	echo '<div class="social-menu-title-right">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.$who_is_on_line.'</span></a></div>';
 	*/
 	echo '</div>';
 	/*
@@ -135,7 +135,7 @@ $table_message = Database::get_main_table(TABLE_MESSAGE);
 
 $user_sender_id=api_get_user_id();
 
-echo '<div id="inbox-wrapper">';
+echo '<div id="social-content">';
 	$id_content_right = '';
 	//LEFT COLUMN	
 	if (api_get_setting('allow_social_tool') != 'true') { 
@@ -149,8 +149,8 @@ echo '<div id="inbox-wrapper">';
 		echo '</div>';		
 	} else {
 		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
-		$id_content_right = 'socialContentRigth';
-		echo '<div id="socialContentLeft">';	
+		$id_content_right = 'social-content-right';
+		echo '<div id="social-content-left">';	
 			//this include the social menu div
 			SocialManager::show_social_menu('messages_outbox');
 		echo '</div>';			

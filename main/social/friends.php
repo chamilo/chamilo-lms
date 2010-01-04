@@ -91,12 +91,12 @@ Display :: display_header($tool_name, 'Groups');
 $user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'),true);
 $user_online_count = count($user_online_list); 
 echo '<div class="actions-title-groups">';
-echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
-		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
+echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="social-menu-text1">'.strtoupper(get_lang('Menu')).'</span></center></td>
+		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
 		</tr></table>';
 /*
-echo '<div class="menuTitle" align="center"><span class="menuTex1">'.get_lang('Menu').'</span></div>';
-echo '<div class="TitleRigth">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.$who_is_on_line.'</span></a></div>';
+echo '<div class="social-menu-title" align="center"><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
+echo '<div class="social-menu-title-right">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.$who_is_on_line.'</span></a></div>';
 */
 echo '</div>';
 /*
@@ -104,13 +104,13 @@ echo '<div class="actions-title">';
 echo get_lang('MyFriends');
 echo '</div>';
 */
-echo '<div id="socialContent">';
+echo '<div id="social-content">';
 
-	echo '<div id="socialContentLeft">';	
+	echo '<div id="social-content-left">';	
 		//this include the social menu div
 		SocialManager::show_social_menu('friends');	
 	echo '</div>';
-	echo '<div id="socialContentRigth">';
+	echo '<div id="social-content-right">';
 	
 $language_variable	= api_xml_http_response_encode(get_lang('Contacts'));
 $user_id	= api_get_user_id();
@@ -134,9 +134,9 @@ $user_id	= api_get_user_id();
       <tr>
 		<td height="153" valign="top">
 			<?php
-			echo '<div class="groupPost">';
+			echo '<div class="social-box-container2">';
 			echo '<div>'.Display::return_icon('content-post-group1.jpg').'</div>';
-			echo '<div id="div_content_table">';
+			echo '<div id="div_content_table" class="social-box-content2">';
 			
 				$list_path_friends	= array();
 				$user_id	= api_get_user_id();

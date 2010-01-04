@@ -17,7 +17,8 @@ $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH)
 
 $this_section = SECTION_SOCIAL;
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
-
+$interbreadcrumb[]= array ('url' =>'groups.php','name' => get_lang('Groups'));
+$interbreadcrumb[]= array ('url' =>'#','name' => get_lang('WaitingList'));
 api_block_anonymous_users();
 
 $group_id	= intval($_GET['id']);
@@ -43,12 +44,12 @@ Display :: display_header($tool_name, 'Groups');
 $user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'),true);
 $user_online_count = count($user_online_list); 
 echo '<div class="actions-title-groups">';
-echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
-		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
+echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="social-menu-text1">'.strtoupper(get_lang('Menu')).'</span></center></td>
+		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
 		</tr></table>';
 /*
-echo '<div class="menuTitle" align="center"><span class="menuTex1">'.get_lang('Menu').'</span></div>';
-echo '<div class="TitleRigth">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.$who_is_on_line.'</span></a></div>';
+echo '<div class="social-menu-title" align="center"><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
+echo '<div class="social-menu-title-right">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.$who_is_on_line.'</span></a></div>';
 */
 echo '</div>';
 /*
@@ -97,12 +98,12 @@ $new_member_list = array();
 
 //Shows left column
 //echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());	
-echo '<div id="socialContent">';
-	echo '<div id="socialContentLeft">';	
+echo '<div id="social-content">';
+	echo '<div id="social-content-left">';	
 	//this include the social menu div
 	SocialManager::show_social_menu('waiting_list',$group_id);	
 	echo '</div>';
-	echo '<div id="socialContentRigth">';			
+	echo '<div id="social-content-right">';			
 		if (!empty($show_message)){
 			Display :: display_normal_message($show_message);
 		}		

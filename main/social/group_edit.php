@@ -37,8 +37,8 @@ function textarea_maxlength(){
 $group_id = isset($_GET['id']) ? intval($_GET['id']) : intval($_POST['id']);
 $tool_name = get_lang('GroupEdit');
 
-$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'group_list.php','name' => get_lang('GroupList'));
+$interbreadcrumb[] = array('url' => 'home.php','name' => get_lang('Social'));
+$interbreadcrumb[] = array('url' => 'groups.php','name' => get_lang('Groups'));
 
 $table_group = Database::get_main_table(TABLE_MAIN_GROUP);
 
@@ -101,23 +101,22 @@ $form->setDefaults($group_data);
 // Validate form
 if ( $form->validate()) {
 	$group = $form->exportValues();
-
 	$picture_element = & $form->getElement('picture');
 	$picture = $picture_element->getValue();
-
 	$picture_uri = $group_data['picture_uri'];
+
 	if ($group['delete_picture']) {
 		$picture_uri = GroupPortalManager::delete_group_picture($group_id);
 		}
 	elseif (!empty($picture['name'])) {
 		$picture_uri = GroupPortalManager::update_group_picture($group_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
 	}
-	
+
 	$name 			= $group['name'];
 	$description	= $group['description'];
 	$url 			= $group['url'];	
 	$status 		= intval($group['visibility']);
-	
+		
 	GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);	
 	$tok = Security::get_token();
 	header('Location: groups.php?id='.$group_id.'&action=show_message&message='.urlencode(get_lang('GroupUpdated')).'&sec_token='.$tok);
@@ -129,12 +128,12 @@ Display::display_header($tool_name);
 $user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'),true);
 $user_online_count = count($user_online_list); 
 echo '<div class="actions-title-groups">';
-echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
-		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
+echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="social-menu-text1">'.strtoupper(get_lang('Menu')).'</span></center></td>
+		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
 		</tr></table>';
 /*
-echo '<div class="menuTitle" align="center"><span class="menuTex1">'.get_lang('Menu').'</span></div>';
-echo '<div class="TitleRigth">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.$who_is_on_line.'</span></a></div>';
+echo '<div class="social-menu-title" align="center"><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
+echo '<div class="social-menu-title-right">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.$who_is_on_line.'</span></a></div>';
 */
 echo '</div>';
 
@@ -175,12 +174,12 @@ if ($image == '') {
 //Shows left column
 //echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
 
-echo '<div id="socialContent">';
-	echo '<div id="socialContentLeft">';	
+echo '<div id="social-content">';
+	echo '<div id="social-content-left">';	
 	//this include the social menu div
 	SocialManager::show_social_menu('group_edit',$group_id);
 	echo '</div>';
-	echo '<div id="socialContentRigth">';
+	echo '<div id="social-content-right">';
 		// Display form
 		$form->display();	
 	echo '</div>';

@@ -863,7 +863,7 @@ class MessageManager
 				
 				// topics and items
 				$parents = array_keys(self::get_messages_by_parent(0,$group_id,$page,$topics_per_page));
-				$html .= '<div id="boxmyGroupMessages">';
+				$html .= '<div class="social-box-main2">';
 				$html .= '	<div class="pager">
 							<table width="690px">
 							<tr><td style="width:25%">&nbsp;</td><td style="text-align:center">'.$pager['details'].'</td><td style="text-align:right;width:25%">'.$pager['links'].'</td></tr></table></div>';	
@@ -877,9 +877,9 @@ class MessageManager
 					$files_attachments = self::get_links_message_attachment_files($topic['id']);
 					$name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
 					
-					$html .= '<div class="groupPost" >';
+					$html .= '<div class="social-box-container2" >';
 						$html .= '<div>'.Display::return_icon('content-post-group1.jpg').'</div>';
-						$html .= '<div class="contentPostGroup">';
+						$html .= '<div class="social-box-content2">';
 						$html .= '<a href="#" class="head" id="head_'.$topic['id'].'">																
 									<span class="message-group-title-topic">'.((isset($_GET['div_id']) && $_GET['div_id'] == 'content_'.$topic['id'])?Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align: middle')):
 									Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align: middle'))).'
@@ -935,7 +935,7 @@ class MessageManager
 							//$html.= '<div class="message-item" style="margin-left: '.$indent.'px;">';
 							$html.= '<div id="contentPostReply" >';	
 								$html .= '<div>'.Display::return_icon('content-post-reply01.jpg').'</div>';
-								$html .= '<div class="contentPostReplybg">';
+								$html .= '<div class="social-box-content3">';
 								$html.= '<div id="message-reply-link">
 										<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$item['id'].'&action=reply_message_group&div_id=content_'.$topic['id'].'&page_nr='.Security::remove_XSS($_GET['page_nr']).'&page_item_nr='.Security::remove_XSS($_GET['page_item_nr']).'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('forumthread_new.gif', get_lang('Reply')).'</a>';
 								if ($item['user_sender_id'] == $current_user_id) {

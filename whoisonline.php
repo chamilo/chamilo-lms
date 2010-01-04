@@ -130,12 +130,12 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 		$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));
 		$user_online_count = count($user_online_list); 		
 		echo '<div class="actions-title-groups">';
-		echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
-				<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
+		echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="social-menu-text1">'.strtoupper(get_lang('Menu')).'</span></center></td>
+				<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
 				</tr></table>';
 		/*
-		echo '<div class="menuTitle" align="center"><span class="menuTex1">'.get_lang('Menu').'</span></div>';
-		echo '<div class="TitleRigth">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.$who_is_on_line.'</span></a></div>';
+		echo '<div class="social-menu-title" align="center"><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
+		echo '<div class="social-menu-title-right">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.$who_is_on_line.'</span></a></div>';
 		*/		
 		echo '</div>';
 		/*
@@ -144,7 +144,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 		echo '</div>';
 		*/
 
-		echo '<div id="socialContentLeft">';	
+		echo '<div id="social-content-left">';	
 			//this include the social menu div
 			if (!api_is_anonymous()) {
 				SocialManager::show_social_menu('whoisonline');
@@ -164,7 +164,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 	if ($user_list) {
 		if (!isset($_GET['id'])) {
 			
-			echo '<div id="socialContentRigth">';	
+			echo '<div id="social-content-right">';	
 			//this include the social menu div
 			if (!api_is_anonymous()) {
 				echo UserManager::get_search_form($_GET['q']);

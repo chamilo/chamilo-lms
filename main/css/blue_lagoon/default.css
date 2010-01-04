@@ -2257,6 +2257,7 @@ div.comments {
 	margin: 0px;
 	padding: 0px;
 }
+
 /*SOCIAL TOOL*/
 div.image-social-content {
 	float:left;
@@ -2314,6 +2315,26 @@ div.image-social-content center.friend {
 	text-align:left;
 	float:left;
 }
+#social-content {
+	width:100%;
+	height:auto;
+	overflow:hidden;
+	margin-left:auto;
+	margin-right:auto;
+}
+#social-content-right {
+	height:auto;
+	float:rigth;
+	overflow:hidden;
+}
+#social-content-left {
+	float:left;
+	height:auto;
+	margin-right:16px;
+	min-height:300px;
+	width:160px;
+	overflow:hidden;
+}
 .social-content-description {
 	background:#ECE9D8;
 }
@@ -2364,27 +2385,224 @@ div.image-social-content center.friend {
 	width:30%;
 	margin-left: 4px;
 }
-#socialContent{
+
+/*  SOCIAL MENU VERTICAL */
+.social-menu  {
+	width:150px;
+	height:auto;
+}
+.social-menu ul {
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin:0;
+	padding:0px;
+}
+.social-menu li {
+	margin-bottom:4px;
+	padding-bottom:12px;
+	background-image:url(../../img/line-social.jpg);
+	background-position:bottom;
+	background-repeat:repeat-x;
+}
+.social-menu li img {
+	float:left;
+}
+.social-menu-sub-level a img {
+	float:left;
+}
+.social-menu ul li a {
+	padding:2px 0px;
+}
+.social-menu-sub-level {
+	margin-left:20px;
+}
+.social-menu-title{
+	width:150px;
+	float:left;
+	height:auto;
+	background-color:#32578b;
+	margin-bottom:10px;
+}
+.social-menu-text1 {
+	color:#fff;
+	font-size:14px;
+	font-weight:normal;
+}
+.social-menu-text2 {
+	color:#000;
+	font-weight:normal;
+	font-size:12px;
+}
+.social-menu-text3 {
+	color:#94cdf9;
+	font-weight:normal;
+	font-size:12px;
+	font-weight:bold;
+}
+.social-menu-text4 {
+	font-family:Verdana, Geneva, sans-serif;
+	color:#000;
+	font-weight:normal;
+	font-size:13px;
+	vertical-align:bottom;
+}
+.social-menu-text-active {
+	font-family:Verdana, Geneva, sans-serif;
+	color:#000;
+	font-weight:bold;
+	font-size:13px;
+	vertical-align:bottom;
+}
+.social-menu-title-right {
+	width:84%;
+	float:right;
+	height:20px;
+	background-color:#32578b;
+	margin-bottom:10px;
+}
+
+/* BOX SHARED PROFILE */
+
+.social-friend-container {
+	width:100%;
+	overflow:hidden;
+}
+
+.shared_profile_mygroups_grid_container {
+	width:100%;
+	overflow:hidden;
+}
+.shared_profile_mygroups_grid_item {
+	width:42%;
+	float:left;
+	height:140px;
+	margin:20px;
+}
+
+ 
+/* SOCIAL BOX */
+
+.social-box-main1 {
 	width:100%;
 	height:auto;
 	overflow:hidden;
-	margin-left:auto;
-	margin-right:auto;
 }
-
-#socialContentRigth{
-	height:auto;
-	float:rigth;
-	overflow:hidden;
-	}
-#socialContentLeft {
+.social-box-left {
+	width:350px;
+	float:left;
+	height:auto;	
+}
+.social-box-right {
+	width:350px;
 	float:left;
 	height:auto;
-	margin-right:16px;
-	min-height:300px;
-	width:160px;
+	margin-left:50px;
+}
+.social-box-container1 {
+	width:350px;
+	height:auto;
+	margin-top:20px;
+}
+.social-box-content1 {
+	width:330px;
+	height:auto;
+	padding-left:15px;
+	padding-right:10px;
+	background-image:url(../../img/boxmygroupscontent.jpg);
+	background-repeat:repeat-y;
 	overflow:hidden;
 }
+.social-box-main2 {
+	height:auto;
+	overflow:hidden;
+	width:700px;
+}
+.social-box-container2 {
+	width:700px;
+	height:auto;
+	overflow:hidden;
+	margin-bottom:20px;
+}
+.social-box-content2 {
+	width:660px;
+	background-image:url(../../img/content-post-group2.jpg);
+	background-repeat:repeat-y;
+	padding-left:20px;
+	padding-right:20px;
+}
+.social-box-container3 {
+	width:110px;
+	margin-left:60px;
+	background-color:yellow;
+}
+.social-box-content3 {
+	width:560px;
+	height:auto;
+	padding-left:20px;
+	padding-right:20px;
+	background-image:url(../../img/content-post-reply02.jpg);
+	background-repeat:repeat-y;
+}
+
+.box_shared_profile_group_title {
+	border-bottom:1pt dotted #000;
+	padding:5px;
+	vertical-align:middle;
+	font-size:12pt;
+	font-weight:bold;
+	margin-bottom:5px
+}
+.box_shared_profile_group_description {
+	height:100px;
+	margin-left:65px;
+}
+.box_shared_profile_group_image {
+	height:80px;
+	width:60px;
+	float:left;
+}
+.box_shared_profile_group_actions {
+	text-align:right;
+}
+
+.social-groups-text1 {
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:#686868;	
+}
+.social-groups-text2 {
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:#666699;
+	font-weight:bold;
+}
+.social-groups-text3 {
+ font-family:Verdana, Geneva, sans-serif;
+ font-size:12px;
+ color:#000;
+ font-weight:bold;
+ text-transform:capitalize;
+ margin-top:35px;
+}
+.social-groups-text4 {
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:#666666;
+}
+.social-groups-image {
+	border: 2px solid #cac9c9;
+}
+.social-groups-home-title {
+	border-bottom:1pt dotted #000;
+	padding:2px;
+	margin-bottom:5px;
+	font-weight:bold;
+}
+.social-home-users-online {
+	border:3px solid #E6E6E6;
+}
+
 /*****************************************************
  *  BUTTONS	                                         *
  *****************************************************/
@@ -2646,7 +2864,6 @@ input.arrowl {
 	padding-bottom:10px;
 	padding-top:8px;
 }
-
 .legal-terms {
 	height:150px;
 	overflow:auto;
@@ -2654,13 +2871,7 @@ input.arrowl {
 	width:500px;
 }
 
-
-
-
-
-
 /* UI improvements for 1.8.6.2 this should be move to the chamilo theme and reproduce in all CSS*/
-
 
 * {
 	outline :none;
@@ -2683,41 +2894,32 @@ input, select, textarea {
 	line-height:normal;
 	padding:5px;
 }
-
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image:url(images/shadow.gif);
 }
-
 .independent_course_item a {
 	font-size:120%;
 }
-
 .session_course_item a {
 	font-size:120%;
 }
-
-
 #maincontent .courseslist li {
 	margin-bottom:8px;
 }
-
 a.read {	
 	font-weight:normal;
 }
-
-a.unread {	
-	
+#inbox-wrapper {
+	width:100%;
+	}
+#inbox {
+	width:80%;
+	float:right;
 }
-
-#inbox-wrapper {width:100%;}
-
-#inbox {width:80%;float:right;}
-
 #inbox-menu  {
 	width:150px;
 	float:left;
 }
-
 #inbox-menu ul {
 	list-style-image:none;
 	list-style-position:outside;
@@ -2728,19 +2930,12 @@ a.unread {
 #inbox-menu ul li {
 	padding:2px 0px;
 }
-
-#message-reply-link {
-	float:right;
-}
-
 .social-plugin-item {
 	float:left;
 	width:50%;
 	background-color:#ccc;
 	margin: 0px;
 }
-
-
 #social-plugins {
 	float:left;
 	background-color:#f00;
@@ -2748,54 +2943,9 @@ a.unread {
 	margin: 0px;
 	padding:2px;
 }
-
-.groups_grid_item {
-	width:80px;
-	float:left;
-	margin:5px;
-}
-
-.groups_grid_container {
-
+#message-reply-link {
+	float:right;
 } 
-
-.contentPostGroup{
-	width:660px;
-	background-image:url(../../img/content-post-group2.jpg);
-	background-repeat:repeat-y;
-	padding-left:20px;
-	padding-right:20px;
-}
-
-#contentPostReply{
-	width:600px;
-	margin-left:60px;
-}
-
-.contentPostReplybg{
-	width:560px;
-	height:auto;
-	padding-left:20px;
-	padding-right:20px;
-	background-image:url(../../img/content-post-reply02.jpg);
-	background-repeat:repeat-y;
-}
-
-#div_content_table {
-	width:660px;
-	background-image:url(../../img/content-post-group2.jpg);
-	background-repeat:repeat-y;
-	padding-left:20px;
-	padding-right:20px;
-}
-
-.groupPost{
-	width:700px;
-	height:auto;
-	overflow:hidden;
-	margin-bottom:20px;
-}
-
 .message-item {
 	-moz-background-clip:border;
 	-moz-background-inline-policy:continuous;
@@ -2808,7 +2958,6 @@ a.unread {
 	margin:0 0 5px;
 	padding:10px;
 }
-
 .message-topic {
 	-moz-background-clip:border;
 	-moz-background-inline-policy:continuous;
@@ -2822,7 +2971,6 @@ a.unread {
 	padding:10px;
 
 }
-
 .message-group-title-topic {
 	font-size:180%;
 	margin:5px 0px 5px 0px;
@@ -2830,11 +2978,9 @@ a.unread {
 .message-group-title {
 	font-size:120%;
 }
-
 .message-group-author {
 	margin:5px 0px 5px 0px;
 }
-
 .message-group-content {
 	line-height:150%;
 	margin: 5px 0px 8px 0px;
@@ -2843,14 +2989,10 @@ a.unread {
 	color:#666;
 	float:right;	
 }
-
-
- 
 .view-message-content {
 	line-height:150%;
 	font-size:110%;
 }
-
 .actions {
 	background:#efefef;
 	border:1px solid #ccc;	
@@ -2858,7 +3000,6 @@ a.unread {
 	margin-bottom: 5px;
 	vertical-align:middle;
 }
-
 .actions-title {	
 	background:#efefef;
 	border:1px solid #ccc;
@@ -2903,14 +3044,14 @@ a.unread {
 }
 
 /* Groups boxes */
-.groups_grid_container { width:100%;}
+
+.groups_grid_container { 
+	width:100%;
+}
 .groups_grid_item {
-	border:1px dotted #CCCCCC;
+	width:80px;
 	float:left;
-	height:85px;
-	margin:8px;
-	padding:5px;
-	width:300px;
+	margin:5px;
 }
 .groups_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
 .groups_grid_element_1 { width:100px; float:left; text-align:left;	margin-bottom:5px;}
@@ -2934,7 +3075,6 @@ a.unread {
 	overflow:hidden;
 }
 
-
 /*NEWEST GROUP*/
 
 .newest_grid_item {
@@ -2955,7 +3095,6 @@ a.unread {
 }
 
 /*MY GROUPS*/
-
 
 .mygroups_grid_item {
 	float:left;
@@ -3010,6 +3149,7 @@ a.unread {
 
 
 /* Groups boxes */
+
 .group_invitation_grid_container { width:100%;}
 .group_invitation_grid_item {
 	border:1px dotted #CCCCCC;
@@ -3121,7 +3261,6 @@ a.unread {
 .search_group_grid_element_2 { width:100%;  text-align:left;}
 */
 
-
 #menu {
 	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
 	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;
@@ -3136,266 +3275,6 @@ a.unread {
 	float: right;
 	min-height: 150px;
 	padding-bottom:30px;	
-}
-
-/*  SOCIAL MENU VERTICAL */
-.social_menu  {
-	width:150px;
-	float:left;
-}
-
-.social_menu ul {
-	list-style-image:none;
-	list-style-position:outside;
-	list-style-type:none;
-	margin:0;
-	padding:0px;
-}
-
-.social_menu ul li {
-	padding:2px 0px;
-}
-
-#social_main {
-	float:left;
-	width: 90%;
-}
-
-#social_left {
-	float:left;
-}
-
-#social_right {
-	float:right;
-}
-
-/*  SOCIAL MENU VERTICAL */
-.socialMenu  {
-	width:150px;
-	height:auto;
-}
-
-.socialMenu ul {
-	list-style-image:none;
-	list-style-position:outside;
-	list-style-type:none;
-	margin:0;
-	padding:0px;
-}
-
-.socialMenu li {
-	margin-bottom:8px;
-	padding-bottom:4px;
-	background-image:url(../../img/line-social.jpg);
-	background-position:bottom;
-	background-repeat:repeat-x;
-}
-
-.socialMenu ul li a{
-	padding:2px 0px;
-}
-
-.socialMenuSubLevel {
-	margin-left:20px;}
-	
-.menuTitle{
-	width:150px;
-	float:left;
-	height:auto;
-	background-color:#32578b;
-	margin-bottom:10px;
-}
-.TitleRigth{
-	width:84%;
-	float:right;
-	height:20px;
-	background-color:#32578b;
-	margin-bottom:10px;
-}
-.menuTex1{
-	color:#fff;
-	font-size:14px;
-	font-weight:normal;
-	}
-.menuTex2{
-	color:#000;
-	font-weight:normal;
-	font-size:12px;
-	}
-.menuTex3{
-	color:#94cdf9;
-	font-weight:normal;
-	font-size:12px;
-	font-weight:bold;
-	}
-.menuTex4{
- font-family:Verdana, Geneva, sans-serif;
- color:#000;
- font-weight:normal;
- font-size:12px;
- }
-
-.menu_active{
- font-family:Verdana, Geneva, sans-serif;
- color:#000;
- font-weight:bold;
- font-size:12px;
- }
-
-/* BOX SHARED PROFILE */
-
-.boxProfile {
-	width:100%;
-	height:auto;
-	overflow:hidden;
-} 
-
-.social-friend-container {
-	width:100%;
-	overflow:hidden;
-}
-
-.boxProfileContent {
-	width:350px;
-	height:auto;
-	margin-top:20px;
-	float:left;
-} 
-
-.profileContent{
-	width:330px;
-	height:auto;
-	padding-left:15px;
-	padding-right:10px;
-	background-image:url(../../img/boxmygroupscontent.jpg);
-	background-repeat:repeat-y;
-	overflow:hidden;
-}
-
-.shared_profile_mygroups_grid_container {
-	width:100%;
-	overflow:hidden;
-}
-.shared_profile_mygroups_grid_item {
-	width:42%;
-	float:left;
-	height:140px;
-	margin:20px;
-}
-
-.box_shared_profile_group_title {
-	border-bottom:1pt dotted #000;
-	padding:5px;
-	vertical-align:middle;
-	font-size:12pt;
-	font-weight:bold;
-	margin-bottom:5px
-}
-
-.box_shared_profile_group_description {
-	height:100px;
-	margin-left:65px;
-}
-
-.box_shared_profile_group_image {
-	height:80px;
-	width:60px;
-	float:left;
-}
-
-.box_shared_profile_group_actions {
-	text-align:right;
-}
-
-.box_shared_profile_group_actions {
-
-}
- 
-/*BOX MY GROPUPS*/
-
-#boxmyGroups{
-	height:auto;
-	overflow:hidden;
-	}
-
-#boxmyGroupMessages {
-	height:auto;
-	overflow:hidden;
-	width:700px;
-}
-
-#boxmyGroupsLeft{
-	width:350px;
-	float:left;
-	height:auto;
-}
-#boxmyGroupsRigth{
-	width:350px;
-	float:left;
-	height:auto;
-	margin-left:50px;
-}
-
-.boxMygroupsContent {
-	width:350px;
-	height:auto;
-	margin-top:20px;
-	}
-	
-.myGroupsContent{
-	width:330px;
-	height:auto;
-	padding-left:15px;
-	padding-right:10px;
-	background-image:url(../../img/boxmygroupscontent.jpg);
-	background-repeat:repeat-y;
-	overflow:hidden;
-}
-
-.imageGroups {
-	border: 2px solid #cac9c9;
-	}
-
-
-.groupTex1 {
-	font-family:Verdana, Geneva, sans-serif;
-	font-size:12px;
-	color:#686868;	
-}
-
-
-
-.groupText2 {
-	font-family:Verdana, Geneva, sans-serif;
-	font-size:12px;
-	color:#666699;
-	font-weight:bold;
-}
-
-.groupText3 {
- font-family:Verdana, Geneva, sans-serif;
- font-size:12px;
- color:#000;
- font-weight:bold;
- text-transform:capitalize;
- margin-top:35px;
-}
-
-.home_group_title {
-	border-bottom:1pt dotted #000;
-	padding:2px;
-	margin-bottom:5px;
-	font-weight:bold;
-}
-
-.groupText4 {
-	font-family:Verdana, Geneva, sans-serif;
-	font-size:12px;
-	color:#666666;
-}
-
-.inicioUserOnline {
-	border:3px solid #E6E6E6;
 }
 
 /* INVITATIONS */

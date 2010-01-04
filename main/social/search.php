@@ -24,12 +24,12 @@ Display :: display_header($tool_name);
 $user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'), true);
 $user_online_count = count($user_online_list); 
 echo '<div class="actions-title-groups">';
-echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
-		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
+echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="social-menu-text1">'.strtoupper(get_lang('Menu')).'</span></center></td>
+		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
 		</tr></table>';
 /*
-echo '<div class="menuTitle" align="center"><span class="menuTex1">'.get_lang('Menu').'</span></div>';
-echo '<div class="TitleRigth">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.$who_is_on_line.'</span></a></div>';
+echo '<div class="social-menu-title" align="center"><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
+echo '<div class="social-menu-title-right">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.$who_is_on_line.'</span></a></div>';
 */
 echo '</div>';
 /*
@@ -38,12 +38,12 @@ echo get_lang('Search');
 echo '</div>';
 */
 
-echo '<div id="socialContent">';
-	echo '<div id="socialContentLeft">';
+echo '<div id="social-content">';
+	echo '<div id="social-content-left">';
 		//show the action menu			
 		SocialManager::show_social_menu('search');
 	echo '</div>';
-	echo '<div id="socialContentRigth">';
+	echo '<div id="social-content-right">';
 		
 		$query = $_GET['q'];
 		echo UserManager::get_search_form($query);
@@ -72,9 +72,9 @@ echo '<div id="socialContent">';
 						$user['lastname'] = $url_open.$user['lastname'].$url_close;						
 						$results[] = array($img, $user['firstname'],$user['lastname'],$user['tag']);			
 					}					
-					echo '<div class="groupPost">';
+					echo '<div class="social-box-container2">';
 					echo '<div>'.Display::return_icon('content-post-group1.jpg').'</div>';
-					echo '<div id="div_content_table">';					
+					echo '<div id="div_content_table" class="social-box-content2">';					
 							Display::display_sortable_grid('search_user', array(), $results, array('hide_navigation'=>true, 'per_page' => 5), $query_vars, false ,true);
 					echo '</div>';
 					echo '</div>';						
@@ -103,10 +103,10 @@ echo '<div id="socialContent">';
 						}					
 						
 						$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);							
-						$result['picture_uri'] = '<img class="imageGroups" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';			
+						$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';			
 						$grid_item_1 = Display::return_icon('boxmygroups.jpg');						
-						$item_1 = '<div>'.$url_open.$result['picture_uri'].'<p class="groupTex1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg').'</div>';
-						$item_2 = '<div class="box_description_group_title" ><span class="groupText2">'.strtoupper(get_lang('DescriptionGroup')).'</span></div>';
+						$item_1 = '<div>'.$url_open.$result['picture_uri'].'<p class="social-groups-text1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg').'</div>';
+						$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.strtoupper(get_lang('DescriptionGroup')).'</span></div>';
 						$item_3 = '<div class="box_description_group_content" >'.cut($result['description'],100,true).'</div>';	
 						$item_4 = '<div class="box_description_group_actions" >'.$url_open.get_lang('SeeMore').$url_close.'</div>';			
 						$grid_item_2 = $item_1.$item_2.$item_3.$item_4;				
@@ -132,10 +132,10 @@ echo '<div id="socialContent">';
 						}				
 						$picture = GroupPortalManager::get_picture_group($group['id'], $group['picture_uri'],80);
 						$tags = GroupPortalManager::get_group_tags($group['id']);						
-						$group['picture_uri'] = '<img class="imageGroups" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';			
+						$group['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';			
 						$grid_item_1 = Display::return_icon('boxmygroups.jpg');						
-						$item_1 = '<div>'.$url_open.$group['picture_uri'].'<p class="groupTex1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg').'</div>';
-						$item_2 = '<div class="box_description_group_title" ><span class="groupText2">'.strtoupper(get_lang('DescriptionGroup')).'</span></div>';
+						$item_1 = '<div>'.$url_open.$group['picture_uri'].'<p class="social-groups-text1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg').'</div>';
+						$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.strtoupper(get_lang('DescriptionGroup')).'</span></div>';
 						$item_3 = '<div class="box_description_group_content" >'.cut($group['description'],100,true).'</div>';
 						$item_4 = '<div class="box_description_group_tags" >'.$tags.'</div>';	
 						$item_5 = '<div class="box_description_group_actions" >'.$url_open.get_lang('SeeMore').$url_close.'</div>';			

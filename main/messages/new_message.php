@@ -256,11 +256,11 @@ function manage_form ($default, $select_from_user_list = null) {
 if ($_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/profile.php','name' => get_lang('Social'));
-	$interbreadcrumb[]= array ('url' => 'outbox.php?f=social','name' => get_lang('Inbox'));	
+	$interbreadcrumb[]= array ('url' => '#','name' => $nameTools);	
 } else {
 	$this_section = SECTION_MYPROFILE;
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
-	$interbreadcrumb[]= array ('url' => 'outbox.php','name' => get_lang('Inbox'));
+	$interbreadcrumb[]= array ('url' => 'inbox.php','name' => get_lang('Inbox'));
 }
 
 Display::display_header('');
@@ -280,12 +280,12 @@ if ($group_id != 0) {
 		$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'),true);
 		$user_online_count = count($user_online_list); 
 		echo '<div class="actions-title-groups">';
-		echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="menuTex1">'.strtoupper(get_lang('Menu')).'</span></center></td>
-				<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
+		echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="social-menu-text1">'.strtoupper(get_lang('Menu')).'</span></center></td>
+				<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
 				</tr></table>';
 		/*
-		echo '<div class="menuTitle" align="center"><span class="menuTex1">'.get_lang('Menu').'</span></div>';
-		echo '<div class="TitleRigth">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="menuTex1">'.$who_is_on_line.'</span></a></div>';
+		echo '<div class="social-menu-title" align="center"><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
+		echo '<div class="social-menu-title-right">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.$who_is_on_line.'</span></a></div>';
 		*/
 		echo '</div>';	
 		/*
@@ -308,7 +308,7 @@ if ($group_id != 0) {
 	
 }
 
-echo '<div id="inbox-wrapper" >';
+echo '<div id="social-content" >';
 	$id_content_right = '';
 	//LEFT COLUMN
 	if (api_get_setting('allow_social_tool') != 'true') {
@@ -322,11 +322,11 @@ echo '<div id="inbox-wrapper" >';
 		echo '</div>';
 	} else {
 		require_once api_get_path(LIBRARY_PATH).'social.lib.php';		
-		echo '<div id="socialContentLeft">';	
+		echo '<div id="social-content-left">';	
 			//this include the social menu div
 			SocialManager::show_social_menu('messages_compose');
 		echo '</div>';
-		$id_content_right = 'socialContentRigth';				
+		$id_content_right = 'social-content-right';				
 	}
 
 	echo '<div id="'.$id_content_right.'">';

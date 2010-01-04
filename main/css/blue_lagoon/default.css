@@ -2261,7 +2261,7 @@ div.comments {
 /*SOCIAL TOOL*/
 div.image-social-content {
 	float:left;
-	border:1px solid #B8C8DC;
+	border:1px dotted #ccc;
 	margin:2px;
 	padding: 8px 4px 4px 4px;
 	background: #ffffff;
@@ -2327,15 +2327,20 @@ div.image-social-content center.friend {
 }
 #social-content-right {
 	height:auto;
-	float:rigth;
 	overflow:hidden;	
 }
+
+.social-content-image {
+	margin-bottom:10px;
+	margin-top:2px;
+}
+
 #social-content-left {
 	float:left;
 	height:auto;
 	margin-right:16px;
 	min-height:300px;
-	width:160px;
+	width:200px;
 	overflow:hidden;	
 }
 .social-content-description {
@@ -2364,7 +2369,9 @@ div.image-social-content center.friend {
 	padding-left:10px;
 	width:200px;
 }
+
 /* general layout of the profile page */
+
 #social-profile-wrapper {
 	width: 100%;
 	text-align:left;
@@ -2391,7 +2398,7 @@ div.image-social-content center.friend {
 
 /*  SOCIAL MENU VERTICAL */
 .social-menu  {
-	width:150px;
+	width:180px;
 	height:auto;
 }
 .social-menu ul {
@@ -2421,16 +2428,18 @@ div.image-social-content center.friend {
 	margin-left:20px;
 }
 .social-menu-title{
-	width:150px;
+	width:180px;
 	float:left;
 	height:auto;
 	background-color:#32578b;
 	margin-bottom:10px;
+	padding-top:4px;
+	padding-bottom:4px;
 }
 .social-menu-text1 {
 	color:#fff;
-	font-size:14px;
-	font-weight:normal;
+	font-size:12px;
+	font-weight:bold;
 }
 .social-menu-text2 {
 	color:#000;
@@ -2483,6 +2492,15 @@ div.image-social-content center.friend {
 	margin:20px;
 }
 
+
+.social-menu-group-member {
+	float:left;
+	height:120px;
+	margin:5px;
+	overflow:hidden;
+	padding:2px;
+	width:76px;
+}
  
 /* SOCIAL BOX */
 
@@ -2505,7 +2523,7 @@ div.image-social-content center.friend {
 .social-box-container1 {
 	width:350px;
 	height:auto;
-	margin-top:20px;
+	margin-top:10px;
 }
 .social-box-content1 {
 	width:330px;
@@ -2581,12 +2599,12 @@ div.image-social-content center.friend {
 	font-weight:bold;
 }
 .social-groups-text3 {
- font-family:Verdana, Geneva, sans-serif;
- font-size:12px;
- color:#000;
- font-weight:bold;
- text-transform:capitalize;
- margin-top:35px;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:#000;
+	font-weight:bold;
+	text-transform:capitalize;
+	margin-top:5px;
 }
 .social-groups-text4 {
 	font-family:Verdana, Geneva, sans-serif;
@@ -2605,6 +2623,23 @@ div.image-social-content center.friend {
 .social-home-users-online {
 	border:3px solid #E6E6E6;
 }
+
+#social-content-online {
+	background-color:#32578B;
+	margin-bottom:5px;
+	margin-top:2px;
+	padding:1px;
+}
+
+#social-group-details {
+	margin-left:82px;
+}
+.social-group-details-info span {
+	color:#777;
+
+}
+
+
 
 /*****************************************************
  *  BUTTONS	                                         *
@@ -2738,10 +2773,10 @@ div#friend-container {
 }
 div.image_friend_network {
 	float:left;
-	border:1px solid #CCCCCC;
+	border:1px dotted #ccc;
 	margin:2px;
 	padding:4px;
-	background: #EFEFEF;
+	/* background: #EFEFEF; */
 	height:125px;
 	width:81px;
 	z-index:5;
@@ -3169,10 +3204,14 @@ a.read {
 
 /* home group boxes */
 
+.home_group_grid_container {
+	margin-bottom:60px;
+}
+
 .home_group_grid_element_1 {
 	font-family:Verdana, Geneva, sans-serif;
 	font-size:12px;
-	color:#666699;
+	color:#686868;
 	font-weight:bold;
 	margin:2px;
 	padding:2px;
@@ -3233,7 +3272,7 @@ a.read {
 .search_user_grid_container { width:100%;}
 .search_user_grid_item { width:100px; height:100px; border:1px dotted #ccc; float:left; padding:5px; margin:5px; overflow:hidden;}
 .search_user_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
-.search_user_grid_element_0 img {width:50px;height:50px;border:3px solid #E6E6E6;}
+.search_user_grid_element_0 img {width:50px;height:50px;border:2px solid #E6E6E6;}
 .search_user_grid_element_1 { width:100%;  text-align:center;}
 .search_user_grid_element_2 { width:100%;  text-align:center;}
 
@@ -3245,6 +3284,10 @@ a.read {
 	height:165px;
 	margin-top:20px;
 }
+
+.search_group_grid_container {
+	margin-top:0px;
+} 
 	
 .search_group_grid_element_1 { 
 	width:330px;

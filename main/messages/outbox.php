@@ -79,18 +79,6 @@ if ($_GET['f']=='social') {
 Display::display_header('');
 
 if ($_GET['f']=='social') {
-	
-	$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'),true);
-	$user_online_count = count($user_online_list); 
-	echo '<div class="social-header">';
-	echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="social-menu-text1">'.strtoupper(get_lang('Menu')).'</span></center></td>
-			<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
-			</tr></table>';
-	/*
-	echo '<div class="social-menu-title" align="center"><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
-	echo '<div class="social-menu-title-right">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.$who_is_on_line.'</span></a></div>';
-	*/
-	echo '</div>';
 
 } else {
 	

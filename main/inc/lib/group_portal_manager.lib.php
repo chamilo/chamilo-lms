@@ -896,7 +896,7 @@ class GroupPortalManager
 				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('message_new.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('NewTopic').'</span></a></li>';
 				echo '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('notebook.gif', get_lang('MessageList'), array('hspace'=>'6')).'<span class="'.($show=='messages_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MessageList').'</span></a></li>';
 				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('InviteFriends').'</span></a></li>';
-				echo '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'"><span class="social-menu-text4" >'.get_lang('LeaveGroup').'</span></a></li>';					
+				echo '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.	Display::return_icon('delete_data.gif', get_lang('LeaveGroup'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('LeaveGroup').'</span></a></li>';					
 				break;
 			case GROUP_USER_PERMISSION_ADMIN:
 				$relation_group_title = get_lang('IamAnAdmin');
@@ -910,7 +910,7 @@ class GroupPortalManager
 				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('InviteFriends').'</span></a></li>';				
 				break;
 			case GROUP_USER_PERMISSION_PENDING_INVITATION:				
-				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'"><span class="social-menu-text4" >'.get_lang('YouHaveBeenInvitedJoinNow').'</span></a></li>';
+				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('addd.gif', get_lang('YouHaveBeenInvitedJoinNow'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('YouHaveBeenInvitedJoinNow').'</span></a></li>';
 				break;
 			case GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
 				$relation_group_title =  get_lang('WaitingForAdminResponse');
@@ -926,7 +926,7 @@ class GroupPortalManager
 				echo '<li><a href="group_invitation.php?id='.$group_id.'">'.	Display::return_icon('login_as.gif', get_lang('InviteFriends'), array('hspace'=>'6')).'<span class="'.($show=='invite_friends'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('InviteFriends').'</span></a></li>';				
 				break;
 			default:
-				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'"><span class="social-menu-text4" >'.get_lang('JoinGroup').'</a></span></li>';
+				echo '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('addd.gif', get_lang('JoinGroup'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('JoinGroup').'</a></span></li>';
 			break;
 		}
 		echo '</ul>';
@@ -950,10 +950,13 @@ class GroupPortalManager
 							$icon= '';
 						}
 						$image_path = UserManager::get_user_picture_path_by_id($member['user_id'], 'web', false, true);				
-						$picture = UserManager::get_picture_user($member['user_id'], $image_path['file'], 60, USER_IMAGE_SIZE_MEDIUM);					
+						$picture = UserManager::get_picture_user($member['user_id'], $image_path['file'], 60, USER_IMAGE_SIZE_MEDIUM);
+					
+						echo '<div class="social-menu-group-member">';
 						echo '<a href="profile.php?u='.$member['user_id'].'">';
 						echo '<img height="44" border="2" align="middle" width="44" vspace="10" class="social-groups-image" src="'.$picture['file'].'"/>';
 						echo '<div>'.api_get_person_name(cut($member['firstname'],15),cut($member['lastname'],15)).'&nbsp;'.$icon.'</div></a>';
+						echo '</div>';
 						$i++;
 					}				
 				}			
@@ -961,9 +964,11 @@ class GroupPortalManager
 					//More link
 					echo '<div class="group_member_more" style="margin-top:20px;"><a href="group_members.php?id='.$group_id.'">'.get_lang('SeeMore').'</a></div>';
 				}			
-			echo '</div>';		
+			echo '</div>';	
+			echo '<div class="clear"></div>';
 			echo '<br />';
 		}
+		/*
 		// my other groups								
 		if (count($groups_by_user) > 1) {												
 			echo '<div align="center" class="social-menu-title"><span class="social-menu-text1">'.get_lang('MyOtherGroups').'</span></div>';
@@ -988,7 +993,8 @@ class GroupPortalManager
 					echo '<div class="mygroups_more" style="margin-top:20px;"><a href="groups.php?view=mygroups">'.get_lang('SeeMore').'</a></div>';
 				}			
 			echo '</div>';				
-		}			
+		}		
+		*/	
 	}
 }
 ?>

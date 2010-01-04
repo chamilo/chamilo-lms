@@ -21,18 +21,6 @@ $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
 
 Display :: display_header($tool_name);
 
-$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'), true);
-$user_online_count = count($user_online_list); 
-echo '<div class="social-header">';
-echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="social-menu-text1">'.strtoupper(get_lang('Menu')).'</span></center></td>
-		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
-		</tr></table>';
-/*
-echo '<div class="social-menu-title" align="center"><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
-echo '<div class="social-menu-title-right">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.$who_is_on_line.'</span></a></div>';
-*/
-echo '</div>';
-
 echo '<div id="social-content">';
 	echo '<div id="social-content-left">';
 		//show the action menu			
@@ -84,7 +72,7 @@ echo '<div id="social-content">';
 						$url_open  = '<a href="groups.php?id='.$id.'">';
 						$url_close = '</a>';
 						
-						$name = strtoupper(cut($result['name'],25,true));				
+						$name = api_strtoupper(cut($result['name'],25,true));				
 						if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {		 	
 							$name .= Display::return_icon('admin_star.png', get_lang('Admin'), array('style'=>'vertical-align:middle'));
 						} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			
@@ -101,7 +89,7 @@ echo '<div id="social-content">';
 						$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';			
 						$grid_item_1 = Display::return_icon('boxmygroups.jpg');						
 						$item_1 = '<div>'.$url_open.$result['picture_uri'].'<p class="social-groups-text1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg').'</div>';
-						$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.strtoupper(get_lang('DescriptionGroup')).'</span></div>';
+						$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.api_strtoupper(get_lang('DescriptionGroup')).'</span></div>';
 						$item_3 = '<div class="box_description_group_content" >'.cut($result['description'],100,true).'</div>';	
 						$item_4 = '<div class="box_description_group_actions" >'.$url_open.get_lang('SeeMore').$url_close.'</div>';			
 						$grid_item_2 = $item_1.$item_2.$item_3.$item_4;				
@@ -118,7 +106,7 @@ echo '<div id="social-content">';
 						$url_open  = '<a href="groups.php?id='.$id.'">';
 						$url_close = '</a>';
 						
-						$name = strtoupper(cut($group['name'],25,true));
+						$name = api_strtoupper(cut($group['name'],25,true));
 						$count_users_group = count(GroupPortalManager::get_all_users_by_group($id));
 						if ($count_users_group == 1 ) {
 							$count_users_group = $count_users_group.' '.get_lang('Member');	
@@ -130,7 +118,7 @@ echo '<div id="social-content">';
 						$group['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';			
 						$grid_item_1 = Display::return_icon('boxmygroups.jpg');						
 						$item_1 = '<div>'.$url_open.$group['picture_uri'].'<p class="social-groups-text1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg').'</div>';
-						$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.strtoupper(get_lang('DescriptionGroup')).'</span></div>';
+						$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.api_strtoupper(get_lang('DescriptionGroup')).'</span></div>';
 						$item_3 = '<div class="box_description_group_content" >'.cut($group['description'],100,true).'</div>';
 						$item_4 = '<div class="box_description_group_tags" >'.$tags.'</div>';	
 						$item_5 = '<div class="box_description_group_actions" >'.$url_open.get_lang('SeeMore').$url_close.'</div>';			

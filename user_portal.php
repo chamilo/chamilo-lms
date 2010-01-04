@@ -1292,6 +1292,12 @@ if ($show_menu) {
 	echo '</div>';
 }
 
+
+//deleting the myprofile link
+if (api_get_setting('allow_social_tool') == true) {
+	unset($menu_navigation['myprofile']);	
+}
+
 // Main navigation section
 // tabs that are deactivated are added here
 if (!empty($menu_navigation)) {
@@ -1304,6 +1310,7 @@ if (!empty($menu_navigation)) {
 		echo '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
 		echo '</li>';
 		echo "\n";
+		
 	}
 	echo '</ul>';
 	echo '</div>';

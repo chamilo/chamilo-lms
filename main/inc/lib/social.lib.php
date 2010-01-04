@@ -667,13 +667,11 @@ class SocialManager extends UserManager {
 			}
 		}
 		
-		echo '<div class="social-menu">';
-				
+		echo '<div class="social-menu">';				
 				
 		if ($show != 'shared_profile') {
 			
-			echo '<div align="center" class="social-menu-title" ><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';        
-		    
+			echo '<div align="center" class="social-menu-title" ><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
 		                	        	        	        
 	        echo 	'<div>
 	                	<ul>
@@ -689,9 +687,10 @@ class SocialManager extends UserManager {
 					echo '</ul></li>';					
 				}
 	        
-	        if ($show == 'invitations') {
+	        // why this link was hide?
+	        //if ($show == 'invitations') {
 	        	echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('mail.png',get_lang('Invitations'),array('hspace'=>'6')).'<span class="'.($show=='invitations'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Invitations').'</span></a></li>';	        	
-	        }
+	        //}
 	                     
 	        echo	'<li><a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png',get_lang('ViewMySharedProfile'),array('hspace'=>'6')).'<span class="'.($show=='shared_profile'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('ViewMySharedProfile').'</span></a></li>
 	        			<li><a href="'.api_get_path(WEB_PATH).'main/social/friends.php">'.Display::return_icon('members.gif',get_lang('Friends'),array('hspace'=>'6')).'<span class="'.($show=='friends'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Friends').'</span></a></li>
@@ -716,11 +715,11 @@ class SocialManager extends UserManager {
         	       	        	                	
         	//--- User image	        	
 			echo '<div class="social-content-image">';
-				echo '<div class="social-background-content" style="width:80%;" ><center>';
+				echo '<div class="social-background-content"  ><center>';
 					if ($img_array['file'] != 'unknown.jpg') {
 		    	  		echo '<a class="thickbox" href="'.$big_image.'"><img src='.$img_array['dir'].$img_array['file'].' width="180px" /> </a>';
 					} else {
-						echo '<img src='.$img_array['dir'].$img_array['file'].' width="150px"/>';
+						echo '<img src='.$img_array['dir'].$img_array['file'].' width="110px" />';
 					}
 	    	  	echo '</center></div>';
     	  	echo '</div>';

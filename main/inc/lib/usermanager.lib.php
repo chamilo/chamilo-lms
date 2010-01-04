@@ -2650,7 +2650,9 @@ class UserManager
 		if ($keyword_active) {
 			$sql .= " AND u.active='1'";
 		} 
-	
+		//avoid anonymous
+		$sql .= " AND u.status <> 6 ";
+		
 	    // adding the filter to see the user's only of the current access_url
 		if ($_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
 	    		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
@@ -2666,7 +2668,7 @@ class UserManager
 	
 		//$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
-
+		
 		$res = Database::query($sql, __FILE__, __LINE__);
 		if (Database::num_rows($res)> 0) {
 			while ($row = Database::fetch_array($res,'ASSOC')) { 

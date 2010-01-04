@@ -2325,7 +2325,8 @@ div.image-social-content center.friend {
 #social-content-right {
 	height:auto;
 	float:rigth;
-	overflow:hidden;
+	overflow:hidden;	
+	width:800px;
 }
 #social-content-left {
 	float:left;
@@ -2333,7 +2334,7 @@ div.image-social-content center.friend {
 	margin-right:16px;
 	min-height:300px;
 	width:160px;
-	overflow:hidden;
+	overflow:hidden;	
 }
 .social-content-description {
 	background:#ECE9D8;
@@ -2451,7 +2452,7 @@ div.image-social-content center.friend {
 	font-family:Verdana, Geneva, sans-serif;
 	color:#000;
 	font-weight:bold;
-	font-size:13px;
+	font-size:12px;
 	vertical-align:bottom;
 }
 .social-menu-title-right {

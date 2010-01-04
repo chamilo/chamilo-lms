@@ -666,11 +666,11 @@ class SocialManager extends UserManager {
 	                        
 			if (in_array($show,$show_messages)) {
 				
-					echo '<ul>';
+					echo '<li><ul>';
 						echo '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('inbox.png', get_lang('Inbox'), array('hspace'=>'6')).'<span class="'.($show=='messages_inbox'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Inbox').'</span></a></li>';
 						echo '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?f=social">'.Display::return_icon('message_new.png', get_lang('ComposeMessage'), array('hspace'=>'6','style'=>'float:left')).'<span class="'.($show=='messages_compose'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('ComposeMessage').'</span></a></li>';
-						echo '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png', get_lang('Outbox'), array('hspace'=>'6')).'<span class="'.($show=='messages_outbox'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Outbox').'</span></a></li>';
-					echo '</ul>';
+						echo '<li class="social-menu-sub-level" style="background:none;padding:0px"><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php?f=social">'.Display::return_icon('outbox.png', get_lang('Outbox'), array('hspace'=>'6')).'<span class="'.($show=='messages_outbox'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Outbox').'</span></a></li>';
+					echo '</ul></li>';
 					
 				}
 	        
@@ -684,10 +684,10 @@ class SocialManager extends UserManager {
 	                    <li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.gif',get_lang('Groups'),array('hspace'=>'6')).'<span class="'.($show=='groups'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Groups').'</span></a></li>';
 	                    	        
 	        if (in_array($show,$show_groups)) {
-					echo '<ul>';
+					echo '<li><ul>';
 						echo $create_group_item;
-						echo '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/social/groups.php?view=mygroups">'.Display::return_icon('group.gif',get_lang('MyGroups'),array('hspace'=>'6')).'<span class="'.($show=='mygroups'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MyGroups').'</span></a></li>';												
-					echo '</ul>';
+						echo '<li class="social-menu-sub-level" style="background:none;padding:0px"><a href="'.api_get_path(WEB_PATH).'main/social/groups.php?view=mygroups">'.Display::return_icon('group.gif',get_lang('MyGroups'),array('hspace'=>'6')).'<span class="'.($show=='mygroups'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MyGroups').'</span></a></li>';												
+					echo '</ul></li>';
 				}                                        	
 	                        echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/search.php">'.Display::return_icon('search.gif',get_lang('Search'),array('hspace'=>'6')).'<span class="'.($show=='search'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Search').'</span></a></li>
 	                    </ul>

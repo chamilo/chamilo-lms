@@ -147,7 +147,7 @@ $group_id	= intval($_GET['id']);
 $relation_group_title = '';
 $who_is_on_line = get_lang('UsersOnline').' '.count(WhoIsOnline(api_get_setting('time_limit_whosonline'),true));
 
-echo '<div class="actions-title-groups">';
+echo '<div class="social-header">';
 echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="social-menu-text1">'.strtoupper(get_lang('Menu')).'</span></center></td>
 		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.$who_is_on_line.'</span></a></td>
 		</tr></table>';
@@ -156,7 +156,6 @@ echo '<div class="social-menu-title" align="center"><span class="social-menu-tex
 echo '<div class="social-menu-title-right">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.$who_is_on_line.'</span></a></div>';
 */
 echo '</div>';
-
 
 echo '<div id="social-content">';
 

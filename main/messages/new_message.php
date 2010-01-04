@@ -279,7 +279,7 @@ if ($group_id != 0) {
 		
 		$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'),true);
 		$user_online_count = count($user_online_list); 
-		echo '<div class="actions-title-groups">';
+		echo '<div class="social-header">';
 		echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="social-menu-text1">'.strtoupper(get_lang('Menu')).'</span></center></td>
 				<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
 				</tr></table>';
@@ -288,11 +288,6 @@ if ($group_id != 0) {
 		echo '<div class="social-menu-title-right">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.$who_is_on_line.'</span></a></div>';
 		*/
 		echo '</div>';	
-		/*
-		echo '<div class="actions-title">';
-		echo get_lang('Messages');
-		echo '</div>';
-		*/
 	} else {
 		echo '<div class=actions>';
 		if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {

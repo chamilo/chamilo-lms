@@ -214,7 +214,7 @@ $users=$sessions=array();
 Display :: display_header($tool_name, 'Groups');
 $user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'), true);
 $user_online_count = count($user_online_list); 
-echo '<div class="actions-title-groups">';
+echo '<div class="social-header">';
 echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="social-menu-text1">'.strtoupper(get_lang('Menu')).'</span></center></td>
 		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
 		</tr></table>';
@@ -223,12 +223,6 @@ echo '<div class="social-menu-title" align="center"><span class="social-menu-tex
 echo '<div class="social-menu-title-right">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.$who_is_on_line.'</span></a></div>';
 */
 echo '</div>';
-/*
-echo '<div class="actions-title">';
-echo get_lang('Invitations');
-echo '</div>'; 
-*/
-
 if($_POST['form_sent']) {
 	$form_sent			= $_POST['form_sent'];
 	$firstLetterUser	= $_POST['firstLetterUser'];

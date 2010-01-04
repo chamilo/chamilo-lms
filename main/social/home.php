@@ -18,7 +18,7 @@ $show_full_profile = true;
 //social tab
 $this_section = SECTION_SOCIAL;
 
-$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/profile.php','name' => get_lang('Social'));
+$interbreadcrumb[]= array ('url' => 'home.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' => '#','name' => get_lang('Home'));
 	
 api_block_anonymous_users();

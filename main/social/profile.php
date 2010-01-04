@@ -390,13 +390,20 @@ echo '<div id="social-content-right">';
 				$friend_html	.= '<div id="friend-container" class="social-friend-container">';
 					$friend_html.= '<div id="friend-header" >';
 							//$friend_html.=  $friends_count.' '.get_lang('Friends');
-						if ($number_friends == 1)
+						if ($number_friends == 1) {
 							$friend_html.= '<div style="float:left;width:80%">'.$number_friends.' '.get_lang('Friend').'</div>';
-						else
+						} else {
 							$friend_html.= '<div style="float:left;width:80%">'.$number_friends.' '.get_lang('Friends').'</div>';
-						if (api_get_user_id() == $user_id) {
-							$friend_html.= '<div style="float:right;width:20%"><a href="friends.php">'.get_lang('SeeAll').'</a></div>';
 						}
+						
+						if ($number_friends > $number_of_images) {						
+							if (api_get_user_id() == $user_id) {
+								$friend_html.= '<div style="float:right;width:20%"><a href="friends.php">'.get_lang('SeeAll').'</a></div>';
+							} else {
+								$friend_html.= '<div style="float:right;width:20%"><a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php?view=friends&height=390&width=610&&user_id='.$user_id.'" class="thickbox" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAll').'</a></div>';
+							}
+						}
+																		
 					$friend_html.= '</div>'; // close div friend-header									
 				$j=1;
 				for ($k=0;$k<$number_friends;$k++) {
@@ -470,7 +477,7 @@ echo '<div id="social-content-right">';
 					$count_users_group = $count_users_group.' '.get_lang('Members');
 				}										
 				$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
-				$item_name = '<div class="box_shared_profile_group_title"><span class="social-groups-text1">'.strtoupper($name).'</span>'. $icon.'</div>';
+				$item_name = '<div class="box_shared_profile_group_title">'.$url_open.'<span class="social-groups-text1">'.api_strtoupper($name).'</span>'. $icon.$url_close.'</div>';
 				$item_description = '<div class="box_shared_profile_group_description"><span class="social-groups-text2">'.get_lang('DescriptionGroup').'</span><p class="social-groups-text4">'.cut($result['description'],120,true).'</p></div>';  															
 				$result['picture_uri'] = '<div class="box_shared_profile_group_image"><img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" /></div>';
 				$item_actions = '';
@@ -495,11 +502,15 @@ echo '<div id="social-content-right">';
 							$count_groups = count($results).' '.get_lang('Groups');
 						}
 						echo '<div>'.$count_groups.'</div>';
-						if (api_get_user_id() == $user_id) {
-							if ($i > $max_numbers_of_group) {							
-		    					echo '<div class="box_shared_profile_group_actions"><a href="groups.php?view=mygroups">'.get_lang('SeeAllMyGroups').'</a></div>';
-		    				}								
-						}														    			
+						
+						if ($i > $max_numbers_of_group) {						
+							if (api_get_user_id() == $user_id) {
+								echo '<div class="box_shared_profile_group_actions"><a href="groups.php?view=mygroups">'.get_lang('SeeAllMyGroups').'</a></div>';								
+							} else {
+								echo '<div class="box_shared_profile_group_actions"><a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php?view=mygroups&height=390&width=610&&user_id='.$user_id.'" class="thickbox" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAllMyGroups').'</a></div>';								
+							}
+						}
+													    			
 		    			Display::display_sortable_grid('shared_profile_mygroups', array(), $grid_my_groups, array('hide_navigation'=>true, 'per_page' => 2), $query_vars, false, array(true, true, true,false));	    			
 					echo '</div>';	
 				echo '</div>';			

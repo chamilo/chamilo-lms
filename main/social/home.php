@@ -54,20 +54,8 @@ if (api_get_setting('profile', 'picture') == 'true') {
 
 Display :: display_header(null);
 $user_info = UserManager :: get_user_info_by_id(api_get_user_id());
-//$user_info = api_get_user_info(api_get_user_id());
 $user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'),true);
 $user_online_count = count($user_online_list); 
-
-echo '<div class="social-header">';
-echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="social-menu-text1">'.strtoupper(get_lang('Menu')).'</span></center></td>
-		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
-		</tr></table>';
-/*
-echo '<div class="social-menu-title" align="center"><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
-echo '<div class="social-menu-title-right">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.$who_is_on_line.'</span></a></div>';
-*/
-echo '</div>';
-	
 
 echo '<div id="social-content">';
 
@@ -79,17 +67,21 @@ echo '<div id="social-content">';
 		echo '<div class="social-box-main1">';
 			echo '<div class="social-box-left">';
 						
-			$user_image_array = UserManager::get_picture_user(api_get_user_id(), $user_info['picture_uri'], 400, USER_IMAGE_SIZE_BIG);				
+			$user_image_array = UserManager::get_picture_user(api_get_user_id(), $user_info['picture_uri'], 400, USER_IMAGE_SIZE_ORIGINAL);
+			// info not neccesary
+			//<div><p><strong>'.get_lang('Username').'</strong><br /><span class="social-groups-text4">'.$user_info['username'].'</span></p></div>
+			//<div><p><strong>'.get_lang('Phone').'</strong><br /><span class="social-groups-text4">'.($user_info['phone']?$user_info['phone']:'').'</span></p></div>
+							
 			// information current user			
 			echo	'<div class="social-box-container1">
                     	<div>'.Display::return_icon('boxmygroups.jpg').'</div>
                         <div class="social-box-content1">
-                        	<div><img hspace="6" height="90" align="left" width="80" src="'.$user_image_array['dir'].$user_image_array['file'].'"/><p class="groupTex3"><strong>'.get_lang('Information').'</strong></p></div>                        	
-                            <div><p><strong>'.get_lang('Username').'</strong><br /><span class="social-groups-text4">'.$user_info['username'].'</span></p></div>
+                        	<div><img hspace="6" height="90" align="left" width="80" src="'.$user_image_array['dir'].$user_image_array['file'].'"/></div>                        	
+                            
                             <div><p><strong>'.get_lang('Name').'</strong><br /><span class="social-groups-text4">'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</span></p></div>
                             <div><p><strong>'.get_lang('Email').'</strong><br /><span class="social-groups-text4">'.($user_info['email']?$user_info['email']:'').'</span></p></div>
-                            <div><p><strong>'.get_lang('Phone').'</strong><br /><span class="social-groups-text4">'.($user_info['phone']?$user_info['phone']:'').'</span></p></div>
-                            <div class="box_description_group_actions" ><a href="profile.php">'.get_lang('SeeMore').$url_close.'</a></div>	            
+                            
+                            <div class="box_description_group_actions" ><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.Display::return_icon('edit.gif', get_lang('EditProfile'), array('hspace'=>'6')).get_lang('EditProfile').$url_close.'</a></div>	            
                         </div>                        
 					</div>';
 			
@@ -109,22 +101,25 @@ echo '<div id="social-content">';
 			echo '</div>';
 
 			echo '<div class="social-box-right">';
-			echo '<br /><br />';
+			echo '<br />';
 			echo UserManager::get_search_form($query);
 			echo '<br />';			
-			$results = GroupPortalManager::get_groups_by_age(1,false);							
+			
+			$results = GroupPortalManager::get_groups_by_age(1,false);	
+									
 			$groups_newest = array();
 			foreach ($results as $result) {
 				$id = $result['id'];
-				$url_open  = '<a href="groups.php?id='.$id.'">';
-				$url_close = '</a>';
+				$url_open  = '<a href="groups.php?id='.$id.'"><span class="social-groups-text1">';
+				$url_close = '</span></a>';
 				$count_users_group = count(GroupPortalManager::get_all_users_by_group($id));
 				if ($count_users_group == 1 ) {
 					$count_users_group = $count_users_group.' '.get_lang('Member');	
 				} else {
 					$count_users_group = $count_users_group.' '.get_lang('Members');
 				}
-				$result['name'] = $url_open.ucwords(cut($result['name'],40,true)).'('.$count_users_group.') '.$url_close.'<div>'.get_lang('DescriptionGroup').'</div>';
+				
+				$result['name'] = $url_open.api_ucwords(cut($result['name'],40,true)).'('.$count_users_group.') '.$url_close.Display::return_icon('linegroups.jpg','').'<div>'.get_lang('DescriptionGroup').'</div>';
 				$picture = GroupPortalManager::get_picture_group($id, $result['picture_uri'],80);							
 				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="10" height="44" border="2" align="left" width="44" />';
 				$actions = '<div class="box_description_group_actions" ><a href="groups.php?view=newest">'.get_lang('SeeMore').$url_close.'</div>';								
@@ -135,15 +130,16 @@ echo '<div id="social-content">';
 			$groups_pop = array();
 			foreach ($results as $result) {
 				$id = $result['id'];
-				$url_open  = '<a href="groups.php?id='.$id.'">';
-				$url_close = '</a>';		
+				
+				$url_open  = '<a href="groups.php?id='.$id.'"><span class="social-groups-text1">';
+				$url_close = '</span></a>';		
 				
 				if ($result['count'] == 1 ) {
 					$result['count'] = $result['count'].' '.get_lang('Member');	
 				} else {
 					$result['count'] = $result['count'].' '.get_lang('Members');
 				}
-				$result['name'] = $url_open.ucwords(cut($result['name'],40,true)).'('.$result['count'].') '.$url_close.'<div>'.get_lang('DescriptionGroup').'</div>';
+				$result['name'] = $url_open.api_ucwords(cut($result['name'],40,true)).'('.$result['count'].') '.$url_close.Display::return_icon('linegroups.jpg').'<div>'.get_lang('DescriptionGroup').'</div>';
 				$picture = GroupPortalManager::get_picture_group($id, $result['picture_uri'],80);							
 				$result['picture_uri'] = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="10" height="44" border="2" align="left" width="44" />';
 				$actions = '<div class="box_description_group_actions" ><a href="groups.php?view=pop">'.get_lang('SeeMore').$url_close.'</div>';								
@@ -151,13 +147,13 @@ echo '<div id="social-content">';
 			}
 			
 			if (count($groups_newest) > 0) {		
-				echo '<div class="social-groups-home-title">'.strtoupper(get_lang('Newest')).'</div>';	
+				echo '<div class="social-groups-home-title">'.api_strtoupper(get_lang('Newest')).'</div>';	
 				Display::display_sortable_grid('home_group', array(), $groups_newest, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
 				echo '<br /><br /><br />';		
 			}
 			
 			if (count($groups_pop) > 0) {
-				echo '<div class="social-groups-home-title">'.strtoupper(get_lang('Popular')).'</div>';
+				echo '<div class="social-groups-home-title">'.api_strtoupper(get_lang('Popular')).'</div>';
 				Display::display_sortable_grid('home_group', array(), $groups_pop, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,true,true));
 			}
 	                               	 

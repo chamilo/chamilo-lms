@@ -21,7 +21,12 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
-$this_section = SECTION_MYPROFILE;
+if (api_get_setting('allow_social_tool') == 'true') {
+	$this_section = SECTION_SOCIAL;
+} else {
+	$this_section = SECTION_MYPROFILE;
+}
+
 $_SESSION['this_section'] = $this_section;
 
 if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
@@ -727,24 +732,24 @@ if (isset($_GET['show'])) {
 */
 Display :: display_header('');
 
-if (api_get_setting('extended_profile') == 'true') {
-	echo '<div class="actions">';
-	
-	if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
-		echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
+if (api_get_setting('allow_social_tool') != 'true') {
+	if (api_get_setting('extended_profile') == 'true') {
+		echo '<div class="actions">';	
+		if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
+			echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
+		}
+		if (api_get_setting('allow_message_tool') == 'true') {
+			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
+		}	
+		$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
+					 
+		if (isset($_GET['type']) && $_GET['type'] == 'extended') {
+			echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
+		} else {
+			echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</a>';
+		}
+		echo '</div>';
 	}
-	if (api_get_setting('allow_message_tool') == 'true') {
-		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
-	}	
-	$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
-				 
-	if (isset($_GET['type']) && $_GET['type'] == 'extended') {
-		echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
-	} else {
-		echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</a>';
-	}
-
-	echo '</div>';
 }
 
 if (!empty($file_deleted)) {
@@ -801,45 +806,66 @@ $big_image_width = $big_image_size[0];
 $big_image_height = $big_image_size[1];
 $url_big_image = $big_image.'?rnd='.time();
 
-// Style position:absolute has been removed for Opera-compatibility. 
-//echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:3px;width:250px;" >';
-echo '<div id="image-message-container" style="float:right;display:inline;padding:3px;width:250px;" >';
 
-if ($image == 'unknown.jpg') {
-	echo '<img '.$img_attributes.' />';
+if (api_get_setting('allow_social_tool') == 'true') {
+	
+	echo '<div class="social-header">';
+	
+	echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="social-menu-text1">'.strtoupper(get_lang('Menu')).'</span></center></td>';	
+	echo '<td width="15px">&nbsp;</td>';
+	
+	if (api_get_setting('extended_profile') == 'true') {
+		//echo '<td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>';
+		echo '<td bgcolor="#32578b">';
+		
+		$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
+					 
+		if (isset($_GET['type']) && $_GET['type'] == 'extended') {
+			echo '<a href="profile.php?type=reduced'.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</span></a>';
+		} else {
+			echo '<a href="profile.php?type=extended'.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</span></a>';
+		}
+		echo '</td>';
+	}
+	echo '</tr></table>';
+	echo '</div>';
+		
+	
+	echo '<div id="social-content">';
+	
+		echo '<div id="social-content-left">';
+		SocialManager::show_social_menu('home', null, $user_id, $show_full_profile);
+		echo '</div>';
+	
+		echo '<div id="social-content-right">';
+			// Style position:absolute has been removed for Opera-compatibility. 
+			//echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:3px;width:250px;" >';
+			echo '<div id="image-message-container" style="float:right;display:inline;padding:3px;width:250px;" >';
+			
+			if ($image == 'unknown.jpg') {
+				echo '<img '.$img_attributes.' />';
+			} else {
+				echo '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
+			}
+			echo '</div>';		
+			$form->display();
+		echo '</div>';
+	echo '</div>';
+	
+	
 } else {
-	echo '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
-}
-/* This was moved to user_portal.php
-if (api_get_setting('allow_message_tool') == 'true') {
-	include api_get_path(LIBRARY_PATH).'message.lib.php';
-	$number_of_new_messages = MessageManager::get_new_messages();
-	$number_of_outbox_message = MessageManager::get_number_of_messages_sent();
-	$cant_out_box = ' ('.$number_of_outbox_message.')';
-	$cant_msg = ' ('.$number_of_new_messages.')';
-	$number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
-	//echo '<div class="message-view" style="display:none;">'.get_lang('ViewMessages').'</div>';
-	echo '<div class="message-content">
-			<h2 class="message-title">'.get_lang('Messages').'</h2>
-			<p>
-				<a href="../social/index.php#remote-tab-2" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />
-				<a href="../social/index.php#remote-tab-3" class="message-body">'.get_lang('Outbox').$cant_out_box.'</a><br />
-			</p>';
-
-	//if (api_get_setting('allow_social_tool') == 'true') {
-	//	 if ($number_of_new_messages_of_friend > 0) {
-	//		echo '<div class="message-content-internal">';
-	//		echo '<a href="../social/index.php#remote-tab-4" style="color:#000000">'. Display::return_icon('info3.gif', get_lang('NewMessage'), 'align="absmiddle"').'&nbsp;'.get_lang('Invitation ').'('.$number_of_new_messages_of_friend.')'.'</a>';
-	//		echo '</div><br />';
-	//	 }
-	// }
-	echo '<img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('Close').'" title="'.get_lang('Close').'"  class="message-delete" />';
-	if ($number_of_new_messages_of_friend > 0) {
-		echo '<br />';
+	// Style position:absolute has been removed for Opera-compatibility. 
+	//echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:3px;width:250px;" >';
+	echo '<div id="image-message-container" style="float:right;display:inline;padding:3px;width:250px;" >';
+	
+	if ($image == 'unknown.jpg') {
+		echo '<img '.$img_attributes.' />';
+	} else {
+		echo '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 	}
 	echo '</div>';
+	$form->display();
 }
-*/
-echo '</div>';
-$form->display();
+
+
 Display :: display_footer();

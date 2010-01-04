@@ -136,8 +136,8 @@ function WhoIsOnline($valid, $friends = false)
 		// 	who friends from social network is online	
 		$query = "	SELECT distinct login_user_id,login_date 
 					FROM $track_online_table 
-					INNER JOIN $friend_user_table ON friend_user_id = login_user_id AND relation_type=3
-					WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' ";
+					INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
+					WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."'  AND relation_type=3 AND user_id = '".api_get_user_id()."' ";
 	} else {
 		// all users online
 		$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";	
@@ -153,8 +153,8 @@ function WhoIsOnline($valid, $friends = false)
 				$query = "	SELECT distinct login_user_id,login_date 
 							FROM $track_online_table 
 							INNER JOIN $tbl_user_rel_access_url user_rel_url ON (user_rel_url.user_id = track.login_user_id)		
-							INNER JOIN $friend_user_table ON friend_user_id = login_user_id AND relation_type=3
-							WHERE access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' ";
+							INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
+							WHERE access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' AND relation_type=3 AND user_id = '".api_get_user_id()."' ";
 			} else {
 				// all users online
 				$query = "	SELECT login_user_id,login_date FROM ".$track_online_table ." track
@@ -196,6 +196,8 @@ function WhoIsOnline($valid, $friends = false)
 		return false;
 	}
 }
+
+
 
 /**
  * Gets the full user name for a given user ID

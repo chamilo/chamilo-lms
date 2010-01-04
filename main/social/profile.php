@@ -247,11 +247,9 @@ echo '<div id="social-content">';
 		SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
 	echo '</div>';
 
-echo '<div id="social-content-right">';	
+echo '<div id="social-content-right">';
 
-
-	echo '<div id="social-content-online">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="'.api_get_path(WEB_PATH).'whoisonline.php" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a>';
-	
+	echo '<div id="social-content-online">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="'.api_get_path(WEB_PATH).'whoisonline.php" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a>';	
 	echo '</div>';
 
 	
@@ -458,7 +456,7 @@ echo '<div id="social-content-right">';
 				$url_open  = '<a href="groups.php?id='.$id.'">';
 				$url_close = '</a>';
 				$icon = '';					
-				$name = strtoupper(cut($result['name'],20,true));				
+				$name = api_strtoupper(cut($result['name'],20,true));				
 				if ($result['relation_type'] == GROUP_USER_PERMISSION_ADMIN) {		 	
 					$icon = Display::return_icon('admin_star.png', get_lang('Admin'), array('style'=>'vertical-align:middle;width:16px;height:16px;'));
 				} elseif ($result['relation_type'] == GROUP_USER_PERMISSION_MODERATOR) {			

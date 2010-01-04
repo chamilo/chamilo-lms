@@ -2261,7 +2261,7 @@ div.comments {
 /*SOCIAL TOOL*/
 div.image-social-content {
 	float:left;
-	border:1px solid #B8C8DC;
+	border:1px dotted #ccc;
 	margin:2px;
 	padding: 8px 4px 4px 4px;
 	background: #ffffff;
@@ -2331,7 +2331,8 @@ div.image-social-content center.friend {
 }
 
 .social-content-image {
-margin-bottom:10px;
+	margin-bottom:10px;
+	margin-top:2px;
 }
 
 #social-content-left {
@@ -2339,7 +2340,7 @@ margin-bottom:10px;
 	height:auto;
 	margin-right:16px;
 	min-height:300px;
-	width:160px;
+	width:200px;
 	overflow:hidden;	
 }
 .social-content-description {
@@ -2368,7 +2369,9 @@ margin-bottom:10px;
 	padding-left:10px;
 	width:200px;
 }
+
 /* general layout of the profile page */
+
 #social-profile-wrapper {
 	width: 100%;
 	text-align:left;
@@ -2395,7 +2398,7 @@ margin-bottom:10px;
 
 /*  SOCIAL MENU VERTICAL */
 .social-menu  {
-	width:150px;
+	width:180px;
 	height:auto;
 }
 .social-menu ul {
@@ -2425,7 +2428,7 @@ margin-bottom:10px;
 	margin-left:20px;
 }
 .social-menu-title{
-	width:150px;
+	width:180px;
 	float:left;
 	height:auto;
 	background-color:#32578b;
@@ -2489,6 +2492,15 @@ margin-bottom:10px;
 	margin:20px;
 }
 
+
+.social-menu-group-member {
+	float:left;
+	height:120px;
+	margin:5px;
+	overflow:hidden;
+	padding:2px;
+	width:76px;
+}
  
 /* SOCIAL BOX */
 
@@ -2511,7 +2523,7 @@ margin-bottom:10px;
 .social-box-container1 {
 	width:350px;
 	height:auto;
-	margin-top:20px;
+	margin-top:10px;
 }
 .social-box-content1 {
 	width:330px;
@@ -2615,6 +2627,16 @@ margin-bottom:10px;
 #social-content-online {
 	background-color:#32578B;
 	margin-bottom:5px;
+	margin-top:2px;
+	padding:1px;
+}
+
+#social-group-details {
+	margin-left:82px;
+}
+.social-group-details-info span {
+	color:#777;
+
 }
 
 
@@ -2751,10 +2773,10 @@ div#friend-container {
 }
 div.image_friend_network {
 	float:left;
-	border:1px solid #CCCCCC;
+	border:1px dotted #ccc;
 	margin:2px;
 	padding:4px;
-	background: #EFEFEF;
+	/* background: #EFEFEF; */
 	height:125px;
 	width:81px;
 	z-index:5;
@@ -3182,10 +3204,14 @@ a.read {
 
 /* home group boxes */
 
+.home_group_grid_container {
+	margin-bottom:60px;
+}
+
 .home_group_grid_element_1 {
 	font-family:Verdana, Geneva, sans-serif;
 	font-size:12px;
-	color:#666699;
+	color:#686868;
 	font-weight:bold;
 	margin:2px;
 	padding:2px;

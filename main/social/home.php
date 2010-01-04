@@ -23,6 +23,8 @@ $interbreadcrumb[]= array ('url' => '#','name' => get_lang('Home'));
 	
 api_block_anonymous_users();
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
 
 //fast upload image
 if (api_get_setting('profile', 'picture') == 'true') {
@@ -67,23 +69,66 @@ echo '<div id="social-content">';
 		echo '<div class="social-box-main1">';
 			echo '<div class="social-box-left">';
 						
-			$user_image_array = UserManager::get_picture_user(api_get_user_id(), $user_info['picture_uri'], 400, USER_IMAGE_SIZE_ORIGINAL);
-			// info not neccesary
-			//<div><p><strong>'.get_lang('Username').'</strong><br /><span class="social-groups-text4">'.$user_info['username'].'</span></p></div>
-			//<div><p><strong>'.get_lang('Phone').'</strong><br /><span class="social-groups-text4">'.($user_info['phone']?$user_info['phone']:'').'</span></p></div>
-							
+				$user_image_array = UserManager::get_picture_user(api_get_user_id(), $user_info['picture_uri'], 400, USER_IMAGE_SIZE_ORIGINAL);
+
+				//@todo fix this aswell as in main/auth/profile.php
+				//User picture size is calculated from SYSTEM path
+				$image_syspath = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system', false, true);
+				$image_syspath['dir'].$image_syspath['file'];
+				
+				$image_size = @getimagesize($image_syspath['dir'].$image_syspath['file']);
+				
+				//Web path
+				$image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web', false, true);
+				$image_dir = $image_path['dir'];
+				$image = $image_path['file'];
+				$image_file = $image_dir.$image;
+				$img_attributes = ' hspace="6" height="90" align="left" width="80" src="'.$image_file.'?rand='.time().'" '
+					.'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" ';
+					
+				if ($image_size[0] > 80) {
+					//limit display width to 80px
+					$img_attributes .= 'width="80" ';
+				}
+				
+				// get the path,width and height from original picture
+				$big_image = $image_dir.'big_'.$image;
+				
+				$big_image_size = api_getimagesize($big_image);
+				$big_image_width = $big_image_size[0];
+				$big_image_height = $big_image_size[1];
+				$url_big_image = $big_image.'?rnd='.time();
+								
+				if ($image == 'unknown.jpg') {
+					$image =  '<a href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php"><img '.$img_attributes.' /></a>';
+					/*if (api_get_setting('profile', 'picture') == 'true') {				
+						$form->display();
+					}*/					
+				} else {
+					$big_image = UserManager::get_picture_user(api_get_user_id(), $user_info['picture_uri'],'',USER_IMAGE_SIZE_BIG);
+					$big_image = $big_image['file'].$big_image['dir'];					
+					$image = '<a class="thickbox" href="'.$big_image.'"><img '.$img_attributes.' /> </a>';					 
+					//$image = '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
+				}
+									
 			// information current user			
 			echo	'<div class="social-box-container1">
                     	<div>'.Display::return_icon('boxmygroups.jpg').'</div>
-                        <div class="social-box-content1">
-                        	<div><img hspace="6" height="90" align="left" width="80" src="'.$user_image_array['dir'].$user_image_array['file'].'"/></div>                        	
+                        <div class="social-box-content1">';
+                   
+                   //echo	'<div><img hspace="6" height="90" align="left" width="80" src="'.$user_image_array['dir'].$user_image_array['file'].'"/></div>';
+                   echo	'<div>'.$image.'</div>';                        	
                             
-                            <div><p><strong>'.get_lang('Name').'</strong><br /><span class="social-groups-text4">'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</span></p></div>
+                       echo '<div><p><strong>'.get_lang('Name').'</strong><br /><span class="social-groups-text4">'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</span></p></div>
                             <div><p><strong>'.get_lang('Email').'</strong><br /><span class="social-groups-text4">'.($user_info['email']?$user_info['email']:'').'</span></p></div>
                             
                             <div class="box_description_group_actions" ><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.Display::return_icon('edit.gif', get_lang('EditProfile'), array('hspace'=>'6')).get_lang('EditProfile').$url_close.'</a></div>	            
                         </div>                        
 					</div>';
+			
+			
+			
+			
 			
 			if (count($user_online_list) > 0) {
  

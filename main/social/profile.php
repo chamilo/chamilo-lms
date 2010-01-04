@@ -187,10 +187,10 @@ if (isset($_GET['shared'])) {
 	$my_link='../social/profile.php';
 	$link_shared='';
 }
-$interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social') );
-$interbreadcrumb[]= array ('url' => '#', 'name' => get_lang('ViewMySharedProfile'));
+$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social') );
+$interbreadcrumb[]= array ('url' => 'profile.php?u='.api_get_user_id(), 'name' => get_lang('ViewMySharedProfile'));
 
-if (isset($_GET['u']) && is_numeric($_GET['u'])) {
+if (isset($_GET['u']) && is_numeric($_GET['u']) && $_GET['u'] != api_get_user_id()) {
 	$info_user=api_get_user_info($_GET['u']);
 	$interbreadcrumb[]= array ('url' => '#','name' => api_get_person_name($info_user['firstName'], $info_user['lastName']));
 }

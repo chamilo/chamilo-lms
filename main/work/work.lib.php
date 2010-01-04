@@ -104,8 +104,9 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;list=with\">".
 				Display::return_icon('check.gif', get_lang('ViewUsersWithTask')).' '.get_lang('ViewUsersWithTask').
 				"</a>\n";
-
-				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;list=without&amp;action=send_mail&amp;sec_token=".$_SESSION['sec_token']."\">".
+				
+				$_SESSION['token'] = time();				
+				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;list=without&amp;action=send_mail&amp;sec_token=".$_SESSION['token']."\">".
 				Display::return_icon('messagebox_warning.gif', get_lang('ReminderMessage')).' '.get_lang('ReminderMessage').
 				"</a>\n";
 			}

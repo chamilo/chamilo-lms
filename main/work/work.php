@@ -217,8 +217,12 @@ if (isset($_GET['list']) && Security::remove_XSS($_GET['list'])=='without') {
 	$display_list_users_without_publication= false;
 }
 
-if (isset($_GET['action']) && $_GET['action'] == 'send_mail') {
-	send_reminder_users_without_publication($publication['id']);
+
+if (isset($_GET['action']) && $_GET['action'] == 'send_mail') {	
+	if ($_GET['sec_token'] == $_SESSION['token']) {
+		send_reminder_users_without_publication($publication['id']);
+		unset($_SESSION['token']);	
+	}
 } 
 
 api_protect_course_script(true);

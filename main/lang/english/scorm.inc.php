@@ -52,4 +52,5 @@ $UnknownPackageFormat = "The package format cannot be recognized. Please make su
 $Attempt = "Attempt";
 $MoveTheCurrentForum = "Move the current forum";
 $WarningWhenEditingScorm = "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object.";
+$AdditionalProfileField = "Add user profile field";
 ?>

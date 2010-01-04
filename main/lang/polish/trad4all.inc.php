@@ -489,5 +489,6 @@ $ForumThreads = "W&#261;tki forum";
 $GradebookVisible = "Widoczny";
 $GradebookInvisible = "Niewidoczny";
 $Phone = "Telefon";
+$DateSend = "Data wys&#322;ania";
 $BackToOutbox = "Powrót do wys&#322;anych";
 ?>

@@ -53,7 +53,6 @@ $YouDontHaveInvites = "Inga inbjudningar";
 $SocialInvitesComment = "Inbjudan avvaktar svar";
 $InvitationSentBy = "Inbjudan skickad av";
 $RequestContact = "Efterfråga kontakt";
-$DateSend = "Skickad";
 $SocialUnknow = "Okänd";
 $SocialParent = "Mina föräldrar";
 $SocialFriend = "Mina vänner";

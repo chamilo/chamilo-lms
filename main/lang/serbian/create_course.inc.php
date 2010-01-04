@@ -99,6 +99,10 @@ $ExampleForum = "Primer foruma";
 $ExampleThread = "Primer teme";
 $ExampleThreadContent = "Primer sadržaja";
 $IntroductionWiki = "Re&#269; Wiki je skra&#263;eno od WikiWikiWeb. Wikiwiki je havajska re&#269; zna&#269;enja \"brz\", \"brzina\". Wiki stranice autori ure&#273;uju zajedno, u kolaboraciji. Ako jedan pogreši u , drugi može ispraviti njegovu grešku. Slede&#263;i pak može dopisati i nešto novo u na Wiki stranici. Na taj na&#269;in, Wiki stranice se neprestano poboljšavaju.";
+$CreateCourseArea = "Kreiraj kurs ";
 $CreateCourse = "Kreiraj kurs";
 $Create = "Kreiraj";
+$MessageOfNewCourseToAdmin = "To poruka vam je poslata da vas informiše o kreiranju novog kursa na platformi  ";
+$NewCourseCreatedIn = "Novi kurs kreiran u ";
+$ExplicationTrainers = "Trener je podešen na Vas trenutno. Možete da promenite ovo podešavanja kasnije u podešavanjima konfiguracije treninga";
 ?>

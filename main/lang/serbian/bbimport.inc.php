@@ -1,9 +1,9 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
-$langViewCourseMaterialImport  = "Vidi kao &#263;e izgledati materijal kursa kada bude uvezen.";
-$langViewExternalLinksImport  = "Vidi kao &#263;e izgledati spoljne linkove kada bude uvezen. ";
-$langViewForumImport  = "Vidi kao &#263;e izgledati forum kada bude uvezen. ";
+$langViewCourseMaterialImport  = "Vidi kako &#263;e izgledati materijal kursa kada bude uvezen.";
+$langViewExternalLinksImport  = "Vidi kako &#263;e izgledati spoljni linkovi kada budu uvezeni. ";
+$langViewForumImport  = "Vidi kako &#263;e izgledati forum kada bude uvezen. ";
 $langImportCourseMaterial  = "Uvezi materijal kursa ";
 $langImportExternalLinks  = "Uvezi linkove";
 $langImportForum  = "Uvezi forume";

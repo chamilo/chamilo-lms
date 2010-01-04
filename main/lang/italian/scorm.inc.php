@@ -52,4 +52,5 @@ $UnknownPackageFormat = "Il formato del file non è stato riconosciuto. Assicurat
 $Attempt = "Tentativo";
 $MoveTheCurrentForum = "Sposta il Forum corrente";
 $WarningWhenEditingScorm = "Attenzione!<br/>Modificando il contenuto di un elemento, puoi modificare le informazioni sugli esiti o danneggiarlo!";
+$AdditionalProfileField = "Aggiungi un campo al profilo utente";
 ?>

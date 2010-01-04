@@ -53,7 +53,6 @@ $YouDontHaveInvites = "Nimaš nobenih èakajo&#269;ih vabil";
 $SocialInvitesComment = "Ta zaslon omogoèa preverjanje tvojih èakajoèih vabil";
 $InvitationSentBy = "Vabilo poslano od";
 $RequestContact = "Zahtevaj kontakt";
-$DateSend = "Datum pošiljanja";
 $SocialUnknow = "Neznan";
 $SocialParent = "Moji starši";
 $SocialFriend = "Moji prijatelji";

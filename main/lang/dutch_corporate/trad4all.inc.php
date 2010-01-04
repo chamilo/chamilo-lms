@@ -601,6 +601,7 @@ $langNameOfLang['swahili'] = "Swahili";
 $langNameOfLang['trad_chinese'] = "Chinees (Traditioneel)";
 $FieldRequired = "Verplicht veld";
 $GoToQuestion = "Ga naar vraag";
+$DateSend = "Verstuurdatum";
 $SocialNetwork = "Sociaal netwerk";
 $TemplatePreview = "Voorbeeldweergave van het sjabloon";
 $NoTemplatePreview = "Voorbeeldweergave is niet beschikbaar";

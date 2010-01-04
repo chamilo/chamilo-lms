@@ -1124,4 +1124,5 @@ $AllowSendMessageToAllPlatformUsersComment = "Allow send message to all platform
 $TabsSocial = "Tabs social";
 $MessageMaxUploadFilesizeTitle = "Message max upload file size";
 $MessageMaxUploadFilesizeComment = "Message max upload file size";
+$AddAdditionalProfileField = "Add user profile field";
 ?>

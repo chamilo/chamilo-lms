@@ -53,7 +53,6 @@ $YouDontHaveInvites = "Kunanqa manaraq kanchu mink\'ayki";
 $SocialInvitesComment = "Kaymantaqa chaskiwaq utaq mana mink\'aykuna haykuqtaqa";
 $InvitationSentBy = "Pin apachimun mink\'ayta";
 $RequestContact = "Sispamasi kanaykipaq mañakushanku";
-$DateSend = "Ima pachapi apachisqa";
 $SocialUnknow = "Sispamasi mana reqsisqa";
 $SocialParent = "Ayllumasi";
 $SocialFriend = "Kunpaykuna";

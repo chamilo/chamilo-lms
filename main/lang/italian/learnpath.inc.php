@@ -244,4 +244,5 @@ $AddAssignmentToCourse = "Includi pagina elaborati nel modulo";
 $AddForumToCourse = "Includi Forum nel modulo";
 $SaveAudioAndOrganization = "Salva audio e ordinamento";
 $UploadOnlyMp3Files = "Si possono caricare solo file mp3, grazie";
+$ModifyHotPotatoes = "Modifica l\'elemento HotPotatoes";
 ?>

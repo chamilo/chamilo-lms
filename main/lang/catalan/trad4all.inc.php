@@ -681,6 +681,7 @@ $Overview = "Vista global";
 $ApiKeys = "Claus API";
 $GenerateApiKey = "Generar clau API";
 $MyApiKey = "La meva clau API";
+$DateSend = "Fecha de enviament";
 $Deny = "Denegar";
 $ThereIsNotQualifiedLearners = "No hi ha estudiants qualificats";
 $ThereIsNotUnqualifiedLearners = "No hi ha estudiants qualificats";

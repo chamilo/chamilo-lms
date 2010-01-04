@@ -705,6 +705,7 @@ $Overview = "Pregled";
 $ApiKeys = "API kljuèi";
 $GenerateApiKey = "Generiraj API kljuè";
 $MyApiKey = "Moji API kljuèi";
+$DateSend = "Datum pošiljanja";
 $Deny = "Onemogoèi";
 $ThereIsNotQualifiedLearners = "Tukaj ni ocenjenih uèeèih se uporabnikov";
 $ThereIsNotUnqualifiedLearners = "Tukaj ni neocenjenih uèeèih se uporabnikov";

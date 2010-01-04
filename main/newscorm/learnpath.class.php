@@ -5682,7 +5682,7 @@ class learnpath {
 
 		$return .= "\t\t" . '<tr>' . "\n";
 
-		$return .= "\t\t\t" . '<td> &nbsp;</td><td><button class="save" name="submit_button" type="submit">' . get_lang('ModifyHotPotatoes') . '</button></td>' . "\n";
+		$return .= "\t\t\t" . '<td> &nbsp;</td><td><button class="save" name="submit_button" action="edit" type="submit">' . get_lang('SaveHotpotatoes') . '</button></td>' . "\n";
 
 		$return .= "\t\t" . '</tr>' . "\n";
 

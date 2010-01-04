@@ -53,7 +53,6 @@ $YouDontHaveInvites = "Actualmente no tiene invitaciones";
 $SocialInvitesComment = "Aquí puede aceptar o denegar las invitaciones entrantes";
 $InvitationSentBy = "Invitación enviada por";
 $RequestContact = "Petición de contacto";
-$DateSend = "Fecha de envio";
 $SocialUnknow = "Contactos desconocidos";
 $SocialParent = "Mis parientes";
 $SocialFriend = "Mis amigos";

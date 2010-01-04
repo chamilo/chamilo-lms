@@ -487,4 +487,5 @@ $HomeDirectory = "hem";
 $Course = "Kurs";
 $ListView = "Visa som lista";
 $Phone = "Tel";
+$DateSend = "Skickad";
 ?>

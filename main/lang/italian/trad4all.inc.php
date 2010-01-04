@@ -705,6 +705,7 @@ $Overview = "Vista d\'insieme";
 $ApiKeys = "API key";
 $GenerateApiKey = "Genera un\'API key";
 $MyApiKey = "API key personale";
+$DateSend = "Data d\'invio";
 $Deny = "Non consentire";
 $ThereIsNotQualifiedLearners = "Non ci sono corsisti con valutazioni";
 $ThereIsNotUnqualifiedLearners = "Non ci sono corsisti senza valutazione";

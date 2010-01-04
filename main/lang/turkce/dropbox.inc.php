@@ -73,4 +73,10 @@ $dropbox_lang["filingRefile"] = "Seçilen dosyalar&#305; yeni i&#351;leme al";
 $dropbox_lang["filingSelected"] = "Al&#305;nd&#305;/Gönderildi (orijinal dizin)";
 $dropbox_lang["filingOtherAs"] = "(yeni dizin ad&#305;) ==>";
 $dropbox_lang["filingName"] = "&#304;sim";
+$langAddEdit = "Ekle / Düzenle";
+$ErrorNoFilesInFolder = "Dizin bo&#351;";
+$dropbox_lang["upload"] = "Yükle";
+$AddComment  = "Geri beslemeyi kaydet";
+$SentCatgoryDeleted = "Dizin silindi";
+$ReceivedCatgoryDeleted = "Dizin silindi";
 ?>

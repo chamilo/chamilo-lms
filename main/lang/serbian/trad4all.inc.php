@@ -345,5 +345,6 @@ $YourTextHere = "Vaš tekst ...";
 $OrderBy = "Sortiraj po ";
 $Notebook = "Beležnica ";
 $FieldRequired = "Obavezno polje ";
+$DateSend = "Datum slanja";
 $Image = "Slika";
 ?>

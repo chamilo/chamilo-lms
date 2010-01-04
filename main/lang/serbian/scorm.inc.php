@@ -27,7 +27,14 @@ $langScormNoItems = "Ovaj sadržaj nema stavke.";
 $langScormNoStatus = "Nema statusa za ovaj sadržaj";
 $langScormLoggedout = "odjavljen iz Scorm okruženja";
 $langScormCloseWindow = "Zatvori prozor";
+$ScormBrowsed = "Pregledan";
 $langScormExitFullScreen = "Nazad na normalan ekran";
 $langScormFullScreen = "Full screen";
 $langScormNotAttempted = "Bez pokušaja";
+$langCharset = "Skup znakova (character set)";
+$langLocal = "Lokalni";
+$langRemote = "Udaljeni";
+$langAutodetect = "Automatsko pronalaženje";
+$langAccomplishedStepsTotal = "Ukupno izvršenih koraka";
+$langUnknown = "Nepoznat";
 ?>

@@ -215,4 +215,5 @@ $CreateFolder = "Dizini yarat";
 $HelpDefaultDirDocuments = "Bu dizin varsay&#305;lan ar&#351;ivi içerir. Dosyalar&#305; temizleyebilir yada yeni bir tane ekleyebilirsiniz, fakat e&#287;er bir dosya web belgesi olarak gizliyken konduysa ö&#287;renciler bu belge içinde o dosyay&#305; göremeyeceklerdir. Web belgesi olarak koydupunuz dosyalar&#305;n görünür oldu&#287;undan emin olun. Dizinler gizli kalabilir.";
 $HelpSharedFolder = "Bu dizin di&#287;er kullan&#305;c&#305;lar&#305;n (yada sizin) editör yard&#305;m&#305;yla bir kurs için gönderdi&#287;iniz dosyalar&#305; içerir (e&#287;er grup arac&#305;ndan yap&#305;lmad&#305;ysa). Ön de&#287;er olarak ö&#287;retmenler taraf&#305;ndan görülebilir fakat di&#287;er ö&#287;renciler taraf&#305;ndan gizlenebilir (dosyalara do&#287;rudan eri&#351;im izni olmak kayd&#305;yla). E&#287;er bir kullan&#305;c&#305; dizini görünür ise di&#287;er kullan&#305;c&#305;lar dizinin tüm içeri&#287;ini görebilirler.";
 $TemplateImage = "&#350;anlon ikonu";
+$MoveElement = "Ö&#287;eyi ta&#351;&#305;";
 ?>

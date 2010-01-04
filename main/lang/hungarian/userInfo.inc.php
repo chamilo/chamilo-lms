@@ -53,7 +53,6 @@ $YouDontHaveInvites = "Üres";
 $SocialInvitesComment = "Függ&#337;ben lév&#337; meghívások.";
 $InvitationSentBy = "A meghívót küldte";
 $RequestContact = "Kapcsolat kérése";
-$DateSend = "Elküldés dátuma";
 $SocialUnknow = "Ismeretlen";
 $SocialParent = "Szüleim";
 $SocialFriend = "Barátaim";

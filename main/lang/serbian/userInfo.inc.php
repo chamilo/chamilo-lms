@@ -37,7 +37,6 @@ $ContactsList = "Kontakti";
 $SelectOneContact = "Izaberite kontakt";
 $SelectOneGroup = "Izaberite jednu grupu";
 $SelectTheCheckbox = "Izaberite polje za potvrdu";
-$DateSend = "Datum slanja";
 $SocialParent = "Moji roditelji";
 $SocialFriend = "Moji prijatelji";
 $SocialGoodFriend = "Moji pravi prijatelji";

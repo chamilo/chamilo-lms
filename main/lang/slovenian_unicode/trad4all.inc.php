@@ -705,6 +705,7 @@ $Overview = "Pregled";
 $ApiKeys = "API ključi";
 $GenerateApiKey = "Generiraj API ključ";
 $MyApiKey = "Moj API ključ";
+$DateSend = "Datum pošiljanja";
 $Deny = "Onemogoči";
 $ThereIsNotQualifiedLearners = "Tu ni kvalificiranih učečih se uporabnikov";
 $ThereIsNotUnqualifiedLearners = "Tu ni nekvalificiranih učečih se uporabnikov";

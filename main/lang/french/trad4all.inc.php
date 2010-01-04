@@ -705,6 +705,7 @@ $Overview = "Vue globale";
 $ApiKeys = "Clefs API";
 $GenerateApiKey = "Générer une nouvelle clef API";
 $MyApiKey = "Ma clef API";
+$DateSend = "Date d\'envoi";
 $Deny = "Refuser";
 $ThereIsNotQualifiedLearners = "Il n\'y a pas d\'apprenant coté";
 $ThereIsNotUnqualifiedLearners = "Il n\'y a pas d\'apprenant à coter";

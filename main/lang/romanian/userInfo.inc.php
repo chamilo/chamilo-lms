@@ -48,7 +48,6 @@ $InvitationDenied = "Invitatia dumneavoastra este refuzata";
 $AddedContactToList = "Ati adaugat contacte listei";
 $ContactsGroupsComment = "Acest ecran este o lista de persoane de contact sortate pe grup";
 $YouDontHaveInvites = "Nu aveti invitatie";
-$DateSend = "Trimite data";
 $SocialUnknow = "Necunoscut";
 $SocialParent = "Parintii mei";
 $SocialFriend = "Prietenii mei";

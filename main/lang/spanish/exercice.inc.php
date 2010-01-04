@@ -352,4 +352,5 @@ $EnableTimerControl = "Habilitar control de tiempo";
 $ExerciseTotalDurationInMinutes = "Duración del ejercicio (en minutos)";
 $ToContinueUseMenu = "Para continuar esta lección, por favor use el menú lateral.";
 $RandomAnswers = "Barajar respuestas";
+$NotMarkActivity = "No es posible calificar este elemento";
 ?>

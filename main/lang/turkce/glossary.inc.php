@@ -22,4 +22,5 @@ $TableView = "Tablo görünümü";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Bu terim zaten var. Lütfen terim ad&#305;n&#305; de&#287;i&#351;tiriniz";
 $GlossaryManagement  = "Sözlük Yönetimi";
 $TermMoved = "Terim ta&#351;&#305;nd&#305;";
+$ShowGlossaryInExtraToolsTitle = "Ekstra araçlarda teknik terimleri göster";
 ?>

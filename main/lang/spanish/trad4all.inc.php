@@ -705,6 +705,7 @@ $Overview = "Vista global";
 $ApiKeys = "Claves API";
 $GenerateApiKey = "Generar clave API";
 $MyApiKey = "Mi clave API";
+$DateSend = "Fecha de envio";
 $Deny = "Denegar";
 $ThereIsNotQualifiedLearners = "No hay estudiantes calificados";
 $ThereIsNotUnqualifiedLearners = "No hay estudiantes sin calificar";

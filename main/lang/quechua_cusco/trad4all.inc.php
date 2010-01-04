@@ -648,6 +648,7 @@ $Overview = "Lliw qhawariy";
 $ApiKeys = "Llaves API";
 $GenerateApiKey = "Generar API key";
 $MyApiKey = "Mi API key";
+$DateSend = "Ima pachapi apachisqa";
 $Deny = "Denegar";
 $ThereIsNotQualifiedLearners = "Mana kanchu yachaqekuna chaninchasqa";
 $ThereIsNotUnqualifiedLearners = "Mana kanchu yachaqekuna mana chaninchasqa";

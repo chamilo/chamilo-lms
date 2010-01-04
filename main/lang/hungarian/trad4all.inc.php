@@ -608,6 +608,7 @@ $Overview = "Leírás";
 $ApiKeys = "API kulcsok";
 $GenerateApiKey = "API kulcs létrehozása";
 $MyApiKey = "Az API kulcsom";
+$DateSend = "Elküldés dátuma";
 $Deny = "Elutasít";
 $SocialNetwork = "Szociális hálózat";
 $BackToOutbox = "Vissza a kimen&#337; üzenetekhez";

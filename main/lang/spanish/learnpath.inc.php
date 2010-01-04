@@ -59,7 +59,7 @@ $lang_published = "publicado";
 $lang_add_learnpath_module = "Añadir una sección";
 $lang_add_learnpath_chapter_to_path = "Añadir una sección a esta lección";
 $lang_learnpath_module_added = "La sección se creó con éxito. Ahora puede añadirle objetos de aprendizaje.";
-$lang_edit_learnpath_module = "Editar el título y la descripción de la sección";
+$lang_edit_learnpath_module = "Editar el origen, posición y el título de la sección.";
 $lang_delete_learnpath_module = "Eliminar sección";
 $lang_learnpath_module_edited = "La sección de la lección ha sido modificada";
 $lang_learnpath_module_deleted = "La sección de la lección y todos sus objetos de aprendizaje han sido eliminados";
@@ -244,4 +244,6 @@ $AddAssignmentToCourse = "Agregar la tarea a la lección";
 $AddForumToCourse = "Agregar el foro a la lección";
 $SaveAudioAndOrganization = "Guardar audio y Organización";
 $UploadOnlyMp3Files = "Por favor, envíe sólo archivos mp3";
+$ModifyHotPotatoes = "Modificar hotpotatoes";
+$SaveHotpotatoes = "Guardar hotpotatoes";
 ?>

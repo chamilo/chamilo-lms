@@ -19,4 +19,8 @@ $langNoLinkName = "Molim Vas, unesite ime linka";
 $langEditLink = "Izmeni link po&#269;etne stranice kursa";
 $langChangePress = "Izmenite i kliknite na OK";
 $langLinkChanged = "Link po&#269;etne stranice kursa je promenjen. Koristite meni putanje iznad da se vratite na po&#269;etnu stranicu.";
+$NoLinkName = "Link nema naziva";
+$NoLinkURL = "Nema URL linka";
+$LinkChanged = "Link je ažuriran";
+$OkSentLink = "Link je poslat";
 ?>

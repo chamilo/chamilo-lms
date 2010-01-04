@@ -53,7 +53,6 @@ $YouDontHaveInvites = "Vous n\'avez pas d\'invitation";
 $SocialInvitesComment = "Cet écran vous permet de vérifier vos invitations en attente";
 $InvitationSentBy = "Invitation envoyée par";
 $RequestContact = "Demander un contact";
-$DateSend = "Date d\'envoi";
 $SocialUnknow = "Inconnu";
 $SocialParent = "Ma famille";
 $SocialFriend = "Mes amis";

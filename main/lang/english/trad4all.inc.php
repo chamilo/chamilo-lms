@@ -705,6 +705,7 @@ $Overview = "Overview";
 $ApiKeys = "API keys";
 $GenerateApiKey = "Generate API key";
 $MyApiKey = "My API key";
+$DateSend = "Date sent";
 $Deny = "Deny";
 $ThereIsNotQualifiedLearners = "There are no qualified learners";
 $ThereIsNotUnqualifiedLearners = "There are no unqualified learners";

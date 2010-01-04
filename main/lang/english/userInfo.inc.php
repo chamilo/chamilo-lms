@@ -53,7 +53,6 @@ $YouDontHaveInvites = "Empty";
 $SocialInvitesComment = "Pending invitations.";
 $InvitationSentBy = "Invitation sent by";
 $RequestContact = "Request contact";
-$DateSend = "Date sent";
 $SocialUnknow = "Unknown";
 $SocialParent = "My parents";
 $SocialFriend = "My friends";

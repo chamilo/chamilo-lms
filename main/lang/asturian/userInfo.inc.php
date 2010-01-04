@@ -53,7 +53,6 @@ $YouDontHaveInvites = "Actualmente nun tienes invitaciones";
 $SocialInvitesComment = "Equí puedes aceutar o torgar les invitaciones entrantes";
 $InvitationSentBy = "Invitación unviada por";
 $RequestContact = "Petición de contautu";
-$DateSend = "Data d\'unvíu";
 $SocialUnknow = "Contautos desconocidos";
 $SocialParent = "Los mios familiares";
 $SocialFriend = "Los mios amigos";

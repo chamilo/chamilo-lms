@@ -63,7 +63,7 @@ if (api_is_allowed_to_edit(null,true)) {
 		$form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '100%', 'Height' => '300'));
 		$form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermAddButton'), 'class="save"');
 		// setting the rules
-		$form->addRule('glossary_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
+		$form->addRule('glossary_title',get_lang('ThisFieldIsRequired'), 'required');
 		// The validation or display
 		if ($form->validate()) {
 			$check = Security::check_token('post');

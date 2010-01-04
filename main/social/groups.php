@@ -245,15 +245,14 @@ if ($group_id != 0 ) {
 				
 				if (!empty($relation_group_title)) {				
 					echo '<div class="social-group-details-info">';
-					echo '<span>'.get_lang('GroupUserStatus').' : </span>';
+					echo '<span>'.get_lang('Status').' : </span>';
 					echo $relation_group_title;
 					echo '</div>';
-				}
-				
+				}				
 				
 				//Group's tags
 				if (!empty($tags)) {
-					echo '<div id="group_tags">'.get_lang('Tags').' : '.$tags.'</div>';
+					echo '<div id="social-group-details-info"><span>'.get_lang('Tags').' : </span>'.$tags.'</div>';
 				}				
 		echo '</div>';
 	echo '</div>';

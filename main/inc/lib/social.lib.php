@@ -646,7 +646,8 @@ class SocialManager extends UserManager {
 		$big_image =  UserManager::get_picture_user($user_id, $img_array['file'],'',USER_IMAGE_SIZE_BIG);
 		$big_image = $big_image['file'].$big_image['dir'];
 		$show_groups = array('groups', 'group_messages', 'messages_list', 'group_add', 'mygroups', 'group_edit', 'member_list', 'invite_friends', 'waiting_list');
-		$show_messages = array('messages', 'messages_inbox', 'messages_outbox', 'messages_compose');	
+		$show_messages = array('messages', 'messages_inbox', 'messages_outbox', 'messages_compose');
+			
 		// Everybody can create groups
 		if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
 			$create_group_item =  '<li class="social-menu-sub-level"><a href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.Display::return_icon('edit.gif',get_lang('CreateAgroup'),array('hspace'=>'6','style'=>'float:left')).'<span class="'.($show=='group_add'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('CreateAgroup').'</span></a></li>';	
@@ -698,21 +699,23 @@ class SocialManager extends UserManager {
 		}
 
         if ($show == 'shared_profile') {
-        	
-        		if ($user_id != intval(api_get_user_id())) {
-        			$user_info = api_get_user_info($user_id);        			
-        			echo '<div><center><strong>'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</strong></center></div>';        			
-				}             	        	                	
+        	       	        	                	
 	        	//--- User image	        	
 				echo '<div class="social-content-image">';
 					echo '<div class="social-background-content" style="width:80%;" ><center>';
 						if ($img_array['file'] != 'unknown.jpg') {
-			    	  		echo '<a class="thickbox" href="'.$big_image.'"><img src='.$img_array['dir'].$img_array['file'].' width="150px" /> </a><br /><br />';
+			    	  		echo '<a class="thickbox" href="'.$big_image.'"><img src='.$img_array['dir'].$img_array['file'].' width="150px" /> </a>';
 						} else {
-							echo '<img src='.$img_array['dir'].$img_array['file'].' width="150px"/><br /><br />';
+							echo '<img src='.$img_array['dir'].$img_array['file'].' width="150px"/>';
 						}
 		    	  	echo '</center></div>';
 	    	  	echo '</div>';
+	    	  	
+	    	  	if ($user_id != intval(api_get_user_id())) {
+        			$user_info = api_get_user_info($user_id);        			
+        			echo '<div><center><strong>'.api_get_person_name($user_info['firstName'], $user_info['lastName']).'</strong></center></div><br />';        			
+				}    
+				
 	    	  	
 	    	  	if ($show_full_profile && $user_id == intval(api_get_user_id())) { 	  	   	  	        	
 		        	echo '<div align="center" class="social-menu-title" ><span class="social-menu-text1">'.strtoupper(get_lang('Menu')).'</span></div>';        
@@ -725,6 +728,8 @@ class SocialManager extends UserManager {
 		                     <li><a href="'.api_get_path(WEB_PATH).'main/social/groups.php">'.Display::return_icon('group.gif',get_lang('Groups'),array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('Groups').'</span></a></li>';
 		            echo   '</ul></div>';
 	    	  	}
+	    	  	
+	    	   
 	    	  	
 	    	  	$html_actions = '';
 		  		if ($user_id != api_get_user_id()) {

@@ -207,16 +207,6 @@ $_SESSION['social_user_id'] = intval($user_id);
  */
 Display :: display_header(null);
 
-
-
-// @todo here we must show the user information as read only
-//User picture size is calculated from SYSTEM path
-
-$img_array= UserManager::get_user_picture_path_by_id($user_id,'web',true,true);
-$big_image =  UserManager::get_picture_user($user_id, $img_array['file'],'',USER_IMAGE_SIZE_BIG);
- 
-$big_image = $big_image['file'].$big_image['dir'];
-//print_r($user_info);
 // Added by Ivan Tcholakov, 03-APR-2009.
 if (USE_JQUERY_CORNERS_SCRIPT) {
 	echo $s="<script>$(document).ready( function(){
@@ -247,29 +237,23 @@ if (is_array($personal_course_list)) {
 	$course_list_code = array_unique_dimensional($course_list_code);
 }
 
-//show the action menu
-//SocialManager::show_social_menu();
-
 $user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'), true);
 $user_online_count = count($user_online_list);
-echo '<div class="social-header">';
-echo '<table width="100%"><tr><td width="150px" bgcolor="#32578b"><center><span class="social-menu-text1">'.get_lang('ViewMySharedProfile').'</span></center></td>
-		<td width="15px">&nbsp;</td><td bgcolor="#32578b">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a></td>
-		</tr></table>';
-/*
-echo '<div class="social-menu-title" align="center"><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
-echo '<div class="social-menu-title-right">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="#" ><span class="social-menu-text1">'.$who_is_on_line.'</span></a></div>';
-*/
-echo '</div>';
 
 echo '<div id="social-content">';
 
-echo '<div id="social-content-left">';	
-	//this include the social menu div
-	SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
-echo '</div>';
+	echo '<div id="social-content-left">';	
+		//this include the social menu div
+		SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
+	echo '</div>';
 
 echo '<div id="social-content-right">';	
+
+
+	echo '<div id="social-content-online">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="'.api_get_path(WEB_PATH).'whoisonline.php" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a>';
+	
+	echo '</div>';
+
 	
 	echo '<div class="social-box-main1">';
 	

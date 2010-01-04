@@ -2327,9 +2327,13 @@ div.image-social-content center.friend {
 }
 #social-content-right {
 	height:auto;
-	float:rigth;
 	overflow:hidden;	
 }
+
+.social-content-image {
+margin-bottom:10px;
+}
+
 #social-content-left {
 	float:left;
 	height:auto;
@@ -2426,11 +2430,13 @@ div.image-social-content center.friend {
 	height:auto;
 	background-color:#32578b;
 	margin-bottom:10px;
+	padding-top:4px;
+	padding-bottom:4px;
 }
 .social-menu-text1 {
 	color:#fff;
-	font-size:14px;
-	font-weight:normal;
+	font-size:12px;
+	font-weight:bold;
 }
 .social-menu-text2 {
 	color:#000;
@@ -2581,12 +2587,12 @@ div.image-social-content center.friend {
 	font-weight:bold;
 }
 .social-groups-text3 {
- font-family:Verdana, Geneva, sans-serif;
- font-size:12px;
- color:#000;
- font-weight:bold;
- text-transform:capitalize;
- margin-top:35px;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:#000;
+	font-weight:bold;
+	text-transform:capitalize;
+	margin-top:5px;
 }
 .social-groups-text4 {
 	font-family:Verdana, Geneva, sans-serif;
@@ -2605,6 +2611,13 @@ div.image-social-content center.friend {
 .social-home-users-online {
 	border:3px solid #E6E6E6;
 }
+
+#social-content-online {
+	background-color:#32578B;
+	margin-bottom:5px;
+}
+
+
 
 /*****************************************************
  *  BUTTONS	                                         *
@@ -3233,7 +3246,7 @@ a.read {
 .search_user_grid_container { width:100%;}
 .search_user_grid_item { width:100px; height:100px; border:1px dotted #ccc; float:left; padding:5px; margin:5px; overflow:hidden;}
 .search_user_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
-.search_user_grid_element_0 img {width:50px;height:50px;border:3px solid #E6E6E6;}
+.search_user_grid_element_0 img {width:50px;height:50px;border:2px solid #E6E6E6;}
 .search_user_grid_element_1 { width:100%;  text-align:center;}
 .search_user_grid_element_2 { width:100%;  text-align:center;}
 
@@ -3245,6 +3258,10 @@ a.read {
 	height:165px;
 	margin-top:20px;
 }
+
+.search_group_grid_container {
+	margin-top:0px;
+} 
 	
 .search_group_grid_element_1 { 
 	width:330px;

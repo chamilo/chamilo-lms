@@ -575,7 +575,7 @@ margin-top:0;
 	padding-left: 12px;
 }
 .menusection {	
-	margin: 0px 5px 0 6px;
+	margin: 20px 5px 0 6px;
 	padding-left: 10px;
 	width: auto;
 }
@@ -2432,7 +2432,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	background:#FFF;
 	border:1px dotted #ccc;
 	padding: 0px 10px 0 10px;
-	width:138px; 
+	width:132px; 
 	position:relative;
 }
 .message-content .message-delete {
@@ -3189,13 +3189,13 @@ div.image-social-content center.friend {
 /* BUTTONS */
 button {
 	margin:2px 5px 3px 3px !important;
-	background-color: #DFDFDF;
+	background-color: #F5F5F5;
+	
 	border-width: 0px;
-	/*    -moz-border-radius-topright : 5px;
-    -moz-border-radius-topleft : 5px;
-    -moz-border-radius-bottomright : 5px;
-    -moz-border-radius-bottomleft : 5px;
-*/
+	border-color:#EEEEEE #DEDEDE #DEDEDE #EEEEEE;
+	border-style:solid;
+	border-width:1px;
+
     font-family: bold arial, verdana, helvetica, sans-serif;
 	font-size: 100%;
 	line-height :130%;
@@ -3206,9 +3206,11 @@ button {
 	vertical-align:middle;
 }
 button:hover {
-	background-color:#cbcbcb;
+	
 	color:#545454;
 	border-style: inset;
+	background-color:#DFF4FF;
+	border:1px solid #C2E1EF;	
 }
 /* button with image */
 button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back {
@@ -3218,12 +3220,12 @@ button.add, button.save, button.cancel, button.refresh, button.upload, button.se
 }
 /* POSITIVE */
 button.save, button.add, button.search, button.refresh, button.upload, button.login, button.plus, button.minus, button.next, button.back {
-	background-color:#;
-	border-color: #fff;
+	/* background-color:#; */
+	/* border-color: #fff; */
 }
 button.save:hover, button.refresh:hover, button.upload:hover, button.add:hover, button.search:hover, button.login:hover, button.plus:hover, button.minus:hover, button.next:hover, button.back:hover {
-	border-color: #fff;
-	background-color:#fff;
+/*	border-color: #fff;
+	background-color:#fff; */
 }
 /* NEGATIVE */
 button.cancel {
@@ -3248,7 +3250,7 @@ button.cancel {
 }
 /*including "search" image*/
 button.search {
-	background-color:#FFFFFF;
+/*	background-color:#FFFFFF; */
 	background-image:url(images/bg-boton.png);
 	background-position:right center;
 	padding-right: 30px;
@@ -3257,16 +3259,16 @@ button.search {
 button.login {
 	background-image:url(images/bg-boton.png);
 	background-position:right;
-	background-color:#FFF;
-	border:solid 2px #FFF;
-	float:right;
+/*	background-color:#FFF;
+	border:solid 2px #FFF; */
+	float:left;
 	margin-right:20px;
 	padding-right:30px;
 	margin:2px 5px 3px 5px !important;
 }
 
 button.login:hover{
-	background-color:#FFF;
+/*	background-color:#FFF; */
 /*	border: solid 1px #FFF; */
 }
 

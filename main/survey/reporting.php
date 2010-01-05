@@ -37,6 +37,7 @@ $language_file = 'survey';
 // including the global dokeos file
 require ('../inc/global.inc.php');
 require_once('survey.lib.php');
+$this_section=SECTION_COURSES;
 
 $survey_id = Security::remove_XSS($_GET['survey_id']);
 

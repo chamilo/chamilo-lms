@@ -35,6 +35,7 @@ $language_file = 'survey';
 
 // including the global dokeos file
 require_once ('../inc/global.inc.php');
+$this_section=SECTION_COURSES;
 
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 

@@ -40,6 +40,7 @@ if (!isset ($_GET['cidReq'])){
 }
 // including the global dokeos file
 require ('../inc/global.inc.php');
+$this_section=SECTION_COURSES;
 
 // including additional libraries
 //require_once (api_get_path(LIBRARY_PATH)."/survey.lib.php");

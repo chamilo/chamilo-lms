@@ -2761,52 +2761,58 @@ class SurveyUtil {
 
 		echo '<div class="actions">';
 		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ReportingOverview')).' '.get_lang('BackTo').' '.get_lang('ReportingOverview').'</a>';
-		echo '<div id="question_report_questionnumbers">'.get_lang('GoToQuestion').': ';
-		for($i=1; $i<=($survey_data['number_of_questions']); $i++ )
-		{
-			if ($offset <> $i-1)
+		
+		if ($survey_data['number_of_questions'] > 0) {
+			echo '<div id="question_report_questionnumbers">'.get_lang('GoToQuestion').': ';
+			for($i=1; $i<=($survey_data['number_of_questions']); $i++ )
 			{
-				echo '<a href="reporting.php?action=questionreport&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.($i-1).'">'.$i.'</a>';
+				if ($offset <> $i-1)
+				{
+					echo '<a href="reporting.php?action=questionreport&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.($i-1).'">'.$i.'</a>';
+				}
+				else
+				{
+					echo $i;
+				}
+				if ($i < $survey_data['number_of_questions'])
+				{
+					echo ' | ';
+				}
+			}
+			echo '</div>';
+	
+			// getting the question information
+			$sql = "SELECT * FROM $table_survey_question WHERE survey_id='".Database::escape_string($_GET['survey_id'])."' AND type<>'pagebreak' AND type<>'comment' ORDER BY sort ASC LIMIT ".$offset.",1";
+			$result = Database::query($sql, __FILE__, __LINE__);
+			$question = Database::fetch_array($result);
+	
+			// navigate through the questions (next and previous)
+			if ($_GET['question'] <> 0)
+			{
+				echo '<a href="reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.$_GET['survey_id'].'&amp;question='.Security::remove_XSS($offset-1).'">'.Display::return_icon('prev.png',get_lang('PreviousQuestion'),array('align'=>'middle')).' '.get_lang('PreviousQuestion').'</a>  ';
 			}
 			else
 			{
-				echo $i;
+				echo Display::return_icon('prev.png',get_lang('PreviousQuestion'),array('align'=>'middle')).' '.get_lang('PreviousQuestion').' ';
 			}
-			if ($i < $survey_data['number_of_questions'])
+			echo ' | ';
+			if ($_GET['question'] < ($survey_data['number_of_questions']-1))
 			{
-				echo ' | ';
+				echo '<a href="reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset+1).'">'.get_lang('NextQuestion').' '.Display::return_icon('next.png',get_lang('NextQuestion'),array('align'=>'middle')).'</a>';
 			}
-		}
-		echo '</div>';
-
-		// getting the question information
-		$sql = "SELECT * FROM $table_survey_question WHERE survey_id='".Database::escape_string($_GET['survey_id'])."' AND type<>'pagebreak' AND type<>'comment' ORDER BY sort ASC LIMIT ".$offset.",1";
-		$result = Database::query($sql, __FILE__, __LINE__);
-		$question = Database::fetch_array($result);
-
-		// navigate through the questions (next and previous)
-		if ($_GET['question'] <> 0)
-		{
-			echo '<a href="reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.$_GET['survey_id'].'&amp;question='.Security::remove_XSS($offset-1).'">'.Display::return_icon('prev.png',get_lang('PreviousQuestion'),array('align'=>'middle')).' '.get_lang('PreviousQuestion').'</a>  ';
-		}
-		else
-		{
-			echo Display::return_icon('prev.png',get_lang('PreviousQuestion'),array('align'=>'middle')).' '.get_lang('PreviousQuestion').' ';
-		}
-		echo ' | ';
-		if ($_GET['question'] < ($survey_data['number_of_questions']-1))
-		{
-			echo '<a href="reporting.php?action='.Security::remove_XSS($_GET['action']).'&amp;survey_id='.Security::remove_XSS($_GET['survey_id']).'&amp;question='.Security::remove_XSS($offset+1).'">'.get_lang('NextQuestion').' '.Display::return_icon('next.png',get_lang('NextQuestion'),array('align'=>'middle')).'</a>';
-		}
-		else
-		{
-			echo get_lang('NextQuestion'). ' '.Display::return_icon('next.png',get_lang('NextQuestion'),array('align'=>'middle'));
+			else
+			{
+				echo get_lang('NextQuestion'). ' '.Display::return_icon('next.png',get_lang('NextQuestion'),array('align'=>'middle'));
+			}
 		}
 		echo '</div>';
 
 		echo $question['survey_question'];
 
 		echo '<br />';
+
+		
+
 
 		if ($question['type'] == 'score')
 		{

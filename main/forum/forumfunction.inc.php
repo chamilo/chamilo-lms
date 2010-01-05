@@ -1847,7 +1847,7 @@ function store_thread($values) {
 			$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&gidReq='.$_SESSION['toolgroup'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
 		} else {
 			$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&gidReq='.$_SESSION['toolgroup'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
-			$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
+			$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&gidReq='.$_SESSION['toolgroup'].'&origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
 		}
 		$reply_info['new_post_id'] = $last_post_id;
 		$my_post_notification=isset($values['post_notification']) ? $values['post_notification'] : null;
@@ -2302,9 +2302,9 @@ function store_reply($values) {
 		if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit(null,true)) {
 			$message.='<br />'.get_lang('MessageHasToBeApproved').'<br />';
 		}
-
-		$message.='<br />'.get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
-		$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'&origin='.$origin.'&amp;gradebook='.$gradebook.'">'.get_lang('Message').'</a>';
+				
+		$message.='<br />'.get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&amp;gidReq='.$_SESSION['toolgroup'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
+		$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'&amp;gidReq='.$_SESSION['toolgroup'].'&origin='.$origin.'&amp;gradebook='.$gradebook.'">'.get_lang('Message').'</a>';
 
 		// setting the notification correctly
 		$my_post_notification=isset($values['post_notification']) ? $values['post_notification'] :null;

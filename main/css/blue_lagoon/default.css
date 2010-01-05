@@ -43,7 +43,7 @@ body {
 /* for content section in main index.php file */
 .maincontent {
 	float: left;
-	width: 67%;
+	width: 66%;
 	padding: 4px;
 	background-color: #fff;
 }
@@ -389,8 +389,9 @@ default.css (línea 362)
 	width: auto;
 	margin: 24px 6px 0 6px;
 	padding-left: 10px;
-	border: 1px solid #ccc;
+	border: 1px dotted #ddd;	
 	background-color: #FFF;
+	
 }
 .menusectioncaption {
 	position: relative;
@@ -2201,7 +2202,7 @@ div.comments {
 	background:#FFF;
 	border:1px dotted #ccc;
 	padding: 0px 10px 0 10px;
-/*	width:50%; */
+	width:120px; 
 	position:relative;
 }
 .message-content .message-delete {
@@ -3322,7 +3323,7 @@ a.read {
 	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;
 	-opera-border-radius: 10px; border: 1px solid #e1e1e0;
 	
-	width:270px;
+	width:280px;
 	margin-top:20px;
 	margin-right:10px;
 	margin-bottom:40px;

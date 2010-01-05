@@ -7,6 +7,7 @@
  
 $language_file = array('userInfo');
 $cidReset = true;
+
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'social.lib.php';
@@ -19,7 +20,6 @@ $show_full_profile = true;
 $this_section = SECTION_SOCIAL;
 
 $interbreadcrumb[]= array ('url' => 'home.php','name' => get_lang('Social'));
-$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Home'));
 	
 api_block_anonymous_users();
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
@@ -54,7 +54,7 @@ if (api_get_setting('profile', 'picture') == 'true') {
 	}
 }
 
-Display :: display_header(null);
+Display :: display_header(get_lang('Home'));
 $user_info = UserManager :: get_user_info_by_id(api_get_user_id());
 $user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'),true);
 $user_online_count = count($user_online_list); 

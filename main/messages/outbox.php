@@ -68,7 +68,7 @@ function deselect_all(formita)
 //api_display_tool_title(api_xml_http_response_encode(get_lang('Inbox')));
 if ($_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/profile.php','name' => get_lang('Social'));
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));
 	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Outbox'));	
 } else {
 	$this_section = SECTION_MYPROFILE;

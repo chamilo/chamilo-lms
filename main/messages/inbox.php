@@ -6,7 +6,7 @@
 
 // name of the language file that needs to be included
 $language_file = array('registration','messages','userInfo');
-$cidReset=true;
+$cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
@@ -124,7 +124,7 @@ $table_message = Database::get_main_table(TABLE_MESSAGE);
 //api_display_tool_title(api_xml_http_response_encode(get_lang('Inbox')));
 if ($_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/profile.php','name' => get_lang('Social'));
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));
 	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Inbox'));	
 } else {
 	$this_section = SECTION_MYPROFILE;

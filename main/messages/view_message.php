@@ -21,7 +21,7 @@ require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 */
 if ($_REQUEST['f']=='social') {
 	$this_section = SECTION_SOCIAL;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/profile.php','name' => get_lang('Social'));
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));
 	$interbreadcrumb[]= array ('url' => 'inbox.php?f=social','name' => get_lang('Inbox'));	
 } else {
 	$this_section = SECTION_MYPROFILE;

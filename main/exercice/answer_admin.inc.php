@@ -1437,7 +1437,7 @@ if($modifyAnswers)
 						<input type="submit" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" />
 						<hr noshade="noshade" size="1" style="color: #4271b5" />
 						<input type="submit" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" />
-						<input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;" />
+						<!--<input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;" />-->
 					  </td>
 					</tr>
 				</table>

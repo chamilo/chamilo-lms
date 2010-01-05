@@ -33,6 +33,16 @@ include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(CONFIGURATION_PATH).'course_info.conf.php');
 
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+function setFocus(){
+$("#title").focus();
+}
+$(window).load(function () {
+  setFocus();
+});
+</script>';
+
 $interbreadcrumb[] = array('url'=>api_get_path(WEB_PATH).'user_portal.php', 'name'=> get_lang('MyCourses'));
 // Displaying the header
 $tool_name = get_lang('CreateSite');
@@ -63,7 +73,7 @@ $form = new FormValidator('add_course');
 // form title
 $form->addElement('header', '', $tool_name);
 //title
-$form->add_textfield('title',get_lang('CourseName'),true,array('size'=>'60'));
+$form->addElement('text', 'title', get_lang('CourseName'), array('size'=>'60','id' => 'title'));
 $form->applyFilter('title', 'html_filter');
 
 $form->addElement('static',null,null,get_lang('Ex'));

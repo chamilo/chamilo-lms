@@ -2935,7 +2935,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image:url(images/shadow.gif);
 }
 .independent_course_item a {
-	font-size:120%;
+	font-size:135%;
 }
 .session_course_item a {
 	font-size:120%;
@@ -2948,14 +2948,24 @@ a.read {
 }
 #inbox-wrapper {
 	width:100%;
-	}
-#inbox {
-	width:80%;
-	float:right;
 }
+#inbox {
+	height:auto;
+	margin-left:auto;
+	margin-right:auto;
+	overflow:hidden;
+}
+#outbox {
+	height:auto;
+	margin-left:auto;
+	margin-right:auto;
+	overflow:hidden;
+}
+
 #inbox-menu  {
 	width:150px;
 	float:left;
+	margin-right:10px;
 }
 #inbox-menu ul {
 	list-style-image:none;

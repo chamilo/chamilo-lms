@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
 
 /**
 ==============================================================================
@@ -139,47 +139,44 @@ class MessageManager
 		$message_list = array ();
 		while ($result = Database::fetch_row($sql_result)) {
 			
-			if ($request===true) {
+			if ($request===true) {				
 				$message[0] = '<input type="checkbox" value='.$result[0].' name="id[]">';
 			 } else {
 				$message[0] = ($result[0]);
 			 }
 
 			if ($request===true) {
-				if($result[4]==0) {
+			
+				/*if($result[4]==0) {
 					$message[1] = Display::return_icon('mail_open.png',get_lang('AlreadyReadMessage'));//Message already read
 				} else {
 					$message[1] = Display::return_icon('mail.png',get_lang('UnReadMessage'));//Message without reading
-				}
+				}*/
 
-				$message[2] = '<a onclick="get_action_url_and_show_messages(1,'.$result[0].')" href="javascript:void(0)">'.GetFullUserName($result[1]).'</a>';
-				$message[3] = '<a onclick="get_action_url_and_show_messages(1,'.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",$result[2]).'</a>';
-				$message[5] = '<a onclick="reply_to_messages(\'show\','.$result[0].',\'\')" href="javascript:void(0)">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
+				$message[1] = '<a onclick="get_action_url_and_show_messages(1,'.$result[0].')" href="javascript:void(0)">'.GetFullUserName($result[1]).'</a>';
+				$message[2] = '<a onclick="get_action_url_and_show_messages(1,'.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",$result[2]).'</a>';
+				$message[4] = '<a onclick="reply_to_messages(\'show\','.$result[0].',\'\')" href="javascript:void(0)">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
 						  '&nbsp;&nbsp;<a onclick="delete_one_message('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			} else {
 				if($result[4]==1) {
 					$class = 'class = "unread"';
 				} else {
 					$class = 'class = "read"';
-				}
-				
-				$link = '';
-				
+				}				
+				$link = '';				
 				if ($_GET['f']=='social') {
 					$link = '&f=social';
 				}
-
-				$message[2] = '<a '.$class.' href="view_message.php?id='.$result[0].$link.'">'.GetFullUserName(($result[1])).'</a>';;
-				$message[3] = '<a '.$class.' href="view_message.php?id='.$result[0].$link.'">'.$result[2].'</a>';
-				$message[5] = '<a href="new_message.php?re_id='.$result[0].'&f='.Security::remove_XSS($_GET['f']).'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
+				$message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].$link.'">'.GetFullUserName(($result[1])).'</a>';;
+				$message[2] = '<a '.$class.' href="view_message.php?id='.$result[0].$link.'">'.$result[2].'</a>';
+				$message[4] = '<a href="new_message.php?re_id='.$result[0].'&f='.Security::remove_XSS($_GET['f']).'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
 						  '&nbsp;&nbsp;<a delete_one_message('.$result[0].') href="inbox.php?action=deleteone&id='.$result[0].'&f='.Security::remove_XSS($_GET['f']).'">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			}
-			$message[4] = ($result[3]); //date stays the same
+			$message[3] = $result[3]; //date stays the same
 			foreach($message as $key => $value) {
 				$message[$key] = api_xml_http_response_encode($value);
 			}
 			$message_list[] = $message;
-
 			$i++;
 		}
 		return $message_list;
@@ -564,7 +561,6 @@ class MessageManager
 	}
 	/**
 	 * Gets information about messages sent
-	 * @author Isaac FLores Paz <isaac.flores@dokeos.com>
 	 * @param  integer
 	 * @param  integer
 	 * @param  string
@@ -589,6 +585,7 @@ class MessageManager
 		$i = 0;
 		$message_list = array ();
 		while ($result = Database::fetch_row($sql_result)) {
+			
 			if ($request===true) {
 				$message[0] = '<input type="checkbox" value='.$result[0].' name="out[]">';
 			 } else {
@@ -597,31 +594,29 @@ class MessageManager
 			 
 			$class = 'class = "read"';
 			
-			if ($request===true) {
-			   if ($result[5]==4) {
-			   		$message[1] = Display::return_icon('mail_send.png',get_lang('MessageSent'));//Message Sent
-			   }
-			   
-				$message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.GetFullUserName($result[4]).'</a>';
-				$message[3] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",$result[2]).'</a>';
-				$message[5] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
+			if ($request===true) {				   
+				$message[1] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.GetFullUserName($result[4]).'</a>';
+				$message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",$result[2]).'</a>';
+					$message[3] = $result[3]; //date stays the same
+				$message[4] = '&nbsp;&nbsp;<a onclick="delete_one_message_outbox('.$result[0].')" href="javascript:void(0)"  >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			} else {
 				$link = '';
 				if ($_GET['f']=='social') {
 					$link = '&f=social';
-				}
-				
-				$message[2] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.GetFullUserName($result[4]).'</a>';
-				$message[3] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.$result[2].'</a>';
-				$message[5] = '<a href="outbox.php?action=deleteone&id='.$result[0].'&f='.Security::remove_XSS($_GET['f']).'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
+				}				
+				$message[1] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.GetFullUserName($result[4]).'</a>';
+				$message[2] = '<a '.$class.' onclick="show_sent_message ('.$result[0].')" href="../messages/view_message.php?id_send='.$result[0].$link.'">'.$result[2].'</a>';
+					$message[3] = $result[3]; //date stays the same
+				$message[4] = '<a href="outbox.php?action=deleteone&id='.$result[0].'&f='.Security::remove_XSS($_GET['f']).'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;">'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).'</a>';
 			}
-			$message[4] = $result[3]; //date stays the same
+		
 			foreach($message as $key => $value) {
 				$message[$key] = $value;
 			}
 			$message_list[] = $message;
 			$i++;
 		}
+	
 		return $message_list;
 	}
 	/**
@@ -1164,8 +1159,7 @@ function inbox_display() {
 //	$charset = api_get_setting('platform_charset');
 	$table_message = Database::get_main_table(TABLE_MESSAGE);
 	$request=api_is_xml_http_request();
-	if ($_SESSION['social_exist']===true) {
-		$redirect="#remote-tab-2";
+	if ($_SESSION['social_exist']===true) {		
 		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
 			$success= get_lang('SelectedMessagesDeleted');
 		} else {
@@ -1195,11 +1189,11 @@ function inbox_display() {
 	$table->set_header(0, '', false,array ('style' => 'width:20px;'));
 	$title=api_xml_http_response_encode(get_lang('Title'));
 	$action=api_xml_http_response_encode(get_lang('Actions'));
-	$table->set_header(1,api_xml_http_response_encode(get_lang('Status')),false,array('style' => 'width:30px;'));
-	$table->set_header(2,api_xml_http_response_encode(get_lang('From')),false);
-	$table->set_header(3,$title,false);
-	$table->set_header(4,api_xml_http_response_encode(get_lang('Date')),false,array('style' => 'width:150px;'));
-	$table->set_header(5,$action,false,array ('style' => 'width:100px;'));
+	
+	$table->set_header(1,api_xml_http_response_encode(get_lang('From')),false);
+	$table->set_header(2,$title,false);
+	$table->set_header(3,api_xml_http_response_encode(get_lang('Date')),false, array('style' => 'width:150px;'));
+	$table->set_header(4,$action,false,array ('style' => 'width:70px;'));
 	
 	if ($_REQUEST['f']=='social') {
 		$parameters['f'] = 'social';
@@ -1242,11 +1236,8 @@ function outbox_display() {
 	$social_link = false;
 	if ($_REQUEST['f']=='social') {
 		$social_link ='f=social';
-	}
-	
-	
-	if ($_SESSION['social_exist']===true) {	
-		
+	}	
+	if ($_SESSION['social_exist']===true) {		
 		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
 			$success= get_lang('SelectedMessagesDeleted')."&nbsp<br><a href=\""."../social/index.php?$social_link\">".get_lang('BackToOutbox')."</a>";
 		}else {
@@ -1273,19 +1264,18 @@ function outbox_display() {
 			break;
 		}
 	}
-
 			
 	// display sortable table with messages of the current user
 	$table = new SortableTable('messages', 'get_number_of_messages_send_mask', 'get_message_data_send_mask', 3, get_number_of_messages_send_mask(), 'DESC');
-	$title=api_xml_http_response_encode(get_lang('Title'));
-	$action=api_xml_http_response_encode(get_lang('Actions'));
+	$title =get_lang('Title');
+	$action=get_lang('Actions');
+	
 	$table->set_header(0, '', false,array ('style' => 'width:20px;'));
-	$table->set_header(1, api_xml_http_response_encode(get_lang('Status')),false,array ('style' => 'width:30px;'));
-	$table->set_header(2, api_xml_http_response_encode(get_lang('To')),false);
-	$table->set_header(3, $title,false);
-	$table->set_header(4, api_xml_http_response_encode(get_lang('Date')),false,array ('style' => 'width:150px;'));
-	$table->set_header(5,$action, false,array ('style' => 'width:100px;'));
 
+	$table->set_header(1, api_xml_http_response_encode(get_lang('To')),false);
+	$table->set_header(2, $title,false);
+	$table->set_header(3, api_xml_http_response_encode(get_lang('Date')),false,array ('style' => 'width:150px;'));
+	$table->set_header(4,$action, false,array ('style' => 'width:50px;'));
 		
 	if ($_REQUEST['f']=='social') {
 		$parameters['f'] = 'social';

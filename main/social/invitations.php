@@ -72,13 +72,15 @@ if (is_array($_GET) && count($_GET)>0) {
 	foreach($_GET as $key => $value) { 
 		switch ($key) {
 			case 'accept':				
-				$user_role = GroupPortalManager::get_user_group_role(api_get_user_id(), $value);				
+				$user_role = GroupPortalManager::get_user_group_role(api_get_user_id(), $value);							
 				if (in_array($user_role , array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,GROUP_USER_PERMISSION_PENDING_INVITATION))) {				
 					GroupPortalManager::update_user_role(api_get_user_id(), $value, GROUP_USER_PERMISSION_READER);
 					$show_message = get_lang('UserIsSubscribedToThisGroup');
+				} elseif (in_array($user_role , array(GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
+					$show_message = get_lang('UserIsAlreadySubscribedToThisGroup');
 				} else {
 					$show_message = get_lang('UserIsNotSubscribedToThisGroup');
-				}				
+				}			
 			break 2;			
 			case 'deny':
 				// delete invitation
@@ -88,14 +90,9 @@ if (is_array($_GET) && count($_GET)>0) {
 		}		
 	}
 }
- 
-
-
 
 $language_variable = get_lang('PendingInvitations');
 $language_comment  = get_lang('SocialInvitesComment');
-
-
 
 echo '<div id="social-content">';
 

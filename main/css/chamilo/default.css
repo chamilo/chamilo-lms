@@ -589,12 +589,16 @@ margin-top:0;
 	margin: 0 0 12px 0;
 	padding: 0;
 	
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
 }
 
 .menulist li{
-	float:left;
+	/* float:left; */
 	/* margin-left:10px; */
 	margin-bottom:10px;
+	display:list-item;
 }
 #centerwrap {
 	float: left;

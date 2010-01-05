@@ -863,7 +863,7 @@ class GroupPortalManager
 	 */
 	public static function show_group_column_information($group_id, $user_id, $show = '') {
 		
-		global $relation_group_title;
+		global $relation_group_title, $my_group_role;
 		
 		$group_info 	= GroupPortalManager::get_group_data($group_id); 
 		$picture		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,'medium_');

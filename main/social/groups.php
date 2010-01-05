@@ -184,7 +184,7 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 // getting group information
 $group_id	= intval($_GET['id']);
 $relation_group_title = '';
-
+$my_group_role = 0;
 if ($group_id != 0 ) {	
 	$user_leave_message = false;
 	$user_added_group_message = false;

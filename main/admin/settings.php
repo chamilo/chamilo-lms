@@ -283,6 +283,12 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 	if ($form->validate())
 	{
 		$values = $form->exportValues();
+		
+		// set true for allow_message_tool variable if social tool is actived 
+		if ($values['allow_social_tool'] == 'true') {
+			$values['allow_message_tool'] = 'true';
+		}		
+		
 		// the first step is to set all the variables that have type=checkbox of the category
 		// to false as the checkbox that is unchecked is not in the $_POST data and can
 		// therefore not be set to false.
@@ -1165,7 +1171,6 @@ function add_edit_template()
 		if ($check) {
 			// exporting the values
 			$values = $form->exportValues();
-
 			// upload the file
 			if (!empty($_FILES['template_image']['name']))
 			{

@@ -80,8 +80,7 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 $tool_name = get_lang('DokeosConfigSettings');
 
 // Build the form
-if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search')))
-{
+if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', 'stylesheets', 'Search'))) {
 	$form = new FormValidator('settings', 'post', 'settings.php?category='.$_GET['category']);
 	$renderer = & $form->defaultRenderer();
 	$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>'."\n");
@@ -92,15 +91,11 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 	$resultcountsettings = Database::query($sqlcountsettings, __FILE__, __LINE__);
 	$countsetting = Database::fetch_array($resultcountsettings);
 
-	if ($_configuration['access_url']==1)
-	{
+	if ($_configuration['access_url']==1) {
 		$settings = api_get_settings($my_category,'group',$_configuration['access_url']);
-	}
-	else
-	{
+	} else {
 		$url_info = api_get_access_url($_configuration['access_url']);
-		if ($url_info['active']==1)
-		{
+		if ($url_info['active']==1) {
 			//the default settings of Dokeos
 			$settings = api_get_settings($my_category,'group',1,0);
 			//the settings that are changeable from a particular site
@@ -130,8 +125,8 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 	//$resultsettings = Database::query($sqlsettings, __FILE__, __LINE__);
 	//while ($row = Database::fetch_array($resultsettings))
 	$default_values = array();
-	foreach($settings as $row) {
-		if ($row['variable'] == 'search_enabled') { continue; }
+	foreach($settings as $row) {		
+		if ($row['variable'] == 'search_enabled') { continue; }			
 		$anchor_name = $row['variable'].(!empty($row['subkey']) ? '_'.$row['subkey'] : '');
 		$form->addElement('html',"\n<a name=\"$anchor_name\"></a>\n");
 
@@ -246,6 +241,12 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 				$group = array ();
 				while ($rowkeys = Database::fetch_array($result)) {
  					if ($rowkeys['variable'] == 'course_create_active_tools' && $rowkeys['subkey'] == 'enable_search') {continue;}
+ 					
+ 					// profile tab option hide, if the social tool is enabled
+ 					if (api_get_setting('allow_social_tool') == 'true') { 						
+ 						if ($rowkeys['variable'] == 'show_tabs' && $rowkeys['subkey'] == 'my_profile') {continue;}
+ 					}
+
 					$element = & $form->createElement('checkbox', $rowkeys['subkey'], '', get_lang($rowkeys['subkeytext']));
 					if ($row['access_url_changeable']==1) {
 						//2. we look into the DB if there is a setting for a specific access_url

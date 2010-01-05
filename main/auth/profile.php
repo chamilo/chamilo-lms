@@ -852,7 +852,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
 } else {
 	// Style position:absolute has been removed for Opera-compatibility. 
 	//echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:3px;width:250px;" >';
-	echo '<div id="image-message-container" style="float:right;display:inline;padding:3px;width:250px;" >';
+	echo '<div id="image-message-container" style="float:right;display:inline;padding:3px;width:230px;" >';
 	
 	if ($image == 'unknown.jpg') {
 		echo '<img '.$img_attributes.' />';

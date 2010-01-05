@@ -197,7 +197,7 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 	}
 
 	// My Profile 
-	if (api_get_setting('show_tabs', 'my_profile') == 'true' && api_get_setting('show_tabs', 'social') != 'true') { 
+	if (api_get_setting('show_tabs', 'my_profile') == 'true' && api_get_setting('allow_social_tool') != 'true') { 
 		$navigation['myprofile'] = $possible_tabs['myprofile'];
 	} else {
 		$menu_navigation['myprofile'] = $possible_tabs['myprofile'];

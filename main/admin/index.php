@@ -273,11 +273,11 @@ if(api_is_platform_admin()){
 	}*/
 ?>
 <div class="admin_section">
- <h4><?php Display::display_icon('dokeos.gif', 'Dokeos'); ?> Dokeos.com</h4>
+ <h4><?php Display::display_icon('dokeos.gif', 'Dokeos'); ?> Chamilo.org</h4>
  <ul>
-  <li><a href="http://www.dokeos.com/" target="_blank"><?php echo get_lang('DokeosHomepage'); ?></a></li>
-  <li><a href="http://www.dokeos.com/forum/" target="_blank"><?php echo get_lang('DokeosForum'); ?></a></li>
-  <li><a href="http://www.dokeos.com/extensions/" target="_blank"><?php echo get_lang('DokeosExtensions'); ?></a></li>
+  <li><a href="http://www.chamilo.org/" target="_blank"><?php echo get_lang('ChamiloHomepage'); ?></a></li>
+  <li><a href="http://forum.chamilo.org/" target="_blank"><?php echo get_lang('ChamiloForum'); ?></a></li>
+  <li><a href="http://www.chamilo.org/extensions/" target="_blank"><?php echo get_lang('ChamiloExtensions'); ?></a></li>
   <li>
   <?php
   //try to display a maximum before we check the dokeos version and all that

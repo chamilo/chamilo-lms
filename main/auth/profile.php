@@ -401,10 +401,12 @@ foreach ($extra as $id => $field_details) {
 				foreach ($user_tags as $tag) {
 					$tag_list .= '<option value="'.$tag['tag'].'" class="selected">'.$tag['tag'].'</option>';
 				}
-			}			
+			}		
+				
 			$multi_select = '<select id="extra_'.$field_details[1].'" name="extra_'.$field_details[1].'">
            					'.$tag_list.'
-      						 </select>';			
+      						 </select>';
+      						 
 			$form->addElement('html',$pre_html.$multi_select.$post );
 			$url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
 			
@@ -833,7 +835,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
 		
 			// Style position:absolute has been removed for Opera-compatibility. 
 			//echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:3px;width:250px;" >';
-			echo '<div id="image-message-container" style="float:right;display:inline;padding:3px;width:250px;" >';
+			echo '<div id="image-message-container" style="float:right;display:inline;padding:3px;width:230px;" >';
 			
 			if ($image == 'unknown.jpg') {
 				echo '<img '.$img_attributes.' />';

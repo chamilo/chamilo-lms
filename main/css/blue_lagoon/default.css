@@ -2636,8 +2636,12 @@ div.image-social-content center.friend {
 }
 .social-group-details-info span {
 	color:#777;
-
 }
+
+.social-group-details-info {
+	padding:2px 0px 2px 0px;
+}
+
 
 
 

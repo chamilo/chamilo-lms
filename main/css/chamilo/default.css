@@ -2866,8 +2866,12 @@ div.image-social-content center.friend {
 }
 .social-group-details-info span {
 	color:#777;
-
 }
+
+.social-group-details-info {
+	padding:2px 0px 2px 0px;
+}
+
 
 
 
@@ -3365,7 +3369,7 @@ div.image_friend_network {
 	border:1px solid #CCCCCC;
 	margin:2px;
 	padding:4px;
-	background: #a0e5fc;
+
 	height:125px;
 	width:82px;
 	z-index:5;

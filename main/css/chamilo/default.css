@@ -2872,17 +2872,6 @@ div.image-social-content center.friend {
 	padding:2px 0px 2px 0px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 /**********************************************
  *  EXERCISE TOOL                           *
  **********************************************/
@@ -2948,6 +2937,7 @@ span.radio {
 	padding-top:10px;
 	padding-bottom:10px;
 	font-weight:bold;
+	font-size:130%;
 }
 #question_feedback {
 	background-color:#FCF7BA;

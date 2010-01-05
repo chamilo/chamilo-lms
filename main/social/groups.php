@@ -155,6 +155,27 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 		if (is_string($res)) {			
 			Display::display_error_message($res);
 		}
+		
+		if ($res === true) {
+			$groups_user = 	GroupPortalManager::get_users_by_group($group_id);
+			$group_info = GroupPortalManager::get_group_data($group_id);			
+			$admin_user_info = api_get_user_info(1);
+			$sender_name = api_get_person_name($admin_user_info['lastName'], $admin_user_info['firstName'], null, PERSON_NAME_EMAIL_ADDRESS);
+			$sender_email = $admin_user_info['mail'];
+			$subject = sprintf(get_lang('ThereIsANewMessageInTheGroupX'),$group_info['name']);			
+			$link = api_get_path(WEB_PATH).'main/social/groups?'.$_SERVER['QUERY_STRING'];			
+			$text_link = '<a href="'.$link.'">'.get_lang('ClickHereToSeeMessageGroup')."</a><br />\r\n<br />\r\n".get_lang('OrCopyPasteTheFollowingUrl')." <br />\r\n ".$link;
+						
+			$message = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'),$group_info['name'])."<br />$text_link";
+									
+			foreach ($groups_user as $group_user) {				
+				if ($group_user == $current_user) continue;				
+				$group_user_info = api_get_user_info($group_user['user_id']);
+				$recipient_name = api_get_person_name($group_user_info['lastName'], $group_user_info['firstName'], null, PERSON_NAME_EMAIL_ADDRESS);
+				$recipient_email = $group_user_info['mail'];				
+				api_mail_html($recipient_name, $recipient_email, stripslashes($subject), $message, $sender_name, $sender_email);				
+			}	
+		}
 									
 		Security::clear_token();
 	}	

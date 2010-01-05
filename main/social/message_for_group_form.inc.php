@@ -53,7 +53,9 @@ if (!empty($group_id) && $allowed_action) {
 	} 	
 }
 
-$param_item_page = isset($_GET['items_page_nr']) && isset($_GET['topic_id'])?('&items_'.intval($_GET['topic_id']).'_page_nr='.$_GET['items_page_nr']):'';
+$page_item = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1;
+
+$param_item_page = isset($_GET['items_page_nr']) && isset($_GET['topic_id'])?('&items_'.intval($_GET['topic_id']).'_page_nr='.(!empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1)):'';
 $page_topic  = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1;
 ?>
 

@@ -218,7 +218,7 @@ Display::display_introduction_section(TOOL_LINK);
 
 if (api_is_allowed_to_edit(null, true) and isset($_GET['action'])) {
 	echo '<div class="actions">';
-	echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png',get_lang('BackToLinksOverview')).get_lang('BackToLinksOverview').'</a>';
+	//echo '<a href="link.php?cidReq='.Security::remove_XSS($_GET['cidReq']).'&amp;urlview='.Security::remove_XSS($_GET['urlview']).'">'.Display::return_icon('back.png',get_lang('BackToLinksOverview')).get_lang('BackToLinksOverview').'</a>';
 	echo '</div>';
 if(api_get_setting('search_enabled')=='true') {
 	if (!extension_loaded('xapian')) {

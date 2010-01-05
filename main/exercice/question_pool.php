@@ -186,11 +186,6 @@ if($is_allowedToEdit)
 
 <div class="actions">
 	<?php
-	if(!empty($fromExercise)) {
-		echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">'.Display::return_icon('quiz.gif', get_lang('GoBackToEx')),get_lang('GoBackToEx'),'</a>';
-	} else {
-		echo '<a href="admin.php?',api_get_cidreq(),'&newQuestion=yes">'.Display::return_icon('new_test.gif'),get_lang('NewQu'),'</a>';
-	}
 	if (isset($type)) {
 		$url = api_get_self().'?type=1';
 	} else {
@@ -269,8 +264,15 @@ if($is_allowedToEdit)
 		}
 		echo '</select> ';
 	?>
-    
+	
 	<button class="save" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Ok') ?></button>
+	<?php
+    if(!empty($fromExercise)) {
+		echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">'.Display::return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')),get_lang('GoBackToQuestionList'),'</a>';
+	} else {
+		echo '<a href="admin.php?',api_get_cidreq(),'&newQuestion=yes">'.Display::return_icon('new_test.gif'),get_lang('NewQu'),'</a>';
+	}
+	?>
     </form>
 </div>
 <form method="post" action="<?php echo $url.'?'.api_get_cidreq().'&fromExercise='.$fromExercise; ?>" >

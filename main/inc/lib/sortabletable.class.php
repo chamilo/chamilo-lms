@@ -429,7 +429,16 @@ class SortableTable extends HTML_Table {
 		echo $html;
 	}
 	
-	public function display_simple_grid($vibility_options, $hide_navigation) {
+	/**
+	 * This function return the content of a table in a grid
+	 * Should not be use to edit information (edit/delete rows) only.
+	 * @param array  	options of visibility
+	 * @param bool   	hide navigation optionally
+	 * @param int    	content per page when show navigation (optional)
+	 * @param bool	 	sort data optionally
+	 * @return string	grid html 
+	 */
+	public function display_simple_grid($vibility_options, $hide_navigation = true, $per_page = 0, $sort_data = true) {
 		global $charset;		
 		$empty_table = false;
 		$html = '';		
@@ -448,19 +457,21 @@ class SortableTable extends HTML_Table {
 		
 		if (!$empty_table) {
 			//if we show the pagination					
-			if ($hide_navigation == false ) {
-				$form = $this->get_page_select_form();	
-				$nav = $this->get_navigation_html();
-				
+			if ($hide_navigation == false ) {	
+				$form = '&nbsp;';			
+				if ($per_page > 10) {				
+					$form = $this->get_page_select_form();
+				}	
+				$nav = $this->get_navigation_html();				
 				//this also must be moved			
-				$html = '<div class="sub-header">';
-				$html .= '<div class="grid_selectbox">'.$form.'</div>';			
+				$html = '<div class="sub-header" >';
+				$html .= '<div class="grid_selectbox">'.$form.'</div>';		
 				$html .= '<div class="grid_title">'.$this->get_table_title().'</div>';			
 				$html .= '<div class="grid_nav">'.$nav.'</div>';			
 				$html .= '</div>';
 			}
 			
-			//$html .= '<div class="clear"></div>';
+			$html .= '<div class="clear"></div>';
 			if (count($this->form_actions) > 0) {			
 				$script= '<script language="javaScript" type="text/javascript">
 							/*<![CDATA[*/
@@ -483,7 +494,7 @@ class SortableTable extends HTML_Table {
 			$items = $this->table_data; //this is a faster way to get what we want
 		} else {
 			//the normal way
-			$items = $this->get_clean_html(); // getting the items of the table
+			$items = $this->get_clean_html($sort_data); // getting the items of the table
 		}
 		
 					
@@ -517,7 +528,7 @@ class SortableTable extends HTML_Table {
 		}
 		$html.='</div>';
 		$html .= '<div class="clear"></div>';
-		echo $html;
+		return $html;
 	}
 	
 	/**
@@ -559,14 +570,15 @@ class SortableTable extends HTML_Table {
 	}
 	/**
 	 * This function return the items of the table
+	 * @param bool true for sorting table data or false otherwise
 	 * @return array table row items
 	 */
-	public function get_clean_html () {
+	public function get_clean_html ($sort=true) {
 		$pager = $this->get_pager();
 		$val = $pager->getOffsetByPageId();
 		$offset = $pager->getOffsetByPageId();
-		$from = $offset[0] - 1;		
-		$table_data = $this->get_table_data($from);		
+		$from = $offset[0] - 1;
+		$table_data = $this->get_table_data($from,$sort);		
 		$new_table_data = array();
 		if (is_array($table_data)) {
 			foreach ($table_data as $index => $row) {
@@ -844,8 +856,14 @@ class SortableTableFromArray extends SortableTable {
 	 * Get table data to show on current page
 	 * @see SortableTable#get_table_data
 	 */
-	public function get_table_data ($from = 1) {
-		$content = TableSort :: sort_table($this->table_data, $this->column, $this->direction == 'ASC' ? SORT_ASC : SORT_DESC);
+	 
+	 
+	public function get_table_data ($from = 1,$sort = true) {				
+		if ($sort) {
+			$content = TableSort :: sort_table($this->table_data, $this->column, $this->direction == 'ASC' ? SORT_ASC : SORT_DESC);
+		} else {
+			$content = $this->table_data;
+		}		
 		return array_slice($content, $from, $this->per_page);
 	}
 	/**

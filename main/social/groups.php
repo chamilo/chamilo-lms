@@ -22,6 +22,21 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqu
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>'; 
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
 
+// prepare anchor for message group topic 
+$anchor = '';
+if (isset($_GET['anchor_topic'])) {	
+	$anchor = Security::remove_XSS($_GET['anchor_topic']);
+} else {
+	$match = 0;
+	$param_names = array_keys($_GET);
+	foreach ($param_names as $param) {
+		if (preg_match('/^items_(\d)_page_nr$/', $param, $match)) {
+			break;
+		}
+	}
+	$anchor = 'topic_'.$match[1];
+}
+
 $htmlHeadXtra[] = '<script type="text/javascript">
 
 var counter_image = 1;	
@@ -71,7 +86,7 @@ function validate_text_empty (str,msg) {
 
 jQuery(document).ready(function() {
 		
-   var valor = "'.Security::remove_XSS($_GET['div_id']).'";
+   var valor = "'.$anchor.'";
 
    $(".head").click(function() { 				
 				$(this).next().next().slideToggle("fast");
@@ -178,7 +193,6 @@ if ($group_id != 0 ) {
 		}
 	}	
 }
-
 
 echo '<div id="social-content">';
 

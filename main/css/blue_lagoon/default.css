@@ -3024,7 +3024,8 @@ a.read {
 }
 .message-group-date {
 	color:#666;
-	float:right;	
+	width:100%;
+	text-align:right;	
 }
 .view-message-content {
 	line-height:150%;
@@ -3183,6 +3184,13 @@ a.read {
 }
 .profile_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
 .profile_grid_element_1 { width:170px; float:left; text-align:left;	margin-bottom:1px; }
+
+
+/* pagination grid sortable */
+.sub_header {width:100%}
+.grid_selectbox {float:left;width:35%}
+.grid_title {float:left;width:30%;text-align:center}
+.grid_nav {float:left;width:35%;text-align:right}
 
 
 /* Groups boxes */

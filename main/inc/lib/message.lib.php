@@ -836,9 +836,13 @@ class MessageManager
 		$rows = self::get_messages_by_group($group_id);						
 		$rows = self::calculate_children($rows);
 		$group_info = GroupPortalManager::get_group_data($group_id);
-		$current_user_id = api_get_user_id();		
+		$current_user_id = api_get_user_id();	
+		$topics_per_page = 5;
+		$items_per_page = 3;	
 		$count_items = 0;
-		$html = '';
+		$html_messages = '';
+		$query_vars = array('id'=>$group_id,'topics_page_nr'=>0);
+		
 		if (is_array($rows) && count($rows)> 0) {
 
 				// prepare array for topics with its items
@@ -852,25 +856,12 @@ class MessageManager
 						$topics[$x]['items'][] = $value;
 					}
 				}			
-				uasort($topics,array('MessageManager','order_desc_date'));
-
-				// pager
-				$page  = isset($_GET['page_nr'])?intval($_GET['page_nr']):1;
-				$total_topics = count($topics);
-				$topics_per_page = 5;
-				$pager = self::get_pager_for_message_group($group_id,$page,$total_topics,$topics_per_page);			
+				uasort($topics,array('MessageManager','order_desc_date'));		
 				
-				
-				// topics and items
-				$parents = array_keys(self::get_messages_by_parent(0,$group_id,$page,$topics_per_page));
-				$html .= '<div class="social-box-main2">';
-				$html .= '	<div class="pager">
-							<table width="690px">
-							<tr><td style="width:25%">&nbsp;</td><td style="text-align:center">'.$pager['details'].'</td><td style="text-align:right;width:25%">'.$pager['links'].'</td></tr></table></div>';	
+				$param_names = array_keys($_GET);					
+				$array_html = array();								
 				foreach ($topics as $index => $topic) {
-					
-					if (!in_array($index,$parents)) continue;	
-					
+					$html = '';
 					// topics
 					$indent	= 0;
 					$user_sender_info = UserManager::get_user_info_by_id($topic['user_sender_id']);
@@ -880,179 +871,91 @@ class MessageManager
 					$html .= '<div class="social-box-container2" >';
 						$html .= '<div>'.Display::return_icon('content-post-group1.jpg').'</div>';
 						$html .= '<div class="social-box-content2">';
-						$html .= '<a href="#" class="head" id="head_'.$topic['id'].'">																
-									<span class="message-group-title-topic">'.((isset($_GET['div_id']) && $_GET['div_id'] == 'content_'.$topic['id'])?Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align: middle')):
-									Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align: middle'))).'
-									'.$topic['title'].'</span>';						
-						$html .= '</a>';
+							$html .= '<a href="#" class="head" id="head_'.$topic['id'].'">';																															
+							$html .= '<span class="message-group-title-topic">'.(((isset($_GET['anchor_topic']) && $_GET['anchor_topic'] == 'topic_'.$topic['id']) || in_array('items_'.$topic['id'].'_page_nr',$param_names))?Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align: middle')):
+										Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align: middle'))).'
+										'.$topic['title'].'</span>';																
+							$html .= '</a>';
 						
-						if ($topic['send_date']!=$topic['update_date']) {
-							if (!empty($topic['update_date']) && $topic['update_date'] != '0000-00-00 00:00:00' ) {						
-								$html .= '<span> ('.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).')</span>';
-							}	
-						} else {
-								$html .= '<span> ('.get_lang('Created').' '.date_to_str_ago($topic['send_date']).')</span>';
-						}			
+							if ($topic['send_date']!=$topic['update_date']) {
+								if (!empty($topic['update_date']) && $topic['update_date'] != '0000-00-00 00:00:00' ) {						
+									$html .= '<span class="message-group-date" > ('.get_lang('LastUpdate').' '.date_to_str_ago($topic['update_date']).')</span>';
+								}	
+							} else {
+									$html .= '<span class="message-group-date" > ('.get_lang('Created').' '.date_to_str_ago($topic['send_date']).')</span>';
+							}			
 				 						 				
-						$html .= '<div id="content_'.$topic['id'].'" >';
-							$html .= '<a name="content_'.$topic['id'].'"></a>';
-							$html.= '<div style="margin-bottom:10px">';
-								$html.= '<div id="message-reply-link" style="margin-right:10px">
-										<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&div_id=content_'.$topic['id'].'&page_nr='.Security::remove_XSS($_GET['page_nr']).'&page_item_nr='.Security::remove_XSS($_GET['page_item_nr']).'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('forumthread_new.gif', get_lang('Reply')).'</a>';								
-								if ($topic['user_sender_id'] == $current_user_id) {
-									$html.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group&div_id=content_'.$topic['id'].'&page_nr='.Security::remove_XSS($_GET['page_nr']).'&page_item_nr='.Security::remove_XSS($_GET['page_item_nr']).'" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.gif', get_lang('Edit')).'</a>';
-								}								
-								$html.=	'</div>';
-								$html.= '<br />';											
-								$html.= '<div class="message-group-author">'.get_lang('From').'&nbsp;<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a></div>';		
-								$html.= '<div class="message-group-content">'.$topic['content'].'</div>';													
-								$html.= '<div class="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>';						
-						$html.= '</div>';
+							$html .= '<div id="topic_'.$topic['id'].'" >';
+								$html .= '<a name="topic_'.$topic['id'].'"></a>';
+								$html.= '<div style="margin-bottom:10px">';
+									$html.= '<div id="message-reply-link" style="margin-right:10px">
+											<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($_GET['items_page_nr']).'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('forumthread_new.gif', get_lang('Reply')).'</a>';								
+									if ($topic['user_sender_id'] == $current_user_id) {
+										$html.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($_GET['items_page_nr']).'" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.gif', get_lang('Edit')).'</a>';
+									}								
+									$html.=	'</div>';
+									$html.= '<br />';											
+									$html.= '<div class="message-group-author">'.get_lang('From').'&nbsp;<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a></div>';		
+									$html.= '<div class="message-group-content">'.$topic['content'].'</div>';													
+									$html.= '<div class="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>';						
+								$html.= '</div>';
 							
-					// items												
+					// items										
 					if (is_array($topic['items'])) {
-
-						// pager items						
-						$page_item  = isset($_GET['page_item_nr'])?intval($_GET['page_item_nr']):1;
-						$total_items = count($topic['items']);
-						$items_per_page = 3;
-						$div_content = 'content_'.$topic['id'];
-						$pager_items = self::get_pager_for_message_group($group_id,$page_item,$total_items,$items_per_page,true,$div_content);			
-						$html .= '	<div class="pager">
-									<table width="100%">
-									<tr><td style="width:25%">&nbsp;</td><td style="text-align:center">'.$pager_items['details'].'</td><td style="text-align:right;width:25%">'.$pager_items['links'].'</td></tr></table></div>';
-
-						$topic_slice['items'] = array_slice($topic['items'],($page_item-1)*($items_per_page),$items_per_page);						
-						
-						$count_items = count($topic['items']);												
-						$current_page = $count_items/$items_per_page;						
-						if (is_int($current_page)) {
-							$page_item_nr = $current_page + 1;
-						} else {
-							$page_item_nr = intval($_GET['page_item_nr']);
-						}
-
-						foreach ($topic_slice['items'] as $item) {
 							
-							$indent	= $item['indent_cnt']*'15';
+						$items_page_nr = intval($_GET['items_'.$topic['id'].'_page_nr']);
+						$array_html_items = array();
+						foreach ($topic['items'] as $item) {	
+							$html_items = '';						
+							//$indent	= $item['indent_cnt']*'15';
 							$user_sender_info = UserManager::get_user_info_by_id($item['user_sender_id']);
 							$files_attachments = self::get_links_message_attachment_files($item['id']);
 							$name = api_get_person_name($user_sender_info['firstname'], $user_sender_info['lastname']);
-							
-							
-							//$html.= '<div class="message-item" style="margin-left: '.$indent.'px;">';
-							$html.= '<div class="social-box-container3" >';	
-								$html .= '<div>'.Display::return_icon('content-post-reply01.jpg').'</div>';
-								$html .= '<div class="social-box-content3">';
-								$html.= '<div id="message-reply-link">';
-								//$html.=	'<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$item['id'].'&action=reply_message_group&div_id=content_'.$topic['id'].'&page_nr='.Security::remove_XSS($_GET['page_nr']).'&page_item_nr='.Security::remove_XSS($_GET['page_item_nr']).'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('forumthread_new.gif', get_lang('Reply')).'</a>';
-								$html.=	'<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$item['id'].'&action=reply_message_group&div_id=content_'.$topic['id'].'&page_nr='.intval($_GET['page_nr']).'&page_item_nr='.intval($page_item_nr).'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('forumthread_new.gif', get_lang('Reply')).'</a>';
+
+							$html_items.= '<div class="social-box-container3" >';	
+								$html_items .= '<div>'.Display::return_icon('content-post-reply01.jpg').'</div>';
+								$html_items .= '<div class="social-box-content3">';
+								$html_items.= '<div id="message-reply-link">';
+
+								$html_items.=	'<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$item['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($items_page_nr).'&topic_id='.$topic['id'].'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('forumthread_new.gif', get_lang('Reply')).'</a>';
 								if ($item['user_sender_id'] == $current_user_id) {
-									$html.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$item['id'].'&action=edit_message_group&div_id=content_'.$topic['id'].'&page_nr='.intval($_GET['page_nr']).'&page_item_nr='.intval($_GET['page_item_nr']).'" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.gif', get_lang('Edit')).'</a>';
+									$html_items.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$item['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($items_page_nr).'&topic_id='.$topic['id'].'" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.gif', get_lang('Edit')).'</a>';
 								} 	
-								$html.= '</div>';
-								$html.= '<div class="message-group-title">'.$item['title'].'&nbsp;</div>';												
-								$html.= '<div class="message-group-author">'.get_lang('From').'&nbsp;<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$item['user_sender_id'].'">'.$name.'&nbsp;</a></div>';		
-								$html.= '<div class="message-group-content">'.$item['content'].'</div>';
+								$html_items.= '</div>';
+								$html_items.= '<div class="message-group-title">'.$item['title'].'&nbsp;</div>';												
+								$html_items.= '<div class="message-group-author">'.get_lang('From').'&nbsp;<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$item['user_sender_id'].'">'.$name.'&nbsp;</a></div>';		
+								$html_items.= '<div class="message-group-content">'.$item['content'].'</div>';
 								
 								if ($item['send_date'] != $item['update_date']) {
 									if (!empty($item['update_date']) && $item['update_date'] != '0000-00-00 00:00:00' ) {						
-										$html .= '<span class="message-group-date"> '.get_lang('LastUpdate').' '.date_to_str_ago($item['update_date']).'</span>';
+										$html_items .= '<div class="message-group-date"> '.get_lang('LastUpdate').' '.date_to_str_ago($item['update_date']).'</div>';
 									}	
 								} else {
-									$html .= '<span class="message-group-date"> '.get_lang('Created').' '.date_to_str_ago($item['send_date']).'</span>';
+									$html_items .= '<div class="message-group-date"> '.get_lang('Created').' '.date_to_str_ago($item['send_date']).'</div>';
 								}	
-								$html.= '<div class="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>';
-								$html.= '</div>';						
-							$html.= '</div>';																
-						}	
-						
-						/*
-						// pager items
-						$html .= '	<div class="pager">
-							<table width="100%">
-							<tr><td style="width:25%">&nbsp;</td><td>&nbsp;</td><td style="text-align:right;width:25%">'.$pager_items['links'].'</td></tr></table></div>';
-						*/
-																	
+																
+								$html_items.= '<div class="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>';
+								$html_items.= '</div>';						
+							$html_items.= '</div>';
+							$array_html_items[] = array($html_items);													
+						}
+						// grids for items with paginations							
+						$html .= Display::return_sortable_grid('items_'.$topic['id'], array(), $array_html_items, array('hide_navigation'=>false, 'per_page' => $items_per_page), $query_vars, false, array(true, true, true,false), false);																							
 					}
 							$html .= '</div>';
 						$html .= '</div>';	
-					$html .= '</div>';	
+					$html .= '</div>';
+					$array_html[] = array($html);		
 				}
-				$html .= '</div>';
+				// grids for items and topics  with paginations
 				
-				/*
-				// pager
-				$html .= '	<div class="pager">
-							<table width="700px">
-							<tr><td style="width:25%">&nbsp;</td><td>&nbsp;</td><td style="text-align:right;width:25%">'.$pager['links'].'</td></tr></table></div>';
-				*/
+				$html_messages .= '<div class="social-box-container2">';
+				$html_messages .= Display::return_sortable_grid('topics', array(), $array_html, array('hide_navigation'=>false, 'per_page' => $topics_per_page), $query_vars, false, array(true, true, true,false), false);
+				$html_messages .= '</div>';
 		}
-		return $html;
+		
+		return $html_messages;
 	}
-
-	/**
-	 *  Get pager for messages of group
-	 *  @param int 		group id
-	 *  @param int 		current page
-	 *  @param int 		total rows
-	 *  @param int 		rows per page
-	 *  @return array 	pager with details and links
-	 */
-	public static function get_pager_for_message_group($group_id,$page,$num_rows,$rows_per_page,$pager_items = false,$div_content='') {
-		
-		$link 		= '';
-		$details	= '';
-		$pager 		= array();
-		$group_id 	= intval($group_id);
-		$page 		= intval($page);
-		$num_rows 	= intval($num_rows);
-		$first_page = 1;
-		$last_page 	= ceil($num_rows/$rows_per_page);
-		
-		// get details		
-		if ($page == $first_page) {
-			$details = $page.' - '.($page*$rows_per_page).' / '.$num_rows;	
-		} else if ($page > $first_page && $page < $last_page) {
-			$details = ((($page-1)*$rows_per_page)+1).' - '.($page*$rows_per_page).' / '.$num_rows;
-		} else {
-			$details = ((($page-1)*$rows_per_page)+1).' - '.($num_rows).' / '.$num_rows;
-		}		
-		$pager['details'] = $details;
-		
-		
-		// get links for pager	
-		$href = api_get_path(WEB_CODE_PATH).'social/groups.php?id='.$group_id;
-		
-		if ($pager_items) {
-			$page_topic  = isset($_GET['page_nr'])?intval($_GET['page_nr']):1;
-			$param_name_page_nr = '&page_nr='.$page_topic.'&div_id='.$div_content.'&page_item_nr=';
-		} else {
-			$param_name_page_nr = '&page_nr=';
-		}
-		
-		if ($page > 1) {									
-			$link .= '<a title="'.get_lang('FirstPage').'" href="'.$href.$param_name_page_nr.$first_page.'">';
-			$link .= Display::return_icon('first.png',get_lang('FirstPage'),array('style'=>'vertical-align: middle'));
-			$link .= '</a>';
-			$link .= '<a title="'.get_lang('PreviousPage').'" href="'.$href.$param_name_page_nr.($page-1).'">';
-			$link .= Display::return_icon('prev.png',get_lang('PreviousPage'),array('style'=>'vertical-align: middle'));
-	 		$link .= '</a>';	
-		}
-		$link .= $page.'/'.$last_page;
-		
-		if ($page < $last_page) {
-			$link .= '<a title="'.get_lang('NextPage').'" href="'.$href.$param_name_page_nr.($page+1).'">';
-			$link .= Display::return_icon('next.png',get_lang('NextPage'),array('style'=>'vertical-align: middle'));
-			$link .= '</a>';
-			$link .= '<a title="'.get_lang('LastPage').'" href="'.$href.$param_name_page_nr.$last_page.'">';
-			$link .= Display::return_icon('last.png',get_lang('PreviousPage'),array('style'=>'vertical-align: middle'));
-	 		$link .= '</a>';	
-		}
-		$pager['links'] = $link;
- 		return $pager;
-	}
-
 	
 	/**
 	 * Add children to messages by id is used for nested view messages  

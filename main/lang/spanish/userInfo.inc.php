@@ -182,4 +182,5 @@ $Topics = "temas";
 $StatusInThisGroup = "estado en este grupo";
 $DescriptionGroup = "descripción del grupo";
 $FriendsOnline = "amigos en línea";
+$GroupDescription = "descripción del grupo";
 ?>

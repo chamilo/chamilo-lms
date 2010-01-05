@@ -183,4 +183,9 @@ $StatusInThisGroup = "estado en este grupo";
 $DescriptionGroup = "descripción del grupo";
 $FriendsOnline = "amigos en línea";
 $GroupDescription = "descripción del grupo";
+$MyProductions = "Mis producciones";
+$YouHaveReceivedANewMessageInTheGroupX = "Usted ha recibido un nuevo mensaje en el grupo %s";
+$ClickHereToSeeMessageGroup = "Clic aquí para ver el mensaje de grupo";
+$OrCopyPasteTheFollowingUrl = "o copia y pega la siguente url";
+$ThereIsANewMessageInTheGroupX = "hay un nuevo mensaje en el grupo %s";
 ?>

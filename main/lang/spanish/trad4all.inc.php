@@ -768,4 +768,7 @@ $SendMessage = "Enviar Mensaje";
 $SeeForum = "Ver foro";
 $SeeMore = "ver más";
 $NoDataAvailable = "no hay datos disponibles";
+$Created = "Creado";
+$LastUpdate = "Última actualización";
+$UserNonRegisteredAtTheCourse = "Usuario no registrado en el curso";
 ?>

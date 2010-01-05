@@ -39,6 +39,7 @@ $UserName = "Brugernavn";
 $lang_show_hide = "Vis/skjul";
 $langCategoryMod = "Ret kategori";
 $Hide = "Skjul";
+$langDear = "Kære";
 $langArchive = "Arkiv";
 $langCourseCode = "Kursuskode";
 $langNoDescription = "Ingen beskrivelse";

@@ -37,6 +37,7 @@ $UserName = "Ensalutnomo";
 $lang_show_hide = "Vidigi / ka&#349;i";
 $langCategoryMod = "&#348;an&#285;i kategorion ";
 $Hide = "Ka&#349;i";
+$langDear = "Kara ";
 $iso639_2_code = "EO";
 $iso639_1_code = "DU ";
 $charset = "utf-8";

@@ -45,6 +45,7 @@ $UserName = "Login/acesso";
 $lang_show_hide = "Mostrar / ocultar";
 $langCategoryMod = "Editar Categoria";
 $Hide = "Ocultar";
+$langDear = "Caro(a)";
 $langArchive = "Arquivo";
 $langCourseCode = "Código";
 $langNoDescription = "Nenhuma descrição";

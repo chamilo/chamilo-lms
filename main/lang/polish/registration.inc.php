@@ -75,7 +75,6 @@ $langIs = "jest";
 $langAddress = "Adres ";
 $langSettings = "z nast&#281;puj&#261;cymi ustawieniami: Nazwa u&#380;ytkownika:";
 $langYouAreReg = "Jeste&#347; zarejestrowany na";
-$langDear = "Szanowna/y";
 $langYourReg = "Twoja rejestracja";
 $langUserFree = "Ta nazwa u&#380;ytkownika jest ju&#380; zaj&#281;ta. U&#380;yj przycisku Wstecz w przegl&#261;darce i wybierz inn&#261;.";
 $langEmptyFields = "Zostawi&#322;e&#347; puste pola. U&#380;yj przycisku Wstecz w przegl&#261;darce i spróbuj jeszcze raz.";

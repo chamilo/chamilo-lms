@@ -45,6 +45,7 @@ $UserName = "Uporabniško ime";
 $lang_show_hide = "Prikaži / skrij";
 $langCategoryMod = "Spremeni kategorijo";
 $Hide = "Skrij";
+$langDear = "Spoštovani";
 $langArchive = "arhiv";
 $langCourseCode = "Koda tečaja";
 $langNoDescription = "Brez opisa";

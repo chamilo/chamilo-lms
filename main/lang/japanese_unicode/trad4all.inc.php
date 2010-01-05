@@ -19,6 +19,7 @@ $langUp = "Up";
 $langCourseCreate = "コ〖スのウエブサイトを侯る";
 $langTodo = "≈妥司∽";
 $UserName = "ユ〖ザ叹";
+$langDear = "飞球";
 $iso639_2_code = "ja";
 $iso639_1_code = "jpn";
 $charset = "UTF-8";

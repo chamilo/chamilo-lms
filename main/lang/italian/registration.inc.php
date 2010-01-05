@@ -78,7 +78,6 @@ $langAddress = "L\'indirizzo di";
 $langSettings = "con i seguenti parametri:
 Nome Utente:";
 $langYouAreReg = "Sei iscritta/o su";
-$langDear = "Cara/o";
 $langYourReg = "Iscrizione su";
 $langUserFree = "Il Nome Utente scelto è già occupato.";
 $langEmptyFields = "Non sono stati riempiti tutti i campi.";

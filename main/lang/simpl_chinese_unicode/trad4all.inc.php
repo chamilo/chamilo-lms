@@ -20,6 +20,7 @@ $langCourseCreate = "新建课程";
 $langTodo = "您的建议";
 $lang_show_hide = "显示/隐藏";
 $langCategoryMod = "修改分类";
+$langDear = "尊敬的";
 $langArchive = "存档";
 $langCourseCode = "课程编号";
 $langNoDescription = "无形容";

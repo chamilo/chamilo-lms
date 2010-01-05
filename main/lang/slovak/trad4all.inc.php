@@ -45,6 +45,7 @@ $UserName = "Prihlasovacie meno";
 $lang_show_hide = "Ukáza&#357; / skry&#357;";
 $langCategoryMod = "Zmeni&#357; kategóriu";
 $Hide = "Skry&#357;";
+$langDear = "Vážená(ý)";
 $langArchive = "archív";
 $langCourseCode = "Kód kurzu";
 $langNoDescription = "Žiadny popis";

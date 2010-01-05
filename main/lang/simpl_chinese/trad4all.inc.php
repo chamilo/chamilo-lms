@@ -38,6 +38,7 @@ $UserName = "用户名";
 $lang_show_hide = "显示/隐藏";
 $langCategoryMod = "修改分类";
 $Hide = "&#38544;&#34255;";
+$langDear = "尊敬的";
 $langArchive = "&#23384;&#26723;";
 $langCourseCode = "&#35838;&#31243;&#32534;&#21495;";
 $langNoDescription = "&#26080;&#24418;&#23481;";

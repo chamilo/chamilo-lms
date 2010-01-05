@@ -44,6 +44,7 @@ $UserName = "Haykuqmasi";
 $lang_show_hide = "Qhawarichiy / pakay";
 $langCategoryMod = "T\'ijrapay mitata";
 $Hide = "Pakay";
+$langDear = "Munasqa";
 $langArchive = "khipu";
 $langCourseCode = "Yachachinaq chinpun";
 $langNoDescription = "Mana nisqasqawan";

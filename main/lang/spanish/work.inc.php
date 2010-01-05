@@ -77,4 +77,9 @@ $StudentAllowedToDeleteOwnPublication = "Permitir que los estudiantes puedan eli
 $TheDocumentHasBeenDeleted = "El documento ha sido borrado.";
 $YouAreNotAllowedToDeleteThisDocument = "Usted no está autorizado para eliminar este documento";
 $ConfirmYourChoiceDeleteAllfiles = "Confirme su elección, se eliminarán todos los archivos y no se podrán recuperar";
+$WorkName = "Nombre de la tarea";
+$ReminderToSubmitPendingTask = "Se le recuerda que tiene una tarea pendiente";
+$MessageConfirmSendingOfTask = "Este es un mensaje para confirmar el envío de su tarea";
+$DataSent = "Fecha de envío";
+$DownloadLink = "Enlace de descarga";
 ?>

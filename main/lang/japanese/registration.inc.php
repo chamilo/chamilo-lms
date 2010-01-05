@@ -29,7 +29,6 @@ $langAddress = "アドレス::";
 $langSettings = "次の設定です: 
  Username:";
 $langYouAreReg = "You are registered on";
-$langDear = "敬白";
 $langYourReg = "登録されました:";
 $langUserFree = "このユーザ名はすでに、他の人がつかっています。ボタンで戻って、別の名前で登録してください。";
 $langEmptyFields = "いくつかの欄が空白です。ボタンで戻って、再度ためしてください";

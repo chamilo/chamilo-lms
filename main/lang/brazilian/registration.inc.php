@@ -82,7 +82,6 @@ $langSettings = "com as seguintes configurações :
 
 Codinome :";
 $langYouAreReg = "Você está inscrito no";
-$langDear = "Caro";
 $langYourReg = "Sua inscrição no";
 $langUserFree = "Esse codinome já está sendo utilizado. Use o botão voltar do seu navegador e escolha outro.";
 $langEmptyFields = "Você deixou alguns campos vazios. Use o botão voltar do seu navegador e tente novamente.";

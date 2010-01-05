@@ -38,6 +38,7 @@ $UserName = "使用者名稱";
 $lang_show_hide = "顯示/隱藏";
 $langCategoryMod = "修改分類";
 $Hide = "隱藏";
+$langDear = "尊敬的";
 $langArchive = "資料庫";
 $langCourseCode = "課程編號";
 $langNoDescription = "無形容";

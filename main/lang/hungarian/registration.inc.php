@@ -80,7 +80,6 @@ $langIs = "elnevezés&#369; portál az alábbi URL-en érhet&#337; el";
 $langAddress = "Az";
 $langSettings = "az alábbi beállításokkal:Felhasználói név:";
 $langYouAreReg = "Ön regisztrációra került az alábbi elnevezés&#369; oktatási portálon:";
-$langDear = "Kedves";
 $langYourReg = "A regisztációja";
 $langUserFree = "Már van ilyen felhasználói név. Használja a böngészõje vissza gombját és próbálja újra.";
 $langEmptyFields = "Néhány mez&#337;t üresen hagyott. Kérjük használja böngész&#337;je vissza gombját, majd töltse ki a mez&#337;ket.";

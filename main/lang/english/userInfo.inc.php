@@ -178,4 +178,8 @@ $InvitationDenied = "Invitation denied";
 $UserAdded = "User added";
 $FilesSizeExceedsX = "Files size exceeds";
 $YouShouldWriteASubject = "You should write a subject";
+$Topics = "topics";
+$StatusInThisGroup = "status in this group";
+$DescriptionGroup = "description group";
+$FriendsOnline = "friends online";
 ?>

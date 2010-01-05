@@ -45,6 +45,7 @@ $UserName = "Gebruikersnaam (\'log-in\')";
 $lang_show_hide = "Weergeven/verbergen";
 $langCategoryMod = "Categorie wijzigen";
 $Hide = "Verbergen";
+$langDear = "Beste";
 $langArchive = "Archief";
 $langCourseCode = "Modulecode";
 $langNoDescription = "Geen beschrijving";

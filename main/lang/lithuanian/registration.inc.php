@@ -75,7 +75,6 @@ $langIs = "yra";
 $langAddress = "The address of ";
 $langSettings = "with the following settings :Username :";
 $langYouAreReg = "Jūs užregistruotas";
-$langDear = "Gerbiamasis (-oji)";
 $langYourReg = "Jūs užregistruotas";
 $langUserFree = "Šis vartotojo vardas jau naudojamas. Spauskite naršyklės \"Atgal\" mygtuką ir bandykite dar kartą.";
 $langEmptyFields = "Neužpildėte visų laukelių. Spauskite naršyklės \"Atgal\" mygtuką ir bandykite dar kartą";

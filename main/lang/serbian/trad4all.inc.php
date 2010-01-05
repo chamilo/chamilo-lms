@@ -39,6 +39,7 @@ $UserName = "Korisni&#269;ko ime";
 $lang_show_hide = "Prikaži/Sakrij";
 $langCategoryMod = "Modifikuj kategoriju";
 $Hide = "Sakrij";
+$langDear = "Poštovani";
 $langArchive = "Arhiva";
 $langCourseCode = "Šifra kursa";
 $FirstName = "Ime";

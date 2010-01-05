@@ -37,6 +37,7 @@ $UserName = "Lietot&#257;jv&#257;rds";
 $lang_show_hide = "Redzams / neredzams";
 $langCategoryMod = "Labot kategoriju";
 $Hide = "Pasl&#275;pt";
+$langDear = "Cien.";
 $langArchive = "arh&#299;vs";
 $langCourseCode = "Kursa kods";
 $langNoDescription = "nav apraksta";

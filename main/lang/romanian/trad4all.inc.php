@@ -45,6 +45,7 @@ $UserName = "Nume de utilizator";
 $lang_show_hide = "Arata / ascunde";
 $langCategoryMod = "Modifica categoria";
 $Hide = "Ascunde";
+$langDear = "Draga";
 $langArchive = "arhiva";
 $langCourseCode = "Codul cursului";
 $langNoDescription = "Fara descriere";

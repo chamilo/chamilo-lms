@@ -45,6 +45,7 @@ $UserName = "Käyttäjä";
 $lang_show_hide = "Näytä / piilota";
 $langCategoryMod = "Muokkaa aihealuetta";
 $Hide = "Piilota";
+$langDear = "Hyvä";
 $langArchive = "arkisto";
 $langCourseCode = "Kurssikoodi";
 $langNoDescription = "Ei kuvausta";

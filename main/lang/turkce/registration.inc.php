@@ -78,7 +78,6 @@ $langAddress = "Adres ";
 $langSettings = "Kayýt bilgileriniz þunlardýr:
 Username:";
 $langYouAreReg = "Kaydolduðunuz ders: ";
-$langDear = "Sayýn";
 $langYourReg = "Kaydýnýz";
 $langUserFree = "Bu kullanýcý adý daha önce alýnmýþtýr. Geri dönüp baþka bir ad yazýnýz.";
 $langEmptyFields = "Bazý alanlarý boþ býraktýnýz. Geri dönüp doldurunuz.";

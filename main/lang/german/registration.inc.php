@@ -78,7 +78,6 @@ $langAddress = "Die Adresse von ";
 $langSettings = "mit den folgenden Einstellungen:
 Benutzername:";
 $langYouAreReg = "Sie wurden registriert am";
-$langDear = "Guten Tag";
 $langYourReg = "Ihre Registrierung am";
 $langUserFree = "Dieser Benutzername ist bereits vergeben. Gehen Sie zurück und wählen einen anderen.";
 $langEmptyFields = "Sie haben einige Felder leer gelassen. Gehen Sie zurück und versuchen Sie es noch einmal.";

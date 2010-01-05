@@ -75,7 +75,6 @@ $langIs = "este";
 $langAddress = "Adresa";
 $langSettings = "cu urmatoarele setari: *Nume de utilizator*:";
 $langYouAreReg = "Te-ai inregistrat pe";
-$langDear = "Draga";
 $langYourReg = "Inregistrarea ta la";
 $langUserFree = "Acest nume de utilizator este deja folosit. Foloseste butonul BACK al browser-ului pentru a alege alt nume.";
 $langEmptyFields = "Ai lasat campuri necompletate. Foloseste butonul BACK al browserului pentru a mai încerca o data.";

@@ -45,6 +45,7 @@ $UserName = "Felhasználói név";
 $lang_show_hide = "Mutat / Elrejt";
 $langCategoryMod = "Kategória módosítása";
 $Hide = "Elrejt";
+$langDear = "Kedves";
 $langArchive = "archív";
 $langCourseCode = "Kurzuskód";
 $langNoDescription = "Nincs leírás";

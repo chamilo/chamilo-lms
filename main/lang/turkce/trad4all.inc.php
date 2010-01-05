@@ -43,6 +43,7 @@ $UserName = "Kullan&#305;c&#305; ismi";
 $lang_show_hide = "Göster / Gizle";
 $langCategoryMod = "Kategori düzenle";
 $Hide = "Sakla";
+$langDear = "Sayýn";
 $langArchive = "Ar&#351;iv";
 $langCourseCode = "Kurs Kod";
 $langNoDescription = "Aç&#305;klama yok";

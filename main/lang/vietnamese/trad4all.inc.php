@@ -26,6 +26,7 @@ $langUniqueSelect = "Một lựa chọn đúng";
 $langCourseCreate = "Khởi tạo khoá học mới";
 $langTodo = "Kiến nghị";
 $UserName = "Tên truy cập";
+$langDear = "Dear";
 $iso639_2_code = "en";
 $iso639_1_code = "eng";
 $left_font_family = "verdana, helvetica, arial, geneva, sans-serif";

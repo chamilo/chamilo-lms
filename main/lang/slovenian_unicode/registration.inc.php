@@ -82,7 +82,6 @@ $langSettings = "z naslednjimi nastavitvami :
 
 Uporabniško ime :";
 $langYouAreReg = "Registrirani ste v skupnost ";
-$langDear = "Spoštovani";
 $langYourReg = "Vasa registracija v";
 $langUserFree = "To uporabniško ime je že v rabi. Uporabite brskalnikov gumb \\\'nazaj\\\' in izberite drugega.";
 $langEmptyFields = "Nekaj vnosnih polj ste pustili praznih. Uporabite brskalnikov gumb \\\'nazaj\\\' in poskusite znova.";

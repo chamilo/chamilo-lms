@@ -40,6 +40,7 @@ $UserName = "اسم المستخدم ";
 $lang_show_hide = "إظهار / إخفاء";
 $langCategoryMod = "تعديل التصنيف ";
 $Hide = "إخفاء";
+$langDear = "عزيزي ";
 $langArchive = "الأرشيف ";
 $langCourseCode = "رمز المقرر ";
 $langNoDescription = "لا يوجد وصف ";

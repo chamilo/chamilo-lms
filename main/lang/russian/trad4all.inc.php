@@ -26,6 +26,7 @@ $langUniqueSelect = "Множественный выбор (один правильный ответ)";
 $langCourseCreate = "Создать сайт курса";
 $langTodo = "Предложения";
 $UserName = "Имя пользователя";
+$langDear = "Уважаемый(ая)";
 $iso639_2_code = "ru";
 $iso639_1_code = "rus";
 $charset = "KOI8-R";

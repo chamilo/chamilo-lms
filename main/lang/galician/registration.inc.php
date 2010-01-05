@@ -78,7 +78,6 @@ $langAddress = "O enderezo de";
 $langSettings = "cos parámetros seguintes:
 Nome de usuario:";
 $langYouAreReg = "Vostede inscribíuse en";
-$langDear = "Estimado(a)";
 $langYourReg = "A súa inscrición en";
 $langUserFree = "O nome de usuario que elixiu xa existe.Use o botón de Volver do navegador e elixa un diferente.";
 $langEmptyFields = "Non cubriu todos os campos.Use o botón de Volver do navegador e volva intentalo.";

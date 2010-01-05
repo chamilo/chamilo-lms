@@ -43,6 +43,7 @@ $UserName = "Användarnamn";
 $lang_show_hide = "Visa / Göm";
 $langCategoryMod = "Modifiera kategori";
 $Hide = "Göm";
+$langDear = "Kära";
 $langArchive = "arkiv";
 $langCourseCode = "Kurskod";
 $langNoDescription = "Beskrivning saknas";

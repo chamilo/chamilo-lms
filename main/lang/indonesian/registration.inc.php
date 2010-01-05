@@ -76,7 +76,6 @@ $langAddress = "Alamat dari ";
 $langSettings = "dengan setting berikut:
 Nama user:";
 $langYouAreReg = "Anda terdaftar pada";
-$langDear = "Yth.";
 $langYourReg = "Pendaftaran anda pada";
 $langUserFree = "Nama user ini telah terpakai. Gunakan tombol BACK di browser dan pilih nama lain.";
 $langEmptyFields = "Anda belum mengisi semua field. Gunakan tombol BACK di browser dan coba lagi.";

@@ -45,6 +45,7 @@ $UserName = "Usuario";
 $lang_show_hide = "Mostrar / ocultar";
 $langCategoryMod = "Modificar categoría";
 $Hide = "Ocultar";
+$langDear = "Estimado/a";
 $langArchive = "archivo";
 $langCourseCode = "Código del curso";
 $langNoDescription = "Sin descripción";
@@ -763,4 +764,8 @@ $UserAdded = "Usuario agregado";
 $UpdatedIn = "Actualizado";
 $Metadata = "Metadatos";
 $langAddMetadata  = "Ver/Editar Metadatos";
+$SendMessage = "Enviar Mensaje";
+$SeeForum = "Ver foro";
+$SeeMore = "ver más";
+$NoDataAvailable = "no hay datos disponibles";
 ?>

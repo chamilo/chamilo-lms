@@ -77,7 +77,6 @@ $langIs = "est";
 $langAddress = "L\'adresse de";
 $langSettings = "avec les paramètres suivants :\\nLogin :";
 $langYouAreReg = "Vous êtes inscrit(e) sur";
-$langDear = "Cher(ère)";
 $langYourReg = "Votre inscription sur";
 $langUserFree = "Le login que vous avez choisi est déjà pris.Utilisez le bouton de retour en arrière de votre navigateuret choisissez-en un autre.";
 $langEmptyFields = "Vous n\'avez pas rempli tous les champs.Utilisez le bouton de retour en arrière de votre navigateur et recommencez.";

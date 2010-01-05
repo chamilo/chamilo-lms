@@ -77,7 +77,6 @@ $langIs = "je";
 $langAddress = "Adresa";
 $langSettings = "Sa slede&#263;im podešavanjema:Korisni&#269;ko ime:";
 $langYouAreReg = "Prijavljeni ste na";
-$langDear = "Poštovani";
 $langYourReg = "Vaša prijava na";
 $langUserFree = "Ovo korisni&#269;ko ime je ve&#263; zauzeto. Upotrebite dugme Back vašeg pretraživa&#269;a i izaberite drugo.";
 $langEmptyFields = "Neka polja su Vam ostala prazna. Upotrebite dugme Back vašeg pretraživa&#269;a i probajte ponovo.";

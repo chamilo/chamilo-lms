@@ -73,7 +73,6 @@ $langIs = "ir";
 $langAddress = "Adrese";
 $langSettings = "ar sekojošiem iestat&#299;jumiem : Lietot&#257;jv&#257;rds :";
 $langYouAreReg = "J&#363;s esat re&#291;istr&#275;ts";
-$langDear = "Cien.";
 $langYourReg = "J&#363;su re&#291;istr&#257;cija";
 $langUserFree = "Šis lietot&#257;jv&#257;rds jau ir aiz&#326;emts. Noklikš&#311;iniet p&#257;rl&#363;kprogrammas \"Back\" pogu un izv&#275;lieties citu.";
 $langEmptyFields = "Daži aizpild&#257;mie lauci&#326;i tika atst&#257;ti tukši. Noklikš&#311;iniet p&#257;rl&#363;kprogrammas \"Back\" pogu un izv&#275;lieties citu.";

@@ -46,7 +46,6 @@ $langAddress = "Osoite ";
 $langSettings = "seuraavilla asetuksilla:
 Käyttäjänimi:";
 $langYouAreReg = "Olet rekisteröitynyt:";
-$langDear = "Hyvä";
 $langYourReg = "Rekisteröintisi:";
 $langUserFree = "Tämä käyttäjänimi on jo käytössä. Mene takaisin ja yritä uudestaan.";
 $langEmptyFields = "Jätit jotkut kentistä tyhjiksi. Mene takaisin ja yritä uudestaan.";

@@ -77,7 +77,6 @@ $langIs = "es";
 $langAddress = "Piqpa maypi kaqnin";
 $langSettings = "kay imakunawan:Haykuqmasiq sutin:";
 $langYouAreReg = "Qan qelqachikunkiña kaypi";
-$langDear = "Munasqa";
 $langYourReg = "Qelqachikusqaykiqa kaypin";
 $langUserFree = "Hakuqmasiq sutin ajllasqaykiqa ña kasha q\'apiy \'Qepa\' nisqata wanpuqniykimanta chaymantaqa ajllay hoqta.";
 $langEmptyFields = "Mana llapan kanchakunatachu hunt\'achinki. Q\'apipay runp\'u \'Qepa\' wanp\'uqniykiqta ymanata hoqmanta ruway.";

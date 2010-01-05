@@ -77,4 +77,9 @@ $StudentAllowedToDeleteOwnPublication = "Allow learners to delete their own publ
 $TheDocumentHasBeenDeleted = "The document has been deleted.";
 $YouAreNotAllowedToDeleteThisDocument = "You are not allowed to delete this document";
 $ConfirmYourChoiceDeleteAllfiles = "Please confirm your choice. This will delete all files without possibility of recovery";
+$WorkName = "Assignment name";
+$ReminderToSubmitPendingTask = "You are reminded that has a pending task";
+$MessageConfirmSendingOfTask = "This is a message confirming the sending of the task";
+$DataSent = "Data sent";
+$DownloadLink = "Download link";
 ?>

@@ -37,6 +37,7 @@ $UserName = "Nama user";
 $lang_show_hide = "Tampilkan / Sembunyikan";
 $langCategoryMod = "Ubah kategori";
 $Hide = "Sembunyi";
+$langDear = "Yth.";
 $iso639_2_code = "en";
 $iso639_1_code = "eng";
 $charset = "iso-8859-1";

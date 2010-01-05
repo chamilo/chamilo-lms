@@ -72,7 +72,6 @@ $langIs = "je";
 $langAddress = "Adresa";
 $langSettings = "s nasledujúcimi nastaveniami : Meno používate&#318;a :";
 $langYouAreReg = "Ste zaregistrovaný na";
-$langDear = "Vážená(ý)";
 $langYourReg = "Vaša registrácia na";
 $langUserFree = "Toto meno používate&#318;a je už obsadené. Použite tla&#269;idlo Spä&#357; a vyberte iné.";
 $langEmptyFields = "Nechali ste nejaké polia prázdne. Použite tla&#269;idlo Spä&#357; a skúste znova.";

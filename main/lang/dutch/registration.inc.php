@@ -76,7 +76,6 @@ $langAddress = "Het adres van";
 $langSettings = "met de volgende parameters:
 Gebruikersnaam:";
 $langYouAreReg = "U bent geregistreerd voor";
-$langDear = "Beste";
 $langYourReg = "Uw registratie op";
 $langUserFree = "De ingevoerde gebruikersnaam is al in gebruik. Gebruik de terugknop van uw browser en probeer opnieuw.";
 $langEmptyFields = "U hebt niet alle velden ingevuld. Gebruik de terugknop van uw browser en probeer opnieuw.";

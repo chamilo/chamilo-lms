@@ -75,7 +75,6 @@ $langIs = "是";
 $langAddress = "地址";
 $langSettings = "下面是您的注册信息: 用户名:";
 $langYouAreReg = "您已注册到";
-$langDear = "尊敬的";
 $langYourReg = "您注册在";
 $langUserFree = "用户名已被占用! 点击浏览器的退回按纽重新选择用户名. ";
 $langEmptyFields = "有些项未填写! 返回重试.";

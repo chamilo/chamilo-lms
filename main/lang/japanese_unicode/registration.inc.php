@@ -29,7 +29,6 @@ $langAddress = "アドレス::";
 $langSettings = "肌の肋年です: 
  Username:";
 $langYouAreReg = "You are registered on";
-$langDear = "飞球";
 $langYourReg = "判峡されました:";
 $langUserFree = "このユ〖ザ叹はすでに、戮の客がつかっています。ボタンで提って、侍の叹涟で判峡してください。";
 $langEmptyFields = "いくつかの腕が鄂球です。ボタンで提って、浩刨ためしてください";

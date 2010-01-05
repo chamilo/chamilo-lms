@@ -77,7 +77,6 @@ $langIs = "é";
 $langAddress = "A morada de";
 $langSettings = "com as seguintes configurações: \\n Login/acesso :";
 $langYouAreReg = "Encontra-se registado em";
-$langDear = "Caro(a)";
 $langYourReg = "O seu registo em";
 $langUserFree = "Este login/acesso já não se encontra disponível. Utilize o botão de voltar atrás do seu browser/navegador e escolha um outro diferente.";
 $langEmptyFields = "Deixou alguns campos por preencher. Utilize o botão de voltar atrás do seu browser/navegador e tente novamente.";

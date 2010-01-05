@@ -178,4 +178,8 @@ $InvitationDenied = "Invitación denegada";
 $UserAdded = "Usuario agregado";
 $FilesSizeExceedsX = "Tamaña del archivo excedido";
 $YouShouldWriteASubject = "Debe escribir el asunto";
+$Topics = "temas";
+$StatusInThisGroup = "estado en este grupo";
+$DescriptionGroup = "descripción del grupo";
+$FriendsOnline = "amigos en línea";
 ?>

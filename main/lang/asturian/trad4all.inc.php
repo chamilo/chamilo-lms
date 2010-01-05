@@ -45,6 +45,7 @@ $UserName = "Usuariu";
 $lang_show_hide = "Amosar / esconder";
 $langCategoryMod = "Modificar categoría";
 $Hide = "Esconder";
+$langDear = "Estimáu/ada";
 $langArchive = "archivu";
 $langCourseCode = "Códigu del cursu";
 $langNoDescription = "Ensin descripción";

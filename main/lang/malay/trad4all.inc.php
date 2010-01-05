@@ -26,6 +26,7 @@ $langUniqueSelect = "Pelbagai Jawapan (Satu Jawapan)";
 $langCourseCreate = "Bina Laman Subjek";
 $langTodo = "Cadangan Penambahbaikan";
 $UserName = "ID Pengguna";
+$langDear = "Terima kasih";
 $iso639_2_code = "en";
 $iso639_1_code = "eng";
 $charset = "iso-8859-1";

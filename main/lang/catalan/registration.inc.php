@@ -78,7 +78,6 @@ $langAddress = "L\'adresa de ";
 $langSettings = "amb els seguents detalls:
 Número de matrícula:";
 $langYouAreReg = "Estàs enregistrat/da a";
-$langDear = "Estimat/da";
 $langYourReg = "El teu enregistrament a";
 $langUserFree = "Aquest número de matrícula ja es troba enregistrat. Utilitza el bot enrera del teu navegador i escull-ne un altre.";
 $langEmptyFields = "Has deixat alguns camps buits. Utilitza el bot enrera del teu navegador i prova un altre cop.";

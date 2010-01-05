@@ -76,7 +76,6 @@ $langAddress = "Adressen till ";
 $langSettings = "med följande inställningar:
 Användarnamn:";
 $langYouAreReg = "Du registrerades vid";
-$langDear = "Kära";
 $langYourReg = "Din registrering vid";
 $langUserFree = "Ditt användarnamn är redan upptaget. Använda webbläsaren tillbakaknapp och försök igen med ett annat.";
 $langEmptyFields = "Du har lämnat några fält tomma. Använda webbläsaren tillbakaknapp och fyll i dem och försök igen.";

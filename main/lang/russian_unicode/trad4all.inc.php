@@ -39,6 +39,7 @@ $UserName = "Имя пользователя";
 $lang_show_hide = "Показать/спрятать";
 $langCategoryMod = "Изменить раздел";
 $Hide = "Скрыть";
+$langDear = "Уважаемый(ая)";
 $langArchive = "архив";
 $langCourseCode = "Код курса";
 $langNoDescription = "Описания нет";

@@ -38,6 +38,7 @@ $UserName = "Vartotojo vardas";
 $lang_show_hide = "Rodyti / slėpti";
 $langCategoryMod = "Redaguoti kategoriją";
 $Hide = "Paslėpti";
+$langDear = "Gerbiamasis (-oji)";
 $langArchive = "archyvas ";
 $langCourseCode = "Kurso kodas";
 $langNoDescription = "Nėra aprašymo";

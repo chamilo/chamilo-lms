@@ -75,7 +75,6 @@ $langIs = "estas ";
 $langAddress = "La adreso de ";
 $langSettings = "kun jenaj parametroj:Uzulnomo: ";
 $langYouAreReg = "Vi registrigxis por ";
-$langDear = "Kara ";
 $langYourReg = "Via registri&#285;o je ";
 $langUserFree = "La enigita uzulnomo estas jam uzata. Uzu la retroiran butonon de via foliumilo ka provu denove.";
 $langEmptyFields = "Vi ne plenigis &#265;iujn kampojn. Uzu la retroiran butonon de via foliumilo, kaj provu denove. ";

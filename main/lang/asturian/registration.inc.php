@@ -77,7 +77,6 @@ $langIs = "ye";
 $langAddress = "La direición de ";
 $langSettings = "colos parámetros siguientes: Nome d\'usuariu:";
 $langYouAreReg = "Ta matriculáu en ";
-$langDear = "Estimáu/ada";
 $langYourReg = "La so matricula en ";
 $langUserFree = "El nome d\'usuariu qu\'escoyó yá esiste. Use\'l botón \'Atrás\' del so navegador y escueya otru.";
 $langEmptyFields = "Nun escribió tolos campos. Use\'l botón \'Atrás\' del so navegador y vuelva facelo.";

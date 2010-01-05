@@ -64,7 +64,6 @@ $langAddress = "Alamat ";
 $langSettings = "dengan maklumat seperti beriku:
 Username:";
 $langYouAreReg = "Anda telah berdaftar pada";
-$langDear = "Terima kasih";
 $langYourReg = "Pendaftaran anda pada";
 $langUserFree = "ID Pengguna telah wujud. Sila daftar dengan ID Pengguna yang lain.";
 $langEmptyFields = "Terdapat ruang kosong yang tidak diisi.Sila penuhkan dan cuba sekali lagi";

@@ -35,7 +35,7 @@ $session_name   = api_get_session_name($my_session_id);
 	Course title section
 -----------------------------------------------------------------------------
 */
-if (!empty($_cid) and $_cid != -1 and isset($_course)) {
+if (!empty($_cid) and $_cid != -1 and isset($_course)) { 
 	//Put the name of the course in the header
 ?>
 	<div id="my_courses"><a href="<?php echo api_get_path(WEB_COURSE_PATH).$_course['path']; ?>/index.php" target="_top">
@@ -58,15 +58,17 @@ if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 		echo stripslashes($_course['titular']);
 	}
 	echo "</a></div>";
-} elseif (isset ($nameTools) && $language_file != 'course_home') {
+} elseif (isset ($nameTools) && $language_file != 'course_home') { 
 	//Put the name of the user-tools in the header
 	if (!isset ($_user['user_id'])) {
 		echo " ";
-	} elseif(!$noPHP_SELF) {
+	} elseif(!$noPHP_SELF) {		
 		echo "<div id=\"my_courses\"><a href=\"".api_get_self()."?".api_get_cidreq(), "\" target=\"_top\">", $nameTools, "</a></div>", "\n";
 	} else {
 		echo "<div id=\"my_courses\">$nameTools</div>\n";
 	}
+} else {
+	echo '<div id="my_courses"></div>';
 }
 //not to let the header disappear if there's nothing on the left
 echo '		<div class="clear">&nbsp;</div>';
@@ -197,7 +199,7 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 	}
 
 	// My Profile 
-	if (api_get_setting('show_tabs', 'my_profile') == 'true' && api_get_setting('show_tabs', 'social') != 'true') { 
+	if (api_get_setting('show_tabs', 'my_profile') == 'true' && api_get_setting('allow_social_tool') != 'true') { 
 		$navigation['myprofile'] = $possible_tabs['myprofile'];
 	} else {
 		$menu_navigation['myprofile'] = $possible_tabs['myprofile'];
@@ -394,6 +396,9 @@ foreach($navigation as $index => $navigation_info) {
 if (!empty($final_navigation)) {
 	echo '<div id="header4">';
 	echo implode(' &gt; ',$final_navigation);
+	echo '</div>';
+} else {
+	echo '<div id="header4">';	
 	echo '</div>';
 }
 if(api_get_setting('show_toolshortcuts')=='true') {

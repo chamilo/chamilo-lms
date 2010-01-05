@@ -43,7 +43,7 @@ body {
 /* for content section in main index.php file */
 .maincontent {
 	float: left;
-	width: 67%;
+	width: 66%;
 	padding: 4px;
 	background-color: #fff;
 }
@@ -389,8 +389,9 @@ default.css (línea 362)
 	width: auto;
 	margin: 24px 6px 0 6px;
 	padding-left: 10px;
-	border: 1px solid #ccc;
+	border: 1px dotted #ddd;	
 	background-color: #FFF;
+	
 }
 .menusectioncaption {
 	position: relative;
@@ -586,7 +587,7 @@ input.liteoption {
 	width: 100%;
 	margin: 0 auto;
 	border: 1px solid #bbb;
-	border-collapse: collapse;
+	border-collapse: collapse;	
 }
 .agenda_month_divider {
 	background-color: #dcdcdc;
@@ -2201,7 +2202,7 @@ div.comments {
 	background:#FFF;
 	border:1px dotted #ccc;
 	padding: 0px 10px 0 10px;
-/*	width:50%; */
+	width:120px; 
 	position:relative;
 }
 .message-content .message-delete {
@@ -2635,8 +2636,12 @@ div.image-social-content center.friend {
 }
 .social-group-details-info span {
 	color:#777;
-
 }
+
+.social-group-details-info {
+	padding:2px 0px 2px 0px;
+}
+
 
 
 
@@ -2935,7 +2940,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-image:url(images/shadow.gif);
 }
 .independent_course_item a {
-	font-size:120%;
+	font-size:135%;
 }
 .session_course_item a {
 	font-size:120%;
@@ -2948,14 +2953,24 @@ a.read {
 }
 #inbox-wrapper {
 	width:100%;
-	}
-#inbox {
-	width:80%;
-	float:right;
 }
+#inbox {
+	height:auto;
+	margin-left:auto;
+	margin-right:auto;
+	overflow:hidden;
+}
+#outbox {
+	height:auto;
+	margin-left:auto;
+	margin-right:auto;
+	overflow:hidden;
+}
+
 #inbox-menu  {
 	width:150px;
 	float:left;
+	margin-right:10px;
 }
 #inbox-menu ul {
 	list-style-image:none;
@@ -3320,7 +3335,7 @@ a.read {
 	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;
 	-opera-border-radius: 10px; border: 1px solid #e1e1e0;
 	
-	width:270px;
+	width:280px;
 	margin-top:20px;
 	margin-right:10px;
 	margin-bottom:40px;

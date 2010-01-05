@@ -255,7 +255,7 @@ function manage_form ($default, $select_from_user_list = null) {
 */
 if ($_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/profile.php','name' => get_lang('Social'));
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));
 	$interbreadcrumb[]= array ('url' => '#','name' => $nameTools);	
 } else {
 	$this_section = SECTION_MYPROFILE;

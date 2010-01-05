@@ -68,7 +68,7 @@ function deselect_all(formita)
 //api_display_tool_title(api_xml_http_response_encode(get_lang('Inbox')));
 if ($_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/profile.php','name' => get_lang('Social'));
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));
 	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Outbox'));	
 } else {
 	$this_section = SECTION_MYPROFILE;
@@ -153,7 +153,11 @@ echo '<div id="social-content">';
 					MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);
 				}
 				$delete_list_id=array();
+				
+				//------------------------
 				outbox_display();
+				//------------------------
+				
 			} elseif ($_REQUEST['action']=='deleteone') {
 				$delete_list_id=array();
 				$id=Security::remove_XSS($_GET['id']);

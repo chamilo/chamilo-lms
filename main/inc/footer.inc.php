@@ -1,10 +1,10 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
 
 /**
 ==============================================================================
 *	This script displays the footer that is below (almost)
-*	every Dokeos web page.
+*	every Chamilo web page.
 *
 *	@package dokeos.include
 ==============================================================================
@@ -38,7 +38,7 @@ if (api_get_setting('show_navigation_menu') != 'false') {
 <div class="copyright">
 <?php
 global $_configuration;
-echo get_lang("Platform"), ' <a href="http://www.dokeos.com" target="_blank">Dokeos ', $_configuration['dokeos_version'], '</a> &copy; ', date('Y');
+echo get_lang("Platform"), ' <a href="http://www.chamilo.org" target="_blank">Chamilo ', $_configuration['dokeos_version'], '</a> &copy; ', date('Y');
 // Server mode indicator.
 if (api_is_platform_admin()) {
 	if (api_get_setting('server_type') == 'test') {
@@ -58,14 +58,11 @@ if (api_is_platform_admin()) {
 api_plugin('footer');
 
 if (api_get_setting('show_administrator_data')=='true') {
-
 	// Platform manager
 	echo '<span id="platformmanager">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));
-
 }
 
-if (api_get_setting('show_tutor_data')=='true'){
-
+if (api_get_setting('show_tutor_data')=='true') {
 	// course manager
 	$id_course=api_get_course_id();
 	$id_session=api_get_session_id();
@@ -73,13 +70,12 @@ if (api_get_setting('show_tutor_data')=='true'){
 		echo '<span id="coursemanager">';
 		if ($id_session!=0){
 			$coachs_email=CourseManager::get_email_of_tutor_to_session($id_session,$id_course);
-
-				$email_link = array();
-				foreach ($coachs_email as $coach_email) {				
-					foreach ($coach_email as $email=>$username) {
-						$email_link[] = Display::encrypted_mailto_link($email,$username);
-					}
-				}				
+			$email_link = array();
+			foreach ($coachs_email as $coach_email) {				
+				foreach ($coach_email as $email=>$username) {
+					$email_link[] = Display::encrypted_mailto_link($email,$username);
+				}
+			}				
 			echo '&nbsp;'.get_lang('Coachs')." : ".implode("&nbsp;|&nbsp;",$email_link);				
 		}
 		echo '</span>';
@@ -109,9 +105,7 @@ if (api_get_setting('show_teacher_data')=='true') {
 		}
 		echo '</span>';
 	}
-
 }
-
 
 ?>&nbsp;
 </div> <!-- end of #footer -->

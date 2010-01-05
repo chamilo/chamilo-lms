@@ -9,7 +9,7 @@ $action = $_GET['a'];
 
 switch ($action) {	
 	case 'search_tags':
-		if (api_is_anonymous()){
+		if (api_is_anonymous()) {
 			echo '';
 			break;
 		} else {		

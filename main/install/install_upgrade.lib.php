@@ -205,7 +205,7 @@ function write_dokeos_config_file($path)
 						  <li>Permission problems.<br />Try initially with <em>chmod -R 777</em> and increase restrictions gradually.</li>
 						  <li>PHP is running in <a href="http://www.php.net/manual/en/features.safe-mode.php" target="_blank">Safe-Mode</a>. If possible, try to switch it off.</li>
 						</ul>
-						<a href="http://www.dokeos.com/forum/" target="_blank">Read about this problem in Support Forum</a><br /><br />
+						<a href="http://forum.chamilo.org/" target="_blank">Read about this problem in Support Forum</a><br /><br />
 						Please go back to step 5.
 					    <p><input type="submit" name="step5" value="&lt; Back" /></p>
 					    </td></tr></table></form></body></html>';

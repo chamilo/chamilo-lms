@@ -163,6 +163,10 @@ switch ($action) {
 		break;
 		
 	case 'toogle_course':
+		if (api_is_anonymous()){
+			echo '';
+			break;
+		}
 		
 		require_once api_get_path(LIBRARY_PATH).'blog.lib.php';
 		require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';

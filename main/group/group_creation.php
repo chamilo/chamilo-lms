@@ -282,7 +282,7 @@ EOT;
 		$form->addGroup($group_el, 'group_'.$group_number, null, '</td><td>', false);
 	}
 	$defaults['action'] = 'create_groups';
-	$defaults['number_of_groups'] = $_POST['number_of_groups'];
+	$defaults['number_of_groups'] = intval($_POST['number_of_groups']);
 	$form->setDefaults($defaults);
 	$form->addElement('style_submit_button', 'submit', get_lang('CreateGroup'), 'class="save"');
 	$form->display();

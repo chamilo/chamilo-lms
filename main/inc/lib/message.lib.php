@@ -827,6 +827,8 @@ class MessageManager
 	 * @param int group id
 	 */
 	public static function display_messages_for_group($group_id) {
+				
+		global $my_group_role;
 						
 		$rows = self::get_messages_by_group($group_id);						
 		$rows = self::calculate_children($rows);
@@ -884,10 +886,12 @@ class MessageManager
 								$html .= '<a name="topic_'.$topic['id'].'"></a>';
 								$html.= '<div style="margin-bottom:10px">';
 									$html.= '<div id="message-reply-link" style="margin-right:10px">
-											<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($_GET['items_page_nr']).'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('forumthread_new.gif', get_lang('Reply')).'</a>';								
-									if ($topic['user_sender_id'] == $current_user_id) {
+											<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($_GET['items_page_nr']).'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('forumthread_new.gif', get_lang('Reply')).'</a>';
+																			
+									if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) || $topic['user_sender_id'] == $current_user_id) {
 										$html.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$topic['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($_GET['items_page_nr']).'" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.gif', get_lang('Edit')).'</a>';
-									}								
+									}
+																	
 									$html.=	'</div>';
 									$html.= '<br />';											
 									$html.= '<div class="message-group-author">'.get_lang('From').'&nbsp;<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a></div>';		
@@ -913,7 +917,8 @@ class MessageManager
 								$html_items.= '<div id="message-reply-link">';
 
 								$html_items.=	'<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&message_id='.$item['id'].'&action=reply_message_group&anchor_topic=topic_'.$topic['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($items_page_nr).'&topic_id='.$topic['id'].'" class="thickbox" title="'.get_lang('Reply').'">'.Display :: return_icon('forumthread_new.gif', get_lang('Reply')).'</a>';
-								if ($item['user_sender_id'] == $current_user_id) {
+								
+								if (($my_group_role == GROUP_USER_PERMISSION_ADMIN || $my_group_role == GROUP_USER_PERMISSION_MODERATOR) || $item['user_sender_id'] == $current_user_id) {
 									$html_items.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$item['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($items_page_nr).'&topic_id='.$topic['id'].'" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.gif', get_lang('Edit')).'</a>';
 								} 	
 								$html_items.= '</div>';

@@ -12,6 +12,20 @@
  * Defines the learnpath parent class
  * @package dokeos.learnpath
  */
+ 
+// including the global file
+require_once '../inc/global.inc.php';
+
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+function setFocus(){
+$("#idTitle").focus();
+}
+$(window).load(function () {
+  setFocus();
+});
+</script>';
+
 class learnpath {
 
 	var $attempt = 0; //the number for the current ID view

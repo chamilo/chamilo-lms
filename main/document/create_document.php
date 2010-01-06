@@ -45,7 +45,7 @@ $language_file = 'document';
 include ('../inc/global.inc.php');
 $_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;
-
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[]='<script>
 
 function InnerDialogLoaded()
@@ -182,8 +182,14 @@ function InnerDialogLoaded()
 		{
 			document.getElementById(\'title_edited\').value = "true";
 		}
-	}
-
+	} 
+			
+	function setFocus(){
+	$("#title").focus();
+		}
+	$(window).load(function () {
+	  setFocus();
+		});
 </script>';
 
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';

@@ -387,7 +387,7 @@ default.css (línea 362)
 }
 .menusection {
 	width: auto;
-	margin: 24px 6px 0 6px;
+	margin: 24px 2px 0 0px;
 	padding-left: 10px;
 	border: 1px dotted #ddd;	
 	background-color: #FFF;
@@ -2283,13 +2283,26 @@ span.radio {
 	margin-left:20px;
 }
 /* styles from the my.profile.php file */
+
+#social_widget  {
+	border:1px dotted #ccc;
+	float:left;	
+	padding:1px;
+	padding-bottom:10px;
+	margin-bottom:10px;
+	margin-left:0px;
+	margin-right:0px;
+	width:215px;	
+}
+
+#social_widget_image {
+	float:left;
+}
 .message-content {
 	float:right;
-	margin:0px 10px;
 	background:#FFF;
-	border:1px dotted #ccc;
-	padding: 0px 10px 0 10px;
-	width:120px; 
+	padding: 10px 0 0 5px;	
+	width:125px; 
 	position:relative;
 }
 .message-content .message-delete {
@@ -3422,12 +3435,13 @@ a.read {
 	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;
 	-opera-border-radius: 10px; border: 1px solid #e1e1e0;
 	
-	width:280px;
+	width:240px;
 	margin-top:20px;
 	margin-right:10px;
 	margin-bottom:40px;
+	
 	padding-left:10px;
-	padding-right:20px;
+	padding-right:10px;
 	padding-top:5px;
 	float: right;
 	min-height: 150px;

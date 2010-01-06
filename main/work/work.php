@@ -69,7 +69,7 @@ $language_file = array (
 	'document',
 	'admin'
 );
-require("../inc/global.inc.php");
+require_once '../inc/global.inc.php';
 // @todo why is this needed?
 //session
 if (isset ($_GET['id_session'])) {
@@ -95,7 +95,17 @@ require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 $this_section = SECTION_COURSES;
 $ctok = $_SESSION['sec_token'];
 $stok = Security::get_token();
+
 $htmlHeadXtra[] = to_javascript_work();
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+function setFocus(){
+$("#title").focus();
+}
+$(window).load(function () {
+  setFocus();
+});
+</script>';
 
 /*
 -----------------------------------------------------------
@@ -1394,7 +1404,7 @@ function draw_date_picker($prefix,$default='') {
 								</div>
 								<div class="formw">
 									<div id="msg_error1" style="display:none;color:red"></div>
-									<input type="text" name="new_dir" onfocus="document.getElementById(\'msg_error1\').style.display=\'none\';"/>
+									<input type="text" id="title" name="new_dir" onfocus="document.getElementById(\'msg_error1\').style.display=\'none\';"/>
 								</div>
 							</div>';
 		//$new_folder_text .= '<button type="button" name="create_dir" class="add" onClick="validate();" value="' . get_lang('Ok') . '"/>'.get_lang('CreateDirectory').'</button>';

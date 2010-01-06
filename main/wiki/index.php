@@ -64,6 +64,7 @@ require_once 'wiki.inc.php';
 $htmlHeadXtra[] ='<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'wiki/css/default.css"/>';
 
 // javascript for advanced parameters menu
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 function advanced_parameters() {
 	if(document.getElementById(\'options\').style.display == \'none\') {
@@ -74,6 +75,13 @@ function advanced_parameters() {
 					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
 	}
 }
+function setFocus(){
+	$("#search_term").focus();
+	}
+	$(window).load(function () {
+	  setFocus();
+	});				
+		
 </script>';
 
 
@@ -1032,7 +1040,7 @@ if ($_GET['action']=='searchpages')
 
 	// settting the form elements
 
-	$form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles"');
+	$form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles" id="search_term"');
 	$form->addElement('checkbox', 'search_content', null, get_lang('AlsoSearchContent'));
 	$form->addElement('style_submit_button', 'SubmitWikiSearch', get_lang('Search'), 'class="search"');
 

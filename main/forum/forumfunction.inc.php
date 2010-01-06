@@ -66,12 +66,31 @@
  * 							-- Patrick Cool <patrick.cool@UGent.be>
  **************************************************************************
 */
+require_once '../inc/global.inc.php';
 require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 require_once(api_get_path(INCLUDE_PATH).'/conf/mail.conf.php');
 require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 get_notifications_of_user();
+
+/*
+-----------------------------------------------------------
+	Javascript
+-----------------------------------------------------------
+*/
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+function setFocus(){
+$("#title").focus();
+}
+$(window).load(function () {
+  setFocus();
+});
+</script>';
+
+
+
 /**
 * This function handles all the forum and forumcategories actions. This is a wrapper for the
 * forum and forum categories. All this code code could go into the section where this function is
@@ -152,7 +171,7 @@ function show_add_forumcategory_form($inputvalues=array()) {
 
 	// settting the form elements
 	$form->addElement('header', '', get_lang('AddForumCategory'));
-	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles"');
+	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles" id="title"');
 	//$form->applyFilter('forum_category_title', 'html_filter');
 	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
 	//$form->applyFilter('forum_category_comment', 'html_filter');
@@ -206,7 +225,7 @@ function show_add_forum_form($inputvalues=array()) {
 		$form->addElement('hidden', 'forum_id', $my_forum_id);
 	}
 	// The title of the forum
-	$form->addElement('text', 'forum_title', get_lang('Title'),'class="input_titles"');
+	$form->addElement('text', 'forum_title', get_lang('Title'),'class="input_titles" id="title"');
 	//$form->applyFilter('forum_title', 'html_filter');
 	// The comment of the forum
 	$form->addElement('html_editor', 'forum_comment', get_lang('Comment'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
@@ -1847,7 +1866,7 @@ function store_thread($values) {
 			$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&gidReq='.$_SESSION['toolgroup'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
 		} else {
 			$message.=get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&gidReq='.$_SESSION['toolgroup'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
-			$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
+			$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&gidReq='.$_SESSION['toolgroup'].'&origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;thread='.$last_thread_id.'">'.get_lang('Message').'</a>';
 		}
 		$reply_info['new_post_id'] = $last_post_id;
 		$my_post_notification=isset($values['post_notification']) ? $values['post_notification'] : null;
@@ -2302,9 +2321,9 @@ function store_reply($values) {
 		if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit(null,true)) {
 			$message.='<br />'.get_lang('MessageHasToBeApproved').'<br />';
 		}
-
-		$message.='<br />'.get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
-		$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'&origin='.$origin.'&amp;gradebook='.$gradebook.'">'.get_lang('Message').'</a>';
+				
+		$message.='<br />'.get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&amp;gidReq='.$_SESSION['toolgroup'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
+		$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'&amp;gidReq='.$_SESSION['toolgroup'].'&origin='.$origin.'&amp;gradebook='.$gradebook.'">'.get_lang('Message').'</a>';
 
 		// setting the notification correctly
 		$my_post_notification=isset($values['post_notification']) ? $values['post_notification'] :null;
@@ -3204,7 +3223,7 @@ function forum_search() {
 
 	// settting the form elements
 	$form->addElement('header', '', get_lang('ForumSearch'));
-	$form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles"');
+	$form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles" id="title"');
 	$form->applyFilter('search_term', 'html_filter');
 	$form->addElement('static', 'search_information', '', get_lang('ForumSearchInformation')/*, $dissertation[$_GET['opleidingsonderdeelcode']]['code']*/);
 	$form->addElement('style_submit_button', null, get_lang('Search'), 'class="search"');

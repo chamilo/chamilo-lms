@@ -147,7 +147,7 @@ echo '<div id="social-content">';
 							<td class="info">
 									<a class="profile_link" href="profile.php?u=<?php echo $sender_user_id;?>"><? echo api_get_person_name($user_info['firstName'], $user_info['lastName']);?></a>
 									<div>
-									<?php echo $title.' : '.$content;?>
+									<?php echo api_utf8_decode($title).' : '.api_utf8_decode($content);?>
 									</div>
 									<div>
 									<?php echo get_lang('DateSend').' : '.$date;?>

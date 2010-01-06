@@ -7,23 +7,12 @@
 * 	@author Olivier Brouckaert
 * 	@version $Id: exercise.class.php 22046 2009-07-14 01:45:19Z ivantcholakov $
 */
-require_once '../inc/global.inc.php';
 
 define('ALL_ON_ONE_PAGE',1);
 define('ONE_PER_PAGE',2);
 define('EXERCISE_FEEDBACK_TYPE_END',0);
 define('EXERCISE_FEEDBACK_TYPE_DIRECT',1);
 define('EXERCISE_FEEDBACK_TYPE_EXAM',2);
-
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script type="text/javascript">
-function setFocus(){
-$("#exercise_title").focus();
-}
-$(document).ready(function () {
-  setFocus();
-});
-</script>';
 
 if(!class_exists('Exercise')):
 

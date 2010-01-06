@@ -1224,12 +1224,15 @@ if ($show_menu) {
 		}		
 		$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 92, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
 		
-		echo '<div id="social_widget" style="">';
-		if ($no_image == false)
-			echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php"><img src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
-		else 
-			echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
-			
+		echo '<div id="social_widget" >';
+		
+			echo '<div id="social_widget_image">';
+				if ($no_image == false)
+					echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php"><img src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
+				else 
+					echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
+			echo '</div>';	
+					
 		require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 		require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
@@ -1247,9 +1250,8 @@ if ($show_menu) {
 		$cant_msg  = '';
 		if ($number_of_new_messages > 0)
 			$cant_msg = ' ('.$number_of_new_messages.')';
-			
-		echo '<div class="message-content">
-				<h2 class="message-title">'.get_lang('Messages').'</h2>
+				//<h2 class="message-title">'.get_lang('Messages').'</h2>
+		echo '<div class="message-content">			
 				<p>';
 				$link = '';
 				if (api_get_setting('show_tabs', 'social') == 'true') {
@@ -1264,10 +1266,9 @@ if ($show_menu) {
 			
 		echo '</p>';
 				
-		echo '</div>';
-	
+		echo '</div>';	
 		
-		echo '</div><br />';
+		echo '</div><div class="clear"></div>';
 				
 	
 	}  

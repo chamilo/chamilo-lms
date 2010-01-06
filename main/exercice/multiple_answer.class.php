@@ -105,6 +105,11 @@ class MultipleAnswer extends Question {
 		$form -> addElement('hidden', 'nb_answers');
 		$boxes_names = array();
 
+		if ($nb_answers < 1) {
+			$nb_answers = 1;
+			Display::display_normal_message(get_lang('YouHaveToCreateAlLeastOneAnswer'));
+		}
+
 		for($i = 1 ; $i <= $nb_answers ; ++$i) {
 			if(is_object($answer)) {
 				$defaults['answer['.$i.']'] = $answer -> answer[$i];

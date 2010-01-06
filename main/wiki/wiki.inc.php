@@ -97,7 +97,7 @@ function links_to($input)
 		if ($input_array[$key-1]=='[[' AND $input_array[$key+1]==']]')
 		{
 
-		    if (strpos($value, "|") != false)
+		    if (api_strpos($value, "|") !== false)
 			{
 			 	$full_link_array=explode("|", $value);
 				$link=trim($full_link_array[0]);
@@ -241,7 +241,7 @@ function make_wiki_link_clickable($input)
 		/////////
 
 			//now full wikilink
-			if (strpos($value, "|") != false)
+			if (api_strpos($value, "|") !== false)
 			 {
 			 	$full_link_array=explode("|", $value);
 				$link=trim($full_link_array[0]);

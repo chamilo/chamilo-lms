@@ -1179,7 +1179,7 @@ api_session_register('status');
 		RIGHT MENU
 ==============================================================================
 */
-echo '	<div id="menu">';
+echo '	<div id="menu" class="menu">';
 
 // api_display_language_form(); // moved to the profile page.
 
@@ -1222,13 +1222,13 @@ if ($show_menu) {
 		if ($img_array['file'] == 'unknown.jpg') {
 			$no_image =true;
 		}		
-		$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 92, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
-		
+		$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
+				
 		echo '<div id="social_widget" >';
 		
 			echo '<div id="social_widget_image">';
 				if ($no_image == false)
-					echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php"><img src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
+					echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a>';
 				else 
 					echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
 			echo '</div>';	

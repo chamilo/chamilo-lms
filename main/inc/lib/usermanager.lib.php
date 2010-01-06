@@ -2195,7 +2195,7 @@ class UserManager
      * @param string user id
      * @param string picture user name
      * @param string height
-     * @param string picture size it can be small_,  medium_  or  big_
+     * @param string picture size it can be USER_IMAGE_SIZE_SMALL,  USER_IMAGE_SIZE_MEDIUM, USER_IMAGE_SIZE_BIG or  USER_IMAGE_SIZE_ORIGINAL
      * @param string style css
      * @return array with the file and the style of an image i.e $array['file'] $array['style']
      */
@@ -2233,10 +2233,10 @@ class UserManager
             $picture['file'] = $image_array['dir'].$size_picture.$picture_file;
 			$picture['style'] = '';
 			if ($height > 0) {
-				$dimension = api_getimagesize($picture['file']);
+				$dimension = api_getimagesize($picture['file']);				
 				$margin = (($height - $dimension[1]) / 2);
 				//@ todo the padding-top should not be here
-				$picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension[0].'px; height:'.$dimension[1].';" ';
+				$picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension[0].'px; height:'.$dimension[1].'px;" ';			
 			}
 		} else {
 			//$file = api_get_path(SYS_CODE_PATH).$patch_profile.$user_id.'/'.$picture_file;

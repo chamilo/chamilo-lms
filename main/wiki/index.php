@@ -513,6 +513,20 @@ if (!in_array($_GET['action'], array('addnew', 'searchpages', 'allpages', 'recen
 
 /////////////////////// more options /////////////////////// Juan Carlos Raña Trabado
 
+//more for export to course document area. See display_wiki_entry
+if ($_POST['export2DOC'])
+{
+	$titleDOC=$_POST['titleDOC'];
+	$contentDOC=$_POST['contentDOC'];
+	$groupIdDOC=(int)$_SESSION['_gid'];
+	$export2doc = export2doc($titleDOC,$contentDOC,$groupIdDOC);
+	
+	if ($export2doc) {
+		Display::display_normal_message(get_lang('ThePageHasBeenExportedToDocArea'));
+	}
+	
+}
+
 if ($_GET['action']=='more')
 {
 
@@ -1491,10 +1505,11 @@ if ($_GET['action']=='edit')
 				}
 				//form
 				echo '<form name="form1" method="post" action="'.api_get_self().'?action=showpage&amp;title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">';
-				echo '<div id="wikititle">';
-				echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.$title;
-				//
-
+				
+				
+				echo '<div id="wikititle" >';
+				echo '<div style="width:70%;float:left;">'.$icon_assignment.str_repeat('&nbsp;',3).$title.'</div>';
+				
 				if((api_is_allowed_to_edit(false,true) || api_is_platform_admin()) && $row['reflink']!='index')
 				{
 

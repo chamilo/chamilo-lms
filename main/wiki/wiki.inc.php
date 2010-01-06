@@ -205,6 +205,8 @@ function detect_irc_link($input)
 **/
 function make_wiki_link_clickable($input)
 {
+	global $_course;
+	
 	if (isset($_SESSION['_gid']))
 	{
 		$_clean['group_id']=(int)$_SESSION['_gid'];
@@ -285,9 +287,7 @@ function make_wiki_link_clickable($input)
 * @return language string saying that the changes are stored
 **/
 function save_wiki() {
-	global $charset;
-	global $tbl_wiki;
-	global $tbl_wiki_conf;
+	global $charset, $tbl_wiki, $_course, $tbl_wiki_conf;
 
 	// NOTE: visibility, visibility_disc and ratinglock_disc changes are not made here, but through the interce buttons
 
@@ -398,7 +398,7 @@ function save_wiki() {
 function restore_wikipage($r_page_id, $r_reflink, $r_title, $r_content, $r_group_id, $r_assignment, $r_progress, $c_version, $r_version, $r_linksto)
 {
 
-	global $tbl_wiki;
+	global $tbl_wiki, $_course;
 
 	$r_user_id= api_get_user_id();
 	$r_dtime = date( "Y-m-d H:i:s" );
@@ -580,7 +580,7 @@ function save_new_wiki() {
 **/
 function display_new_wiki_form()
 {
-
+global $_course;
 ?>
 <script type="text/javascript">
 function CheckSend()
@@ -603,8 +603,8 @@ return true;
 <?php
 	//form
 	echo '<form name="form1" method="post" onsubmit="return CheckSend()" action="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&amp;title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">';
-	echo '<div id="wikititle">';
-	echo  '<span class="form_required">*</span> '.get_lang(Title).': <input type="text" id="wiki_title" name="title" value="'.urldecode($_GET['title']).'" size="40">';
+	echo '<div id="wikititle" style="min-height:30px;">';
+	echo  '<div style="width:70%;float:left;"><span class="form_required">*</span> '.get_lang(Title).': <input type="text" id="title" name="title" value="'.urldecode($_GET['title']).'" size="40"></div>';
 
 	if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 	{
@@ -766,12 +766,8 @@ return true;
 **/
 function display_wiki_entry($newtitle)
 {
-	global $charset;
-	global $tbl_wiki;
-	global $tbl_wiki_conf;
-	global $groupfilter;
-	global $page;
-
+	global $charset, $tbl_wiki, $tbl_wiki_conf, $groupfilter, $page;
+	
 	if($newtitle)
 	{
 		$pageMIX=$newtitle; //display the page after it is created
@@ -869,7 +865,7 @@ function display_wiki_entry($newtitle)
 				$lock_unlock_protect='lock';
 			}
 		}
-		echo '<span style="float:right">';
+		echo '<span style="float:right;padding:4px 3px 4px 3px;">';
 		echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_protect.'&amp;title='.$page.'">'.$protect_page.'</a>';
 		echo '</span>';
 
@@ -893,7 +889,7 @@ function display_wiki_entry($newtitle)
 				$lock_unlock_visibility='visible';
 			}
 		}
-		echo '<span style="float:right">';
+		echo '<span style="float:right;padding:4px 3px 4px 3px;">';
 		echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_visibility.'&amp;title='.$page.'">'.$visibility_page.'</a>';
 		echo '</span>';
 
@@ -909,12 +905,12 @@ function display_wiki_entry($newtitle)
 
 			}
 		}
-		echo '<span style="float:right">';
+		echo '<span style="float:right;padding:4px 3px 4px 3px;">';
 		echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_notify_page.'&amp;title='.$page.'">'.$notify_page.'</a>';
 		echo '</span>';
 
 		//page action: export to pdf
-		echo '<span style="float:right">';
+		echo '<span style="float:right;padding:0px;">';
 		echo '<form name="form_export2PDF" method="post" action="export_html2pdf.php" target="_blank, fullscreen">'; // also with  export_tcpdf.php
 		echo '<input type=hidden name="titlePDF" value="'.api_htmlentities($title, ENT_QUOTES, $charset).'">';
 		echo '<input type=hidden name="contentPDF" value="'.api_htmlentities(trim(preg_replace("/\[\[|\]\]/", " ", $content)), ENT_QUOTES, $charset).'">';
@@ -925,11 +921,11 @@ function display_wiki_entry($newtitle)
 		//page action: copy last version to doc area
 		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 		{
-			echo '<span style="float:right;">';
-			echo '<form name="form_export2DOC" method="post" action="index.php">';
+			echo '<span style="float:right;padding:0px;">';
+			echo '<form name="form_export2DOC" method="post" action="index.php" >';
 			echo '<input type=hidden name="export2DOC" value="export2doc">';
 			echo '<input type=hidden name="titleDOC" value="'.api_htmlentities($title, ENT_QUOTES, $charset).'">';
-			echo '<input type=hidden name="contentDOC" value="'.api_htmlentities($content, ENT_QUOTES, $charset).'">';
+			echo '<input type=hidden name="contentDOC" value="'.api_htmlentities($content, ENT_QUOTES, $charset).'">';			
 			echo '<input type="image" src="../img/wiki/wexport2doc.png" border ="0" title="'.get_lang('ExportToDocArea').'" alt="'.get_lang('ExportToDocArea').'" style=" border:none;">';
 			echo '</form>';
 			echo '</span>';
@@ -948,7 +944,7 @@ function display_wiki_entry($newtitle)
         }
         </script>
 		<?php
-		echo '<span style="float:right; cursor: pointer;">';
+		echo '<span style="float:right; padding:4px 3px 4px 3px; cursor: pointer;">';
 		echo '<img src="../img/wiki/wprint.gif" title="'.get_lang('Print').'" alt="'.get_lang('Print').'" onclick="javascript: goprint();">';
 		echo '</span>';
 
@@ -975,16 +971,6 @@ function display_wiki_entry($newtitle)
 
 	}//end filter visibility
 } // end function display_wiki_entry
-
-
-//more for export to course document area. See display_wiki_entry
-if ($_POST['export2DOC'])
-{
-	$titleDOC=$_POST['titleDOC'];
-	$contentDOC=$_POST['contentDOC'];
-	$groupIdDOC=(int)$_SESSION['_gid'];
-	export2doc($titleDOC,$contentDOC,$groupIdDOC);
-}
 
 /**
 * This function counted the words in a document. Thanks Adeel Khan
@@ -1720,6 +1706,8 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
  */
 function export2doc($wikiTitle, $wikiContents, $groupId)
 {
+	global $_course;
+	
 	$template =
 '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{LANGUAGE}" lang="{LANGUAGE}">
@@ -1771,6 +1759,13 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 
 	$wikiContents = str_replace('{CONTENT}', $wikiContents, $template);
 
+	// replace relative path by absolute path for courses, so you can see items into this page wiki (images, mp3, etc..) exported in documents  
+	if (api_strpos($wikiContents,'../../courses/') !== false) {
+		$web_course_path = api_get_path(WEB_COURSE_PATH);
+		$wikiContents = str_replace('../../courses/',$web_course_path,$wikiContents);
+	}
+
+	$doc_id = 0;
 	$i = 1;
 	while ( file_exists($exportDir . '/' .$exportFile.'_'.$i.'.html') ) $i++; //only export last version, but in new export new version in document area
 	$wikiFileName = $exportFile . '_' . $i . '.html';
@@ -1778,6 +1773,8 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 	file_put_contents( $exportPath, $wikiContents );
 	$doc_id = add_document($_course, $groupPath.'/'.$wikiFileName, 'file', filesize($exportPath), $wikiTitle);
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), $groupId);
+	
+	return $doc_id; 	
     // TODO: link to go document area
 }
 

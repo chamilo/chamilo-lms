@@ -176,4 +176,5 @@ $Feedback3 = "Tercer mensaje";
 $FProgress = "Progreso";
 $PutATimeLimit = "Establecer una limitación temporal";
 $StandardTask = "Tarea estándard";
+$ThePageHasBeenExportedToDocArea = "La página ha sido exportada al área de documentos";
 ?>

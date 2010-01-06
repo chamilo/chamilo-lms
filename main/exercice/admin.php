@@ -448,6 +448,7 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 }
 // -->
 </script>";
+
 Display::display_header($nameTools,'Exercise');
 
 echo '<div class="actions">';

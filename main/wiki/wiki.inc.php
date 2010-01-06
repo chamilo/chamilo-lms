@@ -97,7 +97,7 @@ function links_to($input)
 		if ($input_array[$key-1]=='[[' AND $input_array[$key+1]==']]')
 		{
 
-		    if (strpos($value, "|") != false)
+		    if (api_strpos($value, "|") !== false)
 			{
 			 	$full_link_array=explode("|", $value);
 				$link=trim($full_link_array[0]);
@@ -241,7 +241,7 @@ function make_wiki_link_clickable($input)
 		/////////
 
 			//now full wikilink
-			if (strpos($value, "|") != false)
+			if (api_strpos($value, "|") !== false)
 			 {
 			 	$full_link_array=explode("|", $value);
 				$link=trim($full_link_array[0]);
@@ -604,7 +604,7 @@ return true;
 	//form
 	echo '<form name="form1" method="post" onsubmit="return CheckSend()" action="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&amp;title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">';
 	echo '<div id="wikititle" style="min-height:30px;">';
-	echo  '<div style="width:70%;float:left;"><span class="form_required">*</span> '.get_lang(Title).': <input type="text" id="title" name="title" value="'.urldecode($_GET['title']).'" size="40"></div>';
+	echo  '<div style="width:70%;float:left;"><span class="form_required">*</span> '.get_lang(Title).': <input type="text" id="wiki_title" name="title" value="'.urldecode($_GET['title']).'" size="40"></div>';
 
 	if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 	{

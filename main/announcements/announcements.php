@@ -211,7 +211,7 @@ $htmlHeadXtra[] = to_javascript();
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
-$("#announcement_title").focus();
+$("#emailTitle").focus();
 }
 $(document).ready(function () {
   setFocus();
@@ -1125,7 +1125,7 @@ if ($display_form == true) {
 				</div>
 				<div class="formw">
 
-					<input type="text" id="announcement_title" name="emailTitle" value="'.Security::remove_XSS($title_to_modify).'" size="60">
+					<input type="text" id="emailTitle" name="emailTitle" value="'.Security::remove_XSS($title_to_modify).'" size="60">
 				</div>
 			</div>';
 

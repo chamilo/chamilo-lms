@@ -42,12 +42,12 @@
 
 // name of the language file that needs to be included
 $language_file = 'document';
-include ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[]='<script>
 
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
 function InnerDialogLoaded()
 {
 	/*
@@ -185,11 +185,11 @@ function InnerDialogLoaded()
 	} 
 			
 	function setFocus(){
-	$("#title").focus();
+	$("#document_title").focus();
 		}
 	$(window).load(function () {
 	  setFocus();
-		});
+	    });
 </script>';
 
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
@@ -361,7 +361,7 @@ $group = array();
 if (api_get_setting('use_document_title') == 'true') {
 	//$group[]= $form->add_textfield('title', get_lang('Title'),true,'class="input_titles" id="title"');
 	// replace the 	add_textfield with this
-	$group[]=$form->createElement('text','title',get_lang('Title'),'class="input_titles" id="title"');
+	$group[]=$form->createElement('text','title',get_lang('Title'),'class="input_titles" id="document_title"');
 	//$form->applyFilter('title','trim');
 	//$form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
@@ -371,7 +371,7 @@ if (api_get_setting('use_document_title') == 'true') {
 } else {
 	//$form->add_textfield('filename', get_lang('FileName'),true,'class="input_titles" id="filename"  onblur="check_if_still_empty()"');
 	// replace the 	add_textfield with this
-	$group[]=$form->createElement('text','filename',get_lang('FileName'),'class="input_titles" id="filename"  onblur="check_if_still_empty()"');
+	$group[]=$form->createElement('text','filename',get_lang('FileName'),'class="input_titles" id="document_title" onblur="check_if_still_empty()"');
 	//$form->applyFilter('filename','trim');
 	//$form->addRule('filename', get_lang('ThisFieldIsRequired'), 'required');
 	//$form->addRule('filename', get_lang('FileExists'), 'callback', 'document_exists');

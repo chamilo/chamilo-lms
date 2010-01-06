@@ -39,9 +39,9 @@ $htmlHeadXtra[] = to_javascript();
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
-$("#title").focus();
+$("#agenda_title").focus();
 }
-$(window).load(function () {
+$(document).ready(function () {
   setFocus();
 });
 </script>';
@@ -2859,7 +2859,7 @@ function show_add_form($id = '')
 					</div>
 					<div class="formw">
 	<div id="err_title" style="display:none;color:red"></div>
-						<input type="text" id="title" size="60" name="title" value="';
+						<input type="text" id="agenda_title" size="60" name="title" value="';
 						if (isset($title)) echo $title;
 	echo				'" />
 					</div>

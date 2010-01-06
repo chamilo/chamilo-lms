@@ -36,9 +36,9 @@ require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 		function setFocus(){
-		$("#keyword_title").focus();
+		$("#search_title").focus();
 		}
-		$(window).load(function () {
+		$(document).ready(function () {
 		  setFocus();
 		});		
 	</script>';
@@ -4396,7 +4396,7 @@ class SurveyUtil {
 						'.get_lang('Title').'
 					</div>
 					<div class="formw">
-						<input type="text" id="keyword_title" name="keyword_title"/>
+						<input type="text" id="search_title" name="keyword_title"/>
 					</div>
 				</div>';
 		echo '	<div class="row">

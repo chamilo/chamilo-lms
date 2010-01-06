@@ -43,7 +43,7 @@ if(isset($_GET['id_session'])) {
 }
 
 // including the global dokeos file
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 // section (for the tabs)
 $this_section=SECTION_COURSES;
@@ -76,9 +76,9 @@ function advanced_parameters() {
 	}
 }
 function setFocus(){
-	$("#search_term").focus();
+	$("#search_title").focus();
 	}
-	$(window).load(function () {
+	$(document).ready(function () {
 	  setFocus();
 	});				
 		
@@ -1040,7 +1040,7 @@ if ($_GET['action']=='searchpages')
 
 	// settting the form elements
 
-	$form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles" id="search_term"');
+	$form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles" id="search_title"');
 	$form->addElement('checkbox', 'search_content', null, get_lang('AlsoSearchContent'));
 	$form->addElement('style_submit_button', 'SubmitWikiSearch', get_lang('Search'), 'class="search"');
 

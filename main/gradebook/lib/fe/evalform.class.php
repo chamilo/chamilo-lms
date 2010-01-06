@@ -33,12 +33,12 @@ require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.ph
  * @package dokeos.gradebook
  */
 
- $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
-$("#title").focus();
+$("#evaluation_title").focus();
 }
-$(window).load(function () {
+$(document).ready(function () {
   setFocus();
 });
 </script>';
@@ -326,7 +326,7 @@ class EvalForm extends FormValidator
 		$this->add_textfield('name', get_lang('EvaluationName'), true, array (
 			'size' => '54',
 			'maxlength' => '50',
-			'id' => 'title'
+			'id' => 'evaluation_title'
 		));
 		$this->add_textfield('weight', get_lang('Weight'), true, array (
 			'size' => '4',

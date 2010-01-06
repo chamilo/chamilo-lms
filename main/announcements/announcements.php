@@ -25,7 +25,7 @@ $language_file[] = 'survey';
 $use_anonymous = true;
 
 // setting the global file that gets the general configuration, the databases, the languages, ...
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section=SECTION_COURSES;
 
 $nameTools = get_lang('Announcement');
@@ -211,9 +211,9 @@ $htmlHeadXtra[] = to_javascript();
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
-$("#emailTitle").focus();
+$("#announcement_title").focus();
 }
-$(window).load(function () {
+$(document).ready(function () {
   setFocus();
 });
 </script>';
@@ -1125,7 +1125,7 @@ if ($display_form == true) {
 				</div>
 				<div class="formw">
 
-					<input type="text" id="emailTitle" name="emailTitle" value="'.Security::remove_XSS($title_to_modify).'" size="60">
+					<input type="text" id="announcement_title" name="emailTitle" value="'.Security::remove_XSS($title_to_modify).'" size="60">
 				</div>
 			</div>';
 

@@ -10,7 +10,7 @@
 $language_file = array('glossary');
 
 // including the global dokeos file
-require_once('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 // the section (tabs)
 $this_section=SECTION_COURSES;
@@ -28,7 +28,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
 $("#glossary_title").focus();
 }
-$(window).load(function () {
+$(document).ready(function () {
   setFocus();
 });
 </script>';

@@ -29,9 +29,9 @@ $htmlHeadXtra[] = javascript_notebook();
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
-$("#notetitle").focus();
+$("#note_title").focus();
 }
-$(window).load(function () {
+$(document).ready(function () {
   setFocus();
 });
 </script>';
@@ -80,7 +80,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 	$form = new FormValidator('note','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
 	// settting the form elements
 	$form->addElement('header', '', get_lang('NoteAddNew'));
-	$form->addElement('text', 'note_title', get_lang('NoteTitle'),array('size'=>'95', 'id'=> 'notetitle'));
+	$form->addElement('text', 'note_title', get_lang('NoteTitle'),array('size'=>'95', 'id'=> 'note_title'));
 	//$form->applyFilter('note_title', 'html_filter');
 	$form->addElement('html_editor', 'note_comment', get_lang('NoteComment'), null, api_is_allowed_to_edit()
 		? array('ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300')

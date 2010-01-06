@@ -64,9 +64,9 @@ $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 		} 
 				
 		function setFocus(){
-		$("#SurveyCode").focus();
+		$("#surveycode_title").focus();
 		}
-		$(window).load(function () {
+		$(document).ready(function () {
 		  setFocus();
 		});		
 	</script>';
@@ -155,7 +155,7 @@ if ($_GET['action'] == 'edit' AND isset($survey_id) AND is_numeric($survey_id))
 	$form->addElement('hidden', 'survey_id');
 }
 
-$survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '20','maxlength'=>'20', 'id'=>'SurveyCode'));
+$survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '20','maxlength'=>'20', 'id'=>'surveycode_title'));
 //$form->applyFilter('survey_code', 'html_filter');
 
 if ($_GET['action'] == 'edit') {

@@ -188,4 +188,5 @@ $YouHaveReceivedANewMessageInTheGroupX = "You have received a new message in the
 $ClickHereToSeeMessageGroup = "Click here to see message group";
 $OrCopyPasteTheFollowingUrl = "Or copy paste the following url";
 $ThereIsANewMessageInTheGroupX = "There is a new message in the group %s";
+$UserIsAlreadySubscribedToThisGroup = "User is already subscribed to this group";
 ?>

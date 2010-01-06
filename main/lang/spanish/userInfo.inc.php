@@ -160,7 +160,7 @@ $DeleteFromGroup = "Eliminar de grupo";
 $GroupMembers = "Miembros del grupo";
 $Subscribe = "Inscribir";
 $YouAreInvitedToGroupContent = "Ud. esta invitado al contenido del grupo";
-$YouAreInvitedToGroup = "Tu estas invitado a unirte al grupo";
+$YouAreInvitedToGroup = "Estas invitado a unirte al grupo";
 $ToSubscribeClickInTheLinkBelow = "Para inscribirte has clic en el siguiente enlace";
 $ReturnToInbox = "Regresar a bandeja de entrada";
 $View = "Vista";
@@ -188,4 +188,5 @@ $YouHaveReceivedANewMessageInTheGroupX = "Usted ha recibido un nuevo mensaje en 
 $ClickHereToSeeMessageGroup = "Clic aquí para ver el mensaje de grupo";
 $OrCopyPasteTheFollowingUrl = "O copiar y pegar la siguente url";
 $ThereIsANewMessageInTheGroupX = "Hay un nuevo mensaje en el grupo %s";
+$UserIsAlreadySubscribedToThisGroup = "El usuario ya esta suscrito a este grupo";
 ?>

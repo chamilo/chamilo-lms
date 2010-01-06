@@ -771,4 +771,5 @@ $NoDataAvailable = "No data available";
 $Created = "Created";
 $LastUpdate = "Last update";
 $UserNonRegisteredAtTheCourse = "User non registered at the course";
+$EditMyProfile = "Edit my profile";
 ?>

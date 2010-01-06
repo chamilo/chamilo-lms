@@ -82,5 +82,9 @@ $ReminderToSubmitPendingTask = "Se le recuerda que tiene una tarea pendiente";
 $MessageConfirmSendingOfTask = "Este es un mensaje para confirmar el envío de su tarea";
 $DataSent = "Fecha de envío";
 $DownloadLink = "Enlace de descarga";
-
+$ViewUsersWithoutTask = "Aun no presentan la tarea";
+$ViewUsersWithTask = "Ya presentaron la tarea";
+$ReminderMessage = "Enviar un recordatorio";
+$DateSent = "Fecha de envío";
+$ViewUsersWithoutTask = "Ver a los usuarios sin tarea";
 ?>

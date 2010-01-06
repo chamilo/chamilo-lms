@@ -81,5 +81,5 @@ $Expand = "Expandir";
 $Collapse = "Contraer";
 $CourseDetails = "Descripción del curso";
 $GroupPendingInvitations = "Invitaciones pendientes de grupo";
-$Compose = "redactar";
+$Compose = "Redactar";
 ?>

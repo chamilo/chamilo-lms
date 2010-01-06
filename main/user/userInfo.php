@@ -501,7 +501,7 @@ elseif ($displayMode == "viewContentList") // default display
 
 				"<tr align=\"center\" bgcolor=\"#E6E6E6\">\n",
 				"<td align=\"left\">",get_lang('Name'),"</td>\n",
-				"<td width=\"100px\" align=\"left\">",get_lang('Description'),"</td>\n",
+				"<td width=\"20%\" align=\"left\">",get_lang('Description'),"</td>\n",
 				//"<td>",get_lang('Tutor'),"</td>\n",
 				"<td>",get_lang('CourseManager'),"</td>\n",
 				($allowedToEditDef?"<td>".get_lang('Edit')."</td>\n":""),
@@ -515,6 +515,7 @@ elseif ($displayMode == "viewContentList") // default display
 
 				//DISPLAY TABLE CONTENT
 
+
 				// deprecated feature
 				if ($mainUserInfo['tutor_id'] == 1)
 				{
@@ -522,7 +523,7 @@ elseif ($displayMode == "viewContentList") // default display
 				}
 				else
 				{
-					echo "<td> - </td>\n";
+					//echo "<td> - </td>\n";
 				}
 
 				if ($mainUserInfo['status'] == 1)

@@ -45,21 +45,19 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 /* End hide from IE5-mac */
 
 #main {
+/*
 	-moz-border-image:url(images/bg-main.png) 5 5 5 5;
 	-webkit-border-image:url(images/bg-main.png) 5 5 5 5;
 	-o-border-image:url(images/bg-main.png) 5 5 5 5;
 	-xv-border-image:url(images/bg-main.png) 5 5 5 5;
-	border:5px solid #f6f6f6;
+*/
+	border:2px solid #ddd;
 	position: relative; /* to avoid the IE peekabo bug*/
 	margin: 0px auto;
 	width: 90%;
 	min-height: 320px;
-	padding-top:10px;
-	padding-bottom:10px;
-	padding-left:10px;
-	padding-right:10px;
+	padding:12px;
 	overflow:hidden;
-
 }
 .item {
 	-moz-border-radius-bottomleft:5px;
@@ -78,11 +76,12 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 |
 */
 .maincontent {
-	float: left;
-	width: 68%;
-	padding: 0 20px 0 20px;
+	width: 65%;
+	float: left;	
+	 padding: 0 20px 0 20px; 
+	//padding: 0px;
 	min-height: 333px;
-	margin-top:30px;
+	margin-top:8px;
 	margin-bottom:30px;
 }
 /*
@@ -358,15 +357,17 @@ input[text] {
 #header3 {
 	background-image:url(images/bg-header4.png);
 	background-repeat:repeat-x;
-	width:92%;
+	width:90%;
 	margin-left:auto;
 	margin-right:auto;
 	font-size: 1.0em;
 	color: #006;
 	border-bottom: 2px solid #0daee4;
-	height:36px;
+	
 	overflow:hidden;
 	margin-bottom: 1px;
+	padding: 0px 10px 0px 20px;
+	height:36px;
 }
 
 #header3 a:hover {
@@ -374,6 +375,9 @@ input[text] {
 
 }
 
+#header3 li {
+float:left; /* important for ieX*/
+}
 #header3 li a span:hover {
 	color:#fffc00;
 }
@@ -394,8 +398,8 @@ input[text] {
 	cursor:pointer;
 	float:left;
 	height:25px;
-	padding-left:9px;
-	padding-right:1px;
+	padding-left:9px;	
+	padding-right:2px;
 	text-decoration:none;
 }
 
@@ -492,8 +496,7 @@ margin-top:0;
 	background-image:url(images/bg-header4.png);
 	background-repeat:repeat-x;
 	color: #009;
-	padding: 4px;
-	padding-left: 20px;
+	padding: 4px 10px 4px 20px;	
 	clear:right;
 	height:14px;
 }
@@ -575,8 +578,8 @@ margin-top:0;
 	padding-left: 12px;
 }
 .menusection {	
-	margin: 20px 5px 0 6px;
-	padding-left: 10px;
+	margin: 20px 0px 0 6px;
+	padding-left: 3px;
 	width: auto;
 }
 .menusectioncaption {
@@ -2426,13 +2429,26 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	margin-left:20px;
 }
 /* styles from the my.profile.php file */
+
+#social_widget  {
+	border:1px dotted #ccc;
+	float:left;	
+	padding:1px;
+	padding-bottom:10px;
+	margin-bottom:10px;
+	margin-left:0px;
+	margin-right:0px;
+	width:215px;	
+}
+
+#social_widget_image {
+	float:left;
+}
 .message-content {
 	float:right;
-	margin:0px 10px;
 	background:#FFF;
-	border:1px dotted #ccc;
-	padding: 0px 10px 0 10px;
-	width:132px; 
+	padding: 10px 0 0 5px;	
+	width:125px; 
 	position:relative;
 }
 .message-content .message-delete {
@@ -2872,17 +2888,6 @@ div.image-social-content center.friend {
 	padding:2px 0px 2px 0px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 /**********************************************
  *  EXERCISE TOOL                           *
  **********************************************/
@@ -2948,6 +2953,7 @@ span.radio {
 	padding-top:10px;
 	padding-bottom:10px;
 	font-weight:bold;
+	font-size:130%;
 }
 #question_feedback {
 	background-color:#FCF7BA;
@@ -3879,7 +3885,7 @@ a.read {
 	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;
 	-opera-border-radius: 10px; border: 1px solid #e1e1e0;
 	
-	width:280px;
+	width:218px;
 	margin-top:20px;
 	margin-right:10px;
 	margin-bottom:40px;

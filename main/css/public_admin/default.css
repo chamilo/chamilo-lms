@@ -3414,7 +3414,7 @@ div.image-social-content center.friend {
 
 #social_widget_image {
 	float:left;
-	width:190px;
+	/*width:190px;*/
 	margin-bottom:5px;
 	padding:2px;
 }

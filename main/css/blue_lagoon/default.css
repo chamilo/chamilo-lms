@@ -3329,12 +3329,12 @@ div.image-social-content center.friend {
 	margin-bottom:10px;
 	margin-left:0px;
 	margin-right:0px;
-	width:215px;	
+/*	width:215px; */	
 }
 
 #social_widget_image {
 	float:left;
-	width:190px;
+	/* width:190px; */
 	margin-bottom:10px;
 	padding:2px;
 }

@@ -1223,7 +1223,7 @@ if ($show_menu) {
 			$no_image =true;
 		}		
 		$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
-				
+		echo '<div class="clear"></div>';
 		echo '<div id="social_widget" >';
 		
 			echo '<div id="social_widget_image">';
@@ -1251,6 +1251,7 @@ if ($show_menu) {
 		if ($number_of_new_messages > 0)
 			$cant_msg = ' ('.$number_of_new_messages.')';
 				//<h2 class="message-title">'.get_lang('Messages').'</h2>
+		echo '<div class="clear"></div>';
 		echo '<div class="message-content">			
 				<p>';
 				$link = '';
@@ -1259,6 +1260,7 @@ if ($show_menu) {
 				}
 				echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />';					
 				echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'" class="message-body">'.get_lang('Compose').' </a><br />';
+				echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php" class="message-body">'.get_lang('EditMyProfile').' </a><br />';
 		
 				if ($total_invitations > 0) {		
 					echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' ('.$total_invitations.') </a><br />';

@@ -39,7 +39,7 @@ $language_file='exercice';
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 $this_section=SECTION_COURSES;
 
@@ -267,11 +267,8 @@ if($is_allowedToEdit)
 	
 	<button class="save" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Ok') ?></button>
 	<?php
-    if(!empty($fromExercise)) {
-		echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">'.Display::return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')),get_lang('GoBackToQuestionList'),'</a>';
-	} else {
-		echo '<a href="admin.php?',api_get_cidreq(),'&newQuestion=yes">'.Display::return_icon('new_test.gif'),get_lang('NewQu'),'</a>';
-	}
+    echo '<a href="admin.php?',api_get_cidreq(),'&newQuestion=yes">'.Display::return_icon('new_test.gif'),get_lang('NewQu'),'</a>';
+	echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">'.Display::return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')),get_lang('GoBackToQuestionList'),'</a>';	
 	?>
     </form>
 </div>

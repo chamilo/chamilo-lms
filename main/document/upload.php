@@ -59,7 +59,7 @@
 $language_file = 'document';
 
 // including the global Dokeos file
-require_once "../inc/global.inc.php";
+require_once '../inc/global.inc.php';
 
 // including additional libraries
 require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
@@ -95,9 +95,9 @@ function advanced_parameters() {
 	}
 			
 function setFocus(){
-	$("#title").focus();
+	$("#title_file").focus();
 	}
-	$(window).load(function () {
+	$(document).ready(function () {
  	 setFocus();
 	});
 </script>';
@@ -555,7 +555,7 @@ $form->addElement('file','user_upload',get_lang('File'),'id="user_upload" size="
 
 if(api_get_setting('use_document_title')=='true')
 {
-	$form->addElement('text','title',get_lang('Title'),array('size'=>'20','style' => 'width:300px','id' => 'title'));
+	$form->addElement('text','title',get_lang('Title'),array('size'=>'20','style' => 'width:300px','id' => 'title_file'));
 	$form->addElement('textarea','comment',get_lang('Comment'),'wrap="virtual" style="width:300px;"');
 }
 //Advanced parameters

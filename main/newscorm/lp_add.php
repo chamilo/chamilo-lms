@@ -68,9 +68,9 @@ $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="dtree.css" />'; 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
-$("#idTitle").focus();
+$("#learnpath_title").focus();
 }
-$(window).load(function () {
+$(document).ready(function () {
   setFocus();
 });
 </script>';
@@ -154,7 +154,7 @@ echo '<div class="label">';
 echo '<label for="idTitle"><span class="form_required">*</span> '.get_lang('LPName').'</label>';
 echo '</div>';
 echo '<div class="formw">';
-echo '<input id="idTitle" name="learnpath_name" type="text" size="50" />';
+echo '<input id="learnpath_title" name="learnpath_name" type="text" size="50" />';
 echo '</div>';
 echo '</div>';
 

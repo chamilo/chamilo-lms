@@ -66,7 +66,6 @@
  * 							-- Patrick Cool <patrick.cool@UGent.be>
  **************************************************************************
 */
-require_once '../inc/global.inc.php';
 require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 require_once(api_get_path(INCLUDE_PATH).'/conf/mail.conf.php');
@@ -82,9 +81,11 @@ get_notifications_of_user();
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
-$("#title").focus();
+$("#forum_title").focus();
+$("#category_title").focus();
+$("#search_title").focus();				
 }
-$(window).load(function () {
+$(document).ready(function () {
   setFocus();
 });
 </script>';
@@ -171,7 +172,7 @@ function show_add_forumcategory_form($inputvalues=array()) {
 
 	// settting the form elements
 	$form->addElement('header', '', get_lang('AddForumCategory'));
-	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles" id="title"');
+	$form->addElement('text', 'forum_category_title', get_lang('Title'),'class="input_titles" id="category_title"');
 	//$form->applyFilter('forum_category_title', 'html_filter');
 	$form->addElement('html_editor', 'forum_category_comment', get_lang('Comment'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
 	//$form->applyFilter('forum_category_comment', 'html_filter');
@@ -225,7 +226,7 @@ function show_add_forum_form($inputvalues=array()) {
 		$form->addElement('hidden', 'forum_id', $my_forum_id);
 	}
 	// The title of the forum
-	$form->addElement('text', 'forum_title', get_lang('Title'),'class="input_titles" id="title"');
+	$form->addElement('text', 'forum_title', get_lang('Title'),'class="input_titles" id="forum_title"');
 	//$form->applyFilter('forum_title', 'html_filter');
 	// The comment of the forum
 	$form->addElement('html_editor', 'forum_comment', get_lang('Comment'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
@@ -3223,7 +3224,7 @@ function forum_search() {
 
 	// settting the form elements
 	$form->addElement('header', '', get_lang('ForumSearch'));
-	$form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles" id="title"');
+	$form->addElement('text', 'search_term', get_lang('SearchTerm'),'class="input_titles" id="search_title"');
 	$form->applyFilter('search_term', 'html_filter');
 	$form->addElement('static', 'search_information', '', get_lang('ForumSearchInformation')/*, $dissertation[$_GET['opleidingsonderdeelcode']]['code']*/);
 	$form->addElement('style_submit_button', null, get_lang('Search'), 'class="search"');

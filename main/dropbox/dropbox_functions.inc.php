@@ -5,7 +5,7 @@
 * functions in the init files also but I have moved them over
 * to one file 		-- Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 /*
 -----------------------------------------------------------
 	Javascript
@@ -15,9 +15,9 @@ include('../inc/global.inc.php');
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
-$("#title").focus();
+$("#category_title").focus();
 }
-$(window).load(function () {
+$(document).ready(function () {
   setFocus();
 });
 </script>';
@@ -502,7 +502,7 @@ function display_addcategory_form($category_name='', $id='',$action)
 	{
 		echo '<span class="form_error">'.get_lang('CategoryAlreadyExistsEditIt').'<span><br />';
 	}
-	echo '			<input type="text" id="title" name="category_name" value="'.Security::remove_XSS($category_name).'" />
+	echo '			<input type="text" id="category_title" name="category_name" value="'.Security::remove_XSS($category_name).'" />
 				</div>
 			</div>';
 

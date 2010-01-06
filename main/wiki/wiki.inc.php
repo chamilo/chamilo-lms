@@ -32,16 +32,6 @@
 * 	@package dokeos.wiki
 */
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
-		function setFocus(){
-		$("#title").focus();
-		}
-		$(window).load(function () {
-		  setFocus();
-		});		
-	</script>';
-
 /*
 ==============================================================================
 FUNCTIONS FOR WIKI
@@ -603,12 +593,18 @@ function CheckSend()
 	}
 return true;
 }
+		function setFocus(){
+		$("#wiki_title").focus();
+		}
+		$(document).ready(function () {
+		  setFocus();
+		});		
 </script>
 <?php
 	//form
 	echo '<form name="form1" method="post" onsubmit="return CheckSend()" action="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&amp;title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">';
 	echo '<div id="wikititle">';
-	echo  '<span class="form_required">*</span> '.get_lang(Title).': <input type="text" id="title" name="title" value="'.urldecode($_GET['title']).'" size="40">';
+	echo  '<span class="form_required">*</span> '.get_lang(Title).': <input type="text" id="wiki_title" name="title" value="'.urldecode($_GET['title']).'" size="40">';
 
 	if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 	{

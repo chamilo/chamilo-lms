@@ -842,10 +842,14 @@ class SocialManager extends UserManager {
 				$uid = $user[0];
 				$user_info = api_get_user_info($uid);
 				$table_row = array();
-				if (api_get_setting('allow_social_tool')=='true') {
-					$url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$uid.$course_url;
+				if (!api_is_anonymous()) {
+					if (api_get_setting('allow_social_tool')=='true') {
+						$url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$uid.$course_url;
+					} else {
+						$url = '?id='.$uid.$course_url;
+					}
 				} else {
-					$url = '?id='.$uid.$course_url;
+					$url = '#';
 				}
 				$image_array = UserManager::get_user_picture_path_by_id($uid, 'system', false, true);
 	

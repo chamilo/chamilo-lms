@@ -240,6 +240,7 @@ input[text] {
 .session_course_item {
 	/* padding: 0px; */
 	margin: 0px;
+	margin-bottom:10px;
 }
 
 /*****************************************************
@@ -1431,6 +1432,7 @@ div.admin_section {
 	float: left;
 	padding: 5px;
 	margin: 10px 20px;
+	min-height:200px;
 }
 
 div.admin_section h4 {
@@ -1454,10 +1456,11 @@ div.admin_section h4 {
 	-moz-border-radius-topleft:5px;
 	-moz-border-radius-topright:5px;
 	border:1px solid #E1E1E0;
+
 }
 
 .admin_section li:first-child {
-	background-image:none;
+	background-image:none; 
 }
 
 .user_course_category {
@@ -1477,17 +1480,20 @@ div.admin_section h4 {
 	line-height: 20px;
 }
 .session_box {
-	background-color: #E5EDF9;
-	border: 1px solid #666;
-	font-weight: bold;
+	background-color: #F0F6FF;
+	border: 1px solid #DCE5F3;
+	/* font-weight: bold; */
 	color: #666;
 	list-style-type: none;
 	margin:5px 5px 10px 40px;
-	padding: 5px;
-	
+	padding: 5px;	
 }
 .session_box_title {
-}admin_section
+	margin-bottom: 10px;
+}
+
+.admin_section {
+}
 .session_box_coach {
 }
 /***************************************************************
@@ -2733,7 +2739,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	font-size:135%;
 }
 .session_course_item a {
-	font-size:120%;
+	font-size:135%;
 }
 #maincontent .courseslist li {
 	margin-bottom:8px;

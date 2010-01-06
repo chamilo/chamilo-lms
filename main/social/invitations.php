@@ -117,7 +117,8 @@ echo '<div id="social-content">';
 		$number_loop = count($list_get_invitation);
 		
 		$total_invitations = $number_loop + count($list_get_invitation_sent);
-		if ($total_invitations == 0 ) {
+		
+		if ($total_invitations == 0 && count($_GET) < 0) {
 			echo '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';
 		} 
 		

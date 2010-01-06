@@ -130,12 +130,13 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 		Display::display_header(get_lang('UsersOnLineList'));
 		
 		if (api_get_setting('allow_social_tool') == 'true') {
-			echo '<div id="social-content-left">';	
-				//this include the social menu div
-				if (!api_is_anonymous()) {				
-					SocialManager::show_social_menu('whoisonline');				
-				}	
-			echo '</div>';
+			if (!api_is_anonymous()) {		
+				echo '<div id="social-content-left">';	
+				//this include the social menu div					
+				SocialManager::show_social_menu('whoisonline');
+				echo '</div>';				
+			}	
+			
 	  
 			if ($_GET['id'] == '') {
 				echo '<p><a class="refresh" href="javascript:window.location.reload()">'.get_lang('Refresh').'</a></p>';
@@ -149,8 +150,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 			echo '<div class="actions-title">';
 			echo get_lang('UsersOnLineList');
 			echo '</div>';	
-		}
-			
+		}			
 	}
 
 	if ($user_list) {

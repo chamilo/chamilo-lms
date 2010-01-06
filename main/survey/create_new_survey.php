@@ -34,21 +34,9 @@
 $language_file = 'survey';
 
 // including the global dokeos file
-require_once ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
+
 $this_section=SECTION_COURSES;
-
-$htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
-
-		function advanced_parameters() {
-			if(document.getElementById(\'options\').style.display == \'none\') {
-					document.getElementById(\'options\').style.display = \'block\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-			} else {
-					document.getElementById(\'options\').style.display = \'none\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-			}
-		}
-	</script>';
 
 // including additional libraries
 /** @todo check if these are all needed */
@@ -62,6 +50,26 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/groupmanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH)."/usermanager.lib.php");
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
+		function advanced_parameters() {
+			if(document.getElementById(\'options\').style.display == \'none\') {
+					document.getElementById(\'options\').style.display = \'block\';
+					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+			} else {
+					document.getElementById(\'options\').style.display = \'none\';
+					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+			}
+		} 
+				
+		function setFocus(){
+		$("#SurveyCode").focus();
+		}
+		$(window).load(function () {
+		  setFocus();
+		});		
+	</script>';
 
 // Database table definitions
 $table_survey 				= Database :: get_course_table(TABLE_SURVEY);
@@ -147,7 +155,7 @@ if ($_GET['action'] == 'edit' AND isset($survey_id) AND is_numeric($survey_id))
 	$form->addElement('hidden', 'survey_id');
 }
 
-$survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '20','maxlength'=>'20'));
+$survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '20','maxlength'=>'20', 'id'=>'SurveyCode'));
 //$form->applyFilter('survey_code', 'html_filter');
 
 if ($_GET['action'] == 'edit') {

@@ -93,6 +93,13 @@ function advanced_parameters() {
 			document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 			}
 	}
+			
+function setFocus(){
+	$("#title").focus();
+	}
+	$(window).load(function () {
+ 	 setFocus();
+	});
 </script>';
 
 /**
@@ -548,7 +555,7 @@ $form->addElement('file','user_upload',get_lang('File'),'id="user_upload" size="
 
 if(api_get_setting('use_document_title')=='true')
 {
-	$form->addElement('text','title',get_lang('Title'),'size="20" style="width:300px;"');
+	$form->addElement('text','title',get_lang('Title'),array('size'=>'20','style' => 'width:300px','id' => 'title'));
 	$form->addElement('textarea','comment',get_lang('Comment'),'wrap="virtual" style="width:300px;"');
 }
 //Advanced parameters

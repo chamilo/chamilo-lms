@@ -30,6 +30,23 @@ $DaysLong = api_get_week_days_long();
 $MonthsLong = api_get_months_long();
 
 /*
+-----------------------------------------------------------
+	Javascript
+-----------------------------------------------------------
+*/
+
+$htmlHeadXtra[] = to_javascript();
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+function setFocus(){
+$("#title").focus();
+}
+$(window).load(function () {
+  setFocus();
+});
+</script>';
+
+/*
 ==============================================================================
 		FUNCTIONS
 ==============================================================================
@@ -2842,7 +2859,7 @@ function show_add_form($id = '')
 					</div>
 					<div class="formw">
 	<div id="err_title" style="display:none;color:red"></div>
-						<input type="text" size="60" name="title" value="';
+						<input type="text" id="title" size="60" name="title" value="';
 						if (isset($title)) echo $title;
 	echo				'" />
 					</div>

@@ -23,7 +23,15 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 
 // additional javascript
 $htmlHeadXtra[] = javascript_glossary();
-
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+function setFocus(){
+$("#glossary_title").focus();
+}
+$(window).load(function () {
+  setFocus();
+});
+</script>';
 // setting the tool constants
 $tool = TOOL_GLOSSARY;
 
@@ -58,7 +66,7 @@ if (api_is_allowed_to_edit(null,true)) {
 		$form = new FormValidator('glossary','post', api_get_self().'?action='.Security::remove_XSS($_GET['action']));
 		// settting the form elements
 		$form->addElement('header', '', get_lang('TermAddNew'));
-		$form->addElement('text', 'glossary_title', get_lang('TermName'), array('size'=>'95'));
+		$form->addElement('text', 'glossary_title', get_lang('TermName'), array('size'=>'95', 'id'=>'glossary_title'));
 		//$form->applyFilter('glossary_title', 'html_filter');
 		$form->addElement('html_editor', 'glossary_comment', get_lang('TermDefinition'), null, array('ToolbarSet' => 'Glossary', 'Width' => '100%', 'Height' => '300'));
 		$form->addElement('style_submit_button', 'SubmitGlossary', get_lang('TermAddButton'), 'class="save"');

@@ -208,6 +208,15 @@ if ((empty($originalresource) || ($originalresource!=='no')) and (!empty($action
 */
 
 $htmlHeadXtra[] = to_javascript();
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+function setFocus(){
+$("#emailTitle").focus();
+}
+$(window).load(function () {
+  setFocus();
+});
+</script>';
 
 /*
 -----------------------------------------------------------

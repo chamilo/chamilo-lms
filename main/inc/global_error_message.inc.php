@@ -12,7 +12,7 @@
  */
 
 $Organisation = '<a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a>';
-$PoweredBy = 'Platform <a href="http://www.dokeos.com" target="_blank"> Dokeos </a> &copy; 2009';
+$PoweredBy = 'Platform <a href="http://www.dokeos.com" target="_blank"> Dokeos </a> &copy; '.date('Y');
 
 /**
  * English language variables.

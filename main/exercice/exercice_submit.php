@@ -657,8 +657,6 @@ if ($formSent) {
 									$reply = array_keys($choice);
 									for ($i = 0; $i < sizeof($reply); $i++) {
 										$ans = $reply[$i];
-										echo ($questionScore.' - '.$ans.' - '. $quesId.' - '. $exeId.' - '. $i);
-										echo '<br />';
 										exercise_attempt($questionScore, $ans, $quesId, $exeId, $i);
 									}
 								} else {

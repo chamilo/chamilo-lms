@@ -3953,7 +3953,7 @@ function get_thread_user_post($course_db, $thread_id, $user_id )
 			 					$hand_forums.= '<div id="social-post">';
 			 					$hand_forums.= '<strong>'.$posts['post_title'].'</strong>';
 			 					$hand_forums.= '<br / >';
-			 					$hand_forums.= cut($posts['post_text'], 150);
+			 					$hand_forums.= $posts['post_text'];
 			 					$hand_forums.= '</div>';
 			 					$hand_forums.= '<br / >';
 			 				}

@@ -1,24 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /chamilo_license.txt */
 /**
 *	Exercise result
 *	This script gets informations from the script "exercise_submit.php",
@@ -1102,120 +1083,114 @@ if($num>1) {
 }
 
 
-//------
-if ($origin != 'learnpath')
-
-if(count($arrques)>0) {
-	$mycharset = api_get_setting('platform_charset');
-	$msg = '<html><head>
-		<link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
-		<meta content="text/html; charset='.$mycharset.'" http-equiv="content-type">';
-	$msg .= '</head>
-	<body><br />
-	<p>'.get_lang('OpenQuestionsAttempted').' :
-	</p>
-	<p>'.get_lang('AttemptDetails').' : <br />
-	</p>
-	<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
-						<tr>
-	    <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
-	    <td width="469" valign="top"><h2>#course#</h2></td>
-	  </tr>
-	  <tr>
-	    <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
-	    <td width="469" valign="top" class="outerframe">#exercise#</td>
-	  </tr>
-	  <tr>
-	    <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
-	    '.(api_is_western_name_order() ? '<td valign="top" >#firstName# #lastName#</td>' : '<td valign="top" >#lastName# #firstName#</td>').'
-	  </tr>
-	  <tr>
-	    <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
-	    <td valign="top"> #mail#</td>
-	</tr></table>
-	<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
-	 <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
-	 
-	for($i=0;$i<sizeof($arrques);$i++) {
-		  $msg.='
-			<tr>
-		    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Question').'</span></td>
-		    <td width="473" valign="top" bgcolor="#F3F3F3"><span class="style16"> #questionName#</span></td>
-		  	</tr>
-		  	<tr>
-		    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Answer').' </span></td>
-		    <td valign="top" bgcolor="#F3F3F3"><span class="style16"> #answer#</span></td>
-		  	</tr>';
-			$msg1= str_replace("#exercise#",$exerciseTitle,$msg);
-			$msg= str_replace("#firstName#",$firstName,$msg1);
-			$msg1= str_replace("#lastName#",$lastName,$msg);
-			$msg= str_replace("#mail#",$mail,$msg1);
-			$msg1= str_replace("#questionName#",$arrques[$i],$msg);
-			$msg= str_replace("#answer#",$arrans[$i],$msg1);
-			$msg1= str_replace("#i#",$i,$msg);
-			$msg= str_replace("#course#",$courseName,$msg1);
-	}
-	
-	$msg.='</table><br>
- 			<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
-			<a href="#url#">#url#</a></span></body></html>';
-
-	$msg1= str_replace("#url#",$url,$msg);
-	$mail_content = $msg1;
-	
-	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-	$email_admin = api_get_setting('emailAdministrator');
+// we are able to send emails to the teachers?
+if (api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ) { 
+	// only for "simple tests" 
+	if ($origin != 'learnpath') {
+		//has a unique answer?
+		$mycharset = api_get_setting('platform_charset');
+		$msg = '<html><head>
+			<link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
+			<meta content="text/html; charset='.$mycharset.'" http-equiv="content-type"></head>';
 			
-	$subject = get_lang('OpenQuestionsAttempted');
-	echo $mail_content;
-	$result = api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));	
-} else {
-	$mycharset = api_get_setting('platform_charset');
-	$msg = '<html><head>
-		<link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
-		<meta content="text/html; charset='.$mycharset.'" http-equiv="content-type">';
-	$msg .= '</head>
-	<body>
-	<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
-		<tr>
-	    <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
-	    <td width="469" valign="top"><h2>#course#</h2></td>
-	  </tr>
-	  <tr>
-	    <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
-	    <td width="469" valign="top" class="outerframe">#exercise#</td>
-	  </tr>
-	  <tr>
-	    <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
-	    '.(api_is_western_name_order() ? '<td valign="top" >#firstName# #lastName#</td>' : '<td valign="top" >#lastName# #firstName#</td>').'
-	  </tr>
-	  <tr>
-	    <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
-	    <td valign="top"> #mail#</td>
-	</tr></table>';
-	 
-	$msg= str_replace("#exercise#",$exerciseTitle,$msg);
-	$msg= str_replace("#firstName#",$firstName,$msg);
-	$msg= str_replace("#lastName#",$lastName,$msg);	
-	$msg= str_replace("#mail#",$mail,$msg);
-	$msg= str_replace("#course#",$courseName,$msg);	
-	
-	$msg.='<br />
- 			<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
-			<a href="#url#">#url#</a></span></body></html>';
-
-
-	$msg= str_replace("#url#",$url,$msg);
-	$mail_content = $msg;
-	
-	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-	$email_admin = api_get_setting('emailAdministrator');
-	
-	$subject = get_lang('ExerciseAttempted');
-	var_dump($to);
-	echo ($mail_content);
-	$result = api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
-	var_dump($result);	
+		if(count($arrques)>0) {		
+			$msg .= '
+			<body><br />
+			<p>'.get_lang('OpenQuestionsAttempted').' :
+			</p>
+			<p>'.get_lang('AttemptDetails').' : <br />
+			</p>
+			<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
+								<tr>
+			    <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
+			    <td width="469" valign="top"><h2>#course#</h2></td>
+			  </tr>
+			  <tr>
+			    <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
+			    <td width="469" valign="top" class="outerframe">#exercise#</td>
+			  </tr>
+			  <tr>
+			    <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
+			    '.(api_is_western_name_order() ? '<td valign="top" >#firstName# #lastName#</td>' : '<td valign="top" >#lastName# #firstName#</td>').'
+			  </tr>
+			  <tr>
+			    <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
+			    <td valign="top"> #mail#</td>
+			</tr></table>
+			<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
+			 <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
+			 
+			for($i=0;$i<sizeof($arrques);$i++) {
+				  $msg.='
+					<tr>
+				    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Question').'</span></td>
+				    <td width="473" valign="top" bgcolor="#F3F3F3"><span class="style16"> #questionName#</span></td>
+				  	</tr>
+				  	<tr>
+				    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Answer').' </span></td>
+				    <td valign="top" bgcolor="#F3F3F3"><span class="style16"> #answer#</span></td>
+				  	</tr>';
+					$msg1= str_replace("#exercise#",$exerciseTitle,$msg);
+					$msg= str_replace("#firstName#",$firstName,$msg1);
+					$msg1= str_replace("#lastName#",$lastName,$msg);
+					$msg= str_replace("#mail#",$mail,$msg1);
+					$msg1= str_replace("#questionName#",$arrques[$i],$msg);
+					$msg= str_replace("#answer#",$arrans[$i],$msg1);
+					$msg1= str_replace("#i#",$i,$msg);
+					$msg= str_replace("#course#",$courseName,$msg1);
+			}
+			
+			$msg.='</table><br>
+		 			<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
+					<a href="#url#">#url#</a></span></body></html>';
+		
+			$msg1= str_replace("#url#",$url,$msg);
+			$mail_content = $msg1;
+			
+			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+			$email_admin = api_get_setting('emailAdministrator');
+					
+			$subject = get_lang('OpenQuestionsAttempted');	
+			$result = api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));		
+		} else {
+			$msg .= '<body>
+			<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
+				<tr>
+			    <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
+			    <td width="469" valign="top"><h2>#course#</h2></td>
+			  </tr>
+			  <tr>
+			    <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
+			    <td width="469" valign="top" class="outerframe">#exercise#</td>
+			  </tr>
+			  <tr>
+			    <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
+			    '.(api_is_western_name_order() ? '<td valign="top" >#firstName# #lastName#</td>' : '<td valign="top" >#lastName# #firstName#</td>').'
+			  </tr>
+			  <tr>
+			    <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
+			    <td valign="top"> #mail#</td>
+			</tr></table>';
+			 
+			$msg= str_replace("#exercise#",$exerciseTitle,$msg);
+			$msg= str_replace("#firstName#",$firstName,$msg);
+			$msg= str_replace("#lastName#",$lastName,$msg);	
+			$msg= str_replace("#mail#",$mail,$msg);
+			$msg= str_replace("#course#",$courseName,$msg);	
+			
+			$msg.='<br />
+		 			<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
+					<a href="#url#">#url#</a></span></body></html>';		
+		
+			$msg= str_replace("#url#",$url,$msg);
+			$mail_content = $msg;
+			
+			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+			$email_admin = api_get_setting('emailAdministrator');
+			
+			$subject = get_lang('ExerciseAttempted');
+			$result = api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
+		}
+	}
 }
-
 ?>

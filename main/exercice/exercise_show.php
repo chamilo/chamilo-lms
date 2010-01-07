@@ -1,5 +1,5 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
 /**
 *
 *	@package dokeos.exercise
@@ -1266,7 +1266,11 @@ function send_notification($arrques, $arrans, $to) {
 	global $courseName, $exerciseTitle, $url_email;
     require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 	$user_info = UserManager::get_user_info_by_id(api_get_user_id());
-
+	
+	if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
+		return '';
+	}
+	
 	$mycharset = api_get_setting('platform_charset');
     $msg = '<html><head>
             <link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">

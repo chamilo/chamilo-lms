@@ -52,4 +52,5 @@ $UnknownPackageFormat = "El formatu del paquete nun ye reconocible. Por favor, a
 $Attempt = "Intentu";
 $MoveTheCurrentForum = "Mover el foru actual";
 $WarningWhenEditingScorm = "¡ Cuidáu ! <br/>Si edita\'l conteníu d\'un elementu SCORM igual cambia l\'informe de la secuencia d\'aprendizaxe o estroza l\'elementu.";
+$AdditionalProfileField = "Amestar un campu del perfil d\'usuariu";
 ?>

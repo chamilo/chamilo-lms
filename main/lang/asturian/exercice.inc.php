@@ -352,4 +352,5 @@ $EnableTimerControl = "Activar control de tiempu";
 $ExerciseTotalDurationInMinutes = "Duración total en minutos del exerciciu";
 $ToContinueUseMenu = "Pa siguir esta lleición, por favor, usa\'l menú llateral";
 $RandomAnswers = "Rempuestes al debalu";
+$NotMarkActivity = "Nun foi dable calificar esti elementu";
 ?>

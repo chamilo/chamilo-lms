@@ -202,4 +202,5 @@ $BackToSurvey = "Volver a la encuesta";
 $UpdateInformation = "Anovamientu d\'información";
 $PleaseFillSurvey = "Por favor, rellena la encuesta";
 $ReportingOverview = "Sumariu d\'informes";
+$ThereAreNotQuestionsForthisSurvey = "Nun ahi entrugues pa esta encuesta";
 ?>

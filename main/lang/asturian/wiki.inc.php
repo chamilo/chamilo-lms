@@ -176,4 +176,5 @@ $Feedback3 = "Tercer mensax";
 $FProgress = "Progresu";
 $PutATimeLimit = "Afitar una llimitación temporal";
 $StandardTask = "Tarea standard";
+$ThePageHasBeenExportedToDocArea = "La páxina esportóse al área de documentos";
 ?>

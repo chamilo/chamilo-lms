@@ -81,4 +81,5 @@ $Expand = "Desplegar";
 $Collapse = "Plegar";
 $CourseDetails = "Descripción del cursu";
 $GroupPendingInvitations = "Invitaciones pendientes de grupu";
+$Compose = "Redautar";
 ?>

@@ -178,4 +178,15 @@ $InvitationDenied = "Invitaición non apectada";
 $UserAdded = "Usuariu amestáu";
 $FilesSizeExceedsX = "Tamañu del archivu pergrande";
 $YouShouldWriteASubject = "Tienes qu\'escribir l\'asuntu";
+$Topics = "Temes";
+$StatusInThisGroup = "Estáu nesti grupu";
+$DescriptionGroup = "Descripción del grupu";
+$FriendsOnline = "Amigos online";
+$GroupDescription = "Descripción del grupu";
+$MyProductions = "Les mios producciones";
+$YouHaveReceivedANewMessageInTheGroupX = "Recibistes un mensax nuevu nel grupu %s";
+$ClickHereToSeeMessageGroup = "Calca equí pa ver el mensax de grupu";
+$OrCopyPasteTheFollowingUrl = "O copiar y apegar la siguiente url";
+$ThereIsANewMessageInTheGroupX = "Hai un mensax nuevu nel grupu %s";
+$UserIsAlreadySubscribedToThisGroup = "L\'usuariu ya ta soscritu a esti grupu";
 ?>

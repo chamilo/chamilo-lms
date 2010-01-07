@@ -244,4 +244,6 @@ $AddAssignmentToCourse = "Amestar la tarea a la lleición";
 $AddForumToCourse = "Amestar el foru a la lleición";
 $SaveAudioAndOrganization = "Guardar audiu y organización";
 $UploadOnlyMp3Files = "Por favor, unvía sólo ficheros mp3";
+$ModifyHotPotatoes = "Camudar hotpotatoes";
+$SaveHotpotatoes = "Guardar hotpotatoes";
 ?>

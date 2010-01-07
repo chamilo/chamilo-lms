@@ -1124,4 +1124,5 @@ $AllowSendMessageToAllPlatformUsersComment = "Permite que se pueda unviar mensax
 $TabsSocial = "Pestaña Rede social";
 $MessageMaxUploadFilesizeTitle = "Mensaxe: tamañu máximu del archivu a subir";
 $MessageMaxUploadFilesizeComment = "Mensaxe: tamañu máximu del archivu permitíu pa subir";
+$AddAdditionalProfileField = "Amestar un campu del perfil d\'usuariu";
 ?>

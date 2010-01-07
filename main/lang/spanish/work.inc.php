@@ -86,5 +86,5 @@ $ViewUsersWithoutTask = "Aun no presentan la tarea";
 $ViewUsersWithTask = "Ya presentaron la tarea";
 $ReminderMessage = "Enviar un recordatorio";
 $DateSent = "Fecha de envío";
-$ViewUsersWithoutTask = "Ver a los usuarios sin tarea";
+$ViewUsersWithoutTask = "Faltan presentar tarea";
 ?>

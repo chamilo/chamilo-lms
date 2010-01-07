@@ -353,4 +353,7 @@ $ExerciseTotalDurationInMinutes = "Total duration in minutes of the test";
 $ToContinueUseMenu = "To continue this course, please use the side-menu.";
 $RandomAnswers = "Shuffle answers";
 $NotMarkActivity = "Not possible mark this activity";
+$YouHaveToCreateAtLeastOneAnswer = "You have to create at least one answer";
+$YouHaveToCreateAtLeastOneAnswer = "You have to create at least one answer";
+$ExerciseAttempted = "Exercise attempted";
 ?>

@@ -215,4 +215,5 @@ $CreateFolder = "Criar el direutoriu";
 $HelpDefaultDirDocuments = "Esti direutoriu caltien los ficheros suministraos por defeutu. Puedes desaniciar o amestar otros ficheros, pero si un ficheru ta anubríu cuando ye inxertáu nun documentu web los escolinos tampoco podrán velu equí. Cuando inxertes un ficheru nun documentu web faelo visible previamente. Los direutorios pueden siguir anubríos.";
 $HelpSharedFolder = "Esti direutoriu caltien los ficheros que los estudiantes (y tú) unvían a un cursu a traviés del editor, si nun lo facen dende la ferramienta grupos. Por defeutu serán visibles por cualisquier mayestru, pero tarán anubríos pa otros estudiantes salvo qu\'accedan a ellos mediante un accesu direutu. Si fae visible\'l direutoriu d\'un escolín otros escolinos podrán ver tolo que caltenga.";
 $TemplateImage = "Imaxe de la plantilla";
+$MoveElement = "Mover elementu";
 ?>

@@ -764,4 +764,12 @@ $UserAdded = "Usuariu amestáu";
 $UpdatedIn = "Anováu";
 $Metadata = "Metadatos";
 $langAddMetadata  = "Ver/Editar Metadatos";
+$SendMessage = "Unviar mensax";
+$SeeForum = "Ver foru";
+$SeeMore = "Ver más";
+$NoDataAvailable = "Nun hai datos disponibles";
+$Created = "Criáu";
+$LastUpdate = "Caberu anovamientu";
+$UserNonRegisteredAtTheCourse = "Usuariu nun rexistráu nel cursu";
+$EditMyProfile = "Editar el mio perfil";
 ?>

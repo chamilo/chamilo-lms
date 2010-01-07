@@ -1125,4 +1125,5 @@ $TabsSocial = "Tabs social";
 $MessageMaxUploadFilesizeTitle = "Message max upload file size";
 $MessageMaxUploadFilesizeComment = "Message max upload file size";
 $AddAdditionalProfileField = "Add user profile field";
+$Username = "Username";
 ?>

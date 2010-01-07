@@ -1240,8 +1240,8 @@ div.report_section h4 {
 	line-height: 20px;
 }
 .session_box {
-	background-color: #efefef;
-	border: 1px solid #666;
+	background-color: #F6F6F6;
+	border: 1px solid #ddd;
 	font-weight: bold;
 	color: #666;
 	list-style-type: none;

@@ -978,10 +978,10 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 }
 
 // I'm in a preview mode
-if (api_is_course_admin() && $origin != 'learnpath') {
+if (api_is_course_admin() && $origin != 'learnpath') {	
 	echo '<div class="actions">';
 	echo Display :: return_icon('quiz.gif', get_lang('GoBackToEx')) . '<a href="admin.php?' . api_get_cidreq() . '&exerciseId=' . $objExercise->id . '">' . get_lang('GoBackToEx') . '</a>';
-	echo Display :: return_icon('edit.gif', get_lang('ModifyExercise')) . '<a href="exercise_admin.php?modifyExercise=yes&exerciseId=' . $objExercise->id . '">' . get_lang('ModifyExercise') . '</a>';
+	echo Display :: return_icon('edit.gif', get_lang('ModifyExercise')) . '<a href="exercise_admin.php?' . api_get_cidreq() . '&modifyExercise=yes&exerciseId=' . $objExercise->id . '">' . get_lang('ModifyExercise') . '</a>';
 	echo '</div>';
 }
 //Timer control
@@ -1094,7 +1094,7 @@ if (!empty ($error)) {
 		$s2 = "&exerciseId=" . $exerciseId;
 	}
 
-	$s .= " <form method='post' action='" . api_get_self() . "?autocomplete=off&gradebook=$gradebook" . $s2 . "' id='my_frm_exercise' name='frm_exercise' $onsubmit>
+	$s .= " <form method='post' action='" . api_get_self() . "?".api_get_cidreq()."&autocomplete=off&gradebook=$gradebook" . $s2 . "' id='my_frm_exercise' name='frm_exercise' $onsubmit>
 		 <input type='hidden' name='formSent' value='1' />
 		 <input type='hidden' name='exerciseType' value='" . $exerciseType . "' />
 		 <input type='hidden' name='exerciseId' value='" . $exerciseId . "' />

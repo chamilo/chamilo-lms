@@ -52,7 +52,7 @@ if(!defined('ALLOWED_TO_INCLUDE'))
 if(isset($_GET['editQuestion']))
 {
 	$objQuestion = Question::read ($_GET['editQuestion']);
-	$action = api_get_self()."?modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
+	$action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
 
 
 	if (isset($exerciseId) && !empty($exerciseId)) {
@@ -67,7 +67,7 @@ if(isset($_GET['editQuestion']))
 
 } else {
 	$objQuestion = Question :: getInstance($_REQUEST['answerType']);
-	$action = api_get_self()."?modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
+	$action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
 }
 
 if(is_object($objQuestion))

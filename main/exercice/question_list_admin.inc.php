@@ -114,10 +114,10 @@ if($nbrQuestions) {
 				<td><?php eval('echo get_lang('.get_class($objQuestionTmp).'::$explanationLangVar);'); ?></td>
 			  	<td align="center"><?php echo $objQuestionTmp->selectLevel(); ?></td>		  	
 			  	<td>
-			  	<a href="<?php echo api_get_self(); ?>?myid=1&editQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" alt="<?php echo get_lang('Modify'); ?>" /></a> 
-				<a href="<?php echo api_get_self(); ?>?deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="<?php echo get_lang('Delete'); ?>" /></a>
+			  	<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq() ?>&myid=1&editQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" alt="<?php echo get_lang('Modify'); ?>" /></a> 
+				<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq() ?>&amp;deleteQuestion=<?php echo $id; ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;"><img src="../img/delete.gif" border="0" alt="<?php echo get_lang('Delete'); ?>" /></a>
 				<?php if($i != 1) { ?>
-				<a href="<?php echo api_get_self(); ?>?moveUp=<?php echo $id; ?>"><img src="../img/up.gif" border="0" alt="<?php echo get_lang('MoveUp'); ?>"></a>
+				<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq() ?>&moveUp=<?php echo $id; ?>"><img src="../img/up.gif" border="0" alt="<?php echo get_lang('MoveUp'); ?>"></a>
 				<?php if($i == $nbrQuestions) {
 			    		echo '<img src="../img/down_na.gif">';
 					}
@@ -127,7 +127,7 @@ if($nbrQuestions) {
 						echo '<img src="../img/up_na.gif">';
 					}
 				?>
-				<a href="<?php echo api_get_self(); ?>?moveDown=<?php echo $id; ?>"><img src="../img/down.gif" border="0" alt="<?php echo get_lang('MoveDown'); ?>"></a>
+				<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq() ?>&moveDown=<?php echo $id; ?>"><img src="../img/down.gif" border="0" alt="<?php echo get_lang('MoveDown'); ?>"></a>
 				<?php } ?>
 			    </td>
 			    <?php

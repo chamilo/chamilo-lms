@@ -3302,6 +3302,11 @@ a.read {
 .message-content-body-right:hover {
 }
 
+a.unread {	
+	font-weight:bold;
+}
+
+
 
 /*SOCIAL TOOL*/
 
@@ -3724,3 +3729,4 @@ div.image-social-content center.friend {
 .social-group-details-info {
 	padding:2px 0px 2px 0px;
 }
+

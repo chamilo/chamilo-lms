@@ -1779,6 +1779,12 @@ div.image-social-content center.friend {
 	color:#000033;
 	font-weight:bold;
 }
+
+.social-profile-extended {
+	width:320px;
+	overflow:hidden;
+}
+
 .social-info {
 	background:#B8C8DC;
 	color:#4475B0;

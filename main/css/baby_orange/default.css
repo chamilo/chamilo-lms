@@ -1901,6 +1901,12 @@ div.image-social-content center.friend {
 	font-weight:700;
 	margin-right:2px;
 }
+
+.social-profile-extended {
+	width:320px;
+	overflow:hidden;
+}
+
 .social-content-image {
 	margin-top:4px;
 	margin-right:5px;

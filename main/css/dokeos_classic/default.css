@@ -2548,6 +2548,10 @@ div.image-social-content center.friend {
 	float:left;
 	width:100px;
 }
+.social-profile-extended {
+	width:320px;
+	overflow:hidden;
+}
 .social-profile-info dd {
 	padding:1px 0px 3px 0px;
 	float:left;

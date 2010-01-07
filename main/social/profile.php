@@ -644,28 +644,28 @@ echo '<div id="social-content-right">';
 								echo '<br />';
 								echo '<div class="social-background-content" style="width:100%;">';
 								echo '<div class="social-actions-message"><strong>'.get_lang('MyCompetences').'</strong></div>';
-								echo cut($user_info['competences'],$cut_size);
+								echo '<div class="social-profile-extended">'.$user_info['competences'].'</div>';
 								echo '</div>';
 								echo '<br />';
 							}				
 							if (!empty($user_info['diplomas'])) {
 								echo '<div class="social-background-content" style="width:100%;" >';
 								echo '<div class="social-actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div>';
-								echo cut($user_info['diplomas'],$cut_size);
+								echo '<div class="social-profile-extended">'.$user_info['diplomas'].'</div>'; 
 								echo '</div>';
 								echo '<br />';
 							}
 							if (!empty($user_info['openarea'])) {
 								echo '<div class="social-background-content" style="width:100%;" >';
 								echo '<div class="social-actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div>';
-								echo cut($user_info['openarea'],$cut_size);
+								echo '<div class="social-profile-extended">'.$user_info['openarea'].'</div>';
 								echo '</div>';
 								echo '<br />';
 							}
 							if (!empty($user_info['teach'])) {
 								echo '<div class="social-background-content" style="width:100%;" >';
 								echo '<div class="social-actions-message"><strong>'.get_lang('MyTeach').'</strong></div>';
-								echo cut($user_info['teach'],$cut_size);
+								echo '<div class="social-profile-extended">'.$user_info['teach'].'</div>';
 								echo '</div>';
 								echo '<br />';
 							}

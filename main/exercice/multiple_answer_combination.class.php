@@ -22,7 +22,7 @@ if(!class_exists('MultipleAnswerCombination')):
 
 class MultipleAnswerCombination extends Question {
 
-	static $typePicture = 'mcma.gif';
+	static $typePicture = 'mcmac.gif';
 	static $explanationLangVar = 'MultipleSelectCombination';
 
 	/**

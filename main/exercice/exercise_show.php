@@ -712,20 +712,20 @@ if ($show_results) {
 				echo '</td></tr>';
 				$i++;
 		 	}
-		 	
+		 			 	
 		 	$final_answer = true;
 		 	foreach($real_answers as $my_answer) {
 		 		if (!$my_answer) {
 		 			$final_answer = false;
 		 		}		 		
-		 	}		 	
+		 	}
+		 			 	
 		 	if ($final_answer) {
 		 		//getting only the first score where we save the weight of all the question 
 		 		$answerWeighting=$objAnswerTmp->selectWeighting(1);
 				$questionScore+=$answerWeighting;
 				$totalScore+=$answerWeighting;
-			}			
-		 	
+			}
 		 	
 		 	echo '</table>';
 		} elseif ($answerType == UNIQUE_ANSWER) {
@@ -1167,12 +1167,15 @@ if ($show_results) {
 		</tr>
 		</table>
 
-		<div id="question_score">
+		
 		<?php
 		$my_total_score  = float_format($questionScore,1);
 		$my_total_weight = float_format($questionWeighting,1);
-		echo get_lang('Score')." : $my_total_score/$my_total_weight";
+		
+		echo '<div id="question_score">';
+		echo get_lang('Score')." : $my_total_score/$my_total_weight";		
 		echo '</div>';
+	
 		unset($objAnswerTmp);
 		$i++;
 		$totalWeighting+=$questionWeighting;

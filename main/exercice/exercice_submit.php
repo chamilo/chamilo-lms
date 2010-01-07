@@ -386,7 +386,7 @@ if ($formSent) {
 						if ($answerType == FREE_ANSWER) {
 							$nbrAnswers = 1;
 						}
-
+						$real_answers = array();
 						for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
 							$answer = $objAnswerTmp->selectAnswer($answerId);
 							$answerComment = $objAnswerTmp->selectComment($answerId);
@@ -411,11 +411,36 @@ if ($formSent) {
 									}																		
 									break;
 								case MULTIPLE_ANSWER_COMBINATION:
-									$studentChoice=$choice[$numAnswer];													
-									if ($studentChoice) {
+									$studentChoice=$choice[$numAnswer];									
+																			
+									if ($answerCorrect == 1) {
+										if ($studentChoice) {
+											$real_answers[$answerId] = true;
+										} else {
+											$real_answers[$answerId] = false;
+										}
+									} else {
+										if ($studentChoice) {
+											$real_answers[$answerId] = false;
+										} else {
+											$real_answers[$answerId] = true;
+										}
+									}
+										
+									$final_answer = true;
+								 	foreach($real_answers as $my_answer) {
+								 		if (!$my_answer) {
+								 			$final_answer = false;
+								 		}		 		
+								 	}
+								 			 	
+								 	if ($final_answer) {
+								 		//getting only the first score where we save the weight of all the question 
+								 		$answerWeighting=$objAnswerTmp->selectWeighting(1);
 										$questionScore+=$answerWeighting;
 										$totalScore+=$answerWeighting;
-									}																		
+									}																	
+																									
 									break;
 									// for fill in the blanks
 								case FILL_IN_BLANKS :

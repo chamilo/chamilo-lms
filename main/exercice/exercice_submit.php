@@ -432,15 +432,7 @@ if ($formSent) {
 								 		if (!$my_answer) {
 								 			$final_answer = false;
 								 		}		 		
-								 	}
-								 			 	
-								 	if ($final_answer) {
-								 		//getting only the first score where we save the weight of all the question 
-								 		$answerWeighting=$objAnswerTmp->selectWeighting(1);
-										$questionScore+=$answerWeighting;
-										$totalScore+=$answerWeighting;
-									}																	
-																									
+								 	}																
 									break;
 									// for fill in the blanks
 								case FILL_IN_BLANKS :
@@ -626,6 +618,17 @@ if ($formSent) {
 							} // end switch Answertype
 						} // end for that loops over all answers of the current question
 						// destruction of Answer
+						
+						//we add the total score after dealing with the answers
+						if ($answerType == MULTIPLE_ANSWER_COMBINATION) {
+				 			if ($final_answer) {
+					 			//getting only the first score where we save the weight of all the question 
+					 			$answerWeighting=$objAnswerTmp->selectWeighting(1);
+								$questionScore+=$answerWeighting;
+								$totalScore+=$answerWeighting;
+							}
+						}
+						
 						unset ($objAnswerTmp);
 
 						$i++;
@@ -654,6 +657,8 @@ if ($formSent) {
 									$reply = array_keys($choice);
 									for ($i = 0; $i < sizeof($reply); $i++) {
 										$ans = $reply[$i];
+										echo ($questionScore.' - '.$ans.' - '. $quesId.' - '. $exeId.' - '. $i);
+										echo '<br />';
 										exercise_attempt($questionScore, $ans, $quesId, $exeId, $i);
 									}
 								} else {

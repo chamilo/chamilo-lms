@@ -159,7 +159,7 @@ class UniqueAnswer extends Question {
 			
 			if ($nb_answers < 1) {
 				$nb_answers = 1;
-				Display::display_normal_message(get_lang('YouHaveToCreateAlLeastOneAnswer'));
+				Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
 			}
 						
 			for($i = 1 ; $i <= $nb_answers ; ++$i)
@@ -230,11 +230,12 @@ class UniqueAnswer extends Question {
 				$form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
 				$form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
 				$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
-	
-				if ($obj_ex->selectFeedbackType()==0) // feedback
+
+				if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
+					// feedback
 					$form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-				elseif ($obj_ex->selectFeedbackType()==1) // direct feedback
-				{
+				} elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+					// direct feedback
 					$form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
 					//Adding extra feedback fields
 					$group = array();

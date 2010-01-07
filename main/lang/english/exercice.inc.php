@@ -356,4 +356,6 @@ $NotMarkActivity = "Not possible mark this activity";
 $YouHaveToCreateAtLeastOneAnswer = "You have to create at least one answer";
 $YouHaveToCreateAtLeastOneAnswer = "You have to create at least one answer";
 $ExerciseAttempted = "Exercise attempted";
+$MultipleSelectCombination = "Multiple select combination";
+$MultipleAnswerCombination = "Multiple answer combination";
 ?>

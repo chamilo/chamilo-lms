@@ -334,6 +334,7 @@ FUNCTIONS
 
 function display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect)
 {
+	global $feedback_type;
 	?>
 	<tr>
 	<td width="5%" align="center">
@@ -350,6 +351,7 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 		echo $answer;
 		?>
 	</td>
+	<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 	<td width="45%" style="border-bottom: 1px solid #4171B5;">
 		<?php
 		$answerComment=api_parse_tex($answerComment);
@@ -369,6 +371,9 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 		}
 		?>
 	</td>
+	<?php } else { ?>
+		<td>&nbsp;</td>	
+	<?php } ?>	
 	</tr>
 	<?php
 }
@@ -386,22 +391,27 @@ function display_fill_in_blanks_answer($answer)
 
 function display_free_answer($answer)
 {
+	global $feedback_type;
 	?>
 		<tr>
 		<td width="55%">
 			<?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
 		</td>
+	<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>	
    <td width="45%">
     <?php echo get_lang('notCorrectedYet');?>
 
    </td>
+   <?php } else { ?>
+		<td>&nbsp;</td>	
+	<?php } ?>
 		</tr>
 	<?php
 }
 
 function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment)
 {
-	//global $hotspot_colors;
+	global $feedback_type;
 	$hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
             						"#4271B5",
 									"#FE8E16",
@@ -432,6 +442,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 				<td valign="top">
 					<?php $my_choice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $my_choice; ?>
 				</td>
+				<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 				<td valign="top">
 					<?php
 					if ($studentChoice) {
@@ -443,6 +454,9 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 					echo '</span>';
 					?>
 				</td>
+				<?php } else { ?>
+					<td>&nbsp;</td>	
+				<?php } ?>
 		</tr>
 	<?php
 }
@@ -539,9 +553,13 @@ foreach ($questionList as $questionId) {
 				<td width="45%" valign="top">
 					<i><?php echo get_lang("Answer"); ?></i>
 				</td>
+				<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 				<td width="45%" valign="top">
 					<i><?php echo get_lang("Comment"); ?></i>
 				</td>
+				<?php } else { ?>
+					<td>&nbsp;</td>	
+				<?php } ?>
 				</tr>
 			<?php
 		} elseif ($answerType == FILL_IN_BLANKS) {
@@ -558,9 +576,13 @@ foreach ($questionList as $questionId) {
 				<td width="55%">
 					<i><?php echo get_lang("Answer"); ?></i>
 				</td>
+				<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 				<td width="45%" valign="top">
 					<i><?php echo get_lang("Comment"); ?></i>
 				</td>
+				<?php } else { ?>
+					<td>&nbsp;</td>	
+				<?php } ?>
 				</tr>
 			<?php
 		} elseif ($answerType == HOT_SPOT) {
@@ -576,9 +598,13 @@ foreach ($questionList as $questionId) {
 								<td width="100" valign="top">
 									<i><?php echo get_lang('HotspotHit'); ?></i><br /><br />
 								</td>
+								<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 								<td width="300" valign="top">
 									<i><?php echo get_lang("Comment"); ?></i><br /><br />
 								</td>
+								<?php } else { ?>
+									<td>&nbsp;</td>	
+								<?php } ?>
 							</tr>
 			<?php
 		} else { //matching type

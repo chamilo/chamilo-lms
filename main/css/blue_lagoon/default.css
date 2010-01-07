@@ -2668,6 +2668,7 @@ a.read {
 .profile_grid_element_1 { width:170px; float:left; text-align:left;	margin-bottom:1px; }
 
 
+
 /* pagination grid sortable */
 .sub_header {width:100%}
 .grid_selectbox {float:left;width:35%}
@@ -3076,6 +3077,10 @@ a.read {
 	padding:2px;
 }
 
+.social-profile-extended {
+	width:320px;
+	overflow:hidden;
+}
 
 div.image-social-content {
 	float:left;

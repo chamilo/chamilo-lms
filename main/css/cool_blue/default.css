@@ -3045,6 +3045,10 @@ float:left;
 	padding:2px;
 }
 
+.social-profile-extended {
+	width:320px;
+	overflow:hidden;
+}
 
 div.image-social-content {
 	float:left;

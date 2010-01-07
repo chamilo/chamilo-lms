@@ -3329,6 +3329,10 @@ div.image-social-content center.friend {
 	padding-left:10px;
 	width:200px;
 }
+.social-profile-extended {
+	width:320px;
+	overflow:hidden;
+}
 
 /* general layout of the profile page */
 

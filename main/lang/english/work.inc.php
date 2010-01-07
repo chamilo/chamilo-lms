@@ -82,4 +82,9 @@ $ReminderToSubmitPendingTask = "You are reminded that has a pending task";
 $MessageConfirmSendingOfTask = "This is a message confirming the sending of the task";
 $DataSent = "Data sent";
 $DownloadLink = "Download link";
+$ViewUsersWithoutTask = "Still missing file";
+$ViewUsersWithTask = "Already delivered file";
+$ReminderMessage = "Send a reminder";
+$DateSent = "Date Sent";
+$ViewUsersWithoutTask = "View Users Without Task";
 ?>

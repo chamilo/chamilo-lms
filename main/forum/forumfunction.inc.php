@@ -3923,8 +3923,7 @@ function get_thread_user_post($course_db, $thread_id, $user_id )
  * @param int user id
  * @param string db course name
  * @return string
- * @author Christian Fasanando / J. M
- **/
+ */
 
  function get_all_post_from_user($user_id, $course_db)
  {
@@ -3933,51 +3932,44 @@ function get_thread_user_post($course_db, $thread_id, $user_id )
 	krsort($forums);
 	$forum_results = '';
 
- 	foreach($forums as $forum) {
+ 	foreach ($forums as $forum) {
 		if ($j<=4) {
 	 		$threads = get_threads($forum['forum_id']);
 
 	 		if (is_array($threads)) {
-	 			/*echo Display::return_icon('forum.gif');
-	 			echo $forum['forum_title'];*/
-	 			//$my_course_db=explode('_',$course_db);
-	 			//$my_course_code=$my_course_db[1];
 	 			$my_course_code=CourseManager::get_course_id_by_database_name($course_db);
 	 			$i=0;
 	 			$hand_forums = '';
 	 			$post_counter = 0;
 		 		foreach($threads as $thread) {
-		 				if ($i<=4) {
-			 				$post_list = get_thread_user_post_limit($course_db, $thread['thread_id'], $user_id, 1);
-
-			 				$post_counter = count($post_list);
-			 				if (is_array($post_list) && count($post_list)>0) {
-
-			 					$hand_forums.= '<div id="social-thread">';
-				 				$hand_forums.= Display::return_icon('forumthread.gif', get_lang('Thread'));
-				 				$hand_forums.= ' '.$thread['thread_title'].' ';
-				 				foreach($post_list as $posts) {
-				 					$hand_forums.= '<div id="social-post">';
-				 					$hand_forums.= '<strong>'.$posts['post_title'].'</strong>';
-				 					$hand_forums.= '<br / >';
-				 					$hand_forums.= cut($posts['post_text'], 150);
-				 					$hand_forums.= '</div>';
-				 					$hand_forums.= '<br / >';
-				 				}
+		 			if ($i<=4) {
+		 				$post_list = get_thread_user_post_limit($course_db, $thread['thread_id'], $user_id, 1);
+		 				$post_counter = count($post_list);
+		 				if (is_array($post_list) && count($post_list)>0) {
+		 					$hand_forums.= '<div id="social-thread">';
+			 				$hand_forums.= Display::return_icon('forumthread.gif', get_lang('Thread'));
+			 				$hand_forums.= ' '.$thread['thread_title'].' ';
+			 				foreach($post_list as $posts) {
+			 					$hand_forums.= '<div id="social-post">';
+			 					$hand_forums.= '<strong>'.$posts['post_title'].'</strong>';
+			 					$hand_forums.= '<br / >';
+			 					$hand_forums.= $posts['post_text'];
+			 					$hand_forums.= '</div>';
+			 					$hand_forums.= '<br / >';
 			 				}
+		 				}
 			 			$hand_forums.= '</div>';
 		 			}
-		 			$i++;
-
-					if ($post_counter > 0 ) {
-						$forum_results .='<div id="social-forum">';
-		 				$forum_results .='<div class="clear"></div><br />';
-		 				$forum_results .='<div class="actions" style="margin-left:5px;margin-right:5px;">'.Display::return_icon('forum.gif',get_lang('Forum')).'&nbsp;'.$forum['forum_title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../forum/viewforum.php?cidReq='.$my_course_code.'&gidReq=&forum='.$forum['forum_id'].' " >'.get_lang('SeeForum').'</a></div></div>';
-		 				$forum_results .='<br / >';
-						$forum_results .=$hand_forums;
-						$forum_results .='</div>';
-					}
-	 			}
+		 			$i++;					
+	 			}	 			
+	 			if ($post_counter > 0 ) {
+					$forum_results .='<div id="social-forum">';
+	 				$forum_results .='<div class="clear"></div><br />';
+	 				$forum_results .='<div class="actions" style="margin-left:5px;margin-right:5px;">'.Display::return_icon('forum.gif',get_lang('Forum')).'&nbsp;'.$forum['forum_title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../forum/viewforum.php?cidReq='.$my_course_code.'&gidReq=&forum='.$forum['forum_id'].' " >'.get_lang('SeeForum').'</a></div></div>';
+	 				$forum_results .='<br / >';
+					$forum_results .=$hand_forums;
+					$forum_results .='</div>';
+				}
  			} $j++;
  		}
  	}

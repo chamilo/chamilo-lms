@@ -292,7 +292,7 @@ class CourseSelectForm
 				switch ($type) {
 					case RESOURCE_SURVEYQUESTION:
 						foreach($resources as $id => $obj) {
-						    if(!in_array($obj->survey_id,array_keys($_POST['resource'][RESOURCE_SURVEY]))) {
+						    if(is_array($_POST['resource'][RESOURCE_SURVEY]) && !in_array($obj->survey_id,array_keys($_POST['resource'][RESOURCE_SURVEY]))) {
 								unset ($course->resources[$type][$id]);
 							}
 						}

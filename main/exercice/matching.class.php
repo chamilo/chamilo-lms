@@ -139,6 +139,11 @@ class Matching extends Question {
 
 					</tr>';
 		$form -> addElement ('html', $html);
+		
+		if ($nb_matches < 1) {
+			$nb_matches = 1;
+			Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+		}
 
 		for($i = 1 ; $i <= $nb_matches ; ++$i) {
 			$form -> addElement ('html', '<tr><td>');
@@ -187,6 +192,11 @@ class Matching extends Question {
 
 					</tr>';
 		$form -> addElement ('html', $html);
+
+		if ($nb_options < 1) {
+			$nb_options = 1;
+			Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+		}
 
 		for($i = 1 ; $i <= $nb_options ; ++$i) {
 			$form -> addElement ('html', '<tr><td>');

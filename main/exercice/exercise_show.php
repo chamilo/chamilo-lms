@@ -15,13 +15,13 @@
 $language_file=array('exercice','tracking');
 
 // including the global dokeos file
-include_once '../inc/global.inc.php';
-include_once '../inc/lib/course.lib.php';
+require_once '../inc/global.inc.php';
+require_once '../inc/lib/course.lib.php';
 // including additional libraries
-include_once 'exercise.class.php';
-include_once 'question.class.php'; //also defines answer type constants
-include_once 'answer.class.php';
-include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once 'exercise.class.php';
+require_once 'question.class.php'; //also defines answer type constants
+require_once 'answer.class.php';
+require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 
 if ( empty ( $origin ) ) {
     $origin = $_REQUEST['origin'];
@@ -251,6 +251,7 @@ function get_comments($id,$question_id)
  */
 function display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans)
 {
+	global $feedback_type;
 	?>
 	<tr>
 	<td width="5%" align="center">
@@ -267,6 +268,8 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 		echo $answer;
 		?>
 	</td>
+	
+	<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 	<td width="20%" style="border-bottom: 1px solid #4171B5;">
 		<?php
 		$answerComment=api_parse_tex($answerComment);
@@ -287,10 +290,13 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 		?>
 	</td>
 		<?php
-	    if ($ans==1) {
+	    if ($ans==1) {	    	
 	        $comm = get_comments($id,$questionId);
 		}
 	    ?>
+	 <?php } else { ?>
+		<td>&nbsp;</td>	
+	<?php } ?>	
 	</tr>
 	<?php
 }
@@ -303,20 +309,24 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
  */
 
 function display_fill_in_blanks_answer($answer,$id,$questionId)
-{
+{	global $feedback_type;
 	?>
 		<tr>
 		<td>
 			<?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
-		</td><?php
-		if(!api_is_allowed_to_edit(null,true)) {?>
+		</td>
+		
+		<?php
+		if(!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {?>
 			<td>
 			<?php
 			$comm = get_comments($id,$questionId);
 			?>
 			</td>
+		<?php } ?>	
+
 			</tr>
-	<?php }
+	<?php
 }
 /**
  * Shows the answer to a free-answer question, as HTML
@@ -326,17 +336,22 @@ function display_fill_in_blanks_answer($answer,$id,$questionId)
  * @return void
  */
 function display_free_answer($answer,$id,$questionId) {
+	global $feedback_type;
 	?>
 		<tr>
 		<td>
 			<?php if (!empty($answer)) {echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY));} ?>
-		</td> <?php if(!api_is_allowed_to_edit(null,true)) {?>
+		</td> 
+		
+		<?php if(!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {?>
         <td>
         <?php
         $comm = get_comments($id,$questionId);
         ?>
         </td>
-    <?php }?>
+    	<?php }?>
+    
+    
     </tr>
     <?php
 }
@@ -349,7 +364,7 @@ function display_free_answer($answer,$id,$questionId) {
  * @param string $answerComment
  */
 function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment) {
-	//global $hotspot_colors;
+	global $feedback_type;
 	$hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
             						"#4271B5",
 									"#FE8E16",
@@ -380,6 +395,8 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 			$my_choice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $my_choice; ?>
 		</td>
 
+
+		<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 		<td valign="top" align="left" >
 			<?php
 			$answerComment=api_parse_tex($answerComment);
@@ -390,6 +407,10 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 			}
 			?>
 		</td>
+		<?php } else { ?>
+			<td>&nbsp;</td>	
+		<?php } ?>
+		
 	</tr>
 	<?php
 }
@@ -586,7 +607,11 @@ if ($show_results) {
 				<td><i><?php echo get_lang("Choice"); ?></i> </td>
 				<td><i><?php echo get_lang("ExpectedChoice"); ?></i></td>
 				<td><i><?php echo get_lang("Answer"); ?></i></td>
+				<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 				<td><i><?php echo get_lang("Comment"); ?></i></td>
+				<?php } else { ?>
+				<td>&nbsp;</td>	
+				<?php } ?>	
 			</tr>
 			<tr>
 			<td>&nbsp;</td>
@@ -700,7 +725,11 @@ if ($show_results) {
 					<td><i><?php echo get_lang("Choice"); ?></i> </td>
 					<td><i><?php echo get_lang("ExpectedChoice"); ?></i></td>
 					<td><i><?php echo get_lang("Answer"); ?></i></td>
+					<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 					<td><i><?php echo get_lang("Comment"); ?></i></td>
+					<?php } else { ?>
+					<td>&nbsp;</td>	
+					<?php } ?>	
 				</tr>
 				<tr>
 				<td>&nbsp;</td>
@@ -1106,7 +1135,7 @@ if ($show_results) {
 				}
 				echo '</select>';
 				echo '</form><br/ ></div>';
-				if ($questionScore==-1) {
+				if ($questionScore==-1 ) {
 					$questionScore=0;
 				  	echo '<br />'.get_lang('notCorrectedYet');
 				}

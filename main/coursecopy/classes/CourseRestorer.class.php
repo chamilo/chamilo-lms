@@ -233,8 +233,10 @@ class CourseRestorer
 					if (file_exists($path.$document->path)) {
 						switch ($this->file_option) {
 							case FILE_OVERWRITE :
-								$this->course->backup_path.'/'.$document->path;
-								copy($this->course->backup_path.'/'.$document->path, $path.$document->path);
+								$origin_path = $this->course->backup_path.'/'.$document->path;
+								if (file_exists($origin_path)) {
+									copy($origin_path, $path.$document->path);
+								}
 								$sql = "SELECT id FROM ".$table." WHERE path='/".substr($document->path, 9)."'";
 								$res = Database::query($sql, __FILE__, __LINE__);
 								$obj = Database::fetch_object($res);
@@ -823,6 +825,8 @@ class CourseRestorer
 						"', start_time = '".$quiz->start_time.
 						"', end_time = '".$quiz->end_time.
 						"', feedback_type = ".(int)$quiz->feedback_type.
+						", random_answers = ".(int)$quiz->random_answers.
+						", expired_time = ".(int)$quiz->expired_time.
 						$condition_session;
 					Database::query($sql, __FILE__, __LINE__);
 					$new_id = Database::insert_id();

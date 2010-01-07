@@ -14,11 +14,9 @@ class Wiki extends Resource
 	var $content;
 	var $user_id;
 	var $group_id;
-	var $timestamp;
-	var $template;
-	var $menu;
+	var $timestamp;	
 
-	function Wiki($id, $reflink, $title, $content, $user_id, $group_id, $timestamp, $template, $menu)
+	function Wiki($id, $reflink, $title, $content, $user_id, $group_id, $timestamp)
 	{
 		parent::Resource($id,RESOURCE_WIKI);
 		$this->page_id					= $id;

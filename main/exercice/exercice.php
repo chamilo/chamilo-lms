@@ -471,7 +471,7 @@ if (!empty ($_POST['export_report']) && $_POST['export_report'] == 'export_repor
 		switch ($_POST['export_format']) {
 			case 'xls' :
 				$export = new ExerciseResult();
-				$export->exportCompleteReportXLS($documentPath, $user_id, $_SESSION['export_user_fields']);
+				$export->exportCompleteReportXLS($documentPath, $user_id, $_SESSION['export_user_fields'], $_POST['export_filter']);
 				exit;
 				break;
 			case 'csv' :
@@ -795,9 +795,11 @@ if (($is_allowedToEdit) and ($origin != 'learnpath')) {
 			echo '<form id="form1a" name="form1a" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '">';
 			echo '<input type="hidden" name="export_report" value="export_report">';
 			echo '<input type="hidden" name="export_format" value="csv">';
+			echo '<input type="hidden" name="export_filter" value="'.(empty($filter)?1:intval($filter)).'">';
 			echo '</form>';
 			echo '<form id="form1b" name="form1b" method="post" action="' . api_get_self() . '?show=' . Security :: remove_XSS($_GET['show']) . '">';
 			echo '<input type="hidden" name="export_report" value="export_report">';
+			echo '<input type="hidden" name="export_filter" value="'.(empty($filter)?1:intval($filter)).'">';
 			echo '<input type="hidden" name="export_format" value="xls">';
 			echo '</form>';
 			//echo '<form id="form1c" name="form1c" method="post" action="'.api_get_self().'?show='.Security::remove_XSS($_GET['show']).'">';
@@ -1130,12 +1132,8 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 		  <th><?php echo (($is_allowedToEdit||$is_tutor)?get_lang("CorrectTest"):get_lang("ViewTest")); ?></th>
 		 </tr>-->
 		<?php
-
-	$session_id_and = '';
-	if (api_get_session_id() != 0) {
-		$session_id_and = ' AND session_id = ' . api_get_session_id() . ' ';
-	}
-
+	
+	$session_id_and = ' AND ce.session_id = ' . api_get_session_id() . ' ';
 	if ($is_allowedToEdit || $is_tutor) {
 		$user_id_and = '';
 		if (!empty ($_POST['filter_by_user'])) {
@@ -1164,7 +1162,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 
 	} else {
 		// get only this user's results
-		$user_id_and = ' AND te.exe_user_id = ' . Database :: escape_string(api_get_user_id()) . ' ';
+		$user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
 
 				$sql="SELECT ".(api_is_western_name_order() ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)")." as users,ce.title, te.exe_result ,
 							 te.exe_weighting, UNIX_TIMESTAMP(te.exe_date), te.exe_id, email, UNIX_TIMESTAMP(te.start_date), steps_counter,cuser.user_id,te.exe_duration, ce.results_disabled

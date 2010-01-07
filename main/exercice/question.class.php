@@ -20,6 +20,8 @@ define('MATCHING',		4);
 define('FREE_ANSWER',     5);
 define('HOT_SPOT', 		6);
 define('HOT_SPOT_ORDER', 	7);
+define('HOT_SPOT_DELINEATION', 		8);
+define('MULTIPLE_ANSWER_COMBINATION', 	9);
 
 /**
 	CLASS QUESTION
@@ -50,7 +52,8 @@ abstract class Question
 							FILL_IN_BLANKS => array('fill_blanks.class.php' , 'FillBlanks'),
 							MATCHING => array('matching.class.php' , 'Matching'),
 							FREE_ANSWER => array('freeanswer.class.php' , 'FreeAnswer'),
-							HOT_SPOT => array('hotspot.class.php' , 'HotSpot')
+							HOT_SPOT => array('hotspot.class.php' , 'HotSpot'),
+							MULTIPLE_ANSWER_COMBINATION => array('multiple_answer_combination.class.php' , 'MultipleAnswerCombination'),
 							);
 
 	/**
@@ -84,10 +87,11 @@ abstract class Question
 		$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
 		$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+				
 		$sql="SELECT question,description,ponderation,position,type,picture,level FROM $TBL_QUESTIONS WHERE id='".Database::escape_string($id)."'";
 
 		$result=Database::query($sql,__FILE__,__LINE__);
-
+		
 		// if the question has been found
 		if($object=Database::fetch_object($result))
 		{

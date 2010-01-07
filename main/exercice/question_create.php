@@ -51,7 +51,7 @@ $nameTools=get_lang('AddQuestionToExercise');
 
 
 // The form
-$form = new FormValidator('add_question','post');
+$form = new FormValidator('add_question','post',api_get_self().'?'.api_get_cidreq());
 // form title
 $form->addElement('header','',get_lang('AddQuestionToExercise'));
 

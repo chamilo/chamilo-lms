@@ -145,11 +145,11 @@ $objExercise = new Exercise();
  * INIT FORM
  *********************/
 if(isset($_GET['exerciseId'])) {
-	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?exerciseId='.$_GET['exerciseId']);
+	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?'.api_get_cidreq().'&exerciseId='.$_GET['exerciseId']);
 	$objExercise -> read (intval($_GET['exerciseId']));
 	$form -> addElement ('hidden','edit','true');
 } else {
-	$form = new FormValidator('exercise_admin');
+	$form = new FormValidator('exercise_admin','post',api_get_self().'?'.api_get_cidreq());
 	$form -> addElement ('hidden','edit','false');
 }
 

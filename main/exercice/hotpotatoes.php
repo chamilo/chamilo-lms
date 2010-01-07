@@ -30,14 +30,14 @@
 $language_file ='exercice';
 
 // including the global Dokeos file
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 // include additional libraries
-include_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'document.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-include_once(api_get_path(LIBRARY_PATH)."pclzip/pclzip.lib.php");
-include("hotpotatoes.lib.php");
+require_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'document.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
+require_once (api_get_path(LIBRARY_PATH)."pclzip/pclzip.lib.php");
+require_once 'hotpotatoes.lib.php';
 
 // section (for the tabs)
 $this_section=SECTION_COURSES;
@@ -222,7 +222,7 @@ if((api_is_allowed_to_edit(null,true)) && (($finish == 0) || ($finish == 2)))
 	}
 	if ($finish == 1)
 	{ /** ok -> send to main exercises page */
-		header("Location: exercice.php");
+		header('Location: exercice.php?'.api_get_cidreq());
 		exit;
 	}
 
@@ -246,7 +246,7 @@ if((api_is_allowed_to_edit(null,true)) && (($finish == 0) || ($finish == 2)))
 			  UPLOAD SECTION
 	 --------------------------------------*/
 	echo	"<!-- upload  -->\n",
-			"<form action=\"".api_get_self()."\" method=\"post\" enctype=\"multipart/form-data\" >\n",
+			"<form action=\"".api_get_self()."?".api_get_cidreq()."\" method=\"post\" enctype=\"multipart/form-data\" >\n",
 			"<input type=\"hidden\" name=\"uploadPath\" value=\"\">\n",
 			"<input type=\"hidden\" name=\"fld\" value=\"$fld\">\n",
 			"<input type=\"hidden\" name=\"imgcount\" value=\"$imgcount\">\n",

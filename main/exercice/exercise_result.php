@@ -450,7 +450,7 @@ DISPLAY AND MAIN PROCESS
 if (api_is_course_admin() && $origin != 'learnpath') {
 	echo '<div class="actions">';
 	echo Display::return_icon('quiz.gif', get_lang('GoBackToEx')).'<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('GoBackToEx').'</a>';
-	echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
+	echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
 	echo '</div>';
 }
 
@@ -463,7 +463,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		<?php echo $exerciseDescription; ?>
 	<?php } ?>
 
-	<form method="get" action="exercice.php">
+	<form method="get" action="exercice.php?<?php echo api_get_cidreq() ?>">
 	<input type="hidden" name="origin" value="<?php echo $origin; ?>" />
     <input type="hidden" name="learnpath_id" value="<?php echo $learnpath_id; ?>" />
     <input type="hidden" name="learnpath_item_id" value="<?php echo $learnpath_item_id; ?>" />

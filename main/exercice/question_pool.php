@@ -135,7 +135,7 @@ if($is_allowedToEdit)
 		// adds the question ID represented by $recup into the list of questions for the current exercise
 		$objExercise->addToList($recup);
 		api_session_register('objExercise');
-		header("Location: admin.php?exerciseId=$fromExercise");
+		header("Location: admin.php?".api_get_cidreq()."&exerciseId=$fromExercise");
 		exit();
 	} else if( isset($_POST['recup']) && is_array($_POST['recup']) && $fromExercise) {
 		$list_recup = $_POST['recup'];
@@ -156,7 +156,7 @@ if($is_allowedToEdit)
 			$objExercise->addToList($recup);
 		}
 		api_session_register('objExercise');
-		header("Location: admin.php?exerciseId=$fromExercise");
+		header("Location: admin.php?".api_get_cidreq()."&exerciseId=$fromExercise");
 		exit();
 	}
 }

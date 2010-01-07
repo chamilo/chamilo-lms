@@ -245,6 +245,18 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 					 <span><input class='checkbox' type='checkbox' name='choice[".$questionId."][".$numAnswer."]' value='1'></p></span>";
 				$answer = api_parse_tex($answer);
 				$s.=strip_tags($answer);
+				$s.="</div></td></tr>";			
+				
+			} elseif($answerType == MULTIPLE_ANSWER_COMBINATION) {
+			// multiple answers
+				$s.="<input type='hidden' name='choice2[".$questionId."]' value='0'>
+				<tr>
+				  <td>
+					 <div class='u-m-answer'>
+					 <p style='float:left; padding-right:4px;'>
+					 <span><input class='checkbox' type='checkbox' name='choice[".$questionId."][".$numAnswer."]' value='1'></p></span>";
+				$answer = api_parse_tex($answer);
+				$s.=strip_tags($answer);
 				$s.="</div></td></tr>";
 			}
 

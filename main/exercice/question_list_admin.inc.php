@@ -104,7 +104,9 @@ if($nbrQuestions) {
 	$i=1;
 	if (is_array($questionList)) {
 		foreach($questionList as $id) {
+			
 			$objQuestionTmp = Question :: read($id);
+			
 			//showQuestion($id);
 		?>
 			<tr <?php if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"'; ?>>

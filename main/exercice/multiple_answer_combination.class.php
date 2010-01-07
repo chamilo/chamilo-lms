@@ -8,7 +8,7 @@
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
-if(!class_exists('MultipleAnswer')):
+if(!class_exists('MultipleAnswerCombination')):
 
 /**
 	CLASS MultipleAnswer
@@ -20,17 +20,17 @@ if(!class_exists('MultipleAnswer')):
  *	@package dokeos.exercise
  **/
 
-class MultipleAnswer extends Question {
+class MultipleAnswerCombination extends Question {
 
 	static $typePicture = 'mcma.gif';
-	static $explanationLangVar = 'MultipleSelect';
+	static $explanationLangVar = 'MultipleSelectCombination';
 
 	/**
 	 * Constructor
 	 */
-	function MultipleAnswer(){
+	function MultipleAnswerCombination(){
 		parent::question();
-		$this -> type = MULTIPLE_ANSWER;
+		$this -> type = MULTIPLE_ANSWER_COMBINATION;
 	}
 
 	/**
@@ -43,6 +43,12 @@ class MultipleAnswer extends Question {
 		$nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
+/*
+ * 
+ * 	<th>
+							'.get_lang('Weighting').'
+						</th>
+ */
 		$html='
 		<div class="row">
 			<div class="label">
@@ -63,9 +69,7 @@ class MultipleAnswer extends Question {
 						<th>
 							'.get_lang('Comment').'
 						</th>
-						<th>
-							'.get_lang('Weighting').'
-						</th>
+					
 					</tr>';
 		$form -> addElement ('html', $html);
 
@@ -97,7 +101,7 @@ class MultipleAnswer extends Question {
 				$defaults['answer[2]']  = get_lang('langDefaultMultipleAnswer1');
 				$defaults['comment[2]'] = get_lang('langDefaultMultipleComment1');
 				$defaults['correct[2]'] = false;
-				$defaults['weighting[2]'] = -5;
+				//$defaults['weighting[2]'] = -5;
 			}
 			$renderer = & $form->defaultRenderer();
 			$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>');
@@ -110,16 +114,23 @@ class MultipleAnswer extends Question {
 
 			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
+			
 			$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
-			$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
+			
+			//only 1 answer the all deal ...			
+			//$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
+				
 			$form -> addElement ('html', '</tr>');
 		}
 		$form -> addElement ('html', '</table>');
 		$form -> addElement ('html', '<br />');
 
 		$form -> add_multiple_required_rule ($boxes_names , get_lang('ChooseAtLeastOneCheckbox') , 'multiple_required');
-
-
+		
+		//@todo fix my layout please 
+		//only 1 answer the all deal ...
+		$form->addElement('text', 'weighting[1]',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
+		
 		$navigator_info = api_get_navigator();
 		global $text, $class;
 		//ie6 fix
@@ -159,27 +170,29 @@ class MultipleAnswer extends Question {
 		$objAnswer = new Answer($this->id);
 
 		$nb_answers = $form -> getSubmitValue('nb_answers');
-
+		
 		for($i=1 ; $i <= $nb_answers ; $i++)
         {
         	$answer = trim($form -> getSubmitValue('answer['.$i.']'));
             $comment = trim($form -> getSubmitValue('comment['.$i.']'));
-            $weighting = trim($form -> getSubmitValue('weighting['.$i.']'));
+            if ($i == 1)
+            	$weighting = trim($form -> getSubmitValue('weighting['.$i.']'));
+            else {
+            	$weighting = 0;
+            }
             $goodAnswer = trim($form -> getSubmitValue('correct['.$i.']'));
 
 			if($goodAnswer){
     			$weighting = abs($weighting);
 			} else {
 				$weighting = abs($weighting);
-				$weighting = -$weighting;
+			//	$weighting = -$weighting;
 			}
     		if($weighting > 0)
             {
                 $questionWeighting += $weighting;
             }
-
         	$objAnswer -> createAnswer($answer,$goodAnswer,$comment,$weighting,$i);
-
         }
 
     	// saves the answers into the data base

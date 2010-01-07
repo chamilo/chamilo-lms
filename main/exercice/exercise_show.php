@@ -673,7 +673,7 @@ if ($show_results) {
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 			$questionScore=0;
 			
-			$real_answer = true;
+			$real_answers = array();
 			
 			for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 				$answer=$objAnswerTmp->selectAnswer($answerId);
@@ -686,17 +686,23 @@ if ($show_results) {
 					$ind = $row['answer'];
 					$choice[$ind] = 1;
 				}
-
-				$numAnswer=$objAnswerTmp->selectAutoId($answerId);
-								
-				$studentChoice=$choice[$numAnswer];			
-				var_dump($studentChoice);	
-				
-				if (!$studentChoice) {
-					$real_answer = false;
-					/*$questionScore+=$answerWeighting;
-					$totalScore+=$answerWeighting;*/
+				$numAnswer=$objAnswerTmp->selectAutoId($answerId);								
+				$studentChoice=$choice[$numAnswer];	
+					
+				if ($answerCorrect == 1) {
+					if ($studentChoice) {
+						$real_answers[$answerId] = true;
+					} else {
+						$real_answers[$answerId] = false;
+					}
+				} else {
+					if ($studentChoice) {
+						$real_answers[$answerId] = false;
+					} else {
+						$real_answers[$answerId] = true;
+					}
 				}
+							
 				echo '<tr><td>';
 				if ($answerId==1) {
 						display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
@@ -706,12 +712,19 @@ if ($show_results) {
 				echo '</td></tr>';
 				$i++;
 		 	}
-		 	var_dump($real_answer);
- 			if ($real_answer) {
+		 	
+		 	$final_answer = true;
+		 	foreach($real_answers as $my_answer) {
+		 		if (!$my_answer) {
+		 			$final_answer = false;
+		 		}		 		
+		 	}		 	
+		 	if ($final_answer) {
+		 		//getting only the first score where we save the weight of all the question 
+		 		$answerWeighting=$objAnswerTmp->selectWeighting(1);
 				$questionScore+=$answerWeighting;
 				$totalScore+=$answerWeighting;
-			}
-				
+			}			
 		 	
 		 	
 		 	echo '</table>';

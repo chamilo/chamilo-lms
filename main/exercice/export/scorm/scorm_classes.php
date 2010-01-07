@@ -14,6 +14,7 @@ require_once(api_get_path(SYS_CODE_PATH).'exercice/question.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'exercice/answer.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'exercice/unique_answer.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'exercice/multiple_answer.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'exercice/multiple_answer_combination.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'exercice/fill_blanks.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'exercice/freeanswer.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'exercice/hotspot.class.php');
@@ -31,6 +32,11 @@ define('FIB',				3);
 define('MATCHING',			4);
 define('FREE_ANSWER', 		5);
 define('HOTSPOT',			6);
+
+define('HOT_SPOT_ORDER', 	7);
+define('HOT_SPOT_DELINEATION', 		8);
+define('MULTIPLE_ANSWER_COMBINATION', 	9);
+
 
 /**
  * The ScormQuestion class is a gateway to getting the answers exported

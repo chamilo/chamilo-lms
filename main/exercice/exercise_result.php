@@ -498,7 +498,7 @@ foreach ($questionList as $questionId) {
 	unset($objQuestionTmp);
 
 	// decide how many columns we want to use to show the results of each type
-	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
+	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION) {
 		$colspan=4;
 	} elseif($answerType == MATCHING || $answerType == FREE_ANSWER) {
 		$colspan=2;
@@ -522,7 +522,7 @@ foreach ($questionList as $questionId) {
 		</td>
 		</tr>
 		<?php
-		if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
+		if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION ) {
 			?>
 				<tr>
 				<td width="5%" valign="top" align="center" nowrap="nowrap">
@@ -618,7 +618,8 @@ foreach ($questionList as $questionId) {
 	while ($real_answer = Database::fetch_array($res_answer)) {
 		$answer_matching[$real_answer['id']]= $real_answer['answer'];
 	}
-
+	$real_answers = array();
+	
 	// We're inside *one* question. Go through each possible answer for this question
 	for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 
@@ -644,12 +645,29 @@ foreach ($questionList as $questionId) {
 					break;
 			// for multiple answers
 			case MULTIPLE_ANSWER :
-					$studentChoice=$choice[$numAnswer];
-					if($studentChoice) {
-						$questionScore+=$answerWeighting;
-						$totalScore+=$answerWeighting;
+				$studentChoice=$choice[$numAnswer];
+				if($studentChoice) {
+					$questionScore+=$answerWeighting;
+					$totalScore+=$answerWeighting;
+				}
+				break;
+			case MULTIPLE_ANSWER_COMBINATION :
+				$studentChoice=$choice[$numAnswer];			
+			
+				if ($answerCorrect == 1) {
+					if ($studentChoice) {
+						$real_answers[$answerId] = true;
+					} else {
+						$real_answers[$answerId] = false;
 					}
-					break;
+				} else {
+					if ($studentChoice) {
+						$real_answers[$answerId] = false;
+					} else {
+						$real_answers[$answerId] = true;
+					}
+				}			
+				break;
 			// for fill in the blanks
 			case FILL_IN_BLANKS :
 		    		// the question is encoded like this
@@ -810,8 +828,6 @@ foreach ($questionList as $questionId) {
 					  	$questionScore=-1;
 						$totalScore+=0;
 					}
-
-
 					break;
 			// for matching 
 			case MATCHING :
@@ -854,7 +870,7 @@ foreach ($questionList as $questionId) {
 
 		//display answers (if not matching type, or if the answer is correct)
 		if ($answerType != MATCHING || $answerCorrect) {
-			if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
+			if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION) {
 				if ($origin!='learnpath') {
 					display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect);
 				}
@@ -894,6 +910,22 @@ foreach ($questionList as $questionId) {
 			}
 		}
 	} // end for that loops over all answers of the current question
+	
+	//
+	if ($answerType == MULTIPLE_ANSWER_COMBINATION) {
+		$final_answer = true;
+	 	foreach($real_answers as $my_answer) {
+	 		if (!$my_answer) {
+	 			$final_answer = false;
+	 		}		 		
+	 	}		 	
+	 	if ($final_answer) {
+	 		//getting only the first score where we save the weight of all the question 
+	 		$answerWeighting=$objAnswerTmp->selectWeighting(1);
+			$questionScore+=$answerWeighting;
+			$totalScore+=$answerWeighting;
+		}		
+	}		
 
 	// if answer is hotspot. To the difference of exercise_show.php, we use the results from the session (from_db=0)
 	// TODO Change this, because it is wrong to show the user some results that haven't been stored in the database yet
@@ -952,6 +984,16 @@ foreach ($questionList as $questionId) {
 			} else {
 				exercise_attempt($questionScore, 0 ,$quesId,$exeId,0);
 			}
+		} elseif ($answerType==MULTIPLE_ANSWER_COMBINATION ) {
+			if ($choice != 0) {
+				$reply = array_keys($choice);
+				for ($i=0;$i<sizeof($reply);$i++) {
+					$ans = $reply[$i];
+					exercise_attempt($questionScore,$ans,$quesId,$exeId,$i);
+				}
+			} else {
+				exercise_attempt($questionScore, 0 ,$quesId,$exeId,0);		
+			} 
 		} elseif ($answerType==MATCHING) {		
 			foreach ($matching as $j => $val) {							
 				exercise_attempt($questionScore, $val, $quesId, $exeId, $j);

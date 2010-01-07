@@ -25,6 +25,7 @@ require_once(api_get_path(SYS_CODE_PATH).'/exercice/answer.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/hotspot.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/unique_answer.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/multiple_answer.class.php');
+//require_once(api_get_path(SYS_CODE_PATH).'/exercice/multiple_answer_combination.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/matching.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/freeanswer.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/fill_blanks.class.php');

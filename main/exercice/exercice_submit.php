@@ -29,16 +29,7 @@ require_once 'exercise.lib.php';
 
 // debug var. Set to 0 to hide all debug display. Set to 1 to display debug messages.
 $debug = 0;
-/*
-// answer types
-define('UNIQUE_ANSWER',		1);
-define('MULTIPLE_ANSWER',	2);
-define('FILL_IN_BLANKS',	3);
-define('MATCHING',			4);
-define('FREE_ANSWER', 		5);
-define('HOT_SPOT', 			6);
-define('HOT_SPOT_ORDER', 	7);
-*/
+
 // name of the language file that needs to be included
 $language_file = 'exercice';
 
@@ -417,7 +408,15 @@ if ($formSent) {
 									if ($studentChoice) {
 										$questionScore+=$answerWeighting;
 										$totalScore+=$answerWeighting;
-									}																		break;
+									}																		
+									break;
+								case MULTIPLE_ANSWER_COMBINATION:
+									$studentChoice=$choice[$numAnswer];													
+									if ($studentChoice) {
+										$questionScore+=$answerWeighting;
+										$totalScore+=$answerWeighting;
+									}																		
+									break;
 									// for fill in the blanks
 								case FILL_IN_BLANKS :
 
@@ -618,22 +617,27 @@ if ($formSent) {
 							if ($answerType == MULTIPLE_ANSWER) {
 								if ($choice != 0) {
 									$reply = array_keys($choice);
-
 									for ($i = 0; $i < sizeof($reply); $i++) {
 										$ans = $reply[$i];
-
 										exercise_attempt($questionScore, $ans, $quesId, $exeId, $i);
 									}
 								} else {
 									exercise_attempt($questionScore, 0, $quesId, $exeId, 0);
 								}
-							}
-							elseif ($answerType == MATCHING) {
-
+							} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
+								if ($choice != 0) {
+									$reply = array_keys($choice);
+									for ($i = 0; $i < sizeof($reply); $i++) {
+										$ans = $reply[$i];
+										exercise_attempt($questionScore, $ans, $quesId, $exeId, $i);
+									}
+								} else {
+									exercise_attempt($questionScore, 0, $quesId, $exeId, 0);
+								}
+							} elseif ($answerType == MATCHING) {
 								foreach ($matching as $j => $val) {
 									exercise_attempt($questionScore, $val, $quesId, $exeId, $j);
 								}
-
 							} elseif ($answerType == FREE_ANSWER) {
 								$answer = $choice;
 								exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);

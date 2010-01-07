@@ -355,5 +355,5 @@ $RandomAnswers = "Barajar respuestas";
 $NotMarkActivity = "No es posible calificar este elemento";
 $YouHaveToCreateAtLeastOneAnswer = "Tienes que crear al menos una respuesta";
 $YouHaveToCreateAtLeastOneAnswer = "Tienes que crear al menos una respuesta";
-$ExerciseAttempted = "Intentar ejercicio";
+$ExerciseAttempted = "Un estudiante ha contestado una pregunta";
 ?>

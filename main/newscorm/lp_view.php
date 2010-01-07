@@ -586,7 +586,7 @@ window.onload = function() {
 	//loads the glossary library	
 		
 	<?php
-	if (api_get_setting('show_glossary_in_extra_tools') == 'true') {  	
+	if (api_get_setting('show_glossary_in_extra_tools') == 'true') {	
 		if (api_get_setting('show_glossary_in_documents') == 'ismanual') {  	  	 	
 	  	 	?>		  	 	
 	    $(document).ready(function() {   
@@ -621,8 +621,7 @@ window.onload = function() {
 	<?php
 	  	 }
 	  }
-	?>
-	}
+	?>	
 }
 
 window.onresize = updateContentHeight;

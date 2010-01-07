@@ -1,25 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
-
+/* For licensing terms, see /chamilo_license.txt */
 
 /**
 *	Statement (?) administration
@@ -40,8 +20,7 @@ include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php')
 include_once(api_get_path(LIBRARY_PATH).'image.lib.php');
 
 // ALLOWED_TO_INCLUDE is defined in admin.php
-if(!defined('ALLOWED_TO_INCLUDE'))
-{
+if(!defined('ALLOWED_TO_INCLUDE')) {
 	exit();
 }
 
@@ -49,8 +28,7 @@ if(!defined('ALLOWED_TO_INCLUDE'))
 /*********************
  * INIT QUESTION
  *********************/
-if(isset($_GET['editQuestion']))
-{
+if(isset($_GET['editQuestion'])) {
 	$objQuestion = Question::read ($_GET['editQuestion']);
 	$action = api_get_self()."?modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
 
@@ -70,8 +48,7 @@ if(isset($_GET['editQuestion']))
 	$action = api_get_self()."?modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
 }
 
-if(is_object($objQuestion))
-{
+if(is_object($objQuestion)) {
 
 	/*********************
 	 * FORM STYLES

@@ -66,6 +66,8 @@ class MultipleAnswer extends Question {
 		$nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
+		$obj_ex = $_SESSION['objExercise'];
+
 		$html='
 		<div class="row">
 			<div class="label">
@@ -82,11 +84,15 @@ class MultipleAnswer extends Question {
 						</th>
 						<th>
 							'.get_lang('Answer').'
-						</th>
-						<th>
+						</th>';
+				// show column comment when feedback is enable				
+				if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM ) {	
+				$html .='<th>
 							'.get_lang('Comment').'
-						</th>
-						<th>
+						</th>';
+				}
+						
+				$html .= '<th>
 							'.get_lang('Weighting').'
 						</th>
 					</tr>';
@@ -107,7 +113,7 @@ class MultipleAnswer extends Question {
 
 		if ($nb_answers < 1) {
 			$nb_answers = 1;
-			Display::display_normal_message(get_lang('YouHaveToCreateAlLeastOneAnswer'));
+			Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
 		}
 
 		for($i = 1 ; $i <= $nb_answers ; ++$i) {
@@ -135,10 +141,15 @@ class MultipleAnswer extends Question {
 
 			$form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox" style="margin-left: 0em;"');
 			$boxes_names[] = 'correct['.$i.']';
-
-			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
+							
+			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));		
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
-			$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
+			
+			// show comment when feedback is enable				
+			if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+				$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));	
+			}
+			
 			$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
 			$form -> addElement ('html', '</tr>');
 		}

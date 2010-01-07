@@ -126,11 +126,13 @@ if($_configuration['live_exercise_tracking']) define('ENABLED_LIVE_EXERCISE_TRAC
 if($_configuration['live_exercise_tracking'] == true && $exerciseType == 1){
 	$_configuration['live_exercise_tracking'] = false;
 }
+$arrques = array();
+$arrans = array();
 
 // set admin name as person who sends the results e-mail (lacks policy about whom should really send the results)
 $main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
 $main_admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
-$courseName = $_SESSION['_course']['name'];
+
 $query = "SELECT user_id FROM $main_admin_table LIMIT 1"; //get all admins from admin table
 $admin_id = Database::result(Database::query($query),0,"user_id");
 $uinfo = api_get_user_info($admin_id);
@@ -859,36 +861,8 @@ foreach ($questionList as $questionId) {
 
 				$arrques[] = $questionName;
 				$arrans[]  = $choice;
-				$firstName =   $_SESSION['_user']['firstName'];
-				$lastName =   $_SESSION['_user']['lastName'];
-				$mail =  $_SESSION['_user']['mail'];
-				$coursecode =  $_SESSION['_course']['id'];
-				$to = '';
-				$teachers = array();
-				if(api_get_setting('use_session_mode')=='true' && !empty($_SESSION['id_session']))
-				{
-					$teachers = CourseManager::get_coach_list_from_course_code($coursecode,$_SESSION['id_session']);
-				}
-				else
-				{
-					$teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
-				}
-				$num = count($teachers);
-				if($num>1)
-				{
-					$to = array();
-					foreach($teachers as $teacher)
-					{
-						$to[] = $teacher['email'];
-					}
-				}elseif($num>0){
-					foreach($teachers as $teacher)
-					{
-						$to = $teacher['email'];
-					}
-				}else{
-					//this is a problem (it means that there is no admin for this course)
-				}
+				
+			
 				if($origin != 'learnpath') {
 					display_free_answer($choice);
 				}
@@ -1091,6 +1065,44 @@ if ($origin != 'learnpath') {
 	echo '</body></html>';
 }
 
+
+	
+// Email configuration settings
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+$user_info	= UserManager::get_user_info_by_id(api_get_user_id());	
+
+$firstName 	=  $user_info['firstname'];
+$lastName 	=  $user_info['lastname'];
+$mail 		=  $user_info['email'];	
+$coursecode = api_get_course_id();
+$courseName = $_SESSION['_course']['name'];
+	
+$to = '';
+$teachers = array();
+if(api_get_setting('use_session_mode')=='true' && !empty($_SESSION['id_session'])) {
+	$teachers = CourseManager::get_coach_list_from_course_code($coursecode,$_SESSION['id_session']);
+} else {
+	$teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
+}
+
+$num = count($teachers);
+if($num>1) {
+	$to = array();
+	foreach($teachers as $teacher) {
+		$to[] = $teacher['email'];
+	}
+}elseif($num>0){
+	foreach($teachers as $teacher) {
+		$to = $teacher['email'];
+	}
+} else {
+	//this is a problem (it means that there is no admin for this course)
+}
+
+
+//------
+if ($origin != 'learnpath')
+
 if(count($arrques)>0) {
 	$mycharset = api_get_setting('platform_charset');
 	$msg = '<html><head>
@@ -1100,7 +1112,7 @@ if(count($arrques)>0) {
 	<body><br />
 	<p>'.get_lang('OpenQuestionsAttempted').' :
 	</p>
-	<p>'.get_lang('AttemptDetails').' : ><br />
+	<p>'.get_lang('AttemptDetails').' : <br />
 	</p>
 	<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
 						<tr>
@@ -1121,6 +1133,7 @@ if(count($arrques)>0) {
 	</tr></table>
 	<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
 	 <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
+	 
 	for($i=0;$i<sizeof($arrques);$i++) {
 		  $msg.='
 			<tr>
@@ -1131,7 +1144,6 @@ if(count($arrques)>0) {
 		    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Answer').' </span></td>
 		    <td valign="top" bgcolor="#F3F3F3"><span class="style16"> #answer#</span></td>
 		  	</tr>';
-
 			$msg1= str_replace("#exercise#",$exerciseTitle,$msg);
 			$msg= str_replace("#firstName#",$firstName,$msg1);
 			$msg1= str_replace("#lastName#",$lastName,$msg);
@@ -1141,46 +1153,68 @@ if(count($arrques)>0) {
 			$msg1= str_replace("#i#",$i,$msg);
 			$msg= str_replace("#course#",$courseName,$msg1);
 	}
-		$msg.='</table><br>
-	 	<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
-	<a href="#url#">#url#</a></span></body></html>';
+	
+	$msg.='</table><br>
+ 			<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
+			<a href="#url#">#url#</a></span></body></html>';
 
-		$msg1= str_replace("#url#",$url,$msg);
-		$mail_content = $msg1;
-		$student_name = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName']);
-		$subject = get_lang('OpenQuestionsAttempted');
-
-		/*$from = api_get_setting('noreply_email_address');
-		if($from == '') {
-			if(isset($_SESSION['id_session']) && $_SESSION['id_session'] != ''){
-				$sql = 'SELECT user.email,user.lastname,user.firstname FROM '.TABLE_MAIN_SESSION.' as session, '.TABLE_MAIN_USER.' as user
-						WHERE session.id_coach = user.user_id
-						AND session.id = "'.Database::escape_string($_SESSION['id_session']).'"
-						';
-				$result=Database::query($sql,__FILE__,__LINE__);
-				$from = Database::result($result,0,'email');
-				$from_name = api_get_person_name(Database::result($result,0,'firstname'), Database::result($result,0,'lastname'), null, PERSON_NAME_EMAIL_ADDRESS);
-			} else {
-				$array = explode(' ',$_SESSION['_course']['titular']);
-				$firstname = $array[1];
-				$lastname = $array[0];
-				$sql = 'SELECT email,lastname,firstname FROM '.TABLE_MAIN_USER.'
-						WHERE firstname = "'.Database::escape_string($firstname).'"
-						AND lastname = "'.Database::escape_string($lastname).'"
-				';
-				$result=Database::query($sql,__FILE__,__LINE__);
-				$from = Database::result($result,0,'email');
-				$from_name = api_get_person_name(Database::result($result,0,'firstname'), Database::result($result,0,'lastname'), null, PERSON_NAME_EMAIL_ADDRESS);
-			}
-		}
-	api_mail_html($student_name, $to, $subject, $mail_content, $from_name, $from, array('encoding'=>$mycharset,'charset'=>$mycharset));
-	*/
+	$msg1= str_replace("#url#",$url,$msg);
+	$mail_content = $msg1;
 	
 	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 	$email_admin = api_get_setting('emailAdministrator');
 			
 	$subject = get_lang('OpenQuestionsAttempted');
-	$result = api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));	
+	if (api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ) {
+		$result = api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
+	}	
+} else {
+	$mycharset = api_get_setting('platform_charset');
+	$msg = '<html><head>
+		<link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
+		<meta content="text/html; charset='.$mycharset.'" http-equiv="content-type">';
+	$msg .= '</head>
+	<body>
+	<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
+		<tr>
+	    <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
+	    <td width="469" valign="top"><h2>#course#</h2></td>
+	  </tr>
+	  <tr>
+	    <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
+	    <td width="469" valign="top" class="outerframe">#exercise#</td>
+	  </tr>
+	  <tr>
+	    <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
+	    '.(api_is_western_name_order() ? '<td valign="top" >#firstName# #lastName#</td>' : '<td valign="top" >#lastName# #firstName#</td>').'
+	  </tr>
+	  <tr>
+	    <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
+	    <td valign="top"> #mail#</td>
+	</tr></table>';
+	 
+	$msg= str_replace("#exercise#",$exerciseTitle,$msg);
+	$msg= str_replace("#firstName#",$firstName,$msg);
+	$msg= str_replace("#lastName#",$lastName,$msg);	
+	$msg= str_replace("#mail#",$mail,$msg);
+	$msg= str_replace("#course#",$courseName,$msg);	
+	
+	$msg.='<br />
+ 			<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
+			<a href="#url#">#url#</a></span></body></html>';
+
+
+	$msg= str_replace("#url#",$url,$msg);
+	$mail_content = $msg;
+	
+	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+	$email_admin = api_get_setting('emailAdministrator');
+	
+	$subject = get_lang('ExerciseAttempted');
+	if (api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ) {
+		$result = api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
+	}
 	
 }
+
 ?>

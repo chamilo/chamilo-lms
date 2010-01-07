@@ -133,9 +133,13 @@ class MultipleAnswerCombination extends Question {
 
 		$form -> add_multiple_required_rule ($boxes_names , get_lang('ChooseAtLeastOneCheckbox') , 'multiple_required');
 		
-		//@todo fix my layout please 
+		
+		$html_total_score ='<div style="margin-bottom:2px;">'.get_lang('Score').'</div>';				
+		$form -> addElement ('html', $html_total_score);
+				
 		//only 1 answer the all deal ...
 		$form->addElement('text', 'weighting[1]',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
+		$form -> addElement ('html', '<br /><br />');
 		
 		$navigator_info = api_get_navigator();
 		global $text, $class;

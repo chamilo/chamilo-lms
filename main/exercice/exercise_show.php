@@ -1351,6 +1351,8 @@ function send_notification($arrques, $arrans, $to) {
 	} else {
 		
 		$msg .= '<body>
+		<p>'.get_lang('ExerciseAttempted').' <br /> 
+	    </p>
 		<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
 			<tr>
 		    <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>

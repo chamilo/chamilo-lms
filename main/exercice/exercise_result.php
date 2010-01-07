@@ -1196,6 +1196,8 @@ if (api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ) {
 			$result = api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));		
 		} else {
 			$msg .= '<body>
+			<p>'.get_lang('ExerciseAttempted').' <br /> 
+	    	</p>
 			<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
 				<tr>
 			    <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>

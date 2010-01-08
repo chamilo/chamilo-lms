@@ -343,7 +343,9 @@ if ($add_type == 'multiple') {
 	echo '<div id="social-content-right">';
 	
 	if (count($nosessionUsersList) == 0) {
+		
 			echo get_lang('YouNeedToHaveFriendsInYourSocialNetwork');
+			
 			echo '<div>';
 			echo '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';
 			echo '</div>';

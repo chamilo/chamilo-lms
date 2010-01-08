@@ -189,4 +189,8 @@ $ClickHereToSeeMessageGroup = "Clic aquí para ver el mensaje de grupo";
 $OrCopyPasteTheFollowingUrl = "O copiar y pegar la siguente url";
 $ThereIsANewMessageInTheGroupX = "Hay un nuevo mensaje en el grupo %s";
 $UserIsAlreadySubscribedToThisGroup = "El usuario ya esta suscrito a este grupo";
+$AddNormalUser = "Agregar como un usuario normal";
+$AddModerator = "Agregar como moderador";
+$DenyEntry = "Denegar la entrada";
+$YouNeedToHaveFriendsInYourSocialNetwork = "Usted necesita tener amigos en su red social";
 ?>

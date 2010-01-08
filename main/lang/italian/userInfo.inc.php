@@ -178,4 +178,5 @@ $InvitationDenied = "Invito non accettato";
 $UserAdded = "Utente aggiunto";
 $FilesSizeExceedsX = "Superata la dimensione massima del file";
 $YouShouldWriteASubject = "Devi scrivere l\'oggetto del messaggio";
+$Topics = "Argomenti";
 ?>

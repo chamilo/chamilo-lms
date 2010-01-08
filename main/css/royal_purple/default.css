@@ -3107,7 +3107,7 @@ div.image-social-content center.friend {
 
 /*  SOCIAL MENU VERTICAL */
 .social-menu  {
-	width:180px;
+	width:100%;
 	height:auto;
 }
 .social-menu ul {
@@ -3137,7 +3137,7 @@ div.image-social-content center.friend {
 	margin-left:20px;
 }
 .social-menu-title{
-	width:180px;
+	width:100%;
 	float:left;
 	height:auto;
 	background-color:#8E5B97;
@@ -3352,7 +3352,7 @@ div.image-social-content center.friend {
 }
 
 #social-content-online {
-	background-color:#32578B;
+	background-color:#616161;
 	margin-bottom:5px;
 	margin-top:2px;
 	padding:1px;

@@ -188,8 +188,12 @@ class SocialManager extends UserManager {
 			$sql.=' AND relation_type='.$id_group;
 		}
 		if (isset($search_name) && is_string($search_name)===true) {
-			$sql.=' AND friend_user_id IN (SELECT user_id FROM '.$tbl_my_user.' WHERE '.(api_is_western_name_order() ? 'concat(firstName, lastName)' : 'concat(lastName, firstName)').' like concat("%","'.Database::escape_string($search_name).'","%"));';
+			$search_name = trim($search_name);
+			$search_name = str_replace(' ', '', $search_name);
+			//$sql.=' AND friend_user_id IN (SELECT user_id FROM '.$tbl_my_user.' WHERE '.(api_is_western_name_order() ? 'concat(firstName, lastName)' : 'concat(lastName, firstName)').' like concat("%","'.Database::escape_string($search_name).'","%"));';
+			$sql.=' AND friend_user_id IN (SELECT user_id FROM '.$tbl_my_user.' WHERE firstName LIKE "%'.Database::escape_string($search_name).'%" OR lastName LIKE "%'.Database::escape_string($search_name).'%"   OR    '.(api_is_western_name_order() ? 'concat(firstName, lastName)' : 'concat(lastName, firstName)').' like concat("%","'.Database::escape_string($search_name).'","%")    ) ';
 		}		
+		
 		$res=Database::query($sql,__FILE__,__LINE__);
 		while ($row=Database::fetch_array($res,'ASSOC')) {
 			if ($load_extra_info == true) {
@@ -649,10 +653,11 @@ class SocialManager extends UserManager {
 	 * @param bool show profile or not (show or hide the user image/information)
 	 * 
 	 */
-	public static function show_social_menu($show = '',$group_id = 0, $user_id = 0, $show_full_profile = false) {
+	public static function show_social_menu($show = '', $group_id = 0, $user_id = 0, $show_full_profile = false) {
 		
 		$img_array = UserManager::get_user_picture_path_by_id($user_id,'web',true,true);
-		$big_image = UserManager::get_picture_user($user_id, $img_array['file'],'',USER_IMAGE_SIZE_BIG);
+		$big_image = UserManager::get_picture_user($user_id, $img_array['file'],'', USER_IMAGE_SIZE_BIG);
+		
 		$big_image = $big_image['file'].$big_image['dir'];
 		$show_groups = array('groups', 'group_messages', 'messages_list', 'group_add', 'mygroups', 'group_edit', 'member_list', 'invite_friends', 'waiting_list');
 		$show_messages = array('messages', 'messages_inbox', 'messages_outbox', 'messages_compose');
@@ -668,7 +673,28 @@ class SocialManager extends UserManager {
 		}
 		
 		echo '<div class="social-menu">';				
+		
+		
+		
+		
+		//--- User image	        	
+		echo '<div class="social-content-image">';
+			echo '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()"><center>';
+						
+				if ($img_array['file'] != 'unknown.jpg') {
+	    	  		echo '<a class="thickbox" href="'.$big_image.'"><img src='.$img_array['dir'].$img_array['file'].' /> </a>';
+				} else {
+					echo '<img src='.$img_array['dir'].$img_array['file'].' width="110px" />';
+				}
+				if (api_get_user_id() == $user_id) {		
+					echo '<div id="edit_image" class="hidden_message" style="display:none"><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></div>';
+				}
 				
+    	  	echo '</center></div>';
+	  	echo '</div>';
+	  	
+		
+		
 		if ($show != 'shared_profile') {
 			
 			echo '<div align="center" class="social-menu-title" ><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
@@ -713,20 +739,7 @@ class SocialManager extends UserManager {
 
         if ($show == 'shared_profile') {
         	       	        	                	
-        	//--- User image	        	
-			echo '<div class="social-content-image">';
-				echo '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()"><center>';			
-					if ($img_array['file'] != 'unknown.jpg') {
-		    	  		echo '<a class="thickbox" href="'.$big_image.'"><img src='.$img_array['dir'].$img_array['file'].' width="180px" /> </a>';
-					} else {
-						echo '<img src='.$img_array['dir'].$img_array['file'].' width="110px" />';
-					}
-					if (api_get_user_id() == $user_id) {		
-						echo '<div id="edit_image" class="hidden_message" style="display:none"><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></div>';
-					}
-					
-	    	  	echo '</center></div>';
-    	  	echo '</div>';
+
     	  	
     	  	if ($user_id != intval(api_get_user_id())) {
     			$user_info = api_get_user_info($user_id);        			

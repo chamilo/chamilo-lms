@@ -56,6 +56,28 @@
 $language_file[] = 'document';
 require_once '../inc/global.inc.php';
 require_once '../glossary/glossary.class.php';
+
+$language_file = 'document';
+require_once '../inc/global.inc.php';
+$noPHP_SELF=true;
+$header_file= Security::remove_XSS($_GET['file']);
+$path_array=explode('/',str_replace('\\','/',$header_file));
+$path_array = array_map('urldecode',$path_array);
+$header_file=implode('/',$path_array);
+$nameTools = $header_file;
+
+if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='') {
+	$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
+	$interbreadcrumb[]= array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['_gid'], "name"=> get_lang('GroupSpace'));
+}
+
+$interbreadcrumb[]= array ("url"=>"./document.php?curdirpath=".dirname($header_file).$req_gid, "name"=> get_lang('Documents'));
+$interbreadcrumb[]= array ("url"=>"showinframes.php?file=".$header_file, "name"=>$header_file);
+$file_url_sys=api_get_path(SYS_COURSE_PATH).'document'.$header_file;
+$path_info= pathinfo($file_url_sys);
+$this_section = SECTION_COURSES;
+
+/*
 if (!empty($_GET['nopages'])) {
 	$nopages=Security::remove_XSS($_GET['nopages']);
 	if ($nopages==1) {
@@ -64,6 +86,7 @@ if (!empty($_GET['nopages'])) {
 	}
 	exit;
 }
+*/
 
 $_SESSION['whereami'] = 'document/view';
 
@@ -94,78 +117,72 @@ $file_root=$_course['path'].'/document'.str_replace('%2F', '/',$file);
 $file_url_sys=api_get_path(SYS_COURSE_PATH).$file_root;
 $file_url_web=api_get_path(WEB_COURSE_PATH).$file_root;
 $path_info= pathinfo($file_url_sys);
-?>
-<html>
-<head>
-<title>
-<?php echo $browser_display_title;?>
-</title>
-<script language="javascript" src="<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"></script>
-<script language="javascript" src="<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.frameready.js"></script>
 
 
-<script type="text/javascript">
-	<!--
-	
+$js_glossary_in_documents = '';
+if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
+	$js_glossary_in_documents = '	//	    $(document).ready(function() {
+									$.frameReady(function() {   
+								       //  $("<div>I am a div courses</div>").prependTo("body");		     
+								      }, "top.mainFrame",   
+								      { load: [   
+								      		{type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
+								            {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+								            {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
+								      	 ] 
+								      }		   
+								      );
+								    //});';
+} elseif(api_get_setting('show_glossary_in_documents') == 'isautomatic') {
+	$js_glossary_in_documents =	'//    $(document).ready(function() {
+								      $.frameReady(function(){   
+								       //  $("<div>I am a div courses</div>").prependTo("body");
+								     
+								      }, "top.mainFrame",   
+								      { load: [   
+								      		{type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
+								            {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+								            {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
+								      	 ] 
+								      }								   
+								      );
+								//   });';	
+}
+
+$htmlHeadXtra[] = '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"></script>';
+$htmlHeadXtra[] = '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
+
+$htmlHeadXtra[] = '<script type="text/javascript">
+<!--
 	var updateContentHeight = function() {
-		initialHeight = document.getElementById('headerFrame').offsetHeight; 
+		HeaderHeight = document.getElementById("header").offsetHeight;
+		FooterHeight = document.getElementById("footer").offsetHeight;		 
 		docHeight = document.body.clientHeight;
-		document.getElementById('mainFrame').style.height = (docHeight-initialHeight)+"px";						
+		document.getElementById("mainFrame").style.height = ((docHeight-(parseInt(HeaderHeight)+parseInt(FooterHeight)))-60)+"px";						
 	};
-	
-	// Fixes the content height of the frame			
-	window.onload = function() {
 
+	// Fixes the content height of the frame
+	window.onload = function() {
 		updateContentHeight();
-				
-		//loads the glossary library		
-		<?php 	
-			if (api_get_setting('show_glossary_in_documents') == 'ismanual') {	  	 	
-		  	 	?>		  	 	
-	//	    $(document).ready(function() {   
-		      $.frameReady(function(){   
-		       //  $("<div>I am a div courses</div>").prependTo("body");		     
-		      }, "top.mainFrame",   
-		      { load: [   
-		      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
-		            {type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
-		            {type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
-		      	 ] 
-		      }		   
-		      );
-	//	   });		   		  	 	
-		<?php
-		  	 } elseif(api_get_setting('show_glossary_in_documents') == 'isautomatic') {
-		?>		
-		//    $(document).ready(function() {
-		      $.frameReady(function(){   
-		       //  $("<div>I am a div courses</div>").prependTo("body");
-		     
-		      }, "top.mainFrame",   
-		      { load: [   
-		      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
-		            {type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
-		            {type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
-		      	 ] 
-		      }
-		   
-		      );
-		//   });
-		<?php
-		  	 }		  
-		?>
+		'.$js_glossary_in_documents.'
 	}
-	-->	
-</script>
-</head>
-<body style="margin:0px;padding:0px;" OnResize="updateContentHeight()">
-	<iframe border="0" frameborder="0" scrolling="no" style="width:100%;" id="headerFrame" src="headerpage.php?file=<?php echo $file.'&amp;'.api_get_cidreq(); ?>"> </iframe>
-	<?php
-	if (file_exists($file_url_sys)) {			
-		echo '<iframe border="0" frameborder="0" scrolling="auto"  style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&rand='.mt_rand(1,10000).'"></iframe>';
-	} else {				
-		echo '<frame name="mainFrame" id="mainFrame" src=showinframes.php?nopages=1 />';
-	}
-	?>
-</body>
-</html>
+-->
+</script>';
+
+//Display::display_header($tool_name, "User");
+
+Display::display_header(null,"Doc");
+echo "<div align=\"center\">";
+$file_url_web=api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$header_file."?".api_get_cidreq();
+echo "<a href='".$file_url_web."' target='blank'>".get_lang('_cut_paste_link')."</a></div>";
+//echo '<div>';
+
+if (file_exists($file_url_sys)) {			
+	echo '<iframe border="0" frameborder="0" scrolling="auto"  style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&rand='.mt_rand(1,10000).'"></iframe>';
+} else {				
+	echo '<frame name="mainFrame" id="mainFrame" src=showinframes.php?nopages=1 />';
+}
+
+//echo '</div>';
+
+Display::display_footer();

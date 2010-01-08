@@ -24,6 +24,7 @@ $interbreadcrumb[]= array ("url"=>"showinframes.php?file=".$header_file, "name"=
 $file_url_sys=api_get_path(SYS_COURSE_PATH).'document'.$header_file;
 $path_info= pathinfo($file_url_sys);
 $this_section = SECTION_COURSES;
+
 Display::display_header(null,"Doc");
 echo "<div align=\"center\">";
 $file_url_web=api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$header_file."?".api_get_cidreq();

@@ -112,7 +112,19 @@ jQuery(document).ready(function() {
    } 
    	
 });
-	</script>';
+	
+
+function show_icon_edit(element_html) {	
+	ident="#edit_image";
+	$(ident).show();
+}		
+
+function hide_icon_edit(element_html)  {
+	ident="#edit_image";
+	$(ident).hide();
+}		
+		
+</script>';
 
 $allowed_views = array('mygroups','newest','pop');		   	
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));

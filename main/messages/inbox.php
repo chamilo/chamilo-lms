@@ -46,6 +46,16 @@ function deselect_all(formita)
 				formita.elements[i].checked=0
 	}
 }
+function show_icon_edit(element_html) {	
+	ident="#edit_image";
+	$(ident).show();
+}		
+
+function hide_icon_edit(element_html)  {
+	ident="#edit_image";
+	$(ident).hide();
+}		
+		
 //-->
 </script>';
 

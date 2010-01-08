@@ -1228,7 +1228,7 @@ if ($show_menu) {
 		
 			echo '<div id="social_widget_image">';
 				if ($no_image == false)
-					echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a>';
+					echo '<a href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a>';
 				else 
 					echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
 			echo '</div>';	

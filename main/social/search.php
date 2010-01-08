@@ -18,6 +18,19 @@ api_block_anonymous_users();
 $this_section = SECTION_SOCIAL;
 $tool_name = get_lang('Search');
 $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));
+$htmlHeadXtra[] = '<script type="text/javascript">
+		
+function show_icon_edit(element_html) {	
+	ident="#edit_image";
+	$(ident).show();
+}		
+
+function hide_icon_edit(element_html)  {
+	ident="#edit_image";
+	$(ident).hide();
+}		
+		
+</script>';
 
 Display :: display_header($tool_name);
 

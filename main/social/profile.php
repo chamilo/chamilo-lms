@@ -177,6 +177,7 @@ function register_friend(element_input) {
 		});
  }
 }
+	
 
 function show_icon_edit(element_html) {	
 	ident="#edit_image";
@@ -268,35 +269,42 @@ echo '<div id="social-content-right">';
 		echo '<div class="social-box-left">';		
 			echo '<div>'.Display::return_icon('boxmygroups.jpg').'</div>';
 			echo '<div class="social-box-content1">';
+			
+			if (!empty($user_info['firstname']) || !empty($user_info['lastname'])) {
+    			echo '<div><h3>'.api_get_person_name($user_info['firstname'], $user_info['lastname']).'</h3></div>';
+			} else {
 				//--- Basic Information
-				echo '<div><h3>'.get_lang('Information').'</h3></div>';						
-				if ($show_full_profile) {
-					echo '<div class="social-profile-info" >';
-						echo '<dt>'.get_lang('UserName').'</dt>
-							  <dd>'. $user_info['username'].'	</dd>';
-						if (!empty($user_info['firstname']) || !empty($user_info['lastname']))
+				echo '<div><h3>'.get_lang('Information').'</h3></div>';				
+			}        			
+			 
+								
+			if ($show_full_profile) {
+				echo '<div class="social-profile-info" >';
+					echo '<dt>'.get_lang('UserName').'</dt>
+						  <dd>'. $user_info['username'].'	</dd>';
+/*						if (!empty($user_info['firstname']) || !empty($user_info['lastname']))
 							echo '<dt>'.get_lang('Name').'</dt>
-							  	  <dd>'. api_get_person_name($user_info['firstname'], $user_info['lastname']).'</dd>';
-						if (!empty($user_info['official_code']))
-							echo '<dt>'.get_lang('OfficialCode').'</dt>
-							  <dd>'.$user_info['official_code'].'</dd>';
-						if (!empty($user_info['email']))
-							if (api_get_setting('show_email_addresses')=='true')
-								echo '<dt>'.get_lang('Email').'</dt>
-							  <dd>'.$user_info['email'].'</dd>';
-						if (!empty($user_info['phone']))
-							echo '<dt>'.get_lang('Phone').'</dt>
-							  <dd>'. $user_info['phone'].'</dd>';
-						echo '</dl>';
-					echo '</div>';
-				} else {
-					echo '<div class="social-profile-info" >';
-						echo '<dl>';
-						if (!empty($user_info['firstname']) || !empty($user_info['lastname']))
-							echo '<dt>'.get_lang('Name').'</dt>
-							  <dd>'. api_get_person_name($user_info['firstname'], $user_info['lastname']).'</dd>';
-					echo '</div>';
-				}
+							  	  <dd>'. api_get_person_name($user_info['firstname'], $user_info['lastname']).'</dd>';*/
+					if (!empty($user_info['official_code']))
+						echo '<dt>'.get_lang('OfficialCode').'</dt>
+						  <dd>'.$user_info['official_code'].'</dd>';
+					if (!empty($user_info['email']))
+						if (api_get_setting('show_email_addresses')=='true')
+							echo '<dt>'.get_lang('Email').'</dt>
+						  <dd>'.$user_info['email'].'</dd>';
+					if (!empty($user_info['phone']))
+						echo '<dt>'.get_lang('Phone').'</dt>
+						  <dd>'. $user_info['phone'].'</dd>';
+					echo '</dl>';
+				echo '</div>';
+			} else {
+				echo '<div class="social-profile-info" >';
+					echo '<dl>';
+					if (!empty($user_info['firstname']) || !empty($user_info['lastname']))
+						echo '<dt>'.get_lang('Name').'</dt>
+						  <dd>'. api_get_person_name($user_info['firstname'], $user_info['lastname']).'</dd>';
+				echo '</div>';
+			}
 			
 				echo '<div class="clear"></div>';
 			

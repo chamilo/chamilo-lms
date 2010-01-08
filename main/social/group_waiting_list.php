@@ -14,7 +14,19 @@ require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>'; 
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
+$htmlHeadXtra[] = '<script type="text/javascript">
+		
+function show_icon_edit(element_html) {	
+	ident="#edit_image";
+	$(ident).show();
+}		
 
+function hide_icon_edit(element_html)  {
+	ident="#edit_image";
+	$(ident).hide();
+}		
+		
+</script>';
 $this_section = SECTION_SOCIAL;
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' =>'groups.php','name' => get_lang('Groups'));

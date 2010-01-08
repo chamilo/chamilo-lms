@@ -622,23 +622,18 @@ function handle_stylesheets()
 	// Current style
 	$currentstyle = api_get_setting('stylesheets');
 	$is_style_changeable=false;
-
-
-	if ($_configuration['access_url']!=1)
-	{
+	
+	if ($_configuration['access_url']!=1) {
 		$style_info = api_get_settings('stylesheets','',1,0);
 		$url_info = api_get_access_url($_configuration['access_url']);
-		if ($style_info[0]['access_url_changeable']==1 && $url_info['active']==1)
-		{
+		if ($style_info[0]['access_url_changeable']==1 && $url_info['active']==1) {
 			$is_style_changeable=true;
 			echo '<div class="actions" id="stylesheetuploadlink">';
 			Display::display_icon('theme_add.gif');
 			echo '<a href="" onclick="document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\';return false; ">'.get_lang('UploadNewStylesheet').'</a>';
 			echo '</div>';
 		}
-	}
-	else
-	{
+	} else {
 		$is_style_changeable=true;
 		echo '<div class="actions" id="stylesheetuploadlink">';
 		Display::display_icon('theme_add.gif');
@@ -654,8 +649,7 @@ function handle_stylesheets()
 	$form->addRule('new_stylesheet', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
 	$form->addRule('new_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
 	$form->addElement('style_submit_button', 'stylesheet_upload', get_lang('Ok'), array('class'=>'save'));
-	if( $form->validate() AND is_writable(api_get_path(SYS_CODE_PATH).'css/'))
-	{
+	if( $form->validate() AND is_writable(api_get_path(SYS_CODE_PATH).'css/')) {
 		$values = $form->exportValues();
 		$picture_element = & $form->getElement('new_stylesheet');
 		$picture = $picture_element->getValue();
@@ -668,9 +662,7 @@ function handle_stylesheets()
 		event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
 
 		Display::display_confirmation_message(get_lang('StylesheetAdded'));
-	}
-	else
-	{
+	} else {
 		if (!is_writable(api_get_path(SYS_CODE_PATH).'css/'))
 		{
 			Display::display_error_message(api_get_path(SYS_CODE_PATH).'css/'.get_lang('IsNotWritable'));
@@ -705,8 +697,8 @@ function handle_stylesheets()
 	echo '<div><iframe src="style_preview.php" width="100%" height="300" name="preview"></iframe></div>';
 
 	echo '<form name="stylesheets" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
-	if ($handle = @opendir(api_get_path(SYS_PATH).'main/css/'))
-	{
+	
+	if ($handle = @opendir(api_get_path(SYS_PATH).'main/css/')) {
 		$counter=1;
 		while (false !== ($style_dir = readdir($handle)))
 		{

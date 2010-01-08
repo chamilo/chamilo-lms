@@ -489,7 +489,7 @@ if ($encryptPassForm=='1' ) {
 	<div id="header2">&nbsp;</div>
 	<div id="header3">
 		<ul>
-			<li id="current"><a href="#"><span>Installation</span></a></li>
+			<li id="current"><a href="#"><span><?php echo get_lang('Installation');?></span></a></li>
 		</ul>
 	</div>
 </div>
@@ -514,7 +514,7 @@ if ($encryptPassForm=='1' ) {
 <tr>
 <td>
 	<div id="note" style="float:right;">
-		<a href="../../documentation/installation_guide.html" target="_blank">Read the installation guide</a>
+		<a href="../../documentation/installation_guide.html" target="_blank"><?php echo get_lang('ReadTheInstallationGuide'); ?></a>
 	</div>
 </td>
 </tr>

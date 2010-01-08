@@ -6,7 +6,7 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
-$language_file[] = array('learnpath','document');
+$language_file = array('learnpath','document');
 
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;

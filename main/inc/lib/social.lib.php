@@ -678,26 +678,46 @@ class SocialManager extends UserManager {
 		
 		echo '<div class="social-menu">';				
 	
-		//--- User image	        	
-		echo '<div class="social-content-image">';
-			echo '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()"><center>';
-						
-				if ($img_array['file'] != 'unknown.jpg') {
-	    	  		echo '<a class="thickbox" href="'.$big_image.'"><img src='.$img_array['dir'].$img_array['file'].' /> </a>';
+	  	if (in_array($show, $show_groups) && !empty($group_id)) {
+			//--- Group image	        	
+		
+			$group_info = GroupPortalManager::get_group_data($group_id);
+			$big		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,GROUP_IMAGE_SIZE_BIG);
+			$original	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'',GROUP_IMAGE_SIZE_ORIGINAL);	
+	
+			echo '<div class="social-content-image">';
+				echo '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()"><center>';
+							
+				if (basename($big['file']) != 'unknown_group.png') {
+					echo '<a class="thickbox" href="'.$original['file'].'"><img src='.$big['file'].' class="social-groups-image" /> </a><br /><br />';
 				} else {
-					echo '<img src='.$img_array['dir'].$img_array['file'].' width="110px" />';
+					echo '<img src='.$big['file'].' class="social-groups-image" /><br /><br />';
 				}
-				if (api_get_user_id() == $user_id) {		
-					echo '<div id="edit_image" class="hidden_message" style="display:none"><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></div>';
+				if (GroupPortalManager::is_group_admin($group_id, api_get_user_id())) { 				
+					echo '<div id="edit_image" class="hidden_message" style="display:none"><a href="'.api_get_path(WEB_PATH).'main/social/group_edit.php?id='.$group_id.'">'.get_lang('EditGroup').'</a></div>';
 				}
-				
-    	  	echo '</center></div>';
-	  	echo '</div>';
-	  	
+					
+	    		echo '</center></div>';
+		  	echo '</div>';
+	  	} else {
+	  		//--- User image	        	
+			echo '<div class="social-content-image">';
+				echo '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()"><center>';
+							
+					if ($img_array['file'] != 'unknown.jpg') {
+		    	  		echo '<a class="thickbox" href="'.$big_image.'"><img src='.$img_array['dir'].$img_array['file'].' /> </a>';
+					} else {
+						echo '<img src='.$img_array['dir'].$img_array['file'].' width="110px" />';
+					}
+					if (api_get_user_id() == $user_id) {		
+						echo '<div id="edit_image" class="hidden_message" style="display:none"><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></div>';
+					}
+					
+	    	  	echo '</center></div>';
+		  	echo '</div>';
+	  	}		
 		
-		
-		if ($show != 'shared_profile') {
-			
+		if ($show != 'shared_profile') {			
 			echo '<div align="center" class="social-menu-title" ><span class="social-menu-text1">'.get_lang('Menu').'</span></div>';
 		                	        	        	        
 	        echo 	'<div>

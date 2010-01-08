@@ -24,28 +24,7 @@ if (api_get_setting('allow_message_tool')!='true'){
 	api_not_allowed();
 }
 $htmlHeadXtra[]='<script language="javascript">
-<!--
-function enviar(miforma)
-{
-	if(confirm("'.get_lang("SureYouWantToDeleteSelectedMessages").'"))
-		miforma.submit();
-}
-function select_all(formita)
-{
-   for (i=0;i<formita.elements.length;i++)
-	{
-      		if(formita.elements[i].type == "checkbox")
-				formita.elements[i].checked=1
-	}
-}
-function deselect_all(formita)
-{
-   for (i=0;i<formita.elements.length;i++)
-	{
-      		if(formita.elements[i].type == "checkbox")
-				formita.elements[i].checked=0
-	}
-}
+
 function show_icon_edit(element_html) {	
 	ident="#edit_image";
 	$(ident).show();
@@ -56,7 +35,6 @@ function hide_icon_edit(element_html)  {
 	$(ident).hide();
 }		
 		
-//-->
 </script>';
 
 /*

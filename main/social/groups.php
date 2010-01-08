@@ -263,15 +263,7 @@ if ($group_id != 0 ) {
 		
 	// details about the current group
 	echo '<div class="head_group">';
-		echo '<div id="group_image" style="float:left;height:110px">';
-				$picture	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,'medium_');
-				$big_image	= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'','big_');	
-				if (basename($picture['file']) != 'unknown_group.png') {
-					echo '<a class="thickbox" href="'.$big_image['file'].'"><img src='.$picture['file'].' class="social-groups-image" /> </a><br /><br />';
-				} else {
-					echo '<img src='.$picture['file'].' class="social-groups-image" /><br /><br />';
-				}		
-		echo '</div>';
+
 		
 		echo '<div id="social-group-details">';
 				//Group's title

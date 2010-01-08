@@ -20,6 +20,12 @@ define('GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER'	,'4'); // an user
 define('GROUP_USER_PERMISSION_MODERATOR'	,'5'); // a moderator
 define('GROUP_USER_PERMISSION_ANONYMOUS'	,'6'); // an anonymous user  
 
+
+define('GROUP_IMAGE_SIZE_ORIGINAL',	1);
+define('GROUP_IMAGE_SIZE_BIG', 		2);
+define('GROUP_IMAGE_SIZE_MEDIUM', 	3);
+define('GROUP_IMAGE_SIZE_SMALL', 	4);
+
 class GroupPortalManager
 {
 	/**
@@ -669,9 +675,11 @@ class GroupPortalManager
 
 		$picture_info = @getimagesize($source_file);
 		$type = $picture_info[2];
+		
 		$small = self::resize_picture($source_file, 22);
 		$medium = self::resize_picture($source_file, 85);
 		$normal = self::resize_picture($source_file, 200);
+		
 		$big = new image($source_file); // This is the original picture.
 		$ok = false;
 		$detected = array(1 => 'GIF', 2 => 'JPG', 3 => 'PNG');
@@ -679,8 +687,8 @@ class GroupPortalManager
 		if (in_array($type, array_keys($detected))) {
 			$ok = $small->send_image($detected[$type], $path.'small_'.$filename)
 				&& $medium->send_image($detected[$type], $path.'medium_'.$filename)
-				&& $normal->send_image($detected[$type], $path.$filename)
-				&& $big->send_image($detected[$type], $path.'big_'.$filename);
+				&& $normal->send_image($detected[$type], $path.'big_'.$filename)
+				&& $big->send_image($detected[$type], $path.$filename);
 		}
 		return $ok ? $filename : false;
 	}
@@ -783,7 +791,7 @@ class GroupPortalManager
      * @param string style css
      * @return array with the file and the style of an image i.e $array['file'] $array['style']
      */
-   public static function get_picture_group($id, $picture_file, $height, $size_picture = 'medium_', $style = '') {
+   public static function get_picture_group($id, $picture_file, $height, $size_picture = GROUP_IMAGE_SIZE_MEDIUM , $style = '') {
     	$patch_profile = 'upload/users/groups/';
     	$picture = array();
     	$picture['style'] = $style;
@@ -791,6 +799,24 @@ class GroupPortalManager
     		$picture['file'] = api_get_path(WEB_CODE_PATH).'img/'.$picture_file;
     		return $picture;
     	}
+    	
+    	switch ($size_picture) {
+    		case GROUP_IMAGE_SIZE_ORIGINAL :
+    			$size_picture = '';
+    		break;
+    		case GROUP_IMAGE_SIZE_BIG :
+    			$size_picture = 'big_';
+    		break;
+    		case GROUP_IMAGE_SIZE_MEDIUM :
+    			$size_picture = 'medium_';
+    		break;
+    		case GROUP_IMAGE_SIZE_SMALL :
+    			$size_picture = 'small_';
+    		break;    		
+    		default:
+    			$size_picture = 'medium_';
+    	}
+    	
         $image_array_sys = self::get_group_picture_path_by_id($id, 'system', false, true);
         $image_array = self::get_group_picture_path_by_id($id, 'web', false, true);
         $file = $image_array_sys['dir'].$size_picture.$picture_file;
@@ -866,8 +892,8 @@ class GroupPortalManager
 		global $relation_group_title, $my_group_role;
 		
 		$group_info 	= GroupPortalManager::get_group_data($group_id); 
-		$picture		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,'medium_');
-		$big_image		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'','big_');	
+		$picture		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,GROUP_IMAGE_SIZE_MEDIUM);
+		$big_image		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'',GROUP_IMAGE_SIZE_BIG);	
 		$tags			= GroupPortalManager::get_group_tags($group_id, true);
 		$members		= GroupPortalManager::get_users_by_group($group_id);
 		$groups_by_user	= GroupPortalManager::get_groups_by_user($user_id, 0);

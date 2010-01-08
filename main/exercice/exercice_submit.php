@@ -1014,7 +1014,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 }
 //Timer control
 if ($exercise_row['expired_time'] != 0) { 
-  echo '<div align="right" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';
+  echo '<div align="left" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';
 }
 $exerciseTitle = api_parse_tex($exerciseTitle);
 echo "<h3>" . $exerciseTitle . "</h3>";
@@ -1174,7 +1174,7 @@ if (!empty ($error)) {
 	// end foreach()
 	echo "<!-- <button type='submit' name='buttonCancel' class='cancel'>" . get_lang('Cancel') . "</button>
 		   &nbsp;&nbsp; //--><br />";
-	echo '<div style="padding-left:10px; margin-top:-10px;">';
+	echo '<div style="margin-top:-10px;">';
 	$submit_btn = "<button class='next' type='submit' name='submit' name='submit_save' id='submit_save'>";
 	//	$submit_btn.=get_lang('ValidateAnswer');
 	if ($objExercise->selectFeedbackType() == 1 && $_SESSION['objExercise']->selectType() == 2) {

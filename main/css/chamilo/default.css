@@ -510,8 +510,11 @@ margin-top:0;
 }
 /* The tool shortcuts */
 #toolshortcuts {
-	text-align: right;
-	clear: right;
+	clear:right;
+	margin-left:auto;
+	margin-right:auto;
+	text-align:right;
+	width:92%;
 }
 /*****************************************************
  *  FOOTER STYLES                                    *

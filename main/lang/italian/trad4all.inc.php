@@ -764,4 +764,13 @@ $UserAdded = "Utente aggiunto";
 $UpdatedIn = "Aggiornato";
 $Metadata = "Metadati";
 $langAddMetadata  = "Vedi/Modifica i metadati";
+$SendMessage = "Invia messaggio";
+$SeeForum = "Visita il forum";
+$SeeMore = "Vedi tutto";
+$NoDataAvailable = "Data non disponibile";
+$Created = "Creato";
+$LastUpdate = "Ultimo aggiornamento";
+$UserNonRegisteredAtTheCourse = "Utente non iscritto al corso";
+$EditMyProfile = "Modifica il profilo personale";
+$Announcements = "Avvisi";
 ?>

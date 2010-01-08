@@ -1125,4 +1125,5 @@ $TabsSocial = "Etichetta social network";
 $MessageMaxUploadFilesizeTitle = "Messaggio: dimensione massima file da caricare";
 $MessageMaxUploadFilesizeComment = "Messaggio: dimensione massima file da caricare";
 $AddAdditionalProfileField = "Aggiungi un campo al profilo utente";
+$Username = "Nome utente";
 ?>

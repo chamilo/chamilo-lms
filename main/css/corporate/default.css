@@ -200,6 +200,15 @@ a.breadcrumb0 {
 	background:url(images/home.gif) no-repeat;
 	padding-left: 22px;
 }
+/* The tool shortcuts */
+#toolshortcuts {
+	text-align: right;
+	clear: right;
+	margin-left: auto;
+	margin-right: auto;
+	width: 97.6%
+}
+
 /* footer styles */
 #footer {
 	border-top: 1px solid #aeaeae;

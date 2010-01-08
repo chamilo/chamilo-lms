@@ -341,6 +341,19 @@ if ($add_type == 'multiple') {
 		echo '</div>';
 		
 	echo '<div id="social-content-right">';
+	
+	if (count($nosessionUsersList) == 0) {
+			echo get_lang('YouNeedToHaveFriendsInYourSocialNetwork');
+			echo '<div>';
+			echo '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';
+			echo '</div>';
+			
+			echo '</div>'; // end layout right
+		echo '</div>'; // 	
+		Display::display_footer();
+		exit;		
+	}
+
 ?>
 	
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $group_id; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
@@ -423,7 +436,7 @@ if(!empty($errorMsg)) {
   	  ?>
   	  <div id="ajax_list_users_multiple">
 	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">
-		<?php
+		<?php 
 		foreach($nosessionUsersList as $enreg) {
 		?>
 			<option value="<?php echo $enreg['user_id']; ?>" <?php if(in_array($enreg['user_id'],$UserList)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>

@@ -79,6 +79,18 @@ function clear_form () {
 	$("div#div_qualify_image").html("");
 	$("div#div_info_user").html("");
 }
+	
+		
+function show_icon_edit(element_html) {	
+	ident="#edit_image";
+	$(ident).show();
+}		
+
+function hide_icon_edit(element_html)  {
+	ident="#edit_image";
+	$(ident).hide();
+}		
+		
 </script>';
 
 $interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('Social'));

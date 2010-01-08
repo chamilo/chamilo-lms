@@ -20,7 +20,19 @@ api_block_anonymous_users();
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>'; 
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
+$htmlHeadXtra[] = '<script type="text/javascript">
+		
+function show_icon_edit(element_html) {	
+	ident="#edit_image";
+	$(ident).show();
+}		
 
+function hide_icon_edit(element_html)  {
+	ident="#edit_image";
+	$(ident).hide();
+}		
+		
+</script>';
 $xajax = new xajax();
 //$xajax->debugOn();
 $xajax -> registerFunction ('search_users');

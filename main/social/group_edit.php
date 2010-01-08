@@ -31,7 +31,16 @@ function textarea_maxlength(){
    }else{
       textarea = document.forms[0].description.value;
    } 
-} 
+}
+function show_icon_edit(element_html) {	
+	ident="#edit_image";
+	$(ident).show();
+}		
+
+function hide_icon_edit(element_html)  {
+	ident="#edit_image";
+	$(ident).hide();
+}		
 </script>';
 
 $group_id = isset($_GET['id']) ? intval($_GET['id']) : intval($_POST['id']);

@@ -3091,6 +3091,8 @@ class learnpath {
 								} else {
 									$file = $course_path . '/scorm/' . $lp_path . '/' . $decoded;
 								}
+							} else {
+								$file = 'blank.php?error=document_not_found';
 							}
 						}
 						//}else{

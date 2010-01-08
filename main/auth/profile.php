@@ -813,15 +813,14 @@ $big_image_height = $big_image_size[1];
 $url_big_image = $big_image.'?rnd='.time();
 
 
-if (api_get_setting('allow_social_tool') == 'true') {	
+if (api_get_setting('allow_social_tool') == 'true') {
 	echo '<div id="social-content">';
 	
 		echo '<div id="social-content-left">';
 		SocialManager::show_social_menu('home', null, $user_id, $show_full_profile);
 		echo '</div>';
 	
-		echo '<div id="social-content-right">';
-		
+		echo '<div id="social-content-right">';		
 			echo '<div id="social-content-online">';
 				if (api_get_setting('extended_profile') == 'true') {				
 					$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';							 
@@ -831,19 +830,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
 						echo '<a href="profile.php?type=extended'.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</span></a>';
 					}				
 				}			
-			echo '</div>';
-			
-		
-			// Style position:absolute has been removed for Opera-compatibility. 
-			//echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:3px;width:250px;" >';
-			echo '<div id="image-message-container" style="float:right;display:inline;padding:3px;width:150px;" >';
-			
-			if ($image == 'unknown.jpg') {
-				echo '<img '.$img_attributes.' />';
-			} else {
-				echo '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
-			}
-			echo '</div>';		
+			echo '</div>';	
 			$form->display();
 		echo '</div>';
 	echo '</div>';

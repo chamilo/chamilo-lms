@@ -3085,14 +3085,13 @@ class learnpath {
 										$document_name = $tmp_array[count($tmp_array) - 1];
 										if (strpos($document_name, '_DELETED_')) {
 											$file = 'blank.php?error=document_deleted';
+										} else {
+											$file = 'blank.php?error=document_not_found';
 										}
 									}
-
 								} else {
 									$file = $course_path . '/scorm/' . $lp_path . '/' . $decoded;
 								}
-							} else {
-								$file = 'blank.php?error=document_not_found';
 							}
 						}
 						//}else{

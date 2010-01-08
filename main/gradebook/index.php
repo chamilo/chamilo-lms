@@ -70,6 +70,7 @@ $status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_cour
 $filter_confirm_msg = true;
 $filter_warning_msg = true;
 
+$session_id = api_get_session_id();
 ///direct access to one evaluation
 $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
 if (empty($cats))
@@ -839,7 +840,7 @@ if (api_is_platform_admin() || api_is_allowed_to_create_course()  || $status==1)
 		}
 	}
 }
-if($first_time==1 && api_is_allowed_to_edit())
+if($first_time==1 && api_is_allowed_to_edit(null,true))
 {
 	echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?cidReq='.$course_code.'" />';
 }

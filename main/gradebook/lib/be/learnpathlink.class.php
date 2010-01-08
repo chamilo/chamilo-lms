@@ -59,11 +59,11 @@ class LearnpathLink extends AbstractLink
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 		$sql = 'SELECT id,name from '.$this->get_learnpath_table()
-				.' WHERE id NOT IN'
+				.' lp WHERE id NOT IN'
 				.' (SELECT ref_id FROM '.$tbl_grade_links
 				.' WHERE type = '.LINK_LEARNPATH
 				." AND course_code = '".$this->get_course_code()."'"
-				.')';
+				.') AND lp.session_id='.api_get_session_id().'';
 
 		$result = Database::query($sql, __FILE__, __LINE__);
 
@@ -86,7 +86,7 @@ class LearnpathLink extends AbstractLink
 		$course_info = api_get_course_info($this->course_code);
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK,$course_info['dbName']);
 
-		$sql = 'SELECT id,name from '.$this->get_learnpath_table();
+		$sql = 'SELECT id,name FROM '.$this->get_learnpath_table().' WHERE session_id = '.api_get_session_id().' ';
 		$result = Database::query($sql, __FILE__, __LINE__);
 
 		$cats=array();
@@ -213,8 +213,8 @@ class LearnpathLink extends AbstractLink
      */
     public function is_valid_link()
     {
-    	$sql = 'SELECT count(id) from '.$this->get_learnpath_table()
-				.' WHERE id = '.$this->get_ref_id();
+    	$sql = 'SELECT count(id) FROM '.$this->get_learnpath_table()
+				.' WHERE id = '.$this->get_ref_id().' AND session_id='.api_get_session_id().'';
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$number=Database::fetch_row($result,'NUM');
 		return ($number[0] != 0);
@@ -271,7 +271,7 @@ class LearnpathLink extends AbstractLink
     		return false;
     	} elseif (!isset($this->learnpath_data)) {
 			$sql = 'SELECT * from '.$this->get_learnpath_table()
-					.' WHERE id = '.$this->get_ref_id();
+					.' WHERE id = '.$this->get_ref_id().' AND session_id='.api_get_session_id().'';
 			$result = Database::query($sql, __FILE__, __LINE__);
 			$this->learnpath_data=Database::fetch_array($result);
     	}

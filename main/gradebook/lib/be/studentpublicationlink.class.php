@@ -58,7 +58,7 @@ class StudentPublicationLink extends AbstractLink
 				." WHERE prop.tool = 'work'"
 				.' AND prop.insert_user_id = '.$stud_id
 				.' AND prop.ref = pub.id'
-				." AND pub.title = '".Database::escape_string($eval->get_name())."'";
+				." AND pub.title = '".Database::escape_string($eval->get_name())."' AND pub.session_id=".api_get_session_id()."";
 
 		$result = Database::query($sql, __FILE__, __LINE__);
 		if ($fileurl = Database::fetch_row($result)) {
@@ -99,11 +99,11 @@ class StudentPublicationLink extends AbstractLink
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 		$sql = 'SELECT id,url from '.$this->get_studpub_table()
-				.' WHERE has_properties != '."''".' AND id NOT IN'
+				.' pup WHERE has_properties != '."''".' AND id NOT IN'
 				.' (SELECT ref_id FROM '.$tbl_grade_links
 				.' WHERE type = '.LINK_STUDENTPUBLICATION
 				." AND course_code = '".$this->get_course_code()."'"
-				.')';
+				.') AND pub.session_id='.api_get_session_id().'';
 
 		$result = Database::query($sql, __FILE__, __LINE__);
 
@@ -124,7 +124,7 @@ class StudentPublicationLink extends AbstractLink
     	$course_info = api_get_course_info($this->course_code);
     	$tbl_grade_links = Database :: get_course_table(TABLE_STUDENT_PUBLICATION,$course_info['dbName']);
 
-		$sql = 'SELECT id,url FROM '.$tbl_grade_links.' WHERE has_properties != '."'' AND filetype='folder'";
+		$sql = "SELECT id,url FROM $tbl_grade_links WHERE has_properties != '' AND filetype='folder' AND session_id = ".api_get_session_id()."";
 		$result = Database::query($sql, __FILE__, __LINE__);
 
 		while ($data=Database::fetch_array($result)) {
@@ -140,7 +140,7 @@ class StudentPublicationLink extends AbstractLink
     public function has_results() {
     	$course_info = api_get_course_info($this->course_code);
     	$tbl_grade_links = Database :: get_course_table(TABLE_STUDENT_PUBLICATION,$course_info['dbName']);
-		$sql = 'SELECT count(*) AS number FROM '.$tbl_grade_links." WHERE parent_id = '".$this->get_ref_id()."'";
+		$sql = 'SELECT count(*) AS number FROM '.$tbl_grade_links." WHERE parent_id = '".$this->get_ref_id()."' AND session_id=".api_get_session_id()."";
     	$result = Database::query($sql, __FILE__, __LINE__);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
@@ -154,7 +154,7 @@ class StudentPublicationLink extends AbstractLink
 		if (is_null($database_name)===true) {
 			return false;
 		}
-    	$sql = 'SELECT * FROM '.$tbl_stats." WHERE id = '".$this->get_ref_id()."'";
+    	$sql = 'SELECT * FROM '.$tbl_stats." WHERE id = '".$this->get_ref_id()."' AND session_id=".api_get_session_id()."";
 		$query = Database::query($sql,__FILE__,__LINE__);
 		$assignment = Database::fetch_array($query);
 
@@ -163,7 +163,7 @@ class StudentPublicationLink extends AbstractLink
     	} else {
     		 $v_assigment_id = $assignment['id'];
     	}
-    	$sql = 'SELECT * FROM '.$tbl_stats.' WHERE parent_id ="'.$v_assigment_id.'"';
+    	$sql = 'SELECT * FROM '.$tbl_stats.' WHERE parent_id ="'.$v_assigment_id.'" AND session_id='.api_get_session_id().'';
     	if (isset($stud_id)){
     		$sql1='SELECT firstname, lastname FROM '.Database::get_main_table(TABLE_MAIN_USER)." WHERE user_id = '".((int)$stud_id)."'";
      		$query = Database::query($sql1,__FILE__,__LINE__);
@@ -269,7 +269,7 @@ class StudentPublicationLink extends AbstractLink
 		if ($tbl_name=='') {
 			return false;
 		} elseif (!isset($this->exercise_data)) {
-    		$sql = 'SELECT * FROM '.$this->get_studpub_table()." WHERE id = '".$this->get_ref_id()."'";
+    		$sql = 'SELECT * FROM '.$this->get_studpub_table()." WHERE id = '".$this->get_ref_id()."' AND session_id=".api_get_session_id()."";
 			$query = Database::query($sql,__FILE__,__LINE__);
 			$this->exercise_data = Database::fetch_array($query);
     	}
@@ -286,7 +286,7 @@ class StudentPublicationLink extends AbstractLink
 
     public function is_valid_link() {
     	$sql = 'SELECT count(id) from '.$this->get_studpub_table()
-				.' WHERE id = '.$this->get_ref_id();
+				.' WHERE id = '.$this->get_ref_id().' AND session_id='.api_get_session_id().'';
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);

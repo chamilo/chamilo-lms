@@ -58,11 +58,11 @@ class ExerciseLink extends AbstractLink
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 		$sql = 'SELECT id,title from '.$this->get_exercise_table()
-				.' WHERE id NOT IN'
+				.' exe WHERE id NOT IN'
 				.' (SELECT ref_id FROM '.$tbl_grade_links
 				.' WHERE type = '.LINK_EXERCISE
 				." AND course_code = '".$this->get_course_code()."'"
-				.')';
+				.') AND exe.session_id='.api_get_session_id().'';
 
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$cats=array();
@@ -81,7 +81,7 @@ class ExerciseLink extends AbstractLink
     	}
     	$course_info = api_get_course_info($this->course_code);
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK,$course_info['dbName']);
-		$sql = 'SELECT id,title from '.$this->get_exercise_table().' where active=1';
+		$sql = 'SELECT id,title from '.$this->get_exercise_table().' WHERE active=1 AND session_id='.api_get_session_id().'';
 		$result = Database::query($sql, __FILE__, __LINE__);
 
 		$cats=array();
@@ -201,7 +201,7 @@ class ExerciseLink extends AbstractLink
      */
     public function is_valid_link() {
     	$sql = 'SELECT count(id) from '.$this->get_exercise_table()
-				.' WHERE id = '.$this->get_ref_id();
+				.' WHERE id = '.$this->get_ref_id().' AND session_id='.api_get_session_id().'';
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
@@ -255,7 +255,7 @@ class ExerciseLink extends AbstractLink
     		return false;
     	} elseif (!isset($this->exercise_data)) {
 			$sql = 'SELECT * from '.$this->get_exercise_table()
-					.' WHERE id = '.$this->get_ref_id();
+					.' WHERE id = '.$this->get_ref_id().' AND session_id ='.api_get_session_id().'';
 			$result = Database::query($sql, __FILE__, __LINE__);
 			$this->exercise_data=Database::fetch_array($result);
     	}

@@ -472,7 +472,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				$temp[] = $o_course_user['official_code'];
 
 				// deprecated feature
-				if (isset($o_course_user['tutor_id']) && $o_course_user['tutor_id'] == 1) {
+				if ((isset($o_course_user['tutor_id']) && $o_course_user['tutor_id'] == 1) || (isset($o_course_user['status_session']) && $o_course_user['status_session'] == 2)) {
 					$temp[] = get_lang('Tutor');
 				} else {
 					$temp[] = '-';
@@ -578,7 +578,7 @@ $default_column = ($is_western_name_order xor $sort_by_first_name) ? 3 : 2;
 $default_column = api_is_allowed_to_edit() ? 2 : 1;
 
 $table = new SortableTable('users', 'get_number_of_users', 'get_user_data', $default_column);
-$parameters['keyword'] = $_GET['keyword'];
+$parameters['keyword'] = Security::remove_XSS($_GET['keyword']);
 $table->set_additional_parameters($parameters);
 $header_nr = 0;
 

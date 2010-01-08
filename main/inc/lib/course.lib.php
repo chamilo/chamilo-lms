@@ -336,9 +336,11 @@ class CourseManager {
 		}
 
 		// Check whether the user has not been already subscribed to the course.
-		if (Database::num_rows(@Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-				WHERE user_id = '$user_id' AND course_code = '$course_code'", __FILE__, __LINE__)) > 0) {
-			return false; // The user has been already subscribed to the course.
+		if (empty($_SESSION['id_session'])) {
+			if (Database::num_rows(@Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+					WHERE user_id = '$user_id' AND course_code = '$course_code'", __FILE__, __LINE__)) > 0) {
+				return false; // The user has been already subscribed to the course.
+			}
 		}
 
 		if (!empty($_SESSION['id_session'])) {
@@ -859,9 +861,12 @@ class CourseManager {
 
 		$users = array();
 		$where = array();
-		$sql = $session_id == 0
-			? 'SELECT DISTINCT course_rel_user.status, user.user_id, course_rel_user.role, course_rel_user.tutor_id '
-			: 'SELECT DISTINCT user.user_id, user.status ';
+		
+		if (empty($session_id)) {
+			$sql = 'SELECT DISTINCT course_rel_user.status, user.user_id, course_rel_user.role, course_rel_user.tutor_id ';
+		} else {
+			$sql = 'SELECT DISTINCT user.user_id, user.status, session_course_user.status as status_session ';
+		}
 
 		$sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
 
@@ -897,6 +902,11 @@ class CourseManager {
 			if (isset($user['tutor_id'])) {
 				$user_info['tutor_id'] = $user['tutor_id'];
 			}
+			
+			if (!empty($session_id)) {
+				$user_info['status_session'] = $user['status_session'];
+			}			
+
 			$users[$user['user_id']] = $user_info;
 		}
 

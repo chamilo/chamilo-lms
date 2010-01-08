@@ -66,6 +66,10 @@ UPDATE TABLE settings_current SET selected_value = '1.8.6.2.9070' WHERE variable
 
 INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','SpecialCourse', 'Yes', 1 , 1);
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('user_order_by', NULL, 'radio', 'User', 'lastname', 'OrderUsersByTitle', 'OrderUsersByComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('user_order_by','firstname','FirstName');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('user_order_by','lastname','LastName');
+
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
 ALTER TABLE track_e_online ADD INDEX (course);

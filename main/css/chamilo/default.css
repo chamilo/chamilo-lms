@@ -1112,7 +1112,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	min-height: 30px;
 	border-width: 1px;
 	border-style: solid;
-	border: 1px solid #dcdcdc;
+	border: 1px solid #4171B5;
 	padding: 6px;
 	color: #00407F;
 	background-color: #E5EDF9;
@@ -1130,15 +1130,15 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 	min-height: 30px;
 }
 .confirmation-message {
+	background-color:#CAF0C7;
+	border-color:#1F8323;
+	color:#1F8323;	
 	position: relative;
 	margin-top: 10px;
 	margin-bottom: 10px;
 	border-width: 1px;
 	border-style: solid;
-	padding:6px;
-	border: 1px solid#E5EDF9;
-	color: #2F4F4F;
-	background-color: #E5EDF9;
+	padding:6px;	
 	min-height: 30px;
 }
 .error-message {

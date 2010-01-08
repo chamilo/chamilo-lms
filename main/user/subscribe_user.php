@@ -93,9 +93,15 @@ $list_not_register_user='';
 
 if (isset ($_REQUEST['register'])) {
 	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
-		$result_simple_sub=CourseManager :: subscribe_user(Database::escape_string($_REQUEST['user_id']), $_course['sysCode'],COURSEMANAGER);
+		
+		if (!empty($current_session_id)) {
+			$result_simple_sub = SessionManager::set_coach_to_course_session(intval($_REQUEST['user_id']), $current_session_id, $_course['sysCode']);
+		} else {
+			$result_simple_sub = CourseManager :: subscribe_user(intval($_REQUEST['user_id']), $_course['sysCode'],COURSEMANAGER);	
+		}
+		
 	} else {
-		$result_simple_sub=CourseManager :: subscribe_user(Database::escape_string($_REQUEST['user_id']), $_course['sysCode']);
+		$result_simple_sub=CourseManager :: subscribe_user(intval($_REQUEST['user_id']), $_course['sysCode']);
 	}
 
 	$user_id_temp=$_SESSION['session_user_id'];
@@ -120,18 +126,15 @@ if (isset ($_REQUEST['register'])) {
 if (isset ($_POST['action'])) {
 	switch ($_POST['action']) {
 		case 'subscribe' :
-
 			if (is_array($_POST['user'])) {
 				foreach ($_POST['user'] as $index => $user_id) {
 					$user_id=intval($user_id);
 					if(isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
-						
 						if (!empty($current_session_id)) {
 							$is_suscribe[] = SessionManager::set_coach_to_course_session($user_id, $current_session_id, $_course['sysCode']);
 						} else {
 							$is_suscribe[]=CourseManager :: subscribe_user($user_id, $_course['sysCode'],COURSEMANAGER);	
-						}						
-						
+						}												
 					} else {
 						$is_suscribe[]=CourseManager :: subscribe_user($user_id, $_course['sysCode']);
 					}
@@ -674,11 +677,11 @@ echo '<div class="actions">';
 $actions .= '<a href="user.php">'.Display::return_icon('members.gif',get_lang('BackToUserList')).' '.get_lang('BackToUserList').'</a>';
 if ($_GET['keyword'])
 {
-	$actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_GET['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearSearchResults').'</a>';
+	$actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_REQUEST['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearSearchResults').'</a>';
 }
 if ($_GET['subscribe_user_filter_value'] AND !empty($_GET['subscribe_user_filter_value']))
 {
-	$actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_GET['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearFilterResults').'</a>';
+	$actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_REQUEST['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearFilterResults').'</a>';
 }
 if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {
 	display_extra_profile_fields_filter();
@@ -689,7 +692,7 @@ $form = new FormValidator('search_user', 'get', '', '', null, false);
 $renderer = & $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->add_textfield('keyword', '', false);
-$form->addElement('hidden', 'type', Security::remove_XSS($_POST['type']));
+$form->addElement('hidden', 'type', Security::remove_XSS($_REQUEST['type']));
 $form->addElement('style_submit_button', 'submit', get_lang('SearchButton'), 'class="search"');
 $form->addElement('static', 'additionalactions', null, $actions);
 $form->display();
@@ -697,8 +700,8 @@ echo '</div>';
 
 // Build table
 $table = new SortableTable('users', 'get_number_of_users', 'get_user_data', ($is_western_name_order xor $sort_by_first_name) ? 3 : 2);
-$parameters['keyword'] = Security::remove_XSS($_GET['keyword']);
-$parameters ['type'] = Security::remove_XSS($_POST['type']);
+$parameters['keyword'] = Security::remove_XSS($_REQUEST['keyword']);
+$parameters ['type'] = Security::remove_XSS($_REQUEST['type']);
 $table->set_additional_parameters($parameters);
 $col = 0;
 $table->set_header($col ++, '', false);
@@ -816,7 +819,7 @@ function display_extra_profile_fields_filter()
 	}
 	
 	echo '<form id="subscribe_user_filter" name="subscribe_user_filter" method="get" action="'.api_get_self().'?api_get_cidreq" style="float:left;">';
-	echo '	<input type="hidden" name="type" id="type" value="'.Security::Remove_XSS($_GET['type']).'" />';
+	echo '	<input type="hidden" name="type" id="type" value="'.Security::Remove_XSS($_REQUEST['type']).'" />';
 	echo   '<select name="subscribe_user_filter_value" id="subscribe_user_filter_value">'.$return.'</select>';
 	echo   '<button type="submit" name="submit_filter" id="submit_filter" value="" class="search">'.get_lang('Filter').'</button>';
 	echo '</form>';

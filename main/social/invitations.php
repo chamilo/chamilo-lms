@@ -228,8 +228,8 @@ echo '<div id="social-content">';
 				
 				$invitation['picture_uri'] = '<a href="groups.php?id='.$invitation['id'].'">'.$img.'</a>';		
 				$invitation['name'] = '<a href="groups.php?id='.$invitation['id'].'">'.cut($invitation['name'],120,true).'</a>';
-				$invitation['join'] = '<a href="invitations.php?accept='.$invitation['id'].'">'.get_lang('AcceptInvitation').'</a>';
-				$invitation['deny'] = '<a href="invitations.php?deny='.$invitation['id'].'">'.get_lang('DenyInvitation').'</a>';
+				$invitation['join'] = '<a href="invitations.php?accept='.$invitation['id'].'">'.Display::return_icon('accept_invitation.png', get_lang('AcceptInvitation')).'&nbsp;&nbsp;'.get_lang('AcceptInvitation').'</a>';
+				$invitation['deny'] = '<a href="invitations.php?deny='.$invitation['id'].'">'.Display::return_icon('denied_invitation.png', get_lang('DenyInvitation')).'&nbsp;&nbsp;'.get_lang('DenyInvitation').'</a>';
 				$invitation['description'] = cut($invitation['description'],220,true);
 				//$invitation['send_message'] = '<a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?height=300&width=610&user_friend='.$invitation['id'].'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">';
 				//$invitation['send_message'] .= Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a>';

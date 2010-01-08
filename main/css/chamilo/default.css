@@ -1350,7 +1350,7 @@ span.form_error {
 	background-color: #E5EDF9;
 }
 .data_table tr.row_odd {
-	background-color: #fafafa;
+	background-color: #F2F2F2;
 }
 .data_table tr.row_odd:hover, .data_table tr.row_even:hover {
 	background-color: #E5EDF9;
@@ -2108,6 +2108,26 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 .quiz_export_link {
 	float: right;
 }
+/*Exercice timer*/
+#square{
+  padding:5px;
+  background-color:#EEEEEE;
+  border:1px solid #CCCCCC;
+  margin-right : 24px;
+  width : 155px;
+  margin-bottom:20px;
+}
+#wrapper-clock{
+  width:100%;
+  margin:0;
+}
+.count_down{
+  padding: 3px;  
+  font-size:22px;
+  font-weight:bold;
+  color:#222;
+}
+
 /*
 ------------------------------------------------------------------------------
     Learning path
@@ -2373,7 +2393,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	background:#ccc;
 	padding: 3px;
 	width: 200px;
-	margin-left:10px;
+	/*margin-left:10px;*/
 }
 .rounded_inner {
 	background:#FFF;
@@ -3713,7 +3733,7 @@ div.image-social-content center.friend {
 }
 
 #social-content-online {
-	background-color:#32578B;
+	background-color:#00AAE3;
 	margin-bottom:5px;
 	margin-top:2px;
 	padding:1px;
@@ -3730,3 +3750,27 @@ div.image-social-content center.friend {
 	padding:2px 0px 2px 0px;
 }
 
+
+.social-background-content {
+	z-index:5;
+	position:relative;
+	border:1px dotted #DDDDDD;
+}
+
+.social-background-content .hidden_message {
+	cursor:pointer;
+	position:absolute;	
+	top:0px;
+	right:0px;
+}
+
+.hidden_message {
+	background-color:#5A5A5A;	
+	padding:2px;
+	margin:0px;
+}
+
+.hidden_message a {
+	color:#fff;
+	/* text-decoration: underline; */
+}

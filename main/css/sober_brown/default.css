@@ -2179,7 +2179,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	background:#ccc;
 	padding: 3px;
 	width: 200px;
-	margin-left:10px;
+	/*margin-left:10px; */
 }
 .rounded_inner {
 	background:#FFF;
@@ -2252,7 +2252,8 @@ span.radio {
   background-color:#EEEEEE;
   border:1px solid #CCCCCC;
   margin-right : 24px;
-  width : 155px;margin-bottom:5px;
+  width : 155px;
+  margin-bottom:20px;
 }
 #wrapper-clock{
   width:100%;
@@ -2260,18 +2261,11 @@ span.radio {
 }
 .count_down{
   padding: 3px;
-  font-family:Georgia, "Times New Roman", Times, serif;
   font-size:22px;
   font-weight:bold;
   color:#222;
 }
-.count_down sup{
-  font-family:"Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
-  font-size:12px;
-  color:#555;
-  padding:0px 10px 0 0;
-  font-weight:normal;
-}
+
 /*****************************************************
  *  BUTTONS	                                         *
  *****************************************************/
@@ -3558,3 +3552,28 @@ div.image-social-content center.friend {
 	padding:2px 0px 2px 0px;
 }
 
+
+
+.social-background-content {
+	z-index:5;
+	position:relative;
+	border:1px dotted #DDDDDD;
+}
+
+.social-background-content .hidden_message {
+	cursor:pointer;
+	position:absolute;	
+	top:0px;
+	right:0px;
+}
+
+.hidden_message {
+	background-color:#5A5A5A;	
+	padding:2px;
+	margin:0px;
+}
+
+.hidden_message a {
+	color:#fff;
+	/* text-decoration: underline; */
+}

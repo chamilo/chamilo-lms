@@ -715,12 +715,16 @@ class SocialManager extends UserManager {
         	       	        	                	
         	//--- User image	        	
 			echo '<div class="social-content-image">';
-				echo '<div class="social-background-content"  ><center>';
+				echo '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()"><center>';			
 					if ($img_array['file'] != 'unknown.jpg') {
 		    	  		echo '<a class="thickbox" href="'.$big_image.'"><img src='.$img_array['dir'].$img_array['file'].' width="180px" /> </a>';
 					} else {
 						echo '<img src='.$img_array['dir'].$img_array['file'].' width="110px" />';
 					}
+					if (api_get_user_id() == $user_id) {		
+						echo '<div id="edit_image" class="hidden_message" style="display:none"><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></div>';
+					}
+					
 	    	  	echo '</center></div>';
     	  	echo '</div>';
     	  	

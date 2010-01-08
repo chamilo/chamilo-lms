@@ -345,6 +345,9 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 #toolshortcuts {
 	text-align: right;
 	clear: right;
+	margin-left: auto;
+	margin-right: auto;
+	width: 98%
 }
 /*****************************************************
  *  FOOTER STYLES                                    *

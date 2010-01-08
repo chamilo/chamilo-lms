@@ -77,4 +77,5 @@ $StudentAllowedToDeleteOwnPublication = "Consenti agli studenti di eliminare i d
 $TheDocumentHasBeenDeleted = "Documento eliminato";
 $YouAreNotAllowedToDeleteThisDocument = "Non hai il permesso di eliminare il documento";
 $ConfirmYourChoiceDeleteAllfiles = "TUTTI I FILE SARANNO ELIMINATI E NON POTRANNO ESSERE RECUPERATI CONFERMANDO LA SCELTA";
+$WorkName = "Titolo del compito";
 ?>

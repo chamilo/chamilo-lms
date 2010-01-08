@@ -199,6 +199,15 @@ input[type=button], input[type=submit] {
 	text-decoration: none;
 	color: #f3840d;
 }
+/* The tool shortcuts */
+#toolshortcuts {
+	text-align: right;
+	clear: right;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 10px;
+	width: 98.7%;
+}
 a.breadcrumb {
 	height: 21px;
 }
@@ -206,6 +215,7 @@ a.breadcrumb0 {
 	background:url(images/home.gif) no-repeat;
 	padding-left: 22px;
 }
+
 /* footer styles */
 #footer {
 	height: 7em;
@@ -499,6 +509,7 @@ form span.form_error {
 	padding:2px;
 	margin-bottom: 5px;
 	vertical-align:middle;
+	width: 99.8%	
 }
 .actions img {
 	/*display:inline-block;*/
@@ -774,7 +785,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 .data_table {
 	margin: 3px;
 	border-collapse: collapse;
-	width: 100%;
+	width: 99.8%;
 	padding: 5px;
 }
 .data_table th {

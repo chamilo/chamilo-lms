@@ -779,14 +779,14 @@ class SocialManager extends UserManager {
     	  		        	  	
 	  		if ($user_id != api_get_user_id()) {		
 	  			echo  '<li><a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?height=300&width=610&user_friend='.$user_id.'&view=profile&view_panel=1" class="thickbox" title="'.get_lang('SendMessage').'">';
-	  			echo  Display::return_icon('message_new.png').'&nbsp;&nbsp;'.get_lang('SendMessage').'</a></li>';	  		
+	  			echo  Display::return_icon('message_new.png',get_lang('SendMessage')).'&nbsp;&nbsp;'.get_lang('SendMessage').'</a></li>';	  		
 	  		}	  		
 	  		
 	  		//check if I already sent an invitation message
 	  		$invitation_sent_list = SocialManager::get_list_invitation_sent_by_user_id(api_get_user_id());
 	  			  		
 	  		if (is_array($invitation_sent_list) && is_array($invitation_sent_list[$user_id]) && count($invitation_sent_list[$user_id]) >0 ) {  	  		
-	  			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('YouAlreadySentAnInvitation').'</a></li>';
+	  			echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.Display::return_icon('mail_send.png',get_lang('YouAlreadySentAnInvitation')).'&nbsp;&nbsp;'.get_lang('YouAlreadySentAnInvitation').'</a></li>';
 	  		} else {
 	  			if (!$show_full_profile) {
 	  				echo  '<li><a href="'.api_get_path(WEB_PATH).'main/messages/send_message_to_userfriend.inc.php?view_panel=2&height=260&width=610&user_friend='.$user_id.'" class="thickbox" title="'.get_lang('SendInvitation').'">'.Display :: return_icon('add_multiple_users.gif', get_lang('SocialInvitationToFriends')).'&nbsp;'.get_lang('SendInvitation').'</a></li>';

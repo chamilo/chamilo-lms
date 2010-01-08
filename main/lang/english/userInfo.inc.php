@@ -179,7 +179,7 @@ $UserAdded = "User added";
 $FilesSizeExceedsX = "Files size exceeds";
 $YouShouldWriteASubject = "You should write a subject";
 $Topics = "Topics";
-$StatusInThisGroup = "status in this group";
+$StatusInThisGroup = "Status in this group";
 $DescriptionGroup = "Description group";
 $FriendsOnline = "Friends online";
 $GroupDescription = "Group description";
@@ -189,4 +189,8 @@ $ClickHereToSeeMessageGroup = "Click here to see message group";
 $OrCopyPasteTheFollowingUrl = "Or copy paste the following url";
 $ThereIsANewMessageInTheGroupX = "There is a new message in the group %s";
 $UserIsAlreadySubscribedToThisGroup = "User is already subscribed to this group";
+$AddNormalUser = "Add as a normal user ";
+$AddModerator = "Add as a moderator";
+$DenyEntry = "Deny the entry";
+$YouNeedToHaveFriendsInYourSocialNetwork = "You need to have friends in your social network";
 ?>

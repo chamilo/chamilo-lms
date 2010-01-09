@@ -291,9 +291,9 @@ input[text] {
 #top_corner {
 }
 #institution {
-	background-image: url(images/logo-chamilo.gif);
+	background-image: url(images/dokeos-header-camaleon.png);
 	background-repeat:no-repeat;
-	height:60px;
+	height:90px;
 	overflow:hidden;
 	text-indent:-9999px;
 	margin-left:4%;

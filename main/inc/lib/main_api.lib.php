@@ -2131,9 +2131,10 @@ function api_is_anonymous($user_id = null, $db_check = false) {
  */
 function api_not_allowed($print_headers = false) {
 
-	$home_url = api_get_path(WEB_PATH);
-	$user = api_get_user_id();
-	$course = api_get_course_id();
+	$home_url	= api_get_path(WEB_PATH);
+	$user		= api_get_user_id();
+	$course 	= api_get_course_id();
+	
 	global $this_section;
 
 	$origin = isset($_GET['origin']) ? $_GET['origin'] : '';
@@ -2169,16 +2170,33 @@ function api_not_allowed($print_headers = false) {
 			die();
 		}
 		require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-		$form = new FormValidator('formLogin', 'post', api_get_self().'?'.$_SERVER['QUERY_STRING']);
-		$form->addElement('static', null, null, 'Username');
-		$form->addElement('text', 'login', '', array('size' => USERNAME_MAX_LENGTH));
-		$form->addElement('static', null, null, 'Password');
-		$form->addElement('password', 'password', '', array('size' => 15));
+		$form = new FormValidator('formLogin', 'post', api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']));
+		
+		$form->addElement('text', 'login', get_lang('Username'), array('size' => 17));		
+		$form->addElement('password', 'password', get_lang('Password'), array('size' => 17));		
 		$form->addElement('style_submit_button', 'submitAuth', get_lang('Enter'),'class="login"');
-		$test ='<div id="expire_session"><br />'.$form->return_form().'</div>';
 
 		if ((!headers_sent() || $print_headers) && $origin != 'learnpath') { Display::display_header(''); }
-		Display::display_error_message('<left>'.get_lang('NotAllowed').'<br />'.get_lang('PleaseLoginAgainFromFormBelow').'<br />'.$test.'</left>', false);
+		Display::display_error_message(get_lang('NotAllowed').'<br />'.get_lang('PleaseLoginAgainFromFormBelow').'<br />', false);
+		
+		echo '<div class="menu" id="menu" style="float:left">';		
+		echo '<br />';		
+		$renderer =& $form->defaultRenderer();
+		$renderer->setElementTemplate('<div><label>{label}</label></div><div>{element}</div>');
+		$form->display();
+		/*
+		if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
+			echo '<div class="menusection"><span class="menusectioncaption">'.get_lang('MenuUser').'</span><ul class="menulist">';
+			if (api_get_setting('allow_registration') <> 'false') {
+				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'auth/inscription.php">'.get_lang('Reg').'</a></li>';
+			}
+			if (api_get_setting('allow_lostpassword') == 'true') {
+				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php">'.get_lang('LostPassword').'</a></li>';
+			}
+			echo '</ul></div>';
+		}*/		
+		echo '</div>';
+		
 		$_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
 		if ($print_headers && $origin != 'learnpath') { Display::display_footer(); }
 		die();

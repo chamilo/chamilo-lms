@@ -128,7 +128,7 @@ echo '<div id="social-content">';
 		$pending_invitations 		= GroupPortalManager::get_groups_by_user($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION);
 		$number_loop = count($list_get_invitation);
 		
-		$total_invitations = $number_loop + count($list_get_invitation_sent);
+		$total_invitations = $number_loop + count($list_get_invitation_sent) + count($pending_invitations);
 		
 		if ($total_invitations == 0 && count($_GET) <= 0) {
 			echo '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';

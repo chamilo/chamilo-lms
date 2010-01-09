@@ -659,10 +659,7 @@ class SocialManager extends UserManager {
 			$user_id = api_get_user_id();
 		}
 		
-		$img_array = UserManager::get_user_picture_path_by_id($user_id,'web',true,true);
-		$big_image = UserManager::get_picture_user($user_id, $img_array['file'],'', USER_IMAGE_SIZE_BIG);
-		
-		$big_image = $big_image['file'].$big_image['dir'];
+	
 		$show_groups = array('groups', 'group_messages', 'messages_list', 'group_add', 'mygroups', 'group_edit', 'member_list', 'invite_friends', 'waiting_list');
 		$show_messages = array('messages', 'messages_inbox', 'messages_outbox', 'messages_compose');
 			
@@ -700,6 +697,10 @@ class SocialManager extends UserManager {
 	    		echo '</center></div>';
 		  	echo '</div>';
 	  	} else {
+	  		$img_array = UserManager::get_user_picture_path_by_id($user_id,'web',true,true);
+			$big_image = UserManager::get_picture_user($user_id, $img_array['file'],'', USER_IMAGE_SIZE_BIG);		
+			$big_image = $big_image['file'].$big_image['dir'];
+		
 	  		//--- User image	        	
 			echo '<div class="social-content-image">';
 				echo '<div class="social-background-content" onmouseout="hide_icon_edit()" onmouseover="show_icon_edit()"><center>';

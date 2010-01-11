@@ -77,4 +77,14 @@ $StudentAllowedToDeleteOwnPublication = "Autoriser les apprenants à supprimer le
 $TheDocumentHasBeenDeleted = "Le document a été supprimé.";
 $YouAreNotAllowedToDeleteThisDocument = "Vous n\'êtes pas autorisé à supprimer ce document";
 $ConfirmYourChoiceDeleteAllfiles = "Veuillez confirmer votre choix. Tous les fichiers seront supprimés sans possibilité de récupération postérieure";
+$WorkName = "Nom de la tâche";
+$ReminderToSubmitPendingTask = "Nous vous rappelons que vous devez soumettre une tâche";
+$MessageConfirmSendingOfTask = "Ceci est un message de confirmation de bonne récpetion de la tâche";
+$DataSent = "Données envoyées";
+$DownloadLink = "Lien de téléchargement";
+$ViewUsersWithoutTask = "Travaux manquants";
+$ViewUsersWithTask = "Travaux déjà remis";
+$ReminderMessage = "Envoyer un rappel";
+$DateSent = "Date de réception";
+$ViewUsersWithoutTask = "Travaux manquants";
 ?>

@@ -352,4 +352,9 @@ $EnableTimerControl = "Activer le contrôle du temps";
 $ExerciseTotalDurationInMinutes = "Durée totale du test en minutes";
 $ToContinueUseMenu = "Pour continuer le cours, veuillez utiliser le menu latéral";
 $RandomAnswers = "Désordonner les réponses";
+$NotMarkActivity = "Activité non-qualificable";
+$YouHaveToCreateAtLeastOneAnswer = "Veuillez créer au moins une réponse";
+$ExerciseAttempted = "Un apprenant a passé un exercice";
+$MultipleSelectCombination = "Combinaison exacte";
+$MultipleAnswerCombination = "Combinaison exacte";
 ?>

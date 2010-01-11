@@ -18,4 +18,6 @@ $lang_next_slide = "Slede&#263;i slajd";
 $lang_image = "Slika";
 $lang_of = "sa";
 $lang_view_slideshow = "Pogledaj Slideshow ";
+$FirstSlide = "Prvi slajd";
+$LastSlide = "Poslednji slajd";
 ?>

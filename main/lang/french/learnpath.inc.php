@@ -244,4 +244,6 @@ $AddAssignmentToCourse = "Ajouter cette tâche au cours";
 $AddForumToCourse = "Ajouter ce forum au cours";
 $SaveAudioAndOrganization = "Enregistrer sons et disposition";
 $UploadOnlyMp3Files = "Merci de ne charger que des fichiers audio de type MP3";
+$ModifyHotPotatoes = "Modifier hotpotatoes";
+$SaveHotpotatoes = "Enregistrer hotpotatoes";
 ?>

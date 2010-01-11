@@ -354,7 +354,6 @@ $ToContinueUseMenu = "Per procedere usa il menù a lato";
 $RandomAnswers = "Mescola le risposte";
 $NotMarkActivity = "Non è possibile valutare l\'attività";
 $YouHaveToCreateAtLeastOneAnswer = "Devi indicare almeno una risposta valida";
-$YouHaveToCreateAtLeastOneAnswer = "Devi indicare almeno una risposta valida";
 $ExerciseAttempted = "Quesito affrontato";
 $MultipleSelectCombination = "Selezione multipla";
 $MultipleAnswerCombination = "Risposta multipla";

@@ -1458,7 +1458,7 @@ function api_get_session_visibility($session_id) {
 		$sesion_id = intval(Database::escape_string($session_id));
 		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-		$is_coach = api_is_course_coach();
+		$is_coach = api_is_coach();
 
 		$condition_date_end = "";
 		if ($is_coach) {

@@ -1462,10 +1462,6 @@ div.admin_section h4 {
 
 }
 
-.admin_section li:first-child {
-	background-image:none; 
-}
-
 .user_course_category {
 	background-color: #E5EDF9;
 	border: 1px solid #666;

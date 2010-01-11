@@ -80,4 +80,6 @@ $SessionCategory = "Catégorie de session";
 $Expand = "Déplier";
 $Collapse = "Replier";
 $CourseDetails = "Description du cours";
+$GroupPendingInvitations = "Invitations de groupe en attente";
+$Compose = "Composer";
 ?>

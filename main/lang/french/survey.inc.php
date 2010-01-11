@@ -202,4 +202,5 @@ $BackToSurvey = "Retour à l\'enquête";
 $UpdateInformation = "Mettre les informations à jour";
 $PleaseFillSurvey = "Veuillez compléter l\'enquête";
 $ReportingOverview = "Vue globale du suivi";
+$ThereAreNotQuestionsForthisSurvey = "Il n\'y a pas de questions dans cette enquête";
 ?>

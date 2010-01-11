@@ -985,7 +985,7 @@ class GroupPortalManager
 					
 						echo '<div class="social-menu-group-member">';
 						echo '<a href="profile.php?u='.$member['user_id'].'">';
-						echo '<img height="44" border="2" align="middle" width="44" vspace="10" class="social-groups-image" src="'.$picture['file'].'"/>';
+						echo '<img height="44" border="2" align="middle" vspace="10" class="social-groups-image" src="'.$picture['file'].'"/>';
 						echo '<div>'.api_get_person_name(cut($member['firstname'],15),cut($member['lastname'],15)).'&nbsp;'.$icon.'</div></a>';
 						echo '</div>';
 						$i++;

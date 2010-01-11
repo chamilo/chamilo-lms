@@ -69,4 +69,5 @@ $YouDoNotHaveAnySessionInItsHistory = "Vous n\'avez pas de session dans votre hi
 $Messages = "Messages";
 $Inbox = "Boîte de réception";
 $Comppose = "Nouveau message";
+$PendingInvitations = "Invitations en attente";
 ?>

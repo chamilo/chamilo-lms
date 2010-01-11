@@ -392,7 +392,7 @@ input[text] {
 	background-color: #E5EDF9;
 	font-size: 12px;
 	color:#000;
-	min-height: 100px;	
+	min-height: 50px;	
 	overflow:hidden;	
 }
 .push {

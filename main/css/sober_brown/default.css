@@ -395,12 +395,13 @@ input[text] {
  *****************************************************/
 
 #footer {
-	height:4em;
+	background-color: #756e64;
 	background-image: url(images/footer.jpg);
-	background-repeat: no-repeat;
+	background-repeat:repeat-x;
 	color:#fff;
-	background-color: #fff;
 	font-size: 12px;
+	min-height: 100px;	
+	overflow:hidden;
 }
 .push {
 	height: 4em; /* Very important */
@@ -409,6 +410,16 @@ input[text] {
 	float: right;
 	padding-top:25px;
 	margin-right:10px;
+	background-color: #756e64;
+	background-image: url(images/footer.jpg);
+	background-repeat:repeat-x;
+}
+.footer_emails{
+	float: left;
+	margin-right:5%;	
+	background-color: #756e64;	
+	background-image: url(images/bg-footer.gif);
+	background-repeat:repeat-x;	
 }
 #footer #platformmanager {
 	float: left;

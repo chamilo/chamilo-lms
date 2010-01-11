@@ -276,17 +276,25 @@ class CourseManager {
 		if (!empty($_SESSION['id_session'])) { // We suppose the session is safe!
 
 			// Delete in table session_rel_course_rel_user
-			$my_session_id = Database::escape_string ($_SESSION['id_session']);
+			$my_session_id = intval ($_SESSION['id_session']);
 			Database::query("DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
 					WHERE id_session ='".$my_session_id."'
 						AND course_code = '".Database::escape_string($_SESSION['_course']['id'])."'
 						AND id_user IN ($user_ids)", __FILE__, __LINE__);
 
-			// Delete in table session_rel_user
-			Database::query("DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
-					WHERE id_session ='".$my_session_id."'
-						AND id_user IN ($user_ids)", __FILE__, __LINE__);
-
+			foreach ($user_id as $uid) {				
+				// check if a user is register in the session with other course
+				$sql = "SELECT id_user FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session='$my_session_id' AND id_user='$uid'";
+				$rs = Database::query($sql, __FILE__, __LINE__);
+				if (Database::num_rows($rs) == 0) {
+					// Delete in table session_rel_user
+					Database::query("DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
+									 WHERE id_session ='".$my_session_id."'
+									 AND id_user='$uid'", __FILE__, __LINE__);	
+				}
+				
+			}
+			
 			// Update the table session
 			$row = Database::fetch_array(Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
 					WHERE id_session = '".$my_session_id."'", __FILE__, __LINE__));
@@ -353,13 +361,18 @@ class CourseManager {
 				return false;
 			}
 
-			// Check whether the user has not already been stored in the session_rel_user table
-			if (Database::num_rows(@Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
-					WHERE id_session ='".$_SESSION['id_session']."'
-					AND id_user = '".$user_id."'", __FILE__, __LINE__)) > 0) {
-				return false;
+			// check if the user is registered in the session with other course
+			$sql = "SELECT id_user FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session='".$_SESSION['id_session']."' AND id_user='$user_id'";
+			$rs = Database::query($sql, __FILE__, __LINE__);
+			if (Database::num_rows($rs) == 0) {
+				// Check whether the user has not already been stored in the session_rel_user table
+				if (Database::num_rows(@Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
+						WHERE id_session ='".$_SESSION['id_session']."'
+						AND id_user = '".$user_id."'", __FILE__, __LINE__)) > 0) {
+					return false;
+				}
 			}
-
+				
 			// Add him/her in the table session_rel_course_rel_user
 			@Database::query("INSERT INTO ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
 					SET id_session ='".$_SESSION['id_session']."',

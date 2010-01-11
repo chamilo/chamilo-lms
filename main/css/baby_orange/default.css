@@ -188,13 +188,15 @@ a.breadcrumb0 {
 /* footer styles */
 
 #footer {
-	height:10em;
 	background:transparent url(images/bg.jpg) no-repeat scroll 100% 100%;
 	clear:both;
 	color:#F7D77E;
 	float:left;
 	width:98%;
 	padding: 0 0 0 2%;
+	color:#ffffff;
+	min-height: 100px;	
+	overflow:hidden;
 }
 .push {
 	height: 10em; /* Very important */

@@ -352,10 +352,13 @@ ul {
 ==============================================================================
 */
 #footer {
-	height: 4em;
-	background: url('images/headerbg.jpg') repeat-y top right;
 	font-family: Arial, sans-serif, sans;
 	font-weight: bold;
+	font-size: 12px;
+	color:#000;
+	min-height: 100px;	
+	overflow:hidden;
+	background: url('images/headerbg.jpg');
 }
 .push {
 	height: 4em; /* Very important */
@@ -365,6 +368,12 @@ ul {
 	padding-top:25px;
 	margin-right:10px;
 }
+.footer_emails{
+	float: left;
+	margin-right:5%;	
+	background: url('images/headerbg.jpg');
+}
+
 #footer #platformmanager {
 	float: left;
 	padding-top:25px;

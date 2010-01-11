@@ -2539,13 +2539,13 @@ button.cancel {
 /*including "search" image*/
 button.search {
 /*	background-color:#FFFFFF; */
-	background-image:url(images/bg-button.gif);
+	background-image:url(images/bg-boton.png);
 	background-position:right center;
 	padding-right: 30px;
 }
 /*including "login" image*/
 button.login {
-	background-image:url(images/bg-button.gif);
+	background-image:url(images/bg-boton.png);
 	background-position:right;
 /*	background-color:#FFF;
 	border:solid 2px #FFF; */

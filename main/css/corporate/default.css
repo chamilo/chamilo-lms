@@ -212,9 +212,11 @@ a.breadcrumb0 {
 /* footer styles */
 #footer {
 	border-top: 1px solid #aeaeae;
-	height:3.5em;
-	color:#fff;
 	background-color: #434343;
+	font-size: 12px;
+	color:#fff;
+	min-height: 100px;	
+	overflow:hidden;	
 }
 .push {
 	height: 4em; /* Very important */
@@ -223,6 +225,10 @@ a.breadcrumb0 {
 	float: right;
 	padding-top:8px;
 	margin-right:10px;
+}
+.footer_emails{
+	float: left;
+	margin-right:5%;
 }
 #footer #platformmanager {
 	float: left;

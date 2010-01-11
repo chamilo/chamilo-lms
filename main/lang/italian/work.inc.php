@@ -78,4 +78,13 @@ $TheDocumentHasBeenDeleted = "Documento eliminato";
 $YouAreNotAllowedToDeleteThisDocument = "Non hai il permesso di eliminare il documento";
 $ConfirmYourChoiceDeleteAllfiles = "TUTTI I FILE SARANNO ELIMINATI E NON POTRANNO ESSERE RECUPERATI CONFERMANDO LA SCELTA";
 $WorkName = "Titolo del compito";
+$ReminderToSubmitPendingTask = "Ricorda che hai un compito da completare";
+$MessageConfirmSendingOfTask = "Messaggio di conferma di assegnazione del compito";
+$DataSent = "Data d\'invio";
+$DownloadLink = "Collegamento di download";
+$ViewUsersWithoutTask = "File ancora mancante";
+$ViewUsersWithTask = "File già inviato";
+$ReminderMessage = "Manda un messaggio di richiamo";
+$DateSent = "Data d\'invio";
+$ViewUsersWithoutTask = "Mostra i corsisti senza compiti assegnati";
 ?>

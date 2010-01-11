@@ -773,4 +773,6 @@ $LastUpdate = "Last update";
 $UserNonRegisteredAtTheCourse = "User non registered at the course";
 $EditMyProfile = "Edit my profile";
 $Announcements = "Announcements";
+$Username = "Username";
+$Password = "Password";
 ?>

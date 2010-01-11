@@ -22,6 +22,7 @@ require_once 'exercise.class.php';
 require_once 'question.class.php'; //also defines answer type constants
 require_once 'answer.class.php';
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');	
 
 if ( empty ( $origin ) ) {
     $origin = $_REQUEST['origin'];
@@ -1349,7 +1350,6 @@ function send_notification($arrques, $arrans, $to) {
 	
 	    $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 	    $email_admin = api_get_setting('emailAdministrator');
-	    require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');	
 	    $result = api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
 	} else {
 		

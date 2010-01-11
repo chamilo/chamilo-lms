@@ -200,12 +200,22 @@ a.breadcrumb0 {
 
 /* footer styles */
 #footer {
-	height: 22em;
 	background-color: #4171b5;
-	background: url(images/bg.jpg) 50% 100%;
+	background-image: url(images/bg.jpg);
+	background-repeat:repeat-x;
 	color: #B0C8EB;
 	font-weight:bold;
+	min-height: 100px;	
+	overflow:hidden;
 }
+.footer_emails{
+	float: left;
+	margin-right:5%;	
+	background-color: #4171b5;
+	background-image: url(images/bg-footer.gif);
+	background-repeat:repeat-x;	
+}
+
 .push {
 	height: 22em; /* Very important */
 }
@@ -213,6 +223,9 @@ a.breadcrumb0 {
 	float: right;
 	padding-top:235px;
 	margin-right:10px;
+	background-color: #4171b5;
+	background-image: url(images/bg-footer.gif);
+	background-repeat:repeat-x;	
 }
 #footer #platformmanager {
 	float: left;

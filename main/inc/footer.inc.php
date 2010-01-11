@@ -57,6 +57,8 @@ if (api_is_platform_admin()) {
 */
 api_plugin('footer');
 
+echo '<div class="footer_emails">';
+
 if (api_get_setting('show_administrator_data')=='true') {
 	// Platform manager
 	echo '<span id="platformmanager">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));
@@ -76,7 +78,7 @@ if (api_get_setting('show_tutor_data')=='true') {
 					$email_link[] = Display::encrypted_mailto_link($email,$username);
 				}
 			}				
-			echo '&nbsp;'.get_lang('Coachs')." : ".implode("&nbsp;|&nbsp;",$email_link);				
+			echo '<br />'.get_lang('Coachs')." : ".implode("<br />",$email_link);				
 		}
 		echo '</span>';
 	}
@@ -91,21 +93,22 @@ if (api_get_setting('show_teacher_data')=='true') {
 		$mail=CourseManager::get_emails_of_tutors_to_course($id_course);
 		if (!empty($mail)) {
 			if (count($mail)>1){
-				$bar='&nbsp;|&nbsp;';
-				echo '&nbsp;'.get_lang('Teachers').' : ';
+				$bar='<br />';
+				echo '<br />'.get_lang('Teachers').' : ';
 			} else {
 				$bar='';
-				echo '&nbsp;'.get_lang('Teacher').' : ';
+				echo '<br />'.get_lang('Teacher').' : ';
 			}
 			foreach ($mail as $value=>$key) {
 				foreach ($key as $email=>$name){
-					echo Display::encrypted_mailto_link($email,$name).$bar;
+					echo '<il>'.Display::encrypted_mailto_link($email,$name).$bar.'</il>';
 				}
 			}
 		}
-		echo '</span>';
+		echo '<br /></span>';
 	}
 }
+echo '</div>';
 
 ?>&nbsp;
 </div> <!-- end of #footer -->

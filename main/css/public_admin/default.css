@@ -405,13 +405,14 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
-#footer {
-	height: 8em;
+#footer {	
 	background-color: #305582;
 	background-image: url(images/footer.jpg);
-	background-repeat: no-repeat;
+	background-repeat:repeat-x;
 	font-size: 12px;
 	color:#ffffff;
+	min-height: 100px;	
+	overflow:hidden;	
 }
 .push {
 	height: 8em; /* Very important */
@@ -420,6 +421,17 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
 	float: right;
 	padding-top:60px;
 	margin-right:10px;
+	background-color: #305582;
+	background-image: url(images/footer.jpg);
+	background-repeat:repeat-x;		
+	
+}
+.footer_emails{
+	float: left;
+	margin-right:5%;	
+	background-color: #305582;
+	background-image: url(images/footer.jpg);
+	background-repeat:repeat-x;	
 }
 #footer #platformmanager {
 	float: left;

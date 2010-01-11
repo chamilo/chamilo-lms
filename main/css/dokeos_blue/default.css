@@ -342,11 +342,13 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
  *  FOOTER STYLES                                    *
  *****************************************************/
 #footer {
-	height:3em;
-	background-image: url(images/tab-repeat.png);
-	background-repeat: repeat-x;
-	color:#fff;
 	background-color: #434343;
+	background-image: url(images/tab-repeat.png);
+	background-repeat:repeat-x;
+	font-size: 12px;
+	color:#ffffff;
+	min-height: 50px;	
+	overflow:hidden;	
 }
 .push {
 	height: 3em; /* Very important */
@@ -355,6 +357,16 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	float: right;
 	padding-top:18px;
 	margin-right:10px;
+	background-color: #434343;
+	background-image: url(images/tab-repeat.png);
+	background-repeat:repeat-x;
+}
+.footer_emails{
+	float: left;
+	margin-right:5%;	
+	background-color: #434343;
+	background-image: url(images/tab-repeat.png);
+	background-repeat:repeat-x;	
 }
 #footer #platformmanager {
 	float: left;

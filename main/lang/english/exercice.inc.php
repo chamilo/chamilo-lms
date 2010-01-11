@@ -352,10 +352,9 @@ $EnableTimerControl = "Enable time control";
 $ExerciseTotalDurationInMinutes = "Total duration in minutes of the test";
 $ToContinueUseMenu = "To continue this course, please use the side-menu.";
 $RandomAnswers = "Shuffle answers";
-$NotMarkActivity = "Not possible mark this activity";
+$NotMarkActivity = "This activity cannot be qualified";
 $YouHaveToCreateAtLeastOneAnswer = "You have to create at least one answer";
-$YouHaveToCreateAtLeastOneAnswer = "You have to create at least one answer";
-$ExerciseAttempted = "Exercise attempted";
+$ExerciseAttempted = "A learner attempted an exercise";
 $MultipleSelectCombination = "Multiple select combination";
 $MultipleAnswerCombination = "Multiple answer combination";
 ?>

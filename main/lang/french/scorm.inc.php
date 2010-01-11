@@ -52,4 +52,5 @@ $UnknownPackageFormat = "Le format du cours n\'a pas été identifié. Veuillez vou
 $Attempt = "Tentative";
 $MoveTheCurrentForum = "Déplacer le forum courant";
 $WarningWhenEditingScorm = "Attention !<br />Quand on édite une étape scorm, on peut altérer le reporting, voire endommager le cours.";
+$AdditionalProfileField = "Ajouter un champ de profil utilisateur";
 ?>

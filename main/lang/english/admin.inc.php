@@ -1121,9 +1121,9 @@ $AllowStudentsToCreateGroupsInSocialTitle = "Allow students to create groups in 
 $AllowStudentsToCreateGroupsInSocialComment = "Allow students to create groups in social network";
 $AllowSendMessageToAllPlatformUsersTitle = "Allow send message to all platform users";
 $AllowSendMessageToAllPlatformUsersComment = "Allow send message to all platform users";
-$TabsSocial = "Tabs social";
-$MessageMaxUploadFilesizeTitle = "Message max upload file size";
-$MessageMaxUploadFilesizeComment = "Message max upload file size";
+$TabsSocial = "Social network tab";
+$MessageMaxUploadFilesizeTitle = "Max upload file size in messages";
+$MessageMaxUploadFilesizeComment = "Maximum size for file uploads in the messaging tool (in Bytes)";
 $AddAdditionalProfileField = "Add user profile field";
 $Username = "Username";
 ?>

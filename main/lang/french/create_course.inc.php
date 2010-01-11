@@ -104,4 +104,5 @@ $CreateCourse = "Créer formation";
 $Create = "Créer";
 $MessageOfNewCourseToAdmin = "Ce petit message pour vous informer qu\'un nouveau cours a été créé sur la plateforme";
 $NewCourseCreatedIn = "Nouveau cours créé dans";
+$ExplicationTrainers = "Vous êtes considéré comme formateur pour l\'instant. Vous pourrez modifier ce paramètre plus tard dans la page de configuration des paramètres du cours.";
 ?>

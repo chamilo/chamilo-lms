@@ -180,7 +180,6 @@ $FilesSizeExceedsX = "Tamañu del archivu pergrande";
 $YouShouldWriteASubject = "Tienes qu\'escribir l\'asuntu";
 $Topics = "Temes";
 $StatusInThisGroup = "Estáu nesti grupu";
-$DescriptionGroup = "Descripción del grupu";
 $FriendsOnline = "Amigos online";
 $GroupDescription = "Descripción del grupu";
 $MyProductions = "Les mios producciones";

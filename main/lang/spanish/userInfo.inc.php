@@ -180,7 +180,6 @@ $FilesSizeExceedsX = "Tamaña del archivo excedido";
 $YouShouldWriteASubject = "Debe escribir el asunto";
 $Topics = "Temas";
 $StatusInThisGroup = "Estatus en este grupo";
-$DescriptionGroup = "Descripción del grupo";
 $FriendsOnline = "Amigos en línea";
 $GroupDescription = "Descripción del grupo";
 $MyProductions = "Mis producciones";

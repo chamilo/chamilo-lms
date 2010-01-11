@@ -354,7 +354,6 @@ $ToContinueUseMenu = "Para continuar esta lección, por favor use el menú lateral
 $RandomAnswers = "Barajar respuestas";
 $NotMarkActivity = "No es posible calificar este elemento";
 $YouHaveToCreateAtLeastOneAnswer = "Tienes que crear al menos una respuesta";
-$YouHaveToCreateAtLeastOneAnswer = "Tienes que crear al menos una respuesta";
 $ExerciseAttempted = "Un estudiante ha contestado una pregunta";
 $MultipleSelectCombination = "Combinación de selección multiple";
 $MultipleAnswerCombination = "Combinación de respuesta multiple";

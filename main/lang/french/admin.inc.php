@@ -1117,4 +1117,13 @@ $GoToCourseAfterLoginComment = "Lorsqu\'un utilisateur est enregistré dans un se
 $GroupList = "Liste des groupes";
 $AllowStudentsDownloadFoldersTitle = "Autoriser les apprenants à télécharger des répertoires";
 $AllowStudentsDownloadFoldersComment = "Permettre aux apprenants de comprimer et télécharger un répertoire complet dans l\'outil documents";
+$AllowStudentsToCreateGroupsInSocialTitle = "Autoriser les étudiants à créer des groupes dans le réseau social";
+$AllowStudentsToCreateGroupsInSocialComment = "Autoriser les étudiants à créer des groupes dans le réseau social. Sans cette option, seuls les administrateurs peuvent créer des groupes, ce qui limite l\'interaction entre étudiants et la formation de groupes volontaires.";
+$AllowSendMessageToAllPlatformUsersTitle = "Autoriser l\'envoi de messages à tous les utilisateurs";
+$AllowSendMessageToAllPlatformUsersComment = "Autoriser l\'envoi de messages à tous les utilisateurs de la plateforme. Sans cette option, les utilisateurs ne peuvent envoyer de message qu\'aux utilisateurs actuellement connectés.";
+$TabsSocial = "Onglet réseau social";
+$MessageMaxUploadFilesizeTitle = "Taille maximum d\'envoi de fichier dans les messages";
+$MessageMaxUploadFilesizeComment = "Taille maximum pour l\'envoi de fichiers dans l\'outil de messagerie (en Bytes)";
+$AddAdditionalProfileField = "Ajouter un champ de profil utilisateur";
+$Username = "Nom d\'utilisateur";
 ?>

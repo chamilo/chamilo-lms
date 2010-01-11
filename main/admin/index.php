@@ -63,13 +63,14 @@ if (api_is_platform_admin()) {
 	?>
 		<div class="admin_section">
 	<h4><?php Display::display_icon('members.gif', get_lang('Users')); ?> <?php echo api_ucfirst(get_lang('Users')); ?></h4>
-	<ul>
-		<li style="list-style-type:none"><form method="get" action="user_list.php">
+
+		<div style="list-style-type:none"><form method="get" action="user_list.php">
 			<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
 			<button class="search" type="submit"> <?php echo get_lang('Search');?>
 			</button>
 			</form>
-		</li>
+		</div>
+	<ul>
 		<li><a href="user_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a></li>
 		<li><a href="user_list.php">	<?php echo get_lang('UserList') ?></a></li>
 		<li><a href="user_add.php">		<?php echo get_lang('AddUsers') ?></a></li>
@@ -112,11 +113,14 @@ if(api_is_platform_admin()) {
 ?>
 	<div class="admin_section">
 <h4><?php Display::display_icon('course.gif', get_lang('Courses')); ?> <?php echo api_ucfirst(get_lang('Courses')); ?></h4>
-		<ul><li style="list-style-type:none"><form method="get" action="course_list.php">
+		<div style="list-style-type:none"><form method="get" action="course_list.php">
 		<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
 		<button class="search" type="submit"> <?php echo get_lang('Search');?>
 			</button>
-		</form></li>
+		</form></div>
+		
+		
+		<ul>
 		<li>
 		<a href="course_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a>
 
@@ -186,13 +190,14 @@ if(api_get_setting('use_session_mode')=='true')
 
 <div class="admin_section">
  <h4><?php Display::display_icon('agenda.gif', get_lang('Sessions')); ?> <?php echo get_lang('Sessions') ?></h4>
- <ul>
- <li style="list-style-type:none"><form method="POST" action="session_list.php">
+ <div style="list-style-type:none"><form method="POST" action="session_list.php">
 	<input type="text" name="keyword_name" value="<?php echo $keyword_url; ?>"/>
 	<button class="search" type="submit"> <?php echo get_lang('Search');?>
 			</button>
 	</form>
-</li>
+</div>
+
+ <ul>
   <li><a href="session_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a></li>
   <li><a href="session_list.php"><?php echo get_lang('ListSession') ?></a></li>
   <li><a href="session_category_list.php"><?php echo get_lang('ListSessionCategory') ?></a></li>
@@ -220,13 +225,13 @@ else if(api_is_platform_admin())
 
 <div class="admin_section">
 <h4><?php Display::display_icon('group.gif', get_lang('AdminClasses')); ?> <?php echo api_ucfirst(get_lang('AdminClasses')); ?></h4>
-<ul>
-<li style="list-style-type:none"><form method="get" action="class_list.php">
+<div style="list-style-type:none"><form method="get" action="class_list.php">
 
 	<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
 	<input class="search" type="submit" value="<?php echo get_lang('Search'); ?>"/>
 	</form>
-</li>
+</div>
+<ul>
 <li><a href="class_list.php"><?php echo get_lang('ClassList'); ?></a></li>
 <li><a href="class_add.php"><?php echo get_lang('AddClasses'); ?></a></li>
 <li><a href="class_import.php"><?php echo get_lang('ImportClassListCSV'); ?></a></li>
@@ -278,15 +283,14 @@ if(api_is_platform_admin()){
   <li><a href="http://www.chamilo.org/" target="_blank"><?php echo get_lang('ChamiloHomepage'); ?></a></li>
   <li><a href="http://forum.chamilo.org/" target="_blank"><?php echo get_lang('ChamiloForum'); ?></a></li>
   <li><a href="http://www.chamilo.org/extensions/" target="_blank"><?php echo get_lang('ChamiloExtensions'); ?></a></li>
-  <li>
+
   <?php
   //try to display a maximum before we check the dokeos version and all that
   	//session_write_close(); //close session to avoid blocking concurrent access
 	flush(); //send data to client as much as allowed by the web server
 	//ob_flush();
-	echo get_lang('VersionCheck').': '.version_check();
+	echo '<li>'.get_lang('VersionCheck').': '.version_check().'</li>';
   ?>
-  </li>
  </ul>
 </div>
 <?php
@@ -430,10 +434,10 @@ function check_dokeos_version()
 	global $_configuration; // the dokeos version of your installation
 	$dokeos_version = $_configuration['dokeos_version'];
 
-	if ($fsock = @fsockopen('www.dokeos.com', 80, $errno, $errstr))
+	if ($fsock = @fsockopen('www.chamilo.org', 80, $errno, $errstr))
 	{
 		@fputs($fsock, "GET /version.php HTTP/1.1\r\n");
-		@fputs($fsock, "HOST: www.dokeos.com\r\n");
+		@fputs($fsock, "HOST: www.chamilo.org\r\n");
 		@fputs($fsock, "Connection: close\r\n\r\n");
 
 		$get_info = false;

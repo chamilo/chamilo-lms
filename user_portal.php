@@ -974,8 +974,8 @@ if (!empty ($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/',$_GET['in
 }
 
 if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-	echo '<h3>'.get_lang('HistoryTrainingSession').'</h3>';
-	if (count($courses_tree)==1){
+	echo '<h3>'.get_lang('HistoryTrainingSession').'</h3>';	
+	if (empty($courses_tree[0]['sessions'])){
 		echo get_lang('YouDoNotHaveAnySessionInItsHistory');
 	}
 }
@@ -1007,50 +1007,92 @@ if ( is_array($courses_tree) ) {
 
 			//independent sessions
 			foreach ($category['sessions'] as $session) {
+
 				//don't show empty sessions
-				if (count($session['courses'])<1) { continue; }
-				echo '<ul class="session_box">';
-					echo '<li class="session_box_title" id="session_'.$session['details']['id'].'" >';
-					echo Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
-					$s = get_session_title_box($session['details']['id']);
-					echo get_lang('SessionName') . ': ' . $s['title']. ' - '.(!empty($s['coach'])?$s['coach'].' - ':'').$s['dates'];
-					echo '</li>';
+				if (count($session['courses'])<1) { continue; }	
+										
 				//courses inside the current session
+				$date_session_start = $session['details']['date_start'];
+				$days_access_before_beginning  = ($session['details']['nb_days_access_before_beginning'])*24*3600;
+				$session_now = time();
+				$html_courses_session = '';
+				$count_courses_session = 0;
 				foreach ($session['courses'] as $course) {
-					$c = get_logged_user_course_html($course, $session['details']['id'], 'session_course_item');
-					echo $c[1];
+					$is_coach_course = api_is_coach($session['details']['id'],$course['code']); 					
+					if ($is_coach_course) {
+						$allowed_time = (strtotime($date_session_start)-$days_access_before_beginning);						 
+					} else {
+						$allowed_time = strtotime($date_session_start);
+					}
+					if ($session_now > $allowed_time) {
+						$c = get_logged_user_course_html($course, $session['details']['id'], 'session_course_item');
+						$html_courses_session .= $c[1];
+						$count_courses_session++;		
+					}
 				}
-				echo '</ul>';
+							
+				if ($count_courses_session > 0) {
+					echo '<ul class="session_box">';
+						echo '<li class="session_box_title" id="session_'.$session['details']['id'].'" >';
+						echo Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
+						$s = get_session_title_box($session['details']['id']);
+						echo get_lang('SessionName') . ': ' . $s['title']. ' - '.(!empty($s['coach'])?$s['coach'].' - ':'').$s['dates'];
+						echo '</li>';
+					    echo $html_courses_session;
+					echo '</ul>';
+				}											
 			}
 
 		} else {
+							
 			// all sessions included in
 			if (!empty($category['details'])) {
-				echo '<div class="session_category" id="session_category_'.$category['details']['id'].'" style="background-color:#fbfbfb; border:1px solid #dddddd; padding:5px; margin-top: 10px;">';
-				echo '<div class="session_category_title_box" id="session_category_title_box_'.$category['details']['id'].'" style="font-size:larger; color: #555555;">'. Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'category_img_'.$category['details']['id'])) . ' ' . get_lang('SessionCategory') . ': ' . $category['details']['name'].'  -  '.get_lang('From').' '.$category['details']['date_start'].' '.get_lang('Until').' '.$category['details']['date_end'].'</div>';
-
+				$count_courses_session = 0;
+				$html_sessions = '';
 				foreach ($category['sessions'] as $session) {
 					//don't show empty sessions
-					if (count($session['courses'])<1) { continue; }
-					echo '<ul class="session_box" id="session_'.$session['details']['id'].'">';
-					echo '<li class="session_box_title" id="session_'.$session['details']['id'].'">';
-					echo Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
-					$s = get_session_title_box($session['details']['id']);
-					echo get_lang('SessionName') . ': ' . $s['title']. ' - '.(!empty($s['coach'])?$s['coach'].' - ':'').$s['dates'];
-					echo '</li>';
-
+					if (count($session['courses'])<1) { continue; }					
+					$date_session_start = $session['details']['date_start'];
+					$days_access_before_beginning  = ($session['details']['nb_days_access_before_beginning'])*24*3600;
+					$session_now = time();
+					$html_courses_session = '';
+					$count = 0;
 					foreach ($session['courses'] as $course) {
-						//echo '<li class="session_course_item" id="session_course_item_'.$course['code'].'" style="padding:5px">';
-						$c = get_logged_user_course_html($course, $session['details']['id'], 'session_course_item');
-						echo $c[1];
-						//echo $course['code'];
-						//echo '</li>';
-					}
-					echo '</ul>';
-				}
-				echo '</div>';
-			}
+						$is_coach_course = api_is_coach($session['details']['id'],$course['code']); 					
+						if ($is_coach_course) {
+							$allowed_time = (strtotime($date_session_start)-$days_access_before_beginning);						 
+						} else {
+							$allowed_time = strtotime($date_session_start);
+						}
+						if ($session_now > $allowed_time) {
+							$c = get_logged_user_course_html($course, $session['details']['id'], 'session_course_item');
+							$html_courses_session .= $c[1];
+							$count_courses_session++;
+							$count++;		
+						}	
+					}	
 
+					if ($count > 0) {
+						$s = get_session_title_box($session['details']['id']);
+						$html_sessions .= '<ul class="session_box" id="session_'.$session['details']['id'].'">';
+						$html_sessions .= '<li class="session_box_title" id="session_'.$session['details']['id'].'">';
+						$html_sessions .= Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';					
+						$html_sessions .= get_lang('SessionName') . ': ' . $s['title']. ' - '.(!empty($s['coach'])?$s['coach'].' - ':'').$s['dates'];
+						$html_sessions .= '</li>';
+						$html_sessions .= $html_courses_session;
+						$html_sessions .= '</ul>';
+					}								
+				}
+					
+				if ($count_courses_session > 0) {
+					echo '<div class="session_category" id="session_category_'.$category['details']['id'].'" style="background-color:#fbfbfb; border:1px solid #dddddd; padding:5px; margin-top: 10px;">';
+					echo '<div class="session_category_title_box" id="session_category_title_box_'.$category['details']['id'].'" style="font-size:larger; color: #555555;">'. Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'category_img_'.$category['details']['id'])) . ' ' . get_lang('SessionCategory') . ': ' . $category['details']['name'].'  -  '.get_lang('From').' '.$category['details']['date_start'].' '.get_lang('Until').' '.$category['details']['date_end'].'</div>';														
+					echo $html_sessions;						
+					echo '</div>';
+				}				
+			}
+			
+			
 		}
 	}
 }

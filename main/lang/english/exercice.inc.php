@@ -355,6 +355,6 @@ $RandomAnswers = "Shuffle answers";
 $NotMarkActivity = "This activity cannot be qualified";
 $YouHaveToCreateAtLeastOneAnswer = "You have to create at least one answer";
 $ExerciseAttempted = "A learner attempted an exercise";
-$MultipleSelectCombination = "Multiple select combination";
-$MultipleAnswerCombination = "Multiple answer combination";
+$MultipleSelectCombination = "Exact Selection";
+$MultipleAnswerCombination = "Exact answers combination";
 ?>

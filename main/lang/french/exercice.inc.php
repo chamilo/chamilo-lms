@@ -355,6 +355,6 @@ $RandomAnswers = "Désordonner les réponses";
 $NotMarkActivity = "Activité non-qualificable";
 $YouHaveToCreateAtLeastOneAnswer = "Veuillez créer au moins une réponse";
 $ExerciseAttempted = "Un apprenant a passé un exercice";
-$MultipleSelectCombination = "Sélection multiple déterminée";
-$MultipleAnswerCombination = "Réponses multiples combinées";
+$MultipleSelectCombination = "Combinaison exacte";
+$MultipleAnswerCombination = "Combinaison exacte";
 ?>

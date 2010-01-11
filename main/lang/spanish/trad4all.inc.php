@@ -775,4 +775,7 @@ $EditMyProfile = "Editar mi perfil";
 $Announcements = "Anuncios";
 $Username = "Usuario";
 $Password = "Contraseña";
+$DescriptionGroup = "Descripción del grupo";
+$Installation = "Instalación";
+$ReadTheInstallationGuide = "Leer la guía de instalación";
 ?>

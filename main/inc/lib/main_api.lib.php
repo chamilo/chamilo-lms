@@ -796,8 +796,10 @@ function api_get_user_info($user_id = '') {
 		// ideally the names of the fields of the user table are renamed so that they match $_user (or vice versa)
 		// $_user should also contain every field of the user table (except password maybe). This would make the
 		// following lines obsolete (and the code cleaner and slimmer !!!
-		$user_info['firstName'] = $result_array['firstname'];
-		$user_info['lastName'] = $result_array['lastname'];
+		$user_info['firstName'] 	= $result_array['firstname'];
+		$user_info['lastName'] 		= $result_array['lastname'];
+		$user_info['firstname'] 	= $result_array['firstname'];
+		$user_info['lastname'] 		= $result_array['lastname'];		
 		$user_info['mail'] = $result_array['email'];
 		$user_info['picture_uri'] = $result_array['picture_uri'];
 		$user_info['user_id'] = $result_array['user_id'];

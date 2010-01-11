@@ -3431,6 +3431,7 @@ div.image-social-content center.friend {
 #social-content-right {
 	height:auto;
 	overflow:hidden;	
+	margin-left:220px;
 }
 
 .social-content-image {

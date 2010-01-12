@@ -86,8 +86,12 @@ echo '<div id="social-content">';
 	}
 
 	echo '<div id="'.$id_content_right.'">';
-		//MAIN CONTENT
+		//MAIN CONTENT				
+		
+		
+		
 		$message = MessageManager::show_message_box($id_message,$source);
+		
 		if (!empty($message)) {
 			echo $message;
 		} else {

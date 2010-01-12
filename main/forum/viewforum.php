@@ -448,7 +448,7 @@ if(is_array($threads)) {
 			$attachment_list=get_attachment($row['post_id']);
 			$id_attach = !empty($attachment_list)?$attachment_list['id']:'';
 
-			$sql_post_id="SELECT post_id FROM $table_posts WHERE post_title='".$row['thread_title']."'";
+			$sql_post_id="SELECT post_id FROM $table_posts WHERE post_title='".Database::escape_string($row['thread_title'])."'";
 			$result_post_id=Database::query($sql_post_id, __FILE__, __LINE__);
 			$row_post_id=Database::fetch_array($result_post_id);
 

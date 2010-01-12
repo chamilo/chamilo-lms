@@ -3031,8 +3031,12 @@ class SurveyUtil {
 		// actions bar
 		echo '<div class="actions">';
 		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ReportingOverview')).' '.get_lang('BackTo').' '.get_lang('ReportingOverview').'</a>';
+		echo '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1a.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+		echo '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1b.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a>';
 		echo '</div>';
+				
 
+		
 		// the form
 		echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'">';
 		echo '<input type="hidden" name="export_report" value="export_report">';
@@ -3043,8 +3047,8 @@ class SurveyUtil {
 		echo '<input type="hidden" name="export_format" value="xls">';
 		echo '</form>';
 		echo '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'">';
-		//echo '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1a.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
-		//echo '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1b.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a>';
+		
+		
 		// the table
 		echo '<br /><table class="data_table" border="1">';
 		// getting the number of options per question
@@ -4463,7 +4467,7 @@ class SurveyUtil {
 		$table->set_header(5, get_lang('Language'));
 		//$table->set_header(6, get_lang('Shared'));
 		$table->set_header(6, get_lang('AvailableFrom'));
-		$table->set_header(7, get_lang('AvailableUntill'));
+		$table->set_header(7, get_lang('AvailableUntil'));
 		$table->set_header(8, get_lang('Invite'));
 		$table->set_header(9, get_lang('Anonymous'));
 		$table->set_header(10, get_lang('Modify'), false,'width="150"');
@@ -4496,7 +4500,7 @@ class SurveyUtil {
 		$table->set_header(5, get_lang('Language'));
 		//$table->set_header(6, get_lang('Shared'));
 		$table->set_header(6, get_lang('AvailableFrom'));
-		$table->set_header(7, get_lang('AvailableUntill'));
+		$table->set_header(7, get_lang('AvailableUntil'));
 		$table->set_header(8, get_lang('Invite'));
 		$table->set_header(9, get_lang('Anonymous'));
 		$table->set_header(10, get_lang('Modify'), false,'width="130"');

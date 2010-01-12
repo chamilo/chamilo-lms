@@ -398,32 +398,35 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
 
 // Checking if we have a valid language. If not we set it to the platform language.
 $valid_languages = api_get_languages();
-if (!in_array($user_language, $valid_languages['folder'])) {
-	$user_language = api_get_setting('platformLanguage');
-}
 
-if (in_array($user_language, $valid_languages['folder']) && (isset($_GET['language']) || isset($_POST['language_list']))) {
-	$user_selected_language = $user_language; // $_GET['language'];
-	$_SESSION['user_language_choice'] = $user_selected_language;
-	$platformLanguage = $user_selected_language;
-} else {
-	$platformLanguage = api_get_setting('platformLanguage');
-}
+if(!empty($valid_languages)) {
+	
+	if (!in_array($user_language, $valid_languages['folder'])) {
+		$user_language = api_get_setting('platformLanguage');
+	}
 
-if (isset($_SESSION['user_language_choice'])) {
-	$language_interface = $_SESSION['user_language_choice'];
-} else {
-	$language_interface = api_get_setting('platformLanguage');
+	if (in_array($user_language, $valid_languages['folder']) && (isset($_GET['language']) || isset($_POST['language_list']))) {
+		$user_selected_language = $user_language; // $_GET['language'];
+		$_SESSION['user_language_choice'] = $user_selected_language;
+		$platformLanguage = $user_selected_language;
+	} else {
+		$platformLanguage = api_get_setting('platformLanguage');
+	}
+	
+	if (isset($_SESSION['user_language_choice'])) {
+		$language_interface = $_SESSION['user_language_choice'];
+	} else {
+		$language_interface = api_get_setting('platformLanguage');
+	}
+	
+	if (isset($_user['language'])) {
+		$language_interface = $_user['language'];
+	}
+	
+	if ($_course['language']) {
+		$language_interface = $_course['language'];
+	}
 }
-
-if (isset($_user['language'])) {
-	$language_interface = $_user['language'];
-}
-
-if ($_course['language']) {
-	$language_interface = $_course['language'];
-}
-
 // Sometimes the variable $language_interface is changed
 // temporarily for achieving translation in different language.
 // We need to save the genuine value of this variable and

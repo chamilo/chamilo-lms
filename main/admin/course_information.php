@@ -14,16 +14,18 @@
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
-require ('../inc/global.inc.php');
-require_once(api_get_path(LIBRARY_PATH).'sortabletable.class.php');
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 $this_section=SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 /**
  *
  */
-function get_course_usage($course_code)
+function get_course_usage($course_code, $session_id = 0)
 {
+
 	$table = Database::get_main_table(TABLE_MAIN_COURSE);
     $course_code = Database::escape_string($course_code);
 	$sql = "SELECT * FROM $table WHERE code='".$course_code."'";
@@ -31,28 +33,28 @@ function get_course_usage($course_code)
 	$course = Database::fetch_object($res);
 	// Learnpaths
 	$table = Database :: get_course_table(TABLE_LP_MAIN, $course->db_name);
-	$usage[] = array (get_lang(ucfirst(TOOL_LEARNPATH)), Database::count_rows($table));
+	$usage[] = array (get_lang(ucfirst(TOOL_LEARNPATH)), CourseManager::count_rows_course_table($table,$session_id));
 	// Forums
 	$table = Database :: get_course_table(TABLE_FORUM, $course->db_name);
-	$usage[] = array (get_lang('Forums'), Database::count_rows($table));
+	$usage[] = array (get_lang('Forums'), CourseManager::count_rows_course_table($table,$session_id));
 	// Quizzes
 	$table = Database :: get_course_table(TABLE_QUIZ_TEST, $course->db_name);
-	$usage[] = array (get_lang(ucfirst(TOOL_QUIZ)), Database::count_rows($table));
+	$usage[] = array (get_lang(ucfirst(TOOL_QUIZ)), CourseManager::count_rows_course_table($table,$session_id));
 	// Documents
 	$table = Database :: get_course_table(TABLE_DOCUMENT, $course->db_name);
-	$usage[] = array (get_lang(ucfirst(TOOL_DOCUMENT)), Database::count_rows($table));
+	$usage[] = array (get_lang(ucfirst(TOOL_DOCUMENT)), CourseManager::count_rows_course_table($table,$session_id));
 	// Groups
 	$table = Database :: get_course_table(TABLE_GROUP, $course->db_name);
-	$usage[] = array (get_lang(ucfirst(TOOL_GROUP)), Database::count_rows($table));
+	$usage[] = array (get_lang(ucfirst(TOOL_GROUP)), CourseManager::count_rows_course_table($table,$session_id));
 	// Calendar
 	$table = Database :: get_course_table(TABLE_AGENDA, $course->db_name);
-	$usage[] = array (get_lang(ucfirst(TOOL_CALENDAR_EVENT)), Database::count_rows($table));
+	$usage[] = array (get_lang(ucfirst(TOOL_CALENDAR_EVENT)), CourseManager::count_rows_course_table($table,$session_id));
 	// Link
 	$table = Database::get_course_table(TABLE_LINK, $course->db_name);
-	$usage[] = array(get_lang(ucfirst(TOOL_LINK)), Database::count_rows($table));
+	$usage[] = array(get_lang(ucfirst(TOOL_LINK)), CourseManager::count_rows_course_table($table,$session_id));
 	// Announcements
 	$table = Database::get_course_table(TABLE_ANNOUNCEMENT, $course->db_name);
-	$usage[] = array(get_lang(ucfirst(TOOL_ANNOUNCEMENT)), Database::count_rows($table));
+	$usage[] = array(get_lang(ucfirst(TOOL_ANNOUNCEMENT)), CourseManager::count_rows_course_table($table,$session_id));
 	return $usage;
 }
 /*****************************************************************/
@@ -87,7 +89,9 @@ if(api_get_setting('server_type') == 'test')
 
 echo '<h4>'.get_lang('CourseUsage').'</h4>';
 echo '<blockquote>';
-$table = new SortableTableFromArray(get_course_usage($course->code),0,20,'usage_table');
+
+$id_session = intval($_GET['id_session']);
+$table = new SortableTableFromArray(get_course_usage($course->code,$id_session),0,20,'usage_table');
 $table->set_additional_parameters(array ('code' => $_GET['code']));
 $table->set_other_tables(array('user_table','class_table'));
 $table->set_header(0,get_lang('Tool'), true);

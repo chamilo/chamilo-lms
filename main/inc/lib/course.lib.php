@@ -2085,4 +2085,22 @@ class CourseManager {
 		return $html_code;
 	}
 
+	/**
+	 * 	Get count rows of a table inside a course database
+	 *  @param  string	The table of which the rows should be counted
+	 *  @param  int		optionally count rows by session id
+	 *  @return int 	The number of rows in the given table.
+	 */
+	public static function count_rows_course_table($table, $session_id = '') {		
+		$condition_session = '';		
+		if ($session_id !== '') {
+			$session_id = intval($session_id);
+			$condition_session = " WHERE session_id = '$session_id' ";	
+		}		
+		$sql	= "SELECT COUNT(*) AS n FROM $table $condition_session ";
+		$rs 	= Database::query($sql, __FILE__, __LINE__);
+		$row 	= Database::fetch_row($rs);
+		return $row[0];		
+	}
+
 } //end class CourseManager

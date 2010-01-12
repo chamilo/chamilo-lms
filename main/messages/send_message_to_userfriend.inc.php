@@ -31,7 +31,7 @@ if ( isset($_REQUEST['user_friend']) ) {
     <tr height="180">
         <td align="center">
         <div class="message-content-body-left">
-			<img class="message-image-info" src="<?php echo $info_path_friend['dir'].$info_path_friend['file']; ?>"/>
+			<img src="<?php echo $info_path_friend['dir'].$info_path_friend['file']; ?>"/>
 			<?php
 			if ($panel != 1) {
 				echo '<br /><center>'.api_xml_http_response_encode(api_get_person_name($info_user_friend['firstName'], $info_user_friend['lastName'])).'</center>';

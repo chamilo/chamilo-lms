@@ -53,14 +53,14 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 
 function check_unzip() {
 	if(document.upload.unzip.checked==true){
-	document.upload.if_exists[0].disabled=true;
-	document.upload.if_exists[1].checked=true;
-	document.upload.if_exists[2].disabled=true;
+		document.upload.if_exists[0].disabled=true;
+		document.upload.if_exists[1].checked=true;
+		document.upload.if_exists[2].disabled=true;
 	} else {
-			document.upload.if_exists[0].checked=true;
-			document.upload.if_exists[0].disabled=false;
-			document.upload.if_exists[2].disabled=false;
-			}
+		document.upload.if_exists[0].checked=true;
+		document.upload.if_exists[0].disabled=false;
+		document.upload.if_exists[2].disabled=false;
+		}
 	}
 		
 function advanced_parameters() {
@@ -230,8 +230,7 @@ if($to_group_id!=0 && $path=='/')
 }
 
 //if we want to unzip a file, we need the library
-if (isset($_POST['unzip']) && $_POST['unzip'] == 1)
-{
+if (isset($_POST['unzip']) && $_POST['unzip'] == 1) {
 	require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 }
 
@@ -260,17 +259,16 @@ Display::display_header($nameTools, 'Doc');
 */
 
 //user has submitted a file
-if(isset($_FILES['user_upload']))
-{
+if(isset($_FILES['user_upload'])) {
 	//echo("<pre>");
 	//print_r($_FILES['user_upload']);
 	//echo("</pre>");
 
 	$upload_ok = process_uploaded_file($_FILES['user_upload']);
-	if($upload_ok)
-	{
+	if($upload_ok) {
 		//file got on the server without problems, now process it
 		$new_path = handle_uploaded_document($_course, $_FILES['user_upload'],$base_work_dir,$_POST['curdirpath'],$_user['user_id'],$to_group_id,$to_user_id,$max_filled_space,$_POST['unzip'],$_POST['if_exists']);
+		
     	$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
     	$new_title = isset($_POST['title']) ? trim($_POST['title']) : '';
 
@@ -283,6 +281,10 @@ if(isset($_FILES['user_upload']))
         	if ($new_title)   $ct .= ", title='$new_title'";
         	Database::query("UPDATE $table_document SET" . substr($ct, 1) .
         	    " WHERE id = '$docid'", __FILE__, __LINE__);
+    	}
+    	//showing message when sending zip files
+    	if ($new_path === true && $_POST['unzip'] == 1) {
+    		Display::display_confirmation_message(get_lang('UplUploadSucceeded')."<br/>",false);
     	}
 
       if ( (api_get_setting('search_enabled')=='true') && ($docid = DocumentManager::get_document_id($_course, $new_path))) {
@@ -390,8 +392,7 @@ if(isset($_FILES['user_upload']))
 					}
 
 				}
-			}
-			else {
+			} else {
 				// add all terms
 				$all_specific_terms = '';
 				foreach ($specific_fields as $specific_field) {

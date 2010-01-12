@@ -308,6 +308,8 @@ if ( api_is_allowed_to_edit()) {
 
 	// the action links
 	$actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'&nbsp;'.get_lang('ExportAsCSV').'</a> ';
+	$actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=xls">'.Display::return_icon('excel.gif', get_lang('ExportAsXLS')).'&nbsp;'.get_lang('ExportAsXLS').'</a> ';
+	
 	$actions .= '<a href="subscribe_user.php?'.api_get_cidreq().'">'.Display::return_icon('add_user_big.gif',get_lang("SubscribeUserToCourse")).'&nbsp;'.get_lang("SubscribeUserToCourse").'</a> ';
 	$actions .= "<a href=\"subscribe_user.php?".api_get_cidreq()."&type=teacher\">".Display::return_icon('add_teacher_big.gif', get_lang("SubscribeUserToCourseAsTeacher"))."&nbsp;".get_lang("SubscribeUserToCourseAsTeacher")."</a> ";
 	$actions .= "<a href=\"../group/group.php?".api_get_cidreq()."\">".Display::return_icon('group.gif', get_lang("GroupUserManagement"))."&nbsp;".get_lang("GroupUserManagement")."</a>";

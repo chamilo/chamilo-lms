@@ -295,15 +295,13 @@ input[text] {
 	background-repeat:no-repeat;
 	height:90px;
 	overflow:hidden;
-	text-indent:-9999px;
 	margin-left:4%;
 	margin-top:1%;
-
 }
 #my_courses {
-	float:left;
-	padding-left:4%;
+	float:right;
 	height:16px;
+	padding-right:4%;
 }
 /********************************************************
  *  HEADER 2: Users online, help, student/teacher view	*
@@ -568,6 +566,7 @@ margin-top:0;
 	color:#ffffff;
 	min-height: 100px;	
 	overflow:hidden;
+	width: 100%;
 }
 .push {
 	height: 8em; /* Very important */

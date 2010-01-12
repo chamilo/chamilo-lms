@@ -164,7 +164,7 @@ function save_glossary($values)
 	if (glossary_exists($values['glossary_title']))
 	{
 		// display the feedback message
-		Display::display_error_message('GlossaryTermAlreadyExistsYouShouldEditIt');
+		Display::display_error_message(get_lang('GlossaryTermAlreadyExistsYouShouldEditIt'));
 	} else {
 		$sql = "INSERT INTO $t_glossary (name, description, display_order, session_id)
 				VALUES(
@@ -204,7 +204,7 @@ function update_glossary($values)
 	if (glossary_exists($values['glossary_title'],$values['glossary_id']))
 	{
 		// display the feedback message
-		Display::display_error_message('GlossaryTermAlreadyExistsYouShouldEditIt');
+		Display::display_error_message(get_lang('GlossaryTermAlreadyExistsYouShouldEditIt'));
 	}
 	else
 	{

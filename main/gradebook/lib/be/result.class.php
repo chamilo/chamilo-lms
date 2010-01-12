@@ -97,6 +97,7 @@ class Result
 	public function load ($id = null, $user_id = null, $evaluation_id = null) {
 		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$tbl_course_rel_course = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		$tbl_session_rel_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		if (is_null($id ) && is_null($user_id) && !is_null($evaluation_id)) {
 
 			$sql_verified_if_exist_evaluation='SELECT COUNT(*) AS count FROM '.$tbl_grade_results.' WHERE evaluation_id="'.Database::escape_string($evaluation_id).'";';
@@ -104,7 +105,13 @@ class Result
 			$info_verified_if_exist_evaluation=Database::result($res_verified_if_exist_evaluation,0,0);
 				if ($info_verified_if_exist_evaluation!=0) {
 
-				$sql_course_rel_user='SELECT course_code,user_id,status FROM '.$tbl_course_rel_course.' WHERE status="5" AND course_code="'.api_get_course_id().'"; ';
+				$sql_course_rel_user= '';
+				if (api_get_session_id()) {
+					$sql_course_rel_user = 'SELECT course_code,id_user,status FROM '.$tbl_session_rel_course_user.' WHERE status=0 AND course_code="'.api_get_course_id().' AND id_session='.api_get_session_id().'"';					
+				} else {
+					$sql_course_rel_user = 'SELECT course_code,user_id,status FROM '.$tbl_course_rel_course.' WHERE status="5" AND course_code="'.api_get_course_id().'"; ';	
+				}
+
 				$res_course_rel_user=Database::query($sql_course_rel_user,__FILE__,__LINE__);
 
 				$list_user_course_list=array();

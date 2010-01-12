@@ -33,6 +33,7 @@ require_once ('lib/fe/dataform.class.php');
 require_once (api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
 require_once (api_get_path(LIBRARY_PATH) . 'export.lib.inc.php');
 require_once (api_get_path(LIBRARY_PATH) . 'import.lib.php');
+require_once (api_get_path(LIBRARY_PATH) . 'usermanager.lib.php');
 require_once ('lib/results_data_generator.class.php');
 require_once ('lib/fe/resulttable.class.php');
 require_once ('lib/fe/exportgradebook.php');
@@ -156,92 +157,95 @@ if (isset ($_GET['editres'])) {
 	}
 }
 if (isset ($_GET['import'])) {
-$interbreadcrumb[]= array (
-	'url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']),
-	'name' => get_lang('ViewResult'
-));
-$import_result_form = new DataForm(DataForm :: TYPE_IMPORT, 'import_result_form', null, api_get_self() . '?import=&selecteval=' . $_GET['selecteval']);
-if (!$import_result_form->validate()) {
-	Display :: display_header(get_lang('Import'));
-}
+	$interbreadcrumb[]= array (
+		'url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']),
+		'name' => get_lang('ViewResult'
+	));
+	$import_result_form = new DataForm(DataForm :: TYPE_IMPORT, 'import_result_form', null, api_get_self() . '?import=&selecteval=' . Security::remove_XSS($_GET['selecteval']));
+	if (!$import_result_form->validate()) {
+		Display :: display_header(get_lang('Import'));
+	}
 
-if ($_POST['formSent'] ) {
-	if (!empty ($_FILES['import_file']['name'])) {
-		$values= $import_result_form->exportValues();
-		$file_type= $_POST['file_type'];
-		$file_name= $_FILES['import_file']['tmp_name'];
-		if ($file_type == 'csv') {
-			$results= Import :: csv_to_array($file_name);
-		} else {
-			$results= parse_xml_data($file_name);
-		}
-		$nr_results_added= 0;
-		foreach ($results as $index => $importedresult) {
-			//check username & score
-			$added= '0';
-			foreach ($allresults as $allresult) {
-				if (($importedresult['user_id'] == $allresult->get_user_id())) {
-					if ($importedresult['score'] != $allresult->get_score()) {
-						if (!isset ($values['overwrite'])) {
-							header('Location: gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&import_score_error=' . $importedresult['user_id']);
-							exit;
-							break;
+	if ($_POST['formSent'] ) {
+		if (!empty ($_FILES['import_file']['name'])) {
+			$values= $import_result_form->exportValues();
+			$file_type= $_POST['file_type'];
+			$file_name= $_FILES['import_file']['tmp_name'];
+			if ($file_type == 'csv') {
+				$results= Import :: csv_to_array($file_name);
+			} else {
+				$results= parse_xml_data($file_name);
+			}
+
+			$nr_results_added= 0;
+			foreach ($results as $index => $importedresult) {												
+				//check username & score
+				$importedresult['user_id'] = UserManager::get_user_id_from_username($importedresult['username']);		
+				$added= '0';
+				foreach ($allresults as $allresult) {
+					if (($importedresult['user_id'] == $allresult->get_user_id())) {
+						if ($importedresult['score'] != $allresult->get_score()) {
+							if (!isset ($values['overwrite'])) {
+								header('Location: gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&import_score_error=' . $importedresult['user_id']);
+								exit;
+								break;
+							} else {
+								overwritescore($allresult->get_id(), $importedresult['score'], $eval[0]->get_max());
+								$overwritescore++;
+								$added= '1';
+							}
 						} else {
-							overwritescore($allresult->get_id(), $importedresult['score'], $eval[0]->get_max());
-							$overwritescore++;
 							$added= '1';
 						}
-					} else {
-						$added= '1';
+	
 					}
 
 				}
-			}
-			if ($importedresult['user_id'] == null) {
-				header('Location: gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&incorrectdata=');
-				exit;
-			}
-			$userinfo= get_user_info_from_id($importedresult['user_id']);
-			if ($userinfo['lastname'] != $importedresult['lastname'] || $userinfo['firstname'] != $importedresult['firstname'] || $userinfo['official_code'] != $importedresult['official_code']) {
-				if (!isset ($values['ignoreerrors'])) {
-					header('Location: gradebook_view_result.php?selecteval=' .Security::remove_XSS($_GET['selecteval']) . '&import_user_error=' . $importedresult['user_id']);
+				if ($importedresult['user_id'] == null) {
+					header('Location: gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&incorrectdata=');
 					exit;
 				}
+				$userinfo= get_user_info_from_id($importedresult['user_id']);
+				if ($userinfo['lastname'] != $importedresult['lastname'] || $userinfo['firstname'] != $importedresult['firstname'] || $userinfo['official_code'] != $importedresult['official_code']) {
+					if (!isset ($values['ignoreerrors'])) {
+						header('Location: gradebook_view_result.php?selecteval=' .Security::remove_XSS($_GET['selecteval']) . '&import_user_error=' . $importedresult['user_id']);
+						exit;
+					}
+				}
+				if ($added != '1') {
+					if ($importedresult['score'] > $eval[0]->get_max()) {
+						header('Location: gradebook_view_result.php?selecteval=' .Security::remove_XSS($_GET['selecteval']) . '&overwritemax=');
+						exit;
+					}
+					$result= new Result();
+					$result->set_user_id($importedresult['user_id']);
+					if (!empty ($importedresult['score'])) {
+						$result->set_score($importedresult['score']);
+					}
+					if (!empty ($importedresult['date'])) {
+						$result->set_date(strtotime($importedresult['date']));
+					} else {
+						$result->set_date(time());
+					}
+					$result->set_evaluation_id($_GET['selecteval']);
+					$result->add();
+					$nr_results_added++;
+				}
 			}
-			if ($added != '1') {
-				if ($importedresult['score'] > $eval[0]->get_max()) {
-					header('Location: gradebook_view_result.php?selecteval=' .Security::remove_XSS($_GET['selecteval']) . '&overwritemax=');
-					exit;
-				}
-				$result= new Result();
-				$result->set_user_id($importedresult['user_id']);
-				if (!empty ($importedresult['score'])) {
-					$result->set_score($importedresult['score']);
-				}
-				if (!empty ($importedresult['date'])) {
-					$result->set_date(strtotime($importedresult['date']));
-				} else {
-					$result->set_date(time());
-				}
-				$result->set_evaluation_id($_GET['selecteval']);
-				$result->add();
-				$nr_results_added++;
-			}
+		} else {
+			header('Location: ' . api_get_self() . '?import=&selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&importnofile=');
+			exit;
 		}
-	} else {
-		header('Location: ' . api_get_self() . '?import=&selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&importnofile=');
+		if ($overwritescore != 0) {
+			header('Location: ' . api_get_self() . '?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&importoverwritescore=' . $overwritescore);
+			exit;
+		}
+		if ($nr_results_added == 0) {
+			header('Location: ' . api_get_self() . '?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&nothingadded=');
+			exit;
+		}
+		header('Location: ' . api_get_self() . '?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&importok=');
 		exit;
-	}
-	if ($overwritescore != 0) {
-		header('Location: ' . api_get_self() . '?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&importoverwritescore=' . $overwritescore);
-		exit;
-	}
-	if ($nr_results_added == 0) {
-		header('Location: ' . api_get_self() . '?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&nothingadded=');
-		exit;
-	}
-	header('Location: ' . api_get_self() . '?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&importok=');
-	exit;
 	}
 }
 if (isset ($_GET['export'])) {
@@ -262,7 +266,7 @@ if ($export_result_form->validate()) {
 	$data= array (); //when file type is csv, add a header to the output file
 	if ($file_type == 'csv') {
 		$alldata[]= array (
-			'user_id',
+			'username',
 			'official_code',
 			'lastname',
 			'firstname',
@@ -345,9 +349,10 @@ if ($export_result_form->validate()) {
 		$pdf->ezStream();
 		exit;
 	}
+
 	foreach ($results as $result) {
 		$userinfo= get_user_info_from_id($result->get_user_id());
-		$data['user_id']= $result->get_user_id();
+		$data['username']= $userinfo['username']; //$result->get_user_id();
 		$data['official_code']= $userinfo['official_code'];
 		$data['lastname']= $userinfo['lastname'];
 		$data['firstname']= $userinfo['firstname'];

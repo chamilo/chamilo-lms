@@ -1,26 +1,5 @@
 <?php // $Id: upload.php 22201 2009-07-17 19:57:03Z cfasanando $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2005 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /chamilo_license.txt */
 /**
 ==============================================================================
 * Main script for the documents tool
@@ -545,16 +524,10 @@ echo(build_directory_selector($folders,$path,$group_properties['directory']));
 <?php
 
 $form = new FormValidator('upload','POST',api_get_self(),'','enctype="multipart/form-data"');
-
-// form title
-$form->addElement('header', '', $nameTools);
-
 $form->addElement('hidden','curdirpath',$path);
-
 $form->addElement('file','user_upload',get_lang('File'),'id="user_upload" size="45"');
 
-if(api_get_setting('use_document_title')=='true')
-{
+if(api_get_setting('use_document_title')=='true') {
 	$form->addElement('text','title',get_lang('Title'),array('size'=>'20','style' => 'width:300px','id' => 'title_file'));
 	$form->addElement('textarea','comment',get_lang('Comment'),'wrap="virtual" style="width:300px;"');
 }

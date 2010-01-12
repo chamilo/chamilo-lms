@@ -3216,8 +3216,9 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
  * @param	string	Category
  * @param	string 	Value
  * @param	int		Access URL. Optional. Defaults to 1
+ * @param	array	Optional array of filters on field type
  */
-function api_set_settings_category($category, $value = null, $access_url = 1) {
+function api_set_settings_category($category, $value = null, $access_url = 1, $fieldtype=array()) {
 	if (empty($category)) { return false; }
 	$category = Database::escape_string($category);
 	$t_s = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
@@ -3226,12 +3227,39 @@ function api_set_settings_category($category, $value = null, $access_url = 1) {
 	if (isset($value)) {
 		$value = Database::escape_string($value);
 		$sql = "UPDATE $t_s SET selected_value = '$value' WHERE category = '$category' AND access_url = $access_url";
+		if (is_array($fieldtype) && count($fieldtype)>0) {
+			$sql .= " AND ( ";
+			$i = 0;
+			foreach ($fieldtype as $type){
+				if ($i > 0) {
+					$sql .= ' 0R ';
+				}
+				$type = Database::escape_string($type);
+				$sql .= " type='".$type."' ";
+				$i++;
+			}
+			$sql .= ")";
+		}
+		$res = Database::query($sql, __FILE__, __LINE__);
+		return $res !== false;
+	} else {
+		$sql = "UPDATE $t_s SET selected_value = NULL WHERE category = '$category' AND access_url = $access_url";
+		if (is_array($fieldtype) && count($fieldtype)>0) {
+			$sql .= " AND ( ";
+			$i = 0;
+			foreach ($fieldtype as $type){
+				if ($i > 0) {
+					$sql .= ' 0R ';
+				}
+				$type = Database::escape_string($type);
+				$sql .= " type='".$type."' ";
+				$i++;
+			}
+			$sql .= ")";
+		}
 		$res = Database::query($sql, __FILE__, __LINE__);
 		return $res !== false;
 	}
-	$sql = "UPDATE $t_s SET selected_value = NULL WHERE category = '$category' AND access_url = $access_url";
-	$res = Database::query($sql, __FILE__, __LINE__);
-	return $res !== false;
 }
 
 /**

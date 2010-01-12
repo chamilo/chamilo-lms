@@ -211,10 +211,8 @@ a.breadcrumb0 {
 }
 .footer_emails{
 	float: left;
-	margin-right:5%;	
-	background-color: #4171b5;
-	background-image: url(images/bg-footer.gif);
-	background-repeat:repeat-x;	
+	margin-right:5%;
+	padding-top:40px;	
 }
 
 .push {
@@ -222,11 +220,8 @@ a.breadcrumb0 {
 }
 #footer .copyright {
 	float: right;
-	padding-top:235px;
+	padding-top:290px;
 	margin-right:10px;
-	background-color: #4171b5;
-	background-image: url(images/bg-footer.gif);
-	background-repeat:repeat-x;	
 }
 #footer #platformmanager {
 	float: left;

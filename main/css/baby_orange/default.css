@@ -188,30 +188,36 @@ a.breadcrumb0 {
 /* footer styles */
 
 #footer {
-	background:transparent url(images/bg.jpg) no-repeat scroll 100% 100%;
-	clear:both;
-	color:#F7D77E;
-	float:left;
-	width:98%;
-	padding: 0 0 0 2%;
-	color:#ffffff;
+	background-color: #e26200;
+	background-image: url(images/bg.jpg);
+	background-repeat:repeat-x;
+	color: #F7D77E;
+	font-weight:bold;
 	min-height: 100px;	
 	overflow:hidden;
 	width: 100%;
 }
+.footer_emails{
+	float: left;
+	margin-right:5%;
+	padding-top:40px;	
+}
+
 .push {
-	height: 10em; /* Very important */
+	height: 22em; /* Very important */
 }
 #footer .copyright {
 	float: right;
-	padding-top:98px;
+	padding-top:270px;
 	margin-right:10px;
 }
+
 #footer #platformmanager {
 	float: left;
-	padding-top:98px;
+	padding-top:235px;
 	margin-left:10px;
 }
+
 
 #footerright {
 	margin-top: 10px;
@@ -222,6 +228,7 @@ a.breadcrumb0 {
 	padding-top: 10px;
 }
 #footer a {
+	color: #fff;
 	font-weight:normal;
 }
 

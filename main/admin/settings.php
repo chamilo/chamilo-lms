@@ -294,7 +294,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 		// therefore not be set to false.
 		// This, however, also means that if the process breaks on the third of five checkboxes, the others
 		// will be set to false.
-		$r = api_set_settings_category($my_category,'false',$_configuration['access_url']);
+		$r = api_set_settings_category($my_category,'false',$_configuration['access_url'],array('checkbox','radio'));
 		//$sql = "UPDATE $table_settings_current SET selected_value='false' WHERE category='$my_category' AND type='checkbox'";
 		//$result = Database::query($sql, __FILE__, __LINE__);
 		// Save the settings

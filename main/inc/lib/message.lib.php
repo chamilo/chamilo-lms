@@ -153,6 +153,8 @@ class MessageManager
 				$message[0] = ($result[0]);
 			 }
 
+			$result[2] = Security::remove_XSS($result[2]);
+			
 			if ($request===true) {
 			
 				/*if($result[4]==0) {
@@ -209,6 +211,8 @@ class MessageManager
         $receiver_user_id = intval($receiver_user_id);
         $parent_id = intval($parent_id);
 		$user_sender_id = api_get_user_id();
+		
+		//var_dump($subject,$content);exit;
 		
 		$total_filesize = 0;
 		if (is_array($file_attachments)) {
@@ -602,6 +606,8 @@ class MessageManager
 			 
 			$class = 'class = "read"';
 			
+			$result[2] = Security::remove_XSS($result[2]);
+			
 			if ($request===true) {				   
 				$message[1] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.GetFullUserName($result[4]).'</a>';
 				$message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",$result[2]).'</a>';
@@ -680,6 +686,8 @@ class MessageManager
 		for ($i=0;$i<count($user_con);$i++)
 			if ($row[1]==$user_con[$i])
 				$band=1;
+		
+		$row[5] = Security::remove_XSS($row[5]);
 
 		$message_content =  '
 		<table class="message_view_table" >
@@ -879,7 +887,7 @@ class MessageManager
 							$html .= '<a href="#" class="head" id="head_'.$topic['id'].'">';																															
 							$html .= '<span class="message-group-title-topic">'.(((isset($_GET['anchor_topic']) && $_GET['anchor_topic'] == 'topic_'.$topic['id']) || in_array('items_'.$topic['id'].'_page_nr',$param_names))?Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align: middle')):
 										Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align: middle'))).'
-										'.$topic['title'].'</span>';																
+										'.Security::remove_XSS($topic['title']).'</span>';																
 							$html .= '</a>';
 						
 							if ($topic['send_date']!=$topic['update_date']) {
@@ -930,7 +938,7 @@ class MessageManager
 									$html_items.= '&nbsp;&nbsp;<a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=390&width=610&&user_friend='.$current_user_id.'&group_id='.$group_id.'&message_id='.$item['id'].'&action=edit_message_group&anchor_topic=topic_'.$topic['id'].'&topics_page_nr='.intval($_GET['topics_page_nr']).'&items_page_nr='.intval($items_page_nr).'&topic_id='.$topic['id'].'" class="thickbox" title="'.get_lang('Edit').'">'.Display :: return_icon('edit.gif', get_lang('Edit')).'</a>';
 								} 	
 								$html_items.= '</div>';
-								$html_items.= '<div class="message-group-title">'.$item['title'].'&nbsp;</div>';												
+								$html_items.= '<div class="message-group-title">'.Security::remove_XSS($item['title']).'&nbsp;</div>';												
 								$html_items.= '<div class="message-group-author">'.get_lang('From').'&nbsp;<a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$item['user_sender_id'].'">'.$name.'&nbsp;</a></div>';		
 								$html_items.= '<div class="message-group-content">'.$item['content'].'</div>';
 								
@@ -1103,7 +1111,7 @@ function inbox_display() {
 	// display sortable table with messages of the current user
 	$table = new SortableTable('messages', 'get_number_of_messages_mask', 'get_message_data_mask', 3, get_number_of_messages_mask(),'DESC');
 	$table->set_header(0, '', false,array ('style' => 'width:20px;'));
-	$title=api_xml_http_response_encode(get_lang('Title'));
+	$title=api_xml_http_response_encode(get_lang('Title'));	
 	$action=api_xml_http_response_encode(get_lang('Actions'));
 	
 	$table->set_header(1,api_xml_http_response_encode(get_lang('From')),false);

@@ -225,6 +225,7 @@ a.breadcrumb0 {
 	color:#ffffff;
 	min-height: 50px;	
 	overflow:hidden;
+	width: 100%;
 }
 .push {
 	height: 7em; /* Very important */

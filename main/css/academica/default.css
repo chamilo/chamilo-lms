@@ -207,6 +207,7 @@ a.breadcrumb0 {
 	font-weight:bold;
 	min-height: 100px;	
 	overflow:hidden;
+	width: 100%;
 }
 .footer_emails{
 	float: left;

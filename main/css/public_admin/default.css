@@ -413,6 +413,7 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
 	color:#ffffff;
 	min-height: 100px;	
 	overflow:hidden;	
+	width: 100%;
 }
 .push {
 	height: 8em; /* Very important */

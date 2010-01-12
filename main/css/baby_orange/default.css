@@ -197,6 +197,7 @@ a.breadcrumb0 {
 	color:#ffffff;
 	min-height: 100px;	
 	overflow:hidden;
+	width: 100%;
 }
 .push {
 	height: 10em; /* Very important */

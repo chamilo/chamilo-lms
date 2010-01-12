@@ -394,6 +394,7 @@ input[text] {
 	color:#000;
 	min-height: 50px;	
 	overflow:hidden;	
+	width: 100%;
 }
 .push {
 	height: 4em; /* Very important */

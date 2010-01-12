@@ -359,6 +359,7 @@ ul {
 	min-height: 100px;	
 	overflow:hidden;
 	background: url('images/headerbg.jpg');
+	width: 100%;
 }
 .push {
 	height: 4em; /* Very important */

@@ -367,7 +367,8 @@ input.link_alike:hover {
 	font-size: 12px;
 	color:#000;
 	min-height: 50px;	
-	overflow:hidden;	
+	overflow:hidden;
+	width: 100%;	
 }
 .push {
 	height: 4em; /* Very important */

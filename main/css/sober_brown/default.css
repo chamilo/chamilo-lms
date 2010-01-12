@@ -402,6 +402,7 @@ input[text] {
 	font-size: 12px;
 	min-height: 100px;	
 	overflow:hidden;
+	width: 100%;
 }
 .push {
 	height: 4em; /* Very important */

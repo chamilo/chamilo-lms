@@ -348,6 +348,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	color:#fff;
 	/* background-position: center -15px; */
 	background-color: #434343;
+	width: 100%;
 }
 .push {
 	height: 3em; /* Very important */

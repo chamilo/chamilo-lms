@@ -1,47 +1,18 @@
 <?php // $Id: configure_homepage.php 9246 2006-09-25 13:24:53 +0000 (lun., 25 sept. 2006) bmol $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /chamilo_license.txt */
 
 // name of the language file that needs to be included
 $language_file='admin';
-
 $cidReset=true;
-
-include('../inc/global.inc.php');
-
-
+require_once '../inc/global.inc.php';
 $this_section=SECTION_PLATFORM_ADMIN;
-
 api_protect_admin_script();
-
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-
 // Database Table Definitions
 $tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-
 $message = '';
 
-require api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-
-
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 if(isset($_POST['activeExtension'])){
 
@@ -291,7 +262,7 @@ Display::display_header($nameTool);
 					<td align="center">
 						<?php Display::display_icon('screenshot_conf.jpg', get_lang('Visioconf')); ?>
 					</td>
-					<!--td align="center" width="50%">
+					<td align="center" width="50%">
 						<?php
 						$form = new FormValidator('visio');
 						$form -> addElement('text', 'visio_host', get_lang('VisioHost'));
@@ -328,7 +299,7 @@ Display::display_header($nameTool);
 						$form -> setDefaults($defaults);
 						$form -> display();
 						?>
-					</td-->
+					</td>
 				</tr>
 			</table>
 		</div>
@@ -346,7 +317,7 @@ Display::display_header($nameTool);
 					<td valign="top" align="center">
 						<?php Display::display_icon('screenshot_ppt2lp.jpg', get_lang('Ppt2lp')); ?>
 					</td>
-					<!--td align="center" width="50%">
+					<td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">
 						<?php
 
@@ -401,7 +372,7 @@ Display::display_header($nameTool);
 						echo '<br />';
 						?>
 						</form>
-					</td-->
+					</td>
 				</tr>
 			</table>
 		</div>

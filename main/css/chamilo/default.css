@@ -390,6 +390,9 @@ float:left; /* important for ieX*/
 	margin-left:0px;
 }
 
+
+
+
 #header3  a {
 	-moz-background-clip:border;
 	-moz-background-inline-policy:continuous;
@@ -405,10 +408,7 @@ float:left; /* important for ieX*/
 }
 
 
-#header3 li a span {
-	-moz-background-clip:border;
-	-moz-background-inline-policy:continuous;
-	-moz-background-origin:padding;
+#header3 li a span {	
 	background:transparent url(images/tab_right.gif) no-repeat scroll right top;
 	color:#fff;
 	cursor:pointer;
@@ -418,6 +418,47 @@ float:left; /* important for ieX*/
 	padding-right:10px;
 	padding-top:5px;
 }
+
+#current a {
+background:transparent url(images/tab_left-active.gif) no-repeat scroll left top;
+color:#FFFFFF;
+cursor:pointer;
+float:left;
+height:25px;
+padding-left:9px;
+padding-right:2px;
+text-decoration:none;
+}
+
+#header3 li {
+float:left;
+}
+
+#current {
+background:transparent url(images/tab_center-active.gif) no-repeat scroll right top;;
+color:#FFFFFF;
+cursor:pointer;
+display:block;
+float:left;
+height:20px;
+overflow:hidden;
+padding-bottom:6px;
+margin-right:-3px;
+margin-right:3px;
+}
+
+#current #tab_active {	
+	background:transparent url(images/tab_right-active.gif) no-repeat scroll right top;
+	color:#fff;
+	cursor:pointer;
+	display:block;
+	float:left;
+	height:20px;
+	padding-right:10px;
+	padding-top:5px;
+	margin-right:-2px;
+}
+
 
 #header3 .banner_links {
 	margin: 0;
@@ -2539,13 +2580,13 @@ button.cancel {
 /*including "search" image*/
 button.search {
 /*	background-color:#FFFFFF; */
-	background-image:url(images/bg-boton.png);
+	background-image:url(images/bg-button.gif);
 	background-position:right center;
 	padding-right: 30px;
 }
 /*including "login" image*/
 button.login {
-	background-image:url(images/bg-boton.png);
+	background-image:url(images/bg-button.gif);
 	background-position:right;
 /*	background-color:#FFF;
 	border:solid 2px #FFF; */

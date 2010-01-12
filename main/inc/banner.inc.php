@@ -262,7 +262,7 @@ foreach($navigation as $section => $navigation_info) {
 	} else {
 		$current = '';
 	}
-	echo '<li'.$current.'><a href="'.$navigation_info['url'].'" target="_top"><span>'.$navigation_info['title'].'</span></a></li>'."\n";
+	echo '<li'.$current.'><a  href="'.$navigation_info['url'].'" target="_top"><span id="tab_active">'.$navigation_info['title'].'</span></a></li>'."\n";
 }
 
 /*********************/

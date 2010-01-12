@@ -358,13 +358,23 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		// Get the answers, make a list
 		$objAnswerTmp=new Answer($questionId);
 		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-
-		$answer_list = '<div style="padding: 10px; margin-left: 0px; border: 1px solid #A4A4A4; height: 408px; width: 200px;"><b>'.get_lang('HotspotZones').'</b><dl>';
+		
+		// get answers of hotpost
+		$answers_hotspot = array();
 		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
 		{
-			$answers = $objAnswerTmp->selectAnswerByAutoId($objAnswerTmp->selectAutoId($answerId));			
-			$answer_list .= '<dt>'.$answers['id'].'.- '.$objAnswerTmp->selectAnswer($answerId).'</dt><br>';
+			$answers = $objAnswerTmp->selectAnswerByAutoId($objAnswerTmp->selectAutoId($answerId));
+			$answers_hotspot[$answers['id']] = $objAnswerTmp->selectAnswer($answerId);						
 		}
+		
+		// display answers of hotpost order by id
+		$answer_list = '<div style="padding: 10px; margin-left: 0px; border: 1px solid #A4A4A4; height: 408px; width: 200px;"><b>'.get_lang('HotspotZones').'</b><dl>';
+		if (!empty($answers_hotspot)) {
+			ksort($answers_hotspot);
+			foreach ($answers_hotspot as $key => $value) {
+				$answer_list .= '<dt>'.$key.'.- '.$value.'</dt><br>';
+			}		
+		}		
 		$answer_list .= '</dl></div>';
 
 		if(!$onlyAnswers)

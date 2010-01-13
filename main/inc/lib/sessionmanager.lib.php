@@ -905,7 +905,7 @@ class SessionManager {
 	 * @param bool  	- optional, if is true the user don't be a coach now, otherwise it'll assign a coach
 	 * @return bool true if there are affected rows, otherwise false
 	 */
-	function set_coach_to_course_session($user_id, $session_id = 0, $course_code = '',$nocoach = false) {
+	public static function set_coach_to_course_session($user_id, $session_id = 0, $course_code = '',$nocoach = false) {
 
 		// Definition of variables
 		$user_id = intval($user_id);

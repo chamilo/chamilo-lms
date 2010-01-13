@@ -17,7 +17,7 @@ class SystemAnnouncementManager
 	 * @param int $visible VISIBLE_GUEST, VISIBLE_STUDENT or VISIBLE_TEACHER
 	 * @param int $id The identifier of the announcement to display
 	 */
-	function display_announcements($visible, $id = -1)
+	public static function display_announcements($visible, $id = -1)
 	{
 		$user_selected_language = api_get_interface_language();
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
@@ -92,7 +92,7 @@ class SystemAnnouncementManager
 		return;
 	}
 
-	function display_all_announcements($visible, $id = -1,$start = 0,$user_id='')
+	public static function display_all_announcements($visible, $id = -1,$start = 0,$user_id='')
 	{
 		$user_selected_language = api_get_interface_language();
 
@@ -162,7 +162,7 @@ class SystemAnnouncementManager
 		return;
 	}
 
-	function display_fleche($user_id)
+	public static function display_fleche($user_id)
 	{
 		$start = (int)$_GET['start'];
 		$nb_announcement = SystemAnnouncementManager :: count_nb_announcement($start,$user_id);
@@ -186,7 +186,7 @@ class SystemAnnouncementManager
 
 	}
 
-	function count_nb_announcement($start = 0,$user_id = '')
+	public static function count_nb_announcement($start = 0,$user_id = '')
 	{
 		$start = intval($start);
 		$visibility = api_is_allowed_to_create_course() ? VISIBLE_TEACHER : VISIBLE_STUDENT;
@@ -224,7 +224,7 @@ class SystemAnnouncementManager
 	 * @return array An array with all available system announcements (as php
 	 * objects)
 	 */
-	function get_all_announcements()
+	public static function get_all_announcements()
 	{
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 
@@ -244,7 +244,7 @@ class SystemAnnouncementManager
 	 * @param string $date_start Start date (YYYY-MM-DD HH:II: SS)
 	 * @param string $date_end End date (YYYY-MM-DD HH:II: SS)
 	 */
-	function add_announcement($title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0, $lang = null, $send_mail=0)
+	public static function add_announcement($title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0, $lang = null, $send_mail=0)
 	{
 
 		$a_dateS = explode(' ',$date_start);
@@ -291,7 +291,7 @@ class SystemAnnouncementManager
 	 * @param array $date_start: start date of announcement (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
 	 * @param array $date_end : end date of announcement (0 => day ; 1 => month ; 2 => year ; 3 => hour ; 4 => minute)
 	 */
-	function update_announcement($id, $title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0,$lang=null, $send_mail=0)
+	public static function update_announcement($id, $title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0,$lang=null, $send_mail=0)
 	{
 
 		$a_dateS = explode(' ',$date_start);
@@ -335,7 +335,7 @@ class SystemAnnouncementManager
 	 * @param integer $id The identifier of the announcement that should be
 	 * deleted
 	 */
-	function delete_announcement($id)
+	public static function delete_announcement($id)
 	{
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$id = intval($id);
@@ -347,7 +347,7 @@ class SystemAnnouncementManager
 	 * @param integer $id The identifier of the announcement that should be
 	 * deleted
 	 */
-	function get_announcement($id)
+	public static function get_announcement($id)
 	{
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$id = intval($id);
@@ -361,7 +361,7 @@ class SystemAnnouncementManager
 	 * @param integer $user For who should the visibility be changed (possible
 	 * values are VISIBLE_TEACHER, VISIBLE_STUDENT, VISIBLE_GUEST)
 	 */
-	function set_visibility($announcement_id, $user, $visible)
+	public static function set_visibility($announcement_id, $user, $visible)
 	{
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$announcement_id = intval($announcement_id);
@@ -370,7 +370,7 @@ class SystemAnnouncementManager
 		return Database::query($sql,__FILE__,__LINE__);
 	}
 
-	function send_system_announcement_by_email($title,$content,$teacher, $student)
+	public static function send_system_announcement_by_email($title,$content,$teacher, $student)
 	{
 		global $_user;
 		global $_setting;

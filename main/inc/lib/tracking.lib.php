@@ -41,7 +41,7 @@ class Tracking {
 	 * @param integer $user_id the user id
 	 * @return timestamp $nb_seconds
 	 */
-	function get_time_spent_on_the_platform($user_id) {
+	public static function get_time_spent_on_the_platform($user_id) {
 
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
@@ -89,7 +89,7 @@ class Tracking {
 	 * @param string $course_code the course code
 	 * @return timestamp $nb_seconds
 	 */
-	function get_time_spent_on_the_course($user_id, $course_code) {
+	public static function get_time_spent_on_the_course($user_id, $course_code) {
 		// protect datas
 		$user_id = intval($user_id);
 		$course_code = addslashes($course_code);		
@@ -108,7 +108,7 @@ class Tracking {
 		return $row['nb_seconds']; 
 	}
 
-	function get_first_connection_date($student_id) {
+	public static function get_first_connection_date($student_id) {
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 		$sql = 'SELECT login_date FROM ' . $tbl_track_login . '
 						WHERE login_user_id = ' . intval($student_id) . '
@@ -124,7 +124,7 @@ class Tracking {
 		return false;
 	}
 
-	function get_last_connection_date($student_id, $warning_message = false, $return_timestamp = false) {
+	public static function get_last_connection_date($student_id, $warning_message = false, $return_timestamp = false) {
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 		$sql = 'SELECT login_date FROM ' . $tbl_track_login . '
 						WHERE login_user_id = ' . intval($student_id) . '
@@ -167,7 +167,7 @@ class Tracking {
 		return false;
 	}
 
-	function get_first_connection_date_on_the_course($student_id, $course_code) {
+	public static function get_first_connection_date_on_the_course($student_id, $course_code) {
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 		$sql = 'SELECT login_course_date FROM ' . $tbl_track_login . '
 						WHERE user_id = ' . intval($student_id) . '
@@ -184,7 +184,7 @@ class Tracking {
 		return false;
 	}
 
-	function get_last_connection_date_on_the_course($student_id, $course_code) {
+	public static function get_last_connection_date_on_the_course($student_id, $course_code) {
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 		$sql = 'SELECT login_course_date FROM ' . $tbl_track_login . '
 						WHERE user_id = ' . intval($student_id) . '
@@ -209,7 +209,7 @@ class Tracking {
 		return false;
 	}
 
-	function count_course_per_student($user_id) {
+	public static function count_course_per_student($user_id) {
 
 		$user_id = intval($user_id);
 		$tbl_course_rel_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -236,7 +236,7 @@ class Tracking {
 	 * @param string $course_code - Course id
 	 * @return string value (number %) Which represents a round integer about the score average.
 	 */
-	function get_avg_student_exercise_score($student_id, $course_code) {
+	public static function get_avg_student_exercise_score($student_id, $course_code) {
 
 		// protect datas
 		$course_code = Database::escape_string($course_code);
@@ -280,7 +280,7 @@ class Tracking {
 		return null;		
 	}
 
-	function get_avg_student_progress($student_id, $course_code) {		
+	public static function get_avg_student_progress($student_id, $course_code) {		
 		// protect datas
 		$course_code = addslashes($course_code);
 		// get the informations of the course
@@ -321,7 +321,7 @@ class Tracking {
 	 * @param Array limit average to listed lp ids
 	 * @return string value (number %) Which represents a round integer explain in got in 3.
 	 */
-	function get_avg_student_score($student_id, $course_code, $lp_ids=array()) {
+	public static function get_avg_student_score($student_id, $course_code, $lp_ids=array()) {
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -518,7 +518,7 @@ class Tracking {
 	 * @param integer $coach_id the id of the coach
 	 * @return Array the list of students
 	 */
-	function get_student_followed_by_coach($coach_id) {
+	public static function get_student_followed_by_coach($coach_id) {
 		$coach_id = intval($coach_id);
 
 		$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -602,7 +602,7 @@ class Tracking {
 		return $a_students;
 	}
 
-	function get_student_followed_by_coach_in_a_session($id_session, $coach_id) {
+	public static function get_student_followed_by_coach_in_a_session($id_session, $coach_id) {
 
 		$coach_id = intval($coach_id);
 
@@ -650,7 +650,7 @@ class Tracking {
 		return $a_students;
 	}
 
-	function is_allowed_to_coach_student($coach_id, $student_id) {
+	public static function is_allowed_to_coach_student($coach_id, $student_id) {
 		$coach_id = intval($coach_id);
 		$student_id = intval($student_id);
 
@@ -696,7 +696,7 @@ class Tracking {
 
 	}
 
-	function get_courses_followed_by_coach($coach_id, $id_session = '')
+	public static function get_courses_followed_by_coach($coach_id, $id_session = '')
 	{
 
 		$coach_id = intval($coach_id);
@@ -776,7 +776,7 @@ class Tracking {
 		return $a_courses;
 	}
 
-	function get_sessions_coached_by_user($coach_id) {
+	public static function get_sessions_coached_by_user($coach_id) {
 		// table definition
 		$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -869,7 +869,7 @@ class Tracking {
 
 	}
 
-	function get_courses_list_from_session($session_id) {
+	public static function get_courses_list_from_session($session_id) {
 		//protect datas
 		$session_id = intval($session_id);
 
@@ -889,7 +889,7 @@ class Tracking {
 		return $a_courses;
 	}
 
-	function count_student_assignments($student_id, $course_code) {
+	public static function count_student_assignments($student_id, $course_code) {
 		require_once (api_get_path(LIBRARY_PATH) . 'course.lib.php');
 
 		// protect datas		
@@ -913,7 +913,7 @@ class Tracking {
 		return null;		
 	}
 
-	function count_student_messages($student_id, $course_code) {
+	public static function count_student_messages($student_id, $course_code) {
 		require_once (api_get_path(LIBRARY_PATH) . 'course.lib.php');
 
 		// protect datas
@@ -944,7 +944,7 @@ class Tracking {
 * @author Christian Fasanando <christian.fasanando@dokeos.com>,
 * @version enero 2009, dokeos 1.8.6
 */
-	function count_number_of_posts_by_course($course_code) {
+	public static function count_number_of_posts_by_course($course_code) {
 		//protect data
 		$course_code = addslashes($course_code);
 		// get the informations of the course
@@ -969,7 +969,7 @@ class Tracking {
 * @author Christian Fasanando <christian.fasanando@dokeos.com>,
 * @version enero 2009, dokeos 1.8.6
 */
-	function count_number_of_threads_by_course($course_code) {
+	public static function count_number_of_threads_by_course($course_code) {
 		//protect data
 		$course_code = addslashes($course_code);
 		// get the informations of the course
@@ -994,7 +994,7 @@ class Tracking {
 * @author Christian Fasanando <christian.fasanando@dokeos.com>,
 * @version enero 2009, dokeos 1.8.6
 */
-	function count_number_of_forums_by_course($course_code) {
+	public static function count_number_of_forums_by_course($course_code) {
 		//protect data
 		$course_code = addslashes($course_code);
 		// get the informations of the course
@@ -1020,7 +1020,7 @@ class Tracking {
 * @author Christian Fasanando <christian.fasanando@dokeos.com>,
 * @version enero 2009, dokeos 1.8.6
 */
-	function chat_connections_during_last_x_days_by_course($course_code,$last_days) {
+	public static function chat_connections_during_last_x_days_by_course($course_code,$last_days) {
 		//protect data
 		$last_days = intval($last_days);
 		$course_code = addslashes($course_code);
@@ -1050,7 +1050,7 @@ class Tracking {
 * @author Christian Fasanando <christian.fasanando@dokeos.com>,
 * @version enero 2009, dokeos 1.8.6
 */
-	function chat_last_connection($student_id,$course_code) {
+	public static function chat_last_connection($student_id,$course_code) {
 		require_once (api_get_path(LIBRARY_PATH) . 'course.lib.php');
 
 		//protect datas
@@ -1081,7 +1081,7 @@ class Tracking {
 		}
 	}
 
-	function count_student_visited_links($student_id, $course_code) {
+	public static function count_student_visited_links($student_id, $course_code) {
 		// protect datas
 		$student_id = intval($student_id);
 		$course_code = addslashes($course_code);
@@ -1098,7 +1098,7 @@ class Tracking {
 		return Database::num_rows($rs);
 	}
 
-	function count_student_downloaded_documents($student_id, $course_code) {
+	public static function count_student_downloaded_documents($student_id, $course_code) {
 		// protect datas
 		$student_id = intval($student_id);
 		$course_code = addslashes($course_code);
@@ -1115,7 +1115,7 @@ class Tracking {
 		return Database::num_rows($rs);
 	}
 
-	function get_course_list_in_session_from_student($user_id, $id_session) {
+	public static function get_course_list_in_session_from_student($user_id, $id_session) {
 		$user_id = intval($user_id);
 		$id_session = intval($id_session);
 		$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -1128,7 +1128,7 @@ class Tracking {
 		return $a_courses;
 	}
 
-	function get_inactives_students_in_course($course_code, $since, $session_id=0)
+	public static function get_inactives_students_in_course($course_code, $since, $session_id=0)
 	{
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 		$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -1164,7 +1164,7 @@ class Tracking {
 		return $inactive_users;
 	}
 
-	function count_login_per_student($student_id, $course_code) {
+	public static function count_login_per_student($student_id, $course_code) {
 		$student_id = intval($student_id);
 		$course_code = addslashes($course_code);
 		$tbl_course_rel_user = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
@@ -1181,7 +1181,7 @@ class Tracking {
 	}
 
 
-	function get_student_followed_by_drh($hr_dept_id) {
+	public static function get_student_followed_by_drh($hr_dept_id) {
 
 		$hr_dept_id = intval($hr_dept_id);
 		$a_students = array ();
@@ -1207,7 +1207,7 @@ class Tracking {
 	 * @param int the user id
 	 * @param string the course id
 	 */
-	function get_average_test_scorm_and_lp ($user_id,$course_id) {
+	public static function get_average_test_scorm_and_lp ($user_id,$course_id) {
 		
 		//the score inside the Reporting table
 		$course_info=api_get_course_info($course_id);

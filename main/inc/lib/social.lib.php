@@ -424,7 +424,7 @@ class SocialManager extends UserManager {
 	 * @author  Yannick Warnier
 	 * @since   Dokeos 1.8.6.1
 	 */
-	function get_user_feeds($user, $limit=5) {
+	public static function get_user_feeds($user, $limit=5) {
 	    if (!function_exists('fetch_rss')) { return '';}
 		$fields = UserManager::get_extra_fields();
 	    $feed_fields = array();
@@ -456,7 +456,7 @@ class SocialManager extends UserManager {
 	/**
 	 * Helper functions definition
 	 */
-	function get_logged_user_course_html($my_course, $count) {
+	public static function get_logged_user_course_html($my_course, $count) {
 		global $nosession;
 		if (api_get_setting('use_session_mode')=='true' && !$nosession) {
 			global $now, $date_start, $date_end;
@@ -871,7 +871,7 @@ class SocialManager extends UserManager {
 	 * Displays a sortable table with the list of online users.
 	 * @param array $user_list
 	 */
-	function display_user_list($user_list) {
+	public static function display_user_list($user_list) {
 		global $charset;
 		if ($_GET['id'] == '') {
 			$extra_params = array();
@@ -924,7 +924,7 @@ class SocialManager extends UserManager {
 	 * Displays the information of an individual user
 	 * @param int $user_id
 	 */
-	function display_individual_user($user_id) {
+	public static function display_individual_user($user_id) {
 		global $interbreadcrumb;
 		$safe_user_id = Database::escape_string($user_id);
 	
@@ -1024,7 +1024,7 @@ class SocialManager extends UserManager {
 	 * @param int $user_id User id
 	 * @todo use the correct api_get_path instead of $clarolineRepositoryWeb
 	 */
-	function display_productions($user_id) {
+	public static function display_productions($user_id) {
 		$sysdir_array = UserManager::get_user_picture_path_by_id($user_id, 'system', true);
 		$sysdir = $sysdir_array['dir'].$user_id.'/';
 		$webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true);

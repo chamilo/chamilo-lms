@@ -522,7 +522,7 @@ class SurveyManager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, cleanup and refactoring
 	 *
 	 */
-	function delete_survey($survey_id)
+	public static function delete_survey($survey_id)
 	{
 		$table_survey 	= Database :: get_course_table(TABLE_SURVEY);
 		$table_group 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
@@ -814,7 +814,9 @@ class SurveyManager {
      }
    }
 
-
+	/**
+	 *  Possible  deprecated method
+	 */
    function update_group($groupid,$surveyid,$groupnamme,$introduction,$curr_dbname)
 	{
 		$sql = "UPDATE $curr_dbname.survey_group SET group_id='$groupid', survey_id='$surveyid', groupname='$groupnamme', introduction='$introduction' WHERE group_id='$groupid'";

@@ -505,7 +505,7 @@ class UserManager
     * @return array An array with all users of the platform.
     * @todo optional course code parameter, optional sorting parameters...
     */
-    function get_user_list_like($conditions = array(), $order_by = array()) {
+    public static function get_user_list_like($conditions = array(), $order_by = array()) {
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $return_array = array();
         $sql_query = "SELECT * FROM $user_table";
@@ -2142,7 +2142,7 @@ class UserManager
      * @return  boolean True if is admin, false otherwise
      * @see main_api.lib.php::api_is_platform_admin() for a context-based check
      */
-    function is_admin($user_id) {
+    public static function is_admin($user_id) {
         if (empty($user_id) or $user_id != strval(intval($user_id))) { return false; }
         $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
         $sql = "SELECT * FROM $admin_table WHERE user_id = $user_id";
@@ -2685,7 +2685,7 @@ class UserManager
 	 * @param string the value of the search box
 	 * 
 	 */
-	public function get_search_form($query) {
+	public static function get_search_form($query) {
 		echo'<form method="get" action="'.api_get_path(WEB_PATH).'main/social/search.php">
 
 		<table cellspacing="0" cellpadding="0" id="SearchTable">
@@ -2704,7 +2704,7 @@ class UserManager
 		</tbody></table></form>';
 	}
 	//deprecated
-	public function get_public_users($keyword, $from = 0, $number_of_items= 20, $column=2, $direction='ASC') {	
+	public static function get_public_users($keyword, $from = 0, $number_of_items= 20, $column=2, $direction='ASC') {	
 			
 			$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 			$sql = "SELECT
@@ -2777,7 +2777,7 @@ class UserManager
 	/**
 	 * Shows the user menu 
 	 */
-	function show_menu(){
+	public static function show_menu(){
 		echo '<div class="actions">';
 		echo '<a href="/main/auth/profile.php">'.	Display::return_icon('profile.png').' '.get_lang('PersonalData').'</a>';
 		echo '<a href="/main/messages/inbox.php">'.	Display::return_icon('inbox.png').' '.	get_lang('Inbox').'</a>';

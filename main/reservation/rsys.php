@@ -286,8 +286,8 @@ class Rsys {
 	function get_table_categories($from, $per_page, $column, $direction) {
 		$sql = "SELECT id AS col0, name as col1, id AS col2 FROM ".Rsys :: getTable("category");
 		if (isset ($_GET['keyword'])) {
-			$keyword = Database::escape_string($_GET['keyword']);
-			$sql .= " WHERE name LIKE '%".Database::escape_string($keyword)."%' OR id LIKE '%".Database::escape_string($keyword)."%'";
+			$keyword = Database::escape_string(trim($_GET['keyword']));
+			$sql .= " WHERE name LIKE '%".$keyword."%' OR id LIKE '%".$keyword."%'";
 		}
 		$from = intval($from);
 		$per_page = intval($per_page);
@@ -311,8 +311,8 @@ class Rsys {
 	function get_num_categories() {
 		$sql = "SELECT COUNT(id) FROM ".Rsys :: getTable("category");
 		if (isset ($_GET['keyword'])) {
-			$keyword = Database::escape_string($_GET['keyword']);
-			$sql .= " WHERE name LIKE '%".Database::escape_string($keyword)."%' OR id LIKE '%".Database::escape_string($keyword)."%'";
+			$keyword = Database::escape_string(trim($_GET['keyword']));
+			$sql .= " WHERE name LIKE '%".$keyword."%' OR id LIKE '%".$keyword."%'";
 		}
 		return @ Database::result(Database::query($sql, __FILE__, __LINE__), 0, 0);
 	}
@@ -962,7 +962,7 @@ class Rsys {
                 LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id
                 WHERE ((ir.m_reservation=1 AND cu.user_id='".api_get_user_id()."') OR i.creator='".api_get_user_id()."' OR 1=". (api_is_platform_admin() ? 1 : 0).")";
 		if (isset ($_GET['keyword'])) {
-			$keyword = Database::escape_string($_GET['keyword']);
+			$keyword = Database::escape_string(trim($_GET['keyword']));
 			$sql .= "AND (i.name LIKE '%".$keyword."%' OR i.description LIKE '%".$keyword."%' OR r.notes LIKE '%".$keyword."%')";
 		}
 
@@ -1033,7 +1033,7 @@ class Rsys {
                 LEFT JOIN ".Database :: get_main_table(TABLE_MAIN_CLASS_USER)." cu ON cu.class_id = c.id
                 WHERE ((ir.m_reservation=1 AND cu.user_id='".api_get_user_id()."') OR i.creator='".api_get_user_id()."' OR 1=". (api_is_platform_admin() ? 1 : 0).')';
         if (isset ($_GET['keyword'])) {
-            $keyword = Database::escape_string($_GET['keyword']);
+            $keyword = Database::escape_string(trim($_GET['keyword']));
             $sql .= " AND (i.name LIKE '%".$keyword."%' OR i.description LIKE '%".$keyword."%' OR r.notes LIKE '%".$keyword."%')";
         }
 		return Database::result(Database::query($sql, __FILE__, __LINE__), 0, 0);
@@ -1220,7 +1220,7 @@ class Rsys {
 					OR i2.creator='".api_get_user_id()."'
 					OR 1=". (api_is_platform_admin() ? 1 : 0)."))";
       		if (isset ($_GET['keyword'])) {
-            		$keyword = Database::escape_string($_GET['keyword']);
+            		$keyword = Database::escape_string(trim($_GET['keyword']));
             		$sql .= " AND (i1.name LIKE '%".$keyword."%' or r1.start_at LIKE '%".$keyword."%' or r1.end_at LIKE '%".$keyword."%' or u.lastname LIKE '%".$keyword."%' or u.firstname LIKE '%".$keyword."%' or s.start_at LIKE '%".$keyword."%' or s.end_at LIKE '%".$keyword."%')";
         	}
 		return Database::result(Database::query($sql, __FILE__, __LINE__), 0, 0);
@@ -1256,7 +1256,7 @@ class Rsys {
 					OR i2.creator='".api_get_user_id()."'
 					OR 1=". (api_is_platform_admin() ? 1 : 0)."))";
       		if (isset ($_GET['keyword'])) {
-            		$keyword = Database::escape_string($_GET['keyword']);
+            		$keyword = Database::escape_string(trim($_GET['keyword']));
             		$sql .= " AND (i1.name LIKE '%".$keyword."%' or c.name LIKE '%".$keyword."%' or r1.start_at LIKE '%".$keyword."%' or r1.end_at LIKE '%".$keyword."%' or u.lastname LIKE '%".$keyword."%' or u.firstname LIKE '%".$keyword."%' or s.start_at LIKE '%".$keyword."%' or s.end_at LIKE '%".$keyword."%')";
         	}
 		$sql .= " ORDER BY col".$column." ".$direction." LIMIT ".$from.",".$per_page;

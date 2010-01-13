@@ -269,8 +269,8 @@ function get_number_of_users()
     }
 
 	if ( isset ($_GET['keyword'])) {
-		$keyword = Database::escape_string($_GET['keyword']);
-		$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%') ";
+		$keyword = Database::escape_string(trim($_GET['keyword']));
+		$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR concat(u.firstname,' ',u.lastname) LIKE '%".$keyword."%'  OR concat(u.lastname,' ',u.firstname) LIKE '%".$keyword."%' OR u.username LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%') ";
 	} elseif (isset ($_GET['keyword_firstname'])) {
 		$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 		$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
@@ -350,8 +350,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
     }
 
 	if (isset ($_GET['keyword'])) {
-		$keyword = Database::escape_string($_GET['keyword']);
-		$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%' )";
+		$keyword = Database::escape_string(trim($_GET['keyword']));
+		$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%' OR concat(u.firstname,' ',u.lastname) LIKE '%".$keyword."%' OR concat(u.lastname,' ',u.firstname) LIKE '%".$keyword."%' OR u.username LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%' )";
 	} elseif (isset ($_GET['keyword_firstname'])) {
 		$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
 		$keyword_lastname = Database::escape_string($_GET['keyword_lastname']);

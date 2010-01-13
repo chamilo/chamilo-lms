@@ -66,10 +66,10 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	$from = $page * $limit;
 	//if user is crfp admin only list its sessions
 	if(!api_is_platform_admin()) {
-		$where .= (empty($_REQUEST['keyword']) ? " " : " WHERE name LIKE '%".addslashes($_REQUEST['keyword'])."%'");
+		$where .= (empty($_REQUEST['keyword']) ? " " : " WHERE name LIKE '%".Database::escape_string(trim($_REQUEST['keyword']))."%'");
 	}
 	else {
-		$where .= (empty($_REQUEST['keyword']) ? " " : " WHERE name LIKE '%".addslashes($_REQUEST['keyword'])."%'");
+		$where .= (empty($_REQUEST['keyword']) ? " " : " WHERE name LIKE '%".Database::escape_string(trim($_REQUEST['keyword']))."%'");
 	}
 
 	$query = "SELECT sc.*, (select count(id) FROM $tbl_session WHERE session_category_id = sc.id) as nbr_session

@@ -85,13 +85,13 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	
 	//Prevent hacking keyword
 	if ( isset ($_GET['keyword'])) {
-		$keyword = Database::escape_string($_GET['keyword']);
+		$keyword = Database::escape_string(trim($_GET['keyword']));
 		} else if (isset ($_GET['keyword_name'])) {
-			$keyword_name = Database::escape_string($_GET['keyword_name']);
-			$keyword_category = Database::escape_string($_GET['keyword_category']);
-			$keyword_visibility = Database::escape_string($_GET['keyword_visibility']);
-			$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
-			$keyword_lastname = Database::escape_string($_GET['keyword_lastname']);
+			$keyword_name = Database::escape_string(trim($_GET['keyword_name']));
+			$keyword_category = Database::escape_string(trim($_GET['keyword_category']));
+			$keyword_visibility = Database::escape_string(trim($_GET['keyword_visibility']));
+			$keyword_firstname = Database::escape_string(trim($_GET['keyword_firstname']));
+			$keyword_lastname = Database::escape_string(trim($_GET['keyword_lastname']));
 			}
 	
 	//Process for the search advanced
@@ -218,7 +218,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		if($num>$limit){
 			if($page) {
 			?>
-			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>
+			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo Security::remove_XSS($_REQUEST['keyword']); ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>
 			<?php
 			} else {
 				echo get_lang('Previous');
@@ -228,7 +228,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 			<?php
 			if($nbr_results > $limit) {
 				?>
-				<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Next'); ?></a>
+				<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo Security::remove_XSS($_REQUEST['keyword']); ?><?php echo @$cond_url; ?>"><?php echo get_lang('Next'); ?></a>
 				<?php
 			} else {
 				echo get_lang('Next');
@@ -318,7 +318,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 			{
 			?>
 
-			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>
+			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo Security::remove_XSS($_REQUEST['keyword']); ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>
 
 			<?php
 			}
@@ -335,7 +335,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 			{
 			?>
 
-			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Next'); ?></a>
+			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo Security::remove_XSS($_REQUEST['keyword']); ?><?php echo @$cond_url; ?>"><?php echo get_lang('Next'); ?></a>
 
 			<?php
 			}

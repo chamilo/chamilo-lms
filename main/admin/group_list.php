@@ -40,7 +40,7 @@ function get_number_of_groups()
     }
 */
 	if ( isset ($_GET['keyword'])) {
-		$keyword = Database::escape_string($_GET['keyword']);
+		$keyword = Database::escape_string(trim($_GET['keyword']));
 		$sql .= " WHERE (g.name LIKE '%".$keyword."%' OR g.description LIKE '%".$keyword."%'  OR  g.url LIKE '%".$keyword."%' )";	
 	}
 
@@ -82,7 +82,7 @@ function get_group_data($from, $number_of_items, $column, $direction)
     }*/
 
 	if (isset ($_GET['keyword'])) {
-		$keyword = Database::escape_string($_GET['keyword']);
+		$keyword = Database::escape_string(trim($_GET['keyword']));
 		$sql .= " WHERE (g.name LIKE '%".$keyword."%' OR g.description LIKE '%".$keyword."%'  OR  g.url LIKE '%".$keyword."%' )";
 	} 
 	/*
@@ -140,7 +140,7 @@ function get_recent_group_data($from =0 , $number_of_items = 5, $column, $direct
     }*/
 
 	if (isset ($_GET['keyword'])) {
-		$keyword = Database::escape_string($_GET['keyword']);
+		$keyword = Database::escape_string(trim($_GET['keyword']));
 		$sql .= " WHERE (g.name LIKE '%".$keyword."%' OR g.description LIKE '%".$keyword."%'  OR  g.url LIKE '%".$keyword."%' )";
 	} 
 	/*

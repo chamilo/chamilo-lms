@@ -143,7 +143,7 @@ function count_item_resources() {
 			" WHERE track_resource.insert_user_id = user.user_id";
 
 	if (isset($_GET['keyword'])) {
-		$keyword = Database::escape_string($_GET['keyword']);
+		$keyword = Database::escape_string(trim($_GET['keyword']));
 		$sql .= " AND (user.username LIKE '%".$keyword."%' OR lastedit_type LIKE '%".$keyword."%' OR tool LIKE '%".$keyword."%')";
 	}
 
@@ -169,7 +169,7 @@ function get_item_resources_data($from, $number_of_items, $column, $direction) {
 			WHERE track_resource.insert_user_id = user.user_id ";
 
 	if (isset($_GET['keyword'])) {
-		$keyword = Database::escape_string($_GET['keyword']);
+		$keyword = Database::escape_string(trim($_GET['keyword']));
 		$sql .= " AND (user.username LIKE '%".$keyword."%' OR lastedit_type LIKE '%".$keyword."%' OR tool LIKE '%".$keyword."%') ";
 	}
 

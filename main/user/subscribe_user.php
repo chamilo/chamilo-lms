@@ -324,7 +324,7 @@ function get_number_of_users() {
 
 	// when there is a keyword then we are searching and we have to change the SQL statement
 	if (isset ($_REQUEST['keyword'])) {
-		$keyword = Database::escape_string($_REQUEST['keyword']);
+		$keyword = Database::escape_string(trim($_REQUEST['keyword']));
 		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'   OR email LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
 		
 		// we also want to search for users who have something in their profile fields that matches the keyword
@@ -574,7 +574,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 
 	// adding additional WHERE statements to the SQL for the search functionality
 	if (isset ($_REQUEST['keyword'])) {
-		$keyword = Database::escape_string($_REQUEST['keyword']);
+		$keyword = Database::escape_string(trim($_REQUEST['keyword']));
 		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'   OR email LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
 		
 		if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {

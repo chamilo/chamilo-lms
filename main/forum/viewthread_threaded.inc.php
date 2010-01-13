@@ -307,6 +307,9 @@ echo "\t\t<td class=\"$titleclass\">".prepare4display($rows[$display_post_id]['p
 echo "\t</tr>\n";
 
 // The post message
+
+$rows[$display_post_id]['post_text']= Security::remove_XSS($rows[$display_post_id]['post_text']);
+
 echo "\t<tr>\n";
 echo "\t\t<td class=\"$messageclass\">".prepare4display($rows[$display_post_id]['post_text'])."</td>\n";
 echo "\t</tr>\n";

@@ -129,6 +129,9 @@ foreach ($rows as $post) {
 	echo "\t</tr>\n";
 
 	// The post message
+	
+	$post['post_text']= Security::remove_XSS($post['post_text']);
+	
 	echo "\t<tr>\n";
 	echo "\t\t<td class=\"$messageclass\">".prepare4display($post['post_text'])."</td>\n";
 	echo "\t</tr>\n";

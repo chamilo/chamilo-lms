@@ -5458,7 +5458,12 @@ class learnpath {
 		}
 
 		$return .= "\t\t" . '<tr>' . "\n";
-		$return .= "\t\t\t" . '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit">' . get_lang('AddExercise') . '</button></td>' . "\n";
+		if ($action == 'add') {
+			$return .= '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit">' . get_lang('AddExercise') . '</button></td>';
+		} else {
+			$return .= '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit">' . get_lang('EditCurrentExecice') . '</button></td>';
+		}
+		
 		$return .= "\t\t" . '</tr>' . "\n";
 		$return .= "\t" . '</table>' . "\n";
 
@@ -5942,7 +5947,12 @@ class learnpath {
 		}
 
 		$return .= "\t\t" . '<tr>' . "\n";
-		$return .= "\t\t\t" . '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit"> ' . get_lang('AddForumToCourse') . ' </button></td>' . "\n";
+		
+		if ($action == 'add') {
+			$return .= '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit"> ' . get_lang('AddForumToCourse') . ' </button></td>';
+		} else {
+			$return .= '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit"> ' . get_lang('EditCurrentForum') . ' </button></td>';
+		}
 		$return .= "\t\t" . '</tr>' . "\n";
 
 		$return .= "\t" . '</table>' . "\n";
@@ -6989,8 +6999,11 @@ class learnpath {
 		}
 
 		$return .= "\t\t" . '<tr>' . "\n";
-
-		$return .= "\t\t\t" . '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit">' . get_lang("AddLinkToCourse") . '</button></td>' . "\n";
+		if ($action == 'add') {
+			$return .= '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit">' . get_lang('AddLinkToCourse') . '</button></td>';
+		} else {
+			$return .= '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit">' . get_lang('EditCurrentLink') . '</button></td>';
+		}
 
 		$return .= "\t\t" . '</tr>' . "\n";
 
@@ -7228,7 +7241,11 @@ class learnpath {
 		}
 
 		$return .= "\t\t" . '<tr>' . "\n";
-		$return .= "\t\t\t" . '<td>&nbsp</td><td><button class="save" name="submit_button" type="submit">' . get_lang("AddAssignmentToCourse") . '</button></td>' . "\n";
+		if ($action == 'add') {
+			$return .= '<td>&nbsp</td><td><button class="save" name="submit_button" type="submit">' . get_lang('AddAssignmentToCourse') . '</button></td>';
+		} else {
+			$return .= '<td>&nbsp</td><td><button class="save" name="submit_button" type="submit">' . get_lang('EditCurrentStudentPublication') . '</button></td>';
+		}
 		$return .= "\t\t" . '</tr>' . "\n";
 
 		$return .= "\t" . '</table>' . "\n";

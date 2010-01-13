@@ -229,14 +229,14 @@ class MessageManager
 		}
 		
         if (!empty($receiver_user_id) || !empty($group_id)) {
-        	// message for user friend
-		    $subject = api_convert_encoding($subject, $charset, 'utf-8');
+
+        	// message for user friend        	
+		    $subject = api_convert_encoding($subject, $charset);
 	        $subject = Database::escape_string($subject);
-   	        $content = api_convert_encoding($content, $charset, 'utf-8');
+   	        $content = api_convert_encoding($content, $charset);
 	        $content = Database::escape_string($content);
-	        $content = Security::remove_XSS($content);
-	        	
-	        			
+	        //$content = Security::remove_XSS($content);
+	        
 			//useless query
 			//echo $sql = "SELECT COUNT(*) as count FROM $table_message WHERE user_sender_id = ".$user_sender_id." AND user_receiver_id='$receiver_user_id' AND title = '$title' AND content ='$content' AND group_id = '$group_id' AND parent_id = '$parent_id'";		
 			//$res_exist = Database::query($sql,__FILE__,__LINE__);
@@ -607,9 +607,8 @@ class MessageManager
 			 }
 			 
 			$class = 'class = "read"';
-			
 			$result[2] = Security::remove_XSS($result[2]);
-			
+						
 			if ($request===true) {				   
 				$message[1] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.GetFullUserName($result[4]).'</a>';
 				$message[2] = '<a onclick="show_sent_message('.$result[0].')" href="javascript:void(0)">'.str_replace("\\","",$result[2]).'</a>';
@@ -764,7 +763,8 @@ class MessageManager
 	 * @return void
 	 */
 	public static function show_message_box_sent () {		
-		global $charset;		
+		global $charset;	
+			
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$tbl_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 		

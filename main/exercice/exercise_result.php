@@ -122,20 +122,18 @@ $from_name = api_get_person_name($uinfo['firstname'], $uinfo['lastname'], null, 
 $str = $_SERVER['REQUEST_URI'];
 $url = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result';
 
+ // if the above variables are empty or incorrect, we don't have any result to show, so stop the script
+if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExercise)) {
+	header('Location: exercice.php');
+	exit();
+}
 
 $sql_fb_type='SELECT feedback_type FROM '.$TBL_EXERCICES.' WHERE id ="'.Database::escape_string($objExercise->selectId()).'"';
-
 $res_fb_type=Database::query($sql_fb_type,__FILE__,__LINE__);
 $row_fb_type=Database::fetch_row($res_fb_type);
 $feedback_type = $row_fb_type[0];
 
- // if the above variables are empty or incorrect, we don't have any result to show, so stop the script
-if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExercise))
-{
 
-	header('Location: exercice.php');
-	exit();
-}
 // define basic exercise info to print on screen
 $exerciseTitle=$objExercise->selectTitle();
 $exerciseDescription=$objExercise->selectDescription();

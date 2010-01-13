@@ -88,6 +88,5 @@ $result= Database::query($sql, __FILE__, __LINE__);
 $row= Database::fetch_array($result);
 $title = str_replace(' ','_', $row['filename']);
 DocumentManager::file_send_for_download($full_file_name,TRUE, $title);
-
 exit;
 ?>

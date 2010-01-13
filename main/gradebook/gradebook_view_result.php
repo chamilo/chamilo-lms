@@ -363,9 +363,11 @@ if ($export_result_form->validate()) {
 	switch ($file_type) {
 		case 'xml' :
 			Export :: export_table_xml($alldata, $filename, 'Result', 'XMLResults');
+			exit;
 			break;
 		case 'csv' :
 			Export :: export_table_csv($alldata, $filename);
+			exit;
 			break;
 		}
 	}

@@ -80,12 +80,13 @@ if( isset($_GET['action']))
 					$data[] = $row;
 				}
 			}
-			switch($_GET['type'])
-			{
+			switch($_GET['type']) {
 				case 'csv':
 					Export::export_table_csv($data);
+					exit;
 				case 'xls':
 					Export::export_table_xls($data);
+					exit;
 			}
 			break;
 	}

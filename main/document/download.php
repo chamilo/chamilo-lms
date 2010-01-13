@@ -122,5 +122,5 @@ if (!$is_allowed_to_edit &&
 }
 
 DocumentManager::file_send_for_download($full_file_name);
-
+exit;
 ?>

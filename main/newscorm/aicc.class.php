@@ -675,7 +675,7 @@ class aicc extends learnpath {
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = Database::fetch_array($result);
 		$LPname = $row['path'];
-		$list = split('/',$LPname);
+		$list = split('/',$LPname); 
 		$LPnamesafe = $list[0];
 		//$zipfoldername = '/tmp';
 		//$zipfoldername = '../../courses/'.$_course['directory']."/temp/".$LPnamesafe;
@@ -702,6 +702,7 @@ class aicc extends learnpath {
 		// Delete the temporary zip file and directory in fileManage.lib.php
 		my_delete($zipfilename);
 		my_delete($zipfoldername);
+		
 
 		return true;
 	}

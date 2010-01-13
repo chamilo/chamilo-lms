@@ -143,6 +143,7 @@ if ($nb_sessions > 0) {
 	if ($export_csv) {
 		ob_end_clean();
 		Export :: export_table_csv($csv_content, 'reporting_student_list');
+		exit;
 	}
 } else {
 	get_lang('NoSession');

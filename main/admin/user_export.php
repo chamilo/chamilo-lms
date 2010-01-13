@@ -148,13 +148,14 @@ if ($form->validate())
 		$data[] = $user	;
 	}
 
-	switch($file_type)
-	{
+	switch($file_type) {
 		case 'xml':
 			Export::export_table_xml($data,$filename,'Contact','Contacts');
+			exit;
 			break;
 		case 'csv':
 			Export::export_table_csv($data,$filename);
+			exit;
 			break;
 	}
 }

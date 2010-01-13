@@ -662,10 +662,8 @@ if ($is_platform_admin && $view == 'admin') {
 // send the csv file if asked
 if ($export_csv) {
 	ob_end_clean();
-	/*echo "<pre>";
-	print_r($csv_content);
-	echo "</pre>";*/
 	Export :: export_table_csv($csv_content, 'reporting_index');
+	exit;
 }
 
 //footer
@@ -796,6 +794,7 @@ function export_tracking_user_overview() {
 		}
 	}
 	Export :: export_table_csv($csv_content, 'reporting_user_overview');
+	exit;
 }
 
 /**

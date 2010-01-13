@@ -768,6 +768,7 @@ if (!empty($export_csv)) {
 	$csv_content[] = $temp;
 	ob_end_clean();
 	Export :: export_table_csv($csv_content, 'reporting_learning_path_details');
+	exit;
 }
 
 if ($origin != 'tracking') {

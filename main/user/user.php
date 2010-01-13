@@ -132,8 +132,10 @@ if (api_is_allowed_to_edit()) {
 				switch ($_GET['type']) {
 					case 'csv' :
 						Export::export_table_csv($a_users);
+						exit;
 					case 'xls' :
 						Export::export_table_xls($a_users);
+						exit;
 				}
 		}
 	}

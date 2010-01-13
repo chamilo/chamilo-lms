@@ -102,4 +102,7 @@ $IntroductionWiki = "Het woord Wiki is een afkorting van WikiWikiWeb, een woord 
 $CreateCourseArea = "Maak deze training aan";
 $CreateCourse = "Training aanmaken";
 $Create = "Aanmaken";
+$MessageOfNewCourseToAdmin = "Er werd een nieuwe cursus aangemaakt op het platform:";
+$NewCourseCreatedIn = "Er werd een nieuwe cursus aangemaakt in";
+$ExplicationTrainers = "Je staat op dit moment ingesteld als cursusbeheerder. Je kan dit later aanpassen via de cursuseigenschappen.";
 ?>

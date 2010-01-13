@@ -213,4 +213,5 @@ $CreateTemplate = "Sjabloon aanmaken";
 $SharedFolder = "Gedeelde folder";
 $CreateFolder = "Maak de folder aan";
 $TemplateImage = "Icoon voor het sjabloon";
+$MoveElement = "Verplaats element";
 ?>

@@ -100,4 +100,6 @@ $TaskDeleted = "De taak is verwijderd";
 $TaskAssignmentDeleted = "De toekenning van de taak is verwijderd.";
 $CommentDeleted = "De opmerking is verwijderd.";
 $RatingAdded = "Een score is toegevoegd.";
+$BlogPosts = "Blog Posts";
+$BlogComments = "Blog commentaren";
 ?>

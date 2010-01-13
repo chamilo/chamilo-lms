@@ -77,8 +77,17 @@ if (api_get_setting('show_tutor_data')=='true') {
 				foreach ($coach_email as $email=>$username) {
 					$email_link[] = Display::encrypted_mailto_link($email,$username);
 				}
-			}				
-			echo get_lang('Coachs')." : <ul>".implode("<br /><il>",$email_link);				
+			}	
+			if (count($coachs_email)>1){
+				$bar='<br />';
+				echo get_lang('Coachs').' : <ul>';
+				echo implode("<br /><il>",$email_link);
+			}  elseif(count($coachs_email)==1) {
+				echo get_lang('Coach').' : ';
+				echo implode("&nbps;",$email_link);
+			}  elseif(count($coachs_email)==0) {
+				echo '';
+			} 							
 		}
 		echo '</ul></span>';
 	}
@@ -105,10 +114,15 @@ if (api_get_setting('show_teacher_data')=='true') {
 				}
 			}
 		}
+		if (count($mail)>1){
+			echo '</ul>';
+		} else {
+			echo '<br>';
+		}
 		echo '<br /></span>';
 	}
 }
-echo '</ul></div>';
+echo '</div>';
 
 ?>&nbsp;
 </div> <!-- end of #footer -->

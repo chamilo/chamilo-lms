@@ -105,7 +105,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		// construction of the Answer object
 		$objAnswerTmp=new Answer($questionId);
 
-		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
+		$nbrAnswers=$objAnswerTmp->selectNbrAnswers(); 
 
 		// only used for the answer type "Matching"
 		if($answerType == MATCHING)
@@ -232,7 +232,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 					<p style='float:left; padding-right:4px;'>
 					<span><input class='checkbox' type='radio' name='choice[".$questionId."]' value='".$numAnswer."'></p></span>";
                     $answer=api_parse_tex($answer);
-                    $s.=strip_tags($answer);
+                    $s.=Security::remove_XSS($answer, STUDENT);                    
                     $s.="</div></td></tr>";
 
 			} elseif($answerType == MULTIPLE_ANSWER) {
@@ -244,7 +244,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 					 <p style='float:left; padding-right:4px;'>
 					 <span><input class='checkbox' type='checkbox' name='choice[".$questionId."][".$numAnswer."]' value='1'></p></span>";
 				$answer = api_parse_tex($answer);
-				$s.=strip_tags($answer);
+				$s.=Security::remove_XSS($answer, STUDENT);
 				$s.="</div></td></tr>";			
 				
 			} elseif($answerType == MULTIPLE_ANSWER_COMBINATION) {
@@ -256,20 +256,17 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 					 <p style='float:left; padding-right:4px;'>
 					 <span><input class='checkbox' type='checkbox' name='choice[".$questionId."][".$numAnswer."]' value='1'></p></span>";
 				$answer = api_parse_tex($answer);
-				$s.=strip_tags($answer);
+				$s.=Security::remove_XSS($answer, STUDENT);
 				$s.="</div></td></tr>";
 			}
-
 			// fill in blanks
-			elseif($answerType == FILL_IN_BLANKS)
-			{
+			elseif($answerType == FILL_IN_BLANKS) {
 				$s.="<tr><td colspan='2'>$answer</td></tr>";
 			}
 			// free answer
 
 			// matching // TODO: replace $answerId by $numAnswer
-			else {
-				
+			else {				
 				if ($answerCorrect) {
 					$s.="
 					<tr>

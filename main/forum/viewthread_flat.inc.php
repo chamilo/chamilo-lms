@@ -130,14 +130,20 @@ foreach ($rows as $row) {
 	echo "\t\t<td class=\"$titleclass\">".prepare4display($row['post_title'])."</td>\n";
 	echo "\t</tr>\n";
 
+
+	
 	// The post message
+	//var_dump($messageclass);
+	
+	$row['post_text']= Security::remove_XSS($row['post_text']);
+	
 	echo "\t<tr>\n";
 	echo "\t\t<td class=\"$messageclass\">".prepare4display($row['post_text'])."</td>\n";
 	echo "\t</tr>\n";
 
 	// The check if there is an attachment
+	 
 	$attachment_list=get_attachment($row['post_id']);
-
 	if (!empty($attachment_list)) {
 		echo '<tr><td height="50%">';
 		$realname=$attachment_list['path'];

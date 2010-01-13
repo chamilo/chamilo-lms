@@ -181,7 +181,7 @@ if ($my_message<>'PostDeletedSpecial') {
 	// in this case the first and only post of the thread is removed
 	// this increases the number of times the thread has been viewed
 	increase_thread_view($_GET['thread']);
-	/*
+	/* 
 	-----------------------------------------------------------
 		Action Links
 	-----------------------------------------------------------
@@ -291,7 +291,7 @@ if ($my_message<>'PostDeletedSpecial') {
 		default:
 			include_once('viewthread_flat.inc.php');
 			break;
-	}
+	} 
 } // if ($message<>'PostDeletedSpecial') // in this case the first and only post of the thread is removed
 
 /*

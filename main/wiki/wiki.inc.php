@@ -910,7 +910,7 @@ function display_wiki_entry($newtitle)
 		echo '</span>';
 
 		//page action: export to pdf
-		echo '<span style="float:right;padding:0px;">';
+		echo '<span style="float:right;padding-top:5px;">';
 		echo '<form name="form_export2PDF" method="post" action="export_html2pdf.php" target="_blank, fullscreen">'; // also with  export_tcpdf.php
 		echo '<input type=hidden name="titlePDF" value="'.api_htmlentities($title, ENT_QUOTES, $charset).'">';
 		echo '<input type=hidden name="contentPDF" value="'.api_htmlentities(trim(preg_replace("/\[\[|\]\]/", " ", $content)), ENT_QUOTES, $charset).'">';
@@ -921,7 +921,7 @@ function display_wiki_entry($newtitle)
 		//page action: copy last version to doc area
 		if(api_is_allowed_to_edit(false,true) || api_is_platform_admin())
 		{
-			echo '<span style="float:right;padding:0px;">';
+			echo '<span style="float:right;padding-top:5px;">';
 			echo '<form name="form_export2DOC" method="post" action="index.php" >';
 			echo '<input type=hidden name="export2DOC" value="export2doc">';
 			echo '<input type=hidden name="titleDOC" value="'.api_htmlentities($title, ENT_QUOTES, $charset).'">';

@@ -94,11 +94,16 @@ if (api_get_setting('show_tutor_data')=='true') {
 	echo '<br>';
 }
 
-if (api_get_setting('show_teacher_data')=='true') {
+if (api_get_setting('show_teacher_data')=='true') {	
+	if (api_get_setting('show_tutor_data')=='false'){
+		$class='platformmanager';
+	} else {
+		$class='coursemanager';
+	}
 	// course manager
 	$id_course=api_get_course_id();
 	if (isset($id_course) && $id_course!=-1) {
-		echo '<span id="coursemanager">';
+		echo '<span id="'.$class.'">';
 		$mail=CourseManager::get_emails_of_tutors_to_course($id_course);
 		if (!empty($mail)) {
 			if (count($mail)>1){

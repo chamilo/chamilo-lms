@@ -360,6 +360,7 @@ ul {
 	overflow:hidden;
 	background: url('images/headerbg.jpg');
 	width: 100%;
+	padding-bottom:10px;
 }
 .push {
 	height: 4em; /* Very important */
@@ -379,6 +380,10 @@ ul {
 	float: left;
 	padding-top:25px;
 	margin-left:10px;
+}
+#footer #coursemanager {
+	float: left;
+	margin-left: 10px;
 }
 #bottom_corner {
 }

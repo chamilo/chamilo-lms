@@ -360,6 +360,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	min-height: 50px;	
 	overflow:hidden;
 	width: 100%;	
+	padding-bottom:10px;
 }
 .push {
 	height: 3em; /* Very important */
@@ -371,6 +372,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-color: #434343;
 	background-image: url(images/tab-repeat.png);
 	background-repeat:repeat-x;
+	padding-bottom:10px;
 }
 .footer_emails{
 	float: left;
@@ -390,9 +392,12 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	margin-left:10px;
 }
 
+
 #footer #coursemanager {
+	float: left;
 	margin-left: 10px;
 }
+
 .copyright {
 	display: inline;
 	float: right;

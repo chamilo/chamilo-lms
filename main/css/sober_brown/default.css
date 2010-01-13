@@ -403,6 +403,7 @@ input[text] {
 	min-height: 100px;	
 	overflow:hidden;
 	width: 100%;
+	padding-bottom:10px;
 }
 .push {
 	height: 4em; /* Very important */
@@ -420,12 +421,17 @@ input[text] {
 	margin-right:5%;	
 	background-color: #756e64;	
 	background-image: url(images/bg-footer.gif);
-	background-repeat:repeat-x;	
+	background-repeat:repeat-x;
+	margin-top:20px;	
 }
 #footer #platformmanager {
 	float: left;
 	padding-top:25px;
 	margin-left:10px;
+}
+#footer #coursemanager {
+	float: left;
+	margin-left: 10px;
 }
 #footer a {
 	color:#fff;

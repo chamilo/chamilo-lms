@@ -94,6 +94,8 @@ if (api_get_setting('show_tutor_data')=='true') {
 	echo '<br>';
 }
 
+$class='';
+
 if (api_get_setting('show_teacher_data')=='true') {	
 	if (api_get_setting('show_tutor_data')=='false'){
 		$class='platformmanager';
@@ -125,7 +127,7 @@ if (api_get_setting('show_teacher_data')=='true') {
 
 		}
 
-		echo '<br /></span>';
+		echo '</span>';
 	}
 }
 echo '</div>';

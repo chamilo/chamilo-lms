@@ -5,8 +5,7 @@ $language_file = array('registration', 'tracking', 'exercice', 'admin');
 
 $cidReset = true;
 
-
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
@@ -64,10 +63,7 @@ $now = date('Y-m-d');
   <th><?php echo get_lang('Course'); ?></th>
   <th><?php echo get_lang('Time'); ?></th>
   <th><?php echo get_lang('Progress'); ?></th>
-  <th><?php
-  echo get_lang('Score');
-  Display :: display_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px'));
-  ?></th>
+  <th><?php echo get_lang('Score'); Display :: display_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px')); ?></th>
   <th><?php echo get_lang('LastConnexion'); ?></th>
   <th><?php echo get_lang('Details'); ?></th>
 </tr>
@@ -107,7 +103,16 @@ foreach ($courses as $enreg) {
 		<?php echo $last_connection; ?>
   	</td>
   	<td align='center'>
-		<a href="<?php echo api_get_self(); ?>?course=<?php echo $enreg['code']; ?>"> <?php Display::display_icon('2rightarrow.gif', get_lang('Details')); ?> </a>
+		<?php
+		if ($enreg['code'] == $_GET['course']) { 
+			echo '<a href="#">';
+			Display::display_icon('2rightarrow_na.gif', get_lang('Details'));
+		} else {
+			echo '<a href="'.api_get_self().'?course='.$enreg['code'].'">';
+			Display::display_icon('2rightarrow.gif', get_lang('Details'));
+		} 
+		echo '</a>';
+		?>
   	</td>
 </tr>
 <?php

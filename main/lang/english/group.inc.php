@@ -92,4 +92,5 @@ $GroupsFromClassesInfo = "Using this option, you can create groups based on the 
 $Group = "Group";
 $ForumOfGroup = "Forum of group: ";
 $BackToGroupList = "Back to Groups list";
+$EditGroupCategory = "Edit group category";
 ?>

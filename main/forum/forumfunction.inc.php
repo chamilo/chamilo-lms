@@ -1838,7 +1838,6 @@ function store_thread($values) {
 		$sql="UPDATE $table_threads SET thread_last_post='".Database::escape_string($last_post_id)."'  WHERE thread_id='".Database::escape_string($last_thread_id)."'";
 		$result=Database::query($sql, __LINE__, __FILE__);
 		$message=get_lang('NewThreadStored');
-		$message= Database::escape_string($message);
 		// Storing the attachments if any
 		if ($has_attachment) {
 			$courseDir   = $_course['path'].'/upload/forum';

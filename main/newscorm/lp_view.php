@@ -72,7 +72,12 @@ $my_style=$platform_theme;
 -----------------------------------------------------------
 */
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>'; //jQuery
+
+if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) { 
+	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
+	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
+}
+
 
 $htmlHeadXtra[] = '<script language="javascript" type="text/javascript">
 $(document).ready(function (){
@@ -98,8 +103,7 @@ $_SESSION['scorm_view_id'] = $_SESSION['oLP']->get_view_id();
 $_SESSION['scorm_item_id'] = $lp_item_id;
 $_SESSION['lp_mode'] = $_SESSION['oLP']->mode;
 //reinit exercises variables to avoid spacename clashes (see exercise tool)
-if(isset($exerciseResult) or isset($_SESSION['exerciseResult']))
-{
+if(isset($exerciseResult) or isset($_SESSION['exerciseResult'])) {
     api_session_unregister($exerciseResult);
 }
 unset($_SESSION['objExercise']);
@@ -582,46 +586,37 @@ window.onload = function() {
 	rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
 	document.body.style.overflow = 'hidden';
 	updateContentHeight();
-	
+
 	//loads the glossary library	
-		
 	<?php
-	if (api_get_setting('show_glossary_in_extra_tools') == 'true') {	
-		if (api_get_setting('show_glossary_in_documents') == 'ismanual') {  	  	 	
-	  	 	?>		  	 	
-	    $(document).ready(function() {   
-	      $.frameReady(function(){   
-	       //  $("<div>I am a div courses</div>").prependTo("body");		     
-	      }, "top.content_name",   
-	      { load: [   
-	      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
-	            {type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
-	            {type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
-	      	 ] 
-	      }		   
+	  if (api_get_setting('show_glossary_in_extra_tools') == 'true') { 	
+	  	 if (api_get_setting('show_glossary_in_documents') == 'ismanual') { 
+	  	 	 ?>
+			$.frameReady(function(){
+		   		//  $("<div>I am a div courses</div>").prependTo("body");     
+	     }, "top.content_name",   
+	      { load: [
+	      		{type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
+	          	{type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
+	          	{type:"script", id:"_fr3", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
+	      ] }
+	      );	
+	<?php
+		} elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') { 	 
+	  ?> 	
+	$.frameReady(function(){  
+		//  $("<div>I am a div courses</div>").prependTo("body");     
+	  }, "top.content_name",   
+	  { load: [   
+	  		{type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
+	      	{type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
+	      	{type:"script", id:"_fr3", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
+	      ] }
 	      );
-	   });		   		  	 	
-	<?php
-	  	 } elseif(api_get_setting('show_glossary_in_documents') == 'isautomatic') {
-	?>		
-	    $(document).ready(function() {   
-	      $.frameReady(function(){   
-	       //  $("<div>I am a div courses</div>").prependTo("body");
-	     
-	      }, "top.content_name",   
-	      { load: [   
-	      		{type:"script", id:"_fr1", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
-	            {type:"script", id:"_fr2", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
-	            {type:"script", id:"_fr3", src:"<?= api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
-	      	 ] 
-	      }
-	   
-	      );
-	   });
-	<?php
+	  <?php
 	  	 }
 	  }
-	?>	
+	  ?>	
 }
 
 window.onresize = updateContentHeight;

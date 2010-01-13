@@ -388,6 +388,10 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
 	padding-top:18px;
 	margin-left:10px;
 }
+#footer #coursemanager {
+	float: left;
+	margin-left: 10px;
+}
 #footer a {
 	color:#fff;
 }

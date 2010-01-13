@@ -81,7 +81,7 @@ if (api_get_setting('show_tutor_data')=='true') {
 			if (count($coachs_email)>1){
 				$bar='<br />';
 				echo get_lang('Coachs').' : <ul>';
-				echo implode("<br /><il>",$email_link);
+				echo '<li>'.implode("<li>",$email_link);
 			}  elseif(count($coachs_email)==1) {
 				echo get_lang('Coach').' : ';
 				echo implode("&nbps;",$email_link);
@@ -94,31 +94,37 @@ if (api_get_setting('show_tutor_data')=='true') {
 	echo '<br>';
 }
 
-if (api_get_setting('show_teacher_data')=='true') {
+if (api_get_setting('show_teacher_data')=='true') {	
+	if (api_get_setting('show_tutor_data')=='false'){
+		$class='platformmanager';
+	} else {
+		$class='coursemanager';
+	}
 	// course manager
 	$id_course=api_get_course_id();
 	if (isset($id_course) && $id_course!=-1) {
-		echo '<span id="coursemanager">';
+		echo '<span id="'.$class.'">';
 		$mail=CourseManager::get_emails_of_tutors_to_course($id_course);
 		if (!empty($mail)) {
 			if (count($mail)>1){
-				$bar='<br />';
 				echo get_lang('Teachers').' : <ul>';
+				foreach ($mail as $value=>$key) {
+					foreach ($key as $email=>$name){
+						echo '<li>'.Display::encrypted_mailto_link($email,$name).'</li>';
+					}
+				}
+				echo '</ul>';
 			} else {
-				$bar='';
 				echo get_lang('Teacher').' : ';
-			}
-			foreach ($mail as $value=>$key) {
-				foreach ($key as $email=>$name){
-					echo '<il>'.Display::encrypted_mailto_link($email,$name).$bar.'</il>';
+				foreach ($mail as $value=>$key) {
+					foreach ($key as $email=>$name){
+						echo Display::encrypted_mailto_link($email,$name).'<br />';
+					}
 				}
 			}
+
 		}
-		if (count($mail)>1){
-			echo '</ul>';
-		} else {
-			echo '<br>';
-		}
+
 		echo '<br /></span>';
 	}
 }

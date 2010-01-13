@@ -4190,6 +4190,10 @@ function api_get_tool_information($tool_id) {
 	return Database::fetch_array($rs);
 }
 
+function api_get_software_name() {
+	global $_configuration;
+	return $_configuration['software_name'];
+}
 
 /*
 ==============================================================================

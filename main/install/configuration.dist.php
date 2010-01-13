@@ -122,7 +122,7 @@ $storeSessionInDb             							= false;
 $_configuration['session_lifetime']						= SESSION_LIFETIME;
 // Activation for multi-url access
 //$_configuration['multiple_access_urls']					= true;
-
+$_configuration['software_name']						= 'Chamilo';
 
 // Version settings
 $_configuration['dokeos_version'] 	= '{NEW_VERSION}';

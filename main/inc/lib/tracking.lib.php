@@ -91,15 +91,15 @@ class Tracking {
 	 */
 	public static function get_time_spent_on_the_course($user_id, $course_code) {
 		// protect datas
-		$user_id = intval($user_id);
-		$course_code = addslashes($course_code);		
+		$course_code = Database::escape_string($course_code);		
 		$tbl_track_course = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 		$condition_user = "";
 		if (is_array($user_id)) {
 			$condition_user = " AND user_id IN (".implode(',',$user_id).") ";
 		} else {
+			$user_id = intval($user_id);
 			$condition_user = " AND user_id = '$user_id' ";
-		}				
+		}			
 		$sql = " SELECT SUM(UNIX_TIMESTAMP(logout_course_date)-UNIX_TIMESTAMP(login_course_date)) as nb_seconds 
 				FROM $tbl_track_course
 				WHERE course_code='$course_code' $condition_user";

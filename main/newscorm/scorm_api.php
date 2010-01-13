@@ -1686,7 +1686,7 @@ if(olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
 function attach_glossary_into_scorm(type) {
 	
     var f = $('#content_id')[0];
-	logit_lms('attach_glossary_into_scorm', 0);
+	//logit_lms('attach_glossary_into_scorm', 0);
     var doc = f.contentWindow ? f.contentWindow.document :
     f.contentDocument ? f.contentDocument : f.document; 
   
@@ -1741,7 +1741,7 @@ function attach_glossary_into_scorm(type) {
 		                        }
 								//alert(n + ' ' + my_index);
 		                        $("iframe").contents().find('body').removeHighlight().highlight(n,my_index)
-		                        logit_lms(n+ ' - '+my_index, 0); 
+		                        //logit_lms(n+ ' - '+my_index, 0); 
 		                    }                   
 		                }
 		             

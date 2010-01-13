@@ -65,4 +65,8 @@ $FolderCreated = "Nieuwe folder aangemaakt";
 $LinkAdded = "Nieuwe link toegevoegd";
 $AnnouncementAdded = "Aankondiging toegevoegd";
 $AgendaAdded = "Agenda item toegevoegd";
+$Messages = "Berichten";
+$Inbox = "Postvak In";
+$Comppose = "Opstellen";
+$PendingInvitations = "Hangende uitnodigingen";
 ?>

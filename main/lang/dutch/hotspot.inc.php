@@ -18,4 +18,7 @@ $labelPolyMenu = "Poligoon afsluiten";
 $triesleft = "Resterende beurten";
 $exeFinished = "Alle antwoorden zijn gedefinieerd. U kunt nu de hotspots herschikken of klikken om in te dienen.";
 $nextAnswer = "Klik nu op: &done=done";
+$delineation = "Delineatie";
+$labelDelineationMenu = "Delineatie beëindigen";
+$oar = "Risicogebied";
 ?>

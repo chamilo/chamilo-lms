@@ -271,6 +271,7 @@ if ($isCoach || api_is_platform_admin() || $_user['status'] == DRH) {
 	if ($export_csv) {
 		ob_end_clean();
 		Export :: export_table_csv($csv_content, 'reporting_student_list');
+		exit;
 	}
 }
 

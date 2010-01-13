@@ -1,6 +1,9 @@
 <?php /*
 for more information: see languages.txt in the lang folder. 
 */
+$ModifyEvaluation = "Evaluatie opslaan";
+$CreateLink = "Voeg deze activiteit toe aan de evaluatie";
+$AddResultNoStudents = "Er zijn geen studenten waarvoor resultaten toegevoegd kunnen worden";
 $FlatView = "Vlakke weergave";
 $ScoreEdit = "Scoreregels bewerken";
 $ScoreColor = "Scorekleur";
@@ -103,7 +106,15 @@ $AverageTotal = "Totaal gemiddelde";
 $Evaluation = "Evaluatie";
 $EvaluationAverage = "Gemiddelde van de evaluatie.";
 $EditCategory = "Bewerk categorie";
+$EditAllWeights = "Gewicht";
 $GradebookQualificationTotal = "Totaal";
+$GradebookEvaluationDeleted = "Evaluatie verwijderd";
+$GradebookQualifyLog = "Evaluatiehistoriek";
+$GradebookNameLog = "Evaluatienaam";
+$GradebookDescriptionLog = "Omschrijving evaluatie";
+$GradebookVisibilityLog = "Zichtbaarheid evaluatie";
+$ResourceType = "Type";
+$GradebookWhoChangedItLog = "Wie heeft het aangepast";
 $FileUploadComplete = "Bestand met succes geüpload";
 $NoResultsAvailable = "Géén resultaten beschikbaar";
 ?>

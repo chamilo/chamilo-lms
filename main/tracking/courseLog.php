@@ -607,6 +607,7 @@ if ($_GET['studentlist'] == 'false') {
 	if ($export_csv) {
 		ob_end_clean();
 		Export :: export_table_csv($csv_content, 'reporting_course_tracking');
+		exit;
 	}
 } elseif ($_GET['studentlist'] == 'true' or $_GET['studentlist'] == '') {
 // else display student list with all the informations
@@ -731,8 +732,8 @@ if ($_GET['studentlist'] == 'false') {
 		ob_end_clean();
 		array_unshift($csv_content, $csv_headers); // adding headers before the content
 		Export :: export_table_csv($csv_content, 'reporting_student_list');
+		exit;
 	}
-
 } elseif($_GET['studentlist'] == 'resources') {
 
 	// Create a search-box

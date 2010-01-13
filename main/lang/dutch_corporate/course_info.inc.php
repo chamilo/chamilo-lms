@@ -106,4 +106,10 @@ $AllowLearningPathThemeAllow = "Toegelaten";
 $AllowLearningPathThemeDisallow = "Niet toegelaten";
 $ConfigChat = "Chat instellingen";
 $AllowOpenchatWindow = "Open de chat in een nieuw venster";
+$AllowOpenChatWindowActivate = "Toon chatvenster in een nieuw scherm";
+$AllowOpenChatWindowDeactivate = "Toon chatvenster in hetzelfde venster";
+$NewUserEmailAlert = "Melding van nieuwe inschrijvingen aan de cursusbeheerder";
+$NewUserEmailAlertEnable = "Breng de cursusbeheerder op de hoogte van nieuwe zelfinschrijvingen";
+$NewUserEmailAlertToTeacharAndTutor = "Breng de cursusbeheerder en tutoren op de hoogte van nieuwe zelfinschrijvingen";
+$NewUserEmailAlertDisable = "Breng de beheerders niet op de hoogte";
 ?>

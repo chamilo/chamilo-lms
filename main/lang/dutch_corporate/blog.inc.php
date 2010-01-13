@@ -86,4 +86,6 @@ $Shared = "Gedeeld";
 $PermissionGrantedByGroupOrRole = "Rechten toegekend per groep of rol";
 $Reader = "Lezer";
 $SeeBlog = "Project bekijken";
+$BlogPosts = "Blog Posts";
+$BlogComments = "Blog commentaren";
 ?>

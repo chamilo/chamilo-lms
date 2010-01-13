@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $MessageEmptyMessageOrSubject = "Por favor, escriba el título y el texto de su mensaje";
 $Inbox  = "Bandeja de entrada";
-$Messages = "Mensajes instantáneos";
+$Messages = "Mensajes";
 $SendMessage = "Enviar mensaje instantáneo";
 $NewMessage = "Nuevo mensaje";
 $ComposeMessage = "Redactar";

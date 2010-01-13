@@ -12,4 +12,5 @@ $langSendPage = "Pagina opsturen";
 $langPageTitleModified = "Paginatitel is gewijzigd.";
 $langPageAdded = "Pagina is toegevoegd.";
 $langAddPage = "Pagina toevoegen";
+$Choose = "Bladeren";
 ?>

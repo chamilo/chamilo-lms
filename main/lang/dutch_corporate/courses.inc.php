@@ -75,4 +75,11 @@ $CourseCategoryEditStored = "Categorie bijgewerkt";
 $buttonCreateCourseCategory = "Trainingscategorie bewaren";
 $buttonSaveCategory = "Categorie bewaren";
 $buttonChangeCategory = "Categorie wijzigen";
+$SessionName = "Sessienaam";
+$SessionCategory = "Sessiecategorie";
+$Expand = "Uitklappen";
+$Collapse = "Verbergen";
+$CourseDetails = "Cursusomschrijving";
+$GroupPendingInvitations = "Zwevende uitnodigingen voor groep";
+$Compose = "Opstellen";
 ?>

@@ -24,4 +24,8 @@ $Authoring = "Opstellen";
 $Administration = "Administratie";
 $IntroductionTextUpdated = "De introductietekst is gewijzigd";
 $IntroductionTextDeleted = "Introductietekst verwijderd";
+$SessionIdentifier = "Sessie herkenningsteken";
+$SessionName = "Sessienaam";
+$SessionCategory = "Sessiecategorie";
+$SessionData = "Sessiedata";
 ?>

@@ -38,6 +38,11 @@ if (api_get_setting('show_navigation_menu') != 'false') {
 <div class="copyright">
 <?php
 global $_configuration;
+if (api_get_setting('show_administrator_data')=='true') {
+	// Platform manager
+	echo '<div align="right">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))).'</div>';
+}
+
 echo get_lang("Platform"), ' <a href="http://www.chamilo.org" target="_blank">Chamilo ', $_configuration['dokeos_version'], '</a> &copy; ', date('Y');
 // Server mode indicator.
 if (api_is_platform_admin()) {
@@ -59,17 +64,12 @@ api_plugin('footer');
 
 echo '<div class="footer_emails">';
 
-if (api_get_setting('show_administrator_data')=='true') {
-	// Platform manager
-	echo '<span id="platformmanager">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));
-}
-
 if (api_get_setting('show_tutor_data')=='true') {
 	// course manager
 	$id_course=api_get_course_id();
 	$id_session=api_get_session_id();
 	if (isset($id_course) && $id_course!=-1) {
-		echo '<span id="coursemanager">';
+		echo '<span id="platformmanager">';
 		if ($id_session!=0){
 			$coachs_email=CourseManager::get_email_of_tutor_to_session($id_session,$id_course);
 			$email_link = array();
@@ -78,11 +78,11 @@ if (api_get_setting('show_tutor_data')=='true') {
 					$email_link[] = Display::encrypted_mailto_link($email,$username);
 				}
 			}				
-			echo '<br />'.get_lang('Coachs')." : ".implode("<br />",$email_link);				
+			echo get_lang('Coachs')." : <ul>".implode("<br /><il>",$email_link);				
 		}
-		echo '</span>';
+		echo '</ul></span>';
 	}
-
+	echo '<br>';
 }
 
 if (api_get_setting('show_teacher_data')=='true') {
@@ -94,10 +94,10 @@ if (api_get_setting('show_teacher_data')=='true') {
 		if (!empty($mail)) {
 			if (count($mail)>1){
 				$bar='<br />';
-				echo '<br />'.get_lang('Teachers').' : ';
+				echo get_lang('Teachers').' : <ul>';
 			} else {
 				$bar='';
-				echo '<br />'.get_lang('Teacher').' : ';
+				echo get_lang('Teacher').' : ';
 			}
 			foreach ($mail as $value=>$key) {
 				foreach ($key as $email=>$name){
@@ -108,7 +108,7 @@ if (api_get_setting('show_teacher_data')=='true') {
 		echo '<br /></span>';
 	}
 }
-echo '</div>';
+echo '</ul></div>';
 
 ?>&nbsp;
 </div> <!-- end of #footer -->

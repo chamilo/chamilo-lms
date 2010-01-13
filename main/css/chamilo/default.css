@@ -591,8 +591,11 @@ margin-top:0;
 #footer #platformmanager {
 	float: left;
 	padding-top:60px;
-	margin-left:5%;
-
+	margin-left: 10px;
+}
+#footer #coursemanager {
+	float: left;
+	margin-left: 10px;
 }
 #footer a {
 	color:#f1d40d;

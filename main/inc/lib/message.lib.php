@@ -230,12 +230,13 @@ class MessageManager
 		
         if (!empty($receiver_user_id) || !empty($group_id)) {
         	// message for user friend
-	        $subject = api_convert_encoding($subject,$charset);
+		    $subject = api_convert_encoding($subject, $charset, 'utf-8');
 	        $subject = Database::escape_string($subject);
-	        $content = api_convert_encoding($content,$charset);
+   	        $content = api_convert_encoding($content, $charset, 'utf-8');
 	        $content = Database::escape_string($content);
 	        $content = Security::remove_XSS($content);
-			
+	        	
+	        			
 			//useless query
 			//echo $sql = "SELECT COUNT(*) as count FROM $table_message WHERE user_sender_id = ".$user_sender_id." AND user_receiver_id='$receiver_user_id' AND title = '$title' AND content ='$content' AND group_id = '$group_id' AND parent_id = '$parent_id'";		
 			//$res_exist = Database::query($sql,__FILE__,__LINE__);

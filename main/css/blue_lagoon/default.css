@@ -385,13 +385,14 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
 }
 #footer #platformmanager {
 	float: left;
-	padding-top:18px;
+	padding-top:20px;
 	margin-left:10px;
 }
 #footer a {
 	color:#fff;
 }
 #footer #coursemanager {
+	float: left;
 	margin-left: 10px;
 }
 .copyright {

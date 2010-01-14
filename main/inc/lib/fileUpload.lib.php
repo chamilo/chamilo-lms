@@ -1380,7 +1380,7 @@ function search_img_from_html($htmlFile)
  *         boolean false otherwise
  */
 
-function create_unexisting_directory($_course,$user_id,$to_group_id,$to_user_id,$base_work_dir,$desired_dir_name, $title = null)
+function create_unexisting_directory($_course,$user_id,$to_group_id,$to_user_id,$base_work_dir,$desired_dir_name, $title = null, $visibility = '')
 {
 	$nb = '';
 	while ( file_exists($base_work_dir.$desired_dir_name.$nb) )
@@ -1400,8 +1400,13 @@ function create_unexisting_directory($_course,$user_id,$to_group_id,$to_user_id,
 		if ($document_id)
 		{
 		//update document item_property
-		$current_session_id = api_get_session_id();
-		api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'FolderCreated',$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
+		$current_session_id = api_get_session_id();		
+		if ($visibility !== '') {
+			$visibilities = array(0 => 'invisible', 1 => 'visible', 2 => 'delete');
+			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,$visibilities[$visibility],$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
+		} else {
+			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'FolderCreated',$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);	
+		}
 		return $desired_dir_name.$nb;
 		}
 	}

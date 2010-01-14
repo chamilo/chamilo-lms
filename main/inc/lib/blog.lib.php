@@ -1,28 +1,5 @@
 <?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
-
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /chamilo_license.txt */
 
 /**
  * Blog class
@@ -253,15 +230,13 @@ class Blog {
 		$has_attachment=false;
 		$current_date=date('Y-m-d H:i:s',time());
 
-		if(!empty($_FILES['user_upload']['name']))
-		{
+		if(!empty($_FILES['user_upload']['name'])) {
 			require_once('fileUpload.lib.php');
 			$upload_ok = process_uploaded_file($_FILES['user_upload']);
 			$has_attachment=true;
 		}
 
-		if($upload_ok)
-		{
+		if($upload_ok) {
 			// Table Definitions
 			$tbl_blogs_posts = Database::get_course_table(TABLE_BLOGS_POSTS);
 
@@ -272,8 +247,7 @@ class Blog {
 			Database::query($sql, __FILE__, __LINE__);
 			$last_post_id=Database::insert_id();
 
-			if ($has_attachment)
-			{
+			if ($has_attachment) {
 				$courseDir   = $_course['path'].'/upload/blog';
 				$sys_course_path = api_get_path(SYS_COURSE_PATH);
 				$updir = $sys_course_path.$courseDir;
@@ -296,10 +270,9 @@ class Blog {
 					$comment=Database::escape_string($file_comment);
 
 					// Storing the attachments if any
-					if ($result)
-					{
+					if ($result) {
 						$sql='INSERT INTO '.$blog_table_attachment.'(filename,comment, path, post_id,size, blog_id,comment_id) '.
-							 "VALUES ( '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$last_post_id."', '".$_FILES['user_upload']['size']."',  '".$blog_id."', '0' )";
+							 "VALUES ( '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$last_post_id."', '".intval($_FILES['user_upload']['size'])."',  '".$blog_id."', '0' )";
 						$result=Database::query($sql, __LINE__, __FILE__);
 						$message.=' / '.get_lang('AttachmentUpload');
 					}
@@ -2712,7 +2685,7 @@ class Blog {
 						' . get_lang('Subtitle') . '
 					</div>
 					<div class="formw">
-						<input name="blog_subtitle" type="text" size="50" value="'.Security::remove_XSS($_POST['blog_subtitle']).'"/>
+						<textarea name="blog_subtitle" cols="45">'.Security::remove_XSS($_POST['blog_subtitle']).'</textarea>
 					</div>
 				</div>
 
@@ -2770,7 +2743,7 @@ class Blog {
 						' . get_lang('Subtitle') . '
 					</div>
 					<div class="formw">
-						<input name="blog_subtitle" type="text" size="50" value="' . $blog['blog_subtitle'] . '" />
+						<textarea name="blog_subtitle" type="text" cols="45">' . $blog['blog_subtitle'] . '</textarea>
 					</div>
 				</div>
 

@@ -164,7 +164,7 @@ echo '<div id="social-content">';
 			if (count($groups_newest) > 0) {		
 				echo '<div class="social-groups-home-title">'.api_strtoupper(get_lang('Newest')).'</div>';	
 				Display::display_sortable_grid('home_group', array(), $groups_newest, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false));
-				echo '<br /><br /><br />';		
+				echo '<br />';		
 			}
 			
 			if (count($groups_pop) > 0) {

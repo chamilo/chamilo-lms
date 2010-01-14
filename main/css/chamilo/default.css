@@ -3061,7 +3061,7 @@ a.read {
 /* home group boxes */
 
 .home_group_grid_container {
-	margin-bottom:60px;
+	margin-bottom:70px;
 }
 
 .home_group_grid_element_1 {
@@ -3522,7 +3522,7 @@ div.image-social-content center.friend {
 #social-content-right {
 	height:auto;
 	overflow:hidden;	
-	margin-left:220px;
+	margin-left:200px;
 }
 
 .social-content-image {
@@ -3724,15 +3724,15 @@ div.image-social-content center.friend {
 	overflow:hidden;
 }
 .social-box-left {
-	width:350px;
+	width:330px;
 	float:left;
 	height:auto;	
 }
 .social-box-right {
-	width:350px;
+	width:330px;
 	float:left;
 	height:auto;
-	margin-left:50px;
+	margin-left:30px;
 }
 .social-box-container1 {
 	width:350px;

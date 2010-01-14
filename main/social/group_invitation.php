@@ -399,7 +399,7 @@ if(!empty($errorMsg)) {
 }
 ?>
 
-<table border="0" cellpadding="5" cellspacing="0" width="80%">
+<table border="0" cellpadding="5" cellspacing="0" width="100%">
 <!-- Users -->
 <tr>
   <td align="center"><b><?php echo get_lang('Friends') ?> :</b>
@@ -437,7 +437,7 @@ if(!empty($errorMsg)) {
   	  } else {
   	  ?>
   	  <div id="ajax_list_users_multiple">
-	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">
+	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:320px;">
 		<?php 
 		foreach($nosessionUsersList as $enreg) {
 		?>
@@ -471,7 +471,7 @@ if(!empty($errorMsg)) {
 	<br /><br /><br /><br /><br />
   </td>
   <td align="center">
-  <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:360px;">
+  <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:320px;">
 
 <?php
 foreach($sessionUsersList as $enreg) {

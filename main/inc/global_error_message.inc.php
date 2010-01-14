@@ -11,8 +11,8 @@
  *==============================================================================
  */
 
-$Organisation = '<a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a>';
-$PoweredBy = 'Platform <a href="http://www.dokeos.com" target="_blank"> Dokeos </a> &copy; '.date('Y');
+$Organisation = '<a href="http://www.chamilo.org" target="_blank">Chamilo Homepage</a>';
+$PoweredBy = 'Platform <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');
 
 /**
  * English language variables.

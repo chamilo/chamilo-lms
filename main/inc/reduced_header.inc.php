@@ -168,9 +168,9 @@ if($my_style!='')
 <link rel="top" href="<?php echo api_get_path(WEB_PATH); ?>index.php" title="" />
 <link rel="courses" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/courses.php" title="<?php echo api_htmlentities(get_lang('OtherCourses'),ENT_QUOTES,$charset); ?>" />
 <link rel="profil" href="<?php echo api_get_path(WEB_CODE_PATH) ?>auth/profile.php" title="<?php echo api_htmlentities(get_lang('ModifyProfile'),ENT_QUOTES,$charset); ?>" />
-<link href="http://www.dokeos.com/documentation.php" rel="Help" />
-<link href="http://www.dokeos.com/team.php" rel="Author" />
-<link href="http://www.dokeos.com" rel="Copyright" />
+<link href="http://www.chamilo.org/documentation.php" rel="Help" />
+<link href="http://www.chamilo.org/team.php" rel="Author" />
+<link href="http://www.chamilo.org" rel="Copyright" />
 <link rel="shortcut icon" href="<?php echo api_get_path(WEB_PATH); ?>favicon.ico" type="image/x-icon" />
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>" />
 

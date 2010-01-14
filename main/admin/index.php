@@ -289,7 +289,7 @@ if(api_is_platform_admin()){
   	//session_write_close(); //close session to avoid blocking concurrent access
 	flush(); //send data to client as much as allowed by the web server
 	//ob_flush();
-	echo '<li>'.get_lang('VersionCheck').': '.version_check().'</li>';
+	echo '<br />'.get_lang('VersionCheck').': '.version_check().'';
   ?>
  </ul>
 </div>

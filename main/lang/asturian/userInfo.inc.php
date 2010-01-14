@@ -188,4 +188,8 @@ $ClickHereToSeeMessageGroup = "Calca equí pa ver el mensax de grupu";
 $OrCopyPasteTheFollowingUrl = "O copiar y apegar la siguiente url";
 $ThereIsANewMessageInTheGroupX = "Hai un mensax nuevu nel grupu %s";
 $UserIsAlreadySubscribedToThisGroup = "L\'usuariu ya ta soscritu a esti grupu";
+$AddNormalUser = "Amestar como un usuariu normal";
+$AddModerator = "Amestar como moderador";
+$DenyEntry = "Torgar la entrada";
+$YouNeedToHaveFriendsInYourSocialNetwork = "Necesites tener collacios na to rede social";
 ?>

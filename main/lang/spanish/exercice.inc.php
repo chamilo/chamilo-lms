@@ -357,4 +357,5 @@ $YouHaveToCreateAtLeastOneAnswer = "Tienes que crear al menos una respuesta";
 $ExerciseAttempted = "Un estudiante ha contestado una pregunta";
 $MultipleSelectCombination = "Combinación exacta";
 $MultipleAnswerCombination = "Combinación exacta";
+$ExerciceExpiredTimeMessage = "El tiempo de la evaluación ha terminado. Sin embargo las preguntas que ya respondió, serán consideradas en la evaluación del ejercicio.";
 ?>

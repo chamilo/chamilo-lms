@@ -1125,4 +1125,5 @@ $TabsSocial = "Pestaña Rede social";
 $MessageMaxUploadFilesizeTitle = "Mensaxe: tamañu máximu del archivu a subir";
 $MessageMaxUploadFilesizeComment = "Mensaxe: tamañu máximu del archivu permitíu pa subir";
 $AddAdditionalProfileField = "Amestar un campu del perfil d\'usuariu";
+$Username = "Nome d\'usuariu";
 ?>

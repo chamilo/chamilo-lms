@@ -1,24 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /chamilo_license.txt */
 
 /**
 *	@package dokeos.survey
@@ -117,24 +98,8 @@ if ($_GET['action'] == 'edit' AND isset($survey_id) AND is_numeric($survey_id))
 {
 	$defaults = $survey_data;
 	$defaults['survey_id'] = $survey_id;
-	/*
-	$defaults['survey_share'] = array();
-	$defaults['survey_share']['survey_share'] = $survey_data['survey_share'];
-
-	if (!is_numeric($survey_data['survey_share']) OR $survey_data['survey_share'] == 0)
-	{
-		$form_share_value = 'true';
-	}
-	else
-	{
-		$form_share_value = $defaults['survey_share']['survey_share'];
-	}
-	*/
-
 	$defaults['anonymous'] = $survey_data['anonymous'];
-}
-else
-{
+} else {
 	$defaults['survey_language'] = $_course['language'];
 	$defaults['start_date'] = date('d-F-Y H:i');
 	$startdateandxdays = time() + 864000; // today + 10 days
@@ -205,8 +170,7 @@ $surveytypes[0] = get_lang('Normal');
 $surveytypes[1] = get_lang('Conditional');
 
 
-if ($_GET['action'] == 'add')
-{
+if ($_GET['action'] == 'add') {
 	$form->addElement('hidden','survey_type',0);
     $form -> addElement('html','<div id="options" style="display: none;">');
 	require_once(api_get_path(LIBRARY_PATH).'surveymanager.lib.php');
@@ -223,9 +187,9 @@ if ($survey_data['survey_type']==1 || $_GET['action'] == 'add' )
 	$form->addElement('checkbox', 'shuffle', get_lang('ActivateShuffle'));
 }
 
-if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id) )
-{
+if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id) ) {
 	if ($survey_data['anonymous']==0  ) {
+		
 		// Aditional Parameters
 		$form -> addElement('html','<div class="row">
 		<div class="label">
@@ -235,11 +199,12 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id) 
 			&nbsp;
 		</div>
 		</div>');
-		$form -> addElement('html','<div id="options" style="display:none">');
+		
+		$form->addElement('html','<div id="options" style="display:none">');
 		$form->addElement('checkbox', 'show_form_profile', get_lang('ShowFormProfile'),'','onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
 
 		if ($survey_data['show_form_profile']== 1) {
-		$form -> addElement('html','<div id="options_field" style="display:block">');
+			$form -> addElement('html','<div id="options_field" style="display:block">');
 		} else {
 			$form -> addElement('html','<div id="options_field" style="display:none">');
 		}
@@ -273,23 +238,24 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id) 
 				}
 			}
 		}
-		$form->addElement('html', '</div></div>');
+		$form->addElement('html', '</div></div>');	
 	}
-
 }
-$form -> addElement('html','</div><br />');
+if ($_GET['action'] == 'add') {
+	$form -> addElement('html','</div><br />');
+}
+
 if(isset($_GET['survey_id']) && $_GET['action']=='edit') {
-	$class="save";
+	$class='save';
 	$text=get_lang('ModifySurvey');
 } else {
-	$class="add";
+	$class='add';
 	$text=get_lang('CreateSurvey');
 }
 $form->addElement('style_submit_button', 'submit_survey', $text, 'class="'.$class.'"');
 
 // setting the rules
-if ($_GET['action'] == 'add')
-{
+if ($_GET['action'] == 'add') {
 	$form->addRule('survey_code', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
 	$form->addRule('survey_code', '', 'maxlength',20);
 }

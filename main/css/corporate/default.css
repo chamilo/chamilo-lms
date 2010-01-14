@@ -1393,6 +1393,7 @@ span.radio {
 	margin: 0;
 	text-decoration: none;
 	display: block;
+	line-height:24px;
 }
 #toolnavlist a:hover {
 	background: #fff;

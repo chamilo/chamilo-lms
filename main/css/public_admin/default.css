@@ -589,6 +589,7 @@ this lets the navigation menu appear to the left:
 	margin: 0;
 	padding: 5px 5px 5px 10px;
 	text-decoration: none;
+	line-height:24px;
 }
 #toolnavlist a:hover, #toolnavlist a#here {
 	background: #fff;

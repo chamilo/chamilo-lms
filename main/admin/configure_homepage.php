@@ -387,11 +387,11 @@ if(!empty($action)) {
 							}
 						}
 
-						$home_menu[$insert_where+1]='<li><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'">'.$link_name.'</a></li>';
+						$home_menu[$insert_where+1]='<li><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'"><span>'.$link_name.'</span></a></li>';
 					}
 					else // If the request is about a link edition, change the link
 					{
-						$home_menu[$link_index]='<li><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'">'.$link_name.'</a></li>';
+						$home_menu[$link_index]='<li><a href="'.$link_url.'" target="'.($target_blank?'_blank':'_self').'"><span>'.$link_name.'</span></a></li>';
 					}
 					// Re-build the file from the home_menu array
 					$home_menu=implode("\n",$home_menu);

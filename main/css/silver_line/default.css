@@ -494,65 +494,6 @@ td .menu {
 	   be fed in using IE only CSS below becasue IE/Win also works with the 100% method.
 	*/
 }
-/* --- course navigation menu as a definition list  --- */
-#swap_menu_link {
-	float: left;
-}
-#toolnavbox {
-	margin: 0 0 0 10px;
-	padding: 0;
-	float: left;
-	border: 1px solid #f0f0f0;
-}
-#toolnavbox dl {
-	width: 160px;
-	margin: 0 auto;
-	padding: 0;
-	background: transparent;
-	font-size: 12px;
-	text-align: center;
-}
-#toolnavbox dt {
-	margin: 0;
-	padding: 0;
-	font-weight: bold;
-	font-size: 12px;
-	text-align: center;
-	color: #000;
-	border-bottom: 1px solid #fff;
-	background: transparent;
-}
-#toolnavbox dd {
-	margin: 0;
-	padding: 0;
-	color: #009;
-	text-align: left;
-	border-bottom:1px solid #fff;
-	background: #E5EDF9;
-}
-#toolnav img {
-	float: left;
-	width: 25px;
-	height: 25px;
-	margin: 0 4px 0 0;
-}
-#toolnavlist a, #toolnavlist a:link {
-	background: #E5EDF9;
-	color: #dcdcdc;
-	padding: 5px 5px 5px 10px;
-	margin: 0;
-	text-decoration: none;
-	display: block;
-}
-#toolnavlist a:hover {
-	background: #fff;
-	color:#dcdcdc;
-}
-#toolnavlist a#here {
-	background: #fff;
-	color:#dcdcdc;
-}
-/* --- end of course navigation menu section  --- */
 /*
 this lets the navigation menu appear to the left:
 #center { margin: 0 0 0 180px; padding: 10px 0 40px 0;
@@ -1676,6 +1617,7 @@ div.system_announcement {
 	margin: 0;
 	text-decoration: none;
 	display: block;
+	line-height:24px;
 }
 #toolnavlist a:hover {
 	background: #fff;

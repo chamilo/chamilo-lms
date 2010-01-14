@@ -320,7 +320,7 @@ if(api_get_self() != '/main/admin/configure_homepage.php') {
 	echo $open;
 } else {
 	$home_menu = '';
-	if(file_exists($homep.$menutabs.'_'.$lang.$ext)) {
+	if(file_exists($homep.$menutabs.'_'.$lang.$ext)) {		
 		$home_menu = file($homep.$menutabs.'_'.$lang.$ext);
 	} else {
 		$home_menu = file ($homep.$menutabs.$ext);
@@ -328,12 +328,13 @@ if(api_get_self() != '/main/admin/configure_homepage.php') {
 	foreach($home_menu as $key=>$enreg) {
 		$enreg=trim($enreg);
 		if(!empty($enreg)) {
-			$edit_link='<a href="'.api_get_self().'?action=edit_tabs&amp;link_index='.$key.'" style="padding-right:0px; padding-left:0px;">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-			$delete_link='<a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$key.'" style="padding-right:0px;" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-			echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=',' '.$edit_link.' '.$delete_link.'</li>'),$enreg);
+			$edit_link='<a href="'.api_get_self().'?action=edit_tabs&amp;link_index='.$key.'" ><span>'.Display::return_icon('edit.gif', get_lang('Edit')).'</span></a>';
+			$delete_link='<a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$key.'"  onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;"><span>'.Display::return_icon('delete.gif', get_lang('Delete')).'</span></a>';
+			$tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=',''.$edit_link.$delete_link.'</li>'),$enreg);			
+			echo $tab_string;
 		}
 	}
-	echo '<li id="insert-link"> <a href="'.api_get_self().'?action=insert_tabs" style="padding-right:0px;">'. Display::return_icon('insert_row.png', get_lang('InsertLink')).'</a> <a href="'.api_get_self().'?action=insert_tabs">'.get_lang('InsertLink').'</a></li>';
+	echo '<li id="insert-link"> <a href="'.api_get_self().'?action=insert_tabs" style="padding-right:0px;"><span>'. Display::return_icon('insert_row.png', get_lang('InsertLink'),array('style'=>'vertical-align:middle')).' '.get_lang('InsertLink').'</span></a></li>';
 }
 /*********************/
 //Header about the tabs

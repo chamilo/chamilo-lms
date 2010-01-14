@@ -519,6 +519,7 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
 	margin: 0;
 	text-decoration: none;
 	display: block;
+	line-height:24px;
 }
 #toolnavlist a:hover {
 	background: #fff;

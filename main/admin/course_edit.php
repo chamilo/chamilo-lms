@@ -89,7 +89,7 @@ while($obj = Database::fetch_object($res))
 		$course['tutor_name']=$obj->user_id;
 	}
 	//We add in the array platform teachers
-	$platform_teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
+	$platform_teachers[$obj->user_id] = $obj->firstname.' '.$obj->lastname;
 }
 
 //Case where there is no teacher in the course

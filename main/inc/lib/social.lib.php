@@ -510,13 +510,13 @@ class SocialManager extends UserManager {
 		$s_htlm_status_icon="";
 	
 		if ($s_course_status==1) {
-			$s_htlm_status_icon=Display::return_icon('teachers.gif', get_lang('Teacher'));
+			$s_htlm_status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'),array('style'=>'width:11px; height:11px'));
 		}
 		if ($s_course_status==2) {
-			$s_htlm_status_icon=Display::return_icon('coachs.gif', get_lang('GeneralCoach'));
+			$s_htlm_status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('coachs.gif', get_lang('Status').': '.get_lang('GeneralCoach'),array('style'=>'width:11px; height:11px'));
 		}
 		if ($s_course_status==5) {
-			$s_htlm_status_icon=Display::return_icon('students.gif', get_lang('Student'));
+			$s_htlm_status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('students.gif', get_lang('Status').': '.get_lang('Student'),array('style'=>'width:11px; height:11px'));
 		}
 	
 		//display course entry

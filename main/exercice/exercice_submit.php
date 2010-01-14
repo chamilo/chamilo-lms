@@ -1097,6 +1097,9 @@ if ($limit_time_exists) {
     }
 }
 
+if ($origin != 'learnpath') {
+   echo '<div id="highlight-plugin" class="glossary-content">';
+}   	
 if (!empty ($error)) {
     Display :: display_error_message($error, false);
 } else {
@@ -1143,7 +1146,7 @@ if (!empty ($error)) {
     {
         $s2 = "&exerciseId=" . $exerciseId;
     }
-
+      
     $s .= " <form method='post' action='" . api_get_self() . "?".api_get_cidreq()."&autocomplete=off&gradebook=$gradebook" . $s2 . "' id='my_frm_exercise' name='frm_exercise' $onsubmit>
          <input type='hidden' name='formSent' value='1' />
          <input type='hidden' name='exerciseType' value='" . $exerciseType . "' />
@@ -1157,7 +1160,7 @@ if (!empty ($error)) {
             <tr>
                 <td>
                     <table width='100%' cellpadding='3' cellspacing='0' border='0'>";
-  echo '<div id="highlight-plugin" class="glossary-content">';                   
+                
     echo $s;
     $i = 1;
     foreach ($questionList as $questionId) {
@@ -1194,8 +1197,7 @@ if (!empty ($error)) {
         }
     }
     // end foreach()
-    echo "<!-- <button type='submit' name='buttonCancel' class='cancel'>" . get_lang('Cancel') . "</button>
-           &nbsp;&nbsp; //--><br />";
+    //echo "<!-- <button type='submit' name='buttonCancel' class='cancel'>" . get_lang('Cancel') . "</button>&nbsp;&nbsp; //--><br />";
     echo '<div style="margin-top:-10px;">';
     $submit_btn = "<button class='next' type='submit' name='submit' name='submit_save' id='submit_save'>";
     //	$submit_btn.=get_lang('ValidateAnswer');
@@ -1210,35 +1212,31 @@ if (!empty ($error)) {
                               $('.rounded_inner').corners();
                             });</script>";
         //echo '<br /><span class="rounded" style="width: 300px; margin-top: 10px; padding: 3px; background-color:#ccc;"><span style="width: 300px" class="rounded_inner" ><a href="exercise_submit_modal.php?hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&questionnum='.$questionNum.'&exerciseType='.$exerciseType.'&exerciseId='.$exerciseId.'&placeValuesBeforeTB_=savedValues&TB_iframe=true&height=480&width=640&modal=true" title="" class="thickbox" id="validationButton">'.get_lang('ValidateAnswer').'</a></span></span><br /><br /><br />';
-
     } else {
         if (api_is_allowed_to_session_edit() ) {
             if ($exerciseType == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum) {
                 $submit_btn .= get_lang('ValidateAnswer');
-        $name_btn = get_lang('ValidateAnswer');
+       			$name_btn = get_lang('ValidateAnswer');
             } else {
                 $submit_btn .= get_lang('NextQuestion');
-        $name_btn = get_lang('NextQuestion');
+        		$name_btn = get_lang('NextQuestion');
             }
             $submit_btn .= "</button>";
-      if ($exercise_row['expired_time'] != 0) {
-           echo $submit_btn ="<input class='submit_next' type='submit' id='submit_save' value='".$name_btn."' name='submit_save'/>";
-      } else {
-          echo $submit_btn;
-      }
-
+			if ($exercise_row['expired_time'] != 0) {
+		    	echo $submit_btn ="<input class='submit_next' type='submit' id='submit_save' value='".$name_btn."' name='submit_save'/>";
+		    } else {
+		    	echo $submit_btn;
+		    }
         }
-
     }
-
-
-    echo "</table>
+    echo '</div>';  //margin top -10
+    echo '</table>
             </td>
             </tr>
-            </table></form>";
+            </table></form>';
     $b = 2;
 }
-echo '</div>';
+
 
 if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType != EXERCISE_FEEDBACK_TYPE_DIRECT) {
     
@@ -1267,7 +1265,7 @@ if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType !
 
 if ($origin != 'learnpath') {
     //so we are not in learnpath tool
-  echo '</div>'; //End glossary div
+    echo '</div>'; //End glossary div
     Display :: display_footer();
 } else {
     echo '</body></html>';

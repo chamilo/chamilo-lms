@@ -140,12 +140,13 @@ if($origin=='user_course') {
 	$from_myspace = false;
 	if (isset ($_GET['from']) && $_GET['from'] == 'myspace') {
 		$fromlink = '&from=myspace';
-		$this_section = "session_my_space";
+		$this_section = SECTION_TRACKING;
 	} else {
 		$this_section = SECTION_COURSES;
 	}
 
-} else if($origin=='student_progress') {
+} elseif($origin=='student_progress') {
+	$this_section = SECTION_TRACKING;
 	$interbreadcrumb[] = array ("url" => "../auth/my_progress.php?id_session".Security::remove_XSS($_GET['id_session'])."&course=".$_cid, "name" => get_lang('MyProgress'));
 	unset($_cid);
 } else {

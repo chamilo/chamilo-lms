@@ -48,11 +48,9 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		//echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript"></script>';
 		//echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';
 	}
-
-
+	
 	// reads question informations
-	if(!$objQuestionTmp = Question::read($questionId))
-	{
+	if(!$objQuestionTmp = Question::read($questionId)) {
 		// question not found
 		return false;
 	}
@@ -60,8 +58,8 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 	$answerType=$objQuestionTmp->selectType();
 	$pictureName=$objQuestionTmp->selectPicture();
 
-	if ($answerType != HOT_SPOT) // Question is not of type hotspot
-	{
+	if ($answerType != HOT_SPOT) {
+		// Question is not of type hotspot
 		if(!$onlyAnswers) {
 			$questionName=$objQuestionTmp->selectTitle();
 			$questionDescription=$objQuestionTmp->selectDescription();
@@ -346,9 +344,9 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		{
 			return($s);
 		}
-	}
-	elseif ($answerType == HOT_SPOT) // Question is of type HOT_SPOT
-	{
+	} elseif ($answerType == HOT_SPOT) {
+		
+		// Question is of type HOT_SPOT
 		$questionName=$objQuestionTmp->selectTitle();
 		$questionDescription=$objQuestionTmp->selectDescription();
 
@@ -358,8 +356,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		
 		// get answers of hotpost
 		$answers_hotspot = array();
-		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
-		{
+		for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 			$answers = $objAnswerTmp->selectAnswerByAutoId($objAnswerTmp->selectAutoId($answerId));
 			$answers_hotspot[$answers['id']] = $objAnswerTmp->selectAnswer($answerId);						
 		}
@@ -369,34 +366,22 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		if (!empty($answers_hotspot)) {
 			ksort($answers_hotspot);
 			foreach ($answers_hotspot as $key => $value) {
-				$answer_list .= '<dt>'.$key.'.- '.$value.'</dt><br>';
+				$answer_list .= '<dt>'.$key.'.- '.$value.'</dt><br />';
 			}		
 		}		
 		$answer_list .= '</dl></div>';
 
-		if(!$onlyAnswers)
-		{
-			$s="<div id=\"question_title\" class=\"sectiontitle\">
-				".get_lang('Question').' ';
-			$s.="<input type='hidden' name='hidden_hotspot_id' value='$questionId'>";
-			$s.=$current_item;
+		if(!$onlyAnswers) {
+			echo '<div id="question_title" class="sectiontitle">'.get_lang('Question').' '.$current_item.' : '.$questionName.'</div>';
 			//@todo I need to the get the feedback type
 			//if($answerType == 2)
-			//	$s.=' / '.$total_item;
-			echo $s;
-			echo ': ';
-
-			$s =$questionName.'</div>';
-
-			$s.="<table class='exercise_questions'>
-			<tr>
-			  <td valign='top' colspan='2'>
-				";
-			$questionDescription=api_parse_tex($questionDescription);
-			$s.=$questionDescription;
-			$s.="
-			  </td>
-			</tr>";
+			//	$s.=' / '.$total_item;		
+			echo '<input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'">';
+			echo '<table class="exercise_questions">
+				  <tr>
+			  		<td valign="top" colspan="2">';
+					echo $questionDescription=api_parse_tex($questionDescription);
+			 	    echo '</td></tr>';
 		}
 
 		$canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
@@ -535,11 +520,12 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 							document.write(alternateContent);  // insert non-flash content
 						}
 						// -->
-					</script></td>
-					<td valign='top' align='left'>$answer_list</td></tr></table>
+					</script>
+					</td>
+					<td valign='top' align='left'>$answer_list</td></tr>
+					</table>
 		</td></tr>";
 		echo $s;
-
 	}
 	echo "</table>";
 

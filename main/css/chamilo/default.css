@@ -297,8 +297,8 @@ input[text] {
 }
 #top_corner {
 }
-#institution {
-	background-image: url(images/dokeos-header-camaleon.png);
+#institution {	
+	background-image: url(images/header-logo.png);
 	background-repeat:no-repeat;
 	height:90px;
 	overflow:hidden;
@@ -1882,7 +1882,7 @@ div.comments {
  *****************************************************/
 #installation_steps {
 	float:left;
-	background-color: #a0e5fc;
+	background-color: #EFEFEF;
 }
 .current_step {
 	font-weight: bold;

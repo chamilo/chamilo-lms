@@ -30,7 +30,7 @@ if ( !function_exists('version_compare') || version_compare( phpversion(), '5', 
 			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 			<style type="text/css" media="screen, projection">
 				/*<![CDATA[*/
-				@import "../css/dokeos_blue/default.css";
+				@import "../css/chamilo/default.css";
 				/*]]>*/
 			</style>
 		</head>
@@ -406,7 +406,7 @@ if ($encryptPassForm=='1' ) {
 	<title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?></title>
 	<style type="text/css" media="screen, projection">
 		/*<![CDATA[*/
-		@import "../css/dokeos_blue/default.css";
+		@import "../css/chamilo/default.css";
 		/*]]>*/
 	</style>
 	<script type="text/javascript" src="../inc/lib/javascript/jquery.js"></script>
@@ -489,16 +489,16 @@ if ($encryptPassForm=='1' ) {
 	<div id="header2">&nbsp;</div>
 	<div id="header3">
 		<ul>
-			<li id="current"><a href="#"><span><?php echo get_lang('Installation');?></span></a></li>
+			<li id="current"><a href="#"><span id="tab_active"><?php echo get_lang('Installation');?></span></a></li>
 		</ul>
 	</div>
 </div>
 
-
+<div id="main">
 <form style="padding: 0px; margin: 0px;" method="post" action="<?php echo api_get_self(); ?>?running=1&amp;installType=<?php echo $installType; ?>&amp;updateFromConfigFile=<?php echo urlencode($updateFromConfigFile); ?>">
-
-<div id="installation_steps" style="width:240px">
-	<img src="../img/bluelogo.gif" hspace="10" vspace="10" alt="Chamilo logo" />
+<div id="installation_steps" style="width:220px">
+	<!-- <img src="../css/chamilo/images/header-logo.png" hspace="10" vspace="10" alt="Chamilo logo" /> -->
+	<br />
 	<ol>
 		<li <?php step_active('1'); ?>><?php echo get_lang('InstallationLanguage'); ?></li>
 		<li <?php step_active('2'); ?>><?php echo get_lang('Requirements'); ?></li>
@@ -801,6 +801,7 @@ elseif($_POST['step6'])
 </tr>
 </table>
 </form>
+</div>
 <br style="clear:both;" />
 <div class="push"></div>
 </div><!-- wrapper end-->

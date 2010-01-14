@@ -61,17 +61,17 @@ if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 } elseif (isset ($nameTools) && $language_file != 'course_home') { 
 	//Put the name of the user-tools in the header
 	if (!isset ($_user['user_id'])) {
-		echo " ";
+		echo '<div id="my_courses"></div>';
 	} elseif(!$noPHP_SELF) {		
 		echo "<div id=\"my_courses\"><a href=\"".api_get_self()."?".api_get_cidreq(), "\" target=\"_top\">", $nameTools, "</a></div>", "\n";
 	} else {
-		echo "<div id=\"my_courses\">$nameTools</div>\n";
+		echo '<div id="my_courses">'.$nameTools.'</div>';
 	}
 } else {
 	echo '<div id="my_courses"></div>';
 }
 //not to let the header disappear if there's nothing on the left
-echo '		<div class="clear">&nbsp;</div>';
+echo '<div class="clear">&nbsp;</div>';
 
 /*
 -----------------------------------------------------------------------------

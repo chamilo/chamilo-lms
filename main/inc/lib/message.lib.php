@@ -134,14 +134,15 @@ class MessageManager
 		$from = intval($from);
 		$number_of_items = intval($number_of_items);
 		$column = intval($column);
+
 		if (!in_array($direction, array('ASC', 'DESC')))
 			$direction = 'ASC';
 
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$request=api_is_xml_http_request();
 		$sql_query = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3, msg_status as col4 FROM $table_message " .
-					 "WHERE user_receiver_id=".api_get_user_id()." AND msg_status IN (0,1)" .
-					 "ORDER BY send_date desc, col$column $direction LIMIT $from,$number_of_items";
+					 " WHERE user_receiver_id=".api_get_user_id()." AND msg_status IN (0,1)" .
+					 " ORDER BY col$column $direction LIMIT $from,$number_of_items";
 		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
 		$i = 0;
 		$message_list = array ();
@@ -154,6 +155,8 @@ class MessageManager
 			 }
 
 			$result[2] = Security::remove_XSS($result[2]);
+			
+			$result[2] = cut($result[2],80,true);
 			
 			if ($request===true) {
 			
@@ -1111,14 +1114,15 @@ function inbox_display() {
 		}
 	}
 	// display sortable table with messages of the current user
-	$table = new SortableTable('messages', 'get_number_of_messages_mask', 'get_message_data_mask', 3, get_number_of_messages_mask(),'DESC');
+	//$table = new SortableTable('messages', 'get_number_of_messages_mask', 'get_message_data_mask', 3, get_number_of_messages_mask(),'DESC');
+	$table = new SortableTable('message', array('MessageManager','get_number_of_messages'), array('MessageManager','get_message_data'),3,20,'DESC');
 	$table->set_header(0, '', false,array ('style' => 'width:20px;'));
 	$title=api_xml_http_response_encode(get_lang('Title'));	
 	$action=api_xml_http_response_encode(get_lang('Actions'));
 	
-	$table->set_header(1,api_xml_http_response_encode(get_lang('From')),false);
-	$table->set_header(2,$title,false);
-	$table->set_header(3,api_xml_http_response_encode(get_lang('Date')),false, array('style' => 'width:150px;'));
+	$table->set_header(1,api_xml_http_response_encode(get_lang('From')),true);
+	$table->set_header(2,$title,true);
+	$table->set_header(3,api_xml_http_response_encode(get_lang('Date')),true, array('style' => 'width:150px;'));
 	$table->set_header(4,$action,false,array ('style' => 'width:70px;'));
 	
 	if ($_REQUEST['f']=='social') {
@@ -1192,16 +1196,17 @@ function outbox_display() {
 	}
 			
 	// display sortable table with messages of the current user
-	$table = new SortableTable('messages', 'get_number_of_messages_send_mask', 'get_message_data_send_mask', 3, get_number_of_messages_send_mask(), 'DESC');
+	//$table = new SortableTable('messages', 'get_number_of_messages_send_mask', 'get_message_data_send_mask', 3, get_number_of_messages_send_mask(), 'DESC');
+	$table = new SortableTable('message', array('MessageManager','get_number_of_messages_sent'), array('MessageManager','get_message_data_sent'),3,20,'DESC');
 	$title =get_lang('Title');
 	$action=get_lang('Actions');
 	
 	$table->set_header(0, '', false,array ('style' => 'width:20px;'));
 
-	$table->set_header(1, api_xml_http_response_encode(get_lang('To')),false);
-	$table->set_header(2, $title,false);
-	$table->set_header(3, api_xml_http_response_encode(get_lang('Date')),false,array ('style' => 'width:150px;'));
-	$table->set_header(4,$action, false,array ('style' => 'width:50px;'));
+	$table->set_header(1, api_xml_http_response_encode(get_lang('To')),true);
+	$table->set_header(2, $title,true);
+	$table->set_header(3, api_xml_http_response_encode(get_lang('Date')),true,array ('style' => 'width:150px;'));
+	$table->set_header(4,$action, false,array ('style' => 'width:70px;'));
 		
 	if ($_REQUEST['f']=='social') {
 		$parameters['f'] = 'social';

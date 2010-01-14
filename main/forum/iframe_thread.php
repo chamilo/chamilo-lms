@@ -156,11 +156,11 @@ while ($row=Database::fetch_array($result)) {
 	echo $row['post_date'].'<br /><br />';
 
 	echo "</td>\n";
-	echo "\t\t<td class=\"forum_message_post_title\">".$row['post_title']."</td>\n";
+	echo "\t\t<td class=\"forum_message_post_title\">".Security::remove_XSS($row['post_title'])."</td>\n";
 	echo "\t</tr>\n";
 
 	echo "\t<tr>\n";
-	echo "\t\t<td class=\"forum_message_post_text\">".$row['post_text']."</td>\n";
+	echo "\t\t<td class=\"forum_message_post_text\">".Security::remove_XSS($row['post_text'],STUDENT)."</td>\n";
 	echo "\t</tr>\n";
 }
 echo "</table>";

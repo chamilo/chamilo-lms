@@ -102,9 +102,9 @@ $htmlHeadXtra[] = '<script>
 // we are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
-$current_thread=get_thread_information($_GET['thread']); // note: this has to be validated that it is an existing thread
+$current_thread=get_thread_information(Security::remove_XSS($_GET['thread'])); // note: this has to be validated that it is an existing thread
 $current_forum=get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum.
-$current_forum_category=get_forumcategory_information($current_forum['forum_category']);
+$current_forum_category=get_forumcategory_information(Security::remove_XSS($current_forum['forum_category']));
 
 /*
 -----------------------------------------------------------
@@ -201,31 +201,31 @@ if ($origin != 'learnpath') {
 -----------------------------------------------------------
 	Display Forum Category and the Forum information
 -----------------------------------------------------------
-*/
+*/ 
 echo "<table class=\"data_table\" width='100%'>\n";
 
 // the forum category
 echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"2\">";
 
-echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
+echo '<span class="forum_title">'.prepare4display(Security::remove_XSS($current_thread['thread_title'])).'</span><br />';
 
 if (!empty ($current_forum_category['cat_title'])) {
-	echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title'])." - </span>";
+	echo '<span class="forum_low_description">'.prepare4display(Security::remove_XSS($current_forum_category['cat_title']))." - </span>";
 }
 
-echo '<span class="forum_low_description">'.prepare4display($current_forum['forum_title']).'</span>';
+//echo '<span class="forum_low_description">'.prepare4display(Security::remove_XSS($current_forum['forum_title'])).'</span>';
 echo "</th>\n";
 echo "\t</tr>\n";
 echo '</table>';
 
 // the form for the reply
-$my_action   = isset($_GET['action']) ? $_GET['action'] : '';
-$my_post     = isset($_GET['post']) ? $_GET['post'] : '';
+$my_action   = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
+$my_post     = isset($_GET['post']) ? Security::remove_XSS($_GET['post']) : '';
 $my_elements = isset($_SESSION['formelements']) ? $_SESSION['formelements'] : '';
-$values=show_add_post_form($my_action,$my_post, $my_elements); // note: this has to be cleaned first
+$values=show_add_post_form(Security::remove_XSS($my_action,$my_post, $my_elements)); // note: this has to be cleaned first
 
 if (!empty($values) AND isset($_POST['SubmitPost'])) {
-	store_reply($values);
+	store_reply(Security::remove_XSS($values));
 }
 
 /*

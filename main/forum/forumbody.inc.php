@@ -72,5 +72,5 @@ $output .= '
         </tr>
         </form>
     </table>
-</div>';
+</div>'; 
 echo $output;

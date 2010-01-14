@@ -231,8 +231,8 @@ if ($origin!='learnpath') {
 echo "<table class=\"data_table\" width='100%'>\n";
 // the forum category
 echo "\t<tr>\n\t\t<th align=\"left\" colspan=\"2\">";
-echo '<a href="viewforum.php?&origin='.$origin.'&forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display($current_forum['forum_title']).'</a><br />';
-echo '<span class="forum_description">'.prepare4display($current_forum['forum_comment']).'</span>';echo "</th>\n";
+echo '<a href="viewforum.php?&origin='.$origin.'&forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display(Security::remove_XSS($current_forum['forum_title'])).'</a><br />';
+echo '<span class="forum_description">'.prepare4display(Security::remove_XSS($current_forum['forum_comment'],STUDENT)).'</span>';echo "</th>\n";
 echo "</th>\n";
 echo "\t</tr>\n";
 echo '</table>';

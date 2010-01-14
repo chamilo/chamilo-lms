@@ -270,17 +270,22 @@ if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') {
 //Disable for learning path
 if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') { //Sends the exercice form when the expired time is finished 
     $htmlHeadXtra[] = "<script type=\"text/javascript\">
-    $(document).ready(function(){    
+    $(document).ready(function(){
+      function onExpiredTimeExercise() {
+        $('#wrapper-clock').hide();
+        $('#expired-message-id').show();
+        $('form#my_frm_exercise').submit();
+      }
+
        $('#text-content').epiclock({
          mode: EC_COUNTDOWN,
          format: 'x{ : } i{ : } s{}',
          target: '".$plugin_expired_time."',
-         onTimer: function(){ $('form#my_frm_exercise').submit() }
+         onTimer: function(){ onExpiredTimeExercise() }
        }).clocks(EC_RUN);  
        $('.rounded').corners('transparent');  
        $('#submit_save').click(function () { 
-      });  
-           
+      });      
     });
     </script>";
 }
@@ -1031,6 +1036,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 //Timer control
 if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') { 
   echo '<div align="left" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';
+  echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciceExpiredTimeMessage').'</div>';
 }
 $exerciseTitle = api_parse_tex($exerciseTitle);
 echo "<h3>" . $exerciseTitle . "</h3>";

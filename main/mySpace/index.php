@@ -1,5 +1,5 @@
 <?php // $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
 /**
  * @todo use constant for $this_section
  */
@@ -10,22 +10,21 @@ $language_file = array ('registration', 'index', 'tracking');
 $cidReset = true;
 
 // including the global Dokeos file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 // including additional libraries
-require api_get_path(LIBRARY_PATH).'tracking.lib.php';
+require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 // the section (for the tabs)
-$this_section = "session_my_space";
-
+$this_section = 'session_my_space';
 ob_start();
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $csv_content = array();
 
-$nameTools = get_lang("MySpace");
+$nameTools = get_lang('MySpace');
 
 // access control
 api_block_anonymous_users();
@@ -163,8 +162,13 @@ if ($nb_menu_items > 1) {
 		}
 	}
 }
-echo '<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
-echo (isset($_GET['display']) &&  $_GET['display'] == 'useroverview')? '' : '<a href="'.api_get_self().'?export=csv&view='.$view.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+
+echo '&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
+if ($view == 'admin') {
+	echo (isset($_GET['display']) &&  $_GET['display'] == 'useroverview')? '<a href="'.api_get_self().'?display=useroverview&export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>' : '';
+} else {
+	echo (isset($_GET['display']) &&  $_GET['display'] == 'useroverview')? '' : '<a href="'.api_get_self().'?export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+}
 echo '</div>';
 echo '<h4>'.$title.'</h4>';
 
@@ -469,7 +473,7 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 	}
 }
 
-if ($is_platform_admin && $view == 'admin') {
+if ($is_platform_admin && $view == 'admin') { 
 	echo '<a href="'.api_get_self().'?view=admin&amp;display=coaches">'.get_lang('DisplayCoaches').'</a> | ';
 	echo '<a href="'.api_get_self().'?view=admin&amp;display=useroverview">'.get_lang('DisplayUserOverview').'</a>';
 	if ($_GET['display'] == 'useroverview') {
@@ -723,6 +727,7 @@ function export_tracking_user_overview() {
 	// the additional user defined fields (only those that were selected to be exported)
 	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 	$fields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
+		
 	if (is_array($_SESSION['additional_export_fields'])) {
 		foreach ($_SESSION['additional_export_fields'] as $key => $extra_field_export) {
 			$csv_row[] = $fields[$extra_field_export][3];
@@ -762,6 +767,7 @@ function export_tracking_user_overview() {
 			$csv_row[] = $row[0];
 			// the additional defined user fields
 			$extra_fields = get_user_overview_export_extra_fields($user[4]);
+			
 			if (is_array($field_names_to_be_exported)) {
 				foreach ($field_names_to_be_exported as $key => $extra_field_export) {
 					$csv_row[] = $extra_fields[$extra_field_export];
@@ -792,7 +798,7 @@ function export_tracking_user_overview() {
 
 			$csv_content[] = $csv_row;
 		}
-	}
+	}	
 	Export :: export_table_csv($csv_content, 'reporting_user_overview');
 	exit;
 }
@@ -1104,9 +1110,8 @@ function display_user_overview_export_options() {
  */
 function get_user_overview_export_extra_fields($user_id) {
 	// include the user manager
-	require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-
-	$extra_data = UserManager::get_extra_user_data($user_id, true);
+	require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';	
+	$extra_data = UserManager::get_extra_user_data($user_id, true);	
 	return $extra_data;
 }
 /**

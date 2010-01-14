@@ -1337,38 +1337,45 @@ class UserManager
 		$res = Database::query($sql, __FILE__, __LINE__);
 		if (Database::num_rows($res) > 0) {
 			while ($row = Database::fetch_array($res)) {
-				$sqlu = "SELECT field_value as fval " .
-						" FROM $t_ufv " .
-						" WHERE field_id=".$row['id']."" .
-						" AND user_id=".$user_id;
-				$resu = Database::query($sqlu, __FILE__, __LINE__);
-				$fval = '';
-				// get default value
-				$sql_df = "SELECT field_default_value as fval_df " .
-						" FROM $t_uf " .
-						" WHERE id=".$row['id'];
-				$res_df = Database::query($sql_df, __FILE__, __LINE__);
-				if (Database::num_rows($resu) > 0) {
-					$rowu = Database::fetch_array($resu);
-					$fval = $rowu['fval'];
-					if ($row['type'] ==  USER_FIELD_TYPE_SELECT_MULTIPLE) {
-						$fval = split(';',$rowu['fval']);
-					}
+				if ($row['type'] == USER_FIELD_TYPE_TAG) {
+					$tags = self::get_user_tags_to_string($user_id,$row['id'],false);
+					$extra_data['extra_'.$row['fvar']] = $tags;	
+								
 				} else {
-					$row_df = Database::fetch_array($res_df);
-					$fval = $row_df['fval_df'];
-				}
-				if ($prefix) {
-					if ($row['type'] ==  USER_FIELD_TYPE_RADIO) {
-						$extra_data['extra_'.$row['fvar']]['extra_'.$row['fvar']] = $fval;
+					$sqlu = "SELECT field_value as fval " .
+							" FROM $t_ufv " .
+							" WHERE field_id=".$row['id']."" .
+							" AND user_id=".$user_id;
+					$resu = Database::query($sqlu, __FILE__, __LINE__);
+					$fval = '';
+					// get default value
+					$sql_df = "SELECT field_default_value as fval_df " .
+							" FROM $t_uf " .
+							" WHERE id=".$row['id'];
+					$res_df = Database::query($sql_df, __FILE__, __LINE__);
+					
+					if (Database::num_rows($resu) > 0) {
+						$rowu = Database::fetch_array($resu);
+						$fval = $rowu['fval'];
+						if ($row['type'] ==  USER_FIELD_TYPE_SELECT_MULTIPLE) {
+							$fval = split(';',$rowu['fval']);
+						}
 					} else {
-						$extra_data['extra_'.$row['fvar']] = $fval;
+						$row_df = Database::fetch_array($res_df);
+						$fval = $row_df['fval_df'];
 					}
-				} else {
-					if ($row['type'] ==  USER_FIELD_TYPE_RADIO) {
-						$extra_data['extra_'.$row['fvar']]['extra_'.$row['fvar']] = $fval;
+					if ($prefix) {
+						if ($row['type'] ==  USER_FIELD_TYPE_RADIO) {
+							$extra_data['extra_'.$row['fvar']]['extra_'.$row['fvar']] = $fval;
+						} else {
+							$extra_data['extra_'.$row['fvar']] = $fval;
+						}
 					} else {
-						$extra_data[$row['fvar']] = $fval;
+						if ($row['type'] ==  USER_FIELD_TYPE_RADIO) {
+							$extra_data['extra_'.$row['fvar']]['extra_'.$row['fvar']] = $fval;
+						} else {
+							$extra_data[$row['fvar']] = $fval;
+						}
 					}
 				}
 			}
@@ -2388,9 +2395,10 @@ class UserManager
 	 * Get user's tags
 	 * @param int user_id
 	 * @param int field_id
+	 * @param bool show links or not
 	 * @return array
 	 */
-	public static function get_user_tags_to_string($user_id,$field_id) {
+	public static function get_user_tags_to_string($user_id,$field_id,$show_links=true) {
 		// database table definition
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
@@ -2410,10 +2418,16 @@ class UserManager
 		$user_tags = $return;
 		$tag_tmp = array();
 		foreach ($user_tags as $tag) {
-			$tag_tmp[] = '<a href="'.api_get_path(WEB_PATH).'main/search/?q='.$tag['tag'].'">'.$tag['tag'].'</a>';
+			if ($show_links) {
+				$tag_tmp[] = '<a href="'.api_get_path(WEB_PATH).'main/search/?q='.$tag['tag'].'">'.$tag['tag'].'</a>';
+			} else {
+				$tag_tmp[] = $tag['tag'];
+			}
 		}
 		if (is_array($user_tags) && count($user_tags)>0) {							
 			$return = implode(', ',$tag_tmp);
+		} else {
+			return '';
 		}
 		return $return;
 	}

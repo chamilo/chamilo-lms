@@ -303,7 +303,7 @@ if ($rows[$display_post_id]['post_notification']=='1' AND $rows[$display_post_id
 	$post_image.=icon('../img/forumnotification.gif',get_lang('YouWillBeNotified'));
 }
 // The post title
-echo "\t\t<td class=\"$titleclass\">".prepare4display($rows[$display_post_id]['post_title'])."</td>\n";
+echo "\t\t<td class=\"$titleclass\">".prepare4display(Security::remove_XSS($rows[$display_post_id]['post_title']))."</td>\n";
 echo "\t</tr>\n";
 
 // The post message
@@ -311,7 +311,7 @@ echo "\t</tr>\n";
 $rows[$display_post_id]['post_text']= Security::remove_XSS($rows[$display_post_id]['post_text']);
 
 echo "\t<tr>\n";
-echo "\t\t<td class=\"$messageclass\">".prepare4display($rows[$display_post_id]['post_text'])."</td>\n";
+echo "\t\t<td class=\"$messageclass\">".prepare4display(Security::remove_XSS($rows[$display_post_id]['post_text']))."</td>\n";
 echo "\t</tr>\n";
 
 // The check if there is an attachment
@@ -327,7 +327,7 @@ if (!empty($attachment_list))
 	echo '<a href="download.php?file=';
 	echo $realname;
 	echo ' "> '.$user_filename.' </a>';
-	echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
+	echo '<span class="forum_attach_comment" >'.Security::remove_XSS($attachment_list['comment'],STUDENT).'</span>';
 	if (($current_forum['allow_edit']==1 AND $rows[$display_post_id]['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])))	{
 		echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';
 	}

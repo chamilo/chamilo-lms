@@ -357,4 +357,5 @@ $YouHaveToCreateAtLeastOneAnswer = "You have to create at least one answer";
 $ExerciseAttempted = "A learner attempted an exercise";
 $MultipleSelectCombination = "Exact Selection";
 $MultipleAnswerCombination = "Exact answers combination";
+$ExerciceExpiredTimeMessage = "The time of the exercice is finished";
 ?>

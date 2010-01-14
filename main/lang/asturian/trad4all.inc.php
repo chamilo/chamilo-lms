@@ -772,4 +772,10 @@ $Created = "Criáu";
 $LastUpdate = "Caberu anovamientu";
 $UserNonRegisteredAtTheCourse = "Usuariu nun rexistráu nel cursu";
 $EditMyProfile = "Editar el mio perfil";
+$Announcements = "Anuncies";
+$Username = "Usuariu";
+$Password = "Contraseña";
+$DescriptionGroup = "Descripción del grupu";
+$Installation = "Instalación";
+$ReadTheInstallationGuide = "Lleer la guía d\'instalación";
 ?>

@@ -353,4 +353,8 @@ $ExerciseTotalDurationInMinutes = "Duración total en minutos del exerciciu";
 $ToContinueUseMenu = "Pa siguir esta lleición, por favor, usa\'l menú llateral";
 $RandomAnswers = "Rempuestes al debalu";
 $NotMarkActivity = "Nun foi dable calificar esti elementu";
+$YouHaveToCreateAtLeastOneAnswer = "Tienes que criar al menos una rempuesta";
+$ExerciseAttempted = "Un estudiante contestó una entruga";
+$MultipleSelectCombination = "Combinación esauta";
+$MultipleAnswerCombination = "Combinación esauta";
 ?>

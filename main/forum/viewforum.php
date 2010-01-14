@@ -149,13 +149,13 @@ if (!empty($_SESSION['toolgroup'])) {
 	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
 	//$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS($my_search),"name" => $nameTools);
 	//$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum_category['cat_title']));
-	$interbreadcrumb[]=array("url" => "#","name" => prepare4display($current_forum['forum_title']));
+	$interbreadcrumb[]=array("url" => "#","name" => prepare4display(Security::remove_XSS($current_forum['forum_title'])));
 	//viewforum.php?forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;gidReq=".$_SESSION['toolgroup']."&amp;search=".Security::remove_XSS(urlencode($my_search)),
 
 } else {
 	$interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook&search=".Security::remove_XSS($my_search),"name" => $nameTools);
-	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum_category['cat_title']));
-	$interbreadcrumb[]=array("url" => "#","name" => prepare4display($current_forum['forum_title']));
+	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display(Security::remove_XSS($current_forum_category['cat_title'])));
+	$interbreadcrumb[]=array("url" => "#","name" => prepare4display(Security::remove_XSS($current_forum['forum_title'])));
 	//viewforum.php?forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search))
 }
 
@@ -218,7 +218,7 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 	}
 	$table_list = '<p><br /><h3>'.get_lang('ThreadUsersList').'&nbsp;:'.get_name_thread_by_id($_GET['id']).'</h3>';
 	if ($nrorow3>0 || $nrorow3==-2) {
-		$url = 'cidReq='.Security::remove_XSS($_GET['cidReq']).'&forum='.Security::remove_XSS($my_forum).'&action='.Security::remove_XSS($_GET['action']).'&content='.Security::remove_XSS($_GET['content']).'&id='.Security::remove_XSS($_GET['id']);
+		$url = 'cidReq='.Security::remove_XSS($_GET['cidReq']).'&forum='.Security::remove_XSS($my_forum).'&action='.Security::remove_XSS($_GET['action']).'&content='.Security::remove_XSS($_GET['content'],STUDENT).'&id='.Security::remove_XSS($_GET['id']);
 		$table_list.= '<br />
 				 <div style="width:50%">
 				 <table class="data_table" border="0">
@@ -349,14 +349,14 @@ echo "<table class=\"data_table\" >\n";
 // the current forum
 if ($origin != 'learnpath') {
 	echo "\t<tr>\n\t\t<th align=\"left\" colspan=\"7\">";
-	echo '<span class="forum_title">'.prepare4display($current_forum['forum_title']).'</span>';
+	echo '<span class="forum_title">'.prepare4display(Security::remove_XSS($current_forum['forum_title'])).'</span>';
 
 	if (!empty ($current_forum['forum_comment'])) {
-		echo '<br><span class="forum_description">'.prepare4display($current_forum['forum_comment']).'</span>';
+		echo '<br><span class="forum_description">'.prepare4display(Security::remove_XSS($current_forum['forum_comment'],STUDENT)).'</span>';
 	}
 
 	if (!empty ($current_forum_category['cat_title'])) {
-		echo '<br /><span class="forum_low_description">'.prepare4display($current_forum_category['cat_title'])."</span><br />";
+		echo '<br /><span class="forum_low_description">'.prepare4display(Security::remove_XSS($current_forum_category['cat_title']))."</span><br />";
 	}
 	echo "</th>\n";
 	echo "\t</tr>\n";
@@ -405,7 +405,7 @@ if(is_array($threads)) {
 			}
 			echo "</td>\n";
 			echo "\t\t<td>";
-			echo "<a href=\"viewthread.php?".api_get_cidreq()."&gradebook=".Security::remove_XSS($_GET['gradebook'])."&forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;thread=".$row['thread_id'].$origin_string."&amp;search=".Security::remove_XSS(urlencode($my_search))."\" ".class_visible_invisible($row['visibility']).">".prepare4display($row['thread_title'])."</a></td>\n";
+			echo "<a href=\"viewthread.php?".api_get_cidreq()."&gradebook=".Security::remove_XSS($_GET['gradebook'])."&forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;thread=".$row['thread_id'].$origin_string."&amp;search=".Security::remove_XSS(urlencode($my_search))."\" ".class_visible_invisible($row['visibility']).">".prepare4display(Security::remove_XSS($row['thread_title']))."</a></td>\n";
 			echo "\t\t<td>".$row['thread_replies']."</td>\n";
 			if ($row['user_id']=='0') {
 				$name=prepare4display($row['thread_poster_name']);

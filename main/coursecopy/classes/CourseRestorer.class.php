@@ -197,18 +197,30 @@ class CourseRestorer
 				$perm = api_get_setting('permissions_for_new_directories');
 			    $perm = octdec(!empty($perm)?$perm:0770);
 			    $dirs = explode('/', dirname($document->path));
-			    if (count($dirs)==1) {
-			    	if ($this->file_type==FOLDER) {
-			    		$new = substr($document->path, 8);
-			    		$created_dir = create_unexisting_directory($destination_course,api_get_user_id(),0, 0 ,$path.'document',$new,basename($new));
-			    	}
-			    } else {
+				
+				//if (count($dirs)==1) {
+				
+		    	if ($document->file_type==FOLDER) {		
+		    		$visibility = $document->item_properties[0]['visibility'];
+		    		$new = substr($document->path, 8);
+		    		if (!is_dir($path.'document/'.$new)) {
+			    		$sql = "SELECT id FROM ".$table." WHERE path='/".Database::escape_string($new)."'";
+						$res = Database::query($sql, __FILE__, __LINE__);
+						$num_result = Database::num_rows($res);
+						if ($num_result==0) {
+							$created_dir = create_unexisting_directory($destination_course,api_get_user_id(),0, 0 ,$path.'document',$new,basename($new),$visibility);	
+						}		    		
+		    		}
+		    	}
+		    	
+			    //}
+			    /*
+			    else {
 					$my_temp = '';
 					for ($i=1; $i<=count($dirs); $i++) {
 						$my_temp .= $dirs[$i];
 						if (!is_dir($path.'document/'.$my_temp)) {
 							$sql = "SELECT id FROM ".$table." WHERE path='/".Database::escape_string($my_temp)."'";
-							//echo '<br>';
 							$res = Database::query($sql, __FILE__, __LINE__);
 							$num_result = Database::num_rows($res);
 							if ($num_result==0) {
@@ -218,6 +230,7 @@ class CourseRestorer
 						$my_temp .= '/';
 					}
 			    }
+			    */
 			    /*
 				echo '<br>';
 				echo '------------------------';

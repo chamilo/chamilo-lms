@@ -41,8 +41,8 @@ event_access_tool(TOOL_GLOSSARY);
 // displaying the header
 
 if (isset($_GET['action']) && ($_GET['action'] == 'addglossary' || $_GET['action'] == 'edit_glossary')) {
-$tool='GlossaryManagement';
-$interbreadcrumb[] = array ("url"=>"index.php", "name"=> get_lang('Glossary'));
+	$tool='GlossaryManagement';
+	$interbreadcrumb[] = array ("url"=>"index.php", "name"=> get_lang('Glossary'));
 }
 
 Display::display_header(get_lang(ucfirst($tool)));
@@ -139,6 +139,23 @@ if (api_is_allowed_to_edit(null,true)) {
 
 // footer
 Display::display_footer();
+
+
+/**
+
+@todo lots of cleaning
+
+1. All the functions below should be move to glossary.class.php
+2. glossary.class.php should be renamed to glossary.lib.php and moved to inc/lib 
+3. glossary_ajax_request.php file should be deleted. The content of that file should be move to inc/ajax/glossary.ajax.php
+4. We should call all functions like Glossary::display_something();
+ 
+http://support.chamilo.org/issues/510
+
+Julio Montoya
+
+
+*/
 
 /**
  * This functions stores the glossary in the database
@@ -487,15 +504,14 @@ function get_glossary_data($from, $number_of_items, $column, $direction)
  */
 function actions_filter($glossary_id,$url_params,$row)
 {
-	if (!$_SESSION['max_glossary_display'] OR $_SESSION['max_glossary_display'] == '')
-	{
+	if (!$_SESSION['max_glossary_display'] OR $_SESSION['max_glossary_display'] == '') {
 		$_SESSION['max_glossary_display'] = get_max_glossary_item();
 	}
 
 	if (empty($_GET['glossary_column'])) {
-		if ($row[0] > 1)
-		{
-			$return .= '<a href="'.api_get_self().'?action=moveup&amp;glossary_id='.$row[5].'">'.Display::return_icon('up.gif', get_lang('Up')).'</a>';
+		if ($row[0] > 1) {
+			
+			$return .= '<a href="'.api_get_self().'?action=moveup&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'">'.Display::return_icon('up.gif', get_lang('Up')).'</a>';
 		}
 		else
 		{
@@ -504,7 +520,7 @@ function actions_filter($glossary_id,$url_params,$row)
 		}
 		if ($row[0] < $_SESSION['max_glossary_display'])
 		{
-			$return .= '<a href="'.api_get_self().'?action=movedown&amp;glossary_id='.$row[5].'">'.Display::return_icon('down.gif',get_lang('Down')).'</a>';
+			$return .= '<a href="'.api_get_self().'?action=movedown&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'">'.Display::return_icon('down.gif',get_lang('Down')).'</a>';
 		}
 		else
 		{
@@ -512,12 +528,12 @@ function actions_filter($glossary_id,$url_params,$row)
 
 		}
 	}
-	$return .= '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$row[5].'&msg=edit">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>';
+	$return .= '<a href="'.api_get_self().'?action=edit_glossary&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'&msg=edit">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>';
 
 	$glossary_data = get_glossary_information($row[5]);
 	$glossary_term = $glossary_data['glossary_title'];
 
-	$return .= '<a href="'.api_get_self().'?action=delete_glossary&amp;glossary_id='.$row[5].'" onclick="return confirmation(\''.$glossary_term.'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+	$return .= '<a href="'.api_get_self().'?action=delete_glossary&amp;glossary_id='.$row[5].'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 	return $return;
 }
 
@@ -589,7 +605,7 @@ function move_glossary($direction, $glossary_id)
 		$sortorder = 'ASC';
 	}
 
-	$sql = "SELECT * FROM $t_glossary ORDER BY display_order $sortorder";
+	echo $sql = "SELECT * FROM $t_glossary ORDER BY display_order $sortorder";
 	$res = Database::query($sql, __FILE__, __LINE__);
 	while ($row = Database::fetch_array($res))
 	{

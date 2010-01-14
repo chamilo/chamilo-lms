@@ -432,6 +432,7 @@ function get_number_glossary_terms()
  */
 function get_glossary_data($from, $number_of_items, $column, $direction)
 {
+	global $_user;
 	// Database table definition
 	$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 	$t_item_propery = Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -605,8 +606,9 @@ function move_glossary($direction, $glossary_id)
 		$sortorder = 'ASC';
 	}
 
-	echo $sql = "SELECT * FROM $t_glossary ORDER BY display_order $sortorder";
+	$sql = "SELECT * FROM $t_glossary ORDER BY display_order $sortorder";
 	$res = Database::query($sql, __FILE__, __LINE__);
+	$found = false;	
 	while ($row = Database::fetch_array($res))
 	{
 		if ($found == true and empty($next_id))
@@ -626,6 +628,7 @@ function move_glossary($direction, $glossary_id)
 
 	$sql1 = "UPDATE $t_glossary SET display_order = '".Database::escape_string($next_display_order)."' WHERE glossary_id = '".Database::escape_string($current_id)."'";
 	$sql2 = "UPDATE $t_glossary SET display_order = '".Database::escape_string($current_display_order)."' WHERE glossary_id = '".Database::escape_string($next_id)."'";
+	
 	$res = Database::query($sql1, __FILE__, __LINE__);
 	$res = Database::query($sql2, __FILE__, __LINE__);
 

@@ -235,14 +235,18 @@ if (!isset($_POST['feedback']) && (strstr($_POST['action'],'move_received') OR
 }
 
 // *** Store Feedback ***
-if ($_POST['feedback']) {
+
+if ($_POST['feedback']) {	
 	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
 		api_not_allowed();
-	}
-	$display_message = store_feedback();
-	Display :: display_normal_message($display_message);
+	}		
+	$check = Security::check_token();	
+	if ($check) {		
+		$display_message = store_feedback();
+		Display :: display_normal_message($display_message);
+		Security::check_token();	
+	}	
 }
-
 
 // *** Error Message ***
 if (isset($_GET['error']) AND !empty($_GET['error'])) {

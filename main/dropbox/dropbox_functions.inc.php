@@ -1152,8 +1152,11 @@ function feedback_form()
 	$number_users_who_see_file=Database::num_rows($result);
 	if ($number_users_who_see_file>1)
 	{
-		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea><br /><button type="submit" class="add" name="store_feedback" value="'.get_lang('Ok').'"
-			onclick="document.form_tablename.attributes.action.value = document.location;">'.get_lang('AddComment').'</button>';
+		$token = Security::get_token();
+		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea>';
+		$return .= '<input type="text" name="sec_token" value="'.$token.'"/>';		
+		$return .= '<br /><button type="submit" class="add" name="store_feedback" value="'.get_lang('Ok').'"
+					onclick="document.form_tablename.attributes.action.value = document.location;">'.get_lang('AddComment').'</button>';
 	}
 	else
 	{

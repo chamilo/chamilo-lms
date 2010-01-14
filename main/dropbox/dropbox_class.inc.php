@@ -199,16 +199,16 @@ class Dropbox_Work {
 		$this->last_upload_date = stripslashes($res["last_upload_date"]);
 		$this->category = $res['cat_id'];
 
-
 		// Getting the feedback on the work.
 		if ($_GET['action']=='viewfeedback' AND $this->id==$_GET['id']) {
 			$feedback2=array();
 			$sql_feedback = "SELECT * FROM ".dropbox_cnf("tbl_feedback")." WHERE file_id='".$id."' ORDER BY feedback_id ASC";
 			$result = Database::query($sql_feedback, __FILE__, __LINE__);
-			while ($row_feedback=Database::fetch_array($result)) {
+			while ($row_feedback=Database::fetch_array($result)) {				
+				$row_feedback['feedback'] = Security::remove_XSS($row_feedback['feedback']);
 				$feedback2[]=$row_feedback;
 			}
-			$this->feedback2=$feedback2;
+			$this->feedback2= $feedback2;
 		}
 		/*
 		// RH: Feedback

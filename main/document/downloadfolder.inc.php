@@ -158,7 +158,9 @@ event_download(($path=='/')?'documents.zip (folder)':basename($path).'.zip (fold
 //start download of created file
 //send_file_to_client($temp_zip_file, basename(empty($_GET['id'])?"documents":$_GET['id']).".zip");
 $name = ($path=='/')?'documents.zip':basename($path).'.zip';
+
 DocumentManager::file_send_for_download($temp_zip_file,true,$name);
+@unlink($temp_zip_file);
 exit;
 
 /**

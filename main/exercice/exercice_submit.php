@@ -196,7 +196,8 @@ $total_minutes = $exercise_row["expired_time"];
 $total_seconds = $total_minutes*60;
 $current_timestamp = time();
 
-if ($exercise_row['expired_time'] != 0) {
+//Disable for learning path
+if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') {
     if (!isset($_SESSION['expired_time'])) {
         //In case that the current session php is broken
         //Timer - Get expired_time for a student
@@ -265,7 +266,9 @@ if ($exercise_row['expired_time'] != 0) {
  * The time control feature is enable here - this feature is enable for a jquery plugin called epiclock
  * for more details of how it works see this link : http://eric.garside.name/docs.html?p=epiclock
  */
-if ($exercise_row['expired_time'] != 0) { //Sends the exercice form when the expired time is finished 
+
+//Disable for learning path
+if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') { //Sends the exercice form when the expired time is finished 
     $htmlHeadXtra[] = "<script type=\"text/javascript\">
     $(document).ready(function(){    
        $('#text-content').epiclock({
@@ -1026,7 +1029,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
     echo '</div>';
 }
 //Timer control
-if ($exercise_row['expired_time'] != 0) { 
+if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') { 
   echo '<div align="left" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';
 }
 $exerciseTitle = api_parse_tex($exerciseTitle);

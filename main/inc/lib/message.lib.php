@@ -1198,20 +1198,25 @@ function outbox_display() {
 	// display sortable table with messages of the current user
 	//$table = new SortableTable('messages', 'get_number_of_messages_send_mask', 'get_message_data_send_mask', 3, get_number_of_messages_send_mask(), 'DESC');
 	$table = new SortableTable('message', array('MessageManager','get_number_of_messages_sent'), array('MessageManager','get_message_data_sent'),3,20,'DESC');
-	$title =get_lang('Title');
-	$action=get_lang('Actions');
-	
-	$table->set_header(0, '', false,array ('style' => 'width:20px;'));
 
+	$parameters['f'] = Security::remove_XSS($_GET['f']);	
+	$table->set_additional_parameters($parameters);	
+	$table->set_header(0, '', false,array ('style' => 'width:20px;'));
+	$title = api_xml_http_response_encode(get_lang('Title'));
+	$action= api_xml_http_response_encode(get_lang('Actions'));
+	
 	$table->set_header(1, api_xml_http_response_encode(get_lang('To')),true);
 	$table->set_header(2, $title,true);
 	$table->set_header(3, api_xml_http_response_encode(get_lang('Date')),true,array ('style' => 'width:150px;'));
 	$table->set_header(4,$action, false,array ('style' => 'width:70px;'));
-		
+	
+	/*	
 	if ($_REQUEST['f']=='social') {
 		$parameters['f'] = 'social';
 		$table->set_additional_parameters($parameters);
-	}	
+	}
+	*/
+		
 	echo '<div id="div_content_table_data_sent">';
 	
 		if ($request===true) {

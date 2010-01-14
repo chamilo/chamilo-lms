@@ -1451,9 +1451,9 @@ function draw_date_picker($prefix,$default='') {
 
 		$new_folder_text .= '<div class="row">
 								<div class="label">
-								<a href="javascript: void(0);" onclick="javascript: return plus();"><span id="plus">'.Display::return_icon('div_show.gif',get_lang('AdvancedParameters'),array('style'=>'vertical-align:center')).' '.get_lang('AdvancedParameters').'</span></a><br />
+								
 								</div>
-								<div class="formw">
+								<div class="formw"><a href="javascript: void(0);" onclick="javascript: return plus();"><span id="plus">'.Display::return_icon('div_show.gif',get_lang('AdvancedParameters'),array('style'=>'vertical-align:center')).' '.get_lang('AdvancedParameters').'</span></a><br />
 									'.$addtext.'
 								</div>
 							</div>';
@@ -1541,14 +1541,14 @@ if (!$display_upload_form && !$display_tool_options) {
 		}
 	}
 	
+	if(!empty($publication['description'])){
+			echo '<div class="actions">';
+			echo '<br /><b>'.get_lang('Description').':</b>&nbsp;&nbsp;'.$publication['description'].'<br /><br />';
+			echo '</div>';
+	}
 	if ($display_list_users_without_publication) {
 		display_list_users_without_publication($publication['id']);
 	} else {	
-		if(!empty($publication['description'])){
-				echo '<div class="actions">';
-				echo '<br /><b>'.get_lang('Description').':</b>&nbsp;&nbsp;'.$publication['description'].'<br /><br />';
-				echo '</div>';
-		}
 		display_student_publications_list($base_work_dir . '/' . $my_cur_dir_path, 'work/' . $my_cur_dir_path, $currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_query);
 	}
 }

@@ -27,8 +27,8 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	$origin = isset($_GET['origin'])?Security::remove_XSS($_GET['origin']):'';
 	$curdirpath = isset($_GET['curdirpath'])?Security::remove_XSS($_GET['curdirpath']):empty($curdirpath);
 	
-
-	$origin = api_get_tools_lists($origin);
+	///why is that here?
+	//$origin = api_get_tools_lists($origin);
 	echo '<div class="actions">';
 	
 	if (strlen($cur_dir_path) > 0 && $cur_dir_path != '/') {
@@ -1495,28 +1495,35 @@ function get_list_users_without_publication($task_id) {
 /**
 * Display list of users who have not given the task
 *
-* @param int
+* @param int task id
 * @return array
 * @author cvargas carlos.vargas@beeznest.com cfasanando, christian.fasanado@beeznest.com
+* @author Julio Montoya <gugli100@gmail.com> Fixes
 */
 function display_list_users_without_publication($task_id) {
 	global $origin;
 	$table_header[] = array(get_lang('FirstName'),true);
-	$table_header[] = array(get_lang('LastName'),false);
-	$table_header[] = array(get_lang('Email'),false);
+	$table_header[] = array(get_lang('LastName'),true);
+	$table_header[] = array(get_lang('Email'),true);
 	// table_data
 	$table_data = get_list_users_without_publication($task_id);
 	
 	$sorting_options=array();
 	$sorting_options['column']=1;
 	$paging_options=array();
-	if (isset($_GET['curdirpath'])) {
-		$my_params = array ('curdirpath' => Security::remove_XSS($_GET['curdirpath']));
+	$my_params = array();
+	
+	if (isset($_GET['curdirpath'])) {		
+		$my_params['curdirpath'] = Security::remove_XSS($_GET['curdirpath']);		
 	}
 	if (isset($_GET['edit_dir'])) {
-		$my_params = array ('edit_dir' => Security::remove_XSS($_GET['edit_dir']));
+		$my_params['edit_dir'] = Security::remove_XSS($_GET['edit_dir']);
 	}
-	$my_params['origin'] = $origin;
+	if (isset($_GET['list'])) {
+		$my_params['list'] = Security::remove_XSS($_GET['list']);
+	}
+	$my_params['origin'] = $origin;	
+	
 	//$column_show
 	$column_show[]=1;
 	$column_show[]=1;

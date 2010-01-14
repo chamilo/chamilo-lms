@@ -1431,8 +1431,8 @@ class Blog {
 				$delete_confirm = ($task['system_task'] == '1') ? '' : 'onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"';
 
 				echo	'<tr class="' . $css_class . '" valign="top">',
-							 '<td width="240">' . stripslashes($task['title']) . '</td>',
-							 '<td>' . stripslashes($task['description']) . '</td>',
+							 '<td width="240">' . Security::remove_XSS($task['title']) . '</td>',
+							 '<td>' . Security::remove_XSS($task['description']) . '</td>',
 							 '<td><span style="background-color: #' . $task['color'] . '">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>',
 							 '<td width="50">',
 							 	'<a href="' .api_get_self(). '?action=manage_tasks&amp;blog_id=' . $task['blog_id'] . '&amp;do=edit&amp;task_id=' . $task['task_id'] . '">',
@@ -1540,7 +1540,7 @@ class Blog {
 						' . get_lang('Description') . '
 					</div>
 					<div class="formw">
-						<input name="task_description" type="text" size="70" />
+						<textarea name="task_description" cols="45"></textarea>
 					</div>
 				</div>';
 
@@ -1623,11 +1623,11 @@ class Blog {
 					<table width="100%" border="0" cellspacing="2">
 						<tr>
 					   <td align="right">' . get_lang('Title') . ':&nbsp;&nbsp;</td>
-					   <td><input name="task_name" type="text" size="70" value="'.stripslashes($task['title']) . '" /></td>
+					   <td><input name="task_name" type="text" size="70" value="'.Security::remove_XSS($task['title']) . '" /></td>
 						</tr>
 						<tr>
 					   <td align="right">' . get_lang('Description') . ':&nbsp;&nbsp;</td>
-					   <td><input name="task_description" type="text" size="70" value="'.stripslashes($task['description']) . '" /></td>
+					   <td><textarea name="task_description" cols="45">'.Security::remove_XSS($task['description']).'</textarea></td>
 						</tr>';
 
 						/* edit by Kevin Van Den Haute (kevin@develop-it.be) */

@@ -423,10 +423,10 @@ Then:
 <h2><a name="4._Troubleshooting"></a>4. Troubleshooting</h2>
 
 
-<p>If you have&nbsp;problems, go to the <a href="http://www.dokeos.com">Dokeos website</a> and ask a question on the
-<a href="http://www.dokeos.com/en/node/66">support forum</a>. Please read the previous messages first to see if there is
+<p>If you have&nbsp;problems, go to the <a href="http://www.chamilo.org">Chamilo website</a> and ask a question on the
+<a href="http://forum.chamilo.org">support forum</a>. Please read the previous messages first to see if there is
 already an answer to your question. We also maintain a list of
-<a href="http://www.dokeos.com/wiki/index.php/FAQ">Frequently Asked Questions</a>.</p>
+<a href="http://wiki.chamilo.org">Frequently Asked Questions</a>.</p>
 
 
 <h2></h2>
@@ -435,8 +435,8 @@ already an answer to your question. We also maintain a list of
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="5._Administration_section"></a>5. Administration section</h2>
 
-<p>To access the Dokeos administration section, open browser,
-go to your Dokeos adress and log in with the admin user.
+<p>To access the Chamilo administration section, open browser,
+go to your Chamilo adress and log in with the admin user.
 Then you will see a "Platform admin section" link in the header of the
 web page. There you can manage users, courses, sessions, portal look
 and feel, homepage content, course categories etc.&nbsp;</p>
@@ -448,7 +448,7 @@ and feel, homepage content, course categories etc.&nbsp;</p>
 <p>
 <i>This part is optional, only organisations with an LDAP server will need to read this.</i><br />
 
-An LDAP module is already provided in Dokeos, but it has to be configured to make it work.</p>
+An LDAP module is already provided in Chamilo, but it has to be configured to make it work.</p>
 
 
 <h3><b>Compiling</b></h3>
@@ -458,11 +458,11 @@ Linux servers: It's possible that you have to recompile php with ldap support.
 Newer distributions also allow downloading rpms for additional packages.</p>
 
 
-<h3><b>Activating LDAP in Dokeos</b></h3>
+<h3><b>Activating LDAP in Chamilo</b></h3>
 
 
 <p>
-In (dokeos folder)/main/inc/conf/configuration.php, around line 90, you see<br />
+In (chamilo folder)/main/inc/conf/configuration.php, around line 90, you see<br />
 
 //for new login module<br />
 
@@ -492,7 +492,7 @@ Ask the LDAP server admin for the settings:</p>
   <li>ldap dc</li>
 </ul>
 Since 1.8.5, you have to change the LDAP settings inside the "Portal
-administration" panel, under "Dokeos configuration settings", section
+administration" panel, under "Chamilo configuration settings", section
 "LDAP".
 <br />
 
@@ -510,7 +510,7 @@ LDAP domain: "dc=xx, dc=yy, dc=zz"; //domain<br />
 <h3><b>Teacher/student status</b></h3>
 
 <p>
-By default, Dokeos will check if the "employeenumber" field has a value. If it has, then Dokeos will
+By default, Chamilo will check if the "employeenumber" field has a value. If it has, then Chamilo will
 consider this user as being a teacher.<br />
 
 If you want to change this behaviour, you can edit main/auth/ldap/authldap.php, function ldap_put_user_info_locally(),
@@ -525,7 +525,7 @@ You can also remove this check by removing the condition and leaving only the <e
 <p>
 Some LDAP servers do not support anonymous use of the directory services.<br />
 In this case, you should fill in the appropriate fields in the
-administration panel (e.g. "manager" and "mypassword") and Dokeos will
+administration panel (e.g. "manager" and "mypassword") and Chamilo will
 try to authenticate using these, or fall back to anonymous mode before
 giving up.</p>
 
@@ -533,15 +533,15 @@ giving up.</p>
 <h3>LDAP import into sessions</h3>
 
 <p>There is a new set of scripts now that allow you to insert users
-from LDAP directly into a Dokeos session. This, however, relies on a
+from LDAP directly into a Chamilo session. This, however, relies on a
 set of static choices in the LDAP contact attributes.<br />
 
-The fields used intensively by the Dokeos module are:<br />
+The fields used intensively by the Chamlio module are:<br />
 </p>
 
 <ul>
 
-	<li>uid, which is matched to the username in Dokeos</li>
+	<li>uid, which is matched to the username in Chamilo</li>
 
 	<li>userPassword, which is matched to the user password, although
 this part will only work for non-encrypted passwords for now, but it
@@ -551,11 +551,11 @@ shouldn't be necessary if using the LDAP server as authentication</li>
 criteria you will use to filter users, so that they can be retrieved on
 that criteria</li>
 
-	<li>sn is used as the lastname field in Dokeos</li>
+	<li>sn is used as the lastname field in Chamilo</li>
 
-	<li>givenName is used as the firstname field in Dokeos</li>
+	<li>givenName is used as the firstname field in Chamilo</li>
 
-	<li>mail is used as the email field in Dokeos</li>
+	<li>mail is used as the email field in Chamilo</li>
 </ul>
 
 
@@ -564,7 +564,7 @@ that criteria</li>
 
 <i>This part is optional, only organisations planning to use mathematical formulas inside the online editor might want to read this.</i><br /><br />
 
-You can enable mathematical equations writing inside the Dokeos online editor (FCKEditor) by applying the following steps:
+You can enable mathematical equations writing inside the Chamilo online editor (FCKEditor) by applying the following steps:
 <ul>
 
 	<li>1. Configure your Apache installation to add a cgi-bin directory that contains a symbolic link to the mimetex.cgi in
@@ -627,7 +627,7 @@ copy mimetex.exe (for windows) or mimetex.cgi (for linux) from <i>dokeos/main/in
 </div>
 	</ul>
 
-<p>As a result of this procedure, a new button becomes available in your Dokeos online editor, that gives you possibility
+<p>As a result of this procedure, a new button becomes available in your Chamilo online editor, that gives you possibility
 to insert mathematical formulas into your documents.<br />
 
 

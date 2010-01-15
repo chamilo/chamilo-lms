@@ -4,7 +4,7 @@
  * @package dokeos.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
- 
+$cidReset = true;
 $language_file = array('userInfo');
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';

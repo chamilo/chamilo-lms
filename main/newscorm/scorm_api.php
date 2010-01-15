@@ -1056,7 +1056,8 @@ function dokeos_void_save_asset(myscore,mymax)
  */
 function logit_scorm(message,priority){
 
-	if(scorm_logs>=priority){
+	//if(scorm_logs>=priority){
+	if(scorm_logs>priority){ /* fixed see http://support.chamilo.org/issues/370 */
 		if($("#lp_log_name") && $("#log_content")){
 			$("#log_content").append("SCORM: " + message + "<br/>");
 		}

@@ -2986,7 +2986,7 @@ a.read {
 
 .mygroups_grid_item {
 	float:left;
-	width:350px;
+	width:345px;
 	height:165px;
 	margin-top:20px;
 }
@@ -3139,7 +3139,7 @@ a.read {
 
 .search_group_grid_item {
 	float:left;
-	width:350px;
+	width:345px;
 	height:165px;
 	margin-top:20px;
 }
@@ -3522,7 +3522,7 @@ div.image-social-content center.friend {
 #social-content-right {
 	height:auto;
 	overflow:hidden;	
-	margin-left:200px;
+	margin-left:210px;
 }
 
 .social-content-image {

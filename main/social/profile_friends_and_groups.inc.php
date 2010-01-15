@@ -75,7 +75,11 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
 				}										
 				$picture = GroupPortalManager::get_picture_group($result['id'], $result['picture_uri'],80);
 				$item_name = '<div class="box_shared_profile_group_title">'.$url_open.'<span class="social-groups-text1">'.api_xml_http_response_encode(api_strtoupper($name)).'</span>'. $icon.$url_close.'</div>';
-				$item_description = '<div class="box_shared_profile_group_description"><span class="social-groups-text2">'.api_xml_http_response_encode(get_lang('GroupDescription')).'</span><p class="social-groups-text4">'.cut(api_xml_http_response_encode($result['description']),120,true).'</p></div>';  															
+				$item_description = '';
+				if (!empty($result['description'])) { 				
+					$item_description = '<div class="box_shared_profile_group_description"><span class="social-groups-text2">'.api_xml_http_response_encode(get_lang('Description')).'</span><p class="social-groups-text4">'.cut(api_xml_http_response_encode($result['description']),120,true).'</p></div>';
+				} 
+				  															
 				$result['picture_uri'] = '<div class="box_shared_profile_group_image"><img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" /></div>';
 				$item_actions = '';
 				if (api_get_user_id() == $user_id) {

@@ -144,7 +144,7 @@ $form->addElement('hidden', 'referer');
 $form->add_textfield('name', get_lang('GroupName'));
 
 // Description
-$form->addElement('textarea', 'description', get_lang('GroupDescription'), array ('cols' => 50, 'rows' => 6));
+$form->addElement('textarea', 'description', get_lang('Description'), array ('cols' => 50, 'rows' => 6));
 
 // Tutors: this has been replaced with the new tutors code
 //$tutors = GroupManager :: get_all_tutors();

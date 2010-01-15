@@ -110,7 +110,7 @@ echo '<div id="social-content">';
 						$item_1 = '<div>'.$url_open.$result['picture_uri'].'<p class="social-groups-text1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg').'</div>';
 					
 						if ($result['description'] != '') {
-							$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.get_lang('DescriptionGroup').'</span></div>';
+							$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.get_lang('Description').'</span></div>';
 							$item_3 = '<div class="box_description_group_content" >'.cut($result['description'],100,true).'</div>';
 						} else {
 							$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2"></span></div>';
@@ -144,7 +144,7 @@ echo '<div id="social-content">';
 						$grid_item_1 = Display::return_icon('boxmygroups.jpg');						
 						$item_1 = '<div>'.$url_open.$group['picture_uri'].'<p class="social-groups-text1"><strong>'.$name.'<br />('.$count_users_group.')</strong></p>'.$url_close.Display::return_icon('linegroups.jpg').'</div>';
 						if ($group['description'] != '') {
-							$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.get_lang('DescriptionGroup').'</span></div>';
+							$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2">'.get_lang('Description').'</span></div>';
 							$item_3 = '<div class="box_description_group_content" >'.cut($group['description'],100,true).'</div>';
 						} else {						
 							$item_2 = '<div class="box_description_group_title" ><span class="social-groups-text2"></span></div>';

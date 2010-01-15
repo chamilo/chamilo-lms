@@ -2700,22 +2700,19 @@ class UserManager
 	 * 
 	 */
 	public static function get_search_form($query) {
-		echo'<form method="get" action="'.api_get_path(WEB_PATH).'main/social/search.php">
-
-		<table cellspacing="0" cellpadding="0" id="SearchTable">
-		<tbody><tr>
+		echo'<form method="GET" action="'.api_get_path(WEB_PATH).'main/social/search.php">
+		<table cellspacing="0" cellpadding="0">
+		<tr>
 		<td>
-			<div id="SearchQueryChunk">
-			<div id="SearchQueryNav">
-				<b>'.get_lang('Search').'</b > ('.get_lang('UsersGroups').')				
-			</div>
+			<div id="search_label">			
+					<b>'.get_lang('Search').'</b > ('.get_lang('UsersGroups').')
 			<div>
-				<input type="text" size="30" value="'.Security::remove_XSS($query).'" tabindex="1" id="standard_q" name="q"/>				
-				<button class="search" value="search"/>'.get_lang('Search').'</button>
+				<input type="text" size="30" value="'.Security::remove_XSS($query).'" name="q"/>				
+				<button class="search" type="submit" value="search">'.get_lang('Search').'</button>
 			</div>					
 		</td>
 		</tr>
-		</tbody></table></form>';
+		</table></form>';
 	}
 	//deprecated
 	public static function get_public_users($keyword, $from = 0, $number_of_items= 20, $column=2, $direction='ASC') {	

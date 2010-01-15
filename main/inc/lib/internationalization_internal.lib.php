@@ -91,6 +91,138 @@ function _api_get_latin1_compatible_languages() {
 
 /**
  * ----------------------------------------------------------------------------
+ * Appendix to "Language recognition"
+ * Based on the publication:
+ * W. B. Cavnar and J. M. Trenkle. N-gram-based text categorization.
+ * Proceedings of SDAIR-94, 3rd Annual Symposium on Document Analysis
+ * and Information Retrieval, 1994.
+ * @link http://citeseer.ist.psu.edu/cache/papers/cs/810/http:zSzzSzwww.info.unicaen.frzSz~giguetzSzclassifzSzcavnar_trenkle_ngram.pdf/n-gram-based-text.pdf
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * Generates statistical, based on n-grams language profile from the given text.
+ * @param string $string				The input text. It should be UTF-8 encoded. Practically it should be at least 3000 characters long, 40000 characters size is for increased accuracy.
+ * @param int $n_grams_max (optional)	The size of the array of the generated n-grams.
+ * @param int $n_max (optional)			The limit if the number of characters that a n-gram may contain.
+ * @return array						An array that contains cunstructed n-grams, sorted in reverse order by their frequences. Frequences are not stored in the array.
+ */
+function &_api_generate_n_grams(&$string, $encoding, $n_grams_max = 350, $n_max = 4) {
+	if (empty($string)) {
+		return array();
+	}
+	// We construct only lowercase n-grams if it is applicable for the given language.
+	// Removing all puntuation and some other non-letter characters. Apostrophe characters stay.
+	// Splitting the sample text into separate words.
+	$words = preg_split('/_/u', preg_replace('/[\x00-\x1F\x20-\x26\x28-\x3E\?@\x5B-\x60{|}~\x7F]/u', '_', ' '.api_strtolower(api_utf8_encode($string, $encoding), 'UTF-8').' '), -1, PREG_SPLIT_NO_EMPTY);
+	$prefix = '_'; // Beginning of a word.
+	$suffix = str_repeat('_', $n_nax); // End of a word. Only the last '_' stays.
+	$n_grams = array(); // The array that will contain the constructed n-grams.
+	foreach ($words as $word) {
+		$k = api_strlen($word, 'UTF-8') + 1;
+		$word = $prefix.$word.$suffix;
+		for ($n = 1; $n <= $n_max; $n++) {
+			for ($i = 0; $i < $k; $i++) {
+				$n_gram = api_utf8_decode(api_substr($word, $i, $n, 'UTF-8'), $encoding);
+				if (isset($n_grams[$n_gram])) {
+					$n_grams[$n_gram]++;
+				} else {
+					$n_grams[$n_gram] = 1;
+				}
+			}
+		}
+	}
+	// Sorting the n-grams in reverse order by their frequences.
+	arsort($n_grams);
+	// Reduction the number of n-grams.
+	return array_keys(array_slice($n_grams, 0, $n_grams_max));
+}
+
+/**
+ *
+ * The value $max_delta = 80000 is good enough for speed and detection accuracy.
+ * If you set the value of $max_delta too low, no language will be recognized.
+ * $max_delta = 400 * 350 = 140000 is the best detection with lowest speed.
+ */
+function & _api_compare_n_grams(&$n_grams, $encoding, $max_delta = LANGUAGE_DETECT_MAX_DELTA) {
+	static $language_profiles;
+	if (!isset($language_profiles)) {
+		// Reading the language profile files from the internationalization database.
+		$exceptions = array('.', '..', 'CVS', '.htaccess', '.svn', '_svn', 'index.html');
+		$path = str_replace("\\", '/', dirname(__FILE__).'/internationalization_database/language_detection/language_profiles/');
+		$non_utf8_encodings = & _api_non_utf8_encodings();
+		if (is_dir($path)) {
+			if ($handle = @opendir($path)) {
+				while (($dir_entry = @readdir($handle)) !== false) {
+					if (api_in_array_nocase($dir_entry, $exceptions)) continue;
+					if (strpos($dir_entry, '.txt') === false) continue;
+					$dir_entry_full_path = $path .'/'. $dir_entry;
+					if (@filetype($dir_entry_full_path) != 'dir') {
+						if (false !== $data = @file_get_contents($dir_entry_full_path)) {
+							$language = basename($dir_entry_full_path, '.txt');
+							$encodings = array('UTF-8');
+							if (!empty($non_utf8_encodings[$language])) {
+								$encodings = array_merge($encodings, $non_utf8_encodings[$language]);
+							}
+							foreach ($encodings as $enc) {
+								$data_enc = api_utf8_decode($data, $enc);
+								if (empty($data_enc)) {
+									continue;
+								}
+								$key = $language.':'.$enc;
+								$language_profiles[$key]['data'] = array_flip(explode("\n", $data_enc));
+								$language_profiles[$key]['language'] = $language;
+								$language_profiles[$key]['encoding'] = $enc;
+							}
+						}
+					}
+				}
+			}
+		}
+		@closedir($handle);
+		ksort($language_profiles);
+	}
+	if (!is_array($n_grams) || empty($n_grams)) {
+		return array();
+	}
+	// Comparison between the input n-grams and the lanuage profiles.
+	foreach ($language_profiles as $key => &$language_profile) {
+		if (!api_is_language_supported($language_profile['language']) || !api_equal_encodings($encoding, $language_profile['encoding'])) {
+			continue;
+		}
+		$delta = 0; // This is a summary measurment for matching between the input text and the current language profile.
+		// Searching each n-gram from the input text into the language profile.
+		foreach ($n_grams as $rank => &$n_gram) {
+			if (isset($language_profile['data'][$n_gram])) {
+				// The n-gram has been found, the difference between places in both
+				// arrays is calculated (so called delta-points are adopted for
+				// measuring distances between n-gram ranks.
+				$delta += abs($rank - $language_profile['data'][$n_gram]);
+			} else {
+				// The n-gram has not been found in the profile. We add then
+				// a large enough "distance" in delta-points.
+				$delta += 400;
+			}
+			// Abort: This language already differs too much.
+			if ($delta > $max_delta) {
+				break;
+			}
+		}
+		// Include only non-aborted languages in result array.
+		if ($delta < ($max_delta - 400)) {
+			$result[$key] = $delta;
+		}
+	}
+	if (!isset($result)) {
+		return array();
+	}
+	asort($result);
+	return $result;
+}
+
+
+/**
+ * ----------------------------------------------------------------------------
  * Appendix to "Date and time formats"
  * ----------------------------------------------------------------------------
  */

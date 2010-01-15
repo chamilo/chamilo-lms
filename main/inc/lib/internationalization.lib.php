@@ -36,6 +36,16 @@ define('PERSON_NAME_LIBRARY_ORDER', 3);		// Contextual: formatting person's name
 define('PERSON_NAME_EMAIL_ADDRESS', PERSON_NAME_WESTERN_ORDER);		// Contextual: formatting a person's name assotiated with an email-address. Ivan: I am not sure how seems email servers an clients would interpret name order, so I assign the Western order.
 define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);		// Contextual: formatting a person's name for data-exporting operarions. For backward compatibility this format has been set to Eastern order.
 
+// The following constants are used for tunning language detection functionality.
+// We reduce the text for language detection to the given number of characters
+// for increaseing speed and to decrease memory consumption.
+define ('LANGUAGE_DETECT_MAX_LENGTH', 2000);
+// Maximum allowed difference in so called delta-points for aborting certain language detection.
+// The value 80000 is good enough for speed and detection accuracy.
+// If you set the value of $max_delta too low, no language will be recognized.
+// $max_delta = 400 * 350 = 140000 is the best detection with lowest speed.
+define ('LANGUAGE_DETECT_MAX_DELTA', 140000);
+
 
 /**
  * ----------------------------------------------------------------------------
@@ -311,6 +321,33 @@ function api_is_latin1_compatible($language) {
 	}
 	$language = api_purify_language_id($language);
 	return in_array($language, $latin1_languages);
+}
+
+
+/**
+ * ----------------------------------------------------------------------------
+ * Language recognition
+ * Based on the publication:
+ * W. B. Cavnar and J. M. Trenkle. N-gram-based text categorization.
+ * Proceedings of SDAIR-94, 3rd Annual Symposium on Document Analysis
+ * and Information Retrieval, 1994.
+ * @link http://citeseer.ist.psu.edu/cache/papers/cs/810/http:zSzzSzwww.info.unicaen.frzSz~giguetzSzclassifzSzcavnar_trenkle_ngram.pdf/n-gram-based-text.pdf
+ * ----------------------------------------------------------------------------
+ */
+
+function api_detect_language(&$string, $encoding = null) {
+	if (empty($encoding)) {
+		$encoding = _api_mb_internal_encoding();
+	}
+	if (empty($string)) {
+		return false;
+	}
+	$result_array = &_api_compare_n_grams(_api_generate_n_grams(api_substr($string, 0, LANGUAGE_DETECT_MAX_LENGTH, $encoding), $encoding), $encoding);
+	if (empty($result_array)) {
+		return false;
+	}
+	list($key, $delta_points) = each($result_array);
+	return strstr($key, ':', true);
 }
 
 
@@ -2874,7 +2911,7 @@ function api_refine_encoding_id($encoding) {
 	if (is_array($encoding)){
 		return array_map('api_refine_encoding_id', $encoding);
 	}
-	return strtoupper($encoding);
+	return strtoupper(str_replace('_', '-', $encoding));
 }
 
 /**
@@ -3044,9 +3081,9 @@ function api_get_non_utf8_encoding($language = null) {
 		if (!empty($encodings[$language][0])) {
 			return $encodings[$language][0];
 		}
-		return 'ISO-8859-15';
+		return null;
 	}
-	return 'ISO-8859-15';
+	return null;
 }
 
 /**
@@ -3078,6 +3115,34 @@ function api_get_valid_encodings() {
 	natsort($result2);
 	natsort($result3);
 	return array_merge(array('UTF-8'), $result1, $result2, $result3);
+}
+
+function api_detect_encoding(&$string) {
+	if (api_is_valid_utf8($string)) {
+		return 'UTF-8';
+	}
+	$result = null;
+	$delta_points_min = LANGUAGE_DETECT_MAX_DELTA;
+	$encodings = api_get_valid_encodings();
+	foreach ($encodings as $encoding) {
+		if (api_is_encoding_supported($encoding) & !api_is_utf8($encoding)) {
+			$result_array = & _api_compare_n_grams(_api_generate_n_grams(api_substr($string, 0, LANGUAGE_DETECT_MAX_LENGTH, $encoding), $encoding), $encoding);
+			if (!empty($result_array)) {
+				list($key, $delta_points) = each($result_array);
+				if ($delta_points < $delta_points_min) {
+					$pos = strpos($key, ':');
+					$result_encoding = api_refine_encoding_id(substr($key, $pos + 1));
+					if (api_equal_encodings($encoding, $result_encoding)) {
+						if ($string == api_utf8_decode(api_utf8_encode($string, $encoding), $encoding)) {
+							$delta_points_min = $delta_points;
+							$result = $encoding;
+						}
+					}
+				}
+			}
+		}
+	}
+	return $result;
 }
 
 /**

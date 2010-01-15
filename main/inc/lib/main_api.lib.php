@@ -4192,7 +4192,7 @@ function api_get_tool_information($tool_id) {
 
 /**
  * Gets the software name
- * @param string 
+ * @return string 
  * 
  */
 function api_get_software_name() {

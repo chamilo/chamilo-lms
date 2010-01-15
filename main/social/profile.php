@@ -252,20 +252,13 @@ $user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'), true);
 $user_online_count = count($user_online_list);
 
 echo '<div id="social-content">';
-
 	echo '<div id="social-content-left">';	
 		//this include the social menu div
 		SocialManager::show_social_menu('shared_profile', null, $user_id, $show_full_profile);
 	echo '</div>';
 
 echo '<div id="social-content-right">';
-
-	//echo '<div id="social-content-online">'.Display::return_icon('whoisonline.png','',array('hspace'=>'6')).'<a href="'.api_get_path(WEB_PATH).'whoisonline.php" ><span class="social-menu-text1">'.get_lang('FriendsOnline').' '.$user_online_count.'</span></a>';	
-	//echo '</div>';
-
-	
-	echo '<div class="social-box-main1">';
-	
+	echo '<div class="social-box-main1">';	
 		echo '<div class="social-box-left">';		
 			echo '<div>'.Display::return_icon('boxmygroups.jpg').'</div>';
 			echo '<div class="social-box-content1">';
@@ -275,34 +268,28 @@ echo '<div id="social-content-right">';
 			} else {
 				//--- Basic Information
 				echo '<div><h3>'.get_lang('Information').'</h3></div>';				
-			}        			
-			 
+			}
 								
 			if ($show_full_profile) {
-				echo '<div class="social-profile-info" >';
-					echo '<dt>'.get_lang('UserName').'</dt>
-						  <dd>'. $user_info['username'].'	</dd>';
+				echo '<div class="social-profile-info">';
+					echo '<dt>'.get_lang('UserName').'</dt><dd>'. $user_info['username'].'	</dd>';
 /*						if (!empty($user_info['firstname']) || !empty($user_info['lastname']))
-							echo '<dt>'.get_lang('Name').'</dt>
-							  	  <dd>'. api_get_person_name($user_info['firstname'], $user_info['lastname']).'</dd>';*/
+							echo '<dt>'.get_lang('Name').'</dt><dd>'. api_get_person_name($user_info['firstname'], $user_info['lastname']).'</dd>';*/
 					if (!empty($user_info['official_code']))
-						echo '<dt>'.get_lang('OfficialCode').'</dt>
-						  <dd>'.$user_info['official_code'].'</dd>';
+						echo '<dt>'.get_lang('OfficialCode').'</dt><dd>'.$user_info['official_code'].'</dd>';
+						  
 					if (!empty($user_info['email']))
 						if (api_get_setting('show_email_addresses')=='true')
-							echo '<dt>'.get_lang('Email').'</dt>
-						  <dd>'.$user_info['email'].'</dd>';
+							echo '<dt>'.get_lang('Email').'</dt><dd>'.$user_info['email'].'</dd>';
 					if (!empty($user_info['phone']))
-						echo '<dt>'.get_lang('Phone').'</dt>
-						  <dd>'. $user_info['phone'].'</dd>';
+						echo '<dt>'.get_lang('Phone').'</dt><dd>'. $user_info['phone'].'</dd>';
 					echo '</dl>';
 				echo '</div>';
 			} else {
-				echo '<div class="social-profile-info" >';
+				echo '<div class="social-profile-info">';
 					echo '<dl>';
-					if (!empty($user_info['firstname']) || !empty($user_info['lastname']))
-						echo '<dt>'.get_lang('Name').'</dt>
-						  <dd>'. api_get_person_name($user_info['firstname'], $user_info['lastname']).'</dd>';
+					if (!empty($user_info['username']))
+						echo '<dt>'.get_lang('UserName').'</dt><dd>'. $user_info['username'].'</dd>';
 				echo '</div>';
 			}
 			
@@ -391,38 +378,33 @@ echo '<div id="social-content-right">';
 			$friends = SocialManager::get_friends($user_id, SOCIALFRIEND);
 
 			$friend_html		= '';
-			//$number_of_images	= 3;
+
 			$number_of_images	= 6;
 			$number_friends		= 0;
 			$list_friends_id	= array();
 			$number_friends  	= count($friends); 
-			//$number_of_images	= $number_friends;
-			if ($number_friends != 0) {
-				/*
-				$number_loop	= ($number_friends/$number_of_images);
-				$loop_friends	= ceil($number_loop);
-				*/
+
+			if ($number_friends != 0) {		
+				$friend_html.= '<div><h3>'.get_lang('SocialFriend').'</h3></div>';				
+				$friend_html.= '<div id="friend-container" class="social-friend-container">';
+				$friend_html.= '<div id="friend-header" >';
+									
+				if ($number_friends == 1) {
+					$friend_html.= '<div style="float:left;width:80%">'.$number_friends.' '.get_lang('Friend').'</div>';
+				} else {
+					$friend_html.= '<div style="float:left;width:80%">'.$number_friends.' '.get_lang('Friends').'</div>';
+				}
 				
-				$friend_html	.= '<div><h3>'.get_lang('SocialFriend').'</h3></div>';
-				
-				$friend_html	.= '<div id="friend-container" class="social-friend-container">';
-					$friend_html.= '<div id="friend-header" >';
-							//$friend_html.=  $friends_count.' '.get_lang('Friends');
-						if ($number_friends == 1) {
-							$friend_html.= '<div style="float:left;width:80%">'.$number_friends.' '.get_lang('Friend').'</div>';
-						} else {
-							$friend_html.= '<div style="float:left;width:80%">'.$number_friends.' '.get_lang('Friends').'</div>';
-						}
-						
-						if ($number_friends > $number_of_images) {						
-							if (api_get_user_id() == $user_id) {
-								$friend_html.= '<div style="float:right;width:20%"><a href="friends.php">'.get_lang('SeeAll').'</a></div>';
-							} else {
-								$friend_html.= '<div style="float:right;width:20%"><a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php?view=friends&height=390&width=610&&user_id='.$user_id.'" class="thickbox" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAll').'</a></div>';
-							}
-						}
+				if ($number_friends > $number_of_images) {						
+					if (api_get_user_id() == $user_id) {
+						$friend_html.= '<div style="float:right;width:20%"><a href="friends.php">'.get_lang('SeeAll').'</a></div>';
+					} else {
+						$friend_html.= '<div style="float:right;width:20%"><a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php?view=friends&height=390&width=610&&user_id='.$user_id.'" class="thickbox" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAll').'</a></div>';
+					}
+				}
 																		
-					$friend_html.= '</div>'; // close div friend-header									
+				$friend_html.= '</div>'; // close div friend-header
+													
 				$j=1;
 				for ($k=0;$k<$number_friends;$k++) {
 

@@ -218,15 +218,15 @@ class ScormAnswerMultipleChoice extends Answer
 				// some javascript must be added for that kind of questions
 				$html .= '<tr>' . "\n"
 						.	'<td>' . "\n"
-				    	. '<textarea name="question_'.$qId.'_free" id="question_'.$qId.'_free" rows="20" cols="100"></textarea>' . "\n"
+				    	. '<textarea name="question_'.$qId.'_free" id="question_'.$qId.'_exact" rows="20" cols="100"></textarea>' . "\n"
 				    	.	'</td>' . "\n"
 				    	.	'</tr>' . "\n";
 				$html .= '</table></td></tr>' . "\n";
-				// currently the free answers cannot be displayed, so ignore the textarea
+				// currently the exact answers cannot be displayed, so ignore the textarea
 				$html = '<tr><td colspan="2">'.get_lang('ThisItemIsNotExportable').'</td></tr>';
 				$js .= 'questions_answers['.$this->questionJSId.'] = new Array();'."\n";
 		    	$js .= 'questions_answers_correct['.$this->questionJSId.'] = new Array();'."\n";
-		    	$js .= 'questions_types['.$this->questionJSId.'] = \'free\';'."\n";
+		    	$js .= 'questions_types['.$this->questionJSId.'] = \'exact\';'."\n";
 				$jstmpw = 'questions_answers_ponderation['.$this->questionJSId.'] = new Array();'."\n";
 				$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][0] = 0;'."\n";
 		    	$jstmpw .= 'questions_answers_ponderation['.$this->questionJSId.'][1] = 0;'.";\n";

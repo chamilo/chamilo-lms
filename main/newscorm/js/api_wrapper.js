@@ -429,8 +429,7 @@ function checkAnswers(interrupted)
 	var tmpScore = 0;
 	var status = 'not attempted';
 	var scoreMax = 0;
-	for(var i=0; i<questions.length;i++)
-	{
+	for(var i=0; i<questions.length;i++) {
 		if(questions[i] != undefined && questions[i] != null){
 			var idQuestion = questions[i];
 			var type = questions_types[idQuestion];
@@ -439,8 +438,7 @@ function checkAnswers(interrupted)
 			var interactionCorrectResponses = '';
 			var interactionType = '';
 
-			if (type == 'mcma')
-			{
+			if (type == 'mcma') {
 				var interactionType = 'choice';
 				var myScore = 0;
 				for(var j=0; j<questions_answers[idQuestion].length;j++)
@@ -608,18 +606,16 @@ function checkAnswers(interrupted)
 				//	interactionCorrectResponses += questions_answers_correct[idQuestion][k].toString()+',';
 				//}
 				scoreMax += questions_score_max[idQuestion];
-			}
-			else if(type == 'free')
-			{	//ignore for now as a score cannot be given
+			} else if(type == 'free') {
+				//ignore for now as a score cannot be given
 				var interactionType = 'likert';
 				interactionScore = 0;
 				//interactionAnswers = document.getElementById('question_'+(idQuestion)+'_free').value;
 				//correct responses work by pattern, see SCORM Runtime Env Doc
 				//interactionCorrectResponses += questions_answers_correct[idQuestion].toString();
-			}
-			else if(type == 'hotspot')
-			{
+			} else if(type == 'hotspot') {
 				var interactionType = 'sequencing';
+				interactionScore = 0;
 				//if(question_score && question_score[idQuestion]){
 				//	interactionScore = question_score[idQuestion];
 				//} //else, 0
@@ -630,9 +626,11 @@ function checkAnswers(interrupted)
 				//	interactionCorrectResponses += questions_answers_correct[idQuestion][k].toString()+',';
 				//}
 			} else if(type == 'exact') {
+				var interactionType = 'exact';
+				interactionScore = 0;
 				// not yet implemented see scorm_classes.php ScormAnswerMultipleChoice::export() function 
 				/*
-				var interactionType = 'exact';
+			
 				var myScore = 0;
 				var real_answers = new Array();
 

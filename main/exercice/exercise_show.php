@@ -119,10 +119,7 @@ if (isset($_SESSION['gradebook'])){
 }
 
 if (!empty($gradebook) && $gradebook=='view') {
-	$interbreadcrumb[]= array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
-		);
+	$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'],'name' => get_lang('Gradebook'));
 }
 $fromlink = '';
 if($origin=='user_course') {

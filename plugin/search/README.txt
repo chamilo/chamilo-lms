@@ -135,4 +135,4 @@ website: http://www.mnogosearch.org/
 Commercial suppport is available for the configuration and remote use
 of this plugin at info@dokeos.com
 If you have plenty of time to learn it by yourself or any other reason,
-you might find some free help on our forums: http://www.dokeos.com/forum
+you might find some free help on our forums: http://forum.chamilo.org

@@ -197,7 +197,7 @@ switch ($action) {
 					$all_result_data = 0;
 					if ($forum_result !='') {
 						api_display_tool_title(get_lang('Forum'));
-						echo '<div class="social-background-content" style="background:#FAF9F6; padding:0px;" >';
+						echo '<div style="background:#FAF9F6; padding:0px;" >';
 						echo api_xml_http_response_encode($forum_result);
 						echo '</div>';
 						echo '<br />';
@@ -208,7 +208,7 @@ switch ($action) {
 					$result = get_blog_post_from_user($course_db, $user_id);
 					if (!empty($result)) {
 						api_display_tool_title(api_xml_http_response_encode(get_lang('Blog')));
-						echo '<div class="social-background-content" style="background:#FAF9F6; padding:0px;">';
+						echo '<div style="background:#FAF9F6; padding:0px;">';
 						echo api_xml_http_response_encode($result);
 						echo '</div>';
 						echo '<br />';
@@ -218,7 +218,7 @@ switch ($action) {
 					//------Blog comments
 					$result = get_blog_comment_from_user($course_db, $user_id);
 					if (!empty($result)) {
-						echo '<div class="social-background-content" style="background:#FAF9F6; padding-left:10px;">';
+						echo '<div  style="background:#FAF9F6; padding-left:10px;">';
 						api_display_tool_title(api_xml_http_response_encode(get_lang('BlogComments')));
 						echo api_xml_http_response_encode($result);
 						echo '</div>';
@@ -232,7 +232,7 @@ switch ($action) {
 				} else {
 						echo '<div class="clear"></div><br />';
 						api_display_tool_title(api_xml_http_response_encode(get_lang('Details')));
-						echo '<div class="social-background-content" style="background:#FAF9F6; padding:0px;">';
+						echo '<div style="background:#FAF9F6; padding:0px;">';
 						echo api_xml_http_response_encode(get_lang('UserNonRegisteredAtTheCourse'));
 						echo '<div class="clear"></div><br />';
 						echo '</div>';

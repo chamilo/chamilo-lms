@@ -47,7 +47,7 @@ $TechnicalIssuesDescription = 'This portal is currently experiencing technical i
 
 if (is_int($global_error_code) && $global_error_code > 0) {
 
-	$theme = 'dokeos_blue/';
+	$theme = 'chamilo/';
 	$css_path = 'main/css/';
 	$css_file = $css_path.$theme.'default.css';
 
@@ -157,31 +157,36 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			</style>
 		</head>
 		<body>
+		<div id="wrapper">
+		
 			<div id="header">
 				<div id="header1">{ORGANISATION}</div>
 				<div class="clear"></div>
 				<div id="header2">&nbsp;</div>
-				<div id="header3">
-					<ul id="logout">
-						<li><a href="" target="_top"><span>&nbsp;</span></a></li>
-					</ul>
+				<div id="header3">			
 					<ul>
-						<li id="current"><a href="#"><span>{SECTION}</span></a></li>
+						<li id="current"><a href="#"><span id="tab_active">{SECTION}</span></a></li>
 					</ul>
 					<div style="clear: both;" class="clear"></div>
 				</div>
-				<div id="header4">&nbsp;</div>
+				<div id="header4">&nbsp;</div>				
 			</div>
-
-			<div style="text-align: center;">
-					<br /><br />{DESCRIPTION}<br /><br />
-					{CODE}
+			<div class="clear"> </div>
+			
+			<div id="main">
+				<div style="text-align: center;">
+						<br /><br />{DESCRIPTION}<br /><br />
+						{CODE}
+				</div>
 			</div>
-
-			<div id="footer">
-				<div class="copyright">{POWERED_BY}</div>
-				&nbsp;
-			</div>
+			
+			<div class="push"/></div>
+		</div>
+	
+		<div id="footer">
+			<div class="copyright">{POWERED_BY}</div>
+			&nbsp;
+		</div>		
 		</body>
 </html>
 EOM;

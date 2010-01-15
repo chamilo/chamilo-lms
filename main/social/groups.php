@@ -232,7 +232,7 @@ echo '<div id="social-content">';
 	echo '<div id="social-content-left">';	
 		//this include the social menu div
 		if ($group_id != 0 ) {
-			SocialManager::show_social_menu('messages_list',$group_id);	
+			SocialManager::show_social_menu('groups',$group_id);	
 		} else {
 			$show_menu = 'groups';
 			if (isset($_GET['view']) && $_GET['view'] == 'mygroups') {

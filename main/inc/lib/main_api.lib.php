@@ -4188,11 +4188,20 @@ function api_get_tool_information($tool_id) {
 	$sql = 'SELECT * FROM '.$t_tool.' WHERE id="'.Database::escape_string($tool_id).'"';
 	$rs  = Database::query($sql, __FILE__, __LINE__);
 	return Database::fetch_array($rs);
-}
+} 
 
+/**
+ * Gets the software name
+ * @param string 
+ * 
+ */
 function api_get_software_name() {
-	global $_configuration;
-	return $_configuration['software_name'];
+	global $_configuration;	
+	if (isset($_configuration['software_name']) && !empty($_configuration['software_name'])) {
+		return $_configuration['software_name'];
+	} else {
+		return 'Chamilo';
+	}
 }
 
 /*

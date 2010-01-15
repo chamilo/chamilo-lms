@@ -65,6 +65,7 @@ $(document).ready(function (){
 	            cache: false,
 	            filter_case: true,
 	            filter_hide: true,
+	            complete_text:"'.get_lang('StartToType').'",
 				firstselected: true,
 	            //onremove: "testme",
 				//onselect: "testme",

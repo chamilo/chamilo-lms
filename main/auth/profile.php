@@ -410,7 +410,7 @@ foreach ($extra as $id => $field_details) {
       						 
 			$form->addElement('html',$pre_html.$multi_select.$post );
 			$url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
-			
+			$complete_text = get_lang('StartToType');
 			//if cache is set to true the jquery will be called 1 time
 			$jquery_ready_content.= <<<EOF
       		$("#extra_$field_details[1]").fcbkcomplete({
@@ -418,6 +418,7 @@ foreach ($extra as $id => $field_details) {
 	            cache: false,
 	            filter_case: true,
 	            filter_hide: true,
+	            complete_text:"$complete_text",
 				firstselected: true,
 	            //onremove: "testme",
 				//onselect: "testme",

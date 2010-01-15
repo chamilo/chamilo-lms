@@ -1381,7 +1381,7 @@ class question
 		$this->html .= '			<span class="form_required">*</span> '.get_lang('Question');
 		$this->html .= '		</div>';
 		$this->html .= '		<div class="formw">';
-		$this->html .= api_return_html_area('question', Security::remove_XSS(stripslashes($form_content['question'])), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120'));
+		$this->html .= api_return_html_area('question', Security::remove_XSS(stripslashes($form_content['question']),STUDENT), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120'));
 		$this->html .= '		</div>';
 		$this->html .= '	</div>';
 

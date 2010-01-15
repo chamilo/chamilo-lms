@@ -29,6 +29,13 @@ if(empty($charset))
 //	or die ("WARNING : it remains some characters before &lt;?php bracket or after ?&gt end");
 
 header('Content-Type: text/html; charset='. $charset);
+
+$navigator_info = api_get_navigator();
+//ie6 fix
+if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {	
+	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix_tilebg.js" type="text/javascript" language="javascript"></script>'; //jQuery
+}
+
 if ( isset($httpHeadXtra) && $httpHeadXtra )
 {
 	foreach($httpHeadXtra as $thisHttpHead)
@@ -57,13 +64,11 @@ if(empty($document_language))
 <head>
 <title>
 <?php
-if(!empty($nameTools))
-{
+if(!empty($nameTools)) {
 	echo $nameTools.' - ';
 }
 
-if(!empty($_course['official_code']))
-{
+if(!empty($_course['official_code'])) {
 	echo $_course['official_code'].' - ';
 }
 
@@ -75,6 +80,7 @@ echo api_get_setting('siteName');
 /*<![CDATA[*/
 <?php
 
+ 
 $platform_theme= api_get_setting('stylesheets'); 	// plataform's css
 $my_style=$platform_theme;
 
@@ -88,8 +94,7 @@ if(api_get_setting('user_selected_theme') == 'true')
 	}
 }
 $mycourseid = api_get_course_id();
-if (!empty($mycourseid) && $mycourseid != -1)
-{
+if (!empty($mycourseid) && $mycourseid != -1) {
 	if (api_get_setting('allow_course_theme') == 'true')
 	{
 		$mycoursetheme=api_get_course_setting('course_theme');
@@ -126,20 +131,23 @@ if (!empty($mycourseid) && $mycourseid != -1)
 
 global $show_learn_path;
 
-if ($show_learn_path)
-{
+if ($show_learn_path) {
 	$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'css/'.$my_style.'/learnpath.css"/>';
-	$htmlHeadXtra[] = "<link rel='stylesheet' type='text/css' href='dtree.css' />"; //will be moved
-	$htmlHeadXtra[] = "<script src='dtree.js' type='text/javascript'></script>"; //will be moved
+	$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="dtree.css" />'; //will be moved
+	$htmlHeadXtra[] = '<script src="dtree.js" type="text/javascript"></script>'; //will be moved
 }
 
 $my_code_path = api_get_path(WEB_CODE_PATH);
-if(empty($my_style))
-{
+if(empty($my_style)) {
 	$my_style = 'dokeos_classic';
 }
 echo '@import "'.$my_code_path.'css/'.$my_style.'/default.css";'."\n";
 echo '@import "'.$my_code_path.'css/'.$my_style.'/course.css";'."\n";
+
+if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {	
+	echo 'img, div { behavior: url('.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix.htc) } ';
+}
+  
 ?>
 /*]]>*/
 </style>
@@ -147,6 +155,7 @@ echo '@import "'.$my_code_path.'css/'.$my_style.'/course.css";'."\n";
 /*<![CDATA[*/
 <?php
   echo '@import "'.$my_code_path.'css/'.$my_style.'/print.css";'."\n";
+
 ?>
 /*]]>*/
 </style>

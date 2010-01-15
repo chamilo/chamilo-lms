@@ -1035,29 +1035,34 @@ function display_user_overview_export_options() {
 	if ($_GET['export'] == 'options') {
 		// get all the defined extra fields
 		$extrafields = UserManager::get_extra_fields(0, 50, 5, 'ASC', false);
-
+	
 		// creating the form with all the defined extra fields
 		$form = new FormValidator('exportextrafields', 'post', api_get_self()."?view=".Security::remove_XSS($_GET['view']).'&display='.Security::remove_XSS($_GET['display']).'&export='.Security::remove_XSS($_GET['export']));
-		foreach ($extrafields as $key => $extra) {
-			$form->addElement('checkbox', 'extra_export_field'.$extra[0], '', $extra[3]);
-		}
-		$form->addElement('style_submit_button','submit', get_lang('Ok'),'class="save"' );
-
-		// setting the default values for the form that contains all the extra fields
-		if (is_array($_SESSION['additional_export_fields'])) {
-			foreach ($_SESSION['additional_export_fields'] as $key => $value) {
-				$defaults['extra_export_field'.$value] = 1;
+		
+		if (is_array($extrafields) && count($extrafields) > 0) {		
+			foreach ($extrafields as $key => $extra) {
+				$form->addElement('checkbox', 'extra_export_field'.$extra[0], '', $extra[3]);
 			}
+			$form->addElement('style_submit_button','submit', get_lang('Ok'),'class="save"' );
+			
+			// setting the default values for the form that contains all the extra fields
+			if (is_array($_SESSION['additional_export_fields'])) {
+				foreach ($_SESSION['additional_export_fields'] as $key => $value) {
+					$defaults['extra_export_field'.$value] = 1;
+				}
+			}
+			$form->setDefaults($defaults);
+		} else {
+			$form->addElement('html', Display::display_warning_message(get_lang('ThereAreNotExtrafieldsAvailable')));
 		}
-		$form->setDefaults($defaults);
-
+		
 		if ($form->validate()) {
 			// exporting the form values
 			$values = $form->exportValues();
-
+	
 			// re-initialising the session that contains the additional fields that need to be exported
 			$_SESSION['additional_export_fields'] = array();
-
+	
 			// adding the fields that are checked to the session
 			$message = '';
 			foreach ($values as $field_ids => $value) {
@@ -1065,14 +1070,14 @@ function display_user_overview_export_options() {
 					$_SESSION['additional_export_fields'][] = str_replace('extra_export_field', '', $field_ids);
 				}
 			}
-
+	
 			// adding the fields that will be also exported to a message string
 			if (is_array($_SESSION['additional_export_fields'])) {
 				foreach ($_SESSION['additional_export_fields'] as $key => $extra_field_export) {
 					$message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
 				}
 			}
-
+	
 			// Displaying a feedback message
 			if (!empty($_SESSION['additional_export_fields'])) {
 				Display::display_confirmation_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>', false);
@@ -1082,7 +1087,8 @@ function display_user_overview_export_options() {
 			$message = '';
 		} else {
 			$form->display();
-		}
+		}	
+	
 	} else {
 		if (!empty($_SESSION['additional_export_fields'])) {
 			// get all the defined extra fields

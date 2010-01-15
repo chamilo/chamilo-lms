@@ -1,5 +1,6 @@
-<?php //$id: $
-require_once(api_get_path(SYS_CODE_PATH).'/inc/lib/banner.lib.php');
+<?php
+/* For licensing terms, see /chamilo_license.txt */
+require_once api_get_path(SYS_CODE_PATH).'/inc/lib/banner.lib.php';
 
 /* For licensing terms, see /dokeos_license.txt */
 /**
@@ -21,10 +22,9 @@ $session_name   = api_get_session_name($my_session_id);
 		<div id="institution">
 			<a href="<?php echo api_get_path(WEB_PATH);?>index.php" target="_top"><?php echo api_get_setting('siteName') ?></a>
 			<?php
-			$iurl = api_get_setting('InstitutionUrl');
+			$iurl  = api_get_setting('InstitutionUrl');
 			$iname = api_get_setting('Institution');
-			if (!empty($iname))
-			{
+			if (!empty($iname)) {
 	           echo '-&nbsp;<a href="'.$iurl.'" target="_top">'.$iname.'</a>';
 			}
 			?>
@@ -49,7 +49,7 @@ if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 	}
 
 	if(api_get_setting("use_session_mode") == "true" && isset($_SESSION['session_name'])) {
-		echo ' ('.$_SESSION['session_name'].')';
+		echo '&nbsp;('.$_SESSION['session_name'].')&nbsp;';
 	}
 	if (api_get_setting("display_coursecode_in_courselist") == "true" AND api_get_setting("display_teacher_in_courselist") == "true") {
 		echo " - ";
@@ -105,7 +105,7 @@ if (isset($_course['extLink']) && $_course['extLink']['name'] != "") {
 <?php
 if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR (api_get_setting('showonline','users') == "true" AND $_user['user_id']) OR (api_get_setting('showonline','course') == "true" AND $_user['user_id'] AND $_cid)) {
 	if (api_get_setting("use_session_mode") == "true" && isset($_user['user_id']) && api_is_coach()) {
-	    echo '  <li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$_user['user_id'].'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.get_lang('UsersConnectedToMySessions').'</a></li>';
+	    echo '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$_user['user_id'].'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.get_lang('UsersConnectedToMySessions').'</a></li>';
 	}
 	$number = count(WhoIsOnline(api_get_setting('time_limit_whosonline')));
 	if(!empty($_course['id'])) {
@@ -131,7 +131,7 @@ if ((api_get_setting('showonline','world') == "true" AND !$_user['user_id']) OR 
 
 if ($_user['user_id'] && isset($_cid)) {
 	if ((api_is_course_admin() || api_is_platform_admin()) && api_get_setting('student_view_enabled') == 'true') {
-		echo '<li>| ';
+		echo '<li>&nbsp;|&nbsp;';
 		api_display_tool_view_option();
 		echo '</li>';
 	}

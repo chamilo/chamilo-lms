@@ -333,7 +333,7 @@ class Answer
 	 function getQuestionType()
 	 {
 	 	$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-	 	$sql = "SELECT * FROM $TBL_QUESTIONS WHERE id = '".Database::escape_string($this->questionId)."'";
+	 	$sql = "SELECT type FROM $TBL_QUESTIONS WHERE id = '".Database::escape_string($this->questionId)."'";
 	 	$res = Database::query($sql,__FILE__,__LINE__);
 	 	if(Database::num_rows($res)<=0){
 	 		return null;

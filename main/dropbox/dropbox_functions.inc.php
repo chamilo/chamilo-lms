@@ -1154,7 +1154,7 @@ function feedback_form()
 	{
 		$token = Security::get_token();
 		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea>';
-		$return .= '<input type="text" name="sec_token" value="'.$token.'"/>';		
+		$return .= '<input type="hidden" name="sec_token" value="'.$token.'"/>';		
 		$return .= '<br /><button type="submit" class="add" name="store_feedback" value="'.get_lang('Ok').'"
 					onclick="document.form_tablename.attributes.action.value = document.location;">'.get_lang('AddComment').'</button>';
 	}

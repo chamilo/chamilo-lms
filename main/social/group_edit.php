@@ -69,7 +69,7 @@ if (!GroupPortalManager::is_group_admin($group_id)) {
 $group_data = Database::fetch_array($res, 'ASSOC');
 
 // Create the form
-$form = new FormValidator('group_edit', 'post', '', '', array('style' => 'width: 60%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')));
+$form = new FormValidator('group_edit', 'post', '', '', array('style' => 'width: 100%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')));
 $form->addElement('hidden', 'id', $group_id);
 
 // name

@@ -393,6 +393,7 @@ float:left; /* important for ieX*/
 	list-style-type:none;
 	height:25px;
 	margin-left:0px;
+	margin: 11px 0px 0px 0px ;
 }
 
 
@@ -1513,6 +1514,7 @@ div.admin_section h4 {
 	background-image:url(images/bullet.gif);
 	background-repeat:no-repeat;
 	list-style:none;
+	background-position: center left;
 }
 .admin_section li a {
 	margin-left:15px;
@@ -3520,25 +3522,28 @@ div.image-social-content center.friend {
 	margin-left:auto;
 	margin-right:auto;
 }
+
 #social-content-right {
 	height:auto;
 	overflow:hidden;	
-	margin-left:210px;
+	width:79%;
 }
 
 .social-content-image {
 	margin-bottom:10px;
 	margin-top:2px;
+	overflow:hidden;
 }
 
 #social-content-left {
 	float:left;
 	height:auto;
-	margin-right:2px;
 	min-height:300px;
-	width:195px;
-	overflow:hidden;	
+	width:175px;
+	margin-right:10px;
+	overflow:hidden;
 }
+
 .social-content-description {
 	background:#ECE9D8;
 }
@@ -3725,15 +3730,18 @@ div.image-social-content center.friend {
 	overflow:hidden;
 }
 .social-box-left {
-	width:330px;
-	float:left;
-	height:auto;	
-}
-.social-box-right {
-	width:330px;
+	width:345px;
 	float:left;
 	height:auto;
-	margin-left:30px;
+	margin:0px;
+}
+
+.social-box-right {	
+	width:300px;
+	float:left;
+	height:auto;
+	margin-left:10px;	
+	overflow:hidden;
 }
 .social-box-container1 {
 	width:350px;
@@ -3856,11 +3864,12 @@ div.image-social-content center.friend {
 	padding:2px 0px 2px 0px;
 }
 
-
 .social-background-content {
 	z-index:5;
 	position:relative;
 	border:1px dotted #DDDDDD;
+	width:170px;
+	overflow:hidden;
 }
 
 .social-background-content .hidden_message {

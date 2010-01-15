@@ -85,6 +85,8 @@ class CourseRecycler
 		$this->recycle_surveys();
 		$this->recycle_learnpaths();
 		$this->recycle_cours_description();
+		$this->recycle_wiki();
+		$this->recycle_glossary();
 	}
 	/**
 	 * Delete documents
@@ -103,6 +105,43 @@ class CourseRecycler
 			Database::query($sql,__FILE__,__LINE__);
 		}
 	}
+	
+	/**
+	 * Delete wiki
+	 */
+	function recycle_wiki() {
+		if ($this->course->has_resources(RESOURCE_WIKI)) {
+			$table_wiki 		= Database::get_course_table(TABLE_WIKI);
+			$table_wiki_conf 	= Database::get_course_table(TABLE_WIKI_CONF);
+			$table_wiki_discuss = Database::get_course_table(TABLE_WIKI_DISCUSS);
+			$table_wiki_mailcue = Database::get_course_table(TABLE_WIKI_MAILCUE);
+
+			$pages = array();
+			foreach ($this->course->resources[RESOURCE_WIKI] as $resource) {
+				$pages[] = $resource->page_id;				
+			}
+			$wiki_ids = implode(',', (array_keys($this->course->resources[RESOURCE_WIKI])));
+			$page_ids = implode(',', $pages);
+
+			$sql = "DELETE FROM ".$table_wiki." WHERE id IN(".$wiki_ids.")";
+			Database::query($sql,__FILE__,__LINE__);
+			$sql = "DELETE FROM ".$table_wiki_conf." WHERE page_id IN(".$page_ids.")";
+			Database::query($sql,__FILE__,__LINE__);			
+		}		
+	}
+	
+	/**
+	 * Delete glossary
+	 */
+	function recycle_glossary() {
+		if ($this->course->has_resources(RESOURCE_GLOSSARY)) {
+			$table_glossary	= Database::get_course_table(TABLE_GLOSSARY);
+			$ids = implode(',', (array_keys($this->course->resources[RESOURCE_GLOSSARY])));
+			$sql = "DELETE FROM ".$table_glossary." WHERE glossary_id IN(".$ids.")";
+			Database::query($sql,__FILE__,__LINE__);			
+		}
+	}
+	
 	/**
 	 * Delete links
 	 */

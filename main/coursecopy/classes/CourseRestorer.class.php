@@ -104,7 +104,7 @@ class CourseRestorer
 			$this->restore_learnpaths($session_id);
 			$this->restore_links($session_id);
 			$this->restore_course_descriptions($session_id);
-			$this->restore_wiki();
+			$this->restore_wiki($session_id);
 		} else {
 			$this->restore_links();
 			$this->restore_tool_intro();
@@ -130,7 +130,7 @@ class CourseRestorer
 		if (!empty($session_id)) {
 			$condition_session = " , id_session='".intval($session_id)."'";
 		}
-
+		
 		foreach ($this->course->resources as $type => $resources) {
 			if (is_array($resources)) {
 				foreach ($resources as $id => $resource) {
@@ -1442,7 +1442,7 @@ class CourseRestorer
 		}
 	}
 	
-	function restore_wiki()
+	function restore_wiki($session_id = 0)
 	{
 		if ($this->course->has_resources(RESOURCE_WIKI))
 		{
@@ -1457,26 +1457,32 @@ class CourseRestorer
 			{
 				//$wiki = new Wiki($obj->page_id, $obj->reflink, $obj->title, $obj->content, $obj->user_id, $obj->group_id, $obj->dtime);
 				// the sql statement to insert the groups from the old course to the new course
-				$sql = "INSERT INTO $table_wiki (page_id, reflink, title, content, user_id, group_id, dtime)
+
+				$sql = "INSERT INTO $table_wiki (page_id, reflink, title, content, user_id, group_id, dtime, progress, version, session_id)
 							VALUES (
 							'".Database::escape_string($wiki->page_id)."',
 							'".Database::escape_string($wiki->reflink)."',
 							'".Database::escape_string($wiki->title)."',
 							'".Database::escape_string($wiki->content)."',
-							'".Database::escape_string($wiki->user_id)."', " .
-							(empty($wiki->group_id) ? 'NULL' : Database::escape_string($wiki->group_id)).",
-							'".Database::escape_string($wiki->dtime)."')";
-				$result = Database::query($sql, __FILE__, __LINE__);
-				$new_id = Database::insert_id();
+							'".intval($wiki->user_id)."',
+							'".intval($wiki->group_id)."',
+							'".Database::escape_string($wiki->dtime)."',
+							'".Database::escape_string($wiki->progress)."',								
+							'".intval($wiki->version)."',
+							'".(!empty($session_id)?intval($session_id):0)."')";
+				$rs2 = Database::query($sql, __FILE__, __LINE__);
+				$new_id = Database::insert_id();				
 				$this->course->resources[RESOURCE_WIKI][$id]->destination_id = $new_id;
+				$sql = "UPDATE $table_wiki set page_id = '$new_id' WHERE id = '$new_id'";
+				Database::query($sql, __FILE__, __LINE__);
 				
 				// we also add an entry in wiki_conf
 				$sql = "INSERT INTO $table_wiki_conf 
 						(page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_size, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit) 
 						VALUES
-						('".Database::escape_string($wiki->page_id)."', '', '', '', '', '', '', '', NULL, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0)";
-				$result = Database::query($sql, __FILE__, __LINE__);						
-			}
+						('".intval($new_id)."', '', '', '', '', '', '', '', NULL, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0)";
+				$rs1 = Database::query($sql, __FILE__, __LINE__);		
+			}			
 		}
 	}	
 }

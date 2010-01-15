@@ -71,7 +71,7 @@ class CourseBuilder
 			$this->build_learnpaths($session_id,$course_code);
 			$this->build_links($session_id,$course_code);
 			$this->build_course_descriptions($session_id,$course_code);
-			$this->build_wiki();
+			$this->build_wiki($session_id,$course_code);
 
 		} else {
 
@@ -155,9 +155,9 @@ class CourseBuilder
 			$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
 			if (!empty($this->course->type) && $this->course->type=='partial')
-        	$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND path NOT LIKE \'/images/gallery%\' ORDER BY path';
+        	$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND path  NOT LIKE \'/images/gallery%\' AND d.session_id = 0 ORDER BY path';
 	        else
-	        	$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 ORDER BY path';
+	        	$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND d.session_id = 0 ORDER BY path';
 
 			$db_result = Database::query($sql, __FILE__, __LINE__);
 			while ($obj = Database::fetch_object($db_result))
@@ -244,7 +244,7 @@ class CourseBuilder
 		} else {
 			$table = Database :: get_course_table(TABLE_LINK);
 			$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-			$sql = "SELECT * FROM $table l, $table_prop p WHERE p.ref=l.id AND p.tool = '".TOOL_LINK."' AND p.visibility != 2  ORDER BY l.display_order";
+			$sql = "SELECT * FROM $table l, $table_prop p WHERE p.ref=l.id AND p.tool = '".TOOL_LINK."' AND p.visibility != 2 AND l.session_id = 0 ORDER BY l.display_order";
 		}
 
 		$db_result = Database::query($sql, __FILE__, __LINE__);
@@ -317,7 +317,7 @@ class CourseBuilder
 			$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
 			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
 			$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
-			$sql = 'SELECT * FROM '.$table_qui.' WHERE active >=0'; //select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
+			$sql = 'SELECT * FROM '.$table_qui.' WHERE active >=0 AND session_id = 0'; //select only quizzes with active = 0 or 1 (not -1 which is for deleted quizzes)
 		}
 
 		$db_result = Database::query($sql, __FILE__, __LINE__);
@@ -403,7 +403,7 @@ class CourseBuilder
 		}
 		if ($build_orphan_questions)
 		{
-			$this->course->add_resource(new Quiz(-1, get_lang('OrphanQuestions', ''), '', 0, 0, 1, '', 0));
+			//$this->course->add_resource(new Quiz(-1, get_lang('OrphanQuestions', ''), '', 0, 0, 1, '', 0));
 		}
 	}
 	/**
@@ -444,7 +444,7 @@ class CourseBuilder
 	{
 		$table_survey = Database :: get_course_table(TABLE_SURVEY);
 		$table_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
-		$sql = 'SELECT * FROM '.$table_survey;
+		$sql = 'SELECT * FROM '.$table_survey.' WHERE session_id = 0 ';
 		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
@@ -494,7 +494,7 @@ class CourseBuilder
 	function build_announcements()
 	{
 		$table = Database :: get_course_table(TABLE_ANNOUNCEMENT);
-		$sql = 'SELECT * FROM '.$table;
+		$sql = 'SELECT * FROM '.$table.' WHERE session_id = 0';
 		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
@@ -508,7 +508,7 @@ class CourseBuilder
 	function build_events()
 	{
 		$table = Database :: get_course_table(TABLE_AGENDA);
-		$sql = 'SELECT * FROM '.$table;
+		$sql = 'SELECT * FROM '.$table.' WHERE session_id = 0';
 		$db_result = Database::query($sql, __FILE__, __LINE__);
 		while ($obj = Database::fetch_object($db_result))
 		{
@@ -528,7 +528,7 @@ class CourseBuilder
 			$sql = 'SELECT * FROM '.$table. ' WHERE session_id ='.$session_id;
 		} else {
 			$table = Database :: get_course_table(TABLE_COURSE_DESCRIPTION);
-			$sql = 'SELECT * FROM '.$table;
+			$sql = 'SELECT * FROM '.$table. ' WHERE session_id = 0';
 		}
 
 		$db_result = Database::query($sql, __FILE__, __LINE__);
@@ -556,7 +556,7 @@ class CourseBuilder
 			$table_item 	= Database :: get_course_table(TABLE_LP_ITEM);
 			$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST);
 
-			$sql = 'SELECT * FROM '.$table_main;
+			$sql = 'SELECT * FROM '.$table_main.' WHERE session_id = 0';
 		}
 
 		$db_result = Database::query($sql, __FILE__, __LINE__);
@@ -655,9 +655,9 @@ class CourseBuilder
 		} else {
 			$table_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 	        if (!empty($this->course->type) && $this->course->type=='partial') {
-	        	$sql = 'SELECT * FROM '.$table_glossary.' g ';
+	        	$sql = 'SELECT * FROM '.$table_glossary.' g WHERE session_id = 0';
 	        } else {
-	        	$sql = 'SELECT * FROM '.$table_glossary.' g ';
+	        	$sql = 'SELECT * FROM '.$table_glossary.' g WHERE session_id = 0';
 	        }
 		}
 
@@ -698,17 +698,21 @@ class CourseBuilder
 		return $list;
 	}
 	
-	function build_wiki() 
+	function build_wiki($session_id = 0, $course_code = 0) 
 	{
-		// Database table definition
-		$tbl_wiki = Database::get_course_table('wiki');
-
- 		$sql = 'SELECT * FROM ' . $tbl_wiki . ' INNER JOIN (SELECT MAX(id) as wikiid FROM ' . $tbl_wiki . ' GROUP BY page_id)ids ON id=ids.wikiid ORDER BY dtime DESC, group_id, reflink';
-
+		if (!empty($session_id) && !empty($course_code)) {
+			$course_info = api_get_course_info($course_code);
+			$tbl_wiki = Database::get_course_table(TABLE_WIKI,$course_info['dbName']);
+			$session_id = intval($session_id);
+	        $sql = 'SELECT * FROM ' . $tbl_wiki . ' WHERE session_id='.$session_id.'';
+		} else {
+			$tbl_wiki = Database::get_course_table(TABLE_WIKI);
+	        $sql = 'SELECT * FROM ' . $tbl_wiki . ' WHERE session_id = 0';
+		}
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
 		while ($obj = mysql_fetch_object($db_result))
 		{
-			$wiki = new Wiki($obj->page_id, $obj->reflink, $obj->title, $obj->content, $obj->user_id, $obj->group_id, $obj->dtime);
+			$wiki = new Wiki($obj->id, $obj->page_id, $obj->reflink, $obj->title, $obj->content, $obj->user_id, $obj->group_id, $obj->dtime, $obj->progress, $obj->version);
 			$this->course->add_resource($wiki);
 		}
 	}	

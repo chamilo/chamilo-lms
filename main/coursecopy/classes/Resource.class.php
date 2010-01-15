@@ -186,6 +186,8 @@ class Resource
 			//	return TOOL_SURVEY_INVITATION;
 			case RESOURCE_GLOSSARY:
 				return TOOL_GLOSSARY;
+			case RESOURCE_WIKI:
+				return TOOL_WIKI;
 			default:
 				return null;
 		}

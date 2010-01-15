@@ -57,11 +57,14 @@ class Import
 			$row = array ();
 			//avoid empty lines in csv			
 			if (is_array($row_tmp) && count($row_tmp)>0 && $row_tmp[0]!= '') {
+				if (!is_null($row_tmp[0]))
+				{
 				foreach ($row_tmp as $index => $value) {				
 					$row[$keys[$index]] = $value;				
 				}
 				$result[] = $row;
-			}			
+				}			
+			}
 		}
 		fclose($handle);
 		return $result;

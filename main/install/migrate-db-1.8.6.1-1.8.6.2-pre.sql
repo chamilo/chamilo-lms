@@ -20,7 +20,6 @@ ALTER TABLE session_rel_course_rel_user ADD COLUMN visibility int NOT NULL defau
 ALTER TABLE session_rel_course_rel_user ADD COLUMN status int NOT NULL default 0;
 CREATE TABLE session_category (id int(11) NOT NULL auto_increment, name varchar(100) default NULL, date_start date default NULL, date_end date default NULL, PRIMARY KEY  (id));
 
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_coach_to_edit_course_session', NULL, 'radio', 'Course', 'false', 'AllowCoachsToEditInsideTrainingSessions', 'AllowCoachsToEditInsideTrainingSessionsComment', NULL, NULL, 0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('show_courses_descriptions_in_catalog', NULL, 'radio', 'Course', 'true', 'ShowCoursesDescriptionsInCatalogTitle', 'ShowCoursesDescriptionsInCatalogComment', NULL, NULL, 1, 1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('show_glossary_in_extra_tools', NULL, 'radio', 'Course', 'false', 'ShowGlossaryInExtraToolsTitle', 'ShowGlossaryInExtraToolsComment', NULL, NULL,1,0);
@@ -37,8 +36,6 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('show_gloss
 CREATE TABLE tag (id int NOT NULL auto_increment, tag varchar(255) NOT NULL, field_id int NOT NULL, count int NOT NULL, PRIMARY KEY  (id));
 CREATE TABLE user_rel_tag (id int NOT NULL auto_increment,user_id int NOT NULL,tag_id int NOT NULL, PRIMARY KEY  (id));
 
-CREATE TABLE announcement_attachment ( id int NOT NULL auto_increment, path varchar(255) NOT NULL, comment text, size int NOT NULL default 0, announcement_id int NOT NULL, filename varchar(255) NOT NULL, PRIMARY KEY (id) );
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('send_email_to_admin_when_create_course','true','Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('send_email_to_admin_when_create_course','false','No');
@@ -47,12 +44,11 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('go_to_course_after_login', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('go_to_course_after_login', 'false', 'No');
 
-CREATE TABLE IF NOT EXISTS message_attachment (id int NOT NULL AUTO_INCREMENT, path varchar(255) NOT NULL, comment text, size int NOT NULL default 0, message_id int NOT NULL, filename varchar(255) NOT NULL, PRIMARY KEY(id));
+CREATE TABLE message_attachment (id int NOT NULL AUTO_INCREMENT, path varchar(255) NOT NULL, comment text, size int NOT NULL default 0, message_id int NOT NULL, filename varchar(255) NOT NULL, PRIMARY KEY(id));
 
 CREATE TABLE groups (id int NOT NULL AUTO_INCREMENT, name varchar(255) NOT NULL, description varchar(255) NOT NULL, picture_uri varchar(255) NOT NULL, url varchar(255) NOT NULL, visibility int NOT NULL, updated_on varchar(255) NOT NULL, created_on varchar(255) NOT NULL, PRIMARY KEY (id));
 CREATE TABLE group_rel_tag (id int NOT NULL AUTO_INCREMENT, tag_id int NOT NULL, group_id int NOT NULL, PRIMARY KEY (id));
 CREATE TABLE group_rel_user (id int NOT NULL AUTO_INCREMENT, group_id int NOT NULL, user_id int NOT NULL, relation_type int NOT NULL, PRIMARY KEY (id));
-
 
 ALTER TABLE message ADD COLUMN group_id INT NOT NULL DEFAULT 0;
 ALTER TABLE message ADD COLUMN parent_id INT NOT NULL DEFAULT 0;
@@ -75,7 +71,6 @@ ALTER TABLE group_rel_user ADD INDEX ( relation_type );
 ALTER TABLE group_rel_tag  ADD INDEX ( group_id );
 ALTER TABLE group_rel_tag  ADD INDEX ( tag_id );
 
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_students_to_create_groups_in_social', NULL, 'radio', 'Tools', 'false', 'AllowStudentsToCreateGroupsInSocialTitle', 'AllowStudentsToCreateGroupsInSocialComment', NULL, NULL, 0);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_students_to_create_groups_in_social', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_students_to_create_groups_in_social', 'false', 'No');
@@ -96,6 +91,7 @@ ALTER TABLE track_e_online ADD INDEX (course);
 
 -- xxCOURSExx
 
+CREATE TABLE announcement_attachment ( id int NOT NULL auto_increment, path varchar(255) NOT NULL, comment text, size int NOT NULL default 0, announcement_id int NOT NULL, filename varchar(255) NOT NULL, PRIMARY KEY (id) );
 ALTER TABLE quiz ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);
 ALTER TABLE blog ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);
 ALTER TABLE course_description ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);

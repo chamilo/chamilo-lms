@@ -530,27 +530,27 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 	echo '<div class="RequirementContent">';
 	echo '<table class="requirements">
 			<tr>
-				<td class="requirements-item">dokeos/main/inc/conf/</td>
+				<td class="requirements-item">chamilo/main/inc/conf/</td>
 				<td class="requirements-value">'.check_writable('inc/conf/').'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">dokeos/main/upload/users/</td>
+				<td class="requirements-item">chamilo/main/upload/users/</td>
 				<td class="requirements-value">'.check_writable('upload/users/').'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">dokeos/main/default_course_document/images/</td>
+				<td class="requirements-item">chamilo/main/default_course_document/images/</td>
 				<td class="requirements-value">'.check_writable('default_course_document/images/').'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">dokeos/archive/</td>
+				<td class="requirements-item">chamilo/archive/</td>
 				<td class="requirements-value">'.check_writable('../archive/').'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">dokeos/courses/</td>
+				<td class="requirements-item">chamilo/courses/</td>
 				<td class="requirements-value">'.check_writable('../courses/').'</td>
 			</tr>
 			<tr>
-				<td class="requirements-item">dokeos/home/</td>
+				<td class="requirements-item">chamilo/home/</td>
 				<td class="requirements-value">'.check_writable('../home/').'</td>
 			</tr>'.
             //'<tr>

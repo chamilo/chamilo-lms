@@ -1309,6 +1309,7 @@ if ($display_announcement_list && !$surveyid) {
 					WHERE announcement.id = toolitemproperties.ref
 					AND toolitemproperties.tool='announcement'
 					$cond_user_id
+					$condition_session		
 					AND toolitemproperties.visibility='1'
 					ORDER BY display_order DESC";
 			} else {
@@ -1327,6 +1328,7 @@ if ($display_announcement_list && !$surveyid) {
 						WHERE announcement.id = toolitemproperties.ref
 						AND toolitemproperties.tool='announcement'
 						$cond_user_id
+						$condition_session
 						AND toolitemproperties.visibility='1'
 						AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")
 						ORDER BY display_order DESC";
@@ -1344,6 +1346,7 @@ if ($display_announcement_list && !$surveyid) {
 						WHERE announcement.id = toolitemproperties.ref
 						AND toolitemproperties.tool='announcement'
 						$cond_user_id
+						$condition_session
 						AND toolitemproperties.visibility='1'
 						AND announcement.session_id IN(0,".intval($_SESSION['id_session']).")";
 				}

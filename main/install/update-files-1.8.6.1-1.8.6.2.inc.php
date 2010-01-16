@@ -58,26 +58,36 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	fwrite($fh,'?>');
 	fclose($fh);
 
-
+	$sys_course_path = $pathForm.'courses/';
 	$perm = api_get_setting('permissions_for_new_directories');
 	$perm = octdec(!empty($perm)?$perm:'0770');
 	$old_umask = umask(0);
+
+	$link = mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm);
+	mysql_select_db($dbNameForm,$link);
+	$db_name = $dbNameForm;
+	$sql = "SELECT * FROM $db_name.course";
+	error_log('Getting courses for files updates: '.$sql,0);
+	$result=mysql_query($sql);
+
+	while ($courses_directories=mysql_fetch_array($result)) {
+		$currentCourseRepositorySys = $sys_course_path.$courses_directories['directory'].'/';		
+		//upload > announcements
+		if(!is_dir($currentCourseRepositorySys."upload/announcements")){
+			mkdir($currentCourseRepositorySys."upload/announcements",$perm);
+		}
+	
+		//upload > announcements > images
+		if(!is_dir($currentCourseRepositorySys."upload/announcements/images")){
+			mkdir($currentCourseRepositorySys."upload/announcements/images",$perm);
+		}				
+	}
 
 	////create a specific directory for global thumbails
 	//home > default_platform_document > template_thumb
 	if(!is_dir($pathForm.'home/default_platform_document/template_thumb')){
 		mkdir($pathForm.'home/default_platform_document/template_thumb',$perm);
 	}
-	
-	//upload > announcements
-	if(!is_dir($currentCourseRepositorySys."upload/announcements")){
-		mkdir($currentCourseRepositorySys."upload/announcements",$perm);
-		}
-
-	//upload > announcements > images
-	if(!is_dir($currentCourseRepositorySys."upload/announcements/images")){
-		mkdir($currentCourseRepositorySys."upload/announcements/images",$perm);
-		}
 
 }
 else

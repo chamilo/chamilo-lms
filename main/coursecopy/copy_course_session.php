@@ -26,7 +26,6 @@ require_once '../inc/lib/xajax/xajax.inc.php';
 $xajax = new xajax();
 $xajax -> registerFunction('search_courses');
 
-
 if (!api_is_allowed_to_edit()) {
 	api_not_allowed(true);
 }

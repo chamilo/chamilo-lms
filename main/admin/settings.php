@@ -368,7 +368,7 @@ if (!empty($_GET['action']) && $_GET['action'] == "stored")
 }
 
 // the action images
-$action_images['platform'] 		= 'dokeos.gif';
+$action_images['platform'] 		= 'logo.gif';
 $action_images['course'] 		= 'course.gif';
 $action_images['tools'] 		= 'reference.gif';
 $action_images['user'] 			= 'students.gif';

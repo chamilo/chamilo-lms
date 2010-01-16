@@ -147,7 +147,7 @@ if (api_is_xml_http_request()) {
 		}
 		echo '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
 	} else {
-		Display::display_warning_message (get_lang('GraphicNotAvailable'));
+		Display::display_warning_message(api_convert_encoding(get_lang('GraphicNotAvailable'),'UTF-8'));
 	}
 	exit;
 }

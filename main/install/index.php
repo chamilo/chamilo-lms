@@ -20,7 +20,6 @@
 		PHP VERSION CHECK & MBSTRING EXTENSION CHECK
 ==============================================================================
 */
-
 if ( !function_exists('version_compare') || version_compare( phpversion(), '5', '<' )) {
 	$error_message_php_version = <<<EOM
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -37,15 +36,19 @@ if ( !function_exists('version_compare') || version_compare( phpversion(), '5', 
 		<body>
 			<div id="wrapper">
 				<div id="header">
-					<div id="header1"><a href="http://www.chamilo.org" target="_blank">Chamilo Homepage</a></div>
+					<div id="header1">
+					<div id="institution">
+						<a href="http://www.chamilo.org" target="_blank">Chamilo Homepage</a>
+					</div>					
+					</div>
 					<div class="clear"></div>
-					<div id="header2">&nbsp;</div>
+					<div id="header2" style="height:50px;">&nbsp;</div>
 					<div id="header3">
 						<ul id="logout">
-							<li><a href="" target="_top"><span>&nbsp;</span></a></li>
+							<li>&nbsp;</li>
 						</ul>
 						<ul>
-							<li id="current"><a href="#"><span>Installation</span></a></li>
+							<li id="current"><a href="#"><span id="tab_active">Installation</span></a></li>
 						</ul>
 						<div style="clear:both;" class="clear"></div>
 					</div>
@@ -485,8 +488,13 @@ if ($encryptPassForm=='1' ) {
 <div id="wrapper">
 
 <div id="header">
-	<div id="header1"><?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?><?php if($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').(is_array($update_from_version)?implode('|',$update_from_version):''); ?></div>
-	<div id="header2">&nbsp;</div>
+	<div id="header1">
+	<div id="institution">
+		<?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?><br />
+	</div>
+	<?php if($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').(is_array($update_from_version)?implode('|',$update_from_version):''); ?>
+	</div>
+	<div id="header2" style="height:50px">&nbsp;</div>
 	<div id="header3">
 		<ul>
 			<li id="current"><a href="#"><span id="tab_active"><?php echo get_lang('Installation');?></span></a></li>

@@ -278,7 +278,7 @@ if(api_is_platform_admin()){
 	}*/
 ?>
 <div class="admin_section">
- <h4><?php Display::display_icon('dokeos.gif', 'Dokeos'); ?> Chamilo.org</h4>
+ <h4><?php Display::display_icon('logo.gif', 'Dokeos'); ?> Chamilo.org</h4>
  <ul>
   <li><a href="http://www.chamilo.org/" target="_blank"><?php echo get_lang('ChamiloHomepage'); ?></a></li>
   <li><a href="http://forum.chamilo.org/" target="_blank"><?php echo get_lang('ChamiloForum'); ?></a></li>

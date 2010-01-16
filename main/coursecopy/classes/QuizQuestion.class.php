@@ -87,9 +87,10 @@ class QuizQuestion extends Resource
 	/**
 	 * Add an answer to this QuizQuestion
 	 */
-	function add_answer($answer_text,$correct,$comment,$ponderation,$position,$hotspot_coordinates,$hotspot_type)
+	function add_answer($answer_id, $answer_text,$correct,$comment,$ponderation,$position,$hotspot_coordinates,$hotspot_type)
 	{
-		$answer = array();
+		$answer = array();		
+		$answer['id'] = $answer_id;
 		$answer['answer'] = $answer_text;
 		$answer['correct'] = $correct;
 		$answer['comment'] = $comment;

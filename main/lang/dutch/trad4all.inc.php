@@ -648,4 +648,5 @@ $CourseName = "Titel van de training";
 $SendAMessage = "Stuur een bericht";
 $Menu = "Menu";
 $Parent  = "Ouder";
+$ChamiloInstallation = "Installatie van Chamilo";
 ?>

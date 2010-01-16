@@ -783,4 +783,7 @@ $Blog = "Blog";
 $BlogPosts = "Artículos del blog";
 $BlogComments = "Comentarios de los artículos";
 $ChamiloInstallation = "Instalación de Chamilo";
+$ThereAreNotExtrafieldsAvailable = "No hay campos extras disponibles";
+$StartToType = "Comience a escribir, a continuación, haga clic en esta barra para validar la etiqueta";
+$StartToType = "Comience a escribir, a continuación, haga clic en esta barra para validar la etiqueta";
 ?>

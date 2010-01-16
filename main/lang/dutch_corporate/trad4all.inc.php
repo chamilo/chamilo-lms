@@ -618,4 +618,5 @@ $SaveIntroText = "Bewaar inleidingstekst";
 $CourseName = "Titel van de training";
 $SendAMessage = "Stuur een bericht";
 $Menu = "Menu";
+$ChamiloInstallation = "Installatie van Chamilo";
 ?>

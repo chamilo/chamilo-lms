@@ -783,4 +783,6 @@ $Blog = "Blog";
 $BlogPosts = "Articles du blog";
 $BlogComments = "Commentaires du blog";
 $ChamiloInstallation = "Installation de Chamilo";
+$ThereAreNotExtrafieldsAvailable = "Aucun champ de profil disponible";
+$StartToType = "Commencez à taper, puis cliquez pour valider le tag";
 ?>

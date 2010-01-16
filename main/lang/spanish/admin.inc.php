@@ -385,7 +385,7 @@ $DropboxAllowJustUploadComment = "Permitir a los profesores y a los estudiantes 
 $DropboxAllowStudentToStudentTitle = "Compartir documentos: estudiante <-> estudiante";
 $DropboxAllowStudentToStudentComment = "Permitir a los estudiantes enviar documentos a otros estudiantes (peer to peer, intercambio P2P). Tenga en cuenta que los estudiantes pueden usar esta funcionalidad para enviarse documentos poco relevantes (mp3, soluciones,...). Si deshabilita esta opción los estudiantes sólo podrán enviar documentos a sus profesores";
 $DropboxAllowMailingTitle = "Compartir documentos: permitir el envío por correo";
-$DropboxAllowMailingComment = "Con la funcionalidad de envío por correo, Vd. puede enviar un documento personal a cada estudiante";
+$DropboxAllowMailingComment = "Con la funcionalidad de envío por correo, Ud. puede enviar un documento personal a cada estudiante";
 $PermissionsForNewDirs = "Permisos para los nuevos directorios";
 $PermissionsForNewDirsComment = "La posibilidad de definir la configuración de los permisos asignados a los nuevos directorios, aumenta la seguridad contra los ataques de hackers que puedan enviar material peligroso a la plataforma. La configuración por defecto (0770) debe ser suficiente para dar a su servidor un nivel de protección razonable. El formato proporcionado utiliza la terminología de UNIX Propietario-Grupo-Otros con los permisos de Lectura-Escritura-Ejecución.";
 $UserListHasBeenExported = "La lista de usuarios ha sido exportada.";
@@ -764,7 +764,7 @@ $LDAPVersionComment = "Por favor, seleccione la versión del servidor LDAP que qu
 $LDAPVersion2 = "LDAP 2";
 $LDAPVersion3 = "LDAP 3";
 $LDAPFilledTutorFieldTitle = "Campo de identificación de profesor";
-$LDAPFilledTutorFieldComment = "Comprobará el contenido del campo de contacto LDAP donde los nuevos usuarios serán insertados. Si este campo no está vacío, el usuario será considerado como profesor y será insertado en Chamilo como tal. Si Vd. quiere que todos los usuarios sean reconocidos como simples usuarios, deje este campo en blanco. Podrá modificar este comportamiento cambiando el código. Para más información lea la <a href=\\\"../../documentation/installation_guide.html\\\">guía de instalación</a>.";
+$LDAPFilledTutorFieldComment = "Comprobará el contenido del campo de contacto LDAP donde los nuevos usuarios serán insertados. Si este campo no está vacío, el usuario será considerado como profesor y será insertado en Chamilo como tal. Si Ud. quiere que todos los usuarios sean reconocidos como simples usuarios, deje este campo en blanco. Podrá modificar este comportamiento cambiando el código. Para más información lea la <a href=\\\\\\\"../../documentation/installation_guide.html\\\\\\\">guía de instalación</a>.";
 $LDAPAuthenticationLoginTitle = "Identificador de autentificación";
 $LDAPAuthenticationLoginComment = "Si está usando un servidor LDAP que no acepta acceso anónimo, rellene el siguiente campo con el nombre de usuario que debe ser usado. No incluya \"cn=\". En el caso de aceptar acceso anónimo y querer usarlo, déjelo vacío.";
 $LDAPAuthenticationPasswordTitle = "Contraseña de autentificación";
@@ -1122,8 +1122,8 @@ $AllowStudentsToCreateGroupsInSocialComment = "Permitir a los alumnos crear sus 
 $AllowSendMessageToAllPlatformUsersTitle = "Permitir enviar mensajes a todos los usuarios de la plataforma";
 $AllowSendMessageToAllPlatformUsersComment = "Permite poder enviar mensajes a todos los usuarios de la plataforma";
 $TabsSocial = "Pestaña Red social";
-$MessageMaxUploadFilesizeTitle = "Mensaje tamaño máximo del archivo para subir";
-$MessageMaxUploadFilesizeComment = "Mensaje del tamaño máximo del archivo permitido para subir";
+$MessageMaxUploadFilesizeTitle = "Tamaño máximo del archivo en mensajes";
+$MessageMaxUploadFilesizeComment = "Tamaño máximo del archivo permitido para adjuntar a un mensaje (en Bytes)";
 $AddAdditionalProfileField = "Añadir un campo del perfil de usuario";
 $Username = "Nombre de usuario";
 $ChamiloHomepage = "Página principal de Chamilo";

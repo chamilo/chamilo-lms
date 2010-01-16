@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
 
 /**
  *==============================================================================
@@ -32,8 +32,8 @@ $IncorrectPhpVersionTitle = 'Incorrect PHP version';
 $IncorrectPhpVersionDescription = 'Scripting language version %s1 on your server is incorrect. PHP %s2 should be supported. %s3 Read the installation guide.';
 
 // Error code 2.
-$InstallationTitle = 'Dokeos has not been installed';
-$InstallationDescription = 'Click to INSTALL Dokeos %s or read the installation guide';
+$InstallationTitle = 'Chamilo has not been installed';
+$InstallationDescription = 'Click to INSTALL Chamilo %s or read the installation guide';
 
 // Error code 3.
 // Error code 4.
@@ -109,7 +109,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			$global_error_message['section'] = $SectionInstallation;
 			$global_error_message['title'] = $InstallationTitle;
 			if (($pos = strpos($InstallationDescription, '%s')) === false) {
-				$InstallationDescription = 'Click to INSTALL Dokeos %s or read the installation guide';
+				$InstallationDescription = 'Click to INSTALL Chamilo %s or read the installation guide';
 			}
 			$click_to_install = substr($InstallationDescription, 0, $pos);
 			$read_installation_guide = substr($InstallationDescription, $pos + 2);

@@ -24,9 +24,9 @@ switch ($action) {
 		$is_western_name_order = api_is_western_name_order();
 		
 		if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
-			
-			//all users 
-			if (api_get_setting('display_all_platform_users_in_message_tool') == 'true') {
+						
+			//all users
+			if (api_get_setting('allow_send_message_to_all_platform_users') == 'true') {
 				$sql = 'SELECT DISTINCT u.user_id as id, '.($is_western_name_order ? 'concat(u.firstname," ",u.lastname," ","( ",u.email," )")' : 'concat(u.lastname," ",u.firstname," ","( ",u.email," )")').' as name
 				FROM '.$tbl_user.' u  	
 		 		WHERE u.user_id <>'.(int)$user_id.' AND '.($is_western_name_order ? 'concat(u.firstname, " ", u.lastname)' : 'concat(u.lastname, " ", u.firstname)').' like CONCAT("%","'.$search.'","%") LIMIT 15';		

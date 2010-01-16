@@ -69,7 +69,7 @@ if (api_get_setting('show_tutor_data')=='true') {
 	$id_course=api_get_course_id();
 	$id_session=api_get_session_id();
 	if (isset($id_course) && $id_course!=-1) {
-		echo '<span id="platformmanager">';
+		echo '<div id="platformmanager">';
 		if ($id_session!=0){
 			$coachs_email=CourseManager::get_email_of_tutor_to_session($id_session,$id_course);
 			$email_link = array();
@@ -89,7 +89,7 @@ if (api_get_setting('show_tutor_data')=='true') {
 				echo '';
 			} 							
 		}
-		echo '</ul></span>';
+		echo '</ul></div>';
 	}
 	echo '<br>';
 }
@@ -105,7 +105,7 @@ if (api_get_setting('show_teacher_data')=='true') {
 	// course manager
 	$id_course=api_get_course_id();
 	if (isset($id_course) && $id_course!=-1) {
-		echo '<span id="'.$class.'">';
+		echo '<div id="'.$class.'">';
 		$mail=CourseManager::get_emails_of_tutors_to_course($id_course);
 		if (!empty($mail)) {
 			if (count($mail)>1){
@@ -127,7 +127,7 @@ if (api_get_setting('show_teacher_data')=='true') {
 
 		}
 
-		echo '</span>';
+		echo '</div>';
 	}
 }
 echo '</div>';

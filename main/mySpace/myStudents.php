@@ -383,7 +383,7 @@ if (!empty ($_GET['student'])) {
 						<td>
 										<?php
 
-	echo get_lang('Tel') . ': ';
+	echo get_lang('Tel') . ' : ';
 
 	if (!empty ($info_user['phone'])) {
 		echo $info_user['phone'];

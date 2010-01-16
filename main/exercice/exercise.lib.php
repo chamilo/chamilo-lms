@@ -377,7 +377,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 			//if($answerType == 2)
 			//	$s.=' / '.$total_item;		
 			echo '<input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'">';
-			echo '<table class="exercise_questions">
+			echo '<table class="exercise_questions" >
 				  <tr>
 			  		<td valign="top" colspan="2">';
 					echo $questionDescription=api_parse_tex($questionDescription);
@@ -527,7 +527,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		</td></tr>";
 		echo $s;
 	}
-	echo "</table>";
+	echo "</table><br />";
 
 	return $nbrAnswers;
 }

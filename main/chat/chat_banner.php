@@ -32,6 +32,7 @@
 
 $language_file = array ('chat');
 include('../inc/global.inc.php');
+$this_section=SECTION_COURSES;
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 //$interbreadcrumb[] = array ("url" => "chat.php", "name" => get_lang("Chat"));

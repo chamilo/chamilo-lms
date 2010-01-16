@@ -58,7 +58,7 @@ $current_group = GroupManager :: get_group_properties($_SESSION['_gid']);
 if (!is_array($current_group) ) {
 //display some error message
 }
-
+$this_section=SECTION_COURSES;
 $nameTools = get_lang("GroupSpace");
 $interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang("Groups"));
 

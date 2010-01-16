@@ -189,7 +189,7 @@ function show_navigation_menu()
 			if (strpos($navigation_item['link'],'chat')!==false && api_get_course_setting('allow_open_chat_window',$course_id)==true) {
 				echo '<a href="javascript: void(0);" onclick="window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
 			} else {
-				echo '<a href="'.$navigation_item['link'].'" target="_self" ';
+				echo '<a href="'.$navigation_item['link'].'" target="_top" ';
 			}
 
 			if (stristr($url_item['path'],$url_current['path']))
@@ -245,7 +245,7 @@ function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL)
 		if (strpos(api_get_self(), $navigation_item['link']) !== false) {
 			echo ' id="here"';
 		}
-		echo ' target="_self" title="'.$navigation_item['name'].'">';
+		echo ' target="_top" title="'.$navigation_item['name'].'">';
 		echo '<img src="'.api_get_path(WEB_IMG_PATH).$navigation_item['image'].'" alt="'.$navigation_item['name'].'"/>';
 		echo '</a>';
 		if($orientation == SHORTCUTS_VERTICAL){

@@ -17,7 +17,7 @@
 
 /*
 ==============================================================================
-		PHP VERSION CHECK & MBSTRING EXTENSION CHECK
+		PHP VERSION CHECK
 ==============================================================================
 */
 if ( !function_exists('version_compare') || version_compare( phpversion(), '5', '<' )) {
@@ -39,7 +39,7 @@ if ( !function_exists('version_compare') || version_compare( phpversion(), '5', 
 					<div id="header1">
 					<div id="institution">
 						<a href="http://www.chamilo.org" target="_blank">Chamilo Homepage</a>
-					</div>					
+					</div>
 					</div>
 					<div class="clear"></div>
 					<div id="header2" style="height:50px;">&nbsp;</div>
@@ -288,7 +288,7 @@ if($installType=='update' && in_array($my_old_version,$update_from_version_8))
 }
 
 if(!isset($_GET['running'])) {
-	
+
 	$dbHostForm		='localhost';
 	$dbUsernameForm	='root';
 	$dbPassForm		='';
@@ -586,7 +586,7 @@ if($_POST['step2'])
 	//STEP 3 : LICENSE
 	display_license_agreement();
 } elseif($_POST['step3']) {
-	
+
 	//STEP 4 : MYSQL DATABASE SETTINGS
 	display_database_settings_form($installType, $dbHostForm, $dbUsernameForm, $dbPassForm, $dbPrefixForm, $enableTrackingForm, $singleDbForm, $dbNameForm, $dbStatsForm, $dbScormForm, $dbUserForm);
 }

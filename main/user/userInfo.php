@@ -348,7 +348,7 @@ elseif ($displayMode == "viewDefList")
 
 	echo "<center>\n",
 			"<form method=\"post\" action=\"".api_get_self()."\">",
-			"<input type=\"submit\" name=\"addDef\" value=\"".get_lang('AddNewHeading')."\" />",
+			"<input type=\"submit\" name=\"addDef\" class=\"plus\" value=\"".get_lang('AddNewHeading')."\" />",
 			"</form>\n",
 			"<center>\n";
 }
@@ -585,7 +585,7 @@ elseif ($displayMode == "viewContentList") // default display
 		echo	"<div align=right>",
 				"<form method=\"post\" action=\"".api_get_self()."\">",
 				get_lang('CourseAdministratorOnly')," : ",
-				"<input type=\"submit\" name=\"viewDefList\" value=\"".get_lang('DefineHeadings')."\" />",
+				"<input type=\"submit\" class=\"save\" name=\"viewDefList\" value=\"".get_lang('DefineHeadings')."\" />",
 				"</form>",
 				"<hr noshade size=\"1\" style=\"color:#99CCFF\">",
 				"</div>\n";

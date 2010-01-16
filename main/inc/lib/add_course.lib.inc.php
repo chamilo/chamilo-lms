@@ -1002,7 +1002,7 @@ function update_Db_course($courseDbName)
 		CREATE TABLE `".$TABLETOOLCHATCONNECTED . "` (
 		user_id int unsigned NOT NULL default '0',
 		last_connection datetime NOT NULL default '0000-00-00 00:00:00',
-		session_id smallint NOT NULL default 0,
+		session_id  INT NOT NULL default 0,
 		to_group_id INT NOT NULL default 0		
 		)";
 	Database::query($sql, __FILE__, __LINE__);

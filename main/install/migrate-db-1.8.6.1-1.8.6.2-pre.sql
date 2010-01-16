@@ -110,3 +110,6 @@ ALTER TABLE course_description ADD COLUMN description_type TINYINT NOT NULL DEFA
 ALTER TABLE dropbox_category ADD COLUMN session_id smallint NOT NULL DEFAULT 0, ADD INDEX (session_id);
 ALTER TABLE quiz ADD COLUMN random_answers TINYINT UNSIGNED NOT NULL DEFAULT 0 AFTER random;
 ALTER TABLE quiz_answer ADD COLUMN id_auto INT NOT NULL AUTO_INCREMENT, ADD UNIQUE INDEX (id_auto);
+
+ALTER TABLE chat_connected ADD COLUMN session_id INT NOT NULL default 0;
+ALTER TABLE chat_connected ADD COLUMN to_group_id INT NOT NULL default 0;

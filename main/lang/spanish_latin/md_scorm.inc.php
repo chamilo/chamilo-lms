@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "variable de idioma obsoleta";
 $langMdCallingTool = "Itinerario de Aprendizaje - SCORM";
 $langTool = "Operaciones sobre los Meta Datos (MD) SCORM ";
-$langNotInDB = "no hay entrada en la Base de Datos (BD) de Dokeos";
+$langNotInDB = "no hay entrada en la Base de Datos (BD) de Chamilo";
 $langManifestSyntax = "(error de sintáxis en el archivo Manifest...) ";
 $langEmptyManifest = "(el archivo Manifest está vacío...) ";
 $langNoManifest = "(no existe el archivo Manifest...) ";

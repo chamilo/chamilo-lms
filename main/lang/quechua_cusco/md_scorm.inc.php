@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "variable de idioma obsoleta";
 $langMdCallingTool = "Yachanakuna - SCORM";
 $langTool = "Ima ruwaykuna metadatos (MD) SCORM nisqamanta";
-$langNotInDB = "manan ima haykusqapas kanchu Dokeospa base de datos  (BD) nisqapi";
+$langNotInDB = "manan ima haykusqapas kanchu Chamilopa base de datos  (BD) nisqapi";
 $langManifestSyntax = "(manifest khipupiqa pantay kashan qelqayninpi...)";
 $langEmptyManifest = "(manifest khipuqa ch\'usaqmi kashan...)";
 $langNoManifest = "(manifest khipuqa manan kashanchu...)";

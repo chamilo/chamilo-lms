@@ -10,7 +10,7 @@ $AllPages = "Všetky strany";
 $AddNew = "Prida&#357; novú stranu";
 $ChangesStored = "Vaše zmeny boli uložené";
 $NewWikiSaved = "Nová wiki domovská stránka bola uložená. Môžete si ju zobrazi&#357; klikom na:";
-$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"P. Dokeos\" title=\"P. Dokeos\" /></p> <p align=\"center\">Pre spustenie, za&#269;nite upravova&#357; túto stránku</p>";
+$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"P. Chamilo\" title=\"P. Chamilo\" /></p> <p align=\"center\">Pre spustenie, za&#269;nite upravova&#357; túto stránku</p>";
 $CourseWikiPages = "Wiki stránky kurzu";
 $GroupWikiPages = "Wiki stránky skupiny";
 $NoWikiPageTitle = "Vaše zmeny boli uložené. Ešte musíte zada&#357; názov stránky";

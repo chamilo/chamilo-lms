@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "elavult nyelvi változó";
 $langMdCallingTool = "Tanulási program - Scorm";
 $langTool = "SCORM metaadat-m&#369;veletek";
-$langNotInDB = "nem található Dokeos adatbázis bejegyzés.";
+$langNotInDB = "nem található Chamilo adatbázis bejegyzés.";
 $langManifestSyntax = "(nyelvtani hiba a manifest fájlban)";
 $langEmptyManifest = "(üres manifest fájl)";
 $langNoManifest = "(nincs manifest fájl)";

@@ -11,7 +11,7 @@ $AllPages = "Sve stranice";
 $AddNew = "Dodaj novu stranicu";
 $ChangesStored = "Vaše promjene su ažurirane";
 $NewWikiSaved = "Nova wiki po&#269;etna stranica je spremljena. Možete ju pogledati odabirom :";
-$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"\'.api_get_path(WEB_IMG_PATH).\'wiki/wcollaborative.png\" alt=\"Gosp. Dokeos\" title=\"Gosp. Dokeos\" /></p> <p align=\"center\">Zapo&#269;nite ure&#273;ivanjem ove stranice</p>";
+$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"\'.api_get_path(WEB_IMG_PATH).\'wiki/wcollaborative.png\" alt=\"Gosp. Chamilo\" title=\"Gosp. Chamilo\" /></p> <p align=\"center\">Zapo&#269;nite ure&#273;ivanjem ove stranice</p>";
 $CourseWikiPages = "Wiki stranice kolegija";
 $GroupWikiPages = "Stranice Wiki skupine";
 $NoWikiPageTitle = "Vaše promjene su ažurirane. Morate dati naslov ovoj stranici.";

@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "nebevartojamas kalbos kintamasis";
 $langMdCallingTool = "Mokymosi medžiaga - Scorm";
 $langTool = "Scorm MD Operacijos";
-$langNotInDB = "no Dokeos DB entry";
+$langNotInDB = "no Chamilo DB entry";
 $langManifestSyntax = "(syntax error in manifest file...)";
 $langEmptyManifest = "(empty manifest file...)";
 $langNoManifest = "(no manifest file...)";

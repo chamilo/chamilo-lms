@@ -82,7 +82,6 @@ $ReminderToSubmitPendingTask = "Molimo Vas da zapamtite da pošaljete zadatak";
 $MessageConfirmSendingOfTask = "Ovo je poruka koja potvr&#273;uje dobar prijem zadatka";
 $DataSent = "Podaci poslati ";
 $DownloadLink = "Download link ";
-$ViewUsersWithoutTask = "Nedostaje zadatak";
 $ViewUsersWithTask = "Fajl ve&#263; dostavljen ";
 $ReminderMessage = "Pošalji podsetnik";
 $DateSent = "Podaci poslati ";

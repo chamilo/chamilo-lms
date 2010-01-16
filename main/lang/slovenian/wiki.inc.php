@@ -11,7 +11,7 @@ $AllPages = "Vse strani";
 $AddNew = "Dodaj novo stran";
 $ChangesStored = "Vaše spremembe so bile shranjene";
 $NewWikiSaved = "Nov vnos v Wiki je bil shranjen. Vidite ga lahko s klikom na ";
-$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"mr. Dokeos\" title=\"mr. Dokeos\" /></p> <p align=\"center\">Za zaèetek uredite to stran.....</p> ";
+$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"mr. Chamilo\" title=\"mr. Chamilo\" /></p> <p align=\"center\">Za zaèetek uredite to stran.....</p> ";
 $CourseWikiPages = "Wiki strani teèaja";
 $GroupWikiPages = "Wiki strani celotne skupine";
 $NoWikiPageTitle = "Vaše spremembe so bile shranjene. Vpišite še naslov strani";

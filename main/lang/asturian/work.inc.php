@@ -82,7 +82,6 @@ $ReminderToSubmitPendingTask = "Recuerdote que tienes una tarea pendiente";
 $MessageConfirmSendingOfTask = "Esti ye un mensax pa confirmar l\'unvíu de la to tarea";
 $DataSent = "Data d\'unvíu";
 $DownloadLink = "Enllaz de baxada";
-$ViewUsersWithoutTask = "Tovía nun presenten la tarea";
 $ViewUsersWithTask = "Ya presentaron la tarea";
 $ReminderMessage = "Unviar un recordatoriu";
 $DateSent = "Data d\'unvíu";

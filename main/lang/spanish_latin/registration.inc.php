@@ -125,8 +125,8 @@ $UsernameWrong = "Su nombre de usuario debe contener únicamente letras, números 
 $PasswordRequestFrom = "Esta es una solicitud de contraseña para la dirección de correo electrónico";
 $CorrespondsToAccount = "Esta dirección de correo electrónico corresponde a la siguiente cuenta de usuario.";
 $CorrespondsToAccounts = "Esta dirección de correo electrónico corresponde a las siguientes cuentas de usuario.";
-$AccountExternalAuthSource = "Dokeos no puede gestionar la petición automáticamente porque la cuenta tiene una fuente de autorización externa. Por favor, tome las medidas apropiadas y notifiquelas al usuario.";
-$AccountsExternalAuthSource = "Dokeos no puede gestionar automáticamente la petición porque al menos una de las cuentas tiene una fuente de autentificación externa. Por favor, tome las medidas apropiadas en todas las cuentas (incluyendo las que tienen autorización de la plataforma) y notifiquelas al usuario.";
-$RequestSentToPlatformAdmin = "Dokeos no puede gestionar automáticamente la petición para este tipo de cuenta. Su petición se ha enviado al administrador de la plataforma, que tomará las medidas apropiadas y le notificará del resultado.";
+$AccountExternalAuthSource = "Chamilo no puede gestionar la petición automáticamente porque la cuenta tiene una fuente de autorización externa. Por favor, tome las medidas apropiadas y notifiquelas al usuario.";
+$AccountsExternalAuthSource = "Chamilo no puede gestionar automáticamente la petición porque al menos una de las cuentas tiene una fuente de autentificación externa. Por favor, tome las medidas apropiadas en todas las cuentas (incluyendo las que tienen autorización de la plataforma) y notifiquelas al usuario.";
+$RequestSentToPlatformAdmin = "Chamilo no puede gestionar automáticamente la petición para este tipo de cuenta. Su petición se ha enviado al administrador de la plataforma, que tomará las medidas apropiadas y le notificará del resultado.";
 $langphone = "Teléfono";
 ?>

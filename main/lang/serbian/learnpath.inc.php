@@ -83,7 +83,7 @@ $langPrereqTestLimitNow = "Sada imate:";
 $langLearnpathExitFullScreen = "povratak na normalan ekran";
 $langLearnpathFullScreen = "full screen";
 $langItemMissing1 = "Bila je";
-$langItemMissing2 = "stranica (korak) ovde u originalnoj Dokeosovoj putanji u&#269;enja.";
+$langItemMissing2 = "stranica (korak) ovde u originalnoj Chamiloovoj putanji u&#269;enja.";
 $langDone = "Ura&#273;eno";
 $langNoItemSelected = "Da bi ovde nešto bilo prikazano, molim Vas izaberite stavku sa slajd menija";
 ?>

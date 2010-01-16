@@ -11,7 +11,7 @@ $AllPages = "Tüm sayfalar";
 $AddNew = "Yeni sayfa ekle";
 $ChangesStored = "Ayarlar&#305;n&#305;z kaydedildi";
 $NewWikiSaved = "Wiki sayfas&#305; kay&#305;t edildi. Görmek için t&#305;klay&#305;n:";
-$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Dokeos\" title=\"Mr. Dokeos\" /></p> <p align=\"center\">Bu sayfay&#305; düzenlemeye ba&#351;lay&#305;n ve bu yaz&#305;y&#305; silin.</p> ";
+$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Bu sayfay&#305; düzenlemeye ba&#351;lay&#305;n ve bu yaz&#305;y&#305; silin.</p> ";
 $CourseWikiPages = "Wiki sayfalar&#305;";
 $GroupWikiPages = "Wiki grubu sayfalar&#305;";
 $NoWikiPageTitle = "Ayarlar&#305;n&#305;z kaydedildi. Hala sayfaya bir isim verebilirsiniz.";

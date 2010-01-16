@@ -83,7 +83,7 @@ $langPrereqTestLimitNow = "ตอนนี้คุณมี Now you have : ";
 $langLearnpathExitFullScreen = "กลับหน้าจอปกติ";
 $langLearnpathFullScreen = "ขยายเต็มจอ";
 $langItemMissing1 = "There was a ";
-$langItemMissing2 = "page (step) here in the original Dokeos Learning Path.";
+$langItemMissing2 = "page (step) here in the original Chamilo Learning Path.";
 $langDone = "เรียบร้อย";
 $langNoItemSelected = "To display something here, please select an item from the side menu";
 ?>

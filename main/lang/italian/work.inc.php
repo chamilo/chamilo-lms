@@ -82,7 +82,6 @@ $ReminderToSubmitPendingTask = "Ricorda che hai un compito da completare";
 $MessageConfirmSendingOfTask = "Messaggio di conferma di assegnazione del compito";
 $DataSent = "Data d\'invio";
 $DownloadLink = "Collegamento di download";
-$ViewUsersWithoutTask = "File ancora mancante";
 $ViewUsersWithTask = "File già inviato";
 $ReminderMessage = "Manda un messaggio di richiamo";
 $DateSent = "Data d\'invio";

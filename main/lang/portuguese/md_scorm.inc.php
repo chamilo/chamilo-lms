@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "var de idioma obsoleta";
 $langMdCallingTool = "Curso";
 $langTool = "Operações Scorm MD ";
-$langNotInDB = "Não existe entrada DB Dokeos";
+$langNotInDB = "Não existe entrada DB Chamilo";
 $langManifestSyntax = "(erro de sintaxe no ficheiro manifest ...)";
 $langEmptyManifest = "(esvaziar ficheiro manifest ...)";
 $langNoManifest = "(não existe ficheiro manifest ...)";

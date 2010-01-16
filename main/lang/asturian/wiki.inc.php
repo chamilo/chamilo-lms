@@ -11,7 +11,7 @@ $AllPages = "Toles páxines";
 $AddNew = "Amestar una páxina";
 $ChangesStored = "Los sos cambios guardárense";
 $NewWikiSaved = "La entrada nueva nel wiki guardóse. Pue vela calcando en: ";
-$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Dokeos\" title=\"Mr. Dokeos\" /></p> <p align=\"center\">Pa entamar edite esta páxina y esborre esti testu.</p>";
+$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Dokeos\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Pa entamar edite esta páxina y esborre esti testu.</p>";
 $CourseWikiPages = "Páxines Wiki del cursu";
 $GroupWikiPages = "Páxines Wiki del grupu";
 $NoWikiPageTitle = "Los cambios nun se guardaren. Tien de poner un títulu a esta páxina";

@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "suspekt språk var";
 $langMdCallingTool = "Learning path - Scorm";
 $langTool = "Scorm MD Operationer";
-$langNotInDB = "ingen Dokeos DB tillträde";
+$langNotInDB = "ingen Chamilo DB tillträde";
 $langManifestSyntax = "(syntax fel i manifestfilen...)";
 $langEmptyManifest = "(tom manifestfil...)";
 $langNoManifest = "(ingen manifestfil...)";

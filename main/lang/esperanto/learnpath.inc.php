@@ -83,7 +83,7 @@ $langPrereqTestLimitNow = "Vi havas nun: ";
 $langLearnpathExitFullScreen = "reiri al normala ekrano ";
 $langLearnpathFullScreen = "plena ekrano ";
 $langItemMissing1 = "Estis ";
-$langItemMissing2 = "pa&#349;o &#265;i tie en la originala Dokeos-Lernpado ";
+$langItemMissing2 = "pa&#349;o &#265;i tie en la originala Chamilo-Lernpado ";
 $langDone = "Preta ";
 $langNoItemSelected = "Bonvolu elekti elementon el la menuo por vidigi &#265;i tie ";
 ?>

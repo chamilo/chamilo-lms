@@ -243,4 +243,5 @@ $ViewMinus = "Ver reducido";
 $ResourcesTracking = "Informe sobre recursos";
 $SelectFieldToAdd = "Seleccionar un campo del perfil de usuario";
 $AddAdditionalProfileField = "Añadir un campo del perfil de usuario";
+$ConfigureExtensions = "Configurar los servicios";
 ?>

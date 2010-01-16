@@ -462,7 +462,7 @@ $MoveUp = "Flytta uppåt";
 $MoveDown = "Flytta nedåt";
 $UplUnableToSaveFileFilteredExtension = "Filuppladdning misslyckades: Filtypen är inte tillåten";
 $OpenIDURL = "OpenID URL";
-$UplFileTooBig = "Filen du laddat upp är för stor för aktuella inställningar i Dokeos (%sMB). Kontakta portaladministratören om du vill ta upp frågan";
+$UplFileTooBig = "Filen du laddat upp är för stor för aktuella inställningar i Chamilo (%sMB). Kontakta portaladministratören om du vill ta upp frågan";
 $UplGenericError = "Filen du laddat upp mottogs inte helt. Vänligen försök senare eller kontakta portaladministratören.";
 $OpenIDWhatIs = "Vad är OpenID?";
 $OpenIDDescription = "OpenID minskar behovet av olika användarnamn på olika webbplatser. Du kan själv välja en OpenID-utgivare som du litar på och kan flytta med dig samma login till andra webbplatser. OpenID är inte bundet till någon speciell leverantör, det är en öppet och fri teknik. För företag och organisationer kan det bl a minska kostnaderna för kontohantering. För användaren ökar den egna kontrollen.<br /><br /><a href=\"http://openid.net/what/\">Läs mer...</a>";

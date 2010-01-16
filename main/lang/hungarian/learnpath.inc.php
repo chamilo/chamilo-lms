@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $NewForumCreated = "Elkészült az új fórum";
 $NewThreadCreated = "Az új fórum téma létrejött.";
 $AddHotpotatoes = "Hotpotatoes teszt hozzáadása";
-$LearnPathAddedTitle = "A Dokeos kurzusszerkeszt&#337; eszköze köszönti Önt!";
+$LearnPathAddedTitle = "A Chamilo kurzusszerkeszt&#337; eszköze köszönti Önt!";
 $BuildComment  = "Tanulási objektumok és tevékenységek hozzáadása a kurzusához";
 $BasicOverviewComment = "Hangos megjegyzések és tanulási objektumok hozzáf&#369;zése a tartalomjegyzékhez";
 $NewChapterComment = "1. Fejezet, 2. Fejezet vagy 1. hét, 2. hét...";
@@ -156,7 +156,7 @@ $langNoItemsInLp = "A tanulási útvonalban jelenleg nincsenek elemek. Kattintson 
 $FirstPosition = "Els&#337; oldal";
 $NewQuiz = "Új kvíz";
 $CreateTheForum = "Fórum hozzáadása";
-$AddLpIntro = "<strong>Üdvözli Önt</strong> a Dokeos Tanulási Útvonal szerkeszt&#337;. <br />lépésr&#337;l lépésre létrehozhatja tanulási útvonalát, amelynek struktúrája a bal oldali menüben látható.";
+$AddLpIntro = "<strong>Üdvözli Önt</strong> a Chamilo Tanulási Útvonal szerkeszt&#337;. <br />lépésr&#337;l lépésre létrehozhatja tanulási útvonalát, amelynek struktúrája a bal oldali menüben látható.";
 $AddLpToStart = "Kezdésként nevezze el a tanulási útvonalát.";
 $CreateTheLink = "Hivatkozás importálása";
 $MoveCurrentLink = "Az aktuális hivatkozás áthelyezése";

@@ -126,7 +126,7 @@ $UsernameWrong = "Nama user hanya dapat berisi huruf angka dan _.-";
 $PasswordRequestFrom = "Ini adalah permohonan password untuk alamat email";
 $CorrespondsToAccount = "Alamat email ini berhubungan dengan user berikut ini.";
 $CorrespondsToAccounts = "Email berikut ini berhubungan dengan account user berikut.";
-$AccountExternalAuthSource = "Dokeos tidak dapat menangani permohonan secara automatis karena account tersebut memilikia autorisasi external.  Silahkan gunakan penyelesaian yang cocok dan beritahu user.";
-$AccountsExternalAuthSource = "Dokeos tidak dapat menangani permohonan secara automatis karena setidaknya ada satu account yang berhubungan dengan autorisasi external.  Silahkan lakukan tindakan yang cocok untuk semua account (termasuk juga yang berhubungan dengan autorisasi platform) dan beritahu user. ";
-$RequestSentToPlatformAdmin = "Dokeos tidak dapat menangani permohonan secara automatis untuk account jenis ini.  Permohonan anda telah dikirim ke administrator platform, yang akan menangani masalah ini dan memberi tahu hasilnya.";
+$AccountExternalAuthSource = "Chamilo tidak dapat menangani permohonan secara automatis karena account tersebut memilikia autorisasi external.  Silahkan gunakan penyelesaian yang cocok dan beritahu user.";
+$AccountsExternalAuthSource = "Chamilo tidak dapat menangani permohonan secara automatis karena setidaknya ada satu account yang berhubungan dengan autorisasi external.  Silahkan lakukan tindakan yang cocok untuk semua account (termasuk juga yang berhubungan dengan autorisasi platform) dan beritahu user. ";
+$RequestSentToPlatformAdmin = "Chamilo tidak dapat menangani permohonan secara automatis untuk account jenis ini.  Permohonan anda telah dikirim ke administrator platform, yang akan menangani masalah ini dan memberi tahu hasilnya.";
 ?>

@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "verouderde taalvariabele";
 $langMdCallingTool = "Leerpad &ndash; SCORM";
 $langTool = "SCORM-MD-bewerkingen";
-$langNotInDB = "geen ingave in de Dokeosdatabank";
+$langNotInDB = "geen ingave in de Chamilodatabank";
 $langManifestSyntax = "(syntaxfout in manifestbestand&hellip;)";
 $langEmptyManifest = "(leeg manifestbestand&hellip;)";
 $langNoManifest = "(geenmanifest bestand&hellip;)";

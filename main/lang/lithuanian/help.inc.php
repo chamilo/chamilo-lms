@@ -5,12 +5,12 @@ $langHFor = "Help Forums";
 $langForContent = "The forum is a written and asynchronous discussion tool.
  Where email allows one-to-one dialogue, forums allow public or semi-public (group) 
  dialogue.</p><p>Technically speaking, the users need only their
- browser to use Dokeos forums.</P><p>To organise forums, click on
+ browser to use Chamilo forums.</P><p>To organise forums, click on
  \\\'Forum Administration\\\'. Discussions are organised in sets and subsets as
  following:</p><p><b>Category > Forum > Topic > Answers</b></p>To structure
  your users discussions, it is necessary to organise categories and
  forums beforehand, leaving the creation of topics and answers to them. By
- default, the Dokeos forum only contains the category \\\'Public\\\', a sample
+ default, the Chamilo forum only contains the category \\\'Public\\\', a sample
  forum and a sample topic.</p><p>The first thing you should do is deleting
  the sample topic and modify the first forum name. Then, you can
  create, in the \\\'public\\\' category, other forums, by by themes, to
@@ -132,7 +132,7 @@ configure Shoutcast Winamp DSP Plug-In. <br>
 How to give a conference?<br>
       <br>
       </span>
-      <div style=\\\"margin-left: 40px;\\\">Create a Dokeos course > Enter
+      <div style=\\\"margin-left: 40px;\\\">Create a Chamilo course > Enter
 it > Show then enter Conference
 tool > Edit (pencil icon on top left) the settings > upload your
 slides (PDF, PowerPoint or whatever) > type an introduction text
@@ -161,9 +161,9 @@ give you the URL you need
 to type in the live streaming form field once you edit your conference
 settings.<br>
       <br>
-      <small><a href=\\\"http://www.dokeos.com/hosting.php#streaming\\\"><img
+      <small><a href=\\\"http://www.chamilo.org/hosting.php#streaming\\\"><img
  style=\\\"border: 0px solid ; width: 258px; height: 103px;\\\"
- alt=\\\"dokeos streaming\\\" src=\\\"../img/streaming.jpg\\\"><br>
+ alt=\\\"chamilo streaming\\\" src=\\\"../img/streaming.jpg\\\"><br>
 dokeos streaming</a></small><br>
       <br>
 Do it yourself : install, configure and admin <a
@@ -171,12 +171,12 @@ Do it yourself : install, configure and admin <a
  href=\\\"http://developer.apple.com/darwin/projects/streaming/\\\">Apple
 Darwin</a>. <br>
       <br>
-Or contact Dokeos. We can help you organise your conference, asssist
+Or contact Chamilo. We can help you organise your conference, asssist
 your lecturer and rent you a low cost streaming slot on our servers : <a
- href=\\\"http://www.dokeos.com/hosting.php#streaming\\\">http://www.dokeos.com/hosting.php</a><br>
+ href=\\\"http://www.chamilo.org/hosting.php#streaming\\\">http://www.chamilo.org/hosting.php</a><br>
       <br>
       <br>";
-$langHClar = "Dokeos Help";
+$langHClar = "Chamilo Help";
 $langHDoc = "Help Documents";
 $langDocContent = "<p>The Documents tool is similar to the FileManager of
  your desktop computer.</p><p>You can create simple web pages (\\\'Create a document\\\') or upload files of any type (HTML, Word,
@@ -191,9 +191,9 @@ $langDocContent = "<p>The Documents tool is similar to the FileManager of
  03... Or use the Learning Path to present a sophisticated Table of Contents. Note that once your documents are uploaded, you may decide to hide the documents area and show only one page on Home page (Add link on home page orange tool) or a Learning Path containing some documents from your Documents area.</p>
 <p>You can :</p>
 <H4>Create a document</H4>
-<p>Select Create a document > Give it a title (no spaces, no accents) > type your text > Use the buttons of the Wysiwyg (What You See Is What You Get) editor to structure information, create tables, styles etc. To create web pages, you will need to get familiar with 3 concepts : Links, Images and Tables. Note that web pages offer less layout possibilities than Ms-Word pages. Note too that instead of creating a document in the editor, you can also cut and paste existing content from a web page or a Word document. This is an easy and quick way to migrate content onto your Dokeos course.
+<p>Select Create a document > Give it a title (no spaces, no accents) > type your text > Use the buttons of the Wysiwyg (What You See Is What You Get) editor to structure information, create tables, styles etc. To create web pages, you will need to get familiar with 3 concepts : Links, Images and Tables. Note that web pages offer less layout possibilities than Ms-Word pages. Note too that instead of creating a document in the editor, you can also cut and paste existing content from a web page or a Word document. This is an easy and quick way to migrate content onto your Chamilo course.
 </p>
-<ul><li><b>To add a link</b>, you need to copy the URL of the target somewhere. We suggest that you open 2 browser windows simultaneously, one with your dokeos course and the other to browse the web. Once you find the page you are looking for (note that this page can be inside your dokeos course), copy its URL (CTRL+C or APPLE+C), go back to your page editor, select the word that will be the link, click on the small chain icon, paste the URL of your target there and validate. Once your page is saved, test the link to see if it opens the target. Note that you can decide in the Link popup menu if the link will create a new page or replace your dokeos page in the same window.</li>
+<ul><li><b>To add a link</b>, you need to copy the URL of the target somewhere. We suggest that you open 2 browser windows simultaneously, one with your chamilo course and the other to browse the web. Once you find the page you are looking for (note that this page can be inside your chamilo course), copy its URL (CTRL+C or APPLE+C), go back to your page editor, select the word that will be the link, click on the small chain icon, paste the URL of your target there and validate. Once your page is saved, test the link to see if it opens the target. Note that you can decide in the Link popup menu if the link will create a new page or replace your chamilo page in the same window.</li>
 <li><b>To add an image</b>, the principle is similar to the link feature : browse the web with a 2nd window, find the image (if the image is inside your course\\\'s documents area, select \\\'No frames\\\' to get the image only and not the context), copy its URL (CTRL+C or APPLE+C in the URL bar after selecting the whole URL) then go back to your web page editor, position your mouse in the form where you want your image to appear, then click on the small tree icon and copy the URL of the target image into the URL field, Preview and validate. Note that in web pages, you can not redimension your images like in a PowerPoint presentation, neither can you re-locate the image anywhere in the page.</li>
 <li><b>To add a table</b>, position your mouse in the field where you want the table to appear, then select the table icon in the Wysiwyg editor menu, decide for a number of columns and lines and validate. To get nice tables, we suggest that you choose the following values : border=1, cellspacing=0, cellpadding=4. Note that you will not be allowed to redimension your table or add lines or columns to it after its creation (sorry about this, it is just an online editor, not a word processor yet).</li>
 </ul>
@@ -445,7 +445,7 @@ Orphan questions are questions that don not belong to any test.</p>
 Adding a question
 <hr>
 <b>HotPotatoes Tests</b>
-<p>You can import HotPotatoes tests into Dokeos portal, to this Tests tool. Results of these tests are stored the same way as Dokeos tests. You can explore the results in User Tracking. In case of single tests, we recommend to use html or htm format, if your test contains pictures, a zip file upload is the most convenient way.</p>
+<p>You can import HotPotatoes tests into Chamilo portal, to this Tests tool. Results of these tests are stored the same way as Chamilo tests. You can explore the results in User Tracking. In case of single tests, we recommend to use html or htm format, if your test contains pictures, a zip file upload is the most convenient way.</p>
 <p>Note : You can add HotPotatoes Tests as a step in the Learning Path, as well.</p>
 <b>Method of the import</b>
 <ul>
@@ -486,7 +486,7 @@ visible, it will appear as a new tool on the homepage of the course. This
 way their access is easier.</p>
 <p>
 <b>What are the steps for these paths ? (What are the items that can be added?)</b></p>
-<p>All Dokeos tools, activities and contents that you consider to be useful and connected to your
+<p>All Chamilo tools, activities and contents that you consider to be useful and connected to your
 imagined path can be added :<br><ul>
 <li>Agenda items</li>
 <li>Separate documents (texts, pictures, Office docs, ...)</li>
@@ -500,7 +500,7 @@ imagined path can be added :<br><ul>
 <br>(note : those invisible tests, that you put in a path, become visible for students, but only in the Path tool)</li>
 <li>Assignments page</li>
 <li>Dropbox page</li>
-<li>External links, which point out of Dokeos system</li></ul>
+<li>External links, which point out of Chamilo system</li></ul>
 </p>
 <p><b>
 Other features of Learning Path</b>
@@ -546,7 +546,7 @@ time did John spent in chapter 1?\\\").</li>
 </ul>
 <b>How to create a SCORM compliant learning path?</b><br>
 <br>
-The most natural way is to use the Dokeos Learning Path Builder. However, you may want to create complete Scorm compliant websites locally on your own computer before uploading it onto your dokeos platform. In this case, we recommend the use of a sophisticated tool like Lectora� or Reload�
+The most natural way is to use the Chamilo Learning Path Builder. However, you may want to create complete Scorm compliant websites locally on your own computer before uploading it onto your chamilo platform. In this case, we recommend the use of a sophisticated tool like Lectora� or Reload�
 <br></p><p>
 <b>Useful links</b><br>
 <ul>
@@ -586,7 +586,7 @@ In the top banner you see <ul><li>\"<b>My e-portfolio</b>\": use this to modify 
 <b>Edit my course list</b>, in the right hand menu, allows you to enroll in new courses as far as the tacher or the organisation has left these courses open to enrollment. This link lets you unregister from courses too.
 </p>
 <p>
-The links <b>Support Forum</b> and <b>Documentation</b> that point to the main Dokeos website, where you can ask technical or pedagogical questions, find more information.</li>
+The links <b>Support Forum</b> and <b>Documentation</b> that point to the main Chamilo website, where you can ask technical or pedagogical questions, find more information.</li>
 To enter a course (main area of your startpage), click on its name. Your profile can vary from one course to the other. It is possible that you are teacher in one course and student in another. 
 </p>";
 $langHAgenda = "Help Agenda";
@@ -617,10 +617,10 @@ $langSettingsContent = "<p>Course settings allows you to manage the global param
 <p>The options situated in the middle of the page deal with confidentiality settings : is the course public or private? Can students register to it? You can use these settigs dynamically : open registration during one week > ask your students to register > close access to registration > remove possible intruders through the Users list. This way you keep control of who is in byt you don\\\'t have the administrative hassle of registrating them yourself.</p>
 <p>At the bottom of the page, you can Backup the course and delete it. Backup will create a file on the server and allow you to copy it on your own Hard Disk locally. So that there will be 2 backups of it in different places. If you backup a course then delete it. You will not be allowed to restore it yourself but the system administrator can do this for you if you give him/her the code of your course. Backuping a course is also a good way to get all your documents back onto your own computer. You will need a tool, like Winzip� to UNZIP the archive. Note that backuping a course does not remove it in any way.</p>";
 $langHExternal = "Help Add a Link";
-$langExternalContent = "<p>Dokeos is a modular tool. You can hide and show tools whenever you want, according to your project or to its different chronological phases. But you can also add on your home page tools or pages that you have created yourself or that come from the outside of your Dokeos portal. This way, you will make of your course home page YOUR page.</p>
+$langExternalContent = "<p>Dokeos is a modular tool. You can hide and show tools whenever you want, according to your project or to its different chronological phases. But you can also add on your home page tools or pages that you have created yourself or that come from the outside of your Chamilo portal. This way, you will make of your course home page YOUR page.</p>
 <p>To take possession of your page that way, you will Add links on it. These links can be of 2 types:
-<ul><li><b>External link</b>: you create on your home page a link to a website situated outside your course area. In this case, you will select Target= In a new window because you don\\\'t want that website to replace your Dokeos environment.</li>
-<li><b>Internal link</b>: you link towards a page or a tool inside your Dokeos course. To do this, you go first to that page or document or tool, you copy its URL from the URL bar of your browser (CTRL+C), then you go to Add a link and you paste this URL in the URL field and you give it the name you want. In this case, you will select Target=Same window because you will keep the Dokeos banner on top and the remain in the same environment.</li></ul>
+<ul><li><b>External link</b>: you create on your home page a link to a website situated outside your course area. In this case, you will select Target= In a new window because you don\\\'t want that website to replace your Chamilo environment.</li>
+<li><b>Internal link</b>: you link towards a page or a tool inside your Chamilo course. To do this, you go first to that page or document or tool, you copy its URL from the URL bar of your browser (CTRL+C), then you go to Add a link and you paste this URL in the URL field and you give it the name you want. In this case, you will select Target=Same window because you will keep the Chamilo banner on top and the remain in the same environment.</li></ul>
 Once created, these links cannot be edited. To modify them, the only solution is to deactivate them then delete them, then restart from zero.</p>";
 $langClarContent3 = "Clear content";
 $langClarContent4 = "Clear content";

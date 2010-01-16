@@ -225,17 +225,18 @@ if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['in
 			$home_top_temp = file($home_old.'home_top.html');
 		}
 		$home_top_temp = implode('', $home_top_temp);
-		$open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
-		echo $open;
 	} else {
 		if (file_exists($home.'home_top_'.$user_selected_language.'.html')) {
 			$home_top_temp = file_get_contents($home.'home_top_'.$user_selected_language.'.html');
 		} else {
 			$home_top_temp = file_get_contents($home.'home_top.html');
 		}
-		$open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
-		echo $open;
 	}
+	if(trim($home_top_temp)=='') { 
+		$home_top_temp = get_lang('PortalHomepageDefaultIntroduction'); 
+	}
+    $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
+    echo $open;
 }
 
 // Display System announcements

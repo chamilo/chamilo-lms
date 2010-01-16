@@ -61,7 +61,7 @@ INSERT INTO user_field (field_type, field_variable, field_display_text, field_vi
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_tabs', 'social', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsSocial', 0);
 
-UPDATE TABLE settings_current SET selected_value = '1.8.6.2.9070' WHERE variable = 'dokeos_database_version';
+UPDATE settings_current SET selected_value = '1.8.6.2.9879' WHERE variable = 'dokeos_database_version';
 
 INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','SpecialCourse', 'Yes', 1 , 1);
 
@@ -82,6 +82,35 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_send
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('message_max_upload_filesize', NULL, 'textfield', 'Tools', '20971520', 'MessageMaxUploadFilesizeTitle','MessageMaxUploadFilesizeComment',NULL,NULL, 0);
 
 ALTER TABLE message ADD COLUMN update_date DATETIME  NOT NULL DEFAULT '0000-00-00 00:00:00'; 
+
+UPDATE settings_current SET category = 'Languages' WHERE variable = 'hide_dltt_markup';
+UPDATE settings_current SET category = 'Languages' WHERE variable = 'platform_charset';
+UPDATE settings_current SET category = 'Languages' WHERE variable = 'allow_use_sub_language';
+
+UPDATE settings_current SET category = 'Editor' WHERE variable = 'wcag_anysurfer_public_pages';
+UPDATE settings_current SET category = 'Editor' WHERE variable = 'advanced_filemanager';
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('math_mimetex',NULL,'radio','Editor','false','MathMimetexTitle','MathMimetexComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('math_mimetex', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('math_mimetex', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('math_asciimathML',NULL,'radio','Editor','false','MathASCIImathMLTitle','MathASCIImathMLComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('math_asciimathML', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('math_asciimathML', 'false', 'No');
+
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('youtube_for_students',NULL,'radio','Editor','true','YoutubeForStudentsTitle','YoutubeForStudentsComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('youtube_for_students', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('youtube_for_students', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('block_copy_paste_for_students',NULL,'radio','Editor','false','BlockCopyPasteForStudentsTitle','BlockCopyPasteForStudentsComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('block_copy_paste_for_students', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('block_copy_paste_for_students', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('more_buttons_maximized_mode',NULL,'radio','Editor','false','MoreButtonsForMaximizedModeTitle','MoreButtonsForMaximizedModeComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('more_buttons_maximized_mode', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('more_buttons_maximized_mode', 'false', 'No');
+
 
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
@@ -110,3 +139,6 @@ ALTER TABLE course_description ADD COLUMN description_type TINYINT NOT NULL DEFA
 ALTER TABLE dropbox_category ADD COLUMN session_id smallint NOT NULL DEFAULT 0, ADD INDEX (session_id);
 ALTER TABLE quiz ADD COLUMN random_answers TINYINT UNSIGNED NOT NULL DEFAULT 0 AFTER random;
 ALTER TABLE quiz_answer ADD COLUMN id_auto INT NOT NULL AUTO_INCREMENT, ADD UNIQUE INDEX (id_auto);
+
+ALTER TABLE chat_connected ADD COLUMN session_id INT NOT NULL default 0;
+ALTER TABLE chat_connected ADD COLUMN to_group_id INT NOT NULL default 0;

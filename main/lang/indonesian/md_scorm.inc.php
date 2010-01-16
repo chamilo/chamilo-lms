@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "variable bahasa usang";
 $langMdCallingTool = "Learning path - Scorm";
 $langTool = "Operasi MD Scorm";
-$langNotInDB = "Tidak ada entry Database Dokeos";
+$langNotInDB = "Tidak ada entry Database Chamilo";
 $langManifestSyntax = "(syntax error dalam manifest file ...)";
 $langEmptyManifest = "(manifest file kosong ...)";
 $langNoManifest = "(Tidak ada manifest file ...)";

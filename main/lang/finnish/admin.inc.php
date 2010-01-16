@@ -39,5 +39,5 @@ $langAddACategory = "Lisää kategoria";
 $ServerStatusTitle = "Palvelin tyyppi";
 $Languages = "Kielet";
 $ClassDeleted = "Luokka on poistettu";
-$DokeosForum  = "Dokeos Foorumi";
+$DokeosForum  = "Chamilo Foorumi";
 ?>

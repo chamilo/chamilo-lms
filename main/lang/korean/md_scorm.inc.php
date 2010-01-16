@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "&#50424;&#47784;&#50630;&#45716; &#50616;&#50612; &#48320;&#49688;";
 $langMdCallingTool = "Learning path - Scorm";
 $langTool = "Scorm MD Operations";
-$langNotInDB = "Dokeos DB &#50644;&#53944;&#47532;&#44032; &#50630;&#49845;&#45768;&#45796;";
+$langNotInDB = "Chamilo DB &#50644;&#53944;&#47532;&#44032; &#50630;&#49845;&#45768;&#45796;";
 $langManifestSyntax = "(syntax error in manifest file...)";
 $langEmptyManifest = "(empty manifest file...)";
 $langNoManifest = "(no manifest file...)";

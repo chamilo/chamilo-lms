@@ -126,8 +126,8 @@ $UsernameWrong = "你的用户名只可用字母, 数字和_.- ";
 $PasswordRequestFrom = "这是该电邮的密码索取请求";
 $CorrespondsToAccount = "此电邮地址与下列用户一致.";
 $CorrespondsToAccounts = "此电邮地址与下列用户一致.";
-$AccountExternalAuthSource = "Dokeos无法自动处理这类请求, 因为本帐户有外界确认源. 请采取适当措施, 并通知用户.";
-$AccountsExternalAuthSource = "Dokeos无法自动处理这类请求, 因为最少其中一个帐户有外界确认源. 请对所有帐户 (包括有平台认证者) 采取适当措施, 并通知用户.";
-$RequestSentToPlatformAdmin = "Dokeos无法自动处理这类帐户的请求. 您的请求已经被送到平台管理员, 他将采取适当的措施, 并将结果通知您.";
+$AccountExternalAuthSource = "Chamilo无法自动处理这类请求, 因为本帐户有外界确认源. 请采取适当措施, 并通知用户.";
+$AccountsExternalAuthSource = "Chamilo无法自动处理这类请求, 因为最少其中一个帐户有外界确认源. 请对所有帐户 (包括有平台认证者) 采取适当措施, 并通知用户.";
+$RequestSentToPlatformAdmin = "Chamilo无法自动处理这类帐户的请求. 您的请求已经被送到平台管理员, 他将采取适当的措施, 并将结果通知您.";
 $langphone = "&#30005;&#35805;";
 ?>

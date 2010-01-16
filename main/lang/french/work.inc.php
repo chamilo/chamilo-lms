@@ -82,7 +82,6 @@ $ReminderToSubmitPendingTask = "Nous vous rappelons que vous devez soumettre une
 $MessageConfirmSendingOfTask = "Ceci est un message de confirmation de bonne récpetion de la tâche";
 $DataSent = "Données envoyées";
 $DownloadLink = "Lien de téléchargement";
-$ViewUsersWithoutTask = "Travaux manquants";
 $ViewUsersWithTask = "Travaux déjà remis";
 $ReminderMessage = "Envoyer un rappel";
 $DateSent = "Date de réception";

@@ -11,7 +11,7 @@ $AllPages = "Toutes les pages";
 $AddNew = "Ajouter une nouvelle page";
 $ChangesStored = "Vos modifications ont été sauvegardées";
 $NewWikiSaved = "La nouvelle page d\'accueil du wiki a été enregistrée. Vous pouvez la voir en cliquant sur: ";
-$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Dokeos\" title=\"Mr. Dokeos\" /></p> <p align=\"center\">Pour démarrer, commencez par modifier cette page</p>";
+$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Pour démarrer, commencez par modifier cette page</p>";
 $CourseWikiPages = "Page de cours du wiki";
 $GroupWikiPages = "Page de groupe du wiki";
 $NoWikiPageTitle = "Vos modifications ont été sauvegardées. Vous devez à présent donner un titre à cette page";

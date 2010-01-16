@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langMdCallingTool = "U&#269;ebná osnova - Scorm";
-$langNotInDB = "žiadny záznam Dokeos DB";
+$langNotInDB = "žiadny záznam Chamilo DB";
 $langNotFolder = "nie je to možné, nie je to prie&#269;inok...";
 $langUploadHtt = "Na&#269;íta&#357; HTT súbor";
 $langHttFileNotFound = "Nový HTT súbor sa nedá otvori&#357; (napr. je prázdny, ve&#318;mi ve&#318;ký)";

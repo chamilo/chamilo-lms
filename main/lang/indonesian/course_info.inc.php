@@ -93,6 +93,6 @@ $AllowUserEditAnnouncementDeactivate = "Non-aktifkan edisi oleh user";
 $OrInTime = "Atau pada";
 $CourseRegistrationPassword = "Password pendaftaran mata kuliah";
 $langDescriptionDeleteCourse = "Klik pada link ini untuk membuang jejak/trace dari mata kuliah di server. <br><br>Fungsi ini harus dilakukan dengan ekstra hati-hati!";
-$langDescriptionCopyCourse = "Dokeos mengenalkan kemungkinan penduplikasian sebagian atau keseluruhan mata kuliah yang ada ke mata kuliah lain, yang pada awalnya dapat saja kosong. <br><br> Syaratnya hanyalah adanya suatu mata kuliah berisi beberapa dokumen, iklan, forum ... dan pada mata kuliah ke-2 tidak berisi elemen-elemen tersebut pada mata kuliah ke-1!";
+$langDescriptionCopyCourse = "Chamilo mengenalkan kemungkinan penduplikasian sebagian atau keseluruhan mata kuliah yang ada ke mata kuliah lain, yang pada awalnya dapat saja kosong. <br><br> Syaratnya hanyalah adanya suatu mata kuliah berisi beberapa dokumen, iklan, forum ... dan pada mata kuliah ke-2 tidak berisi elemen-elemen tersebut pada mata kuliah ke-1!";
 $DescriptionRecycleCourse = "Tool ini mengosongkan elemen-elemen yang terseleksi pada mata kuliah.  Tool ini dapa t membuang dokumen, forum, link ... Prosedur ini dapat dilakukan misalnya pada akhir tahun ajaran.  Tentunya sebelum melakukan \"daur-ulang\", anda mesti membackup selengkapnya mata kuliah anda!";
 ?>

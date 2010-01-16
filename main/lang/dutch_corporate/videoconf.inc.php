@@ -3,7 +3,7 @@ for more information: see languages.txt in the lang folder.
 */
 $RecordingOnlyForTeachers = "Opnemen is enkel toegelaten voor lesgevers. ";
 $StartConference = "Start conferentie.";
-$OrganisationSVideoconference = "Dokeos VideoConferentie";
+$OrganisationSVideoconference = "Chamilo VideoConferentie";
 $ImportPresentation = "Importeer presentatie";
 $RefreshList = "Ververs de lijst";
 $GoToTop = "Ga naar boven";

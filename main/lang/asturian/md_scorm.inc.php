@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "variable d\'idioma caduca";
 $langMdCallingTool = "Itineratiu d\'aprendizaxe - SCORM";
 $langTool = "Operaciones colos metadatos (MD) SCORM";
-$langNotInDB = "nun hai entrada na base de datos (BD) de Dokeos";
+$langNotInDB = "nun hai entrada na base de datos (BD) de Chamilo";
 $langManifestSyntax = "erru sintaúticu nel archivu manifest...)";
 $langEmptyManifest = "(l\'archivu manifest ta vacíu...)";
 $langNoManifest = "(nun esiste l\'archivu manifest...)";

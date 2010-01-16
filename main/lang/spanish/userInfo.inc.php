@@ -192,4 +192,5 @@ $AddNormalUser = "Agregar como un usuario normal";
 $AddModerator = "Agregar como moderador";
 $DenyEntry = "Denegar la entrada";
 $YouNeedToHaveFriendsInYourSocialNetwork = "Necesita tener amigos en su red social";
+$SeeAllMyGroups = "Ver todos mis grupos";
 ?>

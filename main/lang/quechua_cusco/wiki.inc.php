@@ -11,7 +11,7 @@ $AllPages = "Llipin raphikuna";
 $AddNew = "Yapay hoq raphita";
 $ChangesStored = "Hoqkuna yapasqaykiqa allchasqaña";
 $NewWikiSaved = "Musuq Wiki haykuchisqaqa allchasqañan. Kunanqa qhawariwaq kaypi q\'apispa:";
-$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Dokeos\" title=\"Wiraqocha Dokeos\" /></p> <p align=\"center\">Qallarinapaqqa ruwapay kay raphita hinallataq pichay kay qelqata</p> ";
+$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Wiraqocha Chamilo\" /></p> <p align=\"center\">Qallarinapaqqa ruwapay kay raphita hinallataq pichay kay qelqata</p> ";
 $CourseWikiPages = "Yachachinaq Wiki raphinkuna";
 $GroupWikiPages = "Huñusqaq Wiki raphinkuna";
 $NoWikiPageTitle = "T\'ijrapaykunaqa manan allchakunkuchu. Sutinchay kay raphita";

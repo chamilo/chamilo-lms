@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "variabila limbii invehita";
 $langMdCallingTool = "Calea de invatare - Scrom";
 $langTool = "Operatiile Scorm MD";
-$langNotInDB = "nici o intrare a bazei de date Dokeos";
+$langNotInDB = "nici o intrare a bazei de date Chamilo";
 $langManifestSyntax = "(eroare de sintaxa in fisierul manifest...)";
 $langEmptyManifest = "(fisier manifest gol...)";
 $langNoManifest = "(nici un fisier manifest...)";

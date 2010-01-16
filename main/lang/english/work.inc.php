@@ -82,7 +82,6 @@ $ReminderToSubmitPendingTask = "Please remember you still have to send an assign
 $MessageConfirmSendingOfTask = "This is a message confirming the good reception of the task";
 $DataSent = "Data sent";
 $DownloadLink = "Download link";
-$ViewUsersWithoutTask = "Missing assignments";
 $ViewUsersWithTask = "Assignments received";
 $ReminderMessage = "Send a reminder";
 $DateSent = "Date sent";

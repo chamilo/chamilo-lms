@@ -93,6 +93,6 @@ $AllowUserEditAnnouncementDeactivate = "Mal&#349;alti &#349;an&#285;on far uzant
 $OrInTime = "A&#365; en ";
 $CourseRegistrationPassword = "Pasvorto de registri&#285;o por kurso";
 $langDescriptionDeleteCourse = "Musklaku sur &#265;i tiun ligon por forigi &#265;iujn postresta&#309;ojn de la kurso en la servilo.<br><br> Estu tre singarda uzante tiun funkcion!";
-$langDescriptionCopyCourse = "Dokeos nun anka&#365; ofertas la eblon kopii perte a&#365; entute ekzistantan kurson al alia kurso, kiu komence povas esti malplena..<br><br>La nura kondi&#265;o estas, ke vi disponas kurson kun nombro da dokumentoj, anoncoj, forumoj... kaj duan kurson enhavantan dokumentojn diferencaj de la unua!";
+$langDescriptionCopyCourse = "Chamilo nun anka&#365; ofertas la eblon kopii perte a&#365; entute ekzistantan kurson al alia kurso, kiu komence povas esti malplena..<br><br>La nura kondi&#265;o estas, ke vi disponas kurson kun nombro da dokumentoj, anoncoj, forumoj... kaj duan kurson enhavantan dokumentojn diferencaj de la unua!";
 $DescriptionRecycleCourse = "&#264;i tiu funkcio forigas el la kurso la elektitajn erojn, a&#365; &#265;iujn erojn. Dokumentoj, forumoj, ligoj... estas forigotaj. &#264;i tiu proceduro povas esti uzata &#265;e la fino de la edukado, a&#365; post la fino de la akademia jaro. Atentu: anta&#365; ol fari tion, vi prefere unue faru resta&#365;rkopion de via kurso!";
 ?>

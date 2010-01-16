@@ -786,4 +786,6 @@ $ChamiloInstallation = "Chamilo installation";
 $ThereAreNotExtrafieldsAvailable = "There are not extra fields available";
 $StartToType = "Start to type, then click on this bar to validate tag";
 $StartToType = "Start to type, then click on this bar to validate tag";
+$InstallChamilo = "Install Chamilo";
+$ChamiloURL = "Chamilo URL";
 ?>

@@ -259,6 +259,192 @@ function get_personal_course_list($user_id) {
 	return $personal_course_list;
 }
 
+/**
+ *  display especial courses
+ *  @param int User id
+ *  @return void
+ */
+function display_especial_courses ($user_id) {
+
+		$user_id = intval($user_id);
+		$special_course_list = array();
+
+		$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+		$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+		$tbl_course_field 			= Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
+		$tbl_course_field_value		= Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+		$tbl_user_course_category   = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+	
+		// get course list auto-register
+		$sql = "SELECT course_code FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf ON " .
+				" tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";	
+								
+		$special_course_result = Database::query($sql, __FILE__, __LINE__);					
+		if(Database::num_rows($special_course_result)>0) {
+			$special_course_list = array();
+			while ($result_row = Database::fetch_array($special_course_result)) {
+				$special_course_list[] = '"'.$result_row['course_code'].'"';
+			}
+		}
+		$with_special_courses = $without_special_courses = '';
+		if (!empty($special_course_list)) {
+			$with_special_courses = ' course.code IN ('.implode(',',$special_course_list).')';			
+		}
+
+		if (!empty($with_special_courses)) {
+			$sql = "SELECT course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
+						   course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status 
+												FROM    ".$tbl_course_user." course_rel_user
+												LEFT JOIN ".$tbl_course." course
+												ON course.code = course_rel_user.course_code
+												LEFT JOIN ".$tbl_user_course_category." user_course_category
+												ON course_rel_user.user_course_cat = user_course_category.id
+												WHERE  $with_special_courses 
+												GROUP BY course.code 
+												ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";																																		
+			$rs_special_course = api_sql_query($sql, __FILE__, __LINE__);				
+			$number_of_courses = Database::num_rows($rs_special_course);
+			$key = 0;
+			$status_icon = '';
+			if ($number_of_courses > 0) {
+				echo "<table width=\"100%\">";
+				while ($course = Database::fetch_array($rs_special_course)) {
+					
+					if ($course['status'] == 1) {
+						$status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'),array('style'=>'width:11px; height:11px;'));
+					}
+					if (($course['status'] == 5 && !api_is_coach()) || empty($course['status'])) {
+						$status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('students.gif', get_lang('Status').': '.get_lang('Student'),array('style'=>'width:11px; height:11px'));
+					}
+					echo "\t<tr>\n";
+					echo "\t\t<td>\n";
+					$course_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session=0">'.$course['title'].'</a>';
+					echo "<div style=\"float:left;margin-right:10px;\">".$status_icon."</div><span style=\"font-size:135%;\">".$course_title."</span><br />";					
+					if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+						echo $course['visual_code'];
+					}
+					if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
+						echo " - ";
+					}
+					if (api_get_setting('display_teacher_in_courselist') == 'true') {
+						echo $course['tutor'];
+					}	
+					echo '&nbsp;';
+					echo Display::return_icon('klipper.png', get_lang('CourseAutoRegister'));				
+					echo "\t\t</td>\n";
+					echo "\t</tr>\n";
+					$key++;
+				}
+				echo "</table>";
+			}			
+		}
+}
+
+/**
+ *  display courses without especial courses
+ *  @param int User id
+ *  @return void
+ */
+function display_courses($user_id) {
+
+	global $_user, $_configuration;
+
+	echo "<table width=\"100%\">\n";
+
+	// building an array that contains all the id's of the user defined course categories
+	// initially this was inside the display_courses_in_category function but when we do it here we have fewer
+	// sql executions = performance increase.
+	$all_user_categories = get_user_course_categories();
+
+	// step 0: we display the course without a user category
+	display_courses_in_category(0, 'true');
+
+	// Step 1: We get all the categories of the user.
+	$tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
+	$sql = "SELECT * FROM $tucc WHERE user_id='".$_user['user_id']."' ORDER BY sort ASC";
+	$result = Database::query($sql, __FILE__, __LINE__);
+	while ($row = Database::fetch_array($result)) {
+		// We simply display the title of the category.
+		echo "<tr><td colspan=\"2\" class=\"user_course_category\">";
+		echo '<a name="category'.$row['id'].'"></a>'; // display an internal anchor.
+		echo $row['title'];		
+		echo "</td>";
+		echo "</tr>";		
+		display_courses_in_category($row['id']);
+	}
+	echo "</table>\n";
+}
+
+/**
+ *  display courses in category without especial courses
+ *  @param int User category id
+ *  @return void
+ */
+function display_courses_in_category($user_category_id) {
+	global $_user;
+	// table definitions
+	$TABLECOURS=Database::get_main_table(TABLE_MAIN_COURSE);
+	$TABLECOURSUSER=Database::get_main_table(TABLE_MAIN_COURSE_USER);
+	$TABLE_USER_COURSE_CATEGORY = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);	
+	$TABLE_COURSE_FIELD 			= Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
+	$TABLE_COURSE_FIELD_VALUE		= Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+
+	// get course list auto-register
+	$sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON " .
+			" tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";	
+							
+	$special_course_result = Database::query($sql, __FILE__, __LINE__);					
+	if(Database::num_rows($special_course_result)>0) {
+		$special_course_list = array();
+		while ($result_row = Database::fetch_array($special_course_result)) {
+			$special_course_list[] = '"'.$result_row['course_code'].'"';
+		}
+	}
+	$without_special_courses = '';
+	if (!empty($special_course_list)) {
+		$without_special_courses = ' AND course.code NOT IN ('.implode(',',$special_course_list).')';			
+	}
+	
+
+	$sql_select_courses = "SELECT course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
+								course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status,
+								course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
+		                        FROM    $TABLECOURS       course,
+										$TABLECOURSUSER  course_rel_user
+		                        WHERE course.code = course_rel_user.course_code
+		                        AND   course_rel_user.user_id = '".$_user['user_id']."'
+		                        AND course_rel_user.user_course_cat='".$user_category_id."' $without_special_courses
+		                        ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
+	$result = Database::query($sql_select_courses,__FILE__,__LINE__);
+	$number_of_courses = Database::num_rows($result);
+	$key = 0;
+	$status_icon = '';
+	while ($course = Database::fetch_array($result)) {
+		
+		if ($course['status'] == 1) {
+			$status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'),array('style'=>'width:11px; height:11px;'));
+		}
+		if (($course['status'] == 5 && !api_is_coach()) || empty($course['status'])) {
+			$status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('students.gif', get_lang('Status').': '.get_lang('Student'),array('style'=>'width:11px; height:11px'));
+		}
+		echo "\t<tr>\n";
+		echo "\t\t<td>\n";
+		$course_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session=0">'.$course['title'].'</a>';
+		echo "<div style=\"float:left;margin-right:10px;\">".$status_icon."</div><span style=\"font-size:135%;\">".$course_title."</span><br />";
+		if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+			echo $course['visual_code'];
+		}
+		if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
+			echo " - ";
+		}
+		if (api_get_setting('display_teacher_in_courselist') == 'true') {
+			echo $course['tutor'];
+		}
+		echo "\t\t</td>\n";
+		echo "\t</tr>\n";
+		$key++;
+	}
+}
 
 /*
 -----------------------------------------------------------
@@ -588,8 +774,7 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 		$result .= '</ul>';
 	}
 	$result .= '</li>';
-
-
+	
 	if (api_get_setting('use_session_mode') == 'true' && !$nosession) {
 		$session = '';
 		$active = false;
@@ -990,21 +1175,9 @@ if ( is_array($courses_tree) ) {
 		// sessions and courses that are not in a session category
 
 			if (!isset($_GET['history'])) { // check if it's not history trainnign session list
-				// independent courses
-				if(count($category['courses']) > 0) {
-					echo '<ul class="courseslist" style="list-style-type:none;">';
-				}
-
-				foreach ($category['courses'] as $course) {
-					$c = get_logged_user_course_html($course, 0, 'independent_course_item');
-					echo $c[1];
-				}
-
-				if(count($category['courses']) > 0) {
-					echo '</ul>';
-				}
+				echo display_especial_courses(api_get_user_id());
+				echo display_courses(api_get_user_id());
 			}
-
 			//independent sessions
 			foreach ($category['sessions'] as $session) {
 
@@ -1098,6 +1271,7 @@ if ( is_array($courses_tree) ) {
 }
 
 /*
+$userdefined_categories = get_user_course_categories();
 if ( is_array($list) ) {
 	//Courses whithout sessions
 	$old_user_category = 0;
@@ -1208,8 +1382,8 @@ if ( is_array($list) ) {
 		}
 		echo "\n</ul><br /><br />\n";
 	}
-} */
-
+} 
+*/
 
 echo '</div>'; // end of content section
 // Register whether full admin or null admin course

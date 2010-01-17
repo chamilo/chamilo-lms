@@ -1276,7 +1276,7 @@ function delete_template($id)
 	$row = Database::fetch_array($result);
 	if (!empty($row['image']))
 	{
-		unlink(api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/'.$row['image']);
+		@unlink(api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/'.$row['image']);
 	}
 
 	// now we remove it from the database

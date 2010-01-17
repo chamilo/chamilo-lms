@@ -201,7 +201,8 @@ a.breadcrumb0 {
 .footer_emails{
 	float: left;
 	margin-right:5%;
-	padding-top:40px;	
+	padding-top:40px;
+	padding-top:235px;	
 }
 
 .push {
@@ -215,7 +216,6 @@ a.breadcrumb0 {
 
 #footer #platformmanager {
 	float: left;
-	padding-top:235px;
 	margin-left:10px;
 }
 

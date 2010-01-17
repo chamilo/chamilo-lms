@@ -422,11 +422,11 @@ input[text] {
 	background-color: #756e64;	
 	background-image: url(images/bg-footer.gif);
 	background-repeat:repeat-x;
-	margin-top:20px;	
+	margin-top:20px;
+	padding-top:25px;	
 }
 #footer #platformmanager {
 	float: left;
-	padding-top:25px;
 	margin-left:10px;
 }
 #footer #coursemanager {

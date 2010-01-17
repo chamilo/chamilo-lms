@@ -382,11 +382,11 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
 	margin-right:5%;	
 	background-color: #434343;
 	background-image: url(images/tab-repeat.png);
-	background-repeat:repeat-x;	
+	background-repeat:repeat-x;
+	padding-top:20px;	
 }
 #footer #platformmanager {
 	float: left;
-	padding-top:20px;
 	margin-left:10px;
 }
 #footer #coursemanager {

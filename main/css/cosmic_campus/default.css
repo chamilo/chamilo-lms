@@ -246,10 +246,10 @@ a.breadcrumb0 {
 	background-color: #7171b7;
 	background-image: url(images/footer.jpg);
 	background-repeat: no-repeat;
+	padding-top:55px;
 }
 #footer #platformmanager {
 	float: left;
-	padding-top:55px;
 	margin-left:10px;
 }
 #footer #coursemanager {

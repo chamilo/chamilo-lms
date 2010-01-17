@@ -376,6 +376,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 }
 .footer_emails{
 	float: left;
+	padding-top:18px;
 	margin-right:5%;	
 	background-color: #434343;
 	background-image: url(images/tab-repeat.png);
@@ -383,7 +384,6 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 }
 #footer #platformmanager {
 	float: left;
-	padding-top:18px;
 	margin-left:10px;
 }
 #footer #coursemanager {

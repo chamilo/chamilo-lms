@@ -595,12 +595,12 @@ margin-top:0;
 	margin-right:5%;	
 	background-color: #79aa0b;
 	background-image: url(images/bg-footer.gif);
-	background-repeat:repeat-x;	
+	background-repeat:repeat-x;
+	padding-top:60px;	
 }
 
 #footer #platformmanager {
 	float: left;
-	padding-top:60px;
 	margin-left: 10px;
 }
 #footer #coursemanager {

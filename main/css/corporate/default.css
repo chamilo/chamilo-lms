@@ -231,10 +231,10 @@ a.breadcrumb0 {
 .footer_emails{
 	float: left;
 	margin-right:5%;
+	padding-top:8px;
 }
 #footer #platformmanager {
 	float: left;
-	padding-top:8px;
 	margin-left:10px;
 }
 #footer #coursemanager {

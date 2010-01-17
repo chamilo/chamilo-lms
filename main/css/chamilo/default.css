@@ -591,6 +591,7 @@ margin-top:0;
 
 .footer_emails{
 	float: left;
+	padding-top:60px;
 	margin-right:5%;	
 	background-color: #037fb2;
 	background-image: url(images/bg-footer.gif);
@@ -599,7 +600,6 @@ margin-top:0;
 
 #footer #platformmanager {
 	float: left;
-	padding-top:60px;
 	margin-left: 10px;
 }
 #footer #coursemanager {

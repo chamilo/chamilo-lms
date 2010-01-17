@@ -368,11 +368,11 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	margin-right:5%;	
 	background-color: #434343;
 	background-image: url(images/tab-repeat.png);
-	background-repeat:repeat-x;	
+	background-repeat:repeat-x;
+	padding-top:18px;	
 }
 #footer #platformmanager {
 	float: left;
-	padding-top:18px;
 	margin-left:10px;
 }
 #footer a {

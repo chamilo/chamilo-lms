@@ -433,11 +433,11 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
 	margin-right:5%;	
 	background-color: #305582;
 	background-image: url(images/footer.jpg);
-	background-repeat:repeat-x;	
+	background-repeat:repeat-x;
+	padding-top:60px;	
 }
 #footer #platformmanager {
 	float: left;
-	padding-top:60px;
 	margin-left:10px;
 }
 #footer #coursemanager {

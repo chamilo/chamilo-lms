@@ -382,11 +382,11 @@ input.link_alike:hover {
 }
 .footer_emails{
 	float: left;
-	margin-right:5%;	
+	margin-right:5%;
+	padding-top:20px;	
 }
 #footer #platformmanager {
 	float: left;
-	padding-top:20px;
 	margin-left:10px;
 }
 #footer #coursemanager {

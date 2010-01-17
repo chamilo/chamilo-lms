@@ -374,11 +374,11 @@ ul {
 	float: left;
 	margin-right:5%;	
 	background: url('images/headerbg.jpg');
+	padding-top:25px;
 }
 
 #footer #platformmanager {
 	float: left;
-	padding-top:25px;
 	margin-left:10px;
 }
 #footer #coursemanager {

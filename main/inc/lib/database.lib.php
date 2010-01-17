@@ -816,6 +816,31 @@ class Database {
 	*/
 
 	/**
+	 * Checks whether a given encoding is supported by the database server.
+	 * @param string $encoding	The encoding (a system conventional id, for example 'UTF-8') to be checked.
+	 * @return bool				Returns a boolean value as a check-result.
+	 * @author Ivan Tcholakov
+	 */
+	public static function is_encoding_supported($encoding) {
+		static $supported = array();
+		if (!isset($supported[$encoding])) {
+			$supported[$encoding] = strlen(self::to_db_encoding($encoding)) > 0;
+		}
+		return $supported[$encoding];
+	}
+
+	/**
+	 * Sets the encoding to be used by the database server if it is supported.
+	 * @param string $encoding	The encoding (a system conventional id, for example 'UTF-8') to be used.
+	 * @author Ivan Tcholakov
+	 */
+	public static function set_encoding($encoding) {
+		if (self::is_encoding_supported($encoding)) {
+			self::query("SET NAMES `" . self::to_db_encoding($encoding) . "`;", __FILE__, __LINE__);
+		}
+	}
+
+	/**
 	 * Constructs a SQL clause about default character set and default collation
 	 * for newly created databases and tables.
 	 * Example: Database::make_charset_clause('UTF-8', 'bulgarian') returns

@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $langStatDB              = "Base de datos de seguimiento. Úsela sólo si hay varias bases de datos.";
 $langEnableTracking      = "Permitir seguimiento";
 $langInstituteShortName  = "Acrónimo de la organización";
-$langWarningResponsible  = "Use este script únicamente tras haber hecho una copia de seguridad. El equipo deChamilo no es resposable si Vd. pierde o deteriora sus datos.";
+$langWarningResponsible  = "Use este script únicamente tras haber hecho una copia de seguridad. El equipo deChamilo no es resposable si Ud. pierde o deteriora sus datos.";
 $langAllowSelfRegProf  = "Permitir que los propios usuarios puedan registrarse como creadores de cursos";
 $langEG = "ej.";
 $langDBHost = "Servidor de base de datos";

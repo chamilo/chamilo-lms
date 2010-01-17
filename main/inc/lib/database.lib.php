@@ -259,7 +259,7 @@ define('TABLE_GLOSSARY', 'glossary');
 // Notebook
 define('TABLE_NOTEBOOK', 'notebook');
 
-// Message 
+// Message
 define('TABLE_MESSAGE', 'message');
 define('TABLE_MESSAGE_ATTACHMENT', 'message_attachment');
 
@@ -798,7 +798,6 @@ class Database {
 	 * @param  resource $result - the return value of the query
 	 * @param  option BOTH, ASSOC, or NUM
 	 * @return array - the value returned by the query
-	 * 
 	 */
 	public static function store_result($result, $option = 'BOTH') {
 		$array = array();
@@ -810,6 +809,197 @@ class Database {
 		return $array;
 	}
 
+	/*
+	-----------------------------------------------------------------------------
+		Encodings and collations supported by MySQL database server
+	-----------------------------------------------------------------------------
+	*/
+
+	/**
+	 * Constructs a SQL clause about default character set and default collation
+	 * for newly created databases and tables.
+	 * Example: Database::make_charset_clause('UTF-8', 'bulgarian') returns
+	 *  DEFAULT CHARACTER SET `utf8` DEFAULT COLLATE `utf8_general_ci`
+	 * @param string $encoding (optional)	The default database/table encoding (a system conventional id) to be used.
+	 * @param string $language (optional)	Language (a system conventional id) used for choosing language sensitive collation (if it is possible).
+	 * @return string						Returns the constructed SQL clause or empty string if $encoding is not correct or is not supported.
+	 * @author Ivan Tcholakov
+	 */
+	public static function make_charset_clause($encoding = null, $language = null) {
+		if (empty($encoding)) {
+			$encoding = api_get_system_encoding();
+		}
+		if (empty($language)) {
+			$language = api_get_interface_language();
+		}
+		$db_encoding = Database::to_db_encoding($encoding);
+		$db_collation = Database::to_db_collation($encoding, $language);
+		$charset_clause = '';
+		if (!empty($db_encoding)) {
+			$charset_clause .= " DEFAULT CHARACTER SET `".$db_encoding."`";
+			if (!empty($db_collation)) {
+				$charset_clause .= " DEFAULT COLLATE `".$db_collation."`";
+			}
+		}
+		return $charset_clause;
+	}
+
+	/**
+	 * Converts an encoding identificator to MySQL-specific encoding identifictor,
+	 * i.e. 'UTF-8' --> 'utf8'.
+	 * @param string $encoding	The conventional encoding identificator.
+	 * @return string			Returns the corresponding MySQL-specific encoding identificator if any, otherwise returns NULL.
+	 * @author Ivan Tcholakov
+	 */
+	public static function to_db_encoding($encoding) {
+		static $result = array();
+		if (!isset($result[$encoding])) {
+			$result[$encoding] = null;
+			$encoding_map = & self::get_db_encoding_map();
+			foreach ($encoding_map as $key => $value) {
+				if (api_equal_encodings($encoding, $key)) {
+					// Check whether the encoding is supported by the server.
+					if (self::num_rows(self::query("SHOW CHARACTER SET WHERE `Charset` =  '".$value."';", __FILE__, __LINE__)) > 0) {
+						$result[$encoding] = $value;
+					}
+					break;
+				}
+			}
+		}
+		return $result[$encoding];
+	}
+
+	/**
+	 * Converts a MySQL-specific encoding identifictor to conventional encoding identificator,
+	 * i.e. 'utf8' --> 'UTF-8'.
+	 * @param string $encoding	The MySQL-specific encoding identificator.
+	 * @return string			Returns the corresponding conventional encoding identificator if any, otherwise returns NULL.
+	 * @author Ivan Tcholakov
+	 */
+	public static function from_db_encoding($db_encoding) {
+		static $result = array();
+		if (!isset($result[$db_encoding])) {
+			$result[$db_encoding] = null;
+			$encoding_map = & self::get_db_encoding_map();
+			foreach ($encoding_map as $key => $value) {
+				if (strtolower($db_encoding) == $value) {
+					$result[$db_encoding] = $key;
+					break;
+				}
+			}
+		}
+		return $result[$db_encoding];
+	}
+
+	/**
+	 * This private function encapsulates a table with relations between
+	 * conventional and MuSQL-specific encoding identificators.
+	 * @author Ivan Tcholakov
+	 */
+	private static function & get_db_encoding_map() {
+		static $encoding_map = array(
+			'ARMSCII-8'    => 'armscii8',
+			'BIG5'         => 'big5',
+			'BINARY'       => 'binary',
+			'CP866'        => 'cp866',
+			'EUC-JP'       => 'ujis',
+			'EUC-KR'       => 'euckr',
+			'GB2312'       => 'gb2312',
+			'GBK'          => 'gbk',
+			'ISO-8859-1'   => 'latin1',
+			'ISO-8859-2'   => 'latin2',
+			'ISO-8859-7'   => 'greek',
+			'ISO-8859-8'   => 'hebrew',
+			'ISO-8859-9'   => 'latin5',
+			'ISO-8859-13'  => 'latin7',
+			'ISO-8859-15'  => 'latin1',
+			'KOI8-R'       => 'koi8r',
+			'KOI8-U'       => 'koi8u',
+			'SHIFT-JIS'    => 'sjis',
+			'TIS-620'      => 'tis620',
+			'US-ASCII'     => 'ascii',
+			'UTF-8'        => 'utf8',
+			'WINDOWS-1250' => 'cp1250',
+			'WINDOWS-1251' => 'cp1251',
+			'WINDOWS-1252' => 'latin1',
+			'WINDOWS-1256' => 'cp1256',
+			'WINDOWS-1257' => 'cp1257'
+		);
+		return $encoding_map;
+	}
+
+	/**
+	 * Chooses the default MySQL-specific collation from given encoding and language.
+	 * @param string $encoding				A conventional encoding id, i.e. 'UTF-8'
+	 * @param string $language (optional)	A conventional for the system language id, i.e. 'bulgarian'. If it is empty, the chosen collation is the default server value corresponding to the given encoding.
+	 * @return string						Returns a suitable default collation, for example 'utf8_general_ci', or NULL if collation was not found.
+	 * @author Ivan Tcholakov
+	 */
+	public static function to_db_collation($encoding, $language = null) {
+		static $result = array();
+		if (!isset($result[$encoding][$language])) {
+			$result[$encoding][$language] = null;
+			$db_encoding = self::to_db_encoding($encoding);
+			if (!empty($db_encoding)) {
+				if (!empty($language)) {
+					$lang = api_purify_language_id($language);
+					$res = self::check_db_collation($db_encoding, $lang);
+					if (empty($res)) {
+						$db_collation_map = & self::get_db_collation_map();
+						if (isset($db_collation_map[$lang])) {
+							$res = self::check_db_collation($db_encoding, $db_collation_map[$lang]);
+						}
+					}
+					if (empty($res)) {
+						$res = self::check_db_collation($db_encoding, null);
+					}
+					$result[$encoding][$language] = $res;
+				} else {
+					$result[$encoding][$language] = self::check_db_collation($db_encoding, null);
+				}
+			}
+		}
+		return $result[$encoding][$language];
+	}
+
+	/**
+	 * A helper language id translation table for choosing some collations.
+	 * @author Ivan Tcholakov
+	 */
+	private static function & get_db_collation_map() {
+		static $db_collation_map = array(
+			'german' => 'german2',
+			'simpl_chinese' => 'chinese',
+			'trad_chinese' => 'chinese',
+			'turkce' => 'turkish'
+		);
+		return $db_collation_map;
+	}
+
+	/**
+	 * Constructs a MySQL-specific collation and checks whether it is supported by the database server.
+	 * @param string $db_encoding	A MySQL-specific encoding id, i.e. 'utf8'
+	 * @param string $language		A MySQL-compatible language id, i.e. 'bulgarian'
+	 * @return string				Returns a suitable default collation, for example 'utf8_general_ci', or NULL if collation was not found.
+	 * @author Ivan Tcholakov
+	 */
+	private static function check_db_collation($db_encoding, $language) {
+		if (empty($db_encoding)) {
+			return null;
+		}
+		if (empty($language)) {
+			$result = self::fetch_array(self::query("SHOW COLLATION WHERE `Charset` = '".$db_encoding."' AND `Default` = 'Yes';", __FILE__, __LINE__), 'NUM');
+			return $result ? $result[0] : null;
+		}
+		$collation = $db_encoding.'_'.$language.'_ci';
+		$query_result = self::query("SHOW COLLATION WHERE `Charset` = '".$db_encoding."';", __FILE__, __LINE__);
+		while ($result = self::fetch_array($query_result, 'NUM')) {
+			if ($result[0] == $collation) {
+				return $collation;
+			}
+		}
+		return null;
+	}
 
 	/*
 	==============================================================================

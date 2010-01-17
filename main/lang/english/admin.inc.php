@@ -1130,4 +1130,6 @@ $ChamiloHomepage = "Chamilo homepage";
 $ChamiloForum = "Chamilo forum";
 $ChamiloExtensions = "Chamilo extensions";
 $ImpossibleToContactVersionServerPleaseTryAgain = "Impossible to contact the version server right now. Please try again later.";
+$ChamiloGreen = "Chamilo Green";
+$ChamiloRed = "Chamilo red";
 ?>

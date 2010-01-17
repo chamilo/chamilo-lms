@@ -18,7 +18,7 @@
 <a href="index.html">Documentation</a> &gt; Changelog
 <div id="outerframe">
 <div id="main">
-<h1>Chamilo 1.8.6.2 - .............</h1>
+<h1>Chamilo 1.8.6.2 - Salto</h1>
 <h3>Release notes - summary</h3>
 <h3>New Features</h3> 
 <ul>
@@ -67,9 +67,8 @@
   <li>Glossary tool improved. Possibility to view glosary terms in Exercises and Learning paths (Courses)</li>
   <li>iepngfix added to support png images in ie6</li>
      
-</li>   
+</ul>   
 
-</ul>
 <h3>Debugging</h3>
 <ul>
   <li>Fixed a bug in course homepage always showing a box even when no tools were shown (r8747:3ad59f6aed1f)</li>
@@ -89,31 +88,18 @@
   <li>Scorm: Objectives and interactions are not supported</li>
   <li>Scorm: Hotspot and Exact type of questions can't be exported in a SCORM package</li>
   <li>Course backup: When trying to generate a backup the image/video paths are not update with the new course code see CT#521</li>
-  <li>Fckeditor in fullscreen mode does not work in the new Chamilo theme</li>  
+  <li>Fckeditor in fullscreen mode does not work in the new Chamilo theme</li>
+  <li>If the "Show glossary terms" option is selected for the lessons tool (SCORM) and exercises, the description of the exercise might contain the answers to the question. Need human intelligence to avoid this.</li>
 </ul>
+
 <h3>Deprecated files</h3>
 <ul>
   <li>main/btf_functions.php file deleted. All functions are in the new class inc/lib/course_home.lib.php</li>
-  <li>Message tool
-  	<ul>
-  		<li>main/messages/message.class.php moved to inc/lib/message.lib.php</li>
-  		<li>In main/messages directory this files are useless: message.css, cookies.js</li>
-  	</ul>
-	</li>
-<li>Social tool
-  	<ul>
-  		<li>Horrible filename message_for_group_form_inc.php moved to the inc/ajax library</li>
-  		<li>main/social/select_options.php moved to  inc/ajax library</li>
-  	</ul>
-	</li>
-	  
-</ul>
-<li>Exercises tool
-    <ul>
-        <li>If the option is selected glossary terms shows the tools lessons (SCORM) and exercises, in the description of exercise may see terms that may be responses to the question</li>
-    </ul>
-    </li>
-      
+  <li>main/messages/message.class.php moved to inc/lib/message.lib.php in messages tool</li>
+  <li>main/messages/message.css is now useless</li>
+  <li>main/messages/cookies.js is now useless</li>
+  <li>message_for_group_form_inc.php in social tool moved to the inc/ajax library</li>
+  <li>main/social/select_options.php moved to inc/ajax library</li>
 </ul>
 <br />
 <h1>Dokeos 1.8.6.1 - August 2009</h1>

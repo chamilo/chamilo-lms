@@ -109,7 +109,7 @@ $fileModified = "Le document est modifié";
 $DocumentsOverview = "l\'outil Documents";
 $ViewSlideshow = "Galerie d\'images";
 $Options = "Options";
-$WelcomeOogieConverter = "Bienvenue dans le convertisseur de Power Point Chamilo RAPID<ul type=\\\\\\\"1\\\\\\\"><li>Choisissez un fichier .ppt ou .odp<li>Importez ce fichier. Il sera converti en cours SCORM<li>Vous pourrez ensuite ajouter des commentaires audio sur chaque dia et insérer tests et activités entres les dias</ul>";
+$WelcomeOogieConverter = "Bienvenue dans le convertisseur de Power Point Chamilo RAPID<ul type=\\\"1\\\"><li>Choisissez un fichier .ppt ou .odp<li>Importez ce fichier. Il sera converti en cours SCORM<li>Vous pourrez ensuite ajouter des commentaires audio sur chaque dia et insérer tests et activités entres les dias</ul>";
 $ConvertToLP = "Convertir en cours";
 $AdvancedSettings = "Options avancées";
 $AdvancedSettings = "Options avancées";

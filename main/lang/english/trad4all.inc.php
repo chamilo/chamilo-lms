@@ -788,4 +788,5 @@ $StartToType = "Start to type, then click on this bar to validate tag";
 $StartToType = "Start to type, then click on this bar to validate tag";
 $InstallChamilo = "Install Chamilo";
 $ChamiloURL = "Chamilo URL";
+$InstallChamilo = "Install chamilo";
 ?>

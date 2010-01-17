@@ -788,4 +788,5 @@ $StartToType = "Comience a escribir, a continuación, haga clic en esta barra par
 $StartToType = "Comience a escribir, a continuación, haga clic en esta barra para validar la etiqueta";
 $InstallChamilo = "Instalar Chamilo";
 $ChamiloURL = "URL de Chamilo";
+$InstallChamilo = "Instalar Chamilo";
 ?>

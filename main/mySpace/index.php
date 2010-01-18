@@ -479,6 +479,7 @@ if ($is_platform_admin && $view == 'admin') {
 	if ($_GET['display'] == 'useroverview') {
 		echo ' | <a href="'.api_get_self().'?view=admin&amp;display=useroverview&amp;export=options">'.get_lang('ExportUserOverviewOptions').'</a>';
 	}
+	echo '<br /><br />';
 	if ($_GET['display'] === 'useroverview') {
 		display_tracking_user_overview();
 	} else {

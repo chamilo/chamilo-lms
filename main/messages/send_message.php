@@ -63,6 +63,7 @@ if ($panel_id == 2 || $panel_id == 4 )  {
 	 </div>
 <?php
 }
+//here we decode to utf8 because this page is called from an ajax popup
 $subject_message = utf8_decode($subject_message);
 $content_message = utf8_decode($content_message);
 

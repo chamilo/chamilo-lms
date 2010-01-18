@@ -594,14 +594,14 @@ echo '<div id="social-content-right">';
 						if ($count_pending_invitations > 0) {
 							echo '<div>'.Display::return_icon('boxmygroups.jpg').'</div>';
 							echo '<div class="social-box-content1">';
-							echo '<div><h3>'.api_convert_encoding(get_lang('PendingInvitations'),$charset,'UTF-8').'</h3></div>';
+							echo '<div><h3>'.get_lang('PendingInvitations').'</h3></div>';
 							for ($i=0;$i<$count_pending_invitations;$i++) {
 									echo '<div id="dpending_'.$pending_invitations[$i]['user_sender_id'].'" class="friend_invitations">';
 									echo '<div style="float:left;width:60px;" >';
 										echo '<img style="margin-bottom:5px;" src="'.$list_get_path_web[$i]['dir'].'/'.$list_get_path_web[$i]['file'].'" width="60px">';
 									echo '</div>';
 									echo '<div style="padding-left:70px;">';
-											echo ' '.api_convert_encoding(substr($pending_invitations[$i]['content'],0,50),$charset,'UTF-8');
+											echo ' '.(substr($pending_invitations[$i]['content'],0,50));
 										echo '<br />';
 										echo '<a id="btn_accepted_'.$pending_invitations[$i]['user_sender_id'].'" onclick="register_friend(this)" href="javascript:void(0)">'.get_lang('SocialAddToFriends').'</a>';
 										echo '<div id="id_response">&nbsp;</div>';

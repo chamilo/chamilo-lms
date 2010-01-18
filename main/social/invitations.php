@@ -139,6 +139,7 @@ echo '<div id="social-content">';
 			echo '<h2>'.get_lang('InvitationReceived').'</h2>';	
 			
 			foreach ($list_get_invitation as $invitation) { 
+				
 				$sender_user_id = $invitation['user_sender_id']
 				?>
 				<div id="<?php echo 'id_'.$sender_user_id ?>" class="invitation_confirm">
@@ -147,9 +148,7 @@ echo '<div id="social-content">';
 				   		$friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
 				        $user_info	= api_get_user_info($sender_user_id);
 				        $title 		= Security::remove_XSS($invitation['title']);	        
-				        $title		= api_convert_encoding($title,$charset);
 				        $content 	= Security::remove_XSS($invitation['content']);
-						$content	= api_convert_encoding($content,$charset);
 				        $date		= $invitation['send_date'];  
 				                        
 				    ?>	   	
@@ -163,7 +162,7 @@ echo '<div id="social-content">';
 							<td class="info">
 									<a class="profile_link" href="profile.php?u=<?php echo $sender_user_id;?>"><? echo api_get_person_name($user_info['firstName'], $user_info['lastName']);?></a>
 									<div>
-									<?php echo api_utf8_decode($title).' : '.api_utf8_decode($content);?>
+									<?php echo $title.' : '.$content;?>
 									</div>
 									<div>
 									<?php echo get_lang('DateSend').' : '.$date;?>
@@ -194,8 +193,8 @@ echo '<div id="social-content">';
 				   		$friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
 				        $user_info	= api_get_user_info($sender_user_id);	  
 				              
-				        $title		= api_convert_encoding($invitation['title'], $charset);
-						$content	= api_convert_encoding($invitation['content'],$charset);
+				        $title		= Security::remove_XSS($invitation['title']);
+						$content	= Security::remove_XSS($invitation['content']);
 				        $date		= $invitation['send_date'];                  
 				    ?>	   	
 					<table cellspacing="0" border="0">

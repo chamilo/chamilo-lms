@@ -39,7 +39,7 @@
 
   <li><a href="#1._Pre-requisites">Pre-requisites</a></li>
   <li><a href="#2._Installation_of_Chamilo_LMS">Installation of Chamilo LMS</a></li>
-  <li><a href="#3._Upgrade_from_a_previous_version_of">Upgrade from a previous version of Dokeos</a></li>
+  <li><a href="#3._Upgrade_from_a_previous_version_of">Upgrade from a previous version of Chamilo/Dokeos</a></li>
   <li><a href="#4._Troubleshooting">Troubleshooting</a></li>
   <li><a href="#5._Administration_section">Administration section</a></li>
   <li><a href="#6._LDAP">LDAP&nbsp;</a></li>
@@ -96,7 +96,6 @@ the installation.<span style="font-weight: bold;"><br />
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation of Chamilo LMS</span></h2>
 
-<a href="http://www.chamilo.org/download.php"></a>
 <ul>
 
   <li><a href="http://www.chamilo.org/download">Download Chamilo LMS</a></li>
@@ -267,9 +266,9 @@ no longer necessary, this can be set to Off and Chamilo will work fine.</p>
 
 
 <hr />
-<h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Upgrade from a previous version of Dokeos</h2>
+<h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Upgrade from a previous version of Chamilo/Dokeos</h2>
 Before upgrading we <b>heavily</b> recommend you do a full backup of the previous
-Dokeos directories and databases. If you are unsure how to achieve this
+Chamilo/Dokeos directories and databases. If you are unsure how to achieve this
 please ask your hosting provider for advice.<br />
 
 <p></p>
@@ -281,8 +280,8 @@ please ask your hosting provider for advice.<br />
 <em>If you upgrade from Dokeos 1.8.x</em> :&nbsp;
 <ul>
   <li> check that you haven't left any customised stylesheet or image*</li>
-  <li> download the Dokeos 1.8.6 Svalbard install package from the <a href="http://www.dokeos.com/en/node/33">Dokeos download page</a></li>
-  <li> unzip the new files of Dokeos 1.8.6 over the files of the older version</li>
+  <li> download the Chamilo 1.8.6.2 Salto install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
+  <li> unzip the new files of Chamilo 1.8.6.2 over the files of the older version</li>
   <li> point your browser on your portal URL + main/install/</li>
   <li> choose your language and click&nbsp;<span style="font-style: italic;">Upgrade from 1.8.x</span></li>
 </ul>
@@ -310,7 +309,7 @@ to the old ones which will be deprecated shortly (not maintained).</font>
 and most important thing to do is to *move* your current directory to another
 place.<br />
 An easy way to do that is to create a subdirectory called "old_version"
-in your current Dokeos directory and move everything in there using a
+in your current Chamilo/Dokeos directory and move everything in there using a
 simple "move" command (i.e. under Linux: mkdir old_version; mv *
 old_verion/), then make the old_version/ directory writeable by the web
 server so that courses/ and upload/ directories can be moved from the
@@ -322,11 +321,11 @@ The complete process is as follow:
     <em>old_version</em> and make it writeable by the web server. This
 is important to allow the move of the courses/ and upload/ directories
 to the new install</li>
-  <li> download the Dokeos 1.8.6 install package from the
-    <a href="http://www.dokeos.com/en/node/33">Dokeos download page</a></li>
-  <li> unzip the new files of Dokeos 1.8.6 in the main Dokeos directory. The
+  <li> download the Chamilo 1.8.6.2 install package from the
+    <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
+  <li> unzip the new files of Chamilo 1.8.6.2 in the main Chamilo/Dokeos directory. The
 new directory <em>main</em> should be located directly inside your
-Dokeos root folder</li>
+Chamilo/Dokeos root folder</li>
   <li> point your browser on your portal URL</li>
   <li> choose your language and click&nbsp;<span style="font-style: italic;">Upgrade from 1.6.x</span> and confirm the
 current directory of the old version</li>
@@ -347,7 +346,7 @@ all the 1.8.x versions
 <p>
 <b>WARNING:</b><br />
 
-Do not delete the previous Dokeos installation directory before installing
+Do not delete the previous Chamilo/Dokeos installation directory before installing
 the new one. When the update is successfully finished, you can remove
 the old path.</p>
 
@@ -373,7 +372,7 @@ The following directories need to be readable, writeable and executable for the 
 
 On Linux, Mac OS X and BSD operating systems you can quick-fix this using the
 CHMOD 777 command, but if you are unsure, we recommend you seek advice for
-your own OS on <a href="http://forum.chamilo.org">our forum</a>.
+your own OS on <a href="http://www.chamilo.org/forum">our forum</a>.
 In Windows, you may need to check the properties of the folders.
 <p></p>
 <h3>3.4 Quick-upgrade from 1.6.x guide for Linux</h3>
@@ -381,8 +380,8 @@ In Windows, you may need to check the properties of the folders.
 
 The following quick-upgrade guide assumes that:
 <ul>
-  <li>the Dokeos database username (for MySQL) is "dokeos_db_user" and your login is "dokeos_user"</li>
-  <li>the Dokeos installation is currently in /var/www/dokeos/ and it has 777 permissions</li>
+  <li>the Chamilo database username (for MySQL) is "chamilo_db_user" and your login is "chamilo_user"</li>
+  <li>the chamilo installation is currently in /var/www/chamilo/ and it has 777 permissions</li>
   <li>your portal's URL is http://www.portalurl.com/</li>
 </ul>
 
@@ -392,16 +391,16 @@ The following quick-upgrade guide assumes that:
 On the command-line, type:
 <ul>
   <li>cd /tmp</li>
-  <li>mysqldump -u dokeos_db_user -p --all-databases --result-file=/home/dokeos_user/dokeos_old.sql</li>
-  <li>cp -ra /var/www/dokeos /home/dokeos_user/backup_dokeos</li>
-  <li>mkdir /var/www/dokeos/old_version</li>
-  <li>mv /var/www/dokeos/* /var/www/dokeos/old_version/</li>
-  <li>chmod -R 0777 /var/www/dokeos/old_version/</li>
-  <li>wget http://www.dokeos.com/download/dokeos-1.8.6.tar.gz</li>
-  <li>tar zxvf dokeos-1.8.6.tar.gz</li>
-  <li>sudo cp -ra dokeos-1.8.6/* /var/www/dokeos/</li>
-  <li>rm dokeos-1.8.6.tar.gz</li>
-  <li>sudo rm -r dokeos-1.8.6/</li>
+  <li>mysqldump -u chamilo_db_user -p --all-databases --result-file=/home/chamilo_user/chamilo_old.sql</li>
+  <li>cp -ra /var/www/chamilo /home/chamilo_user/backup_chamilo</li>
+  <li>mkdir /var/www/chamilo/old_version</li>
+  <li>mv /var/www/chamilo/* /var/www/chamilo/old_version/</li>
+  <li>chmod -R 0777 /var/www/chamilo/old_version/</li>
+  <li>wget http://www.chamilo.org/files/chamilo-1.8.6.2.tar.gz</li>
+  <li>tar zxvf chamilo-1.8.6.2.tar.gz</li>
+  <li>sudo cp -ra chamilo-1.8.6.2/* /var/www/chamilo/</li>
+  <li>rm chamilo-1.8.6.2.tar.gz</li>
+  <li>sudo rm -r chamilo-1.8.6.2/</li>
 </ul>
 
 <br />
@@ -568,11 +567,11 @@ You can enable mathematical equations writing inside the Chamilo online editor (
 <ul>
 
 	<li>1. Configure your Apache installation to add a cgi-bin directory that contains a symbolic link to the mimetex.cgi in
-<i>dokeos/main/inc/lib/mimetex/</i> (*see below, step 4)</li>
+<i>chamilo/main/inc/lib/mimetex/</i> (*see below, step 4)</li>
 
 	<li>2. Reload your Apache configuration</li>
 
-	<li>3. Edit the online editor's configuration file <i>dokeos/main/inc/lib/fckeditor/myconfig.php</i> and
+	<li>3. Edit the online editor's configuration file <i>chamilo/main/inc/lib/fckeditor/myconfig.php</i> and
 
     <ul>
 			<li>3.1. Enable the mimetex plugin, find the line //$config['LoadPlugin'][] = 'mimetex'; and modify it to be:
@@ -585,7 +584,7 @@ In rare cases these options might need to be twicked, see the acccompanying comm
 these options within the file <i>myconfig.php</i></li>
 
 			<li>3.3. Once the plugin has been activated, almost in all toolbars the corresponding button appears.
-If you need to edit some toolbars, see the configuration files (php) within the directory <i>dokeos/main/inc/lib/fckeditor/toolbars/</i> .
+If you need to edit some toolbars, see the configuration files (php) within the directory <i>chamilo/main/inc/lib/fckeditor/toolbars/</i> .
 Here is an example:
         <div class="code">$config['ToolbarSets']['Normal'] = array(<br />
 &nbsp;&nbsp;array('FitWindow','Bold','Image','Link','PasteWord','MP3',<b>'mimetex'</b>,'Table','Subscript','Superscript','ShowBlocks')<br />
@@ -617,10 +616,10 @@ Here is an example:
 
 </p>
 <div class="code">
-  <p>ln -s /var/www/dokeos/main/inc/lib/mimetex/mimetex.cgi /var/www/cgi-bin/mimetex.cgi</p>
+  <p>ln -s /var/www/chamilo/main/inc/lib/mimetex/mimetex.cgi /var/www/cgi-bin/mimetex.cgi</p>
 </div>
 <p>If you are reluctant to modify your Apache configuration, alternately you may do at step 4 the following:
-copy mimetex.exe (for windows) or mimetex.cgi (for linux) from <i>dokeos/main/inc/lib/mimetex/</i> directory to your <i>cgi-bin/</i></p>
+copy mimetex.exe (for windows) or mimetex.cgi (for linux) from <i>chamilo/main/inc/lib/mimetex/</i> directory to your <i>cgi-bin/</i></p>
     <li>5. Make sure that the file mimetex.cgi (or mimetex.exe) has right to be executed by the web-server process. For example, on a Ubuntu Linux system you may write a command like the following:</li>
 <div class="code">
   <p>sudo chmod a+x mimetex.cgi</p>

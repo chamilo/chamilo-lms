@@ -47,7 +47,7 @@ no son requeridos para usar Chamilo LMS. &nbsp;Por favor, lea completamente este
 
   <li><a href="#1._Pre-requisites">Prerrequisitos</a></li>
   <li><a href="#2._Installation_of_Chamilo_LMS">Instalación de Chamilo LMS</a></li>
-  <li><a href="#3._Upgrade_from_a_previous_version_of">Actualizar desde una versión previa de Dokeos</a></li>
+  <li><a href="#3._Upgrade_from_a_previous_version_of">Actualizar desde una versión previa de Chamilo o Dokeos</a></li>
   <li><a href="#4._Troubleshooting">Solución de Problemas</a></li>
   <li><a href="#5._Administration_section">Sección de administración</a></li>
   <li><a href="#6._LDAP">LDAP&nbsp;</a></li>
@@ -308,8 +308,8 @@ se ajustan a las siguientes:</p>
 
 
 <p>
-En versiones de Dokeos anteriores se requería que register_globals estuviera configurada en On. Esto ya no
-necesario, puede estar configurado en Off y Dokeos funcionará bien.
+En versiones de Chamilo/Dokeos anteriores se requería que register_globals estuviera configurada en On. Esto ya no
+necesario, puede estar configurado en Off y Chamilo funcionará bien.
 </p>
 
 
@@ -345,9 +345,9 @@ necesario, puede estar configurado en Off y Dokeos funcionará bien.
 
 
 <hr />
-<h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Actualizar desde una versión previa de Dokeos</h2>
+<h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Actualizar desde una versión previa de Chamilo/Dokeos</h2>
 Antes de actualizar, le recomendamos <b>seriamente</b> que haga una copia de seguridad de los directorios
-y bases de datos de Dokeos que previamente haya en su servidor. Si no está seguro de cómo hacer esto solicite
+y bases de datos de Chamilo/Dokeos que previamente haya en su servidor. Si no está seguro de cómo hacer esto solicite
 asistencia a su proveedor de servicios de almacenamiento.<br />
 
 <p></p>
@@ -359,8 +359,8 @@ asistencia a su proveedor de servicios de almacenamiento.<br />
 <em>Si usted actualiza desde Dokeos 1.8.x</em> :&nbsp;
 <ul>
   <li> Revisar que  no ha dejado alguna hoja de estilo personalizada o imagen*</li>
-  <li> Descargar el paquete de instalación de Dokeos 1.8.6 desde la <a href="http://www.dokeos.com/en/node/33">página de descarga de Dokeos</a></li>
-  <li> Descomprimir los nuevos archivos de Dokeos 1.8.6 sobre los archivos de la version anterior</li>
+  <li> Descargar el paquete de instalación de Chamilo 1.8.6.2 desde la <a href="http://www.chamilo.org/download">página de descarga de Chamilo</a></li>
+  <li> Descomprimir los nuevos archivos de Chamilo 1.8.6.2 sobre los archivos de la version anterior</li>
   <li> Apunte su navegador a su portal URL + main/install/</li>
   <li> Escoja su idioma y haga clic en&nbsp;<span style="font-style: italic;">Actualizar desde 1.8.x</span></li>
 </ul>
@@ -399,11 +399,11 @@ El proceso completo es como sigue:
     <em>version_antigua</em> y darle permisos de escritura por el servidor web. Esto
 es importante para permitir mover los directorios courses/ y upload/
 a la nueva instalacion</li>
-  <li> Descargar el paquete de instalacion de Dokeos 1.8.6 desde la
-    <a href="http://www.dokeos.com/en/node/33">página de descarga de Dokeos</a></li>
-  <li> descomprimir los nuevos archivos de Chamilo 1.8.6 en el directorio principal de Dokeos. El nuevo
+  <li> Descargar el paquete de instalacion de Chamilo 1.8.6.2 desde la
+    <a href="http://www.chamilo.org/download">página de descarga de Chamilo</a></li>
+  <li> descomprimir los nuevos archivos de Chamilo 1.8.6.2 en el directorio principal de Chamilo. El nuevo
 directorio <em>principal</em> debe estar ubicado directamente dentro de su
-directorio raiz de Dokeos</li>
+directorio raiz de Chamilo</li>
   <li> Apuntar su navegador a la URL de su portal</li>
   <li> Escoja su idioma y haga clic en&nbsp;<span style="font-style: italic;">Actualizar desde 1.6.x</span> y confirme el
 directorio actual de la versión antigua</li>
@@ -424,7 +424,7 @@ todas las versiones 1.8.x
 <p>
 <b>ADVERTENCIA:</b><br />
 
-No elimine el directorio de instalación previo de Dokeos antes de instalar
+No elimine el directorio de instalación previo de Chamilo/Dokeos antes de instalar
 el nuevo. Usted puede eliminar la ruta antigua, cuando la actualización haya finalizado satisfactoriamente.
 </p>
 
@@ -452,7 +452,7 @@ Los siguientes directorios necesitan permisos de lectura, escritura y ejecución
 
 En Linux, Mac OS X y sistemas operativos BSD esto se puede arreglar rápidamente  mediante el uso
 del comando CHMOD 777, sin embargo si usted no está seguro,  le recomandamos que busque
-asistencia para su propio SO en <a href="http://forum.chamilo.org">nuestro foro</a>.
+asistencia para su propio SO en <a href="http://www.chamilo.org/forum">nuestro foro</a>.
 En Windows, quizás necesite revisar las propiedades de las carpetas.
 <p>
 </p>
@@ -461,8 +461,8 @@ En Windows, quizás necesite revisar las propiedades de las carpetas.
 
 La siguiente guía de actualización rápida rapida asume lo siguiente:
 <ul>
-  <li>El nombre de usuario de la base de datos de Chamilo (para MySQL) es "dokeos_db_user" y su acceso es "dokeos_user"</li>
-  <li>Actualmente la instalacion de Dokeos esta en /var/www/dokeos/ y tiene permisos 777</li>
+  <li>El nombre de usuario de la base de datos de Chamilo (para MySQL) es "chamilo_db_user" y su acceso es "chamilo_user"</li>
+  <li>Actualmente la instalacion de Chamilo/Dokeos esta en /var/www/chamilo/ y tiene permisos 777</li>
   <li>La URL de su portal es http://www.portalurl.com/</li>
 </ul>
 
@@ -472,16 +472,16 @@ La siguiente guía de actualización rápida rapida asume lo siguiente:
 Escribir en la línea de comandos:
 <ul>
   <li>cd /tmp</li>
-  <li>mysqldump -u dokeos_db_user -p --all-databases --result-file=/home/dokeos_user/dokeos_old.sql</li>
-  <li>cp -ra /var/www/dokeos /home/dokeos_user/backup_dokeos</li>
-  <li>mkdir /var/www/dokeos/version_antigua</li>
-  <li>mv /var/www/dokeos/* /var/www/dokeos/version_antigua/</li>
-  <li>chmod -R 0777 /var/www/dokeos/version_antigua/</li>
-  <li>wget http://www.dokeos.com/download/dokeos-1.8.6.tar.gz</li>
-  <li>tar zxvf dokeos-1.8.6.tar.gz</li>
-  <li>sudo cp -ra dokeos-1.8.6/* /var/www/dokeos/</li>
-  <li>rm dokeos-1.8.6.tar.gz</li>
-  <li>sudo rm -r dokeos-1.8.6/</li>
+  <li>mysqldump -u chamilo_db_user -p --all-databases --result-file=/home/chamilo_user/chamilo_old.sql</li>
+  <li>cp -ra /var/www/chamilo /home/chamilo_user/backup_chamilo</li>
+  <li>mkdir /var/www/chamilo/version_antigua</li>
+  <li>mv /var/www/chamilo/* /var/www/chamilo/version_antigua/</li>
+  <li>chmod -R 0777 /var/www/chamilo/version_antigua/</li>
+  <li>wget http://www.chamilo.org/files/chamilo-1.8.6.2.tar.gz</li>
+  <li>tar zxvf chamilo-1.8.6.2.tar.gz</li>
+  <li>sudo cp -ra chamilo-1.8.6.2/* /var/www/chamilo/</li>
+  <li>rm chamilo-1.8.6.2.tar.gz</li>
+  <li>sudo rm -r chamilo-1.8.6.2/</li>
 </ul>
 
 <br />
@@ -504,9 +504,9 @@ Luego:
 
 
 <p>Si usted tiene problemas, vaya al <a href="http://www.chamilo.org">Sitio Web de Chamilo</a> y haga una pregunta en el
-<a href="http://forum.chamilo.org">foro de soporte</a>. Por favor, primero lea los mensajes previos para ver si existe ya
+<a href="http://www.chamilo.org/forum">foro de soporte</a>. Por favor, primero lea los mensajes previos para ver si existe ya
 una respuesta a su pregunta. Nosotros también mantenemos una lista de
-<a href="http://www.dokeos.com/wiki/index.php/FAQ">Preguntas Frecuentes</a>.
+<a href="http://www.chamilo.org/FAQ">Preguntas Frecuentes</a>.
 </p>
 
 

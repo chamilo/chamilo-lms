@@ -453,7 +453,8 @@ function handle_plugins()
 		Display :: display_confirmation_message(get_lang('SettingsStored'));
 	}
 
-	echo get_lang('AvailablePlugins')."<br/><br/>";
+	//echo get_lang('AvailablePlugins')."<br/>
+	echo '<br />';
 
 	/* We scan the plugin directory. Each folder is a potential plugin. */
 	$pluginpath = api_get_path(SYS_PLUGIN_PATH);

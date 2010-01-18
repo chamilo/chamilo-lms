@@ -450,7 +450,7 @@ $MainMenuLogged = "Meniu principal dupa logare";
 $Banner = "Banner";
 $DokeosAdminWebLinks = "Legaturi Chamilo";
 $ImageResizeTitle = "Redimensioneaza imaginile uploadate de utilizator";
-$ImageResizeComment = "Imaginile utilizatorului pot fi redimensionate la incarcare daca PHP este de acord cu <a href=\\\"http://php.net/manual/en/ref.image.php\\\" target=\\\"_blank\\\">GD library</a>. Daca GD este nedisponibil, aceasta setare va fi ignorata.";
+$ImageResizeComment = "Imaginile utilizatorului pot fi redimensionate la incarcare daca PHP este de acord cu <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library</a>. Daca GD este nedisponibil, aceasta setare va fi ignorata.";
 $MaxImageWidthTitle = "Latimea maxima a imaginii utilizatorului";
 $MaxImageWidthComment = "Latimea maxima in pixeli a imaginii utilizatorului. Aceasta setare se aplica doar daca imaginile utilizatorului sunt setate sa fie resesizate la incarcare.";
 $MaxImageHeightTitle = "Inaltimea maxima a imaginii utilizatorului";

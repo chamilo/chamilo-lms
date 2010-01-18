@@ -177,7 +177,7 @@ $langHotspotWeightingError = "Vi donu positivan (>0) pezon por &#265;iuj atentil
 $langHotspotValidateError1 = "Vi komplete respondu la demandon (";
 $langHotspotValidateError2 = "Necesa nombro da musklakoj anta&#365; vido de la rezulto";
 $langHotspotRequired = "Priskribo kaj vi&#349;o estas devigaj por &#265;iu atentilo - komentario estas la&#365;dezira";
-$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; Por ekfari atentilon: elektu formon apud la koloroj kaj desegnu la atentilon sur la bildon.</div><div style=\\\"padding:2px 3px;\\\">&bull; Por translokigi atentilon, elektu la koloron, musklaku sur alian lokon en la bildo kaj desegnu la atentilon.</div><div style=\\\"padding:2px 3px;\\\">&bull; Por aldoni atentilon:musklaku sur la [+atentilo] butonon.</div><div style=\\\"padding:2px 3px;\\\">&bull; Por fini plurangulan fomon: dekstre musklaku kaj elektu \\\"Fini plurangulon\\\".</div>";
+$langHotspotChoose = "<div style=\"padding:2px 3px;\">&bull; Por ekfari atentilon: elektu formon apud la koloroj kaj desegnu la atentilon sur la bildon.</div><div style=\"padding:2px 3px;\">&bull; Por translokigi atentilon, elektu la koloron, musklaku sur alian lokon en la bildo kaj desegnu la atentilon.</div><div style=\"padding:2px 3px;\">&bull; Por aldoni atentilon:musklaku sur la [+atentilo] butonon.</div><div style=\"padding:2px 3px;\">&bull; Por fini plurangulan fomon: dekstre musklaku kaj elektu \"Fini plurangulon\".</div>";
 $Fault = "Eraro";
 $Hotspot = "Atentilo";
 $ClickNumber = "Nombro da musklakoj";

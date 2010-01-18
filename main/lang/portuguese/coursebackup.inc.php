@@ -21,7 +21,7 @@ $langCopyFinished = "Cópia concluída";
 $langFullRecycle = "Eliminar tudo";
 $langRecycleCourse = "Esvaziar este curso";
 $langRecycleFinished = "Reciclagem terminada";
-$langRecycleWarning = "Atenção: ao utilizar esta ferramenta, irá eliminar objectos de aprendizagem do curso. Não será possível recuperá-los mais tarde. Aconselhamos previamente a realizar um <a href=\\\"create_backup.php\\\">backup/cópia de segurança</a>.";
+$langRecycleWarning = "Atenção: ao utilizar esta ferramenta, irá eliminar objectos de aprendizagem do curso. Não será possível recuperá-los mais tarde. Aconselhamos previamente a realizar um <a href=\"create_backup.php\">backup/cópia de segurança</a>.";
 $langSameFilename = "O que fazer aos ficheiros importados com o mesmo nome de ficheiros já existentes?";
 $langSameFilenameSkip = "Salta ficheiro com o mesmo nome";
 $langSameFilenameRename = "Renomear ficheiros com o mesmo nome (ex. file.pdf ficará file_1.pdf)";

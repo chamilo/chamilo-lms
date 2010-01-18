@@ -180,7 +180,7 @@ $langHotspotWeightingError = "Sie müssen eine positive (>0) für alle Hotspots an
 $langHotspotValidateError1 = "Eine vollständige Antwort ist notwendig für die Frage (";
 $langHotspotValidateError2 = "Click(s) auf das Bild sind notwendig, bevor die Ergebnisse angezeigt werden";
 $langHotspotRequired = "Beschreibung und Gewichtung sind für jeden Hotspot notwendig. Kommentar ist optional";
-$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; Um einen Hotspot zu erstellen: Eine Form neben der Farbe wählen und dann den Hotspot zeichnen</div><div style=\\\"padding:2px 3px;\\\">&bull; Um einen Hotspot zu verschieben: die Farbe wählen, einen anderen Spot im Bild anklicken, dann den Hotspot zeichnen</div><div style=\\\"padding:2px 3px;\\\">&bull; Einen Hotspot hinzufügen: auf [+hotspot] klicken.</div><div style=\\\"padding:2px 3px;\\\">&bull; Um ein Polygon zu schließen: rechtsklick und \\\"Polygon schließen\\\" wählen.</div>";
+$langHotspotChoose = "<div style=\"padding:2px 3px;\">&bull; Um einen Hotspot zu erstellen: Eine Form neben der Farbe wählen und dann den Hotspot zeichnen</div><div style=\"padding:2px 3px;\">&bull; Um einen Hotspot zu verschieben: die Farbe wählen, einen anderen Spot im Bild anklicken, dann den Hotspot zeichnen</div><div style=\"padding:2px 3px;\">&bull; Einen Hotspot hinzufügen: auf [+hotspot] klicken.</div><div style=\"padding:2px 3px;\">&bull; Um ein Polygon zu schließen: rechtsklick und \"Polygon schließen\" wählen.</div>";
 $Fault = "inkorrekt";
 $Hotspot = "Hotspot";
 $ClickNumber = "Auf Zahl klicken";

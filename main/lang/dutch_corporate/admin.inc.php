@@ -450,7 +450,7 @@ $MainMenuLogged = "Hoofdmenu na aanmelden";
 $Banner = "Hoofding";
 $DokeosAdminWebLinks = "Chamilo Web";
 $ImageResizeTitle = "Verklein geüploade gebruikersafbeeldingen";
-$ImageResizeComment = "Gebruikersafbeeldingen kunnen verkleind worden bij het uploaden als PHP gecompileerd is met de <a href=\\\"http://php.net/manual/en/ref.image.php\\\" target=\\\"_blank\\\">GD-bibliotheek</a>. Als GD niet beschikbaar is, wordt deze instelling genegeerd zonder waarschuwing.";
+$ImageResizeComment = "Gebruikersafbeeldingen kunnen verkleind worden bij het uploaden als PHP gecompileerd is met de <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD-bibliotheek</a>. Als GD niet beschikbaar is, wordt deze instelling genegeerd zonder waarschuwing.";
 $MaxImageWidthTitle = "Maximumbreedte gebruikersafbeelding";
 $MaxImageWidthComment = "Maximumbreedte in pixels van een gebruikersafbeelding. Deze instelling is enkel van toepassing als afbeeldingen verkleind moeten worden bij het uploaden.";
 $MaxImageHeightTitle = "Maximumhoogte gebruikersafbeelding";

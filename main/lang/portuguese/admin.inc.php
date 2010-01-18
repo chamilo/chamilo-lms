@@ -450,7 +450,7 @@ $MainMenuLogged = "Menu principal depois do login/aceder";
 $Banner = "Banner/anúncio";
 $DokeosAdminWebLinks = "Chamilo Web";
 $ImageResizeTitle = "Redimensionar as imagens submetidas/enviadas pelos utilizadores";
-$ImageResizeComment = "As imagens dos utilizadores podem ser redimensionadas no envio se o PHP for compilado com a <a href=\\\"http://php.net/manual/en/ref.image.php\\\" target=\\\"_blank\\\">Biblioteca GD</a>. Se a <a href=\\\"http://php.net/manual/en/ref.image.php\\\" target=\\\"_blank\\\">Biblioteca GD</a> não estiver disponível, esta opção será ignorada.";
+$ImageResizeComment = "As imagens dos utilizadores podem ser redimensionadas no envio se o PHP for compilado com a <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">Biblioteca GD</a>. Se a <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">Biblioteca GD</a> não estiver disponível, esta opção será ignorada.";
 $MaxImageWidthTitle = "Tamanho máximo da imagem do utilizador em largura ";
 $MaxImageWidthComment = "Tamanho máximo da largura da imagem de um utilizador em pixels. Esta opção só se aplica se as imagens do utilizador estiverem definidas para serem redimensionada no momento do envio.";
 $MaxImageHeightTitle = "Tamanho máximo da imagem do utilizador em altura ";

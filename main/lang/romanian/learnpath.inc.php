@@ -177,7 +177,7 @@ $CreateANewForum = "Creeaza un forum nou";
 $LinkAdd = "Adauga link";
 $WoogieConversionPowerPoint = "Woogie: conversie Word";
 $WelcomeWoogieSubtitle = "Converteste un curs Word ";
-$WelcomeWoogieConverter = "Bine ati venit la Woogie convertoare <ul type=\\\"1\\\"> <li> Alege&#355;i .doc,. sxw sau . odt fisier in <li> Actualizeaza in Woogie. Acesta este convertit intr-un curs <li> Apoi puteti adauga comentariu audio pentru fiecare pagina si veti putea testa si alte activitati intre pagini </ ul>";
+$WelcomeWoogieConverter = "Bine ati venit la Woogie convertoare <ul type=\"1\"> <li> Alege&#355;i .doc,. sxw sau . odt fisier in <li> Actualizeaza in Woogie. Acesta este convertit intr-un curs <li> Apoi puteti adauga comentariu audio pentru fiecare pagina si veti putea testa si alte activitati intre pagini </ ul>";
 $WoogieError = "Eroare in timpul conversiei intr-un document Word. Controlati daca nu sunt semne speciale in numele documentului";
 $WordConvert = "Coversie in MS Word";
 $Order = "Ordinea";

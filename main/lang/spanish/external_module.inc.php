@@ -2,13 +2,13 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langLinkSite = "Enlace a una web";
-$langSubTitle = "Añadir enlace externo o interno a la página principal del curso. Para realizarlo, vaya a la página, copie la URL que se encuentra en la barra de direcciones del navegador y péguela en el campo \\\"Enlace\\\" situado más abajo.";
+$langSubTitle = "Añadir enlace externo o interno a la página principal del curso. Para realizarlo, vaya a la página, copie la URL que se encuentra en la barra de direcciones del navegador y péguela en el campo \"Enlace\" situado más abajo.";
 $langAddPage            = "Añadir página";
 $langSendPage           = "Página a enviar";
 $langCouldNot           = "El archivo no puede enviarse";
 $langOkSentLink         = "El enlace ha sido añadido. Ahora es accesible desde la <a href=\"%s/index.php\">página principal del curso</a>";
 $langTooBig             = "No ha seleccionado el archivo a enviar o es demasiado grande";
-$langExplanation        = "La página debe estar en formato HTML (ej. \\\"my_page.htm\\\"). Se enlazará a la página inicial. Si quiere enviar documentos que no sean HTML (PDF, Word, Power Point, Video, etc.) utilice la <a href=../document/document.php>herramienta Documentos</a>";
+$langExplanation        = "La página debe estar en formato HTML (ej. \"my_page.htm\"). Se enlazará a la página inicial. Si quiere enviar documentos que no sean HTML (PDF, Word, Power Point, Video, etc.) utilice la <a href=../document/document.php>herramienta Documentos</a>";
 $langPgTitle            = "Título de la página";
 $langNoLinkURL          = "Introduzca la dirección del enlace";
 $langLinkTarget = "Destino del enlace";

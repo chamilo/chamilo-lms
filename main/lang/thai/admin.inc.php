@@ -421,7 +421,7 @@ $MainMenuLogged = "เมนูหลักเมื่อเข้าระบบ";
 $Banner = "ป้ายโฆษณา";
 $DokeosAdminWebLinks = "Chamilo Web";
 $ImageResizeTitle = "ปรับขนาดภาพของสมาชิกที่ส่งขึ้น";
-$ImageResizeComment = "ภาพของสมาชิกสามารถปรับขนาดได้ในระหว่างหารส่งไฟล์ขึ้น หากระบบสามารถคอมพายล์ใช้คำสั่งภาษาPHP ร่วมกับ<a href=\\\"http://php.net/manual/en/ref.image.php\\\" target=\\\"_blank\\\">GD library</a>. ได้ หากไม่คอมพายล์ใช้งาน การตั้งค่าปรับขนาดของภาพจะไม่เกิดผลกับภาพแต่อย่างใด ";
+$ImageResizeComment = "ภาพของสมาชิกสามารถปรับขนาดได้ในระหว่างหารส่งไฟล์ขึ้น หากระบบสามารถคอมพายล์ใช้คำสั่งภาษาPHP ร่วมกับ<a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library</a>. ได้ หากไม่คอมพายล์ใช้งาน การตั้งค่าปรับขนาดของภาพจะไม่เกิดผลกับภาพแต่อย่างใด ";
 $MaxImageWidthTitle = "ขนาดภาพกว้างมากที่สุด";
 $MaxImageWidthComment = "Maximum width in pixels of a user image. This setting only applies if user images are set to be resized on upload.";
 $MaxImageHeightTitle = "ความสูงของภาพใหญ่สุดที่กำหนด";

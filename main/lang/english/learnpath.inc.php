@@ -180,7 +180,7 @@ $CreateANewForum = "Create a new forum";
 $LinkAdd = "Add link";
 $WoogieConversionPowerPoint = "Woogie : Word conversion";
 $WelcomeWoogieSubtitle = "MS Word to course converter";
-$WelcomeWoogieConverter = "Welcome to Woogie Rapid Learning<ul type=\\\"1\\\"><li>Choose a file .doc, .sxw, .odt<li>Upload it to Woogie. It will be convert to a SCORM course<li>You will then be able to add audio comments on each page and insert quizzes and other activities between pages</ul>";
+$WelcomeWoogieConverter = "Welcome to Woogie Rapid Learning<ul type=\"1\"><li>Choose a file .doc, .sxw, .odt<li>Upload it to Woogie. It will be convert to a SCORM course<li>You will then be able to add audio comments on each page and insert quizzes and other activities between pages</ul>";
 $WoogieError = "Error during the conversion of the word document. Please check if there are special characters in the name of your document..";
 $WordConvert = "MS Word conversion";
 $Order = "Order";
@@ -200,7 +200,7 @@ $OogieBadExtension = "Please upload presentations only. Filename should end with
 $WoogieBadExtension = "Please upload text documents only. Filename should end with .doc, .docx or .odt";
 $ShowAudioRecorder = "Show audio recorder";
 $SearchFeatureNotEnabledComment = "The full-text search feature is not enabled in Chamilo. Please contact the Chamilo administrator.";
-$SearchFeatureSearchExplanation = "To search the course database, please use the following syntax:<br/>        <i>term tag:tag_name -exclude +include \\\"exact phrase\\\"</i><br/>     For example:<br/>        <i>car tag:truck -ferrari +ford \\\"high consumption\\\".</i><br/>     This will show all the results for the word \'car\' tagged as \'truck\', not     including the word \'ferrari\' but including the word \'ford\' and the exact  phrase \'high consumption\'.";
+$SearchFeatureSearchExplanation = "To search the course database, please use the following syntax:<br/>        <i>term tag:tag_name -exclude +include \"exact phrase\"</i><br/>     For example:<br/>        <i>car tag:truck -ferrari +ford \"high consumption\".</i><br/>     This will show all the results for the word \'car\' tagged as \'truck\', not     including the word \'ferrari\' but including the word \'ford\' and the exact  phrase \'high consumption\'.";
 $ViewLearningPath = "View course";
 $SearchFeatureDocumentTagsIfIndexing = "Tags to add to the document, if indexing";
 $ReturnToLearningPaths = "Back to courses";

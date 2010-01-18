@@ -357,5 +357,5 @@ $YouHaveToCreateAtLeastOneAnswer = "Veuillez créer au moins une réponse";
 $ExerciseAttempted = "Un apprenant a passé un exercice";
 $MultipleSelectCombination = "Combinaison exacte";
 $MultipleAnswerCombination = "Combinaison exacte";
-$ExerciceExpiredTimeMessage = "Durée maximum de l\\\'exercice expirée";
+$ExerciceExpiredTimeMessage = "Durée maximum de l\'exercice expirée";
 ?>

@@ -448,7 +448,7 @@ $MainMenuLogged = "Hlavní menu po p&#345;ihlášení";
 $Banner = "Banner";
 $DokeosAdminWebLinks = "Chamilo web";
 $ImageResizeTitle = "Zm&#283;nit velikost nahraných uživatelských obrázk&#367;";
-$ImageResizeComment = "Uživatelské obrázky mohou být zmenšeny p&#345;i nahrání, pokud PHP je kompilovánom s <a href=\\\"http://php.net/manual/en/ref.image.php\\\" target=\\\"_blank\\\">GD library</a>. Pokud není GD p&#345;ítomno, pak je vlastnost ignoravána.";
+$ImageResizeComment = "Uživatelské obrázky mohou být zmenšeny p&#345;i nahrání, pokud PHP je kompilovánom s <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library</a>. Pokud není GD p&#345;ítomno, pak je vlastnost ignoravána.";
 $MaxImageWidthTitle = "Maximální ší&#345;ka obrázku (px)";
 $MaxImageWidthComment = "Maximální ší&#345;ka obrázku v pixelech. Tato vlastnost je aplikována tehdy, pokud uživatelské obrázky mají zvolenou zm&#283;nu velikosti p&#345;i nahrávání.";
 $MaxImageHeightTitle = "Maximální výška obrázku (px)";

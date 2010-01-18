@@ -109,7 +109,7 @@ $fileModified = "Dosya düzenlendi";
 $DocumentsOverview = "belgelere genel bak&#305;&#351;";
 $ViewSlideshow = "Resimleri slayt göster";
 $Options = "Seçenekler";
-$WelcomeOogieConverter = "Chamilo RAPID e ho&#351; geldiniz <ul type=\\\"1\\\"><li> Bilgisayar&#305;n&#305;zdaki .ppt yada .odp dosyalar&#305;n&#305; seçin<li>Oogie ye yükleyin. Oda Scorm dersi haline çevirsin.<li>Ondan sonra her slayta ses ekleyebilir, test ilave edebilir ve slaytlar aras&#305;na aktiviteler koyabilirsiniz.";
+$WelcomeOogieConverter = "Chamilo RAPID e ho&#351; geldiniz <ul type=\"1\"><li> Bilgisayar&#305;n&#305;zdaki .ppt yada .odp dosyalar&#305;n&#305; seçin<li>Oogie ye yükleyin. Oda Scorm dersi haline çevirsin.<li>Ondan sonra her slayta ses ekleyebilir, test ilave edebilir ve slaytlar aras&#305;na aktiviteler koyabilirsiniz.";
 $ConvertToLP = "Derse çevir";
 $AdvancedSettings = "Geli&#351;mi&#351; ayarlar";
 $AdvancedSettings = "Geli&#351;mi&#351; ayarlar";

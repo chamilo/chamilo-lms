@@ -439,7 +439,7 @@ $MainMenuLogged = "&#264;efmenuo post ensaluto";
 $Banner = "Standardo";
 $DokeosAdminWebLinks = "Retejo de Chamilo";
 $ImageResizeTitle = "Malpligrandigi al&#349;utitajn uzantajn bildojn";
-$ImageResizeComment = "Bildoj de uzantoj estas malpligrandigeblaj &#265;e al&#349;uto, se PHP estas kompilita per <a href=\\\"http://php.net/manual/en/ref.image.php\\\" target=\\\"_blank\\\">GD-bibliotheek</a>. Se GD ne disponeblas, tiu komando estas ignorata sen averto.";
+$ImageResizeComment = "Bildoj de uzantoj estas malpligrandigeblaj &#265;e al&#349;uto, se PHP estas kompilita per <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD-bibliotheek</a>. Se GD ne disponeblas, tiu komando estas ignorata sen averto.";
 $MaxImageWidthTitle = "Maksimuma bildlar&#285;o de uzanto";
 $MaxImageWidthComment = "Maksimuma bildlar&#285;o en bilderoj de bildo de uzanto. Tiu aran&#285;o validas nur, se bildoj estas malpligrandigendaj dum al&#349;utado.";
 $MaxImageHeightTitle = "Maksimuma alto de bildo de uzanto";

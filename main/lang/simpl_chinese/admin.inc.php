@@ -444,7 +444,7 @@ $MainMenuLogged = "登录后的主菜单";
 $Banner = "标志";
 $DokeosAdminWebLinks = "Chamilo 主页";
 $ImageResizeTitle = "调整上传用户图片的尺寸";
-$ImageResizeComment = "如果PHP与<a href=\\\"http://php.net/manual/en/ref.image.php\\\" target=\\\"_blank\\\">GD library</a>一起编译, 图片上传后可调整大小. 如果没有GD, 此项设置将不起作用.";
+$ImageResizeComment = "如果PHP与<a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library</a>一起编译, 图片上传后可调整大小. 如果没有GD, 此项设置将不起作用.";
 $MaxImageWidthTitle = "用户图片的最大宽度";
 $MaxImageWidthComment = "用户图片的最大象素宽度. 此项设置仅适用于用户图片设置为上传后可调整大小.";
 $MaxImageHeightTitle = "用户图片的最大高度";

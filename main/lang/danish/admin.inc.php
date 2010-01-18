@@ -436,7 +436,7 @@ $MainMenuLogged = "Hoved menu efter login";
 $Banner = "Banner";
 $DokeosAdminWebLinks = "Chamilo Web";
 $ImageResizeTitle = "Ændre størrelsen på billeder uploadet af bruger";
-$ImageResizeComment = "Billeders størrelse kan ændres ved upload, hvis PHP er kompileret med <a href=\\\"http://php.net/manual/en/ref.image.php\\\" target=\\\"_blank\\\">GD library</a>. Hvis GD er utilgængelig, vil indstillingen blive ignoreret.";
+$ImageResizeComment = "Billeders størrelse kan ændres ved upload, hvis PHP er kompileret med <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library</a>. Hvis GD er utilgængelig, vil indstillingen blive ignoreret.";
 $MaxImageWidthTitle = "Maksimum bredde";
 $MaxImageWidthComment = "Maksimum bredde i pixels. Indstillingen gør sig kun gældende, hvis man ved upload har bedt om at ændre billedets størrelse.";
 $MaxImageHeightTitle = "Maksimum højde";

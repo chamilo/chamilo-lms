@@ -180,7 +180,7 @@ $CreateANewForum = "Criar um novo fórum";
 $LinkAdd = "Adicionar ligação/link";
 $WoogieConversionPowerPoint = "Woogie : conversão de Word";
 $WelcomeWoogieSubtitle = "MS Word para conversor curso";
-$WelcomeWoogieConverter = "Bem-vindo ao Woogie Rapid Learning<ul type=\\\"1\\\"><li>Seleccione um ficheiro .doc, .sxw, .odt<li>Envie o ficheiro para o Woogie. Será convertido num curso SCORM<li>Poderá posteriormente adicionar comentários áudio em cada página e inserir questionários e outras actividades entre as páginas</ul>";
+$WelcomeWoogieConverter = "Bem-vindo ao Woogie Rapid Learning<ul type=\"1\"><li>Seleccione um ficheiro .doc, .sxw, .odt<li>Envie o ficheiro para o Woogie. Será convertido num curso SCORM<li>Poderá posteriormente adicionar comentários áudio em cada página e inserir questionários e outras actividades entre as páginas</ul>";
 $WoogieError = "Ocorreu um erro durante a conversão do documento word. Por favor verifique se existem caracteres especiais no nome do seu documento. ";
 $WordConvert = "Conversão de MS Word";
 $Order = "Ordem";
@@ -200,7 +200,7 @@ $OogieBadExtension = "Por favor, envie apenas apresentações. A terminação do nom
 $WoogieBadExtension = "Por favor, envie apenas documentos de texto. A terminação do nome do ficheiro deverá ser .doc, .docx ou .odt";
 $ShowAudioRecorder = "Apresentar o gravador de áudio";
 $SearchFeatureNotEnabledComment = "A funcionalidade de pesquisa de texto integral no Chamilo não se encontra activado. Por favor entre em contacto com o administrador do Chamilo.";
-$SearchFeatureSearchExplanation = "Para pesquisar na base-de-dados do curso, por favor utilize a seguinte sintaxe:<br/>    <i>term tag:tag_name -exclude +include \\\"exact phrase\\\"</i><br/>Por exemplo:<br/>    <i>car tag:truck -ferrari +ford \\\"high consumption\\\".</i><br/> Desta forma irá apresentar todos os resultados para a palavra \'car\' adicionada como \'truck\', não incluindo a palavra \'ferrari\' mas, incluindo a palavra \'ford\' e a frase exacta \'high consumption\'.";
+$SearchFeatureSearchExplanation = "Para pesquisar na base-de-dados do curso, por favor utilize a seguinte sintaxe:<br/>    <i>term tag:tag_name -exclude +include \"exact phrase\"</i><br/>Por exemplo:<br/>    <i>car tag:truck -ferrari +ford \"high consumption\".</i><br/> Desta forma irá apresentar todos os resultados para a palavra \'car\' adicionada como \'truck\', não incluindo a palavra \'ferrari\' mas, incluindo a palavra \'ford\' e a frase exacta \'high consumption\'.";
 $ViewLearningPath = "Visualizar curso";
 $SearchFeatureDocumentTagsIfIndexing = "Etiquetas/marcadores para adicionar ao documento, se a indexação";
 $ReturnToLearningPaths = "Regressar a Cursos";

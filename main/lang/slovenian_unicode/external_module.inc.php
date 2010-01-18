@@ -2,7 +2,7 @@
 for more information: see languages.txt in the lang folder. 
 */
 $langLinkSite = "Povezava na stran";
-$langSubTitle = "Doda povezavo iz glavnega menuja domače strani tečaja na poljubno stran oziroma poljuben URL. <p>Nasvet: če želite dodati povezavo na stran, pojdite na to stran, kopirajte \\\'naslov\\\' (URL) iz vrstice naslov vašega brskalnika in ga vstavite v polje \"Povezava\" spodaj.";
+$langSubTitle = "Doda povezavo iz glavnega menuja domače strani tečaja na poljubno stran oziroma poljuben URL. <p>Nasvet: če želite dodati povezavo na stran, pojdite na to stran, kopirajte \'naslov\' (URL) iz vrstice naslov vašega brskalnika in ga vstavite v polje \"Povezava\" spodaj.";
 $langAddPage            = "Dodaj stran";
 $langSendPage           = "Stran za prenos";
 $langCouldNot           = "Datoteke ni bilo mogoče prenesti";

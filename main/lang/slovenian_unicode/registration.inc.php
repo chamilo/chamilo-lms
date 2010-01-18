@@ -14,7 +14,7 @@ $CurrentPasswordEmptyOrIncorrect = "Trenutno geslo je prazno ali kakorkoli nepra
 $password_request = "Zahtevali ste ponastavitev vašega gesla.
 Če to ni bila vaša zahteva, prezrite to sporočilo.
 
-Za \\\'resetiranje\\\' gesla uporabite dano povezavo.";
+Za \'resetiranje\' gesla uporabite dano povezavo.";
 $YourPasswordHasBeenEmailed = "Geslo vam je bilo poslano preko e-pošte.";
 $lang_enter_email_and_well_send_you_password = "Vnesi e-poštni naslov, ki ste ga uporabili pri registraciji in poslali vam bomo geslo.";
 $langLogin = "Vstop";
@@ -46,7 +46,7 @@ $langOneByOne = "Uporabnika dodaj ročno";
 $langNow = "sedaj";
 $langTutor = "Inštruktor";
 $langTitular = "Avtor";
-$langAddHereSomeCourses = "<font size=2 face=\\\'Arial, Helvetica\\\'><big>Spremeni seznam tečajev</big><br><br>Označi tečaje, ki bi jim rad sledil.<br>Zbriši kljukice pri tečajih, ki te ne zanimajo več.<br>Nato klikni gumb OK na koncu seznama";
+$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Spremeni seznam tečajev</big><br><br>Označi tečaje, ki bi jim rad sledil.<br>Zbriši kljukice pri tečajih, ki te ne zanimajo več.<br>Nato klikni gumb OK na koncu seznama";
 $langStudent = "tečajnik";
 $langImportUserList = "Uvozi seznam uporabnikov";
 $langAddAU = "Dodaj uporabnika";
@@ -83,9 +83,9 @@ $langSettings = "z naslednjimi nastavitvami :
 Uporabniško ime :";
 $langYouAreReg = "Registrirani ste v skupnost ";
 $langYourReg = "Vasa registracija v";
-$langUserFree = "To uporabniško ime je že v rabi. Uporabite brskalnikov gumb \\\'nazaj\\\' in izberite drugega.";
-$langEmptyFields = "Nekaj vnosnih polj ste pustili praznih. Uporabite brskalnikov gumb \\\'nazaj\\\' in poskusite znova.";
-$langPassTwice = "Vnesli ste dve različni gesli. Uporabite brskalnikov gumb \\\'nazaj\\\' in poskusite znova.";
+$langUserFree = "To uporabniško ime je že v rabi. Uporabite brskalnikov gumb \'nazaj\' in izberite drugega.";
+$langEmptyFields = "Nekaj vnosnih polj ste pustili praznih. Uporabite brskalnikov gumb \'nazaj\' in poskusite znova.";
+$langPassTwice = "Vnesli ste dve različni gesli. Uporabite brskalnikov gumb \'nazaj\' in poskusite znova.";
 $langRegAdmin = "Tvori področje tečaja";
 $langRegStudent = "Sledi tečajem";
 $langConfirmation = "Potrditev";

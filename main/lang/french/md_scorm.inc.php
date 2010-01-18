@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 $nameTools = "Variable linguistique obsolète";
 $langMdCallingTool = "Cours SCORM";
 $langTool = "Opérations sur les métadonnées SCORM";
-$langNotInDB = "pas d\\\'entrée dans la base de donnée de Chamilo";
+$langNotInDB = "pas d\'entrée dans la base de donnée de Chamilo";
 $langManifestSyntax = "(erreur de syntaxe dans le fichier manifeste...)";
 $langEmptyManifest = "(le fichier manifeste est vide...)";
 $langNoManifest = "(pas de fichier manifeste...)";

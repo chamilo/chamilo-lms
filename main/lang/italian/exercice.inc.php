@@ -180,7 +180,7 @@ $langHotspotWeightingError = "Devi assegnare un peso positivo (>0) ad ogni zona 
 $langHotspotValidateError1 = "Devi rispondere al quesito in modo completo (necessari ";
 $langHotspotValidateError2 = "click sull\'immagine) prima di poter vedere il risultato";
 $langHotspotRequired = "Sono richiesti peso e descrizione per ogni zona sensibile. Il commento è facoltativo";
-$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; Per creare una zona sensibile: seleziona una forma vicino al colore, e traccia la zona.</div><div style=\\\"padding:2px 3px;\\\">&bull; Per muovere una zona, seleziona il colore, clicca su una zona diversa nell\'immagine e traccia la nuova zona.</div><div style=\\\"padding:2px 3px;\\\">&bull; Per aggiungere una zona sensibile clicca sul pulsante  [+zona sensibile].</div><div style=\\\"padding:2px 3px;\\\">&bull; Per chiudere una forma poligonale usa il pulsante destro del mouse e seleziona \\\"Chiudi il poligono\\\".</div>";
+$langHotspotChoose = "<div style=\"padding:2px 3px;\">&bull; Per creare una zona sensibile: seleziona una forma vicino al colore, e traccia la zona.</div><div style=\"padding:2px 3px;\">&bull; Per muovere una zona, seleziona il colore, clicca su una zona diversa nell\'immagine e traccia la nuova zona.</div><div style=\"padding:2px 3px;\">&bull; Per aggiungere una zona sensibile clicca sul pulsante  [+zona sensibile].</div><div style=\"padding:2px 3px;\">&bull; Per chiudere una forma poligonale usa il pulsante destro del mouse e seleziona \"Chiudi il poligono\".</div>";
 $Fault = "Errato";
 $Hotspot = "Zone sensibili";
 $ClickNumber = "Clicca sul numero";

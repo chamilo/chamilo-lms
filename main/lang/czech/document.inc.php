@@ -109,7 +109,7 @@ $fileModified = "Soubor je upraven";
 $DocumentsOverview = "P&#345;ehled dokument&#367;";
 $ViewSlideshow = "Galerie obrázk&#367;";
 $Options = "Možnosti";
-$WelcomeOogieConverter = "Vítejte do Chamilo RAPID<ul type=\\\"1\\\"><li>Vyhledejte si na disku n&#283;jaké .ppt nebo .odp soubory<li>Nahrajte je do Oogie. Tam jej transformujete do SCORM u&#269;ební osnovy.<li>Potom budete schopni p&#345;idat audio komentá&#345; ke každému slajdu a vkládat testy a hodnocení mezi n&#283;";
+$WelcomeOogieConverter = "Vítejte do Chamilo RAPID<ul type=\"1\"><li>Vyhledejte si na disku n&#283;jaké .ppt nebo .odp soubory<li>Nahrajte je do Oogie. Tam jej transformujete do SCORM u&#269;ební osnovy.<li>Potom budete schopni p&#345;idat audio komentá&#345; ke každému slajdu a vkládat testy a hodnocení mezi n&#283;";
 $ConvertToLP = "Konvertovat do u&#269;ební osnovy";
 $AdvancedSettings = "Rozší&#345;ené nastavení";
 $File = "Soubor";

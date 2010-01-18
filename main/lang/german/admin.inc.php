@@ -450,7 +450,7 @@ $MainMenuLogged = "Hauptmenü nach Login";
 $Banner = "Banner";
 $DokeosAdminWebLinks = "Chamilo Web Links";
 $ImageResizeTitle = "Größe hochgeladener Benutzerbilder ändern";
-$ImageResizeComment = "Benutzerbilder können beim Upload in der Größe verändert werden, falls PHP mit <a href=\\\"http://php.net/manual/en/ref.image.php\\\" target=\\\"_blank\\\">GD library</a> kompiliert wurde. Sollte GD nicht verfügbar sein, wird diese Angabe ignoriert.";
+$ImageResizeComment = "Benutzerbilder können beim Upload in der Größe verändert werden, falls PHP mit <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library</a> kompiliert wurde. Sollte GD nicht verfügbar sein, wird diese Angabe ignoriert.";
 $MaxImageWidthTitle = "Maximale Breite des Benutzerbildes";
 $MaxImageWidthComment = "Maximale Breite eines Benutzerbildes in Pixeln. Diese Angabe hat nur dann Wirkung, wenn Benutzerbilder  beim Upload in der Größe verändert werden sollen";
 $MaxImageHeightTitle = "Maximale Benutzerbild-Höhe";

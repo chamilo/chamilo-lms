@@ -450,7 +450,7 @@ $MainMenuLogged = "Menú principal després de la connexió (login)";
 $Banner = "Banner";
 $DokeosAdminWebLinks = "Lloc web de Chamilo";
 $ImageResizeTitle = "Redimensionar les imatges dels usuaris";
-$ImageResizeComment = "Les imatges descarregades pels usuaris poden ser redimensionades si PHP ha estat compilat amb la <a href=\\\"http://php.net/manual/en/ref.image.php\\\" target=\\\"_blank\\\">llibreria GD</a>. Si no és així, la configuració serà ignorada.";
+$ImageResizeComment = "Les imatges descarregades pels usuaris poden ser redimensionades si PHP ha estat compilat amb la <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">llibreria GD</a>. Si no és així, la configuració serà ignorada.";
 $MaxImageWidthTitle = "Amplada màxima de les imatges";
 $MaxImageWidthComment = "Amplada màxima en píxels per les imatges descarregades. Aquesta configuració no té efecte si el redimensionament de les imatges no ha estat activat";
 $MaxImageHeightTitle = "Alçada màxima de les imatges";

@@ -11,7 +11,7 @@ $langTool = " Nuorodų Meta duomenys";
 $langNoScript = "Jūsų naršyklėje neįjungtas javascript palaikymas, ignoruokite tai, kas vaizduojama žemiau, jei tai neveikia...";
 $langLanguageTip = "the language in which this learning object was made";
 $langIdentifier = "Identifikatorius";
-$langIdentifierTip = "unique identification for this learning object, composed of letters, digits, _-.()\\\'!*";
+$langIdentifierTip = "unique identification for this learning object, composed of letters, digits, _-.()\'!*";
 $langTitleTip = "antraštė ar vardas, ir kalba, kuria jie įrašyti";
 $langDescriptionTip = "apibūdinimas ar komentaras, ir kalba, kuria jie įrašyti";
 $langKeyword = "Raktažodžiai";
@@ -22,10 +22,10 @@ $langKwNote = "If you change the description language, do not add keywords at th
 $langClickKw = "Click a keyword in the tree to select or deselect it.";
 $langKwHelp = "
 <br/>
-Click \\\'+\\\' button to open, \\\'-\\\' button to close, \\\'++\\\' button to open all, \\\'--\\\' button to close all.<br/>
+Click \'+\' button to open, \'-\' button to close, \'++\' button to open all, \'--\' button to close all.<br/>
 <br/>
-Clear all selected keywords by closing the tree and opening it again with the \\\'+\\\' button.<br/>
-Alt-click \\\'+\\\' searches the original keywords in the tree.<br/>
+Clear all selected keywords by closing the tree and opening it again with the \'+\' button.<br/>
+Alt-click \'+\' searches the original keywords in the tree.<br/>
 <br/>
 Alt-click keyword selects a keyword without broader terms or
 deselects a keyword with broader terms.<br/>

@@ -180,7 +180,7 @@ $langHotspotWeightingError = "Va trebui sa dati o valoare pozitiva (>0) pentru t
 $langHotspotValidateError1 = "Trebuie sa raspundeti complet la intrebare (";
 $langHotspotValidateError2 = "este nevoie sa apasati pe imagine) inainte de a vedea rezultatele";
 $langHotspotRequired = "Descrierea si valoarea sunt necesare pentru fiecare punct de interes. Comentariul este optional.";
-$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; Pentru a crea un punct de interes: selectati o forma de langa o culoare si apoi desenati punctul de interes.</div><div style=\\\"padding:2px 3px;\\\">&bull; Pentru a muta un punct de interes, selectati culoarea, apasati pe alt punct din imagine, si apoi desenati punctul de interes</div><div style=\\\"padding:2px 3px;\\\">&bull; Pentru a adauga un punct de interes: apasati pe butonul  [+punct de interes].</div><div style=\\\"padding:2px 3px;\\\">&bull; Pentrut a inchide o forma de poligon: apasati pe click dreapta si selectati\\\"Close polygon\\\".</div>";
+$langHotspotChoose = "<div style=\"padding:2px 3px;\">&bull; Pentru a crea un punct de interes: selectati o forma de langa o culoare si apoi desenati punctul de interes.</div><div style=\"padding:2px 3px;\">&bull; Pentru a muta un punct de interes, selectati culoarea, apasati pe alt punct din imagine, si apoi desenati punctul de interes</div><div style=\"padding:2px 3px;\">&bull; Pentru a adauga un punct de interes: apasati pe butonul  [+punct de interes].</div><div style=\"padding:2px 3px;\">&bull; Pentrut a inchide o forma de poligon: apasati pe click dreapta si selectati\"Close polygon\".</div>";
 $Fault = "Incorect";
 $Hotspot = "Punct de interes";
 $ClickNumber = "Numarul clickurilor";

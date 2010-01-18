@@ -448,7 +448,7 @@ $MainMenuLogged = "Huvudmeny efter inloggning";
 $Banner = "Banner";
 $DokeosAdminWebLinks = "Administrativa chamilolänkar";
 $ImageResizeTitle = "Skala uppladdade användarbilder";
-$ImageResizeComment = "Användarbild kan skalas vid uppladdning om PHP är kompilerad med <a href=\\\"http://php.net/manual/en/ref.image.php\\\" target=\\\"_blank\\\">GD library</a>. Om GD inte finns ignoreras denna inställning.";
+$ImageResizeComment = "Användarbild kan skalas vid uppladdning om PHP är kompilerad med <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library</a>. Om GD inte finns ignoreras denna inställning.";
 $MaxImageWidthTitle = "Maxbredd för användarens bild";
 $MaxImageWidthComment = "Max antal pixlar på bredden på användarbild. Denna inställning tillämpas om användarbild skalas vid uppladdning.";
 $MaxImageHeightTitle = "Maxhöjd på användarbild";

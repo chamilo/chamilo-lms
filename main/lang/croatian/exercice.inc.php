@@ -178,7 +178,7 @@ $langHotspotWeightingError = "Morate odrediti pozitivnu težinu (>0) za sva aktiv
 $langHotspotValidateError1 = "Morate odgovoriti u cijelosti na pitanje (";
 $langHotspotValidateError2 = "potrebni su klik(ovi) mišom na sliku) prije nego što se može vidjeti rezultat";
 $langHotspotRequired = "Opis i bodovanje je potrebno za svako aktivno mjesto. Opaska je neobavezna.";
-$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; Za kreiranje aktivnog mjesta: odaberi oblik do boje i zatim nacrtaj aktivno mjesto.</div><div style=\\\"padding:2px 3px;\\\">&bull; Za pomicanje aktivnog mjesta, odaberi boju, odaberi bilo koju to&#269;ku na slici (klik), i zatim nacrtaj aktivno mjesto.</div><div style=\\\"padding:2px 3px;\\\">&bull; Za dodavanje aktivnog mjesta: odaberite [+aktivno mjesto] gumb.</div><div style=\\\"padding:2px 3px;\\\">&bull; Za zatvaranje poligonskog oblika: desni klik i odabir \\\"Close polygon\\\".</div>";
+$langHotspotChoose = "<div style=\"padding:2px 3px;\">&bull; Za kreiranje aktivnog mjesta: odaberi oblik do boje i zatim nacrtaj aktivno mjesto.</div><div style=\"padding:2px 3px;\">&bull; Za pomicanje aktivnog mjesta, odaberi boju, odaberi bilo koju to&#269;ku na slici (klik), i zatim nacrtaj aktivno mjesto.</div><div style=\"padding:2px 3px;\">&bull; Za dodavanje aktivnog mjesta: odaberite [+aktivno mjesto] gumb.</div><div style=\"padding:2px 3px;\">&bull; Za zatvaranje poligonskog oblika: desni klik i odabir \"Close polygon\".</div>";
 $Fault = "Neto&#269;no";
 $Hotspot = "Aktivna mjesta (hotspots)";
 $ClickNumber = "Klikni broj";

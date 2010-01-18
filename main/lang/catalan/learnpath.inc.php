@@ -180,7 +180,7 @@ $CreateANewForum = "Crear un nou fòrum";
 $LinkAdd = "Afegir un enllaç";
 $WoogieConversionPowerPoint = "Woogie: Conversió de Word";
 $WelcomeWoogieSubtitle = "Un conversor de documents Word a itineraris formatius";
-$WelcomeWoogieConverter = "Benvingut al conversor Woogie<ul type=\\\"1\\\"><li>Escolliu un fitxer .doc, .sxw, .odt<li>Envieu-lo a Woogie i el convertirà en un itinerari formatiu SCORM <li>Podreu afegir comentaris d\'audio a cada pàgina i inserir exercicis i d\'altres activitats entre les pàgines.";
+$WelcomeWoogieConverter = "Benvingut al conversor Woogie<ul type=\"1\"><li>Escolliu un fitxer .doc, .sxw, .odt<li>Envieu-lo a Woogie i el convertirà en un itinerari formatiu SCORM <li>Podreu afegir comentaris d\'audio a cada pàgina i inserir exercicis i d\'altres activitats entre les pàgines.";
 $WoogieError = "Hi ha hagut un error durant la conversió del document Word. Si us plau, assegureu-vos que el nom del document no contingui caràcters especials.";
 $WordConvert = "Conversió Word";
 $Order = "Ordre";

@@ -178,7 +178,7 @@ $langHotspotWeightingError = "Turite įrašyti tik teigiamus (>0) svorinius įve
 $langHotspotValidateError1 = "Pilnai atsakykite į klausimą (";
 $langHotspotValidateError2 = " paspaudimų ant paveikslėlio) prieš peržiūrint rezultatus";
 $langHotspotRequired = "Paaiškinimai ir svoriniai įvertinimo koeficientai būtini - komentarai nebūtini";
-$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull;Kad sukurti \\\"hotspot\\\": pasirinkite kontūrą šalia spalvos ir nupieškite \"hotspot\".</div><div style=\\\"padding:2px 3px;\\\">&bull;Kad sukurti naują \"hotspot\" spauskite [ + ] mygtuką.</div><div style=\\\"padding:2px 3px;\\\">&bull;Kad uždaryti \\\"polygon\\\" sritį: dešinys pelės klavišas ir \\\"Close polygon\\\".</div>";
+$langHotspotChoose = "<div style=\"padding:2px 3px;\">&bull;Kad sukurti \"hotspot\": pasirinkite kontūrą šalia spalvos ir nupieškite \"hotspot\".</div><div style=\"padding:2px 3px;\">&bull;Kad sukurti naują \"hotspot\" spauskite [ + ] mygtuką.</div><div style=\"padding:2px 3px;\">&bull;Kad uždaryti \"polygon\" sritį: dešinys pelės klavišas ir \"Close polygon\".</div>";
 $Fault = "Neteisingas";
 $Hotspot = "Paveikslėlių zonos";
 $ClickNumber = "Paspausti ant numerio";
@@ -217,7 +217,7 @@ $ClickToCommentAndGiveFeedback = "Click the following link to check the answer a
 $OpenQuestionsAttempted = "A learner has answered an open question";
 $AttemptDetails = "Attempt details";
 $TestAttempted = "Test attempted";
-$StudentName = "Student\\\'s name";
+$StudentName = "Student\'s name";
 $StudentEmail = "Student email";
 $OpenQuestionsAttemptedAre = "Open question attempted is";
 $CourseName = "Course name";

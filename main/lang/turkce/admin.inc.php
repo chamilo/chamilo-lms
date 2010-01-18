@@ -450,7 +450,7 @@ $MainMenuLogged = "Oturum açt&#305;ktan sonra ana menü";
 $Banner = "Banner";
 $DokeosAdminWebLinks = "Chamilo Web";
 $ImageResizeTitle = "Gönderilen resimleri yeniden boyutland&#305;r";
-$ImageResizeComment = "Kullan&#305;c&#305; resimleri e&#287;er a href=\\\"http://php.net/manual/en/ref.image.php\\\" target=\\\"_blank\\\">GD library</a> PHP ile derlendiyse yeniden boyutland&#305;rlabilir. E&#287;er GD kullan&#305;lamaz ise, bu özellik sessizce ihmal edilir.";
+$ImageResizeComment = "Kullan&#305;c&#305; resimleri e&#287;er a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library</a> PHP ile derlendiyse yeniden boyutland&#305;rlabilir. E&#287;er GD kullan&#305;lamaz ise, bu özellik sessizce ihmal edilir.";
 $MaxImageWidthTitle = "Kullan&#305;c&#305; resmi en fazla geni&#351;li&#287;i";
 $MaxImageWidthComment = "Bir kullan&#305;c&#305; resiminin en büyük geni&#351;li&#287;i. Bu özellik yaln&#305;zca e&#287;er kullan&#305;c&#305; resimleri yüklemede yeniden boyutland&#305;r&#305;labilir olarak seçildiyse uygulanabilir.";
 $MaxImageHeightTitle = "Kullan&#305;c&#305; resmi en fazla yüksekli&#287;i";

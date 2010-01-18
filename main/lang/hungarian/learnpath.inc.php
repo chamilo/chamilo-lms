@@ -177,7 +177,7 @@ $CreateANewForum = "Új fórum létrehozása";
 $LinkAdd = "Hivatkozás hozzáadása";
 $WoogieConversionPowerPoint = "Woogie : Word konverzió";
 $WelcomeWoogieSubtitle = "Wordb&#337;l tanösvényt készít&#337; konverter";
-$WelcomeWoogieConverter = "Üdvözli a Woogie konverter!<ul type=\\\"1\\\"><li>Válassza ki a .doc, .sxw, .odt állományát<li>Töltse fel a Woogie-ba. A dokumentum átalakul SCORM tanösvénnyé.<li>Ezután hangjegyzeteket adhat minden oldalhoz vagy beilleszthet teszteket, egyéb tevékenységeket az oldalak közé.</ul>";
+$WelcomeWoogieConverter = "Üdvözli a Woogie konverter!<ul type=\"1\"><li>Válassza ki a .doc, .sxw, .odt állományát<li>Töltse fel a Woogie-ba. A dokumentum átalakul SCORM tanösvénnyé.<li>Ezután hangjegyzeteket adhat minden oldalhoz vagy beilleszthet teszteket, egyéb tevékenységeket az oldalak közé.</ul>";
 $WoogieError = "Hiba történt a word dokumentum konverziójakor. Kérem ellen&#337;rizze, hogy ne legyenek különleges karakterek (szóköz, magyar ékezetes bet&#369;k, stb.) a dokumentum nevében.";
 $WordConvert = "Word konverzió";
 $Order = "Sorrend";

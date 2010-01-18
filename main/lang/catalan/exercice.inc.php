@@ -180,7 +180,7 @@ $langHotspotWeightingError = "Heu d\'atribuir una puntuació (més gran que zero) 
 $langHotspotValidateError1 = "Heu de respondre completament a la pregunta (";
 $langHotspotValidateError2 = "clic(s) requerit sobre la imatge) abans de veure els resultats";
 $langHotspotRequired = "Descripció i puntuació obligatoris per cada zona interactiva. Comentari opcional. ";
-$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; Per crear una zona interactiva: seleccioneu la forma al costat del color, després dibuixeu la zona interactiva.</div><div style=\\\"padding:2px 3px;\\\">&bull; Per desplaçar una zona interactiva: seleccioneu el color, cliqueu sobre un altre indret en la imatge i dibuixeu la zona interactiva.</div><div style=\\\"padding:2px 3px;\\\">&bull; Per afegir una zona interactiva: cliqueu el botó [+ zona interactiva].</div><div style=\\\"padding:2px 3px;\\\">&bull; Per tancar un polígon: clic al botó dret i seleccioneu \\\"Tancar el polígon\\\".</div>";
+$langHotspotChoose = "<div style=\"padding:2px 3px;\">&bull; Per crear una zona interactiva: seleccioneu la forma al costat del color, després dibuixeu la zona interactiva.</div><div style=\"padding:2px 3px;\">&bull; Per desplaçar una zona interactiva: seleccioneu el color, cliqueu sobre un altre indret en la imatge i dibuixeu la zona interactiva.</div><div style=\"padding:2px 3px;\">&bull; Per afegir una zona interactiva: cliqueu el botó [+ zona interactiva].</div><div style=\"padding:2px 3px;\">&bull; Per tancar un polígon: clic al botó dret i seleccioneu \"Tancar el polígon\".</div>";
 $Fault = "Incorrecte";
 $Hotspot = "Zones interactives";
 $ClickNumber = "Nombre de clics";

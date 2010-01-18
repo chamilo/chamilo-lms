@@ -169,7 +169,7 @@ $CreateANewForum = "Opret et nyt forum";
 $LinkAdd = "Tilføj link";
 $WoogieConversionPowerPoint = "Woogie: Word-konvertering";
 $WelcomeWoogieSubtitle = "Konvertering af word-fil til læringssti";
-$WelcomeWoogieConverter = "Dette er Woogie konverteringsprogram. <ul type=\\\"1\\\"><li>Vælg den fil, der skal konverteres. Formatet skal være: .doc, .sxw, .odt<li>Upload filen til Woogie. Filen bliver nu konverteret til en SCORM kompatibel læringssti<li>Du kan efterfølgende tilføje audio kommentarer på hver side og tilføje quiz eller andre aktiviteter</ul>";
+$WelcomeWoogieConverter = "Dette er Woogie konverteringsprogram. <ul type=\"1\"><li>Vælg den fil, der skal konverteres. Formatet skal være: .doc, .sxw, .odt<li>Upload filen til Woogie. Filen bliver nu konverteret til en SCORM kompatibel læringssti<li>Du kan efterfølgende tilføje audio kommentarer på hver side og tilføje quiz eller andre aktiviteter</ul>";
 $WoogieError = "Der opstod en fejl under konverteringen. Undersøg om der er specielle tegn i dokumentetnavnet. Er der det, skal du gemme dokumentet på ny under et gyldigt navn.";
 $WordConvert = "Word-konvertering";
 $Order = "Rækkefølge";

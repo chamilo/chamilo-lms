@@ -6,16 +6,16 @@ $langForContent = "The forum is a written and asynchronous discussion tool.
  Where email allows one-to-one dialogue, forums allow public or semi-public (group) 
  dialogue.</p><p>Technically speaking, the users need only their
  browser to use Chamilo forums.</P><p>To organise forums, click on
- \\\'Forum Administration\\\'. Discussions are organised in sets and subsets as
+ \'Forum Administration\'. Discussions are organised in sets and subsets as
  following:</p><p><b>Category > Forum > Topic > Answers</b></p>To structure
  your users discussions, it is necessary to organise categories and
  forums beforehand, leaving the creation of topics and answers to them. By
- default, the Chamilo forum only contains the category \\\'Public\\\', a sample
+ default, the Chamilo forum only contains the category \'Public\', a sample
  forum and a sample topic.</p><p>The first thing you should do is deleting
  the sample topic and modify the first forum name. Then, you can
- create, in the \\\'public\\\' category, other forums, by by themes, to
- fit your learning scenario requirements.</p><p>Don\\\'t mix Categories and
- forums, and don\\\'t forget that an empty category (without forums) does not
+ create, in the \'public\' category, other forums, by by themes, to
+ fit your learning scenario requirements.</p><p>Don\'t mix Categories and
+ forums, and don\'t forget that an empty category (without forums) does not
  appear on the student view.</p><p>The description of a forum can be the
  list of its members, the definition of a goal, a task, a theme...</p>
  <p>Group forums should not be created through Forum tool but through Groups tool. There you will be allowed to decide whether your group forums are private or public.</p>
@@ -34,25 +34,25 @@ $langHomeContent = "<p>The course home page shows a series of tools : an introdu
 <b>Navigation</b>
 <p>To browse your course, you have 2 navigation tools. One on top left is a tree showing where you are and how deep you are in the course. On top right, you can access to a tool through its icon in one clic. Whether you select your course code on left (always UPPER CASE) or the house icon on the right, you will reach the home page of your course. </p>
 <b>Best practice</b>
-<p>To motivate your students, it is important that your course area is a dynamic area. This will indicate that there is \\\'somebody behind the screen\\\'. A quick way to give this feeling is to edit the Introduction text (clic on yellow pencil) at least evey week to tell latest news, forthcoming deadlines and so on.</p>
+<p>To motivate your students, it is important that your course area is a dynamic area. This will indicate that there is \'somebody behind the screen\'. A quick way to give this feeling is to edit the Introduction text (clic on yellow pencil) at least evey week to tell latest news, forthcoming deadlines and so on.</p>
 <p>To build your course, it might proove relevant to follow these steps:
 <ol><li>In Course Settings, check Course Acces : Private and Subscription : Denied. This way, nobody can enter your course area during building process,</li>
 <li>Show all the tools clicking on the grey link below the ones situated at the bottom of the page,</li>
-<li>Use the tools you need to \\\'fill\\\' your area with content, events, guidelines, tests etc.,</li>
+<li>Use the tools you need to \'fill\' your area with content, events, guidelines, tests etc.,</li>
 <li>Hide all tools : your home page is empty in Student view,</li>
-<li>Use the Path tool to structure the way students will visit it and learn with it. This way, you use the other tools, but you don\\\'t show them at first sight.</li>
+<li>Use the Path tool to structure the way students will visit it and learn with it. This way, you use the other tools, but you don\'t show them at first sight.</li>
 <li>Click on the eye icon besides the path you created : this path will then show on your home page,</li>
 <li>The preparation of your course area is over. Your home page shows an introdution text followed by one link only and this link drives students through the course. Clic on Student view (top right) to see things from a student point of view.<I></I></li></ol>";
 $langHOnline = "Help Live Conferencing system";
-$langOnlineContent = "<br><span style=\\\"font-weight: bold;\\\">Introduction </span><br>
+$langOnlineContent = "<br><span style=\"font-weight: bold;\">Introduction </span><br>
       <br>
-      <div style=\\\"margin-left: 40px;\\\">Dokeos online conferencing system
+      <div style=\"margin-left: 40px;\">Dokeos online conferencing system
 allows you to teach, inform or gather
 together up to 500 people in a simple and quick way.<br>
       </div>
       <ul>
         <ul>
-          <li><b>live audio :</b> the trainer\\\'s voice is broadcasted
+          <li><b>live audio :</b> the trainer\'s voice is broadcasted
 live
 to
 participants,<br>
@@ -65,121 +65,121 @@ PDF presentation,<br>
 through a chat.</li>
         </ul>
       </ul>
-      <span style=\\\"font-weight: bold;\\\"></span><span
- style=\\\"font-weight: bold;\\\"><br>
+      <span style=\"font-weight: bold;\"></span><span
+ style=\"font-weight: bold;\"><br>
 Student / participant</span><br>
       <br>
-      <div style=\\\"margin-left: 40px;\\\">To attend a conference you need:<br>
+      <div style=\"margin-left: 40px;\">To attend a conference you need:<br>
       </div>
       <br>
-      <div style=\\\"margin-left: 40px;\\\">1. Loudspeakers (or headset)
+      <div style=\"margin-left: 40px;\">1. Loudspeakers (or headset)
 connected to your PC<br>
       <br>
-      <a href=\\\"http://www.logitech.com\\\"><img
- style=\\\"border: 0px solid ; width: 87px; height: 58px;\\\" alt=\\\"speakers\\\"
- src=\\\"../img/speaker.gif\\\"></a><br>
+      <a href=\"http://www.logitech.com\"><img
+ style=\"border: 0px solid ; width: 87px; height: 58px;\" alt=\"speakers\"
+ src=\"../img/speaker.gif\"></a><br>
       <br>
 2. Winamp Media player<br>
       <br>
-      <a href=\\\"http://www.winamp.com\\\"><img
- style=\\\"border: 0px solid ; width: 87px; height: 27px;\\\" alt=\\\"Winamp\\\"
- src=\\\"../img/winamp.gif\\\"></a><br>
+      <a href=\"http://www.winamp.com\"><img
+ style=\"border: 0px solid ; width: 87px; height: 27px;\" alt=\"Winamp\"
+ src=\"../img/winamp.gif\"></a><br>
       <br>
-Mac : use <a href=\\\"http://www.quicktime.com\\\">Quicktime</a><br>
-Linux : use <a href=\\\"http://www.xmms.org/\\\">XMMS</a> <br>
+Mac : use <a href=\"http://www.quicktime.com\">Quicktime</a><br>
+Linux : use <a href=\"http://www.xmms.org/\">XMMS</a> <br>
       <br>
 � 3. Acrobat PDF reader or Word or PowerPoint, depending on the
 format of
-the teacher\\\'s slides<br>
+the teacher\'s slides<br>
       <br>
-      <a href=\\\"http://www.acrobat.com\\\"><img
- style=\\\"border: 0px solid ; width: 87px; height: 31px;\\\"
- alt=\\\"acrobat reader\\\" src=\\\"../img/acroread.gif\\\"></a><br>
+      <a href=\"http://www.acrobat.com\"><img
+ style=\"border: 0px solid ; width: 87px; height: 31px;\"
+ alt=\"acrobat reader\" src=\"../img/acroread.gif\"></a><br>
       </div>
       <br>
-      <span style=\\\"font-weight: bold;\\\"><br>
+      <span style=\"font-weight: bold;\"><br>
 Teacher / lecturer</span><br>
       <br>
-      <div style=\\\"margin-left: 40px;\\\">To give a lecture, you need :<br>
+      <div style=\"margin-left: 40px;\">To give a lecture, you need :<br>
       </div>
       <br>
-      <div style=\\\"margin-left: 40px;\\\">1. A microphone headset<br>
+      <div style=\"margin-left: 40px;\">1. A microphone headset<br>
       <br>
-      <a href=\\\"http://www.logitech.com\\\"><img
- style=\\\"border: 0px solid ; width: 87px; height: 87px;\\\" alt=\\\"Headset\\\"
- src=\\\"../img/headset.gif\\\"></a><br>
-We advise you to use a <a href=\\\"http://www.logitech.com/\\\">Logitech</a>
+      <a href=\"http://www.logitech.com\"><img
+ style=\"border: 0px solid ; width: 87px; height: 87px;\" alt=\"Headset\"
+ src=\"../img/headset.gif\"></a><br>
+We advise you to use a <a href=\"http://www.logitech.com/\">Logitech</a>
 USB one for a better audio broadcasting quality.<br>
       <br>
 2. Winamp<br>
       <br>
-      <a href=\\\"http://www.winamp.com\\\"><img
- style=\\\"border: 0px solid ; width: 87px; height: 27px;\\\" alt=\\\"Winamp\\\"
- src=\\\"../img/winamp.gif\\\"></a><br>
+      <a href=\"http://www.winamp.com\"><img
+ style=\"border: 0px solid ; width: 87px; height: 27px;\" alt=\"Winamp\"
+ src=\"../img/winamp.gif\"></a><br>
       <br>
 3. SHOUTcast DSP Plug-In for Winamp 2.x <br>
       <br>
-      <a href=\\\"http://www.shoutcast.com\\\"><img
- style=\\\"border: 0px solid ; width: 87px; height: 24px;\\\" alt=\\\"Shoutcast\\\"
- src=\\\"../img/shoutcast.gif\\\"></a><br>
+      <a href=\"http://www.shoutcast.com\"><img
+ style=\"border: 0px solid ; width: 87px; height: 24px;\" alt=\"Shoutcast\"
+ src=\"../img/shoutcast.gif\"></a><br>
       <br>
-Follow instructions on <a href=\\\"http://www.shoutcast.com\\\">www.shoutcast.com</a>
+Follow instructions on <a href=\"http://www.shoutcast.com\">www.shoutcast.com</a>
 on how to install and
 configure Shoutcast Winamp DSP Plug-In. <br>
       </div>
       <br>
-      <span style=\\\"font-weight: bold;\\\"><br>
+      <span style=\"font-weight: bold;\"><br>
 How to give a conference?<br>
       <br>
       </span>
-      <div style=\\\"margin-left: 40px;\\\">Create a Chamilo course > Enter
+      <div style=\"margin-left: 40px;\">Create a Chamilo course > Enter
 it > Show then enter Conference
 tool > Edit (pencil icon on top left) the settings > upload your
 slides (PDF, PowerPoint or whatever) > type an introduction text
 > type the URL of your live streaming according to the information
-you got from your technical admin.<span style=\\\"font-weight: bold;\\\"></span><br>
-      <span style=\\\"font-weight: bold;\\\"></span></div>
-      <div style=\\\"margin-left: 40px;\\\"><img
- style=\\\"width: 256px; height: 182px;\\\" alt=\\\"conference config\\\"
- src=\\\"../img/conf_screen_conf.gif\\\"><br>
-Don\\\'t forget to give a clear meeting date, time and other
+you got from your technical admin.<span style=\"font-weight: bold;\"></span><br>
+      <span style=\"font-weight: bold;\"></span></div>
+      <div style=\"margin-left: 40px;\"><img
+ style=\"width: 256px; height: 182px;\" alt=\"conference config\"
+ src=\"../img/conf_screen_conf.gif\"><br>
+Don\'t forget to give a clear meeting date, time and other
 guidelines to your participants beforehand. <br>
       <br>
-      <span style=\\\"font-weight: bold;\\\">Tip</span> : 10 minutes before
+      <span style=\"font-weight: bold;\">Tip</span> : 10 minutes before
 conference time, type a short message in the chat to inform
 participants that you are here and to help people who might have audio
 trouble. <br>
       </div>
       <br>
       <br>
-      <span style=\\\"font-weight: bold;\\\">Streaming Server</span><br>
+      <span style=\"font-weight: bold;\">Streaming Server</span><br>
       <br>
-      <div style=\\\"margin-left: 40px;\\\">To give an online live streaming
+      <div style=\"margin-left: 40px;\">To give an online live streaming
 conference, you need a streaming
 server and probably a technical admin to help you use it. This guy will
 give you the URL you need
 to type in the live streaming form field once you edit your conference
 settings.<br>
       <br>
-      <small><a href=\\\"http://www.chamilo.org/hosting.php#streaming\\\"><img
- style=\\\"border: 0px solid ; width: 258px; height: 103px;\\\"
- alt=\\\"chamilo streaming\\\" src=\\\"../img/streaming.jpg\\\"><br>
+      <small><a href=\"http://www.chamilo.org/hosting.php#streaming\"><img
+ style=\"border: 0px solid ; width: 258px; height: 103px;\"
+ alt=\"chamilo streaming\" src=\"../img/streaming.jpg\"><br>
 dokeos streaming</a></small><br>
       <br>
 Do it yourself : install, configure and admin <a
- href=\\\"http://www.shoutcast.com\\\">Shoutcast</a> or <a
- href=\\\"http://developer.apple.com/darwin/projects/streaming/\\\">Apple
+ href=\"http://www.shoutcast.com\">Shoutcast</a> or <a
+ href=\"http://developer.apple.com/darwin/projects/streaming/\">Apple
 Darwin</a>. <br>
       <br>
 Or contact Chamilo. We can help you organise your conference, asssist
 your lecturer and rent you a low cost streaming slot on our servers : <a
- href=\\\"http://www.chamilo.org/hosting.php#streaming\\\">http://www.chamilo.org/hosting.php</a><br>
+ href=\"http://www.chamilo.org/hosting.php#streaming\">http://www.chamilo.org/hosting.php</a><br>
       <br>
       <br>";
 $langHClar = "Chamilo Help";
 $langHDoc = "Help Documents";
 $langDocContent = "<p>The Documents tool is similar to the FileManager of
- your desktop computer.</p><p>You can create simple web pages (\\\'Create a document\\\') or upload files of any type (HTML, Word,
+ your desktop computer.</p><p>You can create simple web pages (\'Create a document\') or upload files of any type (HTML, Word,
  Powerpoint, Excel, Acrobat, Flash, Quicktime, etc.). Your only concern
  must be that your users have the corresponding software to read them.
  Some file types can contain viruses, it is your responsibilty not to
@@ -194,7 +194,7 @@ $langDocContent = "<p>The Documents tool is similar to the FileManager of
 <p>Select Create a document > Give it a title (no spaces, no accents) > type your text > Use the buttons of the Wysiwyg (What You See Is What You Get) editor to structure information, create tables, styles etc. To create web pages, you will need to get familiar with 3 concepts : Links, Images and Tables. Note that web pages offer less layout possibilities than Ms-Word pages. Note too that instead of creating a document in the editor, you can also cut and paste existing content from a web page or a Word document. This is an easy and quick way to migrate content onto your Chamilo course.
 </p>
 <ul><li><b>To add a link</b>, you need to copy the URL of the target somewhere. We suggest that you open 2 browser windows simultaneously, one with your chamilo course and the other to browse the web. Once you find the page you are looking for (note that this page can be inside your chamilo course), copy its URL (CTRL+C or APPLE+C), go back to your page editor, select the word that will be the link, click on the small chain icon, paste the URL of your target there and validate. Once your page is saved, test the link to see if it opens the target. Note that you can decide in the Link popup menu if the link will create a new page or replace your chamilo page in the same window.</li>
-<li><b>To add an image</b>, the principle is similar to the link feature : browse the web with a 2nd window, find the image (if the image is inside your course\\\'s documents area, select \\\'No frames\\\' to get the image only and not the context), copy its URL (CTRL+C or APPLE+C in the URL bar after selecting the whole URL) then go back to your web page editor, position your mouse in the form where you want your image to appear, then click on the small tree icon and copy the URL of the target image into the URL field, Preview and validate. Note that in web pages, you can not redimension your images like in a PowerPoint presentation, neither can you re-locate the image anywhere in the page.</li>
+<li><b>To add an image</b>, the principle is similar to the link feature : browse the web with a 2nd window, find the image (if the image is inside your course\'s documents area, select \'No frames\' to get the image only and not the context), copy its URL (CTRL+C or APPLE+C in the URL bar after selecting the whole URL) then go back to your web page editor, position your mouse in the form where you want your image to appear, then click on the small tree icon and copy the URL of the target image into the URL field, Preview and validate. Note that in web pages, you can not redimension your images like in a PowerPoint presentation, neither can you re-locate the image anywhere in the page.</li>
 <li><b>To add a table</b>, position your mouse in the field where you want the table to appear, then select the table icon in the Wysiwyg editor menu, decide for a number of columns and lines and validate. To get nice tables, we suggest that you choose the following values : border=1, cellspacing=0, cellpadding=4. Note that you will not be allowed to redimension your table or add lines or columns to it after its creation (sorry about this, it is just an online editor, not a word processor yet).</li>
 </ul>
 
@@ -233,7 +233,7 @@ $langDocContent = "<p>The Documents tool is similar to the FileManager of
 		<ul>
 			<li>
 				Click on <img src=../img/delete.gif width=20 height=20>
-				in column \\\'Delete\\\'.
+				in column \'Delete\'.
 			</li>
 		</ul>
 		<h4>
@@ -242,7 +242,7 @@ $langDocContent = "<p>The Documents tool is similar to the FileManager of
 		<ul>
 			<li>
 				Click on <img src=../img/visible.gif width=20 height=20>
-				in column \\\'Visible/invisible\\\'.
+				in column \'Visible/invisible\'.
 			</li>
 			<li>
 				The document (or directory) still exists but it is not visible by users anymore.
@@ -250,7 +250,7 @@ $langDocContent = "<p>The Documents tool is similar to the FileManager of
 			<li>
 				To make it invisible back again, click on
 				<img src=../document/../img/invisible.gif width=24 height=20>
-				in column \\\'Visible/invisible\\\'
+				in column \'Visible/invisible\'
 			</li>
 		</ul>
 		<h4>
@@ -258,7 +258,7 @@ $langDocContent = "<p>The Documents tool is similar to the FileManager of
 		</h4>
 		<ul>
 			<li>
-				Click on <img src=../document/../img/comment.gif width=20 height=20> in column \\\'Comment\\\'
+				Click on <img src=../document/../img/comment.gif width=20 height=20> in column \'Comment\'
 			</li>
 			<li>
 				Type new comment in the corresponding field (top right).
@@ -284,7 +284,7 @@ $langDocContent = "<p>The Documents tool is similar to the FileManager of
 			<li>
 				Click on
 				<img src=../document/../img/dossier.gif width=20 height=20>
-				\\\'Create a directory\\\' (top left)
+				\'Create a directory\' (top left)
 			</li>
 			<li>
 				Type the name of your new directory in the corresponding field (top left)
@@ -299,10 +299,10 @@ $langDocContent = "<p>The Documents tool is similar to the FileManager of
 		<ul>
 			<li>
 				Click on button <img src=../document/../img/deplacer.gif width=34 height=16>
-				in column \\\'Move\\\'
+				in column \'Move\'
 			</li>
 			<li>
-				Choose the directory into which you want to move the document (or directory) in the corresponding scrolling menu (top left) (note: the word \\\'root\\\' means you cannot go upper than that level in the document tree of the server).
+				Choose the directory into which you want to move the document (or directory) in the corresponding scrolling menu (top left) (note: the word \'root\' means you cannot go upper than that level in the document tree of the server).
 			</li>
 			<li>
 				Validate by clicking on <input type=submit value=OK name=submit232>.
@@ -315,7 +315,7 @@ $langDocContent = "<p>The Documents tool is similar to the FileManager of
 		</h4>This learning path will look like a Table of Contents and can be used as a Table of Contents, but it will offer you much more. See Learning Path.";
 $langHUser = "Help Users";
 $langUserContent = "<p><b>Adding users</b></p>
- <p>You can subscribe existing students one by one to your course, by clicking on the link \\\'Subscribe users to this course\\\'. Usually however it\\\'s better to open your course for registration and let the students register themselves. </p>
+ <p>You can subscribe existing students one by one to your course, by clicking on the link \'Subscribe users to this course\'. Usually however it\'s better to open your course for registration and let the students register themselves. </p>
  <p><b>Description</b></p>
  <p>Description has no computer related function.
  It does not give rights on the system. It just indicates to
@@ -326,12 +326,12 @@ $langUserContent = "<p><b>Adding users</b></p>
  authorisation to modify the content and organisation of this course area. You can only choose between giving all the admin
  rights and giving none of them.</p>
 <p>To allow an assistant, for instance, to co-admin the area, you need to be sure he/she is already registered, then click
- on the pencil, then check \\\'Teacher\\\', then \\\'Ok\\\'.</P>
+ on the pencil, then check \'Teacher\', then \'Ok\'.</P>
 <p><b>Co-teachers</b></p>
 <p>To mention in the header of the area the name of a
- co-teacher (co�chairmen, etc.), use the tool \\\'Course settings\\\'. This
+ co-teacher (co�chairmen, etc.), use the tool \'Course settings\'. This
  modification does not register your co-teacher as a user of the course.
- The field \\\'Teachers\\\' is completely independant of the Users
+ The field \'Teachers\' is completely independant of the Users
  list.</p>
  <p><b>Tracking and Personal Home Pages</b></p>
  <p>In addition to showing the users list and modifying their rights, the Users tool also shows individual tracking and allows the teacher define headings for personal home pages to be filled-in by students.</p>";
@@ -339,17 +339,17 @@ $langGroupContent = "<p><b>Introduction</b></p>
 <p>This tool allows to create and manage workgroups.
 At creation (Create groups), groups are empty. There are
 many ways to fill them:
-<ul><li>automatically (\\\'Fill groups (random)\\\'),</li>
-<li>manually (\\\'Edit\\\'),</li>
-<li>self-registration by users (Groups settings: \\\'Self registration allowed...\\\').</li>
+<ul><li>automatically (\'Fill groups (random)\'),</li>
+<li>manually (\'Edit\'),</li>
+<li>self-registration by users (Groups settings: \'Self registration allowed...\').</li>
 </ul>
 These three ways can be combined. You can, for instance, ask users to self-register first.
-Then discover that some of them didn\\\'t register and decide to fill groups automatically (random) in
+Then discover that some of them didn\'t register and decide to fill groups automatically (random) in
 order to complete them. You can also edit each group to compose membership user by user after or before self-registration and/or automatical filling.</p>
 <p>Groups filling, whether automatical or manual, works only if there are already users
 registered in the area. Users list is visible in <b>Users</b> tool. </p><hr noshade size=1>
 <p><b>Create groups</b></p>
-<p>To create new groups, click on \\\'Create new group(s)\\\' and determine number of groups to
+<p>To create new groups, click on \'Create new group(s)\' and determine number of groups to
 create.</p><hr noshade size=1>
 <p><b>Group settings</b></p>
 <p>You can determine Group settings globally (for all groups).
@@ -402,7 +402,7 @@ Then, save your test. You will go to to the question administration.</p>
 <ul>
   <li>Define the answers for your question. You can add or delete an answer by clicking on the right button</li>
   <li>Check the left box for the correct answer(s)</li>
-  <li>Add an optional comment. This comment won\\\'t be seen by the user untill he/she has answered to the question</li>
+  <li>Add an optional comment. This comment won\'t be seen by the user untill he/she has answered to the question</li>
   <li>Give a weighting to each answer. The weighting can be any positive or negative integer, or zero</li>
   <li>Save your answers</li>
 </ul></p>
@@ -421,13 +421,13 @@ Notice : Several elements from the first unit can point to the same element in t
 Give a weighting to each correct matching, and save your answer.</p>
 <hr>
 <b>Test modification</b>
-<p>In order to modify a test, the principle is the same as for the creation. Just click on the picture <img src=\\\"../img/edit.gif\\\" border=\\\"0\\\" align=\\\"absmiddle\\\"> beside the test to modify, and follow instructions above.</p>
+<p>In order to modify a test, the principle is the same as for the creation. Just click on the picture <img src=\"../img/edit.gif\" border=\"0\" align=\"absmiddle\"> beside the test to modify, and follow instructions above.</p>
 <hr>
 <b>Test deleting</b>
-<p>In order to delete a test, click on the picture <img src=\\\"../img/delete.gif\\\" border=\\\"0\\\" align=\\\"absmiddle\\\"> beside the test to delete it.</p>
+<p>In order to delete a test, click on the picture <img src=\"../img/delete.gif\" border=\"0\" align=\"absmiddle\"> beside the test to delete it.</p>
 <hr>
 <b>Test enabling</b>
-<p>So as for a test to be used, you have to enable it by clicking on the picture <img src=\\\"../img/invisible.gif\\\" border=\\\"0\\\" align=\\\"absmiddle\\\"> beside the test name.</p>
+<p>So as for a test to be used, you have to enable it by clicking on the picture <img src=\"../img/invisible.gif\" border=\"0\" align=\"absmiddle\"> beside the test name.</p>
 <hr>
 <b>Running the test</b>
 <p>You can test your exercise by clicking on its name in the tests list.</p>
@@ -463,7 +463,7 @@ Adding a question
 <b>Useful link</b><br>
 <ul>
 <li>Hot Potatoes home page :  <a
-href=\\\"http://web.uvic.ca/hrd/halfbaked/\\\">http://web.uvic.ca/hrd/halfbaked/</a></li>
+href=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a></li>
 </li>
 </ul>
 ";
@@ -474,7 +474,7 @@ $langPathContent = "The Learning Path tool has two functions :
 <img src=\"../img/path_help.gif\">
 <p><b>
 What is a Learning Path ?</b>
-</p><p>A Learning Path is a sequence of learning steps included in modules. It can be content-based (looking like a table of contents) or activities-based, looking like an agenda or a programme of what you need to do in order to understand and practice a certain knowledge or know-how.</p><p>In addition to being structured, a learning path can also be sequenced. This means that some steps will constitute pre-requisites for others (\\\'you cannot go to step 2 before step1\\\'). Your sequence can be suggestive (you show steps one after the other) or imperative (you add pre-requisites so that people are forced to follow the sequence).
+</p><p>A Learning Path is a sequence of learning steps included in modules. It can be content-based (looking like a table of contents) or activities-based, looking like an agenda or a programme of what you need to do in order to understand and practice a certain knowledge or know-how.</p><p>In addition to being structured, a learning path can also be sequenced. This means that some steps will constitute pre-requisites for others (\'you cannot go to step 2 before step1\'). Your sequence can be suggestive (you show steps one after the other) or imperative (you add pre-requisites so that people are forced to follow the sequence).
 </p>
 <p><b>How to create our own Learning Path ?</b></p>
 <p>
@@ -513,7 +513,7 @@ completed or incomplete, so the progress of students is clearly available.
 </p><p>
 If you alter the original title of a step, the new title will appear in
 the path, but the original title will not be deleted. So if you want
-test8.doc to appear as \\\'Final Exam\\\' in the path, you do not have to rename
+test8.doc to appear as \'Final Exam\' in the path, you do not have to rename
 the file, you can use the new title in the path. It is also useful
 to give new titles to links as they are too long.
 </p><p>
@@ -533,16 +533,16 @@ like NETg, Macromedia, Microsoft, Skillsoft, etc. and acting at three levels:
 units to be reusable on different Learning Management Systems (LMS)
 through the separation of content and context,</li>
 <li><b>Pedagogy</b> : Scorm integrates the notion of
-pre-requisite or <i>sequencing</i> (<i>e.g. </i>\\\"You
-cannot go to chapter 2 before passing Quiz 1\\\"),</li>
+pre-requisite or <i>sequencing</i> (<i>e.g. </i>\"You
+cannot go to chapter 2 before passing Quiz 1\"),</li>
 <li><b>Technology</b> : Scorm generates a table of contents as
 an
 abstraction layer situated outside content and outside the LMS. It
 helps content and LMS communicate with each
 other. What is communicated is mainly <i>bookmarks
-</i>(\\\"Where is John in the
-course?\\\"), <i>scoring</i> (\\\"How did John pass the test?\\\") and <i>time</i> (\\\"How much
-time did John spent in chapter 1?\\\").</li>
+</i>(\"Where is John in the
+course?\"), <i>scoring</i> (\"How did John pass the test?\") and <i>time</i> (\"How much
+time did John spent in chapter 1?\").</li>
 </ul>
 <b>How to create a SCORM compliant learning path?</b><br>
 <br>
@@ -551,13 +551,13 @@ The most natural way is to use the Chamilo Learning Path Builder. However, you m
 <b>Useful links</b><br>
 <ul>
 <li>Adlnet : authority responsible for Scorm normalisation, <a
-href=\\\"http://www.adlnet.org/\\\">http://www.adlnet.org</a></li>
+href=\"http://www.adlnet.org/\">http://www.adlnet.org</a></li>
 <li>Reload : Open Source free Scorm player and editor, <a
-href=\\\"http://www.reload.ac.uk/\\\">http://www.reload.ac.uk</a></li>
+href=\"http://www.reload.ac.uk/\">http://www.reload.ac.uk</a></li>
 <li>Lectora : Scorm publisher authoring software, <a
-href=\\\"http://www.trivantis.com/\\\">http://www.trivantis.com</a><br>
+href=\"http://www.trivantis.com/\">http://www.trivantis.com</a><br>
 <li>HotPotatoes home page, 
-<a href=\\\"http://web.uvic.ca/hrd/halfbaked/\\\">http://web.uvic.ca/hrd/halfbaked/</a><br>
+<a href=\"http://web.uvic.ca/hrd/halfbaked/\">http://web.uvic.ca/hrd/halfbaked/</a><br>
 </li>
 </ul>
 <p><b>
@@ -566,7 +566,7 @@ The Learning Path section lists all the <i>self-built Learning Paths</i>
 and all uploaded <i>Scorm format Learning Paths</i>, as well.
 </p>";
 $langHDescription = "Help Course Description";
-$langDescriptionContent = "<p>This tool will help you describe your course in a synthetic way and from the outside. It may help your future students get a clear view on what they can expect from this course. It is also an opportunity for you to rethink your course scenario.</p>Items are given here as proposals. If you want to create a course description with your own items, use only the \\\'Other\\\' item and decide for its title.</p>
+$langDescriptionContent = "<p>This tool will help you describe your course in a synthetic way and from the outside. It may help your future students get a clear view on what they can expect from this course. It is also an opportunity for you to rethink your course scenario.</p>Items are given here as proposals. If you want to create a course description with your own items, use only the \'Other\' item and decide for its title.</p>
 <p>
 To fill the course description, select Create and edit with forms > Scrolldown menu and select the item of your choice > fill the form > Validate. You can always edit or delete the content of every item by clicking on the pencil or red cross icons.</p>";
 $langHLinks = "Help Links tool";
@@ -590,23 +590,23 @@ The links <b>Support Forum</b> and <b>Documentation</b> that point to the main C
 To enter a course (main area of your startpage), click on its name. Your profile can vary from one course to the other. It is possible that you are teacher in one course and student in another. 
 </p>";
 $langHAgenda = "Help Agenda";
-$langAgendaContent = "<p>The agenda appears both in each course area and as a synthetic tool for the student (\\\'My agenda\\\' in top banner).</p>
+$langAgendaContent = "<p>The agenda appears both in each course area and as a synthetic tool for the student (\'My agenda\' in top banner).</p>
 <p>In the course, the agenda appears as a list of events. You can attach documents or activities to a date so that the agenda becomes a chronological programme for your learning activities.</p>
 <p>In addition to being present in the agenda, the new events are indicated to the student when he/she logs in the next time. The system tells what has been added in the Agenda (and in the Announcements) since his/her last visit : icons appear on the portal home page besides the courses where events and announcements hve been added.</p>
 <p>If you want to go further in the logic of structuring learning activities one after the other, we suggest that you use preferably the Learning Path that offers the same principles with more advanced features. The Learning Path can be considered as a synthesis of a Table of Contens tool + an Agenda + sequencing (imposed order) and tracking.</p>";
 $langHAnnouncements = "Help Announcements";
 $langAnnouncementsContent = "<p>The Announcements tool allows you to send an email to all your students or to some of them or to some groups. It can proove efficient to drive students back to your website if they do not visit it very often.</p>
-<p>To send a message to some users and/or some groups, select \\\'Messages to selected users\\\' then use CTRL+C to select more than one in the left hand menu, click on the right arrow to move them then type your message in the field below.</p>";
+<p>To send a message to some users and/or some groups, select \'Messages to selected users\' then use CTRL+C to select more than one in the left hand menu, click on the right arrow to move them then type your message in the field below.</p>";
 $langHChat = "Help Chat";
 $langChatContent = "<p>The Chat tool allows you to discuss live with your students.</p>
-<p>This chat is not similar to usual ones, like MSN� or Yahoo Messenger� because it is web based. The disadvantage is that it refreshes only after 10 seconds and not immediately. The advantage is that it is integrated in your course,it archives your discussions into the Documents tool and it doesn\\\'t require from your students any plugin to download.</p>
-<p>If users send their pictures in \\\'My e-portfolio\\\' (top banner), then this picture will appear in the discussion to help identify who is speaking.</p>
+<p>This chat is not similar to usual ones, like MSN� or Yahoo Messenger� because it is web based. The disadvantage is that it refreshes only after 10 seconds and not immediately. The advantage is that it is integrated in your course,it archives your discussions into the Documents tool and it doesn\'t require from your students any plugin to download.</p>
+<p>If users send their pictures in \'My e-portfolio\' (top banner), then this picture will appear in the discussion to help identify who is speaking.</p>
 <p>Only the teacher is allowed to delete the discussion when he/she finds it relevant.</p>
 <p><b>Pedagogical relevance</b></p>
-<p>Adding a chat to your course is not necessarily a good idea. However, if this participates to your scenario, the chat can help. You can imagine, for instance, to hide the chat always except at a certain time when you have a dedicated meeting with your students to answer their questions live. It is less a \\\'free\\\' dicsussion tool this way, but you give students a guarantee that they will benefit from this live meeting.</p>";
+<p>Adding a chat to your course is not necessarily a good idea. However, if this participates to your scenario, the chat can help. You can imagine, for instance, to hide the chat always except at a certain time when you have a dedicated meeting with your students to answer their questions live. It is less a \'free\' dicsussion tool this way, but you give students a guarantee that they will benefit from this live meeting.</p>";
 $langHWork = "Help for Student Publications";
 $langWorkContent = "<p>The student publications tool is a very simple one. It allows your students to upload any document in the course area.</p>
-<p>Depending on your course scenario, you can set all files to be visible to all students by default, or only visible for you. Making all files visible is useful when for instance you want to ask students to give their opinion on each other\\\'s papers or let them learn to publish texts to the world. Keep files invisible if e.g. you ask the same question to everybody and want to avoid cheating.</p>
+<p>Depending on your course scenario, you can set all files to be visible to all students by default, or only visible for you. Making all files visible is useful when for instance you want to ask students to give their opinion on each other\'s papers or let them learn to publish texts to the world. Keep files invisible if e.g. you ask the same question to everybody and want to avoid cheating.</p>
 <p>This tool has an <i>Introduction text</i> area to allow you to write a question, detailed guidelines, a reminder of a deadline or anything else you may find relevant.</p>";
 $langHTracking = "Help Tracking";
 $langTrackingContent = "<p>The tracking helps you follow your students : did they connect to the sytem, when, how many times? How much do they get in tests? Did they already upload their Paper? When? If you use Scorm courses, you can evn know how much time a student spent on a module or chapter. The trackinggives information at 2 levels:
@@ -614,12 +614,12 @@ $langTrackingContent = "<p>The tracking helps you follow your students : did the
 <li><b>Nominatively</b>: What pages has John Doe visited? What score does he get in tests? When was hs last connection on the system?</li></ul>";
 $langHSettings = "Help Course settings";
 $langSettingsContent = "<p>Course settings allows you to manage the global parameters of your course : Title, code, language, name of teachers etc.</p>
-<p>The options situated in the middle of the page deal with confidentiality settings : is the course public or private? Can students register to it? You can use these settigs dynamically : open registration during one week > ask your students to register > close access to registration > remove possible intruders through the Users list. This way you keep control of who is in byt you don\\\'t have the administrative hassle of registrating them yourself.</p>
+<p>The options situated in the middle of the page deal with confidentiality settings : is the course public or private? Can students register to it? You can use these settigs dynamically : open registration during one week > ask your students to register > close access to registration > remove possible intruders through the Users list. This way you keep control of who is in byt you don\'t have the administrative hassle of registrating them yourself.</p>
 <p>At the bottom of the page, you can Backup the course and delete it. Backup will create a file on the server and allow you to copy it on your own Hard Disk locally. So that there will be 2 backups of it in different places. If you backup a course then delete it. You will not be allowed to restore it yourself but the system administrator can do this for you if you give him/her the code of your course. Backuping a course is also a good way to get all your documents back onto your own computer. You will need a tool, like Winzip� to UNZIP the archive. Note that backuping a course does not remove it in any way.</p>";
 $langHExternal = "Help Add a Link";
 $langExternalContent = "<p>Dokeos is a modular tool. You can hide and show tools whenever you want, according to your project or to its different chronological phases. But you can also add on your home page tools or pages that you have created yourself or that come from the outside of your Chamilo portal. This way, you will make of your course home page YOUR page.</p>
 <p>To take possession of your page that way, you will Add links on it. These links can be of 2 types:
-<ul><li><b>External link</b>: you create on your home page a link to a website situated outside your course area. In this case, you will select Target= In a new window because you don\\\'t want that website to replace your Chamilo environment.</li>
+<ul><li><b>External link</b>: you create on your home page a link to a website situated outside your course area. In this case, you will select Target= In a new window because you don\'t want that website to replace your Chamilo environment.</li>
 <li><b>Internal link</b>: you link towards a page or a tool inside your Chamilo course. To do this, you go first to that page or document or tool, you copy its URL from the URL bar of your browser (CTRL+C), then you go to Add a link and you paste this URL in the URL field and you give it the name you want. In this case, you will select Target=Same window because you will keep the Chamilo banner on top and the remain in the same environment.</li></ul>
 Once created, these links cannot be edited. To modify them, the only solution is to deactivate them then delete them, then restart from zero.</p>";
 $langClarContent3 = "Clear content";

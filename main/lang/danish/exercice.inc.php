@@ -178,7 +178,7 @@ $langHotspotWeightingError = "Du bliver nødt til at anføre en positiv værdi for 
 $langHotspotValidateError1 = "Du bør besvære spørgsmålet fyldestgørende (";
 $langHotspotValidateError2 = "der skal klikkes på et billede), før resultatet kan vises";
 $langHotspotRequired = "Beskrivelse og værdi skal anføre for hvert hotspot. Tilbagemelding er valgfri";
-$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; For at oprette et hotspot: vælg en form ved siden at farven og angiv hotspot\'en.</div><div style=\\\"padding:2px 3px;\\\">&bull; For at flytte et hotsport, vælg farven, klik et andet sted på billeder og angiv et nyt hotsport.</div><div style=\\\"padding:2px 3px;\\\">&bull; For at tilføje et hotspot: klik på [+hotspot] knappen.</div><div style=\\\"padding:2px 3px;\\\">&bull; For at lukke en polygon: højreklik og vælg\\\"Luk polygon\\\".</div>";
+$langHotspotChoose = "<div style=\"padding:2px 3px;\">&bull; For at oprette et hotspot: vælg en form ved siden at farven og angiv hotspot\'en.</div><div style=\"padding:2px 3px;\">&bull; For at flytte et hotsport, vælg farven, klik et andet sted på billeder og angiv et nyt hotsport.</div><div style=\"padding:2px 3px;\">&bull; For at tilføje et hotspot: klik på [+hotspot] knappen.</div><div style=\"padding:2px 3px;\">&bull; For at lukke en polygon: højreklik og vælg\"Luk polygon\".</div>";
 $Fault = "Ikke korrekt";
 $Hotspot = "Billedeområde";
 $ClickNumber = "Klik-nummer";

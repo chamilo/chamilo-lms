@@ -66,7 +66,7 @@ $langConfirmBackup = "Ar tikrai norite sukurti kurso srities atsarginę kopiją?
 $langCreateSite = "Sukurti kurso sritį";
 $langRestoreDescription = "Kursas yra archyve, kurį galite pasirinkti viršuje.<br><br>
 Kai tik nuspausite \"Atkurti\", archyvas bus išskleistas ir kursas atkurtas.";
-$langRestoreNotice = "This script doesn\\\'t allow yet to automatically restore users, but data saved in \"users.csv\" are sufficient for the administrator to do it manually.";
+$langRestoreNotice = "This script doesn\'t allow yet to automatically restore users, but data saved in \"users.csv\" are sufficient for the administrator to do it manually.";
 $langAvailableArchives = "Esamų archyvų sąrašas";
 $langNoArchive = "Joks archyvas neparinktas";
 $langArchiveNotFound = "Archyvas nerastas";

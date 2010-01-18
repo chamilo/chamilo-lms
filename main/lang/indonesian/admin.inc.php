@@ -425,7 +425,7 @@ $MainMenuLogged = "Menu Utama setelah login";
 $Banner = "Banner";
 $DokeosAdminWebLinks = "Web Chamilo";
 $ImageResizeTitle = "Resize gambar-gambar yang di-upload user";
-$ImageResizeComment = "Gambar-gambar user dapat di-resize pada saat di-upload jika PHP di-compiled dengan <a href=\\\"http://php.net/manual/en/ref.image.php\\\" target=\\\"_blank\\\">GD library</a>. Jika GD tidak tersedia, setting ini akan diabaikan.";
+$ImageResizeComment = "Gambar-gambar user dapat di-resize pada saat di-upload jika PHP di-compiled dengan <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library</a>. Jika GD tidak tersedia, setting ini akan diabaikan.";
 $MaxImageWidthTitle = "Ukuran lebar maksimum gambar user";
 $MaxImageWidthComment = "Lebar maksimum dalam pixel gambarnya user.  Setting ini berlaku jika gambar user di-set untuk di-resized pada saat di-upload.";
 $MaxImageHeightTitle = "Ukuran tinggi maksimum gambar user";

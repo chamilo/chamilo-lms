@@ -109,7 +109,7 @@ $fileModified = "The file is modified";
 $DocumentsOverview = "Documents overview";
 $ViewSlideshow = "Images gallery";
 $Options = "Options";
-$WelcomeOogieConverter = "Welcome to Chamilo RAPID<ul type=\\\"1\\\"><li>Browse your hard disk to find any .ppt or .odp file<li>Upload it to Oogie. It will tranform it into a Scorm course.<li>You will then be allowed to add audio comments on each slide and insert test and activities between the slides.";
+$WelcomeOogieConverter = "Welcome to Chamilo RAPID<ul type=\"1\"><li>Browse your hard disk to find any .ppt or .odp file<li>Upload it to Oogie. It will tranform it into a Scorm course.<li>You will then be allowed to add audio comments on each slide and insert test and activities between the slides.";
 $ConvertToLP = "Convert to course";
 $AdvancedSettings = "Advanced settings";
 $AdvancedSettings = "Advanced settings";

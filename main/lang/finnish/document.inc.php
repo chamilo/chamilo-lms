@@ -104,7 +104,7 @@ $fileModified = "Tiedostoa on muokattu";
 $DocumentsOverview = "dokumenttien esikatselu";
 $ViewSlideshow = "Katso kuvat diaesityksen‰";
 $Options = "Vaihtoehdot";
-$WelcomeOogieConverter = "Tervetuloa Oogie PowerPoint muuntimeen<ul type=\\\"1\\\"><li>Hae kovalevylt‰ .ppt tai .odp tiedosto<li>Lataa se Oogieen. Se muunnetaan Scorm oppimispoluksi.<li>Voit sen j‰lkeen lis‰t‰ ‰‰nikommentteja jokaiseen diaan ja lis‰t‰ harjoituksia ja testej‰ diojen v‰liin.	";
+$WelcomeOogieConverter = "Tervetuloa Oogie PowerPoint muuntimeen<ul type=\"1\"><li>Hae kovalevylt‰ .ppt tai .odp tiedosto<li>Lataa se Oogieen. Se muunnetaan Scorm oppimispoluksi.<li>Voit sen j‰lkeen lis‰t‰ ‰‰nikommentteja jokaiseen diaan ja lis‰t‰ harjoituksia ja testej‰ diojen v‰liin.	";
 $ConvertToLP = "Muunna oppimispoluksi";
 $AdvancedSettings = "Lis‰asetukset";
 $AdvancedSettings = "Lis‰asetukset";

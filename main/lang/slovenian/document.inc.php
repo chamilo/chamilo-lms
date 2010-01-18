@@ -109,7 +109,7 @@ $fileModified = "Datoteka je bila spremenjena";
 $DocumentsOverview = "dokumenti-povzetek";
 $ViewSlideshow = "Poglej projekcijo slik";
 $Options = "Opcije";
-$WelcomeOogieConverter = "Dobrodošli v OOgie, pretvornik za datoteke v PowerPoint obliki <ul type=\\\"1\\\"><li>Prebrskajte za datotekami .ppt ali .odp</li><li>Naložite jih v Oogie. Ta jih bo pretvoril v Scorm obliko uène poti.</li><li>Po naložitvi imate možnost vsakemu diapozitivu dodati zvoène (avdio) komentarje, besedilo, oziroma vprašanja za sprotno preverjanje.</li>";
+$WelcomeOogieConverter = "Dobrodošli v OOgie, pretvornik za datoteke v PowerPoint obliki <ul type=\"1\"><li>Prebrskajte za datotekami .ppt ali .odp</li><li>Naložite jih v Oogie. Ta jih bo pretvoril v Scorm obliko uène poti.</li><li>Po naložitvi imate možnost vsakemu diapozitivu dodati zvoène (avdio) komentarje, besedilo, oziroma vprašanja za sprotno preverjanje.</li>";
 $ConvertToLP = "Pretvori v Uèno pot";
 $AdvancedSettings = "Napredne nastavitve";
 $AdvancedSettings = "Napredne nastavitve";

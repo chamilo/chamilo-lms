@@ -450,7 +450,7 @@ $MainMenuLogged = "Glavni menu po prijavi";
 $Banner = "Pasica (banner)";
 $DokeosAdminWebLinks = "Chamilo Web";
 $ImageResizeTitle = "Spremeni velikost prenesene uporabnikove slike";
-$ImageResizeComment = "Velikost uporabnikove slike je mogoèe pri prenosu prilagoditi le v primeru, da je namešèena <a href=\\\"http://php.net/manual/en/ref.image.php\\\" target=\"\\\"_blank\\\">knjižnjica GD</a>  znotraj PHP namestitve. V primeru, da GD ni namešèena, se ta nastavitev ignorira.";
+$ImageResizeComment = "Velikost uporabnikove slike je mogoèe pri prenosu prilagoditi le v primeru, da je namešèena <a href=\"http://php.net/manual/en/ref.image.php\" target=\"\"_blank\">knjižnjica GD</a>  znotraj PHP namestitve. V primeru, da GD ni namešèena, se ta nastavitev ignorira.";
 $MaxImageWidthTitle = "Najveèja dolžina uporabnikove slike";
 $MaxImageWidthComment = "Najveèja širina uporabnikove slike, podana v pixlih. Ta nastavitev velja le v primeru, da je potrebno prenešeno sliko redimenzionirati.";
 $MaxImageHeightTitle = "Najveèja višina uporabnikove slike";

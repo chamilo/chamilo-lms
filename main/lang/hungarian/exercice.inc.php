@@ -178,7 +178,7 @@ $langHotspotWeightingError = "Pozitív (>0 ) súlyozást kell megadnia az összes fo
 $langHotspotValidateError1 = "Válaszolnia kell teljesen a kérdésre (";
 $langHotspotValidateError2 = "kattintás szükséges a képen) miel&#337;tt látná az eredményeket";
 $langHotspotRequired = "Leírás és súlyozás minden forróponthoz szükséges - megjegyzés írása opcionális.";
-$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; Forropont létrehozása: válasszon ki egy alakzatot és a színét, majd rajzolja meg a forrópontot.</div><div style=\\\"padding:2px 3px;\\\">&bull; A forrópont áthelyezéséhez válassza ki színét, kattintson a kép egy másik részére, és rajzolja meg az új helyét.</div><div style=\\\"padding:2px 3px;\\\">&bull; Forrópont hozzáadáshoz: kattintson a [+forrópont] gombra.</div><div style=\\\"padding:2px 3px;\\\">&bull; Poligon alakzat bezárásához: jobb egérgombal kattintson rá és válassza a \\\"Poligon bezárása\\\" pontot.</div>";
+$langHotspotChoose = "<div style=\"padding:2px 3px;\">&bull; Forropont létrehozása: válasszon ki egy alakzatot és a színét, majd rajzolja meg a forrópontot.</div><div style=\"padding:2px 3px;\">&bull; A forrópont áthelyezéséhez válassza ki színét, kattintson a kép egy másik részére, és rajzolja meg az új helyét.</div><div style=\"padding:2px 3px;\">&bull; Forrópont hozzáadáshoz: kattintson a [+forrópont] gombra.</div><div style=\"padding:2px 3px;\">&bull; Poligon alakzat bezárásához: jobb egérgombal kattintson rá és válassza a \"Poligon bezárása\" pontot.</div>";
 $Fault = "Helytelen";
 $Hotspot = "Kép zónák";
 $ClickNumber = "Kattintson a számra";

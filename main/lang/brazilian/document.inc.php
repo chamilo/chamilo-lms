@@ -109,7 +109,7 @@ $fileModified = "O arquivo foi modificado";
 $DocumentsOverview = "visão geral dos documentos";
 $ViewSlideshow = "Visualizar a galeria de imagens";
 $Options = "Opções";
-$WelcomeOogieConverter = "Bem-vindo ao conversor Oogie PowerPoint. <ul type=\\\"1\\\"><li> Pesquise no seu disco e seleccione um arquivo .ppt ou .odp<li>Carregue-o para Oogie. Transforme numa Rota de Aprendizagem SCORM. <li> Depois poderá acrescentar comentários áudio para cada slide e inserir exercícios entre os slides para avaliação.";
+$WelcomeOogieConverter = "Bem-vindo ao conversor Oogie PowerPoint. <ul type=\"1\"><li> Pesquise no seu disco e seleccione um arquivo .ppt ou .odp<li>Carregue-o para Oogie. Transforme numa Rota de Aprendizagem SCORM. <li> Depois poderá acrescentar comentários áudio para cada slide e inserir exercícios entre os slides para avaliação.";
 $ConvertToLP = "Converter para Rota de Aprendizagem";
 $AdvancedSettings = "Configurações avançadas";
 $AdvancedSettings = "Configurações avançadas";

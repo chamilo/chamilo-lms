@@ -180,7 +180,7 @@ $langHotspotWeightingError = "Você deve atribuir um valor de pontuação positivo 
 $langHotspotValidateError1 = "Você deve responder completamente a questão (";
 $langHotspotValidateError2 = "clique(s) sobre a imagem são necessários antes de poder ver os resultados";
 $langHotspotRequired = "A descrição e a pontuação são necessárias para cada hotspot. Feedback são opcionais.";
-$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; Para criar um hotspot: selecione uma forma junto à cor e depois desenhe o hotspot.</div><div style=\\\"padding:2px 3px;\\\">&bull; Para mover um hotspot, selecione a cor, clique em um outro ponto da imagem e desenhe o hotspot.</div><div style=\\\"padding:2px 3px;\\\">&bull; Para adicionar um hotspot: clique no botão [+ hotspot].</div><div style=\\\"padding:2px 3px;\\\">&bull; Para fechar a forma de um polígono: clique com o botão direito do mouse e selecione \\\"Fechar polígono\\\".</div>";
+$langHotspotChoose = "<div style=\"padding:2px 3px;\">&bull; Para criar um hotspot: selecione uma forma junto à cor e depois desenhe o hotspot.</div><div style=\"padding:2px 3px;\">&bull; Para mover um hotspot, selecione a cor, clique em um outro ponto da imagem e desenhe o hotspot.</div><div style=\"padding:2px 3px;\">&bull; Para adicionar um hotspot: clique no botão [+ hotspot].</div><div style=\"padding:2px 3px;\">&bull; Para fechar a forma de um polígono: clique com o botão direito do mouse e selecione \"Fechar polígono\".</div>";
 $Fault = "Incorreto";
 $Hotspot = "Hotspot";
 $ClickNumber = "Número de cliques";

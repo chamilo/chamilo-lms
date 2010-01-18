@@ -109,7 +109,7 @@ $fileModified = "O ficheiro é modificado";
 $DocumentsOverview = "Resumo dos documentos";
 $ViewSlideshow = "Galeria de imagens";
 $Options = "Opções";
-$WelcomeOogieConverter = "Bem-vindo ao Chamilo RAPID<ul type=\\\"1\\\"><li>Procure no disco rígido um ficheiro .ppt ou .odp<li>Envie o ficheiro para o Oogie para ser convertido num curso Scorm.<li>Poderá posteriormente adicionar comentários em formato áudio a cada slide e ainda inserir testes/exercícios e actividades entre os slides.";
+$WelcomeOogieConverter = "Bem-vindo ao Chamilo RAPID<ul type=\"1\"><li>Procure no disco rígido um ficheiro .ppt ou .odp<li>Envie o ficheiro para o Oogie para ser convertido num curso Scorm.<li>Poderá posteriormente adicionar comentários em formato áudio a cada slide e ainda inserir testes/exercícios e actividades entre os slides.";
 $ConvertToLP = "Converter em curso";
 $AdvancedSettings = "Configurações avançadas";
 $AdvancedSettings = "Configurações avançadas";

@@ -171,7 +171,7 @@ $CreateANewForum = "Napravi novi forum";
 $LinkAdd = "Dodaj poveznicu";
 $WoogieConversionPowerPoint = "Woogie : pretvorba datoteka MS Word formata";
 $WelcomeWoogieSubtitle = "Pretvorba Word datoteka u Put u&#269;enja";
-$WelcomeWoogieConverter = "Dobrodošli u Woogie pretvornik<ul type=\\\"1\\\"><li>Odaberite datoteku .doc, .sxw, .odt formata<li>U&#269;itajte je u Woogie. Datoteka &#263;e biti preba&#269;ena u SCORM Put u&#269;enja.<li>Nakon pretvorbe možete dodavati audio komentare na svakoj stranici te testove i ostale aktivnosti izme&#273;u stranica</ul>";
+$WelcomeWoogieConverter = "Dobrodošli u Woogie pretvornik<ul type=\"1\"><li>Odaberite datoteku .doc, .sxw, .odt formata<li>U&#269;itajte je u Woogie. Datoteka &#263;e biti preba&#269;ena u SCORM Put u&#269;enja.<li>Nakon pretvorbe možete dodavati audio komentare na svakoj stranici te testove i ostale aktivnosti izme&#273;u stranica</ul>";
 $WoogieError = "Pogreška prilikom pretvorbe Word datoteke. Molim provjerite imate li posebnih znakova u nazivu odabrane datoteke.";
 $WordConvert = "Pretvorba Word datoteke";
 $Order = "Redoslijed";

@@ -447,7 +447,7 @@ $MainMenuLogged = "F&#337;men&#369; belépés után";
 $Banner = "Címsor (banner)";
 $DokeosAdminWebLinks = "Chamilo honlap";
 $ImageResizeTitle = "A feltöltött felhasználói képek átméretezése";
-$ImageResizeComment = "A felhasználói képeket át lehet méretezni feltöltéskor, ha a PHP a <a href=\\\"http://php.net/manual/en/ref.image.php\\\" target=\\\"_blank\\\">GD függvénytárral</a> együtt lett telepítve.  Ha a GD nem elérhet&#337;, ez a lehet&#337;ség észrevétlenül figyelmen kívül lesz hagyva.";
+$ImageResizeComment = "A felhasználói képeket át lehet méretezni feltöltéskor, ha a PHP a <a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD függvénytárral</a> együtt lett telepítve.  Ha a GD nem elérhet&#337;, ez a lehet&#337;ség észrevétlenül figyelmen kívül lesz hagyva.";
 $MaxImageWidthTitle = "Felhasználói kép maximális szélessége";
 $MaxImageWidthComment = "A felhasználói kép maximális szélessége képpontban (pixel). Ez a beállítás csak akkor lesz figyelembe véve, ha a kép feltöltésekor ki lesz választva az átméretezés.";
 $MaxImageHeightTitle = "Felhasználói kép maximális magassága";

@@ -177,7 +177,7 @@ $langHotspotWeightingError = "anda musti memberi bobot positif (>0) untuk semua 
 $langHotspotValidateError1 = "Anda harus menjawab lengkap pertanyaan (";
 $langHotspotValidateError2 = "klik dibutuhkan pada citra) sebelum melihat hasil";
 $langHotspotRequired = "Deskripsi dan bobot dibutuhkan untuk tiap hotspot. Komentar adalah opsional.";
-$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; Untuk membuat sebuah hotspot: pilih bentuk disamping warna, dan gambarkan hotspot. </div><div style=\\\"padding:2px 3px;\\\">&bull;  untuk memindahkan hotspot, pilih warna, dan klik hotspot lain pada citra, dan gambar hotspotnya. /div><div style=\\\"padding:2px 3px;\\\">&bull;  Untuk menambah sebuah hotspot: klik tombol [+hotspot]. </div><div style=\\\"padding:2px 3px;\\\">&bull;  Untuk menutup bentuk polygon: klik kanan dan pilih  \\\"Close polygon\\\".</div>";
+$langHotspotChoose = "<div style=\"padding:2px 3px;\">&bull; Untuk membuat sebuah hotspot: pilih bentuk disamping warna, dan gambarkan hotspot. </div><div style=\"padding:2px 3px;\">&bull;  untuk memindahkan hotspot, pilih warna, dan klik hotspot lain pada citra, dan gambar hotspotnya. /div><div style=\"padding:2px 3px;\">&bull;  Untuk menambah sebuah hotspot: klik tombol [+hotspot]. </div><div style=\"padding:2px 3px;\">&bull;  Untuk menutup bentuk polygon: klik kanan dan pilih  \"Close polygon\".</div>";
 $Fault = "Salah";
 $Hotspot = "Hotspot";
 $ClickNumber = "Klik angka";

@@ -116,7 +116,7 @@ $langChoice = "La so seleición";
 $langCorrect = "Correutu";
 $langPossAnsw = "Cantidá de rempuestes correutes pa una entruga";
 $langStudAnsw = "Númberu d\'erros del estudiante";
-$langDetermine = "Decida\'l valir de la evaluación cambiando la tabla asitiada embaxu esti testu. Dempués calque \\\"OK\\\"";
+$langDetermine = "Decida\'l valir de la evaluación cambiando la tabla asitiada embaxu esti testu. Dempués calque \"OK\"";
 $langNonNumber = "Un valor non numbéricu";
 $langReplaced = "Cambiáu";
 $langSuperior = "un valor mayor de 20";
@@ -180,7 +180,7 @@ $langHotspotWeightingError = "Tien de poner un valor (>0) positivu a toles zones
 $langHotspotValidateError1 = "Tien de contestar completamente a la entruga (";
 $langHotspotValidateError2 = "clics necesarios na imaxe) enantes ver los resultaos";
 $langHotspotRequired = "En cauna les zones interautives la descripción y el valor son obligatorios. El comentariu ye opcional.";
-$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull; Pa crear una zona interautiva seleicione la forma que va asociar al color y dempués dibuxe la zona interautiva.</div><div style=\\\"padding:2px 3px;\\\">&bull; Pa mover una zona interautiva, escueya\'l color, calque n\'otru puntu de la imaxe y p\'acabar dibuxe la zona interautiva. </div><div style=\\\"padding:2px 3px;\\\">&bull; Pa amestar una zona interautiva calque nel botón [+zona interautiva].</div><div style=\\\"padding:2px 3px;\\\">&bull; Pa cerrar una forma poligonal calque\'l botón derechu del ratón y seleicione \\\"Cerrar polígonu\\\".</div>";
+$langHotspotChoose = "<div style=\"padding:2px 3px;\">&bull; Pa crear una zona interautiva seleicione la forma que va asociar al color y dempués dibuxe la zona interautiva.</div><div style=\"padding:2px 3px;\">&bull; Pa mover una zona interautiva, escueya\'l color, calque n\'otru puntu de la imaxe y p\'acabar dibuxe la zona interautiva. </div><div style=\"padding:2px 3px;\">&bull; Pa amestar una zona interautiva calque nel botón [+zona interautiva].</div><div style=\"padding:2px 3px;\">&bull; Pa cerrar una forma poligonal calque\'l botón derechu del ratón y seleicione \"Cerrar polígonu\".</div>";
 $Fault = "Incorreuta";
 $Hotspot = "Zones interautives";
 $ClickNumber = "Numberu de clics";

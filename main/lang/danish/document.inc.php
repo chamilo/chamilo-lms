@@ -104,7 +104,7 @@ $fileModified = "Filen er ændret";
 $DocumentsOverview = "Oversigt over dokumenter";
 $ViewSlideshow = "Se billede-dias show";
 $Options = "Indstillinger";
-$WelcomeOogieConverter = "Herfra kan du med programmet Oogie konvertere din PowerPoint-præsentation til en læringssti. <ul type=\\\"1\\\"><li>Gennemse din computer for at finde filen, der ønskes konverteret (filformat= .ppt eller .odp file)<li>Upload filen hertil. Med Oogie ændres præsentationen til en scormbaseret læringssti.<li>Herefter kan du tilføje speak på samtlige sider og f.eks. tilføje øvelser";
+$WelcomeOogieConverter = "Herfra kan du med programmet Oogie konvertere din PowerPoint-præsentation til en læringssti. <ul type=\"1\"><li>Gennemse din computer for at finde filen, der ønskes konverteret (filformat= .ppt eller .odp file)<li>Upload filen hertil. Med Oogie ændres præsentationen til en scormbaseret læringssti.<li>Herefter kan du tilføje speak på samtlige sider og f.eks. tilføje øvelser";
 $ConvertToLP = "Konverter til læringssti";
 $AdvancedSettings = "Avancerede indstillinger";
 $AdvancedSettings = "Avancerede indstillinger";

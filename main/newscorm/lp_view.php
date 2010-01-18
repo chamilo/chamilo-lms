@@ -320,8 +320,9 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 	</div>
 	<!-- end media player layaout -->
 
-	<!-- toc layout -->
-	<div id="toc_id" name="toc_name"  style="padding:0;margin-top:20px;height:60%;width:100%">
+	<!-- toc layout -->	
+	<div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;height:60%;width:100%">
+	
 		<div id="learning_path_toc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
 			<!-- log message layout -->
 	
@@ -396,6 +397,9 @@ window.onload = function() {
 	rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
 	document.body.style.overflow = 'hidden';
 	updateContentHeight();
+	viewportheight = window.innerHeight;
+	document.getElementById('toc_id').style.height = viewportheight - 200 + "px";
+	
 }
 
 window.onresize = updateContentHeight;
@@ -510,8 +514,9 @@ window.onresize = updateContentHeight;
 		</div>
 		<!-- end media player layaout -->
 
-		<!-- toc layout -->
-		<div id="toc_id" name="toc_name"  style="padding:0;margin-top:20px;height:60%;width:100%">
+		<!-- toc layout -->		
+		<div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;height:60%;width:100%">
+		
 			<div id="learning_path_toc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
 	
     	<?php if (!empty($_SESSION['oLP']->scorm_debug)) { //only show log  ?>
@@ -586,6 +591,9 @@ window.onload = function() {
 	rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
 	document.body.style.overflow = 'hidden';
 	updateContentHeight();
+	viewportheight = window.innerHeight;
+	document.getElementById('toc_id').style.height = viewportheight - 200 + "px";
+	
 
 	//loads the glossary library	
 	<?php

@@ -745,10 +745,10 @@ function api_is_self_registration_allowed() {
  *
  * @example The function can be used to check if a user is logged in
  * 			if (api_get_user_id())
- * @return integer the id of the current user
+ * @return integer the id of the current user, 0 if is empty
  */
 function api_get_user_id() {
-	return empty($GLOBALS['_user']['user_id']) ? 0 : $GLOBALS['_user']['user_id'];
+	return empty($GLOBALS['_user']['user_id']) ? 0 : intval($GLOBALS['_user']['user_id']);
 }
 
 /**

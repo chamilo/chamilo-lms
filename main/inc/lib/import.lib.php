@@ -3,7 +3,6 @@
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
-
 	Copyright (c) 2004,2005 Dokeos S.A.
 	Copyright (c) Bart Mollet, Hogeschool Gent
 
@@ -57,10 +56,12 @@ class Import
 			$row = array ();
 			//avoid empty lines in csv			
 			if (is_array($row_tmp) && count($row_tmp)>0 && $row_tmp[0]!= '') {
-				foreach ($row_tmp as $index => $value) {				
-					$row[$keys[$index]] = $value;				
+				if (!is_null($row_tmp[0])) {			
+					foreach ($row_tmp as $index => $value) {				
+						$row[$keys[$index]] = $value;				
+					}
+					$result[] = $row;
 				}
-				$result[] = $row;
 			}			
 		}
 		fclose($handle);

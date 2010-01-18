@@ -490,9 +490,9 @@ if ($encryptPassForm=='1' ) {
 <div id="header">
 	<div id="header1">
 	<div id="institution">
-		<?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?><br />
+		<?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version_').' '.$new_version; ?>
+        <?php if($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').(is_array($update_from_version)?implode('|',$update_from_version):''); ?>
 	</div>
-	<?php if($installType == 'new') echo ' &ndash; '.get_lang('NewInstallation'); else if($installType == 'update') echo ' &ndash; '.get_lang('UpdateFromDokeosVersion').(is_array($update_from_version)?implode('|',$update_from_version):''); ?>
 	</div>
 	<div id="header2" style="height:50px">&nbsp;</div>
 	<div id="header3">

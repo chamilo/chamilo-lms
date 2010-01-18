@@ -759,14 +759,14 @@ this lets the navigation menu appear to the left:
 	text-align: center;
 }
 #toolnavbox dd {
-	background: #9fd854;
+	background: #fbc0c9;
 	border-bottom:1px solid #fff;
 	color: #009;
 	margin: 0;
 	text-align: left;
 }
 #toolnavlist a, #toolnavlist a:link {
-	background: #9fd854;
+	background: #fbc0c9;
 	color: #4171b5;
 	display: block;
 	margin: 0;
@@ -1233,7 +1233,7 @@ a.personal_agenda:hover, a.personal_agenda:hover {
 .bottom-link {
 	border: 2px outset;
 	text-decoration: none;
-	background-color:#9fd854;
+	background-color:#fbc0c9;
 	border-color: #D4E2F6;
 	background-image:url(images/button_back.jpg);
 	background-position:10px 50%;
@@ -1337,7 +1337,7 @@ a.nobold:hover {
 	font-size: 12px;
 	line-height: 14px;
 	font-family: verdana, arial, helvetica, sans-serif;
-	background-color: #9fd854;
+	background-color: #fbc0c9;
 	color: #666666;
 	border: 1px solid #bbb;
 	padding: 10px 10px 10px 10px;
@@ -1531,7 +1531,7 @@ div.admin_section h4 {
 }
 
 .user_course_category {
-	background-color: #9fd854;
+	background-color: #fbc0c9;
 	border: 1px solid #666;
 	font-weight: bold;
 	color: #666;
@@ -2126,7 +2126,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 }
 .survey_question {
 	/* 264269 4271b5 9fd854 */
-	background-color:#9fd854;
+	background-color:#fbc0c9;
 	color:#999;
 	padding:5px;/*border: 1px solid #264269;*/
 }
@@ -2359,7 +2359,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	vertical-align:middle;
 }
 .actions {
-	background:#9fd854;
+	background:#fbc0c9;
 	border-bottom:1px dotted #999999;
 	border-top:1px dotted #999999;
 	/*height:35px;*/
@@ -2422,7 +2422,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	vertical-align:middle;
 }
 .actions-title {
-	background:#9fd854;
+	background:#fbc0c9;
 	border-bottom:1px dotted #999999;
 	border-top:1px dotted #999999;
 	/*height:35px;*/
@@ -2659,7 +2659,7 @@ button.upload {
 	border: 2px outset;
 	padding: 2px;
 	text-decoration: none;
-	background-color:#9fd854;
+	background-color:#fbc0c9;
 	border-color: #D4E2F6;
 	background-image:url(images/button_back.gif);
 	padding-left:30px;

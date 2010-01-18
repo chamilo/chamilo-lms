@@ -57,7 +57,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	width: 90%;
 	min-height: 320px;
 	padding:12px;
-	overflow:hidden;
+
 }
 .item {
 	-moz-border-radius-bottomleft:5px;

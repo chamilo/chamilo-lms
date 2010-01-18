@@ -3232,7 +3232,7 @@ function api_set_settings_category($category, $value = null, $access_url = 1, $f
 			$i = 0;
 			foreach ($fieldtype as $type){
 				if ($i > 0) {
-					$sql .= ' 0R ';
+					$sql .= ' OR ';
 				}
 				$type = Database::escape_string($type);
 				$sql .= " type='".$type."' ";
@@ -3249,7 +3249,7 @@ function api_set_settings_category($category, $value = null, $access_url = 1, $f
 			$i = 0;
 			foreach ($fieldtype as $type){
 				if ($i > 0) {
-					$sql .= ' 0R ';
+					$sql .= ' OR ';
 				}
 				$type = Database::escape_string($type);
 				$sql .= " type='".$type."' ";

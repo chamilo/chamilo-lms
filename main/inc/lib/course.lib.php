@@ -864,25 +864,35 @@ class CourseManager {
 	 *	Return user info array of all users registered in the specified real or virtual course
 	 *	This only returns the users that are registered in this actual course, not linked courses.
 	 *
-	 *	@param string $course_code
-	 *	@return array with user info
+	 * @param string $course_code the code of the course
+	 * @param boolean $with_session determines if the course is used in a session or not
+	 * @param integer $session_id the id of the session
+	 * @param string $limit the LIMIT statement of the sql statement
+	 * @param string $order_by the field to order the users by. Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement that starts with ORDER BY ...
+	 *  @return array
 	 */
 	public static function get_user_list_from_course_code($course_code, $with_session = true, $session_id = 0, $limit = '', $order_by = '') {
 
-		$session_id = intval($session_id);
-		$course_code = Database::escape_string($course_code);
-
-		$users = array();
-		$where = array();
+		// variable initialisation
+		$session_id 	= intval($session_id);
+		$users			= array();
+		$course_code 	= Database::escape_string($course_code);
+		$where 			= array();
 		
-		if (empty($session_id)) {
-			$sql = 'SELECT DISTINCT course_rel_user.status, user.user_id, course_rel_user.role, course_rel_user.tutor_id ';
-		} else {
-			$sql = 'SELECT DISTINCT user.user_id, user.status, session_course_user.status as status_session ';
+		// if the $order_by does not contain 'ORDER BY' we have to check if it is a valid field that can be sorted on
+		if (!strstr($order_by,'ORDER BY')) {	
+			if (!empty($order_by) AND in_array($order_by, array('lastname', 'firstname', 'username', 'email', 'official_code'))){
+					$order_by = 'ORDER BY user.'.$order_by;
+				} else {
+					$order_by = '';
+				}
 		}
-
+		
+		$sql = $session_id == 0
+			? 'SELECT DISTINCT course_rel_user.status, user.user_id, course_rel_user.role, course_rel_user.tutor_id, user.*  '
+			: 'SELECT DISTINCT user.user_id, user.status, user.*  ';		
 		$sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
-
+		
 		if (api_get_setting('use_session_mode')=='true' && $with_session) {
 			$sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user
 						ON user.user_id = session_course_user.id_user
@@ -903,12 +913,14 @@ class CourseManager {
 		$sql .= ' WHERE '.implode(' OR ', $where);
 
 		$sql .= ' '.$order_by.' '.$limit;
-
+		
 		$rs = Database::query($sql, __FILE__, __LINE__);
 
 		while ($user = Database::fetch_array($rs)) {
-			$user_info = Database::get_user_info_from_id($user['user_id']);
+			//$user_info = Database::get_user_info_from_id($user['user_id']);			
+			$user_info = $user;			
 			$user_info['status'] = $user['status'];
+			
 			if (isset($user['role'])) {
 				$user_info['role'] = $user['role'];
 			}

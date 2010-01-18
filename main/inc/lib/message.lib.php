@@ -1130,7 +1130,7 @@ function inbox_display() {
 	}
 	// display sortable table with messages of the current user
 	//$table = new SortableTable('messages', 'get_number_of_messages_mask', 'get_message_data_mask', 3, get_number_of_messages_mask(),'DESC');
-	$table = new SortableTable('message', array('MessageManager','get_number_of_messages'), array('MessageManager','get_message_data'),3,20,'DESC');
+	$table = new SortableTable('message_inbox', array('MessageManager','get_number_of_messages'), array('MessageManager','get_message_data'),3,20,'DESC');
 	$table->set_header(0, '', false,array ('style' => 'width:20px;'));
 	$title=api_xml_http_response_encode(get_lang('Title'));	
 	$action=api_xml_http_response_encode(get_lang('Actions'));
@@ -1212,7 +1212,7 @@ function outbox_display() {
 			
 	// display sortable table with messages of the current user
 	//$table = new SortableTable('messages', 'get_number_of_messages_send_mask', 'get_message_data_send_mask', 3, get_number_of_messages_send_mask(), 'DESC');
-	$table = new SortableTable('message', array('MessageManager','get_number_of_messages_sent'), array('MessageManager','get_message_data_sent'),3,20,'DESC');
+	$table = new SortableTable('message_outbox', array('MessageManager','get_number_of_messages_sent'), array('MessageManager','get_message_data_sent'),3,20,'DESC');
 
 	$parameters['f'] = Security::remove_XSS($_GET['f']);	
 	$table->set_additional_parameters($parameters);	

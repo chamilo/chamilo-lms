@@ -407,7 +407,7 @@ else
 		$_admins_list[] = $row_admin[0];
 	}
 
-	$table = new SortableTable('users', 'get_number_of_groups', 'get_group_data', 2);
+	$table = new SortableTable('group_list', 'get_number_of_groups', 'get_group_data', 2);
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false);
 	$table->set_header(1, get_lang('Name'));

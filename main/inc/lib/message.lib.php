@@ -133,16 +133,24 @@ class MessageManager
 		global $charset;
 		$from = intval($from);
 		$number_of_items = intval($number_of_items);
-		$column = intval($column);
 
-		if (!in_array($direction, array('ASC', 'DESC')))
-			$direction = 'ASC';
+		//forcing this order
+		if (!isset($direction)) {
+			$column = 3;
+			$direction = 'DESC';		
+		} else {
+			$column = intval($column);
+			if (!in_array($direction, array('ASC', 'DESC')))
+				$direction = 'ASC'; 
+		}
+
 
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$request=api_is_xml_http_request();
 		$sql_query = "SELECT id as col0, user_sender_id as col1, title as col2, send_date as col3, msg_status as col4 FROM $table_message " .
 					 " WHERE user_receiver_id=".api_get_user_id()." AND msg_status IN (0,1)" .
 					 " ORDER BY col$column $direction LIMIT $from,$number_of_items";
+
 		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
 		$i = 0;
 		$message_list = array ();
@@ -588,9 +596,16 @@ class MessageManager
 
 	 	$from = intval($from);
 		$number_of_items = intval($number_of_items);
-		$column = intval($column);
-		if (!in_array($direction, array('ASC', 'DESC')))
-			$direction = 'ASC';
+		
+		if (!isset($direction)) {
+			$column = 3;
+			$direction = 'DESC';		
+		} else {
+			$column = intval($column);
+			if (!in_array($direction, array('ASC', 'DESC')))
+				$direction = 'ASC'; 
+		}
+	
 
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$request=api_is_xml_http_request();
@@ -1153,7 +1168,7 @@ function get_number_of_messages_mask() {
 }
 function get_message_data_mask($from, $number_of_items, $column, $direction) {
 	$column='3';
-	$direction='desc';
+	$direction='DESC';
 	//non set by SortableTable ?
 	$number_of_items=get_number_of_messages_mask();
 	return MessageManager::get_message_data($from, $number_of_items, $column, $direction);

@@ -466,7 +466,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
-	
+
 	$res = Database::query($sql, __FILE__, __LINE__);
 
 	$users = array ();

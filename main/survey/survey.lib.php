@@ -4490,7 +4490,7 @@ class SurveyUtil {
 		}
 
 		// Create a sortable table with survey-data
-		$table = new SortableTable('surveys', 'get_number_of_surveys_for_coach', 'get_survey_data_for_coach',2);
+		$table = new SortableTable('surveys_coach', 'get_number_of_surveys_for_coach', 'get_survey_data_for_coach',2);
 		$table->set_additional_parameters($parameters);
 		$table->set_header(0, '', false);
 		$table->set_header(1, get_lang('SurveyName'));

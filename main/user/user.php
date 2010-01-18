@@ -581,7 +581,7 @@ function modify_filter($user_id) {
 $default_column = ($is_western_name_order xor $sort_by_first_name) ? 3 : 2;
 $default_column = api_is_allowed_to_edit() ? 2 : 1;
 
-$table = new SortableTable('users', 'get_number_of_users', 'get_user_data', $default_column);
+$table = new SortableTable('user_list', 'get_number_of_users', 'get_user_data', $default_column);
 $parameters['keyword'] = Security::remove_XSS($_GET['keyword']);
 $table->set_additional_parameters($parameters);
 $header_nr = 0;

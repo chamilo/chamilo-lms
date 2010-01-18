@@ -699,7 +699,7 @@ $form->display();
 echo '</div>';
 
 // Build table
-$table = new SortableTable('users', 'get_number_of_users', 'get_user_data', ($is_western_name_order xor $sort_by_first_name) ? 3 : 2);
+$table = new SortableTable('subscribe_users', 'get_number_of_users', 'get_user_data', ($is_western_name_order xor $sort_by_first_name) ? 3 : 2);
 $parameters['keyword'] = Security::remove_XSS($_REQUEST['keyword']);
 $parameters ['type'] = Security::remove_XSS($_REQUEST['type']);
 $table->set_additional_parameters($parameters);

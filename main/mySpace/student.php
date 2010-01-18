@@ -136,7 +136,7 @@ if ($isCoach || api_is_platform_admin() || $_user['status'] == DRH) {
 	$tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : DESC;
 
 	if (count($students) > 0) {
-		$table = new SortableTable('tracking', 'count_student_coached', null, ($is_western_name_order xor $sort_by_first_name) ? 1 : 0);
+		$table = new SortableTable('tracking_student', 'count_student_coached', null, ($is_western_name_order xor $sort_by_first_name) ? 1 : 0);
 		if ($is_western_name_order) {
 			$table -> set_header(0, get_lang('FirstName'), true, 'align="center');
 			$table -> set_header(1, get_lang('LastName'), true, 'align="center');

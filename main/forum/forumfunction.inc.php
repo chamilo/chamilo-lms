@@ -2506,7 +2506,6 @@ function store_edit_post($values) {
 				post_text='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['post_text'])),COURSEMANAGERLOWSECURITY))."',
 				post_notification='".Database::escape_string(isset($values['post_notification'])?$values['post_notification']:null)."'
 				WHERE post_id='".Database::escape_string($values['post_id'])."'";
-				//error_log($sql);
 	Database::query($sql,__FILE__, __LINE__);
 
 	if (!empty($values['remove_attach'])) {

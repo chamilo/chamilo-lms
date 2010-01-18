@@ -205,12 +205,11 @@ if( $form->validate())
 
     // Check if the visual code is already used by *another* course
     $visual_code_is_used = false;
-    error_log($visual_code);
+
     $warn = get_lang('TheFollowingCoursesAlreadyUseThisVisualCode').':';
     if (!empty($visual_code)) {
         $list = CourseManager::get_courses_info_from_visual_code($visual_code);
         foreach ($list as $course_temp) {
-            error_log($course_temp['code']);
         	if ($course_temp['code'] != $course_code) {
         	   $visual_code_is_used = true;
                $warn .= ' '.$course_temp['title'].' ('.$course_temp['code'].'),';

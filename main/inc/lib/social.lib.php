@@ -276,11 +276,12 @@ class SocialManager extends UserManager {
 			return true;
 		} else {
 			//invitation already exist
-			$sql_if_exist='SELECT COUNT(*) AS count FROM '.$tbl_message.' WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status=7';
+			$sql_if_exist='SELECT COUNT(*) AS count, id FROM '.$tbl_message.' WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status=7';
 			$res_if_exist=Database::query($sql_if_exist,__FILE__,__LINE__);
 			$row_if_exist=Database::fetch_array($res_if_exist,'ASSOC');
 			if ($row_if_exist['count']==1) {
-				$sql_if_exist_up='UPDATE '.$tbl_message.'SET msg_status=5 WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.';';
+				//$sql_if_exist_up='UPDATE '.$tbl_message.'SET msg_status=5 WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' WHERE msg_status=5';
+				$sql_if_exist_up='UPDATE '.$tbl_message.'SET msg_status=5, set content = '.$message_content.' WHERE id='.$row_if_exist['id'].'';
 				Database::query($sql_if_exist_up,__FILE__,__LINE__);
 				return true;
 			} else {

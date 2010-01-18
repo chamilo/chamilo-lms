@@ -261,7 +261,7 @@ class SocialManager extends UserManager {
 		$tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
 		$user_id = intval($user_id);
 		$friend_id = intval($friend_id);		
-		$message_title = Database::escape_string($message_title);
+		$message_title   = Database::escape_string($message_title);
 		$message_content = Database::escape_string($message_content);
 		
 		$current_date = date('Y-m-d H:i:s',time());		
@@ -280,8 +280,8 @@ class SocialManager extends UserManager {
 			$res_if_exist=Database::query($sql_if_exist,__FILE__,__LINE__);
 			$row_if_exist=Database::fetch_array($res_if_exist,'ASSOC');
 			if ($row_if_exist['count']==1) {
-				//$sql_if_exist_up='UPDATE '.$tbl_message.'SET msg_status=5 WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' WHERE msg_status=5';
-				$sql_if_exist_up='UPDATE '.$tbl_message.'SET msg_status=5, set content = '.$message_content.' WHERE id='.$row_if_exist['id'].'';
+				$sql_if_exist_up='UPDATE '.$tbl_message.'SET msg_status=5, content = "'.$message_content.'"  WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7 ';
+				//$sql_if_exist_up='UPDATE '.$tbl_message.'SET msg_status=5, set content = '.$message_content.' WHERE id='.$row_if_exist['id'].'';
 				Database::query($sql_if_exist_up,__FILE__,__LINE__);
 				return true;
 			} else {

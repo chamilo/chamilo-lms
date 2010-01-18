@@ -181,7 +181,7 @@ if (api_is_allowed_to_edit()) {
 function display_user_search_form() {
 	echo '<form method="get" action="user.php">';
 	echo get_lang("SearchForUser") . "&nbsp;&nbsp;";
-	echo '<input type="text" name="keyword" value="'.$_GET['keyword'].'"/>';
+	echo '<input type="text" name="keyword" value="'.Security::remove_XSS($_GET['keyword']).'"/>';
 	echo '<input type="submit" value="'.get_lang('SearchButton').'"/>';
 	echo '</form>';
 }
@@ -270,7 +270,7 @@ if (!$is_allowed_in_course) {
 -----------------------------------------------------------
 */
 if ($origin != 'learnpath') {
-	if (isset($_GET['keyword'])) {
+	if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
 		$interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("Users"));
 		$tool_name = get_lang('SearchResults');
 	} else {

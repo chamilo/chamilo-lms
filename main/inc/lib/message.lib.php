@@ -234,9 +234,9 @@ class MessageManager
         if (!empty($receiver_user_id) || !empty($group_id)) {
 
         	// message for user friend        	
-		    $subject = api_convert_encoding($subject, $charset);
+		//    $subject = api_convert_encoding($subject, $charset);
 	        $subject = Database::escape_string($subject);
-   	        $content = api_convert_encoding($content, $charset);
+   	      //  $content = api_convert_encoding($content, $charset);
 	        $content = Database::escape_string($content);
 	        //$content = Security::remove_XSS($content);
 	        

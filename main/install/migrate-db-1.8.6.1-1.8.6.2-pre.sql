@@ -61,7 +61,7 @@ INSERT INTO user_field (field_type, field_variable, field_display_text, field_vi
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_tabs', 'social', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsSocial', 0);
 
-UPDATE settings_current SET selected_value = '1.8.6.2.9879' WHERE variable = 'dokeos_database_version';
+UPDATE settings_current SET selected_value = '1.8.6.2.9928' WHERE variable = 'dokeos_database_version';
 
 INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','SpecialCourse', 'Yes', 1 , 1);
 

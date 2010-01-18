@@ -18,69 +18,79 @@
 <a href="index.html">Documentation</a> &gt; Changelog
 <div id="outerframe">
 <div id="main">
-<h1>Chamilo 1.8.6.2 - Salto</h1>
+<h1>Chamilo 1.8.6.2  <span style="font-style: italic;">Salto</span> - January 2010</h1>
 <h3>Release notes - summary</h3>
+<p>Chamilo 1.8.6.2 is a intermediate&nbsp;release including a lot of new features, mostly focused on social network, the handling of sessions (which will help many educational institutions, public or private, to manage their contents in a more flexible way) and visual style, and a few important bugfixes. It lays the first stable stone in the Chamilo software project.</p>
 <h3>New Features</h3> 
 <ul>
   <li>Implemented by-session content creation tools updates</li>
   <li>Added tabs editor (from admin)</li>
-  <li>Added courses catalog</li>
-  <li>Added a link to export course in the (platform administrator -> course list) (DT#4257)</li> 
-  <li>Added sessions history (optional access to previous sessions in read-only for students)</li>
-  <li>Added advanced search  in sessions: you can also search by session name, session category, tutor and visibility. (DT#5541)</li>
+  <li>Added courses catalogue</li>
+  <li>Added a link to export courses in the "platform administrator -> courses list" entry (DT#4257)</li> 
+  <li>Added sessions history (optional access to previous sessions in read-only or read-write, for students)</li>
+  <li>Added advanced search in sessions: you can also search by session name, session category, tutor and visibility. (DT#5541)</li>
   <li>Added an option to configure courses as "auto-registered" (every user has it in his courses list and is automatically subscribed)</li>
   <li>Added chat tool to the groups(DT#3318)</li>
   <li>Allowed password to be recovered using username *or* e-mail</li>
   <li>Added editable section to the registration form</li>
-  <li>Reporting: notification of user who have never been active yet</li>
-  <li>Reporting: the additional user profiles (defined by the platform administrator through platform administration > profiling) can now be displayed also. </li>
-  <li>Subscribing users in a course: you can also filter on a certain addtional user profile field or search inside the values of the additional user profiles fields when subscribing a user in a course (through user/subscribe_user.php) </li>
-  <li>Added Send a email to a portal administrator upon course creation (DT#3489)</li>
-  <li>Added Chat tool is now private when are in sessions or groups (DT#5558)</li>
-  <li>Wiki: Posibility to definition of wiki pages as tasks for students. Add feedback to student wiki pages, sincronized with their progress in the task. Posibility to establish a time limit for each wiki page. Posibility to establish a max number of words into each wiki page. Posibility to establish a max number versions for each page. Improve control of concurrent users. Improvements in the use of wiki pages such as portfolios of student (individual task)</li>
-  <li>Added when a user is enrolled only in one course, go directly to the course after the login (defined by the platform administrator through platform administration > configuration setting > training)- DT#3466</li>
-  <li>Added user' photo into user list interface - DT#5496</li>
-  <li>Disabled field trainers(tutor name) in create course form from user portal, by default is current user's name, you can modify this field into setting course - DT#5496 </li>
-  <li>Added option to export the trainings list to CSV file in Administration>Trainings - DT#4256</li>
-  <li>Gradebook automatic deleted bug of a link fixed DT#5229</li>
-  <li>User tags added DT#5508</li>
-  <li>Who is online look revamped DT#5490</li>
-  <li>New search tool added DT#5610 </li>	
-  <li><strong>User platform groups</strong> added  DT#5611 posibility to send group messages, add moderators, readers, etc</li>  
-  <li>Social network tab added</li>
-  <li>Easy construction of presentations with the images of document tool</li>
-  <li>Upgrade from FCKEditor 2.6.4.1 to <strong>FCKEditor 2.6.5, Build 23959</strong> has been implemented. (#2867)</li>
-  <li>Settings WYSIWYG editor from Platform Admin Area</li>
-  <li>Upgrade html2pdf libray to 3.26</li>
-  <li>Upgrade mimetex to 1.71</li>
-  <li>Social network menu interface revamped</li>
-  <li>Who's on line interface improved </li>
-  <li>Message tool improved: More simply to use, no annoing unuseless ajax menu </li>
-  <li>Message tool: Send multiple attachments, send emails to many users </li>  
-  <li>User portal page improved when Social Network is enabled.(User image, and subscriptions links are showed) </li>
-  <li>New inc/ajax library added to re-order AJAX calls in Chamilo see CT#431. All new jquery + AJAX reponses should be in that directory. </li>
-  <li>RSS Feed added by default to the extra field aswell as the user tag (Needs to change visibility)</li>
-  <li>Reporting tab performance improved (main/mySpace/courseLog.php file)</li>
-  <li>Added View a List students who have not submitted an assignment, and send a reminder to your email. BT#487 BT#489</li>
-  <li>Exercise tool: New type of question added. Multiple answer combination a.k.a "Exact question" CT#402</li>
-  <li>Exercise tool: Email notifications when an student answer an Exercise</li>
-  <li>Glossary tool improved. Possibility to view glosary terms in Exercises and Learning paths (Courses)</li>
-  <li>iepngfix added to support png images in ie6</li>
-     
+  <li>Added option to send a email to a portal administrator upon course creation (DT#3489)</li>
+  <li>Added privacy for the chat tool in a sessions or groups context (DT#5558)</li>
+  <li>Added possibility to view glossary terms in exercises and learning paths (courses)</li>
+  <li>Reporting: notification of users who have never been active yet</li>
+  <li>Reporting: the additional user profile fields (defined by the platform administrator through platform administration > profiling) can now be shown in the reporting screens</li>
+  <li>Subscribing users in a course: you can now filter on addtional user profile fields when subscribing a user in a course (through user/subscribe_user.php) </li>
+  <li>Definition of wiki pages as tasks for students is now possible</li> 
+  <li>Added feedback to student wiki pages, synchronized with their progress in the task</li>
+  <li>Added posibility to establish a time limit for each wiki page</li>
+  <li>Added posibility to establish a max number of words into each wiki page</li>
+  <li>Added posibility to establish a max number of versions for each wiki page</li>
+  <li>Improved control of concurrent users in wiki</li>
+  <li>Improved the use of wiki pages such as student's portfolios (individual task)</li>
+  <li>Added an immediate redirection to the course after login when a user is enrolled only in one course (defined by the platform administrator through platform administration > configuration settings > training)- DT#3466</li>
+  <li>Added user's photo into users list interface - DT#5496</li>
+  <li>Disabled trainer/tutor name field in create course form, set to current user's name by default. Can be modified into course settings - DT#5496 </li>
+  <li>Added option to export the training list to CSV in Administration > Training - DT#4256</li>
+  <li>Added user tags in social network - DT#5508</li>
+  <li>Revamped "Who is online" look - DT#5490</li>
+  <li>Added new search tool - DT#5610 </li>	
+  <li>Added user groups at platform level (social network) with posibility to send group messages, add moderators, readers, etc - DT#5611</li>  
+  <li>Made construction of presentations with the images of document tool easier</li>
+  <li>Upgraded from FCKEditor 2.6.4.1 to FCKEditor 2.6.5, Build 23959 - DT#2867</li>
+  <li>Added settings for WYSIWYG editor into the Platform Admin Area (instead of files)</li>
+  <li>Upgraded html2pdf libray to 3.26</li>
+  <li>Upgraded mimetex to 1.71</li>
+  <li>Rebuilt social network menu interface</li>
+  <li>Improved messages tool: Easier to use, no annoying ajax menun makes it faster and more reliable</li>
+  <li>Added multiple attachments to messages sending</li>
+  <li>Added possibility to send emails to multiple users</li>  
+  <li>Improved user portal page when Social Network is enabled: User image, and subscriptions links are shown</li>
+  <li>Added inc/ajax library folder to structurer AJAX calls - see CT#431. All new jQuery + AJAX reponses should be located there</li>
+  <li>RSS Feed added by default to the extra fields, as well as the user tag. Still requires manual visibility change to be enabled</li>
+  <li>Improved reporting tab performance tenfolds (main/mySpace/courseLog.php file)</li>
+  <li>Added list of students who have not submitted an assignment yet, and  the possibility to send them a reminder by email - BT#487 BT#489</li>
+  <li>Added new question type in exercise tool: Multiple answer combination a.k.a "Exact answer" - CT#402</li>
+  <li>Added e-mail notifications when a student answers an exercise</li>
+  <li>Added iepngfix hack to support png images in IE6</li>
+  <li>Added extensible footer style, allowing for much more information to be shown there</li>   
 </ul>   
 
 <h3>Debugging</h3>
 <ul>
+  <li>Simplified SCORM engine, making it more reliable but supporting less SCORM messages (interactions and objectives disabled for now)</li>
   <li>Fixed a bug in course homepage always showing a box even when no tools were shown (r8747:3ad59f6aed1f)</li>
   <li>Score result in reporting is expressed as a percentage</li>
   <li>CSV export of reporting no longer contains html code in the last column</li>
   <li>The course list is now sorted like you have defined on the course management page</li>
   <li>Display order in LP fixed (Organize view) #5668</li>
+  <li>Automatic deletion of a link in gradebook fixed - DT#5229</li>
 </ul>
 <br />
 <h3>CSS changes</h3>
 <ul>
-  <li>New Chamilo theme added </li>
+  <li>New Chamilo themes added</li>
+  <li>Fixed older styles support</li>
+  <li>Changed footer to allow for extensible height</li>
+  <li>Added many CSS elements to support new tools (social network, glossary, etc)</li>
 </ul>
 <h3>Known issues</h3>
 <ul>
@@ -101,6 +111,7 @@
   <li>message_for_group_form_inc.php in social tool moved to the inc/ajax library</li>
   <li>main/social/select_options.php moved to inc/ajax library</li>
 </ul>
+
 <br />
 <h1>Dokeos 1.8.6.1 - August 2009</h1>
 <h3>Release notes - summary</h3>

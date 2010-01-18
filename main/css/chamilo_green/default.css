@@ -322,7 +322,7 @@ input[text] {
 	position: relative; /* to avoid the IE peekabo bug*/
 	font-size: 1.0em;
 	font-weight: normal;
-	min-height:10px;
+	min-height:30px;
 	padding:  0.2em 0.5em;
 	padding-bottom: 0.2em;
 	color: #666;

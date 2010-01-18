@@ -660,7 +660,7 @@ if ($_GET['studentlist'] == 'false') {
 	    $course_code = $_course['id'];
 		
 		$user_ids = array_keys($a_students);
-		$table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
+		$table = new SortableTable('users_tracking', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 		
 		$parameters['cidReq'] 		= Security::remove_XSS($_GET['cidReq']);
 		$parameters['studentlist'] 	= Security::remove_XSS($_GET['studentlist']);
@@ -959,11 +959,12 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	if (!in_array($direction, array('ASC','DESC'))) {
     	$direction = 'ASC';
     }
+
     $column = intval($column);
     $from = intval($from);
     $number_of_items = intval($number_of_items);
 	$sql .= " ORDER BY col$column $direction ";
-	$sql .= " LIMIT $from,$number_of_items";	
+	$sql .= " LIMIT $from,$number_of_items";
 	$res = Database::query($sql, __FILE__, __LINE__);	
 	$users = array ();
     $t = time();

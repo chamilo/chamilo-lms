@@ -1487,30 +1487,46 @@ if ($display_announcement_list && !$surveyid) {
 					
 				// show attachment list
 				$attachment_list = array();
-				$attachment_list = get_attachment($myrow['id']);
+				$attachment_list = get_attachment($myrow['id']);				
 								
 				if (count($attachment_list)>0) {
-				$realname=$attachment_list['path'];
-				$user_filename=$attachment_list['filename'];
-				$full_file_name = 'download.php?file='.$realname;
-				echo '<br/>';
-				echo '<br/>';
-				echo Display::return_icon('attachment.gif',get_lang('Attachment'));
-				echo '<a href="'.$full_file_name.'';
-				echo ' "> '.$user_filename.' </a>';
-				echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
-				
-				if (api_is_allowed_to_edit()) {
-					echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete&id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';
-				}
-				
-			}					
+					$realname=$attachment_list['path'];
+					$user_filename=$attachment_list['filename'];
+					$full_file_name = 'download.php?file='.$realname;
+					echo '<br/>';
+					echo '<br/>';
+					echo Display::return_icon('attachment.gif',get_lang('Attachment'));
+					echo '<a href="'.$full_file_name.'';
+					echo ' "> '.$user_filename.' </a>';
+					echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
+					
+					if (api_is_allowed_to_edit()) {
+						echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete&id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';
+					}					
+				}					
 	    		
 																	
 				echo "</td>\n</tr>\n";
 
 				$iterator ++;
-			} // is_allowed_to_edit
+			} else { // end of is_allowed_to_edit 
+				//students view
+				// show attachment list
+				$attachment_list = array();
+				$attachment_list = get_attachment($myrow['id']);				
+								
+				if (count($attachment_list)>0) {
+					$realname=$attachment_list['path'];
+					$user_filename=$attachment_list['filename'];
+					$full_file_name = 'download.php?file='.$realname;
+					echo '<br/>';
+					echo '<br/>';
+					echo Display::return_icon('attachment.gif',get_lang('Attachment'));
+					echo '<a href="'.$full_file_name.'';
+					echo ' "> '.$user_filename.' </a>';
+					echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';					
+				}	
+			}
 
 			echo "<tr><td width=\"100%\" colspan=\"3\"><a href=\"#top\">".Display::return_icon('top.gif', get_lang('Top'))."</a></td></tr>";
 

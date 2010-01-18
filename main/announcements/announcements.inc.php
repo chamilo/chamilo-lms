@@ -1194,8 +1194,7 @@ function delete_announcement_attachment_file($id) {
 	global $_course;
 	$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 	$id=Database::escape_string($id);	
-	$sql="DELETE FROM $tbl_announcement_attachment WHERE id = $id";
-	error_log($sql);
+	$sql="DELETE FROM $tbl_announcement_attachment WHERE id = $id";	
 	$result=Database::query($sql, __FILE__,__LINE__);
 	// update item_property
 	//api_item_property_update($_course, 'announcement_attachment',  $id,'AnnouncementAttachmentDeleted', api_get_user_id());

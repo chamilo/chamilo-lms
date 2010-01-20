@@ -361,14 +361,14 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($result);
 	}
 
-	
+
 /**
  * This functon only is added to the end of the test and the end of the files in the all test.
  */
-	public function testDeleteCourse() {
+/*	public function testDeleteCourse() {
 		global $cidReq;			
 		$resu = CourseManager::delete_course($cidReq);				
-	}
+	}*/
  
 }
 

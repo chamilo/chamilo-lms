@@ -1,5 +1,6 @@
 <?php
 require_once(api_get_path(SYS_CODE_PATH).'user/userInfoLib.php');
+require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
 class TestUserInfoLib extends UnitTestCase {
 
@@ -71,20 +72,14 @@ class TestUserInfoLib extends UnitTestCase {
 	*/
 
 	function testget_cat_content() {
-		global $TBL_USERINFO_CONTENT, $TBL_USERINFO_DEF;
 		$userId=1;
 		$catId=1;
-		$sql = "SELECT	1";
-		$result = Database::query($sql,__FILE__,__LINE__);
-		$catContent = Database::fetch_array($result);
 		$res=get_cat_content($userId, $catId);
-		$this->assertTrue(is_array($catContent));
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
 
 	function testget_cat_def() {
-		global $TBL_USERINFO_DEF;
 		$catId=1;
 		$res=get_cat_def($catId);
 		$this->assertTrue(is_bool($res));
@@ -92,14 +87,12 @@ class TestUserInfoLib extends UnitTestCase {
 	}
 
 	function testget_cat_def_list() {
-		global $TBL_USERINFO_DEF;
 		$res=get_cat_def_list();
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
 
 	function testget_course_user_info() {
-		global $TBL_USERINFO_CONTENT, $TBL_USERINFO_DEF;
 		$user_id=1;
 		$res=get_course_user_info($user_id);
 		$this->assertTrue(is_bool($res));
@@ -115,7 +108,6 @@ class TestUserInfoLib extends UnitTestCase {
 	}
 
 	function testhtmlize() {
-		global $charset;
 		$phrase='test';
 		$res=htmlize($phrase);
 		$this->assertTrue(is_string($res));
@@ -123,7 +115,6 @@ class TestUserInfoLib extends UnitTestCase {
 	}
 
 	function testmove_cat_rank() {
-		global $TBL_USERINFO_DEF;
 		$id=1;
 		$direction='up';
 		$res=move_cat_rank($id, $direction);
@@ -132,7 +123,6 @@ class TestUserInfoLib extends UnitTestCase {
 	}
 
 	function testmove_cat_rank_by_rank()  {
-		global $TBL_USERINFO_DEF;
 		$rank=5;
 		$direction='up';
 		$res=move_cat_rank_by_rank($rank, $direction);
@@ -151,7 +141,6 @@ class TestUserInfoLib extends UnitTestCase {
  	* @return - bollean  - TRUE if succeed, ELSE otherwise
 	 */
 	function testremove_cat_def() {
-		global $TBL_USERINFO_CONTENT, $TBL_USERINFO_DEF;
 		$id=1;
 		$res=remove_cat_def($id, $force = false);
 		if(!is_null($res))$this->assertTrue(is_bool($res));
@@ -173,5 +162,13 @@ class TestUserInfoLib extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
+	
+	/**
+ * This functon only is added to the end of the test and the end of the files in the all test.
+ */
+	/*public function testDeleteCourse() {
+		global $cidReq;			
+		$resu = CourseManager::delete_course($cidReq);				
+	}*/
 }
 ?>

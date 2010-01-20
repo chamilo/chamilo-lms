@@ -493,43 +493,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
         $users[] = array($user[0],$photo,$user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7],$user[8]);
 	}
 	return $users;
-
-    if (!in_array($direction, array('ASC','DESC'))) {
-    	$direction = 'ASC';
-    }
-    $column = intval($column);
-    $from = intval($from);
-    $number_of_items = intval($number_of_items);
-
-	$sql .= " ORDER BY col$column $direction ";
-	$sql .= " LIMIT $from,$number_of_items";
-	echo $sql;
-	$res = Database::query($sql, __FILE__, __LINE__);
-
-	$users = array ();
-    $t = time();
-	while ($user = Database::fetch_row($res)) {
-
-		$image_path = UserManager::get_user_picture_path_by_id($user[0], 'web', false, true);
-		$user_profile = UserManager::get_picture_user($user[0], $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
-		if (!api_is_anonymous()) {
-			$photo = '<center><a href="'.api_get_path(WEB_PATH).'whoisonline.php?origin=user_list&id='.$user[0].'" title="'.get_lang('Info').'"  ><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2],$user[3]).'"  title="'.api_get_person_name($user[2], $user[3]).'" /></a></center>';
-		} else {
-			$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2], $user[3]).'" title="'.api_get_person_name($user[2], $user[3]).'" /></center>';
-		}				
-
-        if ($user[7] == 1 && $user[9] != '0000-00-00 00:00:00') {
-            // check expiration date
-            $expiration_time = convert_mysql_date($user[9]);
-            // if expiration date is passed, store a special value for active field
-            if ($expiration_time < $t) {
-        	   $user[7] = '-1';
-            }
-        }
-        // forget about the expiration date field		      
-        $users[] = array($user[0],$photo,$user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7],$user[8]);
-	}
-	return $users;
 }
 /**
 * Returns a mailto-link

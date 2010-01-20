@@ -1,9 +1,5 @@
 <?php
-Mock::generate('Database');
-Mock::generate('Display');
-$config['survey']['debug'] = false;
-require_once(api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
-
+require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
 class TestSurvey extends UnitTestCase {
 
@@ -18,60 +14,62 @@ class TestSurvey extends UnitTestCase {
 	$this->UnitTestCase('');
 
 	}
-	public function setUp() {
+	public function setUp() {				
 		$this->smanager = new survey_manager();
 		$this->squestion = new question();
 		$this->syesno = new yesno();
 		$this->smultiplechoice = new multiplechoice();
 		$this->spersonality = new personality();
-		$this->smultipleresponse = new multipleresponse();
+		$this->smultipleresponse = new multipleresponse();		
 	}
 
-	public function tearDown() {
+	public function tearDown() {		
 		$this-> smanager = null;
 		$this-> squestion = null;
 		$this-> syesno = null;
 		$this->smultiplechoice = null;
 		$this->personality = null;
-		$this->multipleresponse = null;
+		$this->multipleresponse = null;							
 	}
 	
-	public function testGetSurvey() {
-		$instans = new MockDatabase();
-		global $_course;
-		$survey_id=1;
-		$shared=1;
-		$my_course_id=$_GET['course'];
-		$res = $this->smanager->get_survey($survey_id,$shared);
-		$my_course_info=api_get_course_info($my_course_id);
-		$table_survey = Database :: get_course_table(TABLE_SURVEY, $my_course_info['dbName']);
-		$sql = "SELECT * FROM $table_survey WHERE survey_id='".Database::escape_string($survey_id)."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
-		$instans->expectCallCount($table_survey);
-		$this->assertTrue(is_array($res));
-		$this->assertFalse($result);
-		//var_dump($table_survey);
-		//var_dump($result);
-		//var_dump($res);
-	}
-
-	public function testStoreSurvey(){
-		$instans = new MockDatabase();
-		global $_user;
-		$values=array('002','003','003');
-		$table_survey=Database::get_course_table(TABLE_SURVEY);
-		$shared_survey_id=0;
-		$instans->expectCallCount($table_survey);
-		//if(!$values['survey_id'] OR !is_numeric($values['survey_id']))
+		public function testStoreSurvey() {
+		global $_user,$cidReq;
+		$values = array(
+						  'survey_code' => 'Survey1',
+						  'survey_title' => '<p>Survey</p>',
+						  'survey_subtitle' => '',
+						  'survey_language' => 'spanish',
+						  'start_date' => '2010-01-19',
+						  'end_date' => '2010-01-29',
+						  'survey_introduction' => '',
+						  'survey_thanks' =>  '',
+						  'survey_type' =>  '0',
+						  'parent_id' =>  '0', 
+						  'submit_survey' => ''		
+					   );	
 		$res = $this->smanager->store_survey($values);
 		$this->assertTrue($res);
-		$this->assertTrue(is_array($res));
-		$this->assertTrue($res);
-		$this->assertTrue($table_survey);
-		//var_dump($res);
-		//var_dump($table_survey);
+		$this->assertTrue(is_array($res));				
+	}
+
+	
+	public function testGetSurvey() {			   
+		$course_code = 'COURSEX';			   											 	
+		$survey_id=1;
+		$res3 = $this->smanager->get_survey($survey_id,0,$course_code);
+		$this->assertTrue(is_array($res3));		
 	}
 	
+/**
+ * This functon only is added to the end of the test and the end of the files in the all test.
+ */
+	public function testDeleteCourse() {
+		global $cidReq;			
+		$resu = CourseManager::delete_course($cidReq);				
+	}
+ 
+
+/*	
 	public function testStoreSharedSurvey($values){
 		$instans = new MockDatabase();
 		$values=array('');
@@ -248,9 +246,6 @@ class TestSurvey extends UnitTestCase {
 		$direction='moveup';
 		$survey_question_id=01;
 		$survey_id=1;
-		/*$sql = "SELECT * FROM $table_survey_question WHERE survey_id='".Database::escape_string($survey_id)."' ORDER BY sort $sort";
-		$result = Database::query($sql, __FILE__, __LINE__);
-		*/
 		$res = $this->smanager->move_survey_question($direction,$survey_question_id,$survey_id);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
@@ -482,12 +477,13 @@ class TestSurvey extends UnitTestCase {
 		$this->assertNotNull($this->smultiplechoice->html);
 		$this->assertTrue(!is_null(html));
 	}
-	/**
-	 * 	@todo it would make more sense to consider yesno as a
-	 *  special case of multiplechoice and not the other way
-	 *  around
-	 */
-
+	*/
+/**
+ * 	@todo it would make more sense to consider yesno as a
+ *  special case of multiplechoice and not the other way
+ *  around
+ */
+/*
 	public function testRenderQuestion2(){
 		$form_content= array('');
 		$answers=array('');
@@ -519,7 +515,7 @@ class TestSurvey extends UnitTestCase {
 		$this->assertNotNull($this->smultipleresponse->html);
 		$this->assertTrue($this->smultipleresponse->html);
 	}
-
+*/
 }
 
 ?>

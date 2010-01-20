@@ -62,5 +62,6 @@
     }
          
     $_SESSION['_user']['user_id'] = 1;    
+    $_SESSION['is_courseAdmin'] = 1;
 
 ?>

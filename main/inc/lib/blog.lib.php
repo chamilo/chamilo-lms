@@ -224,8 +224,8 @@ class Blog {
 	public static function create_post ($title, $full_text, $file_comment, $blog_id) {
 		global $_user;
 		global $_course;
-		global $blog_table_attachment;
-
+		
+		$blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 		$upload_ok=true;
 		$has_attachment=false;
 		$current_date=date('Y-m-d H:i:s',time());
@@ -2878,14 +2878,13 @@ class Blog {
  */
 function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
 {
-	global $blog_table_attachment;
+	$blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
+	
 	$blog_id = Database::escape_string($blog_id);
 	$comment_id = Database::escape_string($comment_id);
 	$post_id = Database::escape_string($post_id);
-
 	$row=array();
 	$where='';
-
 	if (!empty ($post_id) && is_numeric($post_id))
 	{
 		$where.=' AND post_id ="'.$post_id.'" ';
@@ -2899,9 +2898,9 @@ function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
 		}
 		$where.=' comment_id ="'.$comment_id.'" ';
 	}
-
+	
 	$sql = 'SELECT path, filename, comment FROM '. $blog_table_attachment.' WHERE blog_id ="'.intval($blog_id).'"  '.$where;
-
+	
 	$result=Database::query($sql, __FILE__, __LINE__);
 	if (Database::num_rows($result)!=0)
 	{
@@ -2921,9 +2920,9 @@ function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
 
 function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
 {
-	global $blog_table_attachment;
-	global $_course;
-
+	
+	global $_course;	
+	$blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 	$blog_id = Database::escape_string($blog_id);
 	$comment_id = Database::escape_string($comment_id);
 	$post_id = Database::escape_string($post_id);

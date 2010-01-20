@@ -2,7 +2,7 @@
 	require_once(dirname(__FILE__).'/../main/inc/global.inc.php');
 	require_once(api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
 	
-	$cidReq = 'CURSOB';
+	$cidReq = 'COURSEX';
     // check if course exists 
     $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $sql = "SELECT code FROM  $table_course WHERE code = '$cidReq' ";
@@ -11,8 +11,8 @@
 	if (empty($row[0])) {
 		// create a course
 		$course_datos = array(
-				'wanted_code'=> 'CURSOB',
-				'title'=>'CURSOB',
+				'wanted_code'=> 'COURSEX',
+				'title'=>'COURSEX',
 				'tutor_name'=>'John Doe',
 				'category_code'=>'LANG',
 				'course_language'=>'spanish',
@@ -53,7 +53,6 @@
         $_course['extLink'     ]['name'] = $cData['department_name'];
         $_course['categoryCode']         = $cData['faCode'           ];
         $_course['categoryName']         = $cData['faName'           ];
-
         $_course['visibility'  ]         = $cData['visibility'];
         $_course['subscribe_allowed']    = $cData['subscribe'];
 		$_course['unubscribe_allowed']   = $cData['unsubscribe'];

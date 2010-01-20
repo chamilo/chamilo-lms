@@ -1,5 +1,6 @@
 <?php
-Mock::generate('Database');
+require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
+
 class TestInstallUpgrade extends UnitTestCase{
 
 	public function TestInstallUpgrade() {
@@ -16,7 +17,7 @@ class TestInstallUpgrade extends UnitTestCase{
 	}
 
 	public function testFillLanguageTable() {
-		$language_table='en';
+		$language_table='english';
 		$res = fill_language_table($language_table);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
@@ -109,47 +110,15 @@ class TestInstallUpgrade extends UnitTestCase{
 	}
 
 	public function testAddDocument180() {
-		global $_configuration;
-
- 		require_once api_get_path(SYS_PATH).'tests/main/inc/lib/add_course.lib.inc.test.php';
-		
-		// create a course
-		
-		$course_datos = array(
-				'wanted_code'=> 'COD21',
-				'title'=>'metodologia de calculo diferencial',
-				'tutor_name'=>'R. J. Wolfagan',
-				'category_code'=>'2121',
-				'course_language'=>'english',
-				'course_admin_id'=>'1211',
-				'db_prefix'=> $_configuration['db_prefix'].'COD21',
-				'db_prefix'=> $_configuration['db_prefix'].'COD21',
-				'firstExpirationDelay'=>'112'
-				);
-		$res = create_course($course_datos['wanted_code'], $course_datos['title'],
-							 $course_datos['tutor_name'], $course_datos['category_code'],
-							 $course_datos['course_language'],$course_datos['course_admin_id'],
-							 $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);
-			if ($res) {
-				$_course = 'COD21';	
-				$chamilo_path_folder_web = api_get_path(WEB_PATH);
-				$path = $chamilo_path_folder_web.'/courses/COD21/?id_session=0';
-				$filetype='doc';
-				$filesize='10';
-				$title='metodologia de calculo diferencial';
-				$res = add_document_180($_course,$path,$filetype,$filesize,$title);
-				$resu = CourseManager::delete_course($_course);	
-			}
-				if(is_bool($res)) {
-					$this->assertTrue(is_bool($res));
-					$this->assertTrue($res === false);
-					} else {
-					$this->assertTrue($res);
-					//var_dump($res);
-					}
+			
 		}
+		/**
+ * This functon only is added to the end of the test and the end of the files in the all test.
+ */
+	public function testDeleteCourse() {
+		global $cidReq;			
+		$resu = CourseManager::delete_course($cidReq);				
+	}
+ 
 }
-
-
-
 ?>

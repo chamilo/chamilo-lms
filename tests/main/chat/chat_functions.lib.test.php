@@ -16,32 +16,7 @@ class TestChatFunctions extends UnitTestCase {
 
 
 	function testuser_connected_in_chat () {
-		global $_configuration;
-
- 		require_once api_get_path(SYS_PATH).'tests/main/inc/lib/add_course.lib.inc.test.php';
-		
-		// create a course
-		
-		$course_datos = array(
-				'wanted_code'=> 'COD21',
-				'title'=>'metodologia de calculo diferencial',
-				'tutor_name'=>'R. J. Wolfagan',
-				'category_code'=>'2121',
-				'course_language'=>'english',
-				'course_admin_id'=>'1211',
-				'db_prefix'=> $_configuration['db_prefix'].'COD21',
-				'db_prefix'=> $_configuration['db_prefix'].'COD21',
-				'firstExpirationDelay'=>'112'
-				);
-		$res = create_course($course_datos['wanted_code'], $course_datos['title'],
-							 $course_datos['tutor_name'], $course_datos['category_code'],
-							 $course_datos['course_language'],$course_datos['course_admin_id'],
-							 $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);
-		if ($res) {
-			$course_code = 'COD21';			
-			$course_info = api_get_course_info($course_code);
-		
-		}
+		$course_code = 'COURSEX';
 		$user_id=1;			
 		$course_info = api_get_course_info($course_code);
 		$database_name = $course_info['dbName'];
@@ -51,7 +26,7 @@ class TestChatFunctions extends UnitTestCase {
 	
 
 	function testUsersListInChat () {
-		$course_code = 'COD21';
+		$course_code = 'COURSEX';
 		$course_info = api_get_course_info($course_code);
 		$database_name = $course_info['dbName'];
 		$res = users_list_in_chat($database_name);
@@ -76,7 +51,7 @@ class TestChatFunctions extends UnitTestCase {
 	
 
 	function testExitOfChat () {
-		$course_code = 'COD21';
+		$course_code = 'COURSEX';
 		$course_info = api_get_course_info($course_code);
 		$database_name = $course_info['dbName'];
 		$this->CreateChatConnection($database_name);
@@ -89,21 +64,13 @@ class TestChatFunctions extends UnitTestCase {
 	
 	
 		function testDisconnectUserOfChat() {
-			
 		$_SESSION['is_courseAdmin'] = 1;
-		$course_code = 'COD21';
-		
+		$course_code = 'COURSEX';
 		$course_info = api_get_course_info($course_code);
 		$database_name = $course_info['dbName'];
-		
 		$this->CreateChatConnection($database_name);		
 		$res = disconnect_user_of_chat($database_name);
 		$this->assertTrue(is_null($res));
-		
-		$resu = $this->tcourse->delete_course($course_code);
-
-	}	
-
-	
+	}		
 }
 ?>

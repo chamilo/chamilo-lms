@@ -24,9 +24,9 @@ class TestCalendar extends UnitTestCase {
  	public function testDisplayMinimonthcalendar(){
  		ob_start();
  		global $DaysShort;
- 		$agendaitems=array('abc','cde');
- 		$month=11;
- 		$year=2008;
+ 		$agendaitems=array('test','test2');
+ 		$month=01;
+ 		$year=2010;
  		$monthName='';
  		$res = display_minimonthcalendar($agendaitems, $month, $year, $monthName);
  		ob_end_clean();
@@ -207,8 +207,8 @@ class TestCalendar extends UnitTestCase {
  	public function testGetAgendaitems(){
  		global $_user;
 		global $_configuration;
- 		$month='12';
- 		$year='2009';
+ 		$month=01;
+ 		$year=2010;
  		$res = get_agendaitems($month, $year);
  		if(is_array($res)) {
  			$this->assertTrue(is_array($res));
@@ -262,8 +262,8 @@ class TestCalendar extends UnitTestCase {
 
  	public function testGetDayAgendaitems() {
  		$courses_dbs=array();
- 		$month='12';
- 		$year='2009';
+ 		$month=01;
+ 		$year=2010;
  		$day='1';
  		$res = get_day_agendaitems($courses_dbs, $month, $year, $day);
  		$this->assertTrue(is_array($res));
@@ -272,69 +272,45 @@ class TestCalendar extends UnitTestCase {
 
  	public function testGetWeekAgendaitems() {
  		$courses_dbs=array();
- 		$year='2009';
- 		$month='12';
+ 		$month=01;
+ 		$year=2010;
 		$res = get_week_agendaitems($courses_dbs, $month, $year);
  		$this->assertTrue(is_array($res));
  	}
 
- 	public function testGetRepeatedEventsDayView(){
- 		
- 		global $_configuration;
-
- 		require_once api_get_path(SYS_PATH).'tests/main/inc/lib/add_course.lib.inc.test.php';
-		
-		// create a course
-		
-		$course_datos = array(
-				'wanted_code'=> 'COD21',
-				'title'=>'metodologia de calculo diferencial',
-				'tutor_name'=>'R. J. Wolfagan',
-				'category_code'=>'2121',
-				'course_language'=>'english',
-				'course_admin_id'=>'1211',
-				'db_prefix'=> $_configuration['db_prefix'].'COD21',
-				'db_prefix'=> $_configuration['db_prefix'].'COD21',
-				'firstExpirationDelay'=>'112'
-				);
-		$res = create_course($course_datos['wanted_code'], $course_datos['title'],
-							 $course_datos['tutor_name'], $course_datos['category_code'],
-							 $course_datos['course_language'],$course_datos['course_admin_id'],
-							 $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);
-		if ($res) {
-			$start = 0;
-	 		$end = 0;
-	 		$params='';
-			$course_code = 'COD21';			
+ 	public function testGetRepeatedEventsDayView(){	
+ 			$y=0;
+			$m=0;
+			$d=0;
+ 			$start = mktime(0,0,0,$m,$d,$y);
+ 			$end = mktime(23,59,59,$m,$d,$y);
+ 			$params = array();
+			$course_code = 'COURSEX';			
 			$course_info = api_get_course_info($course_code);			
 			$resul = get_repeated_events_day_view($course_info,$start,$end,$params);		
 	 		$this->assertTrue(is_array($resul));
-	 	
-		}
  	}
 
  	public function testGetRepeatedEventsWeekView(){
- 		$course_info = 'COD21';
+ 		$course_info = 'COURSEX';
  		$resul = get_repeated_events_week_view($course_info, 0, 0, '');
  		$this->assertTrue(is_array($resul));
  	}
 
  	public function testGetRepeatedEventsMonthView(){
- 		$course_code='COD21';
+ 		$course_code='COURSEX';
  		$course_info = api_get_course_info($course_code);
  		$resul= get_repeated_events_month_view($course_info,0,0,'');
 		$this->assertTrue(is_array($resul));
 		//var_dump($resul);
-
 	}
 
 	public function testGetRepeatedEventsListView(){
-		$course_code='COD21';
+		$course_code='COURSEX';
  		$course_info = api_get_course_info($course_code);
 		$resul = get_repeated_events_list_view($course_info,0,0,'');
 		$this->assertTrue(is_array($resul));
 		//var_dump($resul);
-		
 	}
 
  	public function testIsRepeatedEvent() {
@@ -378,7 +354,7 @@ class TestCalendar extends UnitTestCase {
  */
  	public function testAgendaAddItem(){
  		global $_course;
- 		$course_code='COD21';
+ 		$course_code='COURSEX';
  		$course_info = api_get_course_info($course_code);
  		$title='test';
  		$content='test function';
@@ -400,8 +376,8 @@ class TestCalendar extends UnitTestCase {
  */
  	public function testGetCalendarItems(){
  		global $_course;
- 		$month='12';
- 		$year='2009';
+ 		$month=01;
+ 		$year=2010;
 		$res = get_calendar_items($month, $year);
  		$this->assertTrue(is_array($res));
  		//var_dump($res);
@@ -427,13 +403,10 @@ class TestCalendar extends UnitTestCase {
  	}
 
 public function testDeleteAgendaItem(){
- 		global $_course;
- 	 	$course_code='COD21';
+ 	 	$course_code='COURSEX';
 		$id=1;
 		$res = delete_agenda_item($id);
-		$res = $this->tcourse->delete_course($course_code);	
-		$this->assertTrue(is_null($res));
- 		//var_dump($res);
+		$this->assertTrue(is_bool($res));
  	}
 }
 ?>

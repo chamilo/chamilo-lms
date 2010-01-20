@@ -75,7 +75,7 @@ class TestStatistics extends UnitTestCase{
     }
 
     public function testRescale(){
-    	$data=array('aas','aaa'.'aab');
+    	$data=array('test','test2','test3');
     	$max = 500;
     	$res = Statistics::rescale($data, $max);
     	$this->assertTrue($res);
@@ -86,7 +86,7 @@ class TestStatistics extends UnitTestCase{
     public function testPrintStats(){
     	ob_start();
     	$title='testing';
-    	$stats=array('aa','bb','cc');
+    	$stats=array('test','test2','test3');
     	$show_total = true;
     	$is_file_size = false;
     	$res = Statistics::print_stats($title, $stats, $show_total = true, $is_file_size = false);

@@ -4,6 +4,8 @@
 //require_once (api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
 
 require_once(api_get_path(SYS_CODE_PATH).'work/work.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
+
 
 class TestWork extends UnitTestCase {
 
@@ -103,27 +105,11 @@ class TestWork extends UnitTestCase {
  	 */
 
 	function testcreate_unexisting_work_directory() {
-		$base_work_dir='/var/www/dokeos/courses/ABCD/work/';
-		$desired_dir_name='/var/www/merdokeos/main/work';
-		$res=create_unexisting_work_directory();
+		$path_name = api_get_path(SYS_PATH);
+		$base_work_dir=$path_name.'COURSEX/work/';
+		$desired_dir_name= $path_name.'work';
+		$res=create_unexisting_work_directory($base_work_dir,$desired_dir_name);
 		$this->assertTrue(is_bool($res));
-		//var_dump($res);
-	}
-
-	/**
-	 * Delete a work-tool directory
-	 * @param	string	Base "work" directory for this course as /var/www/dokeos/courses/ABCD/work/
-	 * @param	string	The directory name as the bit after "work/", without trailing slash
-	 * @return	integer	-1 on error
-	 */
-
-	function testdel_dir() {
-		$base_work_dir='/var/www/dokeos/';
-		$dir='work/';
-		$id=-1;
-		$res=del_dir();
-		$this->assertTrue(is_numeric($res));
-		//var_dump($res);
 	}
 
 	/**
@@ -133,6 +119,7 @@ class TestWork extends UnitTestCase {
 	 */
 
 	function testdirectory_to_array() {
+		
 		$directory='/var/www/dokeos/';
 		$res=directory_to_array($directory);
 		$this->assertTrue(is_array($res));
@@ -275,10 +262,10 @@ class TestWork extends UnitTestCase {
 	 */
 
 	function testget_subdirs_list() {
-		$basedir = $basedir.'/';
+		$path_name = api_get_path(SYS_PATH);
+		$basedir = $path_name.'/';
 		$dh = opendir($basedir);
 		$entry = readdir($dh);
-		$basedir = $basedir.'/';
 		$dirs_list[] = $entry;
 		$res=get_subdirs_list($basedir='',$recurse=0);
 		$this->assertTrue(is_numeric($res));
@@ -294,7 +281,8 @@ class TestWork extends UnitTestCase {
 	 */
 
 	function testget_work_id() {
-		$path='/var/www/path';
+		$path_name = api_get_path(SYS_PATH);
+		$path=$path_name.'COURSEX';
 		$res=get_work_id($path);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
@@ -322,7 +310,8 @@ class TestWork extends UnitTestCase {
 
 	function testinsert_all_directory_in_course_table() {
 		global $work_table;
-		$base_work_dir='/var/www/path';
+		$path_name = api_get_path(SYS_PATH);
+		$base_work_dir=$path_name.'archive';
 		$dir_to_array =directory_to_array($base_work_dir,true);
 		$res=insert_all_directory_in_course_table($base_work_dir);
 		$this->assertTrue(is_null($res));
@@ -338,8 +327,9 @@ class TestWork extends UnitTestCase {
 	 */
 
 	function testis_subdir_of() {
-		$subdir='';
-		$basedir='';
+		$path_name = api_get_path(SYS_PATH);
+		$subdir=$path_name.'archive';
+		$basedir=$path_name;
 		$res=is_subdir_of($subdir,$basedir);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
@@ -391,10 +381,36 @@ class TestWork extends UnitTestCase {
 
 	function testupdate_work_url() {
 		$id=1;
-		$new_path='/var/www/path/';
+		$path_name = api_get_path(SYS_PATH);
+		$new_path=$path_name.'archive';
 		$res=update_work_url($id,$new_path);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
+	
+		/**
+	 * Delete a work-tool directory
+	 * @param	string	Base "work" directory for this course as /var/www/dokeos/courses/ABCD/work/
+	 * @param	string	The directory name as the bit after "work/", without trailing slash
+	 * @return	integer	-1 on error
+	 */
+
+	function testdel_dir() {
+		$path_name = api_get_path(SYS_PATH);
+		$base_work_dir=$path_name.'COURSEX/work/';
+		$dir= $path_name.'work/';
+		$id=-1;
+		$res=del_dir($base_work_dir,$dir,$id);
+		$this->assertTrue(is_numeric($res));
+		//var_dump($res);
+	}
+	
+	/**
+ * This functon only is added to the end of the test and the end of the files in the all test.
+ */
+/*	public function testDeleteCourse() {
+		global $cidReq;			
+		$resu = CourseManager::delete_course($cidReq);				
+	}*/
 }
 ?>

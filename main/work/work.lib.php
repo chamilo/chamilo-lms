@@ -435,307 +435,308 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	$my_sub_dir = str_replace('work/','',$sub_course_dir);
 
 	// List of all folders
-	foreach($dirs_list as $dir) {
-		if ($my_sub_dir=='') {
-				$mydir_temp = '/'.$dir;
-		}else {
-			$mydir_temp = '/'.$my_sub_dir.$dir;
-		}
-
-		$sql_select_directory= "SELECT prop.lastedit_date, id, author, has_properties, view_properties, description, qualification,weight,id FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE ";
-					if (!empty($_SESSION['toolgroup'])) {
-						$sql_select_directory.=" work.post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
-					} else {
-						$sql_select_directory.=" work.post_group_id = '0' ";
-					}
-		$sql_select_directory.=" AND work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $condition_session";
-		$result=Database::query($sql_select_directory,__FILE__,__LINE__);
-		$row=Database::fetch_array($result);
-
-
-		 if(!$row) {
-			 // the folder belongs to another session
-	         continue;
-		 }
-		$direc_date= $row['lastedit_date']; //directory's date
-		$author= $row['author']; //directory's author
-		$view_properties=$row['view_properties'];
-		$is_assignment = $row['has_properties'];
-		$id2=$row['id'];
-		$mydir = $my_sub_dir.$dir;
-
-		if ($is_allowed_to_edit) {
-			isset($_GET['edit_dir'])?$clean_edit_dir=Security :: remove_XSS(Database::escape_string($_GET['edit_dir'])):$clean_edit_dir='';
-
-			// form edit directory
-			if(isset($clean_edit_dir) && $clean_edit_dir==$mydir) {
-				if(!empty($row['has_properties'])) {
-					$sql = Database::query('SELECT * FROM '.$work_assigment.' WHERE id = '."'".$row['has_properties']."'".' LIMIT 1',__FILE__,__LINE__);
-					$homework = Database::fetch_array($sql);
-				}
-
-				$form_folder = new FormValidator('edit_dir', 'post', api_get_self().'?curdirpath='.$my_sub_dir.'&origin='.$origin.'&gradebook='.$gradebook.'&edit_dir='.$mydir);
-
-				$group_name[] = FormValidator :: createElement('text','dir_name');
-				$form_folder -> addGroup($group_name,'my_group',get_lang('Title'));
-				$form_folder -> addGroupRule('my_group',get_lang('ThisFieldIsRequired'),'required');
-				$defaults = array('my_group[dir_name]'=>html_entity_decode($dir),'description'=>html_entity_decode($row['description']));
-				$form_folder-> addElement('textarea','description',get_lang('Description'),array('rows'=>5,'cols'=>50));
-				$qualification_input[] = FormValidator :: createElement('text','qualification');
-				$form_folder -> addGroup($qualification_input,'qualification',get_lang('QualificationNumberOver'),'size="10"');
-
-				if ($row['weight'] > 0) {
-					$weight_input[] = FormValidator :: createElement('text','weight');
-					$form_folder -> addGroup($weight_input,'weight',get_lang('WeightInTheGradebook'),'size="10"');						
-				}
-
-				$there_is_a_end_date =false;
-				if($row['view_properties']=='1') {
-					if($homework['expires_on']!='0000-00-00 00:00:00'){
-						$there_is_a_expire_date = true;
-						$form_folder -> addGroup(create_group_date_select(),'expires',get_lang('ExpiresAt'));
-					}
-					if($homework['ends_on']!='0000-00-00 00:00:00') {
-						$there_is_a_end_date = true;
-						$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('EndsAt'));
-					}
-
-					if ($there_is_a_expire_date && $there_is_a_end_date) { 
-						$form_folder -> addRule(array('expires','ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');	
-					}
-										
-				} else {
-						$form_folder -> addElement('html','<div class="row">
-	 	                         <div class="label">&nbsp;</div>
- 	  	                         <div class="formw">
- 	  	                                 <a href="javascript://" onclick=" return plus();" ><span id="plus">&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>
- 	  	                         </div>
-	  	                         </div>	');
-
-	  	                $form_folder -> addElement('html','<div id="options" style="display: none;">');
-									if(empty($default)) {
-										$default = date('Y-m-d 12:00:00');
-									}
-
-										$parts = split(' ',$default);
-										list($d_year,$d_month,$d_day) = split('-',$parts[0]);
-										list($d_hour,$d_minute) = split(':',$parts[1]);
-									if ((int)$row['weight'] == 0) {
-										$form_folder -> addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'),'onclick="javascript:if(this.checked==true){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');
-										$form_folder -> addElement('html','<div id=\'option3\' style="display:none">');
-										$weight_input2[] = FormValidator :: createElement('text','weight');
-										$form_folder -> addGroup($weight_input2,'weight',get_lang('WeightInTheGradebook'),'size="10"');	
-										$form_folder -> addElement('html','</div>');										
-									}
-									if($homework['expires_on']='0000-00-00 00:00:00') {
-										$homework['expires_on']=date("Y-m-d H:i:s");
-										$there_is_a_expire_date = true;
-										$form_folder -> addElement('checkbox', 'enableExpiryDate',null,get_lang('EnableExpiryDate'),'onclick="javascript:if(this.checked==true){document.getElementById(\'option1\').style.display = \'block\';}else{document.getElementById(\'option1\').style.display = \'none\';}"');
-										$form_folder -> addElement('html','<div id=\'option1\' style="display:none">');
-										$form_folder -> addGroup(create_group_date_select(),'expires',get_lang('ExpiresAt'));
-										$form_folder -> addElement('html','</div>');
-									}
-									if($homework['ends_on']='0000-00-00 00:00:00') {
-										$homework['ends_on']=date("Y-m-d H:i:s");
-										$there_is_a_end_date = true;
-										$form_folder -> addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'),'onclick="javascript:if(this.checked==true){document.getElementById(\'option2\').style.display = \'block\';}else{document.getElementById(\'option2\').style.display = \'none\';}"');
-										$form_folder -> addElement('html','<div id=\'option2\' style="display:none">');
-										$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('EndsAt'));
-										$form_folder -> addElement('html','</div>');
-									}
-
-									$form_folder -> addRule (array('expires','ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
-
-						$form_folder -> addElement('html','</div>');
-				}
-
-				$form_folder -> addElement('style_submit_button','submit',get_lang('ModifyDirectory'),'class="save"');
-
-				if($there_is_a_end_date == true) {
-					$defaults = array_merge($defaults,convert_date_to_array($homework['ends_on'],'ends'));
-				}
-
-				if($there_is_a_expire_date == true) {
-					$defaults = array_merge($defaults,convert_date_to_array($homework['expires_on'],'expires'));
-				}
-
-				if(!empty($row['qualification'])) {
-					$defaults = array_merge($defaults,array('qualification[qualification]'=>$row['qualification']));
-				}
-				if(!empty($row['weight'])) {
-					$defaults = array_merge($defaults,array('weight[weight]'=>$row['weight']));
-				}
-				$form_folder -> setDefaults($defaults);
-				$display_edit_form=true;
-
-				if($form_folder -> validate()) {
-					$TABLEAGENDA 		= Database::get_course_table(TABLE_AGENDA);
-					if($there_is_a_end_date == true || $there_is_a_expire_date == true) {
-						if($row['view_properties']=='1') {
-								$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
-								Database::query($sql_add_publication, __FILE__, __LINE__);
-								$expires_query= ' SET expires_on = '."'".(($there_is_a_expire_date == true)?get_date_from_group('expires'):'0000-00-00 00:00:00')."'".',';
-								$ends_query =   ' ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
-								Database::query('UPDATE '.$work_assigment.$expires_query.$ends_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
-						} else if($row['view_properties']=='0') {
-								if ($_POST['enableExpiryDate']=='1') {
-									$expires_query= ' SET expires_on = '."'".(($there_is_a_expire_date == true)?get_date_from_group('expires'):'0000-00-00 00:00:00')."'";
-									//$ends_query =   ' ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
-									Database::query('UPDATE '.$work_assigment.$expires_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
-									$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
-									Database::query($sql_add_publication, __FILE__, __LINE__);
-								}
-								if ($_POST['enableEndDate']=='1') {
-									//$expires_query= ' SET expires_on = '."'".(($there_is_a_expire_date == true)?get_date_from_group('expires'):'0000-00-00 00:00:00')."'".',';
-									$ends_query =   ' SET ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
-									Database::query('UPDATE '.$work_assigment.$ends_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
-									$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
-									Database::query($sql_add_publication, __FILE__, __LINE__);
-								}
+	if(is_array($dirs_list)) {
+		foreach($dirs_list as $dir) {
+			if ($my_sub_dir=='') {
+					$mydir_temp = '/'.$dir;
+			}else {
+				$mydir_temp = '/'.$my_sub_dir.$dir;
+			}
+	
+			$sql_select_directory= "SELECT prop.lastedit_date, id, author, has_properties, view_properties, description, qualification,weight,id FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE ";
+						if (!empty($_SESSION['toolgroup'])) {
+							$sql_select_directory.=" work.post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
+						} else {
+							$sql_select_directory.=" work.post_group_id = '0' ";
 						}
-
+			$sql_select_directory.=" AND work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $condition_session";
+			$result=Database::query($sql_select_directory,__FILE__,__LINE__);
+			$row=Database::fetch_array($result);
+	
+	
+			 if(!$row) {
+				 // the folder belongs to another session
+		         continue;
+			 }
+			$direc_date= $row['lastedit_date']; //directory's date
+			$author= $row['author']; //directory's author
+			$view_properties=$row['view_properties'];
+			$is_assignment = $row['has_properties'];
+			$id2=$row['id'];
+			$mydir = $my_sub_dir.$dir;
+	
+			if ($is_allowed_to_edit) {
+				isset($_GET['edit_dir'])?$clean_edit_dir=Security :: remove_XSS(Database::escape_string($_GET['edit_dir'])):$clean_edit_dir='';
+	
+				// form edit directory
+				if(isset($clean_edit_dir) && $clean_edit_dir==$mydir) {
+					if(!empty($row['has_properties'])) {
+						$sql = Database::query('SELECT * FROM '.$work_assigment.' WHERE id = '."'".$row['has_properties']."'".' LIMIT 1',__FILE__,__LINE__);
+						$homework = Database::fetch_array($sql);
 					}
-					//if($_POST['qualification']['qualification']!='')
-						Database::query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string(Security::remove_XSS($_POST['description']))."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE id = '."'".$row['id']."'",__FILE__,__LINE__);
-						Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE course_code = '."'".api_get_course_id()."'".' AND ref_id = '."'".$row['id']."'".'',__FILE__,__LINE__);
-
-				    //we are changing the current work and we want add them into gradebook
-					if(isset($_POST['make_calification']) && $_POST['make_calification']==1) {
-						require_once('../gradebook/lib/be/gradebookitem.class.php');
-						require_once('../gradebook/lib/be/evaluation.class.php');
-						require_once('../gradebook/lib/be/abstractlink.class.php');
-						require_once('../gradebook/lib/gradebook_functions.inc.php');
-				
-						$resource_name = Security::remove_XSS($_POST['dir_name']);
-						add_resource_to_course_gradebook(api_get_course_id(), 3, $row['id'], Database::escape_string($resource_name),(float)$_POST['weight']['weight'], (float)$_POST['qualification']['qualification'], Database::escape_string($_POST['description']),time(), 1,api_get_session_id());
-					}                    
-					Display::display_confirmation_message(get_lang('FolderEdited'));
-
-					$values = $form_folder -> exportValues();
-					$values = $values['my_group'];
-					$dir_name = replace_dangerous_char($values['dir_name']);
-					$dir_name = disable_dangerous_file($dir_name);
-					update_dir_name($mydir,$dir_name);
-					$mydir = $my_sub_dir.$dir_name;
-					$dir = $dir_name;
-					$display_edit_form=false;
-
-					// gets calendar_id from student_publication_assigment
-					$sql = "SELECT add_to_calendar FROM $work_assigment WHERE publication_id ='".$row['id']."'";
-					$res = Database::query($sql,__FILE__,__LINE__);
-					$calendar_id = Database::fetch_row($res);
-					// update from agenda if it exists
-					if (!empty($calendar_id[0])) {
-					$sql = "UPDATE ".$TABLEAGENDA."
-							SET title='".$dir_name."',
-								content = '".$dir_name."',
-								end_date='".get_date_from_group('ends')."'
-							WHERE id='".$calendar_id[0]."'";
-					Database::query($sql,__FILE__,__LINE__);
+	
+					$form_folder = new FormValidator('edit_dir', 'post', api_get_self().'?curdirpath='.$my_sub_dir.'&origin='.$origin.'&gradebook='.$gradebook.'&edit_dir='.$mydir);
+	
+					$group_name[] = FormValidator :: createElement('text','dir_name');
+					$form_folder -> addGroup($group_name,'my_group',get_lang('Title'));
+					$form_folder -> addGroupRule('my_group',get_lang('ThisFieldIsRequired'),'required');
+					$defaults = array('my_group[dir_name]'=>html_entity_decode($dir),'description'=>html_entity_decode($row['description']));
+					$form_folder-> addElement('textarea','description',get_lang('Description'),array('rows'=>5,'cols'=>50));
+					$qualification_input[] = FormValidator :: createElement('text','qualification');
+					$form_folder -> addGroup($qualification_input,'qualification',get_lang('QualificationNumberOver'),'size="10"');
+	
+					if ($row['weight'] > 0) {
+						$weight_input[] = FormValidator :: createElement('text','weight');
+						$form_folder -> addGroup($weight_input,'weight',get_lang('WeightInTheGradebook'),'size="10"');						
 					}
-
-
+	
+					$there_is_a_end_date =false;
+					if($row['view_properties']=='1') {
+						if($homework['expires_on']!='0000-00-00 00:00:00'){
+							$there_is_a_expire_date = true;
+							$form_folder -> addGroup(create_group_date_select(),'expires',get_lang('ExpiresAt'));
+						}
+						if($homework['ends_on']!='0000-00-00 00:00:00') {
+							$there_is_a_end_date = true;
+							$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('EndsAt'));
+						}
+	
+						if ($there_is_a_expire_date && $there_is_a_end_date) { 
+							$form_folder -> addRule(array('expires','ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');	
+						}
+											
+					} else {
+							$form_folder -> addElement('html','<div class="row">
+		 	                         <div class="label">&nbsp;</div>
+	 	  	                         <div class="formw">
+	 	  	                                 <a href="javascript://" onclick=" return plus();" ><span id="plus">&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>
+	 	  	                         </div>
+		  	                         </div>	');
+	
+		  	                $form_folder -> addElement('html','<div id="options" style="display: none;">');
+										if(empty($default)) {
+											$default = date('Y-m-d 12:00:00');
+										}
+	
+											$parts = split(' ',$default);
+											list($d_year,$d_month,$d_day) = split('-',$parts[0]);
+											list($d_hour,$d_minute) = split(':',$parts[1]);
+										if ((int)$row['weight'] == 0) {
+											$form_folder -> addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'),'onclick="javascript:if(this.checked==true){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');
+											$form_folder -> addElement('html','<div id=\'option3\' style="display:none">');
+											$weight_input2[] = FormValidator :: createElement('text','weight');
+											$form_folder -> addGroup($weight_input2,'weight',get_lang('WeightInTheGradebook'),'size="10"');	
+											$form_folder -> addElement('html','</div>');										
+										}
+										if($homework['expires_on']='0000-00-00 00:00:00') {
+											$homework['expires_on']=date("Y-m-d H:i:s");
+											$there_is_a_expire_date = true;
+											$form_folder -> addElement('checkbox', 'enableExpiryDate',null,get_lang('EnableExpiryDate'),'onclick="javascript:if(this.checked==true){document.getElementById(\'option1\').style.display = \'block\';}else{document.getElementById(\'option1\').style.display = \'none\';}"');
+											$form_folder -> addElement('html','<div id=\'option1\' style="display:none">');
+											$form_folder -> addGroup(create_group_date_select(),'expires',get_lang('ExpiresAt'));
+											$form_folder -> addElement('html','</div>');
+										}
+										if($homework['ends_on']='0000-00-00 00:00:00') {
+											$homework['ends_on']=date("Y-m-d H:i:s");
+											$there_is_a_end_date = true;
+											$form_folder -> addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'),'onclick="javascript:if(this.checked==true){document.getElementById(\'option2\').style.display = \'block\';}else{document.getElementById(\'option2\').style.display = \'none\';}"');
+											$form_folder -> addElement('html','<div id=\'option2\' style="display:none">');
+											$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('EndsAt'));
+											$form_folder -> addElement('html','</div>');
+										}
+	
+										$form_folder -> addRule (array('expires','ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
+	
+							$form_folder -> addElement('html','</div>');
+					}
+	
+					$form_folder -> addElement('style_submit_button','submit',get_lang('ModifyDirectory'),'class="save"');
+	
+					if($there_is_a_end_date == true) {
+						$defaults = array_merge($defaults,convert_date_to_array($homework['ends_on'],'ends'));
+					}
+	
+					if($there_is_a_expire_date == true) {
+						$defaults = array_merge($defaults,convert_date_to_array($homework['expires_on'],'expires'));
+					}
+	
+					if(!empty($row['qualification'])) {
+						$defaults = array_merge($defaults,array('qualification[qualification]'=>$row['qualification']));
+					}
+					if(!empty($row['weight'])) {
+						$defaults = array_merge($defaults,array('weight[weight]'=>$row['weight']));
+					}
+					$form_folder -> setDefaults($defaults);
+					$display_edit_form=true;
+	
+					if($form_folder -> validate()) {
+						$TABLEAGENDA 		= Database::get_course_table(TABLE_AGENDA);
+						if($there_is_a_end_date == true || $there_is_a_expire_date == true) {
+							if($row['view_properties']=='1') {
+									$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
+									Database::query($sql_add_publication, __FILE__, __LINE__);
+									$expires_query= ' SET expires_on = '."'".(($there_is_a_expire_date == true)?get_date_from_group('expires'):'0000-00-00 00:00:00')."'".',';
+									$ends_query =   ' ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
+									Database::query('UPDATE '.$work_assigment.$expires_query.$ends_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
+							} else if($row['view_properties']=='0') {
+									if ($_POST['enableExpiryDate']=='1') {
+										$expires_query= ' SET expires_on = '."'".(($there_is_a_expire_date == true)?get_date_from_group('expires'):'0000-00-00 00:00:00')."'";
+										//$ends_query =   ' ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
+										Database::query('UPDATE '.$work_assigment.$expires_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
+										$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
+										Database::query($sql_add_publication, __FILE__, __LINE__);
+									}
+									if ($_POST['enableEndDate']=='1') {
+										//$expires_query= ' SET expires_on = '."'".(($there_is_a_expire_date == true)?get_date_from_group('expires'):'0000-00-00 00:00:00')."'".',';
+										$ends_query =   ' SET ends_on = '."'".(($there_is_a_end_date == true) ? get_date_from_group('ends') : '0000-00-00 00:00:00')."'";
+										Database::query('UPDATE '.$work_assigment.$ends_query.' WHERE id = '."'".$row['has_properties']."'",__FILE__,__LINE__);
+										$sql_add_publication = "UPDATE ".$work_table." SET has_properties  = '".$row['has_properties'].  "', view_properties=1 where id ='".$row['id']."'";
+										Database::query($sql_add_publication, __FILE__, __LINE__);
+									}
+							}
+	
+						}
+						//if($_POST['qualification']['qualification']!='')
+							Database::query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string(Security::remove_XSS($_POST['description']))."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE id = '."'".$row['id']."'",__FILE__,__LINE__);
+							Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE course_code = '."'".api_get_course_id()."'".' AND ref_id = '."'".$row['id']."'".'',__FILE__,__LINE__);
+	
+					    //we are changing the current work and we want add them into gradebook
+						if(isset($_POST['make_calification']) && $_POST['make_calification']==1) {
+							require_once('../gradebook/lib/be/gradebookitem.class.php');
+							require_once('../gradebook/lib/be/evaluation.class.php');
+							require_once('../gradebook/lib/be/abstractlink.class.php');
+							require_once('../gradebook/lib/gradebook_functions.inc.php');
+					
+							$resource_name = Security::remove_XSS($_POST['dir_name']);
+							add_resource_to_course_gradebook(api_get_course_id(), 3, $row['id'], Database::escape_string($resource_name),(float)$_POST['weight']['weight'], (float)$_POST['qualification']['qualification'], Database::escape_string($_POST['description']),time(), 1,api_get_session_id());
+						}                    
+						Display::display_confirmation_message(get_lang('FolderEdited'));
+	
+						$values = $form_folder -> exportValues();
+						$values = $values['my_group'];
+						$dir_name = replace_dangerous_char($values['dir_name']);
+						$dir_name = disable_dangerous_file($dir_name);
+						update_dir_name($mydir,$dir_name);
+						$mydir = $my_sub_dir.$dir_name;
+						$dir = $dir_name;
+						$display_edit_form=false;
+	
+						// gets calendar_id from student_publication_assigment
+						$sql = "SELECT add_to_calendar FROM $work_assigment WHERE publication_id ='".$row['id']."'";
+						$res = Database::query($sql,__FILE__,__LINE__);
+						$calendar_id = Database::fetch_row($res);
+						// update from agenda if it exists
+						if (!empty($calendar_id[0])) {
+						$sql = "UPDATE ".$TABLEAGENDA."
+								SET title='".$dir_name."',
+									content = '".$dir_name."',
+									end_date='".get_date_from_group('ends')."'
+								WHERE id='".$calendar_id[0]."'";
+						Database::query($sql,__FILE__,__LINE__);
+						}
+	
+	
+					}
 				}
 			}
-		}
-		$action = '';
-		$row = array();
-		$class = '';
-		$row[] = '<img src="../img/works.gif" border="0" hspace="5" align="middle" alt="'.get_lang('Assignment').'" title="'.get_lang('Assignment').'" />'; //image
-		//$a_count_directory=count_dir($work_dir.'/'.$dir,false);
-
-		$cant_files=0;
-		$cant_dir = 0;
-		if(api_is_allowed_to_edit()) {
-		$sql_document = "SELECT count(*) FROM $work_table WHERE  url NOT LIKE '".$sub_course_dir.$dir."/%/%' AND url LIKE '".$sub_course_dir.$dir."/%'";
-		} else {
-			// gets admin_course
-			$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-			$table_user = Database :: get_main_table(TABLE_MAIN_USER);
-			$sql = "SELECT course_user.user_id FROM $table_user user, $table_course_user course_user
-					  WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status='1'";
-			$res = Database::query($sql,__FILE__,__LINE__);
-			$admin_course = '';
-			while($row_admin = Database::fetch_row($res)) {
-				$admin_course .='\''.$row_admin[0].'\',';
-			}
-		$sql_document = "SELECT count(*) FROM $work_table s, $iprop_table p WHERE s.id = p.ref AND p.tool='work' AND lastedit_user_id IN(".$admin_course.'\''.api_get_user_id().'\''.") AND s.accepted='1' AND url NOT LIKE '".$sub_course_dir.$dir."/%/%' AND url LIKE '".$sub_course_dir.$dir."/%'";
-		}
-		//count documents
-		$res_document = Database::query($sql_document,__FILE__,__LINE__);
-		$count_document = Database::fetch_row($res_document);
-		$cant_files = $count_document[0];
-		//count directories
-		$sql_directory = "SELECT count(*) FROM $work_table s WHERE  url NOT LIKE '/".$mydir."/%/%' AND url LIKE '/".$mydir."/%'";
-		$res_directory = Database::query($sql_directory,__FILE__,__LINE__);
-		$count_directory = Database::fetch_row($res_directory);
-		$cant_dir = $count_directory[0];
-
-		$text_file=get_lang('FilesUpload');
-		$text_dir=get_lang('Directories');
-
-		if ($cant_files==1) {
-			$text_file=api_strtolower(get_lang('FileUpload'));
-		}
-
-		if ($cant_dir==1) {
-			$text_dir=get_lang('directory');
-		}
-
-		if ($cant_dir!=0) {
-			$dirtext=' ('.$cant_dir.' '.$text_dir.')';
-		} else {
-			$dirtext='';
-		}
-
-		if (!empty($display_edit_form) && isset($clean_edit_dir) && $clean_edit_dir==$mydir) {
-			$row[] = '<span class="invisible" style="display:none">'.$dir.'</span>'.$form_folder->toHtml(); // form to edit the directory's name
-		} else {
-			$tbl_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-			$add_to_name = '';
-			$sql = "SELECT weight FROM ". $tbl_gradebook_link ." WHERE type='3' AND ref_id= '".$id2."'";
-			$result=Database::query($sql, __FILE__, __LINE__);
-			$count = Database::num_rows($result);
-			if($count>0) {
-				$add_to_name = ' / <span style="color:blue">'.get_lang('Assignment').'</span>';
+			$action = '';
+			$row = array();
+			$class = '';
+			$row[] = '<img src="../img/works.gif" border="0" hspace="5" align="middle" alt="'.get_lang('Assignment').'" title="'.get_lang('Assignment').'" />'; //image
+			//$a_count_directory=count_dir($work_dir.'/'.$dir,false);
+	
+			$cant_files=0;
+			$cant_dir = 0;
+			if(api_is_allowed_to_edit()) {
+			$sql_document = "SELECT count(*) FROM $work_table WHERE  url NOT LIKE '".$sub_course_dir.$dir."/%/%' AND url LIKE '".$sub_course_dir.$dir."/%'";
 			} else {
+				// gets admin_course
+				$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+				$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+				$sql = "SELECT course_user.user_id FROM $table_user user, $table_course_user course_user
+						  WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status='1'";
+				$res = Database::query($sql,__FILE__,__LINE__);
+				$admin_course = '';
+				while($row_admin = Database::fetch_row($res)) {
+					$admin_course .='\''.$row_admin[0].'\',';
+				}
+			$sql_document = "SELECT count(*) FROM $work_table s, $iprop_table p WHERE s.id = p.ref AND p.tool='work' AND lastedit_user_id IN(".$admin_course.'\''.api_get_user_id().'\''.") AND s.accepted='1' AND url NOT LIKE '".$sub_course_dir.$dir."/%/%' AND url LIKE '".$sub_course_dir.$dir."/%'";
+			}
+			//count documents
+			$res_document = Database::query($sql_document,__FILE__,__LINE__);
+			$count_document = Database::fetch_row($res_document);
+			$cant_files = $count_document[0];
+			//count directories
+			$sql_directory = "SELECT count(*) FROM $work_table s WHERE  url NOT LIKE '/".$mydir."/%/%' AND url LIKE '/".$mydir."/%'";
+			$res_directory = Database::query($sql_directory,__FILE__,__LINE__);
+			$count_directory = Database::fetch_row($res_directory);
+			$cant_dir = $count_directory[0];
+	
+			$text_file=get_lang('FilesUpload');
+			$text_dir=get_lang('Directories');
+	
+			if ($cant_files==1) {
+				$text_file=api_strtolower(get_lang('FileUpload'));
+			}
+	
+			if ($cant_dir==1) {
+				$text_dir=get_lang('directory');
+			}
+	
+			if ($cant_dir!=0) {
+				$dirtext=' ('.$cant_dir.' '.$text_dir.')';
+			} else {
+				$dirtext='';
+			}
+	
+			if (!empty($display_edit_form) && isset($clean_edit_dir) && $clean_edit_dir==$mydir) {
+				$row[] = '<span class="invisible" style="display:none">'.$dir.'</span>'.$form_folder->toHtml(); // form to edit the directory's name
+			} else {
+				$tbl_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 				$add_to_name = '';
-			}
-			$show_as_icon = get_work_id($mydir); //true or false
-			if ($show_as_icon){
-				if (is_allowed_to_edit()) {
-					$zip='<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&gradebook='.$gradebook.'&action=downloadfolder&path=/'.$mydir.'"><img src="../img/zip_save.gif" style="float:right;" alt="'.get_lang('Save').'" title="'.get_lang('Save').'" width="17" height="17"/></a>';
+				$sql = "SELECT weight FROM ". $tbl_gradebook_link ." WHERE type='3' AND ref_id= '".$id2."'";
+				$result=Database::query($sql, __FILE__, __LINE__);
+				$count = Database::num_rows($result);
+				if($count>0) {
+					$add_to_name = ' / <span style="color:blue">'.get_lang('Assignment').'</span>';
+				} else {
+					$add_to_name = '';
 				}
-				$row[] = $zip.'<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;
-			} else {
-				$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;
+				$show_as_icon = get_work_id($mydir); //true or false
+				if ($show_as_icon){
+					if (is_allowed_to_edit()) {
+						$zip='<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&gradebook='.$gradebook.'&action=downloadfolder&path=/'.$mydir.'"><img src="../img/zip_save.gif" style="float:right;" alt="'.get_lang('Save').'" title="'.get_lang('Save').'" width="17" height="17"/></a>';
+					}
+					$row[] = $zip.'<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;
+				} else {
+					$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;
+				}
 			}
-		}
-		if ($count_files!=0) {
-			$row[] = "";
-		}
-
-		if ($direc_date!='' && $direc_date!='0000-00-00 00:00:00') {
-			$my_direc_date = api_ucfirst(format_locale_date($dateFormatShort,strtotime($direc_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
-			$my_direc_date .= ucfirst(strftime($timeNoSecFormat,strtotime($direc_date)));
-			$row[]= date_to_str_ago($direc_date).'<br /><span class="dropbox_date">'.$my_direc_date.'</span>';
-		} else {
-			$row[]='';
-		}
-
-		if ($origin != 'learnpath') {
-			if( $is_allowed_to_edit) {
-				$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
-					'&curdirpath='.$my_sub_dir.'&origin='.$origin.'&gradebook='.$gradebook.'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';
-				$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&delete_dir='.$mydir.'&delete2='.$id2.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('DirDelete').'"  >'.Display::return_icon('delete.gif',get_lang('DirDelete')).'</a>';
-				$row[] = $action;
-			} else {
+			if ($count_files!=0) {
 				$row[] = "";
 			}
+	
+			if ($direc_date!='' && $direc_date!='0000-00-00 00:00:00') {
+				$my_direc_date = api_ucfirst(format_locale_date($dateFormatShort,strtotime($direc_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
+				$my_direc_date .= ucfirst(strftime($timeNoSecFormat,strtotime($direc_date)));
+				$row[]= date_to_str_ago($direc_date).'<br /><span class="dropbox_date">'.$my_direc_date.'</span>';
+			} else {
+				$row[]='';
+			}
+	
+			if ($origin != 'learnpath') {
+				if( $is_allowed_to_edit) {
+					$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
+						'&curdirpath='.$my_sub_dir.'&origin='.$origin.'&gradebook='.$gradebook.'&edit_dir='.$mydir.'"><img src="../img/edit.gif" alt="'.get_lang('Modify').'" title="'.get_lang('Modify').'"></a>';
+					$action .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&delete_dir='.$mydir.'&delete2='.$id2.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."'".')) return false;" title="'.get_lang('DirDelete').'"  >'.Display::return_icon('delete.gif',get_lang('DirDelete')).'</a>';
+					$row[] = $action;
+				} else {
+					$row[] = "";
+				}
+			}
+			$table_data[] = $row;
 		}
-		$table_data[] = $row;
 	}
-
 	while( $work = Database::fetch_object($sql_result)) {
 		//Get the author ID for that document from the item_property table
 		$is_author = false;
@@ -1022,7 +1023,7 @@ function create_unexisting_work_directory($base_work_dir,$desired_dir_name)
 	//echo "creating ".$base_work_dir.$desired_dir_name.$nb."#...";
 	$perm = api_get_setting('permissions_for_new_directories');
 	$perm = octdec(!empty($perm)?$perm:'0770');
-	if ( mkdir($base_work_dir.$desired_dir_name.$nb, $perm)) {
+	if ( @mkdir($base_work_dir.$desired_dir_name.$nb, $perm)) {
 		chmod($base_work_dir.$desired_dir_name.$nb, $perm);
 		return $desired_dir_name.$nb;
 	} else {
@@ -1191,7 +1192,7 @@ function get_parent_directories($my_cur_dir_path) {
 function directory_to_array($directory)
 {
 	$array_items = array();
-	if ($handle = opendir($directory)) {
+	if ($handle = @opendir($directory)) {
 		while (false !== ($file = readdir($handle))) {
 			if ($file != "." && $file != "..") {
 				if (is_dir($directory. "/" . $file)) {

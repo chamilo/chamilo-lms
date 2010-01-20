@@ -1686,23 +1686,26 @@ class yesno extends question
 	 */
 	function render_question($form_content, $answers=array())
 	{
-		foreach ($form_content['options'] as $key=>$value)
-		{
-			$this->html .= '<label><input name="question'.$form_content['question_id'].'" type="radio" value="'.$key.'"';
-			if (is_array($answers))
+		
+		if (is_array($form_content['options'])) { // check if data is correct
+			foreach ($form_content['options'] as $key=>$value)
 			{
-				if (in_array($key,$answers))
+				$this->html .= '<label><input name="question'.$form_content['question_id'].'" type="radio" value="'.$key.'"';
+				if (is_array($answers))
 				{
-					$this->html .= 'checked="checked"';
+					if (in_array($key,$answers))
+					{
+						$this->html .= 'checked="checked"';
+					}
 				}
-			}
-			if (substr_count($value,"<p>")==1) {
-				$this->html .= '/>'.substr($value,3,(strlen($value)-7)).'</label>';
-				if ($form_content['display'] == 'vertical') {
-					$this->html .= '<br />';
+				if (substr_count($value,"<p>")==1) {
+					$this->html .= '/>'.substr($value,3,(strlen($value)-7)).'</label>';
+					if ($form_content['display'] == 'vertical') {
+						$this->html .= '<br />';
+					}
+				} else {
+					$this->html .= '/>'.$value.'</label>';
 				}
-			} else {
-				$this->html .= '/>'.$value.'</label>';
 			}
 		}
 		echo '<div class="survey_question_wrapper">';
@@ -1755,24 +1758,26 @@ class multiplechoice extends question
 		$this->html .= '		</div>';
 		$this->html .= '		<div class="formw">';
 		$total_number_of_answers = count($form_content['answers']);
-		$this->html .= ' 			<table>';
-		foreach ($form_content['answers'] as $key=>$value) {
-			$this->html .= '	<tr>';
-			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
-			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]), ENT_QUOTES, $charset), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
-			$this->html .= '		<td>';
-			if ($key<$total_number_of_answers-1) {
-				$this->html .= '			<input type="image" src="../img/down.gif"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
+		$this->html .= ' 			<table>';		
+		if (is_array($form_content['answers'])) { // check if data is correct		
+			foreach ($form_content['answers'] as $key=>$value) {
+				$this->html .= '	<tr>';
+				$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
+				//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
+				$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]), ENT_QUOTES, $charset), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
+				$this->html .= '		<td>';
+				if ($key<$total_number_of_answers-1) {
+					$this->html .= '			<input type="image" src="../img/down.gif"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
+				}
+				if ($key>0) {
+					$this->html .= '			<input type="image" src="../img/up.gif"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
+				}
+				if ($total_number_of_answers> 2) {
+					$this->html .= '			<input type="image" src="../img/delete.gif"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
+				}
+				$this->html .= ' 		</td>';
+				$this->html .= '	</tr>';
 			}
-			if ($key>0) {
-				$this->html .= '			<input type="image" src="../img/up.gif"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
-			}
-			if ($total_number_of_answers> 2) {
-				$this->html .= '			<input type="image" src="../img/delete.gif"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
-			}
-			$this->html .= ' 		</td>';
-			$this->html .= '	</tr>';
 		}
 		// The buttons for adding or removing
 		$this->html .= ' 			</table>';
@@ -1847,45 +1852,44 @@ class personality extends question
 
 
 		$question_values=array();
-
+		
 		// values of question options
-		foreach ($form_content['values'] as $key=>$value)
-		{
-			$question_values [] = '<input size="3" type="text" id="values['.$key.']" name="values['.$key.']" value="'.$value.'" />';
+		if(is_array($form_content['values'])) { // check if data is correct
+			foreach ($form_content['values'] as $key=>$value) {
+				$question_values [] = '<input size="3" type="text" id="values['.$key.']" name="values['.$key.']" value="'.$value.'" />';
+			}
 		}
-
-		$count=0;
-
-		foreach ($form_content['answers'] as $key=>$value)
-		{
-			$this->html .= '	<tr>';
-			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
-			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key])), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
-			$this->html .= '		<td>';
-
-			if ($total_number_of_answers> 2)
-			{
-				$this->html .=$question_values[$count];
+			$count=0;
+		if(is_array($form_content['answers'])) {
+			foreach ($form_content['answers'] as $key=>$value) {
+				$this->html .= '	<tr>';
+				$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
+				//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
+				$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key])), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
+				$this->html .= '		<td>';
+	
+				if ($total_number_of_answers> 2)
+				{
+					$this->html .=$question_values[$count];
+				}
+	
+				if ($key<$total_number_of_answers-1)
+				{
+					$this->html .= '		<input type="image" src="../img/down.gif"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
+				}
+				if ($key>0)
+				{
+					$this->html .= '		<input type="image" src="../img/up.gif"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
+				}
+				if ($total_number_of_answers> 2)
+				{
+					$this->html .= '			<input type="image" src="../img/delete.gif"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
+				}
+				$this->html .= ' 		</td>';
+				$this->html .= '	</tr>';
+				$count++;
 			}
-
-			if ($key<$total_number_of_answers-1)
-			{
-				$this->html .= '		<input type="image" src="../img/down.gif"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
-			}
-			if ($key>0)
-			{
-				$this->html .= '		<input type="image" src="../img/up.gif"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
-			}
-			if ($total_number_of_answers> 2)
-			{
-				$this->html .= '			<input type="image" src="../img/delete.gif"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
-			}
-			$this->html .= ' 		</td>';
-			$this->html .= '	</tr>';
-			$count++;
 		}
-
 		// The buttons for adding or removing
 		//$this->html .= parent :: add_remove_buttons($form_content);
 	}
@@ -1949,25 +1953,27 @@ class multipleresponse extends question
 		$this->html .= '		<div class="formw">';
 		$total_number_of_answers = count($form_content['answers']);
 		$this->html .= ' 			<table>';
-		foreach ($form_content['answers'] as $key=>$value) {
-			$this->html .= '	<tr>';
-			$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
-			//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
-			$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]), ENT_QUOTES, $charset), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
-			$this->html .= '		<td>';
-			if ($key<$total_number_of_answers-1) {
-				$this->html .= '			<input type="image" src="../img/down.gif"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
+		if(is_array($form_content['answers'])) { // values of question options
+			foreach ($form_content['answers'] as $key=>$value) {
+				$this->html .= '	<tr>';
+				$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
+				//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
+				$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key]), ENT_QUOTES, $charset), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
+				$this->html .= '		<td>';
+				if ($key<$total_number_of_answers-1) {
+					$this->html .= '			<input type="image" src="../img/down.gif"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
+				}
+	
+				if ($key>0) {
+					$this->html .= '			<input type="image" src="../img/up.gif"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
+				}
+	
+				if ($total_number_of_answers> 2) {
+					$this->html .= '			<input type="image" src="../img/delete.gif"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
+				}
+				$this->html .= ' 		</td>';
+				$this->html .= '	</tr>';
 			}
-
-			if ($key>0) {
-				$this->html .= '			<input type="image" src="../img/up.gif"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
-			}
-
-			if ($total_number_of_answers> 2) {
-				$this->html .= '			<input type="image" src="../img/delete.gif"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
-			}
-			$this->html .= ' 		</td>';
-			$this->html .= '	</tr>';
 		}
 		// The buttons for adding or removing
 		$this->html .= ' 			</table>';

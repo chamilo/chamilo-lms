@@ -125,7 +125,9 @@ function edit_cat_def($id, $title, $comment, $nbline)
 
 function remove_cat_def($id, $force = false)
 {
-	global $TBL_USERINFO_CONTENT, $TBL_USERINFO_DEF;
+	$TBL_USERINFO_DEF 		= Database :: get_course_table(TABLE_USER_INFO);
+	$TBL_USERINFO_CONTENT 	= Database :: get_course_table(TABLE_USER_INFO_CONTENT);
+	
 	$id = strval(intval($id));
 
 	if ( (0 == (int) $id || $id == "ALL") || ! is_bool($force))
@@ -163,7 +165,7 @@ function remove_cat_def($id, $force = false)
 
 function move_cat_rank($id, $direction) // up & down.
 {
-	global $TBL_USERINFO_DEF;
+	$TBL_USERINFO_DEF 		= Database :: get_course_table(TABLE_USER_INFO);
 	$id = strval(intval($id));
 
 	if ( 0 == (int) $id || ! ($direction == "up" || $direction == "down") )
@@ -200,7 +202,7 @@ function move_cat_rank($id, $direction) // up & down.
 
 function move_cat_rank_by_rank($rank, $direction) // up & down.
 {
-	global $TBL_USERINFO_DEF;
+	$TBL_USERINFO_DEF 		= Database :: get_course_table(TABLE_USER_INFO);
 
 	if ( 0 == (int) $rank || ! ($direction == "up" || $direction == "down") )
 	{
@@ -443,7 +445,8 @@ function cleanout_cat_content($user_id, $definition_id)
 
 function get_course_user_info($user_id)
 {
-	global $TBL_USERINFO_CONTENT, $TBL_USERINFO_DEF;
+	$TBL_USERINFO_DEF 		= Database :: get_course_table(TABLE_USER_INFO);
+	$TBL_USERINFO_CONTENT 	= Database :: get_course_table(TABLE_USER_INFO_CONTENT);
 
 	$sql = "SELECT	cat.id catId,	cat.title,
 					cat.comment ,	content.content
@@ -524,8 +527,9 @@ function get_main_user_info($user_id, $courseCode)
 
 function get_cat_content($userId, $catId)
 {
-	global $TBL_USERINFO_CONTENT, $TBL_USERINFO_DEF;
-
+	$TBL_USERINFO_DEF 		= Database :: get_course_table(TABLE_USER_INFO);
+	$TBL_USERINFO_CONTENT 	= Database :: get_course_table(TABLE_USER_INFO_CONTENT);
+	
 	$userId = strval(intval($userId));
 	$catId 	= strval(intval($catId));
 	$sql = "SELECT	cat.id catId,	cat.title,
@@ -558,8 +562,8 @@ function get_cat_content($userId, $catId)
  */
 function get_cat_def($catId)
 {
-	global $TBL_USERINFO_DEF;
-
+	$TBL_USERINFO_DEF 		= Database :: get_course_table(TABLE_USER_INFO);
+	
 	$catId = strval(intval($catId));
 	$sql = "SELECT id, title, comment, line_count, rank FROM ".$TBL_USERINFO_DEF." WHERE id = '$catId'";
 
@@ -587,8 +591,8 @@ function get_cat_def($catId)
  */
 function get_cat_def_list()
 {
-	global $TBL_USERINFO_DEF;
-
+	$TBL_USERINFO_DEF 		= Database :: get_course_table(TABLE_USER_INFO);
+	
 	$sql = "SELECT	id catId,	title,	comment , line_count
 			FROM  ".$TBL_USERINFO_DEF."
 			ORDER BY rank";

@@ -127,33 +127,40 @@ class TestSurvey extends UnitTestCase {
 	}
 	
 	public function testQuestionRenderQuestion() {
+		ob_start();
 		$form_content=array();
 		$res = $this->squestion->render_question($form_content);
 		$this->assertNull($res);
 		$this->assertTrue(is_null($res));
-		//var_dump($res);
+		ob_end_clean();
 	}
 	
 	public function testMultipleChoiseRenderQuestion() {
+		ob_start();
 		$form_content=array();
 		$answers=array();
 		$this->smultiplechoice->render_question($form_content,$answers);
 		$this->assertNull($this->smultiplechoice->html);
+		ob_end_clean();
 	}
 	
 	public function testYesNoRenderQuestion() {
+		ob_start();
 		$form_content=array();
 		$answers=array();
 		$this->syesno->render_question($form_content,$answers);
 		$this->assertNull($this->syesno->html);
+		ob_end_clean();
 	}
 
 	public function testPersonalityRenderQuestion() {
+		ob_start();
 		$form_content=array();
 		$answers=array();
 		$this->spersonality->render_question($form_content,$answers);
 		$this->assertNull($this->spersonality->html);
 		$this->assertFalse($this->spersonality->html);
+		ob_end_clean();
 	}
 
 	public function testAddRemoveButtons() {

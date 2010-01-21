@@ -65,7 +65,7 @@ class TestSubLanguageManager extends UnitTestCase {
 	public function testadd_file_in_language_directory(){
 		
 		$dirname = api_get_path(SYS_LANG_PATH);				
-		$dokeos_path_file = $dirname.'/español.inc.php';
+		$dokeos_path_file = $dirname.'español.inc.php';
 		$res = SubLanguageManager::add_file_in_language_directory($dokeos_path_file);
 		unlink($dokeos_path_file);
 		$this->assertNull($res);

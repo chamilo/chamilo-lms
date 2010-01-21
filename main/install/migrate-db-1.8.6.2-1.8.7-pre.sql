@@ -15,7 +15,7 @@
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook',1,0);
 INSERT INTO course_module (name, link, image, `row`, `column`, position) VALUES ('notebook','notebook/index.php','notebook.gif',2,1,'basic');
 
-
+UPDATE settings_current SET selected_value = '1.8.7.10004' WHERE variable = 'dokeos_database_version';
 
 -- xxSTATSxx
 
@@ -24,4 +24,3 @@ INSERT INTO course_module (name, link, image, `row`, `column`, position) VALUES 
 -- xxCOURSExx
 
 INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,category) VALUES ('notebook','notebook/index.php','notebook.gif',0,'0','squaregrey.gif',0,'_self','interaction');
-

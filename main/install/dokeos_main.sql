@@ -285,7 +285,8 @@ INSERT INTO course_module VALUES
 (25,'wiki','wiki/index.php','wiki.gif',2,3,'basic'),
 (26,'gradebook','gradebook/index.php','gradebook.gif',2,2,'basic'),
 (27,'glossary','glossary/index.php','glossary.gif',2,1,'basic'),
-(28,'notebook','notebook/index.php','notebook.gif',2,1,'basic');
+(28,'notebook','notebook/index.php','notebook.gif',2,1,'basic'),
+(29,'attendance','attendance/index.php','attendance.gif',2,1,'basic');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE course_module ENABLE KEYS */;
 
@@ -716,6 +717,7 @@ VALUES
 ('course_create_active_tools','survey','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Survey', 0),
 ('course_create_active_tools','glossary','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary', 0),
 ('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook', 0),
+('course_create_active_tools','attendance','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Attendance', 0),
 ('advanced_filemanager',NULL,'radio','Editor','false','AdvancedFileManagerTitle','AdvancedFileManagerComment',NULL,NULL, 0),
 ('allow_reservation', NULL, 'radio', 'Tools', 'false', 'AllowReservationTitle', 'AllowReservationComment', NULL, NULL, 0),
 ('profile','apikeys','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'ApiKeys', 0),

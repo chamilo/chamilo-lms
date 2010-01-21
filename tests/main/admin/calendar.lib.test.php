@@ -4,13 +4,10 @@ require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
 require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php');
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
-Mock::generate('Database');
-Mock::generate('Display');
 class TestCalendar extends UnitTestCase {
 
 	function TestCalendar() {
         $this->UnitTestCase('testing the file about calendar/agenda');
-
     }
 
 	public function setUp(){
@@ -101,24 +98,19 @@ class TestCalendar extends UnitTestCase {
 
  	public function testStoreEditedAgendaItem(){
  		ob_start();
- 		$instans = new MockDisplay();
  		$id=1;
 		$title='';
 		$content='';
 		$start_date= 21;
 		$end_date=25;
 		$res = store_edited_agenda_item();
- 		$instans = 	Display::display_normal_message(get_lang("EditSuccess"));
  		$edit_result=save_edit_agenda_item($id,$title,$content,$start_date,$end_date);
  		ob_end_clean();
- 		$this->assertTrue(is_null($instans));
  		$this->assertTrue($edit_result);
- 		//var_dump($instans);
  		//var_dump($edit_result);
  	}
 
  	public function testSaveEditAgendaItem(){
-	 	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 	 	$id=Database::escape_string($id);
 		$title=Database::escape_string($title);
 		$content=Database::escape_string($content);
@@ -126,10 +118,8 @@ class TestCalendar extends UnitTestCase {
 		$end_date=Database::escape_string($end_date);
 	 	$res = save_edit_agenda_item($id,$title,$content,$start_date,$end_date);
  		$this->assertTrue($res);
- 		$this->assertTrue($TABLEAGENDA);
  		$this->assertTrue(is_bool($res));
  		//var_dump($res);
- 		//var_dump($TABLEAGENDA);
  	}
 	/**
 	* Makes an agenda item visible or invisible for a student
@@ -155,14 +145,15 @@ class TestCalendar extends UnitTestCase {
 	/**
 	* Displays all the agenda items
 	*/ 
- 	public function testDisplayAgendaItems(){
+ 	
+ 	public function testDisplayAgendaItems() { 		
+ 		global $_user; 		
  		ob_start(); 		
- 		$_SESSION['is_courseAdmin'] = 1;
  		$res = display_agenda_items();
  		ob_end_clean();
  		$this->assertTrue(is_null($res));	
  	}
- 	
+ 	 	
  	/**
 	* Displays only 1 agenda item. This is used when an agenda item is added to the learning path.
 	*/
@@ -354,7 +345,7 @@ class TestCalendar extends UnitTestCase {
  */
  	public function testAgendaAddItem(){
  		global $_course;
- 		$course_code='COURSEX';
+ 		$course_code='$_course';
  		$course_info = api_get_course_info($course_code);
  		$title='test';
  		$content='test function';
@@ -387,13 +378,12 @@ class TestCalendar extends UnitTestCase {
  		//this function is not used or deprecated
  	}
 
- 	public function testAgendaImportIcal(){
- 		$course_info = 'course_test';
+ 	public function testAgendaImportIcal() { 
+ 		global $_course;
+ 		$course_info = $_course;
  		$file_ical = '00000000000000-980.ics';
  		$file = api_get_path(SYS_PATH).'tests/main/admin/icals/'.$file_ical;
- 		//var_dump($_FILES[$file_ical]);
  		$res = agenda_import_ical($course_info, $file);
- 		//var_dump($res);
  		if(is_bool($res)){
  		$this->assertTrue(is_bool($res));
  		$this->assertTrue($res===false || $res === true);
@@ -403,10 +393,16 @@ class TestCalendar extends UnitTestCase {
  	}
 
 public function testDeleteAgendaItem(){
- 	 	$course_code='COURSEX';
 		$id=1;
 		$res = delete_agenda_item($id);
 		$this->assertTrue(is_bool($res));
  	}
+ 	
+ /*	public function testDeleteCourse() {
+		global $cidReq;			
+		$resu = CourseManager::delete_course($cidReq);
+		session_destroy();			
+	}
+ */
 }
 ?>

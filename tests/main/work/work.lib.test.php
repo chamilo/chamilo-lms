@@ -9,6 +9,23 @@ require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
 class TestWork extends UnitTestCase {
 
+	 
+	/**
+	 * @param	string	Base work dir (.../work)
+	 * @param 	string $desiredDirName complete path of the desired name
+ 	 * @return 	string actual directory name if it succeeds, boolean false
+ 	 * otherwise
+ 	 */
+
+	function testcreate_unexisting_work_directory() {
+		$path_name = api_get_path(SYS_COURSE_PATH);
+		$base_work_dir=$path_name.'testing/';
+		$desired_dir_name= $path_name.'testing';
+		$res=create_unexisting_work_directory($base_work_dir,$desired_dir_name);
+		$this->assertTrue(is_bool($res));
+	}
+	 
+	 
 	 /**
 	 * Builds the form thats enables the user to
 	 * select a directory to browse/upload in
@@ -77,7 +94,8 @@ class TestWork extends UnitTestCase {
 	*/
 
 	function testcount_dir() {
-		$path_dir='/var/www';
+		$path_name = api_get_path(SYS_COURSE_PATH);
+		$path_dir=$path_name;
 		$recurse=0;
 		ob_start();
 		$res=count_dir($path_dir, $recurse);
@@ -97,20 +115,6 @@ class TestWork extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	/**
-	 * @param	string	Base work dir (.../work)
-	 * @param 	string $desiredDirName complete path of the desired name
- 	 * @return 	string actual directory name if it succeeds, boolean false
- 	 * otherwise
- 	 */
-
-	function testcreate_unexisting_work_directory() {
-		$path_name = api_get_path(SYS_PATH);
-		$base_work_dir=$path_name.'COURSEX/work/';
-		$desired_dir_name= $path_name.'work';
-		$res=create_unexisting_work_directory($base_work_dir,$desired_dir_name);
-		$this->assertTrue(is_bool($res));
-	}
 
 	/**
 	 * Transform an all directory structure (only directories) in an array
@@ -119,8 +123,8 @@ class TestWork extends UnitTestCase {
 	 */
 
 	function testdirectory_to_array() {
-		
-		$directory='/var/www/dokeos/';
+		$path_name = api_get_path(SYS_PATH);
+		$directory= $path_name;
 		$res=directory_to_array($directory);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
@@ -281,8 +285,9 @@ class TestWork extends UnitTestCase {
 	 */
 
 	function testget_work_id() {
+		global $cidReq;
 		$path_name = api_get_path(SYS_PATH);
-		$path=$path_name.'COURSEX';
+		$path=$path_name.$cidReq;
 		$res=get_work_id($path);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
@@ -309,9 +314,8 @@ class TestWork extends UnitTestCase {
 	 */
 
 	function testinsert_all_directory_in_course_table() {
-		global $work_table;
-		$path_name = api_get_path(SYS_PATH);
-		$base_work_dir=$path_name.'archive';
+		$path_name = api_get_path(SYS_COURSE_PATH);
+		$base_work_dir=$path_name.'work/testing';
 		$dir_to_array =directory_to_array($base_work_dir,true);
 		$res=insert_all_directory_in_course_table($base_work_dir);
 		$this->assertTrue(is_null($res));
@@ -327,8 +331,8 @@ class TestWork extends UnitTestCase {
 	 */
 
 	function testis_subdir_of() {
-		$path_name = api_get_path(SYS_PATH);
-		$subdir=$path_name.'archive';
+		$path_name = api_get_path(SYS_COURSE_PATH);
+		$subdir=$path_name.'work/testing';
 		$basedir=$path_name;
 		$res=is_subdir_of($subdir,$basedir);
 		$this->assertTrue(is_numeric($res));
@@ -381,8 +385,8 @@ class TestWork extends UnitTestCase {
 
 	function testupdate_work_url() {
 		$id=1;
-		$path_name = api_get_path(SYS_PATH);
-		$new_path=$path_name.'archive';
+		$path_name = api_get_path(SYS_COURSE_PATH);
+		$new_path=$path_name.'work/testing';
 		$res=update_work_url($id,$new_path);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
@@ -395,10 +399,12 @@ class TestWork extends UnitTestCase {
 	 * @return	integer	-1 on error
 	 */
 
+
 	function testdel_dir() {
+		global $cidReq;
 		$path_name = api_get_path(SYS_PATH);
-		$base_work_dir=$path_name.'COURSEX/work/';
-		$dir= $path_name.'work/';
+		$base_work_dir=$path_name.$cidReq.'work/testing';
+		$dir= $path_name.'testing/';
 		$id=-1;
 		$res=del_dir($base_work_dir,$dir,$id);
 		$this->assertTrue(is_numeric($res));
@@ -408,9 +414,12 @@ class TestWork extends UnitTestCase {
 	/**
  * This functon only is added to the end of the test and the end of the files in the all test.
  */
-/*	public function testDeleteCourse() {
+	/*
+	public function testDeleteCourse() {
 		global $cidReq;			
-		$resu = CourseManager::delete_course($cidReq);				
-	}*/
+		$resu = CourseManager::delete_course($cidReq);
+		session_destroy();			
+	}
+	*/
 }
 ?>

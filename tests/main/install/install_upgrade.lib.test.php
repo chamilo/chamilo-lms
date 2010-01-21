@@ -17,22 +17,11 @@ class TestInstallUpgrade extends UnitTestCase{
 	}
 
 	public function testFillLanguageTable() {
-		$language_table='english';
+		$language_table='spanish';
 		$res = fill_language_table($language_table);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	/**
-	 * Fatal error: Call to undefined function trueFalse() in
-	 * /var/www/dokeos1861/main/install/install_upgrade.lib.php on line 114
-	 */
-	/*public function testFillCurrentSettingsTable(){
-		$current_settings_table='';
-		$installation_settings='';
-		$res = fill_current_settings_table($current_settings_table, $installation_settings);
-		$this->assertTrue($res);
-		var_dump($res);
-	}*/
 
 	public function testFillSettingsTable() {
 		$settings_options_table='';
@@ -59,24 +48,35 @@ class TestInstallUpgrade extends UnitTestCase{
 		$this->assertEqual($chamilo_path_folder.'main/install/',$res);
 		//var_dump($res);
 	}
-
-	public function testLoadMainDatabase() {
-		$chamilo_path_folder= api_get_path(SYS_PATH);
-		$installation_settings=array();
-		$db_script = $chamilo_path_folder.'main/install/dokeos_main.sql';
+	//This function is ok but the problem is than create course with other code
+	/*
+	public function testLoadMainDatabase() {		
+		$chamilo_path_folder= api_get_path(SYS_CODE_PATH);		
+		$installation_settings['{ORGANISATIONNAME}'] = 'My Organisation';
+		$installation_settings['{ORGANISATIONURL}'] = 'http://www.chamilo.org';
+		$installation_settings['{CAMPUSNAME}'] = 'My campus';
+		$installation_settings['{PLATFORMLANGUAGE}'] = 'spanish';
+		$installation_settings['{ALLOWSELFREGISTRATION}'] = 1;
+		$installation_settings['{ALLOWTEACHERSELFREGISTRATION}'] = 1;
+		$installation_settings['{ADMINLASTNAME}'] = 'Doe';
+		$installation_settings['{ADMINFIRSTNAME}'] = 'John';
+		$installation_settings['{ADMINLOGIN}'] = 'admin';
+		$installation_settings['{ADMINPASSWORD}'] = md5('admin');
+		$installation_settings['{ADMINEMAIL}'] = '.localdomain';
+		$installation_settings['{ADMINPHONE}'] = '(000) 001 02 03';
+		$installation_settings['{PLATFORM_AUTH_SOURCE}'] = PLATFORM_AUTH_SOURCE;
+		$installation_settings['{ADMINLANGUAGE}'] = 'spanish';
+		$installation_settings['{HASHFUNCTIONMODE}'] = 'md5';					
+		$db_script = $chamilo_path_folder.'install/dokeos_main.sql';				
 		$res = load_main_database($installation_settings,$db_script);
-		$this->assertTrue(is_null($res));
-		$this->assertNull($res);
-
+		$this->assertFalse($res);
 	}
-
+*/
 	public function testLoadDatabaseScript() {
 		$chamilo_path_folder= api_get_path(SYS_PATH);
 		$db_script= $chamilo_path_folder.'main/install/dokeos_stats.sql';
-		
 		$res = load_database_script($db_script);
 		$this->assertTrue(is_null($res));
-		//var_dump($res);
 	}
 
 	public function testSplitSqlFile() {
@@ -86,7 +86,6 @@ class TestInstallUpgrade extends UnitTestCase{
 		$this->assertTrue($res);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res===true);
-		//var_dump($res);
 	}
 
 	public function testGetSqlFileContents() {
@@ -108,17 +107,14 @@ class TestInstallUpgrade extends UnitTestCase{
 		$res = my_directory_to_array($directory);
 		$this->assertTrue(is_array($res));		
 	}
-
-	public function testAddDocument180() {
-			
-		}
-		/**
- * This functon only is added to the end of the test and the end of the files in the all test.
- */
+	
+	
 	public function testDeleteCourse() {
 		global $cidReq;			
-		$resu = CourseManager::delete_course($cidReq);				
+		$resu = CourseManager::delete_course($cidReq);
+		session_destroy();			
 	}
- 
+	
+	
 }
 ?>

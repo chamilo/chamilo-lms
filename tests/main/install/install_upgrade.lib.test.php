@@ -1,5 +1,4 @@
 <?php
-require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
 class TestInstallUpgrade extends UnitTestCase{
 
@@ -108,12 +107,12 @@ class TestInstallUpgrade extends UnitTestCase{
 		$this->assertTrue(is_array($res));		
 	}
 	
-	
+	/*
 	public function testDeleteCourse() {
 		global $cidReq;			
 		$resu = CourseManager::delete_course($cidReq);
 		session_destroy();			
-	}
+	}*/
 	
 	
 }

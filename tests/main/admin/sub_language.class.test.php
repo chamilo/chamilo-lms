@@ -65,7 +65,7 @@ class TestSubLanguageManager extends UnitTestCase {
 	public function testadd_file_in_language_directory(){
 		
 		$dirname = api_get_path(SYS_LANG_PATH);				
-		$dokeos_path_file = $dirname.'español.inc.php';
+		$dokeos_path_file = $dirname.'spanish.inc.php';
 		$res = SubLanguageManager::add_file_in_language_directory($dokeos_path_file);
 		unlink($dokeos_path_file);
 		$this->assertNull($res);
@@ -76,33 +76,15 @@ class TestSubLanguageManager extends UnitTestCase {
 	
 	public function testwrite_data_in_file(){
 		//create a new directory of sub language
-		
 		$dirname = api_get_path(SYS_LANG_PATH).'test';	
-		$filename 	= 'testing.inc.php';
-		$file = $dirname.DIRECTORY_SEPARATOR.$filename;
-
-		$path_sub_language = $dirname;
-		$res1 = SubLanguageManager::add_directory_of_sub_language($path_sub_language);		
-		
-		//add file in language directory of sub language
-		$dokeos_path_file = $file;
-		$res2 = SubLanguageManager::add_file_in_language_directory($dokeos_path_file);
-
-		//write data in file of sub language
+		$file = $dirname.'spanish.inc.php';
 		$path_file = $file;
-		$new_sub_language='caucasico';
-		$variable_sub_language='extremo';
-		$res3 = SubLanguageManager::write_data_in_file($path_file,$new_sub_language,$variable_sub_language);
-		
-		//remove directory and its content of sub language
-		if (file_exists($file)) {
-			unlink($file);
-			rmdir($dirname);	
-		}	
-		$this->assertFalse($res3);
-		$this->assertTrue(is_null($res3));
-		//var_dump($res1, $res2 , $res3);
-		
+		$new_sub_language='spanishtest';
+		$variable_sub_language='test';
+		$res = SubLanguageManager::write_data_in_file($path_file,$new_sub_language,$variable_sub_language);
+
+		$this->assertFalse($res);
+		$this->assertTrue(is_null($res));
 	}
 	
 	/**

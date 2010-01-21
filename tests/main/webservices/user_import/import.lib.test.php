@@ -15,13 +15,6 @@ class TestImpor extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testparse_csv_data() {
-		$file='/var/www/1.csv';
-		$res=parse_csv_data($file);
-		$this->assertTrue(is_array($res));
-		//var_dump($res);
-	}
-
 	/**
  	* Save the imported data
 	*/
@@ -36,6 +29,13 @@ class TestImpor extends UnitTestCase {
 	function testvalidate_data() {
 		global $defined_auth_sources, $users;
 		$res=validate_data($users);
+		$this->assertTrue(is_array($res));
+		//var_dump($res);
+	}
+	
+		function testparse_csv_data() {
+		$file= '/tmp/';
+		$res=parse_csv_data($file);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}

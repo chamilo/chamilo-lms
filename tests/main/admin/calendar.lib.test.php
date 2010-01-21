@@ -345,7 +345,7 @@ class TestCalendar extends UnitTestCase {
  */
  	public function testAgendaAddItem(){
  		global $_course;
- 		$course_code='$_course';
+ 		$course_code=$_course;
  		$course_info = api_get_course_info($course_code);
  		$title='test';
  		$content='test function';
@@ -377,12 +377,13 @@ class TestCalendar extends UnitTestCase {
  	public function testAgendaAddRepeatItem(){
  		//this function is not used or deprecated
  	}
-
+ 	
+ 	//This funtion need a path where will copy to the other folder.
+/*
  	public function testAgendaImportIcal() { 
  		global $_course;
  		$course_info = $_course;
- 		$file_ical = '00000000000000-980.ics';
- 		$file = api_get_path(SYS_PATH).'tests/main/admin/icals/'.$file_ical;
+ 		$file = api_get_path(SYS_PATH).'tests/main/admin/icals/test.ics';
  		$res = agenda_import_ical($course_info, $file);
  		if(is_bool($res)){
  		$this->assertTrue(is_bool($res));
@@ -391,7 +392,7 @@ class TestCalendar extends UnitTestCase {
  			$this->assertTrue($res);
  		}
  	}
-
+*/
 public function testDeleteAgendaItem(){
 		$id=1;
 		$res = delete_agenda_item($id);

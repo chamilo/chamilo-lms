@@ -156,11 +156,11 @@ echo '<div id="social-content">';
 					<tbody>
 						<tr>
 							<td class="invitation_image">
-								<a href="profile.php?u=<? echo $sender_user_id; ?>">
+								<a href="profile.php?u=<?php echo $sender_user_id; ?>">
 								<img src="<?php echo $friends_profile['file']; ?>" <?php echo $friends_profile['style']; ?> /></a>
 							</td>
 							<td class="info">
-									<a class="profile_link" href="profile.php?u=<?php echo $sender_user_id;?>"><? echo api_get_person_name($user_info['firstName'], $user_info['lastName']);?></a>
+									<a class="profile_link" href="profile.php?u=<?php echo $sender_user_id;?>"><?php echo api_get_person_name($user_info['firstName'], $user_info['lastName']);?></a>
 									<div>
 									<?php echo $title.' : '.$content;?>
 									</div>

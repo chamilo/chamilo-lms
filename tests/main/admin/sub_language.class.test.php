@@ -1,6 +1,6 @@
 <?php
 require_once (api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php');
-//require_once(api_get_path(SYS_CODE_PATH).'admin/sub_language_add.php');
+require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
 class TestSubLanguageManager extends UnitTestCase {
 
@@ -64,10 +64,9 @@ class TestSubLanguageManager extends UnitTestCase {
 	 */ 
 	public function testadd_file_in_language_directory(){
 		
-		$dirname = '/var/www/';				
-		$dokeos_path_file = $dirname.'/prueba1234.inc.php';
+		$dirname = api_get_path(SYS_LANG_PATH);				
+		$dokeos_path_file = $dirname.'/español.inc.php';
 		$res = SubLanguageManager::add_file_in_language_directory($dokeos_path_file);
-		
 		unlink($dokeos_path_file);
 		$this->assertNull($res);
 		$this->assertTrue(is_null($res));
@@ -77,8 +76,9 @@ class TestSubLanguageManager extends UnitTestCase {
 	
 	public function testwrite_data_in_file(){
 		//create a new directory of sub language
-		$dirname 	= '/var/www/prueba2';
-		$filename 	= 'gradebook.inc.php';
+		
+		$dirname = api_get_path(SYS_LANG_PATH).'test';	
+		$filename 	= 'testing.inc.php';
 		$file = $dirname.DIRECTORY_SEPARATOR.$filename;
 
 		$path_sub_language = $dirname;
@@ -111,7 +111,8 @@ class TestSubLanguageManager extends UnitTestCase {
 	 * @return boolean
 	 */
 	public function testadd_directory_of_sub_language() {
-		$path_sub_language = '/var/www/prueba1';
+		$path_sub_language = api_get_path(SYS_LANG_PATH).'test';
+		//$path_sub_language = '/var/www/prueba1';
 		$res = SubLanguageManager :: add_directory_of_sub_language($path_sub_language, 0777);
 		if (is_bool($res)) {
 			$this->assertTrue($path_sub_language);
@@ -220,7 +221,8 @@ class TestSubLanguageManager extends UnitTestCase {
 	 */
 	public function Testremove_directory_of_sub_language(){
 		// create a directory of sub language
-		$path_sub_language = '/var/www/prueba123';
+		$path_sub_language = api_get_path(SYS_LANG_PATH).'test';	
+		//$path_sub_language = '/var/www/prueba123';
 		$res = SubLanguageManager :: add_directory_of_sub_language($path_sub_language, 0777);
 		// remove a directory of sub language
 		if (file_exists($path_sub_language)) {
@@ -229,5 +231,12 @@ class TestSubLanguageManager extends UnitTestCase {
 		$this->assertTrue(is_bool($res));
 		// var_dump($res);
 	}
+	
+		public function testDeleteCourse() {
+		global $cidReq;			
+		$resu = CourseManager::delete_course($cidReq);
+		session_destroy();			
+	}
+	
 }
 ?>

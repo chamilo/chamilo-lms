@@ -9,10 +9,11 @@
     $rs = Database::query($sql, __FILE__, __LINE__);
 	$row = Database::fetch_row($rs);
 	if (empty($row[0])) {
-		// create a course
+		
+	// create a course
 		$course_datos = array(
-				'wanted_code'=> 'COURSEX',
-				'title'=>'COURSEX',
+				'wanted_code'=> $cidReq,
+				'title'=>$cidReq,
 				'tutor_name'=>'John Doe',
 				'category_code'=>'LANG',
 				'course_language'=>'spanish',
@@ -35,6 +36,7 @@
              WHERE course.code = '$cidReq'";
     $result = Database::query($sql,__FILE__,__LINE__);
 
+	//create the session
 	
     if (Database::num_rows($result)>0) {
         $cData = Database::fetch_array($result);
@@ -44,7 +46,7 @@
 		$_course['name'        ]         = $cData['title'         ];
         $_course['official_code']         = $cData['visual_code'        ]; // use in echo
         $_course['sysCode'     ]         = $cData['code'             ]; // use as key in db
-        $_course['path'        ]         = $cData['directory'        ]; // use as key in path
+        $_course['path'        ]         = $cData['directory']; // use as key in path
         $_course['dbName'      ]         = $cData['db_name'           ]; // use as key in db list
         $_course['dbNameGlu'   ]         = $_configuration['table_prefix'] . $cData['db_name'] . $_configuration['db_glue']; // use in all queries
         $_course['titular'     ]         = $cData['tutor_name'       ];
@@ -62,6 +64,7 @@
     }
          
     $_SESSION['_user']['user_id'] = 1;    
+    $_user['user_id'] = $_SESSION['_user']['user_id'];
     $_SESSION['is_courseAdmin'] = 1;
 
 ?>

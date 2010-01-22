@@ -15,6 +15,7 @@ require_once $incdir.'global.inc.php';
 ob_start();
 require_once $incdir.'lib/course_document.lib.php';
 require_once $incdir.'lib/banner.lib.php';
+require_once $incdir.'lib/add_course.lib.inc.php';
 require_once $incdir.'tool_navigation_menu.inc.php';
 require_once $incdir.'banner.inc.php';
 ob_end_clean();
@@ -30,7 +31,7 @@ require_once $maindir.'install/install_upgrade.lib.php';
 
 class AllTestsSuite extends TestSuite {
 	function setUp() {
-		global $_configuration, $_user, $_course;
+		global $_configuration, $_user, $_course, $cidReq;
 		$cidReq = 'COURSEX';
         // check if course exists 
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);

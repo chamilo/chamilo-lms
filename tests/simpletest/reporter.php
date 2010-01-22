@@ -41,14 +41,34 @@ class HtmlReporter extends SimpleReporter {
     function paintHeader($test_name) {
         $this->sendNoCacheHeaders();
         print "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">";
-        print "<html>\n<head>\n<title>huachin!!</title>\n";
+        print "<html>\n<head>\n<title>Test Suite</title>\n";
         print "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" .
                 $this->_character_set . "\">\n";
         print "<style type=\"text/css\">\n";
         print $this->_getCss() . "\n";
         print "</style>\n";
         print "</head>\n<body>\n";
-        print "<h1>Probando codigo de Dokeos!</h1>\n";
+       
+        echo '<div style="text-align:center;min-height:100px;font-size:25px;background:url(img/header-logo.png) no-repeat left;">';
+        echo '<div style="float:right;color: green;">';
+        echo ''. date('Y - m - d').'';
+        echo '</div>';
+        echo '</div>';
+        echo '<div style="border:2px solid #DDDDDD";>';
+        echo '<div>';
+        echo '<div style="width:100%;background-image:url(img/bg-header4.png);background-repeat:repeat-x";>
+        		<h2><div style="font-size:18px;font-family:Tahoma,Geneva,sans-serif;">These results showing how many functions has been tested in the code of chamilo 1.8.6.2</div></h2>         		    
+        			<br/><div style="font-size:12px;font-family:Tahoma,Geneva,sans-serif;">
+        			<p>This page showing the kind results different than have been tested and showing the lines the problems.</p>  
+        			<ol><li>This results show the amount of the tests than have been tested.</li>
+        			<li>This results show the amount of the tests than have passed.</li>
+        			<li>This results show the amount of the tests than have failed.</li>
+        			<li>This results show the amount of exceptions in the tests.</li></ol>
+        			<p>You can always find more information about simpletest on the website: http://www.lastcraft.com </p>
+        			<p>"Only a well software like Chamilo, is perfect when has been tested by excellent The Testing Engineers".</p>
+        			</div>
+        	  </div>';
+		echo '</div>';
         flush();
     }
 
@@ -78,6 +98,7 @@ class HtmlReporter extends SimpleReporter {
         return ".fail { background-color: inherit; color: red; }" .
                 ".pass { background-color: inherit; color: green; }" .
                 " pre { background-color: lightgray; color: inherit; }";
+                
     }
 
     /**
@@ -98,6 +119,12 @@ class HtmlReporter extends SimpleReporter {
         print "<strong>" . $this->getExceptionCount() . "</strong> exceptions.";
         print "</div>\n";
         print "</body>\n</html>\n";
+       echo '<div style="min-height:100px;background-color: #037fb2;background-image:url(img/bg-footer.gif);background-repeat:repeat-x"> </div>';
+       
+        
+	//padding-top:60px;
+	//margin-right:5%;
+	
     }
 
     /**

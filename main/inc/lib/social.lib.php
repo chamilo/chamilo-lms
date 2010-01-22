@@ -10,23 +10,10 @@
 ==============================================================================
 */
 
-// Relation type between users
-define('USERUNKNOW',		0);
-define('SOCIALUNKNOW',		1);
-define('SOCIALPARENT',		2);
-define('SOCIALFRIEND',		3);
-define('SOCIALGOODFRIEND',	4);
-define('SOCIALENEMY',		5);
-define('SOCIALDELETED',		6);
-
 //PLUGIN PLACES
 define('SOCIAL_LEFT_PLUGIN',	1);
 define('SOCIAL_CENTER_PLUGIN',	2);
 define('SOCIAL_RIGHT_PLUGIN',	3);
-
-define('MESSAGE_STATUS_INVITATION_PENDING',	'5');
-define('MESSAGE_STATUS_INVITATION_ACCEPTED','6');
-define('MESSAGE_STATUS_INVITATION_DENIED',	'7');
 
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
@@ -34,83 +21,8 @@ require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 class SocialManager extends UserManager {
 
 	private function __construct() {
-
 	}
-	
-	/**
-	 * Allow to register contact to social network
-	 * @param int user friend id
-	 * @param int user id
-	 * @param int relation between users see constants definition
-	 */
-	public static function register_friend ($friend_id,$my_user_id,$relation_type) {		
-		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
 		
-		$friend_id = intval($friend_id);
-		$my_user_id = intval($my_user_id);
-		$relation_type = intval($relation_type);
-		
-		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' .$friend_id.' AND user_id='.$my_user_id;
-		$result = Database::query($sql, __FILE__, __LINE__);
-		$row = Database :: fetch_array($result, 'ASSOC');
-		
-		if ($row['count'] == 0) {
-			$current_date=date('Y-m-d H:i:s');
-			$sql_i = 'INSERT INTO ' . $tbl_my_friend . '(friend_user_id,user_id,relation_type,last_edit)values(' . $friend_id . ','.$my_user_id.','.$relation_type.',"'.$current_date.'");';
-			Database::query($sql_i, __FILE__, __LINE__);
-			return true;
-		} else {
-			$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' . $friend_id . ' AND user_id='.$my_user_id;
-			$result = Database::query($sql, __FILE__, __LINE__);
-			$row = Database :: fetch_array($result, 'ASSOC');
-			if ($row['count'] == 1) {
-				$sql_i = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.$relation_type.' WHERE friend_user_id=' . $friend_id.' AND user_id='.$my_user_id;				
-				Database::query($sql_i, __FILE__, __LINE__);
-				return true;
-			} else {
-				return false;
-			}			
-		}
-		
-	}
-
-	/**
-	 * Deletes a contact	  
-	 * @param int user friend id
-	 * @param bool true will delete ALL friends relationship from $friend_id
-	 * @author isaac flores paz <isaac.flores@dokeos.com>
-	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code
-	 */
-	public static function removed_friend ($friend_id, $real_removed = false) {
-		$tbl_my_friend  = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
-		$tbl_my_message = Database :: get_main_table(TABLE_MAIN_MESSAGE);
-		$friend_id = intval($friend_id);
-		
-		if ($real_removed == true) {			
-			//Delete user friend
-			$sql_delete_relationship1 = 'UPDATE ' . $tbl_my_friend .' SET relation_type='.SOCIALDELETED.' WHERE friend_user_id='.$friend_id;			
-			$sql_delete_relationship2 = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.SOCIALDELETED.' WHERE user_id=' . $friend_id;
-			Database::query($sql_delete_relationship1, __FILE__, __LINE__);
-			Database::query($sql_delete_relationship2, __FILE__, __LINE__);					
-		} else {
-			$user_id=api_get_user_id();
-			$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE user_id=' . $user_id . ' AND relation_type<>6 AND friend_user_id='.$friend_id;
-			$result = Database::query($sql, __FILE__, __LINE__);
-			$row = Database :: fetch_array($result, 'ASSOC');
-			if ($row['count'] == 1) {
-				//Delete user friend
-				$sql_i = 'UPDATE ' . $tbl_my_friend .' SET relation_type='.SOCIALDELETED.' WHERE user_id=' . $user_id.' AND friend_user_id='.$friend_id;
-				$sql_j = 'UPDATE ' . $tbl_my_message.' SET msg_status=7 WHERE user_receiver_id=' . $user_id.' AND user_sender_id='.$friend_id.' AND update_date="0000-00-00 00:00:00" ';
-				//Delete user
-				$sql_ij = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.SOCIALDELETED.' WHERE user_id=' . $friend_id.' AND friend_user_id='.$user_id;
-				$sql_ji = 'UPDATE ' . $tbl_my_message . ' SET msg_status=7 WHERE user_receiver_id=' . $friend_id.' AND user_sender_id='.$user_id.' AND update_date="0000-00-00 00:00:00" ';
-				Database::query($sql_i, __FILE__, __LINE__);
-				Database::query($sql_j, __FILE__, __LINE__);
-				Database::query($sql_ij, __FILE__, __LINE__);
-				Database::query($sql_ji, __FILE__, __LINE__);
-			}			
-		}
-	}
 	/**
 	 * Allow to see contacts list
 	 * @author isaac flores paz <florespaz@bidsoftperu.com>
@@ -157,7 +69,7 @@ class SocialManager extends UserManager {
 	 */
 	public static function get_relation_between_contacts ($user_id,$user_friend) {
 		$tbl_my_friend_relation_type = Database :: get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
-		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
+		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
 		$sql= 'SELECT rt.id as id FROM '.$tbl_my_friend_relation_type.' rt ' .
 			  'WHERE rt.id=(SELECT uf.relation_type FROM '.$tbl_my_friend.' uf WHERE  user_id='.((int)$user_id).' AND friend_user_id='.((int)$user_friend).')';
 		$res=Database::query($sql,__FILE__,__LINE__);
@@ -165,7 +77,7 @@ class SocialManager extends UserManager {
 		if (Database::num_rows($res)>0) {
 			return $row['id'];
 		} else {
-			return USERUNKNOW;
+			return USER_UNKNOW;
 		}
 	}
 	
@@ -181,7 +93,7 @@ class SocialManager extends UserManager {
 	 */
 	public static function get_friends($user_id, $id_group=null, $search_name=null, $load_extra_info = true) {
 		$list_ids_friends=array();
-		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
+		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
 		$tbl_my_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql='SELECT friend_user_id FROM '.$tbl_my_friend.' WHERE relation_type<>6 AND friend_user_id<>'.((int)$user_id).' AND user_id='.((int)$user_id);
 		if (isset($id_group) && $id_group>0) {
@@ -372,7 +284,7 @@ class SocialManager extends UserManager {
 	 * @return void()
 	 */
 	public static function qualify_friend ($id_friend_qualify,$type_qualify) {
-		$tbl_user_friend=Database::get_main_table(TABLE_MAIN_USER_FRIEND);
+		$tbl_user_friend=Database::get_main_table(TABLE_MAIN_USER_REL_USER);
 		$user_id=api_get_user_id();
 		$sql='UPDATE '.$tbl_user_friend.' SET relation_type='.((int)$type_qualify).' WHERE user_id='.((int)$user_id).' AND friend_user_id='.((int)$id_friend_qualify).';';
 		Database::query($sql,__FILE__,__LINE__);

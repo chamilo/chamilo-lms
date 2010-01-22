@@ -788,7 +788,7 @@ elseif($_POST['step6'])
                 include('update-files-1.8.6.1-1.8.6.2.inc.php');
             case '1.8.6.2':
                 include('update-db-1.8.6.2-1.8.7.inc.php');
-                include('update-files-1.8.6.2-1.8.7.inc.php');
+                //include('update-files-1.8.6.2-1.8.7.inc.php');
             default:
 				break;
 		}

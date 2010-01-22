@@ -486,7 +486,7 @@ class Statistics
 	 * Count the number of friends for social network users
 	 */
 	function get_friends() {
-		$user_friend_table = Database::get_main_table(TABLE_MAIN_USER_FRIEND);
+		$user_friend_table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
 		$user_table = Database::get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
 					FROM ".$user_friend_table." uf LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id

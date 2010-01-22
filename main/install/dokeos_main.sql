@@ -498,6 +498,7 @@ DROP TABLE IF EXISTS session_rel_user;
 CREATE TABLE session_rel_user (
   id_session mediumint unsigned NOT NULL default '0',
   id_user mediumint unsigned NOT NULL default '0',
+  relation_type int default 0 ,
   PRIMARY KEY  (id_session,id_user)
 );
 
@@ -2147,9 +2148,9 @@ CREATE TABLE  reservation_subscription  (
 -- ---------------------------------------------------------
 
 --
--- Table structure for table user_friend
+-- Table structure for table user_rel_user
 --
-CREATE TABLE user_friend(
+CREATE TABLE user_rel_user (
   id bigint unsigned not null auto_increment,
   user_id int unsigned not null,
   friend_user_id int unsigned not null,

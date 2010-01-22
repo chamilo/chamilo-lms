@@ -12,6 +12,10 @@
 --
 -- This first part is for the main database
 -- xxMAINxx
+
+ALTER TABLE user_friend RENAME TO user_rel_user;
+ALTER TABLE session_rel_user ADD COLUMN relation_type int NOT NULL default 0;
+
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook',1,0);
 INSERT INTO course_module (name, link, image, `row`, `column`, position) VALUES ('notebook','notebook/index.php','notebook.gif',2,1,'basic');
 

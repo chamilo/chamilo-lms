@@ -20,7 +20,6 @@
 ==============================================================================
 */
 define("DOKEOS_MAIN_DATABASE_FILE", "dokeos_main.sql");
-define("LANGUAGE_DATA_FILENAME", "language_data.csv");
 define("COUNTRY_DATA_FILENAME", "country_data.csv");
 define("SETTING_OPTION_DATA_FILENAME", "setting_option_data.csv");
 define("SETTING_CURRENT_DATA_FILENAME", "setting_current_data.csv");
@@ -44,20 +43,9 @@ function set_file_folder_permissions()
 {
 	@chmod('.',0755); //set permissions on install dir
 	@chmod('..',0755); //set permissions on parent dir of install dir
-	@chmod('language_data.csv',0755);
 	@chmod('setting_current_data.csv',0755);
 	@chmod('setting_option_data.csv',0755);
 	@chmod('country_data.csv.csv',0755);
-}
-
-/**
-* Fills the language table with all available languages.
-*/
-function fill_language_table($language_table)
-{
-	$file_path = dirname(__FILE__).'/'.LANGUAGE_DATA_FILENAME;
-	$add_language_sql = "LOAD DATA INFILE '".mysql_real_escape_string($file_path)."' INTO TABLE $language_table FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\'';";
-	@ mysql_query($add_language_sql);
 }
 
 /**
@@ -226,13 +214,13 @@ function write_dokeos_config_file($path)
 * @return void
 */
 function load_main_database($installation_settings,$db_script='')
-{	
+{
 	if (!empty($db_script)) {
 		$dokeos_main_sql_file_string = file_get_contents($db_script);
 	} else {
-		$dokeos_main_sql_file_string = file_get_contents(DOKEOS_MAIN_DATABASE_FILE);	
+		$dokeos_main_sql_file_string = file_get_contents(DOKEOS_MAIN_DATABASE_FILE);
 	}
-	
+
 	//replace symbolic parameters with user-specified values
 	foreach ($installation_settings as $key => $value)
 	{

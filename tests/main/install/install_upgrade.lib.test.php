@@ -15,13 +15,6 @@ class TestInstallUpgrade extends UnitTestCase{
 		//var_dump($res);
 	}
 
-	public function testFillLanguageTable() {
-		$language_table='spanish';
-		$res = fill_language_table($language_table);
-		$this->assertTrue(is_null($res));
-		//var_dump($res);
-	}
-
 	public function testFillSettingsTable() {
 		$settings_options_table='';
 		$res = fill_settings_options_table($settings_options_table);
@@ -49,8 +42,8 @@ class TestInstallUpgrade extends UnitTestCase{
 	}
 	//This function is ok but the problem is than create course with other code
 	/*
-	public function testLoadMainDatabase() {		
-		$chamilo_path_folder= api_get_path(SYS_CODE_PATH);		
+	public function testLoadMainDatabase() {
+		$chamilo_path_folder= api_get_path(SYS_CODE_PATH);
 		$installation_settings['{ORGANISATIONNAME}'] = 'My Organisation';
 		$installation_settings['{ORGANISATIONURL}'] = 'http://www.chamilo.org';
 		$installation_settings['{CAMPUSNAME}'] = 'My campus';
@@ -65,8 +58,8 @@ class TestInstallUpgrade extends UnitTestCase{
 		$installation_settings['{ADMINPHONE}'] = '(000) 001 02 03';
 		$installation_settings['{PLATFORM_AUTH_SOURCE}'] = PLATFORM_AUTH_SOURCE;
 		$installation_settings['{ADMINLANGUAGE}'] = 'spanish';
-		$installation_settings['{HASHFUNCTIONMODE}'] = 'md5';					
-		$db_script = $chamilo_path_folder.'install/dokeos_main.sql';				
+		$installation_settings['{HASHFUNCTIONMODE}'] = 'md5';
+		$db_script = $chamilo_path_folder.'install/dokeos_main.sql';
 		$res = load_main_database($installation_settings,$db_script);
 		$this->assertFalse($res);
 	}
@@ -100,20 +93,20 @@ class TestInstallUpgrade extends UnitTestCase{
 		//var_dump($res);
 	}
 
-	public function testMyDirectoryToArray() {		
+	public function testMyDirectoryToArray() {
 		$chamilo_path_folder= api_get_path(SYS_PATH);
 		$directory= $chamilo_path_folder.'home';
 		$res = my_directory_to_array($directory);
-		$this->assertTrue(is_array($res));		
+		$this->assertTrue(is_array($res));
 	}
-	
+
 	/*
 	public function testDeleteCourse() {
-		global $cidReq;			
+		global $cidReq;
 		$resu = CourseManager::delete_course($cidReq);
-		session_destroy();			
+		session_destroy();
 	}*/
-	
-	
+
+
 }
 ?>

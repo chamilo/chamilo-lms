@@ -194,7 +194,6 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		//TODO only update this table
 		/*
 		$language_table = "`$dbNameForm`.`language`";
-		fill_language_table($language_table);
 
 		//set the settings from the form or the old config into config settings.
 		//These settings are considered "safe" because they are entered by the admin

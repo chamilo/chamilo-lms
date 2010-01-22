@@ -146,8 +146,7 @@ class TestCalendar extends UnitTestCase {
 	* Displays all the agenda items
 	*/ 
  	
- 	public function testDisplayAgendaItems() { 		
- 		global $_user; 		
+ 	public function testDisplayAgendaItems() { 			
  		ob_start(); 		
  		$res = display_agenda_items();
  		ob_end_clean();
@@ -346,7 +345,7 @@ class TestCalendar extends UnitTestCase {
  	public function testAgendaAddItem(){
  		global $_course;
  		$course_code=$_course;
- 		$course_info = api_get_course_info($course_code);
+ 		$course_info = '';
  		$title='test';
  		$content='test function';
  		$db_start_date='07/11/2009';
@@ -393,7 +392,9 @@ class TestCalendar extends UnitTestCase {
  		}
  	}
 */
-public function testDeleteAgendaItem(){
+
+
+	public function testDeleteAgendaItem(){
 		$id=1;
 		$res = delete_agenda_item($id);
 		$this->assertTrue(is_bool($res));

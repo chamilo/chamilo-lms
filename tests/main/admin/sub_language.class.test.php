@@ -63,25 +63,35 @@ class TestSubLanguageManager extends UnitTestCase {
 	 * 
 	 */ 
 	public function testadd_file_in_language_directory(){
-		
-		$dirname = api_get_path(SYS_LANG_PATH);				
-		$dokeos_path_file = $dirname.'spanish.inc.php';
-		$res = SubLanguageManager::add_file_in_language_directory($dokeos_path_file);
-		unlink($dokeos_path_file);
-		$this->assertNull($res);
-		$this->assertTrue(is_null($res));
-		//var_dump($res);
-		
+		$dirname = api_get_path(SYS_LANG_PATH);
+		$perm_dir = substr(sprintf('%o', fileperms($dirname)), -4);
+		if ($perm_dir != '0777') {
+			$msg = "Error";
+			$this->assertTrue(is_string($msg));
+		} else {
+			$dokeos_path_file = $dirname.'spanish.inc.php';
+			$res = SubLanguageManager::add_file_in_language_directory($dokeos_path_file);
+			unlink($dokeos_path_file);
+			$this->assertTrue($res);	
+		}
 	}
 	
 	public function testwrite_data_in_file(){
-		//create a new directory of sub language
-		$dirname = api_get_path(SYS_LANG_PATH).'test';	
-		$file = $dirname.'spanish.inc.php';
-		$path_file = $file;
-		$new_sub_language='spanishtest';
-		$variable_sub_language='test';
-		$res = SubLanguageManager::write_data_in_file($path_file,$new_sub_language,$variable_sub_language);
+		$dirname = api_get_path(SYS_LANG_PATH);
+		$perm_dir = substr(sprintf('%o', fileperms($dirname)), -4);
+		if ($perm_dir != '0777') {
+			$msg = "Error";
+			$this->assertTrue(is_string($msg));
+		} else {
+			$file = $dirname.'spanish.inc.php';
+			$path_file = $file;
+			$new_sub_language='spanishtest';
+			$variable_sub_language='test';
+			$res = SubLanguageManager::write_data_in_file($path_file,$new_sub_language,$variable_sub_language);
+			$this->assertTrue($res);	
+		}	
+		
+		
 
 		$this->assertFalse($res);
 		$this->assertTrue(is_null($res));
@@ -93,7 +103,7 @@ class TestSubLanguageManager extends UnitTestCase {
 	 * @return boolean
 	 */
 	public function testadd_directory_of_sub_language() {
-		$path_sub_language = mkdir(api_get_path(SYS_LANG_PATH).'test',0777);
+		$path_sub_language = api_get_path(SYS_LANG_PATH).'test';
 		$res = SubLanguageManager :: add_directory_of_sub_language($path_sub_language);
 		if (is_bool($res)) {
 			$this->assertTrue($path_sub_language);

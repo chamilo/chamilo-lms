@@ -401,7 +401,7 @@ function update_Db_course($courseDbName)
 		email_sent tinyint default 0,
 		session_id smallint default 0,
 		PRIMARY KEY (id)
-		) TYPE=MyISAM";
+		)";
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLANNOUNCEMENTS . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
@@ -431,7 +431,7 @@ function update_Db_course($courseDbName)
 		resource_type varchar(50) default NULL,
 		resource_id int unsigned default NULL,
 		UNIQUE KEY id (id)
-		) TYPE=MyISAM";
+		)";
 	Database::query($sql, __FILE__, __LINE__);
 
 	$sql = "
@@ -444,7 +444,7 @@ function update_Db_course($courseDbName)
 		content text NOT NULL,
 		PRIMARY KEY (id),
 		KEY user_id (user_id)
-		) TYPE=MyISAM";
+		)";
 
 	Database::query($sql, __FILE__, __LINE__);
 
@@ -458,7 +458,7 @@ function update_Db_course($courseDbName)
 		line_count tinyint unsigned NOT NULL default 5,
 		rank tinyint unsigned NOT NULL default 0,
 		PRIMARY KEY (id)
-		) TYPE=MyISAM";
+		)";
 
 	Database::query($sql, __FILE__, __LINE__);
 
@@ -477,7 +477,7 @@ function update_Db_course($courseDbName)
 		 locked int NOT NULL default 0,
 		 session_id smallint unsigned NOT NULL default 0,
 		 PRIMARY KEY (cat_id)
-		) TYPE=MyISAM";
+		)";
 
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLFORUMCATEGORY . "` ADD INDEX ( session_id ) ";
@@ -506,7 +506,7 @@ function update_Db_course($courseDbName)
 		 session_id int NOT NULL default 0,
 		 forum_image varchar(255) NOT NULL default '',
 		 PRIMARY KEY (forum_id)
-		) TYPE=MyISAM";
+		)";
 
 	Database::query($sql, __FILE__, __LINE__);
 
@@ -530,7 +530,7 @@ function update_Db_course($courseDbName)
          thread_close_date datetime default '0000-00-00 00:00:00',
          thread_weight float(6,2) UNSIGNED NOT NULL default 0,
 		 PRIMARY KEY (thread_id)
-		) TYPE=MyISAM";
+		)";
 
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLFORUMTHREAD . "` ADD INDEX idx_forum_thread_forum_id (forum_id)";
@@ -553,7 +553,7 @@ function update_Db_course($courseDbName)
 		 PRIMARY KEY (post_id),
 		 KEY poster_id (poster_id),
 		 KEY forum_id (forum_id)
-		) TYPE=MyISAM";
+		)";
 
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLFORUMPOST . "` ADD INDEX idx_forum_post_thread_id (thread_id)";
@@ -567,7 +567,7 @@ function update_Db_course($courseDbName)
 		 thread_id int default NULL,
 		 user_id int default NULL,
 		 post_id int default NULL
-		) TYPE=MyISAM";
+		)";
 
 	Database::query($sql, __FILE__, __LINE__);
 
@@ -737,7 +737,7 @@ function update_Db_course($courseDbName)
 		category enum('authoring','interaction','admin') NOT NULL default 'authoring',
 		session_id smallint default 0,
 		PRIMARY KEY (id)
-		) TYPE=MyISAM";
+		)";
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$tbl_course_homepage . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
@@ -1083,7 +1083,7 @@ function update_Db_course($courseDbName)
 		start_visible datetime NOT NULL default '0000-00-00 00:00:00',
 		end_visible datetime NOT NULL default '0000-00-00 00:00:00',
 		id_session INT NOT NULL DEFAULT 0
-		) TYPE=MyISAM;", __FILE__, __LINE__);
+		);", __FILE__, __LINE__);
 	Database::query("ALTER TABLE `$TABLEITEMPROPERTY` ADD INDEX idx_item_property_toolref (tool,ref)", __FILE__, __LINE__);
 
 	/*
@@ -1338,7 +1338,7 @@ function update_Db_course($courseDbName)
 			visibility tinyint unsigned NOT NULL default 0,
 			session_id smallint default 0,
 			PRIMARY KEY ( blog_id )
-		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with blogs in this course';";
+		) COMMENT = 'Table with blogs in this course';";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1359,7 +1359,7 @@ function update_Db_course($courseDbName)
 			task_id int default NULL ,
 			parent_comment_id int NOT NULL default 0,
 			PRIMARY KEY ( comment_id )
-		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with comments on posts in a blog';";
+		) COMMENT = 'Table with comments on posts in a blog';";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1375,7 +1375,7 @@ function update_Db_course($courseDbName)
 			blog_id mediumint NOT NULL default 0,
 			author_id int NOT NULL default 0,
 			PRIMARY KEY ( post_id )
-		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with posts / blog.';";
+		) COMMENT = 'Table with posts / blog.';";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1391,7 +1391,7 @@ function update_Db_course($courseDbName)
 			user_id int NOT NULL default 0,
 			rating mediumint NOT NULL default 0,
 			PRIMARY KEY ( rating_id )
-		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with ratings for post/comments in a certain blog';";
+		) COMMENT = 'Table with ratings for post/comments in a certain blog';";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1403,7 +1403,7 @@ function update_Db_course($courseDbName)
 			blog_id int NOT NULL default 0,
 			user_id int NOT NULL default 0,
 			PRIMARY KEY ( blog_id , user_id )
-		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table representing users subscribed to a blog';";
+		) COMMENT = 'Table representing users subscribed to a blog';";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1419,7 +1419,7 @@ function update_Db_course($courseDbName)
 			color varchar( 10 ) NOT NULL default '',
 			system_task tinyint unsigned NOT NULL default 0,
 			PRIMARY KEY ( task_id )
-		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with tasks for a blog';";
+		) COMMENT = 'Table with tasks for a blog';";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1433,7 +1433,7 @@ function update_Db_course($courseDbName)
 			task_id mediumint NOT NULL default 0,
 			target_date date NOT NULL default '0000-00-00',
 			PRIMARY KEY ( blog_id , user_id , task_id )
-		) ENGINE = MYISAM DEFAULT CHARSET = latin1 COMMENT = 'Table with tasks assigned to a user in a blog';";
+		) COMMENT = 'Table with tasks assigned to a user in a blog';";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1467,7 +1467,7 @@ function update_Db_course($courseDbName)
 			tool varchar( 250 ) NOT NULL default '',
 			action varchar( 250 ) NOT NULL default '',
 			PRIMARY KEY (id)
-		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
+		)";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1481,7 +1481,7 @@ function update_Db_course($courseDbName)
 			tool varchar( 250 ) NOT NULL default '',
 			action varchar( 250 ) NOT NULL default '',
 			PRIMARY KEY ( id )
-		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
+		)";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1495,7 +1495,7 @@ function update_Db_course($courseDbName)
 			tool varchar( 250 ) NOT NULL default '',
 			action varchar( 250 ) NOT NULL default '',
 			PRIMARY KEY ( id )
-		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
+		)";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1509,7 +1509,7 @@ function update_Db_course($courseDbName)
 			role_comment text,
 			default_role tinyint default 0,
 			PRIMARY KEY ( role_id )
-		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
+		)";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1521,7 +1521,7 @@ function update_Db_course($courseDbName)
 			role_id int NOT NULL default 0,
 			scope varchar( 20 ) NOT NULL default 'course',
 			group_id int NOT NULL default 0
-		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
+		)";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1534,7 +1534,7 @@ function update_Db_course($courseDbName)
 			tool varchar( 250 ) NOT NULL default '',
 			action varchar( 50 ) NOT NULL default '',
 			default_perm tinyint NOT NULL default 0
-		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
+		)";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1546,7 +1546,7 @@ function update_Db_course($courseDbName)
 			role_id int NOT NULL default 0,
 			scope varchar( 20 ) NOT NULL default 'course',
 			user_id int NOT NULL default 0
-		) ENGINE = MYISAM DEFAULT CHARSET = latin1;";
+		)";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{

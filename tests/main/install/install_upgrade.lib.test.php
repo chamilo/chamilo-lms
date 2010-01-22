@@ -15,13 +15,6 @@ class TestInstallUpgrade extends UnitTestCase{
 		//var_dump($res);
 	}
 
-	public function testFillSettingsTable() {
-		$settings_options_table='';
-		$res = fill_settings_options_table($settings_options_table);
-		$this->assertTrue(is_null($res));
-		//var_dump($res);
-	}
-
 	public function testFillTrackCountriesTable() {
 		$track_countries_table='';
 		$res = fill_track_countries_table($track_countries_table);

@@ -21,8 +21,6 @@
 */
 define("DOKEOS_MAIN_DATABASE_FILE", "dokeos_main.sql");
 define("COUNTRY_DATA_FILENAME", "country_data.csv");
-define("SETTING_OPTION_DATA_FILENAME", "setting_option_data.csv");
-define("SETTING_CURRENT_DATA_FILENAME", "setting_current_data.csv");
 define("COURSES_HTACCESS_FILENAME", "htaccess.dist");
 define("DOKEOS_CONFIG_FILENAME", "configuration.dist.php");
 
@@ -43,55 +41,7 @@ function set_file_folder_permissions()
 {
 	@chmod('.',0755); //set permissions on install dir
 	@chmod('..',0755); //set permissions on parent dir of install dir
-	@chmod('setting_current_data.csv',0755);
-	@chmod('setting_option_data.csv',0755);
 	@chmod('country_data.csv.csv',0755);
-}
-
-/**
-* Fills the current settings table with the Dokeos default settings.
-* After using the LOAD DATA INFILE instruction, the database stores some
-* variables literally as '$variable'. The instructions after that replace
-* that literal by the actual value of the variable.
-*/
-function fill_current_settings_table($current_settings_table, $installation_settings)
-{
-	$institutionForm = $installation_settings['institution_form'];
-	$institutionUrlForm = $installation_settings['institution_url_form'];
-	$campusForm = $installation_settings['campus_form'];
-	$emailForm = $installation_settings['email_form'];
-	$adminLastName = $installation_settings['admin_last_name'];
-	$adminFirstName = $installation_settings['admin_first_name'];
-	$languageForm = $installation_settings['language_form'];
-	$allowSelfReg = $installation_settings['allow_self_registration'];
-	$allowSelfRegProf = $installation_settings['allow_teacher_self_registration'];
-	$adminPhoneForm = $installation_settings['admin_phone_form'];
-
-	$file_path = dirname(__FILE__).'/'.SETTING_CURRENT_DATA_FILENAME;
-	$add_setting_current_sql = "LOAD DATA INFILE '".mysql_real_escape_string($file_path)."' INTO TABLE $current_settings_table FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\'';";
-	@ mysql_query($add_setting_current_sql);
-
-	//replace literal '$variable' by the contents of variable $variable
-	mysql_query("UPDATE $current_settings_table SET selected_value='$institutionForm' WHERE  selected_value='\$institutionForm'");
-	mysql_query("UPDATE $current_settings_table SET selected_value='$institutionUrlForm' WHERE  selected_value='\$institutionUrlForm'");
-	mysql_query("UPDATE $current_settings_table SET selected_value='$campusForm' WHERE  selected_value='\$campusForm'");
-	mysql_query("UPDATE $current_settings_table SET selected_value='$emailForm' WHERE  selected_value='\$emailForm'");
-	mysql_query("UPDATE $current_settings_table SET selected_value='$adminLastName' WHERE  selected_value='\$adminLastName'");
-	mysql_query("UPDATE $current_settings_table SET selected_value='$adminFirstName' WHERE  selected_value='\$adminFirstName'");
-	mysql_query("UPDATE $current_settings_table SET selected_value='$languageForm' WHERE  selected_value='\$languageForm'");
-	mysql_query("UPDATE $current_settings_table SET selected_value='".trueFalse($allowSelfReg)."' WHERE  selected_value='\$allowSelfReg'");
-	mysql_query("UPDATE $current_settings_table SET selected_value='".trueFalse($allowSelfRegProf)."' WHERE  selected_value='\$allowSelfRegProf'");
-	mysql_query("UPDATE $current_settings_table SET selected_value='$adminPhoneForm' WHERE  selected_value='\$adminPhoneForm'");
-}
-
-/**
-* Fills the table with the possible options for all settings.
-*/
-function fill_settings_options_table($settings_options_table)
-{
-	$file_path = dirname(__FILE__).'/'.SETTING_OPTION_DATA_FILENAME;
-	$add_setting_option_sql = "LOAD DATA INFILE '".mysql_real_escape_string($file_path)."' INTO TABLE $settings_options_table FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\'';";
-	@ mysql_query($add_setting_option_sql);
 }
 
 /**

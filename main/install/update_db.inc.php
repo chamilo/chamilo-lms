@@ -193,8 +193,6 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		die();
 		//TODO only update this table
 		/*
-		$language_table = "`$dbNameForm`.`language`";
-
 		//set the settings from the form or the old config into config settings.
 		//These settings are considered "safe" because they are entered by the admin
 		$installation_settings['institution_form'] = $institutionForm;
@@ -207,14 +205,6 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		$installation_settings['allow_self_registration'] = $allowSelfReg;
 		$installation_settings['allow_teacher_self_registration'] = $allowSelfRegProf;
 		$installation_settings['admin_phone_form'] = $adminPhoneForm;
-
-		//put the settings into the settings table (taken from CSV file)
-		$current_settings_table = "`$dbNameForm`.`settings_current`";
-		fill_current_settings_table($current_settings_table, $installation_settings);
-
-		//put the options into the options table (taken from CSV file)
-		$settings_options_table = "`$dbNameForm`.`settings_options`";
-		fill_settings_options_table($settings_options_table);
 
 		//mysql_query("INSERT INTO `$dbNameForm`.`course_module` (`name`,`link`,`image`,`row`,`column`,`position`) VALUES
 		//								('AddedLearnpath', NULL, 'scormbuilder.gif', 0, 0, 'external'),

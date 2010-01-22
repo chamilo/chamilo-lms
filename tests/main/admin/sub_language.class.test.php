@@ -93,17 +93,14 @@ class TestSubLanguageManager extends UnitTestCase {
 	 * @return boolean
 	 */
 	public function testadd_directory_of_sub_language() {
-		$path_sub_language = api_get_path(SYS_LANG_PATH).'test';
-		//$path_sub_language = '/var/www/prueba1';
-		$res = SubLanguageManager :: add_directory_of_sub_language($path_sub_language, 0777);
+		$path_sub_language = mkdir(api_get_path(SYS_LANG_PATH).'test',0777);
+		$res = SubLanguageManager :: add_directory_of_sub_language($path_sub_language);
 		if (is_bool($res)) {
 			$this->assertTrue($path_sub_language);
 		} else {
 			$this->assertFalse($path_sub_language);
 		}
-		if (file_exists($path_sub_language)) {
-			rmdir($path_sub_language);	
-		}
+		
 	}
 
 	/**
@@ -112,8 +109,8 @@ class TestSubLanguageManager extends UnitTestCase {
 	 * @return null
  	 */ 
 	public function Testremoved_sub_language() {
-		$parent_id = $_GET['id'];
-		$sub_language_id = $_GET['sub_language_id'];
+		$parent_id = '';
+		$sub_language_id = 1;
 		$res = SubLanguageManager :: removed_sub_language($parent_id, $sub_language_id);
 		$this->assertNull($res);
 		//	var_dump($res);

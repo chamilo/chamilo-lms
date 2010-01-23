@@ -51,7 +51,7 @@ if (file_exists($main_configuration_file_path)) {
 	$_configuration = array();
 }
 
-// Ensure that _configuration is in the global scope before loading 
+// Ensure that _configuration is in the global scope before loading
 // main_api.lib.php. This is particularly helpful for unit tests
 if (!isset($GLOBALS['_configuration'])) {
   $GLOBALS['_configuration'] = $_configuration;
@@ -108,7 +108,7 @@ if (!$_configuration['db_host']) {
 	die();
 }
 
-// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5.
+// The system has not been designed to use special SQL modes that were introduced since MySQL 5.
 Database::query("set session sql_mode='';", __FILE__, __LINE__);
 
 if (!mysql_select_db($_configuration['main_database'], $dokeos_database_connection)) {
@@ -400,7 +400,7 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
 $valid_languages = api_get_languages();
 
 if(!empty($valid_languages)) {
-	
+
 	if (!in_array($user_language, $valid_languages['folder'])) {
 		$user_language = api_get_setting('platformLanguage');
 	}
@@ -412,17 +412,17 @@ if(!empty($valid_languages)) {
 	} else {
 		$platformLanguage = api_get_setting('platformLanguage');
 	}
-	
+
 	if (isset($_SESSION['user_language_choice'])) {
 		$language_interface = $_SESSION['user_language_choice'];
 	} else {
 		$language_interface = api_get_setting('platformLanguage');
 	}
-	
+
 	if (isset($_user['language'])) {
 		$language_interface = $_user['language'];
 	}
-	
+
 	if ($_course['language']) {
 		$language_interface = $_course['language'];
 	}

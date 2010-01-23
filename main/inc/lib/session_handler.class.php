@@ -59,7 +59,7 @@ class session_handler {
 		{
 			$this->idConnexion=@mysql_connect($this->connexion['server'],$this->connexion['login'],$this->connexion['password'],true);
 
-			// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5
+			// The system has not been designed to use special SQL modes that were introduced since MySQL 5
 			@mysql_query("set session sql_mode='';", $this->idConnexion);
 		}
 
@@ -80,7 +80,7 @@ class session_handler {
 	}
 
 	public function sqlQuery ($query,$die_on_error=true) {
-		
+
 		$result=mysql_query($query,$this->idConnexion);
 
 		if($die_on_error && !$result)

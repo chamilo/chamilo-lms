@@ -47,7 +47,7 @@ if(mysql_errno() > 0)
 	exit();
 }
 
-// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5
+// The system has not been designed to use special SQL modes that were introduced since MySQL 5
 @mysql_query("set session sql_mode='';");
 
 if($urlForm[strlen($urlForm)-1] != '/')

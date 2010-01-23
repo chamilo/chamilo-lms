@@ -28,7 +28,7 @@ $prefix_new = 'dokeos180_';
 $bases_new=array($prefix_new.'dokeos_main',$prefix_new.'dokeos_stats',$prefix_new.'dokeos_user','z'.$prefix_new.'COURSE',$prefix_new.'dokeos_scorm');
 $db_new = mysql_connect($sql_server_new,$sql_user_new,$sql_pass_new) or die(mysql_error());
 
-// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5
+// The system has not been designed to use special SQL modes that were introduced since MySQL 5
 @mysql_query("set session sql_mode='';", $db_new);
 
 $sql_server_old='localhost';
@@ -38,7 +38,7 @@ $prefix_old = 'dokeos160_';
 $bases_old=array($prefix_old.'dokeos_main',$prefix_old.'dokeos_stats',$prefix_old.'dokeos_user',$prefix_old.'COURSE',$prefix_old.'dokeos_scorm');
 $db_old = mysql_connect($sql_server_old,$sql_user_old,$sql_pass_old) or die(mysql_error());
 
-// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5
+// The system has not been designed to use special SQL modes that were introduced since MySQL 5
 @mysql_query("set session sql_mode='';", $db_old);
 
 $field_details = array(0=>'Field',1=>'Type',2=>'Null',3=>'Key',4=>'Default',5=>'Extra');

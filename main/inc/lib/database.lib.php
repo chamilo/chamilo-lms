@@ -835,17 +835,6 @@ class Database {
 	}
 
 	/**
-	 * Sets the encoding to be used by the database server if it is supported.
-	 * @param string $encoding	The encoding (a system conventional id, for example 'UTF-8') to be used.
-	 * @author Ivan Tcholakov
-	 */
-	public static function set_encoding($encoding) {
-		if (self::is_encoding_supported($encoding)) {
-			self::query("SET NAMES `" . self::to_db_encoding($encoding) . "`;", __FILE__, __LINE__);
-		}
-	}
-
-	/**
 	 * Constructs a SQL clause about default character set and default collation
 	 * for newly created databases and tables.
 	 * Example: Database::make_charset_clause('UTF-8', 'bulgarian') returns
@@ -862,11 +851,11 @@ class Database {
 		if (empty($language)) {
 			$language = api_get_interface_language();
 		}
-		$db_encoding = Database::to_db_encoding($encoding);
-		$db_collation = Database::to_db_collation($encoding, $language);
 		$charset_clause = '';
-		if (!empty($db_encoding)) {
+		if (self::is_encoding_supported($encoding)) {
+			$db_encoding = Database::to_db_encoding($encoding);
 			$charset_clause .= " DEFAULT CHARACTER SET `".$db_encoding."`";
+			$db_collation = Database::to_db_collation($encoding, $language);
 			if (!empty($db_collation)) {
 				$charset_clause .= " DEFAULT COLLATE `".$db_collation."`";
 			}
@@ -966,8 +955,8 @@ class Database {
 		static $result = array();
 		if (!isset($result[$encoding][$language])) {
 			$result[$encoding][$language] = null;
-			$db_encoding = self::to_db_encoding($encoding);
-			if (!empty($db_encoding)) {
+			if (self::is_encoding_supported($encoding)) {
+				$db_encoding = self::to_db_encoding($encoding);
 				if (!empty($language)) {
 					$lang = api_purify_language_id($language);
 					$res = self::check_db_collation($db_encoding, $lang);

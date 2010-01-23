@@ -824,7 +824,12 @@ class Database {
 	public static function is_encoding_supported($encoding) {
 		static $supported = array();
 		if (!isset($supported[$encoding])) {
-			$supported[$encoding] = strlen(self::to_db_encoding($encoding)) > 0;
+			$supported[$encoding] = false;
+			if (strlen($db_encoding = self::to_db_encoding($encoding)) > 0) {
+				if (self::num_rows(self::query("SHOW CHARACTER SET WHERE `Charset` =  '".$db_encoding."';", __FILE__, __LINE__)) > 0) {
+					$supported[$encoding] = true;
+				}
+			}
 		}
 		return $supported[$encoding];
 	}
@@ -883,10 +888,7 @@ class Database {
 			$encoding_map = & self::get_db_encoding_map();
 			foreach ($encoding_map as $key => $value) {
 				if (api_equal_encodings($encoding, $key)) {
-					// Check whether the encoding is supported by the server.
-					if (self::num_rows(self::query("SHOW CHARACTER SET WHERE `Charset` =  '".$value."';", __FILE__, __LINE__)) > 0) {
-						$result[$encoding] = $value;
-					}
+					$result[$encoding] = $value;
 					break;
 				}
 			}

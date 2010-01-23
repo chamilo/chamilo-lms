@@ -101,18 +101,18 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 	//$resultsettings = Database::query($sqlsettings, __FILE__, __LINE__);
 	//while ($row = Database::fetch_array($resultsettings))
 	$default_values = array();
-	foreach($settings as $row) {		
-		if ($row['variable'] == 'search_enabled') { continue; }			
+	foreach($settings as $row) {
+		if ($row['variable'] == 'search_enabled') { continue; }
 		$anchor_name = $row['variable'].(!empty($row['subkey']) ? '_'.$row['subkey'] : '');
 		$form->addElement('html',"\n<a name=\"$anchor_name\"></a>\n");
 
 		($countsetting['0']%10) < 5 ?$b=$countsetting['0']-10:$b=$countsetting['0'];
 		if ($i % 10 == 0 and $i<$b){
-			
+
 				$form->addElement('html','<div align="right">');
 				$form->addElement('style_submit_button', null,get_lang('SaveSettings'), 'class="save"');
 				$form->addElement('html','</div>');
-		
+
 		}
 		$i++;
 
@@ -177,7 +177,12 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 						}
 					}
 					foreach ($valid_encodings as $key => &$encoding) {
-						$encoding = api_is_encoding_supported($key) ? $key : $key.' (n.a.)';
+						if (api_is_encoding_supported($key) && Database::is_encoding_supported($key)) {
+							$encoding = $key;
+						} else {
+							//$encoding = $key.' (n.a.)';
+							unset($valid_encodings[$key]);
+						}
 					}
 					$form->addElement('select', $row['variable'], get_lang($row['comment']), $valid_encodings);
 					$default_values[$row['variable']] = $current_system_encoding;
@@ -217,9 +222,9 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 				$group = array ();
 				while ($rowkeys = Database::fetch_array($result)) {
  					if ($rowkeys['variable'] == 'course_create_active_tools' && $rowkeys['subkey'] == 'enable_search') {continue;}
- 					
+
  					// profile tab option hide, if the social tool is enabled
- 					if (api_get_setting('allow_social_tool') == 'true') { 						
+ 					if (api_get_setting('allow_social_tool') == 'true') {
  						if ($rowkeys['variable'] == 'show_tabs' && $rowkeys['subkey'] == 'my_profile') {continue;}
  					}
 
@@ -250,7 +255,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 				$form->addElement('static', null, get_lang($row['comment']), get_lang('CurrentValue').' : '.$row['selected_value'],$hideme);
 		}
 	}
-	
+
 		$form->addElement('html','<div align="right">');
 		$form->addElement('style_submit_button', null,get_lang('SaveSettings'), 'class="save"');
 		$form->addElement('html','</div>');
@@ -259,12 +264,12 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 	if ($form->validate())
 	{
 		$values = $form->exportValues();
-		
-		// set true for allow_message_tool variable if social tool is actived 
+
+		// set true for allow_message_tool variable if social tool is actived
 		if ($values['allow_social_tool'] == 'true') {
 			$values['allow_message_tool'] = 'true';
-		}		
-		
+		}
+
 		// the first step is to set all the variables that have type=checkbox of the category
 		// to false as the checkbox that is unchecked is not in the $_POST data and can
 		// therefore not be set to false.
@@ -599,7 +604,7 @@ function handle_stylesheets()
 	// Current style
 	$currentstyle = api_get_setting('stylesheets');
 	$is_style_changeable=false;
-	
+
 	if ($_configuration['access_url']!=1) {
 		$style_info = api_get_settings('stylesheets','',1,0);
 		$url_info = api_get_access_url($_configuration['access_url']);
@@ -674,7 +679,7 @@ function handle_stylesheets()
 	echo '<div><iframe src="style_preview.php" width="100%" height="300" name="preview"></iframe></div>';
 
 	echo '<form name="stylesheets" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
-	
+
 	if ($handle = @opendir(api_get_path(SYS_PATH).'main/css/')) {
 		$counter=1;
 		while (false !== ($style_dir = readdir($handle)))

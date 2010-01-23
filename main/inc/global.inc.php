@@ -140,6 +140,11 @@ api_initialize_internationalization();
 // Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
 api_set_internationalization_default_encoding($charset);
 
+// Initialization of the database encoding to be used.
+Database::query("SET SESSION character_set_server='utf8';");
+Database::query("SET SESSION collation_server='utf8_general_ci';");
+Database::query("SET CHARACTER SET '" . Database::to_db_encoding($charset) . "';");
+
 /*
 --------------------------------------------
   RETRIEVING ALL THE DOKEOS CONFIG SETTINGS

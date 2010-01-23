@@ -50,6 +50,11 @@ if(mysql_errno() > 0)
 // The system has not been designed to use special SQL modes that were introduced since MySQL 5
 @mysql_query("set session sql_mode='';");
 
+// Initialization of the database encoding to be used.
+mysql_query("SET SESSION character_set_server='utf8';");
+mysql_query("SET SESSION collation_server='utf8_general_ci';");
+mysql_query("SET CHARACTER SET 'utf8';");
+
 if($urlForm[strlen($urlForm)-1] != '/')
 {
 	$urlForm=$urlForm.'/';

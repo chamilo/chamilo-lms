@@ -366,7 +366,7 @@ LOCK TABLES language WRITE;
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES
 ('Arabija (el)','arabic','ar','arabic',0),
 ('Asturian','asturian','ast','asturian',0),
-('Balgarski','bulgarian','bg','bulgarian',0),
+('Balgarski','bulgarian','bg','bulgarian',1),
 ('Bosanski','bosnian','bs','bosnian',1),
 ('Catal&agrave;','catalan','ca','catalan',0),
 ('Chinese (simplified)','simpl_chinese','zh','simpl_chinese',0),
@@ -668,7 +668,7 @@ VALUES
 ('show_tabs', 'my_agenda', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyAgenda', 1),
 ('show_tabs', 'my_profile', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsMyProfile', 1),
 ('default_forum_view', NULL, 'radio', 'Course', 'flat', 'DefaultForumViewTitle','DefaultForumViewComment',NULL,NULL, 0),
-('platform_charset',NULL,'textfield','Languages','iso-8859-15','PlatformCharsetTitle','PlatformCharsetComment','platform',NULL, 0),
+('platform_charset',NULL,'textfield','Languages','UTF-8','PlatformCharsetTitle','PlatformCharsetComment','platform',NULL, 0),
 ('noreply_email_address', '', 'textfield', 'Platform', '', 'NoReplyEmailAddress', 'NoReplyEmailAddressComment', NULL, NULL, 0),
 ('survey_email_sender_noreply', '', 'radio', 'Course', 'coach', 'SurveyEmailSenderNoReply', 'SurveyEmailSenderNoReplyComment', NULL, NULL, 0),
 ('openid_authentication',NULL,'radio','Security','false','OpenIdAuthentication','OpenIdAuthenticationComment',NULL,NULL, 0),

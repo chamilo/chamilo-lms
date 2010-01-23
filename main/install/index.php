@@ -61,29 +61,10 @@ if (!empty($_POST['language_list'])) {
 $language_interface = $install_language;
 $language_interface_initial_value = $install_language;
 
-/* TODO: Obsolete logic, to be removed.
-$charset = '';
-//force ISO-8859-15 for European languages. Leave Apache determine the encoding for others (HTML declaring UTF-8)
-$euro_langs = array('english','french','french_KM','french_corporate','french_org','dutch','spanish','german','italian','greek','danish','swedish','norwegian','polish','galician','catalan','czech','finnish');
-if (isset($install_language))
-{
-	if(in_array($install_language,$euro_langs))
-	{
-		$charset = 'ISO-8859-15'; // TODO: This should be UTF-8 for some languages.
-		header('Content-Type: text/html; charset='. $charset);
-	}
-}
-*/
-
-// Character set during installation: ISO-8859-15 for Latin 1 languages, UTF-8 for other languages.
+// Character set during the installation, it is always to be 'UTF-8'.
 $charset = 'UTF-8';
-if (isset($install_language)) {
-	if (strpos($install_language, 'unicode') === false && api_is_latin1_compatible($install_language))
-	{
-		// TODO: This is for backward compatibility. Actually, all the languages may use UTF-8.
-		$charset = 'ISO-8859-15';
-	}
-}
+
+// Page encoding initialization.
 header('Content-Type: text/html; charset='. $charset);
 
 // Initialization of the internationalization library.

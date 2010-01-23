@@ -47,7 +47,7 @@ function create_course($wanted_code, $title, $tutor_name, $category_code, $cours
 		$expiration_date = time() + $firstExpirationDelay;
 
 		prepare_course_repository($directory, $code);
-		update_Db_course($db_name);
+		update_Db_course($db_name, $course_language);
 		fill_course_repository($directory);
 		fill_Db_course($db_name, $directory, $course_language);
 		register_course($code, $visual_code, $directory, $db_name, $tutor_name, $category_code, $title, $course_language, $course_admin_id, $expiration_date);
@@ -253,13 +253,18 @@ function prepare_course_repository($courseRepository, $courseId)
 	return 0;
 };
 
-function update_Db_course($courseDbName)
+function update_Db_course($courseDbName, $language = null)
 {
-	global $_configuration;
+	global $_configuration, $language_interface;
 
-	if(!$_configuration['single_database'])
+	if (empty($language)) {
+		$language = $language_interface;
+	}
+	$charset_clause = Database::make_charset_clause('UTF-8', $language);
+
+	if (!$_configuration['single_database'])
 	{
-		Database::query("CREATE DATABASE IF NOT EXISTS `" . $courseDbName . "`", __FILE__, __LINE__);
+		Database::query("CREATE DATABASE IF NOT EXISTS `" . $courseDbName . "`" . $charset_clause, __FILE__, __LINE__);
 	}
 
 	$courseDbName = $_configuration['table_prefix'].$courseDbName.$_configuration['db_glue'];
@@ -401,11 +406,11 @@ function update_Db_course($courseDbName)
 		email_sent tinyint default 0,
 		session_id smallint default 0,
 		PRIMARY KEY (id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLANNOUNCEMENTS . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
-	
+
 	// Announcement Attachment
 	$sql = "CREATE TABLE  `".$TABLETOOLANNOUNCEMENTSATTACHMENT."` (
 			  id int NOT NULL auto_increment,
@@ -415,7 +420,7 @@ function update_Db_course($courseDbName)
 			  announcement_id int NOT NULL,
 			  filename varchar(255) NOT NULL,
 			  PRIMARY KEY (id)
-			)";
+			)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 
 	/*
@@ -431,7 +436,7 @@ function update_Db_course($courseDbName)
 		resource_type varchar(50) default NULL,
 		resource_id int unsigned default NULL,
 		UNIQUE KEY id (id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 
 	$sql = "
@@ -444,7 +449,7 @@ function update_Db_course($courseDbName)
 		content text NOT NULL,
 		PRIMARY KEY (id),
 		KEY user_id (user_id)
-		)";
+		)" . $charset_clause;
 
 	Database::query($sql, __FILE__, __LINE__);
 
@@ -458,7 +463,7 @@ function update_Db_course($courseDbName)
 		line_count tinyint unsigned NOT NULL default 5,
 		rank tinyint unsigned NOT NULL default 0,
 		PRIMARY KEY (id)
-		)";
+		)" . $charset_clause;
 
 	Database::query($sql, __FILE__, __LINE__);
 
@@ -477,7 +482,7 @@ function update_Db_course($courseDbName)
 		 locked int NOT NULL default 0,
 		 session_id smallint unsigned NOT NULL default 0,
 		 PRIMARY KEY (cat_id)
-		)";
+		)" . $charset_clause;
 
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLFORUMCATEGORY . "` ADD INDEX ( session_id ) ";
@@ -506,7 +511,7 @@ function update_Db_course($courseDbName)
 		 session_id int NOT NULL default 0,
 		 forum_image varchar(255) NOT NULL default '',
 		 PRIMARY KEY (forum_id)
-		)";
+		)" . $charset_clause;
 
 	Database::query($sql, __FILE__, __LINE__);
 
@@ -530,7 +535,7 @@ function update_Db_course($courseDbName)
          thread_close_date datetime default '0000-00-00 00:00:00',
          thread_weight float(6,2) UNSIGNED NOT NULL default 0,
 		 PRIMARY KEY (thread_id)
-		)";
+		)" . $charset_clause;
 
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLFORUMTHREAD . "` ADD INDEX idx_forum_thread_forum_id (forum_id)";
@@ -553,7 +558,7 @@ function update_Db_course($courseDbName)
 		 PRIMARY KEY (post_id),
 		 KEY poster_id (poster_id),
 		 KEY forum_id (forum_id)
-		)";
+		)" . $charset_clause;
 
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLFORUMPOST . "` ADD INDEX idx_forum_post_thread_id (thread_id)";
@@ -567,7 +572,7 @@ function update_Db_course($courseDbName)
 		 thread_id int default NULL,
 		 user_id int default NULL,
 		 post_id int default NULL
-		)";
+		)" . $charset_clause;
 
 	Database::query($sql, __FILE__, __LINE__);
 
@@ -581,7 +586,7 @@ function update_Db_course($courseDbName)
 			  post_id int NOT NULL,
 			  filename varchar(255) NOT NULL,
 			  PRIMARY KEY (id)
-			)";
+			)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 
 	// Forum notification
@@ -592,7 +597,7 @@ function update_Db_course($courseDbName)
 			  post_id int,
 			    KEY user_id (user_id),
   				KEY forum_id (forum_id)
-			)";
+			)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 
 	// Forum thread qualify :Add table forum_thread_qualify
@@ -604,7 +609,7 @@ function update_Db_course($courseDbName)
  			qualify_user_id int  default NULL,
  			qualify_time datetime default '0000-00-00 00:00:00',
  			session_id int  default NULL
-			)";
+			)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLFORUMQUALIFY . "` ADD INDEX (user_id, thread_id)";
 	Database::query($sql, __FILE__, __LINE__);
@@ -618,7 +623,7 @@ function update_Db_course($courseDbName)
  			qualify_user_id int default NULL,
  			qualify_time datetime default '0000-00-00 00:00:00',
  			session_id int default NULL
-			)";
+			)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLFORUMQUALIFYLOG. "` ADD INDEX (user_id, thread_id)";
 	Database::query($sql, __FILE__, __LINE__);
@@ -647,7 +652,7 @@ function update_Db_course($courseDbName)
     	expired_time int NOT NULL default '0',
 		session_id smallint default 0,
 		PRIMARY KEY (id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLEQUIZ . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
@@ -664,7 +669,7 @@ function update_Db_course($courseDbName)
 		picture varchar(50) default NULL,
 		level int unsigned NOT NULL default 0,
 		PRIMARY KEY (id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLEQUIZQUESTIONLIST . "` ADD INDEX (position)";
 	Database::query($sql, __FILE__, __LINE__);
@@ -685,7 +690,7 @@ function update_Db_course($courseDbName)
 		id_auto int NOT NULL AUTO_INCREMENT,		
 		PRIMARY KEY (id, question_id),
 		UNIQUE KEY id_auto (id_auto)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 
 
@@ -697,7 +702,7 @@ function update_Db_course($courseDbName)
 		exercice_id mediumint unsigned NOT NULL,
 		question_order mediumint unsigned NOT NULL default 1,
 		PRIMARY KEY (question_id,exercice_id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 
 	/*
@@ -713,7 +718,7 @@ function update_Db_course($courseDbName)
 		session_id smallint default 0,
 		description_type tinyint unsigned NOT NULL default 0,		
 		UNIQUE (id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLCOURSEDESC . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
@@ -737,7 +742,7 @@ function update_Db_course($courseDbName)
 		category enum('authoring','interaction','admin') NOT NULL default 'authoring',
 		session_id smallint default 0,
 		PRIMARY KEY (id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$tbl_course_homepage . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
@@ -757,7 +762,7 @@ function update_Db_course($courseDbName)
     	parent_event_id INT NULL,
     	session_id int unsigned NOT NULL default 0,
 		PRIMARY KEY (id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLAGENDA . "` ADD INDEX ( session_id ) ;";
 	Database::query($sql, __FILE__, __LINE__);
@@ -770,14 +775,14 @@ function update_Db_course($courseDbName)
 		cal_frequency INT DEFAULT 1,
 		cal_days CHAR(7),
 		PRIMARY KEY (cal_id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql,__FILE__,__LINE__);
 	$sql = "
 		CREATE TABLE `".$TABLETOOLAGENDAREPEATNOT."` (
 		cal_id INT NOT NULL,
 		cal_date INT NOT NULL,
 		PRIMARY KEY ( cal_id, cal_date )
-		)";
+		)" . $charset_clause;
 	Database::query($sql,__FILE__,__LINE__);
 
 
@@ -790,7 +795,7 @@ function update_Db_course($courseDbName)
 			  agenda_id int NOT NULL,
 			  filename varchar(255) NOT NULL,
 			  PRIMARY KEY (id)
-			)";
+			)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 	/*
 	-----------------------------------------------------------
@@ -808,7 +813,7 @@ function update_Db_course($courseDbName)
 			readonly TINYINT UNSIGNED NOT NULL,
 			session_id int UNSIGNED NOT NULL default 0,
 			PRIMARY KEY (`id`)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 
 	/*
@@ -837,7 +842,7 @@ function update_Db_course($courseDbName)
 		weight float(6,2) UNSIGNED NOT NULL default 0,
 		session_id INT UNSIGNED NOT NULL default 0,
 		PRIMARY KEY (id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 
 	$sql = "
@@ -848,8 +853,8 @@ function update_Db_course($courseDbName)
         add_to_calendar tinyint NOT NULL,
         enable_qualification tinyint NOT NULL,
         publication_id int NOT NULL,
-        PRIMARY KEY  (id)" .
-        ")";
+        PRIMARY KEY  (id)
+        )" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLWORKS . "` ADD INDEX ( session_id )" ;
 	Database::query($sql, __FILE__, __LINE__);
@@ -870,7 +875,7 @@ function update_Db_course($courseDbName)
 		target char(10) default '_self',
 		session_id smallint default 0,
 		PRIMARY KEY (id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLLINK . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
@@ -883,7 +888,7 @@ function update_Db_course($courseDbName)
 		display_order mediumint unsigned NOT NULL default 0,
 		session_id smallint default 0,
 		PRIMARY KEY (id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLLINKCATEGORIES . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
@@ -925,7 +930,7 @@ function update_Db_course($courseDbName)
 		KEY reflink (reflink),
 		KEY group_id (group_id),
 		KEY page_id (page_id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLWIKI . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
@@ -947,7 +952,7 @@ function update_Db_course($courseDbName)
 		enddate_assig datetime  NOT NULL default '0000-00-00 00:00:00',
 		delayedsubmit int NOT NULL default 0,
 		KEY page_id (page_id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 
 	//
@@ -960,7 +965,7 @@ function update_Db_course($courseDbName)
 		p_score varchar(255) default NULL,
 		dtime datetime NOT NULL default '0000-00-00 00:00:00',
 		PRIMARY KEY (id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 
 	//
@@ -971,7 +976,7 @@ function update_Db_course($courseDbName)
 		type text NOT NULL,
 		group_id int DEFAULT NULL,
 		KEY (id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 
 
@@ -986,7 +991,7 @@ function update_Db_course($courseDbName)
 		user_id int unsigned NOT NULL,
 		last_connection datetime NOT NULL default '0000-00-00 00:00:00',
 		PRIMARY KEY (user_id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 
 	$sql = "
@@ -995,7 +1000,7 @@ function update_Db_course($courseDbName)
 		name char(50) NOT NULL default '',
 		url char(100) NOT NULL,
 		PRIMARY KEY (id)
-		)";
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 
 	$sql = "
@@ -1003,8 +1008,8 @@ function update_Db_course($courseDbName)
 		user_id int unsigned NOT NULL default '0',
 		last_connection datetime NOT NULL default '0000-00-00 00:00:00',
 		session_id  INT NOT NULL default 0,
-		to_group_id INT NOT NULL default 0		
-		)";
+		to_group_id INT NOT NULL default 0
+		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLCHATCONNECTED . "` ADD INDEX `char_connected_index`(user_id, session_id, to_group_id) ";
 	Database::query($sql, __FILE__, __LINE__);
@@ -1031,7 +1036,7 @@ function update_Db_course($courseDbName)
 		self_unregistration_allowed tinyint unsigned NOT NULL default '0',
 		session_id smallint unsigned NOT NULL default 0,
 		PRIMARY KEY (id)
-		)", __FILE__, __LINE__);
+		)" . $charset_clause, __FILE__, __LINE__);
 	Database::query("ALTER TABLE `".$TABLEGROUPS . "` ADD INDEX ( session_id )", __FILE__,__LINE__);
 
 	Database::query("CREATE TABLE `".$TABLEGROUPCATEGORIES . "` (
@@ -1051,7 +1056,7 @@ function update_Db_course($courseDbName)
 		groups_per_user smallint unsigned NOT NULL default 0,
 		display_order smallint unsigned NOT NULL default 0,
 		PRIMARY KEY (id)
-		)", __FILE__, __LINE__);
+		)" . $charset_clause, __FILE__, __LINE__);
 
 	Database::query("CREATE TABLE `".$TABLEGROUPUSER . "` (
 		id int unsigned NOT NULL auto_increment,
@@ -1060,14 +1065,14 @@ function update_Db_course($courseDbName)
 		status int NOT NULL default 0,
 		role char(50) NOT NULL,
 		PRIMARY KEY (id)
-		)", __FILE__, __LINE__);
+		)" . $charset_clause, __FILE__, __LINE__);
 
 	Database::query("CREATE TABLE `".$TABLEGROUPTUTOR . "` (
 		id int NOT NULL auto_increment,
 		user_id int NOT NULL,
 		group_id int NOT NULL default 0,
 		PRIMARY KEY (id)
-		)", __FILE__, __LINE__);
+		)" . $charset_clause, __FILE__, __LINE__);
 
 	Database::query("CREATE TABLE `".$TABLEITEMPROPERTY . "` (
 		tool varchar(100) NOT NULL default '',
@@ -1083,7 +1088,7 @@ function update_Db_course($courseDbName)
 		start_visible datetime NOT NULL default '0000-00-00 00:00:00',
 		end_visible datetime NOT NULL default '0000-00-00 00:00:00',
 		id_session INT NOT NULL DEFAULT 0
-		);", __FILE__, __LINE__);
+		)" . $charset_clause, __FILE__, __LINE__);
 	Database::query("ALTER TABLE `$TABLEITEMPROPERTY` ADD INDEX idx_item_property_toolref (tool,ref)", __FILE__, __LINE__);
 
 	/*
@@ -1095,7 +1100,8 @@ function update_Db_course($courseDbName)
 		CREATE TABLE `".$TABLEINTROS . "` (
 		id varchar(50) NOT NULL,
 		intro_text text NOT NULL,
-		PRIMARY KEY (id))", __FILE__, __LINE__);
+		PRIMARY KEY (id)
+		)" . $charset_clause, __FILE__, __LINE__);
 
 	/*
 	-----------------------------------------------------------
@@ -1117,7 +1123,7 @@ function update_Db_course($courseDbName)
 		session_id SMALLINT UNSIGNED NOT NULL,
 		PRIMARY KEY (id),
 		UNIQUE KEY UN_filename (filename)
-		)", __FILE__, __LINE__);
+		)" . $charset_clause, __FILE__, __LINE__);
 
 	Database::query("ALTER TABLE `$TABLETOOLDROPBOXFILE` ADD INDEX ( `session_id` )", __FILE__, __LINE__);
 
@@ -1130,7 +1136,7 @@ function update_Db_course($courseDbName)
 		cat_id int NOT NULL default 0,
 		session_id SMALLINT UNSIGNED NOT NULL,
 		PRIMARY KEY (file_id,dest_user_id)
-		)", __FILE__, __LINE__);
+		)" . $charset_clause, __FILE__, __LINE__);
 
 	Database::query("ALTER TABLE `$TABLETOOLDROPBOXPOST` ADD INDEX ( `session_id` )", __FILE__, __LINE__);
 
@@ -1139,7 +1145,7 @@ function update_Db_course($courseDbName)
 		file_id int unsigned NOT NULL,
 		user_id int unsigned NOT NULL default 0,
 		PRIMARY KEY (file_id,user_id)
-		)", __FILE__, __LINE__);
+		)" . $charset_clause, __FILE__, __LINE__);
 
 	$sql = "CREATE TABLE `".$TABLETOOLDROPBOXCATEGORY."` (
   			cat_id int NOT NULL auto_increment,
@@ -1147,9 +1153,9 @@ function update_Db_course($courseDbName)
   			received tinyint unsigned NOT NULL default 0,
   			sent tinyint unsigned NOT NULL default 0,
   			user_id int NOT NULL default 0,
-  			session_id smallint NOT NULL default 0,		
+  			session_id smallint NOT NULL default 0,
   			PRIMARY KEY  (cat_id)
-  			)";
+  			)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 	$sql = "ALTER TABLE `".$TABLETOOLDROPBOXCATEGORY . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
@@ -1163,7 +1169,7 @@ function update_Db_course($courseDbName)
 			  PRIMARY KEY  (feedback_id),
 			  KEY file_id (file_id),
 			  KEY author_user_id (author_user_id)
-  			)";
+  			)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
 
 	/*
@@ -1192,7 +1198,7 @@ function update_Db_course($courseDbName)
 		"preview_image	varchar(255)    not null default '', " . //stores the theme of the LP
 		"author 		varchar(255)    not null default '', " . //stores the theme of the LP
 		"session_id  	int	unsigned not null  default 0 " . //the session_id
-		")";
+		")" . $charset_clause;
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
@@ -1204,7 +1210,7 @@ function update_Db_course($courseDbName)
 		"user_id		int 	unsigned	not null," . //user ID from main.user
 		"view_count		smallint unsigned	not null default 0," . //integer counting the amount of times this learning path has been attempted
 		"last_item		int		unsigned	not null default 0," . //last item seen in this view
-		"progress		int		unsigned	default 0 )"; //lp's progress for this user
+		"progress		int		unsigned	default 0 )" . $charset_clause; //lp's progress for this user
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
@@ -1241,7 +1247,7 @@ function update_Db_course($courseDbName)
 		"max_time_allowed char(13) NULL default ''," . //data from imsmanifest <adlcp:maxtimeallowed>
         "terms TEXT NULL," . // contains the indexing tags (search engine)
         "search_did INT NULL,".// contains the internal search-engine id of this element
-        "audio VARCHAR(250))"; // contains the audio file that goes with the learning path step
+        "audio VARCHAR(250))" . $charset_clause; // contains the audio file that goes with the learning path step
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
@@ -1265,7 +1271,7 @@ function update_Db_course($courseDbName)
 		"lesson_location text null default ''," .
 		"core_exit		varchar(32) not null default 'none'," .
 		"max_score		varchar(8) default ''" .
-		")";
+		")" . $charset_clause;
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
@@ -1293,7 +1299,7 @@ function update_Db_course($courseDbName)
 		"student_response	text not null default ''," . //student response (format depends on type)
 		"result			varchar(255) not null default ''," . //textual result
 		"latency		varchar(16)	not null default ''" . //time necessary for completion of the interaction
-		")";
+		")" . $charset_clause;
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
@@ -1313,7 +1319,7 @@ function update_Db_course($courseDbName)
 		"score_max		float unsigned not null default 0," . //max score
 		"score_min		float unsigned not null default 0," . //min score
 		"status			char(32) not null default 'not attempted'" . //status, just as sco status
-		")";
+		")" . $charset_clause;
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
 		error_log($sql,0);
@@ -1338,7 +1344,7 @@ function update_Db_course($courseDbName)
 			visibility tinyint unsigned NOT NULL default 0,
 			session_id smallint default 0,
 			PRIMARY KEY ( blog_id )
-		) COMMENT = 'Table with blogs in this course';";
+		)" . $charset_clause . " COMMENT = 'Table with blogs in this course';";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1359,7 +1365,7 @@ function update_Db_course($courseDbName)
 			task_id int default NULL ,
 			parent_comment_id int NOT NULL default 0,
 			PRIMARY KEY ( comment_id )
-		) COMMENT = 'Table with comments on posts in a blog';";
+		)" . $charset_clause . " COMMENT = 'Table with comments on posts in a blog';";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1375,7 +1381,7 @@ function update_Db_course($courseDbName)
 			blog_id mediumint NOT NULL default 0,
 			author_id int NOT NULL default 0,
 			PRIMARY KEY ( post_id )
-		) COMMENT = 'Table with posts / blog.';";
+		)" . $charset_clause . " COMMENT = 'Table with posts / blog.';";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1391,7 +1397,7 @@ function update_Db_course($courseDbName)
 			user_id int NOT NULL default 0,
 			rating mediumint NOT NULL default 0,
 			PRIMARY KEY ( rating_id )
-		) COMMENT = 'Table with ratings for post/comments in a certain blog';";
+		)" . $charset_clause . " COMMENT = 'Table with ratings for post/comments in a certain blog';";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1403,7 +1409,7 @@ function update_Db_course($courseDbName)
 			blog_id int NOT NULL default 0,
 			user_id int NOT NULL default 0,
 			PRIMARY KEY ( blog_id , user_id )
-		) COMMENT = 'Table representing users subscribed to a blog';";
+		)" . $charset_clause . " COMMENT = 'Table representing users subscribed to a blog';";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1419,7 +1425,7 @@ function update_Db_course($courseDbName)
 			color varchar( 10 ) NOT NULL default '',
 			system_task tinyint unsigned NOT NULL default 0,
 			PRIMARY KEY ( task_id )
-		) COMMENT = 'Table with tasks for a blog';";
+		)" . $charset_clause . " COMMENT = 'Table with tasks for a blog';";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1433,7 +1439,7 @@ function update_Db_course($courseDbName)
 			task_id mediumint NOT NULL default 0,
 			target_date date NOT NULL default '0000-00-00',
 			PRIMARY KEY ( blog_id , user_id , task_id )
-		) COMMENT = 'Table with tasks assigned to a user in a blog';";
+		)" . $charset_clause . " COMMENT = 'Table with tasks assigned to a user in a blog';";
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1450,7 +1456,7 @@ function update_Db_course($courseDbName)
 		  blog_id int NOT NULL,
 		  comment_id int NOT NULL default '0',
   		PRIMARY KEY  (id)
-		)";
+		)" . $charset_clause;
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1467,7 +1473,7 @@ function update_Db_course($courseDbName)
 			tool varchar( 250 ) NOT NULL default '',
 			action varchar( 250 ) NOT NULL default '',
 			PRIMARY KEY (id)
-		)";
+		)" . $charset_clause;
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1481,7 +1487,7 @@ function update_Db_course($courseDbName)
 			tool varchar( 250 ) NOT NULL default '',
 			action varchar( 250 ) NOT NULL default '',
 			PRIMARY KEY ( id )
-		)";
+		)" . $charset_clause;
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1495,7 +1501,7 @@ function update_Db_course($courseDbName)
 			tool varchar( 250 ) NOT NULL default '',
 			action varchar( 250 ) NOT NULL default '',
 			PRIMARY KEY ( id )
-		)";
+		)" . $charset_clause;
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1509,7 +1515,7 @@ function update_Db_course($courseDbName)
 			role_comment text,
 			default_role tinyint default 0,
 			PRIMARY KEY ( role_id )
-		)";
+		)" . $charset_clause;
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1521,7 +1527,7 @@ function update_Db_course($courseDbName)
 			role_id int NOT NULL default 0,
 			scope varchar( 20 ) NOT NULL default 'course',
 			group_id int NOT NULL default 0
-		)";
+		)" . $charset_clause;
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1534,7 +1540,7 @@ function update_Db_course($courseDbName)
 			tool varchar( 250 ) NOT NULL default '',
 			action varchar( 50 ) NOT NULL default '',
 			default_perm tinyint NOT NULL default 0
-		)";
+		)" . $charset_clause;
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1546,7 +1552,7 @@ function update_Db_course($courseDbName)
 			role_id int NOT NULL default 0,
 			scope varchar( 20 ) NOT NULL default 'course',
 			user_id int NOT NULL default 0
-		)";
+		)" . $charset_clause;
 
 	if(!Database::query($sql, __FILE__, __LINE__))
 	{
@@ -1571,7 +1577,7 @@ function update_Db_course($courseDbName)
 		comment 	varchar(255) default NULL,
 		subkeytext 	varchar(255) default NULL,
 		PRIMARY KEY (id)
- 		)", __FILE__, __LINE__);
+ 		)" . $charset_clause, __FILE__, __LINE__);
 
 	/*
 	-----------------------------------------------------------
@@ -1608,7 +1614,7 @@ function update_Db_course($courseDbName)
 			  form_fields TEXT NOT NULL,
 			  session_id SMALLINT unsigned NOT NULL default 0,
 			  PRIMARY KEY  (survey_id)
-			)";
+			)" . $charset_clause;
 
 	$result = Database::query($sql,__FILE__,__LINE__) or die(mysql_error($sql));
 	$sql = "ALTER TABLE `".$TABLESURVEY."` ADD INDEX ( session_id )";
@@ -1624,7 +1630,7 @@ function update_Db_course($courseDbName)
 			  answered int NOT NULL default 0,
 			  session_id SMALLINT(5) UNSIGNED NOT NULL default 0,
 			  PRIMARY KEY  (survey_invitation_id)
-			)";
+			)" . $charset_clause;
 	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
 
 	$sql = "CREATE TABLE `".$TABLESURVEYQUESTION."` (
@@ -1641,7 +1647,7 @@ function update_Db_course($courseDbName)
 			  survey_group_sec1 int unsigned NOT NULL default '0',
 			  survey_group_sec2 int unsigned NOT NULL default '0',
 			  PRIMARY KEY  (question_id)
-			)";
+			)" . $charset_clause;
 	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
 
 	$sql ="CREATE TABLE `".$TABLESURVEYQUESTIONOPTION."` (
@@ -1652,7 +1658,7 @@ function update_Db_course($courseDbName)
 	  sort int NOT NULL,
 	  value int NOT NULL default '0',
 	  PRIMARY KEY  (question_option_id)
-	)";
+	)" . $charset_clause;
 	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
 
 	$sql = "CREATE TABLE `".$TABLESURVEYANSWER."` (
@@ -1663,7 +1669,7 @@ function update_Db_course($courseDbName)
 			  value int unsigned NOT NULL,
 			  user varchar(250) NOT NULL,
 			  PRIMARY KEY  (answer_id)
-			)";
+			)" . $charset_clause;
 	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
 
 	$sql = "CREATE TABLE `".$TABLESURVEYGROUP."` (
@@ -1672,7 +1678,7 @@ function update_Db_course($courseDbName)
 			  description varchar(255) NOT NULL,
 			  survey_id int unsigned NOT NULL,
 			  PRIMARY KEY  (id)
-			)";
+			)" . $charset_clause;
 
 	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
 
@@ -1684,7 +1690,7 @@ function update_Db_course($courseDbName)
 			  display_order int,
 			  session_id smallint default 0,
 			  PRIMARY KEY  (glossary_id)
-			)";
+			)" . $charset_clause;
 	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
 	$sql = "ALTER TABLE `".$TBL_GLOSSARY . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
@@ -1701,7 +1707,7 @@ function update_Db_course($courseDbName)
 			  update_date datetime NOT NULL default '0000-00-00 00:00:00',
 			  status int,
 			  PRIMARY KEY  (notebook_id)
-			)";
+			)" . $charset_clause;
 	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
 
 	return 0;
@@ -2443,7 +2449,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 		event_system(LOG_COURSE_CREATE, LOG_COURSE_CODE, $courseSysCode, $time, $user_id, $courseSysCode);
 
 		$send_mail_to_admin = api_get_setting('send_email_to_admin_when_create_course');
-		
+
 		//@todo improve code to send to all current portal admins
 		if ($send_mail_to_admin=='true'){
 			$siteName=api_get_setting('siteName');
@@ -2457,8 +2463,8 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 			$message .= get_lang('Category').' '.$category."\n";
 			$message .= get_lang('Tutor').' '.$titular."\n";
 			$message .= get_lang('Language').' '.$course_language;
-			
-			api_mail($recipient_name, $recipient_email, $subject, $message,$siteName,$recipient_email);	
+
+			api_mail($recipient_name, $recipient_email, $subject, $message,$siteName,$recipient_email);
 		}
 
 	}

@@ -333,7 +333,7 @@ function display_language_selection_box()
 	//Reduce the number of languages shown to only show those with higher than 90% translation in DLTT
 	//This option can be easily removed later on. The aim is to test people response to less choice
 	//$language_to_display = $language_list;
-	$language_to_display = array('asturian','english','italian','french','slovenian','slovenian_unicode','spanish');
+	$language_to_display = array('asturian','bulgarian','english','italian','french','slovenian','slovenian_unicode','spanish');
 
 	//display
 	echo "\t\t<select name=\"language_list\">\n";
@@ -1006,7 +1006,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 
 	echo '<td>';
 
-	$array_lang = array('asturian','english','italian','french','slovenian','spanish');
+	$array_lang = array('asturian','bulgarian','english','italian','french','slovenian','spanish');
 
 	////Only display Language have 90% +
 	echo "\t\t<select name=\"languageForm\">\n";

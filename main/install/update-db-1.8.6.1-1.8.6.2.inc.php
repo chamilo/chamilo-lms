@@ -156,18 +156,18 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						}
 					}
 				}
-				
-				
+
+
 				// There might now be multiple course coaches. This implies
 				// moving the previous course coach elements from the
 				// session_rel_course table to the session_rel_course_rel_user
 				// table with status 2
-				// Select all the current course coaches in sessions 
-				
-				$sql = "SELECT id_session, course_code, id_coach 
-				        FROM session_rel_course 
+				// Select all the current course coaches in sessions
+
+				$sql = "SELECT id_session, course_code, id_coach
+				        FROM session_rel_course
 				        ORDER BY id_session, course_code";
-				
+
 				$res = mysql_query($sql);
 
 				if ($res === false) {
@@ -176,18 +176,18 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					// For each coach found, add him as a course coach in the
 					// session_rel_course_rel_user table
 					while ($row = mysql_fetch_array($res)) {
-						
+
 						// chech if coach is a student
-						$sql = "SELECT 1 FROM session_rel_course_rel_user 
+						$sql = "SELECT 1 FROM session_rel_course_rel_user
 									 WHERE id_session='{$row[id_session]}' AND course_code='{$row[course_code]}' AND id_user='{$row[id_coach]}'";
-						$rs  =	mysql_query($sql);			
-						
+						$rs  =	mysql_query($sql);
+
 						if (mysql_num_rows($rs)>0) {
-							$sql_upd = "UPDATE session_rel_course_rel_user SET status=2 
+							$sql_upd = "UPDATE session_rel_course_rel_user SET status=2
 										WHERE id_session='{$row[id_session]}' AND course_code='{$row[course_code]}' AND id_user='{$row[id_coach]}'";
 						} else {
-							$sql_ins = "INSERT INTO session_rel_course_rel_user(id_session, course_code, id_user, status) 
-						  				VALUES ('{$row[id_session]}','{$row[course_code]}','{$row[id_coach]}',2)";	
+							$sql_ins = "INSERT INTO session_rel_course_rel_user(id_session, course_code, id_user, status)
+						  				VALUES ('{$row[id_session]}','{$row[course_code]}','{$row[id_coach]}',2)";
 						}
 
 						$rs_coachs = mysql_query($sql_ins);
@@ -198,47 +198,47 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 
 					}
 				}
-				
+
 				// Remove duplicated rows for 'show_tutor_data' AND 'show_teacher_data' into settings_current table
-				
+
 				$sql = "SELECT id FROM settings_current WHERE variable='show_tutor_data' ORDER BY id";
 				$rs_chk_id1 = mysql_query($sql);
-				
+
 				if ($rs_chk_id1 === false) {
 				    error_log('Could not query settings_current ids table: '.mysql_error());
-				} else { 					
+				} else {
 					$i = 1;
 					while ($row_id1 = mysql_fetch_array($rs_chk_id1)) {
 						$id = $row_id1['id'];
-						if ($i>1) {							
+						if ($i>1) {
 							$sql_del = "DELETE FROM settings_current WHERE id = '$id'";
 							mysql_query($sql_del);
-						}						
+						}
 						$i++;
-					}					
+					}
 				}
-				
+
 				$sql = "SELECT id FROM settings_current WHERE variable='show_teacher_data' ORDER BY id";
 				$rs_chk_id2 = mysql_query($sql);
-				
+
 				if ($rs_chk_id2 === false) {
 				    error_log('Could not query settings_current ids table: '.mysql_error());
-				} else { 					
+				} else {
 					$i = 1;
 					while ($row_id2 = mysql_fetch_array($rs_chk_id2)) {
 						$id = $row_id2['id'];
-						if ($i>1) {							
+						if ($i>1) {
 							$sql_del = "DELETE FROM settings_current WHERE id = '$id'";
 							mysql_query($sql_del);
-						}						
+						}
 						$i++;
-					}					
+					}
 				}
 
 			}
 		}
-		// now clean the deprecated id_coach field from the session_rel_course 
-		// table 
+		// now clean the deprecated id_coach field from the session_rel_course
+		// table
         $m_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-post.sql','main');
         if(count($m_q_list)>0)
         {
@@ -266,7 +266,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
                 }
             }
         }
-		
+
 		//get the stats queries list (s_q_list)
 		$s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql','stats');
 
@@ -363,7 +363,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			mysql_select_db($dbNameForm);
 			$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
 
-			if($res===false){die('Error while querying the courses list in update_db.inc.php');}
+			if($res===false){die('Error while querying the courses list in update_db-1.8.6.1-1.8.6.2.inc.php');}
 
 			if(mysql_num_rows($res)>0)
 			{
@@ -406,33 +406,33 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 								error_log("In ".$row_course['db_name'].", executed: $query",0);
 							}
 						}
-					}					
-					
+					}
+
 					// fill description type into course_description table
-					
+
 					$t_course_description = $row_course['db_name'].".course_description";
 
                     if($singleDbForm)
-                    {                    	
+                    {
                         $t_course_description = "$prefix{$row_course['db_name']}_course_description";
                     }
 
 					// get all ids and update description_type field with them from course_description table
 					$sql_sel = "SELECT id FROM $t_course_description";
 					$rs_sel = mysql_query($sql_sel);
-					
+
 					if ($rs_sel === false) {
 				    	error_log('Could not query course_description ids table: '.mysql_error());
-					} else { 											
-						if (mysql_num_rows($rs_sel) > 0) {													
+					} else {
+						if (mysql_num_rows($rs_sel) > 0) {
 							while ($row_ids = mysql_fetch_array($rs_sel)) {
-								$description_id = $row_ids['id']; 								
+								$description_id = $row_ids['id'];
 								$sql_upd = "UPDATE $t_course_description SET description_type='$description_id' WHERE id='$description_id'";
 								mysql_query($sql_upd);
-							}							
-						}						
+							}
+						}
 					}
-										
+
    				}
 			}
 		}

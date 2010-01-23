@@ -1165,7 +1165,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			mysql_select_db($dbNameForm);
 			$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
 
-			if($res===false){die('Error while querying the courses list in update_db.inc.php');}
+			if($res===false){die('Error while querying the courses list in update_db-1.8.5-1.8.6.inc.php');}
 
 			if(mysql_num_rows($res)>0)
 			{

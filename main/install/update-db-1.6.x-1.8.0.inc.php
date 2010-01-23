@@ -263,7 +263,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		}else{
 			mysql_select_db($dbNameForm);
 			$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
-			if($res===false){die('Error while querying the courses list in update_db.inc.php');}
+			if($res===false){die('Error while querying the courses list in update_db-1.6.x-1.8.0.inc.php');}
 			if(mysql_num_rows($res)>0)
 			{
 				$i=0;
@@ -579,7 +579,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		}else{
 			mysql_select_db($dbNameForm);
 			$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
-			if($res===false){die('Error while querying the courses list in update_db.inc.php');}
+			if($res===false){die('Error while querying the courses list in update_db-1.6.x-1.8.0.inc.php');}
 			if(mysql_num_rows($res)>0)
 			{
 				$i=0;

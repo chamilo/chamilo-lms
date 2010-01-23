@@ -162,10 +162,10 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
             }
         }
         //
-        
-        
-        // now clean the deprecated id_coach field from the session_rel_course 
-        // table 
+
+
+        // now clean the deprecated id_coach field from the session_rel_course
+        // table
         /*
         $m_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-post.sql','main');
         if(count($m_q_list)>0)
@@ -193,7 +193,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
             }
         }
         */
-        
+
         //get the stats queries list (s_q_list)
         $s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql','stats');
 
@@ -296,7 +296,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
             mysql_select_db($dbNameForm);
             $res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
 
-            if($res===false){die('Error while querying the courses list in update_db.inc.php');}
+            if($res===false){die('Error while querying the courses list in update_db-1.8.6.2-1.8.7.inc.php');}
 
             if(mysql_num_rows($res)>0)
             {
@@ -342,7 +342,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
                                 error_log('Error in '.$query.': '.mysql_error());
                             }
                         }
-                    }                                                           
+                    }
                 }
             }
         }

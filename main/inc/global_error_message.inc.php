@@ -72,6 +72,8 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 		}
 	}
 
+	$installation_guide_url = $root_rel.'documentation/installation_guide.html';
+
 	$css_file = $root_sys.$css_file;
 	if (file_exists($css_file)) {
 		$css_def = @file_get_contents($css_file);
@@ -100,7 +102,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 				$length = strlen($IncorrectPhpVersionDescription);
 				$read_installation_guide = substr($IncorrectPhpVersionDescription, $pos + 3, $length);
 				$IncorrectPhpVersionDescription = substr($IncorrectPhpVersionDescription, 0, $pos);
-				$IncorrectPhpVersionDescription .= '<br /><a href="documentation/installation_guide.html" target="_blank">'.$read_installation_guide.'</a>';
+				$IncorrectPhpVersionDescription .= '<br /><a href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>';
 			}
 			$global_error_message['description'] = $IncorrectPhpVersionDescription;
 			break;
@@ -114,7 +116,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			$click_to_install = substr($InstallationDescription, 0, $pos);
 			$read_installation_guide = substr($InstallationDescription, $pos + 2);
 			$InstallationDescription = '<form action="main/install/index.php" method="get"><button class="save" type="submit" value="&nbsp;&nbsp; '.$click_to_install.' &nbsp;&nbsp;" >'.$click_to_install.'</button></form><br />
-					<a href="documentation/installation_guide.html" target="_blank">'.$read_installation_guide.'</a>';
+					<a href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>';
 			$global_error_message['description'] = $InstallationDescription;
 			break;
 
@@ -158,35 +160,39 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 		</head>
 		<body>
 		<div id="wrapper">
-		
+
 			<div id="header">
-				<div id="header1">{ORGANISATION}</div>
+				<div id="header1">
+					<div id="institution">
+						{ORGANISATION}
+					</div>
+				</div>
 				<div class="clear"></div>
 				<div id="header2">&nbsp;</div>
-				<div id="header3">			
+				<div id="header3">
 					<ul>
 						<li id="current"><a href="#"><span id="tab_active">{SECTION}</span></a></li>
 					</ul>
 					<div style="clear: both;" class="clear"></div>
 				</div>
-				<div id="header4">&nbsp;</div>				
+				<div id="header4">&nbsp;</div>
 			</div>
 			<div class="clear"> </div>
-			
+
 			<div id="main">
 				<div style="text-align: center;">
 						<br /><br />{DESCRIPTION}<br /><br />
 						{CODE}
 				</div>
 			</div>
-			
+
 			<div class="push"/></div>
 		</div>
-	
+
 		<div id="footer">
 			<div class="copyright">{POWERED_BY}</div>
 			&nbsp;
-		</div>		
+		</div>
 		</body>
 </html>
 EOM;

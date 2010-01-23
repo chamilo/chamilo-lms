@@ -20,58 +20,15 @@
 		PHP VERSION CHECK
 ==============================================================================
 */
-if ( !function_exists('version_compare') || version_compare( phpversion(), '5', '<' )) {
-	$error_message_php_version = <<<EOM
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-		<head>
-			<title>Wrong PHP version!</title>
-			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-			<style type="text/css" media="screen, projection">
-				/*<![CDATA[*/
-				@import "../css/chamilo/default.css";
-				/*]]>*/
-			</style>
-		</head>
-		<body>
-			<div id="wrapper">
-				<div id="header">
-					<div id="header1">
-					<div id="institution">
-						<a href="http://www.chamilo.org" target="_blank">Chamilo Homepage</a>
-					</div>
-					</div>
-					<div class="clear"></div>
-					<div id="header2" style="height:50px;">&nbsp;</div>
-					<div id="header3">
-						<ul id="logout">
-							<li>&nbsp;</li>
-						</ul>
-						<ul>
-							<li id="current"><a href="#"><span id="tab_active">Installation</span></a></li>
-						</ul>
-						<div style="clear:both;" class="clear"></div>
-					</div>
-					<div id="header4">&nbsp;</div>
-				</div>
 
-				<div style="text-align: center;"><br /><br />
-						The version of scripting language on your server is wrong. Your server has to support PHP 5.x.x .<br />
-						<a href="../../documentation/installation_guide.html" target="_blank">Read the installation guide</a><br /><br />
-				</div>
-				<div id="push"></div>
-				</div>
+// PHP version requirement.
+define('REQUIRED_PHP_VERSION', '5');
 
-			<div id="footer">
-				<div class="copyright">Platform <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; 2009 </div>
-				&nbsp;
-			</div>
-
-		</body>
-</html>
-EOM;
-	header('Content-Type: text/html; charset=UTF-8');
-	die($error_message_php_version);
+if ( !function_exists('version_compare') || version_compare( phpversion(), REQUIRED_PHP_VERSION, '<' )) {
+	$global_error_code = 1;
+	// Incorrect PHP version.
+	require '../inc/global_error_message.inc.php';
+	die();
 }
 
 /*

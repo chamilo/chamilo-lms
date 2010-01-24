@@ -1552,7 +1552,10 @@ class PHPMailer {
     // Try to select the encoding which should produce the shortest output
     if (strlen($str)/3 < $x) {
       $encoding = 'B';
-      if (function_exists('mb_strlen') && $this->HasMultiBytes($str)) {
+      // Modified by Ivan Tcholakov, 24-JAN-2010.
+      //if (function_exists('mb_strlen') && $this->HasMultiBytes($str)) {
+      if ($this->HasMultiBytes($str)) {
+      //
         // Use a custom function which correctly encodes and wraps long
         // multibyte strings without breaking lines within a character
         $encoded = $this->Base64EncodeWrapMB($str);
@@ -1581,11 +1584,14 @@ class PHPMailer {
    * @return bool
    */
   public function HasMultiBytes($str) {
-    if (function_exists('mb_strlen')) {
-      return (strlen($str) > mb_strlen($str, $this->CharSet));
-    } else { // Assume no multibytes (we can't handle without mbstring functions anyway)
-      return false;
-    }
+  	// Modified by Ivan Tcholakov, 24-JAN-2010.
+    // (function_exists('mb_strlen')) {
+    //  return (strlen($str) > mb_strlen($str, $this->CharSet));
+    //} else { // Assume no multibytes (we can't handle without mbstring functions anyway)
+    //  return false;
+    //}
+    return (api_byte_count($str) > api_strlen($str, $this->CharSet));
+    //
   }
 
   /**
@@ -1601,7 +1607,10 @@ class PHPMailer {
     $end = "?=";
     $encoded = "";
 
-    $mb_length = mb_strlen($str, $this->CharSet);
+    // Modified by Ivan Tcholakov, 24-JAN-2010.
+    //$mb_length = mb_strlen($str, $this->CharSet);
+    $mb_length = api_strlen($str, $this->CharSet);
+    //
     // Each line must have length <= 75, including $start and $end
     $length = 75 - strlen($start) - strlen($end);
     // Average multi-byte ratio
@@ -1614,7 +1623,10 @@ class PHPMailer {
 
       do {
         $offset = $avgLength - $lookBack;
-        $chunk = mb_substr($str, $i, $offset, $this->CharSet);
+        // Modified by Ivan Tcholakov, 24-JAN-2010.
+        //$chunk = mb_substr($str, $i, $offset, $this->CharSet);
+        $chunk = api_substr($str, $i, $offset, $this->CharSet);
+        //
         $chunk = base64_encode($chunk);
         $lookBack++;
       }

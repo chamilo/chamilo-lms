@@ -475,7 +475,7 @@ function api_get_path($path_type, $path = null) {
 		$paths[CONFIGURATION_PATH] 	= $paths[SYS_CODE_PATH].$paths[CONFIGURATION_PATH];
 		$paths[WEB_LIBRARY_PATH] 	= $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
 		$paths[WEB_AJAX_PATH] 	 	= $paths[WEB_CODE_PATH].$paths[WEB_AJAX_PATH];
-		
+
 		$is_this_function_initialized = true;
 	}
 
@@ -799,14 +799,14 @@ function api_get_user_info($user_id = '') {
 		// ideally the names of the fields of the user table are renamed so that they match $_user (or vice versa)
 		// $_user should also contain every field of the user table (except password maybe). This would make the
 		// following lines obsolete (and the code cleaner and slimmer !!!
-		
+
 		$user_info['firstname']		= $result_array['firstname'];
 		$user_info['lastname']		= $result_array['lastname'];
-		
+
 		//Kept for historical reasons
 		$user_info['firstName']		= $result_array['firstname'];
-		$user_info['lastName'] 		= $result_array['lastname'];		
-		
+		$user_info['lastName'] 		= $result_array['lastname'];
+
 		$user_info['mail'] 			= $result_array['email'];
 		$user_info['picture_uri'] 	= $result_array['picture_uri'];
 		$user_info['user_id'] 		= $result_array['user_id'];
@@ -1933,14 +1933,14 @@ function api_display_debug_info($debug_info) {
 function api_is_allowed_to_edit($tutor=false,$coach=false,$session_coach = false) {
 
 	$my_session_id = api_get_session_id();
-	$is_allowed_coach_to_edit = api_is_coach();		
+	$is_allowed_coach_to_edit = api_is_coach();
 	$session_visibility = api_get_session_visibility($my_session_id);
 	$is_courseAdmin = api_is_course_admin() || api_is_platform_admin();
 	if (!$is_courseAdmin && $tutor == true) {	//if we also want to check if the user is a tutor...
 		$is_courseAdmin = $is_courseAdmin || api_is_course_tutor();
 	}
 	if (!$is_courseAdmin && $coach == true) {	//if we also want to check if the user is a coach...';
-		// check if session visibility is read only for coachs				
+		// check if session visibility is read only for coachs
 		if ($session_visibility==SESSION_VISIBLE_READ_ONLY) {
 			$is_allowed_coach_to_edit = false;
 		}
@@ -1952,24 +1952,24 @@ function api_is_allowed_to_edit($tutor=false,$coach=false,$session_coach = false
 		}
 
 	}
-	if (!$is_courseAdmin && $session_coach == true) {		
+	if (!$is_courseAdmin && $session_coach == true) {
 		$is_courseAdmin = $is_courseAdmin || api_is_coach();
 	}
 
 	if (api_get_setting('student_view_enabled') == 'true') {	//check if the student_view is enabled, and if so, if it is activated
 		if (!empty($my_session_id)) {
-			// check if session visibility is read only for coachs		
+			// check if session visibility is read only for coachs
 			if ($session_visibility==SESSION_VISIBLE_READ_ONLY) {
 				$is_allowed_coach_to_edit = false;
-			}	
+			}
 			if (api_get_setting('allow_coach_to_edit_course_session') == 'true') { // check if coach is allowed to edit a course
 				$is_allowed = $is_allowed_coach_to_edit;
 			} else {
 				$is_allowed = false;
-			}	
+			}
 		} else {
-			$is_allowed = $is_courseAdmin && $_SESSION['studentview'] != "studentview";	
-		}		
+			$is_allowed = $is_courseAdmin && $_SESSION['studentview'] != "studentview";
+		}
 		return $is_allowed;
 	} else {
 		return $is_courseAdmin;
@@ -2140,7 +2140,7 @@ function api_not_allowed($print_headers = false) {
 	$home_url	= api_get_path(WEB_PATH);
 	$user		= api_get_user_id();
 	$course 	= api_get_course_id();
-	
+
 	global $this_section;
 
 	$origin = isset($_GET['origin']) ? $_GET['origin'] : '';
@@ -2177,16 +2177,16 @@ function api_not_allowed($print_headers = false) {
 		}
 		require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 		$form = new FormValidator('formLogin', 'post', api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']));
-		
-		$form->addElement('text', 'login', get_lang('Username'), array('size' => 17));		
-		$form->addElement('password', 'password', get_lang('Password'), array('size' => 17));		
+
+		$form->addElement('text', 'login', get_lang('Username'), array('size' => 17));
+		$form->addElement('password', 'password', get_lang('Password'), array('size' => 17));
 		$form->addElement('style_submit_button', 'submitAuth', get_lang('Enter'),'class="login"');
 
 		if ((!headers_sent() || $print_headers) && $origin != 'learnpath') { Display::display_header(''); }
 		Display::display_error_message(get_lang('NotAllowed').'<br />'.get_lang('PleaseLoginAgainFromFormBelow').'<br />', false);
-		
-		echo '<div class="menu" id="menu" style="float:left">';		
-		echo '<br />';		
+
+		echo '<div class="menu" id="menu" style="float:left">';
+		echo '<br />';
 		$renderer =& $form->defaultRenderer();
 		$renderer->setElementTemplate('<div><label>{label}</label></div><div>{element}</div>');
 		$form->display();
@@ -2200,9 +2200,9 @@ function api_not_allowed($print_headers = false) {
 				echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php">'.get_lang('LostPassword').'</a></li>';
 			}
 			echo '</ul></div>';
-		}*/		
+		}*/
 		echo '</div>';
-		
+
 		$_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
 		if ($print_headers && $origin != 'learnpath') { Display::display_footer(); }
 		die();
@@ -2703,7 +2703,7 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
 	require_once api_get_path(CONFIGURATION_PATH).'mail.conf.php';
 
 	if (empty($platform_email['SMTP_FROM_NAME'])) {
-		$platform_email['SMTP_FROM_NAME'] = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
+		$platform_email['SMTP_FROM_NAME'] = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 	}
 
 	if (empty($platform_email['SMTP_FROM_EMAIL'])) {
@@ -2729,7 +2729,7 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
 	$regexp = "^[0-9a-z_\.+-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,3})$";
 
 	$mail = new PHPMailer();
-	$mail->CharSet = api_get_system_encoding();
+	$mail->CharSet = $platform_email['SMTP_CHARSET'];
 	$mail->Mailer = $platform_email['SMTP_MAILER'];
 	$mail->Host = $platform_email['SMTP_HOST'];
 	$mail->Port = $platform_email['SMTP_PORT'];
@@ -3779,8 +3779,8 @@ function replace_dangerous_char($filename, $strict = 'loose') {
 	static $replace_strict = array('_');
 
 	$system_encoding = api_get_file_system_encoding();
-	
-	
+
+
 	//comment because (see support.dokeos.com/issues/5596)
 	// Compatibility: we keep the previous behaviour (Dokeos 1.8.6) for Latin 1 platforms (ISO-8859-15, ISO-8859-1, WINDOWS-1252, ...).
 	//if (api_is_latin1($system_encoding)) {
@@ -4194,15 +4194,15 @@ function api_get_tool_information($tool_id) {
 	$sql = 'SELECT * FROM '.$t_tool.' WHERE id="'.Database::escape_string($tool_id).'"';
 	$rs  = Database::query($sql, __FILE__, __LINE__);
 	return Database::fetch_array($rs);
-} 
+}
 
 /**
  * Gets the software name
- * @return string 
- * 
+ * @return string
+ *
  */
 function api_get_software_name() {
-	global $_configuration;	
+	global $_configuration;
 	if (isset($_configuration['software_name']) && !empty($_configuration['software_name'])) {
 		return $_configuration['software_name'];
 	} else {

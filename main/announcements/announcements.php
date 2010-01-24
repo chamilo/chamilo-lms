@@ -588,7 +588,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 						    $sender_name = api_get_person_name($_SESSION['_user']['lastName'], $_SESSION['_user']['firstName'], null, PERSON_NAME_EMAIL_ADDRESS);
 						    $email = $_SESSION['_user']['mail'];
-							$headers="From:$sender_name\r\nReply-to: $email\r\nContent-type: text/html; charset=iso-8859-15";
+							$headers="From:$sender_name\r\nReply-to: $email";
 							//@mail($to,$subject,$message,$headers);
 							//api_send_mail($to,$subject,$message,$headers);
 							api_mail('',$to,$subject,$message,$sender_name,$email,$headers);
@@ -703,7 +703,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	                			$message=stripslashes($newContentsix);
 							    $sender_name = api_get_person_name($_SESSION['_user']['lastName'], $_SESSION['_user']['firstName'], null, PERSON_NAME_EMAIL_ADDRESS);
 							    $email = $_SESSION['_user']['mail'];
-								$headers="From:$sender_name\r\nReply-to: $email\r\nContent-type: text/html; charset=iso-8859-15";
+								$headers="From:$sender_name\r\nReply-to: $email";
 								//@mail($myrow["email"],stripslashes($emailTitle),$message,$headers);
 								api_mail('',$myrow["email"],stripslashes($emailTitle),$message,$sender_name,$email);
 	                        } else {

@@ -2464,7 +2464,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 			$message .= get_lang('Tutor').' '.$titular."\n";
 			$message .= get_lang('Language').' '.$course_language;
 
-			api_mail($recipient_name, $recipient_email, $subject, $message,$siteName,$recipient_email);
+			@api_mail($recipient_name, $recipient_email, $subject, $message,$siteName,$recipient_email);
 		}
 
 	}

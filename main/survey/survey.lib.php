@@ -40,7 +40,7 @@ $htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
 		}
 		$(document).ready(function () {
 		  setFocus();
-		});		
+		});
 	</script>';
 
 
@@ -69,7 +69,7 @@ class survey_manager
 		global $_course;
 
 		// table definition
-		
+
 		if (!empty($course_code)) {
 			$my_course_id = $course_code;
 		} else if (isset($_GET['course'])) {
@@ -454,7 +454,7 @@ class survey_manager
 		//update into item_property (delete)
 		api_item_property_update(api_get_course_info(), TOOL_SURVEY, Database::escape_string($survey_id), 'delete', api_get_user_id());
 
-		return void;
+		return true;
 	}
 
 	function copy_survey($parent_survey, $new_survey_id)
@@ -1686,7 +1686,7 @@ class yesno extends question
 	 */
 	function render_question($form_content, $answers=array())
 	{
-		
+
 		if (is_array($form_content['options'])) { // check if data is correct
 			foreach ($form_content['options'] as $key=>$value)
 			{
@@ -1758,8 +1758,8 @@ class multiplechoice extends question
 		$this->html .= '		</div>';
 		$this->html .= '		<div class="formw">';
 		$total_number_of_answers = count($form_content['answers']);
-		$this->html .= ' 			<table>';		
-		if (is_array($form_content['answers'])) { // check if data is correct		
+		$this->html .= ' 			<table>';
+		if (is_array($form_content['answers'])) { // check if data is correct
 			foreach ($form_content['answers'] as $key=>$value) {
 				$this->html .= '	<tr>';
 				$this->html .= '		<td align="right"><label for="answers['.$key.']">'.($key+1).'</label></td>';
@@ -1852,7 +1852,7 @@ class personality extends question
 
 
 		$question_values=array();
-		
+
 		// values of question options
 		if(is_array($form_content['values'])) { // check if data is correct
 			foreach ($form_content['values'] as $key=>$value) {
@@ -1867,12 +1867,12 @@ class personality extends question
 				//$this->html .= '		<td><input type="text" name="answers['.$key.']" id="answers['.$key.']" value="'.$form_content['answers'][$key].'" /></td>';
 				$this->html .= '		<td width="550">'.api_return_html_area('answers['.$key.']', api_html_entity_decode(stripslashes($form_content['answers'][$key])), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
 				$this->html .= '		<td>';
-	
+
 				if ($total_number_of_answers> 2)
 				{
 					$this->html .=$question_values[$count];
 				}
-	
+
 				if ($key<$total_number_of_answers-1)
 				{
 					$this->html .= '		<input type="image" src="../img/down.gif"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
@@ -1963,11 +1963,11 @@ class multipleresponse extends question
 				if ($key<$total_number_of_answers-1) {
 					$this->html .= '			<input type="image" src="../img/down.gif"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
 				}
-	
+
 				if ($key>0) {
 					$this->html .= '			<input type="image" src="../img/up.gif"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
 				}
-	
+
 				if ($total_number_of_answers> 2) {
 					$this->html .= '			<input type="image" src="../img/delete.gif"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
 				}
@@ -2780,7 +2780,7 @@ class SurveyUtil {
 
 		echo '<div class="actions">';
 		echo '<a href="reporting.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('ReportingOverview')).' '.get_lang('BackTo').' '.get_lang('ReportingOverview').'</a>';
-		
+
 		if ($survey_data['number_of_questions'] > 0) {
 			echo '<div id="question_report_questionnumbers">'.get_lang('GoToQuestion').': ';
 			for($i=1; $i<=($survey_data['number_of_questions']); $i++ )
@@ -2799,12 +2799,12 @@ class SurveyUtil {
 				}
 			}
 			echo '</div>';
-	
+
 			// getting the question information
 			$sql = "SELECT * FROM $table_survey_question WHERE survey_id='".Database::escape_string($_GET['survey_id'])."' AND type<>'pagebreak' AND type<>'comment' ORDER BY sort ASC LIMIT ".$offset.",1";
 			$result = Database::query($sql, __FILE__, __LINE__);
 			$question = Database::fetch_array($result);
-	
+
 			// navigate through the questions (next and previous)
 			if ($_GET['question'] <> 0)
 			{
@@ -2830,7 +2830,7 @@ class SurveyUtil {
 
 		echo '<br />';
 
-		
+
 
 
 		if ($question['type'] == 'score')
@@ -3040,9 +3040,9 @@ class SurveyUtil {
 		echo '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1a.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
 		echo '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1b.submit();"><img align="absbottom" src="'.api_get_path(WEB_IMG_PATH).'excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a>';
 		echo '</div>';
-				
 
-		
+
+
 		// the form
 		echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'">';
 		echo '<input type="hidden" name="export_report" value="export_report">';
@@ -3053,8 +3053,8 @@ class SurveyUtil {
 		echo '<input type="hidden" name="export_format" value="xls">';
 		echo '</form>';
 		echo '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'">';
-		
-		
+
+
 		// the table
 		echo '<br /><table class="data_table" border="1">';
 		// getting the number of options per question
@@ -3143,7 +3143,7 @@ class SurveyUtil {
 				WHERE sq.survey_id = '".Database::escape_string($_GET['survey_id'])."'
 				ORDER BY sq.sort ASC, sqo.sort ASC";
 		$result = Database::query($sql, __FILE__, __LINE__);
-		
+
 			while ($row = Database::fetch_array($result)) {
 				// we show the options if
 				// 1. there is no question filter and the export button has not been clicked
@@ -3160,8 +3160,8 @@ class SurveyUtil {
 					}
 					//no column at all if the question was not a question
 				}
-			} 
-		
+			}
+
 		echo '	</tr>';
 
 		// getting all the answers of the users
@@ -3272,7 +3272,7 @@ class SurveyUtil {
 						}
 					}
 				}
-	
+
 			}
 		}
 		echo '</tr>';
@@ -4279,7 +4279,7 @@ class SurveyUtil {
                 }
             }
 
-            api_mail_html($recipient_name, $recipient_email, $invitation_title, $full_invitation_text, $sender_name, $sender_email, $replyto);
+            @api_mail_html($recipient_name, $recipient_email, $invitation_title, $full_invitation_text, $sender_name, $sender_email, $replyto);
 
         }
 
@@ -4326,7 +4326,7 @@ class SurveyUtil {
 		if (!empty($course_db)) {
 			$table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION,$course_db);
 		} else {
-			$table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION);	
+			$table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION);
 		}
 
 	 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);

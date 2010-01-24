@@ -22,7 +22,7 @@ require_once 'exercise.class.php';
 require_once 'question.class.php'; //also defines answer type constants
 require_once 'answer.class.php';
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');	
+require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 
 if ( empty ( $origin ) ) {
     $origin = $_REQUEST['origin'];
@@ -104,7 +104,7 @@ if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
 	if ($total_time_allowed < $current_time) {
 	  $sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position=0 WHERE exe_id = '$current_attempt' ";
 	  Database::query($sql_fraud,__FILE__,__LINE__);
-	}	
+	}
 }
 //Unset session for clock time
 unset($_SESSION['current_exercice_attempt'][$current_user_id]);
@@ -267,7 +267,7 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 		echo $answer;
 		?>
 	</td>
-	
+
 	<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 	<td width="20%" style="border-bottom: 1px solid #4171B5;">
 		<?php
@@ -289,13 +289,13 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 		?>
 	</td>
 		<?php
-	    if ($ans==1) {	    	
+	    if ($ans==1) {
 	        $comm = get_comments($id,$questionId);
 		}
 	    ?>
 	 <?php } else { ?>
-		<td>&nbsp;</td>	
-	<?php } ?>	
+		<td>&nbsp;</td>
+	<?php } ?>
 	</tr>
 	<?php
 }
@@ -314,7 +314,7 @@ function display_fill_in_blanks_answer($answer,$id,$questionId)
 		<td>
 			<?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
 		</td>
-		
+
 		<?php
 		if(!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {?>
 			<td>
@@ -322,7 +322,7 @@ function display_fill_in_blanks_answer($answer,$id,$questionId)
 			$comm = get_comments($id,$questionId);
 			?>
 			</td>
-		<?php } ?>	
+		<?php } ?>
 
 			</tr>
 	<?php
@@ -340,8 +340,8 @@ function display_free_answer($answer,$id,$questionId) {
 		<tr>
 		<td>
 			<?php if (!empty($answer)) {echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY));} ?>
-		</td> 
-		
+		</td>
+
 		<?php if(!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {?>
         <td>
         <?php
@@ -349,8 +349,8 @@ function display_free_answer($answer,$id,$questionId) {
         ?>
         </td>
     	<?php }?>
-    
-    
+
+
     </tr>
     <?php
 }
@@ -407,9 +407,9 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 			?>
 		</td>
 		<?php } else { ?>
-			<td>&nbsp;</td>	
+			<td>&nbsp;</td>
 		<?php } ?>
-		
+
 	</tr>
 	<?php
 }
@@ -424,7 +424,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 
 $coursecode = api_get_course_id();
 $courseName = $_SESSION['_course']['name'];
-	
+
 $to = '';
 $teachers = array();
 if(api_get_setting('use_session_mode')=='true' && !empty($_SESSION['id_session'])) {
@@ -609,8 +609,8 @@ if ($show_results) {
 				<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 				<td><i><?php echo get_lang("Comment"); ?></i></td>
 				<?php } else { ?>
-				<td>&nbsp;</td>	
-				<?php } ?>	
+				<td>&nbsp;</td>
+				<?php } ?>
 			</tr>
 			<tr>
 			<td>&nbsp;</td>
@@ -633,9 +633,9 @@ if ($show_results) {
 				}
 
 				$numAnswer=$objAnswerTmp->selectAutoId($answerId);
-								
-				$studentChoice=$choice[$numAnswer];				
-				
+
+				$studentChoice=$choice[$numAnswer];
+
 				if ($studentChoice) {
 					$questionScore+=$answerWeighting;
 					$totalScore+=$answerWeighting;
@@ -671,9 +671,9 @@ if ($show_results) {
 			$objAnswerTmp=new Answer($questionId);
 			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 			$questionScore=0;
-			
+
 			$real_answers = array();
-			
+
 			for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 				$answer=$objAnswerTmp->selectAnswer($answerId);
 				$answerComment=$objAnswerTmp->selectComment($answerId);
@@ -685,9 +685,9 @@ if ($show_results) {
 					$ind = $row['answer'];
 					$choice[$ind] = 1;
 				}
-				$numAnswer=$objAnswerTmp->selectAutoId($answerId);								
-				$studentChoice=$choice[$numAnswer];	
-					
+				$numAnswer=$objAnswerTmp->selectAutoId($answerId);
+				$studentChoice=$choice[$numAnswer];
+
 				if ($answerCorrect == 1) {
 					if ($studentChoice) {
 						$real_answers[$answerId] = true;
@@ -701,7 +701,7 @@ if ($show_results) {
 						$real_answers[$answerId] = true;
 					}
 				}
-							
+
 				echo '<tr><td>';
 				if ($answerId==1) {
 						display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
@@ -711,21 +711,21 @@ if ($show_results) {
 				echo '</td></tr>';
 				$i++;
 		 	}
-		 			 	
+
 		 	$final_answer = true;
 		 	foreach($real_answers as $my_answer) {
 		 		if (!$my_answer) {
 		 			$final_answer = false;
-		 		}		 		
+		 		}
 		 	}
-		 			 	
+
 		 	if ($final_answer) {
-		 		//getting only the first score where we save the weight of all the question 
+		 		//getting only the first score where we save the weight of all the question
 		 		$answerWeighting=$objAnswerTmp->selectWeighting(1);
 				$questionScore+=$answerWeighting;
 				$totalScore+=$answerWeighting;
 			}
-		 	
+
 		 	echo '</table>';
 		} elseif ($answerType == UNIQUE_ANSWER) {
 			?>
@@ -740,8 +740,8 @@ if ($show_results) {
 					<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 					<td><i><?php echo get_lang("Comment"); ?></i></td>
 					<?php } else { ?>
-					<td>&nbsp;</td>	
-					<?php } ?>	
+					<td>&nbsp;</td>
+					<?php } ?>
 				</tr>
 				<tr>
 				<td>&nbsp;</td>
@@ -760,7 +760,7 @@ if ($show_results) {
 				$choice = Database::result($resultans,0,"answer");
 
 				$numAnswer=$objAnswerTmp->selectAutoId($answerId);
-								
+
 				$studentChoice=($choice == $numAnswer)?1:0;
 				if ($studentChoice) {
 				  	$questionScore+=$answerWeighting;
@@ -968,10 +968,10 @@ if ($show_results) {
 			} else {
 				$totalScore+=$questionScore;
 			}
-			
+
 			$arrques[] = $questionName;
             $arrans[]  = $choice;
-			
+
 			echo '<tr>
 			<td valign="top">'.display_free_answer($choice, $id, $questionId).'</td>
 			</tr>
@@ -1004,31 +1004,31 @@ if ($show_results) {
 			$questionScore=0;
 
 			while ($a_answers = Database::fetch_array($res_answers)) {
-				
+
 				$i_answer_id = $a_answers['id']; //3
 				$s_answer_label = $a_answers['answer'];  // your dady - you mother
 				$i_answer_correct_answer = $a_answers['correct']; //1 - 2
 				$i_answer_id_auto = $a_answers['id_auto']; // 3 - 4
-				
-				$sql_user_answer = "SELECT answer 
-									FROM $TBL_TRACK_ATTEMPT 
+
+				$sql_user_answer = "SELECT answer
+									FROM $TBL_TRACK_ATTEMPT
 									WHERE exe_id = '$id' AND question_id = '$questionId' AND position='$i_answer_id_auto'";
-				$res_user_answer = Database::query($sql_user_answer, __FILE__, __LINE__);					
-				
+				$res_user_answer = Database::query($sql_user_answer, __FILE__, __LINE__);
+
 				if (Database::num_rows($res_user_answer)>0 ) {
 					$s_user_answer = Database::result($res_user_answer,0,0); //  rich - good looking
 				} else {
 					$s_user_answer = 0;
 				}
-				
+
 				$i_answerWeighting=$objAnswerTmp->selectWeighting($i_answer_id);
-				
+
 				$user_answer = '';
 				if (!empty($s_user_answer)) {
 					if ($s_user_answer == $i_answer_correct_answer)	{
 						$questionScore+=$i_answerWeighting;
 						$totalScore+=$i_answerWeighting;
-						$user_answer = '<span>'.$real_list[$i_answer_correct_answer].'</span>';											
+						$user_answer = '<span>'.$real_list[$i_answer_correct_answer].'</span>';
 					} else {
 						$user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$real_list[$s_user_answer].'</span>';
 					}
@@ -1166,15 +1166,15 @@ if ($show_results) {
 		</tr>
 		</table>
 
-		
+
 		<?php
 		$my_total_score  = float_format($questionScore,1);
 		$my_total_weight = float_format($questionWeighting,1);
-		
+
 		echo '<div id="question_score">';
-		echo get_lang('Score')." : $my_total_score/$my_total_weight";		
+		echo get_lang('Score')." : $my_total_score/$my_total_weight";
 		echo '</div>';
-	
+
 		unset($objAnswerTmp);
 		$i++;
 		$totalWeighting+=$questionWeighting;
@@ -1242,12 +1242,12 @@ if ($origin=='student_progress' && !isset($_GET['my_lp_id'])) {?>
 
 if ($origin != 'learnpath') {
 	$url_email = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result';
-	
+
 	//we are not in learnpath tool
 	Display::display_footer();
 } else {
 	$url_email = api_get_path(WEB_CODE_PATH).'mySpace/lp_tracking.php?course='.api_get_course_id().'&origin=tracking_course&lp_id='.$learnpath_id.'&student_id='.api_get_user_id();
-	
+
 	if (!isset($_GET['fb_type'])) {
 		$lp_mode =  $_SESSION['lp_mode'];
 		$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
@@ -1260,9 +1260,9 @@ if ($origin != 'learnpath') {
 	} else {
 		if (!$is_allowedToEdit) {
 			send_notification($arrques, $arrans, $to);
-		}		
+		}
 		Display::display_normal_message(get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'));
-	}	
+	}
 }
 
 if (!$is_allowedToEdit) {
@@ -1282,18 +1282,18 @@ function send_notification($arrques, $arrans, $to) {
 	global $courseName, $exerciseTitle, $url_email;
     require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 	$user_info = UserManager::get_user_info_by_id(api_get_user_id());
-	
+
 	if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
 		return '';
 	}
-	
-	$mycharset = api_get_setting('platform_charset');
+
+	$mycharset = api_get_system_encoding();
     $msg = '<html><head>
             <link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
-            <meta content="text/html; charset='.$mycharset.'" http-equiv="content-type"></head>';	            
+            <meta content="text/html; charset='.$mycharset.'" http-equiv="content-type"></head>';
 	if(count($arrques)>0) {
 	    $msg .= '<body>
-	    <p>'.get_lang('OpenQuestionsAttempted').' : 
+	    <p>'.get_lang('OpenQuestionsAttempted').' :
 	    </p>
 	    <p>'.get_lang('AttemptDetails').' : <br />
 	    </p>
@@ -1316,7 +1316,7 @@ function send_notification($arrques, $arrans, $to) {
 	    </tr></table>
 	    <p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
 	     <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
-	     
+
 	    for($i=0;$i<sizeof($arrques);$i++) {
 	              $msg.='
 	                    <tr>
@@ -1327,7 +1327,7 @@ function send_notification($arrques, $arrans, $to) {
 	                <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Answer').' </span></td>
 	                <td valign="top" bgcolor="#F3F3F3"><span class="style16"> #answer#</span></td>
 	                    </tr>';
-	
+
 	                    $msg1= str_replace("#exercise#",$exerciseTitle,$msg);
 	                    $msg= str_replace("#firstName#",$user_info['firstname'],$msg1);
 	                    $msg1= str_replace("#lastName#",$user_info['lastname'],$msg);
@@ -1340,20 +1340,20 @@ function send_notification($arrques, $arrans, $to) {
 	    $msg.='</table><br>
 	                    <span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
 	                    <a href="#url#">#url#</a></span></body></html>';
-	
+
 	    $msg1= str_replace("#url#",$url_email,$msg);
 	    $mail_content = $msg1;
-	
+
 	    $subject = get_lang('OpenQuestionsAttempted');
-	
-	
+
+
 	    $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 	    $email_admin = api_get_setting('emailAdministrator');
-	    $result = api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
+	    $result = @api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
 	} else {
-		
+
 		$msg .= '<body>
-		<p>'.get_lang('ExerciseAttempted').' <br /> 
+		<p>'.get_lang('ExerciseAttempted').' <br />
 	    </p>
 		<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
 			<tr>
@@ -1372,24 +1372,24 @@ function send_notification($arrques, $arrans, $to) {
 		    <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
 		    <td valign="top"> #mail#</td>
 		</tr></table>';
-		 
+
 		$msg= str_replace("#exercise#",$exerciseTitle,$msg);
 		$msg= str_replace("#firstName#",$user_info['firstname'],$msg);
-		$msg= str_replace("#lastName#",$user_info['lastname'],$msg);	
+		$msg= str_replace("#lastName#",$user_info['lastname'],$msg);
 		$msg= str_replace("#mail#",$user_info['email'],$msg);
-		$msg= str_replace("#course#",$courseName,$msg);	
-		
+		$msg= str_replace("#course#",$courseName,$msg);
+
 		$msg.='<br />
 	 			<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
-				<a href="#url#">#url#</a></span></body></html>';	
-	
+				<a href="#url#">#url#</a></span></body></html>';
+
 		$msg= str_replace("#url#",$url_email,$msg);
 		$mail_content = $msg;
-		
+
 		$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 		$email_admin = api_get_setting('emailAdministrator');
-		
+
 		$subject = get_lang('ExerciseAttempted');
-		$result = api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
+		$result = @api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
 	}
 }

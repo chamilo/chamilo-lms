@@ -12,7 +12,7 @@ class TestMail extends UnitTestCase {
  		$recipient_email='';
  		$subject='';
  		$message='';
- 		$res=api_mail($recipient_name, $recipient_email, $subject, $message);
+ 		$res=@api_mail($recipient_name, $recipient_email, $subject, $message);
  		$mensajee->expectOnce($mail);
  		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
@@ -25,7 +25,7 @@ class TestMail extends UnitTestCase {
  		$recipient_name='';
  		$recipient_email='';
  		$subject='';
- 		$res=api_mail_html($recipient_name, $recipient_email, $subject);
+ 		$res=@api_mail_html($recipient_name, $recipient_email, $subject);
  		$mensajee->expectOnce($mail);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);

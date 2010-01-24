@@ -591,7 +591,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 							$headers="From:$sender_name\r\nReply-to: $email";
 							//@mail($to,$subject,$message,$headers);
 							//api_send_mail($to,$subject,$message,$headers);
-							api_mail('',$to,$subject,$message,$sender_name,$email,$headers);
+							@api_mail('',$to,$subject,$message,$sender_name,$email,$headers);
 							$sql_date="SELECT * FROM $db_name.survey WHERE survey_id='$surveyid'";
 							$res_date=Database::query($sql_date, __FILE__, __LINE__);
 							$obj_date=Database::fetch_object($res_date);
@@ -705,7 +705,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 							    $email = $_SESSION['_user']['mail'];
 								$headers="From:$sender_name\r\nReply-to: $email";
 								//@mail($myrow["email"],stripslashes($emailTitle),$message,$headers);
-								api_mail('',$myrow["email"],stripslashes($emailTitle),$message,$sender_name,$email);
+								@api_mail('',$myrow["email"],stripslashes($emailTitle),$message,$sender_name,$email);
 	                        } else {
 	                            // intro of the email: receiver name and subject
 								$mail_body = api_get_person_name($myrow["lastname"], $myrow["firstname"], null, PERSON_NAME_EMAIL_ADDRESS)."<br />\n".stripslashes($emailTitle)."<br />";
@@ -740,7 +740,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 													   'filename' => $row['filename']);
 								}
 
-								api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file);
+								@api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file);
 	                        }
 
 							$sql_date="SELECT * FROM $db_name WHERE survey_id='$surveyid'";

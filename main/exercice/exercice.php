@@ -336,7 +336,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	$headers = "From:$from_name\r\nReply-to: $to\r\nContent-type: text/html; charset=" . ($charset ? $charset : 'ISO-8859-15');
 	//mail($emailid, $subject, $mess,$headers);
 
-	api_mail_html($emailid, $emailid, $subject, $mess, $from_name, $from);
+	@api_mail_html($emailid, $emailid, $subject, $mess, $from_name, $from);
 	if (in_array($origin, array (
 			'tracking_course',
 			'user_course'
@@ -532,7 +532,7 @@ if ($is_allowedToEdit) {
 					$sql = 'SELECT gl.id FROM ' . $tbl_grade_link . ' gl WHERE gl.type="1" AND gl.ref_id="' . $exerciseId . '";';
 					$result = Database::query($sql, __FILE__, __LINE__);
 					$row = Database :: fetch_array($result, 'ASSOC');
-					//see 
+					//see
 					if (!empty($row['id'])) {
                  		$link = LinkFactory :: load($row['id']);
                      		if ($link[0] != null) {
@@ -860,7 +860,7 @@ if ($show == 'test') {
 		while ($row = Database :: fetch_array($result)) {
 			//validacion when belongs to a session
 			$session_img = api_get_session_image($row['session_id'], $_user['status']);
-			
+
 			if ($i % 2 == 0)
 				$s_class = "row_odd";
 			else
@@ -1132,7 +1132,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 		  <th><?php echo (($is_allowedToEdit||$is_tutor)?get_lang("CorrectTest"):get_lang("ViewTest")); ?></th>
 		 </tr>-->
 		<?php
-	
+
 	$session_id_and = ' AND ce.session_id = ' . api_get_session_id() . ' ';
 	if ($is_allowedToEdit || $is_tutor) {
 		$user_id_and = '';
@@ -1296,7 +1296,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 						//echo "<a href='exercise_show.php?action=edit&user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".Display :: return_icon('edit.gif', get_lang('Edit'));
 						//echo '&nbsp;';
 						$html_link.= "<a href='exercise_show.php?".api_get_cidreq()."&action=edit&user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".Display :: return_icon('edit.gif', get_lang('Edit'));
-						$html_link.= '&nbsp;';						
+						$html_link.= '&nbsp;';
 					} else {
 						//echo "<a href='exercise_show.php?action=qualify&user=$user&dt=$dt&res=$res&id=$id&email=$mailid'>".Display :: return_icon('quizz_small.gif', get_lang('Qualify'));
 						//echo '&nbsp;';
@@ -1309,13 +1309,13 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 						//echo ' <a href="exercice.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&show=result&filter=' . $filter . '&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.gif', get_lang('Delete')).'</a>';
 						//echo '&nbsp;';
 						$html_link.=' <a href="exercice.php?'.api_get_cidreq().'&show=result&filter=' . $filter . '&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.gif', get_lang('Delete')).'</a>';
-						$html_link.='&nbsp;';	
-					}					
+						$html_link.='&nbsp;';
+					}
 					if ($is_allowedToEdit) {
 						//echo ' <a href="exercice_history.php?cidReq=' . security::remove_XSS($_GET['cidReq']) . '&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
 						if ($filter==2){
 							$html_link.=' <a href="exercice_history.php?'.api_get_cidreq().'&exe_id=' . $id . '">' .Display :: return_icon('history.gif', get_lang('ViewHistoryChange')).'</a>';
-						}				
+						}
 					}
 				} else {
 					if ($revised) {
@@ -1324,7 +1324,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 
 					} else {
 					//	echo '&nbsp;' . get_lang('NoResult');
-						$html_link.='&nbsp;' . get_lang('NoResult');												
+						$html_link.='&nbsp;' . get_lang('NoResult');
 					}
 
 				}
@@ -1332,7 +1332,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 				if ($is_allowedToEdit || $is_tutor) {
 					$list_info [] = array($user_list_name,$quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
 				} else {
-					$list_info [] = array($quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);					
+					$list_info [] = array($quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
 				}
 				//$list_info [] = array($user_list_name,$quiz_name_list,$duration_list,$date_list,$result_list,$more_details_list);
 				//echo '</td>';
@@ -1351,7 +1351,7 @@ $table = new SortableTableFromArrayConfig($list_info, 1,20,'quiz_table');
 $table->set_additional_parameters($parameters);
 if ($is_allowedToEdit || $is_tutor) {
 	$table->set_header(0, get_lang('User'));
-	$secuence = 0;	
+	$secuence = 0;
 } else {
 	$secuence = 1;
 }

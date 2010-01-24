@@ -337,10 +337,10 @@ function get_dropbox_categories($filter='')
 	global $dropbox_cnf;
 
 	$return_array=array();
-	
+
 	$session_id = api_get_session_id();
 	$condition_session = api_get_session_condition($session_id);
-		
+
 	$sql="SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE user_id='".$_user['user_id']."' $condition_session";
 
 	$result=Database::query($sql,__FILE__,__LINE__);
@@ -603,9 +603,9 @@ function display_add_form()
 		{
 			$complete_user_list_for_dropbox = CourseManager :: get_teacher_list_from_course_code($course_info['code']);
 		}
-	}    
+	}
 
-	
+
 
 	foreach ($complete_user_list_for_dropbox as $k => $e) {
 	    $complete_user_list_for_dropbox[$k] = $e + array('lastcommafirst' => api_get_person_name($e['firstname'], $e['lastname']));
@@ -1047,7 +1047,7 @@ function store_add_dropbox()
 		{
 			include_once(api_get_path(LIBRARY_PATH) . 'usermanager.lib.php');
 			$recipent_temp=UserManager :: get_user_info_by_id($recipient_id);
-			api_mail(api_get_person_name($recipent_temp['firstname'].' '.$recipent_temp['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $recipent_temp['email'],
+			@api_mail(api_get_person_name($recipent_temp['firstname'].' '.$recipent_temp['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $recipent_temp['email'],
 				get_lang('NewDropboxFileUploaded'),
 				get_lang('NewDropboxFileUploadedContent').' '.api_get_path(WEB_CODE_PATH).'dropbox/index.php?cidReq='.$_course['sysCode']."\n\n".api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS)."\n".  get_lang('Email') ." : ".$_user['mail'], api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_user['mail']);
 				//get_lang('NewDropboxFileUploadedContent').' '.api_get_path(WEB_CODE_PATH).'dropbox/index.php?cidReq='.$_course['sysCode']."\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS)."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName')." ".api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS), api_get_setting('emailAdministrator'));
@@ -1156,7 +1156,7 @@ function feedback_form()
 	{
 		$token = Security::get_token();
 		$return .= '<textarea name="feedback" style="width: 80%; height: 80px;"></textarea>';
-		$return .= '<input type="hidden" name="sec_token" value="'.$token.'"/>';		
+		$return .= '<input type="hidden" name="sec_token" value="'.$token.'"/>';
 		$return .= '<br /><button type="submit" class="add" name="store_feedback" value="'.get_lang('Ok').'"
 					onclick="document.form_tablename.attributes.action.value = document.location;">'.get_lang('AddComment').'</button>';
 	}

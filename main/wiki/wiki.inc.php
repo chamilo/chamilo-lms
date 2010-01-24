@@ -206,7 +206,7 @@ function detect_irc_link($input)
 function make_wiki_link_clickable($input)
 {
 	global $_course;
-	
+
 	if (isset($_SESSION['_gid']))
 	{
 		$_clean['group_id']=(int)$_SESSION['_gid'];
@@ -563,11 +563,11 @@ function save_new_wiki() {
 		   Database::query($sql,__LINE__,__FILE__);
 
 		   check_emailcue(0, 'A');
-		   
+
 		   $_POST['reflink']=$_clean['reflink'];
-		   
+
 		   return get_lang('NewWikiSaved');
-		   
+
 		}
 	}//end filter no _uass
 }
@@ -598,7 +598,7 @@ return true;
 		}
 		$(document).ready(function () {
 		  setFocus();
-		});		
+		});
 </script>
 <?php
 	//form
@@ -767,7 +767,7 @@ return true;
 function display_wiki_entry($newtitle)
 {
 	global $charset, $tbl_wiki, $tbl_wiki_conf, $groupfilter, $page;
-	
+
 	if($newtitle)
 	{
 		$pageMIX=$newtitle; //display the page after it is created
@@ -925,7 +925,7 @@ function display_wiki_entry($newtitle)
 			echo '<form name="form_export2DOC" method="post" action="index.php" >';
 			echo '<input type=hidden name="export2DOC" value="export2doc">';
 			echo '<input type=hidden name="titleDOC" value="'.api_htmlentities($title, ENT_QUOTES, $charset).'">';
-			echo '<input type=hidden name="contentDOC" value="'.api_htmlentities($content, ENT_QUOTES, $charset).'">';			
+			echo '<input type=hidden name="contentDOC" value="'.api_htmlentities($content, ENT_QUOTES, $charset).'">';
 			echo '<input type="image" src="../img/wiki/wexport2doc.png" border ="0" title="'.get_lang('ExportToDocArea').'" alt="'.get_lang('ExportToDocArea').'" style=" border:none; margin-top: -6px">';
 			echo '</form>';
 			echo '</span>';
@@ -1680,8 +1680,6 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 	{
 		while ($row=Database::fetch_array($result))
 		{
-			if(empty($charset)){$charset='ISO-8859-1';}
-			$headers = 'Content-Type: text/html; charset='. $charset;
 			$userinfo = Database::get_user_info_from_id($row['user_id']);	//$row['user_id'] obtained from tbl_wiki_mailcue
 			$name_to = api_get_person_name($userinfo['firstname'], $userinfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
 			$email_to = $userinfo['email'];
@@ -1694,7 +1692,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 			$email_body .= $email_assignment.'<br /><br /><br />';
 			$email_body .= '<font size="-2">'.get_lang('EmailWikiChangesExt_1').': <strong>'.get_lang('NotifyChanges').'</strong><br />';
 			$email_body .= get_lang('EmailWikiChangesExt_2').': <strong>'.get_lang('NotNotifyChanges').'</strong></font><br />';
-			api_mail_html($name_to, $email_to, $email_subject, $email_body, $sender_name, $sender_email, $headers);
+			@api_mail_html($name_to, $email_to, $email_subject, $email_body, $sender_name, $sender_email);
 		}
 	}
 }
@@ -1707,7 +1705,7 @@ function check_emailcue($id_or_ref, $type, $lastime='', $lastuser='')
 function export2doc($wikiTitle, $wikiContents, $groupId)
 {
 	global $_course;
-	
+
 	$template =
 '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{LANGUAGE}" lang="{LANGUAGE}">
@@ -1759,7 +1757,7 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 
 	$wikiContents = str_replace('{CONTENT}', $wikiContents, $template);
 
-	// replace relative path by absolute path for courses, so you can see items into this page wiki (images, mp3, etc..) exported in documents  
+	// replace relative path by absolute path for courses, so you can see items into this page wiki (images, mp3, etc..) exported in documents
 	if (api_strpos($wikiContents,'../../courses/') !== false) {
 		$web_course_path = api_get_path(WEB_COURSE_PATH);
 		$wikiContents = str_replace('../../courses/',$web_course_path,$wikiContents);
@@ -1773,8 +1771,8 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 	file_put_contents( $exportPath, $wikiContents );
 	$doc_id = add_document($_course, $groupPath.'/'.$wikiFileName, 'file', filesize($exportPath), $wikiTitle);
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(), $groupId);
-	
-	return $doc_id; 	
+
+	return $doc_id;
     // TODO: link to go document area
 }
 
@@ -1870,9 +1868,9 @@ function auto_add_page_users($assignment_type)
    // $content_orig_A='<div align="center" style="background-color: #F5F8FB;  border:double">'.$photo.'</br>'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</br>('.get_lang('Teacher').')</div><br/><div>';
 
 	$content_orig_A='<div align="center" style="background-color: #F5F8FB; border:solid; border-color: #E6E6E6"><table border="0"><tr><td style="font-size:24px">'.get_lang('AssignmentDesc').'</td></tr><tr><td>'.$photo.'</br>'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</td></tr></table></div>';
-	
+
 	$content_orig_B='<br/><div align="center" style="font-size:24px">'.get_lang('AssignmentDescription').': '.$title_orig.'</div><br/>'.$_POST['content'];
-	
+
     //Second: student list (names, photo and links to their works).
 	//Third: Create Students work pages.
 
@@ -1916,9 +1914,9 @@ function auto_add_page_users($assignment_type)
 
 				//AssignmentLinktoTeacherPage
 			 	$all_students_pages[] = '<li>'.strtoupper($o_user_to_add['lastname']).', '.$o_user_to_add['firstname'].' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>'; //don't change this line without guaranteeing that users will be ordered by last names in the following format (surname, name)
-				
+
 				//$all_students_pages[] = '<li><table border="0"><tr><td width="200">'.api_get_person_name($o_user_to_add['lastname'], $o_user_to_add['firstname']).'</td><td>[['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</td></tr></table></li>';
-				
+
 				$_POST['assignment']=2;
 
 			}

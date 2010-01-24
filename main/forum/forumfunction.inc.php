@@ -2958,19 +2958,13 @@ function send_mail($user_info=array(), $thread_information=array()) {
 		$thread_link= api_get_path('WEB_CODE_PATH').'forum/viewthread.php?'.api_get_cidreq().'&forum='.$thread_information['forum_id'].'&thread='.$thread_information['thread_id'];
 	}
 	$email_body = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS)."\n\r";
-	$email_body .= '['.$_course['official_code'].'] - ['.$_course['name']."]<br>\n";
+	$email_body .= '['.$_course['official_code'].'] - ['.$_course['name']."]<br />\n";
 	$email_body .= get_lang('NewForumPost')."\n";
-	$email_body .= get_lang('YouWantedToStayInformed')."<br><br>\n";
+	$email_body .= get_lang('YouWantedToStayInformed')."<br /><br />\n";
 	$email_body .= get_lang('ThreadCanBeFoundHere')." : <a href=\"".$thread_link."\">".$thread_link."</a>\n";
 
-	//set the charset and use it for the encoding of the email - small fix, not really clean (should check the content encoding origin first)
-	//here we use the encoding used for the webpage where the text is encoded (ISO-8859-1 in this case)
-	if(empty($charset)) {
-		$charset='ISO-8859-1';
-	}
-
 	if ($user_info['user_id']<>$_user['user_id']) {
-		$newmail = api_mail_html(api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $user_info['email'], $email_subject, $email_body, api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail']);
+		@api_mail_html(api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $user_info['email'], $email_subject, $email_body, api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail']);
 	}
 }
 
@@ -3728,18 +3722,12 @@ function send_notifications($forum_id=0, $thread_id=0, $post_id=0) {
 		foreach ($users_to_be_notified as $key=>$value) {
 			if ($value['email'] <> $_user['email']) {
 				$email_body = api_get_person_name($value['firstname'], $value['lastname'], null, PERSON_NAME_EMAIL_ADDRESS)."\n\r";
-				$email_body .= '['.$_course['official_code'].'] - ['.$_course['name']."]<br>\n";
+				$email_body .= '['.$_course['official_code'].'] - ['.$_course['name']."]<br />\n";
 				$email_body .= get_lang('NewForumPost')."\n";
-				$email_body .= get_lang('YouWantedToStayInformed')."<br><br>\n";
+				$email_body .= get_lang('YouWantedToStayInformed')."<br /><br />\n";
 				$email_body .= get_lang('ThreadCanBeFoundHere')." : <a href=\"".$thread_link."\">".$thread_link."</a>\n";
 
-				//set the charset and use it for the encoding of the email - small fix, not really clean (should check the content encoding origin first)
-				//here we use the encoding used for the webpage where the text is encoded (ISO-8859-1 in this case)
-				if(empty($charset)) {
-					$charset='ISO-8859-1';
-				}
-
-				$newmail = api_mail_html(api_get_person_name($value['firstname'], $value['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $value['email'], $email_subject, $email_body, api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail']);
+				@api_mail_html(api_get_person_name($value['firstname'], $value['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $value['email'], $email_subject, $email_body, api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail']);
 			}
 		}
 	}

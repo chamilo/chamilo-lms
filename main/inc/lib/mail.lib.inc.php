@@ -57,8 +57,8 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
 	}
 	else
 	{
-		$mail->From 		= $platform_email['SMTP_FROM_EMAIL'];
-		$mail->Sender 	= $platform_email['SMTP_FROM_EMAIL'];
+		$mail->From         = $platform_email['SMTP_FROM_EMAIL'];
+		$mail->Sender       = $platform_email['SMTP_FROM_EMAIL'];
 		//$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; //Disposition-Notification
 	}
 
@@ -72,6 +72,7 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
 	}
 	$mail->Subject = $subject;
 	$mail->Body    = $message;
+
 	//only valid address
 	if(eregi( $regexp, $recipient_email ))
 	{
@@ -149,8 +150,8 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
 	}
 	else
 	{
-		$mail->From 		= $platform_email['SMTP_FROM_EMAIL'];
-		$mail->Sender 	= $platform_email['SMTP_FROM_EMAIL'];
+		$mail->From         = $platform_email['SMTP_FROM_EMAIL'];
+		$mail->Sender       = $platform_email['SMTP_FROM_EMAIL'];
 		//$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; //Disposition-Notification
 	}
 

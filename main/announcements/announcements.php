@@ -46,8 +46,8 @@ api_protect_course_script();
 -----------------------------------------------------------
 */
 // Configuration settings
-$display_announcement_list = true;
-$display_form             = false;
+$display_announcement_list	 = true;
+$display_form				 = false;
 $display_title_list 		 = true;
 
 // Maximum title messages to display
@@ -124,7 +124,6 @@ $lib = api_get_path(LIBRARY_PATH); //avoid useless function calls
 require_once($lib.'groupmanager.lib.php');
 require_once('announcements.inc.php');
 require_once($lib.'mail.lib.inc.php');
-require_once(api_get_path(INCLUDE_PATH).'conf/mail.conf.php');
 require_once($lib.'debug.lib.inc.php');
 require_once($lib.'tracking.lib.php');
 require_once($lib.'fckeditor/fckeditor.php');
@@ -140,20 +139,17 @@ $safe_newContent = $_POST['newContent'];
 
 if (!empty($_POST['To']))
 {
-	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 		api_not_allowed();
 	}
 	$display_form = true;
 
-	$form_elements= array ('emailTitle'=>$safe_emailTitle, 'newContent'=>$safe_newContent, 'id'=>Security::remove_XSS($_POST['id']), 'emailoption'=>Security::remove_XSS($_POST['email_ann']));
-    $_SESSION['formelements']=$form_elements;
+	$form_elements = array ('emailTitle'=>$safe_emailTitle, 'newContent'=>$safe_newContent, 'id'=>Security::remove_XSS($_POST['id']), 'emailoption'=>Security::remove_XSS($_POST['email_ann']));
+    $_SESSION['formelements'] = $form_elements;
 
     $form_elements            	= $_SESSION['formelements'];
-
 	$title_to_modify            = $form_elements["emailTitle"];
-
 	$content_to_modify          = $form_elements["newContent"];
-
 	$announcement_to_modify     = $form_elements["id"];
 }
 
@@ -166,16 +162,16 @@ if (!empty($_POST['To']))
 $setting_select_groupusers = true;
 if (empty($_POST['To']) and !$_SESSION['select_groupusers'])
 {
-	$_SESSION['select_groupusers']="hide";
+	$_SESSION['select_groupusers'] = "hide";
 }
 $select_groupusers_status=$_SESSION['select_groupusers'];
 if (!empty($_POST['To']) and ($select_groupusers_status=="hide"))
 {
-	$_SESSION['select_groupusers']="show";
+	$_SESSION['select_groupusers'] = "show";
 }
 if (!empty($_POST['To']) and ($select_groupusers_status=="show"))
 {
-	$_SESSION['select_groupusers']="hide";
+	$_SESSION['select_groupusers'] = "hide";
 }
 
 /*
@@ -187,7 +183,7 @@ if (!empty($_POST['To']) and ($select_groupusers_status=="show"))
 // display the form
 if (((!empty($_GET['action']) && $_GET['action'] == 'add') && $_GET['origin'] == "") || (!empty($_GET['action']) && $_GET['action'] == 'edit') || !empty($_POST['To']))
 {
-	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 		api_not_allowed();
 	}
 	$display_form = true;
@@ -341,10 +337,10 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	// change visibility -> studentview -> course manager view
 	if (!isset($_GET['isStudentView']) || $_GET['isStudentView']!='false') {
 		if (isset($_GET['id']) AND $_GET['id'] AND isset($_GET['action']) AND $_GET['action']=="showhide") {
-			if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+			if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 				api_not_allowed();
 			}
-			
+
 			$id=intval($_GET['id']);
 			if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
 				if ($ctok == $_GET['sec_token']) {
@@ -363,10 +359,10 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	if (!empty($_GET['action']) AND $_GET['action']=='delete' AND isset($_GET['id'])) {
 		//Database::query("DELETE FROM  $tbl_announcement WHERE id='$delete'",__FILE__,__LINE__);
 		$id=intval(addslashes($_GET['id']));
-		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
 		}
-				
+
 		if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
 
 			// tooledit : visibility = 2 : only visibile for platform administrator
@@ -411,10 +407,10 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	-----------------------------------------------------------
 	*/
 	if (!empty($_GET['action']) and $_GET['action']=='modify' AND isset($_GET['id'])) {
-		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
 		}
-			
+
 		$display_form = true;
 
 		// RETRIEVE THE CONTENT OF THE ANNOUNCEMENT TO MODIFY
@@ -520,7 +516,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 	$emailTitle=(!empty($_POST['emailTitle'])?$safe_emailTitle:'');
 	$newContent=(!empty($_POST['newContent'])?$safe_newContent:'');
-	
+
 	$submitAnnouncement=isset($_POST['submitAnnouncement'])?$_POST['submitAnnouncement']:0;
 
 	$id = 0;
@@ -537,7 +533,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			// there is an Id => the announcement already exists => update mode
 			if ($ctok == $_POST['sec_token']) {
 				$file_comment = $_POST['file_comment'];
-				$file = $_FILES['user_upload'];		
+				$file = $_FILES['user_upload'];
 				$edit_id = edit_advalvas_item($id,$emailTitle,$newContent,$_POST['selectedform'],$file,$file_comment);
 				if (!$delete) {
 				    update_added_resources("Ad_Valvas", $id);
@@ -547,18 +543,18 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		} else {
 			//insert mode
 			if ($ctok == $_POST['sec_token']) {
-				
+
 				if (!$surveyid) {
 					$result = Database::query("SELECT MAX(display_order) FROM $tbl_announcement WHERE session_id=".intval($_SESSION['id_session'])." OR session_id=0",__FILE__,__LINE__);
 					list($orderMax) = Database::fetch_row($result);
 					$order = $orderMax + 1;
 					$file = $_FILES['user_upload'];
 					$file_comment = $_POST['file_comment'];
-					if (!empty($_SESSION['toolgroup'])) {						
+					if (!empty($_SESSION['toolgroup'])) {
 						$insert_id=store_advalvas_group_item($safe_emailTitle,$safe_newContent,$order,array('GROUP:'.$_SESSION['toolgroup']),$_POST['selectedform'],$file,$file_comment);
 					} else {
 						$insert_id=store_advalvas_item($safe_emailTitle,$safe_newContent,$order,$_POST['selectedform'],$file,$file_comment);
-					}					
+					}
 				    store_resources($_SESSION['source_type'],$insert_id);
 				    $_SESSION['select_groupusers']="hide";
 				    $message = get_lang('AnnouncementAdded');
@@ -696,7 +692,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 						    */
 
 							$emailSubject = "[" . $_course['official_code'] . "] " . $emailTitle;
-							
+
 	                        if ($surveyid) {
 	                        	$newContentone=str_replace("#page#","choose_language.php",$newContent);
 								$newContenttwo=str_replace("#temp#",$template,$newContentone);
@@ -722,16 +718,16 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	                            $mail_body .= api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS)." \n";
 	                            $mail_body .= "<br /> \n<a href=\"".api_get_path(WEB_COURSE_PATH).$_course['id']."\">";
 	                            $mail_body .= $_course['official_code'].' '.$_course['name'] . "</a>";
-	                            
+
 								//set the charset and use it for the encoding of the email - small fix, not really clean (should check the content encoding origin first)
 								//here we use the encoding used for the webpage where the text is encoded (ISO-8859-1 in this case)
-								
-								$recipient_name	= api_get_person_name($myrow["lastname"], $myrow["firstname"], null, PERSON_NAME_EMAIL_ADDRESS);
+
+								$recipient_name	= api_get_person_name($myrow["firstname"], $myrow["lastname"], null, PERSON_NAME_EMAIL_ADDRESS);
 		                        $mailid = $myrow["email"];
-		                        
-		                        $sender_name = api_get_person_name($_SESSION['_user']['lastName'], $_SESSION['_user']['firstName'], null, PERSON_NAME_EMAIL_ADDRESS);
+
+		                        $sender_name = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
 		                        $sender_email = $_SESSION['_user']['mail'];
-		                        
+
 								$data_file = array();
 								if (!empty($_FILES['user_upload'])) {
 									$courseDir = $_course['path'].'/upload/announcements/';
@@ -743,7 +739,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 									$data_file = array('path' => $sys_course_path.$courseDir.$row['path'],
 													   'filename' => $row['filename']);
 								}
-		                        
+
 								api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file);
 	                        }
 
@@ -973,9 +969,7 @@ if (!$surveyid) {
 			}
 			//validation when belongs to a session
 			$session_img = api_get_session_image($myrow['session_id'], $_user['status']);
-			
-			
-			
+
 			echo "\t\t\t\t\t\t".Display::return_icon('lp_announcement.png', api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow['end_date']))), array('align' => 'absmiddle', 'Width' => '10', 'Height' => '10'))."  <a style=\"text-decoration:none\" href=\"announcements.php?".api_get_cidreq()."#".$myrow['id']."\" ".$class.">" . api_trunc_str($title, $length) . "</a>\n" . $session_img;
 			echo "\t\t\t\t\t</td>\n\t\t\t\t</tr>\n";
 		}
@@ -1011,8 +1005,8 @@ if (!empty($error_message)) {
 
 if ($display_form == true) {
 
-	$content_to_modify=stripslashes($content_to_modify);
-	$title_to_modify=stripslashes($title_to_modify);
+	$content_to_modify = stripslashes($content_to_modify);
+	$title_to_modify = stripslashes($title_to_modify);
 
 	// DISPLAY ADD ANNOUNCEMENT COMMAND
 	echo '<form method="post" name="f1" enctype = "multipart/form-data" action="'.api_get_self().'?publish_survey='.Security::remove_XSS($surveyid).'&id='.Security::remove_XSS($_GET['id']).'&db_name='.$db_name.'&cidReq='.Security::remove_XSS($_GET['cidReq']).'" style="margin:0px;">'."\n";
@@ -1051,7 +1045,7 @@ if ($display_form == true) {
 			// setting the variables for the form elements: the message has to be sent by email
 			$email_ann = '1';
 			// setting the variables for the form elements: the title of the email
-			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('siteName'),' > ',$_course['name']);				
+			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('siteName'),' > ',$_course['name']);
 			// setting the variables for the form elements: the message of the email
 			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'),' > ',$_course['name'],$since);
 			// when we want to remind the users who have never been active then we have a different subject and content for the announcement
@@ -1309,7 +1303,7 @@ if ($display_announcement_list && !$surveyid) {
 					WHERE announcement.id = toolitemproperties.ref
 					AND toolitemproperties.tool='announcement'
 					$cond_user_id
-					$condition_session		
+					$condition_session
 					AND toolitemproperties.visibility='1'
 					ORDER BY display_order DESC";
 			} else {
@@ -1478,17 +1472,17 @@ if ($display_announcement_list && !$surveyid) {
 					echo	"<a href=\"".api_get_self()."?".api_get_cidreq()."&down=".$myrow["id"]."&sec_token=".$stok."\">".
 							Display::return_icon('down.gif', get_lang('Down'))."</a>";
 				}
-				
+
 				//delete attachment file
 				if($_GET['action'] == 'delete') {
 					$id = $_GET['id_attach'];
 					delete_announcement_attachment_file($id);
 				}
-					
+
 				// show attachment list
 				$attachment_list = array();
-				$attachment_list = get_attachment($myrow['id']);				
-								
+				$attachment_list = get_attachment($myrow['id']);
+
 				if (count($attachment_list)>0) {
 					$realname=$attachment_list['path'];
 					$user_filename=$attachment_list['filename'];
@@ -1499,22 +1493,22 @@ if ($display_announcement_list && !$surveyid) {
 					echo '<a href="'.$full_file_name.'';
 					echo ' "> '.$user_filename.' </a>';
 					echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
-					
+
 					if (api_is_allowed_to_edit()) {
 						echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete&id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';
-					}					
-				}					
-	    		
-																	
+					}
+				}
+
+
 				echo "</td>\n</tr>\n";
 
 				$iterator ++;
-			} else { // end of is_allowed_to_edit 
+			} else { // end of is_allowed_to_edit
 				//students view
 				// show attachment list
 				$attachment_list = array();
-				$attachment_list = get_attachment($myrow['id']);				
-								
+				$attachment_list = get_attachment($myrow['id']);
+
 				if (count($attachment_list)>0) {
 					$realname=$attachment_list['path'];
 					$user_filename=$attachment_list['filename'];
@@ -1524,8 +1518,8 @@ if ($display_announcement_list && !$surveyid) {
 					echo Display::return_icon('attachment.gif',get_lang('Attachment'));
 					echo '<a href="'.$full_file_name.'';
 					echo ' "> '.$user_filename.' </a>';
-					echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';					
-				}	
+					echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
+				}
 			}
 
 			echo "<tr><td width=\"100%\" colspan=\"3\"><a href=\"#top\">".Display::return_icon('top.gif', get_lang('Top'))."</a></td></tr>";

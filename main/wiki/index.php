@@ -54,8 +54,7 @@ require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'text.lib.php';
 require_once api_get_path(LIBRARY_PATH).'security.lib.php';
-require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
-require_once api_get_path(INCLUDE_PATH).'conf/mail.conf.php';
+require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once 'wiki.inc.php';
@@ -80,8 +79,8 @@ function setFocus(){
 	}
 	$(document).ready(function () {
 	  setFocus();
-	});				
-		
+	});
+
 </script>';
 
 
@@ -442,10 +441,10 @@ echo '<td>';
 		if (check_addnewpagelock()==0)
 		{
 			$protect_addnewpage= '<img src="../img/wiki/lockadd.gif" title="'.get_lang('AddOptionProtected').'" alt="'.get_lang('AddOptionProtected').'" width="8" height="8" />';
-			$lock_unlock_addnew='unlockaddnew';						
+			$lock_unlock_addnew='unlockaddnew';
 		}
 		else
-		{					
+		{
 			$protect_addnewpage= '<img src="../img/wiki/unlockadd.gif" title="'.get_lang('AddOptionUnprotected').'" alt="'.get_lang('AddOptionUnprotected').'" width="8" height="8" />';
 			$lock_unlock_addnew='lockaddnew';
 		}
@@ -520,11 +519,11 @@ if ($_POST['export2DOC'])
 	$contentDOC=$_POST['contentDOC'];
 	$groupIdDOC=(int)$_SESSION['_gid'];
 	$export2doc = export2doc($titleDOC,$contentDOC,$groupIdDOC);
-	
+
 	if ($export2doc) {
 		Display::display_normal_message(get_lang('ThePageHasBeenExportedToDocArea'));
 	}
-	
+
 }
 
 if ($_GET['action']=='more')
@@ -1505,11 +1504,11 @@ if ($_GET['action']=='edit')
 				}
 				//form
 				echo '<form name="form1" method="post" action="'.api_get_self().'?action=showpage&amp;title='.$page.'&group_id='.Security::remove_XSS($_GET['group_id']).'">';
-				
-				
+
+
 				echo '<div id="wikititle" >';
 				echo '<div style="width:70%;float:left;">'.$icon_assignment.str_repeat('&nbsp;',3).$title.'</div>';
-				
+
 				if((api_is_allowed_to_edit(false,true) || api_is_platform_admin()) && $row['reflink']!='index')
 				{
 
@@ -1917,7 +1916,7 @@ if ($_GET['action']=='recentchanges')
 		if (check_notify_all()==1)
 		{
 			$notify_all= '<img src="../img/wiki/send_mail_checked.gif" title="'.get_lang('FullNotifyByEmail').'" alt="'.get_lang('FullNotifyByEmail').'" style="vertical-align:middle;" />'.get_lang('NotNotifyChanges');
-			$lock_unlock_notify_all='unlocknotifyall';			
+			$lock_unlock_notify_all='unlocknotifyall';
 		}
 		else
 		{
@@ -1927,8 +1926,8 @@ if ($_GET['action']=='recentchanges')
 
 	}
 
-	echo '<div class="actions"><span style="float: right;">';	
-	echo '<a href="index.php?action=recentchanges&amp;actionpage='.$lock_unlock_notify_all.'&amp;title='.$page.'">'.$notify_all.'</a>';	
+	echo '<div class="actions"><span style="float: right;">';
+	echo '<a href="index.php?action=recentchanges&amp;actionpage='.$lock_unlock_notify_all.'&amp;title='.$page.'">'.$notify_all.'</a>';
 	echo '</span>'.get_lang('RecentChanges').'</div>';
 
 

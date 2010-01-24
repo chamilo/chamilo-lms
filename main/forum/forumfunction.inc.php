@@ -68,7 +68,6 @@
 */
 require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
-require_once(api_get_path(INCLUDE_PATH).'/conf/mail.conf.php');
 require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 get_notifications_of_user();
@@ -83,7 +82,7 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
 $("#forum_title").focus();
 $("#category_title").focus();
-$("#search_title").focus();				
+$("#search_title").focus();
 }
 $(document).ready(function () {
   setFocus();
@@ -2322,7 +2321,7 @@ function store_reply($values) {
 		if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit(null,true)) {
 			$message.='<br />'.get_lang('MessageHasToBeApproved').'<br />';
 		}
-				
+
 		$message.='<br />'.get_lang('ReturnTo').' <a href="viewforum.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&amp;gidReq='.$_SESSION['toolgroup'].'&origin='.$origin.'">'.get_lang('Forum').'</a><br />';
 		$message.=get_lang('ReturnTo').' <a href="viewthread.php?'.api_get_cidreq().'&forum='.$values['forum_id'].'&amp;thread='.$values['thread_id'].'&amp;gidReq='.$_SESSION['toolgroup'].'&origin='.$origin.'&amp;gradebook='.$gradebook.'">'.get_lang('Message').'</a>';
 
@@ -3959,8 +3958,8 @@ function get_thread_user_post($course_db, $thread_id, $user_id )
 		 				}
 			 			$hand_forums.= '</div>';
 		 			}
-		 			$i++;					
-	 			}	 				 			
+		 			$i++;
+	 			}
 				$forum_results .='<div id="social-forum">';
  				$forum_results .='<div class="clear"></div><br />';
  				$forum_results .='<div class="actions" style="margin-left:5px;margin-right:5px;">'.Display::return_icon('forum.gif',get_lang('Forum')).'&nbsp;'.$forum['forum_title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../forum/viewforum.php?cidReq='.$my_course_code.'&gidReq=&forum='.$forum['forum_id'].' " >'.get_lang('SeeForum').'</a></div></div>';
@@ -3968,7 +3967,7 @@ function get_thread_user_post($course_db, $thread_id, $user_id )
  				if ($post_counter > 0 ) {
 					$forum_results .=$hand_forums;
  				}
-				$forum_results .='</div>';				
+				$forum_results .='</div>';
  			}$j++;
  		}
  	}

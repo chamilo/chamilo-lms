@@ -33,7 +33,7 @@
 * - add link to 'root' category => category-less link is always visible.
 *
 * @author Patrick Cool, main author, completely rewritten
-* @author Rene Haentjens, added CSV file import (October 2004)
+* @author René Haentjens, added CSV file import (October 2004)
 * @package dokeos.link
 * @todo improve organisation, tables should come from database library
 ==============================================================================

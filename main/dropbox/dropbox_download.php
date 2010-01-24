@@ -215,7 +215,7 @@ else
 	Copyright (c) 2003 Ghent University (UGent)
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Jan Bols
-	Copyright (c) Rene Haentjens
+	Copyright (c) René Haentjens
 
 	For a full list of contributors, see "credits.txt".
 	The full license can be read in "license.txt".
@@ -313,7 +313,7 @@ else
  * @version 1.21
  * @copyright 2004-2005
  * @author Jan Bols <jan@ivpv.UGent.be>, main programmer
- * @author Ren� Haentjens <rene.haentjens@UGent.be>, several contributions  (see RH)
+ * @author René Haentjens <rene.haentjens@UGent.be>, several contributions  (see RH)
  * @author Roan Embrechts, virtual course support
  *
  * @package dokeos.dropbox

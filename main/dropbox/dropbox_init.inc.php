@@ -12,7 +12,7 @@
  * @version 1.31
  * @copyright 2004-2005
  * @author Jan Bols <jan@ivpv.UGent.be>, main programmer
- * @author Rene Haentjens, severalcontributions <rene.haentjens@UGent.be> (see RH)
+ * @author René Haentjens, severalcontributions <rene.haentjens@UGent.be> (see RH)
  * @author Roan Embrechts, virtual course support
  * @author Patrick Cool <patrick.cool@UGent.be>
  				Dokeos Config Settings (AWACS)
@@ -277,8 +277,8 @@ if((!$is_allowed_in_course || !$is_course_member) && !api_is_allowed_to_edit(nul
 	} else {
 		api_not_allowed();
 	}
-	exit();	
-}	
+	exit();
+}
 
 /*
 ==============================================================================

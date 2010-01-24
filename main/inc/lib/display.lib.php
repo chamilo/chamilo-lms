@@ -9,7 +9,7 @@
 	Copyright (c) Wolfgang Schneider
 	Copyright (c) Bert Vanderkimpen, Ghent University
 	Copyright (c) Bart Mollet, Hogeschool Gent
-	Copyright (c) Rene Haentjens, Ghent University
+	Copyright (c) René Haentjens, Ghent University
 	Copyright (c) Yannick Warnier, Dokeos S.A.
 	Copyright (c) Sandra Matthys, Hogeschool Gent
 	Copyright (c) Denes Nagy, Dokeos S.A.
@@ -270,7 +270,7 @@ class Display {
 	 * 					'per_page' = number of items to show per page
 	 * 					'page_nr' = The page to display
 	 * @param array $query_vars Additional variables to add in the query-string
-	 * @param string The style that the table will show. You can set 'table' or 'grid'  
+	 * @param string The style that the table will show. You can set 'table' or 'grid'
 	 * @author bart.mollet@hogent.be
 	 */
 	public static function display_sortable_table ($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $form_actions=array(), $style='table') {
@@ -289,14 +289,14 @@ class Display {
 					$table->set_header($index, $header_item[0], $header_item[1], $header_item[2], $header_item[3]);
 				}
 			}
-			$table->set_form_actions($form_actions);	
-			$table->display();			
+			$table->set_form_actions($form_actions);
+			$table->display();
 		} else {
-			$table->display_grid();	
-		}		
+			$table->display_grid();
+		}
 	}
 	/**
-	 * Shows a nice grid 
+	 * Shows a nice grid
 	 * @param string grid name (important to create css)
 	 * @param array header content
 	 * @param array array with the information to show
@@ -309,21 +309,21 @@ class Display {
 	 * @param array $query_vars Additional variables to add in the query-string
 	 * @param array $form actions Additional variables to add in the query-string
 	 * @param mixed An array with bool values to know which columns show. i.e: $vibility_options= array(true, false) we will only show the first column
-	 * 				Can be also only a bool value. TRUE: show all columns, FALSE: show nothing 
+	 * 				Can be also only a bool value. TRUE: show all columns, FALSE: show nothing
 	 */
-	 			
+
 	public static function display_sortable_grid ($name, $header, $content, $paging_options = array (), $query_vars = null, $form_actions=array(), $vibility_options = true) {
 		global $origin;
 		$column =  0;
-		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;		
-		$table = new SortableTableFromArray($content, $column, $default_items_per_page, $name);		
-		
+		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;
+		$table = new SortableTableFromArray($content, $column, $default_items_per_page, $name);
+
 		if (is_array($query_vars)) {
 			$table->set_additional_parameters($query_vars);
-		}		
-		echo $table->display_simple_grid($vibility_options, $paging_options['hide_navigation']);		
+		}
+		echo $table->display_simple_grid($vibility_options, $paging_options['hide_navigation']);
 	}
-	
+
 	/**
 	 * gets a nice grid in html string
 	 * @param string grid name (important to create css)
@@ -338,21 +338,21 @@ class Display {
 	 * @param array $query_vars Additional variables to add in the query-string
 	 * @param array $form actions Additional variables to add in the query-string
 	 * @param mixed An array with bool values to know which columns show. i.e: $vibility_options= array(true, false) we will only show the first column
-	 * 				Can be also only a bool value. TRUE: show all columns, FALSE: show nothing 
+	 * 				Can be also only a bool value. TRUE: show all columns, FALSE: show nothing
 	 * @param bool  true for sorting data or false otherwise
 	 * @return 	string   html grid
 	 */
 	public static function return_sortable_grid ($name, $header, $content, $paging_options = array (), $query_vars = null, $form_actions=array(), $vibility_options = true, $sort_data = true) {
 		global $origin;
 		$column =  0;
-		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;		
-		$table = new SortableTableFromArray($content, $column, $default_items_per_page, $name);		
-		
+		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;
+		$table = new SortableTableFromArray($content, $column, $default_items_per_page, $name);
+
 		if (is_array($query_vars)) {
 			$table->set_additional_parameters($query_vars);
-		}		
+		}
 		//var_dump($table->get_additional_url_paramstring());
-		return $table->display_simple_grid($vibility_options, $paging_options['hide_navigation'], $paging_options['per_page'], $sort_data);		
+		return $table->display_simple_grid($vibility_options, $paging_options['hide_navigation'], $paging_options['per_page'], $sort_data);
 	}
 
 	/**

@@ -8,7 +8,7 @@
 	Copyright (c) 2001 Universite catholique de Louvain (UCL)
 	Copyright (c) Olivier Brouckaert
 	Copyright (c) Roan Embrechts
-	Copyright (c) Rene Haentjens (RH) (update 2004/09/30)
+	Copyright (c) René Haentjens (RH) (update 2004/09/30)
 	Copyright (c) Bart Mollet, Hogeschool Gent
 
 	For a full list of contributors, see "credits.txt".
@@ -486,7 +486,7 @@ if($is_allowedToEdit)
 								copy(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css',$filepath.'css/frames.css');
 								$doc_id=add_document($_course,$dir.'css/frames.css','file',filesize($filepath.'css/frames.css'),'frames.css');
 								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'],null,null,null,null,$current_session_id);
-								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],null,null,null,null,$current_session_id);								
+								api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],null,null,null,null,$current_session_id);
 							}
 						}
 
@@ -623,7 +623,7 @@ $owner_id = Database::result($rs,0,'insert_user_id');
 
 
 if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_edit || GroupManager :: is_user_in_group($_user['user_id'],$_SESSION['_gid'] ))
-{  
+{
 	$get_cur_path=Security::remove_XSS($_GET['curdirpath']);
 	$get_file=Security::remove_XSS($_GET['file']);
 	$action =  api_get_self().'?sourceFile='.urlencode($file_name).'&curdirpath='.urlencode($get_cur_path).'&file='.urlencode($get_file).'&doc='.urlencode($doc);
@@ -707,8 +707,8 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 	/*
 	$form->addElement('html','<div id="frmModel" style="display:block; height:525px; width:240px; position:absolute; top:115px; left:1px;"></div>');
 	*/
-	
-	
+
+
 	$origin=Security::remove_XSS($_GET['origin']);
 	if ($origin=='slideshow') {
 		$slide_id=$_GET['origin_opt'];
@@ -723,8 +723,8 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 //for better navigation when a slide is been commented
 function nav_to_slideshow($slide_id)
 {
-		echo '<div class="actions">';		
-		echo '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ViewSlideshow')).get_lang('BackTo').' '.get_lang('ViewSlideshow').'</a>';		
+		echo '<div class="actions">';
+		echo '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ViewSlideshow')).get_lang('BackTo').' '.get_lang('ViewSlideshow').'</a>';
 		echo '</div>';
 }
 /*

@@ -39,9 +39,9 @@
  * @version 1.30
  * @copyright 2004
  * @author Jan Bols <jan@ivpv.UGent.be>
- * with contributions by Ren� Haentjens <rene.haentjens@UGent.be> (see RH)
-  *	@package dokeos.dropbox
- **/
+ * with contributions by René Haentjens <rene.haentjens@UGent.be> (see RH)
+ * @package dokeos.dropbox
+ */
 class Dropbox_Work {
 	public $id;
 	public $uploader_id;
@@ -57,8 +57,8 @@ class Dropbox_Work {
 	public $feedback_date, $feedback;  // RH: Feedback
 
 	/**
-		* Constructor calls private functions to create a new work or retreive an existing work from DB
-		* depending on the number of parameters
+	 * Constructor calls private functions to create a new work or retreive an existing work from DB
+	 * depending on the number of parameters
 	 *
 	 * @param unknown_type $arg1
 	 * @param unknown_type $arg2
@@ -67,7 +67,7 @@ class Dropbox_Work {
 	 * @param unknown_type $arg5
 	 * @param unknown_type $arg6
 	 * @return Dropbox_Work
-		*/
+	 */
 	function Dropbox_Work ($arg1, $arg2=null, $arg3=null, $arg4=null, $arg5=null, $arg6=null) {
 		if (func_num_args()>1)  {
 		    $this->_createNewWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6);
@@ -77,7 +77,7 @@ class Dropbox_Work {
 	}
 
 	/**
-		* private function creating a new work object
+	 * private function creating a new work object
 	 *
 	 * @param unknown_type $uploader_id
 	 * @param unknown_type $title
@@ -88,7 +88,7 @@ class Dropbox_Work {
 	 *
 	 * @todo 	$author was originally a field but this has now been replaced by the first and lastname of the uploader (to prevent anonymous uploads)
 	 * 			As a consequence this parameter can be removed
-		*/
+	 */
 	function _createNewWork ($uploader_id, $title, $description, $author, $filename, $filesize) {
 		global $_user;
 
@@ -159,10 +159,10 @@ class Dropbox_Work {
 	}
 
 	/**
-		* private function creating existing object by retreiving info from db
+	 * private function creating existing object by retreiving info from db
 	 *
 	 * @param unknown_type $id
-		*/
+	 */
 	function _createExistingWork ($id) {
 		global $_user;  // RH: Feedback
 
@@ -204,7 +204,7 @@ class Dropbox_Work {
 			$feedback2=array();
 			$sql_feedback = "SELECT * FROM ".dropbox_cnf("tbl_feedback")." WHERE file_id='".$id."' ORDER BY feedback_id ASC";
 			$result = Database::query($sql_feedback, __FILE__, __LINE__);
-			while ($row_feedback=Database::fetch_array($result)) {				
+			while ($row_feedback=Database::fetch_array($result)) {
 				$row_feedback['feedback'] = Security::remove_XSS($row_feedback['feedback']);
 				$feedback2[]=$row_feedback;
 			}
@@ -229,8 +229,8 @@ class Dropbox_SentWork extends Dropbox_Work
 	public $recipients;	//array of ["id"]["name"] arrays
 
 	/**
-		* Constructor calls private functions to create a new work or retreive an existing work from DB
-		* depending on the number of parameters
+	 * Constructor calls private functions to create a new work or retreive an existing work from DB
+	 * depending on the number of parameters
 	 *
 	 * @param unknown_type $arg1
 	 * @param unknown_type $arg2
@@ -240,7 +240,7 @@ class Dropbox_SentWork extends Dropbox_Work
 	 * @param unknown_type $arg6
 	 * @param unknown_type $arg7
 	 * @return Dropbox_SentWork
-		*/
+	 */
 	function Dropbox_SentWork ($arg1, $arg2=null, $arg3=null, $arg4=null, $arg5=null, $arg6=null, $arg7=null) {
 		if (func_num_args()>1) {
 		    $this->_createNewSentWork ($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7);
@@ -250,8 +250,8 @@ class Dropbox_SentWork extends Dropbox_Work
 	}
 
 	/**
-		* private function creating a new SentWork object
-		*
+	 * private function creating a new SentWork object
+	 *
 	 * @param unknown_type $uploader_id
 	 * @param unknown_type $title
 	 * @param unknown_type $description
@@ -259,7 +259,7 @@ class Dropbox_SentWork extends Dropbox_Work
 	 * @param unknown_type $filename
 	 * @param unknown_type $filesize
 	 * @param unknown_type $recipient_ids
-		*/
+	 */
 	function _createNewSentWork ($uploader_id, $title, $description, $author, $filename, $filesize, $recipient_ids) {
 		// Call constructor of Dropbox_Work object
 		$this->Dropbox_Work($uploader_id, $title, $description, $author, $filename, $filesize);
@@ -316,10 +316,10 @@ class Dropbox_SentWork extends Dropbox_Work
 	}
 
 	/**
-		* private function creating existing object by retreiving info from db
+	 * private function creating existing object by retreiving info from db
 	 *
 	 * @param unknown_type $id
-		*/
+	 */
 	function _createExistingSentWork  ($id) {
 		// Call constructor of Dropbox_Work object
 		$this->Dropbox_Work($id);
@@ -378,7 +378,7 @@ class Dropbox_Person
 
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id);
-			
+
 		$post_tbl = Database::get_course_table(TABLE_DROPBOX_POST);
 		$person_tbl = Database::get_course_table(TABLE_DROPBOX_PERSON);
 		$file_tbl = Database::get_course_table(TABLE_DROPBOX_FILE);
@@ -414,15 +414,15 @@ class Dropbox_Person
 	}
 
 	/**
-		* This private method is used by the usort function in  the
-		* orderSentWork and orderReceivedWork methods.
-		* It compares 2 work-objects by 1 of the properties of that object, dictated by the
+	 * This private method is used by the usort function in  the
+	 * orderSentWork and orderReceivedWork methods.
+	 * It compares 2 work-objects by 1 of the properties of that object, dictated by the
 	 * private property _orderBy
 	 *
 	 * @param unknown_type $a
 	 * @param unknown_type $b
 	 * @return -1, 0 or 1 dependent of the result of the comparison.
-		*/
+	 */
 	function _cmpWork ($a, $b) {
 		$sort = $this->_orderBy;
 		$aval = $a->$sort;
@@ -441,11 +441,11 @@ class Dropbox_Person
 	}
 
 	/**
-		* method that sorts the objects in the sentWork array, dependent on the $sort parameter.
-		* $sort can be lastDate, firstDate, title, size, ...
+	 * method that sorts the objects in the sentWork array, dependent on the $sort parameter.
+	 * $sort can be lastDate, firstDate, title, size, ...
 	 *
 	 * @param unknown_type $sort
-		*/
+	 */
 	function orderSentWork($sort) {
 		/*
 
@@ -477,10 +477,10 @@ class Dropbox_Person
 	}
 
 	/**
-		* method that sorts the objects in the receivedWork array, dependent on the $sort parameter.
-		* $sort can be lastDate, firstDate, title, size, ...
+	 * method that sorts the objects in the receivedWork array, dependent on the $sort parameter.
+	 * $sort can be lastDate, firstDate, title, size, ...
 	 * @param unknown_type $sort
-		*/
+	 */
 	function orderReceivedWork($sort) {
 		switch($sort) {
 			case 'lastDate':
@@ -509,9 +509,9 @@ class Dropbox_Person
 	}
 
 	/**
-		* Deletes all the received work of this person
+	 * Deletes all the received work of this person
 	 *
-		*/
+	 */
 	function deleteAllReceivedWork () {
 		//delete entries in person table concerning received works
 		foreach ($this->receivedWork as $w) {
@@ -521,9 +521,9 @@ class Dropbox_Person
 
 	}
 
-   /**
-    * Deletes all the received categories and work of this person
-	  */
+	/**
+	 * Deletes all the received categories and work of this person
+	 */
 	function deleteReceivedWorkFolder($id) {
 		$sql = "DELETE FROM ".dropbox_cnf("tbl_file")." where cat_id = '".$id."' ";
 		if(!Database::query($sql))		return false;
@@ -537,7 +537,7 @@ class Dropbox_Person
 	 * Deletes a received dropbox file of this person with id=$id
 	 *
 	 * @param integer $id
-		*/
+	 */
 	function deleteReceivedWork ($id) {
 		//id check
 		$found = false;
@@ -559,7 +559,7 @@ class Dropbox_Person
 
 	/**
 	 * Deletes all the sent dropbox files of this person
-		*/
+	 */
 	function deleteAllSentWork () {
 		//delete entries in person table concerning sent works
 		foreach ($this->sentWork as $w) {
@@ -573,7 +573,7 @@ class Dropbox_Person
 	 * Deletes a sent dropbox file of this person with id=$id
 	 *
 	 * @param unknown_type $id
-		*/
+	 */
 	function deleteSentWork ($id) {
 		//index check
 		$found = false;

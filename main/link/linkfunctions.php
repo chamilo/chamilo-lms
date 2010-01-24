@@ -35,7 +35,7 @@
 * - add link to 'root' category => category-less link is always visible.
 *
 *	@author Patrick Cool, complete remake (December 2003 - January 2004)
-*	@author Rene Haentjens, CSV file import (October 2004)
+*	@author René Haentjens, CSV file import (October 2004)
 *	@package dokeos.link
 ==============================================================================
 */
@@ -753,7 +753,7 @@ function movecatlink($catlinkid)
 
 /**
 * CSV file import functions
-* @author Rene Haentjens , Ghent University
+* @author René Haentjens , Ghent University
 */
 function get_cat($catname) // get category id (existing or make new)
 {
@@ -773,7 +773,7 @@ function get_cat($catname) // get category id (existing or make new)
 }
 /**
 * CSV file import functions
-* @author Rene Haentjens , Ghent University
+* @author René Haentjens , Ghent University
 */
 function put_link($url, $cat, $title, $description, $on_homepage, $hidden)
 {
@@ -815,7 +815,7 @@ function put_link($url, $cat, $title, $description, $on_homepage, $hidden)
 }
 /**
 * CSV file import functions
-* @author Rene Haentjens , Ghent University
+* @author René Haentjens , Ghent University
 */
 function import_link($linkdata) // url, category_id, title, description, ...
 {
@@ -851,7 +851,7 @@ function import_link($linkdata) // url, category_id, title, description, ...
 }
 /**
 * CSV file import functions
-* @author Rene Haentjens , Ghent University
+* @author René Haentjens , Ghent University
 */
 function import_csvfile()
 {

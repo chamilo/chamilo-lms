@@ -38,7 +38,7 @@ class TableSort
 	/**
 	 * Create a string to use in sorting.
 	 * @param string $txt The string to convert
-	 * @author Ren� Haentjens
+	 * @author René Haentjens
 	 */
 	function orderingstring($txt)
 	{

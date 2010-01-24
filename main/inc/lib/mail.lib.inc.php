@@ -1,11 +1,11 @@
 <?php //$id: $
-require_once(api_get_path(INCLUDE_PATH).'lib/phpmailer/class.phpmailer.php');
-require_once(api_get_path(INCLUDE_PATH).'/conf/mail.conf.dist.php');
+require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
+require_once api_get_path(CONFIGURATION_PATH).'mail.conf.php';
 
 //regular expression to test for valid email address
 // this should actually be revised to use the complete RFC3696 description
 // http://tools.ietf.org/html/rfc3696#section-3
-$regexp = "^[0-9a-z_\.+-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,3})$";
+$regexp_rfc3696 = "^[0-9a-z_\.+-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,3})$";
 
 /**
  * Sends email using the phpmailer class
@@ -23,7 +23,7 @@ $regexp = "^[0-9a-z_\.+-]+@(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z][0-9a-z-]*[0-9a
  */
 function api_mail($recipient_name, $recipient_email, $subject, $message, $sender_name="", $sender_email="", $extra_headers="") {
 
-	global $regexp;
+	global $regexp_rfc3696;
 	global $platform_email;
 
 	$mail = new PHPMailer();
@@ -74,7 +74,7 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
 	$mail->Body    = $message;
 
 	//only valid address
-	if(eregi( $regexp, $recipient_email ))
+	if(eregi( $regexp_rfc3696, $recipient_email ))
 	{
 		$mail->AddAddress($recipient_email, $recipient_name);
 	}
@@ -116,7 +116,7 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
  */
 function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name = "", $sender_email = "", $extra_headers = null, $data_file = array()) {
 
-	global $regexp;
+	global $regexp_rfc3696;
 	global $platform_email;
 
 	$mail = new PHPMailer();
@@ -176,13 +176,13 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
 	// only valid address
 	if(is_array($recipient_email)) {
 		foreach($recipient_email as $dest) {
-			if(eregi( $regexp, $dest )) {
+			if(eregi( $regexp_rfc3696, $dest )) {
 				$mail->AddAddress($dest, $recipient_name);
 				//$mail->AddAddress($dest, ($i>1?'':$recipient_name));
 			}
 		}
 	} else {
-		if(eregi( $regexp, $recipient_email ))
+		if(eregi( $regexp_rfc3696, $recipient_email ))
 		{
 			$mail->AddAddress($recipient_email, $recipient_name);
 		}

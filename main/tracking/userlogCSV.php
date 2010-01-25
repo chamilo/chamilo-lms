@@ -151,16 +151,11 @@ $tbl_learnpath_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
-// the variables for the days and the months
-// Defining the shorts for the days
-// TODO: The function myEnc() should be eliminated. The following arrays should be constructed using the correspondent API-functions in the internationalization library.
-$DaysShort = array (myEnc(get_lang("SundayShort")), myEnc(get_lang("MondayShort")), myEnc(get_lang("TuesdayShort")), myEnc(get_lang("WednesdayShort")), myEnc(get_lang("ThursdayShort")), myEnc(get_lang("FridayShort")), myEnc(get_lang("SaturdayShort")));
-// Defining the days of the week to allow translation of the days
-$DaysLong = array (myEnc(get_lang("SundayLong")), myEnc(get_lang("MondayLong")), myEnc(get_lang("TuesdayLong")), myEnc(get_lang("WednesdayLong")), myEnc(get_lang("ThursdayLong")), myEnc(get_lang("FridayLong")), myEnc(get_lang("SaturdayLong")));
-// Defining the months of the year to allow translation of the months
-$MonthsLong = array (myEnc(get_lang("JanuaryLong")), myEnc(get_lang("FebruaryLong")), myEnc(get_lang("MarchLong")), myEnc(get_lang("AprilLong")), myEnc(get_lang("MayLong")), myEnc(get_lang("JuneLong")), myEnc(get_lang("JulyLong")), myEnc(get_lang("AugustLong")), myEnc(get_lang("SeptemberLong")), myEnc(get_lang("OctoberLong")), myEnc(get_lang("NovemberLong")), myEnc(get_lang("DecemberLong")));
-// Defining the months of the year to allow translation of the months
-$MonthsShort = array (myEnc(get_lang("JanuaryShort")), myEnc(get_lang("FebruaryShort")), myEnc(get_lang("MarchShort")), myEnc(get_lang("AprilShort")), myEnc(get_lang("MayShort")), myEnc(get_lang("JuneShort")), myEnc(get_lang("JulyShort")), myEnc(get_lang("AugustShort")), myEnc(get_lang("SeptemberShort")), myEnc(get_lang("OctoberShort")), myEnc(get_lang("NovemberShort")), myEnc(get_lang("DecemberShort")));
+// The variables for the days and the months
+$DaysShort = api_get_week_days_short();
+$DaysLong = api_get_week_days_long();
+$MonthsLong = api_get_months_long();
+$MonthsShort = api_get_months_short();
 
 //$is_allowedToTrack = $is_groupTutor; // allowed to track only user of one group
 //$is_allowedToTrackEverybodyInCourse = $is_allowed[EDIT_RIGHT]; // allowed to track all students in course
@@ -175,18 +170,6 @@ $is_allowedToTrackEverybodyInCourse = $is_allowedToTrack; // allowed to track al
 */
 
 /**
- * Shortcut function to use htmlentities on many, many strings in this script
- * @param		string	String in a supposed encoding
- * @param		string	Supposed initial encoding (default: 'ISO-8859-15')
- * @return	string	HTML string (no encoding dependency)
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
- */
-function myEnc($isostring,$supposed_encoding='ISO-8859-15')
-{
-	return api_htmlentities($isostring,ENT_QUOTES,$supposed_encoding);
-}
-
-/**
 * Displays the number of logins every month for a specific user in a specific course.
 */
 function display_login_tracking_info($view, $user_id, $course_id)
@@ -197,7 +180,7 @@ function display_login_tracking_info($view, $user_id, $course_id)
 	if(substr($view,0,1) == '1')
 	{
 		$new_view = substr_replace($view,'0',0,1);
-		$title[1]= myEnc(get_lang('LoginsAndAccessTools')).myEnc(get_lang('LoginsDetails'));
+		$title[1]= get_lang('LoginsAndAccessTools').get_lang('LoginsDetails');
 
 		$sql = "SELECT UNIX_TIMESTAMP(`access_date`), count(`access_date`)
 					FROM $track_access_table
@@ -209,7 +192,7 @@ function display_login_tracking_info($view, $user_id, $course_id)
 		//$results = getManyResults2Col($sql);
 		$results = getManyResults3Col($sql);
 
-		$title_line= myEnc(get_lang('LoginsTitleMonthColumn')).';'.myEnc(get_lang('LoginsTitleCountColumn'))."\n";
+		$title_line= get_lang('LoginsTitleMonthColumn').';'.get_lang('LoginsTitleCountColumn')."\n";
 		$line='';
 		$total = 0;
 		if (is_array($results))
@@ -219,11 +202,11 @@ function display_login_tracking_info($view, $user_id, $course_id)
 				$line .= $results[$j][0].';'.$results[$j][1]."\n";
 				$total = $total + $results[$j][1];
 			}
-		$line .= myEnc(get_lang('Total')).";".$total."\n";
+		$line .= get_lang('Total').";".$total."\n";
 		}
 		else
 		{
-			$line= myEnc(get_lang('NoResult'))."</center></td>";
+			$line= get_lang('NoResult')."</center></td>";
 		}
 	}
 	else
@@ -244,7 +227,7 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 	{
 		$new_view = substr_replace($view,'0',1,1);
 
-		$title[1]= myEnc(get_lang('ExercicesDetails'));
+		$title[1]= get_lang('ExercicesDetails');
 		$line='';
 
 		$sql = "SELECT `ce`.`title`, `te`.`exe_result` , `te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`)
@@ -265,7 +248,7 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 		$NoHPTestRes = 0;
 
 		$results = getManyResultsXCol($sql, 4);
-		$title_line=myEnc(get_lang('ExercicesTitleExerciceColumn')).";".myEnc(get_lang('Date')).';'.myEnc(get_lang('ExercicesTitleScoreColumn'))."\n";
+		$title_line=get_lang('ExercicesTitleExerciceColumn').";".get_lang('Date').';'.get_lang('ExercicesTitleScoreColumn')."\n";
 
 		if (is_array($results))
 		{
@@ -330,9 +313,9 @@ function display_student_publications_tracking_info($view, $user_id, $course_id)
 				ORDER BY `u`.`upload_date` DESC";
 		$results = getManyResultsXCol($sql,4);
 
-		$title[1]=myEnc(get_lang('WorksDetails'));
+		$title[1]=get_lang('WorksDetails');
 		$line='';
-		$title_line=myEnc(get_lang('WorkTitle')).";".myEnc(get_lang('WorkAuthors')).";".myEnc(get_lang('Date'))."\n";
+		$title_line=get_lang('WorkTitle').";".get_lang('WorkAuthors').";".get_lang('Date')."\n";
 
 		if (is_array($results))
 		{
@@ -347,7 +330,7 @@ function display_student_publications_tracking_info($view, $user_id, $course_id)
 		}
 		else
 		{
-			$line= myEnc(get_lang('NoResult'));
+			$line= get_lang('NoResult');
 		}
 	}
 	else
@@ -367,7 +350,7 @@ function display_links_tracking_info($view, $user_id, $course_id)
 	if(substr($view,3,1) == '1')
 	{
 		$new_view = substr_replace($view,'0',3,1);
-		$title[1]=myEnc(get_lang('LinksDetails'));
+		$title[1]=get_lang('LinksDetails');
 		$sql = "SELECT `cl`.`title`, `cl`.`url`
 					FROM `$TABLETRACK_LINKS` AS sl, $TABLECOURSE_LINKS AS cl
 					WHERE `sl`.`links_link_id` = `cl`.`id`
@@ -375,7 +358,7 @@ function display_links_tracking_info($view, $user_id, $course_id)
 						AND `sl`.`links_user_id` = '$user_id'
 					GROUP BY `cl`.`title`, `cl`.`url`";
 		$results = getManyResults2Col($sql);
-		$title_line= myEnc(get_lang('LinksTitleLinkColumn'))."\n";
+		$title_line= get_lang('LinksTitleLinkColumn')."\n";
 		if (is_array($results))
 		{
 			for($j = 0 ; $j < count($results) ; $j++)
@@ -387,7 +370,7 @@ function display_links_tracking_info($view, $user_id, $course_id)
 		}
 		else
 		{
-			$line=myEnc(get_lang('NoResult'));
+			$line=get_lang('NoResult');
 		}
 	}
 	else
@@ -406,7 +389,7 @@ function display_document_tracking_info($view, $user_id, $course_id)
 	if(substr($view,4,1) == '1')
 	{
 		$new_view = substr_replace($view,'0',4,1);
-		$title[1]= myEnc(get_lang('DocumentsDetails'));
+		$title[1]= get_lang('DocumentsDetails');
 
 		$sql = "SELECT `down_doc_path`
 					FROM $downloads_table
@@ -415,7 +398,7 @@ function display_document_tracking_info($view, $user_id, $course_id)
 					GROUP BY `down_doc_path`";
 
 		$results = getManyResults1Col($sql);
-		$title_line = myEnc(get_lang('DocumentsTitleDocumentColumn'))."\n";
+		$title_line = get_lang('DocumentsTitleDocumentColumn')."\n";
 		if (is_array($results))
 		{
 			for($j = 0 ; $j < count($results) ; $j++)
@@ -426,7 +409,7 @@ function display_document_tracking_info($view, $user_id, $course_id)
 		}
 		else
 		{
-			$line=myEnc(get_lang('NoResult'));
+			$line=get_lang('NoResult');
 		}
 	}
 	else
@@ -568,7 +551,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 
 		if ($tracking_is_accepted)
 		{
-			$tracked_user_info['email'] == '' ? $mail_link = myEnc(get_lang('NoEmail')) : $mail_link = Display::encrypted_mailto_link($tracked_user_info['email']);
+			$tracked_user_info['email'] == '' ? $mail_link = get_lang('NoEmail') : $mail_link = Display::encrypted_mailto_link($tracked_user_info['email']);
 
 			if(!isset($view))
 			{
@@ -594,7 +577,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 		}
 		else
 		{
-			echo myEnc(get_lang('ErrorUserNotInGroup'));
+			echo get_lang('ErrorUserNotInGroup');
 		}
 
 
@@ -607,7 +590,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
         /*if(substr($view,5,1) == '1')
         {
             $new_view = substr_replace($view,'0',5,1);
-            $title[1]=myEnc(get_lang('ScormContentColumn'));
+            $title[1]=get_lang('ScormContentColumn');
 			$line ='';
             $sql = "SELECT id, name FROM $tbl_learnpath_main";
     		$result=Database::query($sql,__FILE__,__LINE__);
@@ -630,7 +613,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
    							$result3=Database::query($sql3,__FILE__,__LINE__);
    						    $ar3=Database::fetch_array($result3);
                             if (is_array($ar3)) {
-                                $title_line=myEnc(get_lang('ScormTitleColumn')).";".myEnc(get_lang('ScormStatusColumn')).";".myEnc(get_lang('ScormScoreColumn')).";".myEnc(get_lang('ScormTimeColumn'))."\n";
+                                $title_line=get_lang('ScormTitleColumn').";".get_lang('ScormStatusColumn').";".get_lang('ScormScoreColumn').";".get_lang('ScormTimeColumn')."\n";
 
        							while ($ar3['status'] != '') {
 									require_once('../newscorm/learnpathItem.class.php');
@@ -640,7 +623,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
        								$ar3=Database::fetch_array($result3);
        							}
                             } else {
-                                $line .= myEnc(get_lang('ScormNeverOpened'));
+                                $line .= get_lang('ScormNeverOpened');
                             }
    					}
 		    		$ar=Database::fetch_array($result);
@@ -653,7 +636,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
             }
 
 			if ($noscorm) {
-                $line=myEnc(get_lang('NoResult'));
+                $line=get_lang('NoResult');
 			}
          }
         else
@@ -701,7 +684,7 @@ else
 {
     if(!$_configuration['tracking_enabled'])
     {
-        echo myEnc(get_lang('TrackingDisabled'));
+        echo get_lang('TrackingDisabled');
     }
     else
     {

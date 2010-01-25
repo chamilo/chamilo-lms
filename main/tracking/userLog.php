@@ -160,16 +160,11 @@ $tbl_learnpath_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
-// the variables for the days and the months
-// Defining the shorts for the days
-// TODO: The function myEnc() should be eliminated. The following arrays should be constructed using the correspondent API-functions in the internationalization library.
-$DaysShort = array (myEnc(get_lang("SundayShort")), myEnc(get_lang("MondayShort")), myEnc(get_lang("TuesdayShort")), myEnc(get_lang("WednesdayShort")), myEnc(get_lang("ThursdayShort")), myEnc(get_lang("FridayShort")), myEnc(get_lang("SaturdayShort")));
-// Defining the days of the week to allow translation of the days
-$DaysLong = array (myEnc(get_lang("SundayLong")), myEnc(get_lang("MondayLong")), myEnc(get_lang("TuesdayLong")), myEnc(get_lang("WednesdayLong")), myEnc(get_lang("ThursdayLong")), myEnc(get_lang("FridayLong")), myEnc(get_lang("SaturdayLong")));
-// Defining the months of the year to allow translation of the months
-$MonthsLong = array (myEnc(get_lang("JanuaryLong")), myEnc(get_lang("FebruaryLong")), myEnc(get_lang("MarchLong")), myEnc(get_lang("AprilLong")), myEnc(get_lang("MayLong")), myEnc(get_lang("JuneLong")), myEnc(get_lang("JulyLong")), myEnc(get_lang("AugustLong")), myEnc(get_lang("SeptemberLong")), myEnc(get_lang("OctoberLong")), myEnc(get_lang("NovemberLong")), myEnc(get_lang("DecemberLong")));
-// Defining the months of the year to allow translation of the months
-$MonthsShort = array (myEnc(get_lang("JanuaryShort")), myEnc(get_lang("FebruaryShort")), myEnc(get_lang("MarchShort")), myEnc(get_lang("AprilShort")), myEnc(get_lang("MayShort")), myEnc(get_lang("JuneShort")), myEnc(get_lang("JulyShort")), myEnc(get_lang("AugustShort")), myEnc(get_lang("SeptemberShort")), myEnc(get_lang("OctoberShort")), myEnc(get_lang("NovemberShort")), myEnc(get_lang("DecemberShort")));
+// The variables for the days and the months
+$DaysShort = api_get_week_days_short();
+$DaysLong = api_get_week_days_long();
+$MonthsLong = api_get_months_long();
+$MonthsShort = api_get_months_short();
 
 //$is_allowedToTrack = $is_groupTutor; // allowed to track only user of one group
 //$is_allowedToTrackEverybodyInCourse = $is_allowed[EDIT_RIGHT]; // allowed to track all students in course
@@ -182,18 +177,6 @@ $is_allowedToTrackEverybodyInCourse = $is_allowedToTrack; // allowed to track al
 		FUNCTIONS
 ==============================================================================
 */
-
-/**
- * Shortcut function to use htmlentities on many, many strings in this script
- * @param		string	String in a supposed encoding
- * @param		string	Supposed initial encoding (default: 'ISO-8859-15')
- * @return	string	HTML string (no encoding dependency)
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
- */
-function myEnc($isostring,$supposed_encoding='ISO-8859-15')
-{
-	return api_htmlentities($isostring,ENT_QUOTES,$supposed_encoding);
-}
 
 /**
 * Displays the number of logins every month for a specific user in a specific course.
@@ -209,11 +192,11 @@ function display_login_tracking_info($view, $user_id, $course_id)
 			<tr>
 				<td valign='top'>
 				<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font>" .
-				"<b>".myEnc(get_lang('LoginsAndAccessTools'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=10000'>".get_lang('ExportAsCSV')."</a>]
+				"<b>".get_lang('LoginsAndAccessTools')."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".get_lang('Close')."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=10000'>".get_lang('ExportAsCSV')."</a>]
 				</td>
 			</tr>
 			";
-		echo "<tr><td style='padding-left : 40px;' valign='top'>".myEnc(get_lang('LoginsDetails'))."<br>";
+		echo "<tr><td style='padding-left : 40px;' valign='top'>".get_lang('LoginsDetails')."<br>";
 
 		$sql = "SELECT UNIX_TIMESTAMP(access_date), count(access_date)
 					FROM $track_access_table
@@ -229,10 +212,10 @@ function display_login_tracking_info($view, $user_id, $course_id)
 		echo "<table cellpadding='2' cellspacing='1' border='0' align=center>";
 		echo "<tr>
 				<td class='secLine'>
-				".myEnc(get_lang('LoginsTitleMonthColumn'))."
+				".get_lang('LoginsTitleMonthColumn')."
 				</td>
 				<td class='secLine'>
-				".myEnc(get_lang('LoginsTitleCountColumn'))."
+				".get_lang('LoginsTitleCountColumn')."
 				</td>
 			</tr>";
 		$total = 0;
@@ -246,12 +229,12 @@ function display_login_tracking_info($view, $user_id, $course_id)
 				$total = $total + $results[$j][1];
 			}
 			echo "<tr>";
-			echo "<td>".myEnc(get_lang('Total'))."</td>";
+			echo "<td>".get_lang('Total')."</td>";
 			echo "<td align='right' class='content'>".$total."</td>";
 			echo"</tr>";
 		} else {
 			echo "<tr>";
-			echo "<td colspan='2'><center>".myEnc(get_lang('NoResult'))."</center></td>";
+			echo "<td colspan='2'><center>".get_lang('NoResult')."</center></td>";
 			echo"</tr>";
 		}
 		echo "</table>";
@@ -261,7 +244,7 @@ function display_login_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 				<td valign='top'>
-				+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".myEnc(get_lang('LoginsAndAccessTools'))."</a>
+				+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".get_lang('LoginsAndAccessTools')."</a>
 				</td>
 			</tr>
 		";
@@ -280,10 +263,10 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 		$new_view = substr_replace($view,'0',1,1);
 		echo "<tr>
 				<td valign='top'>
-					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('ExercicesResults'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=01000'>".get_lang('ExportAsCSV')."</a>]
+					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('ExercicesResults')."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".get_lang('Close')."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=01000'>".get_lang('ExportAsCSV')."</a>]
 				</td>
 			</tr>";
-		echo "<tr><td style='padding-left : 40px;' valign='top'>".myEnc(get_lang('ExercicesDetails'))."<br />";
+		echo "<tr><td style='padding-left : 40px;' valign='top'>".get_lang('ExercicesDetails')."<br />";
 
 		$sql = "SELECT ce.title, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date)
 			FROM $TABLECOURSE_EXERCICES AS ce , $TABLETRACK_EXERCICES AS te
@@ -308,13 +291,13 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr bgcolor='#E6E6E6'>
 				<td>
-				".myEnc(get_lang('ExercicesTitleExerciceColumn'))."
+				".get_lang('ExercicesTitleExerciceColumn')."
 				</td>
 				<td>
-				".myEnc(get_lang('Date'))."
+				".get_lang('Date')."
 				</td>
 				<td>
-				".myEnc(get_lang('ExercicesTitleScoreColumn'))."
+				".get_lang('ExercicesTitleScoreColumn')."
 				</td>
 			</tr>";
 
@@ -352,7 +335,7 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 
 		if ($NoTestRes == 1 && $NoHPTestRes == 1) {
 			echo "<tr>\n";
-			echo "<td colspan='3'><center>".myEnc(get_lang('NoResult'))."</center></td>\n";
+			echo "<td colspan='3'><center>".get_lang('NoResult')."</center></td>\n";
 			echo "</tr>\n";
 		}
 		echo "</table>";
@@ -362,7 +345,7 @@ function display_exercise_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 				<td valign='top'>
-					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."' class='specialLink'>".myEnc(get_lang('ExercicesResults'))."</a>
+					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=$user_id&view=".$new_view."' class='specialLink'>".get_lang('ExercicesResults')."</a>
 				</td>
 			</tr>";
 	}
@@ -379,10 +362,10 @@ function display_student_publications_tracking_info($view, $user_id, $course_id)
 		$new_view = substr_replace($view,'0',2,1);
 		echo "<tr>
 					<td valign='top'>
-					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('WorkUploads'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=00100'>".get_lang('ExportAsCSV')."</a>]
+					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('WorkUploads')."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".get_lang('Close')."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=00100'>".get_lang('ExportAsCSV')."</a>]
 					</td>
 			</tr>";
-		echo "<tr><td style='padding-left : 40px;' valign='top'>".myEnc(get_lang('WorksDetails'))."<br>";
+		echo "<tr><td style='padding-left : 40px;' valign='top'>".get_lang('WorksDetails')."<br>";
 		$sql = "SELECT u.upload_date, w.title, w.author,w.url
 							FROM $TABLETRACK_UPLOADS u , $TABLECOURSE_WORK w
 							WHERE u.upload_work_id = w.id
@@ -394,13 +377,13 @@ function display_student_publications_tracking_info($view, $user_id, $course_id)
 		echo "<table cellpadding='2' cellspacing='1' border='0' align=center>";
 		echo "<tr>
 				<td class='secLine' width='40%'>
-				".myEnc(get_lang('WorkTitle'))."
+				".get_lang('WorkTitle')."
 				</td>
 				<td class='secLine' width='30%'>
-				".myEnc(get_lang('WorkAuthors'))."
+				".get_lang('WorkAuthors')."
 				</td>
 				<td class='secLine' width='30%'>
-				".myEnc(get_lang('Date'))."
+				".get_lang('Date')."
 				</td>
 			</tr>";
 		if (is_array($results)) {
@@ -418,7 +401,7 @@ function display_student_publications_tracking_info($view, $user_id, $course_id)
 			}
 		} else {
 			echo "<tr>";
-			echo "<td colspan='3'><center>".myEnc(get_lang('NoResult'))."</center></td>";
+			echo "<td colspan='3'><center>".get_lang('NoResult')."</center></td>";
 			echo"</tr>";
 		}
 		echo "</table>";
@@ -428,7 +411,7 @@ function display_student_publications_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 					<td valign='top'>
-					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".myEnc(get_lang('WorkUploads'))."</a>
+					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".get_lang('WorkUploads')."</a>
 					</td>
 			</tr>
 		";
@@ -447,11 +430,11 @@ function display_links_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 					<td valign='top'>
-					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('LinksAccess'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=00010'>".get_lang('ExportAsCSV')."</a>]
+					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('LinksAccess')."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".get_lang('Close')."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=00010'>".get_lang('ExportAsCSV')."</a>]
 					</td>
 			</tr>
 		";
-		echo "<tr><td style='padding-left : 40px;' valign='top'>".myEnc(get_lang('LinksDetails'))."<br>";
+		echo "<tr><td style='padding-left : 40px;' valign='top'>".get_lang('LinksDetails')."<br>";
 		$sql = "SELECT cl.title, cl.url
 					FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
 					WHERE sl.links_link_id = cl.id
@@ -463,7 +446,7 @@ function display_links_tracking_info($view, $user_id, $course_id)
 		echo "<table cellpadding='2' cellspacing='1' border='0' align=center>";
 		echo "<tr>
 				<td class='secLine'>
-				".myEnc(get_lang('LinksTitleLinkColumn'))."
+				".get_lang('LinksTitleLinkColumn')."
 				</td>
 			</tr>";
 		if (is_array($results)) {
@@ -474,7 +457,7 @@ function display_links_tracking_info($view, $user_id, $course_id)
 			}
 		} else {
 			echo "<tr>";
-			echo "<td ><center>".myEnc(get_lang('NoResult'))."</center></td>";
+			echo "<td ><center>".get_lang('NoResult')."</center></td>";
 			echo"</tr>";
 		}
 		echo "</table>";
@@ -484,7 +467,7 @@ function display_links_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 					<td valign='top'>
-					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".myEnc(get_lang('LinksAccess'))."</a>
+					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".get_lang('LinksAccess')."</a>
 					</td>
 			</tr>
 		";
@@ -503,11 +486,11 @@ function display_document_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 					<td valign='top'>
-					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('DocumentsAccess'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=00001'>".get_lang('ExportAsCSV')."</a>]
+					<font color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('DocumentsAccess')."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."'>".get_lang('Close')."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=00001'>".get_lang('ExportAsCSV')."</a>]
 					</td>
 			</tr>
 		";
-		echo "<tr><td style='padding-left : 40px;' valign='top'>".myEnc(get_lang('DocumentsDetails'))."<br>";
+		echo "<tr><td style='padding-left : 40px;' valign='top'>".get_lang('DocumentsDetails')."<br>";
 
 		$sql = "SELECT down_doc_path
 					FROM $downloads_table
@@ -520,7 +503,7 @@ function display_document_tracking_info($view, $user_id, $course_id)
 		echo "<table cellpadding='2' cellspacing='1' border='0' align='center'>";
 		echo "<tr>
 				<td class='secLine'>
-				".myEnc(get_lang('DocumentsTitleDocumentColumn'))."
+				".get_lang('DocumentsTitleDocumentColumn')."
 				</td>
 			</tr>";
 		if (is_array($results)) {
@@ -531,7 +514,7 @@ function display_document_tracking_info($view, $user_id, $course_id)
 			}
 		} else {
 			echo "<tr>";
-			echo "<td><center>".myEnc(get_lang('NoResult'))."</center></td>";
+			echo "<td><center>".get_lang('NoResult')."</center></td>";
 			echo"</tr>";
 		}
 		echo "</table>";
@@ -541,7 +524,7 @@ function display_document_tracking_info($view, $user_id, $course_id)
 		echo "
 			<tr>
 					<td valign='top'>
-					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".myEnc(get_lang('DocumentsAccess'))."</a>
+					+<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?uInfo=".Security::remove_XSS($user_id)."&view=".Security::remove_XSS($new_view)."' class='specialLink'>".get_lang('DocumentsAccess')."</a>
 					</td>
 			</tr>
 		";
@@ -559,7 +542,7 @@ function display_document_tracking_info($view, $user_id, $course_id)
 	<?php echo $nameTools ?>
 </h3>
 <h4>
-	<?php echo myEnc(get_lang('StatsOfUser')); ?>
+	<?php echo get_lang('StatsOfUser'); ?>
 </h4>
 <table width="100%" cellpadding="2" cellspacing="3" border="0">
 <?php
@@ -572,7 +555,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 		*
 		***************************************************************************/
 
-		echo "<h4>".myEnc(get_lang('ListStudents'))."</h4>";
+		echo "<h4>".get_lang('ListStudents')."</h4>";
 		if( $is_allowedToTrackEverybodyInCourse ) {
 			// if user can track everybody : list user of course
 			if(api_get_setting('use_session_mode')) {
@@ -605,14 +588,14 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 							."<td align='left'>";
 
 			if ($previous >= 0) {
-					$navLink .= "<a href='".api_get_self()."?offset=$previous'>&lt;&lt; ".myEnc(get_lang('PreviousPage'))."</a>";
+					$navLink .= "<a href='".api_get_self()."?offset=$previous'>&lt;&lt; ".get_lang('PreviousPage')."</a>";
 			}
 
 			$navLink .= "</td>\n"
 					."<td align='right'>";
 
 			if ($next < $userGroupNb) {
-					$navLink .= "<a href='".api_get_self()."?offset=$next'>".myEnc(get_lang('NextPage'))." &gt;&gt;</a>";
+					$navLink .= "<a href='".api_get_self()."?offset=$next'>".get_lang('NextPage')." &gt;&gt;</a>";
 			}
 
 			$navLink .= "</td>\n"
@@ -644,7 +627,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 		$list_users = getManyResults3Col($sql);
 		echo 	"<table width='100%' cellpadding='2' cellspacing='1' border='0'>\n"
 					."<tr align='center' valign='top' bgcolor='#E6E6E6'>\n"
-					."<td align='left'>",myEnc(get_lang('UserName')),"</td>\n"
+					."<td align='left'>",get_lang('UserName'),"</td>\n"
 					."</tr>\n";
 		for($i = 0 ; $i < sizeof($list_users) ; $i++) {
 			echo    "<tr valign='top' align='center'>\n"
@@ -685,14 +668,14 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 		}
 
 		if ($tracking_is_accepted) {
-			$tracked_user_info['email'] == '' ? $mail_link = myEnc(get_lang('NoEmail')) : $mail_link = Display::encrypted_mailto_link($tracked_user_info['email']);
+			$tracked_user_info['email'] == '' ? $mail_link = get_lang('NoEmail') : $mail_link = Display::encrypted_mailto_link($tracked_user_info['email']);
 
 			echo "<tr><td>";
 			echo get_lang('informationsAbout').' :';
 			echo "<ul>\n"
-					."<li>".myEnc(get_lang('FirstName'))." : ".$tracked_user_info['firstname']."</li>\n"
-					."<li>".myEnc(get_lang('LastName'))." : ".$tracked_user_info['lastname']."</li>\n"
-					."<li>".myEnc(get_lang('Email'))." : ".$mail_link."</li>\n"
+					."<li>".get_lang('FirstName')." : ".$tracked_user_info['firstname']."</li>\n"
+					."<li>".get_lang('LastName')." : ".$tracked_user_info['lastname']."</li>\n"
+					."<li>".get_lang('Email')." : ".$mail_link."</li>\n"
 					."</ul>";
 			echo "</td></tr>\n";
 
@@ -700,9 +683,9 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 			// show none : number of 0 is equal to or bigger than number of categories
 			echo "<tr>
 					<td>
-					[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($uInfo)."&view=1111111'>".myEnc(get_lang('ShowAll'))."</a>]
-					[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($uInfo)."&view=0000000'>".myEnc(get_lang('ShowNone'))."</a>]".
-					//"||[<a href='".api_get_self()."'>".myEnc(get_lang('BackToList'))."</a>]".
+					[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($uInfo)."&view=1111111'>".get_lang('ShowAll')."</a>]
+					[<a href='".api_get_self()."?uInfo=".Security::remove_XSS($uInfo)."&view=0000000'>".get_lang('ShowNone')."</a>]".
+					//"||[<a href='".api_get_self()."'>".get_lang('BackToList')."</a>]".
 					"</td>
 				</tr>
 			";
@@ -725,7 +708,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 			//Documents downloaded
 			display_document_tracking_info($view, $uInfo, $_cid);
 		} else {
-			echo myEnc(get_lang('ErrorUserNotInGroup'));
+			echo get_lang('ErrorUserNotInGroup');
 		}
 
 
@@ -738,7 +721,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
             $new_view = substr_replace($view,'0',5,1);
             echo "<tr>
                         <td valign='top'>
-                        <font     color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".myEnc(get_lang('ScormAccess'))."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?view=".Security::remove_XSS($new_view)."&uInfo=".Security::remove_XSS($uInfo)."'>".myEnc(get_lang('Close'))."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=000001'>".get_lang('ExportAsCSV')."</a>]
+                        <font     color='#0000FF'>-&nbsp;&nbsp;&nbsp;</font><b>".get_lang('ScormAccess')."</b>&nbsp;&nbsp;&nbsp;[<a href='".api_get_self()."?view=".Security::remove_XSS($new_view)."&uInfo=".Security::remove_XSS($uInfo)."'>".get_lang('Close')."</a>]&nbsp;&nbsp;&nbsp;[<a href='userLogCSV.php?".api_get_cidreq()."&uInfo=".Security::remove_XSS($_GET['uInfo'])."&view=000001'>".get_lang('ExportAsCSV')."</a>]
                         </td>
                 </tr>";
 
@@ -749,7 +732,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 	    	echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
             echo "<table cellpadding='2' cellspacing='1' border='0' align='center'><tr>
     				                <td class='secLine'>
-    								&nbsp;".myEnc(get_lang('ScormContentColumn'))."&nbsp;
+    								&nbsp;".get_lang('ScormContentColumn')."&nbsp;
     				                </td>
     		</tr>";
             if (is_array($ar)) {
@@ -770,16 +753,16 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
                             if (is_array($ar3)) {
                                 echo "<tr><td>&nbsp;&nbsp;&nbsp;</td>
        				                <td class='secLine'>
-       				                &nbsp;".myEnc(get_lang('ScormTitleColumn'))."&nbsp;
+       				                &nbsp;".get_lang('ScormTitleColumn')."&nbsp;
        				                </td>
        				                <td class='secLine'>
-       				                &nbsp;".myEnc(get_lang('ScormStatusColumn'))."&nbsp;
+       				                &nbsp;".get_lang('ScormStatusColumn')."&nbsp;
        				                </td>
        				                <td class='secLine'>
-       				                &nbsp;".myEnc(get_lang('ScormScoreColumn'))."&nbsp;
+       				                &nbsp;".get_lang('ScormScoreColumn')."&nbsp;
        				                </td>
        				                <td class='secLine'>
-       				                &nbsp;".myEnc(get_lang('ScormTimeColumn'))."&nbsp;
+       				                &nbsp;".get_lang('ScormTimeColumn')."&nbsp;
        				                </td>
        					            </tr>";
        							while ($ar3['status'] != '') {
@@ -793,7 +776,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
        							}
                             } else {
                                 echo "<tr>";
-                                echo "<td colspan='3'><center>".myEnc(get_lang('ScormNeverOpened'))."</center></td>";
+                                echo "<td colspan='3'><center>".get_lang('ScormNeverOpened')."</center></td>";
                                 echo"</tr>";
                             }
    					}
@@ -805,7 +788,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 
 			if ($noscorm) {
                 echo "<tr>";
-                echo "<td colspan='3'><center>".myEnc(get_lang('NoResult'))."</center></td>";
+                echo "<td colspan='3'><center>".get_lang('NoResult')."</center></td>";
                 echo "</tr>";
 			}
             echo "</table>";
@@ -815,7 +798,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
             echo "
                 <tr>
                         <td valign='top'>
-                        +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?view=".Security::remove_XSS($new_view)."&uInfo=".Security::remove_XSS($uInfo)."' class='specialLink'>".myEnc(get_lang('ScormAccess'))."</a>
+                        +<font color='#0000FF'>&nbsp;&nbsp;</font><a href='".api_get_self()."?view=".Security::remove_XSS($new_view)."&uInfo=".Security::remove_XSS($uInfo)."' class='specialLink'>".get_lang('ScormAccess')."</a>
                         </td>
                 </tr>
             ";
@@ -826,7 +809,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 	// not allowed
     if(!$_configuration['tracking_enabled'])
     {
-        echo myEnc(get_lang('TrackingDisabled'));
+        echo get_lang('TrackingDisabled');
     } else {
         api_not_allowed();
     }

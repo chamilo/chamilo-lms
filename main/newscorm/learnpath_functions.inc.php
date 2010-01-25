@@ -1957,7 +1957,10 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 		case "Introduction_text" :
 			//1 Get the introduction text data from the database
 			$TBL_INTRO = Database :: get_course_tool_intro_table();
-			$result = Database::query("SELECT * FROM ".$TBL_INTRO." WHERE id=1");
+			// Modified by Ivan Tcholakov, 15-SEP-2008.
+			//$result = Database::query("SELECT * FROM ".$TBL_INTRO." WHERE id=1");
+			$result = Database::query("SELECT * FROM ".$TBL_INTRO." WHERE id='course_homepage'", __FILE__, __LINE__);
+			//
 			$myrow = Database::fetch_array($result);
 			$intro = $myrow["intro_text"];
 			//2 Write introduction text to the export string
@@ -2409,7 +2412,6 @@ function xmltagwrite($tagname, $which, $data, $linebreak = "yes")
  */
 function createimsmanifest($circle1_files, $learnpath_id)
 {
-	global $charset;
 	global $_course, $LPname, $expdir, $LPnamesafe;
 	//$tbl_learnpath_main, $tbl_learnpath_chapter, $tbl_learnpath_item,
 	$tbl_learnpath_main = Database :: get_course_table(TABLE_LEARNPATH_MAIN);
@@ -2425,8 +2427,7 @@ function createimsmanifest($circle1_files, $learnpath_id)
 
 	//1.2
 	//charset should be dependent on content
-	//$mycharset = 'ISO-8859-1';
-	$mycharset = $charset;
+	$mycharset = api_get_system_encoding();
 	$header = '<?xml version="1.0" encoding="'.$mycharset.'"?>'."\n<manifest identifier='".$LPnamesafe."' version='1.1'\n xmlns='http://www.imsproject.org/xsd/imscp_rootv1p1p2'\n xmlns:adlcp='http://www.adlnet.org/xsd/adlcp_rootv1p2'\n xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'\n xsi:schemaLocation='http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd\n http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd\n http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd'>\n";
 
 	$org .= xmltagwrite('metadata', 'open');

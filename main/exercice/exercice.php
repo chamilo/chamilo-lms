@@ -333,7 +333,7 @@ if ($show == 'result' && $_REQUEST['comments'] == 'update' && ($is_allowedToEdit
 	$headers .= "User-Agent: Dokeos/1.6";
 	$headers .= "Content-Transfer-Encoding: 7bit";
 	$headers .= 'From: ' . $from_name . ' <' . $from . '>' . "\r\n";
-	$headers = "From:$from_name\r\nReply-to: $to\r\nContent-type: text/html; charset=" . ($charset ? $charset : 'ISO-8859-15');
+	$headers = "From:$from_name\r\nReply-to: $to";
 	//mail($emailid, $subject, $mess,$headers);
 
 	@api_mail_html($emailid, $emailid, $subject, $mess, $from_name, $from);

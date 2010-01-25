@@ -40,7 +40,7 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqu
 
 if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/glossary.js" type="text/javascript" language="javascript"></script>'; //Glossary
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>'; 
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
 }
 //This library is necessary for the time control feature
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.epiclock.min.js" type="text/javascript" language="javascript"></script>'; //jQuery
@@ -50,7 +50,7 @@ if (!ereg("MSIE",$_SERVER["HTTP_USER_AGENT"])) {
     $(document).ready( function(){
         $('.rounded').corners();
         $('.exercise_options').corners();
-    });</script>";	
+    });</script>";
 }
 /* ------------	ACCESS RIGHTS ------------ */
 // notice for unauthorized people.
@@ -93,7 +93,7 @@ if (empty ($exerciseType)) {
     $exerciseType = $_REQUEST['exerciseType'];
 }
 if (empty ($exerciseId)) {
-    $exerciseId = Database::escape_string(intval($_REQUEST['exerciseId']));	
+    $exerciseId = Database::escape_string(intval($_REQUEST['exerciseId']));
 }
 if (empty ($choice)) {
     $choice = $_REQUEST['choice'];
@@ -189,7 +189,7 @@ $exerciseFeedbackType = $exercise_row['feedback_type'];
  * if the expired time is major that zero(0) then
  * the expired time is compute on this time
  */
- 
+
 //Get the expired time of the current exercice in track_e_exercices
 $total_minutes = $exercise_row["expired_time"];
 
@@ -207,30 +207,30 @@ if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') {
         'exe_cours_id = '."'".api_get_course_id()."'".' AND ' .
         'status = '."'incomplete'".' AND '.
         'session_id = '."'".api_get_session_id()."'";
-        
+
         $sql_track = 'SELECT exe_id,expired_time_control FROM '.$stat_table.$condition;
         $rs_sql = Database::query($sql_track,__FILE__,__LINE__);
         $exists_into_database = Database::num_rows($rs_sql);
         $track_exercice_row = Database::fetch_array($rs_sql);
         $expired_time_of_this_attempt = $track_exercice_row['expired_time_control'];
-        
+
         //Get the last attempt of an exercice
         $sql_track_attempt = 'SELECT max(tms) as last_attempt_date FROM '.$exercice_attemp_table.' WHERE exe_id="'.$track_exercice_row['exe_id'].'"';
         $rs_last_attempt = Database::query($sql_track_attempt,__FILE__,__LINE__);
         $row_last_attempt = Database::fetch_array($rs_last_attempt);
         $my_last_attempt_date = $row_last_attempt['last_attempt_date'];//Get the date of last attempt
         $date_of_last_attempt = $my_last_attempt_date;// Necessary for to change the last attempt
-        
+
         //change the date format
         $my_last_attempt_date = strtotime($my_last_attempt_date);
         $expired_time_of_this_attempt = strtotime($expired_time_of_this_attempt);
-    
+
         //New expired time - it is due to the possible closure of session
         $new_expired_time_in_seconds = $expired_time_of_this_attempt - $my_last_attempt_date;
 
         if ($exists_into_database == 1) {
             $expected_time       = $current_timestamp + $new_expired_time_in_seconds;
-            
+
             $plugin_expired_time = date('M d, Y H:i:s', $expected_time);
             $clock_expired_time  = date('Y-m-d H:i:s' , $expected_time);
             $new_last_attempt    = date('Y-m-d H:i:s' , $current_timestamp);
@@ -243,20 +243,20 @@ if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') {
             $sql_track_e_exe = "UPDATE $exercice_attemp_table SET tms = '".$new_last_attempt."' WHERE exe_id = '".$track_exercice_row['exe_id']."' and tms = '".$date_of_last_attempt."' ";
             Database::query($sql_track_e_exe,__FILE__,__LINE__);
 
-            //Sessions  that contain the expired time				
+            //Sessions  that contain the expired time
             $_SESSION['expired_time'] = $clock_expired_time;
-            $_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);		
+            $_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);
         } else {
             $expected_time = $current_timestamp + $total_seconds;
-            
+
             $plugin_expired_time = date('M d, Y H:i:s',$expected_time);
             $clock_expired_time = date('Y-m-d H:i:s',$expected_time);
 
-            //Sessions  that contain the expired time	
+            //Sessions  that contain the expired time
             $_SESSION['expired_time'] = $clock_expired_time;
-            $_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);		
+            $_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);
         }
-    
+
     } else {
         $plugin_expired_time = $_SESSION['end_expired_time'];
     }
@@ -268,7 +268,7 @@ if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') {
  */
 
 //Disable for learning path
-if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') { //Sends the exercice form when the expired time is finished 
+if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') { //Sends the exercice form when the expired time is finished
     $htmlHeadXtra[] = "<script type=\"text/javascript\">
     $(document).ready(function(){
       function onExpiredTimeExercise() {
@@ -282,10 +282,10 @@ if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') { //Sends the 
          format: 'x{ : } i{ : } s{}',
          target: '".$plugin_expired_time."',
          onTimer: function(){ onExpiredTimeExercise() }
-       }).clocks(EC_RUN);  
-       $('.rounded').corners('transparent');  
-       $('#submit_save').click(function () { 
-      });      
+       }).clocks(EC_RUN);
+       $('.rounded').corners('transparent');
+       $('#submit_save').click(function () {
+      });
     });
     </script>";
 }
@@ -376,7 +376,7 @@ if ($formSent) {
                     $counter = 0;
                     $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
                     $table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
-                    
+
                     //foreach($questionList as $questionId)
                     if (true) {
                         $exeId = $exe_id;
@@ -425,15 +425,15 @@ if ($formSent) {
                                     break;
                                     // for multiple answers
                                 case MULTIPLE_ANSWER :
-                                    $studentChoice=$choice[$numAnswer];													
+                                    $studentChoice=$choice[$numAnswer];
                                     if ($studentChoice) {
                                         $questionScore+=$answerWeighting;
                                         $totalScore+=$answerWeighting;
-                                    }																		
+                                    }
                                     break;
                                 case MULTIPLE_ANSWER_COMBINATION:
-                                    $studentChoice=$choice[$numAnswer];									
-                                                                            
+                                    $studentChoice=$choice[$numAnswer];
+
                                     if ($answerCorrect == 1) {
                                         if ($studentChoice) {
                                             $real_answers[$answerId] = true;
@@ -447,13 +447,13 @@ if ($formSent) {
                                             $real_answers[$answerId] = true;
                                         }
                                     }
-                                        
+
                                     $final_answer = true;
                                     foreach($real_answers as $my_answer) {
                                         if (!$my_answer) {
                                             $final_answer = false;
-                                        }		 		
-                                    }																
+                                        }
+                                    }
                                     break;
                                     // for fill in the blanks
                                 case FILL_IN_BLANKS :
@@ -608,8 +608,8 @@ if ($formSent) {
                                 case MATCHING :
 
                                     $numAnswer=$objAnswerTmp->selectAutoId($answerId);
-                                    if ($answerCorrect) {										
-                                        if ($answerCorrect == $choice[$numAnswer]) {											
+                                    if ($answerCorrect) {
+                                        if ($answerCorrect == $choice[$numAnswer]) {
                                             $questionScore+=$answerWeighting;
                                             $totalScore+=$answerWeighting;
                                         }
@@ -639,17 +639,17 @@ if ($formSent) {
                             } // end switch Answertype
                         } // end for that loops over all answers of the current question
                         // destruction of Answer
-                        
+
                         //we add the total score after dealing with the answers
                         if ($answerType == MULTIPLE_ANSWER_COMBINATION) {
                             if ($final_answer) {
-                                //getting only the first score where we save the weight of all the question 
+                                //getting only the first score where we save the weight of all the question
                                 $answerWeighting=$objAnswerTmp->selectWeighting(1);
                                 $questionScore+=$answerWeighting;
                                 $totalScore+=$answerWeighting;
                             }
                         }
-                        
+
                         unset ($objAnswerTmp);
 
                         $i++;
@@ -696,7 +696,7 @@ if ($formSent) {
                             } elseif ($answerType == HOT_SPOT) {
                                 exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
                                 if (is_array($exerciseResultCoordinates[$key])) {
-                                    foreach($exerciseResultCoordinates[$key] as $idx => $val) {										
+                                    foreach($exerciseResultCoordinates[$key] as $idx => $val) {
                                         exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val);
                                     }
                                 }
@@ -707,7 +707,7 @@ if ($formSent) {
                     }
                     // end huge foreach() block that loops over all questions
                     //at loops over all questions
-                    if (isset($exe_id)) {						
+                    if (isset($exe_id)) {
                         $sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . (int) $totalScore . ',exe_weighting = exe_weighting + ' . (int) $totalWeighting . ' WHERE exe_id = ' . Database::escape_string($exe_id);
                         Database::query($sql_update, __FILE__, __LINE__);
                     }
@@ -726,7 +726,7 @@ if ($formSent) {
     // the script "exercise_result.php" will take the variable $exerciseResult from the session
     api_session_register('exerciseResult');
     api_session_register('exerciseResultCoordinates');
-    
+
     // if all questions on one page OR if it is the last question (only for an exercise with one question per page)
 
     if ($exerciseType == ALL_ON_ONE_PAGE || $questionNum >= $nbrQuestions) {
@@ -746,17 +746,17 @@ if ($formSent) {
                     if (isset($_SESSION['expired_time']) && $exercise_row['expired_time'] != 0) {
                         $expired_date = $_SESSION['expired_time'];
                         $expired_time = strtotime($expired_date);
-                        
+
                         //Validation in case of fraud
                         $total_time_allowed = $expired_time + 30;
                         if ($total_time_allowed < $current_time) {
                             $sql_exe_result = ",exe_result = 0";
                         }
-                                            
+
                     } else {
                         $sql_exe_result = "";
                     }
-                
+
 
                     //clean incomplete
                     $update_query = 'UPDATE ' . $stat_table . ' SET ' . "status = '', data_tracking='', exe_date = '" . date('Y-m-d H:i:s') . "' $sql_exe_result " . ' WHERE exe_id = ' . Database::escape_string($exe_id);
@@ -1016,9 +1016,6 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
         Display :: display_warning_message(get_lang('SessionIsReadOnly'));
     }
 } else {
-    if (empty ($charset)) {
-        $charset = 'ISO-8859-15';
-    }
     /*
      * HTML HEADER
      */
@@ -1027,14 +1024,14 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 }
 
 // I'm in a preview mode
-if (api_is_course_admin() && $origin != 'learnpath') {	
+if (api_is_course_admin() && $origin != 'learnpath') {
     echo '<div class="actions">';
     echo Display :: return_icon('quiz.gif', get_lang('GoBackToEx')) . '<a href="admin.php?' . api_get_cidreq() . '&exerciseId=' . $objExercise->id . '">' . get_lang('GoBackToEx') . '</a>';
     echo Display :: return_icon('edit.gif', get_lang('ModifyExercise')) . '<a href="exercise_admin.php?' . api_get_cidreq() . '&modifyExercise=yes&exerciseId=' . $objExercise->id . '">' . get_lang('ModifyExercise') . '</a>';
     echo '</div>';
 }
 //Timer control
-if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') { 
+if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') {
   echo '<div align="left" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';
   echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciceExpiredTimeMessage').'</div>';
 }
@@ -1099,7 +1096,7 @@ if ($limit_time_exists) {
 
 if ($origin != 'learnpath') {
    echo '<div id="highlight-plugin" class="glossary-content">';
-}   	
+}
 if (!empty ($error)) {
     Display :: display_error_message($error, false);
 } else {
@@ -1146,7 +1143,7 @@ if (!empty ($error)) {
     {
         $s2 = "&exerciseId=" . $exerciseId;
     }
-      
+
     $s .= " <form method='post' action='" . api_get_self() . "?".api_get_cidreq()."&autocomplete=off&gradebook=$gradebook" . $s2 . "' id='my_frm_exercise' name='frm_exercise' $onsubmit>
          <input type='hidden' name='formSent' value='1' />
          <input type='hidden' name='exerciseType' value='" . $exerciseType . "' />
@@ -1160,7 +1157,7 @@ if (!empty ($error)) {
             <tr>
                 <td>
                     <table width='100%' cellpadding='3' cellspacing='0' border='0'>";
-                
+
     echo $s;
     $i = 1;
     foreach ($questionList as $questionId) {
@@ -1239,21 +1236,21 @@ if (!empty ($error)) {
 
 
 if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType != EXERCISE_FEEDBACK_TYPE_DIRECT) {
-    
+
     if ($table_recorded_not_exist) { //$table_recorded_not_exist
         if ($exercise_row['expired_time'] != 0) {
           $sql_fields = "expired_time_control, ";
-          $sql_fields_values = "'"."$clock_expired_time"."',";     
+          $sql_fields_values = "'"."$clock_expired_time"."',";
         } else {
           $sql_fields = "";
           $sql_fields_values = "";
-        }  
-    
+        }
+
         if ($exerciseType == ONE_PER_PAGE) {
             $sql = "INSERT INTO $stat_table($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,data_tracking,start_date,orig_lp_id,orig_lp_item_id)
                     VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";
-     
-            Database::query($sql, __FILE__, __LINE__);      
+
+            Database::query($sql, __FILE__, __LINE__);
         } else {
             echo $sql = "INSERT INTO $stat_table ($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date,orig_lp_id,orig_lp_item_id)
                     VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . api_get_session_id() . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";

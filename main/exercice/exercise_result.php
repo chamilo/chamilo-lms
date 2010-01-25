@@ -271,9 +271,6 @@ if ($origin != 'learnpath') {
 	Display::display_header($nameTools,"Exercise");
 } else {
 
-	if (empty($charset)) {
-		$charset = 'ISO-8859-15';
-	}
 	header('Content-Type: text/html; charset='. $charset);
 
 	@$document_language = api_get_language_isocode($language_interface);

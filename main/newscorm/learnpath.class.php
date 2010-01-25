@@ -12,12 +12,12 @@
  * Defines the learnpath parent class
  * @package dokeos.learnpath
  */
- 
+
 // including the global file
 require_once '../inc/global.inc.php';
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) { 
+if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
 	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
 	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
 }
@@ -27,7 +27,7 @@ function setFocus(){
 $("#idTitle").focus();
 }
 $(window).load(function () {
-  setFocus(); 
+  setFocus();
 });
 </script>';
 
@@ -902,7 +902,7 @@ class learnpath {
 		$sql = 'SELECT gl.id FROM ' . $tbl_grade_link . ' gl WHERE gl.type="4" AND gl.ref_id="' . $id . '";';
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = Database :: fetch_array($result, 'ASSOC');
-		
+
 		//fixing gradebook link deleted see #5229
 		if (!empty($row['id'])) {
 	   		$link = LinkFactory :: load($row['id']);
@@ -910,7 +910,7 @@ class learnpath {
 	       		$link[0]->delete();
 	    	}
 		}
-		
+
 		//TODO: also delete items and item-views
 		if (api_get_setting('search_enabled') == 'true') {
 			require_once (api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
@@ -1102,7 +1102,7 @@ class learnpath {
 			if ($old_next != 0) {
 				$sql_update_previous = "
 						    		UPDATE " . $tbl_lp_item . "
-						    		SET previous_item_id = " . $old_previous . " 
+						    		SET previous_item_id = " . $old_previous . "
 						    		WHERE id = " . $old_next;
 				$res_update_previous = Database::query($sql_update_previous, __FILE__, __LINE__);
 
@@ -2194,9 +2194,8 @@ class learnpath {
 			$progress_height = '16';
 		$size = str_replace('%', '', $percentage);
 
-		$output = ''
-		//.htmlentities(get_lang('ScormCompstatus'),ENT_QUOTES,'ISO-8859-1')."<br />"
-	 . '<table border="0" cellpadding="0" cellspacing="0"><tr><td>' .
+		$output =
+		'<table border="0" cellpadding="0" cellspacing="0"><tr><td>' .
 		'<img id="progress_img_limit_left" src="' . $css_path . 'bar_1.gif" width="1" height="' . $progress_height . '">' .
 		'<img id="progress_img_full" src="' . $css_path . 'bar_1u.gif" width="' . $size * $factor . 'px" height="' . $progress_height . '" id="full_portion">' .
 		'<img id="progress_img_limit_middle" src="' . $css_path . 'bar_1m.gif" width="1" height="' . $progress_height . '">';
@@ -5463,7 +5462,7 @@ class learnpath {
 		} else {
 			$return .= '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit">' . get_lang('EditCurrentExecice') . '</button></td>';
 		}
-		
+
 		$return .= "\t\t" . '</tr>' . "\n";
 		$return .= "\t" . '</table>' . "\n";
 
@@ -5947,7 +5946,7 @@ class learnpath {
 		}
 
 		$return .= "\t\t" . '<tr>' . "\n";
-		
+
 		if ($action == 'add') {
 			$return .= '<td>&nbsp;</td><td><button class="save" name="submit_button" type="submit"> ' . get_lang('AddForumToCourse') . ' </button></td>';
 		} else {
@@ -7715,7 +7714,7 @@ class learnpath {
 		$path = Database::escape_string(str_replace('_', '\_', $path));
 		$added_slash = ($path == '/') ? '' : '/';
 
-		//condition for the session		
+		//condition for the session
 		$current_session_id = api_get_session_id();
 		$condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $tbl_course WHERE code = '{$_course[id]}')))";
 
@@ -7723,10 +7722,10 @@ class learnpath {
 						FROM  $tbl_item_prop AS last, $tbl_doc  AS docs
 						WHERE docs.id = last.ref
 						AND docs.path LIKE '".$path.$added_slash."%'
-						AND docs.path NOT LIKE '%_DELETED_%'		
-						AND last.tool = '".TOOL_DOCUMENT."' $condition_session ORDER BY docs.path ASC";		
+						AND docs.path NOT LIKE '%_DELETED_%'
+						AND last.tool = '".TOOL_DOCUMENT."' $condition_session ORDER BY docs.path ASC";
 
-		//$sql_doc = "SELECT * FROM $tbl_doc WHERE path NOT LIKE '%_DELETED_%' ORDER BY path ASC";								
+		//$sql_doc = "SELECT * FROM $tbl_doc WHERE path NOT LIKE '%_DELETED_%' ORDER BY path ASC";
 		$res_doc = Database::query($sql_doc, __FILE__, __LINE__);
 
 		$return = '<div class="lp_resource_header"' . " onclick=\"if(document.getElementById('resDoc').style.display == 'block') {document.getElementById('resDoc').style.display = 'none';} else {document.getElementById('resDoc').style.display = 'block';}\"" . '>'.Display::return_icon('folder_document.gif',get_lang('Documents'),array('style'=>'margin-right:5px;', 'height' => '16px')).' '. get_lang('Documents') . '</div>';
@@ -7761,9 +7760,9 @@ class learnpath {
 		$return .= $this->write_resources_tree($resources_sorted);
 	if (Database :: num_rows($res_doc) == 0)
 			$return .= '<div class="lp_resource_element">' . get_lang("NoDocuments") . '</div>';
-		
+
 		$return .= '</div>';
-		
+
 		return $return;
 	}
 
@@ -7872,7 +7871,7 @@ class learnpath {
 
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id,false);
-		
+
 		$sql_link = "SELECT * FROM $tbl_link $condition_session ORDER BY title ASC";
 		$res_link = Database::query($sql_link, __FILE__, __LINE__);
 
@@ -7910,7 +7909,7 @@ class learnpath {
 
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id,false);
-		
+
 		$sql_student = "SELECT * FROM $tbl_student  $condition_session ORDER BY title ASC";
 		$res_student = Database::query($sql_student, __FILE__, __LINE__);
 
@@ -7965,7 +7964,7 @@ class learnpath {
 			$return .= '<a style="cursor:hand" onclick="toggle_forum(' . $forum['forum_id'] . ')" style="vertical-align:middle"><img src="' . api_get_path(WEB_IMG_PATH) . 'add.gif" id="forum_' . $forum['forum_id'] . '_opener" align="absbottom" /></a>
 									<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_FORUM . '&amp;forum_id=' . $forum['forum_id'] . '&amp;lp_id=' . $this->lp_id . '" style="vertical-align:middle">' . $forum['forum_title'] . '</a><ul style="display:none" id="forum_' . $forum['forum_id'] . '_content">';
 			}
-						
+
 			$a_threads = get_threads($forum['forum_id']);
 			if (is_array($a_threads)) {
 				foreach ($a_threads as $thread) {

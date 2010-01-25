@@ -719,9 +719,6 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	                            $mail_body .= "<br /> \n<a href=\"".api_get_path(WEB_COURSE_PATH).$_course['id']."\">";
 	                            $mail_body .= $_course['official_code'].' '.$_course['name'] . "</a>";
 
-								//set the charset and use it for the encoding of the email - small fix, not really clean (should check the content encoding origin first)
-								//here we use the encoding used for the webpage where the text is encoded (ISO-8859-1 in this case)
-
 								$recipient_name	= api_get_person_name($myrow["firstname"], $myrow["lastname"], null, PERSON_NAME_EMAIL_ADDRESS);
 		                        $mailid = $myrow["email"];
 

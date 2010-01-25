@@ -47,17 +47,12 @@ if ($is_allowed_in_course == false) api_not_allowed();
 	Variables
 -----------------------------------------------------------
 */
-//$charset = 'UTF-8';
-//$charset = 'ISO-8859-1';
 
 // we set the encoding of the lp
 if (!empty($_SESSION['oLP']->encoding)) {
 	$charset = $_SESSION['oLP']->encoding;
 } else {
 	$charset = api_get_system_encoding();
-}
-if (empty($charset)) {
-	$charset = 'ISO-8859-1';
 }
 
 $oLearnpath = false;
@@ -73,7 +68,7 @@ $my_style=$platform_theme;
 */
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 
-if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) { 
+if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
 	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
 	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
 }
@@ -260,7 +255,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 			<div id="preview_image" style="padding:5px;background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;height:110px">
 		       	<div style="width:100; float:left;height:105;margin:5px">
 		       		<span>
-			        <?php 
+			        <?php
 			        if ($_SESSION['oLP']->get_preview_image()!='') {
 			            echo '<img width="115px" height="100px" src="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'">';
 			        } else {
@@ -320,12 +315,12 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 	</div>
 	<!-- end media player layaout -->
 
-	<!-- toc layout -->	
+	<!-- toc layout -->
 	<div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;height:60%;width:100%">
-	
+
 		<div id="learning_path_toc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
 			<!-- log message layout -->
-	
+
 			<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:50px;overflow:auto;margin:15px">
 				<div id="log_content"></div>
 				<div id="log_content_cleaner" style="color: white;">.</div>
@@ -399,7 +394,7 @@ window.onload = function() {
 	updateContentHeight();
 	viewportheight = window.innerHeight;
 	document.getElementById('toc_id').style.height = viewportheight - 200 + "px";
-	
+
 }
 
 window.onresize = updateContentHeight;
@@ -450,7 +445,7 @@ window.onresize = updateContentHeight;
 		       	<div style="width:100; float:left;height:105;margin:5px">
 		       		<span style="width:104px; height:96px; float:left; vertical-align:bottom;">
 			        <center>
-			        <?php 
+			        <?php
 			        if ($_SESSION['oLP']->get_preview_image()!='') {
 			        	$picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
 			        	if($picture['1'] < 96) { $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" '; }
@@ -514,11 +509,11 @@ window.onresize = updateContentHeight;
 		</div>
 		<!-- end media player layaout -->
 
-		<!-- toc layout -->		
+		<!-- toc layout -->
 		<div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;height:60%;width:100%">
-		
+
 			<div id="learning_path_toc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
-	
+
     	<?php if (!empty($_SESSION['oLP']->scorm_debug)) { //only show log  ?>
 	        <!-- log message layout -->
 			<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
@@ -593,29 +588,29 @@ window.onload = function() {
 	updateContentHeight();
 	viewportheight = window.innerHeight;
 	document.getElementById('toc_id').style.height = viewportheight - 200 + "px";
-	
 
-	//loads the glossary library	
+
+	//loads the glossary library
 	<?php
-	  if (api_get_setting('show_glossary_in_extra_tools') == 'true') { 	
-	  	 if (api_get_setting('show_glossary_in_documents') == 'ismanual') { 
+	  if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
+	  	 if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
 	  	 	 ?>
 			$.frameReady(function(){
-		   		//  $("<div>I am a div courses</div>").prependTo("body");     
-	     }, "top.content_name",   
+		   		//  $("<div>I am a div courses</div>").prependTo("body");
+	     }, "top.content_name",
 	      { load: [
 	      		{type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
 	          	{type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
 	          	{type:"script", id:"_fr3", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
 	      ] }
-	      );	
+	      );
 	<?php
-		} elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') { 	 
-	  ?> 	
-	$.frameReady(function(){  
-		//  $("<div>I am a div courses</div>").prependTo("body");     
-	  }, "top.content_name",   
-	  { load: [   
+		} elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') {
+	  ?>
+	$.frameReady(function(){
+		//  $("<div>I am a div courses</div>").prependTo("body");
+	  }, "top.content_name",
+	  { load: [
 	  		{type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
 	      	{type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
 	      	{type:"script", id:"_fr3", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
@@ -624,7 +619,7 @@ window.onload = function() {
 	  <?php
 	  	 }
 	  }
-	  ?>	
+	  ?>
 }
 
 window.onresize = updateContentHeight;

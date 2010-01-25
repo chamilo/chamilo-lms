@@ -1,11 +1,11 @@
 // --------------------------------------------------------------------------------
-// PclZip 2.6 - readme.txt
+// PclZip 2.8.2 - readme.txt
 // --------------------------------------------------------------------------------
-// License GNU/LGPL - March 2006
+// License GNU/LGPL - August 2009
 // Vincent Blavet - vincent@phpconcept.net
 // http://www.phpconcept.net
 // --------------------------------------------------------------------------------
-// $Id: readme.txt 17088 2008-12-07 02:53:53Z ivantcholakov $
+// $Id: readme.txt,v 1.60 2009/09/30 20:35:21 vblavet Exp $
 // --------------------------------------------------------------------------------
 
 
@@ -31,6 +31,49 @@
 
 2 - What's new
 ==============
+
+  Version 2.8.2 :
+    - PCLZIP_CB_PRE_EXTRACT and PCLZIP_CB_POST_EXTRACT are now supported with
+      extraction as a string (PCLZIP_OPT_EXTRACT_AS_STRING). The string
+      can also be modified in the post-extract call back.
+    **Bugs correction :
+    - PCLZIP_OPT_REMOVE_ALL_PATH was not working correctly
+    - Remove use of eval() and do direct call to callback functions
+    - Correct support of 64bits systems (Thanks to WordPress team)
+
+  Version 2.8.1 :
+    - Move option PCLZIP_OPT_BY_EREG to PCLZIP_OPT_BY_PREG because ereg() is
+      deprecated in PHP 5.3. When using option PCLZIP_OPT_BY_EREG, PclZip will
+      automatically replace it by PCLZIP_OPT_BY_PREG.
+
+  Version 2.8 :
+    - Improve extraction of zip archive for large files by using temporary files
+      This feature is working like the one defined in r2.7.
+      Options are renamed : PCLZIP_OPT_TEMP_FILE_ON, PCLZIP_OPT_TEMP_FILE_OFF,
+      PCLZIP_OPT_TEMP_FILE_THRESHOLD
+    - Add a ratio constant PCLZIP_TEMPORARY_FILE_RATIO to configure the auto
+      sense of temporary file use.
+    - Bug correction : Reduce filepath in returned file list to remove ennoying
+      './/' preambule in file path.
+
+  Version 2.7 :
+    - Improve creation of zip archive for large files :
+      PclZip will now autosense the configured memory and use temporary files
+      when large file is suspected.
+      This feature can also ne triggered by manual options in create() and add()
+      methods. 'PCLZIP_OPT_ADD_TEMP_FILE_ON' force the use of temporary files,
+      'PCLZIP_OPT_ADD_TEMP_FILE_OFF' disable the autosense technic,
+      'PCLZIP_OPT_ADD_TEMP_FILE_THRESHOLD' allow for configuration of a size
+      threshold to use temporary files.
+      Using "temporary files" rather than "memory" might take more time, but
+      might give the ability to zip very large files :
+      Tested on my win laptop with a 88Mo file :
+        Zip "in-memory" : 18sec (max_execution_time=30, memory_limit=180Mo)
+        Zip "tmporary-files" : 23sec (max_execution_time=30, memory_limit=30Mo)
+    - Replace use of mktime() by time() to limit the E_STRICT error messages.
+    - Bug correction : When adding files with full windows path (drive letter)
+      PclZip is now working. Before, if the drive letter is not the default
+      path, PclZip was not able to add the file.
 
   Version 2.6 :
     - Code optimisation
@@ -302,6 +345,8 @@
   In Version 2.x :
     - PclZip does only support file uncompressed or compressed with deflate (compression method 8)
     - PclZip does not support password protected zip archive
+    - Some concern were seen when changing mtime of a file while archiving.
+      Seems to be linked to Daylight Saving Time (PclTest_changing_mtime).
 
   In Version 1.2 :
 

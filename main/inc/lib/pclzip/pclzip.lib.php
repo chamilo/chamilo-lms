@@ -25,6 +25,20 @@
 // $Id: pclzip.lib.php,v 1.60 2009/09/30 21:01:04 vblavet Exp $
 // --------------------------------------------------------------------------------
 
+// --------------------------------------------------------------------------------
+// A patch about the renamed function gzopen() as gzopen64()
+// in Ubuntu Karmic Koala 9.10 (php5 5.2.10.dfsg.1-2ubuntu6).
+// http://dokeoslead.wordpress.com/2009/09/30/pclzip-and-gzopen64/
+// https://bugs.launchpad.net/ubuntu/+source/php5/+bug/451405
+// http://php.net/manual/en/function.gzopen.php
+// --------------------------------------------------------------------------------
+if (!function_exists('gzopen') && function_exists('gzopen64')) {
+	function gzopen($filename, $mode, $use_include_path = 0) {
+		return gzopen64($filename, $mode, $use_include_path);
+	}
+}
+// --------------------------------------------------------------------------------
+
   // ----- Constants
   if (!defined('PCLZIP_READ_BLOCK_SIZE')) {
     define( 'PCLZIP_READ_BLOCK_SIZE', 2048 );

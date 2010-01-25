@@ -6,7 +6,6 @@ ini_set('memory_limit','256M');
 //List of files than need the tests
 require_once 'simpletest/unit_tester.php';
 require_once 'simpletest/web_tester.php';
-require_once 'simpletest/mock_objects.php';
 require_once 'simpletest/autorun.php';
 
 $incdir = dirname(__FILE__).'/../main/inc/';
@@ -21,7 +20,7 @@ require_once $incdir.'banner.inc.php';
 ob_end_clean();
 
 $maindir = dirname(__FILE__).'/../main/';
-//List of files than need the tests since chamilo
+//List of files than need the tests from chamilo
 require_once $maindir.'admin/calendar.lib.php';
 require_once $maindir.'admin/statistics/statistics.lib.php';
 require_once $incdir.'lib/usermanager.lib.php';
@@ -123,7 +122,7 @@ class AllTestsSuite extends TestSuite {
         //List of files from all.test3.php
         $this->addTestFile(dirname(__FILE__).'/main/admin/sub_language.class.test.php');
 
-    }
+ 	}
 }
 $test = &new AllTestsSuite();
 

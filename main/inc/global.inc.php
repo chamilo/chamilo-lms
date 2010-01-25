@@ -35,7 +35,7 @@ $includePath = dirname(__FILE__);
 if (!function_exists('version_compare') || version_compare(phpversion(), REQUIRED_PHP_VERSION, '<')) {
 	$global_error_code = 1;
 	// Incorrect PHP version.
-	require $includePath.'/global_error_message.inc.php';
+	require_once $includePath.'/global_error_message.inc.php';
 	die();
 }
 
@@ -69,7 +69,7 @@ api_session_start($already_installed);
 if (!$already_installed) {
 	$global_error_code = 2;
 	// The system has not been installed yet.
-	require $includePath.'/global_error_message.inc.php';
+	require_once $includePath.'/global_error_message.inc.php';
 	die();
 }
 
@@ -98,13 +98,13 @@ if (empty($_configuration['statistics_database']) && $already_installed) {
 if (!($dokeos_database_connection = @mysql_connect($_configuration['db_host'], $_configuration['db_user'], $_configuration['db_password']))) {
 	$global_error_code = 3;
 	// The database server is not available or credentials are invalid.
-	require $includePath.'/global_error_message.inc.php';
+	require_once $includePath.'/global_error_message.inc.php';
 	die();
 }
 if (!$_configuration['db_host']) {
 	$global_error_code = 4;
 	// A configuration option about database server is missing.
-	require $includePath.'/global_error_message.inc.php';
+	require_once $includePath.'/global_error_message.inc.php';
 	die();
 }
 
@@ -114,7 +114,7 @@ Database::query("set session sql_mode='';", __FILE__, __LINE__);
 if (!mysql_select_db($_configuration['main_database'], $dokeos_database_connection)) {
 	$global_error_code = 5;
 	// Connection to the main Dokeos database is impossible, it might be missing or restricted or its configuration option might be incorrect.
-	require $includePath.'/global_error_message.inc.php';
+	require_once $includePath.'/global_error_message.inc.php';
 	die();
 }
 
@@ -242,7 +242,7 @@ require_once $lib_path.'formvalidator/Rule/allowed_tags.inc.php';
 require_once $lib_path.'htmlpurifier/library/HTMLPurifier.auto.php';
 
 // include the local (contextual) parameters of this course or section
-require $includePath.'/local.inc.php';
+require_once $includePath.'/local.inc.php';
 
 // ===== "who is logged in?" module section =====
 
@@ -362,7 +362,7 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
 
 	foreach ($language_files_to_load as $language_file_item) {
 		$lang_list_pre = array_keys($GLOBALS);
-		include $langpath.'english/'.$language_file_item.'.inc.php';			 //loading english
+		include_once $langpath.'english/'.$language_file_item.'.inc.php';			 //loading english
 		$lang_list_post = array_keys($GLOBALS);
 		$lang_list_result = array_diff($lang_list_post, $lang_list_pre);
 		unset($lang_list_pre);
@@ -376,7 +376,7 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
 		}
 		$parent_file = $langpath.$parent_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
 		if (is_file($parent_file)) {
-			include $parent_file;
+			include_once $parent_file;
 		}
 
 		// ------  parent language array
@@ -388,7 +388,7 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
 		}
 		$sub_file = $langpath.$sub_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
 		if (is_file($sub_file)) {
-			include $sub_file;
+			include_once $sub_file;
 		}
 
 		// ------  sub language array
@@ -459,7 +459,7 @@ if (isset($language_file)) {
 if (is_array($language_files)) {
 	if (api_get_setting('allow_use_sub_language') == 'true') {
 		foreach ($language_files as $index => $language_file) {
-			include $langpath.'english/'.$language_file.'.inc.php';
+			include_once $langpath.'english/'.$language_file.'.inc.php';
 			$langfile = $langpath.$language_interface.'/'.$language_file.'.inc.php';
 
 			$tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
@@ -469,12 +469,12 @@ if (is_array($language_files)) {
 			$num_row_sub_language = Database::num_rows($rs_sub_language);
 
 			if (file_exists($langfile)) {
-				include $langfile;
+				include_once $langfile;
 				for ($i = 0; $i < $num_row_sub_language; $i++) {
 					$row_sub_language = Database::result($rs_sub_language, $i, 'dokeos_folder');
 					$sub_langfile = $langpath.$row_sub_language.'/'.$language_file.'.inc.php';
 					if (file_exists($sub_langfile)) {
-						include $sub_langfile;
+						include_once $sub_langfile;
 					}
 				}
 
@@ -482,10 +482,10 @@ if (is_array($language_files)) {
 		}
 	} else {
 		foreach ($language_files as $index => $language_file) {
-			include $langpath.'english/'.$language_file.'.inc.php';
+			include_once $langpath.'english/'.$language_file.'.inc.php';
 			$langfile = $langpath.$language_interface.'/'.$language_file.'.inc.php';
 			if (file_exists($langfile)) {
-				include $langfile;
+				include_once $langfile;
 			}
 		}
 	}

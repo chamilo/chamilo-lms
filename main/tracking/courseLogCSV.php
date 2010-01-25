@@ -460,15 +460,9 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 						while ($ar2 != '') {
 
 							if (isset($_REQUEST["scormstudentopen"]) && $ar2['user_id']==$scormstudentopen) {
-
-							$line .= $ar['id']." ".$ar2['user_id']." ".$ar2['lastname']." ".$ar2['firstname'];
-
-							}
-
-							else{
-
-							$line .= $ar['id']." ".$ar2['user_id']." ".$ar2['lastname']." ".$ar2['firstname'];
-
+								$line .= $ar['id']." ".$ar2['user_id']." ".api_get_person_name($ar2['firstname'], $ar2['lastname']);
+							} else {
+								$line .= $ar['id']." ".$ar2['user_id']." ".api_get_person_name($ar2['firstname'], $ar2['lastname']);
 							}
 
 
